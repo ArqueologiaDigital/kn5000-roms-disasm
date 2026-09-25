@@ -40,7 +40,13 @@ the bytes, not typed by hand.  The byte gate (`make gate`) certifies the result.
 Self-checks on parse: every `field_XXXX` member must sit at offset 0xXXXX, and
 the summed member sizes must equal the `_Static_assert` size.
 
-This is a library; the driver is `naka_c_retype.py`.
+This is a library; the driver is `naka_c_retype.py` (lane nakarest's driver
+is `nakarest_retype.py`).
+
+CHANGES (lane nakarest)
+  * the blob struct is found as the struct that `} naka_*_t;` closes,
+    searching BACKWARD for its `typedef struct ... {` -- so a local typedef
+    inserted above it (welcome_step_t) is not parsed as blob members.
 """
 import re
 
@@ -141,8 +147,10 @@ class CBlob:
         with open(path, encoding='latin-1') as f:
             self.lines = f.read().split('\n')
         L = self.lines
-        self.s0 = next(i for i, l in enumerate(L) if STRUCT_START_RE.match(l))
-        self.s1 = next(i for i in range(self.s0, len(L)) if STRUCT_END_RE.match(L[i]))
+        # the blob struct is the one STRUCT_END_RE closes; a local typedef
+        # above it (also `typedef struct __attribute__((packed)) {`) is not it
+        self.s1 = next(i for i in range(len(L)) if STRUCT_END_RE.match(L[i]))
+        self.s0 = next(i for i in range(self.s1, -1, -1) if STRUCT_START_RE.match(L[i]))
         self.tname = STRUCT_END_RE.match(L[self.s1]).group(1)
         # members
         self.members, pre = [], []

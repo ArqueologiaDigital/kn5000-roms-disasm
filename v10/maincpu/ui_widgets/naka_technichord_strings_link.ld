@@ -80,7 +80,6 @@ PasswordOk = 0x00F94D18;
 PasswordText = 0x00F94BD8;
 PsFileNameBoxProc = 0x00F95557;
 PsWindowToggleProc = 0x00F95C01;
-SLSrc_ScrollMode8 = 0x00F9000C;
 SaveNo = 0x00F95026;
 SaveText = 0x00F94FC7;
 SaveYes = 0x00F94FD8;

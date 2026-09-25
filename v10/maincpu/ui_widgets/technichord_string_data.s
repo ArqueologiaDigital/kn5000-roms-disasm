@@ -1230,15 +1230,260 @@ NakaInst_KEY_C_E9DE14:
 Str_SOUND:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17ED8, 0x6
 NakaInst_TOTAL:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x17EDE, 0x56
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x17EDE, 0x34
+; -----------------------------------------------------------------------------
+; [nakarest_retype] WelcomeGlyph_C
+; WelcomeGlyph_C  --  'C', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+;
+; What it is: the letter C, read from the bit pictures in the C
+; (upside-down there, because the rows are stored bottom-up). No label
+; of its own in the .s: other files reach it as NakaInst_TOTAL_0x34
+; (.set in shared/positional_labels.s); it shares the old NakaInst_TOTAL
+; slice with the strings above it. Drawn by the welcome-script op
+; handlers: 'C' by op 4 alone and ops 9/12 as the first letter of
+; COLO(U)R.
+;
+; Format, from DrawBitmapSP2_Impl (v10/v9 0xfac59d, v7 0xfac190): 1 bpp,
+; each row one big-endian 16-bit word (MSB = leftmost pixel; the routine
+; byte-swaps the word it loads), (width + 15) / 16 words per row; a set
+; bit is drawn in the colour argument, a clear bit is not drawn. Rows
+; are stored BOTTOM-UP: row i is drawn at y0 + height - i. The callers
+; push height 0x11 (17) and pass width 0x10 (16) -- `pushw 0x11 ... ldw
+; de, 0x10; call DrawBitmapSP2` -- in the welcome-script op handlers
+; that follow AcWelcomScreen_RenderBytecode (v10/v9 0xf7f649, v7
+; 0xf7f245) (ui/drawbar_panel_ui.s; that code is only partly framed as
+; instructions there, and was checked against unidasm), so each glyph is
+; 17 x 2 = 34 bytes.
+;
+; Which op draws which glyph (handlers at AcWelcomScreen_RenderBytecode
+; + the WelcomeScript_OpJumpOffsets entry, decoded with unidasm because
+; ui/drawbar_panel_ui.s frames that code only partly): op 4 C, op 5 O,
+; op 6 L, op 7 R, op 11 U, op 8 I then N, and ops 9 and 12 (one shared
+; handler, offset 386) C-O-L-O-R with the U drawn only when op == 12
+; (`cp (XBC+0x08),0x000c; jr NZ` around it). Step table A (region code
+; 2) uses ops 4/5/6/7 and 9 -- COLOR; table B uses 4/5/6/11/7 and 12 --
+; COLOUR. Ops 4/5/6/7/11 push the step's arg as the colour (`pushw
+; (xde)`, xde = &arg); op 8 pushes 0xff.
+;
+; Typed in naka_technichord_strings.c as uint8_t WelcomeGlyph_C[17][2].
+; -----------------------------------------------------------------------------
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F12, 0x22
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_Digit1
+; Bitmap_Digit1  --  'I', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+;
+; What it is: the letter I, read from the bit pictures in the C
+; (upside-down there, because the rows are stored bottom-up). The label
+; name (Digit1) predates this header: the glyph is the letter I, not a
+; digit. Drawn by the welcome-script op handlers: 'I' by op 8, before
+; the N.
+;
+; Format and readers: as WelcomeGlyph_C (the first glyph, above):
+; DrawBitmapSP2_Impl (v10/v9 0xfac59d, v7 0xfac190) draws 16 x 17, 1
+; bpp, one big-endian word per row, rows bottom-up; the op handlers
+; after AcWelcomScreen_RenderBytecode (v10/v9 0xf7f649, v7 0xf7f245)
+; pass width 0x10 and height 0x11.
+;
+; Typed in naka_technichord_strings.c as uint8_t Bitmap_Digit1[17][2].
+; -----------------------------------------------------------------------------
 Bitmap_Digit1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F34, 0x22
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_DigitL
+; Bitmap_DigitL  --  'L', 'N', 'O', 3 glyphs of 16 x 17 pixels, 1 bpp, 102 bytes
+;
+; What it is: the letters L/N/O, read from the bit pictures in the C
+; (upside-down there, because the rows are stored bottom-up). Glyphs 1
+; and 2 are reached as Bitmap_DigitL_0x22 and Bitmap_DigitL_0x44 (.set
+; in shared/positional_labels.s). Drawn by the welcome-script op
+; handlers: 'L' by op 6 alone and ops 9/12 in COLO(U)R; 'N' by op 8,
+; after the I; 'O' by op 5 alone and ops 9/12 twice in COLO(U)R.
+;
+; Format and readers: as WelcomeGlyph_C (the first glyph, above):
+; DrawBitmapSP2_Impl (v10/v9 0xfac59d, v7 0xfac190) draws 16 x 17, 1
+; bpp, one big-endian word per row, rows bottom-up; the op handlers
+; after AcWelcomScreen_RenderBytecode (v10/v9 0xf7f649, v7 0xf7f245)
+; pass width 0x10 and height 0x11.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_DigitL[3][17][2].
+; -----------------------------------------------------------------------------
 Bitmap_DigitL:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F56, 0x66
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_DigitR
+; Bitmap_DigitR  --  'R', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+;
+; What it is: the letter R, read from the bit pictures in the C
+; (upside-down there, because the rows are stored bottom-up). Drawn by
+; the welcome-script op handlers: 'R' by op 7 alone and ops 9/12 as the
+; last letter of COLO(U)R.
+;
+; Format and readers: as WelcomeGlyph_C (the first glyph, above):
+; DrawBitmapSP2_Impl (v10/v9 0xfac59d, v7 0xfac190) draws 16 x 17, 1
+; bpp, one big-endian word per row, rows bottom-up; the op handlers
+; after AcWelcomScreen_RenderBytecode (v10/v9 0xf7f649, v7 0xf7f245)
+; pass width 0x10 and height 0x11.
+;
+; Typed in naka_technichord_strings.c as uint8_t Bitmap_DigitR[17][2].
+; -----------------------------------------------------------------------------
 Bitmap_DigitR:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17FBC, 0x22
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_DigitD
+; Bitmap_DigitD  --  'U', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+;
+; What it is: the letter U, read from the bit pictures in the C
+; (upside-down there, because the rows are stored bottom-up). The old
+; Bitmap_DigitD slice ran 0x121c bytes: this glyph and the five objects
+; that follow it, which are split off below. Drawn by the welcome-script
+; op handlers: 'U' by op 11 alone and ops 9/12 only when op == 12
+; (COLOUR).
+;
+; Format and readers: as WelcomeGlyph_C (the first glyph, above):
+; DrawBitmapSP2_Impl (v10/v9 0xfac59d, v7 0xfac190) draws 16 x 17, 1
+; bpp, one big-endian word per row, rows bottom-up; the op handlers
+; after AcWelcomScreen_RenderBytecode (v10/v9 0xf7f649, v7 0xf7f245)
+; pass width 0x10 and height 0x11.
+;
+; Typed in naka_technichord_strings.c as uint8_t Bitmap_DigitD[17][2].
+; -----------------------------------------------------------------------------
 Bitmap_DigitD:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x17FDE, 0x121C
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x17FDE, 0x22
+; -----------------------------------------------------------------------------
+; [nakarest_retype] WelcomeScript_Steps_A
+; WelcomeScript_Steps_A  --  186 welcome_step_t records x 12 bytes = 2232 bytes
+;
+; The welcome-screen animation script used when Get_Region_Code returns
+; 2. Reached by other files as Bitmap_DigitD_0x22 (.set in
+; shared/positional_labels.s).
+;
+; Reader: AcWelcomScreenProc (v10/v9 0xf7f4a6, v7 0xf7f0a2), on its init
+; message (0x1c00001), calls Get_Region_Code and stores the table
+; address at 0x024786: Bitmap_DigitD+0x22 when the region code is 2,
+; Bitmap_DigitD+0x8da otherwise (the two `ld xwa, Bitmap_DigitD_0x...`
+; loads; those names are .set in shared/positional_labels.s). The step
+; index lives at 0x024784; a step is table + 12*index (add, add, sll 2).
+; AcWelcomScreen_Select_NextStep (v10/v9 0xf7f9c9, v7 0xf7f5c5)
+; increments the index, reads the step's +0 and hands it to SetApTimer
+; (a zero delay runs the next step at once); AcWelcomScreen_Select
+; (v10/v9 0xf7f605, v7 0xf7f201) loads +8 as the op, runs it only when 0
+; <= op <= 12, through WelcomeScript_OpJumpOffsets below, with the
+; address of +10 in xde.
+;
+; Record layout (welcome_step_t, defined in naka_technichord_strings.c):
+; +0 u32 delay (SetApTimer), +4 s16 x, +6 s16 y, +8 s16 op, +10 u16 arg.
+; Count pinned by the layout: the table starts where the other one ends
+; (or at the U glyph's end) and runs to the next object
+; (WelcomeScreen_ClearRect) at a whole number of records; the only op-0
+; step is the last one, and op 0's jump offset is 0 -- the code at
+; AcWelcomScreen_RenderBytecode itself, which posts event 0x1e000b3, the
+; event AcWelcomScreen_Init_SwitchMode also posts to leave the screen.
+; Op histogram: op 0 x1, op 1 x1, op 2 x125, op 3 x1, op 4 x5, op 5 x10,
+; op 6 x5, op 7 x5, op 8 x1, op 9 x32.
+;
+; Typed in naka_technichord_strings.c as welcome_step_t
+; WelcomeScript_Steps_A[186].
+; -----------------------------------------------------------------------------
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x18000, 0x8B8
+; -----------------------------------------------------------------------------
+; [nakarest_retype] WelcomeScript_Steps_B
+; WelcomeScript_Steps_B  --  191 welcome_step_t records x 12 bytes = 2292 bytes
+;
+; The welcome-screen animation script used for every other region code.
+; Reached by other files as Bitmap_DigitD_0x8da (.set in
+; shared/positional_labels.s).
+;
+; Reader: AcWelcomScreenProc (v10/v9 0xf7f4a6, v7 0xf7f0a2), on its init
+; message (0x1c00001), calls Get_Region_Code and stores the table
+; address at 0x024786: Bitmap_DigitD+0x22 when the region code is 2,
+; Bitmap_DigitD+0x8da otherwise (the two `ld xwa, Bitmap_DigitD_0x...`
+; loads; those names are .set in shared/positional_labels.s). The step
+; index lives at 0x024784; a step is table + 12*index (add, add, sll 2).
+; AcWelcomScreen_Select_NextStep (v10/v9 0xf7f9c9, v7 0xf7f5c5)
+; increments the index, reads the step's +0 and hands it to SetApTimer
+; (a zero delay runs the next step at once); AcWelcomScreen_Select
+; (v10/v9 0xf7f605, v7 0xf7f201) loads +8 as the op, runs it only when 0
+; <= op <= 12, through WelcomeScript_OpJumpOffsets below, with the
+; address of +10 in xde.
+;
+; Record layout (welcome_step_t, defined in naka_technichord_strings.c):
+; +0 u32 delay (SetApTimer), +4 s16 x, +6 s16 y, +8 s16 op, +10 u16 arg.
+; Count pinned by the layout: the table starts where the other one ends
+; (or at the U glyph's end) and runs to the next object
+; (WelcomeScreen_ClearRect) at a whole number of records; the only op-0
+; step is the last one, and op 0's jump offset is 0 -- the code at
+; AcWelcomScreen_RenderBytecode itself, which posts event 0x1e000b3, the
+; event AcWelcomScreen_Init_SwitchMode also posts to leave the screen.
+; Op histogram: op 0 x1, op 1 x1, op 2 x125, op 3 x1, op 4 x5, op 5 x10,
+; op 6 x5, op 7 x5, op 8 x1, op 11 x5, op 12 x32.
+;
+; Typed in naka_technichord_strings.c as welcome_step_t
+; WelcomeScript_Steps_B[191].
+; -----------------------------------------------------------------------------
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x188B8, 0x8F4
+; -----------------------------------------------------------------------------
+; [nakarest_retype] WelcomeScreen_ClearRect
+; WelcomeScreen_ClearRect  --  4 x s16 {x1, y1, x2, y2} = {0, 0, 319, 239}
+;
+; The whole 320 x 240 screen. AcWelcomScreen_Activate (v10/v9 0xf7f595,
+; v7 0xf7f191) (when CheckNotDrawFlag is clear) turns the LCD off,
+; passes this rectangle to DrawBox with colour 0, updates the screen and
+; turns the LCD back on (`ld xwa, Bitmap_DigitD_0x11ce; ld bc, 0; call
+; DrawBox`; the name is .set in shared/positional_labels.s). The
+; generator had read its last four bytes 3F 01 EF 00 as a pointer to
+; Naka_PresentationRootState (0x00ef013f); they are x2 = 319, y2 = 239.
+;
+; Typed as int16_t WelcomeScreen_ClearRect[4].
+; -----------------------------------------------------------------------------
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x191AC, 0x8
+; -----------------------------------------------------------------------------
+; [nakarest_retype] WelcomeScript_OpJumpOffsets
+; WelcomeScript_OpJumpOffsets  --  13 x s16 code offsets, one per op 0..12
+;
+; AcWelcomScreen_Select (v10/v9 0xf7f605, v7 0xf7f201) doubles the op
+; (add hl, hl), loads the word at Bitmap_DigitD_0x11d6 + 2*op (the name
+; is .set in shared/positional_labels.s), loads xix with
+; AcWelcomScreen_RenderBytecode and jumps indirectly -- so each entry is
+; the offset of an op handler from AcWelcomScreen_RenderBytecode.
+; Values: 0, 896, 15, 162, 179, 208, 237, 293, 321, 386, 860, 265, 386.
+; What each handler does (decoded with unidasm at label + offset, v10):
+; op 0 (+0) posts 0x1e000b3 and ends the script; op 1 (+896) just
+; advances to the next step; op 2 (+15) reads arg (cp iz, 2) and a
+; 12-byte record table in RAM at 0x03ea0c (not analysed); op 3 (+162)
+; calls SendEvent with 0x1c0000c; ops 4/5/6/7/11
+; (+179/+208/+237/+293/+265) draw one glyph each -- C, O, L, R, U; op 8
+; (+321) draws I then N; ops 9 and 12 (+386) draw C-O-L-O(-U)-R; op 10
+; (+860) calls ApFuncCall on 0x120000b with 0x1e000ac, CaptureLcd, then
+; 0x1e000ad. That code is not yet framed as instructions in
+; ui/drawbar_panel_ui.s, so the targets stay offsets, not labels.
+;
+; Typed as int16_t WelcomeScript_OpJumpOffsets[13].
+; -----------------------------------------------------------------------------
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x191B4, 0x1A
+; -----------------------------------------------------------------------------
+; [nakarest_retype] PsMixer_ControlProcTable
+; PsMixer_ControlProcTable  --  11 x u32 code addresses
+;
+; PsMixer_ControlHelper (v10/v9 0xf7fcb0, v7 0xf7f8ac)
+; (ui/drawbar_panel_ui.s) loads the word at +2 of a control record,
+; multiplies it by 4 and indexes this table (lda xbc,
+; Bitmap_DigitD_0x11f0 -- .set in shared/positional_labels.s -- then an
+; indexed load into xhl), and calls the entry with xbc = 0x1c0000d, the
+; paint message; the same `lda xbc, Bitmap_DigitD_0x11f0` occurs at 14
+; sites in that file. The eleven values (v10/v9) are 0xf80b7d, 0xf81ed2,
+; 0xf81b56, 0xf80ee9, 0xf815e5, 0xf80b80, 0xf80d21, 0xf812af, 0xf8231b,
+; 0xf81890, 0xf82222: all inside the AudioCtrl_DataBlock_* stretch of
+; ui/drawbar_panel_ui.s, where only 0xf812af, 0xf81890 and 0xf81ed2 are
+; on a label (AudioCtrl_DataBlock_Helper6/7/8) -- the other eight are
+; entry points that file's framing does not show. v7 moves every entry
+; by -0x404 through v7_c_divergence.json (offsets 102862..102902), which
+; is itself evidence that they are code addresses. Kept numeric here
+; because the targets have no labels to name.
+;
+; Typed as uint32_t PsMixer_ControlProcTable[11].
+; -----------------------------------------------------------------------------
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x191CE, 0x2C
 MidiParam_PanelCfgTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x191FA, 0xB4
 MidiParamStr1_Local:

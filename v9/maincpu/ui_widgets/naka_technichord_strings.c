@@ -81,7 +81,6 @@ extern const char PasswordOk;
 extern const char PasswordText;
 extern const char PsFileNameBoxProc;
 extern const char PsWindowToggleProc;
-extern const char SLSrc_ScrollMode8;
 extern const char SaveNo;
 extern const char SaveText;
 extern const char SaveYes;
@@ -98,6 +97,23 @@ extern const char WaitingFunc;
 extern const char WakeUpPassword;
 
 #define BASE  0x00E85F4Eu
+
+/* One step of the welcome-screen animation script (12 bytes).
+ * Walked by AcWelcomScreenProc (ui/drawbar_panel_ui.s): the current step
+ * index lives at 0x024784, the table pointer at 0x024786, and a step is
+ * reached as table + 12*index.  AcWelcomScreen_Select_NextStep hands `delay`
+ * to SetApTimer (0 = run the next step at once); AcWelcomScreen_Select
+ * dispatches on `op` (0..12 through a 13-entry jump table, anything else is
+ * skipped) with the address of `arg` in xde; the single-glyph ops copy
+ * {x, y} to their frame (lda xix, xsp+12; ldiw; ldiw) as the draw position
+ * and push `arg` as DrawBitmapSP2's colour (a palette index). */
+typedef struct __attribute__((packed)) {
+    uint32_t delay;  /* +0  SetApTimer duration before this step runs */
+    int16_t  x;      /* +4  draw position / op operand */
+    int16_t  y;      /* +6 */
+    int16_t  op;     /* +8  jump-table index 0..12 */
+    uint16_t arg;    /* +10 op operand; the glyph ops' colour */
+} welcome_step_t;
 
 typedef struct __attribute__((packed)) {
     uint32_t ptrs_0[30];  /* 30 pointers */
@@ -7960,2160 +7976,222 @@ typedef struct __attribute__((packed)) {
     char w45_name[6];
     char str_780[8];
     char str_781[4];
-    uint16_t field_17f12;
-    uint16_t field_17f14;
-    uint16_t field_17f16;
-    uint16_t field_17f18;
-    uint16_t field_17f1a;
-    uint16_t field_17f1c;
-    char str_782[2];
-    char str_783[2];
-    char str_784[2];
-    char str_785[2];
-    char str_786[2];
-    uint16_t field_17f28;
-    uint16_t field_17f2a;
-    uint16_t field_17f2c;
-    uint16_t field_17f2e;
-    uint16_t field_17f30;
-    uint16_t field_17f32;
-    uint16_t field_17f34;
-    uint16_t field_17f36;
-    uint16_t field_17f38;
-    uint16_t field_17f3a;
-    uint16_t field_17f3c;
-    uint16_t field_17f3e;
-    uint16_t field_17f40;
-    uint16_t field_17f42;
-    uint16_t field_17f44;
-    uint16_t field_17f46;
-    uint16_t field_17f48;
-    uint16_t field_17f4a;
-    uint16_t field_17f4c;
-    uint16_t field_17f4e;
-    uint16_t field_17f50;
-    uint16_t field_17f52;
-    uint16_t field_17f54;
-    uint16_t field_17f56;
-    uint16_t field_17f58;
-    uint16_t field_17f5a;
-    char str_787[2];
-    char str_788[2];
-    char str_789[2];
-    char str_790[2];
-    char str_791[2];
-    char str_792[2];
-    char str_793[2];
-    char str_794[2];
-    char str_795[2];
-    char str_796[2];
-    char str_797[2];
-    char str_798[2];
-    char str_799[2];
-    char str_800[2];
-    uint16_t field_17f78;
-    uint16_t field_17f7a;
-    uint16_t field_17f7c;
-    uint16_t field_17f7e;
-    uint16_t field_17f80;
-    uint16_t field_17f82;
-    uint16_t field_17f84;
-    uint16_t field_17f86;
-    uint16_t field_17f88;
-    uint16_t field_17f8a;
-    uint16_t field_17f8c;
-    uint16_t field_17f8e;
-    uint16_t field_17f90;
-    uint16_t field_17f92;
-    uint16_t field_17f94;
-    uint16_t field_17f96;
-    uint16_t field_17f98;
-    uint16_t field_17f9a;
-    uint16_t field_17f9c;
-    uint16_t field_17f9e;
-    uint16_t field_17fa0;
-    uint16_t field_17fa2;
-    uint16_t field_17fa4;
-    uint16_t field_17fa6;
-    uint16_t field_17fa8;
-    uint16_t field_17faa;
-    uint16_t field_17fac;
-    uint16_t field_17fae;
-    uint16_t field_17fb0;
-    uint16_t field_17fb2;
-    uint16_t field_17fb4;
-    uint16_t field_17fb6;
-    uint16_t field_17fb8;
-    uint16_t field_17fba;
-    uint16_t field_17fbc;
-    uint16_t field_17fbe;
-    uint16_t field_17fc0;
-    uint16_t field_17fc2;
-    uint16_t field_17fc4;
-    uint16_t field_17fc6;
-    uint16_t field_17fc8;
-    uint16_t field_17fca;
-    uint16_t field_17fcc;
-    uint16_t field_17fce;
-    uint16_t field_17fd0;
-    uint16_t field_17fd2;
-    uint16_t field_17fd4;
-    uint16_t field_17fd6;
-    uint16_t field_17fd8;
-    uint16_t field_17fda;
-    uint16_t field_17fdc;
-    uint16_t field_17fde;
-    uint16_t field_17fe0;
-    uint16_t field_17fe2;
-    uint16_t field_17fe4;
-    uint16_t field_17fe6;
-    uint16_t field_17fe8;
-    uint16_t field_17fea;
-    uint16_t field_17fec;
-    uint16_t field_17fee;
-    uint16_t field_17ff0;
-    uint16_t field_17ff2;
-    uint16_t field_17ff4;
-    uint16_t field_17ff6;
-    uint16_t field_17ff8;
-    uint16_t field_17ffa;
-    uint16_t field_17ffc;
-    uint16_t field_17ffe;
-    uint16_t field_18000;
-    uint8_t pad_1552[2];  /* zero padding */
-    uint16_t field_18004;
-    uint16_t field_18006;
-    uint16_t field_18008;
-    uint8_t pad_1553[2];  /* zero padding */
-    uint16_t field_1800c;
-    uint8_t pad_1554[2];  /* zero padding */
-    char str_801[2];
-    uint16_t field_18012;
-    uint16_t field_18014;
-    uint8_t pad_1555[2];  /* zero padding */
-    uint16_t field_18018;
-    uint8_t pad_1556[2];  /* zero padding */
-    uint16_t field_1801c;
-    uint16_t field_1801e;
-    uint16_t field_18020;
-    uint8_t pad_1557[2];  /* zero padding */
-    uint16_t field_18024;
-    uint8_t pad_1558[2];  /* zero padding */
-    char str_802[2];
-    uint16_t field_1802a;
-    uint16_t field_1802c;
-    uint8_t pad_1559[2];  /* zero padding */
-    uint16_t field_18030;
-    uint8_t pad_1560[2];  /* zero padding */
-    uint16_t field_18034;
-    uint16_t field_18036;
-    uint16_t field_18038;
-    uint8_t pad_1561[2];  /* zero padding */
-    uint16_t field_1803c;
-    uint8_t pad_1562[2];  /* zero padding */
-    uint16_t field_18040;
-    uint16_t field_18042;
-    uint16_t field_18044;
-    uint8_t pad_1563[2];  /* zero padding */
-    uint16_t field_18048;
-    uint8_t pad_1564[2];  /* zero padding */
-    uint16_t field_1804c;
-    uint16_t field_1804e;
-    uint16_t field_18050;
-    uint8_t pad_1565[2];  /* zero padding */
-    uint16_t field_18054;
-    uint8_t pad_1566[2];  /* zero padding */
-    char str_803[2];
-    uint16_t field_1805a;
-    uint16_t field_1805c;
-    uint8_t pad_1567[2];  /* zero padding */
-    uint16_t field_18060;
-    uint8_t pad_1568[2];  /* zero padding */
-    uint32_t ptr_18064;
-    uint16_t field_18068;
-    uint8_t pad_1569[2];  /* zero padding */
-    uint16_t field_1806c;
-    uint8_t pad_1570[2];  /* zero padding */
-    uint16_t field_18070;
-    uint16_t field_18072;
-    uint16_t field_18074;
-    uint8_t pad_1571[2];  /* zero padding */
-    uint16_t field_18078;
-    uint8_t pad_1572[2];  /* zero padding */
-    uint16_t field_1807c;
-    uint16_t field_1807e;
-    uint16_t field_18080;
-    uint8_t pad_1573[2];  /* zero padding */
-    uint16_t field_18084;
-    uint8_t pad_1574[2];  /* zero padding */
-    uint16_t field_18088;
-    uint16_t field_1808a;
-    uint16_t field_1808c;
-    uint8_t pad_1575[2];  /* zero padding */
-    uint16_t field_18090;
-    uint8_t pad_1576[2];  /* zero padding */
-    uint16_t field_18094;
-    uint16_t field_18096;
-    uint16_t field_18098;
-    uint8_t pad_1577[2];  /* zero padding */
-    uint16_t field_1809c;
-    uint8_t pad_1578[2];  /* zero padding */
-    uint32_t ptr_180a0;
-    uint16_t field_180a4;
-    uint8_t pad_1579[2];  /* zero padding */
-    uint16_t field_180a8;
-    uint8_t pad_1580[2];  /* zero padding */
-    uint16_t field_180ac;
-    uint16_t field_180ae;
-    uint16_t field_180b0;
-    uint8_t pad_1581[2];  /* zero padding */
-    uint16_t field_180b4;
-    uint8_t pad_1582[2];  /* zero padding */
-    uint16_t field_180b8;
-    char str_804[2];
-    uint16_t field_180bc;
-    uint8_t pad_1583[2];  /* zero padding */
-    uint16_t field_180c0;
-    uint8_t pad_1584[2];  /* zero padding */
-    uint16_t field_180c4;
-    char str_805[2];
-    uint16_t field_180c8;
-    uint8_t pad_1585[2];  /* zero padding */
-    uint16_t field_180cc;
-    uint8_t pad_1586[2];  /* zero padding */
-    uint16_t field_180d0;
-    uint16_t field_180d2;
-    uint16_t field_180d4;
-    uint8_t pad_1587[2];  /* zero padding */
-    uint16_t field_180d8;
-    uint8_t pad_1588[2];  /* zero padding */
-    uint32_t ptr_180dc;
-    uint16_t field_180e0;
-    uint8_t pad_1589[2];  /* zero padding */
-    uint16_t field_180e4;
-    uint8_t pad_1590[2];  /* zero padding */
-    uint16_t field_180e8;
-    char str_806[2];
-    uint16_t field_180ec;
-    uint8_t pad_1591[2];  /* zero padding */
-    uint16_t field_180f0;
-    uint8_t pad_1592[2];  /* zero padding */
-    uint32_t ptr_180f4;
-    uint16_t field_180f8;
-    uint8_t pad_1593[2];  /* zero padding */
-    uint16_t field_180fc;
-    uint8_t pad_1594[2];  /* zero padding */
-    uint32_t ptr_18100;
-    uint16_t field_18104;
-    uint8_t pad_1595[2];  /* zero padding */
-    uint16_t field_18108;
-    uint8_t pad_1596[2];  /* zero padding */
-    uint16_t field_1810c;
-    uint16_t field_1810e;
-    uint16_t field_18110;
-    uint8_t pad_1597[2];  /* zero padding */
-    uint16_t field_18114;
-    uint8_t pad_1598[2];  /* zero padding */
-    uint16_t field_18118;
-    uint16_t field_1811a;
-    uint16_t field_1811c;
-    uint8_t pad_1599[2];  /* zero padding */
-    uint16_t field_18120;
-    uint8_t pad_1600[2];  /* zero padding */
-    char str_807[2];
-    char str_808[2];
-    uint16_t field_18128;
-    uint8_t pad_1601[2];  /* zero padding */
-    uint16_t field_1812c;
-    uint8_t pad_1602[2];  /* zero padding */
-    uint16_t field_18130;
-    char str_809[2];
-    uint16_t field_18134;
-    uint8_t pad_1603[2];  /* zero padding */
-    uint16_t field_18138;
-    uint8_t pad_1604[2];  /* zero padding */
-    uint16_t field_1813c;
-    uint16_t field_1813e;
-    uint16_t field_18140;
-    uint8_t pad_1605[2];  /* zero padding */
-    uint16_t field_18144;
-    uint8_t pad_1606[2];  /* zero padding */
-    char str_810[2];
-    uint16_t field_1814a;
-    uint16_t field_1814c;
-    uint8_t pad_1607[2];  /* zero padding */
-    uint16_t field_18150;
-    uint8_t pad_1608[2];  /* zero padding */
-    uint16_t field_18154;
-    uint16_t field_18156;
-    uint16_t field_18158;
-    uint8_t pad_1609[2];  /* zero padding */
-    uint16_t field_1815c;
-    uint8_t pad_1610[2];  /* zero padding */
-    uint16_t field_18160;
-    char str_811[2];
-    uint16_t field_18164;
-    uint8_t pad_1611[2];  /* zero padding */
-    uint16_t field_18168;
-    uint8_t pad_1612[2];  /* zero padding */
-    uint16_t field_1816c;
-    uint16_t field_1816e;
-    uint16_t field_18170;
-    uint8_t pad_1613[2];  /* zero padding */
-    uint16_t field_18174;
-    uint8_t pad_1614[2];  /* zero padding */
-    uint16_t field_18178;
-    char str_812[2];
-    uint16_t field_1817c;
-    uint8_t pad_1615[6];  /* zero padding */
-    uint16_t field_18184;
-    char str_813[2];
-    uint16_t field_18188;
-    uint16_t field_1818a;
-    uint16_t field_1818c;
-    uint8_t pad_1616[2];  /* zero padding */
-    char str_814[2];
-    char str_815[2];
-    uint16_t field_18194;
-    uint8_t pad_1617[6];  /* zero padding */
-    uint16_t field_1819c;
-    char str_816[2];
-    uint16_t field_181a0;
-    uint16_t field_181a2;
-    uint16_t field_181a4;
-    uint8_t pad_1618[2];  /* zero padding */
-    char str_817[2];
-    char str_818[2];
-    uint16_t field_181ac;
-    uint8_t pad_1619[6];  /* zero padding */
-    char str_819[2];
-    char str_820[2];
-    uint16_t field_181b8;
-    uint16_t field_181ba;
-    uint16_t field_181bc;
-    uint8_t pad_1620[2];  /* zero padding */
-    char str_821[2];
-    char str_822[2];
-    uint16_t field_181c4;
-    uint8_t pad_1621[6];  /* zero padding */
-    char str_823[2];
-    char str_824[2];
-    uint16_t field_181d0;
-    uint16_t field_181d2;
-    uint16_t field_181d4;
-    uint8_t pad_1622[2];  /* zero padding */
-    char str_825[2];
-    char str_826[2];
-    uint16_t field_181dc;
-    uint8_t pad_1623[6];  /* zero padding */
-    char str_827[2];
-    char str_828[2];
-    uint16_t field_181e8;
-    uint16_t field_181ea;
-    uint16_t field_181ec;
-    uint8_t pad_1624[2];  /* zero padding */
-    char str_829[2];
-    char str_830[2];
-    uint16_t field_181f4;
-    uint8_t pad_1625[6];  /* zero padding */
-    char str_831[2];
-    char str_832[2];
-    uint16_t field_18200;
-    uint16_t field_18202;
-    uint16_t field_18204;
-    uint8_t pad_1626[2];  /* zero padding */
-    char str_833[2];
-    char str_834[2];
-    uint16_t field_1820c;
-    uint8_t pad_1627[6];  /* zero padding */
-    char str_835[2];
-    char str_836[2];
-    uint16_t field_18218;
-    uint16_t field_1821a;
-    uint16_t field_1821c;
-    uint8_t pad_1628[2];  /* zero padding */
-    char str_837[2];
-    char str_838[2];
-    uint16_t field_18224;
-    uint8_t pad_1629[6];  /* zero padding */
-    char str_839[2];
-    char str_840[2];
-    uint16_t field_18230;
-    uint16_t field_18232;
-    uint16_t field_18234;
-    uint8_t pad_1630[2];  /* zero padding */
-    uint16_t field_18238;
-    char str_841[2];
-    uint16_t field_1823c;
-    uint8_t pad_1631[6];  /* zero padding */
-    char str_842[2];
-    char str_843[2];
-    uint16_t field_18248;
-    uint16_t field_1824a;
-    uint16_t field_1824c;
-    uint8_t pad_1632[2];  /* zero padding */
-    uint16_t field_18250;
-    char str_844[2];
-    uint16_t field_18254;
-    uint8_t pad_1633[6];  /* zero padding */
-    char str_845[2];
-    char str_846[2];
-    uint16_t field_18260;
-    uint16_t field_18262;
-    uint16_t field_18264;
-    uint8_t pad_1634[2];  /* zero padding */
-    uint16_t field_18268;
-    char str_847[2];
-    uint16_t field_1826c;
-    uint8_t pad_1635[6];  /* zero padding */
-    char str_848[2];
-    char str_849[2];
-    uint16_t field_18278;
-    uint16_t field_1827a;
-    uint16_t field_1827c;
-    uint8_t pad_1636[2];  /* zero padding */
-    uint16_t field_18280;
-    char str_850[2];
-    uint16_t field_18284;
-    uint8_t pad_1637[6];  /* zero padding */
-    char str_851[2];
-    char str_852[2];
-    uint16_t field_18290;
-    uint16_t field_18292;
-    uint16_t field_18294;
-    uint8_t pad_1638[2];  /* zero padding */
-    uint16_t field_18298;
-    char str_853[2];
-    uint16_t field_1829c;
-    uint8_t pad_1639[6];  /* zero padding */
-    char str_854[2];
-    char str_855[2];
-    uint16_t field_182a8;
-    uint16_t field_182aa;
-    uint16_t field_182ac;
-    uint8_t pad_1640[2];  /* zero padding */
-    uint16_t field_182b0;
-    char str_856[2];
-    uint16_t field_182b4;
-    uint8_t pad_1641[6];  /* zero padding */
-    uint16_t field_182bc;
-    char str_857[2];
-    uint16_t field_182c0;
-    uint16_t field_182c2;
-    uint16_t field_182c4;
-    uint8_t pad_1642[2];  /* zero padding */
-    uint16_t field_182c8;
-    char str_858[2];
-    uint16_t field_182cc;
-    uint8_t pad_1643[6];  /* zero padding */
-    uint16_t field_182d4;
-    char str_859[2];
-    uint16_t field_182d8;
-    uint16_t field_182da;
-    uint16_t field_182dc;
-    uint8_t pad_1644[2];  /* zero padding */
-    uint16_t field_182e0;
-    char str_860[2];
-    uint16_t field_182e4;
-    uint8_t pad_1645[6];  /* zero padding */
-    uint16_t field_182ec;
-    char str_861[2];
-    uint16_t field_182f0;
-    uint16_t field_182f2;
-    uint16_t field_182f4;
-    uint8_t pad_1646[2];  /* zero padding */
-    uint16_t field_182f8;
-    char str_862[2];
-    uint16_t field_182fc;
-    uint8_t pad_1647[6];  /* zero padding */
-    uint16_t field_18304;
-    char str_863[2];
-    uint16_t field_18308;
-    uint16_t field_1830a;
-    uint16_t field_1830c;
-    uint8_t pad_1648[2];  /* zero padding */
-    uint16_t field_18310;
-    char str_864[2];
-    uint16_t field_18314;
-    uint8_t pad_1649[6];  /* zero padding */
-    uint16_t field_1831c;
-    char str_865[2];
-    uint16_t field_18320;
-    uint16_t field_18322;
-    uint16_t field_18324;
-    uint8_t pad_1650[2];  /* zero padding */
-    uint16_t field_18328;
-    char str_866[2];
-    uint16_t field_1832c;
-    uint8_t pad_1651[6];  /* zero padding */
-    uint16_t field_18334;
-    char str_867[2];
-    uint16_t field_18338;
-    uint16_t field_1833a;
-    uint16_t field_1833c;
-    uint8_t pad_1652[2];  /* zero padding */
-    uint16_t field_18340;
-    char str_868[2];
-    uint16_t field_18344;
-    uint8_t pad_1653[6];  /* zero padding */
-    uint16_t field_1834c;
-    char str_869[2];
-    uint16_t field_18350;
-    uint16_t field_18352;
-    uint16_t field_18354;
-    uint8_t pad_1654[2];  /* zero padding */
-    uint16_t field_18358;
-    char str_870[2];
-    uint16_t field_1835c;
-    uint8_t pad_1655[6];  /* zero padding */
-    uint16_t field_18364;
-    char str_871[2];
-    uint16_t field_18368;
-    uint16_t field_1836a;
-    uint16_t field_1836c;
-    uint8_t pad_1656[2];  /* zero padding */
-    uint16_t field_18370;
-    char str_872[2];
-    uint16_t field_18374;
-    uint8_t pad_1657[6];  /* zero padding */
-    uint16_t field_1837c;
-    char str_873[2];
-    uint16_t field_18380;
-    uint16_t field_18382;
-    uint16_t field_18384;
-    uint8_t pad_1658[2];  /* zero padding */
-    uint16_t field_18388;
-    char str_874[2];
-    uint16_t field_1838c;
-    uint8_t pad_1659[6];  /* zero padding */
-    uint16_t field_18394;
-    char str_875[2];
-    uint16_t field_18398;
-    uint16_t field_1839a;
-    uint16_t field_1839c;
-    uint8_t pad_1660[2];  /* zero padding */
-    uint16_t field_183a0;
-    char str_876[2];
-    uint16_t field_183a4;
-    uint8_t pad_1661[6];  /* zero padding */
-    uint16_t field_183ac;
-    char str_877[2];
-    uint16_t field_183b0;
-    uint16_t field_183b2;
-    uint16_t field_183b4;
-    uint8_t pad_1662[2];  /* zero padding */
-    uint16_t field_183b8;
-    char str_878[2];
-    uint16_t field_183bc;
-    uint8_t pad_1663[6];  /* zero padding */
-    uint16_t field_183c4;
-    char str_879[2];
-    uint16_t field_183c8;
-    uint16_t field_183ca;
-    uint16_t field_183cc;
-    uint8_t pad_1664[2];  /* zero padding */
-    char str_880[2];
-    char str_881[2];
-    uint16_t field_183d4;
-    uint8_t pad_1665[6];  /* zero padding */
-    uint16_t field_183dc;
-    char str_882[2];
-    uint16_t field_183e0;
-    uint16_t field_183e2;
-    uint16_t field_183e4;
-    uint8_t pad_1666[2];  /* zero padding */
-    char str_883[2];
-    char str_884[2];
-    uint16_t field_183ec;
-    uint8_t pad_1667[6];  /* zero padding */
-    uint16_t field_183f4;
-    char str_885[2];
-    uint16_t field_183f8;
-    uint16_t field_183fa;
-    uint16_t field_183fc;
-    uint8_t pad_1668[2];  /* zero padding */
-    char str_886[2];
-    char str_887[2];
-    uint16_t field_18404;
-    uint8_t pad_1669[6];  /* zero padding */
-    uint16_t field_1840c;
-    char str_888[2];
-    uint16_t field_18410;
-    uint16_t field_18412;
-    uint16_t field_18414;
-    uint8_t pad_1670[2];  /* zero padding */
-    char str_889[2];
-    char str_890[2];
-    uint16_t field_1841c;
-    uint8_t pad_1671[6];  /* zero padding */
-    uint16_t field_18424;
-    char str_891[2];
-    uint16_t field_18428;
-    uint16_t field_1842a;
-    uint16_t field_1842c;
-    uint8_t pad_1672[2];  /* zero padding */
-    char str_892[2];
-    char str_893[2];
-    uint16_t field_18434;
-    uint8_t pad_1673[6];  /* zero padding */
-    uint16_t field_1843c;
-    char str_894[2];
-    uint16_t field_18440;
-    uint16_t field_18442;
-    uint16_t field_18444;
-    uint8_t pad_1674[2];  /* zero padding */
-    char str_895[2];
-    char str_896[2];
-    uint16_t field_1844c;
-    uint8_t pad_1675[6];  /* zero padding */
-    char str_897[2];
-    char str_898[2];
-    uint16_t field_18458;
-    uint16_t field_1845a;
-    uint16_t field_1845c;
-    uint8_t pad_1676[2];  /* zero padding */
-    char str_899[2];
-    char str_900[2];
-    uint16_t field_18464;
-    uint8_t pad_1677[6];  /* zero padding */
-    char str_901[2];
-    char str_902[2];
-    uint16_t field_18470;
-    uint16_t field_18472;
-    uint16_t field_18474;
-    uint8_t pad_1678[2];  /* zero padding */
-    char str_903[2];
-    char str_904[2];
-    uint16_t field_1847c;
-    uint16_t field_1847e;
-    uint16_t field_18480;
-    uint8_t pad_1679[2];  /* zero padding */
-    char str_905[2];
-    char str_906[2];
-    uint16_t field_18488;
-    uint16_t field_1848a;
-    uint16_t field_1848c;
-    uint8_t pad_1680[2];  /* zero padding */
-    char str_907[2];
-    char str_908[2];
-    uint16_t field_18494;
-    uint16_t field_18496;
-    uint16_t field_18498;
-    uint8_t pad_1681[2];  /* zero padding */
-    uint16_t field_1849c;
-    char str_909[2];
-    uint16_t field_184a0;
-    uint16_t field_184a2;
-    uint8_t pad_1682[4];  /* zero padding */
-    char str_910[2];
-    char str_911[2];
-    uint16_t field_184ac;
-    uint16_t field_184ae;
-    uint8_t pad_1683[4];  /* zero padding */
-    char str_912[2];
-    char str_913[2];
-    uint16_t field_184b8;
-    uint16_t field_184ba;
-    uint8_t pad_1684[4];  /* zero padding */
-    char str_914[2];
-    char str_915[2];
-    uint16_t field_184c4;
-    uint16_t field_184c6;
-    uint16_t field_184c8;
-    uint8_t pad_1685[2];  /* zero padding */
-    char str_916[2];
-    char str_917[2];
-    uint16_t field_184d0;
-    uint16_t field_184d2;
-    uint8_t pad_1686[4];  /* zero padding */
-    char str_918[2];
-    char str_919[2];
-    uint16_t field_184dc;
-    uint16_t field_184de;
-    uint8_t pad_1687[4];  /* zero padding */
-    char str_920[2];
-    char str_921[2];
-    uint16_t field_184e8;
-    uint16_t field_184ea;
-    uint8_t pad_1688[4];  /* zero padding */
-    char str_922[2];
-    char str_923[2];
-    uint16_t field_184f4;
-    uint16_t field_184f6;
-    uint16_t field_184f8;
-    uint8_t pad_1689[2];  /* zero padding */
-    char str_924[2];
-    char str_925[2];
-    uint16_t field_18500;
-    uint16_t field_18502;
-    uint8_t pad_1690[4];  /* zero padding */
-    char str_926[2];
-    char str_927[2];
-    uint16_t field_1850c;
-    uint16_t field_1850e;
-    uint8_t pad_1691[4];  /* zero padding */
-    uint16_t field_18514;
-    char str_928[2];
-    uint16_t field_18518;
-    uint16_t field_1851a;
-    uint8_t pad_1692[4];  /* zero padding */
-    uint16_t field_18520;
-    char str_929[2];
-    uint16_t field_18524;
-    uint16_t field_18526;
-    uint16_t field_18528;
-    uint8_t pad_1693[2];  /* zero padding */
-    uint16_t field_1852c;
-    char str_930[2];
-    uint16_t field_18530;
-    uint16_t field_18532;
-    uint8_t pad_1694[4];  /* zero padding */
-    uint16_t field_18538;
-    char str_931[2];
-    uint16_t field_1853c;
-    uint16_t field_1853e;
-    uint8_t pad_1695[4];  /* zero padding */
-    uint16_t field_18544;
-    char str_932[2];
-    uint16_t field_18548;
-    uint16_t field_1854a;
-    uint8_t pad_1696[4];  /* zero padding */
-    uint16_t field_18550;
-    char str_933[2];
-    uint16_t field_18554;
-    uint16_t field_18556;
-    uint16_t field_18558;
-    uint8_t pad_1697[2];  /* zero padding */
-    uint16_t field_1855c;
-    char str_934[2];
-    uint16_t field_18560;
-    uint16_t field_18562;
-    uint8_t pad_1698[4];  /* zero padding */
-    uint16_t field_18568;
-    char str_935[2];
-    uint16_t field_1856c;
-    uint16_t field_1856e;
-    uint8_t pad_1699[4];  /* zero padding */
-    uint16_t field_18574;
-    char str_936[2];
-    uint16_t field_18578;
-    uint16_t field_1857a;
-    uint8_t pad_1700[4];  /* zero padding */
-    uint16_t field_18580;
-    char str_937[2];
-    uint16_t field_18584;
-    uint16_t field_18586;
-    uint16_t field_18588;
-    uint8_t pad_1701[2];  /* zero padding */
-    uint16_t field_1858c;
-    char str_938[2];
-    uint16_t field_18590;
-    uint16_t field_18592;
-    uint8_t pad_1702[4];  /* zero padding */
-    uint16_t field_18598;
-    char str_939[2];
-    uint16_t field_1859c;
-    uint16_t field_1859e;
-    uint8_t pad_1703[4];  /* zero padding */
-    uint16_t field_185a4;
-    char str_940[2];
-    uint16_t field_185a8;
-    uint16_t field_185aa;
-    uint8_t pad_1704[4];  /* zero padding */
-    uint16_t field_185b0;
-    char str_941[2];
-    uint16_t field_185b4;
-    uint16_t field_185b6;
-    uint16_t field_185b8;
-    uint8_t pad_1705[2];  /* zero padding */
-    uint16_t field_185bc;
-    char str_942[2];
-    uint16_t field_185c0;
-    uint16_t field_185c2;
-    uint8_t pad_1706[4];  /* zero padding */
-    uint16_t field_185c8;
-    char str_943[2];
-    uint16_t field_185cc;
-    uint16_t field_185ce;
-    uint8_t pad_1707[4];  /* zero padding */
-    uint16_t field_185d4;
-    char str_944[2];
-    uint16_t field_185d8;
-    uint16_t field_185da;
-    uint8_t pad_1708[4];  /* zero padding */
-    uint16_t field_185e0;
-    char str_945[2];
-    uint16_t field_185e4;
-    uint16_t field_185e6;
-    uint16_t field_185e8;
-    uint8_t pad_1709[2];  /* zero padding */
-    uint16_t field_185ec;
-    uint16_t field_185ee;
-    uint16_t field_185f0;
-    uint16_t field_185f2;
-    uint16_t field_185f4;
-    uint8_t pad_1710[2];  /* zero padding */
-    uint16_t field_185f8;
-    uint16_t field_185fa;
-    uint32_t ptr_185fc;
-    uint16_t field_18600;
-    uint8_t pad_1711[4];  /* zero padding */
-    uint16_t field_18606;
-    uint16_t field_18608;
-    uint8_t pad_1712[2];  /* zero padding */
-    uint16_t field_1860c;
-    uint8_t pad_1713[2];  /* zero padding */
-    uint16_t field_18610;
-    uint16_t field_18612;
-    uint16_t field_18614;
-    uint16_t field_18616;
-    uint16_t field_18618;
-    uint8_t pad_1714[2];  /* zero padding */
-    char str_946[2];
-    uint16_t field_1861e;
-    uint16_t field_18620;
-    uint16_t field_18622;
-    uint16_t field_18624;
-    uint8_t pad_1715[2];  /* zero padding */
-    char str_947[2];
-    uint16_t field_1862a;
-    uint16_t field_1862c;
-    uint16_t field_1862e;
-    uint16_t field_18630;
-    uint8_t pad_1716[2];  /* zero padding */
-    char str_948[2];
-    uint16_t field_18636;
-    uint16_t field_18638;
-    uint16_t field_1863a;
-    uint16_t field_1863c;
-    uint8_t pad_1717[2];  /* zero padding */
-    char str_949[2];
-    uint16_t field_18642;
-    uint16_t field_18644;
-    uint16_t field_18646;
-    uint16_t field_18648;
-    uint8_t pad_1718[2];  /* zero padding */
-    char str_950[2];
-    uint16_t field_1864e;
-    uint16_t field_18650;
-    uint16_t field_18652;
-    uint16_t field_18654;
-    uint8_t pad_1719[2];  /* zero padding */
-    uint16_t field_18658;
-    uint16_t field_1865a;
-    uint16_t field_1865c;
-    uint16_t field_1865e;
-    uint16_t field_18660;
-    uint8_t pad_1720[2];  /* zero padding */
-    uint16_t field_18664;
-    uint16_t field_18666;
-    uint32_t ptr_18668;
-    uint16_t field_1866c;
-    uint8_t pad_1721[2];  /* zero padding */
-    uint16_t field_18670;
-    uint16_t field_18672;
-    uint16_t field_18674;
-    uint16_t field_18676;
-    uint16_t field_18678;
-    uint8_t pad_1722[2];  /* zero padding */
-    uint16_t field_1867c;
-    uint16_t field_1867e;
-    uint32_t ptr_18680;
-    uint16_t field_18684;
-    uint8_t pad_1723[2];  /* zero padding */
-    uint16_t field_18688;
-    uint16_t field_1868a;
-    uint32_t ptr_1868c;
-    uint16_t field_18690;
-    uint8_t pad_1724[2];  /* zero padding */
-    uint16_t field_18694;
-    uint16_t field_18696;
-    uint32_t ptr_18698;
-    uint16_t field_1869c;
-    uint8_t pad_1725[2];  /* zero padding */
-    uint16_t field_186a0;
-    uint16_t field_186a2;
-    uint32_t ptr_186a4;
-    uint16_t field_186a8;
-    uint8_t pad_1726[2];  /* zero padding */
-    uint16_t field_186ac;
-    uint16_t field_186ae;
-    uint32_t ptr_186b0;
-    uint16_t field_186b4;
-    uint8_t pad_1727[2];  /* zero padding */
-    uint16_t field_186b8;
-    uint16_t field_186ba;
-    uint32_t ptr_186bc;
-    uint16_t field_186c0;
-    uint8_t pad_1728[2];  /* zero padding */
-    uint16_t field_186c4;
-    uint16_t field_186c6;
-    uint16_t field_186c8;
-    uint16_t field_186ca;
-    uint16_t field_186cc;
-    uint8_t pad_1729[2];  /* zero padding */
-    uint16_t field_186d0;
-    uint16_t field_186d2;
-    uint16_t field_186d4;
-    uint16_t field_186d6;
-    uint16_t field_186d8;
-    uint8_t pad_1730[2];  /* zero padding */
-    char str_951[2];
-    uint16_t field_186de;
-    uint16_t field_186e0;
-    uint16_t field_186e2;
-    uint16_t field_186e4;
-    uint8_t pad_1731[2];  /* zero padding */
-    char str_952[2];
-    uint16_t field_186ea;
-    uint16_t field_186ec;
-    uint16_t field_186ee;
-    uint16_t field_186f0;
-    uint8_t pad_1732[2];  /* zero padding */
-    char str_953[2];
-    uint16_t field_186f6;
-    uint32_t ptr_186f8;
-    uint16_t field_186fc;
-    uint8_t pad_1733[2];  /* zero padding */
-    uint16_t field_18700;
-    uint16_t field_18702;
-    uint16_t field_18704;
-    uint8_t pad_1734[2];  /* zero padding */
-    uint16_t field_18708;
-    uint8_t pad_1735[2];  /* zero padding */
-    uint16_t field_1870c;
-    uint16_t field_1870e;
-    uint16_t field_18710;
-    uint16_t field_18712;
-    uint16_t field_18714;
-    uint8_t pad_1736[2];  /* zero padding */
-    uint16_t field_18718;
-    uint16_t field_1871a;
-    uint16_t field_1871c;
-    uint16_t field_1871e;
-    uint16_t field_18720;
-    uint8_t pad_1737[2];  /* zero padding */
-    uint16_t field_18724;
-    uint16_t field_18726;
-    uint16_t field_18728;
-    uint16_t field_1872a;
-    uint16_t field_1872c;
-    uint8_t pad_1738[2];  /* zero padding */
-    uint16_t field_18730;
-    uint16_t field_18732;
-    uint16_t field_18734;
-    uint16_t field_18736;
-    uint16_t field_18738;
-    uint8_t pad_1739[2];  /* zero padding */
-    char str_954[2];
-    uint16_t field_1873e;
-    uint16_t field_18740;
-    uint16_t field_18742;
-    uint16_t field_18744;
-    uint8_t pad_1740[2];  /* zero padding */
-    char str_955[2];
-    uint16_t field_1874a;
-    uint16_t field_1874c;
-    uint16_t field_1874e;
-    uint16_t field_18750;
-    uint8_t pad_1741[2];  /* zero padding */
-    char str_956[2];
-    uint16_t field_18756;
-    uint16_t field_18758;
-    uint16_t field_1875a;
-    uint16_t field_1875c;
-    uint8_t pad_1742[2];  /* zero padding */
-    char str_957[2];
-    uint16_t field_18762;
-    uint32_t ptr_18764;
-    uint16_t field_18768;
-    uint8_t pad_1743[2];  /* zero padding */
-    char str_958[2];
-    uint16_t field_1876e;
-    uint16_t field_18770;
-    uint16_t field_18772;
-    uint16_t field_18774;
-    uint8_t pad_1744[2];  /* zero padding */
-    char str_959[2];
-    uint16_t field_1877a;
-    uint32_t ptr_1877c;
-    uint16_t field_18780;
-    uint8_t pad_1745[2];  /* zero padding */
-    char str_960[2];
-    uint16_t field_18786;
-    uint32_t ptr_18788;
-    uint16_t field_1878c;
-    uint8_t pad_1746[2];  /* zero padding */
-    uint16_t field_18790;
-    uint16_t field_18792;
-    uint32_t ptr_18794;
-    uint16_t field_18798;
-    uint8_t pad_1747[2];  /* zero padding */
-    uint16_t field_1879c;
-    uint16_t field_1879e;
-    uint32_t ptr_187a0;
-    uint16_t field_187a4;
-    uint8_t pad_1748[2];  /* zero padding */
-    uint16_t field_187a8;
-    uint16_t field_187aa;
-    uint16_t field_187ac;
-    uint16_t field_187ae;
-    uint16_t field_187b0;
-    uint8_t pad_1749[2];  /* zero padding */
-    uint16_t field_187b4;
-    uint16_t field_187b6;
-    uint16_t field_187b8;
-    uint16_t field_187ba;
-    uint16_t field_187bc;
-    uint8_t pad_1750[2];  /* zero padding */
-    char str_961[2];
-    uint16_t field_187c2;
-    uint16_t field_187c4;
-    uint16_t field_187c6;
-    uint16_t field_187c8;
-    uint8_t pad_1751[2];  /* zero padding */
-    uint16_t field_187cc;
-    uint16_t field_187ce;
-    uint32_t ptr_187d0;
-    uint16_t field_187d4;
-    uint8_t pad_1752[2];  /* zero padding */
-    uint16_t field_187d8;
-    uint16_t field_187da;
-    uint32_t ptr_187dc;
-    uint16_t field_187e0;
-    uint8_t pad_1753[2];  /* zero padding */
-    uint16_t field_187e4;
-    uint16_t field_187e6;
-    uint32_t ptr_187e8;
-    uint16_t field_187ec;
-    uint8_t pad_1754[2];  /* zero padding */
-    uint16_t field_187f0;
-    uint16_t field_187f2;
-    uint16_t field_187f4;
-    uint16_t field_187f6;
-    uint16_t field_187f8;
-    uint8_t pad_1755[2];  /* zero padding */
-    char str_962[2];
-    uint16_t field_187fe;
-    uint16_t field_18800;
-    uint16_t field_18802;
-    uint16_t field_18804;
-    uint8_t pad_1756[2];  /* zero padding */
-    uint16_t field_18808;
-    uint16_t field_1880a;
-    uint16_t field_1880c;
-    uint16_t field_1880e;
-    uint16_t field_18810;
-    uint8_t pad_1757[2];  /* zero padding */
-    uint16_t field_18814;
-    uint16_t field_18816;
-    uint32_t ptr_18818;
-    uint16_t field_1881c;
-    uint8_t pad_1758[2];  /* zero padding */
-    uint16_t field_18820;
-    uint16_t field_18822;
-    uint32_t ptr_18824;
-    uint16_t field_18828;
-    uint8_t pad_1759[2];  /* zero padding */
-    uint16_t field_1882c;
-    uint16_t field_1882e;
-    uint32_t ptr_18830;
-    uint16_t field_18834;
-    uint8_t pad_1760[2];  /* zero padding */
-    char str_963[2];
-    uint16_t field_1883a;
-    uint32_t ptr_1883c;
-    uint16_t field_18840;
-    uint8_t pad_1761[2];  /* zero padding */
-    uint16_t field_18844;
-    uint16_t field_18846;
-    uint16_t field_18848;
-    uint16_t field_1884a;
-    uint16_t field_1884c;
-    uint8_t pad_1762[2];  /* zero padding */
-    uint16_t field_18850;
-    uint16_t field_18852;
-    uint16_t field_18854;
-    uint16_t field_18856;
-    uint16_t field_18858;
-    uint8_t pad_1763[2];  /* zero padding */
-    uint16_t field_1885c;
-    uint16_t field_1885e;
-    uint32_t ptr_18860;
-    uint16_t field_18864;
-    uint8_t pad_1764[2];  /* zero padding */
-    uint16_t field_18868;
-    uint16_t field_1886a;
-    uint32_t ptr_1886c;
-    uint16_t field_18870;
-    uint8_t pad_1765[2];  /* zero padding */
-    char str_964[2];
-    uint16_t field_18876;
-    uint32_t ptr_18878;
-    uint16_t field_1887c;
-    uint8_t pad_1766[2];  /* zero padding */
-    uint16_t field_18880;
-    uint16_t field_18882;
-    uint32_t ptr_18884;
-    uint16_t field_18888;
-    uint8_t pad_1767[2];  /* zero padding */
-    uint16_t field_1888c;
-    uint16_t field_1888e;
-    uint16_t field_18890;
-    uint16_t field_18892;
-    uint16_t field_18894;
-    uint8_t pad_1768[2];  /* zero padding */
-    uint16_t field_18898;
-    uint16_t field_1889a;
-    uint16_t field_1889c;
-    uint16_t field_1889e;
-    uint16_t field_188a0;
-    uint8_t pad_1769[2];  /* zero padding */
-    uint16_t field_188a4;
-    uint16_t field_188a6;
-    uint32_t ptr_188a8;
-    char str_965[2];
-    uint8_t pad_1770[2];  /* zero padding */
-    uint16_t field_188b0;
-    uint16_t field_188b2;
-    uint8_t pad_1771[4];  /* zero padding */
-    uint16_t field_188b8;
-    uint8_t pad_1772[2];  /* zero padding */
-    uint16_t field_188bc;
-    uint16_t field_188be;
-    uint16_t field_188c0;
-    uint8_t pad_1773[2];  /* zero padding */
-    uint16_t field_188c4;
-    uint8_t pad_1774[2];  /* zero padding */
-    char str_966[2];
-    uint16_t field_188ca;
-    uint16_t field_188cc;
-    uint8_t pad_1775[2];  /* zero padding */
-    uint16_t field_188d0;
-    uint8_t pad_1776[2];  /* zero padding */
-    uint16_t field_188d4;
-    uint16_t field_188d6;
-    uint16_t field_188d8;
-    uint8_t pad_1777[2];  /* zero padding */
-    uint16_t field_188dc;
-    uint8_t pad_1778[2];  /* zero padding */
-    char str_967[2];
-    uint16_t field_188e2;
-    uint16_t field_188e4;
-    uint8_t pad_1779[2];  /* zero padding */
-    uint16_t field_188e8;
-    uint8_t pad_1780[2];  /* zero padding */
-    uint16_t field_188ec;
-    uint16_t field_188ee;
-    uint16_t field_188f0;
-    uint8_t pad_1781[2];  /* zero padding */
-    uint16_t field_188f4;
-    uint8_t pad_1782[2];  /* zero padding */
-    uint16_t field_188f8;
-    uint16_t field_188fa;
-    uint16_t field_188fc;
-    uint8_t pad_1783[2];  /* zero padding */
-    uint16_t field_18900;
-    uint8_t pad_1784[2];  /* zero padding */
-    uint16_t field_18904;
-    uint16_t field_18906;
-    uint16_t field_18908;
-    uint8_t pad_1785[2];  /* zero padding */
-    uint16_t field_1890c;
-    uint8_t pad_1786[2];  /* zero padding */
-    char str_968[2];
-    uint16_t field_18912;
-    uint16_t field_18914;
-    uint8_t pad_1787[2];  /* zero padding */
-    uint16_t field_18918;
-    uint8_t pad_1788[2];  /* zero padding */
-    uint32_t ptr_1891c;
-    uint16_t field_18920;
-    uint8_t pad_1789[2];  /* zero padding */
-    uint16_t field_18924;
-    uint8_t pad_1790[2];  /* zero padding */
-    uint16_t field_18928;
-    uint16_t field_1892a;
-    uint16_t field_1892c;
-    uint8_t pad_1791[2];  /* zero padding */
-    uint16_t field_18930;
-    uint8_t pad_1792[2];  /* zero padding */
-    uint16_t field_18934;
-    uint16_t field_18936;
-    uint16_t field_18938;
-    uint8_t pad_1793[2];  /* zero padding */
-    uint16_t field_1893c;
-    uint8_t pad_1794[2];  /* zero padding */
-    uint16_t field_18940;
-    uint16_t field_18942;
-    uint16_t field_18944;
-    uint8_t pad_1795[2];  /* zero padding */
-    uint16_t field_18948;
-    uint8_t pad_1796[2];  /* zero padding */
-    uint16_t field_1894c;
-    uint16_t field_1894e;
-    uint16_t field_18950;
-    uint8_t pad_1797[2];  /* zero padding */
-    uint16_t field_18954;
-    uint8_t pad_1798[2];  /* zero padding */
-    uint32_t ptr_18958;
-    uint16_t field_1895c;
-    uint8_t pad_1799[2];  /* zero padding */
-    uint16_t field_18960;
-    uint8_t pad_1800[2];  /* zero padding */
-    uint16_t field_18964;
-    uint16_t field_18966;
-    uint16_t field_18968;
-    uint8_t pad_1801[2];  /* zero padding */
-    uint16_t field_1896c;
-    uint8_t pad_1802[2];  /* zero padding */
-    uint16_t field_18970;
-    char str_969[2];
-    uint16_t field_18974;
-    uint8_t pad_1803[2];  /* zero padding */
-    uint16_t field_18978;
-    uint8_t pad_1804[2];  /* zero padding */
-    uint16_t field_1897c;
-    char str_970[2];
-    uint16_t field_18980;
-    uint8_t pad_1805[2];  /* zero padding */
-    uint16_t field_18984;
-    uint8_t pad_1806[2];  /* zero padding */
-    uint16_t field_18988;
-    uint16_t field_1898a;
-    uint16_t field_1898c;
-    uint8_t pad_1807[2];  /* zero padding */
-    uint16_t field_18990;
-    uint8_t pad_1808[2];  /* zero padding */
-    uint32_t ptr_18994;
-    uint16_t field_18998;
-    uint8_t pad_1809[2];  /* zero padding */
-    uint16_t field_1899c;
-    uint8_t pad_1810[2];  /* zero padding */
-    uint16_t field_189a0;
-    char str_971[2];
-    uint16_t field_189a4;
-    uint8_t pad_1811[2];  /* zero padding */
-    uint16_t field_189a8;
-    uint8_t pad_1812[2];  /* zero padding */
-    uint32_t ptr_189ac;
-    uint16_t field_189b0;
-    uint8_t pad_1813[2];  /* zero padding */
-    uint16_t field_189b4;
-    uint8_t pad_1814[2];  /* zero padding */
-    uint32_t ptr_189b8;
-    uint16_t field_189bc;
-    uint8_t pad_1815[2];  /* zero padding */
-    uint16_t field_189c0;
-    uint8_t pad_1816[2];  /* zero padding */
-    uint16_t field_189c4;
-    uint16_t field_189c6;
-    uint16_t field_189c8;
-    uint8_t pad_1817[2];  /* zero padding */
-    uint16_t field_189cc;
-    uint8_t pad_1818[2];  /* zero padding */
-    uint16_t field_189d0;
-    uint16_t field_189d2;
-    uint16_t field_189d4;
-    uint8_t pad_1819[2];  /* zero padding */
-    uint16_t field_189d8;
-    uint8_t pad_1820[2];  /* zero padding */
-    char str_972[2];
-    char str_973[2];
-    uint16_t field_189e0;
-    uint8_t pad_1821[2];  /* zero padding */
-    uint16_t field_189e4;
-    uint8_t pad_1822[2];  /* zero padding */
-    uint16_t field_189e8;
-    char str_974[2];
-    uint16_t field_189ec;
-    uint8_t pad_1823[2];  /* zero padding */
-    uint16_t field_189f0;
-    uint8_t pad_1824[2];  /* zero padding */
-    uint16_t field_189f4;
-    uint16_t field_189f6;
-    uint16_t field_189f8;
-    uint8_t pad_1825[2];  /* zero padding */
-    uint16_t field_189fc;
-    uint8_t pad_1826[2];  /* zero padding */
-    char str_975[2];
-    uint16_t field_18a02;
-    uint16_t field_18a04;
-    uint8_t pad_1827[2];  /* zero padding */
-    uint16_t field_18a08;
-    uint8_t pad_1828[2];  /* zero padding */
-    uint16_t field_18a0c;
-    uint16_t field_18a0e;
-    uint16_t field_18a10;
-    uint8_t pad_1829[2];  /* zero padding */
-    uint16_t field_18a14;
-    uint8_t pad_1830[2];  /* zero padding */
-    uint16_t field_18a18;
-    char str_976[2];
-    uint16_t field_18a1c;
-    uint8_t pad_1831[2];  /* zero padding */
-    uint16_t field_18a20;
-    uint8_t pad_1832[2];  /* zero padding */
-    uint16_t field_18a24;
-    uint16_t field_18a26;
-    uint16_t field_18a28;
-    uint8_t pad_1833[2];  /* zero padding */
-    uint16_t field_18a2c;
-    uint8_t pad_1834[2];  /* zero padding */
-    uint16_t field_18a30;
-    char str_977[2];
-    uint16_t field_18a34;
-    uint8_t pad_1835[6];  /* zero padding */
-    uint16_t field_18a3c;
-    char str_978[2];
-    uint16_t field_18a40;
-    uint16_t field_18a42;
-    uint16_t field_18a44;
-    uint8_t pad_1836[2];  /* zero padding */
-    char str_979[2];
-    char str_980[2];
-    uint16_t field_18a4c;
-    uint8_t pad_1837[6];  /* zero padding */
-    uint16_t field_18a54;
-    char str_981[2];
-    uint16_t field_18a58;
-    uint16_t field_18a5a;
-    uint16_t field_18a5c;
-    uint8_t pad_1838[2];  /* zero padding */
-    char str_982[2];
-    char str_983[2];
-    uint16_t field_18a64;
-    uint8_t pad_1839[6];  /* zero padding */
-    char str_984[2];
-    char str_985[2];
-    uint16_t field_18a70;
-    uint16_t field_18a72;
-    uint16_t field_18a74;
-    uint8_t pad_1840[2];  /* zero padding */
-    char str_986[2];
-    char str_987[2];
-    uint16_t field_18a7c;
-    uint8_t pad_1841[6];  /* zero padding */
-    char str_988[2];
-    char str_989[2];
-    uint16_t field_18a88;
-    uint16_t field_18a8a;
-    uint16_t field_18a8c;
-    uint8_t pad_1842[2];  /* zero padding */
-    char str_990[2];
-    char str_991[2];
-    uint16_t field_18a94;
-    uint8_t pad_1843[6];  /* zero padding */
-    char str_992[2];
-    char str_993[2];
-    uint16_t field_18aa0;
-    uint16_t field_18aa2;
-    uint16_t field_18aa4;
-    uint8_t pad_1844[2];  /* zero padding */
-    char str_994[2];
-    char str_995[2];
-    uint16_t field_18aac;
-    uint8_t pad_1845[6];  /* zero padding */
-    char str_996[2];
-    char str_997[2];
-    uint16_t field_18ab8;
-    uint16_t field_18aba;
-    uint16_t field_18abc;
-    uint8_t pad_1846[2];  /* zero padding */
-    char str_998[2];
-    char str_999[2];
-    uint16_t field_18ac4;
-    uint8_t pad_1847[6];  /* zero padding */
-    char str_1000[2];
-    char str_1001[2];
-    uint16_t field_18ad0;
-    uint16_t field_18ad2;
-    uint16_t field_18ad4;
-    uint8_t pad_1848[2];  /* zero padding */
-    char str_1002[2];
-    char str_1003[2];
-    uint16_t field_18adc;
-    uint8_t pad_1849[6];  /* zero padding */
-    char str_1004[2];
-    char str_1005[2];
-    uint16_t field_18ae8;
-    uint16_t field_18aea;
-    uint16_t field_18aec;
-    uint8_t pad_1850[2];  /* zero padding */
-    uint16_t field_18af0;
-    char str_1006[2];
-    uint16_t field_18af4;
-    uint8_t pad_1851[6];  /* zero padding */
-    char str_1007[2];
-    char str_1008[2];
-    uint16_t field_18b00;
-    uint16_t field_18b02;
-    uint16_t field_18b04;
-    uint8_t pad_1852[2];  /* zero padding */
-    uint16_t field_18b08;
-    char str_1009[2];
-    uint16_t field_18b0c;
-    uint8_t pad_1853[6];  /* zero padding */
-    char str_1010[2];
-    char str_1011[2];
-    uint16_t field_18b18;
-    uint16_t field_18b1a;
-    uint16_t field_18b1c;
-    uint8_t pad_1854[2];  /* zero padding */
-    uint16_t field_18b20;
-    char str_1012[2];
-    uint16_t field_18b24;
-    uint8_t pad_1855[6];  /* zero padding */
-    char str_1013[2];
-    char str_1014[2];
-    uint16_t field_18b30;
-    uint16_t field_18b32;
-    uint16_t field_18b34;
-    uint8_t pad_1856[2];  /* zero padding */
-    uint16_t field_18b38;
-    char str_1015[2];
-    uint16_t field_18b3c;
-    uint8_t pad_1857[6];  /* zero padding */
-    char str_1016[2];
-    char str_1017[2];
-    uint16_t field_18b48;
-    uint16_t field_18b4a;
-    uint16_t field_18b4c;
-    uint8_t pad_1858[2];  /* zero padding */
-    uint16_t field_18b50;
-    char str_1018[2];
-    uint16_t field_18b54;
-    uint8_t pad_1859[6];  /* zero padding */
-    char str_1019[2];
-    char str_1020[2];
-    uint16_t field_18b60;
-    uint16_t field_18b62;
-    uint16_t field_18b64;
-    uint8_t pad_1860[2];  /* zero padding */
-    uint16_t field_18b68;
-    char str_1021[2];
-    uint16_t field_18b6c;
-    uint8_t pad_1861[6];  /* zero padding */
-    uint16_t field_18b74;
-    char str_1022[2];
-    uint16_t field_18b78;
-    uint16_t field_18b7a;
-    uint16_t field_18b7c;
-    uint8_t pad_1862[2];  /* zero padding */
-    uint16_t field_18b80;
-    char str_1023[2];
-    uint16_t field_18b84;
-    uint8_t pad_1863[6];  /* zero padding */
-    uint16_t field_18b8c;
-    char str_1024[2];
-    uint16_t field_18b90;
-    uint16_t field_18b92;
-    uint16_t field_18b94;
-    uint8_t pad_1864[2];  /* zero padding */
-    uint16_t field_18b98;
-    char str_1025[2];
-    uint16_t field_18b9c;
-    uint8_t pad_1865[6];  /* zero padding */
-    uint16_t field_18ba4;
-    char str_1026[2];
-    uint16_t field_18ba8;
-    uint16_t field_18baa;
-    uint16_t field_18bac;
-    uint8_t pad_1866[2];  /* zero padding */
-    uint16_t field_18bb0;
-    char str_1027[2];
-    uint16_t field_18bb4;
-    uint8_t pad_1867[6];  /* zero padding */
-    uint16_t field_18bbc;
-    char str_1028[2];
-    uint16_t field_18bc0;
-    uint16_t field_18bc2;
-    uint16_t field_18bc4;
-    uint8_t pad_1868[2];  /* zero padding */
-    uint16_t field_18bc8;
-    char str_1029[2];
-    uint16_t field_18bcc;
-    uint8_t pad_1869[6];  /* zero padding */
-    uint16_t field_18bd4;
-    char str_1030[2];
-    uint16_t field_18bd8;
-    uint16_t field_18bda;
-    uint16_t field_18bdc;
-    uint8_t pad_1870[2];  /* zero padding */
-    uint16_t field_18be0;
-    char str_1031[2];
-    uint16_t field_18be4;
-    uint8_t pad_1871[6];  /* zero padding */
-    uint16_t field_18bec;
-    char str_1032[2];
-    uint16_t field_18bf0;
-    uint16_t field_18bf2;
-    uint16_t field_18bf4;
-    uint8_t pad_1872[2];  /* zero padding */
-    uint16_t field_18bf8;
-    char str_1033[2];
-    uint16_t field_18bfc;
-    uint8_t pad_1873[6];  /* zero padding */
-    uint16_t field_18c04;
-    char str_1034[2];
-    uint16_t field_18c08;
-    uint16_t field_18c0a;
-    uint16_t field_18c0c;
-    uint8_t pad_1874[2];  /* zero padding */
-    uint16_t field_18c10;
-    char str_1035[2];
-    uint16_t field_18c14;
-    uint8_t pad_1875[6];  /* zero padding */
-    uint16_t field_18c1c;
-    char str_1036[2];
-    uint16_t field_18c20;
-    uint16_t field_18c22;
-    uint16_t field_18c24;
-    uint8_t pad_1876[2];  /* zero padding */
-    uint16_t field_18c28;
-    char str_1037[2];
-    uint16_t field_18c2c;
-    uint8_t pad_1877[6];  /* zero padding */
-    uint16_t field_18c34;
-    char str_1038[2];
-    uint16_t field_18c38;
-    uint16_t field_18c3a;
-    uint16_t field_18c3c;
-    uint8_t pad_1878[2];  /* zero padding */
-    uint16_t field_18c40;
-    char str_1039[2];
-    uint16_t field_18c44;
-    uint8_t pad_1879[6];  /* zero padding */
-    uint16_t field_18c4c;
-    char str_1040[2];
-    uint16_t field_18c50;
-    uint16_t field_18c52;
-    uint16_t field_18c54;
-    uint8_t pad_1880[2];  /* zero padding */
-    uint16_t field_18c58;
-    char str_1041[2];
-    uint16_t field_18c5c;
-    uint8_t pad_1881[6];  /* zero padding */
-    uint16_t field_18c64;
-    char str_1042[2];
-    uint16_t field_18c68;
-    uint16_t field_18c6a;
-    uint16_t field_18c6c;
-    uint8_t pad_1882[2];  /* zero padding */
-    uint16_t field_18c70;
-    char str_1043[2];
-    uint16_t field_18c74;
-    uint8_t pad_1883[6];  /* zero padding */
-    uint16_t field_18c7c;
-    char str_1044[2];
-    uint16_t field_18c80;
-    uint16_t field_18c82;
-    uint16_t field_18c84;
-    uint8_t pad_1884[2];  /* zero padding */
-    char str_1045[2];
-    char str_1046[2];
-    uint16_t field_18c8c;
-    uint8_t pad_1885[6];  /* zero padding */
-    uint16_t field_18c94;
-    char str_1047[2];
-    uint16_t field_18c98;
-    uint16_t field_18c9a;
-    uint16_t field_18c9c;
-    uint8_t pad_1886[2];  /* zero padding */
-    char str_1048[2];
-    char str_1049[2];
-    uint16_t field_18ca4;
-    uint8_t pad_1887[6];  /* zero padding */
-    uint16_t field_18cac;
-    char str_1050[2];
-    uint16_t field_18cb0;
-    uint16_t field_18cb2;
-    uint16_t field_18cb4;
-    uint8_t pad_1888[2];  /* zero padding */
-    char str_1051[2];
-    char str_1052[2];
-    uint16_t field_18cbc;
-    uint8_t pad_1889[6];  /* zero padding */
-    uint16_t field_18cc4;
-    char str_1053[2];
-    uint16_t field_18cc8;
-    uint16_t field_18cca;
-    uint16_t field_18ccc;
-    uint8_t pad_1890[2];  /* zero padding */
-    char str_1054[2];
-    char str_1055[2];
-    uint16_t field_18cd4;
-    uint8_t pad_1891[6];  /* zero padding */
-    uint16_t field_18cdc;
-    char str_1056[2];
-    uint16_t field_18ce0;
-    uint16_t field_18ce2;
-    uint16_t field_18ce4;
-    uint8_t pad_1892[2];  /* zero padding */
-    char str_1057[2];
-    char str_1058[2];
-    uint16_t field_18cec;
-    uint8_t pad_1893[6];  /* zero padding */
-    uint16_t field_18cf4;
-    char str_1059[2];
-    uint16_t field_18cf8;
-    uint16_t field_18cfa;
-    uint16_t field_18cfc;
-    uint8_t pad_1894[2];  /* zero padding */
-    char str_1060[2];
-    char str_1061[2];
-    uint16_t field_18d04;
-    uint8_t pad_1895[6];  /* zero padding */
-    char str_1062[2];
-    char str_1063[2];
-    uint16_t field_18d10;
-    uint16_t field_18d12;
-    uint16_t field_18d14;
-    uint8_t pad_1896[2];  /* zero padding */
-    char str_1064[2];
-    char str_1065[2];
-    uint16_t field_18d1c;
-    uint8_t pad_1897[6];  /* zero padding */
-    char str_1066[2];
-    char str_1067[2];
-    uint16_t field_18d28;
-    uint16_t field_18d2a;
-    uint16_t field_18d2c;
-    uint8_t pad_1898[2];  /* zero padding */
-    char str_1068[2];
-    char str_1069[2];
-    uint16_t field_18d34;
-    uint16_t field_18d36;
-    uint16_t field_18d38;
-    uint8_t pad_1899[2];  /* zero padding */
-    char str_1070[2];
-    char str_1071[2];
-    uint16_t field_18d40;
-    uint16_t field_18d42;
-    uint16_t field_18d44;
-    uint8_t pad_1900[2];  /* zero padding */
-    char str_1072[2];
-    char str_1073[2];
-    uint16_t field_18d4c;
-    uint16_t field_18d4e;
-    uint16_t field_18d50;
-    uint8_t pad_1901[2];  /* zero padding */
-    uint16_t field_18d54;
-    char str_1074[2];
-    uint16_t field_18d58;
-    uint16_t field_18d5a;
-    uint8_t pad_1902[4];  /* zero padding */
-    char str_1075[2];
-    char str_1076[2];
-    uint16_t field_18d64;
-    uint16_t field_18d66;
-    uint8_t pad_1903[4];  /* zero padding */
-    char str_1077[2];
-    char str_1078[2];
-    uint16_t field_18d70;
-    uint16_t field_18d72;
-    uint8_t pad_1904[4];  /* zero padding */
-    char str_1079[2];
-    char str_1080[2];
-    uint16_t field_18d7c;
-    uint16_t field_18d7e;
-    uint16_t field_18d80;
-    uint8_t pad_1905[2];  /* zero padding */
-    char str_1081[2];
-    char str_1082[2];
-    uint16_t field_18d88;
-    uint16_t field_18d8a;
-    uint8_t pad_1906[4];  /* zero padding */
-    char str_1083[2];
-    char str_1084[2];
-    uint16_t field_18d94;
-    uint16_t field_18d96;
-    uint8_t pad_1907[4];  /* zero padding */
-    char str_1085[2];
-    char str_1086[2];
-    uint16_t field_18da0;
-    uint16_t field_18da2;
-    uint8_t pad_1908[4];  /* zero padding */
-    char str_1087[2];
-    char str_1088[2];
-    uint16_t field_18dac;
-    uint16_t field_18dae;
-    uint16_t field_18db0;
-    uint8_t pad_1909[2];  /* zero padding */
-    char str_1089[2];
-    char str_1090[2];
-    uint16_t field_18db8;
-    uint16_t field_18dba;
-    uint8_t pad_1910[4];  /* zero padding */
-    char str_1091[2];
-    char str_1092[2];
-    uint16_t field_18dc4;
-    uint16_t field_18dc6;
-    uint8_t pad_1911[4];  /* zero padding */
-    uint16_t field_18dcc;
-    char str_1093[2];
-    uint16_t field_18dd0;
-    uint16_t field_18dd2;
-    uint8_t pad_1912[4];  /* zero padding */
-    uint16_t field_18dd8;
-    char str_1094[2];
-    uint16_t field_18ddc;
-    uint16_t field_18dde;
-    uint16_t field_18de0;
-    uint8_t pad_1913[2];  /* zero padding */
-    uint16_t field_18de4;
-    char str_1095[2];
-    uint16_t field_18de8;
-    uint16_t field_18dea;
-    uint8_t pad_1914[4];  /* zero padding */
-    uint16_t field_18df0;
-    char str_1096[2];
-    uint16_t field_18df4;
-    uint16_t field_18df6;
-    uint8_t pad_1915[4];  /* zero padding */
-    uint16_t field_18dfc;
-    char str_1097[2];
-    uint16_t field_18e00;
-    uint16_t field_18e02;
-    uint8_t pad_1916[4];  /* zero padding */
-    uint16_t field_18e08;
-    char str_1098[2];
-    uint16_t field_18e0c;
-    uint16_t field_18e0e;
-    uint16_t field_18e10;
-    uint8_t pad_1917[2];  /* zero padding */
-    uint16_t field_18e14;
-    char str_1099[2];
-    uint16_t field_18e18;
-    uint16_t field_18e1a;
-    uint8_t pad_1918[4];  /* zero padding */
-    uint16_t field_18e20;
-    char str_1100[2];
-    uint16_t field_18e24;
-    uint16_t field_18e26;
-    uint8_t pad_1919[4];  /* zero padding */
-    uint16_t field_18e2c;
-    char str_1101[2];
-    uint16_t field_18e30;
-    uint16_t field_18e32;
-    uint8_t pad_1920[4];  /* zero padding */
-    uint16_t field_18e38;
-    char str_1102[2];
-    uint16_t field_18e3c;
-    uint16_t field_18e3e;
-    uint16_t field_18e40;
-    uint8_t pad_1921[2];  /* zero padding */
-    uint16_t field_18e44;
-    char str_1103[2];
-    uint16_t field_18e48;
-    uint16_t field_18e4a;
-    uint8_t pad_1922[4];  /* zero padding */
-    uint16_t field_18e50;
-    char str_1104[2];
-    uint16_t field_18e54;
-    uint16_t field_18e56;
-    uint8_t pad_1923[4];  /* zero padding */
-    uint16_t field_18e5c;
-    char str_1105[2];
-    uint16_t field_18e60;
-    uint16_t field_18e62;
-    uint8_t pad_1924[4];  /* zero padding */
-    uint16_t field_18e68;
-    char str_1106[2];
-    uint16_t field_18e6c;
-    uint16_t field_18e6e;
-    uint16_t field_18e70;
-    uint8_t pad_1925[2];  /* zero padding */
-    uint16_t field_18e74;
-    char str_1107[2];
-    uint16_t field_18e78;
-    uint16_t field_18e7a;
-    uint8_t pad_1926[4];  /* zero padding */
-    uint16_t field_18e80;
-    char str_1108[2];
-    uint16_t field_18e84;
-    uint16_t field_18e86;
-    uint8_t pad_1927[4];  /* zero padding */
-    uint16_t field_18e8c;
-    char str_1109[2];
-    uint16_t field_18e90;
-    uint16_t field_18e92;
-    uint8_t pad_1928[4];  /* zero padding */
-    uint16_t field_18e98;
-    char str_1110[2];
-    uint16_t field_18e9c;
-    uint16_t field_18e9e;
-    uint16_t field_18ea0;
-    uint8_t pad_1929[2];  /* zero padding */
-    uint16_t field_18ea4;
-    uint16_t field_18ea6;
-    uint16_t field_18ea8;
-    uint16_t field_18eaa;
-    uint16_t field_18eac;
-    uint8_t pad_1930[2];  /* zero padding */
-    uint16_t field_18eb0;
-    uint16_t field_18eb2;
-    uint32_t ptr_18eb4;
-    uint16_t field_18eb8;
-    uint8_t pad_1931[4];  /* zero padding */
-    uint16_t field_18ebe;
-    uint16_t field_18ec0;
-    uint8_t pad_1932[2];  /* zero padding */
-    uint16_t field_18ec4;
-    uint8_t pad_1933[2];  /* zero padding */
-    uint16_t field_18ec8;
-    uint16_t field_18eca;
-    uint16_t field_18ecc;
-    uint16_t field_18ece;
-    uint16_t field_18ed0;
-    uint8_t pad_1934[2];  /* zero padding */
-    char str_1111[2];
-    uint16_t field_18ed6;
-    uint16_t field_18ed8;
-    uint16_t field_18eda;
-    uint16_t field_18edc;
-    uint8_t pad_1935[2];  /* zero padding */
-    char str_1112[2];
-    uint16_t field_18ee2;
-    uint16_t field_18ee4;
-    uint16_t field_18ee6;
-    uint16_t field_18ee8;
-    uint8_t pad_1936[2];  /* zero padding */
-    char str_1113[2];
-    uint16_t field_18eee;
-    uint16_t field_18ef0;
-    uint16_t field_18ef2;
-    uint16_t field_18ef4;
-    uint8_t pad_1937[2];  /* zero padding */
-    char str_1114[2];
-    uint16_t field_18efa;
-    uint16_t field_18efc;
-    uint16_t field_18efe;
-    uint16_t field_18f00;
-    uint8_t pad_1938[2];  /* zero padding */
-    char str_1115[2];
-    uint16_t field_18f06;
-    uint16_t field_18f08;
-    uint16_t field_18f0a;
-    uint16_t field_18f0c;
-    uint8_t pad_1939[2];  /* zero padding */
-    uint16_t field_18f10;
-    uint16_t field_18f12;
-    uint16_t field_18f14;
-    uint16_t field_18f16;
-    uint16_t field_18f18;
-    uint8_t pad_1940[2];  /* zero padding */
-    uint16_t field_18f1c;
-    uint16_t field_18f1e;
-    uint32_t ptr_18f20;
-    uint16_t field_18f24;
-    uint8_t pad_1941[2];  /* zero padding */
-    uint16_t field_18f28;
-    uint16_t field_18f2a;
-    uint16_t field_18f2c;
-    uint16_t field_18f2e;
-    uint16_t field_18f30;
-    uint8_t pad_1942[2];  /* zero padding */
-    uint16_t field_18f34;
-    uint16_t field_18f36;
-    uint32_t ptr_18f38;
-    uint16_t field_18f3c;
-    uint8_t pad_1943[2];  /* zero padding */
-    uint16_t field_18f40;
-    uint16_t field_18f42;
-    uint32_t ptr_18f44;
-    uint16_t field_18f48;
-    uint8_t pad_1944[2];  /* zero padding */
-    uint16_t field_18f4c;
-    uint16_t field_18f4e;
-    uint32_t ptr_18f50;
-    uint16_t field_18f54;
-    uint8_t pad_1945[2];  /* zero padding */
-    uint16_t field_18f58;
-    uint16_t field_18f5a;
-    uint32_t ptr_18f5c;
-    uint16_t field_18f60;
-    uint8_t pad_1946[2];  /* zero padding */
-    uint16_t field_18f64;
-    uint16_t field_18f66;
-    uint32_t ptr_18f68;
-    uint16_t field_18f6c;
-    uint8_t pad_1947[2];  /* zero padding */
-    uint16_t field_18f70;
-    uint16_t field_18f72;
-    uint32_t ptr_18f74;
-    uint16_t field_18f78;
-    uint8_t pad_1948[2];  /* zero padding */
-    uint16_t field_18f7c;
-    uint16_t field_18f7e;
-    uint16_t field_18f80;
-    uint16_t field_18f82;
-    uint16_t field_18f84;
-    uint8_t pad_1949[2];  /* zero padding */
-    uint16_t field_18f88;
-    uint16_t field_18f8a;
-    uint16_t field_18f8c;
-    uint16_t field_18f8e;
-    uint16_t field_18f90;
-    uint8_t pad_1950[2];  /* zero padding */
-    char str_1116[2];
-    uint16_t field_18f96;
-    uint16_t field_18f98;
-    uint16_t field_18f9a;
-    uint16_t field_18f9c;
-    uint8_t pad_1951[2];  /* zero padding */
-    char str_1117[2];
-    uint16_t field_18fa2;
-    uint16_t field_18fa4;
-    uint16_t field_18fa6;
-    uint16_t field_18fa8;
-    uint8_t pad_1952[2];  /* zero padding */
-    char str_1118[2];
-    uint16_t field_18fae;
-    uint32_t ptr_18fb0;
-    uint16_t field_18fb4;
-    uint8_t pad_1953[2];  /* zero padding */
-    uint16_t field_18fb8;
-    uint16_t field_18fba;
-    uint16_t field_18fbc;
-    uint8_t pad_1954[2];  /* zero padding */
-    uint16_t field_18fc0;
-    uint8_t pad_1955[2];  /* zero padding */
-    uint16_t field_18fc4;
-    uint16_t field_18fc6;
-    uint16_t field_18fc8;
-    uint16_t field_18fca;
-    uint16_t field_18fcc;
-    uint8_t pad_1956[2];  /* zero padding */
-    uint16_t field_18fd0;
-    uint16_t field_18fd2;
-    uint16_t field_18fd4;
-    uint16_t field_18fd6;
-    uint16_t field_18fd8;
-    uint8_t pad_1957[2];  /* zero padding */
-    uint16_t field_18fdc;
-    uint16_t field_18fde;
-    uint16_t field_18fe0;
-    uint16_t field_18fe2;
-    uint16_t field_18fe4;
-    uint8_t pad_1958[2];  /* zero padding */
-    uint16_t field_18fe8;
-    uint16_t field_18fea;
-    uint16_t field_18fec;
-    uint16_t field_18fee;
-    uint16_t field_18ff0;
-    uint8_t pad_1959[2];  /* zero padding */
-    char str_1119[2];
-    uint16_t field_18ff6;
-    uint16_t field_18ff8;
-    uint16_t field_18ffa;
-    uint16_t field_18ffc;
-    uint8_t pad_1960[2];  /* zero padding */
-    char str_1120[2];
-    uint16_t field_19002;
-    uint16_t field_19004;
-    uint16_t field_19006;
-    uint16_t field_19008;
-    uint8_t pad_1961[2];  /* zero padding */
-    char str_1121[2];
-    uint16_t field_1900e;
-    uint16_t field_19010;
-    uint16_t field_19012;
-    uint16_t field_19014;
-    uint8_t pad_1962[2];  /* zero padding */
-    char str_1122[2];
-    uint16_t field_1901a;
-    uint32_t ptr_1901c;
-    uint16_t field_19020;
-    uint8_t pad_1963[2];  /* zero padding */
-    char str_1123[2];
-    uint16_t field_19026;
-    uint16_t field_19028;
-    uint16_t field_1902a;
-    uint16_t field_1902c;
-    uint8_t pad_1964[2];  /* zero padding */
-    char str_1124[2];
-    uint16_t field_19032;
-    uint32_t ptr_19034;
-    uint16_t field_19038;
-    uint8_t pad_1965[2];  /* zero padding */
-    char str_1125[2];
-    uint16_t field_1903e;
-    uint32_t ptr_19040;
-    uint16_t field_19044;
-    uint8_t pad_1966[2];  /* zero padding */
-    uint16_t field_19048;
-    uint16_t field_1904a;
-    uint32_t ptr_1904c;
-    uint16_t field_19050;
-    uint8_t pad_1967[2];  /* zero padding */
-    uint16_t field_19054;
-    uint16_t field_19056;
-    uint32_t ptr_19058;
-    uint16_t field_1905c;
-    uint8_t pad_1968[2];  /* zero padding */
-    uint16_t field_19060;
-    uint16_t field_19062;
-    uint32_t ptr_19064;
-    uint16_t field_19068;
-    uint8_t pad_1969[2];  /* zero padding */
-    uint16_t field_1906c;
-    uint16_t field_1906e;
-    uint16_t field_19070;
-    uint16_t field_19072;
-    uint16_t field_19074;
-    uint8_t pad_1970[2];  /* zero padding */
-    uint16_t field_19078;
-    uint16_t field_1907a;
-    uint16_t field_1907c;
-    uint16_t field_1907e;
-    uint16_t field_19080;
-    uint8_t pad_1971[2];  /* zero padding */
-    char str_1126[2];
-    uint16_t field_19086;
-    uint16_t field_19088;
-    uint16_t field_1908a;
-    uint16_t field_1908c;
-    uint8_t pad_1972[2];  /* zero padding */
-    uint16_t field_19090;
-    uint16_t field_19092;
-    uint32_t ptr_19094;
-    uint16_t field_19098;
-    uint8_t pad_1973[2];  /* zero padding */
-    uint16_t field_1909c;
-    uint16_t field_1909e;
-    uint32_t ptr_190a0;
-    uint16_t field_190a4;
-    uint8_t pad_1974[2];  /* zero padding */
-    uint16_t field_190a8;
-    uint16_t field_190aa;
-    uint32_t ptr_190ac;
-    uint16_t field_190b0;
-    uint8_t pad_1975[2];  /* zero padding */
-    uint16_t field_190b4;
-    uint16_t field_190b6;
-    uint32_t ptr_190b8;
-    uint16_t field_190bc;
-    uint8_t pad_1976[2];  /* zero padding */
-    uint16_t field_190c0;
-    uint16_t field_190c2;
-    uint16_t field_190c4;
-    uint16_t field_190c6;
-    uint16_t field_190c8;
-    uint8_t pad_1977[2];  /* zero padding */
-    char str_1127[2];
-    uint16_t field_190ce;
-    uint16_t field_190d0;
-    uint16_t field_190d2;
-    uint16_t field_190d4;
-    uint8_t pad_1978[2];  /* zero padding */
-    uint16_t field_190d8;
-    uint16_t field_190da;
-    uint16_t field_190dc;
-    uint16_t field_190de;
-    uint16_t field_190e0;
-    uint8_t pad_1979[2];  /* zero padding */
-    uint16_t field_190e4;
-    uint16_t field_190e6;
-    uint32_t ptr_190e8;
-    uint16_t field_190ec;
-    uint8_t pad_1980[2];  /* zero padding */
-    uint16_t field_190f0;
-    uint16_t field_190f2;
-    uint32_t ptr_190f4;
-    uint16_t field_190f8;
-    uint8_t pad_1981[2];  /* zero padding */
-    uint16_t field_190fc;
-    uint16_t field_190fe;
-    uint32_t ptr_19100;
-    uint16_t field_19104;
-    uint8_t pad_1982[2];  /* zero padding */
-    uint16_t field_19108;
-    uint16_t field_1910a;
-    uint32_t ptr_1910c;
-    uint16_t field_19110;
-    uint8_t pad_1983[2];  /* zero padding */
-    char str_1128[2];
-    uint16_t field_19116;
-    uint32_t ptr_19118;
-    uint16_t field_1911c;
-    uint8_t pad_1984[2];  /* zero padding */
-    uint16_t field_19120;
-    uint16_t field_19122;
-    uint16_t field_19124;
-    uint16_t field_19126;
-    uint16_t field_19128;
-    uint8_t pad_1985[2];  /* zero padding */
-    uint16_t field_1912c;
-    uint16_t field_1912e;
-    uint16_t field_19130;
-    uint16_t field_19132;
-    uint16_t field_19134;
-    uint8_t pad_1986[2];  /* zero padding */
-    uint16_t field_19138;
-    uint16_t field_1913a;
-    uint32_t ptr_1913c;
-    uint16_t field_19140;
-    uint8_t pad_1987[2];  /* zero padding */
-    uint16_t field_19144;
-    uint16_t field_19146;
-    uint32_t ptr_19148;
-    uint16_t field_1914c;
-    uint8_t pad_1988[2];  /* zero padding */
-    uint16_t field_19150;
-    uint16_t field_19152;
-    uint32_t ptr_19154;
-    uint16_t field_19158;
-    uint8_t pad_1989[2];  /* zero padding */
-    char str_1129[2];
-    uint16_t field_1915e;
-    uint32_t ptr_19160;
-    uint16_t field_19164;
-    uint8_t pad_1990[2];  /* zero padding */
-    uint16_t field_19168;
-    uint16_t field_1916a;
-    uint32_t ptr_1916c;
-    uint16_t field_19170;
-    uint8_t pad_1991[2];  /* zero padding */
-    uint16_t field_19174;
-    uint16_t field_19176;
-    uint16_t field_19178;
-    uint16_t field_1917a;
-    uint16_t field_1917c;
-    uint8_t pad_1992[2];  /* zero padding */
-    uint16_t field_19180;
-    uint16_t field_19182;
-    uint16_t field_19184;
-    uint16_t field_19186;
-    uint16_t field_19188;
-    uint8_t pad_1993[2];  /* zero padding */
-    uint16_t field_1918c;
-    uint16_t field_1918e;
-    uint32_t ptr_19190;
-    uint16_t field_19194;
-    uint8_t pad_1994[2];  /* zero padding */
-    uint16_t field_19198;
-    uint16_t field_1919a;
-    uint32_t ptr_1919c;
-    char str_1130[2];
-    uint8_t pad_1995[2];  /* zero padding */
-    uint16_t field_191a4;
-    uint16_t field_191a6;
-    uint8_t pad_1996[8];  /* zero padding */
-    uint32_t ptr_191b0;
-    uint8_t pad_1997[2];  /* zero padding */
-    uint16_t field_191b6;
-    uint16_t field_191b8;
-    uint16_t field_191ba;
-    uint16_t field_191bc;
-    uint32_t ptr_191be;
-    uint16_t field_191c2;
-    uint16_t field_191c4;
-    uint16_t field_191c6;
-    uint16_t field_191c8;
-    uint16_t field_191ca;
-    uint16_t field_191cc;
-    uint32_t ptrs_251[11];  /* 11 pointers */
+    /* ---------------------------------------------------------------------
+     * WelcomeGlyph_C  --  'C', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+     *
+     * What it is: the letter C, read from the bit pictures in the C
+     * (upside-down there, because the rows are stored bottom-up). No label
+     * of its own in the .s: other files reach it as NakaInst_TOTAL_0x34
+     * (.set in shared/positional_labels.s); it shares the old NakaInst_TOTAL
+     * slice with the strings above it. Drawn by the welcome-script op
+     * handlers: 'C' by op 4 alone and ops 9/12 as the first letter of
+     * COLO(U)R.
+     *
+     * Format, from DrawBitmapSP2_Impl (v10/v9 0xFAC59D, v7 0xFAC190): 1 bpp,
+     * each row one big-endian 16-bit word (MSB = leftmost pixel; the routine
+     * byte-swaps the word it loads), (width + 15) / 16 words per row; a set
+     * bit is drawn in the colour argument, a clear bit is not drawn. Rows
+     * are stored BOTTOM-UP: row i is drawn at y0 + height - i. The callers
+     * push height 0x11 (17) and pass width 0x10 (16) -- `pushw 0x11 ... ldw
+     * de, 0x10; call DrawBitmapSP2` -- in the welcome-script op handlers
+     * that follow AcWelcomScreen_RenderBytecode (v10/v9 0xF7F649, v7
+     * 0xF7F245) (ui/drawbar_panel_ui.s; that code is only partly framed as
+     * instructions there, and was checked against unidasm), so each glyph is
+     * 17 x 2 = 34 bytes.
+     *
+     * Which op draws which glyph (handlers at AcWelcomScreen_RenderBytecode
+     * + the WelcomeScript_OpJumpOffsets entry, decoded with unidasm because
+     * ui/drawbar_panel_ui.s frames that code only partly): op 4 C, op 5 O,
+     * op 6 L, op 7 R, op 11 U, op 8 I then N, and ops 9 and 12 (one shared
+     * handler, offset 386) C-O-L-O-R with the U drawn only when op == 12
+     * (`cp (XBC+0x08),0x000c; jr NZ` around it). Step table A (region code
+     * 2) uses ops 4/5/6/7 and 9 -- COLOR; table B uses 4/5/6/11/7 and 12 --
+     * COLOUR. Ops 4/5/6/7/11 push the step's arg as the colour (`pushw
+     * (xde)`, xde = &arg); op 8 pushes 0xFF.
+     * --------------------------------------------------------------------- */
+    uint8_t WelcomeGlyph_C[17][2];
+    /* ---------------------------------------------------------------------
+     * Bitmap_Digit1  --  'I', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+     *
+     * What it is: the letter I, read from the bit pictures in the C
+     * (upside-down there, because the rows are stored bottom-up). The label
+     * name (Digit1) predates this header: the glyph is the letter I, not a
+     * digit. Drawn by the welcome-script op handlers: 'I' by op 8, before
+     * the N.
+     *
+     * Format and readers: as WelcomeGlyph_C (the first glyph, above):
+     * DrawBitmapSP2_Impl (v10/v9 0xFAC59D, v7 0xFAC190) draws 16 x 17, 1
+     * bpp, one big-endian word per row, rows bottom-up; the op handlers
+     * after AcWelcomScreen_RenderBytecode (v10/v9 0xF7F649, v7 0xF7F245)
+     * pass width 0x10 and height 0x11.
+     * --------------------------------------------------------------------- */
+    uint8_t Bitmap_Digit1[17][2];
+    /* ---------------------------------------------------------------------
+     * Bitmap_DigitL  --  'L', 'N', 'O', 3 glyphs of 16 x 17 pixels, 1 bpp, 102 bytes
+     *
+     * What it is: the letters L/N/O, read from the bit pictures in the C
+     * (upside-down there, because the rows are stored bottom-up). Glyphs 1
+     * and 2 are reached as Bitmap_DigitL_0x22 and Bitmap_DigitL_0x44 (.set
+     * in shared/positional_labels.s). Drawn by the welcome-script op
+     * handlers: 'L' by op 6 alone and ops 9/12 in COLO(U)R; 'N' by op 8,
+     * after the I; 'O' by op 5 alone and ops 9/12 twice in COLO(U)R.
+     *
+     * Format and readers: as WelcomeGlyph_C (the first glyph, above):
+     * DrawBitmapSP2_Impl (v10/v9 0xFAC59D, v7 0xFAC190) draws 16 x 17, 1
+     * bpp, one big-endian word per row, rows bottom-up; the op handlers
+     * after AcWelcomScreen_RenderBytecode (v10/v9 0xF7F649, v7 0xF7F245)
+     * pass width 0x10 and height 0x11.
+     * --------------------------------------------------------------------- */
+    uint8_t Bitmap_DigitL[3][17][2];
+    /* ---------------------------------------------------------------------
+     * Bitmap_DigitR  --  'R', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+     *
+     * What it is: the letter R, read from the bit pictures in the C
+     * (upside-down there, because the rows are stored bottom-up). Drawn by
+     * the welcome-script op handlers: 'R' by op 7 alone and ops 9/12 as the
+     * last letter of COLO(U)R.
+     *
+     * Format and readers: as WelcomeGlyph_C (the first glyph, above):
+     * DrawBitmapSP2_Impl (v10/v9 0xFAC59D, v7 0xFAC190) draws 16 x 17, 1
+     * bpp, one big-endian word per row, rows bottom-up; the op handlers
+     * after AcWelcomScreen_RenderBytecode (v10/v9 0xF7F649, v7 0xF7F245)
+     * pass width 0x10 and height 0x11.
+     * --------------------------------------------------------------------- */
+    uint8_t Bitmap_DigitR[17][2];
+    /* ---------------------------------------------------------------------
+     * Bitmap_DigitD  --  'U', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
+     *
+     * What it is: the letter U, read from the bit pictures in the C
+     * (upside-down there, because the rows are stored bottom-up). The old
+     * Bitmap_DigitD slice ran 0x121C bytes: this glyph and the five objects
+     * that follow it, which are split off below. Drawn by the welcome-script
+     * op handlers: 'U' by op 11 alone and ops 9/12 only when op == 12
+     * (COLOUR).
+     *
+     * Format and readers: as WelcomeGlyph_C (the first glyph, above):
+     * DrawBitmapSP2_Impl (v10/v9 0xFAC59D, v7 0xFAC190) draws 16 x 17, 1
+     * bpp, one big-endian word per row, rows bottom-up; the op handlers
+     * after AcWelcomScreen_RenderBytecode (v10/v9 0xF7F649, v7 0xF7F245)
+     * pass width 0x10 and height 0x11.
+     * --------------------------------------------------------------------- */
+    uint8_t Bitmap_DigitD[17][2];
+    /* ---------------------------------------------------------------------
+     * WelcomeScript_Steps_A  --  186 welcome_step_t records x 12 bytes = 2232 bytes
+     *
+     * The welcome-screen animation script used when Get_Region_Code returns
+     * 2. Reached by other files as Bitmap_DigitD_0x22 (.set in
+     * shared/positional_labels.s).
+     *
+     * Reader: AcWelcomScreenProc (v10/v9 0xF7F4A6, v7 0xF7F0A2), on its init
+     * message (0x1C00001), calls Get_Region_Code and stores the table
+     * address at 0x024786: Bitmap_DigitD+0x22 when the region code is 2,
+     * Bitmap_DigitD+0x8DA otherwise (the two `ld xwa, Bitmap_DigitD_0x...`
+     * loads; those names are .set in shared/positional_labels.s). The step
+     * index lives at 0x024784; a step is table + 12*index (add, add, sll 2).
+     * AcWelcomScreen_Select_NextStep (v10/v9 0xF7F9C9, v7 0xF7F5C5)
+     * increments the index, reads the step's +0 and hands it to SetApTimer
+     * (a zero delay runs the next step at once); AcWelcomScreen_Select
+     * (v10/v9 0xF7F605, v7 0xF7F201) loads +8 as the op, runs it only when 0
+     * <= op <= 12, through WelcomeScript_OpJumpOffsets below, with the
+     * address of +10 in xde.
+     *
+     * Record layout (welcome_step_t, defined in naka_technichord_strings.c):
+     * +0 u32 delay (SetApTimer), +4 s16 x, +6 s16 y, +8 s16 op, +10 u16 arg.
+     * Count pinned by the layout: the table starts where the other one ends
+     * (or at the U glyph's end) and runs to the next object
+     * (WelcomeScreen_ClearRect) at a whole number of records; the only op-0
+     * step is the last one, and op 0's jump offset is 0 -- the code at
+     * AcWelcomScreen_RenderBytecode itself, which posts event 0x1E000B3, the
+     * event AcWelcomScreen_Init_SwitchMode also posts to leave the screen.
+     * Op histogram: op 0 x1, op 1 x1, op 2 x125, op 3 x1, op 4 x5, op 5 x10,
+     * op 6 x5, op 7 x5, op 8 x1, op 9 x32.
+     * --------------------------------------------------------------------- */
+    welcome_step_t WelcomeScript_Steps_A[186];
+    /* ---------------------------------------------------------------------
+     * WelcomeScript_Steps_B  --  191 welcome_step_t records x 12 bytes = 2292 bytes
+     *
+     * The welcome-screen animation script used for every other region code.
+     * Reached by other files as Bitmap_DigitD_0x8DA (.set in
+     * shared/positional_labels.s).
+     *
+     * Reader: AcWelcomScreenProc (v10/v9 0xF7F4A6, v7 0xF7F0A2), on its init
+     * message (0x1C00001), calls Get_Region_Code and stores the table
+     * address at 0x024786: Bitmap_DigitD+0x22 when the region code is 2,
+     * Bitmap_DigitD+0x8DA otherwise (the two `ld xwa, Bitmap_DigitD_0x...`
+     * loads; those names are .set in shared/positional_labels.s). The step
+     * index lives at 0x024784; a step is table + 12*index (add, add, sll 2).
+     * AcWelcomScreen_Select_NextStep (v10/v9 0xF7F9C9, v7 0xF7F5C5)
+     * increments the index, reads the step's +0 and hands it to SetApTimer
+     * (a zero delay runs the next step at once); AcWelcomScreen_Select
+     * (v10/v9 0xF7F605, v7 0xF7F201) loads +8 as the op, runs it only when 0
+     * <= op <= 12, through WelcomeScript_OpJumpOffsets below, with the
+     * address of +10 in xde.
+     *
+     * Record layout (welcome_step_t, defined in naka_technichord_strings.c):
+     * +0 u32 delay (SetApTimer), +4 s16 x, +6 s16 y, +8 s16 op, +10 u16 arg.
+     * Count pinned by the layout: the table starts where the other one ends
+     * (or at the U glyph's end) and runs to the next object
+     * (WelcomeScreen_ClearRect) at a whole number of records; the only op-0
+     * step is the last one, and op 0's jump offset is 0 -- the code at
+     * AcWelcomScreen_RenderBytecode itself, which posts event 0x1E000B3, the
+     * event AcWelcomScreen_Init_SwitchMode also posts to leave the screen.
+     * Op histogram: op 0 x1, op 1 x1, op 2 x125, op 3 x1, op 4 x5, op 5 x10,
+     * op 6 x5, op 7 x5, op 8 x1, op 11 x5, op 12 x32.
+     * --------------------------------------------------------------------- */
+    welcome_step_t WelcomeScript_Steps_B[191];
+    /* ---------------------------------------------------------------------
+     * WelcomeScreen_ClearRect  --  4 x s16 {x1, y1, x2, y2} = {0, 0, 319, 239}
+     *
+     * The whole 320 x 240 screen. AcWelcomScreen_Activate (v10/v9 0xF7F595,
+     * v7 0xF7F191) (when CheckNotDrawFlag is clear) turns the LCD off,
+     * passes this rectangle to DrawBox with colour 0, updates the screen and
+     * turns the LCD back on (`ld xwa, Bitmap_DigitD_0x11CE; ld bc, 0; call
+     * DrawBox`; the name is .set in shared/positional_labels.s). The
+     * generator had read its last four bytes 3F 01 EF 00 as a pointer to
+     * Naka_PresentationRootState (0x00EF013F); they are x2 = 319, y2 = 239.
+     * --------------------------------------------------------------------- */
+    int16_t WelcomeScreen_ClearRect[4];
+    /* ---------------------------------------------------------------------
+     * WelcomeScript_OpJumpOffsets  --  13 x s16 code offsets, one per op 0..12
+     *
+     * AcWelcomScreen_Select (v10/v9 0xF7F605, v7 0xF7F201) doubles the op
+     * (add hl, hl), loads the word at Bitmap_DigitD_0x11D6 + 2*op (the name
+     * is .set in shared/positional_labels.s), loads xix with
+     * AcWelcomScreen_RenderBytecode and jumps indirectly -- so each entry is
+     * the offset of an op handler from AcWelcomScreen_RenderBytecode.
+     * Values: 0, 896, 15, 162, 179, 208, 237, 293, 321, 386, 860, 265, 386.
+     * What each handler does (decoded with unidasm at label + offset, v10):
+     * op 0 (+0) posts 0x1E000B3 and ends the script; op 1 (+896) just
+     * advances to the next step; op 2 (+15) reads arg (cp iz, 2) and a
+     * 12-byte record table in RAM at 0x03EA0C (not analysed); op 3 (+162)
+     * calls SendEvent with 0x1C0000C; ops 4/5/6/7/11
+     * (+179/+208/+237/+293/+265) draw one glyph each -- C, O, L, R, U; op 8
+     * (+321) draws I then N; ops 9 and 12 (+386) draw C-O-L-O(-U)-R; op 10
+     * (+860) calls ApFuncCall on 0x120000B with 0x1E000AC, CaptureLcd, then
+     * 0x1E000AD. That code is not yet framed as instructions in
+     * ui/drawbar_panel_ui.s, so the targets stay offsets, not labels.
+     * --------------------------------------------------------------------- */
+    int16_t WelcomeScript_OpJumpOffsets[13];
+    /* ---------------------------------------------------------------------
+     * PsMixer_ControlProcTable  --  11 x u32 code addresses
+     *
+     * PsMixer_ControlHelper (v10/v9 0xF7FCB0, v7 0xF7F8AC)
+     * (ui/drawbar_panel_ui.s) loads the word at +2 of a control record,
+     * multiplies it by 4 and indexes this table (lda xbc,
+     * Bitmap_DigitD_0x11F0 -- .set in shared/positional_labels.s -- then an
+     * indexed load into xhl), and calls the entry with xbc = 0x1C0000D, the
+     * paint message; the same `lda xbc, Bitmap_DigitD_0x11F0` occurs at 14
+     * sites in that file. The eleven values (v10/v9) are 0xF80B7D, 0xF81ED2,
+     * 0xF81B56, 0xF80EE9, 0xF815E5, 0xF80B80, 0xF80D21, 0xF812AF, 0xF8231B,
+     * 0xF81890, 0xF82222: all inside the AudioCtrl_DataBlock_* stretch of
+     * ui/drawbar_panel_ui.s, where only 0xF812AF, 0xF81890 and 0xF81ED2 are
+     * on a label (AudioCtrl_DataBlock_Helper6/7/8) -- the other eight are
+     * entry points that file's framing does not show. v7 moves every entry
+     * by -0x404 through v7_c_divergence.json (offsets 102862..102902), which
+     * is itself evidence that they are code addresses. Kept numeric here
+     * because the targets have no labels to name.
+     * --------------------------------------------------------------------- */
+    uint32_t PsMixer_ControlProcTable[11];
     char str_1131[2];
     uint8_t pad_1998[6];  /* zero padding */
     uint32_t ptr_19202;
@@ -30543,4313 +28621,534 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_781 = "MPv",
 
-    .field_17f12 = 0xE007,
-
-    .field_17f14 = 0xF81F,
-
-    .field_17f16 = 0xFC3F,
-
-    .field_17f18 = 0x3C3C,
-
-    .field_17f1a = 0x1E78,
-
-    .field_17f1c = 0x0E70,
-
-    .str_782 = "p",
-
-    .str_783 = "p",
-
-    .str_784 = "p",
-
-    .str_785 = "p",
-
-    .str_786 = "p",
-
-    .field_17f28 = 0x0E70,
-
-    .field_17f2a = 0x1E78,
-
-    .field_17f2c = 0x3C3C,
-
-    .field_17f2e = 0xFC3F,
-
-    .field_17f30 = 0xF81F,
-
-    .field_17f32 = 0xE007,
-
-    .field_17f34 = 0xC001,
-
-    .field_17f36 = 0xC001,
-
-    .field_17f38 = 0xC001,
-
-    .field_17f3a = 0xC001,
-
-    .field_17f3c = 0xC001,
-
-    .field_17f3e = 0xC001,
-
-    .field_17f40 = 0xC001,
-
-    .field_17f42 = 0xC001,
-
-    .field_17f44 = 0xC001,
-
-    .field_17f46 = 0xC001,
-
-    .field_17f48 = 0xC001,
-
-    .field_17f4a = 0xC001,
-
-    .field_17f4c = 0xC001,
-
-    .field_17f4e = 0xC001,
-
-    .field_17f50 = 0xC001,
-
-    .field_17f52 = 0xC001,
-
-    .field_17f54 = 0xC001,
-
-    .field_17f56 = 0xFE3F,
-
-    .field_17f58 = 0xFE3F,
-
-    .field_17f5a = 0xFE3F,
-
-    .str_787 = "8",
-
-    .str_788 = "8",
-
-    .str_789 = "8",
-
-    .str_790 = "8",
-
-    .str_791 = "8",
-
-    .str_792 = "8",
-
-    .str_793 = "8",
-
-    .str_794 = "8",
-
-    .str_795 = "8",
-
-    .str_796 = "8",
-
-    .str_797 = "8",
-
-    .str_798 = "8",
-
-    .str_799 = "8",
-
-    .str_800 = "8",
-
-    .field_17f78 = 0x0E38,
-
-    .field_17f7a = 0x1E38,
-
-    .field_17f7c = 0x3E38,
-
-    .field_17f7e = 0x3E38,
-
-    .field_17f80 = 0x7E38,
-
-    .field_17f82 = 0x7E38,
-
-    .field_17f84 = 0xEE38,
-
-    .field_17f86 = 0xCE38,
-
-    .field_17f88 = 0xCE39,
-
-    .field_17f8a = 0x8E39,
-
-    .field_17f8c = 0x8E3B,
-
-    .field_17f8e = 0x0E3F,
-
-    .field_17f90 = 0x0E3F,
-
-    .field_17f92 = 0x0E3E,
-
-    .field_17f94 = 0x0E3E,
-
-    .field_17f96 = 0x0E3C,
-
-    .field_17f98 = 0x0E38,
-
-    .field_17f9a = 0xF007,
-
-    .field_17f9c = 0xFC1F,
-
-    .field_17f9e = 0xFE3F,
-
-    .field_17fa0 = 0x1E3C,
-
-    .field_17fa2 = 0x0F78,
-
-    .field_17fa4 = 0x0770,
-
-    .field_17fa6 = 0x0770,
-
-    .field_17fa8 = 0x0770,
-
-    .field_17faa = 0x0770,
-
-    .field_17fac = 0x0770,
-
-    .field_17fae = 0x0770,
-
-    .field_17fb0 = 0x0770,
-
-    .field_17fb2 = 0x0F78,
-
-    .field_17fb4 = 0x1E3C,
-
-    .field_17fb6 = 0xFE3F,
-
-    .field_17fb8 = 0xFC1F,
-
-    .field_17fba = 0xF007,
-
-    .field_17fbc = 0x0738,
-
-    .field_17fbe = 0x0F38,
-
-    .field_17fc0 = 0x1E38,
-
-    .field_17fc2 = 0x1C38,
-
-    .field_17fc4 = 0x1C38,
-
-    .field_17fc6 = 0x3C38,
-
-    .field_17fc8 = 0xF83F,
-
-    .field_17fca = 0xF83F,
-
-    .field_17fcc = 0xFC3F,
-
-    .field_17fce = 0x1E38,
-
-    .field_17fd0 = 0x0E38,
-
-    .field_17fd2 = 0x0E38,
-
-    .field_17fd4 = 0x0E38,
-
-    .field_17fd6 = 0x1E38,
-
-    .field_17fd8 = 0xFC3F,
-
-    .field_17fda = 0xF83F,
-
-    .field_17fdc = 0xF03F,
-
-    .field_17fde = 0xF003,
-
-    .field_17fe0 = 0xFC0F,
-
-    .field_17fe2 = 0xFE1F,
-
-    .field_17fe4 = 0x1E1E,
-
-    .field_17fe6 = 0x0F3C,
-
-    .field_17fe8 = 0x0738,
-
-    .field_17fea = 0x0738,
-
-    .field_17fec = 0x0738,
-
-    .field_17fee = 0x0738,
-
-    .field_17ff0 = 0x0738,
-
-    .field_17ff2 = 0x0738,
-
-    .field_17ff4 = 0x0738,
-
-    .field_17ff6 = 0x0738,
-
-    .field_17ff8 = 0x0738,
-
-    .field_17ffa = 0x0738,
-
-    .field_17ffc = 0x0738,
-
-    .field_17ffe = 0x0738,
-
-    .field_18000 = 0x0014,
-
-    .pad_1552 = { 0 },
-
-    .field_18004 = NAKA_NONE,
-
-    .field_18006 = NAKA_NONE,
-
-    .field_18008 = 0x0001,
-
-    .pad_1553 = { 0 },
-
-    .field_1800c = 0x0014,
-
-    .pad_1554 = { 0 },
-
-    .str_801 = "P",
-
-    .field_18012 = 0x001E,
-
-    .field_18014 = 0x0002,
-
-    .pad_1555 = { 0 },
-
-    .field_18018 = 0x0001,
-
-    .pad_1556 = { 0 },
-
-    .field_1801c = 0x00B4,
-
-    .field_1801e = 0x0082,
-
-    .field_18020 = 0x0002,
-
-    .pad_1557 = { 0 },
-
-    .field_18024 = 0x0001,
-
-    .pad_1558 = { 0 },
-
-    .str_802 = "P",
-
-    .field_1802a = 0x00E6,
-
-    .field_1802c = 0x0002,
-
-    .pad_1559 = { 0 },
-
-    .field_18030 = 0x0001,
-
-    .pad_1560 = { 0 },
-
-    .field_18034 = 0x0118,
-
-    .field_18036 = 0x001E,
-
-    .field_18038 = 0x0002,
-
-    .pad_1561 = { 0 },
-
-    .field_1803c = 0x0001,
-
-    .pad_1562 = { 0 },
-
-    .field_18040 = 0x001E,
-
-    .field_18042 = 0x00B4,
-
-    .field_18044 = 0x0002,
-
-    .pad_1563 = { 0 },
-
-    .field_18048 = 0x0001,
-
-    .pad_1564 = { 0 },
-
-    .field_1804c = 0x0082,
-
-    .field_1804e = 0x0082,
-
-    .field_18050 = 0x0002,
-
-    .pad_1565 = { 0 },
-
-    .field_18054 = 0x0001,
-
-    .pad_1566 = { 0 },
-
-    .str_803 = "P",
-
-    .field_1805a = 0x00B4,
-
-    .field_1805c = 0x0002,
-
-    .pad_1567 = { 0 },
-
-    .field_18060 = 0x0001,
-
-    .pad_1568 = { 0 },
-
-    .ptr_18064 = 0x00E60082,
-
-    .field_18068 = 0x0002,
-
-    .pad_1569 = { 0 },
-
-    .field_1806c = 0x0001,
-
-    .pad_1570 = { 0 },
-
-    .field_18070 = 0x0118,
-
-    .field_18072 = 0x00B4,
-
-    .field_18074 = 0x0002,
-
-    .pad_1571 = { 0 },
-
-    .field_18078 = 0x0001,
-
-    .pad_1572 = { 0 },
-
-    .field_1807c = 0x001E,
-
-    .field_1807e = 0x0082,
-
-    .field_18080 = 0x0002,
-
-    .pad_1573 = { 0 },
-
-    .field_18084 = 0x0001,
-
-    .pad_1574 = { 0 },
-
-    .field_18088 = 0x00E6,
-
-    .field_1808a = 0x001E,
-
-    .field_1808c = 0x0002,
-
-    .pad_1575 = { 0 },
-
-    .field_18090 = 0x0001,
-
-    .pad_1576 = { 0 },
-
-    .field_18094 = 0x00E6,
-
-    .field_18096 = 0x0082,
-
-    .field_18098 = 0x0002,
-
-    .pad_1577 = { 0 },
-
-    .field_1809c = 0x0001,
-
-    .pad_1578 = { 0 },
-
-    .ptr_180a0 = 0x00E600E6,
-
-    .field_180a4 = 0x0002,
-
-    .pad_1579 = { 0 },
-
-    .field_180a8 = 0x0001,
-
-    .pad_1580 = { 0 },
-
-    .field_180ac = 0x00B4,
-
-    .field_180ae = 0x00B4,
-
-    .field_180b0 = 0x0002,
-
-    .pad_1581 = { 0 },
-
-    .field_180b4 = 0x0001,
-
-    .pad_1582 = { 0 },
-
-    .field_180b8 = 0x001E,
-
-    .str_804 = "P",
-
-    .field_180bc = 0x0002,
-
-    .pad_1583 = { 0 },
-
-    .field_180c0 = 0x0001,
-
-    .pad_1584 = { 0 },
-
-    .field_180c4 = 0x0118,
-
-    .str_805 = "P",
-
-    .field_180c8 = 0x0002,
-
-    .pad_1585 = { 0 },
-
-    .field_180cc = 0x0001,
-
-    .pad_1586 = { 0 },
-
-    .field_180d0 = 0x00E6,
-
-    .field_180d2 = 0x00B4,
-
-    .field_180d4 = 0x0002,
-
-    .pad_1587 = { 0 },
-
-    .field_180d8 = 0x0001,
-
-    .pad_1588 = { 0 },
-
-    .ptr_180dc = 0x00E600B4,
-
-    .field_180e0 = 0x0002,
-
-    .pad_1589 = { 0 },
-
-    .field_180e4 = 0x0001,
-
-    .pad_1590 = { 0 },
-
-    .field_180e8 = 0x00E6,
-
-    .str_806 = "P",
-
-    .field_180ec = 0x0002,
-
-    .pad_1591 = { 0 },
-
-    .field_180f0 = 0x0001,
-
-    .pad_1592 = { 0 },
-
-    .ptr_180f4 = 0x00E6001E,
-
-    .field_180f8 = 0x0002,
-
-    .pad_1593 = { 0 },
-
-    .field_180fc = 0x0001,
-
-    .pad_1594 = { 0 },
-
-    .ptr_18100 = 0x00E60118,
-
-    .field_18104 = 0x0002,
-
-    .pad_1595 = { 0 },
-
-    .field_18108 = 0x0001,
-
-    .pad_1596 = { 0 },
-
-    .field_1810c = 0x00B4,
-
-    .field_1810e = 0x001E,
-
-    .field_18110 = 0x0002,
-
-    .pad_1597 = { 0 },
-
-    .field_18114 = 0x0001,
-
-    .pad_1598 = { 0 },
-
-    .field_18118 = 0x0118,
-
-    .field_1811a = 0x0082,
-
-    .field_1811c = 0x0002,
-
-    .pad_1599 = { 0 },
-
-    .field_18120 = 0x0001,
-
-    .pad_1600 = { 0 },
-
-    .str_807 = "P",
-
-    .str_808 = "P",
-
-    .field_18128 = 0x0002,
-
-    .pad_1601 = { 0 },
-
-    .field_1812c = 0x0001,
-
-    .pad_1602 = { 0 },
-
-    .field_18130 = 0x00B4,
-
-    .str_809 = "P",
-
-    .field_18134 = 0x0002,
-
-    .pad_1603 = { 0 },
-
-    .field_18138 = 0x0001,
-
-    .pad_1604 = { 0 },
-
-    .field_1813c = 0x0082,
-
-    .field_1813e = 0x00B4,
-
-    .field_18140 = 0x0002,
-
-    .pad_1605 = { 0 },
-
-    .field_18144 = 0x0001,
-
-    .pad_1606 = { 0 },
-
-    .str_810 = "P",
-
-    .field_1814a = 0x0082,
-
-    .field_1814c = 0x0002,
-
-    .pad_1607 = { 0 },
-
-    .field_18150 = 0x0001,
-
-    .pad_1608 = { 0 },
-
-    .field_18154 = 0x0082,
-
-    .field_18156 = 0x001E,
-
-    .field_18158 = 0x0002,
-
-    .pad_1609 = { 0 },
-
-    .field_1815c = 0x0001,
-
-    .pad_1610 = { 0 },
-
-    .field_18160 = 0x0082,
-
-    .str_811 = "P",
-
-    .field_18164 = 0x0002,
-
-    .pad_1611 = { 0 },
-
-    .field_18168 = 0x0001,
-
-    .pad_1612 = { 0 },
-
-    .field_1816c = 0x001E,
-
-    .field_1816e = 0x001E,
-
-    .field_18170 = 0x0002,
-
-    .pad_1613 = { 0 },
-
-    .field_18174 = 0x0001,
-
-    .pad_1614 = { 0 },
-
-    .field_18178 = 0x001E,
-
-    .str_812 = ":",
-
-    .field_1817c = 0x0002,
-
-    .pad_1615 = { 0 },
-
-    .field_18184 = 0x00A0,
-
-    .str_813 = "v",
-
-    .field_18188 = 0x0002,
-
-    .field_1818a = 0x0001,
-
-    .field_1818c = 0x000A,
-
-    .pad_1616 = { 0 },
-
-    .str_814 = " ",
-
-    .str_815 = ":",
-
-    .field_18194 = 0x0002,
-
-    .pad_1617 = { 0 },
-
-    .field_1819c = 0x0086,
-
-    .str_816 = "v",
-
-    .field_181a0 = 0x0002,
-
-    .field_181a2 = 0x0001,
-
-    .field_181a4 = 0x0001,
-
-    .pad_1618 = { 0 },
-
-    .str_817 = "\"",
-
-    .str_818 = ":",
-
-    .field_181ac = 0x0002,
-
-    .pad_1619 = { 0 },
-
-    .str_819 = "f",
-
-    .str_820 = "v",
-
-    .field_181b8 = 0x0002,
-
-    .field_181ba = 0x0001,
-
-    .field_181bc = 0x0001,
-
-    .pad_1620 = { 0 },
-
-    .str_821 = "&",
-
-    .str_822 = ":",
-
-    .field_181c4 = 0x0002,
-
-    .pad_1621 = { 0 },
-
-    .str_823 = "V",
-
-    .str_824 = "v",
-
-    .field_181d0 = 0x0002,
-
-    .field_181d2 = 0x0001,
-
-    .field_181d4 = 0x0001,
-
-    .pad_1622 = { 0 },
-
-    .str_825 = ".",
-
-    .str_826 = ":",
-
-    .field_181dc = 0x0002,
-
-    .pad_1623 = { 0 },
-
-    .str_827 = "N",
-
-    .str_828 = "v",
-
-    .field_181e8 = 0x0002,
-
-    .field_181ea = 0x0001,
-
-    .field_181ec = 0x0001,
-
-    .pad_1624 = { 0 },
-
-    .str_829 = ">",
-
-    .str_830 = ":",
-
-    .field_181f4 = 0x0002,
-
-    .pad_1625 = { 0 },
-
-    .str_831 = "J",
-
-    .str_832 = "v",
-
-    .field_18200 = 0x0002,
-
-    .field_18202 = 0x0001,
-
-    .field_18204 = 0x0001,
-
-    .pad_1626 = { 0 },
-
-    .str_833 = "^",
-
-    .str_834 = ":",
-
-    .field_1820c = 0x0002,
-
-    .pad_1627 = { 0 },
-
-    .str_835 = "H",
-
-    .str_836 = "v",
-
-    .field_18218 = 0x0002,
-
-    .field_1821a = 0x0001,
-
-    .field_1821c = 0x0001,
-
-    .pad_1628 = { 0 },
-
-    .str_837 = "~",
-
-    .str_838 = ":",
-
-    .field_18224 = 0x0002,
-
-    .pad_1629 = { 0 },
-
-    .str_839 = "F",
-
-    .str_840 = "v",
-
-    .field_18230 = 0x0002,
-
-    .field_18232 = 0x0001,
-
-    .field_18234 = 0x0001,
-
-    .pad_1630 = { 0 },
-
-    .field_18238 = 0x00A0,
-
-    .str_841 = ":",
-
-    .field_1823c = 0x0002,
-
-    .pad_1631 = { 0 },
-
-    .str_842 = "H",
-
-    .str_843 = "v",
-
-    .field_18248 = 0x0002,
-
-    .field_1824a = 0x0001,
-
-    .field_1824c = 0x0001,
-
-    .pad_1632 = { 0 },
-
-    .field_18250 = 0x00C2,
-
-    .str_844 = ":",
-
-    .field_18254 = 0x0002,
-
-    .pad_1633 = { 0 },
-
-    .str_845 = "J",
-
-    .str_846 = "v",
-
-    .field_18260 = 0x0002,
-
-    .field_18262 = 0x0001,
-
-    .field_18264 = 0x0001,
-
-    .pad_1634 = { 0 },
-
-    .field_18268 = 0x00E2,
-
-    .str_847 = ":",
-
-    .field_1826c = 0x0002,
-
-    .pad_1635 = { 0 },
-
-    .str_848 = "N",
-
-    .str_849 = "v",
-
-    .field_18278 = 0x0002,
-
-    .field_1827a = 0x0001,
-
-    .field_1827c = 0x0001,
-
-    .pad_1636 = { 0 },
-
-    .field_18280 = 0x0102,
-
-    .str_850 = ":",
-
-    .field_18284 = 0x0002,
-
-    .pad_1637 = { 0 },
-
-    .str_851 = "V",
-
-    .str_852 = "v",
-
-    .field_18290 = 0x0002,
-
-    .field_18292 = 0x0001,
-
-    .field_18294 = 0x0001,
-
-    .pad_1638 = { 0 },
-
-    .field_18298 = 0x0112,
-
-    .str_853 = ":",
-
-    .field_1829c = 0x0002,
-
-    .pad_1639 = { 0 },
-
-    .str_854 = "f",
-
-    .str_855 = "v",
-
-    .field_182a8 = 0x0002,
-
-    .field_182aa = 0x0001,
-
-    .field_182ac = 0x0001,
-
-    .pad_1640 = { 0 },
-
-    .field_182b0 = 0x011A,
-
-    .str_856 = ":",
-
-    .field_182b4 = 0x0002,
-
-    .pad_1641 = { 0 },
-
-    .field_182bc = 0x0086,
-
-    .str_857 = "v",
-
-    .field_182c0 = 0x0002,
-
-    .field_182c2 = 0x0001,
-
-    .field_182c4 = 0x0001,
-
-    .pad_1642 = { 0 },
-
-    .field_182c8 = 0x011E,
-
-    .str_858 = ":",
-
-    .field_182cc = 0x0002,
-
-    .pad_1643 = { 0 },
-
-    .field_182d4 = 0x00A0,
-
-    .str_859 = "v",
-
-    .field_182d8 = 0x0002,
-
-    .field_182da = 0x0001,
-
-    .field_182dc = 0x0001,
-
-    .pad_1644 = { 0 },
-
-    .field_182e0 = 0x0120,
-
-    .str_860 = ":",
-
-    .field_182e4 = 0x0002,
-
-    .pad_1645 = { 0 },
-
-    .field_182ec = 0x00BA,
-
-    .str_861 = "v",
-
-    .field_182f0 = 0x0002,
-
-    .field_182f2 = 0x0001,
-
-    .field_182f4 = 0x0001,
-
-    .pad_1646 = { 0 },
-
-    .field_182f8 = 0x0122,
-
-    .str_862 = ":",
-
-    .field_182fc = 0x0002,
-
-    .pad_1647 = { 0 },
-
-    .field_18304 = 0x00DA,
-
-    .str_863 = "v",
-
-    .field_18308 = 0x0002,
-
-    .field_1830a = 0x0001,
-
-    .field_1830c = 0x0001,
-
-    .pad_1648 = { 0 },
-
-    .field_18310 = 0x0120,
-
-    .str_864 = ":",
-
-    .field_18314 = 0x0002,
-
-    .pad_1649 = { 0 },
-
-    .field_1831c = 0x00EA,
-
-    .str_865 = "v",
-
-    .field_18320 = 0x0002,
-
-    .field_18322 = 0x0001,
-
-    .field_18324 = 0x0001,
-
-    .pad_1650 = { 0 },
-
-    .field_18328 = 0x011E,
-
-    .str_866 = ":",
-
-    .field_1832c = 0x0002,
-
-    .pad_1651 = { 0 },
-
-    .field_18334 = 0x00F2,
-
-    .str_867 = "v",
-
-    .field_18338 = 0x0002,
-
-    .field_1833a = 0x0001,
-
-    .field_1833c = 0x0001,
-
-    .pad_1652 = { 0 },
-
-    .field_18340 = 0x011A,
-
-    .str_868 = ":",
-
-    .field_18344 = 0x0002,
-
-    .pad_1653 = { 0 },
-
-    .field_1834c = 0x00F6,
-
-    .str_869 = "v",
-
-    .field_18350 = 0x0002,
-
-    .field_18352 = 0x0001,
-
-    .field_18354 = 0x0001,
-
-    .pad_1654 = { 0 },
-
-    .field_18358 = 0x0112,
-
-    .str_870 = ":",
-
-    .field_1835c = 0x0002,
-
-    .pad_1655 = { 0 },
-
-    .field_18364 = 0x00F8,
-
-    .str_871 = "v",
-
-    .field_18368 = 0x0002,
-
-    .field_1836a = 0x0001,
-
-    .field_1836c = 0x0001,
-
-    .pad_1656 = { 0 },
-
-    .field_18370 = 0x0102,
-
-    .str_872 = ":",
-
-    .field_18374 = 0x0002,
-
-    .pad_1657 = { 0 },
-
-    .field_1837c = 0x00FA,
-
-    .str_873 = "v",
-
-    .field_18380 = 0x0002,
-
-    .field_18382 = 0x0001,
-
-    .field_18384 = 0x0001,
-
-    .pad_1658 = { 0 },
-
-    .field_18388 = 0x00E2,
-
-    .str_874 = ":",
-
-    .field_1838c = 0x0002,
-
-    .pad_1659 = { 0 },
-
-    .field_18394 = 0x00F8,
-
-    .str_875 = "v",
-
-    .field_18398 = 0x0002,
-
-    .field_1839a = 0x0001,
-
-    .field_1839c = 0x0001,
-
-    .pad_1660 = { 0 },
-
-    .field_183a0 = 0x00C2,
-
-    .str_876 = ":",
-
-    .field_183a4 = 0x0002,
-
-    .pad_1661 = { 0 },
-
-    .field_183ac = 0x00F6,
-
-    .str_877 = "v",
-
-    .field_183b0 = 0x0002,
-
-    .field_183b2 = 0x0001,
-
-    .field_183b4 = 0x0001,
-
-    .pad_1662 = { 0 },
-
-    .field_183b8 = 0x00A0,
-
-    .str_878 = ":",
-
-    .field_183bc = 0x0002,
-
-    .pad_1663 = { 0 },
-
-    .field_183c4 = 0x00F2,
-
-    .str_879 = "v",
-
-    .field_183c8 = 0x0002,
-
-    .field_183ca = 0x0001,
-
-    .field_183cc = 0x0001,
-
-    .pad_1664 = { 0 },
-
-    .str_880 = "~",
-
-    .str_881 = ":",
-
-    .field_183d4 = 0x0002,
-
-    .pad_1665 = { 0 },
-
-    .field_183dc = 0x00EA,
-
-    .str_882 = "v",
-
-    .field_183e0 = 0x0002,
-
-    .field_183e2 = 0x0001,
-
-    .field_183e4 = 0x0001,
-
-    .pad_1666 = { 0 },
-
-    .str_883 = "^",
-
-    .str_884 = ":",
-
-    .field_183ec = 0x0002,
-
-    .pad_1667 = { 0 },
-
-    .field_183f4 = 0x00DA,
-
-    .str_885 = "v",
-
-    .field_183f8 = 0x0002,
-
-    .field_183fa = 0x0001,
-
-    .field_183fc = 0x0001,
-
-    .pad_1668 = { 0 },
-
-    .str_886 = ">",
-
-    .str_887 = ":",
-
-    .field_18404 = 0x0002,
-
-    .pad_1669 = { 0 },
-
-    .field_1840c = 0x00BA,
-
-    .str_888 = "v",
-
-    .field_18410 = 0x0002,
-
-    .field_18412 = 0x0001,
-
-    .field_18414 = 0x0001,
-
-    .pad_1670 = { 0 },
-
-    .str_889 = ".",
-
-    .str_890 = ":",
-
-    .field_1841c = 0x0002,
-
-    .pad_1671 = { 0 },
-
-    .field_18424 = 0x00A0,
-
-    .str_891 = "v",
-
-    .field_18428 = 0x0002,
-
-    .field_1842a = 0x0001,
-
-    .field_1842c = 0x0001,
-
-    .pad_1672 = { 0 },
-
-    .str_892 = "&",
-
-    .str_893 = ":",
-
-    .field_18434 = 0x0002,
-
-    .pad_1673 = { 0 },
-
-    .field_1843c = 0x0086,
-
-    .str_894 = "v",
-
-    .field_18440 = 0x0002,
-
-    .field_18442 = 0x0001,
-
-    .field_18444 = 0x0001,
-
-    .pad_1674 = { 0 },
-
-    .str_895 = "\"",
-
-    .str_896 = ":",
-
-    .field_1844c = 0x0002,
-
-    .pad_1675 = { 0 },
-
-    .str_897 = "f",
-
-    .str_898 = "v",
-
-    .field_18458 = 0x0002,
-
-    .field_1845a = 0x0001,
-
-    .field_1845c = 0x0001,
-
-    .pad_1676 = { 0 },
-
-    .str_899 = " ",
-
-    .str_900 = ":",
-
-    .field_18464 = 0x0002,
-
-    .pad_1677 = { 0 },
-
-    .str_901 = "V",
-
-    .str_902 = "v",
-
-    .field_18470 = 0x0002,
-
-    .field_18472 = 0x0001,
-
-    .field_18474 = 0x0001,
-
-    .pad_1678 = { 0 },
-
-    .str_903 = "N",
-
-    .str_904 = "v",
-
-    .field_1847c = 0x0002,
-
-    .field_1847e = 0x0001,
-
-    .field_18480 = 0x0001,
-
-    .pad_1679 = { 0 },
-
-    .str_905 = "J",
-
-    .str_906 = "v",
-
-    .field_18488 = 0x0002,
-
-    .field_1848a = 0x0001,
-
-    .field_1848c = 0x0001,
-
-    .pad_1680 = { 0 },
-
-    .str_907 = "H",
-
-    .str_908 = "v",
-
-    .field_18494 = 0x0002,
-
-    .field_18496 = 0x0001,
-
-    .field_18498 = 0x0001,
-
-    .pad_1681 = { 0 },
-
-    .field_1849c = 0x001E,
-
-    .str_909 = ":",
-
-    .field_184a0 = 0x0002,
-
-    .field_184a2 = NAKA_NONE,
-
-    .pad_1682 = { 0 },
-
-    .str_910 = "F",
-
-    .str_911 = "v",
-
-    .field_184ac = 0x0002,
-
-    .field_184ae = NAKA_NONE,
-
-    .pad_1683 = { 0 },
-
-    .str_912 = "2",
-
-    .str_913 = ":",
-
-    .field_184b8 = 0x0002,
-
-    .field_184ba = NAKA_NONE,
-
-    .pad_1684 = { 0 },
-
-    .str_914 = "T",
-
-    .str_915 = "v",
-
-    .field_184c4 = 0x0002,
-
-    .field_184c6 = NAKA_NONE,
-
-    .field_184c8 = 0x0001,
-
-    .pad_1685 = { 0 },
-
-    .str_916 = "F",
-
-    .str_917 = ":",
-
-    .field_184d0 = 0x0002,
-
-    .field_184d2 = NAKA_NONE,
-
-    .pad_1686 = { 0 },
-
-    .str_918 = "b",
-
-    .str_919 = "v",
-
-    .field_184dc = 0x0002,
-
-    .field_184de = NAKA_NONE,
-
-    .pad_1687 = { 0 },
-
-    .str_920 = "Z",
-
-    .str_921 = ":",
-
-    .field_184e8 = 0x0002,
-
-    .field_184ea = NAKA_NONE,
-
-    .pad_1688 = { 0 },
-
-    .str_922 = "p",
-
-    .str_923 = "v",
-
-    .field_184f4 = 0x0002,
-
-    .field_184f6 = NAKA_NONE,
-
-    .field_184f8 = 0x0001,
-
-    .pad_1689 = { 0 },
-
-    .str_924 = "n",
-
-    .str_925 = ":",
-
-    .field_18500 = 0x0002,
-
-    .field_18502 = NAKA_NONE,
-
-    .pad_1690 = { 0 },
-
-    .str_926 = "~",
-
-    .str_927 = "v",
-
-    .field_1850c = 0x0002,
-
-    .field_1850e = NAKA_NONE,
-
-    .pad_1691 = { 0 },
-
-    .field_18514 = 0x0082,
-
-    .str_928 = ":",
-
-    .field_18518 = 0x0002,
-
-    .field_1851a = NAKA_NONE,
-
-    .pad_1692 = { 0 },
-
-    .field_18520 = 0x008C,
-
-    .str_929 = "v",
-
-    .field_18524 = 0x0002,
-
-    .field_18526 = NAKA_NONE,
-
-    .field_18528 = 0x0001,
-
-    .pad_1693 = { 0 },
-
-    .field_1852c = 0x0096,
-
-    .str_930 = ":",
-
-    .field_18530 = 0x0002,
-
-    .field_18532 = NAKA_NONE,
-
-    .pad_1694 = { 0 },
-
-    .field_18538 = 0x009A,
-
-    .str_931 = "v",
-
-    .field_1853c = 0x0002,
-
-    .field_1853e = NAKA_NONE,
-
-    .pad_1695 = { 0 },
-
-    .field_18544 = 0x00AA,
-
-    .str_932 = ":",
-
-    .field_18548 = 0x0002,
-
-    .field_1854a = NAKA_NONE,
-
-    .pad_1696 = { 0 },
-
-    .field_18550 = 0x00A8,
-
-    .str_933 = "v",
-
-    .field_18554 = 0x0002,
-
-    .field_18556 = NAKA_NONE,
-
-    .field_18558 = 0x0001,
-
-    .pad_1697 = { 0 },
-
-    .field_1855c = 0x00BE,
-
-    .str_934 = ":",
-
-    .field_18560 = 0x0002,
-
-    .field_18562 = NAKA_NONE,
-
-    .pad_1698 = { 0 },
-
-    .field_18568 = 0x00B6,
-
-    .str_935 = "v",
-
-    .field_1856c = 0x0002,
-
-    .field_1856e = NAKA_NONE,
-
-    .pad_1699 = { 0 },
-
-    .field_18574 = 0x00D2,
-
-    .str_936 = ":",
-
-    .field_18578 = 0x0002,
-
-    .field_1857a = NAKA_NONE,
-
-    .pad_1700 = { 0 },
-
-    .field_18580 = 0x00C4,
-
-    .str_937 = "v",
-
-    .field_18584 = 0x0002,
-
-    .field_18586 = NAKA_NONE,
-
-    .field_18588 = 0x0001,
-
-    .pad_1701 = { 0 },
-
-    .field_1858c = 0x00E6,
-
-    .str_938 = ":",
-
-    .field_18590 = 0x0002,
-
-    .field_18592 = NAKA_NONE,
-
-    .pad_1702 = { 0 },
-
-    .field_18598 = 0x00D2,
-
-    .str_939 = "v",
-
-    .field_1859c = 0x0002,
-
-    .field_1859e = NAKA_NONE,
-
-    .pad_1703 = { 0 },
-
-    .field_185a4 = 0x00FA,
-
-    .str_940 = ":",
-
-    .field_185a8 = 0x0002,
-
-    .field_185aa = NAKA_NONE,
-
-    .pad_1704 = { 0 },
-
-    .field_185b0 = 0x00E0,
-
-    .str_941 = "v",
-
-    .field_185b4 = 0x0002,
-
-    .field_185b6 = NAKA_NONE,
-
-    .field_185b8 = 0x0001,
-
-    .pad_1705 = { 0 },
-
-    .field_185bc = 0x010E,
-
-    .str_942 = ":",
-
-    .field_185c0 = 0x0002,
-
-    .field_185c2 = NAKA_NONE,
-
-    .pad_1706 = { 0 },
-
-    .field_185c8 = 0x00ED,
-
-    .str_943 = "v",
-
-    .field_185cc = 0x0002,
-
-    .field_185ce = NAKA_NONE,
-
-    .pad_1707 = { 0 },
-
-    .field_185d4 = 0x0122,
-
-    .str_944 = ":",
-
-    .field_185d8 = 0x0002,
-
-    .field_185da = NAKA_NONE,
-
-    .pad_1708 = { 0 },
-
-    .field_185e0 = 0x00FA,
-
-    .str_945 = "v",
-
-    .field_185e4 = 0x0002,
-
-    .field_185e6 = NAKA_NONE,
-
-    .field_185e8 = 0x0014,
-
-    .pad_1709 = { 0 },
-
-    .field_185ec = NAKA_NONE,
-
-    .field_185ee = NAKA_NONE,
-
-    .field_185f0 = 0x0003,
-
-    .field_185f2 = 0x0001,
-
-    .field_185f4 = 0x000A,
-
-    .pad_1710 = { 0 },
-
-    .field_185f8 = 0x008E,
-
-    .field_185fa = 0x00A0,
-
-    .ptr_185fc = 0x00FF0008,
-
-    .field_18600 = 0x0001,
-
-    .pad_1711 = { 0 },
-
-    .field_18606 = 0x00DC,
-
-    .field_18608 = 0x0009,
-
-    .pad_1712 = { 0 },
-
-    .field_1860c = 0x0001,
-
-    .pad_1713 = { 0 },
-
-    .field_18610 = 0x0014,
-
-    .field_18612 = 0x00DA,
-
-    .field_18614 = 0x0009,
-
-    .field_18616 = 0x0001,
-
-    .field_18618 = 0x0001,
-
-    .pad_1714 = { 0 },
-
-    .str_946 = "(",
-
-    .field_1861e = 0x00D8,
-
-    .field_18620 = 0x0009,
-
-    .field_18622 = 0x0002,
-
-    .field_18624 = 0x0001,
-
-    .pad_1715 = { 0 },
-
-    .str_947 = "<",
-
-    .field_1862a = 0x00D6,
-
-    .field_1862c = 0x0009,
-
-    .field_1862e = 0x0003,
-
-    .field_18630 = 0x0001,
-
-    .pad_1716 = { 0 },
-
-    .str_948 = "P",
-
-    .field_18636 = 0x00D4,
-
-    .field_18638 = 0x0009,
-
-    .field_1863a = 0x0004,
-
-    .field_1863c = 0x0001,
-
-    .pad_1717 = { 0 },
-
-    .str_949 = "d",
-
-    .field_18642 = 0x00D2,
-
-    .field_18644 = 0x0009,
-
-    .field_18646 = 0x0005,
-
-    .field_18648 = 0x0001,
-
-    .pad_1718 = { 0 },
-
-    .str_950 = "x",
-
-    .field_1864e = 0x00CD,
-
-    .field_18650 = 0x0009,
-
-    .field_18652 = 0x0006,
-
-    .field_18654 = 0x0001,
-
-    .pad_1719 = { 0 },
-
-    .field_18658 = 0x008C,
-
-    .field_1865a = 0x00C8,
-
-    .field_1865c = 0x0009,
-
-    .field_1865e = 0x0008,
-
-    .field_18660 = 0x0001,
-
-    .pad_1720 = { 0 },
-
-    .field_18664 = 0x00A0,
-
-    .field_18666 = 0x00BE,
-
-    .ptr_18668 = 0x00F80009,
-
-    .field_1866c = 0x0001,
-
-    .pad_1721 = { 0 },
-
-    .field_18670 = 0x00B4,
-
-    .field_18672 = 0x00B4,
-
-    .field_18674 = 0x0009,
-
-    .field_18676 = 0x0007,
-
-    .field_18678 = 0x0001,
-
-    .pad_1722 = { 0 },
-
-    .field_1867c = 0x00C8,
-
-    .field_1867e = 0x00AA,
-
-    .ptr_18680 = 0x00F90009,
-
-    .field_18684 = 0x0001,
-
-    .pad_1723 = { 0 },
-
-    .field_18688 = 0x00D2,
-
-    .field_1868a = 0x00A0,
-
-    .ptr_1868c = 0x00FA0009,
-
-    .field_18690 = 0x0001,
-
-    .pad_1724 = { 0 },
-
-    .field_18694 = 0x00DC,
-
-    .field_18696 = 0x009B,
-
-    .ptr_18698 = 0x00FB0009,
-
-    .field_1869c = 0x0001,
-
-    .pad_1725 = { 0 },
-
-    .field_186a0 = 0x00DC,
-
-    .field_186a2 = 0x0096,
-
-    .ptr_186a4 = 0x00FC0009,
-
-    .field_186a8 = 0x0001,
-
-    .pad_1726 = { 0 },
-
-    .field_186ac = 0x00D2,
-
-    .field_186ae = 0x0094,
-
-    .ptr_186b0 = 0x00FD0009,
-
-    .field_186b4 = 0x0001,
-
-    .pad_1727 = { 0 },
-
-    .field_186b8 = 0x00C8,
-
-    .field_186ba = 0x0092,
-
-    .ptr_186bc = 0x00FE0009,
-
-    .field_186c0 = 0x0001,
-
-    .pad_1728 = { 0 },
-
-    .field_186c4 = 0x00B4,
-
-    .field_186c6 = 0x0090,
-
-    .field_186c8 = 0x0009,
-
-    .field_186ca = 0x0009,
-
-    .field_186cc = 0x0001,
-
-    .pad_1729 = { 0 },
-
-    .field_186d0 = 0x0096,
-
-    .field_186d2 = 0x008E,
-
-    .field_186d4 = 0x0009,
-
-    .field_186d6 = 0x000A,
-
-    .field_186d8 = 0x0001,
-
-    .pad_1730 = { 0 },
-
-    .str_951 = "x",
-
-    .field_186de = 0x008C,
-
-    .field_186e0 = 0x0009,
-
-    .field_186e2 = 0x000C,
-
-    .field_186e4 = 0x0001,
-
-    .pad_1731 = { 0 },
-
-    .str_952 = "P",
-
-    .field_186ea = 0x008C,
-
-    .field_186ec = 0x0009,
-
-    .field_186ee = 0x000D,
-
-    .field_186f0 = 0x0001,
-
-    .pad_1732 = { 0 },
-
-    .str_953 = "2",
-
-    .field_186f6 = 0x008E,
-
-    .ptr_186f8 = 0x00FF0009,
-
-    .field_186fc = 0x0001,
-
-    .pad_1733 = { 0 },
-
-    .field_18700 = 0x001E,
-
-    .field_18702 = 0x0090,
-
-    .field_18704 = 0x0009,
-
-    .pad_1734 = { 0 },
-
-    .field_18708 = 0x0001,
-
-    .pad_1735 = { 0 },
-
-    .field_1870c = 0x0014,
-
-    .field_1870e = 0x0092,
-
-    .field_18710 = 0x0009,
-
-    .field_18712 = 0x0001,
-
-    .field_18714 = 0x0001,
-
-    .pad_1736 = { 0 },
-
-    .field_18718 = 0x000F,
-
-    .field_1871a = 0x0096,
-
-    .field_1871c = 0x0009,
-
-    .field_1871e = 0x0002,
-
-    .field_18720 = 0x0001,
-
-    .pad_1737 = { 0 },
-
-    .field_18724 = 0x0014,
-
-    .field_18726 = 0x009B,
-
-    .field_18728 = 0x0009,
-
-    .field_1872a = 0x0003,
-
-    .field_1872c = 0x0001,
-
-    .pad_1738 = { 0 },
-
-    .field_18730 = 0x001E,
-
-    .field_18732 = 0x00A0,
-
-    .field_18734 = 0x0009,
-
-    .field_18736 = 0x0004,
-
-    .field_18738 = 0x0001,
-
-    .pad_1739 = { 0 },
-
-    .str_954 = "(",
-
-    .field_1873e = 0x00AA,
-
-    .field_18740 = 0x0009,
-
-    .field_18742 = 0x0005,
-
-    .field_18744 = 0x0001,
-
-    .pad_1740 = { 0 },
-
-    .str_955 = "2",
-
-    .field_1874a = 0x00B4,
-
-    .field_1874c = 0x0009,
-
-    .field_1874e = 0x0006,
-
-    .field_18750 = 0x0001,
-
-    .pad_1741 = { 0 },
-
-    .str_956 = "<",
-
-    .field_18756 = 0x00B9,
-
-    .field_18758 = 0x0009,
-
-    .field_1875a = 0x0008,
-
-    .field_1875c = 0x0001,
-
-    .pad_1742 = { 0 },
-
-    .str_957 = "P",
-
-    .field_18762 = 0x00BB,
-
-    .ptr_18764 = 0x00F80009,
-
-    .field_18768 = 0x0001,
-
-    .pad_1743 = { 0 },
-
-    .str_958 = "d",
-
-    .field_1876e = 0x00BD,
-
-    .field_18770 = 0x0009,
-
-    .field_18772 = 0x0007,
-
-    .field_18774 = 0x0001,
-
-    .pad_1744 = { 0 },
-
-    .str_959 = "x",
-
-    .field_1877a = 0x00BE,
-
-    .ptr_1877c = 0x00F90009,
-
-    .field_18780 = 0x0001,
-
-    .pad_1745 = { 0 },
-
-    .str_960 = "x",
-
-    .field_18786 = 0x00BE,
-
-    .ptr_18788 = 0x00FE0004,
-
-    .field_1878c = 0x0001,
-
-    .pad_1746 = { 0 },
-
-    .field_18790 = 0x0088,
-
-    .field_18792 = 0x00BE,
-
-    .ptr_18794 = 0x00FB0005,
-
-    .field_18798 = 0x0001,
-
-    .pad_1747 = { 0 },
-
-    .field_1879c = 0x0098,
-
-    .field_1879e = 0x00BE,
-
-    .ptr_187a0 = 0x00FA0006,
-
-    .field_187a4 = 0x0001,
-
-    .pad_1748 = { 0 },
-
-    .field_187a8 = 0x00A8,
-
-    .field_187aa = 0x00BE,
-
-    .field_187ac = 0x0005,
-
-    .field_187ae = 0x0009,
-
-    .field_187b0 = 0x0001,
-
-    .pad_1749 = { 0 },
-
-    .field_187b4 = 0x00B8,
-
-    .field_187b6 = 0x00BE,
-
-    .field_187b8 = 0x0007,
-
-    .field_187ba = 0x000A,
-
-    .field_187bc = 0x0001,
-
-    .pad_1750 = { 0 },
-
-    .str_961 = "x",
-
-    .field_187c2 = 0x00BE,
-
-    .field_187c4 = 0x0004,
-
-    .field_187c6 = 0x000A,
-
-    .field_187c8 = 0x0001,
-
-    .pad_1751 = { 0 },
-
-    .field_187cc = 0x0088,
-
-    .field_187ce = 0x00BE,
-
-    .ptr_187d0 = 0x00FE0005,
-
-    .field_187d4 = 0x0001,
-
-    .pad_1752 = { 0 },
-
-    .field_187d8 = 0x0098,
-
-    .field_187da = 0x00BE,
-
-    .ptr_187dc = 0x00FB0006,
-
-    .field_187e0 = 0x0001,
-
-    .pad_1753 = { 0 },
-
-    .field_187e4 = 0x00A8,
-
-    .field_187e6 = 0x00BE,
-
-    .ptr_187e8 = 0x00FA0005,
-
-    .field_187ec = 0x0001,
-
-    .pad_1754 = { 0 },
-
-    .field_187f0 = 0x00B8,
-
-    .field_187f2 = 0x00BE,
-
-    .field_187f4 = 0x0007,
-
-    .field_187f6 = 0x0009,
-
-    .field_187f8 = 0x0001,
-
-    .pad_1755 = { 0 },
-
-    .str_962 = "x",
-
-    .field_187fe = 0x00BE,
-
-    .field_18800 = 0x0004,
-
-    .field_18802 = 0x0009,
-
-    .field_18804 = 0x0001,
-
-    .pad_1756 = { 0 },
-
-    .field_18808 = 0x0088,
-
-    .field_1880a = 0x00BE,
-
-    .field_1880c = 0x0005,
-
-    .field_1880e = 0x000A,
-
-    .field_18810 = 0x0001,
-
-    .pad_1757 = { 0 },
-
-    .field_18814 = 0x0098,
-
-    .field_18816 = 0x00BE,
-
-    .ptr_18818 = 0x00FE0006,
-
-    .field_1881c = 0x0001,
-
-    .pad_1758 = { 0 },
-
-    .field_18820 = 0x00A8,
-
-    .field_18822 = 0x00BE,
-
-    .ptr_18824 = 0x00FB0005,
-
-    .field_18828 = 0x0001,
-
-    .pad_1759 = { 0 },
-
-    .field_1882c = 0x00B8,
-
-    .field_1882e = 0x00BE,
-
-    .ptr_18830 = 0x00FA0007,
-
-    .field_18834 = 0x0001,
-
-    .pad_1760 = { 0 },
-
-    .str_963 = "x",
-
-    .field_1883a = 0x00BE,
-
-    .ptr_1883c = 0x00FA0004,
-
-    .field_18840 = 0x0001,
-
-    .pad_1761 = { 0 },
-
-    .field_18844 = 0x0088,
-
-    .field_18846 = 0x00BE,
-
-    .field_18848 = 0x0005,
-
-    .field_1884a = 0x0009,
-
-    .field_1884c = 0x0001,
-
-    .pad_1762 = { 0 },
-
-    .field_18850 = 0x0098,
-
-    .field_18852 = 0x00BE,
-
-    .field_18854 = 0x0006,
-
-    .field_18856 = 0x000A,
-
-    .field_18858 = 0x0001,
-
-    .pad_1763 = { 0 },
-
-    .field_1885c = 0x00A8,
-
-    .field_1885e = 0x00BE,
-
-    .ptr_18860 = 0x00FE0005,
-
-    .field_18864 = 0x0001,
-
-    .pad_1764 = { 0 },
-
-    .field_18868 = 0x00B8,
-
-    .field_1886a = 0x00BE,
-
-    .ptr_1886c = 0x00FB0007,
-
-    .field_18870 = 0x0001,
-
-    .pad_1765 = { 0 },
-
-    .str_964 = "x",
-
-    .field_18876 = 0x00BE,
-
-    .ptr_18878 = 0x00FB0004,
-
-    .field_1887c = 0x0001,
-
-    .pad_1766 = { 0 },
-
-    .field_18880 = 0x0088,
-
-    .field_18882 = 0x00BE,
-
-    .ptr_18884 = 0x00FA0005,
-
-    .field_18888 = 0x0001,
-
-    .pad_1767 = { 0 },
-
-    .field_1888c = 0x0098,
-
-    .field_1888e = 0x00BE,
-
-    .field_18890 = 0x0006,
-
-    .field_18892 = 0x0009,
-
-    .field_18894 = 0x0001,
-
-    .pad_1768 = { 0 },
-
-    .field_18898 = 0x00A8,
-
-    .field_1889a = 0x00BE,
-
-    .field_1889c = 0x0005,
-
-    .field_1889e = 0x000A,
-
-    .field_188a0 = 0x0001,
-
-    .pad_1769 = { 0 },
-
-    .field_188a4 = 0x00B8,
-
-    .field_188a6 = 0x00BE,
-
-    .ptr_188a8 = 0x00FE0007,
-
-    .str_965 = "2",
-
-    .pad_1770 = { 0 },
-
-    .field_188b0 = NAKA_NONE,
-
-    .field_188b2 = NAKA_NONE,
-
-    .pad_1771 = { 0 },
-
-    .field_188b8 = 0x0014,
-
-    .pad_1772 = { 0 },
-
-    .field_188bc = NAKA_NONE,
-
-    .field_188be = NAKA_NONE,
-
-    .field_188c0 = 0x0001,
-
-    .pad_1773 = { 0 },
-
-    .field_188c4 = 0x0014,
-
-    .pad_1774 = { 0 },
-
-    .str_966 = "P",
-
-    .field_188ca = 0x001E,
-
-    .field_188cc = 0x0002,
-
-    .pad_1775 = { 0 },
-
-    .field_188d0 = 0x0001,
-
-    .pad_1776 = { 0 },
-
-    .field_188d4 = 0x00B4,
-
-    .field_188d6 = 0x0082,
-
-    .field_188d8 = 0x0002,
-
-    .pad_1777 = { 0 },
-
-    .field_188dc = 0x0001,
-
-    .pad_1778 = { 0 },
-
-    .str_967 = "P",
-
-    .field_188e2 = 0x00E6,
-
-    .field_188e4 = 0x0002,
-
-    .pad_1779 = { 0 },
-
-    .field_188e8 = 0x0001,
-
-    .pad_1780 = { 0 },
-
-    .field_188ec = 0x0118,
-
-    .field_188ee = 0x001E,
-
-    .field_188f0 = 0x0002,
-
-    .pad_1781 = { 0 },
-
-    .field_188f4 = 0x0001,
-
-    .pad_1782 = { 0 },
-
-    .field_188f8 = 0x001E,
-
-    .field_188fa = 0x00B4,
-
-    .field_188fc = 0x0002,
-
-    .pad_1783 = { 0 },
-
-    .field_18900 = 0x0001,
-
-    .pad_1784 = { 0 },
-
-    .field_18904 = 0x0082,
-
-    .field_18906 = 0x0082,
-
-    .field_18908 = 0x0002,
-
-    .pad_1785 = { 0 },
-
-    .field_1890c = 0x0001,
-
-    .pad_1786 = { 0 },
-
-    .str_968 = "P",
-
-    .field_18912 = 0x00B4,
-
-    .field_18914 = 0x0002,
-
-    .pad_1787 = { 0 },
-
-    .field_18918 = 0x0001,
-
-    .pad_1788 = { 0 },
-
-    .ptr_1891c = 0x00E60082,
-
-    .field_18920 = 0x0002,
-
-    .pad_1789 = { 0 },
-
-    .field_18924 = 0x0001,
-
-    .pad_1790 = { 0 },
-
-    .field_18928 = 0x0118,
-
-    .field_1892a = 0x00B4,
-
-    .field_1892c = 0x0002,
-
-    .pad_1791 = { 0 },
-
-    .field_18930 = 0x0001,
-
-    .pad_1792 = { 0 },
-
-    .field_18934 = 0x001E,
-
-    .field_18936 = 0x0082,
-
-    .field_18938 = 0x0002,
-
-    .pad_1793 = { 0 },
-
-    .field_1893c = 0x0001,
-
-    .pad_1794 = { 0 },
-
-    .field_18940 = 0x00E6,
-
-    .field_18942 = 0x001E,
-
-    .field_18944 = 0x0002,
-
-    .pad_1795 = { 0 },
-
-    .field_18948 = 0x0001,
-
-    .pad_1796 = { 0 },
-
-    .field_1894c = 0x00E6,
-
-    .field_1894e = 0x0082,
-
-    .field_18950 = 0x0002,
-
-    .pad_1797 = { 0 },
-
-    .field_18954 = 0x0001,
-
-    .pad_1798 = { 0 },
-
-    .ptr_18958 = 0x00E600E6,
-
-    .field_1895c = 0x0002,
-
-    .pad_1799 = { 0 },
-
-    .field_18960 = 0x0001,
-
-    .pad_1800 = { 0 },
-
-    .field_18964 = 0x00B4,
-
-    .field_18966 = 0x00B4,
-
-    .field_18968 = 0x0002,
-
-    .pad_1801 = { 0 },
-
-    .field_1896c = 0x0001,
-
-    .pad_1802 = { 0 },
-
-    .field_18970 = 0x001E,
-
-    .str_969 = "P",
-
-    .field_18974 = 0x0002,
-
-    .pad_1803 = { 0 },
-
-    .field_18978 = 0x0001,
-
-    .pad_1804 = { 0 },
-
-    .field_1897c = 0x0118,
-
-    .str_970 = "P",
-
-    .field_18980 = 0x0002,
-
-    .pad_1805 = { 0 },
-
-    .field_18984 = 0x0001,
-
-    .pad_1806 = { 0 },
-
-    .field_18988 = 0x00E6,
-
-    .field_1898a = 0x00B4,
-
-    .field_1898c = 0x0002,
-
-    .pad_1807 = { 0 },
-
-    .field_18990 = 0x0001,
-
-    .pad_1808 = { 0 },
-
-    .ptr_18994 = 0x00E600B4,
-
-    .field_18998 = 0x0002,
-
-    .pad_1809 = { 0 },
-
-    .field_1899c = 0x0001,
-
-    .pad_1810 = { 0 },
-
-    .field_189a0 = 0x00E6,
-
-    .str_971 = "P",
-
-    .field_189a4 = 0x0002,
-
-    .pad_1811 = { 0 },
-
-    .field_189a8 = 0x0001,
-
-    .pad_1812 = { 0 },
-
-    .ptr_189ac = 0x00E6001E,
-
-    .field_189b0 = 0x0002,
-
-    .pad_1813 = { 0 },
-
-    .field_189b4 = 0x0001,
-
-    .pad_1814 = { 0 },
-
-    .ptr_189b8 = 0x00E60118,
-
-    .field_189bc = 0x0002,
-
-    .pad_1815 = { 0 },
-
-    .field_189c0 = 0x0001,
-
-    .pad_1816 = { 0 },
-
-    .field_189c4 = 0x00B4,
-
-    .field_189c6 = 0x001E,
-
-    .field_189c8 = 0x0002,
-
-    .pad_1817 = { 0 },
-
-    .field_189cc = 0x0001,
-
-    .pad_1818 = { 0 },
-
-    .field_189d0 = 0x0118,
-
-    .field_189d2 = 0x0082,
-
-    .field_189d4 = 0x0002,
-
-    .pad_1819 = { 0 },
-
-    .field_189d8 = 0x0001,
-
-    .pad_1820 = { 0 },
-
-    .str_972 = "P",
-
-    .str_973 = "P",
-
-    .field_189e0 = 0x0002,
-
-    .pad_1821 = { 0 },
-
-    .field_189e4 = 0x0001,
-
-    .pad_1822 = { 0 },
-
-    .field_189e8 = 0x00B4,
-
-    .str_974 = "P",
-
-    .field_189ec = 0x0002,
-
-    .pad_1823 = { 0 },
-
-    .field_189f0 = 0x0001,
-
-    .pad_1824 = { 0 },
-
-    .field_189f4 = 0x0082,
-
-    .field_189f6 = 0x00B4,
-
-    .field_189f8 = 0x0002,
-
-    .pad_1825 = { 0 },
-
-    .field_189fc = 0x0001,
-
-    .pad_1826 = { 0 },
-
-    .str_975 = "P",
-
-    .field_18a02 = 0x0082,
-
-    .field_18a04 = 0x0002,
-
-    .pad_1827 = { 0 },
-
-    .field_18a08 = 0x0001,
-
-    .pad_1828 = { 0 },
-
-    .field_18a0c = 0x0082,
-
-    .field_18a0e = 0x001E,
-
-    .field_18a10 = 0x0002,
-
-    .pad_1829 = { 0 },
-
-    .field_18a14 = 0x0001,
-
-    .pad_1830 = { 0 },
-
-    .field_18a18 = 0x0082,
-
-    .str_976 = "P",
-
-    .field_18a1c = 0x0002,
-
-    .pad_1831 = { 0 },
-
-    .field_18a20 = 0x0001,
-
-    .pad_1832 = { 0 },
-
-    .field_18a24 = 0x001E,
-
-    .field_18a26 = 0x001E,
-
-    .field_18a28 = 0x0002,
-
-    .pad_1833 = { 0 },
-
-    .field_18a2c = 0x0001,
-
-    .pad_1834 = { 0 },
-
-    .field_18a30 = 0x001E,
-
-    .str_977 = ":",
-
-    .field_18a34 = 0x0002,
-
-    .pad_1835 = { 0 },
-
-    .field_18a3c = 0x00A0,
-
-    .str_978 = "v",
-
-    .field_18a40 = 0x0002,
-
-    .field_18a42 = 0x0001,
-
-    .field_18a44 = 0x000A,
-
-    .pad_1836 = { 0 },
-
-    .str_979 = " ",
-
-    .str_980 = ":",
-
-    .field_18a4c = 0x0002,
-
-    .pad_1837 = { 0 },
-
-    .field_18a54 = 0x0086,
-
-    .str_981 = "v",
-
-    .field_18a58 = 0x0002,
-
-    .field_18a5a = 0x0001,
-
-    .field_18a5c = 0x0001,
-
-    .pad_1838 = { 0 },
-
-    .str_982 = "\"",
-
-    .str_983 = ":",
-
-    .field_18a64 = 0x0002,
-
-    .pad_1839 = { 0 },
-
-    .str_984 = "f",
-
-    .str_985 = "v",
-
-    .field_18a70 = 0x0002,
-
-    .field_18a72 = 0x0001,
-
-    .field_18a74 = 0x0001,
-
-    .pad_1840 = { 0 },
-
-    .str_986 = "&",
-
-    .str_987 = ":",
-
-    .field_18a7c = 0x0002,
-
-    .pad_1841 = { 0 },
-
-    .str_988 = "V",
-
-    .str_989 = "v",
-
-    .field_18a88 = 0x0002,
-
-    .field_18a8a = 0x0001,
-
-    .field_18a8c = 0x0001,
-
-    .pad_1842 = { 0 },
-
-    .str_990 = ".",
-
-    .str_991 = ":",
-
-    .field_18a94 = 0x0002,
-
-    .pad_1843 = { 0 },
-
-    .str_992 = "N",
-
-    .str_993 = "v",
-
-    .field_18aa0 = 0x0002,
-
-    .field_18aa2 = 0x0001,
-
-    .field_18aa4 = 0x0001,
-
-    .pad_1844 = { 0 },
-
-    .str_994 = ">",
-
-    .str_995 = ":",
-
-    .field_18aac = 0x0002,
-
-    .pad_1845 = { 0 },
-
-    .str_996 = "J",
-
-    .str_997 = "v",
-
-    .field_18ab8 = 0x0002,
-
-    .field_18aba = 0x0001,
-
-    .field_18abc = 0x0001,
-
-    .pad_1846 = { 0 },
-
-    .str_998 = "^",
-
-    .str_999 = ":",
-
-    .field_18ac4 = 0x0002,
-
-    .pad_1847 = { 0 },
-
-    .str_1000 = "H",
-
-    .str_1001 = "v",
-
-    .field_18ad0 = 0x0002,
-
-    .field_18ad2 = 0x0001,
-
-    .field_18ad4 = 0x0001,
-
-    .pad_1848 = { 0 },
-
-    .str_1002 = "~",
-
-    .str_1003 = ":",
-
-    .field_18adc = 0x0002,
-
-    .pad_1849 = { 0 },
-
-    .str_1004 = "F",
-
-    .str_1005 = "v",
-
-    .field_18ae8 = 0x0002,
-
-    .field_18aea = 0x0001,
-
-    .field_18aec = 0x0001,
-
-    .pad_1850 = { 0 },
-
-    .field_18af0 = 0x00A0,
-
-    .str_1006 = ":",
-
-    .field_18af4 = 0x0002,
-
-    .pad_1851 = { 0 },
-
-    .str_1007 = "H",
-
-    .str_1008 = "v",
-
-    .field_18b00 = 0x0002,
-
-    .field_18b02 = 0x0001,
-
-    .field_18b04 = 0x0001,
-
-    .pad_1852 = { 0 },
-
-    .field_18b08 = 0x00C2,
-
-    .str_1009 = ":",
-
-    .field_18b0c = 0x0002,
-
-    .pad_1853 = { 0 },
-
-    .str_1010 = "J",
-
-    .str_1011 = "v",
-
-    .field_18b18 = 0x0002,
-
-    .field_18b1a = 0x0001,
-
-    .field_18b1c = 0x0001,
-
-    .pad_1854 = { 0 },
-
-    .field_18b20 = 0x00E2,
-
-    .str_1012 = ":",
-
-    .field_18b24 = 0x0002,
-
-    .pad_1855 = { 0 },
-
-    .str_1013 = "N",
-
-    .str_1014 = "v",
-
-    .field_18b30 = 0x0002,
-
-    .field_18b32 = 0x0001,
-
-    .field_18b34 = 0x0001,
-
-    .pad_1856 = { 0 },
-
-    .field_18b38 = 0x0102,
-
-    .str_1015 = ":",
-
-    .field_18b3c = 0x0002,
-
-    .pad_1857 = { 0 },
-
-    .str_1016 = "V",
-
-    .str_1017 = "v",
-
-    .field_18b48 = 0x0002,
-
-    .field_18b4a = 0x0001,
-
-    .field_18b4c = 0x0001,
-
-    .pad_1858 = { 0 },
-
-    .field_18b50 = 0x0112,
-
-    .str_1018 = ":",
-
-    .field_18b54 = 0x0002,
-
-    .pad_1859 = { 0 },
-
-    .str_1019 = "f",
-
-    .str_1020 = "v",
-
-    .field_18b60 = 0x0002,
-
-    .field_18b62 = 0x0001,
-
-    .field_18b64 = 0x0001,
-
-    .pad_1860 = { 0 },
-
-    .field_18b68 = 0x011A,
-
-    .str_1021 = ":",
-
-    .field_18b6c = 0x0002,
-
-    .pad_1861 = { 0 },
-
-    .field_18b74 = 0x0086,
-
-    .str_1022 = "v",
-
-    .field_18b78 = 0x0002,
-
-    .field_18b7a = 0x0001,
-
-    .field_18b7c = 0x0001,
-
-    .pad_1862 = { 0 },
-
-    .field_18b80 = 0x011E,
-
-    .str_1023 = ":",
-
-    .field_18b84 = 0x0002,
-
-    .pad_1863 = { 0 },
-
-    .field_18b8c = 0x00A0,
-
-    .str_1024 = "v",
-
-    .field_18b90 = 0x0002,
-
-    .field_18b92 = 0x0001,
-
-    .field_18b94 = 0x0001,
-
-    .pad_1864 = { 0 },
-
-    .field_18b98 = 0x0120,
-
-    .str_1025 = ":",
-
-    .field_18b9c = 0x0002,
-
-    .pad_1865 = { 0 },
-
-    .field_18ba4 = 0x00BA,
-
-    .str_1026 = "v",
-
-    .field_18ba8 = 0x0002,
-
-    .field_18baa = 0x0001,
-
-    .field_18bac = 0x0001,
-
-    .pad_1866 = { 0 },
-
-    .field_18bb0 = 0x0122,
-
-    .str_1027 = ":",
-
-    .field_18bb4 = 0x0002,
-
-    .pad_1867 = { 0 },
-
-    .field_18bbc = 0x00DA,
-
-    .str_1028 = "v",
-
-    .field_18bc0 = 0x0002,
-
-    .field_18bc2 = 0x0001,
-
-    .field_18bc4 = 0x0001,
-
-    .pad_1868 = { 0 },
-
-    .field_18bc8 = 0x0120,
-
-    .str_1029 = ":",
-
-    .field_18bcc = 0x0002,
-
-    .pad_1869 = { 0 },
-
-    .field_18bd4 = 0x00EA,
-
-    .str_1030 = "v",
-
-    .field_18bd8 = 0x0002,
-
-    .field_18bda = 0x0001,
-
-    .field_18bdc = 0x0001,
-
-    .pad_1870 = { 0 },
-
-    .field_18be0 = 0x011E,
-
-    .str_1031 = ":",
-
-    .field_18be4 = 0x0002,
-
-    .pad_1871 = { 0 },
-
-    .field_18bec = 0x00F2,
-
-    .str_1032 = "v",
-
-    .field_18bf0 = 0x0002,
-
-    .field_18bf2 = 0x0001,
-
-    .field_18bf4 = 0x0001,
-
-    .pad_1872 = { 0 },
-
-    .field_18bf8 = 0x011A,
-
-    .str_1033 = ":",
-
-    .field_18bfc = 0x0002,
-
-    .pad_1873 = { 0 },
-
-    .field_18c04 = 0x00F6,
-
-    .str_1034 = "v",
-
-    .field_18c08 = 0x0002,
-
-    .field_18c0a = 0x0001,
-
-    .field_18c0c = 0x0001,
-
-    .pad_1874 = { 0 },
-
-    .field_18c10 = 0x0112,
-
-    .str_1035 = ":",
-
-    .field_18c14 = 0x0002,
-
-    .pad_1875 = { 0 },
-
-    .field_18c1c = 0x00F8,
-
-    .str_1036 = "v",
-
-    .field_18c20 = 0x0002,
-
-    .field_18c22 = 0x0001,
-
-    .field_18c24 = 0x0001,
-
-    .pad_1876 = { 0 },
-
-    .field_18c28 = 0x0102,
-
-    .str_1037 = ":",
-
-    .field_18c2c = 0x0002,
-
-    .pad_1877 = { 0 },
-
-    .field_18c34 = 0x00FA,
-
-    .str_1038 = "v",
-
-    .field_18c38 = 0x0002,
-
-    .field_18c3a = 0x0001,
-
-    .field_18c3c = 0x0001,
-
-    .pad_1878 = { 0 },
-
-    .field_18c40 = 0x00E2,
-
-    .str_1039 = ":",
-
-    .field_18c44 = 0x0002,
-
-    .pad_1879 = { 0 },
-
-    .field_18c4c = 0x00F8,
-
-    .str_1040 = "v",
-
-    .field_18c50 = 0x0002,
-
-    .field_18c52 = 0x0001,
-
-    .field_18c54 = 0x0001,
-
-    .pad_1880 = { 0 },
-
-    .field_18c58 = 0x00C2,
-
-    .str_1041 = ":",
-
-    .field_18c5c = 0x0002,
-
-    .pad_1881 = { 0 },
-
-    .field_18c64 = 0x00F6,
-
-    .str_1042 = "v",
-
-    .field_18c68 = 0x0002,
-
-    .field_18c6a = 0x0001,
-
-    .field_18c6c = 0x0001,
-
-    .pad_1882 = { 0 },
-
-    .field_18c70 = 0x00A0,
-
-    .str_1043 = ":",
-
-    .field_18c74 = 0x0002,
-
-    .pad_1883 = { 0 },
-
-    .field_18c7c = 0x00F2,
-
-    .str_1044 = "v",
-
-    .field_18c80 = 0x0002,
-
-    .field_18c82 = 0x0001,
-
-    .field_18c84 = 0x0001,
-
-    .pad_1884 = { 0 },
-
-    .str_1045 = "~",
-
-    .str_1046 = ":",
-
-    .field_18c8c = 0x0002,
-
-    .pad_1885 = { 0 },
-
-    .field_18c94 = 0x00EA,
-
-    .str_1047 = "v",
-
-    .field_18c98 = 0x0002,
-
-    .field_18c9a = 0x0001,
-
-    .field_18c9c = 0x0001,
-
-    .pad_1886 = { 0 },
-
-    .str_1048 = "^",
-
-    .str_1049 = ":",
-
-    .field_18ca4 = 0x0002,
-
-    .pad_1887 = { 0 },
-
-    .field_18cac = 0x00DA,
-
-    .str_1050 = "v",
-
-    .field_18cb0 = 0x0002,
-
-    .field_18cb2 = 0x0001,
-
-    .field_18cb4 = 0x0001,
-
-    .pad_1888 = { 0 },
-
-    .str_1051 = ">",
-
-    .str_1052 = ":",
-
-    .field_18cbc = 0x0002,
-
-    .pad_1889 = { 0 },
-
-    .field_18cc4 = 0x00BA,
-
-    .str_1053 = "v",
-
-    .field_18cc8 = 0x0002,
-
-    .field_18cca = 0x0001,
-
-    .field_18ccc = 0x0001,
-
-    .pad_1890 = { 0 },
-
-    .str_1054 = ".",
-
-    .str_1055 = ":",
-
-    .field_18cd4 = 0x0002,
-
-    .pad_1891 = { 0 },
-
-    .field_18cdc = 0x00A0,
-
-    .str_1056 = "v",
-
-    .field_18ce0 = 0x0002,
-
-    .field_18ce2 = 0x0001,
-
-    .field_18ce4 = 0x0001,
-
-    .pad_1892 = { 0 },
-
-    .str_1057 = "&",
-
-    .str_1058 = ":",
-
-    .field_18cec = 0x0002,
-
-    .pad_1893 = { 0 },
-
-    .field_18cf4 = 0x0086,
-
-    .str_1059 = "v",
-
-    .field_18cf8 = 0x0002,
-
-    .field_18cfa = 0x0001,
-
-    .field_18cfc = 0x0001,
-
-    .pad_1894 = { 0 },
-
-    .str_1060 = "\"",
-
-    .str_1061 = ":",
-
-    .field_18d04 = 0x0002,
-
-    .pad_1895 = { 0 },
-
-    .str_1062 = "f",
-
-    .str_1063 = "v",
-
-    .field_18d10 = 0x0002,
-
-    .field_18d12 = 0x0001,
-
-    .field_18d14 = 0x0001,
-
-    .pad_1896 = { 0 },
-
-    .str_1064 = " ",
-
-    .str_1065 = ":",
-
-    .field_18d1c = 0x0002,
-
-    .pad_1897 = { 0 },
-
-    .str_1066 = "V",
-
-    .str_1067 = "v",
-
-    .field_18d28 = 0x0002,
-
-    .field_18d2a = 0x0001,
-
-    .field_18d2c = 0x0001,
-
-    .pad_1898 = { 0 },
-
-    .str_1068 = "N",
-
-    .str_1069 = "v",
-
-    .field_18d34 = 0x0002,
-
-    .field_18d36 = 0x0001,
-
-    .field_18d38 = 0x0001,
-
-    .pad_1899 = { 0 },
-
-    .str_1070 = "J",
-
-    .str_1071 = "v",
-
-    .field_18d40 = 0x0002,
-
-    .field_18d42 = 0x0001,
-
-    .field_18d44 = 0x0001,
-
-    .pad_1900 = { 0 },
-
-    .str_1072 = "H",
-
-    .str_1073 = "v",
-
-    .field_18d4c = 0x0002,
-
-    .field_18d4e = 0x0001,
-
-    .field_18d50 = 0x0001,
-
-    .pad_1901 = { 0 },
-
-    .field_18d54 = 0x001E,
-
-    .str_1074 = ":",
-
-    .field_18d58 = 0x0002,
-
-    .field_18d5a = NAKA_NONE,
-
-    .pad_1902 = { 0 },
-
-    .str_1075 = "F",
-
-    .str_1076 = "v",
-
-    .field_18d64 = 0x0002,
-
-    .field_18d66 = NAKA_NONE,
-
-    .pad_1903 = { 0 },
-
-    .str_1077 = "2",
-
-    .str_1078 = ":",
-
-    .field_18d70 = 0x0002,
-
-    .field_18d72 = NAKA_NONE,
-
-    .pad_1904 = { 0 },
-
-    .str_1079 = "T",
-
-    .str_1080 = "v",
-
-    .field_18d7c = 0x0002,
-
-    .field_18d7e = NAKA_NONE,
-
-    .field_18d80 = 0x0001,
-
-    .pad_1905 = { 0 },
-
-    .str_1081 = "F",
-
-    .str_1082 = ":",
-
-    .field_18d88 = 0x0002,
-
-    .field_18d8a = NAKA_NONE,
-
-    .pad_1906 = { 0 },
-
-    .str_1083 = "b",
-
-    .str_1084 = "v",
-
-    .field_18d94 = 0x0002,
-
-    .field_18d96 = NAKA_NONE,
-
-    .pad_1907 = { 0 },
-
-    .str_1085 = "Z",
-
-    .str_1086 = ":",
-
-    .field_18da0 = 0x0002,
-
-    .field_18da2 = NAKA_NONE,
-
-    .pad_1908 = { 0 },
-
-    .str_1087 = "p",
-
-    .str_1088 = "v",
-
-    .field_18dac = 0x0002,
-
-    .field_18dae = NAKA_NONE,
-
-    .field_18db0 = 0x0001,
-
-    .pad_1909 = { 0 },
-
-    .str_1089 = "n",
-
-    .str_1090 = ":",
-
-    .field_18db8 = 0x0002,
-
-    .field_18dba = NAKA_NONE,
-
-    .pad_1910 = { 0 },
-
-    .str_1091 = "~",
-
-    .str_1092 = "v",
-
-    .field_18dc4 = 0x0002,
-
-    .field_18dc6 = NAKA_NONE,
-
-    .pad_1911 = { 0 },
-
-    .field_18dcc = 0x0082,
-
-    .str_1093 = ":",
-
-    .field_18dd0 = 0x0002,
-
-    .field_18dd2 = NAKA_NONE,
-
-    .pad_1912 = { 0 },
-
-    .field_18dd8 = 0x008C,
-
-    .str_1094 = "v",
-
-    .field_18ddc = 0x0002,
-
-    .field_18dde = NAKA_NONE,
-
-    .field_18de0 = 0x0001,
-
-    .pad_1913 = { 0 },
-
-    .field_18de4 = 0x0096,
-
-    .str_1095 = ":",
-
-    .field_18de8 = 0x0002,
-
-    .field_18dea = NAKA_NONE,
-
-    .pad_1914 = { 0 },
-
-    .field_18df0 = 0x009A,
-
-    .str_1096 = "v",
-
-    .field_18df4 = 0x0002,
-
-    .field_18df6 = NAKA_NONE,
-
-    .pad_1915 = { 0 },
-
-    .field_18dfc = 0x00AA,
-
-    .str_1097 = ":",
-
-    .field_18e00 = 0x0002,
-
-    .field_18e02 = NAKA_NONE,
-
-    .pad_1916 = { 0 },
-
-    .field_18e08 = 0x00A8,
-
-    .str_1098 = "v",
-
-    .field_18e0c = 0x0002,
-
-    .field_18e0e = NAKA_NONE,
-
-    .field_18e10 = 0x0001,
-
-    .pad_1917 = { 0 },
-
-    .field_18e14 = 0x00BE,
-
-    .str_1099 = ":",
-
-    .field_18e18 = 0x0002,
-
-    .field_18e1a = NAKA_NONE,
-
-    .pad_1918 = { 0 },
-
-    .field_18e20 = 0x00B6,
-
-    .str_1100 = "v",
-
-    .field_18e24 = 0x0002,
-
-    .field_18e26 = NAKA_NONE,
-
-    .pad_1919 = { 0 },
-
-    .field_18e2c = 0x00D2,
-
-    .str_1101 = ":",
-
-    .field_18e30 = 0x0002,
-
-    .field_18e32 = NAKA_NONE,
-
-    .pad_1920 = { 0 },
-
-    .field_18e38 = 0x00C4,
-
-    .str_1102 = "v",
-
-    .field_18e3c = 0x0002,
-
-    .field_18e3e = NAKA_NONE,
-
-    .field_18e40 = 0x0001,
-
-    .pad_1921 = { 0 },
-
-    .field_18e44 = 0x00E6,
-
-    .str_1103 = ":",
-
-    .field_18e48 = 0x0002,
-
-    .field_18e4a = NAKA_NONE,
-
-    .pad_1922 = { 0 },
-
-    .field_18e50 = 0x00D2,
-
-    .str_1104 = "v",
-
-    .field_18e54 = 0x0002,
-
-    .field_18e56 = NAKA_NONE,
-
-    .pad_1923 = { 0 },
-
-    .field_18e5c = 0x00FA,
-
-    .str_1105 = ":",
-
-    .field_18e60 = 0x0002,
-
-    .field_18e62 = NAKA_NONE,
-
-    .pad_1924 = { 0 },
-
-    .field_18e68 = 0x00E0,
-
-    .str_1106 = "v",
-
-    .field_18e6c = 0x0002,
-
-    .field_18e6e = NAKA_NONE,
-
-    .field_18e70 = 0x0001,
-
-    .pad_1925 = { 0 },
-
-    .field_18e74 = 0x010E,
-
-    .str_1107 = ":",
-
-    .field_18e78 = 0x0002,
-
-    .field_18e7a = NAKA_NONE,
-
-    .pad_1926 = { 0 },
-
-    .field_18e80 = 0x00ED,
-
-    .str_1108 = "v",
-
-    .field_18e84 = 0x0002,
-
-    .field_18e86 = NAKA_NONE,
-
-    .pad_1927 = { 0 },
-
-    .field_18e8c = 0x0122,
-
-    .str_1109 = ":",
-
-    .field_18e90 = 0x0002,
-
-    .field_18e92 = NAKA_NONE,
-
-    .pad_1928 = { 0 },
-
-    .field_18e98 = 0x00FA,
-
-    .str_1110 = "v",
-
-    .field_18e9c = 0x0002,
-
-    .field_18e9e = NAKA_NONE,
-
-    .field_18ea0 = 0x0014,
-
-    .pad_1929 = { 0 },
-
-    .field_18ea4 = NAKA_NONE,
-
-    .field_18ea6 = NAKA_NONE,
-
-    .field_18ea8 = 0x0003,
-
-    .field_18eaa = 0x0001,
-
-    .field_18eac = 0x000A,
-
-    .pad_1930 = { 0 },
-
-    .field_18eb0 = 0x008E,
-
-    .field_18eb2 = 0x00A0,
-
-    .ptr_18eb4 = 0x00FF0008,
-
-    .field_18eb8 = 0x0001,
-
-    .pad_1931 = { 0 },
-
-    .field_18ebe = 0x00DC,
-
-    .field_18ec0 = 0x000C,
-
-    .pad_1932 = { 0 },
-
-    .field_18ec4 = 0x0001,
-
-    .pad_1933 = { 0 },
-
-    .field_18ec8 = 0x0014,
-
-    .field_18eca = 0x00DA,
-
-    .field_18ecc = 0x000C,
-
-    .field_18ece = 0x0001,
-
-    .field_18ed0 = 0x0001,
-
-    .pad_1934 = { 0 },
-
-    .str_1111 = "(",
-
-    .field_18ed6 = 0x00D8,
-
-    .field_18ed8 = 0x000C,
-
-    .field_18eda = 0x0002,
-
-    .field_18edc = 0x0001,
-
-    .pad_1935 = { 0 },
-
-    .str_1112 = "<",
-
-    .field_18ee2 = 0x00D6,
-
-    .field_18ee4 = 0x000C,
-
-    .field_18ee6 = 0x0003,
-
-    .field_18ee8 = 0x0001,
-
-    .pad_1936 = { 0 },
-
-    .str_1113 = "P",
-
-    .field_18eee = 0x00D4,
-
-    .field_18ef0 = 0x000C,
-
-    .field_18ef2 = 0x0004,
-
-    .field_18ef4 = 0x0001,
-
-    .pad_1937 = { 0 },
-
-    .str_1114 = "d",
-
-    .field_18efa = 0x00D2,
-
-    .field_18efc = 0x000C,
-
-    .field_18efe = 0x0005,
-
-    .field_18f00 = 0x0001,
-
-    .pad_1938 = { 0 },
-
-    .str_1115 = "x",
-
-    .field_18f06 = 0x00CD,
-
-    .field_18f08 = 0x000C,
-
-    .field_18f0a = 0x0006,
-
-    .field_18f0c = 0x0001,
-
-    .pad_1939 = { 0 },
-
-    .field_18f10 = 0x008C,
-
-    .field_18f12 = 0x00C8,
-
-    .field_18f14 = 0x000C,
-
-    .field_18f16 = 0x0008,
-
-    .field_18f18 = 0x0001,
-
-    .pad_1940 = { 0 },
-
-    .field_18f1c = 0x00A0,
-
-    .field_18f1e = 0x00BE,
-
-    .ptr_18f20 = 0x00F8000C,
-
-    .field_18f24 = 0x0001,
-
-    .pad_1941 = { 0 },
-
-    .field_18f28 = 0x00B4,
-
-    .field_18f2a = 0x00B4,
-
-    .field_18f2c = 0x000C,
-
-    .field_18f2e = 0x0007,
-
-    .field_18f30 = 0x0001,
-
-    .pad_1942 = { 0 },
-
-    .field_18f34 = 0x00C8,
-
-    .field_18f36 = 0x00AA,
-
-    .ptr_18f38 = NAKA_ADDR(SLSrc_ScrollMode8),
-
-    .field_18f3c = 0x0001,
-
-    .pad_1943 = { 0 },
-
-    .field_18f40 = 0x00D2,
-
-    .field_18f42 = 0x00A0,
-
-    .ptr_18f44 = 0x00FA000C,
-
-    .field_18f48 = 0x0001,
-
-    .pad_1944 = { 0 },
-
-    .field_18f4c = 0x00DC,
-
-    .field_18f4e = 0x009B,
-
-    .ptr_18f50 = 0x00FB000C,
-
-    .field_18f54 = 0x0001,
-
-    .pad_1945 = { 0 },
-
-    .field_18f58 = 0x00DC,
-
-    .field_18f5a = 0x0096,
-
-    .ptr_18f5c = 0x00FC000C,
-
-    .field_18f60 = 0x0001,
-
-    .pad_1946 = { 0 },
-
-    .field_18f64 = 0x00D2,
-
-    .field_18f66 = 0x0094,
-
-    .ptr_18f68 = 0x00FD000C,
-
-    .field_18f6c = 0x0001,
-
-    .pad_1947 = { 0 },
-
-    .field_18f70 = 0x00C8,
-
-    .field_18f72 = 0x0092,
-
-    .ptr_18f74 = 0x00FE000C,
-
-    .field_18f78 = 0x0001,
-
-    .pad_1948 = { 0 },
-
-    .field_18f7c = 0x00B4,
-
-    .field_18f7e = 0x0090,
-
-    .field_18f80 = 0x000C,
-
-    .field_18f82 = 0x0009,
-
-    .field_18f84 = 0x0001,
-
-    .pad_1949 = { 0 },
-
-    .field_18f88 = 0x0096,
-
-    .field_18f8a = 0x008E,
-
-    .field_18f8c = 0x000C,
-
-    .field_18f8e = 0x000A,
-
-    .field_18f90 = 0x0001,
-
-    .pad_1950 = { 0 },
-
-    .str_1116 = "x",
-
-    .field_18f96 = 0x008C,
-
-    .field_18f98 = 0x000C,
-
-    .field_18f9a = 0x000C,
-
-    .field_18f9c = 0x0001,
-
-    .pad_1951 = { 0 },
-
-    .str_1117 = "P",
-
-    .field_18fa2 = 0x008C,
-
-    .field_18fa4 = 0x000C,
-
-    .field_18fa6 = 0x000D,
-
-    .field_18fa8 = 0x0001,
-
-    .pad_1952 = { 0 },
-
-    .str_1118 = "2",
-
-    .field_18fae = 0x008E,
-
-    .ptr_18fb0 = 0x00FF000C,
-
-    .field_18fb4 = 0x0001,
-
-    .pad_1953 = { 0 },
-
-    .field_18fb8 = 0x001E,
-
-    .field_18fba = 0x0090,
-
-    .field_18fbc = 0x000C,
-
-    .pad_1954 = { 0 },
-
-    .field_18fc0 = 0x0001,
-
-    .pad_1955 = { 0 },
-
-    .field_18fc4 = 0x0014,
-
-    .field_18fc6 = 0x0092,
-
-    .field_18fc8 = 0x000C,
-
-    .field_18fca = 0x0001,
-
-    .field_18fcc = 0x0001,
-
-    .pad_1956 = { 0 },
-
-    .field_18fd0 = 0x000F,
-
-    .field_18fd2 = 0x0096,
-
-    .field_18fd4 = 0x000C,
-
-    .field_18fd6 = 0x0002,
-
-    .field_18fd8 = 0x0001,
-
-    .pad_1957 = { 0 },
-
-    .field_18fdc = 0x0014,
-
-    .field_18fde = 0x009B,
-
-    .field_18fe0 = 0x000C,
-
-    .field_18fe2 = 0x0003,
-
-    .field_18fe4 = 0x0001,
-
-    .pad_1958 = { 0 },
-
-    .field_18fe8 = 0x001E,
-
-    .field_18fea = 0x00A0,
-
-    .field_18fec = 0x000C,
-
-    .field_18fee = 0x0004,
-
-    .field_18ff0 = 0x0001,
-
-    .pad_1959 = { 0 },
-
-    .str_1119 = "(",
-
-    .field_18ff6 = 0x00AA,
-
-    .field_18ff8 = 0x000C,
-
-    .field_18ffa = 0x0005,
-
-    .field_18ffc = 0x0001,
-
-    .pad_1960 = { 0 },
-
-    .str_1120 = "2",
-
-    .field_19002 = 0x00B4,
-
-    .field_19004 = 0x000C,
-
-    .field_19006 = 0x0006,
-
-    .field_19008 = 0x0001,
-
-    .pad_1961 = { 0 },
-
-    .str_1121 = "<",
-
-    .field_1900e = 0x00B9,
-
-    .field_19010 = 0x000C,
-
-    .field_19012 = 0x0008,
-
-    .field_19014 = 0x0001,
-
-    .pad_1962 = { 0 },
-
-    .str_1122 = "P",
-
-    .field_1901a = 0x00BB,
-
-    .ptr_1901c = 0x00F8000C,
-
-    .field_19020 = 0x0001,
-
-    .pad_1963 = { 0 },
-
-    .str_1123 = "d",
-
-    .field_19026 = 0x00BD,
-
-    .field_19028 = 0x000C,
-
-    .field_1902a = 0x0007,
-
-    .field_1902c = 0x0001,
-
-    .pad_1964 = { 0 },
-
-    .str_1124 = "p",
-
-    .field_19032 = 0x00BE,
-
-    .ptr_19034 = NAKA_ADDR(SLSrc_ScrollMode8),
-
-    .field_19038 = 0x0001,
-
-    .pad_1965 = { 0 },
-
-    .str_1125 = "p",
-
-    .field_1903e = 0x00BE,
-
-    .ptr_19040 = 0x00FD0004,
-
-    .field_19044 = 0x0001,
-
-    .pad_1966 = { 0 },
-
-    .field_19048 = 0x0080,
-
-    .field_1904a = 0x00BE,
-
-    .ptr_1904c = 0x00FE0005,
-
-    .field_19050 = 0x0001,
-
-    .pad_1967 = { 0 },
-
-    .field_19054 = 0x0090,
-
-    .field_19056 = 0x00BE,
-
-    .ptr_19058 = 0x00FB0006,
-
-    .field_1905c = 0x0001,
-
-    .pad_1968 = { 0 },
-
-    .field_19060 = 0x00A0,
-
-    .field_19062 = 0x00BE,
-
-    .ptr_19064 = 0x00FA0005,
-
-    .field_19068 = 0x0001,
-
-    .pad_1969 = { 0 },
-
-    .field_1906c = 0x00B0,
-
-    .field_1906e = 0x00BE,
-
-    .field_19070 = 0x000B,
-
-    .field_19072 = 0x0009,
-
-    .field_19074 = 0x0001,
-
-    .pad_1970 = { 0 },
-
-    .field_19078 = 0x00C0,
-
-    .field_1907a = 0x00BE,
-
-    .field_1907c = 0x0007,
-
-    .field_1907e = 0x000A,
-
-    .field_19080 = 0x0001,
-
-    .pad_1971 = { 0 },
-
-    .str_1126 = "p",
-
-    .field_19086 = 0x00BE,
-
-    .field_19088 = 0x0004,
-
-    .field_1908a = 0x000A,
-
-    .field_1908c = 0x0001,
-
-    .pad_1972 = { 0 },
-
-    .field_19090 = 0x0080,
-
-    .field_19092 = 0x00BE,
-
-    .ptr_19094 = 0x00FD0005,
-
-    .field_19098 = 0x0001,
-
-    .pad_1973 = { 0 },
-
-    .field_1909c = 0x0090,
-
-    .field_1909e = 0x00BE,
-
-    .ptr_190a0 = 0x00FE0006,
-
-    .field_190a4 = 0x0001,
-
-    .pad_1974 = { 0 },
-
-    .field_190a8 = 0x00A0,
-
-    .field_190aa = 0x00BE,
-
-    .ptr_190ac = 0x00FB0005,
-
-    .field_190b0 = 0x0001,
-
-    .pad_1975 = { 0 },
-
-    .field_190b4 = 0x00B0,
-
-    .field_190b6 = 0x00BE,
-
-    .ptr_190b8 = 0x00FA000B,
-
-    .field_190bc = 0x0001,
-
-    .pad_1976 = { 0 },
-
-    .field_190c0 = 0x00C0,
-
-    .field_190c2 = 0x00BE,
-
-    .field_190c4 = 0x0007,
-
-    .field_190c6 = 0x0009,
-
-    .field_190c8 = 0x0001,
-
-    .pad_1977 = { 0 },
-
-    .str_1127 = "p",
-
-    .field_190ce = 0x00BE,
-
-    .field_190d0 = 0x0004,
-
-    .field_190d2 = 0x0009,
-
-    .field_190d4 = 0x0001,
-
-    .pad_1978 = { 0 },
-
-    .field_190d8 = 0x0080,
-
-    .field_190da = 0x00BE,
-
-    .field_190dc = 0x0005,
-
-    .field_190de = 0x000A,
-
-    .field_190e0 = 0x0001,
-
-    .pad_1979 = { 0 },
-
-    .field_190e4 = 0x0090,
-
-    .field_190e6 = 0x00BE,
-
-    .ptr_190e8 = 0x00FD0006,
-
-    .field_190ec = 0x0001,
-
-    .pad_1980 = { 0 },
-
-    .field_190f0 = 0x00A0,
-
-    .field_190f2 = 0x00BE,
-
-    .ptr_190f4 = 0x00FE0005,
-
-    .field_190f8 = 0x0001,
-
-    .pad_1981 = { 0 },
-
-    .field_190fc = 0x00B0,
-
-    .field_190fe = 0x00BE,
-
-    .ptr_19100 = 0x00FB000B,
-
-    .field_19104 = 0x0001,
-
-    .pad_1982 = { 0 },
-
-    .field_19108 = 0x00C0,
-
-    .field_1910a = 0x00BE,
-
-    .ptr_1910c = 0x00FA0007,
-
-    .field_19110 = 0x0001,
-
-    .pad_1983 = { 0 },
-
-    .str_1128 = "p",
-
-    .field_19116 = 0x00BE,
-
-    .ptr_19118 = 0x00FA0004,
-
-    .field_1911c = 0x0001,
-
-    .pad_1984 = { 0 },
-
-    .field_19120 = 0x0080,
-
-    .field_19122 = 0x00BE,
-
-    .field_19124 = 0x0005,
-
-    .field_19126 = 0x0009,
-
-    .field_19128 = 0x0001,
-
-    .pad_1985 = { 0 },
-
-    .field_1912c = 0x0090,
-
-    .field_1912e = 0x00BE,
-
-    .field_19130 = 0x0006,
-
-    .field_19132 = 0x000A,
-
-    .field_19134 = 0x0001,
-
-    .pad_1986 = { 0 },
-
-    .field_19138 = 0x00A0,
-
-    .field_1913a = 0x00BE,
-
-    .ptr_1913c = 0x00FD0005,
-
-    .field_19140 = 0x0001,
-
-    .pad_1987 = { 0 },
-
-    .field_19144 = 0x00B0,
-
-    .field_19146 = 0x00BE,
-
-    .ptr_19148 = 0x00FE000B,
-
-    .field_1914c = 0x0001,
-
-    .pad_1988 = { 0 },
-
-    .field_19150 = 0x00C0,
-
-    .field_19152 = 0x00BE,
-
-    .ptr_19154 = 0x00FB0007,
-
-    .field_19158 = 0x0001,
-
-    .pad_1989 = { 0 },
-
-    .str_1129 = "p",
-
-    .field_1915e = 0x00BE,
-
-    .ptr_19160 = 0x00FB0004,
-
-    .field_19164 = 0x0001,
-
-    .pad_1990 = { 0 },
-
-    .field_19168 = 0x0080,
-
-    .field_1916a = 0x00BE,
-
-    .ptr_1916c = 0x00FA0005,
-
-    .field_19170 = 0x0001,
-
-    .pad_1991 = { 0 },
-
-    .field_19174 = 0x0090,
-
-    .field_19176 = 0x00BE,
-
-    .field_19178 = 0x0006,
-
-    .field_1917a = 0x0009,
-
-    .field_1917c = 0x0001,
-
-    .pad_1992 = { 0 },
-
-    .field_19180 = 0x00A0,
-
-    .field_19182 = 0x00BE,
-
-    .field_19184 = 0x0005,
-
-    .field_19186 = 0x000A,
-
-    .field_19188 = 0x0001,
-
-    .pad_1993 = { 0 },
-
-    .field_1918c = 0x00B0,
-
-    .field_1918e = 0x00BE,
-
-    .ptr_19190 = 0x00FD000B,
-
-    .field_19194 = 0x0001,
-
-    .pad_1994 = { 0 },
-
-    .field_19198 = 0x00C0,
-
-    .field_1919a = 0x00BE,
-
-    .ptr_1919c = 0x00FE0007,
-
-    .str_1130 = "2",
-
-    .pad_1995 = { 0 },
-
-    .field_191a4 = NAKA_NONE,
-
-    .field_191a6 = NAKA_NONE,
-
-    .pad_1996 = { 0 },
-
-    .ptr_191b0 = NAKA_ADDR(Naka_PresentationRootState),
-
-    .pad_1997 = { 0 },
-
-    .field_191b6 = 0x0380,
-
-    .field_191b8 = 0x000F,
-
-    .field_191ba = 0x00A2,
-
-    .field_191bc = 0x00B3,
-
-    .ptr_191be = 0x00ED00D0,
-
-    .field_191c2 = 0x0125,
-
-    .field_191c4 = 0x0141,
-
-    .field_191c6 = 0x0182,
-
-    .field_191c8 = 0x035C,
-
-    .field_191ca = 0x0109,
-
-    .field_191cc = 0x0182,
-
-    .ptrs_251 = {
+    .WelcomeGlyph_C = {
+        { 0x07, 0xE0 },  /*  0 .....######..... */
+        { 0x1F, 0xF8 },  /*  1 ...##########... */
+        { 0x3F, 0xFC },  /*  2 ..############.. */
+        { 0x3C, 0x3C },  /*  3 ..####....####.. */
+        { 0x78, 0x1E },  /*  4 .####......####. */
+        { 0x70, 0x0E },  /*  5 .###........###. */
+        { 0x70, 0x00 },  /*  6 .###............ */
+        { 0x70, 0x00 },  /*  7 .###............ */
+        { 0x70, 0x00 },  /*  8 .###............ */
+        { 0x70, 0x00 },  /*  9 .###............ */
+        { 0x70, 0x00 },  /* 10 .###............ */
+        { 0x70, 0x0E },  /* 11 .###........###. */
+        { 0x78, 0x1E },  /* 12 .####......####. */
+        { 0x3C, 0x3C },  /* 13 ..####....####.. */
+        { 0x3F, 0xFC },  /* 14 ..############.. */
+        { 0x1F, 0xF8 },  /* 15 ...##########... */
+        { 0x07, 0xE0 },  /* 16 .....######..... */
+    },
+
+    .Bitmap_Digit1 = {
+        { 0x01, 0xC0 },  /*  0 .......###...... */
+        { 0x01, 0xC0 },  /*  1 .......###...... */
+        { 0x01, 0xC0 },  /*  2 .......###...... */
+        { 0x01, 0xC0 },  /*  3 .......###...... */
+        { 0x01, 0xC0 },  /*  4 .......###...... */
+        { 0x01, 0xC0 },  /*  5 .......###...... */
+        { 0x01, 0xC0 },  /*  6 .......###...... */
+        { 0x01, 0xC0 },  /*  7 .......###...... */
+        { 0x01, 0xC0 },  /*  8 .......###...... */
+        { 0x01, 0xC0 },  /*  9 .......###...... */
+        { 0x01, 0xC0 },  /* 10 .......###...... */
+        { 0x01, 0xC0 },  /* 11 .......###...... */
+        { 0x01, 0xC0 },  /* 12 .......###...... */
+        { 0x01, 0xC0 },  /* 13 .......###...... */
+        { 0x01, 0xC0 },  /* 14 .......###...... */
+        { 0x01, 0xC0 },  /* 15 .......###...... */
+        { 0x01, 0xC0 },  /* 16 .......###...... */
+    },
+
+    .Bitmap_DigitL = {
+        /* 'L' */ {
+            { 0x3F, 0xFE },  /*  0 ..#############. */
+            { 0x3F, 0xFE },  /*  1 ..#############. */
+            { 0x3F, 0xFE },  /*  2 ..#############. */
+            { 0x38, 0x00 },  /*  3 ..###........... */
+            { 0x38, 0x00 },  /*  4 ..###........... */
+            { 0x38, 0x00 },  /*  5 ..###........... */
+            { 0x38, 0x00 },  /*  6 ..###........... */
+            { 0x38, 0x00 },  /*  7 ..###........... */
+            { 0x38, 0x00 },  /*  8 ..###........... */
+            { 0x38, 0x00 },  /*  9 ..###........... */
+            { 0x38, 0x00 },  /* 10 ..###........... */
+            { 0x38, 0x00 },  /* 11 ..###........... */
+            { 0x38, 0x00 },  /* 12 ..###........... */
+            { 0x38, 0x00 },  /* 13 ..###........... */
+            { 0x38, 0x00 },  /* 14 ..###........... */
+            { 0x38, 0x00 },  /* 15 ..###........... */
+            { 0x38, 0x00 },  /* 16 ..###........... */
+        },
+        /* 'N' */ {
+            { 0x38, 0x0E },  /*  0 ..###.......###. */
+            { 0x38, 0x1E },  /*  1 ..###......####. */
+            { 0x38, 0x3E },  /*  2 ..###.....#####. */
+            { 0x38, 0x3E },  /*  3 ..###.....#####. */
+            { 0x38, 0x7E },  /*  4 ..###....######. */
+            { 0x38, 0x7E },  /*  5 ..###....######. */
+            { 0x38, 0xEE },  /*  6 ..###...###.###. */
+            { 0x38, 0xCE },  /*  7 ..###...##..###. */
+            { 0x39, 0xCE },  /*  8 ..###..###..###. */
+            { 0x39, 0x8E },  /*  9 ..###..##...###. */
+            { 0x3B, 0x8E },  /* 10 ..###.###...###. */
+            { 0x3F, 0x0E },  /* 11 ..######....###. */
+            { 0x3F, 0x0E },  /* 12 ..######....###. */
+            { 0x3E, 0x0E },  /* 13 ..#####.....###. */
+            { 0x3E, 0x0E },  /* 14 ..#####.....###. */
+            { 0x3C, 0x0E },  /* 15 ..####......###. */
+            { 0x38, 0x0E },  /* 16 ..###.......###. */
+        },
+        /* 'O' */ {
+            { 0x07, 0xF0 },  /*  0 .....#######.... */
+            { 0x1F, 0xFC },  /*  1 ...###########.. */
+            { 0x3F, 0xFE },  /*  2 ..#############. */
+            { 0x3C, 0x1E },  /*  3 ..####.....####. */
+            { 0x78, 0x0F },  /*  4 .####.......#### */
+            { 0x70, 0x07 },  /*  5 .###.........### */
+            { 0x70, 0x07 },  /*  6 .###.........### */
+            { 0x70, 0x07 },  /*  7 .###.........### */
+            { 0x70, 0x07 },  /*  8 .###.........### */
+            { 0x70, 0x07 },  /*  9 .###.........### */
+            { 0x70, 0x07 },  /* 10 .###.........### */
+            { 0x70, 0x07 },  /* 11 .###.........### */
+            { 0x78, 0x0F },  /* 12 .####.......#### */
+            { 0x3C, 0x1E },  /* 13 ..####.....####. */
+            { 0x3F, 0xFE },  /* 14 ..#############. */
+            { 0x1F, 0xFC },  /* 15 ...###########.. */
+            { 0x07, 0xF0 },  /* 16 .....#######.... */
+        },
+    },
+
+    .Bitmap_DigitR = {
+        { 0x38, 0x07 },  /*  0 ..###........### */
+        { 0x38, 0x0F },  /*  1 ..###.......#### */
+        { 0x38, 0x1E },  /*  2 ..###......####. */
+        { 0x38, 0x1C },  /*  3 ..###......###.. */
+        { 0x38, 0x1C },  /*  4 ..###......###.. */
+        { 0x38, 0x3C },  /*  5 ..###.....####.. */
+        { 0x3F, 0xF8 },  /*  6 ..###########... */
+        { 0x3F, 0xF8 },  /*  7 ..###########... */
+        { 0x3F, 0xFC },  /*  8 ..############.. */
+        { 0x38, 0x1E },  /*  9 ..###......####. */
+        { 0x38, 0x0E },  /* 10 ..###.......###. */
+        { 0x38, 0x0E },  /* 11 ..###.......###. */
+        { 0x38, 0x0E },  /* 12 ..###.......###. */
+        { 0x38, 0x1E },  /* 13 ..###......####. */
+        { 0x3F, 0xFC },  /* 14 ..############.. */
+        { 0x3F, 0xF8 },  /* 15 ..###########... */
+        { 0x3F, 0xF0 },  /* 16 ..##########.... */
+    },
+
+    .Bitmap_DigitD = {
+        { 0x03, 0xF0 },  /*  0 ......######.... */
+        { 0x0F, 0xFC },  /*  1 ....##########.. */
+        { 0x1F, 0xFE },  /*  2 ...############. */
+        { 0x1E, 0x1E },  /*  3 ...####....####. */
+        { 0x3C, 0x0F },  /*  4 ..####......#### */
+        { 0x38, 0x07 },  /*  5 ..###........### */
+        { 0x38, 0x07 },  /*  6 ..###........### */
+        { 0x38, 0x07 },  /*  7 ..###........### */
+        { 0x38, 0x07 },  /*  8 ..###........### */
+        { 0x38, 0x07 },  /*  9 ..###........### */
+        { 0x38, 0x07 },  /* 10 ..###........### */
+        { 0x38, 0x07 },  /* 11 ..###........### */
+        { 0x38, 0x07 },  /* 12 ..###........### */
+        { 0x38, 0x07 },  /* 13 ..###........### */
+        { 0x38, 0x07 },  /* 14 ..###........### */
+        { 0x38, 0x07 },  /* 15 ..###........### */
+        { 0x38, 0x07 },  /* 16 ..###........### */
+    },
+
+    .WelcomeScript_Steps_A = {
+        /*   0 */ { 20, -1, -1, 1, 0x0000 },
+        /*   1 */ { 20, 80, 30, 2, 0x0000 },
+        /*   2 */ { 1, 180, 130, 2, 0x0000 },
+        /*   3 */ { 1, 80, 230, 2, 0x0000 },
+        /*   4 */ { 1, 280, 30, 2, 0x0000 },
+        /*   5 */ { 1, 30, 180, 2, 0x0000 },
+        /*   6 */ { 1, 130, 130, 2, 0x0000 },
+        /*   7 */ { 1, 80, 180, 2, 0x0000 },
+        /*   8 */ { 1, 130, 230, 2, 0x0000 },
+        /*   9 */ { 1, 280, 180, 2, 0x0000 },
+        /*  10 */ { 1, 30, 130, 2, 0x0000 },
+        /*  11 */ { 1, 230, 30, 2, 0x0000 },
+        /*  12 */ { 1, 230, 130, 2, 0x0000 },
+        /*  13 */ { 1, 230, 230, 2, 0x0000 },
+        /*  14 */ { 1, 180, 180, 2, 0x0000 },
+        /*  15 */ { 1, 30, 80, 2, 0x0000 },
+        /*  16 */ { 1, 280, 80, 2, 0x0000 },
+        /*  17 */ { 1, 230, 180, 2, 0x0000 },
+        /*  18 */ { 1, 180, 230, 2, 0x0000 },
+        /*  19 */ { 1, 230, 80, 2, 0x0000 },
+        /*  20 */ { 1, 30, 230, 2, 0x0000 },
+        /*  21 */ { 1, 280, 230, 2, 0x0000 },
+        /*  22 */ { 1, 180, 30, 2, 0x0000 },
+        /*  23 */ { 1, 280, 130, 2, 0x0000 },
+        /*  24 */ { 1, 80, 80, 2, 0x0000 },
+        /*  25 */ { 1, 180, 80, 2, 0x0000 },
+        /*  26 */ { 1, 130, 180, 2, 0x0000 },
+        /*  27 */ { 1, 80, 130, 2, 0x0000 },
+        /*  28 */ { 1, 130, 30, 2, 0x0000 },
+        /*  29 */ { 1, 130, 80, 2, 0x0000 },
+        /*  30 */ { 1, 30, 30, 2, 0x0000 },
+        /*  31 */ { 1, 30, 58, 2, 0x0000 },
+        /*  32 */ { 0, 160, 118, 2, 0x0001 },
+        /*  33 */ { 10, 32, 58, 2, 0x0000 },
+        /*  34 */ { 0, 134, 118, 2, 0x0001 },
+        /*  35 */ { 1, 34, 58, 2, 0x0000 },
+        /*  36 */ { 0, 102, 118, 2, 0x0001 },
+        /*  37 */ { 1, 38, 58, 2, 0x0000 },
+        /*  38 */ { 0, 86, 118, 2, 0x0001 },
+        /*  39 */ { 1, 46, 58, 2, 0x0000 },
+        /*  40 */ { 0, 78, 118, 2, 0x0001 },
+        /*  41 */ { 1, 62, 58, 2, 0x0000 },
+        /*  42 */ { 0, 74, 118, 2, 0x0001 },
+        /*  43 */ { 1, 94, 58, 2, 0x0000 },
+        /*  44 */ { 0, 72, 118, 2, 0x0001 },
+        /*  45 */ { 1, 126, 58, 2, 0x0000 },
+        /*  46 */ { 0, 70, 118, 2, 0x0001 },
+        /*  47 */ { 1, 160, 58, 2, 0x0000 },
+        /*  48 */ { 0, 72, 118, 2, 0x0001 },
+        /*  49 */ { 1, 194, 58, 2, 0x0000 },
+        /*  50 */ { 0, 74, 118, 2, 0x0001 },
+        /*  51 */ { 1, 226, 58, 2, 0x0000 },
+        /*  52 */ { 0, 78, 118, 2, 0x0001 },
+        /*  53 */ { 1, 258, 58, 2, 0x0000 },
+        /*  54 */ { 0, 86, 118, 2, 0x0001 },
+        /*  55 */ { 1, 274, 58, 2, 0x0000 },
+        /*  56 */ { 0, 102, 118, 2, 0x0001 },
+        /*  57 */ { 1, 282, 58, 2, 0x0000 },
+        /*  58 */ { 0, 134, 118, 2, 0x0001 },
+        /*  59 */ { 1, 286, 58, 2, 0x0000 },
+        /*  60 */ { 0, 160, 118, 2, 0x0001 },
+        /*  61 */ { 1, 288, 58, 2, 0x0000 },
+        /*  62 */ { 0, 186, 118, 2, 0x0001 },
+        /*  63 */ { 1, 290, 58, 2, 0x0000 },
+        /*  64 */ { 0, 218, 118, 2, 0x0001 },
+        /*  65 */ { 1, 288, 58, 2, 0x0000 },
+        /*  66 */ { 0, 234, 118, 2, 0x0001 },
+        /*  67 */ { 1, 286, 58, 2, 0x0000 },
+        /*  68 */ { 0, 242, 118, 2, 0x0001 },
+        /*  69 */ { 1, 282, 58, 2, 0x0000 },
+        /*  70 */ { 0, 246, 118, 2, 0x0001 },
+        /*  71 */ { 1, 274, 58, 2, 0x0000 },
+        /*  72 */ { 0, 248, 118, 2, 0x0001 },
+        /*  73 */ { 1, 258, 58, 2, 0x0000 },
+        /*  74 */ { 0, 250, 118, 2, 0x0001 },
+        /*  75 */ { 1, 226, 58, 2, 0x0000 },
+        /*  76 */ { 0, 248, 118, 2, 0x0001 },
+        /*  77 */ { 1, 194, 58, 2, 0x0000 },
+        /*  78 */ { 0, 246, 118, 2, 0x0001 },
+        /*  79 */ { 1, 160, 58, 2, 0x0000 },
+        /*  80 */ { 0, 242, 118, 2, 0x0001 },
+        /*  81 */ { 1, 126, 58, 2, 0x0000 },
+        /*  82 */ { 0, 234, 118, 2, 0x0001 },
+        /*  83 */ { 1, 94, 58, 2, 0x0000 },
+        /*  84 */ { 0, 218, 118, 2, 0x0001 },
+        /*  85 */ { 1, 62, 58, 2, 0x0000 },
+        /*  86 */ { 0, 186, 118, 2, 0x0001 },
+        /*  87 */ { 1, 46, 58, 2, 0x0000 },
+        /*  88 */ { 0, 160, 118, 2, 0x0001 },
+        /*  89 */ { 1, 38, 58, 2, 0x0000 },
+        /*  90 */ { 0, 134, 118, 2, 0x0001 },
+        /*  91 */ { 1, 34, 58, 2, 0x0000 },
+        /*  92 */ { 0, 102, 118, 2, 0x0001 },
+        /*  93 */ { 1, 32, 58, 2, 0x0000 },
+        /*  94 */ { 0, 86, 118, 2, 0x0001 },
+        /*  95 */ { 1, 78, 118, 2, 0x0001 },
+        /*  96 */ { 1, 74, 118, 2, 0x0001 },
+        /*  97 */ { 1, 72, 118, 2, 0x0001 },
+        /*  98 */ { 1, 30, 58, 2, 0xFFFF },
+        /*  99 */ { 0, 70, 118, 2, 0xFFFF },
+        /* 100 */ { 0, 50, 58, 2, 0xFFFF },
+        /* 101 */ { 0, 84, 118, 2, 0xFFFF },
+        /* 102 */ { 1, 70, 58, 2, 0xFFFF },
+        /* 103 */ { 0, 98, 118, 2, 0xFFFF },
+        /* 104 */ { 0, 90, 58, 2, 0xFFFF },
+        /* 105 */ { 0, 112, 118, 2, 0xFFFF },
+        /* 106 */ { 1, 110, 58, 2, 0xFFFF },
+        /* 107 */ { 0, 126, 118, 2, 0xFFFF },
+        /* 108 */ { 0, 130, 58, 2, 0xFFFF },
+        /* 109 */ { 0, 140, 118, 2, 0xFFFF },
+        /* 110 */ { 1, 150, 58, 2, 0xFFFF },
+        /* 111 */ { 0, 154, 118, 2, 0xFFFF },
+        /* 112 */ { 0, 170, 58, 2, 0xFFFF },
+        /* 113 */ { 0, 168, 118, 2, 0xFFFF },
+        /* 114 */ { 1, 190, 58, 2, 0xFFFF },
+        /* 115 */ { 0, 182, 118, 2, 0xFFFF },
+        /* 116 */ { 0, 210, 58, 2, 0xFFFF },
+        /* 117 */ { 0, 196, 118, 2, 0xFFFF },
+        /* 118 */ { 1, 230, 58, 2, 0xFFFF },
+        /* 119 */ { 0, 210, 118, 2, 0xFFFF },
+        /* 120 */ { 0, 250, 58, 2, 0xFFFF },
+        /* 121 */ { 0, 224, 118, 2, 0xFFFF },
+        /* 122 */ { 1, 270, 58, 2, 0xFFFF },
+        /* 123 */ { 0, 237, 118, 2, 0xFFFF },
+        /* 124 */ { 0, 290, 58, 2, 0xFFFF },
+        /* 125 */ { 0, 250, 118, 2, 0xFFFF },
+        /* 126 */ { 20, -1, -1, 3, 0x0001 },
+        /* 127 */ { 10, 142, 160, 8, 0x00FF },
+        /* 128 */ { 1, 0, 220, 9, 0x0000 },
+        /* 129 */ { 1, 20, 218, 9, 0x0001 },
+        /* 130 */ { 1, 40, 216, 9, 0x0002 },
+        /* 131 */ { 1, 60, 214, 9, 0x0003 },
+        /* 132 */ { 1, 80, 212, 9, 0x0004 },
+        /* 133 */ { 1, 100, 210, 9, 0x0005 },
+        /* 134 */ { 1, 120, 205, 9, 0x0006 },
+        /* 135 */ { 1, 140, 200, 9, 0x0008 },
+        /* 136 */ { 1, 160, 190, 9, 0x00F8 },
+        /* 137 */ { 1, 180, 180, 9, 0x0007 },
+        /* 138 */ { 1, 200, 170, 9, 0x00F9 },
+        /* 139 */ { 1, 210, 160, 9, 0x00FA },
+        /* 140 */ { 1, 220, 155, 9, 0x00FB },
+        /* 141 */ { 1, 220, 150, 9, 0x00FC },
+        /* 142 */ { 1, 210, 148, 9, 0x00FD },
+        /* 143 */ { 1, 200, 146, 9, 0x00FE },
+        /* 144 */ { 1, 180, 144, 9, 0x0009 },
+        /* 145 */ { 1, 150, 142, 9, 0x000A },
+        /* 146 */ { 1, 120, 140, 9, 0x000C },
+        /* 147 */ { 1, 80, 140, 9, 0x000D },
+        /* 148 */ { 1, 50, 142, 9, 0x00FF },
+        /* 149 */ { 1, 30, 144, 9, 0x0000 },
+        /* 150 */ { 1, 20, 146, 9, 0x0001 },
+        /* 151 */ { 1, 15, 150, 9, 0x0002 },
+        /* 152 */ { 1, 20, 155, 9, 0x0003 },
+        /* 153 */ { 1, 30, 160, 9, 0x0004 },
+        /* 154 */ { 1, 40, 170, 9, 0x0005 },
+        /* 155 */ { 1, 50, 180, 9, 0x0006 },
+        /* 156 */ { 1, 60, 185, 9, 0x0008 },
+        /* 157 */ { 1, 80, 187, 9, 0x00F8 },
+        /* 158 */ { 1, 100, 189, 9, 0x0007 },
+        /* 159 */ { 1, 120, 190, 9, 0x00F9 },
+        /* 160 */ { 1, 120, 190, 4, 0x00FE },
+        /* 161 */ { 1, 136, 190, 5, 0x00FB },
+        /* 162 */ { 1, 152, 190, 6, 0x00FA },
+        /* 163 */ { 1, 168, 190, 5, 0x0009 },
+        /* 164 */ { 1, 184, 190, 7, 0x000A },
+        /* 165 */ { 1, 120, 190, 4, 0x000A },
+        /* 166 */ { 1, 136, 190, 5, 0x00FE },
+        /* 167 */ { 1, 152, 190, 6, 0x00FB },
+        /* 168 */ { 1, 168, 190, 5, 0x00FA },
+        /* 169 */ { 1, 184, 190, 7, 0x0009 },
+        /* 170 */ { 1, 120, 190, 4, 0x0009 },
+        /* 171 */ { 1, 136, 190, 5, 0x000A },
+        /* 172 */ { 1, 152, 190, 6, 0x00FE },
+        /* 173 */ { 1, 168, 190, 5, 0x00FB },
+        /* 174 */ { 1, 184, 190, 7, 0x00FA },
+        /* 175 */ { 1, 120, 190, 4, 0x00FA },
+        /* 176 */ { 1, 136, 190, 5, 0x0009 },
+        /* 177 */ { 1, 152, 190, 6, 0x000A },
+        /* 178 */ { 1, 168, 190, 5, 0x00FE },
+        /* 179 */ { 1, 184, 190, 7, 0x00FB },
+        /* 180 */ { 1, 120, 190, 4, 0x00FB },
+        /* 181 */ { 1, 136, 190, 5, 0x00FA },
+        /* 182 */ { 1, 152, 190, 6, 0x0009 },
+        /* 183 */ { 1, 168, 190, 5, 0x000A },
+        /* 184 */ { 1, 184, 190, 7, 0x00FE },
+        /* 185 */ { 50, -1, -1, 0, 0x0000 },
+    },
+
+    .WelcomeScript_Steps_B = {
+        /*   0 */ { 20, -1, -1, 1, 0x0000 },
+        /*   1 */ { 20, 80, 30, 2, 0x0000 },
+        /*   2 */ { 1, 180, 130, 2, 0x0000 },
+        /*   3 */ { 1, 80, 230, 2, 0x0000 },
+        /*   4 */ { 1, 280, 30, 2, 0x0000 },
+        /*   5 */ { 1, 30, 180, 2, 0x0000 },
+        /*   6 */ { 1, 130, 130, 2, 0x0000 },
+        /*   7 */ { 1, 80, 180, 2, 0x0000 },
+        /*   8 */ { 1, 130, 230, 2, 0x0000 },
+        /*   9 */ { 1, 280, 180, 2, 0x0000 },
+        /*  10 */ { 1, 30, 130, 2, 0x0000 },
+        /*  11 */ { 1, 230, 30, 2, 0x0000 },
+        /*  12 */ { 1, 230, 130, 2, 0x0000 },
+        /*  13 */ { 1, 230, 230, 2, 0x0000 },
+        /*  14 */ { 1, 180, 180, 2, 0x0000 },
+        /*  15 */ { 1, 30, 80, 2, 0x0000 },
+        /*  16 */ { 1, 280, 80, 2, 0x0000 },
+        /*  17 */ { 1, 230, 180, 2, 0x0000 },
+        /*  18 */ { 1, 180, 230, 2, 0x0000 },
+        /*  19 */ { 1, 230, 80, 2, 0x0000 },
+        /*  20 */ { 1, 30, 230, 2, 0x0000 },
+        /*  21 */ { 1, 280, 230, 2, 0x0000 },
+        /*  22 */ { 1, 180, 30, 2, 0x0000 },
+        /*  23 */ { 1, 280, 130, 2, 0x0000 },
+        /*  24 */ { 1, 80, 80, 2, 0x0000 },
+        /*  25 */ { 1, 180, 80, 2, 0x0000 },
+        /*  26 */ { 1, 130, 180, 2, 0x0000 },
+        /*  27 */ { 1, 80, 130, 2, 0x0000 },
+        /*  28 */ { 1, 130, 30, 2, 0x0000 },
+        /*  29 */ { 1, 130, 80, 2, 0x0000 },
+        /*  30 */ { 1, 30, 30, 2, 0x0000 },
+        /*  31 */ { 1, 30, 58, 2, 0x0000 },
+        /*  32 */ { 0, 160, 118, 2, 0x0001 },
+        /*  33 */ { 10, 32, 58, 2, 0x0000 },
+        /*  34 */ { 0, 134, 118, 2, 0x0001 },
+        /*  35 */ { 1, 34, 58, 2, 0x0000 },
+        /*  36 */ { 0, 102, 118, 2, 0x0001 },
+        /*  37 */ { 1, 38, 58, 2, 0x0000 },
+        /*  38 */ { 0, 86, 118, 2, 0x0001 },
+        /*  39 */ { 1, 46, 58, 2, 0x0000 },
+        /*  40 */ { 0, 78, 118, 2, 0x0001 },
+        /*  41 */ { 1, 62, 58, 2, 0x0000 },
+        /*  42 */ { 0, 74, 118, 2, 0x0001 },
+        /*  43 */ { 1, 94, 58, 2, 0x0000 },
+        /*  44 */ { 0, 72, 118, 2, 0x0001 },
+        /*  45 */ { 1, 126, 58, 2, 0x0000 },
+        /*  46 */ { 0, 70, 118, 2, 0x0001 },
+        /*  47 */ { 1, 160, 58, 2, 0x0000 },
+        /*  48 */ { 0, 72, 118, 2, 0x0001 },
+        /*  49 */ { 1, 194, 58, 2, 0x0000 },
+        /*  50 */ { 0, 74, 118, 2, 0x0001 },
+        /*  51 */ { 1, 226, 58, 2, 0x0000 },
+        /*  52 */ { 0, 78, 118, 2, 0x0001 },
+        /*  53 */ { 1, 258, 58, 2, 0x0000 },
+        /*  54 */ { 0, 86, 118, 2, 0x0001 },
+        /*  55 */ { 1, 274, 58, 2, 0x0000 },
+        /*  56 */ { 0, 102, 118, 2, 0x0001 },
+        /*  57 */ { 1, 282, 58, 2, 0x0000 },
+        /*  58 */ { 0, 134, 118, 2, 0x0001 },
+        /*  59 */ { 1, 286, 58, 2, 0x0000 },
+        /*  60 */ { 0, 160, 118, 2, 0x0001 },
+        /*  61 */ { 1, 288, 58, 2, 0x0000 },
+        /*  62 */ { 0, 186, 118, 2, 0x0001 },
+        /*  63 */ { 1, 290, 58, 2, 0x0000 },
+        /*  64 */ { 0, 218, 118, 2, 0x0001 },
+        /*  65 */ { 1, 288, 58, 2, 0x0000 },
+        /*  66 */ { 0, 234, 118, 2, 0x0001 },
+        /*  67 */ { 1, 286, 58, 2, 0x0000 },
+        /*  68 */ { 0, 242, 118, 2, 0x0001 },
+        /*  69 */ { 1, 282, 58, 2, 0x0000 },
+        /*  70 */ { 0, 246, 118, 2, 0x0001 },
+        /*  71 */ { 1, 274, 58, 2, 0x0000 },
+        /*  72 */ { 0, 248, 118, 2, 0x0001 },
+        /*  73 */ { 1, 258, 58, 2, 0x0000 },
+        /*  74 */ { 0, 250, 118, 2, 0x0001 },
+        /*  75 */ { 1, 226, 58, 2, 0x0000 },
+        /*  76 */ { 0, 248, 118, 2, 0x0001 },
+        /*  77 */ { 1, 194, 58, 2, 0x0000 },
+        /*  78 */ { 0, 246, 118, 2, 0x0001 },
+        /*  79 */ { 1, 160, 58, 2, 0x0000 },
+        /*  80 */ { 0, 242, 118, 2, 0x0001 },
+        /*  81 */ { 1, 126, 58, 2, 0x0000 },
+        /*  82 */ { 0, 234, 118, 2, 0x0001 },
+        /*  83 */ { 1, 94, 58, 2, 0x0000 },
+        /*  84 */ { 0, 218, 118, 2, 0x0001 },
+        /*  85 */ { 1, 62, 58, 2, 0x0000 },
+        /*  86 */ { 0, 186, 118, 2, 0x0001 },
+        /*  87 */ { 1, 46, 58, 2, 0x0000 },
+        /*  88 */ { 0, 160, 118, 2, 0x0001 },
+        /*  89 */ { 1, 38, 58, 2, 0x0000 },
+        /*  90 */ { 0, 134, 118, 2, 0x0001 },
+        /*  91 */ { 1, 34, 58, 2, 0x0000 },
+        /*  92 */ { 0, 102, 118, 2, 0x0001 },
+        /*  93 */ { 1, 32, 58, 2, 0x0000 },
+        /*  94 */ { 0, 86, 118, 2, 0x0001 },
+        /*  95 */ { 1, 78, 118, 2, 0x0001 },
+        /*  96 */ { 1, 74, 118, 2, 0x0001 },
+        /*  97 */ { 1, 72, 118, 2, 0x0001 },
+        /*  98 */ { 1, 30, 58, 2, 0xFFFF },
+        /*  99 */ { 0, 70, 118, 2, 0xFFFF },
+        /* 100 */ { 0, 50, 58, 2, 0xFFFF },
+        /* 101 */ { 0, 84, 118, 2, 0xFFFF },
+        /* 102 */ { 1, 70, 58, 2, 0xFFFF },
+        /* 103 */ { 0, 98, 118, 2, 0xFFFF },
+        /* 104 */ { 0, 90, 58, 2, 0xFFFF },
+        /* 105 */ { 0, 112, 118, 2, 0xFFFF },
+        /* 106 */ { 1, 110, 58, 2, 0xFFFF },
+        /* 107 */ { 0, 126, 118, 2, 0xFFFF },
+        /* 108 */ { 0, 130, 58, 2, 0xFFFF },
+        /* 109 */ { 0, 140, 118, 2, 0xFFFF },
+        /* 110 */ { 1, 150, 58, 2, 0xFFFF },
+        /* 111 */ { 0, 154, 118, 2, 0xFFFF },
+        /* 112 */ { 0, 170, 58, 2, 0xFFFF },
+        /* 113 */ { 0, 168, 118, 2, 0xFFFF },
+        /* 114 */ { 1, 190, 58, 2, 0xFFFF },
+        /* 115 */ { 0, 182, 118, 2, 0xFFFF },
+        /* 116 */ { 0, 210, 58, 2, 0xFFFF },
+        /* 117 */ { 0, 196, 118, 2, 0xFFFF },
+        /* 118 */ { 1, 230, 58, 2, 0xFFFF },
+        /* 119 */ { 0, 210, 118, 2, 0xFFFF },
+        /* 120 */ { 0, 250, 58, 2, 0xFFFF },
+        /* 121 */ { 0, 224, 118, 2, 0xFFFF },
+        /* 122 */ { 1, 270, 58, 2, 0xFFFF },
+        /* 123 */ { 0, 237, 118, 2, 0xFFFF },
+        /* 124 */ { 0, 290, 58, 2, 0xFFFF },
+        /* 125 */ { 0, 250, 118, 2, 0xFFFF },
+        /* 126 */ { 20, -1, -1, 3, 0x0001 },
+        /* 127 */ { 10, 142, 160, 8, 0x00FF },
+        /* 128 */ { 1, 0, 220, 12, 0x0000 },
+        /* 129 */ { 1, 20, 218, 12, 0x0001 },
+        /* 130 */ { 1, 40, 216, 12, 0x0002 },
+        /* 131 */ { 1, 60, 214, 12, 0x0003 },
+        /* 132 */ { 1, 80, 212, 12, 0x0004 },
+        /* 133 */ { 1, 100, 210, 12, 0x0005 },
+        /* 134 */ { 1, 120, 205, 12, 0x0006 },
+        /* 135 */ { 1, 140, 200, 12, 0x0008 },
+        /* 136 */ { 1, 160, 190, 12, 0x00F8 },
+        /* 137 */ { 1, 180, 180, 12, 0x0007 },
+        /* 138 */ { 1, 200, 170, 12, 0x00F9 },
+        /* 139 */ { 1, 210, 160, 12, 0x00FA },
+        /* 140 */ { 1, 220, 155, 12, 0x00FB },
+        /* 141 */ { 1, 220, 150, 12, 0x00FC },
+        /* 142 */ { 1, 210, 148, 12, 0x00FD },
+        /* 143 */ { 1, 200, 146, 12, 0x00FE },
+        /* 144 */ { 1, 180, 144, 12, 0x0009 },
+        /* 145 */ { 1, 150, 142, 12, 0x000A },
+        /* 146 */ { 1, 120, 140, 12, 0x000C },
+        /* 147 */ { 1, 80, 140, 12, 0x000D },
+        /* 148 */ { 1, 50, 142, 12, 0x00FF },
+        /* 149 */ { 1, 30, 144, 12, 0x0000 },
+        /* 150 */ { 1, 20, 146, 12, 0x0001 },
+        /* 151 */ { 1, 15, 150, 12, 0x0002 },
+        /* 152 */ { 1, 20, 155, 12, 0x0003 },
+        /* 153 */ { 1, 30, 160, 12, 0x0004 },
+        /* 154 */ { 1, 40, 170, 12, 0x0005 },
+        /* 155 */ { 1, 50, 180, 12, 0x0006 },
+        /* 156 */ { 1, 60, 185, 12, 0x0008 },
+        /* 157 */ { 1, 80, 187, 12, 0x00F8 },
+        /* 158 */ { 1, 100, 189, 12, 0x0007 },
+        /* 159 */ { 1, 112, 190, 12, 0x00F9 },
+        /* 160 */ { 1, 112, 190, 4, 0x00FD },
+        /* 161 */ { 1, 128, 190, 5, 0x00FE },
+        /* 162 */ { 1, 144, 190, 6, 0x00FB },
+        /* 163 */ { 1, 160, 190, 5, 0x00FA },
+        /* 164 */ { 1, 176, 190, 11, 0x0009 },
+        /* 165 */ { 1, 192, 190, 7, 0x000A },
+        /* 166 */ { 1, 112, 190, 4, 0x000A },
+        /* 167 */ { 1, 128, 190, 5, 0x00FD },
+        /* 168 */ { 1, 144, 190, 6, 0x00FE },
+        /* 169 */ { 1, 160, 190, 5, 0x00FB },
+        /* 170 */ { 1, 176, 190, 11, 0x00FA },
+        /* 171 */ { 1, 192, 190, 7, 0x0009 },
+        /* 172 */ { 1, 112, 190, 4, 0x0009 },
+        /* 173 */ { 1, 128, 190, 5, 0x000A },
+        /* 174 */ { 1, 144, 190, 6, 0x00FD },
+        /* 175 */ { 1, 160, 190, 5, 0x00FE },
+        /* 176 */ { 1, 176, 190, 11, 0x00FB },
+        /* 177 */ { 1, 192, 190, 7, 0x00FA },
+        /* 178 */ { 1, 112, 190, 4, 0x00FA },
+        /* 179 */ { 1, 128, 190, 5, 0x0009 },
+        /* 180 */ { 1, 144, 190, 6, 0x000A },
+        /* 181 */ { 1, 160, 190, 5, 0x00FD },
+        /* 182 */ { 1, 176, 190, 11, 0x00FE },
+        /* 183 */ { 1, 192, 190, 7, 0x00FB },
+        /* 184 */ { 1, 112, 190, 4, 0x00FB },
+        /* 185 */ { 1, 128, 190, 5, 0x00FA },
+        /* 186 */ { 1, 144, 190, 6, 0x0009 },
+        /* 187 */ { 1, 160, 190, 5, 0x000A },
+        /* 188 */ { 1, 176, 190, 11, 0x00FD },
+        /* 189 */ { 1, 192, 190, 7, 0x00FE },
+        /* 190 */ { 50, -1, -1, 0, 0x0000 },
+    },
+
+    .WelcomeScreen_ClearRect = { 0, 0, 319, 239 },
+
+    .WelcomeScript_OpJumpOffsets = { 0, 896, 15, 162, 179, 208, 237, 293, 321, 386, 860, 265, 386 },
+
+    .PsMixer_ControlProcTable = {
         0x00F80B7D,
         0x00F81ED2,
         0x00F81B56,
