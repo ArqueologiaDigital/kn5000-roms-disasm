@@ -53,86 +53,123 @@
 ; of the labels -- they exist only so the pointer table can name them.
 ; ---------------------------------------------------------------------------
 
+; ---------------------------------------------------------------------------
+; CHORD-TYPE NAMES: the tail of the chord-type pointer table, then the names
+; ---------------------------------------------------------------------------
+; Reader: MainChordPre (kn5000_v10_program.s, 0xFC304E) builds the chord
+; display string with Strcat: the root-note name (RAM byte 0x8D40 x4 into
+; Naka_MemoryC_Screens), then the CHORD-TYPE name -- RAM byte 0x8D42, `sla
+; wa, 2`, `lda xbc, (0xecff6a:24)`, `ld_sril3` -- then "on" or "  "
+; (ChordStr_On / ChordStr_Blank, loaded as the immediates 0xED1C96 and
+; 0xED1C9A).  The pointer table it indexes is 64 entries, 0xECFF6A-0xED0069:
+; entries 0-39 lie in MemScreen_Blank's blob in ui_widgets/style_bitmaps.s
+; (naka_style_bitmaps.c), so this file BEGINS with the high half of entry 39
+; (0x00ED00FA) and holds entries 40-63.  Entry k points at the name of chord
+; type k; the 64 names follow in REVERSE order of k, NUL-terminated and
+; 0xFF-padded to even addresses (`scripts/analysis/ext_lane_checks.py chord`
+; re-checks all of it on the v10, v9 and v7 dumps).
+;
+; Glyph escapes: "~9e" is SHARP and "~a0" is FLAT in these strings (the
+; note-name tables below settle it: NoteNameStr_Table_0 spells C#, D#, F#, G#,
+; A# with ~9e, SplitNoteStr_* spells Db, Eb, Ab, Bb with ~a0 and F# with ~9e;
+; `ext_lane_checks.py sharp`).  The older
+; ChordTypeStr_* labels below read the two the other way round in several
+; places (ChordTypeStr_7_Flat9 is "7 (#9)", ChordTypeStr_M7_Sharp5 is
+; "M7(b5)"); they are kept because ui_widgets/naka_style_bitmaps.c cites them
+; by name, and the entry index in each new ChordTypeStr_TypeNN label is the
+; reliable identity.  ExtData_ChordTypeTable_Top keeps its old name because
+; naka_perf_style_link.ld and naka_extension_device_link.ld name the address.
+; ---------------------------------------------------------------------------
 ExtData_ChordTypeTable_Top:
-	.long SeqVoice_ValidateState_StoreChannel
-	.long 0x00EE00ED
-	.long NakaData_PartConfig
-	.long SepaOut_FormatData_Tail
-	.byte 0xed, 0x00, 0xdc, 0x00, 0xed, 0x00, 0xd6, 0x00, 0xed, 0x00, 0xd0, 0x00, 0xed, 0x00, 0xca, 0x00
-	.byte 0xed, 0x00, 0xc4, 0x00, 0xed, 0x00, 0xbe, 0x00, 0xed, 0x00, 0xb8, 0x00, 0xed, 0x00, 0xb2, 0x00
-ExtData_ChordTypeTable_Mid:
-	.byte 0xed, 0x00, 0xac, 0x00, 0xed, 0x00, 0xa6, 0x00, 0xed, 0x00, 0xa0, 0x00, 0xed, 0x00, 0x9a, 0x00
-	.byte 0xed, 0x00, 0x94, 0x00, 0xed, 0x00, 0x8e, 0x00, 0xed, 0x00, 0x88, 0x00, 0xed, 0x00, 0x82, 0x00
-	.byte 0xed, 0x00, 0x7c, 0x00, 0xed, 0x00, 0x76, 0x00, 0xed, 0x00, 0x70, 0x00, 0xed, 0x00, 0x6a, 0x00
-	.byte 0xed
-ExtData_ChordType_NullByte:
-	aligned_string ""
-ChordTypeStr_Blank_0:	aligned_string "     "
-ChordTypeStr_Blank_1:	aligned_string "     "
-ChordTypeStr_Blank_2:	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "madd9"
-	aligned_string " add9"
-	aligned_string "+7~9e11"
-	aligned_string "m7 11"
-	aligned_string "7 ~9e11"
-	aligned_string "  ~a013"
-	aligned_string "   13"
-	aligned_string "~9e9~a013"
+	.short 0x00ed	; high half of entry 39, begun in style_bitmaps.s
+	.long ChordTypeStr_Type40
+	.long ChordTypeStr_Type41
+	.long ChordTypeStr_Type42
+	.long ChordTypeStr_Type43
+	.long ChordTypeStr_Type44
+	.long ChordTypeStr_Type45
+	.long ChordTypeStr_Type46
+	.long ChordTypeStr_Type47
+	.long ChordTypeStr_Type48
+	.long ChordTypeStr_Type49
+	.long ChordTypeStr_Type50
+	.long ChordTypeStr_Type51
+	.long ChordTypeStr_Type52
+	.long ChordTypeStr_Type53
+	.long ChordTypeStr_Type54
+	.long ChordTypeStr_Type55
+	.long ChordTypeStr_Type56
+	.long ChordTypeStr_Type57
+	.long ChordTypeStr_Type58
+	.long ChordTypeStr_Type59
+	.long ChordTypeStr_Type60
+	.long ChordTypeStr_Blank_2
+	.long ChordTypeStr_Blank_1
+	.long ChordTypeStr_Blank_0
+ChordTypeStr_Blank_0:		aligned_string "     "
+ChordTypeStr_Blank_1:		aligned_string "     "
+ChordTypeStr_Blank_2:		aligned_string "     "
+ChordTypeStr_Type60:		aligned_string "     "
+ChordTypeStr_Type59:		aligned_string "     "
+ChordTypeStr_Type58:		aligned_string "     "
+ChordTypeStr_Type57:		aligned_string "     "
+ChordTypeStr_Type56:		aligned_string "     "
+ChordTypeStr_Type55:		aligned_string "     "
+ChordTypeStr_Type54:		aligned_string "     "
+ChordTypeStr_Type53:		aligned_string "     "
+ChordTypeStr_Type52:		aligned_string "     "
+ChordTypeStr_Type51:		aligned_string "     "
+ChordTypeStr_Type50:		aligned_string "     "
+ChordTypeStr_Type49:		aligned_string "     "
+ChordTypeStr_Type48:		aligned_string "     "
+ChordTypeStr_Type47:		aligned_string "     "
+ChordTypeStr_Type46:		aligned_string "     "
+ChordTypeStr_Type45:		aligned_string "     "
+ChordTypeStr_Type44:		aligned_string "     "
+ChordTypeStr_Type43:		aligned_string "     "
+ChordTypeStr_Type42:		aligned_string "     "
+ChordTypeStr_Type41:		aligned_string "madd9"
+ChordTypeStr_Type40:		aligned_string " add9"
+ChordTypeStr_Type39:		aligned_string "+7~9e11"
+ChordTypeStr_Type38:		aligned_string "m7 11"
+ChordTypeStr_Type37:		aligned_string "7 ~9e11"
+ChordTypeStr_Type36:		aligned_string "  ~a013"
+ChordTypeStr_Type35:		aligned_string "   13"
+ChordTypeStr_Type34:		aligned_string "~9e9~a013"
 ChordTypeStr_Flat9_Flat13:	aligned_string "~a09~a013"
 ChordTypeStr_Sharp9_Flat13:	aligned_string "  ~a013"
 ChordTypeStr_Flat13_Only:	aligned_string "~9e9 13"
-ChordTypeStr_Sharp9_13:	aligned_string "~a09 13"
-ChordTypeStr_9_Flat5:	aligned_string "9~9e5  "
-ChordTypeStr_13_Only:	aligned_string "   13"
+ChordTypeStr_Sharp9_13:		aligned_string "~a09 13"
+ChordTypeStr_9_Flat5:		aligned_string "9~9e5  "
+ChordTypeStr_13_Only:		aligned_string "   13"
 ChordTypeStr_mM7_Sharp5:	aligned_string "mM7~a05"
-ChordTypeStr_M7_Flat5:	aligned_string "M7~9e5 "
-ChordTypeStr_M7_Sharp5:	aligned_string "M7~a05 "
-ChordTypeStr_7_Flat9:	aligned_string "7 ~9e9 "
-ChordTypeStr_sus4:	aligned_string "sus4 "
-ChordTypeStr_69:	aligned_string "m69  "
-	aligned_string "m79  "
-	aligned_string "m ~a05 "
-	aligned_string "m6   "
-	aligned_string "69   "
-	.byte 0x4d, 0x37
-ChordTypeStr_M7_9:	.byte 0x39, 0x20, 0x20, 0x00
-	aligned_string "7 ~a09 "
-	aligned_string "79   "
-	aligned_string "7 ~a05 "
-	aligned_string "  ~a05 "
-	aligned_string "aug7 "
-	aligned_string "6    "
-	.byte 0x37, 0x73
-ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
-	aligned_string "mM7  "
-	aligned_string "m7~a05 "
-	aligned_string "dim  "
-	aligned_string "min7 "
-	aligned_string "min  "
-	aligned_string "aug  "
-	aligned_string "Maj7 "
-	aligned_string "7    "
-	aligned_string "     "
-	aligned_string "     "
+ChordTypeStr_M7_Flat5:		aligned_string "M7~9e5 "
+ChordTypeStr_M7_Sharp5:		aligned_string "M7~a05 "
+ChordTypeStr_7_Flat9:		aligned_string "7 ~9e9 "
+ChordTypeStr_sus4:		aligned_string "sus4 "
+ChordTypeStr_69:		aligned_string "m69  "
+ChordTypeStr_Type21:		aligned_string "m79  "
+ChordTypeStr_Type20:		aligned_string "m ~a05 "
+ChordTypeStr_Type19:		aligned_string "m6   "
+ChordTypeStr_Type18:		aligned_string "69   "
+ChordTypeStr_M7_9:		aligned_string "M79  "
+ChordTypeStr_Type16:		aligned_string "7 ~a09 "
+ChordTypeStr_Type15:		aligned_string "79   "
+ChordTypeStr_Type14:		aligned_string "7 ~a05 "
+ChordTypeStr_Type13:		aligned_string "  ~a05 "
+ChordTypeStr_Type12:		aligned_string "aug7 "
+ChordTypeStr_Type11:		aligned_string "6    "
+ChordTypeStr_7sus4:		aligned_string "7sus4"
+ChordTypeStr_Type09:		aligned_string "mM7  "
+ChordTypeStr_Type08:		aligned_string "m7~a05 "
+ChordTypeStr_Type07:		aligned_string "dim  "
+ChordTypeStr_Type06:		aligned_string "min7 "
+ChordTypeStr_Type05:		aligned_string "min  "
+ChordTypeStr_Type04:		aligned_string "aug  "
+ChordTypeStr_Type03:		aligned_string "Maj7 "
+ChordTypeStr_Type02:		aligned_string "7    "
+ChordTypeStr_Type01:		aligned_string "     "
+ChordTypeStr_Type00:		aligned_string "     "
 	.byte 0x98, 0x02, 0xed, 0x00, 0x94, 0x02, 0xed, 0x00, 0x8e, 0x02, 0xed, 0x00, 0x8a, 0x02, 0xed, 0x00
 	.byte 0x84, 0x02, 0xed, 0x00, 0x80, 0x02, 0xed, 0x00, 0x7c, 0x02, 0xed, 0x00, 0x76, 0x02, 0xed, 0x00
 	.byte 0x72, 0x02, 0xed, 0x00, 0x6c, 0x02, 0xed, 0x00, 0x68, 0x02, 0xed, 0x00, 0x62, 0x02, 0xed, 0x00
@@ -870,20 +907,75 @@ KeyScaleNoteStr_A:
 KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
 KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20, 0x20, 0x20, 0x00, 0xff
 	aligned_string "<%s>"
-	.byte 0x25, 0x73, 0x00, 0xff, 0x6f, 0x6e, 0x00, 0xff, 0x20, 0x20, 0x00, 0xff, 0xc3, 0xe0, 0xfb, 0x00
-	.byte 0x35, 0xd2, 0xfb, 0x00, 0x31, 0xd1, 0xfb, 0x00, 0xfb, 0xd2, 0xfb, 0x00, 0x48, 0x7f, 0xfb, 0x00
-	.byte 0x8c, 0x7f, 0xfb, 0x00, 0xa2, 0x7f, 0xfb, 0x00, 0xb8, 0x7f, 0xfb, 0x00, 0xbb, 0x7f, 0xfb, 0x00
-	.byte 0xcc, 0x7f, 0xfb, 0x00, 0xdd, 0x7f, 0xfb, 0x00, 0x61, 0xaa, 0xfb, 0x00, 0x0f, 0xb0, 0xfb, 0x00
-	.byte 0x37, 0xc1, 0xfb, 0x00, 0xfa, 0xc6, 0xfb, 0x00, 0x25, 0x80, 0xfb, 0x00, 0xd5, 0x88, 0xfb, 0x00
-	.byte 0x8f, 0x8e, 0xfb, 0x00, 0xec, 0x95, 0xfb, 0x00, 0xc1, 0xa3, 0xfb, 0x00, 0xe5, 0xa6, 0xfb, 0x00
-	.byte 0xec, 0xa6, 0xfb, 0x00, 0x4a, 0x7e, 0xfb, 0x00, 0x77, 0x7e, 0xfb, 0x00, 0xa4, 0x7e, 0xfb, 0x00
-	.byte 0xd1, 0x7e, 0xfb, 0x00, 0x01, 0xe1, 0xfb, 0x00, 0xf8, 0xcc, 0xfb, 0x00, 0xfe, 0x7e, 0xfb, 0x00
-	.byte 0x45, 0x24, 0xfc, 0x00, 0x37, 0x25, 0xfc, 0x00, 0xb2, 0x25, 0xfc, 0x00, 0x2d, 0x26, 0xfc, 0x00
-	.byte 0x07, 0x27, 0xfc, 0x00, 0x43, 0x27, 0xfc, 0x00, 0x59, 0x27, 0xfc, 0x00, 0x6d, 0x27, 0xfc, 0x00
-	.byte 0x6a, 0x27, 0xfc, 0x00, 0x32, 0x27, 0xfc, 0x00, 0xee, 0x7f, 0xfb, 0x00, 0xff, 0x7f, 0xfb, 0x00
-	.byte 0x10, 0x80, 0xfb, 0x00, 0x00, 0x00, 0x00, 0x00
+	aligned_string "%s"
+ChordStr_On:	aligned_string "on"	; MainChordPre appends it when byte 0x8D44 != 0 and bit 1 of 0xCEDE is set
+ChordStr_Blank:	aligned_string "  "
+; ---------------------------------------------------------------------------
+; Toshi_ApFunction_Table -- TOSHI object table: 42 "application function"
+; code pointers + NULL (0xED1C9E-0xED1D49)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (extensions/extension_init.s, 0xFC311A):
+;   RegObjTabl 0x1600002, ApFunctionProc, 42, Toshi_ApFunction_Table, 0x122
+; which has RegisterObjectTable (ui/ui_widget_defs.s, 0xFA42FB) copy the
+; 14-byte descriptor {class +0, proc +4, u16 count +8, table +10} into slot
+; 0x122 of the object registry at RAM 0x27ED2 (14 bytes a slot).  An object
+; id is (slot << 16) | element; CheckViewObject (0xFA42C4) reads the table
+; pointer at +10 and indexes it with `extz xwa` / `sll xwa, 2` / `ld xwa, (xwa)`
+; -- one 4-byte pointer per element, 0 = no object.  Slot 0x422 (= 0x122 +
+; 0x300, the pairing RegisterObject 0xFA431A uses for an object's name) is
+; Toshi_ApFunctionName_Table below: entry k there is the NAME of entry k here,
+; and scripts/tools/ext_retype_toshi_object_tables.py --check verifies that
+; every pointer lands on the routine of exactly that name (v10 and v7).
+Toshi_ApFunction_Table:
+	.long PmBkNameFunc
+	.long PmBankNamingCheck
+	.long PmNamingCheck
+	.long MssNameFunc
+	.long SystemInitOkFunc
+	.long SysIniNoFunc
+	.long SysIniYesFunc
+	.long SysSureShowHideFunc
+	.long AttnLngCheck
+	.long SysSureLngCheck
+	.long SureLngCheck
+	.long TchSensGridCheck
+	.long FSWAssGridCheck
+	.long PmExpFilterGridCheck
+	.long DispTimeSetGridCheck
+	.long MstSugAlpGridCheck
+	.long MstStyleAlpGridCheck
+	.long MstStyle1GridCheck
+	.long MstStyle1SubGridCheck
+	.long MstStyle2GridCheck
+	.long MstSong1GridCheck
+	.long MstSong2GridCheck
+	.long BitmapFinpic
+	.long BitmapFinst
+	.long BitmapFoutpic
+	.long BitmapFoutst
+	.long GmOnOffFunc
+	.long DispTimeSetOKFunc
+	.long SystemInitMDFunc
+	.long WallHomeEditCheck
+	.long WallMenuEditCheck
+	.long WallOthEditCheck
+	.long WallSetOKFunc
+	.long WallUsrIniFunc
+	.long WallUsrIniNoFunc
+	.long WallUsrIniYesFunc
+	.long WallUsrShowHideFunc
+	.long WallSureShowHideFunc
+	.long WallSureLngCheck
+	.long CtlIniLngCheck
+	.long PmemNormLngCheck
+	.long PmemExpLngCheck
+	.long 0
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1D1B-0xED1D3A (31 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=70% dist=12 near KeyScaleNoteStr_G_0x18+129
-NoteNameStr_Table_5:
+; Toshi_ApFunctionName_Table -- object-registry slot 0x422 (InitializeToshi:
+; RegObjTabl 0x1600002, ApFunctionProc, 42, Toshi_ApFunctionName_Table, 0x422):
+; the name of each Toshi_ApFunction_Table entry, same index, then "" as the
+; terminator.  The strings follow in REVERSE order.
+Toshi_ApFunctionName_Table:
 	.long FuncNameStr_PmBkNameFunc
 	.long FuncNameStr_PmBankNamingCheck
 	.long FuncNameStr_PmNamingCheck
@@ -1302,7 +1394,29 @@ ParamStr24_Empty:	aligned_string ""
 ParamStr24_window:	aligned_string "window"
 ParamStr24_page:	aligned_string "page"
 
-ExtData_NormScreenProc_Ptr:
+; ---------------------------------------------------------------------------
+; Toshi_Class_Table -- TOSHI object-registry slot 0x162: 28 class records of
+; 24 bytes (0xED27E4-0xED2A83), registered by InitializeToshi with
+;   RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+; (count word Toshi_Class_Count = 28, after the class-name strings).  Record
+; shape, read off the bytes -- all 28 records agree:
+;   +0x00 class procedure (record 0: NormScreenProc; every one is a *Proc
+;         routine in 0xFB-0xFC code)
+;   +0x04 u16 (0x12..0x54)      +0x06 u16, always 0x0160
+;   +0x08 u16, +0x0A u16 -- +0x0A is 0 for a class with no variables and
+;         rises by exactly 4 per extra 'n' variable (instance-variable
+;         storage size, by inference; not traced to a reader)
+;   +0x0C class-name string ("NormScreen", "VariScreen", ...)
+;   +0x10 type-signature string, ONE character per instance variable
+;         ("kc^nnnnnn" for VariScreen's 9 variables)
+;   +0x14 the class's instance-variable NAME table ("func", "font", ...,
+;         "" terminated); its length equals the signature's in all 28.
+; Only record 0's +0x00 is in this file: the table's other 668 bytes, and
+; the name/signature strings after it, are the start of
+; NakaData_MasterStyleGrid (ui_widgets/master_style_grid_screens.s,
+; naka_master_style.c), included right below.
+; ---------------------------------------------------------------------------
+Toshi_Class_Table:
 	.long NormScreenProc
 .include "ui_widgets/master_style_grid_screens.s"
 	.byte 0x6a, 0x00
@@ -1356,7 +1470,19 @@ NakaDesc_RVariScreen:	aligned_string "kc^nnnnnn"
 NakaInst_RVariScreen:	aligned_string "VariScreen"
 NakaDesc_VariScreen:	aligned_string ""
 NakaInst_VariScreen:	aligned_string "NormScreen"
-	.byte 0x1c, 0x00, 0x84, 0x2d, 0xed, 0x00
+; Toshi class count: 28 -- read by InitializeToshi's first registration,
+;   RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+; whose count argument is loaded FROM this address (`ldw_da`), not immediate.
+Toshi_Class_Count:	.short 28
+; ---------------------------------------------------------------------------
+; Toshi_ResEvent_Table -- object-registry slot 0x1C2: 8 event-name string
+; pointers + NULL, registered by InitializeToshi with
+;   RegObjTable 0x160000c, ResEventProc, Toshi_ResEvent_Count, Toshi_ResEvent_Table, 0x1c2
+; (the count word follows the strings).  The strings are the EV_* event
+; names; they follow in reverse order.
+; ---------------------------------------------------------------------------
+Toshi_ResEvent_Table:
+	.long EventNameStr_EV_CHORDSHOW
 ParamStr_Table_25:
 	.long EventNameStr_EV_CHORDDSP
 	.long EventNameStr_EV_PMBKNAME
@@ -1373,8 +1499,17 @@ EventNameStr_EV_FRTPAGECHANGE:	aligned_string "EV_FRTPAGECHANGE"
 EventNameStr_EV_PMNAME:	aligned_string "EV_PMNAME"
 EventNameStr_EV_PMBKNAME:	aligned_string "EV_PMBKNAME"
 EventNameStr_EV_CHORDDSP:	aligned_string "EV_CHORDDSP"
-	aligned_string "EV_CHORDSHOW"
-	.byte 0x08, 0x00, 0x56, 0x2f, 0xed, 0x00
+EventNameStr_EV_CHORDSHOW:	aligned_string "EV_CHORDSHOW"
+Toshi_ResEvent_Count:	.short 8
+; ---------------------------------------------------------------------------
+; Toshi_ResMethod_Table -- object-registry slot 0x1E2: 26 method-name string
+; pointers + NULL, registered by InitializeToshi with
+;   RegObjTable 0x160000d, ResMethodProc, Toshi_ResMethod_Count, Toshi_ResMethod_Table, 0x1e2
+; (the count word follows the strings).  The strings are the MT_* method
+; names; they follow in reverse order.
+; ---------------------------------------------------------------------------
+Toshi_ResMethod_Table:
+	.long MethodNameStr_MT_VariWrite
 NoteNameStr_Table_6:
 	.long MethodNameStr_MT_SvariIni
 	.long MethodNameStr_MT_SvariSet
@@ -1427,18 +1562,56 @@ MethodNameStr_MT_GetSndGrpName:	aligned_string "MT_GetSndGrpName"
 MethodNameStr_MT_GetSndName:	aligned_string "MT_GetSndName"
 MethodNameStr_MT_SvariSet:	aligned_string "MT_SvariSet"
 MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
-	aligned_string "MT_VariWrite"
-	.byte 0x1a, 0x00, 0x62, 0xcd, 0xfb, 0x00, 0xe7, 0xe1, 0xfb, 0x00, 0x18, 0xf5, 0xfb, 0x00, 0xc3, 0x2e
-	.byte 0xfc, 0x00, 0x0b, 0x2d, 0xfc, 0x00, 0xbb, 0x2f, 0xfc, 0x00, 0x22, 0x1a, 0xfc, 0x00, 0x3d, 0xdb
-	.byte 0xfb, 0x00, 0xc3, 0xd5, 0xfb, 0x00, 0x41, 0xd8, 0xfb, 0x00, 0xeb, 0xd4, 0xfb, 0x00, 0xec, 0xd3
-	.byte 0xfb, 0x00, 0xf1, 0xcd, 0xfb, 0x00, 0xd0, 0xb9, 0xfb, 0x00, 0xbb, 0xa7, 0xfb, 0x00, 0x9b, 0xad
-	.byte 0xfb, 0x00, 0x4c, 0xbb, 0xfb, 0x00, 0x12, 0xc4, 0xfb, 0x00, 0x21, 0x80, 0xfb, 0x00, 0x28, 0x80
-	.byte 0xfb, 0x00, 0xef, 0xa6, 0xfb, 0x00, 0x0b, 0x8b, 0xfb, 0x00, 0x3d, 0x90, 0xfb, 0x00, 0x8d, 0x97
-	.byte 0xfb, 0x00, 0xe1, 0xa6, 0xfb, 0x00, 0xe8, 0xa6, 0xfb, 0x00, 0x26, 0x1f, 0xfc, 0x00, 0x22, 0xd0
-	.byte 0xfb, 0x00, 0x00, 0x00, 0x00, 0x00
+MethodNameStr_MT_VariWrite:	aligned_string "MT_VariWrite"
+Toshi_ResMethod_Count:	.short 26
+; ---------------------------------------------------------------------------
+; Toshi_Function_Table -- TOSHI object table: 28 screen/box procedure
+; pointers + NULL (0xED2F66-0xED2FD9)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (0xFC311A) with
+;   RegObjTabl 0x1600001, FunctionProc, 28, Toshi_Function_Table, 0x102
+; into object-registry slot 0x102 (layout and indexing: see
+; Toshi_ApFunction_Table).  Its names are Toshi_FunctionName_Table (slot
+; 0x402); entry k there names entry k here -- verified for all 28 in v10 by
+; scripts/tools/ext_retype_toshi_object_tables.py --check (in v7 for 27: v7
+; labels entry 19's routine only AcMstStyleAlp_Boundary).
+Toshi_Function_Table:
+	.long NormScreenProc
+	.long VariScreenProc
+	.long RVariScreenProc
+	.long AcTransposeBoxProc
+	.long AcFreeSplitBoxProc
+	.long AcChordBoxProc
+	.long PmBankScreenProc
+	.long AcPmBkEditBoxProc
+	.long MsaModeScreenProc
+	.long PmemModeBoxProc
+	.long AcBkNoBoxProc
+	.long AcPmBkNoBoxProc
+	.long IvWindowPageControlProc
+	.long IvPmemWindowPageCtlProc
+	.long AcTchSensGridBoxProc
+	.long AcFSWAssGridBoxProc
+	.long AcPmExpFilterGridBoxProc
+	.long AcDispTimeSetGridBoxProc
+	.long AcMstSugAlpGridBoxProc
+	.long AcMstStyleAlpGridBoxProc
+	.long IvMstStyleWindowPgCtlProc
+	.long AcMstStyle1GridBoxProc
+	.long AcMstStyle1SubGridBoxProc
+	.long AcMstStyle2GridBoxProc
+	.long AcMstSong1GridBoxProc
+	.long AcMstSong2GridBoxProc
+	.long SineWaveScreenProc
+	.long IvPageOverWrProc
+	.long 0
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2F90-0xED2FAB (27 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=67% dist=14 near MethodNameStr_MT_SvariIni+70
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2FAC-0xED2FC6 (26 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=13 near MethodNameStr_MT_SvariIni+98
-NoteNameStr_Table_7:
+; Toshi_FunctionName_Table -- object-registry slot 0x402 (InitializeToshi:
+; RegObjTabl 0x1600001, FunctionProc, 28, Toshi_FunctionName_Table, 0x402):
+; the name of each Toshi_Function_Table entry, same index; strings follow in
+; reverse order.
+Toshi_FunctionName_Table:
 	.long ProcNameStr_NormScreenProc
 	.long ProcNameStr_VariScreenProc
 	.long ProcNameStr_RVariScreenProc
@@ -1498,14 +1671,46 @@ ProcNameStr_AcTransposeBoxProc:	aligned_string "AcTransposeBoxProc"
 ProcNameStr_RVariScreenProc:	aligned_string "RVariScreenProc"
 ProcNameStr_VariScreenProc:	aligned_string "VariScreenProc"
 ProcNameStr_NormScreenProc:	aligned_string "NormScreenProc"
-	.byte 0xd9, 0x27, 0xfc, 0x00, 0x15, 0x28, 0xfc, 0x00, 0x5e, 0x29, 0xfc, 0x00, 0x87, 0x28, 0xfc, 0x00
-	.byte 0x44, 0x2a, 0xfc, 0x00, 0xec, 0x28, 0xfc, 0x00, 0xca, 0x29, 0xfc, 0x00, 0x4e, 0x30, 0xfc, 0x00
-	.byte 0xb9, 0x2a, 0xfc, 0x00, 0x00, 0x63, 0xfb, 0x00, 0xbf, 0x2b, 0xfc, 0x00, 0xab, 0x2c, 0xfc, 0x00
-	.byte 0x59, 0xb9, 0xfb, 0x00, 0xe4, 0x2c, 0xfc, 0x00, 0x11, 0xcd, 0xfb, 0x00, 0x46, 0x26, 0xfc, 0x00
-	.byte 0x44, 0x7d, 0xfb, 0x00, 0x78, 0x7d, 0xfb, 0x00, 0xac, 0x7d, 0xfb, 0x00, 0xe0, 0x7d, 0xfb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
+; ---------------------------------------------------------------------------
+; Toshi_MainFunction_Table -- TOSHI object table: 20 "main function" code
+; pointers + NULL (0xED3292-0xED32E5)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (0xFC311A) with
+;   RegObjTabl 0x1600003, MainFunctionProc, 20, Toshi_MainFunction_Table, 0x142
+; into object-registry slot 0x142 (layout and indexing: see
+; Toshi_ApFunction_Table).  Its names are Toshi_MainFunctionName_Table (slot
+; 0x442), whose strings sit in ui_widgets/normal_mode_layout.s; entry k there
+; names entry k here -- verified for all 20, in v10 and v7, by
+; scripts/tools/ext_retype_toshi_object_tables.py --check.
+Toshi_MainFunction_Table:
+	.long MainVariSet
+	.long MainSvariIni
+	.long MainGetSndName
+	.long MainRvariIni
+	.long MainGetRhyName
+	.long MainGetSndGrpName
+	.long MainGetRhyGrpName
+	.long MainChordPre
+	.long MainPmGet
+	.long OneTchFUNC
+	.long MainSysControl
+	.long CntIniFunc
+	.long FswAsIniFunc
+	.long MainMssSetUp
+	.long MainTimeFlashFunc
+	.long MainWallSetFlashFunc
+	.long TEST2FUNC
+	.long TEST3FUNC
+	.long TEST4FUNC
+	.long TEST6FUNC
+	.long 0
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED32CC-0xED32DE (18 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=100% dist=9 near ProcNameStr_NormScreenProc+74
-NoteNameStr_Table_8:
+; Toshi_MainFunctionName_Table -- object-registry slot 0x442 (InitializeToshi:
+; RegObjTabl 0x1600003, MainFunctionProc, 20, Toshi_MainFunctionName_Table,
+; 0x442): the name of each Toshi_MainFunction_Table entry, same index, then ""
+; as the terminator.  The 20 name strings are the NakaInst_* cells of
+; ui_widgets/normal_mode_layout.s (naka_normal_mode.c), included just below.
+Toshi_MainFunctionName_Table:
 	.long NakaInst_MainVariSet
 	.long NakaInst_MainSvariIni
 	.long NakaInst_MainGetSndName
@@ -1527,9 +1732,7 @@ NoteNameStr_Table_8:
 	.long NakaInst_TEST4FUNC
 	.long NakaInst_TEST6FUNC
 	.long NakaInstTable8_NullTerm
-NakaInstTable8_NullTerm:
-	nop
-	swi 7
+NakaInstTable8_NullTerm:	aligned_string ""
 .include "ui_widgets/normal_mode_layout.s"
 	.byte 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0xf4, 0x03, 0x00, 0x08, 0xf4, 0x03, 0x00
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1a, 0x00, 0xff, 0xff, 0x08, 0x00, 0x15, 0x01
@@ -1597,7 +1800,7 @@ NakaInstTable8_NullTerm:
 	.byte 0x7f, 0x00
 
 
-	.long Naka_PresentationRootState
+	.short 319, 239	; right/bottom edge of the 320x240 screen, NOT a pointer (was `.long Naka_PresentationRootState`: v7 moved that routine, not this value)
 	.byte 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0xf4, 0x03, 0x00, 0x18, 0xf4, 0x03, 0x00
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x29, 0x00, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
 	.byte 0x80, 0x00, 0x2a, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
