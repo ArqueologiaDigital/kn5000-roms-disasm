@@ -1,6 +1,17 @@
 /**
  * sound_data_synth.c — Synth category patch reference table
  *
+ * CORRECTED 2026-09-25 -- read this first.  Descriptor slot +0x38, a
+ * PROGRAM-CHANGE REMAP, not a Synth-category table.  Reader
+ * SndParam_LookupFromPointerTable (v10/v9 0xFEE9BD), called by
+ * Dispatch_Prologue (0xFED8AB) for a received 0xCn message with program p;
+ * the caller then transmits Bn 00 (lo >> 7), Bn 20 ((hi & 7) << 4) and
+ * Cn (lo & 0x7F), where lo/hi are the two bytes of entry p.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 256 bytes: 128 x uint16_t LE patch references for the Synth sound category.
  * Each entry encodes {patch_id (low byte), variant (high byte)}.
  * Zero entries indicate unused slots.

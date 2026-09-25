@@ -1,6 +1,19 @@
 /**
  * sound_data_bass.c — Bass category configuration byte table
  *
+ * CORRECTED 2026-09-25 -- read this first.  Descriptor slot +0x3C: for
+ * ordinary parts in mode 0, the LAST SLOT INDEX of each category (value + 1
+ * sounds), 0xFF = category not offered.  Reader
+ * CharMap_ActivePreamb_Prologue (v10/v9 0xFEE43F); GetSoundBankCount and
+ * Sound_Navigate step categories by value + 1 and skip 0xFF.  The 18 values
+ * sum to 368 sounds, the populated-cell count of sound_data_guitar.c.  The
+ * "sub-bank count or configuration flags" and "use all" readings below are
+ * false.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 18 bytes: one uint8_t per sound category (matching SOUND_CATEGORY_NAMES).
  * Likely a per-category parameter (sub-bank count or configuration flags).
  * Value 0xFF indicates "use all" or "not applicable".

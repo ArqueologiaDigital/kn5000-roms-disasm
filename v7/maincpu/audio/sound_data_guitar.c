@@ -1,6 +1,18 @@
 /**
  * sound_data_guitar.c — Guitar category patch reference grid
  *
+ * CORRECTED 2026-09-25 -- read this first.  This is descriptor slot +0x14:
+ * the mode-0 CATEGORY/SLOT -> PROGRAM/BANK grid.  Reader
+ * FetchOscTableEntry_Prologue (v10/v9 0xFEE808): entry = grid[category*40 +
+ * slot]; LOW byte -> record+3 (program), HIGH byte -> record+4 (bank).  A row
+ * is a CATEGORY (18 = descriptor +0x04), not a "sound sub-bank", and the
+ * high byte is the BANK the program is looked up in, not a "variant": all
+ * 368 populated cells round-trip through sound_data_piano.c.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 1440 bytes: 18 rows x 40 uint16_t entries (80 bytes per row).
  * Each row corresponds to a sound sub-bank. Each uint16_t entry
  * is a patch reference: low byte = patch ID, high byte = variant.

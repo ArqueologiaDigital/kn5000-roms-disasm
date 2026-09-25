@@ -1,6 +1,22 @@
 /**
  * sound_data_flute.c — Flute category sound data
  *
+ * CORRECTED 2026-09-25 -- read this first.  This object and
+ * sound_data_flute_extra.c are ONE 7,296-byte table, descriptor slot +0x20,
+ * the mode-1 BANK/PROGRAM -> CATEGORY/SLOT map: a 128-byte bank -> block map
+ * (banks 0..9 -> blocks 0..9, 16 -> 10, 24 -> 11, 32 -> 12, 120 -> 13, all
+ * others -> 0) and 14 blocks of 128 four-byte records {category, slot}, read
+ * by ApplyProgramChangeAs_LoadDRAM2 (v10/v9 0xFEE798) with a 0x200 stride.
+ * It is cut in two at 0xE078F2 only because of a phantom reference in
+ * sequencer/sequencer_engine.s (see audio/sound_data.s), so the cut falls
+ * 2 bytes into record 592 -- the "2 trailing bytes" below are the first half
+ * of a record.  The sub_bank/patch_ref reading is false (category, slot:
+ * 136 of 136 cells of sound_data_sax_reed.c round-trip).
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 2498 bytes: 128-byte header (sub-bank indices + padding)
  * + 592 x 4-byte patch reference records + 2 trailing bytes.
  *

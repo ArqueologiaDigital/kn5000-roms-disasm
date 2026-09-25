@@ -1,6 +1,18 @@
 /**
  * sound_data_drum_kits.c — Drum Kits category data
  *
+ * CORRECTED 2026-09-25 -- read this first.  Only the first 18 bytes are
+ * descriptor slot +0x4C: the MODE-1 per-category LAST SLOT INDEX table for
+ * PART 15 (reader CharMap_ActivePreamb_Prologue, v10/v9 0xFEE43F; see
+ * sound_data_bass.c) -- category 15 only, 8 kits.  The +0x4C reader never
+ * indexes past byte 17.  The remaining 195 bytes are reached through
+ * SOUND_DATA_DRUM_KITS_0x1A / _0x3A (display/scoop_display.s); the
+ * description of them below cites no reader and has not been checked here.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 213 bytes total:
  *   - 18 bytes: per-category config (same as other sound_data_* config tables)
  *   - 55 bytes: drum kit descriptors (5 x 8-byte records + 15 bytes metadata)

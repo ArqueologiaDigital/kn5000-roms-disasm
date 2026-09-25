@@ -1,6 +1,15 @@
 /**
  * sound_data_digital_drawbar.c — Digital Drawbar category config table
  *
+ * CORRECTED 2026-09-25 -- read this first.  Descriptor slot +0x40: the
+ * mode-0 per-category LAST SLOT INDEX table for PART 15 (reader
+ * CharMap_ActivePreamb_Prologue, v10/v9 0xFEE43F; see sound_data_bass.c).
+ * Only category 15 (drum kits) is offered, with 16 kits; 0xFF = not offered.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 18 bytes: one uint8_t per sound category (matching SOUND_CATEGORY_NAMES).
  * Identical to accordion_reg: all 0xFF except Drum Kits = 0x0F.
  */

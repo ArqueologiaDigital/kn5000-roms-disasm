@@ -6,2085 +6,2788 @@
 ; =============================================================================
 ; Parses format string with % specifiers to build multi-byte command packets.
 ; Stack frame: 74 bytes. Called exclusively by Sprintf_Locked.
+
 Sprintf_Core:
-	ldw	hl, 26114
-	ldw	(11:8), 32:io
-	ld	xwa, (xsp+92)
-	call	(xwa)
+	lda	xsp, (xsp - 74)
+	push	xiz
+	ldw	(xsp + 4), 0x0
+	jrl	Sprintf_MainLoop_ReadNext
 Sprintf_OutputLiteral:
-	.byte 0xef, 0x62, 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x01
-	.byte 0x6e, 0x2b, 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x30
-	.byte 0x00, 0x66, 0x0c, 0x68
+	cp	iz, 0x25
+	jr	z, Sprintf_ParseFormatSpec
+	pushw	iz
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (xsp + 4)
+	jrl	Sprintf_MainLoop_ReadNext
 Sprintf_ParseFormatSpec:
-	.byte 0x20, 0x0b, 0x30, 0x00, 0xaf, 0x5c, 0x20, 0xb0
-	.byte 0xe8, 0xef, 0x62, 0x9f, 0x08, 0x20, 0x9f, 0x08
-	.byte 0x69, 0xd8, 0xd8, 0x6e, 0xec, 0x68
+	ldw	(xsp + 8), 0x0
+	ldw	(xsp + 10), 0x0
+	ldw	(xsp + 6), 0x0
+	ldw	(0x03c220:24), 0x0020
 Sprintf_ReadFormatChar:
-	.byte 0x0a, 0x0b, 0x30, 0x00, 0xaf, 0x5c, 0x20, 0xb0
-	.byte 0xe8, 0xef, 0x62, 0x9f, 0x0a, 0x20, 0x9f, 0x0a
-	.byte 0x69, 0xd8, 0xd8, 0x6e, 0xec, 0x68, 0x18, 0x9f
-	.byte 0x0c, 0x69, 0xbf, 0x38, 0x31, 0x9f, 0x0c, 0x20
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xd8, 0x13, 0x28
-	.byte 0xaf, 0x5c, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0x9f
-	.byte 0x0c, 0x3f, 0x00, 0x00, 0x6e, 0xe1, 0x9f, 0x06
-	.byte 0x20, 0xd8, 0x33, 0x01, 0x6e, 0x0d, 0x78, 0x3f
-	.byte 0x04, 0x0b, 0x20, 0x00, 0xaf, 0x5c, 0x20, 0xb0
-	.byte 0xe8, 0xef, 0x62, 0x9f, 0x08, 0x20, 0x9f, 0x08
-	.byte 0x69, 0xd8, 0xd8, 0x6e, 0xec
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
+	ld	wa, iz
+	cp	iz, 0x30
+	jr	z, Sprintf_Flag_Zero
+	cp	wa, 0x2d
+	jr	z, Sprintf_Flag_Minus
+	cp	wa, 0x2b
+	jr	z, Sprintf_Flag_Plus
+	cp	wa, 0x23
+	jr	z, Sprintf_Flag_Hash
+	cp	wa, 0x20
+	jr	z, Sprintf_Flag_Space
+	cp	iz, 0x2a
+	jr	nz, Sprintf_CheckIfDigit
+	ld	xbc, (xsp + 86)
+	ld	xwa, 2:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	wa, (xwa - 2)
+	ld	(xsp + 8), wa
+	cpw	(xsp + 8), 0x0
+	jr	ge, Sprintf_StarWidth_Positive
+	ld	wa, (xsp + 8)
+	neg	wa
+	ld	(xsp + 8), wa
+	setm	1, (xsp + 6)
 Sprintf_StarWidth_Positive:
-	jrl	1064
-	ld	wa, (xsp+6)
-	bit	6, wa
-	jr	z, 14
-	ld	xbc, (xsp+86)
-	ld	xwa, 4:i3
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
+	jr	Sprintf_CheckPrecisionDot
 Sprintf_Flag_Space:
-	.byte 0xa1, 0x88, 0xa1, 0x20, 0xa8
+	setm	2, (xsp + 6)
+	jr	Sprintf_ReadFormatChar
 Sprintf_Flag_Hash:
-	.byte 0xfc, 0x22, 0x68, 0x0e, 0xaf
+	setm	3, (xsp + 6)
+	jr	Sprintf_ReadFormatChar
 Sprintf_Flag_Plus:
-	.byte 0x56, 0x21, 0xe8, 0xaa, 0xa1
+	setm	0, (xsp + 6)
+	jr	Sprintf_ReadFormatChar
 Sprintf_Flag_Minus:
-	.byte 0x88, 0xa1, 0x20, 0x98, 0xfe
+	setm	1, (xsp + 6)
+	jr	Sprintf_ReadFormatChar
 Sprintf_Flag_Zero:
-	.byte 0x22, 0xea, 0x12, 0xbf, 0x2c, 0x31, 0x9f, 0x06
-	.byte 0x20, 0xd8
+	ldw	(0x03c220:24), 0x0030
+	jrl	Sprintf_ReadFormatChar
 Sprintf_ParseWidthDigit:
-	.byte 0x33, 0x04, 0x66, 0x12, 0x9f, 0x0a, 0x3f, 0x00
-	.byte 0x00, 0x6e, 0x0b, 0xea, 0xe2, 0x6e, 0x07, 0xb1
-	.byte 0x00, 0x00, 0xde, 0xa8, 0x68, 0x12, 0x3a, 0x39
-	.byte 0x1e, 0x4d, 0x04, 0xbf, 0x34, 0x30, 0x38, 0x1d
-	.byte 0xc3
+	ld	bc, iz
+	sub	bc, 0x30
+	ld	wa, (xsp + 8)
+	.byte 0xd8, 0x09, 0x0a
+; Strncpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strncpy is the code at 0xFF0516
+Strncpy:
+	.byte 0x00
+	ld	(xsp + 8), wa
+	add	(xsp + 8), bc
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
 Sprintf_CheckIfDigit:
-	.byte 0x07, 0xff, 0xbf, 0x0c, 0x37, 0xdb, 0x8e, 0x9f
-	.byte 0x06, 0x20, 0xd8, 0x33, 0x04, 0x66, 0x05, 0x9f
-	.byte 0x0a
+	stb_erp	A, 0xf8
+	extz	wa
+	lda	xbc, (CharMap_FullPermutation_0x660:24)
+	bit_dri	2, 0x07, 0xe4, 0xe0
+	jr	nz, Sprintf_ParseWidthDigit
 Sprintf_CheckPrecisionDot:
-	.byte 0xfe, 0x69, 0x07, 0xbf, 0x0a, 0x02, 0x00, 0x00
-	.byte 0x68, 0x03, 0x9f, 0x0a, 0xae, 0xde, 0x88, 0x9f
-	.byte 0x0a, 0x80, 0x9f, 0x08, 0xa8, 0x69, 0x05, 0xbf
-	.byte 0x08, 0x02, 0x00, 0x00, 0x9f, 0x08, 0x20, 0xde
-	.byte 0x80, 0x9f, 0x0a, 0x80, 0x9f, 0x04, 0x88, 0x9f
-	.byte 0x06, 0x20, 0xd8, 0x33, 0x01, 0x66, 0x0e, 0x68
-	.byte 0x22, 0xd2, 0x20, 0xc2, 0x03, 0x04
+	cp	iz, 0x2e
+	jr	nz, Sprintf_CheckLengthH
+	setm	4, (xsp + 6)
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
+	cp	iz, 0x2a
+	jr	nz, Sprintf_CheckPrecisionDigit
+	ld	xbc, (xsp + 86)
+	ld	xwa, 2:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	wa, (xwa - 2)
+	ld	(xsp + 10), wa
+	cpw	(xsp + 10), 0x0
+	jr	ge, Sprintf_StarPrecision_Applied
+	resm	4, (xsp + 6)
 Sprintf_StarPrecision_Applied:
-	.byte 0xaf, 0x5c, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0x9f
-	.byte 0x08, 0x20, 0x9f, 0x08, 0x69, 0xd8, 0xd8, 0x6e
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
+	jr	Sprintf_CheckLengthH
 Sprintf_ParsePrecisionDigit:
-	.byte 0xea, 0x68, 0x0a, 0x0b, 0x30, 0x00, 0xaf, 0x5c
-	.byte 0x20, 0xb0, 0xe8, 0xef, 0x62, 0x9f, 0x0a, 0x20
-	.byte 0x9f, 0x0a, 0x69, 0xd8, 0xd8, 0x6e, 0xec, 0x68
-	.byte 0x14, 0xde, 0x69, 0xbf, 0x2c, 0x30, 0xc3, 0x07
-	.byte 0xe0
+	ld	bc, iz
+	sub	bc, 0x30
+	ld	wa, (xsp + 10)
+	muls	wa, 0xa
+	ld	(xsp + 10), wa
+	add	(xsp + 10), bc
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
 Sprintf_CheckPrecisionDigit:
-	.byte 0xf8, 0x21, 0xd8, 0x13, 0x28, 0xaf, 0x5c, 0x20
-	.byte 0xb0, 0xe8, 0xef, 0x62, 0xde, 0xd8, 0x6e, 0xe8
-	.byte 0x9f
+	stb_erp	A, 0xf8
+	extz	wa
+	lda	xbc, (CharMap_FullPermutation_0x660:24)
+	bit_dri	2, 0x07, 0xe4, 0xe0
+	jr	nz, Sprintf_ParsePrecisionDigit
 Sprintf_CheckLengthH:
-	.byte 0x06, 0x20, 0xd8, 0x33, 0x01, 0x6e, 0x0d, 0x78
-	.byte 0x49, 0x03, 0x0b, 0x20, 0x00, 0xaf, 0x5c, 0x20
-	.byte 0xb0, 0xe8, 0xef, 0x62, 0x9f, 0x08, 0x20, 0x9f
-	.byte 0x08
+	cp	iz, 0x68
+	jr	nz, Sprintf_CheckLengthL
+	setm	5, (xsp + 6)
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
+	jr	Sprintf_DispatchType
 Sprintf_CheckLengthL:
-	.byte 0x69, 0xd8, 0xd8, 0x6e, 0xec, 0x78, 0x32, 0x03
-	.byte 0xbf, 0x06, 0xbe, 0x9f, 0x06, 0x20, 0xd8, 0x33
-	.byte 0x06, 0x66, 0x0e, 0xaf, 0x56, 0x21, 0xe8, 0xac
-	.byte 0xa1
+	cp	iz, 0x6c
+	jr	nz, Sprintf_CheckLengthLL
+	setm	6, (xsp + 6)
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
+	jr	Sprintf_DispatchType
 Sprintf_CheckLengthLL:
-	.byte 0x88, 0xa1, 0x20, 0xa8, 0xfc, 0x22, 0x68, 0x0e
-	.byte 0xaf, 0x56, 0x21, 0xe8, 0xaa, 0xa1, 0x88, 0xa1
-	.byte 0x20, 0x98, 0xfe, 0x22, 0xea, 0x12, 0xbf
+	cp	iz, 0x4c
+	jr	nz, Sprintf_DispatchType
+	setm	7, (xsp + 6)
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
 Sprintf_DispatchType:
-	.byte 0x20, 0x31, 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x04
-	.byte 0x66, 0x15, 0x9f, 0x0a, 0x3f, 0x00, 0x00, 0x6e
-	.byte 0x0e, 0xea, 0xe2, 0x6e, 0x0a, 0xb1, 0x00, 0x00
-	.byte 0xbf, 0x12, 0x02, 0x00, 0x00, 0x68, 0x14, 0x2e
-	.byte 0x3a, 0x39, 0x1e, 0x8f, 0x03, 0xbf, 0x2a, 0x30
-	.byte 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xbf, 0x0e, 0x37
-	.byte 0xbf, 0x12, 0x53, 0x9f, 0x06, 0x20, 0xd8, 0x33
-	.byte 0x04, 0x66, 0x08, 0x9f, 0x0a, 0x20, 0x9f, 0x12
-	.byte 0xf0, 0x69, 0x07
+	ld	wa, iz
+	cp	iz, 0x47
+	jrl	z, Sprintf_FormatFloat_Entry
+	cp	wa, 0x45
+	jrl	z, Sprintf_FormatFloat_Entry
+	cp	wa, 0x58
+	jrl	z, Sprintf_Hex_GetArg
+	cp	wa, 0x25
+	jr	z, Sprintf_Format_Percent
+	sub	wa, 0x63
+	cp	wa, 0:i3
+	jrl	lt, Sprintf_MainLoop_ReadNext
+	cp	wa, 0x15
+	jrl	gt, Sprintf_MainLoop_ReadNext
+	add	wa, wa
+	lda	xix, (CharMap_FullPermutation_0x760:24)
+	ldw_sri	WA, 0x07, 0xf0, 0xe0
+	lda	xix, (Sprintf_Format_Percent:24)
+	jp_ind	8, 0x07, 0xf0, 0xe0
 Sprintf_Format_Percent:
-	.byte 0xbf, 0x0a, 0x02, 0x00, 0x00, 0x68, 0x06, 0x9f
-	.byte 0x12, 0x20
-Sprintf_Percent_PadLeft:
-	.byte 0x9f, 0x0a, 0xa8, 0xd7, 0xfa, 0xa8, 0x9f, 0x06
-	.byte 0x20, 0xd8, 0x33, 0x03, 0x66, 0x03, 0xd7
-Sprintf_Percent_PadLeftLoop:
-	.byte 0xfa, 0xaa, 0x9f, 0x12, 0x20, 0x9f, 0x0a, 0x80
-	.byte 0xd7, 0xfa
-Sprintf_Format_CharOrPercent:
-	.byte 0x80, 0x9f, 0x08, 0xa8, 0x69, 0x05, 0xbf, 0x08
-	.byte 0x02, 0x00, 0x00, 0x9f, 0x08, 0x20, 0x9f, 0x12
-	.byte 0x80, 0x9f, 0x0a, 0x80, 0xd7, 0xfa, 0x80
-Sprintf_Percent_LiteralPush:
-	add	(xsp+4), wa
-Sprintf_Percent_OutputChar:
-	.byte 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x01, 0x6e, 0x1f
-	.byte 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x20, 0x00, 0x66
-	.byte 0x0c, 0x68
-Sprintf_Percent_PadRight:
-	.byte 0x14, 0x0b, 0x20, 0x00, 0xaf, 0x5c, 0x20, 0xb0
-	.byte 0xe8, 0xef, 0x62, 0x9f, 0x08
-Sprintf_Percent_PadRightLoop:
-	.byte 0x20, 0x9f, 0x08, 0x69, 0xd8, 0xd8, 0x6e, 0xec
-	.byte 0xd7, 0xfa, 0xd8, 0x66, 0x17, 0x9f, 0x12, 0x3f
-	.byte 0x00, 0x00, 0x66, 0x10, 0x0b, 0x30, 0x00, 0xaf
-	.byte 0x5c, 0x20, 0xb0, 0xe8, 0x2e, 0xaf, 0x5e, 0x20
-	.byte 0xb0, 0xe8, 0xef, 0x64, 0x9f, 0x06, 0x20, 0xd8
-	.byte 0x33, 0x01, 0x6e, 0x2b, 0xd2, 0x20, 0xc2, 0x03
-Sprintf_String_UseStrLen:
-	push	xsp
-	ldw	wa, 26112
-	incf
-Sprintf_String_UsePrecision:
-	.byte 0x68, 0x20, 0x0b
-Sprintf_String_ComputePadding:
-	ldw	wa, 44800
-	pop	xix
-	ld	w, 176:opc
-	srl	xwa, 98
-	ld	wa, (xsp+8)
-	decm	1, (xsp+8)
-Sprintf_String_WidthAvailable:
-	cp	wa, 0:i3
-	jr	nz, -20
-	jr	10
-	pushw	48
-Sprintf_String_CheckLeftAlign:
-	ld	xwa, (xsp+92)
-	call	(xwa)
-	inc	2, xsp
-	ld	wa, (xsp+10)
-Sprintf_String_PadLeftSpace:
-	decm	1, (xsp+10)
-	cp	wa, 0:i3
-	jr	nz, -20
-	jr	24
-	decm	1, (xsp+18)
-Sprintf_String_PadLeftLoop:
-	.byte 0xbf, 0x20, 0x31, 0x9f, 0x12, 0x20, 0xc3, 0x07
-	.byte 0xe4, 0xe0, 0x21, 0xd8
-Sprintf_String_OutputChars:
-	.byte 0x13, 0x28, 0xaf, 0x5c, 0x20, 0xb0, 0xe8, 0xef
-	.byte 0x62, 0x9f, 0x12, 0x3f, 0x00, 0x00, 0x6e, 0xe1
-	.byte 0x9f, 0x06, 0x20
-Sprintf_String_OutputLoop:
+	ld	wa, (xsp + 6)
 	bit	1, wa
-	jr	nz, 13
-	jrl	478
-	pushw	32
-	ld	xwa, (xsp+92)
+	jr	z, Sprintf_Percent_PadLeftLoop
+	jr	Sprintf_Format_CharOrPercent
+Sprintf_Percent_PadLeft:
+	incw	1, (xsp + 4)
+	pushw_da	0x20, 0xc2, 0x03
+	ld	xwa, (xsp + 92)
 	call	(xwa)
 	inc	2, xsp
-	ld	wa, (xsp+8)
+Sprintf_Percent_PadLeftLoop:
+	decm	1, (xsp + 8)
+	cpw	(xsp + 8), 0x0
+	jr	gt, Sprintf_Percent_PadLeft
+Sprintf_Format_CharOrPercent:
+	incw	1, (xsp + 4)
+	cp	iz, 0x63
+	jr	nz, Sprintf_Percent_LiteralPush
+	ld	xbc, (xsp + 86)
+	ld	xwa, 2:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	pushm	(xwa - 2)
+	jr	Sprintf_Percent_OutputChar
+Sprintf_Percent_LiteralPush:
+	pushw	0x25
+Sprintf_Percent_OutputChar:
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Percent_PadRightLoop
+	jrl	Sprintf_MainLoop_ReadNext
+Sprintf_Percent_PadRight:
+	incw	1, (xsp + 4)
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Percent_PadRightLoop:
+	decm	1, (xsp + 8)
+	cpw	(xsp + 8), 0x0
+	jr	gt, Sprintf_Percent_PadRight
+	jrl	Sprintf_MainLoop_ReadNext
+	ld	xbc, (xsp + 86)
+	ld	xwa, 4:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	xwa, (xwa - 4)
+	ld	(xsp + 16), xwa
+	push	xwa
+	call	Strlen
+	inc	4, xsp
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_String_UseStrLen
+	cp	(xsp + 10), hl
+	jr	lt, Sprintf_String_UsePrecision
+Sprintf_String_UseStrLen:
+	ld	(xsp + 10), hl
+	jr	Sprintf_String_ComputePadding
+Sprintf_String_UsePrecision:
+	ld	hl, (xsp + 10)
+Sprintf_String_ComputePadding:
+	cp	hl, (xsp + 8)
+	jr	le, Sprintf_String_WidthAvailable
+	ldw	(xsp + 8), 0x0
+	add	(xsp + 4), hl
+	jr	Sprintf_String_CheckLeftAlign
+Sprintf_String_WidthAvailable:
+	ld	wa, (xsp + 8)
+	add	(xsp + 4), wa
+	sub	(xsp + 8), hl
+Sprintf_String_CheckLeftAlign:
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	z, Sprintf_String_PadLeftLoop
+	jr	Sprintf_String_OutputLoop
+Sprintf_String_PadLeftSpace:
+	pushw_da	0x20, 0xc2, 0x03
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_String_PadLeftLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_String_PadLeftSpace
+	jr	Sprintf_String_OutputLoop
+Sprintf_String_OutputChars:
+	ld	xwa, (xsp + 16)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 16), xwa
+	exts	bc
+	pushw	bc
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_String_OutputLoop:
+	ld	wa, (xsp + 10)
+	decm	1, (xsp + 10)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_String_OutputChars
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_String_PadRightLoop
+	jrl	Sprintf_MainLoop_ReadNext
 Sprintf_String_PadRightSpace:
-	decm	1, (xsp+8)
-	cp	wa, 0:i3
-	jr	nz, -20
-	jrl	455
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
 Sprintf_String_PadRightLoop:
-	.byte 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x06, 0x66, 0x0e
-	.byte 0xaf, 0x56, 0x21, 0xe8, 0xac, 0xa1, 0x88, 0xa1
-	.byte 0x20, 0xa8, 0xfc, 0x22, 0x68, 0x0e, 0xaf, 0x56
-	.byte 0x21, 0xe8, 0xaa, 0xa1, 0x88, 0xa1, 0x20, 0x98
-	.byte 0xfe, 0x22, 0xea, 0x12, 0xbf, 0x14
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_String_PadRightSpace
+	jrl	Sprintf_MainLoop_ReadNext
+	ld	wa, (xsp + 6)
+	bit	6, wa
+	jr	z, Sprintf_Decimal_GetShortArg
+	ld	xbc, (xsp + 86)
+	ld	xwa, 4:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	xwa, (xwa - 4)
+	ld	(xsp + 16), xwa
+	jr	Sprintf_Decimal_Setup
 Sprintf_Decimal_GetShortArg:
-	.byte 0x31, 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x04, 0x66
-	.byte 0x12, 0x9f, 0x0a, 0x3f, 0x00, 0x00, 0x6e, 0x0b
-	.byte 0xea
+	ld	xbc, (xsp + 86)
+	ld	xwa, 2:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	.byte 0x98
+; Strcpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strcpy is the code at 0xFF0770
+Strcpy:
+	.byte 0xfe, 0x20
+	exts	xwa
+	ld	(xsp + 16), xwa
 Sprintf_Decimal_Setup:
-	.byte 0xe2, 0x6e, 0x07, 0xb1, 0x00, 0x00, 0xde, 0xa8
-	.byte 0x68, 0x12, 0x3a, 0x39, 0x1e, 0x5e, 0x02, 0xbf
-	.byte 0x1c, 0x30, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xbf
-	.byte 0x0c, 0x37, 0xdb, 0x8e, 0x9f, 0x06, 0x20, 0xd8
-	.byte 0x33, 0x04, 0x66, 0x05, 0x9f, 0x0a, 0xfe, 0x69
+	ldw	(xsp + 14), 0x0
+	lda	xbc, (xsp + 56)
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Decimal_ConvertToString
+	cpw	(xsp + 10), 0x0
+	jr	nz, Sprintf_Decimal_ConvertToString
+	ld	xwa, (xsp + 16)
+	or	xwa, xwa
+	jr	nz, Sprintf_Decimal_ConvertToString
+	ld	(xbc), 0x0
+	ldw	(xsp + 12), 0x0
+	jr	Sprintf_Decimal_CheckPrecision
 Sprintf_Decimal_ConvertToString:
-	.byte 0x07, 0xbf, 0x0a, 0x02, 0x00, 0x00, 0x68, 0x03
-	.byte 0x9f, 0x0a, 0xae, 0x9f, 0x06, 0x20, 0xd8, 0xcc
-	.byte 0x08, 0x00, 0xd8, 0xd8, 0xd8, 0x7e, 0xbf, 0x12
-	.byte 0x50, 0xde, 0x88, 0x9f, 0x0a, 0x80, 0x9f, 0x12
-	.byte 0x80, 0x9f, 0x08, 0xa8, 0x69, 0x05
+	ld	xwa, (xsp + 16)
+	push	xwa
+	push	xbc
+	calr	Sprintf_IntToStr
+	lda	xwa, (xsp + 64)
+	push	xwa
+	call	Strlen
+	lda	xsp, (xsp + 12)
+	ld	(xsp + 12), hl
+	ld	xwa, (xsp + 16)
+	cp	xwa, 0x0
+	jr	ge, Sprintf_Decimal_CheckPrecision
+	ldw	(xsp + 14), 0x1
 Sprintf_Decimal_CheckPrecision:
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00, 0x9f, 0x08, 0x20
-	.byte 0xde, 0x80, 0x9f, 0x0a, 0x80, 0x9f, 0x12, 0x80
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Decimal_NoPrecision
+	ld	wa, (xsp + 10)
+	cp	wa, (xsp + 12)
+	jr	ge, Sprintf_Decimal_SubtractLength
 Sprintf_Decimal_NoPrecision:
-	.byte 0x9f, 0x04, 0x88, 0x9f, 0x06, 0x20, 0xd8
+	ldw	(xsp + 10), 0x0
+	jr	Sprintf_Decimal_CheckSign
 Sprintf_Decimal_SubtractLength:
-	.byte 0x33, 0x01, 0x6e, 0x1f, 0xd2, 0x20
+	ld	wa, (xsp + 12)
+	sub	(xsp + 10), wa
 Sprintf_Decimal_CheckSign:
-	.byte 0xc2, 0x03, 0x3f, 0x20, 0x00, 0x66, 0x0c, 0x68
-	.byte 0x14, 0x0b, 0x20, 0x00, 0xaf, 0x5c
+	ld	wa, (xsp + 6)
+	and	wa, 0x5
+	jr	z, Sprintf_Decimal_ComputeWidth
+	ldw	(xsp + 14), 0x1
 Sprintf_Decimal_ComputeWidth:
-	.byte 0x20, 0xb0, 0xe8, 0xef, 0x62, 0x9f, 0x08, 0x20
-	.byte 0x9f, 0x08, 0x69, 0xd8, 0xd8, 0x6e, 0xec, 0x9f
-	.byte 0x12, 0x3f, 0x00
+	ld	wa, (xsp + 12)
+	add	wa, (xsp + 10)
+	add	wa, (xsp + 14)
+	sub	(xsp + 8), wa
+	jr	ge, Sprintf_Decimal_FinalWidth
+	ldw	(xsp + 8), 0x0
 Sprintf_Decimal_FinalWidth:
-	.byte 0x00, 0x66, 0x0e, 0xde, 0xd8, 0x66, 0x0a, 0x0b
-	.byte 0x30, 0x00, 0xaf, 0x5c, 0x20, 0xb0, 0xe8, 0xef
-	.byte 0x62, 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x01, 0x6e
-	.byte 0x2b, 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x30, 0x00
-	.byte 0x66, 0x0c, 0x68, 0x20, 0x0b, 0x30, 0x00, 0xaf
-	.byte 0x5c, 0x20, 0xb0, 0xe8, 0xef, 0x62
+	ld	wa, (xsp + 8)
+	add	wa, (xsp + 12)
+	add	wa, (xsp + 10)
+	add	wa, (xsp + 14)
+	add	(xsp + 4), wa
+	cpw	(xsp + 8), 0x0
+	jr	z, Sprintf_Decimal_OutputSign
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Decimal_OutputSign
+	cpw	(0x3c220:24), 32
+	jr	z, Sprintf_Decimal_PadLeftLoop
+	bit	4, wa
+	jr	nz, Sprintf_Decimal_PadLeftLoop
+	jr	Sprintf_Decimal_OutputSign
 Sprintf_Decimal_PadLeftSpace:
-	ld	wa, (xsp+8)
-	decm	1, (xsp+8)
-	cp	wa, 0:i3
-	jr	nz, -20
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
 Sprintf_Decimal_PadLeftLoop:
-	jr	10
-	pushw	48
-	ld	xwa, (xsp+92)
-	call	(xwa)
-	inc	2, xsp
-	ld	wa, (xsp+10)
-Sprintf_Decimal_OutputSign:
-	.byte 0x9f, 0x0a, 0x69, 0xd8, 0xd8, 0x6e, 0xec, 0x68
-	.byte 0x14, 0xde, 0x69, 0xbf, 0x14, 0x30, 0xc3, 0x07
-Sprintf_Decimal_PlusSign:
-	.byte 0xe0, 0xf8, 0x21, 0xd8, 0x13, 0x28, 0xaf, 0x5c
-	.byte 0x20, 0xb0, 0xe8, 0xef, 0x62
-Sprintf_Decimal_SpaceSign:
-	.byte 0xde, 0xd8, 0x6e, 0xe8, 0x9f, 0x06, 0x20, 0xd8
-	.byte 0x33, 0x01, 0x6e
-Sprintf_Decimal_EmitSign:
-	decf
-	jrl	145
-	pushw	32
-Sprintf_Decimal_ZeroFill:
-	ld	xwa, (xsp+92)
-	call	(xwa)
-	inc	2, xsp
-	ld	wa, (xsp+8)
-	decm	1, (xsp+8)
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
 	cp	wa, 0:i3
-	jr	nz, -20
-	jr	123
+	jr	nz, Sprintf_Decimal_PadLeftSpace
+	ldw	(xsp + 8), 0x0
+Sprintf_Decimal_OutputSign:
+	ld	xwa, (xsp + 16)
+	cp	xwa, 0x0
+	jr	ge, Sprintf_Decimal_PlusSign
+	pushw	0x2d
+	jr	Sprintf_Decimal_EmitSign
+Sprintf_Decimal_PlusSign:
+	ld	wa, (xsp + 6)
+	bit	0, wa
+	jr	z, Sprintf_Decimal_SpaceSign
+	pushw	0x2b
+	jr	Sprintf_Decimal_EmitSign
+Sprintf_Decimal_SpaceSign:
+	ld	wa, (xsp + 6)
+	bit	2, wa
+	jr	z, Sprintf_Decimal_ZeroFill
+	pushw	0x20
+Sprintf_Decimal_EmitSign:
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Decimal_ZeroFill:
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Decimal_PrecZeroLoop
+	cpw	(0x3c220:24), 48
+	jr	z, Sprintf_Decimal_ZeroFillLoop
+	jr	Sprintf_Decimal_PrecZeroLoop
 Sprintf_Decimal_ZeroFillBody:
-	.byte 0xaf, 0x56, 0x21, 0xe8, 0xac, 0xa1, 0x88, 0xa1
-	.byte 0x20, 0xa8
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
 Sprintf_Decimal_ZeroFillLoop:
-	.byte 0xfc, 0x21, 0x9f, 0x06, 0x20, 0xd8, 0x33, 0x06
-	.byte 0x66, 0x09, 0x9f, 0x04
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Decimal_ZeroFillBody
+	jr	Sprintf_Decimal_PrecZeroLoop
 Sprintf_Decimal_PrecZeroBody:
-	ld	w, 232:opc
-	zcf
-	ld	(xbc), xwa
-	jr	94
-	ld	wa, (xsp+4)
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
 Sprintf_Decimal_PrecZeroLoop:
-	.byte 0xb1, 0x50, 0x68, 0x57, 0xbf, 0x44, 0x31, 0x9f
-	.byte 0x06, 0x20, 0xd8, 0x33
+	ld	wa, (xsp + 10)
+	decm	1, (xsp + 10)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Decimal_PrecZeroBody
+	jr	Sprintf_Decimal_DigitLoop
 Sprintf_Decimal_OutputDigits:
-	reti
-	jr	z, 21
+	decm	1, (xsp + 12)
+	lda	xbc, (xsp + 56)
+	ld	wa, (xsp + 12)
+	ldb_sri	A, 0x07, 0xe4, 0xe0
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Decimal_DigitLoop:
+	cpw	(xsp + 12), 0x0
+	jr	nz, Sprintf_Decimal_OutputDigits
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Decimal_PadRightLoop
+	jrl	Sprintf_MainLoop_ReadNext
+Sprintf_Decimal_PadRightSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Decimal_PadRightLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Decimal_PadRightSpace
+	jrl	Sprintf_MainLoop_ReadNext
+	ld	wa, (xsp + 6)
+	bit	6, wa
+	jr	z, Sprintf_Unsigned_GetShortArg
+	ld	xbc, (xsp + 86)
+	ld	xwa, 4:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	xde, (xwa - 4)
+	jr	Sprintf_Unsigned_Setup
+Sprintf_Unsigned_GetShortArg:
+	ld	xbc, (xsp + 86)
+	ld	xwa, 2:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	de, (xwa - 2)
+	extz	xde
+Sprintf_Unsigned_Setup:
+	lda	xbc, (xsp + 44)
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Unsigned_ConvertToString
+	cpw	(xsp + 10), 0x0
+	jr	nz, Sprintf_Unsigned_ConvertToString
+	or	xde, xde
+	jr	nz, Sprintf_Unsigned_ConvertToString
+	ld	(xbc), 0x0
+	ld	iz, 0:i3
+	jr	Sprintf_Unsigned_CheckPrecision
+Sprintf_Unsigned_ConvertToString:
+	push	xde
+	push	xbc
+	calr	Sprintf_UIntToStr
+	lda	xwa, (xsp + 52)
+	push	xwa
+	call	Strlen
+	lda	xsp, (xsp + 12)
+	ld	iz, hl
+Sprintf_Unsigned_CheckPrecision:
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Unsigned_NoPrecision
+	cp	(xsp + 10), iz
+	jr	ge, Sprintf_Unsigned_SubtractLength
+Sprintf_Unsigned_NoPrecision:
+	ldw	(xsp + 10), 0x0
+	jr	Sprintf_Unsigned_ComputeWidth
+Sprintf_Unsigned_SubtractLength:
+	sub	(xsp + 10), iz
+Sprintf_Unsigned_ComputeWidth:
+	ld	wa, iz
+	add	wa, (xsp + 10)
+	sub	(xsp + 8), wa
+	jr	ge, Sprintf_Unsigned_FinalWidth
+	ldw	(xsp + 8), 0x0
+Sprintf_Unsigned_FinalWidth:
+	ld	wa, (xsp + 8)
+	add	wa, iz
+	add	wa, (xsp + 10)
+	add	(xsp + 4), wa
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	z, Sprintf_Unsigned_PadLeftLoop
+	jr	Sprintf_Unsigned_PrecZeroLoop
+Sprintf_Unsigned_PadLeftSpace:
+	pushw_da	0x20, 0xc2, 0x03
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Unsigned_PadLeftLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Unsigned_PadLeftSpace
+	jr	Sprintf_Unsigned_PrecZeroLoop
+Sprintf_Unsigned_PrecZeroBody:
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Unsigned_PrecZeroLoop:
+	ld	wa, (xsp + 10)
+	decm	1, (xsp + 10)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Unsigned_PrecZeroBody
+	jr	Sprintf_Unsigned_DigitLoop
+Sprintf_Unsigned_OutputDigits:
+	dec	1, iz
+	lda	xwa, (xsp + 44)
+	ldb_sri	A, 0x07, 0xe0, 0xf8
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Unsigned_DigitLoop:
+	cp	iz, 0:i3
+	jr	nz, Sprintf_Unsigned_OutputDigits
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Unsigned_PadRightLoop
+	jrl	Sprintf_MainLoop_ReadNext
+Sprintf_Unsigned_PadRightSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Unsigned_PadRightLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Unsigned_PadRightSpace
+	jrl	Sprintf_MainLoop_ReadNext
+	setm	6, (xsp + 6)
+Sprintf_Hex_GetArg:
+	ld	wa, (xsp + 6)
+	bit	6, wa
+	jr	z, Sprintf_Hex_GetShortArg
+	ld	xbc, (xsp + 86)
+	ld	xwa, 4:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	xde, (xwa - 4)
+	jr	Sprintf_Hex_Setup
+Sprintf_Hex_GetShortArg:
+	ld	xbc, (xsp + 86)
+	ld	xwa, 2:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	de, (xwa - 2)
+	extz	xde
+Sprintf_Hex_Setup:
+	lda	xbc, (xsp + 32)
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Hex_ConvertToString
+	cpw	(xsp + 10), 0x0
+	jr	nz, Sprintf_Hex_ConvertToString
+	or	xde, xde
+	jr	nz, Sprintf_Hex_ConvertToString
+	ld	(xbc), 0x0
+	ldw	(xsp + 18), 0x0
+	jr	Sprintf_Hex_CheckPrecision
+Sprintf_Hex_ConvertToString:
+	pushw	iz
+	push	xde
+	push	xbc
+	calr	Sprintf_HexToStr
+	lda	xwa, (xsp + 42)
+	push	xwa
+	call	Strlen
+	lda	xsp, (xsp + 14)
+	ld	(xsp + 18), hl
+Sprintf_Hex_CheckPrecision:
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Hex_NoPrecision
+	ld	wa, (xsp + 10)
+	cp	wa, (xsp + 18)
+	jr	ge, Sprintf_Hex_SubtractLength
+Sprintf_Hex_NoPrecision:
+	ldw	(xsp + 10), 0x0
+	jr	Sprintf_Hex_CheckAltForm
+Sprintf_Hex_SubtractLength:
+	ld	wa, (xsp + 18)
+	sub	(xsp + 10), wa
+Sprintf_Hex_CheckAltForm:
+	ldiw_erp	0xfa, 0
+	ld	wa, (xsp + 6)
+	bit	3, wa
+	jr	z, Sprintf_Hex_AltFormPrefix
+	ldiw_erp	0xfa, 2
+Sprintf_Hex_AltFormPrefix:
+	ld	wa, (xsp + 18)
+	add	wa, (xsp + 10)
+	addw_erp	WA, 0xfa
+	sub	(xsp + 8), wa
+	jr	ge, Sprintf_Hex_ComputeWidth
+	ldw	(xsp + 8), 0x0
+Sprintf_Hex_ComputeWidth:
+	ld	wa, (xsp + 8)
+	add	wa, (xsp + 18)
+	add	wa, (xsp + 10)
+	addw_erp	WA, 0xfa
+	add	(xsp + 4), wa
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Hex_EmitPrefix
+	cpw	(0x3c220:24), 32
+	jr	z, Sprintf_Hex_PadLeftLoop
+	jr	Sprintf_Hex_EmitPrefix
+Sprintf_Hex_PadLeftSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Hex_PadLeftLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Hex_PadLeftSpace
+Sprintf_Hex_EmitPrefix:
+	cpiw_erp	0xfa, 0
+	jr	z, Sprintf_Hex_ZeroFill
+	cpw	(xsp + 18), 0x0
+	jr	z, Sprintf_Hex_ZeroFill
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	pushw	iz
+	ld	xwa, (xsp + 94)
+	call	(xwa)
+	inc	4, xsp
+Sprintf_Hex_ZeroFill:
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Hex_PrecZeroLoop
+	cpw	(0x3c220:24), 48
+	jr	z, Sprintf_Hex_ZeroFillLoop
+	jr	Sprintf_Hex_PrecZeroLoop
+Sprintf_Hex_ZeroFillBody:
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Hex_ZeroFillLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Hex_ZeroFillBody
+	jr	Sprintf_Hex_PrecZeroLoop
+Sprintf_Hex_PrecZeroBody:
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Hex_PrecZeroLoop:
+	ld	wa, (xsp + 10)
+	decm	1, (xsp + 10)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Hex_PrecZeroBody
+	jr	Sprintf_Hex_DigitLoop
+Sprintf_Hex_OutputDigits:
+	decm	1, (xsp + 18)
+	lda	xbc, (xsp + 32)
+	ld	wa, (xsp + 18)
+	ldb_sri	A, 0x07, 0xe4, 0xe0
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Hex_DigitLoop:
+	cpw	(xsp + 18), 0x0
+	jr	nz, Sprintf_Hex_OutputDigits
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Hex_PadRightLoop
+	jrl	Sprintf_MainLoop_ReadNext
+Sprintf_Hex_PadRightSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Hex_PadRightLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Hex_PadRightSpace
+	jrl	Sprintf_MainLoop_ReadNext
+	ld	wa, (xsp + 6)
+	bit	6, wa
+	jr	z, Sprintf_Octal_GetShortArg
+	ld	xbc, (xsp + 86)
+	ld	xwa, 4:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	xde, (xwa - 4)
+	jr	Sprintf_Octal_Setup
+Sprintf_Octal_GetShortArg:
+	ld	xbc, (xsp + 86)
+	ld	xwa, 2:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	de, (xwa - 2)
+	extz	xde
+Sprintf_Octal_Setup:
+	lda	xbc, (xsp + 20)
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Octal_ConvertToString
+	cpw	(xsp + 10), 0x0
+	jr	nz, Sprintf_Octal_ConvertToString
+	or	xde, xde
+	jr	nz, Sprintf_Octal_ConvertToString
+	ld	(xbc), 0x0
+	ld	iz, 0:i3
+	jr	Sprintf_Octal_CheckPrecision
+Sprintf_Octal_ConvertToString:
+	push	xde
+	push	xbc
+	calr	Sprintf_OctalToStr
+	lda	xwa, (xsp + 28)
+	push	xwa
+	call	Strlen
+	lda	xsp, (xsp + 12)
+	ld	iz, hl
+Sprintf_Octal_CheckPrecision:
+	ld	wa, (xsp + 6)
+	bit	4, wa
+	jr	z, Sprintf_Octal_NoPrecision
+	cp	(xsp + 10), iz
+	jr	ge, Sprintf_Octal_SubtractLength
+Sprintf_Octal_NoPrecision:
+	ldw	(xsp + 10), 0x0
+	jr	Sprintf_Octal_CheckAltForm
+Sprintf_Octal_SubtractLength:
+	sub	(xsp + 10), iz
+Sprintf_Octal_CheckAltForm:
+	ld	wa, (xsp + 6)
+	and	wa, 0x8
+	cp	wa, 0:i3
+	scc16	nz, wa
+	ld	(xsp + 18), wa
+	ld	wa, iz
+	add	wa, (xsp + 10)
+	add	wa, (xsp + 18)
+	sub	(xsp + 8), wa
+	jr	ge, Sprintf_Octal_ComputeWidth
+	ldw	(xsp + 8), 0x0
+Sprintf_Octal_ComputeWidth:
+	ld	wa, (xsp + 8)
+	add	wa, iz
+	add	wa, (xsp + 10)
+	add	wa, (xsp + 18)
+	add	(xsp + 4), wa
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Octal_EmitPrefix
+	cpw	(0x3c220:24), 32
+	jr	z, Sprintf_Octal_PadLeftLoop
+	jr	Sprintf_Octal_EmitPrefix
+Sprintf_Octal_PadLeftSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Octal_PadLeftLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Octal_PadLeftSpace
+Sprintf_Octal_EmitPrefix:
+	cpw	(xsp + 18), 0x0
+	jr	z, Strcpy_Code_Skip
+	cp	iz, 0:i3
+	jr	z, Strcpy_Code_Skip
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+; v10 name for this address: Sprintf_Octal_ZeroFill -- not a label here: v7 keeps that name at 0xFF1462 for shared/positional_labels.s
+Strcpy_Code_Skip:
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Octal_PrecZeroLoop
+	cpw	(0x3c220:24), 48
+	jr	z, Sprintf_Octal_ZeroFillLoop
+	jr	Sprintf_Octal_PrecZeroLoop
+Sprintf_Octal_ZeroFillBody:
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Octal_ZeroFillLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Octal_ZeroFillBody
+	jr	Sprintf_Octal_PrecZeroLoop
+Sprintf_Octal_PrecZeroBody:
+	pushw	0x30
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Octal_PrecZeroLoop:
+	ld	wa, (xsp + 10)
+	decm	1, (xsp + 10)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Octal_PrecZeroBody
+	jr	Sprintf_Octal_DigitLoop
+Sprintf_Octal_OutputDigits:
+	dec	1, iz
+	lda	xwa, (xsp + 20)
+	ldb_sri	A, 0x07, 0xe0, 0xf8
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Octal_DigitLoop:
+	cp	iz, 0:i3
+	jr	nz, Sprintf_Octal_OutputDigits
+	ld	wa, (xsp + 6)
+	bit	1, wa
+	jr	nz, Sprintf_Octal_PadRightLoop
+	jrl	Sprintf_MainLoop_ReadNext
+Sprintf_Octal_PadRightSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 92)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_Octal_PadRightLoop:
+	ld	wa, (xsp + 8)
+	decm	1, (xsp + 8)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_Octal_PadRightSpace
+	jr	Sprintf_MainLoop_ReadNext
+	ld	xbc, (xsp + 86)
+	ld	xwa, 4:i3
+	add	(xbc), xwa
+	ld	xwa, (xbc)
+	ld	xbc, (xwa - 4)
+	ld	wa, (xsp + 6)
+	bit	6, wa
+	jr	z, Sprintf_StoreCount_Short
+	ld	wa, (xsp + 4)
+	exts	xwa
+	ld	(xbc), xwa
+	jr	Sprintf_MainLoop_ReadNext
+Sprintf_StoreCount_Short:
+	ld	wa, (xsp + 4)
+	ld	(xbc), wa
+	jr	Sprintf_MainLoop_ReadNext
+Sprintf_FormatFloat_Entry:
+	lda	xbc, (xsp + 68)
+	ld	wa, (xsp + 6)
+	bit	7, wa
+	jr	z, Sprintf_FormatFloat_ShortArg
 	ld	xwa, xbc
-	ld	xde, (xsp+86)
-	lda_dd8l	xbc, 10
+	ld	xde, (xsp + 86)
+	lda_dd8l	XBC, (0x0a)
 	add	(xde), xbc
 	ld	xbc, (xde)
-	lda	xbc, (xbc-10)
-	call	16720036
-	jr	18
-Sprintf_Decimal_DigitLoop:
+	lda	xbc, (xbc - 10)
+	call	Sprintf_CopyBytes10
+	jr	Sprintf_FormatFloat_Dispatch
+Sprintf_FormatFloat_ShortArg:
 	ld	xwa, xbc
-	ld	xde, (xsp+86)
-	lda_dd8l	xbc, 8
+	ld	xde, (xsp + 86)
+	lda_dd8l	XBC, (0x08)
 	add	(xde), xbc
 	ld	xbc, (xde)
 	dec	8, xbc
-	call	Sprintf_Decimal_PrecZeroLoop_Code_Helper
-Sprintf_Decimal_PadRightSpace:
-	.byte 0x9f, 0x0a, 0x04, 0x9f, 0x0a, 0x04, 0x9f, 0x0a
-	.byte 0x04, 0xbf
-Sprintf_Decimal_PadRightLoop:
-	.byte 0x4a, 0x30, 0x38, 0xaf, 0x64, 0x20, 0x38, 0xc7
-	.byte 0xf8, 0x89, 0xd8, 0x13, 0x28, 0x1e, 0x0a, 0x01
-	.byte 0xbf, 0x10, 0x37, 0xd2, 0x22, 0xc2, 0x03, 0x20
-	.byte 0x9f, 0x04, 0x88, 0xaf, 0x52, 0x20, 0xc5, 0xe0
-	.byte 0x23, 0xbf, 0x52
-Sprintf_Unsigned_GetShortArg:
-	.byte 0x60, 0xc7, 0xf8, 0x9b, 0xde, 0x13, 0xde, 0xd8
-	.byte 0x7e, 0x29, 0xf7, 0x9f, 0x04, 0x23
-Sprintf_Unsigned_Setup:
-	.byte 0x5e, 0xbf, 0x4a, 0x37, 0x0e, 0xef, 0x6c, 0x3e
-	.byte 0xaf, 0x10, 0x20, 0xe8, 0xcf, 0x00, 0x00, 0x00
-	.byte 0x00, 0x69, 0x07, 0xd8, 0x06, 0xd7, 0xe2, 0x06
-	.byte 0xe8, 0x61, 0xe8, 0x8e, 0xaf
-Sprintf_Unsigned_ConvertToString:
-	.byte 0x0c, 0x20, 0xf5, 0xe0, 0x31, 0xbf, 0x04, 0x61
-	.byte 0xbf, 0x0c, 0x60, 0xee, 0x88, 0xf0, 0x0a, 0x31
-	.byte 0x1d, 0x35
-Sprintf_Unsigned_CheckPrecision:
-	.byte 0x04, 0xff, 0xeb, 0xc8, 0x30, 0x00, 0x00, 0x00
-	.byte 0xaf, 0x04, 0x20, 0xb0, 0x47
-Sprintf_Unsigned_NoPrecision:
-	.byte 0xee, 0x88, 0xf0, 0x0a, 0x31, 0x1d, 0x3b
-Sprintf_Unsigned_SubtractLength:
-	.byte 0x04, 0xff, 0xeb
-Sprintf_Unsigned_ComputeWidth:
-	.byte 0x8e, 0xee, 0xe6, 0x6e, 0xd1, 0xaf, 0x0c, 0x20
-	.byte 0xb0, 0x00, 0x00, 0x5e, 0xef, 0x64, 0x0e
-Sprintf_Unsigned_FinalWidth:
-	.byte 0xef, 0x6c, 0x3e, 0xaf, 0x10, 0x26, 0xaf, 0x0c
-	.byte 0x20, 0xf5, 0xe0, 0x31, 0xbf, 0x04, 0x61, 0xbf
-	.byte 0x0c, 0x60, 0xee, 0x88, 0xf0
-Sprintf_Unsigned_PadLeftSpace:
-	.byte 0x0a, 0x31, 0x1d, 0x35, 0x04, 0xff, 0xeb, 0xc8
-	.byte 0x30, 0x00, 0x00, 0x00
-Sprintf_Unsigned_PadLeftLoop:
-	.byte 0xaf, 0x04, 0x20, 0xb0, 0x47, 0xee, 0x88, 0xf0
-	.byte 0x0a, 0x31, 0x1d, 0x3b
-Sprintf_Unsigned_PrecZeroBody:
-	.byte 0x04, 0xff, 0xeb, 0x8e, 0xee, 0xe6, 0x6e, 0xd1
-	.byte 0xaf, 0x0c
-Sprintf_Unsigned_PrecZeroLoop:
-	.byte 0x20, 0xb0, 0x00, 0x00, 0x5e, 0xef, 0x64, 0x0e
-	.byte 0x40, 0xb6, 0xd8, 0xee
-Sprintf_Unsigned_OutputDigits:
-	.byte 0x00, 0x9f, 0x0c, 0x3f, 0x78, 0x00, 0x6e, 0x05
-	.byte 0x40, 0xa4, 0xd8, 0xee, 0x00, 0xe8, 0x8c, 0xaf
-	.byte 0x04, 0x23, 0xaf, 0x08
-Sprintf_Unsigned_DigitLoop:
-	.byte 0x22, 0xf5, 0xec, 0x31, 0xea, 0x88, 0xe8, 0xcc
-	.byte 0x0f, 0x00, 0x00, 0x00, 0xec, 0x80, 0x80
-Sprintf_Unsigned_PadRightSpace:
-	ld	a, 177:opc
-	ld	xbc, 1845817322
-	sbc	xhl, xde
-	nop
-Sprintf_Unsigned_PadRightLoop:
-	.byte 0x00, 0x0e, 0xaf, 0x08, 0x22, 0xaf, 0x04, 0x23
-	.byte 0xf5, 0xec, 0x31, 0xea, 0x88, 0xe8, 0xcc, 0x07
-Sprintf_Hex_GetArg:
-	.byte 0x00, 0x00, 0x00, 0xe8, 0xc8, 0x30, 0x00, 0x00
-	.byte 0x00, 0xb1, 0x41, 0xea, 0xef, 0x03, 0x6e, 0xe8
-	.byte 0xb3, 0x00, 0x00, 0x0e, 0xbf, 0xe6
-Sprintf_Hex_GetShortArg:
-	.byte 0x37, 0x3e, 0xbf, 0x04, 0x02, 0x00, 0x00, 0xbf
-	.byte 0x06, 0x30, 0x38, 0xbf, 0x08, 0x30
-Sprintf_Hex_Setup:
-	.byte 0x38, 0x9f, 0x34, 0x04, 0xbf, 0x12, 0x30, 0x38
-	.byte 0xaf, 0x36, 0x20, 0x38, 0x1d, 0x5c, 0x19, 0xff
-	.byte 0xbf, 0x12, 0x37, 0xf2, 0x22, 0xc2, 0x03, 0x02
-	.byte 0x00, 0x00, 0xbf, 0x08, 0x32, 0xea, 0x8d, 0x8f
-Sprintf_Hex_ConvertToString:
-	ld	b, 35:opc
-	ld	xiz, (xsp+36)
-	ld	ix, (xsp+46)
-	ld	hl, (xsp+48)
+	call	Sprintf_CopyBytes8
+Sprintf_FormatFloat_Dispatch:
+	pushm	(xsp + 10)
+	pushm	(xsp + 10)
+	pushm	(xsp + 10)
+	lda	xwa, (xsp + 74)
+	push	xwa
+	ld	xwa, (xsp + 100)
+	push	xwa
+	stb_erp	A, 0xf8
+	exts	wa
+	pushw	wa
+	calr	Sprintf_FormatFloat
+	lda	xsp, (xsp + 16)
+	ld	wa, (0x03c222:24)
+	add	(xsp + 4), wa
+Sprintf_MainLoop_ReadNext:
+	ld	xwa, (xsp + 82)
+	ldb_spi	C, 0xe0
+	ld	(xsp + 82), xwa
+	ldb_erp	C, 0xf8
+	exts	iz
+	cp	iz, 0:i3
+	jrl	nz, Sprintf_OutputLiteral
+	ld	hl, (xsp + 4)
+	pop	xiz
+	lda	xsp, (xsp + 74)
+	ret
+Sprintf_IntToStr:
+	dec	4, xsp
+	push	xiz
+	ld	xwa, (xsp + 16)
+	cp	xwa, 0x0
+	jr	ge, Sprintf_IntToStr_Positive
+	cpl	wa
+	cplw_erp	0xe2
+	inc	1, xwa
+Sprintf_IntToStr_Positive:
+	ld	xiz, xwa
+Sprintf_IntToStr_DivLoop:
+	ld	xwa, (xsp + 12)
+	stb_dpi	A, 0xe0
+	ld	(xsp + 4), xbc
+	ld	(xsp + 12), xwa
+	ld	xwa, xiz
+	lda_dd8l	XBC, (0x0a)
+	call	DivMod32
+	add	xhl, 0x30
+	ld	xwa, (xsp + 4)
+	ld	(xwa), l
+	ld	xwa, xiz
+	lda_dd8l	XBC, (0x0a)
+	call	Math_DivideU32
+	ld	xiz, xhl
+	or	xiz, xiz
+	jr	nz, Sprintf_IntToStr_DivLoop
+	ld	xwa, (xsp + 12)
+	ld	(xwa), 0x0
+	pop	xiz
+	inc	4, xsp
+	ret
+Sprintf_UIntToStr:
+	dec	4, xsp
+	push	xiz
+	ld	xiz, (xsp + 16)
+Sprintf_UIntToStr_DivLoop:
+	ld	xwa, (xsp + 12)
+	stb_dpi	A, 0xe0
+	ld	(xsp + 4), xbc
+	ld	(xsp + 12), xwa
+	ld	xwa, xiz
+	lda_dd8l	XBC, (0x0a)
+	call	DivMod32
+	add	xhl, 0x30
+	ld	xwa, (xsp + 4)
+	ld	(xwa), l
+	ld	xwa, xiz
+	lda_dd8l	XBC, (0x0a)
+	call	Math_DivideU32
+	ld	xiz, xhl
+	or	xiz, xiz
+	jr	nz, Sprintf_UIntToStr_DivLoop
+	ld	xwa, (xsp + 12)
+	ld	(xwa), 0x0
+	pop	xiz
+	inc	4, xsp
+	ret
+Sprintf_HexToStr:
+	ld	xwa, CharMap_FullPermutation_0x79E
+	cpw	(xsp + 12), 0x78
+	jr	nz, Sprintf_HexToStr_TableSelected
+	ld	xwa, CharMap_FullPermutation_0x78C
+Sprintf_HexToStr_TableSelected:
+	ld	xix, xwa
+	ld	xhl, (xsp + 4)
+	ld	xde, (xsp + 8)
+Sprintf_HexToStr_Loop:
+	stb_dpi	A, 0xec
+	ld	xwa, xde
+	and	xwa, 0xf
+	add	xwa, xix
+	ld	a, (xwa)
+	ld	(xbc), a
+	srl	xde, 4
+	jr	nz, Sprintf_HexToStr_Loop
+	ld	(xhl), 0x0
+	ret
+Sprintf_OctalToStr:
+	ld	xde, (xsp + 8)
+	ld	xhl, (xsp + 4)
+Sprintf_OctalToStr_Loop:
+	stb_dpi	A, 0xec
+	ld	xwa, xde
+	and	xwa, 0x7
+	add	xwa, 0x30
+	ld	(xbc), a
+	srl	xde, 3
+	jr	nz, Sprintf_OctalToStr_Loop
+	ld	(xhl), 0x0
+	ret
+Sprintf_FormatFloat:
+	lda	xsp, (xsp - 26)
+	push	xiz
+	ldw	(xsp + 4), 0x0
+	lda	xwa, (xsp + 6)
+	push	xwa
+	lda	xwa, (xsp + 8)
+	push	xwa
+	pushm	(xsp + 52)
+	lda	xwa, (xsp + 18)
+	push	xwa
+	ld	xwa, (xsp + 54)
+	push	xwa
+	call	Sprintf_FormatGGeneral
+	lda	xsp, (xsp + 18)
+	ldw	(0x03c222:24), 0x0000
+	lda	xde, (xsp + 8)
+	ld	xiy, xde
+	ld	c, (xsp + 34)
+	ld	xiz, (xsp + 36)
+	ld	ix, (xsp + 46)
+	ld	hl, (xsp + 48)
 	ld	a, c
 	exts	wa
-	cp	c, 101
-	jr	z, 5
-Sprintf_Hex_CheckPrecision:
-	.byte 0xcb, 0xcf, 0x45, 0x6e, 0x10, 0x9f, 0x06, 0x04
-	.byte 0x9f, 0x06, 0x04, 0x3d, 0x2b, 0x2c, 0x9f, 0x38
-Sprintf_Hex_NoPrecision:
-	.byte 0x04, 0x3e, 0x28, 0x68, 0x49, 0xcb, 0xcf
-Sprintf_Hex_SubtractLength:
-	jr	z, 102
-	halt
-	cp	c, 70
-Sprintf_Hex_CheckAltForm:
-	.byte 0x6e, 0x16, 0x9f, 0x06, 0x04, 0x9f, 0x06, 0x04
-	.byte 0x3d, 0x2b, 0x2c, 0x9f, 0x38, 0x04
-Sprintf_Hex_AltFormPrefix:
-	.byte 0x3e, 0x28, 0x1e, 0x39, 0x00, 0xbf, 0x14, 0x37
-	.byte 0x68, 0x2f, 0x9f, 0x2c, 0x20, 0xd8, 0x33, 0x04
-	.byte 0x6e, 0x05, 0xdb
-Sprintf_Hex_ComputeWidth:
-	.byte 0xae, 0xbf, 0x2c, 0xbc, 0xd9, 0x13, 0x9f, 0x06
-	.byte 0x04, 0x9f, 0x06, 0x04, 0x3a, 0x2b, 0x2c, 0x9f
-	.byte 0x38, 0x04, 0x3e, 0x29, 0x9f, 0x18, 0x3f, 0xfc
-	.byte 0xff, 0x62, 0x05, 0x9f, 0x18, 0xfb, 0x62, 0xcf
-	.byte 0x1e, 0x2d
-Sprintf_Hex_PadLeftSpace:
-	.byte 0x03, 0xbf, 0x14, 0x37, 0x5e, 0xbf, 0x1a, 0x37
-	.byte 0x0e, 0xef
-Sprintf_Hex_PadLeftLoop:
-	.byte 0x6c, 0x2e, 0xbf, 0x04, 0x02, 0x0f, 0x00, 0x9f
-	.byte 0x1a, 0x3f
-Sprintf_Hex_EmitPrefix:
-	.byte 0x01, 0x00, 0x69, 0x07, 0xbf, 0x02, 0x02, 0x00
-	.byte 0x00, 0x68, 0x06, 0x9f, 0x1a, 0x20, 0xbf, 0x02
-	.byte 0x50, 0x9f, 0x10, 0x20, 0xd8, 0x33, 0x04, 0x6e
-	.byte 0x05, 0xbf, 0x14, 0x02
-Sprintf_Hex_ZeroFill:
-	.byte 0x06, 0x00, 0x9f, 0x10, 0x20, 0xd8, 0x33, 0x07
-	.byte 0x66, 0x05, 0xbf, 0x04, 0x02, 0x12, 0x00, 0x8f
-	.byte 0x0a, 0x23, 0xcb
-Sprintf_Hex_ZeroFillBody:
-	.byte 0x89, 0xd8, 0x12, 0xf2, 0x78, 0xd7, 0xee, 0x32
-	.byte 0xf3, 0x07
-Sprintf_Hex_ZeroFillLoop:
-	or	xwa, xwa
-	ldw	de, 51634
-	jr	z, 7
-	ld	a, c
-	sub	a, 32
-Sprintf_Hex_PrecZeroBody:
-	.byte 0x68, 0x02, 0xcb, 0x89, 0xc9, 0xcf, 0x47, 0x6e
-	.byte 0x05, 0x9f
-Sprintf_Hex_PrecZeroLoop:
-	.byte 0x14, 0x26, 0x68, 0x06, 0x9f, 0x14, 0x26, 0x9f
-	.byte 0x1a, 0x86, 0x9f, 0x04
-Sprintf_Hex_OutputDigits:
-	.byte 0x20, 0xd8, 0x61, 0xd8, 0xf6, 0x69, 0x30, 0xaf
-	.byte 0x16, 0x20, 0xc3, 0x07, 0xe0, 0xf8, 0x3f, 0x34
-	.byte 0x62, 0x25, 0xde, 0xd8, 0x69, 0x0b, 0x68, 0x1f
-Sprintf_Hex_DigitLoop:
-	.byte 0xaf, 0x16, 0x20, 0xf3, 0x07, 0xe0, 0xf8, 0x00
-	.byte 0x30, 0xde, 0x69, 0xaf, 0x16, 0x20, 0xc3, 0x07
-	.byte 0xe0, 0xf8
-Sprintf_Hex_PadRightSpace:
-	.byte 0x61, 0xde, 0xd8, 0x62, 0x08, 0xc3, 0x07, 0xe0
-	.byte 0xf8, 0x3f
-Sprintf_Hex_PadRightLoop:
-	.byte 0x39, 0x6a, 0xe1, 0x82, 0x25, 0xcd, 0x33, 0x01
-	.byte 0x66, 0x07, 0xcb, 0x89, 0xc9, 0xca, 0x20, 0x68
-	.byte 0x02, 0xcb, 0x89, 0xc9, 0xcf, 0x47, 0x6e, 0x0d
-	.byte 0x9f, 0x14, 0x26, 0xde, 0x69, 0x9f, 0x1a, 0x20
-	.byte 0xd8, 0x07, 0x9f
-Sprintf_Octal_GetShortArg:
-	.byte 0x14, 0x88, 0xcd, 0x33, 0x01, 0x66, 0x03, 0xcb
-	.byte 0xca, 0x20, 0xcb, 0xcf, 0x47, 0x6e
-Sprintf_Octal_Setup:
-	.byte 0x1a, 0x9f, 0x10, 0x20, 0xd8, 0x33, 0x03, 0x66
-	.byte 0x07, 0x68, 0x10, 0xde, 0x69, 0x9f, 0x14, 0x69
-	.byte 0xaf, 0x16, 0x20, 0xc3, 0x07, 0xe0, 0xf8, 0x3f
-	.byte 0x30, 0x66, 0xf0, 0x9f, 0x10
-Sprintf_Octal_ConvertToString:
-	.byte 0x20, 0xd8, 0x33, 0x04, 0x66, 0x07, 0x9f, 0x14
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x03, 0x9f, 0x12, 0x69
-	.byte 0x9f, 0x1c
-Sprintf_Octal_CheckPrecision:
-	.byte 0x26, 0xde, 0xd8, 0x6e, 0x09, 0x9f, 0x10, 0x20
-	.byte 0xd8, 0xcc, 0x05, 0x00, 0x66
-Sprintf_Octal_NoPrecision:
-	pop	sr
-	decm	1, (xsp+18)
-	ld	wa, (xsp+2)
-Sprintf_Octal_SubtractLength:
-	.byte 0x9f, 0x14, 0x80	; sub (xsp + 10), iz (v7 displacement)
-
-
-
-Sprintf_Octal_CheckAltForm:
-	.byte 0x9f, 0x12, 0xa8, 0xaf, 0x16, 0x20, 0x80, 0x3f
-	.byte 0x39, 0x62, 0x03, 0x9f, 0x12, 0x69, 0x9f, 0x12
-	.byte 0x3f, 0x00, 0x00, 0x69, 0x05, 0xbf, 0x12, 0x02
-	.byte 0x00, 0x00, 0x9f, 0x10, 0x20, 0xd8, 0x33, 0x01
-Sprintf_Octal_ComputeWidth:
-	.byte 0x6e, 0x24, 0xd2, 0x20, 0xc2, 0x03, 0x3f, 0x20
-	.byte 0x00, 0x66, 0x11, 0x68, 0x19, 0x0b, 0x20, 0x00
-	.byte 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xd2
-	.byte 0x22, 0xc2, 0x03, 0x61, 0x9f, 0x12, 0x20, 0x9f
-	.byte 0x12
-Sprintf_Octal_PadLeftSpace:
-	.byte 0x69, 0xd8, 0xd8, 0x6a, 0xe7, 0xde, 0xd8, 0x66
-	.byte 0x05, 0x0b
-Sprintf_Octal_PadLeftLoop:
-	pushw	iy
-	nop
-	jr	24
-	ld	wa, (xsp+16)
-	bit	0, wa
-Sprintf_Octal_EmitPrefix:
-	jr	z, 5
-	pushw	43
-	jr	11
-	ld	wa, (xsp+16)
-	bit	2, wa
-	jr	z, 15
-	pushw	32
-	ld	xwa, (xsp+14)
-Sprintf_Octal_ZeroFill:
-	.byte 0xb0, 0xe8, 0xef, 0x62, 0xd2, 0x22, 0xc2, 0x03
-	.byte 0x61, 0x9f, 0x10, 0x20, 0xd8, 0x33, 0x01, 0x6e
-	.byte 0x24, 0xd2, 0x20
-Sprintf_Octal_ZeroFillBody:
-	.byte 0xc2, 0x03, 0x3f, 0x30, 0x00, 0x66, 0x11, 0x68
-	.byte 0x19, 0x0b
-Sprintf_Octal_ZeroFillLoop:
-	.byte 0x30, 0x00, 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef
-	.byte 0x62, 0xd2, 0x22, 0xc2
-Sprintf_Octal_PrecZeroBody:
-	.byte 0x03, 0x61, 0x9f, 0x12, 0x20, 0x9f, 0x12, 0x69
-	.byte 0xd8, 0xd8
-Sprintf_Octal_PrecZeroLoop:
-	.byte 0x6a, 0xe7, 0xaf, 0x16, 0x20, 0x80, 0x3f, 0x39
-	.byte 0x62, 0x19, 0x9f, 0x1a
-Sprintf_Octal_OutputDigits:
-	.byte 0x3f, 0x00, 0x00, 0x61, 0x12, 0x0b, 0x31, 0x00
-	.byte 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xaf
-	.byte 0x16, 0x20, 0xb0, 0x00
-Sprintf_Octal_DigitLoop:
-	.byte 0x30, 0x68, 0x11, 0x9f, 0x1a, 0x3f, 0x00, 0x00
-	.byte 0x6a, 0x0f, 0x0b, 0x30, 0x00, 0xaf, 0x0e
-Sprintf_Octal_PadRightSpace:
-	ld	w, 176:opc
-	srl	xwa, 98
-	incw	1, (246306:24)
-Sprintf_Octal_PadRightLoop:
-	.byte 0xde, 0xa8, 0x68, 0x19, 0xaf, 0x16, 0x20, 0xc3
-	.byte 0x07, 0xe0, 0xf8, 0x21, 0xd8, 0x13, 0x28, 0xaf
-	.byte 0x0e, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xd2, 0x22
-	.byte 0xc2, 0x03, 0x61, 0xde, 0x61, 0x9f, 0x04, 0x20
-	.byte 0xd8, 0x61, 0xd8, 0xf6, 0x69, 0x1b, 0x9f, 0x02
-	.byte 0x20
-Sprintf_StoreCount_Short:
-	decm	1, (xsp+2)
-	cp	wa, 0:i3
-	jr	gt, -44
-Sprintf_FormatFloat_Entry:
-	.byte 0x68, 0x0f, 0x0b, 0x30, 0x00, 0xaf, 0x0e, 0x20
-	.byte 0xb0, 0xe8, 0xef, 0x62, 0xd2, 0x22, 0xc2, 0x03
-	.byte 0x61, 0x9f, 0x02, 0x20, 0x9f, 0x02, 0x69, 0xd8
-	.byte 0xd8, 0x6a, 0xe7, 0x9f, 0x10, 0x20, 0xd8, 0x33
-Sprintf_FormatFloat_ShortArg:
-	.byte 0x03, 0x6e, 0x07, 0x9f, 0x14, 0x3f, 0x00, 0x00
-	.byte 0x66, 0x46, 0x0b, 0x2e, 0x00, 0xaf, 0x0e, 0x20
-	.byte 0xb0, 0xe8
-Sprintf_FormatFloat_Dispatch:
-	.byte 0xef, 0x62, 0xd2, 0x22, 0xc2, 0x03, 0x61, 0x68
-	.byte 0x35, 0x9f, 0x1a, 0x20, 0xd8, 0xc8, 0x01, 0x00
-	.byte 0x6e, 0x1a, 0xaf, 0x16, 0x20, 0x80, 0x3f, 0x39
-	.byte 0x62, 0x12, 0x0b, 0x31, 0x00, 0xaf, 0x0e, 0x20
-	.byte 0xb0, 0xe8, 0xef, 0x62, 0xaf
-Sprintf_MainLoop_ReadNext:
-	.byte 0x16, 0x20, 0xb0, 0x00, 0x30, 0x68, 0x0a, 0x0b
-	.byte 0x30, 0x00, 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef
-	.byte 0x62, 0xd2, 0x22, 0xc2, 0x03, 0x61, 0x9f, 0x1a
-	.byte 0x61, 0x9f, 0x1a
-Sprintf_IntToStr:
-	.byte 0x3f, 0x00, 0x00, 0x69, 0x0a, 0x9f, 0x14, 0x20
-	.byte 0x9f, 0x14, 0x69, 0xd8, 0xd8, 0x6e, 0xba, 0x9f
-	.byte 0x04, 0x20, 0xd8, 0x61, 0xd8
-Sprintf_IntToStr_Positive:
-	.byte 0xf6, 0x61
-Sprintf_IntToStr_DivLoop:
-	.byte 0x1b, 0x68, 0x3d, 0xaf, 0x16, 0x20, 0xc3, 0x07
-	.byte 0xe0, 0xf8, 0x21, 0xd8, 0x13, 0x28, 0xaf, 0x0e
-	.byte 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xd2, 0x22, 0xc2
-	.byte 0x03, 0x61, 0xde, 0x61, 0x9f, 0x04, 0x20, 0xd8
-	.byte 0x61, 0xd8, 0xf6, 0x69, 0x1b, 0x9f, 0x14, 0x20
-	.byte 0x9f, 0x14, 0x69, 0xd8, 0xd8, 0x6a, 0xd4, 0x68
-	.byte 0x0f, 0x0b, 0x30, 0x00, 0xaf, 0x0e, 0x20, 0xb0
-	.byte 0xe8
-Sprintf_UIntToStr:
-	.byte 0xef, 0x62, 0xd2, 0x22, 0xc2, 0x03
-Sprintf_UIntToStr_DivLoop:
-	.byte 0x61, 0x9f, 0x14, 0x20, 0x9f, 0x14, 0x69, 0xd8
-	.byte 0xd8, 0x6a, 0xe7, 0x9f, 0x10, 0x20, 0xd8, 0x33
-	.byte 0x01, 0x6e, 0x11, 0x68, 0x19, 0x0b, 0x20, 0x00
-	.byte 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xd2
-	.byte 0x22, 0xc2, 0x03, 0x61, 0x9f, 0x12, 0x20, 0x9f
-	.byte 0x12, 0x69, 0xd8, 0xd8, 0x6a, 0xe7, 0x4e, 0xef
-	.byte 0x64, 0x0e, 0xaf, 0x04, 0x20, 0x80, 0x3f, 0x00
-	.byte 0x6e
-Sprintf_HexToStr:
-	.byte 0x03, 0xdb, 0xa9, 0x0e, 0xc5, 0xe0, 0x3f, 0x30
-	.byte 0x66, 0xf2, 0xdb, 0xa8, 0x0e, 0xef, 0x6a, 0x3e
-	.byte 0xbf
-Sprintf_HexToStr_TableSelected:
-	.byte 0x04, 0x02, 0x0f, 0x00, 0x9f, 0x10, 0x20, 0xd8
-Sprintf_HexToStr_Loop:
-	.byte 0x33, 0x04, 0x6e, 0x05, 0xbf, 0x14, 0x02, 0x06
-	.byte 0x00, 0x8f, 0x0a, 0x21, 0xd8, 0x12, 0xf2, 0x78
-	.byte 0xd7, 0xee, 0x31, 0xf3, 0x07, 0xe4, 0xe0, 0x31
-	.byte 0xb1, 0xc9
-Sprintf_OctalToStr:
-	.byte 0x66, 0x08, 0x8f, 0x0a, 0x21, 0xc9
-Sprintf_OctalToStr_Loop:
-	.byte 0xca, 0x20, 0x68, 0x03, 0x8f, 0x0a, 0x21, 0xc9
-	.byte 0xcf, 0x47, 0x6e, 0x0a, 0x9f, 0x14, 0x3f, 0x00
-	.byte 0x00, 0x66, 0x03, 0x9f, 0x14, 0x69, 0x9f, 0x14
-	.byte 0x20, 0xd8, 0x61, 0xd7
-Sprintf_FormatFloat:
-	.byte 0xfa, 0x98, 0x9f, 0x10, 0x20, 0xd8, 0x33, 0x07
-	.byte 0x66, 0x05, 0xbf, 0x04, 0x02, 0x12, 0x00, 0x9f
-	.byte 0x04, 0x22, 0xda, 0x61, 0xd7, 0xfa, 0x88, 0xda
-	.byte 0xf0, 0x69, 0x34, 0xd7, 0xfa, 0x8a, 0xd7, 0xfa
-	.byte 0x69, 0xaf, 0x16, 0x20, 0xc3, 0x07, 0xe0, 0xe8
-	.byte 0x3f, 0x34, 0x6a, 0x0e, 0x68, 0x21, 0xaf, 0x16
-	.byte 0x20, 0xf3, 0x07, 0xe0, 0xfa, 0x00, 0x30, 0xd7
-	.byte 0xfa, 0x69, 0xaf, 0x16, 0x20, 0xc3, 0x07, 0xe0
-	.byte 0xfa, 0x61, 0xd7, 0xfa, 0xd8, 0x62, 0x08, 0xc3
-	.byte 0x07
+	cp	c, 0x65
+	jr	z, Sprintf_FormatFloat_eE
+	cp	c, 0x45
+	jr	nz, Sprintf_FormatFloat_fF_Check
 Sprintf_FormatFloat_eE:
-	.byte 0xe0, 0xfa, 0x3f, 0x39, 0x6a, 0xdf, 0xb1, 0xc9
-	.byte 0x66, 0x08, 0x8f, 0x0a, 0x21, 0xc9, 0xca, 0x20
+	pushm	(xsp + 6)
+	pushm	(xsp + 6)
+	push	xiy
+	pushw	hl
+	pushw	ix
+	pushm	(xsp + 56)
+	push	xiz
+	pushw	wa
+	jr	Sprintf_FormatFloat_gG_UseSci
 Sprintf_FormatFloat_fF_Check:
-	jr	3
-	ld	a, (xsp+10)
-	cp	a, 71
-	jr	nz, 38
+	cp	c, 0x66
+	jr	z, Sprintf_FormatFloat_fF
+	cp	c, 0x46
+	jr	nz, Sprintf_FormatFloat_gG
 Sprintf_FormatFloat_fF:
-	ld	wa, (xsp+16)
-	bit	3, wa
-	jr	nz, 30
-	ld	wa, (xsp+20)
-	ld	qiz, wa
+	pushm	(xsp + 6)
+	pushm	(xsp + 6)
+	push	xiy
+	pushw	hl
+	pushw	ix
+	pushm	(xsp + 56)
+	push	xiz
+	pushw	wa
 Sprintf_FormatFloat_fF_Call:
-	jr	Sprintf_FormatFloat_gG
-	dec	1, qiz
-	decm	1, (xsp+20)
+	calr	Sprintf_FormatFFixed
+	lda	xsp, (xsp + 20)
+	jr	Sprintf_FormatFloat_Return
 Sprintf_FormatFloat_gG:
-	.byte 0xd7, 0xfa, 0xd8, 0x62, 0x0b, 0xaf, 0x16, 0x20
-	.byte 0xc3, 0x07, 0xe0, 0xfa, 0x3f
+	ld	wa, (xsp + 44)
+	bit	4, wa
+	jr	nz, Sprintf_FormatFloat_gG_Setup
+	ld	hl, 6:i3
+	setm	4, (xsp + 44)
 Sprintf_FormatFloat_gG_Setup:
-	.byte 0x30, 0x66, 0xea, 0x9f, 0x12, 0x6d, 0x9f, 0x10
-	.byte 0x20, 0xd8, 0x33, 0x04, 0x66, 0x07, 0x9f, 0x14
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x03, 0x9f, 0x12, 0x69
-	.byte 0x9f, 0x1c, 0x26, 0xde
-Sprintf_FormatFloat_gG_UseSci:
-	.byte 0xd8, 0x6e, 0x09, 0x9f, 0x10, 0x20
-Sprintf_FormatFloat_Return:
-	.byte 0xd8, 0xcc, 0x05, 0x00, 0x66
-Sprintf_FormatFFixed:
-	.byte 0x03, 0x9f, 0x12, 0x69, 0x9f, 0x14, 0x20, 0x9f
-	.byte 0x12, 0xa8, 0x69, 0x05, 0xbf, 0x12, 0x02, 0x00
-	.byte 0x00, 0x9f, 0x10, 0x20, 0xd8, 0x33
-Sprintf_FFixed_SetPrecision:
-	.byte 0x01, 0x6e, 0x24, 0xd2, 0x20, 0xc2
-Sprintf_FFixed_CheckDefaults:
-	.byte 0x03, 0x3f, 0x20, 0x00, 0x66, 0x11, 0x68, 0x19
-	.byte 0x0b, 0x20, 0x00, 0xaf, 0x0e
-Sprintf_FFixed_CheckLongDouble:
-	ld	w, 176:opc
-	srl	xwa, 98
-	incw	1, (246306:24)
-	decm	1, (xsp+18)
-Sprintf_FFixed_CheckLongDoubleLimit:
-	.byte 0x9f, 0x12, 0x3f, 0x00, 0x00, 0x6a, 0xe7, 0xde
-	.byte 0xd8, 0x66, 0x05, 0x0b, 0x2d, 0x00, 0x68, 0x18
-	.byte 0x9f, 0x10, 0x20, 0xd8, 0x33, 0x00, 0x66, 0x05
-	.byte 0x0b, 0x2b, 0x00, 0x68
-Sprintf_FFixed_SpecNoUpperCase:
-	.byte 0x0b, 0x9f
-Sprintf_FFixed_CheckSpecG:
-	rcf
-	ld	w, 216:opc
-	ldw	hl, 26114
-	retd	8203
-	nop
-Sprintf_FFixed_NotG:
-	.byte 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef
-Sprintf_FFixed_RoundCheck:
-	.byte 0x62, 0xd2, 0x22, 0xc2, 0x03, 0x61, 0x9f, 0x10
-	.byte 0x20, 0xd8, 0x33, 0x01, 0x6e, 0x24, 0xd2, 0x20
-	.byte 0xc2, 0x03, 0x3f, 0x30, 0x00, 0x66, 0x11, 0x68
-	.byte 0x19, 0x0b
-Sprintf_FFixed_RoundCarry:
-	ldw	wa, 44800
-	ret
-	ld	w, 176:opc
-	srl	xwa, 98
-Sprintf_FFixed_RoundLoop:
-	.byte 0xd2, 0x22, 0xc2, 0x03, 0x61, 0x9f, 0x12, 0x69
-	.byte 0x9f, 0x12, 0x3f, 0x00, 0x00, 0x6a, 0xe7, 0xaf
-	.byte 0x16, 0x20, 0x80, 0x3f, 0x39, 0x62
-Sprintf_FFixed_AfterRound:
+	exts	bc
+	pushm	(xsp + 6)
+	pushm	(xsp + 6)
+	push	xde
+	pushw	hl
+	pushw	ix
+	pushm	(xsp + 56)
+	push	xiz
 	pushw	bc
-	pushw	49
-	ld	xwa, (xsp+14)
+	cpw	(xsp + 24), 0xfffc
+	jr	le, Sprintf_FormatFloat_gG_UseSci
+	cp	(xsp + 24), hl
+	jr	le, Sprintf_FormatFloat_fF_Call
+Sprintf_FormatFloat_gG_UseSci:
+	calr	Sprintf_FormatEScientific
+	lda	xsp, (xsp + 20)
+Sprintf_FormatFloat_Return:
+	pop	xiz
+	lda	xsp, (xsp + 26)
+	ret
+Sprintf_FormatFFixed:
+	dec	4, xsp
+	pushw	iz
+	ldw	(xsp + 4), 0xf
+	cpw	(xsp + 26), 0x1
+	jr	ge, Sprintf_FFixed_SetPrecision
+	ldw	(xsp + 2), 0x0
+	jr	Sprintf_FFixed_CheckDefaults
+Sprintf_FFixed_SetPrecision:
+	ld	wa, (xsp + 26)
+	ld	(xsp + 2), wa
+Sprintf_FFixed_CheckDefaults:
+	ld	wa, (xsp + 16)
+	bit	4, wa
+	jr	nz, Sprintf_FFixed_CheckLongDouble
+	ldw	(xsp + 20), 0x6
+Sprintf_FFixed_CheckLongDouble:
+	ld	wa, (xsp + 16)
+	bit	7, wa
+	jr	z, Sprintf_FFixed_CheckLongDoubleLimit
+	ldw	(xsp + 4), 0x12
+Sprintf_FFixed_CheckLongDoubleLimit:
+	ld	c, (xsp + 10)
+	ld	a, c
+	extz	wa
+	lda	xde, (CharMap_FullPermutation_0x660:24)
+	lda_dri	XDE, 0x07, 0xe8, 0xe0
+	bitm	1, (xde)
+	jr	z, Sprintf_FFixed_SpecNoUpperCase
+	ld	a, c
+	sub	a, 0x20
+	jr	Sprintf_FFixed_CheckSpecG
+Sprintf_FFixed_SpecNoUpperCase:
+	ld	a, c
+Sprintf_FFixed_CheckSpecG:
+	cp	a, 0x47
+	jr	nz, Sprintf_FFixed_NotG
+	ld	iz, (xsp + 20)
+	jr	Sprintf_FFixed_RoundCheck
+Sprintf_FFixed_NotG:
+	ld	iz, (xsp + 20)
+	add	iz, (xsp + 26)
+Sprintf_FFixed_RoundCheck:
+	ld	wa, (xsp + 4)
+	inc	1, wa
+	cp	iz, wa
+	jr	ge, Sprintf_FFixed_AfterRound
+	ld	xwa, (xsp + 22)
+	cpib_sri	0x07, 0xe0, 0xf8, 0x34
+	jr	le, Sprintf_FFixed_AfterRound
+	cp	iz, 0:i3
+	jr	ge, Sprintf_FFixed_RoundLoop
+	jr	Sprintf_FFixed_AfterRound
+Sprintf_FFixed_RoundCarry:
+	ld	xwa, (xsp + 22)
+	stib_ind	0x07, 0xe0, 0xf8, 0x30
+Sprintf_FFixed_RoundLoop:
+	dec	1, iz
+	ld	xwa, (xsp + 22)
+	inc_srib	1, 0x07, 0xe0, 0xf8
+	cp	iz, 0:i3
+	jr	le, Sprintf_FFixed_AfterRound
+	cpib_sri	0x07, 0xe0, 0xf8, 0x39
+	jr	gt, Sprintf_FFixed_RoundCarry
+Sprintf_FFixed_AfterRound:
+	ld	e, (xde)
+	bit	1, e
+	jr	z, Sprintf_FFixed_AfterRound_NoCase
+	ld	a, c
+	sub	a, 0x20
+	jr	Sprintf_FFixed_CheckG_StripZeros
+Sprintf_FFixed_AfterRound_NoCase:
+	ld	a, c
+Sprintf_FFixed_CheckG_StripZeros:
+	cp	a, 0x47
+	jr	nz, Sprintf_FFixed_CheckG_AltForm
+	ld	iz, (xsp + 20)
+	dec	1, iz
+	ld	wa, (xsp + 26)
+	neg	wa
+	add	(xsp + 20), wa
+Sprintf_FFixed_CheckG_AltForm:
+	bit	1, e
+	jr	z, Sprintf_FFixed_CaseApplied
+	sub	c, 0x20
+Sprintf_FFixed_CaseApplied:
+	cp	c, 0x47
+	jr	nz, Sprintf_FFixed_ComputeOutputLen
+	ld	wa, (xsp + 16)
+	bit	3, wa
+	jr	z, Sprintf_FFixed_StripZeroCheck
+	jr	Sprintf_FFixed_ComputeOutputLen
+Sprintf_FFixed_StripZeroLoop:
+	dec	1, iz
+	decm	1, (xsp + 20)
+Sprintf_FFixed_StripZeroCheck:
+	ld	xwa, (xsp + 22)
+	cpib_sri	0x07, 0xe0, 0xf8, 0x30
+	jr	z, Sprintf_FFixed_StripZeroLoop
+Sprintf_FFixed_ComputeOutputLen:
+	ld	wa, (xsp + 16)
+	bit	4, wa
+	jr	z, Sprintf_FFixed_CheckPrecZero
+	cpw	(xsp + 20), 0x0
+	jr	z, Sprintf_FFixed_AdjustForSign
+Sprintf_FFixed_CheckPrecZero:
+	decm	1, (xsp + 18)
+Sprintf_FFixed_AdjustForSign:
+	ld	iz, (xsp + 28)
+	cp	iz, 0:i3
+	jr	nz, Sprintf_FFixed_AdjustForSign2
+	ld	wa, (xsp + 16)
+	and	wa, 0x5
+	jr	z, Sprintf_FFixed_ComputePadding
+Sprintf_FFixed_AdjustForSign2:
+	decm	1, (xsp + 18)
+Sprintf_FFixed_ComputePadding:
+	ld	wa, (xsp + 2)
+	add	wa, (xsp + 20)
+	sub	(xsp + 18), wa
+	ld	xwa, (xsp + 22)
+	cp	(xwa), 0x39
+	jr	le, Sprintf_FFixed_CheckOverflow
+	decm	1, (xsp + 18)
+Sprintf_FFixed_CheckOverflow:
+	cpw	(xsp + 18), 0x0
+	jr	ge, Sprintf_FFixed_PadLeftCheck
+	ldw	(xsp + 18), 0x0
+Sprintf_FFixed_PadLeftCheck:
+	ld	wa, (xsp + 16)
+	bit	1, wa
+	jr	nz, Sprintf_FFixed_EmitSign
+	cpw	(0x3c220:24), 32
+	jr	z, Sprintf_FFixed_PadLeftLoop
+	jr	Sprintf_FFixed_EmitSign
+Sprintf_FFixed_PadLeftSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 14)
 	call	(xwa)
 	inc	2, xsp
-	ld	xwa, (xsp+22)
-Sprintf_FFixed_AfterRound_NoCase:
-	.byte 0xb0, 0x00
-Sprintf_FFixed_CheckG_StripZeros:
-	.byte 0x30, 0xd7, 0xfa, 0xa8, 0xd2, 0x22, 0xc2, 0x03
-	.byte 0x61, 0x9f, 0x1a, 0x3f, 0x00, 0x00, 0x69, 0x05
-	.byte 0x9f, 0x1a
-Sprintf_FFixed_CheckG_AltForm:
-	.byte 0x61, 0x68, 0x1c, 0x9f, 0x1a, 0x69, 0x68, 0x17
-Sprintf_FFixed_CaseApplied:
-	ld	xwa, (xsp+22)
+	incw	1, (0x3c222:24)
+Sprintf_FFixed_PadLeftLoop:
+	ld	wa, (xsp + 18)
+	decm	1, (xsp + 18)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_FFixed_PadLeftSpace
+Sprintf_FFixed_EmitSign:
+	cp	iz, 0:i3
+	jr	z, Sprintf_FFixed_SignPlus
+	pushw	0x2d
+	jr	Sprintf_FFixed_SignEmit
+Sprintf_FFixed_SignPlus:
+	ld	wa, (xsp + 16)
+	bit	0, wa
+	jr	z, Sprintf_FFixed_SignSpace
+	pushw	0x2b
+	jr	Sprintf_FFixed_SignEmit
+Sprintf_FFixed_SignSpace:
+	ld	wa, (xsp + 16)
+	bit	2, wa
+	jr	z, Sprintf_FFixed_ZeroFill
+	pushw	0x20
+Sprintf_FFixed_SignEmit:
+	ld	xwa, (xsp + 14)
+; Sprintf_Octal_ZeroFill is kept at this address only for shared/positional_labels.s; v10's Sprintf_Octal_ZeroFill is the code at 0xFF1048
+Sprintf_Octal_ZeroFill:
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_FFixed_ZeroFill:
+	ld	wa, (xsp + 16)
+	bit	1, wa
+	jr	nz, Sprintf_FFixed_LeadDigit
+	cpw	(0x3c220:24), 48
+	jr	z, Sprintf_FFixed_ZeroFillLoop
+	jr	Sprintf_FFixed_LeadDigit
+Sprintf_FFixed_ZeroFillBody:
+	pushw	0x30
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_FFixed_ZeroFillLoop:
+	ld	wa, (xsp + 18)
+	decm	1, (xsp + 18)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_FFixed_ZeroFillBody
+Sprintf_FFixed_LeadDigit:
+	ld	xwa, (xsp + 22)
+	cp	(xwa), 0x39
+	jr	le, Sprintf_FFixed_LeadDigitZero
+	cpw	(xsp + 26), 0x0
+	jr	lt, Sprintf_FFixed_LeadDigitZero
+	pushw	0x31
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	ld	xwa, (xsp + 22)
+	ld	(xwa), 0x30
+	jr	Sprintf_FFixed_LeadDigitDone
+Sprintf_FFixed_LeadDigitZero:
+	cpw	(xsp + 26), 0x0
+	jr	gt, Sprintf_FFixed_IntegerDigits
+	pushw	0x30
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_FFixed_LeadDigitDone:
+	incw	1, (0x3c222:24)
+Sprintf_FFixed_IntegerDigits:
+	ld	iz, 0:i3
+	jr	Sprintf_FFixed_IntDigitLoop
+Sprintf_FFixed_IntDigitOutput:
+	ld	xwa, (xsp + 22)
+	ldb_sri	A, 0x07, 0xe0, 0xf8
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+	inc	1, iz
+Sprintf_FFixed_IntDigitLoop:
+	ld	wa, (xsp + 4)
+	inc	1, wa
+	cp	iz, wa
+	jr	ge, Sprintf_FFixed_IntZeroLoop
+	ld	wa, (xsp + 2)
+	decm	1, (xsp + 2)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_FFixed_IntDigitOutput
+	jr	Sprintf_FFixed_IntZeroLoop
+Sprintf_FFixed_IntZeroFill:
+	pushw	0x30
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_FFixed_IntZeroLoop:
+	ld	wa, (xsp + 2)
+	decm	1, (xsp + 2)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_FFixed_IntZeroFill
+	ld	wa, (xsp + 16)
+	bit	3, wa
+	jr	nz, Sprintf_FFixed_DecimalPoint
+	cpw	(xsp + 20), 0x0
+	jr	z, Sprintf_FFixed_FracLeadZeroLoop
+Sprintf_FFixed_DecimalPoint:
+	pushw	0x2e
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+	jr	Sprintf_FFixed_FracLeadZeroLoop
+Sprintf_FFixed_FracLeadZeros:
+	ld	wa, (xsp + 26)
+	add	wa, 0x1
+	jr	nz, Sprintf_FFixed_FracLeadZeroBody
+	ld	xwa, (xsp + 22)
+	cp	(xwa), 0x39
+	jr	le, Sprintf_FFixed_FracLeadZeroBody
+	pushw	0x31
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	ld	xwa, (xsp + 22)
+	ld	(xwa), 0x30
+	jr	Sprintf_FFixed_FracLeadZeroDone
+Sprintf_FFixed_FracLeadZeroBody:
+	pushw	0x30
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+Sprintf_FFixed_FracLeadZeroDone:
+	incw	1, (0x3c222:24)
+	incw	1, (xsp + 26)
+Sprintf_FFixed_FracLeadZeroLoop:
+	cpw	(xsp + 26), 0x0
+	jr	ge, Sprintf_FFixed_FracDigits
+	ld	wa, (xsp + 20)
+	decm	1, (xsp + 20)
+	cp	wa, 0:i3
+	jr	nz, Sprintf_FFixed_FracLeadZeros
+Sprintf_FFixed_FracDigits:
+	ld	wa, (xsp + 4)
+	inc	1, wa
+	cp	iz, wa
+	jr	lt, Sprintf_FFixed_FracDigitLoop
+	jr	Sprintf_FFixed_FracTrailLoop
+Sprintf_FFixed_FracDigitOutput:
+	ld	xwa, (xsp + 22)
+	ldb_sri	A, 0x07, 0xe0, 0xf8
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+	inc	1, iz
+Sprintf_FFixed_FracDigitLoop:
+	ld	wa, (xsp + 4)
+	inc	1, wa
+	cp	iz, wa
+	jr	ge, Sprintf_FFixed_FracTrailLoop
+	ld	wa, (xsp + 20)
+	decm	1, (xsp + 20)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_FFixed_FracDigitOutput
+	jr	Sprintf_FFixed_FracTrailLoop
+Sprintf_FFixed_FracTrailZeros:
+	pushw	0x30
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_FFixed_FracTrailLoop:
+	ld	wa, (xsp + 20)
+	decm	1, (xsp + 20)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_FFixed_FracTrailZeros
+	ld	wa, (xsp + 16)
+	bit	1, wa
+	jr	nz, Sprintf_FFixed_PadRightLoop
+	jr	Sprintf_FFixed_Return
+Sprintf_FFixed_PadRightSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_FFixed_PadRightLoop:
+	ld	wa, (xsp + 18)
+	decm	1, (xsp + 18)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_FFixed_PadRightSpace
+Sprintf_FFixed_Return:
+	popw	iz
+	inc	4, xsp
+	ret
+Sprintf_FFixed_DataTable:
+	ld	xwa, (xsp+4)
+Sprintf_FormatFFixed_Entry:
+	.byte	0x80, 0x3f, 0x00
+	jr	nz, Sprintf_FormatFFixed_Skip
+	ld	hl, 1:i3
+	ret
+Sprintf_FormatFFixed_Skip:
+	cp_spib_im	224, 48
+	jr	z, Sprintf_FormatFFixed_Entry
+	ld	hl, 0:i3
+	ret
+Sprintf_FormatEScientific:
+	dec	2, xsp
+	push	xiz
+	ldw	(xsp + 4), 0xf
+	ld	wa, (xsp + 16)
+	bit	4, wa
+	jr	nz, Sprintf_ESci_ApplyDefaults
+	ldw	(xsp + 20), 0x6
+Sprintf_ESci_ApplyDefaults:
+	ld	a, (xsp + 10)
+	extz	wa
+	lda	xbc, (CharMap_FullPermutation_0x660:24)
+	lda_dri	XBC, 0x07, 0xe4, 0xe0
+	bitm	1, (xbc)
+	jr	z, Sprintf_ESci_SpecNoUpperCase
+	ld	a, (xsp + 10)
+	sub	a, 0x20
+	jr	Sprintf_ESci_CheckSpecG
+Sprintf_ESci_SpecNoUpperCase:
+	ld	a, (xsp + 10)
+Sprintf_ESci_CheckSpecG:
+	cp	a, 0x47
+	jr	nz, Sprintf_ESci_SetDigitCount
+	cpw	(xsp + 20), 0x0
+	jr	z, Sprintf_ESci_SetDigitCount
+	decm	1, (xsp + 20)
+Sprintf_ESci_SetDigitCount:
+	ld	wa, (xsp + 20)
+	inc	1, wa
+	ldw_erp	WA, 0xfa
+	ld	wa, (xsp + 16)
+	bit	7, wa
+	jr	z, Sprintf_ESci_RoundCheck
+	ldw	(xsp + 4), 0x12
+Sprintf_ESci_RoundCheck:
+	ld	de, (xsp + 4)
+	inc	1, de
+	stw_erp	WA, 0xfa
+	cp	wa, de
+	jr	ge, Sprintf_ESci_AfterRound
+	stw_erp	DE, 0xfa
+	dec1w_erp	0xfa
+	ld	xwa, (xsp + 22)
+	cpib_sri	0x07, 0xe0, 0xe8, 0x34
+	jr	gt, Sprintf_ESci_RoundLoop
+	jr	Sprintf_ESci_AfterRound
+Sprintf_ESci_RoundCarry:
+	ld	xwa, (xsp + 22)
+	stib_ind	0x07, 0xe0, 0xfa, 0x30
+	dec1w_erp	0xfa
+Sprintf_ESci_RoundLoop:
+	ld	xwa, (xsp + 22)
+	inc_srib	1, 0x07, 0xe0, 0xfa
+	cpiw_erp	0xfa, 0
+	jr	le, Sprintf_ESci_AfterRound
+	cpib_sri	0x07, 0xe0, 0xfa, 0x39
+	jr	gt, Sprintf_ESci_RoundCarry
+Sprintf_ESci_AfterRound:
+	bitm	1, (xbc)
+	jr	z, Sprintf_ESci_AfterRound_NoCase
+	ld	a, (xsp + 10)
+	sub	a, 0x20
+	jr	Sprintf_ESci_StripTrailZeros
+Sprintf_ESci_AfterRound_NoCase:
+	ld	a, (xsp + 10)
+Sprintf_ESci_StripTrailZeros:
+	cp	a, 0x47
+	jr	nz, Sprintf_ESci_ComputeOutputLen
+	ld	wa, (xsp + 16)
+	bit	3, wa
+	jr	nz, Sprintf_ESci_ComputeOutputLen
+	ld	wa, (xsp + 20)
+	ldw_erp	WA, 0xfa
+	jr	Sprintf_ESci_StripCheck
+Sprintf_ESci_StripLoop:
+	dec1w_erp	0xfa
+	decm	1, (xsp + 20)
+Sprintf_ESci_StripCheck:
+	cpiw_erp	0xfa, 0
+	jr	le, Sprintf_ESci_ComputeOutputLen
+	ld	xwa, (xsp + 22)
+	cpib_sri	0x07, 0xe0, 0xfa, 0x30
+	jr	z, Sprintf_ESci_StripLoop
+Sprintf_ESci_ComputeOutputLen:
+	decm	5, (xsp + 18)
+	ld	wa, (xsp + 16)
+	bit	4, wa
+	jr	z, Sprintf_ESci_CheckPrecZero
+	cpw	(xsp + 20), 0x0
+	jr	z, Sprintf_ESci_AdjustForSign
+Sprintf_ESci_CheckPrecZero:
+	decm	1, (xsp + 18)
+Sprintf_ESci_AdjustForSign:
+	ld	iz, (xsp + 28)
+	cp	iz, 0:i3
+	jr	nz, Sprintf_ESci_AdjustForSign2
+	ld	wa, (xsp + 16)
+	and	wa, 0x5
+	jr	z, Sprintf_ESci_ComputePadding
+Sprintf_ESci_AdjustForSign2:
+	decm	1, (xsp + 18)
+Sprintf_ESci_ComputePadding:
+	ld	wa, (xsp + 20)
+	sub	(xsp + 18), wa
+	jr	ge, Sprintf_ESci_PadLeftCheck
+	ldw	(xsp + 18), 0x0
+Sprintf_ESci_PadLeftCheck:
+	ld	wa, (xsp + 16)
+	bit	1, wa
+	jr	nz, Sprintf_ESci_EmitSign
+	cpw	(0x3c220:24), 32
+	jr	z, Sprintf_ESci_PadLeftLoop
+	jr	Sprintf_ESci_EmitSign
+Sprintf_ESci_PadLeftSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_ESci_PadLeftLoop:
+	decm	1, (xsp + 18)
+	cpw	(xsp + 18), 0x0
+	jr	gt, Sprintf_ESci_PadLeftSpace
+Sprintf_ESci_EmitSign:
+	cp	iz, 0:i3
+	jr	z, Sprintf_ESci_SignPlus
+	pushw	0x2d
+	jr	Sprintf_ESci_SignEmit
+Sprintf_ESci_SignPlus:
+	ld	wa, (xsp + 16)
+	bit	0, wa
+	jr	z, Sprintf_ESci_SignSpace
+	pushw	0x2b
+	jr	Sprintf_ESci_SignEmit
+Sprintf_ESci_SignSpace:
+	ld	wa, (xsp + 16)
+	bit	2, wa
+	jr	z, Sprintf_ESci_ZeroFill
+	pushw	0x20
+Sprintf_ESci_SignEmit:
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_ESci_ZeroFill:
+	ld	wa, (xsp + 16)
+	bit	1, wa
+	jr	nz, Sprintf_ESci_LeadDigit
+	cpw	(0x3c220:24), 48
+	jr	z, Sprintf_ESci_ZeroFillLoop
+	jr	Sprintf_ESci_LeadDigit
+Sprintf_ESci_ZeroFillBody:
+	pushw	0x30
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_ESci_ZeroFillLoop:
+	decm	1, (xsp + 18)
+	cpw	(xsp + 18), 0x0
+	jr	gt, Sprintf_ESci_ZeroFillBody
+Sprintf_ESci_LeadDigit:
+	ld	xwa, (xsp + 22)
+	cp	(xwa), 0x39
+	jr	le, Sprintf_ESci_LeadDigitNormal
+	pushw	0x31
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	ld	xwa, (xsp + 22)
+	ld	(xwa), 0x30
+	ldiw_erp	0xfa, 0
+	incw	1, (0x3c222:24)
+	cpw	(xsp + 26), 0x0
+	jr	ge, Sprintf_ESci_Overflow_DecExp
+	incw	1, (xsp + 26)
+	jr	Sprintf_ESci_DecimalPoint
+Sprintf_ESci_Overflow_DecExp:
+	decm	1, (xsp + 26)
+	jr	Sprintf_ESci_DecimalPoint
+Sprintf_ESci_LeadDigitNormal:
+	ld	xwa, (xsp + 22)
 	ld	a, (xwa)
 	exts	wa
 	pushw	wa
-	ld	xwa, (xsp+14)
+	ld	xwa, (xsp + 14)
 	call	(xwa)
 	inc	2, xsp
-Sprintf_FFixed_StripZeroLoop:
-	incw	1, (246306:24)
-Sprintf_FFixed_StripZeroCheck:
-	.byte 0xd7, 0xfa, 0xa9, 0x9f, 0x14, 0x3f, 0x00, 0x00
-	.byte 0x6e, 0x08, 0x9f
-Sprintf_FFixed_ComputeOutputLen:
-	rcf
-	ld	w, 216:opc
-	ldw	hl, 26115
-	retd	11787
-	nop
-	ld	xwa, (xsp+14)
+	incw	1, (0x3c222:24)
+	ldiw_erp	0xfa, 1
+Sprintf_ESci_DecimalPoint:
+	cpw	(xsp + 20), 0x0
+	jr	nz, Sprintf_ESci_DecimalPointEmit
+	ld	wa, (xsp + 16)
+	bit	3, wa
+	jr	z, Sprintf_ESci_MantissaDigits
+Sprintf_ESci_DecimalPointEmit:
+	pushw	0x2e
+	ld	xwa, (xsp + 14)
 	call	(xwa)
-Sprintf_FFixed_CheckPrecZero:
-	.byte 0xef, 0x62, 0xd2
-Sprintf_FFixed_AdjustForSign:
-	.byte 0x22, 0xc2, 0x03, 0x61, 0x8f, 0x0a, 0x23, 0xd9
-	.byte 0x12, 0xf2, 0x78, 0xd7, 0xee, 0x30, 0xf3, 0x07
-Sprintf_FFixed_AdjustForSign2:
-	.byte 0xe0, 0xe4, 0xc9
-Sprintf_FFixed_ComputePadding:
-	.byte 0x66, 0x08, 0x8f, 0x0a, 0x21, 0xc9, 0xca, 0x20
-	.byte 0x68, 0x03, 0x8f, 0x0a, 0x21, 0xc9, 0xcf, 0x47
-	.byte 0x6e, 0x0f, 0x9f, 0x14
-Sprintf_FFixed_CheckOverflow:
-	.byte 0x3f, 0x00, 0x00, 0x6e, 0x08, 0x9f, 0x1a, 0x3f
-	.byte 0x01, 0x00, 0x76, 0x2b
-Sprintf_FFixed_PadLeftCheck:
-	.byte 0x01, 0x9f, 0x04, 0x21, 0xd9, 0x61, 0xd7, 0xfa
-	.byte 0x88, 0xd9, 0xf0, 0x61, 0x1c, 0x68, 0x41, 0xaf
-	.byte 0x16, 0x20, 0xc3
-Sprintf_FFixed_PadLeftSpace:
-	.byte 0x07, 0xe0, 0xfa, 0x21, 0xd8, 0x13, 0x28, 0xaf
-	.byte 0x0e, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xd2
-Sprintf_FFixed_PadLeftLoop:
-	.byte 0x22, 0xc2, 0x03, 0x61, 0xd7, 0xfa, 0x61, 0x9f
-	.byte 0x04, 0x21
-Sprintf_FFixed_EmitSign:
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_ESci_MantissaDigits:
+	ld	c, (xsp + 10)
+	extz	bc
+	lda	xwa, (CharMap_FullPermutation_0x660:24)
+	bit_dri	1, 0x07, 0xe0, 0xe4
+	jr	z, Sprintf_ESci_MantissaNoCase
+	ld	a, (xsp + 10)
+	sub	a, 0x20
+	jr	Sprintf_ESci_CheckGTrim
+Sprintf_ESci_MantissaNoCase:
+	ld	a, (xsp + 10)
+Sprintf_ESci_CheckGTrim:
+	cp	a, 0x47
+	jr	nz, Sprintf_ESci_OutputMantissa
+	cpw	(xsp + 20), 0x0
+	jr	nz, Sprintf_ESci_OutputMantissa
+	cpw	(xsp + 26), 0x1
+	jrl	z, Sprintf_ESci_Return
+Sprintf_ESci_OutputMantissa:
+	ld	bc, (xsp + 4)
 	inc	1, bc
-	ld	wa, qiz
+	stw_erp	WA, 0xfa
 	cp	wa, bc
-	jr	ge, 27
-Sprintf_FFixed_SignPlus:
-	.byte 0x9f, 0x14, 0x20, 0x9f, 0x14, 0x69, 0xd8, 0xd8
-	.byte 0x6a, 0xd0, 0x68, 0x0f, 0x0b
-Sprintf_FFixed_SignSpace:
-	.byte 0x30, 0x00, 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef
-	.byte 0x62, 0xd2, 0x22
-Sprintf_FFixed_SignEmit:
-	.byte 0xc2, 0x03, 0x61, 0x9f, 0x14, 0x20, 0x9f, 0x14
-	.byte 0x69, 0xd8, 0xd8, 0x6a
-Sprintf_FFixed_ZeroFill:
-	.byte 0xe7, 0x9f, 0x1a, 0x69, 0x9f, 0x1a, 0x20, 0xe8
-	.byte 0x13, 0x38, 0xaf, 0x1a, 0x20, 0x38, 0x1e, 0xc0
-	.byte 0xf8, 0xaf, 0x1e
-Sprintf_FFixed_ZeroFillBody:
-	.byte 0x20, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xbf, 0x0c
-	.byte 0x37, 0xdb, 0x8e, 0x8f, 0x0a, 0x23, 0xd9
-Sprintf_FFixed_ZeroFillLoop:
-	.byte 0x12, 0xf2, 0x78, 0xd7, 0xee, 0x30, 0xf3, 0x07
-	.byte 0xe0, 0xe4
-Sprintf_FFixed_LeadDigit:
-	.byte 0xc9, 0x66, 0x08, 0x8f, 0x0a, 0x21, 0xc9, 0xca
-	.byte 0x20, 0x68, 0x03, 0x8f, 0x0a, 0x21, 0xc9, 0xcf
-	.byte 0x47, 0x6e, 0x07, 0x8f, 0x0a, 0x21, 0xc9, 0x6a
-	.byte 0x68, 0x03, 0x8f, 0x0a, 0x21, 0xd8, 0x13, 0x28
-	.byte 0xaf
-Sprintf_FFixed_LeadDigitZero:
-	.byte 0x0e, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xd2, 0x22
-	.byte 0xc2, 0x03, 0x61, 0x9f, 0x1a, 0x3f, 0x00, 0x00
-	.byte 0x69
-Sprintf_FFixed_LeadDigitDone:
-	.byte 0x05, 0x0b, 0x2d, 0x00, 0x68
-Sprintf_FFixed_IntegerDigits:
-	pop	sr
-	pushw	43
-Sprintf_FFixed_IntDigitOutput:
-	ld	xwa, (xsp+14)
+	jr	lt, Sprintf_ESci_MantDigitLoop
+	jr	Sprintf_ESci_MantTrailLoop
+Sprintf_ESci_MantDigitOutput:
+	ld	xwa, (xsp + 22)
+	ldb_sri	A, 0x07, 0xe0, 0xfa
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 14)
 	call	(xwa)
 	inc	2, xsp
-	incw	1, (246306:24)
-	ld	qiz, iz
-	jr	Sprintf_FFixed_LeadDigitDone_Code_Join
-Sprintf_FFixed_LeadDigitDone_Code_Loop:
-	pushw	48
-	ld	xwa, (xsp+14)
+	incw	1, (0x3c222:24)
+	inc1w_erp	0xfa
+Sprintf_ESci_MantDigitLoop:
+	ld	bc, (xsp + 4)
+	inc	1, bc
+	stw_erp	WA, 0xfa
+	cp	wa, bc
+	jr	ge, Sprintf_ESci_MantTrailLoop
+	ld	wa, (xsp + 20)
+	decm	1, (xsp + 20)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_ESci_MantDigitOutput
+	jr	Sprintf_ESci_MantTrailLoop
+Sprintf_ESci_MantTrailZeros:
+	pushw	0x30
+	ld	xwa, (xsp + 14)
 	call	(xwa)
-Sprintf_FFixed_IntDigitLoop:
 	inc	2, xsp
-	incw	1, (246306:24)
-Sprintf_FFixed_LeadDigitDone_Code_Join:
-	ld	wa, qiz
-	inc	1, qiz
+	incw	1, (0x3c222:24)
+Sprintf_ESci_MantTrailLoop:
+	ld	wa, (xsp + 20)
+	decm	1, (xsp + 20)
+	cp	wa, 0:i3
+	jr	gt, Sprintf_ESci_MantTrailZeros
+	decm	1, (xsp + 26)
+	ld	wa, (xsp + 26)
+	exts	xwa
+	push	xwa
+	ld	xwa, (xsp + 26)
+	push	xwa
+	calr	Sprintf_IntToStr
+	ld	xwa, (xsp + 30)
+	push	xwa
+	call	Strlen
+	lda	xsp, (xsp + 12)
+	ld	iz, hl
+	ld	c, (xsp + 10)
+	extz	bc
+	lda	xwa, (CharMap_FullPermutation_0x660:24)
+	bit_dri	1, 0x07, 0xe0, 0xe4
+	jr	z, Sprintf_ESci_ExpNoCase
+	ld	a, (xsp + 10)
+	sub	a, 0x20
+	jr	Sprintf_ESci_CheckExpG
+Sprintf_ESci_ExpNoCase:
+	ld	a, (xsp + 10)
+Sprintf_ESci_CheckExpG:
+	cp	a, 0x47
+	jr	nz, Sprintf_ESci_ExpLetterNormal
+	ld	a, (xsp + 10)
+	dec	2, a
+	jr	Sprintf_ESci_EmitExpLetter
+Sprintf_ESci_ExpLetterNormal:
+	ld	a, (xsp + 10)
+Sprintf_ESci_EmitExpLetter:
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+	cpw	(xsp + 26), 0x0
+	jr	ge, Sprintf_ESci_ExpSignPositive
+	pushw	0x2d
+	jr	Sprintf_ESci_EmitExpSign
+Sprintf_ESci_ExpSignPositive:
+	pushw	0x2b
+Sprintf_ESci_EmitExpSign:
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+	ldw_erp	IZ, 0xfa
+	jr	Sprintf_ESci_ExpLeadZeroLoop
+Sprintf_ESci_ExpLeadZeros:
+	pushw	0x30
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_ESci_ExpLeadZeroLoop:
+	stw_erp	WA, 0xfa
+	inc1w_erp	0xfa
 	cp	wa, 3:i3
-	jr	lt, Sprintf_FFixed_LeadDigitDone_Code_Loop
-	jr	Sprintf_FFixed_IntZeroFill_Code_Join
+	jr	lt, Sprintf_ESci_ExpLeadZeros
+	jr	Sprintf_ESci_ExpDigitLoop
+Sprintf_ESci_ExpDigitOutput:
 	dec	1, iz
-Sprintf_FFixed_IntZeroFill:
-	.byte 0xaf, 0x16, 0x20, 0xc3, 0x07, 0xe0, 0xf8, 0x21
-	.byte 0xd8, 0x13, 0x28, 0xaf, 0x0e, 0x20, 0xb0
-Sprintf_FFixed_IntZeroLoop:
-	srl	xwa, 98
-	incw	1, (246306:24)
-Sprintf_FFixed_IntZeroFill_Code_Join:
+	ld	xwa, (xsp + 22)
+	ldb_sri	A, 0x07, 0xe0, 0xf8
+	exts	wa
+	pushw	wa
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_ESci_ExpDigitLoop:
 	cp	iz, 0:i3
-	jr	nz, -29
-	ld	wa, (xsp+16)
+	jr	nz, Sprintf_ESci_ExpDigitOutput
+	ld	wa, (xsp + 16)
 	bit	1, wa
-	jr	nz, 17
-	jr	25
-	pushw	32
-Sprintf_FFixed_DecimalPoint:
-	.byte 0xaf, 0x0e, 0x20, 0xb0, 0xe8, 0xef, 0x62, 0xd2
-	.byte 0x22, 0xc2, 0x03, 0x61, 0x9f, 0x12, 0x69, 0x9f
-	.byte 0x12
-Sprintf_FFixed_FracLeadZeros:
-	.byte 0x3f, 0x00, 0x00, 0x6a, 0xe7, 0x5e, 0xef, 0x62
-	.byte 0x0e, 0xbf, 0xf0, 0x37, 0x3e, 0xde, 0xa8, 0xbf
-	.byte 0x06, 0x02, 0x0f, 0x00, 0xbf, 0x08, 0x02, 0x08
-	.byte 0x00, 0x0b, 0x20, 0x00, 0x0b, 0x00, 0x00, 0x0b
-	.byte 0x03, 0x00, 0x0b
-Sprintf_FFixed_FracLeadZeroBody:
-	.byte 0x24, 0xc2, 0x1d, 0x1d, 0x08, 0xff, 0xef, 0x60
-	.byte 0xd7, 0xfa
-Sprintf_FFixed_FracLeadZeroDone:
-	.byte 0xa8, 0xd7, 0xfa, 0x89, 0xd9, 0x81, 0xf2, 0x84
-Sprintf_FFixed_FracLeadZeroLoop:
-	.byte 0xc2, 0x03, 0x32, 0xf2, 0x44, 0xc2, 0x03, 0x30
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x02, 0x00, 0x00, 0xf3
-	.byte 0x07
-Sprintf_FFixed_FracDigits:
-	.byte 0xe8, 0xe4, 0x02, 0x00, 0x00, 0xd7, 0xfa, 0x61
-	.byte 0xd7, 0xfa, 0xcf
-Sprintf_FFixed_FracDigitOutput:
-	.byte 0x20, 0x00, 0x61, 0xd9, 0x9f, 0x20, 0x20, 0xd8
-	.byte 0x33, 0x07, 0x66, 0x0a, 0xbf, 0x06, 0x02, 0x12
-	.byte 0x00, 0xbf, 0x08, 0x02, 0x0a, 0x00, 0xd7, 0xfa
-	.byte 0xa8
-Sprintf_FFixed_FracDigitLoop:
-	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00, 0x62, 0x22, 0xbf
-	.byte 0x0a, 0x30, 0x9f, 0x08, 0x21, 0xd9, 0x69, 0xd7
-	.byte 0xfa, 0xa1, 0xe9, 0x12, 0xaf
-Sprintf_FFixed_FracTrailZeros:
-	.byte 0x18, 0x81, 0x81, 0x23, 0xf3, 0x07, 0xe0, 0xfa
-	.byte 0x43, 0xd7, 0xfa, 0x61, 0xd7, 0xfa, 0x88
-Sprintf_FFixed_FracTrailLoop:
-	.byte 0x9f, 0x08, 0xf0, 0x61, 0xde, 0xbf, 0x0a, 0x32
-	.byte 0xb2, 0xcf, 0x66, 0x04, 0xd8, 0xa9, 0x68, 0x02
-	.byte 0xd8, 0xa8, 0xaf, 0x26
-Sprintf_FFixed_PadRightSpace:
-	.byte 0x21, 0xb1, 0x50, 0xba, 0x01, 0x31, 0x9f, 0x20
-	.byte 0x20, 0xd8, 0x33, 0x07, 0x66, 0x16, 0x82
-Sprintf_FFixed_PadRightLoop:
-	.byte 0x3f, 0x00, 0x6e, 0x05, 0x81, 0x3f, 0x00, 0x66
-	.byte 0x0c, 0x81
-Sprintf_FFixed_Return:
-	.byte 0x27, 0xdb, 0x12, 0x30
-Sprintf_FFixed_DataTable:
-	.byte 0x08, 0x00, 0x31, 0x00, 0x40, 0x68, 0x19, 0x82
-	.byte 0x3f, 0x00, 0x6e, 0x05, 0x81, 0x3f, 0x00, 0x66
-	.byte 0x23, 0x81, 0x27, 0xcf
-Sprintf_FormatEScientific:
-	.byte 0xcc, 0xf0, 0xdb, 0x12, 0xdb, 0xed, 0x04, 0xd8
-	.byte 0xac, 0x31, 0x00, 0x04, 0x82, 0x25, 0xcd, 0x30
-	.byte 0x07, 0xda, 0x12, 0xc9, 0xcc
-Sprintf_ESci_ApplyDefaults:
-	.byte 0x0f, 0x66, 0x02, 0xda, 0xfc, 0xda, 0x8e, 0xdb
-	.byte 0x86, 0xd9, 0xa6, 0x2e, 0x1e, 0x41, 0x05, 0xef
-	.byte 0x62, 0xbf, 0x04, 0x53, 0xde, 0xd8, 0x69, 0x03
-	.byte 0x9f, 0x04, 0x69
-Sprintf_ESci_SpecNoUpperCase:
-	ld	wa, (xsp+32)
-Sprintf_ESci_CheckSpecG:
-	.byte 0xd8, 0x33, 0x07, 0x66, 0x2b, 0xd7, 0xfa, 0xaa
-	.byte 0xbf, 0x0a, 0x30, 0xc3, 0x07, 0xe0, 0xfa
-Sprintf_ESci_SetDigitCount:
-	.byte 0x21, 0xc9, 0xcc, 0xff, 0xd7, 0xfa, 0x8a, 0xda
-	.byte 0x82, 0xf2, 0x40, 0xc2, 0x03, 0x31, 0xd8, 0x12
-	.byte 0xf3, 0x07, 0xe4, 0xe8, 0x50
-Sprintf_ESci_RoundCheck:
-	.byte 0xd7, 0xfa, 0x61, 0xd7, 0xfa, 0xcf, 0x0a, 0x00
-	.byte 0x61, 0xda, 0x68, 0x52, 0xdc, 0xa8, 0xd7, 0xfa
-	.byte 0xa8, 0xbf, 0x0a, 0x31, 0xc3, 0x07, 0xe4, 0xfa
-	.byte 0x3f, 0x00, 0x66, 0x04, 0xdc, 0xa9, 0x68
-Sprintf_ESci_RoundCarry:
-	.byte 0x0a, 0xd7, 0xfa, 0x61, 0xd7, 0xfa, 0xcf, 0x08
-	.byte 0x00, 0x61, 0xe7, 0x89
-Sprintf_ESci_RoundLoop:
-	.byte 0x01, 0x3c, 0x0f, 0xd7, 0xfa, 0xa9, 0xc3, 0x07
-	.byte 0xe4, 0xfa, 0x21, 0xc9, 0xcc, 0xff, 0xd7, 0xfa
-	.byte 0x8b, 0xdb, 0x83, 0xdb, 0x6a
-Sprintf_ESci_AfterRound:
-	.byte 0xf2, 0x44, 0xc2, 0x03, 0x32, 0xd8, 0x12, 0xf3
-	.byte 0x07, 0xe8, 0xec, 0x50
-Sprintf_ESci_AfterRound_NoCase:
-	; Disassembled from the committed romslice (no source of any kind existed):
-	; llvm-mc round-trips these 3 B byte-exact as one instruction. v9/v10 open
-	; this label with "ld a,(xsp+10)" instead, so this fragment is NOT the
-	; routine's first instruction in this revision -- the label here just marks
-	; the nearest preceding symbol, not a verified entry point. Kept as a single
-	; verified instruction rather than an opaque blob.
-	inc	1, qiz
-Sprintf_ESci_StripTrailZeros:
-	.byte 0xd7, 0xfa, 0xcf, 0x08, 0x00, 0x61, 0xdb, 0xdc
-	.byte 0xd8, 0x66, 0x04, 0x92, 0x3e, 0x10, 0x00, 0x9f
-	.byte 0x08, 0x04, 0x0b, 0x03, 0x00
-Sprintf_ESci_StripLoop:
-	pushw	49732
-	calr	992
-Sprintf_ESci_StripCheck:
-	.byte 0xef, 0x66, 0xd7, 0xfa, 0xa8, 0xde, 0xd8, 0x62
-	.byte 0x54, 0x9f, 0x04, 0x3f, 0x00, 0x00, 0x62, 0x25
-Sprintf_ESci_ComputeOutputLen:
-	.byte 0x0b, 0x03, 0x00, 0x0b, 0x44, 0xc2, 0x1e, 0xf7
-	.byte 0x02, 0x9f, 0x0c, 0x04, 0x0b, 0x03, 0x00, 0x0b
-	.byte 0x44, 0xc2
-Sprintf_ESci_CheckPrecZero:
-	calr	955
-Sprintf_ESci_AdjustForSign:
-	.byte 0xbf, 0x0a, 0x37, 0xdb, 0xa6, 0xd7, 0xfa, 0x61
-	.byte 0xd7, 0xfa, 0x88, 0x9f, 0x04, 0xf0, 0x61, 0xdb
-Sprintf_ESci_AdjustForSign2:
-	.byte 0x9f, 0x06, 0x04	; decm 1, (xsp + 18) (v7 displacement)
-
-
-
-Sprintf_ESci_ComputePadding:
+	jr	nz, Sprintf_ESci_PadRightLoop
+	jr	Sprintf_ESci_Return
+Sprintf_ESci_PadRightSpace:
+	pushw	0x20
+	ld	xwa, (xsp + 14)
+	call	(xwa)
+	inc	2, xsp
+	incw	1, (0x3c222:24)
+Sprintf_ESci_PadRightLoop:
+	decm	1, (xsp + 18)
+	cpw	(xsp + 18), 0x0
+	jr	gt, Sprintf_ESci_PadRightSpace
+Sprintf_ESci_Return:
+	pop	xiz
+	inc	2, xsp
+	ret
+Sprintf_FormatGGeneral:
+	lda	xsp, (xsp - 16)
+	push	xiz
+	ld	iz, 0:i3
+	ldw	(xsp + 6), 0xf
+	ldw	(xsp + 8), 0x8
+	pushw	0x20
+	pushw	0x0
+	pushw	0x3
+	pushw	0xc224
+	call	Memset
+	inc	8, xsp
+	ldiw_erp	0xfa, 0
+Sprintf_GGen_ClearArrays:
+	stw_erp	BC, 0xfa
+	add	bc, bc
+	lda	xde, (0x03c284:24)
+	lda	xwa, (0x03c244:24)
+	stiw_ind	0x07, 0xe0, 0xe4, 0x00, 0x00
+	stiw_ind	0x07, 0xe8, 0xe4, 0x00, 0x00
+	inc1w_erp	0xfa
+	cp_erpw	0xfa, 0x20, 0x00
+	jr	lt, Sprintf_GGen_ClearArrays
+	ld	wa, (xsp + 32)
+	bit	7, wa
+	jr	z, Sprintf_GGen_CheckLongDouble
+	ldw	(xsp + 6), 0x12
+	ldw	(xsp + 8), 0xa
+Sprintf_GGen_CheckLongDouble:
+	ldiw_erp	0xfa, 0
+	cpw	(xsp + 8), 0x0
+	jr	le, Sprintf_GGen_CheckSign
+Sprintf_GGen_LoadDigits:
+	lda	xwa, (xsp + 10)
+	ld	bc, (xsp + 8)
+	dec	1, bc
+	subw_erp	BC, 0xfa
+	extz	xbc
+	add	xbc, (xsp + 24)
+	ld	c, (xbc)
+	stb_dri	C, 0x07, 0xe0, 0xfa
+	inc1w_erp	0xfa
+	stw_erp	WA, 0xfa
+	cp	wa, (xsp + 8)
+	jr	lt, Sprintf_GGen_LoadDigits
+Sprintf_GGen_CheckSign:
+	lda	xde, (xsp + 10)
+	bitm	7, (xde)
+	jr	z, Sprintf_GGen_Negative
+	ld	wa, 1:i3
+	jr	Sprintf_GGen_ExtractExponent
+Sprintf_GGen_Negative:
+	ld	wa, 0:i3
+Sprintf_GGen_ExtractExponent:
+	ld	xbc, (xsp + 38)
+	ld	(xbc), wa
+	lda	xbc, (xde + 1)
+	ld	wa, (xsp + 32)
+	bit	7, wa
+	jr	z, Sprintf_GGen_NormalExp
+	cp	(xde), 0x0
+	jr	nz, Sprintf_GGen_LongDoubleExp
+	cp	(xbc), 0x0
+	jr	z, Sprintf_GGen_NormalExp
+Sprintf_GGen_LongDoubleExp:
+	ld	l, (xbc)
+	extz	hl
+	ldw	wa, 0x8
+	ldw	bc, 0x4000
+	jr	Sprintf_GGen_ComputeDecExp
+Sprintf_GGen_NormalExp:
+	cp	(xde), 0x0
+	jr	nz, Sprintf_GGen_NonZero
+	cp	(xbc), 0x0
+	jr	z, Sprintf_GGen_DecimalExponent
+Sprintf_GGen_NonZero:
+	ld	l, (xbc)
+	and	l, 0xf0
+	extz	hl
+	sra	hl, 4
+	ld	wa, 4:i3
+	ldw	bc, 0x400
+Sprintf_GGen_ComputeDecExp:
+	ld	e, (xde)
+	res	7, e
+	extz	de
+	and	a, 0xf
+	jr	z, Sprintf_GGen_ShiftMantissa
+	slaa	de
+Sprintf_GGen_ShiftMantissa:
+	ld	iz, de
+	add	iz, hl
+	sub	iz, bc
+Sprintf_GGen_DecimalExponent:
+	pushw	iz
+	calr	Sprintf_DecimalExponent
+	inc	2, xsp
+	ld	(xsp + 4), hl
+	cp	iz, 0:i3
+	jr	ge, Sprintf_GGen_AdjustNegExp
+	decm	1, (xsp + 4)
+Sprintf_GGen_AdjustNegExp:
+	ld	wa, (xsp + 32)
+	bit	7, wa
+	jr	z, Sprintf_GGen_NormalDigits
+	ldiw_erp	0xfa, 2
+Sprintf_GGen_LongDoubleDigits:
+	lda	xwa, (xsp + 10)
+	ldb_sri	A, 0x07, 0xe0, 0xfa
+	and	a, 0xff
+	stw_erp	DE, 0xfa
+	add	de, de
+	lda	xbc, (0x03c240:24)
+	extz	wa
+	stw_dri	WA, 0x07, 0xe4, 0xe8
+	inc1w_erp	0xfa
+	cp_erpw	0xfa, 0x0a, 0x00
+	jr	lt, Sprintf_GGen_LongDoubleDigits
+	jr	Sprintf_GGen_NormalizeArray
+Sprintf_GGen_NormalDigits:
+	ld	ix, 0:i3
+	ldiw_erp	0xfa, 0
+Sprintf_GGen_FindLeadDigit:
+	lda	xbc, (xsp + 10)
+	cpib_sri	0x07, 0xe4, 0xfa, 0x00
+	jr	z, Sprintf_GGen_FindLeadDone
+	ld	ix, 1:i3
+	jr	Sprintf_GGen_LoadDigitPairs
+Sprintf_GGen_FindLeadDone:
+	inc1w_erp	0xfa
+	cp_erpw	0xfa, 0x08, 0x00
+	jr	lt, Sprintf_GGen_FindLeadDigit
+Sprintf_GGen_LoadDigitPairs:
+	andmi8	(xbc + 1), 0xf
+	ldiw_erp	0xfa, 1
+Sprintf_GGen_DigitPairLoop:
+	ldb_sri	A, 0x07, 0xe4, 0xfa
+	and	a, 0xff
+	stw_erp	HL, 0xfa
+	add	hl, hl
+	dec	2, hl
+	lda	xde, (0x03c244:24)
+	extz	wa
+	stw_dri	WA, 0x07, 0xe8, 0xec
+; (pre-port v7 note about the bytes at 0xFF1AC9:)
+; Disassembled from the committed romslice (no source of any kind existed):
+; llvm-mc round-trips these 3 B byte-exact as one instruction. v9/v10 open
+; this label with "ld a,(xsp+10)" instead, so this fragment is NOT the
+; routine's first instruction in this revision -- the label here just marks
+; the nearest preceding symbol, not a verified entry point. Kept as a single
+; verified instruction rather than an opaque blob.
+	inc1w_erp	0xfa
+	cp_erpw	0xfa, 0x08, 0x00
+	jr	lt, Sprintf_GGen_DigitPairLoop
+	cp	ix, 0:i3
+	jr	z, Sprintf_GGen_NormalizeArray
+	ormi16	(xde), 0x10
+Sprintf_GGen_NormalizeArray:
+	pushm	(xsp + 8)
+	pushw	0x3
+	pushw	0xc244
+	calr	Sprintf_CountLeadingZeros
+	inc	6, xsp
+	ldiw_erp	0xfa, 0
+	cp	iz, 0:i3
+	jr	le, Sprintf_GGen_NegativeExpCheck
+	cpw	(xsp + 4), 0x0
+	jr	le, Sprintf_GGen_PositiveExpDone
+Sprintf_GGen_MultiplyLoop:
+	pushw	0x3
+	pushw	0xc244
+	calr	Sprintf_DivideDigitsByTen
+	pushm	(xsp + 12)
+	pushw	0x3
+	pushw	0xc244
+	calr	Sprintf_CountLeadingZeros
+	lda	xsp, (xsp + 10)
+	sub	iz, hl
+	inc1w_erp	0xfa
+	stw_erp	WA, 0xfa
+	cp	wa, (xsp + 4)
+	jr	lt, Sprintf_GGen_MultiplyLoop
+Sprintf_GGen_PositiveExpDone:
+	pushm	(xsp + 6)
 	ld	wa, 6:i3
 	sub	wa, iz
 	pushw	wa
-	pushw	3
-	pushw	49732
-	jr	Sprintf_ESci_PadLeftLoop_Code_Join
-Sprintf_ESci_PadLeftCheck:
-	.byte 0x39, 0x1e, 0xf0, 0x02, 0x9f, 0x0c, 0x04, 0x0b
-	.byte 0x03, 0x00, 0x0b, 0x44, 0xc2, 0x1e, 0xfd, 0x03
-	.byte 0xbf, 0x0a, 0x37
-Sprintf_ESci_PadLeftSpace:
+	pushw	0x3
+	pushw	0xc244
+	jr	Sprintf_GGen_FinalShift
+Sprintf_GGen_DivideLoop:
+	push	xbc
+	calr	Sprintf_MultiplyDigitsByTen
+	pushm	(xsp + 12)
+	pushw	0x3
+	pushw	0xc244
+	calr	Sprintf_CountTrailingZeros
+	lda	xsp, (xsp + 10)
 	add	iz, hl
-	inc	1, qiz
-	ld	de, (xsp+4)
+	inc1w_erp	0xfa
+Sprintf_GGen_NegativeExpCheck:
+	ld	de, (xsp + 4)
 	neg	de
-	lda	xbc, (246340:24)
-Sprintf_ESci_PadLeftLoop:
-	.byte 0xd7, 0xfa, 0x88, 0xda, 0xf0, 0x61, 0xd7, 0x9f
-	.byte 0x06, 0x04
-Sprintf_ESci_EmitSign:
+	lda	xbc, (0x03c244:24)
+	stw_erp	WA, 0xfa
+	cp	wa, de
+	jr	lt, Sprintf_GGen_DivideLoop
+	pushm	(xsp + 6)
 	ld	wa, 6:i3
 	sub	wa, iz
 	pushw	wa
 	push	xbc
-Sprintf_ESci_PadLeftLoop_Code_Join:
-	calr	Sprintf_ESci_OutputMantissa
-Sprintf_ESci_SignPlus:
+Sprintf_GGen_FinalShift:
+	calr	Sprintf_ShiftDigitArray
 	inc	8, xsp
-	ld	qiz, 1
-	push	qiz
-	ld	bc, qiz
+	ldiw_erp	0xfa, 1
+Sprintf_GGen_RoundLoop:
+	pushw_erp	0xfa
+	stw_erp	BC, 0xfa
 	add	bc, bc
-Sprintf_ESci_SignSpace:
-	.byte 0xf2, 0x44, 0xc2, 0x03, 0x30, 0xd3, 0x07, 0xe0
-	.byte 0xe4, 0x04, 0x1e
-Sprintf_ESci_SignEmit:
-	.byte 0x95, 0x01, 0xef, 0x64, 0xd7, 0xfa, 0x61, 0xd7
-	.byte 0xfa, 0xcf, 0x09, 0x00
-Sprintf_ESci_ZeroFill:
-	.byte 0x61, 0xdf, 0xda, 0xa8, 0xf2, 0x44, 0xc2, 0x03
-	.byte 0x31, 0xaf, 0x1c, 0x23, 0x91, 0x20, 0xd8, 0xcf
-	.byte 0x09, 0x00, 0x63
-Sprintf_ESci_ZeroFillBody:
-	.byte 0x0d, 0xda, 0xa9, 0xe8, 0x12, 0xd8, 0x0a, 0x0a
-	.byte 0x00, 0xb3, 0x41, 0x9f, 0x04, 0x61, 0xda
-Sprintf_ESci_ZeroFillLoop:
-	.byte 0x8c, 0xda, 0x61, 0x91, 0x20, 0xe8, 0x12, 0xd8
-	.byte 0x0a, 0x0a
-Sprintf_ESci_LeadDigit:
-	.byte 0x00, 0xd7, 0xe2, 0x88, 0xf3, 0x07, 0xec, 0xf0
-	.byte 0x41, 0x9f, 0x04, 0x61, 0xd7, 0xfa, 0xa9, 0x68
-	.byte 0x16, 0xda, 0x89, 0xda, 0x61, 0xf2, 0x24, 0xc2
-	.byte 0x03, 0x30, 0xc3, 0x07, 0xe0, 0xfa, 0x21, 0xf3
-	.byte 0x07, 0xec, 0xe4, 0x41, 0xd7, 0xfa, 0x61, 0x9f
-	.byte 0x06, 0x21, 0xd9, 0x62
-Sprintf_ESci_Overflow_DecExp:
-	ld	wa, qiz
+	lda	xwa, (0x03c244:24)
+	push_sriw	0x07, 0xe0, 0xe4
+	calr	Sprintf_NormalizeDigits
+	inc	4, xsp
+	inc1w_erp	0xfa
+	cp_erpw	0xfa, 0x09, 0x00
+	jr	lt, Sprintf_GGen_RoundLoop
+	ld	de, 0:i3
+	lda	xbc, (0x03c244:24)
+	ld	xhl, (xsp + 28)
+	ld	wa, (xbc)
+	cp	wa, 0x9
+	jr	ule, Sprintf_GGen_ExtractResult
+	ld	de, 1:i3
+	extz	xwa
+	div	wa, 0xa
+	ld	(xhl), a
+	incw	1, (xsp + 4)
+Sprintf_GGen_ExtractResult:
+	ld	ix, de
+	inc	1, de
+	ld	wa, (xbc)
+	extz	xwa
+	div	wa, 0xa
+	stw_erp	WA, 0xe2
+	stb_dri	A, 0x07, 0xec, 0xf0
+	incw	1, (xsp + 4)
+	ldiw_erp	0xfa, 1
+	jr	Sprintf_GGen_CopyLoop
+Sprintf_GGen_CopyDigits:
+	ld	bc, de
+	inc	1, de
+	lda	xwa, (0x03c224:24)
+	ldb_sri	A, 0x07, 0xe0, 0xfa
+	stb_dri	A, 0x07, 0xec, 0xe4
+	inc1w_erp	0xfa
+Sprintf_GGen_CopyLoop:
+	ld	bc, (xsp + 6)
+	inc	2, bc
+	stw_erp	WA, 0xfa
 	cp	wa, bc
-Sprintf_ESci_LeadDigitNormal:
-	.byte 0x61, 0xde, 0x9f, 0x06, 0x22, 0xda, 0x61, 0xf3
-	.byte 0x07, 0xec, 0xe8, 0x31, 0x81, 0x3f, 0x05, 0x67
-	.byte 0x08, 0x9f, 0x06, 0x20, 0xc3, 0x07, 0xec
-Sprintf_ESci_DecimalPoint:
-	.byte 0xe0, 0x61, 0xb1, 0x00, 0x00, 0x9f, 0x06, 0x20
-	.byte 0xd7, 0xfa, 0x98, 0x68, 0x10, 0xd7, 0xfa
-Sprintf_ESci_DecimalPointEmit:
-	.byte 0x89, 0xd9, 0x69, 0xc3, 0x07, 0xec, 0xe4, 0x61
-	.byte 0xb0, 0x00, 0x00, 0xd7, 0xfa, 0x69, 0xd7
-Sprintf_ESci_MantissaDigits:
-	.byte 0xfa, 0xd8, 0x66, 0x0a, 0xf3, 0x07, 0xec, 0xfa
-	.byte 0x30, 0x80, 0x3f, 0x09, 0x6b, 0xe1, 0xd7, 0xfa
-	.byte 0xa8, 0x68, 0x09, 0xc3, 0x07, 0xec, 0xfa, 0x3e
-	.byte 0x30
-Sprintf_ESci_MantissaNoCase:
-	inc	1, qiz
-Sprintf_ESci_CheckGTrim:
-	ld	wa, qiz
+	jr	lt, Sprintf_GGen_CopyDigits
+	ld	de, (xsp + 6)
+	inc	1, de
+	lda_dri	XBC, 0x07, 0xec, 0xe8
+	cp	(xbc), 0x5
+	jr	c, Sprintf_GGen_HandleCarry
+	ld	wa, (xsp + 6)
+	inc_srib	1, 0x07, 0xec, 0xe0
+Sprintf_GGen_HandleCarry:
+	ld	(xbc), 0x0
+	ld	wa, (xsp + 6)
+	ldw_erp	WA, 0xfa
+	jr	Sprintf_GGen_CarryCheck
+Sprintf_GGen_CarryLoop:
+	stw_erp	BC, 0xfa
+	dec	1, bc
+	inc_srib	1, 0x07, 0xec, 0xe4
+	ld	(xwa), 0x0
+	dec1w_erp	0xfa
+Sprintf_GGen_CarryCheck:
+	cpiw_erp	0xfa, 0
+	jr	z, Sprintf_GGen_ConvertToAscii
+	lda_dri	XWA, 0x07, 0xec, 0xfa
+	cp	(xwa), 0x9
+	jr	ugt, Sprintf_GGen_CarryLoop
+Sprintf_GGen_ConvertToAscii:
+	ldiw_erp	0xfa, 0
+	jr	Sprintf_GGen_AsciiDone
+Sprintf_GGen_AsciiLoop:
+	or_srib_im	0x07, 0xec, 0xfa, 0x30
+	inc1w_erp	0xfa
+Sprintf_GGen_AsciiDone:
+	stw_erp	WA, 0xfa
 	cp	wa, de
-	jr	lt, -16
-	ld	xbc, (xsp+34)
-	ld	wa, (xsp+4)
+	jr	lt, Sprintf_GGen_AsciiLoop
+	ld	xbc, (xsp + 34)
+	ld	wa, (xsp + 4)
 	ld	(xbc), wa
 	pop	xiz
-	lda	xsp, (xsp+16)
+	lda	xsp, (xsp + 16)
 	ret
-Sprintf_ESci_OutputMantissa:
+Sprintf_ShiftDigitArray:
 	dec	8, xsp
 	pushw	iz
 	ld	iz, 0:i3
 	ld	wa, 0:i3
-	ld	hl, (xsp+18)
+	ld	hl, (xsp + 18)
 	cp	hl, 0:i3
-	jr	le, Sprintf_ESci_OutputMantissa_Skip
-Sprintf_ESci_MantDigitOutput:
+	jr	le, Sprintf_Shift_SetupLoop
+Sprintf_Shift_BuildMask:
 	add	wa, wa
 	set	0, wa
 	inc	1, iz
 	cp	iz, hl
-	jr	lt, -11
-Sprintf_ESci_OutputMantissa_Skip:
-	ld	iz, (xsp+20)
+	jr	lt, Sprintf_Shift_BuildMask
+Sprintf_Shift_SetupLoop:
+	ld	iz, (xsp + 20)
 	dec	1, iz
-	ld	xiy, (xsp+14)
+	ld	xiy, (xsp + 14)
 	cp	iz, 0:i3
-	jr	le, 79
-	ld	(xsp+4), wa
-Sprintf_ESci_MantDigitLoop:
-	.byte 0xbf, 0x02, 0x02, 0x08, 0x00, 0x9f, 0x02, 0xab
-	.byte 0xde, 0x88, 0xe8, 0x13, 0xe8, 0x80, 0xe8, 0x8c
-	.byte 0xbf, 0x06, 0x64, 0xaf, 0x06, 0x8d, 0xaf, 0x06
-Sprintf_ESci_MantTrailZeros:
-	.byte 0x21, 0x91, 0x22, 0xdb, 0x88, 0xc9, 0xcc, 0x0f
-	.byte 0x66, 0x02, 0xda, 0xff, 0xb1, 0x52, 0xec
-Sprintf_ESci_MantTrailLoop:
-	.byte 0x89, 0xe8, 0xaa, 0xe8, 0xa1, 0xed, 0x81, 0x9f
-	.byte 0x04, 0x20, 0x91, 0xc0, 0xd8, 0x89, 0x9f, 0x02
-	.byte 0x20, 0xc9, 0xcc, 0x0f, 0x66, 0x02, 0xd9, 0xfe
-	.byte 0xaf, 0x06, 0x20, 0x90, 0xe9, 0xde, 0x69, 0xec
-	.byte 0x6a, 0xde, 0xd8, 0x6a, 0xc4, 0x95, 0x21, 0xdb
-	.byte 0x88, 0xc9, 0xcc, 0x0f, 0x66, 0x02, 0xd9, 0xff
-	.byte 0xb5, 0x51, 0x4e, 0xef, 0x60, 0x0e, 0xaf, 0x04
-	.byte 0x25, 0x95, 0x3c, 0xff, 0x00, 0xdc, 0xa9, 0x9f
-Sprintf_ESci_ExpNoCase:
-	ld	(35:8), 219:io
-Sprintf_ESci_CheckExpG:
-	.byte 0x83, 0x68, 0x2f, 0xdc, 0x8a, 0xea, 0x13, 0xea
-	.byte 0x82, 0xed, 0x82, 0x9f
-Sprintf_ESci_ExpLetterNormal:
-	.byte 0x0a, 0x20, 0x92
-Sprintf_ESci_EmitExpLetter:
-	.byte 0x21, 0xc9, 0xcc, 0x0f, 0x66, 0x02, 0xd9, 0xfe
-	.byte 0xb2, 0x51, 0xdc, 0x88, 0xd8, 0x69, 0xe8, 0x13
-	.byte 0xe8, 0x80, 0xe8, 0x89, 0xed, 0x81, 0x92, 0x20
-	.byte 0xd8, 0xef, 0x08
-Sprintf_ESci_ExpSignPositive:
-	.byte 0x91, 0x88, 0x92
-Sprintf_ESci_EmitExpSign:
-	.byte 0x3c, 0xff, 0x00, 0xdc, 0x61, 0xdb, 0xf4, 0x61
-	.byte 0xcd, 0x0e, 0x2e, 0xf2, 0x84, 0xc2, 0x03, 0x32
-	.byte 0xea
-Sprintf_ESci_ExpLeadZeros:
-	.byte 0x88, 0xba, 0x12, 0x31, 0xf5, 0xe1, 0x02, 0x00
-	.byte 0x00, 0xe9, 0xf0, 0x67, 0xf7, 0x9f, 0x06
-Sprintf_ESci_ExpLeadZeroLoop:
-	.byte 0x20, 0xba, 0x10, 0x50, 0xde, 0xa8, 0xf2, 0x84
-	.byte 0xc2, 0x03, 0x30, 0x90
-Sprintf_ESci_ExpDigitOutput:
-	.byte 0x3f, 0x00, 0x00, 0x6e, 0x3f, 0x98, 0x02, 0x3f
-	.byte 0x00, 0x00, 0x6e, 0x38, 0x98, 0x04, 0x3f, 0x00
-	.byte 0x00, 0x6e, 0x31, 0x98, 0x06, 0x3f, 0x00, 0x00
-	.byte 0x6e
-Sprintf_ESci_ExpDigitLoop:
-	.byte 0x2a, 0x98, 0x08, 0x3f, 0x00, 0x00, 0x6e, 0x23
-	.byte 0x98, 0x0a, 0x3f, 0x00, 0x00, 0x6e
-Sprintf_ESci_PadRightSpace:
-	.byte 0x1c, 0x98, 0x0c, 0x3f, 0x00, 0x00, 0x6e, 0x15
-	.byte 0x98, 0x0e, 0x3f, 0x00, 0x00, 0x6e, 0x0e
-Sprintf_ESci_PadRightLoop:
-	.byte 0x98, 0x10, 0x3f, 0x00, 0x00, 0x6e, 0x07, 0x68
-	.byte 0x3d, 0xde
-Sprintf_ESci_Return:
-	.byte 0x61, 0x1e, 0x0c, 0x01
-Sprintf_FormatGGeneral:
-	.byte 0x30, 0x08, 0x00, 0x9f, 0x08, 0xa0, 0xd8, 0x80
-	.byte 0xf2, 0x84, 0xc2, 0x03, 0x31, 0xd3, 0x07, 0xe4
-	.byte 0xe0, 0x20, 0xd8, 0xd8, 0x66, 0xe5, 0x2e, 0x28
-	.byte 0x1e, 0x1f, 0x00, 0xef, 0x64, 0x31, 0x08, 0x00
-	.byte 0x9f, 0x08, 0xa1, 0xd9, 0x81
-Sprintf_GGen_ClearArrays:
-	.byte 0xf2, 0x84, 0xc2, 0x03, 0x30, 0xf3, 0x07, 0xe0
-	.byte 0xe4, 0x02, 0x00, 0x00, 0xde, 0xcf, 0x20, 0x00
-	.byte 0x72, 0x7e, 0xff, 0x4e, 0x0e, 0x9f, 0x06, 0x22
-	.byte 0xda, 0xcf, 0x20, 0x00, 0x69, 0x0d, 0xf2, 0x24
-	.byte 0xc2, 0x03, 0x31, 0x9f, 0x04, 0x20, 0xc3, 0x07
-	.byte 0xe4, 0xe8, 0x89, 0x68, 0x02, 0xda, 0x69, 0xda
-	.byte 0xcf, 0x20, 0x00, 0x69, 0xf8, 0xf2, 0x24, 0xc2
-	.byte 0x03
-Sprintf_GGen_CheckLongDouble:
-	.byte 0x30, 0x68, 0x13, 0xda, 0x89, 0xd9, 0x69, 0xc3
-	.byte 0x07, 0xe0
-Sprintf_GGen_LoadDigits:
-	.byte 0xe4, 0x61, 0xda, 0x89, 0xda, 0x69, 0xc3, 0x07
-	.byte 0xe0, 0xe4, 0x3a, 0x0a, 0xc3, 0x07, 0xe0, 0xe8
-	.byte 0x3f, 0x0a, 0xb0, 0xf1, 0xda, 0xd8, 0x6a, 0xe1
-	.byte 0x0e, 0xaf, 0x04, 0x20, 0xe8, 0x89, 0xb8, 0x12
-	.byte 0x32, 0x91
-Sprintf_GGen_CheckSign:
-	.byte 0x20, 0xe8, 0x12, 0xd8, 0x0a, 0x0a, 0x00, 0xd7
-	.byte 0xe2, 0x88, 0xd8
-Sprintf_GGen_Negative:
-	.byte 0xee, 0x08
-Sprintf_GGen_ExtractExponent:
-	.byte 0x99, 0x02, 0x88, 0x91, 0x20, 0xe8, 0x12, 0xd8
-	.byte 0x0a, 0x0a, 0x00, 0xf5, 0xe5, 0x50, 0xea, 0xf1
-	.byte 0x67, 0xe0, 0x0e, 0x2e, 0xdc, 0xa8, 0xe9, 0xa8
-	.byte 0xaf, 0x06
-Sprintf_GGen_LongDoubleExp:
-	.byte 0x23, 0xe9, 0x8a, 0xeb, 0x82, 0x92, 0x20, 0xd8
-	.byte 0x08, 0x0a, 0x00, 0xb2
-Sprintf_GGen_NormalExp:
-	.byte 0x50, 0xdc, 0xd8, 0x66, 0x2d, 0xdc, 0x8e, 0x68
-	.byte 0x15, 0xde
-Sprintf_GGen_NonZero:
-	.byte 0x8d, 0xdd, 0x69, 0xed, 0x13, 0xed, 0x85, 0xeb
-	.byte 0x85, 0xd8, 0xef, 0x08, 0x95, 0x88, 0x92
-Sprintf_GGen_ComputeDecExp:
-	.byte 0x3c, 0xff, 0x00, 0xde, 0x69, 0xde, 0xd8, 0x62
-	.byte 0x10, 0xde, 0x8a, 0xea, 0x13, 0xea
-Sprintf_GGen_ShiftMantissa:
-	.byte 0x82, 0xeb, 0x82, 0x92, 0x20, 0xd8
-Sprintf_GGen_DecimalExponent:
-	.byte 0xcf, 0xff, 0x00, 0x6b, 0xd7, 0xdc, 0x61, 0xe9
-	.byte 0x62, 0xdc, 0xcf, 0x10, 0x00, 0x61, 0xb6, 0xbb
-Sprintf_GGen_AdjustNegExp:
-	.byte 0x1e, 0x31, 0x91, 0x20, 0xd8, 0x33, 0x07, 0x66
-	.byte 0x03, 0x9b, 0x1c
-Sprintf_GGen_LongDoubleDigits:
-	.byte 0x61, 0xb1, 0x02, 0x00, 0x00, 0x4e, 0x0e, 0xf2
-	.byte 0x84, 0xc2, 0x03, 0x33, 0xeb, 0x89, 0xbb, 0x14
-	.byte 0x32, 0x91, 0x3f, 0x00, 0x00, 0x66, 0x08, 0x91
-	.byte 0x20, 0xd8, 0x08, 0x0a, 0x00, 0xb1, 0x50, 0xe9
-	.byte 0x62, 0xea, 0xf1, 0x67, 0xec, 0xbb, 0x12, 0x31
-Sprintf_GGen_NormalDigits:
-	ldw	de, 18
+	jr	le, Sprintf_Shift_LastEntry
+	ld	(xsp + 4), wa
+	ldw	(xsp + 2), 0x8
+	sub	(xsp + 2), hl
+	ld	wa, iz
+	exts	xwa
+	add	xwa, xwa
+	ld	xix, xwa
+Sprintf_Shift_Loop:
+	ld	(xsp + 6), xix
+	add	(xsp + 6), xiy
+	ld	xbc, (xsp + 6)
+	ld	de, (xbc)
+	ld	wa, hl
+	and	a, 0xf
+	jr	z, Sprintf_Shift_ApplyShift
+	srla	de
+Sprintf_Shift_ApplyShift:
+	ld	(xbc), de
+	ld	xbc, xix
+	ld	xwa, 2:i3
+	sub	xbc, xwa
+	add	xbc, xiy
+	ld	wa, (xsp + 4)
+	and	wa, (xbc)
+	ld	bc, wa
+	ld	wa, (xsp + 2)
+	and	a, 0xf
+	jr	z, Sprintf_Shift_ApplyCarry
+	slla	bc
+Sprintf_Shift_ApplyCarry:
+	ld	xwa, (xsp + 6)
+	or	(xwa), bc
+	dec	1, iz
+	dec	2, xix
+	cp	iz, 0:i3
+	jr	gt, Sprintf_Shift_Loop
+Sprintf_Shift_LastEntry:
+	ld	bc, (xiy)
+	ld	wa, hl
+	and	a, 0xf
+	jr	z, Sprintf_Shift_LastShift
+	srla	bc
+Sprintf_Shift_LastShift:
+	ld	(xiy), bc
+	popw	iz
+	inc	8, xsp
+	ret
+Sprintf_PropagateCarry:
+	ld	xiy, (xsp + 4)
+	andmi16	(xiy), 0xff
+	ld	ix, 1:i3
+	ld	hl, (xsp + 8)
+	add	hl, hl
+	jr	Sprintf_PropCarry_Check
+Sprintf_PropCarry_Loop:
+	ld	de, ix
+	exts	xde
+	add	xde, xde
+	add	xde, xiy
+	ld	wa, (xsp + 10)
+	ld	bc, (xde)
+	and	a, 0xf
+	jr	z, Sprintf_PropCarry_Store
+	slla	bc
+Sprintf_PropCarry_Store:
+	ld	(xde), bc
+	ld	wa, ix
+	dec	1, wa
+	exts	xwa
+	add	xwa, xwa
+	ld	xbc, xwa
+	add	xbc, xiy
+	ld	wa, (xde)
+	srl	wa, 8
+	add	(xbc), wa
+	andmi16	(xde), 0xff
+	inc	1, ix
+Sprintf_PropCarry_Check:
+	cp	ix, hl
+	jr	lt, Sprintf_PropCarry_Loop
+	ret
+Sprintf_NormalizeDigits:
+	pushw	iz
+	lda	xde, (0x03c284:24)
+	ld	xwa, xde
+	lda	xbc, (xde + 18)
+Sprintf_Normalize_ClearLoop:
+	stiw_dsp	0xe1, 0x00, 0x00
+	cp	xwa, xbc
+	jr	c, Sprintf_Normalize_ClearLoop
+	ld	wa, (xsp + 6)
+	ld	(xde + 16), wa
+	ld	iz, 0:i3
+Sprintf_Normalize_MainLoop:
+	lda	xwa, (0x03c284:24)
+	cpw	(xwa), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 2), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 4), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 6), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 8), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 10), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 12), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 14), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	cpw	(xwa + 16), 0x0
+	jr	nz, Sprintf_Normalize_ExtractDigit
+	jr	Sprintf_Normalize_Done
+Sprintf_Normalize_MultiplyTen:
+	inc	1, iz
+	calr	Sprintf_MultiplyBCDByTen
+Sprintf_Normalize_ExtractDigit:
+	ldw	wa, 0x8
+	sub	wa, (xsp + 8)
+	add	wa, wa
+	lda	xbc, (0x03c284:24)
+	ldw_sri	WA, 0x07, 0xe4, 0xe0
+	cp	wa, 0:i3
+	jr	z, Sprintf_Normalize_MultiplyTen
+	pushw	iz
+	pushw	wa
+	calr	Sprintf_InsertCarry
+	inc	4, xsp
+	ldw	bc, 0x8
+	sub	bc, (xsp + 8)
+	add	bc, bc
+	lda	xwa, (0x03c284:24)
+	stiw_ind	0x07, 0xe0, 0xe4, 0x00, 0x00
+	cp	iz, 0x20
+	jrl	le, Sprintf_Normalize_MainLoop
+Sprintf_Normalize_Done:
+	popw	iz
+	ret
+Sprintf_InsertCarry:
+	ld	de, (xsp + 6)
+	cp	de, 0x20
+	jr	ge, Sprintf_InsertCarry_Clamp
+	lda	xbc, (0x03c224:24)
+	ld	wa, (xsp + 4)
+	add_srib_mr	A, 0x07, 0xe4, 0xe8
+Sprintf_InsertCarry_Clamp:
+	jr	Sprintf_InsertCarry_Check
+Sprintf_InsertCarry_ClampLoop:
+	dec	1, de
+Sprintf_InsertCarry_Check:
+	cp	de, 0x20
+	jr	ge, Sprintf_InsertCarry_ClampLoop
+	lda	xwa, (0x03c224:24)
+	jr	Sprintf_InsertCarry_PropCheck
+Sprintf_InsertCarry_Propagate:
+	ld	bc, de
+	dec	1, bc
+	inc_srib	1, 0x07, 0xe0, 0xe4
+	ld	bc, de
+	dec	1, de
+	sub_srib_im	0x07, 0xe0, 0xe4, 0x0a
+Sprintf_InsertCarry_PropCheck:
+	cpib_sri	0x07, 0xe0, 0xe8, 0x0a
+	ret	lt
+	cp	de, 0:i3
+	jr	gt, Sprintf_InsertCarry_Propagate
+	ret
+Sprintf_DivideDigitsByTen:
+	ld	xwa, (xsp + 4)
+	ld	xbc, xwa
+	lda	xde, (xwa + 18)
+Sprintf_DivByTen_Loop:
 	ld	wa, (xbc)
-Sprintf_GGen_FindLeadDigit:
-	.byte 0xd8, 0xcf, 0x00, 0x01, 0x67, 0x10, 0xda, 0x8c
-	.byte 0xdc, 0x6a, 0xd8, 0xef, 0x08, 0xd3, 0x07
-Sprintf_GGen_FindLeadDone:
-	.byte 0xec, 0xf0, 0x88, 0x91, 0x3c, 0xff, 0x00, 0xda
-	.byte 0x6a, 0xe9
-Sprintf_GGen_LoadDigitPairs:
-	.byte 0x6a, 0xda, 0xd8, 0x6a, 0xe0, 0x0e, 0xef
-Sprintf_GGen_DigitPairLoop:
-	.byte 0x6a, 0x2e, 0xde, 0xa8, 0x9f, 0x0c, 0x3f, 0x00
-	.byte 0x00, 0x62, 0x16, 0xde, 0x88, 0xe8, 0x13, 0xe8
-	.byte 0x80, 0xaf, 0x08, 0x80, 0x90, 0x3f, 0x00, 0x00
-	.byte 0x6e, 0x07, 0xde, 0x61, 0x9f, 0x0c, 0xf6, 0x61
-	.byte 0xea, 0x9f, 0x0c, 0xf6, 0x6e, 0x04, 0xdb, 0xa8
-	.byte 0x68, 0x43, 0xbf, 0x02, 0x02
-Sprintf_GGen_NormalizeArray:
-	.byte 0x00, 0x00, 0x68, 0x2f, 0xde, 0xa8, 0xaf, 0x08
-	.byte 0x21, 0x68, 0x07, 0xaf, 0x08, 0x20, 0x90, 0x7e
-	.byte 0xde, 0x61, 0x91, 0x20, 0xd8, 0x33, 0x07, 0x6e
-	.byte 0x06, 0xde, 0xcf, 0x08
-Sprintf_GGen_MultiplyLoop:
-	.byte 0x00, 0x61, 0xec, 0xde, 0xd8, 0x66, 0x0d, 0x2e
-	.byte 0x9f, 0x0e, 0x04, 0xaf, 0x0c, 0x20, 0x38, 0x1e
-	.byte 0xa9, 0xfd, 0xef, 0x60, 0x9f, 0x02, 0x8e, 0xaf
-	.byte 0x08, 0x20, 0x90, 0x20, 0xd8, 0x33, 0x07, 0x66
-	.byte 0xc7, 0x9f, 0x02, 0x23, 0x4e
-Sprintf_GGen_PositiveExpDone:
+	extz	xwa
+	div	wa, 0xa
+	stw_erp	WA, 0xe2
+	sll	wa, 8
+	add	(xbc + 2), wa
+	ld	wa, (xbc)
+	extz	xwa
+	div	wa, 0xa
+	stw_dpi	WA, 0xe5
+	cp	xbc, xde
+	jr	c, Sprintf_DivByTen_Loop
+	ret
+Sprintf_MultiplyDigitsByTen:
+	pushw	iz
+	ld	ix, 0:i3
+	ld	xbc, 0:i3
+Sprintf_MulByTen_Loop:
+	ld	xhl, (xsp + 6)
+	ld	xde, xbc
+	add	xde, xhl
+	ld	wa, (xde)
+	mul	wa, 0xa
+	ld	(xde), wa
+	cp	ix, 0:i3
+	jr	z, Sprintf_MulByTen_Next
+	ld	iz, ix
+	jr	Sprintf_MulByTen_CarryCheck
+Sprintf_MulByTen_CarryLoop:
+	ld	iy, iz
+	dec	1, iy
+	exts	xiy
+	add	xiy, xiy
+	add	xiy, xhl
+	srl	wa, 8
+	add	(xiy), wa
+	andmi16	(xde), 0xff
+	dec	1, iz
+Sprintf_MulByTen_CarryCheck:
+	cp	iz, 0:i3
+	jr	le, Sprintf_MulByTen_Next
+	ld	de, iz
+	exts	xde
+	add	xde, xde
+	add	xde, xhl
+	ld	wa, (xde)
+	cp	wa, 0xff
+	jr	ugt, Sprintf_MulByTen_CarryLoop
+Sprintf_MulByTen_Next:
+	inc	1, ix
+	inc	2, xbc
+	cp	ix, 0x10
+	jr	lt, Sprintf_MulByTen_Loop
+	lda	xbc, (xhl + 30)
+	ld	wa, (xbc)
+	bit	7, wa
+	jr	z, Sprintf_MulByTen_HandleOverflow
+	incw	1, (xhl + 28)
+Sprintf_MulByTen_HandleOverflow:
+	ldw	(xbc), 0x0
+	popw	iz
+	ret
+Sprintf_MultiplyBCDByTen:
+	lda	xhl, (0x03c284:24)
+	ld	xbc, xhl
+	lda	xde, (xhl + 20)
+Sprintf_BCDMul_Loop:
+	cpw	(xbc), 0x0
+	jr	z, Sprintf_BCDMul_Skip
+	ld	wa, (xbc)
+	mul	wa, 0xa
+	ld	(xbc), wa
+Sprintf_BCDMul_Skip:
+	inc	2, xbc
+	cp	xbc, xde
+	jr	c, Sprintf_BCDMul_Loop
+	lda	xbc, (xhl + 18)
+	ldw	de, 0x12
+Sprintf_BCDMul_CarryLoop:
+	ld	wa, (xbc)
+	cp	wa, 0x100
+	jr	c, Sprintf_BCDMul_Next
+	ld	ix, de
+	dec	2, ix
+	srl	wa, 8
+	add_sriw_mr	WA, 0x07, 0xec, 0xf0
+	andmi16	(xbc), 0xff
+Sprintf_BCDMul_Next:
+	dec	2, de
+	dec	2, xbc
+	cp	de, 0:i3
+	jr	gt, Sprintf_BCDMul_CarryLoop
+	ret
+Sprintf_CountLeadingZeros:
+	dec	2, xsp
+	pushw	iz
+	ld	iz, 0:i3
+	cpw	(xsp + 12), 0x0
+	jr	le, Sprintf_LeadZero_CheckAllZero
+Sprintf_LeadZero_Loop:
+	ld	wa, iz
+	exts	xwa
+	add	xwa, xwa
+	add	xwa, (xsp + 8)
+	cpw	(xwa), 0x0
+	jr	nz, Sprintf_LeadZero_CheckAllZero
+	inc	1, iz
+	cp	iz, (xsp + 12)
+	jr	lt, Sprintf_LeadZero_Loop
+Sprintf_LeadZero_CheckAllZero:
+	cp	iz, (xsp + 12)
+	jr	nz, Sprintf_LeadZero_CountBits
+	ld	hl, 0:i3
+	jr	Sprintf_LeadZero_Return
+Sprintf_LeadZero_CountBits:
+	ldw	(xsp + 2), 0x0
+	jr	Sprintf_LeadZero_OuterLoop
+Sprintf_LeadZero_ShiftLoop:
+	ld	iz, 0:i3
+	ld	xbc, (xsp + 8)
+	jr	Sprintf_LeadZero_CheckBit7
+Sprintf_LeadZero_ShiftBody:
+	ld	xwa, (xsp + 8)
+	mriw2	0x90, 0x7e
+	inc	1, iz
+Sprintf_LeadZero_CheckBit7:
+	ld	wa, (xbc)
+	bit	7, wa
+	jr	nz, Sprintf_LeadZero_ApplyShift
+	cp	iz, 0x8
+	jr	lt, Sprintf_LeadZero_ShiftBody
+Sprintf_LeadZero_ApplyShift:
+	cp	iz, 0:i3
+	jr	z, Sprintf_LeadZero_AccumShift
+	pushw	iz
+	pushm	(xsp + 14)
+	ld	xwa, (xsp + 12)
+	push	xwa
+	calr	Sprintf_PropagateCarry
+	inc	8, xsp
+Sprintf_LeadZero_AccumShift:
+	add	(xsp + 2), iz
+Sprintf_LeadZero_OuterLoop:
+	ld	xwa, (xsp + 8)
+	ld	wa, (xwa)
+	bit	7, wa
+	jr	z, Sprintf_LeadZero_ShiftLoop
+	ld	hl, (xsp + 2)
+Sprintf_LeadZero_Return:
+	popw	iz
 	inc	2, xsp
 	ret
+Sprintf_CountTrailingZeros:
 	pushw	iz
-	ld	xde, (xsp+6)
+	ld	xde, (xsp + 6)
 	ld	iz, 0:i3
-	ld	bc, (xsp+10)
+	ld	bc, (xsp + 10)
 	cp	bc, 0:i3
-	jr	le, 20
-Sprintf_GGen_DivideLoop:
-	.byte 0xde, 0x88, 0xe8, 0x13, 0xe8, 0x80, 0xea, 0x80
-	.byte 0x90, 0x3f, 0x00, 0x00, 0x6e, 0x06, 0xde, 0x61
-	.byte 0xd9, 0xf6, 0x61, 0xec, 0xd9, 0xf6, 0x6e, 0x04
-Sprintf_GGen_NegativeExpCheck:
-	.byte 0xdb, 0xa8, 0x68, 0x27, 0x92, 0x23, 0xde, 0xa8
-	.byte 0x68, 0x05, 0xdb, 0xef, 0x01, 0xde, 0x61, 0xdb
-	.byte 0x88, 0xd8, 0xcc, 0x00, 0xff, 0x66, 0x06, 0xde
-	.byte 0xcf, 0x08
-Sprintf_GGen_FinalShift:
-	nop
-	jr	lt, -19
+	jr	le, Sprintf_TrailZero_CheckAllZero
+Sprintf_TrailZero_Loop:
+	ld	wa, iz
+	exts	xwa
+	add	xwa, xwa
+	add	xwa, xde
+	cpw	(xwa), 0x0
+	jr	nz, Sprintf_TrailZero_CheckAllZero
+	inc	1, iz
+	cp	iz, bc
+	jr	lt, Sprintf_TrailZero_Loop
+Sprintf_TrailZero_CheckAllZero:
+	cp	iz, bc
+	jr	nz, Sprintf_TrailZero_CountBits
+	ld	hl, 0:i3
+	jr	Sprintf_TrailZero_Return
+Sprintf_TrailZero_CountBits:
+	ld	hl, (xde)
+	ld	iz, 0:i3
+	jr	Sprintf_TrailZero_CheckHigh
+Sprintf_TrailZero_ShiftLoop:
+	srl	hl, 1
+	inc	1, iz
+Sprintf_TrailZero_CheckHigh:
+	ld	wa, hl
+	and	wa, 0xff00
+	jr	z, Sprintf_TrailZero_ApplyShift
+	cp	iz, 0x8
+	jr	lt, Sprintf_TrailZero_ShiftLoop
+Sprintf_TrailZero_ApplyShift:
 	cp	iz, 0:i3
-	jr	z, 8
+	jr	z, Sprintf_TrailZero_Done
 	pushw	bc
-Sprintf_GGen_RoundLoop:
-	.byte 0x2e, 0x3a, 0x1e, 0xc2, 0xfc, 0xef, 0x60, 0xde
-	.byte 0x8b, 0x4e, 0x0e, 0xef, 0x68, 0x3e, 0x9f, 0x10
-	.byte 0x20, 0xe8, 0x13, 0xf1, 0x2d, 0x01, 0x31, 0x1d
-	.byte 0x7f, 0x02, 0xff, 0xeb, 0x8e, 0xee, 0xcf, 0x00
-	.byte 0x00, 0x00, 0x00, 0x69, 0x0e, 0xee, 0x88, 0xd8
-	.byte 0x06, 0xd7, 0xe2, 0x06, 0xe8, 0x61, 0xbf, 0x04
-	.byte 0x60, 0x68, 0x03, 0xbf, 0x04, 0x66, 0xaf, 0x04
-	.byte 0x26, 0xee, 0x88, 0xf1, 0xe8, 0x03, 0x31, 0x1d
-Sprintf_GGen_ExtractResult:
-	.byte 0x2d, 0x04, 0xff, 0xbf, 0x08, 0x63, 0xee, 0x88
-	.byte 0xf1, 0xe8, 0x03, 0x31, 0x1d, 0x31, 0x04, 0xff
-	.byte 0xeb, 0x8e, 0xaf, 0x08, 0x20, 0xe8, 0xcf, 0xd4
-	.byte 0x03, 0x00, 0x00, 0x62
-Sprintf_GGen_CopyDigits:
-	.byte 0x04, 0xee, 0x61, 0x68, 0x14, 0xaf, 0x04, 0x20
-	.byte 0xe8, 0xe0, 0x66, 0x0d, 0xaf, 0x08, 0x20, 0xe8
-	.byte 0xcf, 0x14, 0x00, 0x00, 0x00, 0x69
-Sprintf_GGen_CopyLoop:
-	.byte 0x02, 0xee, 0x69, 0x9f, 0x10, 0x3f, 0x00, 0x00
-	.byte 0x69, 0x0d, 0xee, 0x88, 0xd8, 0x06, 0xd7, 0xe2
-	.byte 0x06, 0xe8, 0x61, 0xe8, 0x8b, 0x68, 0x02, 0xee
-	.byte 0x8b, 0x5e, 0xef, 0x60, 0x0e, 0xff
-Sprintf_Decimal_PrecZeroLoop_Code_Helper:
-	ld XIX,(XBC)
-	ld XIY,(XBC+0x04)
-Sprintf_GGen_HandleCarry:
-	ld (XWA),XIX
-	ld (XWA+0x04),XIY
+	pushw	iz
+	push	xde
+	calr	Sprintf_ShiftDigitArray
+	inc	8, xsp
+Sprintf_TrailZero_Done:
+	ld	hl, iz
+Sprintf_TrailZero_Return:
+	popw	iz
 	ret
-Free_LoadReg4_Code_Helper:
-	.byte 0xbf, 0xd2, 0x37, 0x3e, 0x9f
-Sprintf_GGen_CarryLoop:
-	.byte 0x3e, 0x3f, 0x02, 0x00, 0x61, 0x07, 0x9f, 0x3e
-	.byte 0x3f, 0x24, 0x00, 0x62, 0x08, 0xaf, 0x3a, 0x20
-Sprintf_GGen_CarryCheck:
-	ld	(xwa), 0
-	jr	102
-	lda	xwa, (xsp+16)
-	ld	(xsp+8), xwa
-	ld	(xwa+32), 0
-Sprintf_GGen_ConvertToAscii:
-	.byte 0xaf, 0x08, 0x20, 0xb8, 0x1f
-Sprintf_GGen_AsciiLoop:
-	ldw	wa, 1215
-	jr	f, -81
-	ldw	iz, 40742
+Sprintf_DecimalExponent:
+	dec	8, xsp
 	push	xiz
-Sprintf_GGen_AsciiDone:
-	.byte 0x20, 0xe8, 0x13, 0xbf, 0x0c, 0x60, 0xee, 0x88
-	.byte 0xaf, 0x0c, 0x21, 0x1d, 0x35, 0x04, 0xff, 0xcf
-	.byte 0xc8, 0x30, 0xaf, 0x04
-Sprintf_ShiftDigitArray:
-	.byte 0x20, 0xb0, 0x47, 0x80, 0x3f, 0x39, 0x62, 0x03
-	.byte 0x80, 0x38, 0x27, 0xee, 0x88, 0xaf
-Sprintf_Shift_BuildMask:
-	.byte 0x0c, 0x21, 0x1d, 0x3b, 0x04, 0xff, 0xeb, 0x8e
-	.byte 0xee, 0xe6, 0x66
-Sprintf_Shift_SetupLoop:
-	.byte 0x07, 0xe8, 0xa9, 0xaf, 0x04, 0xa8, 0x68, 0xc9
-	.byte 0xaf, 0x08, 0x20, 0xb8, 0x21, 0x30, 0xaf, 0x04
-	.byte 0xa0, 0x38, 0xaf, 0x08, 0x20, 0x38, 0xaf, 0x42
-	.byte 0x20, 0x38, 0x1d, 0xbc, 0x05, 0xff, 0xbf
-Sprintf_Shift_Loop:
-	incf
-	ldw sp, 15023
-	ld c, 94:opc
-	lda xsp, (xsp+46)
+	ld	wa, (xsp + 16)
+	exts	xwa
+	lda	xbc, (301:16)
+	call	Math_MultiplyAccumulate
+	ld	xiz, xhl
+	cp	xiz, 0x0
+	jr	ge, Sprintf_DecExp_Positive
+	ld	xwa, xiz
+	cpl	wa
+	cplw_erp	0xe2
+	inc	1, xwa
+	ld	(xsp + 4), xwa
+	jr	Sprintf_DecExp_ComputeQuotient
+Sprintf_DecExp_Positive:
+	ld	(xsp + 4), xiz
+Sprintf_DecExp_ComputeQuotient:
+	ld	xiz, (xsp + 4)
+	ld	xwa, xiz
+	lda	xbc, (1000:16)
+	call	Free_ClearByte2
+	ld	(xsp + 8), xhl
+	ld	xwa, xiz
+	lda	xbc, (1000:16)
+	call	Math_DivideSigned32
+	ld	xiz, xhl
+	ld	xwa, (xsp + 8)
+	cp	xwa, 0x3d4
+	jr	le, Sprintf_DecExp_CheckRemainder
+	inc	1, xiz
+	jr	Sprintf_DecExp_ApplySign
+Sprintf_DecExp_CheckRemainder:
+	ld	xwa, (xsp + 4)
+	or	xwa, xwa
+	jr	z, Sprintf_DecExp_ApplySign
+	ld	xwa, (xsp + 8)
+	cp	xwa, 0x14
+	jr	ge, Sprintf_DecExp_ApplySign
+	dec	1, xiz
+Sprintf_DecExp_ApplySign:
+	cpw	(xsp + 16), 0x0
+	jr	ge, Sprintf_DecExp_Positive_Return
+	ld	xwa, xiz
+	cpl	wa
+	cplw_erp	0xe2
+	inc	1, xwa
+	ld	xhl, xwa
+	jr	Sprintf_DecExp_Return
+Sprintf_DecExp_Positive_Return:
+	ld	xhl, xiz
+Sprintf_DecExp_Return:
+	pop	xiz
+	inc	8, xsp
 	ret
-	swi 7
-	ld XIX,(XBC)
-	ld XIY,(XBC+0x04)
-	ld HL,(XBC+0x08)
-	.byte 0xb0
-Sprintf_Shift_ApplyShift:
-	.byte 0x64, 0xb8, 0x04, 0x65, 0xb8, 0x08, 0x53, 0x0e
-Free_Compare2_Helper:
-	.byte 0xef, 0x6c, 0x2e, 0x9f, 0x14, 0x26, 0x2e, 0x9f
-	.byte 0x14, 0x04, 0xaf, 0x12, 0x20, 0x38, 0x1d, 0xf5
-	.byte 0x20, 0xff, 0xef
-Sprintf_Shift_ApplyCarry:
-	.byte 0x60, 0xbf, 0x02, 0x63, 0xaf, 0x02, 0x20, 0xe8
-	.byte 0xe0, 0x6e, 0x03, 0x2e, 0x68
-Sprintf_Shift_LastEntry:
-	.byte 0x09, 0xaf, 0x02, 0x20, 0xaf, 0x0e, 0xa0, 0xe8
-	.byte 0x61, 0x28, 0xaf
-Sprintf_Shift_LastShift:
-	rcf
-	ld	w, 56:opc
-	ld	xwa, (xsp+16)
-Sprintf_PropagateCarry:
-	.byte 0x38, 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0a, 0x37
-	.byte 0xaf, 0x02, 0x23, 0x4e, 0xef, 0x64, 0x0e, 0xeb
-Sprintf_PropCarry_Loop:
-	.byte 0xa8, 0x9f, 0x0a, 0x21, 0xd9, 0xd8, 0xb0, 0xf6
-	.byte 0xaf, 0x04, 0x23, 0x9f, 0x08, 0x20, 0x83, 0x15
-	.byte 0xeb, 0x69, 0xb0, 0xf6
-Sprintf_PropCarry_Store:
+	.byte 0xff
+Sprintf_CopyBytes8:
+	ld	xix, (xbc)
+	ld	xiy, (xbc + 4)
+	ld	(xwa), xix
+	ld	(xwa + 4), xiy
+	ret
+Sprintf_ItoaBaseN:
+	lda	xsp, (xsp - 46)
+	push	xiz
+	cpw	(xsp + 62), 0x2
+	jr	lt, Sprintf_ItoaBaseN_Invalid
+	cpw	(xsp + 62), 0x24
+	jr	le, Sprintf_ItoaBaseN_Setup
+Sprintf_ItoaBaseN_Invalid:
+	ld	xwa, (xsp + 58)
+	ld	(xwa), 0x0
+	jr	Sprintf_ItoaBaseN_Return
+Sprintf_ItoaBaseN_Setup:
+	lda	xwa, (xsp + 16)
+	ld	(xsp + 8), xwa
+	ld	(xwa + 32), 0x0
+	ld	xwa, (xsp + 8)
+	lda	xwa, (xwa + 31)
+	ld	(xsp + 4), xwa
+	ld	xiz, (xsp + 54)
+Sprintf_ItoaBaseN_DivLoop:
+	ld	wa, (xsp + 62)
+	exts	xwa
+	ld	(xsp + 12), xwa
+	ld	xwa, xiz
+	ld	xbc, (xsp + 12)
+	call	DivMod32
+	add	l, 0x30
+	ld	xwa, (xsp + 4)
+	ld	(xwa), l
+	cp	(xwa), 0x39
+	jr	le, Sprintf_ItoaBaseN_StoreDigit
+	addmi8	(xwa), 0x27
+Sprintf_ItoaBaseN_StoreDigit:
+	ld	xwa, xiz
+	ld	xbc, (xsp + 12)
+	call	Math_DivideU32
+	ld	xiz, xhl
+	or	xiz, xiz
+	jr	z, Sprintf_ItoaBaseN_Reverse
+	ld	xwa, 1:i3
+	sub	(xsp + 4), xwa
+	jr	Sprintf_ItoaBaseN_DivLoop
+Sprintf_ItoaBaseN_Reverse:
+	ld	xwa, (xsp + 8)
+	lda	xwa, (xwa + 33)
+	sub	xwa, (xsp + 4)
+	push	xwa
+	ld	xwa, (xsp + 8)
+	push	xwa
+	ld	xwa, (xsp + 66)
+	push	xwa
+	call	Mem_Copy
+	lda	xsp, (xsp + 12)
+Sprintf_ItoaBaseN_Return:
+	ld	xhl, (xsp + 58)
+	pop	xiz
+	lda	xsp, (xsp + 46)
+	ret
+Sprintf_ItoaBaseN_Pad:
+	swi	7
+Sprintf_CopyBytes10:
+	ld	xix, (xbc)
+	ld	xiy, (xbc + 4)
+	ld	hl, (xbc + 8)
+	ld	(xwa), xix
+	ld	(xwa + 4), xiy
+	ld	(xwa + 8), hl
+	ret
+Sprintf_StringNSearch:
+	dec	4, xsp
+	pushw	iz
+	ld	iz, (xsp + 20)
+	pushw	iz
+	pushm	(xsp + 20)
+	ld	xwa, (xsp + 18)
+	push	xwa
+	call	Sprintf_MemChr
+	inc	8, xsp
+	ld	(xsp + 2), xhl
+	ld	xwa, (xsp + 2)
+	or	xwa, xwa
+	jr	nz, Sprintf_StringNSearch_Found
+	pushw	iz
+	jr	Sprintf_StringNSearch_Copy
+Sprintf_StringNSearch_Found:
+	ld	xwa, (xsp + 2)
+	sub	xwa, (xsp + 14)
+	inc	1, xwa
+	pushw	wa
+Sprintf_StringNSearch_Copy:
+	ld	xwa, (xsp + 16)
+	push	xwa
+	ld	xwa, (xsp + 16)
+	push	xwa
+	call	Mem_Copy
+	lda	xsp, (xsp + 10)
+	ld	xhl, (xsp + 2)
+	popw	iz
+	inc	4, xsp
+	ret
+Sprintf_MemChr:
+	ld	xhl, 0:i3
+	ld	bc, (xsp + 10)
+	cp	bc, 0:i3
+	ret	z
+	ld	xhl, (xsp + 4)
+	ld	wa, (xsp + 8)
+	cpir83	; <-- aqui é o endereço FF28E2
+	dec	1, xhl
+	ret	z
 	ld	xhl, 0:i3
 	ret
 MssNameFunc_Helper2:
+Sprintf_DataBlock_28E9:
 	ld	de, (xsp+10)
 	ld	xix, (xsp+4)
 	ld	xhl, xix
-	jr	8
+	jr	Sprintf_DataBlock_28E9_Join
+Sprintf_DataBlock_28E9_Loop:
 	stb_dpi	a, 240
 	ld	wa, (xsp+8)
 	ld	(xbc), a
+Sprintf_DataBlock_28E9_Join:
 	ld	wa, de
 	dec	1, de
 	cp	wa, 0:i3
-Sprintf_PropCarry_Check:
-	.byte 0xb0, 0xf6, 0x84, 0x3f, 0x00
-Sprintf_NormalizeDigits:
-	.byte 0x6e, 0xeb, 0x0e, 0x3e, 0xaf, 0x08, 0x26, 0x3e
-	.byte 0x1d, 0xc3, 0x07
-Sprintf_Normalize_ClearLoop:
-	.byte 0xff, 0xef, 0x64, 0xdb, 0x61, 0xdb, 0x89, 0xf3
-	.byte 0x07, 0xf8, 0xe4, 0x33, 0xd9, 0xd8, 0x66, 0x0b
-	.byte 0x9f
-Sprintf_Normalize_MainLoop:
-	incf
-	ld	w, 196:opc
-	cp	xbc, xix
-	jr	z, 5
-	djnz16	bc, -8
+	ret	z
+	.byte	0x84, 0x3f, 0x00
+	jr	nz, Sprintf_DataBlock_28E9_Loop
+	ret
+Sprintf_StringLength:
+	push	xiz
+	ld	xiz, (xsp + 8)
+	push	xiz
+	call	Strlen
+	inc	4, xsp
+	inc	1, hl
+	ld	bc, hl
+	lda_dri	XHL, 0x07, 0xf8, 0xe4
+	cp	bc, 0:i3
+	jr	z, Sprintf_StrLen_NotFound
+	ld	wa, (xsp + 12)
+Sprintf_StrLen_ScanLoop:
+	cp_spdb	A, 0xec
+	jr	z, Sprintf_StrLen_Return
+	djnz	xbc, Sprintf_StrLen_ScanLoop
+Sprintf_StrLen_NotFound:
 	ld	xhl, 0:i3
+Sprintf_StrLen_Return:
 	pop	xiz
 	ret
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_Normalize_MultiplyTen:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_Normalize_ExtractDigit:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_Normalize_Done:
-	swi	7
-	swi	7
-Sprintf_InsertCarry:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_InsertCarry_Clamp:
-	swi	7
-	swi	7
-Sprintf_InsertCarry_ClampLoop:
-	swi	7
-	swi	7
-Sprintf_InsertCarry_Check:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_InsertCarry_Propagate:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_InsertCarry_PropCheck:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_DivideDigitsByTen:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_DivByTen_Loop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MultiplyDigitsByTen:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MulByTen_Loop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MulByTen_CarryLoop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MulByTen_CarryCheck:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MulByTen_Next:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MulByTen_HandleOverflow:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MultiplyBCDByTen:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_BCDMul_Loop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_BCDMul_Skip:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_BCDMul_CarryLoop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_BCDMul_Next:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_CountLeadingZeros:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_Loop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_CheckAllZero:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_CountBits:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_ShiftLoop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_ShiftBody:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_CheckBit7:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_ApplyShift:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_AccumShift:
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_OuterLoop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_LeadZero_Return:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_CountTrailingZeros:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_TrailZero_Loop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_TrailZero_CheckAllZero:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_TrailZero_CountBits:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_TrailZero_ShiftLoop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_TrailZero_CheckHigh:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_TrailZero_ApplyShift:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_TrailZero_Done:
-	swi	7
-	swi	7
-Sprintf_TrailZero_Return:
-	swi	7
-	swi	7
-Sprintf_DecimalExponent:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_DecExp_Positive:
-	swi	7
-	swi	7
-	swi	7
-Sprintf_DecExp_ComputeQuotient:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_DecExp_CheckRemainder:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_DecExp_ApplySign:
+; ---------------------------------------------------------------------------
+; ERASED FLASH, 0xFF2154-0xFFFE7F (56,620 bytes, every one 0xFF).
+;
+; Measured on original_ROMs/kn5000_v7_program.rom: the byte after the `ret`
+; above is the first of an unbroken 0xFF run that ends exactly at
+; Debug_PrintHexByte (0xFFFE80).  The `.org` below emits all of it.
+;
+; Until 2026-09-25 the head of this run was written as ~990 lines of
+; `swi 7` (0xFF decodes as SWI 7), four `.byte 0xff` rows and a 27-byte
+; `.fill`, carrying 68 labels transplanted from v9/v10 (Sprintf_Normalize_*,
+; Sprintf_InsertCarry*, Sprintf_DivideDigitsByTen, Sprintf_MulByTen_*,
+; Sprintf_CountLeadingZeros, Sprintf_DecimalExponent, Sprintf_DecExp_*,
+; Sprintf_CopyBytes8/10, Sprintf_ItoaBaseN*, Sprintf_StringNSearch*,
+; Sprintf_MemChr, Sprintf_DataBlock_28E9, Sprintf_StringLength,
+; Sprintf_StrLen_*, Sprintf_FillToEnd).  No v7 source file referenced any
+; of them (checked over every v7/maincpu .s/.c/.ld), and no byte here is
+; anything but 0xFF, so they were names on erased flash, not routines.
+; The routines themselves DO exist in v7, lower down: a byte alignment
+; (difflib over the two ROMs) matches v7 0xFF086B-0xFF2153 to v10
+; 0xFF1048-0xFF292F -- v10's whole Sprintf_Core..Sprintf_FillToEnd span --
+; with only 2-byte operand differences and one inserted byte.  The v7 labels
+; of this file sit 0x41A bytes above their code, which is what pushed the
+; last ~70 of them onto the fill.  The note below was written about one of
+; them, Sprintf_DecExp_ApplySign (then at 0xFF240F); its point, that a clean
+; `swi 7` decode of 0xFF is not code, is the reason for this block.
+; ---------------------------------------------------------------------------
 	; NOT code, despite the label: all 27 bytes are 0xff. v9/v10 has a real,
 	; ~10-instruction routine at this same label ("cpw (xsp+16),0x0 / jr ge,... /
 	; ld xwa,xiz / cpl wa / ..."), so this is not shared structure -- this v7
@@ -2092,325 +2795,7 @@ Sprintf_DecExp_ApplySign:
 	; disassembler happily decodes 0xff as 27x `swi 7` and round-trips it
 	; byte-exact, which is exactly the trap noted in the HD-AE5000 version-string
 	; case: a clean decode is not proof of code. Typed as the fill it plainly is.
-	.fill 27, 1, 0xff
 ; === end v7 block ===
-Sprintf_CopyBytes8:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN_Invalid:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN_Setup:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN_DivLoop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN_StoreDigit:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN_Reverse:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN_Return:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_ItoaBaseN_Pad:
-	swi	7
-
-Sprintf_CopyBytes10:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_StringNSearch:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_StringNSearch_Found:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_StringNSearch_Copy:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_MemChr:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_DataBlock_28E9:
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-Sprintf_StringLength:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_StrLen_ScanLoop:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-Sprintf_StrLen_NotFound:
-	swi	7
-	swi	7
-Sprintf_StrLen_Return:
-	swi	7
-	swi	7
-Sprintf_FillToEnd:
 ; v7: Use .org to auto-compute padding to reach Debug_PrintHexByte at 0xFFFE80
 	.org 0xfffe80 - 0xe00000, 0xff
 Sprintf_FillToVectors:

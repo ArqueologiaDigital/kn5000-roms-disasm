@@ -1,6 +1,17 @@
 /**
  * sound_data_orchestral_pad.c — Orchestral Pad pitch offset table
  *
+ * CORRECTED 2026-09-25 -- read this first.  Descriptor slot +0x34.  Reader
+ * SndParam_LookupByPartAndNote (v10/v9 0xFEE9EA) indexes it by the VOICE
+ * INDEX that slot +0x18/+0x28 yields, not by "patch number within the
+ * Orchestral Pad category" (false).  Its caller at v10 0xF24D8C adds the
+ * byte to RAM 0x0FAC; the values (0, +12, -12) have the shape of an octave
+ * shift, but the use of the sum is not traced.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 128 bytes: per-patch signed pitch offsets (int8_t) for the Orchestral Pad
  * sound category. Values observed: 0 (no offset), +12 (up one octave),
  * -12/0xF4 (down one octave).

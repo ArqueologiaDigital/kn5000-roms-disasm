@@ -1,6 +1,18 @@
 /**
  * sound_data_strings_vocal.c — Strings & Vocal category sound data
  *
+ * CORRECTED 2026-09-25 -- read this first.  This is descriptor slot +0x18:
+ * the mode-0 BANK/PROGRAM -> VOICE INDEX map.  Reader
+ * ApplyProgramChange_LoadDRAM (v10/v9 0xFEE87F), same addressing as
+ * sound_data_piano.c; it stores the low byte of the first word (a voice
+ * index 0..127) at record+2 and the low byte of the second (0 in all 2,048
+ * records) at record+1.  Proven false below: the sub_bank/patch_ref reading;
+ * sound_data_brass.s is the exact inverse (128 of 128 voice indices).
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 8320 bytes: 128-byte header + 2048 x 4-byte patch reference records.
  * Same structure as piano: header has 8-byte sub-bank index + 120 pad,
  * then 2048 records of { sub_bank: uint16_t, patch_ref: uint16_t }.

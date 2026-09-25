@@ -1,6 +1,19 @@
 /**
  * sound_data_flute_extra.c — Flute Extra category sound data
  *
+ * CORRECTED 2026-09-25 -- read this first.  NOT a separate object: this is
+ * the last 4,798 bytes of the 7,296-byte table that starts in
+ * sound_data_flute.c (descriptor slot +0x20, the mode-1 BANK/PROGRAM ->
+ * CATEGORY/SLOT map).  It starts 2 bytes into record 592, so it has NO
+ * header: the "128-byte header (sub-bank indices + padding)" below is FALSE
+ * -- those bytes are records, read 2 bytes out of phase -- and so is the
+ * sub_bank/patch_ref reading.  The split exists only because of a phantom
+ * reference in sequencer/sequencer_engine.s (see audio/sound_data.s).
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 4798 bytes: 128-byte header (sub-bank indices + padding)
  * + 1167 x 4-byte patch reference records + 2 trailing bytes.
  *

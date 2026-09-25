@@ -1,6 +1,17 @@
 /**
  * sound_data_mallet_orch_perc.c — Mallet & Orchestral Percussion data
  *
+ * CORRECTED 2026-09-25 -- read this first.  This is descriptor slot +0x28:
+ * the mode-1 BANK/PROGRAM -> VOICE INDEX map, read by
+ * ApplyProgramChange_LoadDRAM (v10/v9 0xFEE87F) with a 0x200 stride: the
+ * same 14-block bank map as sound_data_flute.c, records {voice index, 0}.
+ * The sub_bank/patch_ref reading below is false; sound_data_world_perc.s is
+ * the exact inverse (128 of 128).
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 7296 bytes: 128-byte header (sub-bank indices + padding)
  * + 1792 x 4-byte patch reference records.
  *
