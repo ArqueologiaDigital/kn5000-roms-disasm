@@ -243,6 +243,10 @@ Bitmap_SoundIcon_Microphone:		.incbin "includes/generated/Bitmap_SoundIcon_Micro
 ; -----------------------------------------------------------------------------
 ; These six blocks are indexed by SectionDirectory_Table entries 6 and 28-32
 ; (floppy save/load banks), but their factory content is a set of full UI
+; [CORRECTED 2026-09-25: "floppy save/load banks" had no evidence; every
+; directory entry is a bitmap and no firmware reader of the directory was
+; found -- see preset_banks.s, whose accessor routines also give these six
+; images' width and height]
 ; images, each byte-identical to an extraction already checked in under
 ; v10/maincpu/images/ -- so they are emitted from those files here (same
 ; single-sourcing as the Bitmap_1bit_* boot screens below).  The maincpu

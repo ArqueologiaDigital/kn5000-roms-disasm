@@ -47,6 +47,12 @@ CHECKS (the signal each one reads)
                 database is 200 pointers into a string pool at RAM 0x69B20.
     panelmem    80 records x 674 B at 0x99ECA0, each a 34-chunk (tag, length,
                 payload) stream ending 0xFF 0xFF.
+    sections    all 33 SectionDirectory_Table targets are byte-identical to
+                v10/maincpu/images/*.bin bitmaps that the v7/v9/v10 program ROMs
+                also carry; entries 0-5, 8-27 tile 0x800088.. with no gap, then 7;
+                entry 1 = entry 0 with 0xF8 -> 0x0A; split pictures 13-24 differ
+                from 12 only by 0xFF->0xFE / 0x00->0xFC; lists every other 24/32-bit
+                constant hit on a target address (expected: coincidences only).
     stylerec    the 96-byte residue after StyleRec_PtrTable_Default (0x987FA0)
                 equals ROM 0x98FF98..0x98FFF7, inside HelpDB_French.
 """
@@ -302,10 +308,76 @@ def check_stylerec():
     return r == dup and 0x98F0DA <= 0x98FF98 < 0x992A0C
 
 
+SECTION_IMAGES = {
+    0: "BitmapAccger16", 1: "BitmapAccita16", 2: "BitmapSomeArrows",
+    3: "BitmapDrawbarNumberedSlider_1", 4: "BitmapDrawbarNumberedSlider_2",
+    5: "BitmapDrawbarNumberedSlider_3", 6: "BitmapTechnicsLogo", 7: "BitmapKN5000Logo",
+    8: "BitmapFadeInPicture", 9: "BitmapFadeInText", 10: "BitmapFadeOutPicture",
+    11: "BitmapFadeOutText", 25: "BitmapMIDIConnections_1", 26: "BitmapMIDIConnections_2",
+    27: "BitmapMIDIConnections_3", 28: "BitmapBmphk", 29: "BitmapNtedt0k",
+    30: "BitmapNtedt0d", 31: "BitmapDredt0k", 32: "BitmapDredt0d",
+}
+for _i, _k in enumerate(["no_split", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]):
+    SECTION_IMAGES[12 + _i] = "BitmapSplitPoint_" + _k
+
+
+def check_sections():
+    """Every directory entry == a v10/maincpu/images bitmap, which the program
+    ROMs also carry; the in-half entries tile 0x800088..0x82E9C1; recolouring
+    facts quoted in preset_banks.s; no 24/32-bit constant reference to any
+    target outside the directory and the accessor routines."""
+    ok = True
+    d = directory()
+    progs = {k: rom(OTHER_ROMS[k][0]) for k in ("v7", "v9", "v10")}
+    img = {}
+    for n in range(33):
+        f = os.path.join(ROOT, "v10/maincpu/images/%s.bin" % SECTION_IMAGES[n])
+        b = open(f, "rb").read()
+        img[n] = b
+        same = td(d[n], len(b)) == b
+        where = {k: progs[k].find(b) for k in progs}
+        good = same and all(v >= 0 for v in where.values())
+        ok &= good
+        print("  entry %2d 0x%06X %-30s %6d B  == file %s  program copies %s"
+              % (n, d[n], SECTION_IMAGES[n], len(b), same,
+                 {k: "0x%06X" % (v + 0xE00000) for k, v in where.items()}))
+    a = 0x800088
+    for n in [0, 1, 2, 3, 4, 5, 8, 9, 10, 11] + list(range(12, 28)) + [7]:
+        ok &= d[n] == a
+        a += len(img[n])
+    print("  in-half entries tile 0x800088..0x%06X with no gap: %s" % (a - 1, a == 0x82E9C2))
+    ok &= a == 0x82E9C2
+    g, i = img[0], img[1]
+    diff = [(x, y) for x, y in zip(g, i) if x != y]
+    rec = set(diff) == {(0xF8, 0x0A)}
+    print("  entry 1 vs 0: %d differing pixels, all 0xF8 -> 0x0A: %s (entry 0 has %d 0xF8 pixels)"
+          % (len(diff), rec, g.count(0xF8)))
+    ok &= rec
+    base = img[12]
+    kinds = set()
+    for n in range(13, 25):
+        kinds |= {(x, y) for x, y in zip(base, img[n]) if x != y}
+    print("  split-point pictures 13-24 differ from 12 only as %s" % sorted(kinds))
+    ok &= kinds <= {(0xFF, 0xFE), (0x00, 0xFC)}
+    roms = {k: (rom(f), b) for k, (f, b) in OTHER_ROMS.items()}
+    hits = []
+    for n in range(33):
+        for w in (3, 4):
+            pat = d[n].to_bytes(w, "little")
+            for k, (blob, b) in roms.items():
+                for m in re.finditer(re.escape(pat), blob):
+                    loc = m.start() + b
+                    if k == "tabledata" and (loc < 0x800088 or 0x82F000 <= loc < 0x82F2E9):
+                        continue          # the directory itself / the accessor routines
+                    hits.append("%s:w%d:0x%06X@0x%06X" % (k, w, d[n], loc))
+    print("  other constant hits: %s" % (hits or "none"))
+    return ok
+
+
 CHECKS = {"sec07": check_sec07, "accessors": check_accessors, "sec10pad": check_sec10pad,
           "fdemo": check_fdemo, "wallpaper": check_wallpaper, "demo": check_demo,
           "helpdb": check_helpdb, "panelmem": check_panelmem,
-          "stylerec": check_stylerec}
+          "stylerec": check_stylerec, "sections": check_sections}
 
 
 def main():

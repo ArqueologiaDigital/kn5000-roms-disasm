@@ -18,6 +18,11 @@
 ;                     - Factory defaults: 0xF7 (erased flash), 0x07, 0x00, or 0xFF
 ;                     - Entries 12-24: 13 x 3,016-byte slots (52 x 58-B records)
 ;                     - Entries 25-27: 3 x 31,968-byte slots (0xFF-dominant)
+;                     CORRECTED 2026-09-25: all 33 directory entries are 8bpp
+;                     bitmaps (0xF7 = transparent), byte-identical to images
+;                     the program ROM also carries -- entries 12-24 are the
+;                     58x52 split-point pictures, 25-27 the 296x108 MIDI
+;                     connection diagrams; see preset_banks.s
 ; 0x830000-0x87FFEF  Tone Database (copied to SubCPU RAM 0x50000 at boot)
 ;                     - 0x830000 directory/program maps/offset table (tone_database_directory.s)
 ;                     - 0x8324D4 579 tone/voice records (tone_database_records.s)
@@ -70,6 +75,8 @@
 ;   Help Lang Index  @ 0x988000: 12 entries, 4 bytes/entry (6 intro-string ptrs
 ;                      + 6 SLIDE8K help-database ptrs; slot 4 of each = English)
 ;   Section Directory@ 0x800000: 33 entries indexing preset data banks for floppy I/O
+;                      (CORRECTED 2026-09-25: 33 bitmaps; no firmware reader
+;                      found -- see preset_banks.s)
 ; =============================================================================
 
 ; =============================================================================
@@ -98,6 +105,8 @@
 	; and the fill-pattern legend.  (includes/initial_data.bin is no longer
 	; referenced by the LLVM build; the file stays on disk because the
 	; archived ASL mirror still bincludes it in full.)
+	; Since 2026-09-25 that header shows the "banks" are bitmaps, emitted
+	; from v10/maincpu/images/.
 	.org 0x800000 - 0x800000, 0xFF
 	.include "preset_banks.s"
 
