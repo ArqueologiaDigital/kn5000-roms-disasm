@@ -268,14 +268,17 @@ def emit(d):
     w("; read as DspParamName_Table indexes is the inference).  Effects that share an")
     w("; algorithm share a letter string: ROCK ROTARY (15) and ROTARY SPEAKER (53)")
     w("; are both 'abfjjiifjjiicf!t', the 12 reverbs 16-27 are all 'ugvfc'.")
-    w("; The operand bytes include 24-bit big-endian coefficients (e.g. 0x266666,")
-    w("; 0x400000); their DSP-side meaning is not established here.")
+    w("; Open question for the DSP work: what each letter's operands do on the DSP")
+    w("; side -- they include 24-bit big-endian coefficients such as 0x266666 and")
+    w("; 0x400000 (cf. the sub-CPU DSP_EffNN_* blocks in v142/subcpu).")
     w("; Byte-identical in v7, v9 and v10.")
     w("; =============================================================================")
     order = sorted(lists.items(), key=lambda t: t[1][0])
     for fx, (p, recs, end) in order:
         lab = label_for(fx, names, p)
-        w("; effect %d %s: %d parameters" % (fx, names[fx], len(recs)))
+        w("; effect %d %s -- %d parameter-write records (count byte 0xEE5FE0+%d);"
+          % (fx, names[fx], len(recs), fx))
+        w("; reached through DspFxRecListPtrTable entry %d (DSPCfg_FindSlot63 & co.)" % fx)
         if lab in KEEP_LABEL.values():
             w("; (label name kept: shared/positional_labels.s derives")
             w(";  WidgetParam_Config_058_0x36 = DspFxRecListPtrTable from it)")
@@ -317,27 +320,33 @@ def emit(d):
 
 
 def apply(path):
+    """Replace the record lists + DspFxRecListPtrTable entries 0..99.
+    First application: from `WidgetParam_Config_000:` to the
+    `.long WidgetParam_Config_046` entry under `Naka_DisplayMode_Table:`.
+    Re-application: from the `; ====` line above `; DSP EFFECT PARAMETER-WRITE
+    RECORDS` to the first `; 99 PEQ+OVERDR+DELAY` entry AFTER
+    `DspFxRecListPtrTable:` (comments there are this generator's own output)."""
     raw = open(path, "rb").read()
     lines = raw.split(b"\n")
-    s = next(i for i, l in enumerate(lines) if l == b"WidgetParam_Config_000:")
-    nd = next(i for i, l in enumerate(lines) if l == b"Naka_DisplayMode_Table:")
-    e = nd + 4
-    assert lines[e].strip() == b".long WidgetParam_Config_046", lines[e]
-    # every line in the replaced block must be code/data/label/blank -- no comments
-    for l in lines[s:e + 1]:
-        assert b";" not in l, ("comment inside replaced block", l)
+    hdr = [i for i, l in enumerate(lines) if l.startswith(b"; DSP EFFECT PARAMETER-WRITE RECORDS")]
+    if hdr:
+        s = hdr[0] - 1
+        assert lines[s].startswith(b"; ====="), lines[s]
+        t = next(i for i, l in enumerate(lines) if l == b"DspFxRecListPtrTable:")
+        assert t > s
+        e = next(i for i in range(t, len(lines)) if lines[i].endswith(b"; 99 PEQ+OVERDR+DELAY"))
+    else:
+        s = next(i for i, l in enumerate(lines) if l == b"WidgetParam_Config_000:")
+        nd = next(i for i, l in enumerate(lines) if l == b"Naka_DisplayMode_Table:")
+        e = nd + 4
+        assert lines[e].strip() == b".long WidgetParam_Config_046", lines[e]
+        for l in lines[s:e + 1]:
+            assert b";" not in l, ("comment inside replaced block", l)
+    assert e > s
     new = emit(rom("v10")).encode("latin-1").rstrip(b"\n").split(b"\n")
     out = lines[:s] + new + lines[e + 1:]
     open(path, "wb").write(b"\n".join(out))
     print("%s: replaced lines %d..%d (%d lines) with %d lines" % (path, s + 1, e + 1, e - s + 1, len(new)))
-
-
-# ---------------------------------------------------------------------------
-# 0xEE6048-0xEE63B9: the tail of the parameter-range pointer table, the
-# settings-block pointer table and seven small DSPCfg arrays.
-# ---------------------------------------------------------------------------
-SET_TAB = 0xEE61D4        # 100 x u32 -> 24-byte settings block per effect
-TAB_LO, TAB_HI = 0xEE6048, 0xEE63BA
 
 
 def nm_symbols(v="v10"):

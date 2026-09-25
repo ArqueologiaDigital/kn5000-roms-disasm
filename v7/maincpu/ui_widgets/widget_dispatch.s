@@ -3237,11 +3237,13 @@ DspConfig_EventDispatch_JumpOffsets:	.short 285, 328, 0, 436, 501, 878, 0
 ; read as DspParamName_Table indexes is the inference).  Effects that share an
 ; algorithm share a letter string: ROCK ROTARY (15) and ROTARY SPEAKER (53)
 ; are both 'abfjjiifjjiicf!t', the 12 reverbs 16-27 are all 'ugvfc'.
-; The operand bytes include 24-bit big-endian coefficients (e.g. 0x266666,
-; 0x400000); their DSP-side meaning is not established here.
+; Open question for the DSP work: what each letter's operands do on the DSP
+; side -- they include 24-bit big-endian coefficients such as 0x266666 and
+; 0x400000 (cf. the sub-CPU DSP_EffNN_* blocks in v142/subcpu).
 ; Byte-identical in v7, v9 and v10.
 ; =============================================================================
-; effect 32 DISTORTION: 5 parameters
+; effect 32 DISTORTION -- 5 parameter-write records (count byte 0xEE5FE0+32);
+; reached through DspFxRecListPtrTable entry 32 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_32_Distortion:
 	.byte 0x00, 7,	'a', 0x00
 	.byte		'a', 0x01, 'z'
@@ -3251,7 +3253,8 @@ DspFxRecs_32_Distortion:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0	; end of list
-; effect 33 OVERDRIVE: 5 parameters
+; effect 33 OVERDRIVE -- 5 parameter-write records (count byte 0xEE5FE0+33);
+; reached through DspFxRecListPtrTable entry 33 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_33_Overdrive:
 	.byte 0x00, 7,	'a', 0x00
 	.byte		'a', 0x01, 'z'
@@ -3261,7 +3264,8 @@ DspFxRecs_33_Overdrive:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0	; end of list
-; effect 34 FUZZ: 5 parameters
+; effect 34 FUZZ -- 5 parameter-write records (count byte 0xEE5FE0+34);
+; reached through DspFxRecListPtrTable entry 34 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_34_Fuzz:
 	.byte 0x00, 7,	'a', 0x00
 	.byte		'a', 0x01, 'z'
@@ -3271,7 +3275,8 @@ DspFxRecs_34_Fuzz:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0	; end of list
-; effect 35 EXCITER: 7 parameters
+; effect 35 EXCITER -- 7 parameter-write records (count byte 0xEE5FE0+35);
+; reached through DspFxRecListPtrTable entry 35 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_35_Exciter:
 	.byte 0x00, 7,	'a', 0x00
 	.byte		'a', 0x01, 'z'
@@ -3285,7 +3290,8 @@ DspFxRecs_35_Exciter:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0	; end of list
-; effect 39 PARAMETRIC EQ: 17 parameters
+; effect 39 PARAMETRIC EQ -- 17 parameter-write records (count byte 0xEE5FE0+39);
+; reached through DspFxRecListPtrTable entry 39 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_39_ParametricEq:
 	.byte 0x00, 6,	'p', 0x00, 0x00, 'z'
 	.byte 0x00, 6,	'p', 0x00, 0x10, 'z'
@@ -3305,7 +3311,8 @@ DspFxRecs_39_ParametricEq:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 1 CHORUS: 5 parameters
+; effect 1 CHORUS -- 5 parameter-write records (count byte 0xEE5FE0+1);
+; reached through DspFxRecListPtrTable entry 1 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_01_Chorus:
 	.byte 0x00, 19,	'f', 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte		'f', 0x01, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 'z'
@@ -3314,7 +3321,8 @@ DspFxRecs_01_Chorus:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 2 MODULATED CHORUS: 7 parameters
+; effect 2 MODULATED CHORUS -- 7 parameter-write records (count byte 0xEE5FE0+2);
+; reached through DspFxRecListPtrTable entry 2 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_02_ModulatedChorus:
 	.byte 0x00, 19,	'f', 0x02, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte		'f', 0x04, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 'z'
@@ -3326,7 +3334,8 @@ DspFxRecs_02_ModulatedChorus:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 3 ENHANCER: 7 parameters
+; effect 3 ENHANCER -- 7 parameter-write records (count byte 0xEE5FE0+3);
+; reached through DspFxRecListPtrTable entry 3 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_03_Enhancer:
 	.byte 0x00, 19,	'k', 0x00, 0x4c, 0xcc, 0xcc, 0x6f, 0x5c, 0x28
 	.byte		'k', 0x01, 0x4c, 0xcc, 0xcc, 0x6f, 0x5c, 0x28, 'z'
@@ -3339,7 +3348,8 @@ DspFxRecs_03_Enhancer:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 4 FLANGER: 8 parameters
+; effect 4 FLANGER -- 8 parameter-write records (count byte 0xEE5FE0+4);
+; reached through DspFxRecListPtrTable entry 4 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_04_Flanger:
 	.byte 0x00, 19,	'f', 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte		'f', 0x01, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 'z'
@@ -3355,7 +3365,8 @@ DspFxRecs_04_Flanger:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 5 PHASER: 8 parameters
+; effect 5 PHASER -- 8 parameter-write records (count byte 0xEE5FE0+5);
+; reached through DspFxRecListPtrTable entry 5 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_05_Phaser:
 	.byte 0x00, 19,	'f', 0x00, 0x00, 0x00, 0x00, 0x06, 0x66, 0x66
 	.byte		'f', 0x02, 0x00, 0x00, 0x00, 0x06, 0x66, 0x66, 'z'
@@ -3371,7 +3382,8 @@ DspFxRecs_05_Phaser:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 48 AUTO PAN: 6 parameters
+; effect 48 AUTO PAN -- 6 parameter-write records (count byte 0xEE5FE0+48);
+; reached through DspFxRecListPtrTable entry 48 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_48_AutoPan:
 	.byte 0x00, 19,	'f', 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte		'f', 0x01, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 'z'
@@ -3383,7 +3395,8 @@ DspFxRecs_48_AutoPan:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 50 VIBRATO: 6 parameters
+; effect 50 VIBRATO -- 6 parameter-write records (count byte 0xEE5FE0+50);
+; reached through DspFxRecListPtrTable entry 50 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_50_Vibrato:
 	.byte 0x00, 19,	'f', 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte		'f', 0x01, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 'z'
@@ -3395,7 +3408,8 @@ DspFxRecs_50_Vibrato:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 52 AUTO WAH: 5 parameters
+; effect 52 AUTO WAH -- 5 parameter-write records (count byte 0xEE5FE0+52);
+; reached through DspFxRecListPtrTable entry 52 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_52_AutoWah:
 	.byte 0x00, 45,	'$', 0x01, 0x00, 0x3f, 0xff, 0x58, 0x3f, 0xff, 0x58, 0x50, 0xa3, 0xd7, 0x50, 0xa3, 0xd7, 0x7f, 0xff, 0xde, 0x7f, 0xff, 0xde
 	.byte		'$', 0x03, 0x00, 0x2a, 0x7e, 0xf9, 0x2a, 0x7e, 0xf9, 0x47, 0xae, 0x14, 0x47, 0xae, 0x14, 0x7f, 0xe7, 0x6c, 0x7f, 0xe7, 0x6c, 'z'
@@ -3404,7 +3418,8 @@ DspFxRecs_52_AutoWah:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 53 ROTARY SPEAKER: 16 parameters
+; effect 53 ROTARY SPEAKER -- 16 parameter-write records (count byte 0xEE5FE0+53);
+; reached through DspFxRecListPtrTable entry 53 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_53_RotarySpeaker:
 	.byte 0x00, 7,	'a', 0x00
 	.byte		'a', 0x01, 'z'
@@ -3424,7 +3439,8 @@ DspFxRecs_53_RotarySpeaker:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 15 ROCK ROTARY: 16 parameters
+; effect 15 ROCK ROTARY -- 16 parameter-write records (count byte 0xEE5FE0+15);
+; reached through DspFxRecListPtrTable entry 15 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_15_RockRotary:
 	.byte 0x00, 7,	'a', 0x00
 	.byte		'a', 0x01, 'z'
@@ -3444,7 +3460,8 @@ DspFxRecs_15_RockRotary:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 54 RING MODULATOR: 5 parameters
+; effect 54 RING MODULATOR -- 5 parameter-write records (count byte 0xEE5FE0+54);
+; reached through DspFxRecListPtrTable entry 54 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_54_RingModulator:
 	.byte 0x00, 9,	'e', 0x00, 0x01
 	.byte		'e', 0x01, 0x01, 'z'
@@ -3454,7 +3471,8 @@ DspFxRecs_54_RingModulator:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 37 SLOW ATTACKER: 5 parameters
+; effect 37 SLOW ATTACKER -- 5 parameter-write records (count byte 0xEE5FE0+37);
+; reached through DspFxRecListPtrTable entry 37 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_37_SlowAttacker:
 	.byte 0x00, 11,	'f', 0x00, 0x00, 0x00, 0x00, 0x19, 0x99, 0x99, 'z'
 	.byte 0x00, 11,	'n', 0x00, 0x19, 0x99, 0x99, 0x00, 0x00, 0x14, 'z'
@@ -3462,7 +3480,8 @@ DspFxRecs_37_SlowAttacker:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 8 GATED REVERB: 6 parameters
+; effect 8 GATED REVERB -- 6 parameter-write records (count byte 0xEE5FE0+8);
+; reached through DspFxRecListPtrTable entry 8 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_08_GatedReverb:
 	.byte 0x00, 5,	'o', 0x01, 'z'
 	.byte 0x00, 11,	'v', 0x00, 0x12, 0x14
@@ -3472,7 +3491,8 @@ DspFxRecs_08_GatedReverb:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 6 ENSEMBLE: 5 parameters
+; effect 6 ENSEMBLE -- 5 parameter-write records (count byte 0xEE5FE0+6);
+; reached through DspFxRecListPtrTable entry 6 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_06_Ensemble:
 	.byte 0x00, 51,	'w', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc8
 	.byte		'w', 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe9
@@ -3485,7 +3505,8 @@ DspFxRecs_06_Ensemble:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 36 COMPRESSOR: 6 parameters
+; effect 36 COMPRESSOR -- 6 parameter-write records (count byte 0xEE5FE0+36);
+; reached through DspFxRecListPtrTable entry 36 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_36_Compressor:
 	.byte 0x00, 9,	'r', 0x00, 0x00
 	.byte		'r', 0x01, 0x00, 'z'
@@ -3498,7 +3519,8 @@ DspFxRecs_36_Compressor:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 56 MIX UP: 8 parameters
+; effect 56 MIX UP -- 8 parameter-write records (count byte 0xEE5FE0+56);
+; reached through DspFxRecListPtrTable entry 56 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_56_MixUp:
 	.byte 0x00, 19,	'f', 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte		'f', 0x01, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 'z'
@@ -3511,7 +3533,8 @@ DspFxRecs_56_MixUp:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 9 SINGLE DELAY: 7 parameters
+; effect 9 SINGLE DELAY -- 7 parameter-write records (count byte 0xEE5FE0+9);
+; reached through DspFxRecListPtrTable entry 9 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_09_SingleDelay:
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x00, 0x02, 'z'
 	.byte 0x00, 8,	'g', 0x01, 0x00, 0x3f, 0xe0, 'z'
@@ -3524,7 +3547,8 @@ DspFxRecs_09_SingleDelay:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 10 MULTI TAP DELAY: 12 parameters
+; effect 10 MULTI TAP DELAY -- 12 parameter-write records (count byte 0xEE5FE0+10);
+; reached through DspFxRecListPtrTable entry 10 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_10_MultiTapDelay:
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x00, 0x02, 'z'
 	.byte 0x00, 8,	'g', 0x01, 0x00, 0x00, 0x02, 'z'
@@ -3540,7 +3564,8 @@ DspFxRecs_10_MultiTapDelay:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 57 STANDARD: 2 parameters
+; effect 57 STANDARD -- 2 parameter-write records (count byte 0xEE5FE0+57);
+; reached through DspFxRecListPtrTable entry 57 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_57_Standard:
 	.byte 0x00, 59,	'l', 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0xdd
 	.byte		'l', 0x01, 0x00, 0x05, 0xdd, 0x00, 0x0c, 0x1e
@@ -3551,7 +3576,8 @@ DspFxRecs_57_Standard:
 	.byte		'l', 0x06, 0x00, 0x19, 0xf6, 0x00, 0x1c, 0xb3, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0xf0	; end of list
-; effect 58 PERCUSSIVE: 2 parameters
+; effect 58 PERCUSSIVE -- 2 parameter-write records (count byte 0xEE5FE0+58);
+; reached through DspFxRecListPtrTable entry 58 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_58_Percussive:
 	.byte 0x00, 59,	'l', 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf5
 	.byte		'l', 0x01, 0x00, 0x01, 0xf5, 0x00, 0x09, 0xc6
@@ -3562,7 +3588,8 @@ DspFxRecs_58_Percussive:
 	.byte		'l', 0x06, 0x00, 0x23, 0x92, 0x00, 0x27, 0x7b, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0xf0	; end of list
-; effect 59 SYMPHONIC: 2 parameters
+; effect 59 SYMPHONIC -- 2 parameter-write records (count byte 0xEE5FE0+59);
+; reached through DspFxRecListPtrTable entry 59 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_59_Symphonic:
 	.byte 0x00, 59,	'l', 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x41
 	.byte		'l', 0x01, 0x00, 0x06, 0x41, 0x00, 0x0c, 0x82
@@ -3573,7 +3600,8 @@ DspFxRecs_59_Symphonic:
 	.byte		'l', 0x06, 0x00, 0x1f, 0x46, 0x00, 0x26, 0x4f, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0xf0	; end of list
-; effect 60 DEEP SPACE: 2 parameters
+; effect 60 DEEP SPACE -- 2 parameter-write records (count byte 0xEE5FE0+60);
+; reached through DspFxRecListPtrTable entry 60 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_60_DeepSpace:
 	.byte 0x00, 59,	'l', 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x79
 	.byte		'l', 0x01, 0x00, 0x05, 0x79, 0x00, 0x0d, 0x4a
@@ -3584,7 +3612,8 @@ DspFxRecs_60_DeepSpace:
 	.byte		'l', 0x06, 0x00, 0x25, 0x22, 0x00, 0x29, 0xd3, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0xf0	; end of list
-; effect 79 GEQ: 9 parameters
+; effect 79 GEQ -- 9 parameter-write records (count byte 0xEE5FE0+79);
+; reached through DspFxRecListPtrTable entry 79 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_79_Geq:
 	.byte 0x00, 6,	'v', 0x00, 0x00, 'z'
 	.byte 0x00, 6,	'v', 0x00, 0x10, 'z'
@@ -3596,7 +3625,8 @@ DspFxRecs_79_Geq:
 	.byte 0x00, 6,	'v', 0x01, 0x11, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 88 ROOM: 5 parameters
+; effect 88 ROOM -- 5 parameter-write records (count byte 0xEE5FE0+88);
+; reached through DspFxRecListPtrTable entry 88 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_88_Room:
 	.byte 0x00, 8,	'u', 0x00, 0x1b, 0xe7, 0x6c, 'z'
 	.byte 0x00, 6,	'v', 0x00, 0x01, 'z'
@@ -3604,7 +3634,8 @@ DspFxRecs_88_Room:
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0x00, 6,	'y', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 89 KARAOKE: 5 parameters
+; effect 89 KARAOKE -- 5 parameter-write records (count byte 0xEE5FE0+89);
+; reached through DspFxRecListPtrTable entry 89 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_89_Karaoke:
 	.byte 0x00, 8,	'u', 0x00, 0x10, 0xc4, 0x9b, 'z'
 	.byte 0x00, 6,	'v', 0x00, 0x01, 'z'
@@ -3612,7 +3643,8 @@ DspFxRecs_89_Karaoke:
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0x00, 6,	'y', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 90 BATH ROOM: 5 parameters
+; effect 90 BATH ROOM -- 5 parameter-write records (count byte 0xEE5FE0+90);
+; reached through DspFxRecListPtrTable entry 90 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_90_BathRoom:
 	.byte 0x00, 8,	'u', 0x00, 0x1d, 0x0e, 0x56, 'z'
 	.byte 0x00, 6,	'v', 0x00, 0x01, 'z'
@@ -3620,7 +3652,8 @@ DspFxRecs_90_BathRoom:
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0x00, 6,	'y', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 91 STAGE: 5 parameters
+; effect 91 STAGE -- 5 parameter-write records (count byte 0xEE5FE0+91);
+; reached through DspFxRecListPtrTable entry 91 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_91_Stage:
 	.byte 0x00, 8,	'u', 0x00, 0x1d, 0x0e, 0x56, 'z'
 	.byte 0x00, 6,	'v', 0x00, 0x01, 'z'
@@ -3628,7 +3661,8 @@ DspFxRecs_91_Stage:
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0x00, 6,	'y', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 64 S.DELAY+CHORUS: 11 parameters
+; effect 64 S.DELAY+CHORUS -- 11 parameter-write records (count byte 0xEE5FE0+64);
+; reached through DspFxRecListPtrTable entry 64 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_64_SDelayChorus:
 	.byte 0x00, 19,	'f', 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte		'f', 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 'z'
@@ -3645,7 +3679,8 @@ DspFxRecs_64_SDelayChorus:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 65 S.DELAY+S.DELAY: 12 parameters
+; effect 65 S.DELAY+S.DELAY -- 12 parameter-write records (count byte 0xEE5FE0+65);
+; reached through DspFxRecListPtrTable entry 65 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_65_SDelaySDelay:
 	.byte 0x00, 19,	'f', 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte		'f', 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 'z'
@@ -3662,7 +3697,8 @@ DspFxRecs_65_SDelaySDelay:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 66 S.DELAY+FLANGER: 14 parameters
+; effect 66 S.DELAY+FLANGER -- 14 parameter-write records (count byte 0xEE5FE0+66);
+; reached through DspFxRecListPtrTable entry 66 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_66_SDelayFlanger:
 	.byte 0x00, 19,	'f', 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte		'f', 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 'z'
@@ -3686,7 +3722,8 @@ DspFxRecs_66_SDelayFlanger:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 67 S.DELAY+VIBRATO: 11 parameters
+; effect 67 S.DELAY+VIBRATO -- 11 parameter-write records (count byte 0xEE5FE0+67);
+; reached through DspFxRecListPtrTable entry 67 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_67_SDelayVibrato:
 	.byte 0x00, 19,	'f', 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte		'f', 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 'z'
@@ -3704,7 +3741,8 @@ DspFxRecs_67_SDelayVibrato:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 68 S.DELAY+PHASER: 14 parameters
+; effect 68 S.DELAY+PHASER -- 14 parameter-write records (count byte 0xEE5FE0+68);
+; reached through DspFxRecListPtrTable entry 68 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_68_SDelayPhaser:
 	.byte 0x00, 19,	'f', 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte		'f', 0x06, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 'z'
@@ -3728,7 +3766,8 @@ DspFxRecs_68_SDelayPhaser:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 70 AUTO WAH+S.DELAY: 10 parameters
+; effect 70 AUTO WAH+S.DELAY -- 10 parameter-write records (count byte 0xEE5FE0+70);
+; reached through DspFxRecListPtrTable entry 70 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_70_AutoWahSDelay:
 	.byte 0x00, 45,	'$', 0x01, 0x00, 0x3f, 0xff, 0x58, 0x3f, 0xff, 0x58, 0x50, 0xa3, 0xd7, 0x50, 0xa3, 0xd7, 0x7f, 0xff, 0xde, 0x7f, 0xff, 0xde
 	.byte		'$', 0x03, 0x00, 0x2a, 0x7e, 0xf9, 0x2a, 0x7e, 0xf9, 0x47, 0xae, 0x14, 0x47, 0xae, 0x14, 0x7f, 0xe7, 0x6c, 0x7f, 0xe7, 0x6c, 'z'
@@ -3743,7 +3782,8 @@ DspFxRecs_70_AutoWahSDelay:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 71 PEQ+CHORUS: 9 parameters
+; effect 71 PEQ+CHORUS -- 9 parameter-write records (count byte 0xEE5FE0+71);
+; reached through DspFxRecListPtrTable entry 71 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_71_PeqChorus:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3760,7 +3800,8 @@ DspFxRecs_71_PeqChorus:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 72 PEQ+S.DELAY: 10 parameters
+; effect 72 PEQ+S.DELAY -- 10 parameter-write records (count byte 0xEE5FE0+72);
+; reached through DspFxRecListPtrTable entry 72 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_72_PeqSDelay:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3777,7 +3818,8 @@ DspFxRecs_72_PeqSDelay:
 	.byte 0x00, 6,	'c', 0x00, 0x01, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 73 PEQ+FLANGER: 12 parameters
+; effect 73 PEQ+FLANGER -- 12 parameter-write records (count byte 0xEE5FE0+73);
+; reached through DspFxRecListPtrTable entry 73 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_73_PeqFlanger:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3801,7 +3843,8 @@ DspFxRecs_73_PeqFlanger:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 74 PEQ+VIBRATO: 9 parameters
+; effect 74 PEQ+VIBRATO -- 9 parameter-write records (count byte 0xEE5FE0+74);
+; reached through DspFxRecListPtrTable entry 74 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_74_PeqVibrato:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3819,7 +3862,8 @@ DspFxRecs_74_PeqVibrato:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0	; end of list
-; effect 75 PEQ+COMPRESSOR: 9 parameters
+; effect 75 PEQ+COMPRESSOR -- 9 parameter-write records (count byte 0xEE5FE0+75);
+; reached through DspFxRecListPtrTable entry 75 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_75_PeqCompressor:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3838,7 +3882,8 @@ DspFxRecs_75_PeqCompressor:
 	.byte 0x00, 6,	'c', 0x00, 0x00, 'z'
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 96 PEQ+COMPR+DIST: 12 parameters
+; effect 96 PEQ+COMPR+DIST -- 12 parameter-write records (count byte 0xEE5FE0+96);
+; reached through DspFxRecListPtrTable entry 96 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_96_PeqComprDist:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3862,7 +3907,8 @@ DspFxRecs_96_PeqComprDist:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 97 PEQ+COMPR+OVERDR: 12 parameters
+; effect 97 PEQ+COMPR+OVERDR -- 12 parameter-write records (count byte 0xEE5FE0+97);
+; reached through DspFxRecListPtrTable entry 97 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_97_PeqComprOverdr:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3886,7 +3932,8 @@ DspFxRecs_97_PeqComprOverdr:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 98 PEQ+DIST+DELAY: 13 parameters
+; effect 98 PEQ+DIST+DELAY -- 13 parameter-write records (count byte 0xEE5FE0+98);
+; reached through DspFxRecListPtrTable entry 98 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_98_PeqDistDelay:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3908,7 +3955,8 @@ DspFxRecs_98_PeqDistDelay:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0	; end of list
-; effect 99 PEQ+OVERDR+DELAY: 13 parameters
+; effect 99 PEQ+OVERDR+DELAY -- 13 parameter-write records (count byte 0xEE5FE0+99);
+; reached through DspFxRecListPtrTable entry 99 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_99_PeqOverdrDelay:
 	.byte 0x00, 9,	'p', 0x00, 0x00
 	.byte		'p', 0x01, 0x00, 'z'
@@ -3930,7 +3978,8 @@ DspFxRecs_99_PeqOverdrDelay:
 	.byte 0x00, 11,	'!', 0x00, 0x00, 0x00, 0x00, 0x26, 0x66, 0x66, 'z'
 	.byte 0x00, 6,	't', 0x00, 0x01, 'z'
 	.byte 0xf0	; end of list
-; effect 16 ROOM REVERB 1: 5 parameters
+; effect 16 ROOM REVERB 1 -- 5 parameter-write records (count byte 0xEE5FE0+16);
+; reached through DspFxRecListPtrTable entry 16 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_16_RoomReverb1:
 	.byte 0x00, 8,	'u', 0x00, 0x07, 0x65, 0xfd, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -3940,7 +3989,8 @@ DspFxRecs_16_RoomReverb1:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 17 ROOM REVERB 2: 5 parameters
+; effect 17 ROOM REVERB 2 -- 5 parameter-write records (count byte 0xEE5FE0+17);
+; reached through DspFxRecListPtrTable entry 17 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_17_RoomReverb2:
 	.byte 0x00, 8,	'u', 0x00, 0x12, 0x8f, 0x5c, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -3950,7 +4000,8 @@ DspFxRecs_17_RoomReverb2:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 18 PLATE REVERB 1: 5 parameters
+; effect 18 PLATE REVERB 1 -- 5 parameter-write records (count byte 0xEE5FE0+18);
+; reached through DspFxRecListPtrTable entry 18 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_18_PlateReverb1:
 	.byte 0x00, 8,	'u', 0x00, 0x25, 0x1e, 0xb8, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -3960,7 +4011,8 @@ DspFxRecs_18_PlateReverb1:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 19 PLATE REVERB 2: 5 parameters
+; effect 19 PLATE REVERB 2 -- 5 parameter-write records (count byte 0xEE5FE0+19);
+; reached through DspFxRecListPtrTable entry 19 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_19_PlateReverb2:
 	.byte 0x00, 8,	'u', 0x00, 0x22, 0xf1, 0xa9, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -3970,7 +4022,8 @@ DspFxRecs_19_PlateReverb2:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 20 CONCERT REVERB 1: 5 parameters
+; effect 20 CONCERT REVERB 1 -- 5 parameter-write records (count byte 0xEE5FE0+20);
+; reached through DspFxRecListPtrTable entry 20 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_20_ConcertReverb1:
 	.byte 0x00, 8,	'u', 0x00, 0x17, 0x97, 0x24, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -3980,7 +4033,8 @@ DspFxRecs_20_ConcertReverb1:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 21 CONCERT REVERB 2: 5 parameters
+; effect 21 CONCERT REVERB 2 -- 5 parameter-write records (count byte 0xEE5FE0+21);
+; reached through DspFxRecListPtrTable entry 21 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_21_ConcertReverb2:
 	.byte 0x00, 8,	'u', 0x00, 0x1a, 0x4d, 0xd2, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -3990,7 +4044,8 @@ DspFxRecs_21_ConcertReverb2:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 22 DARK REVERB 1: 5 parameters
+; effect 22 DARK REVERB 1 -- 5 parameter-write records (count byte 0xEE5FE0+22);
+; reached through DspFxRecListPtrTable entry 22 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_22_DarkReverb1:
 	.byte 0x00, 8,	'u', 0x00, 0x1f, 0xbe, 0x76, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -4000,7 +4055,8 @@ DspFxRecs_22_DarkReverb1:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 23 DARK REVERB 2: 5 parameters
+; effect 23 DARK REVERB 2 -- 5 parameter-write records (count byte 0xEE5FE0+23);
+; reached through DspFxRecListPtrTable entry 23 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_23_DarkReverb2:
 	.byte 0x00, 8,	'u', 0x00, 0x1f, 0xbe, 0x76, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -4010,7 +4066,8 @@ DspFxRecs_23_DarkReverb2:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 24 BRIGHT REVERB 1: 5 parameters
+; effect 24 BRIGHT REVERB 1 -- 5 parameter-write records (count byte 0xEE5FE0+24);
+; reached through DspFxRecListPtrTable entry 24 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_24_BrightReverb1:
 	.byte 0x00, 8,	'u', 0x00, 0x1f, 0xbe, 0x76, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -4020,7 +4077,8 @@ DspFxRecs_24_BrightReverb1:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 25 BRIGHT REVERB 2: 5 parameters
+; effect 25 BRIGHT REVERB 2 -- 5 parameter-write records (count byte 0xEE5FE0+25);
+; reached through DspFxRecListPtrTable entry 25 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_25_BrightReverb2:
 	.byte 0x00, 8,	'u', 0x00, 0x1c, 0x8b, 0x43, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -4030,7 +4088,8 @@ DspFxRecs_25_BrightReverb2:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 26 WAVE REVERB 1: 5 parameters
+; effect 26 WAVE REVERB 1 -- 5 parameter-write records (count byte 0xEE5FE0+26);
+; reached through DspFxRecListPtrTable entry 26 (DSPCfg_FindSlot63 & co.)
 DspFxRecs_26_WaveReverb1:
 	.byte 0x00, 8,	'u', 0x00, 0x2a, 0x5e, 0x35, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -4040,7 +4099,8 @@ DspFxRecs_26_WaveReverb1:
 	.byte		'f', 0x05, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x39, 'z'
 	.byte 0x00, 6,	'c', 0x00, 0x02, 'z'
 	.byte 0xf0, 0xff	; end of list, even-address pad
-; effect 27 WAVE REVERB 2: 5 parameters
+; effect 27 WAVE REVERB 2 -- 5 parameter-write records (count byte 0xEE5FE0+27);
+; reached through DspFxRecListPtrTable entry 27 (DSPCfg_FindSlot63 & co.)
 ; (label name kept: shared/positional_labels.s derives
 ;  WidgetParam_Config_058_0x36 = DspFxRecListPtrTable from it)
 WidgetParam_Config_058:
@@ -4194,7 +4254,8 @@ Naka_DisplayMode_Table:
 ; ends in 0xFFFFFFFF; tables + separators + lists + one trailing 0xFF
 ; partition the span; v9 == v10 byte-for-byte; v7 has the same layout with
 ; relocated callback addresses.  Lists are named after the lowest event
-; code that selects them; the codes' meanings are not established here.
+; code that selects them.  Open question: what most codes stand for -- only
+; 0x61 and 0x63-0x66 are tied down (DSP blocks, see DspBlock_ObjectCode_Table).
 ; The old names UIState_Config{A,B,C}_NNN, UIState_HandlerTable_*,
 ; UIState_SeqInit_Table and UIState_EventHandler_Table (a label in the
 ; middle of a list) did not match the table index and are retired;
@@ -4202,7 +4263,8 @@ Naka_DisplayMode_Table:
 ; Naka_EventHandler_Table are kept because other files load them by name.
 ; =============================================================================
 
-; ---- bank 1: event code -> listener list (queue 0xBD3C) ----
+; ---- bank 1: 192 x u32, entry = event code 0x00..0xBF -> listener list;
+;      installed by SwbtWr_InitBank1, read by SwbtWr_DispatchLoop (queue 0xBD3C)
 SwbtBank1_ListenerTable:
 	.long SwbtB1_Code00_Listeners	; 0x00
 	.long SwbtB1_Code01_Listeners	; 0x01
@@ -4469,6 +4531,7 @@ SwbtB1_Code44_Listeners:	.long 0xffffffff
 SwbtB1_Code45_Listeners:	.long 0xffffffff
 SwbtB1_Code46_Listeners:	.long 0xffffffff
 SwbtB1_Code47_Listeners:	.long 0xffffffff
+; code 0x48: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_Code48_Listeners:
 	.long EffectMode_ByteData_Block3
 	.long 0xffffffff
@@ -4501,11 +4564,13 @@ SwbtB1_Code7A_Listeners:	.long 0xffffffff
 SwbtB1_Code80_Listeners:	.long 0xffffffff
 SwbtB1_Code81_Listeners:	.long 0xffffffff
 SwbtB1_Code90_Listeners:	.long 0xffffffff
+; code 0x91: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_Code91_Listeners:
 	.long MidiSysEx_ProcessBlock + 347	; no label at this callback entry yet; v10: MidiCtrl_ModeSwitchHandler
 	.long 0xffffffff
 SwbtB1_Code92_Listeners:	.long 0xffffffff
 SwbtB1_Code93_Listeners:	.long 0xffffffff
+; code 0x98: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_Code98_Listeners:
 	.long BitMapOut_ByteData_PresetCopy
 	.long EffectMode_ByteData_Block4
@@ -4513,6 +4578,7 @@ SwbtB1_Code98_Listeners:
 	.long 0xffffffff
 SwbtB1_Code99_Listeners:	.long 0xffffffff
 SwbtB1_Code9A_Listeners:	.long 0xffffffff
+; code 0xA8: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_CodeA8_Listeners:
 	.long EffectMode_ByteData_Block2
 	.long 0xffffffff
@@ -4536,9 +4602,10 @@ SwbtB1_CodeBB_Listeners:	.long 0xffffffff
 SwbtB1_CodeBC_Listeners:	.long 0xffffffff
 SwbtB1_CodeBD_Listeners:	.long 0xffffffff
 UIState_DefaultConfig_A:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
-SwbtBank1_PostCallbacks:	.long 0xffffffff	; post list (called once per SwbtWr_DispatchLoop run)
+SwbtBank1_PostCallbacks:	.long 0xffffffff	; bank 1 post list: SwbtWr_PostCallback_Loop calls each entry once the queue drains
 
-; ---- bank 2: event code -> listener list (queue 0xBD3C) ----
+; ---- bank 2: 192 x u32, entry = event code 0x00..0xBF -> listener list;
+;      installed by SwbtWr_InitBank2, read by SwbtWr_DispatchLoop (queue 0xBD3C)
 ; (name kept: SwbtWr_InitBank2 in audio/dsp_config_sysex.s loads it;
 ;  it is SwbtWr bank 2, not the table its name suggests)
 Naka_RenderMode_A_Table:
@@ -4735,6 +4802,7 @@ Naka_RenderMode_A_Table:
 	.long UIState_DefaultConfig_B	; 0xBE
 	.long UIState_DefaultConfig_B	; 0xBF
 	.byte 0xff				; separator (read by nothing)
+; code 0x00: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code00_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4747,6 +4815,7 @@ SwbtB2_Code00_Listeners:
 	.long FDemoText_ByteData_VoiceProbeA
 	.long BitmapFinpic_ByteData
 	.long 0xffffffff
+; code 0x01: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code01_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4758,6 +4827,7 @@ SwbtB2_Code01_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long 0xffffffff
+; code 0x02: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code02_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4768,6 +4838,7 @@ SwbtB2_Code02_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long 0xffffffff
+; code 0x03: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code03_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4777,6 +4848,7 @@ SwbtB2_Code03_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x04: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code04_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4786,6 +4858,7 @@ SwbtB2_Code04_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x05: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code05_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4795,6 +4868,7 @@ SwbtB2_Code05_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x06: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code06_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4804,6 +4878,7 @@ SwbtB2_Code06_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x07: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code07_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4813,6 +4888,7 @@ SwbtB2_Code07_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x08: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code08_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4822,6 +4898,7 @@ SwbtB2_Code08_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x09: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code09_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4831,6 +4908,7 @@ SwbtB2_Code09_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x0A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0A_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4840,6 +4918,7 @@ SwbtB2_Code0A_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x0B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0B_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4849,6 +4928,7 @@ SwbtB2_Code0B_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x0C: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0C_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4858,6 +4938,7 @@ SwbtB2_Code0C_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x0D: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0D_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4867,6 +4948,7 @@ SwbtB2_Code0D_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x0E: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0E_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4876,6 +4958,7 @@ SwbtB2_Code0E_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x0F: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0F_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4885,6 +4968,7 @@ SwbtB2_Code0F_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x10: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code10_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4893,6 +4977,7 @@ SwbtB2_Code10_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x11: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code11_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4901,6 +4986,7 @@ SwbtB2_Code11_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x12: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code12_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4909,6 +4995,7 @@ SwbtB2_Code12_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x13: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code13_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4917,6 +5004,7 @@ SwbtB2_Code13_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x14: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code14_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4925,6 +5013,7 @@ SwbtB2_Code14_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x15: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code15_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4933,6 +5022,7 @@ SwbtB2_Code15_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x16: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code16_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4941,6 +5031,7 @@ SwbtB2_Code16_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x17: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code17_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4949,6 +5040,7 @@ SwbtB2_Code17_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x18: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code18_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4957,6 +5049,7 @@ SwbtB2_Code18_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x19: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code19_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4965,6 +5058,7 @@ SwbtB2_Code19_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x1A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1A_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4973,6 +5067,7 @@ SwbtB2_Code1A_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x1B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1B_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4981,6 +5076,7 @@ SwbtB2_Code1B_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x1C: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1C_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4989,6 +5085,7 @@ SwbtB2_Code1C_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x1D: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1D_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -4997,6 +5094,7 @@ SwbtB2_Code1D_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x1E: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1E_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -5005,6 +5103,7 @@ SwbtB2_Code1E_Listeners:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x1F: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1F_Listeners:
 	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
@@ -5045,30 +5144,37 @@ SwbtB2_Code3C_Listeners:	.long 0xffffffff
 SwbtB2_Code3D_Listeners:	.long 0xffffffff
 SwbtB2_Code3E_Listeners:	.long 0xffffffff
 SwbtB2_Code3F_Listeners:	.long 0xffffffff
+; code 0x40: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code40_Listeners:
 	.long UIState_UpdateControlBits
 	.long 0xffffffff
 SwbtB2_Code41_Listeners:	.long 0xffffffff
 SwbtB2_Code42_Listeners:	.long 0xffffffff
+; code 0x43: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code43_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long HdaeRom_TableEntry2 + 29	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry9
 	.long 0xffffffff
+; code 0x44: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code44_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
 	.long 0xffffffff
+; code 0x45: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code45_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
 	.long 0xffffffff
+; code 0x46: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code46_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
 	.long 0xffffffff
+; code 0x47: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code47_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x48: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code48_Listeners:
 	.long UIState_ProcessExtendedMode
 	.long AccWrap_ReplayStop
@@ -5084,49 +5190,60 @@ SwbtB2_Code51_Listeners:	.long 0xffffffff
 SwbtB2_Code52_Listeners:	.long 0xffffffff
 SwbtB2_Code53_Listeners:	.long 0xffffffff
 SwbtB2_Code54_Listeners:	.long 0xffffffff
+; code 0x60: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code60_Listeners:
 	.long VoiceSlot_CheckAndApply_Data2 + 234	; no label at this callback entry yet; v10: HdaeRom_Entry
 	.long UIState_ProcessSimpleMode
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x61: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code61_Listeners:
 	.long VoiceSlot_CheckAndApply_Data2 + 338	; no label at this callback entry yet; v10: HdaeRom_ProcessBlock
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
 	.long 0xffffffff
+; code 0x62: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code62_Listeners:
 	.long VoiceSlot_CheckAndApply_Data2_Code_Epilogue + 3	; no label at this callback entry yet; v10: HdaeRom_ReadParam
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x63: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code63_Listeners:
 	.long VoiceSlot_CheckAndApply_Data2_Code_Epilogue + 4	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
 	.long 0xffffffff
+; code 0x64: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code64_Listeners:
 	.long EffEdit_DSPConfigBlock
 	.long NoteDisplay_StoreAndDispatch + 23	; no label at this callback entry yet; v10: HdaeRom_WriteParam
 	.long 0xffffffff
+; code 0x65: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code65_Listeners:
 	.long EffEdit_DSPConfigBlock
 	.long NoteDisplay_StoreAnd_LoadReg + 13	; no label at this callback entry yet; v10: HdaeRom_CheckResult
 	.long 0xffffffff
+; code 0x66: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code66_Listeners:
 	.long EffEdit_DSPConfigBlock
 	.long NoteDisplay_StoreAnd_LoadDRAM + 22	; no label at this callback entry yet; v10: HdaeRom_FinishBlock
 	.long 0xffffffff
+; code 0x68: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code68_Listeners:
 	.long NoteDisplay_StoreAnd_LoadReg3 + 6	; no label at this callback entry yet; v10: HdaeRom_TableEntry0
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x69: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code69_Listeners:
 	.long NoteDisplay_StoreAnd_LoadReg3 + 7	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x6A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code6A_Listeners:
 	.long NoteDisplay_StoreAnd_LoadReg3 + 8	; no label at this callback entry yet; v10: HdaeRom_TableEntry1
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x6B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code6B_Listeners:
 	.long NoteDisplay_StoreAnd_LoadReg3 + 9	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
@@ -5134,6 +5251,7 @@ SwbtB2_Code6B_Listeners:
 SwbtB2_Code6C_Listeners:	.long 0xffffffff
 SwbtB2_Code6D_Listeners:	.long 0xffffffff
 SwbtB2_Code6E_Listeners:	.long 0xffffffff
+; code 0x70: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code70_Listeners:
 	.long UIState_NullReturn
 	.long SndParam_ProcessEntry + 201	; no label at this callback entry yet; v10: HdaeRom_AltReadParam
@@ -5141,10 +5259,12 @@ SwbtB2_Code70_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
 	.long 0xffffffff
+; code 0x71: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code71_Listeners:
 	.long UIStateEvt_VolumeMixer_Data + 127	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x72: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code72_Listeners:
 	.long NoteDisplay_StoreAnd_LoadReg3 + 10	; no label at this callback entry yet; v10: HdaeRom_TableEntry2
 	.long UIState_KeyScan_Dispatch
@@ -5152,6 +5272,7 @@ SwbtB2_Code72_Listeners:
 SwbtB2_Code78_Listeners:	.long 0xffffffff
 SwbtB2_Code79_Listeners:	.long 0xffffffff
 SwbtB2_Code7A_Listeners:	.long 0xffffffff
+; code 0x80: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code80_Listeners:
 	.long UIState_ProcessKeyEvent + 86	; no label at this callback entry yet; v10: HdaeRom_AltEntry
 	.long UIStateEvt_ParamEdit_Data + 297	; no label at this callback entry yet; v10: UIStateEvt_ChannelConfig_Data
@@ -5159,6 +5280,7 @@ SwbtB2_Code80_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 SwbtB2_Code81_Listeners:	.long 0xffffffff
+; code 0x90: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code90_Listeners:
 	.long UIState_SwitchOnDisplayMode
 	.long UIStateEvt_PartRouting + 42	; no label at this callback entry yet; v10: UIStateEvt_VolumeMixer_Data
@@ -5167,6 +5289,7 @@ SwbtB2_Code90_Listeners:
 	.long CtrlPanel_HandleKeyInput
 	.long BitMapOut_ByteData_RenderD
 	.long 0xffffffff
+; code 0x91: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code91_Listeners:
 	.long MidiSysEx_ProcessBlock_Code_Helper4 + 35	; no label at this callback entry yet; v10: MidiCtrl_ModeSwitch_Data
 	.long UIState_ProcessKeyEvent + 87	; no label at this callback entry yet; v10: UIStateEvt_ProcessHandler
@@ -5175,16 +5298,19 @@ SwbtB2_Code91_Listeners:
 	.long UIStateEvt_VoiceParamHandler
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x92: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code92_Listeners:
 	.long SndParam_ProcessEntry + 104	; no label at this callback entry yet; v10: HdaeRom_AltProcessBlock
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0x93: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code93_Listeners:
 	.long UIStateEvt_VolumeMixer_Data + 84	; no label at this callback entry yet
 	.long ReadNextRecord_Block3 + 11	; no label at this callback entry yet; v10: CharMap_ActivePreamb_LoadDRAM
 	.long UIState_KeyScan_Dispatch
 	.long Encoder_ApplySystemModeSettings
 	.long 0xffffffff
+; code 0x98: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code98_Listeners:
 	.long UIState_ProcessAltMode
 	.long UIStateEvt_ParamEdit_Data + 243	; no label at this callback entry yet; v10: UIStateEvt_PlayModeGuard_Data
@@ -5196,14 +5322,17 @@ SwbtB2_Code98_Listeners:
 	.long BitMapOut_ByteData_TransitionSeq
 	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
 	.long 0xffffffff
+; code 0x99: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code99_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long UIState_CheckAndRenderBitmap
 	.long 0xffffffff
+; code 0x9A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code9A_Listeners:
 	.long HdaeRom_Entry + 6	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
+; code 0xA8: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeA8_Listeners:
 	.long UIState_SwitchForMidiFlags
 	.long AccompSeq_JumpTable
@@ -5223,30 +5352,39 @@ SwbtB2_CodeA9_Listeners:	.long 0xffffffff
 SwbtB2_CodeAA_Listeners:	.long 0xffffffff
 SwbtB2_CodeAC_Listeners:	.long 0xffffffff
 SwbtB2_CodeAD_Listeners:	.long 0xffffffff
+; code 0xAE: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeAE_Listeners:
 	.long HdaeRom_ProcessBlock + 4	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry0
 	.long 0xffffffff
+; code 0xB0: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB0_Listeners:
 	.long HdaeRom_ProcessBlock + 48	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry1
 	.long 0xffffffff
+; code 0xB1: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB1_Listeners:
 	.long HdaeRom_WriteParam + 3	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry2
 	.long 0xffffffff
+; code 0xB2: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB2_Listeners:
 	.long HdaeRom_WriteParam + 47	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry3
 	.long 0xffffffff
+; code 0xB3: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB3_Listeners:
 	.long HdaeRom_CheckResult + 23	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry4
 	.long 0xffffffff
+; code 0xB4: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB4_Listeners:
 	.long HdaeRom_FinishBlock + 11	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry5
 	.long 0xffffffff
+; code 0xB5: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB5_Listeners:
 	.long HdaeRom_FinishBlock + 55	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry6
 	.long 0xffffffff
+; code 0xB6: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB6_Listeners:
 	.long HdaeRom_TableEntry2 + 27	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry7
 	.long 0xffffffff
+; code 0xB7: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB7_Listeners:
 	.long HdaeRom_TableEntry2 + 28	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry8
 	.long 0xffffffff
@@ -5257,7 +5395,7 @@ SwbtB2_CodeBB_Listeners:	.long 0xffffffff
 SwbtB2_CodeBC_Listeners:	.long 0xffffffff
 SwbtB2_CodeBD_Listeners:	.long 0xffffffff
 UIState_DefaultConfig_B:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
-; post list (called once per SwbtWr_DispatchLoop run)
+; bank 2 post list: SwbtWr_PostCallback_Loop calls each entry once the queue drains
 SwbtBank2_PostCallbacks:
 	.long SendEpilogue_Data_Code_Skip + 8	; no label at this callback entry yet; v10: Song_SendPartDataBlocks
 	.long DSPCfg_EventType50 + 27	; no label at this callback entry yet; v10: AudioInit_ProcessModeChange
@@ -5267,7 +5405,8 @@ SwbtBank2_PostCallbacks:
 	.long FDemoText_ProcessVoiceFlags
 	.long 0xffffffff
 
-; ---- bank 3: event code -> listener list (queue 0xC039) ----
+; ---- bank 3: 192 x u32, entry = event code 0x00..0xBF -> listener list;
+;      installed by SwbtWr_InitBank3, read by SwbtWr_DispatchLoop (queue 0xC039)
 ; (name kept: SwbtWr_InitBank3 in audio/dsp_config_sysex.s loads it;
 ;  it is SwbtWr bank 3, not the table its name suggests)
 Naka_EventHandler_Table:
@@ -5464,99 +5603,131 @@ Naka_EventHandler_Table:
 	.long UIState_DefaultConfig_C	; 0xBE
 	.long UIState_DefaultConfig_C	; 0xBF
 	.byte 0xff				; separator (read by nothing)
+; code 0x00: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code00_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x01: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code01_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x02: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code02_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x03: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code03_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x04: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code04_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x05: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code05_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x06: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code06_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x07: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code07_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x08: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code08_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x09: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code09_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x0A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code0A_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x0B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code0B_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x0C: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code0C_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x0D: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code0D_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x0E: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code0E_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x0F: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code0F_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x10: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code10_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x11: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code11_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x12: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code12_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x13: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code13_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x14: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code14_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x15: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code15_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x16: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code16_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x17: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code17_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x18: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code18_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x19: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code19_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x1A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code1A_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x1B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code1B_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x1C: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code1C_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x1D: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code1D_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x1E: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code1E_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
+; code 0x1F: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code1F_Listeners:
 	.long BitMapOut_ByteData_RenderA
 	.long 0xffffffff
@@ -5600,6 +5771,7 @@ SwbtB3_Code44_Listeners:	.long 0xffffffff
 SwbtB3_Code45_Listeners:	.long 0xffffffff
 SwbtB3_Code46_Listeners:	.long 0xffffffff
 SwbtB3_Code47_Listeners:	.long 0xffffffff
+; code 0x48: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code48_Listeners:
 	.long BitMapOut_ByteData_RenderD_Epilogue + 3	; no label at this callback entry yet
 	.long 0xffffffff
@@ -5638,17 +5810,20 @@ SwbtB3_Code93_Listeners:	.long 0xffffffff
 SwbtB3_Code98_Listeners:	.long 0xffffffff
 SwbtB3_Code99_Listeners:	.long 0xffffffff
 SwbtB3_Code9A_Listeners:	.long 0xffffffff
+; code 0xA8: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_CodeA8_Listeners:
 	.long AccDir_JumpTable + 2	; no label at this callback entry yet
 	.long BitMapOut_UpdateWidget_Done
 	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
 	.long 0xffffffff
+; code 0xA9: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_CodeA9_Listeners:
 	.long Demo_SelectionEntryHandler + 51	; no label at this callback entry yet
 	.long AccompSeq_JumpTable + 8	; no label at this callback entry yet
 	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
 	.long SubCPU_ToneParamRet + 977	; no label at this callback entry yet
 	.long 0xffffffff
+; code 0xAA: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_CodeAA_Listeners:
 	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
 	.long 0xffffffff
@@ -5670,7 +5845,7 @@ SwbtB3_CodeBB_Listeners:	.long 0xffffffff
 SwbtB3_CodeBC_Listeners:	.long 0xffffffff
 SwbtB3_CodeBD_Listeners:	.long 0xffffffff
 UIState_DefaultConfig_C:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
-SwbtBank3_PostCallbacks:	.long 0xffffffff	; post list (called once per SwbtWr_DispatchLoop run)
+SwbtBank3_PostCallbacks:	.long 0xffffffff	; bank 3 post list: SwbtWr_PostCallback_Loop calls each entry once the queue drains
 	.byte 0xff				; pad (read by nothing)
 
 SystemConfig_PointerTable:

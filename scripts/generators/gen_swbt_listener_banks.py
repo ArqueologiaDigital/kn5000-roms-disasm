@@ -219,7 +219,8 @@ def emit(v):
     w("; ends in 0xFFFFFFFF; tables + separators + lists + one trailing 0xFF")
     w("; partition the span; v9 == v10 byte-for-byte; v7 has the same layout with")
     w("; relocated callback addresses.  Lists are named after the lowest event")
-    w("; code that selects them; the codes' meanings are not established here.")
+    w("; code that selects them.  Open question: what most codes stand for -- only")
+    w("; 0x61 and 0x63-0x66 are tied down (DSP blocks, see DspBlock_ObjectCode_Table).")
     w("; The old names UIState_Config{A,B,C}_NNN, UIState_HandlerTable_*,")
     w("; UIState_SeqInit_Table and UIState_EventHandler_Table (a label in the")
     w("; middle of a list) did not match the table index and are retired;")
@@ -233,7 +234,8 @@ def emit(v):
         codes.setdefault(post, [])
         tname = TABLE_NAME[b]
         w("")
-        w("; ---- bank %d: event code -> listener list (queue 0x%04X) ----" % (b, q))
+        w("; ---- bank %d: 192 x u32, entry = event code 0x00..0xBF -> listener list;" % b)
+        w(";      installed by SwbtWr_InitBank%d, read by SwbtWr_DispatchLoop (queue 0x%04X)" % (b, q))
         if tname in KEEP.values():
             w("; (name kept: SwbtWr_InitBank%d in audio/dsp_config_sysex.s loads it;" % b)
             w(";  it is SwbtWr bank %d, not the table its name suggests)" % b)
@@ -249,9 +251,12 @@ def emit(v):
             lab = list_label(b, p, codes[p], post)
             cs = codes[p]
             if p == post:
-                what = "post list (called once per SwbtWr_DispatchLoop run)"
+                what = ("bank %d post list: SwbtWr_PostCallback_Loop calls each entry"
+                        " once the queue drains" % b)
             elif len(cs) > 1:
                 what = "codes " + ", ".join("0x%02X" % c for c in cs)
+            elif fns:
+                what = "code 0x%02X: callbacks SwbtWr_DispatchLoop calls for it" % cs[0]
             else:
                 what = None
             if p in KEEP and p != post:
@@ -277,10 +282,14 @@ def apply(v):
     path = os.path.join(ROOT, v, "maincpu/ui_widgets/widget_dispatch.s")
     raw = open(path, "rb").read()
     lines = raw.split(b"\n")
-    s = next(i for i, l in enumerate(lines) if l.endswith(b"; 99 PEQ+OVERDR+DELAY")) + 1
+    t = next(i for i, l in enumerate(lines) if l == b"DspFxRecListPtrTable:")
+    s = next(i for i in range(t, len(lines)) if lines[i].endswith(b"; 99 PEQ+OVERDR+DELAY")) + 1
     e = next(i for i, l in enumerate(lines) if l == b"SystemConfig_PointerTable:")
-    for l in lines[s:e]:
-        assert b";" not in l, ("comment inside replaced block", l)
+    assert e > s
+    regen = any(l.startswith(b"; SwbtWr EVENT-LISTENER BANKS") for l in lines[s:e])
+    if not regen:             # first application: the old block held no comment
+        for l in lines[s:e]:
+            assert b";" not in l, ("comment inside replaced block", l)
     new = emit(v).encode("latin-1").split(b"\n")
     out = lines[:s] + new + lines[e:]
     open(path, "wb").write(b"\n".join(out))
