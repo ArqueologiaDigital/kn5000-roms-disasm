@@ -1,0 +1,202 @@
+{
+ "lane": "promb",
+ "branch_head": "504de84246d635e7ab773e7b8dea4b9a9531086b",
+ "commits": [
+  {
+   "hash": "504de842",
+   "summary": "notes: commit relocated_copy_scan.py, the lead finder that surfaced the three older-build remnants (a lead list, not evidence)"
+  },
+  {
+   "hash": "9c18c1eb",
+   "summary": "Data_F04042 is six 42-byte TOUCH/CURVE A-lists plus 4 tables (ListPtrs 5/3, BoxOrigins 5/3) that sub_F5BDBB picks with (0x27A3)/(0x27F5); one origin disagrees with its box, and this is stated"
+  },
+  {
+   "hash": "deeac34d",
+   "summary": "12 coverage-walk objects typed as DLRecordPtrs_* pointer tables. Each reader site is byte-matched to a shape (one-record/pair/fixed/end). Records that DLRecordPtrs_F03173's readers index past its end"
+  },
+  {
+   "hash": "4e59ad1f",
+   "summary": "Data_F6EA57 (474 B) is five UNREACHED routines plus RamPtrTable_F6EBDD (llvm-mc round trip; nothing references it); branches symbolised and labels re-parented"
+  },
+  {
+   "hash": "26bcea8f",
+   "summary": "SMF reader SysEx handler named (SmfEvent_SysEx: GM On/Off, and 50 2C 04 00 11 00 param change). SmfSysEx_Addr11_Targets = 118-entry RAM map bounded by cp A,0x75. The 0xFFFFFFFF test compares the pointer, not the entry"
+  },
+  {
+   "hash": "1b1f10b1",
+   "summary": "77 records at 0xF3F400 are FACTORY DEFAULTS of ParamNumber_RecordPtrs records (prom_a sub_FAAE2A/FAAF91/FAA967 copy them); Default_Part*_A/B, Default_DspEffect1-3 (alg 1/35/20)"
+  },
+  {
+   "hash": "92052505",
+   "summary": "0xF6F000-0xF6F3FF is an older build's copy of the 0xF7AA00 module (live-0xBA00; 9 relocated bytes), dead; Data_F6F19C converted to code; OldCopy_* labels"
+  },
+  {
+   "hash": "4c72cbdd",
+   "summary": "0xF17A5F-0xF17BFF is a second older-build value-glyph copy (live-0x1A401); table entries respelled OldBuild2_ValueGlyph_Bitmaps+72k"
+  },
+  {
+   "hash": "37df48c0",
+   "summary": "0xF0ED50-0xF0EFFF is an older build's DL data (handler-table tail, quantiser, glyph table, glyphs 0-3) at live-0x23001; RamPtrTable_F0EFFF one-byte misframe corrected; 7 spurious _Arm labels removed"
+  },
+  {
+   "hash": "550af7f1",
+   "summary": "two retired-label header lines no longer contradict range vs count"
+  },
+  {
+   "hash": "5ad3922c",
+   "summary": "dlb_table_splitter: 33 coverage-walk objects typed from interpreter-B records (49 tables, 5 pointer arrays), note names/frequencies/pan legend etc."
+  },
+  {
+   "hash": "a57ab5d9",
+   "summary": "Data_F32FE6 = controller-destination names (64x13), OFF/ON/---/INV, header record pointers"
+  },
+  {
+   "hash": "ee4a18e9",
+   "summary": "DL_F4C000 is the CREATOR SELECT screen: six pieces, callers found, rendered"
+  },
+  {
+   "hash": "80f4c267",
+   "summary": "Font_Svc1C open question answered, refiled"
+  },
+  {
+   "hash": "cf53cdf6",
+   "summary": "the firmware's only Japanese text: two messages in DL_F2E91A"
+  },
+  {
+   "hash": "de59e117",
+   "summary": "EffectNames_F147AC 'Read by' negative proven false, corrected"
+  },
+  {
+   "hash": "99bb586d",
+   "summary": "DspEffect_MoveCursor and DspEffect_StepCursorValue"
+  },
+  {
+   "hash": "76baa719",
+   "summary": "seven DSP-effect value steppers named from their bytes"
+  },
+  {
+   "hash": "6635a0cb",
+   "summary": "R5 re-synchronised: 21 more branch operands symbolic"
+  },
+  {
+   "hash": "0e6aa4c9",
+   "summary": "54 more numeric branches symbolic (nop runs, ISR exits)"
+  },
+  {
+   "hash": "0f297e83",
+   "summary": "123 numeric branches in real code made symbolic (R3 false positives)"
+  },
+  {
+   "hash": "75ca9be4",
+   "summary": "IndexMap_F4FA9B maps SysEx parameter byte to effect parameter number"
+  },
+  {
+   "hash": "30794aa4",
+   "summary": "eleven code islands framed as data, two misframes"
+  },
+  {
+   "hash": "ef473060",
+   "summary": "402 B effect-editor code framed as data, a misframe, eight paint jobs"
+  },
+  {
+   "hash": "edda0957",
+   "summary": "every DSP-effect record and map names its reader"
+  },
+  {
+   "hash": "946119a1",
+   "summary": "DSP-effect editor tables 0xF13124-0xF13D33 typed from readers"
+  },
+  {
+   "hash": "4fee08a3",
+   "summary": "byte 3 of a DSP-effect parameter group is its own index (correction)"
+  },
+  {
+   "hash": "ae9d7a16",
+   "summary": "0xF124A6-0xF12F23 = EQ-graph template + 57 DSP-effect descriptors"
+  },
+  {
+   "hash": "6453a6e9",
+   "summary": "0xF4FE38 SysEx transmit strings and tables typed"
+  },
+  {
+   "hash": "ecb52937",
+   "summary": "DSP-effect descriptor bytes 1-3 decoded"
+  },
+  {
+   "hash": "b73597af",
+   "summary": "README: drop reference to a findings file not in tree"
+  },
+  {
+   "hash": "f6ac83ce",
+   "summary": "branch symboliser re-run, 135 sites, re-parent"
+  },
+  {
+   "hash": "3f008cc6",
+   "summary": "CurveBitmapSelector and Map_12EC_F6CAE3 framed as data"
+  },
+  {
+   "hash": "de5f371e",
+   "summary": "77 hand-made return points named <Routine>_Resume"
+  },
+  {
+   "hash": "dfb4a972",
+   "summary": "sub_F70C6F is code; F70C4F is a map"
+  },
+  {
+   "hash": "f540f07b",
+   "summary": "nine data tables framed as code, reframed with readers"
+  },
+  {
+   "hash": "350e4c7b",
+   "summary": "lane README; mid-line artefact probe"
+  },
+  {
+   "hash": "197398a6",
+   "summary": "kanji readings on cell lines; six headers corrected"
+  },
+  {
+   "hash": "0f503f79",
+   "summary": "1,491 more ROM pointers symbolic"
+  },
+  {
+   "hash": "56d2712d",
+   "summary": "re-parent 811 <Table>_Code_* labels"
+  },
+  {
+   "hash": "f43e2378",
+   "summary": "LinkTable_F4FF61 is the SysEx decode tree prom_a walks"
+  },
+  {
+   "hash": "336a97c8",
+   "summary": "13 stale directory slots name display lists"
+  },
+  {
+   "hash": "fdb0e352",
+   "summary": "198 block-transfer macros spelled natively"
+  },
+  {
+   "hash": "37a58113",
+   "summary": "SMF export SysEx templates, step-length table, two routines"
+  },
+  {
+   "hash": "3e0a4c45",
+   "summary": "MsgLine_FormatNoteAndVelocity and its name tables"
+  },
+  {
+   "hash": "e8f524cd",
+   "summary": "Unclaimed_F57453 is five routines (stage values)"
+  },
+  {
+   "hash": "589b7473",
+   "summary": "label 338 unlabelled code entries named by pointer tables"
+  },
+  {
+   "hash": "4fdb31ac",
+   "summary": "5,799 numeric ROM-address operands -> existing labels"
+  }
+ ],
+ "measured": "Commands: python3 scripts/analysis/data_range_census.py --images prom_b --json /tmp/claude-1000/lane-promb/final.json && python3 notes/promb-2026-09-25/measure_promb.py --census /tmp/claude-1000/lane-promb/final.json\n\nBase 3958235e -> final HEAD 504de842:\n- CODE 202,176 -> 204,349\n- KNOWN-A 136,934 -> 163,160\n- KNOWN-B 110,560 -> 85,108\n- UNKNOWN 3,566 -> 620\n- FILLER 71,005 -> 71,004\n- RESEARCH 97,806 -> 69,348 bytes (1,137 regions)\n- data-as-code markers 215 -> 112\n\nOther measures:\n- Numeric branch operands: 405 at 6453a6e9 (when the previous run's measurements started) -> 206.\n- Numeric ROM-address operands: 1,490 -> 1,445. Of those, 1,279 are `.long -> prom_a` with no prom_a label to point at.\n- Labels: 13,334, of which 1,506 are semantic.\n\nThis continuation (from a57ab5d9, per commit):\n- RESEARCH went 77,502 -> 69,348 bytes and 1,259 -> 1,137 regions.\n- UNKNOWN went 2,944 -> 620.\n- CODE went 203,293 -> 204,349.",
+ "gate": "`make gate-wsa1` passed before every commit, with every rebuilt ROM byte-identical. The one-byte perturbation test was run once, in an earlier part of this lane: changing W of EffectDesc_Chorus turned the gate red at 0x1262E, and it was restored.\n\nComments were checked on each commit with `assert_comments_preserved.py`, using per-commit rename maps committed under notes/promb-2026-09-25/*.map. The only comments lost are these, each named in its commit message:\n- answered `Unknown:` lines\n- retired first lines of the coverage-walk headers, now naming their address\n- \"The extent is the reachability walk's\" sentences, marked CORRECTED\n- `; ADDR |..|` byte-dump comments on replaced `.byte` rows\n- claims proven false: the RamPtrTable_F0EFFF misframe, and \"287 bytes\" for the glyph copy\n\nThe final run of `symbolize_numeric_branches.py --image prom_b --only prom_b/wsa1_prom_b.s --apply --verify` found 0 convertible sites; its VERIFY passed. Every generator script reproduces its commit: dlb_table_splitter was verified byte for byte from a57ab5d9.",
+ "not_done": "- dlb_table_splitter refused 13 objects: Data_F05286, F28866, F288A1, F2B38F (skipped because it overlaps the word array at 0xF2B41F), F32B3C, F33394, F33A49, F34C6E, F35035, F39559, F3A0A5, F3C7E3 and F3DC21. The reasons were partial entries, record sets that disagree with the source's `+0x07` fields, or width/kind conflicts.\n- Data_F33A1B is not typed. It holds three 3-entry tables read by sub_F5CC64 (+0: 50-byte B lists; +0xC: 20-byte A lists; +0x18: 5-byte A lists; index C = 0..2).\n- Data_F00B48 (261 B; a 0x90/0x7D byte-code pattern) is untouched, as are several small odd-sized coverage-walk objects (Data_F04E32 etc., 1-byte pieces of larger arrays).\n- Data_F71767's sibling Data_F3356B is unresolved: it is used only as a list END, and its 2 entries are not read.\n- 1,279 `.long -> prom_a` operands stay numeric because prom_a has no label at their targets. That is the proma lane's file.\n- These admissions (the census's research flags) remain:\n  - 11 Default_RecordNN ids (0x60, 0x78-0x7A, 0x80, 0x91-0x93, 0x98-0x99) still have no meaning.\n  - The SoundCodeByGroupMember_* word encoding (6,660 B) is not decoded. prom_a sub_FAAF91 splits the low byte into kind bands (<=0x0F, 0x10-0x1F, 0x20-0x21) and writes (0x60F014..16); param 0x98 consumers were not traced.\n  - The font admissions, DL_YesAreYouSure (unreached), and the 24 headerless B records at 0xF3DCBB-0xF3DE22 (unreferenced) remain open.\n- The SUPERSEDED notes of other lanes containing \"reachability walk's\" still flag DLText_PanL64CtrR63 and DLBoxes_F05AB4. They were left verbatim because they are true history.\n- The FINDINGS file for the Japanese text was blocked by the harness, so the finding is given under leads.",
+ "leads": "Items 3-6 are observations from the bytes that were not run on hardware.\n\n1. Older-build remnants exist in prom_b. Three are proven, each by its own script under notes/promb-2026-09-25/:\n   - 0xF0ED50-0xF0EFFF is live minus 0x23001 (`stale_dl_tables_f0ed50.py`).\n   - 0xF17A5F-0xF17BFF is live minus 0x1A401 (`stale_value_glyphs_f17a5f.py`).\n   - 0xF6F000-0xF6F3FF is live minus 0xBA00 (`old_module_copy_f6f000.py`).\n\n   Each runs from the end of this build's code to a 1 KB or 4 KB boundary and is named by nothing. `relocated_copy_scan.py --boundaries` lists further candidates to check. Most candidates will be legitimate repeats, but any unreferenced run ending on a 1 KB boundary deserves a look. prom_a may hold the same kind of remnant. This may matter for MAME: code that looks unreached may be stale, not a missed call path.\n\n2. The 0xF3F400 records are the factory-default image of the ParamNumber_RecordPtrs parameter records.\n   - They give the parts' default MIDI channels (part k gets channel k; part 9, channel 10, differs).\n   - They give the DSP effect defaults (algorithms 1, 35, 20).\n   - A prom_a lane could name the loaders: sub_FAAE2A / sub_FAAF91 / sub_FAA967 look like reset-to-defaults routines. It could also give meanings to the other 11 ids.\n\n3. `SmfSysEx_WriteAddr11` has `cp XDE,0xffffffff` before `ld XDE,(XDE)`, so it compares the pointer, not the entry. As written, SysEx address 11:lo with an empty (0xFFFFFFFF) entry writes through to 0xFFFFFF. This is worth a MAME trace.\n\n4. DLRecordPtrs_F03173's readers index entries 19-20, past the table and into DL_F031BF (A = 18/19 in the pairing site, A = 7 in the one-record site).\n\n5. TouchCurve_BoxOrigins3[0] says x = 0xA8, but its list's box starts at 0xE0.\n\n6. The Japanese text finding (commit cf53cdf6), the FINDINGS content the harness blocked. DL_F2E91A (0xF2E91A-0xF2E9E2, 28 A-records) is the firmware's only Japanese text: two 14-record messages split at 0xF2E97A.\n   - Message 1: \u300c\u30b3\u30fc\u30c9\u30c8\u30e9\u30c3\u30af\u304c\u3059\u3067\u306b\u3042\u308a\u307e\u3059\u30022\u3064\u306e\u30c8\u30e9\u30c3\u30af\u3092\u30b3\u30fc\u30c9\u30c8\u30e9\u30c3\u30af\u306b\u6307\u5b9a\u3067\u304d\u307e\u305b\u3093\u3002\u300d (\"A chord track already exists; two tracks cannot be assigned as chord tracks.\")\n   - Message 2: the same with \u30b3\u30f3\u30c8\u30ed\u30fc\u30eb\u30c8\u30e9\u30c3\u30af (control track).\n   - Record ops are 0x19/0x1D/0x1A (kana/kanji faces) and 0x07 (Latin 8x16).\n   - Small katakana 0x46 = \u30c3 and 0x3E = \u30a1, verified by glyph.\n   - 0xF2E91A appears 8 times in prom_a's PtrTable_F99121, always as the END of DL_Error (0xF2E910-0xF2E91A). 0xF2E97A is spelled nowhere, so neither Japanese list is proven reachable.\n   - 151 op-0x1C records use service 0x1C (Font_Svc1C).\n   - Checked by `japanese_messages_probe.py`."
+}

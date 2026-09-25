@@ -1,0 +1,90 @@
+{
+ "lane": "seqeng",
+ "branch_head": "c56b53a921fa8b89894a467db693d2a6cd5c0cd7",
+ "commits": [
+  {
+   "hash": "7beb1400",
+   "summary": "seqeng tools: line map (v10/v9/v7), misframe-zone finder, reframe tool with llvm/unidasm operation-agreement check (+selftest), measure script"
+  },
+  {
+   "hash": "568bb213",
+   "summary": "v10 sequencer: re-frame 470 misframed spans (sequencer_engine 213/1,949 B, smf_event_processor 226/1,502 B, smf_tonegen_core 31/167 B) on unidasm framing + symboliser"
+  },
+  {
+   "hash": "0791404d",
+   "summary": "v9 sequencer: same 470 re-frames"
+  },
+  {
+   "hash": "dff15118",
+   "summary": "v7 sequencer: re-frame 240 misframed spans (789+836+149 B)"
+  },
+  {
+   "hash": "ae0b133b",
+   "summary": "v10 seq_event_playback: Voice_NoteChannelGrid_Lookup named/re-framed (ld HL,(XIX+HL) was .byte 0xd3/reti/...), NoteParamTable head typed, 10 more spans"
+  },
+  {
+   "hash": "85aa9882",
+   "summary": "v9+v7 seq_event_playback: port v10's typed voice tables (4,390 B; 638 data-as-code markers retired per version)"
+  },
+  {
+   "hash": "b452a081",
+   "summary": "tools: --fresh code-as-data mode, unidasm respelling, ROM-address immediate symbolisation, seqeng_code_runs.py, seqeng_symbolize_imm.py"
+  },
+  {
+   "hash": "0b1246ac",
+   "summary": "v7 sequencer: decode 13.1 KB of code written as .byte/.incbin, incl. all 9 romslices (2,223 B)"
+  },
+  {
+   "hash": "3a9c5d4f",
+   "summary": "v10+v9 sequencer: decode 44 short code-as-data runs (251 B each)"
+  },
+  {
+   "hash": "022cc38e",
+   "summary": "v7 smf_playback: numeric ld -> SoundBank_DefaultTrackData"
+  },
+  {
+   "hash": "afd32818",
+   "summary": "v10/v9/v7: type 13 data objects spelled as code (VoiceChannel_ParamTable1, ChannelRecord_PtrTable, channel maps, DataEntry ptr/limit tables, screen-group handler table, ...) + evidence headers on 5 more; FloppyIO_SwitchboardChannelPtrs -> ChannelRecord_PtrTable"
+  },
+  {
+   "hash": "9432460f",
+   "summary": "v10/v9/v7: type Voice_SlotTemplateData; Rhythm_InitDataBlock zero fill as .zero 128 (unreferenced, searched)"
+  },
+  {
+   "hash": "8ef7c95f",
+   "summary": "v7 sequencer: decode 1,033 B more code-as-data (--all-data, every zone >4 B is CODE in v10)"
+  },
+  {
+   "hash": "41cc8af5",
+   "summary": "v7: 72 numeric calls -> exact-target labels; worklist v7-unlabelled-call-targets.txt for the other 183 call sites"
+  },
+  {
+   "hash": "bf266c10",
+   "summary": "fix v10/v9 misframe around phantom label SeqByteBlock_PathNormalize (.set kept, phantom pointer explained) and the CRLF step; annotate 105 swapped-mnemonic lda_dpi/stb_dpi lines"
+  },
+  {
+   "hash": "38b45719",
+   "summary": "v7 smf_event_processor: drop 121 'v10 does not spell this byte either' notes proven false by seqeng_stale_v10_notes.py (34 kept)"
+  },
+  {
+   "hash": "71b7b5df",
+   "summary": "name SeqVoice_InitEntryForCurrentBank (was SeqPos_DataBlock) and AccPlay_NoteWriteStatusByte (was AccPlay_NoteSetType91), all versions"
+  },
+  {
+   "hash": "bc464924",
+   "summary": "name the 8.3 path-component parser FatPath_Next83Component + its 16 inner labels (were EffectsSeqData, TechnichordCfgA, ...), all versions"
+  },
+  {
+   "hash": "b166dae1",
+   "summary": "name Fat_ReadEntry (was SeqStep_FileSectorError) and Fat_CountContiguousClusters with evidence headers; rename seds skip comment lines"
+  },
+  {
+   "hash": "c56b53a9",
+   "summary": "README: document annotation/stale-note tools; lane figures in message"
+  }
+ ],
+ "measured": "Command: python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json on lane base 3958235e (before) and on c56b53a9 (after), then python3 scripts/analysis/seqeng_measure.py BEFORE.json AFTER.json (research-target rule and marker regex copied from lane_worklists.py; toolchain tlcs900_backend@4d7fa4f6b37c for both).\n\nTOTAL over the 15 owned files (before -> after):\n  CODE 392,017 -> 406,173 B; KNOWN-A 3,425 -> 11,891 B; KNOWN-B 21,024 -> 241 B; UNKNOWN 0 -> 0; FILLER 2,223 -> 384 B (as graded); RESEARCH TARGETS 19,894 -> 241 B.\n  Source text: data-as-code markers 2,006 -> 21 (the 21 are executed nop runs in code, e.g. `call FloppyIO_ReadNextByte / nop x3`); numeric branch operands 1,748 -> 315 (v10 0, v9 0, all 315 in v7); v7 romslice bytes 2,223 -> 0.\n\nPer file, research targets before -> after:\n  v10 sequencer_engine 820 -> 16, seq_event_playback 71 -> 14, smf_event_processor 584 -> 36, smf_tonegen_core 278 -> 0, smf_playback 21 -> 0\n  v9  sequencer_engine 822 -> 16, seq_event_playback 1,348 -> 14, smf_event_processor 584 -> 36, smf_tonegen_core 278 -> 0, smf_playback 21 -> 0\n  v7  sequencer_engine 6,609 -> 41, seq_event_playback 2,789 -> 31, smf_event_processor 4,844 -> 31, smf_tonegen_core 804 -> 6, smf_playback 21 -> 0\nKNOWN-A per file after: seq_event_playback 3,482 (each version; v9/v7 were 0), smf_tonegen_core 299, smf_event_processor 144, smf_playback 32.\nMarkers before -> after (per version): seq_event_playback v9 667 -> 0, v7 663 -> 0, v10 30 -> 0; smf_event_processor 162/162/93 -> 3; sequencer_engine 51/51/19 -> 0; smf_tonegen_core 31 -> 2; smf_playback 5 -> 2.\nNumeric branches v7 after: sequencer_engine 215, smf_event_processor 77, seq_event_playback 15, smf_tonegen_core 8.\nThe remaining 241 B of research targets are single instructions with no llvm-mc spelling, written `.byte` + unidasm's decode (list in leads).",
+ "gate": "make gate PASS at HEAD c56b53a9 (assert_images_assemble clean; 9/9 KN5000 images IDENTICAL), run before every commit. Perturbation proof: changed one byte of a re-framed `.byte 0xc2, 0xe3, 0xff, 0x00, 0x19, 0x78, 0x28` in v10 sequencer_engine.s -> make gate FAIL (\"kn5000_v10_program 1 BYTES DIFFER\"), restored, PASS. main's lane_worklists.py --verify-branch seqeng main s2/seqeng: PASS (31 paths). assert_comments_preserved --base main: PASS for all v10/v9 files and 4 of 5 v7 files; v7 smf_event_processor.s reports exactly the 121 intentionally removed notes (commit 38b45719, each proven false by scripts/tools/seqeng_stale_v10_notes.py). Every conversion also passed a quick private build (llvm-mc+ld.lld+objcopy+cmp) and symbolize_numeric_branches.py --verify.",
+ "not_done": "1. 241 B of research targets remain (per version ~50-100 B): single instructions the backend cannot spell -- lda XBC,(XWA+) 18, sla A,r 16, (r32+r16)-indexed ops with immediates 18, ldi/ldir with 0x85 prefix 2, rlc N,W 2, sla N,QBC 2 -- written `.byte` + unidasm text. Needs backend support, not source work.\n2. 315 numeric branches in v7 (none in v10/v9): 183 call sites go to 27 addresses that have no label in v7 because they sit inside other files' objects (worklist committed: notes/seqeng-2026-09-25/v7-unlabelled-call-targets.txt); the rest are jr/jrl/calr in small blocks the symboliser refuses wholesale (R1) because a neighbouring call has such a target. They resolve once the target files get labels.\n3. Naming: 399 labels per version still carry ByteBlock/DataBlock names (mostly structural children like SeqByteBlock_PathNormalize_Skip12) and 24-32 `_Helper` routines. Named this session: Voice_NoteChannelGrid_Lookup, VoiceChannel_SetRecordField3, ChannelRecord_PtrTable, SeqVoice_InitEntryForCurrentBank, AccPlay_NoteWriteStatusByte, FatPath_Next83Component (+16 inner), Fat_ReadEntry, Fat_CountContiguousClusters (+5 inner). The rest of the FAT module (~20 functions) and the SeqPart_ByteBlock*/SeqPlay_DataBlock_BBE/SeqChan_ByteBlock* routines need RAM-variable semantics that are not established (0x2877-0x28B5 sequencer state bytes have no names).\n4. Could not rename SeqByteBlock_PathNormalize / SeqByteBlock_StyleBitmapRef / SeqByteBlock_DispatchJumpTable / Voice_NoteChannelTable1_Code_Sub(v7): referenced from files this lane does not own (widget_dispatch.s, positional_labels.s, v7 accompseq_routines.s); kept as-is or as flagged aliases.\n5. Unreferenced routine after SeqVoice_InitEntryForCurrentBank (v10 0xF3F82D) left unlabelled: no absolute reference found in the dump, no call in the lane's files.\n6. 34 of v7's 'v10 does not spell this byte either' notes could not be proven false (no unique v10 byte match) and were kept.\n7. A notes/FINDINGS-seqeng-*.md file could not be written (the harness refuses report files from subagents); its content is in `leads`. Tool docs are in notes/seqeng-2026-09-25/README.md.\nScratch (/tmp/claude-1000/lane-seqeng) holds only regenerable or disposable items: census JSONs (regenerate with the census command), v9/v7 unidasm listings (recipe in the README), qc.sh (quick private build+cmp; the gate is the certification), delta.py/zonecheck.py (review helpers superseded by seqeng_measure.py and the tool guards), lw_check.py (main's lane_worklists.py with ROOT patched).\nNote for other lanes: my make gate runs rebuilt the shared worktree-local objects only; I did not rebuild the shared llvm-project toolchain.",
+ "leads": "A. BACKEND BUG (byte-exact, semantically wrong): the F5-prefix (r32+) mnemonics for 0x31/0x41 are swapped. `f5 e0 31` is lda XBC,(XWA+) (C idiom p=q++) but llvm-mc prints `stb_dpi a, 224`; `f5 e8 41` is ld (XDE+),A but prints `lda_dpi xbc, 232`. Verified with unidasm on synthetic bytes and by the code's own use. 228 such lines tree-wide in v10 alone; lane files annotated via scripts/tools/seqeng_annotate_swapped_dpi.py (`; = ld (xde+),a (backend mnemonic is swapped)`). Also: no llvm-mc syntax exists for post-increment operands (`ld (xde+),a` is a parse error; `ld (+xde),a` silently assembles an ABSOLUTE address expression -- a trap). Other llvm prints misname registers while round-tripping: `cpda8 xbc,(8990)` is cp A,(0x231E); `addda16 xwa,(..)` is add WA; `andda16 xhl` is and HL; `div xwa,xbc` is div XWA,BC. The reframe tool's agree()/respell() handles these.\nB. BACKEND: unspellable encodings listed in not_done #1 (shift-by-A, (r32+r16)+immediate forms, 0x85-prefixed ldi/ldir, rlc N,W).\nC. PHANTOM POINTER in v10/v9 ui_widgets/widget_dispatch.s (:8834 / :8854): `.long SeqByteBlock_PathNormalize` covers bytes d7 00 f5 00, which are two LE16 coordinates (215, 245) in a row table like its neighbours. Write `.short 0x00d7, 0x00f5` there; then delete `.set SeqByteBlock_PathNormalize, . + 1` in smf_event_processor.s.\nD. v7 LABELS for other lanes: notes/seqeng-2026-09-25/v7-unlabelled-call-targets.txt (scripts/analysis/seqeng_v7_call_targets.py). Biggest: v7 0xFDD69E inside DSPCfg_EventType50+157 = v10 Audio_CheckSubsystemReady (66 calls); 0xFF081D inside Free_Block4+12 = Memset (18); 0xFF05BC inside StrSearch_Init+2 = Mem_Copy (17); 0xFDC028 = DSPCfg_ReadParam_Map0 (15); 0xFF043B inside VoiceParam_DispatchTable1+3 = Math_DivideU32 (11); 0xFDAA53 inside SysEx_ValidateRolandHeader+20 = AddswbWr (11). The v7 library region has coarse/misnamed labels. After labels exist: `python3 scripts/converters/seqeng_symbolize_imm.py v7 --apply`.\nE. INTEGRATOR cleanups: shared/positional_labels.s aliases Voice_NoteChannelTable1_0x422 (= Voice_NoteChannelGrid_Lookup; still called by that name from v10/v9 accompseq_routines.s, v7 calls Voice_NoteChannelTable1_Code_Sub), VoiceChannel_ParamTable1_0x80 (now unused; = VoiceChannel_SetRecordField3), SeqByteBlock_StyleBitmapRef_0x736 (used 4x in smf_event_processor.s; give that routine a real label). SeqByteBlock_DispatchJumpTable (referenced from widget_dispatch.s SystemConfig_PointerTable entry 14) is the sequencer's 4-entry screen-group handler table -- rename there. Nine v7 romslice .bin files (2,223 B) under v7/maincpu/includes/romslices/ are now unreferenced and can be deleted. symbols/* still hold old names (SeqPos_DataBlock, FloppyIO_SwitchboardChannelPtrs, AccPlay_NoteSetType91, SeqStep_FileSectorError ...).\nF. SEMANTICS for the docs/naming lanes: VoiceSynth_CommandDispatch compares the byte at 0x0FAC with 0x20,0x26,0x40,0x42,0x43,0x5B,0x5D,0x60-0x65 = MIDI CC numbers (bank LSB, data-entry LSB, hold, sostenuto, soft, reverb, chorus, data inc/dec, NRPN, RPN) -> VoiceSynth_Algorithm_Table / VoiceParam_ReadUpdate_Table are [INFERENCE] CC 0..15 handler tables; VoiceSynth_DataEntry_PtrTable + VoiceChannel_ParamLimitTable (12/127/255) look like GM RPN 0/1/2; several handler names there (VoiceSynth_Cmd_Pan for 0x40 = hold, Scoop_Cmd_ReleaseVoiceSlot for NRPN select, NoteOn/OffByCh for RPN select) look wrong. Mode byte 0x11F8 != 1 swaps MIDI channels 10 and 16 through four tables. smf_event_processor.s contains a compiled-C FAT12/FAT16 module (file +30 volume, +38 sector buffer, +42 first cluster, +44 run length; volume +24 FAT start, +36 highest cluster, 0xFFF = FAT12): ~20 functions left to name after FatPath_Next83Component, Fat_ReadEntry, Fat_CountContiguousClusters; SeqStep_FileIoCheck (14 calls) is the cached sector fetch.\nG. TOOLING: the branch symboliser's R5 check uses the GLOBAL linear unidasm listing, which is out of step after data; for spans decoded with a fresh unidasm from a known start (seqeng_reframe.py --fresh) it refuses correct branches. seqeng_symbolize_imm.py covers absolute call/jp/ld with exact-label targets as a complement. seqeng_reframe.py/seqeng_code_runs.py (fresh decode + agreement + respell + evidence per zone, guards each justified by a recorded case) should work unchanged on other lanes' files: `--auto` for misframes, seqeng_code_runs.py --census for code-as-data.\nH. Rename sed scripts must not touch comment lines that record history (a re-run rewrote an old name quoted in a header); lane seds now start with `/^[[:space:]]*;/b`."
+}

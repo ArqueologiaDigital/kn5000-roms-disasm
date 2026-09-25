@@ -1,0 +1,150 @@
+{
+ "lane": "proma",
+ "branch_head": "961b6e45c0474c5d36e945f8c32300ec7e63bf26",
+ "commits": [
+  {
+   "hash": "6c61f97d",
+   "summary": "(earlier run) Data_FF17E2 is ten keyboard-ruler bitmaps + four block-store cursor routines"
+  },
+  {
+   "hash": "cd06f6c0",
+   "summary": "(earlier run) DrumKitNames split per block; open question narrowed to blocks 7-12"
+  },
+  {
+   "hash": "4867e280",
+   "summary": "(earlier run) splash header admission closed"
+  },
+  {
+   "hash": "38484c4b",
+   "summary": "(earlier run) frame ModuleTables_FCF044 by its 56 readers"
+  },
+  {
+   "hash": "0522f390",
+   "summary": "(earlier run) 0xFC4000-0xFC52F7 = DIGITAL EFFECT / COPY pages' screen data"
+  },
+  {
+   "hash": "3ceacb1c",
+   "summary": "(earlier run) IndexMap_FCFCD4 + three step-value lists"
+  },
+  {
+   "hash": "11ec85f8",
+   "summary": "(earlier run) RAM-0x3800 module's two data images typed"
+  },
+  {
+   "hash": "de805d63",
+   "summary": "(earlier run) retire 1,958 B of data framed as code"
+  },
+  {
+   "hash": "568b7b38",
+   "summary": "(earlier run) panel LED wire maps / test-mode switch-to-LED tables were framed as code"
+  },
+  {
+   "hash": "bd4d49ce",
+   "summary": "(earlier run) 8 KB under .LFAF7A5 = identity maps + 66 key/value lists"
+  },
+  {
+   "hash": "eb76ae10",
+   "summary": "(earlier run) 0xFB1A3E-0xFB1FFF = three AND/OR RAM patch lists"
+  },
+  {
+   "hash": "18a059e4",
+   "summary": "(earlier run) MidiOut_ParamNumberTable header + 192 symbolic entries"
+  },
+  {
+   "hash": "900aa08e",
+   "summary": "(earlier run) 67 certified single instructions spelled"
+  },
+  {
+   "hash": "dd6e7e15",
+   "summary": "(earlier run) 19 .byte branches in MidiOut become instructions"
+  },
+  {
+   "hash": "dda3665b",
+   "summary": "(earlier run) 262 more numeric branches symbolic"
+  },
+  {
+   "hash": "b497b5c5",
+   "summary": "(earlier run) 7,573 numeric ROM addresses become labels; prom_b equates"
+  },
+  {
+   "hash": "538261cd",
+   "summary": "(earlier run) 2,262 more address operands symbolic"
+  },
+  {
+   "hash": "991bcca3",
+   "summary": "(earlier run) patch-list findings into record headers"
+  },
+  {
+   "hash": "b70369ce",
+   "summary": "eleven panel lookup tables framed as code -> typed data; live vs dead handlers pinned from PanelGroupActionListPool (finishes and corrects the interrupted run's diff)"
+  },
+  {
+   "hash": "7bedf075",
+   "summary": "nineteen MIDI-in 32-record parameter tables get reader-derived headers"
+  },
+  {
+   "hash": "805dcf90",
+   "summary": "Dispatch_By_60F080 indexed by the 0x2030 record's parameter number; 11 controller handlers named; Queue2C00_PublishStaged 'no caller' disproven"
+  },
+  {
+   "hash": "782e9e69",
+   "summary": "panel assignable controllers store MIDI controller numbers (0x81 = channel pressure); action pool handler pointers symbolic, 15 handlers labelled"
+  },
+  {
+   "hash": "dce2440f",
+   "summary": "PtrTable_F99121 split into MessageScreen_ListPairs/ListPairsB/ArgHandlers/PairTableByLanguage; 134 prom_b DL_ names"
+  },
+  {
+   "hash": "52de469f",
+   "summary": "PtrTable_F98DE5 = dead second copy of the MessageScreen tables, 0x400 lower"
+  },
+  {
+   "hash": "23af4423",
+   "summary": "34 string operand tables of the SYSTEM-menu module spelled as .ascii rows"
+  },
+  {
+   "hash": "cbb6d8a6",
+   "summary": "PtrTables_F95C95 = two screens' button-handler tables + stale copy; stray byte explained"
+  },
+  {
+   "hash": "3639f9f6",
+   "summary": "DisplayListPtrs_F99870 = three screen-page button rows; (0x2740) is the page"
+  },
+  {
+   "hash": "513bed36",
+   "summary": "reword a correction note that falsely read as self-admitting"
+  },
+  {
+   "hash": "59569c62",
+   "summary": "PtrTable_FAD28A -> ParamNumber_DefaultRecordPtrs: ROM factory default of each parameter record"
+  },
+  {
+   "hash": "ca1e8013",
+   "summary": "ten UI tables' selector is the panel button code (read by +8 BUTTON methods); 7 renamed ScreenButtonHandlers_<Screen>"
+  },
+  {
+   "hash": "e7fbf9a5",
+   "summary": "headers for five small tables flagged embedded-in-code"
+  },
+  {
+   "hash": "c0241b4b",
+   "summary": "13 numeric branches in the live panel event walker symbolic (vetted-range tool)"
+  },
+  {
+   "hash": "821c2a0d",
+   "summary": "KitCategoryLegends as .ascii legends, label per switch base"
+  },
+  {
+   "hash": "97abf864",
+   "summary": "RAM 0x2252/0x2256 = held-panel-code sets; interlock's 17 offset explained"
+  },
+  {
+   "hash": "961b6e45",
+   "summary": "3 more branches symbolic in the dead module's twin code (own-range targets only)"
+  }
+ ],
+ "measured": "Command: `python3 notes/proma-2026-09-25/measure_proma.py [--rev REV]` (committed; wraps scripts/analysis/data_range_census.py --images prom_a over wsa1/prom_a/wsa1_prom_a.s only, plus source counts). One toolchain throughout: LLVM tlcs900_backend@4d7fa4f6b37c.\n\n| | base 3958235e | after interrupted run (b70369ce) | final 961b6e45 |\n|---|---:|---:|---:|\n| CODE | 325,001 | 322,524 | 322,524 |\n| KNOWN-A | 60,857 | 100,347 | 107,566 |\n| KNOWN-B | 70,523 | 30,562 | 23,988 |\n| UNKNOWN | 2,350 | 2,000 | 1,355 |\n| FILLER | 63,096 | 66,394 | 66,394 |\n| research targets | 56,329 | 26,542 | 21,059 |\n| data-as-code markers | 2,932 | 855 | 855 |\n| numeric branches | 3,695 | 219 | 203 |\n| numeric ROM-range immediates | 3,365 (a 1,896 / b 1,469) | 361 (99/262) | 361 (99/262) |\n\nThis session alone: research -5,483 B, KNOWN-A +7,219 B, KNOWN-B -6,574 B, UNKNOWN -645 B, numeric branches -16. The two MIDI-in tables for unidentified controllers (0xB6/0xB7) now say so, which added 192 B to research on purpose. Remaining numeric branches: call->prom_a 24, call->prom_b 9, calr 117, jr 33, jrl 9, jp->prom_a 9, jp->other 2. Every census figure is a heuristic; the claims themselves are asserted by the gen_*/ascii_* scripts in notes/proma-2026-09-25/ (listed in its README).",
+ "gate": "`make gate-wsa1` PASSES at 961b6e45: all four WSA1R images are byte-identical, and it was run before every commit. I showed the gate can fail on this work: I changed one byte of PanelKeypad_OrdinalToKey_V1, the gate reported \"DIFFERS wsa1_prom_a.ic12: 1 byte(s), first at 0xADD7\", and I then restored it. Only wsa1/prom_a/wsa1_prom_a.s changed among the lane's files, plus new files under notes/proma-2026-09-25/ and scripts/renaming/, so gate-wsa1 is sufficient. After every edit, comment_loss.py showed that the only comments lost were regenerated address-only ones or lines I proved false; each of those is quoted in its replacement text and in the commit message. `python3 notes/proma-2026-09-25/symbolize_prom_a_r1.py --image prom_a --only prom_a/wsa1_prom_a.s --apply --verify` finds 0 convertible sites and VERIFY passes. The file is still valid UTF-8, with no double encoding (checked after each edit).",
+ "not_done": "- DrumKitNames_Block7-12 (7,740 B): still no reader. The 24-bit block and base addresses do not occur in prom_a, prom_b, prom_c or prom_d; the earlier run already ruled out multiplies by 1290 or 129 in prom_a. The admission stays.\n- Not attempted: RecordTables_FB82A0 (2,566 B), MixedTables_FC6626, the DiskImage_* pair (1,024 B), Msg0716_ObjectRecords, VersionScreen_*, RamInitTable_F96CA6_Addrs, MidiFile_Tables_FBA169.\n- Still open because the admission is true:\n  - ParamNumber_RecordPtrs' field layout.\n  - Dispatch_FF3D39's row-4 question.\n  - Dispatch_By_60F080__Tail's intent.\n  - The stale copies' origin.\n  - What bit 5 of (0x7F36) does.\n  - Switch assignments 0x88, 0x89 and 0x90.\n- Eight more jump tables with an unknown selector are indexed by RAM cells rather than button codes: F9A3C7/F9AB84 by (0x2720), F9D966 by (0x269A), and F9DBE6, F9EC58, FA08BF, FA09BD, FA0B13 by other cells. Unresolved.\n- 100 display lists in the 0xFA1404 SYSTEM-menu module (9,915 B) are still `.byte` with text inside. Typing them needs per-interpreter record framing.\n- 0xF95C60-0xF95C94 (53 B, RAM-test tables framed as code): readers located at 0xF951ED-0xF95705, not retyped.\n- 361 numeric ROM immediates were not worked further: 262 are prom_b targets with no prom_b label, 99 are prom_a targets.\n- 203 numeric branches remain, refused as R3/R5/mid-line. Some are genuinely stale code, such as the dead handler at 0xF8A7DF.\n- Some code lines stay `.byte`. llvm-mc has no register-count shifts (`sla A,D`), and the shared include has no `or/and (mem),R` macros. That include is not my file.\n- Probe breakage: check 2 of wsa1/notes/prom_a_uiblock_checks.py (not my file) asserts the old names PtrTable_F99121, PtrTables_F95C95, DisplayListPtrs_F99870/F92C66/F93557/F93839 and JumpTable_F9A2A7/\u2026; I renamed those. Its other four failures (checks 4 and 7) already failed at base 3958235e.\n- The FINDINGS note on the parameter-number space was not written: the harness blocks report files here. Its content is in \"leads\" below.\n- v7/v9 did not apply (WSA1 only), and prom_a.ld was not touched.",
+ "leads": "**One parameter-number space covers CPU 1.** Each record is 4 bytes, [number][class][value][mask]. MIDI-in builds these at RAM 0x1950. The panel expander writes them to the list at 0x2030; the panel lists call byte 0 the \"class\". List2030_TranslateToQueue2C00 \u2192 Dispatch_By_60F080 turns them into records of the 0x2C00 queue. What the numbers mean:\n- 0x00-0x1F: part n, with the class naming the attribute: 0 program, 3 volume, 5/6/7 effect depths, 8 pan, 9-11 RPN.\n- 0x20-0x3F: the second half of each part record.\n- 0xB1 = pitch bend, 0xB2 = CC01, 0xB3 = CC0B, 0xB4 = channel pressure, 0xB5 = CC40, 0xB8-BB = CC10-13, 0xBC = CC02, 0xBD = CC04, 0xAD/0xAE = CC79/CC78.\n- For controller numbers, the class byte is the part. Each controller fans out over a 32-bit part mask held at RAM 0x60F280+.\n\n**Leads for prom_b (the other lane):**\n- prom_b 0xF3F480-0xF3FCBF holds the 32 part records' factory defaults as [op = number][len 0x1E][30 bytes]. The address is ParamNumber_RecordPtrs + 0xF37DDE for all 64 entries.\n- prom_b's T_F4080C is MidiIn_ControlRecord_Dispatch.\n- The (0x7FC1) \"language\" table points all 3 slots at one pair table.\n\n**The panel assignment byte is a MIDI CC number.** The bytes at 0x7F12+slot map to parameter numbers exactly as the MIDI-in map does, and 0x81 stands for channel pressure. The same pattern (assignment \u2192 class) could decode other assignable RAM.\n\n**Screen BUTTON methods.** Each is the +8 slot of a PanelScreen_VtableTable object, and gets the button code in HL and at (XIZ+8). Any table read by one is indexed by that code, and Dispatch_FF3D39's legend names each code. The same check could be run over the rest of the UI block.\n\n**Stale-copy pattern.** Unreachable copies of live structures, 0x400-ish lower, have now turned up four times: 0xF8A44B, 0xFAA000, 0xF98DE5 and 0xF95D95. A systematic constant-delta twin scan may find more dead data and settle \"no reader\" admissions.\n\n**Integrator actions:**\n- Update the NAMES map in prom_a_uiblock_checks.py check 2.\n- Consider adding `m_or_mr`/`m_and_mr` and register-count shift macros to wsa1/include/tlcs900_mem_ops.inc, so 19+ `.byte` code lines can be spelled.\n- Symbol files will need regenerating for about 70 renamed labels. The sed maps are in scripts/renaming/rename_proma_*.sed; the other renames are in the gen_* scripts.\n\n**Tools for reuse** (all in notes/proma-2026-09-25/):\n- symbolize_vetted_ranges.py symbolises numeric branches in header-vetted code ranges, with an \"own targets only\" option for stale code.\n- xref_targets.py misses symbolic `Label+offset` readers. Search those forms instead; that is how the multi-table splits in this session were found."
+}

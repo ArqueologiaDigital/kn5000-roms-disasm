@@ -1,0 +1,98 @@
+{
+ "lane": "sequi",
+ "branch_head": "30b2b770f74f732f02dbb90141fc41d5bd291e84 (branch s2/sequi, worktree /home/fsanches/compartilhado/disasm-lanes/s2-sequi, base 3958235e; not pushed)",
+ "commits": [
+  {
+   "hash": "090e28e9",
+   "summary": "v7 InitializeKubo: 1,289 B of .byte -> 7 RegMode + 39 RegTitle macro calls (text now identical to v10's)"
+  },
+  {
+   "hash": "26eb26e0",
+   "summary": "v10/v9 sequencer_ui: re-framed 61 misframed code spans (152 instructions), symbolised 72 branches; new scripts/converters/sequi_reframe.py"
+  },
+  {
+   "hash": "7e463b58",
+   "summary": "v7 sequencer_ui: re-framed 70 spans (347 instructions), symbolised 65 branches; dropped 73 proven-false 'v10 does not spell this byte either' comments"
+  },
+  {
+   "hash": "de665fa8",
+   "summary": "seq_audio_mode (v10/v9/v7): four unreferenced routines decoded and named, AccVoice_BankBaseTable / AccPedal_BankBaseTableCopy typed as .long with reader headers; house-style spellings plus a register cross-check added to the reframe tool"
+  },
+  {
+   "hash": "c5cdd0df",
+   "summary": "rhythm_routines (v10/v9/v7): InstrMap, PitchShift, Velocity and SeqReset tables typed with reader, stride and count; v7 code re-framed; v7 SeqReset romslice retired"
+  },
+  {
+   "hash": "921d3f57",
+   "summary": "smf_config_routines (v10/v9/v7): SMF export constants (MThd/MTrk/track-name/GM On-Off/part offset tables) typed with readers; unreferenced handler decoded"
+  },
+  {
+   "hash": "4be8a3f5",
+   "summary": "bmdredit_routines (v10/v9/v7): unreferenced routines decoded and named; v7 NoteCoordTable (113 B) and CompoundWidgetUpdate (194 B) romslices retired"
+  },
+  {
+   "hash": "bae1a53e",
+   "summary": "seq_step_routines (v10/v9/v7): byte islands decoded; v7 EA5F and VoiceReassignExit romslices (240 B) retired; EA5F documented"
+  },
+  {
+   "hash": "542063d4",
+   "summary": "SMF_ChannelTranslationTable typed with its reader; v7 ExitPlayMode decoded; 16 refused v7 branches named via existing labels; scoped three admissions to the objects they belong to"
+  },
+  {
+   "hash": "6a757df8",
+   "summary": "sequencer_ui: re-parented 68 structural labels (InitializeKubo_* deep inside NoteEditBox/SndParam cases); new reparent tool"
+  },
+  {
+   "hash": "7d15495f",
+   "summary": "renamed nine code labels that had data-shaped names (7 jp_ind case bases -> *_Cases, TrAsGrid_StepListValue, SMF_AdvanceInPageChain), with headers"
+  },
+  {
+   "hash": "680edf4f",
+   "summary": "sequi_rename_case_bases.py made idempotent (renames code only; reproduces 7d15495f byte for byte)"
+  },
+  {
+   "hash": "e22f0d47",
+   "summary": "composer_msp_defaults: Composer_SettingsBlock layout documented from ToneData_SetupCopyPointers; Composer_FunctionTable label; 0x124/0x424 registration cited"
+  },
+  {
+   "hash": "aa136eea",
+   "summary": "v7: 142 hand-expanded RegisterObjectTable records -> RegObjTable/RegObjTabl macros; macro address args symbolised (10 in v10); v10/v7 InitializeKubo now diff-identical"
+  },
+  {
+   "hash": "77625c01",
+   "summary": "bmdredit: the two *_Helper routines renamed BmDrEdit_SetRowOffsetFromDelta / BmDrEdit_ClampScrollPos, with headers"
+  },
+  {
+   "hash": "550dd8b1",
+   "summary": "composer_msp_defaults: corrected my OWN wrong counts (73 handlers + 0, not 72 + 0); new sequi_header_evidence.py re-derives every number the headers quote (23/23 PASS)"
+  },
+  {
+   "hash": "e9a69051",
+   "summary": "one-off patch scripts moved from scratch to notes/sequi-2026-09-25/patches with a README"
+  },
+  {
+   "hash": "c436c8dd",
+   "summary": "sequi_misframe_scan.py: no misframed code left in the six code files, v10 and v7"
+  },
+  {
+   "hash": "558d1fbd",
+   "summary": "SMF_SlotParam_PortamentoTime renamed SMF_SlotParam_Remap14To2 (nothing supported the old name)"
+  },
+  {
+   "hash": "d4cc8b97",
+   "summary": "README: before/after census figures and how they were taken"
+  },
+  {
+   "hash": "a4791936",
+   "summary": "README: why v7's identical nops score 0 markers"
+  },
+  {
+   "hash": "30b2b770",
+   "summary": "sequi_log_regcheck.py: the register cross-check behind the reframe commits, moved from scratch into the repo"
+  }
+ ],
+ "measured": "All figures are summed over the 24 files this lane owns (8 paths in each of v10/v9/v7). Toolchain for every figure: tlcs900_backend@4d7fa4f6b37c.\n\nCommands:\n  python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json C.json\n  python3 scripts/analysis/sequi_lane_figures.py C.json\n\nBEFORE is the branch base 3958235e. Its v7 part was measured on a clean `git archive` export of that commit, because the first v7 run raced one of my edits. BEFORE matches the worklist exactly. AFTER is 558d1fbd; only notes and scripts changed after that.\n\n| | before | after |\n|---|---:|---:|\n| CODE | 244,726 | 250,573 |\n| KNOWN-A | 3,786 | 8,283 |\n| KNOWN-B | 22,380 | 12,084 |\n| UNKNOWN | 0 | 0 |\n| FILLER | 4,074 | 4,026 |\n| Research targets | 5,598 B in 445 regions | 270 B in 6 regions |\n| Data-as-code markers | 258 | 36 |\n| Numeric branch operands | 218 | 39 |\n\nResearch targets per file (after):\n- v10/v9 each: seq_audio_mode 28 (AccPedal_BankBaseTableCopy, no reader found) and smf_config_routines 62 (SMF_SlotParam_RPNReturn, unresolved index).\n- v7: the same two.\n- Every other file is 0, in every version.\n\nPer-file changes:\n- v10/v9 sequencer_ui: research 262 -> 0; markers 16 -> 0; numeric branches 64 -> 0.\n- v7 sequencer_ui: research 2,033 -> 0; markers 8 -> 0; numeric branches 69 -> 31.\n- rhythm_routines: markers v10 57 -> 0, v7 56 -> 0; research v7 302 -> 0.\n- bmdredit: research v10 104 -> 0, v7 505 -> 0.\n- seq_step: research v10 34 -> 0, v7 254 -> 0.\n- seq_audio_mode: research v10 319 -> 28, v7 336 -> 28.\n- smf_config: research 238 -> 62 per version.\n- composer_msp_defaults: KNOWN-A 62 -> 926 per version.\n\nv7 romslice debt in these files: 615 B -> 0. All 5 slices are now source; the .bin files are unreferenced but live in includes/, which is not this lane's.\n\nOther checks:\n- scripts/analysis/sequi_misframe_scan.py: 0 code runs off the unidasm framing, in all six code files of v10 and v7.\n- scripts/analysis/sequi_log_regcheck.py: 1,360 replaced instructions, 19 register-family differences, all harmless. They are extended-register codes 249/250/251 = IZH/QIZL/QIZH, used consistently, and one SRI form whose index registers are raw bytes.\n- scripts/analysis/sequi_header_evidence.py: 23/23 PASS.\n- v10-vs-v7 diff of InitializeKubo: now empty (was ~2,450 lines).",
+ "gate": "`make gate` PASS at the branch head (30b2b770): both assemble checks are clean and all 9/9 KN5000 images are IDENTICAL. The gate was run before every source commit; the only exceptions are two comment-only follow-ups (the 542063d4 reflow and the e22f0d47 wording), each of which rebuilt every affected image byte-identical.\n\nThe gate was shown to see the work once. On the first conversion I changed `RegMode 0x8, 0xe3, 0x2f8` to `0x2f9` in v7 sequencer_ui.s. `make gate` then reported \"kn5000_v7_program 1 BYTES DIFFER\" and \"FAIL: 1 target(s) differ\". I restored the value and the gate went green.\n\nThe rename passes were also checked with scripts/analysis/assert_comments_preserved.py, using --rename-map for the case-base rename. Every comment it reports as lost is one of these:\n- a claim proven false and named in its commit: 73 + 2 \"v10 does not spell this byte either\", \"ordi8 0x3363, 1 (v7 patched)\", and \"(55 entries)\";\n- a header I had written earlier the same day and then reworded.\n\ngit diff --name-status 3958235e..HEAD shows modifications only to the 21 owned .s files (ssf_gate_states is untouched). The only additions are new files under notes/sequi-2026-09-25/ and scripts/.",
+ "not_done": "- **270 B of research targets remain, on purpose:**\n  - AccPedal_BankBaseTableCopy (28 B per version): its bytes equal entries 1-7 of AccVoice_BankBaseTable, but no reader was found. The forms searched are listed in its header.\n  - SMF_SlotParam_RPNReturn (62 B per version): two identical 31-byte halves. The bit-5 path looks up base+0x1F with an unmasked index of 0x20 or more, which lands past the table. This is recorded as NOT RESOLVED.\n- **ssf_gate_states.s (2,562 B KNOWN-B per version) is untouched.** It is generated by scripts/generators/generate_ssf_gate_states.py, which is a shared script I may not edit, and the brief says prose must go in the generator. Its header does not name the reader, which is ui_control_panel.s:1902-1947, reading via RAM 0x8D38.\n- **The MSP_Default_* field labels in composer_msp_defaults.s stay KNOWN-B (about 1.4 KB per version).**\n  - Their readers are in storage/flash_floppy_handlers.s: NoteEvent_LoadSoundGenParams, Flash_InitBytecodeBlock and others.\n  - Those readers copy whole blocks or index tables from code that is still misframed in that file.\n  - Nothing I could verify supports or refutes the per-field names (Volume, ReverbLevel, GroupIndex ...).\n  - MSP_Default_GroupIndexPad is itself used as a lookup base by several readers, so the table boundaries may be wrong. I did not write evidence headers that I could not back.\n- **39 numeric branches remain, all in v7.** Each targets the middle of a data line in another lane's v7 file:\n  - 0xFF0516 = v10 Strncpy, 30 calls;\n  - 0xFDD69E = v10 Audio_CheckSubsystemReady, 6;\n  - 0xFF081D = v10 Memset, 1;\n  - 0xFF05BC, 1;\n  - 0xFDD7C0, 1.\n- **Renames blocked because other lanes' files reference the names:**\n  - IvNamingExit_ScreenData (code, still with a data-shaped name), used by ui_widgets/naka_direct_play_dispatch.s;\n  - SeqStep_ByteBlockEA5F (an address-derived name), used by midi/midi_dispatch_handlers.s and its positional alias;\n  - Rhythm_VelocityTable_A (the reader adds the value to the note, not a velocity) and AccPedal_SetFlag13155, which are held by positional_labels.s aliases or by other files. Headers state the facts.\n- **36 markers remain in v10/v9 seq_audio_mode.** They are genuine 4-`nop` slots after six calls, present in all versions. They are not data.\n- **Cross-version diff noise grew in some files**, for example smf_config 7 -> 50 lines and rhythm 1,807 -> 1,964. The causes are per-version reader addresses in the new headers, and the v7 re-framed text using house-style spellings where the older v10 lines still use decimal. The sequencer_ui diff shrank (7,885 -> 5,771).\n- **Other lanes' files still reference things I changed:** symbols/*, the unreferenced v7 romslice .bin files, and positional_labels.s .set aliases that are now redundant or unused (Str_42a03242322043). These were not edited because they belong to other lanes.",
+ "leads": "**Sys lane:**\n1. v7 C runtime:\n   - v7 0xFF06A3 (named SLIDE_Decompress_4K_Init_Helper2) is v10's Malloc: 63 of the first 64 bytes are equal.\n   - v7 0xFF0315 (SLIDE_Decompress_4K_Init_Helper) is v10's Free: 62/64 equal.\n   - v7's own `Malloc`/`Free` labels sit at 0xFF0ABD/0xFF072F, which are not routine starts.\n   - Strncpy (0xFF0516), Memset (0xFF081D) and 0xFF05BC are framed as data. Fixing this unblocks 32 v7 numeric calls in sequencer_ui/seq_step.\n2. v7 0xFDD69E (= v10 Audio_CheckSubsystemReady) and 0xFDD7C0 are also mid-data-line. That lane owns the audio or shared file there.\n3. storage/flash_floppy_handlers.s:\n   - InitializeSuna should say Composer_FunctionTable instead of 0xe16284.\n   - The MSP/Composer readers there (Flash_InitBytecodeBlock, NoteEvent_LoadSoundGenParams, ToneData_*) are heavily misframed (`.byte 0xc3 / reti ...`). Once they are re-framed, the MSP_Default_* layout can be derived and those labels given real evidence. The GroupIndexPad-as-lookup-base finding suggests the table boundaries are wrong.\n4. shared/positional_labels.s: Str_42a03242322043 is now referenced by nothing (it came from a misframe).\n5. The includes/romslices .bin files are unreferenced after this branch: v7_transplant_{BmDrEdit_ByteData_NoteCoordTable, BmDrEdit_ByteData_CompoundWidgetUpdate, SeqStep_ByteBlockEA5F, Rhythm_SeqResetTable} and v7_block_seqstep_voicereassignexit.\n\n**Generator owner:** scripts/generators/generate_ssf_gate_states.py should emit the reader citation (ui_control_panel.s SSF_PresentationGateTable reader) and drop its inline address comments.\n\n**Coordinated renames:** SeqStep_ByteBlockEA5F (entry at +0 and at +0x4E) and IvNamingExit_ScreenData.\n\n**Tools any lane can reuse:**\n- scripts/converters/sequi_reframe.py (--auto / --span / --restyle): it retired roughly 1,360 misframed or `.byte` instructions here with two-decoder framing and a register cross-check, and it is image-generic for v10/v9/v7. Candidates named in branch-symbolization README: v10 sequencer_engine.s, scoop_display.s, ui_window_procs.s. The tool's auto mode refuses data after a terminator unless something branches into it, which is the safety margin.\n- scripts/renaming/sequi_reparent_structural_labels.py for symboliser labels parented thousands of lines away.\n- scripts/converters/sequi_regobjtab_macroize.py and sequi_symbolize_macro_args.py for other hand-expanded RegisterObjectTable records.\n\n**Backend (llvm-mc disassembler):**\n- It prints the wrong register for `c1 xx xx f1` (cpda8 xbc for `cp a`), which is caught by the register cross-check.\n- It cannot decode `ld (a24),(a16)`, `cp xwa,(xix+iy)`, `cp (xhl+wa),imm` or `ld (a16),(a24)`; the assembler accepts all of them."
+}

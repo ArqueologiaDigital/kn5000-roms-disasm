@@ -1,0 +1,158 @@
+{
+ "lane": "uimisc",
+ "branch_head": "84fc91fa",
+ "commits": [
+  {
+   "hash": "72006b17",
+   "summary": "widget_dispatch 0xEE63BA-0xEE7786: DSP effect parameter-write records (59 lists, DspFxRecListPtrTable), readers DSPCfg_* (v10/v9/v7)"
+  },
+  {
+   "hash": "dc409d24",
+   "summary": "widget_dispatch 0xEE7786-0xEE8C7D: three SwbtWr listener banks (3 x 192 u32), SwbtWr_InitBank1-3 (v10/v9/v7)"
+  },
+  {
+   "hash": "da8993d9",
+   "summary": "DSP settings-block table + 7 DSPCfg arrays 0xEE6048-0xEE63B9 typed"
+  },
+  {
+   "hash": "3679758c",
+   "summary": "per-object evidence lines for DSP record lists and SwbtWr banks"
+  },
+  {
+   "hash": "08a682a0",
+   "summary": "42 audio/note/harmony objects 0xEE8C7E-0xEEAE44 typed from readers; retype_data_objects.py + spec tools"
+  },
+  {
+   "hash": "f052a093",
+   "summary": "38 objects 0xEEAE44-0xEEC288 typed from readers"
+  },
+  {
+   "hash": "95f5698b",
+   "summary": "two-line headers for semitone tables and bank maps"
+  },
+  {
+   "hash": "ee9138eb",
+   "summary": "SndParam registry (972 entries) and dispatch tables 0xEE0142-0xEE1574"
+  },
+  {
+   "hash": "df533883",
+   "summary": "escape newline in SndParam_OutOfMemoryMsg; v7 SoundConfig header"
+  },
+  {
+   "hash": "a73db972",
+   "summary": "80 MIDI/SysEx objects 0xEE2D6C-0xEE3678 typed"
+  },
+  {
+   "hash": "7e2d4070",
+   "summary": "incoming-SysEx recognition trie (817 x 6 B) replaces 'display scripts' (v10/v9/v7)"
+  },
+  {
+   "hash": "05611787",
+   "summary": "41 MIDI control records + dispatch tables 0xEE49E8-0xEE4FC5"
+  },
+  {
+   "hash": "b2157559",
+   "summary": "evidence headers for the 120 ToneKit_* slices (which DSP effect, as what)"
+  },
+  {
+   "hash": "74dce4db",
+   "summary": "41 objects 0xEED118-0xEEDD35 + WorkRamInit_Image (boot RAM image 1) identified"
+  },
+  {
+   "hash": "102ace8d",
+   "summary": "RamInit string-pointer tables (power-on RAM image)"
+  },
+  {
+   "hash": "24f3c260",
+   "summary": "charmap region retyped as bytes (reader then recorded as not established; superseded by 2ecaf576)"
+  },
+  {
+   "hash": "17f4d33c",
+   "summary": "charmap_dispatch_table correction note (superseded by 2ecaf576)"
+  },
+  {
+   "hash": "3a6a5019",
+   "summary": "ui: re-frame 41 mis-framed code spans (v10/v9)"
+  },
+  {
+   "hash": "4b313885",
+   "summary": "setwall: mis-framed compare fixed, SetWall_SlotMaskTable typed"
+  },
+  {
+   "hash": "2ecaf576",
+   "summary": "charmap tables: reader found -- SndParam_ValueMapGrid (7x6 grid of 128-B value maps) read from its RAM copy 0xEC11 via Boot_InitWorkRAM_ROMCopy2; 30 renames (sed); inverse-pair structure asserted (v10/v9/v7)"
+  },
+  {
+   "hash": "a35dee7c",
+   "summary": "char_encoding_naka_state = tail of work-RAM image 2: voice link arrays A/B, sentinels, song-player variables with readers (v10/v9/v7)"
+  },
+  {
+   "hash": "66c8a777",
+   "summary": "v7 ui: 2,650 B .byte code re-framed, framing cross-checked against v10; 138 branch operands symbolized"
+  },
+  {
+   "hash": "2f49c50c",
+   "summary": "drawing_primitives: nine *_ParamBlock byte rows are queued-draw executors (-> *_QueuedExec); UI_DialRangeData = two setters (v10/v9/v7)"
+  },
+  {
+   "hash": "25a4af9c",
+   "summary": "MainPmanCtrl_DispatchTable is MainPmanControl's six switch cases: 228 B to instructions (v10/v9/v7)"
+  },
+  {
+   "hash": "ce43b0c8",
+   "summary": "re-frame misframed runs inside code where operands hold 0x01/0x04 (max/normal markers) (v10/v9/v7)"
+  },
+  {
+   "hash": "7d2f40a5",
+   "summary": "v7 ui: +1,791 B code re-framed (cross-check encodes absolute operands numerically)"
+  },
+  {
+   "hash": "56a97a1b",
+   "summary": "v7 BitMapOut_ByteData_PresetCopy romslice inlined and re-framed"
+  },
+  {
+   "hash": "e503f5b0",
+   "summary": "naka_widget_desc_dispatch: MIDI-menu tables InitializeEast registers (counts, 12-entry MsgType table moved to its real start, 16-routine table) (v10/v9/v7)"
+  },
+  {
+   "hash": "0d46cbde",
+   "summary": "naka_*: headers for 63 registered object tables (InitializeSuna/Yoko/Kubo RegObjTable/RegObjTabl); count words + one-entry function tables typed; MtName_PtrTable moved to real start"
+  },
+  {
+   "hash": "ca262f91",
+   "summary": "naka_* v7: 16 registration labels added to v7 with v7 operand site"
+  },
+  {
+   "hash": "77fb6685",
+   "summary": "naka_*: header-less file heads (Kubo class strings, end of Suna 0xB8 table w/ RAM pointers, record tail) typed/headed"
+  },
+  {
+   "hash": "4d39153f",
+   "summary": "reader headers for CPANEL_STATE_MACHINE_TABLE and SetWall_SlotOrderTable; v7 numeric table operand made symbolic"
+  },
+  {
+   "hash": "a20b3ec3",
+   "summary": "'.ascii' strings inside routines were push/pop runs: re-framed; v7 cross-check +1,102 B"
+  },
+  {
+   "hash": "84d8ce90",
+   "summary": "technichord record-tail header moved directly above its data"
+  },
+  {
+   "hash": "424420fd",
+   "summary": "naka_*: retire 400 instruction lines decoded from data (v10 68, v9 166, v7 166)"
+  },
+  {
+   "hash": "64360f16",
+   "summary": "widget_dispatch v9/v7: three nop/swi 7 data bytes -> .byte"
+  },
+  {
+   "hash": "84fc91fa",
+   "summary": "setwall: SetWall_SlotTypeMap is a 20-byte slot->type map, not code (v10/v9/v7)"
+  }
+ ],
+ "measured": "Census over the lane's v10+v9+v7 files, bytes by grade. Commands: `python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json` (before.json from a pristine 3958235e tree, after_final.json at 84fc91fa), then `python3 scripts/analysis/lane_census_figures.py --lane uimisc --before before.json --after after_final.json`.\nBEFORE (3958235e): CODE 172,978 | KNOWN-A 22,291 | KNOWN-B 220,129 | UNKNOWN 1,539 | FILLER 10,482 | research targets 12,725.\nAFTER (84fc91fa): CODE 174,565 | KNOWN-A 158,419 | KNOWN-B 91,528 | UNKNOWN 960 | FILLER 1,947 | targets 6,936.\nDelta: KNOWN-A +136,128; KNOWN-B -128,601; UNKNOWN -579; targets -5,789; CODE +1,587 (v7 .byte code re-framed as instructions, net of data retired from CODE).\nData-as-code markers (lane_worklists ABS regex over lane .s files): 1,201 -> 18.\nPer-tool figures (each tool's own report; commands in its header): v7 code re-framed with the v10 cross-check 2,650 + 1,791 + 1,102 + 105 B; switch cases 228 B x3 versions; 400 NAKA instruction lines retired; 63 registration targets headed (+16 labels added to v7).",
+ "gate": "`make gate` PASS (9/9 images IDENTICAL) before every commit and at 84fc91fa. One-byte perturbation shown once: changing a byte of DspFxRecs_32_Distortion made the rebuilt v10 image differ at offset 0xE63BD (addr 0xEE63BD), so the gate goes red; restoring the byte made it identical again. Converters that rewrite code also ran symbolize_numeric_branches.py --apply --verify (re-mirror == dump PASS). The branch-ownership check (the --verify-branch logic of lane_worklists.py, re-run against 3958235e) passed: 87 paths changed, none outside the lane except new scripts. assert_comments_preserved was run on every edit; the comments each commit removed are named there as proven false.",
+ "not_done": "- Research targets with no reader found: NoRef_HarmonyLike_EEA22E (1,680 B x3), NoRef_FF128_EEC298 and NoRef_ExpCurve128 (128 B x3 each), NoRef_SetWall_SlotPerm20x2 (40 B). Searched with instruction operands, 32-bit and 24-bit values and the two RAM-init images. Nothing found.\n- v7 code still held as bytes: BitMapOut_Snapshot_Execute and BitMapOut_CopyExtTable_Check (618 B, romslice .incbin). Their v7 code differs from v10, so nothing confirms a framing. Also remaining .byte in v7 cpanel_routines (CPanel_InitHardware etc., about 365 B), ui_playback_modes (.Lc_f2093f etc., about 72 B) and setwall (about 33 B). These were refused as undecodable, as a mismatch with v10, or as data in v10.\n- Misframes the tools refused in v10/v9 setwall_routines: the e7-prefix runs around SetWall_MiscDataAndCode_Entry.\n- Two ApFunctionProc tables (0xE16284 and 0xE163AC, 73 entries each) that InitializeSuna registers. They sit in sequencer/composer_msp_defaults.s, which another lane owns, so they were not headed.\n- naka_* v9/v7 files were not made identical in text to v10 (only their data-as-code was retired). The census's KNOWN-B string rows (StrTimeSig_*, StrName_*) have no per-object headers.\n- Orphaned v7 romslices were not deleted (lane sys owns them): v7_transplant_MainPmanCtrl_DispatchTable.bin, v7_transplant_BitMapOut_ByteData_PresetCopy.bin, v7_data_msgtype_excsend.bin, v7_data_mtname_songnameset.bin.\n- symbols/*.txt were not regenerated (forbidden to this lane). The renames (CharMap_* -> SndParam_ValueMap_*, *_ParamBlock -> *_QueuedExec, UI_DialRangeData, new registration labels) make them staler.\n- Commit 0d46cbde's message says \"12 table starts\" got labels. The true figure is 16 (13 tables and 3 count words); 77fb6685's message corrects it.",
+ "leads": "- audio (note_voice_mapping.s): `lda xde,(0xec11)` / `lda xbc,(0xec11)` read SndParam_ValueMapGrid's RAM copy (v7: 0xEB4B). The node arrays are at RAM 0xE82E/0xE970 and the free heads at 0xE92F/0xE9B1. The song-player variables are at 0xE9C4.. (see char_encoding_naka_state.s headers). These RAM addresses could become .equ symbols. SndParamChan/Offs switch targets are labelled SndParam_TypeDispatch_Entry1 / TypeDispatch_Entry1_Extend..., which are poor names.\n- boot/sys: Boot_InitWorkRAM_ROMCopy2 in v7 system_handlers.s is .byte (`ld xde,0xe2c2; ld xhl,0xEEFA66; ld xbc,0x931`). The v7 label Malloc (0xFF0ABD) and SLIDE_Decompress_4K_Init_Helper2 (0xFF06A3) look swapped: v7 MainPmanCtrl cases call 0xFF06A3 where v10/v9 call Malloc. Four v7 romslices are now unreferenced.\n- naka lanes: the NAKA C/.ld files name Naka_PresentationRootState (0x00EF013F), NakaState_ZeroBlock_* and CharEncoding_* as `.handler`/.long values. These point into RAM-init image 2 (zero bytes, never read in ROM), so they are not ROM routine pointers. Aliases were kept so nothing breaks.\n- seqeng/sys (Initialize* in sequencer_ui.s, flash_floppy_handlers.s, seq_event_playback.s): the RegObjTable/RegObjTabl operands in this lane's files now have labels (Suna_*/Yoko_*/Kubo_*/MidiMenu_*, MtName_PtrTable at its real start 0xE20E24). Routine labels are odd: PaintArrowProc sits at StylCnvStorBnk_ProcDataBlock (0xF1DFB1) and PsSongSelBoxProc at IvNamingExit_ScreenData (0xF2BBF9). MainPmanControl's offset words at 0xEA99F8 are spelled DiskWarning_ConfirmStrings_0xD4C.\n- uiproc: ui_window_procs.s ClipBlit_Replace_ParamBlock and ClipBlit_Direct_ParamBlock follow the queued-draw executor pattern (see drawing_primitives *_QueuedExec).\n- Tools any lane can reuse:\n  - scripts/analysis/reframe_v7_runs_crosscheck_v10.py: v7 .byte code confirmed against v10's instructions for the same label.\n  - reframe_code_runs_to_region_end.py: next-label anchor.\n  - reframe_code_runs_inside_code.py: accepts 0x01/0x04 operands, but only in regions that already hold code.\n  - strings_in_code_to_bytes.py: .ascii that is really push/pop runs.\n  - naka_retire_insn_lines.py: data files.\n  - gen_regobj_table_headers.py: registration evidence.\n  - scripts/tools/carry_trailing_comments.py: the base reframe tool drops comments trailing replaced .byte lines.\n- The seqeng lead (`.long SeqByteBlock_PathNormalize` = coordinates 215,245) and the ext lead (`.long WidgetName_PtrBlock_O` = coordinates) were already resolved by 74dce4db: both are now `.byte`/`.short` in WorkRamInit_Image. The SeqByteBlock_PathNormalize `.set` in smf_event_processor.s (seqeng) and the NAKA C/.ld references can be dropped.\n- assert_comments_preserved reports `.ascii` literals that contain ';' as lost comments (false positive)."
+}

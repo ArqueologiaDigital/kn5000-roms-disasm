@@ -1,0 +1,47 @@
+===== uimisc
+The gate failed at link time because the two branches renamed and referenced the same label. Git merged them without a textual conflict. The pre-merge checks passed: the tree was clean, s2/uimisc had 37 commits not on main, `lane_worklists.py --verify-branch uimisc main s2/uimisc` printed PASS (88 paths changed), and `git merge --no-ff --no-commit s2/uimisc` merged without conflict.
+
+`make gate-all` exited 2 before comparing any image, so no IDENTICAL, PASS or wsa1 lines were printed. The only error in the log:
+  ld.lld: error: undefined symbol: SubCPU_ToneParamRet_Code_Return2
+  >>> referenced by rebuilt_ROMs/kn5000_v10_program.llvm.o:(.text+0xe8c21)
+  make: *** [Makefile:714: rebuilt_ROMs/kn5000_v10_program.llvm.elf] Error 1
+
+Cause: main commit 6eb0815d (scoop lane, "display/*.s: structural code labels no longer named after DATA tables") renamed the label `SubCPU_ToneParamRet_Code_Return2` in v10/maincpu/display/scoop_display.s to `PerfMode_ParamHandler_11_Return5`. It is the `ret` after `call SubCPU_ToneParamRet_0x354`, near line 12510. The uimisc lane added a new reference to the old name in:
+  v10/maincpu/ui_widgets/widget_dispatch.s:7031  `.long SubCPU_ToneParamRet_Code_Return2 + 1`
+  v9/maincpu/ui_widgets/widget_dispatch.s:7092   `.long SubCPU_ToneParamRet_Code_Return2 + 1`
+The v9 link would fail the same way, and v9 scoop_display.s probably got the same rename. Suggested fix on s2/uimisc: rebase or merge main, then change both references to the new name. That name is `PerfMode_ParamHandler_11_Return5` in v10; check v9's name before using it there. Then rerun the gate.
+
+`git merge --abort` succeeded, and `git status --porcelain` is empty. HEAD is still 153777ce and nothing was committed or pushed. The full gate log is at /tmp/claude-1000/-home-fsanches-compartilhado-kn5000-roms-disasm/53b889a2-7a91-44a2-993e-a73c39d83e0d/scratchpad/gate_uimisc.log.
+===== uiproc
+GATE FAILED: the v7 link broke, so kn5000_v7_program was not built. The merge was aborted; main is still at 153777ce and `git status --porcelain` is empty.
+
+Steps 1-4 passed: the tree was clean, the lane has 10 commits, `--verify-branch uiproc` printed PASS (34 paths changed), and `git merge --no-ff --no-commit s2/uiproc` merged with no textual conflict.
+
+Step 5 (`make gate-all`) exited 2. v10 and v9 linked, but the v7 link failed:
+  /home/fsanches/compartilhado/llvm-project/build/bin/ld.lld -e 0 -T v7/maincpu/maincpu.ld -o rebuilt_ROMs/kn5000_v7_program.llvm.elf rebuilt_ROMs/kn5000_v7_program.llvm.o
+  ld.lld: error: undefined symbol: LcdOff_Epilogue
+  >>> referenced by rebuilt_ROMs/kn5000_v7_program.llvm.o:(.text+0x12b1be)
+  make: *** [Makefile:750: rebuilt_ROMs/kn5000_v7_program.llvm.elf] Error 1
+Because of this, neither PASS line was printed and no IDENTICAL or ok lines appeared (0 of 9 KN5000, 0 of 4 wsa1).
+
+Cause: each lane is fine on its own, but the two conflict. This lane's alias cleanup (scripts/renaming/rename_uiproc_aliases_v7.sed:49, `s/\bLcdOff_Epilogue\b/UpdateScreen/g`; the same rule is in the _v10.sed at line 56) removes the `LcdOff_Epilogue:` label from v7/maincpu/ui/ui_widget_defs.s. But the sequi lane, merged earlier in 03d377ff through commit 7e463b58, added `call LcdOff_Epilogue` at v7/maincpu/sequencer/sequencer_ui.s:1282. That file is outside the uiproc worklist, so the lane's sed never touched it. ld.lld reported no other undefined symbol. v10 and v9 have no such caller in sequencer_ui.s.
+
+Suggested fix (not applied, because I may not edit files): on s2/uiproc, rebase or merge main, then change v7/maincpu/sequencer/sequencer_ui.s:1282 to `call UpdateScreen`. Another option is to keep `LcdOff_Epilogue` as a second label until that caller is updated. That file is in the sequi lane's worklist, so the change may need to go through that lane or an approved cross-lane edit. The lane_worklists.py check will show which. Then re-run the gate. The C-side references (naka_widget_names_charmap.c and _link.ld in v7/v9/v10) define `LcdOff_Epilogue = 0x00FAA61D` themselves, so they are not the problem. The full gate log is only in session scratch (volatile): /tmp/claude-1000/-home-fsanches-compartilhado-kn5000-roms-disasm/53b889a2-7a91-44a2-993e-a73c39d83e0d/scratchpad/gate_uiproc.log
+===== sys
+Gate FAILED, so the merge was aborted. `git merge --abort` succeeded, `git status --porcelain` is empty and main is still at 153777ce.
+
+The steps before the gate passed: the tree was clean, s2/sys had 20 commits, `lane_worklists.py --verify-branch` printed PASS (71 paths), and `git merge --no-ff --no-commit` merged with no textual conflicts.
+
+`make gate-all` exited 2 and stopped at the KN5000 byte-identity step, so the wsa1 set and the toolchain-rebuild check never ran. The KN5000 results were 8 IDENTICAL and 1 failing:
+  kn5000_v7_program   4 BYTES DIFFER
+  FAIL: 1 target(s) differ.
+compare_roms shows these bytes for maincpu v7:
+  0xFDD7BD  orig 0x40  built 0x26
+  0xFDD7BE  orig 0xF2  built 0xEE
+  0xFDD847  orig 0x40  built 0x26
+  0xFDD848  orig 0xF2  built 0xEE
+All the other assembled images were 100% and assert_images_assemble was clean.
+
+Cause: this is a semantic conflict between lanes, not a textual one. The ROM has `jp 0xFDF240` at 0xFDD7BC and `call 0xFDF240` at 0xFDD846. s2/sys's new v7/maincpu/boot/screen_group_dispatch.s writes both as `AudioInit_RefreshToneBank` (line 54 `jp AudioInit_RefreshToneBank` and line 98 `call AudioInit_RefreshToneBank`). At the merge base (3958235e) that name was at 0xFDF240 in v7. The already-merged s2/audio lane changed that: its commits 6be7a37b and ac76cd4e ('v7: port dsp_config_sysex..sprintf_core from v10 by byte alignment') reworked v7/maincpu/audio/audioinit_routines.s. On main, `AudioInit_RefreshToneBank` (with the alias `Interrupt_FlagSetBytecode_Helper`) is now at 0xFDEE26, and 0xFDF240 is named `AudioInit_DispatchChanges`. So both references now resolve 0x41A bytes too low.
+
+Likely fix, in the s2/sys worktree: rebase or merge main into s2/sys, then change lines 54 and 98 of v7/maincpu/boot/screen_group_dispatch.s to `AudioInit_DispatchChanges`, or to whatever name main now gives 0xFDF240. Also check that line 125 `call z, (Interrupt_FlagSetBytecode_Helper:24)` still points at the intended address, and look at the other v7 files the lane ported by name for the same kind of drift. Then re-run the gate. The full gate log is in the session scratchpad at /tmp/claude-1000/-home-fsanches-compartilhado-kn5000-roms-disasm/53b889a2-7a91-44a2-993e-a73c39d83e0d/scratchpad/gate_sys.log. I did not edit, commit or push anything.

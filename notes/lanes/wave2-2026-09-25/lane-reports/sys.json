@@ -1,0 +1,90 @@
+{
+ "lane": "sys",
+ "branch_head": "42943c6c",
+ "commits": [
+  {
+   "hash": "e8979686",
+   "summary": "boot banners: header names the reader Draw_FlashMemUpdate_message_bitmap (22x28 B, MSB-left) and a line per banner with the routine that draws it, in v10/v9/v7"
+  },
+  {
+   "hash": "9c868b0b",
+   "summary": "v10/v9 interrupt_vector_trampolines.s is not interrupt vectors. It is the tail of the 192-entry MIDI RX record-type handler table (reader MidiStream_DispatchLoop). Now typed as .long rows; the 4 false header lines are dropped. The deliberate one-byte perturbation made the gate fail here"
+  },
+  {
+   "hash": "26f3568a",
+   "summary": "scripts/lanes/sys/sys_lane_census.py: per-file census aggregator for the lane's own files"
+  },
+  {
+   "hash": "12bb969c",
+   "summary": "v7 banners: include v7's own .bin files again, because address_line_map's mirror cannot resolve ../../v10 paths; the reason is written in the header"
+  },
+  {
+   "hash": "29b59fb3",
+   "summary": "new reframe_markers.py (unidasm framing, llvm-mc round trip), run to convergence on 6 v10 files; symboliser rewrote 516 operands and added 253 labels"
+  },
+  {
+   "hash": "cc3520f0",
+   "summary": "same re-frame on v9: 15 passes, 516 operands, 253 labels"
+  },
+  {
+   "hash": "85657d4f",
+   "summary": "re-frame also covers .byte/.ascii misframes of 8 bytes or less; the trampoline header wording no longer reads as an admission"
+  },
+  {
+   "hash": "db6fd87b",
+   "summary": "new convert_code_runs.py: code-suspect .byte runs become code, 83 per image. AudioMix_BytecodeData is really AudioMix_WriteAllGroupRegs/WriteGroupRegs8 (no caller). CDlikeSwTtl_DispatchData is 2 stubs plus CDlikeSwTtl_SendEvt4/SendStartEvtArg1 (the positional aliases now point to these)"
+  },
+  {
+   "hash": "3fa4603d",
+   "summary": "new port_islands.py: v10 text ported onto v7 .byte islands and romslices by byte alignment, 16,528 B; v7 re-framed and symbolised"
+  },
+  {
+   "hash": "5b4dd3f0",
+   "summary": "v7 drift zone: trampolines.s and screen_group_dispatch.s hold other code (v10 sndparam / dsp_config_sysex, +0x7D1); ported with --whole --delta, 17 unreferenced drifted labels dropped, the drifted SoundParam_NotifyChange label removed, headers explain"
+  },
+  {
+   "hash": "3f31858c",
+   "summary": "23 v7 notes '; v10 does not spell this byte either' shown false by byte alignment (check_stale_v10_notes.py), removed"
+  },
+  {
+   "hash": "04d40e93",
+   "summary": "v9 FlashWrite/ScreenData record area (0xF15907-0xF1627E) was data decoded as code; v10 text transplanted (same bytes). v7 head re-ported with v10 record structure. fast_build stale-ELF bug fixed"
+  },
+  {
+   "hash": "3fb107f3",
+   "summary": "v7 InitializeCheap RegTitle block ported (macro prelude with tree symbols), 560 B; 86 v7 code-suspect runs converted"
+  },
+  {
+   "hash": "d88042b1",
+   "summary": "ScreenData continuation in flash_floppy_handlers.s (3,396 B x3), using the vendored seui model: one line per record, pointer fields as .long, tables typed, reader headers; 15 misnamed labels renamed SeScreenData_0xNNNN, 38 aliases retargeted, false .long pointers removed"
+  },
+  {
+   "hash": "a13f10d4",
+   "summary": "new gui_tables.py: GUI_DisplayStructData/EmbeddedPtrTable/ToneGen_ParamTable cut into 92 labelled incbin slices at every lda-loaded or alias address; 73 RegisterObjectTable parameter blocks, 32 dispatch tables and 11 other reads get headers; 76 positional aliases are now real labels"
+  },
+  {
+   "hash": "fbdf79cf",
+   "summary": "HAMA factory test: tables registered by InitializeHama typed (FunctionProc/ApFunctionProc code+name pairs, parameter blocks); InitializeHama arguments made symbolic (v10/v9)"
+  },
+  {
+   "hash": "f1089501",
+   "summary": "fd_test_data.s: 89 (v7 10) instruction lines that are strings/record fields turned back into .ascii/.byte; the '.long Naka_PresentationRootState' is really '.short 319, 239'"
+  },
+  {
+   "hash": "2ce3d895",
+   "summary": "code that had been typed as .ascii (printable opcodes) turned back into code: MiddleFuncCall stubs, Demo*_DispatchTable stubs, TaskSched_TCBTemplate prologue, Voice_BankLookupCode"
+  },
+  {
+   "hash": "85c1b632",
+   "summary": "RegObjTable proc/data arguments made symbolic where an exact label exists: 112 of 210 in v10 and in v9"
+  },
+  {
+   "hash": "42943c6c",
+   "summary": "before/after census artefact with its commands (census_before_after_2026-09-25.txt); aggregator gains --rev"
+  }
+ ],
+ "measured": "Measured over the lane's 126 owned source files (v10+v9+v7 summed). The census went from base 3958235e to head 42943c6c; toolchain tlcs900_backend@4d7fa4f6b37c for both.\nCommands: data_range_census.py --images v10,v9,v7 --json {before,after}.json, then scripts/lanes/sys/sys_lane_census.py before.json after.json. Marker/numeric counts at the base come from `sys_lane_census.py before.json --rev 3958235e`. All output, per file, is committed in scripts/lanes/sys/census_before_after_2026-09-25.txt.\n\n| measure | before | after |\n|---|---:|---:|\n| CODE | 372,280 | 389,657 |\n| KNOWN-A | 5,028 | 46,658 |\n| KNOWN-B | 75,919 | 16,458 |\n| UNKNOWN | 878 | 1,332 |\n| FILLER | 341 | 341 |\n| research targets | 15,091 | 3,809 |\n| data-as-code markers | 602 | 18 |\n| numeric branch operands | 1,158 | 260 |\n\nMarkers per image: v10 235 -> 6, v9 324 -> 6, v7 43 -> 6. Numeric branches per image: v10 449 -> 17, v9 503 -> 17, v7 206 -> 226 (up; see not_done).\n\nUNKNOWN rose on purpose: 444 B per image of GUI data now carries an explicit \"purpose not established\" header. Research targets include a further 550 B per image flagged the same way.\n\nPer-file highlights:\n- flash_floppy_handlers.s: research 263/1,191/3,197 -> 123/123/116 (v10/v9/v7); KNOWN-A 769 -> 3,341 (v10, v9).\n- root program .s: KNOWN-A 0 -> 5,556 each.\n- boot_data_tables.s: KNOWN-A 39 -> 4,967.\n- interrupt_vector_trampolines.s: UNKNOWN 439 -> 0 (v10, v9).\n- fdemotext v7: research 2,128 -> 38.\n- medley v7: 1,138 -> 16.\n- system_handlers v7: 1,027 -> 53.\n- fdc_routines v10/v9: 108 -> 4.\n\nv7 romslices: 20 of 21 retired (5,733 of 5,745 B). The one left is v7_data_fdtest_string_testtitlefunc_tail.bin (12 B).",
+ "gate": "make gate PASSES at head 42943c6c (9/9 KNOWN-5000 images IDENTICAL, all images assemble). It was run before every commit that touched sources. In commit 9c868b0b the gate was shown to fail on a deliberate one-byte perturbation (type-0x60 entry `- 22`: 'kn5000_v10_program 1 BYTES DIFFER'), and passed again after the byte was restored. The comment gate (assert_comments_preserved.py) passed on every commit, except for comments dropped on purpose because they were proven false; each such drop is named in its commit message (the trampoline and screen_group headers, and 23 stale '; v10 does not spell' notes). main's `lane_worklists.py --verify-branch sys main s2/sys`: PASS (71 paths changed).",
+ "not_done": "- The v7 numeric-branch count went 206 -> 226. Code ported from v10 brought branch sites that the symboliser refuses (R1/R3/mid-line-data), many of them into v7's 0x41A drift zone.\n- About 16.5 KB is still KNOWN-B:\n  - fd_test_data.s Naka widget records, about 2.1 KB per image. Record layouts need the Naka framework model.\n  - HamaStr_* strings in test_data.s. In v7 all of test_data.s is untouched (1,866 B), because v7 test_init.s has no RegObjTable macro lines for hama_tables.py to parse.\n  - Voice_FactoryPresetData, 480 B per image.\n  - Boot FILETYPE_SIG strings and LED tables: no reader found beyond coincidental byte hits.\n  - Small .byte instructions that llvm-mc cannot encode, e.g. the 7-byte `ld (XIX+WA),imm16` and `cp (XBC+IZ),0` forms in flash_floppy_handlers.s and fdemotext.\n- GUI_DisplayStructData +0x0 (550 B) and +0x59C (436 B) per image have no reader: the lda/ld imm24/imm32 search and the LE24 search found nothing. The headers say so.\n- The v10 names for v7 screen_group_dispatch.s / trampolines.s content (AudioVoice_Callback..UIStateEvt_*, SndParam_*) are not placed. v7 still defines those names, drifted, in audio/dsp_config_sysex.s and audio/sndparam_routines.s, which belong to other lanes.\n- Retired romslice .bin files are not deleted; they are now referenced only by '(was .incbin ...)' notes. The orphaned slices other lanes listed are not deleted either: those lanes are unmerged.\n- Remaining positional_labels cleanup (Str_*, TransposeNoteStr, etc.) not done.\n- Data-shaped names on code not renamed: TaskSched_TCBTemplate, Demo{Style,Sound,Rhythm}_DispatchTable, MiddleFuncCall_DispatchData, Voice_BankLookupCode, AcApcToggleProc_Helper, DkMdlyPly_CheckState_Helper. The last two are used by 18 and 8 other lanes' files.\n- symbols/* not regenerated (reserved for the integrator).",
+ "leads": "1. s2/audio (after merge):\n   - interrupt_vector_trampolines.s entries 0x48/0x60/0x98 can name MidiStream_RecType48_SysExDispatch / RecType60_CtrlDispatch / RecType98_CmdDispatch instead of `<JumpTable> - 23/24`.\n   - v7's real SoundParam_NotifyChange is 0xFCCA30 (54 calls), inside audio_control_engine.s bytes.\n   - v7's screen-group code is at 0xFDD35D, inside dsp_config_sysex.s bytes.\n   - Afterwards re-run `port_islands.py --whole --delta 0x7d1` on v7 screen_group_dispatch.s and trampolines.s so the v10 names land there.\n   - AcApcToggleProc_Helper = v10 SndParam_LookupReadOnly; DkMdlyPly_CheckState_Helper = SndParam_LookupViaEncode.\n2. seui:\n   - v9 audio/sound_editor_ui.s ~13038 `jrl ugt, FlashWrite_BlockRef_Type6_Skip` decodes ASCII as code. A commented alias is kept in v9 positional_labels.s; delete it once that region is data.\n   - Vendored scripts/lanes/sys/se_screendata_model_seui.py should be replaced by the original when s2/seui merges.\n   - audio/tonegen_param_table.c comments (\"tagged entries\") are a misreading. Its real structure is 18-entry code-pointer tables at +0x1E+0x48k; see gui_tables.py headers.\n3. display lane: graphics_text_vga.s:180 `.long GUI_DisplayStructData` is a misframe of `cp iz, 0xe0`. includes/gui_display_struct_data.c field names are not reader-derived; rewrite them from gui_tables.py's per-slice evidence (InitializeScoop object blocks, Scoop_SoundEditorData tables).\n4. setwall_routines.s owner: call CDlikeSwTtl_SendEvt4 / CDlikeSwTtl_SendStartEvtArg1 directly (then delete the two positional aliases); its lines ~36-43 are misframed.\n5. backend: the unencodable forms listed in not_done block full code conversion. convert_code_runs.py will finish them once llvm-mc round-trips them.\n6. Reusable tools, committed under scripts/lanes/sys/: reframe_markers.py, convert_code_runs.py, port_islands.py (island and --whole/--delta/--keep modes, macro prelude), gui_tables.py, data_insns_to_bytes.py. They apply to other lanes' files and to v7 drift zones.\n7. Integrator: regenerate symbols/*. Renames made: AudioMix_BytecodeData->AudioMix_WriteAllGroupRegs, CDlikeSwTtl_DispatchData->CDlikeSwTtl_ReturnZeroStub, 15 FlashWrite_*/FlashRead_* -> SeScreenData_0xNNNN, new HamaObj_*_Data, GUI_DisplayStructData_0x* now real labels; the full list is in scripts/lanes/sys/rename_sys.sed and the commit messages."
+}

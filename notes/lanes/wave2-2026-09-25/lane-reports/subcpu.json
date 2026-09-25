@@ -1,0 +1,190 @@
+{
+ "lane": "subcpu",
+ "branch_head": "6a602347e58710f07956c1bcad4b66f53e7159b5",
+ "commits": [
+  {
+   "hash": "1468e0fb",
+   "summary": "(earlier run) the 'DSP channel config table' is the scheduler's task table"
+  },
+  {
+   "hash": "e245c521",
+   "summary": "(earlier run) DSP zone tail 0x01E17F-0x01F417 carved into 56 typed objects"
+  },
+  {
+   "hash": "9625ffa5",
+   "summary": "(earlier run) every DSP-zone object names the pointer entry and routine that read it"
+  },
+  {
+   "hash": "cc6ba54b",
+   "summary": "(earlier run) 33 routines held as .byte converted to instructions (1,307 B)"
+  },
+  {
+   "hash": "11db90fa",
+   "summary": "(earlier run) misframe repairs, 22 code islands, boot-ROM cross references"
+  },
+  {
+   "hash": "2d57bee4",
+   "summary": "(earlier run) FP library routines get libm names"
+  },
+  {
+   "hash": "0ca6b9fb",
+   "summary": "(earlier run) FP literal pool at 0x01F63E typed as 31 doubles, not code"
+  },
+  {
+   "hash": "63ce8df7",
+   "summary": "(earlier run) last strings-in-code and the FP swi-7 pad retyped"
+  },
+  {
+   "hash": "50b9b0fc",
+   "summary": "(earlier run) two more or-word+jr islands in the part-setup routine"
+  },
+  {
+   "hash": "eb281882",
+   "summary": "(earlier run) evidence for the 20 FP pad bytes; param-metadata negative re-searched"
+  },
+  {
+   "hash": "d2255659",
+   "summary": "(earlier run) effect parameter metadata names settled from the main-CPU name table"
+  },
+  {
+   "hash": "9ccfa8b2",
+   "summary": "(earlier run) say 'no reader' where there is none"
+  },
+  {
+   "hash": "c73dd485",
+   "summary": "Effect-parameter metadata (0x0133CF-0x014738) proven a byte/relocation-identical copy of main-CPU 0xEE4FC6-0xEE636B (v7/v9/v10); main-CPU readers DSPCfg_* cited per object; 'one byte per range record' and 'null terminator' claims corrected"
+  },
+  {
+   "hash": "2493bb58",
+   "summary": "281 numeric (addr:24) operands landing exactly on a label made symbolic (new symbolize_v142_abs24_operands.py)"
+  },
+  {
+   "hash": "3bf90da3",
+   "summary": "50 more absolute operands symbolic (decimal spelling)"
+  },
+  {
+   "hash": "a04ad0a6",
+   "summary": "0x00F693-0x00F785 re-carved by its 12 readers into 13 tables (10 computed-goto `.short Case - Base`), 73 case labels; 3 proven-false comments corrected"
+  },
+  {
+   "hash": "b8c60f63",
+   "summary": "Reader/evidence lines for op74 LUTs, voice-pool quota/pointer tables (retyped), program ptr tables, trace strings"
+  },
+  {
+   "hash": "02d6465c",
+   "summary": "Effects 57-60 no longer marked 'unidentified' beside the IDENTIFIED note"
+  },
+  {
+   "hash": "a026316d",
+   "summary": "Task-kernel semaphore routines named from their code (TaskSem_Release, _NoResched, TaskSem_GetCount, TaskSched_Block_Self); new v142_maincpu_shared_code_scan.py"
+  },
+  {
+   "hash": "8ce461ca",
+   "summary": "31 routines/arms with data-shaped names renamed per their own headers (rename_v142_code_under_data_names.py)"
+  },
+  {
+   "hash": "23b4448f",
+   "summary": "Last 198 LABEL_<addr> placeholders renamed structurally (39 -> __jrt_nop_, rest _Skip/_Loop/_Join/_Epilogue/_Return)"
+  },
+  {
+   "hash": "a320d660",
+   "summary": "223 DSP FP constants each labelled FPConst_<reader>_<value> and read by name; header claim 'cannot reference symbolically' corrected"
+  },
+  {
+   "hash": "b0cec199",
+   "summary": "0x00F002-0x00F41F split into measured objects (6 RAM variables with readers, default DSP config image, DSP2 gain curve, 25 libm constants); touch-curve table labelled; FPConst_Ln2(=sqrt2)->FPConst_Sqrt2; FP compare predicates FP_dcmp/FP_fcmp + result rows"
+  },
+  {
+   "hash": "375065e9",
+   "summary": "All 22 remaining computed-goto offset tables written as `.short Case - Base` (25 labels inserted); DSP_Bytecode_Programs -> DSP_Bytecode_Op00_Groups5_ParamMix"
+  },
+  {
+   "hash": "68fe98d9",
+   "summary": "Two 'unreferenced padding' 0x0E bytes are null task stubs pointed to by DSP2_InitTask/DSP_ResetTask tables: written as ret, named"
+  },
+  {
+   "hash": "4f453b87",
+   "summary": "8-byte 'baud-rate table' is an INTES1 writer routine (Serial1_Write_INTES1_FD); PreReset bytes renamed honestly; search-order list reader lines"
+  },
+  {
+   "hash": "039806aa",
+   "summary": "Boot ROM: channel-init flag/table labelled (read by TONE_GEN_CHANNEL_INIT and by the payload), 13 numeric ROM operands symbolic, SUB_FEC1 -> DEBUG_OUTPUT_CHAR_STUB"
+  },
+  {
+   "hash": "96896d65",
+   "summary": "subcpu_nop_run_context.py: nop-nop markers are settling delays after HW register access (180/181 v142, 29/30 boot)"
+  },
+  {
+   "hash": "bc11b1ee",
+   "summary": "ToneGen_RegAddrLatch/RegDataPort .equ: 361 TG port operands symbolic"
+  },
+  {
+   "hash": "7423242c",
+   "summary": "Last 20 `//` comment lines become `;`"
+  },
+  {
+   "hash": "b9350792",
+   "summary": "Six unlabelled task-kernel entry points labelled with headers (TaskSem_TryDec, TaskSched_ChangePriority, ...)"
+  },
+  {
+   "hash": "fd2efaa9",
+   "summary": "TaskMsgQ_Send_NoResched header: main-CPU twin label names fixed"
+  },
+  {
+   "hash": "1b3c4320",
+   "summary": "Four more unlabelled entry points labelled"
+  },
+  {
+   "hash": "8e0e0658",
+   "summary": "Voice_SetPitchBendRangeAndApply calls Voice_SetMasterTune: renamed Voice_SetMasterTuneAndApply, header corrected"
+  },
+  {
+   "hash": "7cf6d8e7",
+   "summary": "38 table addresses loaded as plain immediates symbolised, only where dereferenced as a base (220500 divisor left numeric)"
+  },
+  {
+   "hash": "e69b1f26",
+   "summary": "Last *_Opaque* labels renamed (TaskSched_Lock, FIFO*_SetMark, orphaned sublabels)"
+  },
+  {
+   "hash": "9dbab9a0",
+   "summary": "CALL_TABLE_12159 -> Voice_PolyNoteOn_Setup_PtrTable, Voice_SetParam_04134B -> Voice_SetVelSwitchConfig"
+  },
+  {
+   "hash": "c3db7ea8",
+   "summary": "Split trim table A merged into Voice_Part_Trim_Table_A (.short x10); OFFSETS_F460/AlgoJumpTable1..6 named after their dispatchers"
+  },
+  {
+   "hash": "19c64edd",
+   "summary": "Five DRAM variables named from headers (ToneGen_StagingBlock, Part_Record_Base, Part_PresentWord, Part_PatchRecord_Ptr, Voice_GlobalFlags): 454 operands"
+  },
+  {
+   "hash": "b28a44cb",
+   "summary": "46 IRAM operands use existing .set names (DMA_XFER_STATE etc.)"
+  },
+  {
+   "hash": "59538612",
+   "summary": "503 SFR operands by TMP94C241 name; IntMask_SetBit3/ClearBit3 -> Timer3_Start/Stop (T8RUN bit 3)"
+  },
+  {
+   "hash": "70f71d22",
+   "summary": "18 more SFR operands (byte-macro forms)"
+  },
+  {
+   "hash": "71f78bb5",
+   "summary": "Boot SFR table checked against MAME tmp94c241.cpp map: 13 wrong values fixed, wrong-name aliases marked, 83 operands by name, 5 proven-false port-init comments corrected"
+  },
+  {
+   "hash": "00341e17",
+   "summary": "Drop duplicate include of shared/sfr_tmp94c241.s (vectors.s already includes it; it broke census/symboliser mirrors)"
+  },
+  {
+   "hash": "6a602347",
+   "summary": "lane_subcpu_measure.py also counts absolute operands still spelled as numbers"
+  }
+ ],
+ "measured": "Command: `python3 scripts/analysis/lane_subcpu_measure.py` (this tree) vs `... --root <git archive 3958235e extracted>` (base). It runs data_range_census.py, symbolize_numeric_branches.py --report and the ABS/nop-nop marker regex. Toolchain: tlcs900_backend@4d7fa4f6b37c for every figure.\n\nCensus bytes (lane files, base 3958235e -> HEAD):\n- TOTAL: CODE 131,068 -> 132,464; KNOWN-A 48,122 -> 66,839; KNOWN-B 21,871 -> 1,722; UNKNOWN 8 -> 44; research targets 247 -> 105.\n- kn5000_subprogram_v142.s: CODE 119,977 -> 121,417; A 1,076 -> 120; B 515 -> 31; research 162 -> 30.\n- subcpu_data_tables.s: CODE 532 -> 489; A 46,017 -> 65,671; B 21,302 -> 1,655; UNKNOWN 8 -> 44; research 69 -> 74.\n- subcpu_fp_math.s: A 161 -> 178; B 17 -> 1; research 16 -> 1.\n- kn5000_subcpu_boot.s: A 868 -> 870; B 37 -> 35; research 0 -> 0.\n\nHow to read these numbers:\n- UNKNOWN and data-table research went up because three unreferenced ranges were split out of a block the census graded A (IRAM_Unreferenced_F00A/F340/F40A, 44 B). Each now says \"purpose not established\".\n- 1,532 B of the 1,655 B of data-table KNOWN-B are 252 one-line constants of the form `Label: .double v ; value, read by <routine> (operand at 0x...)`. The census only credits comment blocks above a label, so it cannot see this evidence.\n\nOther counts (same script):\n- Numeric branch operands: 24 -> 0.\n- Absolute operands still written as numbers (the new band count in lane_subcpu_measure.py):\n  - v142 payload-image addresses: 683 -> 0\n  - v142 SFR: 501 -> 1\n  - v142 RAM/IO: 2,425 -> 1,587\n  - boot SFR: 91 -> 8\n  - boot RAM/IO: 177 -> 167\n- Data-as-code markers: v142 main 365 -> 362, data_tables 21 -> 0, fp_math 1 -> 0, boot 70 -> 70.\n  - Per `python3 scripts/analysis/subcpu_nop_run_context.py`, the remaining ones are nop runs right after a tone-generator, DSP or port write: 180 of 181 runs in v142, 29 of 30 in boot. They are settling delays in real code.\n- LABEL_<addr> definitions in kn5000_subprogram_v142.s: 198 -> 0.\n- Shared-code scan (`python3 scripts/analysis/v142_maincpu_shared_code_scan.py --min 16`): 273 runs of at least 16 bytes, 11,946 B in total, appear byte-identical in the main-CPU v10 ROM.\n- Twin proof (`python3 scripts/analysis/v142_param_meta_maincpu_twin.py`): ALL PASS.",
+ "gate": "`make gate` PASSES at HEAD 6a602347: all 9 KN5000 images are IDENTICAL, including kn5000_subprogram_v142, its compressed form and kn5000_subcpu_boot.\n- The gate was run before every commit.\n- It was shown to fail once: I changed one byte of EFF_ParamMeta_ByteTableB (`.byte 1,1,1,1` -> `1,1,1,2`), the v142 image build stopped (\"input does not match the reference compression decisions\", make Error 1), and after restoring the byte the gate passed again.\n- The comment gate (assert_comments_preserved.py, with --rename-map for renames) was run after each edit. The only comments dropped or changed are the claims proven false, and each commit message lists them; the old wording is usually quoted in a \u2605 CORRECTED note. Examples: \"one byte per range record\", \"null terminator\", \"0x00F693 filler\", the case 2/3 off-by-one, \"0x99 -> small group\", \"cannot reference symbolically\", \"UNDESCRIBED ... no consumer\", the boot \"Port 0 / Watchdog\" comments.\n- symbolize_numeric_branches.py was re-run with --apply --verify on v142 and subboot: VERIFY PASS, 0 sites left.\n- `git diff --name-only $(git merge-base main HEAD) HEAD` lists only this lane's .s files plus new files under scripts/ and notes/.",
+ "not_done": "- 1,587 v142 and 167 boot RAM/IO absolute operands are still numbers. I only named variables that an existing header pins: the TG ports, 5 DRAM variables and 6 IRAM variables. For example, 0x045314 is described both as a \"global master offset\" and as \"a pointer into the DSP/tone parameter block\", so it stays numeric.\n- Some misleading names were deliberately not renamed:\n  - VoiceCC_DataTable_0280FE, VoiceCC_DataTable_028F75 and VoiceModWheel_DataTable_02A061: scripts/lanes/verify_mislabel_markers.py (not this lane's file) looks these names up.\n  - OFFSETS_14739 and OFFSETS_14745: dsp/ analysis notes and tools cite them by name.\n- 11 instructions are still `.byte`: minc1 x10, `ldc DMAS2,XHL`, `ldc cr[0x48]`, `and (XBC+WA),imm` x3, `bit n,(XDE+IY)/(XWA+DE)` x5. llvm-mc still cannot encode or decode them (I re-tested).\n- The sub-CPU copy of the effect-parameter metadata still has no reader inside the payload, and why it is there is not established.\n- The 23-byte defaults record is only described as far as the main-CPU reader chain goes: byte 0 is the effect number, used as an index into the descriptor table at 0xEE75F6, and the fields are 1 or 2 bytes. The per-effect field decode was not done.\n- The meaning is still not established for: EFF_SlotByteTable_Unreferenced, EFF_ParamMeta_ByteTableA/B, IRAM_Unreferenced_F00A/F340/F40A and PreReset_Unreferenced_Bytes. DSP2_InitTask_PtrTable and DSP_ResetTask_PtrTable still have no reader. Their headers say so honestly.\n- About 96 called routines had no comment directly above them. About 15 got headers; the rest were not audited.\n- Boot port C (0x30) operands stay numeric, because the assembler reads `PC` as the program counter. The boot's wrong-name SFR aliases were marked, not removed.\n- The FINDINGS-subcpu-maincpu-shared-code.md note was not written: this session's tool policy refused new report files. The findings are in the commit messages, the source headers and the docstrings of v142_maincpu_shared_code_scan.py and v142_param_meta_maincpu_twin.py.\n- The census still grades the one-line constants B (1,532 B).\n- There are no v7/v9 copies of these files, so the multi-version rule did not apply. The main-CPU consequences are listed under leads.",
+ "leads": "1. For the maincpu lanes (v7/v9/v10; evidence: v142_param_meta_maincpu_twin.py and v142_maincpu_shared_code_scan.py):\n   - The ToneKit_* family at 0xEE4FC6-0xEE636B is the DSP effect-parameter metadata: range arrays, 24-byte defaults records, counts and two pointer tables. DSPCfg_LookupAndExtract, DSPCfg_ClampAndExtract, DSPCfg_ResolveWithFallback and the other DSPCfg_* routines read it.\n   - The label ToneKit_VoiceDispatch_Table sits 4 bytes past the table start: the code uses 0xEE6044, and 0xEE6048 appears nowhere in the ROM.\n   - WidgetParam_Config_000..057 are twins of the sub-CPU DSP_EffNN_Param_Values tables. The main CPU reaches them through 0xEE75F6 (DSPCfg_ReadViaTableLookup).\n   - Free_ClearByte (0xFF0BC3) is byte-identical to Int_SignedDiv over 170 B.\n   - Show_ScreenGroup_Entry is TaskSched_SpawnTask.\n   - TaskSched_Resume actually blocks the calling task.\n   - Audio_Lock_* / AudioLock_* are the generic kernel semaphore routines.\n2. .claude/skills/tmp94c241/references/sfr.md disagrees with MAME's tmp94c241.cpp on the 8-bit timer block and the port FC addresses (for example T8RUN 0x82 vs 0x80, T01MOD 0x80 vs 0x84, P0FC 0x04 vs 0x03). Either fix the skill or mark it unreliable.\n3. Census (data_range_census.py):\n   - Credit trailing comments on `Label: .directive ; ...` one-liners.\n   - Its mirror breaks with \"symbol __drc_N already defined\" when an .equ-only file is included twice; this cost one commit here.\n4. Update scripts/lanes/verify_mislabel_markers.py, so the three VoiceCC/VoiceModWheel_DataTable_* routines can take the names their headers propose.\n5. Backend: spellings for minc1, ldc to DMA/control registers, `and (reg+reg),imm16` and `bit n,(reg+reg)` would retire the last 11 .byte instructions in v142.\n6. Decode the defaults records field by field using the main-CPU descriptor lists (the WidgetParam_Config twins).\n7. Model the 287-byte part record at 0x041368 (fields +0, +2, +6, +0x6E slots and more) as a struct, to name the remaining DRAM operands.\n8. Many labels were renamed. The symbols/subcpu_*.txt files need regenerating centrally.\n9. Old names survive as history in older rename scripts, trace_blocked_byte_runs.py, convert_taskevent_fifo_family.py, disassemble_dsp_voice_blocks.py, convert_subcpu_blocks.py, notes/sound/FINDINGS-kn5000-sound-coverage-2026-09-01.md and wsa1/notes/FINDINGS-kernel-in-the-kn5000.md."
+}

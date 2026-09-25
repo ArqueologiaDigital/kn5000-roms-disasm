@@ -1,0 +1,62 @@
+{
+ "lane": "tonedb",
+ "branch_head": "a9d0ce854aba9b2af0bc7528a974269d328ecc1b (branch s2/tonedb, worktree /home/fsanches/compartilhado/disasm-lanes/s2-tonedb, clean; not pushed)",
+ "commits": [
+  {
+   "hash": "ba58d736",
+   "summary": "style_records: the 113-byte Music Stylist parameter block (not 115) is decoded from its three maincpu readers (EffectMode_UpdateBitFlags plus the 30-entry table WidgetStyleDataTable_0x2A8 at 0xEB7BDA, which is the same in v7/v9/v10; BitMapOut_ByteData_PatchTable; EffectMode_CopyVoiceParams). Each record now has one row per panel field and a two-line header. The tempo matches the display string in 991 of 1000 records."
+  },
+  {
+   "hash": "5447fbff",
+   "summary": "tone_database_directory: each of the 25 tone-number banks and the coefficient bank map now names its subcpu reader and the formula it uses."
+  },
+  {
+   "hash": "996941ad",
+   "summary": "tone_database_aux: zone records are typed rows (new data macros); key maps point at their curve by label; the 26 drum kits are decoded to show which instrument each note plays (cross-checked against the separate name path); the 610 PercInst records have headers taken from the code that reads them; the drawbar blobs were never 'segment lists' and are now shown to be 9*9*9 zone records."
+  },
+  {
+   "hash": "7abf2ebc",
+   "summary": "tone_database_records: the old 'layer configuration' is split into the part-mode byte, the partial mask and +0x12..+0x14. Each block says which partial it serves, each 81-byte partial block is cut into its 7 field groups (defined by the code that reads them), and each record has a header saying which bank/program selects it. Three old claims are corrected (the old text is kept and marked)."
+  },
+  {
+   "hash": "0a54e7f5",
+   "summary": "tone_database_aux: fixes this lane's own claim that PercInst layer bytes +0x03/+0x04 and +0x0F..+0x14 have no reader. They are read as tune (Voice_Pitch_CopyBase) and as the drum-voice filter (TVF_BuildEmit_Short_Dispatch and related routines)."
+  },
+  {
+   "hash": "a0e932a9",
+   "summary": "tone_database_aux: the 487 SET descriptors are now one ToneSetDesc row each. The header also records how the search for readers of +0x0E and flag bit 3 was done."
+  },
+  {
+   "hash": "f62215f4",
+   "summary": "tone_database_records: +0x13 is the bend type (Voice_Pitch_Compute_Inactive). The list of routines known to read the common block grows from 3 to 9, including the octave shift, algorithm type, level offset and secondary parameters."
+  },
+  {
+   "hash": "05c31f9b",
+   "summary": "style_records: part 03 is 'PART 4' in the part-name table at 0xE9F374; which panel part that is on the instrument is not established."
+  },
+  {
+   "hash": "be3d3470",
+   "summary": "tone_database_records: each record's common block is cut into 10 groups defined by the code that reads it. The bytes at +0x2B..+0x5A form twelve 4-byte entries; this is measured from the data and marked as such."
+  },
+  {
+   "hash": "e860293f",
+   "summary": "tone_database_aux: DrawbarPreset_Jazz/Rock (tone numbers 336/337, part mode 0x40) now use the same field layout as the other tone records, with 4 partial blocks mapped directly (no packing). Also fixes the object-boundary rule in the tool."
+  },
+  {
+   "hash": "8fc5694e",
+   "summary": "tone_database: the 'MixerDefaultTable' and 'PercMixerDefaultTable' are velocity-split records, not mixer defaults: 3 velocity thresholds, then 4 {wave, family} pairs, one per velocity zone (Velocity_Select_Split_Zone 0x022824, WaveSel_StageA2_FromVelZone 0x0328B5). The descriptions of ToneIndexMapA/B and PercSourceIndexMapA, which index these tables, are corrected. ToneDB_DefaultLayerParams is confirmed as the block used when a partial is absent."
+  },
+  {
+   "hash": "0ebca578",
+   "summary": "tone_database_aux: renamed the 974 SET chunks ToneEnv_RecNNN_A/_B to ToneSet_NNN_KeyMap/_Zones with a committed sed script (scripts/renaming/rename_tonedb_set_chunks.sed). The chunks contain no envelope data."
+  },
+  {
+   "hash": "a9d0ce85",
+   "summary": "notes/tonedb-2026-09-25/README.md: brought in line with the rename (notes only)."
+  }
+ ],
+ "measured": "Command: `python3 scripts/analysis/data_range_census.py --images tabledata --json X.json`, then `python3 notes/tonedb-2026-09-25/lane_census.py before.json after.json` (committed). The before figure is from base 3958235e; the after figure is from the committed state, measured with the same toolchain build tlcs900_backend@4d7fa4f6b37c.\n\nPer file, KNOWN-A / KNOWN-B / UNKNOWN / FILLER / research targets, before -> after:\n- style_records.s: 9,872 / 197,802 / 0 / 0 / 0 -> 207,674 / 0 / 0 / 0 / 0\n- tone_database_aux.s: 79,970 / 88,140 / 0 / 5,370 / 7,446 -> 160,413 / 7,697 / 0 / 5,370 / 7,697\n- tone_database_directory.s: 3,348 / 6,080 / 0 / 0 / 64 -> 9,364 / 64 / 0 / 0 / 64\n- tone_database_records.s: 264 / 144,492 / 0 / 0 / 0 -> 144,654 / 102 / 0 / 0 / 102\n- Total: KNOWN-A 93,454 -> 522,105; KNOWN-B 436,514 -> 7,863; UNKNOWN 0 -> 0.\n\nResearch-target bytes went up, 7,510 -> 7,863. The new section headers honestly list fields that have no reader, and the census assigns a section header to the first record under it. That adds DrumKit_00 (295 B), PercInst_000 (58 B) and ToneRec_000's first region (102 B). ToneEnv_Rec000_B (102 B) is no longer flagged.\n\nWhole table-data image, strict (CODE + KNOWN-A + FILLER): 44.45% -> 64.89%.\n\nThe lane's files contain no code, so data-as-code markers, numeric branches and romslices are all 0 and the branch symboliser does not apply.\n\nChecks, all passing at head: `notes/tonedb-2026-09-25/style_record_field_map.py`, `drum_chain_probe.py` and `partial_block_reads.py --chains`.",
+ "gate": "`make gate` (every KN5000 image assembles; 9/9 ROMs byte-identical) passes at every commit and again on the final committed state.\n\nEvery edit was shown to break the gate when perturbed, and each was restored and re-gated:\n- style tempo 108 -> 109: table data goes red at 0x951097\n- zone trim -9 -> -8: red at 0x85B0C7\n- ToneRec_000 mask 0x05 -> 0x15: red at 0x8324E5\n- descriptor 0 base pitch 0x4280 -> 0x4281: red at 0x857920\n- ToneRec_000 +0x5D 0x43 -> 0x44: red at 0x832531\n- DrawbarPreset_Jazz +0x10 0x60 -> 0x61: red at 0x8706CD\n\nmain's `lane_worklists.py --verify-branch tonedb 3958235e s2/tonedb` reports PASS: 14 paths changed, all either lane-owned or new files under notes/ or scripts/.\n\nComments were checked with the new `notes/tonedb-2026-09-25/comments_lost.py`, a linear-time stand-in; `assert_comments_preserved.py` did not finish in 10 minutes on style_records.s. Only intended drops occurred, and each is listed in its commit message:\n- anonymous 16-byte row offset comments (\"; +0x4d\", \"; +0x66\", ...)\n- \"; +0x10 layer configuration\", whose framing the code disproves\n- \"; +0xc0 constant fill\", corrected to +0xbf\n- 3 superseded style-header lines\n- this lane's own superseded lines\nAll other comments survive, in their original order.",
+ "not_done": "Not done:\n- **ToneDB_EnvDescTable (7,305 B) is still a research target.** No reader was found for descriptor +0x0E or for flag bit 3. The header now states the shapes searched: every displacement-14 access, word reads at +0x0D, long reads at +0x0B..+0x0E, and every bit-3 test in the v142 subcpu. Each hit traced to another base.\n- **ToneDB_Directory tail +0xD0..+0xE8 (64 B)** is unread in v1.42. The only displacement reads in 0xD0..0xE8 are stack frames and the five stride words already cited.\n- **ToneSet_000_KeyMap (39 B)** keeps the chunk header's honest note that what a selector class means at the chip is not established.\n- **Tone-record bytes with no reader found:**\n  - common block: +0x15..+0x28 (except the drum-kit pairs), +0x3B..+0x5B apart from entries' shape, +0x62/+0x63\n  - partial block: +0x01, +0x04, +0x06, +0x12, +0x1D..+0x26, +0x38, +0x48\n  - +0x14\n  The partial-block map comes from a heuristic dataflow probe plus reading the code by hand, so it is a lower bound.\n- **Style records:**\n  - +0xBE has no reader.\n  - EffectMode_CopyVoiceParams and the walker table disagree on where bytes 29/30 go (part 03 +0/+1 versus +1/+2). This is recorded, not resolved.\n  - Part 03's panel identity is unknown.\n  - Tags 0x90, 0x60 and 0x65, and most of tag 0x61's 18 bytes, are named only by destination.\n- **Drum kits:** +0x11 (values 0..6) and the constant head +0x12..+0x26 have no reader.\n- **Drawbar zone records:** which drawbar levels feed the three base-9 digits (Voice_Slot_CalcAmpNibble / FindOctaveOffset) was not traced.\n- **Labels kept:** ToneDB_MixerDefaultTable and ToneDB_PercMixerDefaultTable keep their misleading names because the WSA1 notes cite them; the headers now say what they are.\n- **Not this lane's files, left untouched:** symbols/table_data_symbols_reference.txt (974 renamed labels need central regeneration), analysis/wave7-packages/*.json and scripts/generators/gen_tonedb_aux.py (historical ToneEnv names).",
+ "leads": "1. **The subcpu's InterCPU_E1_DMA_Transfer header probably has source and destination swapped.**\n   - It says XWA is the main-CPU destination.\n   - But DSP_Reinit_VoiceSlots passes XWA=0x007800, which is its own staging image (DSP_ResetWriteBufferPtr sets (0x04531C)=0x7800), and XDE=0x1E0000.\n   - The maincpu restores the same 0x72AA bytes from its SRAM at 0x1E0000 to subcpu 0x7800.\n   - This is for the subcpu lane.\n2. **Many subcpu comments say \"tonerec+NN\" for the pointer at voice slot +0x23, which is the part record (0x041368+part*0x11F), not the tone record.**\n   - The tone record is at slot +0x13; paramA (the partial block or PercInst layer) is at +0x17.\n   - Many of those offsets are part-record fields.\n3. **analysis/disk-format-probes/README-lsw-part-record-fields.md calls the style parameter block a \"DSP-effect preset\".** It is the Music Stylist record: CopyVoiceParams byte 31 is style-record byte +0x6C.\n4. **Each style's DSP effect could be named.**\n   - EffEdit_ValidateAndReadParams reads parameter id 0x4900 (& 0x7F) into RAM 0x2976.\n   - DspItem0_DisplayEffectName uses 0x2976 to index DspEffectName_PtrTable.\n   - If DSPCfg_ReadParam_Map0(0x4900) resolves to tag 0x61 +0 (style record +0x9E), every one of the 1000 styles gets a named effect.\n5. **Wave-selection chain, now complete from the code (worth a technics-docs page for MAME/HLE):**\n   - partial block +0x02 wave / +0x03 family\n   - -> StageA1 index map (dir +0x0C/+0x10/+0x14)\n   - -> velocity-split record (dir +0x18/+0x1C/+0x20, 11 bytes)\n   - -> velocity zone -> {wave, family}\n   - -> StageA2 map (dir +0x24/+0x28/+0x2C)\n   - -> SET descriptor\n   - -> key map -> zone record\n   - -> TG register +0x040 selector\n6. **WSA1 prom_d has the same directory slots** (+0x18/+0x20 are 43-byte 'wave-select' records there). The velocity-split reading (3 thresholds + {wave, family} pairs per zone) is a candidate framing to test against prom_c's readers.\n7. **Tone records +0x2B..+0x5A are twelve 4-byte entries in three runs of four.** Only entries 0-3 have a reader (ExtVoice_Build_SlotRegisters, selected by voice +0x1A & 3). The other two runs are likely per-partial parameter sets; look for readers that index +0x3B+4k or +0x4B+4k.\n8. **Bank-0x40 drum kits do not follow the GM note layout; kits 14-17/19/20 (selector 0x41) do.** A MAME/HLE drum map should use the ROM's per-kit note table, not GM.\n9. **Regenerate symbols/table_data_symbols_reference.txt** (the ToneSet_* rename)."
+}

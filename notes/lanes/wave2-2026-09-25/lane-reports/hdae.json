@@ -1,0 +1,142 @@
+{
+ "lane": "hdae",
+ "branch_head": "0581e6ba398be522974f47d37997a4eed0aaa6a1",
+ "commits": [
+  {
+   "hash": "997b446a",
+   "summary": "line<->address map tool for all seven hdae5000 sources (scripts/analysis/hdae5000_line_map.py)"
+  },
+  {
+   "hash": "97d1aa9b",
+   "summary": "C runtime library named by what its code does (54 renames, incl. Divide_Signed/StrCopy fixes)"
+  },
+  {
+   "hash": "8601a69d",
+   "summary": "PC-link coroutine, its 30 services, debug-trace stub; .L cross-file labels made real"
+  },
+  {
+   "hash": "91388f94",
+   "summary": "IDE/ATA driver and FS-table I/O were named RAM_Test/Display_String_Render"
+  },
+  {
+   "hash": "808db2f2",
+   "summary": "converter for the 384 numeric jp/call cc,(N:24) operands"
+  },
+  {
+   "hash": "f5019a78",
+   "summary": "UI object descriptor pool as 769 typed records"
+  },
+  {
+   "hash": "053fc39e",
+   "summary": "trilingual message block, its reader and switch table"
+  },
+  {
+   "hash": "9ba78942",
+   "summary": "misframe at 0x2998D9 fixed, version/signature block labelled"
+  },
+  {
+   "hash": "06ea7dc2",
+   "summary": "51 compiled switch tables typed from their dispatchers; reachability tool"
+  },
+  {
+   "hash": "87065c75",
+   "summary": "cluster-chain file layer and format were Display_*"
+  },
+  {
+   "hash": "b13d9e6f",
+   "summary": "song/directory/FLS record layer named from its data"
+  },
+  {
+   "hash": "dfd740fe",
+   "summary": "28 screen helpers named from their texts/templates"
+  },
+  {
+   "hash": "53d37a11",
+   "summary": "20 PC-link commands numbered by their own status strings"
+  },
+  {
+   "hash": "4a7564c5",
+   "summary": "384 numeric conditional abs24 branches symbolic"
+  },
+  {
+   "hash": "2d1694d6",
+   "summary": "UiObj_SetCaption, UiState_Reset, PC-link services 28-30"
+  },
+  {
+   "hash": "bdc58f59",
+   "summary": "graphics-bank note restored to point at real copy code"
+  },
+  {
+   "hash": "f7819792",
+   "summary": "load-by-number switch labels renamed with their routines"
+  },
+  {
+   "hash": "829b18bc",
+   "summary": ".rodata 0x2E1C82-0x2E3703 rebuilt object by object from readers"
+  },
+  {
+   "hash": "98a78c26",
+   "summary": "390 UI object ids are named constants"
+  },
+  {
+   "hash": "e7386f68",
+   "summary": "43 named RAM variables, 1,827 operands symbolic"
+  },
+  {
+   "hash": "16a6f80e",
+   "summary": "lyrics module .rodata (0x2E5B80-0x2E5DCD) and the last untyped (two-level) switch"
+  },
+  {
+   "hash": "b1d7c944",
+   "summary": "README entries for the rodata --block2 run"
+  },
+  {
+   "hash": "7c50a645",
+   "summary": "every main-CPU call named with the firmware's own function name (953 sites, 100 functions, WS_RootFnTable/WS_HamaFnTable)"
+  },
+  {
+   "hash": "20ab6def",
+   "summary": "reachability tool: conditional ret cc falls through (437 B were wrongly dead)"
+  },
+  {
+   "hash": "57a86380",
+   "summary": "lyrics player (File_*/Calc_Disk_Space/Display_* were wrong) and event helpers (Menu_*, HD_Shutdown, Wait_Callback_Loop) renamed; registration comments corrected"
+  },
+  {
+   "hash": "ca1888e0",
+   "summary": "file-top index no longer names nonexistent labels"
+  },
+  {
+   "hash": "ee3d358a",
+   "summary": "frame handler drives lyrics from main-CPU sequencer position; PPI-port misreadings fixed; UiObjectName header reattached"
+  },
+  {
+   "hash": "d60c91e8",
+   "summary": "floppy lyric-file list (Path_Builder/Directory_Handler) and version-string copier (Display_Clear) renamed"
+  },
+  {
+   "hash": "00ba30f6",
+   "summary": "custom_data: 0x3D3000 is the sound-parameter user banks (false 'no banks / no writer' note corrected)"
+  },
+  {
+   "hash": "dff739ea",
+   "summary": "custom_data: entry-count wording (superseded by 80abca47)"
+  },
+  {
+   "hash": "80abca47",
+   "summary": "custom_data: 39 entries, address 0 = unused slot, from the SndParam_Apply* readers"
+  },
+  {
+   "hash": "44fed63d",
+   "summary": "README lists all ten rename scripts"
+  },
+  {
+   "hash": "0581e6ba",
+   "summary": "missing CopyVersionString call-site hunk (d60c91e8..44fed63d do not assemble alone; fixed here)"
+  }
+ ],
+ "measured": "Census, `python3 scripts/analysis/data_range_census.py --images hdae5000,customdata --json <scratch>/final2.json`:\n- hdae5000 at lane start (the \"before\" in f5019a78's message): KNOWN-A 330,533 B, KNOWN-B 50,845 B.\n- hdae5000 now: CODE 112,324, KNOWN-A 373,890, KNOWN-B 7,736, UNKNOWN 0, FILLER 30,338. Strict A-only share is 98.52%; earlier this session it was 97.92%, before the UiObjectName_PtrTable header was reattached (3,160 B went back from B to A).\n- customdata: KNOWN-A 660,657, KNOWN-B 0, FILLER 387,919, the same totals as at start. It dipped to 1,104 B KNOWN-B while an interim note admitted undecoded bytes; that note was then resolved.\n- Combined strict share: 99.51%.\n\nMain-CPU calls, `python3 scripts/converters/hdae5000_symbolize_fn_tables.py`:\n- 953 call sites through workspace+0x0E0A or +0x0E88 now use named constants: 100 distinct functions, named from the firmware's own name tables (0x400 WidgetName_InitPtrTable, 0x409 Hama_ModeParam_Table).\n- The v10 build's label agrees with the firmware name for 99 of 100. The exception is offset 0x084: the firmware calls it UpdateScreen, the v10 build calls it LcdOff_Epilogue.\n\nRAM names, `python3 scripts/converters/hdae5000_symbolize_ram.py`: 43 -> 63 variables, 126 more operands made symbolic.\n\nReachability, `python3 scripts/analysis/hdae5000_reachability.py | head -1`:\n- Now 5,868 B unreachable in 118 ranges.\n- Before the `ret cc` fix in 20ab6def the tool reported 6,305 B in 137 ranges. The 6,645 B / 138 quoted in 06ea7dc2's message had the same bug.\n\nBranch symbolizer, `python3 scripts/converters/symbolize_numeric_branches.py --image hdae5000`: 0 sites left to convert.\n\nRenames this session: about 30 labels and 3 new labels for code with no caller, via scripts/renaming/rename_hdae5000_lyrics_events.sed and rename_hdae5000_fdlyrics.sed.",
+ "gate": "`make gate` PASS, 9/9 IDENTICAL, on the working tree before every commit and at HEAD 0581e6ba.\n\nNegative control, done once earlier in the lane: the first entry of HDAE5000_SfxLswBitCheck_CaseTable was pointed at the 0x3F case. The gate went red on 1 byte at 0x2E2974; restored, it went green.\n\nCaveat: the gate builds the working tree, not the commit. d60c91e8 staged only 3 of the 4 files its sed changed, so commits d60c91e8, 00ba30f6, dff739ea, 80abca47 and 44fed63d do not assemble on their own (undefined HDAE5000_Display_Clear in hdae5000_hd_driver.s). 0581e6ba adds the missing hunk; HEAD builds and matches byte for byte.",
+ "not_done": "- Titles: the difference between events 0x01C00015 and 0x01C00016 (RequestTitle15 vs RequestTitle16) is not established; RequestTitle16 has no caller.\n- Lyrics, unresolved details:\n  - (0x230882), a byte at the next event + delta size + 4;\n  - meta type 0x7E beyond its \"Chord : %s\" case;\n  - the tempo and measure lyric objects;\n  - the meaning of the sequencer variables sqbtof, sq_beadt and sqsrtc (named after the firmware only).\n- Naming-window handlers (FlsNamingCheck and relatives) still carry the older \"tile\" wording in their event-case comments. Only the false function-name comments were fixed.\n- File-top index RAM entries 0x230EC2-0x230EDA are now named, but 0x22A000 and 0x23952A were left as found (not verified).\n- Two honest admissions remain: HDAE5000_Palette_Button01 (1,024 B) and HDAE5000_CType_Table (256 B).\n- Remaining hdae5000 KNOWN-B (7,736 B) is mostly name-string tables whose only documentation is a descriptive name (ObjName, ClassName and ScreenName tables in init_data/utilities, HdaeUiName_* strings).\n- EVT_HD_INIT_PARAMS (0x01C00016) is wrong: it is a title-change request. Renaming it requires the technics-docs changes of the Event Code Freshness policy, which this lane may not touch.\n- symbols/* and technics-docs were not touched, as instructed.\n- Scratch (/tmp/claude-1000/lane-hdae: one-off comment editors, census JSONs, wsoffs.py) is disposable. Every quoted figure comes from a committed tool listed in notes/hdae-2026-09-25/README.md.",
+ "leads": "- maincpu:\n  - 0xFAA61D is labelled LcdOff_Epilogue but the firmware's own name table calls it UpdateScreen.\n  - InitializeRoot's FunctionProc table (0xEAFA6E, 0x160 entries) and its name table WidgetName_InitPtrTable (0xEAFFF2), and InitializeHama's (0xE1F0EC / Hama_ModeParam_Table 0xE1F240), are .incbin blobs. They can be typed as `.long <fn>` / `.long <name>` tables; hdae5000_symbolize_fn_tables.py shows the pairing, and entries 75-79 exist past the registered count 0x4B.\n  - SndParam_GetBlockPointer, SndParam_CopyPreset and ToneGen_FlashWriteAll use numeric 0x3D3000/0x3D3010/0x3D3110/0x3D3210/0x3D3400. These should become cross-ROM refs to custom_data CustomData_SndParamBanks.\n- technics-docs, stale claims now disproved by the code:\n  - hdae5000-filesystem.md vtable table: +0x0100 is SendEvent (not SetDisplayCell), +0x0124 ApPostEvent (not RegisterEventHandler), +0x050C GetNamingWindowID.\n  - boot-sequence.md Table B: +0x0100/0104/0108 are GetAdr_sqbtof/sq_beadt/sqsrtc, not \"init functions\"; the 0x0270 call is RegisterTitle(0x7F \"TT_HDDEXT\").\n  - memory-map: 0x23A19E is the lyric box object, not a secondary workspace pointer; 0x23A0AA holds the six 40-byte lyric lines, not directory entries.\n  - \"PPI port 0x016000nn\" is the proc class id.\n  - event-codes.md: 0x01C00014 = mode request (param 0x0180nnnn), 0x01C00015/16 = title requests (0x01A0nnnn; 0x7F TT_HDDEXT, 0xEE TT_MESAGE).\n- HD-AE5000 module scheme: object-table index = kind + module, with root = 0, Hama = 9, HD-AE5000 = 0x0A. Other expansion modules may register at other module numbers.\n- Lyric file format: a one-track SMF with \"TLhd\"/\"TLtr\" chunk ids. It could be documented for homebrew or MAME; the header checks (Lyrics_CheckFile) are dead code in this ROM."
+}

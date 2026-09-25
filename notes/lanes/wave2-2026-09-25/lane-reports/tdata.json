@@ -1,0 +1,70 @@
+{
+ "lane": "tdata",
+ "branch_head": "1ecf26b9982e60a81e95723cefa93edcf175dd79 (branch s2/tdata, worktree /home/fsanches/compartilhado/disasm-lanes/s2-tdata; base 3958235e; 15 commits; not pushed; working tree clean)",
+ "commits": [
+  {
+   "hash": "9333b1b9",
+   "summary": "FDC_ReadResultPhase: the `.byte bf 04 16 00 0c` is now `ldw (xsp+4),(0x0c00)`. This was the worklist's only code-suspect region. The comment \"no assembler mnemonic\" was false and is corrected."
+  },
+  {
+   "hash": "a248bb44",
+   "summary": "New scripts/analysis/lane_census_by_file.py: per-file CODE/KNOWN-A/KNOWN-B/UNKNOWN/FILLER/research totals for one roster lane. It uses lane_worklists.owner(), the same ownership rule the integrator applies."
+  },
+  {
+   "hash": "28c48df9",
+   "summary": "\"Section 7\" is two things. First, the 199x36 KN-5000 wordmark, byte-identical to v10/maincpu/images/BitmapKN5000Logo.bin and now an .incbin. Second, 0x82F000-0x82F2E8 (745 B, previously .byte) is 17 accessor routines, now instructions with symbolic lda operands. Added scripts/analysis/tdata_evidence_probes.py."
+  },
+  {
+   "hash": "43deafb0",
+   "summary": "Evidence headers with reader name and address for: FeatureDemo_FileMetadata/FileEntry layout, Feature_Bitmap_1..6, Wallpaper_0/1, the wallpaper palette trailers, and DemoSongPreset00..17 plus the pointer-table readers. Two \"no code reference, RGB tentative\" comments were disproven: they are kept and marked CORRECTED."
+  },
+  {
+   "hash": "0e52cad9",
+   "summary": "Help DB readers named precisely. Measured that each live DB decompresses to 200 pointers plus a string pool. Panel-memory consumer names updated (the old LABEL_* names no longer exist) and each of the 80 records gets its ROM/RAM addresses. Readers added to the Stylist pointer tables. The Default-page residue is identified as a stale copy of HelpDB_French bytes."
+  },
+  {
+   "hash": "c0a00f74",
+   "summary": "The \"preset data banks\" at 0x800000-0x82FFFF are 26 bitmaps (plus 6 and 28-32 already in ui_bitmaps.s). Each is byte-identical to a v10/maincpu/images/*.bin that the v7/v9/v10 program ROMs also carry. preset_banks.s goes from 12,051 lines to 621 (one .incbin per image). PresetBank_SecNN became SectionBankNN_<image> (sed map committed). The proven-false \"user data / fill legend / record grid\" reading was removed; its true byte facts are restated."
+  },
+  {
+   "hash": "8ccd1de0",
+   "summary": "Reader addresses added for fonts (GetCharHeight/GetCharDescent/CalcTotalWidth/DrawString_Impl), the bitmap/frame tables (DrawBitmap_Impl, DrawBitmapFast_Impl, DrawFrameSP_Impl, GetFrameSPSize) and icons (DrawIcons_Impl). Also reworded one phrase that the census misread as an admission."
+  },
+  {
+   "hash": "653db993",
+   "summary": "Bootloader: 115 numeric boot-alias operands became `<label> + 0x600000`, via new scripts/converters/tabledata_boot_alias_symbolize.py. Two regions typed: 0x9FA140 is Boot_LoadDiskData_JumpOffsets and 0x9FFEEE is BootInit_EnableFlag/BootInit_EntryTable. Program-ROM handoff constants named as .equ. Three call-site comments corrected because their targets disprove them (e.g. \"Boot_InitDisplay\" is really FDC_Reset)."
+  },
+  {
+   "hash": "11cf26e9",
+   "summary": "IVT `.equ BOOT_*_HANDLER` values are this ROM's own handlers plus 0x600000, not sub-CPU boot ROM addresses. Now written symbolically, with a CORRECTED note."
+  },
+  {
+   "hash": "19eb5e4a",
+   "summary": "Boot_LoadDiskData handlers renamed by the disk type that reaches them through the jump table (Program12, Table12, CustomData, HDAEPrg, ProgramPCK, TablePCK; sed map committed). The type-numbered handler comments were wrong and are rewritten."
+  },
+  {
+   "hash": "437b613e",
+   "summary": "demo_presets/README.md: the SLIDE4K size field is big-endian, not little-endian. The decoder settles it: SLIDE_Decompress_4K_Init at 0xEF3FAB."
+  },
+  {
+   "hash": "38936803",
+   "summary": "DemoSongPreset18's reader is DemoSongPreset_PointerTable[18] via Demo_ParseSlideHeader, not SubCPU_Send_Payload (which uses 0x3E0000 and 0x800000). CORRECTED note added."
+  },
+  {
+   "hash": "9d8b92c3",
+   "summary": "BootscreenSlideMarker renamed LZSS_SlideSignature: LZSS_ParseHeader (0x9FC9B3) compares against it via the pointer 0x00FFA150. Cross-referenced the jump table against the program ROM's HANDLE_UPDATE_OFFSETS, which has the same 8-way shape."
+  },
+  {
+   "hash": "9065cf15",
+   "summary": "Noted the current v10 names behind two stale LABEL_F6413A / LABEL_EF185A citations. The originals are kept."
+  },
+  {
+   "hash": "1ecf26b9",
+   "summary": "The probe now also prints the byte-difference figures quoted in the preset_banks.s header."
+  }
+ ],
+ "measured": "Command: `python3 scripts/analysis/data_range_census.py --images tabledata --json X.json`, then `python3 scripts/analysis/lane_census_by_file.py --json X.json --lane tdata`. Both runs used LLVM tlcs900_backend@4d7fa4f6b37c; the before run is at base 3958235e, the after run at 9065cf15/1ecf26b9.\n\nLane totals (the before row matches the worklist):\n- Before: CODE 18,676, KNOWN-A 622,985, KNOWN-B 728,462, UNKNOWN 0, FILLER 191,691, research 0\n- After: CODE 19,426, KNOWN-A 1,278,480, KNOWN-B 87,280, UNKNOWN 0, FILLER 176,628, research 136\n\nPer file, KNOWN-B before -> after (KNOWN-A after):\n- kn5000_table_data.s: 523,347 -> 50,776 (A 319,797 -> 792,368)\n- preset_banks.s: 65,569 -> 136 (A 190,778; CODE 0 -> 745; FILLER 20,012 -> 4,949, because the fills are now inside image incbins)\n- help_databases.s: 44,906 -> 0 (A 81,554)\n- panel_memory_presets.s: 53,920 -> 0 (A 54,080)\n- style_record_ptr_tables.s: 4,096 -> 0 (A 8,192)\n- ui_bitmaps.s: 36,476 -> 36,220 (A 106,890)\n- fonts.s: 144 -> 144\n- boot_fdc_driver.s: KNOWN-A 5 -> CODE (4,595 -> 4,600)\n- Boot code files: unchanged (CODE only).\n\nImage-wide strict share for tabledata (CODE + KNOWN-A + FILLER): 44.45% -> 75.02%.\n\nOther measures:\n- Numeric 0xFFxxxx boot-time code operands in lane files: 115 -> 0. `tabledata_boot_alias_symbolize.py` dry run now reports \"0 rewritten, 0 refused\". The two Program-ROM handoff constants are now named `.equ`s.\n- `symbolize_numeric_branches.py --image tabledata`: 0 convertible sites, VERIFY PASS.\n- Data-as-code markers in lane files are unchanged: 21 nop, 1 halt, 6 reti. All are genuine code (a NOP-patched debug stub, the Boot_ShortDelay loop, the NMI halt loop), so there is nothing to retire.\n\nProbes: `python3 scripts/analysis/tdata_evidence_probes.py` re-derives every header figure from original_ROMs/ and prints ALL PASS. It has 10 checks: sec07, accessors, sec10pad, fdemo, wallpaper, demo, helpdb, panelmem, stylerec, sections.",
+ "gate": "`make gate` (9 KN5000 images) passed, 9/9 IDENTICAL, before every commit that touched a source file. Runs are logged in /tmp/claude-1000/lane-tdata/gate1..13.log.\n\nPerturbation check: I changed `ldw (xsp+4),(0x0c00)` to `(0x0c01)` in boot_fdc_driver.s. The gate reported \"kn5000_table_data 1 BYTES DIFFER / FAIL: 1 target(s) differ\" and exited with make error. After restoring, the ROM was identical again.\n\nNo wsa1/ file was touched, so gate-wsa1 was not needed.\n\nComment preservation: `assert_comments_preserved.py` was run on every edit. Every reported drop or alteration is intended and itemised in its commit message:\n- 11,379 offset tags on the removed .byte rows\n- the proven-false preset-bank headers\n- stale LABEL_* names in the panel-memory consumers block\n- four \"Reserved entry N?\" lines\n- three wrong call-site names\n- nine handler-comment lines\n\nThe integrator's check, run with main's lane_worklists.py (23d1cb63), passes: `--verify-branch tdata 3958235e s2/tdata` gives VERIFY-BRANCH tdata PASS (17 paths changed).",
+ "not_done": "1. The remaining 87,280 B of KNOWN-B is almost all compact one-line .incbin tables: 176 IconPixels_NNN runs (~50 KB) and 87 ui_bitmaps.s bitmap/frame runs (~36 KB). Their block banners do name the readers (DrawIcons_Impl 0xFABF9B, DrawBitmap_Impl 0xFABC98, DrawFrameSP_Impl 0xFAC0E7). The census only credits a banner to objects within 6 lines of it, and per-entry comments would break the label+include compaction policy, so I left them. The icons also have no semantic names.\n\n2. The one research target left is SectionDirectory_Table (136 B). Nothing in any ROM we hold reads the directory or the table-data bitmap copies. The forms searched are listed in the header: 24- and 32-bit LE constants in v7/v9/v10, v142, IC19, HD-AE5000 and table data. What uses the directory is still open.\n\n3. The harness blocked writing notes/FINDINGS-tdata-2026-09-25.md, so the prose findings are only in this report and in the source headers. The committed probe script is the reproducible evidence.\n\n4. I left alone files I do not own:\n   - The repo CLAUDE.md \"ROM LAYOUT\" / \"Preset Data Destination\" dispute text.\n   - ../technics-docs (table-data-rom.md, feature-demo.md, ssf-presentation.md, memory-map). They still describe 0x800000-0x82FFFF as preset/user data, place the file index at 0x8CE01C without naming its readers, and call the wallpaper table \"SetWallPaper\".\n   - The symbols/table_data file, which needs a central regeneration after these renames.\n   - scripts/generators/generate_preset_banks.py, now a stale historical bootstrap (preset_banks.s says it is hand-maintained). I did not edit it because it is an existing unowned script.\n   - notes/table-data-bmp-lane-2026-09-02.md, which wrongly says the FTBMPs are shown during firmware update; they are Feature Demo slides.\n\n5. Boot_LoadDiskData: types 1 and 3 both write to 0x800000/0x900000. I did not work out how the chip is selected. I only recorded that Boot_Init skips types 3 and 8.\n\n6. The origin of the wallpaper palette entries 0xE0-0xEF is unresolved. ChangeWallPalette_Impl loads them via the RAM table 0x3F1E4, and I could not find what writes that table.\n\n7. The `jr __jrt_nop_9FB652` alias label in Boot_Init is left as is.",
+ "leads": "1. Disputed \"Preset Data Destination\" item (CLAUDE.md). SubCPU_Send_Payload's fallback (`xiz = 0x800000`) ships 0x800000 onward to the sub CPU. That region is the bitmap bank, so the 0xF7 bytes seen in the fallback are those bitmaps' transparent palette index. Worth confirming in MAME and recording in the dispute table.\n\n2. Misleading maincpu names for the lanes that own those files:\n   - Display_CopyAndRenderBitmaps (0xFC81EF), VoiceData_InitAndCopyParams (0xFC7DD8) and VoiceData_ExtendedParamSetup (0xFC7E82) are the Panel Memory factory loaders.\n   - AccWidget_DispatchTable (0xF6413A) is the Composer image copier.\n   - Seq_CopyResourcePtrs / Seq_InitVoiceStructures and the FDemo_* routines are feature-demo code.\n   - Str_No_0xB4C/B50 (0xEAAE62/66) is the wallpaper descriptor table: 5 records of 10 B {pixels, palette, 0}.\n\n3. The maincpu still has `.byte 0xbf,0x04,0x16,...` word mem-to-mem stores that llvm-mc now encodes as `ldw (xsp+4),(addr)`:\n   - v10/v9 sequencer/seq_step_routines.s:3042\n   - v7 file_io/medley.s:1563\n   - v7 storage/fdc_routines.s:541 (embedded)\n\n4. Icon naming. DrawIcons callers take the icon id from widget fields (+50, +46, +22), with constants 0x20, 0x8C and 0x90. Pairing NAKA widget descriptors with their icon ids would give evidence-based names for all 176 icons. For example, icon 32 is the GENERAL MIDI logo, used by GmOnOff.\n\n5. Census improvement (shared script): credit a banner to a contiguous run of one-line `label: .incbin/desc_entry` entries directly beneath it. About 86 KB of properly documented table-data runs are graded KNOWN-B only because of this.\n\n6. Boot_DetectDiskType pushes pointers into FileIdentifierStringsTable as `pushw 0xFF` / `pushw 0xA0xx` word pairs. Once the assembler supports hi/lo-word relocation operators, these could become symbolic.\n\n7. Rename preset_banks.s to something like section_bitmaps.s. It now holds no preset data; I left the name because the roster and other references use it.\n\n8. The program ROM's fixed jp stubs at 0xFFFED4-0xFFFEE3 (identical addresses in v7/v9/v10) deserve labels in maincpu. They are currently mislabelled Debug_SWI_JumpTable(_0x6)."
+}

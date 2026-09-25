@@ -1,0 +1,82 @@
+{
+ "lane": "audio",
+ "branch_head": "06aa2e94 (branch s2/audio in /home/fsanches/compartilhado/disasm-lanes/s2-audio, based on 3958235e; 18 commits, not pushed)",
+ "commits": [
+  {
+   "hash": "9602c19e",
+   "summary": "v7 sprintf_core: the 56,620-byte erased-flash tail (0xFF2154-0xFFFE7F) is now written as fill. It used to be ~990 `swi 7` lines carrying 68 v10 names that nothing referenced. Markers 998 -> 7. Also adds lane_audio_measure.py."
+  },
+  {
+   "hash": "d547f405",
+   "summary": "msp_factory_defaults (x3): header now cites the stream readers. AccompSeq_ParseSequenceData confirms the event lengths the tiling test had found (0x90=6, 0x91=8, 0xD1-D7=3, 0xC0=6), and event byte +1 is the tick. The false admission is reworded; note/velocity/length is stated as open."
+  },
+  {
+   "hash": "88fa7997",
+   "summary": "Sound data: reader evidence for all 16 descriptor tables (0xE023A0) in v10/v9/v7. The 'category' names are historical: the tables are bank/program <-> category/slot maps, voice-index maps, per-part last-slot tables and a program-change remap. sound_data_map_proof.py shows the pairs are exact inverses (368/368, 136/136, 128/128 x2). Brass/world-perc records retyped as `.byte prog,bank,0xff`. CORRECTED blocks added to the 15 C headers. Also adds v7_label_drift.py."
+  },
+  {
+   "hash": "6be7a37b",
+   "summary": "v7: dsp_config_sysex, audioinit, note_voice_mapping and sprintf_core ported from v10 by byte alignment (new port_v10_span_to_v7.py). Result: 95,213 B as instructions, 795 B `.byte`, 10 romslices retired. Every ported line was re-assembled against the v7 bytes."
+  },
+  {
+   "hash": "ac76cd4e",
+   "summary": "Port tool fix: comment blocks had come out reversed; the dsp span was regenerated. Spans are now configurable (--span). lane_audio_measure gets --before-rev."
+  },
+  {
+   "hash": "84f300f3",
+   "summary": "v7: tonegen_fileio_handlers + audio_control_engine ported (--span ace). 9 romslices retired (9,182 B)."
+  },
+  {
+   "hash": "67da248f",
+   "summary": "v10 audio_control_engine: MidiStream tail 0xFCCB1D-0xFCCFF4 reframed (new reframe_region.py). Its 4 jump tables are typed and their targets labelled. The 192-entry MIDI RX record-type table is identified. Markers 115 -> 58."
+  },
+  {
+   "hash": "5afd46ef",
+   "summary": "MidiStream SysMsg area reframed and the record-type handlers named. Both MidiStream reframes applied to v9 and v7."
+  },
+  {
+   "hash": "c41fd0e6",
+   "summary": "MidiSeqBuf/TempoRing handler tables typed. The handler group is reframed; the 6 record emitters are named MIDI_EmitRecord_B0/80/D0/D1/D2/D3 (v10/v9/v7)."
+  },
+  {
+   "hash": "c926501f",
+   "summary": "VoiceMode3_DispatchTable typed and its handlers labelled (v9 had it decoded as code). `cp (XIX+HL),imm` is now written as cpib_sri (8 sites)."
+  },
+  {
+   "hash": "6e020306",
+   "summary": "Chord tables (VoiceSlot_CheckAndApply_Data, 441 B) get a reader-derived header. The mask table is typed, Chord_EvalAltNoteBuffer reframed, the v9 region reframed, v7 labelled, and 23 v7 operands made symbolic."
+  },
+  {
+   "hash": "ca6dbf73",
+   "summary": "note_voice_mapping: UIState_ProcessKeyEvent .. HdaeRom_AltTableEntry9 reframed (x3). SndParam_ProcessEntry is kept as a `.set . + 1` because its only reference is a phantom pointer. Numeric branches v10 187 -> 77."
+  },
+  {
+   "hash": "dadaf228",
+   "summary": "audio_control_engine: five more misframed spans reframed (the R5 phantom-branch sites) in v10/v9/v7. Adds reframe_by_labels.sh."
+  },
+  {
+   "hash": "e3e8845d",
+   "summary": "dsp_config_sysex: DSPCfg_Data_ParamDispatch and UIStateEvt_* spans reframed (x3). v10 markers 31 -> 3, numeric branches 111 -> 24. Three v7 names pinned by other files are kept as .set."
+  },
+  {
+   "hash": "434af72b",
+   "summary": "note_voice_mapping: nine more spans reframed (x3). reframe_region.py gets a resynchronisation (sync) check."
+  },
+  {
+   "hash": "42ce73fd",
+   "summary": "tonegen_fileio_handlers: the DSPCfg_InitDispatch targets are reframed, so its nine calr/jr slots are symbolic (x3)."
+  },
+  {
+   "hash": "fc1f9326",
+   "summary": "7 embedded jump tables get headers quoting each image's own reader (add_jump_table_headers.py). The chord tables' unread 43-byte run is split out into its own object."
+  },
+  {
+   "hash": "06aa2e94",
+   "summary": "EditSwParam_TempoTable is code: eight `ldw wa,N / jr` slots (x3)."
+  }
+ ],
+ "measured": "Command, run on the lane base (3958235e) and on HEAD 06aa2e94, same toolchain tlcs900_backend@4d7fa4f6b37c:\n`python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json`\nthen `python3 scripts/analysis/lane_audio_measure.py --census after.json --before before.json --before-rev 3958235e` (committed; it aggregates over the 138 files the roster gives to `audio`).\n\nLANE TOTALS, base -> head:\n- CODE 299,118 -> 391,987\n- KNOWN-A 2,872 -> 128,037\n- KNOWN-B 236,341 -> 17,308\n- UNKNOWN 0 -> 0\n- Research targets 33,237 -> 5,620\n- Data-as-code markers 1,769 -> 232\n- Numeric branch operands 2,041 -> 657\n- v7 romslice bytes 13,726 -> 0\n\nPER FILE, base -> head:\n- sound_data.s (x3): KNOWN-A 320 -> 35,409 and KNOWN-B 35,117 -> 28 in each version.\n- msp_factory_defaults.s (x3): research 5,376 -> 0 (now KNOWN-A).\n- brass / world_perc (x3): markers 23 / 29 -> 0.\n  - World-perc research 30 -> 512 per version. This rise is deliberate: its pointer table now says \"No reader found\".\n- v7 note_voice_mapping: CODE 9,347 -> 68,248; KNOWN-B 59,714 -> 424; research 3,680 -> 345; markers 94 -> 37; numeric 411 -> 48.\n- v7 dsp_config_sysex: CODE 1,869 -> 14,162; KNOWN-B 15,194 -> 63; research 319 -> 49; romslice 3,889 -> 0.\n- v7 audio_control_engine: CODE 15,700 -> 26,151; KNOWN-B 13,952 -> 3,647; research 7,299 -> 718; romslice 9,182 -> 0.\n  - Markers 17 -> 21, because v10's still-misframed lines came across with the port.\n- v7 audioinit: CODE 225 -> 5,978; KNOWN-B 4,152 -> 213.\n  - Research 0 -> 213: the v7-only byte runs now sit between code.\n- v7 sprintf_core: markers 998 -> 1; KNOWN-B 4,536 -> 14.\n- v10 audio_control_engine: markers 115 -> 37; numeric 261 -> 149; research 1,279 -> 731.\n- v9 audio_control_engine: markers 127 -> 41; numeric 285 -> 161.\n- v10 note_voice_mapping: markers 65 -> 37; numeric 187 -> 51; research 888 -> 291.\n- v9 note_voice_mapping: markers 94 -> 39; numeric 198 -> 61.\n- v10 dsp_config_sysex: markers 31 -> 3; numeric 111 -> 24; research 334 -> 39.\n- v9 dsp_config_sysex: markers 36 -> 5; numeric 125 -> 28.\n- tonegen (x3): numeric 29 -> 5 (v7 57 -> 4).\n\nv7 LABEL DRIFT (scripts/analysis/v7_label_drift.py):\n- Before: 0 of 1,544 locatable labels in dsp / audioinit / note_voice_mapping / sprintf were aligned; all sat +0x41A above their code.\n- After: 1,727 are aligned. 34 stay drifted because other v7 files pin them, and each is annotated in place.\n\nsound_data_map_proof.py (with --selftest): grid <-> bank-map round trips 368/368 and 136/136, voice-index lists 128/128 twice, identical on v10/v9/v7.",
+ "gate": "`make gate` passed before every commit: every KNOWN-5000 image assembles, and all 9 ROMs are byte-identical.\n\n- Every reframe and port was also checked by rebuilding the affected image and comparing it with the dump.\n- symbolize_numeric_branches.py --verify passed on every file it rewrote.\n- Perturbation test: I added one `.byte 0xfe` after the `ret` at v7 0xFF2154 (sprintf erased-flash edit). The gate went red with \"kn5000_v7_program 1 BYTES DIFFER\" and \"0xFF2154 0xFF 0xFE\". I then restored the file and the gate passed.\n- make gate-wsa1 was not needed: no file under wsa1/ was touched.\n- Only lane-owned files were edited, plus new scripts under scripts/. `git diff --name-status 3958235e..HEAD -- scripts/` shows additions only.\n\nComments, checked with assert_comments_preserved.py --base 3958235e over all changed .s files: 1,857 comments -> 4,019. 38 lines were dropped on purpose, each explained in its commit message:\n- Proven false: sound_data \"one per category\" x2, \"end-of-descriptor\" and \"per-category includes\"; brass/world-perc \"35/33 variable-length entries\"; two v7 sprintf decodes that unidasm contradicts (0xFF13F5 is `add wa,(xsp+0x14)`, 0xFF1B1C is `pushw (xsp+6)`).\n- Reworded: the MSP retraction sentence (it was an admission about a dead claim, not about the data).\n- Obsolete block markers: \"=== end v7 block ===\" x3 and \"First part replaced by .incbin\".",
+ "not_done": "- VoiceMode_ParamConfigTables (~1.6 KB of KNOWN-B in each version): its many sub-tables are reached only through positional .set names. Each needs its reader traced; I did not start this.\n- Meanings I could not pin down, stated as open in the headers:\n  - MSP 0x90/0x91 event bytes +2..+5/+7 (note, velocity, length?). The consumer is AccompSeq_ProcessNoteOn6/8.\n  - What the four values of RAM 0xFD50 bits 0-1 select (three MIDI-mode tables).\n  - What each VoiceMode3 event index stands for.\n  - Who reads the chord tables' 43-byte run at +0x15E.\n  - Who reads the world-perc table (descriptor slot +0x2C). Nothing found indexes it; the searches tried are listed in its header.\n- Two note_voice_mapping spans do not tile under unidasm from their labels and were left as they are: SendPartDataBlock_Return5_Skip9.._Data5 and TmFlashWrite_ValidateParams..TmFlashWrite_Block2. They probably contain data.\n- v9 AudioInit_VoiceRoutingTable (248 B): the backend cannot encode `or/and (nnnn),n` and `res/set n,(XWA)`.\n- About 15 instructions in reframed spans stay as `.byte` with unidasm's text as a comment. The backend or llvm-mc cannot spell them, e.g. `or iz,(xbc+wa)` and ldir with an 0x85 prefix.\n- Routines around the chord code keep misleading names (InitPartAllocState_*, VoiceSlot_SetPitchParams_*, *_Helper1-8 in DSPCfg_InitDispatch). Renaming them needs their callers checked.\n- SOUND_DATA_* labels: kept (headers say they are historical), because docs, CLAUDE.md and other files cite them. SOUND_DATA_FLUTE + FLUTE_EXTRA cannot be merged into one table without a fix in sequencer_engine.s and the Makefile.\n- The 19 romslice .bin files my ports made unreferenced are left for their owner to delete.\n- The census still grades Brass/WorldPerc per-record labels (3 B each) as KNOWN-B individually. The census only credits a header sitting directly above a label, so the table header does not cover them.\n- v7 audioinit: ~200 B of v7-only bytes between ported code stay `.byte`. They now show as embedded-in-code research (213 B).\n- v7 audio_control_engine carries 21 markers inherited from lines v10 still misframes. They port mechanically once v10 is fixed.\n- The port tool's dsp span (6be7a37b/ac76cd4e) can only be reproduced from the pre-port tree 88fa7997 with the ac76cd4e version of the tool. Its generated files were committed, not regenerated, after the last tool change.\n- The findings prose was not written to notes/FINDINGS-audio-*.md: the harness refused a report .md. The v7 drift measurement and its explanation live in the docstring of scripts/analysis/v7_label_drift.py.",
+ "leads": "1. v7 label drift outside this lane. From SoundParam_NotifyChange (a romslice in kn5000_v7_program.s) through midi/midi_serial_routines.s (80 labels) and midi/midi_dispatch_handlers.s (236), plus audio/sndparam_routines.s (85), every v7 label is +0x41A above its code. In the same zone:\n   - boot/screen_group_dispatch.s actually holds v10 dsp-B code.\n   - 22 `.set` aliases in kn5000_v7_program.s (UIStateEvt_*, AudioInit_*) are 0x41A too high.\n   - Fix: extend `SPANS` in scripts/converters/port_v10_span_to_v7.py; v7_label_drift.py measures the result.\n2. 49 v7 names are pinned at drifted addresses by other v7 files (e.g. v7 has 64 `call SysEx_ApplyVoiceParam_49` that really call v10's routine 0xFDAC20+0x7D1). Each place carries a \"v10 name for this address\" / \"kept at this address only for\" comment. The owners of those callers should rename the calls to the v10 name at that address.\n3. sequencer_engine.s SoundData_HandlerDispatch: `.byte 0x1d,0xa9,0x04` + `.long SOUND_DATA_FLUTE_EXTRA` is really `call PartParam_Handler_03 / jrl AppEvent_PopIzSkip2Ret` at v10 0xF451D6. Once fixed, FLUTE and FLUTE_EXTRA become one 7,296-byte table.\n4. boot/interrupt_vector_trampolines.s (v9/v10), bytes 0xFCCFF4-0xFCD200: this is entries 61-191 of the MIDI RX record-type table, spelled there as instructions. The header now at 0xFCCF01 gives the layout.\n5. ui_widgets/widget_dispatch.s:6610 (v10/v9): `.long SndParam_ProcessEntry` is 4 bytes of a byte table, not a pointer. The same kind of pseudo-pointer appears in v7 widget_dispatch (`.long Audio_CheckSubsystemReady + 31` and others, pinning drifted names).\n6. v10 ui/cpanel_routines.s:1368 defines a label named `c:`, which shadows register c for tools.\n7. Backend / llvm-mc: the disassembler does not produce `cp (XIX+HL),imm` (the assembler accepts cpib_sri), `or iz,(xbc+wa)`, or 0x85-prefixed ldir. The symboliser's R3 (absurd-neighbourhood) refusals still number 177 in v10 audio_control_engine, mostly around the ExtData_*Bytecode* regions; bytecode-as-data needs research there.\n8. Reusable tools this lane added:\n   - reframe_region.py: sync check, isolated re-assembly per instruction, --data long/short/byte, --mid-label-as-set.\n   - reframe_by_labels.sh: applies one reframe across v10/v9/v7.\n   - label_table_targets.py and add_jump_table_headers.py.\n   - Together they handle the phantom-branch (R5) clusters of any lane.\n9. Semantic follow-ups inside the lane: VoiceMode_ParamConfigTables; the meaning of 0xFD50; the MSP note operands via AccompSeq_ProcessNoteOn6/8; real names for the chord routines; the ORCH_PAD octave byte's use at RAM 0x0FAC (MidiNoteOn_NonDrumLookupA)."
+}

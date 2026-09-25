@@ -1,0 +1,54 @@
+RECONCILIATION
+  image              dump     census      delta  inert
+  v10             2097152    2097152          0  yes
+  v9              2097152    2097152          0  yes
+  v7              2097152    2097152          0  yes
+  v142             196608     196608          0  yes
+  subboot          131072     131072          0  yes
+  tabledata       2097152    2097152          0  yes
+  customdata      1048576    1048576          0  yes
+  hdae5000         524288     524288          0  yes
+  prom_a           524288     524288          0  yes
+  prom_b           524288     524288          0  yes
+  prom_c           524288     524288          0  yes
+  prom_d           524288     524288          0  yes
+  TOTAL          12386304   12386304          0
+  every byte of every image is in exactly one bucket.
+
+PER-IMAGE CENSUS (bytes)
+  image             CODE   KNOWN-A   KNOWN-B   UNKNOWN    FILLER
+  v10             995508    917658    108608     16943     58435
+  v9              995358    917199    109203     16943     58449
+  v7              985895    915445    114755     20662     60395
+  v142            128860     65969      1687        44        48
+  subboot           3604       870        35         0    126563
+  tabledata        19426   1800585     95143         0    181998
+  customdata           0    660657         0         0    387919
+  hdae5000        112324    373890      7736         0     30338
+  prom_a          324950    107566     24023      1355     66394
+  prom_b          204396    163160     85108       620     71004
+  prom_c          207511    177152     10409         0    129216
+  prom_d               0    329425      1096         0    193767
+  --------------------------------------------------------------
+  TOTAL          3977832   6429576    557803     56567   1364526
+
+  per-image share explained by the raw census (before the false-positive correction):
+    v10            2080209 /   2097152 =  99.19%   (strict A-only:  94.01%)
+    v9             2080209 /   2097152 =  99.19%   (strict A-only:  93.98%)
+    v7             2076490 /   2097152 =  99.01%   (strict A-only:  93.54%)
+    v142            196564 /    196608 =  99.98%   (strict A-only:  99.12%)
+    subboot         131072 /    131072 = 100.00%   (strict A-only:  99.97%)
+    tabledata      2097152 /   2097152 = 100.00%   (strict A-only:  95.46%)
+    customdata     1048576 /   1048576 = 100.00%   (strict A-only: 100.00%)
+    hdae5000        524288 /    524288 = 100.00%   (strict A-only:  98.52%)
+    prom_a          522933 /    524288 =  99.74%   (strict A-only:  95.16%)
+    prom_b          523668 /    524288 =  99.88%   (strict A-only:  83.65%)
+    prom_c          524288 /    524288 = 100.00%   (strict A-only:  98.01%)
+    prom_d          524288 /    524288 = 100.00%   (strict A-only:  99.79%)
+  KNOWN regions >=   8192 B:   103 regions,   3014878 B (43.1% of the explained figure)
+  KNOWN regions >=  32768 B:    26 regions,   1703154 B (24.4% of the explained figure)
+
+  explained (CODE + KNOWN-A/B + FILLER) : 12329737 / 12386304 = 99.54%
+  strict (CODE + KNOWN-A + FILLER)      : 11771934 / 12386304 = 95.04%
+
+LARGEST PURPOSE-UNKNOWN RANGES

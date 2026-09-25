@@ -1,0 +1,74 @@
+{
+ "lane": "nakarest",
+ "branch_head": "657700b7 (s2/nakarest, worktree /home/fsanches/compartilhado/disasm-lanes/s2-nakarest). The working tree is clean and nothing has been pushed.",
+ "commits": [
+  {
+   "hash": "05a04f71",
+   "summary": "Typed the 8 UserBitmap bitmaps in naka_technichord_strings as uint8_t[h][stride] in v10/v9/v7: Accita16/Accger16 (120x95), SomeArrows (294x6), DrawbarNumberedSlider_1..3 (22x222; brown/white/black handles), Technics logo (312x45), KN-5000 logo (199x36). Retired 250 false pointers and 3 pixel-value linker symbols. Includes the gate perturbation demo."
+  },
+  {
+   "hash": "86d24f94",
+   "summary": "'Bitmap_DigitD' turned out to be the welcome-screen script: 7 bottom-up 1-bpp 16x17 glyphs (C I L N O R U), two 12-byte step tables (186 and 191 steps; region code 2 gives IN COLOR, other regions IN COLOUR), a clear rectangle, a 13-entry op jump-offset table and PsMixer_ControlProcTable."
+  },
+  {
+   "hash": "63913d6c",
+   "summary": "style_bitmaps: typed the 4 FADE IN/OUT bitmaps, StyleSong_MasterTable (1000 x {title, id}) and StyleSong_Titles (char[1000][34]). Retired 130 labels that cut across the titles, and turned 6 false pointers in 3 of this lane's C files back into numbers."
+  },
+  {
+   "hash": "35a7f5b7",
+   "summary": "Re-cut the NAKA screen .s slices at registered objects (every RegObjTabl/RegObjTable table read from the ROM). Found that the NAKA class system describes itself: the Class tables name every field. Corrected the proven-false 'Screen group 7 / entry length' header in control_menu_screens.s."
+  },
+  {
+   "hash": "8f65aa34",
+   "summary": "Compact per-slice headers. Every object now has an extent, and records carry their texts. Honesty fix: an admission that a line wrap had split (so the census missed it) now sits on one line."
+  },
+  {
+   "hash": "8e1f5568",
+   "summary": "Decoded the IvMesage message catalog (80 records x 14 B, 6 window ids, 59 six-language string tables). Added reader chains (symbol, positional .set name, literal and data word, plus one hop back) for pieces that nothing registers."
+  },
+  {
+   "hash": "840ad8ee",
+   "summary": "Typed 3,197 of 3,234 widget records in 14 C blobs as local naka_cls_<Class>_t structs, using the firmware's own field names. SELF/NAKA_ADDR are kept on 4-byte fields; 685 symbolic values per version that fall off the class layout are now numbers."
+  },
+  {
+   "hash": "82c7ee61",
+   "summary": "Typed 151 class definitions (plus 1 split record) as naka_classdef_t {proc, parent, allsize, selfsize, name, propdata, propname}. The old naka_dispatch_t typing sat 4 bytes off these records."
+  },
+  {
+   "hash": "7e50f5fa",
+   "summary": "Evidence headers for style_ui_params.s (ScreenData bytecode; the pointer table is 4 x 19 entries, read by the Scoop routines). Found that DbgStr_NakaProcName_Table is entries 1-45 of the name table in ApFunction slot 0x427."
+  },
+  {
+   "hash": "ff581243",
+   "summary": "Decoded and typed the MstStyle browser tree in C: root of 10 groups, 250 styles, 250 variation tables and 1000 titles. The 1,521 objects tile 48,340 B exactly."
+  },
+  {
+   "hash": "339ef062",
+   "summary": "Mapped the work-RAM initial image (Boot_InitWorkRAM's two ldir copies, read from each version's ROM). Identified the wallpaper palettes and GetWallPaletteRGB as their reader. Fixed lowercasing of hex digits inside symbol names in comments, and a full --apply run that had been stopping silently."
+  },
+  {
+   "hash": "7e0c7218",
+   "summary": "The C model now accepts any *_t blob struct, so control_menu_header.c's 9 records are typed as their classes."
+  },
+  {
+   "hash": "05ef039a",
+   "summary": "Unregistered stretches are now cut at every offset the code references, and text pieces that start with a pointer table are described as such."
+  },
+  {
+   "hash": "70e7c2ee",
+   "summary": "Typed 12 palettes in the C (DefaultPalette via InitPaletteRGB, plus 11 wallpaper palettes) as uint8_t[256][4]."
+  },
+  {
+   "hash": "7c8f5538",
+   "summary": "Typed the IvMesage catalog in the C as msg_record_t[81] {kind, code, header, text} plus the 6 window ids."
+  },
+  {
+   "hash": "657700b7",
+   "summary": "--check-classes now prints the record-spacing figures the headers quote (4 of 3340; 1747), so they can be re-derived."
+  }
+ ],
+ "measured": "Command: `python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json <scratch>.json`, aggregated over this lane's files (roster precedence) by `python3 scripts/analysis/lane_nakarest_measure.py BEFORE.json AFTER.json [--per-file]`. BEFORE was measured at the lane base 3958235e, AFTER at 7c8f5538 (657700b7 only adds report output to a script). Toolchain: tlcs900_backend@4d7fa4f6b37c.\n\nv10+v9+v7 totals:\n- CODE: 0 before, 0 after.\n- KNOWN-A: 399,894 before, 1,318,769 after.\n- KNOWN-B: 1,035,369 before, 68,493 after.\n- UNKNOWN: 0 before, 48,001 after.\n- FILLER: 0 before, 0 after.\n- Research targets: 0 before, 113,986 after.\n\nThe research figure includes UNKNOWN. It is data the old names were hiding: code-read constant pools, RAM-image blocks and unreferenced tables. Each piece now carries an admission line plus its reader list, or says that no reference was found.\n\nPer version:\n- v10: A 133,298 \u2192 439,691; B 345,137 \u2192 23,763; U 0 \u2192 14,981; research 0 \u2192 37,908.\n- v9: identical to v10.\n- v7: A 439,387; B 20,967; U 18,039; research 38,170.\n\nLargest per-file B\u2192A moves in v10: technichord_string_data.s B 111,742 \u2192 2,264 (A 107,135); style_bitmaps.s B 101,962 \u2192 1,342 (A 98,636); disk_menu_file_io_screens.s B 30,872 \u2192 100 (A 30,670); widget_names_charmap.s B 22,158 \u2192 954.\n\nNumeric branch operands and data-as-code markers: 0 before and after. The lane's files contain no code, so the branch symboliser had nothing to do.\n\nC typing done (bytes identical, recompiled by the tools and gated):\n- 3,197 of 3,234 widget records as naka_cls_<Class>_t, and 151 whole class definitions plus 1 split one.\n- 12 8-bpp bitmaps, 7 1-bpp glyphs, 2 welcome step tables.\n- The 1000-title list, the MstStyle browser (1,521 objects), 12 palettes, and the message catalog (81 records).\n\nClass-system invariants (`nakarest_objtab_map.py <v> --check-classes`, v10/v9/v7): 292 classes in 10 tables, 0 inconsistent, 291 of 291 allsize relations hold, 3,340 records all resolve to a class, 0 overlap.",
+ "gate": "`make gate` (KN5000) passed before every commit: all 9 images IDENTICAL, run in the worktree. Each C-typing tool also recompiles the blob and compares it before writing.\n\nPerturbation demo (commit 05a04f71): I changed row 10, column 6 of Bitmap_Technics_Logo from 0xF7 to 0x5A. The gate reported \"kn5000_v10_program 1 BYTES DIFFER\" at 0xE90BDC (= 0xE8FFA6 + 10*312 + 6). After restoring the byte it passed.\n\nComment gates:\n- `assert_comments_preserved.py --base 3958235e` passes on every touched .s file.\n- The only .s lines removed are the 14 proven-false \"Screen Group 7 / Entry length\" lines per version in control_menu_screens.s. The claim and the evidence are recorded in the commit and in the replacement header.\n- `nakarest_assert_c_comments_preserved.py` passes. It is told to ignore (--allow) only the generator's per-member tags: `zero padding`, `N pointers`, `NAKA_TYPE_*`, `0xNN`, and the `GROUP: Name` / `w0: TYPE_*` tags in naka_sequencer_exit.c. Each allow-list is written in the commit that uses it.\n\nThe branch edits only files this lane owns (checked with a roster script over `git diff --name-only 3958235e`: 157 files, 0 unowned). The 7 scripts are all new files with lane-prefixed names; no shared script, Makefile, symbols/ file or naka_types.h was touched.",
+ "not_done": "1. Research left: 37,908 B in v10 (113,986 B over three versions). The biggest pieces:\n   - disk_warning_strings.s: DiskWarning_ConfirmStrings, Str_No and Data_SoundEditorCharsLayout, about 9.7 KB. These are code-read constant pools reached through hundreds of positional .set names. They are now cut per reader, but most object layouts are not derived.\n   - widget_names_charmap.s: NakaInst_ara6_fnt (3,240 B). Font file names chara1..6.fnt plus a pointer table of frame/bitmap resource names (MixerTab, EditDD, Round1a...). No reader of that pointer table was found.\n   - sequencer_channel_containers.s: about 7.7 KB inside the work-RAM image. Most of its pieces have no literal RAM reader.\n   - style_bitmaps.s head: WidgetStyleDataTable (1,856 B), the *_EnumTable blocks, NakaInst_IT_Off.\n   - extension_device_screens.s: SoundParam_EncoderMappingData and friends.\n   - technichord_string_data.s: the special-cased ERROR 24 variants (MsgText_Lang1/2/3) and the MixerPartTable pieces.\n\n2. C typing not done:\n   - 37 widget records whose boundary falls inside a member carrying a SELF target or a straddling symbolic value. The tool lists them by name.\n   - naka_master_style.c: its records are an array member (`.w = {...}`) the C model cannot parse. The 27 whole InitializeToshi class definitions there are untyped.\n   - The ResName / ApFunction name tables and the resource-name tables are still the generator's uint32/char members. They have SELF pointers but no named table types.\n\n3. No labels were renamed. Misleading names that other lanes' files reference were left alone and are only explained in the headers:\n   - NakaInst_* on name strings\n   - StyleGroup_LatinDance_Table (it is root+4)\n   - Naka_DrawbarReg_Table (it is the wallpaper palette table)\n   - TechniChord_StyleDispatch_Table (it is entries 10-28 of ResName slot 0x30D)\n   - Bitmap_Digit1 / Bitmap_DigitD (they are the letters I and U)\n   - Bitmap_SomeArrows (BitmapDrawsw)\n   - NAKA_PerfReg_Container_Root (it is the InitializeNaka tree)\n   - DbgStr_* (ApFunction names)\n\n4. Numeric `.long 0x00EAxxxx` pointer tables written directly in the .s (EmbeddedPtrTable_* in disk_menu_file_io_screens.s and technichord_part_settings.s) are still numeric.\n\n5. Deliberately left in scratch: the PNG renders (regenerate with `nakarest_retype.py --render DIR`), the census JSONs (regenerable) and an exploration helper that produced no quoted figure.\n\n6. The harness would not let me write notes/FINDINGS-nakarest-*.md, so the class-system write-up lives in the docstring of scripts/analysis/nakarest_objtab_map.py (\"THE CLASS SYSTEM\").",
+ "leads": "For lane nakabig (naka_types.h):\n- Every NAKA record's first word is a CLASS ID, 0x016S_KKKK: entry KKKK of the Class table in registry slot 0x16S (ClassProc does `srl 16; and 0xFFF`, and `*24`).\n- The 24-byte class definitions name every field: proc, parent, allsize, selfsize, name, propdata, propname. There are 292 classes; `python3 scripts/analysis/nakarest_objtab_map.py v10 --classes` prints each one's fields at their offsets.\n- naka_dispatch_t is a class definition shifted by 4 bytes: its \"header\" is the parent id and proc_addr is the NEXT class's procedure. NAKA_TYPE_CONTAINER 0x34 is class TtlScreen, GROUP 0x31 is Box, LABEL 0x2B is Label, 0x2E is Line.\n- `nakarest_type_records.py` could type naka_widget_descriptors / tables_1 / tables_2 the same way.\n\nWork-RAM image (all lanes): Boot_InitWorkRAM copies ROM 0xEED8C8.. to RAM 0x3D524 (0x219E B) and 0xEEFA66.. to RAM 0xE35E (0x95B B; in v7 0x931 B to 0xE2C2). `nakarest_refs.py ram_mirror()` maps a ROM range to its RAM copy; RAM-literal readers of that copy are readers of the ROM bytes.\n\nFor the ui/uimisc lanes (ui/drawbar_panel_ui.s):\n- AcWelcomScreen_RenderBytecode and the op handlers after it are misframed code. The handler offsets are 0, 896, 15, 162, 179, 208, 237, 293, 321, 386, 860, 265, 386.\n- 8 of the 11 PsMixer_ControlProcTable targets (e.g. 0xF80B7D, 0xF80B80) are unlabelled entry points inside AudioCtrl_DataBlock_*.\n- The 2nd and 3rd Bitmap_QueryProperties3x handlers (0xF7B51E, 0xF7B54B) are unreferenced. The comment there says \"(in Table Data ROM)\", which is wrong.\n\nsepaout_config.bin (ui/sepaout_config.s): the C blob runs 4 bytes into the ApFunction name table of slot 0x427. Its last word is entry 0, which points at \"PartSelLangCheck\".\n\nLabel cleanup (a sed across lanes, for the integrator): shared/positional_labels.s .set names such as Bitmap_DigitD_0x22/0x8DA/0x11CE/0x11D6/0x11F0, NakaInst_TOTAL_0x34 and StyleGroup_LatinWorld_PairTable_0x2FA could become the semantic names these headers use: WelcomeScript_Steps_A/B, WelcomeScreen_ClearRect, WelcomeScript_OpJumpOffsets, PsMixer_ControlProcTable, WelcomeGlyph_C, StyleBrowser_Groups.\n\nLane ext: extension_data.s at my base still has the false \"Screen group 7, index N\" headers for elements 9-12 of Viewable slot 0xF4 (they are Labels under the Window \"TEST1CP\").\n\nData observations:\n- The 1000 style titles exist twice: StyleSong_Titles, and the MstStyle browser's variation titles.\n- The Italian slot of the disk-error messages holds only \"ERROR NN\".\n- The palette channel order was not traced. Tracing SetPaletteRGB into the VGA DAC write would settle it.\n\nTools for the next wave:\n- `nakarest_refs.py <v> LO HI` lists readers of an address range.\n- `nakarest_objtab_map.py <v> --range/--at` shows what the registered tables point at.\n- `nakarest_retype.py --apply` regenerates every header idempotently, including the hand notes (PIECE_NOTES, LABEL_NOTES, TEXT_FIXES)."
+}

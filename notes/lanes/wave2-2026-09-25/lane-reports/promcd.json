@@ -1,0 +1,114 @@
+{
+ "lane": "promcd",
+ "branch_head": "9f1ca41d349d2887cbeac5cc9ebf9e11285d9396",
+ "commits": [
+  {
+   "hash": "f9b0c3ef",
+   "summary": "lanes/promcd: per-file census + data-as-code marker measurement for one lane (notes/lanes/promcd-2026-09-25/lane_measure.py)"
+  },
+  {
+   "hash": "50319db8",
+   "summary": "prom_c preset bank: cites its six prom_a readers (remote link reads), takes back the \"no reader found\" claim, adds per-record combination headers"
+  },
+  {
+   "hash": "7560ad13",
+   "summary": "prom_d: the twelve 1024-entry index maps, what the index selects, their readers, exact inverses of the catalogue"
+  },
+  {
+   "hash": "f430c276",
+   "summary": "prom_d tone records: names the wave each of the 451 element blocks plays (902 headers)"
+  },
+  {
+   "hash": "2b4447ad",
+   "summary": "prom_d: names the waves that reach each 14-byte descriptor (+0x30, +0x38)"
+  },
+  {
+   "hash": "d980cac5",
+   "summary": "prom_d drum kits: the per-note map is a selector pair; names the instrument on every note of 18 kits"
+  },
+  {
+   "hash": "5c6fda47",
+   "summary": "prom_d: corrects the remaining \"no reader\" / \"none identified\" claims (+0x18/+0x20, 13 directory slots, PercInst)"
+  },
+  {
+   "hash": "73eb5b77",
+   "summary": "prom_d: evidence headers for the last small objects; drawbar reader"
+  },
+  {
+   "hash": "750f899c",
+   "summary": "prom_c Curve_FE13D6: fixes its length at 101 entries from the reader's clamp"
+  },
+  {
+   "hash": "a4c46b4b",
+   "summary": "prom_c: every ROM-address operand and data pointer is now symbolic (scripts/converters/symbolize_rom_operands.py; 2,668 operands, 55 new labels)"
+  },
+  {
+   "hash": "c3409820",
+   "summary": "prom_c literal pools: labels every element by its value/text; readers listed from the operands"
+  },
+  {
+   "hash": "4809b2c1",
+   "summary": "prom_c P7 pool: names every directory record, field array and stream by DSP effect; 24 unreferenced streams stated as such"
+  },
+  {
+   "hash": "5cc6b7f4",
+   "summary": "prom_c P7 value tables: layout from P7Unit_SendValueTable; takes back \"NOT established\""
+  },
+  {
+   "hash": "32e48bf2",
+   "summary": "prom_c P7 value tables: the two inner entry points' extent is 109 bytes"
+  },
+  {
+   "hash": "f3133afd",
+   "summary": "prom_c pools: element headers say what the element is and who reads it; corrects 53 false \"no loading site located\""
+  },
+  {
+   "hash": "f66814e5",
+   "summary": "prom_c PoolDir_RecordForUnitProgram: a program is a named DSP effect (56-record bijection with prom_b EffectNames)"
+  },
+  {
+   "hash": "69a5b49b",
+   "summary": "prom_c: the 17 numeric branches into the shared kernel/dsp now use labels"
+  },
+  {
+   "hash": "247b03cc",
+   "summary": "prom_c: converts the ten branches the symboliser's R3/R6 guards refused, after review"
+  },
+  {
+   "hash": "662d1b7d",
+   "summary": "prom_c touch_eq_mixer: file header no longer calls the fp pool undecoded"
+  },
+  {
+   "hash": "59ee8913",
+   "summary": "prom_c Voice_KeyBend_Curve_0: traces the index; the wrapped rows 115..127 ARE reached"
+  },
+  {
+   "hash": "fba30fd7",
+   "summary": "prom_c: names five part-parameter routines from their operands (rename_promcd_param_appliers.sed)"
+  },
+  {
+   "hash": "f5b5ff7c",
+   "summary": "lanes/promcd: README lists every script this lane committed and its question"
+  },
+  {
+   "hash": "de081cf3",
+   "summary": "lanes/promcd: README table fix and a more exact --apply sentence"
+  },
+  {
+   "hash": "62f60965",
+   "summary": "prom_c mathlib: Double_Sin/Cos/Tan/Exp/Log/Pow/Abs/MakeInfinity named from the Cody & Waite coefficient sets (29 within 1 ulp); corrects two claims shown false"
+  },
+  {
+   "hash": "cd501dbc",
+   "summary": "prom_c fp pools: the double-library call each constant is pushed for, and its stack depth (115 headers)"
+  },
+  {
+   "hash": "9f1ca41d",
+   "summary": "prom_c P7: decodes the descriptor type letters {b,w,v,s,h,c,B} and the field-descriptor +5 byte from their readers; sub_FA2784 -> P7Unit_SendModulatedField, sub_FA294F -> P7Field_ModulateClamped; corrects 14 lines shown false"
+  }
+ ],
+ "measured": "CENSUS of the lane's files (wsa1/prom_c/*, wsa1/prom_d/*, wsa1/kernel/*, wsa1/dsp/*). Command: `python3 scripts/analysis/data_range_census.py --images prom_a,prom_c,prom_d --json X.json` then `python3 notes/lanes/promcd-2026-09-25/lane_measure.py --lane promcd BEFORE.json AFTER.json`.\nBEFORE (main @3958235e): CODE 209,890 / KNOWN-A 317,666 / KNOWN-B 199,831 / UNKNOWN 620 / FILLER 322,983 / research targets 32,835.\nAFTER (s2/promcd @9f1ca41d): CODE 209,890 / KNOWN-A 506,577 / KNOWN-B 11,540 / UNKNOWN 0 / FILLER 322,983 / research targets 10,719.\nPer-file deltas (KNOWN-A / KNOWN-B / UNKNOWN / research): preset_bank.s +88,736 / -88,736 / 0 / 0; tone_database_records.s +56,141 / -56,141 / 0 / -217; tone_database_aux.s +37,433 / -37,433 / 0 / -25,002; p7_stream_pool.s +3,693 / -3,275 / -418 / +5,107 (5,897 of it is now the stated, true admission on 24 unreferenced streams); tone_database_directory.s +1,216 / -1,216 / 0 / -192; touch_eq_mixer.s +954 / -954 / 0 / -1,002; mathlib.s +536 / -536 / 0 / -608 (part of this comes from splitting the pools into labelled elements, as the commit says); tail_data_zone.s +202 / 0 / -202 / -202.\nData-as-code markers in lane files: 84 -> 84. All 84 are five-nop device-settle delays in real code, not data; counted by lane_measure.py.\nprom_c numeric ROM-address operands: 2,669 -> 1. `python3 scripts/converters/symbolize_rom_operands.py --image prom_c` now prints candidates 1, refused-midcode 1.\nprom_c numeric branches: 33 -> 6. `python3 scripts/converters/symbolize_numeric_branches.py --image prom_c --report X.json` now prints numeric_call 1 and numeric_jp 5, all six with mid-instruction targets in the dead UNREFERENCED_TRAMPOLINES, and SITES CONVERTIBLE 0.\nEvidence scripts, each committed under notes/lanes/promcd-2026-09-25/ and indexed in its README: p7_descriptor_letters.py asserts 124 reader instructions, plus on the dump 56/56 digit strings, 390/390 descriptor offsets inside their letter's span, and the +5 counts b 204 / ' ' 196 / B 34 / w 4. mathlib_names.py asserts all 29 Cody & Waite coefficients within 1 ulp. pool_element_consumers.py: fp pool 768 of 771 loads credited to a push-and-call, Float64 pool 106 of 132.",
+ "gate": "`make gate-wsa1` passed before every commit and passes at HEAD 9f1ca41d (\"PASS: every rebuilt ROM is byte-identical.\"). The deliberate one-byte perturbation was shown twice and both times turned the gate red, then restored: the preset bank string \"Downtown Sat\" (red at prom_c 0x30E), and F64_1p0 byte +4 changed to +5. The ownership check `python3 scripts/analysis/lane_worklists.py --verify-branch promcd main s2/promcd`, run from the main tree, gave \"VERIFY-BRANCH promcd PASS (56 paths changed)\". I ran scripts/analysis/assert_comments_preserved.py (with a rename map) on every rename and correction commit. The only lines it reports lost are the corrections, and each commit message names them.",
+ "not_done": "- p7_stream_pool.s: 24 streams (5,897 B) have no reader. The check covered the PoolDir records, `.long` words and operands, LE24/LE32 in prom_c, LE32 in prom_a/prom_b, and pool-relative LE16. Most sit in orphan block/stream quartets. They are stated as UNREFERENCED, not explained. I also compared them with the KN5000 subprogram: only generic 24-byte prefixes match, so that gives no lead.\n- ToneDB_ToneOffsetTable (1,096 B research target): the admission in its header is about a different question, the program order of ToneDB_ToneNumBanks (not General MIDI). That question is still open.\n- tail_data_zone.s (about 3.1 KB), voice_dsp_tables.s (Ramp_0_to_100_Curve, Curve_Exp2Gain_U8_128, BitMask_Table_FDE695 and others) and touch_eq_mixer.s (Link_ClassHandlerTable, P7Module_RamStateImage, P7Unit_StreamPtrsByGroupAndUnit, unexplained_FCC5BE/FCCB6E): their admissions are true open questions and were left in place.\n- 'v' and 's' in the P7 type letters: only their width (one byte) is decoded. 's' occurs only in the wah records 12/13, which take hand-coded paths (0xFA3D7F, 0xFA4148, 0xFA427B) that I have not traced.\n- Unnamed math helpers: sub_FC8EE5, sub_FC9FA3, sub_FC9ACB (no caller), sub_FC9BBC.\n- Some renames are blocked because probes in wsa1/notes (outside this lane) assert the old names: sub_FAEAF9, sub_FAEB65, sub_FAEBD1, sub_FAECC7, sub_FAEFC2/E7/F00C.\n- kernel/kernel.s: 70 B graded KNOWN-B are m_ldc_* macro lines, a census artefact (LLVM has no `ldc`). Not changed.\n- Scratch: /tmp/claude-1000/lane-promcd/*.json are census and report dumps. They are disposable and regenerate with the commands above.",
+ "leads": "- Lane tonedb: prom_d's index maps are exact inverses of the catalogue (307/307, 314/314, 208/208, 161/161). The same property holds on the KN5000 (333/333, 339/339, 141/141, 144/144). See notes/lanes/promcd-2026-09-25/prom_d_index_maps.py.\n- Stale prose outside this lane, for its owners:\n  - wsa1/notes/FINDINGS-prom_c-preset-bank.md and gen_prom_c_preset_bank.py's docstring still say the preset bank has no reader.\n  - wsa1/notes/FINDINGS-prom_c-f64-pool.md uses the old names sub_FC8C45/FC8BB2/FC9140/FC9844/FC9D12/FC9576/FCA085/FC9CCD (now Double_Sin/Cos/Tan/Exp/Log/Pow/Abs/MakeInfinity).\n  - wsa1/notes/prom_c_understanding_round5.py lines 62 and 347 say the type letters and descriptor +5 are \"NOT decoded\". They are now decoded (p7_descriptor_letters.py).\n- gen_prom_d_asm.py no longer reproduces the prom_d sources, so anyone regenerating from it would lose the new headers.\n- The census could credit single-line headers. It also reads labels such as F64_2376 as address-derived. And it treats m_ldc_* macros as data.\n- The five-nop device-settle delays are false positives for the data-as-code marker.\n- P7Field_ModulateClamped has the same shape as Scale7Bit_ByDepth_UniOrBipolar_x25 (amount-64, depth, /16256 = 127*128). There may be one shared modulation convention across prom_c.\n- Record 14 (ROTARY SPEAKER), descriptor 14 is a 0/1 switch driven by amount >= 0x40 (block +15). Worth checking against the panel's rotary speed control.\n- The prom_a lane could run scripts/converters/symbolize_rom_operands.py on its own image. It was only checked on prom_c."
+}

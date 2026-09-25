@@ -1,0 +1,120 @@
+diff --git a/llvm/lib/Target/TLCS900/TLCS900InstrInfo.td b/llvm/lib/Target/TLCS900/TLCS900InstrInfo.td
+index 5e89d3e88263..4cca7cd5bd0d 100644
+--- a/llvm/lib/Target/TLCS900/TLCS900InstrInfo.td
++++ b/llvm/lib/Target/TLCS900/TLCS900InstrInfo.td
+@@ -1120,9 +1120,15 @@ def EI : SingleByteImm8Inst<0x06, (outs), (ins i32imm:$level),
+                             "ei", "$level", []>,
+          Sched<[WriteNop]>;
+ 
+-// DI is an alias for EI 0 (setting interrupt level to 0 disables interrupts).
+-// There is no separate DI opcode in the TLCS-900/H instruction set.
+-def : InstAlias<"di", (EI 0)>;
++// DI is EI 7: EI n loads the interrupt mask IFF with n, and a maskable
++// interrupt is accepted only when its level is >= IFF, so IFF=7 masks every
++// maskable level (TMP94C241 reference: "DI ; IFF=7"; MAME op_EI).  EI 0 is the
++// OPPOSITE -- IFF=0 accepts every level.  This alias used to say (EI 0), so
++// `di` assembled to 06 00 and 06 00 printed back as `di`: 213 source lines in
++// the KN5000/SX-WSA1R disassembly read as the opposite of what the CPU does.
++// There is no separate DI opcode.  Parse-only (emit priority 0): 06 07 keeps
++// printing as `ei 7`, and 06 00 prints as `ei 0`.
++def : InstAlias<"di", (EI 7), 0>;
+ 
+ // SWI — Software interrupt (with vector number)
+ // Encoding: 0xF8+num (1 byte, num in bits 0-2)
+diff --git a/llvm/test/MC/TLCS900/basic-asm.s b/llvm/test/MC/TLCS900/basic-asm.s
+index 3377cb986054..8906b0c9111f 100644
+--- a/llvm/test/MC/TLCS900/basic-asm.s
++++ b/llvm/test/MC/TLCS900/basic-asm.s
+@@ -103,8 +103,8 @@ nop
+ ; CHECK: halt
+ halt
+ 
+-; DI is an alias for EI 0 (prints back as "di")
+-; CHECK: di
++; DI is an alias for EI 7 (parse-only; prints back as "ei 7")
++; CHECK: ei	7
+ di
+ 
+ ; CHECK: ei	3
+diff --git a/llvm/test/MC/TLCS900/comprehensive-encoding.s b/llvm/test/MC/TLCS900/comprehensive-encoding.s
+index bf2cdf151955..53898313fcf7 100644
+--- a/llvm/test/MC/TLCS900/comprehensive-encoding.s
++++ b/llvm/test/MC/TLCS900/comprehensive-encoding.s
+@@ -24,7 +24,7 @@ ret
+ ; ==========================================================================
+ 
+ ; DI is an alias for EI 0
+-; CHECK: di               ; encoding: [0x06,0x00]
++; CHECK: ei 7             ; encoding: [0x06,0x07]
+ di
+ 
+ ; CHECK: ei 3             ; encoding: [0x06,0x03]
+diff --git a/llvm/test/MC/TLCS900/elf-round-trip.s b/llvm/test/MC/TLCS900/elf-round-trip.s
+index 406e355e4675..ab1793298e32 100644
+--- a/llvm/test/MC/TLCS900/elf-round-trip.s
++++ b/llvm/test/MC/TLCS900/elf-round-trip.s
+@@ -207,7 +207,7 @@ muls xwa, xbc
+ 
+ ; === EI / DI / SWI / RETD ===
+ 
+-; CHECK-NEXT: di
++; CHECK-NEXT: ei 7
+ di
+ 
+ ; CHECK-NEXT: ei 3
+diff --git a/llvm/test/MC/TLCS900/encoding.s b/llvm/test/MC/TLCS900/encoding.s
+index 2e65a6d69f9f..b23494de7d21 100644
+--- a/llvm/test/MC/TLCS900/encoding.s
++++ b/llvm/test/MC/TLCS900/encoding.s
+@@ -14,8 +14,8 @@ ret
+ ; CHECK: halt    ; encoding: [0x05]
+ halt
+ 
+-; DI is an alias for EI 0 (prints back as "di")
+-; CHECK: di      ; encoding: [0x06,0x00]
++; DI is an alias for EI 7 (parse-only; prints back as "ei 7")
++; CHECK: ei 7    ; encoding: [0x06,0x07]
+ di
+ 
+ ; CHECK: reti    ; encoding: [0x07]
+@@ -228,8 +228,8 @@ cpdr
+ ; === SingleByteImm8 (immediate encoded in opcode byte) ===
+ 
+ ; EI level: 0x06, level
+-; EI 0 prints as "di" due to InstAlias
+-; CHECK: di               ; encoding: [0x06,0x00]
++; EI 0 accepts every interrupt level; it is NOT DI
++; CHECK: ei 0             ; encoding: [0x06,0x00]
+ ei 0
+ 
+ ; CHECK: ei 3             ; encoding: [0x06,0x03]
+diff --git a/llvm/test/MC/TLCS900/round-trip.s b/llvm/test/MC/TLCS900/round-trip.s
+index b28fb6e10caa..373df97ff588 100644
+--- a/llvm/test/MC/TLCS900/round-trip.s
++++ b/llvm/test/MC/TLCS900/round-trip.s
+@@ -31,9 +31,9 @@ ret
+ 
+ ; === EI / DI ===
+ 
+-; CHECK: di
+-; CHECK-ENC: encoding: [0x06,0x00]
+-; CHECK-INST: di
++; CHECK: ei 7
++; CHECK-ENC: encoding: [0x06,0x07]
++; CHECK-INST: ei 7
+ di
+ 
+ ; CHECK: ei 3
+diff --git a/llvm/test/MC/TLCS900/system.s b/llvm/test/MC/TLCS900/system.s
+index 7b084ab0a3c7..219658eac6fa 100644
+--- a/llvm/test/MC/TLCS900/system.s
++++ b/llvm/test/MC/TLCS900/system.s
+@@ -31,7 +31,7 @@ ret
+ ; ==========================================================================
+ 
+ ; DI is an alias for EI 0
+-; CHECK: di                 ; encoding: [0x06,0x00]
++; CHECK: ei 7               ; encoding: [0x06,0x07]
+ di
+ 
+ ; CHECK: ei 1               ; encoding: [0x06,0x01]

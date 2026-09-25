@@ -1,0 +1,86 @@
+{
+ "lane": "scoop",
+ "branch_head": "a864a071",
+ "commits": [
+  {
+   "hash": "e4ef2964",
+   "summary": "scoop lane: reframe engine (scripts/converters/scoop_reframe.py: map/trace/refs/plan/islands/apply) and per-file measurement script scripts/analysis/scoop_lane_measure.py"
+  },
+  {
+   "hash": "2946c1e6",
+   "summary": "v10 scoop_display.s: 817 misframed or data-as-code islands re-framed by control flow (markers 593 -> 6)"
+  },
+  {
+   "hash": "aaa0c90e",
+   "summary": "v9 scoop_display.s: the same control-flow re-frame as v10 (819 islands; markers 625 -> 6)"
+  },
+  {
+   "hash": "bbe6195c",
+   "summary": "v10+v9 graphics_text_vga.s and scoop_editor_data.s: control-flow re-frame (markers 61+56 -> 0 per version)"
+  },
+  {
+   "hash": "02d072ed",
+   "summary": "v7 scoop_editor_data.s: all romslices re-expressed as instructions (the message says 11; the true count is 9, corrected in the notes README)"
+  },
+  {
+   "hash": "6f63ea35",
+   "summary": "v7 scoop_display.s and graphics_text_vga.s: control-flow re-frame; all 37 romslices (15,604 B) re-typed"
+  },
+  {
+   "hash": "47a32905",
+   "summary": "scripts/analysis/scoop_data_readers.py: lists every data object in a file with the instructions that load it (dispatch, stride, bound, copy count)"
+  },
+  {
+   "hash": "08f8838d",
+   "summary": "display/*.s (v10, v9, v7): instructions still written as .byte get their mnemonic spellings"
+  },
+  {
+   "hash": "9777966e",
+   "summary": "scoop_display.s (v10, v9, v7): 27 LCD parameter pop-up routines and 41 text tables named (ParamPopup_*, Tbl_ChordTypeNames, Tbl_NoteNamesSharp, ...)"
+  },
+  {
+   "hash": "6cad6bfb",
+   "summary": "scoop_display.s (v10, v9, v7): headers that cite the reader for the remaining data objects"
+  },
+  {
+   "hash": "f8fb6ae4",
+   "summary": "display/*.s: numeric ROM operands made symbolic; 'No reader found' headers shown to be wrong were corrected"
+  },
+  {
+   "hash": "8374a453",
+   "summary": "scoop_display.s (v10, v9, v7): one-line data headers get a second line quoting the reader's instruction"
+  },
+  {
+   "hash": "193dc962",
+   "summary": "display/*.s: 17 instructions per version that were .byte get backend spellings"
+  },
+  {
+   "hash": "fb8da1c0",
+   "summary": "display/*.s: the remaining numeric relative branches made symbolic (v10/v9 25, v7 24); 39 v7 operands into other lanes' files remain"
+  },
+  {
+   "hash": "c32b63b4",
+   "summary": "v9/v7 scoop_display.s: PerfMode_VoiceAddressTable written as 20 aligned .long RAM pointers"
+  },
+  {
+   "hash": "6eb0815d",
+   "summary": "display/*.s: structural code labels no longer named after DATA tables (v10/v9 284, v7 168); sed scripts under scripts/renaming/"
+  },
+  {
+   "hash": "ce5cd3d2",
+   "summary": "notes/scoop-lane-2026-09-25: README (commands, overrides with evidence, tool table), before/after figures, list of retired romslices"
+  },
+  {
+   "hash": "41e45bf1",
+   "summary": "notes/scoop-lane-2026-09-25: exact list of the v7 numeric targets left in other lanes' files"
+  },
+  {
+   "hash": "a864a071",
+   "summary": "display/scoop_editor_data.s (v10, v9, v7): the old header ('display data ... parameter bytecode ... tables') was PROVEN FALSE and is replaced: the file is 3,422 instructions with no data directive, and the header now names the evidence (trace coverage, entry table, SeMenu_* calls)"
+  }
+ ],
+ "measured": "Command: python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json, then python3 scripts/analysis/scoop_lane_measure.py --census X.json --base BEFORE.json. BEFORE is the census at base 3958235e. The figures cover the 9 lane files: display/{scoop_display,scoop_editor_data,graphics_text_vga}.s in each of v10, v9 and v7.\n\nTOTAL, before -> after:\n- CODE: 200,392 -> 229,279 B\n- KNOWN-A: 747 -> 16,871\n- KNOWN-B: 45,644 -> 231\n- UNKNOWN: 0 -> 402 (honest admissions)\n- RESEARCH: 31,574 -> 624\n- data-as-code markers: 1,701 -> 0\n- numeric branch operands: 2,154 -> 39 (all 39 in v7, all pointing into other lanes' files)\n- romslice bytes: 23,038 -> 0 (all 46 v7 romslices retired)\n\nPer file, after:\n- v10/v9 scoop_display.s: CODE 50,507, KNOWN-A 5,625, KNOWN-B 77, UNKNOWN 134, RESEARCH 208.\n- v7 scoop_display.s: CODE 50,511, KNOWN-A 5,621, KNOWN-B 77, UNKNOWN 134, RESEARCH 208, 10 numeric branches.\n- scoop_editor_data.s: 9,200 B CODE and nothing else in each version.\n- graphics_text_vga.s: 16,718 B CODE and 0 research in each version; v7 has 29 numeric branches.\n\nv7 against v10 correspondence (scripts/analysis/scoop_v7_v10_correspondence.py, unidasm mnemonic streams):\n- scoop_editor_data: 3,421 of 3,422 match (ratio 1.000)\n- graphics_text_vga: both spans 1.000\n- scoop_display: 0.942, data included\n\nThe before and after tables are committed in notes/scoop-lane-2026-09-25/measure_before.txt and measure_final.txt.",
+ "gate": "make gate passed before every commit: all 9 KN5000 images IDENTICAL with the pinned toolchain, and it passed again at a864a071.\n\nDeliberate-perturbation demo, done once: changing one byte in v10 scoop_display.s (`cpdi8 (0x0def), 1` to `2`) turned the gate red with 'kn5000_v10_program 1 BYTES DIFFER'. The byte was then restored.\n\nEvery converter (scoop_reframe apply, scoop_annotate, scoop_symbolize_imm and the others) also rebuilds and compares the image itself, and restores the files if any byte moves.\n\nOwnership check: python3 /home/fsanches/compartilhado/kn5000-roms-disasm/scripts/analysis/lane_worklists.py --verify-branch scoop 3958235e s2/scoop printed VERIFY-BRANCH scoop PASS (32 paths changed). The only paths touched are the 9 owned .s files plus new files under scripts/ and notes/.",
+ "not_done": "1. 39 numeric operands remain in v7 (10 in scoop_display.s, 29 in graphics_text_vga.s). Their targets are in other lanes' files at addresses where no label stands, inside a data or instruction line there:\n   - 16 calr: 9 to 0xFAFAC0, 7 to 0xFB02A9.\n   - 23 absolute call/jp: 0xFF05BC x6, 0xFDD69E x5, 0xFEE40D x2, 0xFF081D x2, 0xFEE01B x2, and one each to 0xFEB5D2, 0xFDAD86, 0xFDADAE, 0xFDAA84, 0xFEDE39, 0xFDD375.\n2. The LLVM backend has no spelling for `cp BC/IY,(XIX+IZ)` (d3 07 f0 f8 f1/f5) or `ldcf/stcf A,RH3` (c7 3d 2b/2c). These stay `.byte`, with unidasm's reading in a comment.\n3. Honest unknowns (graded UNKNOWN, 402 B in total):\n   - the 64-byte second part-name scheme after Str_TuningEq\n   - Str_ExtTabEffectEnDis\n   - Unref_EF6BD3_Tbl and Unref_EFA7C5_Tbl (v10/v9)\n   - ClockConfig_Select_Table: no reader by name or by 32-bit value\n   - the role of the 0x09 bytes in Tbl_AccompPartNames\n4. Three short tails of scoop_editor_data.s (37 B in v10) are not reached by the trace. They stay code because they decode cleanly and nothing marks them as data. In v7 the equivalent bytes are reached through documented overrides.\n5. Naming is incomplete:\n   - Routines reached through dispatch tables carry `<Table>_Target<k>` names.\n   - The ~3,400 instructions of scoop_editor_data.s have only structural labels.\n   - The label Scoop_SoundEditorData names code as 'Data'. I could not rename it: it is referenced from kn5000_v*_program.s and shared/positional_labels.s, which belong to other lanes.\n6. The 46 retired v7 romslice .bin files are now unreferenced but not deleted: they belong to lane sys. The list is in notes/scoop-lane-2026-09-25/retired_romslices.txt.\n7. Nothing was changed in symbols/*, .beads/, the Makefile or ../technics-docs, as the rules require.\n\nScratch in /tmp/claude-1000/lane-scoop (plans, census JSONs, the one-off header-edit script) is disposable. The committed tools regenerate all of it, and the committed notes record the results.",
+ "leads": "1. The pointer table EmbeddedPtrTable_v*_gui_display_struct_data_000B00 in kn5000_v*_program.s (lines 182-449 in v10 and v7) holds 187 bare numeric `.long`s that point into scoop_editor_data.s. Only one is named (`.long Scoop_SoundEditorData`). The lane that owns kn5000_v*_program.s should make them symbolic. Every target is an instruction boundary in the re-framed file.\n2. `.long OscScope_DrawWaveform` (sequencer/smf_event_processor.s) and `.long OscScope_FinalizeRender` (ui/drawbar_panel_ui.s, ui/ui_mode_handlers.s) point into the middle of instructions. In my files they are kept as `.set NAME, . + k`. The referring lines are probably misframed code in those files.\n3. ui/drawbar_panel_ui.s loads StringData_APCModeNames_0x160..0x163 (0xF00001-0xF00004) and passes them to SendEvent. These are most likely numeric event arguments that a positional-label pass turned into symbols by accident.\n4. The 39 v7 targets in 'not done' mark misframed or mis-typed spots in other lanes' files; the exact list is in notes/scoop-lane-2026-09-25/README.md.\n5. Adding backend spellings for d3 07 f0 f8 f1/f5 and c7 3d 2b/2c would retire the last `.byte` instructions here.\n6. The reusable tools are in scripts/converters/ and scripts/analysis/:\n   - scoop_reframe.py: plan/islands/apply control-flow re-frame, which re-types code as data only on positive evidence.\n   - scoop_data_readers.py / scoop_data_headers.py: data objects with the instructions that read them.\n   - scoop_annotate.py: labels, headers and record-per-line spelling, placed by address.\n   - scoop_symbolize_imm.py and scoop_label_numeric_targets.py.\n   They apply to any lane's files: other lanes can run the plan -> islands -> apply sequence documented in the README."
+}
