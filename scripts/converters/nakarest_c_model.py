@@ -69,9 +69,9 @@ MEMBER_RE = re.compile(
     r'^(\s*)((?:const\s+)?[A-Za-z_][A-Za-z0-9_]*)\s+([A-Za-z_][A-Za-z0-9_]*)'
     r'((?:\[[^\]]+\])*)\s*;(.*)$')
 STRUCT_START_RE = re.compile(r'^typedef struct __attribute__\(\(packed\)\) \{\s*$')
-STRUCT_END_RE = re.compile(r'^\} (naka_[A-Za-z0-9_]+_t);\s*$')
-INIT_START_RE = re.compile(r'^const (naka_[A-Za-z0-9_]+_t) ([A-Za-z0-9_]+)\s*$')
-SIZE_ASSERT_RE = re.compile(r'_Static_assert\(sizeof\((naka_[A-Za-z0-9_]+_t)\) == (\d+)')
+STRUCT_END_RE = re.compile(r'^\} ([A-Za-z][A-Za-z0-9_]*_t);\s*$')
+INIT_START_RE = re.compile(r'^const ([A-Za-z][A-Za-z0-9_]*_t) ([A-Za-z0-9_]+)(?:\s*=\s*\{)?\s*$')
+SIZE_ASSERT_RE = re.compile(r'_Static_assert\(sizeof\(([A-Za-z][A-Za-z0-9_]*_t)\) == (\d+)')
 SELF_RE = re.compile(r'SELF\(\s*([A-Za-z_][A-Za-z0-9_]*)((?:\[[^\]]*\])*)\s*\)')
 SYMBOLIC_RE = re.compile(r'NAKA_ADDR\(|SELF\(|NAKA_SELF\(')
 

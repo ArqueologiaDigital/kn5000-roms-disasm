@@ -50,7 +50,8 @@ BLOBS = ['naka_disk_warning', 'naka_block_012', 'naka_block_007', 'naka_sequence
          'naka_master_style', 'naka_msp_recording', 'naka_accomp7_widgets', 'naka_normal_mode', 'naka_debug_naming',
          'naka_disk_menu_file_io', 'naka_midi_reverb', 'naka_direct_play', 'naka_composer_style',
          'naka_effects_seq', 'naka_sound_menu_drawbar', 'naka_technichord_part',
-         'naka_extension_device', 'naka_perf_style', 'naka_ctrl_menu_body']
+         'naka_extension_device', 'naka_perf_style', 'naka_ctrl_menu_body',
+         'naka_control_menu_header']
 C_KEYWORDS = {'auto', 'break', 'case', 'char', 'const', 'continue', 'default', 'do', 'double',
               'else', 'enum', 'extern', 'float', 'for', 'goto', 'if', 'int', 'long', 'register',
               'return', 'short', 'signed', 'sizeof', 'static', 'struct', 'switch', 'typedef',
@@ -379,7 +380,7 @@ FALSE_LOG = []
 
 def type_blob(v, blob, apply, layouts):
     m = RT.objmap(v)
-    cpath = os.path.join(RT.ui(v), blob + '.c')
+    cpath = RT.c_path(v, blob)
     try:
         cb = M.CBlob(cpath)
     except (SystemExit, StopIteration, KeyError) as e:

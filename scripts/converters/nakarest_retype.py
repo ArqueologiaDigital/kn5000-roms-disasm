@@ -269,15 +269,25 @@ def ui(v):
     return os.path.join(ROOT, v, 'maincpu', 'ui_widgets')
 
 
+# blobs whose C / linker-script file is not named after the blob (Makefile)
+C_FILE = {'naka_control_menu_header': 'control_menu_header'}
+LD_FILE = {'naka_control_menu_header': 'naka_ctrl_menu_link'}
+
+
+def c_path(v, blob):
+    return os.path.join(ui(v), C_FILE.get(blob, blob) + '.c')
+
+
 def compile_blob(v, blob):
     """The bytes the version's C compiles to (Makefile recipe, scratch dir)."""
     with tempfile.TemporaryDirectory() as t:
         o, elf, b = (os.path.join(t, 'x' + s) for s in ('.o', '.elf', '.bin'))
         subprocess.run([os.path.join(LLVM, 'clang'), '-target', 'tlcs900', '-ffreestanding',
-                        '-c', '-O2', '-I', ui(v), '-o', o, os.path.join(ui(v), blob + '.c')],
+                        '-c', '-O2', '-I', ui(v), '-o', o, c_path(v, blob)],
                        check=True)
         subprocess.run([os.path.join(LLVM, 'ld.lld'), '-e', '0', '-T',
-                        os.path.join(ui(v), blob + '_link.ld'), '-o', elf, o], check=True)
+                        os.path.join(ui(v), LD_FILE.get(blob, blob + '_link') + '.ld'), '-o', elf, o],
+                       check=True)
         subprocess.run([os.path.join(LLVM, 'llvm-objcopy'), '-O', 'binary', '-j', '.text',
                         elf, b], check=True)
         return open(b, 'rb').read()
