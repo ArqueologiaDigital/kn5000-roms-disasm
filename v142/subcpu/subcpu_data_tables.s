@@ -3001,14 +3001,21 @@ DSP_MixerGain_Curve:
 ; control registers, and/bit on (reg+reg); each annotated with its unidasm reading), none of
 ; which carries such an address, plus documented 0xFF / 0x0E fill bytes.  So no reader of these
 ; three tables exists in any dumped image in any of those forms.
+; IDENTIFIED 2026-09-25: effects 57-60 ("unidentified two-parameter entries" above) are the
+; IC310 reverbs STANDARD / PERCUSSIVE / SYMPHONIC / DEEP SPACE, and 79 / 88-91 are GEQ / ROOM /
+; KARAOKE / BATH ROOM / STAGE (main-CPU v10 name table, 18-byte records at 0x033568 - 18*n); and
+; the 15/53 rotary labels were swapped: 15 is ROCK ROTARY, 53 ROTARY SPEAKER.  Labels renamed by
+; scripts/renaming/rename_v142_effect_param_meta.sed.
 ; ===========================================================================
 
 ; Shared placeholder range array (2 records) used by all effect numbers without a
 ; dedicated one: 0, 7, 11, 12, 13, 14, 28, 29, 30, 31, 38, 40, 41, 42, 43, 44, 45, 46, 47, 49, 51, 55, 61, 62, 63, 69, 76, 77, 78, 80, 81, 82, 83, 84, 85, 86, 87, 92, 93, 94, 95.
+; Pointed to by EFF_ParamRanges_PtrTable (effects 0 7 11-14 28-31 38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 EffDefault_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 32): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff32_Distortion_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3016,6 +3023,7 @@ Eff32_Distortion_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 33): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff33_Overdrive_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3023,6 +3031,7 @@ Eff33_Overdrive_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 34): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff34_Fuzz_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3030,6 +3039,7 @@ Eff34_Fuzz_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 35): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
 Eff35_Exciter_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3039,6 +3049,7 @@ Eff35_Exciter_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 39): 17 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 17.
 Eff39_ParametricEq_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3058,6 +3069,7 @@ Eff39_ParametricEq_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 1): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff01_Chorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3065,6 +3077,7 @@ Eff01_Chorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 2): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
 Eff02_ModulatedChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x09	; param 9: 0..99
@@ -3074,6 +3087,7 @@ Eff02_ModulatedChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 3): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
 Eff03_Enhancer_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x36	; param 54: 0..99
@@ -3083,6 +3097,7 @@ Eff03_Enhancer_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 4): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
 Eff04_Flanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3093,6 +3108,7 @@ Eff04_Flanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 5): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
 Eff05_Phaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3103,7 +3119,8 @@ Eff05_Phaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
-Eff15_RotarySpeaker_ParamRanges:
+; Pointed to by EFF_ParamRanges_PtrTable (effect 15): 16 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 16.
+Eff15_RockRotary_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x14	; param 20: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x48	; param 72: 0..99
@@ -3121,6 +3138,7 @@ Eff15_RotarySpeaker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 48): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
 Eff48_AutoPan_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3129,6 +3147,7 @@ Eff48_AutoPan_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 50): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
 Eff50_Vibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3137,6 +3156,7 @@ Eff50_Vibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 52): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff52_AutoWah_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x02, 0x00, 0x0b	; param 11: 0..2
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
@@ -3144,7 +3164,8 @@ Eff52_AutoWah_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
-Eff53_RockRotary_ParamRanges:
+; Pointed to by EFF_ParamRanges_PtrTable (effect 53): 16 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 16.
+Eff53_RotarySpeaker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x14	; param 20: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x48	; param 72: 0..99
@@ -3162,6 +3183,7 @@ Eff53_RockRotary_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 54): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff54_RingModulator_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x15	; param 21: 0..99
 	.byte 0x00, 0x00, 0x00, 0xb4, 0x00, 0x38	; param 56: 0..180
@@ -3169,6 +3191,7 @@ Eff54_RingModulator_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 37): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff37_SlowAttacker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x28	; param 40: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x2c	; param 44: 0..99
@@ -3176,6 +3199,7 @@ Eff37_SlowAttacker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 8): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
 Eff08_GatedReverb_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x2e	; param 46: 0..99
 	.byte 0x00, 0x00, 0x00, 0x18, 0x00, 0x24	; param 36: 0..24
@@ -3184,6 +3208,7 @@ Eff08_GatedReverb_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 6): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff06_Ensemble_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3191,6 +3216,7 @@ Eff06_Ensemble_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 36): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
 Eff36_Compressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x28	; param 40: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x29	; param 41: 0..99
@@ -3199,6 +3225,7 @@ Eff36_Compressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 56): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
 Eff56_MixUp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x09	; param 9: 0..99
@@ -3209,6 +3236,7 @@ Eff56_MixUp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 9): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
 Eff09_SingleDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x01, 0x5e, 0x00, 0x16	; param 22: 0..350
 	.byte 0x00, 0x00, 0x01, 0x5e, 0x00, 0x17	; param 23: 0..350
@@ -3218,6 +3246,7 @@ Eff09_SingleDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 10): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
 Eff10_MultiTapDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x02, 0xbc, 0x00, 0x4b	; param 75: 0..700
 	.byte 0x00, 0x00, 0x02, 0xbc, 0x00, 0x4c	; param 76: 0..700
@@ -3232,6 +3261,7 @@ Eff10_MultiTapDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 64): 11 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 11.
 Eff64_SDelayChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3245,6 +3275,7 @@ Eff64_SDelayChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 65): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
 Eff65_SDelaySDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x43	; param 67: 0..99
 	.byte 0x00, 0x00, 0x00, 0xb4, 0x00, 0x16	; param 22: 0..180
@@ -3259,6 +3290,7 @@ Eff65_SDelaySDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 66): 14 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 14.
 Eff66_SDelayFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3275,6 +3307,7 @@ Eff66_SDelayFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 67): 11 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 11.
 Eff67_SDelayVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3288,6 +3321,7 @@ Eff67_SDelayVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 68): 14 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 14.
 Eff68_SDelayPhaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3304,6 +3338,7 @@ Eff68_SDelayPhaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 70): 10 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 10.
 Eff70_AutoWahSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x02, 0x00, 0x0b	; param 11: 0..2
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
@@ -3316,6 +3351,7 @@ Eff70_AutoWahSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 16): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff16_RoomReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3323,6 +3359,7 @@ Eff16_RoomReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 17): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff17_RoomReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3330,6 +3367,7 @@ Eff17_RoomReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 18): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff18_PlateReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3337,6 +3375,7 @@ Eff18_PlateReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 19): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff19_PlateReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3344,6 +3383,7 @@ Eff19_PlateReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 20): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff20_ConcertReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3351,6 +3391,7 @@ Eff20_ConcertReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 21): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff21_ConcertReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3358,6 +3399,7 @@ Eff21_ConcertReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 22): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff22_DarkReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3365,6 +3407,7 @@ Eff22_DarkReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 23): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff23_DarkReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3372,6 +3415,7 @@ Eff23_DarkReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 24): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff24_BrightReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3379,6 +3423,7 @@ Eff24_BrightReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 25): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff25_BrightReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3386,6 +3431,7 @@ Eff25_BrightReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 26): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff26_WaveReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3393,6 +3439,7 @@ Eff26_WaveReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 27): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
 Eff27_WaveReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3400,6 +3447,7 @@ Eff27_WaveReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 71): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
 Eff71_PeqChorus_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3411,6 +3459,7 @@ Eff71_PeqChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 72): 10 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 10.
 Eff72_PeqSDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3423,6 +3472,7 @@ Eff72_PeqSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 73): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
 Eff73_PeqFlanger_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3437,6 +3487,7 @@ Eff73_PeqFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 74): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
 Eff74_PeqVibrato_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3448,6 +3499,7 @@ Eff74_PeqVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 75): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
 Eff75_PeqCompressor_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3459,6 +3511,7 @@ Eff75_PeqCompressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 96): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
 Eff96_PeqComprDist_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3473,6 +3526,7 @@ Eff96_PeqComprDist_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 97): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
 Eff97_PeqComprOverdr_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3487,6 +3541,7 @@ Eff97_PeqComprOverdr_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 98): 13 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 13.
 Eff98_PeqDistDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3502,6 +3557,7 @@ Eff98_PeqDistDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 99): 13 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 13.
 Eff99_PeqOverdrDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3518,27 +3574,42 @@ Eff99_PeqOverdrDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; effect 57: unidentified
-Eff57_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 57 is "STANDARD", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*57; also the DSP zone's DSP2_Eff57_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 57): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+Eff57_Standard_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; effect 58: unidentified
-Eff58_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 58 is "PERCUSSIVE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*58; also the DSP zone's DSP2_Eff58_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 58): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+Eff58_Percussive_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; effect 59: unidentified
-Eff59_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 59 is "SYMPHONIC", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*59; also the DSP zone's DSP2_Eff59_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 59): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+Eff59_Symphonic_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; effect 60: unidentified
-Eff60_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 60 is "DEEP SPACE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*60; also the DSP zone's DSP2_Eff60_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 60): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+Eff60_DeepSpace_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; effect 88: second-DSP (MN19413) parameter stream, name unknown
-Eff88_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 88 is "ROOM", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*88; also the DSP zone's DSP2_Eff88_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 88): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+Eff88_Room_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3546,7 +3617,10 @@ Eff88_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 89: second-DSP (MN19413) parameter stream, name unknown
-Eff89_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 89 is "KARAOKE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*89; also the DSP zone's DSP2_Eff89_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 89): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+Eff89_Karaoke_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3554,7 +3628,10 @@ Eff89_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 90: second-DSP (MN19413) parameter stream, name unknown
-Eff90_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 90 is "BATH ROOM", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*90; also the DSP zone's DSP2_Eff90_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 90): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+Eff90_BathRoom_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3562,7 +3639,10 @@ Eff90_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 91: second-DSP (MN19413) parameter stream, name unknown
-Eff91_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 91 is "STAGE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*91; also the DSP zone's DSP2_Eff91_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 91): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+Eff91_Stage_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3570,7 +3650,10 @@ Eff91_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 79: second-DSP (MN19413) parameter stream, name unknown
-Eff79_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 79 is "GEQ", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*79; also the DSP zone's DSP2_Eff79_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 79): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+Eff79_Geq_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x16, 0x00, 0x1e	; param 30: 0..22
 	.byte 0x00, 0x00, 0x00, 0x30, 0x00, 0x1f	; param 31: 0..48
 	.byte 0x00, 0x04, 0x00, 0x1a, 0x00, 0x33	; param 51: 4..26
@@ -3583,249 +3666,312 @@ Eff79_SecondDsp_ParamRanges:
 
 ; Shared placeholder defaults record for the same effect numbers as
 ; EffDefault_ParamRanges.
+; Pointed to by EFF_ParamDefaults_PtrTable (effects 0 7 11-14 28-31 38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): 23-byte defaults record, one byte per range record in order, final byte 99.
 EffDefault_ParamDefaults:
 	.byte 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 32): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff32_Distortion_ParamDefaults:
 	.byte 32, 80, 70, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 33): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff33_Overdrive_ParamDefaults:
 	.byte 33, 90, 68, 84, 75, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 34): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff34_Fuzz_ParamDefaults:
 	.byte 34, 90, 66, 84, 75, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 35): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff35_Exciter_ParamDefaults:
 	.byte 35, 30, 86, 5, 0, 70, 84, 75, 1, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 39): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff39_ParametricEq_ParamDefaults:
 	.byte 39, 89, 88, 90, 24, 90, 216, 91, 152, 92, 88, 84, 75, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 1): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff01_Chorus_ParamDefaults:
 	.byte 1, 30, 6, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 2): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff02_ModulatedChorus_ParamDefaults:
 	.byte 2, 30, 6, 60, 15, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 3): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff03_Enhancer_ParamDefaults:
 	.byte 3, 50, 99, 99, 0, 25, 0, 0, 84, 75, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 4): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff04_Flanger_ParamDefaults:
 	.byte 4, 80, 2, 60, 0, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 5): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff05_Phaser_ParamDefaults:
 	.byte 5, 80, 4, 60, 50, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff15_RotarySpeaker_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 15): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff15_RockRotary_ParamDefaults:
 	.byte 15, 90, 58, 70, 45, 7, 10, 10, 60, 40, 6, 72, 79, 84, 1, 70
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 48): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff48_AutoPan_ParamDefaults:
 	.byte 48, 80, 8, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 50): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff50_Vibrato_ParamDefaults:
 	.byte 50, 20, 40, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 52): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff52_AutoWah_ParamDefaults:
 	.byte 52, 2, 0, 99, 99, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff53_RockRotary_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 53): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff53_RotarySpeaker_ParamDefaults:
 	.byte 53, 0, 75, 64, 45, 7, 10, 10, 60, 40, 6, 72, 79, 84, 1, 70
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 54): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff54_RingModulator_ParamDefaults:
 	.byte 54, 64, 90, 0, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 37): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff37_SlowAttacker_ParamDefaults:
 	.byte 37, 12, 49, 1, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 8): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff08_GatedReverb_ParamDefaults:
 	.byte 8, 20, 12, 40, 5, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 6): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff06_Ensemble_ParamDefaults:
 	.byte 6, 30, 4, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 36): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff36_Compressor_ParamDefaults:
 	.byte 36, 14, 28, 9, 9, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 56): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff56_MixUp_ParamDefaults:
 	.byte 56, 50, 30, 84, 81, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 9): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff09_SingleDelay_ParamDefaults:
 	.byte 9, 1, 94, 1, 94, 196, 196, 18, 84, 70, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 10): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff10_MultiTapDelay_ParamDefaults:
 	.byte 10, 0, 136, 1, 16, 1, 152, 2, 32, 0, 30, 60, 99, 196, 18, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 64): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff64_SDelayChorus_ParamDefaults:
 	.byte 64, 20, 1, 44, 1, 44, 216, 216, 50, 40, 6, 0, 84, 70, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 65): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff65_SDelaySDelay_ParamDefaults:
 	.byte 65, 30, 0, 180, 0, 180, 196, 196, 30, 0, 100, 0, 100, 176, 176, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 66): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff66_SDelayFlanger_ParamDefaults:
 	.byte 66, 20, 1, 44, 1, 44, 216, 216, 80, 80, 2, 60, 50, 90, 0, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 67): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff67_SDelayVibrato_ParamDefaults:
 	.byte 67, 20, 1, 44, 1, 44, 216, 216, 40, 6, 90, 0, 84, 70, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 68): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff68_SDelayPhaser_ParamDefaults:
 	.byte 68, 20, 1, 44, 1, 44, 216, 216, 80, 80, 4, 60, 50, 90, 0, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 70): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff70_AutoWahSDelay_ParamDefaults:
 	.byte 70, 2, 0, 99, 20, 1, 44, 1, 44, 216, 216, 99, 70, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 16): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff16_RoomReverb1_ParamDefaults:
 	.byte 16, 19, 0, 12, 18, 50, 94, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 17): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff17_RoomReverb2_ParamDefaults:
 	.byte 17, 25, 0, 12, 20, 50, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 18): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff18_PlateReverb1_ParamDefaults:
 	.byte 18, 35, 0, 45, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 19): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff19_PlateReverb2_ParamDefaults:
 	.byte 19, 41, 0, 45, 16, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 20): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff20_ConcertReverb1_ParamDefaults:
 	.byte 20, 35, 0, 11, 20, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 21): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff21_ConcertReverb2_ParamDefaults:
 	.byte 21, 39, 0, 60, 18, 80, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 22): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff22_DarkReverb1_ParamDefaults:
 	.byte 22, 45, 0, 45, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 23): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff23_DarkReverb2_ParamDefaults:
 	.byte 23, 55, 0, 90, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 24): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff24_BrightReverb1_ParamDefaults:
 	.byte 24, 41, 0, 25, 20, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 25): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff25_BrightReverb2_ParamDefaults:
 	.byte 25, 45, 0, 30, 6, 50, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 26): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff26_WaveReverb1_ParamDefaults:
 	.byte 26, 45, 0, 45, 18, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 27): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff27_WaveReverb2_ParamDefaults:
 	.byte 27, 55, 0, 45, 18, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 71): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff71_PeqChorus_ParamDefaults:
 	.byte 71, 92, 100, 50, 30, 6, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 72): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff72_PeqSDelay_ParamDefaults:
 	.byte 72, 92, 100, 20, 1, 44, 1, 44, 216, 216, 84, 75, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 73): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff73_PeqFlanger_ParamDefaults:
 	.byte 73, 92, 100, 80, 80, 2, 60, 50, 90, 0, 84, 75, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 74): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff74_PeqVibrato_ParamDefaults:
 	.byte 74, 92, 100, 40, 6, 90, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 75): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff75_PeqCompressor_ParamDefaults:
 	.byte 75, 92, 100, 14, 28, 9, 9, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 96): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff96_PeqComprDist_ParamDefaults:
 	.byte 96, 92, 100, 14, 28, 9, 9, 65, 66, 84, 75, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 97): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff97_PeqComprOverdr_ParamDefaults:
 	.byte 97, 92, 100, 14, 28, 9, 9, 80, 80, 84, 75, 1, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 98): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff98_PeqDistDelay_ParamDefaults:
 	.byte 98, 92, 100, 80, 68, 20, 1, 44, 1, 44, 216, 216, 84, 75, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 99): 23-byte defaults record, one byte per range record in order, final byte 99.
 Eff99_PeqOverdrDelay_ParamDefaults:
 	.byte 99, 92, 100, 80, 80, 20, 1, 44, 1, 44, 216, 216, 84, 75, 1, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff57_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 57): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff57_Standard_ParamDefaults:
 	.byte 57, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff58_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 58): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff58_Percussive_ParamDefaults:
 	.byte 58, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff59_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 59): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff59_Symphonic_ParamDefaults:
 	.byte 59, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff60_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 60): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff60_DeepSpace_ParamDefaults:
 	.byte 60, 99, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff88_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 88): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff88_Room_ParamDefaults:
 	.byte 88, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff89_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 89): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff89_Karaoke_ParamDefaults:
 	.byte 89, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff90_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 90): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff90_BathRoom_ParamDefaults:
 	.byte 90, 45, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff91_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 91): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff91_Stage_ParamDefaults:
 	.byte 91, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff79_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 79): 23-byte defaults record, one byte per range record in order, final byte 99.
+Eff79_Geq_ParamDefaults:
 	.byte 79, 1, 216, 3, 152, 5, 24, 5, 216, 84, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
 ; --- 0x0143ad  editable-parameter count per effect number 0-99 (10 per row, so row = tens
 ; digit).  For effects with a dedicated range array the count equals the number of range
 ; records; effects on the shared EffDefault_ParamRanges still carry their nominal count 5.
+; Reader: none found in any dumped image -- forms searched are listed in the RE-CHECKED note
+; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
+; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamCount_Table:
 	.byte 5, 5, 7, 7, 8, 8, 5, 5, 6, 7
 	.byte 12, 5, 5, 5, 5, 16, 5, 5, 5, 5
@@ -3839,6 +3985,9 @@ EFF_ParamCount_Table:
 	.byte 5, 5, 5, 5, 5, 5, 12, 12, 13, 13
 
 ; --- 0x014411  100 x u32, effect number -> parameter-ranges record.
+; Reader: none found in any dumped image -- forms searched are listed in the RE-CHECKED note
+; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
+; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 0
 	.long Eff01_Chorus_ParamRanges	; effect 1
@@ -3855,7 +4004,7 @@ EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 12
 	.long EffDefault_ParamRanges	; effect 13
 	.long EffDefault_ParamRanges	; effect 14
-	.long Eff15_RotarySpeaker_ParamRanges	; effect 15
+	.long Eff15_RockRotary_ParamRanges	; effect 15
 	.long Eff16_RoomReverb1_ParamRanges	; effect 16
 	.long Eff17_RoomReverb2_ParamRanges	; effect 17
 	.long Eff18_PlateReverb1_ParamRanges	; effect 18
@@ -3893,14 +4042,14 @@ EFF_ParamRanges_PtrTable:
 	.long Eff50_Vibrato_ParamRanges	; effect 50
 	.long EffDefault_ParamRanges	; effect 51
 	.long Eff52_AutoWah_ParamRanges	; effect 52
-	.long Eff53_RockRotary_ParamRanges	; effect 53
+	.long Eff53_RotarySpeaker_ParamRanges	; effect 53
 	.long Eff54_RingModulator_ParamRanges	; effect 54
 	.long EffDefault_ParamRanges	; effect 55
 	.long Eff56_MixUp_ParamRanges	; effect 56
-	.long Eff57_ParamRanges	; effect 57
-	.long Eff58_ParamRanges	; effect 58
-	.long Eff59_ParamRanges	; effect 59
-	.long Eff60_ParamRanges	; effect 60
+	.long Eff57_Standard_ParamRanges	; effect 57
+	.long Eff58_Percussive_ParamRanges	; effect 58
+	.long Eff59_Symphonic_ParamRanges	; effect 59
+	.long Eff60_DeepSpace_ParamRanges	; effect 60
 	.long EffDefault_ParamRanges	; effect 61
 	.long EffDefault_ParamRanges	; effect 62
 	.long EffDefault_ParamRanges	; effect 63
@@ -3919,7 +4068,7 @@ EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 76
 	.long EffDefault_ParamRanges	; effect 77
 	.long EffDefault_ParamRanges	; effect 78
-	.long Eff79_SecondDsp_ParamRanges	; effect 79
+	.long Eff79_Geq_ParamRanges	; effect 79
 	.long EffDefault_ParamRanges	; effect 80
 	.long EffDefault_ParamRanges	; effect 81
 	.long EffDefault_ParamRanges	; effect 82
@@ -3928,10 +4077,10 @@ EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 85
 	.long EffDefault_ParamRanges	; effect 86
 	.long EffDefault_ParamRanges	; effect 87
-	.long Eff88_SecondDsp_ParamRanges	; effect 88
-	.long Eff89_SecondDsp_ParamRanges	; effect 89
-	.long Eff90_SecondDsp_ParamRanges	; effect 90
-	.long Eff91_SecondDsp_ParamRanges	; effect 91
+	.long Eff88_Room_ParamRanges	; effect 88
+	.long Eff89_Karaoke_ParamRanges	; effect 89
+	.long Eff90_BathRoom_ParamRanges	; effect 90
+	.long Eff91_Stage_ParamRanges	; effect 91
 	.long EffDefault_ParamRanges	; effect 92
 	.long EffDefault_ParamRanges	; effect 93
 	.long EffDefault_ParamRanges	; effect 94
@@ -3942,6 +4091,9 @@ EFF_ParamRanges_PtrTable:
 	.long Eff99_PeqOverdrDelay_ParamRanges	; effect 99
 
 ; --- 0x0145a1  100 x u32, effect number -> parameter-defaults record.
+; Reader: none found in any dumped image -- forms searched are listed in the RE-CHECKED note
+; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
+; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 0
 	.long Eff01_Chorus_ParamDefaults	; effect 1
@@ -3958,7 +4110,7 @@ EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 12
 	.long EffDefault_ParamDefaults	; effect 13
 	.long EffDefault_ParamDefaults	; effect 14
-	.long Eff15_RotarySpeaker_ParamDefaults	; effect 15
+	.long Eff15_RockRotary_ParamDefaults	; effect 15
 	.long Eff16_RoomReverb1_ParamDefaults	; effect 16
 	.long Eff17_RoomReverb2_ParamDefaults	; effect 17
 	.long Eff18_PlateReverb1_ParamDefaults	; effect 18
@@ -3996,14 +4148,14 @@ EFF_ParamDefaults_PtrTable:
 	.long Eff50_Vibrato_ParamDefaults	; effect 50
 	.long EffDefault_ParamDefaults	; effect 51
 	.long Eff52_AutoWah_ParamDefaults	; effect 52
-	.long Eff53_RockRotary_ParamDefaults	; effect 53
+	.long Eff53_RotarySpeaker_ParamDefaults	; effect 53
 	.long Eff54_RingModulator_ParamDefaults	; effect 54
 	.long EffDefault_ParamDefaults	; effect 55
 	.long Eff56_MixUp_ParamDefaults	; effect 56
-	.long Eff57_ParamDefaults	; effect 57
-	.long Eff58_ParamDefaults	; effect 58
-	.long Eff59_ParamDefaults	; effect 59
-	.long Eff60_ParamDefaults	; effect 60
+	.long Eff57_Standard_ParamDefaults	; effect 57
+	.long Eff58_Percussive_ParamDefaults	; effect 58
+	.long Eff59_Symphonic_ParamDefaults	; effect 59
+	.long Eff60_DeepSpace_ParamDefaults	; effect 60
 	.long EffDefault_ParamDefaults	; effect 61
 	.long EffDefault_ParamDefaults	; effect 62
 	.long EffDefault_ParamDefaults	; effect 63
@@ -4022,7 +4174,7 @@ EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 76
 	.long EffDefault_ParamDefaults	; effect 77
 	.long EffDefault_ParamDefaults	; effect 78
-	.long Eff79_SecondDsp_ParamDefaults	; effect 79
+	.long Eff79_Geq_ParamDefaults	; effect 79
 	.long EffDefault_ParamDefaults	; effect 80
 	.long EffDefault_ParamDefaults	; effect 81
 	.long EffDefault_ParamDefaults	; effect 82
@@ -4031,10 +4183,10 @@ EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 85
 	.long EffDefault_ParamDefaults	; effect 86
 	.long EffDefault_ParamDefaults	; effect 87
-	.long Eff88_SecondDsp_ParamDefaults	; effect 88
-	.long Eff89_SecondDsp_ParamDefaults	; effect 89
-	.long Eff90_SecondDsp_ParamDefaults	; effect 90
-	.long Eff91_SecondDsp_ParamDefaults	; effect 91
+	.long Eff88_Room_ParamDefaults	; effect 88
+	.long Eff89_Karaoke_ParamDefaults	; effect 89
+	.long Eff90_BathRoom_ParamDefaults	; effect 90
+	.long Eff91_Stage_ParamDefaults	; effect 91
 	.long EffDefault_ParamDefaults	; effect 92
 	.long EffDefault_ParamDefaults	; effect 93
 	.long EffDefault_ParamDefaults	; effect 94
