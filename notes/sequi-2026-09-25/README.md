@@ -53,7 +53,8 @@ The 270 B left are two honest admissions per version: AccPedal_BankBaseTableCopy
 (28 B, no reader found) and SMF_SlotParam_RPNReturn (62 B, the second
 lookup's index is inconsistent with the table's extent).  The 36 markers are
 the genuine 4-`nop` slots after six `call`s in seq_audio_mode.s (v10 and v9;
-v7 has the same nops, its marker count reads them differently).  The 39
+v7 has the same nops, but on lines separated by blank lines, which the
+nop-nop rule does not pair).  The 39
 numeric branches are all v7 `call`s into C-runtime routines that another
 lane's v7 file frames as data (0xFF0516 = v10 Strncpy x30, 0xFDD69E = v10
 Audio_CheckSubsystemReady x6, 0xFF081D = v10 Memset, 0xFF05BC, 0xFDD7C0).
