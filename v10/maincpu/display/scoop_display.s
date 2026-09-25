@@ -868,25 +868,25 @@ SoundEvt_LongPacketHandler_DispatchTbl_Target2:
 	call	(xiy)
 	ld	wa, (0x371a:16)
 	cp wa, (3816:16)
-	jrl	nz, ScoopDisp_HandlerData2_Code_Skip3
+	jrl	nz, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip3
 	ld	a, (3420:16)
 	ld	w, (3821:16)
 	cp	a, w
-	jrl	z, ScoopDisp_HandlerData2_Code_Skip2
+	jrl	z, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2
 	cpdi8	(0x0d5d), 4
-	jrl	ule, ScoopDisp_HandlerData2_Code_Skip2
+	jrl	ule, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2
 	cp	w, 3:i3
-	jrl	ugt, ScoopDisp_HandlerData2_Code_Skip
+	jrl	ugt, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip
 	cp	a, 3:i3
 	jrl	ugt, SoundEvt_LongPacketHandler_Loop
 	jp	ScoopDisp_HandlerData2_0x6D
-ScoopDisp_HandlerData2_Code_Skip:
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip:
 	cp	a, 3:i3
-	jrl	ule, ScoopDisp_HandlerData2_Code_Skip3
-ScoopDisp_HandlerData2_Code_Skip2:
+	jrl	ule, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip3
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2:
 	call	VoiceState_DataBlock2_0x472
 	jp	ScoopDisp_HandlerData2_0x7E
-ScoopDisp_HandlerData2_Code_Skip3:
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip3:
 	ordi8	(0x0dd3), 1
 	call	VoiceSlot_TableSetup
 	ret
@@ -1817,16 +1817,16 @@ PerfMode_VoiceAddressTable:
 
 	; PerfMode_VoiceAddressTable_0x50: called from six sites.
 	bit 7, w
-	jrl nz, PerfMode_VoiceAddressTable_Code_Skip
+	jrl nz, PerfMode_Evt04_VolumeHandler_Skip
 	cp a, h
-	jrl z, PerfMode_VoiceAddressTable_Code_Return
+	jrl z, PerfMode_Evt04_VolumeHandler_Return
 	inc 1, a
-	jp PerfMode_VoiceAddressTable_Code_Return
-PerfMode_VoiceAddressTable_Code_Skip:
+	jp PerfMode_Evt04_VolumeHandler_Return
+PerfMode_Evt04_VolumeHandler_Skip:
 	cp a, l
-	jrl z, PerfMode_VoiceAddressTable_Code_Return
+	jrl z, PerfMode_Evt04_VolumeHandler_Return
 	dec 1, a
-PerfMode_VoiceAddressTable_Code_Return:
+PerfMode_Evt04_VolumeHandler_Return:
 	ret
 PerfMode_ParamHandler_10:
 	ld	hl, bc
@@ -2824,14 +2824,14 @@ PerfMode_Handler_EvtB_Data:
 	; Entry 11 of UIState_EventTable (a code pointer the table holds).
 UIState_EventTable_Target11:
 	bit	7, w
-	jrl	nz, ScoopDisp_DispatchTable_Extended_Code_Return
+	jrl	nz, UIState_EventTable_Target11_Return
 	ld	xiy, 3567
 	ld	a, (xiy)
 	ld	(3568:16), a
 	ld	(xiy), 18
 	ld	(3422:16), 0
 	call	Display_BytecodeBlock_F_0x33F
-ScoopDisp_DispatchTable_Extended_Code_Return:
+UIState_EventTable_Target11_Return:
 	ret
 	ld	a, (3822:16)
 	ld	(0x2877:16), a
@@ -3765,45 +3765,45 @@ ToneParam_HandlerTable_BC:
 	.long	VoiceSlot_TableSetup
 	.long	DefaultHandler_Ret
 	cpdi8	(0x0d65), 3
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip
-ToneParam_HandlerTable_BC_Code_Loop:
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip4
+ToneParam_Evt09_BytecodeHandler_Loop4:
 	ld	w, 0:opc
 	jp	ToneParam_HandlerTable_BC_0x9E
-ToneParam_HandlerTable_BC_Code_Skip:
+ToneParam_Evt09_BytecodeHandler_Skip4:
 	call	ToneParam_HandlerTable_BC_0x269
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Loop
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Loop4
 	call	ToneParam_HandlerTable_BC_0x2D4
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip2
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip5
 	ld	w, 104:opc
 	call	MIDI_SendSysExFromW
 	ld	w, 1:opc
 	jp	ToneParam_HandlerTable_BC_0x9E
-ToneParam_HandlerTable_BC_Code_Skip2:
+ToneParam_Evt09_BytecodeHandler_Skip5:
 	ld	a, (3647:16)
 	ld	(3649:16), a
 	call	ToneParam_HandlerTable_BC_0x1A2
 	ld	a, (3647:16)
 	ld	(3648:16), a
 	cpda8	xbc, (0x0e41)
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip20
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip6
 	jp	ToneParam_HandlerTable_BC_0x18
-ToneParam_HandlerTable_BC_Code_Skip20:
+ToneParam_Evt09_BytecodeHandler_Skip6:
 	ld	wa, (3418:16)
 	cp wa, (3435:16)
-	jrl	c, ToneParam_HandlerTable_BC_Code_Entry
+	jrl	c, ToneParam_Evt09_BytecodeHandler_Entry
 	call	ToneParam_HandlerTable_BC_0x4DC
 	ld	a, (3648:16)
 	cp a, (3649:16)
-	jrl c, ToneParam_HandlerTable_BC_Code_Skip3
+	jrl c, ToneParam_Evt09_BytecodeHandler_Skip7
 	call	ToneParam_HandlerTable_BC_0x2EB
 	jp	ToneParam_HandlerTable_BC_0x82
-ToneParam_HandlerTable_BC_Code_Skip3:
+ToneParam_Evt09_BytecodeHandler_Skip7:
 	call	ToneParam_HandlerTable_BC_0x357
 	ld	w, 1:opc
 	jp	ToneParam_HandlerTable_BC_0x9E
-ToneParam_HandlerTable_BC_Code_Entry:
+ToneParam_Evt09_BytecodeHandler_Entry:
 	anddi8	(0xe3e2), 111
 	stdi8	(0x7f42), 25
 	xor	wa, wa
@@ -3813,49 +3813,49 @@ ToneParam_HandlerTable_BC_Code_Entry:
 	ret
 	ld	a, (3429:16)
 	cp	a, 3:i3
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip4
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip8
 	ld	w, 0:opc
 	jp	ToneParam_HandlerTable_BC_0xD3
-ToneParam_HandlerTable_BC_Code_Skip4:
+ToneParam_Evt09_BytecodeHandler_Skip8:
 	ld	a, (0x3722:16)
 	ld	d, (3655:16)
 	call	Rhythm_DispatchNote_Tramp
 	ld	(3648:16), a
 	call	ToneParam_HandlerTable_BC_0x1CB
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip5
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip9
 	call	ToneParam_HandlerTable_BC_0xD4
 	jp	ToneParam_HandlerTable_BC_0xD3
-ToneParam_HandlerTable_BC_Code_Skip5:
+ToneParam_Evt09_BytecodeHandler_Skip9:
 	call	ToneParam_HandlerTable_BC_0x148
 	ret
 	ld	a, (3647:16)
 	ld	(3649:16), a
 	ld	a, (3648:16)
 	cp a, (3649:16)
-	jrl nz, ToneParam_HandlerTable_BC_Code_Skip6
+	jrl nz, ToneParam_Evt09_BytecodeHandler_Skip10
 	call	ToneParam_HandlerTable_BC_0x4DC
 	ld	w, 6:opc
 	ld	xiy, 3471
 	call	SysInit_BytecodeBlock_0x486
 	jp	ToneParam_HandlerTable_BC_0x145
-ToneParam_HandlerTable_BC_Code_Skip6:
+ToneParam_Evt09_BytecodeHandler_Skip10:
 	ld	wa, (3418:16)
 	cp wa, (3435:16)
-	jrl	c, ToneParam_HandlerTable_BC_Code_Entry2
+	jrl	c, ToneParam_Evt09_BytecodeHandler_Entry2
 	call	ToneParam_HandlerTable_BC_0x4DC
 	ld	a, (3648:16)
 	cp a, (3649:16)
-	jrl c, ToneParam_HandlerTable_BC_Code_Skip7
+	jrl c, ToneParam_Evt09_BytecodeHandler_Skip11
 	call	ToneParam_HandlerTable_BC_0x2EB
 	jp	ToneParam_HandlerTable_BC_0x120
-ToneParam_HandlerTable_BC_Code_Skip7:
+ToneParam_Evt09_BytecodeHandler_Skip11:
 	call	ToneParam_HandlerTable_BC_0x357
 	ld	w, 6:opc
 	ld	xiy, 3471
 	call	SysInit_BytecodeBlock_0x486
 	jp	ToneParam_HandlerTable_BC_0x145
-ToneParam_HandlerTable_BC_Code_Entry2:
+ToneParam_Evt09_BytecodeHandler_Entry2:
 	anddi8	(0xe3e2), 111
 	stdi8	(0x7f42), 25
 	xor	wa, wa
@@ -3869,23 +3869,23 @@ ToneParam_HandlerTable_BC_Code_Entry2:
 	ld	(3649:16), a
 	ld	a, (3648:16)
 	cp a, (3649:16)
-	jrl nz, ToneParam_HandlerTable_BC_Code_Skip8
+	jrl nz, ToneParam_Evt09_BytecodeHandler_Skip12
 	ld	w, 0:opc
 	jp	ToneParam_HandlerTable_BC_0x1A1
-ToneParam_HandlerTable_BC_Code_Skip8:
+ToneParam_Evt09_BytecodeHandler_Skip12:
 	ld	wa, (3418:16)
 	cp wa, (3435:16)
-	jrl	c, ToneParam_HandlerTable_BC_Code_Entry3
+	jrl	c, ToneParam_Evt09_BytecodeHandler_Entry3
 	ld	a, (3648:16)
 	cp a, (3649:16)
-	jrl c, ToneParam_HandlerTable_BC_Code_Skip9
+	jrl c, ToneParam_Evt09_BytecodeHandler_Skip13
 	call	ToneParam_HandlerTable_BC_0x2EB
 	jp	ToneParam_HandlerTable_BC_0x187
-ToneParam_HandlerTable_BC_Code_Skip9:
+ToneParam_Evt09_BytecodeHandler_Skip13:
 	call	ToneParam_HandlerTable_BC_0x357
 	ld	w, 0:opc
 	jp	ToneParam_HandlerTable_BC_0x1A1
-ToneParam_HandlerTable_BC_Code_Entry3:
+ToneParam_Evt09_BytecodeHandler_Entry3:
 	anddi8	(0xe3e2), 111
 	stdi8	(0x7f42), 25
 	xor	wa, wa
@@ -3895,71 +3895,71 @@ ToneParam_HandlerTable_BC_Code_Entry3:
 	ret
 	ld	a, 3:opc
 	call	VoiceSlot_SaveState
-ToneParam_HandlerTable_BC_Code_Loop2:
+ToneParam_Evt09_BytecodeHandler_Loop5:
 	call	VoiceSlot_CompareAndBranch_0x7
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip10
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip14
 	call	ToneParam_HandlerTable_BC_0x269
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop2
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop5
 	jp	ToneParam_HandlerTable_BC_0x1C4
-ToneParam_HandlerTable_BC_Code_Skip10:
+ToneParam_Evt09_BytecodeHandler_Skip14:
 	ld	(3647:16), 4
 	ld	a, 3:opc
 	call	VoiceSlot_RestoreState
 	ret
 	ld	a, 3:opc
 	call	VoiceSlot_SaveState
-ToneParam_HandlerTable_BC_Code_Loop3:
+ToneParam_Evt09_BytecodeHandler_Loop6:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, ToneParam_HandlerTable_BC_Code_Loop4
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Loop7
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop3
-ToneParam_HandlerTable_BC_Code_Loop4:
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop6
+ToneParam_Evt09_BytecodeHandler_Loop7:
 	call	VoiceSlot_CompareAndBranch_0x7
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip13
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip17
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip13
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip17
 	call	ToneParam_HandlerTable_BC_0x269
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop4
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop7
 	ld	a, 4:opc
 	call	VoiceSlot_SaveState
 	ld	a, (3647:16)
 	ld	(3650:16), a
-ToneParam_HandlerTable_BC_Code_Loop5:
+ToneParam_Evt09_BytecodeHandler_Loop8:
 	call	VoiceSlot_CompareAndBranch_0x7
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip11
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip15
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, ToneParam_HandlerTable_BC_Code_Loop6
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Loop9
 	call	ToneParam_HandlerTable_BC_0x269
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop5
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop8
 	call	ToneParam_HandlerTable_BC_0x4DC
 	jp	ToneParam_HandlerTable_BC_0x210
-ToneParam_HandlerTable_BC_Code_Loop6:
+ToneParam_Evt09_BytecodeHandler_Loop9:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip12
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip16
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip12
-ToneParam_HandlerTable_BC_Code_Skip11:
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip16
+ToneParam_Evt09_BytecodeHandler_Skip15:
 	call	ToneParam_HandlerTable_BC_0x269
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop6
-ToneParam_HandlerTable_BC_Code_Skip12:
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop9
+ToneParam_Evt09_BytecodeHandler_Skip16:
 	ld	a, (3650:16)
 	ld	(3647:16), a
 	ld	w, 0:opc
 	jp	ToneParam_HandlerTable_BC_0x268
-ToneParam_HandlerTable_BC_Code_Skip13:
+ToneParam_Evt09_BytecodeHandler_Skip17:
 	ld	a, 3:opc
 	call	VoiceSlot_RestoreState
 	ld	w, 255:opc
@@ -3971,15 +3971,15 @@ ToneParam_HandlerTable_BC_Code_Skip13:
 	ld	(3528:16), a
 	and	a, 240
 	cp	a, 192
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip14
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip19
 	call	VoiceSlot_StatusRet_0x8A1
 	cp	a, 72
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip14
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip19
 	call	VoiceSlot_FinalRetZ
 	ldb_erp a, 60
 	and a, 31
 	stb_erp a, 60
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip14
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip19
 	srl	a, 5
 	and	a, 3
 	ld	d, a
@@ -3990,14 +3990,14 @@ ToneParam_HandlerTable_BC_Code_Skip13:
 	call	VoiceSlot_ReadCurrentParams
 	popw	de
 	bitda	0, (0x0dc8)
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip21
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip18
 	or	a, 128
-ToneParam_HandlerTable_BC_Code_Skip21:
+ToneParam_Evt09_BytecodeHandler_Skip18:
 	call	Rhythm_DispatchNote_Tramp
 	ld	(3647:16), a
 	ld	w, 0:opc
 	jp	ToneParam_HandlerTable_BC_0x2CC
-ToneParam_HandlerTable_BC_Code_Skip14:
+ToneParam_Evt09_BytecodeHandler_Skip19:
 	ld	w, 255:opc
 	ld	a, 2:opc
 	call	VoiceSlot_RestoreState
@@ -4007,11 +4007,11 @@ ToneParam_HandlerTable_BC_Code_Skip14:
 	pushw	de
 	xor	de, de
 	cp (3418:16), de
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Epilogue
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Epilogue
 	cp e, (3415:16)
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Epilogue
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Epilogue
 	ld	w, 0:opc
-ToneParam_HandlerTable_BC_Code_Epilogue:
+ToneParam_Evt09_BytecodeHandler_Epilogue:
 	popw	de
 	ret
 	push	xwa
@@ -4025,31 +4025,31 @@ ToneParam_HandlerTable_BC_Code_Epilogue:
 	call	VoiceSlot_SaveState
 	xor	a, a
 	ld	(3651:16), a
-ToneParam_HandlerTable_BC_Code_Loop7:
+ToneParam_Evt09_BytecodeHandler_Loop10:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip15
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip20
 	inc	1, (3651:16)
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip16
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip21
 	ld	a, (3651:16)
 	cp a, (3649:16)
-	jrl c, ToneParam_HandlerTable_BC_Code_Loop7
+	jrl c, ToneParam_Evt09_BytecodeHandler_Loop10
 	xor	b, b
 	ld	c, (3648:16)
 	sub	c, (3649:16)
 	call	SysInit_BytecodeBlock_0xFF
 	djnz16	bc, -7
 	jp	ToneParam_HandlerTable_BC_0x2F8
-ToneParam_HandlerTable_BC_Code_Skip15:
+ToneParam_Evt09_BytecodeHandler_Skip20:
 	and	a, 240
 	cp	a, 192
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip16
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip21
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop7
-ToneParam_HandlerTable_BC_Code_Skip16:
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop10
+ToneParam_Evt09_BytecodeHandler_Skip21:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	pop	xiz
@@ -4071,54 +4071,54 @@ ToneParam_HandlerTable_BC_Code_Skip16:
 	call	VoiceSlot_SaveState
 	xor	a, a
 	ld	(3651:16), a
-ToneParam_HandlerTable_BC_Code_Loop8:
+ToneParam_Evt09_BytecodeHandler_Loop11:
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	cp	a, 129
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip17
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip22
 	and	a, 240
 	cp	a, 192
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	jp	ToneParam_HandlerTable_BC_0x36A
-ToneParam_HandlerTable_BC_Code_Skip17:
+ToneParam_Evt09_BytecodeHandler_Skip22:
 	inc	1, (3651:16)
 	call	MemConfig_Handler_5_0xE4
 	ld	a, (3649:16)
 	sub	a, (3648:16)
 	cp a, (3651:16)
-	jrl ugt, ToneParam_HandlerTable_BC_Code_Loop8
+	jrl ugt, ToneParam_Evt09_BytecodeHandler_Loop11
 	xor	b, b
 	ld	c, (3648:16)
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 130
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	cp	a, 132
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	cp	a, 129
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip18
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip23
 	pushw	bc
 	call	VoiceSlot_DispatchRet
 	popw	bc
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	djnz16	bc, -37
 	jp	ToneParam_HandlerTable_BC_0x364
-ToneParam_HandlerTable_BC_Code_Skip18:
+ToneParam_Evt09_BytecodeHandler_Skip23:
 	and	a, 240
 	cp	a, 192
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip19
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip24
 	pushw	bc
 	call	VoiceSlot_DispatchRet
 	popw	bc
 	jp	ToneParam_HandlerTable_BC_0x3B8
-ToneParam_HandlerTable_BC_Code_Skip19:
+ToneParam_Evt09_BytecodeHandler_Skip24:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	pop	xiz
@@ -4138,12 +4138,12 @@ SerialPort_ModeHandler_0_Helper:
 	ld	(3822:16), a
 	ld	(3435:16), wa
 	cpdi8	(0x0d65), 3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip24
-ToneParam_HandlerTable_BC_Code_Loop9:
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip27
+ToneParam_Evt09_BytecodeHandler_Loop12:
 	ld	a, (3822:16)
 	inc	1, a
 	cp	a, 16
-	jrl	ugt, ToneParam_HandlerTable_BC_Code_Skip24
+	jrl	ugt, ToneParam_Evt09_BytecodeHandler_Skip27
 	ld	(3822:16), a
 	call	VoiceSlot_ComputeWordIndex
 	srl	xiz, 1
@@ -4151,12 +4151,12 @@ ToneParam_HandlerTable_BC_Code_Loop9:
 	ld	xix, 0xf1a0
 	cpib_sri 0x07, 0xf0, 0xf8, 0x10	; cp (XIX+IZ),0x10
 	pop	xix
-	jrl	z, ToneParam_HandlerTable_BC_Code_Loop9
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Loop12
 	xor	wa, wa
 	ld	(3652:16), wa
 	call	VoiceState_DataBlock2_0x184
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop9
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop12
 	xor	wa, wa
 	ld	a, (3822:16)
 	dec	1, a
@@ -4180,27 +4180,27 @@ ToneParam_HandlerTable_BC_Code_Loop9:
 	stib_ind 0x07, 0xe8, 0xec, 0x05	; ld (XDE+HL),0x05
 	pop	xhl
 	pop	xde
-ToneParam_HandlerTable_BC_Code_Loop10:
+ToneParam_Evt09_BytecodeHandler_Loop13:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Skip22
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip25
 	incw	1, (3652:16)
-ToneParam_HandlerTable_BC_Code_Skip22:
+ToneParam_Evt09_BytecodeHandler_Skip25:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop10
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop13
 	call	VoiceSlot_FlagCheck
 	cp	a, 132
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip23
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip26
 	ld	wa, (3652:16)
 	cp wa, (3435:16)
-	jrl	c, ToneParam_HandlerTable_BC_Code_Loop9
+	jrl	c, ToneParam_Evt09_BytecodeHandler_Loop12
 	dec	1, wa
 	ld	(3435:16), wa
 	jp	ToneParam_HandlerTable_BC_0x41C
-ToneParam_HandlerTable_BC_Code_Skip23:
+ToneParam_Evt09_BytecodeHandler_Skip26:
 	ldw	(3435:16), 0xffff
-ToneParam_HandlerTable_BC_Code_Skip24:
+ToneParam_Evt09_BytecodeHandler_Skip27:
 	ld	a, (3654:16)
 	ld	(3822:16), a
 	ret
@@ -4214,29 +4214,29 @@ ToneParam_HandlerTable_BC_Code_Skip24:
 	ret
 	ordi8	(0xe3e2), 8
 	ldw_d16	hl, (0x0d5a)
-ToneParam_HandlerTable_BC_Code_Loop11:
+ToneParam_Evt09_BytecodeHandler_Loop14:
 	push	xhl
 	call	AccPedal_CheckBitAndUpdate
-ToneParam_HandlerTable_BC_Code_Loop12:
+ToneParam_Evt09_BytecodeHandler_Loop15:
 	call	Timer_ParamCompareAlt
 	xor	a, a
 	cp	(3415:16), a
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop12
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop15
 	cp	(3420:16), a
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop12
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop15
 	pop	xhl
 	cpdi16	(0x0d5a), 0
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip25
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip28
 	cp hl, (3418:16)
-	jrl	z, ToneParam_HandlerTable_BC_Code_Loop11
-ToneParam_HandlerTable_BC_Code_Skip25:
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Loop14
+ToneParam_Evt09_BytecodeHandler_Skip28:
 	resda	2, (0x0d54)
 	ld	(3413:16), 255
 	ret
 	ordi8	(0xe3e2), 8
 	call	AccPedal_CheckBitAndUpdate
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Return
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Return
 	ld	l, (3421:16)
 	sub	l, (3420:16)
 	xor	h, h
@@ -4246,7 +4246,7 @@ ToneParam_HandlerTable_BC_Code_Skip25:
 	call	DisplayMode_Handler_3_0x30C
 	resda	2, (0x0d54)
 	ld	(3413:16), 255
-ToneParam_HandlerTable_BC_Code_Return:
+ToneParam_Evt09_BytecodeHandler_Return:
 	ret
 	call	Display_UpdateRegion0
 	call	Display_UpdateRegion1
@@ -4255,33 +4255,33 @@ ToneParam_HandlerTable_BC_Code_Return:
 	call	Display_UpdateRegion2
 	ret
 	cp	c, 0:i3
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip27
-ToneParam_HandlerTable_BC_Code_Loop13:
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip30
+ToneParam_Evt09_BytecodeHandler_Loop16:
 	pushw	bc
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 130
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip28
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip31
 	cp	a, 132
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip28
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip31
 	cpdi8	(0x0dcf), 0
-	jrl	z, ToneParam_HandlerTable_BC_Code_Skip26
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Skip29
 	call	VoiceSlot_CompareAndBranch_0x7
 	jp	ToneParam_HandlerTable_BC_0x5A6
-ToneParam_HandlerTable_BC_Code_Skip26:
+ToneParam_Evt09_BytecodeHandler_Skip29:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, ToneParam_HandlerTable_BC_Code_Epilogue2
+	jrl	z, ToneParam_Evt09_BytecodeHandler_Epilogue2
 	call	VoiceSlot_ReadCurrentParams
 	popw	bc
 	cp	a, 129
-	jrl	nz, ToneParam_HandlerTable_BC_Code_Loop13
+	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop16
 	djnz16	bc, -57
-ToneParam_HandlerTable_BC_Code_Skip27:
+ToneParam_Evt09_BytecodeHandler_Skip30:
 	ld	w, 0:opc
 	jp	ToneParam_HandlerTable_BC_0x5C3
-ToneParam_HandlerTable_BC_Code_Skip28:
+ToneParam_Evt09_BytecodeHandler_Skip31:
 	ld	w, 0:opc
-ToneParam_HandlerTable_BC_Code_Epilogue2:
+ToneParam_Evt09_BytecodeHandler_Epilogue2:
 	popw	bc
 	ret
 ToneEvt_Handler_Mode9:
@@ -6551,23 +6551,23 @@ SerialPort_ModeHandler_0_Skip8:
 ScoopParam_ValueTable:
 	.byte	0x00, 0x00, 0x08, 0x00, 0x0c, 0x00, 0x10, 0x00, 0x18, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00
 	.byte	0x60, 0x00, 0xc0, 0x00, 0x80, 0x01, 0x00, 0x03, 0x80, 0x04, 0x00, 0x06
-	call	ScoopParam_ValueTable_Code_Helper
+	call	SerialPort_ModeHandler_0_Helper2
 	ld	(3415:16), w
 	ld	(3533:16), a
 	ret
-	call	ScoopParam_ValueTable_Code_Helper
+	call	SerialPort_ModeHandler_0_Helper2
 	ld	(3534:16), w
 	ld	(3533:16), a
 	ret
-ScoopParam_ValueTable_Code_Helper:
+SerialPort_ModeHandler_0_Helper2:
 	ld	w, (13359:16)
 	ld	a, (13360:16)
 	add	w, (3415:16)
 	cp	w, 96
-	jrl	c, ScoopParam_ValueTable_Return
+	jrl	c, SerialPort_ModeHandler_0_Return2
 	sub	w, 96
 	inc	1, a
-ScoopParam_ValueTable_Return:
+SerialPort_ModeHandler_0_Return2:
 	ret
 	push	xwa
 	push	xhl
@@ -6578,15 +6578,15 @@ ScoopParam_ValueTable_Return:
 	push	xiz
 	ld	xiy, 10430
 	cp	(xiy), 255
-	jrl	z, ScoopParam_ValueTable_Epilogue
+	jrl	z, SerialPort_ModeHandler_0_Epilogue
 	ld	(xiy), 255
 	ld	a, (3822:16)
 	ld	(10359:16), a
 	call	Scoop_SpecialMode_ParamCheckBound
 	resda	7, (0x0d54)
-	call	ScoopParam_ValueTable_Sub
+	call	SerialPort_ModeHandler_0_Sub
 	ordi8	(0x8d88), 1
-ScoopParam_ValueTable_Epilogue:
+SerialPort_ModeHandler_0_Epilogue:
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -6603,7 +6603,7 @@ ScoopParam_ValueTable_Epilogue:
 	push	xiy
 	push	xiz
 	xor	bc, bc
-ScoopParam_ValueTable_Loop:
+SerialPort_ModeHandler_0_Loop:
 	ld	wa, bc
 	ld	xhl, 3439
 	ld_rr8b	a, xhl, a
@@ -6611,11 +6611,11 @@ ScoopParam_ValueTable_Loop:
 	ld	(xhl), 255
 	ld	e, a
 	cp	a, 255
-	jrl	nz, ScoopParam_ValueTable_Skip
-ScoopParam_ValueTable_Join:
+	jrl	nz, SerialPort_ModeHandler_0_Skip11
+SerialPort_ModeHandler_0_Join:
 	inc	1, bc
 	cp	bc, 28
-	jrl	ule, ScoopParam_ValueTable_Loop
+	jrl	ule, SerialPort_ModeHandler_0_Loop
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -6624,8 +6624,8 @@ ScoopParam_ValueTable_Join:
 	pop	xhl
 	pop	xwa
 	anddi8	(0x0d53), 254
-	jp	ScoopParam_ValueTable_Return2
-ScoopParam_ValueTable_Skip:
+	jp	SerialPort_ModeHandler_0_Return3
+SerialPort_ModeHandler_0_Skip11:
 	ld	xiy, 3471
 	ld	(xiy), 176
 	ld	a, (3415:16)
@@ -6633,20 +6633,20 @@ ScoopParam_ValueTable_Skip:
 	ld	(xiy+5), 127
 	ld	a, c
 	cp	a, 15
-	jrl	ugt, ScoopParam_ValueTable_Skip2
+	jrl	ugt, SerialPort_ModeHandler_0_Skip12
 	ld	xhl, SerialPort_ModeHandler_0_Tbl
 	ld_rr8b	a, xhl, a
 	ld	w, 3:opc
-	jp	ScoopParam_ValueTable_Join2
-ScoopParam_ValueTable_Skip2:
+	jp	SerialPort_ModeHandler_0_Join2
+SerialPort_ModeHandler_0_Skip12:
 	cp	a, 27
-	jrl	nz, ScoopParam_ValueTable_Skip3
+	jrl	nz, SerialPort_ModeHandler_0_Skip13
 	ld	a, 72:opc
 	ld	w, 8:opc
-	jp	ScoopParam_ValueTable_Join2
-ScoopParam_ValueTable_Skip3:
+	jp	SerialPort_ModeHandler_0_Join2
+SerialPort_ModeHandler_0_Skip13:
 	cp	a, 28
-	jrl	z, ScoopParam_ValueTable_Entry
+	jrl	z, SerialPort_ModeHandler_0_Entry
 	sub	a, 16
 	ld	l, a
 	xor	h, h
@@ -6657,9 +6657,9 @@ ScoopParam_ValueTable_Skip3:
 	ld_rrb	w, xix, hl
 	pop	xix
 	cp	a, 255
-	jrl	nz, ScoopParam_ValueTable_Join2
-	jp	ScoopParam_ValueTable_Join
-ScoopParam_ValueTable_Entry:
+	jrl	nz, SerialPort_ModeHandler_0_Join2
+	jp	SerialPort_ModeHandler_0_Join
+SerialPort_ModeHandler_0_Entry:
 	ormi8	(xiy), 4
 	ld	(xiy+2), 152
 	andmi8	(xiy+2), 127
@@ -6668,20 +6668,20 @@ ScoopParam_ValueTable_Entry:
 	ld	(xiy+5), 127
 	ld	w, 6:opc
 	pushw	bc
-	call	ScoopParam_ValueTable_Helper10
+	call	SystemInit_StepHandler_0_Helper2
 	popw	bc
-	jp	ScoopParam_ValueTable_Join
-ScoopParam_ValueTable_Join2:
+	jp	SerialPort_ModeHandler_0_Join
+SerialPort_ModeHandler_0_Join2:
 	ld	(xiy+2), a
 	ld	a, w
 	ld	(xiy+3), a
 	ld	(xiy+4), e
 	ld	w, 6:opc
 	pushw	bc
-	call	ScoopParam_ValueTable_Helper10
+	call	SystemInit_StepHandler_0_Helper2
 	popw	bc
-	jp	ScoopParam_ValueTable_Join
-ScoopParam_ValueTable_Return2:
+	jp	SerialPort_ModeHandler_0_Join
+SerialPort_ModeHandler_0_Return3:
 	ret
 	; Byte data, 16 B.  Read by SerialPort_ModeHandler_0 (0xEF9E03): `ld xhl, SerialPort_ModeHandler_0_Tbl`
 	; index bounded to 0..15 (`cp a, 15` / `jrl ugt` skips larger values)
@@ -6709,42 +6709,42 @@ SerialPort_ModeHandler_0_Data2:
 	call	VoiceCtrl_CheckAndReset
 	ld	a, (64605:16)
 	ld	(4392:16), a
-	call	ScoopParam_ValueTable_Helper2
+	call	PortConfig_Handler_0_Helper2
 	cp	(3429:16), 0
-	jrl	nz, ScoopParam_ValueTable_Sub
+	jrl	nz, SerialPort_ModeHandler_0_Sub
 	anddi8	(0xfc5d), 247
 	ld	e, 72:opc
 	ld	d, 3:opc
 	ld	a, (64605:16)
 	ld	w, 8:opc
 	call	SwbtWr_QueuePostEvent
-ScoopParam_ValueTable_Sub:
+SerialPort_ModeHandler_0_Sub:
 	ld	(14100:16), 4
 	ld	(14101:16), 0
 	ld	(14102:16), 1
-	call	ScoopParam_ValueTable_Helper3
-	call	ScoopParam_ValueTable_Helper2
+	call	PortConfig_Handler_0_Helper3
+	call	PortConfig_Handler_0_Helper2
 	ld	a, (36154:16)
 	ld	(3430:16), a
-	call	PortConfig_DataTable_A_Sub
-	call	ScoopParam_ValueTable_Helper5
-	call	PortConfig_DataTable_B_Return
-	call	ScoopParam_ValueTable_Helper6
+	call	PortConfig_Handler_0_Sub
+	call	PortConfig_Handler_0_Helper5
+	call	PortConfig_Handler_0_Return
+	call	ClockConfig_Handler_0_Helper
 	cpw	(62001:16), 0
-	jrl	nz, ScoopParam_ValueTable_Entry2
-	call	ScoopParam_ValueTable_Helper11
+	jrl	nz, SerialPort_ModeHandler_0_Entry2
+	call	VoiceState_DataBlock2_Helper
 	cp	w, 0:i3
-	jrl	z, ScoopParam_ValueTable_Entry2
+	jrl	z, SerialPort_ModeHandler_0_Entry2
 	ld	(3433:16), 24
-	jp	ScoopParam_ValueTable_Return3
-ScoopParam_ValueTable_Entry2:
+	jp	SerialPort_ModeHandler_0_Return4
+SerialPort_ModeHandler_0_Entry2:
 	resda	7, (0x0d54)
-	call	ScoopParam_ValueTable_Helper4
+	call	PortConfig_Handler_0_Helper4
 	call	SeqBuf_Init
-	call	ScoopParam_ValueTable_Helper
-	call	ScoopParam_ValueTable_Helper8
+	call	PortConfig_Handler_0_Helper
+	call	MemConfig_Handler_4_Helper2
 	call	BitMapOut_ComputeRegionDelta
-	call	ScoopParam_ValueTable_Helper7
+	call	MemConfig_Handler_4_Helper
 	call	PortConfig_SetupBytecode
 	xor	wa, wa
 	ld	(3407:16), wa
@@ -6799,24 +6799,24 @@ ScoopParam_ValueTable_Entry2:
 	stw_erp DE, 0x3e	; ld DE,QHL3
 	ldw	(3928:16), 65535
 	call	Audio_CheckSubsystemReady
-	call	ScoopParam_ValueTable_Helper11
+	call	VoiceState_DataBlock2_Helper
 	cp	w, 0:i3
-	jrl	z, ScoopParam_ValueTable_Skip4
-	call	ScoopParam_ValueTable_Helper9
+	jrl	z, SerialPort_ModeHandler_0_Skip14
+	call	SystemInit_StepHandler_0_Helper
 	call	VoiceSlot_CompareAndBranch
 	call	ScoopParam_ValueTable_Sub_Helper
-	jp	ScoopParam_ValueTable_Join3
-ScoopParam_ValueTable_Skip4:
-	call	MemoryConfig_Handler_Table_Code_Sub
-ScoopParam_ValueTable_Join3:
+	jp	SerialPort_ModeHandler_0_Join3
+SerialPort_ModeHandler_0_Skip14:
+	call	MemoryConfig_Handler_Table_Target2_Sub
+SerialPort_ModeHandler_0_Join3:
 	call	ScoopParam_ValueTable_Sub_Helper2
 	bitda	2, (0x0421)
-	jrl	z, ScoopParam_ValueTable_Entry3
+	jrl	z, SerialPort_ModeHandler_0_Entry3
 	call	Demo_PreSetupAndScan
-ScoopParam_ValueTable_Entry3:
+SerialPort_ModeHandler_0_Entry3:
 	anddi8	(0x346e), 239
 	anddi8	(0x045b), 252
-	call	ScoopParam_ValueTable_Helper12
+	call	VoiceState_DataBlock2_Helper2
 	ordi8	(0x28a7), 4
 	ld	xiy, 3411
 	ormi8	(xiy), 8
@@ -6829,18 +6829,18 @@ ScoopParam_ValueTable_Entry3:
 	call	PortConfig_SetupBytecode_0x34
 SerialPort_ModeHandler_0_Skip9:
 	call	SerialPort_ModeHandler_0_Helper
-	jp	ScoopParam_ValueTable_Return3
+	jp	SerialPort_ModeHandler_0_Return4
 ScoopParam_ValueTable_Entry3_Code_Skip:
-	call	PortConfig_DataTable_B_Return
-	call	ScoopParam_ValueTable_Helper6
+	call	PortConfig_Handler_0_Return
+	call	ClockConfig_Handler_0_Helper
 	bitda	3, (0x0d53)
 	jrl	z, SerialPort_ModeHandler_0_Skip10
 	call	PortConfig_SetupBytecode_0x34
 	cp	(3429:16), 0
 	jrl	nz, SerialPort_ModeHandler_0_Skip10
 SerialPort_ModeHandler_0_Skip10:
-	jp	ScoopParam_ValueTable_Return3
-ScoopParam_ValueTable_Return3:
+	jp	SerialPort_ModeHandler_0_Return4
+SerialPort_ModeHandler_0_Return4:
 	ret
 
 Interrupt_ModeGuardCheck:
@@ -7181,7 +7181,7 @@ PortConfig_Handler_0_Skip2:
 PortConfig_Handler_0_Skip3:
 	call	DisplayMode_Handler_3_0x775
 	ret
-ScoopParam_ValueTable_Helper:
+PortConfig_Handler_0_Helper:
 	call	VoiceSlot_ComputeIndex
 	push	xde
 	ld	xde, 0xf250
@@ -7212,7 +7212,7 @@ ScoopParam_ValueTable_Helper_Skip:
 	pop	xix
 	pop	xde
 	ret
-ScoopParam_ValueTable_Helper2:
+PortConfig_Handler_0_Helper2:
 	ld	a, (3424:16)
 	ld	(3822:16), a
 	call	VoiceSlot_ComputeWordIndex
@@ -7230,7 +7230,7 @@ ScoopParam_ValueTable_Helper2:
 PortConfig_DataTable_A:
 	.byte	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x02
 	.byte	0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
-PortConfig_DataTable_A_Sub:
+PortConfig_Handler_0_Sub:
 	call	VoiceSlot_ComputeWordIndex
 	srl	xiz, 1
 	push	xix
@@ -7261,18 +7261,18 @@ PortConfig_DataTable_A_Sub_Return:
 PortConfig_DataTable_B:
 	.byte	0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff
 	.byte	0xff, 0x0c, 0x0d, 0x0e
-ScoopParam_ValueTable_Helper3:
+PortConfig_Handler_0_Helper3:
 	ld	xhl, 4362
 	ld	xwa, (7514:16)
 	ld	(xhl), xwa
 	ret
-ScoopParam_ValueTable_Helper4:
+PortConfig_Handler_0_Helper4:
 	call	TempoRingBuf_ReadByte
 	ld	wa, hl
 	cp	wa, 0xffff
-	jrl	nz, ScoopParam_ValueTable_Helper4
+	jrl	nz, PortConfig_Handler_0_Helper4
 	ret
-ScoopParam_ValueTable_Helper5:
+PortConfig_Handler_0_Helper5:
 	ld	xhl, PortConfig_Handler_0_Tbl
 	ld	a, (3429:16)
 	and	a, 3
@@ -7283,7 +7283,7 @@ ScoopParam_ValueTable_Helper5:
 	; reader PortConfig_Handler_0: `ld xhl, PortConfig_Handler_0_Tbl` then `ld_rr8b a, xhl, a`
 PortConfig_Handler_0_Tbl:
 	.byte	0x00, 0x00, 0x00, 0x0c
-PortConfig_DataTable_B_Return:
+PortConfig_Handler_0_Return:
 	ret
 	; Pointer table, 16 B.  No reader found: no label, positional or absolute .set
 	; name at this address is loaded anywhere in the image (searched by
@@ -7299,7 +7299,7 @@ ClockConfig_Handler_1:
 ClockConfig_Handler_0:
 	anddi8	(0xe3e2), 253
 	ret
-ScoopParam_ValueTable_Helper6:
+ClockConfig_Handler_0_Helper:
 	ret
 	; Byte data, 4 B.  No reader found: no label, positional or absolute .set
 	; name at this address is loaded anywhere in the image (searched by
@@ -7686,29 +7686,29 @@ MemoryConfig_Handler_Table:
 	ld	(xix+2), 72
 	ld	a, 5:opc
 	cp	hl, 48
-	jrl	c, MemoryConfig_Handler_Table_Code_Skip
+	jrl	c, SysEx_BytecodeDispatcher_Skip7
 	ld	a, 6:opc
-MemoryConfig_Handler_Table_Code_Skip:
+SysEx_BytecodeDispatcher_Skip7:
 	ld	(xix+3), a
 	xor	w, w
 	ld_rrb	a, xiy, hl
 	bit	7, a
-	jrl	z, MemoryConfig_Handler_Table_Code_Skip2
+	jrl	z, SysEx_BytecodeDispatcher_Skip8
 	ormi8	(xix), 1
 	ld	(xix+4), w
 	jp	MemoryConfig_Handler_Table_0x67
-MemoryConfig_Handler_Table_Code_Skip2:
+SysEx_BytecodeDispatcher_Skip8:
 	ld	(xix+4), a
 	ldfr_lerp	xiy, 56
 	lda_rr	xiy, xiy, hl
 	ld	a, (xiy+1)
 	ldto_lerp	xiy, 56
 	bit	7, a
-	jrl	z, MemoryConfig_Handler_Table_Code_Skip3
+	jrl	z, SysEx_BytecodeDispatcher_Skip9
 	ormi8	(xix), 2
 	ld	(xix+5), w
 	jp	MemoryConfig_Handler_Table_0x88
-MemoryConfig_Handler_Table_Code_Skip3:
+SysEx_BytecodeDispatcher_Skip9:
 	ld	(xix+5), a
 	push	xiy
 	ld	w, 6:opc
@@ -7720,7 +7720,7 @@ MemoryConfig_Handler_Table_Code_Skip3:
 	push	xix
 	push	xiy
 	push	xiz
-	call	ScoopParam_ValueTable_Helper10
+	call	SystemInit_StepHandler_0_Helper2
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -7748,22 +7748,22 @@ SysEx_BytecodeDispatcher_Tbl:
 MemoryConfig_Handler_Table_Target2:
 	ld	xhl, 0x10f9
 	bitm	2, (xhl)
-	jrl	z, MemoryConfig_Handler_Table_Code_Skip4
+	jrl	z, MemoryConfig_Handler_Table_Target2_Skip
 	resm	2, (xhl)
-	jp	MemoryConfig_Handler_Table_Code_Join
-MemoryConfig_Handler_Table_Code_Skip4:
+	jp	MemoryConfig_Handler_Table_Target2_Join
+MemoryConfig_Handler_Table_Target2_Skip:
 	ld	w, 114:opc
 	call	MIDI_SendSysExFromW
 	setda	1, (0x10f9)
-MemoryConfig_Handler_Table_Code_Sub:
-	call	ScoopParam_ValueTable_Helper7
+MemoryConfig_Handler_Table_Target2_Sub:
+	call	MemConfig_Handler_4_Helper
 	ld	xiz, 0x0d53
 	andmi8	(xiz), 191
 	call	MemConfig_VoiceSlotLookup
 	call	ClockConfig_Handler_0_0xAB
-MemoryConfig_Handler_Table_Code_Join:
+MemoryConfig_Handler_Table_Target2_Join:
 	cpdi8	(0x0d65), 0
-	jrl	nz, MemoryConfig_Handler_Table_Code_Entry
+	jrl	nz, MemoryConfig_Handler_Table_Target2_Entry
 	stdi8	(0x0d6a), 0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
@@ -7773,7 +7773,7 @@ MemoryConfig_Handler_Table_Code_Sub_Skip:
 	call	SubCPU_ToneParamRet_0x4BD
 	call	DMA_FlagCheckWithCalls
 	call	SndDispatch_ProcessCommand_0x28B
-MemoryConfig_Handler_Table_Code_Entry:
+MemoryConfig_Handler_Table_Target2_Entry:
 	ld	w, 0:opc
 	ret
 
@@ -8700,7 +8700,7 @@ MemConfig_Handler_4_Skip7:
 MemConfig_Handler_4_Skip8:
 	ld	w, 0:opc
 	ret
-ScoopParam_ValueTable_Helper7:
+MemConfig_Handler_4_Helper:
 	ld	(0xfc5f:16), 0
 	ld	(0xfc60:16), 0
 	push	xwa
@@ -8728,7 +8728,7 @@ ScoopParam_ValueTable_Helper7:
 	pop	xhl
 	pop	xwa
 	ret
-ScoopParam_ValueTable_Helper8:
+MemConfig_Handler_4_Helper2:
 	cpdi8	(0x0d65), 0
 	jrl	nz, ScoopParam_ValueTable_Helper8_Return
 	ld	a, (0xfc5d:16)
@@ -8776,9 +8776,9 @@ SystemInit_Handler_Table:
 	pop	xhl
 	sub	l, 2
 	cp	l, 6:i3
-	jrl	lt, SystemInit_Handler_Table_Code_Skip
+	jrl	lt, SysInit_SendAllNotesAndReset_Skip
 	sub	l, 2
-SystemInit_Handler_Table_Code_Skip:
+SysInit_SendAllNotesAndReset_Skip:
 	xor	h, h
 	sla	hl, 3
 	call	MemoryConfig_Handler_Table_0x18
@@ -8907,20 +8907,20 @@ SysEx_BytecodeDispatcher_Tbl2:
 	ld	xiy, 3471
 	call	SysInit_BytecodeBlock_0x486
 	ret
-SysInit_BytecodeBlock_Code_Loop:
+SystemInit_StepHandler_0_Loop:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Skip17
+	jrl	z, SystemInit_StepHandler_0_Skip3
 	call	VoiceCtrl_BytecodeHandler
 	cp	b, 22
-	jrl	z, SysInit_BytecodeBlock_Code_Loop
+	jrl	z, SystemInit_StepHandler_0_Loop
 	cp	b, 23
-	jrl	z, SysInit_BytecodeBlock_Code_Loop
-SysInit_BytecodeBlock_Code_Skip17:
+	jrl	z, SystemInit_StepHandler_0_Loop
+SystemInit_StepHandler_0_Skip3:
 	ld	xiy, 3519
 	call	SysInit_BytecodeBlock_0x413
 	cp	l, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Return
+	jrl	z, SystemInit_StepHandler_0_Return2
 	xor	h, h
 	sla	hl, 2
 	push	xde
@@ -8935,55 +8935,55 @@ SysInit_BytecodeBlock_Code_Skip17:
 	ld	(3578:16), a
 	add	a, l
 	cp	a, 96
-	jrl	c, SysInit_BytecodeBlock_Code_Skip18
+	jrl	c, SystemInit_StepHandler_0_Skip4
 	sub	a, 96
 	ld	(3415:16), a
 	call	SysInit_BytecodeBlock_0xFB
 	cp	a, 96
-	jrl	c, SysInit_BytecodeBlock_Code_Skip18
+	jrl	c, SystemInit_StepHandler_0_Skip4
 	sub	a, 96
 	ld	(3415:16), a
 	call	SysInit_BytecodeBlock_0xFB
-SysInit_BytecodeBlock_Code_Skip18:
+SystemInit_StepHandler_0_Skip4:
 	djnz16	bc, -39
 	ld	(3415:16), a
 	cpda8	xbc, (0x0dfa)
-	jrl	z, SysInit_BytecodeBlock_Code_Return
+	jrl	z, SystemInit_StepHandler_0_Return2
 	call	MemConfig_Handler_5_0x1BF
-SysInit_BytecodeBlock_Code_Return:
+SystemInit_StepHandler_0_Return2:
 	ret
 	call	VoiceState_DataBlock2_0x10C
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Skip19
+	jrl	z, SystemInit_StepHandler_0_Skip5
 	cp	c, 2:i3
-	jrl	ule, SysInit_BytecodeBlock_Code_Return6
-SysInit_BytecodeBlock_Code_Skip19:
+	jrl	ule, SystemInit_StepHandler_0_Return3
+SystemInit_StepHandler_0_Skip5:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	nz, SysInit_BytecodeBlock_Code_Return6
+	jrl	nz, SystemInit_StepHandler_0_Return3
 	call	VoiceSlot_LoadAndDispatch
 	jp	SysInit_BytecodeBlock_0xA7
-SysInit_BytecodeBlock_Code_Return6:
+SystemInit_StepHandler_0_Return3:
 	ret
 	xor	a, a
 	call	VoiceSlot_SaveState
 	call	VoiceSlot_FlagCheck
 	cp	a, 132
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip20
+	jrl	nz, SystemInit_StepHandler_0_Skip6
 	setda	7, (0x0d54)
-SysInit_BytecodeBlock_Code_Skip20:
+SystemInit_StepHandler_0_Skip6:
 	call	SysInit_BytecodeBlock_0xFF
 	xor	a, a
 	call	VoiceSlot_RestoreState
 	ret
 	call	VoiceSlot_FlagCheck
 	cp	a, 132
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip21
+	jrl	nz, SystemInit_StepHandler_0_Skip7
 	setda	7, (0x0d54)
-SysInit_BytecodeBlock_Code_Skip21:
+SystemInit_StepHandler_0_Skip7:
 	call	SysInit_BytecodeBlock_0xFF
 	ret
-ScoopParam_ValueTable_Helper9:
+SystemInit_StepHandler_0_Helper:
 	incw	1, (3416:16)
 	push	xwa
 	push	xhl
@@ -9005,60 +9005,60 @@ ScoopParam_ValueTable_Helper9:
 	pop	xwa
 	ret
 	cp	l, 2:i3
-	jrl	z, SysInit_BytecodeBlock_Code_Skip
+	jrl	z, SystemInit_StepHandler_0_Skip8
 	cp	l, 10
-	jrl	nz, SysInit_BytecodeBlock_Code_Return2
-SysInit_BytecodeBlock_Code_Skip:
+	jrl	nz, SystemInit_StepHandler_0_Return4
+SystemInit_StepHandler_0_Skip8:
 	pushw	hl
 	call	VoiceState_DataBlock2_0xAD
 	popw	hl
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Skip2
+	jrl	z, SystemInit_StepHandler_0_Skip9
 	jp	SysInit_BytecodeBlock_0x154
-SysInit_BytecodeBlock_Code_Skip2:
+SystemInit_StepHandler_0_Skip9:
 	xor	wa, wa
 	cp (3416:16), wa
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip3
+	jrl	nz, SystemInit_StepHandler_0_Skip10
 	cp	(3415:16), a
-	jrl	z, SysInit_BytecodeBlock_Code_Return2
-SysInit_BytecodeBlock_Code_Skip3:
+	jrl	z, SystemInit_StepHandler_0_Return4
+SystemInit_StepHandler_0_Skip10:
 	cp	l, 2:i3
-	jrl	z, SysInit_BytecodeBlock_Code_Skip4
+	jrl	z, SystemInit_StepHandler_0_Skip11
 	ld	l, 5:opc
 	jp	SysInit_BytecodeBlock_0x154
-SysInit_BytecodeBlock_Code_Skip4:
+SystemInit_StepHandler_0_Skip11:
 	ld	l, 4:opc
-SysInit_BytecodeBlock_Code_Return2:
+SystemInit_StepHandler_0_Return4:
 	ret
 	cp	l, 7:i3
-	jrl	nz, SysInit_BytecodeBlock_Code_Return3
+	jrl	nz, SystemInit_StepHandler_0_Return5
 	call	VoiceState_DataBlock2_0xAD
 	cp	w, 0:i3
-	jrl	z, SysInit_BytecodeBlock_Code_Skip5
+	jrl	z, SystemInit_StepHandler_0_Skip12
 	jp	SysInit_BytecodeBlock_0x179
-SysInit_BytecodeBlock_Code_Skip5:
+SystemInit_StepHandler_0_Skip12:
 	xor	wa, wa
 	cp (3416:16), wa
-	jrl	nz, SysInit_BytecodeBlock_Code_Return3
+	jrl	nz, SystemInit_StepHandler_0_Return5
 	cp	(3415:16), a
-	jrl	nz, SysInit_BytecodeBlock_Code_Return3
+	jrl	nz, SystemInit_StepHandler_0_Return5
 	ld	l, 3:opc
-SysInit_BytecodeBlock_Code_Return3:
+SystemInit_StepHandler_0_Return5:
 	ret
 	cp	l, 10
-	jrl	nz, SysInit_BytecodeBlock_Code_Return4
+	jrl	nz, SystemInit_StepHandler_0_Return6
 	call	VoiceState_DataBlock2_0xAD
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Skip6
+	jrl	z, SystemInit_StepHandler_0_Skip13
 	jp	SysInit_BytecodeBlock_0x1A0
-SysInit_BytecodeBlock_Code_Skip6:
+SystemInit_StepHandler_0_Skip13:
 	xor	wa, wa
 	cp (3416:16), wa
-	jrl	nz, SysInit_BytecodeBlock_Code_Return4
+	jrl	nz, SystemInit_StepHandler_0_Return6
 	cp	(3415:16), a
-	jrl	nz, SysInit_BytecodeBlock_Code_Return4
+	jrl	nz, SystemInit_StepHandler_0_Return6
 	ld	l, 5:opc
-SysInit_BytecodeBlock_Code_Return4:
+SystemInit_StepHandler_0_Return6:
 	ret
 	ld	xhl, 3412
 	bitm	7, (xhl)
@@ -9108,7 +9108,7 @@ ScoopParam_ValueTable_Helper9_Loop:
 	ld	a, (3822:16)
 	inc	1, a
 	cp	a, 15
-	jrl	ugt, SysInit_BytecodeBlock_Code_Return5
+	jrl	ugt, SystemInit_StepHandler_0_Return7
 	ld	(3822:16), a
 	call	VoiceSlot_ComputeWordIndex
 	srl	xiz, 1
@@ -9119,7 +9119,7 @@ ScoopParam_ValueTable_Helper9_Loop:
 	jrl	nz, ScoopParam_ValueTable_Helper9_Loop
 	call	VoiceState_DataBlock2_0x184
 	cp	w, 0:i3
-	jrl	nz, SysInit_BytecodeBlock_Code_Return5
+	jrl	nz, SystemInit_StepHandler_0_Return7
 	call	VoiceSlot_ComputeIndex
 	push	xix
 	ld	xix, 0xf250
@@ -9143,12 +9143,12 @@ ScoopParam_ValueTable_Helper9_Loop:
 	jrl	z, ScoopParam_ValueTable_Helper9_Skip2
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Return5
+	jrl	z, SystemInit_StepHandler_0_Return7
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
-	jrl	z, SysInit_BytecodeBlock_Code_Return5
+	jrl	z, SystemInit_StepHandler_0_Return7
 	cp	a, 132
-	jrl	z, SysInit_BytecodeBlock_Code_Return5
+	jrl	z, SystemInit_StepHandler_0_Return7
 	jp	SysInit_BytecodeBlock_0x28C
 	jp	SysInit_BytecodeBlock_0x3DA
 ScoopParam_ValueTable_Helper9_Skip2:
@@ -9156,13 +9156,13 @@ ScoopParam_ValueTable_Helper9_Skip2:
 	rrc	w
 	ld	(3528:16), w
 	cp	a, 176
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip9
+	jrl	nz, SystemInit_StepHandler_0_Skip16
 	call	VoiceSlot_FlagCheck
 	cp	a, 48
-	jrl	z, SysInit_BytecodeBlock_Code_Skip7
+	jrl	z, SystemInit_StepHandler_0_Skip14
 	cp	a, 96
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip9
-SysInit_BytecodeBlock_Code_Skip7:
+	jrl	nz, SystemInit_StepHandler_0_Skip16
+SystemInit_StepHandler_0_Skip14:
 	ld	a, 2:opc
 	call	VoiceSlot_SaveState
 	ld	de, 4:i3
@@ -9170,7 +9170,7 @@ SysInit_BytecodeBlock_Code_Skip7:
 	call	VoiceSlot_ReadCurrentParams
 	or	a, (3528:16)
 	cp	a, 0:i3
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip8
+	jrl	nz, SystemInit_StepHandler_0_Skip15
 	ld	a, 2:opc
 	call	VoiceSlot_RestoreState
 	ld	de, 1:i3
@@ -9179,43 +9179,43 @@ SysInit_BytecodeBlock_Code_Skip7:
 	dec	1, a
 	ld	w, a
 	call	VoiceSlot_FinalRetZ_0x84
-SysInit_BytecodeBlock_Code_Skip8:
+SystemInit_StepHandler_0_Skip15:
 	ld	a, 2:opc
 	call	VoiceSlot_RestoreState
-SysInit_BytecodeBlock_Code_Skip9:
+SystemInit_StepHandler_0_Skip16:
 	call	VoiceSlot_FlagCheck
 	ld	(3658:16), a
 	xor	a, a
 	ld	(3657:16), a
-SysInit_BytecodeBlock_Code_Loop2:
+SystemInit_StepHandler_0_Loop2:
 	call	VoiceSlot_DispatchRet
 	inc	1, (3657:16)
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
-	jrl	z, SysInit_BytecodeBlock_Code_Skip10
+	jrl	z, SystemInit_StepHandler_0_Skip17
 	cp	a, 129
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip11
-SysInit_BytecodeBlock_Code_Skip10:
+	jrl	nz, SystemInit_StepHandler_0_Skip18
+SystemInit_StepHandler_0_Skip17:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	jp	SysInit_BytecodeBlock_0x2A1
-SysInit_BytecodeBlock_Code_Skip11:
+SystemInit_StepHandler_0_Skip18:
 	call	VoiceSlot_FlagCheck
 	cp	(3658:16), a
-	jrl	ule, SysInit_BytecodeBlock_Code_Loop2
-SysInit_BytecodeBlock_Code_Loop3:
+	jrl	ule, SystemInit_StepHandler_0_Loop2
+SystemInit_StepHandler_0_Loop3:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, SysInit_BytecodeBlock_Code_Skip12
+	jrl	z, SystemInit_StepHandler_0_Skip19
 	call	VoiceSlot_FlagCheck
 	cp	(3658:16), a
-	jrl	ugt, SysInit_BytecodeBlock_Code_Skip12
+	jrl	ugt, SystemInit_StepHandler_0_Skip19
 	inc	1, (3657:16)
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	nz, SysInit_BytecodeBlock_Code_Loop3
+	jrl	nz, SystemInit_StepHandler_0_Loop3
 	dec	1, (3657:16)
-SysInit_BytecodeBlock_Code_Skip12:
+SystemInit_StepHandler_0_Skip19:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	call	VoiceSlot_FinalRetZ
@@ -9228,10 +9228,10 @@ SysInit_BytecodeBlock_Code_Skip12:
 	call	VoiceSlot_FinalRetZ
 	pop	xiy
 	bit	7, a
-	jrl	nz, SysInit_BytecodeBlock_Code_Skip13
+	jrl	nz, SystemInit_StepHandler_0_Skip20
 	ld	(xiy), a
 	jp	SysInit_BytecodeBlock_0x392
-SysInit_BytecodeBlock_Code_Skip13:
+SystemInit_StepHandler_0_Skip20:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	call	ToneParam_HandlerTable_BC_0x4DC
@@ -9247,7 +9247,7 @@ SysInit_BytecodeBlock_Code_Skip13:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	jp	SysInit_BytecodeBlock_0x2AB
-SysInit_BytecodeBlock_Code_Return5:
+SystemInit_StepHandler_0_Return7:
 	ret
 	push	xix
 	pushw	hl
@@ -9269,61 +9269,61 @@ SysInit_BytecodeBlock_Code_Return5:
 	ret
 	pushw	bc
 	xor	c, c
-SysInit_BytecodeBlock_Code_Loop4:
+SystemInit_StepHandler_0_Loop4:
 	ldb_erp a, 60
 	ld a, c
 	scf
 	xorcf	a, (xiy)
 	stb_erp a, 60
-	jrl	nc, SysInit_BytecodeBlock_Code_Skip14
+	jrl	nc, SystemInit_StepHandler_0_Skip21
 	inc	1, c
 	cp	c, 8
-	jrl	c, SysInit_BytecodeBlock_Code_Loop4
+	jrl	c, SystemInit_StepHandler_0_Loop4
 	ld	l, 255:opc
 	popw	bc
 	jp	SysInit_BytecodeBlock_0x439
-SysInit_BytecodeBlock_Code_Skip14:
+SystemInit_StepHandler_0_Skip21:
 	ld	l, c
 	jp	SysInit_BytecodeBlock_0x42E
 	ret
 	push	xiy
 	pushw	bc
 	xor	c, c
-SysInit_BytecodeBlock_Code_Loop5:
+SystemInit_StepHandler_0_Loop5:
 	ldb_erp a, 60
 	ld a, c
 	scf
 	xorcf	a, (xiy)
 	stb_erp a, 60
-	jrl	nc, SysInit_BytecodeBlock_Code_Skip15
+	jrl	nc, SystemInit_StepHandler_0_Skip22
 	inc	1, c
 	cp	c, 8
-	jrl	c, SysInit_BytecodeBlock_Code_Loop5
+	jrl	c, SystemInit_StepHandler_0_Loop5
 	xor	c, c
 	inc	1, xiy
-SysInit_BytecodeBlock_Code_Loop6:
+SystemInit_StepHandler_0_Loop6:
 	ldb_erp a, 60
 	ld a, c
 	scf
 	xorcf	a, (xiy)
 	stb_erp a, 60
-	jrl	nc, SysInit_BytecodeBlock_Code_Skip16
+	jrl	nc, SystemInit_StepHandler_0_Skip23
 	inc	1, c
 	cp	c, 8
-	jrl	c, SysInit_BytecodeBlock_Code_Loop6
+	jrl	c, SystemInit_StepHandler_0_Loop6
 	ld	l, 255:opc
 	popw	bc
 	pop	xiy
 	jp	SysInit_BytecodeBlock_0x485
-SysInit_BytecodeBlock_Code_Skip15:
+SystemInit_StepHandler_0_Skip22:
 	ld	l, c
 	jp	SysInit_BytecodeBlock_0x470
-SysInit_BytecodeBlock_Code_Skip16:
+SystemInit_StepHandler_0_Skip23:
 	ld	l, c
 	add	l, 8
 	jp	SysInit_BytecodeBlock_0x470
 	ret
-ScoopParam_ValueTable_Helper10:
+SystemInit_StepHandler_0_Helper2:
 	ld	a, (3822:16)
 	call	SysInit_BytecodeBlock_0x499
 	ordi8	(0x8d88), 1
@@ -9415,7 +9415,7 @@ ScoopParam_ValueTable_Helper10_Skip2:
 	call	DispatchHandler_JumpToSubHandler
 	popw	de
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Loop7
+	jrl	z, SystemInit_StepHandler_0_Loop7
 	ld	iy, ix
 	ld	xix, 0xf1f8
 	srl	iz, 1
@@ -9453,7 +9453,7 @@ ScoopParam_ValueTable_Helper10_Skip2:
 	xor	w, w
 	popw	bc
 	jp	SysInit_BytecodeBlock_0x691
-SysInit_BytecodeBlock_Code_Loop7:
+SystemInit_StepHandler_0_Loop7:
 	ld	w, 104:opc
 	call	MIDI_SendSysExFromW
 	anddi8	(0xe3e2), 111
@@ -9469,7 +9469,7 @@ ScoopParam_ValueTable_Helper10_Skip3:
 	ld	iy, ix
 	pop	xix
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_Code_Loop7
+	jrl	z, SystemInit_StepHandler_0_Loop7
 	st_rrw iy, xix, iz
 	srl	iz, 1
 	ldfr_lerp xix, 56
@@ -11327,7 +11327,7 @@ VoiceState_DataBlock2_Skip3:
 	ld	bc, 2:i3
 	pop	xhl
 	ret
-ScoopParam_ValueTable_Helper11:
+VoiceState_DataBlock2_Helper:
 	push	xhl
 	ld	a, (3822:16)
 	dec	1, a
@@ -11641,7 +11641,7 @@ VoiceState_DataBlock2_Code_Skip15:
 	ld	(0x370f:16), h
 	call	DisplayStr_StyleSectionNames_0x69
 	ret
-ScoopParam_ValueTable_Helper12:
+VoiceState_DataBlock2_Helper2:
 	ld	xix, 0xf1a0
 	xor	bc, bc
 	ld	c, 16:opc
@@ -12103,11 +12103,11 @@ SubCPU_ToneParamDisplay_Tbl:
 SubCPU_ToneParamRet_Target1:
 	xor	l, l
 	bit	7, w
-	jrl	nz, SubCPU_ToneDispatch_Code_Skip
+	jrl	nz, SubCPU_ToneParamRet_Target1_Skip
 	ld	l, 3:opc
-SubCPU_ToneDispatch_Code_Skip:
+SubCPU_ToneParamRet_Target1_Skip:
 	cp	(4380:16), l
-	jrl	z, SubCPU_ToneDispatch_Code_Return
+	jrl	z, SubCPU_ToneParamRet_Target1_Return
 	ld	a, (4380:16)
 	xor	l, l
 	ld	h, 3:opc
@@ -12116,7 +12116,7 @@ SubCPU_ToneDispatch_Code_Skip:
 	call	SubCPU_ToneParamDisplay_0x9F
 	call	SubCPU_ToneParamDisplay_0xE3
 	call	SubCPU_ToneParamDisplay_0x4E
-SubCPU_ToneDispatch_Code_Return:
+SubCPU_ToneParamRet_Target1_Return:
 	ret
 SubCPU_ToneHandler_A:
 	; --- Dispatch: set flag, load A, 3-way bounds selection, clamp+calls (70 bytes) ---
@@ -12263,9 +12263,9 @@ SubCPU_ToneParamRet:
 	ld	(3784:16), a
 	ld	(3667:16), a
 	cpdi16	(0x371a), 1
-	jrl	z, SubCPU_ToneParamRet_Code_Skip4
+	jrl	z, PerfMode_ParamHandler_11_Skip6
 	cpdi8	(0x0ec8), 4
-	jrl	ugt, SubCPU_ToneParamRet_Code_Entry
+	jrl	ugt, PerfMode_ParamHandler_11_Entry
 	call	SubCPU_ToneParamRet_0x38A
 	ld	de, (3662:16)
 	inc	1, de
@@ -12274,25 +12274,25 @@ SubCPU_ToneParamRet:
 	ld	a, (3822:16)
 	call	SetWall_SlotResolve
 	cpdi8	(0x287a), 0
-	jrl	z, SubCPU_ToneParamRet_Code_Skip
+	jrl	z, PerfMode_ParamHandler_11_Skip
 	xor	wa, wa
 	ld	(3664:16), wa
 	ld	(3668:16), a
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip:
+PerfMode_ParamHandler_11_Skip:
 	ld	hl, (3662:16)
 	inc	1, hl
 	ld	(3664:16), hl
 	ld	(3785:16), a
 	ld	(3668:16), a
 	cp	a, 4:i3
-	jrl	ule, SubCPU_ToneParamRet_Code_Skip34
+	jrl	ule, PerfMode_ParamHandler_11_Skip2
 	ld	(3668:16), 4
-SubCPU_ToneParamRet_Code_Skip34:
+PerfMode_ParamHandler_11_Skip2:
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Entry:
+PerfMode_ParamHandler_11_Entry:
 	cpdi8	(0x0d5c), 3
-	jrl	ugt, SubCPU_ToneParamRet_Code_Skip35
+	jrl	ugt, PerfMode_ParamHandler_11_Skip3
 	call	SubCPU_ToneParamRet_0x38A
 	ld	wa, (3662:16)
 	ld	(3664:16), wa
@@ -12301,7 +12301,7 @@ SubCPU_ToneParamRet_Code_Entry:
 	ld	(3668:16), a
 	ld	(3667:16), 4
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip35:
+PerfMode_ParamHandler_11_Skip3:
 	ld	de, (3662:16)
 	ld	(0x287f:16), de
 	call	SubCPU_ToneParamRet_0x315
@@ -12323,23 +12323,23 @@ SubCPU_ToneParamRet_Code_Skip35:
 	ld	a, (3822:16)
 	call	SetWall_SlotResolve
 	cpdi8	(0x287a), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip3
+	jrl	nz, PerfMode_ParamHandler_11_Skip5
 	ld	hl, (3662:16)
 	inc	1, hl
 	ld	(3664:16), hl
 	ld	(3785:16), a
 	ld	(3668:16), a
 	cp	a, 3:i3
-	jrl	ule, SubCPU_ToneParamRet_Code_Skip2
+	jrl	ule, PerfMode_ParamHandler_11_Skip4
 	ld	(3668:16), 4
-SubCPU_ToneParamRet_Code_Skip2:
+PerfMode_ParamHandler_11_Skip4:
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip3:
+PerfMode_ParamHandler_11_Skip5:
 	xor	wa, wa
 	ld	(3664:16), wa
 	ld	(3668:16), a
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip4:
+PerfMode_ParamHandler_11_Skip6:
 	ld	l, (3822:16)
 	dec	1, l
 	ld	h, l
@@ -12354,7 +12354,7 @@ SubCPU_ToneParamRet_Code_Skip4:
 	ld	(0x28bf:16), hl
 	ldw	(0x28c1:16), 5
 	cpdi8	(0x0ec8), 4
-	jrl	ugt, SubCPU_ToneParamRet_Code_Skip37
+	jrl	ugt, PerfMode_ParamHandler_11_Skip9
 	xor	wa, wa
 	ld	(3660:16), wa
 	ld	(3666:16), a
@@ -12367,25 +12367,25 @@ SubCPU_ToneParamRet_Code_Skip4:
 	ld	a, (3822:16)
 	call	SetWall_SlotResolve
 	cpdi8	(0x287a), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip5
+	jrl	nz, PerfMode_ParamHandler_11_Skip8
 	ld	hl, (3662:16)
 	inc	1, hl
 	ld	(3664:16), hl
 	ld	(3785:16), a
 	ld	(3668:16), a
 	cp	a, 4:i3
-	jrl	ule, SubCPU_ToneParamRet_Code_Skip36
+	jrl	ule, PerfMode_ParamHandler_11_Skip7
 	ld	(3668:16), 4
-SubCPU_ToneParamRet_Code_Skip36:
+PerfMode_ParamHandler_11_Skip7:
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip5:
+PerfMode_ParamHandler_11_Skip8:
 	xor	wa, wa
 	ld	(3664:16), wa
 	ld	(3668:16), a
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip37:
+PerfMode_ParamHandler_11_Skip9:
 	cpdi8	(0x0d5c), 3
-	jrl	ugt, SubCPU_ToneParamRet_Code_Skip38
+	jrl	ugt, PerfMode_ParamHandler_11_Skip10
 	xor	wa, wa
 	ld	(3660:16), wa
 	ld	(3666:16), a
@@ -12396,7 +12396,7 @@ SubCPU_ToneParamRet_Code_Skip37:
 	ld	wa, (3662:16)
 	ld	(3664:16), wa
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip38:
+PerfMode_ParamHandler_11_Skip10:
 	ld	wa, (0x371a:16)
 	ld	(3660:16), wa
 	ld	(3666:16), 4
@@ -12410,18 +12410,18 @@ SubCPU_ToneParamRet_Code_Skip38:
 	ld	a, (3822:16)
 	call	SetWall_SlotResolve
 	cpdi8	(0x287a), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip7
+	jrl	nz, PerfMode_ParamHandler_11_Skip12
 	ld	hl, (0x371a:16)
 	inc	1, hl
 	ld	(3664:16), hl
 	ld	(3785:16), a
 	ld	(3668:16), a
 	cp	a, 4:i3
-	jrl	ule, SubCPU_ToneParamRet_Code_Skip6
+	jrl	ule, PerfMode_ParamHandler_11_Skip11
 	ld	(3668:16), 4
-SubCPU_ToneParamRet_Code_Skip6:
+PerfMode_ParamHandler_11_Skip11:
 	jp	SubCPU_ToneParamRet_0x2CC
-SubCPU_ToneParamRet_Code_Skip7:
+PerfMode_ParamHandler_11_Skip12:
 	xor	wa, wa
 	ld	(3664:16), wa
 	ld	(3668:16), a
@@ -12436,7 +12436,7 @@ SubCPU_ToneParamRet_Code_Skip7:
 	ld	(3782:16), a
 	ld	(3780:16), wa
 	cpdm16	(0x117c), xwa
-	jrl	nz, SubCPU_ToneParamRet_Code_Return4
+	jrl	nz, PerfMode_ParamHandler_11_Return2
 	ld	wa, (3662:16)
 	ld	(4476:16), wa
 	ld	xwa, 3701
@@ -12444,54 +12444,54 @@ SubCPU_ToneParamRet_Code_Skip7:
 	ld	(3782:16), 1
 	ld	a, (3667:16)
 	ld	(3777:16), a
-SubCPU_ToneParamRet_Code_Return4:
+PerfMode_ParamHandler_11_Return2:
 	ret
 	xor	w, w
 	bitda	0, (0x0d54)
-	jrl	z, SubCPU_ToneParamRet_Code_Skip40
+	jrl	z, PerfMode_ParamHandler_11_Skip14
 	xor	hl, hl
 	cp	hl, 15
-	jrl	ugt, SubCPU_ToneParamRet_Code_Return5
+	jrl	ugt, PerfMode_ParamHandler_11_Return3
 	push	xde
 	ld	xde, 0xf1a0
 	cpib_sri 0x07, 0xe8, 0xec, 0x10	; cp (XDE+HL),0x10
 	pop	xde
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip39
+	jrl	nz, PerfMode_ParamHandler_11_Skip13
 	ld	w, l
 	inc	1, w
 	jp	SubCPU_ToneParamRet_0x34E
-SubCPU_ToneParamRet_Code_Skip39:
+PerfMode_ParamHandler_11_Skip13:
 	inc	1, hl
 	jp	SubCPU_ToneParamRet_0x320
-SubCPU_ToneParamRet_Code_Skip40:
+PerfMode_ParamHandler_11_Skip14:
 	anddi8	(0x287b), 251
 	jp	SubCPU_ToneParamRet_0x353
 	ordi8	(0x287b), 4
-SubCPU_ToneParamRet_Code_Return5:
+PerfMode_ParamHandler_11_Return3:
 	ret
 	xor	bc, bc
 	pushw	bc
 	call	VoiceBank_LoadLerpState
 	popw	bc
 	bit	7, a
-	jrl	z, SubCPU_ToneParamRet_Code_Skip8
+	jrl	z, PerfMode_ParamHandler_11_Skip15
 	cp	a, 130
-	jrl	z, SubCPU_ToneParamRet_Code_Return
+	jrl	z, PerfMode_ParamHandler_11_Return4
 	cp	a, 132
-	jrl	z, SubCPU_ToneParamRet_Code_Return
+	jrl	z, PerfMode_ParamHandler_11_Return4
 	cp	a, 129
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip8
+	jrl	nz, PerfMode_ParamHandler_11_Skip15
 	inc	1, c
 	cp	c, 4:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip9
-SubCPU_ToneParamRet_Code_Skip8:
+	jrl	z, PerfMode_ParamHandler_11_Skip16
+PerfMode_ParamHandler_11_Skip15:
 	pushw	bc
 	call	VoiceBank_UpdateLerpState
 	popw	bc
 	jp	SubCPU_ToneParamRet_0x356
-SubCPU_ToneParamRet_Code_Skip9:
+PerfMode_ParamHandler_11_Skip16:
 	call	VoiceBank_UpdateLerpState
-SubCPU_ToneParamRet_Code_Return:
+PerfMode_ParamHandler_11_Return4:
 	ret
 	ld	de, (3662:16)
 	dec	1, de
@@ -12510,90 +12510,90 @@ SubCPU_ToneParamRet_Code_Return:
 	ld	(3783:16), a
 	ld	(3666:16), a
 	cp	a, 4:i3
-	jrl	ule, SubCPU_ToneParamRet_Code_Return2
+	jrl	ule, PerfMode_ParamHandler_11_Return5
 	sub	a, 4
 	ld	(3666:16), a
 	call	SubCPU_ToneParamRet_0x354
-SubCPU_ToneParamRet_Code_Return2:
+PerfMode_ParamHandler_11_Return5:
 	ret
 	call	Display_ResetDirtyFlags
 	call	SubCPU_ToneParamRet_0x3DE
 	call	Display_UpdateDirtyRegions
 	ret
 	cpdi8	(0x8d38), 138
-	jrl	nz, SubCPU_ToneParamRet_Code_Return3
+	jrl	nz, PerfMode_ParamHandler_11_Return6
 	ld	a, (0xc07d:16)
 	cp	a, 0:i3
-	jrl	nz, SubCPU_ToneParamRet_Code_Return3
+	jrl	nz, PerfMode_ParamHandler_11_Return6
 	ld	a, (3429:16)
 	cp	a, 1:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip10
+	jrl	z, PerfMode_ParamHandler_11_Skip17
 	cp	a, 2:i3
-	jrl	nz, SubCPU_ToneParamRet_Code_Return3
-SubCPU_ToneParamRet_Code_Skip10:
+	jrl	nz, PerfMode_ParamHandler_11_Return6
+PerfMode_ParamHandler_11_Skip17:
 	ld	w, (0xc07e:16)
 	ld	a, (0xc07f:16)
 	cp	w, 0:i3
-	jrl	nz, SubCPU_ToneParamRet_Code_Return3
+	jrl	nz, PerfMode_ParamHandler_11_Return6
 	and	a, 3
 	cp	a, 1:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip41
+	jrl	z, PerfMode_ParamHandler_11_Skip18
 	cp	a, 2:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip41
+	jrl	z, PerfMode_ParamHandler_11_Skip18
 	cp	a, 3:i3
-	jrl	nz, SubCPU_ToneParamRet_Code_Return3
-SubCPU_ToneParamRet_Code_Skip41:
+	jrl	nz, PerfMode_ParamHandler_11_Return6
+PerfMode_ParamHandler_11_Skip18:
 	ld	(3382:16), 0
 	bitda	7, (0x0d39)
-	jrl	z, SubCPU_ToneParamRet_Code_Skip43
+	jrl	z, PerfMode_ParamHandler_11_Skip20
 	anddi8	(0x0f57), 254
 	call	Display_UpdateRegion0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, SubCPU_ToneParamRet_Code_Skip42
+	jrl	z, PerfMode_ParamHandler_11_Skip19
 	cp	a, 130
-	jrl	z, SubCPU_ToneParamRet_Code_Skip42
+	jrl	z, PerfMode_ParamHandler_11_Skip19
 	call	VoiceSlot_FlagCheck
 	cpda8	xbc, (0x0d57)
-	jrl	nc, SubCPU_ToneParamRet_Code_Skip42
+	jrl	nc, PerfMode_ParamHandler_11_Skip19
 	call	DMA_FlagCheckWithCalls
 	resda	2, (0x0d54)
 	jp	SubCPU_ToneParamRet_0x461
-SubCPU_ToneParamRet_Code_Skip42:
+PerfMode_ParamHandler_11_Skip19:
 	ld	(0x3717:16), 255
 	call	DisplayMode_Handler_3_0x775
 	ordi8	(0x0dd3), 1
 	ldw	(9920:16), 0
 	call	VoiceSlot_TableSetup
 	jp	SubCPU_ToneParamRet_0x4BC
-SubCPU_ToneParamRet_Code_Skip43:
+PerfMode_ParamHandler_11_Skip20:
 	anddi8	(0x0f57), 254
 	call	Display_UpdateRegion0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, SubCPU_ToneParamRet_Code_Skip44
+	jrl	z, PerfMode_ParamHandler_11_Skip21
 	cp	a, 130
-	jrl	z, SubCPU_ToneParamRet_Code_Skip44
+	jrl	z, PerfMode_ParamHandler_11_Skip21
 	call	VoiceSlot_FlagCheck
 	cpda8	xbc, (0x0d57)
-	jrl	nc, SubCPU_ToneParamRet_Code_Skip44
+	jrl	nc, PerfMode_ParamHandler_11_Skip21
 	call	DMA_FlagCheckWithCalls
 	resda	2, (0x0d54)
 	jp	SubCPU_ToneParamRet_0x4AD
-SubCPU_ToneParamRet_Code_Skip44:
+PerfMode_ParamHandler_11_Skip21:
 	ld	(0x3717:16), 255
 	call	DisplayMode_Handler_3_0x775
 	ordi8	(0x0dd3), 1
 	ldw	(9920:16), 0
 	call	VoiceSlot_TableSetup
-SubCPU_ToneParamRet_Code_Return3:
+PerfMode_ParamHandler_11_Return6:
 	ret
 	cpdi8	(0x28be), 255
-	jrl	z, SubCPU_ToneParamRet_Code_Skip45
-SubCPU_ToneParamRet_Code_Loop4:
+	jrl	z, PerfMode_ParamHandler_11_Skip22
+PerfMode_ParamHandler_11_Loop:
 	call	Display_UpdateRegion1
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip45:
+PerfMode_ParamHandler_11_Skip22:
 	ld	l, (3424:16)
 	dec	1, l
 	ld	h, l
@@ -12604,262 +12604,262 @@ SubCPU_ToneParamRet_Code_Skip45:
 	ld	xde, 0xf250
 	bit_dri 7, 0x07, 0xe8, 0xec	; bit 7,(XDE+HL)
 	pop	xde
-	jrl	z, SubCPU_ToneParamRet_Code_Loop4
+	jrl	z, PerfMode_ParamHandler_11_Loop
 	call	OscScope_RenderBlock_0x21
 	call	SubCPU_ToneParamRet_0x80
 	call	VoiceBank_ProcessCommand
 	cpdi8	(0x0eb5), 129
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip46
+	jrl	nz, PerfMode_ParamHandler_11_Skip24
 	call	DisplayStr_BytecodeBlock_A_0x1A4
 	ld	a, (3771:16)
 	cp	a, 130
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip11
+	jrl	nz, PerfMode_ParamHandler_11_Skip23
 	call	SubCPU_ToneParamRet_0x98D
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip11:
+PerfMode_ParamHandler_11_Skip23:
 	call	StringData_APCModeNames_0x713
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip46:
+PerfMode_ParamHandler_11_Skip24:
 	cpdi8	(0x0eb5), 130
-	jrl	z, SubCPU_ToneParamRet_Code_Skip12
+	jrl	z, PerfMode_ParamHandler_11_Skip25
 	cpdi8	(0x0eb5), 132
-	jrl	z, SubCPU_ToneParamRet_Code_Skip12
+	jrl	z, PerfMode_ParamHandler_11_Skip25
 	cpdi8	(0x0eb6), 48
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip12
+	jrl	nz, PerfMode_ParamHandler_11_Skip25
 	call	StringData_APCModeNames_0x713
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip12:
+PerfMode_ParamHandler_11_Skip25:
 	ldw	(3778:16), 0
 	ld	a, (3765:16)
 	cp	a, 130
-	jrl	z, SubCPU_ToneParamRet_Code_Skip13
+	jrl	z, PerfMode_ParamHandler_11_Skip26
 	cp	a, 132
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip14
+	jrl	nz, PerfMode_ParamHandler_11_Skip27
 	call	SubCPU_ToneParamRet_0x9AF
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip13:
+PerfMode_ParamHandler_11_Skip26:
 	call	SubCPU_ToneParamRet_0x98D
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip14:
+PerfMode_ParamHandler_11_Skip27:
 	and	a, 240
 	cp	a, 144
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip15
+	jrl	nz, PerfMode_ParamHandler_11_Skip28
 	call	SubCPU_ToneParamRet_0x8C5
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip15:
+PerfMode_ParamHandler_11_Skip28:
 	ld	a, (3765:16)
 	cp	a, 132
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip16
+	jrl	nz, PerfMode_ParamHandler_11_Skip29
 	call	SubCPU_ToneParamRet_0x9AF
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip16:
+PerfMode_ParamHandler_11_Skip29:
 	and	a, 240
 	ld	a, (3766:16)
 	cp	a, 47
-	jrl	z, SubCPU_ToneParamRet_Code_Skip17
+	jrl	z, PerfMode_ParamHandler_11_Skip30
 	cp	a, 95
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip18
-SubCPU_ToneParamRet_Code_Skip17:
+	jrl	nz, PerfMode_ParamHandler_11_Skip31
+PerfMode_ParamHandler_11_Skip30:
 	jp	SubCPU_ToneParamRet_0x4F3
-SubCPU_ToneParamRet_Code_Skip18:
+PerfMode_ParamHandler_11_Skip31:
 	call	SubCPU_ToneParamRet_0xA1F
 	ld	a, (3766:16)
 	ld	(3952:16), a
-SubCPU_ToneParamRet_Code_Loop5:
+PerfMode_ParamHandler_11_Loop2:
 	call	VoiceBank_ProcessCommand
 	ld	a, (3765:16)
 	cp	a, 129
-	jrl	z, SubCPU_ToneParamRet_Code_Loop
+	jrl	z, PerfMode_ParamHandler_11_Loop3
 	cp	a, 132
-	jrl	z, SubCPU_ToneParamRet_Code_Loop
+	jrl	z, PerfMode_ParamHandler_11_Loop3
 	ld	l, (3766:16)
 	cp	l, 47
-	jrl	z, SubCPU_ToneParamRet_Code_Loop5
+	jrl	z, PerfMode_ParamHandler_11_Loop2
 	cp	l, 95
-	jrl	z, SubCPU_ToneParamRet_Code_Loop5
+	jrl	z, PerfMode_ParamHandler_11_Loop2
 	cpda8	xsp, (0x0f70)
-	jrl	nz, SubCPU_ToneParamRet_Code_Loop
+	jrl	nz, PerfMode_ParamHandler_11_Loop3
 	and	a, 240
 	cp	a, 144
-	jrl	nz, SubCPU_ToneParamRet_Code_Loop5
+	jrl	nz, PerfMode_ParamHandler_11_Loop2
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Loop:
+PerfMode_ParamHandler_11_Loop3:
 	ld	a, (3765:16)
 	cp	a, 129
-	jrl	z, SubCPU_ToneParamRet_Code_Skip48
+	jrl	z, PerfMode_ParamHandler_11_Skip38
 	cp	a, 130
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip47
+	jrl	nz, PerfMode_ParamHandler_11_Skip32
 	call	SubCPU_ToneParamRet_0x98D
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip47:
+PerfMode_ParamHandler_11_Skip32:
 	cp	a, 132
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip19
+	jrl	nz, PerfMode_ParamHandler_11_Skip33
 	call	SubCPU_ToneParamRet_0x9AF
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip19:
+PerfMode_ParamHandler_11_Skip33:
 	and	a, 240
 	cp	a, 144
-	jrl	z, SubCPU_ToneParamRet_Code_Skip28
+	jrl	z, PerfMode_ParamHandler_11_Skip48
 	cpdi8	(0x0eb6), 47
-	jrl	z, SubCPU_ToneParamRet_Code_Skip20
+	jrl	z, PerfMode_ParamHandler_11_Skip34
 	cpdi8	(0x0eb6), 95
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip21
-SubCPU_ToneParamRet_Code_Skip20:
+	jrl	nz, PerfMode_ParamHandler_11_Skip35
+PerfMode_ParamHandler_11_Skip34:
 	call	VoiceBank_ProcessCommand
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip21:
+PerfMode_ParamHandler_11_Skip35:
 	ld	a, (3766:16)
 	ld	l, (3778:16)
 	cp	l, 0:i3
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip22
+	jrl	nz, PerfMode_ParamHandler_11_Skip36
 	ld	l, (3952:16)
-SubCPU_ToneParamRet_Code_Skip22:
+PerfMode_ParamHandler_11_Skip36:
 	sub	a, l
 	cp	a, 0:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip23
+	jrl	z, PerfMode_ParamHandler_11_Skip37
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
-SubCPU_ToneParamRet_Code_Skip23:
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
+PerfMode_ParamHandler_11_Skip37:
 	call	SubCPU_ToneParamRet_0xA1F
 	ldw	(3778:16), 0
 	ld	a, (3766:16)
 	ld	(3952:16), a
-SubCPU_ToneParamRet_Code_Loop2:
+PerfMode_ParamHandler_11_Loop4:
 	call	VoiceBank_ProcessCommand
 	ld	a, (3765:16)
 	cp	a, 129
-	jrl	z, SubCPU_ToneParamRet_Code_Loop
+	jrl	z, PerfMode_ParamHandler_11_Loop3
 	cp	a, 132
-	jrl	z, SubCPU_ToneParamRet_Code_Loop
+	jrl	z, PerfMode_ParamHandler_11_Loop3
 	ld	h, (3766:16)
 	cp	h, 47
-	jrl	z, SubCPU_ToneParamRet_Code_Loop2
+	jrl	z, PerfMode_ParamHandler_11_Loop4
 	cp	h, 95
-	jrl	z, SubCPU_ToneParamRet_Code_Loop2
+	jrl	z, PerfMode_ParamHandler_11_Loop4
 	ld	l, (3952:16)
 	cp	l, h
-	jrl	nz, SubCPU_ToneParamRet_Code_Loop
+	jrl	nz, PerfMode_ParamHandler_11_Loop3
 	and	a, 240
 	cp	a, 144
-	jrl	nz, SubCPU_ToneParamRet_Code_Loop2
+	jrl	nz, PerfMode_ParamHandler_11_Loop4
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip48:
+PerfMode_ParamHandler_11_Skip38:
 	call	DisplayStr_BytecodeBlock_A_0x1A4
 	ld	a, (3771:16)
 	cp	a, 130
-	jrl	z, SubCPU_ToneParamRet_Code_Skip25
+	jrl	z, PerfMode_ParamHandler_11_Skip40
 	cp	a, 132
-	jrl	z, SubCPU_ToneParamRet_Code_Skip24
+	jrl	z, PerfMode_ParamHandler_11_Skip39
 	cp	a, 129
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip26
-SubCPU_ToneParamRet_Code_Skip24:
+	jrl	nz, PerfMode_ParamHandler_11_Skip41
+PerfMode_ParamHandler_11_Skip39:
 	call	DisplayStr_BytecodeBlock_A
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
 	call	VoiceBank_ProcessCommand
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip25:
+PerfMode_ParamHandler_11_Skip40:
 	call	SubCPU_ToneParamRet_0x98D
 	jp	SubCPU_ToneParamRet_0x7B8
-SubCPU_ToneParamRet_Code_Skip26:
+PerfMode_ParamHandler_11_Skip41:
 	ld	l, (3772:16)
 	add	l, 96
 	ld	c, (3952:16)
 	cpdi16	(0x0ec2), 0
-	jrl	z, SubCPU_ToneParamRet_Code_Skip49
+	jrl	z, PerfMode_ParamHandler_11_Skip42
 	ld	c, (3778:16)
-SubCPU_ToneParamRet_Code_Skip49:
+PerfMode_ParamHandler_11_Skip42:
 	sub	l, c
 	cp	l, 48
-	jrl	z, SubCPU_ToneParamRet_Code_Skip51
+	jrl	z, PerfMode_ParamHandler_11_Skip44
 	cp	l, 96
-	jrl	z, SubCPU_ToneParamRet_Code_Skip53
+	jrl	z, PerfMode_ParamHandler_11_Skip46
 	call	DisplayStr_BytecodeBlock_A
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
 	xor	a, a
 	cpdi8	(0x0ebc), 48
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip50
+	jrl	nz, PerfMode_ParamHandler_11_Skip43
 	ld	a, 48:opc
-SubCPU_ToneParamRet_Code_Skip50:
+PerfMode_ParamHandler_11_Skip43:
 	ld	(3952:16), a
 	ldw	(3778:16), 0
 	jp	SubCPU_ToneParamRet_0x777
-SubCPU_ToneParamRet_Code_Skip51:
+PerfMode_ParamHandler_11_Skip44:
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
 	xor	a, a
 	cpdi8	(0x0ebc), 48
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip52
+	jrl	nz, PerfMode_ParamHandler_11_Skip45
 	ld	a, 48:opc
-SubCPU_ToneParamRet_Code_Skip52:
+PerfMode_ParamHandler_11_Skip45:
 	ld	(3952:16), a
 	ldw	(3778:16), 0
 	jp	SubCPU_ToneParamRet_0x777
-SubCPU_ToneParamRet_Code_Skip53:
+PerfMode_ParamHandler_11_Skip46:
 	call	DisplayStr_BytecodeBlock_A
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
 	xor	wa, wa
 	ld	(3778:16), wa
 	ld	(3952:16), a
 	cpdi8	(0x0ebc), 0
-	jrl	z, SubCPU_ToneParamRet_Code_Skip27
+	jrl	z, PerfMode_ParamHandler_11_Skip47
 	ld	(3952:16), 48
-SubCPU_ToneParamRet_Code_Skip27:
+PerfMode_ParamHandler_11_Skip47:
 	call	VoiceBank_ProcessCommand
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip28:
+PerfMode_ParamHandler_11_Skip48:
 	ld	a, (3766:16)
 	ld	l, (3778:16)
 	add	l, (3952:16)
 	cp	l, 96
-	jrl	c, SubCPU_ToneParamRet_Code_Skip29
+	jrl	c, PerfMode_ParamHandler_11_Skip49
 	sub	l, 96
-SubCPU_ToneParamRet_Code_Skip29:
+PerfMode_ParamHandler_11_Skip49:
 	sub	a, l
 	cp	a, 48
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip30
+	jrl	nz, PerfMode_ParamHandler_11_Skip50
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
-SubCPU_ToneParamRet_Code_Skip30:
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
+PerfMode_ParamHandler_11_Skip50:
 	call	SubCPU_ToneParamRet_0x8C5
 	cpdi8	(0x0ef6), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip31
+	jrl	nz, PerfMode_ParamHandler_11_Skip51
 	jp	SubCPU_ToneParamRet_0x5E9
-SubCPU_ToneParamRet_Code_Skip31:
+PerfMode_ParamHandler_11_Skip51:
 	call	OscScope_RenderBlock_0x61
 	call	SubCPU_ToneParamRet_0x7C1
 	ret
 	cpdi8	(0x0d6a), 0
-	jrl	nz, SubCPU_ToneParamRet_Code_Return6
+	jrl	nz, PerfMode_ParamHandler_11_Return7
 	call	SubCPU_ToneParamRet_0x315
 	call	AccPedal_CheckBitAndUpdate
 	cpdi8	(0x0d5d), 4
-	jrl	ugt, SubCPU_ToneParamRet_Code_Skip54
+	jrl	ugt, PerfMode_ParamHandler_11_Skip52
 	ld	a, (3420:16)
 	jp	SubCPU_ToneParamRet_0x7ED
-SubCPU_ToneParamRet_Code_Skip54:
+PerfMode_ParamHandler_11_Skip52:
 	ld	a, (3420:16)
 	cp	a, 4:i3
-	jrl	c, SubCPU_ToneParamRet_Code_Skip55
+	jrl	c, PerfMode_ParamHandler_11_Skip53
 	sub	a, 4
-SubCPU_ToneParamRet_Code_Skip55:
+PerfMode_ParamHandler_11_Skip53:
 	sla	a, 1
 	cpdi8	(0x0d57), 0
-	jrl	z, SubCPU_ToneParamRet_Code_Skip56
+	jrl	z, PerfMode_ParamHandler_11_Skip54
 	inc	1, a
-SubCPU_ToneParamRet_Code_Skip56:
+PerfMode_ParamHandler_11_Skip54:
 	ld	(3823:16), a
-SubCPU_ToneParamRet_Code_Return6:
+PerfMode_ParamHandler_11_Return7:
 	ret
 	pushw	wa
 	push	xiy
@@ -12893,7 +12893,7 @@ SubCPU_ToneParamRet_Code_Return6:
 	dec	1, c
 	xor	b, b
 	xor	de, de
-SubCPU_ToneParamRet_Code_Loop6:
+PerfMode_ParamHandler_11_Loop5:
 	ld	xiy, 4457
 	ld	xix, xiy
 	inc	1, xix
@@ -12902,22 +12902,22 @@ SubCPU_ToneParamRet_Code_Loop6:
 	ld	a, (xiy)
 	ld	w, (xix)
 	cp	a, w
-	jrl	c, SubCPU_ToneParamRet_Code_Skip57
+	jrl	c, PerfMode_ParamHandler_11_Skip55
 	inc	1, xix
 	ld	xhl, 4457
 	lda_rr	xhl, xhl, bc
 	cp	xix, xhl
-	jrl	ugt, SubCPU_ToneParamRet_Code_Skip58
+	jrl	ugt, PerfMode_ParamHandler_11_Skip56
 	jp	SubCPU_ToneParamRet_0x85D
-SubCPU_ToneParamRet_Code_Skip57:
+PerfMode_ParamHandler_11_Skip55:
 	ld	(xiy), w
 	ld	(xix), a
 	xor	de, de
 	jp	SubCPU_ToneParamRet_0x848
-SubCPU_ToneParamRet_Code_Skip58:
+PerfMode_ParamHandler_11_Skip56:
 	inc	1, de
 	cp	de, bc
-	jrl	c, SubCPU_ToneParamRet_Code_Loop6
+	jrl	c, PerfMode_ParamHandler_11_Loop5
 	ret
 	ld	xix, (4372:16)
 	xor	hl, hl
@@ -12928,10 +12928,10 @@ SubCPU_ToneParamRet_Code_Skip58:
 	ld	a, (xix)
 	and	a, 96
 	cp	a, 0:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip59
+	jrl	z, PerfMode_ParamHandler_11_Skip57
 	inc	1, xix
 	jp	SubCPU_ToneParamRet_0x8B4
-SubCPU_ToneParamRet_Code_Skip59:
+PerfMode_ParamHandler_11_Skip57:
 	ld	a, 32:opc
 	lda_dpi	xbc, 240
 	xor	a, a
@@ -12954,28 +12954,28 @@ SubCPU_ToneParamRet_Code_Skip59:
 	ld	xix, 4457
 	lda_dpi	xbc, 240
 	push	xix
-	call	SubCPU_ToneParamRet_Code_Helper
+	call	OscScope_Handler_7_Helper
 	pop	xix
-SubCPU_ToneParamRet_Code_Join:
+PerfMode_ParamHandler_11_Join:
 	push	xix
 	call	VoiceBank_ProcessCommand
 	pop	xix
 	cpdi8	(0x0eb5), 129
-	jrl	z, SubCPU_ToneParamRet_Code_Skip60
+	jrl	z, PerfMode_ParamHandler_11_Skip58
 	cpdi8	(0x0eb5), 132
-	jrl	z, SubCPU_ToneParamRet_Code_Skip60
+	jrl	z, PerfMode_ParamHandler_11_Skip58
 	ld	a, (3765:16)
 	and	a, 240
 	cp	a, 144
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip60
+	jrl	nz, PerfMode_ParamHandler_11_Skip58
 	ld	a, (3766:16)
 	cpda8	xbc, (0x0f70)
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip60
+	jrl	nz, PerfMode_ParamHandler_11_Skip58
 	inc	1, (4478:16)
 	ld	a, (3767:16)
 	lda_dpi	xbc, 240
-	jp	SubCPU_ToneParamRet_Code_Join
-SubCPU_ToneParamRet_Code_Skip60:
+	jp	PerfMode_ParamHandler_11_Join
+PerfMode_ParamHandler_11_Skip58:
 	ld	a, (3952:16)
 	xor	w, w
 	ld	de, (3778:16)
@@ -12984,27 +12984,27 @@ SubCPU_ToneParamRet_Code_Skip60:
 	ld	l, 96:opc
 	div8rr	a, l
 	cp	a, 0:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip33
+	jrl	z, PerfMode_ParamHandler_11_Skip60
 	ld	c, a
 	xor	b, b
 	cpdi8	(0x0eb5), 129
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip32
+	jrl	nz, PerfMode_ParamHandler_11_Skip59
 	djnz16	bc, 4
 	jp	SubCPU_ToneParamRet_0x97C
-SubCPU_ToneParamRet_Code_Loop3:
+PerfMode_ParamHandler_11_Loop6:
 	pushw	bc
 	call	VoiceBank_ProcessCommand
 	popw	bc
 	jp	SubCPU_ToneParamRet_0x94F
-SubCPU_ToneParamRet_Code_Skip32:
+PerfMode_ParamHandler_11_Skip59:
 	ld	a, (3766:16)
 	cp	a, 47
-	jrl	z, SubCPU_ToneParamRet_Code_Loop3
+	jrl	z, PerfMode_ParamHandler_11_Loop6
 	cp	a, 95
-	jrl	z, SubCPU_ToneParamRet_Code_Loop3
+	jrl	z, PerfMode_ParamHandler_11_Loop6
 	jp	SubCPU_ToneParamRet_0x980
 	call	VoiceBank_ProcessCommand
-SubCPU_ToneParamRet_Code_Skip33:
+PerfMode_ParamHandler_11_Skip60:
 	call	SubCPU_ToneParamRet_0x7FF
 	call	SubCPU_ToneParamRet_0x88B
 	call	OscScope_DrawWaveform_0x4
@@ -13037,30 +13037,30 @@ SubCPU_ToneParamRet_Code_Skip33:
 	sla	l, 1
 	ld	a, (3780:16)
 	cp	a, l
-	jrl	nc, SubCPU_ToneParamRet_Code_Skip61
+	jrl	nc, PerfMode_ParamHandler_11_Skip61
 	incw	1, (3780:16)
 	ld	ix, (3780:16)
 	sla	ix, 2
 	ldw	bc, 32
 	sub	bc, ix
 	cp	bc, 0:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Skip61
+	jrl	z, PerfMode_ParamHandler_11_Skip61
 	extz	xix
 	add	xix, (4372:16)
 	xor	a, a
 	lda_dpi	xbc, 240
 	djnz16	bc, -6
-SubCPU_ToneParamRet_Code_Skip61:
-	jp	SubCPU_ToneParamRet_Code_Return7
+PerfMode_ParamHandler_11_Skip61:
+	jp	PerfMode_ParamHandler_11_Return8
 	ldb_d8	e, (0x0ec6)
 	cp	e, 2:i3
-	jrl	z, SubCPU_ToneParamRet_Code_Return7
+	jrl	z, PerfMode_ParamHandler_11_Return8
 	cp	e, 0:i3
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip62
+	jrl	nz, PerfMode_ParamHandler_11_Skip62
 	call	OscScope_RenderBlock_0x3F
-SubCPU_ToneParamRet_Code_Skip62:
+PerfMode_ParamHandler_11_Skip62:
 	call	OscScope_RenderBlock_0x50
-SubCPU_ToneParamRet_Code_Return7:
+PerfMode_ParamHandler_11_Return8:
 	ret
 	ld	a, (3765:16)
 	and	a, 1
@@ -13068,38 +13068,38 @@ SubCPU_ToneParamRet_Code_Return7:
 	ld	(4461:16), a
 	ld	l, (3766:16)
 	cp	l, 47
-	jrl	z, SubCPU_ToneParamRet_Code_Return8
+	jrl	z, PerfMode_ParamHandler_11_Return9
 	cp	l, 95
-	jrl	z, SubCPU_ToneParamRet_Code_Return8
+	jrl	z, PerfMode_ParamHandler_11_Return9
 	ld	l, (3767:16)
 	cp	l, 72
-	jrl	nz, SubCPU_ToneParamRet_Code_Return8
+	jrl	nz, PerfMode_ParamHandler_11_Return9
 	cpdi8	(0x0eb8), 5
-	jrl	z, SubCPU_ToneParamRet_Code_Skip63
+	jrl	z, PerfMode_ParamHandler_11_Skip63
 	cpdi8	(0x0eb8), 6
-	jrl	nz, SubCPU_ToneParamRet_Code_Return8
-SubCPU_ToneParamRet_Code_Skip63:
+	jrl	nz, PerfMode_ParamHandler_11_Return9
+PerfMode_ParamHandler_11_Skip63:
 	ld	a, (3769:16)
 	and	a, 127
 	or	a, (4461:16)
 	xor	bc, bc
-SubCPU_ToneParamRet_Code_Loop7:
+PerfMode_ParamHandler_11_Loop7:
 	ldb_erp	a, 60
 	ldb_erp	a, 61
 	ld	a, c
 	scf
 	xorcfb_erp	61
 	stb_erp	a, 60
-	jrl	nc, SubCPU_ToneParamRet_Code_Entry2
+	jrl	nc, PerfMode_ParamHandler_11_Entry2
 	inc	1, c
 	cp	c, 7:i3
-	jrl	ule, SubCPU_ToneParamRet_Code_Loop7
+	jrl	ule, PerfMode_ParamHandler_11_Loop7
 	jp	SubCPU_ToneParamRet_0xAA3
-SubCPU_ToneParamRet_Code_Entry2:
+PerfMode_ParamHandler_11_Entry2:
 	cpdi8	(0x0eb8), 6
-	jrl	nz, SubCPU_ToneParamRet_Code_Skip64
+	jrl	nz, PerfMode_ParamHandler_11_Skip64
 	add	c, 8
-SubCPU_ToneParamRet_Code_Skip64:
+PerfMode_ParamHandler_11_Skip64:
 	xor	h, h
 	ld	l, c
 	sla	hl, 2
@@ -13109,7 +13109,7 @@ SubCPU_ToneParamRet_Code_Skip64:
 	ld_rrl	xhl, xde, hl
 	pop	xde
 	call	(xhl)
-SubCPU_ToneParamRet_Code_Return8:
+PerfMode_ParamHandler_11_Return9:
 	ret
 
 
@@ -13170,7 +13170,7 @@ OscScope_Handler_7:
 	ld	(xix+1), a
 	ld	(xix+2), de
 	ret
-SubCPU_ToneParamRet_Code_Helper:
+OscScope_Handler_7_Helper:
 	pushw	wa
 	push	xhl
 	ld	a, (3770:16)
@@ -13743,9 +13743,9 @@ Str_Rhythm:
 	call	StringData_APCModeNames_0x54E
 	pop	xiy
 	bitda	0, (0x10f6)
-	jrl	z, DisplayStr_RhythmLabel_Code_Skip
+	jrl	z, DisplayStr_BytecodeBlock_B_Skip
 	ld	xiy, Str_MSA
-DisplayStr_RhythmLabel_Code_Skip:
+DisplayStr_BytecodeBlock_B_Skip:
 	ld	xix, 3791
 	ld	bc, 5:i3
 	ldirw
@@ -13881,10 +13881,10 @@ DisplayStr_BytecodeBlock_C_Text:
 	ret
 	ld	wa, (0x371a:16)
 	cp	wa, 1000
-	jrl	c, DisplayStr_TempoString_Code_Skip
+	jrl	c, DisplayStr_BytecodeBlock_C_Skip3
 	call	DisplayStr_FillDashes
 	jp	DisplayStr_TempoString_0x9F
-DisplayStr_TempoString_Code_Skip:
+DisplayStr_BytecodeBlock_C_Skip3:
 	call	ParamDigit_ExtractAndFormat
 	ld	xiy, 4481
 	ld	xix, 3786
@@ -14543,7 +14543,7 @@ Tbl_ArticulationNames:
 Disp_ShowNoteNameAndVelocity:
 	ld	xix, 0x0ecf
 	cpdi8	(0x3717), 255
-	jrl	nz, StringData_KeyNames_Code_Skip
+	jrl	nz, Disp_ShowNoteNameAndVelocity_Skip
 	ldw	wa, 8224
 	ld (xix+256), wa
 	ld	(xix+2), wa
@@ -14551,7 +14551,7 @@ Disp_ShowNoteNameAndVelocity:
 	ld	(xix+6), wa
 	ld	(xix+8), a
 	jp	StringData_KeyNames_0x312
-StringData_KeyNames_Code_Skip:
+Disp_ShowNoteNameAndVelocity_Skip:
 	xor	wa, wa
 	ld	a, (0x3718:16)
 	ld	l, 12:opc
@@ -14682,10 +14682,10 @@ Str_PanpotEq:
 	; byte at 0x1180 and three digits from 0x1181.
 ParamPopup_PartKeyShift:
 	cpdi8	(0x0def), 10
-	jrl	z, StringData_PartNames_Code_Skip
+	jrl	z, ParamPopup_PartKeyShift_Skip
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
-StringData_PartNames_Code_Skip:
+ParamPopup_PartKeyShift_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14801,10 +14801,10 @@ Str_BendSensEq:
 	; then Str_OnOffPair + 0 when bit 3 of (0x10f3) is set, + 4 when clear.
 ParamPopup_PartSustain:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_PartNames_Code_Skip2
+	jrl	z, ParamPopup_PartSustain_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_PartNames_Code_Skip2:
+ParamPopup_PartSustain_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14820,9 +14820,9 @@ StringData_PartNames_Code_Skip2:
 	ldir85
 	xor	hl, hl
 	bitda	3, (0x10f3)
-	jrl	nz, StringData_PartNames_Code_Skip3
+	jrl	nz, ParamPopup_PartSustain_Skip2
 	ld	l, 4:opc
-StringData_PartNames_Code_Skip3:
+ParamPopup_PartSustain_Skip2:
 	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
@@ -14843,10 +14843,10 @@ Str_OnOffPair:
 	; then Str_OnOffPair + 4 unconditionally (`ld l, 4`).
 ParamPopup_PartDspEffectOff:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_PartNames_Code_Skip4
+	jrl	z, ParamPopup_PartDspEffectOff_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_PartNames_Code_Skip4:
+ParamPopup_PartDspEffectOff_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14877,10 +14877,10 @@ Str_DspEffect:
 	; then Str_OnOffPair + 0 when bit 6 of (0x10f3) is set, + 4 when clear.
 ParamPopup_PartEffect:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_PartNames_Code_Skip5
+	jrl	z, ParamPopup_PartEffect_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_PartNames_Code_Skip5:
+ParamPopup_PartEffect_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14896,9 +14896,9 @@ StringData_PartNames_Code_Skip5:
 	ldir85
 	xor	hl, hl
 	bitda	6, (0x10f3)
-	jrl	nz, StringData_PartNames_Code_Skip6
+	jrl	nz, ParamPopup_PartEffect_Skip2
 	ld	l, 4:opc
-StringData_PartNames_Code_Skip6:
+ParamPopup_PartEffect_Skip2:
 	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
@@ -14913,10 +14913,10 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	; value (0x10f3) in decimal.
 ParamPopup_PartDspEffectLevel:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_EffectLabel_Code_Skip
+	jrl	z, ParamPopup_PartDspEffectLevel_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_EffectLabel_Code_Skip:
+ParamPopup_PartDspEffectLevel_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14947,10 +14947,10 @@ Str_DspEffectEq:
 	; value (0x10f3) in decimal.
 ParamPopup_PartReverb:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_EffectLabel_Code_Skip2
+	jrl	z, ParamPopup_PartReverb_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_EffectLabel_Code_Skip2:
+ParamPopup_PartReverb_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14982,12 +14982,12 @@ Str_ReverbEq:
 	; each printed in decimal with '-' (45) between them.
 ParamPopup_PanelMemory:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_EffectLabel_Code_Skip3
+	jrl	z, ParamPopup_PanelMemory_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
-StringData_EffectLabel_Code_Skip3:
+ParamPopup_PanelMemory_Skip:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
@@ -15028,12 +15028,12 @@ Str_PanelMemoryEq:
 	; A on entry (0 / 1).
 ParamPopup_FadeIn:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_EffectLabel_Code_Skip4
+	jrl	z, ParamPopup_FadeIn_Skip2
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
-StringData_EffectLabel_Code_Skip4:
+ParamPopup_FadeIn_Skip2:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
@@ -15134,12 +15134,12 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	; ("OFF") over the "ON " at 0x0EDA when (A and W) = 0.
 ParamPopup_ApcMemory:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip21
+	jrl	z, ParamPopup_ApcMemory_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
-StringData_APCModeNames_Code_Skip21:
+ParamPopup_ApcMemory_Skip:
 	and	w, a
 	pushw	wa
 	call	DisplayStr_ClearRegion
@@ -15152,12 +15152,12 @@ StringData_APCModeNames_Code_Skip21:
 	ldw	bc, 14
 	ldir85
 	and	a, w
-	jrl	nz, StringData_APCModeNames_Code_Skip22
+	jrl	nz, ParamPopup_ApcMemory_Skip2
 	ld	xiy, Str_OffAccomp
 	ld	xix, 3802
 	ld	bc, 3:i3
 	ldir85
-StringData_APCModeNames_Code_Skip22:
+ParamPopup_ApcMemory_Skip2:
 	call	Display_UpdateRegion3
 	ret
 	; "APC MEMORY ON ", 14 chars copied by ParamPopup_ApcMemory (0xEFFF31).
@@ -15170,12 +15170,12 @@ Str_ApcMemoryOn:
 	; 0x0EDC when (A and W) = 0.
 ParamPopup_AccompPart:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip23
+	jrl	z, ParamPopup_AccompPart_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
-StringData_APCModeNames_Code_Skip23:
+ParamPopup_AccompPart_Skip:
 	and	w, 224
 	and	a, 224
 	srl	w, 5
@@ -15193,12 +15193,12 @@ StringData_APCModeNames_Code_Skip23:
 	ldir85
 	inc	1, xix
 	and	a, w
-	jrl	nz, StringData_APCModeNames_Code_Skip24
+	jrl	nz, ParamPopup_AccompPart_Skip2
 	ld	xiy, Str_OffAccomp
 	ld	xix, 3804
 	ld	bc, 3:i3
 	ldir85
-StringData_APCModeNames_Code_Skip24:
+ParamPopup_AccompPart_Skip2:
 	call	Display_UpdateRegion3
 	ret
 	; 52 bytes read by ParamPopup_AccompPart (0xEFFF88): 16 bytes at +k*16,
@@ -15227,12 +15227,12 @@ Str_OffAccomp:
 	; (W and A) = 0.
 ParamPopup_DynamicAccomp:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip25
+	jrl	z, ParamPopup_DynamicAccomp_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
-StringData_APCModeNames_Code_Skip25:
+ParamPopup_DynamicAccomp_Skip:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
@@ -15241,12 +15241,12 @@ StringData_APCModeNames_Code_Skip25:
 	ldw	bc, 17
 	ldir85
 	and	w, a
-	jrl	nz, StringData_APCModeNames_Code_Skip26
+	jrl	nz, ParamPopup_DynamicAccomp_Skip2
 	ld	xiy, Str_OffAccomp
 	ld	xix, 3806
 	ld	bc, 3:i3
 	ldir85
-StringData_APCModeNames_Code_Skip26:
+ParamPopup_DynamicAccomp_Skip2:
 	call	Display_UpdateRegion3
 	ret
 	; "DYNAMIC ACCOMP ON ", 17 chars copied by ParamPopup_DynamicAccomp (0xF00019).
@@ -15258,12 +15258,12 @@ Str_DynamicAccompOn:
 	; (W and A) = 0.
 ParamPopup_TechniChord:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip27
+	jrl	z, ParamPopup_TechniChord_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
-StringData_APCModeNames_Code_Skip27:
+ParamPopup_TechniChord_Skip:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
@@ -15272,12 +15272,12 @@ StringData_APCModeNames_Code_Skip27:
 	ldw	bc, 16
 	ldir85
 	and	w, a
-	jrl	nz, StringData_APCModeNames_Code_Skip28
+	jrl	nz, ParamPopup_TechniChord_Skip2
 	ld	xiy, Str_OffAccomp
 	ld	xix, 3804
 	ld	bc, 3:i3
 	ldir85
-StringData_APCModeNames_Code_Skip28:
+ParamPopup_TechniChord_Skip2:
 	call	Display_UpdateRegion3
 	ret
 	; "TECHNI-CHORD ON ", 16 chars copied by ParamPopup_TechniChord (0xF0006B).
@@ -15290,12 +15290,12 @@ Str_TechniChordOn:
 	; [((0x10f3) & 15) * 4] ("<G >", "<Ab>" ...), read as two words.
 ParamPopup_KeyNameBracketed:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip29
+	jrl	z, ParamPopup_KeyNameBracketed_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
-StringData_APCModeNames_Code_Skip29:
+ParamPopup_KeyNameBracketed_Skip:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
@@ -15326,14 +15326,14 @@ Tbl_KeyNamesBracketed:
 	; of (0x10f3) is clear), else A (on entry) in decimal at 0x0EDF.
 ParamPopup_AccompVolume:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip30
+	jrl	z, ParamPopup_AccompVolume_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	pushw	hl
 	call	Display_UpdateRegion0
 	popw	hl
 	popw	wa
-StringData_APCModeNames_Code_Skip30:
+ParamPopup_AccompVolume_Skip:
 	pushw	wa
 	pushw	hl
 	call	DisplayStr_ClearRegion
@@ -15349,17 +15349,17 @@ StringData_APCModeNames_Code_Skip30:
 	ldir85
 	popw	wa
 	bitda	7, (0x10f5)
-	jrl	z, StringData_APCModeNames_Code_Skip32
+	jrl	z, ParamPopup_AccompVolume_Skip3
 	ld	xiy, Tbl_MuteOnOff
 	bitda	7, (0x10f3)
-	jrl	nz, StringData_APCModeNames_Code_Skip31
+	jrl	nz, ParamPopup_AccompVolume_Skip2
 	add	xiy, 8
-StringData_APCModeNames_Code_Skip31:
+ParamPopup_AccompVolume_Skip2:
 	ld	xix, 3806
 	ldw	bc, 8
 	ldir85
 	jp	StringData_APCModeNames_0x31F
-StringData_APCModeNames_Code_Skip32:
+ParamPopup_AccompVolume_Skip3:
 	xor	w, w
 	call	ParamDigit_ExtractAndFormat
 	ld	xiy, 4481
@@ -15383,10 +15383,10 @@ Tbl_MuteOnOff:
 	; then 3 chars of Str_OnOffPair + 0 (bit 7 of (0x10f3) set) or + 4.
 ParamPopup_PartTremolo:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip33
+	jrl	z, ParamPopup_PartTremolo_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_APCModeNames_Code_Skip33:
+ParamPopup_PartTremolo_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -15402,9 +15402,9 @@ StringData_APCModeNames_Code_Skip33:
 	ldir85
 	xor	hl, hl
 	bitda	7, (0x10f3)
-	jrl	nz, StringData_APCModeNames_Code_Skip34
+	jrl	nz, ParamPopup_PartTremolo_Skip2
 	ld	l, 4:opc
-StringData_APCModeNames_Code_Skip34:
+ParamPopup_PartTremolo_Skip2:
 	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 3:i3
@@ -15430,10 +15430,10 @@ Str_ExtTabEffectEnDis:
 	; Str_OnOffPair + 0 (bit 7 of (0x10f3) set) or + 4.
 ParamPopup_TotalReverb:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip35
+	jrl	z, ParamPopup_TotalReverb_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_APCModeNames_Code_Skip35:
+ParamPopup_TotalReverb_Skip:
 	call	DisplayStr_ClearRegion
 	ld	xix, 3793
 	ld	xiy, Str_TotalReverb
@@ -15441,9 +15441,9 @@ StringData_APCModeNames_Code_Skip35:
 	ldir85
 	xor	hl, hl
 	bitda	7, (0x10f3)
-	jrl	nz, StringData_APCModeNames_Code_Skip36
+	jrl	nz, ParamPopup_TotalReverb_Skip2
 	ld	l, 4:opc
-StringData_APCModeNames_Code_Skip36:
+ParamPopup_TotalReverb_Skip2:
 	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
@@ -15460,10 +15460,10 @@ Str_TotalReverb:
 	; Tbl_TimbreNames[((0x10f3) >> 6) * 6] (NORMAL/BRIGHT/MELLOW/WARM).
 ParamPopup_PartTimbre:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip37
+	jrl	z, ParamPopup_PartTimbre_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_APCModeNames_Code_Skip37:
+ParamPopup_PartTimbre_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -15497,18 +15497,18 @@ Tbl_TimbreNames:
 	; then 4 chars of Tbl_MsaStates[((0x10f3) & 7) * 4] (OFF/ON/#2/#3).
 ParamPopup_Msa:
 	cpdi8	(0x0d65), 3
-	jrl	nz, StringData_APCModeNames_Code_Skip38
+	jrl	nz, ParamPopup_Msa_Skip
 	cpdi8	(0x0def), 15
 	jrl	z, StringData_APCModeNames_0x506
 	ld	(3567:16), 15
 	call	Display_UpdateRegion0
 	jp	StringData_APCModeNames_0x506
-StringData_APCModeNames_Code_Skip38:
+ParamPopup_Msa_Skip:
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip39
+	jrl	z, ParamPopup_Msa_Skip2
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_APCModeNames_Code_Skip39:
+ParamPopup_Msa_Skip2:
 	call	DisplayStr_ClearRegion
 	ld	xiy, Str_Msa
 	ld	xix, 3793
@@ -15551,11 +15551,11 @@ Tbl_MsaStates:
 	ld	(4342:16), 0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	nz, StringData_APCModeNames_Code_Skip41
-StringData_APCModeNames_Code_Loop:
+	jrl	nz, ParamPopup_Msa_Skip4
+ParamPopup_Msa_Loop:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, StringData_APCModeNames_Code_Skip
+	jrl	z, ParamPopup_Msa_Skip5
 	call	VoiceSlot_ComputeWordIndex
 	push	xhl
 	ld	xhl, 3230
@@ -15569,22 +15569,22 @@ StringData_APCModeNames_Code_Loop:
 	add	xhl, 40
 	cp	ix, (xhl)
 	pop	xhl
-	jrl	nz, StringData_APCModeNames_Code_Skip40
+	jrl	nz, ParamPopup_Msa_Skip3
 	push	xhl
 	ld	xhl, 3583
 	add xhl,(0x2a:8)	; add XHL,(0x2a)
 	cp	a, (xhl)
 	pop	xhl
-	jrl	nc, StringData_APCModeNames_Code_Skip
-StringData_APCModeNames_Code_Skip40:
+	jrl	nc, ParamPopup_Msa_Skip5
+ParamPopup_Msa_Skip3:
 	call	VoiceSlot_ReadCurrentParams
-StringData_APCModeNames_Code_Skip41:
+ParamPopup_Msa_Skip4:
 	and	a, 240
 	cp	a, 176
-	jrl	nz, StringData_APCModeNames_Code_Loop
+	jrl	nz, ParamPopup_Msa_Loop
 	call	StringData_APCModeNames_0x5F5
 	jp	StringData_APCModeNames_0x57E
-StringData_APCModeNames_Code_Skip:
+ParamPopup_Msa_Skip5:
 	ld	a, 5:opc
 	call	VoiceSlot_RestoreState
 	pop	xiz
@@ -15615,10 +15615,10 @@ StringData_APCModeNames_Code_Skip:
 	ld	a, (3765:16)
 	and	a, 240
 	cp	a, 176
-	jrl	z, StringData_APCModeNames_Code_Skip2
-StringData_APCModeNames_Code_Loop4:
+	jrl	z, ParamPopup_Msa_Skip6
+ParamPopup_Msa_Loop2:
 	jp	ParamPopup_PartPedal
-StringData_APCModeNames_Code_Skip2:
+ParamPopup_Msa_Skip6:
 	ld	a, (3765:16)
 	and	a, 4
 	rrc_i_8 a, 3	; rrc 0x03,A  (llvm-mc: rrc	a does not round-trip)
@@ -15626,11 +15626,11 @@ StringData_APCModeNames_Code_Skip2:
 	and	w, 127
 	or	a, w
 	cp	a, 152
-	jrl	nz, StringData_APCModeNames_Code_Loop4
+	jrl	nz, ParamPopup_Msa_Loop2
 	cpdi8	(0x0eb8), 3
-	jrl	nz, StringData_APCModeNames_Code_Loop4
+	jrl	nz, ParamPopup_Msa_Loop2
 	bitda	0, (0x0eba)
-	jrl	z, StringData_APCModeNames_Code_Loop4
+	jrl	z, ParamPopup_Msa_Loop2
 	ld	a, (3769:16)
 	and	a, 1
 	ld	(4342:16), a
@@ -15641,10 +15641,10 @@ StringData_APCModeNames_Code_Skip2:
 ParamPopup_PartPedal:
 	ret
 	cpdi8	(0x0def), 1
-	jrl	z, StringData_APCModeNames_Code_Skip42
+	jrl	z, ParamPopup_PartPedal_Skip
 	ld	(3567:16), 1
 	call	Display_UpdateRegion0
-StringData_APCModeNames_Code_Skip42:
+ParamPopup_PartPedal_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4338:16)
 	xor	h, h
@@ -15664,7 +15664,7 @@ StringData_APCModeNames_Code_Skip42:
 	ldir85
 	inc	1, xix
 	cpdi8	(0x10f1), 181
-	jrl	nz, StringData_APCModeNames_Code_Skip43
+	jrl	nz, ParamPopup_PartPedal_Skip2
 	xor	wa, wa
 	ld	a, (4339:16)
 	push	xix
@@ -15674,13 +15674,13 @@ StringData_APCModeNames_Code_Skip42:
 	ld	bc, 3:i3
 	ldir85
 	jp	StringData_APCModeNames_0x6F0
-StringData_APCModeNames_Code_Skip43:
+ParamPopup_PartPedal_Skip2:
 	ld	c, (4339:16)
 	xor	hl, hl
 	cp	c, 64
-	jrl	nc, StringData_APCModeNames_Code_Skip44
+	jrl	nc, ParamPopup_PartPedal_Skip3
 	ld	hl, 4:i3
-StringData_APCModeNames_Code_Skip44:
+ParamPopup_PartPedal_Skip3:
 	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
@@ -15693,40 +15693,40 @@ Tbl_PedalNames:
 	.ascii	" SUSTAIN  SOFT PEDALSOSTENUTE "
 	call	StringData_APCModeNames_0x9D6
 	cp	l, 0:i3
-	jrl	z, StringData_APCModeNames_Code_Skip46
+	jrl	z, ParamPopup_PartPedal_Skip5
 	ld	a, (3765:16)
 	cp	a, 129
-	jrl	z, StringData_APCModeNames_Code_Skip45
+	jrl	z, ParamPopup_PartPedal_Skip4
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
-StringData_APCModeNames_Code_Skip45:
+ParamPopup_PartPedal_Skip4:
 	call	DisplayStr_BytecodeBlock_A
 	xor	wa, wa
 	ld	(3952:16), a
 	ld	(3778:16), wa
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip46:
+ParamPopup_PartPedal_Skip5:
 	ld	a, (4463:16)
 	ld	(3952:16), a
 	ld	a, (4462:16)
 	and	a, 240
 	cp	a, 144
-	jrl	z, StringData_APCModeNames_Code_Skip4
+	jrl	z, ParamPopup_PartPedal_Skip7
 	cpdi8	(0x0eb5), 129
-	jrl	z, StringData_APCModeNames_Code_Skip3
+	jrl	z, ParamPopup_PartPedal_Skip6
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	ldw	(3778:16), 0
 	ld	(3952:16), 48
 	jp	StringData_APCModeNames_0x9B1
-StringData_APCModeNames_Code_Skip3:
+ParamPopup_PartPedal_Skip6:
 	call	DisplayStr_BytecodeBlock_A
 	xor	wa, wa
 	ld	(3778:16), wa
 	ld	(3952:16), a
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip4:
+ParamPopup_PartPedal_Skip7:
 	call	StringData_APCModeNames_0x9C1
 	ld	a, (4463:16)
 	exts	wa
@@ -15734,9 +15734,9 @@ StringData_APCModeNames_Code_Skip4:
 	xor h, h
 	ld	l, 96:opc
 	cpdi8	(0x0eb5), 129
-	jrl	z, StringData_APCModeNames_Code_Skip5
+	jrl	z, ParamPopup_PartPedal_Skip8
 	ld	l, 48:opc
-StringData_APCModeNames_Code_Skip5:
+ParamPopup_PartPedal_Skip8:
 	ld	wa, (4468:16)
 	ldw	bc, 96
 	muls	xwa, xbc
@@ -15745,24 +15745,24 @@ StringData_APCModeNames_Code_Skip5:
 	ld	(4470:16), hl
 	ld	wa, (3778:16)
 	cp	wa, hl
-	jrl	ugt, StringData_APCModeNames_Code_Skip7
-	jrl	c, StringData_APCModeNames_Code_Skip10
+	jrl	ugt, ParamPopup_PartPedal_Skip10
+	jrl	c, ParamPopup_PartPedal_Skip14
 	cpdi8	(0x0eb5), 129
-	jrl	nz, StringData_APCModeNames_Code_Skip6
+	jrl	nz, ParamPopup_PartPedal_Skip9
 	call	DisplayStr_BytecodeBlock_A_0x53
 	ld	(3952:16), 0
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip6:
+ParamPopup_PartPedal_Skip9:
 	call	DisplayStr_BytecodeBlock_A_0x120
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
-StringData_APCModeNames_Code_Skip7:
+ParamPopup_PartPedal_Skip10:
 	sub	wa, hl
 	ld	(3778:16), wa
 	cp	wa, 96
-	jrl	c, StringData_APCModeNames_Code_Skip8
+	jrl	c, ParamPopup_PartPedal_Skip11
 	xor	de, de
 	xor	b, b
 	ld	c, 96:opc
@@ -15787,116 +15787,116 @@ StringData_APCModeNames_Code_Skip7:
 	call	DisplayStr_BytecodeBlock_A_0x53
 	popw	bc
 	cpdi8	(0x0ef6), 0
-	jrl	nz, StringData_APCModeNames_Code_Return
+	jrl	nz, ParamPopup_PartPedal_Return
 	djnz16	bc, -23
 	cpdi16	(0x0ec2), 48
 	jrl	nz, StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A_0x120
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip8:
+ParamPopup_PartPedal_Skip11:
 	call	DisplayStr_BytecodeBlock_A_0x120
 	call	DisplayStr_BytecodeBlock_A_0x1A4
 	cpdi8	(0x0ebb), 129
-	jrl	nz, StringData_APCModeNames_Code_Skip47
+	jrl	nz, ParamPopup_PartPedal_Skip12
 	call	DisplayStr_BytecodeBlock_A_0x53
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip47:
+ParamPopup_PartPedal_Skip12:
 	cpdi8	(0x0ebb), 132
-	jrl	nz, StringData_APCModeNames_Code_Entry
+	jrl	nz, ParamPopup_PartPedal_Entry
 	call	StringData_APCModeNames_0x9B2
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Entry:
+ParamPopup_PartPedal_Entry:
 	cpdi8	(0x0ebc), 0
-	jrl	nz, StringData_APCModeNames_Code_Skip9
+	jrl	nz, ParamPopup_PartPedal_Skip13
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	xor	wa, wa
 	ld	(3952:16), 0
 	ld	(3778:16), wa
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip9:
+ParamPopup_PartPedal_Skip13:
 	call	DisplayStr_BytecodeBlock_A_0x53
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip10:
+ParamPopup_PartPedal_Skip14:
 	sub	hl, wa
 	cp	hl, 96
-	jrl	c, StringData_APCModeNames_Code_Entry2
+	jrl	c, ParamPopup_PartPedal_Entry2
 	cpdi8	(0x0eb5), 129
-	jrl	z, StringData_APCModeNames_Code_Skip11
+	jrl	z, ParamPopup_PartPedal_Skip15
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
-StringData_APCModeNames_Code_Skip11:
+ParamPopup_PartPedal_Skip15:
 	ld	wa, hl
 	ld	l, 96:opc
 	div8rr	a, l
 	ld	(3952:16), w
 	cpdi8	(0x116e), 129
-	jrl	z, StringData_APCModeNames_Code_Skip12
+	jrl	z, ParamPopup_PartPedal_Skip16
 	pushw	wa
 	call	DisplayStr_BytecodeBlock_A_0x1A4
 	popw	wa
 	cp	w, 48
-	jrl	nz, StringData_APCModeNames_Code_Skip12
+	jrl	nz, ParamPopup_PartPedal_Skip16
 	pushw	wa
 	call	DisplayStr_BytecodeBlock_A_0x120
 	popw	wa
 	cpdi8	(0x0ebb), 129
-	jrl	z, StringData_APCModeNames_Code_Skip14
+	jrl	z, ParamPopup_PartPedal_Skip18
 	cpdi8	(0x0ebc), 48
-	jrl	z, StringData_APCModeNames_Code_Skip14
-StringData_APCModeNames_Code_Skip12:
+	jrl	z, ParamPopup_PartPedal_Skip18
+ParamPopup_PartPedal_Skip16:
 	cp	w, 48
-	jrl	z, StringData_APCModeNames_Code_Skip13
+	jrl	z, ParamPopup_PartPedal_Skip17
 	jp	StringData_APCModeNames_0x928
 	cp	a, 1:i3
-	jrl	z, StringData_APCModeNames_Code_Skip14
-StringData_APCModeNames_Code_Skip13:
+	jrl	z, ParamPopup_PartPedal_Skip18
+ParamPopup_PartPedal_Skip17:
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	jp	StringData_APCModeNames_0x92C
-StringData_APCModeNames_Code_Skip14:
+ParamPopup_PartPedal_Skip18:
 	call	DisplayStr_BytecodeBlock_A
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Entry2:
+ParamPopup_PartPedal_Entry2:
 	cpdi8	(0x0eb5), 129
-	jrl	z, StringData_APCModeNames_Code_Skip15
+	jrl	z, ParamPopup_PartPedal_Skip19
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
-StringData_APCModeNames_Code_Skip15:
+ParamPopup_PartPedal_Skip19:
 	call	DisplayStr_BytecodeBlock_A_0x120
 	call	DisplayStr_BytecodeBlock_A_0x1A4
 	cpdi8	(0x0ebb), 129
-	jrl	nz, StringData_APCModeNames_Code_Entry3
+	jrl	nz, ParamPopup_PartPedal_Entry3
 	call	DisplayStr_BytecodeBlock_A
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Entry3:
+ParamPopup_PartPedal_Entry3:
 	cpdi8	(0x0ebb), 132
-	jrl	nz, StringData_APCModeNames_Code_Entry4
+	jrl	nz, ParamPopup_PartPedal_Entry4
 	call	StringData_APCModeNames_0x9B2
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Entry4:
+ParamPopup_PartPedal_Entry4:
 	cpdi8	(0x0ebc), 0
-	jrl	nz, StringData_APCModeNames_Code_Skip16
+	jrl	nz, ParamPopup_PartPedal_Skip20
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	xor	wa, wa
 	ld	(3952:16), a
 	ld	(3778:16), wa
 	jp	StringData_APCModeNames_0x9AD
-StringData_APCModeNames_Code_Skip16:
+ParamPopup_PartPedal_Skip20:
 	call	DisplayStr_BytecodeBlock_A
 	ld	(3952:16), 48
 	ldw	(3778:16), 0
 	call	VoiceBank_ProcessCommand
-StringData_APCModeNames_Code_Return:
+ParamPopup_PartPedal_Return:
 	ret
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	xor	wa, wa
@@ -15919,31 +15919,31 @@ StringData_APCModeNames_Code_Return:
 	ld	(4472:16), wa
 	ld	wa, (0x28bf:16)
 	ld	(4474:16), wa
-StringData_APCModeNames_Code_Loop2:
+ParamPopup_PartPedal_Loop:
 	call	StringData_APCModeNames_0xA48
 	call	StringData_APCModeNames_0xAAC
 	bit	7, a
-	jrl	z, StringData_APCModeNames_Code_Loop2
-StringData_APCModeNames_Code_Loop3:
+	jrl	z, ParamPopup_PartPedal_Loop
+ParamPopup_PartPedal_Loop2:
 	call	StringData_APCModeNames_0xA48
 	cp	l, 0:i3
-	jrl	nz, StringData_APCModeNames_Code_Epilogue
+	jrl	nz, ParamPopup_PartPedal_Epilogue
 	call	StringData_APCModeNames_0xAAC
 	bit	7, a
-	jrl	z, StringData_APCModeNames_Code_Loop3
+	jrl	z, ParamPopup_PartPedal_Loop2
 	cp	a, 129
-	jrl	nz, StringData_APCModeNames_Code_Skip17
+	jrl	nz, ParamPopup_PartPedal_Skip21
 	incw	1, (4468:16)
 	jp	StringData_APCModeNames_0x9FF
-StringData_APCModeNames_Code_Skip17:
+ParamPopup_PartPedal_Skip21:
 	ld	l, 0:opc
 	call	StringData_APCModeNames_0xAC2
 	ld	a, (4463:16)
 	cp	a, 47
-	jrl	z, StringData_APCModeNames_Code_Loop3
+	jrl	z, ParamPopup_PartPedal_Loop2
 	cp	a, 95
-	jrl	z, StringData_APCModeNames_Code_Loop3
-StringData_APCModeNames_Code_Epilogue:
+	jrl	z, ParamPopup_PartPedal_Loop2
+ParamPopup_PartPedal_Epilogue:
 	pop	xiy
 	ret
 	ld	xix, 4462
@@ -15954,29 +15954,29 @@ StringData_APCModeNames_Code_Epilogue:
 	ret
 	ld	wa, (4472:16)
 	cp	wa, 5:i3
-	jrl	nz, StringData_APCModeNames_Code_Skip19
+	jrl	nz, ParamPopup_PartPedal_Skip23
 	ld	hl, (4474:16)
 	call	DisplayStr_ComputeTableAddr
 	ld	xhl, (4349:16)
 	ld	wa, (xhl+1)
 	cp	wa, 0:i3
-	jrl	nz, StringData_APCModeNames_Code_Skip18
+	jrl	nz, ParamPopup_PartPedal_Skip22
 	ld	l, 1:opc
 	jp	StringData_APCModeNames_0xA7E
-StringData_APCModeNames_Code_Skip18:
+ParamPopup_PartPedal_Skip22:
 	ld	(4474:16), wa
 	ldw	wa, 255
 	jp	StringData_APCModeNames_0xA78
-StringData_APCModeNames_Code_Skip19:
+ParamPopup_PartPedal_Skip23:
 	dec	1, wa
 	ld	(4472:16), wa
 	xor	hl, hl
 	ret
-StringData_APCModeNames_Code_Helper:
+ParamPopup_PartPedal_Helper:
 	push	xix
 	ld	wa, (4472:16)
 	cp	wa, 255
-	jrl	nz, StringData_APCModeNames_Code_Skip20
+	jrl	nz, ParamPopup_PartPedal_Skip24
 	ld	hl, (4474:16)
 	call	DisplayStr_ComputeTableAddr
 	ld	xhl, (4349:16)
@@ -15984,7 +15984,7 @@ StringData_APCModeNames_Code_Helper:
 	ld	(4474:16), hl
 	ld	wa, 5:i3
 	jp	StringData_APCModeNames_0xAA6
-StringData_APCModeNames_Code_Skip20:
+ParamPopup_PartPedal_Skip24:
 	inc	1, wa
 	ld	(4472:16), wa
 	pop	xix
@@ -16002,16 +16002,16 @@ StringData_APCModeNames_Code_Skip20:
 	call	StringData_APCModeNames_0xAAC
 	pop	xix
 	lda_dpi xbc, 240
-StringData_APCModeNames_Code_Join:
+ParamPopup_PartPedal_Join:
 	push xix
-	call StringData_APCModeNames_Code_Helper
+	call ParamPopup_PartPedal_Helper
 	call	StringData_APCModeNames_0xAAC
 	pop	xix
 	bit	7, a
-	jrl	nz, StringData_APCModeNames_Code_Entry5
+	jrl	nz, ParamPopup_PartPedal_Entry5
 	lda_dpi xbc, 240
-	jp StringData_APCModeNames_Code_Join
-StringData_APCModeNames_Code_Entry5:
+	jp ParamPopup_PartPedal_Join
+ParamPopup_PartPedal_Entry5:
 	popw (0x1178:16)	; popw (0x1178)
 	popw (0x117a:16)	; popw (0x117a)
 	ret
