@@ -1,0 +1,43 @@
+# Lane `seqeng`, 2026-09-25 -- tools and how to re-run them
+
+Lane `seqeng` owns the five sequencer sources (`sequencer_engine.s`,
+`seq_event_playback.s`, `smf_event_processor.s`, `smf_tonegen_core.s`,
+`smf_playback.s`) in `v10/`, `v9/` and `v7/` maincpu.
+
+| script | question it answers | command |
+|---|---|---|
+| `scripts/analysis/seqeng_line_map.py` | which ROM address does line L of one of these files emit? (v10/v9/v7; proven-inert mirror build) | `python3 scripts/analysis/seqeng_line_map.py v9 sequencer/seq_event_playback.s --addr 0xF71A24` |
+| `scripts/analysis/seqeng_misframe_zones.py` | where does the source's instruction framing disagree with MAME unidasm's (misframed multi-byte instructions)? | `python3 scripts/analysis/seqeng_misframe_zones.py v10 sequencer/sequencer_engine.s --unidasm <v10.unidasm>` |
+| `scripts/converters/seqeng_reframe.py` | rewrite those zones on unidasm's framing, instruction by instruction, only where llvm-mc decodes the same bytes as ONE instruction, re-assembles them exactly, AND agrees with unidasm on the operation and registers; `.byte` + unidasm text otherwise | `python3 scripts/converters/seqeng_reframe.py v10 sequencer/sequencer_engine.s --auto --unidasm <v10.unidasm> [--apply]`; `--selftest` checks the agreement rule on synthetic pairs |
+| `scripts/analysis/seqeng_measure.py` | per-file census grades (CODE/KNOWN-A/KNOWN-B/UNKNOWN/FILLER/research) + data-as-code markers + numeric branches + v7 romslice bytes | `python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json && python3 scripts/analysis/seqeng_measure.py X.json` |
+
+The unidasm listings are regenerable (not committed for v9/v7):
+
+    ../tools/unidasm original_ROMs/kn5000_v9_program.rom -arch tlcs900 -basepc 0xE00000 > v9.unidasm
+    ../tools/unidasm original_ROMs/kn5000_v7_program.rom -arch tlcs900 -basepc 0xE00000 > v7.unidasm
+
+(`original_ROMs/kn5000_v10_program.rom.unidasm` is committed and identical to a
+fresh run.)
+
+## Guards in seqeng_reframe.py, and the case that forced each
+
+* **zone ends on agreed boundaries** -- first byte and end must be unidasm
+  instruction starts, and the unidasm walk must land exactly on the end.
+* **misframe signature** -- the old text of the zone must contain a `.byte`
+  fragment or an absurd mnemonic, else unidasm (not the source) may be the
+  one out of sync.
+* **shape guard** -- a zone holding a `.long`/`.short`/`.ascii` line or a
+  `.byte` line of more than 4 values is refused: seen, v10
+  `smf_event_processor.s` 0xF532A9, a two-entry pointer table followed by a
+  `ret` that unidasm read straight through.
+* **decode-absurdity guard** -- a zone whose unidasm framing reads as data
+  (`db`, `(r+)`/`(-r)` stores, `call 0x00..`, halt/swi/...) is data typed as
+  code, not a misframe: seen, `VoiceChannel_ParamTable1` (32-bit RAM pointers
+  0xF496 + 26k).
+* **referenced mid-instruction label** -- refused: seen, `SndParam_LookupChannelVoice`
+  (0xF26E81) is a real entry, and unidasm had eaten its first byte as the
+  operand of `ei` after three data bytes.
+* **operation agreement** -- seen, `f5 e0 31`: unidasm `lda XBC,(XWA+)` (the C
+  idiom `p = q++`), llvm-mc `stb_dpi a, 224`.  The LLVM backend has the
+  mnemonics of F5-prefix opcodes 0x31 and 0x41 SWAPPED (`f5 e0 41` prints as
+  `lda_dpi xbc, 224` but is `ld (XWA+),A`).  Those are written as `.byte`.
