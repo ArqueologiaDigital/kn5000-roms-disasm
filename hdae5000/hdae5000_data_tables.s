@@ -13643,19 +13643,19 @@ HDAE5000_AttenHDFormatSwCatch_CaseTable:
 	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 6
 	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 7
 ;
-; HDAE5000_HD_Sector_Read_CaseTable (0x2E2CF2, 6 x u16): the switch of HDAE5000_Lbn_StepDigit
+; HDAE5000_Lbn_StepDigit_CaseTable (0x2E2CF2, 6 x u16): the switch of HDAE5000_Lbn_StepDigit
 ; (dispatch at 0x286A49, hdae5000_hd_driver.s:5493: bound `cp xwa,5`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_HD_Sector_Read_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_HD_Sector_Read_Case0 of the case for value 0+i; 6 entries, pinned by the bound
+; `lda xix,(HDAE5000_Lbn_StepDigit_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_Lbn_StepDigit_Case0 of the case for value 0+i; 6 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
-HDAE5000_HD_Sector_Read_CaseTable:
-	.short	HDAE5000_HD_Sector_Read_Case0 - HDAE5000_HD_Sector_Read_Case0	; 0
-	.short	HDAE5000_HD_Sector_Read_Case1 - HDAE5000_HD_Sector_Read_Case0	; 1
-	.short	HDAE5000_HD_Sector_Read_Case2 - HDAE5000_HD_Sector_Read_Case0	; 2
-	.short	HDAE5000_HD_Sector_Read_Case3 - HDAE5000_HD_Sector_Read_Case0	; 3
-	.short	HDAE5000_HD_Sector_Read_Case4 - HDAE5000_HD_Sector_Read_Case0	; 4
-	.short	HDAE5000_HD_Sector_Read_Case5 - HDAE5000_HD_Sector_Read_Case0	; 5
+HDAE5000_Lbn_StepDigit_CaseTable:
+	.short	HDAE5000_Lbn_StepDigit_Case0 - HDAE5000_Lbn_StepDigit_Case0	; 0
+	.short	HDAE5000_Lbn_StepDigit_Case1 - HDAE5000_Lbn_StepDigit_Case0	; 1
+	.short	HDAE5000_Lbn_StepDigit_Case2 - HDAE5000_Lbn_StepDigit_Case0	; 2
+	.short	HDAE5000_Lbn_StepDigit_Case3 - HDAE5000_Lbn_StepDigit_Case0	; 3
+	.short	HDAE5000_Lbn_StepDigit_Case4 - HDAE5000_Lbn_StepDigit_Case0	; 4
+	.short	HDAE5000_Lbn_StepDigit_Case5 - HDAE5000_Lbn_StepDigit_Case0	; 5
 	.asciz "LBNS"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13689,20 +13689,20 @@ HDAE5000_LBNPage1SwCatch_CaseTable:
 	.asciz " %2.2d"
 	.zero 1				; 0x2E2D45 (split off by the table below/above)
 ;
-; HDAE5000_FS_Init_CaseTable (0x2E2D46, 7 x u16): the switch of HDAE5000_Lbn_ShowEntry
+; HDAE5000_Lbn_ShowEntry_CaseTable (0x2E2D46, 7 x u16): the switch of HDAE5000_Lbn_ShowEntry
 ; (dispatch at 0x2870FC, hdae5000_filesystem.s:17: bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_FS_Init_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_FS_Init_Case0 of the case for value 0+i; 7 entries, pinned by the bound
+; `lda xix,(HDAE5000_Lbn_ShowEntry_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_Lbn_ShowEntry_Case0 of the case for value 0+i; 7 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
-HDAE5000_FS_Init_CaseTable:
-	.short	HDAE5000_FS_Init_Case0 - HDAE5000_FS_Init_Case0	; 0
-	.short	HDAE5000_FS_Init_Case1 - HDAE5000_FS_Init_Case0	; 1
-	.short	HDAE5000_FS_Init_Case2 - HDAE5000_FS_Init_Case0	; 2
-	.short	HDAE5000_FS_Init_Case3 - HDAE5000_FS_Init_Case0	; 3
-	.short	HDAE5000_FS_Init_Case4 - HDAE5000_FS_Init_Case0	; 4
-	.short	HDAE5000_FS_Init_Case5 - HDAE5000_FS_Init_Case0	; 5
-	.short	HDAE5000_FS_Init_Case6 - HDAE5000_FS_Init_Case0	; 6
+HDAE5000_Lbn_ShowEntry_CaseTable:
+	.short	HDAE5000_Lbn_ShowEntry_Case0 - HDAE5000_Lbn_ShowEntry_Case0	; 0
+	.short	HDAE5000_Lbn_ShowEntry_Case1 - HDAE5000_Lbn_ShowEntry_Case0	; 1
+	.short	HDAE5000_Lbn_ShowEntry_Case2 - HDAE5000_Lbn_ShowEntry_Case0	; 2
+	.short	HDAE5000_Lbn_ShowEntry_Case3 - HDAE5000_Lbn_ShowEntry_Case0	; 3
+	.short	HDAE5000_Lbn_ShowEntry_Case4 - HDAE5000_Lbn_ShowEntry_Case0	; 4
+	.short	HDAE5000_Lbn_ShowEntry_Case5 - HDAE5000_Lbn_ShowEntry_Case0	; 5
+	.short	HDAE5000_Lbn_ShowEntry_Case6 - HDAE5000_Lbn_ShowEntry_Case0	; 6
 	.asciz "                          "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"

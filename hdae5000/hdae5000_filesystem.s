@@ -16,11 +16,11 @@ HDAE5000_Lbn_ShowEntry:	; 0x2870D6 (3711 bytes)
 	cp	wa, 6:i3
 	jrl ugt, .LFS_7334                     ; [7b 49 02] jrl UGT,0x287334
 	add	wa, wa
-	lda xix, (HDAE5000_FS_Init_CaseTable:24)
+	lda xix, (HDAE5000_Lbn_ShowEntry_CaseTable:24)
 	ldw_sri wa, 0x07, 0xF0, 0xE0	; ld WA,(XIX+WA)
-	lda xix, (HDAE5000_FS_Init_Case0:24)
+	lda xix, (HDAE5000_Lbn_ShowEntry_Case0:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-HDAE5000_FS_Init_Case0:
+HDAE5000_Lbn_ShowEntry_Case0:
 	pushw 0x0005
 	lda xwa, (0x2e1cac:24)
 	push xwa
@@ -48,7 +48,7 @@ HDAE5000_FS_Init_Case0:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+10)
 	jrl t, .LFS_7334                       ; [78 de 01] jrl T,0x287334
-HDAE5000_FS_Init_Case1:
+HDAE5000_Lbn_ShowEntry_Case1:
 	ld	wa, iz
 	extz xwa
 	div wa, 0x0064
@@ -69,7 +69,7 @@ HDAE5000_FS_Init_Case1:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
 	jrl t, .LFS_7334                       ; [78 aa 01] jrl T,0x287334
-HDAE5000_FS_Init_Case2:
+HDAE5000_Lbn_ShowEntry_Case2:
 	ld	wa, iz
 	extz xwa
 	div wa, 0x000a
@@ -90,7 +90,7 @@ HDAE5000_FS_Init_Case2:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
 	jrl t, .LFS_7334                       ; [78 76 01] jrl T,0x287334
-HDAE5000_FS_Init_Case3:
+HDAE5000_Lbn_ShowEntry_Case3:
 	pushw iz                                ; push IZ
 	pushw 0x002e
 	pushw 0x2d30
@@ -124,7 +124,7 @@ HDAE5000_FS_Init_Case3:
 .LFS_720d:
 	ldw (xsp + 0x02), 65535
 	jrl t, .LFS_7334                       ; [78 1f 01] jrl T,0x287334
-HDAE5000_FS_Init_Case4:
+HDAE5000_Lbn_ShowEntry_Case4:
 	ld	wa, (xsp+36)
 	extz xwa
 	div wa, 0x000a
@@ -145,7 +145,7 @@ HDAE5000_FS_Init_Case4:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
 	jrl t, .LFS_7334                       ; [78 ea 00] jrl T,0x287334
-HDAE5000_FS_Init_Case5:
+HDAE5000_Lbn_ShowEntry_Case5:
 	pushm	(xsp+36)
 	pushw 0x002e
 	pushw 0x2d3e
@@ -188,7 +188,7 @@ HDAE5000_FS_Init_Case5:
 .LFS_72b5:
 	ldw (xsp + 0x02), 65535
 	jr t, .LFS_7334                        ; [68 78] jr T,0x287334
-HDAE5000_FS_Init_Case6:
+HDAE5000_Lbn_ShowEntry_Case6:
 	pushw 0x0005
 	lda xwa, (0x2e1cac:24)
 	push xwa

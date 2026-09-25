@@ -31,3 +31,7 @@ s/\bHDAE5000_FS_Buffer_Setup\b/HDAE5000_FdList_Redisplay/g
 s/\bHDAE5000_FS_Scan_Directory\b/HDAE5000_CopyToHd_Execute/g
 s/\bHDAE5000_FS_Entry_Lookup\b/HDAE5000_DelOpt_ShowFlags/g
 s/\bHDAE5000_Display_Update_Offset\b/HDAE5000_DelOpt_InitFromSong/g
+# second pass: the switch-table labels of the two renamed load-by-number
+# routines (the patterns above end in \b, so they left the _Case* suffixes)
+s/\bHDAE5000_FS_Init_/HDAE5000_Lbn_ShowEntry_/g
+s/\bHDAE5000_HD_Sector_Read_/HDAE5000_Lbn_StepDigit_/g

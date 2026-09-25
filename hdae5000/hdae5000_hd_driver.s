@@ -5678,15 +5678,15 @@ HDAE5000_Lbn_StepDigit:	; 0x286A28 (1064 bytes)
 	cp wa, 5:i3			; state >= 6? (unsigned)
 	jrl ugt, .LHD_SR__apply	; yes → apply values
 	add wa, wa			; state * 2
-	lda xix, (HDAE5000_HD_Sector_Read_CaseTable:24); jump table base
+	lda xix, (HDAE5000_Lbn_StepDigit_CaseTable:24); jump table base
 	ldw_sri wa, 0x07, 0xF0, 0xE0	; ld WA, (XIX + WA)
-	lda xix, (HDAE5000_HD_Sector_Read_Case0:24); dispatch base
+	lda xix, (HDAE5000_Lbn_StepDigit_Case0:24); dispatch base
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
 	; Case 0 (offset 0x0000): jump to FS_Init directly
-HDAE5000_HD_Sector_Read_Case0:
+HDAE5000_Lbn_StepDigit_Case0:
 	jrl t, .LHD_SR__cleanup
 	; Case 1 (offset 0x0003): cylinder digit * 100
-HDAE5000_HD_Sector_Read_Case1:
+HDAE5000_Lbn_StepDigit_Case1:
 	ld wa, hl
 	muls wa, 0x0064			; WA = digit * 100
 	add de, wa			; DE += WA
@@ -5700,7 +5700,7 @@ HDAE5000_HD_Sector_Read_Case1:
 	ld de, 0:i3			; clamp to 0
 	jr t, .LHD_SR__apply
 	; Case 2 (offset 0x001E): cylinder digit * 10
-HDAE5000_HD_Sector_Read_Case2:
+HDAE5000_Lbn_StepDigit_Case2:
 	ld wa, hl
 	muls wa, 0x000a			; WA = digit * 10
 	add de, wa
@@ -5714,7 +5714,7 @@ HDAE5000_HD_Sector_Read_Case2:
 	ld de, 0:i3
 	jr t, .LHD_SR__apply
 	; Case 3 (offset 0x0039): cylinder unit digit
-HDAE5000_HD_Sector_Read_Case3:
+HDAE5000_Lbn_StepDigit_Case3:
 	add de, hl
 	cp de, 0x0078
 	jr le, .LHD_SR__c3_lo
@@ -5726,7 +5726,7 @@ HDAE5000_HD_Sector_Read_Case3:
 	ld de, 1:i3
 	jr t, .LHD_SR__apply
 	; Case 4 (offset 0x004E): head digit * 10
-HDAE5000_HD_Sector_Read_Case4:
+HDAE5000_Lbn_StepDigit_Case4:
 	ld wa, hl
 	muls wa, 0x000a
 	add bc, wa
@@ -5740,7 +5740,7 @@ HDAE5000_HD_Sector_Read_Case4:
 	ld bc, 0:i3
 	jr t, .LHD_SR__apply
 	; Case 5 (offset 0x0069): head unit digit
-HDAE5000_HD_Sector_Read_Case5:
+HDAE5000_Lbn_StepDigit_Case5:
 	add bc, hl
 	cp bc, 0x0010			; BC >= 16?
 	jr le, .LHD_SR__c5_lo

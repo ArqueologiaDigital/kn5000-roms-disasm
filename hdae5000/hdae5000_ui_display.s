@@ -16640,6 +16640,8 @@ HDAE5000_PPORT_Ptrs:	; 295412h
 ; record back on the regular pad.
 ;
 ; EVIDENCE: HDAE5000_PPORT_Cmd01_SendInfosAboutHd's PPORT command handlers load a status
+; ["Cmd01..'s handlers" was "Code_2_PartB's", the name of the whole
+;  conversion region: all twenty HDAE5000_PPORT_CmdNN handlers are meant]
 ; string via `lda_24 xbc, (0x2954xx/0x2955xx)` before every
 ; HDAE5000_PPORT_CallService call. There are 23 such literals in this file, one
 ; per record, and ALL 23 land exactly on a record start computed
