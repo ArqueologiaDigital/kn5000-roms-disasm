@@ -8738,12 +8738,26 @@ MidiSeqBuf_Return:
 	pop xiz
 	ret
 
+; MidiSeqBuf event-type handler table: 8 x .long code pointer, starting one
+; byte in (after the 0xff pad byte; the reader uses MidiSeqBuf_ProcessorTable_0x1,
+; a .set in shared/positional_labels.s).  Reader MidiStream_ProcessorDispatchB:
+;   and w, 7 / sll w, 2 / ld xix, <table> / ld_sril3 xix, (xix + w) / call (xix)
+; so 8 entries, index = w & 7.  Each handler builds one record at RAM 0x91AD
+; whose first byte is the status named in the handler's label (C0 is
+; TempoCC_TransmitBytecodeBlock) and hands it to TempoRingBuf_ProcessEntry;
+; entries 5-7 are the `ret` right after the table (no record).
 MidiSeqBuf_ProcessorTable:
-	.byte 0xff, 0x24, 0xa9, 0xfc, 0x00, 0x76, 0xa9, 0xfc
-	.byte 0x00, 0xc8, 0xa9, 0xfc, 0x00, 0xf3, 0xa9, 0xfc
-	.byte 0x00, 0x18, 0xaa, 0xfc, 0x00, 0xb7, 0xa6, 0xfc
-	.byte 0x00, 0xb7, 0xa6, 0xfc, 0x00, 0xb7, 0xa6, 0xfc
-	.byte 0x00, 0x0e
+	.byte	0xff	; pad: the table proper starts one byte in
+	.long TempoCC_TransmitBytecodeBlock
+	.long	MIDI_EmitRecord_B0
+	.long	MIDI_EmitRecord_D2
+	.long	MIDI_EmitRecord_D1
+	.long	MIDI_EmitRecord_D3
+	.long	MidiSeqBuf_ProcessorNop
+	.long	MidiSeqBuf_ProcessorNop
+	.long	MidiSeqBuf_ProcessorNop
+MidiSeqBuf_ProcessorNop:
+	ret
 
 MidiSeqBuf_InitFromTable:
 	ld (0x91d2:16), 255
@@ -8969,16 +8983,34 @@ TempoRing_Return:
 	pop xiz
 	ret
 
+; TempoRing event-type handler table: 16 x .long code pointer, starting one
+; byte in (after the 0xff pad byte; the reader uses TempoRing_ProcessorTable_0x1,
+; a .set in shared/positional_labels.s).  Reader MidiStream_ProcessorDispatchC
+;   and w, 0xf / sll w, 2 / ld xix, <table> / ld_sril3 xix, (xix + w) / call (xix)
+; so 16 entries, index = w & 15; entries 7-15 point at the `ret` right after
+; the table (no record).  Same
+; handlers as MidiSeqBuf_ProcessorTable plus MIDI_EmitRecord_80 (index 2) and
+; MIDI_EmitRecord_D0 (index 6, which emits only when bit 0 of 0xFFC2 is set).
 TempoRing_ProcessorTable:
-	.byte 0xff, 0x24, 0xa9, 0xfc, 0x00, 0x76, 0xa9, 0xfc
-	.byte 0x00, 0x69, 0xaa, 0xfc, 0x00, 0xc8, 0xa9, 0xfc
-	.byte 0x00, 0xf3, 0xa9, 0xfc, 0x00, 0x18, 0xaa, 0xfc
-	.byte 0x00, 0x3d, 0xaa, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0xf9, 0xa8, 0xfc, 0x00, 0xf9, 0xa8, 0xfc
-	.byte 0x00, 0x0e
+	.byte	0xff	; pad: the table proper starts one byte in
+	.long TempoCC_TransmitBytecodeBlock
+	.long	MIDI_EmitRecord_B0
+	.long	MIDI_EmitRecord_80
+	.long	MIDI_EmitRecord_D2
+	.long	MIDI_EmitRecord_D1
+	.long	MIDI_EmitRecord_D3
+	.long	MIDI_EmitRecord_D0
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+	.long	TempoRing_ProcessorNop
+TempoRing_ProcessorNop:
+	ret
 
 TempoRing_ValidateState:
 	ld xix, (0x91c1:16)
@@ -8997,129 +9029,135 @@ TempoRing_ValidateState:
 
 MIDI_ParamValidation_ReturnNoOp:
 	ret
-
 TempoCC_TransmitBytecodeBlock:
 	ld	xix, 0x91ad
 	ld	a, 192:opc
-	ld	w, (0x91c9:16)
+	ldb_d8	w, (0x91c9)
 	stw_dpi	wa, 241
-	ld	wa, (0x91bd:16)
+	ldw_d16	wa, (0x91bd)
 	stw_dpi	wa, 241
-	ld	xiy, (0x90f2:16)
+	ldda32	xiy, (0x90f2)
 	extz	wa
 	sll	wa, 2
-	ld_rrl xiy, xiy, wa
-	ld wa, (xiy)
-	bit 7, a
-	jr z, 7
+	ld_rrl	xiy, xiy, wa
+	ld	wa, (xiy)
+	bit	7, a
+	jr	z, TempoCC_TransmitBytecodeBlock_Skip
 	res	7, a
-	.byte 0xf1, 0xad, 0x91
-	lda	xhl, (xwa-56)
-	reti
-	jr	z, 7
+	setda	0, (0x91ad)
+TempoCC_TransmitBytecodeBlock_Skip:
+	bit	7, w
+	jr	z, TempoCC_TransmitBytecodeBlock_Skip2
 	res	7, w
-	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
-	ld	a, (0x91c7:16)
+	setda	1, (0x91ad)
+TempoCC_TransmitBytecodeBlock_Skip2:
+	stw_dpi	wa, 241
+	ldb_d8	a, (0x91c7)
 	ld	w, 255:opc
 	stw_dpi	wa, 241
-	ld	(0x91ca:16), 7
-	calr	490
+	stdi8	(0x91ca), 7
+	calr	TempoRingBuf_ProcessEntry
 	ret
+MIDI_EmitRecord_B0:
 	ld	xix, 0x91ad
 	ld	a, 176:opc
-	ld	w, (0x91c9:16)
+	ldb_d8	w, (0x91c9)
 	stw_dpi	wa, 241
-	ld	wa, (0x91bd:16)
+	ldw_d16	wa, (0x91bd)
 	bit	7, a
-	jr	z, 7
+	jr	z, MIDI_EmitRecord_B0_Skip
 	res	7, a
-	.byte 0xf1, 0xad, 0x91, 0xba, 0xf5, 0xf1, 0x50
-	ld	wa, (0x91bf:16)
+	setda	2, (0x91ad)
+MIDI_EmitRecord_B0_Skip:
+	stw_dpi	wa, 241
+	ldw_d16	wa, (0x91bf)
 	bit	7, a
-	jr	z, 7
+	jr	z, MIDI_EmitRecord_B0_Skip2
 	res	7, a
-	.byte 0xf1, 0xad, 0x91
-	lda	xhl, (xwa-56)
-	reti
-	jr	z, 7
+	setda	0, (0x91ad)
+MIDI_EmitRecord_B0_Skip2:
+	bit	7, w
+	jr	z, MIDI_EmitRecord_B0_Skip3
 	res	7, w
-	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
-	ld	a, (0x91c7:16)
+	setda	1, (0x91ad)
+MIDI_EmitRecord_B0_Skip3:
+	stw_dpi	wa, 241
+	ldb_d8	a, (0x91c7)
 	ld	w, 255:opc
 	stw_dpi	wa, 241
-	ld	(0x91ca:16), 7
-	calr	408
+	stdi8	(0x91ca), 7
+	calr	TempoRingBuf_ProcessEntry
 	ret
+MIDI_EmitRecord_D2:
 	ld	xix, 0x91ad
 	ld	a, 210:opc
-	ld	w, (0x91c9:16)
+	ldb_d8	w, (0x91c9)
 	stw_dpi	wa, 241
-	ld	wa, (0x91bf:16)
+	ldw_d16	wa, (0x91bf)
 	and	wa, 0x7f7f
 	stw_dpi	wa, 241
-	ld	a, (0x91c7:16)
+	ldb_d8	a, (0x91c7)
 	ld	w, 255:opc
 	stw_dpi	wa, 241
-	ld	(0x91ca:16), 37
+	stdi8	(0x91ca), 37
 	calr	TempoRingBuf_ProcessEntry
 	ret
+MIDI_EmitRecord_D1:
 	ld	xix, 0x91ad
 	ld	a, 209:opc
-	ld	w, (0x91c9:16)
+	ldb_d8	w, (0x91c9)
 	stw_dpi	wa, 241
-	ld	a, (0x91bf:16)
-	ld	w, (0x91c7:16)
-	stw_dpi wa, 241
-	ld (xix), 255
-	ld	(0x91ca:16), 20
+	ldb_d8	a, (0x91bf)
+	ldb_d8	w, (0x91c7)
+	stw_dpi	wa, 241
+	ld	(xix), 255
+	stdi8	(0x91ca), 20
 	calr	TempoRingBuf_ProcessEntry
 	ret
+MIDI_EmitRecord_D3:
 	ld	xix, 0x91ad
 	ld	a, 211:opc
-	ld	w, (0x91c9:16)
+	ldb_d8	w, (0x91c9)
 	stw_dpi	wa, 241
-	ld	a, (0x91bf:16)
-	ld	w, (0x91c7:16)
-	stw_dpi wa, 241
-	ld (xix), 255
-	ld	(0x91ca:16), 4
-	calr	291
+	ldb_d8	a, (0x91bf)
+	ldb_d8	w, (0x91c7)
+	stw_dpi	wa, 241
+	ld	(xix), 255
+	stdi8	(0x91ca), 4
+	calr	TempoRingBuf_ProcessEntry
 	ret
-	.byte 0xf2
-	inc	6, (0xc800ff:24)
-	ld	d, 68:opc
-	.byte 0xad, 0x91
-	nop
-	nop
+MIDI_EmitRecord_D0:
+	bitda_24	0, (0xffc2)
+	jr	z, MIDI_EmitRecord_D0_Return
+	ld	xix, 0x91ad
 	ld	a, 208:opc
-	ld	w, (0x91c9:16)
+	ldb_d8	w, (0x91c9)
 	stw_dpi	wa, 241
-	ld	a, (0x91bf:16)
-	ld	w, (0x91c7:16)
-	stw_dpi wa, 241
-	ld (xix), 255
-	ld	(0x91ca:16), 4
-	calr	247
+	ldb_d8	a, (0x91bf)
+	ldb_d8	w, (0x91c7)
+	stw_dpi	wa, 241
+	ld	(xix), 255
+	stdi8	(0x91ca), 4
+	calr	TempoRingBuf_ProcessEntry
+MIDI_EmitRecord_D0_Return:
 	ret
+MIDI_EmitRecord_80:
 	ld	xix, 0x91ad
 	ld	a, 128:opc
-	ld	w, (0x91c9:16)
-	.byte 0xf5
-	ld	(0xd150:16), xde
-	swi	4
-	ld	w, 216:opc
-	.byte 0xcc
-	swi	7
-	.byte 0x01
+	ldb_d8	w, (0x91c9)
+	stw_dpi	wa, 241
+	ldw_d16	wa, (0xfc62)
+	and	wa, 0x1ff
 	sll	w, 1
 	bit	7, a
-	jr	z, 3
+	jr	z, MIDI_EmitRecord_80_Skip
 	set	0, w
+MIDI_EmitRecord_80_Skip:
 	res	7, a
-	stw_dpi wa, 241
-	ld (xix), 255
-	ld	(0x91ca:16), 4
-	calr	196
+	stw_dpi	wa, 241
+	ld	(xix), 255
+	stdi8	(0x91ca), 4
+	calr	TempoRingBuf_ProcessEntry
 	ret
 
 MIDI_TransmitTempoCC:

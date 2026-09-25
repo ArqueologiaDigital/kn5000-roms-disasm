@@ -68,7 +68,8 @@ def main():
             m = re.match(r'^\s*\.long\s+([A-Za-z_.$][\w.$]*)\s*$', src[ln - 1]) if ln else None
             if m and syms.get(m.group(1)) == v:
                 continue                     # already symbolic and right
-            if ln is None or not re.match(r'^\s*\.long\s+0x%08x\s*$' % v, src[ln - 1], re.I):
+            mm = re.match(r'^\s*\.long\s+(0x[0-9a-fA-F]+)\s*$', src[ln - 1]) if ln else None
+            if ln is None or not mm or int(mm.group(1), 16) != v:
                 sys.exit("table row at 0x%06X is not `.long 0x%08x` (line %s: %r)" % (
                     q, v, ln, src[ln - 1] if ln else None))
             if v == 0xFFFFFFFF:
