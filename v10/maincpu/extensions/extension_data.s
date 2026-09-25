@@ -442,69 +442,96 @@ Str_StoreTotalSetting_EN3:	aligned_string "Stores to total setting including Rhy
 Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂlich Rhythmus, Transpose & Tempo."
 	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 	aligned_string "%c:%d/%d  "
-	.byte 0xef, 0x02, 0x1d, 0x05, 0xef, 0x02, 0x1d, 0x05, 0x27, 0x08, 0xfd, 0x07, 0xfd, 0x07, 0x20, 0x00
+; ---------------------------------------------------------------------------
+; Event-offset tables and screen strings of the Toshi grid/box procedures
+; ---------------------------------------------------------------------------
+; Eleven procedures in ui/ui_mode_handlers.s dispatch the seven events
+; 0x1C00017-0x1C0001D the same way: `sub x, 0x1c00017`, bounds 0..6, `add
+; x, x`, add a table address, `ld wa/bc, (table)`, `lda xix, (<base>:24)`,
+; `jp_ind` -- so each *_EventOffsets table is SEVEN u16 offsets FROM ITS
+; BASE LABEL (0 = the base itself).  The procedure names are the originals
+; from Toshi_Function_Table / Toshi_ApFunctionName_Table.  The code still
+; reaches these tables through positional names Str_StoreTotalSetting_DE_0xNN
+; (shared/positional_labels.s), given with each; the targets carry no labels
+; in ui_mode_handlers.s, which is why the offsets stay numeric here -- and
+; why they differ in v7, whose handlers moved.
+; The strings between them are loaded by the same procedures as immediates
+; (`ld xwa, Str_StoreTotalSetting_DE_0xNN` then Strcpy): "     " (0x15A),
+; "TEMPO" (0x164, 0x16E) by the MstStyle2 name drawers, the 32-space
+; blanks (0x188, 0x1AC, 0x1D0, 0x1F4, 0x216) by MstGrid2_OutOfRange_*, and
+; "ON "/"OFF" (0x258/0x25C, 0x270/0x26C) by TchSensGrid.
+; ---------------------------------------------------------------------------
+AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (Str_StoreTotalSetting_DE_0x98)
+	.short 0x02ef, 0x051d, 0x02ef, 0x051d, 0x0827, 0x07fd, 0x07fd
+	aligned_string " "
 	aligned_string "                                "
-	ld w, 0:opc
-	.zero 8
-	.byte 0xf1, 0x01, 0xf1, 0x01, 0xf1, 0x01, 0x59, 0x00, 0x65, 0x01, 0x59, 0x00, 0x65, 0x01, 0x10, 0x03
-	.byte 0xf8, 0x02, 0xf8, 0x02, 0x20, 0x00
+	aligned_string " "
+MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAlp_EventDispatch (Str_StoreTotalSetting_DE_0xCC)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x01f1, 0x01f1, 0x01f1
+AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (Str_StoreTotalSetting_DE_0xDA)
+	.short 0x0059, 0x0165, 0x0059, 0x0165, 0x0310, 0x02f8, 0x02f8
+	aligned_string " "
 	aligned_string "                "
-	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6a, 0x01, 0x00, 0x00, 0x00, 0x00
+	aligned_string " "
+MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_EventDispatch (Str_StoreTotalSetting_DE_0xFE)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x016a, 0x0000, 0x0000
 	aligned_string "%d/%d"
-	.byte 0xcc, 0x01, 0xfa, 0x02, 0xcc, 0x01, 0xfa, 0x02, 0x29, 0x05, 0x11, 0x05, 0x11, 0x05, 0x20, 0x00
+AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (Str_StoreTotalSetting_DE_0x112)
+	.short 0x01cc, 0x02fa, 0x01cc, 0x02fa, 0x0529, 0x0511, 0x0511
+	aligned_string " "
 	aligned_string "                "
-	ld w, 0:opc
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	pop xiz
-	normal
-	nop
-	nop
-	nop
-	nop
-	ld e, 115:opc
-	push xde
-	nop
+	aligned_string " "
+MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (Str_StoreTotalSetting_DE_0x136)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x015e, 0x0000, 0x0000
+	aligned_string "%s:"
 	aligned_string "                 "
-	ld w, 32:opc
-	ld w, 32:opc
-	ld w, 0:opc
-	ld e, 115:opc
-	push xde
-	nop
+	aligned_string "     "
+	aligned_string "%s:"
 	aligned_string "TEMPO"
-	ld e, 115:opc
-	push xde
-	nop
+	aligned_string "%s:"
 	aligned_string "TEMPO"
-	.byte 0x25, 0x73, 0x00, 0xff, 0x5a, 0x05, 0x6a, 0x07, 0x5a, 0x05, 0x6a, 0x07, 0xae, 0x0b, 0x96, 0x0b
-	.byte 0x96, 0x0b, 0x20, 0x00
+	aligned_string "%s"
+AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (Str_StoreTotalSetting_DE_0x178)
+	.short 0x055a, 0x076a, 0x055a, 0x076a, 0x0bae, 0x0b96, 0x0b96
+	aligned_string " "
 	aligned_string "                                "
-	ld w, 0:opc
+	aligned_string " "
 	aligned_string "                                "
-	ld w, 0:opc
+	aligned_string " "
 	aligned_string "                                "
-	ld w, 0:opc
+	aligned_string " "
 	aligned_string "                                "
 	aligned_string "                                "
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xdb, 0x02, 0xdb, 0x02, 0xdb, 0x02, 0x6a, 0x00
-	.byte 0x27, 0x01, 0x6a, 0x00, 0x27, 0x01, 0x34, 0x02, 0x0c, 0x02, 0x0c, 0x02, 0x25, 0x33, 0x64, 0x00
-	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00, 0x25, 0x33, 0x64, 0x00, 0x25, 0x33, 0x64, 0x00
-	.byte 0x25, 0x33, 0x64, 0x00, 0x4f, 0x46, 0x46, 0x00, 0x4f, 0x4e, 0x20, 0x00, 0x25, 0x33, 0x64, 0x00
-	.byte 0x25, 0x33, 0x64, 0x00, 0x00, 0x00, 0x7c, 0x00, 0x00, 0x00, 0x7c, 0x00, 0xf8, 0x02, 0xfe, 0x00
-	.byte 0xfe, 0x00, 0x6a, 0x00, 0x0e, 0x01, 0x6a, 0x00, 0x0e, 0x01, 0x02, 0x02, 0xda, 0x01, 0xda, 0x01
+MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_ScrollJumpTable (Str_StoreTotalSetting_DE_0x238)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x02db, 0x02db, 0x02db
+AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (Str_StoreTotalSetting_DE_0x246)
+	.short 0x006a, 0x0127, 0x006a, 0x0127, 0x0234, 0x020c, 0x020c
+	aligned_string "%3d"
+	aligned_string "ON "
+	aligned_string "OFF"
+	aligned_string "%3d"
+	aligned_string "%3d"
+	aligned_string "%3d"
+	aligned_string "OFF"
+	aligned_string "ON "
+	aligned_string "%3d"
+	aligned_string "%3d"
+TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (Str_StoreTotalSetting_DE_0x27C)
+	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x02f8, 0x00fe, 0x00fe
+AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (Str_StoreTotalSetting_DE_0x28A)
+	.short 0x006a, 0x010e, 0x006a, 0x010e, 0x0202, 0x01da, 0x01da
+; FswAssign_FunctionCodes / FswAssign_FunctionNames: the foot-switch
+; assignable functions.  FSWAssGrid_EventDispatch (ui/ui_mode_handlers.s)
+; indexes the codes with `ld_rrb c, xbc, hl` (Str_StoreTotalSetting_DE_0x298)
+; and, after AudioTable_FindMatchIndex, the names with `sla hl, 2` /
+; `ld_rrl xwa, xbc, hl` (Str_StoreTotalSetting_DE_0x2B8).  31 codes -- 0x00
+; is OFF, then 0x90.. in the order of the names -- and a 0xFF terminator;
+; 31 name pointers, entry k naming code k.
+FswAssign_FunctionCodes:
 	.byte 0x00, 0x90, 0x91, 0xb3, 0xb4, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xb2, 0x88, 0x92
 	.byte 0x93, 0x94, 0x95, 0x40, 0x96, 0x99, 0x97, 0x98, 0xad, 0xb0, 0xb1, 0xb8, 0xb9, 0xb6, 0xb7, 0xff
-	.byte 0xdc, 0x11, 0xed, 0x00
-
-
-NoteNameStr_Table_4:
+FswAssign_FunctionNames:
+	.long CtrlAssignStr_Off
 	.long CtrlAssignStr_PMemIncrement
 	.long CtrlAssignStr_PMemDecrement
 	.long CtrlAssignStr_PMemBankInc
@@ -689,21 +716,11 @@ VariationStr_V1:
 	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
-	ld e, 115:opc
-	push xde
-	nop
-	ld e, 115:opc
-	push xde
-	nop
-	ld e, 100:opc
-	push xde
-	nop
-	ld e, 100:opc
-	push xde
-	nop
-	ld e, 115:opc
-	push xde
-	nop
+	aligned_string "%s:"
+	aligned_string "%s:"
+	aligned_string "%d:"
+	aligned_string "%d:"
+	aligned_string "%s:"
 	aligned_string "PAGE %d/%d"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+40
 	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
@@ -768,16 +785,7 @@ TransposeNoteStr_C:
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
-	ldw bc, 12544
-	nop
-	ld xwa, 1073758208
-	nop
-	ldw bc, 16384
-	nop
-	ldw iy, 15360
-	nop
-	nop
-	nop
+	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
@@ -1285,11 +1293,7 @@ ParamStr19_Empty:	aligned_string ""
 ParamStr19_nowstylectgpage:	aligned_string "nowstylectgpage"
 ParamStr19_nowstylectgmaxpage:	aligned_string "nowstylectgmaxpage"
 ParamStr19_nowstylectgdtno:	aligned_string "nowstylectgdtno"
-ParamStr19_func:
-	jr z, 117
-	jr nz, 99
-	nop
-	swi 7
+ParamStr19_func:	aligned_string "func"
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
 
@@ -1341,8 +1345,7 @@ NakaParam_AcMstSong2GridBox:
 MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
 MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
 MstSong2Grid_nowsongctgdtno:	aligned_string "nowsongctgdtno"
-	jr z, 117
-MstSong2Grid_func:	.byte 0x6e, 0x63, 0x00, 0xff
+MstSong2Grid_func:	aligned_string "func"
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
 
@@ -1419,41 +1422,41 @@ ParamStr24_page:	aligned_string "page"
 Toshi_Class_Table:
 	.long NormScreenProc
 .include "ui_widgets/master_style_grid_screens.s"
-	.byte 0x6a, 0x00
+; ---------------------------------------------------------------------------
+; The tail of Toshi_Class_Table's string pool.  Each of the 28 class records
+; points at a type-signature string (+0x10) and a class-name string (+0x0C);
+; the pool holds them as (signature, name) pairs in REVERSE record order, and
+; its first part -- down to "XX" of record 18's signature -- is inside the
+; naka_master_style.c blob included above, so this file resumes with "j".
+; !! The NakaDesc_* / NakaInst_* labels below are ONE CLASS OFF: each labels
+; the signature / name of the class that FOLLOWS its namesake in the pool
+; (NakaInst_VariScreen is the string "NormScreen").  They are kept because
+; ui_widgets/naka_master_style.c and its .ld cite them by name.  Record
+; layout and the check that each signature has one character per variable:
+; Toshi_Class_Table's header, scripts/analysis/ext_lane_checks.py class.
+; ---------------------------------------------------------------------------
+	.byte 0x6a, 0x00	; tail of record 18's signature "XXj"
 	aligned_string "AcDispTimeSetGridBox"
-NakaDesc_AcDispTimeSetGridBox:
-	pop xwa
-	pop xwa
-	jr gt, 0
+NakaDesc_AcDispTimeSetGridBox:	aligned_string "XXj"
 NakaInst_AcDispTimeSetGridBox:	aligned_string "AcPmExpFilterGridBox"
-NakaDesc_AcPmExpFilterGridBox:
-	pop xwa
-	pop xwa
-	jr gt, 0
+NakaDesc_AcPmExpFilterGridBox:	aligned_string "XXj"
 NakaInst_AcPmExpFilterGridBox:	aligned_string "AcFSWAssGridBox"
-NakaDesc_AcFSWAssGridBox:
-	pop xwa
-	pop xwa
-	jr gt, 0
+NakaDesc_AcFSWAssGridBox:	aligned_string "XXj"
 	aligned_string "AcTchSensGridBox"
-	jr nz, 0
+	aligned_string "n"
 	aligned_string "IvMstStyleWindowPgCtl"
-	.byte 0x6e, 0x00
+	aligned_string "n"
 	aligned_string "IvPmemWindowPageCtl"
-	.byte 0x6e, 0x00
+	aligned_string "n"
 	aligned_string "IvWindowPageControl"
 NakaDesc_IvWindowPageControl:	aligned_string "kc^nn"
 NakaInst_IvWindowPageControl:	aligned_string "PmemModeBox"
 NakaDesc_PmemModeBox:	aligned_string "kc^nn"
 NakaInst_PmemModeBox:	aligned_string "MsaModeScreen"
-NakaDesc_MsaModeScreen:
-	jr gt, 114
-	nop
-	swi 7
+NakaDesc_MsaModeScreen:	aligned_string "jr"
 	aligned_string "AcPmBkEditBox"
 NakaDesc_AcPmBkEditBox:	aligned_string "kc^nnn"
-NakaInst_AcPmBkEditBox:	.asciz "PmBankScreen"
-	swi 7
+NakaInst_AcPmBkEditBox:	aligned_string "PmBankScreen"
 NakaDesc_PmBankScreen:	aligned_string ""
 NakaInst_PmBankScreen:	aligned_string "PmBkNoBox"
 NakaDesc_AcPmBkNoBox:	aligned_string ""
@@ -1734,241 +1737,298 @@ Toshi_MainFunctionName_Table:
 	.long NakaInstTable8_NullTerm
 NakaInstTable8_NullTerm:	aligned_string ""
 .include "ui_widgets/normal_mode_layout.s"
-	.byte 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0xf4, 0x03, 0x00, 0x08, 0xf4, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1a, 0x00, 0xff, 0xff, 0x08, 0x00, 0x15, 0x01
-	.byte 0x80, 0x00, 0x3b, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x07, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1b, 0x00, 0x19, 0x00, 0x08, 0x00, 0xee, 0x00
-	.byte 0x80, 0x00, 0x14, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x01, 0x00, 0x06, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1c, 0x00, 0x1a, 0x00, 0x08, 0x00, 0xc7, 0x00
-	.byte 0x80, 0x00, 0xed, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x02, 0x00, 0x05, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1d, 0x00, 0x1b, 0x00, 0x08, 0x00, 0xa0, 0x00
-	.byte 0x80, 0x00, 0xc6, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x13, 0x00, 0x04, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1e, 0x00, 0x1c, 0x00, 0x08, 0x00, 0x79, 0x00
-	.byte 0x80, 0x00, 0x9f, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x10, 0x00, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1f, 0x00, 0x1d, 0x00, 0x08, 0x00, 0x52, 0x00
-	.byte 0x80, 0x00, 0x78, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x11, 0x00, 0x02, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x20, 0x00, 0x1e, 0x00, 0x08, 0x00, 0x2b, 0x00
-	.byte 0x80, 0x00, 0x51, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x12, 0x00, 0x01, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0xff, 0xff, 0x1f, 0x00, 0x08, 0x00, 0x04, 0x00
-	.byte 0x80, 0x00, 0x2a, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x14, 0x00, 0x00, 0x00
-	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x22, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
-	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, 0xf4, 0x03, 0x00
-	.byte 0x10, 0xf4, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x23, 0x00, 0xff, 0xff, 0x08, 0x00, 0xa0, 0x00
-	.byte 0x80, 0x00
-
-
+; naka_node -- the first 12 bytes every NAKA widget record shares: the 4-byte
+; header {type, 0x00, 0x60, 0x01} and four element-index links (see below).
+.macro naka_node type, parent, child, next, prev
+	.byte \type, 0x00, 0x60, 0x01
+	.short \parent, \child, \next, \prev
+.endm
+; ---------------------------------------------------------------------------
+; NAKA widget records: elements 24-62 of Toshi_Viewable_NORMAL (object-
+; registry slot 1, 63 entries, registered by InitializeToshi -- see
+; extensions/extension_init.s).  Every entry of that table from 25 to 62
+; points at one of the records below, in order; element 24 begins in
+; ui_widgets/normal_mode_layout.s and only its last 14 bytes are here.
+;
+; Common part (`naka_node`): the 4-byte NAKA header, then four element
+; indices into the SAME viewable table -- parent, first child, next
+; sibling, previous sibling -- NAKA_INDEX_NONE when absent.  That reading
+; is checked for all 38 records: every next/prev pair and every child/parent
+; pair agree (scripts/analysis/ext_lane_checks.py widgets).  It contradicts
+; ui_widgets/naka_types.h, which calls +6 prev_sibling, +8 self_idx and +10
+; next_sibling: record 25's +8 is 26, and element 26's +10 is 25.
+; +0x0E..+0x14 are a rectangle x1, y1, x2, y2 on the 320x240 screen that
+; lies inside the parent's rectangle in every record (same script).  The
+; six 0x35 records are root panels: elements 24, 33, 39 and 48 span the
+; bottom of the screen, (0,127)-(319,23x), and parent 8, 5, 8 and 8 0x3C
+; cells at x = 4, 43, 82, ... (39 px apart); elements 57 and 60 span
+; (4,190)-(315,236) and parent two 0x69 records each.  +0x0C (always 8)
+; and the fields after the rectangle are not traced to a reader; each 0x35
+; panel ends in two consecutive u32 RAM addresses, 0x3F404/0x3F408 for
+; element 24 up to 0x3F42C/0x3F430 for element 60.  Record sizes: 0x3C 32 B,
+; 0x35 36 B, 0x69 26 B.
+; Until 2026-09-25 sixteen of these rectangles' (x2, y2) corners
+; were written as POINTERS -- `.long WidgetName_PtrBlock_C` ({42, 235}), _D,
+; _E, _F2, _I2, _L, _M2, _N1, `.long SoundName_ToTheBone` and `.long
+; Naka_PresentationRootState` (element 39's right/bottom edge {319, 239}).
+; None is a pointer: every one is a rectangle corner inside its parent, and
+; v7 proves the last one -- it moved Naka_PresentationRootState by -0x2A and
+; kept these bytes.
+; ---------------------------------------------------------------------------
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED37EF-0xED380A (27 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=12 near NakaInst_MainVariSet+935
-
-
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED382F-0xED384A (27 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=14 near NakaInst_MainVariSet+999
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3859-0xED386A (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1041
-
-
-
-
-
-
-
-
-
-
-	.long WidgetName_PtrBlock_I2
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x15, 0x00, 0x04, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x24, 0x00, 0x22, 0x00, 0x08, 0x00, 0x79, 0x00
-	.byte 0x80, 0x00
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED391D-0xED392E (17 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1237
-	.long WidgetName_PtrBlock_F2
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x16, 0x00, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x25, 0x00, 0x23, 0x00, 0x08, 0x00, 0x52, 0x00
-	.byte 0x80, 0x00
-
-
-	.long WidgetName_PtrBlock_E
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x17, 0x00, 0x02, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x26, 0x00, 0x24, 0x00, 0x08, 0x00, 0x2b, 0x00
-	.byte 0x80, 0x00
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED395B-0xED396E (19 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+1299
-	.long WidgetName_PtrBlock_D
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x1a, 0x00, 0x01, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0xff, 0xff, 0x25, 0x00, 0x08, 0x00, 0x04, 0x00
-	.byte 0x80, 0x00
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED397D-0xED398E (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=9 near NakaInst_MainVariSet+1333
-	.long WidgetName_PtrBlock_C
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x1b, 0x00, 0x00, 0x00
-	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x28, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
-	.byte 0x7f, 0x00
-
-
-	.short 319, 239	; right/bottom edge of the 320x240 screen, NOT a pointer (was `.long Naka_PresentationRootState`: v7 moved that routine, not this value)
-	.byte 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0xf4, 0x03, 0x00, 0x18, 0xf4, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x29, 0x00, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
-	.byte 0x80, 0x00, 0x2a, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2a, 0x00, 0x28, 0x00, 0x08, 0x00, 0x2b, 0x00
-	.byte 0x80, 0x00, 0x51, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x01, 0x00, 0x01, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2b, 0x00, 0x29, 0x00, 0x08, 0x00, 0x52, 0x00
-	.byte 0x80, 0x00, 0x78, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x02, 0x00, 0x02, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2c, 0x00, 0x2a, 0x00, 0x08, 0x00, 0x79, 0x00
-	.byte 0x80, 0x00, 0x9f, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x03, 0x00, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2d, 0x00, 0x2b, 0x00, 0x08, 0x00, 0xa0, 0x00
-	.byte 0x80, 0x00, 0xc6, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x04, 0x00, 0x04, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2e, 0x00, 0x2c, 0x00, 0x08, 0x00, 0xc7, 0x00
-	.byte 0x80, 0x00, 0xed, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x05, 0x00, 0x05, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2f, 0x00, 0x2d, 0x00, 0x08, 0x00, 0xee, 0x00
-	.byte 0x80, 0x00, 0x14, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x06, 0x00, 0x06, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0xff, 0xff, 0x2e, 0x00, 0x08, 0x00, 0x15, 0x01
-	.byte 0x80, 0x00, 0x3b, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x07, 0x00, 0x07, 0x00
-	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x31, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
-	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1c, 0xf4, 0x03, 0x00
-	.byte 0x20, 0xf4, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x32, 0x00, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
-	.byte 0x80, 0x00
-
-
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED39D7-0xED39F2 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=12 near NakaInst_MainVariSet+1423
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A01-0xED3A12 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1465
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A13-0xED3A32 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=100% dist=15 near NakaInst_MainVariSet+1483
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A37-0xED3A52 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=13 near NakaInst_MainVariSet+1519
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A61-0xED3A72 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1561
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A77-0xED3A92 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=13 near NakaInst_MainVariSet+1583
-
-
-
-
-
-
-	.long WidgetName_PtrBlock_C
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x33, 0x00, 0x31, 0x00, 0x08, 0x00, 0x2b, 0x00
-	.byte 0x80, 0x00
-
-
-	.long WidgetName_PtrBlock_D
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x09, 0x00, 0x01, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x34, 0x00, 0x32, 0x00, 0x08, 0x00, 0x52, 0x00
-	.byte 0x80, 0x00
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3B25-0xED3B36 (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1757
-	.long WidgetName_PtrBlock_E
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0a, 0x00, 0x02, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x35, 0x00, 0x33, 0x00, 0x08, 0x00, 0x79, 0x00
-	.byte 0x80, 0x00
-
-
-	.long WidgetName_PtrBlock_F2
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0b, 0x00, 0x03, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x36, 0x00, 0x34, 0x00, 0x08, 0x00, 0xa0, 0x00
-	.byte 0x80, 0x00
-
-
-	.long WidgetName_PtrBlock_I2
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0c, 0x00, 0x04, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x37, 0x00, 0x35, 0x00, 0x08, 0x00, 0xc7, 0x00
-	.byte 0x80, 0x00
-
-
-	.long WidgetName_PtrBlock_L
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0d, 0x00, 0x05, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x38, 0x00, 0x36, 0x00, 0x08, 0x00, 0xee, 0x00
-	.byte 0x80, 0x00
-
-
-	.long WidgetName_PtrBlock_M2
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0e, 0x00, 0x06, 0x00
-	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0xff, 0xff, 0x37, 0x00, 0x08, 0x00, 0x15, 0x01
-	.byte 0x80, 0x00
-
-
-	.long WidgetName_PtrBlock_N1
-	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0f, 0x00, 0x07, 0x00
-	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x3a, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
-	.byte 0xbe, 0x00
-
-
-	.long SoundName_ToTheBone
-	.byte 0x07, 0x00, 0xc1, 0x00, 0x00, 0x00, 0x24, 0xf4, 0x03, 0x00, 0x28, 0xf4, 0x03, 0x00
-	.byte 0x69, 0x00, 0x60, 0x01, 0x39, 0x00, 0xff, 0xff, 0x3b, 0x00, 0xff, 0xff, 0x08, 0x00, 0x98, 0x00
-	.byte 0xc8, 0x00, 0x07, 0x01, 0xe0, 0x00, 0x16, 0x00, 0x22, 0x01
-	.byte 0x69, 0x00, 0x60, 0x01, 0x39, 0x00, 0xff, 0xff, 0xff, 0xff, 0x3a, 0x00, 0x08, 0x00, 0x38, 0x00
-	.byte 0xcc, 0x00, 0x87, 0x00, 0xdd, 0x00, 0x17, 0x00, 0x22, 0x01
-	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x3d, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
-	.byte 0xbe, 0x00
-
-
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C1F-0xED3C34 (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2007
-
-
-	.long SoundName_ToTheBone
-	.byte 0x07, 0x00, 0xc1, 0x00, 0x00, 0x00, 0x2c, 0xf4, 0x03, 0x00, 0x30, 0xf4, 0x03, 0x00
-	.byte 0x69, 0x00, 0x60, 0x01, 0x3c, 0x00, 0xff, 0xff, 0x3e, 0x00, 0xff, 0xff, 0x08, 0x00, 0x28, 0x00
-	.byte 0xcc, 0x00, 0x93, 0x00, 0xdf, 0x00, 0x19, 0x00, 0x22, 0x01
-	.byte 0x69, 0x00, 0x60, 0x01, 0x3c, 0x00, 0xff, 0xff, 0xff, 0xff, 0x3d, 0x00, 0x08, 0x00, 0xa0, 0x00
-	.byte 0xc8, 0x00, 0x10, 0x01, 0xe0, 0x00, 0x18, 0x00, 0x22, 0x01
+	; element 24 (0x35), +0x16..+0x23 -- begun in normal_mode_layout.s
+	.short 245, 0, 0
+	.long 0x0003f404, 0x0003f408
+Toshi_NORMAL_Elem25:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 26, NAKA_INDEX_NONE
+	.short 8, 277, 128, 315, 235
+	.short 7, 193, 0xffff, 0, 7
+Toshi_NORMAL_Elem26:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 27, 25
+	.short 8, 238, 128, 276, 235
+	.short 7, 193, 0xffff, 1, 6
+Toshi_NORMAL_Elem27:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 28, 26
+	.short 8, 199, 128, 237, 235
+	.short 7, 193, 0xffff, 2, 5
+Toshi_NORMAL_Elem28:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 29, 27
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 19, 4
+Toshi_NORMAL_Elem29:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 30, 28
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 16, 3
+Toshi_NORMAL_Elem30:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 31, 29
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 17, 2
+Toshi_NORMAL_Elem31:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 32, 30
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 18, 1
+Toshi_NORMAL_Elem32:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 31
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 20, 0
+Toshi_NORMAL_Elem33:
+	naka_node 0x35, NAKA_INDEX_NONE, 34, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 0, 127, 319, 239
+	.short 245, 0, 0
+	.long 0x0003f40c, 0x0003f410
+Toshi_NORMAL_Elem34:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 35, NAKA_INDEX_NONE
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 21, 4
+Toshi_NORMAL_Elem35:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 36, 34
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 22, 3
+Toshi_NORMAL_Elem36:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 37, 35
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 23, 2
+Toshi_NORMAL_Elem37:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 38, 36
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 26, 1
+Toshi_NORMAL_Elem38:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 37
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 27, 0
+Toshi_NORMAL_Elem39:
+	naka_node 0x35, NAKA_INDEX_NONE, 40, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 0, 127, 319, 239
+	.short 245, 0, 0
+	.long 0x0003f414, 0x0003f418
+Toshi_NORMAL_Elem40:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 41, NAKA_INDEX_NONE
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 0, 0
+Toshi_NORMAL_Elem41:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 42, 40
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 1, 1
+Toshi_NORMAL_Elem42:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 43, 41
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 2, 2
+Toshi_NORMAL_Elem43:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 44, 42
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 3, 3
+Toshi_NORMAL_Elem44:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 45, 43
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 4, 4
+Toshi_NORMAL_Elem45:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 46, 44
+	.short 8, 199, 128, 237, 235
+	.short 7, 193, 0xffff, 5, 5
+Toshi_NORMAL_Elem46:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 47, 45
+	.short 8, 238, 128, 276, 235
+	.short 7, 193, 0xffff, 6, 6
+Toshi_NORMAL_Elem47:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 46
+	.short 8, 277, 128, 315, 235
+	.short 7, 193, 0xffff, 7, 7
+Toshi_NORMAL_Elem48:
+	naka_node 0x35, NAKA_INDEX_NONE, 49, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 0, 127, 319, 239
+	.short 245, 0, 0
+	.long 0x0003f41c, 0x0003f420
+Toshi_NORMAL_Elem49:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 50, NAKA_INDEX_NONE
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 8, 0
+Toshi_NORMAL_Elem50:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 51, 49
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 9, 1
+Toshi_NORMAL_Elem51:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 52, 50
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 10, 2
+Toshi_NORMAL_Elem52:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 53, 51
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 11, 3
+Toshi_NORMAL_Elem53:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 54, 52
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 12, 4
+Toshi_NORMAL_Elem54:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 55, 53
+	.short 8, 199, 128, 237, 235
+	.short 7, 193, 0xffff, 13, 5
+Toshi_NORMAL_Elem55:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 56, 54
+	.short 8, 238, 128, 276, 235
+	.short 7, 193, 0xffff, 14, 6
+Toshi_NORMAL_Elem56:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 55
+	.short 8, 277, 128, 315, 235
+	.short 7, 193, 0xffff, 15, 7
+Toshi_NORMAL_Elem57:
+	naka_node 0x35, NAKA_INDEX_NONE, 58, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 4, 190, 315, 236
+	.short 7, 193, 0
+	.long 0x0003f424, 0x0003f428
+Toshi_NORMAL_Elem58:
+	naka_node 0x69, 57, NAKA_INDEX_NONE, 59, NAKA_INDEX_NONE
+	.short 8, 152, 200, 263, 224
+	.short 22, 290
+Toshi_NORMAL_Elem59:
+	naka_node 0x69, 57, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 58
+	.short 8, 56, 204, 135, 221
+	.short 23, 290
+Toshi_NORMAL_Elem60:
+	naka_node 0x35, NAKA_INDEX_NONE, 61, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 4, 190, 315, 236
+	.short 7, 193, 0
+	.long 0x0003f42c, 0x0003f430
+Toshi_NORMAL_Elem61:
+	naka_node 0x69, 60, NAKA_INDEX_NONE, 62, NAKA_INDEX_NONE
+	.short 8, 40, 204, 147, 223
+	.short 25, 290
+Toshi_NORMAL_Elem62:
+	naka_node 0x69, 60, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 61
+	.short 8, 160, 200, 272, 224
+	.short 24, 290
 
 
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C77-0xED3C8C (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2095
 .include "ui_widgets/control_menu_screens.s"
-	.byte 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x09, 0x00, 0xff, 0xff, 0x08, 0x00, 0x4e, 0x00, 0x80, 0x00
-	.byte 0xe1, 0x00, 0x92, 0x00
+; ---------------------------------------------------------------------------
+; The "CPU data transmission" error texts: five LABEL (type 0x2B) records,
+; elements 8-12 of Toshi_Viewable_TEST1 (object-registry slot 0xF4, 14
+; entries, registered by InitializeToshi -- extensions/extension_init.s),
+; all children of element 7, the 0x35 panel at 0xED6676 in
+; ui_widgets/control_menu_screens.s.  Layout as the NORMAL records above:
+; `naka_node` (parent, first child, next, previous -- element indices of the
+; same table), +0x0C (8), the text rectangle x1, y1, x2, y2, +0x16 a pointer
+; to the record's string, +0x1A..+0x1E three words, then the string.  The
+; links are checked by scripts/analysis/ext_lane_checks.py test1.  Element 8
+; begins 2 bytes before this file resumes: its type byte 0x2B and the 0x00
+; after it are the last two bytes of the control_menu_screens.s blob.
+; ---------------------------------------------------------------------------
+	.byte 0x60, 0x01	; element 8: header bytes 2-3
+	.short 7, NAKA_INDEX_NONE, 9, NAKA_INDEX_NONE
+	.short 8, 78, 128, 225, 146
 	.long Str_ErrorDialog_Caution
-	push sr
-	nop
-	nop
-	nop
-	swi 1
-	nop
+	.short 2, 0, 249
 Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 
 
 ; ---------------------------------------------------------------------------
-; Widget 10 (0x0a): ERROR Message
+; Element 9 of Toshi_Viewable_TEST1: ERROR Message
 ; "** ERROR in CPU data transmission **"
-; Screen group 7, index 10 - Main error message
+; CORRECTED 2026-09-25: this used to say "Widget 10 (0x0a)" and "Screen group
+; 7, index 10"; 7 is the PARENT element and 0x0a the NEXT sibling (element 10).
 ; ---------------------------------------------------------------------------
 ErrorDialog_CPUTransmissionError:
-	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00, 0x08, 0x00, 0x0e, 0x00
-	.byte 0x96, 0x00, 0x31, 0x01, 0xa8, 0x00, 0xe4, 0x66, 0xed, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
-	aligned_string "** ERROR in CPU data transmission **"
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, 10, 8
+	.short 8, 14, 150, 305, 168
+	.long Str_ErrorDialog_CPUTransmission
+	.short 0, 0, 2
+Str_ErrorDialog_CPUTransmission:	aligned_string "** ERROR in CPU data transmission **"
 
 
 ; ---------------------------------------------------------------------------
-; Widget 11 (0x0b): Recovery Instruction Line 1
+; Element 10 of Toshi_Viewable_TEST1: Recovery Instruction Line 1
 ; "Please try turning off and on again."
-; Screen group 7, index 11
+; (was "Widget 11 (0x0b)" / "Screen group 7, index 11": parent 7, next 11)
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine1:
-	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0b, 0x00, 0x09, 0x00, 0x08, 0x00, 0x2e, 0x00
-	.byte 0xae, 0x00, 0x09, 0x01, 0xb8, 0x00
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, 11, 9
+	.short 8, 46, 174, 265, 184
 	.long Str_ErrorDialog_TryTurningOff
-	pop sr
-	nop
-	nop
-	nop
-	nop
-	nop
+	.short 3, 0, 0
 Str_ErrorDialog_TryTurningOff:	aligned_string "Please try turning off and on again."
 
 
 ; ---------------------------------------------------------------------------
-; Widget 12 (0x0c): Recovery Instruction Line 2
+; Element 11 of Toshi_Viewable_TEST1: Recovery Instruction Line 2
 ; "If this message appears again,"
-; Screen group 7, index 12
+; (was "Widget 12 (0x0c)" / "Screen group 7, index 12": parent 7, next 12;
+; its rectangle's y1/x2 pair used to be written `.long
+; TechnichordParam_Block3`, an absolute symbol that happens to equal
+; 0x00E500BE = {190, 229})
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine2:
-	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0c, 0x00, 0x0a, 0x00, 0x08, 0x00, 0x2e, 0x00
-	.long TechnichordParam_Block3
-	.byte 0xc8, 0x00, 0x70, 0x67, 0xed, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "If this message appears again,"
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, 12, 10
+	.short 8, 46, 190, 229, 200
+	.long Str_ErrorDialog_AppearsAgain
+	.short 3, 0, 0
+Str_ErrorDialog_AppearsAgain:	aligned_string "If this message appears again,"
 
 
 ; ---------------------------------------------------------------------------
-; Widget 13 (end marker 0xffff): Recovery Instruction Line 3
+; Element 12 of Toshi_Viewable_TEST1: Recovery Instruction Line 3
 ; "this unit needs repairing."
-; Screen group 7, final widget
+; (was "Widget 13 (end marker 0xffff)" / "Screen group 7, final widget": the
+; 0xffff is "no next sibling", i.e. the LAST child of element 7)
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine3:
-	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0xff, 0xff, 0x0b, 0x00, 0x08, 0x00, 0x2e, 0x00
-	.byte 0xce, 0x00, 0xcd, 0x00, 0xd8, 0x00, 0xb0, 0x67, 0xed, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "this unit needs repairing."
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 11
+	.short 8, 46, 206, 205, 216
+	.long Str_ErrorDialog_NeedsRepairing
+	.short 3, 0, 0
+Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 .include "ui_widgets/extension_device_screens.s"
 	.ascii "!\"#$%%&'()*+,,-./01234456789:;;<=>?@ABCCDEFGHIJKKLMNOPQRRSTUVWXYZZ[\\]^_`abbcdefghiijklmqtx{"
 	.byte 0x7f, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x06, 0x07, 0x07, 0x08

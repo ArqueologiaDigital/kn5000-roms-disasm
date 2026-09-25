@@ -21,7 +21,7 @@ dumps.  Measured with this script's `--compare`:
 
 So each v10 source line is carried over unchanged when its bytes are the same
 in the target dump, and REWRITTEN from the target dump when they are not:
-`.byte` rows get the target's values; `.long SYMBOL` gets the target symbol
+`.byte` rows and all-hex `.short` rows get the target's values; `.long SYMBOL` gets the target symbol
 that sits at the target's pointer value (looked up in the target's linked ELF,
 so it must be built first); a line of any other kind that differs is a hard
 failure, reported with its address, rather than guessed at.
@@ -241,8 +241,12 @@ def main():
                 T = rt[addr - BASE:addr - BASE + size]
                 mb = re.match(r'^(\s*(?:[A-Za-z_]\w*:\s*)?)\.byte\s', code)
                 ml4 = re.match(r'^(\s*(?:[A-Za-z_]\w*:\s*)?)\.long\s+([A-Za-z_]\w*)\s*$', code)
+                msh = re.match(r'^(\s*(?:[A-Za-z_]\w*:\s*)?)\.short\s+0x[0-9a-f]{4}(\s*,\s*0x[0-9a-f]{4})*\s*$', code)
                 if mb:
                     new = mb.group(1) + ".byte " + ", ".join("0x%02x" % x for x in T)
+                elif msh and size % 2 == 0:
+                    new = msh.group(1) + ".short " + ", ".join(
+                        "0x%04x" % int.from_bytes(T[k:k + 2], "little") for k in range(0, size, 2))
                 elif ml4 and size == 4:
                     if syms_t is None:
                         syms_t = load_syms(a.target)

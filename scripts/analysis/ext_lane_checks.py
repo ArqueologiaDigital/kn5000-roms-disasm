@@ -32,7 +32,11 @@ FAIL and the numbers it saw; exit status is non-zero if any check fails.
              the Toshi_Viewable_NORMAL table (slot 1, 0xED77CE), and in every
              one +4 is the parent element, +6 the first child, +8 the next
              sibling and +10 the previous sibling (element indices of the same
-             table, 0xFFFF = none): each link is checked against the others.
+             table, 0xFFFF = none): each link is checked against the others;
+             and +0x0E..+0x14 are a rectangle x1,y1,x2,y2 on the 320x240
+             screen that lies inside the parent's rectangle.  The same links
+             are checked for the five LABEL records 0xED669A-0xED67CB,
+             elements 8-12 of Toshi_Viewable_TEST1 (slot 0xF4).
 
 All checks run on v10 and on v7 (and v9, which is byte-identical in this range).
 
@@ -151,12 +155,40 @@ def widgets(r):
             bad.append((k, "child.parent"))
         if par != NONE and not (0 <= par < n):
             bad.append((k, "parent range"))
+        # +0x0E..+0x14 are a rectangle x1, y1, x2, y2 inside the parent's
+        x1, y1, x2, y2 = (r.u16(a + o) for o in (14, 16, 18, 20))
+        if not (x1 <= x2 < 320 and y1 <= y2 < 240):
+            bad.append((k, "rect"))
+        if par != NONE:
+            px1, py1, px2, py2 = (r.u16(elems[par] + o) for o in (14, 16, 18, 20))
+            if not (px1 <= x1 and x2 <= px2 and py1 <= y1 and y2 <= py2):
+                bad.append((k, "rect outside parent"))
     ok = not bad and ks == list(range(25, 63))
     return ok, "%d records = elements %d..%d of slot 1, link inconsistencies: %s" % (
         len(recs), min(ks), max(ks), bad or "none")
 
 
-CHECKS = {"chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
+def test1(r):
+    vt = 0xED7C62                       # Toshi_Viewable_TEST1, slot 0xF4, 14 entries
+    elems = [r.u32(vt + 4 * k) for k in range(14)]
+    NONE = 0xFFFF
+    bad = []
+    for k in range(7, 13):
+        a = elems[k]
+        par, child, nxt, prv = (r.u16(a + o) for o in (4, 6, 8, 10))
+        if nxt != NONE and r.u16(elems[nxt] + 10) != k:
+            bad.append((k, "next.prev"))
+        if prv != NONE and r.u16(elems[prv] + 8) != k:
+            bad.append((k, "prev.next"))
+        if child != NONE and r.u16(elems[child] + 4) != k:
+            bad.append((k, "child.parent"))
+    want = [0xED6676, 0xED669A, 0xED66C4, 0xED670A, 0xED6750, 0xED6790]
+    ok = not bad and elems[7:13] == want and all(r.u8(a) == 0x2B for a in want[1:])
+    return ok, "elements 7-12 at %s, link inconsistencies: %s" % (
+        ",".join("0x%06X" % a for a in elems[7:13]), bad or "none")
+
+
+CHECKS = {"test1": test1, "chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
 
 
 def main():
