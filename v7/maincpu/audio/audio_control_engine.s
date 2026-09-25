@@ -8493,6 +8493,11 @@ RegBitManip_Dispatch:
 	ld	xix, RegisterBit_Manipulate_Table
 	ld_sril3	XIX, 0x07, 0xf0, 0xec
 	jp	(xix)
+; Jump table: 8 x .long code pointer.  Reader RegBitManip_Dispatch:
+;   extz xhl / xor h, h / ld l, (0xfc5d:16) / and l, 0x7 / sla hl, 2
+;   ld xix, RegisterBit_Manipulate_Table / ld_sril3 XIX, 0x07, 0xf0, 0xec
+;   jp (xix)
+; Index: bits 0-2 of the byte it loads; 8 entries.
 RegisterBit_Manipulate_Table:
 	.long	RegBitManip_Handler_0
 	.long	RegBitManip_Handler_1
@@ -8663,6 +8668,10 @@ MidiStream_BufferDone:
 MidiStream_Return:
 	pop	xiz
 	ret
+; Jump table: 8 x .long code pointer.  Reader MidiStream_ProcessorDispatch:
+;   and w, 0x7 / sll w, 2 / ld xix, MidiStream_Processor_Table
+;   ld_sril3 XIX, 0x03, 0xf0, 0xe1 / call (xix)
+; Index: w & 7; 8 entries.
 MidiStream_Processor_Table:
 	.long	MidiStream_ProcessHandler_0
 	.long	MidiStream_ProcessHandler_1
@@ -9522,6 +9531,12 @@ VoiceMode_ParamDispatch:
 	jr	AudioSeq_CheckEventPending
 VoiceMode_ParamDispatch_Sentinel:
 	swi	7
+; Jump table: 8 x .long code pointer.  Reader VoiceMode_ParamDispatch:
+;   ld (xiy), 0xff / ld a, (0x911a:16) / ld (0x905c:16), a / extz hl
+;   ld l, (0x9119:16) / and l, 0x70 / srl hl, 2
+;   ld xiy, VoiceMode_ParamDispatch_Table / ld_sril3 XIY, 0x07, 0xf4, 0xec
+;   call (xiy)
+; Index: bits 4-6 of the byte it loads; 8 entries.
 VoiceMode_ParamDispatch_Table:
 	.long	VoiceMode_ParamHandler_0
 	.long	VoiceMode_ParamHandler_1
@@ -11280,6 +11295,11 @@ MidiStream_StatusPrecheck:
 	ld	xix, MidiStream_StatusJumpTable
 	ld_rrl	xix, xix, hl
 	jp	(xix)
+; Jump table: 12 x .long code pointer.  Reader MidiStream_StatusPrecheck:
+;   extz hl / ld l, b / cp l, 11 / jr ugt, MidiStream_HandleNoteCC
+;   sll hl, 2 / ld xix, MidiStream_StatusJumpTable / ld_rrl xix, xix, hl
+;   jp (xix)
+; Index: the record's second byte (B), 0-11; above 11 goes to the ret stub MidiStream_HandleNoteCC; 12 entries.
 MidiStream_StatusJumpTable:
 	.long	MidiStream_HandleRunningStatus
 	.long	MidiStream_HandleNoteCC
@@ -11406,6 +11426,10 @@ MidiStream_RecType48_SysExDispatch:
 	ld	xix, MidiStream_SysExJumpTable
 	ld_rrl	xix, xix, hl
 	jp	(xix)
+; Jump table: 4 x .long code pointer.  Reader MidiStream_RecType48_SysExDispatch:
+;   extz hl / ld l, b / cp l, 3:i3 / jr ugt, MidiStream_SysExNop / sll hl, 2
+;   ld xix, MidiStream_SysExJumpTable / ld_rrl xix, xix, hl / jp (xix)
+; Index: the record's second byte (B), 0-3; 4 entries.
 MidiStream_SysExJumpTable:
 	.long	MidiStream_HandleRunningStatus
 	.long	MidiStream_SysExNop
@@ -11437,6 +11461,10 @@ MidiStream_RecType60_CtrlDispatch:
 	ld	xix, MidiStream_CtrlJumpTable
 	ld_rrl	xix, xix, hl
 	jp	(xix)
+; Jump table: 2 x .long code pointer.  Reader MidiStream_RecType60_CtrlDispatch:
+;   extz hl / ld l, b / cp l, 1:i3 / jr ugt, MidiStream_CtrlNop / sll hl, 2
+;   ld xix, MidiStream_CtrlJumpTable / ld_rrl xix, xix, hl / jp (xix)
+; Index: the record's second byte (B), 0-1; 2 entries.
 MidiStream_CtrlJumpTable:
 	.long	MidiStream_CtrlNop
 	.long	MidiStream_CtrlData
@@ -11466,6 +11494,10 @@ MidiStream_RecType98_CmdDispatch:
 	ld	xix, MidiStream_CmdJumpTable
 	ld_rrl	xix, xix, hl
 	jp	(xix)
+; Jump table: 12 x .long code pointer.  Reader MidiStream_RecType98_CmdDispatch:
+;   extz hl / ld l, b / cp l, 11 / jr ugt, MidiStream_CmdNop / sll hl, 2
+;   ld xix, MidiStream_CmdJumpTable / ld_rrl xix, xix, hl / jp (xix)
+; Index: the record's second byte (B), 0-11; 12 entries.
 MidiStream_CmdJumpTable:
 	.long	MidiStream_CmdNop
 	.long	MidiStream_CmdPedalNotify

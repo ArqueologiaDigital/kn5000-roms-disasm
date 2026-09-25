@@ -15668,8 +15668,8 @@ VoiceSlot_CheckAndApply_Return:
 ;   +0x00D 132 B   NOTE -> PITCH CLASS + 1 (11 rows of 1..12)
 ;   +0x091  41 B   CHORD TYPE -> NOTE COUNT (3 or 4)
 ;   +0x0BA 164 B   CHORD TYPE -> 4 INTERVALS above the root (41 x 4)
-;   +0x15E  43 B   0x00..0x2A in order; no reader found (in v10 either)
-;   +0x189  48 B   PITCH INDEX -> BIT MASK, 24 x .hword, 1 << ((i + 5) mod 12)
+;   +0x15E  43 B   0x00..0x2A in order: see ChordTables_Run15E
+;   +0x189  48 B   PITCH INDEX -> BIT MASK (ChordTables_PitchMask), 24 x .hword, 1 << ((i + 5) mod 12)
 Chord_Tables:
 	.byte	0x00
 	; index row
@@ -15735,6 +15735,14 @@ Chord_Tables:
 	.byte	0x00, 0x00, 0x00, 0x00
 	.byte	0x00, 0x04, 0x07, 0x02
 	.byte	0x00, 0x03, 0x07, 0x02
+; The chord tables' +0x15E part: the 43 bytes 0x00..0x2A in order, between
+; the interval records and the pitch-mask words.  No reader found: every
+; 24-bit address inside the chord tables was searched in the v10 dump; only
+; +0x00, +0x0D, +0x91, +0xBA and +0x189 are loaded (plus one stray +0xD5
+; inside misframed bytes at 0xF541B2).  Base-plus-index reads were not
+; excluded: the chord-type readers do not bound the type, so a type > 41
+; would read here.
+ChordTables_Run15E:
 	.byte	0x00, 0x01, 0x02, 0x03
 	.byte	0x04, 0x05, 0x06, 0x07
 	.byte	0x08, 0x09, 0x0a, 0x0b
@@ -15746,6 +15754,10 @@ Chord_Tables:
 	.byte	0x20, 0x21, 0x22, 0x23
 	.byte	0x24, 0x25, 0x26, 0x27
 	.byte	0x28, 0x29, 0x2a
+; The chord tables' +0x189 part: 24 x .hword, entry i = 1 << ((i + 5) mod 12).
+; Reader InitPartAllocState_TestBit242's code (v7 0xFE9942, 0x7CF below v10's
+; 0xFEA111): `ld xiz, <this> / ld wa, (xiz + hl)` then three `or wa, (xiz + hl)`.
+ChordTables_PitchMask:
 	; 16-bit masks, powers of two
 	.hword	0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x0001
 	.hword	0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100
