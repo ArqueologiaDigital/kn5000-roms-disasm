@@ -115,6 +115,21 @@
 ; also the table-data revision number that boot parses.
 ; Cross-ref: v10/maincpu/kn5000_v10_program.s (Boot_ParseSubCPUTimestamp),
 ; same in v9; v7 predates the check.
+;
+; Record layout (28 bytes, 0x87FFF0-0x88000B) as its readers use it (v10):
+;   +0x00  "hkst_55.ssf",0   digits at +0x05 parsed by Boot_ParseSubCPUTimestamp
+;                            (0xEF07E6)
+;   +0x0C  .long 0           } neither field is read by the routines listed
+;   +0x10  .long -> HKstSSF_Padding (two zero bytes) } here
+;   +0x14  .long -> Feature_Demo_XML: Seq_CopyResourcePtrs (0xF862B5) handles
+;          demo number 18 only -- it loads (0x880000 + 12*(n-18) + 4), i.e.
+;          this field, and stores it at RAM 0x0249CC/0x0249D4 as the SSF
+;          script position (any other n takes the pointer at RAM 0x0249D0)
+;   +0x18  .long -> FeatureDemo_FileEntry1: FDemo_LinkedListSearch (0xF8682F)
+;          starts its bitmap-name search with `ld xiz, (0x880008)`
+; A v10 search for 0x87FFxx/0x8800xx constants finds only those three
+; readers.  Demo number 18 is also the Feature Demo's preset slot
+; (DemoSongPreset18 at 0x8E0000).
 FeatureDemo_FileMetadata:
 	.asciz "hkst_55.ssf"	; Filename for the feature demo SSF file
 	.long 0x0
@@ -169,27 +184,65 @@ Feature_Demo_XML:
 ; Feature-demo slide images: standard Windows 3.x BMP files (8bpp indexed,
 ; 256-color palette, 320 px wide), stored verbatim; the sizes and addresses
 ; are echoed by the FeatureDemo_FileEntry records below.
+; What the firmware checks (DrawBitmapFile_Impl, 0xFAC6F3): "BM" against the
+; string at 0xEAADF2, biSize == 40, biPlanes == 1, biBitCount <= 8,
+; biClrUsed <= 256 and bfOffBits - 54 <= 1024; it then copies the palette
+; from file offset 54.  FDemoText_RenderTextLine (0xF85F8C) also reads
+; biWidth (file offset 18) to lay out text around a slide.  All six pass.
 	.org 0x880418 - 0x800000, 0xFF
+; FTBMP01.BMP, 320x240 8bpp, 256-colour palette, 77,878 B: the "Technics" wordmark over a world-map globe.
+; FeatureDemo_FileEntry1 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP01", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_1:	.incbin "images/FTBMP01.BMP"
 
 	.org 0x89344E - 0x800000, 0xFF
+; FTBMP02.BMP, 320x130 8bpp, 256-colour palette, 42,678 B: the keyboard seen from above with coloured rings
+; marking its speaker positions.
+; FeatureDemo_FileEntry2 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP02", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_2:	.incbin "images/FTBMP02.BMP"
 
 	.org 0x89DB04 - 0x800000, 0xFF
+; FTBMP03.BMP, 320x120 8bpp, 256-colour palette, 39,478 B: a fan of floppy disks.
+; FeatureDemo_FileEntry3 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP03", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_3:	.incbin "images/FTBMP03.BMP"
 
 	.org 0x8A753A - 0x800000, 0xFF
+; FTBMP04.BMP, 320x120 8bpp, 256-colour palette, 39,478 B: floppy disks going into the keyboard's disk drive.
+; FeatureDemo_FileEntry4 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP04", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_4:	.incbin "images/FTBMP04.BMP"
 
 	.org 0x8B0F70 - 0x800000, 0xFF
+; FTBMP05.BMP, 320x125 8bpp, 256-colour palette, 41,078 B: the keyboard circled by two curved arrows.
+; FeatureDemo_FileEntry5 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP05", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_5:	.incbin "images/FTBMP05.BMP"
 
 	.org 0x8BAFE6 - 0x800000, 0xFF
+; FTBMP06.BMP, 320x240 8bpp, 256-colour palette, 77,878 B: "KN5000" and a rainbow comet over a starfield.
+; FeatureDemo_FileEntry6 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP06", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_6:	.incbin "images/FTBMP06.BMP"
 
 
 	.org 0x8CE01C - 0x800000, 0xFF
 
+; Feature-demo bitmap file list: 24-byte records walked by
+; FDemo_LinkedListSearch (0xF8682F) from the pointer at 0x880008:
+;   +0x00  12-byte NUL-padded name, compared with Strcmp
+;   +0x0C  .long 0 (not read by the search)
+;   +0x10  .long data pointer; 0 ends the list (the 24 zero bytes after
+;          entry 6 are that terminator)
+;   +0x14  .long size in bytes (equals each BMP's own bfSize field)
+; FDemo_LinkedListLookupField (0xF868EF) returns +0x10 of the match.
 FeatureDemo_FileEntry1:
 	.asciz "FTBMP01.BMP"
 	.long 0x0
@@ -278,9 +331,27 @@ DemoSongPreset18:
 ; These 320x240 8bpp wallpaper images are referenced by the SetWallPaper
 ; routine in the Main CPU ROM via the wallpaper table at 0xEAAE62.
 ; Each wallpaper is 76,800 bytes (320 * 240).
+;
+; Readers, precisely (v10): the table at 0xEAAE62 holds five 10-byte records
+; {+0 pixel pointer, +4 palette pointer, +8 zero word}; records 0 and 1 are
+; {Wallpaper_0, 0x8FFC00} and {Wallpaper_1, 0x912C00}, i.e. each image and
+; the 1 KB trailer that follows it (records 2-4 point into custom-data flash
+; 0x3C0000 and RAM).  SetWallPaper (0xF9A9EF) jumps to ChangeWall;
+; ChangeWall_Impl (0xFAF237) stores record+0 at RAM 0x03EF98 and 0x030452,
+; and DrawWall (0xFABB73) copies 2 x 0x9600 bytes from (0x030452) to the
+; offscreen buffer at 0x43C00.  ChangePalette_Impl (0xFAF2F3) reads
+; record+4 and copies trailer entries 0x20-0xDF (4 bytes each) into the RAM
+; palette at 0x324FC via SetPaletteRGB (0xFB2895); VGA_WritePaletteEntry
+; (0xFB31AB) later sends entry bytes +0, +1, +2 to the DAC data port 0x3C9
+; in that order -- so the trailer entries are {red, green, blue, 0}.
+; Every pixel of both images is in 0xE0-0xEF (a 16-shade ramp), matching the
+; only non-zero entries of Wallpaper_0's trailer (+0x380-+0x3BF).
 ; =============================================================================
 
 	.org 0x8ED000 - 0x800000, 0xFF
+; Wallpaper record 0 (0xEAAE62): 320 x 240 x 8bpp, row-major, pixel values
+; 0xE0-0xEF only; drawn by DrawWall (0xFABB73) after ChangeWall_Impl
+; (0xFAF237) selects it.  Source: images/Wallpaper_0.bin (+ .png).
 Wallpaper_0:	; Blue textured pattern
 	.incbin "images/Wallpaper_0.bin"
 
@@ -290,6 +361,14 @@ Wallpaper_0:	; Blue textured pattern
 	; slot holds a 16-entry shade ramp of ascending {r, g, b, 0x00}
 	; quadruplets; this one matches WallpaperRamp_Navy.  No code reference
 	; found yet, so the RGB interpretation is tentative.
+	; CORRECTED 2026-09-25: the sentence above is superseded.  This
+	; trailer is the 256 x 4-byte palette that wallpaper record 0
+	; (0xEAAE62+4) points at; see the PRESET WALLPAPERS banner for
+	; ChangePalette_Impl and the DAC byte order.
+	; Only entries 0xE0-0xEF (this ramp) are non-zero, and the image uses
+	; exactly those pixel values.  The routine that loads entries 0xE0-0xEF
+	; for a wallpaper (ChangeWallPalette_Impl, via the RAM table at 0x3F1E4)
+	; was not traced to this slot.
 	.zero 896
 Wallpaper0_ShadeRamp:
 	.byte 0x1f, 0x1f, 0x28, 0x00
@@ -311,6 +390,10 @@ Wallpaper0_ShadeRamp:
 	.zero 64
 
 	.org 0x900000 - 0x800000, 0xFF
+; Wallpaper record 1 (0xEAAE6C): 320 x 240 x 8bpp, row-major, pixel values
+; 0xE0-0xEF only; drawn by DrawWall (0xFABB73) after ChangeWall_Impl
+; (0xFAF237) selects it; its palette trailer follows (see ui_bitmaps.s).
+; Source: images/Wallpaper_1.bin (+ .png).
 Wallpaper_1:	; Technics branded texture
 	.incbin "images/Wallpaper_1.bin"
 
@@ -902,7 +985,15 @@ Composer_FactoryMemoryImage:	.incbin	"includes/generated/Composer_FactoryMemoryI
 ; decompressed to RAM 0x69800; a null index 0-18 falls back to the live
 ; preset area at 0x0AB000.  Entry 18 is the Feature Demo preset, stored apart
 ; from the others at 0x8E0000.
-DemoSongPreset_PointerTable:
+; v10 readers of this table (file_demo_proc.s; all compute 0x9C4000 + 4*n):
+;   Demo_ParseSlideHeader (0xF87189)  if the entry is non-null, calls
+;       SLIDE_Parse_Header (0xEF41E3) with it and destination RAM 0x69800;
+;       "SLIDE" + '4' dispatches to SLIDE_Decompress_4K_Init (0xEF3FAB)
+;   Demo_GetPresetBaseForPart (0xF86F48), ..Alt (0xF86F6D), ..Ext (0xF86F92)
+;       null test only: non-null -> 0x69800, null -> 0x0AB000
+;   Voice_GetPresetFieldWord (0xF86FB7) / Voice_GetPresetFieldAddr (0xF86FDC)
+;       the same test, then the u16 at +0x1E (track-enable mask) / the address
+;       +0x20 (track types) of the decompressed image
 	.long	DemoSongPreset00
 	.long	DemoSongPreset01
 	.long	DemoSongPreset02
@@ -940,108 +1031,198 @@ DemoSongPreset_PointerTable:
 ; -----------------------------------------------------------------------------
 
 	.org 0x9C4050 - 0x800000, 0xFF
+; Demo song 00 (pointer-table slot 0): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 26,880 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "MAIN".
+; Built from includes/demo_presets/midi/demo_preset_00.mid + sidecar/.yaml.
 DemoSongPreset00:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x69, 0x00	; uncompressed size = 26880 bytes
 	.incbin "includes/demo_presets/demo_preset_00_compressed.bin"
 
 	.org 0x9C9018 - 0x800000, 0xFF
+; Demo song 01 (pointer-table slot 1): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 28,928 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "ACCORD".
+; Built from includes/demo_presets/midi/demo_preset_01.mid + sidecar/.yaml.
 DemoSongPreset01:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x71, 0x00	; uncompressed size = 28928 bytes
 	.incbin "includes/demo_presets/demo_preset_01_compressed.bin"
 
 	.org 0x9CE17C - 0x800000, 0xFF
+; Demo song 02 (pointer-table slot 2): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 18,944 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_02.mid + sidecar/.yaml.
 DemoSongPreset02:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x4A, 0x00	; uncompressed size = 18944 bytes
 	.incbin "includes/demo_presets/demo_preset_02_compressed.bin"
 
 	.org 0x9D16F2 - 0x800000, 0xFF
+; Demo song 03 (pointer-table slot 3): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 27,392 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_03.mid + sidecar/.yaml.
 DemoSongPreset03:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x6B, 0x00	; uncompressed size = 27392 bytes
 	.incbin "includes/demo_presets/demo_preset_03_compressed.bin"
 
 	.org 0x9D645C - 0x800000, 0xFF
+; Demo song 04 (pointer-table slot 4): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 22,016 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "SHOW".
+; Built from includes/demo_presets/midi/demo_preset_04.mid + sidecar/.yaml.
 DemoSongPreset04:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x56, 0x00	; uncompressed size = 22016 bytes
 	.incbin "includes/demo_presets/demo_preset_04_compressed.bin"
 
 	.org 0x9DA016 - 0x800000, 0xFF
+; Demo song 05 (pointer-table slot 5): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 25,088 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "CONTEMP".
+; Built from includes/demo_presets/midi/demo_preset_05.mid + sidecar/.yaml.
 DemoSongPreset05:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x62, 0x00	; uncompressed size = 25088 bytes
 	.incbin "includes/demo_presets/demo_preset_05_compressed.bin"
 
 	.org 0x9DE072 - 0x800000, 0xFF
+; Demo song 06 (pointer-table slot 6): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 17,408 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "STRINGS".
+; Built from includes/demo_presets/midi/demo_preset_06.mid + sidecar/.yaml.
 DemoSongPreset06:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x44, 0x00	; uncompressed size = 17408 bytes
 	.incbin "includes/demo_presets/demo_preset_06_compressed.bin"
 
 	.org 0x9E0CE2 - 0x800000, 0xFF
+; Demo song 07 (pointer-table slot 7): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 8,448 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_07.mid + sidecar/.yaml.
 DemoSongPreset07:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x21, 0x00	; uncompressed size = 8448 bytes
 	.incbin "includes/demo_presets/demo_preset_07_compressed.bin"
 
 	.org 0x9E2358 - 0x800000, 0xFF
+; Demo song 08 (pointer-table slot 8): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 23,040 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "GUITAR".
+; Built from includes/demo_presets/midi/demo_preset_08.mid + sidecar/.yaml.
 DemoSongPreset08:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x5A, 0x00	; uncompressed size = 23040 bytes
 	.incbin "includes/demo_presets/demo_preset_08_compressed.bin"
 
 	.org 0x9E61C2 - 0x800000, 0xFF
+; Demo song 09 (pointer-table slot 9): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,912 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_09.mid + sidecar/.yaml.
 DemoSongPreset09:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1B, 0x00	; uncompressed size = 6912 bytes
 	.incbin "includes/demo_presets/demo_preset_09_compressed.bin"
 
 	.org 0x9E72E8 - 0x800000, 0xFF
+; Demo song 10 (pointer-table slot 10): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 17,408 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "SAX".
+; Built from includes/demo_presets/midi/demo_preset_10.mid + sidecar/.yaml.
 DemoSongPreset10:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x44, 0x00	; uncompressed size = 17408 bytes
 	.incbin "includes/demo_presets/demo_preset_10_compressed.bin"
 
 	.org 0x9EA1F2 - 0x800000, 0xFF
+; Demo song 11 (pointer-table slot 11): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 23,296 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "JAZZORG".
+; Built from includes/demo_presets/midi/demo_preset_11.mid + sidecar/.yaml.
 DemoSongPreset11:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x5B, 0x00	; uncompressed size = 23296 bytes
 	.incbin "includes/demo_presets/demo_preset_11_compressed.bin"
 
 	.org 0x9EDFFC - 0x800000, 0xFF
+; Demo song 12 (pointer-table slot 12): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,912 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Hokie Dance".
+; Built from includes/demo_presets/midi/demo_preset_12.mid + sidecar/.yaml.
 DemoSongPreset12:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1B, 0x00	; uncompressed size = 6912 bytes
 	.incbin "includes/demo_presets/demo_preset_12_compressed.bin"
 
 	.org 0x9EEC62 - 0x800000, 0xFF
+; Demo song 13 (pointer-table slot 13): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 11,264 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is blank.
+; Built from includes/demo_presets/midi/demo_preset_13.mid + sidecar/.yaml.
 DemoSongPreset13:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x2C, 0x00	; uncompressed size = 11264 bytes
 	.incbin "includes/demo_presets/demo_preset_13_compressed.bin"
 
 	.org 0x9F0E72 - 0x800000, 0xFF
+; Demo song 14 (pointer-table slot 14): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,656 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Organ Combo Demo".
+; Built from includes/demo_presets/midi/demo_preset_14.mid + sidecar/.yaml.
 DemoSongPreset14:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1A, 0x00	; uncompressed size = 6656 bytes
 	.incbin "includes/demo_presets/demo_preset_14_compressed.bin"
 
 	.org 0x9F1C70 - 0x800000, 0xFF
+; Demo song 15 (pointer-table slot 15): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 11,520 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Big Band Mid".
+; Built from includes/demo_presets/midi/demo_preset_15.mid + sidecar/.yaml.
 DemoSongPreset15:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x2D, 0x00	; uncompressed size = 11520 bytes
 	.incbin "includes/demo_presets/demo_preset_15_compressed.bin"
 
 	.org 0x9F3B52 - 0x800000, 0xFF
+; Demo song 16 (pointer-table slot 16): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,656 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Bavarian Polka".
+; Built from includes/demo_presets/midi/demo_preset_16.mid + sidecar/.yaml.
 DemoSongPreset16:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1A, 0x00	; uncompressed size = 6656 bytes
 	.incbin "includes/demo_presets/demo_preset_16_compressed.bin"
 
 	.org 0x9F494E - 0x800000, 0xFF
+; Demo song 17 (pointer-table slot 17): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 5,888 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_17.mid + sidecar/.yaml.
 DemoSongPreset17:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x17, 0x00	; uncompressed size = 5888 bytes

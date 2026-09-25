@@ -45,8 +45,22 @@
 ; holds a bank of four candidate ramps at +0x80.  No code reference to these
 ; tables has been found yet, so the RGB interpretation is tentative (the
 ; values behave like one: monotonically brightening triplets).
+; CORRECTED 2026-09-25 -- the two sentences above are superseded.  The whole
+; trailer is a 256-entry x 4-byte palette: v10's wallpaper table at 0xEAAE62
+; has record 1 = {Wallpaper_1, 0x912C00, 0}, and ChangePalette_Impl
+; (0xFAF2F3), called with index 1 by AcWelcomScreenProc (0xF7F4A6), copies
+; entries 0x20-0xDF of it (trailer +0x80..+0x37F) into the RAM palette at
+; 0x324FC through SetPaletteRGB (0xFB2895).  VGA_WritePaletteEntry (0xFB31AB)
+; sends bytes +0, +1, +2 of each entry to DAC port 0x3C9 in that order, so an
+; entry is {red, green, blue, 0}.  The four ramps below are therefore palette
+; entries 0x20-0x2F, 0x30-0x3F, 0x40-0x4F and 0x50-0x5F; the +0x380 ramp is
+; entries 0xE0-0xEF, the only values Wallpaper_1's pixels use.  The loader of
+; entries 0xE0-0xEF (ChangeWallPalette_Impl, via the RAM table at 0x3F1E4)
+; was not traced back to this slot.
 	.zero 128
 
+; palette entries 0x20-0x2F (trailer +0x80), loaded by ChangePalette_Impl
+; (0xFAF2F3) for wallpaper record 1
 WallpaperRamp_Beige:	; ends at pure white
 	.byte 0xb5, 0x94, 0x18, 0x00
 	.byte 0xb5, 0x94, 0x29, 0x00
@@ -64,6 +78,8 @@ WallpaperRamp_Beige:	; ends at pure white
 	.byte 0xef, 0xce, 0x8c, 0x00
 	.byte 0xe7, 0xd6, 0x94, 0x00
 	.byte 0xff, 0xff, 0xff, 0x00
+; palette entries 0x30-0x3F (trailer +0xC0), loaded by ChangePalette_Impl
+; (0xFAF2F3) for wallpaper record 1
 WallpaperRamp_Brown:
 	.byte 0x0d, 0x0d, 0x0d, 0x00
 	.byte 0x3d, 0x20, 0x0d, 0x00
@@ -81,6 +97,8 @@ WallpaperRamp_Brown:
 	.byte 0x6b, 0x54, 0x18, 0x00
 	.byte 0x72, 0x54, 0x18, 0x00
 	.byte 0x6b, 0x5b, 0x20, 0x00
+; palette entries 0x40-0x4F (trailer +0x100), loaded by ChangePalette_Impl
+; (0xFAF2F3) for wallpaper record 1
 WallpaperRamp_Blue:
 	.byte 0x0d, 0x20, 0x2b, 0x00
 	.byte 0x0f, 0x28, 0x3d, 0x00
@@ -98,6 +116,8 @@ WallpaperRamp_Blue:
 	.byte 0x30, 0x51, 0x62, 0x00
 	.byte 0x33, 0x51, 0x6a, 0x00
 	.byte 0x40, 0x64, 0x7a, 0x00
+; palette entries 0x50-0x5F (trailer +0x140), loaded by ChangePalette_Impl
+; (0xFAF2F3) for wallpaper record 1
 WallpaperRamp_Navy:	; same values as Wallpaper0_ShadeRamp
 	.byte 0x1f, 0x1f, 0x28, 0x00
 	.byte 0x1f, 0x1f, 0x2d, 0x00
@@ -116,6 +136,8 @@ WallpaperRamp_Navy:	; same values as Wallpaper0_ShadeRamp
 	.byte 0x27, 0x2e, 0x41, 0x00
 	.byte 0x2b, 0x33, 0x46, 0x00
 	.zero 512
+; palette entries 0xE0-0xEF (trailer +0x380): the 16 values Wallpaper_1's
+; pixels use.  Not in ChangePalette_Impl's 0x20-0xDF range.
 Wallpaper1_ShadeRamp:	; active ramp slot (+0x380); same values as WallpaperRamp_Blue
 	.byte 0x0d, 0x20, 0x2b, 0x00
 	.byte 0x0f, 0x28, 0x3d, 0x00

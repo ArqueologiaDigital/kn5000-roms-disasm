@@ -8,8 +8,12 @@ QUESTION THIS ANSWERS
     prints PASS/FAIL and the figures it measured.  Exit status is non-zero if
     any check fails.
 
-    It reads only original_ROMs/* and committed image files -- never the
-    rebuilt ROMs -- so it cannot be fooled by a stale build.
+    It reads original_ROMs/* and committed image files -- never the rebuilt
+    ROMs -- so it cannot be fooled by a stale build.  One exception: `demo`
+    compares against the decompressed demo images, which are build products
+    (make rebuild-demo-presets, or any table_data build, regenerates them from
+    the committed .mid + .yaml; the build itself byte-checks them against the
+    factory streams).
 
 RUN
     python3 scripts/analysis/tdata_evidence_probes.py            # all checks
@@ -27,6 +31,17 @@ CHECKS (the signal each one reads)
                 directory extent; each entry address is searched as a 24- and a
                 32-bit LE constant in every ROM we hold.
     sec10pad    byte +113 of each 114-byte slot of section 10 is 0x00.
+    fdemo       walks the feature-demo file list from (0x880008) in 24-byte steps
+                until +0x10 == 0 (FDemo_LinkedListSearch's loop) and applies
+                DrawBitmapFile_Impl's header tests ("BM" at v10 0xEAADF2,
+                biSize 40, 1 plane, <=8 bpp, <=256 colours, bfOffBits-54 <=
+                1024) to each target; size field == bfSize.
+    wallpaper   v10 table 0xEAAE62: 10-byte records {pixels, palette, 0}; both
+                ROM wallpapers use only pixel values 0xE0-0xEF; their 1 KB
+                trailers are 256 x {r,g,b,0} (byte +3 always 0).
+    demo        the 19 SLIDE4K blocks behind DemoSongPreset_PointerTable: magic,
+                big-endian size == len(decompressed .bin), "ZZZZ" image head,
+                and the 16-char field at +0x100 the headers quote.
 """
 import os
 import re
@@ -155,7 +170,82 @@ def check_sec10pad():
     return v == {0}
 
 
-CHECKS = {"sec07": check_sec07, "accessors": check_accessors, "sec10pad": check_sec10pad}
+def check_fdemo():
+    """Walk the feature-demo file list exactly as FDemo_LinkedListSearch does
+    and apply DrawBitmapFile_Impl's header tests to every target."""
+    ok = True
+    p10 = rom("kn5000_v10_program.rom")
+    ok &= p10[0xEAADF2 - 0xE00000:0xEAADF2 - 0xE00000 + 2] == b"BM"
+    ok &= p10[0xEAA160 - 0xE00000:0xEAA160 - 0xE00000 + 5] == b".BMP\0"
+    meta = td(0x87FFF0, 28)
+    f = struct.unpack_from("<4I", meta, 12)
+    print("  metadata name %r fields +0x0C..+0x18 = %s" % (meta[:12], [hex(x) for x in f]))
+    ok &= meta[:12] == b"hkst_55.ssf\0" and f[0] == 0
+    a = struct.unpack("<I", td(0x880008, 4))[0]
+    n = 0
+    while True:
+        name = td(a, 12)
+        z, ptr, size = struct.unpack("<3I", td(a + 12, 12))
+        if ptr == 0:
+            print("  terminator record at 0x%06X" % a)
+            break
+        h = td(ptr, 54)
+        bfsize, off = struct.unpack_from("<I", h, 2)[0], struct.unpack_from("<I", h, 10)[0]
+        bisize, w, hh, planes, bpp = struct.unpack_from("<IiiHH", h, 14)
+        clr = struct.unpack_from("<I", h, 46)[0]
+        good = (h[:2] == b"BM" and bisize == 40 and planes == 1 and bpp <= 8 and clr <= 256
+                and off - 54 <= 1024 and bfsize == size and z == 0)
+        ok &= good
+        print("  0x%06X %-12s -> 0x%06X %dx%d %dbpp size %d bfSize %d %s"
+              % (a, name.split(b"\0")[0].decode(), ptr, w, hh, bpp, size, bfsize, "ok" if good else "BAD"))
+        a += 24
+        n += 1
+    ok &= n == 6
+    return ok
+
+
+def check_wallpaper():
+    ok = True
+    p10 = rom("kn5000_v10_program.rom")
+    o = 0xEAAE62 - 0xE00000
+    recs = [struct.unpack_from("<IIH", p10, o + 10 * i) for i in range(5)]
+    print("  records at 0xEAAE62: %s" % [(hex(a), hex(b), c) for a, b, c in recs])
+    ok &= recs[0][:2] == (0x8ED000, 0x8FFC00) and recs[1][:2] == (0x900000, 0x912C00)
+    for k, (pix_a, pal_a, _) in enumerate(recs[:2]):
+        pix = td(pix_a, 76800)
+        vals = sorted(set(pix))
+        pal = td(pal_a, 1024)
+        nz = [i for i in range(256) if pal[4 * i:4 * i + 4] != b"\0\0\0\0"]
+        pad = {pal[4 * i + 3] for i in range(256)}
+        print("  wallpaper %d: pixel values 0x%02X-0x%02X (%d distinct); palette non-zero"
+              " entries %d (0x%02X..0x%02X), byte +3 values %s"
+              % (k, vals[0], vals[-1], len(vals), len(nz), nz[0], nz[-1], sorted(pad)))
+        ok &= vals[0] >= 0xE0 and vals[-1] <= 0xEF and pad == {0}
+    return ok
+
+
+def check_demo():
+    ok = True
+    tab = [struct.unpack("<I", td(0x9C4000 + 4 * i, 4))[0] for i in range(20)]
+    ok &= tab[18] == 0x8E0000 and tab[19] == 0
+    for n in range(19):
+        a = tab[n]
+        hdr = td(a, 11)
+        size = int.from_bytes(hdr[8:11], "big")
+        fn = os.path.join(ROOT, "table_data/includes/demo_presets/demo_preset_%02d.bin" % n)
+        if not os.path.exists(fn):
+            print("  %s missing -- run `make rebuild-demo-presets` first" % fn)
+            return False
+        img = open(fn, "rb").read()
+        good = hdr[:8] == b"SLIDE4K\0" and size == len(img) and img[:4] == b"ZZZZ"
+        ok &= good
+        print("  slot %2d 0x%06X size %6d title %-18r %s"
+              % (n, a, size, img[0x100:0x110].decode("latin-1"), "ok" if good else "BAD"))
+    return ok
+
+
+CHECKS = {"sec07": check_sec07, "accessors": check_accessors, "sec10pad": check_sec10pad,
+          "fdemo": check_fdemo, "wallpaper": check_wallpaper, "demo": check_demo}
 
 
 def main():
