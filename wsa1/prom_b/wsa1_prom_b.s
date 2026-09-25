@@ -35784,6 +35784,14 @@ EffectDesc_PeqOverdrDelay:
 ;              match, 0 for 0xFF, else 2, before the next record is run.
 ;    Re-derived, with the per-effect table, by
 ;    python3 notes/promb-2026-09-25/effect_descriptor_probe.py.
+; ⚠ CORRECTED AGAIN 2026-09-25 (lane promb): "byte 3  0x00-0x07 or 0xFF" above
+;    is wrong -- the probe it came from read only the first EIGHT groups of each
+;    descriptor.  Over every live group byte 3 is the group's OWN INDEX or 0xFF
+;    (235 and 200 of 435), up to 18 in PARAMETRIC EQ's VOLUME; the stored byte
+;    it is compared with is therefore a parameter index.  The records
+;    themselves, their full layout and the word W that ends each one are typed
+;    and explained at EffectDesc_* above (notes/promb-2026-09-25/
+;    effect_descriptor_pool.py).
 ; --------------------------------------------------------------------------
 EffectParamDescriptors_F12F24:
 	.long	EffectDesc_NoOperation	; F12F24  [0] -> 0xF12748  NO OPERATION

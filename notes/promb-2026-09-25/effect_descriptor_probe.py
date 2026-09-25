@@ -83,10 +83,16 @@ def main():
             continue
         seen.add(p)
         ps = []
-        for j in range(8):
+        # ⚠ CORRECTED 2026-09-25: this loop read `for j in range(8)`, so the
+        # byte-3 census below saw only the first EIGHT groups and printed
+        # 00..07 -- descriptors run to 19 live groups (PARAMETRIC EQ) and byte
+        # 3 is the group's own index or 0xFF (effect_descriptor_pool.py).
+        # Walk every group up to the first one whose +2 is 0xFF, as the
+        # firmware's scroll test (sub_F105B8) does.
+        for j in range(64):
             g = at(p + 4 * j, 4)
-            if g[0] == 0 and g[2] == 0xFF:
-                continue
+            if g[2] == 0xFF:
+                break
             b1max = max(b1max, g[1])
             b3vals.add(g[3])
             ps.append((pnames[g[0]], g[1], units[g[1] & 0x1F], g[2], g[3]))
