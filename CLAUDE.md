@@ -143,22 +143,24 @@ Symbol reference files in `symbols/` provide address-to-name mappings for extern
 
 | File | ROM | Symbols | Address Range |
 |------|-----|---------|---------------|
-| `symbols/maincpu_symbols_reference.txt` | Main CPU | 39,449 | 0xE00000 - 0xFFFFFF |
-| `symbols/subcpu_symbols_reference.txt` | Sub CPU payload | 4,326 | 0x000400 - 0x04531C |
-| `symbols/subcpu_boot_symbols_reference.txt` | Sub CPU boot | 61 | 0xFF8000 - 0xFFFFF0 |
-| `symbols/table_data_symbols_reference.txt` | Table data | 4,153 | 0x800000 - 0x9FFEE0 |
-| `symbols/hdae5000_symbols_reference.txt` | HDAE5000 expansion | 532 | 0x280000 - 0x2FA134 |
+| `symbols/maincpu_symbols_reference.txt` | Main CPU **v10** (identical to `maincpu_v10_...`) | 47,836 | 0xE00000 - 0xFFFFE8 |
+| `symbols/maincpu_v9_symbols_reference.txt` | Main CPU v9 | 47,830 | 0xE00000 - 0xFFFFE8 |
+| `symbols/maincpu_v7_symbols_reference.txt` | Main CPU v7 | 47,920 | 0xE00000 - 0xFFFFE8 |
+| `symbols/subcpu_symbols_reference.txt` | Sub CPU payload v1.42 | 5,560 | 0x000400 - 0x03EE75 |
+| `symbols/subcpu_boot_symbols_reference.txt` | Sub CPU boot | 201 | 0xFF8000 - 0x1000000 (last row is the linker `end` marker) |
+| `symbols/table_data_symbols_reference.txt` | Table data | 4,759 | 0x800000 - 0x9FFEF0 |
+| `symbols/hdae5000_symbols_reference.txt` | HDAE5000 expansion | 3,932 | 0x280000 - 0x300000 |
 
-**They are not in sync.** Counts and ranges above are the files at 2026-08-21.
-Rows that match the corresponding `.llvm.elf` on both NAME and ADDRESS, measured
-the same day with the `llvm-nm` dump shown below: maincpu 1,332 / 39,449 (3.4%),
-subcpu 4,269 / 4,326 (98.7%), subcpu_boot 53 / 61 (86.9%), table_data 1 / 4,153
-(0.0%), hdae5000 501 / 532 (94.2%). Those ratios are one-directional - they count
-file rows that match the build, not build symbols the file is missing (the
-maincpu build defines 5,288 addresses that file does not list at all). `maincpu`
-is the only file still holding `LABEL_*` rows, 35,924 of them; see the header
-block inside it for the full breakdown. `table_data` holds no `LABEL_*` rows yet
-scores worse on names, being uniformly ALL-CAPS where the build is MixedCase.
+**In sync as of 2026-09-25** (after the Wave 2 merges): regenerated from each
+image's linked ELF by `python3 scripts/analysis/l2_symbol_reference.py --regen`,
+and `python3 scripts/analysis/l2_symbol_reference.py --check` reports 100 %
+NAME+ADDRESS agreement for all eight files. **Use that script to regenerate** --
+it knows the per-version maincpu split (v7/v9/v10 are separate links; a v7
+address looked up in the v10 file is wrong) and writes the header block itself.
+The hand recipe below is kept for reference. Rows are `NAME 00ADDRESS` (8 hex
+digits, no `0x`). Before regenerating, grep the prose that quotes names
+(listed at the end of this section) -- on 2026-09-25 one name had moved
+(`OFFSETS_F460` -> `AudioTick_CaseOffsets`, kn7000_mame notes fixed in 3707804).
 
 **Format:**
 ```

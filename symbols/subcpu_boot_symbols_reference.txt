@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 199
-#   semantic names ........... 169 (84.9%)
-#   positional names ......... 30
+#   symbols .................. 201
+#   semantic names ........... 172 (85.6%)
+#   positional names ......... 29
 #
 CmdHandler_Table 00FF8000
 MemTest_RegionTable 00FF8020
@@ -203,8 +203,10 @@ DEBUG_OUTPUT_STRING__loop 00FFFEA4
 DEBUG_OUTPUT_STRING__done 00FFFEB2
 NIBBLE_TO_HEX_ASCII 00FFFEB4
 NIBBLE_TO_HEX_ASCII__letter 00FFFEBD
-SUB_FEC1 00FFFEC1
+DEBUG_OUTPUT_CHAR_STUB 00FFFEC1
 RESET_HANDLER 00FFFEE0
+ToneGen_ChannelInit_Flag 00FFFEEE
+ToneGen_ChannelInit_Config 00FFFEF0
 VECTOR_TABLE 00FFFF00
 RESET_VECTORS 00FFFFF0
 end 01000000
