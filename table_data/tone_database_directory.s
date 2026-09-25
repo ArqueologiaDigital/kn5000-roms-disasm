@@ -162,6 +162,7 @@ ToneDB_BankMap_Main:
 ; table).  Unassigned program slots repeat a default tone of the bank.
 ToneDB_ToneNumBanks_Main:
 ; Bank 0: selector(s) 0x00 (and every selector the map leaves at 0); tone numbers 0-289.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main00:
 	.short 0, 1, 2, 7, 15, 9, 14, 32
 	.short 21, 20, 23, 24, 25, 29, 26, 69
@@ -180,6 +181,7 @@ ToneDB_ToneNumBank_Main00:
 	.short 253, 30, 19, 19, 15, 250, 251, 263
 	.short 275, 250, 230, 240, 234, 38, 37, 34
 ; Bank 1: selector(s) 0x01; tone numbers 3-288.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main01:
 	.short 3, 6, 4, 7, 15, 9, 14, 32
 	.short 21, 20, 23, 31, 25, 29, 28, 69
@@ -198,6 +200,7 @@ ToneDB_ToneNumBank_Main01:
 	.short 253, 30, 19, 19, 15, 250, 251, 288
 	.short 274, 250, 231, 241, 236, 38, 39, 34
 ; Bank 2: selector(s) 0x02; tone numbers 1-285.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main02:
 	.short 8, 1, 2, 5, 11, 10, 14, 15
 	.short 21, 269, 23, 24, 25, 29, 244, 69
@@ -216,6 +219,7 @@ ToneDB_ToneNumBank_Main02:
 	.short 206, 30, 19, 19, 279, 253, 261, 263
 	.short 275, 250, 233, 243, 237, 239, 37, 34
 ; Bank 3: selector(s) 0x03; tone numbers 2-303.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main03:
 	.short 4, 6, 2, 7, 15, 9, 15, 32
 	.short 21, 20, 23, 24, 25, 29, 70, 69
@@ -234,6 +238,7 @@ ToneDB_ToneNumBank_Main03:
 	.short 198, 30, 19, 19, 277, 250, 251, 263
 	.short 275, 287, 235, 232, 238, 242, 37, 34
 ; Bank 4: selector(s) 0x04; tone numbers 1-302.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main04:
 	.short 8, 1, 2, 7, 12, 9, 14, 32
 	.short 22, 20, 23, 24, 25, 70, 27, 69
@@ -252,6 +257,7 @@ ToneDB_ToneNumBank_Main04:
 	.short 253, 30, 19, 19, 15, 250, 251, 263
 	.short 275, 250, 230, 79, 234, 38, 37, 35
 ; Bank 5: selector(s) 0x05; tone numbers 1-307.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main05:
 	.short 292, 1, 2, 7, 13, 9, 14, 32
 	.short 21, 20, 23, 267, 25, 71, 26, 69
@@ -270,6 +276,7 @@ ToneDB_ToneNumBank_Main05:
 	.short 253, 30, 19, 19, 15, 256, 251, 263
 	.short 275, 258, 230, 240, 234, 38, 37, 36
 ; Bank 6: selector(s) 0x06; tone numbers 0-309.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main06:
 	.short 0, 1, 2, 7, 15, 9, 14, 32
 	.short 21, 20, 23, 24, 25, 72, 268, 69
@@ -288,6 +295,7 @@ ToneDB_ToneNumBank_Main06:
 	.short 253, 30, 19, 255, 257, 250, 251, 263
 	.short 275, 250, 230, 240, 234, 38, 37, 34
 ; Bank 7: selector(s) 0x07; tone numbers 0-306.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main07:
 	.short 0, 1, 2, 7, 15, 9, 14, 32
 	.short 21, 20, 23, 24, 25, 73, 70, 69
@@ -306,6 +314,7 @@ ToneDB_ToneNumBank_Main07:
 	.short 253, 30, 19, 19, 15, 250, 251, 263
 	.short 275, 250, 230, 240, 234, 38, 37, 34
 ; Bank 8: selector(s) 0x40; tone numbers 0-332.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main08:
 	.short 315, 310, 327, 318, 329, 312, 314, 321
 	.short 323, 326, 324, 325, 330, 332, 320, 315
@@ -324,6 +333,7 @@ ToneDB_ToneNumBank_Main08:
 	.short 0, 0, 0, 0, 0, 0, 0, 0
 	.short 0, 0, 0, 0, 0, 0, 0, 0
 ; Bank 9: selector(s) 0x41; tone numbers 0-335.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main09:
 	.short 316, 319, 322, 328, 317, 311, 313, 331
 	.short 333, 326, 324, 325, 330, 332, 320, 334
@@ -342,6 +352,7 @@ ToneDB_ToneNumBank_Main09:
 	.short 0, 0, 0, 0, 0, 0, 0, 0
 	.short 0, 0, 0, 0, 0, 0, 0, 335
 ; Bank 10: selector(s) 0x70; tone numbers 336-337.
+; Entry p = tone number for program p, read by ToneDB_Find_PatchRecord_Preset (subcpu 0x031F87) as u16[slot +0x04 + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Main10:
 	.short 336, 337, 336, 336, 336, 336, 336, 336
 	.short 336, 336, 336, 336, 336, 336, 336, 336
@@ -360,6 +371,10 @@ ToneDB_ToneNumBank_Main10:
 	.short 336, 336, 336, 336, 336, 336, 336, 336
 	.short 336, 336, 336, 336, 336, 336, 336, 336
 
+; Coefficient-path bank map (dir slot +0x6C): bank selector -> bank of
+; ToneDB_ToneNumBanks_Coeff.  Its sole reader is ToneDB_Find_ToneRecord_CoeffPath
+; (subcpu 0x031F16), which ToneDB_Find_ToneRecord (0x03206F) takes instead of
+; ToneDB_Find_PatchRecord when bit 0 of ToneGen_GlobalFlags (0x041343) is set.
 ToneDB_BankMap_Coeff:
 	.byte 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0	; selectors 0x00-0x0F
 	.byte 10, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0	; selectors 0x10-0x1F
@@ -375,6 +390,7 @@ ToneDB_BankMap_Coeff:
 ; drawbar records and the DSP1 stream region of the offset table.
 ToneDB_ToneNumBanks_Coeff:
 ; Bank 0: selector(s) 0x00 (and every selector the map leaves at 0); tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff00:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -393,6 +409,7 @@ ToneDB_ToneNumBank_Coeff00:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 593, 599, 603, 609, 619, 625
 ; Bank 1: selector(s) 0x01; tone numbers 400-626.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff01:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -411,6 +428,7 @@ ToneDB_ToneNumBank_Coeff01:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 589, 592, 594, 600, 604, 610, 620, 626
 ; Bank 2: selector(s) 0x02; tone numbers 400-627.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff02:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -429,6 +447,7 @@ ToneDB_ToneNumBank_Coeff02:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 590, 591, 595, 601, 605, 611, 621, 627
 ; Bank 3: selector(s) 0x03; tone numbers 400-628.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff03:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -447,6 +466,7 @@ ToneDB_ToneNumBank_Coeff03:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 596, 602, 606, 612, 622, 628
 ; Bank 4: selector(s) 0x04; tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff04:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -465,6 +485,7 @@ ToneDB_ToneNumBank_Coeff04:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 597, 599, 607, 613, 623, 625
 ; Bank 5: selector(s) 0x05; tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff05:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -483,6 +504,7 @@ ToneDB_ToneNumBank_Coeff05:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 598, 599, 608, 614, 624, 625
 ; Bank 6: selector(s) 0x06; tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff06:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -501,6 +523,7 @@ ToneDB_ToneNumBank_Coeff06:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 593, 599, 603, 615, 619, 625
 ; Bank 7: selector(s) 0x07; tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff07:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -519,6 +542,7 @@ ToneDB_ToneNumBank_Coeff07:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 593, 599, 603, 616, 619, 625
 ; Bank 8: selector(s) 0x08; tone numbers 401-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff08:
 	.short 401, 404, 406, 408, 410, 414, 417, 420
 	.short 421, 422, 423, 425, 427, 428, 430, 432
@@ -537,6 +561,7 @@ ToneDB_ToneNumBank_Coeff08:
 	.short 575, 576, 577, 579, 581, 583, 585, 587
 	.short 588, 591, 593, 599, 603, 617, 619, 625
 ; Bank 9: selector(s) 0x09; tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff09:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 431, 432
@@ -555,6 +580,7 @@ ToneDB_ToneNumBank_Coeff09:
 	.short 575, 576, 577, 578, 580, 582, 586, 587
 	.short 588, 591, 593, 599, 603, 618, 619, 625
 ; Bank 10: selector(s) 0x10; tone numbers 402-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff10:
 	.short 402, 403, 405, 407, 411, 415, 418, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -573,6 +599,7 @@ ToneDB_ToneNumBank_Coeff10:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 593, 599, 603, 609, 619, 625
 ; Bank 11: selector(s) 0x18; tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff11:
 	.short 400, 403, 405, 407, 412, 413, 419, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -591,6 +618,7 @@ ToneDB_ToneNumBank_Coeff11:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 593, 599, 603, 609, 619, 625
 ; Bank 12: selector(s) 0x20; tone numbers 400-625.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff12:
 	.short 400, 403, 405, 407, 409, 413, 416, 420
 	.short 421, 422, 423, 424, 426, 428, 429, 432
@@ -609,6 +637,7 @@ ToneDB_ToneNumBank_Coeff12:
 	.short 575, 576, 577, 578, 580, 582, 584, 587
 	.short 588, 591, 593, 599, 603, 609, 619, 625
 ; Bank 13: selector(s) 0x78; tone numbers 311-333.
+; Entry p = tone number for program p, read by ToneDB_Find_ToneRecord_CoeffPath (subcpu 0x031F16) as u16[slot +0x6C + 0x80 + 2*(bank*128 + p)].
 ToneDB_ToneNumBank_Coeff13:
 	.short 316, 316, 316, 316, 316, 316, 316, 316
 	.short 319, 319, 319, 319, 319, 319, 319, 319
