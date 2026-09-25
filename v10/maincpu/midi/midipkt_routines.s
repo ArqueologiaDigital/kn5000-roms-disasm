@@ -170,7 +170,7 @@ MidiPkt_BuildControl:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (WidgetParam_SelfRef_Table_0x4:24)
-	ld_rrl	xiz, xbc, wa
+	ld	xiz, (xbc+wa)
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xiz+1)
@@ -234,7 +234,7 @@ MidiPkt_BuildControl_Epilogue:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (WidgetParam_SelfRef_Table_0xA:24)
-	ld_rrl	xiz, xbc, wa
+	ld	xiz, (xbc+wa)
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xde+7)
@@ -1264,20 +1264,19 @@ MidiPkt_SendBankSelect_Send:
 MidiPkt_SysExValidator_Data:
 	ld	a, (0x8d36:16)
 	cp	a, 108
-	jr	c, 5
+	jr	c, MidiPkt_SysExValidator_Data_Skip
 	cp	a, 118
-	jr	ule, 6
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
+	jr	ule, MidiPkt_SysExValidator_Data_Skip2
+MidiPkt_SysExValidator_Data_Skip:
+	bit	4, (0xfd50:16)
+	ret	nz
+MidiPkt_SysExValidator_Data_Skip2:
 	cp	a, 153
-	jr	ugt, 5
+	jr	ugt, MidiPkt_SysExValidator_Data_Skip3
 	cp	a, 148
 	ret	nc
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xbf
+MidiPkt_SysExValidator_Data_Skip3:
+	set	7, (0x90f9:16)
 	lda	xbc, (0xfdad:16)
 	ld	e, (xbc)
 	set	2, e
@@ -1294,24 +1293,23 @@ MidiPkt_SysExValidator_Data:
 MidiPkt_SysExProcessor_Data:
 	ld	a, (0x8d36:16)
 	cp	a, 108
-	jr	c, 5
+	jr	c, MidiPkt_SysExProcessor_Data_Skip
 	cp	a, 118
-	jr	ule, 6
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
+	jr	ule, MidiPkt_SysExProcessor_Data_Skip2
+MidiPkt_SysExProcessor_Data_Skip:
+	bit	4, (0xfd50:16)
+	ret	nz
+MidiPkt_SysExProcessor_Data_Skip2:
 	cp	a, 153
-	jr	ugt, 5
+	jr	ugt, MidiPkt_SysExProcessor_Data_Skip3
 	cp	a, 148
 	ret	nc
+MidiPkt_SysExProcessor_Data_Skip3:
 	lda	xbc, (0xfdad:16)
 	ld	a, (xbc)
 	bit	2, a
 	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xbf
+	set	7, (0x90f9:16)
 	ld	e, (xbc)
 	res	2, e
 	ld	(xbc), e
@@ -1336,7 +1334,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ret	gt
 	add	hl, hl
 	lda	xix, (MidiPkt_EventType_Table_0x324:24)
-	ld_rrw hl, xix, hl
+	ld	hl, (xix+hl)
 	lda xix, (16623949:24)
 	jp_rr 8, xix, hl
 	jr	MidiPkt_SysExBulkTransfer_Data_Join

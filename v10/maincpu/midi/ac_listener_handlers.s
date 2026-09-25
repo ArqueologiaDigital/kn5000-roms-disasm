@@ -802,7 +802,7 @@ Data_FadeSetGridDispatch:
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
 	lda	xbc, (NakaInst_OFF_WidgetTbl2_0x5C:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
 	ld	bc, 1:i3
@@ -825,7 +825,7 @@ Data_FadeSetGridDispatch:
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
 	lda	xbc, (NakaInst_OFF_WidgetTbl2_0x5C:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
 	ldw	bc, 0xffff
@@ -1329,7 +1329,7 @@ Data_InOutGridDispatch:
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
 	lda	xix, (NakaInst_DIRECT_E7FCE4_0x7A:24)
-	ld_rrw bc, xix, bc
+	ld	bc, (xix+bc)
 	lda xix, (16210732:24)
 	jp_rr 8, xix, bc
 	ld xwa, 8448
@@ -1396,7 +1396,7 @@ InOutGridCheck_Skip:
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
 	lda	xix, (NakaInst_DIRECT_E7FCE4_0x68:24)
-	ld_rrw bc, xix, bc
+	ld	bc, (xix+bc)
 	lda xix, (16210936:24)
 	jp_rr 8, xix, bc
 	ld xwa, 8448
@@ -1474,7 +1474,7 @@ InOutGridCheck_Join:
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (NakaInst_OFF_E7FCA2_0x6:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1488,7 +1488,7 @@ InOutGridCheck_Skip3:
 	ldw	(xbc), 1
 	ld	wa, (xwa)
 	sla	wa, 2
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1511,7 +1511,7 @@ InOutGridCheck_Skip4:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1530,7 +1530,7 @@ InOutGridCheck_Skip5:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1549,7 +1549,7 @@ InOutGridCheck_Skip6:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1624,7 +1624,7 @@ InOutGridCheck_Skip11:
 	ldw (xbc), 5
 	ld	wa, (xwa)
 	sla	wa, 2
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1638,7 +1638,7 @@ InOutGridCheck_Skip12:
 	ldw (xbc), 6
 	ld	wa, (xiz+4)
 	sla	wa, 2
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1652,7 +1652,7 @@ InOutGridCheck_Skip13:
 	ldw (xbc), 7
 	ld	wa, (xiz+4)
 	sla	wa, 2
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1670,7 +1670,7 @@ InOutGridCheck_Entry:
 	ld	a, 217:opc
 	.byte 0xec
 	push	sr
-	ld_rrl xwa, xhl, bc
+	ld	xwa, (xhl+bc)
 	push xwa
 	push	xde
 	call	Strcpy
@@ -1710,7 +1710,7 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (NakaInst_OFF_E7FCA2_0x6:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1725,7 +1725,7 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (NakaInst_OFF_WidgetTbl2_0x37E:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1740,7 +1740,7 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (ControlMode_Option_Table_0xA:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1859,7 +1859,7 @@ InOutGridCheck_Skip17:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (NakaInst_OFF_WidgetTbl2_0x37E:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1874,7 +1874,7 @@ InOutGridCheck_Skip17:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (NakaInst_OFF_WidgetTbl2_0x37E:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1889,7 +1889,7 @@ InOutGridCheck_Skip17:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (NakaInst_OFF_WidgetTbl2_0x37E:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1904,7 +1904,7 @@ InOutGridCheck_Skip17:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (NakaInst_OFF_WidgetTbl2_0x37E:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa

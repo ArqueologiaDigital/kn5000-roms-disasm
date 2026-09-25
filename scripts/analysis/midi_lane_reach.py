@@ -58,6 +58,7 @@ import midi_lane_rewrite as rw  # noqa: E402
 LL = rw.LLVM
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
 BR_SYM = re.compile(r"^\s*(?:[\w.$]+:\s*)?(call|calr|jp|jr|jrl|djnz)\s+(?:[a-z]+\s*,\s*)?([A-Za-z_][\w.$]*)\s*(;.*)?$")
+IMM_SYM = re.compile(r"^\s*(?:[\w.$]+:\s*)?(ld|lda)\s+(x[a-z]{2}|x[a-z]{1,2}),\s*([A-Za-z_][\w.$]*)\s*(;.*)?$")
 LONG_SYM = re.compile(r"^\s*(?:[\w.$]+:\s*)?\.long\s+([A-Za-z_][\w.$]*)\s*(;.*)?$")
 
 
@@ -179,9 +180,14 @@ def main():
     syms = all_symbols(a.image)
     srcdir = os.path.join(ROOT, img["mirror"])
     files = {rel: open(os.path.join(srcdir, rel), encoding="latin-1").read().split("\n") for rel in a.file}
-    lo = min(x for rel in a.file for x in la[rel] if x is not None)
-    hi = max(x for rel in a.file for x in la[rel] if x is not None) + 8
-    inr = lambda x: x is not None and lo <= x < hi  # noqa: E731
+    # the judged files' own address intervals (not the span between them: that
+    # would walk every other file linked in between)
+    ivs = []
+    for rel in a.file:
+        xs = [x for x in la[rel] if x is not None]
+        if xs:
+            ivs.append((min(xs), max(xs) + 8))
+    inr = lambda x: x is not None and any(s0 <= x < e0 for s0, e0 in ivs)  # noqa: E731
     # which label names are defined on instruction lines of the judged files
     code_label_addr = {}
     for rel, L in files.items():
@@ -207,8 +213,9 @@ def main():
         rel = os.path.relpath(path, srcdir)
         L = open(path, encoding="latin-1").read().split("\n")
         # pointer tables: maximal runs of `.long SYMBOL` lines (comments and
-        # blank lines do not break a run).  A run of >= 3 whose targets are
-        # at least HALF (>= 50%) labels already framed as code is a code-pointer
+        # blank lines do not break a run).  A run of >= 3 of which at least
+        # HALF of the targets inside the judged files are labels already framed
+        # as code (targets elsewhere are not judged either way) is a code-pointer
         # table, and then every in-range target in it is an entry -- including
         # routines whose first bytes the source mis-spells as `.byte`.
         runs, cur = [], []
@@ -223,14 +230,24 @@ def main():
         if cur:
             runs.append(cur)
         for r in runs:
-            names = [n for _, n in r]
-            codeish = sum(1 for n in names if n in code_label_addr or
-                          (n in syms and not inr(syms[n])))
-            if len(r) >= 3 and codeish >= 0.5 * len(r):
+            names = [n for _, n in r if n in any_label and inr(any_label[n])]
+            codeish = sum(1 for n in names if n in code_label_addr)
+            if len(r) >= 3 and names and codeish >= 0.5 * len(names):
                 for i, n in r:
                     if n in any_label and inr(any_label[n]):
                         seeds.add(any_label[n])
                         why.setdefault(any_label[n], "ptr-table %s:%d" % (rel, i + 1))
+        # a lone `.long SYMBOL` (a record field) or an immediate `ld xrr, SYMBOL`
+        # (a procedure registered by address) names an entry only when SYMBOL
+        # is already framed as code in the judged files
+        for i, t in enumerate(L):
+            m = LONG_SYM.match(t) or IMM_SYM.match(t)
+            if m:
+                n = m.group(m.lastindex - 1) if m.re is IMM_SYM else m.group(1)
+                if n in code_label_addr and inr(code_label_addr[n]) and \
+                        (rel not in files or m.re is LONG_SYM):
+                    seeds.add(code_label_addr[n])
+                    why.setdefault(code_label_addr[n], "ref %s:%d" % (rel, i + 1))
         if rel in files:
             continue
         for i, t in enumerate(L):
@@ -238,6 +255,22 @@ def main():
             if m and m.group(2) in syms and inr(syms[m.group(2)]):
                 seeds.add(syms[m.group(2)])
                 why.setdefault(syms[m.group(2)], "%s %s:%d" % (m.group(1), rel, i + 1))
+    # a 32-bit little-endian pointer to a code-framed label, ANYWHERE in the
+    # ROM (the class/procedure tables live in C-compiled .incbin blobs whose
+    # symbols no .s file names)
+    for n, ad in code_label_addr.items():
+        if inr(ad) and ad not in seeds and rom.find(ad.to_bytes(4, "little")) >= 0:
+            seeds.add(ad)
+            why.setdefault(ad, "rom-pointer")
+    # a `call imm24` (0x1D) / `jp imm24` (0x1B) byte pattern anywhere in the ROM
+    # whose operand is exactly a label of the judged files (code other lanes'
+    # files hold as numeric operands or as C-compiled blobs)
+    for n, ad in any_label.items():
+        if inr(ad) and ad not in seeds:
+            a24 = ad.to_bytes(3, "little")
+            if rom.find(b"\x1d" + a24) >= 0 or rom.find(b"\x1b" + a24) >= 0:
+                seeds.add(ad)
+                why.setdefault(ad, "rom-call-pattern")
     for s in a.seed:
         seeds.add(int(s, 16))
         why[int(s, 16)] = "manual"

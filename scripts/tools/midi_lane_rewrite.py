@@ -223,24 +223,33 @@ def canon(text):
         return "lda\t%s, (%s+%s)" % m.groups()
     if mn in ("st_rrb", "st_rrw", "st_rrl") and m:
         return "ld\t(%s+%s), %s" % (m.group(2), m.group(3), m.group(1))
-    m = re.fullmatch(r"(\w+), \((\d+)\)", ops)
+    m = re.fullmatch(r"(\w+), \(((?:0x)?[0-9a-f]+)\)", ops)
     if m and mn in ("ldb_d8", "ldw_d16", "ldl_d16"):
-        return "ld\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2)), 16))
+        return "ld\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2), 0), 16))
     if m and mn in ("ldb_da", "ldw_da", "ldl_da"):
-        return "ld\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2)), 24))
+        return "ld\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2), 0), 24))
     if m and mn == "lda_d16":
-        return "lda\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2)), 16))
+        return "lda\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2), 0), 16))
     if m and mn == "lda_24":
-        return "lda\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2)), 24))
+        return "lda\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2), 0), 24))
     if m and mn in ("bitda", "bitm"):
-        return "bit\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2)), 16))
-    m = re.fullmatch(r"\((\d+)\), (-?\d+)", ops)
+        return "bit\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2), 0), 16))
+    m = re.fullmatch(r"(\d), \(((?:0x)?[0-9a-f]+)\)", ops)
+    if m and mn in ("setda", "resda", "bitda", "chgda", "tsetda"):
+        return "%s\t%s, (%s)" % (mn[:-2], m.group(1), hexaddr(int(m.group(2), 0), 16))
+    m = re.fullmatch(r"\(((?:0x)?[0-9a-f]+)\), (-?\d+)", ops)
+    if m and mn in ("stdi8", "stdi16", "stdiw"):
+        return "%s\t(%s), %s" % ("ld" if mn == "stdi8" else "ldw", hexaddr(int(m.group(1), 0), 16), m.group(2))
+    mm2 = re.fullmatch(r"(cp|or|and|xor|add|sub|adc|sbc|ld)(ib|iw)_da", mn)
+    if m and mm2:
+        return "%s%s\t(%s), %s" % (mm2.group(1), "w" if mm2.group(2) == "iw" else "",
+                                   hexaddr(int(m.group(1), 0), 24), m.group(2))
     mm = re.fullmatch(r"(cp|or|and|xor|add|sub|adc|sbc|ld)(di|mi)(8|16)", mn)
     if m and mm:
-        return "%s\t(%s), %s" % (mm.group(1), hexaddr(int(m.group(1)), 16), m.group(2))
-    m = re.fullmatch(r"\((\d+)\), (\w+)", ops)
+        return "%s\t(%s), %s" % (mm.group(1), hexaddr(int(m.group(1), 0), 16), m.group(2))
+    m = re.fullmatch(r"\(((?:0x)?[0-9a-f]+)\), (\w+)", ops)
     if m and mn in ("stb_d8", "stw_d16", "stl_d16"):
-        return "ld\t(%s), %s" % (hexaddr(int(m.group(1)), 16), m.group(2))
+        return "ld\t(%s), %s" % (hexaddr(int(m.group(1), 0), 16), m.group(2))
     return None
 
 
@@ -471,12 +480,65 @@ def verify(key):
     return True
 
 
+def canon_files(key, rels, dry):
+    """Respell decoder-internal mnemonics (bitda, ldb_d8, stdi8, cpdi8, ...) in
+    house style, line by line, only where the new text encodes to exactly the
+    bytes the old text encodes to (both assembled standalone)."""
+    img = image(key)
+    total = 0
+    for rel in rels:
+        path = os.path.join(ROOT, img["mirror"], rel)
+        raw = open(path, "rb").read()
+        L = raw.decode("latin-1").split("\n")
+        cand = []
+        for i, t in enumerate(L):
+            code = drc.strip_comment(t)
+            tail = t[len(code):]
+            m = re.match(r"^(\s*(?:[A-Za-z_.$][\w.$]*:\s*)?)(\S+)\s+(.*?)\s*$", code)
+            if not m or m.group(2).startswith("."):
+                continue
+            text = m.group(2) + " " + m.group(3)
+            c = canon(text)
+            if c:
+                cand.append((i, m.group(1), text, hexify(c), tail))
+        if not cand:
+            continue
+        e_old = encodings([x[2] for x in cand])
+        e_new = encodings([x[3] for x in cand])
+        n = 0
+        for (i, pre, text, c, tail), eo, en in zip(cand, e_old, e_new):
+            if eo is not None and eo == en:
+                mn, _, ops = c.replace("\t", " ").partition(" ")
+                L[i] = (pre if pre.strip() else "\t") + mn + "\t" + ops.strip() + (tail if tail else "")
+                n += 1
+        print("%s %s: %d of %d decoder spellings respelled" % (key, rel, n, len(cand)))
+        total += n
+        if not dry:
+            open(path, "wb").write("\n".join(L).encode("latin-1"))
+    return total
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--image", required=True, choices=["v10", "v9", "v7"])
-    ap.add_argument("--spec", required=True)
+    ap.add_argument("--spec")
+    ap.add_argument("--canon", action="append", default=[],
+                    help="respell decoder-internal mnemonics in this file (relative to "
+                         "<image>/maincpu), verified per line, then verify the image")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
+    if a.canon:
+        img = image(a.image)
+        backups = {r: open(os.path.join(ROOT, img["mirror"], r), "rb").read() for r in a.canon}
+        canon_files(a.image, a.canon, a.dry_run)
+        if a.dry_run:
+            return
+        if not verify(a.image):
+            for r, t in backups.items():
+                open(os.path.join(ROOT, img["mirror"], r), "wb").write(t)
+            sys.exit("REJECTED: image changed; restored")
+        print("VERIFIED: rebuilt %s is byte-identical to the dump" % a.image)
+        return
     specs = json.load(open(a.spec))
     rels = sorted({s["file"] for s in specs})
     la, rom = line_addresses(a.image, rels)
