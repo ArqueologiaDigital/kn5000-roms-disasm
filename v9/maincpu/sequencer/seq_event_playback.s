@@ -1664,10 +1664,14 @@ AccPlay_NoteAllocAndWrite:
 	ld (0x7e56:16), a
 	ld a, 0x90:opc
 	cp (0x7e54:16), 0
-	jr z, AccPlay_NoteSetType91
+	jr z, AccPlay_NoteWriteStatusByte
 	ld a, 0x91:opc
 
-AccPlay_NoteSetType91:
+; AccPlay_NoteWriteStatusByte (was AccPlay_NoteSetType91): A = 0x90, or 0x91
+; when AccPlay_NoteParamTable's flag byte for this note is nonzero; the branch
+; here is taken with A still 0x90.  Writes A, then the bytes at 0x7F37 and
+; 0x7F38, to the MIDI sequence buffer (MidiSeqBuf_WriteByte).
+AccPlay_NoteWriteStatusByte:
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
 	ld a, (0x7f37:16)

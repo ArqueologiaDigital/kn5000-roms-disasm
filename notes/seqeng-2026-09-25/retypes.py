@@ -61,7 +61,10 @@ RETYPES = [
              "(lane seqeng); it was eight raw .byte.  The table ends where",
              "SeqDispatch_ReturnNop begins.",
          ]),
-    dict(file="sequencer/smf_tonegen_core.s", label="FloppyIO_SwitchboardChannelPtrs",
+    # label renamed after this spec was applied (was FloppyIO_SwitchboardChannelPtrs,
+    # scripts/renaming/rename_seqeng_2026_09_25.sed).  Re-running the spec is a
+    # no-op: the tool skips an object whose header is already present.
+    dict(file="sequencer/smf_tonegen_core.s", label="ChannelRecord_PtrTable",
          size=64, fmt="long4",
          header=[
              "16 x 32-bit pointers to " + CHREC + " (the",

@@ -165,6 +165,9 @@ def main():
             if addr_of_line[last][0] + (addr_of_line[last][1] or 0) != a1:
                 print("REFUSE %s: a line straddles the end (0x%06X)" % (lab, a1))
                 continue
+            if any(src[k].strip() == hdr[0].strip() for k in range(li + 1, last)):
+                print("SKIP %s: already retyped (its header is present)" % lab)
+                continue
             # lines from label+1 .. last (inclusive) are replaced
             keep_comments, bad = [], None
             for ln in range(li + 2, last + 1):

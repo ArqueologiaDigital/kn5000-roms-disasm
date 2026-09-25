@@ -12191,7 +12191,14 @@ SeqPosDec_Return:
 	inc 2, xsp
 	ret
 
-SeqPos_DataBlock:
+; SeqVoice_InitEntryForCurrentBank (named 2026-09-25, lane seqeng; it was
+; labelled SeqPos_DataBlock and spelled partly as .byte, but it is a routine
+; with two callers in this file).  Runs SeqVoice_InitEntry with the byte at
+; 0x2878 temporarily replaced by the byte at 0xFFE3, then restores 0x2878
+; (kept in QIZH meanwhile; QIZ is pushed and popped).  0xFFE3 is the index
+; FloppyIO_ComputeSwitchboardAddr uses to pick one of the ten 0x800-byte
+; records at DRAM 0xAB000, and SMF_SelectBankAndLoad is what stores it.
+SeqVoice_InitEntryForCurrentBank:
 	push	qiz
 	ld	a, (0x2878:16)
 	ldb_erp	a, 251
@@ -25621,7 +25628,7 @@ SeqLoad_ProcessDataBlock_Skip2:
 	call	VoicePreset_LoadAndInitPan
 	ld	a, (xsp+2)
 	ld	(0xffe3:24), a
-	call	SeqPos_DataBlock
+	call	SeqVoice_InitEntryForCurrentBank
 	ld	a, (0xffe3:24)
 	extz	wa
 	call	SeqData_CopyBlockToBuffer
@@ -25636,7 +25643,7 @@ SeqLoad_ProcessDataBlock_Skip2:
 	ld	(xsp+10), a
 	cp	bc, 0:i3
 	jr	ge, SeqLoad_ProcessDataBlock_Skip3
-	call	SeqPos_DataBlock
+	call	SeqVoice_InitEntryForCurrentBank
 	jrl	SeqLoad_ProcessDataBlock_Join
 SeqLoad_ProcessDataBlock_Skip3:
 	calr	SeqBar_DataBlock
