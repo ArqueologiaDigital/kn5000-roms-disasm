@@ -33,68 +33,52 @@ SetWall_InlineCodeBlock:
 MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
 	cpdi8 (3295), 7
-	jr	z, 4
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
+MiddleFuncCall_DispatchData_Code_Helper_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 15
-	jr	z, 2
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip2
 	inc	1, a
+MiddleFuncCall_DispatchData_Code_Helper_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
 MiddleFuncCall_DispatchData_Code_Helper2:
 	call	SetWall_InlineCodeBlock2
-	.byte 0xc1, 0xdf
-	incf
-	push	xsp
-	ld	(102:8), 4:io
+	cpdi8 (3295), 8
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
+MiddleFuncCall_DispatchData_Code_Helper2_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 0:i3
-	jr	z, 2
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip2
 	dec	1, a
+MiddleFuncCall_DispatchData_Code_Helper2_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
-	nop
-	push	sr
-	nop
-	ldw	(3:8), 1284:io
-	.byte 0x06
-	pushw	2312
-	.byte 0x01
-	zcf
-	incf
-	decf
-	ret
-	retd	4359
-	ccf
-	push	sr
-	pushw	1025
-	halt
-	ei	7
-	scf
-	push	10
-	pop	sr
-	ld	(13:8), 14:io
-	retd	4112
-	ccf
-	zcf
-	incf
+; Two 20-byte permutations of 0..0x13 (the SetWall slot numbers).  No reader:
+; no instruction operand and no 32-bit data pointer in the v10 ROM names
+; 0xF1EE8D..0xF1EEB4; purpose not established.  Was decoded as `nop / push sr
+; / ldw (3:8),1284:io / halt / ei 7 ...` after the `ret` above.
+NoRef_SetWall_SlotPerm20x2:
+	.byte 0x00, 0x02, 0x00, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x0b, 0x08, 0x09, 0x01, 0x13, 0x0c, 0x0d, 0x0e, 0x0f, 0x07, 0x11, 0x12
+	.byte 0x02, 0x0b, 0x01, 0x04, 0x05, 0x06, 0x07, 0x11, 0x09, 0x0a, 0x03, 0x08, 0x0d, 0x0e, 0x0f, 0x10, 0x10, 0x12, 0x13, 0x0c
 SetWall_InlineCodeBlock_Sub:
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
 	ld	a, (0x2873:16)
 	cp	a, 13
-	jr	z, 59
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 16
-	jr	z, 54
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 15
-	jr	z, 49
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 14
-	jr	z, 44
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	call	CDlikeSwTtl_SendStartEvt
 	ld	xhl, 0xf1a0
 	xor	w, w
@@ -102,31 +86,26 @@ SetWall_InlineCodeBlock_Sub:
 	ld	iy, wa
 	ld_rrb a, xhl, iy
 	cp a, 13
-	jr	z, 17
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 16
-	jr	z, 12
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 15
-	jr	z, 7
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 14
-	jr	z, 2
-	jr	4
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	SetWall_InlineCodeBlock_Sub_Return
+SetWall_InlineCodeBlock_Sub_Skip:
 	call	CDlikeSwTtl_DispatchData_0x4A
+SetWall_InlineCodeBlock_Sub_Return:
 	ret
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
+; 20 x u8 mask per SetWall slot number 0..0x13 (0xFF, or 0 for slots 13-16):
+; SetWall_CompareAndSwap (0xF1EFF7) and SetWall_InlineCodeBlock2_Skip read it with
+; `ld xde,<this>; ld_rrb c,xde,iy`, iy = a slot number from the RAM slot table
+; at 0xF1A0 -- two such masks are then ANDed (`and a,c`) to test a pair of slots.
+SetWall_SlotMaskTable:
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff
 
 SetWall_EventHandler:
 	bit 2, (1056:16)
