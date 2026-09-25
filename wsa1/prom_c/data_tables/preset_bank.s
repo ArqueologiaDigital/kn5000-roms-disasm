@@ -17,6 +17,8 @@
 ; 704-byte records.  Its own banner states the geometry and the four
 ; independent facts it rests on.  No consumer has been located, so this is
 ; filed as DATA, not under a subsystem that would claim to read it.
+; ⚠ RETRACTED 2026-09-25: a consumer HAS been located -- CPU 1 reads it over the
+; link; see READERS in the banner below.
 ;
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
@@ -58,6 +60,55 @@
 ;   * The directory-entry field split is AMBIGUOUS: {u16 id, u32le offset, u16 count}
 ;     and {u16 id, u16 offset, u16 zero, u16 count} give identical bytes here.
 ;
+; ⚠⚠ RETRACTED 2026-09-25 (lane promcd) -- THE FIRST TWO BULLETS ABOVE ARE FALSE (the
+;   third, the directory-entry ambiguity, still stands).  They are kept verbatim so the
+;   record of what was believed survives; do not quote them.
+;
+; ★ READERS.  CPU 1 reads this region over the inter-processor link.  The pointer search
+;   above discarded prom_a's hits as ambiguous; the readers ARE those hits.  Six prom_a
+;   routines build an address in CPU 2's space from this region's own constants and hand
+;   it to Link_SendCommandE2 (prom_a 0xF8E0FE, via prom_b thunk 0xF40EF0), the 0xE2
+;   REMOTE READ whose frame is (remote address, length, local buffer):
+;     sub_F9F984 (0xF9F984)  mode 0: 0xF80300 + 0x1600*bank + 0x2C0*memory, bank 0..15,
+;                            memory 0..7 (mode 8: CPU 2 flash 0xEC0300, the USER bank;
+;                            mode 0x10: a RAM working copy at 0xC00300)
+;     sub_F9F910 (0xF9F910)  mode 0: 0xF80200 + 0x10*bank -- PresetBank_CategoryNames,
+;                            indexed by the bank alone: 16 names for 16 banks of 8
+;     sub_F98927 (0xF98927)  0xF80300 + 0x2C0*index, 0x2C0 bytes -> CPU 1 RAM 0x7620
+;     sub_FAABB3 (0xFAABB3)  0xF80300 itself (combination 0), 0x2C0 bytes -> CPU 1 RAM 0x7300
+;     sub_FC1C77 (0xFC1C77)  0xF80300 + 0x2C0*index + 2, 16 bytes -> 0x810: the NAME alone
+;     sub_FC21D0 (0xFC21D0)  base 0xF80000 (loaded by sub_FC2155) + 0x200 + 0x10*bank,
+;                            16 bytes -> 0x810: one bank name
+;   So the record stride 0x2C0 = 704 and the bank stride 0x1600 = 8 x 704 are the
+;   READERS' constants, not only the data's; sub_F9F984's three branches (0xF80300,
+;   0xF8F500, 0xF90B00) are one linear array, 0xF8F500 = 0xF80300 + 11*0x1600 exactly.
+;
+; ★ WHAT IT IS.  The factory COMBINATION memory: 16 banks x 8 combinations, the same
+;   format as the SysEx COMBINATION bulk-dump category (ADR 50 00 00), whose first block's
+;   16-byte signature 5A 5A 5A 5A 00 00 57 53 41 31 20 20 01 00 00 02 is this region's
+;   first 16 bytes, and whose 0x300-byte header block is 0xF80000-0xF802FF.  The user
+;   bank (mode 8) has the same shape, names 0x100 below the data at 0xEC0200.
+;   Each tag is the instrument's own parameter-record number (the same number that
+;   addresses the record in a parameter message), so the chunk table above reads:
+;     0x78 COMBINATION NAME   0x60 EFFECT COMMON   0x61 EFFECT block 1   0x62 EFFECT block 2
+;     0x63 REVERB block       0x00+k / 0x20+k  PART k+1, individual blocks A / B
+;     0x92 KEY SCALING / SCALE TUNING              0x79 PART COMMON (real time)
+;   Field-level names (PROGRAM CHANGE & BANK at A+0x00, VOLUME at A+0x03, PANPOT at
+;   A+0x08, KEY LAYER LOW/HIGH at B+0x07/+0x08 ...) and the range checks that pin them
+;   over all 129 presets: `python3 wsa1/notes/sysex-probes/sysex_combination_layout.py
+;   --fields`.  Corroboration from CPU 1's use: 0xFAAB86-0xFAABA6 takes the first payload
+;   byte of each effect record out of the copy at 0x7620 (0x7642 / 0x7662 / 0x7682 =
+;   0x7620 + 0x22 / 0x42 / 0x62) and passes it with the record number 0x61 / 0x62 / 0x63
+;   to prom_b 0xF42F58 -- the effect TYPE, where the reference puts it.
+;   The ONE FIELD below is thereby named: payload +0x0D of an A block (tags 0x00..0x07)
+;   is BASIC CHANNEL in bits 0-4, LOCAL CONTROL bit 5, MIDI OUT SETTING bit 6, MIDI IN
+;   SETTING bit 7 (--fields).  Its low nibble equals the tag because each factory part k
+;   is on basic channel k; the high nibble 0xC / 0xE is LOCAL CONTROL off / on, which
+;   supersedes the [INFERENCE] "in-use flag" below.
+;   Every instruction byte above is asserted by
+;   `python3 notes/lanes/promcd-2026-09-25/preset_bank_readers.py`; the reference is
+;   wsa1/docs/system-exclusive-reference/sec-blocks.tex, "Inside the COMBINATION block".
+;
 ; ★ ONE FIELD IS PROVEN, and it is what makes the eight paired blocks an indexed
 ; array rather than eight unrelated chunks: in ALL 1,032 blocks tagged 0x00..0x07
 ; (129 records x 8) the payload byte at +13 has LOW NIBBLE equal to the block's own
@@ -76,6 +127,13 @@ PresetBank:
 ; ----------------------------------------------------------------------------
 ; PresetBank_Header -- 0xF80000..0xF8001F  (32 bytes)
 ; ----------------------------------------------------------------------------
+; The COMBINATION block header.  Its first 16 bytes equal the signature the SysEx
+; reference prints for bulk-dump block COMBINATION 1 (ADR 50 00 00), read from a
+; real instrument's dump (wsa1/docs/system-exclusive-reference/tbl-signatures.tex).
+; Its fields are not read as fields: sub_FC2155 (0xFC2155) loads 0xF80000 as the
+; block base and sub_FC21D0 adds the constant 0x200, and the combination readers
+; carry 0x300 and 0x2C0 as constants too -- the same values directory entries 1 and
+; 2 and the stride word below hold.
 PresetBank_Header:
 	.ascii	"ZZZZ"
 	.short	0x0000
@@ -99,6 +157,9 @@ PresetBank_HeaderPad:
 ; ----------------------------------------------------------------------------
 ; PresetBank_CategoryNames -- 0xF80200..0xF802FF  (16 x 16 bytes)
 ; ----------------------------------------------------------------------------
+; Bank names, 16 bytes each, one per bank of eight combinations.  Read by prom_a
+; sub_F9F910 (0xF9F910) as 0xF80200 + 0x10*bank and by sub_FC21D0 (0xFC21D0) as
+; 0xF80000 + 0x200 + 0x10*bank, remote-read over the link (see READERS above).
 PresetBank_CategoryNames:
 	.ascii	"FUSION COMBO1   "	; [ 0]
 	.ascii	"JAZZ COMBO      "	; [ 1]
@@ -163,6 +224,8 @@ PresetBank_CategoryNames:
 PresetBank_Records:
 ; ............................................................................
 ; record 0 -- 0xF80300  '  Downtown Set  '
+; preset combination: bank 0 'FUSION COMBO1', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*0
+; and by sub_F98927 as index 0; remote-read to CPU 1 (READERS above).
 PresetBank_Downtown_Set:
 	.byte	0x78, 0x10
 	.ascii	"  Downtown Set  "
@@ -234,6 +297,8 @@ PresetBank_Downtown_Set:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 1 -- 0xF805C0  'ReggaeBass Chord'
+; preset combination: bank 0 'FUSION COMBO1', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*1
+; and by sub_F98927 as index 1; remote-read to CPU 1 (READERS above).
 PresetBank_ReggaeBass_Chord:
 	.byte	0x78, 0x10
 	.ascii	"ReggaeBass Chord"
@@ -305,6 +370,8 @@ PresetBank_ReggaeBass_Chord:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 2 -- 0xF80880  '   Pad & Bass   '
+; preset combination: bank 0 'FUSION COMBO1', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*2
+; and by sub_F98927 as index 2; remote-read to CPU 1 (READERS above).
 PresetBank_Pad_And_Bass:
 	.byte	0x78, 0x10
 	.ascii	"   Pad & Bass   "
@@ -376,6 +443,8 @@ PresetBank_Pad_And_Bass:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 3 -- 0xF80B40  '    Metalap     '
+; preset combination: bank 0 'FUSION COMBO1', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*3
+; and by sub_F98927 as index 3; remote-read to CPU 1 (READERS above).
 PresetBank_Metalap:
 	.byte	0x78, 0x10
 	.ascii	"    Metalap     "
@@ -447,6 +516,8 @@ PresetBank_Metalap:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 4 -- 0xF80E00  'E.Bass/Wah Gtr. '
+; preset combination: bank 0 'FUSION COMBO1', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*4
+; and by sub_F98927 as index 4; remote-read to CPU 1 (READERS above).
 PresetBank_E_Bass_Wah_Gtr:
 	.byte	0x78, 0x10
 	.ascii	"E.Bass/Wah Gtr. "
@@ -518,6 +589,8 @@ PresetBank_E_Bass_Wah_Gtr:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 5 -- 0xF810C0  ' Funky Bassoon  '
+; preset combination: bank 0 'FUSION COMBO1', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*5
+; and by sub_F98927 as index 5; remote-read to CPU 1 (READERS above).
 PresetBank_Funky_Bassoon:
 	.byte	0x78, 0x10
 	.ascii	" Funky Bassoon  "
@@ -589,6 +662,8 @@ PresetBank_Funky_Bassoon:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 6 -- 0xF81380  ' Funky Cup Mute '
+; preset combination: bank 0 'FUSION COMBO1', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*6
+; and by sub_F98927 as index 6; remote-read to CPU 1 (READERS above).
 PresetBank_Funky_Cup_Mute:
 	.byte	0x78, 0x10
 	.ascii	" Funky Cup Mute "
@@ -660,6 +735,8 @@ PresetBank_Funky_Cup_Mute:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 7 -- 0xF81640  ' Ac.Bass/Guitar '
+; preset combination: bank 0 'FUSION COMBO1', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*0 + 0x2C0*7
+; and by sub_F98927 as index 7; remote-read to CPU 1 (READERS above).
 PresetBank_Ac_Bass_Guitar:
 	.byte	0x78, 0x10
 	.ascii	" Ac.Bass/Guitar "
@@ -731,6 +808,8 @@ PresetBank_Ac_Bass_Guitar:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 8 -- 0xF81900  '   Sheer Jazz   '
+; preset combination: bank 1 'JAZZ COMBO', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*0
+; and by sub_F98927 as index 8; remote-read to CPU 1 (READERS above).
 PresetBank_Sheer_Jazz:
 	.byte	0x78, 0x10
 	.ascii	"   Sheer Jazz   "
@@ -802,6 +881,8 @@ PresetBank_Sheer_Jazz:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 9 -- 0xF81BC0  '   Jazz Chops   '
+; preset combination: bank 1 'JAZZ COMBO', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*1
+; and by sub_F98927 as index 9; remote-read to CPU 1 (READERS above).
 PresetBank_Jazz_Chops:
 	.byte	0x78, 0x10
 	.ascii	"   Jazz Chops   "
@@ -873,6 +954,8 @@ PresetBank_Jazz_Chops:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 10 -- 0xF81E80  '  Jazz Unison   '
+; preset combination: bank 1 'JAZZ COMBO', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*2
+; and by sub_F98927 as index 10; remote-read to CPU 1 (READERS above).
 PresetBank_Jazz_Unison:
 	.byte	0x78, 0x10
 	.ascii	"  Jazz Unison   "
@@ -944,6 +1027,8 @@ PresetBank_Jazz_Unison:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 11 -- 0xF82140  ' Sweet Backing  '
+; preset combination: bank 1 'JAZZ COMBO', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*3
+; and by sub_F98927 as index 11; remote-read to CPU 1 (READERS above).
 PresetBank_Sweet_Backing:
 	.byte	0x78, 0x10
 	.ascii	" Sweet Backing  "
@@ -1015,6 +1100,8 @@ PresetBank_Sweet_Backing:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 12 -- 0xF82400  '   Miles Night  '
+; preset combination: bank 1 'JAZZ COMBO', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*4
+; and by sub_F98927 as index 12; remote-read to CPU 1 (READERS above).
 PresetBank_Miles_Night:
 	.byte	0x78, 0x10
 	.ascii	"   Miles Night  "
@@ -1086,6 +1173,8 @@ PresetBank_Miles_Night:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 13 -- 0xF826C0  '   Dixie Band   '
+; preset combination: bank 1 'JAZZ COMBO', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*5
+; and by sub_F98927 as index 13; remote-read to CPU 1 (READERS above).
 PresetBank_Dixie_Band:
 	.byte	0x78, 0x10
 	.ascii	"   Dixie Band   "
@@ -1157,6 +1246,8 @@ PresetBank_Dixie_Band:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 14 -- 0xF82980  '  Fantasy Sax   '
+; preset combination: bank 1 'JAZZ COMBO', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*6
+; and by sub_F98927 as index 14; remote-read to CPU 1 (READERS above).
 PresetBank_Fantasy_Sax:
 	.byte	0x78, 0x10
 	.ascii	"  Fantasy Sax   "
@@ -1228,6 +1319,8 @@ PresetBank_Fantasy_Sax:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 15 -- 0xF82C40  ' Bass/JazzOrgan '
+; preset combination: bank 1 'JAZZ COMBO', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*1 + 0x2C0*7
+; and by sub_F98927 as index 15; remote-read to CPU 1 (READERS above).
 PresetBank_Bass_JazzOrgan:
 	.byte	0x78, 0x10
 	.ascii	" Bass/JazzOrgan "
@@ -1299,6 +1392,8 @@ PresetBank_Bass_JazzOrgan:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 16 -- 0xF82F00  '  Latin Combo   '
+; preset combination: bank 2 'WILD WORLD', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*0
+; and by sub_F98927 as index 16; remote-read to CPU 1 (READERS above).
 PresetBank_Latin_Combo:
 	.byte	0x78, 0x10
 	.ascii	"  Latin Combo   "
@@ -1370,6 +1465,8 @@ PresetBank_Latin_Combo:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 17 -- 0xF831C0  '  Limbo Combo   '
+; preset combination: bank 2 'WILD WORLD', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*1
+; and by sub_F98927 as index 17; remote-read to CPU 1 (READERS above).
 PresetBank_Limbo_Combo:
 	.byte	0x78, 0x10
 	.ascii	"  Limbo Combo   "
@@ -1441,6 +1538,8 @@ PresetBank_Limbo_Combo:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 18 -- 0xF83480  'DanceTheFlamenco'
+; preset combination: bank 2 'WILD WORLD', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*2
+; and by sub_F98927 as index 18; remote-read to CPU 1 (READERS above).
 PresetBank_DanceTheFlamenco:
 	.byte	0x78, 0x10
 	.ascii	"DanceTheFlamenco"
@@ -1512,6 +1611,8 @@ PresetBank_DanceTheFlamenco:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 19 -- 0xF83740  'Tango Argentina '
+; preset combination: bank 2 'WILD WORLD', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*3
+; and by sub_F98927 as index 19; remote-read to CPU 1 (READERS above).
 PresetBank_Tango_Argentina:
 	.byte	0x78, 0x10
 	.ascii	"Tango Argentina "
@@ -1583,6 +1684,8 @@ PresetBank_Tango_Argentina:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 20 -- 0xF83A00  'Gondola Serenade'
+; preset combination: bank 2 'WILD WORLD', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*4
+; and by sub_F98927 as index 20; remote-read to CPU 1 (READERS above).
 PresetBank_Gondola_Serenade:
 	.byte	0x78, 0x10
 	.ascii	"Gondola Serenade"
@@ -1654,6 +1757,8 @@ PresetBank_Gondola_Serenade:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 21 -- 0xF83CC0  ' Venetian Band  '
+; preset combination: bank 2 'WILD WORLD', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*5
+; and by sub_F98927 as index 21; remote-read to CPU 1 (READERS above).
 PresetBank_Venetian_Band:
 	.byte	0x78, 0x10
 	.ascii	" Venetian Band  "
@@ -1725,6 +1830,8 @@ PresetBank_Venetian_Band:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 22 -- 0xF83F80  ' Go For Baroque '
+; preset combination: bank 2 'WILD WORLD', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*6
+; and by sub_F98927 as index 22; remote-read to CPU 1 (READERS above).
 PresetBank_Go_For_Baroque:
 	.byte	0x78, 0x10
 	.ascii	" Go For Baroque "
@@ -1796,6 +1903,8 @@ PresetBank_Go_For_Baroque:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 23 -- 0xF84240  '   Highlander   '
+; preset combination: bank 2 'WILD WORLD', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*2 + 0x2C0*7
+; and by sub_F98927 as index 23; remote-read to CPU 1 (READERS above).
 PresetBank_Highlander:
 	.byte	0x78, 0x10
 	.ascii	"   Highlander   "
@@ -1867,6 +1976,8 @@ PresetBank_Highlander:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 24 -- 0xF84500  '   Christmas    '
+; preset combination: bank 3 'HAPPY TIME', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*0
+; and by sub_F98927 as index 24; remote-read to CPU 1 (READERS above).
 PresetBank_Christmas:
 	.byte	0x78, 0x10
 	.ascii	"   Christmas    "
@@ -1938,6 +2049,8 @@ PresetBank_Christmas:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 25 -- 0xF847C0  'Christmas Synth '
+; preset combination: bank 3 'HAPPY TIME', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*1
+; and by sub_F98927 as index 25; remote-read to CPU 1 (READERS above).
 PresetBank_Christmas_Synth:
 	.byte	0x78, 0x10
 	.ascii	"Christmas Synth "
@@ -2009,6 +2122,8 @@ PresetBank_Christmas_Synth:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 26 -- 0xF84A80  'Moonlight Space '
+; preset combination: bank 3 'HAPPY TIME', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*2
+; and by sub_F98927 as index 26; remote-read to CPU 1 (READERS above).
 PresetBank_Moonlight_Space:
 	.byte	0x78, 0x10
 	.ascii	"Moonlight Space "
@@ -2080,6 +2195,8 @@ PresetBank_Moonlight_Space:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 27 -- 0xF84D40  '   Fairy Dust   '
+; preset combination: bank 3 'HAPPY TIME', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*3
+; and by sub_F98927 as index 27; remote-read to CPU 1 (READERS above).
 PresetBank_Fairy_Dust:
 	.byte	0x78, 0x10
 	.ascii	"   Fairy Dust   "
@@ -2151,6 +2268,8 @@ PresetBank_Fairy_Dust:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 28 -- 0xF85000  ' Backward Bell  '
+; preset combination: bank 3 'HAPPY TIME', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*4
+; and by sub_F98927 as index 28; remote-read to CPU 1 (READERS above).
 PresetBank_Backward_Bell:
 	.byte	0x78, 0x10
 	.ascii	" Backward Bell  "
@@ -2222,6 +2341,8 @@ PresetBank_Backward_Bell:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 29 -- 0xF852C0  '  Let It Rain   '
+; preset combination: bank 3 'HAPPY TIME', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*5
+; and by sub_F98927 as index 29; remote-read to CPU 1 (READERS above).
 PresetBank_Let_It_Rain:
 	.byte	0x78, 0x10
 	.ascii	"  Let It Rain   "
@@ -2293,6 +2414,8 @@ PresetBank_Let_It_Rain:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 30 -- 0xF85580  '   White Lead   '
+; preset combination: bank 3 'HAPPY TIME', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*6
+; and by sub_F98927 as index 30; remote-read to CPU 1 (READERS above).
 PresetBank_White_Lead:
 	.byte	0x78, 0x10
 	.ascii	"   White Lead   "
@@ -2364,6 +2487,8 @@ PresetBank_White_Lead:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 31 -- 0xF85840  '  Paris Caffe   '
+; preset combination: bank 3 'HAPPY TIME', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*3 + 0x2C0*7
+; and by sub_F98927 as index 31; remote-read to CPU 1 (READERS above).
 PresetBank_Paris_Caffe:
 	.byte	0x78, 0x10
 	.ascii	"  Paris Caffe   "
@@ -2435,6 +2560,8 @@ PresetBank_Paris_Caffe:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 32 -- 0xF85B00  '  The Symphony  '
+; preset combination: bank 4 'STRING ORCHESTRA', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*0
+; and by sub_F98927 as index 32; remote-read to CPU 1 (READERS above).
 PresetBank_The_Symphony:
 	.byte	0x78, 0x10
 	.ascii	"  The Symphony  "
@@ -2506,6 +2633,8 @@ PresetBank_The_Symphony:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 33 -- 0xF85DC0  ' String Texture '
+; preset combination: bank 4 'STRING ORCHESTRA', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*1
+; and by sub_F98927 as index 33; remote-read to CPU 1 (READERS above).
 PresetBank_String_Texture:
 	.byte	0x78, 0x10
 	.ascii	" String Texture "
@@ -2577,6 +2706,8 @@ PresetBank_String_Texture:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 34 -- 0xF86080  'Orchestra Switch'
+; preset combination: bank 4 'STRING ORCHESTRA', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*2
+; and by sub_F98927 as index 34; remote-read to CPU 1 (READERS above).
 PresetBank_Orchestra_Switch:
 	.byte	0x78, 0x10
 	.ascii	"Orchestra Switch"
@@ -2648,6 +2779,8 @@ PresetBank_Orchestra_Switch:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 35 -- 0xF86340  'Italiano Strings'
+; preset combination: bank 4 'STRING ORCHESTRA', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*3
+; and by sub_F98927 as index 35; remote-read to CPU 1 (READERS above).
 PresetBank_Italiano_Strings:
 	.byte	0x78, 0x10
 	.ascii	"Italiano Strings"
@@ -2719,6 +2852,8 @@ PresetBank_Italiano_Strings:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 36 -- 0xF86600  ' String Quartet '
+; preset combination: bank 4 'STRING ORCHESTRA', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*4
+; and by sub_F98927 as index 36; remote-read to CPU 1 (READERS above).
 PresetBank_String_Quartet:
 	.byte	0x78, 0x10
 	.ascii	" String Quartet "
@@ -2790,6 +2925,8 @@ PresetBank_String_Quartet:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 37 -- 0xF868C0  '  Chamber Set   '
+; preset combination: bank 4 'STRING ORCHESTRA', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*5
+; and by sub_F98927 as index 37; remote-read to CPU 1 (READERS above).
 PresetBank_Chamber_Set:
 	.byte	0x78, 0x10
 	.ascii	"  Chamber Set   "
@@ -2861,6 +2998,8 @@ PresetBank_Chamber_Set:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 38 -- 0xF86B80  '  Baroque Tune  '
+; preset combination: bank 4 'STRING ORCHESTRA', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*6
+; and by sub_F98927 as index 38; remote-read to CPU 1 (READERS above).
 PresetBank_Baroque_Tune:
 	.byte	0x78, 0x10
 	.ascii	"  Baroque Tune  "
@@ -2932,6 +3071,8 @@ PresetBank_Baroque_Tune:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 39 -- 0xF86E40  'Warm String Pad '
+; preset combination: bank 4 'STRING ORCHESTRA', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*4 + 0x2C0*7
+; and by sub_F98927 as index 39; remote-read to CPU 1 (READERS above).
 PresetBank_Warm_String_Pad:
 	.byte	0x78, 0x10
 	.ascii	"Warm String Pad "
@@ -3003,6 +3144,8 @@ PresetBank_Warm_String_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 40 -- 0xF87100  '  Tutti Finale  '
+; preset combination: bank 5 'ORCHESTRAL', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*0
+; and by sub_F98927 as index 40; remote-read to CPU 1 (READERS above).
 PresetBank_Tutti_Finale:
 	.byte	0x78, 0x10
 	.ascii	"  Tutti Finale  "
@@ -3074,6 +3217,8 @@ PresetBank_Tutti_Finale:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 41 -- 0xF873C0  'Orchestra pp~ff '
+; preset combination: bank 5 'ORCHESTRAL', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*1
+; and by sub_F98927 as index 41; remote-read to CPU 1 (READERS above).
 PresetBank_Orchestra_pp_ff:
 	.byte	0x78, 0x10
 	.ascii	"Orchestra pp~ff "
@@ -3145,6 +3290,8 @@ PresetBank_Orchestra_pp_ff:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 42 -- 0xF87680  '   Oratorio     '
+; preset combination: bank 5 'ORCHESTRAL', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*2
+; and by sub_F98927 as index 42; remote-read to CPU 1 (READERS above).
 PresetBank_Oratorio:
 	.byte	0x78, 0x10
 	.ascii	"   Oratorio     "
@@ -3216,6 +3363,8 @@ PresetBank_Oratorio:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 43 -- 0xF87940  ' Piano Concert  '
+; preset combination: bank 5 'ORCHESTRAL', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*3
+; and by sub_F98927 as index 43; remote-read to CPU 1 (READERS above).
 PresetBank_Piano_Concert:
 	.byte	0x78, 0x10
 	.ascii	" Piano Concert  "
@@ -3287,6 +3436,8 @@ PresetBank_Piano_Concert:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 44 -- 0xF87C00  'Orchestral Wood '
+; preset combination: bank 5 'ORCHESTRAL', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*4
+; and by sub_F98927 as index 44; remote-read to CPU 1 (READERS above).
 PresetBank_Orchestral_Wood:
 	.byte	0x78, 0x10
 	.ascii	"Orchestral Wood "
@@ -3358,6 +3509,8 @@ PresetBank_Orchestral_Wood:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 45 -- 0xF87EC0  '  Chamber Wood  '
+; preset combination: bank 5 'ORCHESTRAL', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*5
+; and by sub_F98927 as index 45; remote-read to CPU 1 (READERS above).
 PresetBank_Chamber_Wood:
 	.byte	0x78, 0x10
 	.ascii	"  Chamber Wood  "
@@ -3429,6 +3582,8 @@ PresetBank_Chamber_Wood:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 46 -- 0xF88180  '   Royal Solo   '
+; preset combination: bank 5 'ORCHESTRAL', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*6
+; and by sub_F98927 as index 46; remote-read to CPU 1 (READERS above).
 PresetBank_Royal_Solo:
 	.byte	0x78, 0x10
 	.ascii	"   Royal Solo   "
@@ -3500,6 +3655,8 @@ PresetBank_Royal_Solo:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 47 -- 0xF88440  '  Woodwind Ens. '
+; preset combination: bank 5 'ORCHESTRAL', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*5 + 0x2C0*7
+; and by sub_F98927 as index 47; remote-read to CPU 1 (READERS above).
 PresetBank_Woodwind_Ens:
 	.byte	0x78, 0x10
 	.ascii	"  Woodwind Ens. "
@@ -3571,6 +3728,8 @@ PresetBank_Woodwind_Ens:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 48 -- 0xF88700  '   Hallelujah   '
+; preset combination: bank 6 'VOCAL & ORGAN', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*0
+; and by sub_F98927 as index 48; remote-read to CPU 1 (READERS above).
 PresetBank_Hallelujah:
 	.byte	0x78, 0x10
 	.ascii	"   Hallelujah   "
@@ -3642,6 +3801,8 @@ PresetBank_Hallelujah:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 49 -- 0xF889C0  ' Carol Service  '
+; preset combination: bank 6 'VOCAL & ORGAN', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*1
+; and by sub_F98927 as index 49; remote-read to CPU 1 (READERS above).
 PresetBank_Carol_Service:
 	.byte	0x78, 0x10
 	.ascii	" Carol Service  "
@@ -3713,6 +3874,8 @@ PresetBank_Carol_Service:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 50 -- 0xF88C80  ' Cast Of 1000's '
+; preset combination: bank 6 'VOCAL & ORGAN', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*2
+; and by sub_F98927 as index 50; remote-read to CPU 1 (READERS above).
 PresetBank_Cast_Of_1000s:
 	.byte	0x78, 0x10
 	.ascii	" Cast Of 1000's "
@@ -3784,6 +3947,8 @@ PresetBank_Cast_Of_1000s:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 51 -- 0xF88F40  'Pipe Org.W/Touch'
+; preset combination: bank 6 'VOCAL & ORGAN', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*3
+; and by sub_F98927 as index 51; remote-read to CPU 1 (READERS above).
 PresetBank_Pipe_Org_W_Touch:
 	.byte	0x78, 0x10
 	.ascii	"Pipe Org.W/Touch"
@@ -3855,6 +4020,8 @@ PresetBank_Pipe_Org_W_Touch:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 52 -- 0xF89200  '  Sing Praises  '
+; preset combination: bank 6 'VOCAL & ORGAN', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*4
+; and by sub_F98927 as index 52; remote-read to CPU 1 (READERS above).
 PresetBank_Sing_Praises:
 	.byte	0x78, 0x10
 	.ascii	"  Sing Praises  "
@@ -3926,6 +4093,8 @@ PresetBank_Sing_Praises:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 53 -- 0xF894C0  '   Blues Bars   '
+; preset combination: bank 6 'VOCAL & ORGAN', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*5
+; and by sub_F98927 as index 53; remote-read to CPU 1 (READERS above).
 PresetBank_Blues_Bars:
 	.byte	0x78, 0x10
 	.ascii	"   Blues Bars   "
@@ -3997,6 +4166,8 @@ PresetBank_Blues_Bars:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 54 -- 0xF89780  '  Street Organ  '
+; preset combination: bank 6 'VOCAL & ORGAN', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*6
+; and by sub_F98927 as index 54; remote-read to CPU 1 (READERS above).
 PresetBank_Street_Organ:
 	.byte	0x78, 0x10
 	.ascii	"  Street Organ  "
@@ -4068,6 +4239,8 @@ PresetBank_Street_Organ:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 55 -- 0xF89A40  '   Mediaeval    '
+; preset combination: bank 6 'VOCAL & ORGAN', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*6 + 0x2C0*7
+; and by sub_F98927 as index 55; remote-read to CPU 1 (READERS above).
 PresetBank_Mediaeval:
 	.byte	0x78, 0x10
 	.ascii	"   Mediaeval    "
@@ -4139,6 +4312,8 @@ PresetBank_Mediaeval:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 56 -- 0xF89D00  ' Big Band Mutes '
+; preset combination: bank 7 'BIG BAND', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*0
+; and by sub_F98927 as index 56; remote-read to CPU 1 (READERS above).
 PresetBank_Big_Band_Mutes:
 	.byte	0x78, 0x10
 	.ascii	" Big Band Mutes "
@@ -4210,6 +4385,8 @@ PresetBank_Big_Band_Mutes:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 57 -- 0xF89FC0  '    UniBono     '
+; preset combination: bank 7 'BIG BAND', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*1
+; and by sub_F98927 as index 57; remote-read to CPU 1 (READERS above).
 PresetBank_UniBono:
 	.byte	0x78, 0x10
 	.ascii	"    UniBono     "
@@ -4281,6 +4458,8 @@ PresetBank_UniBono:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 58 -- 0xF8A280  '   Brass 1995   '
+; preset combination: bank 7 'BIG BAND', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*2
+; and by sub_F98927 as index 58; remote-read to CPU 1 (READERS above).
 PresetBank_Brass_1995:
 	.byte	0x78, 0x10
 	.ascii	"   Brass 1995   "
@@ -4352,6 +4531,8 @@ PresetBank_Brass_1995:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 59 -- 0xF8A540  '  Brass Unison  '
+; preset combination: bank 7 'BIG BAND', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*3
+; and by sub_F98927 as index 59; remote-read to CPU 1 (READERS above).
 PresetBank_Brass_Unison:
 	.byte	0x78, 0x10
 	.ascii	"  Brass Unison  "
@@ -4423,6 +4604,8 @@ PresetBank_Brass_Unison:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 60 -- 0xF8A800  '  Bass SAXtion  '
+; preset combination: bank 7 'BIG BAND', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*4
+; and by sub_F98927 as index 60; remote-read to CPU 1 (READERS above).
 PresetBank_Bass_SAXtion:
 	.byte	0x78, 0x10
 	.ascii	"  Bass SAXtion  "
@@ -4494,6 +4677,8 @@ PresetBank_Bass_SAXtion:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 61 -- 0xF8AAC0  '   Saxophones   '
+; preset combination: bank 7 'BIG BAND', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*5
+; and by sub_F98927 as index 61; remote-read to CPU 1 (READERS above).
 PresetBank_Saxophones:
 	.byte	0x78, 0x10
 	.ascii	"   Saxophones   "
@@ -4565,6 +4750,8 @@ PresetBank_Saxophones:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 62 -- 0xF8AD80  'Dance Band Reeds'
+; preset combination: bank 7 'BIG BAND', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*6
+; and by sub_F98927 as index 62; remote-read to CPU 1 (READERS above).
 PresetBank_Dance_Band_Reeds:
 	.byte	0x78, 0x10
 	.ascii	"Dance Band Reeds"
@@ -4636,6 +4823,8 @@ PresetBank_Dance_Band_Reeds:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 63 -- 0xF8B040  '  French Brass  '
+; preset combination: bank 7 'BIG BAND', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*7 + 0x2C0*7
+; and by sub_F98927 as index 63; remote-read to CPU 1 (READERS above).
 PresetBank_French_Brass:
 	.byte	0x78, 0x10
 	.ascii	"  French Brass  "
@@ -4707,6 +4896,8 @@ PresetBank_French_Brass:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 64 -- 0xF8B300  '   Piano Pad    '
+; preset combination: bank 8 'PIANO PAD', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*0
+; and by sub_F98927 as index 64; remote-read to CPU 1 (READERS above).
 PresetBank_Piano_Pad:
 	.byte	0x78, 0x10
 	.ascii	"   Piano Pad    "
@@ -4778,6 +4969,8 @@ PresetBank_Piano_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 65 -- 0xF8B5C0  'Piano & Strings '
+; preset combination: bank 8 'PIANO PAD', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*1
+; and by sub_F98927 as index 65; remote-read to CPU 1 (READERS above).
 PresetBank_Piano_And_Strings:
 	.byte	0x78, 0x10
 	.ascii	"Piano & Strings "
@@ -4849,6 +5042,8 @@ PresetBank_Piano_And_Strings:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 66 -- 0xF8B880  '  Good For You  '
+; preset combination: bank 8 'PIANO PAD', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*2
+; and by sub_F98927 as index 66; remote-read to CPU 1 (READERS above).
 PresetBank_Good_For_You:
 	.byte	0x78, 0x10
 	.ascii	"  Good For You  "
@@ -4920,6 +5115,8 @@ PresetBank_Good_For_You:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 67 -- 0xF8BB40  '  Sweet Piano   '
+; preset combination: bank 8 'PIANO PAD', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*3
+; and by sub_F98927 as index 67; remote-read to CPU 1 (READERS above).
 PresetBank_Sweet_Piano:
 	.byte	0x78, 0x10
 	.ascii	"  Sweet Piano   "
@@ -4991,6 +5188,8 @@ PresetBank_Sweet_Piano:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 68 -- 0xF8BE00  '  Foster Phaze  '
+; preset combination: bank 8 'PIANO PAD', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*4
+; and by sub_F98927 as index 68; remote-read to CPU 1 (READERS above).
 PresetBank_Foster_Phaze:
 	.byte	0x78, 0x10
 	.ascii	"  Foster Phaze  "
@@ -5062,6 +5261,8 @@ PresetBank_Foster_Phaze:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 69 -- 0xF8C0C0  'Dream Piano Pad '
+; preset combination: bank 8 'PIANO PAD', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*5
+; and by sub_F98927 as index 69; remote-read to CPU 1 (READERS above).
 PresetBank_Dream_Piano_Pad:
 	.byte	0x78, 0x10
 	.ascii	"Dream Piano Pad "
@@ -5133,6 +5334,8 @@ PresetBank_Dream_Piano_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 70 -- 0xF8C380  ' Fantasy Piano  '
+; preset combination: bank 8 'PIANO PAD', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*6
+; and by sub_F98927 as index 70; remote-read to CPU 1 (READERS above).
 PresetBank_Fantasy_Piano:
 	.byte	0x78, 0x10
 	.ascii	" Fantasy Piano  "
@@ -5204,6 +5407,8 @@ PresetBank_Fantasy_Piano:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 71 -- 0xF8C640  '   Dreamy EP    '
+; preset combination: bank 8 'PIANO PAD', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*8 + 0x2C0*7
+; and by sub_F98927 as index 71; remote-read to CPU 1 (READERS above).
 PresetBank_Dreamy_EP:
 	.byte	0x78, 0x10
 	.ascii	"   Dreamy EP    "
@@ -5275,6 +5480,8 @@ PresetBank_Dreamy_EP:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 72 -- 0xF8C900  '  Ethnic Stuff  '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*0
+; and by sub_F98927 as index 72; remote-read to CPU 1 (READERS above).
 PresetBank_Ethnic_Stuff:
 	.byte	0x78, 0x10
 	.ascii	"  Ethnic Stuff  "
@@ -5346,6 +5553,8 @@ PresetBank_Ethnic_Stuff:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 73 -- 0xF8CBC0  '  Gamelan Pad   '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*1
+; and by sub_F98927 as index 73; remote-read to CPU 1 (READERS above).
 PresetBank_Gamelan_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  Gamelan Pad   "
@@ -5417,6 +5626,8 @@ PresetBank_Gamelan_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 74 -- 0xF8CE80  '  Birumsemble   '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*2
+; and by sub_F98927 as index 74; remote-read to CPU 1 (READERS above).
 PresetBank_Birumsemble:
 	.byte	0x78, 0x10
 	.ascii	"  Birumsemble   "
@@ -5488,6 +5699,8 @@ PresetBank_Birumsemble:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 75 -- 0xF8D140  '   Ethno Harp   '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*3
+; and by sub_F98927 as index 75; remote-read to CPU 1 (READERS above).
 PresetBank_Ethno_Harp:
 	.byte	0x78, 0x10
 	.ascii	"   Ethno Harp   "
@@ -5559,6 +5772,8 @@ PresetBank_Ethno_Harp:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 76 -- 0xF8D400  '  Eat This Pad  '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*4
+; and by sub_F98927 as index 76; remote-read to CPU 1 (READERS above).
 PresetBank_Eat_This_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  Eat This Pad  "
@@ -5630,6 +5845,8 @@ PresetBank_Eat_This_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 77 -- 0xF8D6C0  'Fantasia Guitar '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*5
+; and by sub_F98927 as index 77; remote-read to CPU 1 (READERS above).
 PresetBank_Fantasia_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"Fantasia Guitar "
@@ -5701,6 +5918,8 @@ PresetBank_Fantasia_Guitar:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 78 -- 0xF8D980  '   Milky Way    '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*6
+; and by sub_F98927 as index 78; remote-read to CPU 1 (READERS above).
 PresetBank_Milky_Way:
 	.byte	0x78, 0x10
 	.ascii	"   Milky Way    "
@@ -5772,6 +5991,8 @@ PresetBank_Milky_Way:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 79 -- 0xF8DC40  '   Dreamy Pad   '
+; preset combination: bank 9 'PERCUSSIVE PAD', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*9 + 0x2C0*7
+; and by sub_F98927 as index 79; remote-read to CPU 1 (READERS above).
 PresetBank_Dreamy_Pad:
 	.byte	0x78, 0x10
 	.ascii	"   Dreamy Pad   "
@@ -5843,6 +6064,8 @@ PresetBank_Dreamy_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 80 -- 0xF8DF00  'Metal Distortion'
+; preset combination: bank 10 'ENSEMBLE PAD', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*0
+; and by sub_F98927 as index 80; remote-read to CPU 1 (READERS above).
 PresetBank_Metal_Distortion:
 	.byte	0x78, 0x10
 	.ascii	"Metal Distortion"
@@ -5914,6 +6137,8 @@ PresetBank_Metal_Distortion:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 81 -- 0xF8E1C0  '  The Big Pad   '
+; preset combination: bank 10 'ENSEMBLE PAD', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*1
+; and by sub_F98927 as index 81; remote-read to CPU 1 (READERS above).
 PresetBank_The_Big_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  The Big Pad   "
@@ -5985,6 +6210,8 @@ PresetBank_The_Big_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 82 -- 0xF8E480  '   Angel Wing   '
+; preset combination: bank 10 'ENSEMBLE PAD', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*2
+; and by sub_F98927 as index 82; remote-read to CPU 1 (READERS above).
 PresetBank_Angel_Wing:
 	.byte	0x78, 0x10
 	.ascii	"   Angel Wing   "
@@ -6056,6 +6283,8 @@ PresetBank_Angel_Wing:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 83 -- 0xF8E740  '  Bigger Mist   '
+; preset combination: bank 10 'ENSEMBLE PAD', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*3
+; and by sub_F98927 as index 83; remote-read to CPU 1 (READERS above).
 PresetBank_Bigger_Mist:
 	.byte	0x78, 0x10
 	.ascii	"  Bigger Mist   "
@@ -6127,6 +6356,8 @@ PresetBank_Bigger_Mist:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 84 -- 0xF8EA00  '   Breath Pad   '
+; preset combination: bank 10 'ENSEMBLE PAD', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*4
+; and by sub_F98927 as index 84; remote-read to CPU 1 (READERS above).
 PresetBank_Breath_Pad:
 	.byte	0x78, 0x10
 	.ascii	"   Breath Pad   "
@@ -6198,6 +6429,8 @@ PresetBank_Breath_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 85 -- 0xF8ECC0  '   Big & Warm   '
+; preset combination: bank 10 'ENSEMBLE PAD', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*5
+; and by sub_F98927 as index 85; remote-read to CPU 1 (READERS above).
 PresetBank_Big_And_Warm:
 	.byte	0x78, 0x10
 	.ascii	"   Big & Warm   "
@@ -6269,6 +6502,8 @@ PresetBank_Big_And_Warm:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 86 -- 0xF8EF80  '    Fat Pad     '
+; preset combination: bank 10 'ENSEMBLE PAD', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*6
+; and by sub_F98927 as index 86; remote-read to CPU 1 (READERS above).
 PresetBank_Fat_Pad:
 	.byte	0x78, 0x10
 	.ascii	"    Fat Pad     "
@@ -6340,6 +6575,8 @@ PresetBank_Fat_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 87 -- 0xF8F240  '    Wave Pad    '
+; preset combination: bank 10 'ENSEMBLE PAD', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*10 + 0x2C0*7
+; and by sub_F98927 as index 87; remote-read to CPU 1 (READERS above).
 PresetBank_Wave_Pad:
 	.byte	0x78, 0x10
 	.ascii	"    Wave Pad    "
@@ -6411,6 +6648,8 @@ PresetBank_Wave_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 88 -- 0xF8F500  ' Sizeable Orch  '
+; preset combination: bank 11 'SWEEP PAD', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*0
+; and by sub_F98927 as index 88; remote-read to CPU 1 (READERS above).
 PresetBank_Sizeable_Orch:
 	.byte	0x78, 0x10
 	.ascii	" Sizeable Orch  "
@@ -6482,6 +6721,8 @@ PresetBank_Sizeable_Orch:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 89 -- 0xF8F7C0  'Infinite Cosmos '
+; preset combination: bank 11 'SWEEP PAD', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*1
+; and by sub_F98927 as index 89; remote-read to CPU 1 (READERS above).
 PresetBank_Infinite_Cosmos:
 	.byte	0x78, 0x10
 	.ascii	"Infinite Cosmos "
@@ -6553,6 +6794,8 @@ PresetBank_Infinite_Cosmos:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 90 -- 0xF8FA80  'The Big Sweeper '
+; preset combination: bank 11 'SWEEP PAD', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*2
+; and by sub_F98927 as index 90; remote-read to CPU 1 (READERS above).
 PresetBank_The_Big_Sweeper:
 	.byte	0x78, 0x10
 	.ascii	"The Big Sweeper "
@@ -6624,6 +6867,8 @@ PresetBank_The_Big_Sweeper:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 91 -- 0xF8FD40  '  Phasing Pad   '
+; preset combination: bank 11 'SWEEP PAD', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*3
+; and by sub_F98927 as index 91; remote-read to CPU 1 (READERS above).
 PresetBank_Phasing_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  Phasing Pad   "
@@ -6695,6 +6940,8 @@ PresetBank_Phasing_Pad:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 92 -- 0xF90000  '  Goblinterval  '
+; preset combination: bank 11 'SWEEP PAD', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*4
+; and by sub_F98927 as index 92; remote-read to CPU 1 (READERS above).
 PresetBank_Goblinterval:
 	.byte	0x78, 0x10
 	.ascii	"  Goblinterval  "
@@ -6766,6 +7013,8 @@ PresetBank_Goblinterval:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 93 -- 0xF902C0  '    Winterval   '
+; preset combination: bank 11 'SWEEP PAD', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*5
+; and by sub_F98927 as index 93; remote-read to CPU 1 (READERS above).
 PresetBank_Winterval:
 	.byte	0x78, 0x10
 	.ascii	"    Winterval   "
@@ -6837,6 +7086,8 @@ PresetBank_Winterval:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 94 -- 0xF90580  'Fullness Of Time'
+; preset combination: bank 11 'SWEEP PAD', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*6
+; and by sub_F98927 as index 94; remote-read to CPU 1 (READERS above).
 PresetBank_Fullness_Of_Time:
 	.byte	0x78, 0x10
 	.ascii	"Fullness Of Time"
@@ -6908,6 +7159,8 @@ PresetBank_Fullness_Of_Time:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 95 -- 0xF90840  'Over Indulgance '
+; preset combination: bank 11 'SWEEP PAD', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*11 + 0x2C0*7
+; and by sub_F98927 as index 95; remote-read to CPU 1 (READERS above).
 PresetBank_Over_Indulgance:
 	.byte	0x78, 0x10
 	.ascii	"Over Indulgance "
@@ -6979,6 +7232,8 @@ PresetBank_Over_Indulgance:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 96 -- 0xF90B00  '  Guitar Synth  '
+; preset combination: bank 12 'GUITAR STACK', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*0
+; and by sub_F98927 as index 96; remote-read to CPU 1 (READERS above).
 PresetBank_Guitar_Synth:
 	.byte	0x78, 0x10
 	.ascii	"  Guitar Synth  "
@@ -7050,6 +7305,8 @@ PresetBank_Guitar_Synth:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 97 -- 0xF90DC0  '  Guitar Clav   '
+; preset combination: bank 12 'GUITAR STACK', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*1
+; and by sub_F98927 as index 97; remote-read to CPU 1 (READERS above).
 PresetBank_Guitar_Clav:
 	.byte	0x78, 0x10
 	.ascii	"  Guitar Clav   "
@@ -7121,6 +7378,8 @@ PresetBank_Guitar_Clav:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 98 -- 0xF91080  '   Mega Strat   '
+; preset combination: bank 12 'GUITAR STACK', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*2
+; and by sub_F98927 as index 98; remote-read to CPU 1 (READERS above).
 PresetBank_Mega_Strat:
 	.byte	0x78, 0x10
 	.ascii	"   Mega Strat   "
@@ -7192,6 +7451,8 @@ PresetBank_Mega_Strat:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 99 -- 0xF91340  '   L&R Guitar   '
+; preset combination: bank 12 'GUITAR STACK', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*3
+; and by sub_F98927 as index 99; remote-read to CPU 1 (READERS above).
 PresetBank_LAndR_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"   L&R Guitar   "
@@ -7263,6 +7524,8 @@ PresetBank_LAndR_Guitar:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 100 -- 0xF91600  '  Beauty Feel   '
+; preset combination: bank 12 'GUITAR STACK', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*4
+; and by sub_F98927 as index 100; remote-read to CPU 1 (READERS above).
 PresetBank_Beauty_Feel:
 	.byte	0x78, 0x10
 	.ascii	"  Beauty Feel   "
@@ -7334,6 +7597,8 @@ PresetBank_Beauty_Feel:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 101 -- 0xF918C0  '   E. Picking   '
+; preset combination: bank 12 'GUITAR STACK', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*5
+; and by sub_F98927 as index 101; remote-read to CPU 1 (READERS above).
 PresetBank_E_Picking:
 	.byte	0x78, 0x10
 	.ascii	"   E. Picking   "
@@ -7405,6 +7670,8 @@ PresetBank_E_Picking:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 102 -- 0xF91B80  ' Playing Ac.Gtr.'
+; preset combination: bank 12 'GUITAR STACK', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*6
+; and by sub_F98927 as index 102; remote-read to CPU 1 (READERS above).
 PresetBank_Playing_Ac_Gtr:
 	.byte	0x78, 0x10
 	.ascii	" Playing Ac.Gtr."
@@ -7476,6 +7743,8 @@ PresetBank_Playing_Ac_Gtr:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 103 -- 0xF91E40  '  Chorus Guitar '
+; preset combination: bank 12 'GUITAR STACK', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*12 + 0x2C0*7
+; and by sub_F98927 as index 103; remote-read to CPU 1 (READERS above).
 PresetBank_Chorus_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"  Chorus Guitar "
@@ -7547,6 +7816,8 @@ PresetBank_Chorus_Guitar:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 104 -- 0xF92100  'Lead Dynanamics '
+; preset combination: bank 13 'SYNTH STACK', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*0
+; and by sub_F98927 as index 104; remote-read to CPU 1 (READERS above).
 PresetBank_Lead_Dynanamics:
 	.byte	0x78, 0x10
 	.ascii	"Lead Dynanamics "
@@ -7618,6 +7889,8 @@ PresetBank_Lead_Dynanamics:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 105 -- 0xF923C0  '  Unusual Clav  '
+; preset combination: bank 13 'SYNTH STACK', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*1
+; and by sub_F98927 as index 105; remote-read to CPU 1 (READERS above).
 PresetBank_Unusual_Clav:
 	.byte	0x78, 0x10
 	.ascii	"  Unusual Clav  "
@@ -7689,6 +7962,8 @@ PresetBank_Unusual_Clav:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 106 -- 0xF92680  '  Fusion Lead   '
+; preset combination: bank 13 'SYNTH STACK', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*2
+; and by sub_F98927 as index 106; remote-read to CPU 1 (READERS above).
 PresetBank_Fusion_Lead:
 	.byte	0x78, 0x10
 	.ascii	"  Fusion Lead   "
@@ -7760,6 +8035,8 @@ PresetBank_Fusion_Lead:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 107 -- 0xF92940  '    Wah Lead    '
+; preset combination: bank 13 'SYNTH STACK', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*3
+; and by sub_F98927 as index 107; remote-read to CPU 1 (READERS above).
 PresetBank_Wah_Lead:
 	.byte	0x78, 0x10
 	.ascii	"    Wah Lead    "
@@ -7831,6 +8108,8 @@ PresetBank_Wah_Lead:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 108 -- 0xF92C00  ' The Big Olymp  '
+; preset combination: bank 13 'SYNTH STACK', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*4
+; and by sub_F98927 as index 108; remote-read to CPU 1 (READERS above).
 PresetBank_The_Big_Olymp:
 	.byte	0x78, 0x10
 	.ascii	" The Big Olymp  "
@@ -7902,6 +8181,8 @@ PresetBank_The_Big_Olymp:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 109 -- 0xF92EC0  '   Parp Parp    '
+; preset combination: bank 13 'SYNTH STACK', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*5
+; and by sub_F98927 as index 109; remote-read to CPU 1 (READERS above).
 PresetBank_Parp_Parp:
 	.byte	0x78, 0x10
 	.ascii	"   Parp Parp    "
@@ -7973,6 +8254,8 @@ PresetBank_Parp_Parp:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 110 -- 0xF93180  'Metallica Stack '
+; preset combination: bank 13 'SYNTH STACK', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*6
+; and by sub_F98927 as index 110; remote-read to CPU 1 (READERS above).
 PresetBank_Metallica_Stack:
 	.byte	0x78, 0x10
 	.ascii	"Metallica Stack "
@@ -8044,6 +8327,8 @@ PresetBank_Metallica_Stack:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 111 -- 0xF93440  '  Large S.Brass '
+; preset combination: bank 13 'SYNTH STACK', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*13 + 0x2C0*7
+; and by sub_F98927 as index 111; remote-read to CPU 1 (READERS above).
 PresetBank_Large_S_Brass:
 	.byte	0x78, 0x10
 	.ascii	"  Large S.Brass "
@@ -8115,6 +8400,8 @@ PresetBank_Large_S_Brass:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 112 -- 0xF93700  '  Jimmy Plays   '
+; preset combination: bank 14 'ROCK STAFF', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*0
+; and by sub_F98927 as index 112; remote-read to CPU 1 (READERS above).
 PresetBank_Jimmy_Plays:
 	.byte	0x78, 0x10
 	.ascii	"  Jimmy Plays   "
@@ -8186,6 +8473,8 @@ PresetBank_Jimmy_Plays:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 113 -- 0xF939C0  '    Raw Meat    '
+; preset combination: bank 14 'ROCK STAFF', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*1
+; and by sub_F98927 as index 113; remote-read to CPU 1 (READERS above).
 PresetBank_Raw_Meat:
 	.byte	0x78, 0x10
 	.ascii	"    Raw Meat    "
@@ -8257,6 +8546,8 @@ PresetBank_Raw_Meat:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 114 -- 0xF93C80  'Big Dist.Guitar '
+; preset combination: bank 14 'ROCK STAFF', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*2
+; and by sub_F98927 as index 114; remote-read to CPU 1 (READERS above).
 PresetBank_Big_Dist_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"Big Dist.Guitar "
@@ -8328,6 +8619,8 @@ PresetBank_Big_Dist_Guitar:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 115 -- 0xF93F40  '    Run Away    '
+; preset combination: bank 14 'ROCK STAFF', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*3
+; and by sub_F98927 as index 115; remote-read to CPU 1 (READERS above).
 PresetBank_Run_Away:
 	.byte	0x78, 0x10
 	.ascii	"    Run Away    "
@@ -8399,6 +8692,8 @@ PresetBank_Run_Away:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 116 -- 0xF94200  '    Funk It     '
+; preset combination: bank 14 'ROCK STAFF', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*4
+; and by sub_F98927 as index 116; remote-read to CPU 1 (READERS above).
 PresetBank_Funk_It:
 	.byte	0x78, 0x10
 	.ascii	"    Funk It     "
@@ -8470,6 +8765,8 @@ PresetBank_Funk_It:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 117 -- 0xF944C0  '   Strut Bass   '
+; preset combination: bank 14 'ROCK STAFF', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*5
+; and by sub_F98927 as index 117; remote-read to CPU 1 (READERS above).
 PresetBank_Strut_Bass:
 	.byte	0x78, 0x10
 	.ascii	"   Strut Bass   "
@@ -8541,6 +8838,8 @@ PresetBank_Strut_Bass:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 118 -- 0xF94780  '   Wah Rhythm   '
+; preset combination: bank 14 'ROCK STAFF', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*6
+; and by sub_F98927 as index 118; remote-read to CPU 1 (READERS above).
 PresetBank_Wah_Rhythm:
 	.byte	0x78, 0x10
 	.ascii	"   Wah Rhythm   "
@@ -8612,6 +8911,8 @@ PresetBank_Wah_Rhythm:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 119 -- 0xF94A40  '    Funk Set    '
+; preset combination: bank 14 'ROCK STAFF', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*14 + 0x2C0*7
+; and by sub_F98927 as index 119; remote-read to CPU 1 (READERS above).
 PresetBank_Funk_Set:
 	.byte	0x78, 0x10
 	.ascii	"    Funk Set    "
@@ -8683,6 +8984,8 @@ PresetBank_Funk_Set:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 120 -- 0xF94D00  '  Unsure Pitz   '
+; preset combination: bank 15 'DRUM & EFFECT', memory 0.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*0
+; and by sub_F98927 as index 120; remote-read to CPU 1 (READERS above).
 PresetBank_Unsure_Pitz:
 	.byte	0x78, 0x10
 	.ascii	"  Unsure Pitz   "
@@ -8754,6 +9057,8 @@ PresetBank_Unsure_Pitz:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 121 -- 0xF94FC0  '    Orbital     '
+; preset combination: bank 15 'DRUM & EFFECT', memory 1.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*1
+; and by sub_F98927 as index 121; remote-read to CPU 1 (READERS above).
 PresetBank_Orbital:
 	.byte	0x78, 0x10
 	.ascii	"    Orbital     "
@@ -8825,6 +9130,8 @@ PresetBank_Orbital:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 122 -- 0xF95280  '     Cosmos     '
+; preset combination: bank 15 'DRUM & EFFECT', memory 2.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*2
+; and by sub_F98927 as index 122; remote-read to CPU 1 (READERS above).
 PresetBank_Cosmos:
 	.byte	0x78, 0x10
 	.ascii	"     Cosmos     "
@@ -8896,6 +9203,8 @@ PresetBank_Cosmos:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 123 -- 0xF95540  '  Velo Fantasy  '
+; preset combination: bank 15 'DRUM & EFFECT', memory 3.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*3
+; and by sub_F98927 as index 123; remote-read to CPU 1 (READERS above).
 PresetBank_Velo_Fantasy:
 	.byte	0x78, 0x10
 	.ascii	"  Velo Fantasy  "
@@ -8967,6 +9276,8 @@ PresetBank_Velo_Fantasy:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 124 -- 0xF95800  '   Model Kit    '
+; preset combination: bank 15 'DRUM & EFFECT', memory 4.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*4
+; and by sub_F98927 as index 124; remote-read to CPU 1 (READERS above).
 PresetBank_Model_Kit:
 	.byte	0x78, 0x10
 	.ascii	"   Model Kit    "
@@ -9038,6 +9349,8 @@ PresetBank_Model_Kit:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 125 -- 0xF95AC0  ' Dancing Indian '
+; preset combination: bank 15 'DRUM & EFFECT', memory 5.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*5
+; and by sub_F98927 as index 125; remote-read to CPU 1 (READERS above).
 PresetBank_Dancing_Indian:
 	.byte	0x78, 0x10
 	.ascii	" Dancing Indian "
@@ -9109,6 +9422,8 @@ PresetBank_Dancing_Indian:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 126 -- 0xF95D80  ' Asian Paradise '
+; preset combination: bank 15 'DRUM & EFFECT', memory 6.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*6
+; and by sub_F98927 as index 126; remote-read to CPU 1 (READERS above).
 PresetBank_Asian_Paradise:
 	.byte	0x78, 0x10
 	.ascii	" Asian Paradise "
@@ -9180,6 +9495,8 @@ PresetBank_Asian_Paradise:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 127 -- 0xF96040  'Avant-gardeMusic'
+; preset combination: bank 15 'DRUM & EFFECT', memory 7.  Read by prom_a sub_F9F984 as 0xF80300 + 0x1600*15 + 0x2C0*7
+; and by sub_F98927 as index 127; remote-read to CPU 1 (READERS above).
 PresetBank_Avant_gardeMusic:
 	.byte	0x78, 0x10
 	.ascii	"Avant-gardeMusic"
@@ -9251,6 +9568,10 @@ PresetBank_Avant_gardeMusic:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 128 -- 0xF96300  '    Clear       '   (the template; not one of the 128 the header counts)
+; No bank name and outside sub_F9F984's 16 x 8 (bank 16 would be 0xF80300 + 0x1600*16,
+; this record's address); sub_F98927 and sub_FC1C77 index linearly and reach it as index 128.
+; No caller passing 128 has been pinned.  The only record whose eight A blocks all set
+; LOCAL CONTROL (payload +0x0D bit 5, see WHAT IT IS above).
 PresetBank_Clear:
 	.byte	0x78, 0x10
 	.ascii	"    Clear       "
