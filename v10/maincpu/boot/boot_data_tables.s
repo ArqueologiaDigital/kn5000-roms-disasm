@@ -76,11 +76,32 @@ HANDLE_UPDATE_OFFSETS:
 SLIDE_STRING_2:
 	aligned_string "SLIDE"
 
+; -----------------------------------------------------------------------------
+; Firmware-update banners: eight 224x22 monochrome bitmaps, 1 bpp
+; -----------------------------------------------------------------------------
+; Format, from the reader Draw_FlashMemUpdate_message_bitmap (0xEF5040,
+; boot/system_handlers.s): 616 bytes each = 22 rows x 28 bytes, row-major,
+; MSB = leftmost pixel.  The reader walks IZ = 0..0x267 (`cp iz, 0x268`),
+; starts a new row every `div wa, 0x1c` (28 bytes = 224 pixels), tests each
+; bit through a mask table and writes one 8-bpp pixel per bit into the
+; 320-wide offscreen buffer at 0x43C00 (foreground / background palette
+; index are its two stacked word arguments), then blits that buffer to VRAM
+; 0x1A0000.  Every caller passes XWA = banner, BC = x = 48 (0x30), DE = y.
+; Built from the PNG beside each .bin by scripts/build/mono_images.py (the
+; round trip is exact; `mono_images.py verify`).
+; drawn by FLASH_MEM_UPDATE (0xEF4F6F) and Flash_CheckAndValidate (0xEF4FE4), at y=80
 Bitmap_1bit_Flash_Memory_Update:	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
+; drawn by Erase_and_Burn____when_disk_is_valid (0xEF4745), at y=160
 Bitmap_1bit_Now_Erasing:		.incbin "images/Bitmap_1bit_Now_Erasing.bin"
+; drawn by SHOW_FD_TO_FLASH_MEMORY_MESSAGE (0xEF468E), at y=160
 Bitmap_1bit_FD_to_Flash_Memory:		.incbin "images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+; drawn by FLASH_MEM_UPDATE (0xEF4F6F) and Flash_CheckAndValidate (0xEF4FE4), at y=160
 Bitmap_1bit_Completed:			.incbin "images/Bitmap_1bit_Completed.bin"
+; drawn by We_seem_to_be_running_boot_ROM_code (0xEF0536), at y=80
 Bitmap_1bit_Please_Wait:		.incbin "images/Bitmap_1bit_Please_Wait.bin"
+; drawn by SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE (0xEF46A8), at y=160
 Bitmap_1bit_Change_FD_2_of_2:		.incbin "images/Bitmap_1bit_Change_FD_2_of_2.bin"
+; drawn by SHOW_ILLEGAL_DISK_MESSAGE (0xEF482A), at y=160
 Bitmap_1bit_Illegal_Disk:		.incbin "images/Bitmap_1bit_Illegal_Disk.bin"
+; drawn by FLASH_MEM_UPDATE (0xEF4F6F) and Flash_CheckAndValidate (0xEF4FE4), at y=200
 Bitmap_1bit_Turn_On_AGAIN:		.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
