@@ -9,6 +9,9 @@ QUESTION THIS ANSWERS
     left (scripts/converters/symbolize_numeric_branches.py --report), and how many
     data-as-code markers remain (lane_worklists.py's ABS regex + nop-nop pairs)?
 
+    It also counts absolute memory operands still spelled as numbers (`(0x1234:24)`, `(61458:16)`,
+    `(0xEB:8)`, and the SFR operand of `*_dd8` bit instructions), by address band.
+
     It also re-checks one fact quoted in subcpu_fp_math.s: every `*_Pad` byte in that file is
     0xFF at an ODD address (so it 2-aligns the routine after it).
 
@@ -81,6 +84,31 @@ def markers(root):
     return res
 
 
+def numeric_operands(root):
+    """Absolute memory operands still spelled as numbers, `(N:24|16|8)`, and SFR operands of the
+    `*_dd8` bit instructions, in the v142 code/data files and the boot ROM, by address band:
+    payload image (0x00F000-0x03EF00) / SFR (< 0x100) / other RAM & I/O."""
+    OPER = re.compile(r"\((0x[0-9a-fA-F]+|[0-9]+):(24|16|8)\)")
+    DD8 = re.compile(r"^\s*(?:set|res|bit|stcf|ldcf|xorcf|chg)_dd8\s+\d+\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*$", re.I)
+    out = collections.Counter()
+    for base in IMG_ROOT.values():
+        d = os.path.join(root, base)
+        for f in sorted(os.listdir(d)):
+            if not f.endswith(".s"):
+                continue
+            for ln in open(os.path.join(d, f), encoding="latin-1").read().split("\n"):
+                code = ln.split(";")[0]
+                vals = [int(m.group(1), 0) for m in OPER.finditer(code)]
+                m = DD8.match(code)
+                if m:
+                    vals.append(int(m.group(1), 0))
+                for v in vals:
+                    band = ("image" if (base.startswith("v142") and 0xF000 <= v < 0x3EF00) else
+                            "SFR" if v < 0x100 else "RAM/IO")
+                    out[(base.rstrip("/"), band)] += 1
+    return out
+
+
 def pad_parity(root):
     """Every *_Pad label in subcpu_fp_math.s: byte value and address parity, from a build."""
     llvm = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
@@ -126,6 +154,8 @@ def main():
     print("  %-40s" % "TOTAL" + "".join("%10d" % tot[c] for c in cols))
     num = numeric(root, tmp)
     print("numeric branch operands:", dict(num), "total", sum(num.values()))
+    no = numeric_operands(root)
+    print("numeric absolute operands left (file tree, band):", dict(sorted(no.items())))
     mk = markers(root)
     print("data-as-code markers (halt/incf/decf/ldf/normal/max/min/swi/jr cc,0/jr f/nop-nop):")
     for f, n in sorted(mk.items()):
