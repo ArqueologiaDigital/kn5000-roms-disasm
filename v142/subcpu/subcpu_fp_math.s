@@ -164,7 +164,7 @@ FP_tan:
 	jr c, FP_tan_InRange
 	ldw (0x040c22:24), 0x0022
 	ld xwa, xiz
-	lda xbc, (0x01f63e:24)
+	lda xbc, (FPConst_tan_Zero:24)
 	call FP_DP_Raw8Copy
 	jr FP_tan_Epilog
 
@@ -222,13 +222,13 @@ FP_pow:
 	lda xsp, (xsp - 56)
 	pushw iz
 	lda xwa, (xsp + 74)
-	lda xbc, (0x01f646:24)
+	lda xbc, (FPConst_Int32_Min_As_Double:24)
 	ld de, 1:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, FP_pow_Invalid
 	lda xwa, (xsp + 74)
-	lda xbc, (0x01f64e:24)
+	lda xbc, (FPConst_Int32_Max_As_Double:24)
 	ld de, 3:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
@@ -261,7 +261,7 @@ FP_pow_AfterRange:
 	jr nz, FP_pow_AltPath
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f656:24)
+	lda xbc, (FPConst_pow_AfterRange_One:24)
 	call FP_DP_Raw8Copy
 	jrl FP_pow_Epilog
 
@@ -279,7 +279,7 @@ FP_pow_AltPath:
 	jr nz, FP_pow_AltPath2
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f65e:24)
+	lda xbc, (FPConst_pow_AltPath_One:24)
 	call FP_DP_Raw8Copy
 	jrl FP_pow_Epilog
 
@@ -306,7 +306,7 @@ FP_pow_AltPath2:
 
 ; pow(): n was already >= 0; seed the accumulator with 1.0 and enter the loop test.
 FP_pow_IntPower_Seed:
-	lda xbc, (0x01f666:24)
+	lda xbc, (FPConst_pow_IntPower_Seed_One:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 	jrl FP_pow_IntPower_CheckContinue
@@ -361,7 +361,7 @@ FP_pow_IntPower_GreaterPath:
 
 ; Underflow: result = 0.0 (0x01F66E).
 FP_pow_IntPower_LessPath:
-	lda xbc, (0x01f66e:24)
+	lda xbc, (FPConst_pow_IntPower_LessPath_Zero:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 
@@ -439,7 +439,7 @@ FP_pow_IntPower_CheckContinue:
 ; Negative integer exponent: result = 1.0 (0x01F676) / accumulator.
 FP_pow_IntPower_DifferentPath:
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f676:24)
+	lda xbc, (FPConst_pow_IntPower_DifferentPath_One:24)
 	lda xde, (xsp + 46)
 	call FP_ddiv
 	jrl FP_pow_Epilog
@@ -469,7 +469,7 @@ FP_pow_ExpLog:
 	cpw (265250:24), 33
 	jr nz, FP_pow_ExpLog_Body
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f67e:24)
+	lda xbc, (FPConst_pow_ExpLog_Zero:24)
 	call FP_DP_Raw8Copy
 	jrl FP_pow_Epilog
 
@@ -550,7 +550,7 @@ FP_pow_ExpLog_Clamp:
 	jr ge, FP_pow_ExpLog_CrossZero
 	ldw (0x040c22:24), 0x0022
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f686:24)
+	lda xbc, (FPConst_pow_ExpLog_Clamp_Zero:24)
 	call FP_DP_Raw8Copy
 	jr FP_pow_Epilog
 
@@ -800,7 +800,7 @@ FP_SinCos_Kernel:
 	jr c, FP_SinCos_Kernel_InRange
 	ldw (0x040c22:24), 0x0022
 	ld_sril XWA, (xsp + 0x0088)
-	lda xbc, (0x01f68e:24)
+	lda xbc, (FPConst_SinCos_Kernel_Zero:24)
 	call FP_DP_Raw8Copy
 	jrl FP_SinCos_Kernel_Epilog
 
@@ -822,14 +822,14 @@ FP_SinCos_Kernel_InRange:
 	call FP_modf
 	lda xsp, (xsp + 16)
 	lda xwa, (xsp + 100)
-	lda xbc, (0x01f696:24)
+	lda xbc, (FPConst_SinCos_Kernel_InRange_Half:24)
 	ld de, 1:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, FP_SinCos_Kernel_Phase2
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	lda xde, (0x01f69e:24)
+	lda xde, (FPConst_SinCos_Kernel_InRange_One:24)
 	call FP_dadd
 
 ; Convert the (rounded) quadrant count to int32 and test its parity.
@@ -863,7 +863,7 @@ FP_SinCos_Kernel_Phase3:
 	jr nz, FP_SinCos_Kernel_Phase4
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	lda xde, (0x01f6a6:24)
+	lda xde, (FPConst_SinCos_Kernel_Phase3_Half:24)
 	call FP_DP_Sub
 
 ; Cody-Waite reduction proper: subtract n*pi_hi then n*pi_lo, leaving z in the local at
@@ -1984,7 +1984,7 @@ FP_fadd_Encode:
 FP_modf:
 	lda xsp, (xsp - 24)
 	push xiz
-	lda xbc, (0x01f6ae:24)
+	lda xbc, (FPConst_modf_Zero:24)
 	lda xwa, (xsp + 20)
 	call FP_DP_Raw8Copy
 	lda xiy, (xsp + 36)
@@ -2683,7 +2683,7 @@ FP_SP_SubMantissa_Zero:
 FP_exp:
 	lda xsp, (xsp - 48)
 	pushw iz
-	lda xbc, (0x01f6b6:24)
+	lda xbc, (FPConst_exp_One:24)
 	lda xwa, (xsp + 34)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
@@ -2698,11 +2698,11 @@ FP_exp:
 
 ; x != 0: load the term seed and test the overflow threshold.
 FP_exp_NonZero:
-	lda xbc, (0x01f6be:24)
+	lda xbc, (FPConst_exp_NonZero_One:24)
 	lda xwa, (xsp + 42)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
-	lda xbc, (0x01f6c6:24)
+	lda xbc, (FPConst_Exp_Overflow_Limit:24)
 	ld de, 0:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
@@ -2716,13 +2716,13 @@ FP_exp_NonZero:
 ; x <= log(DBL_MAX): test the underflow threshold.
 FP_exp_LessPath:
 	lda xwa, (xsp + 58)
-	lda xbc, (0x01f6ce:24)
+	lda xbc, (FPConst_Exp_Underflow_Limit:24)
 	ld de, 2:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
 	jr nz, FP_exp_StartIter
 	ld xwa, (xsp + 54)
-	lda xbc, (0x01f6d6:24)
+	lda xbc, (FPConst_exp_LessPath_Zero:24)
 	call FP_DP_Raw8Copy
 	jr FP_exp_Epilog
 
@@ -2804,7 +2804,7 @@ FP_log:
 	jr nz, FP_log_InRange
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 110)
-	lda xbc, (0x01f6de:24)
+	lda xbc, (FPConst_log_Zero:24)
 	call FP_DP_Raw8Copy
 	jrl FP_log_Epilog
 
@@ -2826,7 +2826,7 @@ FP_log_InRange:
 	push xwa
 	call FP_frexp
 	pushm (xsp + 120)
-	lda xiy, (0x01f6e6:24)
+	lda xiy, (FPConst_log_InRange_One_1:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -2840,11 +2840,11 @@ FP_log_InRange:
 	lda xde, (xsp + 56)
 	call FP_ddiv
 	lda xbc, (xsp + 114)
-	lda xde, (0x01f6ee:24)
+	lda xde, (FPConst_log_InRange_One_2:24)
 	lda xwa, (xsp + 48)
 	call FP_dadd
 	lda xbc, (xsp + 114)
-	lda xde, (0x01f6f6:24)
+	lda xde, (FPConst_log_InRange_One_3:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -2903,7 +2903,7 @@ FP_log_IterLoop:
 	ld xde, xiz
 	call FP_dmul
 	lda xbc, (xsp + 88)
-	lda xde, (0x01f6fe:24)
+	lda xde, (FPConst_log_IterLoop_Two:24)
 	lda xwa, (xsp + 48)
 	call FP_dmul
 	lda xbc, (xsp + 48)
@@ -2955,7 +2955,7 @@ FP_NaN_Handler:
 FP_trunc:
 	lda xsp, (xsp - 28)
 	push xiz
-	ld xiy, 0x1F706
+	ld xiy, FPConst_trunc_Zero
 	lda xix, (xsp + 24)
 	ld bc, 4:i3
 	ldirw
@@ -2975,7 +2975,7 @@ FP_trunc:
 ; Biased exponent 0 or 0x7FF: return 0.0.
 FP_trunc_ZeroOrMax:
 	ld xwa, (xsp + 36)
-	lda xbc, (0x01f70e:24)
+	lda xbc, (FPConst_trunc_ZeroOrMax_Zero:24)
 	call FP_DP_Raw8Copy
 	jrl FP_trunc_Return
 
@@ -3011,7 +3011,7 @@ FP_trunc_NegOffset:
 	cp wa, 0:i3
 	jr ge, FP_trunc_LargeOffset
 	ld xwa, (xsp + 36)
-	lda xbc, (0x01f716:24)
+	lda xbc, (FPConst_trunc_NegOffset_Zero:24)
 	call FP_DP_Raw8Copy
 	jrl FP_trunc_Return
 
@@ -3270,7 +3270,7 @@ FP_ldexp:
 	ld xde, (xsp + 22)
 	cp hl, 0:i3
 	jr nz, FP_ldexp_InRange
-	lda xbc, (0x01f71e:24)
+	lda xbc, (FPConst_ldexp_Zero:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
 	jrl FP_ldexp_Epilog
@@ -3300,7 +3300,7 @@ FP_ldexp_ClampHigh:
 FP_ldexp_ClampLow:
 	cp bc, 0xF801
 	jr ge, FP_ldexp_NibbleAdjust
-	lda xbc, (0x01f726:24)
+	lda xbc, (FPConst_ldexp_ClampLow_Zero:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
 	jrl FP_ldexp_Epilog
@@ -3371,7 +3371,7 @@ FP_ldexp_DecLoop:
 	sub wa, 0x1
 	jr nz, FP_ldexp_DecStep
 	ldw (0x040c22:24), 0x0022
-	lda xbc, (0x01f72e:24)
+	lda xbc, (FPConst_ldexp_DecLoop_Zero:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
 	jr FP_ldexp_Epilog

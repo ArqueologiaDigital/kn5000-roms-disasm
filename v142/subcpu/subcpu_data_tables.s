@@ -12066,77 +12066,64 @@ ToneGen_Velocity_Output_Curve:
 	.byte 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x10, 0x10, 0x11
 	.byte 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19
 	.byte 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21
-	.ascii "\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-	jrl	nc, 0x0000
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29
+	.byte 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31
+	.byte 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39
+	.byte 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f, 0x40, 0x41
+	.byte 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49
+	.byte 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f, 0x50, 0x51
+	.byte 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59
+	.byte 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f, 0x60, 0x61
+	.byte 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69
+	.byte 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f, 0x70, 0x71
+	.byte 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79
+	.byte 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f
+; ===========================================================================
+; 0x01F63E-0x01F735  DOUBLE-PRECISION LITERAL POOL of the floating-point code (31 x 8 bytes)
+; ===========================================================================
+; IEEE-754 doubles, little-endian.  Each slot is loaded by exactly ONE `lda xNN,(slot:24)`
+; in subcpu_fp_math.s -- the compiler's per-use constant pool; the reader is in each
+; label's name and the comment gives the value and the address of the reading operand.  Until
+; 2026-09-25 this was framed as instructions (`normal`, `swi 7`, `mul xbc,xsp`, `jrl nc,0`)
+; and misaligned `.byte` rows; verified and re-typed by
+; scripts/converters/retype_v142_fp_literal_pool.py (31 source readers, 31 ROM references,
+; none elsewhere).
+FPConst_tan_Zero:	.double 0.0	; 0.0, read by FP_tan (operand at 0x03D4E7)
 ; -2147483647.0000002 -- returned by the double->long conversion path on negative overflow
 ; (subcpu_fp_math.s line 154, via ToneGen_Compare_Voice with de = 1).
-FPConst_Int32_Min_As_Double:
-	normal
-	nop
-	.byte 0xc0, 0xff, 0xff
-	swi	7
-	.byte 0xdf, 0xc1
+FPConst_Int32_Min_As_Double:	.quad 0xc1dfffffffc00001	; -2147483647.0000002, read by FP_pow (operand at 0x03D53B)
 ; +2147483647.0000002 -- the positive-overflow counterpart (subcpu_fp_math.s line 160, de = 3).
-FPConst_Int32_Max_As_Double:
-	normal
-	nop
-	.byte 0xc0, 0xff, 0xff
-	swi	7
-	mul	xbc, xsp
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf0, 0x3f, 0x00, 0x00
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf0, 0x3f, 0x00, 0x00
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf0, 0x3f, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f
+FPConst_Int32_Max_As_Double:	.quad 0x41dfffffffc00001	; 2147483647.0000002, read by FP_pow (operand at 0x03D54D)
+FPConst_pow_AfterRange_One:	.double 1.0	; 1.0, read by FP_pow_AfterRange (operand at 0x03D5A1)
+FPConst_pow_AltPath_One:	.double 1.0	; 1.0, read by FP_pow_AltPath (operand at 0x03D5D1)
+FPConst_pow_IntPower_Seed_One:	.double 1.0	; 1.0, read by FP_pow_IntPower_Seed (operand at 0x03D610)
+FPConst_pow_IntPower_LessPath_Zero:	.double 0.0	; 0.0, read by FP_pow_IntPower_LessPath (operand at 0x03D67B)
+FPConst_pow_IntPower_DifferentPath_One:	.double 1.0	; 1.0, read by FP_pow_IntPower_DifferentPath (operand at 0x03D721)
+FPConst_pow_ExpLog_Zero:	.double 0.0	; 0.0, read by FP_pow_ExpLog (operand at 0x03D75D)
+FPConst_pow_ExpLog_Clamp_Zero:	.double 0.0	; 0.0, read by FP_pow_ExpLog_Clamp (operand at 0x03D814)
+FPConst_SinCos_Kernel_Zero:	.double 0.0	; 0.0, read by FP_SinCos_Kernel (operand at 0x03D9AA)
+FPConst_SinCos_Kernel_InRange_Half:	.double 0.5	; 0.5, read by FP_SinCos_Kernel_InRange (operand at 0x03D9E3)
+FPConst_SinCos_Kernel_InRange_One:	.double 1.0	; 1.0, read by FP_SinCos_Kernel_InRange (operand at 0x03D9F7)
+FPConst_SinCos_Kernel_Phase3_Half:	.double 0.5	; 0.5, read by FP_SinCos_Kernel_Phase3 (operand at 0x03DA4E)
+FPConst_modf_Zero:	.double 0.0	; 0.0, read by FP_modf (operand at 0x03E1AA)
+FPConst_exp_One:	.double 1.0	; 1.0, read by FP_exp (operand at 0x03E650)
+FPConst_exp_NonZero_One:	.double 1.0	; 1.0, read by FP_exp_NonZero (operand at 0x03E676)
 ; 709.778 = ln(DBL_MAX). Compared against before exp()/pow() to decide the ERANGE path.
-FPConst_Exp_Overflow_Limit:
-	.byte 0x4e, 0x62
-	.byte 0x10, 0x58, 0x39, 0x2e, 0x86, 0x40
+FPConst_Exp_Overflow_Limit:	.quad 0x40862e395810624e	; 709.778, read by FP_exp_NonZero (operand at 0x03E685)
 ; -708.396 = ln(DBL_MIN). The underflow counterpart of the above.
-FPConst_Exp_Underflow_Limit:
-	.byte 0xba, 0x49
-	.byte 0x0c, 0x02, 0x2b, 0x23, 0x86, 0xc0, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.zero 8
-	.zero 8
-	.zero 8
-	.zero 6
+FPConst_Exp_Underflow_Limit:	.quad 0xc086232b020c49ba	; -708.396, read by FP_exp_LessPath (operand at 0x03E6AD)
+FPConst_exp_LessPath_Zero:	.double 0.0	; 0.0, read by FP_exp_LessPath (operand at 0x03E6BF)
+FPConst_log_Zero:	.double 0.0	; 0.0, read by FP_log (operand at 0x03E74D)
+FPConst_log_InRange_One_1:	.double 1.0	; 1.0, read by FP_log_InRange (operand at 0x03E781)
+FPConst_log_InRange_One_2:	.double 1.0	; 1.0, read by FP_log_InRange (operand at 0x03E7A7)
+FPConst_log_InRange_One_3:	.double 1.0	; 1.0, read by FP_log_InRange (operand at 0x03E7B6)
+FPConst_log_IterLoop_Two:	.double 2.0	; 2.0, read by FP_log_IterLoop (operand at 0x03E85D)
+FPConst_trunc_Zero:	.double 0.0	; 0.0, read by FP_trunc (operand at 0x03E899)
+FPConst_trunc_ZeroOrMax_Zero:	.double 0.0	; 0.0, read by FP_trunc_ZeroOrMax (operand at 0x03E8CB)
+FPConst_trunc_NegOffset_Zero:	.double 0.0	; 0.0, read by FP_trunc_NegOffset (operand at 0x03E928)
+FPConst_ldexp_Zero:	.double 0.0	; 0.0, read by FP_ldexp (operand at 0x03EABB)
+FPConst_ldexp_ClampLow_Zero:	.double 0.0	; 0.0, read by FP_ldexp_ClampLow (operand at 0x03EB00)
+FPConst_ldexp_DecLoop_Zero:	.double 0.0	; 0.0, read by FP_ldexp_DecLoop (operand at 0x03EB8B)
 
 
 INTRX1_HANDLER:	; 1F736
