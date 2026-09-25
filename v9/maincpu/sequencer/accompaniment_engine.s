@@ -22527,18 +22527,22 @@ RhythmROM_LoadPattern:
 	xor xwa, xwa
 	ldw_sri WA, 0x07, 0xf0, 0xec
 	jr RhythmROM_PatternDisp_ReadByte
-	xor de, (0x03d803:24)
-	reti
-RhythmROM_PatternDisp_InitLoop:
-	neg	wa
-	.byte	0xd3, 0x03, 0xd3, 0x07, 0xd3	; xor HL, (rD3L+QB0) (unidasm; no llvm-mc spelling)
-	pop	sr
-	.byte	0xd3, 0x07, 0xd2, 0x03, 0xd2	; xor DE, (XWA-1+r03W) (unidasm; no llvm-mc spelling)
-	pop	sr
-	ld	wa, 984
-	xor	(0x07d207:24), wa
-	reti
-	neg	wa
+; RhythmROM_LoadPattern +0x34 -- 16 x LE16 byte offsets into the rhythm pattern
+; buffer.  ** RE-TYPED 2026-09-25 (lane accomp): was `xor de,(0x03d803:24)`,
+; reti, neg wa ... and -- by this lane's own third re-frame pass, now undone --
+; two `.byte` "xor HL,(rD3L+QB0)" readings (data-as-code).  Read by the
+; routine it sits in, RhythmROM_LoadPattern:
+;     ld l,(0x34ef) / and l,0xf / xor h,h / sla hl,1 /
+;     ld xix, RhythmROM_LoadPattern_0x34 / xor xwa,xwa / ldw_sri WA,(xix+hl)
+; then RhythmROM_PatternDisp_ReadByte adds WA to the pointer in (0x3564) and
+; reads the byte there.  16 entries: `and l, 0xf`; the table ends exactly at
+; RhythmROM_PatternDisp_ReadByte.  The label RhythmROM_PatternDisp_InitLoop
+; that sat inside it (a symboliser target of a phantom branch, referenced
+; nowhere) is dropped.
+; readers in v9/v10 (address from the linked ELF): RhythmROM_LoadPattern 0xF6358D,
+;     RhythmROM_PatternDisp_ReadByte 0xF635E1
+	.short 0x03d2, 0x03d8, 0x07d2, 0x07d8, 0x03d3, 0x07d3, 0x03d3, 0x07d3
+	.short 0x03d2, 0x03d2, 0x03d8, 0x03d8, 0x07d2, 0x07d2, 0x07d8, 0x07d8
 
 RhythmROM_PatternDisp_ReadByte:
 	ld xiy, (0x3564:16)

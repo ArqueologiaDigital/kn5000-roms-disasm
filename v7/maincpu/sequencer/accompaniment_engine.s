@@ -470,7 +470,7 @@ AccStyle_ApplyExt_CheckSplit:
 	jr	z, AccStyle_ApplyExt_CheckBit0
 	ld	a, (1075:16)
 	ld	xhl, 14969776
-	.byte	0xf3, 0x03, 0xec, 0xe0, 0xc8	; bit 0, (XHL+A) (unidasm; no llvm-mc spelling)
+	bit_dri	0, 0x03, 0xec, 0xe0
 	jr	z, AccStyle_ApplyExt_SelectPart
 	and	(0x3263:16), 253
 	and	(0xfc5f:16), 247
@@ -742,76 +742,39 @@ AccVoice_LookupParamIndex:
 	ret
 
 AccVoice_ParamIndexData:
-	nop
-	pop	sr
-	max
-	reti
-	add	hl, 994
-	extz	wa
-	.byte	0xd7, 0x30, 0x98	; ld RWA3, WA (unidasm; no llvm-mc spelling)
-	add	hl, wa
-	ld_rrb	a, xiy, hl
-	cp	a, 255
-	jr	nz, 12
-	.byte	0xd7, 0x30, 0x88	; ld WA, RWA3 (unidasm; no llvm-mc spelling)
-	add	wa, 994
-	ld_rrb a, xiy, wa
-	ret
-	nop
-	nop
-	normal
-	normal
-	nop
-	push	sr
-	normal
-	normal
-	push	sr
-	normal
-	normal
-	normal
-	normal
-	nop
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	push	sr
-	normal
-	normal
-	nop
-	normal
-	normal
-	normal
-	normal
-	normal
-	nop
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	nop
-	push	sr
-	.zero 8
-	ld	(4:8), 12:io
-	nop
-	halt
-	ldw	(15:8), 6420:io
-	calr	53795
-	pop	sr
-	.byte	0xd4, 0x03, 0xd6	; xor IZ, (-r03L) (unidasm; no llvm-mc spelling)
-	pop	sr
-	ld	wa, 2002
-	.byte	0xd4, 0x07, 0xd6	; xor IZ, (-r07L) (unidasm; no llvm-mc spelling)
-	reti
-	neg	wa
+; ** v7: typed as in v10 (the 115 bytes are identical in both ROMs) -- lane accomp
+;    2026-09-25, scripts/converters/lane_accomp_port_typed_v10_to_v7.py.
+; (this lane's third re-frame pass had read four bank-register instructions
+;  into +0x04..+0x25 here; that reading is withdrawn with this typing.)
+; RE-FRAMED 2026-09-02 (lane v10seq). Was 60 lines of mnemonics
+; (nop / pop sr / reti / add hl 994 / ldio / halt) with 18 undecodable
+; bytes wedged between them as .byte. It is DATA: all five references to
+; this block -- AccVoice_ParamIndexData and the positional labels +0x26
+; +0x57 +0x5B +0x63 -- are `ld xhl, <label>`, an address taken; nothing
+; in v10/maincpu calls or jumps to any of them.
+; The layout below is the readers own indexing, and the bytes corroborate
+; it: the +0x26 segment is exactly 48 entries long, matching its reader
+; `cp w,0x30` bound, and holds nothing but 0/1/2; +0x5B is the ramp
+; 0,5,10,...,35; and +0x63 reads as 8 LE16 words (0x03D2..0x03D8 then
+; 0x07D2..0x07D8), matching its reader `sla a,1`.
+; +0x00 (4 B). AccVoice_LookupParamIndex: ld xhl <here> / and wa 0x3 / ldb_sri -> byte[wa&3]
+	.byte 0x00, 0x03, 0x04, 0x07	; |....|
+; +0x04 (34 B). No reader found: nothing in the tree names this offset
+	.byte 0xdb, 0xc8, 0xe2, 0x03, 0xd8, 0x12, 0xd7, 0x30, 0x98, 0xd8, 0x83, 0xc3, 0x07, 0xf4, 0xec, 0x21	; |.......0.......!|
+	.byte 0xc9, 0xcf, 0xff, 0x6e, 0x0c, 0xd7, 0x30, 0x88, 0xd8, 0xc8, 0xe2, 0x03, 0xc3, 0x07, 0xf4, 0xe0	; |...n..0.........|
+	.byte 0x21, 0x0e	; |!.|
+; +0x26 (48 B). Rhythm_LookupStyleIndex: cp w 0x30 else xor w w / ldb_sri -> byte[w] with w < 48. Every value is 0 1 or 2
+	.byte 0x00, 0x00, 0x01, 0x01, 0x00, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01	; |................|
+	.byte 0x01, 0x01, 0x01, 0x01, 0x02, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01	; |................|
+	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; |................|
+; +0x56 (1 B). Gap between the 48-entry table and the next
+	.byte 0x00	; |.|
+; +0x57 (4 B). Rhythm_LookupStyleIndex: and w 0x3 / ldb_sri -> byte[w&3]
+	.byte 0x00, 0x08, 0x04, 0x0c	; |....|
+; +0x5B (8 B). Rhythm_LookupTuningByStyle: ldb_sri -> byte[a]. Ramp 0 5 10 ... 35
+	.byte 0x00, 0x05, 0x0a, 0x0f, 0x14, 0x19, 0x1e, 0x23	; |.......#|
+; +0x63 (8 x LE16). Rhythm_LookupTuningRange: sla a 1 / ldw_sri -> word[a]
+	.short 0x03d2, 0x03d4, 0x03d6, 0x03d8, 0x07d2, 0x07d4, 0x07d6, 0x07d8
 
 AccPart_GetVoiceParamOffsetTable:
 	ld xhl, AccPart_VoiceParamDispatchTable
@@ -4570,7 +4533,7 @@ AccVoice_Reassign_Mode2:
 	and	a, 127
 	call	AccPatch_SetVoiceParam
 	ld	xhl, 14969776
-	.byte	0xf3, 0x03, 0xec, 0xe0, 0xc9	; bit 1, (XHL+A) (unidasm; no llvm-mc spelling)
+	bit_dri	1, 0x03, 0xec, 0xe0
 	jr	z, AccVoice_Reassign_Fallback
 	and	(0xfc5f:16), 247
 	ld	e, 72:opc
@@ -9075,7 +9038,7 @@ AccKbdTiming_NoteSlotScan:
 AccKbdTiming_SlotLoop:
 	cp	iz, (0x32e2:16)
 	jr	nc, AccKbdTiming_SlotOverflow
-	.byte	0xf3, 0x07, 0xe4, 0xf8, 0xcf	; bit 7, (XBC+IZ) (unidasm; no llvm-mc spelling)
+	bit_dri	7, 0x07, 0xe4, 0xf8
 	jr	z, AccKbdTiming_WriteNoteEvent
 	add	iz, (0x32e0:16)
 	jr	AccKbdTiming_SlotLoop
@@ -9346,7 +9309,7 @@ AccKbdTiming_TableScan:
 AccKbdTiming_TableScan_Loop:
 	cp	iz, (0x32e2:16)
 	jp	nc, (0xf5b589:24)
-	.byte	0xf3, 0x07, 0xe4, 0xf8, 0xcf	; bit 7, (XBC+IZ) (unidasm; no llvm-mc spelling)
+	bit_dri	7, 0x07, 0xe4, 0xf8
 	jr	z, AccKbdTiming_TableScan_NextSlot
 	ld	ix, iz
 	ld_rrb	a, xbc, ix
@@ -9477,7 +9440,7 @@ AccAccTiming_NoteSlotScan:
 AccAccTiming_NoteSlot_Loop:
 	cp	iz, (0x32e2:16)
 	jr	nc, AccAccTiming_NoteSlot_FindFree
-	.byte	0xf3, 0x07, 0xe4, 0xf8, 0xcf	; bit 7, (XBC+IZ) (unidasm; no llvm-mc spelling)
+	bit_dri	7, 0x07, 0xe4, 0xf8
 	jr	z, AccAccTiming_NoteSlot_NextSlot
 	ld	qiz, iz
 	add	iz, 2
@@ -9512,7 +9475,7 @@ AccAccTiming_NoteSlot_FindFree:
 AccAccTiming_NoteSlot_FreeLoop:
 	cp	iz, (0x32e2:16)
 	jr	nc, AccAccTiming_SlotOverflow
-	.byte	0xf3, 0x07, 0xe4, 0xf8, 0xcf	; bit 7, (XBC+IZ) (unidasm; no llvm-mc spelling)
+	bit_dri	7, 0x07, 0xe4, 0xf8
 	jr	z, AccAccTiming_WriteNoteEvent
 	add	iz, (0x32e0:16)
 	jr	AccAccTiming_NoteSlot_FreeLoop
@@ -9741,7 +9704,7 @@ AccAccTiming_TableScan:
 AccAccTiming_TableScan_Loop:
 	cp	iz, (0x32e2:16)
 	jp	nc, (0xf5b931:24)
-	.byte	0xf3, 0x07, 0xe4, 0xf8, 0xcf	; bit 7, (XBC+IZ) (unidasm; no llvm-mc spelling)
+	bit_dri	7, 0x07, 0xe4, 0xf8
 	jr	z, AccAccTiming_TableScan_NextSlot
 	ld	ix, iz
 	ld_rrb	a, xbc, ix
@@ -21617,9 +21580,9 @@ RhythmROM_LoadPattern:
 	.byte 0xd2, 0x07
 RhythmROM_PatternDisp_InitLoop:
 	neg	wa
-	.byte	0xd3, 0x03, 0xd3, 0x07, 0xd3	; xor HL, (rD3L+QB0) (unidasm; no llvm-mc spelling)
+	.byte	0xd3, 0x03, 0xd3, 0x07, 0xd3	; data: part of the 16 x LE16 table at RhythmROM_LoadPattern+0x34 (typed in v9/v10)
 	pop	sr
-	.byte	0xd3, 0x07, 0xd2, 0x03, 0xd2	; xor DE, (XWA-1+r03W) (unidasm; no llvm-mc spelling)
+	.byte	0xd3, 0x07, 0xd2, 0x03, 0xd2	; data: part of the 16 x LE16 table at RhythmROM_LoadPattern+0x34 (typed in v9/v10)
 	pop	sr
 	ld	wa, 984
 	xor	(0x07d207:24), wa

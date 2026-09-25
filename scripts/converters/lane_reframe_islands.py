@@ -224,11 +224,19 @@ SRI_MNS = ["adc_sril_mr", "add_srib_mr", "add_sril_mr", "add_sril_rm", "add_sriw
            "ldmm_srib", "ldmm_sriw", "ld_srib1", "ld_sril1", "ld_sril3", "ld_sriw1",
            "ldw_sri", "or_srib_im", "or_srib_mr", "or_srib_rm", "or_sril_rm",
            "or_sriw_im", "or_sriw_mr", "or_sriw_rm", "push_sriw", "sub_srib_im",
-           "sub_srib_mr", "sub_sril_mr", "sub_sril_rm", "sub_sriw_rm", "xor_srib_rm"]
+           "sub_srib_mr", "sub_sril_mr", "sub_sril_rm", "sub_sriw_rm", "xor_srib_rm",
+           # destination-SRI (F3 prefix) forms, TLCS900InstrInfo.td
+           "bit_dri", "lda_dri", "ldb_dri", "ldcf_dri", "ldl_dri", "ldmmb_dri", "ldmmw_dri",
+           "ldw_dri", "res_dri", "set_dri", "stb_dri", "stl_dri", "stw_dri", "xorcf_dri"]
 REGS = ["W", "A", "B", "C", "D", "E", "H", "L", "WA", "BC", "DE", "HL", "IX", "IY",
         "IZ", "SP", "XWA", "XBC", "XDE", "XHL", "XIX", "XIY", "XIZ", "XSP"]
 OPWORD = {"cpb": "cp", "cpl": "cp", "cpw": "cp", "cpib": "cp", "cpiw": "cp",
-          "ldb": "ld", "ldw": "ld", "ldmm": "ld"}
+          "ldb": "ld", "ldw": "ld", "ldmm": "ld", "stb": "ld", "stw": "ld", "stl": "ld",
+          "ldl": "ld", "ldmmb": "ld", "ldmmw": "ld", "ldcf": "ldcf", "xorcf": "xorcf"}
+# unidasm readings that name BANK registers (rD3L, QB0, RWA3 ...) or a
+# negative register index are what data decodes into far more often than what
+# this firmware's code uses; never keep such a reading as a .byte instruction
+EXOTIC = re.compile(r'\br[0-9A-Fa-f]{2}[LWHB]?\b|\bQ[A-Z0-9]+\b|\bR(WA|BC|DE|HL|IX|IY|IZ)\d\b|\(-|\+r|-1\+')
 
 
 def sri_candidates(b):
@@ -278,7 +286,8 @@ def fallback_insn(rom_path, rom, addr):
     # "ld (XHL+IY),0xd0": the store-immediate SRI form has no llvm-mc
     # spelling).  Policy 11 allows `.byte` exactly for such encodings: emit the
     # instruction's own bytes with unidasm's reading as the comment.
-    if ABS.match(re.sub(r'\s+', ' ', utext.lower())) or uop in ("db", "halt", "swi", "reti"):
+    if ABS.match(re.sub(r'\s+', ' ', utext.lower())) or uop in ("db", "halt", "swi", "reti") \
+            or EXOTIC.search(utext):
         return None
     return n, ".byte " + ", ".join("0x%02x" % x for x in b) + \
         "\t; %s (unidasm; no llvm-mc spelling)" % utext.replace(",", ", ")
@@ -724,7 +733,45 @@ def _analyse_island(isl):
     return res, None
 
 
+KEPT_RE = re.compile(r'^\t\.byte\t((?:0x[0-9a-f]{2}, )*0x[0-9a-f]{2})\t; (.*) \(unidasm; no llvm-mc spelling\)$')
+
+
+def respell_kept(path):
+    """Re-try the `.byte` lines this tool kept for unspellable instructions
+    against the (grown) candidate list; replace a line only when a mnemonic
+    encodes to exactly its bytes and names unidasm's operation."""
+    L = open(path, encoding="latin-1").read().split("\n")
+    n = 0
+    for i, ln in enumerate(L):
+        m = KEPT_RE.match(ln)
+        if not m:
+            continue
+        b = bytes(int(x, 16) for x in m.group(1).split(", "))
+        utext = m.group(2)
+        uop = utext.split()[0].lower()
+        cands = sri_candidates(b)
+        enc = encodings(cands)
+        want = ",".join("0x%02x" % x for x in b)
+        for c, e in zip(cands, enc):
+            if e is None or e.replace(" ", "") != want:
+                continue
+            w = c.split("\t")[0].split("_")[0]
+            if OPWORD.get(w, w) != uop:
+                continue
+            L[i] = "\t" + c
+            n += 1
+            break
+    tmp = path + ".tmp"
+    open(tmp, "w", encoding="latin-1").write("\n".join(L))
+    os.replace(tmp, path)
+    print("%s: %d kept .byte instructions now spelled" % (path, n))
+
+
 def main():
+    if len(sys.argv) > 2 and sys.argv[1] == "--respell-kept":
+        for p in sys.argv[2:]:
+            respell_kept(p)
+        return
     ap = argparse.ArgumentParser()
     ap.add_argument("--image", required=True)
     ap.add_argument("--file", required=True)

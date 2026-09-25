@@ -257,6 +257,29 @@ def key_value_tables(blob, ntables=2, pad=2):
 
 
 REGIONS = {
+    "RhythmROM_LoadPattern_WordTable": dict(
+        file="sequencer/accompaniment_engine.s", start="RhythmROM_LoadPattern",
+        offset=0x34, size=32, drop_labels=("RhythmROM_PatternDisp_InitLoop",),
+        images=("v10", "v9"),
+        # this lane's own third pass wrote two "(unidasm; no llvm-mc spelling)"
+        # readings here; the header withdraws them, so they are not carried
+        drop_comments_containing="(unidasm; no llvm-mc spelling)",
+        fn=layout([(32, "h8", None)]),
+        header=[
+            "; RhythmROM_LoadPattern +0x34 -- 16 x LE16 byte offsets into the rhythm pattern",
+            "; buffer.  ** RE-TYPED 2026-09-25 (lane accomp): was `xor de,(0x03d803:24)`,",
+            "; reti, neg wa ... and -- by this lane's own third re-frame pass, now undone --",
+            "; two `.byte` \"xor HL,(rD3L+QB0)\" readings (data-as-code).  Read by the",
+            "; routine it sits in, RhythmROM_LoadPattern:",
+            ";     ld l,(0x34ef) / and l,0xf / xor h,h / sla hl,1 /",
+            ";     ld xix, RhythmROM_LoadPattern_0x34 / xor xwa,xwa / ldw_sri WA,(xix+hl)",
+            "; then RhythmROM_PatternDisp_ReadByte adds WA to the pointer in (0x3564) and",
+            "; reads the byte there.  16 entries: `and l, 0xf`; the table ends exactly at",
+            "; RhythmROM_PatternDisp_ReadByte.  The label RhythmROM_PatternDisp_InitLoop",
+            "; that sat inside it (a symboliser target of a phantom branch, referenced",
+            "; nowhere) is dropped.",
+        ]),
+
     "AccStyle_InlinedBlock_ByteTable_v7": dict(
         images=("v7",), file="sequencer/accompaniment_engine.s", start="AccStyle_InlinedBlock",
         offset=0x1A0, size=96,
@@ -583,7 +606,7 @@ REGIONS = {
 }
 
 
-READERS = {'Demo_StyleRhythmData': ['AccDemo_LoadRhythm', 'AccDemo_LoadVariation', 'AccDemo_LoadVariation_DataBlock', 'AccDemo_LoadFillIn', 'Demo_LoadVariationData', 'Demo_LoadVariationC_Data'], '__pad_F62230': ['ToneGen_InitPlaybackState'], 'AccPatch_AdvPlayPos_DataBlock': ['AccPatch_LoadTablePointers'], 'AccStyle_ParamOffsetTables': ['AccStyle_ReadParamOffset', 'AccPart_LookupBoundVoiceParam'], 'AccStyle_ParamOffsetTables_v7': ['AccStyle_ReadParamOffset', 'AccPart_LookupBoundVoiceParam'], 'AccTiming_SlotOffsetTables': ['AccKbdTiming_SlotOverflow', 'AccAccTiming_SlotOverflow'], '__pad_F62002': ['AccPlayback_TrackPosition', 'ToneGen_LoadRhythmPatternParams'], 'AccPatch_TransposeNoteTable': ['AccPatch_Transpose_LookupTable', 'AccPatch_StoreDrumParams'], 'AccTuning_ValueTable': ['AccTuning_FetchValue'], 'MultiVoice_Setup_Done': ['Rhythm_MapChannelToDrumIndex'], 'AccPatch_PartNumberTable': ['AccPatch_PartChanges_MapLookup'], 'DrumParam_PointerTableAndData': ['DrumParam_Lookup'], 'AccVoice_CopyFromROM_KeyTables': ['AccVoice_CopyFromROM_DataBlock'], 'AccStyle_InlinedBlock_ByteTable': ['AccVoiceState_DispatchChange']}
+READERS = {"RhythmROM_LoadPattern_WordTable": ["RhythmROM_LoadPattern", "RhythmROM_PatternDisp_ReadByte"], 'Demo_StyleRhythmData': ['AccDemo_LoadRhythm', 'AccDemo_LoadVariation', 'AccDemo_LoadVariation_DataBlock', 'AccDemo_LoadFillIn', 'Demo_LoadVariationData', 'Demo_LoadVariationC_Data'], '__pad_F62230': ['ToneGen_InitPlaybackState'], 'AccPatch_AdvPlayPos_DataBlock': ['AccPatch_LoadTablePointers'], 'AccStyle_ParamOffsetTables': ['AccStyle_ReadParamOffset', 'AccPart_LookupBoundVoiceParam'], 'AccStyle_ParamOffsetTables_v7': ['AccStyle_ReadParamOffset', 'AccPart_LookupBoundVoiceParam'], 'AccTiming_SlotOffsetTables': ['AccKbdTiming_SlotOverflow', 'AccAccTiming_SlotOverflow'], '__pad_F62002': ['AccPlayback_TrackPosition', 'ToneGen_LoadRhythmPatternParams'], 'AccPatch_TransposeNoteTable': ['AccPatch_Transpose_LookupTable', 'AccPatch_StoreDrumParams'], 'AccTuning_ValueTable': ['AccTuning_FetchValue'], 'MultiVoice_Setup_Done': ['Rhythm_MapChannelToDrumIndex'], 'AccPatch_PartNumberTable': ['AccPatch_PartChanges_MapLookup'], 'DrumParam_PointerTableAndData': ['DrumParam_Lookup'], 'AccVoice_CopyFromROM_KeyTables': ['AccVoice_CopyFromROM_DataBlock'], 'AccStyle_InlinedBlock_ByteTable': ['AccVoiceState_DispatchChange']}
 
 
 def readers_line(name, image, mapdir):
@@ -657,8 +680,20 @@ def plan(image, spec, mapdir):
     if keep:
         emit = [(ln, a, sz) for ln, a, sz, t in rows if s_ln < ln < e_ln and sz]
         s_ln, s_ad = emit[keep - 1][0], emit[keep][1]
-    # no label strictly inside the range (they would be lost / moved)
-    inner = [(ln, t) for ln, a, sz, t in rows if s_ln < ln < e_ln and LABEL_RE.match(t.strip())]
+    # no label strictly inside the range (they would be lost / moved), except
+    # labels the spec lists as dropped -- each must be referenced nowhere
+    drop = set(spec.get("drop_labels", ()))
+    inner = [(ln, t) for ln, a, sz, t in rows if s_ln < ln < e_ln and LABEL_RE.match(t.strip())
+             and LABEL_RE.match(t.strip()).group(1) not in drop]
+    for d in drop:
+        src = os.path.join(ROOT, image, "maincpu")
+        for dp, _, fn in os.walk(src):
+            for f in fn:
+                if f.endswith(".s"):
+                    for x in open(os.path.join(dp, f), encoding="latin-1"):
+                        c = x.split(";")[0]
+                        if re.search(r'\b%s\b' % re.escape(d), c) and not c.strip().startswith(d + ":"):
+                            raise SystemExit("%s: label %s to drop is referenced: %s" % (image, d, x.strip()))
     # preceding blank lines before the end label stay; replace s_ln+1 .. last emitting line
     last = max(ln for ln, a, sz, t in rows if s_ln < ln < e_ln)
     if not own_line and not keep:
@@ -666,7 +701,8 @@ def plan(image, spec, mapdir):
     rom = open(os.path.join(ROOT, "original_ROMs", "kn5000_%s_program.rom" % image), "rb").read()
     blob = rom[s_ad - BASE:e_ad - BASE]
     comments = [comment_of(L[i - 1]) for i in range(s_ln + 1, last + 1)]
-    comments = [c for c in comments if c]
+    dropc = spec.get("drop_comments_containing")
+    comments = [c for c in comments if c and not (dropc and dropc in c)]
     body = spec["fn"](blob, base_addr=s_ad) if spec.get("needs_addr") else spec["fn"](blob)
     return dict(path=path, L=L, s_ln=s_ln, last=last, inner=inner, blob=blob,
                 comments=comments, body=body, s_ad=s_ad, e_ad=e_ad,
