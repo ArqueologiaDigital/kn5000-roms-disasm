@@ -1641,7 +1641,17 @@ Table_FE13C2:
 ;
 ; 101 u16.  Entries 0..3 are 0xFFFF; then a steep decay 0xC673, 0xA560, 0x8F53 ... down to
 ; 0x0001 at entry 100.  Cited once, from 0xFC3663.
-; ⚠ 101 entries is the extent between two cited bases; no reader clamp was located.
+; COUNT 101, from the reader's clamp (corrected 2026-09-25, lane promcd: this line
+; said the clamp had not been located).  sub_FC35DB (0xFC35DB) forms the index as
+; byte +0x29 of the record at voice+0x17 (0xFC363A/0xFC363D) plus a signed byte
+; (0xFC3645), clamps it to 0..100 (`cp HL,0x0064` 0xFC364E, `cp HL,0` 0xFC3657),
+; and reads T[index] (0xFC365E-0xFC3663).  It multiplies T by the INTT1 ticks since
+; a stored timestamp (0x00F2F3, 0xFC3619; Multiply32 at 0xFC3676), shifts right 10
+; (0xFC367C) and subtracts the result from voice word +0x0D (0xFC3696), or sets it to
+; 0xC000 when the result exceeds 0xFFF (0xFC3681/0xFC368B).  So T[k] is a RATE per
+; tick for setting k of a 0..100 parameter, fastest at k <= 3.  (The KN5000's
+; transplant table names this offset Voice_Portamento_Rate_Table; that is its name
+; there, not a finding here.)  notes/lanes/promcd-2026-09-25/prom_c_curve_fe13d6.py
 ;
 ; Cited by: 0xFC3663 [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
