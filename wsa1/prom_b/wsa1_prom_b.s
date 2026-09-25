@@ -163496,7 +163496,7 @@ Smf_ReadFile_Skip11:
 	cp	a, 240	; F6F72E  cp A,0xf0
 	jr	nz, Smf_ReadFile_Skip14	; F6F731  jr NZ,0xf6f747
 Smf_ReadFile_Skip12:
-	calr	sub_F71525	; F6F733  calr 0xf71525
+	calr	SmfEvent_SysEx	; F6F733  calr 0xf71525
 	ld	w, (4682:16)	; F6F736  ld W,(0x124a)
 	cp	w, 1:i3	; F6F73A  cp W,1
 	jr	z, Smf_ReadFile_Skip13	; F6F73C  jr Z,0xf6f744
@@ -167844,163 +167844,170 @@ Data_F71512:
 
 
 ; --------------------------------------------------------------------------
-; sub_F71525
+; SmfEvent_SysEx
 ; Called from: in-module: 0xF6F733 0xF71CF1
 ; Touches: (0x1198) (0x11B1) (0x1239) (0x124A) (0x124B) (0x137B) (0x137C)
 ;          (0x137D) (0x137E)
-; Calls:   sub_F6FD7A InputStream_GetByte sub_F71417 sub_F71697 sub_F6FD91
+; Calls:   sub_F6FD7A InputStream_GetByte sub_F71417 SmfSysEx_ApplyParamChange sub_F6FD91
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71525 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ⚠ ANSWERED 2026-09-25 (SmfEvent_SysEx, was a name that was the address): the
+;   SMF reader's SysEx-event handler.  With (0x1198), the bytes left in the
+;   event, = 5 it matches 7E 7F 09 01 / 02 -- GM System On / Off -- and
+;   records it (bit 0 of (0x124B); (0x1239) = 0xFF / 0x00; sub_F71417).  With
+;   (0x1198) = 16 it matches 50 2C 04 00 11 00, an address pair into
+;   (0x137B)/(0x137C) (0x00:0x30-0x31, 0x01:0x04, or 0x11:<=0x75 -- `cp
+;   A,0x75` at 0xF71637), 00 00 01, two data nibbles into (0x137E)/(0x137D),
+;   and calls SmfSysEx_ApplyParamChange.
+;   notes/promb-2026-09-25/smf_sysex_param_change.py.
 ; --------------------------------------------------------------------------
-sub_F71525:
+SmfEvent_SysEx:
 	calr	sub_F6FD7A	; F71525  calr 0xf6fd7a
 	ld	w, (4682:16)	; F71528  ld W,(0x124a)
 	cp	w, 1:i3	; F7152C  cp W,1
-	jr	z, sub_F71525_Skip	; F7152E  jr Z,0xf71536
+	jr	z, SmfEvent_SysEx_Skip	; F7152E  jr Z,0xf71536
 	cp	w, 253	; F71530  cp W,0xfd
-	jrl	nz, sub_F71525_Return	; F71533  jrl NZ,0xf71696
-sub_F71525_Skip:
+	jrl	nz, SmfEvent_SysEx_Return	; F71533  jrl NZ,0xf71696
+SmfEvent_SysEx_Skip:
 	m_bit 0, MD16, 0x124b	; F71536  bit 0,(0x124b)
-	jrl	nz, sub_F71525_Skip3	; F7153A  jrl NZ,0xf715ad
+	jrl	nz, SmfEvent_SysEx_Skip3	; F7153A  jrl NZ,0xf715ad
 	m_bit 0, MD16, 0x11b1	; F7153D  bit 0,(0x11b1)
-	jrl	nz, sub_F71525_Join2	; F71541  jrl NZ,0xf71693
+	jrl	nz, SmfEvent_SysEx_Join2	; F71541  jrl NZ,0xf71693
 	m_cp_mi16 MW16, 0x1198, 0x0005	; F71544  cp (0x1198),0x0005
-	jrl	nz, sub_F71525_Skip3	; F7154A  jrl NZ,0xf715ad
+	jrl	nz, SmfEvent_SysEx_Skip3	; F7154A  jrl NZ,0xf715ad
 	ld	hl, (4504:16)	; F7154D  ld HL,(0x1198)
 	pushw	hl	; F71551  push HL
 	calr	InputStream_GetByte	; F71552  calr 0xf7138f
 	popw	hl	; F71555  pop HL
 	dec	1, hl	; F71556  dec 1,HL
 	cp	a, 126	; F71558  cp A,0x7e
-	jrl	nz, sub_F71525_Loop	; F7155B  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F7155B  jrl NZ,0xf715a6
 	pushw	hl	; F7155E  push HL
 	calr	InputStream_GetByte	; F7155F  calr 0xf7138f
 	popw	hl	; F71562  pop HL
 	dec	1, hl	; F71563  dec 1,HL
 	cp	a, 127	; F71565  cp A,0x7f
-	jrl	nz, sub_F71525_Loop	; F71568  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F71568  jrl NZ,0xf715a6
 	pushw	hl	; F7156B  push HL
 	calr	InputStream_GetByte	; F7156C  calr 0xf7138f
 	popw	hl	; F7156F  pop HL
 	dec	1, hl	; F71570  dec 1,HL
 	cp	a, 9	; F71572  cp A,0x09
-	jrl	nz, sub_F71525_Loop	; F71575  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F71575  jrl NZ,0xf715a6
 	pushw	hl	; F71578  push HL
 	calr	InputStream_GetByte	; F71579  calr 0xf7138f
 	popw	hl	; F7157C  pop HL
 	dec	1, hl	; F7157D  dec 1,HL
 	cp	a, 1:i3	; F7157F  cp A,1
-	jrl	nz, sub_F71525_Skip2	; F71581  jrl NZ,0xf71594
+	jrl	nz, SmfEvent_SysEx_Skip2	; F71581  jrl NZ,0xf71594
 	m_or_mi8 MB16, 0x124b, 0x01	; F71584  or (0x124b),0x01
 	ld	(4665:16), 255	; F71589  ld (0x1239),0xff
 	calr	sub_F71417	; F7158E  calr 0xf71417
-	jrl	sub_F71525_Loop	; F71591  jrl T,0xf715a6
-sub_F71525_Skip2:
+	jrl	SmfEvent_SysEx_Loop	; F71591  jrl T,0xf715a6
+SmfEvent_SysEx_Skip2:
 	cp	a, 2:i3	; F71594  cp A,2
-	jrl	nz, sub_F71525_Loop	; F71596  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F71596  jrl NZ,0xf715a6
 	m_or_mi8 MB16, 0x124b, 0x01	; F71599  or (0x124b),0x01
 	ld	(4665:16), 0	; F7159E  ld (0x1239),0x00
 	calr	sub_F71417	; F715A3  calr 0xf71417
-sub_F71525_Loop:
+SmfEvent_SysEx_Loop:
 	ld	(4504:16), hl	; F715A6  ld (0x1198),HL
-	jrl	sub_F71525_Join2	; F715AA  jrl T,0xf71693
-sub_F71525_Skip3:
+	jrl	SmfEvent_SysEx_Join2	; F715AA  jrl T,0xf71693
+SmfEvent_SysEx_Skip3:
 	m_cp_mi16 MW16, 0x1198, 0x0010	; F715AD  cp (0x1198),0x0010
-	jrl	nz, sub_F71525_Join2	; F715B3  jrl NZ,0xf71693
+	jrl	nz, SmfEvent_SysEx_Join2	; F715B3  jrl NZ,0xf71693
 	ld	hl, (4504:16)	; F715B6  ld HL,(0x1198)
 	pushw	hl	; F715BA  push HL
 	calr	InputStream_GetByte	; F715BB  calr 0xf7138f
 	popw	hl	; F715BE  pop HL
 	dec	1, hl	; F715BF  dec 1,HL
 	cp	a, 80	; F715C1  cp A,0x50
-	jrl	nz, sub_F71525_Loop	; F715C4  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F715C4  jrl NZ,0xf715a6
 	pushw	hl	; F715C7  push HL
 	calr	InputStream_GetByte	; F715C8  calr 0xf7138f
 	popw	hl	; F715CB  pop HL
 	dec	1, hl	; F715CC  dec 1,HL
 	cp	a, 44	; F715CE  cp A,0x2c
-	jrl	nz, sub_F71525_Loop	; F715D1  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F715D1  jrl NZ,0xf715a6
 	pushw	hl	; F715D4  push HL
 	calr	InputStream_GetByte	; F715D5  calr 0xf7138f
 	popw	hl	; F715D8  pop HL
 	dec	1, hl	; F715D9  dec 1,HL
 	cp	a, 4:i3	; F715DB  cp A,4
-	jrl	nz, sub_F71525_Loop	; F715DD  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F715DD  jrl NZ,0xf715a6
 	pushw	hl	; F715E0  push HL
 	calr	InputStream_GetByte	; F715E1  calr 0xf7138f
 	popw	hl	; F715E4  pop HL
 	dec	1, hl	; F715E5  dec 1,HL
 	cp	a, 0:i3	; F715E7  cp A,0
-	jrl	nz, sub_F71525_Loop	; F715E9  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F715E9  jrl NZ,0xf715a6
 	pushw	hl	; F715EC  push HL
 	calr	InputStream_GetByte	; F715ED  calr 0xf7138f
 	popw	hl	; F715F0  pop HL
 	dec	1, hl	; F715F1  dec 1,HL
 	cp	a, 17	; F715F3  cp A,0x11
-	jrl	nz, sub_F71525_Loop	; F715F6  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F715F6  jrl NZ,0xf715a6
 	pushw	hl	; F715F9  push HL
 	calr	InputStream_GetByte	; F715FA  calr 0xf7138f
 	popw	hl	; F715FD  pop HL
 	dec	1, hl	; F715FE  dec 1,HL
 	cp	a, 0:i3	; F71600  cp A,0
-	jrl	nz, sub_F71525_Loop	; F71602  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F71602  jrl NZ,0xf715a6
 	pushw	hl	; F71605  push HL
 	calr	InputStream_GetByte	; F71606  calr 0xf7138f
 	popw	hl	; F71609  pop HL
 	dec	1, hl	; F7160A  dec 1,HL
 	ld	(4987:16), a	; F7160C  ld (0x137b),A
 	cp	a, 0:i3	; F71610  cp A,0
-	jr	z, sub_F71525_Skip4	; F71612  jr Z,0xf7161e
+	jr	z, SmfEvent_SysEx_Skip4	; F71612  jr Z,0xf7161e
 	cp	a, 1:i3	; F71614  cp A,1
-	jr	z, sub_F71525_Skip4	; F71616  jr Z,0xf7161e
+	jr	z, SmfEvent_SysEx_Skip4	; F71616  jr Z,0xf7161e
 	cp	a, 17	; F71618  cp A,0x11
-	jrl	nz, sub_F71525_Loop	; F7161B  jrl NZ,0xf715a6
-sub_F71525_Skip4:
+	jrl	nz, SmfEvent_SysEx_Loop	; F7161B  jrl NZ,0xf715a6
+SmfEvent_SysEx_Skip4:
 	pushw	hl	; F7161E  push HL
 	calr	InputStream_GetByte	; F7161F  calr 0xf7138f
 	popw	hl	; F71622  pop HL
 	dec	1, hl	; F71623  dec 1,HL
 	ld	(4988:16), a	; F71625  ld (0x137c),A
 	m_cp_mi8 MB16, 0x137b, 0x00	; F71629  cp (0x137b),0x00
-	jr	z, sub_F71525_Skip5	; F7162E  jr Z,0xf7163f
+	jr	z, SmfEvent_SysEx_Skip5	; F7162E  jr Z,0xf7163f
 	m_cp_mi8 MB16, 0x137b, 0x01	; F71630  cp (0x137b),0x01
-	jr	z, sub_F71525_Skip6	; F71635  jr Z,0xf7164d
+	jr	z, SmfEvent_SysEx_Skip6	; F71635  jr Z,0xf7164d
 	cp	a, 117	; F71637  cp A,0x75
-	jrl	ugt, sub_F71525_Loop	; F7163A  jrl UGT,0xf715a6
-	jr	sub_F71525_Join	; F7163D  jr T,0xf71652
-sub_F71525_Skip5:
+	jrl	ugt, SmfEvent_SysEx_Loop	; F7163A  jrl UGT,0xf715a6
+	jr	SmfEvent_SysEx_Join	; F7163D  jr T,0xf71652
+SmfEvent_SysEx_Skip5:
 	cp	a, 48	; F7163F  cp A,0x30
-	jrl	c, sub_F71525_Loop	; F71642  jrl C,0xf715a6
+	jrl	c, SmfEvent_SysEx_Loop	; F71642  jrl C,0xf715a6
 	cp	a, 49	; F71645  cp A,0x31
-	jrl	ugt, sub_F71525_Loop	; F71648  jrl UGT,0xf715a6
-	jr	sub_F71525_Join	; F7164B  jr T,0xf71652
-sub_F71525_Skip6:
+	jrl	ugt, SmfEvent_SysEx_Loop	; F71648  jrl UGT,0xf715a6
+	jr	SmfEvent_SysEx_Join	; F7164B  jr T,0xf71652
+SmfEvent_SysEx_Skip6:
 	cp	a, 4:i3	; F7164D  cp A,4
-	jrl	nz, sub_F71525_Loop	; F7164F  jrl NZ,0xf715a6
-sub_F71525_Join:
+	jrl	nz, SmfEvent_SysEx_Loop	; F7164F  jrl NZ,0xf715a6
+SmfEvent_SysEx_Join:
 	pushw	hl	; F71652  push HL
 	calr	InputStream_GetByte	; F71653  calr 0xf7138f
 	popw	hl	; F71656  pop HL
 	dec	1, hl	; F71657  dec 1,HL
 	cp	a, 0:i3	; F71659  cp A,0
-	jrl	nz, sub_F71525_Loop	; F7165B  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F7165B  jrl NZ,0xf715a6
 	pushw	hl	; F7165E  push HL
 	calr	InputStream_GetByte	; F7165F  calr 0xf7138f
 	popw	hl	; F71662  pop HL
 	dec	1, hl	; F71663  dec 1,HL
 	cp	a, 0:i3	; F71665  cp A,0
-	jrl	nz, sub_F71525_Loop	; F71667  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F71667  jrl NZ,0xf715a6
 	pushw	hl	; F7166A  push HL
 	calr	InputStream_GetByte	; F7166B  calr 0xf7138f
 	popw	hl	; F7166E  pop HL
 	dec	1, hl	; F7166F  dec 1,HL
 	cp	a, 1:i3	; F71671  cp A,1
-	jrl	nz, sub_F71525_Loop	; F71673  jrl NZ,0xf715a6
+	jrl	nz, SmfEvent_SysEx_Loop	; F71673  jrl NZ,0xf715a6
 	pushw	hl	; F71676  push HL
 	calr	InputStream_GetByte	; F71677  calr 0xf7138f
 	popw	hl	; F7167A  pop HL
@@ -168012,26 +168019,29 @@ sub_F71525_Join:
 	dec	1, hl	; F71686  dec 1,HL
 	ld	(4989:16), a	; F71688  ld (0x137d),A
 	ld	(4504:16), hl	; F7168C  ld (0x1198),HL
-	calr	sub_F71697	; F71690  calr 0xf71697
-sub_F71525_Join2:
+	calr	SmfSysEx_ApplyParamChange	; F71690  calr 0xf71697
+SmfEvent_SysEx_Join2:
 	calr	sub_F6FD91	; F71693  calr 0xf6fd91
-sub_F71525_Return:
+SmfEvent_SysEx_Return:
 	ret	; F71696  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71697
+; SmfSysEx_ApplyParamChange
 ; Called from: in-module: 0xF71690
 ; Touches: (0x137B) (0x137F) (0x1380)
-; Calls:   sub_F716CD sub_F716E5 sub_F71730
+; Calls:   SmfSysEx_JoinNibbles SmfSysEx_WriteAddr11 SmfSysEx_WriteAddr00
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71697 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ⚠ ANSWERED 2026-09-25 (SmfSysEx_ApplyParamChange, was a name that was the
+;   address): joins the nibbles (SmfSysEx_JoinNibbles) and stores the value by
+;   address-hi (0x137B): 0x00 -> SmfSysEx_WriteAddr00, 0x01 -> (0x1380), else
+;   (0x11) -> SmfSysEx_WriteAddr11.
+;   notes/promb-2026-09-25/smf_sysex_param_change.py.
 ; --------------------------------------------------------------------------
-sub_F71697:
+SmfSysEx_ApplyParamChange:
 	push	xwa	; F71697  push XWA
 	push	xhl	; F71698  push XHL
 	push	xbc	; F71699  push XBC
@@ -168041,21 +168051,21 @@ sub_F71697:
 	push	xiz	; F7169D  push XIZ
 	ld	a, (4987:16)	; F7169E  ld A,(0x137b)
 	cp	a, 0:i3	; F716A2  cp A,0
-	jr	z, sub_F71697_Skip	; F716A4  jr Z,0xf716b2
+	jr	z, SmfSysEx_ApplyParamChange_Skip	; F716A4  jr Z,0xf716b2
 	cp	a, 1:i3	; F716A6  cp A,1
-	jr	z, sub_F71697_Skip2	; F716A8  jr Z,0xf716ba
-	calr	sub_F716CD	; F716AA  calr 0xf716cd
-	calr	sub_F716E5	; F716AD  calr 0xf716e5
-	jr	sub_F71697_Epilogue	; F716B0  jr T,0xf716c5
-sub_F71697_Skip:
-	calr	sub_F716CD	; F716B2  calr 0xf716cd
-	calr	sub_F71730	; F716B5  calr 0xf71730
-	jr	sub_F71697_Epilogue	; F716B8  jr T,0xf716c5
-sub_F71697_Skip2:
-	calr	sub_F716CD	; F716BA  calr 0xf716cd
+	jr	z, SmfSysEx_ApplyParamChange_Skip2	; F716A8  jr Z,0xf716ba
+	calr	SmfSysEx_JoinNibbles	; F716AA  calr 0xf716cd
+	calr	SmfSysEx_WriteAddr11	; F716AD  calr 0xf716e5
+	jr	SmfSysEx_ApplyParamChange_Epilogue	; F716B0  jr T,0xf716c5
+SmfSysEx_ApplyParamChange_Skip:
+	calr	SmfSysEx_JoinNibbles	; F716B2  calr 0xf716cd
+	calr	SmfSysEx_WriteAddr00	; F716B5  calr 0xf71730
+	jr	SmfSysEx_ApplyParamChange_Epilogue	; F716B8  jr T,0xf716c5
+SmfSysEx_ApplyParamChange_Skip2:
+	calr	SmfSysEx_JoinNibbles	; F716BA  calr 0xf716cd
 	ld	a, (4991:16)	; F716BD  ld A,(0x137f)
 	ld	(4992:16), a	; F716C1  ld (0x1380),A
-sub_F71697_Epilogue:
+SmfSysEx_ApplyParamChange_Epilogue:
 	pop	xiz	; F716C5  pop XIZ
 	pop	xiy	; F716C6  pop XIY
 	pop	xix	; F716C7  pop XIX
@@ -168066,7 +168076,7 @@ sub_F71697_Epilogue:
 	ret	; F716CC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F716CD
+; SmfSysEx_JoinNibbles
 ; Called from: in-module: 0xF716AA 0xF716B2 0xF716BA
 ; Touches: (0x137D) (0x137E) (0x137F)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -168074,10 +168084,12 @@ sub_F71697_Epilogue:
 ;                    0xF716CD is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ⚠ ANSWERED 2026-09-25 (SmfSysEx_JoinNibbles, was a name that was the
+;   address): (0x137F) = (0x137E & 0x0F) << 4 | (0x137D & 0x0F), the SysEx
+;   value from its two data nibbles.
+;   notes/promb-2026-09-25/smf_sysex_param_change.py.
 ; --------------------------------------------------------------------------
-sub_F716CD:
+SmfSysEx_JoinNibbles:
 	ld	a, (4989:16)	; F716CD  ld A,(0x137d)
 	and	a, 15	; F716D1  and A,0x0f
 	ld	w, (4990:16)	; F716D4  ld W,(0x137e)
@@ -168088,7 +168100,7 @@ sub_F716CD:
 	ret	; F716E4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F716E5
+; SmfSysEx_WriteAddr11
 ; Called from: in-module: 0xF716AD
 ; Touches: (0x137C) (0x137F)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -168096,41 +168108,47 @@ sub_F716CD:
 ;                    0xF716E5 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ⚠ ANSWERED 2026-09-25 (SmfSysEx_WriteAddr11, was a name that was the
+;   address): writes the value to the RAM byte
+;   SmfSysEx_Addr11_Targets[(0x137C)] names: lo 1 its low nibble, lo 2 its
+;   high nibble (from the value's low nibble), any other lo the whole byte.  ⚠
+;   `cp XDE,0xffffffff` (0xF716F8) runs before `ld XDE,(XDE)` (0xF71700), so
+;   it tests the entry's ADDRESS and never matches: as the bytes stand, a
+;   0xFFFFFFFF entry is written through.
+;   notes/promb-2026-09-25/smf_sysex_param_change.py.
 ; --------------------------------------------------------------------------
-sub_F716E5:
+SmfSysEx_WriteAddr11:
 	xor	hl, hl	; F716E5  xor HL,HL
 	ld	l, (4988:16)	; F716E7  ld L,(0x137c)
 	sla	hl, 2	; F716EB  sla 0x02,HL
-	ld	xde, Data_F71767	; F716EE  ld XDE,0x00f71767
+	ld	xde, SmfSysEx_Addr11_Targets	; F716EE  ld XDE,0x00f71767
 	mx_lda32 MXD, ra_DE, ra_HL, 2	; F716F3  lda XDE,XDE+HL
 	cp	xde, 4294967295	; F716F8  cp XDE,0xffffffff
-	jr	z, sub_F716E5_Return	; F716FE  jr Z,0xf7172f
+	jr	z, SmfSysEx_WriteAddr11_Return	; F716FE  jr Z,0xf7172f
 	ld	xde, (xde)	; F71700  ld XDE,(XDE)
 	ld	a, (4991:16)	; F71702  ld A,(0x137f)
 	m_cp_mi8 MB16, 0x137c, 0x01	; F71706  cp (0x137c),0x01
-	jr	z, sub_F716E5_Skip	; F7170B  jr Z,0xf71723
+	jr	z, SmfSysEx_WriteAddr11_Skip	; F7170B  jr Z,0xf71723
 	m_cp_mi8 MB16, 0x137c, 0x02	; F7170D  cp (0x137c),0x02
-	jr	nz, sub_F716E5_Join	; F71712  jr NZ,0xf7172d
+	jr	nz, SmfSysEx_WriteAddr11_Join	; F71712  jr NZ,0xf7172d
 	ld	w, (xde)	; F71714  ld W,(XDE)
 	and	w, 15	; F71716  and W,0x0f
 	sla	a, 4	; F71719  sla 0x04,A
 	and	a, 240	; F7171C  and A,0xf0
 	or	a, w	; F7171F  or A,W
-	jr	sub_F716E5_Join	; F71721  jr T,0xf7172d
-sub_F716E5_Skip:
+	jr	SmfSysEx_WriteAddr11_Join	; F71721  jr T,0xf7172d
+SmfSysEx_WriteAddr11_Skip:
 	ld	w, (xde)	; F71723  ld W,(XDE)
 	and	w, 240	; F71725  and W,0xf0
 	and	a, 15	; F71728  and A,0x0f
 	or	a, w	; F7172B  or A,W
-sub_F716E5_Join:
+SmfSysEx_WriteAddr11_Join:
 	ld	(xde), a	; F7172D  ld (XDE),A
-sub_F716E5_Return:
+SmfSysEx_WriteAddr11_Return:
 	ret	; F7172F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71730
+; SmfSysEx_WriteAddr00
 ; Called from: in-module: 0xF716B5
 ; Touches: (0x137C) (0x137F)  |  0x603EE4
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -168138,12 +168156,14 @@ sub_F716E5_Return:
 ;                    0xF71730 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ⚠ ANSWERED 2026-09-25 (SmfSysEx_WriteAddr00, was a name that was the
+;   address): address 0x00:0x30 writes the value's low nibble into the low
+;   nibble of the byte at 0x603EE4, 0x00:0x31 into its high nibble.
+;   notes/promb-2026-09-25/smf_sysex_param_change.py.
 ; --------------------------------------------------------------------------
-sub_F71730:
+SmfSysEx_WriteAddr00:
 	m_cp_mi8 MB16, 0x137c, 0x30	; F71730  cp (0x137c),0x30
-	jr	z, sub_F71730_Skip	; F71735  jr Z,0xf71751
+	jr	z, SmfSysEx_WriteAddr00_Skip	; F71735  jr Z,0xf71751
 	ld	xde, 6307556	; F71737  ld XDE,0x00603ee4
 	ld	a, (xde)	; F7173C  ld A,(XDE)
 	and	a, 15	; F7173E  and A,0x0f
@@ -168152,8 +168172,8 @@ sub_F71730:
 	and	w, 240	; F71748  and W,0xf0
 	or	a, w	; F7174B  or A,W
 	ld	(xde), a	; F7174D  ld (XDE),A
-	jr	sub_F71730_Return	; F7174F  jr T,0xf71766
-sub_F71730_Skip:
+	jr	SmfSysEx_WriteAddr00_Return	; F7174F  jr T,0xf71766
+SmfSysEx_WriteAddr00_Skip:
 	ld	xde, 6307556	; F71751  ld XDE,0x00603ee4
 	ld	a, (xde)	; F71756  ld A,(XDE)
 	and	a, 240	; F71758  and A,0xf0
@@ -168161,11 +168181,11 @@ sub_F71730_Skip:
 	and	w, 15	; F7175F  and W,0x0f
 	or	a, w	; F71762  or A,W
 	ld	(xde), a	; F71764  ld (XDE),A
-sub_F71730_Return:
+SmfSysEx_WriteAddr00_Return:
 	ret	; F71766  ret
 
 ; --------------------------------------------------------------------------
-; Data_F71767 -- 472 bytes this block could not split.  No content rule
+; 0xF71767 -- 472 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -168184,39 +168204,138 @@ sub_F71730_Return:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; ⚠ ANSWERED 2026-09-25 (the "nothing but its bytes" verdict that stood here): the
+;   header below says what it is; `SmfSysEx_Addr11_Targets` is retired.
 ; --------------------------------------------------------------------------
-Data_F71767:
-	.byte	0x34, 0x36, 0x60, 0x00, 0xB7, 0x38, 0x60, 0x00, 0xB7, 0x38, 0x60, 0x00, 0xFF, 0xFF, 0xFF, 0xFF	; F71767  [0..15]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F71777  [16..31]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F71787  [32..47]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F71797  [48..63]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F717A7  [64..79]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F717B7  [80..95]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F717C7  [96..111]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F717D7  [112..127]
-	.byte	0x42, 0x36, 0x60, 0x00, 0x43, 0x36, 0x60, 0x00, 0x44, 0x36, 0x60, 0x00, 0x45, 0x36, 0x60, 0x00	; F717E7  [128..143]
-	.byte	0x46, 0x36, 0x60, 0x00, 0x47, 0x36, 0x60, 0x00, 0x48, 0x36, 0x60, 0x00, 0x49, 0x36, 0x60, 0x00	; F717F7  [144..159]
-	.byte	0x4A, 0x36, 0x60, 0x00, 0x4B, 0x36, 0x60, 0x00, 0x4C, 0x36, 0x60, 0x00, 0x4D, 0x36, 0x60, 0x00	; F71807  [160..175]
-	.byte	0x4E, 0x36, 0x60, 0x00, 0x4F, 0x36, 0x60, 0x00, 0x50, 0x36, 0x60, 0x00, 0x51, 0x36, 0x60, 0x00	; F71817  [176..191]
-	.byte	0x52, 0x36, 0x60, 0x00, 0x53, 0x36, 0x60, 0x00, 0x54, 0x36, 0x60, 0x00, 0x55, 0x36, 0x60, 0x00	; F71827  [192..207]
-	.byte	0x56, 0x36, 0x60, 0x00, 0x57, 0x36, 0x60, 0x00, 0x58, 0x36, 0x60, 0x00, 0xFF, 0xFF, 0xFF, 0xFF	; F71837  [208..223]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F71847  [224..239]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F71857  [240..255]
-	.byte	0x62, 0x36, 0x60, 0x00, 0x63, 0x36, 0x60, 0x00, 0x64, 0x36, 0x60, 0x00, 0x65, 0x36, 0x60, 0x00	; F71867  [256..271]
-	.byte	0x66, 0x36, 0x60, 0x00, 0x67, 0x36, 0x60, 0x00, 0x68, 0x36, 0x60, 0x00, 0x69, 0x36, 0x60, 0x00	; F71877  [272..287]
-	.byte	0x6A, 0x36, 0x60, 0x00, 0x6B, 0x36, 0x60, 0x00, 0x6C, 0x36, 0x60, 0x00, 0x6D, 0x36, 0x60, 0x00	; F71887  [288..303]
-	.byte	0x6E, 0x36, 0x60, 0x00, 0x6F, 0x36, 0x60, 0x00, 0x70, 0x36, 0x60, 0x00, 0x71, 0x36, 0x60, 0x00	; F71897  [304..319]
-	.byte	0x72, 0x36, 0x60, 0x00, 0x73, 0x36, 0x60, 0x00, 0x74, 0x36, 0x60, 0x00, 0x75, 0x36, 0x60, 0x00	; F718A7  [320..335]
-	.byte	0x76, 0x36, 0x60, 0x00, 0x77, 0x36, 0x60, 0x00, 0x78, 0x36, 0x60, 0x00, 0xFF, 0xFF, 0xFF, 0xFF	; F718B7  [336..351]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F718C7  [352..367]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F718D7  [368..383]
-	.byte	0x82, 0x36, 0x60, 0x00, 0x83, 0x36, 0x60, 0x00, 0x84, 0x36, 0x60, 0x00, 0x85, 0x36, 0x60, 0x00	; F718E7  [384..399]
-	.byte	0x86, 0x36, 0x60, 0x00, 0x87, 0x36, 0x60, 0x00, 0x88, 0x36, 0x60, 0x00, 0x89, 0x36, 0x60, 0x00	; F718F7  [400..415]
-	.byte	0x8A, 0x36, 0x60, 0x00, 0x8B, 0x36, 0x60, 0x00, 0x8C, 0x36, 0x60, 0x00, 0x8D, 0x36, 0x60, 0x00	; F71907  [416..431]
-	.byte	0x8E, 0x36, 0x60, 0x00, 0x8F, 0x36, 0x60, 0x00, 0x90, 0x36, 0x60, 0x00, 0x91, 0x36, 0x60, 0x00	; F71917  [432..447]
-	.byte	0x92, 0x36, 0x60, 0x00, 0x93, 0x36, 0x60, 0x00, 0x94, 0x36, 0x60, 0x00, 0x95, 0x36, 0x60, 0x00	; F71927  [448..463]
-	.byte	0x96, 0x36, 0x60, 0x00, 0x98, 0x36, 0x60, 0x00	; F71937  [464..471]
+; --------------------------------------------------------------------------
+; SmfSysEx_Addr11_Targets -- 118 LE32 RAM addresses, one per SysEx address
+;   `11 lo` (lo 0x00-0x75): the byte that the SMF SysEx message
+;   `50 2C 04 00 11 00 11 lo 00 00 01 nh nl` sets (SmfEvent_SysEx parses it,
+;   SmfSysEx_WriteAddr11 writes it: `ld XDE,this` at 0xF716EE, then
+;   `lda XDE,XDE+4*lo`).  Entry count: SmfEvent_SysEx drops lo > 0x75
+;   (`cp A,0x75 / jrl UGT` at 0xF71637), so 118 entries = 472 bytes, the whole
+;   object.  0xFFFFFFFF = no target (lo 0x03-0x1F, 0x37-0x3F, 0x57-0x5F);
+;   lo 1 and lo 2 both name 0x6038B7, whose low / high nibble they write.
+; --------------------------------------------------------------------------
+SmfSysEx_Addr11_Targets:
+	.long	0x00603634	; F71767  [0x00]
+	.long	0x006038B7	; F7176B  [0x01]
+	.long	0x006038B7	; F7176F  [0x02]
+	.long	0xFFFFFFFF	; F71773  [0x03]  no target
+	.long	0xFFFFFFFF	; F71777  [0x04]  no target
+	.long	0xFFFFFFFF	; F7177B  [0x05]  no target
+	.long	0xFFFFFFFF	; F7177F  [0x06]  no target
+	.long	0xFFFFFFFF	; F71783  [0x07]  no target
+	.long	0xFFFFFFFF	; F71787  [0x08]  no target
+	.long	0xFFFFFFFF	; F7178B  [0x09]  no target
+	.long	0xFFFFFFFF	; F7178F  [0x0A]  no target
+	.long	0xFFFFFFFF	; F71793  [0x0B]  no target
+	.long	0xFFFFFFFF	; F71797  [0x0C]  no target
+	.long	0xFFFFFFFF	; F7179B  [0x0D]  no target
+	.long	0xFFFFFFFF	; F7179F  [0x0E]  no target
+	.long	0xFFFFFFFF	; F717A3  [0x0F]  no target
+	.long	0xFFFFFFFF	; F717A7  [0x10]  no target
+	.long	0xFFFFFFFF	; F717AB  [0x11]  no target
+	.long	0xFFFFFFFF	; F717AF  [0x12]  no target
+	.long	0xFFFFFFFF	; F717B3  [0x13]  no target
+	.long	0xFFFFFFFF	; F717B7  [0x14]  no target
+	.long	0xFFFFFFFF	; F717BB  [0x15]  no target
+	.long	0xFFFFFFFF	; F717BF  [0x16]  no target
+	.long	0xFFFFFFFF	; F717C3  [0x17]  no target
+	.long	0xFFFFFFFF	; F717C7  [0x18]  no target
+	.long	0xFFFFFFFF	; F717CB  [0x19]  no target
+	.long	0xFFFFFFFF	; F717CF  [0x1A]  no target
+	.long	0xFFFFFFFF	; F717D3  [0x1B]  no target
+	.long	0xFFFFFFFF	; F717D7  [0x1C]  no target
+	.long	0xFFFFFFFF	; F717DB  [0x1D]  no target
+	.long	0xFFFFFFFF	; F717DF  [0x1E]  no target
+	.long	0xFFFFFFFF	; F717E3  [0x1F]  no target
+	.long	0x00603642	; F717E7  [0x20]
+	.long	0x00603643	; F717EB  [0x21]
+	.long	0x00603644	; F717EF  [0x22]
+	.long	0x00603645	; F717F3  [0x23]
+	.long	0x00603646	; F717F7  [0x24]
+	.long	0x00603647	; F717FB  [0x25]
+	.long	0x00603648	; F717FF  [0x26]
+	.long	0x00603649	; F71803  [0x27]
+	.long	0x0060364A	; F71807  [0x28]
+	.long	0x0060364B	; F7180B  [0x29]
+	.long	0x0060364C	; F7180F  [0x2A]
+	.long	0x0060364D	; F71813  [0x2B]
+	.long	0x0060364E	; F71817  [0x2C]
+	.long	0x0060364F	; F7181B  [0x2D]
+	.long	0x00603650	; F7181F  [0x2E]
+	.long	0x00603651	; F71823  [0x2F]
+	.long	0x00603652	; F71827  [0x30]
+	.long	0x00603653	; F7182B  [0x31]
+	.long	0x00603654	; F7182F  [0x32]
+	.long	0x00603655	; F71833  [0x33]
+	.long	0x00603656	; F71837  [0x34]
+	.long	0x00603657	; F7183B  [0x35]
+	.long	0x00603658	; F7183F  [0x36]
+	.long	0xFFFFFFFF	; F71843  [0x37]  no target
+	.long	0xFFFFFFFF	; F71847  [0x38]  no target
+	.long	0xFFFFFFFF	; F7184B  [0x39]  no target
+	.long	0xFFFFFFFF	; F7184F  [0x3A]  no target
+	.long	0xFFFFFFFF	; F71853  [0x3B]  no target
+	.long	0xFFFFFFFF	; F71857  [0x3C]  no target
+	.long	0xFFFFFFFF	; F7185B  [0x3D]  no target
+	.long	0xFFFFFFFF	; F7185F  [0x3E]  no target
+	.long	0xFFFFFFFF	; F71863  [0x3F]  no target
+	.long	0x00603662	; F71867  [0x40]
+	.long	0x00603663	; F7186B  [0x41]
+	.long	0x00603664	; F7186F  [0x42]
+	.long	0x00603665	; F71873  [0x43]
+	.long	0x00603666	; F71877  [0x44]
+	.long	0x00603667	; F7187B  [0x45]
+	.long	0x00603668	; F7187F  [0x46]
+	.long	0x00603669	; F71883  [0x47]
+	.long	0x0060366A	; F71887  [0x48]
+	.long	0x0060366B	; F7188B  [0x49]
+	.long	0x0060366C	; F7188F  [0x4A]
+	.long	0x0060366D	; F71893  [0x4B]
+	.long	0x0060366E	; F71897  [0x4C]
+	.long	0x0060366F	; F7189B  [0x4D]
+	.long	0x00603670	; F7189F  [0x4E]
+	.long	0x00603671	; F718A3  [0x4F]
+	.long	0x00603672	; F718A7  [0x50]
+	.long	0x00603673	; F718AB  [0x51]
+	.long	0x00603674	; F718AF  [0x52]
+	.long	0x00603675	; F718B3  [0x53]
+	.long	0x00603676	; F718B7  [0x54]
+	.long	0x00603677	; F718BB  [0x55]
+	.long	0x00603678	; F718BF  [0x56]
+	.long	0xFFFFFFFF	; F718C3  [0x57]  no target
+	.long	0xFFFFFFFF	; F718C7  [0x58]  no target
+	.long	0xFFFFFFFF	; F718CB  [0x59]  no target
+	.long	0xFFFFFFFF	; F718CF  [0x5A]  no target
+	.long	0xFFFFFFFF	; F718D3  [0x5B]  no target
+	.long	0xFFFFFFFF	; F718D7  [0x5C]  no target
+	.long	0xFFFFFFFF	; F718DB  [0x5D]  no target
+	.long	0xFFFFFFFF	; F718DF  [0x5E]  no target
+	.long	0xFFFFFFFF	; F718E3  [0x5F]  no target
+	.long	0x00603682	; F718E7  [0x60]
+	.long	0x00603683	; F718EB  [0x61]
+	.long	0x00603684	; F718EF  [0x62]
+	.long	0x00603685	; F718F3  [0x63]
+	.long	0x00603686	; F718F7  [0x64]
+	.long	0x00603687	; F718FB  [0x65]
+	.long	0x00603688	; F718FF  [0x66]
+	.long	0x00603689	; F71903  [0x67]
+	.long	0x0060368A	; F71907  [0x68]
+	.long	0x0060368B	; F7190B  [0x69]
+	.long	0x0060368C	; F7190F  [0x6A]
+	.long	0x0060368D	; F71913  [0x6B]
+	.long	0x0060368E	; F71917  [0x6C]
+	.long	0x0060368F	; F7191B  [0x6D]
+	.long	0x00603690	; F7191F  [0x6E]
+	.long	0x00603691	; F71923  [0x6F]
+	.long	0x00603692	; F71927  [0x70]
+	.long	0x00603693	; F7192B  [0x71]
+	.long	0x00603694	; F7192F  [0x72]
+	.long	0x00603695	; F71933  [0x73]
+	.long	0x00603696	; F71937  [0x74]
+	.long	0x00603698	; F7193B  [0x75]
 
 
 ; --------------------------------------------------------------------------
@@ -168587,7 +168706,7 @@ Data_F71BE6:
 ; Called from: in-module: 0xF71BB5
 ; Touches: (0x1010) (0x10CB) (0x11B1) (0x11B2) (0x1238) (0x124A) (0x2880)
 ; Calls:   InputStream_GetByte sub_F71369 sub_F6FE1B sub_F728FE sub_F710E7 sub_F712B6
-;          sub_F6FB51 sub_F728A3 sub_F71525 sub_F71D71 sub_F6FEA1
+;          sub_F6FB51 sub_F728A3 SmfEvent_SysEx sub_F71D71 sub_F6FEA1
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71BEA is an instruction boundary of this
@@ -168697,7 +168816,7 @@ sub_F71BEA_Skip9:
 	cp	a, 240	; F71CEC  cp A,0xf0
 	jr	nz, sub_F71BEA_Skip12	; F71CEF  jr NZ,0xf71d0b
 sub_F71BEA_Skip10:
-	calr	sub_F71525	; F71CF1  calr 0xf71525
+	calr	SmfEvent_SysEx	; F71CF1  calr 0xf71525
 	ld	w, (4682:16)	; F71CF4  ld W,(0x124a)
 	cp	w, 1:i3	; F71CF8  cp W,1
 	jr	z, sub_F71BEA_Skip11	; F71CFA  jr Z,0xf71d08
