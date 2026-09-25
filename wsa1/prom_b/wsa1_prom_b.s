@@ -26882,7 +26882,6 @@ sub_F0EA9F_Join3:
 	sub	xbc, xbc	; F0EB32  sub XBC,XBC
 	inc	2, xbc	; F0EB34  inc 2,XBC
 	add	(xiz+8), xbc	; F0EB36  add (XIZ+0x08),XBC
-sub_F0EA9F_Arm3:
 	ld	xwa, (xiz+8)	; F0EB39  ld XWA,(XIZ+0x08)
 	m_ld_m16m MBI+r0, 0, 0x28d0	; F0EB3C  ld (0x28d0),(XWA)
 	m_ld_m16m MBD+r0, 0x01, 0x28d6	; F0EB40  ld (0x28d6),(XWA+0x01)
@@ -26896,7 +26895,6 @@ sub_F0EA9F_Skip6:
 	push	xhl	; F0EB54  push XHL
 	push	xix	; F0EB55  push XIX
 	push	xiz	; F0EB56  push XIZ
-sub_F0EA9F_Arm:
 	ld	wa, (10452:16)	; F0EB57  ld WA,(0x28d4)
 	ld	de, (10454:16)	; F0EB5B  ld DE,(0x28d6)
 	extz	de	; F0EB5F  extz DE
@@ -26915,7 +26913,6 @@ sub_F0EA9F_Arm:
 	ldw	hl, 3	; F0EB7E  ld HL,0x0003
 	sub	hl, bc	; F0EB81  sub HL,BC
 	ldw	bc, 10273	; F0EB83  ld BC,0x2821
-sub_F0EA9F_Arm2:
 	add	bc, hl	; F0EB86  add BC,HL
 	extz	xbc	; F0EB88  extz XBC
 	ld	(xiz-4), xbc	; F0EB8A  ld (XIZ+0xfc),XBC
@@ -27141,12 +27138,38 @@ sub_F0EC4A_Join5:
 	unlk XIZ	; F0ED4D  unlk XIZ
 	ret	; F0ED4F  ret
 
+; ==========================================================================
+; 0xF0ED50-0xF0EFFF -- AN OLDER BUILD'S DISPLAY-LIST DATA, LEFT IN PLACE
+;   The four objects below are the display-list interpreter's data block as
+;   an EARLIER BUILD placed it, 0x23001 bytes below this build's live copy:
+;     0xF0ED50  39 words  = DisplayList_HandlerTable[12..35] and
+;                           DisplayListB_HandlerTable[0..14] (live 0xF31D51),
+;                           each the live entry - 0x23000 (34) or - 0x23001 (5:
+;                           the live targets 0xF31C56 and up)
+;     0xF0EDEC  128 bytes = ValueGlyph_Quantiser (0xF31DED), byte for byte
+;     0xF0EE6C  29 words  = ValueGlyph_Table (0xF31E6D) - 0x23001, word for word
+;     0xF0EEE0  288 bytes = ValueGlyph_Bitmaps glyphs 0-3 (0xF31EE1), byte for
+;                           byte; the old glyph 4 would begin at 0xF0F000
+;   The stretch runs from the blink engine's last `ret` (0xF0ED4F; the old
+;   A table's first 12 words would have been 0xF0ED20-0xF0ED4F) to the 4 KB
+;   boundary 0xF0F000, where this build's bytes resume.  In this build 10 of
+;   the 16 distinct old handler addresses are not instruction starts --
+;   0xF0EA3A is inside Blink_Command_Table -- so no working dispatcher can use
+;   the table, and nothing in prom_a or prom_b names any of the four addresses
+;   (32-bit or 24-bit).  The table entries are therefore spelled as what they
+;   are, `<live handler> - 0x23000`, not as labels of the code that happens to
+;   sit at those addresses now.  The reading that the image was built over an
+;   older one, and that this unused stretch kept the old bytes, is the natural
+;   one; what the checks prove is the correspondence.
+;   python3 notes/promb-2026-09-25/stale_dl_tables_f0ed50.py checks every
+;   number here.
+; ==========================================================================
 ; --------------------------------------------------------------------------
-; PtrTable_F0ED50 -- 39 32-bit words, every one an address in
+; OldBuild_DLHandlerTables_Tail -- 39 32-bit words, every one an address in
 ;                    0x00F00000-0x00F7FFFF, i.e. inside this image.  16
 ;                    distinct values.  notes/prom_b_f0ea9f_layout.py classes
 ;                    it UNKNOWN.
-; Why UNKNOWN: no instruction in prom_a or prom_b spells this address as a
+; Why UNKNOWN to that tool: no instruction in prom_a or prom_b spells this address as a
 ;              32-bit word in a decodable operand, so nothing here says how
 ;              it is indexed; the entries do NOT seed the code walk
 ; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
@@ -27161,52 +27184,54 @@ sub_F0EC4A_Join5:
 ;           notes/prom_b_f0ea9f_layout.py --null-ptr`), and the STRIDED rule
 ;           fires zero times over the 33 proven dispatch tables of this
 ;           image (`--null-stride`).
-; Unknown: what indexes it, and what the entries mean.
+; ⚠ ANSWERED 2026-09-25: nothing in this build indexes it, and each entry is
+;   the address an OLDER BUILD gave one display-list handler -- see the
+;   banner above.  Spelled `<live handler> - 0x2300N` below.
 ; --------------------------------------------------------------------------
-PtrTable_F0ED50:
-	.long	0x00F0EAEB	; F0ED50  [0] -> 0xF0EAEB
-	.long	0x00F0EAEB	; F0ED54  [1] -> 0xF0EAEB
-	.long	sub_F0EA9F	; F0ED58  [2] -> sub_F0EA9F
-	.long	0x00F0EAEB	; F0ED5C  [3] -> 0xF0EAEB
-	.long	0x00F0EAEB	; F0ED60  [4] -> 0xF0EAEB
-	.long	Blink_CmdArm_SetState_DashTest	; F0ED64  [5] -> 0xF0EA75
-	.long	Blink_CmdArm_SetState_DashTest	; F0ED68  [6] -> 0xF0EA75
-	.long	Blink_CmdArm_SetState_DashTest	; F0ED6C  [7] -> 0xF0EA75
-	.long	0x00F0EAEB	; F0ED70  [8] -> 0xF0EAEB
-	.long	Blink_CmdArm_SetState_DashTest	; F0ED74  [9] -> 0xF0EA75
-	.long	Blink_Command_Table + 0x26	; F0ED78  [10] -> 0xF0EA3A
-	.long	Blink_CmdArm_SetState_Then_F0EC4A_Skip	; F0ED7C  [11] -> 0xF0EA52
-	.long	Blink_Command_Table + 0x26	; F0ED80  [12] -> 0xF0EA3A
-	.long	Blink_Command_Table + 0x26	; F0ED84  [13] -> 0xF0EA3A
-	.long	Blink_Command_Table + 0x26	; F0ED88  [14] -> 0xF0EA3A
-	.long	Blink_CmdArm_SetState_DashTest	; F0ED8C  [15] -> 0xF0EA75
-	.long	Blink_CmdArm_SetState_Then_F0EC4A_Skip	; F0ED90  [16] -> 0xF0EA52
-	.long	Blink_Command_Table + 0x26	; F0ED94  [17] -> 0xF0EA3A
-	.long	Blink_Command_Table + 0x26	; F0ED98  [18] -> 0xF0EA3A
-	.long	Blink_Command_Table + 0x26	; F0ED9C  [19] -> 0xF0EA3A
-	.long	Blink_Command_Table + 0x26	; F0EDA0  [20] -> 0xF0EA3A
-	.long	Blink_Command_Table + 0x26	; F0EDA4  [21] -> 0xF0EA3A
-	.long	Blink_CmdArm_SetState_DashTest	; F0EDA8  [22] -> 0xF0EA75
-	.long	0x00F0EACE	; F0EDAC  [23] -> 0xF0EACE
-	.long	0x00F0EBA1	; F0EDB0  [24] -> 0xF0EBA1
-	.long	0x00F0EC9D	; F0EDB4  [25] -> 0xF0EC9D
-	.long	0x00F0EB21	; F0EDB8  [26] -> 0xF0EB21
-	.long	sub_F0EA9F_Arm	; F0EDBC  [27] -> 0xF0EB57
-	.long	sub_F0EA9F_Arm2	; F0EDC0  [28] -> 0xF0EB86
-	.long	0x00F0EBD7	; F0EDC4  [29] -> 0xF0EBD7
-	.long	0x00F0EBA1	; F0EDC8  [30] -> 0xF0EBA1
-	.long	sub_F0EA9F_Arm3	; F0EDCC  [31] -> 0xF0EB39
-	.long	sub_F0EA9F_Arm	; F0EDD0  [32] -> 0xF0EB57
-	.long	0x00F0EC14	; F0EDD4  [33] -> 0xF0EC14
-	.long	0x00F0EC14	; F0EDD8  [34] -> 0xF0EC14
-	.long	0x00F0EC55	; F0EDDC  [35] -> 0xF0EC55
-	.long	0x00F0ED1F	; F0EDE0  [36] -> 0xF0ED1F
-	.long	0x00F0ED1F	; F0EDE4  [37] -> 0xF0ED1F
-	.long	0x00F0ED1F	; F0EDE8  [38] -> 0xF0ED1F
+OldBuild_DLHandlerTables_Tail:
+	.long	DLHandler_Ignore - 0x23000	; F0ED50  [0] -> 0xF0EAEB
+	.long	DLHandler_Ignore - 0x23000	; F0ED54  [1] -> 0xF0EAEB
+	.long	DLHandler_IY_BC_HL - 0x23000	; F0ED58  [2] -> sub_F0EA9F
+	.long	DLHandler_Ignore - 0x23000	; F0ED5C  [3] -> 0xF0EAEB
+	.long	DLHandler_Ignore - 0x23000	; F0ED60  [4] -> 0xF0EAEB
+	.long	DLHandler_4Words - 0x23000	; F0ED64  [5] -> 0xF0EA75
+	.long	DLHandler_4Words - 0x23000	; F0ED68  [6] -> 0xF0EA75
+	.long	DLHandler_4Words - 0x23000	; F0ED6C  [7] -> 0xF0EA75
+	.long	DLHandler_Ignore - 0x23000	; F0ED70  [8] -> 0xF0EAEB
+	.long	DLHandler_4Words - 0x23000	; F0ED74  [9] -> 0xF0EA75
+	.long	DLHandler_IX_Text - 0x23000	; F0ED78  [10] -> 0xF0EA3A
+	.long	DLHandler_2Words_Text - 0x23000	; F0ED7C  [11] -> 0xF0EA52
+	.long	DLHandler_IX_Text - 0x23000	; F0ED80  [12] -> 0xF0EA3A
+	.long	DLHandler_IX_Text - 0x23000	; F0ED84  [13] -> 0xF0EA3A
+	.long	DLHandler_IX_Text - 0x23000	; F0ED88  [14] -> 0xF0EA3A
+	.long	DLHandler_4Words - 0x23000	; F0ED8C  [15] -> 0xF0EA75
+	.long	DLHandler_2Words_Text - 0x23000	; F0ED90  [16] -> 0xF0EA52
+	.long	DLHandler_IX_Text - 0x23000	; F0ED94  [17] -> 0xF0EA3A
+	.long	DLHandler_IX_Text - 0x23000	; F0ED98  [18] -> 0xF0EA3A
+	.long	DLHandler_IX_Text - 0x23000	; F0ED9C  [19] -> 0xF0EA3A
+	.long	DLHandler_IX_Text - 0x23000	; F0EDA0  [20] -> 0xF0EA3A
+	.long	DLHandler_IX_Text - 0x23000	; F0EDA4  [21] -> 0xF0EA3A
+	.long	DLHandler_4Words - 0x23000	; F0EDA8  [22] -> 0xF0EA75
+	.long	DLHandler_Glyph24x24 - 0x23000	; F0EDAC  [23] -> 0xF0EACE
+	.long	DLB_Handler_Decimal - 0x23000	; F0EDB0  [24] -> 0xF0EBA1
+	.long	DLB_Handler_CentredSpan - 0x23001	; F0EDB4  [25] -> 0xF0EC9D
+	.long	DLB_Handler_StringTable - 0x23000	; F0EDB8  [26] -> 0xF0EB21
+	.long	DLB_Handler_Array8 - 0x23000	; F0EDBC  [27] -> 0xF0EB57
+	.long	DLB_Handler_Array6 - 0x23000	; F0EDC0  [28] -> 0xF0EB86
+	.long	DLB_Handler_DecimalSigned - 0x23000	; F0EDC4  [29] -> 0xF0EBD7
+	.long	DLB_Handler_Decimal - 0x23000	; F0EDC8  [30] -> 0xF0EBA1
+	.long	DLB_Handler_StringTable2 - 0x23000	; F0EDCC  [31] -> 0xF0EB39
+	.long	DLB_Handler_Array8 - 0x23000	; F0EDD0  [32] -> 0xF0EB57
+	.long	DLB_Handler_Decimal2Words - 0x23000	; F0EDD4  [33] -> 0xF0EC14
+	.long	DLB_Handler_Decimal2Words - 0x23000	; F0EDD8  [34] -> 0xF0EC14
+	.long	DLB_Handler_DecimalSigned2Words - 0x23001	; F0EDDC  [35] -> 0xF0EC55
+	.long	dl_handler_ret - 0x23001	; F0EDE0  [36] -> 0xF0ED1F
+	.long	dl_handler_ret - 0x23001	; F0EDE4  [37] -> 0xF0ED1F
+	.long	dl_handler_ret - 0x23001	; F0EDE8  [38] -> 0xF0ED1F
 
 
 ; --------------------------------------------------------------------------
-; Data_F0EDEC -- 128 bytes this block could not split.  No content rule
+; OldBuild_ValueGlyph_Quantiser -- 128 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -27217,9 +27242,11 @@ PtrTable_F0ED50:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; ⚠ ANSWERED 2026-09-25 (the "nothing but its bytes" verdict that stood
+;   here): it is ValueGlyph_Quantiser (0xF31DED) byte for byte, in the older
+;   build's position -- see the banner above.
 ; --------------------------------------------------------------------------
-Data_F0EDEC:
+OldBuild_ValueGlyph_Quantiser:
 	.byte	0x00, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04	; F0EDEC  [0..15]
 	.byte	0x04, 0x05, 0x05, 0x05, 0x05, 0x05, 0x06, 0x06, 0x06, 0x06, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07	; F0EDFC  [16..31]
 	.byte	0x08, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09, 0x09, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0B	; F0EE0C  [32..47]
@@ -27231,7 +27258,7 @@ Data_F0EDEC:
 
 
 ; --------------------------------------------------------------------------
-; ArrayDescriptor_F0EE6C -- 29 32-bit words, every one an address in
+; OldBuild_ValueGlyph_Table -- 29 32-bit words, every one an address in
 ;                           0x00F00000-0x00F7FFFF, i.e. inside this image.
 ;                           29 distinct values.
 ;                           notes/prom_b_f0ea9f_layout.py classes it
@@ -27253,42 +27280,46 @@ Data_F0EDEC:
 ;           notes/prom_b_f0ea9f_layout.py --null-ptr`), and the STRIDED rule
 ;           fires zero times over the 33 proven dispatch tables of this
 ;           image (`--null-stride`).
-; Unknown: what indexes it, and what the entries mean.
+; ⚠ ANSWERED 2026-09-25: nothing in this build indexes it; it is
+;   ValueGlyph_Table (0xF31E6D) with every entry - 0x23001, i.e. the older
+;   build's pointers to ITS 29 glyphs.  Only glyphs 0-3 survive (next
+;   object); entries 4-28 name 0xF0F000 onwards, which this build filled
+;   with other bytes -- spelled `OldBuild_ValueGlyph_Bitmaps + 72 k` below.
 ; --------------------------------------------------------------------------
-ArrayDescriptor_F0EE6C:
-	.long	Data_F0EEE0	; F0EE6C  [0] -> Data_F0EEE0
-	.long	Data_F0EEE0 + 0x48	; F0EE70  [1] -> 0xF0EF28
-	.long	Data_F0EEE0 + 0x90	; F0EE74  [2] -> 0xF0EF70
-	.long	Data_F0EEE0 + 0xD8	; F0EE78  [3] -> 0xF0EFB8
-	.long	RamPtrTable_F0EFFF + 0x1	; F0EE7C  [4] -> 0xF0F000
-	.long	0x00F0F048	; F0EE80  [5] -> 0xF0F048
-	.long	0x00F0F090	; F0EE84  [6] -> 0xF0F090
-	.long	DispatchTable_F0F0CE + 0xA	; F0EE88  [7] -> 0xF0F0D8
-	.long	sub_F0F105_Arm	; F0EE8C  [8] -> 0xF0F120
-	.long	DispatchTable_F0F152 + 0x16	; F0EE90  [9] -> 0xF0F168
-	.long	0x00F0F1B0	; F0EE94  [10] -> 0xF0F1B0
-	.long	DispatchTable_F0F1E8 + 0x10	; F0EE98  [11] -> 0xF0F1F8
-	.long	0x00F0F240	; F0EE9C  [12] -> 0xF0F240
-	.long	0x00F0F288	; F0EEA0  [13] -> 0xF0F288
-	.long	0x00F0F2D0	; F0EEA4  [14] -> 0xF0F2D0
-	.long	sub_F0F315_Arm	; F0EEA8  [15] -> 0xF0F318
-	.long	0x00F0F360	; F0EEAC  [16] -> 0xF0F360
-	.long	0x00F0F3A8	; F0EEB0  [17] -> 0xF0F3A8
-	.long	0x00F0F3F0	; F0EEB4  [18] -> 0xF0F3F0
-	.long	0x00F0F438	; F0EEB8  [19] -> 0xF0F438
-	.long	0x00F0F480	; F0EEBC  [20] -> 0xF0F480
-	.long	DispatchTable_F0F4C4 + 0x4	; F0EEC0  [21] -> 0xF0F4C8
-	.long	0x00F0F510	; F0EEC4  [22] -> 0xF0F510
-	.long	DispatchTable_F0F558	; F0EEC8  [23] -> DispatchTable_F0F558
-	.long	sub_F0F59F_Arm	; F0EECC  [24] -> 0xF0F5A0
-	.long	0x00F0F5E8	; F0EED0  [25] -> 0xF0F5E8
-	.long	0x00F0F630	; F0EED4  [26] -> 0xF0F630
-	.long	sub_F0F676_Arm	; F0EED8  [27] -> 0xF0F678
-	.long	0x00F0F6C0	; F0EEDC  [28] -> 0xF0F6C0
+OldBuild_ValueGlyph_Table:
+	.long	OldBuild_ValueGlyph_Bitmaps	; F0EE6C  [0] -> OldBuild_ValueGlyph_Bitmaps
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x48	; F0EE70  [1] -> 0xF0EF28
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x90	; F0EE74  [2] -> 0xF0EF70
+	.long	OldBuild_ValueGlyph_Bitmaps + 0xD8	; F0EE78  [3] -> 0xF0EFB8
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x120	; F0EE7C  [4] -> 0xF0F000
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x168	; F0EE80  [5] -> 0xF0F048
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x1B0	; F0EE84  [6] -> 0xF0F090
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x1F8	; F0EE88  [7] -> 0xF0F0D8
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x240	; F0EE8C  [8] -> 0xF0F120
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x288	; F0EE90  [9] -> 0xF0F168
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x2D0	; F0EE94  [10] -> 0xF0F1B0
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x318	; F0EE98  [11] -> 0xF0F1F8
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x360	; F0EE9C  [12] -> 0xF0F240
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x3A8	; F0EEA0  [13] -> 0xF0F288
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x3F0	; F0EEA4  [14] -> 0xF0F2D0
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x438	; F0EEA8  [15] -> 0xF0F318
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x480	; F0EEAC  [16] -> 0xF0F360
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x4C8	; F0EEB0  [17] -> 0xF0F3A8
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x510	; F0EEB4  [18] -> 0xF0F3F0
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x558	; F0EEB8  [19] -> 0xF0F438
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x5A0	; F0EEBC  [20] -> 0xF0F480
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x5E8	; F0EEC0  [21] -> 0xF0F4C8
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x630	; F0EEC4  [22] -> 0xF0F510
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x678	; F0EEC8  [23] -> DispatchTable_F0F558
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x6C0	; F0EECC  [24] -> 0xF0F5A0
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x708	; F0EED0  [25] -> 0xF0F5E8
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x750	; F0EED4  [26] -> 0xF0F630
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x798	; F0EED8  [27] -> 0xF0F678
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x7E0	; F0EEDC  [28] -> 0xF0F6C0
 
 
 ; --------------------------------------------------------------------------
-; Data_F0EEE0 -- 287 bytes this block could not split.  No content rule
+; OldBuild_ValueGlyph_Bitmaps -- 287 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -27303,9 +27334,13 @@ ArrayDescriptor_F0EE6C:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; ⚠ ANSWERED 2026-09-25 (the "nothing but its bytes" verdict that stood
+;   here): ValueGlyph_Bitmaps glyphs 0-3 (0xF31EE1), byte for byte, four
+;   24 x 24 dials stored column-major (3 columns x 24 bytes) as swi 7
+;   service 3 blits them.  ⚠ CORRECTED: 288 bytes, not 287 -- its last byte,
+;   0xF0EFFF, had been taken as the first byte of a word table.
 ; --------------------------------------------------------------------------
-Data_F0EEE0:
+OldBuild_ValueGlyph_Bitmaps:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07, 0x07, 0x0F, 0x0F, 0x2F, 0x0F, 0x0F, 0x07, 0x07	; F0EEE0  [0..15]
 	.byte	0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x7C, 0xFF, 0xFF, 0xFF	; F0EEF0  [16..31]
 	.byte	0xFF, 0xFF, 0xFF, 0xEF, 0xEF, 0xDF, 0xDF, 0xDF, 0xBF, 0xBF, 0x3C, 0x00, 0x10, 0x00, 0x00, 0x00	; F0EF00  [32..47]
@@ -27324,53 +27359,28 @@ Data_F0EEE0:
 	.byte	0x00, 0x00, 0x10, 0x00, 0x7C, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xEF, 0x9F, 0x7F, 0xFF, 0xFF	; F0EFD0  [240..255]
 	.byte	0xFF, 0xFF, 0x7C, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xC0	; F0EFE0  [256..271]
 	.byte	0xC0, 0xE0, 0xE0, 0xE8, 0xE0, 0xE0, 0xC0, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F0EFF0  [272..286]
+	.byte	0x00	; F0EFFF  [287]
 
 
 ; --------------------------------------------------------------------------
-; RamPtrTable_F0EFFF -- 6 32-bit words, every one below 0x10000, i.e. a
-;                       16-bit RAM address stored one per long word.  First
-;                       0x0E00, last 0x0E00; the step between neighbours
-;                       takes 1 distinct value (0x0).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Entry count: 6.  The chain stops at the first word that is not below
-;              0x10000, at 0xF0F017.
-; Evidence: every word is re-read and range-asserted on every emit.  The
-;           RAMTAB rule fires ZERO times over the proven prom_b instruction
-;           text (`python3 notes/prom_b_f0ea9f_layout.py --null-ptr`).
-; Unknown: what lives at those RAM addresses.  The name describes the
-;          CONTENT of the table, not its purpose.
+; Data_F0F000 -- 0xF0F000-0xF0F017, 24 bytes: six little-endian words of
+;   0x0000000E, just before sub_F0F018 (a routine-directory target).  This is
+;   where this build's bytes resume after the older build's data above.
+;   Nothing in prom_a or prom_b names 0xF0F000 (the older build's glyph
+;   table does, as its glyph 4); purpose not established.
+; ⚠ REPLACES `RamPtrTable_F0EFFF` ("6 words below 0x10000 ... RAM 0x0E00" at
+;   0xF0EFFF) and the 1-byte `Data_F0F017`: that framing started one byte
+;   early -- 0xF0EFFF is glyph 3's last byte -- so every word it read was
+;   the true word shifted by 8 bits, and its last byte fell outside it.
+;   notes/promb-2026-09-25/stale_dl_tables_f0ed50.py.
 ; --------------------------------------------------------------------------
-RamPtrTable_F0EFFF:
-	.long	0x00000E00	; F0EFFF  [0] -> RAM 0x0E00
-	.long	0x00000E00	; F0F003  [1] -> RAM 0x0E00
-	.long	0x00000E00	; F0F007  [2] -> RAM 0x0E00
-	.long	0x00000E00	; F0F00B  [3] -> RAM 0x0E00
-	.long	0x00000E00	; F0F00F  [4] -> RAM 0x0E00
-	.long	0x00000E00	; F0F013  [5] -> RAM 0x0E00
-
-
-; --------------------------------------------------------------------------
-; Data_F0F017 -- 1 byte this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F0F017:
-	.byte	0x00	; F0F017  [0..0]
+Data_F0F000:
+	.long	0x0000000E	; F0F000  [0]
+	.long	0x0000000E	; F0F004  [1]
+	.long	0x0000000E	; F0F008  [2]
+	.long	0x0000000E	; F0F00C  [3]
+	.long	0x0000000E	; F0F010  [4]
+	.long	0x0000000E	; F0F014  [5]
 
 
 ; --------------------------------------------------------------------------
@@ -27606,22 +27616,21 @@ sub_F0F105:		; <- T_F42F4C
 	lda	xix, (10129:16)	; F0F106  lda XIX,0x2791
 	ld	c, (8314:16)	; F0F10A  ld C,(0x207a)
 	m_cp_rm MB16, 0x207b, 3	; F0F10E  cp C,(0x207b)
-	jr	z, sub_F0F105_Arm_Skip2	; F0F112  jr Z,0xf0f12c
+	jr	z, sub_F0F105_Skip2	; F0F112  jr Z,0xf0f12c
 	pushw	0	; F0F114  push 0x0000
 	calr	sub_F0F018	; F0F117  calr 0xf0f018
 	popw	bc	; F0F11A  pop BC
 	m_cp_mi8 MB16, 0x2797, 0x02	; F0F11B  cp (0x2797),0x02
-sub_F0F105_Arm:
-	jr	ule, sub_F0F105_Arm_Skip	; F0F120  jr ULE,0xf0f127
+	jr	ule, sub_F0F105_Skip	; F0F120  jr ULE,0xf0f127
 	ld	(10135:16), 0	; F0F122  ld (0x2797),0x00
-sub_F0F105_Arm_Skip:
+sub_F0F105_Skip:
 	ld	(10136:16), 0	; F0F127  ld (0x2798),0x00
-sub_F0F105_Arm_Skip2:
+sub_F0F105_Skip2:
 	ld	c, (8316:16)	; F0F12C  ld C,(0x207c)
 	m_cp_rm MB16, 0x207d, 3	; F0F130  cp C,(0x207d)
-	jr	z, sub_F0F105_Arm_Skip3	; F0F134  jr Z,0xf0f139
+	jr	z, sub_F0F105_Skip3	; F0F134  jr Z,0xf0f139
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F136  or (XIX),0x80
-sub_F0F105_Arm_Skip3:
+sub_F0F105_Skip3:
 	ld	bc, (10128:16)	; F0F139  ld BC,(0x2790)
 	extz	bc	; F0F13D  extz BC
 	extz	xbc	; F0F13F  extz XBC
@@ -28167,7 +28176,6 @@ sub_F0F310:
 ; --------------------------------------------------------------------------
 sub_F0F315:
 	pushw	17	; F0F315  push 0x0011
-sub_F0F315_Arm:
 	pushw	0	; F0F318  push 0x0000
 	calr	sub_F10252	; F0F31B  calr 0xf10252
 	m_set 0, MD16, 0x2791	; F0F31E  set 0,(0x2791)
@@ -29071,7 +29079,6 @@ sub_F0F59E:
 ; --------------------------------------------------------------------------
 sub_F0F59F:
 	pushw	hl	; F0F59F  push HL
-sub_F0F59F_Arm:
 	ld	h, (10416:16)	; F0F5A0  ld H,(0x28b0)
 	ld	bc, (10128:16)	; F0F5A4  ld BC,(0x2790)
 	extz	bc	; F0F5A8  extz BC
@@ -29327,7 +29334,7 @@ DispatchTable_F0F63E:
 sub_F0F656:
 	ld	c, h	; F0F656  ld C,H
 	and	c, 1	; F0F658  and C,0x01
-	jr	z, sub_F0F676_Arm_Skip	; F0F65B  jr Z,0xf0f67d
+	jr	z, sub_F0F676_Skip	; F0F65B  jr Z,0xf0f67d
 	ld	(10135:16), 1	; F0F65D  ld (0x2797),0x01
 	ld	(10136:16), 0	; F0F662  ld (0x2798),0x00
 	m_set 4, MD16, 0x2071	; F0F667  set 4,(0x2071)
@@ -29351,7 +29358,7 @@ sub_F0F656:
 sub_F0F66D:
 	ld	c, h	; F0F66D  ld C,H
 	and	c, 1	; F0F66F  and C,0x01
-	jr	z, sub_F0F676_Arm_Skip	; F0F672  jr Z,0xf0f67d
+	jr	z, sub_F0F676_Skip	; F0F672  jr Z,0xf0f67d
 	jr	sub_F0F684	; F0F674  jr T,0xf0f684
 
 ; --------------------------------------------------------------------------
@@ -29372,10 +29379,9 @@ sub_F0F66D:
 ; --------------------------------------------------------------------------
 sub_F0F676:
 	ld	c, h	; F0F676  ld C,H
-sub_F0F676_Arm:
 	and	c, 1	; F0F678  and C,0x01
 	jr	nz, sub_F0F684	; F0F67B  jr NZ,0xf0f684
-sub_F0F676_Arm_Skip:
+sub_F0F676_Skip:
 	pushw	2	; F0F67D  push 0x0002
 	calr	sub_F0F02B	; F0F680  calr 0xf0f02b
 	popw	bc	; F0F683  pop BC
