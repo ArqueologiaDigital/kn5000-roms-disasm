@@ -43862,7 +43862,7 @@ DLB_Records_F174E1:
 ;   object, and 0xF17A6C holds a 24-entry array of pointers spaced 0x48 that
 ;   nothing here explains".  Two things about it are now settled and one was
 ;   wrong.  The array at 0xF17A6C has TWENTY-NINE entries, not 24 (the stride,
-;   0x48, was right); it is emitted below as PtrTable_F17A6C, and its 29 entries
+;   0x48, was right); it is emitted below as OldBuild2_ValueGlyph_Table, and its 29 entries
 ;   run from 0xF17AE0 -- the 24x24 glyph bitmaps -- upward.  And the span DOES
 ;   tile, not by a stride walk but from proven operands, display-list call sites,
 ;   `ldir` copy lengths and record framing walks: see notes/prom_b_f17559_layout.py
@@ -44241,54 +44241,70 @@ DL_MainOutEqualizer_F17A2C:
 	.byte 0x69, 0x30, 0x00	; +2  'i0.'
 
 ; --------------------------------------------------------------------------
-; BitTable_F17A5F -- bit table, 0xF17A5F-0xF17A6B (13 bytes)
+; OldBuild2_ValueGlyph_QuantiserTail -- bit table, 0xF17A5F-0xF17A6B (13 bytes)
 ; Evidence: last 13 bytes of the 128-byte glyph quantiser at 0xF31DED
+; ⚠ 2026-09-25: an OLDER BUILD's bytes, not this build's.  This, PtrTable
+;   and bitmap below sit at their live twins' addresses - 0x1A401 (the
+;   quantiser's 0xF31E60, ValueGlyph_Table 0xF31E6D, ValueGlyph_Bitmaps
+;   0xF31EE1): the value-glyph data as an earlier build placed it, cut at
+;   0xF17A5F by this build's DL_MainOutEqualizer_F17A2C and ending on the
+;   1 KB boundary 0xF17C00.  Same phenomenon, other offset, as
+;   OldBuild_DLHandlerTables_Tail at 0xF0ED50 (live - 0x23001).
+;   notes/promb-2026-09-25/stale_value_glyphs_f17a5f.py.
 ; --------------------------------------------------------------------------
-BitTable_F17A5F:
+OldBuild2_ValueGlyph_QuantiserTail:
 	.byte 0x19, 0x19, 0x19, 0x19, 0x1a, 0x1a, 0x1a, 0x1a, 0x1b, 0x1b, 0x1b, 0x1b, 0x1c   ; F17A5F  .............
 
 ; --------------------------------------------------------------------------
-; PtrTable_F17A6C -- pointer table, 0xF17A6C-0xF17ADF (116 bytes)
+; OldBuild2_ValueGlyph_Table -- pointer table, 0xF17A6C-0xF17ADF (116 bytes)
 ; Shape: 29 entries of 4 bytes = 116 bytes, which is the whole segment.
 ; First / last: 0xF17AE0 ... 0xF182C0
 ; Evidence: 29 words, all addresses in prom_a/prom_b; UNREFERENCED
+; ⚠ 2026-09-25: ValueGlyph_Table (0xF31E6D) with every word - 0x1A401 -- the
+;   older build's pointers to its 29 glyphs.  Only glyphs 0-3 survive (the
+;   next object); entries 4-28 name 0xF17C00-0xF182C0, which this build
+;   filled with display lists, so they are spelled
+;   `OldBuild2_ValueGlyph_Bitmaps + 72 k`, not as offsets into those lists.
 ; --------------------------------------------------------------------------
-PtrTable_F17A6C:
-	.long Bitmap_F17AE0                       ; F17A6C  [0]   -> Bitmap_F17AE0
-	.long Bitmap_F17AE0 + 0x48                       ; F17A70  [1]   -> 0xF17B28 (inside this span)
-	.long Bitmap_F17AE0 + 0x90                       ; F17A74  [2]   -> 0xF17B70 (inside this span)
-	.long Bitmap_F17AE0 + 0xD8                       ; F17A78  [3]   -> 0xF17BB8 (inside this span)
-	.long DL_F17C00                       ; F17A7C  [4]   -> DL_F17C00
-	.long DL_F17C45 + 0x3                       ; F17A80  [5]   -> 0xF17C48 (inside this span)
-	.long DL_Mixer + 0x4                       ; F17A84  [6]   -> 0xF17C90 (inside this span)
-	.long DL_Mixer + 0x4C                       ; F17A88  [7]   -> 0xF17CD8 (inside this span)
-	.long DL_Mixer + 0x94                       ; F17A8C  [8]   -> 0xF17D20 (inside this span)
-	.long DL_Mixer + 0xDC                       ; F17A90  [9]   -> 0xF17D68 (inside this span)
-	.long DL_Mixer + 0x124                       ; F17A94  [10]   -> 0xF17DB0 (inside this span)
-	.long DL_Mixer + 0x16C                       ; F17A98  [11]   -> 0xF17DF8 (inside this span)
-	.long DL_F17E2E + 0x12                       ; F17A9C  [12]   -> 0xF17E40 (inside this span)
-	.long DL_Sound + 0x46                       ; F17AA0  [13]   -> 0xF17E88 (inside this span)
-	.long DL_F17E9D + 0x33                       ; F17AA4  [14]   -> 0xF17ED0 (inside this span)
-	.long DL_KeyShift + 0x11                       ; F17AA8  [15]   -> 0xF17F18 (inside this span)
-	.long DL_KeyShift + 0x59                       ; F17AAC  [16]   -> 0xF17F60 (inside this span)
-	.long DL_Midiout + 0x4                       ; F17AB0  [17]   -> 0xF17FA8 (inside this span)
-	.long DL_Midiout + 0x4C                       ; F17AB4  [18]   -> 0xF17FF0 (inside this span)
-	.long DL_F1802A + 0xE                       ; F17AB8  [19]   -> 0xF18038 (inside this span)
-	.long RecordArray_F18066 + 0x1A                       ; F17ABC  [20]   -> 0xF18080 (inside this span)
-	.long RecordArray_F18066 + 0x62                       ; F17AC0  [21]   -> 0xF180C8 (inside this span)
-	.long RecordArray_F180EE + 0x22                       ; F17AC4  [22]   -> 0xF18110 (inside this span)
-	.long DL_Pt1Pt9Pt2Pt3Pt4Pt5Pt6Pt7 + 0xA                       ; F17AC8  [23]   -> 0xF18158 (inside this span)
-	.long DL_Pt1Pt9Pt2Pt3Pt4Pt5Pt6Pt7 + 0x52                       ; F17ACC  [24]   -> 0xF181A0 (inside this span)
-	.long DL_Part1Part9Part17Part25Part2 + 0x12                       ; F17AD0  [25]   -> 0xF181E8 (inside this span)
-	.long DL_Part1Part9Part17Part25Part2 + 0x5A                       ; F17AD4  [26]   -> 0xF18230 (inside this span)
-	.long DL_F18274 + 0x4                       ; F17AD8  [27]   -> 0xF18278 (inside this span)
-	.long StringTable_F1828A + 0x36                       ; F17ADC  [28]   -> 0xF182C0 (inside this span)
+OldBuild2_ValueGlyph_Table:
+	.long OldBuild2_ValueGlyph_Bitmaps                       ; F17A6C  [0]   -> OldBuild2_ValueGlyph_Bitmaps
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x48                       ; F17A70  [1]   -> 0xF17B28 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x90                       ; F17A74  [2]   -> 0xF17B70 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0xD8                       ; F17A78  [3]   -> 0xF17BB8 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x120                       ; F17A7C  [4]   -> DL_F17C00
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x168                       ; F17A80  [5]   -> 0xF17C48 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x1B0                       ; F17A84  [6]   -> 0xF17C90 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x1F8                       ; F17A88  [7]   -> 0xF17CD8 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x240                       ; F17A8C  [8]   -> 0xF17D20 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x288                       ; F17A90  [9]   -> 0xF17D68 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x2D0                       ; F17A94  [10]   -> 0xF17DB0 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x318                       ; F17A98  [11]   -> 0xF17DF8 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x360                       ; F17A9C  [12]   -> 0xF17E40 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x3A8                       ; F17AA0  [13]   -> 0xF17E88 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x3F0                       ; F17AA4  [14]   -> 0xF17ED0 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x438                       ; F17AA8  [15]   -> 0xF17F18 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x480                       ; F17AAC  [16]   -> 0xF17F60 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x4C8                       ; F17AB0  [17]   -> 0xF17FA8 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x510                       ; F17AB4  [18]   -> 0xF17FF0 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x558                       ; F17AB8  [19]   -> 0xF18038 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x5A0                       ; F17ABC  [20]   -> 0xF18080 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x5E8                       ; F17AC0  [21]   -> 0xF180C8 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x630                       ; F17AC4  [22]   -> 0xF18110 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x678                       ; F17AC8  [23]   -> 0xF18158 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x6C0                       ; F17ACC  [24]   -> 0xF181A0 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x708                       ; F17AD0  [25]   -> 0xF181E8 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x750                       ; F17AD4  [26]   -> 0xF18230 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x798                       ; F17AD8  [27]   -> 0xF18278 (inside this span)
+	.long OldBuild2_ValueGlyph_Bitmaps + 0x7E0                       ; F17ADC  [28]   -> 0xF182C0 (inside this span)
 
 ; --------------------------------------------------------------------------
-; Bitmap_F17AE0 -- bitmap, 0xF17AE0-0xF17BFF (288 bytes)
+; OldBuild2_ValueGlyph_Bitmaps -- bitmap, 0xF17AE0-0xF17BFF (288 bytes)
 ; Evidence: 4 x 72-byte 24x24 glyphs, byte-identical to 0xF31EE1
+; ⚠ 2026-09-25: the older build's glyphs 0-3 (see
+;   OldBuild2_ValueGlyph_QuantiserTail above); 24 x 24 dials stored
+;   column-major, 3 columns x 24 bytes.
 ; --------------------------------------------------------------------------
-Bitmap_F17AE0:
+OldBuild2_ValueGlyph_Bitmaps:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07, 0x07, 0x0f, 0x0f, 0x2f, 0x0f, 0x0f, 0x07, 0x07   ; F17AE0  .........../....
 	.byte 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x7c, 0xff, 0xff, 0xff   ; F17AF0  ............|...
 	.byte 0xff, 0xff, 0xff, 0xef, 0xef, 0xdf, 0xdf, 0xdf, 0xbf, 0xbf, 0x3c, 0x00, 0x10, 0x00, 0x00, 0x00   ; F17B00  ..........<.....
