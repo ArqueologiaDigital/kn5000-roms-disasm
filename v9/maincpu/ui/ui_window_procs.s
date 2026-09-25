@@ -277,9 +277,8 @@ WndEvt_EventCodeDispatch:
 	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
-	.byte 0xaf
-	.ascii "*\"x6"
-	pop	sr
+	ld	xde, (xsp+42)
+	jrl	WndEvt_EventCodeDispatch_Join3
 	ld	wa, (0x0274d8:24)
 	ld	bc, wa
 	inc	1, bc
@@ -311,7 +310,7 @@ WndEvt_EventCodeDispatch:
 	extz	xbc
 	sll	xbc, 2
 	ld	xwa, xbc
-	add	xwa, (xsp+4)
+	add xwa, (xsp+0x04)	; F9B8CE (add xwa,(xsp+0x04))
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
@@ -437,8 +436,7 @@ WndEvt_EventCodeDispatch_Skip4:
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
-	.byte 0x42
-	.long Data_SoundEditorCharsLayout
+	ld	xde, Data_SoundEditorCharsLayout
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
@@ -1997,7 +1995,7 @@ DrawDesignFrame_Skip4:
 	cpw	(xbc), 319
 	jr	nz, DrawDesignFrame_Skip5
 	ldw	de, 318
-	sub	de, (xsp+6)
+	sub	de, (xsp+6)	; F9CA23 (sub de,(xsp+0x06))
 	ld	(xix), de
 	ld	de, (xbc+2)
 	sub	de, wa
@@ -8217,7 +8215,42 @@ ColorBlit2_PopReturn:
 	inc 8, xsp
 	ret
 
+
+; =============================================================================
+; DrawMonoBitmap - draw a 1-bpp bitmap into OFFSCREEN_BUFFER_1 in fg/bg colours
+;
+; Input:
+;   XWA = pointer to a rectangle: word[0]=x0, word[2]=y0, word[4]=x1, word[6]=y1
+;   XBC = pointer to the bitmap: one byte per (8-pixel column group, row),
+;         MSB = leftmost pixel; for each group x = 0, 8, 16 .. < x1-x0 the
+;         rows y = 0 .. < y1-y0 are consumed in order (column-major strips)
+;   DE  = foreground colour (used where a bit is 1)
+; The background colour (bit 0) is the word at 0x03efa2 (stored by
+; DirmdEmulator_Dispatch_Code_Helper in display/graphics_text_vga.s).
+; Colour 0xf5 means "copy the pixel from the buffer whose address is at
+; 0x030452" instead of writing a fixed colour (the same convention as DrawLine).
+;
+; Same draw-task idiom as DrawLine / DrawBox (ui/drawing_primitives.s): the
+; draw mode byte at 0x03efa8 is latched into 0x03efaa; if the caller is not the
+; draw task (IS_XSP_INSIDE_4K_REGION_AT_1C032 returns 0) the call is queued as a
+; 20-byte DrawQueue_Alloc record {+0 DrawMonoBitmap_ParamBlock, +4 rect (4
+; words), +12 bitmap pointer, +16 colour, +18 draw mode} and executed later by
+; DisplayCmd_DequeueAndExecute; nothing is drawn while the word at 0x03044e is 0.
+;
+; DrawMonoBitmap_Impl dispatches on the latched draw mode (0x03efaa):
+;   0  pixel = (pixel & 0x60) | (colour & 0x9f)   -- bits 5-6 of the buffer
+;      pixel are preserved, the rest is the colour
+;   1  bit 5 of the pixel := its bit 7 XOR the bitmap bit   (_Impl_Mode1)
+;   2  bit 6 likewise                                       (_Impl_Mode2)
+;   other  nothing is drawn
+; and always finishes with SetChangeRect(rect).
+; Derived from the ROM code below (v10 0xFAFB48); caller:
+; display/graphics_text_vga.s (the character-cell renderer that divides a cell
+; index by 40 and multiplies by 8 to build the rectangle).
+; =============================================================================
+; ColorBlit2_LargeCodeBlock: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s and shared/positional_labels.s (owned by another lane)
 ColorBlit2_LargeCodeBlock:
+DrawMonoBitmap:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), de
@@ -8225,21 +8258,21 @@ ColorBlit2_LargeCodeBlock:
 	ld	xiz, xwa
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, ColorBlit2_LargeCodeBlock_Skip17
+	jr	z, DrawMonoBitmap_DeferredPath
 	ld	a, (0x03efa8:24)
 	ld	(0x03efaa:24), a
 	cpw	(0x03044e:24), 0
-	jr	z, ColorBlit2_LargeCodeBlock_Epilogue2
+	jr	z, DrawMonoBitmap_Return
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
 	ld	de, (xsp+4)
-	calr	ColorBlit2_LargeCodeBlock_Helper
-	jr	ColorBlit2_LargeCodeBlock_Epilogue2
-ColorBlit2_LargeCodeBlock_Skip17:
+	calr	DrawMonoBitmap_Impl
+	jr	DrawMonoBitmap_Return
+DrawMonoBitmap_DeferredPath:
 	ldw	wa, 20
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (ColorBlit2_LargeCodeBlock_0x65:24)
+	lda	xbc, (DrawMonoBitmap_ParamBlock:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -8252,10 +8285,11 @@ ColorBlit2_LargeCodeBlock_Skip17:
 	ld	c, (0x03efa8:24)
 	ld	(xwa+18), c
 	calr	DisplayCmd_DequeueAndExecute
-ColorBlit2_LargeCodeBlock_Epilogue2:
+DrawMonoBitmap_Return:
 	pop	xiz
 	inc	6, xsp
 	ret
+DrawMonoBitmap_ParamBlock:
 	ld	xbc, xwa
 	lda	xwa, (xbc+4)
 	ld	xhl, (xbc+12)
@@ -8265,9 +8299,9 @@ ColorBlit2_LargeCodeBlock_Epilogue2:
 	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xbc, xhl
-	calr	ColorBlit2_LargeCodeBlock_Helper
+	calr	DrawMonoBitmap_Impl
 	ret
-ColorBlit2_LargeCodeBlock_Helper:
+DrawMonoBitmap_Impl:
 	lda	xsp, (xsp-30)
 	pushw	iz
 	ld	(xsp+22), de
@@ -8275,17 +8309,17 @@ ColorBlit2_LargeCodeBlock_Helper:
 	ld	(xsp+28), xwa
 	ld	a, (0x03efaa:24)
 	cp	a, 2:i3
-	jrl	z, ColorBlit2_LargeCodeBlock_Skip25
+	jrl	z, DrawMonoBitmap_Impl_Mode2
 	cp	a, 1:i3
-	jrl	z, ColorBlit2_LargeCodeBlock_Skip
+	jrl	z, DrawMonoBitmap_Impl_Mode1
 	cp	a, 0:i3
-	jrl	nz, ColorBlit2_LargeCodeBlock_Join9
+	jrl	nz, DrawMonoBitmap_Impl_Done
 	ldw	(xsp+6), 0
-	jrl	ColorBlit2_LargeCodeBlock_Join2
-ColorBlit2_LargeCodeBlock_Loop:
+	jrl	DrawMonoBitmap_Impl_Join3
+DrawMonoBitmap_Impl_Loop:
 	ldw	(xsp+8), 0
-	jrl	ColorBlit2_LargeCodeBlock_Join
-ColorBlit2_LargeCodeBlock_Loop8:
+	jrl	DrawMonoBitmap_Impl_Join2
+DrawMonoBitmap_Impl_Loop2:
 	lda	xwa, (xsp+18)
 	ld	(xsp+10), xwa
 	ld	xwa, (xsp+28)
@@ -8302,7 +8336,7 @@ ColorBlit2_LargeCodeBlock_Loop8:
 	ld	a, (xwa)
 	ld	(xsp+2), a
 	ld	(xsp+4), 0
-ColorBlit2_LargeCodeBlock_Loop9:
+DrawMonoBitmap_Impl_Loop3:
 	ld	xhl, (0x030452:24)
 	ld	xwa, (xsp+14)
 	ld	wa, (xwa)
@@ -8313,7 +8347,7 @@ ColorBlit2_LargeCodeBlock_Loop9:
 	sll	xde, 6
 	lda	xbc, (0x043c00:24)
 	bitm	7, (xsp+2)
-	jr	z, ColorBlit2_LargeCodeBlock_Skip20
+	jr	z, DrawMonoBitmap_Impl_Skip3
 	ld	xiy, (xsp+10)
 	ld	iz, (xsp+22)
 	ld	xwa, (xsp+10)
@@ -8323,7 +8357,7 @@ ColorBlit2_LargeCodeBlock_Loop9:
 	ld	xix, xbc
 	add	xix, xwa
 	cp	iz, 245
-	jr	z, ColorBlit2_LargeCodeBlock_Skip18
+	jr	z, DrawMonoBitmap_Impl_Skip
 	and	(xix), 0x60
 	ld	wa, iz
 	and	wa, 0x9f
@@ -8334,9 +8368,9 @@ ColorBlit2_LargeCodeBlock_Loop9:
 	and	a, 0x80
 	extz	wa
 	cp	wa, bc
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip19
-	jrl	ColorBlit2_LargeCodeBlock_Join21
-ColorBlit2_LargeCodeBlock_Skip18:
+	jr	nz, DrawMonoBitmap_Impl_Skip2
+	jrl	DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip:
 	ld	bc, (xiy)
 	exts	xbc
 	ld	wa, (xiy+2)
@@ -8356,11 +8390,11 @@ ColorBlit2_LargeCodeBlock_Skip18:
 	ld	a, (xix)
 	and	a, 0x80
 	cp	a, c
-	jr	z, ColorBlit2_LargeCodeBlock_Join21
-ColorBlit2_LargeCodeBlock_Skip19:
+	jr	z, DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip2:
 	xor	(xix), 0x60
-	jr	ColorBlit2_LargeCodeBlock_Join21
-ColorBlit2_LargeCodeBlock_Skip20:
+	jr	DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip3:
 	ld	xiy, (xsp+10)
 	ld	iz, (0x03efa2:24)
 	ld	xwa, (xsp+10)
@@ -8370,7 +8404,7 @@ ColorBlit2_LargeCodeBlock_Skip20:
 	ld	xix, xbc
 	add	xix, xwa
 	cp	iz, 245
-	jr	z, ColorBlit2_LargeCodeBlock_Skip21
+	jr	z, DrawMonoBitmap_Impl_Skip4
 	and	(xix), 0x60
 	ld	wa, iz
 	and	wa, 0x9f
@@ -8381,9 +8415,9 @@ ColorBlit2_LargeCodeBlock_Skip20:
 	and	a, 0x80
 	extz	wa
 	cp	wa, bc
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip22
-	jr	ColorBlit2_LargeCodeBlock_Join21
-ColorBlit2_LargeCodeBlock_Skip21:
+	jr	nz, DrawMonoBitmap_Impl_Skip5
+	jr	DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip4:
 	ld	bc, (xiy)
 	exts	xbc
 	ld	wa, (xiy+2)
@@ -8403,43 +8437,43 @@ ColorBlit2_LargeCodeBlock_Skip21:
 	ld	a, (xix)
 	and	a, 0x80
 	cp	a, c
-	jr	z, ColorBlit2_LargeCodeBlock_Join21
-ColorBlit2_LargeCodeBlock_Skip22:
+	jr	z, DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip5:
 	xor	(xix), 0x60
-ColorBlit2_LargeCodeBlock_Join21:
+DrawMonoBitmap_Impl_Join:
 	ld	a, (xsp+2)
 	add	(xsp+2), a
 	ld	xwa, (xsp+10)
 	incw	1, (xwa)
 	inc	1, (xsp+4)
 	cp	(xsp+4), 8
-	jrl	c, ColorBlit2_LargeCodeBlock_Loop9
+	jrl	c, DrawMonoBitmap_Impl_Loop3
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
-ColorBlit2_LargeCodeBlock_Join:
+DrawMonoBitmap_Impl_Join2:
 	ld	xwa, (xsp+28)
 	lda	xde, (xwa+2)
 	ld	bc, (xde)
 	ld	wa, (xwa+6)
 	sub	wa, bc
 	cp	(xsp+8), wa
-	jrl	c, ColorBlit2_LargeCodeBlock_Loop8
+	jrl	c, DrawMonoBitmap_Impl_Loop2
 	incw	8, (xsp+6)
-ColorBlit2_LargeCodeBlock_Join2:
+DrawMonoBitmap_Impl_Join3:
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	sub	bc, (xwa)
 	cp	(xsp+6), bc
-	jrl	c, ColorBlit2_LargeCodeBlock_Loop
-	jrl	ColorBlit2_LargeCodeBlock_Join9
-ColorBlit2_LargeCodeBlock_Skip:
+	jrl	c, DrawMonoBitmap_Impl_Loop
+	jrl	DrawMonoBitmap_Impl_Done
+DrawMonoBitmap_Impl_Mode1:
 	ldw	(xsp+6), 0
-	jrl	ColorBlit2_LargeCodeBlock_Join5
-ColorBlit2_LargeCodeBlock_Loop2:
+	jrl	DrawMonoBitmap_Impl_Join7
+DrawMonoBitmap_Impl_Loop4:
 	ldw	(xsp+8), 0
-	jr	ColorBlit2_LargeCodeBlock_Join4
-ColorBlit2_LargeCodeBlock_Loop3:
+	jr	DrawMonoBitmap_Impl_Join6
+DrawMonoBitmap_Impl_Loop5:
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
 	ld	wa, (xwa)
@@ -8453,7 +8487,7 @@ ColorBlit2_LargeCodeBlock_Loop3:
 	ld	a, (xwa)
 	ld	(xsp+2), a
 	ld	(xsp+4), 0
-ColorBlit2_LargeCodeBlock_Loop10:
+DrawMonoBitmap_Impl_Loop6:
 	lda	xix, (0x043c00:24)
 	ld	wa, (xhl)
 	exts	xwa
@@ -8462,61 +8496,61 @@ ColorBlit2_LargeCodeBlock_Loop10:
 	add	xbc, xwa
 	sll	xbc, 6
 	bitm	7, (xsp+2)
-	jr	z, ColorBlit2_LargeCodeBlock_Skip23
+	jr	z, DrawMonoBitmap_Impl_Skip6
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xix
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip24
-	jr	ColorBlit2_LargeCodeBlock_Join22
-ColorBlit2_LargeCodeBlock_Skip23:
+	jr	nz, DrawMonoBitmap_Impl_Skip7
+	jr	DrawMonoBitmap_Impl_Join4
+DrawMonoBitmap_Impl_Skip6:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xix
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	z, ColorBlit2_LargeCodeBlock_Skip24
-ColorBlit2_LargeCodeBlock_Join22:
+	jr	z, DrawMonoBitmap_Impl_Skip7
+DrawMonoBitmap_Impl_Join4:
 	setm	5, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join3
-ColorBlit2_LargeCodeBlock_Skip24:
+	jr	DrawMonoBitmap_Impl_Join5
+DrawMonoBitmap_Impl_Skip7:
 	resm	5, (xbc)
-ColorBlit2_LargeCodeBlock_Join3:
+DrawMonoBitmap_Impl_Join5:
 	ld	a, (xsp+2)
 	add	(xsp+2), a
 	incw	1, (xde)
 	inc	1, (xsp+4)
 	cp	(xsp+4), 8
-	jr	c, ColorBlit2_LargeCodeBlock_Loop10
+	jr	c, DrawMonoBitmap_Impl_Loop6
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
-ColorBlit2_LargeCodeBlock_Join4:
+DrawMonoBitmap_Impl_Join6:
 	ld	xwa, (xsp+28)
 	lda	xix, (xwa+2)
 	ld	bc, (xix)
 	ld	wa, (xwa+6)
 	sub	wa, bc
 	cp	(xsp+8), wa
-	jrl	c, ColorBlit2_LargeCodeBlock_Loop3
+	jrl	c, DrawMonoBitmap_Impl_Loop5
 	incw	8, (xsp+6)
-ColorBlit2_LargeCodeBlock_Join5:
+DrawMonoBitmap_Impl_Join7:
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	sub	bc, (xwa)
 	cp	(xsp+6), bc
-	jrl	c, ColorBlit2_LargeCodeBlock_Loop2
-	jrl	ColorBlit2_LargeCodeBlock_Join9
-ColorBlit2_LargeCodeBlock_Skip25:
+	jrl	c, DrawMonoBitmap_Impl_Loop4
+	jrl	DrawMonoBitmap_Impl_Done
+DrawMonoBitmap_Impl_Mode2:
 	ldw	(xsp+6), 0
-	jrl	ColorBlit2_LargeCodeBlock_Join8
-ColorBlit2_LargeCodeBlock_Loop4:
+	jrl	DrawMonoBitmap_Impl_Join11
+DrawMonoBitmap_Impl_Loop7:
 	ldw	(xsp+8), 0
-	jr	ColorBlit2_LargeCodeBlock_Join7
-ColorBlit2_LargeCodeBlock_Loop5:
+	jr	DrawMonoBitmap_Impl_Join10
+DrawMonoBitmap_Impl_Loop8:
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
 	ld	wa, (xwa)
@@ -8530,7 +8564,7 @@ ColorBlit2_LargeCodeBlock_Loop5:
 	ld	a, (xwa)
 	ld	(xsp+2), a
 	ld	(xsp+4), 0
-ColorBlit2_LargeCodeBlock_Loop11:
+DrawMonoBitmap_Impl_Loop9:
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xbc, xwa
@@ -8538,60 +8572,92 @@ ColorBlit2_LargeCodeBlock_Loop11:
 	add	xbc, xwa
 	sll	xbc, 6
 	bitm	7, (xsp+2)
-	jr	z, ColorBlit2_LargeCodeBlock_Skip26
+	jr	z, DrawMonoBitmap_Impl_Skip8
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
 	lda	xbc, (0x043c00:24)
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip27
-	jr	ColorBlit2_LargeCodeBlock_Join23
-ColorBlit2_LargeCodeBlock_Skip26:
+	jr	nz, DrawMonoBitmap_Impl_Skip9
+	jr	DrawMonoBitmap_Impl_Join8
+DrawMonoBitmap_Impl_Skip8:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
 	lda	xbc, (0x043c00:24)
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	z, ColorBlit2_LargeCodeBlock_Skip27
-ColorBlit2_LargeCodeBlock_Join23:
+	jr	z, DrawMonoBitmap_Impl_Skip9
+DrawMonoBitmap_Impl_Join8:
 	setm	6, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join6
-ColorBlit2_LargeCodeBlock_Skip27:
+	jr	DrawMonoBitmap_Impl_Join9
+DrawMonoBitmap_Impl_Skip9:
 	resm	6, (xbc)
-ColorBlit2_LargeCodeBlock_Join6:
+DrawMonoBitmap_Impl_Join9:
 	ld	a, (xsp+2)
 	add	(xsp+2), a
 	incw	1, (xde)
 	inc	1, (xsp+4)
 	cp	(xsp+4), 8
-	jr	c, ColorBlit2_LargeCodeBlock_Loop11
+	jr	c, DrawMonoBitmap_Impl_Loop9
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
-ColorBlit2_LargeCodeBlock_Join7:
+DrawMonoBitmap_Impl_Join10:
 	ld	xwa, (xsp+28)
 	lda	xix, (xwa+2)
 	ld	bc, (xix)
 	ld	wa, (xwa+6)
 	sub	wa, bc
 	cp	(xsp+8), wa
-	jrl	c, ColorBlit2_LargeCodeBlock_Loop5
+	jrl	c, DrawMonoBitmap_Impl_Loop8
 	incw	8, (xsp+6)
-ColorBlit2_LargeCodeBlock_Join8:
+DrawMonoBitmap_Impl_Join11:
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	sub	bc, (xwa)
 	cp	(xsp+6), bc
-	jrl	c, ColorBlit2_LargeCodeBlock_Loop4
-ColorBlit2_LargeCodeBlock_Join9:
+	jrl	c, DrawMonoBitmap_Impl_Loop7
+DrawMonoBitmap_Impl_Done:
 	ld	xwa, (xsp+28)
 	calr	SetChangeRect
 	popw	iz
 	lda	xsp, (xsp+30)
 	ret
+
+; =============================================================================
+; DrawLineWithMode - draw a line between two points, honouring the draw mode
+;
+; Input:
+;   XWA = pointer to point A: word[0]=x, word[2]=y
+;   XBC = pointer to point B: word[0]=x, word[2]=y
+;   DE  = colour (0xf5 = copy the pixel from the buffer at (0x030452))
+;
+; Wrapper / deferred path as in DrawMonoBitmap, with a 16-byte queue record
+; {+0 DrawLineWithMode_ParamBlock, +4 point A, +8 point B, +12 colour,
+; +14 draw mode}.
+;
+; DrawLineWithMode_Impl returns at once unless IsPointOnScreen accepts both
+; points and at least one delta is non-zero.  It walks the longer axis one
+; pixel at a time and the other in 16.16 fixed point: the slope comes from
+; Math_DivideSigned32 on the delta shifted left 16 (`sla 0` = 16), rounded by
+; adding 0x8000.  Pixel writes follow the latched draw mode (0x03efaa): 0 writes
+; the colour into bits 0-4,7 keeping bits 5-6 (as DrawMonoBitmap); 1 sets or
+; clears bit 5 (_Impl_Mode1) and 2 bit 6 (_Impl_Mode2) according to the pixel's
+; bit 7 -- the axis-aligned paths and the general path use OPPOSITE polarity
+; (set-if-bit7 vs clear-if-bit7), as the ROM has it; other modes draw nothing.
+; It ends with SetChangeRect over the rectangle spanned by the two points
+; (_Impl_Done).  DrawLine's wrapper (ui/drawing_primitives.s) does not latch the
+; draw mode byte; this one does.
+; Derived from the ROM code below (v10 0xFAFECD).  Callers:
+; display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper) and,
+; directly into _Impl, the image's root .s (as
+; Voice_FactoryPresetData_Code_Helper).
+; =============================================================================
+; DrawText_LayoutAndRender_Variant1_Helper: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s (owned by another lane)
 DrawText_LayoutAndRender_Variant1_Helper:
+DrawLineWithMode:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), de
@@ -8599,21 +8665,21 @@ DrawText_LayoutAndRender_Variant1_Helper:
 	ld	xiz, xwa
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper_Skip
+	jr	z, DrawLineWithMode_DeferredPath
 	ld	a, (0x03efa8:24)
 	ld	(0x03efaa:24), a
 	cpw	(0x03044e:24), 0
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper_Epilogue
+	jr	z, DrawLineWithMode_Return
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
 	ld	de, (xsp+4)
-	calr	Voice_FactoryPresetData_Code_Helper
-	jr	DrawText_LayoutAndRender_Variant1_Helper_Epilogue
-DrawText_LayoutAndRender_Variant1_Helper_Skip:
+	calr	DrawLineWithMode_Impl
+	jr	DrawLineWithMode_Return
+DrawLineWithMode_DeferredPath:
 	ldw	wa, 16
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (ColorBlit2_LargeCodeBlock_0x3F0:24)
+	lda	xbc, (DrawLineWithMode_ParamBlock:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -8629,10 +8695,11 @@ DrawText_LayoutAndRender_Variant1_Helper_Skip:
 	ld	c, (0x03efa8:24)
 	ld	(xwa+14), c
 	calr	DisplayCmd_DequeueAndExecute
-DrawText_LayoutAndRender_Variant1_Helper_Epilogue:
+DrawLineWithMode_Return:
 	pop	xiz
 	inc	6, xsp
 	ret
+DrawLineWithMode_ParamBlock:
 	ld	xbc, xwa
 	lda	xwa, (xbc+4)
 	lda	xhl, (xbc+8)
@@ -8642,9 +8709,11 @@ DrawText_LayoutAndRender_Variant1_Helper_Epilogue:
 	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xbc, xhl
-	calr	Voice_FactoryPresetData_Code_Helper
+	calr	DrawLineWithMode_Impl
 	ret
+; Voice_FactoryPresetData_Code_Helper: previous name of this label, kept only because it is still referenced by kn5000_v10_program.s (owned by another lane)
 Voice_FactoryPresetData_Code_Helper:
+DrawLineWithMode_Impl:
 	lda	xsp, (xsp-72)
 	push	xiz
 	ld	(xsp+66), de
@@ -8653,19 +8722,19 @@ Voice_FactoryPresetData_Code_Helper:
 	ld	xwa, (xsp+72)
 	calr	IsPointOnScreen
 	cp	hl, 0:i3
-	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue
+	jrl	z, DrawLineWithMode_Impl_Epilogue
 	ld	xwa, (xsp+68)
 	calr	IsPointOnScreen
 	cp	hl, 0:i3
-	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue
+	jrl	z, DrawLineWithMode_Impl_Epilogue
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+68)
 	ld	bc, (xwa)
 	ld	xwa, (xsp+72)
 	cp	bc, (xwa)
-	jr	le, ColorBlit2_LargeCodeBlock_Skip2
+	jr	le, DrawLineWithMode_Impl_Skip
 	ld	xde, 1:i3
-ColorBlit2_LargeCodeBlock_Skip2:
+DrawLineWithMode_Impl_Skip:
 	ld	(xsp+12), xde
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+68)
@@ -8679,44 +8748,44 @@ ColorBlit2_LargeCodeBlock_Skip2:
 	ld	xwa, (xsp+26)
 	ld	hl, (xwa)
 	cp	bc, hl
-	jr	le, ColorBlit2_LargeCodeBlock_Skip3
+	jr	le, DrawLineWithMode_Impl_Skip2
 	ld	xde, 1:i3
-ColorBlit2_LargeCodeBlock_Skip3:
+DrawLineWithMode_Impl_Skip2:
 	ld	(xsp+16), xde
 	ld	xwa, (xsp+12)
 	cp	xwa, 1
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip4
+	jr	nz, DrawLineWithMode_Impl_Skip3
 	ld	xwa, (xsp+68)
 	ld	de, (xwa)
 	ld	xwa, (xsp+72)
 	sub	de, (xwa)
-	jr	Voice_FactoryPresetData_Code_Helper_Join
-ColorBlit2_LargeCodeBlock_Skip4:
+	jr	DrawLineWithMode_Impl_Join
+DrawLineWithMode_Impl_Skip3:
 	ld	xwa, (xsp+72)
 	ld	de, (xwa)
 	ld	xwa, (xsp+68)
 	sub	de, (xwa)
-Voice_FactoryPresetData_Code_Helper_Join:
+DrawLineWithMode_Impl_Join:
 	exts	xde
 	ld	(xsp+4), xde
 	ld	xwa, (xsp+16)
 	cp	xwa, 1
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip5
+	jr	nz, DrawLineWithMode_Impl_Skip4
 	sub	bc, hl
 	ld	hl, bc
-	jr	ColorBlit2_LargeCodeBlock_Join10
-ColorBlit2_LargeCodeBlock_Skip5:
+	jr	DrawLineWithMode_Impl_Join2
+DrawLineWithMode_Impl_Skip4:
 	sub	hl, bc
-ColorBlit2_LargeCodeBlock_Join10:
+DrawLineWithMode_Impl_Join2:
 	exts	xhl
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip6
+	jr	nz, DrawLineWithMode_Impl_Skip5
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue
-ColorBlit2_LargeCodeBlock_Skip6:
+	jrl	z, DrawLineWithMode_Impl_Epilogue
+DrawLineWithMode_Impl_Skip5:
 	ld	xwa, (xsp+72)
 	ld	xiy, xwa
 	lda	xix, (xsp+62)
@@ -8748,14 +8817,14 @@ ColorBlit2_LargeCodeBlock_Skip6:
 	ld	xwa, 32768
 	add	(xsp+50), xwa
 	cp	(xsp+20), 2
-	jrl	z, Voice_FactoryPresetData_Code_Helper_Skip20
+	jrl	z, DrawLineWithMode_Impl_Mode2
 	cp	(xsp+20), 1
-	jrl	z, Voice_FactoryPresetData_Code_Helper_Skip14
+	jrl	z, DrawLineWithMode_Impl_Mode1
 	cp	(xsp+20), 0
-	jrl	nz, ColorBlit2_LargeCodeBlock_Join17
+	jrl	nz, DrawLineWithMode_Impl_Done
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jrl	nz, Voice_FactoryPresetData_Code_Helper_Skip4
+	jrl	nz, DrawLineWithMode_Impl_Skip9
 	ld	xde, (xsp+42)
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
@@ -8770,12 +8839,12 @@ ColorBlit2_LargeCodeBlock_Skip6:
 	ld	xhl, (xsp+30)
 	add	xhl, xwa
 	cpw	(xsp+66), 245
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip2
+	jr	z, DrawLineWithMode_Impl_Skip7
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop:
 	and	(xhl), 0x60
 	ld	wa, (xsp+66)
 	and	wa, 0x9f
@@ -8786,9 +8855,9 @@ Voice_FactoryPresetData_Code_Helper_Loop:
 	and	a, 0x80
 	extz	wa
 	cp	wa, de
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip
+	jr	z, DrawLineWithMode_Impl_Skip6
 	xor	(xhl), 0x60
-Voice_FactoryPresetData_Code_Helper_Skip:
+DrawLineWithMode_Impl_Skip6:
 	ld	xwa, (xsp+16)
 	sla	xwa, 2
 	add	xwa, (xsp+16)
@@ -8796,9 +8865,9 @@ Voice_FactoryPresetData_Code_Helper_Skip:
 	add	xhl, xwa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip2:
+	jr	le, DrawLineWithMode_Impl_Loop
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip7:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xbc
@@ -8807,8 +8876,8 @@ Voice_FactoryPresetData_Code_Helper_Skip2:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop2:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop2:
 	and	(xhl), 0x60
 	ld	a, (xix)
 	and	a, 0x9f
@@ -8818,9 +8887,9 @@ Voice_FactoryPresetData_Code_Helper_Loop2:
 	ld	a, (xhl)
 	and	a, 0x80
 	cp	a, e
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip3
+	jr	z, DrawLineWithMode_Impl_Skip8
 	xor	(xhl), 0x60
-Voice_FactoryPresetData_Code_Helper_Skip3:
+DrawLineWithMode_Impl_Skip8:
 	ld	xwa, (xsp+16)
 	sla	xwa, 2
 	add	xwa, (xsp+16)
@@ -8829,12 +8898,12 @@ Voice_FactoryPresetData_Code_Helper_Skip3:
 	add	xix, xwa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop2
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip4:
+	jr	le, DrawLineWithMode_Impl_Loop2
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip9:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	nz, Voice_FactoryPresetData_Code_Helper_Skip8
+	jrl	nz, DrawLineWithMode_Impl_Skip13
 	ld	xde, (xsp+42)
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
@@ -8850,12 +8919,12 @@ Voice_FactoryPresetData_Code_Helper_Skip4:
 	ld	xhl, (xsp+30)
 	add	xhl, xwa
 	cpw	(xsp+66), 245
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip6
+	jr	z, DrawLineWithMode_Impl_Skip11
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop3:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop3:
 	and	(xhl), 0x60
 	ld	wa, (xsp+66)
 	and	wa, 0x9f
@@ -8866,15 +8935,15 @@ Voice_FactoryPresetData_Code_Helper_Loop3:
 	and	a, 0x80
 	extz	wa
 	cp	wa, de
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip5
+	jr	z, DrawLineWithMode_Impl_Skip10
 	xor	(xhl), 0x60
-Voice_FactoryPresetData_Code_Helper_Skip5:
+DrawLineWithMode_Impl_Skip10:
 	add	xhl, (xsp+12)
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop3
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip6:
+	jr	le, DrawLineWithMode_Impl_Loop3
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip11:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xbc
@@ -8883,8 +8952,8 @@ Voice_FactoryPresetData_Code_Helper_Skip6:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop4:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop4:
 	and	(xhl), 0x60
 	ld	a, (xix)
 	and	a, 0x9f
@@ -8894,19 +8963,19 @@ Voice_FactoryPresetData_Code_Helper_Loop4:
 	ld	a, (xhl)
 	and	a, 0x80
 	cp	a, e
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip7
+	jr	z, DrawLineWithMode_Impl_Skip12
 	xor	(xhl), 0x60
-Voice_FactoryPresetData_Code_Helper_Skip7:
+DrawLineWithMode_Impl_Skip12:
 	add	xhl, (xsp+12)
 	add	xix, (xsp+12)
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop4
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip8:
+	jr	le, DrawLineWithMode_Impl_Loop4
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip13:
 	ld	xwa, (xsp+8)
 	cp	xwa, (xsp+4)
-	jrl	le, Voice_FactoryPresetData_Code_Helper_Skip11
+	jrl	le, DrawLineWithMode_Impl_Skip16
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
 	call	Math_MultiplyAccumulate
@@ -8923,8 +8992,8 @@ Voice_FactoryPresetData_Code_Helper_Skip8:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop5:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop5:
 	ld	xiy, xde
 	ld	hl, (xsp+66)
 	lda	xwa, (xde+2)
@@ -8941,7 +9010,7 @@ Voice_FactoryPresetData_Code_Helper_Loop5:
 	ld	xix, (xsp+38)
 	add	xix, xwa
 	cpw	(xsp+66), 245
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip9
+	jr	z, DrawLineWithMode_Impl_Skip14
 	and	(xix), 0x60
 	ld	wa, hl
 	and	wa, 0x9f
@@ -8951,9 +9020,9 @@ Voice_FactoryPresetData_Code_Helper_Loop5:
 	and	a, 0x80
 	extz	wa
 	cp	wa, hl
-	jr	nz, Voice_FactoryPresetData_Code_Helper_Skip10
-	jr	Voice_FactoryPresetData_Code_Helper_Join2
-Voice_FactoryPresetData_Code_Helper_Skip9:
+	jr	nz, DrawLineWithMode_Impl_Skip15
+	jr	DrawLineWithMode_Impl_Join3
+DrawLineWithMode_Impl_Skip14:
 	ld	xiz, (0x030452:24)
 	ld	hl, (xiy)
 	exts	xhl
@@ -8974,10 +9043,10 @@ Voice_FactoryPresetData_Code_Helper_Skip9:
 	ld	a, (xix)
 	and	a, 0x80
 	cp	a, l
-	jr	z, Voice_FactoryPresetData_Code_Helper_Join2
-Voice_FactoryPresetData_Code_Helper_Skip10:
+	jr	z, DrawLineWithMode_Impl_Join3
+DrawLineWithMode_Impl_Skip15:
 	xor	(xix), 0x60
-Voice_FactoryPresetData_Code_Helper_Join2:
+DrawLineWithMode_Impl_Join3:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -8988,9 +9057,9 @@ Voice_FactoryPresetData_Code_Helper_Join2:
 	add	(xwa), hl
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jrl	le, Voice_FactoryPresetData_Code_Helper_Loop5
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip11:
+	jrl	le, DrawLineWithMode_Impl_Loop5
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip16:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
 	call	Math_MultiplyAccumulate
@@ -9003,8 +9072,8 @@ Voice_FactoryPresetData_Code_Helper_Skip11:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop6:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop6:
 	ld	xix, xde
 	ld	hl, (xsp+66)
 	ld	xwa, (xsp+46)
@@ -9020,7 +9089,7 @@ Voice_FactoryPresetData_Code_Helper_Loop6:
 	ld	xiy, (xsp+38)
 	add	xiy, xwa
 	cpw	(xsp+66), 245
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip12
+	jr	z, DrawLineWithMode_Impl_Skip17
 	and	(xiy), 0x60
 	ld	wa, hl
 	and	wa, 0x9f
@@ -9030,9 +9099,9 @@ Voice_FactoryPresetData_Code_Helper_Loop6:
 	and	a, 0x80
 	extz	wa
 	cp	wa, hl
-	jr	nz, Voice_FactoryPresetData_Code_Helper_Skip13
-	jr	Voice_FactoryPresetData_Code_Helper_Join3
-Voice_FactoryPresetData_Code_Helper_Skip12:
+	jr	nz, DrawLineWithMode_Impl_Skip18
+	jr	DrawLineWithMode_Impl_Join4
+DrawLineWithMode_Impl_Skip17:
 	ld	xiz, (0x030452:24)
 	ld	hl, (xix)
 	exts	xhl
@@ -9053,10 +9122,10 @@ Voice_FactoryPresetData_Code_Helper_Skip12:
 	ld	a, (xiy)
 	and	a, 0x80
 	cp	a, l
-	jr	z, Voice_FactoryPresetData_Code_Helper_Join3
-Voice_FactoryPresetData_Code_Helper_Skip13:
+	jr	z, DrawLineWithMode_Impl_Join4
+DrawLineWithMode_Impl_Skip18:
 	xor	(xiy), 0x60
-Voice_FactoryPresetData_Code_Helper_Join3:
+DrawLineWithMode_Impl_Join4:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xhl, (xsp+8)
@@ -9067,12 +9136,12 @@ Voice_FactoryPresetData_Code_Helper_Join3:
 	add	(xde), wa
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jrl	le, Voice_FactoryPresetData_Code_Helper_Loop6
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip14:
+	jrl	le, DrawLineWithMode_Impl_Loop6
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Mode1:
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip7
+	jr	nz, DrawLineWithMode_Impl_Skip20
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9089,15 +9158,15 @@ Voice_FactoryPresetData_Code_Helper_Skip14:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop7:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop7:
 	bitm	7, (xde)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip15
+	jr	z, DrawLineWithMode_Impl_Skip19
 	setm	5, (xde)
-	jr	ColorBlit2_LargeCodeBlock_Join11
-Voice_FactoryPresetData_Code_Helper_Skip15:
+	jr	DrawLineWithMode_Impl_Join5
+DrawLineWithMode_Impl_Skip19:
 	resm	5, (xde)
-ColorBlit2_LargeCodeBlock_Join11:
+DrawLineWithMode_Impl_Join5:
 	ld	xwa, (xsp+16)
 	sla	xwa, 2
 	add	xwa, (xsp+16)
@@ -9105,12 +9174,12 @@ ColorBlit2_LargeCodeBlock_Join11:
 	add	xde, xwa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop7
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-ColorBlit2_LargeCodeBlock_Skip7:
+	jr	le, DrawLineWithMode_Impl_Loop7
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip20:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip8
+	jr	nz, DrawLineWithMode_Impl_Skip22
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9127,24 +9196,24 @@ ColorBlit2_LargeCodeBlock_Skip7:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop8:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop8:
 	bitm	7, (xde)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip16
+	jr	z, DrawLineWithMode_Impl_Skip21
 	setm	5, (xde)
-	jr	Voice_FactoryPresetData_Code_Helper_Join4
-Voice_FactoryPresetData_Code_Helper_Skip16:
+	jr	DrawLineWithMode_Impl_Join6
+DrawLineWithMode_Impl_Skip21:
 	resm	5, (xde)
-Voice_FactoryPresetData_Code_Helper_Join4:
+DrawLineWithMode_Impl_Join6:
 	add	xde, (xsp+12)
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop8
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-ColorBlit2_LargeCodeBlock_Skip8:
+	jr	le, DrawLineWithMode_Impl_Loop8
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip22:
 	ld	xwa, (xsp+8)
 	cp	xwa, (xsp+4)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Skip18
+	jr	le, DrawLineWithMode_Impl_Skip24
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
 	call	Math_MultiplyAccumulate
@@ -9161,8 +9230,8 @@ ColorBlit2_LargeCodeBlock_Skip8:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop9:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop9:
 	lda	xhl, (xde+2)
 	ld	wa, (xhl)
 	exts	xwa
@@ -9176,12 +9245,12 @@ Voice_FactoryPresetData_Code_Helper_Loop9:
 	ld	xix, (xsp+38)
 	add	xix, xwa
 	bitm	7, (xix)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip17
+	jr	z, DrawLineWithMode_Impl_Skip23
 	resm	5, (xix)
-	jr	ColorBlit2_LargeCodeBlock_Join12
-Voice_FactoryPresetData_Code_Helper_Skip17:
+	jr	DrawLineWithMode_Impl_Join7
+DrawLineWithMode_Impl_Skip23:
 	setm	5, (xix)
-ColorBlit2_LargeCodeBlock_Join12:
+DrawLineWithMode_Impl_Join7:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -9191,9 +9260,9 @@ ColorBlit2_LargeCodeBlock_Join12:
 	add	(xhl), wa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop9
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip18:
+	jr	le, DrawLineWithMode_Impl_Loop9
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip24:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
 	call	Math_MultiplyAccumulate
@@ -9205,8 +9274,8 @@ Voice_FactoryPresetData_Code_Helper_Skip18:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-ColorBlit2_LargeCodeBlock_Loop6:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop10:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xwa
@@ -9219,12 +9288,12 @@ ColorBlit2_LargeCodeBlock_Loop6:
 	ld	xix, (xsp+38)
 	add	xix, xwa
 	bitm	7, (xix)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip19
+	jr	z, DrawLineWithMode_Impl_Skip25
 	resm	5, (xix)
-	jr	ColorBlit2_LargeCodeBlock_Join13
-Voice_FactoryPresetData_Code_Helper_Skip19:
+	jr	DrawLineWithMode_Impl_Join8
+DrawLineWithMode_Impl_Skip25:
 	setm	5, (xix)
-ColorBlit2_LargeCodeBlock_Join13:
+DrawLineWithMode_Impl_Join8:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
@@ -9234,9 +9303,9 @@ ColorBlit2_LargeCodeBlock_Join13:
 	add	(xhl), wa
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, ColorBlit2_LargeCodeBlock_Loop6
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip20:
+	jr	le, DrawLineWithMode_Impl_Loop10
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Mode2:
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9246,7 +9315,7 @@ Voice_FactoryPresetData_Code_Helper_Skip20:
 	sll	xbc, 6
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip9
+	jr	nz, DrawLineWithMode_Impl_Skip27
 	ld	xwa, (xsp+42)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9256,15 +9325,15 @@ Voice_FactoryPresetData_Code_Helper_Skip20:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop10:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop11:
 	bitm	7, (xde)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip21
+	jr	z, DrawLineWithMode_Impl_Skip26
 	resm	6, (xde)
-	jr	ColorBlit2_LargeCodeBlock_Join14
-Voice_FactoryPresetData_Code_Helper_Skip21:
+	jr	DrawLineWithMode_Impl_Join9
+DrawLineWithMode_Impl_Skip26:
 	setm	6, (xde)
-ColorBlit2_LargeCodeBlock_Join14:
+DrawLineWithMode_Impl_Join9:
 	ld	xwa, (xsp+16)
 	sla	xwa, 2
 	add	xwa, (xsp+16)
@@ -9272,12 +9341,12 @@ ColorBlit2_LargeCodeBlock_Join14:
 	add	xde, xwa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop10
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-ColorBlit2_LargeCodeBlock_Skip9:
+	jr	le, DrawLineWithMode_Impl_Loop11
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip27:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip10
+	jr	nz, DrawLineWithMode_Impl_Skip29
 	ld	xwa, (xsp+42)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9287,24 +9356,24 @@ ColorBlit2_LargeCodeBlock_Skip9:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop11:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop12:
 	bitm	7, (xde)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip22
+	jr	z, DrawLineWithMode_Impl_Skip28
 	resm	6, (xde)
-	jr	Voice_FactoryPresetData_Code_Helper_Join5
-Voice_FactoryPresetData_Code_Helper_Skip22:
+	jr	DrawLineWithMode_Impl_Join10
+DrawLineWithMode_Impl_Skip28:
 	setm	6, (xde)
-Voice_FactoryPresetData_Code_Helper_Join5:
+DrawLineWithMode_Impl_Join10:
 	add	xde, (xsp+12)
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop11
-	jrl	ColorBlit2_LargeCodeBlock_Join17
-ColorBlit2_LargeCodeBlock_Skip10:
+	jr	le, DrawLineWithMode_Impl_Loop12
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip29:
 	ld	xwa, (xsp+8)
 	cp	xwa, (xsp+4)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Skip24
+	jr	le, DrawLineWithMode_Impl_Skip31
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
 	call	Math_MultiplyAccumulate
@@ -9321,8 +9390,8 @@ ColorBlit2_LargeCodeBlock_Skip10:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Loop12:
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop13:
 	lda	xhl, (xde+2)
 	ld	wa, (xhl)
 	exts	xwa
@@ -9336,12 +9405,12 @@ Voice_FactoryPresetData_Code_Helper_Loop12:
 	ld	xix, (xsp+38)
 	add	xix, xwa
 	bitm	7, (xix)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip23
+	jr	z, DrawLineWithMode_Impl_Skip30
 	resm	6, (xix)
-	jr	ColorBlit2_LargeCodeBlock_Join15
-Voice_FactoryPresetData_Code_Helper_Skip23:
+	jr	DrawLineWithMode_Impl_Join11
+DrawLineWithMode_Impl_Skip30:
 	setm	6, (xix)
-ColorBlit2_LargeCodeBlock_Join15:
+DrawLineWithMode_Impl_Join11:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -9351,9 +9420,9 @@ ColorBlit2_LargeCodeBlock_Join15:
 	add	(xhl), wa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, Voice_FactoryPresetData_Code_Helper_Loop12
-	jr	ColorBlit2_LargeCodeBlock_Join17
-Voice_FactoryPresetData_Code_Helper_Skip24:
+	jr	le, DrawLineWithMode_Impl_Loop13
+	jr	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip31:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
 	call	Math_MultiplyAccumulate
@@ -9365,8 +9434,8 @@ Voice_FactoryPresetData_Code_Helper_Skip24:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jr	lt, ColorBlit2_LargeCodeBlock_Join17
-ColorBlit2_LargeCodeBlock_Loop7:
+	jr	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop14:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xwa
@@ -9379,12 +9448,12 @@ ColorBlit2_LargeCodeBlock_Loop7:
 	ld	xix, (xsp+38)
 	add	xix, xwa
 	bitm	7, (xix)
-	jr	z, Voice_FactoryPresetData_Code_Helper_Skip25
+	jr	z, DrawLineWithMode_Impl_Skip32
 	resm	6, (xix)
-	jr	ColorBlit2_LargeCodeBlock_Join16
-Voice_FactoryPresetData_Code_Helper_Skip25:
+	jr	DrawLineWithMode_Impl_Join12
+DrawLineWithMode_Impl_Skip32:
 	setm	6, (xix)
-ColorBlit2_LargeCodeBlock_Join16:
+DrawLineWithMode_Impl_Join12:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
@@ -9394,8 +9463,8 @@ ColorBlit2_LargeCodeBlock_Join16:
 	add	(xhl), wa
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, ColorBlit2_LargeCodeBlock_Loop7
-ColorBlit2_LargeCodeBlock_Join17:
+	jr	le, DrawLineWithMode_Impl_Loop14
+DrawLineWithMode_Impl_Done:
 	lda	xwa, (xsp+54)
 	ld	xbc, (xsp+26)
 	ld	bc, (xbc)
@@ -9410,11 +9479,28 @@ ColorBlit2_LargeCodeBlock_Join17:
 	ld	bc, (xbc)
 	ld	(xwa+6), bc
 	calr	SetChangeRect
-ColorBlit2_LargeCodeBlock_Epilogue:
+DrawLineWithMode_Impl_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+72)
 	ret
+
+; =============================================================================
+; DrawDottedLineWithMode - DrawLineWithMode with a dotted pattern
+;
+; Same inputs, queue record layout (+0 DrawDottedLineWithMode_ParamBlock) and
+; algorithm as DrawLineWithMode, plus a pattern counter at (xsp+0x18) of the
+; _Impl frame: per pixel step, counter 0 and 1 draw and increment, 2 and 3 skip
+; and increment, and at 4 the counter is reset to 0 WITHOUT drawing or
+; incrementing -- two pixels on, three off.  The draw-mode test is made per
+; pixel inside the loop.
+; The routine continues past the end of this file into the image's root .s
+; (kn5000_v10_program.s), which branches back into it.
+; Derived from the ROM code below (v10 0xFB06B6).  Caller:
+; display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper2).
+; =============================================================================
+; DrawText_LayoutAndRender_Variant1_Helper2: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s (owned by another lane)
 DrawText_LayoutAndRender_Variant1_Helper2:
+DrawDottedLineWithMode:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), de
@@ -9422,21 +9508,21 @@ DrawText_LayoutAndRender_Variant1_Helper2:
 	ld	xiz, xwa
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip
+	jr	z, DrawDottedLineWithMode_DeferredPath
 	ld	a, (0x03efa8:24)
 	ld	(0x03efaa:24), a
 	cpw	(0x03044e:24), 0
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Epilogue
+	jr	z, DrawDottedLineWithMode_Return
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
 	ld	de, (xsp+4)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2_Helper
-	jr	DrawText_LayoutAndRender_Variant1_Helper2_Epilogue
-DrawText_LayoutAndRender_Variant1_Helper2_Skip:
+	calr	DrawDottedLineWithMode_Impl
+	jr	DrawDottedLineWithMode_Return
+DrawDottedLineWithMode_DeferredPath:
 	ldw	wa, 16
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (ColorBlit2_LargeCodeBlock_0xBD9:24)
+	lda	xbc, (DrawDottedLineWithMode_ParamBlock:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -9452,10 +9538,11 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip:
 	ld	c, (0x03efa8:24)
 	ld	(xwa+14), c
 	calr	DisplayCmd_DequeueAndExecute
-DrawText_LayoutAndRender_Variant1_Helper2_Epilogue:
+DrawDottedLineWithMode_Return:
 	pop	xiz
 	inc	6, xsp
 	ret
+DrawDottedLineWithMode_ParamBlock:
 	ld	xbc, xwa
 	lda	xwa, (xbc+4)
 	lda	xhl, (xbc+8)
@@ -9465,9 +9552,9 @@ DrawText_LayoutAndRender_Variant1_Helper2_Epilogue:
 	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xbc, xhl
-	calr	DrawText_LayoutAndRender_Variant1_Helper2_Helper
+	calr	DrawDottedLineWithMode_Impl
 	ret
-DrawText_LayoutAndRender_Variant1_Helper2_Helper:
+DrawDottedLineWithMode_Impl:
 	lda	xsp, (xsp-56)
 	push	xiz
 	ld	(xsp+50), de
@@ -9479,9 +9566,9 @@ DrawText_LayoutAndRender_Variant1_Helper2_Helper:
 	ld	bc, (xwa)
 	ld	xwa, (xsp+56)
 	cp	bc, (xwa)
-	jr	le, ColorBlit2_LargeCodeBlock_Skip11
+	jr	le, DrawDottedLineWithMode_Impl_Skip
 	ld	xde, 1:i3
-ColorBlit2_LargeCodeBlock_Skip11:
+DrawDottedLineWithMode_Impl_Skip:
 	ld	(xsp+12), xde
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+52)
@@ -9495,44 +9582,44 @@ ColorBlit2_LargeCodeBlock_Skip11:
 	ld	xwa, (xsp+30)
 	ld	hl, (xwa)
 	cp	bc, hl
-	jr	le, ColorBlit2_LargeCodeBlock_Skip12
+	jr	le, DrawDottedLineWithMode_Impl_Skip2
 	ld	xde, 1:i3
-ColorBlit2_LargeCodeBlock_Skip12:
+DrawDottedLineWithMode_Impl_Skip2:
 	ld	(xsp+16), xde
 	ld	xwa, (xsp+12)
 	cp	xwa, 1
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip13
+	jr	nz, DrawDottedLineWithMode_Impl_Skip3
 	ld	xwa, (xsp+52)
 	ld	de, (xwa)
 	ld	xwa, (xsp+56)
 	sub	de, (xwa)
-	jr	DrawText_LayoutAndRender_Variant1_Helper2_Join
-ColorBlit2_LargeCodeBlock_Skip13:
+	jr	DrawDottedLineWithMode_Impl_Join
+DrawDottedLineWithMode_Impl_Skip3:
 	ld	xwa, (xsp+56)
 	ld	de, (xwa)
 	ld	xwa, (xsp+52)
 	sub	de, (xwa)
-DrawText_LayoutAndRender_Variant1_Helper2_Join:
+DrawDottedLineWithMode_Impl_Join:
 	exts	xde
 	ld	(xsp+4), xde
 	ld	xwa, (xsp+16)
 	cp	xwa, 1
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip14
+	jr	nz, DrawDottedLineWithMode_Impl_Skip4
 	sub	bc, hl
 	ld	hl, bc
-	jr	ColorBlit2_LargeCodeBlock_Join18
-ColorBlit2_LargeCodeBlock_Skip14:
+	jr	DrawDottedLineWithMode_Impl_Join2
+DrawDottedLineWithMode_Impl_Skip4:
 	sub	hl, bc
-ColorBlit2_LargeCodeBlock_Join18:
+DrawDottedLineWithMode_Impl_Join2:
 	exts	xhl
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, ColorBlit2_LargeCodeBlock_Skip15
+	jr	nz, DrawDottedLineWithMode_Impl_Skip5
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
 	jrl	z, Voice_FactoryPresetData_Code_Epilogue
-ColorBlit2_LargeCodeBlock_Skip15:
+DrawDottedLineWithMode_Impl_Skip5:
 	ld	xwa, (xsp+56)
 	ld	xiy, xwa
 	lda	xix, (xsp+46)
@@ -9540,27 +9627,27 @@ ColorBlit2_LargeCodeBlock_Skip15:
 	ldiw
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jrl	nz, ColorBlit2_LargeCodeBlock_Skip16
+	jrl	nz, DrawDottedLineWithMode_Impl_Skip13
 	ld	xwa, 0:i3
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jrl	lt, Voice_FactoryPresetData_Code_Join4
-DrawText_LayoutAndRender_Variant1_Helper2_Loop:
+DrawDottedLineWithMode_Impl_Loop:
 	cp	(xsp+24), 3
-	jr	ule, DrawText_LayoutAndRender_Variant1_Helper2_Skip2
+	jr	ule, DrawDottedLineWithMode_Impl_Skip6
 	ld	(xsp+24), 0
-	jrl	DrawText_LayoutAndRender_Variant1_Helper2_Join2
-DrawText_LayoutAndRender_Variant1_Helper2_Skip2:
+	jrl	DrawDottedLineWithMode_Impl_Join4
+DrawDottedLineWithMode_Impl_Skip6:
 	cp	(xsp+24), 1
-	jrl	ugt, ColorBlit2_LargeCodeBlock_Join19
+	jrl	ugt, DrawDottedLineWithMode_Impl_Join3
 	ld	a, (0x03efaa:24)
 	cp	a, 2:i3
-	jrl	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip7
+	jrl	z, DrawDottedLineWithMode_Impl_Skip11
 	cp	a, 1:i3
-	jrl	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip5
+	jrl	z, DrawDottedLineWithMode_Impl_Skip9
 	cp	a, 0:i3
-	jrl	nz, ColorBlit2_LargeCodeBlock_Join19
+	jrl	nz, DrawDottedLineWithMode_Impl_Join3
 	lda	xwa, (xsp+46)
 	ld	xiy, xwa
 	ld	ix, (xsp+50)
@@ -9576,7 +9663,7 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip2:
 	lda	xhl, (0x043c00:24)
 	add	xhl, xwa
 	cpw	(xsp+50), 245
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip3
+	jr	z, DrawDottedLineWithMode_Impl_Skip7
 	and	(xhl), 0x60
 	ld	wa, ix
 	and	wa, 0x9f
@@ -9587,9 +9674,9 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip2:
 	and	a, 0x80
 	extz	wa
 	cp	wa, bc
-	jr	nz, DrawText_LayoutAndRender_Variant1_Helper2_Skip4
-	jrl	ColorBlit2_LargeCodeBlock_Join19
-DrawText_LayoutAndRender_Variant1_Helper2_Skip3:
+	jr	nz, DrawDottedLineWithMode_Impl_Skip8
+	jrl	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip7:
 	ld	xix, (0x030452:24)
 	ld	bc, (xiy)
 	exts	xbc
@@ -9610,11 +9697,11 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip3:
 	ld	a, (xhl)
 	and	a, 0x80
 	cp	a, c
-	jr	z, ColorBlit2_LargeCodeBlock_Join19
-DrawText_LayoutAndRender_Variant1_Helper2_Skip4:
+	jr	z, DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip8:
 	xor	(xhl), 0x60
-	jr	ColorBlit2_LargeCodeBlock_Join19
-DrawText_LayoutAndRender_Variant1_Helper2_Skip5:
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip9:
 	lda	xwa, (xsp+46)
 	ld	bc, (xwa+2)
 	exts	xbc
@@ -9628,13 +9715,13 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip5:
 	lda	xbc, (0x043c00:24)
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip6
+	jr	z, DrawDottedLineWithMode_Impl_Skip10
 	resm	5, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join19
-DrawText_LayoutAndRender_Variant1_Helper2_Skip6:
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip10:
 	setm	5, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join19
-DrawText_LayoutAndRender_Variant1_Helper2_Skip7:
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip11:
 	lda	xwa, (xsp+46)
 	ld	bc, (xwa+2)
 	exts	xbc
@@ -9648,46 +9735,46 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip7:
 	lda	xbc, (0x043c00:24)
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip8
+	jr	z, DrawDottedLineWithMode_Impl_Skip12
 	resm	6, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join19
-DrawText_LayoutAndRender_Variant1_Helper2_Skip8:
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip12:
 	setm	6, (xbc)
-ColorBlit2_LargeCodeBlock_Join19:
+DrawDottedLineWithMode_Impl_Join3:
 	inc	1, (xsp+24)
-DrawText_LayoutAndRender_Variant1_Helper2_Join2:
+DrawDottedLineWithMode_Impl_Join4:
 	ld	xwa, (xsp+16)
 	add	(xsp+48), wa
 	ld	xwa, 1:i3
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+8)
-	jrl	le, DrawText_LayoutAndRender_Variant1_Helper2_Loop
+	jrl	le, DrawDottedLineWithMode_Impl_Loop
 	jrl	Voice_FactoryPresetData_Code_Join4
-ColorBlit2_LargeCodeBlock_Skip16:
+DrawDottedLineWithMode_Impl_Skip13:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	nz, DrawText_LayoutAndRender_Variant1_Helper2_Skip16
+	jrl	nz, DrawDottedLineWithMode_Impl_Skip21
 	ld	xwa, 0:i3
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jrl	lt, Voice_FactoryPresetData_Code_Join4
-ColorBlit2_LargeCodeBlock_Entry:
+DrawDottedLineWithMode_Impl_Entry:
 	cp	(xsp+24), 3
-	jr	ule, DrawText_LayoutAndRender_Variant1_Helper2_Skip9
+	jr	ule, DrawDottedLineWithMode_Impl_Skip14
 	ld	(xsp+24), 0
-	jrl	DrawText_LayoutAndRender_Variant1_Helper2_Join3
-DrawText_LayoutAndRender_Variant1_Helper2_Skip9:
+	jrl	DrawDottedLineWithMode_Impl_Join6
+DrawDottedLineWithMode_Impl_Skip14:
 	cp	(xsp+24), 1
-	jrl	ugt, ColorBlit2_LargeCodeBlock_Join20
+	jrl	ugt, DrawDottedLineWithMode_Impl_Join5
 	ld	a, (0x03efaa:24)
 	cp	a, 2:i3
-	jrl	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip14
+	jrl	z, DrawDottedLineWithMode_Impl_Skip19
 	cp	a, 1:i3
-	jrl	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip12
+	jrl	z, DrawDottedLineWithMode_Impl_Skip17
 	cp	a, 0:i3
-	jrl	nz, ColorBlit2_LargeCodeBlock_Join20
+	jrl	nz, DrawDottedLineWithMode_Impl_Join5
 	lda	xwa, (xsp+46)
 	ld	xiy, xwa
 	ld	ix, (xsp+50)
@@ -9703,7 +9790,7 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip9:
 	lda	xhl, (0x043c00:24)
 	add	xhl, xwa
 	cpw	(xsp+50), 245
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip10
+	jr	z, DrawDottedLineWithMode_Impl_Skip15
 	and	(xhl), 0x60
 	ld	wa, ix
 	and	wa, 0x9f
@@ -9714,9 +9801,9 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip9:
 	and	a, 0x80
 	extz	wa
 	cp	wa, bc
-	jr	nz, DrawText_LayoutAndRender_Variant1_Helper2_Skip11
-	jrl	ColorBlit2_LargeCodeBlock_Join20
-DrawText_LayoutAndRender_Variant1_Helper2_Skip10:
+	jr	nz, DrawDottedLineWithMode_Impl_Skip16
+	jrl	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip15:
 	ld	xix, (0x030452:24)
 	ld	bc, (xiy)
 	exts	xbc
@@ -9737,11 +9824,11 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip10:
 	ld	a, (xhl)
 	and	a, 0x80
 	cp	a, c
-	jr	z, ColorBlit2_LargeCodeBlock_Join20
-DrawText_LayoutAndRender_Variant1_Helper2_Skip11:
+	jr	z, DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip16:
 	xor	(xhl), 0x60
-	jr	ColorBlit2_LargeCodeBlock_Join20
-DrawText_LayoutAndRender_Variant1_Helper2_Skip12:
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip17:
 	lda	xwa, (xsp+46)
 	ld	bc, (xwa+2)
 	exts	xbc
@@ -9755,13 +9842,13 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip12:
 	lda	xbc, (0x043c00:24)
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip13
+	jr	z, DrawDottedLineWithMode_Impl_Skip18
 	resm	5, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join20
-DrawText_LayoutAndRender_Variant1_Helper2_Skip13:
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip18:
 	setm	5, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join20
-DrawText_LayoutAndRender_Variant1_Helper2_Skip14:
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip19:
 	lda	xwa, (xsp+46)
 	ld	bc, (xwa+2)
 	exts	xbc
@@ -9775,23 +9862,23 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip14:
 	lda	xbc, (0x043c00:24)
 	add	xbc, xwa
 	bitm	7, (xbc)
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip15
+	jr	z, DrawDottedLineWithMode_Impl_Skip20
 	resm	6, (xbc)
-	jr	ColorBlit2_LargeCodeBlock_Join20
-DrawText_LayoutAndRender_Variant1_Helper2_Skip15:
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip20:
 	setm	6, (xbc)
-ColorBlit2_LargeCodeBlock_Join20:
+DrawDottedLineWithMode_Impl_Join5:
 	inc	1, (xsp+24)
-DrawText_LayoutAndRender_Variant1_Helper2_Join3:
+DrawDottedLineWithMode_Impl_Join6:
 	ld	xwa, (xsp+12)
 	add	(xsp+46), wa
 	ld	xwa, 1:i3
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+4)
-	jrl	le, ColorBlit2_LargeCodeBlock_Entry
+	jrl	le, DrawDottedLineWithMode_Impl_Entry
 	jrl	Voice_FactoryPresetData_Code_Join4
-DrawText_LayoutAndRender_Variant1_Helper2_Skip16:
+DrawDottedLineWithMode_Impl_Skip21:
 	lda	xwa, (xsp+46)
 	ld	(xsp+34), xwa
 	ld	xwa, (xsp+8)
@@ -9820,12 +9907,14 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip16:
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jrl	lt, Voice_FactoryPresetData_Code_Join4
+; ColorBlit2_LargeCodeBlock_Entry2: previous name of this label, kept only because it is still referenced by kn5000_v10_program.s (owned by another lane)
 ColorBlit2_LargeCodeBlock_Entry2:
+DrawDottedLineWithMode_Impl_Entry2:
 	cp	(xsp+24), 3
-	jr	ule, DrawText_LayoutAndRender_Variant1_Helper2_Skip17
+	jr	ule, DrawDottedLineWithMode_Impl_Skip22
 	ld	(xsp+24), 0
 	jrl	202
-DrawText_LayoutAndRender_Variant1_Helper2_Skip17:
+DrawDottedLineWithMode_Impl_Skip22:
 	cp	(xsp+24), 1
 	jrl	ugt, Voice_FactoryPresetData_Code_Join
 	ld	a, (0x03efaa:24)
@@ -9838,9 +9927,9 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip17:
 	sll	xhl, 6
 	lda	xde, (0x043c00:24)
 	cpib_erp	240, 2	; cp ixl, 2
-	jrl	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip22
+	jrl	z, DrawDottedLineWithMode_Impl_Skip27
 	cpib_erp	240, 1	; cp ixl, 1
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip20
+	jr	z, DrawDottedLineWithMode_Impl_Skip25
 	cpib_erp	240, 0	; cp ixl, 0
 	jrl	nz, Voice_FactoryPresetData_Code_Join
 	ld	xiz, xbc
@@ -9851,7 +9940,7 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip17:
 	ld	xix, xde
 	add	xix, xwa
 	cpw	(xsp+50), 245
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip18
+	jr	z, DrawDottedLineWithMode_Impl_Skip23
 	and	(xix), 0x60
 	ld	wa, iy
 	and	wa, 0x9f
@@ -9862,9 +9951,9 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip17:
 	and	a, 0x80
 	extz	wa
 	cp	wa, de
-	jr	nz, DrawText_LayoutAndRender_Variant1_Helper2_Skip19
+	jr	nz, DrawDottedLineWithMode_Impl_Skip24
 	jr	Voice_FactoryPresetData_Code_Join
-DrawText_LayoutAndRender_Variant1_Helper2_Skip18:
+DrawDottedLineWithMode_Impl_Skip23:
 	ld	xiy, (0x030452:24)
 	ld	de, (xiz)
 	exts	xde
@@ -9886,20 +9975,20 @@ DrawText_LayoutAndRender_Variant1_Helper2_Skip18:
 	and	a, 0x80
 	cp	a, e
 	jr	z, Voice_FactoryPresetData_Code_Join
-DrawText_LayoutAndRender_Variant1_Helper2_Skip19:
+DrawDottedLineWithMode_Impl_Skip24:
 	xor	(xix), 0x60
 	jr	Voice_FactoryPresetData_Code_Join
-DrawText_LayoutAndRender_Variant1_Helper2_Skip20:
+DrawDottedLineWithMode_Impl_Skip25:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xhl
 	add	xde, xwa
 	bitm	7, (xde)
-	jr	z, DrawText_LayoutAndRender_Variant1_Helper2_Skip21
+	jr	z, DrawDottedLineWithMode_Impl_Skip26
 	resm	5, (xde)
 	jr	Voice_FactoryPresetData_Code_Join
-DrawText_LayoutAndRender_Variant1_Helper2_Skip21:
+DrawDottedLineWithMode_Impl_Skip26:
 	setm	5, (xde)
 	jr	Voice_FactoryPresetData_Code_Join
-DrawText_LayoutAndRender_Variant1_Helper2_Skip22:
+DrawDottedLineWithMode_Impl_Skip27:
 	ld	wa, (xbc)
