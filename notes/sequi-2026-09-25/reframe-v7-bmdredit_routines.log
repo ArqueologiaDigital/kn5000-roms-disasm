@@ -1,0 +1,172 @@
+0xF382DF-0xF383A1: 1 old lines (1 dirty) -> 63 new instrs replaced, 8 .byte fallbacks, dropped labels -
+    0xF382DF  dec 8, xsp                               || unidasm: dec 0,XSP
+    0xF382E1  push qiz                                 || unidasm: push QIZ
+    0xF382E4  lda xwa, (xsp+8)                         || unidasm: lda XWA,XSP+0x08
+    0xF382E7  lda xbc, (xsp+6)                         || unidasm: lda XBC,XSP+0x06
+    0xF382EA  calr 59319                               || unidasm: calr 0xf36aa4
+    0xF382ED  ld wa, (xsp+6)                           || unidasm: ld WA,(XSP+0x06)
+    0xF382F0  sub (xsp+8), wa                          || unidasm: sub (XSP+0x08),WA
+    0xF382F3  ldw (0x27ce), (xsp+8)                    || unidasm: ldw (0x27ce),(XSP+0x08)
+    0xF382F8  call SeqData_ReadNextByte                || unidasm: call 0xf42198
+    0xF382FC  .byte 0xc7, 0xfa, 0x9f	; ld QIZL,L (no assembler spelling found) || unidasm: ld QIZL,L
+    0xF382FF  lda xwa, (xsp+4)                         || unidasm: lda XWA,XSP+0x04
+    0xF38302  lda xbc, (xsp+2)                         || unidasm: lda XBC,XSP+0x02
+    0xF38305  calr 60352                               || unidasm: calr 0xf36ec8
+    0xF38308  .byte 0xc7, 0xfa, 0x89	; ld A,QIZL (no assembler spelling found) || unidasm: ld A,QIZL
+    0xF3830B  extz wa                                  || unidasm: extz WA
+    0xF3830D  ld c, (xsp+4)                            || unidasm: ld C,(XSP+0x04)
+    0xF38310  extz bc                                  || unidasm: extz BC
+    0xF38312  calr 65445                               || unidasm: calr 0xf382ba
+    0xF38315  call SeqData_AdvancePosition             || unidasm: call 0xf40044
+    0xF38319  call SeqData_AdvancePosition             || unidasm: call 0xf40044
+    0xF3831D  call SeqData_ReadNextByte                || unidasm: call 0xf42198
+    0xF38321  .byte 0xc7, 0xfa, 0x9f	; ld QIZL,L (no assembler spelling found) || unidasm: ld QIZL,L
+    0xF38324  .byte 0xc7, 0xfa, 0x89	; ld A,QIZL (no assembler spelling found) || unidasm: ld A,QIZL
+    0xF38327  .byte 0xc7, 0xfb, 0x99	; ld QIZH,A (no assembler spelling found) || unidasm: ld QIZH,A
+    0xF3832A  call SeqData_AdvancePosition             || unidasm: call 0xf40044
+    0xF3832E  call SeqData_ReadNextByte                || unidasm: call 0xf42198
+    0xF38332  .byte 0xc7, 0xfa, 0x9f	; ld QIZL,L (no assembler spelling found) || unidasm: ld QIZL,L
+    0xF38335  res_erpb 251, 7                          || unidasm: res 0x07,QIZH
+    0xF38339  res_erpb 250, 7                          || unidasm: res 0x07,QIZL
+    0xF3833D  .byte 0xc7, 0xfa, 0x8b	; ld C,QIZL (no assembler spelling found) || unidasm: ld C,QIZL
+    0xF38340  extz bc                                  || unidasm: extz BC
+    0xF38342  mul bc, 96                               || unidasm: mul BC,0x0060
+    0xF38346  .byte 0xc7, 0xfb, 0x89	; ld A,QIZH (no assembler spelling found) || unidasm: ld A,QIZH
+    0xF38349  extz wa                                  || unidasm: extz WA
+    0xF3834B  add bc, wa                               || unidasm: add BC,WA
+    0xF3834D  ld (0x27d0:16), bc                       || unidasm: ld (0x27d0),BC
+    0xF38351  calr 6                                   || unidasm: calr 0xf3835a
+    0xF38354  pop qiz                                  || unidasm: pop QIZ
+    0xF38357  inc 8, xsp                               || unidasm: inc 0,XSP
+    0xF38359  ret                                      || unidasm: ret
+    0xF3835A  ld e, (0x2774:16)                        || unidasm: ld E,(0x2774)
+    0xF3835E  mul e, 96                                || unidasm: mul E,0x60
+    0xF38361  dec 1, de                                || unidasm: dec 1,DE
+    0xF38363  ld wa, (0x27ce:16)                       || unidasm: ld WA,(0x27ce)
+    0xF38367  ld bc, wa                                || unidasm: ld BC,WA
+    0xF38369  add bc, (0x27d0:16)                      || unidasm: add BC,(0x27d0)
+    0xF3836D  cp bc, de                                || unidasm: cp BC,DE
+    0xF3836F  ret ule                                  || unidasm: ret ULE
+    0xF38371  sub de, wa                               || unidasm: sub DE,WA
+    0xF38373  ld (0x27d0:16), de                       || unidasm: ld (0x27d0),DE
+    0xF38377  ret                                      || unidasm: ret
+    0xF38378  ld wa, (0x27ce:16)                       || unidasm: ld WA,(0x27ce)
+    0xF3837C  srl wa, 2                                || unidasm: srl 0x02,WA
+    0xF3837F  add wa, 22                               || unidasm: add WA,0x0016
+    0xF38383  ld (0x27ba:16), wa                       || unidasm: ld (0x27ba),WA
+    0xF38387  ld wa, (0x27d0:16)                       || unidasm: ld WA,(0x27d0)
+    0xF3838B  srl wa, 2                                || unidasm: srl 0x02,WA
+    0xF3838E  add wa, (0x27ba:16)                      || unidasm: add WA,(0x27ba)
+    0xF38392  ld (0x27bc:16), wa                       || unidasm: ld (0x27bc),WA
+    0xF38396  ld wa, (0x27be:16)                       || unidasm: ld WA,(0x27be)
+    0xF3839A  inc 3, wa                                || unidasm: inc 3,WA
+    0xF3839C  ld (0x27c0:16), wa                       || unidasm: ld (0x27c0),WA
+    0xF383A0  ret                                      || unidasm: ret
+0xF36F06-0xF36F31: 6 old lines (6 dirty) -> 16 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36F06  ld a, (0x2965:16)                        || unidasm: ld A,(0x2965)
+    0xF36F0A  extz wa                                  || unidasm: extz WA
+    0xF36F0C  lda_d16 xbc, (0xf1a0)                    || unidasm: lda XBC,0xf1a0
+    0xF36F10  extz xwa                                 || unidasm: extz XWA
+    0xF36F12  add xwa, xbc                             || unidasm: add XWA,XBC
+    0xF36F14  ld a, (xwa)                              || unidasm: ld A,(XWA)
+    0xF36F16  extz wa                                  || unidasm: extz WA
+    0xF36F18  sla wa, 2                                || unidasm: sla 0x02,WA
+    0xF36F1B  lda_24 xbc, (0xe4448e)                   || unidasm: lda XBC,0xe4448e
+    0xF36F20  ld_rrl xwa, xbc, wa                      || unidasm: ld XWA,(XBC+WA)
+    0xF36F25  cp (xwa), 240                            || unidasm: cp (XWA),0xf0
+    0xF36F28  jr c, 3                                  || unidasm: jr C,0xf36f2d
+    0xF36F2A  ld hl, 0:i3                              || unidasm: ld HL,0
+    0xF36F2C  ret                                      || unidasm: ret
+    0xF36F2D  ldw hl, 0xffff                           || unidasm: ld HL,0xffff
+    0xF36F30  ret                                      || unidasm: ret
+0xF36C69-0xF36CDA: 1 old lines (1 dirty) -> 31 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36C69  ldmm16 0x2778, 0x275e                    || unidasm: ldw (0x2778),(0x275e)
+    0xF36C6F  ldmm8 0x277a, 0x2760                     || unidasm: ld (0x277a),(0x2760)
+    0xF36C75  ldmm16 0x277c, 0x28af                    || unidasm: ldw (0x277c),(0x28af)
+    0xF36C7B  ldmm16 0x277e, 0x2666                    || unidasm: ldw (0x277e),(0x2666)
+    0xF36C81  ret                                      || unidasm: ret
+    0xF36C82  ldmm16 0x275e, 0x2778                    || unidasm: ldw (0x275e),(0x2778)
+    0xF36C88  ldmm8 0x2760, 0x277a                     || unidasm: ld (0x2760),(0x277a)
+    0xF36C8E  ldmm16 0x28af, 0x277c                    || unidasm: ldw (0x28af),(0x277c)
+    0xF36C94  ldmm16 0x2666, 0x277e                    || unidasm: ldw (0x2666),(0x277e)
+    0xF36C9A  ret                                      || unidasm: ret
+    0xF36C9B  bit 7, (0x295c:16)                       || unidasm: bit 7,(0x295c)
+    0xF36C9F  ret nz                                   || unidasm: ret NZ
+    0xF36CA1  ld wa, (0x2792:16)                       || unidasm: ld WA,(0x2792)
+    0xF36CA5  cp wa, 96                                || unidasm: cp WA,0x0060
+    0xF36CA9  ret nc                                   || unidasm: ret NC
+    0xF36CAB  inc 1, wa                                || unidasm: inc 1,WA
+    0xF36CAD  ld (0x2792:16), wa                       || unidasm: ld (0x2792),WA
+    0xF36CB1  jp NoteEditSy_SendModeScrollCmd          || unidasm: jp 0xf468d3
+    0xF36CB5  bit 7, (0x295c:16)                       || unidasm: bit 7,(0x295c)
+    0xF36CB9  ret nz                                   || unidasm: ret NZ
+    0xF36CBB  ld wa, (0x2792:16)                       || unidasm: ld WA,(0x2792)
+    0xF36CBF  cp wa, 0:i3                              || unidasm: cp WA,0
+    0xF36CC1  jr nz, 8                                 || unidasm: jr NZ,0xf36ccb
+    0xF36CC3  stdi16 (0x2792), 48                      || unidasm: ld (0x2792),0x0030
+    0xF36CC9  jr 10                                    || unidasm: jr T,0xf36cd5
+    0xF36CCB  cp wa, 1:i3                              || unidasm: cp WA,1
+    0xF36CCD  ret ule                                  || unidasm: ret ULE
+    0xF36CCF  dec 1, wa                                || unidasm: dec 1,WA
+    0xF36CD1  ld (0x2792:16), wa                       || unidasm: ld (0x2792),WA
+    0xF36CD5  call NoteEditSy_SendModeScrollCmd        || unidasm: call 0xf468d3
+    0xF36CD9  ret                                      || unidasm: ret
+VERIFIED: v7 byte-identical after 3 span(s)
+0xF387C6-0xF387F0: 10 old lines (4 dirty) -> 7 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF387D4  ld a, (0x28b1:16)                        || unidasm: ld A,(0x28b1)
+    0xF387D8  ld (0x283c:16), a                        || unidasm: ld (0x283c),A
+    0xF387DC  set 0, (0x28b1:16)                       || unidasm: set 0,(0x28b1)
+    0xF387E0  cp (0x283a:16), 0                        || unidasm: cp (0x283a),0x00
+    0xF387E5  jr nz, 9                                 || unidasm: jr NZ,0xf387f0
+    0xF387E7  ldw (0xf19e:16), (0x00ffec:24)           || unidasm: ldw (0xf19e),(0x00ffec)
+    0xF387EE  jr 6                                     || unidasm: jr T,0xf387f6
+0xF3830D-0xF38349: 18 old lines (6 dirty) -> 6 new instrs replaced, 6 .byte fallbacks, dropped labels -
+    0xF38321  .byte 0xc7, 0xfa, 0x9f	; ld QIZL,L (no assembler spelling found) || unidasm: ld QIZL,L
+    0xF38324  .byte 0xc7, 0xfa, 0x89	; ld A,QIZL (no assembler spelling found) || unidasm: ld A,QIZL
+    0xF38327  .byte 0xc7, 0xfb, 0x99	; ld QIZH,A (no assembler spelling found) || unidasm: ld QIZH,A
+    0xF38332  .byte 0xc7, 0xfa, 0x9f	; ld QIZL,L (no assembler spelling found) || unidasm: ld QIZL,L
+    0xF3833D  .byte 0xc7, 0xfa, 0x8b	; ld C,QIZL (no assembler spelling found) || unidasm: ld C,QIZL
+    0xF38346  .byte 0xc7, 0xfb, 0x89	; ld A,QIZH (no assembler spelling found) || unidasm: ld A,QIZH
+0xF382E7-0xF3830B: 11 old lines (2 dirty) -> 2 new instrs replaced, 2 .byte fallbacks, dropped labels -
+    0xF382FC  .byte 0xc7, 0xfa, 0x9f	; ld QIZL,L (no assembler spelling found) || unidasm: ld QIZL,L
+    0xF38308  .byte 0xc7, 0xfa, 0x89	; ld A,QIZL (no assembler spelling found) || unidasm: ld A,QIZL
+0xF37156-0xF3717B: 8 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF37175  calr 64147                               || unidasm: calr 0xf36c0b
+    0xF37178  jrl -1496                                || unidasm: jrl T,0xf36ba3
+0xF36FE3-0xF36FF6: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36FF2  set 0, (0x8cec:16)                       || unidasm: set 0,(0x8cec)
+0xF36F8C-0xF36FDA: 19 old lines (5 dirty) -> 7 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36FA0  bit 4, (0x28ad:16)                       || unidasm: bit 4,(0x28ad)
+    0xF36FAC  res 4, (0x28ad:16)                       || unidasm: res 4,(0x28ad)
+    0xF36FB0  res 0, (0x266a:16)                       || unidasm: res 0,(0x266a)
+    0xF36FB7  set 0, (0x266a:16)                       || unidasm: set 0,(0x266a)
+    0xF36FBB  set 0, (0x26e2:16)                       || unidasm: set 0,(0x26e2)
+    0xF36FC3  set 2, (0x28a7:16)                       || unidasm: set 2,(0x28a7)
+    0xF36FD4  ldmm16 0x0d51, 0x2963                    || unidasm: ldw (0x0d51),(0x2963)
+0xF36F2C-0xF36F61: 11 old lines (5 dirty) -> 9 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36F3A  ld (0x1d50:16), xhl                      || unidasm: ld (0x1d50),XHL
+    0xF36F3E  ld (0x1d54:16), xhl                      || unidasm: ld (0x1d54),XHL
+    0xF36F42  calr 6457                                || unidasm: calr 0xf3887e
+    0xF36F45  stdi16 (0x278e), 10                      || unidasm: ld (0x278e),0x000a
+    0xF36F4B  ldmm16 0x2792, 0x2796                    || unidasm: ldw (0x2792),(0x2796)
+    0xF36F51  set 0, (0x2742:16)                       || unidasm: set 0,(0x2742)
+    0xF36F55  ld (0x2774:16), 7                        || unidasm: ld (0x2774),0x07
+    0xF36F5A  ld (0x27a2:16), 8                        || unidasm: ld (0x27a2),0x08
+    0xF36F5F  jr 28                                    || unidasm: jr T,0xf36f7d
+0xF36521-0xF3653F: 8 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36535  call SeqVoice_FindSingleActive           || unidasm: call 0xf3ec2d
+    0xF36539  ldmm8 0x1d58, 0x8c9e                     || unidasm: ld (0x1d58),(0x8c9e)
+0xF364E1-0xF364F1: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF364ED  res 0, (0x8cec:16)                       || unidasm: res 0,(0x8cec)
+VERIFIED: v7 byte-identical after 9 span(s)
+0xF3830D-0xF38349: 18 old lines (6 dirty) -> 6 new instrs replaced, 0 .byte fallbacks, dropped labels -; dropped 6 comment(s) matching --drop-comment
+    0xF38321  ldb_erp l, 250                           || unidasm: ld QIZL,L
+    0xF38324  stb_erp a, 250                           || unidasm: ld A,QIZL
+    0xF38327  ldb_erp a, 251                           || unidasm: ld QIZH,A
+    0xF38332  ldb_erp l, 250                           || unidasm: ld QIZL,L
+    0xF3833D  stb_erp c, 250                           || unidasm: ld C,QIZL
+    0xF38346  stb_erp a, 251                           || unidasm: ld A,QIZH
+0xF382E7-0xF3830B: 11 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -; dropped 2 comment(s) matching --drop-comment
+    0xF382FC  ldb_erp l, 250                           || unidasm: ld QIZL,L
+    0xF38308  stb_erp a, 250                           || unidasm: ld A,QIZL
+VERIFIED: v7 byte-identical after 2 span(s)

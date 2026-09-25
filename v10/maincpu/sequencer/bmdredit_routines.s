@@ -1517,12 +1517,34 @@ BmDrEdit_CalcBeatFromGridPos:
 	add (0x275e:16), wa
 	ret
 
-BmDrEdit_ByteData_NoteCoordTable:
-	.byte 0xd1, 0x5e, 0x27, 0x19, 0x78, 0x27, 0xc1, 0x60, 0x27, 0x19, 0x7a, 0x27, 0xd1, 0xaf, 0x28, 0x19, 0x7c, 0x27, 0xd1, 0x66, 0x26, 0x19, 0x7e, 0x27
+; -----------------------------------------------------------------------------
+; Four unreferenced routines, `.byte` until 2026-09-25 (both decoders agree:
+; notes/sequi-2026-09-25/reframe-v10-bmdredit_routines.log).  NO CALLER FOUND
+; for any of the four entry points: scripts/analysis/sequi_find_refs.py v10
+; 0xF36C93 0xF36CAC 0xF36CC5 0xF36CDF -> no hit at an instruction start.
+;
+; BmDrEdit_SavePositionVars / BmDrEdit_RestorePositionVars: copy the four
+; variables 0x275e, 0x2760 (byte), 0x28af, 0x2666
+; to 0x2778, 0x277a, 0x277c, 0x277e and back.  (The first two are the
+; beat position BmDrEdit_CalcBeatFromGridPos writes.)
+; -----------------------------------------------------------------------------
+BmDrEdit_SavePositionVars:
+	ldmm16 0x2778, 0x275e
+	ldmm8 0x277a, 0x2760
+	ldmm16 0x277c, 0x28af
+	ldmm16 0x277e, 0x2666
 	ret
-	.byte 0xd1, 0x78, 0x27, 0x19, 0x5e, 0x27, 0xc1, 0x7a, 0x27, 0x19, 0x60, 0x27, 0xd1, 0x7c, 0x27, 0x19, 0xaf, 0x28, 0xd1, 0x7e, 0x27, 0x19, 0x66, 0x26
+BmDrEdit_RestorePositionVars:
+	ldmm16 0x275e, 0x2778
+	ldmm8 0x2760, 0x277a
+	ldmm16 0x28af, 0x277c
+	ldmm16 0x2666, 0x277e
 	ret
-	.byte 0xf1, 0x5c, 0x29, 0xcf
+
+; Unreferenced near-duplicate of BmDrEdit_ModeScrollUp (same test of bit 7 of
+; RAM 0x295C, same 0x60 ceiling, same tail jump).
+BmDrEdit_ModeScrollUp_Dup:
+	bit 7, (0x295c:16)
 	ret	nz
 	ld	wa, (10130:16)
 	cp	wa, 96
@@ -1530,19 +1552,23 @@ BmDrEdit_ByteData_NoteCoordTable:
 	inc	1, wa
 	ld	(10130:16), wa
 	jp	NoteEditSy_SendModeScrollCmd
-	.byte 0xf1, 0x5c, 0x29, 0xcf
+
+; Unreferenced near-duplicate of BmDrEdit_ModeScrollDown (0 -> 48, else
+; decrement down to 1); ends in `call ...; ret` where the live one has `jp`.
+BmDrEdit_ModeScrollDown_Dup:
+	bit 7, (0x295c:16)
 	ret	nz
 	ld	wa, (10130:16)
 	cp	wa, 0:i3
-	jr	nz, BmDrEdit_ByteData_NoteCoordTable_Code_Skip
+	jr	nz, BmDrEdit_ModeScrollDown_Dup_Clamp
 	ldw	(10130:16), 48
-	jr	BmDrEdit_ByteData_NoteCoordTable_Code_Join
-BmDrEdit_ByteData_NoteCoordTable_Code_Skip:
+	jr	BmDrEdit_ModeScrollDown_Dup_Send
+BmDrEdit_ModeScrollDown_Dup_Clamp:
 	cp	wa, 1:i3
 	ret	ule
 	dec	1, wa
 	ld	(10130:16), wa
-BmDrEdit_ByteData_NoteCoordTable_Code_Join:
+BmDrEdit_ModeScrollDown_Dup_Send:
 	call	NoteEditSy_SendModeScrollCmd
 	ret
 
@@ -1755,13 +1781,33 @@ BmDrEdit_SetupScrollRegion_MelodicMode:
 	ld (xbc), a
 	ret
 
-BmDrEdit_ByteData_ScrollParams:
-	.byte 0xc1, 0x65, 0x29, 0x21, 0xd8, 0x12, 0xf1, 0xa0
-	.byte 0xf1, 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x80, 0x21
-	.byte 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2, 0x8e, 0x44
-	.byte 0xe4, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x80
-	.byte 0x3f, 0xf0, 0x67, 0x03, 0xdb, 0xa8, 0x0e, 0x33
-	.byte 0xff, 0xff, 0x0e
+; -----------------------------------------------------------------------------
+; BmDrEdit_TestPartTableEntry -- A := RAM 0x2965 (a MIDI channel), code :=
+; RAM 0xF1A0[A] (the channel's part-type code, cf. SMF_HeaderConstants),
+; XWA := the 32-bit pointer at 0xE4448E + code*4; returns HL = 0 when the byte
+; that pointer addresses is >= 0xF0, else HL = 0xFFFF.
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v10 0xF36F30 -> none.
+; Was `.byte` (named ByteData_ScrollParams) until 2026-09-25.  What the
+; pointer table at 0xE4448E is, is not established here.
+; -----------------------------------------------------------------------------
+BmDrEdit_TestPartTableEntry:
+	ld a, (0x2965:16)
+	extz wa
+	lda_d16 xbc, (0xf1a0)
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (0xe4448e)
+	ld_rrl xwa, xbc, wa
+	cp (xwa), 240
+	jr c, BmDrEdit_TestPartTableEntry_Below
+	ld hl, 0:i3
+	ret
+BmDrEdit_TestPartTableEntry_Below:
+	ldw hl, 0xffff
+	ret
 
 BmDrEdit_InitDrumMode:
 	pushw 0x6a4
@@ -3919,7 +3965,16 @@ BmDrEdit_UpdateDisplay_MelodicOffset:
 	ld (0x27cc:16), c
 	ret
 
-BmDrEdit_ByteData_CompoundWidgetUpdate:
+; -----------------------------------------------------------------------------
+; BmDrEdit_CompoundWidgetUpdate (inherited name, formerly
+; BmDrEdit_ByteData_CompoundWidgetUpdate: it is code, not data) -- sets up
+; coordinates and the scroll region, reads three event bytes through
+; SeqData_ReadNextByte / SeqData_AdvancePosition, stores
+; (third byte & 0x7F) * 96 + (second byte & 0x7F) in RAM 0x27D0 and clamps
+; it in NoteEdit_UpdateScrollAndDisplay_Helper2.
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v10 0xF38309 -> none.
+; -----------------------------------------------------------------------------
+BmDrEdit_CompoundWidgetUpdate:
 	dec	8, xsp
 	push	qiz
 	lda	xwa, (xsp+8)
@@ -3927,7 +3982,7 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	calr	BmDrEdit_SetupCoordinates
 	ld	wa, (xsp+6)
 	sub	(xsp+8), wa
-	.byte 0x9f, 0x08, 0x19, 0xce, 0x27
+	ldw (0x27ce), (xsp+8)
 	call	SeqData_ReadNextByte
 	ldb_erp	l, 250
 	lda	xwa, (xsp+4)

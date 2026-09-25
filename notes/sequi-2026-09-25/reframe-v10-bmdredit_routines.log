@@ -1,0 +1,32 @@
+0xF36F30-0xF36F5B: 6 old lines (6 dirty) -> 16 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36F30  ld a, (0x2965:16)                        || unidasm: ld A,(0x2965)
+    0xF36F34  extz wa                                  || unidasm: extz WA
+    0xF36F36  lda_d16 xbc, (0xf1a0)                    || unidasm: lda XBC,0xf1a0
+    0xF36F3A  extz xwa                                 || unidasm: extz XWA
+    0xF36F3C  add xwa, xbc                             || unidasm: add XWA,XBC
+    0xF36F3E  ld a, (xwa)                              || unidasm: ld A,(XWA)
+    0xF36F40  extz wa                                  || unidasm: extz WA
+    0xF36F42  sla wa, 2                                || unidasm: sla 0x02,WA
+    0xF36F45  lda_24 xbc, (0xe4448e)                   || unidasm: lda XBC,0xe4448e
+    0xF36F4A  ld_rrl xwa, xbc, wa                      || unidasm: ld XWA,(XBC+WA)
+    0xF36F4F  cp (xwa), 240                            || unidasm: cp (XWA),0xf0
+    0xF36F52  jr c, 3                                  || unidasm: jr C,0xf36f57
+    0xF36F54  ld hl, 0:i3                              || unidasm: ld HL,0
+    0xF36F56  ret                                      || unidasm: ret
+    0xF36F57  ldw hl, 0xffff                           || unidasm: ld HL,0xffff
+    0xF36F5A  ret                                      || unidasm: ret
+0xF36C93-0xF36CE3: 13 old lines (4 dirty) -> 10 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF36C93  ldmm16 0x2778, 0x275e                    || unidasm: ldw (0x2778),(0x275e)
+    0xF36C99  ldmm8 0x277a, 0x2760                     || unidasm: ld (0x277a),(0x2760)
+    0xF36C9F  ldmm16 0x277c, 0x28af                    || unidasm: ldw (0x277c),(0x28af)
+    0xF36CA5  ldmm16 0x277e, 0x2666                    || unidasm: ldw (0x277e),(0x2666)
+    0xF36CAC  ldmm16 0x275e, 0x2778                    || unidasm: ldw (0x275e),(0x2778)
+    0xF36CB2  ldmm8 0x2760, 0x277a                     || unidasm: ld (0x2760),(0x277a)
+    0xF36CB8  ldmm16 0x28af, 0x277c                    || unidasm: ldw (0x28af),(0x277c)
+    0xF36CBE  ldmm16 0x2666, 0x277e                    || unidasm: ldw (0x2666),(0x277e)
+    0xF36CC5  bit 7, (0x295c:16)                       || unidasm: bit 7,(0x295c)
+    0xF36CDF  bit 7, (0x295c:16)                       || unidasm: bit 7,(0x295c)
+VERIFIED: v10 byte-identical after 2 span(s)
+0xF3830B-0xF38322: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3831D  ldw (0x27ce), (xsp+8)                    || unidasm: ldw (0x27ce),(XSP+0x08)
+VERIFIED: v10 byte-identical after 1 span(s)

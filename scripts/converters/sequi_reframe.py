@@ -74,7 +74,7 @@ NM = os.path.join(LLVM, "llvm-nm")
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
 BASE = 0xE00000
 ABSURD = re.compile(r'^(halt|incf|decf|ldf|normal|max|min|swi)\b|^(jr|jrl)\s+[a-z]+\s*,\s*0+$')
-TERM = re.compile(r'^(ret|reti|retd)\b|^(jp|jr|jrl)\s+(t\s*,\s*)?[^,]+$')
+TERM = re.compile(r'^(ret|reti)\s*$|^retd\b|^(jp|jr|jrl)\s+(t\s*,\s*)?[^,]+$')
 DROP_COMMENT = None     # --drop-comment REGEX: inline comments PROVEN false by the re-frame
 LBL = re.compile(r'^\s*([A-Za-z_.$][\w.$@]*):\s*(;.*)?$')
 
@@ -278,6 +278,13 @@ def fallback_spellings(udm, raw):
         b = ", ".join("0x%02x" % x for x in raw[1:4])
         for form in ("%s%s_sri_rm", "%s_sri%s_rm", "%s%s_sri_mr", "%s_sri%s_mr"):
             out.append("%s %s, %s" % (form % (op, sz), reg, b))
+    m = re.match(r'^ld (\w+),(\w+)$', udm)
+    if m and raw[0] in (0xc7, 0xd7, 0xe7) and len(raw) == 3:
+        # extended-register (ERP) move: the non-Q operand is the CPU register
+        reg = [r for r in m.groups() if not r.startswith("Q")]
+        if reg:
+            for mn in ("ldb_erp", "stb_erp", "ldw_erp", "stw_erp", "ldl_erp", "stl_erp"):
+                out.append("%s %s, %d" % (mn, reg[0].lower(), raw[1]))
     m = re.match(r'^(bit|set|res) (\d+),\(X\w\w\+\w+\)$', udm)
     if m and raw[0] == 0xf3 and len(raw) == 5:
         b = ", ".join("0x%02x" % x for x in raw[1:4])
@@ -325,6 +332,10 @@ def plan(ctx, lo, hi, allow_after_term=False):
         got = llvm_at.get(a)
         raw = list(ctx.rom[a - BASE:a - BASE + n])
         house = ud_spelling(m, raw)
+        if house and encode([house])[0] != raw:
+            # unidasm writes word stores/compares with plain `ld`/`cp`; the
+            # assembler needs the width in the mnemonic
+            house = re.sub(r"^(ld|cp) ", r"\1w ", house)
         if house and encode([house])[0] == raw:
             t = house
         elif got and got[0] == n and not got[1].startswith(".byte") \
@@ -522,6 +533,9 @@ def house_hex(t):
                if int(m.group(1)) >= 256 else m.group(0), t)
     t = re.sub(r"(?<![\w.$(+-])(\d{5,})(?![\w.$])", lambda m: "0x%08x" % int(m.group(1))
                if int(m.group(1)) >= 0x10000 else m.group(0), t)
+    # remaining bare numbers >= 256 (16-bit immediates, ldmm addresses): hex
+    t = re.sub(r"(?<![\w.$(+-])(\d{3,5})(?![\w.$:])", lambda m: "0x%04x" % int(m.group(1))
+               if 256 <= int(m.group(1)) < 0x10000 else m.group(0), t)
     return t
 
 
@@ -586,7 +600,7 @@ def auto_spans(ctx, maxrun=4096):
 
 
 PSEUDO = re.compile(r'^\s*(ldb_d8|stb_d8|stdi8|anddi8|ordi8|xordi8|cpda8|bitda|pushdi_w|cpdi8|'
-                    r'ldw_d8|stw_d8|stdi16|cpdi16)\b')
+                    r'ldw_d8|stw_d8|stdi16|cpdi16|lda_d16)\b')
 
 
 def restyle(ctx):
@@ -607,6 +621,8 @@ def restyle(ctx):
         if len(ud) != 1 or ud[0][1] != len(raw):
             continue
         h = ud_spelling(ud[0][2], raw)
+        if h and encode([h])[0] != raw:
+            h = re.sub(r"^(ld|cp) ", r"\1w ", h)
         if h and encode([h])[0] == raw and registers_agree(h, ud[0][2]):
             out[li] = "\t" + h + cm
     return out

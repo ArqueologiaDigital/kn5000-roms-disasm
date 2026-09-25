@@ -655,7 +655,7 @@ BmDrEdit_AllocateNote_NextSlot:
 	ret
 
 BmDrEdit_RefreshDisplayState:
-	.byte 0xf1, 0xec, 0x8c, 0xb0	; resda 0, 0x8d88 (v7 patched)
+	res 0, (0x8cec:16)	; resda 0, 0x8d88 (v7 patched)
 
 	ldw wa, 0xf
 
@@ -700,10 +700,10 @@ BmDrEdit_SaveSeqState_Apply:
 	call	UI_PostModeChangeEvent
 
 	ldmm16 0x2963, 3407
+	call SeqVoice_FindSingleActive	; call SeqVoice_FindSingleActive (v7 addr)
+	ldmm8 0x1d58, 0x8c9e	; ldmm8 7512, 0x8d3a (v7 patched)
 
-	.byte 0x1d, 0x2d, 0xec, 0xf3	; call SeqVoice_FindSingleActive (v7 addr)
 
-	.byte 0xc1, 0x9e, 0x8c, 0x19, 0x58, 0x1d	; ldmm8 7512, 0x8d3a (v7 patched)
 
 	ret
 
@@ -1526,8 +1526,60 @@ BmDrEdit_CalcBeatFromGridPos:
 	add (0x275e:16), wa
 	ret
 
-BmDrEdit_ByteData_NoteCoordTable:
-	.incbin "includes/romslices/v7_transplant_BmDrEdit_ByteData_NoteCoordTable.bin"
+; -----------------------------------------------------------------------------
+; Four unreferenced routines, `.byte` until 2026-09-25 (both decoders agree:
+; notes/sequi-2026-09-25/reframe-v7-bmdredit_routines.log).  NO CALLER FOUND
+; for any of the four entry points: scripts/analysis/sequi_find_refs.py v7
+; 0xF36C69 0xF36C82 0xF36C9B 0xF36CB5 -> no hit at an instruction start.
+;
+; BmDrEdit_SavePositionVars / BmDrEdit_RestorePositionVars: copy the four
+; variables 0x275e, 0x2760 (byte), 0x28af, 0x2666
+; to 0x2778, 0x277a, 0x277c, 0x277e and back.  (The first two are the
+; beat position BmDrEdit_CalcBeatFromGridPos writes.)
+; -----------------------------------------------------------------------------
+BmDrEdit_SavePositionVars:
+	ldmm16 0x2778, 0x275e
+	ldmm8 0x277a, 0x2760
+	ldmm16 0x277c, 0x28af
+	ldmm16 0x277e, 0x2666
+	ret
+BmDrEdit_RestorePositionVars:
+	ldmm16 0x275e, 0x2778
+	ldmm8 0x2760, 0x277a
+	ldmm16 0x28af, 0x277c
+	ldmm16 0x2666, 0x277e
+	ret
+
+; Unreferenced near-duplicate of BmDrEdit_ModeScrollUp (same test of bit 7 of
+; RAM 0x295C, same 0x60 ceiling, same tail jump).
+BmDrEdit_ModeScrollUp_Dup:
+	bit 7, (0x295c:16)
+	ret nz
+	ld wa, (0x2792:16)
+	cp wa, 96
+	ret nc
+	inc 1, wa
+	ld (0x2792:16), wa
+	jp NoteEditSy_SendModeScrollCmd
+
+; Unreferenced near-duplicate of BmDrEdit_ModeScrollDown (0 -> 48, else
+; decrement down to 1); ends in `call ...; ret` where the live one has `jp`.
+BmDrEdit_ModeScrollDown_Dup:
+	bit 7, (0x295c:16)
+	ret nz
+	ld wa, (0x2792:16)
+	cp wa, 0:i3
+	jr nz, BmDrEdit_ModeScrollDown_Dup_Clamp
+	ldw (0x2792:16), 48
+	jr BmDrEdit_ModeScrollDown_Dup_Send
+BmDrEdit_ModeScrollDown_Dup_Clamp:
+	cp wa, 1:i3
+	ret ule
+	dec 1, wa
+	ld (0x2792:16), wa
+BmDrEdit_ModeScrollDown_Dup_Send:
+	call NoteEditSy_SendModeScrollCmd
+	ret
 BmDrEdit_ChordScrollUp_Check:
 	bit 7, (0x295c:16)
 	jr z, BmDrEdit_ChordScrollUp
@@ -1737,23 +1789,47 @@ BmDrEdit_SetupScrollRegion_MelodicMode:
 	ld (xbc), a
 	ret
 
-BmDrEdit_ByteData_ScrollParams:
-	.byte 0xc1, 0x65, 0x29, 0x21, 0xd8, 0x12, 0xf1, 0xa0
-	.byte 0xf1, 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x80, 0x21
-	.byte 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2, 0x8e, 0x44
-	.byte 0xe4, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x80
-	.byte 0x3f, 0xf0, 0x67, 0x03, 0xdb, 0xa8, 0x0e, 0x33
-	.byte 0xff, 0xff, 0x0e
+; -----------------------------------------------------------------------------
+; BmDrEdit_TestPartTableEntry -- A := RAM 0x2965 (a MIDI channel), code :=
+; RAM 0xF1A0[A] (the channel's part-type code, cf. SMF_HeaderConstants),
+; XWA := the 32-bit pointer at 0xE4448E + code*4; returns HL = 0 when the byte
+; that pointer addresses is >= 0xF0, else HL = 0xFFFF.
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v7 0xF36F06 -> none.
+; Was `.byte` (named ByteData_ScrollParams) until 2026-09-25.  What the
+; pointer table at 0xE4448E is, is not established here.
+; -----------------------------------------------------------------------------
+BmDrEdit_TestPartTableEntry:
+	ld a, (0x2965:16)
+	extz wa
+	lda_d16 xbc, (0xf1a0)
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (0xe4448e)
+	ld_rrl xwa, xbc, wa
+	cp (xwa), 240
+	jr c, BmDrEdit_TestPartTableEntry_Below
+	ld hl, 0:i3
+	ret
+BmDrEdit_TestPartTableEntry_Below:
+	ldw hl, 0xffff
+	ret
 
 BmDrEdit_InitDrumMode:
 	pushw 0x06a4
 	call SLIDE_Decompress_4K_Init_Helper2
 	inc 2,XSP
-	.byte 0xf1, 0x50, 0x1d, 0x63, 0xf1, 0x54, 0x1d, 0x63
-	.byte 0x1e, 0x39, 0x19, 0xf1, 0x8e, 0x27, 0x02, 0x0a
-	.byte 0x00, 0xd1, 0x96, 0x27, 0x19, 0x92, 0x27, 0xf1
-	.byte 0x42, 0x27, 0xb8, 0xf1, 0x74, 0x27, 0x00, 0x07
-	.byte 0xf1, 0xa2, 0x27, 0x00, 0x08, 0x68, 0x1c
+	ld (0x1d50:16), xhl
+	ld (0x1d54:16), xhl
+	calr NoteEditSy_ScanAndSortEntries
+	ldw (0x278e:16), 10
+	ldmm16 0x2792, 0x2796
+	set 0, (0x2742:16)
+	ld (0x2774:16), 7
+	ld (0x27a2:16), 8
+	jr BmDrEdit_InitCommon
 BmDrEdit_InitMelodicMode:
 	ldmm16 0x2792, 0x2794
 	ldmm16 0x278e, 0x2790
@@ -1774,20 +1850,22 @@ BmDrEdit_InitCommon_CheckSongActive:
 	ld	a, (35996:16)
 	cp	a, (35997:16)
 	jr	z, BmDrEdit_InitCommon_SetupDisplay
-	.byte 0xf1, 0xad, 0x28, 0xcc
+	bit 4, (0x28ad:16)
 	jr	z, BmDrEdit_InitCommon_SetupDisplay
 	ld	wa, 1:i3
 	call	UI_PostPartChangeEvent
-	.byte 0xf1, 0xad, 0x28, 0xb4, 0xf1, 0x6a, 0x26, 0xb0
+	res 4, (0x28ad:16)
+	res 0, (0x266a:16)
 	jrl	BmDrEdit_PopIzAndReturn
 BmDrEdit_InitCommon_SetupDisplay:
-	.byte 0xf1, 0x6a, 0x26, 0xb8, 0xf1, 0xe2, 0x26, 0xb8
+	set 0, (0x266a:16)
+	set 0, (0x26e2:16)
 	call	AccWrap_PlayModeDispatch
-	.byte 0xf1, 0xa7, 0x28, 0xba
+	set 2, (0x28a7:16)
 	ld	(10588:16), 0
 	ld	wa, (10595:16)
 	ld	(3407:16), wa
-	.byte 0xd1, 0x63, 0x29, 0x19, 0x51, 0x0d
+	ldmm16 0x0d51, 0x2963
 	ld	a, (35997:16)
 	cp	a, 150
 	jr	z, BmDrEdit_CopyStepCount
@@ -1798,8 +1876,8 @@ BmDrEdit_InitCommon_SetupDisplay:
 	cp	a, 151
 	jr	nz, BmDrEdit_CheckDrumModeEntry
 BmDrEdit_SetRecordingFlag:
-	.byte 0xf1, 0xec, 0x8c, 0xb8
-	jr	24
+	set 0, (0x8cec:16)
+	jr	BmDrEdit_ReadVoiceBitAndCopy
 BmDrEdit_CheckDrumModeEntry:
 	bit 0, (0x2742:16)
 	jrl z, BmDrEdit_FlagDisplayUpdate
@@ -1948,10 +2026,10 @@ BmDrEdit_CleanupCommon:
 	call	16635550
 
 	res 0, (0x27b0:16)
+	calr 64147	; calr BmDrEdit_ClearAllSlotsAlt (v7 displacement)
+	jrl -1496	; jrl BmDrEdit_ClearAllSlots (v7 displacement)
 
-	.byte 0x1e, 0x93, 0xfa	; calr BmDrEdit_ClearAllSlotsAlt (v7 displacement)
 
-	.byte 0x78, 0x28, 0xfa	; jrl BmDrEdit_ClearAllSlots (v7 displacement)
 
 
 
@@ -3883,6 +3961,7 @@ NoteEdit_UpdateScrollAndDisplay:
 	cp (0x279a:16), wa
 	ret nc
 	jrl NoteEditSy_UpdateAllWidgets
+NoteEdit_UpdateScrollAndDisplay_Helper:
 	sub a, c
 	bit 0, (0x2742:16)
 	jr z, BmDrEdit_UpdateDisplay_MelodicOffset
@@ -3900,8 +3979,84 @@ BmDrEdit_UpdateDisplay_MelodicOffset:
 	ld (0x27cc:16), c
 	ret
 
-BmDrEdit_ByteData_CompoundWidgetUpdate:
-	.incbin "includes/romslices/v7_transplant_BmDrEdit_ByteData_CompoundWidgetUpdate.bin"
+; -----------------------------------------------------------------------------
+; BmDrEdit_CompoundWidgetUpdate (inherited name, formerly
+; BmDrEdit_ByteData_CompoundWidgetUpdate: it is code, not data) -- sets up
+; coordinates and the scroll region, reads three event bytes through
+; SeqData_ReadNextByte / SeqData_AdvancePosition, stores
+; (third byte & 0x7F) * 96 + (second byte & 0x7F) in RAM 0x27D0 and clamps
+; it in NoteEdit_UpdateScrollAndDisplay_Helper2.
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v7 0xF382DF -> none.
+; In v7 these 194 bytes were a verbatim ROM slice
+; (includes/romslices/v7_transplant_BmDrEdit_ByteData_CompoundWidgetUpdate.bin,
+; now unreferenced) until 2026-09-25; decoded with both decoders agreeing
+; (notes/sequi-2026-09-25/reframe-v7-bmdredit_routines.log).
+; -----------------------------------------------------------------------------
+BmDrEdit_CompoundWidgetUpdate:
+	dec 8, xsp
+	push qiz
+	lda xwa, (xsp+8)
+	lda xbc, (xsp+6)
+	calr BmDrEdit_SetupCoordinates
+	ld wa, (xsp+6)
+	sub (xsp+8), wa
+	ldw (0x27ce), (xsp+8)
+	call SeqData_ReadNextByte
+	ldb_erp l, 250
+	lda xwa, (xsp+4)
+	lda xbc, (xsp+2)
+	calr BmDrEdit_SetupScrollRegion
+	stb_erp a, 250
+	extz wa
+	ld c, (xsp+4)
+	extz bc
+	calr NoteEdit_UpdateScrollAndDisplay_Helper
+	call SeqData_AdvancePosition
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
+	ldb_erp l, 250
+	stb_erp a, 250
+	ldb_erp a, 251
+	call SeqData_AdvancePosition
+	call SeqData_ReadNextByte
+	ldb_erp l, 250
+	res_erpb 251, 7
+	res_erpb 250, 7
+	stb_erp c, 250
+	extz bc
+	mul bc, 96
+	stb_erp a, 251
+	extz wa
+	add bc, wa
+	ld (0x27d0:16), bc
+	calr NoteEdit_UpdateScrollAndDisplay_Helper2
+	pop qiz
+	inc 8, xsp
+	ret
+NoteEdit_UpdateScrollAndDisplay_Helper2:
+	ld e, (0x2774:16)
+	mul e, 96
+	dec 1, de
+	ld wa, (0x27ce:16)
+	ld bc, wa
+	add bc, (0x27d0:16)
+	cp bc, de
+	ret ule
+	sub de, wa
+	ld (0x27d0:16), de
+	ret
+	ld wa, (0x27ce:16)
+	srl wa, 2
+	add wa, 22
+	ld (0x27ba:16), wa
+	ld wa, (0x27d0:16)
+	srl wa, 2
+	add wa, (0x27ba:16)
+	ld (0x27bc:16), wa
+	ld wa, (0x27be:16)
+	inc 3, wa
+	ld (0x27c0:16), wa
+	ret
 ReadSeqData_StoreParams:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
@@ -4356,10 +4511,13 @@ BmDrEdit_EnterPlayMode:
 	ld a, (0x8c9a:16)
 	cp a, (0x8c9b:16)
 	ret Z
-	.byte 0xc1, 0xb1, 0x28, 0x21, 0xf1, 0x3c, 0x28, 0x41
-	.byte 0xf1, 0xb1, 0x28, 0xb8, 0xc1, 0x3a, 0x28, 0x3f
-	.byte 0x00, 0x6e, 0x09, 0xd2, 0xec, 0xff, 0x00, 0x19
-	.byte 0x9e, 0xf1, 0x68, 0x06
+	ld a, (0x28b1:16)
+	ld (0x283c:16), a
+	set 0, (0x28b1:16)
+	cp (0x283a:16), 0
+	jr nz, BmDrEdit_EnterPlay_RestoreSettings
+	ldw (0xf19e:16), (0x00ffec:24)
+	jr BmDrEdit_EnterPlay_CheckAudio
 BmDrEdit_EnterPlay_RestoreSettings:
 	ldmm16 0xf19e, 0x2963
 
