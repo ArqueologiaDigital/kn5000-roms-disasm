@@ -89,7 +89,7 @@ lands on a v10 data line -- `.long`/`.ascii`/`sd_*` -- with equal bytes):
 |---|---:|---:|---|
 | semenu_routines.s | 34 | 1,197 | witness disagrees 9, no line boundary 1 |
 | sound_editor_ui.s | 36 | 6,742 | witness disagrees 30, witness has data 1 (the romslice that ends inside the envelope-curve pointer table) |
-| sndparam_routines.s | 0 | 0 | NOT APPLIED: the v7 labels there sit on `.byte` rows and 30+ of them fall inside instructions; relocating them needs more than this tool's by-content search (see the lane report) |
+| sndparam_routines.s | 0 | 0 | (runs refused; see `--span` below) |
 
 then `symbolize_numeric_branches.py --image v7 --only ...`: 376 operands, 202
 labels, verify PASS.
@@ -105,3 +105,13 @@ Round 3 of the auto re-frame (a window may also start right after a table when
 its start is a `call` target named somewhere in the image): v10 2, v9 2
 windows, among them the routine at SeMenu_ShowConfirmDialog_Data + 0xC0, whose
 seven pushes were `.ascii "89:;<=>\xf1"`.
+
+v7 sndparam_routines.s, `--span 0xFCCE9F 0xFCED54 --witness v10 <map of ALL v10
+files>` (a v7 routine can live in another file in v10): the whole file decoded
+in lock-step; 2,768 of 2,776 comparable instructions start a v10 instruction
+(or `.byte`-island) line.  66 labels fall inside instructions of that framing;
+they are kept at their exact addresses as `.set Name, . + k` because other code
+uses some as bases (`.long SndParam_ResolveWidget + 164`).  Moving them to the
+same-named v10 label's bytes was tried and REJECTED: two labels can share their
+first 10 bytes (common epilogues) and land on one address.  Then the
+symboliser: 298 operands, 235 labels, verify PASS.

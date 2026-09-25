@@ -195,24 +195,25 @@ class Reframer:
             addr = self.addr_of_line(li)
             if m:
                 if addr not in bounds:
-                    # v7's labels here were copied onto `.byte` rows and some
-                    # fall inside instructions.  Where the witness image has
-                    # the same label, find ITS code in this window by content
-                    # and move the label there; an unreferenced label that
-                    # cannot be placed is kept as a comment, not deleted.
-                    name = m.group(1)
-                    if relabel is None or self.referenced(name):
-                        return None, "label %s at %06x falls inside a new instruction" % (name, addr)
-                    fix = relabel(name, a, b)
-                    if fix is not None and fix in bounds:
-                        self.moved.append((name, addr, fix))
-                        addr = fix
-                    else:
-                        self.moved.append((name, addr, None))
-                        extra.append((addr if addr in bounds else max(x for x in bounds if x <= addr),
-                                      li, "\t; (label %s stood here, inside an instruction; nothing "
-                                          "references it)" % name))
+                    # v7's labels were copied onto `.byte` rows and some fall
+                    # INSIDE an instruction of the true framing.  Other code
+                    # uses several of them as bases (`.long Label + 164`), so
+                    # the address must not move: it is kept as
+                    # `.set Label, . + k` in front of the instruction that
+                    # contains it (policy: mid-instruction address = .set).
+                    if relabel is None:
+                        return None, "label %s at %06x falls inside a new instruction" % (m.group(1), addr)
+                    fix = relabel(m.group(1), a, b)
+                    if fix is not None and fix in bounds and not self.referenced(m.group(1)):
+                        # nothing uses it as a base: put it where the witness
+                        # image's label of the same name is (by offset)
+                        self.moved.append((m.group(1), addr, fix))
+                        extra.append((fix, li, m.group(1) + ":"))
                         continue
+                    base = max(x for x in bounds if x <= addr)
+                    self.moved.append((m.group(1), addr, None))
+                    extra.append((base, li, "\t.set\t%s, . + %d" % (m.group(1), addr - base)))
+                    continue
                 extra.append((addr, li, m.group(1) + ":"))
                 rest = st[m.end():].strip()
                 if rest.startswith(";"):
@@ -342,18 +343,27 @@ class Reframer:
             done_until = got[4]
         return report
 
-    def span(self, a, b):
-        dl = llvm_decode(self.rom, a, b - a)
-        du = unidasm_bounds(self.rom, a, b - a + 16)
-        ub = {p: k for (p, k, t) in du}
-        bad = [p for (p, k, t) in dl if ub.get(p) != k and not t.startswith("\t.byte")]
-        if sum(k for (p, k, t) in dl) != b - a:
-            return "decode does not tile the span"
-        if bad:
-            return "decoders disagree at %s" % ", ".join("%06x" % p for p in bad[:8])
+    def span(self, a, b, w=None, need=0.9):
+        """re-decode [a, b) whole, in lock-step (unidasm framing, backend
+        spelling); with a witness image the >= need agreement rule applies"""
+        dl = self.lockstep(a, b)
+        if dl[-1][0] + dl[-1][1] != b:
+            return "decode does not end at %06x (%06x)" % (b, dl[-1][0] + dl[-1][1])
         if not self.lines_between(a, b):
             return "span does not start/end on source lines"
-        r, why = self.render(a, b, dl)
+        if w is not None:
+            ag, cp = self.witness(w, a, dl)
+            print("  witness: %d / %d comparable instructions start a witness instruction line" % (ag, cp))
+            if cp == 0 or ag < need * cp:
+                return "witness disagrees"
+        # Moving a label by content (the witness's same-named label's first
+        # bytes) was tried and REJECTED: two different labels can share their
+        # first 10 bytes (common epilogues) and land on one address.  Every
+        # label that falls inside an instruction is therefore kept at its
+        # exact old address as `.set Label, . + k`.
+        def relabel(name, lo, hi):
+            return None
+        r, why = self.render(a, b, dl, relabel=relabel)
         if not r:
             return why
         self.edits.append(r + ("span %06x-%06x" % (a, b),))
@@ -524,41 +534,50 @@ def main():
     ap.add_argument("--notes", action="store_true", help="list the windows/runs only")
     a = ap.parse_args()
     r = Reframer(a.image, a.file, a.amap)
-    if a.runs:
-        wimg, wamap = a.witness
+    def load_witness(wimg, wamap):
+        """(rom, instruction-or-.byte line starts, shared-label offsets); also
+        sets r.wdata = bytes of the witness's DATA lines.  The map may cover
+        every file of the witness image (a routine can live in another file
+        there)."""
         rom10 = open(os.path.join(ROOT, "original_ROMs/kn5000_%s_program.rom" % wimg), "rb").read()
-        sp = [x for x in json.load(open(wamap)) if x[2] == a.file]
-        # only INSTRUCTION lines of the witness count: a `.long` row of a
-        # pointer table also starts a line, and must not vouch for code
-        wl = open(os.path.join(ROOT, wimg, "maincpu", a.file), encoding="latin-1").read().split("\n")
+        sp = json.load(open(wamap))
+        cache = {}
 
-        def insn(li):
-            c = re.sub(r"^[\w.$]+:\s*", "", wl[li].split(";")[0].strip())
-            return bool(c) and not c.startswith(".") and not ABS.match(c.lower())
-        starts10 = {x[0] for x in sp if insn(x[3])}
-
-        def data(li):
-            # `.byte` rows are neutral: in these files they are mostly
-            # single instructions the backend still cannot spell
-            c = re.sub(r"^[\w.$]+:\s*", "", wl[li].split(";")[0].strip())
-            return c.startswith((".long", ".short", ".hword", ".word", ".ascii", ".asciz",
-                                 ".fill", ".zero", ".space", "sd_", "sdb_"))
-        r.wdata = set()
-        for x in sp:
-            if data(x[3]):
-                r.wdata.update(range(x[0], x[1]))     # every byte of a data line
+        def text(rel, li):
+            if rel not in cache:
+                cache[rel] = open(os.path.join(ROOT, wimg, "maincpu", rel),
+                                  encoding="latin-1").read().split("\n")
+            return re.sub(r"^[\w.$]+:\s*", "", cache[rel][li].split(";")[0].strip())
+        starts, r.wdata = set(), set()
+        for (x0, x1, rel, li) in sp:
+            c = text(rel, li)
+            if c.startswith((".long", ".short", ".hword", ".word", ".ascii", ".asciz",
+                             ".fill", ".zero", ".space", "sd_", "sdb_")):
+                r.wdata.update(range(x0, x1))
+            elif c and (not c.startswith(".") or c.startswith(".byte")) and not ABS.match(c.lower()):
+                # an instruction, or a `.byte` island the backend cannot spell:
+                # either way the witness has an instruction boundary here
+                starts.add(x0)
         s10 = sm.symbols(wimg)
+        r.w10syms = s10
         shared = [(av, s10[n] - av) for n, av in r.byname.items()
                   if n in s10 and not n.startswith(("__", ".")) and 0xF00000 <= av < 0x1000000]
-        r.w10syms = s10
-        rep = r.convert_runs((rom10, starts10, shared))
+        return (rom10, starts, shared)
+
+    if a.runs:
+        w = load_witness(*a.witness)
+        rep = r.convert_runs(w)
         for (n, x, y) in r.moved:
-            print("  label %s %06x -> %s" % (n, x, ("%06x (by %s content)" % (y, wimg)) if y else "comment"))
+            print("  label %s %06x kept as .set (inside an instruction)" % (n, x))
         print("%s %s: %d runs (%d B) converted; refused %s"
               % (a.image, a.file, rep["ok"], rep["bytes"], rep["refused"]))
     elif a.span:
-        why = r.span(int(a.span[0], 16), int(a.span[1], 16))
+        w = load_witness(*a.witness) if a.witness else None
+        why = r.span(int(a.span[0], 16), int(a.span[1], 16), w)
         print("span:", why or "ok")
+        for (n, x, y) in r.moved:
+            print("  label %s %06x %s" % (n, x, ("moved to %06x (same bytes as the witness's %s)" % (y, n))
+                                          if y else "kept as .set (inside an instruction)"))
     else:
         rep = r.auto()
         print("%s %s: %d windows re-framed; refused %s" % (a.image, a.file, rep["ok"], rep["refused"]))
