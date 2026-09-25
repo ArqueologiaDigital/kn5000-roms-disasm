@@ -188,6 +188,22 @@ def objdump(data):
     return segs
 
 
+UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
+
+
+def unidasm_insn(rom, addr):
+    """(length, text) of the instruction at addr per MAME unidasm (1, None if none)."""
+    with tempfile.TemporaryDirectory() as td:
+        f = os.path.join(td, "u.bin")
+        open(f, "wb").write(rom[addr - BASE:addr - BASE + 16])
+        out = subprocess.run([UNIDASM, f, "-arch", "tlcs900", "-basepc", "0x%x" % addr],
+                             capture_output=True, text=True).stdout.split("\n")
+    m = re.match(r"^\s*[0-9a-f]+:\s((?:[0-9a-f]{2} )+)\s*(.*)$", out[0]) if out else None
+    if not m or m.group(2).lower().startswith(("swi", "db ")):
+        return 1, None
+    return len(m.group(1).split()), re.sub(r"\s+", " ", m.group(2).strip().lower())
+
+
 REL_BR = re.compile(r"^(jr|jrl|calr|djnz)\b")
 ABS_BR = re.compile(r"^(call|jp)\b")
 
@@ -218,6 +234,10 @@ def canon(text):
         return "lda\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2)), 24))
     if m and mn in ("bitda", "bitm"):
         return "bit\t%s, (%s)" % (m.group(1), hexaddr(int(m.group(2)), 16))
+    m = re.fullmatch(r"\((\d+)\), (-?\d+)", ops)
+    mm = re.fullmatch(r"(cp|or|and|xor|add|sub|adc|sbc|ld)(di|mi)(8|16)", mn)
+    if m and mm:
+        return "%s\t(%s), %s" % (mm.group(1), hexaddr(int(m.group(1)), 16), m.group(2))
     m = re.fullmatch(r"\((\d+)\), (\w+)", ops)
     if m and mn in ("stb_d8", "stw_d16", "stl_d16"):
         return "ld\t(%s), %s" % (hexaddr(int(m.group(1)), 16), m.group(2))
@@ -263,18 +283,32 @@ def name_operand(chosen, text, addr, n, syms):
 
 def render_code(rom, a, b, boundaries, syms):
     """-> list of (addr, text).  Refuses if a boundary is not an insn start."""
-    data = rom[a - BASE:b - BASE]
-    items, off = [], 0
-    for raw, text in objdump(data):
-        items.append((a + off, raw, text))
-        off += len(raw)
+    items, pos = [], a
+    while pos < b:
+        segs = objdump(rom[pos - BASE:b - BASE])
+        restart = None
+        for raw, text in segs:
+            if text is None:
+                # a form the backend cannot decode: take its LENGTH from MAME's
+                # unidasm, emit exactly those bytes, and restart the sweep after
+                # it (resyncing one byte later is how these files got misframed)
+                n, utext = unidasm_insn(rom, pos)
+                n = min(n, b - pos)
+                items.append((pos, list(rom[pos - BASE:pos - BASE + n]), None, utext))
+                restart = pos + n
+                break
+            items.append((pos, raw, text, None))
+            pos += len(raw)
+        if restart is not None:
+            pos = restart
+    items = [(ad, raw, text) if u is None else (ad, raw, ("GAP", u)) for ad, raw, text, u in items]
     starts = {x[0] for x in items}
     bad = [hex(x) for x in boundaries if a <= x < b and x not in starts]
     if bad:
         raise SystemExit("REFUSED: labels/boundaries %s are not instruction starts" % bad)
     tests = []
     for k, (ad, raw, text) in enumerate(items):
-        if text is None:
+        if text is None or isinstance(text, tuple):
             continue
         if REL_BR.match(text.split()[0]) or ABS_BR.match(text.split()[0]):
             tests.append((k, text))
@@ -293,6 +327,10 @@ def render_code(rom, a, b, boundaries, syms):
             good[k] = t
     out = []
     for k, (ad, raw, text) in enumerate(items):
+        if isinstance(text, tuple):
+            out.append((ad, "\t.byte " + ", ".join("0x%02x" % x for x in raw) +
+                        ("\t; %s -- the backend cannot spell this form" % text[1] if text[1] else "")))
+            continue
         if k not in good:
             out.append((ad, "\t.byte " + ", ".join("0x%02x" % x for x in raw)))
             continue
@@ -358,20 +396,26 @@ def splice(lines, la, a, b, new, spec):
         t = lines[i]
         kind = drc.classify_line(t, {})[0]
         s = t.strip()
-        cmt = s.startswith(";")
-        if LABEL_RE.match(s) and kind == "none":
-            keep.append((la[i], t))
-        elif cmt or (not s):
-            if cmt and any(d in s for d in drops):
-                dropped.append(s)
-                continue
-            keep.append((la[i], t))
-        elif ";" in t and kind in ("code", "data", "fill"):
-            tail = t[t.index(";"):]
+        code = drc.strip_comment(t)
+        tail = t[len(code):]
+        # labels at the head of the line, even when an instruction or a
+        # directive follows on the same line (`Name:\t.ascii ":;<>"`)
+        rest = code.strip()
+        while True:
+            m = LABEL_RE.match(rest)
+            if not m:
+                break
+            keep.append((la[i], m.group(1) + ":"))
+            rest = rest[m.end():].strip()
+        if tail.strip().startswith(";"):
             if any(d in tail for d in drops):
-                dropped.append(tail)
+                dropped.append(tail.strip())
+            elif rest or code.strip():
+                keep.append((la[i], "\t" + tail.strip()))
             else:
-                keep.append((la[i], "\t" + tail))
+                keep.append((la[i], t))
+        elif not s:
+            keep.append((la[i], t))
     starts = {ad for ad, tx in new if tx.startswith("\t") and not tx.startswith("\t;")}
     bad = [(hex(ad), tx) for ad, tx in keep if LABEL_RE.match(tx.strip()) and ad not in starts and ad != b]
     if bad:
@@ -392,8 +436,12 @@ def splice(lines, la, a, b, new, spec):
         if k not in placed:
             out.append(ktx)
             oad.append(b)
-    return (lines[:first] + out + lines[last + 1:], la[:first] + oad + la[last + 1:],
-            dropped)
+    res = lines[:first] + out + lines[last + 1:]
+    lab = lambda L: sorted(m.group(1) for m in (LABEL_RE.match(drc.strip_comment(x).strip()) for x in L) if m)  # noqa: E731
+    if lab(lines[first:last + 1]) != lab(out) and set(lab(lines[first:last + 1])) - set(lab(out)):
+        raise SystemExit("REFUSED: label definitions would be lost: %s" %
+                         sorted(set(lab(lines[first:last + 1])) - set(lab(out))))
+    return (res, la[:first] + oad + la[last + 1:], dropped)
 
 
 def verify(key):
@@ -406,8 +454,12 @@ def verify(key):
     if r.returncode:
         print("\n".join(l for l in r.stderr.split("\n") if "error" in l)[:3000])
         return False
-    subprocess.run([os.path.join(LLVM, "ld.lld"), "-e", "0", "-T", os.path.join(inc, img["ld"]),
-                    "-o", os.path.join(td, "o.elf"), os.path.join(td, "o.o")], check=True)
+    r = subprocess.run([os.path.join(LLVM, "ld.lld"), "-e", "0", "-T", os.path.join(inc, img["ld"]),
+                        "-o", os.path.join(td, "o.elf"), os.path.join(td, "o.o")],
+                       capture_output=True, text=True)
+    if r.returncode:
+        print(r.stderr[:3000])
+        return False
     subprocess.run([os.path.join(LLVM, "llvm-objcopy"), "-O", "binary",
                     os.path.join(td, "o.elf"), os.path.join(td, "o.bin")], check=True)
     got = open(os.path.join(td, "o.bin"), "rb").read()
