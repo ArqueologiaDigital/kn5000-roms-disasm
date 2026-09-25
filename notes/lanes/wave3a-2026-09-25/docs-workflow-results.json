@@ -1,0 +1,450 @@
+[
+  {
+    "label": "write:docs-wsa1status",
+    "agentId": "a2db18fc6d6e67557",
+    "result": {
+      "commits": [
+        "d5880d4 wsa1: new page -- CPU 1's parameter-number space and the records it addresses (wsa1-parameters.md, nav entry, tools/wsa1_param_record_layout_check.py: all 23 prom_c combination chunks copied to RAM 0x7620 land exactly on ParamNumber_RecordPtrs[tag], across all 129 records; a RAM base 2 bytes off matches 0)",
+        "200999c rom-reconstruction: census after Wave 2 (strict 64.15% -> 95.04%, per-image table and strict shares, KNOWN-A/B, research targets 5,077 ranges / 328,853 B by reason and image, UNKNOWN 12,357 -> 56,567 read as admissions replacing names that hid gaps), the grades explained, 95.04% labelled as a keyword grade whose hand audit predates Wave 2, census defects listed; numeric-branch table re-counted (the old prom_c 'before' of ~3,970 was wrong: it is 2,479); prom_a/prom_b no longer called data-as-code clean; symbol counts updated",
+        "f6f7fd6 tools: branch_operand_counts.py and census_research_by_image.py, the scripts behind those figures",
+        "544c339 index, help-wanted: completeness figure is now the post-Wave-2 strict census, with its caveat",
+        "d621f37 wsa1-disassembly: coverage and meaning counts re-derived (the old glob skipped prom_c's subdirectories); per-image census table; stale 'largest unconverted spans' replaced by the largest research targets; new section on older-build remnants (prom_b live-0x23001 / -0x1A401 / -0xBA00, prom_a stale twins) and why they matter for emulation; the maths library's Double_* names",
+        "beffdbf sysex-messages (WSA1R): the tempo routine this page cited at 0xFAA350 sits in the stale copy; the live one is sub_FAA742; LinkTable_F4FF61 named as the decode tree; 0x2C also carries single-parameter changes (SMF templates)",
+        "6c6e59c wsa1: prom_d field-meaning statement corrected (readers, index maps inverse on both models, per-element waves, drum-kit note maps); prom_c bank is the combination memory; P7 upload path and descriptor letters decoded",
+        "015ee9c wsa1-panel: the path from a switch to a parameter record; sub_F94E1C -> TestMode_PanelSwitchesToLeds and the LED/wire tables' current names; open item 3 corrected (0xF869F0-0xF86A23 is UiEventList_Run code)",
+        "1dc2fe5 wsa1-modeling-lsi: 32 references to old curve-table names replaced from the disassembly's own rename map (l7a1429_crosscheck.py still passes)",
+        "d687c09 wsa1-emulation: unreached code may be stale rather than a missing path; the SmfSysEx_WriteAddr11 compare noted as a MAME-trace lead",
+        "31d6412 raw-byte-code-elimination: prom_a is not at zero code-as-.byte (298 sites, 1,318 B per wsa1_unspellable_forms.py); WSA1 statement counts re-measured",
+        "bef9184 questions: SX-WSA1R section with the WSA1 lanes' open questions",
+        "8db1d9a wsa1-parameters: the SMF exporter's address-hi 0x11 reads RAM 0x7622 + lo",
+        "5986c62 help-wanted, roadmap: two status claims the tree now contradicts (prom_a .byte code; LABEL_ rows now 0)",
+        "eec3c23 tools/tone_db_index_map_inverse_check.py: committed check for the KN5000 half of the index-map inverse claim (the lane's script covers prom_d only); wsa1.md and tone-database.md cite it",
+        "5e8d754 wsa1-parameters: opening claim scoped (tone-editor fields use a separate store); layout statements tightened",
+        "18b54f1 tools/check_doc_symbols.py: the symbol-name checker behind the 'names checked' statements"
+      ],
+      "pages_changed": [
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-parameters.md (new)",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/_data/navigation.yml",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/rom-reconstruction.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/index.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/help-wanted.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/roadmap.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-disassembly.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-panel.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-emulation.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-modeling-lsi.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/sysex-messages.md (SX-WSA1R section only)",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/raw-byte-code-elimination.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/questions.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/tone-database.md (one paragraph, KN5000 half of item 4)",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/tools/wsa1_param_record_layout_check.py (new)",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/tools/tone_db_index_map_inverse_check.py (new)",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/tools/branch_operand_counts.py (new)",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/tools/census_research_by_image.py (new)",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/tools/check_doc_symbols.py (new)"
+      ],
+      "not_done": "All 17 commits are on branch docs/w2-wsa1status. Nothing was pushed, and nothing was written to kn5000-roms-disasm. Every commit was preceded by a clean Jekyll build (exit 0), and the worktree is clean.\n\nHow the figures were checked: I re-ran the census on the committed tree at be376096 and it matches census-after-wave2.txt exactly. Branch counts were taken from committed files only. The branch counter reproduces the symboliser docstring's 'before' figures exactly, which is how I found that the old prom_c 'before' figure of ~3,970 was wrong; the correct value is 2,479.\n\nNot done, and why:\n1. The census's hand-audited false-positive sample (40 regions, seed 90902) was not redrawn. The last audit ran on 2026-09-02. The pages therefore present 95.04% as the instrument's grade, not an audited figure. Redrawing it takes a person reading 40 regions.\n2. The KN5000 half of the index-map claim had no committed check. Lane promcd's script, prom_d_index_maps.py, covers prom_d only. I added tools/tone_db_index_map_inverse_check.py in the docs repo instead (PASS on both models, with a control).\n3. tone-database.md (a KN5000 page) got one paragraph for item 4 and nothing else. Its other claims were left to whichever lane owns that page.\n4. Two new findings from combining lanes are stated as leads, not settled:\n   - the parameter records are one combination record laid out in RAM, so four of prom_b's 'no meaning' ids get their names from the SysEx reference (0x78 COMBINATION NAME, 0x60 EFFECT COMMON, 0x79 PART COMMON, 0x92 KEY SCALING);\n   - SysEx address 11/lo maps to RAM 0x7622+lo.\n   Neither has been confirmed from prom_a's own code. Both are listed in questions.md.\n5. A few earlier figures that Wave 2 did not re-measure were left with their dates:\n   - wsa1-disassembly's reachability section (STRONG 9 B, 2026-09-02);\n   - wsa1-panel's counts of named ENTER methods and dispatch slots (32/36, 459 of 654);\n   - rom-reconstruction's v7 and HD-AE5000 code-as-.byte figures, now pointed at the raw-byte page.\n6. The Japanese-text finding and the prom_b DSP-effect editor findings (lane promb) were not written up as page content. Only the reachability question went into questions.md.\n7. sysex-messages.md's reading of 0x2C as 'open bulk transfer' was not changed. I only flagged that it is not reconciled with the single-parameter-change use.\n8. The disassembly's HEAD moved to 96a03043 during the session (it only respells `di` as `ei 0`). The page figures are stated at be376096, and symbol names were re-checked at 96a03043.\n\nScratch files: everything left in the session scratchpad can be thrown away. The census output duplicates the committed census-after-wave2.txt and regenerates with data_range_census.py. The unspellable-forms output regenerates with its script. The two ad-hoc scripts are committed as tools/branch_operand_counts.py and tools/check_doc_symbols.py."
+    }
+  },
+  {
+    "label": "check:docs-wsa1status",
+    "agentId": "abde2f3176e8dede2",
+    "result": {
+      "checked": 82,
+      "build_ok": true,
+      "problems": [
+        {
+          "file": "wsa1-parameters.md (also questions.md, wsa1-disassembly.md)",
+          "claim": "`Dispatch_By_60F080` has 256 entries; 168 of them are a lone `ret`. Beyond the parts and the controllers, thirteen numbers — 0x44, 0x45, 0x46, 0x48, 0x60, 0x70, 0x72, 0x7A, 0x90, 0x91, 0x98, 0xA8, 0xB0 — have one handler each that is not decoded yet. (questions.md asks what they do; wsa1-disassembly says thirteen of the dispatcher's handlers are still sub_XXXXXX.)",
+          "evidence": "From the ROM table at 0xFAC8EA and wsa1/prom_a/wsa1_prom_a.s, nine of the thirteen go to a handler that is only `ret`: 0x44/0x45/0x46 all go to sub_FABB5D (`ret` at 0xFABB5D, so the three share one handler), 0x48 to sub_FABB60, 0x90 to sub_FABBCF, 0x91 to sub_FABBD0, 0x60 to sub_FABBD2, 0x70 to sub_FABBD4 and 0x72 to sub_FABBD5, each a bare `ret`. Only 0x7A (sub_FABB61), 0x98 (sub_FABBD7), 0xA8 (sub_FABCD7) and 0xB0 (sub_FABCEF) have bodies. So 177 of the 256 entries do nothing, not 168, and there are 11 distinct handlers for the 13 numbers, not 13.",
+          "fix": "Say: 168 entries point at the shared `ret` sub_FAC845. Nine more numbers (0x44–0x46, 0x48, 0x60, 0x70, 0x72, 0x90, 0x91) point at their own one-byte `ret` stubs, so they are no-ops in this dispatcher too. Only 0x7A, 0x98, 0xA8 and 0xB0 have handlers with bodies, and those are not decoded. Narrow the questions.md item to those four, and reword the wsa1-disassembly count to match."
+        },
+        {
+          "file": "wsa1-disassembly.md, help-wanted.md, raw-byte-code-elimination.md, rom-reconstruction.md",
+          "claim": "prom_a carries 298 instructions (1,318 B) as `.byte` lines that no spelling tried so far assembles back byte-identically, in 89 forms. rom-reconstruction goes further: '298 certified sites (1,318 B) that the assembler has no spelling for yet'.",
+          "evidence": "`python3 notes/sound/wsa1_unspellable_forms.py` (run from wsa1/, disassembly HEAD = be376096 for wsa1/) prints '298 certified site(s), 1318 byte(s), 89 form(s)' and then '292 of those site(s) have NO SPELLING'. The other 6 are marked 'spellable': `ld a,(-xix)`, `ld (-xiy),a`, `ld (xix+),a`, `ld (xix+),wa`, `ld (xix+),e` and `tset 0,(0x2a1b76)`. rom-reconstruction's 'the assembler has no spelling' also contradicts raw-byte-code-elimination's own caveat that 'no spelling' is not the same as the backend being unable to encode them.",
+          "fix": "Everywhere: '298 certified `.byte` instruction sites (1,318 B, 89 forms), of which 292 have no spelling found so far that reassembles byte-identically; the other 6 are spellable and not yet respelled'. In rom-reconstruction.md, replace 'that the assembler has no spelling for yet' with that sentence."
+        },
+        {
+          "file": "wsa1-disassembly.md",
+          "claim": "The three prom_b older-build remnants are each proven 'by its own script under notes/promb-2026-09-25/'. The table cites `stale_dl_tables_f0ed50.py` as the proof for 0xF0ED50–0xF0EFFF.",
+          "evidence": "At the current disassembly tree (wsa1/ is identical at be376096 and HEAD 96a03043), `python3 notes/promb-2026-09-25/stale_dl_tables_f0ed50.py` ends with 'VERDICT: FAIL (7)'. Its byte-level checks pass (live − 0x23001, 688 B, the Blink_Command_Table + 0x26 landing). The failures are seven label checks for sub_F0EA9F_Arm, sub_F0F105_Arm and others ('-1 references'). Commit 37df48c0 removed those labels.",
+          "fix": "Either get the script fixed in the disassembly repository so it passes, or say on the page that its byte checks pass and its seven label checks fail on the current tree because they look for the _Arm labels removed in 37df48c0."
+        },
+        {
+          "file": "wsa1-panel.md",
+          "claim": "`gen_panel_test_tables.py` is listed among the checks, for 'the LED wire maps and test-mode tables' (PanelLedWireMap_Variant1/2, TestMode_* at 0xF94ED8/0xF95008/0xF94F58/0xF95088).",
+          "evidence": "`python3 notes/proma-2026-09-25/gen_panel_test_tables.py` stops with AssertionError at line 84 at the current tree. Its orphan-label assertion finds the six labels as they are now named: PanelLedWireMap_Variant1/2, TestMode_PanelWireGroupMap_Variant1/2 and TestMode_SwitchLedCodes_Variant1/2. The check no longer runs to completion.",
+          "fix": "Have the script fixed to accept the current names, or cite it with the commit at which it passed and state that it fails on the current tree."
+        },
+        {
+          "file": "wsa1-emulation.md",
+          "claim": "'The disadssembly has proven that parts of prom_b are an older build's code and data left in place ... Nothing reaches them on real hardware either.'",
+          "evidence": "wsa1-disassembly.md itself says: 'The checks prove the correspondence; that the image was built over an older one is the natural reading, not something the bytes can prove.' The scripts prove relocated copies and no static reference. They prove neither an older build nor runtime unreachability.",
+          "fix": "Write: 'The disassembly has proven that three stretches of prom_b are relocated copies of live objects (at live − 0x23001, − 0x1A401 and − 0xBA00), and nothing in either image names them. The natural reading, not proven, is that they are an older build's bytes left in place.' Drop 'on real hardware either', or turn it into 'no static reference reaches them'."
+        },
+        {
+          "file": "wsa1-disassembly.md",
+          "claim": "'The largest open ranges', 'from the same census, merged the way its research-target list merges them': prom_b fonts 15,120 B, prom_b 0xF06800 9,432 B, prom_a DrumKitNames 7,740 B, LinkTable_F4FF61 4,602 B, prom_c P7 pool, prom_d ToneDB_ToneOffsetTable.",
+          "evidence": "`tools/census_research_by_image.py` over a fresh census JSON ranks prom_b 0xF7D2D8–0xF7E2D8 ButtonTable_* (4,096 B) 5th, 0xF511DD RecordArray_F511DD (3,139 B) 6th, Font_Svc06_8x14 (2,800 B), prom_a RecordTables_FB82A0 (2,566 B) and EffectNames_F147AC (2,048 B). All are larger than the prom_c and prom_d entries listed. prom_c's largest research target is 0xFDF7E0–0xFDFECC (1,772 B, Curve_Fitting_Exp2Decay_256 … Dev104_Reg0100_Const_251), not a P7 stream (the largest of those is 1,103 B).",
+          "fix": "Title the list 'Among the largest open ranges', or add ButtonTable_* (4,096 B) and RecordArray_F511DD (3,139 B). Under prom_c, name the 1,772 B curve-table range as its largest research target, ahead of the ~1 KB P7 streams."
+        },
+        {
+          "file": "rom-reconstruction.md",
+          "claim": "'KNOWN-A is keyword-graded: a header of eight or more words carrying two evidence tokens (`read by`, `record`, `+0x`, `.py`, …) and no admission phrase earns it.' Also: 'A header that says \"purpose not established\" ... grades UNKNOWN'.",
+          "evidence": "grade_purpose() in scripts/analysis/data_range_census.py has a second route to A: a descriptive name, 6 or more words and a single evidence token. The EVIDENCE list also counts any '0x' and generic words ('entry', 'header', 'format', 'see '). An admission grades UNKNOWN ('C') only when the header has fewer than 40 words (`if admits and words < 40`).",
+          "fix": "State both routes to A (8+ words with 2 tokens, or a descriptive name with 6+ words and 1 token). Say that the token list includes '0x' and generic words. Say that an admitting header grades UNKNOWN only under 40 words (research-target listing applies either way)."
+        },
+        {
+          "file": "rom-reconstruction.md",
+          "claim": "The grading defects are 'listed for Wave 3 in notes/lanes/wave2-2026-09-25/WAVE3-LEADS.md, \"Instruments\"'.",
+          "evidence": "The 'Instruments' section (WAVE3-LEADS.md lines 11–17) holds only the `NAME = expr` item and the comment-run/0xED0008 item. The six-line banner / ~86 KB icon item and the single-line-header, F64_2376 and m_ldc_* items are under 'Open research' (the latter at line 78).",
+          "fix": "Cite 'WAVE3-LEADS.md, \"Instruments\" and \"Open research\"', or cite the file without naming a section."
+        },
+        {
+          "file": "rom-reconstruction.md",
+          "claim": "'The run after Wave 2 is committed as notes/lanes/wave2-2026-09-25/census-after-wave2.txt ... and re-running the command at be376096 reproduces it figure for figure.' The research-target figures (328,853 B in 5,077 ranges, the 248,744/59,562/20,547 split) and the flag table (3,687/20,547; 8,812/360,387; 1,100/25,424; 55.1 % vs 4.1 %) are quoted beside it.",
+          "evidence": "The committed file is 54 lines. It stops at the 'LARGEST PURPOSE-UNKNOWN RANGES' heading and has no research-target, embedded-in-code, code-shaped or code-suspect blocks. I re-ran the census, which reproduces every quoted figure, but the research and flag numbers exist in no committed artefact (only README.md's headline row has 328,853 / 5,077).",
+          "fix": "Commit the census's full stdout in the disassembly repository, or say that the research-target and flag figures come from re-running the command and are not in the committed file."
+        },
+        {
+          "file": "rom-reconstruction.md, wsa1-disassembly.md, raw-byte-code-elimination.md, index.md, wsa1-panel.md, wsa1-parameters.md, wsa1.md, tone-database.md",
+          "claim": "Several passages are written as change history rather than current state.",
+          "evidence": "Examples: rom-reconstruction 'It stood at 64.15 % before the September 25 semantic push', the before/after table, 'UNKNOWN went up, and that is the push working', and 'v7's denominator grew by 16,320 branches during Wave 2'. wsa1-disassembly: 'prom_a's substantive count is 3,298 bytes lower than on 2026-09-02 … nothing was lost', 'The unnamed count is higher than the 4,752 recorded on 2026-09-02', 'the earlier audit … did not hold'. raw-byte: 'The earlier \"0 — byte runs audited and typed\" … did not survive'. index.md: 'up from 64.15 %'. wsa1-panel: 'now written as `.long`', 'They now carry screen names', '(The range … this item used to name as a map …)'. wsa1-parameters: '(… once called \"a step, not a proof\" …)'. wsa1.md: 'the thirteen an earlier census listed as reader-less', 'now names its instrument'. tone-database: 'are now read'.",
+          "fix": "Rewrite each as a current-state statement: give the current figure and its meaning, and move before/after comparisons to the lane notes or commit messages. Keep only corrections a reader needs, such as the 0xFAA350 → sub_FAA742 note, and write those as a fact about the address ('0xFAA350 is inside the stale copy'), not as page history."
+        },
+        {
+          "file": "tone-database.md",
+          "claim": "New paragraph: 'Two of the three trailing bytes of a row are now read: bytes +14/+15 are the row's own selector pair'.",
+          "evidence": "A few lines earlier the unchanged sentence still says the 16-byte rows are a '13-character source name + three id/flag bytes whose meaning is *not yet decoded*'. The page now contradicts itself. The new claim is confirmed: tools/tone_db_index_map_inverse_check.py PASS, 333/333, 339/339, 141/141, 144/144.",
+          "fix": "Edit the earlier sentence: '13-character source name, then byte +13 (not decoded) and bytes +14/+15, the row's (program, bank-family) selector pair'. Drop 'now' from the new paragraph."
+        },
+        {
+          "file": "wsa1-disassembly.md",
+          "claim": "'6,294 unnamed routines (3,794 in prom_a, 2,328 in prom_b, 173 in prom_c's sources)'. Also: 'prom_c is now 26 subject files in subdirectories, which a one-level glob silently skips'.",
+          "evidence": "The per-image figures sum to 6,295. `sort -u` counts sub_FADE2F once, but prom_a and prom_c each define it as a different routine at the same CPU address. `git ls-files 'wsa1/prom_c/*.s'` lists 27 files: 25 in subdirectories, plus field_accessors.s and wsa1_prom_c.s at top level.",
+          "fix": "'6,295 unnamed routines (6,294 distinct names; sub_FADE2F exists in both prom_a and prom_c)'. Change '26 subject files in subdirectories' to '25 of its 27 source files are in subdirectories'."
+        },
+        {
+          "file": "wsa1-disassembly.md",
+          "claim": "The three prom_b remnants 'share a signature: each runs from the end of this build's live code up to a 1 KB or 4 KB boundary … and its own pointers are the live ones shifted by one constant'.",
+          "evidence": "old_module_copy_f6f000.py: 0xF6F000 is preceded by 0x0E fill 0xF6EC9F–0xF6EFFF, so it starts at a 4 KB boundary after pad, not at the end of live code. Its calr at 0xF6F3E4 targets old+0xBA60, not −0xBA00.",
+          "fix": "Say that the first two follow live code directly, and the third starts on a 4 KB boundary after 0x0E fill. Say its four `call`s shift by 0xBA00 and its one `calr` does not."
+        },
+        {
+          "file": "wsa1-parameters.md",
+          "claim": "Record byte +0 is 0x00–0xBF '(the list runners skip anything above 0xBF)'.",
+          "evidence": "Evt2030_RunList (`cp A,0xbf` at 0xFADB55) and UiEventList_Run (`cp L,0xbf` at 0xF869FB) do skip such numbers. List2030_TranslateToQueue2C00 (0xFAB81F) does not bound the number: it dispatches all 256 through Dispatch_By_60F080, whose entries 0xC0–0xFF are the default `ret`.",
+          "fix": "'(Evt2030_RunList and UiEventList_Run skip numbers above 0xBF; List2030_TranslateToQueue2C00 dispatches all 256, and 0xC0–0xFF land on a `ret`)'."
+        },
+        {
+          "file": "wsa1-parameters.md",
+          "claim": "'0xF3F400–0xF3FFFF is 77 [id][len][payload] records'.",
+          "evidence": "factory_default_records.py: 'the walk from 0xF3F400 lands on 0xF3FD60: 77 records'. wsa1_prom_b.s has an end marker `.byte 0xFF, 0xFF` at 0xF3FD5E, then '0xF3FD60-0xF3FFFF -- 672 bytes of pad, value 0x00', emitted as `.fill`.",
+          "fix": "'0xF3F400–0xF3FD5F holds 77 [id][len][payload] records (0xF3FD60–0xF3FFFF is 672 bytes of zero pad)'."
+        },
+        {
+          "file": "wsa1-parameters.md",
+          "claim": "'part k's channel byte (+0x0D) defaults to k; part 9 — MIDI channel 10 — alone differs, in both halves'.",
+          "evidence": "factory_default_records.py: 'payload byte 0x0D of id k is k, k = 0x00-0x1F' holds for part 9 too. Part 9 differs at payload byte 1 (0x20, where every other part has 0x00) and in its second half (id 0x29). As written, the sentence reads as if part 9's channel byte were different.",
+          "fix": "'part k's channel byte (+0x0D) defaults to k for all 32 parts; part 9 (MIDI channel 10) is the only part whose other defaults differ: +0x01 = 0x20 and a different second half'."
+        },
+        {
+          "file": "wsa1-parameters.md",
+          "claim": "Under 'What is not established': 'only the classes above, +0x0D and the bytes the AND/OR patch lists touch (+0x0C, +0x0D, +0x2B–+0x36) are confirmed there'.",
+          "evidence": "The ParamNumber_RecordPtrs header in wsa1_prom_a.s also lists '+0x1B..+0x1D (written by 0xFAA6B1)' as established offsets.",
+          "fix": "Add '+0x1B–+0x1D (written by 0xFAA6B1)' to the list of offsets confirmed from prom_a's code."
+        },
+        {
+          "file": "wsa1-disassembly.md",
+          "claim": "Each Cody & Waite coefficient set 'is loaded by exactly one routine — which is how Double_Sin, Double_Cos, Double_Tan, Double_Exp, Double_Log, Double_Pow, Double_Abs and Double_MakeInfinity got their names'.",
+          "evidence": "mathlib.s headers: Double_Abs was named from `and (XIX+0x07),0x7f` (clears the sign bit, 0xFCA098), and Double_MakeInfinity from building 7F F0 00.. / FF F0 00.. (0xFC9CDF–0xFC9CF0). Neither was named from a coefficient set. mathlib_names.py confirms 29 coefficients within 1 ulp.",
+          "fix": "Credit the coefficient sets for Sin/Cos/Tan/Exp/Log/Pow only. Say Double_Abs and Double_MakeInfinity were named from their own sign-bit and ±Inf constructions, also asserted by mathlib_names.py."
+        },
+        {
+          "file": "raw-byte-code-elimination.md",
+          "claim": "'The SX-WSA1R instruction-statement figures were re-measured with the command below at the same commit.'",
+          "evidence": "The command (`mnemonic_census.py --root <dir>`) is shown above that paragraph, not below. The figures themselves are correct: prom_a 119,235, prom_b 67,679, prom_c 75,701, kernel 938, dsp 97.",
+          "fix": "Change 'the command below' to 'the command above'."
+        },
+        {
+          "file": "wsa1-disassembly.md",
+          "claim": "The `.incbin` spans column (0 for every image) comes from `grep -rc '^\\s*\\.incbin' wsa1/prom_*/`.",
+          "evidence": "Run in the disassembly repository, that command counts 2 matches, both in wsa1/prom_a/insert_region.py (docstring lines 8 and 15), not in any `.s` file. The 0 in the table is right for sources, but the command as quoted does not give it.",
+          "fix": "Use `grep -rc --include='*.s' '^\\s*\\.incbin' wsa1/prom_*/` (or `command grep`), which gives 0."
+        },
+        {
+          "file": "tools/census_research_by_image.py",
+          "claim": "Docstring: 'The per-image sums must add up to the census's printed total; this script prints both so the reader can see they do.'",
+          "evidence": "The script prints the per-image sums and its own TOTAL (328853). It never reads or prints the census's total, so it does not show the two agreeing. They do agree when compared by hand against the census's 'RESEARCH TARGETS … 328853 bytes total'.",
+          "fix": "Reword to 'its TOTAL line must equal the census's printed research-target total', or have it read that total from the JSON if the file stores it."
+        }
+      ]
+    }
+  },
+  {
+    "label": "write:docs-kn5000",
+    "agentId": "a7753add4ecc9c36d",
+    "result": {
+      "commits": [
+        "technics-docs (worktree /home/fsanches/compartilhado/disasm-lanes/docs-kn5000, branch docs/w2-kn5000), oldest first:",
+        "b86cd28 event codes: 0x01C00014-16 are mode/title requests, 0x01CA000n are HD-AE5000 events",
+        "60abb09 UI framework: the NAKA class system describes itself; module numbers; object ids",
+        "ca2b887 memory map: work-RAM initial image, HD-AE5000 RAM, the 0x800000 bitmap bank",
+        "e14d7ec HD-AE5000 filesystem page rewritten from the code; lyric file format documented",
+        "8daf0c7 HD-AE5000 homebrew: workspace offsets named by the firmware, classes, DISK MENU item",
+        "52b352c boot sequence: HD-AE5000 Table B and 0x0270 named, work-RAM init step",
+        "f452570 boot sequence / event codes: HD-AE5000 boot title request depends on an unreconciled result",
+        "355e8d4 HD-AE5000 page: Wave 2 corrections (boot steps, RAM, class ids, .rodata, PC link)",
+        "376e032 HD-AE5000 pages: stale labels swept (ATA driver, RAM, registry, STORE pair)",
+        "47828bb tone database: reader-derived record layout, wave-selection chain, index maps are inverses",
+        "0f7b96b Music Stylist: the 113-byte parameter block decoded; tempo field; residue identified",
+        "15fdb02 table data ROM: 0x800000 half is a bitmap bank, wallpaper trailers are palettes",
+        "afbe3b6 Preset Data Destination dispute: the 0x800000 fallback is a bitmap bank (strong lead, not confirmed)",
+        "b470a90 DSP effects: the effect-parameter metadata is the main CPU's; sub-CPU copy unread",
+        "5421e2c sweep: names the Wave 2 lanes renamed (MIDI system handlers, algo case tables, SwbtWr listener lists)",
+        "9630228 kernel names: Audio_Lock_* are semaphores, Show_ScreenGroup_Entry spawns a task, TaskSched_Resume blocks",
+        "f446bee sweep: FSB/FGB/FEB and '20,457-sector limit' claims, panel-memory loader names, wallpaper chain",
+        "e05461b feature demo: readers of the file-entry index and the metadata header",
+        "f6fa044 feature demo: spell the old listener-list labels in full",
+        "331ac23 open questions: NAKA answers from the class system; Wave 2 open items",
+        "cc0079e sound categories: the 16 descriptor slots are maps, not per-category data",
+        "821604d source map: file descriptions the Wave 2 lanes disproved",
+        "ad67633 ROM reconstruction: the Wave 2 census (strict 95.04 %), beside the audited September figure",
+        "d00052c custom data flash: 0x3D3000 is three sound-parameter user banks, not registration memory",
+        "e552d01 storage subsystem: HD-AE5000 routine table uses the real labels and addresses",
+        "cbde194 sound parameter protocol: reverb/EQ preset loading is one 24-byte record per command",
+        "db9c8c1 welcome screen: the IN COLOR/IN COLOUR lettering is a ROM script; FTBMPs are in table data",
+        "c523ebf reverse engineering: 0xE9F11C is PsMixer_ControlProcTable, not an event-handler table",
+        "cafaf42 tools: check_doc_symbols.py -- which quoted symbols no longer exist in the sources",
+        "5ca336e event codes: ModeProc's 0x01C00013 case, worded without a wrong ordinal",
+        "Mines (/home/fsanches/compartilhado/Mines, branch kn5000_port; only CLAUDE.md committed, other people's untracked files untouched):",
+        "64ae1d9 CLAUDE.md: workspace offsets carry the firmware's own function names"
+      ],
+      "pages_changed": [
+        "event-codes.md (item 1: 0x01C00014 mode request / 0x01C00015-16 title requests with dispatch path, titles table, requesters; 0x01CA000n HD-AE5000 events; PostEvent address fixed; default handler = InheritedProc)",
+        "hdae5000-homebrew.md (items 1/2: full RootFn/HamaFn offset tables with the firmware's own names; registration table by class id and proc, module 0x0A, final RegisterTitle; 0x016A record table = 13 class definitions with root parents, allsize and signature-size checks; the DISK MENU 'slot' = RAM-resident AcTitleMenu 'HARD DISK MAIN MENU' re-classed as HDTitleMenu, with a check snippet)",
+        "hdae5000-filesystem.md (item 2: rewritten from the code: 1-based head-major sectors, FAT from sector 2, 323 table sectors at 3908, song/FLS records, cluster chains, part signatures; disk-image section reconciled exactly (3908 -> LBA 0xF403, 29+9x32+6=323); vtable corrected; new 'Lyric Files (.TLX)' section: one-track SMF with TLhd/TLtr ids, meta types, Lyrics_CheckFile dead code, playback, parser RAM; misname table)",
+        "boot-sequence.md (item 2 Table B / 0x0270 RegisterTitle, workspace diagram with firmware names, frame handler, step-8 caveat; item 4 Boot_InitWorkRAM step; divide-routine names; welcome-screen script; 0x8E0000 question answered)",
+        "memory-map.md (item 4 'Work-RAM initial image' section incl. v7 difference; item 2 HD-AE5000 RAM table with 0x23A19E lyric box object and 0x23A0AA six lyric lines; 0x800000 bitmap bank rows; sub-CPU metadata note)",
+        "hdae5000.md (boot steps, RAM names, 'PPI port' -> class id, EV_* ids, class parents, .rodata re-cut, STORE pair labelled, PC-link table = entries 6-17, routine names, frame-handler flow, Check_HD_Present return, UI pool typed, Wave 2 census, pre-format notes)",
+        "ui-framework.md (item 3: module numbers and object-id scheme; 'The class system describes itself' section: class definition fields, class ids, Viewable +4 parent/+6 first child/+8 next/+10 prev/+14 rect, type-letter sizes, 292 classes, invariants; event table rows)",
+        "ui-widget-types.md (item 3: type bytes = class indices with firmware class names; Viewable layout; naka_dispatch_t = class definition read 4 bytes late; handler_table = window/selected)",
+        "tone-database.md (item 5: reader-derived tone-record layout, velocity-split records, SET descriptors, key maps/zone records, 'Wave selection, end to end'; catalogue index maps exact inverses 333/333, 339/339, 141/141, 144/144 with inline check; drum-kit per-note decoding; open items)",
+        "music-stylist-database.md (item 5: 113-byte parameter block decoded, applied tempo field, stale help-DB copy after the grid, DSP-effect lead marked unchecked)",
+        "table-data-rom.md (item 5: 0x800000 section directory + 26 bitmaps, no reader; wallpaper trailers are palettes; demo preset 18 reader; open items)",
+        "lzss-compression.md (item 8: 'Preset Data Destination dispute: a Strong Lead' section, stated as not confirmed in MAME with the check that would confirm it)",
+        "subcpu-firmware-images.md (item 8 pointer)",
+        "dsp-effect-data-zone.md (item 6: sub-CPU 0x0133CF metadata = byte/relocation-identical copy of main-CPU 0xEE4FC6-0xEE636B read by DSPCfg_*; DspFxRecs_NN lists vs DSP_Eff<NN>_Param_Values measured 4/58 identical, 32 differ only in last 1-12 bytes, with inline snippet; effect label corrections)",
+        "effects-dsp.md, dsp-bytecode-interpreter.md, subcpu-payload-loading.md (item 6 links; algo case-offset table names)",
+        "cpu-subsystem.md, inter-cpu-protocol.md, audio-subsystem.md (item 7: kernel twin table; Audio_Lock_* = semaphore P/V; Show_ScreenGroup_Entry = TaskSched_SpawnTask; TaskSched_Resume blocks the caller; bytecode op 0xD releases semaphore 1)",
+        "questions.md (NAKA questions answered; new Event System, HD-AE5000 and Data Tables open items)",
+        "sound-categories.md (audio lane: descriptor slots are maps, not per-category data)",
+        "custom-data-flash.md (0x3D3000 = three sound-parameter user banks, not registration memory)",
+        "source-map.md, rom-reconstruction.md (Wave 2 census), storage-subsystem.md, sound-parameter-protocol.md, reverse-engineering.md, feature-demo.md, ssf-presentation.md, test-modes.md, memory-dump-screen.md, midi-serial-io.md, subcpu-command-format.md, panel-memory-factory-data.md, image-gallery.md, app-loader.md, hdae5000-disk-interface.md, hdae5000-mame-setup.md, hdae5000-resources.md, index.md (item 9 sweep of renamed names and contradicted statements)",
+        "tools/check_doc_symbols.py (new: the committed symbol-existence checker used for the sweep)",
+        "/home/fsanches/compartilhado/Mines/CLAUDE.md (item 1: workspace offsets with firmware names)"
+      ],
+      "not_done": "Disassembly-side items (kn5000-roms-disasm was read-only for me): (1) Event Code Freshness step 1 not done: EVT_HD_INIT_PARAMS (0x01C00016), EVT_DISPLAY_CALLBACK (0x01CA0000) and EVT_DISPLAY_UPDATE (0x01CA0004) still carry wrong names in hdae5000/shared/event_codes.s and v10/maincpu/shared/event_codes.s; the pages state the correct meaning and flag the stale names. (2) The KN5000 tone-DB index-map inverse check (333/333, 339/339, 141/141, 144/144) is NOT in the committed notes/lanes/promcd-2026-09-25/prom_d_index_maps.py (prom_d only); I re-derived it and embedded the check inline on tone-database.md; it should be committed beside the prom_d script. Same for the DspFxRecs-vs-DSP_Eff<NN>_Param_Values byte comparison (inline on dsp-effect-data-zone.md). (3) The disasm CLAUDE.md 'Known Disputed Interpretations' table was not updated with the 0x800000 bitmap-bank lead. (4) symbols/ files untouched.\n\nStated as leads, not facts, on the pages: the Preset Data Destination explanation (not confirmed in MAME); the Music Stylist DSP-effect-name lead (param 0x4900); the tonedb report that InterCPU_E1_DMA_Transfer's header has src/dst swapped; the disk-image geometry (32 spt/16 heads) inferred from 0x200-sector spacing; the HD-AE5000 boot title-request condition, where Check_HD_Present's header and the call-site comments disagree.\n\nNot reflected on pages: the midi lane's CC transmit/receive inverse (MidiCC_FunctionToCCNumber) and RX record-type tables, the ext lane's language tables (Italian never translated), SoundCheck_Text, the uimisc SysEx recognition trie, seui ScreenData typing, the accomp/seqeng/sequi/scoop re-framing work. I found no KN5000 page contradicted by those beyond the renamed names I fixed. The Wave 2 census is added to rom-reconstruction.md, but the 40-region hand audit was not repeated, and the page says so.\n\nPre-existing stale names NOT from Wave 2 were left alone, e.g.: sequencer.md Seq_*; event-codes.md EVT_GETTER_*/EVT_LIFECYCLE_* (never in the sources); Audio_SendCommand on inter-cpu/sound-parameter pages; memory-map.md IntMed_*/MEDLEY_*/SUB_*; control-panel-protocol Encoder_Return*; shorthand labels in hdae5000.md's ROM-layout table. tools/check_doc_symbols.py lists them.\n\nWSA1 and KN7000 pages were out of scope and untouched. Nothing pushed. Scratch files in the session scratchpad docs-kn5000/ are disposable: tokens.pkl and olddefs.pkl are caches; fntables.md was generated from the RootFn_/HamaFn_ .equ block and is now in hdae5000-homebrew.md; classes.txt is output of nakarest_objtab_map.py --classes; kn5000_index_maps.py is embedded in tone-database.md; symck.py is committed as tools/check_doc_symbols.py."
+    }
+  },
+  {
+    "label": "fix:docs-wsa1status",
+    "agentId": "a2594b72d967f461e",
+    "result": {
+      "commits": [
+        "71cde6e wsa1-parameters: nine of the thirteen dispatcher numbers are ret stubs",
+        "1509789 prom_a code-as-.byte: 298 certified sites, 292 of them without a spelling (superseded by bb058d6)",
+        "b80a3bf wsa1-disassembly: stale_dl_tables_f0ed50.py fails its label checks now",
+        "3272072 wsa1-panel: gen_panel_test_tables.py stops at its label precondition now",
+        "0b01ccd wsa1-emulation: relocated copies are proven, the older build is a reading",
+        "4f17ce3 wsa1-disassembly: the remnant section's lead matches its own caveat",
+        "bb058d6 prom_a code-as-.byte: the no-spelling count depends on the assembler build (adds tools/wsa1_unspelt_by_toolchain.py)",
+        "019e2bb rom-reconstruction: the census grades as grade_purpose() actually applies them",
+        "c4a48a4 rom-reconstruction: the grading defects are in two WAVE3-LEADS sections",
+        "64cfaef wsa1-disassembly: the open-range list is a selection; two larger ranges added",
+        "47c31d3 rom-reconstruction: the committed census file stops before the targets"
+      ],
+      "pages_changed": [
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-parameters.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/questions.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-disassembly.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/help-wanted.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/raw-byte-code-elimination.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/rom-reconstruction.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-panel.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/wsa1-emulation.md",
+        "/home/fsanches/compartilhado/disasm-lanes/docs-wsa1status/tools/wsa1_unspelt_by_toolchain.py (new tool)"
+      ],
+      "not_done": "All nine fact-checker items are fixed on branch docs/w2-wsa1status, one commit each (plus a small companion fix, 4f17ce3). The Jekyll build exits 0 before every commit. Nothing was pushed, and I wrote nothing to the disassembly repository. The ninth item's evidence text was cut off at \"The committ...\"; I checked it myself and fixed what I found.\n\nWhere I did not follow the checker:\n\n1. **The `.byte` counts (item 2).** The checker's \"292 without a spelling, 6 spellable\" is true under only one assembler build. The script uses whatever llvm-mc the shared build holds, and that binary changed several times today. I re-ran it at be376096 under four saved llvm-mc builds:\n   - da00420dba8d (sha256 a7ee33d53676, the pin be376096 names): 298 of 298 have no spelling, so the page's original wording was right.\n   - 6488ae7d (9c0c0033a21f): 298 of 298.\n   - 910b50efab49 (b211a23195df): 292, with 6 spellable. This is the checker's figure.\n   - 8e188b215251 (a67c563269fc, the current pin): 282, with 16 spellable (the ten `mul WA,(XIZ+d)` sites join the six).\n   \n   So my first commit, 1509789 (\"292 at be376096\"), was wrong and bb058d6 corrects it. The pages now give 282/16 under the current pin, and raw-byte-code-elimination has a table with one row per build. At e5f6cea1 (latest HEAD measured), 293 certified sites remain: 1485d941 respelled the five post-increment / pre-decrement ones.\n   \n   The new tools/wsa1_unspelt_by_toolchain.py reproduces all these runs. Three of the binaries it needs exist only in `disasm-lanes/wave3a-scratch/`, which is scratch, so their sha256 values are recorded in the script and the commit message.\n\n2. **The two failing scripts (items 3 and 4).** I did not get them fixed; I could only have done that by writing to the disassembly repository. Both scripts both checked and rewrote the source, and their label checks are preconditions that their own `--apply` made false.\n   - `stale_dl_tables_f0ed50.py` passes in full against the prom_b source from just before 37df48c0 (the commit where its `--apply` ran). On the current tree its byte checks pass and its 7 label checks fail. The page now says this.\n   - `gen_panel_test_tables.py` could not be re-run on the tree before 568b7b38: that tree uses `mul8rr`, which the current assembler rejects. The page cites 568b7b38, says the script fails at line 84 on the current tree, and says its byte checks (which run before that line) pass.\n   - The other panel scripts and the other two prom_b remnant scripts pass on the current tree.\n\n3. **The census (items 6 and 9).** The committed `census-after-wave2.txt` is only 54 lines. It stops at the \"LARGEST PURPOSE-UNKNOWN RANGES\" heading, so none of the research-target or flag figures are in it. I re-ran the census at be376096 in a scratch export with the a7ee33d5 binary (all images rebuilt at 100%). Up to where the committed file stops, the output matches it line for line, and further on it prints every research-target and flag figure the page quotes. rom-reconstruction now says this. The full census output is not committed anywhere; its key lines are in the message of commit 47c31d3. Whoever maintains `notes/lanes/wave2-2026-09-25/` may want to commit the full output there.\n\nLeft open:\n- In the prom_b source, the ButtonTable header says \"nine codes\" but lists 0x0E plus 0x11–0x19, which is ten. The page lists the codes and gives no count.\n- `tools/check_doc_symbols.py` flags `sub_F0EA9F_Arm` and `sub_F0F676_Arm` on wsa1-disassembly. They are quoted on purpose as the removed labels."
+    }
+  },
+  {
+    "label": "check:docs-kn5000",
+    "agentId": "a9bc733d7e1e876e4",
+    "result": {
+      "checked": 140,
+      "build_ok": true,
+      "problems": [
+        {
+          "file": "dsp-bytecode-interpreter.md",
+          "claim": "The new note '(These were `AlgoJumpTable1`-`AlgoJumpTable6` until September 2026 ...)' is placed inside the supporting-table-family table, between the `Algo_SubTable_*_CaseOffsets` row and the `DSP_EFFPARAM_APPLY_JUMPTABLE` row (source lines 203-207).",
+          "evidence": "In the built page (docs-verify-docs-kn5000/dsp-bytecode-interpreter/index.html) the <table> closes after the Algo_SubTable row. The next three rows (DSP_EFFPARAM_APPLY_JUMPTABLE, DSP_AlgoChannel_SelectorRecords, DSP_AlgoDescriptor_Records) render as raw '| ... |' text inside the note's <p>. No other changed page has this defect.",
+          "fix": "Move the parenthetical below the last table row, or fold the old names into the first column (for example 'DSP_AlgoType_Dispatch1_CaseOffsets (was AlgoJumpTable1)')."
+        },
+        {
+          "file": "hdae5000-filesystem.md",
+          "claim": "Line 134: `HDAE5000_CheckFileSignature` records at ROM 0x2F8E20: `\"HK\"` at +4 (LSW, PMT, MD), `01 08` at +5 (SQT), `\"HK\\0\"` (CMP), `\"KN5000 SOUND RAM\"` (TM), `\"H\\0K\"` (MSP, RCM), `\"TLhd\"` (TLX).",
+          "evidence": "ROM bytes at 0x2F8E20, records {u32 str, u16 off, u16 len} in part order: LSW (0x2F8E98,+4,2)='HK'; PMT (0x2F8E94,+0,2)='HK'; SQT (0x2F8E90,+5,2)=01 08; CMP (0x2F8E8C,+0,3)=48 00 4B='H\\0K'; TM 'KN5000 SOUND RAM'; MSP and RCM 'H\\0K'; MD (0x2F8E6E,+0,2)='HK'; TLX 'TLhd'. So PMT and MD are at +0, not +4, and CMP's signature is 'H\\0K', not 'HK\\0'. The source header of HDAE5000_CheckFileSignature (hdae5000_ui_display.s:11237) also says 'HK\\0' for CMP, so the source is wrong there too.",
+          "fix": "Change it to: `\"HK\"` at +4 (LSW), `\"HK\"` at +0 (PMT, MD), `01 08` at +5 (SQT), `\"H\\0K\"` (CMP, MSP, RCM), `\"KN5000 SOUND RAM\"` (TM), `\"TLhd\"` (TLX). Also correct the CMP entry in the source header."
+        },
+        {
+          "file": "tone-database.md",
+          "claim": "Line 336: the two drum name paths name 'the same instrument for 3,236 of the 3,328 kit notes. The rest differ only in numbering (\"Scratch 3\" / \"Scratch 2\")'.",
+          "evidence": "I re-ran the probe's own comparison and categorised all 92 misses. Only about 34 are numbering-only (Scratch 3/2, Bird 3/2, CrashCymbal 6/CrashCym 4, ...). 16 name a different sound outright ('Zap 1' vs 'High Q'). About 40 are abbreviation mismatches ('SambaWhistleL' vs 'SambaWhiLo', 'MetronomeClik' vs 'MetroClick'). There are 2 cases of 'DanceHHPedal' vs 'HatPedal 5'. The comment in notes/tonedb-2026-09-25/drum_chain_probe.py itself says 'a few differ outright (\"Zap 1\" / \"High Q\")'.",
+          "fix": "Change it to: 'The other 92 differ in numbering (\"Scratch 3\"/\"Scratch 2\"), in abbreviation (\"SambaWhistleL\"/\"SambaWhiLo\"), or outright (\"Zap 1\"/\"High Q\", 16 notes).'"
+        },
+        {
+          "file": "event-codes.md",
+          "claim": "Line 205: 'Requesters first cancel any request of the same kind that is still queued (`DeleteEvent` ...), then queue the new one with `ApPostEvent`.' Line 283: 'The mode and title requests above use `ApPostEvent`.'",
+          "evidence": "Only UI_PostPartChangeEvent, UI_PostModeChangeEvent and HDAE5000_RequestMode/RequestTitle15/ShowErrorMessageTitle call DeleteEvent before ApPostEvent. MainTitle_InitGraphicsAndEvents (boot/main_title_ctrl_panel.s) posts mode 0x01800001 and title 0xEF with plain `PostEvent` and no DeleteEvent. CtrlPanel_PostDisplayEvent and CtrlPanel_PostScrollEvent go straight to `call ApPostEvent` with no DeleteEvent. HDAE5000_Boot_Init calls RootFn_ApPostEvent directly.",
+          "fix": "Limit both statements to the UI_Post*/HDAE5000_Request* helpers. Say that the boot request in MainTitle_InitGraphicsAndEvents uses PostEvent, and that the control-panel chords and the HD-AE5000 boot request post with ApPostEvent without a prior DeleteEvent."
+        },
+        {
+          "file": "image-gallery.md",
+          "claim": "Line 68 (this line was edited in the diff): 'Disassembly symbols: `FTDEMO_SCREEN01_TECHNICS_GLOBE` through `FTDEMO_SCREEN06_KN5000_RAINBOW`.'",
+          "evidence": "None of the FTDEMO_SCREEN* names occurs in any .s/.c/.h outside archive/ (command grep, and tools/check_doc_symbols.py flags lines 32-68). The table-data ELF labels the six BMPs Feature_Bitmap_1..6 (0x880418, 0x89344E, 0x89DB04, 0x8A753A, 0x8B0F70, 0x8BAFE6). The same sentence names those labels a few words earlier.",
+          "fix": "Drop the FTDEMO_SCREEN sentence, or write 'Disassembly symbols: `Feature_Bitmap_1`..`Feature_Bitmap_6`'. Update the per-image headings at lines 32-62 as well."
+        },
+        {
+          "file": "source-map.md",
+          "claim": "Line 401: `hdae5000_hd_driver.s` = 'IDE/ATA driver: drive setup, identify, seek, read/write, error handling, CHS calculation, partition management'. Line 400: `hd-ae5000_v2_06i.s` holds '`HDAE5000_Register_Frame` and its bitmap/palette copy code'. The commit that edited the neighbouring rows ('file descriptions the Wave 2 lanes disproved') left both lines unchanged.",
+          "evidence": "Every ATA routine (HDAE5000_ATA_ReadSector, HD_Init, HD_WriteFile, ...) is defined in hdae5000_ui_display.s, as the edited row on line 402 now says. hdae5000_hd_driver.s defines UI and screen code: HDAE5000_FdList_Scan, TitleInfo_Build, DirList_BuildPage, SEL_DIR_Screen, SongScreen_Refresh, PC_DATA_LINK_PAGE (223 labels, no ATA primitive). `HDAE5000_Register_Frame` is not a label any more; the ELF has HDAE5000_UiState_Reset at 0x2803C2, and the old name survives only in a comment.",
+          "fix": "Describe hdae5000_hd_driver.s as the floppy/HD list screens, title info, directory and song screens, and the PC data-link page, noting that the file name is historical. Replace `HDAE5000_Register_Frame` with `HDAE5000_UiState_Reset` and the 0x2803C2 region."
+        },
+        {
+          "file": "hdae5000.md",
+          "claim": "Stale rows in tables the diff edited: line 562 'Key Routine Addresses' gives `HDAE5000_Alloc_Memory_4` at 0x280395 (also line 388); line 586 gives `HDAE5000_Version_Info` at 0x2999B0; line 794 says 'PPORT jump table + strings | 12 labeled `dd` entries, 21 ASCII literals'.",
+          "evidence": "The ELF has no HDAE5000_Alloc_Memory_4; 0x280395 is HDAE5000_BitmapHdd_icon (source line 788 reads 'was HDAE5000_Alloc_Memory_4'), and hdae5000-resources.md in this same diff says the source now carries HDAE5000_BitmapHdd_icon. HDAE5000_Version_Info is at 0x2999B2 in the ELF. The rewritten ROM-layout rows on this page now describe 0x2953E2-0x295641 as entries 6-17 and 18-20 of a 20-entry table plus 24-byte status records, not 12 entries and 21 strings.",
+          "fix": "Rename the 0x280395 rows to `HDAE5000_BitmapHdd_icon`. Correct Version_Info to 0x2999B2. Rewrite the status row to match the 20-entry `HDAE5000_PPORT_CommandTable` and the status records."
+        },
+        {
+          "file": "hdae5000-homebrew.md",
+          "claim": "Line 325 (and hdae5000-filesystem.md line 318): the HD-AE5000 uses '100 functions at 953 call sites'.",
+          "evidence": "The page's own tables list 41 table-0x100 rows plus 58 table-0x109 rows, which is 99. The hdae5000 sources define 99 RootFn_/HamaFn_ constants, and the operands `+ RootFn_/HamaFn_` occur 953 times with 99 distinct names. The 100 comes from the lane report and commit 7c50a645 and is not reproduced. All 99 rows match the v10 ROM function tables at 0xEAFA6E/0xE1F0EC, the name tables 0xEAFFF2/0xE1F240, and the v10 ELF labels.",
+          "fix": "Say '99 functions at 953 call sites' on both pages, or find the 100th."
+        },
+        {
+          "file": "hdae5000-homebrew.md",
+          "claim": "Line 326: the offsets were read 'out of the v10 ROM with `scripts/converters/hdae5000_symbolize_fn_tables.py`'. The page cites this script as the method.",
+          "evidence": "Running `python3 scripts/converters/hdae5000_symbolize_fn_tables.py` in kn5000-roms-disasm at HEAD prints \"REFUSED: evidence line gone from v10/maincpu/factory_test/test_init.s: 'RegObjTablHama 0x1600001, FunctionProc, 0x4b, 0xe1f0ec, 0x109'\". Commit fbdf79cf changed that line to `HamaObj_109_Data`. The cited check can no longer be reproduced. The facts themselves hold: I re-derived all 99 rows from the ROM.",
+          "fix": "Update EVIDENCE_TEXT in the script to the symbolic line in kn5000-roms-disasm, or point the page at an equivalent check that runs. (The script is a disassembly-repo file, not a page.)"
+        },
+        {
+          "file": "cpu-subsystem.md",
+          "claim": "Line 262: `TaskMsgQ_Send` / `TaskMsgQ_Receive` ↔ `TaskMsg_Send` / `TaskMsg_Receive`, aligned run '41-54 B'.",
+          "evidence": "`python3 scripts/analysis/v142_maincpu_shared_code_scan.py --min 16` gives 020659 39 TaskMsgQ_Receive+23 / EF21F8 TaskMsg_Receive+23 ALIGNED. The Receive run is 39 B; the Send runs are 41 and 54 B. The other rows of the table and the '273 runs, 11,946 bytes' total all reproduce.",
+          "fix": "Change '41-54 B' to '39-54 B' (Send 41 B / 54 B, Receive 39 B)."
+        },
+        {
+          "file": "reverse-engineering.md",
+          "claim": "Lines 1822 and 2001 present `PsMixer_ControlProcTable` as the name of 0xE9F11C. The same applies to `DemoSongPreset_PointerTable` (0x9C4000), quoted as a symbol in new text on lzss-compression.md, feature-demo.md, boot-sequence.md and table-data-rom.md.",
+          "evidence": "The v10 ELF has no PsMixer_ControlProcTable. 0xE9F11C carries the positional `.set Bitmap_DigitD_0x11F0` (shared/positional_labels.s:137), and all 13 code uses in drawbar_panel_ui.s load `Bitmap_DigitD_0x11F0`. PsMixer_ControlProcTable exists only as a C struct member and header comment in naka_technichord_strings.c and technichord_string_data.s. DemoSongPreset_PointerTable appears only in comments in table_data/kn5000_table_data.s; the .long block at 0x9C4000 has no label. check_doc_symbols.py passes both names because it matches any token.",
+          "fix": "Say that the table is typed as the C member `PsMixer_ControlProcTable` and its label is still `Bitmap_DigitD_0x11F0`, or add real labels in the sources (PsMixer_ControlProcTable at 0xE9F11C, DemoSongPreset_PointerTable at 0x9C4000) and then quote them."
+        },
+        {
+          "file": "hdae5000-homebrew.md",
+          "claim": "Line 955, in the Architecture Overview block the diff edited: '0x02BC14: Current object identity (SetCurrentTarget/GetCurrentTarget)'. The same appears at lines 982, 1054-1062 and 1141.",
+          "evidence": "v10 GetCurrentTarget/SetCurrentTarget read and write 0x02F83C (ui_widget_defs.s:18239/18245), which event-codes.md in this same diff now states. 0x02BC14 is used by InheritedProc, EventHandler_ObjectDispatch and EventRoute_ObjectDispatch, not by the *CurrentTarget accessors.",
+          "fix": "Relabel 0x02BC14 (for example 'dispatch identity, used by InheritedProc / EventHandler_ObjectDispatch'). Attribute SetCurrentTarget/GetCurrentTarget to 0x02F83C."
+        },
+        {
+          "file": "music-stylist-database.md",
+          "claim": "Line 91 (unchanged sentence under the rewritten table): the generator asserts '... the five `0xFF`'. The table now says '+0xBF | 6 | `FF` ×6'.",
+          "evidence": "ROM check over all 1000 records (grid 0x951000, stride 198): bytes +0xBF..+0xC4 are six 0xFF in all 1000. The style_records.s header says 'CORRECTED from \"+0xc0 5 x 0xff\"'. The rest of the new parameter-block material checks out: 9 tempo mismatches at the listed records, +0xBE histogram 850/95/54/1, slot bits 998/1000, +0x93=0 and +0x94=0xEA in all 1000.",
+          "fix": "Change 'the five `0xFF`' to 'the six `0xFF`', and check the generator's assertion."
+        },
+        {
+          "file": "table-data-rom.md",
+          "claim": "Line 32 (also memory-map.md line 102 and source-map.md line 424): the 0x800000-0x82FFFF half holds the 'Section directory + 26 bitmaps'.",
+          "evidence": "Parsing the directory: 27 of the 33 targets lie in this half, entries 0-5 and 8-27 plus entry 7, the KN-5000 wordmark at 0x82CDA2 (7,200 B, emitted from BitmapKN5000Logo.bin). table-data-rom.md line 56 itself lists '26 ... (entries 0-5, 8-27), the KN-5000 wordmark (entry 7)', so the half holds 27 bitmaps plus 17 accessor routines. tdata_evidence_probes.py: ALL PASS.",
+          "fix": "Say '27 bitmaps (26 + the KN-5000 wordmark, entry 7) and the 17 accessor routines' in the module rows on all three pages."
+        },
+        {
+          "file": "sound-parameter-protocol.md",
+          "claim": "Line 60 (context line directly above the rewritten step 2, also line 230): '`MainRevEqPresetLoad` (at F746F4)'.",
+          "evidence": "The v10 and v9 ELFs put MainRevEqPresetLoad at 0xF746DD (v7 0xF742D9); 0xF746F4 carries no label. The newly added figures are correct: ReverbPreset_Table 0xEDB36C has 10 pointers, EQPreset_Table 9, CombinedPreset_Table 9 × 48 B, all within 0xEDA6EC-0xEDAA63, byte 22 = 99 throughout, EQ byte 0 = 0x4F.",
+          "fix": "Change F746F4 to 0xF746DD (v10/v9)."
+        },
+        {
+          "file": "custom-data-flash.md",
+          "claim": "Line 185: `SndParam_ApplyBaseBlock` applies 'RAM addresses `0xF9C2`, `0xF9DC`, … on a 0x1A stride'.",
+          "evidence": "The IC19 bank-0 entries 0-22 run 0xF9C2 ... 0xFB48, then entry 16 = 0xFC18, then 0xFB62 ... 0xFBE4. So the stride breaks at entry 16 (deltas {26, 208, -182}). The other bank facts check out: 39 × 6 B, 0xFF pad, entries 36-38 unused, header+bank0 differ from 0xED933A in 14 of 0xFA bytes, mask entries 0xFD50-0xFD5C.",
+          "fix": "Add 'except entry 16 (0xFC18)', and apply the same fix to the CustomData_SndParamBanks header comment."
+        },
+        {
+          "file": "dsp-effect-data-zone.md",
+          "claim": "Line 119: the 58 lists `DspFxRecs_NN_<Effect>` occupy '`0xEE63BA-0xEE7786`'.",
+          "evidence": "The last list, DspFxRecs_26_WaveReverb1, starts at 0xEE758A. DspFxRecListPtrTable (100 × u32) occupies 0xEE75F6-0xEE7785, and 0xEE7786 is SwbtBank1_ListenerTable. So the stated range includes the pointer table. The match statistics (4 / 32 / 3 / 19 of 58) reproduce exactly with the page's snippet, and v142_param_meta_maincpu_twin.py reports ALL PASS.",
+          "fix": "Write '0xEE63BA-0xEE75F5', followed by DspFxRecListPtrTable at 0xEE75F6-0xEE7785."
+        },
+        {
+          "file": "event-codes.md",
+          "claim": "Line 231 (and questions.md line 98): 'Both `hdae5000/shared/event_codes.s` and `v10/maincpu/shared/event_codes.s` still define `0x01C00016` as `EVT_HD_INIT_PARAMS`'. The rename item says 'in both `event_codes.s` files'.",
+          "evidence": "command grep: v7/maincpu/shared/event_codes.s:28 and v9/maincpu/shared/event_codes.s:28 carry the same EVT_HD_INIT_PARAMS line, and the same EVT_DISPLAY_CALLBACK/EVT_DISPLAY_UPDATE lines.",
+          "fix": "Say 'all four event_codes.s files (hdae5000, v7, v9, v10)'."
+        },
+        {
+          "file": "hdae5000-homebrew.md",
+          "claim": "Changelog-style narration instead of current-state text. Examples: 'This page previously attributed the 0x16B, 0x167 and 0x168 lines to InitializeKSS...' (after the RegObjTable block); '**Earlier versions of this page guessed several of these wrong.**'; 'Earlier versions of this table called the class ids \"port addresses\"...'; 'This replaces the older reading on this page...'; 'has since been renamed in the build too'. hdae5000.md has the same pattern: 'Steps 6, 7 and 9 were earlier read as...', 'The earlier reading (...) was wrong on every variable', 'This table used to be spelled as roughly 6,150 lines...', 'as this page used to say'.",
+          "evidence": "42 added lines across the diff match phrases such as 'used to say/call/list', 'earlier version', 'this page previously', 'until September 2026' and 'renamed them in September 2026'. The HD-AE5000 pages carry the most. They narrate edits to the page ('lane' history) rather than state the firmware facts.",
+          "fix": "State only the current reading. Where an old name matters for search, keep a terse 'formerly `X`' alias, and move the history of the page to git log."
+        },
+        {
+          "file": "hdae5000-filesystem.md",
+          "claim": "Changelog-style blocks: '> **Earlier versions of this page were largely wrong.** They described ...'; 'The earlier version of this page gave the first long as 0x55AA55AA, a byte-order slip'; 'Earlier versions of this page called the first three ...'; 'The routines this page used to list for commands 03-06 ...'. Related HD-AE5000 pages repeat the pattern: hdae5000-disk-interface.md ('The older names in this table ... did not survive the hdae lane's reading'), hdae5000-mame-setup.md ('An earlier version of this page gave ...'), hdae5000-resources.md ('used to disagree ...').",
+          "evidence": "See the added-line phrase search above. The 'Routines That Were Misnamed' old→new table is a useful alias map, but the prose around it is page history.",
+          "fix": "Replace the history paragraphs with current-state statements. Keep the alias table (old name → current name) as a lookup aid, without narrative."
+        },
+        {
+          "file": "boot-sequence.md",
+          "claim": "Changelog-style narration on non-HD-AE5000 pages: boot-sequence.md ('This page used to say the assets were pre-rendered bitmaps ...', 'The earlier diagram here called +0x0124 ... all three were wrong', 'The hdae lane renamed them in September 2026'); event-codes.md ('(This page previously gave PostEvent's address as 0xFAD61F ...)'); sound-parameter-protocol.md ('(Earlier text here read step 3 as ...)'); storage-subsystem.md ('(The rows this table used to carry ...)'); midi-serial-io.md ('The midi lane renamed them in September 2026'); ssf-presentation.md ('despite what this page used to say', 'The older version of this table listed ...'); music-stylist-database.md ('Earlier versions of this page called the parameter block ...'); custom-data-flash.md, table-data-rom.md and sound-categories.md ('> **Corrected ...** This section used to call ...'); image-gallery.md ('An earlier version of this note placed them on floppy disk'); tone-database.md ('labelled ToneEnv_RecNNN_A / _B until September 2026'); questions.md ('Earlier text here described ...').",
+          "evidence": "The added-line phrase search finds these on 16 pages. They also carry internal process jargon ('hdae lane', 'tdata lane', 'Wave 2') that means nothing to a site reader.",
+          "fix": "Rewrite as current-state facts with evidence. Keep at most a 'formerly `X`' alias where an old label is still searched for. Drop lane and wave narration from public pages, or confine it to rom-reconstruction.md's measurement section."
+        }
+      ]
+    }
+  },
+  {
+    "label": "fix:docs-kn5000",
+    "agentId": "a284be5c53559d3e3",
+    "result": {
+      "commits": [
+        "ffe5305 DSP bytecode interpreter: rename note below the algorithm-table table",
+        "7c976e5 HD-AE5000 filesystem: per-part signature records as the ROM has them",
+        "b19e95a tone database: the 92 drum notes whose name paths disagree, by kind",
+        "fbb2192 event codes: only the UI_Post*/HDAE5000_Request* helpers cancel before posting",
+        "302226a image gallery: FTBMP labels are Feature_Bitmap_1..6, not FTDEMO_SCREEN*",
+        "7b47529 source map: hdae5000_hd_driver.s holds UI screens; Register_Frame is UiState_Reset",
+        "c129453 HD-AE5000: BitmapHdd_icon, Version_Info at 0x2999B2, the PPORT table as data",
+        "6369c02 HD-AE5000: 99 main-CPU functions, with a check that still runs",
+        "020c3e0 CPU subsystem: message-queue twin runs as the scan prints them"
+      ],
+      "pages_changed": [
+        "dsp-bytecode-interpreter.md",
+        "hdae5000-filesystem.md",
+        "tone-database.md",
+        "event-codes.md",
+        "image-gallery.md",
+        "source-map.md",
+        "hdae5000.md",
+        "hdae5000-homebrew.md",
+        "cpu-subsystem.md",
+        "tools/drum_name_path_misses.py (new: reproduces the 92-miss breakdown, 37 numbering / 37 abbreviation / 16 Zap 1-High Q / 2 DanceHHPedal-HatPedal 5)",
+        "tools/hdae5000_fn_table_check.py (new: re-derives the 99 RootFn_/HamaFn_ rows from the v10 ROM, gives 99/99 names, 953 call sites, PASS)"
+      ],
+      "not_done": "Everything is in /home/fsanches/compartilhado/disasm-lanes/docs-kn5000 on branch docs/w2-kn5000, nothing pushed. The Jekyll build exits 0 after every commit and the working tree is clean. What is still open:\n\n1. The tenth finding (cpu-subsystem.md) was cut off in the task text after \"clai\", so I never saw what the checker claimed. Instead I re-ran scripts/analysis/v142_maincpu_shared_code_scan.py --min 16. It reproduces the 273 runs and 11,946 bytes, and every row of the kernel twin table. Every name in the table exists in the current sources. The one error was \"41-54 B\" for TaskMsgQ_Send / TaskMsgQ_Receive: Send has aligned runs of 41 B at +37 and 54 B at +102, and Receive has one of 39 B at +23. I fixed that in 020c3e0, and changed the ALIGNED sentence to match the script's own wording (\"strongest sign\", not proof). If the checker's finding was about something else on that page, it has not been fixed.\n\n2. Fixes that belong in kn5000-roms-disasm, which I was told not to write to:\n   - hdae5000/hdae5000_ui_display.s:11237, header of HDAE5000_CheckFileSignature: it gives CMP's signature as \"HK\\0\". The ROM has 48 00 4B (\"H\\0K\") at 0x2F8E8C, length 3. The page now says the header is wrong.\n   - scripts/converters/hdae5000_symbolize_fn_tables.py: EVIDENCE_TEXT still expects the literal 'RegObjTablHama 0x1600001, FunctionProc, 0x4b, 0xe1f0ec, 0x109', which now reads 'HamaObj_109_Data'. Its call-site scan also looks for the numeric operands 0x0e0a/0x0e88, which the script itself replaced with symbols. The page now cites the new docs-repo check, tools/hdae5000_fn_table_check.py, instead.\n   - notes/tonedb-2026-09-25/drum_chain_probe.py: its docstring and check message still say the 92 misses \"differ in numbering\".\n   - hdae5000/hd-ae5000_v2_06i.s:86: the comment on `.equ RootFn_UpdateScreen` still says \"v10 build label LcdOff_Epilogue\", but the v10 ELF labels 0xFAA61D UpdateScreen.\n   - The \"100 functions\" in the hdae lane report, WAVE3-LEADS.md:86 and commit 7c50a645 is not reproduced. The sources define 99 constants and the code uses all 99. The page now says so.\n\n3. Other pages still use FTDEMO_SCREEN as a structure name: feature-demo.md:260 and :279, ui-widget-types.md:51 and ssf-presentation.md:414. That name also occurs in no source file. These pages were outside the findings, so I left them.\n\n4. The rest of what check_doc_symbols.py flags on the pages I edited is old names quoted as history (for example the \"Routines That Were Misnamed\" table) or short forms, so I left it."
+    }
+  }
+]

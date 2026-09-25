@@ -14,6 +14,8 @@ a serialized integrator merged each behind `make gate-all`. All 20 are on main.
 | `WAVE3-LEADS.md` | every lead the lanes reported, grouped for the next wave |
 | `WAVE3-PLAN.md` | the plan built from those leads, and the integration lessons |
 | `di-alias.patch` | the ready backend fix for the `di` alias (applies to llvm-project tlcs900_backend) |
+| `workflows/semantic-wave2.js` | the exact workflow script that ran the 20 lanes and the serialized integrator (prompts, roster use, merge gate) |
+| `workflows/review-wave2.js` | an adversarial review of the merged lanes' semantic claims -- drafted, NEVER RUN (a candidate for Wave 3b) |
 
 ## Headline figures (re-derive with `python3 scripts/analysis/data_range_census.py`)
 

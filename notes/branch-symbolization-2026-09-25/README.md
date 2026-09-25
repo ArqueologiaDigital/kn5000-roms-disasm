@@ -8,6 +8,7 @@ Tool: `scripts/converters/symbolize_numeric_branches.py` (its docstring is the s
 |---|---|
 | `samples/<image>.txt` | the 45 randomly sampled sites the tool ACCEPTED per image (first tool revision, before R5/R6), with source and target context -- the exact input the verification panel read |
 | `panel1_verdicts.json` | the panel's verdict per site: is the source real code, is the target a plausible destination, is the proposed name misleading, plus each judge's pattern notes |
+| `workflows/verify-branch-symbolization-sample.js` | the exact workflow script that ran panel 1 (the judge prompt and verdict schema) |
 
 The samples were drawn with `random.seed(hash(key) % 1000)` from the accepted
 set of the tool as it stood before the R5/R6 guards; Python's string hash is
