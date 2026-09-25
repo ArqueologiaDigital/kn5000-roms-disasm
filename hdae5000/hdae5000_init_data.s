@@ -4,7 +4,7 @@
 ; HDAE5000_Clear_Work_Buffer copies this block verbatim to RAM 0x23952a, then
 ; HDAE5000_Handler_Registration publishes six of the tables below to the main
 ; CPU through workspace[0x0e0a][0x00e4] ("RegisterObjectTable").  Each
-; registration passes {port, handler fn, entry count, data pointer}; the counts
+; registration passes {class id, proc, entry count, data pointer}; the counts
 ; quoted there (0x45, 0x0d, 0x0e) are exactly the entry counts of these tables,
 ; which is how each table boundary below was established.
 ;
@@ -158,7 +158,7 @@ HDAE5000_Init_Data:
 ; ----------------------------------------------------------------------------
 ; HDAE5000_ObjHandler_Table / HDAE5000_ObjName_Table
 ;   69 named objects published to the main-CPU UI framework (registration IDs
-;   0x012a and 0x042a, both on PPI port 0x01600002).  Index i of one table
+;   0x012a and 0x042a, both class id 0x01600002, ApFunctionProc).  Index i of one table
 ;   matches index i of the other; the name is what the framework looks up.
 ;   Names ending in "Check" are validation callbacks, "Catch" are event sinks,
 ;   "Page"/"PAGE" are page constructors and "Bitmap*" are image providers.
@@ -364,7 +364,7 @@ HDAE5000_ParamNames_FDFileSelect:
 	.long HDAE5000_ParamStr_FDFileSelect_End	; terminator
 
 ; ----------------------------------------------------------------------------
-; EV_* event names (registration ID 0x01ca, PPI port 0x0160000c)
+; EV_* event names (registration ID 0x01ca, class id 0x0160000c, ResEventProc)
 ;   Registered with a run-time count read from HDAE5000_EventName_Count, which
 ;   is part of this same image (RAM 0x239822) rather than an immediate.
 ; ----------------------------------------------------------------------------
@@ -387,7 +387,7 @@ HDAE5000_EventName_Count:
 	.short 13
 
 ; ----------------------------------------------------------------------------
-; MT_* message names (registration ID 0x01ea, PPI port 0x0160000d)
+; MT_* message names (registration ID 0x01ea, class id 0x0160000d, ResMethodProc)
 ;   Lyrics/file-select message vocabulary shared with the main CPU; count in
 ;   HDAE5000_MessageName_Count (RAM 0x239870).
 ; ----------------------------------------------------------------------------
@@ -696,18 +696,26 @@ HDAE5000_Browser_State:
 	.short 0, 0, 0, 0, 0, 0, 0
 	.short 127			; RAM 0x23a09c, not read anywhere in this ROM
 	.short 0			; RAM 0x23a09e, byte-tested flag
+				; ^ = HDAE5000_RAM_SeparateBassPart (0 = NONE): the value of
+				;   SeparateBassPartCheck, used by HDAE5000_SeparateOutput_Apply
 HDAE5000_Browser_PageRows:
+	; ^ name not supported by the code: 0x23a0a0 is HDAE5000_RAM_SeparateDrumPart
+	;   (SeparateDrumPartCheck's value, initially 16) and 0x23a0a2 the drum part
+	;   last sent (HDAE5000_RAM_SeparateDrumPartSent); see HDAE5000_SeparateOutput_Apply.
 	.short 16, 16		; RAM 0x23a0a0/0x23a0a2
 	.short 0			; RAM 0x23a0a4, byte-tested flag
+				; ^ = HDAE5000_RAM_SeparateBassPartSent
 	.short 2			; RAM 0x23a0a6
 	.short 0			; RAM 0x23a0a8
-HDAE5000_Dir_EntrySlots:
-	; six 40-byte directory-entry slots from RAM 0x23a0aa; the backup path in
-	; hdae5000_filesystem.s shifts five of them one slot along (0x23a0aa->0x23a0d2)
+HDAE5000_LyricLines_Init:
+	; RAM 0x23a0aa = HDAE5000_RAM_LyricLines: the six 40-byte text lines of the
+	; lyric window; HDAE5000_Lyrics_FillLines (hdae5000_ui_display.s) scrolls
+	; them up one line (0x23a0d2 -> 0x23a0aa) before refilling the last
 	.zero 240
-	.zero 4			; RAM 0x23a19a, unused
-HDAE5000_Workspace_Ptr_Init:
-	.long 0xffffffff	; RAM 0x23a19e (secondary workspace pointer) starts unset
+	.zero 4			; RAM 0x23a19a (set to 1 by HDAE5000_Lyrics_ResetState) and
+				; 0x23a19c (HDAE5000_RAM_LyricLoaded)
+HDAE5000_LyricBoxObj_Init:
+	.long 0xffffffff	; RAM 0x23a19e = HDAE5000_RAM_LyricBoxObj: no lyric box open
 	.zero 10		; RAM 0x23a1a2 (main workspace pointer) + 6 bytes; last byte of
 				; the copied image is 0x23a1ab = 0x23952a + 0x0c82 - 1
 

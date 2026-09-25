@@ -41,26 +41,31 @@ FP_SP_NegateInPlace4:
 ; raw-copies via FP_DP_Raw8Copy. Caller pops 12 bytes. Callers: the sin kernel
 ; 0x03DA2F / 0x03DA6C / 0x03DAE9 and cos 0x03D361.
 ; NOTE: the name is a mechanical description of the body; the routine is fabs().
-FP_DP_CmpAndCopy:
+; RENAMED 2026-09-25: was FP_DP_CmpAndCopy (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_fabs:
 	lda xwa, (xsp + 8)
 	ld bc, 1:i3
 	call FP_DP_CmpZero64
 	lda xbc, (xsp + 8)
 	ld xwa, (xsp + 4)
 	cp hl, 0:i3
-	jr nz, FP_DP_CmpAndCopy_Negate
+	jr nz, FP_fabs_Negate
 	call FP_DP_Raw8Copy
 	ret
 
 ; x < 0 arm of fabs(): result = -x.
-FP_DP_CmpAndCopy_Negate:
+FP_fabs_Negate:
 	call FP_DP_CopyOrNegate8
 	ret
 
-; --- 0x03D44B-0x03D44B  FP_DP_CmpAndCopy_Pad (0xFF alignment byte)
+; --- 0x03D44B-0x03D44B  FP_fabs_Pad (0xFF alignment byte)
 ; One 0xFF pad byte inserted by the linker between routines. There are ~14 of these in
 ; the region; each is already named *_Pad and none is reachable code.
-FP_DP_CmpAndCopy_Pad:
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_ftoi starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
+FP_fabs_Pad:
 	.byte 0xff
 
 ; (int32)(float) conversion. XWA = pointer to the int32 result, XBC = pointer to the
@@ -68,7 +73,9 @@ FP_DP_CmpAndCopy_Pad:
 ; the float, then FP_DP_ShiftDecode to shift the mantissa to integer position, and
 ; stores XHL to *XIZ. Sets ERANGE (via FP_DP_ShiftDecode) on out-of-range.
 ; NOTE: the name describes the first instruction, not the function; this is __ftoi.
-FP_SP_Decode_ReadSign:
+; RENAMED 2026-09-25: was FP_SP_Decode_ReadSign (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_ftoi:
 	push xiz
 	lda xsp, (xsp - 8)
 	ld xiz, xwa
@@ -81,7 +88,10 @@ FP_SP_Decode_ReadSign:
 	pop xiz
 	ret
 
-FP_SP_Decode_ReadSign_Pad:
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_CmpZero64 starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
+FP_ftoi_Pad:
 	.byte 0xff
 
 ; Relational compare of a double against 0.0, returning a C boolean in HL.
@@ -99,19 +109,19 @@ FP_DP_CmpZero64:
 	ld xiy, (xwa)
 	cp xiy, xde
 	jr nz, FP_DP_CmpZero64_Greater
-	lda xde, (0x03d978:24)
+	lda xde, (FP_CmpResult_Equal:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x < 0: return LessRow[BC].
 FP_DP_CmpZero64_Less:
-	lda xde, (0x03d97e:24)
+	lda xde, (FP_CmpResult_Less:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x > 0 (and the "high words differ" shortcut): return GreaterRow[BC].
 FP_DP_CmpZero64_Greater:
-	lda xde, (0x03d984:24)
+	lda xde, (FP_CmpResult_Greater:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
@@ -124,47 +134,49 @@ FP_SP_CmpZero32:
 	cp xde, 0x0
 	jr lt, FP_SP_CmpZero32_Less
 	jr gt, FP_SP_CmpZero32_Greater
-	lda xde, (0x03d978:24)
+	lda xde, (FP_CmpResult_Equal:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x < 0 arm.
 FP_SP_CmpZero32_Less:
-	lda xde, (0x03d97e:24)
+	lda xde, (FP_CmpResult_Less:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x > 0 arm.
 FP_SP_CmpZero32_Greater:
-	lda xde, (0x03d984:24)
+	lda xde, (FP_CmpResult_Greater:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; tan(double). C signature f(double *result, double x). Loads the exponent word of x
 ; ((XSP+0x3A), i.e. bytes 6..7 of the argument), masks 0x7FF0 and compares against
 ; 0x41E0: if |x| >= 2^31 the argument cannot be reduced, so errno=ERANGE and the result
-; is the constant 0.0 at 0x01F63E. Otherwise it calls VoiceFloat_DispatchMulAdd
-; (= cos, 0x03D34D) and VoiceFloat_MulAddVariant2 (= sin, 0x03D84F) on the same x and
-; divides with VoiceFloat_SubDP (= double divide, 0x03D3A4): result = sin(x)/cos(x).
+; is the constant 0.0 at 0x01F63E. Otherwise it calls FP_cos
+; (= cos, 0x03D34D) and FP_sin (= sin, 0x03D84F) on the same x and
+; divides with FP_ddiv (= double divide, 0x03D3A4): result = sin(x)/cos(x).
 ; 3 callers, all in the DSP curve block: 0x03A9A9, 0x03AE9B, 0x03B0B3.
 ; NOTE: nothing in this routine multiplies, adds or dispatches; the name is wrong.
-VoiceFloat_MulAddDispatch:
+; RENAMED 2026-09-25: was VoiceFloat_MulAddDispatch (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_tan:
 	lda xsp, (xsp - 40)
 	push xiz
 	ld xiz, (xsp + 48)
 	ld wa, (xsp + 58)
 	and wa, 0x7FF0
 	cp wa, 0x41E0
-	jr c, VoiceFloat_MulAddDispatch_InRange
+	jr c, FP_tan_InRange
 	ldw (0x040c22:24), 0x0022
 	ld xwa, xiz
-	lda xbc, (0x01f63e:24)
+	lda xbc, (FPConst_tan_Zero:24)
 	call FP_DP_Raw8Copy
-	jr VoiceFloat_MulAddDispatch_Epilog
+	jr FP_tan_Epilog
 
 ; |x| < 2^31 arm of tan(): compute cos into the local at entrySP-0x10, sin into
 ; entrySP-0x18, then divide sin by cos.
-VoiceFloat_MulAddDispatch_InRange:
+FP_tan_InRange:
 	lda xiy, (xsp + 52)
 	ld xix, (xiy + 4)
 	push xix
@@ -172,7 +184,7 @@ VoiceFloat_MulAddDispatch_InRange:
 	push xix
 	lda xwa, (xsp + 36)
 	push xwa
-	call VoiceFloat_DispatchMulAdd
+	call FP_cos
 	lda xiy, (xsp + 64)
 	ld xix, (xiy + 4)
 	push xix
@@ -180,18 +192,18 @@ VoiceFloat_MulAddDispatch_InRange:
 	push xix
 	lda xwa, (xsp + 40)
 	push xwa
-	call VoiceFloat_MulAddVariant2
+	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 20)
 	lda xde, (xsp + 28)
 	lda xwa, (xsp + 36)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	ld xwa, xiz
 	lda xbc, (xsp + 36)
 	call FP_DP_Raw8Copy
 
 ; tan() epilogue: pop XIZ, release the 0x28-byte frame.
-VoiceFloat_MulAddDispatch_Epilog:
+FP_tan_Epilog:
 	pop xiz
 	lda xsp, (xsp + 40)
 	ret
@@ -205,91 +217,93 @@ VoiceFloat_MulAddDispatch_Epilog:
 ;       is what identifies the routine.
 ;   (3) if y <= 0 and x == 0         -> errno = EDOM, result = 1.0 (0x01F65E).
 ;   (4) if (double)n == y (integer exponent) -> binary exponentiation, see
-;       VoiceFloat_IterationLoop.
-;   (5) otherwise -> exp(y * log(x)) via VoiceFloat_ConvergenceLoop.
+;       FP_pow_IntPower.
+;   (5) otherwise -> exp(y * log(x)) via FP_pow_ExpLog.
 ; 21 callers, all in the DSP curve block (0x03937D ... 0x03BA14) - this is the single
 ; most-used libm function in the firmware.
 ; NOTE: the name is wrong; it is pow().
-VoiceFloat_CompareAndConvert:
+; RENAMED 2026-09-25: was VoiceFloat_CompareAndConvert (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_pow:
 	lda xsp, (xsp - 56)
 	pushw iz
 	lda xwa, (xsp + 74)
-	lda xbc, (0x01f646:24)
+	lda xbc, (FPConst_Int32_Min_As_Double:24)
 	ld de, 1:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoiceFloat_CompareAndConvert_Invalid
+	jr nz, FP_pow_Invalid
 	lda xwa, (xsp + 74)
-	lda xbc, (0x01f64e:24)
+	lda xbc, (FPConst_Int32_Max_As_Double:24)
 	ld de, 3:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoiceFloat_CompareAndConvert_Invalid
+	jr nz, FP_pow_Invalid
 	lda xbc, (xsp + 74)
 	lda xwa, (xsp + 54)
 	call FP_DP_DecodeToInt
-	jr VoiceFloat_CompareAndConvert_AfterRange
+	jr FP_pow_AfterRange
 
 ; y not representable as int32: store n = 0xFFFFFFFF so the integer test below fails.
-VoiceFloat_CompareAndConvert_Invalid:
+FP_pow_Invalid:
 	ld xwa, 0xFFFFFFFF
 	ld (xsp + 54), xwa
 
 ; pow(): x < 0 branch - reject a non-integer exponent with EDOM.
-VoiceFloat_CompareAndConvert_AfterRange:
+FP_pow_AfterRange:
 	lda xwa, (xsp + 66)
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_CompareAndConvert_AltPath
+	jr nz, FP_pow_AltPath
 	lda xbc, (xsp + 54)
 	lda xwa, (xsp + 18)
 	call FP_ScalarToDP
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
 	ld de, 4:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoiceFloat_CompareAndConvert_AltPath
+	jr nz, FP_pow_AltPath
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f656:24)
+	lda xbc, (FPConst_pow_AfterRange_One:24)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_CompareAndConvert_Epilog
+	jrl FP_pow_Epilog
 
 ; pow(): x >= 0 branch - reject pow(0, y<=0) with EDOM.
-VoiceFloat_CompareAndConvert_AltPath:
+FP_pow_AltPath:
 	lda xwa, (xsp + 74)
 	ld bc, 3:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_CompareAndConvert_AltPath2
+	jr nz, FP_pow_AltPath2
 	lda xwa, (xsp + 66)
 	ld bc, 5:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_CompareAndConvert_AltPath2
+	jr nz, FP_pow_AltPath2
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f65e:24)
+	lda xbc, (FPConst_pow_AltPath_One:24)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_CompareAndConvert_Epilog
+	jrl FP_pow_Epilog
 
 ; pow(): choose between the integer-exponent path and the exp/log path by testing
 ; (double)n == y; then take |n| and seed the accumulator with 1.0 (0x01F666).
-VoiceFloat_CompareAndConvert_AltPath2:
+FP_pow_AltPath2:
 	lda xbc, (xsp + 54)
 	lda xwa, (xsp + 18)
 	call FP_ScalarToDP
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
 	ld de, 5:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jrl nz, VoiceFloat_ConvergenceLoop
+	jrl nz, FP_pow_ExpLog
 	ld xwa, (xsp + 54)
 	cp xwa, 0x0
-	jr ge, VoiceFloat_SignedDelta_Positive
+	jr ge, FP_pow_IntPower_Seed
 	ld xwa, (xsp + 54)
 	cpl wa
 	cplw_erp 0xE2
@@ -297,21 +311,23 @@ VoiceFloat_CompareAndConvert_AltPath2:
 	ld (xsp + 54), xwa
 
 ; pow(): n was already >= 0; seed the accumulator with 1.0 and enter the loop test.
-VoiceFloat_SignedDelta_Positive:
-	lda xbc, (0x01f666:24)
+FP_pow_IntPower_Seed:
+	lda xbc, (FPConst_pow_IntPower_Seed_One:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_IterationLoop_CheckContinue
+	jrl FP_pow_IntPower_CheckContinue
 
 ; pow() integer-exponent kernel: classic square-and-multiply over |n|.
-; Each pass calls FP_DP_FreqAdjust (= frexp) on the running base to get its exponent,
+; Each pass calls FP_frexp (= frexp) on the running base to get its exponent,
 ; doubles that exponent and compares against -1021 (0xFC03) and +1024 (0x0400) to detect
 ; the next squaring overflowing or underflowing BEFORE it happens; on overflow it sets
 ; errno=ERANGE and returns +/-DBL_MAX (0x00F420), on underflow +/-0.0. If bit 0 of the
 ; remaining exponent is set the accumulator is multiplied by the base
-; (FP_DP_Add_Outer, which is the double MULTIPLY), then the base is squared and the
+; (FP_dmul, which is the double MULTIPLY), then the base is squared and the
 ; exponent is shifted right by one (sra 1). Terminates in at most 32 passes.
-VoiceFloat_IterationLoop:
+; RENAMED 2026-09-25: was VoiceFloat_IterationLoop (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_pow_IntPower:
 	lda xwa, (xsp + 36)
 	push xwa
 	lda xiy, (xsp + 70)
@@ -321,128 +337,130 @@ VoiceFloat_IterationLoop:
 	push xix
 	lda xwa, (xsp + 38)
 	push xwa
-	call FP_DP_FreqAdjust
+	call FP_frexp
 	lda xsp, (xsp + 16)
 	ld wa, (xsp + 36)
 	add wa, wa
 	cp wa, 0xFC03
-	jr ge, VoiceFloat_IterationLoop_LargeStep
+	jr ge, FP_pow_IntPower_LargeStep
 	lda xwa, (xsp + 74)
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_IterationLoop_LessPath
+	jr nz, FP_pow_IntPower_LessPath
 	ldw (0x040c22:24), 0x0022
 	lda xwa, (xsp + 66)
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	cp hl, 0:i3
-	jr nz, VoiceFloat_IterationLoop_GreaterPath
+	jr nz, FP_pow_IntPower_GreaterPath
 	lda xwa, (xsp + 46)
 	call FP_DP_CopyOrNegate8
-	jr VoiceFloat_IterationLoop_CopyResult
+	jr FP_pow_IntPower_CopyResult
 
 ; Overflow with a positive base: result = +DBL_MAX.
-VoiceFloat_IterationLoop_GreaterPath:
+FP_pow_IntPower_GreaterPath:
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
-	jr VoiceFloat_IterationLoop_CopyResult
+	jr FP_pow_IntPower_CopyResult
 
 ; Underflow: result = 0.0 (0x01F66E).
-VoiceFloat_IterationLoop_LessPath:
-	lda xbc, (0x01f66e:24)
+FP_pow_IntPower_LessPath:
+	lda xbc, (FPConst_pow_IntPower_LessPath_Zero:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 
 ; Store the saturated result to *result and return.
-VoiceFloat_IterationLoop_CopyResult:
+FP_pow_IntPower_CopyResult:
 	ld xwa, (xsp + 62)
 	lda xbc, (xsp + 46)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_CompareAndConvert_Epilog
+	jrl FP_pow_Epilog
 
 ; 2*exponent >= -1021: check the upper limit (+1024) before squaring.
-VoiceFloat_IterationLoop_LargeStep:
+FP_pow_IntPower_LargeStep:
 	lda xde, (xsp + 66)
 	cp wa, 0x400
-	jr le, VoiceFloat_IterationLoop_SmallStep
+	jr le, FP_pow_IntPower_SmallStep
 	ldw (0x040c22:24), 0x0022
 	ld xwa, xde
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_IterationLoop_LargeStep_NegPath
-	lda xbc, (0x00f420:24)
+	jr nz, FP_pow_IntPower_LargeStep_NegPath
+	lda xbc, (FPConst_MaxNorm:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_CopyOrNegate8
-	jr VoiceFloat_IterationLoop_LargeStep_Copy
+	jr FP_pow_IntPower_LargeStep_Copy
 
 ; Overflow with a negative base: result = -DBL_MAX.
-VoiceFloat_IterationLoop_LargeStep_NegPath:
-	lda xbc, (0x00f420:24)
+FP_pow_IntPower_LargeStep_NegPath:
+	lda xbc, (FPConst_MaxNorm:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 
 ; Store the ERANGE-saturated result and return.
-VoiceFloat_IterationLoop_LargeStep_Copy:
+FP_pow_IntPower_LargeStep_Copy:
 	ld xwa, (xsp + 62)
 	lda xbc, (xsp + 46)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_CompareAndConvert_Epilog
+	jrl FP_pow_Epilog
 
 ; Exponent in range: test bit 0 of the remaining integer exponent.
-VoiceFloat_IterationLoop_SmallStep:
+FP_pow_IntPower_SmallStep:
 	ld xwa, (xsp + 54)
 	bit 0, wa
-	jr z, VoiceFloat_IterationLoop_SmallStep_Add
+	jr z, FP_pow_IntPower_SmallStep_Add
 	lda xwa, (xsp + 46)
 	ld xbc, xwa
-	call FP_DP_Add_Outer
+	call FP_dmul
 
 ; Square the base (base = base * base) and shift the exponent right one bit.
-VoiceFloat_IterationLoop_SmallStep_Add:
+FP_pow_IntPower_SmallStep_Add:
 	lda xwa, (xsp + 66)
 	ld xbc, xwa
 	ld xde, xwa
-	call FP_DP_Add_Outer
+	call FP_dmul
 	ld xwa, (xsp + 54)
 	sra xwa, 1
 	ld (xsp + 54), xwa
 
 ; Loop while the remaining exponent is non-zero; then, if the ORIGINAL exponent was
-; negative, take the reciprocal (1.0 / acc) via VoiceFloat_SubDP.
-VoiceFloat_IterationLoop_CheckContinue:
+; negative, take the reciprocal (1.0 / acc) via FP_ddiv.
+FP_pow_IntPower_CheckContinue:
 	ld xwa, (xsp + 54)
 	or xwa, xwa
-	jrl nz, VoiceFloat_IterationLoop
+	jrl nz, FP_pow_IntPower
 	lda xwa, (xsp + 74)
 	ld bc, 1:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_IterationLoop_DifferentPath
+	jr nz, FP_pow_IntPower_DifferentPath
 	ld xwa, (xsp + 62)
 	lda xbc, (xsp + 46)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_CompareAndConvert_Epilog
+	jrl FP_pow_Epilog
 
 ; Negative integer exponent: result = 1.0 (0x01F676) / accumulator.
-VoiceFloat_IterationLoop_DifferentPath:
+FP_pow_IntPower_DifferentPath:
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f676:24)
+	lda xbc, (FPConst_pow_IntPower_DifferentPath_One:24)
 	lda xde, (xsp + 46)
-	call VoiceFloat_SubDP
-	jrl VoiceFloat_CompareAndConvert_Epilog
+	call FP_ddiv
+	jrl FP_pow_Epilog
 
 ; pow() general path: result = exp(y * log(x)). Saves errno (0x040C22) in IZ, clears it,
-; calls VoiceAmp_ConvergeEngine (= log, 0x03E731) on x, and if log() set EDOM returns
+; calls FP_log (= log, 0x03E731) on x, and if log() set EDOM returns
 ; 0.0 (0x01F67E). Otherwise it restores errno and does the over/underflow pre-check in
-; exponent space: frexp(log(x)) and frexp(y) via FP_DP_FreqAdjust, adds the two
+; exponent space: frexp(log(x)) and frexp(y) via FP_frexp, adds the two
 ; exponents, and if the sum exceeds +1024 -> ERANGE and +/-DBL_MAX, if below -1021 ->
 ; ERANGE and 0.0 (0x01F686). Only when the product is representable does it multiply
-; y*log(x) (FP_DP_Add_Outer) and call VoicePitch_SlideEngine (= exp, 0x03E64B).
+; y*log(x) (FP_dmul) and call FP_exp (= exp, 0x03E64B).
 ; This exponent pre-check is why pow() never actually feeds a huge argument to exp().
-VoiceFloat_ConvergenceLoop:
+; RENAMED 2026-09-25: was VoiceFloat_ConvergenceLoop (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_pow_ExpLog:
 	ld iz, (0x040c22:24)
 	ldw (0x040c22:24), 0x0000
 	lda xiy, (xsp + 66)
@@ -452,17 +470,17 @@ VoiceFloat_ConvergenceLoop:
 	push xix
 	lda xwa, (xsp + 46)
 	push xwa
-	call VoiceAmp_ConvergeEngine
+	call FP_log
 	lda xsp, (xsp + 12)
 	cpw (265250:24), 33
-	jr nz, VoiceFloat_ConvergenceLoop_Body
+	jr nz, FP_pow_ExpLog_Body
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f67e:24)
+	lda xbc, (FPConst_pow_ExpLog_Zero:24)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_CompareAndConvert_Epilog
+	jrl FP_pow_Epilog
 
 ; Restore errno and frexp both operands into (XSP+0x24) and (XSP+0x22).
-VoiceFloat_ConvergenceLoop_Body:
+FP_pow_ExpLog_Body:
 	ld (0x040c22:24), iz
 	lda xwa, (xsp + 36)
 	push xwa
@@ -473,7 +491,7 @@ VoiceFloat_ConvergenceLoop_Body:
 	push xix
 	lda xwa, (xsp + 22)
 	push xwa
-	call FP_DP_FreqAdjust
+	call FP_frexp
 	lda xwa, (xsp + 50)
 	push xwa
 	lda xiy, (xsp + 94)
@@ -483,71 +501,71 @@ VoiceFloat_ConvergenceLoop_Body:
 	push xix
 	lda xwa, (xsp + 30)
 	push xwa
-	call FP_DP_FreqAdjust
+	call FP_frexp
 	lda xsp, (xsp + 32)
 	cpw (xsp + 36), 0x0
-	jr ge, VoiceFloat_ConvergenceLoop_SumCheck
+	jr ge, FP_pow_ExpLog_SumCheck
 	cpw (xsp + 34), 0x0
-	jr ge, VoiceFloat_ConvergenceLoop_SumCheck
+	jr ge, FP_pow_ExpLog_SumCheck
 	ld wa, (xsp + 34)
 	neg wa
 	ld (xsp + 34), wa
 
 ; IZ = exponent(log x) + exponent(y), negated when y < 0.
-VoiceFloat_ConvergenceLoop_SumCheck:
+FP_pow_ExpLog_SumCheck:
 	ld iz, (xsp + 36)
 	add iz, (xsp + 34)
 	lda xwa, (xsp + 74)
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_ConvergenceLoop_RangeCheck
+	jr nz, FP_pow_ExpLog_RangeCheck
 	ld wa, iz
 	neg wa
 	ld iz, wa
 
 ; IZ > 1024 -> ERANGE, result = +/-DBL_MAX.
-VoiceFloat_ConvergenceLoop_RangeCheck:
+FP_pow_ExpLog_RangeCheck:
 	cp iz, 0x400
-	jr le, VoiceFloat_ConvergenceLoop_Clamp
+	jr le, FP_pow_ExpLog_Clamp
 	ldw (0x040c22:24), 0x0022
 	lda xwa, (xsp + 66)
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	lda xwa, (xsp + 46)
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	cp hl, 0:i3
-	jr nz, VoiceFloat_ConvergenceLoop_NegResult
+	jr nz, FP_pow_ExpLog_NegResult
 	call FP_DP_CopyOrNegate8
-	jr VoiceFloat_ConvergenceLoop_StoreResult
+	jr FP_pow_ExpLog_StoreResult
 
 ; Overflow with a negative sign: copy DBL_MAX unnegated.
-VoiceFloat_ConvergenceLoop_NegResult:
+FP_pow_ExpLog_NegResult:
 	call FP_DP_Raw8Copy
 
 ; Store the saturated result and return.
-VoiceFloat_ConvergenceLoop_StoreResult:
+FP_pow_ExpLog_StoreResult:
 	ld xwa, (xsp + 62)
 	lda xbc, (xsp + 46)
 	call FP_DP_Raw8Copy
-	jr VoiceFloat_CompareAndConvert_Epilog
+	jr FP_pow_Epilog
 
 ; IZ < -1021 -> ERANGE, result = 0.0 (0x01F686).
-VoiceFloat_ConvergenceLoop_Clamp:
+FP_pow_ExpLog_Clamp:
 	cp iz, 0xFC03
-	jr ge, VoiceFloat_ConvergenceLoop_CrossZero
+	jr ge, FP_pow_ExpLog_CrossZero
 	ldw (0x040c22:24), 0x0022
 	ld xwa, (xsp + 62)
-	lda xbc, (0x01f686:24)
+	lda xbc, (FPConst_pow_ExpLog_Clamp_Zero:24)
 	call FP_DP_Raw8Copy
-	jr VoiceFloat_CompareAndConvert_Epilog
+	jr FP_pow_Epilog
 
-; In range: t = y * log(x) (FP_DP_Add_Outer = multiply), result = exp(t).
-VoiceFloat_ConvergenceLoop_CrossZero:
+; In range: t = y * log(x) (FP_dmul = multiply), result = exp(t).
+FP_pow_ExpLog_CrossZero:
 	lda xbc, (xsp + 38)
 	lda xde, (xsp + 74)
 	lda xwa, (xsp + 18)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 18)
 	ld xix, (xiy + 4)
 	push xix
@@ -555,25 +573,27 @@ VoiceFloat_ConvergenceLoop_CrossZero:
 	push xix
 	lda xwa, (xsp + 54)
 	push xwa
-	call VoicePitch_SlideEngine
+	call FP_exp
 	lda xsp, (xsp + 12)
 	ld xwa, (xsp + 62)
 	lda xbc, (xsp + 46)
 	call FP_DP_Raw8Copy
 
 ; pow() epilogue: pop IZ, release the 0x38-byte frame.
-VoiceFloat_CompareAndConvert_Epilog:
+FP_pow_Epilog:
 	popw iz
 	lda xsp, (xsp + 56)
 	ret
 
 ; sin(double). C signature f(double *result, double x). Computes the sign flag
 ; (x < 0) with FP_DP_CmpZero64 relation 2 (">= 0") and calls the shared kernel
-; VoiceFloat_BlendAndMerge(result, x, |x|, x<0). The |x| is produced by
+; FP_SinCos_Kernel(result, x, |x|, x<0). The |x| is produced by
 ; FP_DP_CopyOrNegate8 on the negative arm. 7 call sites, 6 of them in the DSP curve
 ; block (0x03B73E, 0x03B84E, 0x03BA8D, 0x03BB95, 0x03BDC6, 0x03BECE) plus tan().
 ; NOTE: the name is wrong; it is sin().
-VoiceFloat_MulAddVariant2:
+; RENAMED 2026-09-25: was VoiceFloat_MulAddVariant2 (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_sin:
 	lda xsp, (xsp - 48)
 	push xiz
 	ld xiz, (xsp + 56)
@@ -581,7 +601,7 @@ VoiceFloat_MulAddVariant2:
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceFloat_MulAddVariant2_AltPath
+	jr nz, FP_sin_AltPath
 	pushw 0x1
 	lda xbc, (xsp + 62)
 	lda xwa, (xsp + 46)
@@ -598,15 +618,15 @@ VoiceFloat_MulAddVariant2:
 	push xix
 	lda xwa, (xsp + 54)
 	push xwa
-	call VoiceFloat_BlendAndMerge
+	call FP_SinCos_Kernel
 	lda xsp, (xsp + 22)
 	ld xwa, xiz
 	lda xbc, (xsp + 36)
 	call FP_DP_Raw8Copy
-	jr VoiceFloat_MulAddVariant2_Epilog
+	jr FP_sin_Epilog
 
 ; x >= 0 arm: kernel(result, x, x, flag=0).
-VoiceFloat_MulAddVariant2_AltPath:
+FP_sin_AltPath:
 	pushw 0x0
 	lda xiy, (xsp + 62)
 	ld xix, (xiy + 4)
@@ -620,14 +640,14 @@ VoiceFloat_MulAddVariant2_AltPath:
 	push xix
 	lda xwa, (xsp + 46)
 	push xwa
-	call VoiceFloat_BlendAndMerge
+	call FP_SinCos_Kernel
 	lda xsp, (xsp + 22)
 	ld xwa, xiz
 	lda xbc, (xsp + 28)
 	call FP_DP_Raw8Copy
 
 ; sin() epilogue.
-VoiceFloat_MulAddVariant2_Epilog:
+FP_sin_Epilog:
 	pop xiz
 	lda xsp, (xsp + 48)
 	ret
@@ -655,7 +675,7 @@ FP_MulAccum64:
 ; they are EQUAL (FP_DP_SubMantissa). Repacks with FP_DP_Encode. The zero flag at +2 of
 ; the first record short-circuits the sign test. 21 call sites (11 external).
 ; This is the reference for the whole arithmetic quartet: compare it against
-; FP_DP_Mul 0x03E10E, which is byte-for-byte identical apart from the inverted sign
+; FP_dadd 0x03E10E, which is byte-for-byte identical apart from the inverted sign
 ; test and is therefore the ADDITION.
 FP_DP_Sub:
 	push xiz
@@ -694,6 +714,9 @@ FP_DP_Sub_Done:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_Sub starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_Sub_Pad:
 	.byte 0xff
 
@@ -743,13 +766,19 @@ FP_SP_Sub_Done:
 ; 0x03D97E: Less-than result table (6 bytes)
 ; 0x03D984: Greater-than result table (6 bytes)
 ; ----------------------------------------------------------------------------
-ToneGen_Compare_Tables:	; 03D977h
+; ★ Renamed 2026-09-25 from ToneGen_Compare_Tables (FP library compare; see the headers).
+FP_CmpResult_Pad:	; 03D977h
 	.byte 0xff	; Padding
+; The three rows are indexed by the comparison-kind code 0..5 (DE in FP_dcmp / FP_fcmp,
+; BC in FP_DP_CmpZero64 / FP_SP_CmpZero32), `ldb_sri` / `xor_srib_rm` = row[kind].
 	; Equal table (0x03D978)
+FP_CmpResult_Equal:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	; Less-than table (0x03D97E)
+FP_CmpResult_Less:
 	.byte 0x01, 0x01, 0x00, 0x00, 0x00, 0x01
 	; Greater-than table (0x03D984)
+FP_CmpResult_Greater:
 	.byte 0x00, 0x00, 0x01, 0x01, 0x00, 0x01
 
 ; The shared sin/cos kernel. C signature f(double *result, double x, double a, int neg),
@@ -758,7 +787,7 @@ ToneGen_Compare_Tables:	; 03D977h
 ;   (1) if |x| >= 2^31 (exponent word test against 0x41E0) -> errno = ERANGE,
 ;       result = 0.0 (0x01F68E). Argument reduction is impossible past that point.
 ;   (2) n = round(a * (1/pi)): multiplies by the constant 0.3183098861837907 at
-;       0x00F396 (= 1/pi), splits with DSP_VoiceBlend (= modf), and rounds up when the
+;       0x00F396 (= 1/pi), splits with FP_modf (= modf), and rounds up when the
 ;       fraction is >= 0.5 (constants 0.5 at 0x01F696 and 1.0 at 0x01F69E).
 ;   (3) if n is odd, the sign flag at (XSP+0x9C) is toggled - i.e. sin(x + n*pi) =
 ;       (-1)^n sin(x).
@@ -775,27 +804,29 @@ ToneGen_Compare_Tables:	; 03D977h
 ; reciprocal factorials to double precision and are what identifies this as sin.
 ; Callers: only sin() 0x03D888/0x03D8B5 and cos() 0x03D38F.
 ; NOTE: the name is wrong; nothing here blends or merges anything.
-VoiceFloat_BlendAndMerge:
+; RENAMED 2026-09-25: was VoiceFloat_BlendAndMerge (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_SinCos_Kernel:
 	lda xsp, (xsp - 128)
 	push xiz
 	ldw_sri0 WA, (xsp + 0x0092)
 	and wa, 0x7FF0
 	cp wa, 0x41E0
-	jr c, VoiceFloat_BlendAndMerge_InRange
+	jr c, FP_SinCos_Kernel_InRange
 	ldw (0x040c22:24), 0x0022
 	ld_sril XWA, (xsp + 0x0088)
-	lda xbc, (0x01f68e:24)
+	lda xbc, (FPConst_SinCos_Kernel_Zero:24)
 	call FP_DP_Raw8Copy
-	jrl VoiceFloat_BlendAndMerge_Epilog
+	jrl FP_SinCos_Kernel_Epilog
 
 ; |x| < 2^31: begin argument reduction, a * (1/pi) then modf.
-VoiceFloat_BlendAndMerge_InRange:
+FP_SinCos_Kernel_InRange:
 	lda xwa, (xsp + 116)
 	push xwa
-	lda xde, (0x00f396:24)
+	lda xde, (FPConst_InvPi:24)
 	lda_dri XBC, 0xFD, 0x98, 0x00
 	lda xwa, (xsp + 72)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -803,33 +834,33 @@ VoiceFloat_BlendAndMerge_InRange:
 	push xix
 	lda xwa, (xsp + 112)
 	push xwa
-	call DSP_VoiceBlend
+	call FP_modf
 	lda xsp, (xsp + 16)
 	lda xwa, (xsp + 100)
-	lda xbc, (0x01f696:24)
+	lda xbc, (FPConst_SinCos_Kernel_InRange_Half:24)
 	ld de, 1:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoiceFloat_BlendAndMerge_Phase2
+	jr nz, FP_SinCos_Kernel_Phase2
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	lda xde, (0x01f69e:24)
-	call FP_DP_Mul
+	lda xde, (FPConst_SinCos_Kernel_InRange_One:24)
+	call FP_dadd
 
 ; Convert the (rounded) quadrant count to int32 and test its parity.
-VoiceFloat_BlendAndMerge_Phase2:
+FP_SinCos_Kernel_Phase2:
 	lda xbc, (xsp + 116)
 	lda xwa, (xsp + 64)
 	call FP_DP_DecodeToInt
 	ld xwa, (xsp + 64)
 	bit 0, wa
-	jr z, VoiceFloat_BlendAndMerge_Phase3
+	jr z, FP_SinCos_Kernel_Phase3
 	cpiw_sri 0xFD, 0x9C, 0x00, 0x00, 0x00
 	scc16 z, wa
 	stw_dri WA, 0xFD, 0x9C, 0x00
 
 ; Take |n| and, on the half-quadrant case, subtract 0.5 (0x01F6A6).
-VoiceFloat_BlendAndMerge_Phase3:
+FP_SinCos_Kernel_Phase3:
 	lda_dri XIY, 0xFD, 0x8C, 0x00
 	ld xix, (xiy + 4)
 	push xix
@@ -837,22 +868,22 @@ VoiceFloat_BlendAndMerge_Phase3:
 	push xix
 	lda xwa, (xsp + 100)
 	push xwa
-	call FP_DP_CmpAndCopy
+	call FP_fabs
 	lda xsp, (xsp + 12)
 	lda xwa, (xsp + 92)
 	lda_dri XBC, 0xFD, 0x94, 0x00
 	ld de, 4:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoiceFloat_BlendAndMerge_Phase4
+	jr nz, FP_SinCos_Kernel_Phase4
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
-	lda xde, (0x01f6a6:24)
+	lda xde, (FPConst_SinCos_Kernel_Phase3_Half:24)
 	call FP_DP_Sub
 
 ; Cody-Waite reduction proper: subtract n*pi_hi then n*pi_lo, leaving z in the local at
 ; (XSP+0x7C); then the |z| <= 2.3283e-10 shortcut test.
-VoiceFloat_BlendAndMerge_Phase4:
+FP_SinCos_Kernel_Phase4:
 	lda_dri XWA, 0xFD, 0x8C, 0x00
 	push xwa
 	lda_dri XIY, 0xFD, 0x90, 0x00
@@ -862,7 +893,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	push xix
 	lda xwa, (xsp + 96)
 	push xwa
-	call FP_DP_CmpAndCopy
+	call FP_fabs
 	lda xsp, (xsp + 12)
 	lda xiy, (xsp + 88)
 	ld xix, (xiy + 4)
@@ -871,11 +902,11 @@ VoiceFloat_BlendAndMerge_Phase4:
 	push xix
 	lda xwa, (xsp + 120)
 	push xwa
-	call DSP_VoiceBlend
-	lda xde, (0x00f39e:24)
+	call FP_modf
+	lda xde, (FPConst_PiHi_CodyWaite:24)
 	lda_dri XBC, 0xFD, 0x84, 0x00
 	lda xwa, (xsp + 84)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda_dri XBC, 0xFD, 0x9C, 0x00
 	lda xwa, (xsp + 84)
 	ld xde, xwa
@@ -883,14 +914,14 @@ VoiceFloat_BlendAndMerge_Phase4:
 	lda xwa, (xsp + 84)
 	ld xbc, xwa
 	lda xde, (xsp + 124)
-	call FP_DP_Mul
-	lda xbc, (0x00f38e:24)
+	call FP_dadd
+	lda xbc, (FPConst_PiLo_CodyWaite:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_CopyOrNegate8
 	lda xwa, (xsp + 72)
 	ld xbc, xwa
 	lda_dri XDE, 0xFD, 0x84, 0x00
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 84)
 	lda xde, (xsp + 72)
 	lda_dri XWA, 0xFD, 0x8C, 0x00
@@ -902,24 +933,24 @@ VoiceFloat_BlendAndMerge_Phase4:
 	push xix
 	lda xwa, (xsp + 100)
 	push xwa
-	call FP_DP_CmpAndCopy
+	call FP_fabs
 	lda xsp, (xsp + 28)
-	lda xbc, (0x00f3a6:24)
+	lda xbc, (FPConst_SinCos_Epsilon:24)
 	lda xwa, (xsp + 76)
 	ld de, 0:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jrl nz, VoiceFloat_BlendAndMerge_FinalCheck
+	jrl nz, FP_SinCos_Kernel_FinalCheck
 	lda xde, (xsp + 124)
 	ld xbc, xde
 	lda xwa, (xsp + 108)
-	call FP_DP_Add_Outer
-	lda xwa, (0x00f34e:24)
+	call FP_dmul
+	lda xwa, (FPConst_InvFact3:24)
 	lda xiz, (xwa + 48)
 	lda xbc, (xwa + 56)
 	lda xde, (xsp + 108)
 	lda xwa, (xsp + 56)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	ld xde, xiz
@@ -927,80 +958,80 @@ VoiceFloat_BlendAndMerge_Phase4:
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
-	call FP_DP_Add_Outer
-	lda xbc, (0x00f376:24)
+	call FP_dmul
+	lda xbc, (FPConst_InvFact13:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
-	call FP_DP_Mul
+	call FP_dadd
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
-	call FP_DP_Add_Outer
-	lda xde, (0x00f36e:24)
+	call FP_dmul
+	lda xde, (FPConst_InvFact11:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
-	call FP_DP_Add_Outer
-	lda xbc, (0x00f366:24)
+	call FP_dmul
+	lda xbc, (FPConst_InvFact9:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
-	call FP_DP_Mul
+	call FP_dadd
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
-	call FP_DP_Add_Outer
-	lda xde, (0x00f35e:24)
+	call FP_dmul
+	lda xde, (FPConst_InvFact7:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
-	call FP_DP_Add_Outer
-	lda xbc, (0x00f356:24)
+	call FP_dmul
+	lda xbc, (FPConst_InvFact5:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
-	call FP_DP_Mul
+	call FP_dadd
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
-	call FP_DP_Add_Outer
-	lda xde, (0x00f34e:24)
+	call FP_dmul
+	lda xde, (FPConst_InvFact3:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 124)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 56)
 	lda xwa, (xsp + 124)
 	ld xde, xwa
-	call FP_DP_Mul
+	call FP_dadd
 
 ; Apply the accumulated sign flag: if non-zero, negate the polynomial result.
-VoiceFloat_BlendAndMerge_FinalCheck:
+FP_SinCos_Kernel_FinalCheck:
 	cpiw_sri 0xFD, 0x9C, 0x00, 0x00, 0x00
-	jr z, VoiceFloat_BlendAndMerge_FinalCopy
+	jr z, FP_SinCos_Kernel_FinalCopy
 	lda xwa, (xsp + 124)
 	ld xbc, xwa
 	call FP_DP_CopyOrNegate8
 
 ; Copy the kernel result to the caller's result pointer.
-VoiceFloat_BlendAndMerge_FinalCopy:
+FP_SinCos_Kernel_FinalCopy:
 	ld_sril XWA, (xsp + 0x0088)
 	lda xbc, (xsp + 124)
 	call FP_DP_Raw8Copy
 
 ; Kernel epilogue: pop XIZ, release the 0x80-byte frame.
-VoiceFloat_BlendAndMerge_Epilog:
+FP_SinCos_Kernel_Epilog:
 	pop xiz
 	lda_dri XSP, 0xFD, 0x80, 0x00
 	ret
@@ -1071,6 +1102,9 @@ Int_SignedDiv_ConstData:
 Int_SignedDiv_AltEntry:
 	ld d, 0x1:opc
 	jr Int_SignedDiv
+; The fourth entry point the header above describes ("unsigned remainder": call FP_UnsignedDiv
+; and return XDE in XHL); unlabelled until 2026-09-25, no caller found.
+Int_UnsignedRemainder:
 	calr FP_UnsignedDiv
 	ld xhl, xde
 	ret
@@ -1180,6 +1214,9 @@ FP_DP_Raw8Copy:
 	ld (xwa + 4), xiy
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_ftod starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_Raw8Copy_Pad:
 	.byte 0xff
 
@@ -1188,14 +1225,16 @@ FP_DP_Raw8Copy_Pad:
 ; mantissa right by 3 into the 53-bit double layout (three srl/rrc pairs building the
 ; low word in XDE and the high word in XHL) and repacks with FP_DP_Encode.
 ; NOTE: nothing is negated here; the name is wrong.
-FP_DP_NegMantissaLS:
+; RENAMED 2026-09-25: was FP_DP_NegMantissaLS (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_ftod:
 	push xiz
 	lda xsp, (xsp - 12)
 	ld xiz, xwa
 	ld xwa, xsp
 	call FP_SP_Decode
 	cp l, 0:i3
-	jr nz, FP_DP_NegMantissaLS_Store
+	jr nz, FP_ftod_Store
 	ld xhl, (xsp + 4)
 	ld xde, 0:i3
 	srl xhl, 1
@@ -1211,7 +1250,7 @@ FP_DP_NegMantissaLS:
 	ld (xsp + 4), xde
 
 ; Repack the widened value with FP_DP_Encode and return.
-FP_DP_NegMantissaLS_Store:
+FP_ftod_Store:
 	ld xwa, xiz
 	ld xbc, xsp
 	call FP_DP_Encode
@@ -1219,6 +1258,9 @@ FP_DP_NegMantissaLS_Store:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_ScalarToDP starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_ScalarToDP_Pad:
 	.byte 0xff
 
@@ -1269,14 +1311,16 @@ FP_DP_CallWithBuf12:
 ; discarded byte (compare against 0x80) and re-normalises if the round carried out of
 ; bit 23; repacks with FP_SP_Encode.
 ; NOTE: the name describes an internal step; this is __dtof.
-FP_DP_NormalizeMantissa:
+; RENAMED 2026-09-25: was FP_DP_NormalizeMantissa (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_dtof:
 	push xiz
 	lda xsp, (xsp - 12)
 	ld xiz, xwa
 	ld xwa, xsp
 	call FP_DP_Decode
 	cp l, 0:i3
-	jr nz, FP_DP_NormalizeMantissa_Encode
+	jr nz, FP_dtof_Encode
 	ld xhl, (xsp + 8)
 	ld de, (xsp + 6)
 	sll de, 1
@@ -1289,19 +1333,19 @@ FP_DP_NormalizeMantissa:
 	stcf_erpw 0xEE, 0x0F
 	rlc xhl
 	cp d, 0x80
-	jr c, FP_DP_NormalizeMantissa_StoreHL
+	jr c, FP_dtof_StoreHL
 	inc 1, xhl
 	bit_erpw 0xEE, 0x07
-	jr nz, FP_DP_NormalizeMantissa_StoreHL
+	jr nz, FP_dtof_StoreHL
 	incw 1, (xsp + 256)
 	srl xhl, 1
 
 ; Store the rounded 24-bit mantissa back into the unpacked record.
-FP_DP_NormalizeMantissa_StoreHL:
+FP_dtof_StoreHL:
 	ld (xsp + 4), xhl
 
 ; Repack with FP_SP_Encode and return.
-FP_DP_NormalizeMantissa_Encode:
+FP_dtof_Encode:
 	ld xwa, xiz
 	ld xbc, xsp
 	call FP_SP_Encode
@@ -1309,6 +1353,9 @@ FP_DP_NormalizeMantissa_Encode:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_Raw4Copy starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_Raw4Copy_Pad:
 	.byte 0xff
 
@@ -1319,6 +1366,9 @@ FP_SP_Raw4Copy:
 	ld (xwa), xix
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_CallWithBuf8 starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_CallWithBuf8_Pad:
 	.byte 0xff
 
@@ -1376,6 +1426,9 @@ FP_DP_DecodeToInt:
 
 ; --- 0x03DE19-0x03DE19  FP_DP_Normalize_Pad (0xFF alignment byte)
 ; Linker pad.
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_Normalize starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_Normalize_Pad:
 	.byte 0xff
 
@@ -1460,6 +1513,9 @@ FP_DP_NormCore_Zero:
 	ld (xiy + 2), 0x1
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_ShiftDecode starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_ShiftDecode_Pad:
 	.byte 0xff
 
@@ -1467,7 +1523,7 @@ FP_DP_ShiftDecode_Pad:
 ; record. Rejects the NaN/overflow marker, returns 0 for a negative exponent
 ; (magnitude < 1), and sets ERANGE with 0xFFFFFFFF for an exponent above 31. Otherwise
 ; it shifts the 24-bit mantissa to align bit 23 with the requested exponent and applies
-; the sign by two's complement. Called only from FP_SP_Decode_ReadSign.
+; the sign by two's complement. Called only from FP_ftoi.
 FP_DP_ShiftDecode:
 	ld xde, (xwa)
 	cpib_erp 0xEA, 0
@@ -1537,11 +1593,11 @@ FP_DP_ShiftDecode_Zero:
 ; exponents must already be equal - the caller has run FP_DP_AlignMantissa). If the sum
 ; carries out of bit 53 it shifts right one and increments the exponent, propagating the
 ; rounding bit. If either record carries a special flag it jumps to FP_DP_CopyWithSign.
-; Called by FP_DP_Sub (different signs) and FP_DP_Mul (equal signs).
+; Called by FP_DP_Sub (different signs) and FP_dadd (equal signs).
 FP_DP_AddMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EA06:24)
+	jp nz, (FP_DP_CopyWithSign:24)
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	add xde, (xbc + 4)
@@ -1572,7 +1628,7 @@ FP_DP_AddMantissa_Store:
 FP_SP_AddMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EA02:24)
+	jp nz, (FP_DP_CopyNoSign:24)
 	ld xix, (xwa + 4)
 	add xix, (xbc + 4)
 	bit_erpw 0xF2, 0x08
@@ -1586,6 +1642,9 @@ FP_SP_AddMantissa_Store:
 	ld (xwa + 4), xix
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_Decode starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_Decode_Pad:
 	.byte 0xff
 
@@ -1652,7 +1711,8 @@ FP_SP_Decode_Zero:
 	ld xix, 0:i3
 	ldib_erp 0xEE, 1
 	jr FP_SP_Decode_Store
-	swi 7
+	.byte 0xff	; fill byte after the unconditional jr -- never executed (it was written as `swi 7`,
+			; the way 0xFF decodes; the other 0xFF fill bytes in this file are FP_*_Pad data)
 
 ; Signed int32 -> unpacked DOUBLE-precision record. Sign extraction plus
 ; FP_SP_NormCore, then the sign byte at record+3.
@@ -1795,11 +1855,14 @@ __jrt_nop_03E0A5:
 ; program's writable DRAM image. The identical hook appears at 0x03E0FB for singles.
 ; (The alias symbol __jrt_nop_03E0A5 refers to the same address.)
 FP_DP_Encode_NormCheck:
-	ld xbc, (0x00f428:24)
+	ld xbc, (FPConst_Zero:24)
 	or xbc, xbc
 	mri_d2 0xB1, 0xEE
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_Encode starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_Encode_Pad:
 	.byte 0xff
 
@@ -1850,7 +1913,7 @@ FP_SP_Encode_Overflow:
 FP_SP_Encode_Overflow_Store:
 	ldw (0x040c22:24), 0x0022
 	ld (xwa), xde
-	ld xbc, (0x00f428:24)
+	ld xbc, (FPConst_Zero:24)
 	or xbc, xbc
 	mri_d2 0xB1, 0xEE
 	ret
@@ -1860,9 +1923,11 @@ FP_SP_Encode_Overflow_Store:
 ; test: here EQUAL signs take FP_DP_AddMantissa and DIFFERENT signs take
 ; FP_DP_SubMantissa, which is addition, not multiplication. It calls
 ; FP_DP_AlignMantissa, which only exists to line up exponents for add/subtract; a
-; multiply would never need it. The real double multiply is FP_DP_Add_Outer 0x03E290.
+; multiply would never need it. The real double multiply is FP_dmul 0x03E290.
 ; 29 call sites (17 external). NOTE: the name is wrong; this is __dadd.
-FP_DP_Mul:
+; RENAMED 2026-09-25: was FP_DP_Mul (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_dadd:
 	push xiz
 	lda xsp, (xsp - 28)
 	ld xiz, xde
@@ -1880,21 +1945,21 @@ FP_DP_Mul:
 	lda xbc, (xiz)
 	ld e, (xsp + 3)
 	xor e, (xiz + 3)
-	jr nz, FP_DP_Mul_DiffSign
+	jr nz, FP_dadd_DiffSign
 
 ; Equal signs: magnitudes add.
-FP_DP_Mul_SameSign:
+FP_dadd_SameSign:
 	call FP_DP_AddMantissa
-	jr FP_DP_Mul_Encode
+	jr FP_dadd_Encode
 
 ; Different signs (and neither operand zero): magnitudes subtract.
-FP_DP_Mul_DiffSign:
+FP_dadd_DiffSign:
 	bitm 0, (xsp + 2)
-	jr nz, FP_DP_Mul_SameSign
+	jr nz, FP_dadd_SameSign
 	call FP_DP_SubMantissa
 
 ; Repack with FP_DP_Encode.
-FP_DP_Mul_Encode:
+FP_dadd_Encode:
 	ld xwa, (xsp + 24)
 	ld xbc, xsp
 	call FP_DP_Encode
@@ -1902,13 +1967,18 @@ FP_DP_Mul_Encode:
 	pop xiz
 	ret
 
-FP_SP_Mul_Pad:
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_fadd starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
+FP_fadd_Pad:
 	.byte 0xff
 
 ; Single-precision ADDITION: *(float*)XWA = *(float*)XBC + *(float*)XDE. Same argument
-; as FP_DP_Mul. 32 call sites, all external (the DSP curve code does most of its work in
+; as FP_dadd. 32 call sites, all external (the DSP curve code does most of its work in
 ; single precision). NOTE: the name is wrong; this is __fadd.
-FP_SP_Mul:
+; RENAMED 2026-09-25: was FP_SP_Mul (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_fadd:
 	push xiz
 	lda xsp, (xsp - 20)
 	ld xiz, xde
@@ -1926,21 +1996,21 @@ FP_SP_Mul:
 	lda xbc, (xiz)
 	ld e, (xsp + 3)
 	xor e, (xiz + 3)
-	jr nz, FP_SP_Mul_DiffSign
+	jr nz, FP_fadd_DiffSign
 
 ; Equal signs: magnitudes add.
-FP_SP_Mul_SameSign:
+FP_fadd_SameSign:
 	call FP_SP_AddMantissa
-	jr FP_SP_Mul_Encode
+	jr FP_fadd_Encode
 
 ; Different signs: magnitudes subtract.
-FP_SP_Mul_DiffSign:
+FP_fadd_DiffSign:
 	bitm 0, (xsp + 2)
-	jr nz, FP_SP_Mul_SameSign
+	jr nz, FP_fadd_SameSign
 	call FP_SP_SubMantissa
 
 ; Repack with FP_SP_Encode.
-FP_SP_Mul_Encode:
+FP_fadd_Encode:
 	ld xwa, (xsp + 16)
 	ld xbc, xsp
 	call FP_SP_Encode
@@ -1949,16 +2019,18 @@ FP_SP_Mul_Encode:
 	ret
 
 ; modf(double x, double *iptr). C signature f(double *result, double x, double *iptr).
-; Calls DSP_VoiceRegUpdate (the integer-part extractor, 0x03E894) to produce the
+; Calls FP_trunc (the integer-part extractor, 0x03E894) to produce the
 ; integral part, stores it through the caller's *iptr, and returns x minus that part -
 ; i.e. the fractional part - through *result. The 0.0 constant at 0x01F6AE is copied
 ; into the scratch buffer first as the default. Only callers: the sin kernel
 ; (0x03D9D8, 0x03DA81) for its quadrant reduction.
 ; NOTE: nothing here touches the DSP or a voice; the name is wrong.
-DSP_VoiceBlend:
+; RENAMED 2026-09-25: was DSP_VoiceBlend (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_modf:
 	lda xsp, (xsp - 24)
 	push xiz
-	lda xbc, (0x01f6ae:24)
+	lda xbc, (FPConst_modf_Zero:24)
 	lda xwa, (xsp + 20)
 	call FP_DP_Raw8Copy
 	lda xiy, (xsp + 36)
@@ -1968,7 +2040,7 @@ DSP_VoiceBlend:
 	push xix
 	lda xwa, (xsp + 20)
 	push xwa
-	call DSP_VoiceRegUpdate
+	call FP_trunc
 	lda xsp, (xsp + 12)
 	ld xiz, (xsp + 44)
 	ld xwa, xiz
@@ -1995,7 +2067,9 @@ DSP_VoiceBlend:
 ; Callers: pow()'s overflow pre-checks (0x03D630, 0x03D77F, 0x03D795) and log()
 ; (0x03E779). The loops are bounded by the exponent value, at most 2047 iterations.
 ; NOTE: nothing here adjusts a frequency; the name is wrong.
-FP_DP_FreqAdjust:
+; RENAMED 2026-09-25: was FP_DP_FreqAdjust (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_frexp:
 	dec 8, xsp
 	pushw iz
 	lda xwa, (xsp + 2)
@@ -2008,14 +2082,14 @@ FP_DP_FreqAdjust:
 	call FP_DP_CmpZero64
 	ld xix, (xsp + 14)
 	cp hl, 0:i3
-	jr nz, FP_DP_FreqAdjust_NonZeroExp
+	jr nz, FP_frexp_NonZeroExp
 	ld xwa, xix
 	lda xbc, (xsp + 18)
 	call FP_DP_Raw8Copy
-	jr FP_DP_FreqAdjust_Return
+	jr FP_frexp_Return
 
 ; Extract the biased exponent from bytes 6..7 and compute *exp = biased - 0x3FE.
-FP_DP_FreqAdjust_NonZeroExp:
+FP_frexp_NonZeroExp:
 	lda xde, (xsp + 2)
 	lda xbc, (xde + 6)
 	ld a, (xbc)
@@ -2035,57 +2109,60 @@ FP_DP_FreqAdjust_NonZeroExp:
 	ld (xwa), iz
 	ld iz, 0:i3
 	cpw (xwa), 0x0
-	jr gt, FP_DP_FreqAdjust_DecCheck
-	jr FP_DP_FreqAdjust_IncCheck
+	jr gt, FP_frexp_DecCheck
+	jr FP_frexp_IncCheck
 
 ; Count the stored exponent down toward 0x3FE (positive *exp case).
-FP_DP_FreqAdjust_DecLoop:
+FP_frexp_DecLoop:
 	dec 1, hl
 	inc 1, iz
 
 ; Loop test for the count-down.
-FP_DP_FreqAdjust_DecCheck:
+FP_frexp_DecCheck:
 	ld xwa, (xsp + 26)
 	cp iz, (xwa)
-	jr lt, FP_DP_FreqAdjust_DecLoop
-	jr FP_DP_FreqAdjust_Combine
+	jr lt, FP_frexp_DecLoop
+	jr FP_frexp_Combine
 
 ; Count the stored exponent up toward 0x3FE (negative *exp case).
-FP_DP_FreqAdjust_IncLoop:
+FP_frexp_IncLoop:
 	inc 1, hl
 	dec 1, iz
 
 ; Loop test for the count-up.
-FP_DP_FreqAdjust_IncCheck:
+FP_frexp_IncCheck:
 	ld xwa, (xsp + 26)
 	cp iz, (xwa)
-	jr gt, FP_DP_FreqAdjust_IncLoop
+	jr gt, FP_frexp_IncLoop
 
 ; Merge the new exponent back with the top mantissa nibble and restore the sign bit.
-FP_DP_FreqAdjust_Combine:
+FP_frexp_Combine:
 	sll hl, 4
 	ld a, (xbc)
 	and a, 0xF
 	extz wa
 	or hl, wa
 	bitm 7, (xiy)
-	jr z, FP_DP_FreqAdjust_StoreResult
+	jr z, FP_frexp_StoreResult
 	set 15, hl
 
 ; Write the patched exponent word and copy the mantissa to *result.
-FP_DP_FreqAdjust_StoreResult:
+FP_frexp_StoreResult:
 	ld (xbc), hl
 	ld xwa, xix
 	ld xbc, xde
 	call FP_DP_Raw8Copy
 
 ; frexp epilogue.
-FP_DP_FreqAdjust_Return:
+FP_frexp_Return:
 	popw iz
 	inc 8, xsp
 	ret
 
-FP_DP_Add_Outer_Pad:
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_dmul starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
+FP_dmul_Pad:
 	.byte 0xff
 
 ; Double MULTIPLICATION: *(double*)XWA = *(double*)XBC * *(double*)XDE.
@@ -2096,7 +2173,9 @@ FP_DP_Add_Outer_Pad:
 ; at 0x03D6E7 uses it as `base = base * base`, (c) the sin kernel uses it to form z^2
 ; at 0x03DB0B. 69 call sites (48 external) - the most-used arithmetic routine in the
 ; firmware. NOTE: the name is wrong; this is __dmul.
-FP_DP_Add_Outer:
+; RENAMED 2026-09-25: was FP_DP_Add_Outer (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_dmul:
 	push xiz
 	lda xsp, (xsp - 28)
 	ld xiz, xde
@@ -2119,7 +2198,9 @@ FP_DP_Add_Outer:
 
 ; Single-precision MULTIPLICATION via FP_SP_MulAdd (0x03EC9E). 58 call sites, all
 ; external. NOTE: the name is wrong; this is __fmul.
-FP_SP_Add_Outer:
+; RENAMED 2026-09-25: was FP_SP_Add_Outer (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_fmul:
 	push xiz
 	lda xsp, (xsp - 20)
 	ld xiz, xde
@@ -2144,7 +2225,7 @@ FP_SP_Add_Outer:
 ; raises the smaller one to match the larger, and shifts that record's 53-bit mantissa
 ; right by the difference (32/16/8/1 bits at a time), keeping a guard byte and rounding
 ; to nearest at the end. A shift beyond 53 (0x35) bits zeroes the operand entirely and
-; marks it as zero. Called only by FP_DP_Sub and FP_DP_Mul (= double add).
+; marks it as zero. Called only by FP_DP_Sub and FP_dadd (= double add).
 FP_DP_AlignMantissa:
 	ld h, (xwa + 2)
 	or h, (xbc + 2)
@@ -2234,6 +2315,9 @@ FP_DP_AlignMantissa_MaxShift:
 	ld (xwa + 2), 0x1
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_AlignMantissa starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_AlignMantissa_Pad:
 	.byte 0xff
 
@@ -2299,13 +2383,15 @@ FP_SP_AlignMantissa_MaxShift:
 ; (0x03E40A) and XORs the signs, short-circuits when the divisor mantissa is exactly
 ; 1.0, and otherwise runs a restoring long division through FP_Div_Step_Bit3 /
 ; FP_Div_Step4Bits, 4 quotient bits per call, 8 rounds (C = 8). This is the callee of
-; VoiceFloat_SubDP 0x03D3A4, which is the public double divide.
+; FP_ddiv 0x03D3A4, which is the public double divide.
 ; NOTE: exponent SUBTRACTION is the giveaway - a multiply adds them (compare
 ; FP_DP_MulAdd 0x03EBCE). The name is wrong; this is the divide core.
-FP_DP_Mul_Outer:
+; RENAMED 2026-09-25: was FP_DP_Mul_Outer (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_DP_DivCore:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3E884:24)
+	jp nz, (FP_NaN_Handler:24)
 	ld l, (xbc + 3)
 	xor (xwa + 3), l
 	ld hl, (xbc + 256)
@@ -2379,18 +2465,23 @@ FP_DP_MulMantissaCore_Store:
 	pop xiz
 	ret
 
-FP_SP_Mul_Outer_Pad:
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_DivCore starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
+FP_SP_DivCore_Pad:
 	.byte 0xff
 
 ; Single-precision DIVISION mantissa core. Subtracts exponents, XORs signs, then runs a
 ; classic restoring division that resolves four quotient bits per iteration by keeping
 ; the divisor pre-shifted by 1, 2 and 3 (XIX, XIY, XIZ) and comparing against each.
-; Eight iterations give 32 bits. Callee of VoiceFloat_SubSP 0x03D3D4.
+; Eight iterations give 32 bits. Callee of FP_fdiv 0x03D3D4.
 ; NOTE: the name is wrong; this is the single-precision divide core.
-FP_SP_Mul_Outer:
+; RENAMED 2026-09-25: was FP_SP_Mul_Outer (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_SP_DivCore:
 	ld e, (xwa + 2)
 	or e, (xwa + 2)
-	jp nz, (0x3E884:24)
+	jp nz, (FP_NaN_Handler:24)
 	push xiz
 	push xwa
 	ld hl, (xbc + 256)
@@ -2485,11 +2576,11 @@ FP_SP_MulMantissaCore_Divisor1:
 ; RE-NORMALISES the difference: `bs1b` finds the new leading bit and the mantissa is
 ; shifted left (or right) with the exponent adjusted. A result of exactly zero sets the
 ; record's zero flag. Special flags divert to FP_DP_NegWithSign. Called by FP_DP_Sub
-; (equal signs) and FP_DP_Mul (different signs).
+; (equal signs) and FP_dadd (different signs).
 FP_DP_SubMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE3A:24)
+	jp nz, (FP_DP_NegWithSign:24)
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	sub xde, (xbc + 4)
@@ -2584,7 +2675,7 @@ FP_DP_SubMantissa_Zero:
 FP_SP_SubMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE36:24)
+	jp nz, (FP_DP_NegNoSign:24)
 	ld xiy, xwa
 	ld de, (xwa + 256)
 	ld xix, (xwa + 4)
@@ -2637,64 +2728,66 @@ FP_SP_SubMantissa_Zero:
 ;   x < -708.396 (0x01F6CE)-> return 0.0 (0x01F6D6)
 ; The two thresholds are log(DBL_MAX) and log(DBL_MIN) to full double precision, which
 ; is what identifies the function. The kernel is the plain Taylor series: on pass n it
-; forms t = x/n (VoiceFloat_SubDP = divide), term *= t (FP_DP_Add_Outer = multiply),
-; acc += term (FP_DP_Mul = add), and stops as soon as acc stops changing.
+; forms t = x/n (FP_ddiv = divide), term *= t (FP_dmul = multiply),
+; acc += term (FP_dadd = add), and stops as soon as acc stops changing.
 ; IMPORTANT: the loop is HARD-BOUNDED at 300 passes (`cp IZ,0x012C; jr LE`) - contrast
 ; with log() below, which has no such bound. Only caller: pow() at 0x03D839.
 ; NOTE: the name is wrong; nothing here slides a pitch.
-VoicePitch_SlideEngine:
+; RENAMED 2026-09-25: was VoicePitch_SlideEngine (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_exp:
 	lda xsp, (xsp - 48)
 	pushw iz
-	lda xbc, (0x01f6b6:24)
+	lda xbc, (FPConst_exp_One:24)
 	lda xwa, (xsp + 34)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
 	ld bc, 5:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoicePitch_SlideEngine_NonZero
+	jr nz, FP_exp_NonZero
 	ld xwa, (xsp + 54)
 	lda xbc, (xsp + 34)
 	call FP_DP_Raw8Copy
-	jrl VoicePitch_SlideEngine_Epilog
+	jrl FP_exp_Epilog
 
 ; x != 0: load the term seed and test the overflow threshold.
-VoicePitch_SlideEngine_NonZero:
-	lda xbc, (0x01f6be:24)
+FP_exp_NonZero:
+	lda xbc, (FPConst_exp_NonZero_One:24)
 	lda xwa, (xsp + 42)
 	call FP_DP_Raw8Copy
 	lda xwa, (xsp + 58)
-	lda xbc, (0x01f6c6:24)
+	lda xbc, (FPConst_Exp_Overflow_Limit:24)
 	ld de, 0:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoicePitch_SlideEngine_LessPath
+	jr nz, FP_exp_LessPath
 	ldw (0x040c22:24), 0x0022
 	ld xwa, (xsp + 54)
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	call FP_DP_Raw8Copy
-	jrl VoicePitch_SlideEngine_Epilog
+	jrl FP_exp_Epilog
 
 ; x <= log(DBL_MAX): test the underflow threshold.
-VoicePitch_SlideEngine_LessPath:
+FP_exp_LessPath:
 	lda xwa, (xsp + 58)
-	lda xbc, (0x01f6ce:24)
+	lda xbc, (FPConst_Exp_Underflow_Limit:24)
 	ld de, 2:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoicePitch_SlideEngine_StartIter
+	jr nz, FP_exp_StartIter
 	ld xwa, (xsp + 54)
-	lda xbc, (0x01f6d6:24)
+	lda xbc, (FPConst_exp_LessPath_Zero:24)
 	call FP_DP_Raw8Copy
-	jr VoicePitch_SlideEngine_Epilog
+	jr FP_exp_Epilog
 
 ; Seed the term index IZ = 1.
-VoicePitch_SlideEngine_StartIter:
+FP_exp_StartIter:
 	ld iz, 1:i3
 
 ; Taylor pass: save the previous sum, term *= x/n, sum += term, stop when the sum stops
 ; changing or n exceeds 300.
-VoicePitch_SlideEngine_IterLoop:
+FP_exp_IterLoop:
 	lda xbc, (xsp + 34)
 	lda xwa, (xsp + 26)
 	call FP_DP_Raw8Copy
@@ -2707,33 +2800,33 @@ VoicePitch_SlideEngine_IterLoop:
 	lda xbc, (xsp + 58)
 	lda xwa, (xsp + 14)
 	ld xde, xwa
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xwa, (xsp + 42)
 	ld xbc, xwa
 	lda xde, (xsp + 14)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xwa, (xsp + 34)
 	ld xbc, xwa
 	lda xde, (xsp + 42)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xwa, (xsp + 26)
 	lda xbc, (xsp + 34)
 	ld de, 5:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr z, VoicePitch_SlideEngine_Done
+	jr z, FP_exp_Done
 	inc 1, iz
 	cp iz, 0x12C
-	jr le, VoicePitch_SlideEngine_IterLoop
+	jr le, FP_exp_IterLoop
 
 ; Copy the converged sum to *result.
-VoicePitch_SlideEngine_Done:
+FP_exp_Done:
 	ld xwa, (xsp + 54)
 	lda xbc, (xsp + 34)
 	call FP_DP_Raw8Copy
 
 ; exp() epilogue.
-VoicePitch_SlideEngine_Epilog:
+FP_exp_Epilog:
 	popw iz
 	lda xsp, (xsp + 48)
 	ret
@@ -2743,7 +2836,7 @@ VoicePitch_SlideEngine_Epilog:
 ; (0x01F6DE). Otherwise:
 ;   (1) t = x / sqrt(2) using the constant 1.4142135623730951 at 0x00F42C, then
 ;       frexp(t) -> exponent k in the local at (XSP+0x68), and ldexp(1.0, k) via
-;       VoiceFreq_EnvelopeStep; x is divided by that so the reduced argument sits
+;       FP_ldexp; x is divided by that so the reduced argument sits
 ;       around 1.0.
 ;   (2) z = (x - 1.0) / (x + 1.0), using 1.0 at 0x01F6EE and 0x01F6F6.
 ;   (3) the atanh series: acc = z; on pass n (n stepping 1, 3, 5, ...) x *= z^2 and
@@ -2754,29 +2847,31 @@ VoicePitch_SlideEngine_Epilog:
 ; Only caller: pow() at 0x03D749.
 ; NOTE 1: the name is wrong; this is log().
 ; NOTE 2: the series loop at 0x03E7E6 has NO ITERATION CAP - see [UNCERTAIN] / findings.
-VoiceAmp_ConvergeEngine:
+; RENAMED 2026-09-25: was VoiceAmp_ConvergeEngine (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_log:
 	lda xsp, (xsp - 102)
 	push xiz
 	lda xwa, (xsp + 114)
 	ld bc, 3:i3
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
-	jr nz, VoiceAmp_ConvergeEngine_InRange
+	jr nz, FP_log_InRange
 	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 110)
-	lda xbc, (0x01f6de:24)
+	lda xbc, (FPConst_log_Zero:24)
 	call FP_DP_Raw8Copy
-	jrl VoiceAmp_ConvergeEngine_Epilog
+	jrl FP_log_Epilog
 
 ; x > 0: argument reduction by sqrt(2) + frexp + ldexp, then form z = (x-1)/(x+1) and
 ; z^2, and seed the accumulator with z.
-VoiceAmp_ConvergeEngine_InRange:
+FP_log_InRange:
 	lda xwa, (xsp + 104)
 	push xwa
-	lda xde, (0x00f42c:24)
+	lda xde, (FPConst_Sqrt2:24)
 	lda xbc, (xsp + 118)
 	lda xwa, (xsp + 52)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xiy, (xsp + 52)
 	ld xix, (xiy + 4)
 	push xix
@@ -2784,37 +2879,37 @@ VoiceAmp_ConvergeEngine_InRange:
 	push xix
 	lda xwa, (xsp + 76)
 	push xwa
-	call FP_DP_FreqAdjust
+	call FP_frexp
 	pushm (xsp + 120)
-	lda xiy, (0x01f6e6:24)
+	lda xiy, (FPConst_log_InRange_One_1:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
 	push xix
 	lda xwa, (xsp + 82)
 	push xwa
-	call VoiceFreq_EnvelopeStep
+	call FP_ldexp
 	lda xsp, (xsp + 30)
 	lda xwa, (xsp + 114)
 	ld xbc, xwa
 	lda xde, (xsp + 56)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 114)
-	lda xde, (0x01f6ee:24)
+	lda xde, (FPConst_log_InRange_One_2:24)
 	lda xwa, (xsp + 48)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 114)
-	lda xde, (0x01f6f6:24)
+	lda xde, (FPConst_log_InRange_One_3:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 48)
 	lda xwa, (xsp + 114)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xde, (xsp + 114)
 	ld xbc, xde
 	lda xwa, (xsp + 96)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	ld iz, 1:i3
 	lda xbc, (xsp + 114)
 	lda xwa, (xsp + 88)
@@ -2822,11 +2917,11 @@ VoiceAmp_ConvergeEngine_InRange:
 
 ; atanh series pass: x *= z^2, n += 2, acc += x/n; loops while the accumulator still
 ; changes. UNBOUNDED - there is no pass counter here, unlike exp()'s 300-pass cap.
-VoiceAmp_ConvergeEngine_IterLoop:
+FP_log_IterLoop:
 	lda xwa, (xsp + 114)
 	ld xbc, xwa
 	lda xde, (xsp + 96)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	inc 2, iz
 	lda xbc, (xsp + 88)
 	lda xwa, (xsp + 80)
@@ -2840,18 +2935,18 @@ VoiceAmp_ConvergeEngine_IterLoop:
 	lda xbc, (xsp + 114)
 	lda xwa, (xsp + 72)
 	ld xde, xwa
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xwa, (xsp + 88)
 	ld xbc, xwa
 	lda xde, (xsp + 72)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xwa, (xsp + 80)
 	lda xbc, (xsp + 88)
 	ld de, 5:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
-	jr nz, VoiceAmp_ConvergeEngine_IterLoop
-	lda xiz, (0x00f3d2:24)
+	jr nz, FP_log_IterLoop
+	lda xiz, (FPConst_Ln2:24)
 	ld wa, (xsp + 104)
 	exts xwa
 	ld (xsp + 44), xwa
@@ -2861,25 +2956,28 @@ VoiceAmp_ConvergeEngine_IterLoop:
 	lda xwa, (xsp + 72)
 	ld xbc, xwa
 	ld xde, xiz
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 88)
-	lda xde, (0x01f6fe:24)
+	lda xde, (FPConst_log_IterLoop_Two:24)
 	lda xwa, (xsp + 48)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 48)
 	lda xwa, (xsp + 72)
 	ld xde, xwa
-	call FP_DP_Mul
+	call FP_dadd
 	ld xwa, (xsp + 110)
 	lda xbc, (xsp + 72)
 	call FP_DP_Raw8Copy
 
 ; log() epilogue: pop XIZ, release the 0x66-byte frame.
-VoiceAmp_ConvergeEngine_Epilog:
+FP_log_Epilog:
 	pop xiz
 	lda xsp, (xsp + 102)
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_NaN_Handler starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_NaN_Handler_Pad:
 	.byte 0xff
 
@@ -2897,12 +2995,12 @@ FP_NaN_Handler:
 	ret
 
 ; Integer part of a double, i.e. trunc(). C signature f(double *result, double x); it is
-; the worker behind modf (DSP_VoiceBlend 0x03E1A5) and has no other caller.
+; the worker behind modf (FP_modf 0x03E1A5) and has no other caller.
 ; Copies a 4-word template from 0x01F706, then:
 ;   - biased exponent 0 or 0x7FF (zero/inf/NaN) -> result = 0.0 (0x01F70E)
 ;   - unbiased exponent >= 0x28 goes straight to the large-value test
 ;   - otherwise it builds a magic value with exponent field 0x000F, adds it and
-;     subtracts it again (FP_DP_Mul then FP_DP_Sub, i.e. add then subtract) to force
+;     subtracts it again (FP_dadd then FP_DP_Sub, i.e. add then subtract) to force
 ;     rounding, and re-reads the exponent
 ;   - unbiased exponent < 0 (|x| < 1) -> result = 0.0 (0x01F716)
 ;   - unbiased exponent >= 0x34 (52) -> x is already integral, copy it through
@@ -2910,10 +3008,12 @@ FP_NaN_Handler:
 ;     at 0x03E96A / 0x03E9C7 (rotate the mantissa down by exponent/8 bytes, mask the
 ;     partial nibble, rotate back) and rebuilds the exponent field.
 ; NOTE: nothing here touches a DSP register or a voice; the name is wrong.
-DSP_VoiceRegUpdate:
+; RENAMED 2026-09-25: was DSP_VoiceRegUpdate (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_trunc:
 	lda xsp, (xsp - 28)
 	push xiz
-	ld xiy, 0x1F706
+	ld xiy, FPConst_trunc_Zero
 	lda xix, (xsp + 24)
 	ld bc, 4:i3
 	ldirw
@@ -2926,23 +3026,23 @@ DSP_VoiceRegUpdate:
 	and wa, 0x7FF0
 	srl wa, 4
 	cp wa, 0:i3
-	jr z, DSP_VoiceRegUpdate_ZeroOrMax
+	jr z, FP_trunc_ZeroOrMax
 	cp wa, 0x7FF
-	jr nz, DSP_VoiceRegUpdate_InRange
+	jr nz, FP_trunc_InRange
 
 ; Biased exponent 0 or 0x7FF: return 0.0.
-DSP_VoiceRegUpdate_ZeroOrMax:
+FP_trunc_ZeroOrMax:
 	ld xwa, (xsp + 36)
-	lda xbc, (0x01f70e:24)
+	lda xbc, (FPConst_trunc_ZeroOrMax_Zero:24)
 	call FP_DP_Raw8Copy
-	jrl DSP_VoiceRegUpdate_Return
+	jrl FP_trunc_Return
 
 ; The add-magic/subtract-magic rounding trick, then re-read the exponent.
-DSP_VoiceRegUpdate_InRange:
+FP_trunc_InRange:
 	ld (xsp + 4), wa
 	sub wa, 0x3FF
 	cp wa, 0x28
-	jr ge, DSP_VoiceRegUpdate_NegOffset
+	jr ge, FP_trunc_NegOffset
 	lda xde, (xsp + 24)
 	ldw (xde), 0xF
 	ld wa, (xbc)
@@ -2951,7 +3051,7 @@ DSP_VoiceRegUpdate_InRange:
 	ld xiz, xhl
 	ld xbc, xiz
 	ld xwa, xiz
-	call FP_DP_Mul
+	call FP_dadd
 	lda xde, (xsp + 24)
 	ldw (xde), 0x0
 	lda xiz, (xsp + 16)
@@ -2965,26 +3065,26 @@ DSP_VoiceRegUpdate_InRange:
 	sub wa, 0x3FF
 
 ; Unbiased exponent < 0 (|x| < 1): the integer part is 0.0.
-DSP_VoiceRegUpdate_NegOffset:
+FP_trunc_NegOffset:
 	cp wa, 0:i3
-	jr ge, DSP_VoiceRegUpdate_LargeOffset
+	jr ge, FP_trunc_LargeOffset
 	ld xwa, (xsp + 36)
-	lda xbc, (0x01f716:24)
+	lda xbc, (FPConst_trunc_NegOffset_Zero:24)
 	call FP_DP_Raw8Copy
-	jrl DSP_VoiceRegUpdate_Return
+	jrl FP_trunc_Return
 
 ; Unbiased exponent >= 52: x has no fractional bits, copy it unchanged.
-DSP_VoiceRegUpdate_LargeOffset:
+FP_trunc_LargeOffset:
 	cp wa, 0x34
-	jr lt, DSP_VoiceRegUpdate_BlendLoop
+	jr lt, FP_trunc_BlendLoop
 	ld xwa, (xsp + 36)
 	lda xbc, (xsp + 40)
 	call FP_DP_Raw8Copy
-	jrl DSP_VoiceRegUpdate_Return
+	jrl FP_trunc_Return
 
 ; Split the exponent into a byte count and a bit remainder (divs by 8) for the
 ; nibble-shift masking below.
-DSP_VoiceRegUpdate_BlendLoop:
+FP_trunc_BlendLoop:
 	ld iy, wa
 	exts xiy
 	divs iy, 0x8
@@ -3000,7 +3100,7 @@ DSP_VoiceRegUpdate_BlendLoop:
 	lda xiz, (xwa - 6)
 
 ; Rotate the mantissa down one nibble per byte into the scratch buffer.
-DSP_VoiceRegUpdate_ForwardScan:
+FP_trunc_ForwardScan:
 	ld w, (xde - 1)
 	srl w, 4
 	ld a, (xde)
@@ -3009,51 +3109,51 @@ DSP_VoiceRegUpdate_ForwardScan:
 	lda_dpi XBC, 0xE4
 	dec 1, xde
 	cp xde, xiz
-	jr ugt, DSP_VoiceRegUpdate_ForwardScan
+	jr ugt, FP_trunc_ForwardScan
 	ld a, (xhl)
 	sll a, 4
 	ld (xix + 6), a
 	ld wa, 6:i3
 	cp iy, 6:i3
-	jr ge, DSP_VoiceRegUpdate_BackScan
+	jr ge, FP_trunc_BackScan
 
 ; Zero the bytes above the retained integer bits.
-DSP_VoiceRegUpdate_FillPad:
+FP_trunc_FillPad:
 	stib_ind 0x07, 0xF0, 0xE0, 0x00
 	dec 1, wa
 	cp wa, iy
-	jr gt, DSP_VoiceRegUpdate_FillPad
+	jr gt, FP_trunc_FillPad
 
 ; Mask the partial byte at the integer/fraction boundary.
-DSP_VoiceRegUpdate_BackScan:
+FP_trunc_BackScan:
 	lda_dri XDE, 0x07, 0xF0, 0xF4
 	cpw (xsp + 6), 0x0
-	jr z, DSP_VoiceRegUpdate_ZeroLow
+	jr z, FP_trunc_ZeroLow
 	ldw wa, 0x8
 	sub wa, (xsp + 6)
 	ldw bc, 0xFF
 	and a, 0xF
-	jr z, DSP_VoiceRegUpdate_MaskLow
+	jr z, FP_trunc_MaskLow
 	slaa bc
 
 ; Apply the computed byte mask.
-DSP_VoiceRegUpdate_MaskLow:
+FP_trunc_MaskLow:
 	and (xde), c
-	jr DSP_VoiceRegUpdate_BackScan2
+	jr FP_trunc_BackScan2
 
 ; Boundary lands on a byte edge: just zero it.
-DSP_VoiceRegUpdate_ZeroLow:
+FP_trunc_ZeroLow:
 	ld (xde), 0x0
 
 ; Prepare the reverse nibble rotation.
-DSP_VoiceRegUpdate_BackScan2:
+FP_trunc_BackScan2:
 	ld xbc, xhl
 	lda xwa, (xix + 6)
 	ld xde, xwa
 	lda xiy, (xwa - 6)
 
 ; Rotate the masked mantissa back up one nibble per byte and restore the exponent field.
-DSP_VoiceRegUpdate_BackScanLoop:
+FP_trunc_BackScanLoop:
 	ld w, (xde - 1)
 	sll w, 4
 	ld a, (xde)
@@ -3062,7 +3162,7 @@ DSP_VoiceRegUpdate_BackScanLoop:
 	lda_dpi XBC, 0xE4
 	dec 1, xde
 	cp xde, xiy
-	jr ugt, DSP_VoiceRegUpdate_BackScanLoop
+	jr ugt, FP_trunc_BackScanLoop
 	lda xbc, (xhl + 6)
 	ld a, (xix)
 	srl a, 4
@@ -3076,11 +3176,14 @@ DSP_VoiceRegUpdate_BackScanLoop:
 	call FP_DP_Raw8Copy
 
 ; trunc() epilogue.
-DSP_VoiceRegUpdate_Return:
+FP_trunc_Return:
 	pop xiz
 	lda xsp, (xsp + 28)
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_CopyNoSign starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_CopyVariant_Pad:
 	.byte 0xff
 
@@ -3096,6 +3199,8 @@ FP_DP_CopyNoSign:
 FP_DP_CopyWithSign:
 	ld d, 0x1:opc
 	jr FP_DP_CopyDispatch
+; The third entry (D = 2) the header above says is unreferenced; labelled 2026-09-25.
+FP_CopyWithSign_D2:
 	ld d, 0x2:opc
 	jr __jrt_nop_03EA0E
 __jrt_nop_03EA0E:
@@ -3123,6 +3228,9 @@ FP_DP_Copy3Words:
 	ld (xwa + 8), xhl
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_DecodeToInt starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_DecodeToInt_Pad:
 	.byte 0xff
 
@@ -3214,7 +3322,9 @@ FP_SP_DecodeToInt_NaN:
 ; exponent field back and copies the result out. Sign bit preserved at 0x03EBB0.
 ; Only caller: log() at 0x03E790 (ldexp(1.0, k)).
 ; NOTE: the name is wrong; this has nothing to do with envelopes or frequency.
-VoiceFreq_EnvelopeStep:
+; RENAMED 2026-09-25: was VoiceFreq_EnvelopeStep (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_ldexp:
 	lda xsp, (xsp - 16)
 	pushw iz
 	lda xwa, (xsp + 10)
@@ -3225,44 +3335,44 @@ VoiceFreq_EnvelopeStep:
 	call FP_DP_CmpZero64
 	ld xde, (xsp + 22)
 	cp hl, 0:i3
-	jr nz, VoiceFreq_EnvelopeStep_InRange
-	lda xbc, (0x01f71e:24)
+	jr nz, FP_ldexp_InRange
+	lda xbc, (FPConst_ldexp_Zero:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
-	jrl VoiceFreq_EnvelopeStep_Epilog
+	jrl FP_ldexp_Epilog
 
 ; x != 0: test n against the +0x7FF upper limit.
-VoiceFreq_EnvelopeStep_InRange:
+FP_ldexp_InRange:
 	ld bc, (xsp + 34)
 	lda xwa, (xsp + 10)
 	lda xhl, (xwa + 7)
 	cp bc, 0x7FF
-	jr le, VoiceFreq_EnvelopeStep_ClampLow
+	jr le, FP_ldexp_ClampLow
 	ldw (0x040c22:24), 0x0022
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	bitm 7, (xhl)
-	jr z, VoiceFreq_EnvelopeStep_ClampHigh
+	jr z, FP_ldexp_ClampHigh
 	ld xwa, xde
 	call FP_DP_CopyOrNegate8
-	jrl VoiceFreq_EnvelopeStep_Epilog
+	jrl FP_ldexp_Epilog
 
 ; Positive-sign overflow: copy +DBL_MAX.
-VoiceFreq_EnvelopeStep_ClampHigh:
+FP_ldexp_ClampHigh:
 	ld xwa, xde
 	call FP_DP_Raw8Copy
-	jrl VoiceFreq_EnvelopeStep_Epilog
+	jrl FP_ldexp_Epilog
 
 ; Test n against the -0x7FF lower limit; below it, return 0.0.
-VoiceFreq_EnvelopeStep_ClampLow:
+FP_ldexp_ClampLow:
 	cp bc, 0xF801
-	jr ge, VoiceFreq_EnvelopeStep_NibbleAdjust
-	lda xbc, (0x01f726:24)
+	jr ge, FP_ldexp_NibbleAdjust
+	lda xbc, (FPConst_ldexp_ClampLow_Zero:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
-	jrl VoiceFreq_EnvelopeStep_Epilog
+	jrl FP_ldexp_Epilog
 
 ; Extract the biased exponent from the nibble-split bytes 6..7 into IY.
-VoiceFreq_EnvelopeStep_NibbleAdjust:
+FP_ldexp_NibbleAdjust:
 	ld (xsp + 2), xwa
 	inc 6, xwa
 	ld (xsp + 6), xwa
@@ -3282,65 +3392,65 @@ VoiceFreq_EnvelopeStep_NibbleAdjust:
 	ld iy, wa
 	ld iz, 0:i3
 	cp bc, 0:i3
-	jr le, VoiceFreq_EnvelopeStep_DecCheck
+	jr le, FP_ldexp_DecCheck
 	cp bc, 0:i3
-	jr le, VoiceFreq_EnvelopeStep_StoreResult
+	jr le, FP_ldexp_StoreResult
 
 ; n > 0: increment the biased exponent once per pass, saturating at 0x7FF with ERANGE.
 ; Bounded by n, which was already limited to 0x7FF.
-VoiceFreq_EnvelopeStep_IncLoop:
+FP_ldexp_IncLoop:
 	ld wa, iy
 	inc 1, wa
 	cp wa, 0x7FF
-	jr c, VoiceFreq_EnvelopeStep_IncStep
+	jr c, FP_ldexp_IncStep
 	ldw (0x040c22:24), 0x0022
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	ld a, (xix)
 	bit 7, a
-	jr z, VoiceFreq_EnvelopeStep_IncClamp_Copy
+	jr z, FP_ldexp_IncClamp_Copy
 	ld xwa, xde
 	call FP_DP_CopyOrNegate8
-	jr VoiceFreq_EnvelopeStep_Epilog
+	jr FP_ldexp_Epilog
 
 ; Overflow with a positive value: copy +DBL_MAX.
-VoiceFreq_EnvelopeStep_IncClamp_Copy:
+FP_ldexp_IncClamp_Copy:
 	ld xwa, xde
 	call FP_DP_Raw8Copy
-	jr VoiceFreq_EnvelopeStep_Epilog
+	jr FP_ldexp_Epilog
 
 ; One successful increment; loop while IZ < n.
-VoiceFreq_EnvelopeStep_IncStep:
+FP_ldexp_IncStep:
 	inc 1, iy
 	inc 1, iz
 	cp iz, bc
-	jr lt, VoiceFreq_EnvelopeStep_IncLoop
-	jr VoiceFreq_EnvelopeStep_StoreResult
+	jr lt, FP_ldexp_IncLoop
+	jr FP_ldexp_StoreResult
 
 ; n == 0: nothing to do.
-VoiceFreq_EnvelopeStep_DecCheck:
+FP_ldexp_DecCheck:
 	cp bc, 0:i3
-	jr ge, VoiceFreq_EnvelopeStep_StoreResult
+	jr ge, FP_ldexp_StoreResult
 
 ; n < 0: decrement the biased exponent, flushing to 0.0 with ERANGE at 0 (0x01F72E).
-VoiceFreq_EnvelopeStep_DecLoop:
+FP_ldexp_DecLoop:
 	ld wa, iy
 	sub wa, 0x1
-	jr nz, VoiceFreq_EnvelopeStep_DecStep
+	jr nz, FP_ldexp_DecStep
 	ldw (0x040c22:24), 0x0022
-	lda xbc, (0x01f72e:24)
+	lda xbc, (FPConst_ldexp_DecLoop_Zero:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy
-	jr VoiceFreq_EnvelopeStep_Epilog
+	jr FP_ldexp_Epilog
 
 ; One successful decrement; loop while IZ > n.
-VoiceFreq_EnvelopeStep_DecStep:
+FP_ldexp_DecStep:
 	dec 1, iy
 	dec 1, iz
 	cp iz, bc
-	jr gt, VoiceFreq_EnvelopeStep_DecLoop
+	jr gt, FP_ldexp_DecLoop
 
 ; Reassemble the exponent nibbles with the retained top mantissa nibble.
-VoiceFreq_EnvelopeStep_StoreResult:
+FP_ldexp_StoreResult:
 	sll iy, 4
 	stb_erp C, 0xE2
 	and c, 0xF
@@ -3349,11 +3459,11 @@ VoiceFreq_EnvelopeStep_StoreResult:
 	or wa, bc
 	ld iy, wa
 	bit 7, l
-	jr z, VoiceFreq_EnvelopeStep_SetHighBit
+	jr z, FP_ldexp_SetHighBit
 	set 15, iy
 
 ; Restore the sign bit and write the patched word back, then copy the result out.
-VoiceFreq_EnvelopeStep_SetHighBit:
+FP_ldexp_SetHighBit:
 	ld bc, iy
 	ld xwa, (xsp + 6)
 	ld (xwa), bc
@@ -3362,11 +3472,14 @@ VoiceFreq_EnvelopeStep_SetHighBit:
 	call FP_DP_Raw8Copy
 
 ; ldexp epilogue.
-VoiceFreq_EnvelopeStep_Epilog:
+FP_ldexp_Epilog:
 	popw iz
 	lda xsp, (xsp + 16)
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_MulAdd starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_MulAdd_Pad:
 	.byte 0xff
 
@@ -3375,12 +3488,12 @@ FP_DP_MulAdd_Pad:
 ; forms the 106-bit product as four 32x32 partial products through FP_MulMantissa64x64,
 ; accumulating into a 16-byte stack buffer. Then it normalises by at most one bit,
 ; re-packs to 53 bits with a 4-bit shift, and rounds to nearest on the discarded byte.
-; Special flags divert to FP_Overflow_Handler. Called only by FP_DP_Add_Outer, which is
+; Special flags divert to FP_Overflow_Handler. Called only by FP_dmul, which is
 ; therefore the public double multiply.
 FP_DP_MulAdd:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE70:24)
+	jp nz, (FP_Overflow_Handler:24)
 	push xiz
 	lda xsp, (xsp - 16)
 	ld xhl, (xbc)
@@ -3463,11 +3576,11 @@ FP_DP_MulAdd_Store:
 
 ; Single-precision MULTIPLY mantissa core. Adds exponents, XORs signs, forms the 48-bit
 ; product with four hardware `mul` instructions, normalises by at most one bit and
-; rounds to nearest. Called only by FP_SP_Add_Outer.
+; rounds to nearest. Called only by FP_fmul.
 FP_SP_MulAdd:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE70:24)
+	jp nz, (FP_Overflow_Handler:24)
 	push xiz
 	ld xiz, xwa
 	ld xhl, (xbc)
@@ -3540,7 +3653,7 @@ FP_MulMantissa64x64:
 	ret
 
 ; Restoring-division engine producing FOUR quotient bits per call, used by the double
-; divide core FP_DP_Mul_Outer. Registers: XIX/XIY = running remainder, XDE/XHL =
+; divide core FP_DP_DivCore. Registers: XIX/XIY = running remainder, XDE/XHL =
 ; divisor, XIZ = quotient accumulator, C = remaining rounds. Each of the four unrolled
 ; stages shifts the remainder left one bit, trial-subtracts the divisor, and either
 ; keeps the subtraction (setting the corresponding bit of IZ) or restores it. The entry
@@ -3689,6 +3802,8 @@ FP_DP_NegNoSign:
 FP_DP_NegWithSign:
 	ld d, 0x1:opc
 	jr FP_DP_NegDispatch
+; The third entry (D = 2) the header above says is unreferenced; labelled 2026-09-25.
+FP_NegWithSign_D2:
 	ld d, 0x2:opc
 	jr __jrt_nop_03EE42
 __jrt_nop_03EE42:
@@ -3718,6 +3833,9 @@ FP_DP_Neg3Words:
 	xormi8 (xwa + 3), 0x80
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_Overflow_Handler starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_Overflow_Handler_Pad:
 	.byte 0xff
 

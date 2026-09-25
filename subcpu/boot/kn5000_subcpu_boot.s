@@ -73,9 +73,9 @@
 ; ==============================================================================
 
 ; Port Function Control Registers
-.equ P0FC, 0x7	; Port 0 Function Control
-.equ P1FC, 0xB	; Port 1 Function Control
-.equ P2FC, 0xF	; Port 2 Function Control
+.equ P0FC, 0x3	; Port 0 Function Control  [★ value corrected 2026-09-25, was 0x7: MAME tmp94c241 map]
+.equ P1FC, 0x7	; Port 1 Function Control  [★ value corrected 2026-09-25, was 0xB: MAME tmp94c241 map]
+.equ P2FC, 0xB	; Port 2 Function Control  [★ value corrected 2026-09-25, was 0xF: MAME tmp94c241 map]
 .equ P7, 0x1C	; Port 7 Data
 .equ P7CR, 0x1E	; Port 7 Control
 .equ P7FC, 0x1F	; Port 7 Function Control
@@ -101,12 +101,12 @@
 .equ INTERCPU_STATUS, 0x34
 
 ; Port 8 area (legacy names for compatibility)
-.equ SC0BUF, 0x34	; Alias for INTERCPU_STATUS
-.equ SC0CR, 0x36
-.equ SC0MOD, 0x38
-.equ SC1BUF, 0x3A
-.equ SC1CR, 0x3C
-.equ SC1MOD, 0x3E
+.equ SC0BUF, 0x34	; Alias for INTERCPU_STATUS    [★ WRONG NAME for this address on the TMP94C241: 0x34 is port D (PD); SC0BUF is 0xD0 (SER0_BUF)]
+.equ SC0CR, 0x36	;  [★ WRONG NAME for this address on the TMP94C241: 0x36 is PDCR]
+.equ SC0MOD, 0x38	;  [★ WRONG NAME for this address on the TMP94C241: 0x38 is port E (PE)]
+.equ SC1BUF, 0x3A	;  [★ WRONG NAME for this address on the TMP94C241: 0x3A is PECR]
+.equ SC1CR, 0x3C	;  [★ WRONG NAME for this address on the TMP94C241: 0x3C is port F (PF)]
+.equ SC1MOD, 0x3E	;  [★ WRONG NAME for this address on the TMP94C241: 0x3E is PFCR]
 
 ; ⚠ CORRECTED 2026-09-01.  These six names were wrong, and they were wrong about
 ; the SOUND CONTROL PINS.  The TMP94C241's port SFRs run P0..P8 at 0x00..0x20 and
@@ -132,25 +132,44 @@
 .equ PE_CR, PZCR	; superseded name
 
 ; 8-Bit Timer Registers (0x80-0x8F)
-.equ T01MOD, 0x80	; Timer 0/1 Mode (NOT watchdog - that's at 110h)
+.equ T01MOD, 0x84	; Timer 0/1 Mode (NOT watchdog - that's at 110h)  [★ value corrected 2026-09-25, was 0x80: MAME tmp94c241 map]
 				; Bit 0: PRRUN (Prescaler run)
 				; Bit 1-2: T0CLK (Timer 0 clock source)
 				; Bit 3-4: T01M (Timer 0/1 mode)
 				; Bit 5: PWM0
 				; Bit 6-7: T1CLK (Timer 1 clock source)
-.equ T01FFCR, 0x81	; Timer 0/1 Flip-Flop Control
-.equ T8RUN, 0x82	; 8-bit Timer Run Control (T0RUN, T1RUN, T2RUN, T3RUN)
-.equ TRDC, 0x83	; Timer Register Double-buffer Control
-.equ TREG0, 0x84	; Timer 0 Register (write-only)
-.equ TREG1, 0x85	; Timer 1 Register (write-only)
-.equ T23MOD, 0x88	; Timer 2/3 Mode
-.equ T23FFCR, 0x89	; Timer 2/3 Flip-Flop Control
+.equ T01FFCR, 0x81	; Timer 0/1 Flip-Flop Control    [★ WRONG NAME for this address on the TMP94C241: 0x81 is TRDC; the timers' flip-flop control is T02FFCR, 0x82]
+.equ T8RUN, 0x80	; 8-bit Timer Run Control (T0RUN, T1RUN, T2RUN, T3RUN)  [★ value corrected 2026-09-25, was 0x82: MAME tmp94c241 map]
+.equ TRDC, 0x81	; Timer Register Double-buffer Control  [★ value corrected 2026-09-25, was 0x83: MAME tmp94c241 map]
+.equ TREG0, 0x88	; Timer 0 Register (write-only)  [★ value corrected 2026-09-25, was 0x84: MAME tmp94c241 map]
+.equ TREG1, 0x89	; Timer 1 Register (write-only)  [★ value corrected 2026-09-25, was 0x85: MAME tmp94c241 map]
+.equ T23MOD, 0x85	; Timer 2/3 Mode  [★ value corrected 2026-09-25, was 0x88: MAME tmp94c241 map]
+.equ T23FFCR, 0x89	; Timer 2/3 Flip-Flop Control    [★ WRONG NAME for this address on the TMP94C241: 0x89 is TREG1; there is no separate timer-2/3 flip-flop register]
 .equ TREG2, 0x8A	; Timer 2 Register (write-only)
 .equ TREG3, 0x8B	; Timer 3 Register (write-only)
 
+; TMP94C241 SFR names this file lacked, with the values of v142/subcpu/shared/sfr_tmp94c241.s
+; and MAME's tmp94c241 map (added 2026-09-25 for the symbolic operands below).
+.equ P3FC, 0xF
+.equ PCCR, 0x32
+.equ PCFC, 0x33
+.equ PD, 0x34
+.equ PDCR, 0x36
+.equ PDFC, 0x37
+.equ PE, 0x38
+.equ PECR, 0x3A
+.equ PEFC, 0x3B
+.equ PF, 0x3C
+.equ PFCR, 0x3E
+.equ PFFC, 0x3F
+.equ T02FFCR, 0x82
+.equ T16RUN, 0x9E
+.equ T16CR, 0x9F
+.equ IIMC, 0xF6
+
 ; Legacy aliases for backward compatibility with existing code
-.equ WDMOD, 0x80	; Legacy alias - actually T01MOD, not watchdog!
-.equ WDCR, 0x81	; Legacy alias - actually T01FFCR
+.equ WDMOD, 0x110	; Legacy alias - actually T01MOD, not watchdog!  [★ value corrected 2026-09-25, was 0x80: MAME tmp94c241 map]
+.equ WDCR, 0x111	; Legacy alias - actually T01FFCR  [★ value corrected 2026-09-25, was 0x81: MAME tmp94c241 map]
 .equ REG_40, 0x40	; = P8_DATA
 .equ REG_44, 0x44	; = P8_FC_LO
 .equ REG_46, 0x46	; = P8_FC_HI
@@ -161,8 +180,8 @@
 ; 16-Bit Timer 4 Registers (0x98-0x9F)
 .equ T4MOD, 0x98	; Timer 4 Mode
 .equ T4FFCR, 0x99	; Timer 4 Flip-Flop Control
-.equ CAP4L, 0x9E	; Timer 4 Capture Low
-.equ CAP4H, 0x9F	; Timer 4 Capture High
+.equ CAP4L, 0x94	; Timer 4 Capture Low  [★ value corrected 2026-09-25, was 0x9E: MAME tmp94c241 map]
+.equ CAP4H, 0x95	; Timer 4 Capture High  [★ value corrected 2026-09-25, was 0x9F: MAME tmp94c241 map]
 
 ; Serial Channel 0 Registers (0xD0-0xD3)
 .equ SER0_BUF, 0xD0	; Serial 0 Buffer (TX/RX)
@@ -179,13 +198,13 @@
 ; (Legacy aliases removed - now using primary names SER0_CR, SER0_MOD, etc.)
 
 ; Port F area (Serial I/O pins)
-.equ PF_FC, 0xE5	; Port F Function Control
+.equ PF_FC, 0xE5	; Port F Function Control    [★ WRONG NAME for this address on the TMP94C241: 0xE5 is INTET23 (interrupt level, timers 2/3)]
 
 ; Other Port Function Controls
-.equ PORT_FC_1, 0xEC	; Port function control
-.equ PORT_FC_2, 0xED	; Port function control
-.equ PORT_FC_3, 0xF0	; Port function control
-.equ PORT_FC_4, 0xF6	; Port function control
+.equ PORT_FC_1, 0xEC	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xEC is INTETC01]
+.equ PORT_FC_2, 0xED	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xED is INTETC23]
+.equ PORT_FC_3, 0xF0	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xF0 is INTE0AD]
+.equ PORT_FC_4, 0xF6	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xF6 is IIMC]
 
 ; ==============================================================================
 ; Extended SFR (0x0100+)
@@ -398,6 +417,8 @@ ToneGen_VelCurve_Divisor:
 ; (`byte[0x01F420 + 3*mode]`), which is what fixes the record stride at 3 and
 ; the row count at 10 -- the run also self-describes, its first byte stepping
 ; 0x00,0x10,...,0x90.  The payload's copy of this table is still unlabelled.
+; ★ 2026-09-25: no longer -- the payload labels its copy ToneGen_VelCurve_ModeParams too
+; (v142/subcpu/subcpu_data_tables.s, 0x01F420).
 ToneGen_VelCurve_ModeParams:
 	.byte 0x00, 0xd0, 0x00	; mode 0: gain   0/128 (0.000x), pivot out 208, black-key trim  0
 	.byte 0x10, 0xc7, 0x03	; mode 1: gain  16/128 (0.125x), pivot out 199, black-key trim  3
@@ -405,6 +426,8 @@ ToneGen_VelCurve_ModeParams:
 	.byte 0x30, 0xb4, 0x08	; mode 3: gain  48/128 (0.375x), pivot out 180, black-key trim  8
 	.byte 0x40, 0xab, 0x0b	; mode 4: gain  64/128 (0.500x), pivot out 171, black-key trim 11
 	.byte 0x50, 0xa1, 0x0e	; mode 5: gain  80/128 (0.625x), pivot out 161, black-key trim 14
+; Row 6 is the only row the boot ROM reads: NOTE_VELOCITY_LOOKUP_CALCULATE loads it with
+; `lda xde,(ToneGen_VelCurve_ModeParams_Mode6:24)` (gain +0, pivot output +1, black-key trim +2).
 ToneGen_VelCurve_ModeParams_Mode6:	; 0xFF8040 -- the mode the boot ROM uses
 	.byte 0x60, 0x98, 0x10	; mode 6: gain  96/128 (0.750x), pivot out 152, black-key trim 16
 	.byte 0x70, 0x8f, 0x13	; mode 7: gain 112/128 (0.875x), pivot out 143, black-key trim 19
@@ -562,55 +585,55 @@ BOOT_INIT:
 	ld (266:16), 4
 
 	; Initialize port function control registers (set all pins to function mode)
-	ld (0x07:8), 0xFF:io	; Port 0 all function
-	ld (0x0B:8), 0xFF:io	; Port 1 all function
-	ld (0x0F:8), 0xFF:io	; Port 2 all function
-	ld (0x1C:8), 0xFF:io	; Port 7 data
-	ld (0x1F:8), 0x07:io	; Port 7 function
-	ld (0x1E:8), 0x78:io	; Port 7 control
-	ld (0x20:8), 0x3B:io	; Port 8 data
-	ld (0x23:8), 0x3F:io	; Port 8 function
-	ld (0x22:8), 0xFF:io	; Port 8 control
-	ld (0x28:8), 0xFF:io	; Port A data
-	ld (0x2B:8), 0x08:io	; Port A function
-	ld (0x2C:8), 0xFF:io	; Port B data
-	ld (0x2F:8), 0x1F:io	; Port B function
+	ld (P1FC:8), 0xFF:io	; Port 1 all function (★ was "Port 0": 0x07 is P1FC, port 0's FC is 0x03)
+	ld (P2FC:8), 0xFF:io	; Port 2 all function (★ was "Port 1": 0x0B is P2FC)
+	ld (P3FC:8), 0xFF:io	; Port 3 all function (★ was "Port 2": 0x0F is P3FC)
+	ld (P7:8), 0xFF:io	; Port 7 data
+	ld (P7FC:8), 0x07:io	; Port 7 function
+	ld (P7CR:8), 0x78:io	; Port 7 control
+	ld (P8:8), 0x3B:io	; Port 8 data
+	ld (P8FC:8), 0x3F:io	; Port 8 function
+	ld (P8CR:8), 0xFF:io	; Port 8 control
+	ld (PA:8), 0xFF:io	; Port A data
+	ld (PAFC:8), 0x08:io	; Port A function
+	ld (PB:8), 0xFF:io	; Port B data
+	ld (PBFC:8), 0x1F:io	; Port B function
 
 	; Initialize ports C, D, E and F (SFRs 0x30-0x3F: data, CR and FC registers;
 	; 0x30/0x33/0x32 = PC/PCFC/PCCR, so PC.0 is an input and PC.1 an output)
 	ld (0x30:8), 0x03:io
-	ld (0x33:8), 0x00:io
-	ld (0x32:8), 0x02:io
-	ld (0x34:8), 0xFF:io
-	ld (0x37:8), 0x00:io
-	ld (0x36:8), 0x63:io
-	ld (0x38:8), 0xFE:io
-	ld (0x3B:8), 0x00:io
-	ld (0x3A:8), 0x71:io
-	ld (0x3C:8), 0xFF:io
-	ld (0x3F:8), 0x70:io
-	ld (0x3E:8), 0x17:io
+	ld (PCFC:8), 0x00:io
+	ld (PCCR:8), 0x02:io
+	ld (PD:8), 0xFF:io
+	ld (PDFC:8), 0x00:io
+	ld (PDCR:8), 0x63:io
+	ld (PE:8), 0xFE:io
+	ld (PEFC:8), 0x00:io
+	ld (PECR:8), 0x71:io
+	ld (PF:8), 0xFF:io
+	ld (PFFC:8), 0x70:io
+	ld (PFCR:8), 0x17:io
 
 	; Initialize more registers
-	ld (0x44:8), 0xFF:io
-	ld (0x47:8), 0x18:io
-	ld (0x46:8), 0x07:io
-	ld (0x68:8), 0x00:io
-	ld (0x6A:8), 0xFF:io
-	ld (0x84:8), 0x1D:io
-	ld (0x85:8), 0x1D:io
-	ld (0x82:8), 0x00:io
-	ld (0x88:8), 0x0A:io
-	ld (0x89:8), 0x10:io
-	ld (0x8A:8), 0x40:io
-	ld (0x8B:8), 0x20:io
-	ld (0x81:8), 0x00:io	; Watchdog control
-	set_dd8 1, 0x80	; Watchdog mode
-	ld (0x98:8), 0x05:io
-	ld (0x99:8), 0x00:io
-	ld (0x9F:8), 0x00:io
-	ld (0x9E:8), 0x00:io
-	set_dd8 7, 0x9E
+	ld (PH:8), 0xFF:io
+	ld (PHFC:8), 0x18:io
+	ld (PHCR:8), 0x07:io
+	ld (PZ:8), 0x00:io
+	ld (PZCR:8), 0xFF:io
+	ld (T01MOD:8), 0x1D:io
+	ld (T23MOD:8), 0x1D:io
+	ld (T02FFCR:8), 0x00:io
+	ld (TREG0:8), 0x0A:io
+	ld (TREG1:8), 0x10:io
+	ld (TREG2:8), 0x40:io
+	ld (TREG3:8), 0x20:io
+	ld (TRDC:8), 0x00:io	; TRDC, timer double-buffer control (★ was "Watchdog control"; the watchdog is 0x110/0x111)
+	set_dd8 1, T8RUN	; T8RUN bit 1: run 8-bit timer 1 (★ was "Watchdog mode": 0x80 is T8RUN)
+	ld (T4MOD:8), 0x05:io
+	ld (T4FFCR:8), 0x00:io
+	ld (T16CR:8), 0x00:io
+	ld (T16RUN:8), 0x00:io
+	set_dd8 7, T16RUN
 
 	; Initialize timer registers
 	ld (323:16), 16
@@ -624,7 +647,7 @@ BOOT_INIT:
 	ld (330:16), 1
 
 	; Check bit 0 of register 0x40 for clock configuration
-	bit_dd8 0, 0x40
+	bit_dd8 0, PG
 	jr nz, BOOT_INIT__clock_alt
 	ld (334:16), 31
 	jr BOOT_INIT__clock_done
@@ -635,17 +658,17 @@ BOOT_INIT__clock_done:
 	ld (342:16), 1
 
 	; Initialize serial/DMA registers
-	ld (0xD2:8), 0x01:io
-	ld (0xD1:8), 0x00:io
+	ld (SER0_MOD:8), 0x01:io
+	ld (SER0_CR:8), 0x00:io
 	and_sd8b_im 0xD3, 0xCF
 	and_sd8b_im 0xD3, 0xF0
-	ld (0xD6:8), 0x29:io
+	ld (SER1_MOD:8), 0x29:io
 	lda_dd8l XBC, (0xD6)
 	ld a, (xbc)
 	and a, 0xFC
 	set 0, a
 	ld (xbc), a
-	ld (0xD5:8), 0x00:io
+	ld (SER1_CR:8), 0x00:io
 	and_sd8b_im 0xD7, 0xCF
 	and_sd8b_im 0xD7, 0xF0
 
@@ -667,7 +690,7 @@ BOOT_INIT__clock_done:
 	ld (329:16), 192
 
 	; Check clock config again
-	bit_dd8 0, 0x40
+	bit_dd8 0, PG
 	jr nz, BOOT_INIT__clock_alt2
 	ld (333:16), 138
 	jr BOOT_INIT__clock_done2
@@ -676,7 +699,7 @@ BOOT_INIT__clock_alt2:
 BOOT_INIT__clock_done2:
 	ld (337:16), 128
 	ld (341:16), 129
-	ld (0xF6:8), 0x00:io
+	ld (IIMC:8), 0x00:io
 
 	; Set up stack pointer
 	lda xwa, (0x0005a2:24); lda XWA, 0x0005a2 (24-bit encoding)
@@ -742,7 +765,7 @@ RESET_ENTRY:
 
 TONE_GEN_CHANNEL_INIT:
 	pushw_erp 0xFA	; Save QIZ (QIZH used as loop counter)
-	cpw (16776942:24), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
+	cpw (ToneGen_ChannelInit_Flag:24), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
 	jr nz, TONE_GEN_CHANNEL_INIT__done	; Skip if memory not 0xFFFF (already initialized)
 	ldib_erp 0xFB, 0	; Clear loop counter (QIZH = 0)
 TONE_GEN_CHANNEL_INIT__loop:
@@ -751,7 +774,7 @@ TONE_GEN_CHANNEL_INIT__loop:
 	stb_erp C, 0xFB	; C = loop counter (QIZH)
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
-	lda xde, (0xfffef0:24); XDE = pointer to channel config table
+	lda xde, (ToneGen_ChannelInit_Config:24); XDE = pointer to channel config table
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1b_erp 0xFB	; Increment loop counter
@@ -767,7 +790,7 @@ TONE_GEN_CHANNEL_INIT__done:
 
 COPY_VECTORS:
 	ld xde, 0x400	; Destination: RAM at 0x0400
-	ld xhl, 0xFF8F6C	; Source: Trampoline data in ROM
+	ld xhl, VECTOR_TRAMPOLINES	; Source: Trampoline data in ROM
 	ld xbc, 0xE1	; Count: 225 bytes (45 handlers x 5 bytes)
 	or xbc, xbc
 	jr z, COPY_VECTORS__done
@@ -788,7 +811,7 @@ COPY_VECTORS__done:
 	.org 0xFF8490 - 0xFE0000, 0xFF
 
 HALT_LOOP:
-	res_dd8 0, 0x38	; Disable serial
+	res_dd8 0, PE	; Disable serial
 HALT_LOOP__halt:
 	halt	; Halt CPU
 	jr HALT_LOOP__halt	; Loop forever if we wake (jump to halt, not start)
@@ -1026,7 +1049,7 @@ CmdHandler_Stub_Cmd6And7:
 
 INIT_DMA_SERIAL:
 	and_sd8b_im 0xE5, 0xF8	; Clear E5 bits
-	res_dd8 2, 0x80	; Watchdog mode
+	res_dd8 2, T8RUN	; Watchdog mode
 	lda_dd8l XBC, (0xEC)
 	ld a, (xbc)
 	and a, 0xF8
@@ -1042,7 +1065,7 @@ INIT_DMA_SERIAL:
 	and a, 0xF8
 	set 0, a
 	ld (xbc), a
-	ld (0x8A:8), 0x0A:io
+	ld (TREG2:8), 0x0A:io
 
 	; Set up DMA for inter-CPU latch at 0x120000
 	lda xwa, (0x120000:24)
@@ -1163,9 +1186,9 @@ SendData_Block:
 	ret z	; Yes - nothing to send
 	ld ix, 0:i3	; IX = timeout counter
 SendData_Block__wait_ready1:
-	bit_dd8 4, 0x34	; Check if other CPU ready
+	bit_dd8 4, PD	; Check if other CPU ready
 	jr z, SendData_Block__timeout1	; Not ready - check timeout
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (1302:16), 1; Set DMA sync flag
 	ld l, c	; L = byte count
 	dec 1, l	; L = count - 1
@@ -1174,14 +1197,14 @@ SendData_Block__wait_ready1:
 	ld (0x120000:24), a; Send command+count to main CPU
 	ld ix, 0:i3	; Reset timeout counter
 SendData_Block__wait_ready2:
-	bit_dd8 4, 0x34	; Check if main CPU acknowledged
+	bit_dd8 4, PD	; Check if main CPU acknowledged
 	jr nz, SendData_Block__timeout2	; Main CPU responded - check timeout
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	ldc_cr32 xde, 0x08	; DMA source = XDE
 	extpfx2 0xD9, 0x12	; Zero-extend BC (count)
 	ldc_cr16 bc, 0x48	; DMA count = BC
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	cp (1302:16), 0; Is DMA complete?
 	ret z	; Yes - return
 SendData_Block__wait_dma_done:
@@ -1199,7 +1222,7 @@ SendData_Block__timeout2:
 	inc 1, ix	; Increment counter
 	cp wa, 0xEA60	; Timeout limit
 	jr ule, SendData_Block__wait_ready2	; Keep waiting if not timed out
-	set_dd8 0, 0x34	; Set ready flag before returning
+	set_dd8 0, PD	; Set ready flag before returning
 	ret
 
 ; ------------------------------------------------------------------------------
@@ -1223,15 +1246,15 @@ SendData_Block__timeout2:
 SendCmd_E3:
 	ld bc, 0:i3	; BC = timeout counter
 SendCmd_E3__wait_ready:
-	bit_dd8 4, 0x34	; Check if main CPU ready
+	bit_dd8 4, PD	; Check if main CPU ready
 	jr z, SendCmd_E3__timeout1	; Not ready - check timeout
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (0x120000:24), 0xe3; Send E3 command to main CPU
 SendCmd_E3__wait_ack:
-	bit_dd8 4, 0x34	; Check for acknowledgment
+	bit_dd8 4, PD	; Check for acknowledgment
 	jr nz, SendCmd_E3__timeout2	; Got response - handle in timeout2
 SendCmd_E3__set_flag_ret:	; Success path AND timeout2 target
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	ret	; Done
 SendCmd_E3__timeout1:
 	ld wa, bc	; WA = timeout counter
@@ -1281,14 +1304,14 @@ SendParams_E2__timeout_wait:
 	cp (1302:16), 0; Check sync flag again
 	jr nz, SendParams_E2__timeout_wait	; Still not clear - keep waiting
 SendParams_E2__sync_cleared:
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (1302:16), 1; Set DMA sync flag
 	ld (0x120000:24), 0xe2; Send E2 command to main CPU
 	ld ix, 0:i3	; Reset timeout counter
 SendParams_E2__wait_cpu_ready:
-	bit_dd8 4, 0x34	; Check if main CPU ready
+	bit_dd8 4, PD	; Check if main CPU ready
 	jr nz, SendParams_E2__timeout2	; Not ready yet - check timeout
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	lda xhl, (1282:16); XHL = address of DMA parameter block
 	ld (xhl), xwa	; Store XWA parameter
 	ld (xhl + 4), xde	; Store XDE parameter
@@ -1297,7 +1320,7 @@ SendParams_E2__wait_cpu_ready:
 	ldw wa, 0xA	; WA = 10 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 10
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	set 7, (1278:16)	; Set DMA ready flag
 	cp (1302:16), 0; Is DMA complete?
 	ret z	; Yes - return
@@ -1310,7 +1333,7 @@ SendParams_E2__timeout2:
 	inc 1, ix	; Increment counter
 	cp hl, 0xEA60	; Timeout limit
 	jr ule, SendParams_E2__wait_cpu_ready	; Keep waiting if not timed out
-	set_dd8 0, 0x34	; Set ready flag before returning
+	set_dd8 0, PD	; Set ready flag before returning
 	ret
 
 ; ------------------------------------------------------------------------------
@@ -1354,16 +1377,16 @@ TwoPhase_Transfer__timeout_sync:
 TwoPhase_Transfer__sync_cleared:
 	ld iz, 0:i3	; Reset timeout counter
 TwoPhase_Transfer__wait_cpu_ready:
-	bit_dd8 4, 0x34	; Check if CPU ready
+	bit_dd8 4, PD	; Check if CPU ready
 	jrl z, TwoPhase_Transfer__timeout_ready1	; Not ready - timeout handler
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (1302:16), 2; Set sync flag to E1 mode
 	ld (0x120000:24), 0xe1; Send E1 command
 	ld iz, 0:i3	; Reset timeout counter
 TwoPhase_Transfer__wait_ack:
-	bit_dd8 4, 0x34	; Check for acknowledgment
+	bit_dd8 4, PD	; Check for acknowledgment
 	jrl nz, TwoPhase_Transfer__timeout_ack	; Not acknowledged - timeout handler
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	; Phase 1: Set up first DMA transfer
 	lda xhl, (1342:16); XHL = 0x053E (second buffer)
 	ld (xhl), xwa	; Store XWA to buffer
@@ -1375,7 +1398,7 @@ TwoPhase_Transfer__wait_ack:
 	ld wa, 6:i3	; WA = 6 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 6
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	; Wait for first transfer to complete (sync flag = 1)
 	cp (1302:16), 1; Is sync flag = 1?
 	jr z, TwoPhase_Transfer__phase1_done	; Yes - phase 1 complete
@@ -1400,7 +1423,7 @@ TwoPhase_Transfer__delay1_done:
 	ld wa, (xwa + 4)	; WA = count from buffer+4
 	ldc_cr16 wa, 0x48	; DMA count = WA
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	; Wait for second transfer to complete (sync flag = 0)
 	cp (1302:16), 0; Is sync flag = 0?
 	jr z, TwoPhase_Transfer__phase2_done	; Yes - phase 2 complete
@@ -1430,7 +1453,7 @@ TwoPhase_Transfer__timeout_ack:
 	inc 1, iz	; Increment counter
 	cp hl, 0xEA60	; Timeout limit
 	jrl ule, TwoPhase_Transfer__wait_ack	; Keep waiting if not timed out
-	set_dd8 0, 0x34	; Set ready flag before exit
+	set_dd8 0, PD	; Set ready flag before exit
 TwoPhase_Transfer__exit:
 	popw iz	; Restore IZ
 	ret
@@ -1469,7 +1492,7 @@ TwoPhase_Transfer__exit:
 
 InterCPU_RX_Handler:
 	push xwa
-	bit_dd8 2, 0x34	; Check serial status
+	bit_dd8 2, PD	; Check serial status
 	jr nz, InterCPU_RX_Handler__exit
 	ld a, (0x120000:24); Read command from main CPU
 	ld (1306:16), a; Save received byte
@@ -1514,7 +1537,7 @@ InterCPU_RX_Handler__default_cmd:
 InterCPU_RX_Handler__start_dma:
 	ld (256:16), 10; Trigger DMA
 InterCPU_RX_Handler__clear_flag:
-	res_dd8 1, 0x34
+	res_dd8 1, PD
 InterCPU_RX_Handler__exit:
 	pop xwa
 	reti
@@ -1536,7 +1559,7 @@ InterCPU_RX_Handler__exit:
 	.org 0xFF889A - 0xFE0000, 0xFF
 
 DMA_Complete_Handler:
-	res_dd8 2, 0x80	; Clear watchdog bit
+	res_dd8 2, T8RUN	; Clear watchdog bit
 	cp (1302:16), 1; State 1?
 	jr nz, DMA_Complete_Handler__not_state1
 	ld (1302:16), 0; -> State 0
@@ -1600,7 +1623,7 @@ CMD_Dispatch_Handler:
 	ld a, c
 	extz wa
 	sla wa, 2	; index * 4
-	lda xbc, (0xff8000:24); XBC = CmdHandler_Table
+	lda xbc, (CmdHandler_Table:24); XBC = CmdHandler_Table
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
@@ -1620,7 +1643,7 @@ CMD_Dispatch_Handler__state3:
 	; State 3: Set completion flags
 	ld (1308:16), 255
 	ld (1304:16), 0
-	set_dd8 1, 0x34
+	set_dd8 1, PD
 	set 7, (1364:16)
 	jr CMD_Dispatch_Handler__check_watchdog
 CMD_Dispatch_Handler__state4:
@@ -1628,14 +1651,14 @@ CMD_Dispatch_Handler__state4:
 	ld (1304:16), 0
 	res 7, (1278:16)
 CMD_Dispatch_Handler__set_flag_exit:
-	set_dd8 1, 0x34
+	set_dd8 1, PD
 CMD_Dispatch_Handler__check_watchdog:
-	bit_dd8 2, 0x80
+	bit_dd8 2, T8RUN
 	jr z, CMD_Dispatch_Handler__exit
-	res_dd8 2, 0x80
+	res_dd8 2, T8RUN
 	nop
 	nop
-	set_dd8 2, 0x80
+	set_dd8 2, T8RUN
 CMD_Dispatch_Handler__exit:
 	pop xwa
 	pop xbc
@@ -1780,7 +1803,7 @@ MEM_TEST_ROUTINE__next_region:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
-	lda xbc, (0xff8020:24); XBC = MemTest_RegionTable
+	lda xbc, (MemTest_RegionTable:24); XBC = MemTest_RegionTable
 	lda_dri XDE, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
@@ -2195,16 +2218,16 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	; Calculate velocity from tables
 	ld c, e	; C = velocity index
 	extz bc	; Zero-extend BC
-	lda xde, (0xff804c:24); XDE = ToneGen_Velocity_Input_Curve
+	lda xde, (ToneGen_Velocity_Input_Curve:24); XDE = ToneGen_Velocity_Input_Curve
 	ld xhl, 0:i3	; Clear XHL
 	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
-	ld bc, (0xff802a:24); BC = ToneGen_VelCurve_Pivot (77)
+	ld bc, (ToneGen_VelCurve_Pivot:24); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
-	lda xde, (0xff8040:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
+	lda xde, (ToneGen_VelCurve_ModeParams_Mode6:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
 	muls xbc, xhl	; XBC = BC * HL (signed)
-	ld hl, (0xff802c:24); HL = ToneGen_VelCurve_Divisor (128)
+	ld hl, (ToneGen_VelCurve_Divisor:24); HL = ToneGen_VelCurve_Divisor (128)
 	exts xbc	; Sign-extend XBC
 	divs xbc, xhl	; XBC = XBC / HL (signed)
 	ld hl, bc	; HL = quotient
@@ -2249,7 +2272,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_max:
 NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
-	lda xde, (0xff814c:24); XDE = ToneGen_Velocity_Output_Curve
+	lda xde, (ToneGen_Velocity_Output_Curve:24); XDE = ToneGen_Velocity_Output_Curve
 	ldb_sri C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret
@@ -2308,11 +2331,11 @@ __jrt_nop_FF8CA9:
 
 	; Call HARDWARE_PARAM_BLOCK_WRITE with ToneGen_ProbeVoice_ParamBlock (0xFF824C)
 	ld wa, 0:i3
-	ld xbc, 0xFF824C	; XBC = ToneGen_ProbeVoice_ParamBlock
+	ld xbc, ToneGen_ProbeVoice_ParamBlock	; XBC = ToneGen_ProbeVoice_ParamBlock
 	calr HARDWARE_PARAM_BLOCK_WRITE	; Write parameters to hardware
 
 	; Read back and verify
-	ld bc, (0xff824c:24); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
+	ld bc, (ToneGen_ProbeVoice_ParamBlock:24); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
 	ld wa, 0:i3
 	calr HARDWARE_VERIFY_WRITE	; Call verification routine
 
@@ -2831,18 +2854,25 @@ VECTOR_TRAMPOLINES:
 ; Debug/Utility Routines (0xFFFE80 - 0xFFFED1)
 ;
 ; These appear to be debug or diagnostic routines, possibly for serial output.
-; DEBUG_OUTPUT_BYTE_HEX: Wrapper that calls SUB_FEC1
-; HEX_BYTE_TO_ASCII: Output hex byte (calls NIBBLE_TO_HEX_ASCII for nibble conversion, SUB_FEC1 for output)
+; DEBUG_OUTPUT_BYTE_HEX: Wrapper that calls DEBUG_OUTPUT_CHAR_STUB
+; HEX_BYTE_TO_ASCII: Output hex byte (calls NIBBLE_TO_HEX_ASCII for nibble conversion, DEBUG_OUTPUT_CHAR_STUB for output)
 ; DEBUG_OUTPUT_STRING: Output null-terminated string from (XIX)
 ; NIBBLE_TO_HEX_ASCII: Convert nibble (0-15) to ASCII hex character ('0'-'9', 'a'-'f')
-; SUB_FEC1: Output character (loads IZ with 0xFE00, placeholder NOPs)
+; DEBUG_OUTPUT_CHAR_STUB: Output character (loads IZ with 0xFE00, placeholder NOPs)
+;
+; Evidence of use (2026-09-25): the v1.42 sub-CPU PAYLOAD calls two of these across the ROM
+; boundary -- Debug_Print_String (payload 0x038365) does `call 0xFFFEA1` (DEBUG_OUTPUT_STRING)
+; and Debug_Print_Byte / Debug_Print_Word do `call 0xFFFE86` (HEX_BYTE_TO_ASCII, which prints
+; A as two hex digits).  The payload's EFF/DSP layer traces through them ("EFF %d mute",
+; "DSP %d anti reset", ...).  Since DEBUG_OUTPUT_CHAR_STUB as dumped writes nothing (IZ load + NOPs + RET),
+; those traces are silent with this boot ROM.
 ; ==============================================================================
 
 	.org 0xFFFE80 - 0xFE0000, 0xFF
 
 DEBUG_OUTPUT_BYTE_HEX:
 	push xiz
-	calr SUB_FEC1
+	calr DEBUG_OUTPUT_CHAR_STUB
 	pop xiz
 	ret
 
@@ -2852,12 +2882,12 @@ HEX_BYTE_TO_ASCII:
 	srl a, 4	; A >>= 4 (high nibble)
 	calr NIBBLE_TO_HEX_ASCII	; Convert to hex char
 	pushw wa
-	calr SUB_FEC1	; Output character
+	calr DEBUG_OUTPUT_CHAR_STUB	; Output character
 	popw wa
 	ld a, w	; Restore original A
 	and a, 0xF	; Mask low nibble
 	calr NIBBLE_TO_HEX_ASCII	; Convert to hex char
-	calr SUB_FEC1	; Output character
+	calr DEBUG_OUTPUT_CHAR_STUB	; Output character
 	pop xiz
 	ret
 
@@ -2869,7 +2899,7 @@ DEBUG_OUTPUT_STRING__loop:
 	cp a, 0:i3	; Check for null terminator
 	jr z, DEBUG_OUTPUT_STRING__done	; If null, exit
 	push xix
-	calr SUB_FEC1	; Output character
+	calr DEBUG_OUTPUT_CHAR_STUB	; Output character
 	pop xix
 	jr DEBUG_OUTPUT_STRING__loop	; Continue loop
 DEBUG_OUTPUT_STRING__done:
@@ -2885,7 +2915,11 @@ NIBBLE_TO_HEX_ASCII__letter:
 	add a, 0x57	; 'a' - 10 = 0x57
 	ret
 
-SUB_FEC1:
+; The per-character sink DEBUG_OUTPUT_STRING calls.  In this ROM it outputs nothing: it loads
+; IZ = 0xFE00 and burns twelve `nop`s before `ret` -- a stubbed-out debug port.  The v1.42 payload
+; reaches it through BootROM_DEBUG_OUTPUT_STRING, so its Debug_Print_* calls are no-ops.
+; ★ Renamed 2026-09-25 from SUB_FEC1 (its address, 0xFFFEC1).
+DEBUG_OUTPUT_CHAR_STUB:
 	ldw iz, 0xFE00	; Output port address (placeholder)
 	nop	; Timing/placeholder
 	nop
@@ -2929,15 +2963,25 @@ RESET_HANDLER:
 	.org 0xFFFEE5 - 0xFE0000, 0xFF
 
 	.fill 9, 1, 0xff	; 0xFFFEE5-0xFFFEED
+; u16 channel-init flag: TONE_GEN_CHANNEL_INIT (0xFF8437) runs its 4-channel loop only when
+; this word is 0xFFFF (`cpw (this:24),0xFFFF / jr nz`).  The dumped value is 0x0000, so the
+; loop is skipped.  The v1.42 payload reads the same cell as a byte, BootROM_ChannelInitFlag
+; (kn5000_subprogram_v142.s, DSP_Init_Channels_FromBootTable).
+ToneGen_ChannelInit_Flag:
 	.byte 0x00, 0x00	; 0xFFFEEE-0xFFFEEF
 
 ; ==============================================================================
 ; Reserved data area (0xFFFEF0 - 0xFFFEFF)
 ; Appears to be some kind of configuration or padding data
+; ★ 2026-09-25: it is TONE_GEN_CHANNEL_INIT's channel table -- 4 x u32, entry ch loaded
+; `lda xde,(ToneGen_ChannelInit_Config:24) / ld_sril3 XBC,(XDE+BC)` with BC = 4*ch and passed to
+; TONE_GEN_WRITE; the v1.42 payload addresses it as BootROM_ChannelConfigTable.  All four entries
+; are 0x00000400 in the dump.
 ; ==============================================================================
 
 	.org 0xFFFEF0 - 0xFE0000, 0xFF
 
+ToneGen_ChannelInit_Config:
 	.byte 0x00, 0x04, 0x00, 0x00	; 0xFFFEF0-0xFFFEF3
 	.byte 0x00, 0x04, 0x00, 0x00	; 0xFFFEF4-0xFFFEF7
 	.byte 0x00, 0x04, 0x00, 0x00	; 0xFFFEF8-0xFFFEFB
@@ -2952,7 +2996,7 @@ RESET_HANDLER:
 	.org 0xFFFF00 - 0xFE0000, 0xFF
 
 VECTOR_TABLE:
-	.long 0xFFFEe0	; Reset - points to ROM handler at 0xFFFEE0
+	.long RESET_HANDLER	; Reset - points to ROM handler at 0xFFFEE0
 	.long 0x405	; Handler 1 at 0x0405
 	.long 0x40A	; Handler 2 at 0x040A
 	.long 0x40F	; Handler 3 at 0x040F
