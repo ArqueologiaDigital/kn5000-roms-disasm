@@ -2837,9 +2837,16 @@ UI_PostDialEnable:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0006f
 	jp ApPostEvent
-UI_DialRangeData:
-	.byte 0xf2, 0x94, 0x74, 0x02, 0x41, 0x0e, 0xf2, 0x95
-	.byte 0x74, 0x02, 0x41, 0x0e
+; Two setters, `ld (RAM),a; ret`, for RAM 0x27494 and 0x27495.  Nothing
+; calls or points at either: no 24- or 32-bit value in the ROM and no
+; jr/jrl/calr displacement reaches 0xF9912C or 0xF99132.  (Formerly UI_DialRangeData,
+; held as `.byte`; it is not data.)
+UI_StoreA_Ram27494:
+	ld (0x027494:24), a
+	ret
+UI_StoreA_Ram27495:
+	ld (0x027495:24), a
+	ret
 
 UI_PostEvent_0x6E:
 	ld e, a
