@@ -924,10 +924,16 @@ def apply_s(v, apply):
 CMARK = '; [nakarest] '
 
 
+def ascii_only(t):
+    """Header text quotes ROM strings; keep the .s files ASCII (a high byte
+    makes ugrep treat a whole source as binary): non-ASCII -> \\xNN."""
+    return ''.join(ch if ord(ch) < 0x80 else '\\x%02X' % ord(ch) for ch in t)
+
+
 def piece_lines(p, blob):
     out = []
     if p.header and p.compact:
-        parts = p.header.split('\n')
+        parts = ascii_only(p.header).split('\n')
         out.append(CMARK + parts[0])
         if len(parts) > 2:                      # an admission line, never wrapped
             out.append(CMARK + parts[1])
@@ -1113,12 +1119,17 @@ CLS_PROC = {k: v + 'Proc' for k, v in CLS_NAME.items()}
 
 
 def _reg_short(r):
+    if r['cls'] not in CLS_NAME:
+        return r['desc']
     return ('%s slot 0x%X (table 0x%06X, %d entries, %s)'
             % (CLS_NAME[r['cls']], r['slot'], r['table'], r['count'], r['init']))
 
 
 def _reg_full(m, r):
     """The file-level note for one registered table."""
+    if r['cls'] not in CLS_NAME:
+        return ('%s: not registered with RegObjTabl; found from its readers, named in '
+                'each piece header below.' % r['desc'])
     if r.get('count_at') is not None:
         t = ('%s slot 0x%X: RegObjTable 0x%X, %s, 0x%06X, 0x%06X, 0x%X in %s (%s) -- '
              'the count, %d, is the word at 0x%06X; RegisterObjectTable stores '
@@ -1197,8 +1208,9 @@ def _group_text(m, kind, r, ks, starts):
             fl = m.text_field.get(a, [])
             who = ', '.join(sorted({'%s.%s of element %d' % (cn, fn, k) for cn, fn, k in fl}))
             shown.append('"%s" (%s)' % (m.string_at(a, 48), who))
-        return ('text the records point at, in %s: %s.'
-                % (_reg_short(r), '; '.join(shown[:4]) + ('; ...' if len(shown) > 4 else '')))
+        return ('%d text%s the records point at (%s): %s.'
+                % (len(shown), 's' if len(shown) > 1 else '', _reg_short(r),
+                   '; '.join(shown[:4]) + ('; ...' if len(shown) > 4 else '')))
     if kind in ('classdef', 'classname', 'classsig', 'propnames'):
         names = []
         for k in ks:
@@ -1234,6 +1246,37 @@ def _group_text(m, kind, r, ks, starts):
                 % ('s' if len(ks) > 1 else '', 'ies' if len(ks) > 1 else 'y', _ranges(ks),
                    _reg_short(r), ' (names for %s slot 0x%X)' % (CLS_NAME[par['cls']], par['slot'])
                    if par else '', shown))
+    if kind == 'msgcat':
+        return ('the IvMesage message catalog itself (0x%06X): %d records x 14 bytes '
+                '{u16 kind, u32 code 0x00NNFFFF (NN = the error number shown; 0xFFFFFFFF '
+                'none), u32 header table, u32 text table} and a terminator record whose '
+                'pointers are 0.  Readers (ui/drawbar_panel_ui.s): IvMesageProc on init '
+                '(0x1C00001) and IvMessage_SelectionChange / LanguageCheckReturn load +0 '
+                'with index*14 (`muls wa, 0xe`, positional name ..._0x118) and send '
+                '0x1C00001 to the window it selects; MessageText (event 0x1E0009F) returns '
+                '+10 (..._0x122); CheckMsg_IncrementCheck stops at a record whose +10 '
+                'is 0; IvMessage_Paint compares +0 with 5.' % (r['table'], r['count']))
+    if kind == 'msgwin':
+        return ('the 6 window object ids the catalog\'s kind field selects (`sla wa, 2` '
+                'from ..._0x586): 0x00EE0014 NoMessage, 0x00EE0002 Completed, 0x00EE0005 '
+                'Reminder, 0x00EE0009 Error, 0x00EE000D Other, 0x00EE0016 PleaseWait -- '
+                'elements of Viewable slot 0xEE (InitializeMurai), all class Window.')
+    if kind == 'msglang':
+        uses = m.msg_langtab.get(starts[0], [])
+        return ('per-language string table%s (6 pointers each: English, German, French, '
+                'Spanish, Italian, Indonesian -- the order of the header table\'s own '
+                'strings "English Header" ... "Indonesian Header") used as the %s of '
+                'catalog record%s %s.' % (
+                    's' if len(starts) > 1 else '',
+                    '/'.join(sorted({role for a in starts for _, role in m.msg_langtab.get(a, [])})),
+                    's' if len({k for a in starts for k, _ in m.msg_langtab.get(a, [])}) > 1 else '',
+                    _ranges({k for a in starts for k, _ in m.msg_langtab.get(a, [])})))
+    if kind == 'msgstr':
+        langs = []
+        for (t, i), a in zip(ks, starts):
+            langs.append('%s "%s"' % (m.MSG_LANGS[i], m.string_at(a, 28).split('\n')[0]))
+        return ('message text%s of the catalog: %s.' % (
+            's' if len(starts) > 1 else '', '; '.join(langs[:4]) + ('; ...' if len(langs) > 4 else '')))
     if kind == 'table':
         if r['cls'] == 0x1600004:
             return 'the table itself: %s, %d class definitions x 24 bytes.' % (_reg_short(r), r['count'])
@@ -1250,6 +1293,67 @@ def _objects(m, base, lo, hi):
     return out
 
 
+_REFSV = {}
+
+
+def refs(v):
+    if v not in _REFSV:
+        sys.path.insert(0, os.path.join(ROOT, 'scripts', 'analysis'))
+        import nakarest_refs as NR
+        _REFSV[v] = NR.Refs(v)
+    return _REFSV[v]
+
+
+def first_string(m, a):
+    t = m.string_at(a, 60).split('\n')[0]
+    return t[:48]
+
+
+def _uses_text(uses, limit=4):
+    by = {}
+    for a, kind, f, ln, text, routine in uses:
+        key = routine or f
+        if key not in by:
+            by[key] = (f, ' '.join(text.split())[:60])
+    items = sorted(by.items())
+    out = ['%s (%s: `%s`)' % (k, f, t) for k, (f, t) in items[:limit]]
+    if len(items) > limit:
+        out.append('%d more' % (len(items) - limit))
+    return ', '.join(out)
+
+
+def reader_chain(v, lo, hi):
+    """(text, is_text): the symbolic/numeric source references into [lo, hi),
+    and the data words below 0xF00000 pointing into it with, one hop back,
+    the source references to the object holding each word."""
+    R = refs(v)
+    parts = []
+    uses = R.in_range(lo, hi)
+    if uses:
+        parts.append('source references ' + _uses_text(uses))
+    dw = R.data_refs(lo, hi, max_word_addr=0xF00000)
+    if dw:
+        conts = {}
+        for a, val, nm in dw:
+            base_nm = nm.split('+')[0]
+            conts.setdefault(base_nm, []).append((a, val))
+        cs = []
+        for nm, words in list(conts.items())[:3]:
+            ca = R.sym.get(nm)
+            hop = R.in_range(ca, ca + 1) if ca is not None else []
+            cs.append('%d data word%s in %s (at %s)%s' % (
+                len(words), 's' if len(words) > 1 else '', nm,
+                ', '.join('0x%06X' % a for a, _ in words[:3]),
+                ', which is read by ' + _uses_text(hop, 2) if hop else ''))
+        if len(conts) > 3:
+            cs.append('words in %d more objects' % (len(conts) - 3))
+        parts.append('; '.join(cs))
+    rom = R.rom[lo - 0xE00000:hi - 0xE00000]
+    pr = sum(1 for b in rom if 32 <= b < 127 or b in (0, 0x0A, 0x0D, 0xFF))
+    is_text = len(rom) > 0 and pr / len(rom) >= 0.9 and sum(1 for b in rom if 32 <= b < 127) >= len(rom) / 2
+    return '; '.join(parts), is_text
+
+
 def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
     """Pieces for the blob span [S0, S1): cut at the start of every run of
     objects of one (kind, slot) and at every existing label; each piece says
@@ -1262,7 +1366,8 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
             continue
         # a record's texts belong to its run (records and the strings they
         # point at alternate); so do a class table's definitions
-        key = ({'text': 'record'}.get(kind, kind), r['slot'])
+        key = ({'text': 'record', 'msglang': 'msg', 'msgstr': 'msg', 'msgcat': 'msgc',
+                'msgwin': 'msgc'}.get(kind, kind), r['slot'])
         if key != prev:
             cuts.add(off)
         prev = key
@@ -1274,13 +1379,17 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
         # the object this piece starts inside, if any (latest start before c
         # whose extent reaches past c)
         cont = [o for o in objs if o[0] < c < o[1]]
-        groups = []
+        # one sentence per (kind, table): records and their texts interleave,
+        # and a piece may hold hundreds of them
+        groups, gi = [], {}
         for off, end, kind, r, k in inside:
             used.setdefault(r['slot'], r)
-            if groups and groups[-1][0] == kind and groups[-1][1] is r:
-                groups[-1][2].append(k)
-                groups[-1][3].append(base + off)
+            key = (kind, id(r))
+            if key in gi:
+                groups[gi[key]][2].append(k)
+                groups[gi[key]][3].append(base + off)
             else:
+                gi[key] = len(groups)
                 groups.append([kind, r, [k], [base + off]])
         labs = labels_at.get(c, [])
         name = labs[0] if labs else '%s+0x%X' % (blob, c)
@@ -1295,10 +1404,22 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
         covered = max([o[1] for o in cont], default=c)
         admit = None
         if first > covered:
-            # kept on ONE line: the census looks for the phrase, and a wrap
-            # between its words would hide the admission
-            admit = ('purpose not established: %d bytes at 0x%06X that no registered '
-                     'NAKA table points into' % (first - covered, base + covered))
+            chain, is_text = reader_chain(m.v, base + covered, base + first)
+            n = first - covered
+            if chain and is_text:
+                paras.append('Text (%d B at 0x%06X), first string "%s"; no registered NAKA '
+                             'table points into it; reached through %s.'
+                             % (n, base + covered, first_string(m, base + covered), chain))
+            elif chain:
+                # kept on ONE line: the census looks for the phrase, and a
+                # wrap between its words would hide the admission
+                admit = ('purpose not established: layout of %d B at 0x%06X not derived; '
+                         'readers below' % (n, base + covered))
+                paras.append('Readers: %s.' % chain)
+            else:
+                admit = ('purpose not established: %d B at 0x%06X that no registered NAKA '
+                         'table, symbol, 24/32-bit literal or data word points into'
+                         % (n, base + covered))
         for kind, r, ks, starts in groups:
             paras.append(_group_text(m, kind, r, ks, starts))
         if len(labs) > 1:

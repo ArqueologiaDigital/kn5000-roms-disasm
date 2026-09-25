@@ -39,7 +39,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_Block012  +0x0..+0x14 (0xeaccda, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xeaccda that no registered NAKA table points into
+; [nakarest] purpose not established: 20 B at 0xeaccda that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 NakaData_Block012:
 	.incbin "includes/generated/naka_block_012.bin", 0x0, 0x14
 ; [nakarest] naka_block_012+0x14  +0x14..+0x764 (0xeaccee, 1872 B)

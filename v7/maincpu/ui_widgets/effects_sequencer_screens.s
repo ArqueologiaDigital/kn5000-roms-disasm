@@ -463,989 +463,352 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] Naka_ReverbScreen_EmptyStr  +0x0..+0x2 (0xe27fa4, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe27fa4 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe27fa4 not derived; readers below
+; [nakarest] Readers: 1 data word in NakaData_SeqChannels (at 0xeee2b8).
 Naka_ReverbScreen_EmptyStr:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x0, 0x2
 ; [nakarest] naka_effects_seq+0x2  +0x2..+0x1bc (0xe27fa6, 442 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xa (table 0xe2e624, 12 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xa
-; [nakarest] (table 0xe2e624, 12 entries, InitializeKubo): "REVERB" (TtlScreen.title of element
-; [nakarest] 0). widget records, elements 1-4 of Viewable slot 0xa (table 0xe2e624, 12 entries,
-; [nakarest] InitializeKubo): AcIndexWideES (42 B) x3, Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0xa (table 0xe2e624, 12 entries, InitializeKubo): "TYPE"
-; [nakarest] (Label.str of element 4). widget record, element 5 of Viewable slot 0xa (table
-; [nakarest] 0xe2e624, 12 entries, InitializeKubo): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xa (table 0xe2e624, 12 entries, InitializeKubo): "PARAMETER"
-; [nakarest] (Label.str of element 5). widget record, element 6 of Viewable slot 0xa (table
-; [nakarest] 0xe2e624, 12 entries, InitializeKubo): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xa (table 0xe2e624, 12 entries, InitializeKubo): "VALUE" (Label.str
-; [nakarest] of element 6). widget records, elements 7-9 of Viewable slot 0xa (table 0xe2e624,
-; [nakarest] 12 entries, InitializeKubo): EffectBox (38 B), Box (26 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xa (table 0xe2e624, 12 entries,
-; [nakarest] InitializeKubo): "TYPE:" (Label.str of element 9). widget records, elements 10-11
-; [nakarest] of Viewable slot 0xa (table 0xe2e624, 12 entries, InitializeKubo): IvIntEasySet (24
-; [nakarest] B), IvSdrev (22 B).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0xa (table 0xe2e624, 12 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B) x3, Label (32 B) x4,
+; [nakarest] EffectBox (38 B), Box (26 B), IvIntEasySet (24 B), IvSdrev (22 B). 5 texts the
+; [nakarest] records point at (Viewable slot 0xa (table 0xe2e624, 12 entries, InitializeKubo)):
+; [nakarest] "REVERB" (TtlScreen.title of element 0); "TYPE" (Label.str of element 4);
+; [nakarest] "PARAMETER" (Label.str of element 5); "VALUE" (Label.str of element 6); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x2, 0x1BA
 ; [nakarest] naka_effects_seq+0x1bc  +0x1bc..+0x37c (0xe28160, 448 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb (table 0xe2e658, 12 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xb
-; [nakarest] (table 0xe2e658, 12 entries, InitializeKubo): "DSP EFFECT" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0xb (table 0xe2e658, 12
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xb (table 0xe2e658, 12 entries, InitializeKubo): "TYPE :" (Label.str of element
-; [nakarest] 1). widget records, elements 2-3 of Viewable slot 0xb (table 0xe2e658, 12 entries,
-; [nakarest] InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xb (table 0xe2e658, 12 entries, InitializeKubo): "TYPE" (Label.str
-; [nakarest] of element 3). widget records, elements 4-6 of Viewable slot 0xb (table 0xe2e658,
-; [nakarest] 12 entries, InitializeKubo): AcIndexWideES (42 B) x2, Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xb (table 0xe2e658, 12 entries,
-; [nakarest] InitializeKubo): "PARAMETER" (Label.str of element 6). widget record, element 7 of
-; [nakarest] Viewable slot 0xb (table 0xe2e658, 12 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xb (table 0xe2e658, 12 entries,
-; [nakarest] InitializeKubo): "VALUE" (Label.str of element 7). widget records, elements 8-11 of
-; [nakarest] Viewable slot 0xb (table 0xe2e658, 12 entries, InitializeKubo): EffectBox (38 B),
-; [nakarest] Box (26 B), IvIntEasySet (24 B), IvSddsp (22 B).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0xb (table 0xe2e658, 12 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B) x4, AcIndexWideES (42 B) x3,
+; [nakarest] EffectBox (38 B), Box (26 B), IvIntEasySet (24 B), IvSddsp (22 B). 5 texts the
+; [nakarest] records point at (Viewable slot 0xb (table 0xe2e658, 12 entries, InitializeKubo)):
+; [nakarest] "DSP EFFECT" (TtlScreen.title of element 0); "TYPE :" (Label.str of element 1);
+; [nakarest] "TYPE" (Label.str of element 3); "PARAMETER" (Label.str of element 6); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x1BC, 0x1C0
 ; [nakarest] naka_effects_seq+0x37c  +0x37c..+0x8e4 (0xe28320, 1384 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "EQUALIZER" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-9 of Viewable slot 0xc (table 0xe2e68c, 37
-; [nakarest] entries, InitializeKubo): AcIndexEditSw (40 B) x8, Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): "FREQ"
-; [nakarest] (Label.str of element 9). widget record, element 10 of Viewable slot 0xc (table
-; [nakarest] 0xe2e68c, 37 entries, InitializeKubo): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): "GAIN" (Label.str
-; [nakarest] of element 10). widget record, element 11 of Viewable slot 0xc (table 0xe2e68c, 37
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xc (table 0xe2e68c, 37 entries, InitializeKubo): "FREQ" (Label.str of element 11).
-; [nakarest] widget record, element 12 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "FREQ" (Label.str of element 12).
-; [nakarest] widget record, element 13 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "FREQ" (Label.str of element 13).
-; [nakarest] widget record, element 14 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "GAIN" (Label.str of element 14).
-; [nakarest] widget record, element 15 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "GAIN" (Label.str of element 15).
-; [nakarest] widget record, element 16 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "GAIN" (Label.str of element 16).
-; [nakarest] widget record, element 17 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "LOW" (Label.str of element 17).
-; [nakarest] widget record, element 18 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "MID-LOW" (Label.str of element 18).
-; [nakarest] widget record, element 19 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "MID-HIGH" (Label.str of element 19).
-; [nakarest] widget record, element 20 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xc
-; [nakarest] (table 0xe2e68c, 37 entries, InitializeKubo): "HIGH" (Label.str of element 20).
-; [nakarest] widget records, elements 21-27 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): Line (26 B) x4, EqualizerBox (34 B), Box (26 B), Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): "FREQ(Hz)" (Label.str of element 27). widget record, element 28 of
-; [nakarest] Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): "GAIN(dB)" (Label.str of element 28). widget record, element 29 of
-; [nakarest] Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): "LOW" (Label.str of element 29). widget record, element 30 of
-; [nakarest] Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): "MID-LOW" (Label.str of element 30). widget record, element 31 of
-; [nakarest] Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): "MID-HIGH" (Label.str of element 31). widget record, element 32 of
-; [nakarest] Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xc (table 0xe2e68c, 37 entries,
-; [nakarest] InitializeKubo): "HIGH" (Label.str of element 32). widget records, elements 33-35
-; [nakarest] of Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo): Line (26 B) x2,
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xc (table 0xe2e68c, 37
-; [nakarest] entries, InitializeKubo): "FREQ" (Label.str of element 35). widget record, element
-; [nakarest] 36 of Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo):
-; [nakarest] EqOnOffFuncToggle (44 B). text the records point at, in Viewable slot 0xc (table
-; [nakarest] 0xe2e68c, 37 entries, InitializeKubo): "EQ:OFF" (EqOnOffFuncToggle.stroff of
-; [nakarest] element 36); "EQ:ON" (EqOnOffFuncToggle.stron of element 36).
+; [nakarest] widget records, elements 0-36 of Viewable slot 0xc (table 0xe2e68c, 37 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexEditSw (40 B) x8, Label (32 B) x19, Line
+; [nakarest] (26 B) x6, EqualizerBox (34 B), Box (26 B), EqOnOffFuncToggle (44 B). 22 texts the
+; [nakarest] records point at (Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo)):
+; [nakarest] "EQUALIZER" (TtlScreen.title of element 0); "FREQ" (Label.str of element 9); "GAIN"
+; [nakarest] (Label.str of element 10); "FREQ" (Label.str of element 11); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x37C, 0x568
 ; [nakarest] naka_effects_seq+0x8e4  +0x8e4..+0xa98 (0xe28888, 436 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xe (table 0xe2e724, 12 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xe
-; [nakarest] (table 0xe2e724, 12 entries, InitializeKubo): "ACOUSTIC ILLUSION" (TtlScreen.title
-; [nakarest] of element 0). widget records, elements 1-3 of Viewable slot 0xe (table 0xe2e724,
-; [nakarest] 12 entries, InitializeKubo): AcIndexWideES (42 B) x2, Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xe (table 0xe2e724, 12 entries,
-; [nakarest] InitializeKubo): "TYPE" (Label.str of element 3). widget record, element 4 of
-; [nakarest] Viewable slot 0xe (table 0xe2e724, 12 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xe (table 0xe2e724, 12 entries,
-; [nakarest] InitializeKubo): "LEVEL" (Label.str of element 4). widget records, elements 5-8 of
-; [nakarest] Viewable slot 0xe (table 0xe2e724, 12 entries, InitializeKubo): AccIll (32 B), Box
-; [nakarest] (26 B) x2, Label (32 B). text the records point at, in Viewable slot 0xe (table
-; [nakarest] 0xe2e724, 12 entries, InitializeKubo): "ILLUSION LEVEL:" (Label.str of element 8).
-; [nakarest] widget record, element 9 of Viewable slot 0xe (table 0xe2e724, 12 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0xe
-; [nakarest] (table 0xe2e724, 12 entries, InitializeKubo): "TYPE:" (Label.str of element 9).
-; [nakarest] widget records, elements 10-11 of Viewable slot 0xe (table 0xe2e724, 12 entries,
-; [nakarest] InitializeKubo): IvSdacc (22 B), IvIntEasySet (24 B).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0xe (table 0xe2e724, 12 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B) x2, Label (32 B) x4, AccIll
+; [nakarest] (32 B), Box (26 B) x2, IvSdacc (22 B), IvIntEasySet (24 B). 5 texts the records
+; [nakarest] point at (Viewable slot 0xe (table 0xe2e724, 12 entries, InitializeKubo)):
+; [nakarest] "ACOUSTIC ILLUSION" (TtlScreen.title of element 0); "TYPE" (Label.str of element
+; [nakarest] 3); "LEVEL" (Label.str of element 4); "ILLUSION LEVEL:" (Label.str of element 8);
+; [nakarest] ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x8E4, 0x1B4
 ; [nakarest] naka_effects_seq+0xa98  +0xa98..+0xcb0 (0xe28a3c, 536 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x80 (table 0xe2e758, 12 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x80
-; [nakarest] (table 0xe2e758, 12 entries, InitializeKubo): "SEQUENCER MENU" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x80 (table 0xe2e758, 12
-; [nakarest] entries, InitializeKubo): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x80 (table 0xe2e758, 12 entries, InitializeKubo): "CREATE"
-; [nakarest] (AcTitleMenu.str of element 1). widget record, element 2 of Viewable slot 0x80
-; [nakarest] (table 0xe2e758, 12 entries, InitializeKubo): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x80 (table 0xe2e758, 12 entries, InitializeKubo): "SONG"
-; [nakarest] (Label.str of element 2). widget record, element 3 of Viewable slot 0x80 (table
-; [nakarest] 0xe2e758, 12 entries, InitializeKubo): AcModeMenu (54 B). text the records point
-; [nakarest] at, in Viewable slot 0x80 (table 0xe2e758, 12 entries, InitializeKubo): "EDIT"
-; [nakarest] (AcModeMenu.str of element 3). widget records, elements 4-11 of Viewable slot 0x80
-; [nakarest] (table 0xe2e758, 12 entries, InitializeKubo): IvExitMode (26 B), AcIndexEditSw (40
-; [nakarest] B) x2, Box (26 B), SngSel (36 B), AcLanguageText (42 B) x2, AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x80 (table 0xe2e758, 12 entries,
-; [nakarest] InitializeKubo): "PANEL WRITE" (AcTitleMenu.str of element 11).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0x80 (table 0xe2e758, 12 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcTitleMenu (54 B) x2, Label (32 B), AcModeMenu
+; [nakarest] (54 B), IvExitMode (26 B), AcIndexEditSw (40 B) x2, Box (26 B), SngSel (36 B),
+; [nakarest] AcLanguageText (42 B) x2. 5 texts the records point at (Viewable slot 0x80 (table
+; [nakarest] 0xe2e758, 12 entries, InitializeKubo)): "SEQUENCER MENU" (TtlScreen.title of
+; [nakarest] element 0); "CREATE" (AcTitleMenu.str of element 1); "SONG" (Label.str of element
+; [nakarest] 2); "EDIT" (AcModeMenu.str of element 3); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0xA98, 0x218
 ; [nakarest] naka_effects_seq+0xcb0  +0xcb0..+0x10dc (0xe28c54, 1068 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x81
-; [nakarest] (table 0xe2e78c, 28 entries, InitializeKubo): "SEQUENCER PLAY" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x81 (table 0xe2e78c, 28
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x81 (table 0xe2e78c, 28 entries, InitializeKubo): "MEAS" (Label.str of element 1).
-; [nakarest] widget records, elements 2-3 of Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): IvTrackSwitch (22 B), AcFuncToggle (44 B). text the records point
-; [nakarest] at, in Viewable slot 0x81 (table 0xe2e78c, 28 entries, InitializeKubo): "CYCLE:OFF"
-; [nakarest] (AcFuncToggle.stroff of element 3); "CYCLE:ON" (AcFuncToggle.stron of element 3).
-; [nakarest] widget records, elements 4-9 of Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): Box (26 B) x2, SqplyVal (32 B), TrTransposeBox (36 B), TrChordBox
-; [nakarest] (36 B), Label (32 B). text the records point at, in Viewable slot 0x81 (table
-; [nakarest] 0xe2e78c, 28 entries, InitializeKubo): "MEASURE =" (Label.str of element 9). widget
-; [nakarest] record, element 10 of Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x81
-; [nakarest] (table 0xe2e78c, 28 entries, InitializeKubo): "TIME SIG. =" (Label.str of element
-; [nakarest] 10). widget records, elements 11-15 of Viewable slot 0x81 (table 0xe2e78c, 28
-; [nakarest] entries, InitializeKubo): AcTempoBox (36 B), AcIndexEditSw (40 B) x2, AcFuncEditSw
-; [nakarest] (44 B), Label (32 B). text the records point at, in Viewable slot 0x81 (table
-; [nakarest] 0xe2e78c, 28 entries, InitializeKubo): "MIXER" (Label.str of element 15). widget
-; [nakarest] records, elements 16-19 of Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): IvPlayExit (26 B), SngSel (36 B), Window (36 B), AcTitleMenu (54
-; [nakarest] B). text the records point at, in Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): "MEDLEY" (AcTitleMenu.str of element 19). widget records, elements
-; [nakarest] 20-21 of Viewable slot 0x81 (table 0xe2e78c, 28 entries, InitializeKubo):
-; [nakarest] AcFuncEditSw (44 B), Label (32 B). text the records point at, in Viewable slot 0x81
-; [nakarest] (table 0xe2e78c, 28 entries, InitializeKubo): "SONG" (Label.str of element 21).
-; [nakarest] widget records, elements 22-25 of Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): Window (36 B), AcIndexEditSw (40 B) x2, Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x81 (table 0xe2e78c, 28 entries,
-; [nakarest] InitializeKubo): "SONG" (Label.str of element 25). widget records, elements 26-27
-; [nakarest] of Viewable slot 0x81 (table 0xe2e78c, 28 entries, InitializeKubo): IvShowHide (26
-; [nakarest] B), SngSel2 (22 B).
+; [nakarest] widget records, elements 0-27 of Viewable slot 0x81 (table 0xe2e78c, 28 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B) x6, IvTrackSwitch (22 B),
+; [nakarest] AcFuncToggle (44 B), Box (26 B) x2, SqplyVal (32 B), TrTransposeBox (36 B),
+; [nakarest] TrChordBox (36 B), AcTempoBox (36 B), AcIndexEditSw (40 B) x4, AcFuncEditSw (44 B)
+; [nakarest] x2, IvPlayExit (26 B), SngSel (36 B), Window (36 B) x2, AcTitleMenu (54 B),
+; [nakarest] IvShowHide (26 B), SngSel2 (22 B). 10 texts the records point at (Viewable slot
+; [nakarest] 0x81 (table 0xe2e78c, 28 entries, InitializeKubo)): "SEQUENCER PLAY"
+; [nakarest] (TtlScreen.title of element 0); "MEAS" (Label.str of element 1); "CYCLE:OFF"
+; [nakarest] (AcFuncToggle.stroff of element 3); "CYCLE:ON" (AcFuncToggle.stron of element 3);
+; [nakarest] ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0xCB0, 0x42C
 ; [nakarest] naka_effects_seq+0x10dc  +0x10dc..+0x127e (0xe29080, 418 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x82 (table 0xe2e800, 8 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x82
-; [nakarest] (table 0xe2e800, 8 entries, InitializeKubo): "CYCLE PLAY" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-2 of Viewable slot 0x82 (table 0xe2e800, 8
-; [nakarest] entries, InitializeKubo): SqplyVal (32 B), PsEditBox (50 B). text the records point
-; [nakarest] at, in Viewable slot 0x82 (table 0xe2e800, 8 entries, InitializeKubo): "CYCLE START
-; [nakarest] MEASURE :" (PsEditBox.caption of element 2). widget record, element 3 of Viewable
-; [nakarest] slot 0x82 (table 0xe2e800, 8 entries, InitializeKubo): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x82 (table 0xe2e800, 8 entries,
-; [nakarest] InitializeKubo): "CURRENT MEASURE :" (Label.str of element 3). widget record,
-; [nakarest] element 4 of Viewable slot 0x82 (table 0xe2e800, 8 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0x82 (table 0xe2e800,
-; [nakarest] 8 entries, InitializeKubo): "CYCLE :" (PsEditBox.caption of element 4). widget
-; [nakarest] record, element 5 of Viewable slot 0x82 (table 0xe2e800, 8 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0x82
-; [nakarest] (table 0xe2e800, 8 entries, InitializeKubo): "CYCLE END MEASURE :"
-; [nakarest] (PsEditBox.caption of element 5). widget records, elements 6-7 of Viewable slot
-; [nakarest] 0x82 (table 0xe2e800, 8 entries, InitializeKubo): AcIndexWideES (42 B), Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0x82 (table 0xe2e800, 8 entries,
-; [nakarest] InitializeKubo): "VALUE" (Label.str of element 7).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x82 (table 0xe2e800, 8 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), SqplyVal (32 B), PsEditBox (50 B) x3, Label (32
+; [nakarest] B) x2, AcIndexWideES (42 B). 6 texts the records point at (Viewable slot 0x82
+; [nakarest] (table 0xe2e800, 8 entries, InitializeKubo)): "CYCLE PLAY" (TtlScreen.title of
+; [nakarest] element 0); "CYCLE START MEASURE :" (PsEditBox.caption of element 2); "CURRENT
+; [nakarest] MEASURE :" (Label.str of element 3); "CYCLE :" (PsEditBox.caption of element 4);
+; [nakarest] ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x10DC, 0x1A2
 ; [nakarest] naka_effects_seq+0x127e  +0x127e..+0x14f4 (0xe29222, 630 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x83 (table 0xe2e824, 16 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x83
-; [nakarest] (table 0xe2e824, 16 entries, InitializeKubo): "EASY RECORD" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x83 (table 0xe2e824, 16
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x83 (table 0xe2e824, 16 entries, InitializeKubo): "SONG" (Label.str of element 1).
-; [nakarest] widget records, elements 2-3 of Viewable slot 0x83 (table 0xe2e824, 16 entries,
-; [nakarest] InitializeKubo): IvExitMode (26 B), AcTitleMenu (54 B). text the records point at,
-; [nakarest] in Viewable slot 0x83 (table 0xe2e824, 16 entries, InitializeKubo): "NAMING"
-; [nakarest] (AcTitleMenu.str of element 3). widget records, elements 4-15 of Viewable slot 0x83
-; [nakarest] (table 0xe2e824, 16 entries, InitializeKubo): Box (26 B), AcIndexEditSw (40 B) x2,
-; [nakarest] SngSel (36 B), AcFuncEditSw (44 B), PsTrackSwitch (36 B) x5, AcLanguageText (42 B)
-; [nakarest] x2.
+; [nakarest] widget records, elements 0-15 of Viewable slot 0x83 (table 0xe2e824, 16 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B), IvExitMode (26 B), AcTitleMenu (54
+; [nakarest] B), Box (26 B), AcIndexEditSw (40 B) x2, SngSel (36 B), AcFuncEditSw (44 B),
+; [nakarest] PsTrackSwitch (36 B) x5, AcLanguageText (42 B) x2. 3 texts the records point at
+; [nakarest] (Viewable slot 0x83 (table 0xe2e824, 16 entries, InitializeKubo)): "EASY RECORD"
+; [nakarest] (TtlScreen.title of element 0); "SONG" (Label.str of element 1); "NAMING"
+; [nakarest] (AcTitleMenu.str of element 3).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x127E, 0x276
 ; [nakarest] naka_effects_seq+0x14f4  +0x14f4..+0x1790 (0xe29498, 668 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x84 (table 0xe2e868, 10 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x84
-; [nakarest] (table 0xe2e868, 10 entries, InitializeKubo): "CREATE" (TtlScreen.title of element
-; [nakarest] 0). widget record, element 1 of Viewable slot 0x84 (table 0xe2e868, 10 entries,
-; [nakarest] InitializeKubo): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x84 (table 0xe2e868, 10 entries, InitializeKubo): "TRACK ASSIGN" (AcTitleMenu.str
-; [nakarest] of element 1). widget record, element 2 of Viewable slot 0x84 (table 0xe2e868, 10
-; [nakarest] entries, InitializeKubo): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo): "PANEL WRITE"
-; [nakarest] (AcTitleMenu.str of element 2). widget record, element 3 of Viewable slot 0x84
-; [nakarest] (table 0xe2e868, 10 entries, InitializeKubo): AcTitleMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo): "SONG
-; [nakarest] SELECT /NAMING" (AcTitleMenu.str of element 3). widget record, element 4 of
-; [nakarest] Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo): AcTitleMenu (54
-; [nakarest] B). text the records point at, in Viewable slot 0x84 (table 0xe2e868, 10 entries,
-; [nakarest] InitializeKubo): "SONG CLEAR" (AcTitleMenu.str of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x84 (table
-; [nakarest] 0xe2e868, 10 entries, InitializeKubo): "SONG/TRACK COPY" (AcTitleMenu.str of
-; [nakarest] element 5). widget record, element 6 of Viewable slot 0x84 (table 0xe2e868, 10
-; [nakarest] entries, InitializeKubo): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo): "AFTER TOUCH SET"
-; [nakarest] (AcTitleMenu.str of element 6). widget record, element 7 of Viewable slot 0x84
-; [nakarest] (table 0xe2e868, 10 entries, InitializeKubo): AcModeMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo):
-; [nakarest] "REALTIME RECORD" (AcModeMenu.str of element 7). widget record, element 8 of
-; [nakarest] Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo): AcModeMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x84 (table 0xe2e868, 10 entries,
-; [nakarest] InitializeKubo): "STEP RECORD" (AcModeMenu.str of element 8). widget record,
-; [nakarest] element 9 of Viewable slot 0x84 (table 0xe2e868, 10 entries, InitializeKubo):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x84 (table
-; [nakarest] 0xe2e868, 10 entries, InitializeKubo): "PUNCH RECORD" (AcTitleMenu.str of element
-; [nakarest] 9).
+; [nakarest] widget records, elements 0-9 of Viewable slot 0x84 (table 0xe2e868, 10 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcTitleMenu (54 B) x7, AcModeMenu (54 B) x2. 10
+; [nakarest] texts the records point at (Viewable slot 0x84 (table 0xe2e868, 10 entries,
+; [nakarest] InitializeKubo)): "CREATE" (TtlScreen.title of element 0); "TRACK ASSIGN"
+; [nakarest] (AcTitleMenu.str of element 1); "PANEL WRITE" (AcTitleMenu.str of element 2); "SONG
+; [nakarest] SELECT /NAMING" (AcTitleMenu.str of element 3); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x14F4, 0x29C
 ; [nakarest] naka_effects_seq+0x1790  +0x1790..+0x1b1e (0xe29734, 910 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x85 (table 0xe2e894, 25 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x85
-; [nakarest] (table 0xe2e894, 25 entries, InitializeKubo): "REALTIME RECORD" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-3 of Viewable slot 0x85 (table 0xe2e894, 25
-; [nakarest] entries, InitializeKubo): IvTrackSwitch (22 B), AcFuncEditSw (44 B), Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x85 (table 0xe2e894, 25 entries,
-; [nakarest] InitializeKubo): "REC STOP" (Label.str of element 3). widget record, element 4 of
-; [nakarest] Viewable slot 0x85 (table 0xe2e894, 25 entries, InitializeKubo): AcFuncToggle (44
-; [nakarest] B). text the records point at, in Viewable slot 0x85 (table 0xe2e894, 25 entries,
-; [nakarest] InitializeKubo): "CYCLE:OFF" (AcFuncToggle.stroff of element 4); "CYCLE:ON"
-; [nakarest] (AcFuncToggle.stron of element 4). widget records, elements 5-6 of Viewable slot
-; [nakarest] 0x85 (table 0xe2e894, 25 entries, InitializeKubo): Box (26 B), AcFuncToggle (44 B).
-; [nakarest] text the records point at, in Viewable slot 0x85 (table 0xe2e894, 25 entries,
-; [nakarest] InitializeKubo): "~a4OFF" (AcFuncToggle.stroff of element 6); "~a4ON"
-; [nakarest] (AcFuncToggle.stron of element 6). widget records, elements 7-9 of Viewable slot
-; [nakarest] 0x85 (table 0xe2e894, 25 entries, InitializeKubo): SqplyVal (32 B), Box (26 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x85 (table 0xe2e894, 25
-; [nakarest] entries, InitializeKubo): "MEASURE =" (Label.str of element 9). widget record,
-; [nakarest] element 10 of Viewable slot 0x85 (table 0xe2e894, 25 entries, InitializeKubo):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x85 (table 0xe2e894, 25
-; [nakarest] entries, InitializeKubo): "TIME SIG. =" (Label.str of element 10). widget record,
-; [nakarest] element 11 of Viewable slot 0x85 (table 0xe2e894, 25 entries, InitializeKubo):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x85 (table 0xe2e894, 25
-; [nakarest] entries, InitializeKubo): "MEMORY =" (Label.str of element 11). widget records,
-; [nakarest] elements 12-15 of Viewable slot 0x85 (table 0xe2e894, 25 entries, InitializeKubo):
-; [nakarest] AcTempoBox (36 B), TrTransposeBox (36 B), TrChordBox (36 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x85 (table 0xe2e894, 25 entries,
-; [nakarest] InitializeKubo): "%" (Label.str of element 15). widget records, elements 16-18 of
-; [nakarest] Viewable slot 0x85 (table 0xe2e894, 25 entries, InitializeKubo): SngSel (36 B),
-; [nakarest] AcFuncEditSw (44 B), Label (32 B). text the records point at, in Viewable slot 0x85
-; [nakarest] (table 0xe2e894, 25 entries, InitializeKubo): "MIXER" (Label.str of element 18).
-; [nakarest] widget records, elements 21-24 of Viewable slot 0x85 (table 0xe2e894, 25 entries,
-; [nakarest] InitializeKubo): IvRealRecExit (22 B), Window (36 B), AcFuncEditSw (44 B), Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0x85 (table 0xe2e894, 25
-; [nakarest] entries, InitializeKubo): "CLEAR" (Label.str of element 24).
+; [nakarest] widget records, elements 0-18, 21-24 of Viewable slot 0x85 (table 0xe2e894, 25
+; [nakarest] entries, InitializeKubo): TtlScreen (42 B), IvTrackSwitch (22 B), AcFuncEditSw (44
+; [nakarest] B) x3, Label (32 B) x7, AcFuncToggle (44 B) x2, Box (26 B) x2, SqplyVal (32 B),
+; [nakarest] AcTempoBox (36 B), TrTransposeBox (36 B), TrChordBox (36 B), SngSel (36 B),
+; [nakarest] IvRealRecExit (22 B), Window (36 B). 12 texts the records point at (Viewable slot
+; [nakarest] 0x85 (table 0xe2e894, 25 entries, InitializeKubo)): "REALTIME RECORD"
+; [nakarest] (TtlScreen.title of element 0); "REC STOP" (Label.str of element 3); "CYCLE:OFF"
+; [nakarest] (AcFuncToggle.stroff of element 4); "CYCLE:ON" (AcFuncToggle.stron of element 4);
+; [nakarest] ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x1790, 0x38E
 ; [nakarest] naka_effects_seq+0x1b1e  +0x1b1e..+0x1d50 (0xe29ac2, 562 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x86 (table 0xe2e8fc, 11 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x86
-; [nakarest] (table 0xe2e8fc, 11 entries, InitializeKubo): "REALTIME RECORD" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-2 of Viewable slot 0x86 (table 0xe2e8fc, 11
-; [nakarest] entries, InitializeKubo): SqplyVal (32 B), PsEditBox (50 B). text the records point
-; [nakarest] at, in Viewable slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo): "CYCLE
-; [nakarest] START MEASURE :" (PsEditBox.caption of element 2). widget record, element 3 of
-; [nakarest] Viewable slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x86 (table 0xe2e8fc, 11 entries,
-; [nakarest] InitializeKubo): "CURRENT MEASURE :" (Label.str of element 3). widget record,
-; [nakarest] element 4 of Viewable slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0x86 (table 0xe2e8fc,
-; [nakarest] 11 entries, InitializeKubo): "CYCLE END MEASURE :" (PsEditBox.caption of element
-; [nakarest] 4). widget records, elements 5-6 of Viewable slot 0x86 (table 0xe2e8fc, 11 entries,
-; [nakarest] InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo): "VALUE" (Label.str
-; [nakarest] of element 6). widget record, element 7 of Viewable slot 0x86 (table 0xe2e8fc, 11
-; [nakarest] entries, InitializeKubo): AcFuncToggle (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo): "~a4OFF"
-; [nakarest] (AcFuncToggle.stroff of element 7); "~a4ON" (AcFuncToggle.stron of element 7).
-; [nakarest] widget records, elements 8-9 of Viewable slot 0x86 (table 0xe2e8fc, 11 entries,
-; [nakarest] InitializeKubo): AcFuncEditSw (44 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo): "CLEAR" (Label.str
-; [nakarest] of element 9). widget record, element 10 of Viewable slot 0x86 (table 0xe2e8fc, 11
-; [nakarest] entries, InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo): "CYCLE :"
-; [nakarest] (PsEditBox.caption of element 10).
+; [nakarest] widget records, elements 0-10 of Viewable slot 0x86 (table 0xe2e8fc, 11 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), SqplyVal (32 B), PsEditBox (50 B) x3, Label (32
+; [nakarest] B) x3, AcIndexWideES (42 B), AcFuncToggle (44 B), AcFuncEditSw (44 B). 9 texts the
+; [nakarest] records point at (Viewable slot 0x86 (table 0xe2e8fc, 11 entries, InitializeKubo)):
+; [nakarest] "REALTIME RECORD" (TtlScreen.title of element 0); "CYCLE START MEASURE :"
+; [nakarest] (PsEditBox.caption of element 2); "CURRENT MEASURE :" (Label.str of element 3);
+; [nakarest] "CYCLE END MEASURE :" (PsEditBox.caption of element 4); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x1B1E, 0x232
 ; [nakarest] naka_effects_seq+0x1d50  +0x1d50..+0x20f8 (0xe29cf4, 936 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x87 (table 0xe2e92c, 24 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x87
-; [nakarest] (table 0xe2e92c, 24 entries, InitializeKubo): "PUNCH RECORD" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-5 of Viewable slot 0x87 (table 0xe2e92c, 24
-; [nakarest] entries, InitializeKubo): IvTrackSwitch (22 B), Box (26 B) x2, SqplyVal (32 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x87 (table 0xe2e92c, 24
-; [nakarest] entries, InitializeKubo): "MEASURE =" (Label.str of element 5). widget record,
-; [nakarest] element 6 of Viewable slot 0x87 (table 0xe2e92c, 24 entries, InitializeKubo): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0x87 (table 0xe2e92c, 24
-; [nakarest] entries, InitializeKubo): "TIME SIG. =" (Label.str of element 6). widget record,
-; [nakarest] element 7 of Viewable slot 0x87 (table 0xe2e92c, 24 entries, InitializeKubo): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0x87 (table 0xe2e92c, 24
-; [nakarest] entries, InitializeKubo): "MEMORY =" (Label.str of element 7). widget records,
-; [nakarest] elements 8-11 of Viewable slot 0x87 (table 0xe2e92c, 24 entries, InitializeKubo):
-; [nakarest] AcTempoBox (36 B), TrTransposeBox (36 B), TrChordBox (36 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x87 (table 0xe2e92c, 24 entries,
-; [nakarest] InitializeKubo): "%" (Label.str of element 11). widget records, elements 12-13 of
-; [nakarest] Viewable slot 0x87 (table 0xe2e92c, 24 entries, InitializeKubo): SngSel (36 B),
-; [nakarest] AcFuncToggle (44 B). text the records point at, in Viewable slot 0x87 (table
-; [nakarest] 0xe2e92c, 24 entries, InitializeKubo): "~a4OFF" (AcFuncToggle.stroff of element
-; [nakarest] 13); "~a4ON" (AcFuncToggle.stron of element 13). widget record, element 14 of
-; [nakarest] Viewable slot 0x87 (table 0xe2e92c, 24 entries, InitializeKubo): AcFuncToggle (44
-; [nakarest] B). text the records point at, in Viewable slot 0x87 (table 0xe2e92c, 24 entries,
-; [nakarest] InitializeKubo): "PUNCH IN" (AcFuncToggle.stroff of element 14); "PUNCH OUT"
-; [nakarest] (AcFuncToggle.stron of element 14). widget record, element 15 of Viewable slot 0x87
-; [nakarest] (table 0xe2e92c, 24 entries, InitializeKubo): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x87 (table 0xe2e92c, 24 entries, InitializeKubo): "MEAS"
-; [nakarest] (Label.str of element 15). widget records, elements 16-19 of Viewable slot 0x87
-; [nakarest] (table 0xe2e92c, 24 entries, InitializeKubo): AcIndexEditSw (40 B) x2, AcFuncEditSw
-; [nakarest] (44 B), Label (32 B). text the records point at, in Viewable slot 0x87 (table
-; [nakarest] 0xe2e92c, 24 entries, InitializeKubo): "MIXER" (Label.str of element 19). widget
-; [nakarest] records, elements 20-22 of Viewable slot 0x87 (table 0xe2e92c, 24 entries,
-; [nakarest] InitializeKubo): IvPunchExit (22 B), AcFuncEditSw (44 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x87 (table 0xe2e92c, 24 entries,
-; [nakarest] InitializeKubo): "AUTO" (Label.str of element 22). widget record, element 23 of
-; [nakarest] Viewable slot 0x87 (table 0xe2e92c, 24 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x87 (table 0xe2e92c, 24 entries,
-; [nakarest] InitializeKubo): "PUNCH" (Label.str of element 23).
+; [nakarest] widget records, elements 0-23 of Viewable slot 0x87 (table 0xe2e92c, 24 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), IvTrackSwitch (22 B), Box (26 B) x2, SqplyVal
+; [nakarest] (32 B), Label (32 B) x8, AcTempoBox (36 B), TrTransposeBox (36 B), TrChordBox (36
+; [nakarest] B), SngSel (36 B), AcFuncToggle (44 B) x2, AcIndexEditSw (40 B) x2, AcFuncEditSw
+; [nakarest] (44 B) x2, IvPunchExit (22 B). 13 texts the records point at (Viewable slot 0x87
+; [nakarest] (table 0xe2e92c, 24 entries, InitializeKubo)): "PUNCH RECORD" (TtlScreen.title of
+; [nakarest] element 0); "MEASURE =" (Label.str of element 5); "TIME SIG. =" (Label.str of
+; [nakarest] element 6); "MEMORY =" (Label.str of element 7); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x1D50, 0x3A8
 ; [nakarest] naka_effects_seq+0x20f8  +0x20f8..+0x235e (0xe2a09c, 614 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x88 (table 0xe2e990, 12 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x88
-; [nakarest] (table 0xe2e990, 12 entries, InitializeKubo): "AUTO PUNCH RECORD" (TtlScreen.title
-; [nakarest] of element 0). widget records, elements 1-2 of Viewable slot 0x88 (table 0xe2e990,
-; [nakarest] 12 entries, InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x88 (table 0xe2e990, 12 entries, InitializeKubo):
-; [nakarest] "MEAS" (Label.str of element 2). widget record, element 3 of Viewable slot 0x88
-; [nakarest] (table 0xe2e990, 12 entries, InitializeKubo): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x88 (table 0xe2e990, 12 entries, InitializeKubo): "CURRENT
-; [nakarest] MEASURE :" (Label.str of element 3). widget record, element 4 of Viewable slot 0x88
-; [nakarest] (table 0xe2e990, 12 entries, InitializeKubo): AcFuncToggle (44 B). text the records
-; [nakarest] point at, in Viewable slot 0x88 (table 0xe2e990, 12 entries, InitializeKubo):
-; [nakarest] "~a4OFF" (AcFuncToggle.stroff of element 4); "~a4ON" (AcFuncToggle.stron of element
-; [nakarest] 4). widget records, elements 5-6 of Viewable slot 0x88 (table 0xe2e990, 12 entries,
-; [nakarest] InitializeKubo): SqplyVal (32 B), PsEditBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x88 (table 0xe2e990, 12 entries, InitializeKubo): "PUNCH IN MEASURE
-; [nakarest] :" (PsEditBox.caption of element 6). widget record, element 7 of Viewable slot 0x88
-; [nakarest] (table 0xe2e990, 12 entries, InitializeKubo): PsEditBox (50 B). text the records
-; [nakarest] point at, in Viewable slot 0x88 (table 0xe2e990, 12 entries, InitializeKubo):
-; [nakarest] "PUNCH OUT MEASURE :" (PsEditBox.caption of element 7). widget record, element 8 of
-; [nakarest] Viewable slot 0x88 (table 0xe2e990, 12 entries, InitializeKubo): PsEditBox (50 B).
-; [nakarest] text the records point at, in Viewable slot 0x88 (table 0xe2e990, 12 entries,
-; [nakarest] InitializeKubo): "MEASURE COUNT IN :" (PsEditBox.caption of element 8). widget
-; [nakarest] records, elements 9-11 of Viewable slot 0x88 (table 0xe2e990, 12 entries,
-; [nakarest] InitializeKubo): AcLanguageText (42 B), IvAutoPunchExit (22 B), TtlScreen (42 B).
-; [nakarest] text the records point at, in Viewable slot 0x88 (table 0xe2e990, 12 entries,
-; [nakarest] InitializeKubo): "AUTO PUNCH RECORD" (TtlScreen.title of element 11).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0x88 (table 0xe2e990, 12 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B) x2, AcIndexWideES (42 B), Label (32 B) x2,
+; [nakarest] AcFuncToggle (44 B), SqplyVal (32 B), PsEditBox (50 B) x3, AcLanguageText (42 B),
+; [nakarest] IvAutoPunchExit (22 B). 9 texts the records point at (Viewable slot 0x88 (table
+; [nakarest] 0xe2e990, 12 entries, InitializeKubo)): "AUTO PUNCH RECORD" (TtlScreen.title of
+; [nakarest] element 0); "MEAS" (Label.str of element 2); "CURRENT MEASURE :" (Label.str of
+; [nakarest] element 3); "~a4OFF" (AcFuncToggle.stroff of element 4); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x20F8, 0x266
 ; [nakarest] naka_effects_seq+0x235e  +0x235e..+0x2400 (0xe2a302, 162 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x8d (table 0xe2e9c4, 4 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x8d
-; [nakarest] (table 0xe2e9c4, 4 entries, InitializeKubo): "PANEL WRITE" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-3 of Viewable slot 0x8d (table 0xe2e9c4, 4
-; [nakarest] entries, InitializeKubo): AcFuncEditSw (44 B), AcLanguageText (42 B), IvPnlWrExit
-; [nakarest] (22 B).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0x8d (table 0xe2e9c4, 4 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcFuncEditSw (44 B), AcLanguageText (42 B),
+; [nakarest] IvPnlWrExit (22 B). 1 text the records point at (Viewable slot 0x8d (table
+; [nakarest] 0xe2e9c4, 4 entries, InitializeKubo)): "PANEL WRITE" (TtlScreen.title of element
+; [nakarest] 0).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x235E, 0xA2
 ; [nakarest] naka_effects_seq+0x2400  +0x2400..+0x2686 (0xe2a3a4, 646 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x90 (table 0xe2e9d8, 17 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x90
-; [nakarest] (table 0xe2e9d8, 17 entries, InitializeKubo): "SONG CLEAR" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-2 of Viewable slot 0x90 (table 0xe2e9d8, 17
-; [nakarest] entries, InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x90 (table 0xe2e9d8, 17 entries, InitializeKubo): "SONG
-; [nakarest] NO/ALL" (Label.str of element 2). widget records, elements 3-5 of Viewable slot
-; [nakarest] 0x90 (table 0xe2e9d8, 17 entries, InitializeKubo): SqedtVal3 (30 B), Box (26 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x90 (table 0xe2e9d8, 17
-; [nakarest] entries, InitializeKubo): ":" (Label.str of element 5). widget record, element 6 of
-; [nakarest] Viewable slot 0x90 (table 0xe2e9d8, 17 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x90 (table 0xe2e9d8, 17 entries,
-; [nakarest] InitializeKubo): "%" (Label.str of element 6). widget records, elements 7-11 of
-; [nakarest] Viewable slot 0x90 (table 0xe2e9d8, 17 entries, InitializeKubo): MsgToTtl (22 B),
-; [nakarest] AcFuncEditSw (44 B), Window (36 B), Box (26 B), AcScreenMenu (54 B). text the
-; [nakarest] records point at, in Viewable slot 0x90 (table 0xe2e9d8, 17 entries,
-; [nakarest] InitializeKubo): "NO" (AcScreenMenu.str of element 11). widget records, elements
-; [nakarest] 12-16 of Viewable slot 0x90 (table 0xe2e9d8, 17 entries, InitializeKubo):
-; [nakarest] AcFuncEditSw (44 B), IvExitScreen (26 B), AcLanguageText (42 B) x3.
+; [nakarest] widget records, elements 0-16 of Viewable slot 0x90 (table 0xe2e9d8, 17 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B), Label (32 B) x3, SqedtVal3
+; [nakarest] (30 B), Box (26 B) x2, MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B),
+; [nakarest] AcScreenMenu (54 B), IvExitScreen (26 B), AcLanguageText (42 B) x3. 5 texts the
+; [nakarest] records point at (Viewable slot 0x90 (table 0xe2e9d8, 17 entries, InitializeKubo)):
+; [nakarest] "SONG CLEAR" (TtlScreen.title of element 0); "SONG NO/ALL" (Label.str of element
+; [nakarest] 2); ":" (Label.str of element 5); "%" (Label.str of element 6); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x2400, 0x286
 ; [nakarest] naka_effects_seq+0x2686  +0x2686..+0x292c (0xe2a62a, 678 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x91 (table 0xe2ea20, 19 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x91
-; [nakarest] (table 0xe2ea20, 19 entries, InitializeKubo): "SONG/TRACK COPY" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-15 of Viewable slot 0x91 (table 0xe2ea20, 19
-; [nakarest] entries, InitializeKubo): SqedtVal2 (30 B), SqedtFix (28 B), AcIndexWideES (42 B)
-; [nakarest] x4, IvSongCopyExit (22 B) x2, MsgToTtl (22 B), AcFuncEditSw (44 B), Window (36 B),
-; [nakarest] Box (26 B) x3, AcScreenMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x91 (table 0xe2ea20, 19 entries, InitializeKubo): "NO" (AcScreenMenu.str of
-; [nakarest] element 15). widget records, elements 16-18 of Viewable slot 0x91 (table 0xe2ea20,
-; [nakarest] 19 entries, InitializeKubo): IvExitScreen (26 B), AcFuncEditSw (44 B),
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-18 of Viewable slot 0x91 (table 0xe2ea20, 19 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), SqedtVal2 (30 B), SqedtFix (28 B), AcIndexWideES
+; [nakarest] (42 B) x4, IvSongCopyExit (22 B) x2, MsgToTtl (22 B), AcFuncEditSw (44 B) x2,
+; [nakarest] Window (36 B), Box (26 B) x3, AcScreenMenu (54 B), IvExitScreen (26 B),
+; [nakarest] AcLanguageText (42 B). 2 texts the records point at (Viewable slot 0x91 (table
+; [nakarest] 0xe2ea20, 19 entries, InitializeKubo)): "SONG/TRACK COPY" (TtlScreen.title of
+; [nakarest] element 0); "NO" (AcScreenMenu.str of element 15).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x2686, 0x2A6
 ; [nakarest] naka_effects_seq+0x292c  +0x292c..+0x2e34 (0xe2a8d0, 1288 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x93
-; [nakarest] (table 0xe2ea70, 26 entries, InitializeKubo): "EDIT" (TtlScreen.title of element
-; [nakarest] 0). widget records, elements 1-7 of Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): IvPageControl (28 B) x2, AcWindowPage (36 B), IvExitMode (26 B),
-; [nakarest] IvShowHide (26 B), Window (36 B), AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "NOTE EDIT"
-; [nakarest] (AcTitleMenu.str of element 7). widget record, element 8 of Viewable slot 0x93
-; [nakarest] (table 0xe2ea70, 26 entries, InitializeKubo): AcTitleMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "DRUM
-; [nakarest] EDIT" (AcTitleMenu.str of element 8). widget record, element 9 of Viewable slot
-; [nakarest] 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): AcTitleMenu (54 B). text the
-; [nakarest] records point at, in Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): "SONG/TRACK COPY" (AcTitleMenu.str of element 9). widget record,
-; [nakarest] element 10 of Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x93 (table
-; [nakarest] 0xe2ea70, 26 entries, InitializeKubo): "TRACK CLEAR" (AcTitleMenu.str of element
-; [nakarest] 10). widget record, element 11 of Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "TRACK MERGE" (AcTitleMenu.str
-; [nakarest] of element 11). widget record, element 12 of Viewable slot 0x93 (table 0xe2ea70, 26
-; [nakarest] entries, InitializeKubo): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "QUANTIZE"
-; [nakarest] (AcTitleMenu.str of element 12). widget record, element 13 of Viewable slot 0x93
-; [nakarest] (table 0xe2ea70, 26 entries, InitializeKubo): AcTitleMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo):
-; [nakarest] "TRANSPOSE" (AcTitleMenu.str of element 13). widget record, element 14 of Viewable
-; [nakarest] slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): AcTitleMenu (54 B). text
-; [nakarest] the records point at, in Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): "VELOCITY CHANGE" (AcTitleMenu.str of element 14). widget record,
-; [nakarest] element 15 of Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x93 (table
-; [nakarest] 0xe2ea70, 26 entries, InitializeKubo): "NOTE CHANGE" (AcTitleMenu.str of element
-; [nakarest] 15). widget record, element 16 of Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "ADVANCE/DELAY" (AcTitleMenu.str
-; [nakarest] of element 16). widget records, elements 17-18 of Viewable slot 0x93 (table
-; [nakarest] 0xe2ea70, 26 entries, InitializeKubo): Window (36 B), AcTitleMenu (54 B). text the
-; [nakarest] records point at, in Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): "COPY" (AcTitleMenu.str of element 18). widget records, elements
-; [nakarest] 19-20 of Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): Line (26
-; [nakarest] B), AcTitleMenu (54 B). text the records point at, in Viewable slot 0x93 (table
-; [nakarest] 0xe2ea70, 26 entries, InitializeKubo): "ERASE" (AcTitleMenu.str of element 20).
-; [nakarest] widget record, element 21 of Viewable slot 0x93 (table 0xe2ea70, 26 entries,
-; [nakarest] InitializeKubo): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "DELETE" (AcTitleMenu.str of
-; [nakarest] element 21). widget record, element 22 of Viewable slot 0x93 (table 0xe2ea70, 26
-; [nakarest] entries, InitializeKubo): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "INSERT"
-; [nakarest] (AcTitleMenu.str of element 22). widget record, element 23 of Viewable slot 0x93
-; [nakarest] (table 0xe2ea70, 26 entries, InitializeKubo): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x93 (table 0xe2ea70, 26 entries, InitializeKubo): "MEASURE"
-; [nakarest] (Label.str of element 23). widget records, elements 24-25 of Viewable slot 0x93
-; [nakarest] (table 0xe2ea70, 26 entries, InitializeKubo): Line (26 B) x2.
+; [nakarest] widget records, elements 0-25 of Viewable slot 0x93 (table 0xe2ea70, 26 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), IvPageControl (28 B) x2, AcWindowPage (36 B),
+; [nakarest] IvExitMode (26 B), IvShowHide (26 B), Window (36 B) x2, AcTitleMenu (54 B) x14,
+; [nakarest] Line (26 B) x3, Label (32 B). 16 texts the records point at (Viewable slot 0x93
+; [nakarest] (table 0xe2ea70, 26 entries, InitializeKubo)): "EDIT" (TtlScreen.title of element
+; [nakarest] 0); "NOTE EDIT" (AcTitleMenu.str of element 7); "DRUM EDIT" (AcTitleMenu.str of
+; [nakarest] element 8); "SONG/TRACK COPY" (AcTitleMenu.str of element 9); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x292C, 0x508
 ; [nakarest] naka_effects_seq+0x2e34  +0x2e34..+0x2ed8 (0xe2add8, 164 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x94 (table 0xe2eadc, 4 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x94
-; [nakarest] (table 0xe2eadc, 4 entries, InitializeKubo): "NOTE EDIT " (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x94 (table 0xe2eadc, 4
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x94 (table 0xe2eadc, 4 entries, InitializeKubo): ":PART SELECT" (Label.str of
-; [nakarest] element 1). widget records, elements 2-3 of Viewable slot 0x94 (table 0xe2eadc, 4
-; [nakarest] entries, InitializeKubo): IvTrackSwitch (22 B), AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0x94 (table 0xe2eadc, 4 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B), IvTrackSwitch (22 B),
+; [nakarest] AcLanguageText (42 B). 2 texts the records point at (Viewable slot 0x94 (table
+; [nakarest] 0xe2eadc, 4 entries, InitializeKubo)): "NOTE EDIT " (TtlScreen.title of element 0);
+; [nakarest] ":PART SELECT" (Label.str of element 1).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x2E34, 0xA4
 ; [nakarest] naka_effects_seq+0x2ed8  +0x2ed8..+0x32ce (0xe2ae7c, 1014 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x95 (table 0xe2eaf0, 27 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x95
-; [nakarest] (table 0xe2eaf0, 27 entries, InitializeKubo): "NOTE EDIT" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-7 of Viewable slot 0x95 (table 0xe2eaf0, 27
-; [nakarest] entries, InitializeKubo): AcIndexEditSw (40 B) x6, Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo):
-; [nakarest] "MEAS" (Label.str of element 7). widget record, element 8 of Viewable slot 0x95
-; [nakarest] (table 0xe2eaf0, 27 entries, InitializeKubo): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo): "POS"
-; [nakarest] (Label.str of element 8). widget record, element 9 of Viewable slot 0x95 (table
-; [nakarest] 0xe2eaf0, 27 entries, InitializeKubo): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo): "NOTE" (Label.str
-; [nakarest] of element 9). widget record, element 10 of Viewable slot 0x95 (table 0xe2eaf0, 27
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo): "VEL" (Label.str of element 10).
-; [nakarest] widget record, element 11 of Viewable slot 0x95 (table 0xe2eaf0, 27 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x95
-; [nakarest] (table 0xe2eaf0, 27 entries, InitializeKubo): "LEN" (Label.str of element 11).
-; [nakarest] widget record, element 12 of Viewable slot 0x95 (table 0xe2eaf0, 27 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x95
-; [nakarest] (table 0xe2eaf0, 27 entries, InitializeKubo): "INC" (Label.str of element 12).
-; [nakarest] widget record, element 13 of Viewable slot 0x95 (table 0xe2eaf0, 27 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x95
-; [nakarest] (table 0xe2eaf0, 27 entries, InitializeKubo): "CURSOR" (Label.str of element 13).
-; [nakarest] widget records, elements 14-16 of Viewable slot 0x95 (table 0xe2eaf0, 27 entries,
-; [nakarest] InitializeKubo): AcIndexEditSw (40 B) x2, Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo): "GRAPH"
-; [nakarest] (Label.str of element 16). widget records, elements 17-22 of Viewable slot 0x95
-; [nakarest] (table 0xe2eaf0, 27 entries, InitializeKubo): NoteEditBox (32 B), Box (26 B),
-; [nakarest] VwUserBitmap (26 B) x2, AcIndexEditSw (40 B), Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo): "ERS"
-; [nakarest] (Label.str of element 22). widget records, elements 23-24 of Viewable slot 0x95
-; [nakarest] (table 0xe2eaf0, 27 entries, InitializeKubo): AcIndexEditSw (40 B), Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x95 (table 0xe2eaf0, 27 entries,
-; [nakarest] InitializeKubo): "PLAY" (Label.str of element 24). widget records, elements 25-26
-; [nakarest] of Viewable slot 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo): AcIndexEditSw
-; [nakarest] (40 B) x2.
+; [nakarest] widget records, elements 0-26 of Viewable slot 0x95 (table 0xe2eaf0, 27 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexEditSw (40 B) x12, Label (32 B) x10,
+; [nakarest] NoteEditBox (32 B), Box (26 B), VwUserBitmap (26 B) x2. 11 texts the records point
+; [nakarest] at (Viewable slot 0x95 (table 0xe2eaf0, 27 entries, InitializeKubo)): "NOTE EDIT"
+; [nakarest] (TtlScreen.title of element 0); "MEAS" (Label.str of element 7); "POS" (Label.str
+; [nakarest] of element 8); "NOTE" (Label.str of element 9); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x2ED8, 0x3F6
 ; [nakarest] naka_effects_seq+0x32ce  +0x32ce..+0x3470 (0xe2b272, 418 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x96 (table 0xe2eb60, 8 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x96
-; [nakarest] (table 0xe2eb60, 8 entries, InitializeKubo): "CYCLE PLAY" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x96 (table 0xe2eb60, 8
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x96 (table 0xe2eb60, 8 entries, InitializeKubo): "CURRENT MEASURE :" (Label.str of
-; [nakarest] element 1). widget records, elements 2-3 of Viewable slot 0x96 (table 0xe2eb60, 8
-; [nakarest] entries, InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x96 (table 0xe2eb60, 8 entries, InitializeKubo):
-; [nakarest] "VALUE" (Label.str of element 3). widget records, elements 4-5 of Viewable slot
-; [nakarest] 0x96 (table 0xe2eb60, 8 entries, InitializeKubo): SqplyVal (32 B), PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0x96 (table 0xe2eb60, 8 entries,
-; [nakarest] InitializeKubo): "SOLO :" (PsEditBox.caption of element 5). widget record, element
-; [nakarest] 6 of Viewable slot 0x96 (table 0xe2eb60, 8 entries, InitializeKubo): PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0x96 (table 0xe2eb60, 8 entries,
-; [nakarest] InitializeKubo): "CYCLE START MEASURE :" (PsEditBox.caption of element 6). widget
-; [nakarest] record, element 7 of Viewable slot 0x96 (table 0xe2eb60, 8 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0x96
-; [nakarest] (table 0xe2eb60, 8 entries, InitializeKubo): "CYCLE END MEASURE :"
-; [nakarest] (PsEditBox.caption of element 7).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x96 (table 0xe2eb60, 8 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B) x2, AcIndexWideES (42 B), SqplyVal
+; [nakarest] (32 B), PsEditBox (50 B) x3. 6 texts the records point at (Viewable slot 0x96
+; [nakarest] (table 0xe2eb60, 8 entries, InitializeKubo)): "CYCLE PLAY" (TtlScreen.title of
+; [nakarest] element 0); "CURRENT MEASURE :" (Label.str of element 1); "VALUE" (Label.str of
+; [nakarest] element 3); "SOLO :" (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x32CE, 0x1A2
 ; [nakarest] naka_effects_seq+0x3470  +0x3470..+0x3514 (0xe2b414, 164 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x97 (table 0xe2eb84, 4 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x97
-; [nakarest] (table 0xe2eb84, 4 entries, InitializeKubo): "DRUM EDIT " (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x97 (table 0xe2eb84, 4
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x97 (table 0xe2eb84, 4 entries, InitializeKubo): ":PART SELECT" (Label.str of
-; [nakarest] element 1). widget records, elements 2-3 of Viewable slot 0x97 (table 0xe2eb84, 4
-; [nakarest] entries, InitializeKubo): IvTrackSwitch (22 B), AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0x97 (table 0xe2eb84, 4 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B), IvTrackSwitch (22 B),
+; [nakarest] AcLanguageText (42 B). 2 texts the records point at (Viewable slot 0x97 (table
+; [nakarest] 0xe2eb84, 4 entries, InitializeKubo)): "DRUM EDIT " (TtlScreen.title of element 0);
+; [nakarest] ":PART SELECT" (Label.str of element 1).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x3470, 0xA4
 ; [nakarest] naka_effects_seq+0x3514  +0x3514..+0x38e2 (0xe2b4b8, 974 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x98 (table 0xe2eb98, 26 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x98
-; [nakarest] (table 0xe2eb98, 26 entries, InitializeKubo): "DRUM EDIT" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-7 of Viewable slot 0x98 (table 0xe2eb98, 26
-; [nakarest] entries, InitializeKubo): AcIndexEditSw (40 B) x6, Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x98 (table 0xe2eb98, 26 entries, InitializeKubo):
-; [nakarest] "MEAS" (Label.str of element 7). widget record, element 8 of Viewable slot 0x98
-; [nakarest] (table 0xe2eb98, 26 entries, InitializeKubo): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x98 (table 0xe2eb98, 26 entries, InitializeKubo): "POS"
-; [nakarest] (Label.str of element 8). widget record, element 9 of Viewable slot 0x98 (table
-; [nakarest] 0xe2eb98, 26 entries, InitializeKubo): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x98 (table 0xe2eb98, 26 entries, InitializeKubo): "SND" (Label.str
-; [nakarest] of element 9). widget record, element 10 of Viewable slot 0x98 (table 0xe2eb98, 26
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x98 (table 0xe2eb98, 26 entries, InitializeKubo): "VEL" (Label.str of element 10).
-; [nakarest] widget record, element 11 of Viewable slot 0x98 (table 0xe2eb98, 26 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x98
-; [nakarest] (table 0xe2eb98, 26 entries, InitializeKubo): "INC" (Label.str of element 11).
-; [nakarest] widget record, element 12 of Viewable slot 0x98 (table 0xe2eb98, 26 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x98
-; [nakarest] (table 0xe2eb98, 26 entries, InitializeKubo): "CURSOR" (Label.str of element 12).
-; [nakarest] widget record, element 13 of Viewable slot 0x98 (table 0xe2eb98, 26 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x98
-; [nakarest] (table 0xe2eb98, 26 entries, InitializeKubo): "SOUND" (Label.str of element 13).
-; [nakarest] widget records, elements 14-19 of Viewable slot 0x98 (table 0xe2eb98, 26 entries,
-; [nakarest] InitializeKubo): Box (26 B), NoteEditBox (32 B), VwUserBitmap (26 B) x2,
-; [nakarest] AcIndexEditSw (40 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x98 (table 0xe2eb98, 26 entries, InitializeKubo): "ENTER" (Label.str of element
-; [nakarest] 19). widget records, elements 20-21 of Viewable slot 0x98 (table 0xe2eb98, 26
-; [nakarest] entries, InitializeKubo): AcIndexEditSw (40 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x98 (table 0xe2eb98, 26 entries, InitializeKubo): "ERS"
-; [nakarest] (Label.str of element 21). widget records, elements 22-23 of Viewable slot 0x98
-; [nakarest] (table 0xe2eb98, 26 entries, InitializeKubo): AcIndexEditSw (40 B), Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x98 (table 0xe2eb98, 26 entries,
-; [nakarest] InitializeKubo): "PLAY" (Label.str of element 23). widget records, elements 24-25
-; [nakarest] of Viewable slot 0x98 (table 0xe2eb98, 26 entries, InitializeKubo): AcIndexEditSw
-; [nakarest] (40 B) x2.
+; [nakarest] widget records, elements 0-25 of Viewable slot 0x98 (table 0xe2eb98, 26 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexEditSw (40 B) x11, Label (32 B) x10, Box
+; [nakarest] (26 B), NoteEditBox (32 B), VwUserBitmap (26 B) x2. 11 texts the records point at
+; [nakarest] (Viewable slot 0x98 (table 0xe2eb98, 26 entries, InitializeKubo)): "DRUM EDIT"
+; [nakarest] (TtlScreen.title of element 0); "MEAS" (Label.str of element 7); "POS" (Label.str
+; [nakarest] of element 8); "SND" (Label.str of element 9); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x3514, 0x3CE
 ; [nakarest] naka_effects_seq+0x38e2  +0x38e2..+0x3a84 (0xe2b886, 418 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x99 (table 0xe2ec04, 8 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x99
-; [nakarest] (table 0xe2ec04, 8 entries, InitializeKubo): "CYCLE PLAY" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x99 (table 0xe2ec04, 8
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x99 (table 0xe2ec04, 8 entries, InitializeKubo): "CURRENT MEASURE :" (Label.str of
-; [nakarest] element 1). widget records, elements 2-3 of Viewable slot 0x99 (table 0xe2ec04, 8
-; [nakarest] entries, InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x99 (table 0xe2ec04, 8 entries, InitializeKubo):
-; [nakarest] "VALUE" (Label.str of element 3). widget records, elements 4-5 of Viewable slot
-; [nakarest] 0x99 (table 0xe2ec04, 8 entries, InitializeKubo): SqplyVal (32 B), PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0x99 (table 0xe2ec04, 8 entries,
-; [nakarest] InitializeKubo): "SOLO :" (PsEditBox.caption of element 5). widget record, element
-; [nakarest] 6 of Viewable slot 0x99 (table 0xe2ec04, 8 entries, InitializeKubo): PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0x99 (table 0xe2ec04, 8 entries,
-; [nakarest] InitializeKubo): "CYCLE START MEASURE :" (PsEditBox.caption of element 6). widget
-; [nakarest] record, element 7 of Viewable slot 0x99 (table 0xe2ec04, 8 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0x99
-; [nakarest] (table 0xe2ec04, 8 entries, InitializeKubo): "CYCLE END MEASURE :"
-; [nakarest] (PsEditBox.caption of element 7).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x99 (table 0xe2ec04, 8 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B) x2, AcIndexWideES (42 B), SqplyVal
+; [nakarest] (32 B), PsEditBox (50 B) x3. 6 texts the records point at (Viewable slot 0x99
+; [nakarest] (table 0xe2ec04, 8 entries, InitializeKubo)): "CYCLE PLAY" (TtlScreen.title of
+; [nakarest] element 0); "CURRENT MEASURE :" (Label.str of element 1); "VALUE" (Label.str of
+; [nakarest] element 3); "SOLO :" (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x38E2, 0x1A2
 ; [nakarest] naka_effects_seq+0x3a84  +0x3a84..+0x3ca4 (0xe2ba28, 544 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x9a (table 0xe2ec28, 14 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x9a
-; [nakarest] (table 0xe2ec28, 14 entries, InitializeKubo): "TRACK CLEAR" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-8 of Viewable slot 0x9a (table 0xe2ec28, 14
-; [nakarest] entries, InitializeKubo): IvTrackSwitch (22 B), MsgToTtl (22 B), AcLanguageText (42
-; [nakarest] B) x2, AcFuncEditSw (44 B) x2, Window (36 B), AcScreenMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0x9a (table 0xe2ec28, 14 entries, InitializeKubo): "NO"
-; [nakarest] (AcScreenMenu.str of element 8). widget records, elements 9-13 of Viewable slot
-; [nakarest] 0x9a (table 0xe2ec28, 14 entries, InitializeKubo): VwBox (28 B), IvExitScreen (26
-; [nakarest] B), AcLanguageText (42 B) x3.
+; [nakarest] widget records, elements 0-13 of Viewable slot 0x9a (table 0xe2ec28, 14 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), IvTrackSwitch (22 B), MsgToTtl (22 B),
+; [nakarest] AcLanguageText (42 B) x5, AcFuncEditSw (44 B) x2, Window (36 B), AcScreenMenu (54
+; [nakarest] B), VwBox (28 B), IvExitScreen (26 B). 2 texts the records point at (Viewable slot
+; [nakarest] 0x9a (table 0xe2ec28, 14 entries, InitializeKubo)): "TRACK CLEAR" (TtlScreen.title
+; [nakarest] of element 0); "NO" (AcScreenMenu.str of element 8).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x3A84, 0x220
 ; [nakarest] naka_effects_seq+0x3ca4  +0x3ca4..+0x3fd8 (0xe2bc48, 820 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x9b (table 0xe2ec64, 22 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x9b
-; [nakarest] (table 0xe2ec64, 22 entries, InitializeKubo): "TRACK MERGE" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-8 of Viewable slot 0x9b (table 0xe2ec64, 22
-; [nakarest] entries, InitializeKubo): Line (26 B) x6, AcIndexWideES (42 B), Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x9b (table 0xe2ec64, 22 entries,
-; [nakarest] InitializeKubo): "VALUE" (Label.str of element 8). widget records, elements 9-10 of
-; [nakarest] Viewable slot 0x9b (table 0xe2ec64, 22 entries, InitializeKubo): SqedtVal (32 B),
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0x9b (table 0xe2ec64,
-; [nakarest] 22 entries, InitializeKubo): "TRACK :" (PsEditBox.caption of element 10). widget
-; [nakarest] record, element 11 of Viewable slot 0x9b (table 0xe2ec64, 22 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0x9b
-; [nakarest] (table 0xe2ec64, 22 entries, InitializeKubo): "TRACK :" (PsEditBox.caption of
-; [nakarest] element 11). widget record, element 12 of Viewable slot 0x9b (table 0xe2ec64, 22
-; [nakarest] entries, InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x9b (table 0xe2ec64, 22 entries, InitializeKubo): "TRACK :"
-; [nakarest] (PsEditBox.caption of element 12). widget records, elements 13-17 of Viewable slot
-; [nakarest] 0x9b (table 0xe2ec64, 22 entries, InitializeKubo): MsgToTtl (22 B), AcFuncEditSw
-; [nakarest] (44 B) x2, Window (36 B), AcScreenMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x9b (table 0xe2ec64, 22 entries, InitializeKubo): "NO"
-; [nakarest] (AcScreenMenu.str of element 17). widget records, elements 18-21 of Viewable slot
-; [nakarest] 0x9b (table 0xe2ec64, 22 entries, InitializeKubo): IvExitScreen (26 B), Box (26 B)
-; [nakarest] x2, AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-21 of Viewable slot 0x9b (table 0xe2ec64, 22 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Line (26 B) x6, AcIndexWideES (42 B), Label (32
+; [nakarest] B), SqedtVal (32 B), PsEditBox (50 B) x3, MsgToTtl (22 B), AcFuncEditSw (44 B) x2,
+; [nakarest] Window (36 B), AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B) x2,
+; [nakarest] AcLanguageText (42 B). 6 texts the records point at (Viewable slot 0x9b (table
+; [nakarest] 0xe2ec64, 22 entries, InitializeKubo)): "TRACK MERGE" (TtlScreen.title of element
+; [nakarest] 0); "VALUE" (Label.str of element 8); "TRACK :" (PsEditBox.caption of element 10);
+; [nakarest] "TRACK :" (PsEditBox.caption of element 11); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x3CA4, 0x334
 ; [nakarest] naka_effects_seq+0x3fd8  +0x3fd8..+0x4384 (0xe2bf7c, 940 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x9c
-; [nakarest] (table 0xe2ecc0, 21 entries, InitializeKubo): "QUANTIZE" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x9c (table 0xe2ecc0, 21
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo): "VALUE" (Label.str of element
-; [nakarest] 1). widget records, elements 2-4 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
-; [nakarest] InitializeKubo): AcIndexWideES (42 B), SqedtVal (32 B), PsEditBox (50 B). text the
-; [nakarest] records point at, in Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
-; [nakarest] InitializeKubo): "LAST MEASURE :" (PsEditBox.caption of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0x9c (table 0xe2ecc0,
-; [nakarest] 21 entries, InitializeKubo): "WINDOW :" (PsEditBox.caption of element 5). widget
-; [nakarest] record, element 6 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
-; [nakarest] InitializeKubo): Label (32 B). text the records point at, in Viewable slot 0x9c
-; [nakarest] (table 0xe2ecc0, 21 entries, InitializeKubo): "%" (Label.str of element 6). widget
-; [nakarest] record, element 7 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0x9c
-; [nakarest] (table 0xe2ecc0, 21 entries, InitializeKubo): "TRACK :" (PsEditBox.caption of
-; [nakarest] element 7). widget record, element 8 of Viewable slot 0x9c (table 0xe2ecc0, 21
-; [nakarest] entries, InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo): "FIRST MEASURE:"
-; [nakarest] (PsEditBox.caption of element 8). widget record, element 9 of Viewable slot 0x9c
-; [nakarest] (table 0xe2ecc0, 21 entries, InitializeKubo): PsEditBox (50 B). text the records
-; [nakarest] point at, in Viewable slot 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo):
-; [nakarest] "VALUE :" (PsEditBox.caption of element 9). widget record, element 10 of Viewable
-; [nakarest] slot 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo): PsEditBox (50 B). text the
-; [nakarest] records point at, in Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
-; [nakarest] InitializeKubo): "STRENGTH:" (PsEditBox.caption of element 10). widget record,
-; [nakarest] element 11 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x9c (table 0xe2ecc0, 21
-; [nakarest] entries, InitializeKubo): "%" (Label.str of element 11). widget records, elements
-; [nakarest] 12-15 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo): MsgToTtl
-; [nakarest] (22 B), AcFuncEditSw (44 B), Window (36 B), AcScreenMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo): "NO"
-; [nakarest] (AcScreenMenu.str of element 15). widget records, elements 16-20 of Viewable slot
-; [nakarest] 0x9c (table 0xe2ecc0, 21 entries, InitializeKubo): AcFuncEditSw (44 B),
-; [nakarest] IvExitScreen (26 B), Box (26 B) x2, AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-20 of Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B) x3, AcIndexWideES (42 B), SqedtVal
+; [nakarest] (32 B), PsEditBox (50 B) x6, MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36
+; [nakarest] B), AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B) x2, AcLanguageText (42 B).
+; [nakarest] 11 texts the records point at (Viewable slot 0x9c (table 0xe2ecc0, 21 entries,
+; [nakarest] InitializeKubo)): "QUANTIZE" (TtlScreen.title of element 0); "VALUE" (Label.str of
+; [nakarest] element 1); "LAST MEASURE :" (PsEditBox.caption of element 4); "WINDOW :"
+; [nakarest] (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x3FD8, 0x3AC
 ; [nakarest] naka_effects_seq+0x4384  +0x4384..+0x4658 (0xe2c328, 724 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x9d (table 0xe2ed18, 16 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x9d
-; [nakarest] (table 0xe2ed18, 16 entries, InitializeKubo): "TRANSPOSE" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x9d (table 0xe2ed18, 16
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x9d (table 0xe2ed18, 16 entries, InitializeKubo): "VALUE" (Label.str of element
-; [nakarest] 1). widget records, elements 2-4 of Viewable slot 0x9d (table 0xe2ed18, 16 entries,
-; [nakarest] InitializeKubo): AcIndexWideES (42 B), SqedtVal (32 B), PsEditBox (50 B). text the
-; [nakarest] records point at, in Viewable slot 0x9d (table 0xe2ed18, 16 entries,
-; [nakarest] InitializeKubo): "LAST MEASURE :" (PsEditBox.caption of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0x9d (table 0xe2ed18, 16 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0x9d (table 0xe2ed18,
-; [nakarest] 16 entries, InitializeKubo): "TRACK :" (PsEditBox.caption of element 5). widget
-; [nakarest] record, element 6 of Viewable slot 0x9d (table 0xe2ed18, 16 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0x9d
-; [nakarest] (table 0xe2ed18, 16 entries, InitializeKubo): "FIRST MEASURE:" (PsEditBox.caption
-; [nakarest] of element 6). widget record, element 7 of Viewable slot 0x9d (table 0xe2ed18, 16
-; [nakarest] entries, InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x9d (table 0xe2ed18, 16 entries, InitializeKubo): "TRANSPOSE :"
-; [nakarest] (PsEditBox.caption of element 7). widget records, elements 8-11 of Viewable slot
-; [nakarest] 0x9d (table 0xe2ed18, 16 entries, InitializeKubo): MsgToTtl (22 B), AcFuncEditSw
-; [nakarest] (44 B), Window (36 B), AcScreenMenu (54 B). text the records point at, in Viewable
-; [nakarest] slot 0x9d (table 0xe2ed18, 16 entries, InitializeKubo): "NO" (AcScreenMenu.str of
-; [nakarest] element 11). widget records, elements 12-15 of Viewable slot 0x9d (table 0xe2ed18,
-; [nakarest] 16 entries, InitializeKubo): AcFuncEditSw (44 B), IvExitScreen (26 B), Box (26 B),
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-15 of Viewable slot 0x9d (table 0xe2ed18, 16 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B), AcIndexWideES (42 B), SqedtVal (32
+; [nakarest] B), PsEditBox (50 B) x4, MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B),
+; [nakarest] AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B), AcLanguageText (42 B). 7
+; [nakarest] texts the records point at (Viewable slot 0x9d (table 0xe2ed18, 16 entries,
+; [nakarest] InitializeKubo)): "TRANSPOSE" (TtlScreen.title of element 0); "VALUE" (Label.str of
+; [nakarest] element 1); "LAST MEASURE :" (PsEditBox.caption of element 4); "TRACK :"
+; [nakarest] (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x4384, 0x2D4
 ; [nakarest] naka_effects_seq+0x4658  +0x4658..+0x4932 (0xe2c5fc, 730 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x9e (table 0xe2ed5c, 16 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x9e
-; [nakarest] (table 0xe2ed5c, 16 entries, InitializeKubo): "VELOCITY CHANGE" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0x9e (table 0xe2ed5c, 16
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x9e (table 0xe2ed5c, 16 entries, InitializeKubo): "VALUE" (Label.str of element
-; [nakarest] 1). widget records, elements 2-4 of Viewable slot 0x9e (table 0xe2ed5c, 16 entries,
-; [nakarest] InitializeKubo): AcIndexWideES (42 B), SqedtVal (32 B), PsEditBox (50 B). text the
-; [nakarest] records point at, in Viewable slot 0x9e (table 0xe2ed5c, 16 entries,
-; [nakarest] InitializeKubo): "LAST MEASURE :" (PsEditBox.caption of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0x9e (table 0xe2ed5c, 16 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0x9e (table 0xe2ed5c,
-; [nakarest] 16 entries, InitializeKubo): "TRACK :" (PsEditBox.caption of element 5). widget
-; [nakarest] record, element 6 of Viewable slot 0x9e (table 0xe2ed5c, 16 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0x9e
-; [nakarest] (table 0xe2ed5c, 16 entries, InitializeKubo): "FIRST MEASURE:" (PsEditBox.caption
-; [nakarest] of element 6). widget record, element 7 of Viewable slot 0x9e (table 0xe2ed5c, 16
-; [nakarest] entries, InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x9e (table 0xe2ed5c, 16 entries, InitializeKubo): "VELOCITY :"
-; [nakarest] (PsEditBox.caption of element 7). widget records, elements 8-11 of Viewable slot
-; [nakarest] 0x9e (table 0xe2ed5c, 16 entries, InitializeKubo): MsgToTtl (22 B), AcFuncEditSw
-; [nakarest] (44 B), Window (36 B), AcScreenMenu (54 B). text the records point at, in Viewable
-; [nakarest] slot 0x9e (table 0xe2ed5c, 16 entries, InitializeKubo): "NO" (AcScreenMenu.str of
-; [nakarest] element 11). widget records, elements 12-15 of Viewable slot 0x9e (table 0xe2ed5c,
-; [nakarest] 16 entries, InitializeKubo): AcFuncEditSw (44 B), IvExitScreen (26 B), Box (26 B),
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-15 of Viewable slot 0x9e (table 0xe2ed5c, 16 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B), AcIndexWideES (42 B), SqedtVal (32
+; [nakarest] B), PsEditBox (50 B) x4, MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B),
+; [nakarest] AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B), AcLanguageText (42 B). 7
+; [nakarest] texts the records point at (Viewable slot 0x9e (table 0xe2ed5c, 16 entries,
+; [nakarest] InitializeKubo)): "VELOCITY CHANGE" (TtlScreen.title of element 0); "VALUE"
+; [nakarest] (Label.str of element 1); "LAST MEASURE :" (PsEditBox.caption of element 4); "TRACK
+; [nakarest] :" (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x4658, 0x2DA
 ; [nakarest] naka_effects_seq+0x4932  +0x4932..+0x4d22 (0xe2c8d6, 1008 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x9f (table 0xe2eda0, 25 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0x9f
-; [nakarest] (table 0xe2eda0, 25 entries, InitializeKubo): "NOTE CHANGE" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-2 of Viewable slot 0x9f (table 0xe2eda0, 25
-; [nakarest] entries, InitializeKubo): SqedtVal (32 B), PsEditBox (50 B). text the records point
-; [nakarest] at, in Viewable slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): ""
-; [nakarest] (PsEditBox.caption of element 2). widget record, element 3 of Viewable slot 0x9f
-; [nakarest] (table 0xe2eda0, 25 entries, InitializeKubo): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): "CHANGE TO"
-; [nakarest] (Label.str of element 3). widget records, elements 4-5 of Viewable slot 0x9f (table
-; [nakarest] 0xe2eda0, 25 entries, InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x9f (table 0xe2eda0, 25 entries,
-; [nakarest] InitializeKubo): "VALUE" (Label.str of element 5). widget record, element 6 of
-; [nakarest] Viewable slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): PsEditBox (50 B).
-; [nakarest] text the records point at, in Viewable slot 0x9f (table 0xe2eda0, 25 entries,
-; [nakarest] InitializeKubo): "TRACK :" (PsEditBox.caption of element 6). widget record, element
-; [nakarest] 7 of Viewable slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0x9f (table 0xe2eda0, 25 entries,
-; [nakarest] InitializeKubo): "" (PsEditBox.caption of element 7). widget record, element 8 of
-; [nakarest] Viewable slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x9f (table 0xe2eda0, 25 entries,
-; [nakarest] InitializeKubo): "TARGET NOTE" (Label.str of element 8). widget records, elements
-; [nakarest] 9-14 of Viewable slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): Line (26
-; [nakarest] B) x5, PsEditBox (50 B). text the records point at, in Viewable slot 0x9f (table
-; [nakarest] 0xe2eda0, 25 entries, InitializeKubo): "FIRST MEASURE:" (PsEditBox.caption of
-; [nakarest] element 14). widget record, element 15 of Viewable slot 0x9f (table 0xe2eda0, 25
-; [nakarest] entries, InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): "LAST MEASURE :"
-; [nakarest] (PsEditBox.caption of element 15). widget records, elements 16-19 of Viewable slot
-; [nakarest] 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): MsgToTtl (22 B), AcFuncEditSw
-; [nakarest] (44 B), Window (36 B), AcScreenMenu (54 B). text the records point at, in Viewable
-; [nakarest] slot 0x9f (table 0xe2eda0, 25 entries, InitializeKubo): "NO" (AcScreenMenu.str of
-; [nakarest] element 19). widget records, elements 20-24 of Viewable slot 0x9f (table 0xe2eda0,
-; [nakarest] 25 entries, InitializeKubo): AcFuncEditSw (44 B), IvExitScreen (26 B), Box (26 B)
-; [nakarest] x2, AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-24 of Viewable slot 0x9f (table 0xe2eda0, 25 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), SqedtVal (32 B), PsEditBox (50 B) x5, Label (32
+; [nakarest] B) x3, AcIndexWideES (42 B), Line (26 B) x5, MsgToTtl (22 B), AcFuncEditSw (44 B)
+; [nakarest] x2, Window (36 B), AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B) x2,
+; [nakarest] AcLanguageText (42 B). 10 texts the records point at (Viewable slot 0x9f (table
+; [nakarest] 0xe2eda0, 25 entries, InitializeKubo)): "NOTE CHANGE" (TtlScreen.title of element
+; [nakarest] 0); "" (PsEditBox.caption of element 2); "CHANGE TO" (Label.str of element 3);
+; [nakarest] "VALUE" (Label.str of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x4932, 0x3F0
 ; [nakarest] naka_effects_seq+0x4d22  +0x4d22..+0x4ffc (0xe2ccc6, 730 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xa0 (table 0xe2ee08, 16 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xa0
-; [nakarest] (table 0xe2ee08, 16 entries, InitializeKubo): "ADVANCE/DELAY" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-2 of Viewable slot 0xa0 (table 0xe2ee08, 16
-; [nakarest] entries, InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xa0 (table 0xe2ee08, 16 entries, InitializeKubo):
-; [nakarest] "VALUE" (Label.str of element 2). widget records, elements 3-4 of Viewable slot
-; [nakarest] 0xa0 (table 0xe2ee08, 16 entries, InitializeKubo): SqedtVal (32 B), PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0xa0 (table 0xe2ee08, 16 entries,
-; [nakarest] InitializeKubo): "FIRST MEASURE:" (PsEditBox.caption of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0xa0 (table 0xe2ee08, 16 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0xa0 (table 0xe2ee08,
-; [nakarest] 16 entries, InitializeKubo): "LAST MEASURE :" (PsEditBox.caption of element 5).
-; [nakarest] widget record, element 6 of Viewable slot 0xa0 (table 0xe2ee08, 16 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0xa0
-; [nakarest] (table 0xe2ee08, 16 entries, InitializeKubo): "TRACK :" (PsEditBox.caption of
-; [nakarest] element 6). widget record, element 7 of Viewable slot 0xa0 (table 0xe2ee08, 16
-; [nakarest] entries, InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0xa0 (table 0xe2ee08, 16 entries, InitializeKubo): "ADVANCE/DELAY:"
-; [nakarest] (PsEditBox.caption of element 7). widget records, elements 8-12 of Viewable slot
-; [nakarest] 0xa0 (table 0xe2ee08, 16 entries, InitializeKubo): MsgToTtl (22 B), AcFuncEditSw
-; [nakarest] (44 B) x2, Window (36 B), AcScreenMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xa0 (table 0xe2ee08, 16 entries, InitializeKubo): "NO"
-; [nakarest] (AcScreenMenu.str of element 12). widget records, elements 13-15 of Viewable slot
-; [nakarest] 0xa0 (table 0xe2ee08, 16 entries, InitializeKubo): IvExitScreen (26 B), Box (26 B),
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-15 of Viewable slot 0xa0 (table 0xe2ee08, 16 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B), Label (32 B), SqedtVal (32
+; [nakarest] B), PsEditBox (50 B) x4, MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B),
+; [nakarest] AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B), AcLanguageText (42 B). 7
+; [nakarest] texts the records point at (Viewable slot 0xa0 (table 0xe2ee08, 16 entries,
+; [nakarest] InitializeKubo)): "ADVANCE/DELAY" (TtlScreen.title of element 0); "VALUE"
+; [nakarest] (Label.str of element 2); "FIRST MEASURE:" (PsEditBox.caption of element 4); "LAST
+; [nakarest] MEASURE :" (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x4D22, 0x2DA
 ; [nakarest] naka_effects_seq+0x4ffc  +0x4ffc..+0x52d6 (0xe2cfa0, 730 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xa1 (table 0xe2ee4c, 16 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xa1
-; [nakarest] (table 0xe2ee4c, 16 entries, InitializeKubo): "MEASURE ERASE" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-2 of Viewable slot 0xa1 (table 0xe2ee4c, 16
-; [nakarest] entries, InitializeKubo): AcIndexWideES (42 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xa1 (table 0xe2ee4c, 16 entries, InitializeKubo):
-; [nakarest] "VALUE" (Label.str of element 2). widget records, elements 3-4 of Viewable slot
-; [nakarest] 0xa1 (table 0xe2ee4c, 16 entries, InitializeKubo): SqedtVal (32 B), PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0xa1 (table 0xe2ee4c, 16 entries,
-; [nakarest] InitializeKubo): "TRACK :" (PsEditBox.caption of element 4). widget record, element
-; [nakarest] 5 of Viewable slot 0xa1 (table 0xe2ee4c, 16 entries, InitializeKubo): PsEditBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0xa1 (table 0xe2ee4c, 16 entries,
-; [nakarest] InitializeKubo): "FIRST MEASURE:" (PsEditBox.caption of element 5). widget record,
-; [nakarest] element 6 of Viewable slot 0xa1 (table 0xe2ee4c, 16 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0xa1 (table 0xe2ee4c,
-; [nakarest] 16 entries, InitializeKubo): "LAST MEASURE :" (PsEditBox.caption of element 6).
-; [nakarest] widget record, element 7 of Viewable slot 0xa1 (table 0xe2ee4c, 16 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0xa1
-; [nakarest] (table 0xe2ee4c, 16 entries, InitializeKubo): "ERASE DATA :" (PsEditBox.caption of
-; [nakarest] element 7). widget records, elements 8-11 of Viewable slot 0xa1 (table 0xe2ee4c, 16
-; [nakarest] entries, InitializeKubo): MsgToTtl (22 B), AcFuncEditSw (44 B), Window (36 B),
-; [nakarest] AcScreenMenu (54 B). text the records point at, in Viewable slot 0xa1 (table
-; [nakarest] 0xe2ee4c, 16 entries, InitializeKubo): "NO" (AcScreenMenu.str of element 11).
-; [nakarest] widget records, elements 12-15 of Viewable slot 0xa1 (table 0xe2ee4c, 16 entries,
-; [nakarest] InitializeKubo): AcFuncEditSw (44 B), IvExitScreen (26 B), Box (26 B),
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-15 of Viewable slot 0xa1 (table 0xe2ee4c, 16 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B), Label (32 B), SqedtVal (32
+; [nakarest] B), PsEditBox (50 B) x4, MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B),
+; [nakarest] AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B), AcLanguageText (42 B). 7
+; [nakarest] texts the records point at (Viewable slot 0xa1 (table 0xe2ee4c, 16 entries,
+; [nakarest] InitializeKubo)): "MEASURE ERASE" (TtlScreen.title of element 0); "VALUE"
+; [nakarest] (Label.str of element 2); "TRACK :" (PsEditBox.caption of element 4); "FIRST
+; [nakarest] MEASURE:" (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x4FFC, 0x2DA
 ; [nakarest] naka_effects_seq+0x52d6  +0x52d6..+0x554e (0xe2d27a, 632 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xa2 (table 0xe2ee90, 17 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xa2
-; [nakarest] (table 0xe2ee90, 17 entries, InitializeKubo): "MEASURE COPY" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-16 of Viewable slot 0xa2 (table 0xe2ee90, 17
-; [nakarest] entries, InitializeKubo): AcIndexWideES (42 B) x4, SqedtVal2 (30 B), SqedtFix (28
-; [nakarest] B), MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B), Box (26 B) x3,
-; [nakarest] IvExitScreen (26 B), AcLanguageText (42 B), AcScreenMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0xa2 (table 0xe2ee90, 17 entries, InitializeKubo): "NO"
-; [nakarest] (AcScreenMenu.str of element 16).
+; [nakarest] widget records, elements 0-16 of Viewable slot 0xa2 (table 0xe2ee90, 17 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B) x4, SqedtVal2 (30 B),
+; [nakarest] SqedtFix (28 B), MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B), Box (26 B)
+; [nakarest] x3, IvExitScreen (26 B), AcLanguageText (42 B), AcScreenMenu (54 B). 2 texts the
+; [nakarest] records point at (Viewable slot 0xa2 (table 0xe2ee90, 17 entries, InitializeKubo)):
+; [nakarest] "MEASURE COPY" (TtlScreen.title of element 0); "NO" (AcScreenMenu.str of element
+; [nakarest] 16).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x52D6, 0x278
 ; [nakarest] naka_effects_seq+0x554e  +0x554e..+0x57e6 (0xe2d4f2, 664 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xa3 (table 0xe2eed8, 15 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xa3
-; [nakarest] (table 0xe2eed8, 15 entries, InitializeKubo): "MEASURE DELETE" (TtlScreen.title of
-; [nakarest] element 0). widget record, element 1 of Viewable slot 0xa3 (table 0xe2eed8, 15
-; [nakarest] entries, InitializeKubo): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xa3 (table 0xe2eed8, 15 entries, InitializeKubo): "VALUE" (Label.str of element
-; [nakarest] 1). widget records, elements 2-4 of Viewable slot 0xa3 (table 0xe2eed8, 15 entries,
-; [nakarest] InitializeKubo): AcIndexWideES (42 B), SqedtVal (32 B), PsEditBox (50 B). text the
-; [nakarest] records point at, in Viewable slot 0xa3 (table 0xe2eed8, 15 entries,
-; [nakarest] InitializeKubo): "FIRST MEASURE:" (PsEditBox.caption of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0xa3 (table 0xe2eed8, 15 entries, InitializeKubo):
-; [nakarest] PsEditBox (50 B). text the records point at, in Viewable slot 0xa3 (table 0xe2eed8,
-; [nakarest] 15 entries, InitializeKubo): "LAST MEASURE :" (PsEditBox.caption of element 5).
-; [nakarest] widget record, element 6 of Viewable slot 0xa3 (table 0xe2eed8, 15 entries,
-; [nakarest] InitializeKubo): PsEditBox (50 B). text the records point at, in Viewable slot 0xa3
-; [nakarest] (table 0xe2eed8, 15 entries, InitializeKubo): "TRACK :" (PsEditBox.caption of
-; [nakarest] element 6). widget records, elements 7-10 of Viewable slot 0xa3 (table 0xe2eed8, 15
-; [nakarest] entries, InitializeKubo): MsgToTtl (22 B), AcFuncEditSw (44 B), Window (36 B),
-; [nakarest] AcScreenMenu (54 B). text the records point at, in Viewable slot 0xa3 (table
-; [nakarest] 0xe2eed8, 15 entries, InitializeKubo): "NO" (AcScreenMenu.str of element 10).
-; [nakarest] widget records, elements 11-14 of Viewable slot 0xa3 (table 0xe2eed8, 15 entries,
-; [nakarest] InitializeKubo): AcFuncEditSw (44 B), IvExitScreen (26 B), Box (26 B),
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-14 of Viewable slot 0xa3 (table 0xe2eed8, 15 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), Label (32 B), AcIndexWideES (42 B), SqedtVal (32
+; [nakarest] B), PsEditBox (50 B) x3, MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B),
+; [nakarest] AcScreenMenu (54 B), IvExitScreen (26 B), Box (26 B), AcLanguageText (42 B). 6
+; [nakarest] texts the records point at (Viewable slot 0xa3 (table 0xe2eed8, 15 entries,
+; [nakarest] InitializeKubo)): "MEASURE DELETE" (TtlScreen.title of element 0); "VALUE"
+; [nakarest] (Label.str of element 1); "FIRST MEASURE:" (PsEditBox.caption of element 4); "LAST
+; [nakarest] MEASURE :" (PsEditBox.caption of element 5); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x554E, 0x298
 ; [nakarest] naka_effects_seq+0x57e6  +0x57e6..+0x5a60 (0xe2d78a, 634 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xa4 (table 0xe2ef18, 17 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xa4
-; [nakarest] (table 0xe2ef18, 17 entries, InitializeKubo): "MEASURE INSERT" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-16 of Viewable slot 0xa4 (table 0xe2ef18, 17
-; [nakarest] entries, InitializeKubo): AcIndexWideES (42 B) x4, SqedtVal2 (30 B), SqedtFix (28
-; [nakarest] B), MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B), Box (26 B) x3,
-; [nakarest] IvExitScreen (26 B), AcLanguageText (42 B), AcScreenMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0xa4 (table 0xe2ef18, 17 entries, InitializeKubo): "NO"
-; [nakarest] (AcScreenMenu.str of element 16).
+; [nakarest] widget records, elements 0-16 of Viewable slot 0xa4 (table 0xe2ef18, 17 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B) x4, SqedtVal2 (30 B),
+; [nakarest] SqedtFix (28 B), MsgToTtl (22 B), AcFuncEditSw (44 B) x2, Window (36 B), Box (26 B)
+; [nakarest] x3, IvExitScreen (26 B), AcLanguageText (42 B), AcScreenMenu (54 B). 2 texts the
+; [nakarest] records point at (Viewable slot 0xa4 (table 0xe2ef18, 17 entries, InitializeKubo)):
+; [nakarest] "MEASURE INSERT" (TtlScreen.title of element 0); "NO" (AcScreenMenu.str of element
+; [nakarest] 16).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x57E6, 0x27A
 ; [nakarest] naka_effects_seq+0x5a60  +0x5a60..+0x5abc (0xe2da04, 92 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xab (table 0xe2ef68, 2 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xab
-; [nakarest] (table 0xe2ef68, 2 entries, InitializeKubo): "METRONOME BALANCE" (TtlScreen.title
-; [nakarest] of element 0). widget record, element 1 of Viewable slot 0xab (table 0xe2ef68, 2
-; [nakarest] entries, InitializeKubo): AcMixerVol (32 B).
+; [nakarest] widget records, elements 0-1 of Viewable slot 0xab (table 0xe2ef68, 2 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), AcMixerVol (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xab (table 0xe2ef68, 2 entries, InitializeKubo)): "METRONOME
+; [nakarest] BALANCE" (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x5A60, 0x5C
 ; [nakarest] naka_effects_seq+0x5abc  +0x5abc..+0x5bf2 (0xe2da60, 310 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xd6 (table 0xe2ef74, 15 entries,
-; [nakarest] InitializeKubo) ("EnterTainerScr"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xd6 (table 0xe2ef74, 15 entries, InitializeKubo): "ENTERTAINER"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xd6
-; [nakarest] (table 0xe2ef74, 15 entries, InitializeKubo) ("EnterTainerScr"):
-; [nakarest] AcEntertainerGridBox (74 B). text the records point at, in Viewable slot 0xd6
-; [nakarest] (table 0xe2ef74, 15 entries, InitializeKubo): "MIC BALANCE :|-|| ON/OFF :| TYPE :|
-; [nakarest] RE" (AcEntertainerGridBox.fixedrow of element 1); " | "
-; [nakarest] (AcEntertainerGridBox.fixedcol of element 1). widget record, element 2 of Viewable
-; [nakarest] slot 0xd6 (table 0xe2ef74, 15 entries, InitializeKubo) ("EnterTainerScr"): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xd6 (table 0xe2ef74, 15
-; [nakarest] entries, InitializeKubo): "VOCAL REVERB" (Label.str of element 2).
+; [nakarest] widget records, elements 0-2 of Viewable slot 0xd6 (table 0xe2ef74, 15 entries,
+; [nakarest] InitializeKubo) ("EnterTainerScr"): TtlScreen (42 B), AcEntertainerGridBox (74 B),
+; [nakarest] Label (32 B). 4 texts the records point at (Viewable slot 0xd6 (table 0xe2ef74, 15
+; [nakarest] entries, InitializeKubo)): "ENTERTAINER" (TtlScreen.title of element 0); "MIC
+; [nakarest] BALANCE :|-|| ON/OFF :| TYPE :| RE" (AcEntertainerGridBox.fixedrow of element 1); "
+; [nakarest] | " (AcEntertainerGridBox.fixedcol of element 1); "VOCAL REVERB" (Label.str of
+; [nakarest] element 2).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x5ABC, 0x136
 ; [nakarest] NakaInst_FADE_IN_OUT_SETTING  +0x5bf2..+0x5d6c (0xe2db96, 378 B)
-; [nakarest] purpose not established: 36 bytes at 0xe2db96 that no registered NAKA table points into
-; [nakarest] widget records, elements 7-9 of Viewable slot 0xd6 (table 0xe2ef74, 15 entries,
-; [nakarest] InitializeKubo) ("EnterTainerScr"): AcIndexWideES (42 B) x2, Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xd6 (table 0xe2ef74, 15 entries,
-; [nakarest] InitializeKubo): "ITEM" (Label.str of element 9). widget record, element 10 of
-; [nakarest] Viewable slot 0xd6 (table 0xe2ef74, 15 entries, InitializeKubo) ("EnterTainerScr"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xd6 (table 0xe2ef74, 15
-; [nakarest] entries, InitializeKubo): "VALUE" (Label.str of element 10). widget records,
-; [nakarest] elements 11-12 of Viewable slot 0xd6 (table 0xe2ef74, 15 entries, InitializeKubo)
-; [nakarest] ("EnterTainerScr"): IvExitMode (26 B), AcFuncToggle (44 B). text the records point
-; [nakarest] at, in Viewable slot 0xd6 (table 0xe2ef74, 15 entries, InitializeKubo): "MUTE
-; [nakarest] KEYS:OFF" (AcFuncToggle.stroff of element 12); "MUTE KEYS:ON " (AcFuncToggle.stron
-; [nakarest] of element 12). widget records, elements 13-14 of Viewable slot 0xd6 (table
-; [nakarest] 0xe2ef74, 15 entries, InitializeKubo) ("EnterTainerScr"): AcPanicEditSw (46 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xd6 (table 0xe2ef74, 15
-; [nakarest] entries, InitializeKubo): "PANIC" (Label.str of element 14).
+; [nakarest] Text (36 B at 0xe2db96), first string "FADE IN/OUT SETTING"; no registered NAKA
+; [nakarest] table points into it; reached through 3 data words in NakaData_SeqChannels (at
+; [nakarest] 0xeee608, 0xeee63e, 0xeee674). widget records, elements 7-14 of Viewable slot 0xd6
+; [nakarest] (table 0xe2ef74, 15 entries, InitializeKubo) ("EnterTainerScr"): AcIndexWideES (42
+; [nakarest] B) x2, Label (32 B) x3, IvExitMode (26 B), AcFuncToggle (44 B), AcPanicEditSw (46
+; [nakarest] B). 5 texts the records point at (Viewable slot 0xd6 (table 0xe2ef74, 15 entries,
+; [nakarest] InitializeKubo)): "ITEM" (Label.str of element 9); "VALUE" (Label.str of element
+; [nakarest] 10); "MUTE KEYS:OFF" (AcFuncToggle.stroff of element 12); "MUTE KEYS:ON "
+; [nakarest] (AcFuncToggle.stron of element 12); ....
 NakaInst_FADE_IN_OUT_SETTING:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x5BF2, 0x17A
 ; [nakarest] naka_effects_seq+0x5d6c  +0x5d6c..+0x6680 (0xe2dd10, 2324 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xe7 (table 0xe2efb4, 61 entries,
-; [nakarest] InitializeKubo): TtlScreen (42 B). text the records point at, in Viewable slot 0xe7
-; [nakarest] (table 0xe2efb4, 61 entries, InitializeKubo): "HELP FUNCTION" (TtlScreen.title of
-; [nakarest] element 0). widget records, elements 1-6 of Viewable slot 0xe7 (table 0xe2efb4, 61
-; [nakarest] entries, InitializeKubo): IvExitMode (26 B), AcLanguageText (42 B), IvShowHide (26
-; [nakarest] B), AcFuncEditSw (44 B), Window (36 B), AcIndexWideToggle (50 B). text the records
-; [nakarest] point at, in Viewable slot 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo):
-; [nakarest] "ENGLISH" (AcIndexWideToggle.stroff of element 6); "ENGLISH"
-; [nakarest] (AcIndexWideToggle.stron of element 6). widget record, element 7 of Viewable slot
-; [nakarest] 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo): AcIndexWideToggle (50 B). text
-; [nakarest] the records point at, in Viewable slot 0xe7 (table 0xe2efb4, 61 entries,
-; [nakarest] InitializeKubo): "GERMAN" (AcIndexWideToggle.stroff of element 7); "GERMAN"
-; [nakarest] (AcIndexWideToggle.stron of element 7). widget record, element 8 of Viewable slot
-; [nakarest] 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo): AcIndexWideToggle (50 B). text
-; [nakarest] the records point at, in Viewable slot 0xe7 (table 0xe2efb4, 61 entries,
-; [nakarest] InitializeKubo): "FRENCH" (AcIndexWideToggle.stroff of element 8); "FRENCH"
-; [nakarest] (AcIndexWideToggle.stron of element 8). widget record, element 9 of Viewable slot
-; [nakarest] 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo): AcIndexWideToggle (50 B). text
-; [nakarest] the records point at, in Viewable slot 0xe7 (table 0xe2efb4, 61 entries,
-; [nakarest] InitializeKubo): "SPANISH" (AcIndexWideToggle.stroff of element 9); "SPANISH"
-; [nakarest] (AcIndexWideToggle.stron of element 9). widget records, elements 10-11 of Viewable
-; [nakarest] slot 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo): Window (36 B),
-; [nakarest] AcIndexWideToggle (50 B). text the records point at, in Viewable slot 0xe7 (table
-; [nakarest] 0xe2efb4, 61 entries, InitializeKubo): "ENGLISH" (AcIndexWideToggle.stroff of
-; [nakarest] element 11); "ENGLISH" (AcIndexWideToggle.stron of element 11). widget record,
-; [nakarest] element 12 of Viewable slot 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo):
-; [nakarest] AcIndexWideToggle (50 B). text the records point at, in Viewable slot 0xe7 (table
-; [nakarest] 0xe2efb4, 61 entries, InitializeKubo): "SPANISH" (AcIndexWideToggle.stroff of
-; [nakarest] element 12); "SPANISH" (AcIndexWideToggle.stron of element 12). widget record,
-; [nakarest] element 13 of Viewable slot 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo):
-; [nakarest] AcIndexWideToggle (50 B). text the records point at, in Viewable slot 0xe7 (table
-; [nakarest] 0xe2efb4, 61 entries, InitializeKubo): "INDONESIA" (AcIndexWideToggle.stroff of
-; [nakarest] element 13); "INDONESIA" (AcIndexWideToggle.stron of element 13). widget records,
-; [nakarest] elements 14-60 of Viewable slot 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo):
-; [nakarest] Screen (34 B) x4, IvExitScreen (26 B) x4, HelpTtl (36 B) x4, AcLanguageText (42 B)
-; [nakarest] x10, IvShowHide (26 B) x4, Window (36 B) x9, IvPageControl (28 B) x9, AcWindowPage
-; [nakarest] (36 B) x3.
+; [nakarest] widget records, elements 0-60 of Viewable slot 0xe7 (table 0xe2efb4, 61 entries,
+; [nakarest] InitializeKubo): TtlScreen (42 B), IvExitMode (26 B), AcLanguageText (42 B) x11,
+; [nakarest] IvShowHide (26 B) x5, AcFuncEditSw (44 B), Window (36 B) x11, AcIndexWideToggle (50
+; [nakarest] B) x7, Screen (34 B) x4, IvExitScreen (26 B) x4, HelpTtl (36 B) x4, IvPageControl
+; [nakarest] (28 B) x9, AcWindowPage (36 B) x3. 15 texts the records point at (Viewable slot
+; [nakarest] 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo)): "HELP FUNCTION"
+; [nakarest] (TtlScreen.title of element 0); "ENGLISH" (AcIndexWideToggle.stroff of element 6);
+; [nakarest] "ENGLISH" (AcIndexWideToggle.stron of element 6); "GERMAN"
+; [nakarest] (AcIndexWideToggle.stroff of element 7); ....
 	.incbin "includes/generated/naka_effects_seq.bin", 0x5D6C, 0x914
 ; [nakarest] naka_effects_seq+0x6680  +0x6680..+0x66b4 (0xe2e624, 52 B)
 ; [nakarest] the table itself: Viewable slot 0xa (table 0xe2e624, 12 entries, InitializeKubo),
@@ -2101,7 +1464,7 @@ EmbeddedPtrTable_v7_naka_effects_seq_006700:
 	.long 0x00E2E5AC
 	.long 0x00E2E5D6
 ; [nakarest] naka_effects_seq+0x7100  +0x7100..+0x7108 (0xe2f0a4, 8 B)
-; [nakarest] purpose not established: 4 bytes at 0xe2f0a8 that no registered NAKA table points into
+; [nakarest] purpose not established: 4 B at 0xe2f0a8 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: Viewable slot 0xe7 (table 0xe2efb4, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe2efb4, 4 of its 244 bytes
 ; [nakarest] are here or later).
@@ -2445,7 +1808,7 @@ Naka_Help_566_E300E3:
 Naka_Help_567_E300EC:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x8148, 0x27
 ; [nakarest] Naka_Help_569_E30113  +0x816f..+0x81f4 (0xe30113, 133 B)
-; [nakarest] purpose not established: 6 bytes at 0xe30192 that no registered NAKA table points into
+; [nakarest] purpose not established: 6 B at 0xe30192 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 127 of its 244 bytes
 ; [nakarest] are here or later).
@@ -2518,7 +1881,10 @@ EmbeddedPtrTable_v7_naka_effects_seq_008600:
 	.long 0x00E30686
 	.long 0x00E30684
 ; [nakarest] naka_effects_seq+0x86e0  +0x86e0..+0x86e2 (0xe30684, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe30684 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe30684 not derived; readers below
+; [nakarest] Readers: source references EmbeddedPtrTable_v7_naka_effects_seq_008600
+; [nakarest] (ui_widgets/effects_sequencer_screens.s: `.long 0x00e30684`); 1 data word in
+; [nakarest] EmbeddedPtrTable_v7_naka_effects_seq_008600 (at 0xe30680).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x2
 ; [nakarest] naka_effects_seq+0x86e2  +0x86e2..+0x8ebc (0xe30686, 2010 B)
 ; [nakarest] name strings, entries 0-43 of MainFunction slot 0x448 (table 0xe305d0, 44 entries,

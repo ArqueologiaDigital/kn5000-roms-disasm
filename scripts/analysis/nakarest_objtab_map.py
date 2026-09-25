@@ -122,6 +122,7 @@ class Map:
         self.addr = {}           # address -> list of (kind, reg, k)
         self._index()
         self.index_texts()
+        self.index_message_catalog()
 
     # ---------------------------------------------------------------- source
     def _val(self, tok):
@@ -283,8 +284,14 @@ class Map:
         if kind == 'record':
             c = self.record_class(a)
             return c['allsize'] if c else 0
-        if kind in ('name', 'classname', 'classsig', 'text'):
+        if kind in ('name', 'classname', 'classsig', 'text', 'msgstr'):
             return self.strlen_even(a)
+        if kind == 'msgcat':
+            return 14 * (r['count'] + 1)
+        if kind == 'msgwin':
+            return 24
+        if kind == 'msglang':
+            return 24
         if kind == 'table':
             return (24 if r['cls'] == 0x1600004 else 4) * r['count']
         if kind == 'classdef':
@@ -319,6 +326,45 @@ class Map:
                     if self.inrom(t) and t != a:
                         self.addr.setdefault(t, []).append(('text', r, k))
                         self.text_field.setdefault(t, []).append((c['name'], fname, k))
+
+    MSG_LANGS = ('English', 'German', 'French', 'Spanish', 'Italian', 'Indonesian')
+
+    def index_message_catalog(self):
+        """The IvMesage message catalog (not a RegObjTabl table; found from
+        its readers in ui/drawbar_panel_ui.s): 14-byte records {u16 kind,
+        u32 code, u32 header table, u32 text table}, indexed `muls wa, 0xe`
+        from the positional name ..._0x118 (kind), ..._0x11E (+6) and
+        ..._0x122 (+10); an all-zero-pointer record ends it.  kind indexes
+        the 6 x u32 window object ids that follow the catalog (`sla wa, 2`
+        from ..._0x586).  Each header/text table is 6 string pointers, one
+        per display language."""
+        T = self.sym.get('NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118')
+        if T is None:
+            return
+        n = 0
+        while self.u32(T + 14 * n + 10) and n < 256:
+            n += 1
+        self.msgcat = dict(cls='msg', slot=0xF0000, table=T, count=n, init='IvMesageProc',
+                           file='', desc='the IvMesage message catalog (0x%06X, %d records '
+                                         'x 14 B + a terminator)' % (T, n))
+        r = self.msgcat
+        self.addr.setdefault(T, []).append(('msgcat', r, None))
+        W = T + 14 * (n + 1)
+        self.msgwin = W
+        self.addr.setdefault(W, []).append(('msgwin', r, None))
+        self.msg_langtab = {}
+        for k in range(n):
+            for off, role in ((6, 'header'), (10, 'text')):
+                t = self.u32(T + 14 * k + off)
+                if not self.inrom(t):
+                    continue
+                self.msg_langtab.setdefault(t, []).append((k, role))
+        for t, uses in self.msg_langtab.items():
+            self.addr.setdefault(t, []).append(('msglang', r, uses[0][0]))
+            for i in range(6):
+                sa = self.u32(t + 4 * i)
+                if self.inrom(sa):
+                    self.addr.setdefault(sa, []).append(('msgstr', r, (t, i)))
 
     def klass(self, cid):
         """The class definition for a class id 0x016S_KKKK: table of Class

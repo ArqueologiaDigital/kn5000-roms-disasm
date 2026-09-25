@@ -111,6 +111,10 @@
 ; 0xe86644, 0x441 in InitializeMurai (ui/drawbar_panel_ui.s), i.e.
 ; RegisterObjectTable stores {class, proc, 2, table} at 0x27ed2 +
 ; 14*0x441.
+;
+; the IvMesage message catalog (0xe9d340, 80 records x 14 B + a
+; terminator): not registered with RegObjTabl; found from its readers,
+; named in each piece header below.
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_TechniChordStrings  +0x0..+0x28 (0xe85f4e, 40 B)
@@ -119,7 +123,7 @@
 NakaData_TechniChordStrings:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x0, 0x28
 ; [nakarest] TechniChord_StyleDispatch_Table  +0x28..+0x7a (0xe85f76, 82 B)
-; [nakarest] purpose not established: 6 bytes at 0xe85fc2 that no registered NAKA table points into
+; [nakarest] purpose not established: 6 B at 0xe85fc2 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: ResName slot 0x30d (table 0xe85f4e, 29 entries,
 ; [nakarest] InitializeMurai), 29 entry pointers x 4 bytes (starts 0xe85f4e, 76 of its 116 bytes
 ; [nakarest] are here or later).
@@ -244,7 +248,8 @@ NakaInst_Sdtecd:
 ; [nakarest] 4 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x140, 0x14
 ; [nakarest] NakaInst_Sqmixer_Term1  +0x154..+0x156 (0xe860a2, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe860a2 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe860a2 not derived; readers below
+; [nakarest] Readers: 1 data word in NakaInst_Sdtecd (at 0xe8609e).
 NakaInst_Sqmixer_Term1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x154, 0x2
 ; [nakarest] NakaInst_Sqmixer_Term2  +0x156..+0x158 (0xe860a4, 2 B)
@@ -272,7 +277,8 @@ NakaInst_Sqmixer:
 ; [nakarest] 15 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x164, 0x40
 ; [nakarest] NakaInst_Sqmixer_PtrEnd  +0x1a4..+0x1a6 (0xe860f2, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe860f2 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe860f2 not derived; readers below
+; [nakarest] Readers: 1 data word in NakaInst_Sqmixer (at 0xe860ee).
 NakaInst_Sqmixer_PtrEnd:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A4, 0x2
 ; [nakarest] NakaInst_PresentationTitle  +0x1a6..+0x1b8 (0xe860f4, 18 B)
@@ -350,7 +356,7 @@ NakaInst_Demofeature:
 ; [nakarest] 44 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x230, 0x8
 ; [nakarest] NakaInst_DrawbarPtrTable  +0x238..+0x2e6 (0xe86186, 174 B)
-; [nakarest] purpose not established: 6 bytes at 0xe8622e that no registered NAKA table points into
+; [nakarest] purpose not established: 6 B at 0xe8622e that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: ResName slot 0x3ea (table 0xe8617e, 44 entries,
 ; [nakarest] InitializeMurai), 44 entry pointers x 4 bytes (starts 0xe8617e, 168 of its 176
 ; [nakarest] bytes are here or later).
@@ -396,7 +402,8 @@ Str_Drawbar_Drawbar:
 ; [nakarest] 37 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x3A4, 0x98
 ; [nakarest] DrawbarStrNull_E8638A  +0x43c..+0x43e (0xe8638a, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe8638a that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe8638a not derived; readers below
+; [nakarest] Readers: 1 data word in Str_Drawbar_Drawbar (at 0xe86386).
 DrawbarStrNull_E8638A:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x43C, 0x2
 ; [nakarest] DrawbarStrNull_E8638C  +0x43e..+0x440 (0xe8638c, 2 B)
@@ -554,7 +561,10 @@ Str_Accordion_Accordion:
 StrTable_WelcomVersion:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x582, 0x30
 ; [nakarest] Str_Version_Empty1  +0x5b2..+0x5b4 (0xe86500, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe86500 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe86500 not derived; readers below
+; [nakarest] Readers: 1 data word in StrTable_WelcomVersion (at 0xe864fc), which is read by
+; [nakarest] InitializeMurai (ui/drawbar_panel_ui.s: `RegObjTabl 0x160000f, 0xfa62cb, 0xb,
+; [nakarest] 0xe864d0, 0x3ef`).
 Str_Version_Empty1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x5B2, 0x2
 ; [nakarest] Str_Version_MPver  +0x5b4..+0x5ba (0xe86502, 6 B)
@@ -617,14 +627,15 @@ Str_Version_Welcom:
 ; [nakarest] 6 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x5E6, 0x4
 ; [nakarest] StrTable_SoftwareVersionComps  +0x5ea..+0x602 (0xe86538, 24 B)
-; [nakarest] purpose not established: 4 bytes at 0xe8654c that no registered NAKA table points into
+; [nakarest] purpose not established: 4 B at 0xe8654c that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: ResName slot 0x3f0 (table 0xe86534, 6 entries,
 ; [nakarest] InitializeMurai), 6 entry pointers x 4 bytes (starts 0xe86534, 20 of its 24 bytes
 ; [nakarest] are here or later).
 StrTable_SoftwareVersionComps:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x5EA, 0x18
 ; [nakarest] Str_SoftVer_Empty1  +0x602..+0x604 (0xe86550, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe86550 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe86550 not derived; readers below
+; [nakarest] Readers: 1 data word in StrTable_SoftwareVersionComps (at 0xe8654c).
 Str_SoftVer_Empty1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x602, 0x2
 ; [nakarest] Str_SoftVer_Empty2  +0x604..+0x606 (0xe86552, 2 B)
@@ -666,7 +677,8 @@ Str_SoftVer_Softver:
 ; [nakarest] InitializeMurai), 2 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x6F6, 0xC
 ; [nakarest] Str_DrawCtrl_Empty  +0x702..+0x704 (0xe86650, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe86650 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe86650 not derived; readers below
+; [nakarest] Readers: 1 data word in Str_SoftVer_Softver (at 0xe8664c).
 Str_DrawCtrl_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x702, 0x2
 ; [nakarest] Str_DrawCtrl_MainMemDrawCtrl  +0x704..+0x718 (0xe86652, 20 B)
@@ -996,1411 +1008,1989 @@ Bitmap_Technics_Logo:
 Bitmap_KN5000_Logo:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xD730, 0x1C20
 ; [nakarest] Str_Mixer_ON  +0xf350..+0xf354 (0xe9529e, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9529e that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9529e), first string "ON "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc4).
 Str_Mixer_ON:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF350, 0x4
 ; [nakarest] MixerPartTable_Start  +0xf354..+0xf4bc (0xe952a2, 360 B)
-; [nakarest] purpose not established: 360 bytes at 0xe952a2 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 360 B at 0xe952a2 not derived; readers below
+; [nakarest] Readers: source references AudioCtrl_DataBlock_Join17 (ui/drawbar_panel_ui.s: `ld
+; [nakarest] xwa, (MixerPartTable_Start_0x104:24)`), AudioCtrl_DataBlock_Skip13
+; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (MixerPartTable_Start_0x80:24)`),
+; [nakarest] AudioCtrl_DataBlock_Skip14 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (MixerPartTable_Start_0x80:24)`), AudioCtrl_DataBlock_Skip16
+; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (MixerPartTable_Start_0x80:24)`), 73 more; 1 data
+; [nakarest] word in MixerPart_NamePtrTable (at 0xeeecc0).
 MixerPartTable_Start:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF354, 0x168
 ; [nakarest] Str_PartName_Empty  +0xf4bc..+0xf4c6 (0xe9540a, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9540a that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9540a), first string " "; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed3c).
 Str_PartName_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4BC, 0xA
 ; [nakarest] Str_PartName_Rhythm  +0xf4c6..+0xf4d2 (0xe95414, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe95414 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe95414), first string " RHYTHM "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed38).
 Str_PartName_Rhythm:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4C6, 0xC
 ; [nakarest] Str_PartName_Control  +0xf4d2..+0xf4dc (0xe95420, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95420 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95420), first string " CONTROL "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed34).
 Str_PartName_Control:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4D2, 0xA
 ; [nakarest] Str_PartName_APC  +0xf4dc..+0xf4e6 (0xe9542a, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9542a that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9542a), first string " APC "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed30).
 Str_PartName_APC:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4DC, 0xA
 ; [nakarest] Str_PartName_MIC  +0xf4e6..+0xf4f0 (0xe95434, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95434 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95434), first string " MIC "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed2c).
 Str_PartName_MIC:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4E6, 0xA
 ; [nakarest] Str_PartName_Metronome  +0xf4f0..+0xf4fa (0xe9543e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9543e that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9543e), first string "METRONOME"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed28).
 Str_PartName_Metronome:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4F0, 0xA
 ; [nakarest] Str_PartName_MSP  +0xf4fa..+0xf504 (0xe95448, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95448 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95448), first string " MSP "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed24).
 Str_PartName_MSP:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4FA, 0xA
 ; [nakarest] Str_PartName_Drums  +0xf504..+0xf50e (0xe95452, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95452 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95452), first string " DRUMS "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed20).
 Str_PartName_Drums:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF504, 0xA
 ; [nakarest] Str_PartName_Bass  +0xf50e..+0xf51a (0xe9545c, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe9545c that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe9545c), first string " BASS "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed1c).
 Str_PartName_Bass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF50E, 0xC
 ; [nakarest] Str_PartName_Accomp3  +0xf51a..+0xf524 (0xe95468, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95468 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95468), first string " ACCOMP3 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed18).
 Str_PartName_Accomp3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF51A, 0xA
 ; [nakarest] Str_PartName_Accomp2  +0xf524..+0xf52e (0xe95472, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95472 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95472), first string " ACCOMP2 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed14).
 Str_PartName_Accomp2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF524, 0xA
 ; [nakarest] Str_PartName_Accomp1  +0xf52e..+0xf538 (0xe9547c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9547c that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9547c), first string " ACCOMP1 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed10).
 Str_PartName_Accomp1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF52E, 0xA
 ; [nakarest] Str_PartName_RBass  +0xf538..+0xf544 (0xe95486, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe95486 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe95486), first string " R.BASS "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed0c).
 Str_PartName_RBass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF538, 0xC
 ; [nakarest] Str_PartName_Chord  +0xf544..+0xf54e (0xe95492, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95492 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95492), first string " CHORD "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed08).
 Str_PartName_Chord:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF544, 0xA
 ; [nakarest] Str_PartName_Part16  +0xf54e..+0xf558 (0xe9549c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9549c that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9549c), first string " PART 16 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed04).
 Str_PartName_Part16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF54E, 0xA
 ; [nakarest] Str_PartName_Part15  +0xf558..+0xf562 (0xe954a6, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe954a6 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe954a6), first string " PART 15 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed00).
 Str_PartName_Part15:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF558, 0xA
 ; [nakarest] Str_PartName_Part14  +0xf562..+0xf56c (0xe954b0, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe954b0 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe954b0), first string " PART 14 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecfc).
 Str_PartName_Part14:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF562, 0xA
 ; [nakarest] Str_PartName_Part13  +0xf56c..+0xf576 (0xe954ba, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe954ba that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe954ba), first string " PART 13 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecf8).
 Str_PartName_Part13:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF56C, 0xA
 ; [nakarest] Str_PartName_Part12  +0xf576..+0xf580 (0xe954c4, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe954c4 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe954c4), first string " PART 12 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecf4).
 Str_PartName_Part12:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF576, 0xA
 ; [nakarest] Str_PartName_Part11  +0xf580..+0xf58a (0xe954ce, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe954ce that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe954ce), first string " PART 11 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecf0).
 Str_PartName_Part11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF580, 0xA
 ; [nakarest] Str_PartName_Part10  +0xf58a..+0xf594 (0xe954d8, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe954d8 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe954d8), first string " PART 10 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecec).
 Str_PartName_Part10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF58A, 0xA
 ; [nakarest] Str_PartName_Part9  +0xf594..+0xf5a0 (0xe954e2, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe954e2 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe954e2), first string " PART 9 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeece8).
 Str_PartName_Part9:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF594, 0xC
 ; [nakarest] Str_PartName_Part8  +0xf5a0..+0xf5ac (0xe954ee, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe954ee that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe954ee), first string " PART 8 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeece4).
 Str_PartName_Part8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5A0, 0xC
 ; [nakarest] Str_PartName_Part7  +0xf5ac..+0xf5b8 (0xe954fa, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe954fa that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe954fa), first string " PART 7 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeece0).
 Str_PartName_Part7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5AC, 0xC
 ; [nakarest] Str_PartName_Part6  +0xf5b8..+0xf5c4 (0xe95506, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe95506 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe95506), first string " PART 6 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecdc).
 Str_PartName_Part6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5B8, 0xC
 ; [nakarest] Str_PartName_Part5  +0xf5c4..+0xf5d0 (0xe95512, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe95512 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe95512), first string " PART 5 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecd8).
 Str_PartName_Part5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5C4, 0xC
 ; [nakarest] Str_PartName_Part4  +0xf5d0..+0xf5dc (0xe9551e, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe9551e that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe9551e), first string " PART 4 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecd4).
 Str_PartName_Part4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5D0, 0xC
 ; [nakarest] Str_PartName_Left  +0xf5dc..+0xf5e8 (0xe9552a, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe9552a that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe9552a), first string " LEFT "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecd0).
 Str_PartName_Left:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5DC, 0xC
 ; [nakarest] Str_PartName_Right2  +0xf5e8..+0xf5f2 (0xe95536, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95536 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe95536), first string " RIGHT 2 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeeccc).
 Str_PartName_Right2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5E8, 0xA
 ; [nakarest] Str_PartName_Right1  +0xf5f2..+0xf720 (0xe95540, 302 B)
-; [nakarest] purpose not established: 302 bytes at 0xe95540 that no registered NAKA table points into
+; [nakarest] Text (302 B at 0xe95540), first string " RIGHT 1 "; no registered NAKA table points
+; [nakarest] into it; reached through source references IvSdpartProc (ui/drawbar_panel_ui.s:
+; [nakarest] `add xwa, Str_PartName_Right1_0x10`), LswAfterTouch (ui/drawbar_panel_ui.s: `ld
+; [nakarest] xwa, Str_PartName_Right1_0xf8`), LswAfterTouch_InactiveStr (ui/drawbar_panel_ui.s:
+; [nakarest] `ld xwa, Str_PartName_Right1_0x100`), LswAfterTouch_StrOff (ui/drawbar_panel_ui.s:
+; [nakarest] `ld xwa, Str_PartName_Right1_0xfc`), 34 more; 1 data word in MixerPart_NamePtrTable
+; [nakarest] (at 0xeeecc8).
 Str_PartName_Right1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5F2, 0x12E
 ; [nakarest] StrTable_LangHeaders  +0xf720..+0xf738 (0xe9566e, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9566e that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the header of catalog records 4, 13, 16-18, 20-21,
+; [nakarest] 35, 37-42, 44, 46, 51-52, 64-67, 74-79.
 StrTable_LangHeaders:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF720, 0x18
 ; [nakarest] Str_Header_Indonesian  +0xf738..+0xf74a (0xe95686, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xe95686 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Indonesian Header".
 Str_Header_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF738, 0x12
 ; [nakarest] Str_Header_Italian  +0xf74a..+0xf75a (0xe95698, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe95698 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "Italian Header".
 Str_Header_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF74A, 0x10
 ; [nakarest] Str_Header_Spanish  +0xf75a..+0xf76a (0xe956a8, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe956a8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Spanish Header".
 Str_Header_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF75A, 0x10
 ; [nakarest] Str_Header_French  +0xf76a..+0xf778 (0xe956b8, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe956b8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "French Header".
 Str_Header_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF76A, 0xE
 ; [nakarest] Str_Header_German  +0xf778..+0xf786 (0xe956c6, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe956c6 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "German Header".
 Str_Header_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF778, 0xE
 ; [nakarest] Str_Header_English  +0xf786..+0xf796 (0xe956d4, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe956d4 that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "English Header".
 Str_Header_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF786, 0x10
 ; [nakarest] StrTable_LangTexts  +0xf796..+0xf7ae (0xe956e4, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe956e4 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog records 4, 13, 16-18, 42, 46,
+; [nakarest] 51-52, 64-67, 75-79.
 StrTable_LangTexts:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF796, 0x18
 ; [nakarest] Str_Text_Indonesian  +0xf7ae..+0xf7be (0xe956fc, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe956fc that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Indonesian Text".
 Str_Text_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF7AE, 0x10
 ; [nakarest] Str_Text_Italian  +0xf7be..+0xf7cc (0xe9570c, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9570c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "Italian Text".
 Str_Text_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF7BE, 0xE
 ; [nakarest] Str_Text_Spanish  +0xf7cc..+0xf7da (0xe9571a, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9571a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Spanish Text".
 Str_Text_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF7CC, 0xE
 ; [nakarest] Str_Text_French  +0xf7da..+0xf7e6 (0xe95728, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe95728 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "French Text".
 Str_Text_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF7DA, 0xC
 ; [nakarest] Str_Text_German  +0xf7e6..+0xf7f2 (0xe95734, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe95734 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "German Text".
 Str_Text_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF7E6, 0xC
 ; [nakarest] Str_Text_English  +0xf7f2..+0xf800 (0xe95740, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe95740 that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "English Text".
 Str_Text_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF7F2, 0xE
 ; [nakarest] StrTable_ErrorLabel  +0xf800..+0xf818 (0xe9574e, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9574e that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the header of catalog records 0-3, 5-12, 14-15,
+; [nakarest] 19, 22-34, 43, 45, 47-50, 53-63, 68-71, 73.
 StrTable_ErrorLabel:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF800, 0x18
 ; [nakarest] Str_ErrorLabel_Indonesian  +0xf818..+0xf81e (0xe95766, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe95766 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "ERROR".
 Str_ErrorLabel_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF818, 0x6
 ; [nakarest] Str_ErrorLabel_Italian  +0xf81e..+0xf824 (0xe9576c, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9576c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR".
 Str_ErrorLabel_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF81E, 0x6
 ; [nakarest] Str_ErrorLabel_Spanish  +0xf824..+0xf82a (0xe95772, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe95772 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "ERROR".
 Str_ErrorLabel_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF824, 0x6
 ; [nakarest] Str_ErrorLabel_French  +0xf82a..+0xf832 (0xe95778, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe95778 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "ERREUR".
 Str_ErrorLabel_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF82A, 0x8
 ; [nakarest] Str_ErrorLabel_German  +0xf832..+0xf838 (0xe95780, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe95780 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "ERROR".
 Str_ErrorLabel_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF832, 0x6
 ; [nakarest] Str_ErrorLabel_English  +0xf838..+0xf842 (0xe95786, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95786 that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "ERROR". per-language string table (6 pointers
+; [nakarest] each: English, German, French, Spanish, Italian, Indonesian -- the order of the
+; [nakarest] header table's own strings "English Header" ... "Indonesian Header") used as the
+; [nakarest] header of catalog records 36, 72.
 Str_ErrorLabel_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF838, 0xA
 ; [nakarest] StrTable_ReminderLabel  +0xf842..+0xf856 (0xe95790, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe95790 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the header of catalog records 36,
+; [nakarest] 72 (starts 0xe9578c, 20 of its 24 bytes are here or later).
 StrTable_ReminderLabel:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF842, 0x14
 ; [nakarest] Str_Reminder_Indonesian  +0xf856..+0xf862 (0xe957a4, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe957a4 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "REMINDER !".
 Str_Reminder_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF856, 0xC
 ; [nakarest] Str_Reminder_Italian  +0xf862..+0xf86e (0xe957b0, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe957b0 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "REMINDER! ".
 Str_Reminder_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF862, 0xC
 ; [nakarest] Str_Reminder_Spanish  +0xf86e..+0xf87a (0xe957bc, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe957bc that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "\xA1RECUERDE!".
 Str_Reminder_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF86E, 0xC
 ; [nakarest] Str_Reminder_French  +0xf87a..+0xf884 (0xe957c8, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe957c8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "RAPPEL! ".
 Str_Reminder_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF87A, 0xA
 ; [nakarest] Str_Reminder_German  +0xf884..+0xf89c (0xe957d2, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe957d2 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "HINWEIS ! "; English "REMINDER! ".
 Str_Reminder_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF884, 0x18
 ; [nakarest] StrTable_CompletedLabel  +0xf89c..+0xf8b4 (0xe957ea, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe957ea that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog records 20-21, 35, 41, 44.
 StrTable_CompletedLabel:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF89C, 0x18
 ; [nakarest] Str_Completed_Indonesian  +0xf8b4..+0xf8c2 (0xe95802, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe95802 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "LENGKAPILAH!".
 Str_Completed_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF8B4, 0xE
 ; [nakarest] Str_Completed_Italian  +0xf8c2..+0xf904 (0xe95810, 66 B)
-; [nakarest] purpose not established: 66 bytes at 0xe95810 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "COMPLETED!"; Spanish "\xA1FINALIZADO!";
+; [nakarest] French "TERMINE!"; German "Vorgang beendet!"; ....
 Str_Completed_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF8C2, 0x42
 ; [nakarest] StrTable_PleaseWaitLabel  +0xf904..+0xf91c (0xe95852, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe95852 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog records 37-40.
 StrTable_PleaseWaitLabel:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF904, 0x18
 ; [nakarest] Str_PleaseWait_Indonesian  +0xf91c..+0xf92e (0xe9586a, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xe9586a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "SILAHKAN TUNGGU!".
 Str_PleaseWait_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF91C, 0x12
 ; [nakarest] Str_PleaseWait_Italian  +0xf92e..+0xf998 (0xe9587c, 106 B)
-; [nakarest] purpose not established: 106 bytes at 0xe9587c that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "PLEASE WAIT!"; Spanish "\xA1POR FAVOR,
+; [nakarest] ESPERE!"; French "VEUILLEZ PATIENTER!"; German "BITTE WARTEN!"; .... per-language
+; [nakarest] string table (6 pointers each: English, German, French, Spanish, Italian,
+; [nakarest] Indonesian -- the order of the header table's own strings "English Header" ...
+; [nakarest] "Indonesian Header") used as the text of catalog record 36.
 Str_PleaseWait_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF92E, 0x6A
 ; [nakarest] Str_MemReminder_Indonesian  +0xf998..+0xfa12 (0xe958e6, 122 B)
-; [nakarest] purpose not established: 122 bytes at 0xe958e6 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Memori internal diterima unt".
 Str_MemReminder_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF998, 0x7A
 ; [nakarest] Str_MemReminder_Italian  +0xfa12..+0xfc3a (0xe95960, 552 B)
-; [nakarest] purpose not established: 552 bytes at 0xe95960 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "REMINDER"; Spanish "La memoria interna es
+; [nakarest] reteni"; French "La m\xE9moire interne est conse"; German "Der Speicherinhalt
+; [nakarest] bleibt et"; ....
 Str_MemReminder_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFA12, 0x228
 ; [nakarest] StrTable_SettingsNotSaved  +0xfc3a..+0xfc52 (0xe95b88, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe95b88 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 72.
 StrTable_SettingsNotSaved:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFC3A, 0x18
 ; [nakarest] Str_SettingsNotSaved_ID  +0xfc52..+0xfce4 (0xe95ba0, 146 B)
-; [nakarest] purpose not established: 146 bytes at 0xe95ba0 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Aturan sudah dibatalkan kare".
 Str_SettingsNotSaved_ID:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFC52, 0x92
 ; [nakarest] Str_SettingsNotSaved_IT  +0xfce4..+0xfcee (0xe95c32, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe95c32 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "REMINDER".
 Str_SettingsNotSaved_IT:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFCE4, 0xA
 ; [nakarest] Str_SettingsNotSaved_ES  +0xfcee..+0xfdc0 (0xe95c3c, 210 B)
-; [nakarest] purpose not established: 210 bytes at 0xe95c3c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Las configuraciones fueron c".
 Str_SettingsNotSaved_ES:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFCEE, 0xD2
 ; [nakarest] Str_SettingsNotSaved_FR  +0xfdc0..+0xfe5e (0xe95d0e, 158 B)
-; [nakarest] purpose not established: 158 bytes at 0xe95d0e that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Vous n'avez pas press\xE9 le bo".
 Str_SettingsNotSaved_FR:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFDC0, 0x9E
 ; [nakarest] Str_SettingsNotSaved_DE  +0xfe5e..+0xff04 (0xe95dac, 166 B)
-; [nakarest] purpose not established: 166 bytes at 0xe95dac that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Die Einstellungen wurden nic".
 Str_SettingsNotSaved_DE:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFE5E, 0xA6
 ; [nakarest] Str_SettingsNotSaved_EN  +0xff04..+0xffac (0xe95e52, 168 B)
-; [nakarest] purpose not established: 168 bytes at 0xe95e52 that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "The settings have been cance".
 Str_SettingsNotSaved_EN:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFF04, 0xA8
 ; [nakarest] StrTable_GenericError  +0xffac..+0xffc4 (0xe95efa, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe95efa that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 74.
 StrTable_GenericError:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFFAC, 0x18
 ; [nakarest] Str_GenericErr_Indonesian  +0xffc4..+0xffcc (0xe95f12, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe95f12 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "ERROR!".
 Str_GenericErr_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFFC4, 0x8
 ; [nakarest] Str_GenericErr_Italian  +0xffcc..+0xffd4 (0xe95f1a, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe95f1a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR!".
 Str_GenericErr_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFFCC, 0x8
 ; [nakarest] Str_GenericErr_Spanish  +0xffd4..+0xffdc (0xe95f22, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe95f22 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "ERROR!".
 Str_GenericErr_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFFD4, 0x8
 ; [nakarest] Str_GenericErr_French  +0xffdc..+0xffe4 (0xe95f2a, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe95f2a that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "ERREUR!".
 Str_GenericErr_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFFDC, 0x8
 ; [nakarest] Str_GenericErr_German  +0xffe4..+0xffec (0xe95f32, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe95f32 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "ERROR!".
 Str_GenericErr_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFFE4, 0x8
 ; [nakarest] Str_GenericErr_English  +0xffec..+0x1000c (0xe95f3a, 32 B)
-; [nakarest] purpose not established: 32 bytes at 0xe95f3a that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "ERROR!". per-language string table (6
+; [nakarest] pointers each: English, German, French, Spanish, Italian, Indonesian -- the order
+; [nakarest] of the header table's own strings "English Header" ... "Indonesian Header") used as
+; [nakarest] the text of catalog record 0.
 Str_GenericErr_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xFFEC, 0x20
 ; [nakarest] Str_DiskErr00_Indonesian  +0x1000c..+0x1005a (0xe95f5a, 78 B)
-; [nakarest] purpose not established: 78 bytes at 0xe95f5a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Data pada disk yang Anda per".
 Str_DiskErr00_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1000C, 0x4E
 ; [nakarest] Str_DiskErr00_Italian  +0x1005a..+0x1018a (0xe95fa8, 304 B)
-; [nakarest] purpose not established: 304 bytes at 0xe95fa8 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 00"; Spanish "Los datos del disco que
+; [nakarest] uste"; French "Les informations contenues d"; German "Die Daten auf dieser
+; [nakarest] Diskett"; ....
 Str_DiskErr00_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1005A, 0x130
 ; [nakarest] StrTable_DiskErr01  +0x1018a..+0x101a2 (0xe960d8, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe960d8 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 1.
 StrTable_DiskErr01:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1018A, 0x18
 ; [nakarest] Str_DiskErr01_Indonesian  +0x101a2..+0x101ee (0xe960f0, 76 B)
-; [nakarest] purpose not established: 76 bytes at 0xe960f0 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Kesalahan sudah terjadi keti".
 Str_DiskErr01_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x101A2, 0x4C
 ; [nakarest] Str_DiskErr01_Italian  +0x101ee..+0x101f8 (0xe9613c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9613c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 01".
 Str_DiskErr01_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x101EE, 0xA
 ; [nakarest] Str_DiskErr01_Spanish  +0x101f8..+0x10240 (0xe96146, 72 B)
-; [nakarest] purpose not established: 72 bytes at 0xe96146 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Se ha producido un error mie".
 Str_DiskErr01_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x101F8, 0x48
 ; [nakarest] Str_DiskErr01_French  +0x10240..+0x1028e (0xe9618e, 78 B)
-; [nakarest] purpose not established: 78 bytes at 0xe9618e that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Une erreur s'est produite pe".
 Str_DiskErr01_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10240, 0x4E
 ; [nakarest] Str_DiskErr01_German  +0x1028e..+0x102e4 (0xe961dc, 86 B)
-; [nakarest] purpose not established: 86 bytes at 0xe961dc that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Beim Laden von der Diskette ".
 Str_DiskErr01_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1028E, 0x56
 ; [nakarest] Str_DiskErr01_English  +0x102e4..+0x103fa (0xe96232, 278 B)
-; [nakarest] purpose not established: 278 bytes at 0xe96232 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: English "An error has occurred while "; Indonesian
+; [nakarest] "Tidak ada disket dalam disk "; Italian "ERROR 02"; Spanish "No hay disco en Disk
+; [nakarest] Drive."; .... per-language string tables (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog records 2-3.
 Str_DiskErr01_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x102E4, 0x116
 ; [nakarest] StrTable_DiskErr03  +0x103fa..+0x1040e (0xe96348, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe96348 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 3
+; [nakarest] (starts 0xe96344, 20 of its 24 bytes are here or later).
 StrTable_DiskErr03:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x103FA, 0x14
 ; [nakarest] Str_DiskErr03_Indonesian  +0x1040e..+0x10464 (0xe9635c, 86 B)
-; [nakarest] purpose not established: 86 bytes at 0xe9635c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "File yang dicoba untuk dikel".
 Str_DiskErr03_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1040E, 0x56
 ; [nakarest] Str_DiskErr03_Italian  +0x10464..+0x1046e (0xe963b2, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe963b2 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 03".
 Str_DiskErr03_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10464, 0xA
 ; [nakarest] Str_DiskErr03_Spanish  +0x1046e..+0x1049a (0xe963bc, 44 B)
-; [nakarest] purpose not established: 44 bytes at 0xe963bc that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "El disco que trat\xF3 de cargar".
 Str_DiskErr03_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1046E, 0x2C
 ; [nakarest] Str_DiskErr03_French  +0x1049a..+0x104d0 (0xe963e8, 54 B)
-; [nakarest] purpose not established: 54 bytes at 0xe963e8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Le fichier que vous avez ess".
 Str_DiskErr03_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1049A, 0x36
 ; [nakarest] Str_DiskErr03_German  +0x104d0..+0x10534 (0xe9641e, 100 B)
-; [nakarest] purpose not established: 100 bytes at 0xe9641e that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Die Diskettenbank, die Sie g"; English "The
+; [nakarest] file that you tried to l".
 Str_DiskErr03_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x104D0, 0x64
 ; [nakarest] StrTable_DiskErr05  +0x10534..+0x1054c (0xe96482, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe96482 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 5.
 StrTable_DiskErr05:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10534, 0x18
 ; [nakarest] Str_DiskErr05_Indonesian  +0x1054c..+0x1058e (0xe9649a, 66 B)
-; [nakarest] purpose not established: 66 bytes at 0xe9649a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Kesalahan terjadi ketika dis".
 Str_DiskErr05_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1054C, 0x42
 ; [nakarest] Str_DiskErr05_Italian  +0x1058e..+0x10598 (0xe964dc, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe964dc that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 05".
 Str_DiskErr05_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1058E, 0xA
 ; [nakarest] Str_DiskErr05_Spanish  +0x10598..+0x106da (0xe964e6, 322 B)
-; [nakarest] purpose not established: 322 bytes at 0xe964e6 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Spanish "Se ha producido un error mie"; French "Une
+; [nakarest] erreur s'est produite pe"; German "Beim Speichern auf die Diske"; English "An error
+; [nakarest] has occurred while ".
 Str_DiskErr05_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10598, 0x142
 ; [nakarest] StrTable_DiskErr06  +0x106da..+0x106f2 (0xe96628, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe96628 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 6.
 StrTable_DiskErr06:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x106DA, 0x18
 ; [nakarest] Str_DiskErr06_Indonesian  +0x106f2..+0x10754 (0xe96640, 98 B)
-; [nakarest] purpose not established: 98 bytes at 0xe96640 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Disket yang Anda pergunakan ".
 Str_DiskErr06_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x106F2, 0x62
 ; [nakarest] Str_DiskErr06_Italian  +0x10754..+0x1075e (0xe966a2, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe966a2 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 06".
 Str_DiskErr06_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10754, 0xA
 ; [nakarest] Str_DiskErr06_Spanish  +0x1075e..+0x107d6 (0xe966ac, 120 B)
-; [nakarest] purpose not established: 120 bytes at 0xe966ac that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "El disco que est\xE1 utilizando".
 Str_DiskErr06_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1075E, 0x78
 ; [nakarest] Str_DiskErr06_French  +0x107d6..+0x10848 (0xe96724, 114 B)
-; [nakarest] purpose not established: 114 bytes at 0xe96724 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "La disquette que vous utilis".
 Str_DiskErr06_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x107D6, 0x72
 ; [nakarest] Str_DiskErr06_German  +0x10848..+0x108ae (0xe96796, 102 B)
-; [nakarest] purpose not established: 102 bytes at 0xe96796 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Ihre Diskette ist schreibges".
 Str_DiskErr06_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10848, 0x66
 ; [nakarest] Str_DiskErr06_English  +0x108ae..+0x10910 (0xe967fc, 98 B)
-; [nakarest] purpose not established: 98 bytes at 0xe967fc that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "The disk that you are using ".
 Str_DiskErr06_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x108AE, 0x62
 ; [nakarest] StrTable_DiskErr07  +0x10910..+0x10928 (0xe9685e, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9685e that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 7.
 StrTable_DiskErr07:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10910, 0x18
 ; [nakarest] Str_DiskErr07_Indonesian  +0x10928..+0x10972 (0xe96876, 74 B)
-; [nakarest] purpose not established: 74 bytes at 0xe96876 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Disket yang Anda dipergunaka".
 Str_DiskErr07_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10928, 0x4A
 ; [nakarest] Str_DiskErr07_Italian  +0x10972..+0x10a7a (0xe968c0, 264 B)
-; [nakarest] purpose not established: 264 bytes at 0xe968c0 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 07"; Spanish "El disco que est\xE1
+; [nakarest] utilizando"; French "La disquette que vous utilis"; German "Ihre Diskette ist voll.
+; [nakarest] Benu"; ....
 Str_DiskErr07_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10972, 0x108
 ; [nakarest] StrTable_DiskErr08  +0x10a7a..+0x10a92 (0xe969c8, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe969c8 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 8.
 StrTable_DiskErr08:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10A7A, 0x18
 ; [nakarest] Str_DiskErr08_Indonesian  +0x10a92..+0x10b10 (0xe969e0, 126 B)
-; [nakarest] purpose not established: 126 bytes at 0xe969e0 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Kesalahan sudah terjadi keti".
 Str_DiskErr08_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10A92, 0x7E
 ; [nakarest] Str_DiskErr08_Italian  +0x10b10..+0x10b1a (0xe96a5e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe96a5e that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 08".
 Str_DiskErr08_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10B10, 0xA
 ; [nakarest] Str_DiskErr08_Spanish  +0x10b1a..+0x10bb8 (0xe96a68, 158 B)
-; [nakarest] purpose not established: 158 bytes at 0xe96a68 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Se ha producido un error mie".
 Str_DiskErr08_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10B1A, 0x9E
 ; [nakarest] Str_DiskErr08_French  +0x10bb8..+0x10c58 (0xe96b06, 160 B)
-; [nakarest] purpose not established: 160 bytes at 0xe96b06 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Une erreur s'est produite pe".
 Str_DiskErr08_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10BB8, 0xA0
 ; [nakarest] Str_DiskErr08_German  +0x10c58..+0x10ca6 (0xe96ba6, 78 B)
-; [nakarest] purpose not established: 78 bytes at 0xe96ba6 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Beim Formatieren ist ein Feh".
 Str_DiskErr08_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10C58, 0x4E
 ; [nakarest] Str_DiskErr08_English  +0x10ca6..+0x10d2a (0xe96bf4, 132 B)
-; [nakarest] purpose not established: 132 bytes at 0xe96bf4 that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "An error has occurred while ".
 Str_DiskErr08_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10CA6, 0x84
 ; [nakarest] StrTable_DiskErr09  +0x10d2a..+0x10d42 (0xe96c78, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe96c78 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 9.
 StrTable_DiskErr09:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10D2A, 0x18
 ; [nakarest] Str_DiskErr09_Indonesian  +0x10d42..+0x10d8a (0xe96c90, 72 B)
-; [nakarest] purpose not established: 72 bytes at 0xe96c90 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Data didalam disk diprotek, ".
 Str_DiskErr09_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10D42, 0x48
 ; [nakarest] Str_DiskErr09_Italian  +0x10d8a..+0x10d9e (0xe96cd8, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe96cd8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "(ERROR 09)cp_prtct".
 Str_DiskErr09_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10D8A, 0x14
 ; [nakarest] Str_DiskErr09_Spanish  +0x10d9e..+0x10df4 (0xe96cec, 86 B)
-; [nakarest] purpose not established: 86 bytes at 0xe96cec that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Los datos del disco est\xE1n pr".
 Str_DiskErr09_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10D9E, 0x56
 ; [nakarest] Str_DiskErr09_French  +0x10df4..+0x10e36 (0xe96d42, 66 B)
-; [nakarest] purpose not established: 66 bytes at 0xe96d42 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Cette disquette est prot\xE9g\xE9e".
 Str_DiskErr09_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10DF4, 0x42
 ; [nakarest] Str_DiskErr09_German  +0x10e36..+0x10e8e (0xe96d84, 88 B)
-; [nakarest] purpose not established: 88 bytes at 0xe96d84 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Die Daten auf dieser Diskett".
 Str_DiskErr09_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10E36, 0x58
 ; [nakarest] Str_DiskErr09_English  +0x10e8e..+0x10ed2 (0xe96ddc, 68 B)
-; [nakarest] purpose not established: 68 bytes at 0xe96ddc that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "The data on the disk is copy".
 Str_DiskErr09_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10E8E, 0x44
 ; [nakarest] StrTable_DiskErr10  +0x10ed2..+0x10eea (0xe96e20, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe96e20 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 10.
 StrTable_DiskErr10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10ED2, 0x18
 ; [nakarest] Str_DiskErr10_Indonesian  +0x10eea..+0x10f00 (0xe96e38, 22 B)
-; [nakarest] purpose not established: 22 bytes at 0xe96e38 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Data sudah diprotek.".
 Str_DiskErr10_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10EEA, 0x16
 ; [nakarest] Str_DiskErr10_Italian  +0x10f00..+0x10f0a (0xe96e4e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe96e4e that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 10".
 Str_DiskErr10_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10F00, 0xA
 ; [nakarest] Str_DiskErr10_Spanish  +0x10f0a..+0x10f3a (0xe96e58, 48 B)
-; [nakarest] purpose not established: 48 bytes at 0xe96e58 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Los datos ya est\xE1n protegido".
 Str_DiskErr10_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10F0A, 0x30
 ; [nakarest] Str_DiskErr10_French  +0x10f3a..+0x10f66 (0xe96e88, 44 B)
-; [nakarest] purpose not established: 44 bytes at 0xe96e88 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Ces donn\xE9es sont prot\xE9g\xE9es c".
 Str_DiskErr10_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10F3A, 0x2C
 ; [nakarest] Str_DiskErr10_German  +0x10f66..+0x10f90 (0xe96eb4, 42 B)
-; [nakarest] purpose not established: 42 bytes at 0xe96eb4 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Diese Daten sind bereits kop".
 Str_DiskErr10_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10F66, 0x2A
 ; [nakarest] Str_DiskErr10_English  +0x10f90..+0x10fb4 (0xe96ede, 36 B)
-; [nakarest] purpose not established: 36 bytes at 0xe96ede that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "The data is already copy pro".
 Str_DiskErr10_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10F90, 0x24
 ; [nakarest] StrTable_DiskErr11  +0x10fb4..+0x10fcc (0xe96f02, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe96f02 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 11.
 StrTable_DiskErr11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10FB4, 0x18
 ; [nakarest] Str_DiskErr11_Indonesian  +0x10fcc..+0x10ff0 (0xe96f1a, 36 B)
-; [nakarest] purpose not established: 36 bytes at 0xe96f1a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Password yang anda masukkan ".
 Str_DiskErr11_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10FCC, 0x24
 ; [nakarest] Str_DiskErr11_Italian  +0x10ff0..+0x1109a (0xe96f3e, 170 B)
-; [nakarest] purpose not established: 170 bytes at 0xe96f3e that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 11"; Spanish "La contrase\xF1a
+; [nakarest] ingresada es i"; French "Votre mot de passe est incor"; German "Das eingegebene
+; [nakarest] Password ist"; .... per-language string table (6 pointers each: English, German,
+; [nakarest] French, Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 12.
 Str_DiskErr11_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x10FF0, 0xAA
 ; [nakarest] StrTable_DiskErr12  +0x1109a..+0x110ae (0xe96fe8, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe96fe8 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 12
+; [nakarest] (starts 0xe96fe4, 20 of its 24 bytes are here or later).
 StrTable_DiskErr12:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1109A, 0x14
 ; [nakarest] Str_DiskErr12_Indonesian  +0x110ae..+0x110fa (0xe96ffc, 76 B)
-; [nakarest] purpose not established: 76 bytes at 0xe96ffc that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Batu Baterei sudah lemah. Ga".
 Str_DiskErr12_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x110AE, 0x4C
 ; [nakarest] Str_DiskErr12_Italian  +0x110fa..+0x11104 (0xe97048, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe97048 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 12".
 Str_DiskErr12_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x110FA, 0xA
 ; [nakarest] Str_DiskErr12_Spanish  +0x11104..+0x1116c (0xe97052, 104 B)
-; [nakarest] purpose not established: 104 bytes at 0xe97052 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "La carga de las bater\xEDas es ".
 Str_DiskErr12_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11104, 0x68
 ; [nakarest] Str_DiskErr12_French  +0x1116c..+0x113b2 (0xe970ba, 582 B)
-; [nakarest] purpose not established: 582 bytes at 0xe970ba that no registered NAKA table points into
+; [nakarest] message texts of the catalog: French "La batterie interne est prat"; German "Die
+; [nakarest] verbleibende Kapazit\xE4t d"; English "The remaining battery power "; Indonesian
+; [nakarest] "Lagu yang anda sedang coba u"; .... per-language string tables (6 pointers each:
+; [nakarest] English, German, French, Spanish, Italian, Indonesian -- the order of the header
+; [nakarest] table's own strings "English Header" ... "Indonesian Header") used as the text of
+; [nakarest] catalog records 47-48.
 Str_DiskErr12_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1116C, 0x246
 ; [nakarest] StrTable_DiskErr16  +0x113b2..+0x113c6 (0xe97300, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe97300 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 48
+; [nakarest] (starts 0xe972fc, 20 of its 24 bytes are here or later).
 StrTable_DiskErr16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x113B2, 0x14
 ; [nakarest] Str_DiskErr16_Indonesian  +0x113c6..+0x11416 (0xe97314, 80 B)
-; [nakarest] purpose not established: 80 bytes at 0xe97314 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Standard MIDI File tidak kom".
 Str_DiskErr16_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x113C6, 0x50
 ; [nakarest] Str_DiskErr16_Italian  +0x11416..+0x11428 (0xe97364, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xe97364 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "(ERROR 16)err_cnv".
 Str_DiskErr16_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11416, 0x12
 ; [nakarest] Str_DiskErr16_Spanish  +0x11428..+0x1147a (0xe97376, 82 B)
-; [nakarest] purpose not established: 82 bytes at 0xe97376 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Este archivo MIDI est\xE1ndar e".
 Str_DiskErr16_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11428, 0x52
 ; [nakarest] Str_DiskErr16_French  +0x1147a..+0x114d6 (0xe973c8, 92 B)
-; [nakarest] purpose not established: 92 bytes at 0xe973c8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Cette s\xE9quence STANDARD MIDI".
 Str_DiskErr16_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1147A, 0x5C
 ; [nakarest] Str_DiskErr16_German  +0x114d6..+0x11586 (0xe97424, 176 B)
-; [nakarest] purpose not established: 176 bytes at 0xe97424 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Dieses STANDARD MIDI FILE is"; English "This
+; [nakarest] Standard MIDI File is i".
 Str_DiskErr16_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x114D6, 0xB0
 ; [nakarest] StrPtr_DiskErr17Table  +0x11586..+0x1158a (0xe974d4, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe974d4 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 49.
 StrPtr_DiskErr17Table:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11586, 0x4
 ; [nakarest] StrTable_DiskErr17  +0x1158a..+0x1159e (0xe974d8, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe974d8 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 49
+; [nakarest] (starts 0xe974d4, 20 of its 24 bytes are here or later).
 StrTable_DiskErr17:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1158A, 0x14
 ; [nakarest] Str_DiskErr17_Indonesian  +0x1159e..+0x115bc (0xe974ec, 30 B)
-; [nakarest] purpose not established: 30 bytes at 0xe974ec that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Ini tidak STANDARD MIDI FILE".
 Str_DiskErr17_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1159E, 0x1E
 ; [nakarest] Str_DiskErr17_Italian  +0x115bc..+0x115d2 (0xe9750a, 22 B)
-; [nakarest] purpose not established: 22 bytes at 0xe9750a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "(ERROR 17)err_no_midi".
 Str_DiskErr17_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x115BC, 0x16
 ; [nakarest] Str_DiskErr17_Spanish  +0x115d2..+0x115f8 (0xe97520, 38 B)
-; [nakarest] purpose not established: 38 bytes at 0xe97520 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Este no es un archivo MIDI e".
 Str_DiskErr17_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x115D2, 0x26
 ; [nakarest] Str_DiskErr17_French  +0x115f8..+0x11628 (0xe97546, 48 B)
-; [nakarest] purpose not established: 48 bytes at 0xe97546 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Ceci n'est pas une s\xE9quence ".
 Str_DiskErr17_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x115F8, 0x30
 ; [nakarest] Str_DiskErr17_German  +0x11628..+0x11684 (0xe97576, 92 B)
-; [nakarest] purpose not established: 92 bytes at 0xe97576 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Dies ist kein STANDARD MIDI "; English "This
+; [nakarest] is not a STANDARD MIDI ". per-language string table (6 pointers each: English,
+; [nakarest] German, French, Spanish, Italian, Indonesian -- the order of the header table's own
+; [nakarest] strings "English Header" ... "Indonesian Header") used as the text of catalog
+; [nakarest] record 50.
 Str_DiskErr17_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11628, 0x5C
 ; [nakarest] Str_DiskErr18_Indonesian  +0x11684..+0x116d8 (0xe975d2, 84 B)
-; [nakarest] purpose not established: 84 bytes at 0xe975d2 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Timebase (resolusi PPQ) yang".
 Str_DiskErr18_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11684, 0x54
 ; [nakarest] Str_DiskErr18_Italian  +0x116d8..+0x11860 (0xe97626, 392 B)
-; [nakarest] purpose not established: 392 bytes at 0xe97626 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "(ERROR 18)err_timebase"; Spanish "La base de
+; [nakarest] tiempo (resoluci\xF3"; French "La r\xE9solution {PPQ} que vous"; German "Die
+; [nakarest] Zeiteinheit (PPQ Aufl\xF6su"; ....
 Str_DiskErr18_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x116D8, 0x188
 ; [nakarest] StrTable_DiskErr19  +0x11860..+0x11878 (0xe977ae, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe977ae that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 63.
 StrTable_DiskErr19:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11860, 0x18
 ; [nakarest] Str_DiskErr19_Indonesian  +0x11878..+0x118d0 (0xe977c6, 88 B)
-; [nakarest] purpose not established: 88 bytes at 0xe977c6 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Disket ini adalah satu FORMA".
 Str_DiskErr19_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11878, 0x58
 ; [nakarest] Str_DiskErr19_Italian  +0x118d0..+0x118e0 (0xe9781e, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe9781e that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "(ERROR 19)dctp".
 Str_DiskErr19_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x118D0, 0x10
 ; [nakarest] Str_DiskErr19_Spanish  +0x118e0..+0x11a54 (0xe9782e, 372 B)
-; [nakarest] purpose not established: 372 bytes at 0xe9782e that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Spanish "Este es un archivo MIDI de F"; French "Ceci
+; [nakarest] est une s\xE9quence STANDA"; German "Dies ist ein FORMAT 1 MIDI F"; English "This
+; [nakarest] is a FORMAT 1 MIDI FILE". per-language string table (6 pointers each: English,
+; [nakarest] German, French, Spanish, Italian, Indonesian -- the order of the header table's own
+; [nakarest] strings "English Header" ... "Indonesian Header") used as the text of catalog
+; [nakarest] record 14.
 Str_DiskErr19_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x118E0, 0x174
 ; [nakarest] Str_DiskErr20_Indonesian  +0x11a54..+0x11ac0 (0xe979a2, 108 B)
-; [nakarest] purpose not established: 108 bytes at 0xe979a2 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Satu masalah terjadi terhad".
 Str_DiskErr20_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11A54, 0x6C
 ; [nakarest] Str_DiskErr20_Italian  +0x11ac0..+0x120a2 (0xe97a0e, 1506 B)
-; [nakarest] purpose not established: 1506 bytes at 0xe97a0e that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 20"; Spanish "Se ha producido un
+; [nakarest] problema "; French "Je ne peux pas charger le SE"; German "Die Sequenzerdaten sind
+; [nakarest] nich"; .... per-language string tables (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog records 15,
+; [nakarest] 24-26.
 Str_DiskErr20_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x11AC0, 0x5E2
 ; [nakarest] StrTable_DiskErr24_Rhythm  +0x120a2..+0x120b6 (0xe97ff0, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe97ff0 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 26
+; [nakarest] (starts 0xe97fec, 20 of its 24 bytes are here or later).
 StrTable_DiskErr24_Rhythm:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x120A2, 0x14
 ; [nakarest] Str_Err24Rhythm_Indonesian  +0x120b6..+0x12106 (0xe98004, 80 B)
-; [nakarest] purpose not established: 80 bytes at 0xe98004 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Satu Rhythm Track sudah ada.".
 Str_Err24Rhythm_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x120B6, 0x50
 ; [nakarest] Str_Err24Rhythm_Italian  +0x12106..+0x12110 (0xe98054, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe98054 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 24".
 Str_Err24Rhythm_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12106, 0xA
 ; [nakarest] Str_Err24Rhythm_Spanish  +0x12110..+0x1215a (0xe9805e, 74 B)
-; [nakarest] purpose not established: 74 bytes at 0xe9805e that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Ya existe una pista de ritmo".
 Str_Err24Rhythm_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12110, 0x4A
 ; [nakarest] Str_Err24Rhythm_French  +0x1215a..+0x121be (0xe980a8, 100 B)
-; [nakarest] purpose not established: 100 bytes at 0xe980a8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Vous avez d\xE9j\xE0 choisi une pi".
 Str_Err24Rhythm_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1215A, 0x64
 ; [nakarest] Str_Err24Rhythm_German  +0x121be..+0x1226a (0xe9810c, 172 B)
-; [nakarest] purpose not established: 172 bytes at 0xe9810c that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Es ist nicht m\xF6glich, zwei R"; English "A
+; [nakarest] Rhythm Track already exist".
 Str_Err24Rhythm_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x121BE, 0xAC
 ; [nakarest] StrTable_DiskErr24_Chord  +0x1226a..+0x12282 (0xe981b8, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe981b8 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 24 B at 0xe981b8 not derived; readers below
+; [nakarest] Readers: source references MsgText_Lang1 (ui/drawbar_panel_ui.s: `ld xhl,
+; [nakarest] StrTable_DiskErr24_Chord`).
 StrTable_DiskErr24_Chord:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1226A, 0x18
 ; [nakarest] Str_Err24Chord_Indonesian  +0x12282..+0x122d0 (0xe981d0, 78 B)
-; [nakarest] purpose not established: 78 bytes at 0xe981d0 that no registered NAKA table points into
+; [nakarest] Text (78 B at 0xe981d0), first string "Satu Chord Track sudah ada. tidak mungkin
+; [nakarest] menunj"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] StrTable_DiskErr24_Chord (at 0xe981cc), which is read by MsgText_Lang1
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xhl, StrTable_DiskErr24_Chord`).
 Str_Err24Chord_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12282, 0x4E
 ; [nakarest] Str_Err24Chord_Italian  +0x122d0..+0x122da (0xe9821e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9821e that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9821e), first string "ERROR 24"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in StrTable_DiskErr24_Chord (at 0xe981c8),
+; [nakarest] which is read by MsgText_Lang1 (ui/drawbar_panel_ui.s: `ld xhl,
+; [nakarest] StrTable_DiskErr24_Chord`).
 Str_Err24Chord_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x122D0, 0xA
 ; [nakarest] Str_Err24Chord_Spanish  +0x122da..+0x12326 (0xe98228, 76 B)
-; [nakarest] purpose not established: 76 bytes at 0xe98228 that no registered NAKA table points into
+; [nakarest] Text (76 B at 0xe98228), first string "Ya existe una pista de ritmo. No es posible
+; [nakarest] asig"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] StrTable_DiskErr24_Chord (at 0xe981c4), which is read by MsgText_Lang1
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xhl, StrTable_DiskErr24_Chord`).
 Str_Err24Chord_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x122DA, 0x4C
 ; [nakarest] Str_Err24Chord_French  +0x12326..+0x1238a (0xe98274, 100 B)
-; [nakarest] purpose not established: 100 bytes at 0xe98274 that no registered NAKA table points into
+; [nakarest] Text (100 B at 0xe98274), first string "Vous avez d\xE9j\xE0 choisi une piste pour
+; [nakarest] le Chord! V"; no registered NAKA table points into it; reached through 1 data word
+; [nakarest] in StrTable_DiskErr24_Chord (at 0xe981c0), which is read by MsgText_Lang1
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xhl, StrTable_DiskErr24_Chord`).
 Str_Err24Chord_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12326, 0x64
 ; [nakarest] Str_Err24Chord_German  +0x1238a..+0x123e6 (0xe982d8, 92 B)
-; [nakarest] purpose not established: 92 bytes at 0xe982d8 that no registered NAKA table points into
+; [nakarest] Text (92 B at 0xe982d8), first string "Es ist nicht m\xF6glich, zwei CHORD-Spuren
+; [nakarest] die glei"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] StrTable_DiskErr24_Chord (at 0xe981bc), which is read by MsgText_Lang1
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xhl, StrTable_DiskErr24_Chord`).
 Str_Err24Chord_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1238A, 0x5C
 ; [nakarest] Str_Err24Chord_English  +0x123e6..+0x1244c (0xe98334, 102 B)
-; [nakarest] purpose not established: 102 bytes at 0xe98334 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 102 B at 0xe98334 not derived; readers below
+; [nakarest] Readers: source references MsgText_Lang2 (ui/drawbar_panel_ui.s: `ld xhl,
+; [nakarest] Str_Err24Chord_English_0x4e`); 1 data word in StrTable_DiskErr24_Chord (at
+; [nakarest] 0xe981b8), which is read by MsgText_Lang1 (ui/drawbar_panel_ui.s: `ld xhl,
+; [nakarest] StrTable_DiskErr24_Chord`).
 Str_Err24Chord_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x123E6, 0x66
 ; [nakarest] Str_Err24Ctrl_Indonesian  +0x1244c..+0x1249e (0xe9839a, 82 B)
-; [nakarest] purpose not established: 82 bytes at 0xe9839a that no registered NAKA table points into
+; [nakarest] Text (82 B at 0xe9839a), first string "Satu Control Track sudah ada. Tidak mungkin
+; [nakarest] menu"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] Str_Err24Chord_English_0x4e (at 0xe98396), which is read by MsgText_Lang2
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xhl, Str_Err24Chord_English_0x4e`).
 Str_Err24Ctrl_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1244C, 0x52
 ; [nakarest] Str_Err24Ctrl_Italian  +0x1249e..+0x12612 (0xe983ec, 372 B)
-; [nakarest] purpose not established: 372 bytes at 0xe983ec that no registered NAKA table points into
+; [nakarest] Text (372 B at 0xe983ec), first string "ERROR 24"; no registered NAKA table points
+; [nakarest] into it; reached through source references MsgText_Lang3 (ui/drawbar_panel_ui.s:
+; [nakarest] `ld xhl, Str_Err24Ctrl_Italian_0x170`); 5 data words in Str_Err24Chord_English_0x4e
+; [nakarest] (at 0xe98392, 0xe9838e, 0xe9838a), which is read by MsgText_Lang2
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xhl, Str_Err24Chord_English_0x4e`).
 Str_Err24Ctrl_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1249E, 0x174
 ; [nakarest] StrTable_DiskErr24_APC  +0x12612..+0x12626 (0xe98560, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe98560 that no registered NAKA table points into
+; [nakarest] purpose not established: 20 B at 0xe98560 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 StrTable_DiskErr24_APC:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12612, 0x14
 ; [nakarest] Str_Err24APC_Indonesian  +0x12626..+0x12670 (0xe98574, 74 B)
-; [nakarest] purpose not established: 74 bytes at 0xe98574 that no registered NAKA table points into
+; [nakarest] Text (74 B at 0xe98574), first string "Satu APC Track sudah ada. Tidak mungkin
+; [nakarest] menunjuk"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] StrTable_DiskErr24_APC (at 0xe98570).
 Str_Err24APC_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12626, 0x4A
 ; [nakarest] Str_Err24APC_Italian  +0x12670..+0x1267a (0xe985be, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe985be that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe985be), first string "ERROR 24"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in StrTable_DiskErr24_APC (at 0xe9856c).
 Str_Err24APC_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12670, 0xA
 ; [nakarest] Str_Err24APC_Spanish  +0x1267a..+0x126c6 (0xe985c8, 76 B)
-; [nakarest] purpose not established: 76 bytes at 0xe985c8 that no registered NAKA table points into
+; [nakarest] Text (76 B at 0xe985c8), first string "Ya existe una pista de ritmo. No es posible
+; [nakarest] asig"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] StrTable_DiskErr24_APC (at 0xe98568).
 Str_Err24APC_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1267A, 0x4C
 ; [nakarest] Str_Err24APC_French  +0x126c6..+0x12e0a (0xe98614, 1860 B)
-; [nakarest] purpose not established: 1860 bytes at 0xe98614 that no registered NAKA table points into
+; [nakarest] Text (262 B at 0xe98614), first string "Vous avez d\xE9j\xE0 choisi une piste pour
+; [nakarest] le APC! Vou"; no registered NAKA table points into it; reached through 2 data words
+; [nakarest] in StrTable_DiskErr24_APC (at 0xe98564, 0xe98560); 1 data word in
+; [nakarest] Str_Err24Ctrl_Italian_0x170 (at 0xe9855c), which is read by MsgText_Lang3
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xhl, Str_Err24Ctrl_Italian_0x170`). per-language string
+; [nakarest] tables (6 pointers each: English, German, French, Spanish, Italian, Indonesian --
+; [nakarest] the order of the header table's own strings "English Header" ... "Indonesian
+; [nakarest] Header") used as the text of catalog records 27-30. message texts of the catalog:
+; [nakarest] Indonesian "Ini hanya mungkin untuk meng"; Italian "ERROR 25"; Spanish "S\xF3lo es
+; [nakarest] posible cambiar la v"; French "Je ne peux changer la v\xE9loci"; ....
 Str_Err24APC_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x126C6, 0x744
 ; [nakarest] StrTable_DiskErr28  +0x12e0a..+0x12e1e (0xe98d58, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe98d58 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 30
+; [nakarest] (starts 0xe98d54, 20 of its 24 bytes are here or later).
 StrTable_DiskErr28:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12E0A, 0x14
 ; [nakarest] Str_DiskErr28_Indonesian  +0x12e1e..+0x12e58 (0xe98d6c, 58 B)
-; [nakarest] purpose not established: 58 bytes at 0xe98d6c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Lagu ini terlalu panjang unt".
 Str_DiskErr28_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12E1E, 0x3A
 ; [nakarest] Str_DiskErr28_Italian  +0x12e58..+0x12e62 (0xe98da6, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe98da6 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 28".
 Str_DiskErr28_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12E58, 0xA
 ; [nakarest] Str_DiskErr28_Spanish  +0x12e62..+0x12eac (0xe98db0, 74 B)
-; [nakarest] purpose not established: 74 bytes at 0xe98db0 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Esta canci\xF3n dura demasiado ".
 Str_DiskErr28_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12E62, 0x4A
 ; [nakarest] Str_DiskErr28_French  +0x12eac..+0x12f04 (0xe98dfa, 88 B)
-; [nakarest] purpose not established: 88 bytes at 0xe98dfa that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Cette s\xE9quence est trop long".
 Str_DiskErr28_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12EAC, 0x58
 ; [nakarest] Str_DiskErr28_German  +0x12f04..+0x12f78 (0xe98e52, 116 B)
-; [nakarest] purpose not established: 116 bytes at 0xe98e52 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Dieser Titel ist zu lang, um"; English "This
+; [nakarest] song is too long to be ".
 Str_DiskErr28_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12F04, 0x74
 ; [nakarest] StrTable_DiskErr29  +0x12f78..+0x12f90 (0xe98ec6, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe98ec6 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 31.
 StrTable_DiskErr29:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12F78, 0x18
 ; [nakarest] Str_DiskErr29_Indonesian  +0x12f90..+0x1301a (0xe98ede, 138 B)
-; [nakarest] purpose not established: 138 bytes at 0xe98ede that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "MIDI FILE yang anda coba unt".
 Str_DiskErr29_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x12F90, 0x8A
 ; [nakarest] Str_DiskErr29_Italian  +0x1301a..+0x13024 (0xe98f68, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe98f68 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 29".
 Str_DiskErr29_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1301A, 0xA
 ; [nakarest] Str_DiskErr29_Spanish  +0x13024..+0x132a0 (0xe98f72, 636 B)
-; [nakarest] purpose not established: 636 bytes at 0xe98f72 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Spanish "El fichero MIDI que usted ha"; French "La
+; [nakarest] s\xE9quence MIDI File que vo"; German "Der zu ladende MIDI File-Son"; English "The
+; [nakarest] MIDI FILE that you have ".
 Str_DiskErr29_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x13024, 0x27C
 ; [nakarest] StrTable_DiskErr30  +0x132a0..+0x132b8 (0xe991ee, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe991ee that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 19.
 StrTable_DiskErr30:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x132A0, 0x18
 ; [nakarest] Str_DiskErr30_Indonesian  +0x132b8..+0x13382 (0xe99206, 202 B)
-; [nakarest] purpose not established: 202 bytes at 0xe99206 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Ini tidak mungkin untuk meng".
 Str_DiskErr30_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x132B8, 0xCA
 ; [nakarest] Str_DiskErr30_Italian  +0x13382..+0x13d8a (0xe992d0, 2568 B)
-; [nakarest] purpose not established: 2568 bytes at 0xe992d0 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 30"; Spanish "No es posible cambiar la
+; [nakarest] sig"; French "Je ne peux pas changer la me"; German "Nach einer Aufnahme im COMPO";
+; [nakarest] .... per-language string tables (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog records 22-23, 33-34.
 Str_DiskErr30_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x13382, 0xA08
 ; [nakarest] StrTable_DiskErr41  +0x13d8a..+0x13d9e (0xe99cd8, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe99cd8 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 33
+; [nakarest] (starts 0xe99cd4, 20 of its 24 bytes are here or later).
 StrTable_DiskErr41:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x13D8A, 0x14
 ; [nakarest] Str_DiskErr41_Indonesian  +0x13d9e..+0x13e38 (0xe99cec, 154 B)
-; [nakarest] purpose not established: 154 bytes at 0xe99cec that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Satu kesalahan sudah terjadi".
 Str_DiskErr41_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x13D9E, 0x9A
 ; [nakarest] Str_DiskErr41_Italian  +0x13e38..+0x13e42 (0xe99d86, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe99d86 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 41".
 Str_DiskErr41_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x13E38, 0xA
 ; [nakarest] Str_DiskErr41_Spanish  +0x13e42..+0x13ee6 (0xe99d90, 164 B)
-; [nakarest] purpose not established: 164 bytes at 0xe99d90 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Se ha producido un error dur".
 Str_DiskErr41_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x13E42, 0xA4
 ; [nakarest] Str_DiskErr41_French  +0x13ee6..+0x1437a (0xe99e34, 1172 B)
-; [nakarest] purpose not established: 1172 bytes at 0xe99e34 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: French "Une erreur s'est produite pe"; German "Beim
+; [nakarest] Empfang der System Excl"; English "An error has occurred during"; Indonesian "Satu
+; [nakarest] kesalahan sudah terjadi"; .... per-language string tables (6 pointers each:
+; [nakarest] English, German, French, Spanish, Italian, Indonesian -- the order of the header
+; [nakarest] table's own strings "English Header" ... "Indonesian Header") used as the text of
+; [nakarest] catalog records 32, 43.
 Str_DiskErr41_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x13EE6, 0x494
 ; [nakarest] StrTable_DiskErr43  +0x1437a..+0x1438e (0xe9a2c8, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe9a2c8 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 43
+; [nakarest] (starts 0xe9a2c4, 20 of its 24 bytes are here or later).
 StrTable_DiskErr43:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1437A, 0x14
 ; [nakarest] Str_DiskErr43_Indonesian  +0x1438e..+0x1442a (0xe9a2dc, 156 B)
-; [nakarest] purpose not established: 156 bytes at 0xe9a2dc that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "File yang sedang anda coba u".
 Str_DiskErr43_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1438E, 0x9C
 ; [nakarest] Str_DiskErr43_Italian  +0x1442a..+0x14434 (0xe9a378, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9a378 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 43".
 Str_DiskErr43_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1442A, 0xA
 ; [nakarest] Str_DiskErr43_Spanish  +0x14434..+0x144b0 (0xe9a382, 124 B)
-; [nakarest] purpose not established: 124 bytes at 0xe9a382 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "El fichero que trata de carg".
 Str_DiskErr43_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14434, 0x7C
 ; [nakarest] Str_DiskErr43_French  +0x144b0..+0x14546 (0xe9a3fe, 150 B)
-; [nakarest] purpose not established: 150 bytes at 0xe9a3fe that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Le fichier que vous essayez ".
 Str_DiskErr43_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x144B0, 0x96
 ; [nakarest] Str_DiskErr43_German  +0x14546..+0x1467a (0xe9a494, 308 B)
-; [nakarest] purpose not established: 308 bytes at 0xe9a494 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Der Datensatz (File), den Si"; English "The
+; [nakarest] file that you are trying".
 Str_DiskErr43_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14546, 0x134
 ; [nakarest] StrTable_DiskErr44  +0x1467a..+0x14692 (0xe9a5c8, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9a5c8 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 45.
 StrTable_DiskErr44:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1467A, 0x18
 ; [nakarest] Str_DiskErr44_Indonesian  +0x14692..+0x14714 (0xe9a5e0, 130 B)
-; [nakarest] purpose not established: 130 bytes at 0xe9a5e0 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Tidak mungkin untuk meng-edi".
 Str_DiskErr44_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14692, 0x82
 ; [nakarest] Str_DiskErr44_Italian  +0x14714..+0x1471e (0xe9a662, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9a662 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 44".
 Str_DiskErr44_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14714, 0xA
 ; [nakarest] Str_DiskErr44_Spanish  +0x1471e..+0x147a4 (0xe9a66c, 134 B)
-; [nakarest] purpose not established: 134 bytes at 0xe9a66c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "No es posible editar un jueg".
 Str_DiskErr44_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1471E, 0x86
 ; [nakarest] Str_DiskErr44_French  +0x147a4..+0x1482a (0xe9a6f2, 134 B)
-; [nakarest] purpose not established: 134 bytes at 0xe9a6f2 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Il est impossible d'\xE9diter u".
 Str_DiskErr44_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x147A4, 0x86
 ; [nakarest] Str_DiskErr44_German  +0x1482a..+0x148ac (0xe9a778, 130 B)
-; [nakarest] purpose not established: 130 bytes at 0xe9a778 that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Es ist nicht m\xF6glich ein Dru".
 Str_DiskErr44_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1482A, 0x82
 ; [nakarest] Str_DiskErr44_English  +0x148ac..+0x1491c (0xe9a7fa, 112 B)
-; [nakarest] purpose not established: 112 bytes at 0xe9a7fa that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "It is impossible to edit a D".
 Str_DiskErr44_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x148AC, 0x70
 ; [nakarest] StrTable_DiskErr46  +0x1491c..+0x14934 (0xe9a86a, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9a86a that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 53.
 StrTable_DiskErr46:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1491C, 0x18
 ; [nakarest] Str_DiskErr46_Indonesian  +0x14934..+0x1499e (0xe9a882, 106 B)
-; [nakarest] purpose not established: 106 bytes at 0xe9a882 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Hanya mungkin dimasukkan Mel".
 Str_DiskErr46_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14934, 0x6A
 ; [nakarest] Str_DiskErr46_Italian  +0x1499e..+0x14b92 (0xe9a8ec, 500 B)
-; [nakarest] purpose not established: 500 bytes at 0xe9a8ec that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 46"; Spanish "S\xF3lo es posible
+; [nakarest] insertar pis"; French "Il est seulement possible d'"; German "Es k\xF6nnen nur
+; [nakarest] Melodie-Spuren"; .... per-language string table (6 pointers each: English, German,
+; [nakarest] French, Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 54.
 Str_DiskErr46_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1499E, 0x1F4
 ; [nakarest] StrTable_DiskErr47  +0x14b92..+0x14ba6 (0xe9aae0, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe9aae0 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 54
+; [nakarest] (starts 0xe9aadc, 20 of its 24 bytes are here or later).
 StrTable_DiskErr47:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14B92, 0x14
 ; [nakarest] Str_DiskErr47_Indonesian  +0x14ba6..+0x14c22 (0xe9aaf4, 124 B)
-; [nakarest] purpose not established: 124 bytes at 0xe9aaf4 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Tidak mungkin untuk mengguna".
 Str_DiskErr47_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14BA6, 0x7C
 ; [nakarest] Str_DiskErr47_Italian  +0x14c22..+0x14c2c (0xe9ab70, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ab70 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 47".
 Str_DiskErr47_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14C22, 0xA
 ; [nakarest] Str_DiskErr47_Spanish  +0x14c2c..+0x14caa (0xe9ab7a, 126 B)
-; [nakarest] purpose not established: 126 bytes at 0xe9ab7a that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "No es posible utilizar el ar".
 Str_DiskErr47_Spanish:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14C2C, 0x7E
 ; [nakarest] Str_DiskErr47_French  +0x14caa..+0x14d1e (0xe9abf8, 116 B)
-; [nakarest] purpose not established: 116 bytes at 0xe9abf8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "L'utilisation du "Sound Arra".
 Str_DiskErr47_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14CAA, 0x74
 ; [nakarest] Str_DiskErr47_German  +0x14d1e..+0x14dfa (0xe9ac6c, 220 B)
-; [nakarest] purpose not established: 220 bytes at 0xe9ac6c that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Der Sound Arranger kann nich"; English "It is
+; [nakarest] not possible to use th".
 Str_DiskErr47_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14D1E, 0xDC
 ; [nakarest] StrTable_DiskErr48  +0x14dfa..+0x14e12 (0xe9ad48, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9ad48 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 55.
 StrTable_DiskErr48:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14DFA, 0x18
 ; [nakarest] NakaInst_Tipe_disket_yang_digunakan  +0x14e12..+0x14e72 (0xe9ad60, 96 B)
-; [nakarest] purpose not established: 96 bytes at 0xe9ad60 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Tipe disket yang digunakan "".
 NakaInst_Tipe_disket_yang_digunakan:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14E12, 0x60
 ; [nakarest] NakaInst_ERR0R_48  +0x14e72..+0x14e7c (0xe9adc0, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9adc0 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERR0R 48".
 NakaInst_ERR0R_48:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14E72, 0xA
 ; [nakarest] NakaInst_lo_pueden_usarse_los_disquetes_de_tipo  +0x14e7c..+0x14ee2 (0xe9adca, 102 B)
-; [nakarest] purpose not established: 102 bytes at 0xe9adca that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "El disquete insertado es de ".
 NakaInst_lo_pueden_usarse_los_disquetes_de_tipo:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14E7C, 0x66
 ; [nakarest] Str_DiskErr48_French  +0x14ee2..+0x14f4c (0xe9ae30, 106 B)
-; [nakarest] purpose not established: 106 bytes at 0xe9ae30 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "La disquette ins\xE9r\xE9e est de ".
 Str_DiskErr48_French:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14EE2, 0x6A
 ; [nakarest] Str_DiskErr48_German  +0x14f4c..+0x14fb4 (0xe9ae9a, 104 B)
-; [nakarest] purpose not established: 104 bytes at 0xe9ae9a that no registered NAKA table points into
+; [nakarest] message text of the catalog: German "Die eingelegte Diskette ist ".
 Str_DiskErr48_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14F4C, 0x68
 ; [nakarest] Str_DiskErr48_English  +0x14fb4..+0x15020 (0xe9af02, 108 B)
-; [nakarest] purpose not established: 108 bytes at 0xe9af02 that no registered NAKA table points into
+; [nakarest] message text of the catalog: English "The type of inserted DISK is". per-language
+; [nakarest] string table (6 pointers each: English, German, French, Spanish, Italian,
+; [nakarest] Indonesian -- the order of the header table's own strings "English Header" ...
+; [nakarest] "Indonesian Header") used as the text of catalog record 56.
 Str_DiskErr48_English:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x14FB4, 0x6C
 ; [nakarest] NakaInst_Jumlah_lagu_melebihi_kapasitas_KN_5000_Coba_lagi  +0x15020..+0x15098 (0xe9af6e, 120 B)
-; [nakarest] purpose not established: 120 bytes at 0xe9af6e that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Jumlah lagu melebihi kapasit".
 NakaInst_Jumlah_lagu_melebihi_kapasitas_KN_5000_Coba_lagi:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x15020, 0x78
 ; [nakarest] NakaInst_ERROR_49  +0x15098..+0x1532e (0xe9afe6, 662 B)
-; [nakarest] purpose not established: 662 bytes at 0xe9afe6 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 49"; Spanish "La longitud de esta
+; [nakarest] canci\xF3n "; French "La taille de cette s\xE9quence "; German "Die Gr\xF6\xDFe
+; [nakarest] dieses Songs \xFCbers"; ....
 NakaInst_ERROR_49:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x15098, 0x296
 ; [nakarest] StrTable_DiskErr49_PtrEnd  +0x1532e..+0x15332 (0xe9b27c, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9b27c that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 57.
 StrTable_DiskErr49_PtrEnd:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1532E, 0x4
 ; [nakarest] Str_SongCapacityExceeded_Multilingual  +0x15332..+0x15346 (0xe9b280, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe9b280 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 57
+; [nakarest] (starts 0xe9b27c, 20 of its 24 bytes are here or later).
 Str_SongCapacityExceeded_Multilingual:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x15332, 0x14
 ; [nakarest] NakaInst_Tidak_mungkin_merekam_dengan_menggunakan_Preset  +0x15346..+0x153ce (0xe9b294, 136 B)
-; [nakarest] purpose not established: 136 bytes at 0xe9b294 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Tidak mungkin merekam dengan".
 NakaInst_Tidak_mungkin_merekam_dengan_menggunakan_Preset:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x15346, 0x88
 ; [nakarest] NakaInst_ERROR_54  +0x153ce..+0x153d8 (0xe9b31c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9b31c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 54".
 NakaInst_ERROR_54:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x153CE, 0xA
 ; [nakarest] NakaInst_No_es_posible_grabar_sobre_los_bancos  +0x153d8..+0x15476 (0xe9b326, 158 B)
-; [nakarest] purpose not established: 158 bytes at 0xe9b326 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "No es posible grabar sobre l".
 NakaInst_No_es_posible_grabar_sobre_los_bancos:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x153D8, 0x9E
 ; [nakarest] NakaInst_Il_n_est_pas_possible_d_effectuer_un  +0x15476..+0x15532 (0xe9b3c4, 188 B)
-; [nakarest] purpose not established: 188 bytes at 0xe9b3c4 that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Il n'est pas possible d'effe".
 NakaInst_Il_n_est_pas_possible_d_effectuer_un:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x15476, 0xBC
 ; [nakarest] NakaInst_It_is_not_possible_to_record_using_preset_banks  +0x15532..+0x15638 (0xe9b480, 262 B)
-; [nakarest] purpose not established: 262 bytes at 0xe9b480 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Es ist nicht m\xF6glich auf Pre"; English "It
+; [nakarest] is not possible to record". per-language string table (6 pointers each: English,
+; [nakarest] German, French, Spanish, Italian, Indonesian -- the order of the header table's own
+; [nakarest] strings "English Header" ... "Indonesian Header") used as the text of catalog
+; [nakarest] record 58.
 NakaInst_It_is_not_possible_to_record_using_preset_banks:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x15532, 0x106
 ; [nakarest] NakaInst_Special_Tracks_seperti_Chord_APC_Rhythm_dan  +0x15638..+0x156e6 (0xe9b586, 174 B)
-; [nakarest] purpose not established: 174 bytes at 0xe9b586 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Special Tracks seperti Chord".
 NakaInst_Special_Tracks_seperti_Chord_APC_Rhythm_dan:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x15638, 0xAE
 ; [nakarest] NakaInst_ERROR_55  +0x156e6..+0x165da (0xe9b634, 3828 B)
-; [nakarest] purpose not established: 3828 bytes at 0xe9b634 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: Italian "ERROR 55"; Spanish "En la canci\xF3n que
+; [nakarest] usted est\xE1"; French "Des pistes assign\xE9es \xE0 Chord"; German "In dem Song
+; [nakarest] den Sie kopieren"; .... per-language string tables (6 pointers each: English,
+; [nakarest] German, French, Spanish, Italian, Indonesian -- the order of the header table's own
+; [nakarest] strings "English Header" ... "Indonesian Header") used as the text of catalog
+; [nakarest] records 59-61, 68-69.
 NakaInst_ERROR_55:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x156E6, 0xEF4
 ; [nakarest] Str_RKBLKBSpecialTracks_Multilingual  +0x165da..+0x165ee (0xe9c528, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe9c528 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 69
+; [nakarest] (starts 0xe9c524, 20 of its 24 bytes are here or later).
 Str_RKBLKBSpecialTracks_Multilingual:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x165DA, 0x14
 ; [nakarest] NakaInst_s_v  +0x165ee..+0x165f4 (0xe9c53c, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9c53c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "\x95s\x97v".
 NakaInst_s_v:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x165EE, 0x6
 ; [nakarest] NakaInst_ERROR_60  +0x165f4..+0x165fe (0xe9c542, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9c542 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 60".
 NakaInst_ERROR_60:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x165F4, 0xA
 ; [nakarest] NakaInst_es_RKB_LKB_pistas_especiales  +0x165fe..+0x166dc (0xe9c54c, 222 B)
-; [nakarest] purpose not established: 222 bytes at 0xe9c54c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "RKB y LKB son pistas especia".
 NakaInst_es_RKB_LKB_pistas_especiales:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x165FE, 0xDE
 ; [nakarest] NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association  +0x166dc..+0x16fca (0xe9c62a, 2286 B)
-; [nakarest] purpose not established: 2286 bytes at 0xe9c62a that no registered NAKA table points into
+; [nakarest] message texts of the catalog: French "RKB et LKB sont des pistes d"; German "RKB
+; [nakarest] und LKB sind spezielle S"; English "RKB and LKB are special trac"; Indonesian
+; [nakarest] "Tidak mungkin untuk meng-edi"; .... per-language string tables (6 pointers each:
+; [nakarest] English, German, French, Spanish, Italian, Indonesian -- the order of the header
+; [nakarest] table's own strings "English Header" ... "Indonesian Header") used as the text of
+; [nakarest] catalog records 62, 70-71.
 NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x166DC, 0x8EE
 ; [nakarest] Str_InitSettingWarning_Multilingual  +0x16fca..+0x16fde (0xe9cf18, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe9cf18 that no registered NAKA table points into
+; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
+; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
+; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog record 71
+; [nakarest] (starts 0xe9cf14, 20 of its 24 bytes are here or later).
 Str_InitSettingWarning_Multilingual:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x16FCA, 0x14
 ; [nakarest] NakaInst_Bitmap_adalah_salah_format_dari_KN_5000_dan  +0x16fde..+0x17060 (0xe9cf2c, 130 B)
-; [nakarest] purpose not established: 130 bytes at 0xe9cf2c that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Bitmap adalah salah format d".
 NakaInst_Bitmap_adalah_salah_format_dari_KN_5000_dan:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x16FDE, 0x82
 ; [nakarest] NakaInst_ERROR_63  +0x17060..+0x1706a (0xe9cfae, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9cfae that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 63".
 NakaInst_ERROR_63:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17060, 0xA
 ; [nakarest] NakaInst_es_Bitmap_formato_incorrecto  +0x1706a..+0x170fc (0xe9cfb8, 146 B)
-; [nakarest] purpose not established: 146 bytes at 0xe9cfb8 that no registered NAKA table points into
+; [nakarest] message text of the catalog: Spanish "Este mapa de bits tiene en u".
 NakaInst_es_Bitmap_formato_incorrecto:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1706A, 0x92
 ; [nakarest] NakaInst_Cette_configuration_Bitmap_n_est_pas_au_bon  +0x170fc..+0x17192 (0xe9d04a, 150 B)
-; [nakarest] purpose not established: 150 bytes at 0xe9d04a that no registered NAKA table points into
+; [nakarest] message text of the catalog: French "Cette configuration Bitmap n".
 NakaInst_Cette_configuration_Bitmap_n_est_pas_au_bon:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x170FC, 0x96
 ; [nakarest] NakaInst_This_Bitmap_is_in_the_wrong_format_for_the_KN5000  +0x17192..+0x17284 (0xe9d0e0, 242 B)
-; [nakarest] purpose not established: 242 bytes at 0xe9d0e0 that no registered NAKA table points into
+; [nakarest] message texts of the catalog: German "Das Format dieses Bitmaps ka"; English "This
+; [nakarest] Bitmap is in the wrong ".
 NakaInst_This_Bitmap_is_in_the_wrong_format_for_the_KN5000:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17192, 0xF2
 ; [nakarest] StrTable_DiskErr64_PtrEnd  +0x17284..+0x1729c (0xe9d1d2, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9d1d2 that no registered NAKA table points into
+; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
+; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
+; [nakarest] ... "Indonesian Header") used as the text of catalog record 73.
 StrTable_DiskErr64_PtrEnd:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17284, 0x18
 ; [nakarest] NakaInst_Pilihlah_Panel_Memory_yang_ingin_anda_berikan_nama  +0x1729c..+0x172d0 (0xe9d1ea, 52 B)
-; [nakarest] purpose not established: 52 bytes at 0xe9d1ea that no registered NAKA table points into
+; [nakarest] message text of the catalog: Indonesian "Pilihlah Panel Memory yang i".
 NakaInst_Pilihlah_Panel_Memory_yang_ingin_anda_berikan_nama:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1729C, 0x34
 ; [nakarest] NakaInst_ERROR_64  +0x172d0..+0x172da (0xe9d21e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d21e that no registered NAKA table points into
+; [nakarest] message text of the catalog: Italian "ERROR 64".
 NakaInst_ERROR_64:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x172D0, 0xA
-; [nakarest] NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea  +0x172da..+0x17894 (0xe9d228, 1466 B)
-; [nakarest] purpose not established: 1466 bytes at 0xe9d228 that no registered NAKA table points into
+; [nakarest] NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea  +0x172da..+0x173f2 (0xe9d228, 280 B)
+; [nakarest] message texts of the catalog: Spanish "Por favor seleccione el Pane"; French
+; [nakarest] "Veuillez s\xE9lectionner le \xAB P"; German "Bitte w\xE4hlen Sie den Panel M";
+; [nakarest] English "Please select the Panel Memo".
 NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x172DA, 0x5BA
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x172DA, 0x118
+; [nakarest] naka_technichord_strings+0x173f2  +0x173f2..+0x17894 (0xe9d340, 1186 B)
+; [nakarest] the IvMesage message catalog itself (0xe9d340): 80 records x 14 bytes {u16 kind,
+; [nakarest] u32 code 0x00NNFFFF (NN = the error number shown; 0xffffffff none), u32 header
+; [nakarest] table, u32 text table} and a terminator record whose pointers are 0. Readers
+; [nakarest] (ui/drawbar_panel_ui.s): IvMesageProc on init (0x1c00001) and
+; [nakarest] IvMessage_SelectionChange / LanguageCheckReturn load +0 with index*14 (`muls wa,
+; [nakarest] 0xe`, positional name ..._0x118) and send 0x1c00001 to the window it selects;
+; [nakarest] MessageText (event 0x1e0009f) returns +10 (..._0x122); CheckMsg_IncrementCheck
+; [nakarest] stops at a record whose +10 is 0; IvMessage_Paint compares +0 with 5. the 6 window
+; [nakarest] object ids the catalog's kind field selects (`sla wa, 2` from ..._0x586):
+; [nakarest] 0x00ee0014 NoMessage, 0x00ee0002 Completed, 0x00ee0005 Reminder, 0x00ee0009 Error,
+; [nakarest] 0x00ee000d Other, 0x00ee0016 PleaseWait -- elements of Viewable slot 0xee
+; [nakarest] (InitializeMurai), all class Window.
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x173F2, 0x4A2
 ; [nakarest] NakaInst_SILAHKAN_TUNGGU  +0x17894..+0x178a6 (0xe9d7e2, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xe9d7e2 that no registered NAKA table points into
+; [nakarest] Text (18 B at 0xe9d7e2), first string "SILAHKAN TUNGGU!"; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in
+; [nakarest] NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5a2 (at 0xe9d7de),
+; [nakarest] which is read by PleaseWait_BuildScrollStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_q`), PleaseWait_GetText
+; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_q`).
 NakaInst_SILAHKAN_TUNGGU:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17894, 0x12
 ; [nakarest] NakaInst_PLEASE_WAIT  +0x178a6..+0x178f8 (0xe9d7f4, 82 B)
-; [nakarest] purpose not established: 82 bytes at 0xe9d7f4 that no registered NAKA table points into
+; [nakarest] Text (82 B at 0xe9d7f4), first string "PLEASE WAIT!"; no registered NAKA table
+; [nakarest] points into it; reached through 5 data words in
+; [nakarest] NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5a2 (at 0xe9d7da,
+; [nakarest] 0xe9d7d6, 0xe9d7d2), which is read by PleaseWait_BuildScrollStr
+; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_q`), PleaseWait_GetText
+; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_q`).
 NakaInst_PLEASE_WAIT:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x178A6, 0x52
 ; [nakarest] Str_PleaseWait_Multilingual  +0x178f8..+0x17910 (0xe9d846, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9d846 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 24 B at 0xe9d846 not derived; readers below
+; [nakarest] Readers: source references CheckLang_GetTextStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Str_PleaseWait_Multilingual:24)`).
 Str_PleaseWait_Multilingual:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x178F8, 0x18
 ; [nakarest] NakaInst_Indonesian_E9D85E  +0x17910..+0x1791c (0xe9d85e, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe9d85e that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe9d85e), first string "Indonesian"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Str_PleaseWait_Multilingual (at 0xe9d85a),
+; [nakarest] which is read by CheckLang_GetTextStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Str_PleaseWait_Multilingual:24)`).
 NakaInst_Indonesian_E9D85E:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17910, 0xC
 ; [nakarest] NakaInst_Italian_E9D86A  +0x1791c..+0x17924 (0xe9d86a, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9d86a that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9d86a), first string "Italian"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Str_PleaseWait_Multilingual (at 0xe9d856),
+; [nakarest] which is read by CheckLang_GetTextStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Str_PleaseWait_Multilingual:24)`).
 NakaInst_Italian_E9D86A:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1791C, 0x8
 ; [nakarest] NakaInst_Spanish_E9D872  +0x17924..+0x1792c (0xe9d872, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9d872 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9d872), first string "Spanish"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Str_PleaseWait_Multilingual (at 0xe9d852),
+; [nakarest] which is read by CheckLang_GetTextStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Str_PleaseWait_Multilingual:24)`).
 NakaInst_Spanish_E9D872:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17924, 0x8
 ; [nakarest] NakaInst_French_E9D87A  +0x1792c..+0x17934 (0xe9d87a, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9d87a that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9d87a), first string "French"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Str_PleaseWait_Multilingual (at 0xe9d84e), which
+; [nakarest] is read by CheckLang_GetTextStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Str_PleaseWait_Multilingual:24)`).
 NakaInst_French_E9D87A:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1792C, 0x8
 ; [nakarest] NakaInst_German_E9D882  +0x17934..+0x1793c (0xe9d882, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9d882 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9d882), first string "German"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Str_PleaseWait_Multilingual (at 0xe9d84a), which
+; [nakarest] is read by CheckLang_GetTextStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Str_PleaseWait_Multilingual:24)`).
 NakaInst_German_E9D882:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17934, 0x8
 ; [nakarest] NakaInst_English_E9D88A  +0x1793c..+0x1795e (0xe9d88a, 34 B)
-; [nakarest] purpose not established: 34 bytes at 0xe9d88a that no registered NAKA table points into
+; [nakarest] Text (34 B at 0xe9d88a), first string "English"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Str_PleaseWait_Multilingual (at 0xe9d846),
+; [nakarest] which is read by CheckLang_GetTextStr (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Str_PleaseWait_Multilingual:24)`).
 NakaInst_English_E9D88A:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1793C, 0x22
 ; [nakarest] NakaInst_METRO  +0x1795e..+0x17968 (0xe9d8ac, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8ac that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8ac), first string "METRO :"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_METRO`); 1 data word in
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeedac).
 NakaInst_METRO:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1795E, 0xA
 ; [nakarest] NakaInst_CONTROL  +0x17968..+0x17972 (0xe9d8b6, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8b6 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8b6), first string "CONTROL:"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_CONTROL`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeeda8).
 NakaInst_CONTROL:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17968, 0xA
 ; [nakarest] NakaInst_MSP  +0x17972..+0x1797c (0xe9d8c0, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8c0 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8c0), first string "MSP :"; no registered NAKA table points into
+; [nakarest] it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_MSP`); 1 data word in
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeeda4).
 NakaInst_MSP:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17972, 0xA
 ; [nakarest] NakaInst_MSP_E9D8CA  +0x1797c..+0x17986 (0xe9d8ca, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8ca that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8ca), first string "MSP :"; no registered NAKA table points into
+; [nakarest] it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_MSP_E9D8CA`); 1 data
+; [nakarest] word in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeeda0).
 NakaInst_MSP_E9D8CA:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1797C, 0xA
 ; [nakarest] NakaInst_R_BASS  +0x17986..+0x17990 (0xe9d8d4, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8d4 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8d4), first string "R.BASS :"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_R_BASS`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed9c).
 NakaInst_R_BASS:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17986, 0xA
 ; [nakarest] NakaInst_CHORD  +0x17990..+0x1799a (0xe9d8de, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8de that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8de), first string "CHORD :"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_CHORD`); 1 data word in
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed98).
 NakaInst_CHORD:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17990, 0xA
 ; [nakarest] NakaInst_DRUM_E9D8E8  +0x1799a..+0x179a4 (0xe9d8e8, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8e8 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8e8), first string "DRUM :"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_DRUM_E9D8E8`); 1 data
+; [nakarest] word in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed94).
 NakaInst_DRUM_E9D8E8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1799A, 0xA
 ; [nakarest] NakaInst_BASS_E9D8F2  +0x179a4..+0x179ae (0xe9d8f2, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8f2 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8f2), first string "BASS :"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_BASS_E9D8F2`); 1 data
+; [nakarest] word in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed90).
 NakaInst_BASS_E9D8F2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179A4, 0xA
 ; [nakarest] NakaInst_ACCOMP3  +0x179ae..+0x179b8 (0xe9d8fc, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d8fc that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d8fc), first string "ACCOMP3:"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_ACCOMP3`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed8c).
 NakaInst_ACCOMP3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179AE, 0xA
 ; [nakarest] NakaInst_ACCOMP2  +0x179b8..+0x179c2 (0xe9d906, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d906 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d906), first string "ACCOMP2:"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_ACCOMP2`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed88).
 NakaInst_ACCOMP2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179B8, 0xA
 ; [nakarest] NakaInst_ACCOMP1  +0x179c2..+0x179cc (0xe9d910, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d910 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d910), first string "ACCOMP1:"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_ACCOMP1`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed84).
 NakaInst_ACCOMP1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179C2, 0xA
 ; [nakarest] NakaInst_PART_16  +0x179cc..+0x179d6 (0xe9d91a, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d91a that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d91a), first string "PART 16:"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_PART_16`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed80).
 NakaInst_PART_16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179CC, 0xA
 ; [nakarest] NakaInst_PART_15  +0x179d6..+0x179e0 (0xe9d924, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d924 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d924), first string "PART 15:"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_PART_15`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed7c).
 NakaInst_PART_15:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179D6, 0xA
 ; [nakarest] NakaInst_PART_14  +0x179e0..+0x179ea (0xe9d92e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d92e that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d92e), first string "PART 14:"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EmbeddedPtrTable_v10_naka_sequencer_channels_000D00
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaInst_PART_14`); 1 data word
+; [nakarest] in EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 (at 0xeeed78).
 NakaInst_PART_14:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179E0, 0xA
 ; [nakarest] NakaInst_PART_13  +0x179ea..+0x179f4 (0xe9d938, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d938 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d938), first string "PART 13:"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed74).
 NakaInst_PART_13:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179EA, 0xA
 ; [nakarest] NakaInst_PART_12  +0x179f4..+0x179fe (0xe9d942, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d942 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d942), first string "PART 12:"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed70).
 NakaInst_PART_12:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179F4, 0xA
 ; [nakarest] NakaInst_PART_11  +0x179fe..+0x17a08 (0xe9d94c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d94c that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d94c), first string "PART 11:"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed6c).
 NakaInst_PART_11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x179FE, 0xA
 ; [nakarest] NakaInst_PART_10  +0x17a08..+0x17a12 (0xe9d956, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d956 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d956), first string "PART 10:"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed68).
 NakaInst_PART_10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A08, 0xA
 ; [nakarest] NakaInst_PART_9  +0x17a12..+0x17a1c (0xe9d960, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d960 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d960), first string "PART 9 :"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed64).
 NakaInst_PART_9:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A12, 0xA
 ; [nakarest] NakaInst_PART_8  +0x17a1c..+0x17a26 (0xe9d96a, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d96a that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d96a), first string "PART 8 :"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed60).
 NakaInst_PART_8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A1C, 0xA
 ; [nakarest] NakaInst_PART_7  +0x17a26..+0x17a30 (0xe9d974, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d974 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d974), first string "PART 7 :"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed5c).
 NakaInst_PART_7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A26, 0xA
 ; [nakarest] NakaInst_PART_6  +0x17a30..+0x17a3a (0xe9d97e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d97e that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d97e), first string "PART 6 :"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed58).
 NakaInst_PART_6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A30, 0xA
 ; [nakarest] NakaInst_PART_5  +0x17a3a..+0x17a44 (0xe9d988, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d988 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d988), first string "PART 5 :"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed54).
 NakaInst_PART_5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A3A, 0xA
 ; [nakarest] NakaInst_PART_4  +0x17a44..+0x17a4e (0xe9d992, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d992 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d992), first string "PART 4 :"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed50).
 NakaInst_PART_4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A44, 0xA
 ; [nakarest] NakaInst_LEFT_E9D99C  +0x17a4e..+0x17a58 (0xe9d99c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d99c that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d99c), first string "LEFT :"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed4c).
 NakaInst_LEFT_E9D99C:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A4E, 0xA
 ; [nakarest] NakaInst_RIGHT_2_E9D9A6  +0x17a58..+0x17a62 (0xe9d9a6, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9d9a6 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9d9a6), first string "RIGHT 2:"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_DrawbarControl_Table (at 0xeeed48).
 NakaInst_RIGHT_2_E9D9A6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A58, 0xA
 ; [nakarest] NakaInst_RIGHT_1_E9D9B0  +0x17a62..+0x17ada (0xe9d9b0, 120 B)
-; [nakarest] purpose not established: 120 bytes at 0xe9d9b0 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 120 B at 0xe9d9b0 not derived; readers below
+; [nakarest] Readers: source references IvSdtecd1Proc (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (NakaInst_RIGHT_1_E9D9B0_0x1c:24)`), Sdtecd1_Match (ui/drawbar_panel_ui.s: `lda
+; [nakarest] xbc, (NakaInst_RIGHT_1_E9D9B0_0x1c:24)`), Sdtecd1_ScrollDown_Lookup
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, NakaInst_RIGHT_1_E9D9B0_0x54`),
+; [nakarest] Sdtecd1_ScrollUp_Lookup (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] NakaInst_RIGHT_1_E9D9B0_0x54`); 1 data word in Naka_DrawbarControl_Table (at
+; [nakarest] 0xeeed44).
 NakaInst_RIGHT_1_E9D9B0:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A62, 0x78
 ; [nakarest] Naka_TechniChord1_Screens  +0x17ada..+0x17b1e (0xe9da28, 68 B)
-; [nakarest] purpose not established: 68 bytes at 0xe9da28 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 68 B at 0xe9da28 not derived; readers below
+; [nakarest] Readers: source references LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 Naka_TechniChord1_Screens:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17ADA, 0x44
 ; [nakarest] NakaInst_CONDUCTOR  +0x17b1e..+0x17b28 (0xe9da6c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9da6c that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9da6c), first string "CONDUCTOR"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da68),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_CONDUCTOR:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B1E, 0xA
 ; [nakarest] NakaInst_PART_16_E9DA76  +0x17b28..+0x17b32 (0xe9da76, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9da76 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9da76), first string " PART 16 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da64),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_16_E9DA76:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B28, 0xA
 ; [nakarest] NakaInst_PART_15_E9DA80  +0x17b32..+0x17b3c (0xe9da80, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9da80 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9da80), first string " PART 15 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da60),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_15_E9DA80:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B32, 0xA
 ; [nakarest] NakaInst_PART_14_E9DA8A  +0x17b3c..+0x17b46 (0xe9da8a, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9da8a that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9da8a), first string " PART 14 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da5c),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_14_E9DA8A:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B3C, 0xA
 ; [nakarest] NakaInst_PART_13_E9DA94  +0x17b46..+0x17b50 (0xe9da94, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9da94 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9da94), first string " PART 13 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da58),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_13_E9DA94:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B46, 0xA
 ; [nakarest] NakaInst_PART_12_E9DA9E  +0x17b50..+0x17b5a (0xe9da9e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9da9e that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9da9e), first string " PART 12 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da54),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_12_E9DA9E:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B50, 0xA
 ; [nakarest] NakaInst_PART_11_E9DAA8  +0x17b5a..+0x17b64 (0xe9daa8, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9daa8 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9daa8), first string " PART 11 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da50),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_11_E9DAA8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B5A, 0xA
 ; [nakarest] NakaInst_PART_10_E9DAB2  +0x17b64..+0x17b6e (0xe9dab2, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dab2 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dab2), first string " PART 10 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da4c),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_10_E9DAB2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B64, 0xA
 ; [nakarest] NakaInst_PART_9_E9DABC  +0x17b6e..+0x17b78 (0xe9dabc, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dabc that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dabc), first string " PART 9 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da48),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_9_E9DABC:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B6E, 0xA
 ; [nakarest] NakaInst_PART_8_E9DAC6  +0x17b78..+0x17b82 (0xe9dac6, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dac6 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dac6), first string " PART 8 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da44),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_8_E9DAC6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B78, 0xA
 ; [nakarest] NakaInst_PART_7_E9DAD0  +0x17b82..+0x17b8c (0xe9dad0, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dad0 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dad0), first string " PART 7 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da40),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_7_E9DAD0:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B82, 0xA
 ; [nakarest] NakaInst_PART_6_E9DADA  +0x17b8c..+0x17b96 (0xe9dada, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dada that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dada), first string " PART 6 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da3c),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_6_E9DADA:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B8C, 0xA
 ; [nakarest] NakaInst_PART_5_E9DAE4  +0x17b96..+0x17ba0 (0xe9dae4, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dae4 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dae4), first string " PART 5 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da38),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_5_E9DAE4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17B96, 0xA
 ; [nakarest] NakaInst_PART_4_E9DAEE  +0x17ba0..+0x17baa (0xe9daee, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9daee that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9daee), first string " PART 4 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da34),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_PART_4_E9DAEE:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17BA0, 0xA
 ; [nakarest] NakaInst_LEFT_E9DAF8  +0x17baa..+0x17bb4 (0xe9daf8, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9daf8 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9daf8), first string " LEFT "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da30),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_LEFT_E9DAF8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17BAA, 0xA
 ; [nakarest] NakaInst_RIGHT_2_E9DB02  +0x17bb4..+0x17bbe (0xe9db02, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9db02 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9db02), first string " RIGHT 2 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_TechniChord1_Screens (at 0xe9da2c),
+; [nakarest] which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_RIGHT_2_E9DB02:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17BB4, 0xA
 ; [nakarest] NakaInst_RIGHT_1_E9DB0C  +0x17bbe..+0x17c88 (0xe9db0c, 202 B)
-; [nakarest] purpose not established: 202 bytes at 0xe9db0c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 202 B at 0xe9db0c not derived; readers below
+; [nakarest] Readers: source references IvSdscltyp2Proc (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (NakaInst_RIGHT_1_E9DB0C_0x70:24)`), LswMasterTuning (ui/drawbar_panel_ui.s: `lda
+; [nakarest] xde, (NakaInst_RIGHT_1_E9DB0C_0x14:24)`), LswScaleKeyX_LoopBody
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xde, NakaInst_RIGHT_1_E9DB0C_0x70`),
+; [nakarest] LswScaleKeyX_LoopCheck (ui/drawbar_panel_ui.s: `ld xbc,
+; [nakarest] NakaInst_RIGHT_1_E9DB0C_0x70`), 3 more; 1 data word in Naka_TechniChord1_Screens
+; [nakarest] (at 0xe9da28), which is read by LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
+; [nakarest] (Naka_TechniChord1_Screens:24)`).
 NakaInst_RIGHT_1_E9DB0C:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17BBE, 0xCA
 ; [nakarest] Naka_Scale2_Screens  +0x17c88..+0x17ccc (0xe9dbd6, 68 B)
-; [nakarest] purpose not established: 68 bytes at 0xe9dbd6 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 68 B at 0xe9dbd6 not derived; readers below
+; [nakarest] Readers: source references LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 Naka_Scale2_Screens:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17C88, 0x44
 ; [nakarest] NakaInst_NO_TYPE  +0x17ccc..+0x17cda (0xe9dc1a, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc1a that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc1a), first string " NO TYPE !! "; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dc16),
+; [nakarest] which is read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_NO_TYPE:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17CCC, 0xE
 ; [nakarest] NakaInst_USER  +0x17cda..+0x17ce8 (0xe9dc28, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc28 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc28), first string " USER "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dc12), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_USER:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17CDA, 0xE
 ; [nakarest] NakaInst_USER_E9DC36  +0x17ce8..+0x17cf6 (0xe9dc36, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc36 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc36), first string " USER "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dc0e), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_USER_E9DC36:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17CE8, 0xE
 ; [nakarest] NakaInst_PELOG  +0x17cf6..+0x17d04 (0xe9dc44, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc44 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc44), first string " PELOG "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dc0a), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_PELOG:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17CF6, 0xE
 ; [nakarest] NakaInst_SLENDRO  +0x17d04..+0x17d12 (0xe9dc52, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc52 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc52), first string " SLENDRO "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dc06), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_SLENDRO:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D04, 0xE
 ; [nakarest] NakaInst_ARABIC_5  +0x17d12..+0x17d20 (0xe9dc60, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc60 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc60), first string " ARABIC 5 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dc02), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_ARABIC_5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D12, 0xE
 ; [nakarest] NakaInst_ARABIC_4  +0x17d20..+0x17d2e (0xe9dc6e, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc6e that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc6e), first string " ARABIC 4 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbfe), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_ARABIC_4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D20, 0xE
 ; [nakarest] NakaInst_ARABIC_3  +0x17d2e..+0x17d3c (0xe9dc7c, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc7c that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc7c), first string " ARABIC 3 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbfa), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_ARABIC_3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D2E, 0xE
 ; [nakarest] NakaInst_ARABIC_2  +0x17d3c..+0x17d4a (0xe9dc8a, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc8a that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc8a), first string " ARABIC 2 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbf6), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_ARABIC_2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D3C, 0xE
 ; [nakarest] NakaInst_ARABIC_1  +0x17d4a..+0x17d58 (0xe9dc98, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dc98 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dc98), first string " ARABIC 1 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbf2), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_ARABIC_1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D4A, 0xE
 ; [nakarest] NakaInst_KIRNBERGER  +0x17d58..+0x17d66 (0xe9dca6, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dca6 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dca6), first string " KIRNBERGER "; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbee),
+; [nakarest] which is read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_KIRNBERGER:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D58, 0xE
 ; [nakarest] NakaInst_WERCKMEISTER  +0x17d66..+0x17d74 (0xe9dcb4, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dcb4 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dcb4), first string "WERCKMEISTER"; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbea),
+; [nakarest] which is read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_WERCKMEISTER:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D66, 0xE
 ; [nakarest] NakaInst_PYTHAGOREAN  +0x17d74..+0x17d82 (0xe9dcc2, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dcc2 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dcc2), first string "PYTHAGOREAN "; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbe6),
+; [nakarest] which is read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_PYTHAGOREAN:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D74, 0xE
 ; [nakarest] NakaInst_ORCHESTRA  +0x17d82..+0x17d90 (0xe9dcd0, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dcd0 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dcd0), first string " ORCHESTRA "; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbe2),
+; [nakarest] which is read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_ORCHESTRA:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D82, 0xE
 ; [nakarest] NakaInst_PIANO  +0x17d90..+0x17d9e (0xe9dcde, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dcde that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dcde), first string " PIANO "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbde), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_PIANO:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D90, 0xE
 ; [nakarest] NakaInst_RANDOM  +0x17d9e..+0x17dac (0xe9dcec, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xe9dcec that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xe9dcec), first string " RANDOM "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbda), which is
+; [nakarest] read by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa,
+; [nakarest] (Naka_Scale2_Screens:24)`).
 NakaInst_RANDOM:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17D9E, 0xE
 ; [nakarest] NakaInst_OFF_E9DCFA  +0x17dac..+0x17dc8 (0xe9dcfa, 28 B)
-; [nakarest] purpose not established: 28 bytes at 0xe9dcfa that no registered NAKA table points into
+; [nakarest] Text (28 B at 0xe9dcfa), first string " OFF "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Naka_Scale2_Screens (at 0xe9dbd6), which is read
+; [nakarest] by LswScalingType (ui/drawbar_panel_ui.s: `lda xwa, (Naka_Scale2_Screens:24)`).
 NakaInst_OFF_E9DCFA:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17DAC, 0x1C
 ; [nakarest] Scale_Arabic2_NameTable  +0x17dc8..+0x17df8 (0xe9dd16, 48 B)
-; [nakarest] purpose not established: 48 bytes at 0xe9dd16 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 48 B at 0xe9dd16 not derived; readers below
+; [nakarest] Readers: source references LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_NameTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17DC8, 0x30
 ; [nakarest] Scale_Arabic2_Plus11  +0x17df8..+0x17dfc (0xe9dd46, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd46 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd46), first string "+11"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd42), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17DF8, 0x4
 ; [nakarest] Scale_Arabic2_Plus10  +0x17dfc..+0x17e00 (0xe9dd4a, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd4a that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd4a), first string "+10"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd3e), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17DFC, 0x4
 ; [nakarest] Scale_Arabic2_Plus9  +0x17e00..+0x17e04 (0xe9dd4e, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd4e that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd4e), first string "+ 9"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd3a), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus9:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E00, 0x4
 ; [nakarest] Scale_Arabic2_Plus8  +0x17e04..+0x17e08 (0xe9dd52, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd52 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd52), first string "+ 8"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd36), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E04, 0x4
 ; [nakarest] Scale_Arabic2_Plus7  +0x17e08..+0x17e0c (0xe9dd56, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd56 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd56), first string "+ 7"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd32), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E08, 0x4
 ; [nakarest] Scale_Arabic2_Plus6  +0x17e0c..+0x17e10 (0xe9dd5a, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd5a that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd5a), first string "+ 6"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd2e), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E0C, 0x4
 ; [nakarest] Scale_Arabic2_Plus5  +0x17e10..+0x17e14 (0xe9dd5e, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd5e that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd5e), first string "+ 5"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd2a), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E10, 0x4
 ; [nakarest] Scale_Arabic2_Plus4  +0x17e14..+0x17e18 (0xe9dd62, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd62 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd62), first string "+ 4"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd26), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E14, 0x4
 ; [nakarest] Scale_Arabic2_Plus3  +0x17e18..+0x17e1c (0xe9dd66, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd66 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd66), first string "+ 3"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd22), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E18, 0x4
 ; [nakarest] Scale_Arabic2_Plus2  +0x17e1c..+0x17e20 (0xe9dd6a, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd6a that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd6a), first string "+ 2"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd1e), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E1C, 0x4
 ; [nakarest] Scale_Arabic2_Plus1  +0x17e20..+0x17e24 (0xe9dd6e, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd6e that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd6e), first string "+ 1"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd1a), which is
+; [nakarest] read by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Plus1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E20, 0x4
 ; [nakarest] Scale_Arabic2_Zero  +0x17e24..+0x17e28 (0xe9dd72, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9dd72 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9dd72), first string " 0"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in Scale_Arabic2_NameTable (at 0xe9dd16), which is read
+; [nakarest] by LswScalingShift (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Arabic2_NameTable:24)`).
 Scale_Arabic2_Zero:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E24, 0x4
 ; [nakarest] Scale_Names_Table  +0x17e28..+0x17e58 (0xe9dd76, 48 B)
-; [nakarest] purpose not established: 48 bytes at 0xe9dd76 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 48 B at 0xe9dd76 not derived; readers below
+; [nakarest] Readers: source references LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 Scale_Names_Table:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E28, 0x30
 ; [nakarest] NakaInst_KEY_B  +0x17e58..+0x17e62 (0xe9dda6, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dda6 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dda6), first string "[KEY=B ]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dda2), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_B:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E58, 0xA
 ; [nakarest] NakaInst_KEY_A  +0x17e62..+0x17e6c (0xe9ddb0, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ddb0 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9ddb0), first string "[KEY=A#]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd9e), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_A:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E62, 0xA
 ; [nakarest] NakaInst_KEY_A_E9DDBA  +0x17e6c..+0x17e76 (0xe9ddba, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ddba that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9ddba), first string "[KEY=A ]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd9a), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_A_E9DDBA:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E6C, 0xA
 ; [nakarest] NakaInst_KEY_G  +0x17e76..+0x17e80 (0xe9ddc4, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ddc4 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9ddc4), first string "[KEY=G#]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd96), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_G:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E76, 0xA
 ; [nakarest] NakaInst_KEY_G_E9DDCE  +0x17e80..+0x17e8a (0xe9ddce, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ddce that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9ddce), first string "[KEY=G ]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd92), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_G_E9DDCE:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E80, 0xA
 ; [nakarest] NakaInst_KEY_F  +0x17e8a..+0x17e94 (0xe9ddd8, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ddd8 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9ddd8), first string "[KEY=F#]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd8e), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_F:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E8A, 0xA
 ; [nakarest] NakaInst_KEY_F_E9DDE2  +0x17e94..+0x17e9e (0xe9dde2, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9dde2 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9dde2), first string "[KEY=F ]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd8a), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_F_E9DDE2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E94, 0xA
 ; [nakarest] NakaInst_KEY_E  +0x17e9e..+0x17ea8 (0xe9ddec, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ddec that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9ddec), first string "[KEY=E ]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd86), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_E:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17E9E, 0xA
 ; [nakarest] NakaInst_KEY_D  +0x17ea8..+0x17eb2 (0xe9ddf6, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9ddf6 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9ddf6), first string "[KEY=D#]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd82), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_D:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17EA8, 0xA
 ; [nakarest] NakaInst_KEY_D_E9DE00  +0x17eb2..+0x17ebc (0xe9de00, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9de00 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9de00), first string "[KEY=D ]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd7e), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_D_E9DE00:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17EB2, 0xA
 ; [nakarest] NakaInst_KEY_C  +0x17ebc..+0x17ec6 (0xe9de0a, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9de0a that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9de0a), first string "[KEY=C#]"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Scale_Names_Table (at 0xe9dd7a), which is
+; [nakarest] read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_C:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17EBC, 0xA
 ; [nakarest] NakaInst_KEY_C_E9DE14  +0x17ec6..+0x17ed8 (0xe9de14, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xe9de14 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 18 B at 0xe9de14 not derived; readers below
+; [nakarest] Readers: source references LswScalingMode (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (NakaInst_KEY_C_E9DE14_0xa:24)`); 1 data word in Scale_Names_Table (at 0xe9dd76),
+; [nakarest] which is read by LswScalingShift2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (Scale_Names_Table:24)`).
 NakaInst_KEY_C_E9DE14:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17EC6, 0x12
 ; [nakarest] Str_SOUND  +0x17ed8..+0x17ede (0xe9de26, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9de26 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9de26), first string "SOUND"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in NakaInst_KEY_C_E9DE14_0xa (at 0xe9de22), which
+; [nakarest] is read by LswScalingMode (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (NakaInst_KEY_C_E9DE14_0xa:24)`).
 Str_SOUND:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17ED8, 0x6
 NakaInst_TOTAL:
@@ -2659,1031 +3249,1901 @@ Bitmap_DigitD:
 ; -----------------------------------------------------------------------------
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x191CE, 0x2C
 ; [nakarest] MidiParam_PanelCfgTable  +0x191fa..+0x192ae (0xe9f148, 180 B)
-; [nakarest] purpose not established: 180 bytes at 0xe9f148 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 180 B at 0xe9f148 not derived; readers below
+; [nakarest] Readers: source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long MidiParam_PanelCfgTable`); 1
+; [nakarest] data word in MidiPart_ConfigNameTable (at 0xeeedd4).
 MidiParam_PanelCfgTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x191FA, 0xB4
 ; [nakarest] MidiParamStr1_Local  +0x192ae..+0x192b6 (0xe9f1fc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f1fc that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f1fc), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 2 data words in MidiParam_PanelCfgTable (at 0xe9f1f8, 0xe9f1ec),
+; [nakarest] which is read by MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long MidiParam_PanelCfgTable`).
 MidiParamStr1_Local:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192AE, 0x8
 ; [nakarest] MidiParamStr1_Midi  +0x192b6..+0x192be (0xe9f204, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f204 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f204), first string "MIDI"; no registered NAKA table points into
+; [nakarest] it; reached through 2 data words in MidiParam_PanelCfgTable (at 0xe9f1e0,
+; [nakarest] 0xe9f1d4), which is read by MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long MidiParam_PanelCfgTable`).
 MidiParamStr1_Midi:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192B6, 0x8
 ; [nakarest] MidiParamStr1_Empty  +0x192be..+0x192c2 (0xe9f20c, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f20c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 4 B at 0xe9f20c not derived; readers below
+; [nakarest] Readers: 2 data words in MidiParam_PanelCfgTable (at 0xe9f1c8, 0xe9f1bc), which is
+; [nakarest] read by MidiPart_ConfigNameTable (ui_widgets/sequencer_channel_containers.s: `.long
+; [nakarest] MidiParam_PanelCfgTable`).
 MidiParamStr1_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192BE, 0x4
 ; [nakarest] MidiParamStr1_KeyShift  +0x192c2..+0x192d8 (0xe9f210, 22 B)
-; [nakarest] purpose not established: 22 bytes at 0xe9f210 that no registered NAKA table points into
+; [nakarest] Text (22 B at 0xe9f210), first string "KEY SHIFT"; no registered NAKA table points
+; [nakarest] into it; reached through 2 data words in MidiParam_PanelCfgTable (at 0xe9f1b0,
+; [nakarest] 0xe9f1a4), which is read by MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long MidiParam_PanelCfgTable`).
 MidiParamStr1_KeyShift:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192C2, 0x16
 ; [nakarest] MidiParamStr1_DspEff  +0x192d8..+0x192e8 (0xe9f226, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe9f226 that no registered NAKA table points into
+; [nakarest] Text (16 B at 0xe9f226), first string "DSP EFF"; no registered NAKA table points
+; [nakarest] into it; reached through 2 data words in MidiParam_PanelCfgTable (at 0xe9f198,
+; [nakarest] 0xe9f18c), which is read by MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long MidiParam_PanelCfgTable`).
 MidiParamStr1_DspEff:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192D8, 0x10
 ; [nakarest] MidiParamStr1_Volume  +0x192e8..+0x192f2 (0xe9f236, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9f236 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9f236), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 2 data words in MidiParam_PanelCfgTable (at 0xe9f180, 0xe9f174),
+; [nakarest] which is read by MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long MidiParam_PanelCfgTable`).
 MidiParamStr1_Volume:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192E8, 0xA
 ; [nakarest] MidiParamStr1_Pan  +0x192f2..+0x192fc (0xe9f240, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9f240 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9f240), first string "PAN"; no registered NAKA table points into
+; [nakarest] it; reached through 2 data words in MidiParam_PanelCfgTable (at 0xe9f168,
+; [nakarest] 0xe9f15c), which is read by MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long MidiParam_PanelCfgTable`).
 MidiParamStr1_Pan:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192F2, 0xA
 ; [nakarest] MidiParamStr1_End  +0x192fc..+0x192fe (0xe9f24a, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe9f24a that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe9f24a not derived; readers below
+; [nakarest] Readers: 1 data word in MidiParam_PanelCfgTable (at 0xe9f150), which is read by
+; [nakarest] MidiPart_ConfigNameTable (ui_widgets/sequencer_channel_containers.s: `.long
+; [nakarest] MidiParam_PanelCfgTable`).
 MidiParamStr1_End:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192FC, 0x2
 ; [nakarest] Midi_PartToChMappingTable  +0x192fe..+0x1933e (0xe9f24c, 64 B)
-; [nakarest] purpose not established: 64 bytes at 0xe9f24c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 64 B at 0xe9f24c not derived; readers below
+; [nakarest] Readers: source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long Midi_PartToChMappingTable`); 1
+; [nakarest] data word in MidiPart_ConfigNameTable (at 0xeeedd8).
 Midi_PartToChMappingTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x192FE, 0x40
 ; [nakarest] PartName6_Blank  +0x1933e..+0x19346 (0xe9f28c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f28c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f28c), first string " "; no registered NAKA table points into it;
+; [nakarest] reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Blank`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee50).
 PartName6_Blank:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1933E, 0x8
 ; [nakarest] PartName6_Rhythm  +0x19346..+0x1934e (0xe9f294, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f294 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f294), first string "RHYTHM"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Rhythm`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee4c).
 PartName6_Rhythm:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19346, 0x8
 ; [nakarest] PartName6_Ctrl  +0x1934e..+0x19356 (0xe9f29c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f29c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f29c), first string "CTRL "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Ctrl`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeee48).
 PartName6_Ctrl:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1934E, 0x8
 ; [nakarest] PartName6_Apc  +0x19356..+0x1935e (0xe9f2a4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2a4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2a4), first string "APC "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Apc`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeee44).
 PartName6_Apc:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19356, 0x8
 ; [nakarest] PartName6_Mic  +0x1935e..+0x19366 (0xe9f2ac, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2ac that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2ac), first string "MIC "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Mic`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeee40).
 PartName6_Mic:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1935E, 0x8
 ; [nakarest] PartName6_Metro  +0x19366..+0x1936e (0xe9f2b4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2b4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2b4), first string "METRO "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Metro`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee3c).
 PartName6_Metro:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19366, 0x8
 ; [nakarest] PartName6_Msp  +0x1936e..+0x19376 (0xe9f2bc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2bc that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2bc), first string "MSP "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Msp`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeee38).
 PartName6_Msp:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1936E, 0x8
 ; [nakarest] PartName6_Drums  +0x19376..+0x1937e (0xe9f2c4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2c4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2c4), first string "DRUMS "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Drums`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee34).
 PartName6_Drums:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19376, 0x8
 ; [nakarest] PartName6_Bass  +0x1937e..+0x19386 (0xe9f2cc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2cc that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2cc), first string "BASS "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Bass`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeee30).
 PartName6_Bass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1937E, 0x8
 ; [nakarest] PartName6_Acomp3  +0x19386..+0x1938e (0xe9f2d4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2d4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2d4), first string "ACOMP3"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Acomp3`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee2c).
 PartName6_Acomp3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19386, 0x8
 ; [nakarest] PartName6_Acomp2  +0x1938e..+0x19396 (0xe9f2dc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2dc that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2dc), first string "ACOMP2"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Acomp2`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee28).
 PartName6_Acomp2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1938E, 0x8
 ; [nakarest] PartName6_Acomp1  +0x19396..+0x1939e (0xe9f2e4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2e4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2e4), first string "ACOMP1"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Acomp1`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee24).
 PartName6_Acomp1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19396, 0x8
 ; [nakarest] PartName6_RBass  +0x1939e..+0x193a6 (0xe9f2ec, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2ec that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2ec), first string "R.BASS"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_RBass`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee20).
 PartName6_RBass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1939E, 0x8
 ; [nakarest] PartName6_Chord  +0x193a6..+0x193ae (0xe9f2f4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2f4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2f4), first string "CHORD "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Chord`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee1c).
 PartName6_Chord:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193A6, 0x8
 ; [nakarest] PartName6_Part16  +0x193ae..+0x193b6 (0xe9f2fc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f2fc that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f2fc), first string "PART16"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part16`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee18).
 PartName6_Part16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193AE, 0x8
 ; [nakarest] PartName6_Part15  +0x193b6..+0x193be (0xe9f304, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f304 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f304), first string "PART15"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part15`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee14).
 PartName6_Part15:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193B6, 0x8
 ; [nakarest] PartName6_Part14  +0x193be..+0x193c6 (0xe9f30c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f30c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f30c), first string "PART14"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part14`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee10).
 PartName6_Part14:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193BE, 0x8
 ; [nakarest] PartName6_Part13  +0x193c6..+0x193ce (0xe9f314, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f314 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f314), first string "PART13"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part13`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee0c).
 PartName6_Part13:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193C6, 0x8
 ; [nakarest] PartName6_Part12  +0x193ce..+0x193d6 (0xe9f31c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f31c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f31c), first string "PART12"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part12`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee08).
 PartName6_Part12:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193CE, 0x8
 ; [nakarest] PartName6_Part11  +0x193d6..+0x193de (0xe9f324, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f324 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f324), first string "PART11"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part11`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee04).
 PartName6_Part11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193D6, 0x8
 ; [nakarest] PartName6_Part10  +0x193de..+0x193e6 (0xe9f32c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f32c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f32c), first string "PART10"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part10`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee00).
 PartName6_Part10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193DE, 0x8
 ; [nakarest] PartName6_Part9  +0x193e6..+0x193ee (0xe9f334, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f334 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f334), first string "PART 9"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part9`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeedfc).
 PartName6_Part9:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193E6, 0x8
 ; [nakarest] PartName6_Part8  +0x193ee..+0x193f6 (0xe9f33c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f33c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f33c), first string "PART 8"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part8`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeedf8).
 PartName6_Part8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193EE, 0x8
 ; [nakarest] PartName6_Part7  +0x193f6..+0x193fe (0xe9f344, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f344 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f344), first string "PART 7"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part7`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeedf4).
 PartName6_Part7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193F6, 0x8
 ; [nakarest] PartName6_Part6  +0x193fe..+0x19406 (0xe9f34c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f34c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f34c), first string "PART 6"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part6`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeedf0).
 PartName6_Part6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x193FE, 0x8
 ; [nakarest] PartName6_Part5  +0x19406..+0x1940e (0xe9f354, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f354 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f354), first string "PART 5"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part5`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeedec).
 PartName6_Part5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19406, 0x8
 ; [nakarest] PartName6_Part4  +0x1940e..+0x19416 (0xe9f35c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f35c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f35c), first string "PART 4"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Part4`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeede8).
 PartName6_Part4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1940E, 0x8
 ; [nakarest] PartName6_Left  +0x19416..+0x1941e (0xe9f364, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f364 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f364), first string "LEFT "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Left`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeede4).
 PartName6_Left:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19416, 0x8
 ; [nakarest] PartName6_Right2  +0x1941e..+0x19426 (0xe9f36c, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f36c that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f36c), first string "RIGHT2"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Right2`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeede0).
 PartName6_Right2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1941E, 0x8
 ; [nakarest] PartName6_Right1  +0x19426..+0x1942e (0xe9f374, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f374 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f374), first string "RIGHT1"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_Right1`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeddc).
 PartName6_Right1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19426, 0x8
 ; [nakarest] PartName6_TableEnd  +0x1942e..+0x19434 (0xe9f37c, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f37c that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f37c), first string " "; no registered NAKA table points into it;
+; [nakarest] reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName6_TableEnd`); 1 data
+; [nakarest] word in MidiPart_ConfigNameTable (at 0xeeeec8).
 PartName6_TableEnd:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1942E, 0x6
 ; [nakarest] PartName4_Rhythm  +0x19434..+0x1943a (0xe9f382, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f382 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f382), first string "RHY "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Rhythm`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeec4).
 PartName4_Rhythm:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19434, 0x6
 ; [nakarest] PartName4_Ctrl  +0x1943a..+0x19440 (0xe9f388, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f388 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f388), first string "CTRL"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Ctrl`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeec0).
 PartName4_Ctrl:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1943A, 0x6
 ; [nakarest] PartName4_Apc  +0x19440..+0x19446 (0xe9f38e, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f38e that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f38e), first string "APC "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Apc`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeebc).
 PartName4_Apc:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19440, 0x6
 ; [nakarest] PartName4_Mic  +0x19446..+0x1944c (0xe9f394, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f394 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f394), first string "MIC "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Mic`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeeb8).
 PartName4_Mic:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19446, 0x6
 ; [nakarest] PartName4_Metro  +0x1944c..+0x19452 (0xe9f39a, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f39a that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f39a), first string "METR"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Metro`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeeb4).
 PartName4_Metro:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1944C, 0x6
 ; [nakarest] PartName4_Msp  +0x19452..+0x19458 (0xe9f3a0, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3a0 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3a0), first string "MSP "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Msp`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeeb0).
 PartName4_Msp:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19452, 0x6
 ; [nakarest] PartName4_Drums  +0x19458..+0x1945e (0xe9f3a6, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3a6 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3a6), first string "DRUM"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Drums`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeeac).
 PartName4_Drums:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19458, 0x6
 ; [nakarest] PartName4_Bass  +0x1945e..+0x19464 (0xe9f3ac, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3ac that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3ac), first string "BASS"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Bass`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeea8).
 PartName4_Bass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1945E, 0x6
 ; [nakarest] PartName4_Acomp3  +0x19464..+0x1946a (0xe9f3b2, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3b2 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3b2), first string "ACP3"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Acomp3`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeea4).
 PartName4_Acomp3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19464, 0x6
 ; [nakarest] PartName4_Acomp2  +0x1946a..+0x19470 (0xe9f3b8, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3b8 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3b8), first string "ACP2"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Acomp2`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeea0).
 PartName4_Acomp2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1946A, 0x6
 ; [nakarest] PartName4_Acomp1  +0x19470..+0x19476 (0xe9f3be, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3be that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3be), first string "ACP1"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Acomp1`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee9c).
 PartName4_Acomp1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19470, 0x6
 ; [nakarest] PartName4_RBass  +0x19476..+0x1947c (0xe9f3c4, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3c4 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3c4), first string "R.BA"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_RBass`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee98).
 PartName4_RBass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19476, 0x6
 ; [nakarest] PartName4_Chord  +0x1947c..+0x19482 (0xe9f3ca, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3ca that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3ca), first string "CHRD"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Chord`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee94).
 PartName4_Chord:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1947C, 0x6
 ; [nakarest] PartName4_Part16  +0x19482..+0x19488 (0xe9f3d0, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3d0 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3d0), first string "PT16"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part16`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee90).
 PartName4_Part16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19482, 0x6
 ; [nakarest] PartName4_Part15  +0x19488..+0x1948e (0xe9f3d6, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3d6 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3d6), first string "PT15"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part15`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee8c).
 PartName4_Part15:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19488, 0x6
 ; [nakarest] PartName4_Part14  +0x1948e..+0x19494 (0xe9f3dc, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3dc that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3dc), first string "PT14"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part14`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee88).
 PartName4_Part14:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1948E, 0x6
 ; [nakarest] PartName4_Part13  +0x19494..+0x1949a (0xe9f3e2, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3e2 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3e2), first string "PT13"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part13`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee84).
 PartName4_Part13:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19494, 0x6
 ; [nakarest] PartName4_Part12  +0x1949a..+0x194a0 (0xe9f3e8, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3e8 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3e8), first string "PT12"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part12`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee80).
 PartName4_Part12:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1949A, 0x6
 ; [nakarest] PartName4_Part11  +0x194a0..+0x194a6 (0xe9f3ee, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3ee that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3ee), first string "PT11"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part11`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee7c).
 PartName4_Part11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194A0, 0x6
 ; [nakarest] PartName4_Part10  +0x194a6..+0x194ac (0xe9f3f4, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3f4 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3f4), first string "PT10"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part10`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee78).
 PartName4_Part10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194A6, 0x6
 ; [nakarest] PartName4_Part9  +0x194ac..+0x194b2 (0xe9f3fa, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f3fa that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f3fa), first string "PT 9"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part9`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee74).
 PartName4_Part9:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194AC, 0x6
 ; [nakarest] PartName4_Part8  +0x194b2..+0x194b8 (0xe9f400, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f400 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f400), first string "PT 8"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part8`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee70).
 PartName4_Part8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194B2, 0x6
 ; [nakarest] PartName4_Part7  +0x194b8..+0x194be (0xe9f406, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f406 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f406), first string "PT 7"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part7`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee6c).
 PartName4_Part7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194B8, 0x6
 ; [nakarest] PartName4_Part6  +0x194be..+0x194c4 (0xe9f40c, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f40c that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f40c), first string "PT 6"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part6`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee68).
 PartName4_Part6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194BE, 0x6
 ; [nakarest] PartName4_Part5  +0x194c4..+0x194ca (0xe9f412, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f412 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f412), first string "PT 5"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part5`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee64).
 PartName4_Part5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194C4, 0x6
 ; [nakarest] PartName4_Part4  +0x194ca..+0x194d0 (0xe9f418, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f418 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f418), first string "PT 4"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Part4`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee60).
 PartName4_Part4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194CA, 0x6
 ; [nakarest] PartName4_Left  +0x194d0..+0x194d6 (0xe9f41e, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f41e that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f41e), first string "LEFT"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Left`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeee5c).
 PartName4_Left:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194D0, 0x6
 ; [nakarest] PartName4_Right2  +0x194d6..+0x194dc (0xe9f424, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f424 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f424), first string "RT 2"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Right2`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee58).
 PartName4_Right2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194D6, 0x6
 ; [nakarest] PartName4_Right1  +0x194dc..+0x194e2 (0xe9f42a, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f42a that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f42a), first string "RT 1"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long PartName4_Right1`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeee54).
 PartName4_Right1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194DC, 0x6
 ; [nakarest] AccompName6_Chord  +0x194e2..+0x194ea (0xe9f430, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f430 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f430), first string "CHORD "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_Chord`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef28).
 AccompName6_Chord:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194E2, 0x8
 ; [nakarest] AccompName6_RBass  +0x194ea..+0x194f2 (0xe9f438, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f438 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f438), first string "R.BASS"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_RBass`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef24).
 AccompName6_RBass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194EA, 0x8
 ; [nakarest] AccompName6_Msp  +0x194f2..+0x194fa (0xe9f440, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f440 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f440), first string "MSP "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_Msp`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef20).
 AccompName6_Msp:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194F2, 0x8
 ; [nakarest] AccompName6_Bass  +0x194fa..+0x19502 (0xe9f448, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f448 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f448), first string "BASS "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_Bass`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef1c).
 AccompName6_Bass:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x194FA, 0x8
 ; [nakarest] AccompName6_Acomp1  +0x19502..+0x1950a (0xe9f450, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f450 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f450), first string "ACOMP1"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_Acomp1`); 1 data
+; [nakarest] word in MidiPart_ConfigNameTable (at 0xeeef18).
 AccompName6_Acomp1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19502, 0x8
 ; [nakarest] AccompName6_Acomp2  +0x1950a..+0x19512 (0xe9f458, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f458 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f458), first string "ACOMP2"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_Acomp2`); 1 data
+; [nakarest] word in MidiPart_ConfigNameTable (at 0xeeef14).
 AccompName6_Acomp2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1950A, 0x8
 ; [nakarest] AccompName6_Acomp3  +0x19512..+0x1951a (0xe9f460, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f460 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f460), first string "ACOMP3"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_Acomp3`); 1 data
+; [nakarest] word in MidiPart_ConfigNameTable (at 0xeeef10).
 AccompName6_Acomp3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19512, 0x8
 ; [nakarest] AccompName6_Drums  +0x1951a..+0x19522 (0xe9f468, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f468 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f468), first string "DRUMS "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long AccompName6_Drums`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef0c).
 AccompName6_Drums:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1951A, 0x8
 ; [nakarest] TrackName6_Tr16  +0x19522..+0x1952a (0xe9f470, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f470 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f470), first string " TR16 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr16`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef08).
 TrackName6_Tr16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19522, 0x8
 ; [nakarest] TrackName6_Tr15  +0x1952a..+0x19532 (0xe9f478, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f478 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f478), first string " TR15 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr15`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef04).
 TrackName6_Tr15:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1952A, 0x8
 ; [nakarest] TrackName6_Tr14  +0x19532..+0x1953a (0xe9f480, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f480 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f480), first string " TR14 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr14`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef00).
 TrackName6_Tr14:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19532, 0x8
 ; [nakarest] TrackName6_Tr13  +0x1953a..+0x19542 (0xe9f488, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f488 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f488), first string " TR13 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr13`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeefc).
 TrackName6_Tr13:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1953A, 0x8
 ; [nakarest] TrackName6_Tr12  +0x19542..+0x1954a (0xe9f490, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f490 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f490), first string " TR12 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr12`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeef8).
 TrackName6_Tr12:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19542, 0x8
 ; [nakarest] TrackName6_Tr11  +0x1954a..+0x19552 (0xe9f498, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f498 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f498), first string " TR11 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr11`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeef4).
 TrackName6_Tr11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1954A, 0x8
 ; [nakarest] TrackName6_Tr10  +0x19552..+0x1955a (0xe9f4a0, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4a0 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4a0), first string " TR10 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr10`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeeef0).
 TrackName6_Tr10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19552, 0x8
 ; [nakarest] TrackName6_Tr9  +0x1955a..+0x19562 (0xe9f4a8, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4a8 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4a8), first string " TR 9 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr9`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeeec).
 TrackName6_Tr9:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1955A, 0x8
 ; [nakarest] TrackName6_Tr8  +0x19562..+0x1956a (0xe9f4b0, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4b0 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4b0), first string " TR 8 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr8`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeee8).
 TrackName6_Tr8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19562, 0x8
 ; [nakarest] TrackName6_Tr7  +0x1956a..+0x19572 (0xe9f4b8, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4b8 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4b8), first string " TR 7 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr7`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeee4).
 TrackName6_Tr7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1956A, 0x8
 ; [nakarest] TrackName6_Tr6  +0x19572..+0x1957a (0xe9f4c0, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4c0 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4c0), first string " TR 6 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr6`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeee0).
 TrackName6_Tr6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19572, 0x8
 ; [nakarest] TrackName6_Tr5  +0x1957a..+0x19582 (0xe9f4c8, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4c8 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4c8), first string " TR 5 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr5`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeedc).
 TrackName6_Tr5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1957A, 0x8
 ; [nakarest] TrackName6_Tr4  +0x19582..+0x1958a (0xe9f4d0, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4d0 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4d0), first string " TR 4 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr4`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeed8).
 TrackName6_Tr4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19582, 0x8
 ; [nakarest] TrackName6_Tr3  +0x1958a..+0x19592 (0xe9f4d8, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4d8 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4d8), first string " TR 3 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr3`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeed4).
 TrackName6_Tr3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1958A, 0x8
 ; [nakarest] TrackName6_Tr2  +0x19592..+0x1959a (0xe9f4e0, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4e0 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4e0), first string " TR 2 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr2`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeed0).
 TrackName6_Tr2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19592, 0x8
 ; [nakarest] TrackName6_Tr1  +0x1959a..+0x195a2 (0xe9f4e8, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f4e8 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f4e8), first string " TR 1 "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Tr1`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeeecc).
 TrackName6_Tr1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1959A, 0x8
 ; [nakarest] TrackName6_Unassigned  +0x195a2..+0x195a8 (0xe9f4f0, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f4f0 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f4f0), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MidiPart_ConfigNameTable (at 0xeeef88).
 TrackName6_Unassigned:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195A2, 0x6
 ; [nakarest] TrackName6_Unassigned_02  +0x195a8..+0x195ae (0xe9f4f6, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f4f6 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f4f6), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MidiPart_ConfigNameTable (at 0xeeef84).
 TrackName6_Unassigned_02:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195A8, 0x6
 ; [nakarest] TrackName6_Unassigned_03  +0x195ae..+0x195b4 (0xe9f4fc, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f4fc that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f4fc), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MidiPart_ConfigNameTable (at 0xeeef80).
 TrackName6_Unassigned_03:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195AE, 0x6
 ; [nakarest] TrackName6_Unassigned_04  +0x195b4..+0x195ba (0xe9f502, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f502 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f502), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MidiPart_ConfigNameTable (at 0xeeef7c).
 TrackName6_Unassigned_04:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195B4, 0x6
 ; [nakarest] TrackName6_Unassigned_05  +0x195ba..+0x195c0 (0xe9f508, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f508 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f508), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in MidiPart_ConfigNameTable (at 0xeeef78).
 TrackName6_Unassigned_05:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195BA, 0x6
 ; [nakarest] TrackName6_Unassigned_06  +0x195c0..+0x195c6 (0xe9f50e, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f50e that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f50e), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Unassigned_06`); 1
+; [nakarest] data word in MidiPart_ConfigNameTable (at 0xeeef74).
 TrackName6_Unassigned_06:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195C0, 0x6
 ; [nakarest] TrackName6_Unassigned_07  +0x195c6..+0x195cc (0xe9f514, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f514 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f514), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Unassigned_07`); 1
+; [nakarest] data word in MidiPart_ConfigNameTable (at 0xeeef70).
 TrackName6_Unassigned_07:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195C6, 0x6
 ; [nakarest] TrackName6_Unassigned_08  +0x195cc..+0x195d2 (0xe9f51a, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f51a that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f51a), first string " -- "; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName6_Unassigned_08`); 1
+; [nakarest] data word in MidiPart_ConfigNameTable (at 0xeeef6c).
 TrackName6_Unassigned_08:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195CC, 0x6
 ; [nakarest] TrackName4_Tr16  +0x195d2..+0x195d8 (0xe9f520, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f520 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f520), first string "TR16"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr16`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef68).
 TrackName4_Tr16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195D2, 0x6
 ; [nakarest] TrackName4_Tr15  +0x195d8..+0x195de (0xe9f526, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f526 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f526), first string "TR15"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr15`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef64).
 TrackName4_Tr15:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195D8, 0x6
 ; [nakarest] TrackName4_Tr14  +0x195de..+0x195e4 (0xe9f52c, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f52c that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f52c), first string "TR14"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr14`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef60).
 TrackName4_Tr14:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195DE, 0x6
 ; [nakarest] TrackName4_Tr13  +0x195e4..+0x195ea (0xe9f532, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f532 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f532), first string "TR13"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr13`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef5c).
 TrackName4_Tr13:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195E4, 0x6
 ; [nakarest] TrackName4_Tr12  +0x195ea..+0x195f0 (0xe9f538, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f538 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f538), first string "TR12"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr12`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef58).
 TrackName4_Tr12:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195EA, 0x6
 ; [nakarest] TrackName4_Tr11  +0x195f0..+0x195f6 (0xe9f53e, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f53e that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f53e), first string "TR11"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr11`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef54).
 TrackName4_Tr11:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195F0, 0x6
 ; [nakarest] TrackName4_Tr10  +0x195f6..+0x195fc (0xe9f544, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f544 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f544), first string "TR10"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr10`); 1 data word
+; [nakarest] in MidiPart_ConfigNameTable (at 0xeeef50).
 TrackName4_Tr10:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195F6, 0x6
 ; [nakarest] TrackName4_Tr9  +0x195fc..+0x19602 (0xe9f54a, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f54a that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f54a), first string "TR 9"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr9`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef4c).
 TrackName4_Tr9:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x195FC, 0x6
 ; [nakarest] TrackName4_Tr8  +0x19602..+0x19608 (0xe9f550, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f550 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f550), first string "TR 8"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr8`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef48).
 TrackName4_Tr8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19602, 0x6
 ; [nakarest] TrackName4_Tr7  +0x19608..+0x1960e (0xe9f556, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f556 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f556), first string "TR 7"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr7`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef44).
 TrackName4_Tr7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19608, 0x6
 ; [nakarest] TrackName4_Tr6  +0x1960e..+0x19614 (0xe9f55c, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f55c that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f55c), first string "TR 6"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr6`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef40).
 TrackName4_Tr6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1960E, 0x6
 ; [nakarest] TrackName4_Tr5  +0x19614..+0x1961a (0xe9f562, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f562 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f562), first string "TR 5"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr5`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef3c).
 TrackName4_Tr5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19614, 0x6
 ; [nakarest] TrackName4_Tr4  +0x1961a..+0x19620 (0xe9f568, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f568 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f568), first string "TR 4"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr4`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef38).
 TrackName4_Tr4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1961A, 0x6
 ; [nakarest] TrackName4_Tr3  +0x19620..+0x19626 (0xe9f56e, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f56e that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f56e), first string "TR 3"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr3`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef34).
 TrackName4_Tr3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19620, 0x6
 ; [nakarest] TrackName4_Tr2  +0x19626..+0x1962c (0xe9f574, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9f574 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9f574), first string "TR 2"; no registered NAKA table points into
+; [nakarest] it; reached through source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr2`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef30).
 TrackName4_Tr2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19626, 0x6
 ; [nakarest] TrackName4_Tr1  +0x1962c..+0x19722 (0xe9f57a, 246 B)
-; [nakarest] purpose not established: 246 bytes at 0xe9f57a that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 246 B at 0xe9f57a not derived; readers below
+; [nakarest] Readers: source references MidiPart_ConfigNameTable
+; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr1`), PartMixer_Init
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, TrackName4_Tr1_0x42`), PsMixerControlProc
+; [nakarest] (ui/drawbar_panel_ui.s: `add xbc, TrackName4_Tr1_0x2e`); 1 data word in
+; [nakarest] MidiPart_ConfigNameTable (at 0xeeef2c).
 TrackName4_Tr1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1962C, 0xF6
 ; [nakarest] MidiParamStr2_End  +0x19722..+0x19724 (0xe9f670, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe9f670 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe9f670 not derived; readers below
+; [nakarest] Readers: 1 data word in TrackName4_Tr1_0x42 (at 0xe9f66c), which is read by
+; [nakarest] PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa, TrackName4_Tr1_0x42`).
 MidiParamStr2_End:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19722, 0x2
 ; [nakarest] MidiParamStr2_Local  +0x19724..+0x19730 (0xe9f672, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe9f672 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe9f672), first string "LOCAL"; no registered NAKA table points into
+; [nakarest] it; reached through 2 data words in TrackName4_Tr1_0x42 (at 0xe9f660, 0xe9f654),
+; [nakarest] which is read by PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] TrackName4_Tr1_0x42`).
 MidiParamStr2_Local:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19724, 0xC
 ; [nakarest] MidiParamStr2_Empty  +0x19730..+0x19734 (0xe9f67e, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f67e that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 4 B at 0xe9f67e not derived; readers below
+; [nakarest] Readers: 2 data words in TrackName4_Tr1_0x42 (at 0xe9f648, 0xe9f63c), which is read
+; [nakarest] by PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa, TrackName4_Tr1_0x42`).
 MidiParamStr2_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19730, 0x4
 ; [nakarest] MidiParamStr2_KeyShift  +0x19734..+0x19740 (0xe9f682, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe9f682 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe9f682), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 2 data words in TrackName4_Tr1_0x42 (at 0xe9f630, 0xe9f624), which
+; [nakarest] is read by PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa, TrackName4_Tr1_0x42`).
 MidiParamStr2_KeyShift:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19734, 0xC
 ; [nakarest] MidiParamStr2_DspEff  +0x19740..+0x19754 (0xe9f68e, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe9f68e that no registered NAKA table points into
+; [nakarest] Text (20 B at 0xe9f68e), first string "DIGITAL EFF"; no registered NAKA table
+; [nakarest] points into it; reached through 2 data words in TrackName4_Tr1_0x42 (at 0xe9f618,
+; [nakarest] 0xe9f60c), which is read by PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] TrackName4_Tr1_0x42`).
 MidiParamStr2_DspEff:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19740, 0x14
 ; [nakarest] MidiParamStr2_Reverb  +0x19754..+0x1975e (0xe9f6a2, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9f6a2 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9f6a2), first string "REVERB"; no registered NAKA table points
+; [nakarest] into it; reached through 2 data words in TrackName4_Tr1_0x42 (at 0xe9f600,
+; [nakarest] 0xe9f5f4), which is read by PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] TrackName4_Tr1_0x42`).
 MidiParamStr2_Reverb:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19754, 0xA
 ; [nakarest] MidiParamStr2_Volume  +0x1975e..+0x1976a (0xe9f6ac, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xe9f6ac that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xe9f6ac), first string "VOLUME"; no registered NAKA table points
+; [nakarest] into it; reached through 2 data words in TrackName4_Tr1_0x42 (at 0xe9f5e8,
+; [nakarest] 0xe9f5dc), which is read by PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] TrackName4_Tr1_0x42`).
 MidiParamStr2_Volume:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1975E, 0xC
 ; [nakarest] MidiParamStr2_Sound  +0x1976a..+0x19866 (0xe9f6b8, 252 B)
-; [nakarest] purpose not established: 252 bytes at 0xe9f6b8 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 252 B at 0xe9f6b8 not derived; readers below
+; [nakarest] Readers: source references PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x8`), TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`); 2 data words in TrackName4_Tr1_0x42 (at 0xe9f5d0,
+; [nakarest] 0xe9f5c4), which is read by PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] TrackName4_Tr1_0x42`).
 MidiParamStr2_Sound:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1976A, 0xFC
 ; [nakarest] MidiParamStr3_Local  +0x19866..+0x1986e (0xe9f7b4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f7b4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f7b4), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 2 data words in MidiParamStr2_Sound_0x48 (at 0xe9f7b0, 0xe9f7a4),
+; [nakarest] which is read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParamStr3_Local:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19866, 0x8
 ; [nakarest] MidiParamStr3_Midi  +0x1986e..+0x19876 (0xe9f7bc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9f7bc that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9f7bc), first string "MIDI"; no registered NAKA table points into
+; [nakarest] it; reached through 2 data words in MidiParamStr2_Sound_0x48 (at 0xe9f798,
+; [nakarest] 0xe9f78c), which is read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParamStr3_Midi:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1986E, 0x8
 ; [nakarest] MidiParamStr3_Empty  +0x19876..+0x1987a (0xe9f7c4, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f7c4 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 4 B at 0xe9f7c4 not derived; readers below
+; [nakarest] Readers: 2 data words in MidiParamStr2_Sound_0x48 (at 0xe9f780, 0xe9f774), which is
+; [nakarest] read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParamStr3_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19876, 0x4
 ; [nakarest] MidiParamStr3_KeyShift  +0x1987a..+0x19890 (0xe9f7c8, 22 B)
-; [nakarest] purpose not established: 22 bytes at 0xe9f7c8 that no registered NAKA table points into
+; [nakarest] Text (22 B at 0xe9f7c8), first string "KEY SHIFT"; no registered NAKA table points
+; [nakarest] into it; reached through 2 data words in MidiParamStr2_Sound_0x48 (at 0xe9f768,
+; [nakarest] 0xe9f75c), which is read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParamStr3_KeyShift:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1987A, 0x16
 ; [nakarest] MidiParamStr3_DspEff  +0x19890..+0x198a0 (0xe9f7de, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe9f7de that no registered NAKA table points into
+; [nakarest] Text (16 B at 0xe9f7de), first string "DSP EFF"; no registered NAKA table points
+; [nakarest] into it; reached through 2 data words in MidiParamStr2_Sound_0x48 (at 0xe9f750,
+; [nakarest] 0xe9f744), which is read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParamStr3_DspEff:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19890, 0x10
 ; [nakarest] MidiParamStr3_Volume  +0x198a0..+0x198aa (0xe9f7ee, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9f7ee that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9f7ee), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 2 data words in MidiParamStr2_Sound_0x48 (at 0xe9f738, 0xe9f72c),
+; [nakarest] which is read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParamStr3_Volume:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x198A0, 0xA
 ; [nakarest] MidiParamStr3_Pan  +0x198aa..+0x198b4 (0xe9f7f8, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xe9f7f8 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xe9f7f8), first string "PAN"; no registered NAKA table points into
+; [nakarest] it; reached through 2 data words in MidiParamStr2_Sound_0x48 (at 0xe9f720,
+; [nakarest] 0xe9f714), which is read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParamStr3_Pan:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x198AA, 0xA
 ; [nakarest] MidiParam_MixerCfgData  +0x198b4..+0x1995c (0xe9f802, 168 B)
-; [nakarest] purpose not established: 168 bytes at 0xe9f802 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 168 B at 0xe9f802 not derived; readers below
+; [nakarest] Readers: source references AcTrackMixerProc (ui/drawbar_panel_ui.s: `ld xiy,
+; [nakarest] MidiParam_MixerCfgData_0x2`), AudioCtrl_DataBlock_Entry (ui/drawbar_panel_ui.s: `ld
+; [nakarest] xde, MidiParam_MixerCfgData_0x6a`), AudioCtrl_DataBlock_Join5
+; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (MidiParam_MixerCfgData_0x2a:24)`),
+; [nakarest] DemoMenu_BuildItemWorkspace (ui/drawbar_panel_ui.s: `ld xbc,
+; [nakarest] MidiParam_MixerCfgData_0x8a`), 4 more; 1 data word in MidiParamStr2_Sound_0x48 (at
+; [nakarest] 0xe9f708), which is read by TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] MidiParamStr2_Sound_0x48`).
 MidiParam_MixerCfgData:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x198B4, 0xA8
 ; [nakarest] KeyShift_DisplayStrTable  +0x1995c..+0x1999c (0xe9f8aa, 64 B)
-; [nakarest] purpose not established: 64 bytes at 0xe9f8aa that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 64 B at 0xe9f8aa not derived; readers below
+; [nakarest] Readers: source references LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswPercDecay (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswPercLevel (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`).
 KeyShift_DisplayStrTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1995C, 0x40
 ; [nakarest] KeyShiftStr_Minus1  +0x1999c..+0x199a0 (0xe9f8ea, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f8ea that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f8ea), first string "-1"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8e6), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1999C, 0x4
 ; [nakarest] KeyShiftStr_Minus2  +0x199a0..+0x199a4 (0xe9f8ee, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f8ee that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f8ee), first string "-2"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8e2), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199A0, 0x4
 ; [nakarest] KeyShiftStr_Minus3  +0x199a4..+0x199a8 (0xe9f8f2, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f8f2 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f8f2), first string "-3"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8de), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199A4, 0x4
 ; [nakarest] KeyShiftStr_Minus4  +0x199a8..+0x199ac (0xe9f8f6, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f8f6 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f8f6), first string "-4"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8da), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199A8, 0x4
 ; [nakarest] KeyShiftStr_Minus5  +0x199ac..+0x199b0 (0xe9f8fa, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f8fa that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f8fa), first string "-5"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8d6), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199AC, 0x4
 ; [nakarest] KeyShiftStr_Minus6  +0x199b0..+0x199b4 (0xe9f8fe, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f8fe that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f8fe), first string "-6"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8d2), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199B0, 0x4
 ; [nakarest] KeyShiftStr_Minus7  +0x199b4..+0x199b8 (0xe9f902, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f902 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f902), first string "-7"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8ce), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199B4, 0x4
 ; [nakarest] KeyShiftStr_Minus8  +0x199b8..+0x199bc (0xe9f906, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f906 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f906), first string "-8"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8ca), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Minus8:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199B8, 0x4
 ; [nakarest] KeyShiftStr_Plus7  +0x199bc..+0x199c0 (0xe9f90a, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f90a that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f90a), first string "+7"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8c6), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Plus7:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199BC, 0x4
 ; [nakarest] KeyShiftStr_Plus6  +0x199c0..+0x199c4 (0xe9f90e, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f90e that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f90e), first string "+6"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8c2), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Plus6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199C0, 0x4
 ; [nakarest] KeyShiftStr_Plus5  +0x199c4..+0x199c8 (0xe9f912, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f912 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f912), first string "+5"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8be), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Plus5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199C4, 0x4
 ; [nakarest] KeyShiftStr_Plus4  +0x199c8..+0x199cc (0xe9f916, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f916 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f916), first string "+4"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8ba), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Plus4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199C8, 0x4
 ; [nakarest] KeyShiftStr_Plus3  +0x199cc..+0x199d0 (0xe9f91a, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f91a that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f91a), first string "+3"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8b6), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Plus3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199CC, 0x4
 ; [nakarest] KeyShiftStr_Plus2  +0x199d0..+0x199d4 (0xe9f91e, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f91e that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f91e), first string "+2"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8b2), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Plus2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199D0, 0x4
 ; [nakarest] KeyShiftStr_Plus1  +0x199d4..+0x199d8 (0xe9f922, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9f922 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9f922), first string "+1"; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in KeyShift_DisplayStrTable (at 0xe9f8ae), which is
+; [nakarest] read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Plus1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199D4, 0x4
 ; [nakarest] KeyShiftStr_Zero  +0x199d8..+0x19a7a (0xe9f926, 162 B)
-; [nakarest] purpose not established: 162 bytes at 0xe9f926 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 162 B at 0xe9f926 not derived; readers below
+; [nakarest] Readers: source references AcPresentationControlProc (ui/drawbar_panel_ui.s: `add
+; [nakarest] xbc, KeyShiftStr_Zero_0x8c`), DemoMenu_DescriptorFunc (ui/drawbar_panel_ui.s: `lda
+; [nakarest] xix, (KeyShiftStr_Zero_0x6a:24)`), DemoMenu_WorkspaceFunc (ui/drawbar_panel_ui.s:
+; [nakarest] `lda xix, (KeyShiftStr_Zero_0x5e:24)`), DrawbarBitmapHelper (ui/drawbar_panel_ui.s:
+; [nakarest] `lda xix, (KeyShiftStr_Zero_0x28:24)`); 1 data word in KeyShift_DisplayStrTable (at
+; [nakarest] 0xe9f8aa), which is read by LswDrawAttack (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), LswDrawRelease (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (KeyShift_DisplayStrTable:24)`), 2 more.
 KeyShiftStr_Zero:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x199D8, 0xA2
 ; [nakarest] DemoDisk_LangPromptTable  +0x19a7a..+0x19a92 (0xe9f9c8, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9f9c8 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 24 B at 0xe9f9c8 not derived; readers below
+; [nakarest] Readers: source references FDemoText (demo/fdemotext_routines.s: `lda xhl,
+; [nakarest] (DemoDisk_LangPromptTable:24)`).
 DemoDisk_LangPromptTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A7A, 0x18
 ; [nakarest] DemoDiskPrompt_Indonesian  +0x19a92..+0x19b34 (0xe9f9e0, 162 B)
-; [nakarest] purpose not established: 162 bytes at 0xe9f9e0 that no registered NAKA table points into
+; [nakarest] Text (162 B at 0xe9f9e0), first string "Untuk memulai suatu DEMO eksternal,
+; [nakarest] masukkanlah "; no registered NAKA table points into it; reached through 1 data word
+; [nakarest] in DemoDisk_LangPromptTable (at 0xe9f9dc), which is read by FDemoText
+; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (DemoDisk_LangPromptTable:24)`).
 DemoDiskPrompt_Indonesian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A92, 0xA2
 ; [nakarest] DemoDiskPrompt_Italian  +0x19b34..+0x19b3c (0xe9fa82, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9fa82 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9fa82), first string "Italian"; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in DemoDisk_LangPromptTable (at 0xe9f9d8),
+; [nakarest] which is read by FDemoText (demo/fdemotext_routines.s: `lda xhl,
+; [nakarest] (DemoDisk_LangPromptTable:24)`).
 DemoDiskPrompt_Italian:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19B34, 0x8
 ; [nakarest] DemoDiskPrompt_English2  +0x19b3c..+0x19bc2 (0xe9fa8a, 134 B)
-; [nakarest] purpose not established: 134 bytes at 0xe9fa8a that no registered NAKA table points into
+; [nakarest] Text (134 B at 0xe9fa8a), first string "To Starting an external DEMO, please insert
+; [nakarest] a fe"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] DemoDisk_LangPromptTable (at 0xe9f9d4), which is read by FDemoText
+; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (DemoDisk_LangPromptTable:24)`).
 DemoDiskPrompt_English2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19B3C, 0x86
 ; [nakarest] DemoDiskPrompt_English3  +0x19bc2..+0x19c48 (0xe9fb10, 134 B)
-; [nakarest] purpose not established: 134 bytes at 0xe9fb10 that no registered NAKA table points into
+; [nakarest] Text (134 B at 0xe9fb10), first string "To Starting an external DEMO, please insert
+; [nakarest] a fe"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] DemoDisk_LangPromptTable (at 0xe9f9d0), which is read by FDemoText
+; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (DemoDisk_LangPromptTable:24)`).
 DemoDiskPrompt_English3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19BC2, 0x86
 ; [nakarest] DemoDiskPrompt_German  +0x19c48..+0x19cf0 (0xe9fb96, 168 B)
-; [nakarest] purpose not established: 168 bytes at 0xe9fb96 that no registered NAKA table points into
+; [nakarest] Text (168 B at 0xe9fb96), first string "Um eine externe DEMO zu starten, legen Sie
+; [nakarest] bitte"; no registered NAKA table points into it; reached through 1 data word in
+; [nakarest] DemoDisk_LangPromptTable (at 0xe9f9cc), which is read by FDemoText
+; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (DemoDisk_LangPromptTable:24)`).
 DemoDiskPrompt_German:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19C48, 0xA8
 ; [nakarest] DemoDiskPrompt_English1  +0x19cf0..+0x19e8e (0xe9fc3e, 414 B)
-; [nakarest] purpose not established: 414 bytes at 0xe9fc3e that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 414 B at 0xe9fc3e not derived; readers below
+; [nakarest] Readers: source references FDemoText_ActivateVoiceAlt (demo/fdemotext_routines.s:
+; [nakarest] `lda xbc, (DemoDiskPrompt_English1_0x8a:24)`), FDemoText_ByteData_DisplayRefresh
+; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (DemoDiskPrompt_English1_0x192:24)`),
+; [nakarest] FDemoText_ByteData_VoiceProbeA_Skip (demo/fdemotext_routines.s: `lda xbc,
+; [nakarest] (DemoDiskPrompt_English1_0x86:24)`), FDemoText_ByteData_VoiceProbeA_Skip2
+; [nakarest] (demo/fdemotext_routines.s: `lda xbc, (DemoDiskPrompt_English1_0x86:24)`), 14 more;
+; [nakarest] 1 data word in DemoDisk_LangPromptTable (at 0xe9f9c8), which is read by FDemoText
+; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (DemoDisk_LangPromptTable:24)`); 1 data word
+; [nakarest] in SystemConfig_PointerTable (at 0xee8cc2), which is read by ScreenGroup_WidgetLoop
+; [nakarest] (boot/screen_group_dispatch.s: `ld xbc, SystemConfig_PointerTable`),
+; [nakarest] VoiceInit_Dispatch (boot/screen_group_dispatch.s: `ld xbc,
+; [nakarest] SystemConfig_PointerTable`).
 DemoDiskPrompt_English1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19CF0, 0x19E
 ; [nakarest] ErrStr_GetInstanceID  +0x19e8e..+0x19ea6 (0xe9fddc, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xe9fddc that no registered NAKA table points into
+; [nakarest] Text (24 B at 0xe9fddc), first string "Error! (GetInstanceID)"; no registered NAKA
+; [nakarest] table points into it; reached through source references
+; [nakarest] FDemoText_ByteData_DisplayRefresh_Skip4 (demo/fdemotext_routines.s: `.long
+; [nakarest] ErrStr_GetInstanceID`).
 ErrStr_GetInstanceID:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19E8E, 0x18
 ; [nakarest] FileType_NameTable  +0x19ea6..+0x19eb6 (0xe9fdf4, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe9fdf4 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 16 B at 0xe9fdf4 not derived; readers below
+; [nakarest] Readers: source references FDemoText_TextDispatch_Join2 (demo/fdemotext_routines.s:
+; [nakarest] `lda xwa, (FileType_NameTable:24)`).
 FileType_NameTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19EA6, 0x10
 ; [nakarest] FileTypeName_Empty  +0x19eb6..+0x19eb8 (0xe9fe04, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe9fe04 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe9fe04 not derived; readers below
+; [nakarest] Readers: 1 data word in FileType_NameTable (at 0xe9fe00), which is read by
+; [nakarest] FDemoText_TextDispatch_Join2 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (FileType_NameTable:24)`).
 FileTypeName_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19EB6, 0x2
 ; [nakarest] FileTypeName_Name  +0x19eb8..+0x19ebe (0xe9fe06, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9fe06 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9fe06), first string "NAME"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in FileType_NameTable (at 0xe9fdfc), which is read
+; [nakarest] by FDemoText_TextDispatch_Join2 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (FileType_NameTable:24)`).
 FileTypeName_Name:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19EB8, 0x6
 ; [nakarest] FileTypeName_Src  +0x19ebe..+0x19ec2 (0xe9fe0c, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9fe0c that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9fe0c), first string "SRC"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in FileType_NameTable (at 0xe9fdf8), which is read
+; [nakarest] by FDemoText_TextDispatch_Join2 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (FileType_NameTable:24)`).
 FileTypeName_Src:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19EBE, 0x4
 ; [nakarest] FileTypeName_Song  +0x19ec2..+0x19f28 (0xe9fe10, 102 B)
-; [nakarest] purpose not established: 102 bytes at 0xe9fe10 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 102 B at 0xe9fe10 not derived; readers below
+; [nakarest] Readers: source references FDemoText_ByteData_LayoutEngine
+; [nakarest] (demo/fdemotext_routines.s: `ld xiy, FileTypeName_Song_0x6`),
+; [nakarest] FDemoText_TextDispatch_Join3 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (FileTypeName_Song_0x5a:24)`); 1 data word in FileType_NameTable (at 0xe9fdf4),
+; [nakarest] which is read by FDemoText_TextDispatch_Join2 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (FileType_NameTable:24)`).
 FileTypeName_Song:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19EC2, 0x66
 ; [nakarest] UIStr_Pan  +0x19f28..+0x19f2e (0xe9fe76, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9fe76 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9fe76), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 2 data words in FileTypeName_Song_0x5a (at 0xe9fe72, 0xe9fe6e),
+; [nakarest] which is read by FDemoText_TextDispatch_Join3 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (FileTypeName_Song_0x5a:24)`).
 UIStr_Pan:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F28, 0x6
 ; [nakarest] UIStr_No  +0x19f2e..+0x19f3e (0xe9fe7c, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xe9fe7c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 16 B at 0xe9fe7c not derived; readers below
+; [nakarest] Readers: source references FDemoText_TextDispatch_Skip8 (demo/fdemotext_routines.s:
+; [nakarest] `lda xwa, (UIStr_No_0x4:24)`); 1 data word in FileTypeName_Song_0x5a (at 0xe9fe6a),
+; [nakarest] which is read by FDemoText_TextDispatch_Join3 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (FileTypeName_Song_0x5a:24)`).
 UIStr_No:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F2E, 0x10
 ; [nakarest] ImgAttr_Empty  +0x19f3e..+0x19f40 (0xe9fe8c, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe9fe8c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe9fe8c not derived; readers below
+; [nakarest] Readers: 1 data word in UIStr_No_0x4 (at 0xe9fe88), which is read by
+; [nakarest] FDemoText_TextDispatch_Skip8 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (UIStr_No_0x4:24)`).
 ImgAttr_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F3E, 0x2
 ; [nakarest] ImgAttr_Color  +0x19f40..+0x19f46 (0xe9fe8e, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9fe8e that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9fe8e), first string "COLOR"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in UIStr_No_0x4 (at 0xe9fe84), which is read by
+; [nakarest] FDemoText_TextDispatch_Skip8 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (UIStr_No_0x4:24)`).
 ImgAttr_Color:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F40, 0x6
 ; [nakarest] ImgAttr_Size  +0x19f46..+0x19f74 (0xe9fe94, 46 B)
-; [nakarest] purpose not established: 46 bytes at 0xe9fe94 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 46 B at 0xe9fe94 not derived; readers below
+; [nakarest] Readers: source references FDemoText_TextDispatch_Join4 (demo/fdemotext_routines.s:
+; [nakarest] `lda xwa, (ImgAttr_Size_0x6:24)`); 1 data word in UIStr_No_0x4 (at 0xe9fe80), which
+; [nakarest] is read by FDemoText_TextDispatch_Skip8 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (UIStr_No_0x4:24)`).
 ImgAttr_Size:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F46, 0x2E
 ; [nakarest] ImgAttr_NameTable  +0x19f74..+0x19f9c (0xe9fec2, 40 B)
-; [nakarest] purpose not established: 40 bytes at 0xe9fec2 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 40 B at 0xe9fec2 not derived; readers below
+; [nakarest] Readers: source references FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s:
+; [nakarest] `lda xwa, (ImgAttr_NameTable:24)`).
 ImgAttr_NameTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F74, 0x28
 ; [nakarest] ImgAttrName_Empty  +0x19f9c..+0x19f9e (0xe9feea, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe9feea that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe9feea not derived; readers below
+; [nakarest] Readers: 1 data word in ImgAttr_NameTable (at 0xe9fee6), which is read by
+; [nakarest] FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F9C, 0x2
 ; [nakarest] ImgAttrName_Border  +0x19f9e..+0x19fa6 (0xe9feec, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9feec that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9feec), first string "BORDER"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9fee2), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Border:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19F9E, 0x8
 ; [nakarest] ImgAttrName_Lowsrc  +0x19fa6..+0x19fae (0xe9fef4, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9fef4 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9fef4), first string "LOWSRC"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9fede), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Lowsrc:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FA6, 0x8
 ; [nakarest] ImgAttrName_Height  +0x19fae..+0x19fb6 (0xe9fefc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9fefc that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9fefc), first string "HEIGHT"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9feda), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Height:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FAE, 0x8
 ; [nakarest] ImgAttrName_Width  +0x19fb6..+0x19fbc (0xe9ff04, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9ff04 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9ff04), first string "WIDTH"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9fed6), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Width:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FB6, 0x6
 ; [nakarest] ImgAttrName_Hspace  +0x19fbc..+0x19fc4 (0xe9ff0a, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9ff0a that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9ff0a), first string "HSPACE"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9fed2), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Hspace:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FBC, 0x8
 ; [nakarest] ImgAttrName_Vspace  +0x19fc4..+0x19fcc (0xe9ff12, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xe9ff12 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xe9ff12), first string "VSPACE"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9fece), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Vspace:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FC4, 0x8
 ; [nakarest] ImgAttrName_Align  +0x19fcc..+0x19fd2 (0xe9ff1a, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xe9ff1a that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xe9ff1a), first string "ALIGN"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9feca), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Align:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FCC, 0x6
 ; [nakarest] ImgAttrName_Alt  +0x19fd2..+0x19fd6 (0xe9ff20, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xe9ff20 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xe9ff20), first string "ALT"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in ImgAttr_NameTable (at 0xe9fec6), which is read
+; [nakarest] by FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttr_NameTable:24)`).
 ImgAttrName_Alt:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FD2, 0x4
 ; [nakarest] ImgAttrName_Src  +0x19fd6..+0x1a066 (0xe9ff24, 144 B)
-; [nakarest] purpose not established: 144 bytes at 0xe9ff24 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 144 B at 0xe9ff24 not derived; readers below
+; [nakarest] Readers: source references FDemoText_TextDispatch_Join5 (demo/fdemotext_routines.s:
+; [nakarest] `lda xwa, (ImgAttrName_Src_0x88:24)`), FDemoText_TextDispatch_Skip9
+; [nakarest] (demo/fdemotext_routines.s: `ld xiy, ImgAttrName_Src_0x4`); 1 data word in
+; [nakarest] ImgAttr_NameTable (at 0xe9fec2), which is read by FDemoText_TextDispatch_Skip9
+; [nakarest] (demo/fdemotext_routines.s: `lda xwa, (ImgAttr_NameTable:24)`).
 ImgAttrName_Src:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19FD6, 0x90
 ; [nakarest] ObjAttr_Empty  +0x1a066..+0x1a068 (0xe9ffb4, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe9ffb4 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe9ffb4 not derived; readers below
+; [nakarest] Readers: 1 data word in ImgAttrName_Src_0x88 (at 0xe9ffb0), which is read by
+; [nakarest] FDemoText_TextDispatch_Join5 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttrName_Src_0x88:24)`).
 ObjAttr_Empty:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A066, 0x2
 ; [nakarest] ObjAttr_Obj  +0x1a068..+0x1a0b2 (0xe9ffb6, 74 B)
-; [nakarest] purpose not established: 74 bytes at 0xe9ffb6 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 74 B at 0xe9ffb6 not derived; readers below
+; [nakarest] Readers: source references FDemoText_RenderTextLine (demo/fdemotext_routines.s: `ld
+; [nakarest] xiy, ObjAttr_Obj_0x46`), FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s:
+; [nakarest] `ld xiy, ObjAttr_Obj_0x4`); 1 data word in ImgAttrName_Src_0x88 (at 0xe9ffac),
+; [nakarest] which is read by FDemoText_TextDispatch_Join5 (demo/fdemotext_routines.s: `lda xwa,
+; [nakarest] (ImgAttrName_Src_0x88:24)`); 1 data word in NAKA_PerfReg_Container_Root_0x1697 (at
+; [nakarest] 0xe109e0), which is read by CDlikeSwTtl_SetRecordAndNotify (demo/demo_seq_bridge.s:
+; [nakarest] `ld xwa, NAKA_PerfReg_Container_Root_0x1697`), SeqInit_PostEventSequence
+; [nakarest] (demo/demo_seq_bridge.s: `ld xwa, NAKA_PerfReg_Container_Root_0x1697`).
 ObjAttr_Obj:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A068, 0x4A
 ; [nakarest] Presentation_RootEntry  +0x1a0b2..+0x1a0ba (0xea0000, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xea0000 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 8 B at 0xea0000 not derived; readers below
+; [nakarest] Readers: source references InitializeMurai (ui/drawbar_panel_ui.s: `RegTitle 0x1,
+; [nakarest] 0xe8, 0x65fe, 0xea, 0x1200000, 0xea0000`), IvDrawbar_DrawbarUpdate
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Presentation_RootEntry_0x3`),
+; [nakarest] IvDrawbar_DrawbarUpdate_Lower (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] Presentation_RootEntry_0x2`), IvDrawbar_DrawbarUpdate_UpperOff
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Presentation_RootEntry_0x3`), 2 more; 1 data word
+; [nakarest] in StrInstantStart_0x3a (at 0xe1e372), which is read by SndArgGridCheck
+; [nakarest] (audio/sound_editor_ui.s: `add xwa, StrInstantStart_0x3a`); 2 data words in
+; [nakarest] Bitmap_DigitD_0x22 (at 0xe9e268, 0xe9e328), which is read by AcWelcomScreenProc
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Bitmap_DigitD_0x22`); 2 data words in
+; [nakarest] Bitmap_DigitD_0x8da (at 0xe9eb20, 0xe9ebe0), which is read by AcWelcomScreenProc
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Bitmap_DigitD_0x8da`).
 Presentation_RootEntry:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B2, 0x8
 ; [nakarest] Presentation_TagStrTable  +0x1a0ba..+0x1a1f1 (0xea0008, 311 B)
-; [nakarest] purpose not established: 311 bytes at 0xea0008 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 311 B at 0xea0008 not derived; readers below
+; [nakarest] Readers: source references ApPreControl (demo/file_demo_proc.s: `add xwa,
+; [nakarest] Presentation_TagStrTable_0x88`), Demo_ScanPartLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xde, (Presentation_TagStrTable_0xd2:24)`), Demo_SelectEntry_DrawSecondary
+; [nakarest] (demo/file_demo_proc.s: `lda xbc, (Presentation_TagStrTable_0xa5:24)`),
+; [nakarest] Demo_SelectEntry_LoadPattern (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (Presentation_TagStrTable_0xa4:24)`), 26 more; 2 data words in
+; [nakarest] NAKA_PerfReg_Container_Root_0x1697 (at 0xe10b20, 0xe10b44), which is read by
+; [nakarest] CDlikeSwTtl_SetRecordAndNotify (demo/demo_seq_bridge.s: `ld xwa,
+; [nakarest] NAKA_PerfReg_Container_Root_0x1697`), SeqInit_PostEventSequence
+; [nakarest] (demo/demo_seq_bridge.s: `ld xwa, NAKA_PerfReg_Container_Root_0x1697`); 1 data word
+; [nakarest] in NakaStr_PaintArrowProc_Empty (at 0xe183fa), which is read by MTStr_CmpNameSet
+; [nakarest] (ui_widgets/naka_property_descriptors.s: `.long NakaStr_PaintArrowProc_Empty + 2`);
+; [nakarest] 1 data word in Naka_ReverbScreen_EmptyStr (at 0xe29f12); words in 5 more objects.
 Presentation_TagStrTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0BA, 0x137
 ; [nakarest] Presentation_TagTableEnd  +0x1a1f1..+0x1a2aa (0xea013f, 185 B)
-; [nakarest] purpose not established: 185 bytes at 0xea013f that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 185 B at 0xea013f not derived; readers below
+; [nakarest] Readers: source references FileDemo_RecordCallback (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (Presentation_TagTableEnd_0x81:24)`), FileIO_LoadRegion0_VRAM
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, 0x00ea0194`), FileIO_LoadRegion1_VRAM
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, 0x00ea0198`), FileIO_LoadRegion2_ExtMem
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, 0x00ea01a0`), 16 more; 1 data word in
+; [nakarest] Naka_ReverbScreen_EmptyStr (at 0xe2a9a2); 7 data words in
+; [nakarest] Presentation_TagStrTable_0x102 (at 0xea013c, 0xea0134, 0xea012c), which is read by
+; [nakarest] FileIO_CheckSig_LoopTest (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (Presentation_TagStrTable_0x102:24)`); 1 data word in Presentation_TagStrTable_0xfc
+; [nakarest] (at 0xea0104), which is read by FileIO_CheckSig_ReadLoop (demo/file_demo_proc.s:
+; [nakarest] `lda xbc, (Presentation_TagStrTable_0xfc:24)`).
 Presentation_TagTableEnd:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A1F1, 0xB9
 ; [nakarest] Resource_Region7_Start  +0x1a2aa..+0x1a2ae (0xea01f8, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea01f8 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea01f8), first string "wb"; no registered NAKA table points into it;
+; [nakarest] reached through source references SaveRegion7_SpaceOk (demo/file_demo_proc.s: `ld
+; [nakarest] xbc, Resource_Region7_Start`).
 Resource_Region7_Start:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2AA, 0x4
 ; [nakarest] Resource_Region2_Start  +0x1a2ae..+0x1a2b2 (0xea01fc, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea01fc that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea01fc), first string "wb"; no registered NAKA table points into it;
+; [nakarest] reached through source references SaveRegion2_SpaceOk (demo/file_demo_proc.s: `ld
+; [nakarest] xbc, Resource_Region2_Start`).
 Resource_Region2_Start:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2AE, 0x4
 ; [nakarest] Resource_Region3_Start  +0x1a2b2..+0x1a2fe (0xea0200, 76 B)
-; [nakarest] purpose not established: 76 bytes at 0xea0200 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 76 B at 0xea0200 not derived; readers below
+; [nakarest] Readers: source references FileDemo_ProcessCallback (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (Resource_Region3_Start_0x10:24)`), FileIO_SaveRegion6_Simple
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, 0x00ea0208`), LoadFileVariant
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, Resource_Region3_Start_0x44`),
+; [nakarest] LoadSMF_GetRecordPtr (demo/file_demo_proc.s: `ld xbc,
+; [nakarest] Resource_Region3_Start_0x40`), 6 more.
 Resource_Region3_Start:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2B2, 0x4C
 ; [nakarest] Resource_RegionPad  +0x1a2fe..+0x1a3f2 (0xea024c, 244 B)
-; [nakarest] purpose not established: 244 bytes at 0xea024c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 244 B at 0xea024c not derived; readers below
+; [nakarest] Readers: source references FileIO_ByteBlock_DemoProc1_Skip (demo/file_demo_proc.s:
+; [nakarest] `.long Resource_RegionPad`), FileIO_ByteBlock_DemoProc1_Skip12
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, Resource_RegionPad_0xc`),
+; [nakarest] FileIO_ByteBlock_DemoProc1_Skip15 (demo/file_demo_proc.s: `ld xbc,
+; [nakarest] Resource_RegionPad_0x10`), FileIO_ByteBlock_DemoProc1_Skip20
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, Resource_RegionPad_0x14`), 7 more.
 Resource_RegionPad:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2FE, 0xF4
 ; [nakarest] SeqFileType_CodeTable  +0x1a3f2..+0x1a41a (0xea0340, 40 B)
-; [nakarest] purpose not established: 40 bytes at 0xea0340 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 40 B at 0xea0340 not derived; readers below
+; [nakarest] Readers: source references FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileType_CodeTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3F2, 0x28
 ; [nakarest] SeqFileTypeCode_Seq  +0x1a41a..+0x1a41e (0xea0368, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0368 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0368), first string "SEQ"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea0364), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Seq:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A41A, 0x4
 ; [nakarest] SeqFileTypeCode_Sqf  +0x1a41e..+0x1a422 (0xea036c, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea036c that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea036c), first string "SQF"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea0360), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Sqf:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A41E, 0x4
 ; [nakarest] SeqFileTypeCode_Md  +0x1a422..+0x1a426 (0xea0370, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0370 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0370), first string "MD "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea035c), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Md:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A422, 0x4
 ; [nakarest] SeqFileTypeCode_Rcm  +0x1a426..+0x1a42a (0xea0374, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0374 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0374), first string "RCM"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea0358), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Rcm:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A426, 0x4
 ; [nakarest] SeqFileTypeCode_Msp  +0x1a42a..+0x1a42e (0xea0378, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0378 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0378), first string "MSP"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea0354), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Msp:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A42A, 0x4
 ; [nakarest] SeqFileTypeCode_Tm  +0x1a42e..+0x1a432 (0xea037c, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea037c that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea037c), first string "TM "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea0350), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Tm:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A42E, 0x4
 ; [nakarest] SeqFileTypeCode_Cmp  +0x1a432..+0x1a436 (0xea0380, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0380 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0380), first string "CMP"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea034c), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Cmp:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A432, 0x4
 ; [nakarest] SeqFileTypeCode_Sqt  +0x1a436..+0x1a43a (0xea0384, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0384 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0384), first string "SQT"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea0348), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Sqt:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A436, 0x4
 ; [nakarest] SeqFileTypeCode_Pmt  +0x1a43a..+0x1a43e (0xea0388, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0388 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0388), first string "PMT"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in SeqFileType_CodeTable (at 0xea0344), which is
+; [nakarest] read by FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`), ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda
+; [nakarest] xbc, (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Pmt:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A43A, 0x4
 ; [nakarest] SeqFileTypeCode_Lsw  +0x1a43e..+0x1a4fa (0xea038c, 188 B)
-; [nakarest] purpose not established: 188 bytes at 0xea038c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 188 B at 0xea038c not derived; readers below
+; [nakarest] Readers: source references BuildRecords_CopyLoop (demo/file_demo_proc.s: `ld xiy,
+; [nakarest] SeqFileTypeCode_Lsw_0x5c`), BuildSecondPage_CopyRecordLoop (demo/file_demo_proc.s:
+; [nakarest] `ld xiy, SeqFileTypeCode_Lsw_0x5c`), FileIO_GetDiskRecordPtr
+; [nakarest] (demo/file_demo_proc.s: `ld xde, (SeqFileTypeCode_Lsw_0x8:24)`),
+; [nakarest] FileIO_InitRecordTable (demo/file_demo_proc.s: `ld xiy, SeqFileTypeCode_Lsw_0x4`),
+; [nakarest] 12 more; 1 data word in SeqFileType_CodeTable (at 0xea0340), which is read by
+; [nakarest] FileIO_ReadHeader (demo/file_demo_proc.s: `lda xbc, (SeqFileType_CodeTable:24)`),
+; [nakarest] ParseFileExt_MatchLoop (demo/file_demo_proc.s: `lda xbc,
+; [nakarest] (SeqFileType_CodeTable:24)`).
 SeqFileTypeCode_Lsw:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A43E, 0xBC
 ; [nakarest] Filename_TemplateArea  +0x1a4fa..+0x1a574 (0xea0448, 122 B)
-; [nakarest] purpose not established: 122 bytes at 0xea0448 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 122 B at 0xea0448 not derived; readers below
+; [nakarest] Readers: source references BuildSecondPage_CopyRecordLoop (demo/file_demo_proc.s:
+; [nakarest] `ld xwa, Filename_TemplateArea_0x4e`), FileIO_GetFileEntryByIndex
+; [nakarest] (demo/file_demo_proc.s: `lda xhl, (Filename_TemplateArea:24)`),
+; [nakarest] FileIO_GetFileEntryWithRefresh (demo/file_demo_proc.s: `lda xhl,
+; [nakarest] (Filename_TemplateArea:24)`), FileIO_GetWallpaperEntry (demo/file_demo_proc.s: `lda
+; [nakarest] xhl, (Filename_TemplateArea:24)`), 25 more.
 Filename_TemplateArea:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A4FA, 0x7A
 ; [nakarest] FileOp_StubAndDirNames  +0x1a574..+0x1a60a (0xea04c2, 150 B)
-; [nakarest] purpose not established: 150 bytes at 0xea04c2 that no registered NAKA table points into
+; [nakarest] Text (150 B at 0xea04c2), first string "rb"; no registered NAKA table points into
+; [nakarest] it; reached through source references BuildIndex_CheckSubEntry
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, FileOp_StubAndDirNames_0x82`), BuildIndex_ScanLoop
+; [nakarest] (demo/file_demo_proc.s: `ld xbc, FileOp_StubAndDirNames_0x7e`),
+; [nakarest] BuildRecords_CopyLoop (demo/file_demo_proc.s: `ld xwa,
+; [nakarest] FileOp_StubAndDirNames_0x1c`), DetectType_TryExtended (demo/file_demo_proc.s: `ld
+; [nakarest] xbc, FileOp_StubAndDirNames_0x2c`), 16 more.
 FileOp_StubAndDirNames:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A574, 0x96
 ; [nakarest] DiskType_CodeTable  +0x1a60a..+0x1a62a (0xea0558, 32 B)
-; [nakarest] purpose not established: 32 bytes at 0xea0558 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 32 B at 0xea0558 not derived; readers below
+; [nakarest] Readers: source references DiskInfo_RenderStrings (file_io/disk_operations.s: `lda
+; [nakarest] xbc, (DiskType_CodeTable:24)`).
 DiskType_CodeTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A60A, 0x20
 ; [nakarest] DiskTypeCode_Doc1  +0x1a62a..+0x1a62e (0xea0578, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0578 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0578), first string "DOC"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea0574), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_Doc1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A62A, 0x4
 ; [nakarest] DiskTypeCode_Doc2  +0x1a62e..+0x1a632 (0xea057c, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea057c that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea057c), first string "DOC"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea0570), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_Doc2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A62E, 0x4
 ; [nakarest] DiskTypeCode_Pd  +0x1a632..+0x1a636 (0xea0580, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0580 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0580), first string "PD "; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea056c), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_Pd:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A632, 0x4
 ; [nakarest] DiskTypeCode_2DD1  +0x1a636..+0x1a63a (0xea0584, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0584 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0584), first string "2DD"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea0568), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_2DD1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A636, 0x4
 ; [nakarest] DiskTypeCode_2HD  +0x1a63a..+0x1a63e (0xea0588, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0588 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0588), first string "2HD"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea0564), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_2HD:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A63A, 0x4
 ; [nakarest] DiskTypeCode_2DD2  +0x1a63e..+0x1a642 (0xea058c, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea058c that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea058c), first string "2DD"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea0560), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_2DD2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A63E, 0x4
 ; [nakarest] DiskTypeCode_Dashes1  +0x1a642..+0x1a646 (0xea0590, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0590 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0590), first string "---"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea055c), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_Dashes1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A642, 0x4
 ; [nakarest] DiskTypeCode_Dashes2  +0x1a646..+0x1a64a (0xea0594, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0594 that no registered NAKA table points into
+; [nakarest] Text (4 B at 0xea0594), first string "---"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in DiskType_CodeTable (at 0xea0558), which is read
+; [nakarest] by DiskInfo_RenderStrings (file_io/disk_operations.s: `lda xbc,
+; [nakarest] (DiskType_CodeTable:24)`).
 DiskTypeCode_Dashes2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A646, 0x4
 ; [nakarest] StorageArea_NameTable  +0x1a64a..+0x1a65e (0xea0598, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xea0598 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 20 B at 0xea0598 not derived; readers below
+; [nakarest] Readers: source references SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] (StorageArea_NameTable:24)`).
 StorageArea_NameTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A64A, 0x14
 ; [nakarest] StorageAreaName_Blank  +0x1a65e..+0x1a66c (0xea05ac, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xea05ac that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xea05ac), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea05a8), which is read
+; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_Blank:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A65E, 0xE
 ; [nakarest] StorageAreaName_SoundMemory  +0x1a66c..+0x1a67a (0xea05ba, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xea05ba that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xea05ba), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea05a4), which is read
+; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_SoundMemory:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A66C, 0xE
 ; [nakarest] StorageAreaName_Composer  +0x1a67a..+0x1a688 (0xea05c8, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xea05c8 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xea05c8), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea05a0), which is read
+; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_Composer:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A67A, 0xE
 ; [nakarest] StorageAreaName_Sequencer  +0x1a688..+0x1a696 (0xea05d6, 14 B)
-; [nakarest] purpose not established: 14 bytes at 0xea05d6 that no registered NAKA table points into
+; [nakarest] Text (14 B at 0xea05d6), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea059c), which is read
+; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_Sequencer:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A688, 0xE
 ; [nakarest] StorageAreaName_PanelMemory  +0x1a696..+0x1a6b8 (0xea05e4, 34 B)
-; [nakarest] purpose not established: 34 bytes at 0xea05e4 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 34 B at 0xea05e4 not derived; readers below
+; [nakarest] Readers: source references SLDstBankList_FuncBody (file_io/single_load.s: `lda xde,
+; [nakarest] (StorageAreaName_PanelMemory_0xe:24)`), SLDstBankList_FuncBody_Helper3
+; [nakarest] (file_io/single_load.s: `lda xde, (StorageAreaName_PanelMemory_0xe:24)`),
+; [nakarest] SLDstBankList_FuncBody_Helper5 (file_io/single_load.s: `lda xde,
+; [nakarest] (StorageAreaName_PanelMemory_0xe:24)`), SLDstBank_HandleShow
+; [nakarest] (file_io/single_load.s: `lda xbc, (StorageAreaName_PanelMemory_0xe:24)`), 4 more; 1
+; [nakarest] data word in StorageArea_NameTable (at 0xea0598), which is read by
+; [nakarest] SLMode_HandleShow (file_io/single_load.s: `lda xbc, (StorageArea_NameTable:24)`).
 StorageAreaName_PanelMemory:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A696, 0x22
 ; [nakarest] BankStr_Dashes  +0x1a6b8..+0x1a6be (0xea0606, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xea0606 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xea0606), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageAreaName_PanelMemory_0xe (at 0xea0602), which
+; [nakarest] is read by SLDstBankList_FuncBody (file_io/single_load.s: `lda xde,
+; [nakarest] (StorageAreaName_PanelMemory_0xe:24)`), SLDstBankList_FuncBody_Helper3
+; [nakarest] (file_io/single_load.s: `lda xde, (StorageAreaName_PanelMemory_0xe:24)`), 6 more.
 BankStr_Dashes:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6B8, 0x6
 ; [nakarest] BankStr_Bank1  +0x1a6be..+0x1a6c4 (0xea060c, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xea060c that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xea060c), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageAreaName_PanelMemory_0xe (at 0xea05fe), which
+; [nakarest] is read by SLDstBankList_FuncBody (file_io/single_load.s: `lda xde,
+; [nakarest] (StorageAreaName_PanelMemory_0xe:24)`), SLDstBankList_FuncBody_Helper3
+; [nakarest] (file_io/single_load.s: `lda xde, (StorageAreaName_PanelMemory_0xe:24)`), 6 more.
 BankStr_Bank1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6BE, 0x6
 ; [nakarest] BankStr_Bank2  +0x1a6c4..+0x1a6ca (0xea0612, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xea0612 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xea0612), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageAreaName_PanelMemory_0xe (at 0xea05fa), which
+; [nakarest] is read by SLDstBankList_FuncBody (file_io/single_load.s: `lda xde,
+; [nakarest] (StorageAreaName_PanelMemory_0xe:24)`), SLDstBankList_FuncBody_Helper3
+; [nakarest] (file_io/single_load.s: `lda xde, (StorageAreaName_PanelMemory_0xe:24)`), 6 more.
 BankStr_Bank2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6C4, 0x6
 ; [nakarest] BankStr_Dashes2  +0x1a6ca..+0x1a6d0 (0xea0618, 6 B)
-; [nakarest] purpose not established: 6 bytes at 0xea0618 that no registered NAKA table points into
+; [nakarest] Text (6 B at 0xea0618), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in StorageAreaName_PanelMemory_0xe (at 0xea05f6), which
+; [nakarest] is read by SLDstBankList_FuncBody (file_io/single_load.s: `lda xde,
+; [nakarest] (StorageAreaName_PanelMemory_0xe:24)`), SLDstBankList_FuncBody_Helper3
+; [nakarest] (file_io/single_load.s: `lda xde, (StorageAreaName_PanelMemory_0xe:24)`), 6 more.
 BankStr_Dashes2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6CA, 0x6
 ; [nakarest] BankStr_Bank3  +0x1a6d0..+0x1a6da (0xea061e, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xea061e that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 10 B at 0xea061e not derived; readers below
+; [nakarest] Readers: source references SLDstBankList_FuncBody_Helper (file_io/single_load.s:
+; [nakarest] `lda xhl, (BankStr_Bank3_0x6:24)`), SLDstBankList_FuncBody_Helper2
+; [nakarest] (file_io/single_load.s: `lda xde, (BankStr_Bank3_0x6:24)`),
+; [nakarest] SLDstBankList_FuncBody_Helper4 (file_io/single_load.s: `lda xde,
+; [nakarest] (BankStr_Bank3_0x6:24)`), SLDstBankList_FuncBody_Helper6 (file_io/single_load.s:
+; [nakarest] `lda xde, (BankStr_Bank3_0x6:24)`), 6 more; 1 data word in
+; [nakarest] StorageAreaName_PanelMemory_0xe (at 0xea05f2), which is read by
+; [nakarest] SLDstBankList_FuncBody (file_io/single_load.s: `lda xde,
+; [nakarest] (StorageAreaName_PanelMemory_0xe:24)`), SLDstBankList_FuncBody_Helper3
+; [nakarest] (file_io/single_load.s: `lda xde, (StorageAreaName_PanelMemory_0xe:24)`), 6 more.
 BankStr_Bank3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6D0, 0xA
 ; [nakarest] DiskItem_TypeTable  +0x1a6da..+0x1a6ea (0xea0628, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xea0628 that no registered NAKA table points into
+; [nakarest] purpose not established: 16 B at 0xea0628 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 DiskItem_TypeTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6DA, 0x10
 ; [nakarest] DiskItemType_Dashes  +0x1a6ea..+0x1a6f4 (0xea0638, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xea0638 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xea0638), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in DiskItem_TypeTable (at 0xea0634).
 DiskItemType_Dashes:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6EA, 0xA
 ; [nakarest] DiskItemType_Memory  +0x1a6f4..+0x1a6fe (0xea0642, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xea0642 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xea0642), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in DiskItem_TypeTable (at 0xea0630).
 DiskItemType_Memory:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6F4, 0xA
 ; [nakarest] DiskItemType_Pattern  +0x1a6fe..+0x1a708 (0xea064c, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xea064c that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xea064c), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in DiskItem_TypeTable (at 0xea062c).
 DiskItemType_Pattern:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6FE, 0xA
 ; [nakarest] DiskItemType_Song  +0x1a708..+0x1a712 (0xea0656, 10 B)
-; [nakarest] purpose not established: 10 bytes at 0xea0656 that no registered NAKA table points into
+; [nakarest] Text (10 B at 0xea0656), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in DiskItem_TypeTable (at 0xea0628).
 DiskItemType_Song:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A708, 0xA
 ; [nakarest] BankStr_Memory  +0x1a712..+0x1a71e (0xea0660, 12 B)
-; [nakarest] purpose not established: 12 bytes at 0xea0660 that no registered NAKA table points into
+; [nakarest] Text (12 B at 0xea0660), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through source references FmmSaveTtl_SlotLoop (file_io/disk_operations.s:
+; [nakarest] `ld xiy, BankStr_Memory_0xa`), ResetProgressIndication (demo/file_demo_proc.s: `ld
+; [nakarest] xiy, BankStr_Memory_0xa`); 1 data word in BankStr_Bank3_0x6 (at 0xea0624), which is
+; [nakarest] read by SLDstBankList_FuncBody_Helper (file_io/single_load.s: `lda xhl,
+; [nakarest] (BankStr_Bank3_0x6:24)`), SLDstBankList_FuncBody_Helper2 (file_io/single_load.s:
+; [nakarest] `lda xde, (BankStr_Bank3_0x6:24)`), 8 more.
 BankStr_Memory:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A712, 0xC
 ; [nakarest] DiskOp_ChannelCfgTable  +0x1a71e..+0x1a812 (0xea066c, 244 B)
-; [nakarest] purpose not established: 244 bytes at 0xea066c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 244 B at 0xea066c not derived; readers below
+; [nakarest] Readers: source references CompLoad_DrawItem_Empty (file_io/composer_filters.s:
+; [nakarest] `lda xbc, (DiskOp_ChannelCfgTable_0x80:24)`), DiskInfo_RenderStrings
+; [nakarest] (file_io/disk_operations.s: `ld xbc, DiskOp_ChannelCfgTable_0x6a`),
+; [nakarest] FRenameSmf_HandleApply (file_io/disk_operations.s: `ld xbc,
+; [nakarest] DiskOp_ChannelCfgTable_0x64`), FRenameSmf_TextChange_Error
+; [nakarest] (file_io/disk_operations.s: `ld xbc, DiskOp_ChannelCfgTable_0x5a`), 20 more; 1 data
+; [nakarest] word in SystemConfig_PointerTable (at 0xee8c9a), which is read by
+; [nakarest] ScreenGroup_WidgetLoop (boot/screen_group_dispatch.s: `ld xbc,
+; [nakarest] SystemConfig_PointerTable`), VoiceInit_Dispatch (boot/screen_group_dispatch.s: `ld
+; [nakarest] xbc, SystemConfig_PointerTable`).
 DiskOp_ChannelCfgTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A71E, 0xF4
 ; [nakarest] Str_SmfConvert_GmToTech  +0x1a812..+0x1a822 (0xea0760, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xea0760 that no registered NAKA table points into
+; [nakarest] Text (16 B at 0xea0760), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in DiskOp_ChannelCfgTable_0xe8 (at 0xea075c), which is
+; [nakarest] read by SmfLoadAs_Apply (file_io/smf_operations.s: `lda xbc,
+; [nakarest] (DiskOp_ChannelCfgTable_0xe8:24)`).
 Str_SmfConvert_GmToTech:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A812, 0x10
 ; [nakarest] Str_SmfConvert_TechToTech  +0x1a822..+0x1a832 (0xea0770, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xea0770 that no registered NAKA table points into
+; [nakarest] Text (16 B at 0xea0770), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through 1 data word in DiskOp_ChannelCfgTable_0xe8 (at 0xea0758), which is
+; [nakarest] read by SmfLoadAs_Apply (file_io/smf_operations.s: `lda xbc,
+; [nakarest] (DiskOp_ChannelCfgTable_0xe8:24)`).
 Str_SmfConvert_TechToTech:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A822, 0x10
 ; [nakarest] Str_SmfConvert_GmToGm  +0x1a832..+0x1a86c (0xea0780, 58 B)
-; [nakarest] purpose not established: 58 bytes at 0xea0780 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 58 B at 0xea0780 not derived; readers below
+; [nakarest] Readers: source references FmmSmfFileNameFunc (file_io/smf_operations.s: `add xde,
+; [nakarest] Str_SmfConvert_GmToGm_0x1e`), SmfFN_UpdateFilenameField (file_io/smf_operations.s:
+; [nakarest] `ld xbc, Str_SmfConvert_GmToGm_0x10`), WPScan_CheckAvail (file_io/wallpaper.s: `ld
+; [nakarest] xbc, Str_SmfConvert_GmToGm_0x2a`), WPScan_LoopBody (file_io/wallpaper.s: `ld xwa,
+; [nakarest] Str_SmfConvert_GmToGm_0x2a`), 4 more; 1 data word in DiskOp_ChannelCfgTable_0xe8
+; [nakarest] (at 0xea0754), which is read by SmfLoadAs_Apply (file_io/smf_operations.s: `lda
+; [nakarest] xbc, (DiskOp_ChannelCfgTable_0xe8:24)`).
 Str_SmfConvert_GmToGm:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A832, 0x3A
 ; [nakarest] Str_MemorySlot_C  +0x1a86c..+0x1a87c (0xea07ba, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xea07ba that no registered NAKA table points into
+; [nakarest] Text (16 B at 0xea07ba), first string " MEMORY-C "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Str_SmfConvert_GmToGm_0x2e (at 0xea07b6),
+; [nakarest] which is read by WP_GetPresetName1 (file_io/wallpaper.s: `ld xbc,
+; [nakarest] Str_SmfConvert_GmToGm_0x2e`).
 Str_MemorySlot_C:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A86C, 0x10
 ; [nakarest] Str_MemorySlot_B  +0x1a87c..+0x1a88c (0xea07ca, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xea07ca that no registered NAKA table points into
+; [nakarest] Text (16 B at 0xea07ca), first string " MEMORY-B "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Str_SmfConvert_GmToGm_0x2e (at 0xea07b2),
+; [nakarest] which is read by WP_GetPresetName1 (file_io/wallpaper.s: `ld xbc,
+; [nakarest] Str_SmfConvert_GmToGm_0x2e`).
 Str_MemorySlot_B:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A87C, 0x10
 ; [nakarest] Str_MemorySlot_A  +0x1a88c..+0x1a89c (0xea07da, 16 B)
-; [nakarest] purpose not established: 16 bytes at 0xea07da that no registered NAKA table points into
+; [nakarest] Text (16 B at 0xea07da), first string " MEMORY-A "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in Str_SmfConvert_GmToGm_0x2e (at 0xea07ae),
+; [nakarest] which is read by WP_GetPresetName1 (file_io/wallpaper.s: `ld xbc,
+; [nakarest] Str_SmfConvert_GmToGm_0x2e`).
 Str_MemorySlot_A:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A88C, 0x10
 ; [nakarest] PtrTbl_VariationNames  +0x1a89c..+0x1a8c6 (0xea07ea, 42 B)
-; [nakarest] purpose not established: 42 bytes at 0xea07ea that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 42 B at 0xea07ea not derived; readers below
+; [nakarest] Readers: source references WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc,
+; [nakarest] PtrTbl_VariationNames`); 1 data word in Boot_ClearAllInterruptEnables (at
+; [nakarest] 0xef0676), which is read by Boot_HandleFactoryReset (kn5000_v10_program.s: `calr
+; [nakarest] Boot_ClearAllInterruptEnables`).
 PtrTbl_VariationNames:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A89C, 0x2A
 ; [nakarest] Data_VariPad_EA0814  +0x1a8c6..+0x1a8c8 (0xea0814, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xea0814 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xea0814 not derived; readers below
+; [nakarest] Readers: 1 data word in PtrTbl_VariationNames (at 0xea080a), which is read by
+; [nakarest] WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Data_VariPad_EA0814:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8C6, 0x2
 ; [nakarest] Data_VariPad_EA0816  +0x1a8c8..+0x1a8ca (0xea0816, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xea0816 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xea0816 not derived; readers below
+; [nakarest] Readers: 1 data word in PtrTbl_VariationNames (at 0xea0806), which is read by
+; [nakarest] WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Data_VariPad_EA0816:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8C8, 0x2
 ; [nakarest] Data_VariPad_EA0818  +0x1a8ca..+0x1a8ce (0xea0818, 4 B)
-; [nakarest] purpose not established: 4 bytes at 0xea0818 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 4 B at 0xea0818 not derived; readers below
+; [nakarest] Readers: 2 data words in PtrTbl_VariationNames (at 0xea0802, 0xea07fe), which is
+; [nakarest] read by WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Data_VariPad_EA0818:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8CA, 0x4
 ; [nakarest] Data_VariPad_EA081C  +0x1a8ce..+0x1a8d0 (0xea081c, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xea081c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xea081c not derived; readers below
+; [nakarest] Readers: 1 data word in PtrTbl_VariationNames (at 0xea07fa), which is read by
+; [nakarest] WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Data_VariPad_EA081C:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8CE, 0x2
 ; [nakarest] Str_Variation4  +0x1a8d0..+0x1a8d8 (0xea081e, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xea081e that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xea081e), first string "VARI 4"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in PtrTbl_VariationNames (at 0xea07f6), which is
+; [nakarest] read by WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Str_Variation4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8D0, 0x8
 ; [nakarest] Str_Variation3  +0x1a8d8..+0x1a8e0 (0xea0826, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xea0826 that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xea0826), first string "VARI 3"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in PtrTbl_VariationNames (at 0xea07f2), which is
+; [nakarest] read by WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Str_Variation3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8D8, 0x8
 ; [nakarest] Str_Variation2  +0x1a8e0..+0x1a8e8 (0xea082e, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xea082e that no registered NAKA table points into
+; [nakarest] Text (8 B at 0xea082e), first string "VARI 2"; no registered NAKA table points into
+; [nakarest] it; reached through 1 data word in PtrTbl_VariationNames (at 0xea07ee), which is
+; [nakarest] read by WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Str_Variation2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8E0, 0x8
 ; [nakarest] Str_Variation1  +0x1a8e8..+0x1a900 (0xea0836, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xea0836 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 24 B at 0xea0836 not derived; readers below
+; [nakarest] Readers: source references WP_GetBankMemName_FromROM (file_io/wallpaper.s: `ld xbc,
+; [nakarest] Str_Variation1_0x8`); 1 data word in PtrTbl_VariationNames (at 0xea07ea), which is
+; [nakarest] read by WP_GetPresetPtr (file_io/wallpaper.s: `ld xbc, PtrTbl_VariationNames`).
 Str_Variation1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A8E8, 0x18
 ; [nakarest] PtrTbl_RhythmSectionNames  +0x1a900..+0x1a918 (0xea084e, 24 B)
-; [nakarest] purpose not established: 24 bytes at 0xea084e that no registered NAKA table points into
+; [nakarest] purpose not established: 24 B at 0xea084e that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 PtrTbl_RhythmSectionNames:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A900, 0x18
 ; [nakarest] Str_Ending2  +0x1a918..+0x1a92a (0xea0866, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xea0866 that no registered NAKA table points into
+; [nakarest] Text (18 B at 0xea0866), first string " ENDING 2 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in PtrTbl_RhythmSectionNames (at 0xea0862).
 Str_Ending2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A918, 0x12
 ; [nakarest] Str_Ending1  +0x1a92a..+0x1a93c (0xea0878, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xea0878 that no registered NAKA table points into
+; [nakarest] Text (18 B at 0xea0878), first string " ENDING 1 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in PtrTbl_RhythmSectionNames (at 0xea085e).
 Str_Ending1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A92A, 0x12
 ; [nakarest] Str_FillIn2  +0x1a93c..+0x1a94e (0xea088a, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xea088a that no registered NAKA table points into
+; [nakarest] Text (18 B at 0xea088a), first string " FILL IN 2 "; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in PtrTbl_RhythmSectionNames (at
+; [nakarest] 0xea085a).
 Str_FillIn2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A93C, 0x12
 ; [nakarest] Str_FillIn1  +0x1a94e..+0x1a960 (0xea089c, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xea089c that no registered NAKA table points into
+; [nakarest] Text (18 B at 0xea089c), first string " FILL IN 1 "; no registered NAKA table
+; [nakarest] points into it; reached through 1 data word in PtrTbl_RhythmSectionNames (at
+; [nakarest] 0xea0856).
 Str_FillIn1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A94E, 0x12
 ; [nakarest] Str_Intro2  +0x1a960..+0x1a972 (0xea08ae, 18 B)
-; [nakarest] purpose not established: 18 bytes at 0xea08ae that no registered NAKA table points into
+; [nakarest] Text (18 B at 0xea08ae), first string " INTRO 2 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in PtrTbl_RhythmSectionNames (at 0xea0852).
 Str_Intro2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A960, 0x12
 ; [nakarest] Str_Intro1  +0x1a972..+0x1a986 (0xea08c0, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xea08c0 that no registered NAKA table points into
+; [nakarest] Text (20 B at 0xea08c0), first string " INTRO 1 "; no registered NAKA table points
+; [nakarest] into it; reached through 1 data word in PtrTbl_RhythmSectionNames (at 0xea084e); 1
+; [nakarest] data word in Str_Variation1_0x8 (at 0xea084a), which is read by
+; [nakarest] WP_GetBankMemName_FromROM (file_io/wallpaper.s: `ld xbc, Str_Variation1_0x8`).
 Str_Intro1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A972, 0x14
 ; [nakarest] Data_DrumKitPad_EA08D4  +0x1a986..+0x1a988 (0xea08d4, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xea08d4 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xea08d4 not derived; readers below
+; [nakarest] Readers: 1 data word in Str_Variation1_0x8 (at 0xea0846), which is read by
+; [nakarest] WP_GetBankMemName_FromROM (file_io/wallpaper.s: `ld xbc, Str_Variation1_0x8`).
 Data_DrumKitPad_EA08D4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A986, 0x2
 ; [nakarest] Data_DrumKitPad_EA08D6  +0x1a988..+0x1a98a (0xea08d6, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xea08d6 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xea08d6 not derived; readers below
+; [nakarest] Readers: 1 data word in Str_Variation1_0x8 (at 0xea0842), which is read by
+; [nakarest] WP_GetBankMemName_FromROM (file_io/wallpaper.s: `ld xbc, Str_Variation1_0x8`).
 Data_DrumKitPad_EA08D6:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A988, 0x2
 ; [nakarest] PtrTbl_DrumKitNames  +0x1a98a..+0x1aa32 (0xea08d8, 168 B)
-; [nakarest] purpose not established: 168 bytes at 0xea08d8 that no registered NAKA table points into
+; [nakarest] Text (168 B at 0xea08d8), first string ""; no registered NAKA table points into it;
+; [nakarest] reached through source references SLSrcBankList_FuncBody (file_io/single_load.s:
+; [nakarest] `ld xbc, PtrTbl_DrumKitNames_0x60`), SLSrcBankList_FuncBody_Entry
+; [nakarest] (file_io/single_load.s: `ld c, (PtrTbl_DrumKitNames_0x7a:24)`),
+; [nakarest] SLSrcBankList_FuncBody_Helper10 (file_io/single_load.s: `ld xbc,
+; [nakarest] PtrTbl_DrumKitNames_0xa4`), SLSrcBankList_FuncBody_Helper2 (file_io/single_load.s:
+; [nakarest] `ld xbc, PtrTbl_DrumKitNames_0x64`), 16 more; 1 data word in Str_Variation1_0x8 (at
+; [nakarest] 0xea083e), which is read by WP_GetBankMemName_FromROM (file_io/wallpaper.s: `ld
+; [nakarest] xbc, Str_Variation1_0x8`).
 PtrTbl_DrumKitNames:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A98A, 0xA8
 ; [nakarest] Str_AllOption_EA0980  +0x1aa32..+0x1aa64 (0xea0980, 50 B)
-; [nakarest] purpose not established: 50 bytes at 0xea0980 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 50 B at 0xea0980 not derived; readers below
+; [nakarest] Readers: source references SLDstBankList_FuncBody (file_io/single_load.s: `ld xbc,
+; [nakarest] Str_AllOption_EA0980_0x2a`), SLDstBankList_FuncBody_Helper (file_io/single_load.s:
+; [nakarest] `ld xbc, Str_AllOption_EA0980_0x2e`), SLSrcBankList_FuncBody_Entry2
+; [nakarest] (file_io/single_load.s: `ld c, (Str_AllOption_EA0980_0x12:24)`),
+; [nakarest] SLSrcBankList_FuncBody_Join10 (file_io/single_load.s: `.long
+; [nakarest] Str_AllOption_EA0980`), 15 more.
 Str_AllOption_EA0980:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA32, 0x32
 ; [nakarest] Str_AllOption_EA09B2  +0x1aa64..+0x1aaa2 (0xea09b2, 62 B)
-; [nakarest] purpose not established: 62 bytes at 0xea09b2 that no registered NAKA table points into
+; [nakarest] Text (62 B at 0xea09b2), first string " ALL "; no registered NAKA table points into
+; [nakarest] it; reached through source references SLDstBankList_FuncBody_Helper
+; [nakarest] (file_io/single_load.s: `.long Str_AllOption_EA09B2`),
+; [nakarest] SLDstBankList_FuncBody_Helper2 (file_io/single_load.s: `ld xbc,
+; [nakarest] Str_AllOption_EA09B2_0x1a`), SLDstBankList_FuncBody_Helper3 (file_io/single_load.s:
+; [nakarest] `ld xbc, Str_AllOption_EA09B2_0x20`), SLDstBankList_FuncBody_Helper4
+; [nakarest] (file_io/single_load.s: `ld xbc, Str_AllOption_EA09B2_0x24`), 9 more.
 Str_AllOption_EA09B2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA64, 0x3E
 ; [nakarest] Data_SaveLoadMenuTable  +0x1aaa2..+0x1ab00 (0xea09f0, 94 B)
-; [nakarest] purpose not established: 94 bytes at 0xea09f0 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 94 B at 0xea09f0 not derived; readers below
+; [nakarest] Readers: source references CmpDst_HandleScroll (file_io/single_load.s: `lda xde,
+; [nakarest] (Data_SaveLoadMenuTable_0x4e:24)`), CmpDst_HandleShow (file_io/single_load.s: `lda
+; [nakarest] xde, (Data_SaveLoadMenuTable_0x4e:24)`), CmpDst_ScrollMode5 (file_io/single_load.s:
+; [nakarest] `lda xde, (Data_SaveLoadMenuTable_0x4e:24)`), CmpDst_ScrollMode6
+; [nakarest] (file_io/single_load.s: `lda xde, (Data_SaveLoadMenuTable_0x4e:24)`), 33 more.
 Data_SaveLoadMenuTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAA2, 0x5E
 EmbeddedPtrTable_v10_naka_technichord_strings_01AB00:
@@ -4446,7 +5906,7 @@ Str_Ev_NotParaDraw:
 ; [nakarest] InitializeCheap), 17 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B2A6, 0x4
 ; [nakarest] PtrTbl_MsgTypeNames_EA11F8  +0x1b2aa..+0x1b2ee (0xea11f8, 68 B)
-; [nakarest] purpose not established: 4 bytes at 0xea1238 that no registered NAKA table points into
+; [nakarest] purpose not established: 4 B at 0xea1238 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: ResMethod slot 0x1e5 (table 0xea11f4, 17 entries,
 ; [nakarest] InitializeCheap), 17 entry pointers x 4 bytes (starts 0xea11f4, 64 of its 68 bytes
 ; [nakarest] are here or later).
@@ -4542,7 +6002,10 @@ Str_Mt_SetFileSfx:
 PtrTbl_NakaModuleHandlers:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B444, 0x38
 ; [nakarest] Data_NakaSep_EA13CA  +0x1b47c..+0x1b47e (0xea13ca, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xea13ca that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xea13ca not derived; readers below
+; [nakarest] Readers: 1 data word in PtrTbl_NakaModuleHandlers (at 0xea13c6), which is read by
+; [nakarest] InitializeCheap (file_io/medley.s: `RegObjTabl 0x1600001, FunctionProc, 0xd,
+; [nakarest] PtrTbl_NakaModuleHa`).
 Data_NakaSep_EA13CA:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B47C, 0x2
 

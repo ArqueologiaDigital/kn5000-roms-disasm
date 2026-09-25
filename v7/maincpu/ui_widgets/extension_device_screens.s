@@ -354,261 +354,46 @@
 
 ; [nakarest] NakaInst_ExtDevice_Screens  +0x0..+0x2c (0xed67cc, 44 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0xf4 (table 0xed7c62, 14 entries,
-; [nakarest] InitializeToshi): TtlScreen (42 B). text the records point at, in Viewable slot
-; [nakarest] 0xf4 (table 0xed7c62, 14 entries, InitializeToshi): "" (TtlScreen.title of element
-; [nakarest] 13).
+; [nakarest] InitializeToshi): TtlScreen (42 B). 1 text the records point at (Viewable slot 0xf4
+; [nakarest] (table 0xed7c62, 14 entries, InitializeToshi)): "" (TtlScreen.title of element 13).
 NakaInst_ExtDevice_Screens:
 	.incbin "includes/generated/naka_extension_device.bin", 0x0, 0x2C
 ; [nakarest] naka_extension_device+0x2c  +0x2c..+0x41a (0xed67f8, 1006 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
-; [nakarest] InitializeToshi) ("TEST2"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): ""
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xf5
-; [nakarest] (table 0xed7c9e, 23 entries, InitializeToshi) ("TEST2"): TextBox (40 B). text the
-; [nakarest] records point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
-; [nakarest] InitializeToshi): "Please check by the LED of test port. (PANEL CPU" (TextBox.text
-; [nakarest] of element 1). widget record, element 2 of Viewable slot 0xf5 (table 0xed7c9e, 23
-; [nakarest] entries, InitializeToshi) ("TEST2"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "PANEL CPU
-; [nakarest] CHECKING" (Label.str of element 2). widget record, element 3 of Viewable slot 0xf5
-; [nakarest] (table 0xed7c9e, 23 entries, InitializeToshi) ("TEST2"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
-; [nakarest] InitializeToshi): "RESULT: CPU of CPR =" (Label.str of element 3). widget record,
-; [nakarest] element 4 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi)
-; [nakarest] ("TEST2"): Label (32 B). text the records point at, in Viewable slot 0xf5 (table
-; [nakarest] 0xed7c9e, 23 entries, InitializeToshi): "CPU of CPL =" (Label.str of element 4).
-; [nakarest] widget record, element 5 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
-; [nakarest] InitializeToshi) ("TEST2"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "If both CPU are NO,"
-; [nakarest] (Label.str of element 5). widget record, element 6 of Viewable slot 0xf5 (table
-; [nakarest] 0xed7c9e, 23 entries, InitializeToshi) ("TEST2"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "it
-; [nakarest] is better to check the MAIN PCB." (Label.str of element 6). widget records,
-; [nakarest] elements 7-12 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi)
-; [nakarest] ("TEST2"): IvPageControl (28 B) x4, Window (36 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "OK"
-; [nakarest] (Label.str of element 12). widget record, element 13 of Viewable slot 0xf5 (table
-; [nakarest] 0xed7c9e, 23 entries, InitializeToshi) ("TEST2"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "OK"
-; [nakarest] (Label.str of element 13). widget records, elements 14-15 of Viewable slot 0xf5
-; [nakarest] (table 0xed7c9e, 23 entries, InitializeToshi) ("TEST2"): Window (36 B), Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
-; [nakarest] InitializeToshi): "NO" (Label.str of element 15). widget record, element 16 of
-; [nakarest] Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi) ("TEST2"): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xf5 (table 0xed7c9e, 23
-; [nakarest] entries, InitializeToshi): "NO" (Label.str of element 16). widget records, elements
-; [nakarest] 17-18 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi)
-; [nakarest] ("TEST2"): Window (36 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "NO" (Label.str of element 18).
-; [nakarest] widget record, element 19 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
-; [nakarest] InitializeToshi) ("TEST2"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "OK" (Label.str of element
-; [nakarest] 19). widget records, elements 20-21 of Viewable slot 0xf5 (table 0xed7c9e, 23
-; [nakarest] entries, InitializeToshi) ("TEST2"): Window (36 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "OK"
-; [nakarest] (Label.str of element 21). widget record, element 22 of Viewable slot 0xf5 (table
-; [nakarest] 0xed7c9e, 23 entries, InitializeToshi) ("TEST2"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi): "NO"
-; [nakarest] (Label.str of element 22).
+; [nakarest] widget records, elements 0-22 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
+; [nakarest] InitializeToshi) ("TEST2"): TtlScreen (42 B), TextBox (40 B), Label (32 B) x13,
+; [nakarest] IvPageControl (28 B) x4, Window (36 B) x4. 15 texts the records point at (Viewable
+; [nakarest] slot 0xf5 (table 0xed7c9e, 23 entries, InitializeToshi)): "" (TtlScreen.title of
+; [nakarest] element 0); "Please check by the LED of test port. (PANEL CPU" (TextBox.text of
+; [nakarest] element 1); "PANEL CPU CHECKING" (Label.str of element 2); "RESULT: CPU of CPR ="
+; [nakarest] (Label.str of element 3); ....
 	.incbin "includes/generated/naka_extension_device.bin", 0x2C, 0x3EE
 ; [nakarest] naka_extension_device+0x41a  +0x41a..+0x44e (0xed6be6, 52 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xf6 (table 0xed7cfe, 1 entries,
 ; [nakarest] InitializeToshi) ("TEST3"): SineWaveScreen (52 B).
 	.incbin "includes/generated/naka_extension_device.bin", 0x41A, 0x34
 ; [nakarest] naka_extension_device+0x44e  +0x44e..+0x548 (0xed6c1a, 250 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xf7 (table 0xed7d06, 3 entries,
-; [nakarest] InitializeToshi) ("TEST4"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xf7 (table 0xed7d06, 3 entries, InitializeToshi): ""
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xf7
-; [nakarest] (table 0xed7d06, 3 entries, InitializeToshi) ("TEST4"): TextBox (40 B). text the
-; [nakarest] records point at, in Viewable slot 0xf7 (table 0xed7d06, 3 entries,
-; [nakarest] InitializeToshi): "After all LEDs ON and OFF, Please push any butt" (TextBox.text
-; [nakarest] of element 1). widget record, element 2 of Viewable slot 0xf7 (table 0xed7d06, 3
-; [nakarest] entries, InitializeToshi) ("TEST4"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf7 (table 0xed7d06, 3 entries, InitializeToshi): "PANEL SW&LED
-; [nakarest] CHECK" (Label.str of element 2).
+; [nakarest] widget records, elements 0-2 of Viewable slot 0xf7 (table 0xed7d06, 3 entries,
+; [nakarest] InitializeToshi) ("TEST4"): TtlScreen (42 B), TextBox (40 B), Label (32 B). 3 texts
+; [nakarest] the records point at (Viewable slot 0xf7 (table 0xed7d06, 3 entries,
+; [nakarest] InitializeToshi)): "" (TtlScreen.title of element 0); "After all LEDs ON and OFF,
+; [nakarest] Please push any butt" (TextBox.text of element 1); "PANEL SW&LED CHECK" (Label.str
+; [nakarest] of element 2).
 	.incbin "includes/generated/naka_extension_device.bin", 0x44E, 0xFA
 ; [nakarest] naka_extension_device+0x548  +0x548..+0xe6c (0xed6d14, 2340 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): ""
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-7 of Viewable slot 0xf8
-; [nakarest] (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): IvPageControl (28 B) x5,
-; [nakarest] Window (36 B), Label (32 B). text the records point at, in Viewable slot 0xf8
-; [nakarest] (table 0xed7d16, 67 entries, InitializeToshi): "LCD PANEL TEST" (Label.str of
-; [nakarest] element 7). widget records, elements 8-9 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Window (36 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "LCD
-; [nakarest] PANEL TEST" (Label.str of element 9). widget records, elements 10-11 of Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Window (36 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "LCD PANEL TEST" (Label.str of element 11). widget
-; [nakarest] records, elements 12-13 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Window (36 B), Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "LCD PANEL
-; [nakarest] TEST" (Label.str of element 13). widget records, elements 14-15 of Viewable slot
-; [nakarest] 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Window (36 B), Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "LCD PANEL TEST" (Label.str of element 15). widget
-; [nakarest] records, elements 16-18 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Window (36 B), Frame (28 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi): "H" (Label.str of element 18). widget record, element 19 of
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 19). widget record, element 20
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "HHHHHHH" (Label.str of element 20). widget record,
-; [nakarest] element 21 of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi)
-; [nakarest] ("TEST5"): Label (32 B). text the records point at, in Viewable slot 0xf8 (table
-; [nakarest] 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element 21). widget
-; [nakarest] record, element 22 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 22). widget record, element 23 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 23). widget record, element 24 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 24). widget record, element 25 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 25). widget record, element 26 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 26). widget records, elements 27-28 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Frame (28 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H"
-; [nakarest] (Label.str of element 28). widget record, element 29 of Viewable slot 0xf8 (table
-; [nakarest] 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H"
-; [nakarest] (Label.str of element 29). widget record, element 30 of Viewable slot 0xf8 (table
-; [nakarest] 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi):
-; [nakarest] "HHHHHHH" (Label.str of element 30). widget record, element 31 of Viewable slot
-; [nakarest] 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi): "H" (Label.str of element 31). widget record, element 32 of
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 32). widget record, element 33
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 33). widget record, element 34
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 34). widget record, element 35
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 35). widget record, element 36
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 36). widget records, elements
-; [nakarest] 37-38 of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi)
-; [nakarest] ("TEST5"): Frame (28 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element 38).
-; [nakarest] widget record, element 39 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 39). widget record, element 40 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "HHHHHHH" (Label.str of
-; [nakarest] element 40). widget record, element 41 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of
-; [nakarest] element 41). widget record, element 42 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of
-; [nakarest] element 42). widget record, element 43 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of
-; [nakarest] element 43). widget record, element 44 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of
-; [nakarest] element 44). widget record, element 45 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of
-; [nakarest] element 45). widget record, element 46 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of
-; [nakarest] element 46). widget records, elements 47-48 of Viewable slot 0xf8 (table 0xed7d16,
-; [nakarest] 67 entries, InitializeToshi) ("TEST5"): Frame (28 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi): "H" (Label.str of element 48). widget record, element 49 of
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 49). widget record, element 50
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "HHHHHHH" (Label.str of element 50). widget record,
-; [nakarest] element 51 of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi)
-; [nakarest] ("TEST5"): Label (32 B). text the records point at, in Viewable slot 0xf8 (table
-; [nakarest] 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element 51). widget
-; [nakarest] record, element 52 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 52). widget record, element 53 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 53). widget record, element 54 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 54). widget record, element 55 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 55). widget record, element 56 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi) ("TEST5"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H" (Label.str of element
-; [nakarest] 56). widget records, elements 57-58 of Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi) ("TEST5"): Frame (28 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H"
-; [nakarest] (Label.str of element 58). widget record, element 59 of Viewable slot 0xf8 (table
-; [nakarest] 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi): "H"
-; [nakarest] (Label.str of element 59). widget record, element 60 of Viewable slot 0xf8 (table
-; [nakarest] 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi):
-; [nakarest] "HHHHHHH" (Label.str of element 60). widget record, element 61 of Viewable slot
-; [nakarest] 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67 entries,
-; [nakarest] InitializeToshi): "H" (Label.str of element 61). widget record, element 62 of
-; [nakarest] Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 62). widget record, element 63
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 63). widget record, element 64
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 64). widget record, element 65
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 65). widget record, element 66
-; [nakarest] of Viewable slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi) ("TEST5"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xf8 (table 0xed7d16, 67
-; [nakarest] entries, InitializeToshi): "H" (Label.str of element 66).
+; [nakarest] widget records, elements 0-66 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
+; [nakarest] InitializeToshi) ("TEST5"): TtlScreen (42 B), IvPageControl (28 B) x5, Window (36
+; [nakarest] B) x6, Label (32 B) x50, Frame (28 B) x5. 51 texts the records point at (Viewable
+; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi)): "" (TtlScreen.title of
+; [nakarest] element 0); "LCD PANEL TEST" (Label.str of element 7); "LCD PANEL TEST" (Label.str
+; [nakarest] of element 9); "LCD PANEL TEST" (Label.str of element 11); ....
 	.incbin "includes/generated/naka_extension_device.bin", 0x548, 0x924
 ; [nakarest] naka_extension_device+0xe6c  +0xe6c..+0xfe0 (0xed7638, 372 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xf9 (table 0xed7e26, 9 entries,
-; [nakarest] InitializeToshi) ("TEST6"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xf9 (table 0xed7e26, 9 entries, InitializeToshi): ""
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xf9
-; [nakarest] (table 0xed7e26, 9 entries, InitializeToshi) ("TEST6"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xf9 (table 0xed7e26, 9 entries,
-; [nakarest] InitializeToshi): "PERIPHERAL DEVICE CHECK" (Label.str of element 1). widget
-; [nakarest] record, element 2 of Viewable slot 0xf9 (table 0xed7e26, 9 entries,
-; [nakarest] InitializeToshi) ("TEST6"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xf9 (table 0xed7e26, 9 entries, InitializeToshi): "FLOPPY DISK
-; [nakarest] CONTROLLER(FDC) " (Label.str of element 2). widget records, elements 3-6 of
-; [nakarest] Viewable slot 0xf9 (table 0xed7e26, 9 entries, InitializeToshi) ("TEST6"):
-; [nakarest] IvPageControl (28 B) x2, Window (36 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf9 (table 0xed7e26, 9 entries, InitializeToshi): "= may be OK"
-; [nakarest] (Label.str of element 6). widget records, elements 7-8 of Viewable slot 0xf9 (table
-; [nakarest] 0xed7e26, 9 entries, InitializeToshi) ("TEST6"): Window (36 B), Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xf9 (table 0xed7e26, 9 entries,
-; [nakarest] InitializeToshi): "= NO" (Label.str of element 8).
+; [nakarest] widget records, elements 0-8 of Viewable slot 0xf9 (table 0xed7e26, 9 entries,
+; [nakarest] InitializeToshi) ("TEST6"): TtlScreen (42 B), Label (32 B) x4, IvPageControl (28 B)
+; [nakarest] x2, Window (36 B) x2. 5 texts the records point at (Viewable slot 0xf9 (table
+; [nakarest] 0xed7e26, 9 entries, InitializeToshi)): "" (TtlScreen.title of element 0);
+; [nakarest] "PERIPHERAL DEVICE CHECK" (Label.str of element 1); "FLOPPY DISK CONTROLLER(FDC) "
+; [nakarest] (Label.str of element 2); "= may be OK" (Label.str of element 6); ....
 	.incbin "includes/generated/naka_extension_device.bin", 0xE6C, 0x174
 ; [nakarest] naka_extension_device+0xfe0  +0xfe0..+0x1002 (0xed77ac, 34 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xfb (table 0xed7e4e, 1 entries,
@@ -962,19 +747,28 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] InitializeToshi) (names for Viewable slot 0xfb): "EXT".
 	.incbin "includes/generated/naka_extension_device.bin", 0x21AC, 0x13A6
 ; [nakarest] SoundParam_EncoderMappingData  +0x3552..+0x3860 (0xed9d1e, 782 B)
-; [nakarest] purpose not established: 782 bytes at 0xed9d1e that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 782 B at 0xed9d1e not derived; readers below
+; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
+; [nakarest] `.long SoundParam_EncoderMappingData`); 1 data word in SystemConfig_PointerTable
+; [nakarest] (at 0xee8ca6).
 SoundParam_EncoderMappingData:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x30E
 ; [nakarest] EffectMode_DispatchTable  +0x3860..+0x38f0 (0xeda02c, 144 B)
-; [nakarest] purpose not established: 144 bytes at 0xeda02c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 144 B at 0xeda02c not derived; readers below
+; [nakarest] Readers: source references MidiCC_LookupHandler (audio/audio_control_engine.s: `lda
+; [nakarest] xbc, (EffectMode_DispatchTable_0x10:24)`), SystemConfig_PointerTable
+; [nakarest] (ui_widgets/widget_dispatch.s: `.long EffectMode_DispatchTable`); 1 data word in
+; [nakarest] SystemConfig_PointerTable (at 0xee8ca2).
 EffectMode_DispatchTable:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3860, 0x90
 ; [nakarest] ENCODER_HANDLER_TABLE  +0x38f0..+0x3970 (0xeda0bc, 128 B)
-; [nakarest] purpose not established: 128 bytes at 0xeda0bc that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 128 B at 0xeda0bc not derived; readers below
+; [nakarest] Readers: source references CPanel_EncoderDispatch (midi/midi_encoder_routines.s:
+; [nakarest] `lda xde, (ENCODER_HANDLER_TABLE:24)`).
 ENCODER_HANDLER_TABLE:
 	.incbin "includes/generated/naka_extension_device.bin", 0x38F0, 0x80
 ; [nakarest] ENCODER_LUT_MODWHEEL  +0x3970..+0x3994 (0xeda13c, 36 B)
-; [nakarest] purpose not established: 36 bytes at 0xeda13c that no registered NAKA table points into
+; [nakarest] purpose not established: 36 B at 0xeda13c that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ENCODER_LUT_MODWHEEL:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3970, 0x24
 ; External label offsets within the binary blob above.

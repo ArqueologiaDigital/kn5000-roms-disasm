@@ -49,23 +49,50 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] DiskWarning_ConfirmStrings  +0x0..+0x1226 (0xea8cac, 4646 B)
-; [nakarest] purpose not established: 4646 bytes at 0xea8cac that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 4646 B at 0xea8cac not derived; readers below
+; [nakarest] Readers: source references AcFileSfx_DrawLoop (ui/ui_control_panel.s: `lda xhl,
+; [nakarest] (DiskWarning_ConfirmStrings_0xb46:24)`), CtrlPanel_CheckButtonRelease
+; [nakarest] (boot/main_title_ctrl_panel.s: `ld xbc, DiskWarning_ConfirmStrings_0xcba`),
+; [nakarest] CtrlPanel_CheckDiskMenuRelease (boot/main_title_ctrl_panel.s: `ld xbc,
+; [nakarest] DiskWarning_ConfirmStrings_0xcba`), CtrlPanel_DispatchByIndex
+; [nakarest] (ui/ui_control_panel.s: `lda xix, (DiskWarning_ConfirmStrings_0xd58:24)`), 17 more;
+; [nakarest] 3 data words in NakaInst_WaitWinCtlSmf_0xe5c (at 0xea8c64, 0xea8c60, 0xea8c5c),
+; [nakarest] which is read by DiskSure (file_io/medley.s: `lda xhl,
+; [nakarest] (NakaInst_WaitWinCtlSmf_0xe5c:24)`); 3 data words in Data_SoundEditorCharsLayout
+; [nakarest] (at 0xea9ed2, 0xea9ed6, 0xea9eda), which is read by WndEvt_EventCodeDispatch
+; [nakarest] (ui/ui_window_procs.s: `ld xde, Data_SoundEditorCharsLayout`),
+; [nakarest] WndEvt_EventCodeDispatch_Join (ui/ui_window_procs.s: `ld xde,
+; [nakarest] Data_SoundEditorCharsLayout`), 3 more.
 DiskWarning_ConfirmStrings:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x0, 0x1226
 ; [nakarest] Data_SoundEditorCharsLayout  +0x1226..+0x164e (0xea9ed2, 1064 B)
-; [nakarest] purpose not established: 1064 bytes at 0xea9ed2 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 1064 B at 0xea9ed2 not derived; readers below
+; [nakarest] Readers: source references AcGridBoxProc (ui/ui_widget_defs.s: `add xwa,
+; [nakarest] Data_SoundEditorCharsLayout_0x386`), AcNaming_QueryCharSet
+; [nakarest] (audio/presentation_sound_nav.s: `ld xbc, Data_SoundEditorCharsLayout_0x18`),
+; [nakarest] ButtonState_Paint_Default (ui/ui_widget_defs.s: `ld xde,
+; [nakarest] Data_SoundEditorCharsLayout_0x410`), DrawEditSw (ui/ui_window_procs.s: `ld xwa,
+; [nakarest] Data_SoundEditorCharsLayout_0x2a0`), 16 more.
 Data_SoundEditorCharsLayout:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1226, 0x428
 ; [nakarest] NakaInst_OK  +0x164e..+0x166a (0xeaa2fa, 28 B)
-; [nakarest] purpose not established: 28 bytes at 0xeaa2fa that no registered NAKA table points into
+; [nakarest] purpose not established: 28 B at 0xeaa2fa that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 NakaInst_OK:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x164E, 0x1C
 ; [nakarest] Str_No  +0x166a..+0x24f4 (0xeaa316, 3722 B)
-; [nakarest] purpose not established: 3722 bytes at 0xeaa316 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 3722 B at 0xeaa316 not derived; readers below
+; [nakarest] Readers: source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `lda xix,
+; [nakarest] (Str_No_0x26:24)`), AcMixerVol_Confirm (ui/ui_widget_defs.s: `ld
+; [nakarest] XWA,Str_No_0x1f6`), AcMixerVol_FastScroll (ui/ui_widget_defs.s: `ld xde,
+; [nakarest] Str_No_0x1f6`), AcMixerVol_FastScroll_Increment (ui/ui_widget_defs.s: `ld xde,
+; [nakarest] Str_No_0x1f6`), 85 more.
 Str_No:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x166A, 0xE8A
 ; [nakarest] Data_CharMapFormatBlock  +0x24f4..+0x2608 (0xeab1a0, 276 B)
-; [nakarest] purpose not established: 276 bytes at 0xeab1a0 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 276 B at 0xeab1a0 not derived; readers below
+; [nakarest] Readers: source references FontGlyph_ByteData (display/graphics_text_vga.s: `lda
+; [nakarest] xde, (Data_CharMapFormatBlock_0x14:24)`), TextRender_CharEncodeAndDraw
+; [nakarest] (kn5000_v7_program.s: `lda xde, (0xeab1b4:24)`).
 Data_CharMapFormatBlock:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x24F4, 0x114
 ; [nakarest] naka_disk_warning+0x2608  +0x2608..+0x263c (0xeab2b4, 52 B)

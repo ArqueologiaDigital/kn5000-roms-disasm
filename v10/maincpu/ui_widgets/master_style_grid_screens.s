@@ -39,7 +39,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_MasterStyleGrid  +0x0..+0x14 (0xed27e8, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xed27e8 that no registered NAKA table points into
+; [nakarest] purpose not established: 20 B at 0xed27e8 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 NakaData_MasterStyleGrid:
 	.incbin "includes/generated/naka_master_style.bin", 0x0, 0x14
 ; [nakarest] naka_master_style+0x14  +0x14..+0x2b4 (0xed27fc, 672 B)

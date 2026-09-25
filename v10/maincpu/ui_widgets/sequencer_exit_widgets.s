@@ -39,7 +39,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_SequencerExit  +0x0..+0x14 (0xe272a4, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe272a4 that no registered NAKA table points into
+; [nakarest] purpose not established: 20 B at 0xe272a4 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 NakaData_SequencerExit:
 	.incbin "includes/generated/naka_sequencer_exit.bin", 0x0, 0x14
 ; [nakarest] naka_sequencer_exit+0x14  +0x14..+0x164 (0xe272b8, 336 B)

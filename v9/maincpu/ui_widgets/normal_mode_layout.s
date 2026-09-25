@@ -145,30 +145,14 @@ NakaInst_MainSvariIni:
 NakaInst_MainVariSet:
 	.incbin "includes/generated/naka_normal_mode.bin", 0x10C, 0xC
 ; [nakarest] naka_normal_mode+0x118  +0x118..+0x490 (0xed3454, 888 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x1 (table 0xed77ce, 63 entries,
-; [nakarest] InitializeToshi) ("Normal"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x1 (table 0xed77ce, 63 entries, InitializeToshi): "NORMAL"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x1
-; [nakarest] (table 0xed77ce, 63 entries, InitializeToshi) ("Normal"): NormScreen (42 B). text
-; [nakarest] the records point at, in Viewable slot 0x1 (table 0xed77ce, 63 entries,
-; [nakarest] InitializeToshi): "" (NormScreen.title of element 1). widget records, elements 2-7
-; [nakarest] of Viewable slot 0x1 (table 0xed77ce, 63 entries, InitializeToshi) ("Normal"):
-; [nakarest] AcTempoBox (36 B), AcPmemName (36 B), AcRhythmName (36 B), AcSoundName (38 B) x2,
-; [nakarest] StringBox (38 B). text the records point at, in Viewable slot 0x1 (table 0xed77ce,
-; [nakarest] 63 entries, InitializeToshi): "RIGHT2" (StringBox.str of element 7). widget
-; [nakarest] records, elements 8-9 of Viewable slot 0x1 (table 0xed77ce, 63 entries,
-; [nakarest] InitializeToshi) ("Normal"): AcSoundName (38 B), StringBox (38 B). text the records
-; [nakarest] point at, in Viewable slot 0x1 (table 0xed77ce, 63 entries, InitializeToshi):
-; [nakarest] "RIGHT1" (StringBox.str of element 9). widget record, element 10 of Viewable slot
-; [nakarest] 0x1 (table 0xed77ce, 63 entries, InitializeToshi) ("Normal"): StringBox (38 B).
-; [nakarest] text the records point at, in Viewable slot 0x1 (table 0xed77ce, 63 entries,
-; [nakarest] InitializeToshi): "LEFT" (StringBox.str of element 10). widget record, element 11
-; [nakarest] of Viewable slot 0x1 (table 0xed77ce, 63 entries, InitializeToshi) ("Normal"):
-; [nakarest] StringBox (38 B). text the records point at, in Viewable slot 0x1 (table 0xed77ce,
-; [nakarest] 63 entries, InitializeToshi): "RHYTHM" (StringBox.str of element 11). widget
-; [nakarest] records, elements 12-24 of Viewable slot 0x1 (table 0xed77ce, 63 entries,
-; [nakarest] InitializeToshi) ("Normal"): TransposeBox (36 B), ChordBox (36 B), AcLswBox (44 B),
-; [nakarest] IvWindowPageControl (26 B), FreeSplitBox (36 B), IvPageOverWr (28 B) x6, IvExit (22
-; [nakarest] B), Window (36 B).
+; [nakarest] widget records, elements 0-24 of Viewable slot 0x1 (table 0xed77ce, 63 entries,
+; [nakarest] InitializeToshi) ("Normal"): TtlScreen (42 B), NormScreen (42 B), AcTempoBox (36
+; [nakarest] B), AcPmemName (36 B), AcRhythmName (36 B), AcSoundName (38 B) x3, StringBox (38 B)
+; [nakarest] x4, TransposeBox (36 B), ChordBox (36 B), AcLswBox (44 B), IvWindowPageControl (26
+; [nakarest] B), FreeSplitBox (36 B), IvPageOverWr (28 B) x6, IvExit (22 B), Window (36 B). 6
+; [nakarest] texts the records point at (Viewable slot 0x1 (table 0xed77ce, 63 entries,
+; [nakarest] InitializeToshi)): "NORMAL" (TtlScreen.title of element 0); "" (NormScreen.title of
+; [nakarest] element 1); "RIGHT2" (StringBox.str of element 7); "RIGHT1" (StringBox.str of
+; [nakarest] element 9); ....
 	.incbin "includes/generated/naka_normal_mode.bin", 0x118, 0x378
 ; External label offsets within the binary blob above.

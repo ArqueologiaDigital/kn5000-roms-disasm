@@ -281,645 +281,207 @@ NakaInst_PsHarmOnOffBoxProc:
 NakaInst_AcVocalistListBoxProc:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x138, 0x16
 ; [nakarest] naka_midi_reverb+0x14e  +0x14e..+0x274 (0xe55f86, 294 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x9 (table 0xe59c5a, 4 entries,
-; [nakarest] InitializeEast) ("ReverbEqualizerMenu"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x9 (table 0xe59c5a, 4 entries, InitializeEast): "REVERB &
-; [nakarest] EQUALIZER PRESETS" (TtlScreen.title of element 0). widget record, element 1 of
-; [nakarest] Viewable slot 0x9 (table 0xe59c5a, 4 entries, InitializeEast)
-; [nakarest] ("ReverbEqualizerMenu"): AcTitleMenu (54 B). text the records point at, in Viewable
-; [nakarest] slot 0x9 (table 0xe59c5a, 4 entries, InitializeEast): "REVERB PRESETS"
-; [nakarest] (AcTitleMenu.str of element 1). widget record, element 2 of Viewable slot 0x9
-; [nakarest] (table 0xe59c5a, 4 entries, InitializeEast) ("ReverbEqualizerMenu"): AcTitleMenu
-; [nakarest] (54 B). text the records point at, in Viewable slot 0x9 (table 0xe59c5a, 4 entries,
-; [nakarest] InitializeEast): "EQUALIZER PRESETS" (AcTitleMenu.str of element 2). widget record,
-; [nakarest] element 3 of Viewable slot 0x9 (table 0xe59c5a, 4 entries, InitializeEast)
-; [nakarest] ("ReverbEqualizerMenu"): AcTitleMenu (54 B). text the records point at, in Viewable
-; [nakarest] slot 0x9 (table 0xe59c5a, 4 entries, InitializeEast): "REVERB + EQUALIZER PRESETS"
-; [nakarest] (AcTitleMenu.str of element 3).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0x9 (table 0xe59c5a, 4 entries,
+; [nakarest] InitializeEast) ("ReverbEqualizerMenu"): TtlScreen (42 B), AcTitleMenu (54 B) x3. 4
+; [nakarest] texts the records point at (Viewable slot 0x9 (table 0xe59c5a, 4 entries,
+; [nakarest] InitializeEast)): "REVERB & EQUALIZER PRESETS" (TtlScreen.title of element 0);
+; [nakarest] "REVERB PRESETS" (AcTitleMenu.str of element 1); "EQUALIZER PRESETS"
+; [nakarest] (AcTitleMenu.str of element 2); "REVERB + EQUALIZER PRESETS" (AcTitleMenu.str of
+; [nakarest] element 3).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x14E, 0x126
 ; [nakarest] naka_midi_reverb+0x274  +0x274..+0x324 (0xe560ac, 176 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xf (table 0xe59c6e, 3 entries,
-; [nakarest] InitializeEast) ("R12OctaveSetting"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0xf (table 0xe59c6e, 3 entries, InitializeEast): "RIGHT1/RIGHT2
-; [nakarest] OCTAVE" (TtlScreen.title of element 0). widget record, element 1 of Viewable slot
-; [nakarest] 0xf (table 0xe59c6e, 3 entries, InitializeEast) ("R12OctaveSetting"): AcLswEditBox
-; [nakarest] (58 B). text the records point at, in Viewable slot 0xf (table 0xe59c6e, 3 entries,
-; [nakarest] InitializeEast): "OCTAVE :" (AcLswEditBox.caption of element 1). widget record,
-; [nakarest] element 2 of Viewable slot 0xf (table 0xe59c6e, 3 entries, InitializeEast)
-; [nakarest] ("R12OctaveSetting"): AcIndexWideES (42 B).
+; [nakarest] widget records, elements 0-2 of Viewable slot 0xf (table 0xe59c6e, 3 entries,
+; [nakarest] InitializeEast) ("R12OctaveSetting"): TtlScreen (42 B), AcLswEditBox (58 B),
+; [nakarest] AcIndexWideES (42 B). 2 texts the records point at (Viewable slot 0xf (table
+; [nakarest] 0xe59c6e, 3 entries, InitializeEast)): "RIGHT1/RIGHT2 OCTAVE" (TtlScreen.title of
+; [nakarest] element 0); "OCTAVE :" (AcLswEditBox.caption of element 1).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x274, 0xB0
 ; [nakarest] naka_midi_reverb+0x324  +0x324..+0x5ce (0xe5615c, 682 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x18 (table 0xe59c7e, 12 entries,
-; [nakarest] InitializeEast) ("ReverbPreset"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast): "REVERB PRESETS"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x18
-; [nakarest] (table 0xe59c7e, 12 entries, InitializeEast) ("ReverbPreset"): AcStrRadioBox (48
-; [nakarest] B). text the records point at, in Viewable slot 0x18 (table 0xe59c7e, 12 entries,
-; [nakarest] InitializeEast): "Huge Room" (AcStrRadioBox.str of element 1). widget record,
-; [nakarest] element 2 of Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast)
-; [nakarest] ("ReverbPreset"): AcStrRadioBox (48 B). text the records point at, in Viewable slot
-; [nakarest] 0x18 (table 0xe59c7e, 12 entries, InitializeEast): "Box Room" (AcStrRadioBox.str of
-; [nakarest] element 2). widget records, elements 3-4 of Viewable slot 0x18 (table 0xe59c7e, 12
-; [nakarest] entries, InitializeEast) ("ReverbPreset"): IvCatchEvent (26 B), AcStrRadioBox (48
-; [nakarest] B). text the records point at, in Viewable slot 0x18 (table 0xe59c7e, 12 entries,
-; [nakarest] InitializeEast): "Small Plate" (AcStrRadioBox.str of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast)
-; [nakarest] ("ReverbPreset"): AcStrRadioBox (48 B). text the records point at, in Viewable slot
-; [nakarest] 0x18 (table 0xe59c7e, 12 entries, InitializeEast): "Sports Hall" (AcStrRadioBox.str
-; [nakarest] of element 5). widget record, element 6 of Viewable slot 0x18 (table 0xe59c7e, 12
-; [nakarest] entries, InitializeEast) ("ReverbPreset"): AcStrRadioBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast):
-; [nakarest] "Bright Hall" (AcStrRadioBox.str of element 6). widget record, element 7 of
-; [nakarest] Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast) ("ReverbPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x18 (table
-; [nakarest] 0xe59c7e, 12 entries, InitializeEast): "Dark Confines" (AcStrRadioBox.str of
-; [nakarest] element 7). widget record, element 8 of Viewable slot 0x18 (table 0xe59c7e, 12
-; [nakarest] entries, InitializeEast) ("ReverbPreset"): AcStrRadioBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast):
-; [nakarest] "Reflection" (AcStrRadioBox.str of element 8). widget record, element 9 of Viewable
-; [nakarest] slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast) ("ReverbPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x18 (table
-; [nakarest] 0xe59c7e, 12 entries, InitializeEast): "High & Open" (AcStrRadioBox.str of element
-; [nakarest] 9). widget record, element 10 of Viewable slot 0x18 (table 0xe59c7e, 12 entries,
-; [nakarest] InitializeEast) ("ReverbPreset"): AcStrRadioBox (48 B). text the records point at,
-; [nakarest] in Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast): "Left To Right"
-; [nakarest] (AcStrRadioBox.str of element 10). widget record, element 11 of Viewable slot 0x18
-; [nakarest] (table 0xe59c7e, 12 entries, InitializeEast) ("ReverbPreset"): AcStrRadioBox (48
-; [nakarest] B). text the records point at, in Viewable slot 0x18 (table 0xe59c7e, 12 entries,
-; [nakarest] InitializeEast): "Cavernous" (AcStrRadioBox.str of element 11).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0x18 (table 0xe59c7e, 12 entries,
+; [nakarest] InitializeEast) ("ReverbPreset"): TtlScreen (42 B), AcStrRadioBox (48 B) x10,
+; [nakarest] IvCatchEvent (26 B). 11 texts the records point at (Viewable slot 0x18 (table
+; [nakarest] 0xe59c7e, 12 entries, InitializeEast)): "REVERB PRESETS" (TtlScreen.title of
+; [nakarest] element 0); "Huge Room" (AcStrRadioBox.str of element 1); "Box Room"
+; [nakarest] (AcStrRadioBox.str of element 2); "Small Plate" (AcStrRadioBox.str of element 4);
+; [nakarest] ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x324, 0x2AA
 ; [nakarest] naka_midi_reverb+0x5ce  +0x5ce..+0x87e (0xe56406, 688 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x19 (table 0xe59cb2, 12 entries,
-; [nakarest] InitializeEast) ("EqualizerPreset"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast): "EQUALIZER
-; [nakarest] PRESETS" (TtlScreen.title of element 0). widget record, element 1 of Viewable slot
-; [nakarest] 0x19 (table 0xe59cb2, 12 entries, InitializeEast) ("EqualizerPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x19 (table
-; [nakarest] 0xe59cb2, 12 entries, InitializeEast): "Make Up" (AcStrRadioBox.str of element 1).
-; [nakarest] widget record, element 2 of Viewable slot 0x19 (table 0xe59cb2, 12 entries,
-; [nakarest] InitializeEast) ("EqualizerPreset"): AcStrRadioBox (48 B). text the records point
-; [nakarest] at, in Viewable slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast): "Middle
-; [nakarest] Cut" (AcStrRadioBox.str of element 2). widget record, element 3 of Viewable slot
-; [nakarest] 0x19 (table 0xe59cb2, 12 entries, InitializeEast) ("EqualizerPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x19 (table
-; [nakarest] 0xe59cb2, 12 entries, InitializeEast): "Transistor Radio" (AcStrRadioBox.str of
-; [nakarest] element 3). widget record, element 4 of Viewable slot 0x19 (table 0xe59cb2, 12
-; [nakarest] entries, InitializeEast) ("EqualizerPreset"): AcStrRadioBox (48 B). text the
-; [nakarest] records point at, in Viewable slot 0x19 (table 0xe59cb2, 12 entries,
-; [nakarest] InitializeEast): "Treble Boost" (AcStrRadioBox.str of element 4). widget record,
-; [nakarest] element 5 of Viewable slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast)
-; [nakarest] ("EqualizerPreset"): AcStrRadioBox (48 B). text the records point at, in Viewable
-; [nakarest] slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast): "Treble Cut"
-; [nakarest] (AcStrRadioBox.str of element 5). widget record, element 6 of Viewable slot 0x19
-; [nakarest] (table 0xe59cb2, 12 entries, InitializeEast) ("EqualizerPreset"): AcStrRadioBox (48
-; [nakarest] B). text the records point at, in Viewable slot 0x19 (table 0xe59cb2, 12 entries,
-; [nakarest] InitializeEast): "No Hi Hat" (AcStrRadioBox.str of element 6). widget record,
-; [nakarest] element 7 of Viewable slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast)
-; [nakarest] ("EqualizerPreset"): AcStrRadioBox (48 B). text the records point at, in Viewable
-; [nakarest] slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast): "Tubby Bass"
-; [nakarest] (AcStrRadioBox.str of element 7). widget record, element 8 of Viewable slot 0x19
-; [nakarest] (table 0xe59cb2, 12 entries, InitializeEast) ("EqualizerPreset"): AcStrRadioBox (48
-; [nakarest] B). text the records point at, in Viewable slot 0x19 (table 0xe59cb2, 12 entries,
-; [nakarest] InitializeEast): "Bass Cut" (AcStrRadioBox.str of element 8). widget record,
-; [nakarest] element 9 of Viewable slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast)
-; [nakarest] ("EqualizerPreset"): AcStrRadioBox (48 B). text the records point at, in Viewable
-; [nakarest] slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast): "Too Bright"
-; [nakarest] (AcStrRadioBox.str of element 9). widget records, elements 10-11 of Viewable slot
-; [nakarest] 0x19 (table 0xe59cb2, 12 entries, InitializeEast) ("EqualizerPreset"): IvCatchEvent
-; [nakarest] (26 B), AcFuncToggle (44 B). text the records point at, in Viewable slot 0x19
-; [nakarest] (table 0xe59cb2, 12 entries, InitializeEast): "EQ : OFF" (AcFuncToggle.stroff of
-; [nakarest] element 11); "EQ : ON" (AcFuncToggle.stron of element 11).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0x19 (table 0xe59cb2, 12 entries,
+; [nakarest] InitializeEast) ("EqualizerPreset"): TtlScreen (42 B), AcStrRadioBox (48 B) x9,
+; [nakarest] IvCatchEvent (26 B), AcFuncToggle (44 B). 12 texts the records point at (Viewable
+; [nakarest] slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast)): "EQUALIZER PRESETS"
+; [nakarest] (TtlScreen.title of element 0); "Make Up" (AcStrRadioBox.str of element 1); "Middle
+; [nakarest] Cut" (AcStrRadioBox.str of element 2); "Transistor Radio" (AcStrRadioBox.str of
+; [nakarest] element 3); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x5CE, 0x2B0
 ; [nakarest] naka_midi_reverb+0x87e  +0x87e..+0xb32 (0xe566b6, 692 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x1a (table 0xe59ce6, 12 entries,
-; [nakarest] InitializeEast) ("ReverbEqualizerPreset"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast): "REVERB +
-; [nakarest] EQUALIZER PRESETS" (TtlScreen.title of element 0). widget record, element 1 of
-; [nakarest] Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast)
-; [nakarest] ("ReverbEqualizerPreset"): AcStrRadioBox (48 B). text the records point at, in
-; [nakarest] Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast): "Warm & Wide"
-; [nakarest] (AcStrRadioBox.str of element 1). widget record, element 2 of Viewable slot 0x1a
-; [nakarest] (table 0xe59ce6, 12 entries, InitializeEast) ("ReverbEqualizerPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x1a (table
-; [nakarest] 0xe59ce6, 12 entries, InitializeEast): "In Your Face" (AcStrRadioBox.str of element
-; [nakarest] 2). widget record, element 3 of Viewable slot 0x1a (table 0xe59ce6, 12 entries,
-; [nakarest] InitializeEast) ("ReverbEqualizerPreset"): AcStrRadioBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast): "Oil
-; [nakarest] Tank" (AcStrRadioBox.str of element 3). widget record, element 4 of Viewable slot
-; [nakarest] 0x1a (table 0xe59ce6, 12 entries, InitializeEast) ("ReverbEqualizerPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x1a (table
-; [nakarest] 0xe59ce6, 12 entries, InitializeEast): "Warm Plate" (AcStrRadioBox.str of element
-; [nakarest] 4). widget record, element 5 of Viewable slot 0x1a (table 0xe59ce6, 12 entries,
-; [nakarest] InitializeEast) ("ReverbEqualizerPreset"): AcStrRadioBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast):
-; [nakarest] "Light & Shade" (AcStrRadioBox.str of element 5). widget record, element 6 of
-; [nakarest] Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast)
-; [nakarest] ("ReverbEqualizerPreset"): AcStrRadioBox (48 B). text the records point at, in
-; [nakarest] Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast): "Warm & Fuzzy"
-; [nakarest] (AcStrRadioBox.str of element 6). widget record, element 7 of Viewable slot 0x1a
-; [nakarest] (table 0xe59ce6, 12 entries, InitializeEast) ("ReverbEqualizerPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x1a (table
-; [nakarest] 0xe59ce6, 12 entries, InitializeEast): "Ice Box" (AcStrRadioBox.str of element 7).
-; [nakarest] widget record, element 8 of Viewable slot 0x1a (table 0xe59ce6, 12 entries,
-; [nakarest] InitializeEast) ("ReverbEqualizerPreset"): AcStrRadioBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast):
-; [nakarest] "Stadium" (AcStrRadioBox.str of element 8). widget record, element 9 of Viewable
-; [nakarest] slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast) ("ReverbEqualizerPreset"):
-; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x1a (table
-; [nakarest] 0xe59ce6, 12 entries, InitializeEast): "Live Room" (AcStrRadioBox.str of element
-; [nakarest] 9). widget record, element 10 of Viewable slot 0x1a (table 0xe59ce6, 12 entries,
-; [nakarest] InitializeEast) ("ReverbEqualizerPreset"): AcFuncToggle (44 B). text the records
-; [nakarest] point at, in Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast): "EQ :
-; [nakarest] OFF" (AcFuncToggle.stroff of element 10); "EQ : ON" (AcFuncToggle.stron of element
-; [nakarest] 10). widget record, element 11 of Viewable slot 0x1a (table 0xe59ce6, 12 entries,
-; [nakarest] InitializeEast) ("ReverbEqualizerPreset"): IvCatchEvent (26 B).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0x1a (table 0xe59ce6, 12 entries,
+; [nakarest] InitializeEast) ("ReverbEqualizerPreset"): TtlScreen (42 B), AcStrRadioBox (48 B)
+; [nakarest] x9, AcFuncToggle (44 B), IvCatchEvent (26 B). 12 texts the records point at
+; [nakarest] (Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast)): "REVERB +
+; [nakarest] EQUALIZER PRESETS" (TtlScreen.title of element 0); "Warm & Wide" (AcStrRadioBox.str
+; [nakarest] of element 1); "In Your Face" (AcStrRadioBox.str of element 2); "Oil Tank"
+; [nakarest] (AcStrRadioBox.str of element 3); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x87E, 0x2B4
 ; [nakarest] naka_midi_reverb+0xb32  +0xb32..+0xf9c (0xe5696a, 1130 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x50 (table 0xe59d1a, 20 entries,
-; [nakarest] InitializeEast) ("MidiMenu"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast): "MIDI MENU"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-7 of Viewable slot 0x50
-; [nakarest] (table 0xe59d1a, 20 entries, InitializeEast) ("MidiMenu"): AcWindowPage (36 B),
-; [nakarest] IvPageControl (28 B) x2, IvExitMode (26 B), IvShowHide (26 B), Window (36 B),
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x50 (table
-; [nakarest] 0xe59d1a, 20 entries, InitializeEast): "PART SETTING" (AcTitleMenu.str of element
-; [nakarest] 7). widget record, element 8 of Viewable slot 0x50 (table 0xe59d1a, 20 entries,
-; [nakarest] InitializeEast) ("MidiMenu"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast): "CONTROL MESSAGES"
-; [nakarest] (AcTitleMenu.str of element 8). widget record, element 9 of Viewable slot 0x50
-; [nakarest] (table 0xe59d1a, 20 entries, InitializeEast) ("MidiMenu"): AcTitleMenu (54 B). text
-; [nakarest] the records point at, in Viewable slot 0x50 (table 0xe59d1a, 20 entries,
-; [nakarest] InitializeEast): "REALTIME MESSAGES" (AcTitleMenu.str of element 9). widget record,
-; [nakarest] element 10 of Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast)
-; [nakarest] ("MidiMenu"): AcTitleMenu (54 B). text the records point at, in Viewable slot 0x50
-; [nakarest] (table 0xe59d1a, 20 entries, InitializeEast): "COMMON SETTING" (AcTitleMenu.str of
-; [nakarest] element 10). widget record, element 11 of Viewable slot 0x50 (table 0xe59d1a, 20
-; [nakarest] entries, InitializeEast) ("MidiMenu"): AcTitleMenu (54 B). text the records point
-; [nakarest] at, in Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast):
-; [nakarest] "INPUT/OUTPUT SETTING" (AcTitleMenu.str of element 11). widget record, element 12
-; [nakarest] of Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast) ("MidiMenu"):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x50 (table
-; [nakarest] 0xe59d1a, 20 entries, InitializeEast): "MIDI PRESETS" (AcTitleMenu.str of element
-; [nakarest] 12). widget record, element 13 of Viewable slot 0x50 (table 0xe59d1a, 20 entries,
-; [nakarest] InitializeEast) ("MidiMenu"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast): "SYSEX BULK DUMP"
-; [nakarest] (AcTitleMenu.str of element 13). widget record, element 14 of Viewable slot 0x50
-; [nakarest] (table 0xe59d1a, 20 entries, InitializeEast) ("MidiMenu"): AcTitleMenu (54 B). text
-; [nakarest] the records point at, in Viewable slot 0x50 (table 0xe59d1a, 20 entries,
-; [nakarest] InitializeEast): "GENERAL MIDI" (AcTitleMenu.str of element 14). widget record,
-; [nakarest] element 15 of Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast)
-; [nakarest] ("MidiMenu"): AcTitleMenu (54 B). text the records point at, in Viewable slot 0x50
-; [nakarest] (table 0xe59d1a, 20 entries, InitializeEast): "PROG.CHANGE MIDI OUT"
-; [nakarest] (AcTitleMenu.str of element 15). widget record, element 16 of Viewable slot 0x50
-; [nakarest] (table 0xe59d1a, 20 entries, InitializeEast) ("MidiMenu"): AcTitleMenu (54 B). text
-; [nakarest] the records point at, in Viewable slot 0x50 (table 0xe59d1a, 20 entries,
-; [nakarest] InitializeEast): "P.MEM OUTPUT" (AcTitleMenu.str of element 16). widget records,
-; [nakarest] elements 17-18 of Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast)
-; [nakarest] ("MidiMenu"): Window (36 B), AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast): "COMPUTER
-; [nakarest] CONNECTION" (AcTitleMenu.str of element 18). widget record, element 19 of Viewable
-; [nakarest] slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast) ("MidiMenu"): AcTitleMenu
-; [nakarest] (54 B). text the records point at, in Viewable slot 0x50 (table 0xe59d1a, 20
-; [nakarest] entries, InitializeEast): "MIDI SETTINGS LOAD OPTION" (AcTitleMenu.str of element
-; [nakarest] 19).
+; [nakarest] widget records, elements 0-19 of Viewable slot 0x50 (table 0xe59d1a, 20 entries,
+; [nakarest] InitializeEast) ("MidiMenu"): TtlScreen (42 B), AcWindowPage (36 B), IvPageControl
+; [nakarest] (28 B) x2, IvExitMode (26 B), IvShowHide (26 B), Window (36 B) x2, AcTitleMenu (54
+; [nakarest] B) x12. 13 texts the records point at (Viewable slot 0x50 (table 0xe59d1a, 20
+; [nakarest] entries, InitializeEast)): "MIDI MENU" (TtlScreen.title of element 0); "PART
+; [nakarest] SETTING" (AcTitleMenu.str of element 7); "CONTROL MESSAGES" (AcTitleMenu.str of
+; [nakarest] element 8); "REALTIME MESSAGES" (AcTitleMenu.str of element 9); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0xB32, 0x46A
 ; [nakarest] naka_midi_reverb+0xf9c  +0xf9c..+0x1136 (0xe56dd4, 410 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x51 (table 0xe59d6e, 7 entries,
-; [nakarest] InitializeEast) ("MidiPartSetting"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x51 (table 0xe59d6e, 7 entries, InitializeEast): "PART SETTING"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x51
-; [nakarest] (table 0xe59d6e, 7 entries, InitializeEast) ("MidiPartSetting"): AcMidiPartGridBox
-; [nakarest] (78 B). text the records point at, in Viewable slot 0x51 (table 0xe59d6e, 7
-; [nakarest] entries, InitializeEast): "|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PA"
+; [nakarest] widget records, elements 0-6 of Viewable slot 0x51 (table 0xe59d6e, 7 entries,
+; [nakarest] InitializeEast) ("MidiPartSetting"): TtlScreen (42 B), AcMidiPartGridBox (78 B),
+; [nakarest] AcIndexWideES (42 B) x4, IvShowHide (26 B). 3 texts the records point at (Viewable
+; [nakarest] slot 0x51 (table 0xe59d6e, 7 entries, InitializeEast)): "PART SETTING"
+; [nakarest] (TtlScreen.title of element 0); "|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PA"
 ; [nakarest] (AcMidiPartGridBox.fixedrow of element 1); " PART |CHANNEL|OCTAVE| LOCAL"
-; [nakarest] (AcMidiPartGridBox.fixedcol of element 1). widget records, elements 2-6 of Viewable
-; [nakarest] slot 0x51 (table 0xe59d6e, 7 entries, InitializeEast) ("MidiPartSetting"):
-; [nakarest] AcIndexWideES (42 B) x4, IvShowHide (26 B).
+; [nakarest] (AcMidiPartGridBox.fixedcol of element 1).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0xF9C, 0x19A
 ; [nakarest] naka_midi_reverb+0x1136  +0x1136..+0x12f8 (0xe56f6e, 450 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x52 (table 0xe59d8e, 8 entries,
-; [nakarest] InitializeEast) ("MidiControlMessage"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x52 (table 0xe59d8e, 8 entries, InitializeEast): "CONTROL
-; [nakarest] MESSAGES" (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable
-; [nakarest] slot 0x52 (table 0xe59d8e, 8 entries, InitializeEast) ("MidiControlMessage"):
-; [nakarest] PsPageBox (32 B), AcCtlMsgGridBox (78 B). text the records point at, in Viewable
-; [nakarest] slot 0x52 (table 0xe59d8e, 8 entries, InitializeEast): "PRG.CHANGE|BANK
-; [nakarest] SELECT|PITCH BEND|VOLUME|EXPRESS" (AcCtlMsgGridBox.fixedrow of element 2); " | "
-; [nakarest] (AcCtlMsgGridBox.fixedcol of element 2). widget records, elements 3-4 of Viewable
-; [nakarest] slot 0x52 (table 0xe59d8e, 8 entries, InitializeEast) ("MidiControlMessage"):
-; [nakarest] AcIndexWideES (42 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x52 (table 0xe59d8e, 8 entries, InitializeEast): "MESSAGE" (Label.str of element
-; [nakarest] 4). widget record, element 5 of Viewable slot 0x52 (table 0xe59d8e, 8 entries,
-; [nakarest] InitializeEast) ("MidiControlMessage"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x52 (table 0xe59d8e, 8 entries, InitializeEast): "ON/OFF" (Label.str
-; [nakarest] of element 5). widget records, elements 6-7 of Viewable slot 0x52 (table 0xe59d8e,
-; [nakarest] 8 entries, InitializeEast) ("MidiControlMessage"): AcIndexWideES (42 B), IvShowHide
-; [nakarest] (26 B).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x52 (table 0xe59d8e, 8 entries,
+; [nakarest] InitializeEast) ("MidiControlMessage"): TtlScreen (42 B), PsPageBox (32 B),
+; [nakarest] AcCtlMsgGridBox (78 B), AcIndexWideES (42 B) x2, Label (32 B) x2, IvShowHide (26
+; [nakarest] B). 5 texts the records point at (Viewable slot 0x52 (table 0xe59d8e, 8 entries,
+; [nakarest] InitializeEast)): "CONTROL MESSAGES" (TtlScreen.title of element 0);
+; [nakarest] "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESS" (AcCtlMsgGridBox.fixedrow of
+; [nakarest] element 2); " | " (AcCtlMsgGridBox.fixedcol of element 2); "MESSAGE" (Label.str of
+; [nakarest] element 4); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x1136, 0x1C2
 ; [nakarest] naka_midi_reverb+0x12f8  +0x12f8..+0x1476 (0xe57130, 382 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x53 (table 0xe59db2, 6 entries,
-; [nakarest] InitializeEast) ("MidiRealtimeMessage"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x53 (table 0xe59db2, 6 entries, InitializeEast): "REALTIME
-; [nakarest] MESSAGES" (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable
-; [nakarest] slot 0x53 (table 0xe59db2, 6 entries, InitializeEast) ("MidiRealtimeMessage"):
-; [nakarest] AcIndexWideES (42 B), AcLswFuncEditBox (68 B). text the records point at, in
-; [nakarest] Viewable slot 0x53 (table 0xe59db2, 6 entries, InitializeEast): " OFF "
+; [nakarest] widget records, elements 0-5 of Viewable slot 0x53 (table 0xe59db2, 6 entries,
+; [nakarest] InitializeEast) ("MidiRealtimeMessage"): TtlScreen (42 B), AcIndexWideES (42 B),
+; [nakarest] AcLswFuncEditBox (68 B) x2, Label (32 B), IvShowHide (26 B). 8 texts the records
+; [nakarest] point at (Viewable slot 0x53 (table 0xe59db2, 6 entries, InitializeEast)):
+; [nakarest] "REALTIME MESSAGES" (TtlScreen.title of element 0); " OFF "
 ; [nakarest] (AcLswFuncEditBox.off_str of element 2); " ON " (AcLswFuncEditBox.on_str of element
-; [nakarest] 2); "REALTIME COMMANDS :" (AcLswFuncEditBox.caption of element 2). widget record,
-; [nakarest] element 3 of Viewable slot 0x53 (table 0xe59db2, 6 entries, InitializeEast)
-; [nakarest] ("MidiRealtimeMessage"): AcLswFuncEditBox (68 B). text the records point at, in
-; [nakarest] Viewable slot 0x53 (table 0xe59db2, 6 entries, InitializeEast): " INTERNAL "
-; [nakarest] (AcLswFuncEditBox.off_str of element 3); " MIDI " (AcLswFuncEditBox.on_str of
-; [nakarest] element 3); " CLOCK :" (AcLswFuncEditBox.caption of element 3). widget record,
-; [nakarest] element 4 of Viewable slot 0x53 (table 0xe59db2, 6 entries, InitializeEast)
-; [nakarest] ("MidiRealtimeMessage"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x53 (table 0xe59db2, 6 entries, InitializeEast): "VALUE" (Label.str of element 4).
-; [nakarest] widget record, element 5 of Viewable slot 0x53 (table 0xe59db2, 6 entries,
-; [nakarest] InitializeEast) ("MidiRealtimeMessage"): IvShowHide (26 B).
+; [nakarest] 2); "REALTIME COMMANDS :" (AcLswFuncEditBox.caption of element 2); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x12F8, 0x17E
 ; [nakarest] naka_midi_reverb+0x1476  +0x1476..+0x1642 (0xe572ae, 460 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x54 (table 0xe59dce, 5 entries,
-; [nakarest] InitializeEast) ("MidiCommonSetting"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x54 (table 0xe59dce, 5 entries, InitializeEast): "COMMON SETTING"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x54
-; [nakarest] (table 0xe59dce, 5 entries, InitializeEast) ("MidiCommonSetting"): AcGridBox (74
-; [nakarest] B). text the records point at, in Viewable slot 0x54 (table 0xe59dce, 5 entries,
-; [nakarest] InitializeEast): " NOTE ONLY :| PRG.CHANGE TO P.MEM :| R" (AcGridBox.fixedrow of
-; [nakarest] element 1); " | " (AcGridBox.fixedcol of element 1). widget records, elements 2-4
-; [nakarest] of Viewable slot 0x54 (table 0xe59dce, 5 entries, InitializeEast)
-; [nakarest] ("MidiCommonSetting"): AcIndexWideES (42 B) x2, IvShowHide (26 B).
+; [nakarest] widget records, elements 0-4 of Viewable slot 0x54 (table 0xe59dce, 5 entries,
+; [nakarest] InitializeEast) ("MidiCommonSetting"): TtlScreen (42 B), AcGridBox (74 B),
+; [nakarest] AcIndexWideES (42 B) x2, IvShowHide (26 B). 3 texts the records point at (Viewable
+; [nakarest] slot 0x54 (table 0xe59dce, 5 entries, InitializeEast)): "COMMON SETTING"
+; [nakarest] (TtlScreen.title of element 0); " NOTE ONLY :| PRG.CHANGE TO P.MEM :| R"
+; [nakarest] (AcGridBox.fixedrow of element 1); " | " (AcGridBox.fixedcol of element 1).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x1476, 0x1CC
 ; [nakarest] naka_midi_reverb+0x1642  +0x1642..+0x1800 (0xe5747a, 446 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x55 (table 0xe59de6, 5 entries,
-; [nakarest] InitializeEast) ("MidiInOutSetting"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x55 (table 0xe59de6, 5 entries, InitializeEast): "INPUT/OUTPUT
-; [nakarest] SETTING" (TtlScreen.title of element 0). widget record, element 1 of Viewable slot
-; [nakarest] 0x55 (table 0xe59de6, 5 entries, InitializeEast) ("MidiInOutSetting"):
-; [nakarest] AcInOutGridBox (74 B). text the records point at, in Viewable slot 0x55 (table
-; [nakarest] 0xe59de6, 5 entries, InitializeEast): " RIGHT 1 INPUT :| AUTO PLAY CHORD INPUT"
+; [nakarest] widget records, elements 0-4 of Viewable slot 0x55 (table 0xe59de6, 5 entries,
+; [nakarest] InitializeEast) ("MidiInOutSetting"): TtlScreen (42 B), AcInOutGridBox (74 B),
+; [nakarest] AcIndexWideES (42 B) x2, IvShowHide (26 B). 3 texts the records point at (Viewable
+; [nakarest] slot 0x55 (table 0xe59de6, 5 entries, InitializeEast)): "INPUT/OUTPUT SETTING"
+; [nakarest] (TtlScreen.title of element 0); " RIGHT 1 INPUT :| AUTO PLAY CHORD INPUT"
 ; [nakarest] (AcInOutGridBox.fixedrow of element 1); " | " (AcInOutGridBox.fixedcol of element
-; [nakarest] 1). widget records, elements 2-4 of Viewable slot 0x55 (table 0xe59de6, 5 entries,
-; [nakarest] InitializeEast) ("MidiInOutSetting"): AcIndexWideES (42 B) x2, IvShowHide (26 B).
+; [nakarest] 1).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x1642, 0x1BE
 ; [nakarest] naka_midi_reverb+0x1800  +0x1800..+0x1a28 (0xe57638, 552 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "MIDI PRESETS"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-10 of Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"): AcWindowPage (36 B),
+; [nakarest] widget records, elements 0-12 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
+; [nakarest] InitializeEast) ("MidiPresets"): TtlScreen (42 B), AcWindowPage (36 B),
 ; [nakarest] IvPageControl (28 B) x2, IvMpstPageControl (32 B) x2, IvShowHide (26 B), Window (36
-; [nakarest] B), AcIndexWideES (42 B), AcFuncEditSw (44 B), Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "VALUE"
-; [nakarest] (Label.str of element 10). widget records, elements 11-12 of Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"): VwBox (28 B),
-; [nakarest] AcListBox (48 B). text the records point at, in Viewable slot 0x56 (table 0xe59dfe,
-; [nakarest] 67 entries, InitializeEast): "Organ ~95|Organ Fixed Touch ~95|PX P" (AcListBox.list
-; [nakarest] of element 12).
+; [nakarest] B), AcIndexWideES (42 B), AcFuncEditSw (44 B), Label (32 B), VwBox (28 B),
+; [nakarest] AcListBox (48 B). 3 texts the records point at (Viewable slot 0x56 (table 0xe59dfe,
+; [nakarest] 67 entries, InitializeEast)): "MIDI PRESETS" (TtlScreen.title of element 0);
+; [nakarest] "VALUE" (Label.str of element 10); "Organ ~95|Organ Fixed Touch ~95|PX P"
+; [nakarest] (AcListBox.list of element 12).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x1800, 0x228
 ; [nakarest] NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95  +0x1a28..+0x24b2 (0xe57860, 2698 B)
-; [nakarest] Continues text the records point at, in Viewable slot 0x56 (table 0xe59dfe, 67
-; [nakarest] entries, InitializeEast): "Organ ~95|Organ Fixed Touch ~95|PX P" (AcListBox.list of
-; [nakarest] element 12) (starts 0xe57812, 54 of its 132 bytes are here or later). widget
-; [nakarest] records, elements 13-14 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): AcFuncWideES (46 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast): "WITHOUT APC" (Label.str of element 14). widget records, elements
-; [nakarest] 15-16 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): AcFuncWideES (46 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "WITH APC"
-; [nakarest] (Label.str of element 16). widget records, elements 17-18 of Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"): VwUserBitmap (26 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x56 (table 0xe59dfe, 67
-; [nakarest] entries, InitializeEast): "KN5000" (Label.str of element 18). widget records,
-; [nakarest] elements 19-21 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): Window (36 B), VwBox (28 B), AcListBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast):
-; [nakarest] "Organ 1 ~95|Organ 2 ~95|Or" (AcListBox.list of element 21). widget records,
-; [nakarest] elements 22-23 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): VwUserBitmap (26 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "KN5000"
-; [nakarest] (Label.str of element 23). widget records, elements 24-27 of Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"): AcFuncEditSw (44 B),
-; [nakarest] AcIndexWideES (42 B), AcFuncWideES (46 B), Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "WITH APC"
-; [nakarest] (Label.str of element 27). widget records, elements 28-29 of Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"): AcFuncWideES (46 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x56 (table 0xe59dfe, 67
-; [nakarest] entries, InitializeEast): "WITHOUT APC" (Label.str of element 29). widget record,
-; [nakarest] element 30 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): Label (32 B). text the records point at, in Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast): "VALUE" (Label.str of element 30).
-; [nakarest] widget records, elements 31-32 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): Window (36 B), AcListBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "
-; [nakarest] USER 1 SETTING | USER 2 SETTING | USER 3 SETTIN" (AcListBox.list of element 32).
-; [nakarest] widget records, elements 33-35 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): AcIndexWideES (42 B), AcFuncEditSw (44 B), Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0x56 (table 0xe59dfe, 67
-; [nakarest] entries, InitializeEast): "VALUE" (Label.str of element 35). widget records,
-; [nakarest] elements 36-37 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): Window (36 B), AcListBox (48 B). text the records point at, in
-; [nakarest] Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): " USER 1 SETTING |
-; [nakarest] USER 2 SETTING | USER 3 SETTIN" (AcListBox.list of element 37). widget records,
-; [nakarest] elements 38-40 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): AcIndexWideES (42 B), AcFuncEditSw (44 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast): "WRITE" (Label.str of element 40). widget record, element 41 of
-; [nakarest] Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"):
-; [nakarest] AcFuncToggle (44 B). text the records point at, in Viewable slot 0x56 (table
-; [nakarest] 0xe59dfe, 67 entries, InitializeEast): "WITH SPLIT POINT ? : NO"
-; [nakarest] (AcFuncToggle.stroff of element 41); "WITH SPLIT POINT ? : YES" (AcFuncToggle.stron
-; [nakarest] of element 41). widget record, element 42 of Viewable slot 0x56 (table 0xe59dfe, 67
-; [nakarest] entries, InitializeEast) ("MidiPresets"): Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "VALUE"
-; [nakarest] (Label.str of element 42). widget records, elements 43-45 of Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"): Window (36 B), VwBox
-; [nakarest] (28 B), AcListBox (48 B). text the records point at, in Viewable slot 0x56 (table
-; [nakarest] 0xe59dfe, 67 entries, InitializeEast): "~95 Sound Module|~95 Vocalist|~95 Ext.
-; [nakarest] Sequencer" (AcListBox.list of element 45). widget records, elements 46-47 of
-; [nakarest] Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"):
-; [nakarest] VwUserBitmap (26 B), Label (32 B). text the records point at, in Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast): "KN5000" (Label.str of element 47).
-; [nakarest] widget records, elements 48-51 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): AcIndexWideES (42 B), AcFuncEditSw (44 B),
-; [nakarest] AcFuncWideES (46 B), Label (32 B). text the records point at, in Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast): "WITH APC" (Label.str of element 51).
-; [nakarest] widget records, elements 52-53 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): AcFuncWideES (46 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast): "WITHOUT APC" (Label.str of element 53). widget record, element 54
-; [nakarest] of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x56 (table 0xe59dfe, 67
-; [nakarest] entries, InitializeEast): "VALUE" (Label.str of element 54). widget records,
-; [nakarest] elements 55-57 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): Window (36 B), VwBox (28 B), AcListBox (48 B). text the records
-; [nakarest] point at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "~95
-; [nakarest] Sound Module|~95 Vocalist|~95 Ext. Sequencer" (AcListBox.list of element 57).
-; [nakarest] widget records, elements 58-61 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): AcFuncEditSw (44 B), AcIndexWideES (42 B),
-; [nakarest] AcFuncWideES (46 B), Label (32 B). text the records point at, in Viewable slot 0x56
-; [nakarest] (table 0xe59dfe, 67 entries, InitializeEast): "WITH APC" (Label.str of element 61).
-; [nakarest] widget records, elements 62-63 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast) ("MidiPresets"): AcFuncWideES (46 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x56 (table 0xe59dfe, 67 entries,
-; [nakarest] InitializeEast): "WITHOUT APC" (Label.str of element 63). widget record, element 64
-; [nakarest] of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast) ("MidiPresets"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x56 (table 0xe59dfe, 67
-; [nakarest] entries, InitializeEast): "VALUE" (Label.str of element 64). widget records,
-; [nakarest] elements 65-66 of Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)
-; [nakarest] ("MidiPresets"): VwUserBitmap (26 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast): "KN5000"
-; [nakarest] (Label.str of element 66).
+; [nakarest] Continues 1 text the records point at (Viewable slot 0x56 (table 0xe59dfe, 67
+; [nakarest] entries, InitializeEast)): "Organ ~95|Organ Fixed Touch ~95|PX P" (AcListBox.list
+; [nakarest] of element 12) (starts 0xe57812, 54 of its 132 bytes are here or later). widget
+; [nakarest] records, elements 13-66 of Viewable slot 0x56 (table 0xe59dfe, 67 entries,
+; [nakarest] InitializeEast) ("MidiPresets"): AcFuncWideES (46 B) x8, Label (32 B) x18,
+; [nakarest] VwUserBitmap (26 B) x4, Window (36 B) x5, VwBox (28 B) x3, AcListBox (48 B) x5,
+; [nakarest] AcFuncEditSw (44 B) x5, AcIndexWideES (42 B) x5, AcFuncToggle (44 B). 25 texts the
+; [nakarest] records point at (Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast)):
+; [nakarest] "WITHOUT APC" (Label.str of element 14); "WITH APC" (Label.str of element 16);
+; [nakarest] "KN5000" (Label.str of element 18); "Organ 1 ~95|Organ 2 ~95|Or" (AcListBox.list of
+; [nakarest] element 21); ....
 NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x1A28, 0xA8A
 ; [nakarest] naka_midi_reverb+0x24b2  +0x24b2..+0x2b1a (0xe582ea, 1640 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x57 (table 0xe59f0e, 28 entries,
-; [nakarest] InitializeEast) ("MidiExclusive"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast): "SYSEX BULK DUMP"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0x57
-; [nakarest] (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"): AcFuncEditSw (44
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x57 (table 0xe59f0e,
-; [nakarest] 28 entries, InitializeEast): "SEND" (Label.str of element 2). widget record,
-; [nakarest] element 3 of Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast)
-; [nakarest] ("MidiExclusive"): AcListBox (48 B). text the records point at, in Viewable slot
-; [nakarest] 0x57 (table 0xe59f0e, 28 entries, InitializeEast): " PERFORMANCE | CURRENT PANEL +
-; [nakarest] PANEL MEMORY | CO" (AcListBox.list of element 3). widget records, elements 4-7 of
-; [nakarest] Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"):
-; [nakarest] AcIndexWideES (42 B), IvShowHide (26 B), Window (36 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x57 (table 0xe59f0e, 28 entries,
-; [nakarest] InitializeEast): "SYSTEM EXCLUSIVE" (Label.str of element 7). widget record,
-; [nakarest] element 8 of Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast)
-; [nakarest] ("MidiExclusive"): Label (32 B). text the records point at, in Viewable slot 0x57
-; [nakarest] (table 0xe59f0e, 28 entries, InitializeEast): "SENDING" (Label.str of element 8).
-; [nakarest] widget record, element 9 of Viewable slot 0x57 (table 0xe59f0e, 28 entries,
-; [nakarest] InitializeEast) ("MidiExclusive"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast): "PLEASE WAIT!"
-; [nakarest] (Label.str of element 9). widget records, elements 10-11 of Viewable slot 0x57
-; [nakarest] (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"): VwBox (28 B),
-; [nakarest] AcRamEditBox (58 B). text the records point at, in Viewable slot 0x57 (table
-; [nakarest] 0xe59f0e, 28 entries, InitializeEast): "PANEL MEMORY :" (AcRamEditBox.caption of
-; [nakarest] element 11). widget record, element 12 of Viewable slot 0x57 (table 0xe59f0e, 28
-; [nakarest] entries, InitializeEast) ("MidiExclusive"): AcRamEditBox (58 B). text the records
-; [nakarest] point at, in Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast):
-; [nakarest] "SOUND MEMORY :" (AcRamEditBox.caption of element 12). widget record, element 13 of
-; [nakarest] Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"):
-; [nakarest] AcRamEditBox (58 B). text the records point at, in Viewable slot 0x57 (table
-; [nakarest] 0xe59f0e, 28 entries, InitializeEast): "COMPOSER :" (AcRamEditBox.caption of
-; [nakarest] element 13). widget record, element 14 of Viewable slot 0x57 (table 0xe59f0e, 28
-; [nakarest] entries, InitializeEast) ("MidiExclusive"): AcRamEditBox (58 B). text the records
-; [nakarest] point at, in Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast):
-; [nakarest] "SEQUENCER :" (AcRamEditBox.caption of element 14). widget record, element 15 of
-; [nakarest] Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"):
-; [nakarest] AcRamEditBox (58 B). text the records point at, in Viewable slot 0x57 (table
-; [nakarest] 0xe59f0e, 28 entries, InitializeEast): "MSP USER :" (AcRamEditBox.caption of
-; [nakarest] element 15). widget records, elements 16-18 of Viewable slot 0x57 (table 0xe59f0e,
-; [nakarest] 28 entries, InitializeEast) ("MidiExclusive"): AcRamBox (44 B), Window (36 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x57 (table 0xe59f0e, 28
-; [nakarest] entries, InitializeEast): "SYSTEM EXCLUSIVE" (Label.str of element 18). widget
-; [nakarest] record, element 19 of Viewable slot 0x57 (table 0xe59f0e, 28 entries,
-; [nakarest] InitializeEast) ("MidiExclusive"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast): "RECIEVING"
-; [nakarest] (Label.str of element 19). widget record, element 20 of Viewable slot 0x57 (table
-; [nakarest] 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x57 (table 0xe59f0e, 28 entries,
-; [nakarest] InitializeEast): "PLEASE WAIT!" (Label.str of element 20). widget records, elements
-; [nakarest] 21-22 of Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast)
-; [nakarest] ("MidiExclusive"): VwBox (28 B), AcRamEditBox (58 B). text the records point at, in
-; [nakarest] Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast): "PANEL MEMORY :"
-; [nakarest] (AcRamEditBox.caption of element 22). widget record, element 23 of Viewable slot
-; [nakarest] 0x57 (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"): AcRamEditBox
-; [nakarest] (58 B). text the records point at, in Viewable slot 0x57 (table 0xe59f0e, 28
-; [nakarest] entries, InitializeEast): "SOUND MEMORY :" (AcRamEditBox.caption of element 23).
-; [nakarest] widget record, element 24 of Viewable slot 0x57 (table 0xe59f0e, 28 entries,
-; [nakarest] InitializeEast) ("MidiExclusive"): AcRamEditBox (58 B). text the records point at,
-; [nakarest] in Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast): "COMPOSER :"
-; [nakarest] (AcRamEditBox.caption of element 24). widget record, element 25 of Viewable slot
-; [nakarest] 0x57 (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"): AcRamEditBox
-; [nakarest] (58 B). text the records point at, in Viewable slot 0x57 (table 0xe59f0e, 28
-; [nakarest] entries, InitializeEast): "SEQUENCER :" (AcRamEditBox.caption of element 25).
-; [nakarest] widget record, element 26 of Viewable slot 0x57 (table 0xe59f0e, 28 entries,
-; [nakarest] InitializeEast) ("MidiExclusive"): AcRamEditBox (58 B). text the records point at,
-; [nakarest] in Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast): "MSP USER :"
-; [nakarest] (AcRamEditBox.caption of element 26). widget record, element 27 of Viewable slot
-; [nakarest] 0x57 (table 0xe59f0e, 28 entries, InitializeEast) ("MidiExclusive"): AcRamBox (44
-; [nakarest] B).
+; [nakarest] widget records, elements 0-27 of Viewable slot 0x57 (table 0xe59f0e, 28 entries,
+; [nakarest] InitializeEast) ("MidiExclusive"): TtlScreen (42 B), AcFuncEditSw (44 B), Label (32
+; [nakarest] B) x7, AcListBox (48 B), AcIndexWideES (42 B), IvShowHide (26 B), Window (36 B) x2,
+; [nakarest] VwBox (28 B) x2, AcRamEditBox (58 B) x10, AcRamBox (44 B) x2. 19 texts the records
+; [nakarest] point at (Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast)): "SYSEX
+; [nakarest] BULK DUMP" (TtlScreen.title of element 0); "SEND" (Label.str of element 2); "
+; [nakarest] PERFORMANCE | CURRENT PANEL + PANEL MEMORY | CO" (AcListBox.list of element 3);
+; [nakarest] "SYSTEM EXCLUSIVE" (Label.str of element 7); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x24B2, 0x668
 ; [nakarest] naka_midi_reverb+0x2b1a  +0x2b1a..+0x2e62 (0xe58952, 840 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x58 (table 0xe59f82, 21 entries,
-; [nakarest] InitializeEast) ("MidiGmMode"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x58 (table 0xe59f82, 21 entries, InitializeEast): "GENERAL MIDI"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x58
-; [nakarest] (table 0xe59f82, 21 entries, InitializeEast) ("MidiGmMode"): AcGMOnOffBox (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x58 (table 0xe59f82, 21 entries,
-; [nakarest] InitializeEast): "GENERAL MIDI :" (AcGMOnOffBox.caption of element 1). widget
-; [nakarest] records, elements 2-20 of Viewable slot 0x58 (table 0xe59f82, 21 entries,
-; [nakarest] InitializeEast) ("MidiGmMode"): AcIndexWideES (42 B), AcFuncEditSw (44 B) x5,
-; [nakarest] IvShowHide (26 B), Window (36 B) x2, VwBox (28 B) x2, AcLanguageText (42 B) x6,
-; [nakarest] IvExitWindow (22 B) x2.
+; [nakarest] widget records, elements 0-20 of Viewable slot 0x58 (table 0xe59f82, 21 entries,
+; [nakarest] InitializeEast) ("MidiGmMode"): TtlScreen (42 B), AcGMOnOffBox (54 B),
+; [nakarest] AcIndexWideES (42 B), AcFuncEditSw (44 B) x5, IvShowHide (26 B), Window (36 B) x2,
+; [nakarest] VwBox (28 B) x2, AcLanguageText (42 B) x6, IvExitWindow (22 B) x2. 2 texts the
+; [nakarest] records point at (Viewable slot 0x58 (table 0xe59f82, 21 entries, InitializeEast)):
+; [nakarest] "GENERAL MIDI" (TtlScreen.title of element 0); "GENERAL MIDI :"
+; [nakarest] (AcGMOnOffBox.caption of element 1).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x2B1A, 0x348
 ; [nakarest] naka_midi_reverb+0x2e62  +0x2e62..+0x2fca (0xe58c9a, 360 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x59 (table 0xe59fda, 6 entries,
-; [nakarest] InitializeEast) ("MidiPcgOutput"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x59 (table 0xe59fda, 6 entries, InitializeEast): "PROGRAM CHANGE
-; [nakarest] MIDI OUT" (TtlScreen.title of element 0). widget record, element 1 of Viewable slot
-; [nakarest] 0x59 (table 0xe59fda, 6 entries, InitializeEast) ("MidiPcgOutput"): AcPcgOutGridBox
-; [nakarest] (74 B). text the records point at, in Viewable slot 0x59 (table 0xe59fda, 6
-; [nakarest] entries, InitializeEast): " MIDI CHANNEL :| PROGRAM CHANGE :| BANK MSB"
+; [nakarest] widget records, elements 0-3, 5 of Viewable slot 0x59 (table 0xe59fda, 6 entries,
+; [nakarest] InitializeEast) ("MidiPcgOutput"): TtlScreen (42 B), AcPcgOutGridBox (74 B),
+; [nakarest] AcIndexWideES (42 B) x2, IvShowHide (26 B). 3 texts the records point at (Viewable
+; [nakarest] slot 0x59 (table 0xe59fda, 6 entries, InitializeEast)): "PROGRAM CHANGE MIDI OUT"
+; [nakarest] (TtlScreen.title of element 0); " MIDI CHANNEL :| PROGRAM CHANGE :| BANK MSB"
 ; [nakarest] (AcPcgOutGridBox.fixedrow of element 1); " | " (AcPcgOutGridBox.fixedcol of element
-; [nakarest] 1). widget records, elements 2-3, 5 of Viewable slot 0x59 (table 0xe59fda, 6
-; [nakarest] entries, InitializeEast) ("MidiPcgOutput"): AcIndexWideES (42 B) x2, IvShowHide (26
-; [nakarest] B).
+; [nakarest] 1).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x2E62, 0x168
 ; [nakarest] naka_midi_reverb+0x2fca  +0x2fca..+0x30d0 (0xe58e02, 262 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x5a (table 0xe59ff6, 6 entries,
-; [nakarest] InitializeEast) ("MidiComputerConnection"): TtlScreen (42 B). text the records
-; [nakarest] point at, in Viewable slot 0x5a (table 0xe59ff6, 6 entries, InitializeEast):
-; [nakarest] "COMPUTER CONNECTION" (TtlScreen.title of element 0). widget record, element 1 of
-; [nakarest] Viewable slot 0x5a (table 0xe59ff6, 6 entries, InitializeEast)
-; [nakarest] ("MidiComputerConnection"): AcLswEditBox (58 B). text the records point at, in
-; [nakarest] Viewable slot 0x5a (table 0xe59ff6, 6 entries, InitializeEast): "MODE :"
-; [nakarest] (AcLswEditBox.caption of element 1). widget records, elements 2-4 of Viewable slot
-; [nakarest] 0x5a (table 0xe59ff6, 6 entries, InitializeEast) ("MidiComputerConnection"):
-; [nakarest] AcIndexWideES (42 B), VwBox (28 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x5a (table 0xe59ff6, 6 entries, InitializeEast): "VALUE" (Label.str
-; [nakarest] of element 4). widget record, element 5 of Viewable slot 0x5a (table 0xe59ff6, 6
-; [nakarest] entries, InitializeEast) ("MidiComputerConnection"): IvShowHide (26 B).
+; [nakarest] widget records, elements 0-5 of Viewable slot 0x5a (table 0xe59ff6, 6 entries,
+; [nakarest] InitializeEast) ("MidiComputerConnection"): TtlScreen (42 B), AcLswEditBox (58 B),
+; [nakarest] AcIndexWideES (42 B), VwBox (28 B), Label (32 B), IvShowHide (26 B). 3 texts the
+; [nakarest] records point at (Viewable slot 0x5a (table 0xe59ff6, 6 entries, InitializeEast)):
+; [nakarest] "COMPUTER CONNECTION" (TtlScreen.title of element 0); "MODE :"
+; [nakarest] (AcLswEditBox.caption of element 1); "VALUE" (Label.str of element 4).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x2FCA, 0x106
 ; [nakarest] naka_midi_reverb+0x30d0  +0x30d0..+0x33f2 (0xe58f08, 802 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x5b (table 0xe5a012, 17 entries,
-; [nakarest] InitializeEast) ("MidiPanelMemoryOutput"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast): "PANEL
-; [nakarest] MEMORY OUTPUT" (TtlScreen.title of element 0). widget record, element 1 of Viewable
-; [nakarest] slot 0x5b (table 0xe5a012, 17 entries, InitializeEast) ("MidiPanelMemoryOutput"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x5b (table 0xe5a012, 17
-; [nakarest] entries, InitializeEast): "P.MEM" (Label.str of element 1). widget record, element
-; [nakarest] 2 of Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast)
-; [nakarest] ("MidiPanelMemoryOutput"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x5b (table 0xe5a012, 17 entries, InitializeEast): "ON/OFF" (Label.str of
-; [nakarest] element 2). widget record, element 3 of Viewable slot 0x5b (table 0xe5a012, 17
-; [nakarest] entries, InitializeEast) ("MidiPanelMemoryOutput"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast):
-; [nakarest] "PART" (Label.str of element 3). widget record, element 4 of Viewable slot 0x5b
-; [nakarest] (table 0xe5a012, 17 entries, InitializeEast) ("MidiPanelMemoryOutput"): Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0x5b (table 0xe5a012, 17 entries,
-; [nakarest] InitializeEast): "P.CNG" (Label.str of element 4). widget record, element 5 of
-; [nakarest] Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast)
-; [nakarest] ("MidiPanelMemoryOutput"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x5b (table 0xe5a012, 17 entries, InitializeEast): "BANK" (Label.str of
-; [nakarest] element 5). widget record, element 6 of Viewable slot 0x5b (table 0xe5a012, 17
-; [nakarest] entries, InitializeEast) ("MidiPanelMemoryOutput"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast): "VOL"
-; [nakarest] (Label.str of element 6). widget record, element 7 of Viewable slot 0x5b (table
-; [nakarest] 0xe5a012, 17 entries, InitializeEast) ("MidiPanelMemoryOutput"): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x5b (table 0xe5a012, 17 entries,
-; [nakarest] InitializeEast): "~95" (Label.str of element 7). widget record, element 8 of
-; [nakarest] Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast)
-; [nakarest] ("MidiPanelMemoryOutput"): AcPmemOutLGridBox (74 B). text the records point at, in
-; [nakarest] Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast):
-; [nakarest] "P.MEM:|ON/OFF:|-|PART:" (AcPmemOutLGridBox.fixedrow of element 8); " | "
-; [nakarest] (AcPmemOutLGridBox.fixedcol of element 8). widget record, element 9 of Viewable
-; [nakarest] slot 0x5b (table 0xe5a012, 17 entries, InitializeEast) ("MidiPanelMemoryOutput"):
-; [nakarest] AcPmemOutRGridBox (74 B). text the records point at, in Viewable slot 0x5b (table
-; [nakarest] 0xe5a012, 17 entries, InitializeEast): "PRG. CHANGE:|BANK:|VOLUME:"
-; [nakarest] (AcPmemOutRGridBox.fixedrow of element 9); " | " (AcPmemOutRGridBox.fixedcol of
-; [nakarest] element 9). widget records, elements 10-16 of Viewable slot 0x5b (table 0xe5a012,
-; [nakarest] 17 entries, InitializeEast) ("MidiPanelMemoryOutput"): AcIndexEditSw (40 B) x6,
-; [nakarest] IvShowHide (26 B).
+; [nakarest] widget records, elements 0-16 of Viewable slot 0x5b (table 0xe5a012, 17 entries,
+; [nakarest] InitializeEast) ("MidiPanelMemoryOutput"): TtlScreen (42 B), Label (32 B) x7,
+; [nakarest] AcPmemOutLGridBox (74 B), AcPmemOutRGridBox (74 B), AcIndexEditSw (40 B) x6,
+; [nakarest] IvShowHide (26 B). 12 texts the records point at (Viewable slot 0x5b (table
+; [nakarest] 0xe5a012, 17 entries, InitializeEast)): "PANEL MEMORY OUTPUT" (TtlScreen.title of
+; [nakarest] element 0); "P.MEM" (Label.str of element 1); "ON/OFF" (Label.str of element 2);
+; [nakarest] "PART" (Label.str of element 3); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x30D0, 0x322
 ; [nakarest] naka_midi_reverb+0x33f2  +0x33f2..+0x3600 (0xe5922a, 526 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x5c (table 0xe5a05a, 8 entries,
-; [nakarest] InitializeEast) ("MidiSetup"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x5c (table 0xe5a05a, 8 entries, InitializeEast): "MIDI SETTINGS LOAD
-; [nakarest] OPTION" (TtlScreen.title of element 0). widget record, element 1 of Viewable slot
-; [nakarest] 0x5c (table 0xe5a05a, 8 entries, InitializeEast) ("MidiSetup"):
-; [nakarest] AcParaLoadOptGridBox (74 B). text the records point at, in Viewable slot 0x5c
-; [nakarest] (table 0xe5a05a, 8 entries, InitializeEast): " |-|From Registration file :|From
-; [nakarest] Sequencer song" (AcParaLoadOptGridBox.fixedrow of element 1); " | "
-; [nakarest] (AcParaLoadOptGridBox.fixedcol of element 1). widget record, element 2 of Viewable
-; [nakarest] slot 0x5c (table 0xe5a05a, 8 entries, InitializeEast) ("MidiSetup"): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x5c (table 0xe5a05a, 8 entries,
-; [nakarest] InitializeEast): "Load MIDI parameters?" (Label.str of element 2). widget record,
-; [nakarest] element 3 of Viewable slot 0x5c (table 0xe5a05a, 8 entries, InitializeEast)
-; [nakarest] ("MidiSetup"): Label (32 B). text the records point at, in Viewable slot 0x5c
-; [nakarest] (table 0xe5a05a, 8 entries, InitializeEast): "Use these settings when:" (Label.str
-; [nakarest] of element 3). widget records, elements 4-7 of Viewable slot 0x5c (table 0xe5a05a,
-; [nakarest] 8 entries, InitializeEast) ("MidiSetup"): AcIndexWideES (42 B) x2, AcFuncEditSw (44
-; [nakarest] B), IvShowHide (26 B).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x5c (table 0xe5a05a, 8 entries,
+; [nakarest] InitializeEast) ("MidiSetup"): TtlScreen (42 B), AcParaLoadOptGridBox (74 B), Label
+; [nakarest] (32 B) x2, AcIndexWideES (42 B) x2, AcFuncEditSw (44 B), IvShowHide (26 B). 5 texts
+; [nakarest] the records point at (Viewable slot 0x5c (table 0xe5a05a, 8 entries,
+; [nakarest] InitializeEast)): "MIDI SETTINGS LOAD OPTION" (TtlScreen.title of element 0); "
+; [nakarest] |-|From Registration file :|From Sequencer song" (AcParaLoadOptGridBox.fixedrow of
+; [nakarest] element 1); " | " (AcParaLoadOptGridBox.fixedcol of element 1); "Load MIDI
+; [nakarest] parameters?" (Label.str of element 2); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x33F2, 0x20E
 ; [nakarest] naka_midi_reverb+0x3600  +0x3600..+0x3b70 (0xe59438, 1392 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
-; [nakarest] InitializeEast) ("EntertainerVocal"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast): "VOCALIST
-; [nakarest] WORKSTATION" (TtlScreen.title of element 0). widget records, elements 1-6 of
-; [nakarest] Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast)
-; [nakarest] ("EntertainerVocal"): IvPageControl (28 B) x2, AcWindowPage (36 B), IvShowHide (26
-; [nakarest] B), Window (36 B), Label (32 B). text the records point at, in Viewable slot 0xd7
-; [nakarest] (table 0xe5a07e, 24 entries, InitializeEast): "PRESET SETTINGS" (Label.str of
-; [nakarest] element 6). widget records, elements 7-8 of Viewable slot 0xd7 (table 0xe5a07e, 24
-; [nakarest] entries, InitializeEast) ("EntertainerVocal"): VwBox (28 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
-; [nakarest] InitializeEast): "KN5000 ~95 VOCALIST WORKSTATION" (Label.str of element 8). widget
-; [nakarest] records, elements 9-10 of Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
-; [nakarest] InitializeEast) ("EntertainerVocal"): AcFuncEditSw (44 B), AcVocalistListBox (48
-; [nakarest] B). text the records point at, in Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
-; [nakarest] InitializeEast): " CHORD ~95 CHORDAL PROGRAM | RIGHT1 ~95 CH"
-; [nakarest] (AcVocalistListBox.list of element 10). widget records, elements 11-12 of Viewable
-; [nakarest] slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast) ("EntertainerVocal"):
-; [nakarest] AcIndexWideES (42 B), PsHarmOnOffBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast): "HARMONY PART LOCAL: OFF"
-; [nakarest] (PsHarmOnOffBox.stroff of element 12); "HARMONY PART LOCAL: ON"
-; [nakarest] (PsHarmOnOffBox.stron of element 12). widget records, elements 13-14 of Viewable
-; [nakarest] slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast) ("EntertainerVocal"): Window
-; [nakarest] (36 B), AcVocalGridBox (74 B). text the records point at, in Viewable slot 0xd7
-; [nakarest] (table 0xe5a07e, 24 entries, InitializeEast): " |-|MIDI CHANNEL|PROGRAM |HARMONY
-; [nakarest] |KEY " (AcVocalGridBox.fixedrow of element 14); " | | " (AcVocalGridBox.fixedcol of
-; [nakarest] element 14). widget record, element 15 of Viewable slot 0xd7 (table 0xe5a07e, 24
-; [nakarest] entries, InitializeEast) ("EntertainerVocal"): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast): "ITEM"
-; [nakarest] (Label.str of element 15). widget record, element 16 of Viewable slot 0xd7 (table
-; [nakarest] 0xe5a07e, 24 entries, InitializeEast) ("EntertainerVocal"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
-; [nakarest] InitializeEast): "VALUE" (Label.str of element 16). widget record, element 17 of
-; [nakarest] Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast)
-; [nakarest] ("EntertainerVocal"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xd7 (table 0xe5a07e, 24 entries, InitializeEast): "SEND" (Label.str of element
-; [nakarest] 17). widget record, element 18 of Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
-; [nakarest] InitializeEast) ("EntertainerVocal"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast): "KEY SPLIT"
-; [nakarest] (Label.str of element 18). widget record, element 19 of Viewable slot 0xd7 (table
-; [nakarest] 0xe5a07e, 24 entries, InitializeEast) ("EntertainerVocal"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
-; [nakarest] InitializeEast): "IGNORE" (Label.str of element 19). widget records, elements 20-23
-; [nakarest] of Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast)
-; [nakarest] ("EntertainerVocal"): AcIndexWideES (42 B) x3, AcFuncEditSw (44 B).
+; [nakarest] widget records, elements 0-23 of Viewable slot 0xd7 (table 0xe5a07e, 24 entries,
+; [nakarest] InitializeEast) ("EntertainerVocal"): TtlScreen (42 B), IvPageControl (28 B) x2,
+; [nakarest] AcWindowPage (36 B), IvShowHide (26 B), Window (36 B) x2, Label (32 B) x7, VwBox
+; [nakarest] (28 B), AcFuncEditSw (44 B) x2, AcVocalistListBox (48 B), AcIndexWideES (42 B) x4,
+; [nakarest] PsHarmOnOffBox (44 B), AcVocalGridBox (74 B). 13 texts the records point at
+; [nakarest] (Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast)): "VOCALIST
+; [nakarest] WORKSTATION" (TtlScreen.title of element 0); "PRESET SETTINGS" (Label.str of
+; [nakarest] element 6); "KN5000 ~95 VOCALIST WORKSTATION" (Label.str of element 8); " CHORD ~95
+; [nakarest] CHORDAL PROGRAM | RIGHT1 ~95 CH" (AcVocalistListBox.list of element 10); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3600, 0x570
 ; [nakarest] naka_midi_reverb+0x3b70  +0x3b70..+0x3d46 (0xe599a8, 470 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xd8 (table 0xe5a0e2, 8 entries,
-; [nakarest] InitializeEast) ("EntertainerFade"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0xd8 (table 0xe5a0e2, 8 entries, InitializeEast): "FADE IN/OUT
-; [nakarest] SETTING" (TtlScreen.title of element 0). widget record, element 1 of Viewable slot
-; [nakarest] 0xd8 (table 0xe5a0e2, 8 entries, InitializeEast) ("EntertainerFade"):
-; [nakarest] AcFadeSetGridBox (74 B). text the records point at, in Viewable slot 0xd8 (table
-; [nakarest] 0xe5a0e2, 8 entries, InitializeEast): " | Time :| | Time :| "
-; [nakarest] (AcFadeSetGridBox.fixedrow of element 1); " | " (AcFadeSetGridBox.fixedcol of
-; [nakarest] element 1). widget record, element 2 of Viewable slot 0xd8 (table 0xe5a0e2, 8
-; [nakarest] entries, InitializeEast) ("EntertainerFade"): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0xd8 (table 0xe5a0e2, 8 entries, InitializeEast): "FADE IN"
-; [nakarest] (Label.str of element 2). widget record, element 3 of Viewable slot 0xd8 (table
-; [nakarest] 0xe5a0e2, 8 entries, InitializeEast) ("EntertainerFade"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xd8 (table 0xe5a0e2, 8 entries,
-; [nakarest] InitializeEast): "FADE OUT" (Label.str of element 3). widget records, elements 4-7
-; [nakarest] of Viewable slot 0xd8 (table 0xe5a0e2, 8 entries, InitializeEast)
-; [nakarest] ("EntertainerFade"): AcIndexWideES (42 B) x2, IvIntEasySet (24 B), IvShowHide (26
-; [nakarest] B).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0xd8 (table 0xe5a0e2, 8 entries,
+; [nakarest] InitializeEast) ("EntertainerFade"): TtlScreen (42 B), AcFadeSetGridBox (74 B),
+; [nakarest] Label (32 B) x2, AcIndexWideES (42 B) x2, IvIntEasySet (24 B), IvShowHide (26 B). 5
+; [nakarest] texts the records point at (Viewable slot 0xd8 (table 0xe5a0e2, 8 entries,
+; [nakarest] InitializeEast)): "FADE IN/OUT SETTING" (TtlScreen.title of element 0); " | Time :|
+; [nakarest] | Time :| " (AcFadeSetGridBox.fixedrow of element 1); " | "
+; [nakarest] (AcFadeSetGridBox.fixedcol of element 1); "FADE IN" (Label.str of element 2); ....
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3B70, 0x1D6
 ; [nakarest] naka_midi_reverb+0x3d46  +0x3d46..+0x3e22 (0xe59b7e, 220 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xec (table 0xe5a106, 6 entries,
-; [nakarest] InitializeEast) ("SplitSetting"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xec (table 0xe5a106, 6 entries, InitializeEast): "SPLIT POINT"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-5 of Viewable slot 0xec
-; [nakarest] (table 0xe5a106, 6 entries, InitializeEast) ("SplitSetting"): VwBox (28 B) x2,
-; [nakarest] AcLswBox (44 B), IvIntEasySet (24 B), AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-5 of Viewable slot 0xec (table 0xe5a106, 6 entries,
+; [nakarest] InitializeEast) ("SplitSetting"): TtlScreen (42 B), VwBox (28 B) x2, AcLswBox (44
+; [nakarest] B), IvIntEasySet (24 B), AcLanguageText (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xec (table 0xe5a106, 6 entries, InitializeEast)): "SPLIT POINT"
+; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3D46, 0xDC
 ; [nakarest] naka_midi_reverb+0x3e22  +0x3e22..+0x3e36 (0xe59c5a, 20 B)
 ; [nakarest] the table itself: Viewable slot 0x9 (table 0xe59c5a, 4 entries, InitializeEast), 4

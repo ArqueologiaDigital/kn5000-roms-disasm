@@ -305,744 +305,98 @@ NakaInst_PsWindowToggleProc:
 NakaInst_PsFileNameBoxProc:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xD6, 0x12
 ; [nakarest] naka_disk_menu_file_io+0xe8  +0xe8..+0xd76 (0xea14b4, 3214 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap) ("DiskMenu"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "DISK MENU"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x60
-; [nakarest] (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap): "STYLE CONVERT" (AcTitleMenu.str of element 1). widget record,
-; [nakarest] element 3 of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap)
-; [nakarest] ("DiskMenu"): AcTitleMenu (54 B). text the records point at, in Viewable slot 0x60
-; [nakarest] (table 0xea67b6, 74 entries, InitializeCheap): "PREFERENCES" (AcTitleMenu.str of
-; [nakarest] element 3). widget record, element 4 of Viewable slot 0x60 (table 0xea67b6, 74
-; [nakarest] entries, InitializeCheap) ("DiskMenu"): AcTitleMenu (54 B). text the records point
-; [nakarest] at, in Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "SAVE"
-; [nakarest] (AcTitleMenu.str of element 4). widget record, element 5 of Viewable slot 0x60
-; [nakarest] (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): AcTtlJgBox (54 B). text
-; [nakarest] the records point at, in Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap): "DISK TOOLS" (AcTtlJgBox.str of element 5). widget record,
-; [nakarest] element 6 of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap)
-; [nakarest] ("DiskMenu"): AcTtlJgBox (54 B). text the records point at, in Viewable slot 0x60
-; [nakarest] (table 0xea67b6, 74 entries, InitializeCheap): "LOAD" (AcTtlJgBox.str of element
-; [nakarest] 6). widget records, elements 7-8 of Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap) ("DiskMenu"): IvExitMode (26 B), AcTtlJgBox (54 B). text the
-; [nakarest] records point at, in Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap): "DIRECT PLAY" (AcTtlJgBox.str of element 8). widget record,
-; [nakarest] element 9 of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap)
-; [nakarest] ("DiskMenu"): AcTtlJgBox (54 B). text the records point at, in Viewable slot 0x60
-; [nakarest] (table 0xea67b6, 74 entries, InitializeCheap): "SONG MEDLEY" (AcTtlJgBox.str of
-; [nakarest] element 9). widget record, element 10 of Viewable slot 0x60 (table 0xea67b6, 74
-; [nakarest] entries, InitializeCheap) ("DiskMenu"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "INTERNAL
-; [nakarest] SONG MEDLEY" (TtlScreen.title of element 10). widget records, elements 11-17 of
-; [nakarest] Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"):
-; [nakarest] AcIndexWideES (42 B), AcIndexEditSw (40 B) x2, PsFileNameBox (58 B) x2, Line (26
-; [nakarest] B), AcMonoIndexToggle (42 B). text the records point at, in Viewable slot 0x60
-; [nakarest] (table 0xea67b6, 74 entries, InitializeCheap): "OFF" (AcMonoIndexToggle.stroff of
-; [nakarest] element 17); "ON" (AcMonoIndexToggle.stron of element 17). widget records, elements
-; [nakarest] 18-19 of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap)
-; [nakarest] ("DiskMenu"): AcIndexEditSw (40 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "START"
-; [nakarest] (Label.str of element 19). widget records, elements 20-21 of Viewable slot 0x60
-; [nakarest] (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): IvOneShotTimer (26 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x60 (table 0xea67b6, 74
-; [nakarest] entries, InitializeCheap): "ALL" (Label.str of element 21). widget record, element
-; [nakarest] 22 of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap)
-; [nakarest] ("DiskMenu"): Label (32 B). text the records point at, in Viewable slot 0x60 (table
-; [nakarest] 0xea67b6, 74 entries, InitializeCheap): "ADD" (Label.str of element 22). widget
-; [nakarest] record, element 23 of Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap) ("DiskMenu"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "LOOP" (Label.str of
-; [nakarest] element 23). widget record, element 24 of Viewable slot 0x60 (table 0xea67b6, 74
-; [nakarest] entries, InitializeCheap) ("DiskMenu"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "SAVE FILE
-; [nakarest] NAMING" (TtlScreen.title of element 24). widget records, elements 25-27 of Viewable
-; [nakarest] slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): AcFuncEditSw
-; [nakarest] (44 B), IvNaming (26 B), TtlScreen (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "COMPOSER LOAD"
-; [nakarest] (TtlScreen.title of element 27). widget records, elements 28-32 of Viewable slot
-; [nakarest] 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): AcIndexEditSw (40
-; [nakarest] B) x2, AcIndexWideES (42 B), PsFileNameBox (58 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap):
-; [nakarest] "DISK NAME:" (Label.str of element 32). widget records, elements 33-36 of Viewable
-; [nakarest] slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): AcParaStrBox
-; [nakarest] (44 B) x2, AcIndexEditSw (40 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "LOAD" (Label.str
-; [nakarest] of element 36). widget records, elements 37-40 of Viewable slot 0x60 (table
-; [nakarest] 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): IvExitMode (26 B), Window (36
-; [nakarest] B), AcRotStrBox (48 B), TtlScreen (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "SAVE FILE NAMING"
-; [nakarest] (TtlScreen.title of element 40). widget records, elements 41-43 of Viewable slot
-; [nakarest] 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): AcFuncEditSw (44
-; [nakarest] B), IvNaming (26 B), TtlScreen (42 B). text the records point at, in Viewable slot
-; [nakarest] 0x60 (table 0xea67b6, 74 entries, InitializeCheap): "WALLPAPER LOAD"
-; [nakarest] (TtlScreen.title of element 43). widget records, elements 44-45 of Viewable slot
-; [nakarest] 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"): AcIndexEditSw (40
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x60 (table 0xea67b6,
-; [nakarest] 74 entries, InitializeCheap): "PREV" (Label.str of element 45). widget records,
-; [nakarest] elements 46-48 of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap)
-; [nakarest] ("DiskMenu"): AcIndexWideES (42 B), AcIndexEditSw (40 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap): "NEXT" (Label.str of element 48). widget record, element 49 of
-; [nakarest] Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x60 (table 0xea67b6, 74
-; [nakarest] entries, InitializeCheap): "DISK NAME:" (Label.str of element 49). widget records,
-; [nakarest] elements 50-53 of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap)
-; [nakarest] ("DiskMenu"): AcParaStrBox (44 B) x2, AcIndexEditSw (40 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x60 (table 0xea67b6, 74 entries,
-; [nakarest] InitializeCheap): "LOAD" (Label.str of element 53). widget records, elements 54-73
-; [nakarest] of Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap) ("DiskMenu"):
-; [nakarest] PsFileNameBox (58 B), Window (36 B) x3, VwBox (28 B), AcLanguageText (42 B) x5,
-; [nakarest] Line (26 B), AcFuncEditSw (44 B) x7, IvNaming (26 B) x2.
+; [nakarest] widget records, elements 0-1, 3-73 of Viewable slot 0x60 (table 0xea67b6, 74
+; [nakarest] entries, InitializeCheap) ("DiskMenu"): TtlScreen (42 B) x6, AcTitleMenu (54 B) x3,
+; [nakarest] AcTtlJgBox (54 B) x4, IvExitMode (26 B) x2, AcIndexWideES (42 B) x3, AcIndexEditSw
+; [nakarest] (40 B) x9, PsFileNameBox (58 B) x4, Line (26 B) x2, AcMonoIndexToggle (42 B), Label
+; [nakarest] (32 B) x10, IvOneShotTimer (26 B), AcFuncEditSw (44 B) x9, IvNaming (26 B) x4,
+; [nakarest] AcParaStrBox (44 B) x4, Window (36 B) x4, AcRotStrBox (48 B), VwBox (28 B),
+; [nakarest] AcLanguageText (42 B) x5. 25 texts the records point at (Viewable slot 0x60 (table
+; [nakarest] 0xea67b6, 74 entries, InitializeCheap)): "DISK MENU" (TtlScreen.title of element
+; [nakarest] 0); "STYLE CONVERT" (AcTitleMenu.str of element 1); "PREFERENCES" (AcTitleMenu.str
+; [nakarest] of element 3); "SAVE" (AcTitleMenu.str of element 4); ....
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xE8, 0xC8E
 ; [nakarest] naka_disk_menu_file_io+0xd76  +0xd76..+0x22a0 (0xea2142, 5418 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): ""
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-10 of Viewable slot 0x61
-; [nakarest] (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): AcWindowPage (36 B),
-; [nakarest] IvPageControl (28 B) x3, IvExit (22 B), IvMainEditSw (26 B), Window (36 B),
-; [nakarest] PsFileNameBox (58 B), AcIndexEditSw (40 B), Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "LOAD"
-; [nakarest] (Label.str of element 10). widget records, elements 11-12 of Viewable slot 0x61
-; [nakarest] (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): AcFileSfxBox (34 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap): "DISK NAME:" (Label.str of element 12). widget record,
-; [nakarest] element 13 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): AcTitleMenu (54 B). text the records point at, in Viewable slot 0x61
-; [nakarest] (table 0xea68e2, 128 entries, InitializeCheap): "SMF" (AcTitleMenu.str of element
-; [nakarest] 13). widget records, elements 14-19 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): AcIndexEditSw (40 B) x2, AcIndexWideES (42
-; [nakarest] B), AcParaStrBox (44 B) x2, VwScreenTitle (38 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "LOAD"
-; [nakarest] (VwScreenTitle.title of element 19). widget records, elements 20-29 of Viewable
-; [nakarest] slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): Window (36
-; [nakarest] B), AcIndexEditSw (40 B) x8, Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "PNL" (Label.str of
-; [nakarest] element 29). widget record, element 30 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "P.MEM"
-; [nakarest] (Label.str of element 30). widget record, element 31 of Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "SEQ" (Label.str of element 31). widget record, element 32 of
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap): "COMP" (Label.str of element 32). widget record, element
-; [nakarest] 33 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): Label (32 B). text the records point at, in Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap): "SOUND" (Label.str of element 33). widget
-; [nakarest] record, element 34 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "MSP" (Label.str of
-; [nakarest] element 34). widget record, element 35 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "CUSTOM"
-; [nakarest] (Label.str of element 35). widget record, element 36 of Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "MIDI" (Label.str of element 36). widget records, elements 37-39
-; [nakarest] of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"):
-; [nakarest] AcParaStrBox (44 B), VwBox (28 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "CURRENT PANEL"
-; [nakarest] (Label.str of element 39). widget record, element 40 of Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "USER MIDI SETTINGS" (Label.str of element 40). widget record,
-; [nakarest] element 41 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): Label (32 B). text the records point at, in Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap): "RHYTHM CUSTOM" (Label.str of element 41).
-; [nakarest] widget record, element 42 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "MSP" (Label.str of
-; [nakarest] element 42). widget record, element 43 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "SOUND MEMORY"
-; [nakarest] (Label.str of element 43). widget record, element 44 of Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "COMPOSER" (Label.str of element 44). widget record, element 45
-; [nakarest] of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap): "SEQUENCER" (Label.str of element 45). widget record,
-; [nakarest] element 46 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): Label (32 B). text the records point at, in Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap): "PANEL MEMORY" (Label.str of element 46).
-; [nakarest] widget records, elements 47-50 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): PsFileNameBox (58 B), Line (26 B), AcIndexEditSw (40
-; [nakarest] B), VwScreenTitle (38 B). text the records point at, in Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap): "LOAD OPTION" (VwScreenTitle.title of
-; [nakarest] element 50). widget record, element 51 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "LOAD"
-; [nakarest] (Label.str of element 51). widget records, elements 52-53 of Viewable slot 0x61
-; [nakarest] (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): Window (36 B),
-; [nakarest] VwScreenTitle (38 B). text the records point at, in Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap): "SINGLE LOAD" (VwScreenTitle.title of
-; [nakarest] element 53). widget records, elements 54-57 of Viewable slot 0x61 (table 0xea68e2,
-; [nakarest] 128 entries, InitializeCheap) ("DiskLoad"): IvIndexSwCtrl (32 B), IvIndexSwDelay
-; [nakarest] (30 B), AcIndexEditSw (40 B), Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "LOAD" (Label.str of
-; [nakarest] element 57). widget records, elements 58-66 of Viewable slot 0x61 (table 0xea68e2,
-; [nakarest] 128 entries, InitializeCheap) ("DiskLoad"): Arrow (32 B), AcIndexWideES (42 B) x4,
-; [nakarest] AcIndexEditSw (40 B), PsFileNameBox (58 B), AcParaStrBox (44 B), Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "TO" (Label.str of element 66). widget records, elements 67-68 of
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"):
-; [nakarest] PsFileNameBox (58 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "MODE" (Label.str of element
-; [nakarest] 68). widget records, elements 69-73, 75 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): PsFileNameBox (58 B) x5, TtlScreen (42 B).
-; [nakarest] text the records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "SMF LOAD" (TtlScreen.title of element 75). widget record,
-; [nakarest] element 76 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): AcTitleMenu (54 B). text the records point at, in Viewable slot 0x61
-; [nakarest] (table 0xea68e2, 128 entries, InitializeCheap): "TECH" (AcTitleMenu.str of element
-; [nakarest] 76). widget records, elements 77-79 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): AcIndexWideES (42 B), AcIndexEditSw (40 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap): "PREV" (Label.str of element 79). widget records,
-; [nakarest] elements 80-81 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): AcIndexEditSw (40 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "NEXT"
-; [nakarest] (Label.str of element 81). widget records, elements 82-83 of Viewable slot 0x61
-; [nakarest] (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): PsFileNameBox (58 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap): "INFO" (Label.str of element 83). widget record, element
-; [nakarest] 84 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): PsWindowToggle (52 B). text the records point at, in Viewable slot
-; [nakarest] 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "DISK" (PsWindowToggle.stroff
-; [nakarest] of element 84); "SONG" (PsWindowToggle.stron of element 84). widget record, element
-; [nakarest] 85 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): Label (32 B). text the records point at, in Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap): "LOAD AS" (Label.str of element 85).
-; [nakarest] widget records, elements 86-98 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): AcIndexEditSw (40 B) x4, PsFileNameBox (58 B) x3,
-; [nakarest] IvMainEditSw (26 B), IvExit (22 B), IvIndexSwDelay (30 B), Window (36 B),
-; [nakarest] AcParaStrBox (44 B), Label (32 B). text the records point at, in Viewable slot 0x61
-; [nakarest] (table 0xea68e2, 128 entries, InitializeCheap): "LOAD" (Label.str of element 98).
-; [nakarest] widget records, elements 99-100 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): Window (36 B), Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "DISK
-; [nakarest] NAME:" (Label.str of element 100). widget records, elements 101-104 of Viewable
-; [nakarest] slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): AcParaStrBox
-; [nakarest] (44 B) x2, AcIndexEditSw (40 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "LOAD"
-; [nakarest] (Label.str of element 104). widget record, element 105 of Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): TtlScreen (42 B). text the
-; [nakarest] records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "LOAD SINGLE COMPOSER" (TtlScreen.title of element 105). widget
-; [nakarest] records, elements 106-113 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): AcIndexWideES (42 B) x4, PsFileNameBox (58 B) x2,
-; [nakarest] AcIndexEditSw (40 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x61 (table 0xea68e2, 128 entries, InitializeCheap): "LOAD" (Label.str of element
-; [nakarest] 113). widget records, elements 114-115 of Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap) ("DiskLoad"): Arrow (32 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "TO" (Label.str of element 115). widget record, element 116 of
-; [nakarest] Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x61 (table 0xea68e2, 128
-; [nakarest] entries, InitializeCheap): "FROM" (Label.str of element 116). widget records,
-; [nakarest] elements 117-119 of Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap) ("DiskLoad"): AcIndexEditSw (40 B) x2, Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries,
-; [nakarest] InitializeCheap): "FILE" (Label.str of element 119). widget records, elements
-; [nakarest] 120-121 of Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap)
-; [nakarest] ("DiskLoad"): PsFileNameBox (58 B), AcMonoIndexToggle (42 B). text the records
-; [nakarest] point at, in Viewable slot 0x61 (table 0xea68e2, 128 entries, InitializeCheap):
-; [nakarest] "SINGLE" (AcMonoIndexToggle.stroff of element 121); "BANK" (AcMonoIndexToggle.stron
-; [nakarest] of element 121). widget records, elements 122-127 of Viewable slot 0x61 (table
-; [nakarest] 0xea68e2, 128 entries, InitializeCheap) ("DiskLoad"): PsFileNameBox (58 B) x4,
-; [nakarest] IvIndexSwCtrl (32 B), IvIndexSwDelay (30 B).
+; [nakarest] widget records, elements 0-73, 75-127 of Viewable slot 0x61 (table 0xea68e2, 128
+; [nakarest] entries, InitializeCheap) ("DiskLoad"): TtlScreen (42 B) x3, AcWindowPage (36 B),
+; [nakarest] IvPageControl (28 B) x3, IvExit (22 B) x2, IvMainEditSw (26 B) x2, Window (36 B)
+; [nakarest] x5, PsFileNameBox (58 B) x20, AcIndexEditSw (40 B) x24, Label (32 B) x33,
+; [nakarest] AcFileSfxBox (34 B), AcTitleMenu (54 B) x2, AcIndexWideES (42 B) x10, AcParaStrBox
+; [nakarest] (44 B) x7, VwScreenTitle (38 B) x3, VwBox (28 B), Line (26 B), IvIndexSwCtrl (32 B)
+; [nakarest] x2, IvIndexSwDelay (30 B) x3, Arrow (32 B) x2, PsWindowToggle (52 B),
+; [nakarest] AcMonoIndexToggle (42 B). 45 texts the records point at (Viewable slot 0x61 (table
+; [nakarest] 0xea68e2, 128 entries, InitializeCheap)): "" (TtlScreen.title of element 0); "LOAD"
+; [nakarest] (Label.str of element 10); "DISK NAME:" (Label.str of element 12); "SMF"
+; [nakarest] (AcTitleMenu.str of element 13); ....
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xD76, 0x152A
 ; [nakarest] naka_disk_menu_file_io+0x22a0  +0x22a0..+0x235a (0xea366c, 186 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x65 (table 0xea6af2, 3 entries,
-; [nakarest] InitializeCheap) ("DiskSaveMenu"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x65 (table 0xea6af2, 3 entries, InitializeCheap): "SAVE"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x65
-; [nakarest] (table 0xea6af2, 3 entries, InitializeCheap) ("DiskSaveMenu"): AcTtlJgBox (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x65 (table 0xea6af2, 3 entries,
-; [nakarest] InitializeCheap): "TECHNICS FORMAT" (AcTtlJgBox.str of element 1). widget record,
-; [nakarest] element 2 of Viewable slot 0x65 (table 0xea6af2, 3 entries, InitializeCheap)
-; [nakarest] ("DiskSaveMenu"): AcTtlJgBox (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x65 (table 0xea6af2, 3 entries, InitializeCheap): "SMF FORMAT 0" (AcTtlJgBox.str
-; [nakarest] of element 2).
+; [nakarest] widget records, elements 0-2 of Viewable slot 0x65 (table 0xea6af2, 3 entries,
+; [nakarest] InitializeCheap) ("DiskSaveMenu"): TtlScreen (42 B), AcTtlJgBox (54 B) x2. 3 texts
+; [nakarest] the records point at (Viewable slot 0x65 (table 0xea6af2, 3 entries,
+; [nakarest] InitializeCheap)): "SAVE" (TtlScreen.title of element 0); "TECHNICS FORMAT"
+; [nakarest] (AcTtlJgBox.str of element 1); "SMF FORMAT 0" (AcTtlJgBox.str of element 2).
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x22A0, 0xBA
 ; [nakarest] naka_disk_menu_file_io+0x235a  +0x235a..+0x2e60 (0xea3726, 2822 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap) ("DiskSave"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): ""
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-12 of Viewable slot 0x67
-; [nakarest] (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): AcWindowPage (36 B),
-; [nakarest] IvPageControl (28 B) x3, IvExit (22 B), IvMainEditSw (26 B), Window (36 B),
-; [nakarest] AcIndexWideES (42 B), AcIndexEditSw (40 B) x2, AcParaStrBox (44 B), Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap): "SAVE AS :" (Label.str of element 12). widget records, elements
-; [nakarest] 13-14 of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap)
-; [nakarest] ("DiskSave"): AcParaStrBox (44 B), AcTitleMenu (54 B). text the records point at,
-; [nakarest] in Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "NAME"
-; [nakarest] (AcTitleMenu.str of element 14). widget records, elements 15-17 of Viewable slot
-; [nakarest] 0x67 (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): PsFileNameBox (58
-; [nakarest] B), AcIndexEditSw (40 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "SAVE" (Label.str of element
-; [nakarest] 17). widget records, elements 18-20 of Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap) ("DiskSave"): AcFileSfxBox (34 B), IvCatchEvent (26 B),
-; [nakarest] VwScreenTitle (38 B). text the records point at, in Viewable slot 0x67 (table
-; [nakarest] 0xea6b06, 71 entries, InitializeCheap): "SAVE" (VwScreenTitle.title of element 20).
-; [nakarest] widget records, elements 21-23 of Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap) ("DiskSave"): Window (36 B), VwBox (28 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap): "CURRENT PANEL" (Label.str of element 23). widget record, element
-; [nakarest] 24 of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap)
-; [nakarest] ("DiskSave"): Label (32 B). text the records point at, in Viewable slot 0x67 (table
-; [nakarest] 0xea6b06, 71 entries, InitializeCheap): "USER MIDI SETTINGS" (Label.str of element
-; [nakarest] 24). widget record, element 25 of Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap) ("DiskSave"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "RHYTHM CUSTOM" (Label.str
-; [nakarest] of element 25). widget record, element 26 of Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap) ("DiskSave"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "MSP" (Label.str
-; [nakarest] of element 26). widget record, element 27 of Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap) ("DiskSave"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "SOUND MEMORY"
-; [nakarest] (Label.str of element 27). widget record, element 28 of Viewable slot 0x67 (table
-; [nakarest] 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap):
-; [nakarest] "COMPOSER" (Label.str of element 28). widget record, element 29 of Viewable slot
-; [nakarest] 0x67 (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap): "SEQUENCER" (Label.str of element 29). widget record, element 30
-; [nakarest] of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap): "PANEL MEMORY" (Label.str of element 30). widget
-; [nakarest] records, elements 31-34 of Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap) ("DiskSave"): PsFileNameBox (58 B), Line (26 B), AcIndexEditSw (40
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x67 (table 0xea6b06,
-; [nakarest] 71 entries, InitializeCheap): "SAVE" (Label.str of element 34). widget records,
-; [nakarest] elements 35-36 of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap)
-; [nakarest] ("DiskSave"): AcParaStrBox (44 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "SAVE AS :"
-; [nakarest] (Label.str of element 36). widget records, elements 37-38 of Viewable slot 0x67
-; [nakarest] (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): AcIndexEditSw (40 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap): "PERFORM" (Label.str of element 38). widget records,
-; [nakarest] elements 39-40 of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap)
-; [nakarest] ("DiskSave"): AcIndexEditSw (40 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "BACKUP"
-; [nakarest] (Label.str of element 40). widget records, elements 41-42 of Viewable slot 0x67
-; [nakarest] (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): AcIndexEditSw (40 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap): "PNL" (Label.str of element 42). widget records,
-; [nakarest] elements 43-45 of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap)
-; [nakarest] ("DiskSave"): IvCatchEvent (26 B), AcIndexEditSw (40 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap): "P.MEM" (Label.str of element 45). widget records, elements 46-52
-; [nakarest] of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"):
-; [nakarest] AcIndexEditSw (40 B) x6, Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "SEQ" (Label.str of element
-; [nakarest] 52). widget record, element 53 of Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap) ("DiskSave"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "COMP" (Label.str of
-; [nakarest] element 53). widget record, element 54 of Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap) ("DiskSave"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "MSP" (Label.str
-; [nakarest] of element 54). widget record, element 55 of Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap) ("DiskSave"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "SOUND"
-; [nakarest] (Label.str of element 55). widget record, element 56 of Viewable slot 0x67 (table
-; [nakarest] 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap):
-; [nakarest] "CUSTOM" (Label.str of element 56). widget record, element 57 of Viewable slot 0x67
-; [nakarest] (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap): "MIDI" (Label.str of element 57). widget record, element 58 of
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"):
-; [nakarest] VwScreenTitle (38 B). text the records point at, in Viewable slot 0x67 (table
-; [nakarest] 0xea6b06, 71 entries, InitializeCheap): "SAVE OPTION" (VwScreenTitle.title of
-; [nakarest] element 58). widget records, elements 59-60 of Viewable slot 0x67 (table 0xea6b06,
-; [nakarest] 71 entries, InitializeCheap) ("DiskSave"): AcIndexEditSw (40 B), Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap): "ALL OFF" (Label.str of element 60). widget records, elements
-; [nakarest] 61-66 of Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap)
-; [nakarest] ("DiskSave"): Window (36 B), PsFileNameBox (58 B), AcIndexWideES (42 B),
-; [nakarest] AcIndexEditSw (40 B), AcParaStrBox (44 B), Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "SAVE"
-; [nakarest] (Label.str of element 66). widget record, element 67 of Viewable slot 0x67 (table
-; [nakarest] 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap): "
-; [nakarest] AS:" (Label.str of element 67). widget record, element 68 of Viewable slot 0x67
-; [nakarest] (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x67 (table 0xea6b06, 71 entries,
-; [nakarest] InitializeCheap): "SAVE" (Label.str of element 68). widget record, element 69 of
-; [nakarest] Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap) ("DiskSave"):
-; [nakarest] VwScreenTitle (38 B). text the records point at, in Viewable slot 0x67 (table
-; [nakarest] 0xea6b06, 71 entries, InitializeCheap): "SEQUENCER SONG SAVE" (VwScreenTitle.title
-; [nakarest] of element 69). widget record, element 70 of Viewable slot 0x67 (table 0xea6b06, 71
-; [nakarest] entries, InitializeCheap) ("DiskSave"): IvCatchEvent (26 B).
+; [nakarest] widget records, elements 0-70 of Viewable slot 0x67 (table 0xea6b06, 71 entries,
+; [nakarest] InitializeCheap) ("DiskSave"): TtlScreen (42 B), AcWindowPage (36 B), IvPageControl
+; [nakarest] (28 B) x3, IvExit (22 B), IvMainEditSw (26 B), Window (36 B) x3, AcIndexWideES (42
+; [nakarest] B) x2, AcIndexEditSw (40 B) x16, AcParaStrBox (44 B) x4, Label (32 B) x26,
+; [nakarest] AcTitleMenu (54 B), PsFileNameBox (58 B) x3, AcFileSfxBox (34 B), IvCatchEvent (26
+; [nakarest] B) x3, VwScreenTitle (38 B) x3, VwBox (28 B), Line (26 B). 31 texts the records
+; [nakarest] point at (Viewable slot 0x67 (table 0xea6b06, 71 entries, InitializeCheap)): ""
+; [nakarest] (TtlScreen.title of element 0); "SAVE AS :" (Label.str of element 12); "NAME"
+; [nakarest] (AcTitleMenu.str of element 14); "SAVE" (Label.str of element 17); ....
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x235A, 0xB06
 ; [nakarest] naka_disk_menu_file_io+0x2e60  +0x2e60..+0x322e (0xea422c, 974 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x6b (table 0xea6c2a, 21 entries,
-; [nakarest] InitializeCheap) ("DiskSmfSave"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap): "SMF SAVE"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-4 of Viewable slot 0x6b
-; [nakarest] (table 0xea6c2a, 21 entries, InitializeCheap) ("DiskSmfSave"): PsFileNameBox (58
-; [nakarest] B), AcIndexWideES (42 B), AcIndexEditSw (40 B), Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap):
-; [nakarest] "PREV" (Label.str of element 4). widget records, elements 5-6 of Viewable slot 0x6b
-; [nakarest] (table 0xea6c2a, 21 entries, InitializeCheap) ("DiskSmfSave"): AcIndexEditSw (40
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x6b (table 0xea6c2a,
-; [nakarest] 21 entries, InitializeCheap): "NEXT" (Label.str of element 6). widget record,
-; [nakarest] element 7 of Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap)
-; [nakarest] ("DiskSmfSave"): AcMonoIndexToggle (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap): "OFF"
-; [nakarest] (AcMonoIndexToggle.stroff of element 7); "ON" (AcMonoIndexToggle.stron of element
-; [nakarest] 7). widget record, element 8 of Viewable slot 0x6b (table 0xea6c2a, 21 entries,
-; [nakarest] InitializeCheap) ("DiskSmfSave"): AcMonoIndexToggle (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap): "OFF"
-; [nakarest] (AcMonoIndexToggle.stroff of element 8); "ON" (AcMonoIndexToggle.stron of element
-; [nakarest] 8). widget record, element 9 of Viewable slot 0x6b (table 0xea6c2a, 21 entries,
-; [nakarest] InitializeCheap) ("DiskSmfSave"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap): "PANEL HEADER"
-; [nakarest] (Label.str of element 9). widget record, element 10 of Viewable slot 0x6b (table
-; [nakarest] 0xea6c2a, 21 entries, InitializeCheap) ("DiskSmfSave"): AcTitleMenu (54 B). text
-; [nakarest] the records point at, in Viewable slot 0x6b (table 0xea6c2a, 21 entries,
-; [nakarest] InitializeCheap): "NAME" (AcTitleMenu.str of element 10). widget records, elements
-; [nakarest] 11-13 of Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap)
-; [nakarest] ("DiskSmfSave"): AcParaStrBox (44 B), AcIndexEditSw (40 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x6b (table 0xea6c2a, 21 entries,
-; [nakarest] InitializeCheap): "SAVE" (Label.str of element 13). widget record, element 14 of
-; [nakarest] Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap) ("DiskSmfSave"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x6b (table 0xea6c2a, 21
-; [nakarest] entries, InitializeCheap): "1 MEASURE SPACE" (Label.str of element 14). widget
-; [nakarest] records, elements 15-19 of Viewable slot 0x6b (table 0xea6c2a, 21 entries,
-; [nakarest] InitializeCheap) ("DiskSmfSave"): PsFileNameBox (58 B) x3, AcIndexEditSw (40 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x6b (table 0xea6c2a, 21
-; [nakarest] entries, InitializeCheap): "SAVE" (Label.str of element 19). widget record, element
-; [nakarest] 20 of Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap)
-; [nakarest] ("DiskSmfSave"): Label (32 B). text the records point at, in Viewable slot 0x6b
-; [nakarest] (table 0xea6c2a, 21 entries, InitializeCheap): " AS:" (Label.str of element 20).
+; [nakarest] widget records, elements 0-20 of Viewable slot 0x6b (table 0xea6c2a, 21 entries,
+; [nakarest] InitializeCheap) ("DiskSmfSave"): TtlScreen (42 B), PsFileNameBox (58 B) x4,
+; [nakarest] AcIndexWideES (42 B), AcIndexEditSw (40 B) x4, Label (32 B) x7, AcMonoIndexToggle
+; [nakarest] (42 B) x2, AcTitleMenu (54 B), AcParaStrBox (44 B). 13 texts the records point at
+; [nakarest] (Viewable slot 0x6b (table 0xea6c2a, 21 entries, InitializeCheap)): "SMF SAVE"
+; [nakarest] (TtlScreen.title of element 0); "PREV" (Label.str of element 4); "NEXT" (Label.str
+; [nakarest] of element 6); "OFF" (AcMonoIndexToggle.stroff of element 7); ....
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2E60, 0x3CE
 ; [nakarest] naka_disk_menu_file_io+0x322e  +0x322e..+0x3f20 (0xea45fa, 3314 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "SMF
-; [nakarest] DIRECT PLAY" (TtlScreen.title of element 0). widget records, elements 1-5 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): PsFileNameBox (58 B) x2, AcIndexWideES (42 B), AcIndexEditSw
-; [nakarest] (40 B), Label (32 B). text the records point at, in Viewable slot 0x6c (table
-; [nakarest] 0xea6c82, 83 entries, InitializeCheap): "PREV" (Label.str of element 5). widget
-; [nakarest] records, elements 6-7 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): AcIndexEditSw (40 B), Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "NEXT" (Label.str of element 7). widget record, element 8 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "INFO" (Label.str of element
-; [nakarest] 8). widget record, element 9 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): PsWindowToggle (52 B). text the records
-; [nakarest] point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap):
-; [nakarest] "DISK" (PsWindowToggle.stroff of element 9); "SONG" (PsWindowToggle.stron of
-; [nakarest] element 9). widget records, elements 10-12 of Viewable slot 0x6c (table 0xea6c82,
-; [nakarest] 83 entries, InitializeCheap) ("DiskSmfDirectPlay"): AcIndexEditSw (40 B) x2,
-; [nakarest] AcMonoIndexToggle (42 B). text the records point at, in Viewable slot 0x6c (table
-; [nakarest] 0xea6c82, 83 entries, InitializeCheap): "OFF" (AcMonoIndexToggle.stroff of element
-; [nakarest] 12); "ON" (AcMonoIndexToggle.stron of element 12). widget record, element 13 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): AcMonoIndexToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "TECH"
-; [nakarest] (AcMonoIndexToggle.stroff of element 13); "GM" (AcMonoIndexToggle.stron of element
-; [nakarest] 13). widget record, element 14 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "PLAY AS"
-; [nakarest] (Label.str of element 14). widget records, elements 15-19 of Viewable slot 0x6c
-; [nakarest] (table 0xea6c82, 83 entries, InitializeCheap) ("DiskSmfDirectPlay"): Line (26 B)
-; [nakarest] x4, Label (32 B). text the records point at, in Viewable slot 0x6c (table 0xea6c82,
-; [nakarest] 83 entries, InitializeCheap): "LOOP" (Label.str of element 19). widget record,
-; [nakarest] element 20 of Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "MEDLEY" (Label.str of element
-; [nakarest] 20). widget records, elements 21-22 of Viewable slot 0x6c (table 0xea6c82, 83
-; [nakarest] entries, InitializeCheap) ("DiskSmfDirectPlay"): IvOneShotTimer (26 B), Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "ALL" (Label.str of element 22). widget record, element 23 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "ADD" (Label.str of element
-; [nakarest] 23). widget record, element 24 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): AcMonoIndexToggle (42 B). text the records
-; [nakarest] point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap):
-; [nakarest] "OFF" (AcMonoIndexToggle.stroff of element 24); "ON" (AcMonoIndexToggle.stron of
-; [nakarest] element 24). widget record, element 25 of Viewable slot 0x6c (table 0xea6c82, 83
-; [nakarest] entries, InitializeCheap) ("DiskSmfDirectPlay"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap):
-; [nakarest] "MIDI OUT" (Label.str of element 25). widget records, elements 26-31 of Viewable
-; [nakarest] slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap) ("DiskSmfDirectPlay"):
-; [nakarest] IvIndexSwDelay (30 B), AcIndexEditSw (40 B) x2, Window (36 B), AcParaStrBox (44 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x6c (table 0xea6c82, 83
-; [nakarest] entries, InitializeCheap): "START" (Label.str of element 31). widget records,
-; [nakarest] elements 32-33 of Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Window (36 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "DISK NAME:"
-; [nakarest] (Label.str of element 33). widget records, elements 34-37 of Viewable slot 0x6c
-; [nakarest] (table 0xea6c82, 83 entries, InitializeCheap) ("DiskSmfDirectPlay"): AcParaStrBox
-; [nakarest] (44 B) x2, AcIndexEditSw (40 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "START"
-; [nakarest] (Label.str of element 37). widget record, element 38 of Viewable slot 0x6c (table
-; [nakarest] 0xea6c82, 83 entries, InitializeCheap) ("DiskSmfDirectPlay"): TtlScreen (42 B).
-; [nakarest] text the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "DOC DIRECT PLAY" (TtlScreen.title of element 38). widget
-; [nakarest] records, elements 39-42 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): PsFileNameBox (58 B) x2, AcIndexEditSw (40
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x6c (table 0xea6c82,
-; [nakarest] 83 entries, InitializeCheap): "PREV" (Label.str of element 42). widget records,
-; [nakarest] elements 43-45 of Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): AcIndexWideES (42 B), AcIndexEditSw (40 B), Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "NEXT" (Label.str of element 45). widget record, element 46 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "MEDLEY" (Label.str of element
-; [nakarest] 46). widget records, elements 47-54 of Viewable slot 0x6c (table 0xea6c82, 83
-; [nakarest] entries, InitializeCheap) ("DiskSmfDirectPlay"): IvOneShotTimer (26 B), Line (26 B)
-; [nakarest] x4, AcIndexEditSw (40 B) x2, Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "LOOP" (Label.str of
-; [nakarest] element 54). widget record, element 55 of Viewable slot 0x6c (table 0xea6c82, 83
-; [nakarest] entries, InitializeCheap) ("DiskSmfDirectPlay"): AcMonoIndexToggle (42 B). text the
-; [nakarest] records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "OFF" (AcMonoIndexToggle.stroff of element 55); "ON"
-; [nakarest] (AcMonoIndexToggle.stron of element 55). widget records, elements 56-58 of Viewable
-; [nakarest] slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap) ("DiskSmfDirectPlay"):
-; [nakarest] AcParaStrBox (44 B), AcIndexEditSw (40 B), Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "START"
-; [nakarest] (Label.str of element 58). widget record, element 59 of Viewable slot 0x6c (table
-; [nakarest] 0xea6c82, 83 entries, InitializeCheap) ("DiskSmfDirectPlay"): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "ALL" (Label.str of element 59). widget record, element 60 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "ADD" (Label.str of element
-; [nakarest] 60). widget record, element 61 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): TtlScreen (42 B). text the records point
-; [nakarest] at, in Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "PIANO
-; [nakarest] DISC DIRECT PLAY" (TtlScreen.title of element 61). widget records, elements 62-66
-; [nakarest] of Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): PsFileNameBox (58 B) x2, AcIndexWideES (42 B), AcIndexEditSw
-; [nakarest] (40 B), Label (32 B). text the records point at, in Viewable slot 0x6c (table
-; [nakarest] 0xea6c82, 83 entries, InitializeCheap): "PREV" (Label.str of element 66). widget
-; [nakarest] records, elements 67-68 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): AcIndexEditSw (40 B), Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "NEXT" (Label.str of element 68). widget records, elements 69-72
-; [nakarest] of Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): AcIndexEditSw (40 B) x2, IvOneShotTimer (26 B),
-; [nakarest] AcMonoIndexToggle (42 B). text the records point at, in Viewable slot 0x6c (table
-; [nakarest] 0xea6c82, 83 entries, InitializeCheap): "OFF" (AcMonoIndexToggle.stroff of element
-; [nakarest] 72); "ON" (AcMonoIndexToggle.stron of element 72). widget record, element 73 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "LOOP" (Label.str of element
-; [nakarest] 73). widget records, elements 74-75 of Viewable slot 0x6c (table 0xea6c82, 83
-; [nakarest] entries, InitializeCheap) ("DiskSmfDirectPlay"): AcIndexEditSw (40 B), Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "START" (Label.str of element 75). widget record, element 76 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "MEDLEY" (Label.str of element
-; [nakarest] 76). widget records, elements 77-81 of Viewable slot 0x6c (table 0xea6c82, 83
-; [nakarest] entries, InitializeCheap) ("DiskSmfDirectPlay"): Line (26 B) x4, Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x6c (table 0xea6c82, 83 entries,
-; [nakarest] InitializeCheap): "ALL" (Label.str of element 81). widget record, element 82 of
-; [nakarest] Viewable slot 0x6c (table 0xea6c82, 83 entries, InitializeCheap)
-; [nakarest] ("DiskSmfDirectPlay"): Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x6c (table 0xea6c82, 83 entries, InitializeCheap): "ADD" (Label.str of element
-; [nakarest] 82).
+; [nakarest] widget records, elements 0-82 of Viewable slot 0x6c (table 0xea6c82, 83 entries,
+; [nakarest] InitializeCheap) ("DiskSmfDirectPlay"): TtlScreen (42 B) x3, PsFileNameBox (58 B)
+; [nakarest] x6, AcIndexWideES (42 B) x3, AcIndexEditSw (40 B) x17, Label (32 B) x26,
+; [nakarest] PsWindowToggle (52 B), AcMonoIndexToggle (42 B) x5, Line (26 B) x12, IvOneShotTimer
+; [nakarest] (26 B) x3, IvIndexSwDelay (30 B), Window (36 B) x2, AcParaStrBox (44 B) x4. 41
+; [nakarest] texts the records point at (Viewable slot 0x6c (table 0xea6c82, 83 entries,
+; [nakarest] InitializeCheap)): "SMF DIRECT PLAY" (TtlScreen.title of element 0); "PREV"
+; [nakarest] (Label.str of element 5); "NEXT" (Label.str of element 7); "INFO" (Label.str of
+; [nakarest] element 8); ....
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x322E, 0xCF2
 ; [nakarest] naka_disk_menu_file_io+0x3f20  +0x3f20..+0x42b8 (0xea52ec, 920 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x77 (table 0xea6dda, 21 entries,
-; [nakarest] InitializeCheap) ("DiskSongMedley"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap): "SONG MEDLEY"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-7 of Viewable slot 0x77
-; [nakarest] (table 0xea6dda, 21 entries, InitializeCheap) ("DiskSongMedley"): AcIndexEditSw (40
-; [nakarest] B) x2, AcIndexWideES (42 B), PsFileNameBox (58 B) x3, Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x77 (table 0xea6dda, 21 entries,
-; [nakarest] InitializeCheap): "DISK NAME:" (Label.str of element 7). widget records, elements
-; [nakarest] 8-11 of Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap)
-; [nakarest] ("DiskSongMedley"): AcParaStrBox (44 B) x2, AcIndexEditSw (40 B), Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x77 (table 0xea6dda, 21 entries,
-; [nakarest] InitializeCheap): "START" (Label.str of element 11). widget records, elements 12-13
-; [nakarest] of Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap)
-; [nakarest] ("DiskSongMedley"): AcIndexEditSw (40 B), Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap): "ALL"
-; [nakarest] (Label.str of element 13). widget records, elements 14-15 of Viewable slot 0x77
-; [nakarest] (table 0xea6dda, 21 entries, InitializeCheap) ("DiskSongMedley"): AcIndexEditSw (40
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x77 (table 0xea6dda,
-; [nakarest] 21 entries, InitializeCheap): "ADD" (Label.str of element 15). widget record,
-; [nakarest] element 16 of Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap)
-; [nakarest] ("DiskSongMedley"): AcMonoIndexToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap): "OFF"
-; [nakarest] (AcMonoIndexToggle.stroff of element 16); "ON" (AcMonoIndexToggle.stron of element
-; [nakarest] 16). widget record, element 17 of Viewable slot 0x77 (table 0xea6dda, 21 entries,
-; [nakarest] InitializeCheap) ("DiskSongMedley"): AcMonoIndexToggle (42 B). text the records
-; [nakarest] point at, in Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap):
-; [nakarest] "1SONG" (AcMonoIndexToggle.stroff of element 17); "10SNGS" (AcMonoIndexToggle.stron
-; [nakarest] of element 17). widget record, element 18 of Viewable slot 0x77 (table 0xea6dda, 21
-; [nakarest] entries, InitializeCheap) ("DiskSongMedley"): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap): "MODE"
-; [nakarest] (Label.str of element 18). widget records, elements 19-20 of Viewable slot 0x77
-; [nakarest] (table 0xea6dda, 21 entries, InitializeCheap) ("DiskSongMedley"): IvShowHide (26
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x77 (table 0xea6dda,
-; [nakarest] 21 entries, InitializeCheap): "LOOP" (Label.str of element 20).
+; [nakarest] widget records, elements 0-20 of Viewable slot 0x77 (table 0xea6dda, 21 entries,
+; [nakarest] InitializeCheap) ("DiskSongMedley"): TtlScreen (42 B), AcIndexEditSw (40 B) x5,
+; [nakarest] AcIndexWideES (42 B), PsFileNameBox (58 B) x3, Label (32 B) x6, AcParaStrBox (44 B)
+; [nakarest] x2, AcMonoIndexToggle (42 B) x2, IvShowHide (26 B). 11 texts the records point at
+; [nakarest] (Viewable slot 0x77 (table 0xea6dda, 21 entries, InitializeCheap)): "SONG MEDLEY"
+; [nakarest] (TtlScreen.title of element 0); "DISK NAME:" (Label.str of element 7); "START"
+; [nakarest] (Label.str of element 11); "ALL" (Label.str of element 13); ....
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x3F20, 0x398
 ; [nakarest] naka_disk_menu_file_io+0x42b8  +0x42b8..+0x5250 (0xea5684, 3992 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "DISK TOOLS"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-4 of Viewable slot 0x7b
-; [nakarest] (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcIndexWideES (42
-; [nakarest] B), AcIndexEditSw (40 B) x2, AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "SMF"
-; [nakarest] (AcTitleMenu.str of element 4). widget record, element 5 of Viewable slot 0x7b
-; [nakarest] (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap): "DISK NAME:" (Label.str of element 5). widget records, elements
-; [nakarest] 6-8 of Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)
-; [nakarest] ("DiskUtility"): AcIndexEditSw (40 B) x2, Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "DEL"
-; [nakarest] (Label.str of element 8). widget record, element 9 of Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap): "MOVE" (Label.str of element 9). widget record, element 10 of
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap): "" (AcTitleMenu.str of element 10). widget
-; [nakarest] record, element 11 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "FORMAT"
-; [nakarest] (Label.str of element 11). widget record, element 12 of Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcScreenMenu (54 B). text
-; [nakarest] the records point at, in Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap): "" (AcScreenMenu.str of element 12). widget record, element 13 of
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94
-; [nakarest] entries, InitializeCheap): "RENAME" (Label.str of element 13). widget records,
-; [nakarest] elements 14-15 of Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)
-; [nakarest] ("DiskUtility"): AcIndexEditSw (40 B), AcScreenMenu (54 B). text the records point
-; [nakarest] at, in Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "COPY"
-; [nakarest] (AcScreenMenu.str of element 15). widget records, elements 16-21 of Viewable slot
-; [nakarest] 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcParaStrBox
-; [nakarest] (44 B) x2, PsFileNameBox (58 B), IvWaitWinCtl (26 B), Screen (34 B), VwScreenTitle
-; [nakarest] (38 B). text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94
-; [nakarest] entries, InitializeCheap): "FILE RENAME" (VwScreenTitle.title of element 21).
-; [nakarest] widget records, elements 22-24 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): IvNaming (26 B), AcFuncEditSw (44 B), TtlScreen
-; [nakarest] (42 B). text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94
-; [nakarest] entries, InitializeCheap): "FLOPPY DISK FORMAT" (TtlScreen.title of element 24).
-; [nakarest] widget record, element 25 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "SMF DISK TOOLS"
-; [nakarest] (TtlScreen.title of element 25). widget record, element 26 of Viewable slot 0x7b
-; [nakarest] (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap): "TECH" (AcTitleMenu.str of element 26). widget records, elements
-; [nakarest] 27-28 of Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)
-; [nakarest] ("DiskUtility"): AcIndexEditSw (40 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "PREV" (Label.str
-; [nakarest] of element 28). widget records, elements 29-31 of Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcIndexWideES (42 B),
-; [nakarest] AcIndexEditSw (40 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "NEXT" (Label.str of element
-; [nakarest] 31). widget record, element 32 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "INFO" (Label.str
-; [nakarest] of element 32). widget records, elements 33-34 of Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): PsFileNameBox (58 B),
-; [nakarest] PsWindowToggle (52 B). text the records point at, in Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap): "DISK" (PsWindowToggle.stroff of element
-; [nakarest] 34); "SONG" (PsWindowToggle.stron of element 34). widget record, element 35 of
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap): "" (AcTitleMenu.str of element 35). widget
-; [nakarest] record, element 36 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "FORMAT"
-; [nakarest] (Label.str of element 36). widget records, elements 37-38 of Viewable slot 0x7b
-; [nakarest] (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcIndexEditSw (40
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x7b (table 0xea6e36,
-; [nakarest] 94 entries, InitializeCheap): "DEL" (Label.str of element 38). widget record,
-; [nakarest] element 39 of Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)
-; [nakarest] ("DiskUtility"): AcScreenMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "" (AcScreenMenu.str of element
-; [nakarest] 39). widget record, element 40 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "RENAME"
-; [nakarest] (Label.str of element 40). widget records, elements 41-44 of Viewable slot 0x7b
-; [nakarest] (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): IvIndexSwDelay (30
-; [nakarest] B), IvWaitWinCtl (26 B), Window (36 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "DISK NAME:"
-; [nakarest] (Label.str of element 44). widget records, elements 45-53 of Viewable slot 0x7b
-; [nakarest] (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcParaStrBox (44 B)
-; [nakarest] x3, Window (36 B) x2, IvNaming (26 B), AcFuncEditSw (44 B), IvMainEditSw (26 B),
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94
-; [nakarest] entries, InitializeCheap): "DISK NAMING" (Label.str of element 53). widget records,
-; [nakarest] elements 54-60 of Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)
-; [nakarest] ("DiskUtility"): Window (36 B), VwBox (28 B), AcLanguageText (42 B) x3, Line (26
-; [nakarest] B), VwEditSwBox (44 B). text the records point at, in Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap): "" (VwEditSwBox.str of element 60). widget
-; [nakarest] record, element 61 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): ""
-; [nakarest] (VwEditSwBox.str of element 61). widget records, elements 62-65 of Viewable slot
-; [nakarest] 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): IvMainEditSw
-; [nakarest] (26 B) x2, Window (36 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "Select the FORMAT type for
-; [nakarest] your disk." (Label.str of element 65). widget record, element 66 of Viewable slot
-; [nakarest] 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): VwMenuBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap): " 720K Byte format : 2DD" (VwMenuBox.str of element 66). widget
-; [nakarest] record, element 67 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): " 1.44M Byte
-; [nakarest] format : 2HD" (VwMenuBox.str of element 67). widget records, elements 68-69 of
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"):
-; [nakarest] Screen (34 B), VwScreenTitle (38 B). text the records point at, in Viewable slot
-; [nakarest] 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "FILE COPY"
-; [nakarest] (VwScreenTitle.title of element 69). widget records, elements 70-71 of Viewable
-; [nakarest] slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): Arrow (32
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0x7b (table 0xea6e36,
-; [nakarest] 94 entries, InitializeCheap): "TO" (Label.str of element 71). widget records,
-; [nakarest] elements 72-73 of Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)
-; [nakarest] ("DiskUtility"): AcParaStrBox (44 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "FROM" (Label.str
-; [nakarest] of element 73). widget records, elements 74-78 of Viewable slot 0x7b (table
-; [nakarest] 0xea6e36, 94 entries, InitializeCheap) ("DiskUtility"): AcIndexWideES (42 B),
-; [nakarest] AcIndexEditSw (40 B), PsFileNameBox (58 B), Screen (34 B), VwScreenTitle (38 B).
-; [nakarest] text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap): "FILE RENAME" (VwScreenTitle.title of element 78). widget
-; [nakarest] records, elements 79-91 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
-; [nakarest] InitializeCheap) ("DiskUtility"): IvNaming (26 B), AcFuncEditSw (44 B) x4, Window
-; [nakarest] (36 B), VwBox (28 B), AcLanguageText (42 B) x3, Line (26 B), Screen (34 B), Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0x7b (table 0xea6e36, 94
-; [nakarest] entries, InitializeCheap): "DELETE SURE" (Label.str of element 91). widget records,
-; [nakarest] elements 92-93 of Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)
-; [nakarest] ("DiskUtility"): Screen (34 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap): "OVERWRITE SURE"
-; [nakarest] (Label.str of element 93).
+; [nakarest] widget records, elements 0-93 of Viewable slot 0x7b (table 0xea6e36, 94 entries,
+; [nakarest] InitializeCheap) ("DiskUtility"): TtlScreen (42 B) x3, AcIndexWideES (42 B) x3,
+; [nakarest] AcIndexEditSw (40 B) x9, AcTitleMenu (54 B) x4, Label (32 B) x18, AcScreenMenu (54
+; [nakarest] B) x3, AcParaStrBox (44 B) x6, PsFileNameBox (58 B) x3, IvWaitWinCtl (26 B) x2,
+; [nakarest] Screen (34 B) x5, VwScreenTitle (38 B) x3, IvNaming (26 B) x3, AcFuncEditSw (44 B)
+; [nakarest] x6, PsWindowToggle (52 B), IvIndexSwDelay (30 B), Window (36 B) x6, IvMainEditSw
+; [nakarest] (26 B) x3, VwBox (28 B) x2, AcLanguageText (42 B) x6, Line (26 B) x2, VwEditSwBox
+; [nakarest] (44 B) x2, VwMenuBox (50 B) x2, Arrow (32 B). 37 texts the records point at
+; [nakarest] (Viewable slot 0x7b (table 0xea6e36, 94 entries, InitializeCheap)): "DISK TOOLS"
+; [nakarest] (TtlScreen.title of element 0); "SMF" (AcTitleMenu.str of element 4); "DISK NAME:"
+; [nakarest] (Label.str of element 5); "DEL" (Label.str of element 8); ....
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x42B8, 0xF98
 ; [nakarest] naka_disk_menu_file_io+0x5250  +0x5250..+0x53ea (0xea661c, 410 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x7e (table 0xea6fba, 8 entries,
-; [nakarest] InitializeCheap) ("DiskSetup"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x7e (table 0xea6fba, 8 entries, InitializeCheap): "PREFERENCES"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0x7e
-; [nakarest] (table 0xea6fba, 8 entries, InitializeCheap) ("DiskSetup"): AcIndexWideES (42 B),
-; [nakarest] AcRamEditBox (58 B). text the records point at, in Viewable slot 0x7e (table
-; [nakarest] 0xea6fba, 8 entries, InitializeCheap): "DISK INSERT OPTION :" (AcRamEditBox.caption
-; [nakarest] of element 2). widget record, element 3 of Viewable slot 0x7e (table 0xea6fba, 8
-; [nakarest] entries, InitializeCheap) ("DiskSetup"): AcBitEditBox (58 B). text the records
-; [nakarest] point at, in Viewable slot 0x7e (table 0xea6fba, 8 entries, InitializeCheap): "FILE
-; [nakarest] TYPE PRIORITY :" (AcBitEditBox.caption of element 3). widget records, elements 4-7
-; [nakarest] of Viewable slot 0x7e (table 0xea6fba, 8 entries, InitializeCheap) ("DiskSetup"):
-; [nakarest] AcFuncEditSw (44 B), IvCatchEvent (26 B), AcLanguageText (42 B) x2.
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x7e (table 0xea6fba, 8 entries,
+; [nakarest] InitializeCheap) ("DiskSetup"): TtlScreen (42 B), AcIndexWideES (42 B),
+; [nakarest] AcRamEditBox (58 B), AcBitEditBox (58 B), AcFuncEditSw (44 B), IvCatchEvent (26 B),
+; [nakarest] AcLanguageText (42 B) x2. 3 texts the records point at (Viewable slot 0x7e (table
+; [nakarest] 0xea6fba, 8 entries, InitializeCheap)): "PREFERENCES" (TtlScreen.title of element
+; [nakarest] 0); "DISK INSERT OPTION :" (AcRamEditBox.caption of element 2); "FILE TYPE PRIORITY
+; [nakarest] :" (AcBitEditBox.caption of element 3).
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x5250, 0x19A
 ; [nakarest] naka_disk_menu_file_io+0x53ea  +0x53ea..+0x5516 (0xea67b6, 300 B)
 ; [nakarest] the table itself: Viewable slot 0x60 (table 0xea67b6, 74 entries, InitializeCheap),
@@ -1203,7 +557,7 @@ EmbeddedPtrTable_v9_naka_disk_menu_file_io_005F00:
 	.long 0x00EA747C
 	.long 0x00EA747A
 ; [nakarest] naka_disk_menu_file_io+0x6000  +0x6000..+0x6062 (0xea73cc, 98 B)
-; [nakarest] purpose not established: 6 bytes at 0xea7428 that no registered NAKA table points into
+; [nakarest] purpose not established: 6 B at 0xea7428 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: ResName slot 0x361 (table 0xea7228, 128 entries,
 ; [nakarest] InitializeCheap), 128 entry pointers x 4 bytes (starts 0xea7228, 92 of its 512
 ; [nakarest] bytes are here or later).
@@ -1326,7 +680,10 @@ EmbeddedPtrTable_v9_naka_disk_menu_file_io_006500:
 	.long 0x00EA79CA
 	.long 0x00EA79C8
 ; [nakarest] naka_disk_menu_file_io+0x65fc  +0x65fc..+0x65fe (0xea79c8, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xea79c8 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xea79c8 not derived; readers below
+; [nakarest] Readers: source references EmbeddedPtrTable_v9_naka_disk_menu_file_io_006500
+; [nakarest] (ui_widgets/disk_menu_file_io_screens.s: `.long 0x00ea79c8`); 1 data word in
+; [nakarest] EmbeddedPtrTable_v9_naka_disk_menu_file_io_006500 (at 0xea79c4).
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FC, 0x2
 ; [nakarest] naka_disk_menu_file_io+0x65fe  +0x65fe..+0x66fe (0xea79ca, 256 B)
 ; [nakarest] name strings, entries 0-82 of ResName slot 0x36c (table 0xea7878, 83 entries,

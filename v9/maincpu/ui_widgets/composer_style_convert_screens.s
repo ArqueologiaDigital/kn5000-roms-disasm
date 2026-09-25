@@ -175,7 +175,12 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaStr_PaintArrowProc_Empty  +0x0..+0x2 (0xe176e4, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe176e4 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe176e4 not derived; readers below
+; [nakarest] Readers: source references MTStr_CmpNameSet
+; [nakarest] (ui_widgets/naka_property_descriptors.s: `.long NakaStr_PaintArrowProc_Empty + 2`);
+; [nakarest] 1 data word in MTStr_CmpNameSet (at 0xe176e0), which is read by
+; [nakarest] NakaMethodTable_PtrsStart (ui_widgets/naka_property_descriptors.s: `.long
+; [nakarest] MTStr_CmpNameSet`).
 NakaStr_PaintArrowProc_Empty:
 	.incbin "includes/generated/naka_composer_style.bin", 0x0, 0x2
 ; [nakarest] naka_composer_style+0x2  +0x2..+0x12 (0xe176e6, 16 B)
@@ -183,425 +188,146 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] InitializeSuna) (names for Function slot 0x104): "PaintArrowProc".
 	.incbin "includes/generated/naka_composer_style.bin", 0x2, 0x10
 ; [nakarest] naka_composer_style+0x12  +0x12..+0x90 (0xe176f6, 126 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x10 (table 0xe1b4e2, 3 entries,
-; [nakarest] InitializeSuna) ("StylCnvWaitScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x10 (table 0xe1b4e2, 3 entries, InitializeSuna): "STYLE CONVERT"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0x10
-; [nakarest] (table 0xe1b4e2, 3 entries, InitializeSuna) ("StylCnvWaitScreen"): VwBox (28 B),
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-2 of Viewable slot 0x10 (table 0xe1b4e2, 3 entries,
+; [nakarest] InitializeSuna) ("StylCnvWaitScreen"): TtlScreen (42 B), VwBox (28 B),
+; [nakarest] AcLanguageText (42 B). 1 text the records point at (Viewable slot 0x10 (table
+; [nakarest] 0xe1b4e2, 3 entries, InitializeSuna)): "STYLE CONVERT" (TtlScreen.title of element
+; [nakarest] 0).
 	.incbin "includes/generated/naka_composer_style.bin", 0x12, 0x7E
 ; [nakarest] naka_composer_style+0x90  +0x90..+0x1f6 (0xe17774, 358 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x11 (table 0xe1b4f2, 8 entries,
-; [nakarest] InitializeSuna) ("StylCnvModlScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x11 (table 0xe1b4f2, 8 entries, InitializeSuna): "STYLE TYPE
-; [nakarest] SELECT" (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable
-; [nakarest] slot 0x11 (table 0xe1b4f2, 8 entries, InitializeSuna) ("StylCnvModlScreen"):
-; [nakarest] IvMainEditSw (26 B), PsParaListBox (42 B), VwEditSwBox (44 B). text the records
-; [nakarest] point at, in Viewable slot 0x11 (table 0xe1b4f2, 8 entries, InitializeSuna): "PREV"
-; [nakarest] (VwEditSwBox.str of element 3). widget record, element 4 of Viewable slot 0x11
-; [nakarest] (table 0xe1b4f2, 8 entries, InitializeSuna) ("StylCnvModlScreen"): VwWideESBox (46
-; [nakarest] B). text the records point at, in Viewable slot 0x11 (table 0xe1b4f2, 8 entries,
-; [nakarest] InitializeSuna): "" (VwWideESBox.str of element 4). widget record, element 5 of
-; [nakarest] Viewable slot 0x11 (table 0xe1b4f2, 8 entries, InitializeSuna)
-; [nakarest] ("StylCnvModlScreen"): VwEditSwBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0x11 (table 0xe1b4f2, 8 entries, InitializeSuna): "NEXT" (VwEditSwBox.str of
-; [nakarest] element 5). widget record, element 6 of Viewable slot 0x11 (table 0xe1b4f2, 8
-; [nakarest] entries, InitializeSuna) ("StylCnvModlScreen"): VwEditSwBox (44 B). text the
-; [nakarest] records point at, in Viewable slot 0x11 (table 0xe1b4f2, 8 entries,
-; [nakarest] InitializeSuna): "" (VwEditSwBox.str of element 6). widget record, element 7 of
-; [nakarest] Viewable slot 0x11 (table 0xe1b4f2, 8 entries, InitializeSuna)
-; [nakarest] ("StylCnvModlScreen"): PsStylCnvVer (36 B).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x11 (table 0xe1b4f2, 8 entries,
+; [nakarest] InitializeSuna) ("StylCnvModlScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
+; [nakarest] PsParaListBox (42 B), VwEditSwBox (44 B) x3, VwWideESBox (46 B), PsStylCnvVer (36
+; [nakarest] B). 5 texts the records point at (Viewable slot 0x11 (table 0xe1b4f2, 8 entries,
+; [nakarest] InitializeSuna)): "STYLE TYPE SELECT" (TtlScreen.title of element 0); "PREV"
+; [nakarest] (VwEditSwBox.str of element 3); "" (VwWideESBox.str of element 4); "NEXT"
+; [nakarest] (VwEditSwBox.str of element 5); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x90, 0x166
 ; [nakarest] naka_composer_style+0x1f6  +0x1f6..+0x334 (0xe178da, 318 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x12 (table 0xe1b516, 7 entries,
-; [nakarest] InitializeSuna) ("StylCnvCnvtScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x12 (table 0xe1b516, 7 entries, InitializeSuna): "STYLE CONVERT"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0x12
-; [nakarest] (table 0xe1b516, 7 entries, InitializeSuna) ("StylCnvCnvtScreen"): IvMainEditSw (26
-; [nakarest] B), PsParaListBox (42 B), VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x12 (table 0xe1b516, 7 entries, InitializeSuna): "PREV"
-; [nakarest] (VwEditSwBox.str of element 3). widget record, element 4 of Viewable slot 0x12
-; [nakarest] (table 0xe1b516, 7 entries, InitializeSuna) ("StylCnvCnvtScreen"): VwWideESBox (46
-; [nakarest] B). text the records point at, in Viewable slot 0x12 (table 0xe1b516, 7 entries,
-; [nakarest] InitializeSuna): "" (VwWideESBox.str of element 4). widget record, element 5 of
-; [nakarest] Viewable slot 0x12 (table 0xe1b516, 7 entries, InitializeSuna)
-; [nakarest] ("StylCnvCnvtScreen"): VwEditSwBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0x12 (table 0xe1b516, 7 entries, InitializeSuna): "NEXT" (VwEditSwBox.str of
-; [nakarest] element 5). widget record, element 6 of Viewable slot 0x12 (table 0xe1b516, 7
-; [nakarest] entries, InitializeSuna) ("StylCnvCnvtScreen"): VwEditSwBox (44 B). text the
-; [nakarest] records point at, in Viewable slot 0x12 (table 0xe1b516, 7 entries,
-; [nakarest] InitializeSuna): "" (VwEditSwBox.str of element 6).
+; [nakarest] widget records, elements 0-6 of Viewable slot 0x12 (table 0xe1b516, 7 entries,
+; [nakarest] InitializeSuna) ("StylCnvCnvtScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
+; [nakarest] PsParaListBox (42 B), VwEditSwBox (44 B) x3, VwWideESBox (46 B). 5 texts the
+; [nakarest] records point at (Viewable slot 0x12 (table 0xe1b516, 7 entries, InitializeSuna)):
+; [nakarest] "STYLE CONVERT" (TtlScreen.title of element 0); "PREV" (VwEditSwBox.str of element
+; [nakarest] 3); "" (VwWideESBox.str of element 4); "NEXT" (VwEditSwBox.str of element 5); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x1F6, 0x13E
 ; [nakarest] naka_composer_style+0x334  +0x334..+0x410 (0xe17a18, 220 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x13 (table 0xe1b536, 4 entries,
-; [nakarest] InitializeSuna) ("StylCnvStorScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x13 (table 0xe1b536, 4 entries, InitializeSuna): "STORAGE DATA"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x13
-; [nakarest] (table 0xe1b536, 4 entries, InitializeSuna) ("StylCnvStorScreen"): AcRamEditBox (58
-; [nakarest] B). text the records point at, in Viewable slot 0x13 (table 0xe1b536, 4 entries,
-; [nakarest] InitializeSuna): " Data Storage to :" (AcRamEditBox.caption of element 1). widget
-; [nakarest] records, elements 2-3 of Viewable slot 0x13 (table 0xe1b536, 4 entries,
-; [nakarest] InitializeSuna) ("StylCnvStorScreen"): AcIndexWideES (42 B), AcFuncEditSw (44 B).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0x13 (table 0xe1b536, 4 entries,
+; [nakarest] InitializeSuna) ("StylCnvStorScreen"): TtlScreen (42 B), AcRamEditBox (58 B),
+; [nakarest] AcIndexWideES (42 B), AcFuncEditSw (44 B). 2 texts the records point at (Viewable
+; [nakarest] slot 0x13 (table 0xe1b536, 4 entries, InitializeSuna)): "STORAGE DATA"
+; [nakarest] (TtlScreen.title of element 0); " Data Storage to :" (AcRamEditBox.caption of
+; [nakarest] element 1).
 	.incbin "includes/generated/naka_composer_style.bin", 0x334, 0xDC
 ; [nakarest] naka_composer_style+0x410  +0x410..+0x4a4 (0xe17af4, 148 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x14 (table 0xe1b54a, 4 entries,
-; [nakarest] InitializeSuna) ("StylCnvTxtScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x14 (table 0xe1b54a, 4 entries, InitializeSuna): "STYLE CONVERT"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0x14
-; [nakarest] (table 0xe1b54a, 4 entries, InitializeSuna) ("StylCnvTxtScreen"): VwBox (28 B),
-; [nakarest] PSSCTxtBox2 (38 B), IvMainEditSw (26 B).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0x14 (table 0xe1b54a, 4 entries,
+; [nakarest] InitializeSuna) ("StylCnvTxtScreen"): TtlScreen (42 B), VwBox (28 B), PSSCTxtBox2
+; [nakarest] (38 B), IvMainEditSw (26 B). 1 text the records point at (Viewable slot 0x14 (table
+; [nakarest] 0xe1b54a, 4 entries, InitializeSuna)): "STYLE CONVERT" (TtlScreen.title of element
+; [nakarest] 0).
 	.incbin "includes/generated/naka_composer_style.bin", 0x410, 0x94
 ; [nakarest] naka_composer_style+0x4a4  +0x4a4..+0x606 (0xe17b88, 354 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x15 (table 0xe1b55e, 8 entries,
-; [nakarest] InitializeSuna) ("StylCnvSelScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x15 (table 0xe1b55e, 8 entries, InitializeSuna): "STYLE CONVERT"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0x15
-; [nakarest] (table 0xe1b55e, 8 entries, InitializeSuna) ("StylCnvSelScreen"): IvMainEditSw (26
-; [nakarest] B), PsParaListBox (42 B), VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x15 (table 0xe1b55e, 8 entries, InitializeSuna): "PREV"
-; [nakarest] (VwEditSwBox.str of element 3). widget record, element 4 of Viewable slot 0x15
-; [nakarest] (table 0xe1b55e, 8 entries, InitializeSuna) ("StylCnvSelScreen"): VwWideESBox (46
-; [nakarest] B). text the records point at, in Viewable slot 0x15 (table 0xe1b55e, 8 entries,
-; [nakarest] InitializeSuna): "" (VwWideESBox.str of element 4). widget record, element 5 of
-; [nakarest] Viewable slot 0x15 (table 0xe1b55e, 8 entries, InitializeSuna)
-; [nakarest] ("StylCnvSelScreen"): VwEditSwBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0x15 (table 0xe1b55e, 8 entries, InitializeSuna): "NEXT" (VwEditSwBox.str of
-; [nakarest] element 5). widget record, element 6 of Viewable slot 0x15 (table 0xe1b55e, 8
-; [nakarest] entries, InitializeSuna) ("StylCnvSelScreen"): VwEditSwBox (44 B). text the records
-; [nakarest] point at, in Viewable slot 0x15 (table 0xe1b55e, 8 entries, InitializeSuna): ""
-; [nakarest] (VwEditSwBox.str of element 6). widget record, element 7 of Viewable slot 0x15
-; [nakarest] (table 0xe1b55e, 8 entries, InitializeSuna) ("StylCnvSelScreen"): PsSCTxtBox (36
-; [nakarest] B).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x15 (table 0xe1b55e, 8 entries,
+; [nakarest] InitializeSuna) ("StylCnvSelScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
+; [nakarest] PsParaListBox (42 B), VwEditSwBox (44 B) x3, VwWideESBox (46 B), PsSCTxtBox (36 B).
+; [nakarest] 5 texts the records point at (Viewable slot 0x15 (table 0xe1b55e, 8 entries,
+; [nakarest] InitializeSuna)): "STYLE CONVERT" (TtlScreen.title of element 0); "PREV"
+; [nakarest] (VwEditSwBox.str of element 3); "" (VwWideESBox.str of element 4); "NEXT"
+; [nakarest] (VwEditSwBox.str of element 5); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x4A4, 0x162
 ; [nakarest] naka_composer_style+0x606  +0x606..+0x722 (0xe17cea, 284 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x16 (table 0xe1b582, 7 entries,
-; [nakarest] InitializeSuna) ("StylCnvContScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0x16 (table 0xe1b582, 7 entries, InitializeSuna): "STYLE CONVERT"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0x16
-; [nakarest] (table 0xe1b582, 7 entries, InitializeSuna) ("StylCnvContScreen"): IvMainEditSw (26
-; [nakarest] B), VwBox (28 B), Label (32 B). text the records point at, in Viewable slot 0x16
-; [nakarest] (table 0xe1b582, 7 entries, InitializeSuna): "Continue" (Label.str of element 3).
-; [nakarest] widget record, element 4 of Viewable slot 0x16 (table 0xe1b582, 7 entries,
-; [nakarest] InitializeSuna) ("StylCnvContScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x16 (table 0xe1b582, 7 entries, InitializeSuna): "Next ?" (Label.str
-; [nakarest] of element 4). widget record, element 5 of Viewable slot 0x16 (table 0xe1b582, 7
-; [nakarest] entries, InitializeSuna) ("StylCnvContScreen"): VwEditSwBox (44 B). text the
-; [nakarest] records point at, in Viewable slot 0x16 (table 0xe1b582, 7 entries,
-; [nakarest] InitializeSuna): "" (VwEditSwBox.str of element 5). widget record, element 6 of
-; [nakarest] Viewable slot 0x16 (table 0xe1b582, 7 entries, InitializeSuna)
-; [nakarest] ("StylCnvContScreen"): VwEditSwBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0x16 (table 0xe1b582, 7 entries, InitializeSuna): "" (VwEditSwBox.str of
-; [nakarest] element 6).
+; [nakarest] widget records, elements 0-6 of Viewable slot 0x16 (table 0xe1b582, 7 entries,
+; [nakarest] InitializeSuna) ("StylCnvContScreen"): TtlScreen (42 B), IvMainEditSw (26 B), VwBox
+; [nakarest] (28 B), Label (32 B) x2, VwEditSwBox (44 B) x2. 5 texts the records point at
+; [nakarest] (Viewable slot 0x16 (table 0xe1b582, 7 entries, InitializeSuna)): "STYLE CONVERT"
+; [nakarest] (TtlScreen.title of element 0); "Continue" (Label.str of element 3); "Next ?"
+; [nakarest] (Label.str of element 4); "" (VwEditSwBox.str of element 5); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x606, 0x11C
 ; [nakarest] naka_composer_style+0x722  +0x722..+0xa8c (0xe17e06, 874 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
-; [nakarest] InitializeSuna) ("CmpMenuScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna): "COMPOSER MENU"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xb0
-; [nakarest] (table 0xe1b5a2, 18 entries, InitializeSuna) ("CmpMenuScreen"): AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
-; [nakarest] InitializeSuna): "BEND RANGE SET" (AcTitleMenu.str of element 1). widget record,
-; [nakarest] element 2 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna)
-; [nakarest] ("CmpMenuScreen"): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna): "EASY COMPOSER" (AcTitleMenu.str
-; [nakarest] of element 2). widget record, element 3 of Viewable slot 0xb0 (table 0xe1b5a2, 18
-; [nakarest] entries, InitializeSuna) ("CmpMenuScreen"): AcTitleMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna):
-; [nakarest] "PATTERN COPY" (AcTitleMenu.str of element 3). widget record, element 4 of Viewable
-; [nakarest] slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna) ("CmpMenuScreen"):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0xb0 (table
-; [nakarest] 0xe1b5a2, 18 entries, InitializeSuna): "CUSTOM COPY" (AcTitleMenu.str of element
-; [nakarest] 4). widget record, element 5 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
-; [nakarest] InitializeSuna) ("CmpMenuScreen"): AcTitleMenu (54 B). text the records point at,
-; [nakarest] in Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna): "SEQ TO
-; [nakarest] COMPOSER COPY" (AcTitleMenu.str of element 5). widget record, element 6 of Viewable
-; [nakarest] slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna) ("CmpMenuScreen"):
-; [nakarest] AcTitleMenu (54 B). text the records point at, in Viewable slot 0xb0 (table
-; [nakarest] 0xe1b5a2, 18 entries, InitializeSuna): "LOAD SINGLE COMPOSER" (AcTitleMenu.str of
-; [nakarest] element 6). widget records, elements 7-11 of Viewable slot 0xb0 (table 0xe1b5a2, 18
-; [nakarest] entries, InitializeSuna) ("CmpMenuScreen"): Line (26 B) x4, Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
-; [nakarest] InitializeSuna): "RECORDING" (Label.str of element 11). widget record, element 12
-; [nakarest] of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna)
-; [nakarest] ("CmpMenuScreen"): Label (32 B). text the records point at, in Viewable slot 0xb0
-; [nakarest] (table 0xe1b5a2, 18 entries, InitializeSuna): "MEMORY" (Label.str of element 12).
-; [nakarest] widget records, elements 13-14 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
-; [nakarest] InitializeSuna) ("CmpMenuScreen"): IvMainEditSw (26 B), VwMenuBox (50 B). text the
-; [nakarest] records point at, in Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
-; [nakarest] InitializeSuna): "A" (VwMenuBox.str of element 14). widget record, element 15 of
-; [nakarest] Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna) ("CmpMenuScreen"):
-; [nakarest] VwMenuBox (50 B). text the records point at, in Viewable slot 0xb0 (table 0xe1b5a2,
-; [nakarest] 18 entries, InitializeSuna): "B" (VwMenuBox.str of element 15). widget record,
-; [nakarest] element 16 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna)
-; [nakarest] ("CmpMenuScreen"): VwMenuBox (50 B). text the records point at, in Viewable slot
-; [nakarest] 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna): "C" (VwMenuBox.str of element
-; [nakarest] 16). widget record, element 17 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
-; [nakarest] InitializeSuna) ("CmpMenuScreen"): IvExitMode (26 B).
+; [nakarest] widget records, elements 0-17 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
+; [nakarest] InitializeSuna) ("CmpMenuScreen"): TtlScreen (42 B), AcTitleMenu (54 B) x6, Line
+; [nakarest] (26 B) x4, Label (32 B) x2, IvMainEditSw (26 B), VwMenuBox (50 B) x3, IvExitMode
+; [nakarest] (26 B). 12 texts the records point at (Viewable slot 0xb0 (table 0xe1b5a2, 18
+; [nakarest] entries, InitializeSuna)): "COMPOSER MENU" (TtlScreen.title of element 0); "BEND
+; [nakarest] RANGE SET" (AcTitleMenu.str of element 1); "EASY COMPOSER" (AcTitleMenu.str of
+; [nakarest] element 2); "PATTERN COPY" (AcTitleMenu.str of element 3); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x722, 0x36A
 ; [nakarest] naka_composer_style+0xa8c  +0xa8c..+0xd46 (0xe18170, 698 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb1 (table 0xe1b5ee, 12 entries,
-; [nakarest] InitializeSuna) ("CmpBkslScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna): "RECORD MEMORY"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0xb1
-; [nakarest] (table 0xe1b5ee, 12 entries, InitializeSuna) ("CmpBkslScreen"): IvMainEditSw (26
-; [nakarest] B), VwMenuBox (50 B). text the records point at, in Viewable slot 0xb1 (table
-; [nakarest] 0xe1b5ee, 12 entries, InitializeSuna): "VARIATION 1" (VwMenuBox.str of element 2).
-; [nakarest] widget record, element 3 of Viewable slot 0xb1 (table 0xe1b5ee, 12 entries,
-; [nakarest] InitializeSuna) ("CmpBkslScreen"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna): "VARIATION 3"
-; [nakarest] (VwMenuBox.str of element 3). widget record, element 4 of Viewable slot 0xb1 (table
-; [nakarest] 0xe1b5ee, 12 entries, InitializeSuna) ("CmpBkslScreen"): VwMenuBox (50 B). text the
-; [nakarest] records point at, in Viewable slot 0xb1 (table 0xe1b5ee, 12 entries,
-; [nakarest] InitializeSuna): "INTRO 1" (VwMenuBox.str of element 4). widget record, element 5
-; [nakarest] of Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna)
-; [nakarest] ("CmpBkslScreen"): VwMenuBox (50 B). text the records point at, in Viewable slot
-; [nakarest] 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna): "FILL IN 1" (VwMenuBox.str of
-; [nakarest] element 5). widget record, element 6 of Viewable slot 0xb1 (table 0xe1b5ee, 12
-; [nakarest] entries, InitializeSuna) ("CmpBkslScreen"): VwMenuBox (50 B). text the records
-; [nakarest] point at, in Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna):
-; [nakarest] "ENDING 1" (VwMenuBox.str of element 6). widget record, element 7 of Viewable slot
-; [nakarest] 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna) ("CmpBkslScreen"): VwMenuBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0xb1 (table 0xe1b5ee, 12 entries,
-; [nakarest] InitializeSuna): " VARIATION 2" (VwMenuBox.str of element 7). widget record,
-; [nakarest] element 8 of Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna)
-; [nakarest] ("CmpBkslScreen"): VwMenuBox (50 B). text the records point at, in Viewable slot
-; [nakarest] 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna): " VARIATION 4" (VwMenuBox.str of
-; [nakarest] element 8). widget record, element 9 of Viewable slot 0xb1 (table 0xe1b5ee, 12
-; [nakarest] entries, InitializeSuna) ("CmpBkslScreen"): VwMenuBox (50 B). text the records
-; [nakarest] point at, in Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna):
-; [nakarest] "INTRO 2" (VwMenuBox.str of element 9). widget record, element 10 of Viewable slot
-; [nakarest] 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna) ("CmpBkslScreen"): VwMenuBox (50
-; [nakarest] B). text the records point at, in Viewable slot 0xb1 (table 0xe1b5ee, 12 entries,
-; [nakarest] InitializeSuna): "FILL IN 2" (VwMenuBox.str of element 10). widget record, element
-; [nakarest] 11 of Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna)
-; [nakarest] ("CmpBkslScreen"): VwMenuBox (50 B). text the records point at, in Viewable slot
-; [nakarest] 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna): "ENDING 2" (VwMenuBox.str of
-; [nakarest] element 11).
+; [nakarest] widget records, elements 0-11 of Viewable slot 0xb1 (table 0xe1b5ee, 12 entries,
+; [nakarest] InitializeSuna) ("CmpBkslScreen"): TtlScreen (42 B), IvMainEditSw (26 B), VwMenuBox
+; [nakarest] (50 B) x10. 11 texts the records point at (Viewable slot 0xb1 (table 0xe1b5ee, 12
+; [nakarest] entries, InitializeSuna)): "RECORD MEMORY" (TtlScreen.title of element 0);
+; [nakarest] "VARIATION 1" (VwMenuBox.str of element 2); "VARIATION 3" (VwMenuBox.str of element
+; [nakarest] 3); "INTRO 1" (VwMenuBox.str of element 4); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0xA8C, 0x2BA
 ; [nakarest] naka_composer_style+0xd46  +0xd46..+0x10fa (0xe1842a, 948 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb2 (table 0xe1b622, 22 entries,
-; [nakarest] InitializeSuna) ("CmpBkslSScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna): "RECORDING"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0xb2
-; [nakarest] (table 0xe1b622, 22 entries, InitializeSuna) ("CmpBkslSScreen"): Box (26 B), Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xb2 (table 0xe1b622, 22
-; [nakarest] entries, InitializeSuna): "Memory:" (Label.str of element 2). widget records,
-; [nakarest] elements 3-4 of Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna)
-; [nakarest] ("CmpBkslSScreen"): IvMainEditSw (26 B), VwMenuBox (50 B). text the records point
-; [nakarest] at, in Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna): "RECORD
-; [nakarest] SETTING" (VwMenuBox.str of element 4). widget record, element 5 of Viewable slot
-; [nakarest] 0xb2 (table 0xe1b622, 22 entries, InitializeSuna) ("CmpBkslSScreen"): VwEditSwBox
-; [nakarest] (44 B). text the records point at, in Viewable slot 0xb2 (table 0xe1b622, 22
-; [nakarest] entries, InitializeSuna): "DRM" (VwEditSwBox.str of element 5). widget record,
-; [nakarest] element 6 of Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna)
-; [nakarest] ("CmpBkslSScreen"): VwEditSwBox (44 B). text the records point at, in Viewable slot
-; [nakarest] 0xb2 (table 0xe1b622, 22 entries, InitializeSuna): "AC3" (VwEditSwBox.str of
-; [nakarest] element 6). widget record, element 7 of Viewable slot 0xb2 (table 0xe1b622, 22
-; [nakarest] entries, InitializeSuna) ("CmpBkslSScreen"): VwEditSwBox (44 B). text the records
-; [nakarest] point at, in Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna): "AC2"
-; [nakarest] (VwEditSwBox.str of element 7). widget record, element 8 of Viewable slot 0xb2
-; [nakarest] (table 0xe1b622, 22 entries, InitializeSuna) ("CmpBkslSScreen"): VwEditSwBox (44
-; [nakarest] B). text the records point at, in Viewable slot 0xb2 (table 0xe1b622, 22 entries,
-; [nakarest] InitializeSuna): "AC1" (VwEditSwBox.str of element 8). widget record, element 9 of
-; [nakarest] Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna) ("CmpBkslSScreen"):
-; [nakarest] VwEditSwBox (44 B). text the records point at, in Viewable slot 0xb2 (table
-; [nakarest] 0xe1b622, 22 entries, InitializeSuna): "BAS" (VwEditSwBox.str of element 9). widget
-; [nakarest] records, elements 10-11 of Viewable slot 0xb2 (table 0xe1b622, 22 entries,
-; [nakarest] InitializeSuna) ("CmpBkslSScreen"): AcMemNoBox (36 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xb2 (table 0xe1b622, 22 entries,
-; [nakarest] InitializeSuna): "START RECORDING" (Label.str of element 11). widget records,
-; [nakarest] elements 12-16 of Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna)
-; [nakarest] ("CmpBkslSScreen"): Line (26 B) x4, CmpNameMenuBox (50 B). text the records point
-; [nakarest] at, in Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna): "VARIATION
-; [nakarest] NAMING" (CmpNameMenuBox.str of element 16). widget record, element 17 of Viewable
-; [nakarest] slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna) ("CmpBkslSScreen"):
-; [nakarest] VwMenuBox (50 B). text the records point at, in Viewable slot 0xb2 (table 0xe1b622,
-; [nakarest] 22 entries, InitializeSuna): "CLEAR THE ENTIRE PATTERN" (VwMenuBox.str of element
-; [nakarest] 17). widget records, elements 18-21 of Viewable slot 0xb2 (table 0xe1b622, 22
-; [nakarest] entries, InitializeSuna) ("CmpBkslSScreen"): Window (36 B), AcFuncEditSw (44 B) x2,
-; [nakarest] AcLanguageText (42 B).
+; [nakarest] widget records, elements 0-21 of Viewable slot 0xb2 (table 0xe1b622, 22 entries,
+; [nakarest] InitializeSuna) ("CmpBkslSScreen"): TtlScreen (42 B), Box (26 B), Label (32 B) x2,
+; [nakarest] IvMainEditSw (26 B), VwMenuBox (50 B) x2, VwEditSwBox (44 B) x5, AcMemNoBox (36 B),
+; [nakarest] Line (26 B) x4, CmpNameMenuBox (50 B), Window (36 B), AcFuncEditSw (44 B) x2,
+; [nakarest] AcLanguageText (42 B). 11 texts the records point at (Viewable slot 0xb2 (table
+; [nakarest] 0xe1b622, 22 entries, InitializeSuna)): "RECORDING" (TtlScreen.title of element 0);
+; [nakarest] "Memory:" (Label.str of element 2); "RECORD SETTING" (VwMenuBox.str of element 4);
+; [nakarest] "DRM" (VwEditSwBox.str of element 5); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0xD46, 0x3B4
 ; [nakarest] naka_composer_style+0x10fa  +0x10fa..+0x11ca (0xe187de, 208 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb3 (table 0xe1b67e, 5 entries,
-; [nakarest] InitializeSuna) ("CmpNamingScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0xb3 (table 0xe1b67e, 5 entries, InitializeSuna): "VARIATION
-; [nakarest] NAMING" (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable
-; [nakarest] slot 0xb3 (table 0xe1b67e, 5 entries, InitializeSuna) ("CmpNamingScreen"): IvNaming
-; [nakarest] (26 B), AcFuncEditSw (44 B), Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb3 (table 0xe1b67e, 5 entries, InitializeSuna): "MEMORY :" (Label.str of
-; [nakarest] element 3). widget record, element 4 of Viewable slot 0xb3 (table 0xe1b67e, 5
-; [nakarest] entries, InitializeSuna) ("CmpNamingScreen"): AcMemNoBox (36 B).
+; [nakarest] widget records, elements 0-4 of Viewable slot 0xb3 (table 0xe1b67e, 5 entries,
+; [nakarest] InitializeSuna) ("CmpNamingScreen"): TtlScreen (42 B), IvNaming (26 B),
+; [nakarest] AcFuncEditSw (44 B), Label (32 B), AcMemNoBox (36 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xb3 (table 0xe1b67e, 5 entries, InitializeSuna)): "VARIATION
+; [nakarest] NAMING" (TtlScreen.title of element 0); "MEMORY :" (Label.str of element 3).
 	.incbin "includes/generated/naka_composer_style.bin", 0x10FA, 0xD0
 ; [nakarest] naka_composer_style+0x11ca  +0x11ca..+0x1580 (0xe188ae, 950 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb4 (table 0xe1b696, 18 entries,
-; [nakarest] InitializeSuna) ("CmpSetScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna): "RECORD SETTING"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-7 of Viewable slot 0xb4
-; [nakarest] (table 0xe1b696, 18 entries, InitializeSuna) ("CmpSetScreen"): IvMainEditSw (26 B),
-; [nakarest] AcWindowPage (36 B), IvPageControl (28 B) x2, IvShowHide (26 B), Window (36 B),
-; [nakarest] AcCmpSetGridBox (74 B). text the records point at, in Viewable slot 0xb4 (table
-; [nakarest] 0xe1b696, 18 entries, InitializeSuna): "|MEASURE :|TIME SIGNATURE:|-| | KEY "
-; [nakarest] (AcCmpSetGridBox.fixedrow of element 7); " MEASURE &|TIME SIGNATURE"
-; [nakarest] (AcCmpSetGridBox.fixedcol of element 7). widget record, element 8 of Viewable slot
-; [nakarest] 0xb4 (table 0xe1b696, 18 entries, InitializeSuna) ("CmpSetScreen"): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0xb4 (table 0xe1b696, 18 entries,
-; [nakarest] InitializeSuna): "RECORD SETTING" (Label.str of element 8). widget records,
-; [nakarest] elements 9-11 of Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna)
-; [nakarest] ("CmpSetScreen"): AcIndexWideES (42 B) x2, Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna): "ITEM"
-; [nakarest] (Label.str of element 11). widget record, element 12 of Viewable slot 0xb4 (table
-; [nakarest] 0xe1b696, 18 entries, InitializeSuna) ("CmpSetScreen"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xb4 (table 0xe1b696, 18 entries,
-; [nakarest] InitializeSuna): "VALUE" (Label.str of element 12). widget records, elements 13-14
-; [nakarest] of Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna)
-; [nakarest] ("CmpSetScreen"): Window (36 B), AcGridBox (74 B). text the records point at, in
-; [nakarest] Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna):
-; [nakarest] "|-|BASS|ACCOMP1|ACCOMP2|ACCOMP3" (AcGridBox.fixedrow of element 14); " PART |
-; [nakarest] PANPOT |PITCH POINT" (AcGridBox.fixedcol of element 14). widget records, elements
-; [nakarest] 15-17 of Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna)
-; [nakarest] ("CmpSetScreen"): AcIndexWideES (42 B) x3.
+; [nakarest] widget records, elements 0-17 of Viewable slot 0xb4 (table 0xe1b696, 18 entries,
+; [nakarest] InitializeSuna) ("CmpSetScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
+; [nakarest] AcWindowPage (36 B), IvPageControl (28 B) x2, IvShowHide (26 B), Window (36 B) x2,
+; [nakarest] AcCmpSetGridBox (74 B), Label (32 B) x3, AcIndexWideES (42 B) x5, AcGridBox (74 B).
+; [nakarest] 8 texts the records point at (Viewable slot 0xb4 (table 0xe1b696, 18 entries,
+; [nakarest] InitializeSuna)): "RECORD SETTING" (TtlScreen.title of element 0); "|MEASURE :|TIME
+; [nakarest] SIGNATURE:|-| | KEY " (AcCmpSetGridBox.fixedrow of element 7); " MEASURE &|TIME
+; [nakarest] SIGNATURE" (AcCmpSetGridBox.fixedcol of element 7); "RECORD SETTING" (Label.str of
+; [nakarest] element 8); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x11CA, 0x3B6
 ; [nakarest] naka_composer_style+0x1580  +0x1580..+0x1a2a (0xe18c64, 1194 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna) ("CmpRealScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "REALTIME
-; [nakarest] RECORDING" (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable
-; [nakarest] slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"): Box (26
-; [nakarest] B), PsCmpMemBox (36 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "%" (Label.str of element 3).
-; [nakarest] widget record, element 4 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna) ("CmpRealScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "PATTERN ="
-; [nakarest] (Label.str of element 4). widget record, element 5 of Viewable slot 0xb5 (table
-; [nakarest] 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna): "TEMPO =" (Label.str of element 5). widget record, element 6 of
-; [nakarest] Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xb5 (table 0xe1b6e2, 31
-; [nakarest] entries, InitializeSuna): "QUANTIZE=" (Label.str of element 6). widget record,
-; [nakarest] element 7 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna)
-; [nakarest] ("CmpRealScreen"): Label (32 B). text the records point at, in Viewable slot 0xb5
-; [nakarest] (table 0xe1b6e2, 31 entries, InitializeSuna): "MEASURE =" (Label.str of element 7).
-; [nakarest] widget record, element 8 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna) ("CmpRealScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "MEMORY ="
-; [nakarest] (Label.str of element 8). widget records, elements 9-10 of Viewable slot 0xb5
-; [nakarest] (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"): IvMainEditSw (26
-; [nakarest] B), VwEditSwBox (44 B). text the records point at, in Viewable slot 0xb5 (table
-; [nakarest] 0xe1b6e2, 31 entries, InitializeSuna): "DRM" (VwEditSwBox.str of element 10).
-; [nakarest] widget record, element 11 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna) ("CmpRealScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "AC3"
-; [nakarest] (VwEditSwBox.str of element 11). widget record, element 12 of Viewable slot 0xb5
-; [nakarest] (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"): VwEditSwBox (44 B).
-; [nakarest] text the records point at, in Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna): "AC2" (VwEditSwBox.str of element 12). widget record, element 13
-; [nakarest] of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna)
-; [nakarest] ("CmpRealScreen"): VwEditSwBox (44 B). text the records point at, in Viewable slot
-; [nakarest] 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "AC1" (VwEditSwBox.str of
-; [nakarest] element 13). widget record, element 14 of Viewable slot 0xb5 (table 0xe1b6e2, 31
-; [nakarest] entries, InitializeSuna) ("CmpRealScreen"): VwEditSwBox (44 B). text the records
-; [nakarest] point at, in Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "BAS"
-; [nakarest] (VwEditSwBox.str of element 14). widget records, elements 15-16 of Viewable slot
-; [nakarest] 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"): AcCmpTempoBox
-; [nakarest] (36 B), AcTitleMenu (54 B). text the records point at, in Viewable slot 0xb5 (table
-; [nakarest] 0xe1b6e2, 31 entries, InitializeSuna): "BAL" (AcTitleMenu.str of element 16).
-; [nakarest] widget record, element 17 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna) ("CmpRealScreen"): AcTitleMenu (54 B). text the records point at,
-; [nakarest] in Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "STEP"
-; [nakarest] (AcTitleMenu.str of element 17). widget records, elements 18-19 of Viewable slot
-; [nakarest] 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"): AcMemNoBox (36
-; [nakarest] B), VwMenuBox (50 B). text the records point at, in Viewable slot 0xb5 (table
-; [nakarest] 0xe1b6e2, 31 entries, InitializeSuna): "PART CLR" (VwMenuBox.str of element 19).
-; [nakarest] widget record, element 20 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna) ("CmpRealScreen"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "ALL ERAS"
-; [nakarest] (VwMenuBox.str of element 20). widget record, element 21 of Viewable slot 0xb5
-; [nakarest] (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"): VwMenuBox (50 B).
-; [nakarest] text the records point at, in Viewable slot 0xb5 (table 0xe1b6e2, 31 entries,
-; [nakarest] InitializeSuna): "INST ERS" (VwMenuBox.str of element 21). widget record, element
-; [nakarest] 22 of Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna)
-; [nakarest] ("CmpRealScreen"): VwMenuBox (50 B). text the records point at, in Viewable slot
-; [nakarest] 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "QUANTIZE" (VwMenuBox.str of
-; [nakarest] element 22). widget record, element 23 of Viewable slot 0xb5 (table 0xe1b6e2, 31
-; [nakarest] entries, InitializeSuna) ("CmpRealScreen"): VwMenuBox (50 B). text the records
-; [nakarest] point at, in Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna): "
-; [nakarest] SOLO" (VwMenuBox.str of element 23). widget records, elements 29-30 of Viewable
-; [nakarest] slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna) ("CmpRealScreen"):
-; [nakarest] PsCmpQtzBox (36 B), PsCmpMeasBox (36 B).
+; [nakarest] widget records, elements 0-23, 29-30 of Viewable slot 0xb5 (table 0xe1b6e2, 31
+; [nakarest] entries, InitializeSuna) ("CmpRealScreen"): TtlScreen (42 B), Box (26 B),
+; [nakarest] PsCmpMemBox (36 B), Label (32 B) x6, IvMainEditSw (26 B), VwEditSwBox (44 B) x5,
+; [nakarest] AcCmpTempoBox (36 B), AcTitleMenu (54 B) x2, AcMemNoBox (36 B), VwMenuBox (50 B)
+; [nakarest] x5, PsCmpQtzBox (36 B), PsCmpMeasBox (36 B). 19 texts the records point at
+; [nakarest] (Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna)): "REALTIME
+; [nakarest] RECORDING" (TtlScreen.title of element 0); "%" (Label.str of element 3); "PATTERN
+; [nakarest] =" (Label.str of element 4); "TEMPO =" (Label.str of element 5); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x1580, 0x4AA
 ; [nakarest] naka_composer_style+0x1a2a  +0x1a2a..+0x1a4c (0xe1910e, 34 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xb6 (table 0xe1b762, 1 entries,
 ; [nakarest] InitializeSuna): IvDirmdScreen (34 B).
 	.incbin "includes/generated/naka_composer_style.bin", 0x1A2A, 0x22
 ; [nakarest] naka_composer_style+0x1a4c  +0x1a4c..+0x1b24 (0xe19130, 216 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb7 (table 0xe1b76a, 6 entries,
-; [nakarest] InitializeSuna) ("CmpBalScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb7 (table 0xe1b76a, 6 entries, InitializeSuna): "PART BALANCE"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-5 of Viewable slot 0xb7
-; [nakarest] (table 0xe1b76a, 6 entries, InitializeSuna) ("CmpBalScreen"): AcMixerVol (32 B) x5.
+; [nakarest] widget records, elements 0-5 of Viewable slot 0xb7 (table 0xe1b76a, 6 entries,
+; [nakarest] InitializeSuna) ("CmpBalScreen"): TtlScreen (42 B), AcMixerVol (32 B) x5. 1 text
+; [nakarest] the records point at (Viewable slot 0xb7 (table 0xe1b76a, 6 entries,
+; [nakarest] InitializeSuna)): "PART BALANCE" (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_composer_style.bin", 0x1A4C, 0xD8
 ; [nakarest] naka_composer_style+0x1b24  +0x1b24..+0x1eba (0xe19208, 918 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna) ("CmpNcpScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): "PATTERN COPY"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0xb8
-; [nakarest] (table 0xe1b786, 33 entries, InitializeSuna) ("CmpNcpScreen"): IvMainEditSw (26 B),
-; [nakarest] VwWideESBox (46 B). text the records point at, in Viewable slot 0xb8 (table
-; [nakarest] 0xe1b786, 33 entries, InitializeSuna): "" (VwWideESBox.str of element 2). widget
-; [nakarest] record, element 3 of Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna) ("CmpNcpScreen"): VwWideESBox (46 B). text the records point at, in
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): ""
-; [nakarest] (VwWideESBox.str of element 3). widget record, element 4 of Viewable slot 0xb8
-; [nakarest] (table 0xe1b786, 33 entries, InitializeSuna) ("CmpNcpScreen"): VwWideESBox (46 B).
-; [nakarest] text the records point at, in Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna): "" (VwWideESBox.str of element 4). widget record, element 5 of
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna) ("CmpNcpScreen"):
-; [nakarest] VwWideESBox (46 B). text the records point at, in Viewable slot 0xb8 (table
-; [nakarest] 0xe1b786, 33 entries, InitializeSuna): "" (VwWideESBox.str of element 5). widget
-; [nakarest] record, element 6 of Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna) ("CmpNcpScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): "ITEM VALUE ITEM
-; [nakarest] VALUE" (Label.str of element 6). widget record, element 7 of Viewable slot 0xb8
-; [nakarest] (table 0xe1b786, 33 entries, InitializeSuna) ("CmpNcpScreen"): Label (32 B). text
-; [nakarest] the records point at, in Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna): "FROM" (Label.str of element 7). widget records, elements 8-12 of
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna) ("CmpNcpScreen"):
-; [nakarest] Line (26 B) x4, Label (32 B). text the records point at, in Viewable slot 0xb8
-; [nakarest] (table 0xe1b786, 33 entries, InitializeSuna): "TO" (Label.str of element 12).
-; [nakarest] widget records, elements 13-17, 19 of Viewable slot 0xb8 (table 0xe1b786, 33
-; [nakarest] entries, InitializeSuna) ("CmpNcpScreen"): Line (26 B) x4, Box (26 B), Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna): "GROUP:" (Label.str of element 19). widget record, element 20 of
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna) ("CmpNcpScreen"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xb8 (table 0xe1b786, 33
-; [nakarest] entries, InitializeSuna): "RHYTHM:" (Label.str of element 20). widget record,
-; [nakarest] element 21 of Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna)
-; [nakarest] ("CmpNcpScreen"): Label (32 B). text the records point at, in Viewable slot 0xb8
-; [nakarest] (table 0xe1b786, 33 entries, InitializeSuna): "PATTERN:" (Label.str of element 21).
-; [nakarest] widget record, element 22 of Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna) ("CmpNcpScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): "FROM" (Label.str
-; [nakarest] of element 22). widget record, element 23 of Viewable slot 0xb8 (table 0xe1b786, 33
-; [nakarest] entries, InitializeSuna) ("CmpNcpScreen"): Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): "TO" (Label.str
-; [nakarest] of element 23). widget record, element 24 of Viewable slot 0xb8 (table 0xe1b786, 33
-; [nakarest] entries, InitializeSuna) ("CmpNcpScreen"): VwEditSwBox (44 B). text the records
-; [nakarest] point at, in Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): ""
-; [nakarest] (VwEditSwBox.str of element 24). widget record, element 25 of Viewable slot 0xb8
-; [nakarest] (table 0xe1b786, 33 entries, InitializeSuna) ("CmpNcpScreen"): Box (26 B).
+; [nakarest] widget records, elements 0-17, 19-25 of Viewable slot 0xb8 (table 0xe1b786, 33
+; [nakarest] entries, InitializeSuna) ("CmpNcpScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
+; [nakarest] VwWideESBox (46 B) x4, Label (32 B) x8, Line (26 B) x8, Box (26 B) x2, VwEditSwBox
+; [nakarest] (44 B). 14 texts the records point at (Viewable slot 0xb8 (table 0xe1b786, 33
+; [nakarest] entries, InitializeSuna)): "PATTERN COPY" (TtlScreen.title of element 0); ""
+; [nakarest] (VwWideESBox.str of element 2); "" (VwWideESBox.str of element 3); ""
+; [nakarest] (VwWideESBox.str of element 4); ....
 	.incbin "includes/generated/naka_composer_style.bin", 0x1B24, 0x396
 ; [nakarest] NakaLabel_PatternCopy_MemoryLabel  +0x1eba..+0x1ee2 (0xe1959e, 40 B)
 ; [nakarest] widget record, element 28 of Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna) ("CmpNcpScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): "MEMORY:"
+; [nakarest] InitializeSuna) ("CmpNcpScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna)): "MEMORY:"
 ; [nakarest] (Label.str of element 28).
 NakaLabel_PatternCopy_MemoryLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1EBA, 0x28
 ; [nakarest] NakaLabel_PatternCopy_PatMemLabel  +0x1ee2..+0x1f0c (0xe195c6, 42 B)
 ; [nakarest] widget record, element 29 of Viewable slot 0xb8 (table 0xe1b786, 33 entries,
-; [nakarest] InitializeSuna) ("CmpNcpScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna): "PATTERN:"
+; [nakarest] InitializeSuna) ("CmpNcpScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna)): "PATTERN:"
 ; [nakarest] (Label.str of element 29).
 NakaLabel_PatternCopy_PatMemLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1EE2, 0x2A
@@ -612,29 +338,29 @@ NakaNode_PatternCopy_ProgressBar:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1F0C, 0x20
 ; [nakarest] NakaContainer_SeqToComposer_Root  +0x1f2c..+0x1f6c (0xe19610, 64 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "SEQ TO COMPOSER
+; [nakarest] InitializeSuna) ("S2CScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "SEQ TO COMPOSER
 ; [nakarest] COPY" (TtlScreen.title of element 0).
 NakaContainer_SeqToComposer_Root:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1F2C, 0x40
 ; [nakarest] Naka0x3e_SeqToComposer_DrmBtn  +0x1f6c..+0x1f9a (0xe19650, 46 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 1).
 Naka0x3E_SeqToComposer_DrmBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1F6C, 0x2E
 ; [nakarest] Naka0x3e_SeqToComposer_Ac3Btn  +0x1f9a..+0x1fc8 (0xe1967e, 46 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 2).
 Naka0x3E_SeqToComposer_Ac3Btn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1F9A, 0x2E
 ; [nakarest] Naka0x3e_SeqToComposer_Ac2Btn  +0x1fc8..+0x1ff6 (0xe196ac, 46 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 3).
 Naka0x3E_SeqToComposer_Ac2Btn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1FC8, 0x2E
@@ -645,36 +371,36 @@ Naka0x29_SeqToComposer_Scrollbar:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1FF6, 0x1A
 ; [nakarest] Naka0x3e_SeqToComposer_SourceBtn  +0x2010..+0x203e (0xe196f4, 46 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 5).
 Naka0x3E_SeqToComposer_SourceBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2010, 0x2E
 ; [nakarest] Naka0x3e_SeqToComposer_DestBtn  +0x203e..+0x206c (0xe19722, 46 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 6).
 Naka0x3E_SeqToComposer_DestBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x203E, 0x2E
 ; [nakarest] Naka0x3e_SeqToComposer_InfoBtn  +0x206c..+0x209a (0xe19750, 46 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("S2CScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 7).
 Naka0x3E_SeqToComposer_InfoBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x206C, 0x2E
 ; [nakarest] NakaLabel_SeqToComposer_FirstLast  +0x209a..+0x20c6 (0xe1977e, 44 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "FIRST LAST" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "FIRST LAST" (Label.str of
 ; [nakarest] element 8).
 NakaLabel_SeqToComposer_FirstLast:
 	.incbin "includes/generated/naka_composer_style.bin", 0x209A, 0x2C
 ; [nakarest] NakaLabel_SeqToComposer_MeasureLabel  +0x20c6..+0x20ee (0xe197aa, 40 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "MEASURE" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "MEASURE" (Label.str of
 ; [nakarest] element 9).
 NakaLabel_SeqToComposer_MeasureLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x20C6, 0x28
@@ -700,22 +426,22 @@ NakaValue_SeqToComposer_MeasVal4:
 	.incbin "includes/generated/naka_composer_style.bin", 0x213C, 0x1A
 ; [nakarest] NakaLabel_SeqToComposer_TransLabel  +0x2156..+0x217c (0xe1983a, 38 B)
 ; [nakarest] widget record, element 14 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "TRANS" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "TRANS" (Label.str of
 ; [nakarest] element 14).
 NakaLabel_SeqToComposer_TransLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2156, 0x26
 ; [nakarest] NakaLabel_SeqToComposer_TransPose  +0x217c..+0x21a2 (0xe19860, 38 B)
 ; [nakarest] widget record, element 15 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "-POSE" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "-POSE" (Label.str of
 ; [nakarest] element 15).
 NakaLabel_SeqToComposer_TransPose:
 	.incbin "includes/generated/naka_composer_style.bin", 0x217C, 0x26
 ; [nakarest] NakaLabel_SeqToComposer_SequencerLabel  +0x21a2..+0x21cc (0xe19886, 42 B)
 ; [nakarest] widget record, element 16 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "SEQUENCER" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "SEQUENCER" (Label.str of
 ; [nakarest] element 16).
 NakaLabel_SeqToComposer_SequencerLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x21A2, 0x2A
@@ -731,29 +457,29 @@ NakaValue_SeqToComposer_SeqValue:
 	.incbin "includes/generated/naka_composer_style.bin", 0x21E6, 0x1A
 ; [nakarest] NakaLabel_SeqToComposer_FirstLabel  +0x2200..+0x2226 (0xe198e4, 38 B)
 ; [nakarest] widget record, element 19 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "FIRST" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "FIRST" (Label.str of
 ; [nakarest] element 19).
 NakaLabel_SeqToComposer_FirstLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2200, 0x26
 ; [nakarest] NakaLabel_SeqToComposer_MeasFirstLabel  +0x2226..+0x224c (0xe1990a, 38 B)
 ; [nakarest] widget record, element 20 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "MEAS:" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "MEAS:" (Label.str of
 ; [nakarest] element 20).
 NakaLabel_SeqToComposer_MeasFirstLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2226, 0x26
 ; [nakarest] NakaLabel_SeqToComposer_LastLabel  +0x224c..+0x2272 (0xe19930, 38 B)
 ; [nakarest] widget record, element 21 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "LAST" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "LAST" (Label.str of
 ; [nakarest] element 21).
 NakaLabel_SeqToComposer_LastLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x224C, 0x26
 ; [nakarest] NakaLabel_SeqToComposer_MeasLastLabel  +0x2272..+0x2298 (0xe19956, 38 B)
 ; [nakarest] widget record, element 22 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "MEAS:" (Label.str of
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "MEAS:" (Label.str of
 ; [nakarest] element 22).
 NakaLabel_SeqToComposer_MeasLastLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2272, 0x26
@@ -764,22 +490,22 @@ NakaGroup_SeqToComposer_TransGroup:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2298, 0x1A
 ; [nakarest] NakaLabel_SeqToComposer_TrnLabel  +0x22b2..+0x22d6 (0xe19996, 36 B)
 ; [nakarest] widget record, element 25 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "TRN" (Label.str of element
-; [nakarest] 25).
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "TRN" (Label.str of
+; [nakarest] element 25).
 NakaLabel_SeqToComposer_TrnLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x22B2, 0x24
 ; [nakarest] NakaLabel_SeqToComposer_MemLabel  +0x22d6..+0x22fa (0xe199ba, 36 B)
 ; [nakarest] widget record, element 26 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "MEM" (Label.str of element
-; [nakarest] 26).
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "MEM" (Label.str of
+; [nakarest] element 26).
 NakaLabel_SeqToComposer_MemLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x22D6, 0x24
 ; [nakarest] NakaLabel_SeqToComposer_ComposerMemory  +0x22fa..+0x232a (0xe199de, 48 B)
 ; [nakarest] widget record, element 27 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna): "COMPOSER MEMORY"
+; [nakarest] InitializeSuna) ("S2CScreen"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): "COMPOSER MEMORY"
 ; [nakarest] (Label.str of element 27).
 NakaLabel_SeqToComposer_ComposerMemory:
 	.incbin "includes/generated/naka_composer_style.bin", 0x22FA, 0x30
@@ -800,8 +526,8 @@ NakaNode_SeqToComposer_ProgressBar:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2372, 0x20
 ; [nakarest] NakaNode_SeqToComposer_PartDisplay  +0x2392..+0x2410 (0xe19a76, 126 B)
 ; [nakarest] widget record, element 33 of Viewable slot 0xb9 (table 0xe1b80e, 37 entries,
-; [nakarest] InitializeSuna) ("S2CScreen"): S2cGridBox (74 B). text the records point at, in
-; [nakarest] Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna):
+; [nakarest] InitializeSuna) ("S2CScreen"): S2cGridBox (74 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)):
 ; [nakarest] "|-|DRUMS|BASS|ACCOMP1|ACCOMP2|ACCOMP3" (S2cGridBox.fixedrow of element 33); " PART
 ; [nakarest] |TRACK" (S2cGridBox.fixedcol of element 33).
 NakaNode_SeqToComposer_PartDisplay:
@@ -823,8 +549,8 @@ Naka0x64_SeqToComposer_TabContent:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2460, 0x1A
 ; [nakarest] NakaContainer_EasyComposer_Root  +0x247a..+0x24b2 (0xe19b5e, 56 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna): "EASY COMPOSER"
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)): "EASY COMPOSER"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaContainer_EasyComposer_Root:
 	.incbin "includes/generated/naka_composer_style.bin", 0x247A, 0x38
@@ -835,43 +561,43 @@ Naka0x29_EasyComposer_Scrollbar:
 	.incbin "includes/generated/naka_composer_style.bin", 0x24B2, 0x1A
 ; [nakarest] Naka0x3d_EasyComposer_EditBtn  +0x24cc..+0x2504 (0xe19bb0, 56 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna): "EDIT"
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)): "EDIT"
 ; [nakarest] (VwMenuBox.str of element 2).
 Naka0x3D_EasyComposer_EditBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x24CC, 0x38
 ; [nakarest] Naka0x3e_EasyComposer_DestBtn  +0x2504..+0x2532 (0xe19be8, 46 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 3).
 Naka0x3E_EasyComposer_DestBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2504, 0x2E
 ; [nakarest] Naka0x3e_EasyComposer_SourceBtn  +0x2532..+0x2560 (0xe19c16, 46 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 4).
 Naka0x3E_EasyComposer_SourceBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2532, 0x2E
 ; [nakarest] Naka0x3e_EasyComposer_InfoBtn  +0x2560..+0x2590 (0xe19c44, 48 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna): "SET"
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)): "SET"
 ; [nakarest] (VwEditSwBox.str of element 5).
 Naka0x3E_EasyComposer_InfoBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2560, 0x30
 ; [nakarest] NakaLabel_EasyComposer_CompMemLabel  +0x2590..+0x25c2 (0xe19c74, 50 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna): "COMPOSER MEMORY
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)): "COMPOSER MEMORY
 ; [nakarest] :" (Label.str of element 6).
 NakaLabel_EasyComposer_CompMemLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2590, 0x32
 ; [nakarest] NakaLabel_EasyComposer_MemField  +0x25c2..+0x25e6 (0xe19ca6, 36 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna): "MEM" (Label.str
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)): "MEM" (Label.str
 ; [nakarest] of element 7).
 NakaLabel_EasyComposer_MemField:
 	.incbin "includes/generated/naka_composer_style.bin", 0x25C2, 0x24
@@ -887,8 +613,8 @@ NakaNode_EasyComposer_StatusField:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2602, 0x24
 ; [nakarest] NakaNode_EasyComposer_PartDisplay  +0x2626..+0x26d6 (0xe19d0a, 176 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0xba (table 0xe1b8a6, 14 entries,
-; [nakarest] InitializeSuna) ("CmpEasyScreen"): AcEasyCmpGridBox (74 B). text the records point
-; [nakarest] at, in Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna):
+; [nakarest] InitializeSuna) ("CmpEasyScreen"): AcEasyCmpGridBox (74 B). 2 texts the records
+; [nakarest] point at (Viewable slot 0xba (table 0xe1b8a6, 14 entries, InitializeSuna)):
 ; [nakarest] "|-|BsDr&Snare|HHat&Cymbal|Percussion|Bass|Accomp" (AcEasyCmpGridBox.fixedrow of
 ; [nakarest] element 10); " PART | STYLE |VARI" (AcEasyCmpGridBox.fixedcol of element 10).
 NakaNode_EasyComposer_PartDisplay:
@@ -910,8 +636,8 @@ Naka0x1F_EasyComposer_PartSel3:
 	.incbin "includes/generated/naka_composer_style.bin", 0x272A, 0x28
 ; [nakarest] NakaContainer_BendRange_Root  +0x2752..+0x279e (0xe19e36, 76 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xbb (table 0xe1b8e2, 4 entries,
-; [nakarest] InitializeSuna) ("CmpBendScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xbb (table 0xe1b8e2, 4 entries, InitializeSuna): "COMPOSER PITCH
+; [nakarest] InitializeSuna) ("CmpBendScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbb (table 0xe1b8e2, 4 entries, InitializeSuna)): "COMPOSER PITCH
 ; [nakarest] BEND RANGE SETTING" (TtlScreen.title of element 0).
 NakaContainer_BendRange_Root:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2752, 0x4C
@@ -922,107 +648,107 @@ Naka0x22_BendRange_PartSelector:
 	.incbin "includes/generated/naka_composer_style.bin", 0x279E, 0x2A
 ; [nakarest] Naka0x1a_BendRange_RangeControl  +0x27c8..+0x2816 (0xe19eac, 78 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xbb (table 0xe1b8e2, 4 entries,
-; [nakarest] InitializeSuna) ("CmpBendScreen"): AcLswEditBox (58 B). text the records point at,
-; [nakarest] in Viewable slot 0xbb (table 0xe1b8e2, 4 entries, InitializeSuna): " BEND RANGE : "
+; [nakarest] InitializeSuna) ("CmpBendScreen"): AcLswEditBox (58 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbb (table 0xe1b8e2, 4 entries, InitializeSuna)): " BEND RANGE : "
 ; [nakarest] (AcLswEditBox.caption of element 2).
 Naka0x1A_BendRange_RangeControl:
 	.incbin "includes/generated/naka_composer_style.bin", 0x27C8, 0x4E
 ; [nakarest] NakaLabel_BendRange_ValueLabel  +0x2816..+0x283c (0xe19efa, 38 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xbb (table 0xe1b8e2, 4 entries,
-; [nakarest] InitializeSuna) ("CmpBendScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbb (table 0xe1b8e2, 4 entries, InitializeSuna): "VALUE" (Label.str
-; [nakarest] of element 3).
+; [nakarest] InitializeSuna) ("CmpBendScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbb (table 0xe1b8e2, 4 entries, InitializeSuna)): "VALUE"
+; [nakarest] (Label.str of element 3).
 NakaLabel_BendRange_ValueLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2816, 0x26
 ; [nakarest] NakaContainer_ModeSelect_Root  +0x283c..+0x2872 (0xe19f20, 54 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "MODE SELECT"
+; [nakarest] InitializeSuna) ("CmpModeScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "MODE SELECT"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaContainer_ModeSelect_Root:
 	.incbin "includes/generated/naka_composer_style.bin", 0x283C, 0x36
 ; [nakarest] NakaLabel_ModeSelect_IntroFillIns  +0x2872..+0x28b0 (0xe19f56, 62 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "The
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "The
 ; [nakarest] Intro,Fill-Ins and Ending" (Label.str of element 1).
 NakaLabel_ModeSelect_IntroFillIns:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2872, 0x3E
 ; [nakarest] NakaLabel_ModeSelect_ForEachPattern  +0x28b0..+0x28ee (0xe19f94, 62 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "for each Composer
-; [nakarest] Pattern can" (Label.str of element 2).
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "for each
+; [nakarest] Composer Pattern can" (Label.str of element 2).
 NakaLabel_ModeSelect_ForEachPattern:
 	.incbin "includes/generated/naka_composer_style.bin", 0x28B0, 0x3E
 ; [nakarest] NakaLabel_ModeSelect_BeCopied  +0x28ee..+0x2932 (0xe19fd2, 68 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "be copied from
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "be copied from
 ; [nakarest] any preset pattern." (Label.str of element 3).
 NakaLabel_ModeSelect_BeCopied:
 	.incbin "includes/generated/naka_composer_style.bin", 0x28EE, 0x44
 ; [nakarest] NakaLabel_ModeSelect_MemAssigned  +0x2932..+0x2970 (0xe1a016, 62 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "A Composer Memory
-; [nakarest] is assigned" (Label.str of element 4).
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "A Composer
+; [nakarest] Memory is assigned" (Label.str of element 4).
 NakaLabel_ModeSelect_MemAssigned:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2932, 0x3E
 ; [nakarest] NakaLabel_ModeSelect_ToEachIntro  +0x2970..+0x29b0 (0xe1a054, 64 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "to each of The
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "to each of The
 ; [nakarest] Intro Fill-In 1," (Label.str of element 5).
 NakaLabel_ModeSelect_ToEachIntro:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2970, 0x40
 ; [nakarest] NakaLabel_ModeSelect_FillInEnding  +0x29b0..+0x29f0 (0xe1a094, 64 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "Fill -In 2 and
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "Fill -In 2 and
 ; [nakarest] Ending buttons," (Label.str of element 6).
 NakaLabel_ModeSelect_FillInEnding:
 	.incbin "includes/generated/naka_composer_style.bin", 0x29B0, 0x40
 ; [nakarest] NakaLabel_ModeSelect_SoYouCanCreate  +0x29f0..+0x2a2c (0xe1a0d4, 60 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "so you can create
-; [nakarest] your own" (Label.str of element 7).
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "so you can
+; [nakarest] create your own" (Label.str of element 7).
 NakaLabel_ModeSelect_SoYouCanCreate:
 	.incbin "includes/generated/naka_composer_style.bin", 0x29F0, 0x3C
 ; [nakarest] NakaLabel_ModeSelect_IntroFillEnding  +0x2a2c..+0x2a66 (0xe1a110, 58 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): "Intro,Fill-Ins &
-; [nakarest] Ending." (Label.str of element 8).
+; [nakarest] InitializeSuna) ("CmpModeScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): "Intro,Fill-Ins
+; [nakarest] & Ending." (Label.str of element 8).
 NakaLabel_ModeSelect_IntroFillEnding:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2A2C, 0x3A
 ; [nakarest] NakaNode_ModeSelect_NormalMode  +0x2a66..+0x2aa8 (0xe1a14a, 66 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): AcCmpMdBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): " NORMAL MODE:"
+; [nakarest] InitializeSuna) ("CmpModeScreen"): AcCmpMdBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): " NORMAL MODE:"
 ; [nakarest] (AcCmpMdBox.caption of element 9).
 NakaNode_ModeSelect_NormalMode:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2A66, 0x42
 ; [nakarest] NakaNode_ModeSelect_ExpandMode  +0x2aa8..+0x2aea (0xe1a18c, 66 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0xbd (table 0xe1b8f6, 11 entries,
-; [nakarest] InitializeSuna) ("CmpModeScreen"): AcCmpMdBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna): " EXPAND MODE:"
+; [nakarest] InitializeSuna) ("CmpModeScreen"): AcCmpMdBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbd (table 0xe1b8f6, 11 entries, InitializeSuna)): " EXPAND MODE:"
 ; [nakarest] (AcCmpMdBox.caption of element 10).
 NakaNode_ModeSelect_ExpandMode:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2AA8, 0x42
 ; [nakarest] NakaNode_CustomCopy_RootOuter  +0x2aea..+0x2b20 (0xe1a1ce, 54 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "CUSTOM COPY"
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "CUSTOM COPY"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaNode_CustomCopy_RootOuter:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2AEA, 0x36
 ; [nakarest] NakaLabel_CustomCopy_FromLabel  +0x2b20..+0x2b46 (0xe1a204, 38 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "FROM" (Label.str
-; [nakarest] of element 1).
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "FROM"
+; [nakarest] (Label.str of element 1).
 NakaLabel_CustomCopy_FromLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2B20, 0x26
 ; [nakarest] Naka0x11_CustomCopy_FromFrame  +0x2b46..+0x2b62 (0xe1a22a, 28 B)
@@ -1042,9 +768,9 @@ NakaNode_CustomCopy_ToFieldTop:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2B88, 0x26
 ; [nakarest] NakaLabel_CustomCopy_ToLabel  +0x2bae..+0x2bd2 (0xe1a292, 36 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "TO" (Label.str of
-; [nakarest] element 5).
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "TO" (Label.str
+; [nakarest] of element 5).
 NakaLabel_CustomCopy_ToLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2BAE, 0x24
 ; [nakarest] Naka0x11_CustomCopy_ToFrame  +0x2bd2..+0x2bee (0xe1a2b6, 28 B)
@@ -1059,22 +785,22 @@ Naka0x29_CustomCopy_Scrollbar:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2BEE, 0x1A
 ; [nakarest] Naka0x3f_CustomCopy_Selector1  +0x2c08..+0x2c38 (0xe1a2ec, 48 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwWideESBox (46 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwWideESBox (46 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): ""
 ; [nakarest] (VwWideESBox.str of element 8).
 Naka0x3F_CustomCopy_Selector1:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2C08, 0x30
 ; [nakarest] Naka0x3f_CustomCopy_Selector2  +0x2c38..+0x2c70 (0xe1a31c, 56 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwWideESBox (46 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "DIRECTION"
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwWideESBox (46 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "DIRECTION"
 ; [nakarest] (VwWideESBox.str of element 9).
 Naka0x3F_CustomCopy_Selector2:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2C38, 0x38
 ; [nakarest] Naka0x3f_CustomCopy_Selector3  +0x2c70..+0x2caa (0xe1a354, 58 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwWideESBox (46 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "CstmCpToSw"
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwWideESBox (46 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "CstmCpToSw"
 ; [nakarest] (VwWideESBox.str of element 10).
 Naka0x3F_CustomCopy_Selector3:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2C70, 0x3A
@@ -1085,8 +811,8 @@ NakaNode_CustomCopy_DestField:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2CAA, 0x26
 ; [nakarest] Naka0x3e_CustomCopy_InfoBtn  +0x2cd0..+0x2cfe (0xe1a3b4, 46 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): ""
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): ""
 ; [nakarest] (VwEditSwBox.str of element 12).
 Naka0x3E_CustomCopy_InfoBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2CD0, 0x2E
@@ -1142,15 +868,15 @@ NakaNode_CustomCopy_RhythmStatus:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2E4E, 0x24
 ; [nakarest] Naka0x3e_CustomCopy_ExecuteBtn  +0x2e72..+0x2ea6 (0xe1a556, 52 B)
 ; [nakarest] widget record, element 23 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "EXECUTE"
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "EXECUTE"
 ; [nakarest] (VwEditSwBox.str of element 23).
 Naka0x3E_CustomCopy_ExecuteBtn:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2E72, 0x34
 ; [nakarest] Naka0x3e_CustomCopy_AbortBtn1  +0x2ea6..+0x2ed8 (0xe1a58a, 50 B)
 ; [nakarest] widget record, element 24 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "ABORT"
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "ABORT"
 ; [nakarest] (VwEditSwBox.str of element 24).
 Naka0x3E_CustomCopy_AbortBtn1:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2EA6, 0x32
@@ -1186,15 +912,15 @@ NakaNode_CustomCopy_DestRhythmStatus:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2F96, 0x24
 ; [nakarest] Naka0x3e_CustomCopy_ExecuteBtn2  +0x2fba..+0x2fee (0xe1a69e, 52 B)
 ; [nakarest] widget record, element 31 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "EXECUTE"
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "EXECUTE"
 ; [nakarest] (VwEditSwBox.str of element 31).
 Naka0x3E_CustomCopy_ExecuteBtn2:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2FBA, 0x34
 ; [nakarest] Naka0x3e_CustomCopy_AbortBtn2  +0x2fee..+0x3020 (0xe1a6d2, 50 B)
 ; [nakarest] widget record, element 32 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
-; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna): "ABORT"
+; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwEditSwBox (44 B). 1 text the records point
+; [nakarest] at (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "ABORT"
 ; [nakarest] (VwEditSwBox.str of element 32).
 Naka0x3E_CustomCopy_AbortBtn2:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2FEE, 0x32
@@ -1204,8 +930,8 @@ Naka0x3E_CustomCopy_AbortBtn2:
 NakaContainer_CustomCopy_FinalRoot:
 	.incbin "includes/generated/naka_composer_style.bin", 0x3020, 0x2A
 ; [nakarest] String_MSP_BANK_SELECT  +0x304a..+0x305a (0xe1a72e, 16 B)
-; [nakarest] text the records point at, in Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
-; [nakarest] InitializeSuna): "MSP BANK SELECT" (TtlScreen.title of element 0).
+; [nakarest] 1 text the records point at (Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
+; [nakarest] InitializeSuna)): "MSP BANK SELECT" (TtlScreen.title of element 0).
 String_MSP_BANK_SELECT:
 	.incbin "includes/generated/naka_composer_style.bin", 0x304A, 0x10
 ; External label offsets within the binary blob above.

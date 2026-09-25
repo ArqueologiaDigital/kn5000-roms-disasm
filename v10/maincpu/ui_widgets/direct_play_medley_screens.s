@@ -172,7 +172,11 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaBoxData_PsSongSelBox  +0x0..+0x2 (0xe2107c, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe2107c that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe2107c not derived; readers below
+; [nakarest] Readers: source references MtName_SongNameSet
+; [nakarest] (ui_widgets/naka_direct_play_dispatch.s: `.long NakaBoxData_PsSongSelBox`); 1 data
+; [nakarest] word in MtName_SongNameSet (at 0xe21078), which is read by MtName_PtrTable
+; [nakarest] (ui_widgets/naka_direct_play_dispatch.s: `.long MtName_SongNameSet`).
 NakaBoxData_PsSongSelBox:
 	.incbin "includes/generated/naka_direct_play.bin", 0x0, 0x2
 ; [nakarest] naka_direct_play+0x2  +0x2..+0x14 (0xe2107e, 18 B)
@@ -181,8 +185,8 @@ NakaBoxData_PsSongSelBox:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2, 0x12
 ; [nakarest] naka_direct_play+0x14  +0x14..+0x50 (0xe21090, 60 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): TtlScreen (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "SMF DIRECT PLAY "
+; [nakarest] InitializeYoko) ("DpSmf"): TtlScreen (42 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "SMF DIRECT PLAY "
 ; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x14, 0x3C
 ; [nakarest] NakaWidget_SmfDpContainer  +0x50..+0x74 (0xe210cc, 36 B)
@@ -192,8 +196,8 @@ NakaWidget_SmfDpContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x50, 0x24
 ; [nakarest] NakaWidget_SmfDpVolume  +0x74..+0xb2 (0xe210f0, 62 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "LYRICS"
+; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "LYRICS"
 ; [nakarest] (AcTitleMenu.str of element 2).
 NakaWidget_SmfDpVolume:
 	.incbin "includes/generated/naka_direct_play.bin", 0x74, 0x3E
@@ -219,8 +223,8 @@ NakaWidget_SmfDpLyricsToggle:
 	.incbin "includes/generated/naka_direct_play.bin", 0x114, 0x28
 ; [nakarest] NakaWidget_SmfDpMuteToggle  +0x13c..+0x178 (0xe211b8, 60 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): AcRamEditBox (58 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): " "
+; [nakarest] InitializeYoko) ("DpSmf"): AcRamEditBox (58 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): " "
 ; [nakarest] (AcRamEditBox.caption of element 7).
 NakaWidget_SmfDpMuteToggle:
 	.incbin "includes/generated/naka_direct_play.bin", 0x13C, 0x3C
@@ -236,57 +240,57 @@ NakaWidget_SmfDpFileSelector:
 	.incbin "includes/generated/naka_direct_play.bin", 0x192, 0x1A
 ; [nakarest] NakaWidget_SmfDpFileList  +0x1ac..+0x1e0 (0xe21228, 52 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "OFF"
+; [nakarest] InitializeYoko) ("DpSmf"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "OFF"
 ; [nakarest] (AcMuteToggleBox.stroff of element 10); "ON" (AcMuteToggleBox.stron of element 10).
 NakaWidget_SmfDpFileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1AC, 0x34
 ; [nakarest] NakaWidget_SmfDpMixer  +0x1e0..+0x218 (0xe2125c, 56 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): VwMenuBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "MIXER" (VwMenuBox.str of
+; [nakarest] InitializeYoko) ("DpSmf"): VwMenuBox (50 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "MIXER" (VwMenuBox.str of
 ; [nakarest] element 11).
 NakaWidget_SmfDpMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1E0, 0x38
 ; [nakarest] NakaWidget_SmfDpMic  +0x218..+0x24e (0xe21294, 54 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): VwMenuBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "MIC" (VwMenuBox.str of
+; [nakarest] InitializeYoko) ("DpSmf"): VwMenuBox (50 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "MIC" (VwMenuBox.str of
 ; [nakarest] element 12).
 NakaWidget_SmfDpMic:
 	.incbin "includes/generated/naka_direct_play.bin", 0x218, 0x36
 ; [nakarest] NakaWidget_SmfDpMuteChLabel  +0x24e..+0x278 (0xe212ca, 42 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "-MUTE CH-" (Label.str of
+; [nakarest] InitializeYoko) ("DpSmf"): Label (32 B). 1 text the records point at (Viewable slot
+; [nakarest] 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "-MUTE CH-" (Label.str of
 ; [nakarest] element 13).
 NakaWidget_SmfDpMuteChLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x24E, 0x2A
 ; [nakarest] NakaWidget_SmfDpMuteChPanel  +0x278..+0x2b0 (0xe212f4, 56 B)
 ; [nakarest] widget record, element 14 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): TtlScreen (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "SMF MEDLEY "
+; [nakarest] InitializeYoko) ("DpSmf"): TtlScreen (42 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "SMF MEDLEY "
 ; [nakarest] (TtlScreen.title of element 14).
 NakaWidget_SmfDpMuteChPanel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x278, 0x38
 ; [nakarest] NakaWidget_SmfMedleyItem  +0x2b0..+0x2ec (0xe2132c, 60 B)
 ; [nakarest] widget record, element 15 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "MIXER"
+; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "MIXER"
 ; [nakarest] (AcTitleMenu.str of element 15).
 NakaWidget_SmfMedleyItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2B0, 0x3C
 ; [nakarest] NakaWidget_SmfMixerItem  +0x2ec..+0x326 (0xe21368, 58 B)
 ; [nakarest] widget record, element 16 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "MIC"
+; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "MIC"
 ; [nakarest] (AcTitleMenu.str of element 16).
 NakaWidget_SmfMixerItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2EC, 0x3A
 ; [nakarest] NakaWidget_SmfLyricsItem  +0x326..+0x364 (0xe213a2, 62 B)
 ; [nakarest] widget record, element 17 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "LYRICS"
+; [nakarest] InitializeYoko) ("DpSmf"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "LYRICS"
 ; [nakarest] (AcTitleMenu.str of element 17).
 NakaWidget_SmfLyricsItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0x326, 0x3E
@@ -302,9 +306,9 @@ NakaWidget_SmfDpDisplayMode:
 	.incbin "includes/generated/naka_direct_play.bin", 0x388, 0x2C
 ; [nakarest] NakaWidget_SmfDpSkipLabel  +0x3b4..+0x3da (0xe21430, 38 B)
 ; [nakarest] widget record, element 20 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "SKIP" (Label.str of
-; [nakarest] element 20).
+; [nakarest] InitializeYoko) ("DpSmf"): Label (32 B). 1 text the records point at (Viewable slot
+; [nakarest] 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "SKIP" (Label.str of element
+; [nakarest] 20).
 NakaWidget_SmfDpSkipLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x3B4, 0x26
 ; [nakarest] NakaWidget_SmfDpLyricsToggle2  +0x3da..+0x402 (0xe21456, 40 B)
@@ -314,9 +318,8 @@ NakaWidget_SmfDpLyricsToggle2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x3DA, 0x28
 ; [nakarest] NakaWidget_SmfDpChLabel  +0x402..+0x426 (0xe2147e, 36 B)
 ; [nakarest] widget record, element 22 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): "CH" (Label.str of element
-; [nakarest] 22).
+; [nakarest] InitializeYoko) ("DpSmf"): Label (32 B). 1 text the records point at (Viewable slot
+; [nakarest] 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): "CH" (Label.str of element 22).
 NakaWidget_SmfDpChLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x402, 0x24
 ; [nakarest] NakaWidget_SmfDpMuteGroup  +0x426..+0x440 (0xe214a2, 26 B)
@@ -331,8 +334,8 @@ NakaWidget_SmfDpMuteSel1:
 	.incbin "includes/generated/naka_direct_play.bin", 0x440, 0x24
 ; [nakarest] NakaWidget_SmfDpMuteSel2  +0x464..+0x492 (0xe214e0, 46 B)
 ; [nakarest] widget record, element 25 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 25).
 NakaWidget_SmfDpMuteSel2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x464, 0x2E
@@ -343,8 +346,8 @@ NakaWidget_SmfDpMuteCtrl1:
 	.incbin "includes/generated/naka_direct_play.bin", 0x492, 0x1A
 ; [nakarest] NakaWidget_SmfDpMuteSel3  +0x4ac..+0x4da (0xe21528, 46 B)
 ; [nakarest] widget record, element 27 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 27).
 NakaWidget_SmfDpMuteSel3:
 	.incbin "includes/generated/naka_direct_play.bin", 0x4AC, 0x2E
@@ -355,8 +358,8 @@ NakaWidget_SmfDpMuteCtrl2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x4DA, 0x1A
 ; [nakarest] NakaWidget_SmfDpMuteSel4  +0x4f4..+0x522 (0xe21570, 46 B)
 ; [nakarest] widget record, element 29 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 29).
 NakaWidget_SmfDpMuteSel4:
 	.incbin "includes/generated/naka_direct_play.bin", 0x4F4, 0x2E
@@ -367,8 +370,8 @@ NakaWidget_SmfDpMuteCtrl3:
 	.incbin "includes/generated/naka_direct_play.bin", 0x522, 0x1A
 ; [nakarest] NakaWidget_SmfDpMuteSel5  +0x53c..+0x56a (0xe215b8, 46 B)
 ; [nakarest] widget record, element 31 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 31).
 NakaWidget_SmfDpMuteSel5:
 	.incbin "includes/generated/naka_direct_play.bin", 0x53C, 0x2E
@@ -379,8 +382,8 @@ NakaWidget_SmfDpMuteCtrl4:
 	.incbin "includes/generated/naka_direct_play.bin", 0x56A, 0x1A
 ; [nakarest] NakaWidget_SmfDpMuteSel6  +0x584..+0x5b2 (0xe21600, 46 B)
 ; [nakarest] widget record, element 33 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
-; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DpSmf"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x6f (table 0xe240ac, 43 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 33).
 NakaWidget_SmfDpMuteSel6:
 	.incbin "includes/generated/naka_direct_play.bin", 0x584, 0x2E
@@ -431,8 +434,8 @@ NakaWidget_SmfDpMuteSwRow2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x6CC, 0x26
 ; [nakarest] naka_direct_play+0x6f2  +0x6f2..+0x72e (0xe2176e, 60 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x70 (table 0xe2415c, 12 entries,
-; [nakarest] InitializeYoko) ("DpDoc"): TtlScreen (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko): "DOC DIRECT PLAY "
+; [nakarest] InitializeYoko) ("DpDoc"): TtlScreen (42 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko)): "DOC DIRECT PLAY "
 ; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x6F2, 0x3C
 ; [nakarest] NakaWidget_DocDpContainer  +0x72e..+0x752 (0xe217aa, 36 B)
@@ -467,43 +470,43 @@ NakaWidget_DocDpFileSelector:
 	.incbin "includes/generated/naka_direct_play.bin", 0x7CE, 0x1A
 ; [nakarest] NakaWidget_DocDpFileList  +0x7e8..+0x81c (0xe21864, 52 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0x70 (table 0xe2415c, 12 entries,
-; [nakarest] InitializeYoko) ("DpDoc"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko): "RT1"
+; [nakarest] InitializeYoko) ("DpDoc"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko)): "RT1"
 ; [nakarest] (AcMuteToggleBox.stroff of element 7); "RT1" (AcMuteToggleBox.stron of element 7).
 NakaWidget_DocDpFileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x7E8, 0x34
 ; [nakarest] NakaWidget_DocDpRT2Selector  +0x81c..+0x850 (0xe21898, 52 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0x70 (table 0xe2415c, 12 entries,
-; [nakarest] InitializeYoko) ("DpDoc"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko): "RT2"
+; [nakarest] InitializeYoko) ("DpDoc"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko)): "RT2"
 ; [nakarest] (AcMuteToggleBox.stroff of element 8); "RT2" (AcMuteToggleBox.stron of element 8).
 NakaWidget_DocDpRT2Selector:
 	.incbin "includes/generated/naka_direct_play.bin", 0x81C, 0x34
 ; [nakarest] NakaWidget_DocDpOrchSelector  +0x850..+0x888 (0xe218cc, 56 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0x70 (table 0xe2415c, 12 entries,
-; [nakarest] InitializeYoko) ("DpDoc"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko): "ORCH"
+; [nakarest] InitializeYoko) ("DpDoc"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko)): "ORCH"
 ; [nakarest] (AcMuteToggleBox.stroff of element 9); "ORCH" (AcMuteToggleBox.stron of element 9).
 NakaWidget_DocDpOrchSelector:
 	.incbin "includes/generated/naka_direct_play.bin", 0x850, 0x38
 ; [nakarest] NakaWidget_DocDpMixer  +0x888..+0x8c0 (0xe21904, 56 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x70 (table 0xe2415c, 12 entries,
-; [nakarest] InitializeYoko) ("DpDoc"): VwMenuBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko): "MIXER" (VwMenuBox.str of
+; [nakarest] InitializeYoko) ("DpDoc"): VwMenuBox (50 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko)): "MIXER" (VwMenuBox.str of
 ; [nakarest] element 10).
 NakaWidget_DocDpMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x888, 0x38
 ; [nakarest] NakaWidget_DocDpMic  +0x8c0..+0x8f6 (0xe2193c, 54 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0x70 (table 0xe2415c, 12 entries,
-; [nakarest] InitializeYoko) ("DpDoc"): VwMenuBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko): "MIC" (VwMenuBox.str of
+; [nakarest] InitializeYoko) ("DpDoc"): VwMenuBox (50 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x70 (table 0xe2415c, 12 entries, InitializeYoko)): "MIC" (VwMenuBox.str of
 ; [nakarest] element 11).
 NakaWidget_DocDpMic:
 	.incbin "includes/generated/naka_direct_play.bin", 0x8C0, 0x36
 ; [nakarest] NakaWidget_PdDpContainer  +0x8f6..+0x93c (0xe21972, 70 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x71 (table 0xe24190, 11 entries,
-; [nakarest] InitializeYoko) ("DpPd"): TtlScreen (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x71 (table 0xe24190, 11 entries, InitializeYoko): "PIANO DISC DIRECT PLAY "
+; [nakarest] InitializeYoko) ("DpPd"): TtlScreen (42 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x71 (table 0xe24190, 11 entries, InitializeYoko)): "PIANO DISC DIRECT PLAY "
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_PdDpContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x8F6, 0x46
@@ -539,37 +542,37 @@ NakaWidget_PdDpFileSelector:
 	.incbin "includes/generated/naka_direct_play.bin", 0x9DC, 0x1A
 ; [nakarest] NakaWidget_PdDpFileList  +0x9f6..+0xa2a (0xe21a72, 52 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0x71 (table 0xe24190, 11 entries,
-; [nakarest] InitializeYoko) ("DpPd"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x71 (table 0xe24190, 11 entries, InitializeYoko): "RT1"
+; [nakarest] InitializeYoko) ("DpPd"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x71 (table 0xe24190, 11 entries, InitializeYoko)): "RT1"
 ; [nakarest] (AcMuteToggleBox.stroff of element 7); "RT1" (AcMuteToggleBox.stron of element 7).
 NakaWidget_PdDpFileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x9F6, 0x34
 ; [nakarest] NakaWidget_PdDpOrchSelector  +0xa2a..+0xa62 (0xe21aa6, 56 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0x71 (table 0xe24190, 11 entries,
-; [nakarest] InitializeYoko) ("DpPd"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x71 (table 0xe24190, 11 entries, InitializeYoko): "ORCH"
+; [nakarest] InitializeYoko) ("DpPd"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x71 (table 0xe24190, 11 entries, InitializeYoko)): "ORCH"
 ; [nakarest] (AcMuteToggleBox.stroff of element 8); "ORCH" (AcMuteToggleBox.stron of element 8).
 NakaWidget_PdDpOrchSelector:
 	.incbin "includes/generated/naka_direct_play.bin", 0xA2A, 0x38
 ; [nakarest] NakaWidget_PdDpMixer  +0xa62..+0xa9a (0xe21ade, 56 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0x71 (table 0xe24190, 11 entries,
-; [nakarest] InitializeYoko) ("DpPd"): VwMenuBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x71 (table 0xe24190, 11 entries, InitializeYoko): "MIXER" (VwMenuBox.str of
+; [nakarest] InitializeYoko) ("DpPd"): VwMenuBox (50 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x71 (table 0xe24190, 11 entries, InitializeYoko)): "MIXER" (VwMenuBox.str of
 ; [nakarest] element 9).
 NakaWidget_PdDpMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0xA62, 0x38
 ; [nakarest] NakaWidget_PdDpMic  +0xa9a..+0xad0 (0xe21b16, 54 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x71 (table 0xe24190, 11 entries,
-; [nakarest] InitializeYoko) ("DpPd"): VwMenuBox (50 B). text the records point at, in Viewable
-; [nakarest] slot 0x71 (table 0xe24190, 11 entries, InitializeYoko): "MIC" (VwMenuBox.str of
+; [nakarest] InitializeYoko) ("DpPd"): VwMenuBox (50 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x71 (table 0xe24190, 11 entries, InitializeYoko)): "MIC" (VwMenuBox.str of
 ; [nakarest] element 10).
 NakaWidget_PdDpMic:
 	.incbin "includes/generated/naka_direct_play.bin", 0xA9A, 0x36
 ; [nakarest] NakaWidget_SmfMdlyContainer  +0xad0..+0xb0c (0xe21b4c, 60 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x72 (table 0xe241c0, 7 entries,
-; [nakarest] InitializeYoko) ("DpSmfLyr"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x72 (table 0xe241c0, 7 entries, InitializeYoko): "SMF DIRECT PLAY "
-; [nakarest] (TtlScreen.title of element 0).
+; [nakarest] InitializeYoko) ("DpSmfLyr"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x72 (table 0xe241c0, 7 entries, InitializeYoko)): "SMF DIRECT PLAY
+; [nakarest] " (TtlScreen.title of element 0).
 NakaWidget_SmfMdlyContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0xAD0, 0x3C
 ; [nakarest] NakaWidget_SmfMdlyVolume  +0xb0c..+0xb30 (0xe21b88, 36 B)
@@ -589,8 +592,8 @@ NakaWidget_SmfMdlyFileSelector:
 	.incbin "includes/generated/naka_direct_play.bin", 0xB4A, 0x1A
 ; [nakarest] NakaWidget_SmfMdlyMicWidget  +0xb64..+0xb9a (0xe21be0, 54 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0x72 (table 0xe241c0, 7 entries,
-; [nakarest] InitializeYoko) ("DpSmfLyr"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x72 (table 0xe241c0, 7 entries, InitializeYoko): "MIC"
+; [nakarest] InitializeYoko) ("DpSmfLyr"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x72 (table 0xe241c0, 7 entries, InitializeYoko)): "MIC"
 ; [nakarest] (VwMenuBox.str of element 4).
 NakaWidget_SmfMdlyMicWidget:
 	.incbin "includes/generated/naka_direct_play.bin", 0xB64, 0x36
@@ -606,15 +609,15 @@ NakaWidget_SmfMdlyOrchRow:
 	.incbin "includes/generated/naka_direct_play.bin", 0xBB4, 0x16
 ; [nakarest] NakaWidget_SmfMdlyContainer2  +0xbca..+0xc00 (0xe21c46, 54 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): "SMF MEDLEY"
+; [nakarest] InitializeYoko) ("DpMdlySmf"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "SMF MEDLEY"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_SmfMdlyContainer2:
 	.incbin "includes/generated/naka_direct_play.bin", 0xBCA, 0x36
 ; [nakarest] NakaWidget_SmfMdlyLyricsItem  +0xc00..+0xc3e (0xe21c7c, 62 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): "LYRICS"
+; [nakarest] InitializeYoko) ("DpMdlySmf"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "LYRICS"
 ; [nakarest] (AcTitleMenu.str of element 1).
 NakaWidget_SmfMdlyLyricsItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0xC00, 0x3E
@@ -645,22 +648,22 @@ NakaWidget_SmfMdlyMuteRow1:
 	.incbin "includes/generated/naka_direct_play.bin", 0xCC8, 0x24
 ; [nakarest] NakaWidget_SmfMdlyMuteToggle  +0xcec..+0xd1a (0xe21d68, 46 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DpMdlySmf"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 7).
 NakaWidget_SmfMdlyMuteToggle:
 	.incbin "includes/generated/naka_direct_play.bin", 0xCEC, 0x2E
 ; [nakarest] NakaWidget_SmfMdlySkipLabel  +0xd1a..+0xd40 (0xe21d96, 38 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): "SKIP" (Label.str of
+; [nakarest] InitializeYoko) ("DpMdlySmf"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "SKIP" (Label.str of
 ; [nakarest] element 8).
 NakaWidget_SmfMdlySkipLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0xD1A, 0x26
 ; [nakarest] NakaWidget_SmfMdlyMutePanel  +0xd40..+0xd7c (0xe21dbc, 60 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): AcRamEditBox (58 B). text the records point at, in
-; [nakarest] Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): " "
+; [nakarest] InitializeYoko) ("DpMdlySmf"): AcRamEditBox (58 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): " "
 ; [nakarest] (AcRamEditBox.caption of element 9).
 NakaWidget_SmfMdlyMutePanel:
 	.incbin "includes/generated/naka_direct_play.bin", 0xD40, 0x3C
@@ -676,42 +679,42 @@ NakaWidget_SmfMdlyOffOnSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0xD96, 0x16
 ; [nakarest] NakaWidget_SmfMdlyOffOnList  +0xdac..+0xde0 (0xe21e28, 52 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): AcMuteToggleBox (44 B). text the records point at,
-; [nakarest] in Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): "OFF"
+; [nakarest] InitializeYoko) ("DpMdlySmf"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "OFF"
 ; [nakarest] (AcMuteToggleBox.stroff of element 12); "ON" (AcMuteToggleBox.stron of element 12).
 NakaWidget_SmfMdlyOffOnList:
 	.incbin "includes/generated/naka_direct_play.bin", 0xDAC, 0x34
 ; [nakarest] NakaWidget_SmfMdlyMixerWidget  +0xde0..+0xe18 (0xe21e5c, 56 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): "MIXER"
+; [nakarest] InitializeYoko) ("DpMdlySmf"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "MIXER"
 ; [nakarest] (VwMenuBox.str of element 13).
 NakaWidget_SmfMdlyMixerWidget:
 	.incbin "includes/generated/naka_direct_play.bin", 0xDE0, 0x38
 ; [nakarest] NakaWidget_SmfMdlyMicWidget2  +0xe18..+0xe4e (0xe21e94, 54 B)
 ; [nakarest] widget record, element 14 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): "MIC"
+; [nakarest] InitializeYoko) ("DpMdlySmf"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "MIC"
 ; [nakarest] (VwMenuBox.str of element 14).
 NakaWidget_SmfMdlyMicWidget2:
 	.incbin "includes/generated/naka_direct_play.bin", 0xE18, 0x36
 ; [nakarest] NakaWidget_SmfMdlyMuteChLabel  +0xe4e..+0xe78 (0xe21eca, 42 B)
 ; [nakarest] widget record, element 15 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko): "-MUTE CH-" (Label.str of
+; [nakarest] InitializeYoko) ("DpMdlySmf"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "-MUTE CH-" (Label.str of
 ; [nakarest] element 15).
 NakaWidget_SmfMdlyMuteChLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0xE4E, 0x2A
 ; [nakarest] naka_direct_play+0xe78  +0xe78..+0xeae (0xe21ef4, 54 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): TtlScreen (42 B). text the records point at, in Viewable slot 0x74
-; [nakarest] (table 0xe24224, 15 entries, InitializeYoko): "SMF MEDLEY" (TtlScreen.title of
+; [nakarest] InitializeYoko): TtlScreen (42 B). 1 text the records point at (Viewable slot 0x74
+; [nakarest] (table 0xe24224, 15 entries, InitializeYoko)): "SMF MEDLEY" (TtlScreen.title of
 ; [nakarest] element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0xE78, 0x36
 ; [nakarest] NakaWidget_SmfMdlyRootContainer  +0xeae..+0xee4 (0xe21f2a, 54 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): TtlScreen (42 B). text the records point at, in Viewable slot 0x74
-; [nakarest] (table 0xe24224, 15 entries, InitializeYoko): "DOC MEDLEY" (TtlScreen.title of
+; [nakarest] InitializeYoko): TtlScreen (42 B). 1 text the records point at (Viewable slot 0x74
+; [nakarest] (table 0xe24224, 15 entries, InitializeYoko)): "DOC MEDLEY" (TtlScreen.title of
 ; [nakarest] element 1).
 NakaWidget_SmfMdlyRootContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0xEAE, 0x36
@@ -737,15 +740,15 @@ NakaWidget_DocMdlySubPanel:
 	.incbin "includes/generated/naka_direct_play.bin", 0xF46, 0x24
 ; [nakarest] NakaWidget_DocMdlyMuteToggle  +0xf6a..+0xf98 (0xe21fe6, 46 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): VwEditSwBox (44 B). text the records point at, in Viewable slot
-; [nakarest] 0x74 (table 0xe24224, 15 entries, InitializeYoko): "" (VwEditSwBox.str of element
+; [nakarest] InitializeYoko): VwEditSwBox (44 B). 1 text the records point at (Viewable slot
+; [nakarest] 0x74 (table 0xe24224, 15 entries, InitializeYoko)): "" (VwEditSwBox.str of element
 ; [nakarest] 6).
 NakaWidget_DocMdlyMuteToggle:
 	.incbin "includes/generated/naka_direct_play.bin", 0xF6A, 0x2E
 ; [nakarest] NakaWidget_DocMdlySkipLabel  +0xf98..+0xfbe (0xe22014, 38 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): Label (32 B). text the records point at, in Viewable slot 0x74
-; [nakarest] (table 0xe24224, 15 entries, InitializeYoko): "SKIP" (Label.str of element 7).
+; [nakarest] InitializeYoko): Label (32 B). 1 text the records point at (Viewable slot 0x74
+; [nakarest] (table 0xe24224, 15 entries, InitializeYoko)): "SKIP" (Label.str of element 7).
 NakaWidget_DocMdlySkipLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0xF98, 0x26
 ; [nakarest] NakaWidget_DocMdlyMeasureBox  +0xfbe..+0xfd8 (0xe2203a, 26 B)
@@ -760,46 +763,46 @@ NakaWidget_DocMdlyOffOnSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0xFD8, 0x16
 ; [nakarest] NakaWidget_DocMdlyOffOnList  +0xfee..+0x1022 (0xe2206a, 52 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0x74 (table 0xe24224, 15 entries, InitializeYoko): "RT1"
+; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). 2 texts the records point at (Viewable
+; [nakarest] slot 0x74 (table 0xe24224, 15 entries, InitializeYoko)): "RT1"
 ; [nakarest] (AcMuteToggleBox.stroff of element 10); "RT1" (AcMuteToggleBox.stron of element
 ; [nakarest] 10).
 NakaWidget_DocMdlyOffOnList:
 	.incbin "includes/generated/naka_direct_play.bin", 0xFEE, 0x34
 ; [nakarest] NakaWidget_DocMdlyRT2Sel  +0x1022..+0x1056 (0xe2209e, 52 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0x74 (table 0xe24224, 15 entries, InitializeYoko): "RT2"
+; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). 2 texts the records point at (Viewable
+; [nakarest] slot 0x74 (table 0xe24224, 15 entries, InitializeYoko)): "RT2"
 ; [nakarest] (AcMuteToggleBox.stroff of element 11); "RT2" (AcMuteToggleBox.stron of element
 ; [nakarest] 11).
 NakaWidget_DocMdlyRT2Sel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1022, 0x34
 ; [nakarest] NakaWidget_DocMdlyOrchSel  +0x1056..+0x108e (0xe220d2, 56 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0x74 (table 0xe24224, 15 entries, InitializeYoko): "ORCH"
+; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). 2 texts the records point at (Viewable
+; [nakarest] slot 0x74 (table 0xe24224, 15 entries, InitializeYoko)): "ORCH"
 ; [nakarest] (AcMuteToggleBox.stroff of element 12); "ORCH" (AcMuteToggleBox.stron of element
 ; [nakarest] 12).
 NakaWidget_DocMdlyOrchSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1056, 0x38
 ; [nakarest] NakaWidget_DocMdlyMixer  +0x108e..+0x10c6 (0xe2210a, 56 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): VwMenuBox (50 B). text the records point at, in Viewable slot 0x74
-; [nakarest] (table 0xe24224, 15 entries, InitializeYoko): "MIXER" (VwMenuBox.str of element
+; [nakarest] InitializeYoko): VwMenuBox (50 B). 1 text the records point at (Viewable slot 0x74
+; [nakarest] (table 0xe24224, 15 entries, InitializeYoko)): "MIXER" (VwMenuBox.str of element
 ; [nakarest] 13).
 NakaWidget_DocMdlyMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x108E, 0x38
 ; [nakarest] NakaWidget_DocMdlyMic  +0x10c6..+0x10fc (0xe22142, 54 B)
 ; [nakarest] widget record, element 14 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): VwMenuBox (50 B). text the records point at, in Viewable slot 0x74
-; [nakarest] (table 0xe24224, 15 entries, InitializeYoko): "MIC" (VwMenuBox.str of element 14).
+; [nakarest] InitializeYoko): VwMenuBox (50 B). 1 text the records point at (Viewable slot 0x74
+; [nakarest] (table 0xe24224, 15 entries, InitializeYoko)): "MIC" (VwMenuBox.str of element 14).
 NakaWidget_DocMdlyMic:
 	.incbin "includes/generated/naka_direct_play.bin", 0x10C6, 0x36
 ; [nakarest] naka_direct_play+0x10fc  +0x10fc..+0x113c (0xe22178, 64 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko): "PIANO DISC MEDLEY
-; [nakarest] " (TtlScreen.title of element 0).
+; [nakarest] InitializeYoko) ("DpMdlyPd"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): "PIANO DISC
+; [nakarest] MEDLEY " (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x10FC, 0x40
 ; [nakarest] NakaWidget_PdMdlyContainer  +0x113c..+0x1160 (0xe221b8, 36 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x75 (table 0xe24264, 13 entries,
@@ -823,15 +826,15 @@ NakaWidget_PdMdlyMuteRow1:
 	.incbin "includes/generated/naka_direct_play.bin", 0x119E, 0x24
 ; [nakarest] NakaWidget_PdMdlyMuteToggle  +0x11c2..+0x11f0 (0xe2223e, 46 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DpMdlyPd"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 5).
 NakaWidget_PdMdlyMuteToggle:
 	.incbin "includes/generated/naka_direct_play.bin", 0x11C2, 0x2E
 ; [nakarest] NakaWidget_PdMdlySkipLabel  +0x11f0..+0x1216 (0xe2226c, 38 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x75 (table 0xe24264, 13 entries, InitializeYoko): "SKIP" (Label.str of
+; [nakarest] InitializeYoko) ("DpMdlyPd"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): "SKIP" (Label.str of
 ; [nakarest] element 6).
 NakaWidget_PdMdlySkipLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x11F0, 0x26
@@ -847,37 +850,37 @@ NakaWidget_PdMdlyOffOnSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1230, 0x16
 ; [nakarest] NakaWidget_PdMdlyOffOnList  +0x1246..+0x127a (0xe222c2, 52 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko): "RT1"
+; [nakarest] InitializeYoko) ("DpMdlyPd"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): "RT1"
 ; [nakarest] (AcMuteToggleBox.stroff of element 9); "RT1" (AcMuteToggleBox.stron of element 9).
 NakaWidget_PdMdlyOffOnList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1246, 0x34
 ; [nakarest] NakaWidget_PdMdlyRT2Sel  +0x127a..+0x12b2 (0xe222f6, 56 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): AcMuteToggleBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko): "ORCH"
+; [nakarest] InitializeYoko) ("DpMdlyPd"): AcMuteToggleBox (44 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): "ORCH"
 ; [nakarest] (AcMuteToggleBox.stroff of element 10); "ORCH" (AcMuteToggleBox.stron of element
 ; [nakarest] 10).
 NakaWidget_PdMdlyRT2Sel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x127A, 0x38
 ; [nakarest] NakaWidget_PdMdlyMixer  +0x12b2..+0x12ea (0xe2232e, 56 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko): "MIXER"
+; [nakarest] InitializeYoko) ("DpMdlyPd"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): "MIXER"
 ; [nakarest] (VwMenuBox.str of element 11).
 NakaWidget_PdMdlyMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x12B2, 0x38
 ; [nakarest] NakaWidget_PdMdlyMic  +0x12ea..+0x1320 (0xe22366, 54 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko): "MIC"
+; [nakarest] InitializeYoko) ("DpMdlyPd"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): "MIC"
 ; [nakarest] (VwMenuBox.str of element 12).
 NakaWidget_PdMdlyMic:
 	.incbin "includes/generated/naka_direct_play.bin", 0x12EA, 0x36
 ; [nakarest] naka_direct_play+0x1320  +0x1320..+0x1356 (0xe2239c, 54 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x76 (table 0xe2429c, 8 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko): "SMF MEDLEY"
+; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko)): "SMF MEDLEY"
 ; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x1320, 0x36
 ; [nakarest] NakaWidget_SmfMdly2Container  +0x1356..+0x137a (0xe223d2, 36 B)
@@ -887,15 +890,15 @@ NakaWidget_SmfMdly2Container:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1356, 0x24
 ; [nakarest] NakaWidget_SmfMdly2MuteToggle  +0x137a..+0x13a8 (0xe223f6, 46 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0x76 (table 0xe2429c, 8 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko): "" (VwEditSwBox.str
-; [nakarest] of element 2).
+; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko)): ""
+; [nakarest] (VwEditSwBox.str of element 2).
 NakaWidget_SmfMdly2MuteToggle:
 	.incbin "includes/generated/naka_direct_play.bin", 0x137A, 0x2E
 ; [nakarest] NakaWidget_SmfMdly2SkipLabel  +0x13a8..+0x13ce (0xe22424, 38 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0x76 (table 0xe2429c, 8 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko): "SKIP" (Label.str
+; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko)): "SKIP" (Label.str
 ; [nakarest] of element 3).
 NakaWidget_SmfMdly2SkipLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x13A8, 0x26
@@ -911,8 +914,8 @@ NakaWidget_SmfMdly2OffOnSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x13E8, 0x16
 ; [nakarest] NakaWidget_SmfMdly2MicWidget  +0x13fe..+0x1434 (0xe2247a, 54 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0x76 (table 0xe2429c, 8 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko): "MIC"
+; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko)): "MIC"
 ; [nakarest] (VwMenuBox.str of element 6).
 NakaWidget_SmfMdly2MicWidget:
 	.incbin "includes/generated/naka_direct_play.bin", 0x13FE, 0x36
@@ -923,8 +926,8 @@ NakaWidget_SmfMdly2OrchSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1434, 0x1A
 ; [nakarest] NakaWidget_SongMdlyContainer  +0x144e..+0x148c (0xe224ca, 62 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x78 (table 0xe242c0, 30 entries,
-; [nakarest] InitializeYoko) ("DkMdlyPly"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko): "SONG MEDLEY "
+; [nakarest] InitializeYoko) ("DkMdlyPly"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko)): "SONG MEDLEY "
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_SongMdlyContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x144E, 0x3E
@@ -950,8 +953,8 @@ NakaWidget_SongMdlySongList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x14EE, 0x1E
 ; [nakarest] NakaWidget_SongMdlyRT1Sel  +0x150c..+0x153a (0xe22588, 46 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0x78 (table 0xe242c0, 30 entries,
-; [nakarest] InitializeYoko) ("DkMdlyPly"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("DkMdlyPly"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 5).
 NakaWidget_SongMdlyRT1Sel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x150C, 0x2E
@@ -977,8 +980,8 @@ NakaWidget_SongMdlyMuteList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x158E, 0x24
 ; [nakarest] NakaWidget_SongMdlySkipLabel  +0x15b2..+0x15d8 (0xe2262e, 38 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x78 (table 0xe242c0, 30 entries,
-; [nakarest] InitializeYoko) ("DkMdlyPly"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko): "SKIP" (Label.str of
+; [nakarest] InitializeYoko) ("DkMdlyPly"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko)): "SKIP" (Label.str of
 ; [nakarest] element 10).
 NakaWidget_SongMdlySkipLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x15B2, 0x26
@@ -989,8 +992,8 @@ NakaWidget_SongMdlyOffOnSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x15D8, 0x16
 ; [nakarest] NakaWidget_SongMdlyMixer  +0x15ee..+0x1626 (0xe2266a, 56 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0x78 (table 0xe242c0, 30 entries,
-; [nakarest] InitializeYoko) ("DkMdlyPly"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko): "MIXER"
+; [nakarest] InitializeYoko) ("DkMdlyPly"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko)): "MIXER"
 ; [nakarest] (VwMenuBox.str of element 12).
 NakaWidget_SongMdlyMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x15EE, 0x38
@@ -1081,8 +1084,8 @@ NakaWidget_SongMdlySongSel16:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1866, 0x24
 ; [nakarest] naka_direct_play+0x188a  +0x188a..+0x18c0 (0xe22906, 54 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x7a (table 0xe2433c, 12 entries,
-; [nakarest] InitializeYoko) ("SqMdlyPly"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko): "SONG MEDLEY"
+; [nakarest] InitializeYoko) ("SqMdlyPly"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko)): "SONG MEDLEY"
 ; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x188A, 0x36
 ; [nakarest] NakaWidget_SongMdly2Group  +0x18c0..+0x18da (0xe2293c, 26 B)
@@ -1107,15 +1110,15 @@ NakaWidget_SongMdly2SongSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x191C, 0x24
 ; [nakarest] NakaWidget_SongMdly2RT1Sel  +0x1940..+0x196e (0xe229bc, 46 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0x7a (table 0xe2433c, 12 entries,
-; [nakarest] InitializeYoko) ("SqMdlyPly"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqMdlyPly"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 5).
 NakaWidget_SongMdly2RT1Sel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1940, 0x2E
 ; [nakarest] NakaWidget_SongMdly2SkipLabel  +0x196e..+0x1994 (0xe229ea, 38 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0x7a (table 0xe2433c, 12 entries,
-; [nakarest] InitializeYoko) ("SqMdlyPly"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko): "SKIP" (Label.str of
+; [nakarest] InitializeYoko) ("SqMdlyPly"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko)): "SKIP" (Label.str of
 ; [nakarest] element 6).
 NakaWidget_SongMdly2SkipLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x196E, 0x26
@@ -1141,22 +1144,22 @@ NakaWidget_SongMdly2OffOnSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x19E8, 0x16
 ; [nakarest] NakaWidget_SongMdly2Mixer  +0x19fe..+0x1a36 (0xe22a7a, 56 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0x7a (table 0xe2433c, 12 entries,
-; [nakarest] InitializeYoko) ("SqMdlyPly"): VwMenuBox (50 B). text the records point at, in
-; [nakarest] Viewable slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko): "MIXER"
+; [nakarest] InitializeYoko) ("SqMdlyPly"): VwMenuBox (50 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko)): "MIXER"
 ; [nakarest] (VwMenuBox.str of element 11).
 NakaWidget_SongMdly2Mixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x19FE, 0x38
 ; [nakarest] NakaWidget_StepRecContainer  +0x1a36..+0x1a74 (0xe22ab2, 62 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x89 (table 0xe24370, 5 entries,
-; [nakarest] InitializeYoko) ("SqTrSel"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x89 (table 0xe24370, 5 entries, InitializeYoko): "STEP RECORD "
+; [nakarest] InitializeYoko) ("SqTrSel"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x89 (table 0xe24370, 5 entries, InitializeYoko)): "STEP RECORD "
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_StepRecContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1A36, 0x3E
 ; [nakarest] NakaWidget_StepRecPartLabel  +0x1a74..+0x1aa2 (0xe22af0, 46 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x89 (table 0xe24370, 5 entries,
-; [nakarest] InitializeYoko) ("SqTrSel"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x89 (table 0xe24370, 5 entries, InitializeYoko): ": PART SELECT" (Label.str
+; [nakarest] InitializeYoko) ("SqTrSel"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x89 (table 0xe24370, 5 entries, InitializeYoko)): ": PART SELECT" (Label.str
 ; [nakarest] of element 1).
 NakaWidget_StepRecPartLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1A74, 0x2E
@@ -1182,15 +1185,15 @@ NakaWidget_StepRecSubPanel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1AF8, 0x22
 ; [nakarest] NakaWidget_TrAsContainer  +0x1b1a..+0x1b54 (0xe22b96, 58 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): "TRACK ASSIGN "
+; [nakarest] InitializeYoko) ("SqTrAs"): TtlScreen (42 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): "TRACK ASSIGN "
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_TrAsContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1B1A, 0x3A
 ; [nakarest] NakaWidget_TrAsPresetItem  +0x1b54..+0x1b92 (0xe22bd0, 62 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): "PRESET"
+; [nakarest] InitializeYoko) ("SqTrAs"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): "PRESET"
 ; [nakarest] (AcTitleMenu.str of element 1).
 NakaWidget_TrAsPresetItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1B54, 0x3E
@@ -1201,30 +1204,30 @@ NakaWidget_TrAsFileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1B92, 0x26
 ; [nakarest] NakaWidget_TrAsGridDisplay  +0x1bb8..+0x1c3e (0xe22c34, 134 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): AcTrAsGridBox (74 B). text the records point at, in
-; [nakarest] Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): "|-|TR 1|TR 2|TR
+; [nakarest] InitializeYoko) ("SqTrAs"): AcTrAsGridBox (74 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): "|-|TR 1|TR 2|TR
 ; [nakarest] 3|TR 4|TR 5|TR 6|TR 7|TR 8" (AcTrAsGridBox.fixedrow of element 4); " | | | "
 ; [nakarest] (AcTrAsGridBox.fixedcol of element 4).
 NakaWidget_TrAsGridDisplay:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1BB8, 0x86
 ; [nakarest] NakaWidget_TrAsTrackAssign  +0x1c3e..+0x1c76 (0xe22cba, 56 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): TextBox (40 B). text the records point at, in Viewable
-; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): "TRACK~0DASSIGN"
+; [nakarest] InitializeYoko) ("SqTrAs"): TextBox (40 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): "TRACK~0DASSIGN"
 ; [nakarest] (TextBox.text of element 5).
 NakaWidget_TrAsTrackAssign:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1C3E, 0x38
 ; [nakarest] NakaWidget_TrAsLocalCont  +0x1c76..+0x1cac (0xe22cf2, 54 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): TextBox (40 B). text the records point at, in Viewable
-; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): "LOCAL~0DCONT."
+; [nakarest] InitializeYoko) ("SqTrAs"): TextBox (40 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): "LOCAL~0DCONT."
 ; [nakarest] (TextBox.text of element 6).
 NakaWidget_TrAsLocalCont:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1C76, 0x36
 ; [nakarest] NakaWidget_TrAsMidiOut  +0x1cac..+0x1ce0 (0xe22d28, 52 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): TextBox (40 B). text the records point at, in Viewable
-; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): "MIDI~0DOUT" (TextBox.text
+; [nakarest] InitializeYoko) ("SqTrAs"): TextBox (40 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): "MIDI~0DOUT" (TextBox.text
 ; [nakarest] of element 7).
 NakaWidget_TrAsMidiOut:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1CAC, 0x34
@@ -1250,8 +1253,8 @@ NakaWidget_TrAsMeasureBox:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1D5A, 0x1A
 ; [nakarest] NakaWidget_TrAsSubContainer  +0x1d74..+0x1dac (0xe22df0, 56 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): "TRACK ASSIGN"
+; [nakarest] InitializeYoko) ("SqTrAs"): TtlScreen (42 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): "TRACK ASSIGN"
 ; [nakarest] (TtlScreen.title of element 13).
 NakaWidget_TrAsSubContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1D74, 0x38
@@ -1282,15 +1285,15 @@ NakaWidget_TrAsMeasureBox2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1E44, 0x1A
 ; [nakarest] NakaWidget_TrAsRT1Selector  +0x1e5e..+0x1e8c (0xe22eda, 46 B)
 ; [nakarest] widget record, element 19 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqTrAs"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 19).
 NakaWidget_TrAsRT1Selector:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1E5E, 0x2E
 ; [nakarest] NakaWidget_TrAsRT2Selector  +0x1e8c..+0x1eba (0xe22f08, 46 B)
 ; [nakarest] widget record, element 20 of Viewable slot 0x8b (table 0xe24390, 22 entries,
-; [nakarest] InitializeYoko) ("SqTrAs"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqTrAs"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8b (table 0xe24390, 22 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 20).
 NakaWidget_TrAsRT2Selector:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1E8C, 0x2E
@@ -1301,14 +1304,14 @@ NakaWidget_TrAsPresetSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1EBA, 0x1A
 ; [nakarest] naka_direct_play+0x1ed4  +0x1ed4..+0x1f12 (0xe22f50, 62 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "TRACK ASSIGN
+; [nakarest] InitializeYoko) ("SqTrAsPs"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "TRACK ASSIGN
 ; [nakarest] PRESET" (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x1ED4, 0x3E
 ; [nakarest] NakaWidget_TrAsPresetSong  +0x1f12..+0x1f38 (0xe22f8e, 38 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "SONG" (Label.str of
+; [nakarest] InitializeYoko) ("SqTrAsPs"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "SONG" (Label.str of
 ; [nakarest] element 1).
 NakaWidget_TrAsPresetSong:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1F12, 0x26
@@ -1319,29 +1322,29 @@ NakaWidget_TrAsPresetMatrix:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1F38, 0x2A
 ; [nakarest] NakaWidget_TrAsPresetPanel  +0x1f62..+0x1fa6 (0xe22fde, 68 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): AcRamEditBox (58 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "SONG : "
+; [nakarest] InitializeYoko) ("SqTrAsPs"): AcRamEditBox (58 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "SONG : "
 ; [nakarest] (AcRamEditBox.caption of element 3).
 NakaWidget_TrAsPresetPanel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1F62, 0x44
 ; [nakarest] NakaWidget_TrAsPresetInit  +0x1fa6..+0x1fe2 (0xe23022, 60 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): AcModeSelBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "INITIAL"
+; [nakarest] InitializeYoko) ("SqTrAsPs"): AcModeSelBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "INITIAL"
 ; [nakarest] (AcModeSelBox.caption of element 4).
 NakaWidget_TrAsPresetInit:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1FA6, 0x3C
 ; [nakarest] NakaWidget_TrAsPresetGmRec  +0x1fe2..+0x2030 (0xe2305e, 78 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): AcModeSelBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "TECHNICS MULTI
+; [nakarest] InitializeYoko) ("SqTrAsPs"): AcModeSelBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "TECHNICS MULTI
 ; [nakarest] RECORDING" (AcModeSelBox.caption of element 5).
 NakaWidget_TrAsPresetGmRec:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1FE2, 0x4E
 ; [nakarest] NakaWidget_TrAsPresetMeasure  +0x2030..+0x2078 (0xe230ac, 72 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): AcModeSelBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "GM MULTI
+; [nakarest] InitializeYoko) ("SqTrAsPs"): AcModeSelBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "GM MULTI
 ; [nakarest] RECORDING" (AcModeSelBox.caption of element 6).
 NakaWidget_TrAsPresetMeasure:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2030, 0x48
@@ -1352,8 +1355,8 @@ NakaWidget_TrAsPresetRT2Sel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2078, 0x1A
 ; [nakarest] NakaWidget_TrAsPresetList  +0x2092..+0x20c0 (0xe2310e, 46 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 8).
 NakaWidget_TrAsPresetList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2092, 0x2E
@@ -1364,8 +1367,8 @@ NakaWidget_TrAsPresetGroup:
 	.incbin "includes/generated/naka_direct_play.bin", 0x20C0, 0x2A
 ; [nakarest] NakaWidget_TrAsPresetContainer  +0x20ea..+0x2128 (0xe23166, 62 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "TRACK ASSIGN
+; [nakarest] InitializeYoko) ("SqTrAsPs"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "TRACK ASSIGN
 ; [nakarest] PRESET" (TtlScreen.title of element 10).
 NakaWidget_TrAsPresetContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x20EA, 0x3E
@@ -1376,15 +1379,15 @@ NakaWidget_TrAsPresetMeasure2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2128, 0x1A
 ; [nakarest] NakaWidget_TrAsPresetRT1Sel  +0x2142..+0x2170 (0xe231be, 46 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 12).
 NakaWidget_TrAsPresetRT1Sel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2142, 0x2E
 ; [nakarest] NakaWidget_TrAsPresetRT2Sel2  +0x2170..+0x219e (0xe231ec, 46 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 13).
 NakaWidget_TrAsPresetRT2Sel2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2170, 0x2E
@@ -1415,8 +1418,8 @@ NakaWidget_TrAsPresetList4:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2226, 0x2A
 ; [nakarest] NakaWidget_TrAsPresetContainer2  +0x2250..+0x228e (0xe232cc, 62 B)
 ; [nakarest] widget record, element 19 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): "TRACK ASSIGN
+; [nakarest] InitializeYoko) ("SqTrAsPs"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): "TRACK ASSIGN
 ; [nakarest] PRESET" (TtlScreen.title of element 19).
 NakaWidget_TrAsPresetContainer2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2250, 0x3E
@@ -1452,29 +1455,29 @@ NakaWidget_TrAsPresetMeasure3:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2340, 0x1A
 ; [nakarest] NakaWidget_TrAsPresetRT1Sel2  +0x235a..+0x2388 (0xe233d6, 46 B)
 ; [nakarest] widget record, element 26 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 26).
 NakaWidget_TrAsPresetRT1Sel2:
 	.incbin "includes/generated/naka_direct_play.bin", 0x235A, 0x2E
 ; [nakarest] NakaWidget_TrAsPresetRT2Sel3  +0x2388..+0x23b6 (0xe23404, 46 B)
 ; [nakarest] widget record, element 27 of Viewable slot 0x8c (table 0xe243ec, 28 entries,
-; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). text the records point at, in
-; [nakarest] Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko): ""
+; [nakarest] InitializeYoko) ("SqTrAsPs"): VwEditSwBox (44 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8c (table 0xe243ec, 28 entries, InitializeYoko)): ""
 ; [nakarest] (VwEditSwBox.str of element 27).
 NakaWidget_TrAsPresetRT2Sel3:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2388, 0x2E
 ; [nakarest] NakaWidget_SongSelNamContainer  +0x23b6..+0x23f4 (0xe23432, 62 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x8e (table 0xe24460, 5 entries,
-; [nakarest] InitializeYoko) ("SqSngSel"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x8e (table 0xe24460, 5 entries, InitializeYoko): "SONG
+; [nakarest] InitializeYoko) ("SqSngSel"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8e (table 0xe24460, 5 entries, InitializeYoko)): "SONG
 ; [nakarest] SELECT/NAMING" (TtlScreen.title of element 0).
 NakaWidget_SongSelNamContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x23B6, 0x3E
 ; [nakarest] NakaWidget_SongSelNamNameItem  +0x23f4..+0x2432 (0xe23470, 62 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x8e (table 0xe24460, 5 entries,
-; [nakarest] InitializeYoko) ("SqSngSel"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x8e (table 0xe24460, 5 entries, InitializeYoko): "NAMING"
+; [nakarest] InitializeYoko) ("SqSngSel"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8e (table 0xe24460, 5 entries, InitializeYoko)): "NAMING"
 ; [nakarest] (AcTitleMenu.str of element 1).
 NakaWidget_SongSelNamNameItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0x23F4, 0x3E
@@ -1495,8 +1498,8 @@ NakaWidget_SongSelNamDuration:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2496, 0x2A
 ; [nakarest] NakaWidget_NamingContainer  +0x24c0..+0x24f2 (0xe2353c, 50 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x8f (table 0xe24478, 6 entries,
-; [nakarest] InitializeYoko) ("SqNameing"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x8f (table 0xe24478, 6 entries, InitializeYoko): "NAMING"
+; [nakarest] InitializeYoko) ("SqNameing"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x8f (table 0xe24478, 6 entries, InitializeYoko)): "NAMING"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_NamingContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x24C0, 0x32
@@ -1507,8 +1510,8 @@ NakaWidget_NamingCharSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x24F2, 0x24
 ; [nakarest] NakaWidget_NamingSeqLabel  +0x2516..+0x2548 (0xe23592, 50 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0x8f (table 0xe24478, 6 entries,
-; [nakarest] InitializeYoko) ("SqNameing"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0x8f (table 0xe24478, 6 entries, InitializeYoko): "SEQUENCER :" (Label.str of
+; [nakarest] InitializeYoko) ("SqNameing"): Label (32 B). 1 text the records point at (Viewable
+; [nakarest] slot 0x8f (table 0xe24478, 6 entries, InitializeYoko)): "SEQUENCER :" (Label.str of
 ; [nakarest] element 2).
 NakaWidget_NamingSeqLabel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2516, 0x32
@@ -1529,8 +1532,8 @@ NakaWidget_NamingOrchRow:
 	.incbin "includes/generated/naka_direct_play.bin", 0x258E, 0x16
 ; [nakarest] naka_direct_play+0x25a4  +0x25a4..+0x25e2 (0xe23620, 62 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x92 (table 0xe24494, 4 entries,
-; [nakarest] InitializeYoko) ("AfterTouchSet"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x92 (table 0xe24494, 4 entries, InitializeYoko): "AFTER TOUCH
+; [nakarest] InitializeYoko) ("AfterTouchSet"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x92 (table 0xe24494, 4 entries, InitializeYoko)): "AFTER TOUCH
 ; [nakarest] SETTING" (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x25A4, 0x3E
 ; [nakarest] NakaWidget_AftTouchDuration  +0x25e2..+0x260c (0xe2365e, 42 B)
@@ -1540,8 +1543,8 @@ NakaWidget_AftTouchDuration:
 	.incbin "includes/generated/naka_direct_play.bin", 0x25E2, 0x2A
 ; [nakarest] NakaWidget_AftTouchChSel  +0x260c..+0x265e (0xe23688, 82 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0x92 (table 0xe24494, 4 entries,
-; [nakarest] InitializeYoko) ("AfterTouchSet"): AcBitEditBox (58 B). text the records point at,
-; [nakarest] in Viewable slot 0x92 (table 0xe24494, 4 entries, InitializeYoko): " AFTER TOUCH
+; [nakarest] InitializeYoko) ("AfterTouchSet"): AcBitEditBox (58 B). 1 text the records point at
+; [nakarest] (Viewable slot 0x92 (table 0xe24494, 4 entries, InitializeYoko)): " AFTER TOUCH
 ; [nakarest] RECORD :" (AcBitEditBox.caption of element 2).
 NakaWidget_AftTouchChSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x260C, 0x52
@@ -1552,8 +1555,8 @@ NakaWidget_AftTouchList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x265E, 0x2A
 ; [nakarest] naka_direct_play+0x2688  +0x2688..+0x26c0 (0xe23704, 56 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xa9 (table 0xe244ac, 6 entries,
-; [nakarest] InitializeYoko) ("StepPartBal"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xa9 (table 0xe244ac, 6 entries, InitializeYoko): "PART BALANCE"
+; [nakarest] InitializeYoko) ("StepPartBal"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xa9 (table 0xe244ac, 6 entries, InitializeYoko)): "PART BALANCE"
 ; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x2688, 0x38
 ; [nakarest] NakaWidget_PartBal0  +0x26c0..+0x26e0 (0xe2373c, 32 B)
@@ -1583,22 +1586,22 @@ NakaWidget_PartBal4:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2740, 0x20
 ; [nakarest] NakaWidget_DemoContainer  +0x2760..+0x2798 (0xe237dc, 56 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xe0 (table 0xe244c8, 4 entries,
-; [nakarest] InitializeYoko) ("DemoMenu"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe0 (table 0xe244c8, 4 entries, InitializeYoko): "DEMONSTRATION"
+; [nakarest] InitializeYoko) ("DemoMenu"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe0 (table 0xe244c8, 4 entries, InitializeYoko)): "DEMONSTRATION"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_DemoContainer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2760, 0x38
 ; [nakarest] NakaWidget_DemoPerfItem  +0x2798..+0x27dc (0xe23814, 68 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xe0 (table 0xe244c8, 4 entries,
-; [nakarest] InitializeYoko) ("DemoMenu"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe0 (table 0xe244c8, 4 entries, InitializeYoko): "PERFORMANCES"
+; [nakarest] InitializeYoko) ("DemoMenu"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe0 (table 0xe244c8, 4 entries, InitializeYoko)): "PERFORMANCES"
 ; [nakarest] (AcTitleMenu.str of element 1).
 NakaWidget_DemoPerfItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2798, 0x44
 ; [nakarest] NakaWidget_DemoFeatPresItem  +0x27dc..+0x2828 (0xe23858, 76 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xe0 (table 0xe244c8, 4 entries,
-; [nakarest] InitializeYoko) ("DemoMenu"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe0 (table 0xe244c8, 4 entries, InitializeYoko): "FEATURE
+; [nakarest] InitializeYoko) ("DemoMenu"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe0 (table 0xe244c8, 4 entries, InitializeYoko)): "FEATURE
 ; [nakarest] PRESENTATION" (AcTitleMenu.str of element 2).
 NakaWidget_DemoFeatPresItem:
 	.incbin "includes/generated/naka_direct_play.bin", 0x27DC, 0x4C
@@ -1609,70 +1612,70 @@ NakaWidget_DemoMeasureBox:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2828, 0x1A
 ; [nakarest] naka_direct_play+0x2842  +0x2842..+0x287a (0xe238be, 56 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "PERFORMANCES"
+; [nakarest] InitializeYoko) ("DemoStyle"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "PERFORMANCES"
 ; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x2842, 0x38
 ; [nakarest] NakaWidget_PerfMainMedley  +0x287a..+0x28bc (0xe238f6, 66 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "Main Medley"
+; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "Main Medley"
 ; [nakarest] (AcDemoSongBox.caption of element 1).
 NakaWidget_PerfMainMedley:
 	.incbin "includes/generated/naka_direct_play.bin", 0x287A, 0x42
 ; [nakarest] NakaWidget_PerfAccordionMedley  +0x28bc..+0x2904 (0xe23938, 72 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "Accordion Medley"
-; [nakarest] (AcDemoSongBox.caption of element 2).
+; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "Accordion
+; [nakarest] Medley" (AcDemoSongBox.caption of element 2).
 NakaWidget_PerfAccordionMedley:
 	.incbin "includes/generated/naka_direct_play.bin", 0x28BC, 0x48
 ; [nakarest] NakaWidget_PerfFolkMedley  +0x2904..+0x2946 (0xe23980, 66 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "Folk Medley"
+; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "Folk Medley"
 ; [nakarest] (AcDemoSongBox.caption of element 3).
 NakaWidget_PerfFolkMedley:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2904, 0x42
 ; [nakarest] NakaWidget_PerfClassical  +0x2946..+0x2986 (0xe239c2, 64 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "Classical"
+; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "Classical"
 ; [nakarest] (AcDemoSongBox.caption of element 4).
 NakaWidget_PerfClassical:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2946, 0x40
 ; [nakarest] NakaWidget_PerfShow  +0x2986..+0x29c2 (0xe23a02, 60 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "Show"
+; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "Show"
 ; [nakarest] (AcDemoSongBox.caption of element 5).
 NakaWidget_PerfShow:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2986, 0x3C
 ; [nakarest] NakaWidget_PerfContemporary  +0x29c2..+0x2a06 (0xe23a3e, 68 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "Contemporary"
+; [nakarest] InitializeYoko) ("DemoStyle"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "Contemporary"
 ; [nakarest] (AcDemoSongBox.caption of element 6).
 NakaWidget_PerfContemporary:
 	.incbin "includes/generated/naka_direct_play.bin", 0x29C2, 0x44
 ; [nakarest] NakaWidget_PerfStyleSel  +0x2a06..+0x2a3c (0xe23a82, 54 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "STYLE"
+; [nakarest] InitializeYoko) ("DemoStyle"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "STYLE"
 ; [nakarest] (PsWideToggle.stroff of element 7); "STYLE" (PsWideToggle.stron of element 7).
 NakaWidget_PerfStyleSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2A06, 0x36
 ; [nakarest] NakaWidget_PerfSoundSel  +0x2a3c..+0x2a72 (0xe23ab8, 54 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "SOUND"
+; [nakarest] InitializeYoko) ("DemoStyle"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "SOUND"
 ; [nakarest] (PsWideToggle.stroff of element 8); "SOUND" (PsWideToggle.stron of element 8).
 NakaWidget_PerfSoundSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2A3C, 0x36
 ; [nakarest] NakaWidget_PerfRhythmSel  +0x2a72..+0x2aac (0xe23aee, 58 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0xe1 (table 0xe244dc, 12 entries,
-; [nakarest] InitializeYoko) ("DemoStyle"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko): "RHYTHM"
+; [nakarest] InitializeYoko) ("DemoStyle"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe1 (table 0xe244dc, 12 entries, InitializeYoko)): "RHYTHM"
 ; [nakarest] (PsWideToggle.stroff of element 9); "RHYTHM" (PsWideToggle.stron of element 9).
 NakaWidget_PerfRhythmSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2A72, 0x3A
@@ -1688,63 +1691,58 @@ NakaWidget_PerfFileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2AC6, 0x24
 ; [nakarest] NakaWidget_Perf2Container  +0x2aea..+0x2b22 (0xe23b66, 56 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "PERFORMANCES"
+; [nakarest] InitializeYoko) ("DemoSound"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "PERFORMANCES"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaWidget_Perf2Container:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2AEA, 0x38
 ; [nakarest] NakaWidget_Perf2Strings  +0x2b22..+0x2b60 (0xe23b9e, 62 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "Strings"
+; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "Strings"
 ; [nakarest] (AcDemoSongBox.caption of element 1).
 NakaWidget_Perf2Strings:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2B22, 0x3E
 ; [nakarest] NakaWidget_Perf2Gamelan  +0x2b60..+0x2bdc (0xe23bdc, 124 B)
-; [nakarest] widget record, element 2 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "Gamelan"
-; [nakarest] (AcDemoSongBox.caption of element 2). widget record, element 3 of Viewable slot
-; [nakarest] 0xe2 (table 0xe24510, 12 entries, InitializeYoko) ("DemoSound"): AcDemoSongBox (54
-; [nakarest] B). text the records point at, in Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko): "Guitar" (AcDemoSongBox.caption of element 3).
+; [nakarest] widget records, elements 2-3 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
+; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B) x2. 2 texts the records point
+; [nakarest] at (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "Gamelan"
+; [nakarest] (AcDemoSongBox.caption of element 2); "Guitar" (AcDemoSongBox.caption of element
+; [nakarest] 3).
 NakaWidget_Perf2Gamelan:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2B60, 0x7C
 ; [nakarest] NakaWidget_Perf2Guitar  +0x2bdc..+0x2c18 (0xe23c58, 60 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "Piano"
+; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "Piano"
 ; [nakarest] (AcDemoSongBox.caption of element 4).
 NakaWidget_Perf2Guitar:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2BDC, 0x3C
 ; [nakarest] NakaWidget_Perf2SaxBrass  +0x2c18..+0x2c94 (0xe23c94, 124 B)
-; [nakarest] widget record, element 5 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "Sax&Brass"
-; [nakarest] (AcDemoSongBox.caption of element 5). widget record, element 6 of Viewable slot
-; [nakarest] 0xe2 (table 0xe24510, 12 entries, InitializeYoko) ("DemoSound"): AcDemoSongBox (54
-; [nakarest] B). text the records point at, in Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko): "Organ" (AcDemoSongBox.caption of element 6).
+; [nakarest] widget records, elements 5-6 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
+; [nakarest] InitializeYoko) ("DemoSound"): AcDemoSongBox (54 B) x2. 2 texts the records point
+; [nakarest] at (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "Sax&Brass"
+; [nakarest] (AcDemoSongBox.caption of element 5); "Organ" (AcDemoSongBox.caption of element 6).
 NakaWidget_Perf2SaxBrass:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2C18, 0x7C
 ; [nakarest] NakaWidget_Perf2StyleSel  +0x2c94..+0x2cca (0xe23d10, 54 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "STYLE"
+; [nakarest] InitializeYoko) ("DemoSound"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "STYLE"
 ; [nakarest] (PsWideToggle.stroff of element 7); "STYLE" (PsWideToggle.stron of element 7).
 NakaWidget_Perf2StyleSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2C94, 0x36
 ; [nakarest] NakaWidget_Perf2SoundSel  +0x2cca..+0x2d00 (0xe23d46, 54 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "SOUND"
+; [nakarest] InitializeYoko) ("DemoSound"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "SOUND"
 ; [nakarest] (PsWideToggle.stroff of element 8); "SOUND" (PsWideToggle.stron of element 8).
 NakaWidget_Perf2SoundSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2CCA, 0x36
 ; [nakarest] NakaWidget_Perf2RhythmSel  +0x2d00..+0x2d3a (0xe23d7c, 58 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
-; [nakarest] InitializeYoko) ("DemoSound"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko): "RHYTHM"
+; [nakarest] InitializeYoko) ("DemoSound"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "RHYTHM"
 ; [nakarest] (PsWideToggle.stroff of element 9); "RHYTHM" (PsWideToggle.stron of element 9).
 NakaWidget_Perf2RhythmSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2D00, 0x3A
@@ -1760,49 +1758,37 @@ NakaWidget_Perf2FileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2D54, 0x24
 ; [nakarest] naka_direct_play+0x2d78  +0x2d78..+0x2db0 (0xe23df4, 56 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko) ("DemoRhy"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko): "PERFORMANCES"
+; [nakarest] InitializeYoko) ("DemoRhy"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko)): "PERFORMANCES"
 ; [nakarest] (TtlScreen.title of element 0).
 	.incbin "includes/generated/naka_direct_play.bin", 0x2D78, 0x38
 ; [nakarest] NakaWidget_Perf3HokieDance  +0x2db0..+0x2f04 (0xe23e2c, 340 B)
-; [nakarest] widget record, element 1 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko) ("DemoRhy"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko): "Hokie Dance"
-; [nakarest] (AcDemoSongBox.caption of element 1). widget record, element 2 of Viewable slot
-; [nakarest] 0xe3 (table 0xe24544, 12 entries, InitializeYoko) ("DemoRhy"): AcDemoSongBox (54
-; [nakarest] B). text the records point at, in Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko): "Gospel Revival" (AcDemoSongBox.caption of element 2). widget
-; [nakarest] record, element 3 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko) ("DemoRhy"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko): "Organ Combo"
-; [nakarest] (AcDemoSongBox.caption of element 3). widget record, element 4 of Viewable slot
-; [nakarest] 0xe3 (table 0xe24544, 12 entries, InitializeYoko) ("DemoRhy"): AcDemoSongBox (54
-; [nakarest] B). text the records point at, in Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko): "Big Band Mid" (AcDemoSongBox.caption of element 4). widget
-; [nakarest] record, element 5 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko) ("DemoRhy"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko): "Bavarian Polka"
-; [nakarest] (AcDemoSongBox.caption of element 5).
+; [nakarest] widget records, elements 1-5 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
+; [nakarest] InitializeYoko) ("DemoRhy"): AcDemoSongBox (54 B) x5. 5 texts the records point at
+; [nakarest] (Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko)): "Hokie Dance"
+; [nakarest] (AcDemoSongBox.caption of element 1); "Gospel Revival" (AcDemoSongBox.caption of
+; [nakarest] element 2); "Organ Combo" (AcDemoSongBox.caption of element 3); "Big Band Mid"
+; [nakarest] (AcDemoSongBox.caption of element 4); ....
 NakaWidget_Perf3HokieDance:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2DB0, 0x154
 ; [nakarest] NakaWidget_Perf3ModernBluegrass  +0x2f04..+0x2f4c (0xe23f80, 72 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko) ("DemoRhy"): AcDemoSongBox (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko): "Modern Bluegrass"
-; [nakarest] (AcDemoSongBox.caption of element 6).
+; [nakarest] InitializeYoko) ("DemoRhy"): AcDemoSongBox (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko)): "Modern
+; [nakarest] Bluegrass" (AcDemoSongBox.caption of element 6).
 NakaWidget_Perf3ModernBluegrass:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2F04, 0x48
 ; [nakarest] NakaWidget_Perf3StyleSel  +0x2f4c..+0x2f82 (0xe23fc8, 54 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko) ("DemoRhy"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko): "STYLE"
+; [nakarest] InitializeYoko) ("DemoRhy"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko)): "STYLE"
 ; [nakarest] (PsWideToggle.stroff of element 7); "STYLE" (PsWideToggle.stron of element 7).
 NakaWidget_Perf3StyleSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2F4C, 0x36
 ; [nakarest] NakaWidget_Perf3SoundSel  +0x2f82..+0x2fb8 (0xe23ffe, 54 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0xe3 (table 0xe24544, 12 entries,
-; [nakarest] InitializeYoko) ("DemoRhy"): PsWideToggle (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko): "SOUND"
+; [nakarest] InitializeYoko) ("DemoRhy"): PsWideToggle (42 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xe3 (table 0xe24544, 12 entries, InitializeYoko)): "SOUND"
 ; [nakarest] (PsWideToggle.stroff of element 8); "SOUND" (PsWideToggle.stron of element 8).
 NakaWidget_Perf3SoundSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2F82, 0x36

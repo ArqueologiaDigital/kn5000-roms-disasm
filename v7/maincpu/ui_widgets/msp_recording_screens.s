@@ -170,8 +170,8 @@
 
 ; [nakarest] NakaNode_Accomp7_Widget27  +0x0..+0x40 (0xe1ab58, 64 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xc9 (table 0xe1ba1e, 16 entries,
-; [nakarest] InitializeSuna) ("MspRecScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna): "MSP PHRASE
+; [nakarest] InitializeSuna) ("MspRecScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna)): "MSP PHRASE
 ; [nakarest] RECORDING" (TtlScreen.title of element 0).
 NakaNode_Accomp7_Widget27:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x0, 0x40
@@ -182,15 +182,15 @@ NakaNode_Accomp8_Widget01:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x40, 0x1C
 ; [nakarest] NakaNode_Accomp8_Widget02  +0x5c..+0x8e (0xe1abb4, 50 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xc9 (table 0xe1ba1e, 16 entries,
-; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna): "Recording Phrase"
-; [nakarest] (Label.str of element 2).
+; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna)): "Recording
+; [nakarest] Phrase" (Label.str of element 2).
 NakaNode_Accomp8_Widget02:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x5C, 0x32
 ; [nakarest] NakaNode_Accomp8_Widget03  +0x8e..+0xb6 (0xe1abe6, 40 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xc9 (table 0xe1ba1e, 16 entries,
-; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna): "BANK :"
+; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna)): "BANK :"
 ; [nakarest] (Label.str of element 3).
 NakaNode_Accomp8_Widget03:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x8E, 0x28
@@ -211,8 +211,8 @@ NakaNode_Accomp8_Widget06:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xFE, 0x1C
 ; [nakarest] NakaNode_Accomp8_Widget07  +0x11a..+0x144 (0xe1ac72, 42 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xc9 (table 0xe1ba1e, 16 entries,
-; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna): "TEMPO ="
+; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna)): "TEMPO ="
 ; [nakarest] (Label.str of element 7).
 NakaNode_Accomp8_Widget07:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x11A, 0x2A
@@ -233,22 +233,22 @@ NakaNode_Accomp8_Widget10:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x18C, 0x24
 ; [nakarest] NakaNode_Accomp8_Widget11  +0x1b0..+0x1d2 (0xe1ad08, 34 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0xc9 (table 0xe1ba1e, 16 entries,
-; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna): "%" (Label.str of
-; [nakarest] element 11).
+; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna)): "%" (Label.str
+; [nakarest] of element 11).
 NakaNode_Accomp8_Widget11:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x1B0, 0x22
 ; [nakarest] NakaNode_Accomp8_Widget12  +0x1d2..+0x1fa (0xe1ad2a, 40 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0xc9 (table 0xe1ba1e, 16 entries,
-; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna): "PAD :" (Label.str
-; [nakarest] of element 12).
+; [nakarest] InitializeSuna) ("MspRecScreen"): Label (32 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna)): "PAD :"
+; [nakarest] (Label.str of element 12).
 NakaNode_Accomp8_Widget12:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x1D2, 0x28
 ; [nakarest] NakaNode_Accomp8_Widget13  +0x1fa..+0x240 (0xe1ad52, 70 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0xc9 (table 0xe1ba1e, 16 entries,
-; [nakarest] InitializeSuna) ("MspRecScreen"): AcRamEditBox (58 B). text the records point at,
-; [nakarest] in Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna): "play mode :"
+; [nakarest] InitializeSuna) ("MspRecScreen"): AcRamEditBox (58 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xc9 (table 0xe1ba1e, 16 entries, InitializeSuna)): "play mode :"
 ; [nakarest] (AcRamEditBox.caption of element 13).
 NakaNode_Accomp8_Widget13:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x1FA, 0x46
@@ -264,22 +264,22 @@ NakaNode_Accomp8_Widget15:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x26A, 0x1A
 ; [nakarest] NakaNode_Accomp9_Widget01  +0x284..+0x2b8 (0xe1addc, 52 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xca (table 0xe1ba62, 6 entries,
-; [nakarest] InitializeSuna) ("MspMenuScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna): "MSP MENU"
+; [nakarest] InitializeSuna) ("MspMenuScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna)): "MSP MENU"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaNode_Accomp9_Widget01:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x284, 0x34
 ; [nakarest] NakaNode_Accomp9_Widget02  +0x2b8..+0x2fa (0xe1ae10, 66 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xca (table 0xe1ba62, 6 entries,
-; [nakarest] InitializeSuna) ("MspMenuScreen"): AcTitleMenu (54 B). text the records point at,
-; [nakarest] in Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna): "COMPILE SET"
+; [nakarest] InitializeSuna) ("MspMenuScreen"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna)): "COMPILE SET"
 ; [nakarest] (AcTitleMenu.str of element 1).
 NakaNode_Accomp9_Widget02:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x2B8, 0x42
 ; [nakarest] NakaNode_Accomp9_Widget03  +0x2fa..+0x34e (0xe1ae52, 84 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xca (table 0xe1ba62, 6 entries,
-; [nakarest] InitializeSuna) ("MspMenuScreen"): AcTitleMenu (54 B). text the records point at,
-; [nakarest] in Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna): "Naming for
+; [nakarest] InitializeSuna) ("MspMenuScreen"): AcTitleMenu (54 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna)): "Naming for
 ; [nakarest] User&COMPILE Banks" (AcTitleMenu.str of element 2).
 NakaNode_Accomp9_Widget03:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x2FA, 0x54
@@ -290,8 +290,8 @@ NakaNode_Accomp9_Widget04:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x34E, 0x1A
 ; [nakarest] NakaNode_Accomp9_Widget05  +0x368..+0x3b0 (0xe1aec0, 72 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xca (table 0xe1ba62, 6 entries,
-; [nakarest] InitializeSuna) ("MspMenuScreen"): AcRamEditBox (58 B). text the records point at,
-; [nakarest] in Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna): "Naming Bank :"
+; [nakarest] InitializeSuna) ("MspMenuScreen"): AcRamEditBox (58 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xca (table 0xe1ba62, 6 entries, InitializeSuna)): "Naming Bank :"
 ; [nakarest] (AcRamEditBox.caption of element 4).
 NakaNode_Accomp9_Widget05:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x368, 0x48
@@ -302,8 +302,8 @@ NakaNode_Accomp9_Widget06:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x3B0, 0x2A
 ; [nakarest] NakaNode_Accomp10_Widget01  +0x3da..+0x40c (0xe1af32, 50 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xcb (table 0xe1ba7e, 4 entries,
-; [nakarest] InitializeSuna) ("MspNamingScreen"): TtlScreen (42 B). text the records point at,
-; [nakarest] in Viewable slot 0xcb (table 0xe1ba7e, 4 entries, InitializeSuna): "NAMING"
+; [nakarest] InitializeSuna) ("MspNamingScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xcb (table 0xe1ba7e, 4 entries, InitializeSuna)): "NAMING"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaNode_Accomp10_Widget01:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x3DA, 0x32
@@ -324,8 +324,8 @@ NakaNode_Accomp10_Widget04:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x452, 0x24
 ; [nakarest] NakaNode_Accomp11_Widget01  +0x476..+0x4b4 (0xe1afce, 62 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xcc (table 0xe1ba92, 9 entries,
-; [nakarest] InitializeSuna) ("MspReGrpScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xcc (table 0xe1ba92, 9 entries, InitializeSuna): "MSP COMPILE
+; [nakarest] InitializeSuna) ("MspReGrpScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xcc (table 0xe1ba92, 9 entries, InitializeSuna)): "MSP COMPILE
 ; [nakarest] SETTING" (TtlScreen.title of element 0).
 NakaNode_Accomp11_Widget01:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x476, 0x3E
@@ -336,15 +336,15 @@ NakaNode_Accomp11_Widget02:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x4B4, 0x2C
 ; [nakarest] NakaNode_Accomp11_Widget03  +0x4e0..+0x50c (0xe1b038, 44 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xcc (table 0xe1ba92, 9 entries,
-; [nakarest] InitializeSuna) ("MspReGrpScreen"): StringBox (38 B). text the records point at, in
-; [nakarest] Viewable slot 0xcc (table 0xe1ba92, 9 entries, InitializeSuna): "BANK"
+; [nakarest] InitializeSuna) ("MspReGrpScreen"): StringBox (38 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xcc (table 0xe1ba92, 9 entries, InitializeSuna)): "BANK"
 ; [nakarest] (StringBox.str of element 2).
 NakaNode_Accomp11_Widget03:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x4E0, 0x2C
 ; [nakarest] NakaNode_Accomp11_Widget04  +0x50c..+0x594 (0xe1b064, 136 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xcc (table 0xe1ba92, 9 entries,
-; [nakarest] InitializeSuna) ("MspReGrpScreen"): AcGridBox (74 B). text the records point at, in
-; [nakarest] Viewable slot 0xcc (table 0xe1ba92, 9 entries, InitializeSuna):
+; [nakarest] InitializeSuna) ("MspReGrpScreen"): AcGridBox (74 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xcc (table 0xe1ba92, 9 entries, InitializeSuna)):
 ; [nakarest] "|-|PAD1|PAD2|PAD3|PAD4|PAD5|PAD6" (AcGridBox.fixedrow of element 3); "PADS| BANK
 ; [nakarest] |PHRASE" (AcGridBox.fixedcol of element 3).
 NakaNode_Accomp11_Widget04:
@@ -376,15 +376,15 @@ NakaNode_Accomp11_Widget09:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x634, 0x1A
 ; [nakarest] NakaNode_Accomp12_Widget01  +0x64e..+0x688 (0xe1b1a6, 58 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xdc (table 0xe1baba, 8 entries,
-; [nakarest] InitializeSuna) ("SndArgrScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xdc (table 0xe1baba, 8 entries, InitializeSuna): "SOUND ARRANGER"
+; [nakarest] InitializeSuna) ("SndArgrScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xdc (table 0xe1baba, 8 entries, InitializeSuna)): "SOUND ARRANGER"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaNode_Accomp12_Widget01:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x64E, 0x3A
 ; [nakarest] NakaNode_Accomp12_Widget02  +0x688..+0x6ba (0xe1b1e0, 50 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xdc (table 0xe1baba, 8 entries,
-; [nakarest] InitializeSuna) ("SndArgrScreen"): StringBox (38 B). text the records point at, in
-; [nakarest] Viewable slot 0xdc (table 0xe1baba, 8 entries, InitializeSuna): " PATTERN :"
+; [nakarest] InitializeSuna) ("SndArgrScreen"): StringBox (38 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xdc (table 0xe1baba, 8 entries, InitializeSuna)): " PATTERN :"
 ; [nakarest] (StringBox.str of element 1).
 NakaNode_Accomp12_Widget02:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x688, 0x32
@@ -405,8 +405,8 @@ NakaNode_Accomp12_Widget05:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x6F8, 0x1A
 ; [nakarest] NakaNode_Accomp12_Widget06  +0x712..+0x7aa (0xe1b26a, 152 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xdc (table 0xe1baba, 8 entries,
-; [nakarest] InitializeSuna) ("SndArgrScreen"): AcSndArgGridBox (74 B). text the records point
-; [nakarest] at, in Viewable slot 0xdc (table 0xe1baba, 8 entries, InitializeSuna):
+; [nakarest] InitializeSuna) ("SndArgrScreen"): AcSndArgGridBox (74 B). 2 texts the records
+; [nakarest] point at (Viewable slot 0xdc (table 0xe1baba, 8 entries, InitializeSuna)):
 ; [nakarest] "|-|DRUMS|BASS|ACCOMP1|ACCOMP2|ACCOMP3" (AcSndArgGridBox.fixedrow of element 5); "
 ; [nakarest] PART | SOUND |D.EFFECT" (AcSndArgGridBox.fixedcol of element 5).
 NakaNode_Accomp12_Widget06:
@@ -423,43 +423,43 @@ NakaNode_Accomp12_Widget08:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x7D4, 0x2A
 ; [nakarest] NakaNode_Accomp13_Widget01  +0x7fe..+0x838 (0xe1b356, 58 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xed (table 0xe1bade, 6 entries,
-; [nakarest] InitializeSuna) ("ApcSelScreen"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna): "AUTO PLAY CHORD"
+; [nakarest] InitializeSuna) ("ApcSelScreen"): TtlScreen (42 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna)): "AUTO PLAY CHORD"
 ; [nakarest] (TtlScreen.title of element 0).
 NakaNode_Accomp13_Widget01:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x7FE, 0x3A
 ; [nakarest] NakaNode_Accomp13_Widget02  +0x838..+0x878 (0xe1b390, 64 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xed (table 0xe1bade, 6 entries,
-; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcMdBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna): "ONE FINGER"
+; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcMdBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna)): "ONE FINGER"
 ; [nakarest] (AcApcMdBox.caption of element 1).
 NakaNode_Accomp13_Widget02:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x838, 0x40
 ; [nakarest] NakaNode_Accomp13_Widget03  +0x878..+0x8b6 (0xe1b3d0, 62 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xed (table 0xe1bade, 6 entries,
-; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcMdBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna): "FINGERED"
+; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcMdBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna)): "FINGERED"
 ; [nakarest] (AcApcMdBox.caption of element 2).
 NakaNode_Accomp13_Widget03:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x878, 0x3E
 ; [nakarest] NakaNode_Accomp13_Widget04  +0x8b6..+0x8f2 (0xe1b40e, 60 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xed (table 0xe1bade, 6 entries,
-; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcMdBox (52 B). text the records point at, in
-; [nakarest] Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna): "PIANIST"
+; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcMdBox (52 B). 1 text the records point at
+; [nakarest] (Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna)): "PIANIST"
 ; [nakarest] (AcApcMdBox.caption of element 3).
 NakaNode_Accomp13_Widget04:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x8B6, 0x3C
 ; [nakarest] NakaNode_Accomp13_Widget05  +0x8f2..+0x93e (0xe1b44a, 76 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xed (table 0xe1bade, 6 entries,
-; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcToggle (48 B). text the records point at, in
-; [nakarest] Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna): " MEMORY : OFF"
+; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcToggle (48 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna)): " MEMORY : OFF"
 ; [nakarest] (AcApcToggle.stroff of element 4); " MEMORY : ON" (AcApcToggle.stron of element 4).
 NakaNode_Accomp13_Widget05:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x8F2, 0x4C
 ; [nakarest] NakaNode_Accomp13_Widget06  +0x93e..+0x98a (0xe1b496, 76 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xed (table 0xe1bade, 6 entries,
-; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcToggle (48 B). text the records point at, in
-; [nakarest] Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna): "ON BASS : OFF"
+; [nakarest] InitializeSuna) ("ApcSelScreen"): AcApcToggle (48 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xed (table 0xe1bade, 6 entries, InitializeSuna)): "ON BASS : OFF"
 ; [nakarest] (AcApcToggle.stroff of element 5); "ON BASS : ON" (AcApcToggle.stron of element 5).
 NakaNode_Accomp13_Widget06:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x93E, 0x4C

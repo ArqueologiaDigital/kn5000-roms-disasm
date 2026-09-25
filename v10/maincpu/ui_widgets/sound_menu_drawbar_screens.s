@@ -65,7 +65,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_SoundMenuDrawbar  +0x0..+0x14 (0xe80fe2, 20 B)
-; [nakarest] purpose not established: 20 bytes at 0xe80fe2 that no registered NAKA table points into
+; [nakarest] purpose not established: 20 B at 0xe80fe2 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 NakaData_SoundMenuDrawbar:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x0, 0x14
 ; [nakarest] naka_sound_menu_drawbar+0x14  +0x14..+0xa4 (0xe80ff6, 144 B)
@@ -374,7 +374,7 @@ NakaData_SoundMenuDrawbar:
 ; [nakarest] InitializeMurai), 10 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x302, 0x4
 ; [nakarest] Naka_EventDispatch_Table  +0x306..+0x32e (0xe812e8, 40 B)
-; [nakarest] purpose not established: 4 bytes at 0xe8130c that no registered NAKA table points into
+; [nakarest] purpose not established: 4 B at 0xe8130c that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: ResEvent slot 0x1c1 (table 0xe812e4, 10 entries,
 ; [nakarest] InitializeMurai), 10 entry pointers x 4 bytes (starts 0xe812e4, 36 of its 40 bytes
 ; [nakarest] are here or later).
@@ -404,14 +404,15 @@ Naka_Event_Table3:
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x5AA, 0x4
 ; [nakarest] Naka_Event_Table2  +0x5ae..+0x642 (0xe81590, 148 B)
-; [nakarest] purpose not established: 4 bytes at 0xe81620 that no registered NAKA table points into
+; [nakarest] purpose not established: 4 B at 0xe81620 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 ; [nakarest] Continues the table itself: Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes (starts 0xe8158c, 144 of its 148
 ; [nakarest] bytes are here or later).
 Naka_Event_Table2:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x5AE, 0x94
 ; [nakarest] NakaInst_EmptyString  +0x642..+0x644 (0xe81624, 2 B)
-; [nakarest] purpose not established: 2 bytes at 0xe81624 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 2 B at 0xe81624 not derived; readers below
+; [nakarest] Readers: 1 data word in Naka_Event_Table2 (at 0xe81620).
 NakaInst_EmptyString:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x642, 0x2
 ; [nakarest] naka_sound_menu_drawbar+0x644  +0x644..+0x8c0 (0xe81626, 636 B)
@@ -431,8 +432,8 @@ NakaInst_IvSdpartProc:
 NakaContainer_SoundMenu_Root:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8CE, 0x2A
 ; [nakarest] NakaDesc_SOUND_MENU  +0x8f8..+0x904 (0xe818da, 12 B)
-; [nakarest] text the records point at, in Viewable slot 0x2 (table 0xe85470, 20 entries,
-; [nakarest] InitializeMurai): "SOUND MENU" (TtlScreen.title of element 0).
+; [nakarest] 1 text the records point at (Viewable slot 0x2 (table 0xe85470, 20 entries,
+; [nakarest] InitializeMurai)): "SOUND MENU" (TtlScreen.title of element 0).
 NakaDesc_SOUND_MENU:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8F8, 0xC
 ; [nakarest] NakaWidget_SoundMenu_PageButton  +0x904..+0x90a (0xe818e6, 6 B)

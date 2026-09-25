@@ -2,27 +2,41 @@
 ; Sequencer Channel Containers + Drawbar/Mixer Data (13 widgets, 7936 bytes)
 ; Source: maincpu/ui_widgets/naka_sequencer_channels.c (C struct with named fields)
 ; [nakarest] NakaData_SeqChannels  +0x0..+0x6a0 (0xeee078, 1696 B)
-; [nakarest] purpose not established: 1696 bytes at 0xeee078 that no registered NAKA table points into
+; [nakarest] purpose not established: 1696 B at 0xeee078 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 NakaData_SeqChannels:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x6A0
 ; [nakarest] Naka_DrawbarOrgan_Screens  +0x6a0..+0x7a8 (0xeee718, 264 B)
-; [nakarest] purpose not established: 264 bytes at 0xeee718 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 264 B at 0xeee718 not derived; readers below
+; [nakarest] Readers: source references AudioCtrl_DataBlock_Join4 (ui/drawbar_panel_ui.s: `.long
+; [nakarest] Pad_AfterNaka_DrawbarOrgan_Screens`).
 Naka_DrawbarOrgan_Screens:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0x108
 ; [nakarest] SeqCh_FeatureDemoCallbackData  +0x7a8..+0x888 (0xeee820, 224 B)
-; [nakarest] purpose not established: 224 bytes at 0xeee820 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 224 B at 0xeee820 not derived; readers below
+; [nakarest] Readers: source references FDemoText_ByteData_DisplayRefresh_Loop
+; [nakarest] (demo/fdemotext_routines.s: `.long SeqCh_FeatureDemoCallbackData`).
 SeqCh_FeatureDemoCallbackData:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x7A8, 0xE0
 ; [nakarest] SeqCh_SystemHandlerData  +0x888..+0xc48 (0xeee900, 960 B)
-; [nakarest] purpose not established: 960 bytes at 0xeee900 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 960 B at 0xeee900 not derived; readers below
+; [nakarest] Readers: source references HDAE5000_Init_BytecodeBlock_Code_Loop
+; [nakarest] (boot/system_handlers.s: `.long SeqCh_SystemHandlerData`); 2 data words in
+; [nakarest] HDAE5000_Init_BytecodeBlock_Code_Loop (at 0xef4b47, 0xef4b44), which is read by
+; [nakarest] HDAE5000_Init_BytecodeBlock_Code_Loop (boot/system_handlers.s: `jr z,
+; [nakarest] HDAE5000_Init_BytecodeBlock_Code_Loop`); 1 data word in
+; [nakarest] SLIDE_Decompress_4K_FillRing (at 0xef3ff1), which is read by
+; [nakarest] SLIDE_Decompress_4K_FillRing (boot/system_handlers.s: `jr c,
+; [nakarest] SLIDE_Decompress_4K_FillRing`); 1 data word in SLIDE_Decompress_8K_FillRing (at
+; [nakarest] 0xef410f), which is read by SLIDE_Decompress_8K_FillRing (boot/system_handlers.s:
+; [nakarest] `jr c, SLIDE_Decompress_8K_FillRing`).
 SeqCh_SystemHandlerData:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x888, 0x3C0
 ; [nakarest] MixerPart_NamePtrTable  +0xc48..+0xccc (0xeeecc0, 132 B)
-; [nakarest] purpose not established: 132 bytes at 0xeeecc0 that no registered NAKA table points into
+; [nakarest] purpose not established: 132 B at 0xeeecc0 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 MixerPart_NamePtrTable:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC48, 0x84
 ; [nakarest] Naka_DrawbarControl_Table  +0xccc..+0xd00 (0xeeed44, 52 B)
-; [nakarest] purpose not established: 52 bytes at 0xeeed44 that no registered NAKA table points into
+; [nakarest] purpose not established: 52 B at 0xeeed44 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 Naka_DrawbarControl_Table:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xCCC, 0x34
 EmbeddedPtrTable_v9_naka_sequencer_channels_000D00:
@@ -48,7 +62,7 @@ EmbeddedPtrTable_v9_naka_sequencer_channels_000D00:
 	.long 0xFFFF0002
 	.long 0x00000000
 ; [nakarest] naka_sequencer_channels+0xd54  +0xd54..+0xd5c (0xeeedcc, 8 B)
-; [nakarest] purpose not established: 8 bytes at 0xeeedcc that no registered NAKA table points into
+; [nakarest] purpose not established: 8 B at 0xeeedcc that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xD54, 0x8
 MidiPart_ConfigNameTable:
 	.long MidiParam_PanelCfgTable
@@ -157,18 +171,18 @@ MidiPart_ConfigNameTable:
 	.long TrackName6_Unassigned_07
 	.long TrackName6_Unassigned_06
 ; [nakarest] naka_sequencer_channels+0xf00  +0xf00..+0xf48 (0xeeef78, 72 B)
-; [nakarest] purpose not established: 72 bytes at 0xeeef78 that no registered NAKA table points into
+; [nakarest] purpose not established: 72 B at 0xeeef78 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF00, 0x48
 ; [nakarest] Naka_DrawbarSlider_Resources  +0xf48..+0x12d8 (0xeeefc0, 912 B)
-; [nakarest] purpose not established: 912 bytes at 0xeeefc0 that no registered NAKA table points into
+; [nakarest] purpose not established: 912 B at 0xeeefc0 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 Naka_DrawbarSlider_Resources:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390
 ; [nakarest] Naka_DrawbarDisplay_Table1  +0x12d8..+0x1358 (0xeef350, 128 B)
-; [nakarest] purpose not established: 128 bytes at 0xeef350 that no registered NAKA table points into
+; [nakarest] purpose not established: 128 B at 0xeef350 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 Naka_DrawbarDisplay_Table1:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
 ; [nakarest] Naka_DrawbarDisplay_Table2  +0x1358..+0x1510 (0xeef3d0, 440 B)
-; [nakarest] purpose not established: 440 bytes at 0xeef3d0 that no registered NAKA table points into
+; [nakarest] purpose not established: 440 B at 0xeef3d0 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 Naka_DrawbarDisplay_Table2:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x1B8
 Naka_DrawbarReg_Table:
@@ -233,10 +247,15 @@ Naka_DrawbarReg_Table:
 	.long 0x00ED0212
 	.long NoteNameStr_Table_1
 ; [nakarest] naka_sequencer_channels+0x1600  +0x1600..+0x1a78 (0xeef678, 1144 B)
-; [nakarest] purpose not established: 1144 bytes at 0xeef678 that no registered NAKA table points into
+; [nakarest] purpose not established: layout of 1144 B at 0xeef678 not derived; readers below
+; [nakarest] Readers: source references Boot_InitWorkRAM_ROMCopy2_Start (boot/system_handlers.s:
+; [nakarest] `ld xhl, Naka_DrawbarReg_Table_0x4de`); 1 data word in
+; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start (at 0xef0bd8), which is read by
+; [nakarest] Boot_InitWorkRAM_ROMCopy1_Start (boot/system_handlers.s: `jr z,
+; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start`).
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x478
 ; [nakarest] Palette_8bit_RGBA_2_Data  +0x1a78..+0x1f00 (0xeefaf0, 1160 B)
-; [nakarest] purpose not established: 1160 bytes at 0xeefaf0 that no registered NAKA table points into
+; [nakarest] purpose not established: 1160 B at 0xeefaf0 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 Palette_8bit_RGBA_2_Data:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x488
 

@@ -192,463 +192,168 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] naka_control_menu_header+0x0  +0x0..+0x250 (0xed3c96, 592 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x40 (table 0xed78ce, 9 entries,
-; [nakarest] InitializeToshi) ("ControlMenu"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x40 (table 0xed78ce, 9 entries, InitializeToshi): "CONTROL MENU"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x40
-; [nakarest] (table 0xed78ce, 9 entries, InitializeToshi) ("ControlMenu"): AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x40 (table 0xed78ce, 9 entries,
-; [nakarest] InitializeToshi): "INITIAL" (AcTitleMenu.str of element 1). widget record, element
-; [nakarest] 2 of Viewable slot 0x40 (table 0xed78ce, 9 entries, InitializeToshi)
-; [nakarest] ("ControlMenu"): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x40 (table 0xed78ce, 9 entries, InitializeToshi): "OVERALL TOUCH SENSITIVITY"
-; [nakarest] (AcTitleMenu.str of element 2). widget record, element 3 of Viewable slot 0x40
-; [nakarest] (table 0xed78ce, 9 entries, InitializeToshi) ("ControlMenu"): AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x40 (table 0xed78ce, 9 entries,
-; [nakarest] InitializeToshi): "FOOT CONTROLLERS" (AcTitleMenu.str of element 3). widget record,
-; [nakarest] element 4 of Viewable slot 0x40 (table 0xed78ce, 9 entries, InitializeToshi)
-; [nakarest] ("ControlMenu"): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x40 (table 0xed78ce, 9 entries, InitializeToshi): "DISPLAY TIME OUT"
-; [nakarest] (AcTitleMenu.str of element 4). widget record, element 5 of Viewable slot 0x40
-; [nakarest] (table 0xed78ce, 9 entries, InitializeToshi) ("ControlMenu"): AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0x40 (table 0xed78ce, 9 entries,
-; [nakarest] InitializeToshi): "PANEL MEMORY MODE" (AcTitleMenu.str of element 5). widget
-; [nakarest] records, elements 6-7 of Viewable slot 0x40 (table 0xed78ce, 9 entries,
-; [nakarest] InitializeToshi) ("ControlMenu"): IvExitMode (26 B), AcTitleMenu (54 B). text the
-; [nakarest] records point at, in Viewable slot 0x40 (table 0xed78ce, 9 entries,
-; [nakarest] InitializeToshi): "MUSIC STYLE ARRANGER MODE" (AcTitleMenu.str of element 7).
-; [nakarest] widget record, element 8 of Viewable slot 0x40 (table 0xed78ce, 9 entries,
-; [nakarest] InitializeToshi) ("ControlMenu"): AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0x40 (table 0xed78ce, 9 entries, InitializeToshi): "WALLPAPER
-; [nakarest] SETTING" (AcTitleMenu.str of element 8).
+; [nakarest] widget records, elements 0-8 of Viewable slot 0x40 (table 0xed78ce, 9 entries,
+; [nakarest] InitializeToshi) ("ControlMenu"): TtlScreen (42 B), AcTitleMenu (54 B) x7,
+; [nakarest] IvExitMode (26 B). 8 texts the records point at (Viewable slot 0x40 (table
+; [nakarest] 0xed78ce, 9 entries, InitializeToshi)): "CONTROL MENU" (TtlScreen.title of element
+; [nakarest] 0); "INITIAL" (AcTitleMenu.str of element 1); "OVERALL TOUCH SENSITIVITY"
+; [nakarest] (AcTitleMenu.str of element 2); "FOOT CONTROLLERS" (AcTitleMenu.str of element 3);
+; [nakarest] ....
 	.incbin "includes/generated/naka_control_menu_header.bin", 0x0, 0x250
 
 ; Control Menu body widgets (184 widgets across all sub-screens)
 ; Source: maincpu/ui_widgets/naka_ctrl_menu_body.c (C struct with named fields)
 ; [nakarest] naka_ctrl_menu_body+0x0  +0x0..+0x348 (0xed3ee6, 840 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x41 (table 0xed78f6, 17 entries,
-; [nakarest] InitializeToshi) ("ControlIni"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x41 (table 0xed78f6, 17 entries, InitializeToshi): "INITIAL"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0x41
-; [nakarest] (table 0xed78f6, 17 entries, InitializeToshi) ("ControlIni"): AcIndexWideES (42 B),
-; [nakarest] AcListBox (48 B). text the records point at, in Viewable slot 0x41 (table 0xed78f6,
-; [nakarest] 17 entries, InitializeToshi): "PERFORMANCE | CURRENT PANEL | PART " (AcListBox.list
-; [nakarest] of element 2). widget records, elements 3-6 of Viewable slot 0x41 (table 0xed78f6,
-; [nakarest] 17 entries, InitializeToshi) ("ControlIni"): AcFuncEditSw (44 B), IvShowHide (26
-; [nakarest] B), AcLanguageText (42 B), TtlScreen (42 B). text the records point at, in Viewable
-; [nakarest] slot 0x41 (table 0xed78f6, 17 entries, InitializeToshi): "INITIAL" (TtlScreen.title
-; [nakarest] of element 6). widget records, elements 7-8 of Viewable slot 0x41 (table 0xed78f6,
-; [nakarest] 17 entries, InitializeToshi) ("ControlIni"): Screen (34 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x41 (table 0xed78f6, 17 entries,
-; [nakarest] InitializeToshi): "INITIAL" (Label.str of element 8). widget records, elements 9-16
-; [nakarest] of Viewable slot 0x41 (table 0xed78f6, 17 entries, InitializeToshi) ("ControlIni"):
-; [nakarest] Icon (26 B), Box (26 B), AcLanguageText (42 B) x3, AcFuncEditSw (44 B) x2,
-; [nakarest] IvShowHide (26 B).
+; [nakarest] widget records, elements 0-16 of Viewable slot 0x41 (table 0xed78f6, 17 entries,
+; [nakarest] InitializeToshi) ("ControlIni"): TtlScreen (42 B) x2, AcIndexWideES (42 B),
+; [nakarest] AcListBox (48 B), AcFuncEditSw (44 B) x3, IvShowHide (26 B) x2, AcLanguageText (42
+; [nakarest] B) x4, Screen (34 B), Label (32 B), Icon (26 B), Box (26 B). 4 texts the records
+; [nakarest] point at (Viewable slot 0x41 (table 0xed78f6, 17 entries, InitializeToshi)):
+; [nakarest] "INITIAL" (TtlScreen.title of element 0); "PERFORMANCE | CURRENT PANEL | PART "
+; [nakarest] (AcListBox.list of element 2); "INITIAL" (TtlScreen.title of element 6); "INITIAL"
+; [nakarest] (Label.str of element 8).
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x0, 0x348
 ; [nakarest] naka_ctrl_menu_body+0x348  +0x348..+0x504 (0xed422e, 444 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x42 (table 0xed793e, 6 entries,
-; [nakarest] InitializeToshi) ("ControlFsw"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x42 (table 0xed793e, 6 entries, InitializeToshi): "FOOT CONTROLLERS"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x42
-; [nakarest] (table 0xed793e, 6 entries, InitializeToshi) ("ControlFsw"): AcFSWAssGridBox (74
-; [nakarest] B). text the records point at, in Viewable slot 0x42 (table 0xed793e, 6 entries,
-; [nakarest] InitializeToshi): "|-|FOOT SWITCH 1 |FOOT SWITCH 2 |FOOT CONT.SW 1|"
+; [nakarest] widget records, elements 0-5 of Viewable slot 0x42 (table 0xed793e, 6 entries,
+; [nakarest] InitializeToshi) ("ControlFsw"): TtlScreen (42 B), AcFSWAssGridBox (74 B), Label
+; [nakarest] (32 B) x2, AcIndexWideES (42 B) x2. 5 texts the records point at (Viewable slot
+; [nakarest] 0x42 (table 0xed793e, 6 entries, InitializeToshi)): "FOOT CONTROLLERS"
+; [nakarest] (TtlScreen.title of element 0); "|-|FOOT SWITCH 1 |FOOT SWITCH 2 |FOOT CONT.SW 1|"
 ; [nakarest] (AcFSWAssGridBox.fixedrow of element 1); " | " (AcFSWAssGridBox.fixedcol of element
-; [nakarest] 1). widget record, element 2 of Viewable slot 0x42 (table 0xed793e, 6 entries,
-; [nakarest] InitializeToshi) ("ControlFsw"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x42 (table 0xed793e, 6 entries, InitializeToshi): "CONTROLLER"
-; [nakarest] (Label.str of element 2). widget record, element 3 of Viewable slot 0x42 (table
-; [nakarest] 0xed793e, 6 entries, InitializeToshi) ("ControlFsw"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x42 (table 0xed793e, 6 entries,
-; [nakarest] InitializeToshi): "FUNCTION" (Label.str of element 3). widget records, elements 4-5
-; [nakarest] of Viewable slot 0x42 (table 0xed793e, 6 entries, InitializeToshi) ("ControlFsw"):
-; [nakarest] AcIndexWideES (42 B) x2.
+; [nakarest] 1); "CONTROLLER" (Label.str of element 2); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x348, 0x1BC
 ; [nakarest] naka_ctrl_menu_body+0x504  +0x504..+0x710 (0xed43ea, 524 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x43 (table 0xed795a, 8 entries,
-; [nakarest] InitializeToshi) ("ControlSns"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x43 (table 0xed795a, 8 entries, InitializeToshi): "OVERALL TOUCH
-; [nakarest] SENSITIVITY" (TtlScreen.title of element 0). widget record, element 1 of Viewable
-; [nakarest] slot 0x43 (table 0xed795a, 8 entries, InitializeToshi) ("ControlSns"):
-; [nakarest] AcTchSensGridBox (74 B). text the records point at, in Viewable slot 0x43 (table
-; [nakarest] 0xed795a, 8 entries, InitializeToshi): "| VELOCITY SENSE : |-|| ON/OFF"
+; [nakarest] widget records, elements 0-7 of Viewable slot 0x43 (table 0xed795a, 8 entries,
+; [nakarest] InitializeToshi) ("ControlSns"): TtlScreen (42 B), AcTchSensGridBox (74 B), Label
+; [nakarest] (32 B) x4, AcIndexWideES (42 B) x2. 7 texts the records point at (Viewable slot
+; [nakarest] 0x43 (table 0xed795a, 8 entries, InitializeToshi)): "OVERALL TOUCH SENSITIVITY"
+; [nakarest] (TtlScreen.title of element 0); "| VELOCITY SENSE : |-|| ON/OFF"
 ; [nakarest] (AcTchSensGridBox.fixedrow of element 1); " | " (AcTchSensGridBox.fixedcol of
-; [nakarest] element 1). widget record, element 2 of Viewable slot 0x43 (table 0xed795a, 8
-; [nakarest] entries, InitializeToshi) ("ControlSns"): Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x43 (table 0xed795a, 8 entries, InitializeToshi): "INITIAL TOUCH"
-; [nakarest] (Label.str of element 2). widget record, element 3 of Viewable slot 0x43 (table
-; [nakarest] 0xed795a, 8 entries, InitializeToshi) ("ControlSns"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x43 (table 0xed795a, 8 entries,
-; [nakarest] InitializeToshi): "AFTER TOUCH" (Label.str of element 3). widget records, elements
-; [nakarest] 4-6 of Viewable slot 0x43 (table 0xed795a, 8 entries, InitializeToshi)
-; [nakarest] ("ControlSns"): AcIndexWideES (42 B) x2, Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x43 (table 0xed795a, 8 entries, InitializeToshi): "ITEM"
-; [nakarest] (Label.str of element 6). widget record, element 7 of Viewable slot 0x43 (table
-; [nakarest] 0xed795a, 8 entries, InitializeToshi) ("ControlSns"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x43 (table 0xed795a, 8 entries,
-; [nakarest] InitializeToshi): "VALUE" (Label.str of element 7).
+; [nakarest] element 1); "INITIAL TOUCH" (Label.str of element 2); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x504, 0x20C
 ; [nakarest] naka_ctrl_menu_body+0x710  +0x710..+0xa4a (0xed45f6, 826 B)
-; [nakarest] widget records, elements 0-1 of Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): MsaModeScreen (52 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): "MUSIC STYLE
-; [nakarest] ARRANGER MODE" (Label.str of element 1). widget records, elements 2-3 of Viewable
-; [nakarest] slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Icon (26 B), EditSw (40
-; [nakarest] B). text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "~7f" (EditSw.str of element 3). widget record, element 4 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): EditSw (40 B).
-; [nakarest] text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "~7f" (EditSw.str of element 4). widget record, element 5 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): EditSw (40 B).
-; [nakarest] text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "~7f" (EditSw.str of element 5). widget record, element 6 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "RHYTHM" (Label.str of element 6). widget record, element 7 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "SOUND & RHYTHM" (Label.str of element 7). widget record, element
-; [nakarest] 8 of Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "PANEL MEMORY" (Label.str of element 8). widget records, elements
-; [nakarest] 9-11 of Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi):
-; [nakarest] IvIntEasySet (24 B), MsaModeScreen (52 B), Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): "MUSIC STYLE
-; [nakarest] ARRENGER MODE" (Label.str of element 11). widget records, elements 12-13 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Icon (26 B),
-; [nakarest] EditSw (40 B). text the records point at, in Viewable slot 0x44 (table 0xed797e, 19
-; [nakarest] entries, InitializeToshi): "~7f" (EditSw.str of element 13). widget record, element
-; [nakarest] 14 of Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): EditSw (40
-; [nakarest] B). text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "~7f" (EditSw.str of element 14). widget record, element 15 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): EditSw (40 B).
-; [nakarest] text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "~7f" (EditSw.str of element 15). widget record, element 16 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "RHYTHM" (Label.str of element 16). widget record, element 17 of
-; [nakarest] Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "SOUND&RHYTHM" (Label.str of element 17). widget record, element
-; [nakarest] 18 of Viewable slot 0x44 (table 0xed797e, 19 entries, InitializeToshi): Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0x44 (table 0xed797e, 19 entries,
-; [nakarest] InitializeToshi): "PANEL MEMORY" (Label.str of element 18).
+; [nakarest] widget records, elements 0-18 of Viewable slot 0x44 (table 0xed797e, 19 entries,
+; [nakarest] InitializeToshi): MsaModeScreen (52 B) x2, Label (32 B) x8, Icon (26 B) x2, EditSw
+; [nakarest] (40 B) x6, IvIntEasySet (24 B). 14 texts the records point at (Viewable slot 0x44
+; [nakarest] (table 0xed797e, 19 entries, InitializeToshi)): "MUSIC STYLE ARRANGER MODE"
+; [nakarest] (Label.str of element 1); "~7f" (EditSw.str of element 3); "~7f" (EditSw.str of
+; [nakarest] element 4); "~7f" (EditSw.str of element 5); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x710, 0x33A
 ; [nakarest] naka_ctrl_menu_body+0xa4a  +0xa4a..+0xdee (0xed4930, 932 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x45 (table 0xed79ce, 19 entries,
-; [nakarest] InitializeToshi): TtlScreen (42 B). text the records point at, in Viewable slot
-; [nakarest] 0x45 (table 0xed79ce, 19 entries, InitializeToshi): "PANEL MEMORY MODE "
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-7 of Viewable slot 0x45
-; [nakarest] (table 0xed79ce, 19 entries, InitializeToshi): IvPmemWindowPageCtl (26 B),
-; [nakarest] IvPageControl (28 B) x2, IvIntEasySet (24 B), Window (36 B), PmemModeBox (44 B),
-; [nakarest] EditSw (40 B). text the records point at, in Viewable slot 0x45 (table 0xed79ce, 19
-; [nakarest] entries, InitializeToshi): "~7f" (EditSw.str of element 7). widget record, element
-; [nakarest] 8 of Viewable slot 0x45 (table 0xed79ce, 19 entries, InitializeToshi): EditSw (40
-; [nakarest] B). text the records point at, in Viewable slot 0x45 (table 0xed79ce, 19 entries,
-; [nakarest] InitializeToshi): "~7f" (EditSw.str of element 8). widget record, element 9 of
-; [nakarest] Viewable slot 0x45 (table 0xed79ce, 19 entries, InitializeToshi): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x45 (table 0xed79ce, 19 entries,
-; [nakarest] InitializeToshi): "NORMAL" (Label.str of element 9). widget record, element 10 of
-; [nakarest] Viewable slot 0x45 (table 0xed79ce, 19 entries, InitializeToshi): Label (32 B).
-; [nakarest] text the records point at, in Viewable slot 0x45 (table 0xed79ce, 19 entries,
-; [nakarest] InitializeToshi): "EXPAND" (Label.str of element 10). widget records, elements
-; [nakarest] 11-14 of Viewable slot 0x45 (table 0xed79ce, 19 entries, InitializeToshi):
-; [nakarest] AcLanguageText (42 B) x2, Window (36 B), AcPmExpFilterGridBox (74 B). text the
-; [nakarest] records point at, in Viewable slot 0x45 (table 0xed79ce, 19 entries,
-; [nakarest] InitializeToshi): "|-|RHYTHM SELECT|TEMPO|APC&MEMORY|SPLIT POINT|TR"
-; [nakarest] (AcPmExpFilterGridBox.fixedrow of element 14); " | " (AcPmExpFilterGridBox.fixedcol
-; [nakarest] of element 14). widget records, elements 15-17 of Viewable slot 0x45 (table
-; [nakarest] 0xed79ce, 19 entries, InitializeToshi): AcIndexWideES (42 B) x2, StringBox (38 B).
-; [nakarest] text the records point at, in Viewable slot 0x45 (table 0xed79ce, 19 entries,
-; [nakarest] InitializeToshi): "EXPAND MODE FILTER" (StringBox.str of element 17). widget
-; [nakarest] record, element 18 of Viewable slot 0x45 (table 0xed79ce, 19 entries,
-; [nakarest] InitializeToshi): Window (36 B).
+; [nakarest] widget records, elements 0-18 of Viewable slot 0x45 (table 0xed79ce, 19 entries,
+; [nakarest] InitializeToshi): TtlScreen (42 B), IvPmemWindowPageCtl (26 B), IvPageControl (28
+; [nakarest] B) x2, IvIntEasySet (24 B), Window (36 B) x3, PmemModeBox (44 B), EditSw (40 B) x2,
+; [nakarest] Label (32 B) x2, AcLanguageText (42 B) x2, AcPmExpFilterGridBox (74 B),
+; [nakarest] AcIndexWideES (42 B) x2, StringBox (38 B). 8 texts the records point at (Viewable
+; [nakarest] slot 0x45 (table 0xed79ce, 19 entries, InitializeToshi)): "PANEL MEMORY MODE "
+; [nakarest] (TtlScreen.title of element 0); "~7f" (EditSw.str of element 7); "~7f" (EditSw.str
+; [nakarest] of element 8); "NORMAL" (Label.str of element 9); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xA4A, 0x3A4
 ; [nakarest] naka_ctrl_menu_body+0xdee  +0xdee..+0xfb0 (0xed4cd4, 450 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x47 (table 0xed7a22, 7 entries,
-; [nakarest] InitializeToshi) ("ControlSys"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0x47 (table 0xed7a22, 7 entries, InitializeToshi): "DISPLAY TIME OUT"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x47
-; [nakarest] (table 0xed7a22, 7 entries, InitializeToshi) ("ControlSys"): AcDispTimeSetGridBox
-; [nakarest] (74 B). text the records point at, in Viewable slot 0x47 (table 0xed7a22, 7
-; [nakarest] entries, InitializeToshi): "|-|SAVE REMINDER|'COMPLETED' MESSAGE|ARE YOU SUR"
-; [nakarest] (AcDispTimeSetGridBox.fixedrow of element 1); " | " (AcDispTimeSetGridBox.fixedcol
-; [nakarest] of element 1). widget record, element 2 of Viewable slot 0x47 (table 0xed7a22, 7
-; [nakarest] entries, InitializeToshi) ("ControlSys"): Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0x47 (table 0xed7a22, 7 entries, InitializeToshi): "DISPLAY TYPE"
-; [nakarest] (Label.str of element 2). widget record, element 3 of Viewable slot 0x47 (table
-; [nakarest] 0xed7a22, 7 entries, InitializeToshi) ("ControlSys"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x47 (table 0xed7a22, 7 entries,
-; [nakarest] InitializeToshi): "TIME" (Label.str of element 3). widget records, elements 4-6 of
-; [nakarest] Viewable slot 0x47 (table 0xed7a22, 7 entries, InitializeToshi) ("ControlSys"):
-; [nakarest] AcIndexWideES (42 B) x2, AcFuncEditSw (44 B).
+; [nakarest] widget records, elements 0-6 of Viewable slot 0x47 (table 0xed7a22, 7 entries,
+; [nakarest] InitializeToshi) ("ControlSys"): TtlScreen (42 B), AcDispTimeSetGridBox (74 B),
+; [nakarest] Label (32 B) x2, AcIndexWideES (42 B) x2, AcFuncEditSw (44 B). 5 texts the records
+; [nakarest] point at (Viewable slot 0x47 (table 0xed7a22, 7 entries, InitializeToshi)):
+; [nakarest] "DISPLAY TIME OUT" (TtlScreen.title of element 0); "|-|SAVE REMINDER|'COMPLETED'
+; [nakarest] MESSAGE|ARE YOU SUR" (AcDispTimeSetGridBox.fixedrow of element 1); " | "
+; [nakarest] (AcDispTimeSetGridBox.fixedcol of element 1); "DISPLAY TYPE" (Label.str of element
+; [nakarest] 2); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xDEE, 0x1C2
 ; [nakarest] naka_ctrl_menu_body+0xfb0  +0xfb0..+0x1458 (0xed4e96, 1192 B)
-; [nakarest] widget record, element 0 of Viewable slot 0x48 (table 0xed7a42, 25 entries,
-; [nakarest] InitializeToshi): TtlScreen (42 B). text the records point at, in Viewable slot
-; [nakarest] 0x48 (table 0xed7a42, 25 entries, InitializeToshi): "WALLPAPER SETTING"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x48
-; [nakarest] (table 0xed7a42, 25 entries, InitializeToshi): AcTitleMenu (54 B). text the records
-; [nakarest] point at, in Viewable slot 0x48 (table 0xed7a42, 25 entries, InitializeToshi):
-; [nakarest] "LOAD" (AcTitleMenu.str of element 1). widget record, element 2 of Viewable slot
-; [nakarest] 0x48 (table 0xed7a42, 25 entries, InitializeToshi): TtlScreen (42 B). text the
-; [nakarest] records point at, in Viewable slot 0x48 (table 0xed7a42, 25 entries,
-; [nakarest] InitializeToshi): "WALLPAPER SETTING" (TtlScreen.title of element 2). widget
-; [nakarest] record, element 3 of Viewable slot 0x48 (table 0xed7a42, 25 entries,
-; [nakarest] InitializeToshi): AcTitleMenu (54 B). text the records point at, in Viewable slot
-; [nakarest] 0x48 (table 0xed7a42, 25 entries, InitializeToshi): "LOAD" (AcTitleMenu.str of
-; [nakarest] element 3). widget record, element 4 of Viewable slot 0x48 (table 0xed7a42, 25
-; [nakarest] entries, InitializeToshi): AcRamEditBox (58 B). text the records point at, in
-; [nakarest] Viewable slot 0x48 (table 0xed7a42, 25 entries, InitializeToshi): " :"
-; [nakarest] (AcRamEditBox.caption of element 4). widget record, element 5 of Viewable slot 0x48
-; [nakarest] (table 0xed7a42, 25 entries, InitializeToshi): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x48 (table 0xed7a42, 25 entries, InitializeToshi): "HOME
-; [nakarest] PAGE/" (Label.str of element 5). widget record, element 6 of Viewable slot 0x48
-; [nakarest] (table 0xed7a42, 25 entries, InitializeToshi): Label (32 B). text the records point
-; [nakarest] at, in Viewable slot 0x48 (table 0xed7a42, 25 entries, InitializeToshi):
-; [nakarest] "SOUND&RHYTHM SELECT" (Label.str of element 6). widget record, element 7 of
-; [nakarest] Viewable slot 0x48 (table 0xed7a42, 25 entries, InitializeToshi): AcRamEditBox (58
-; [nakarest] B). text the records point at, in Viewable slot 0x48 (table 0xed7a42, 25 entries,
-; [nakarest] InitializeToshi): "MENU PAGES :" (AcRamEditBox.caption of element 7). widget
-; [nakarest] record, element 8 of Viewable slot 0x48 (table 0xed7a42, 25 entries,
-; [nakarest] InitializeToshi): AcRamEditBox (58 B). text the records point at, in Viewable slot
-; [nakarest] 0x48 (table 0xed7a42, 25 entries, InitializeToshi): "OTHERS :"
-; [nakarest] (AcRamEditBox.caption of element 8). widget records, elements 9-10 of Viewable slot
-; [nakarest] 0x48 (table 0xed7a42, 25 entries, InitializeToshi): AcFuncEditSw (44 B), Label (32
-; [nakarest] B). text the records point at, in Viewable slot 0x48 (table 0xed7a42, 25 entries,
-; [nakarest] InitializeToshi): "USER INITIAL" (Label.str of element 10). widget records,
-; [nakarest] elements 11-12 of Viewable slot 0x48 (table 0xed7a42, 25 entries, InitializeToshi):
-; [nakarest] AcIndexWideES (42 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0x48 (table 0xed7a42, 25 entries, InitializeToshi): "VALUE" (Label.str of element
-; [nakarest] 12). widget records, elements 13-24 of Viewable slot 0x48 (table 0xed7a42, 25
-; [nakarest] entries, InitializeToshi): AcFuncEditSw (44 B) x3, IvShowHide (26 B) x2, Screen (34
-; [nakarest] B), Box (26 B), AcLanguageText (42 B) x3, Icon (26 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0x48 (table 0xed7a42, 25 entries,
-; [nakarest] InitializeToshi): "WALLPAPER SETTING" (Label.str of element 24).
+; [nakarest] widget records, elements 0-24 of Viewable slot 0x48 (table 0xed7a42, 25 entries,
+; [nakarest] InitializeToshi): TtlScreen (42 B) x2, AcTitleMenu (54 B) x2, AcRamEditBox (58 B)
+; [nakarest] x3, Label (32 B) x5, AcFuncEditSw (44 B) x4, AcIndexWideES (42 B), IvShowHide (26
+; [nakarest] B) x2, Screen (34 B), Box (26 B), AcLanguageText (42 B) x3, Icon (26 B). 12 texts
+; [nakarest] the records point at (Viewable slot 0x48 (table 0xed7a42, 25 entries,
+; [nakarest] InitializeToshi)): "WALLPAPER SETTING" (TtlScreen.title of element 0); "LOAD"
+; [nakarest] (AcTitleMenu.str of element 1); "WALLPAPER SETTING" (TtlScreen.title of element 2);
+; [nakarest] "LOAD" (AcTitleMenu.str of element 3); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xFB0, 0x4A8
 ; [nakarest] naka_ctrl_menu_body+0x1458  +0x1458..+0x14fa (0xed533e, 162 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xc0 (table 0xed7aaa, 4 entries,
-; [nakarest] InitializeToshi) ("ONETCH"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xc0 (table 0xed7aaa, 4 entries, InitializeToshi): ""
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xc0
-; [nakarest] (table 0xed7aaa, 4 entries, InitializeToshi) ("ONETCH"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xc0 (table 0xed7aaa, 4 entries,
-; [nakarest] InitializeToshi): "ONE TOUCH PLAY" (Label.str of element 1). widget records,
-; [nakarest] elements 2-3 of Viewable slot 0xc0 (table 0xed7aaa, 4 entries, InitializeToshi)
-; [nakarest] ("ONETCH"): AcRamBox (44 B), IvExitMode (26 B).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0xc0 (table 0xed7aaa, 4 entries,
+; [nakarest] InitializeToshi) ("ONETCH"): TtlScreen (42 B), Label (32 B), AcRamBox (44 B),
+; [nakarest] IvExitMode (26 B). 2 texts the records point at (Viewable slot 0xc0 (table
+; [nakarest] 0xed7aaa, 4 entries, InitializeToshi)): "" (TtlScreen.title of element 0); "ONE
+; [nakarest] TOUCH PLAY" (Label.str of element 1).
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x1458, 0xA2
 ; [nakarest] naka_ctrl_menu_body+0x14fa  +0x14fa..+0x15dc (0xed53e0, 226 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xc1 (table 0xed7abe, 4 entries,
-; [nakarest] InitializeToshi) ("MUSICSTYL"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xc1 (table 0xed7abe, 4 entries, InitializeToshi): "MUSIC STYLIST"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xc1
-; [nakarest] (table 0xed7abe, 4 entries, InitializeToshi) ("MUSICSTYL"): AcTitleMenu (54 B).
-; [nakarest] text the records point at, in Viewable slot 0xc1 (table 0xed7abe, 4 entries,
-; [nakarest] InitializeToshi): "STYLE EXPLORER" (AcTitleMenu.str of element 1). widget records,
-; [nakarest] elements 2-3 of Viewable slot 0xc1 (table 0xed7abe, 4 entries, InitializeToshi)
-; [nakarest] ("MUSICSTYL"): IvExitMode (26 B), AcTitleMenu (54 B). text the records point at, in
-; [nakarest] Viewable slot 0xc1 (table 0xed7abe, 4 entries, InitializeToshi): "STYLE
-; [nakarest] ALPHABETICAL" (AcTitleMenu.str of element 3).
+; [nakarest] widget records, elements 0-3 of Viewable slot 0xc1 (table 0xed7abe, 4 entries,
+; [nakarest] InitializeToshi) ("MUSICSTYL"): TtlScreen (42 B), AcTitleMenu (54 B) x2, IvExitMode
+; [nakarest] (26 B). 3 texts the records point at (Viewable slot 0xc1 (table 0xed7abe, 4
+; [nakarest] entries, InitializeToshi)): "MUSIC STYLIST" (TtlScreen.title of element 0); "STYLE
+; [nakarest] EXPLORER" (AcTitleMenu.str of element 1); "STYLE ALPHABETICAL" (AcTitleMenu.str of
+; [nakarest] element 3).
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x14FA, 0xE2
 ; [nakarest] naka_ctrl_menu_body+0x15dc  +0x15dc..+0x19d0 (0xed54c2, 1012 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xc2 (table 0xed7ad2, 20 entries,
-; [nakarest] InitializeToshi) ("MSCTSEL"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi): "STYLE EXPLORER"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-5 of Viewable slot 0xc2
-; [nakarest] (table 0xed7ad2, 20 entries, InitializeToshi) ("MSCTSEL"): IvMstStyleWindowPgCtl
-; [nakarest] (26 B), IvPageControl (28 B) x2, Window (36 B), AcMstStyle1GridBox (86 B). text the
-; [nakarest] records point at, in Viewable slot 0xc2 (table 0xed7ad2, 20 entries,
-; [nakarest] InitializeToshi): " | | | | | | | | | " (AcMstStyle1GridBox.fixedrow of element 5);
-; [nakarest] "| " (AcMstStyle1GridBox.fixedcol of element 5). widget records, elements 6-7 of
-; [nakarest] Viewable slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi) ("MSCTSEL"):
-; [nakarest] AcIndexWideES (42 B), VwEditSwBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi): "" (VwEditSwBox.str of
-; [nakarest] element 7). widget record, element 8 of Viewable slot 0xc2 (table 0xed7ad2, 20
-; [nakarest] entries, InitializeToshi) ("MSCTSEL"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi): "MAIN CATEGORY"
-; [nakarest] (Label.str of element 8). widget record, element 9 of Viewable slot 0xc2 (table
-; [nakarest] 0xed7ad2, 20 entries, InitializeToshi) ("MSCTSEL"): AcMstStyle1SubGridBox (86 B).
-; [nakarest] text the records point at, in Viewable slot 0xc2 (table 0xed7ad2, 20 entries,
-; [nakarest] InitializeToshi): " | | | | | | | | | " (AcMstStyle1SubGridBox.fixedrow of element
-; [nakarest] 9); "| " (AcMstStyle1SubGridBox.fixedcol of element 9). widget records, elements
-; [nakarest] 10-11 of Viewable slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi)
-; [nakarest] ("MSCTSEL"): AcIndexWideES (42 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi): "SUB CATEGORY"
-; [nakarest] (Label.str of element 11). widget records, elements 12-13 of Viewable slot 0xc2
-; [nakarest] (table 0xed7ad2, 20 entries, InitializeToshi) ("MSCTSEL"): Window (36 B),
-; [nakarest] AcMstStyle2GridBox (102 B). text the records point at, in Viewable slot 0xc2 (table
-; [nakarest] 0xed7ad2, 20 entries, InitializeToshi): " | | | || | | | |"
-; [nakarest] (AcMstStyle2GridBox.fixedrow of element 13); "| " (AcMstStyle2GridBox.fixedcol of
-; [nakarest] element 13). widget records, elements 14-15 of Viewable slot 0xc2 (table 0xed7ad2,
-; [nakarest] 20 entries, InitializeToshi) ("MSCTSEL"): Box (26 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xc2 (table 0xed7ad2, 20 entries,
-; [nakarest] InitializeToshi): "TEMPO" (Label.str of element 15). widget records, elements 16-17
-; [nakarest] of Viewable slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi) ("MSCTSEL"):
-; [nakarest] AcIndexWideES (42 B), Label (32 B). text the records point at, in Viewable slot
-; [nakarest] 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi): "CATEGORY :" (Label.str of
-; [nakarest] element 17). widget record, element 18 of Viewable slot 0xc2 (table 0xed7ad2, 20
-; [nakarest] entries, InitializeToshi) ("MSCTSEL"): VwEditSwBox (44 B). text the records point
-; [nakarest] at, in Viewable slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi): ""
-; [nakarest] (VwEditSwBox.str of element 18). widget record, element 19 of Viewable slot 0xc2
-; [nakarest] (table 0xed7ad2, 20 entries, InitializeToshi) ("MSCTSEL"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xc2 (table 0xed7ad2, 20 entries,
-; [nakarest] InitializeToshi): "SKIP" (Label.str of element 19).
+; [nakarest] widget records, elements 0-19 of Viewable slot 0xc2 (table 0xed7ad2, 20 entries,
+; [nakarest] InitializeToshi) ("MSCTSEL"): TtlScreen (42 B), IvMstStyleWindowPgCtl (26 B),
+; [nakarest] IvPageControl (28 B) x2, Window (36 B) x2, AcMstStyle1GridBox (86 B), AcIndexWideES
+; [nakarest] (42 B) x3, VwEditSwBox (44 B) x2, Label (32 B) x5, AcMstStyle1SubGridBox (86 B),
+; [nakarest] AcMstStyle2GridBox (102 B), Box (26 B). 14 texts the records point at (Viewable
+; [nakarest] slot 0xc2 (table 0xed7ad2, 20 entries, InitializeToshi)): "STYLE EXPLORER"
+; [nakarest] (TtlScreen.title of element 0); " | | | | | | | | | " (AcMstStyle1GridBox.fixedrow
+; [nakarest] of element 5); "| " (AcMstStyle1GridBox.fixedcol of element 5); "" (VwEditSwBox.str
+; [nakarest] of element 7); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x15DC, 0x3F4
 ; [nakarest] naka_ctrl_menu_body+0x19d0  +0x19d0..+0x1d04 (0xed58b6, 820 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xc3 (table 0xed7b26, 17 entries,
-; [nakarest] InitializeToshi) ("MSSCTSEL"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xc3 (table 0xed7b26, 17 entries, InitializeToshi): "SUGGESTED SONG
-; [nakarest] LIST" (TtlScreen.title of element 0). widget records, elements 1-5 of Viewable slot
-; [nakarest] 0xc3 (table 0xed7b26, 17 entries, InitializeToshi) ("MSSCTSEL"):
-; [nakarest] IvMstStyleWindowPgCtl (26 B), IvPageControl (28 B) x2, Window (36 B),
-; [nakarest] AcMstSong1GridBox (86 B). text the records point at, in Viewable slot 0xc3 (table
-; [nakarest] 0xed7b26, 17 entries, InitializeToshi): " | | | | | | | | | |"
-; [nakarest] (AcMstSong1GridBox.fixedrow of element 5); "| " (AcMstSong1GridBox.fixedcol of
-; [nakarest] element 5). widget records, elements 6-7 of Viewable slot 0xc3 (table 0xed7b26, 17
-; [nakarest] entries, InitializeToshi) ("MSSCTSEL"): AcIndexWideES (42 B), VwEditSwBox (44 B).
-; [nakarest] text the records point at, in Viewable slot 0xc3 (table 0xed7b26, 17 entries,
-; [nakarest] InitializeToshi): "" (VwEditSwBox.str of element 7). widget record, element 8 of
-; [nakarest] Viewable slot 0xc3 (table 0xed7b26, 17 entries, InitializeToshi) ("MSSCTSEL"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xc3 (table 0xed7b26, 17
-; [nakarest] entries, InitializeToshi): "(BY CATEGORY)" (Label.str of element 8). widget
-; [nakarest] records, elements 9-10 of Viewable slot 0xc3 (table 0xed7b26, 17 entries,
-; [nakarest] InitializeToshi) ("MSSCTSEL"): Window (36 B), AcMstSong2GridBox (102 B). text the
-; [nakarest] records point at, in Viewable slot 0xc3 (table 0xed7b26, 17 entries,
-; [nakarest] InitializeToshi): " | | | || | | | " (AcMstSong2GridBox.fixedrow of element 10); "|
-; [nakarest] " (AcMstSong2GridBox.fixedcol of element 10). widget records, elements 11-13 of
-; [nakarest] Viewable slot 0xc3 (table 0xed7b26, 17 entries, InitializeToshi) ("MSSCTSEL"):
-; [nakarest] AcIndexWideES (42 B), Box (26 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc3 (table 0xed7b26, 17 entries, InitializeToshi): "TEMPO"
-; [nakarest] (Label.str of element 13). widget record, element 14 of Viewable slot 0xc3 (table
-; [nakarest] 0xed7b26, 17 entries, InitializeToshi) ("MSSCTSEL"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xc3 (table 0xed7b26, 17 entries, InitializeToshi):
-; [nakarest] "CATEGORY :" (Label.str of element 14). widget record, element 15 of Viewable slot
-; [nakarest] 0xc3 (table 0xed7b26, 17 entries, InitializeToshi) ("MSSCTSEL"): VwEditSwBox (44
-; [nakarest] B). text the records point at, in Viewable slot 0xc3 (table 0xed7b26, 17 entries,
-; [nakarest] InitializeToshi): "" (VwEditSwBox.str of element 15). widget record, element 16 of
-; [nakarest] Viewable slot 0xc3 (table 0xed7b26, 17 entries, InitializeToshi) ("MSSCTSEL"):
-; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xc3 (table 0xed7b26, 17
-; [nakarest] entries, InitializeToshi): "SKIP" (Label.str of element 16).
+; [nakarest] widget records, elements 0-16 of Viewable slot 0xc3 (table 0xed7b26, 17 entries,
+; [nakarest] InitializeToshi) ("MSSCTSEL"): TtlScreen (42 B), IvMstStyleWindowPgCtl (26 B),
+; [nakarest] IvPageControl (28 B) x2, Window (36 B) x2, AcMstSong1GridBox (86 B), AcIndexWideES
+; [nakarest] (42 B) x2, VwEditSwBox (44 B) x2, Label (32 B) x4, AcMstSong2GridBox (102 B), Box
+; [nakarest] (26 B). 11 texts the records point at (Viewable slot 0xc3 (table 0xed7b26, 17
+; [nakarest] entries, InitializeToshi)): "SUGGESTED SONG LIST" (TtlScreen.title of element 0); "
+; [nakarest] | | | | | | | | | |" (AcMstSong1GridBox.fixedrow of element 5); "| "
+; [nakarest] (AcMstSong1GridBox.fixedcol of element 5); "" (VwEditSwBox.str of element 7); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x19D0, 0x334
 ; [nakarest] naka_ctrl_menu_body+0x1d04  +0x1d04..+0x1eae (0xed5bea, 426 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xc4 (table 0xed7b6e, 8 entries,
-; [nakarest] InitializeToshi) ("MSSONGLIST"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xc4 (table 0xed7b6e, 8 entries, InitializeToshi): "SUGGESTED SONG
-; [nakarest] LIST" (TtlScreen.title of element 0). widget record, element 1 of Viewable slot
-; [nakarest] 0xc4 (table 0xed7b6e, 8 entries, InitializeToshi) ("MSSONGLIST"):
-; [nakarest] AcMstSugAlpGridBox (102 B). text the records point at, in Viewable slot 0xc4 (table
-; [nakarest] 0xed7b6e, 8 entries, InitializeToshi): " | | | | | | | | | |"
+; [nakarest] widget records, elements 0-7 of Viewable slot 0xc4 (table 0xed7b6e, 8 entries,
+; [nakarest] InitializeToshi) ("MSSONGLIST"): TtlScreen (42 B), AcMstSugAlpGridBox (102 B),
+; [nakarest] Label (32 B) x3, AcIndexWideES (42 B), Box (26 B), VwEditSwBox (44 B). 7 texts the
+; [nakarest] records point at (Viewable slot 0xc4 (table 0xed7b6e, 8 entries, InitializeToshi)):
+; [nakarest] "SUGGESTED SONG LIST" (TtlScreen.title of element 0); " | | | | | | | | | |"
 ; [nakarest] (AcMstSugAlpGridBox.fixedrow of element 1); "| " (AcMstSugAlpGridBox.fixedcol of
-; [nakarest] element 1). widget record, element 2 of Viewable slot 0xc4 (table 0xed7b6e, 8
-; [nakarest] entries, InitializeToshi) ("MSSONGLIST"): Label (32 B). text the records point at,
-; [nakarest] in Viewable slot 0xc4 (table 0xed7b6e, 8 entries, InitializeToshi): "(ALPHBETICAL)"
-; [nakarest] (Label.str of element 2). widget records, elements 3-5 of Viewable slot 0xc4 (table
-; [nakarest] 0xed7b6e, 8 entries, InitializeToshi) ("MSSONGLIST"): AcIndexWideES (42 B), Box (26
-; [nakarest] B), Label (32 B). text the records point at, in Viewable slot 0xc4 (table 0xed7b6e,
-; [nakarest] 8 entries, InitializeToshi): "TEMPO" (Label.str of element 5). widget record,
-; [nakarest] element 6 of Viewable slot 0xc4 (table 0xed7b6e, 8 entries, InitializeToshi)
-; [nakarest] ("MSSONGLIST"): VwEditSwBox (44 B). text the records point at, in Viewable slot
-; [nakarest] 0xc4 (table 0xed7b6e, 8 entries, InitializeToshi): "" (VwEditSwBox.str of element
-; [nakarest] 6). widget record, element 7 of Viewable slot 0xc4 (table 0xed7b6e, 8 entries,
-; [nakarest] InitializeToshi) ("MSSONGLIST"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc4 (table 0xed7b6e, 8 entries, InitializeToshi): "SKIP" (Label.str
-; [nakarest] of element 7).
+; [nakarest] element 1); "(ALPHBETICAL)" (Label.str of element 2); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x1D04, 0x1AA
 ; [nakarest] naka_ctrl_menu_body+0x1eae  +0x1eae..+0x2022 (0xed5d94, 372 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xc5 (table 0xed7b92, 7 entries,
-; [nakarest] InitializeToshi) ("MSSTLSEL"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xc5 (table 0xed7b92, 7 entries, InitializeToshi): "STYLE
-; [nakarest] ALPHABETICAL" (TtlScreen.title of element 0). widget record, element 1 of Viewable
-; [nakarest] slot 0xc5 (table 0xed7b92, 7 entries, InitializeToshi) ("MSSTLSEL"):
-; [nakarest] AcMstStyleAlpGridBox (94 B). text the records point at, in Viewable slot 0xc5
-; [nakarest] (table 0xed7b92, 7 entries, InitializeToshi): " | | | | | | | | | |"
+; [nakarest] widget records, elements 0-6 of Viewable slot 0xc5 (table 0xed7b92, 7 entries,
+; [nakarest] InitializeToshi) ("MSSTLSEL"): TtlScreen (42 B), AcMstStyleAlpGridBox (94 B), Box
+; [nakarest] (26 B), Label (32 B) x2, AcIndexWideES (42 B), VwEditSwBox (44 B). 6 texts the
+; [nakarest] records point at (Viewable slot 0xc5 (table 0xed7b92, 7 entries, InitializeToshi)):
+; [nakarest] "STYLE ALPHABETICAL" (TtlScreen.title of element 0); " | | | | | | | | | |"
 ; [nakarest] (AcMstStyleAlpGridBox.fixedrow of element 1); "| " (AcMstStyleAlpGridBox.fixedcol
-; [nakarest] of element 1). widget records, elements 2-3 of Viewable slot 0xc5 (table 0xed7b92,
-; [nakarest] 7 entries, InitializeToshi) ("MSSTLSEL"): Box (26 B), Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xc5 (table 0xed7b92, 7 entries,
-; [nakarest] InitializeToshi): "TEMPO" (Label.str of element 3). widget records, elements 4-5 of
-; [nakarest] Viewable slot 0xc5 (table 0xed7b92, 7 entries, InitializeToshi) ("MSSTLSEL"):
-; [nakarest] AcIndexWideES (42 B), VwEditSwBox (44 B). text the records point at, in Viewable
-; [nakarest] slot 0xc5 (table 0xed7b92, 7 entries, InitializeToshi): "" (VwEditSwBox.str of
-; [nakarest] element 5). widget record, element 6 of Viewable slot 0xc5 (table 0xed7b92, 7
-; [nakarest] entries, InitializeToshi) ("MSSTLSEL"): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xc5 (table 0xed7b92, 7 entries, InitializeToshi): "SKIP" (Label.str
-; [nakarest] of element 6).
+; [nakarest] of element 1); "TEMPO" (Label.str of element 3); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x1EAE, 0x174
 ; [nakarest] naka_ctrl_menu_body+0x2022  +0x2022..+0x210e (0xed5f08, 236 B)
-; [nakarest] widget records, elements 0-2 of Viewable slot 0xd0 (table 0xed7bb2, 6 entries,
-; [nakarest] InitializeToshi) ("PMBANK"): PmBankScreen (56 B), Icon (26 B), StringBox (38 B).
-; [nakarest] text the records point at, in Viewable slot 0xd0 (table 0xed7bb2, 6 entries,
-; [nakarest] InitializeToshi): "PMEM BANK SELECT" (StringBox.str of element 2). widget records,
-; [nakarest] elements 3-4 of Viewable slot 0xd0 (table 0xed7bb2, 6 entries, InitializeToshi)
-; [nakarest] ("PMBANK"): PsPageBox (32 B), Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xd0 (table 0xed7bb2, 6 entries, InitializeToshi): "PAGE 1/2" (Label.str of
-; [nakarest] element 4). widget record, element 5 of Viewable slot 0xd0 (table 0xed7bb2, 6
-; [nakarest] entries, InitializeToshi) ("PMBANK"): IvIntEasySet (24 B).
+; [nakarest] widget records, elements 0-5 of Viewable slot 0xd0 (table 0xed7bb2, 6 entries,
+; [nakarest] InitializeToshi) ("PMBANK"): PmBankScreen (56 B), Icon (26 B), StringBox (38 B),
+; [nakarest] PsPageBox (32 B), Label (32 B), IvIntEasySet (24 B). 2 texts the records point at
+; [nakarest] (Viewable slot 0xd0 (table 0xed7bb2, 6 entries, InitializeToshi)): "PMEM BANK
+; [nakarest] SELECT" (StringBox.str of element 2); "PAGE 1/2" (Label.str of element 4).
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2022, 0xEC
 ; [nakarest] naka_ctrl_menu_body+0x210e  +0x210e..+0x2326 (0xed5ff4, 536 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xd1 (table 0xed7bce, 13 entries,
-; [nakarest] InitializeToshi) ("PMVIEW"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi): "BANK VIEW"
-; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xd1
-; [nakarest] (table 0xed7bce, 13 entries, InitializeToshi) ("PMVIEW"): AcPmBkEditBox (58 B).
-; [nakarest] text the records point at, in Viewable slot 0xd1 (table 0xed7bce, 13 entries,
-; [nakarest] InitializeToshi): "" (AcPmBkEditBox.caption of element 1). widget records, elements
-; [nakarest] 2-4 of Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi) ("PMVIEW"):
-; [nakarest] AcIndexWideES (42 B), PsPageBox (32 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi): "PAGE 2/2"
-; [nakarest] (Label.str of element 4). widget record, element 5 of Viewable slot 0xd1 (table
-; [nakarest] 0xed7bce, 13 entries, InitializeToshi) ("PMVIEW"): Label (32 B). text the records
-; [nakarest] point at, in Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi):
-; [nakarest] "BANK" (Label.str of element 5). widget record, element 6 of Viewable slot 0xd1
-; [nakarest] (table 0xed7bce, 13 entries, InitializeToshi) ("PMVIEW"): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xd1 (table 0xed7bce, 13 entries,
-; [nakarest] InitializeToshi): "BANK" (Label.str of element 6). widget record, element 7 of
-; [nakarest] Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi) ("PMVIEW"): Label
-; [nakarest] (32 B). text the records point at, in Viewable slot 0xd1 (table 0xed7bce, 13
-; [nakarest] entries, InitializeToshi): "NAMING" (Label.str of element 7). widget record,
-; [nakarest] element 8 of Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi)
-; [nakarest] ("PMVIEW"): Label (32 B). text the records point at, in Viewable slot 0xd1 (table
-; [nakarest] 0xed7bce, 13 entries, InitializeToshi): "MEMORY" (Label.str of element 8). widget
-; [nakarest] record, element 9 of Viewable slot 0xd1 (table 0xed7bce, 13 entries,
-; [nakarest] InitializeToshi) ("PMVIEW"): Label (32 B). text the records point at, in Viewable
-; [nakarest] slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi): "NAMING" (Label.str of
-; [nakarest] element 9). widget record, element 10 of Viewable slot 0xd1 (table 0xed7bce, 13
-; [nakarest] entries, InitializeToshi) ("PMVIEW"): EditSw (40 B). text the records point at, in
-; [nakarest] Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi): "~80" (EditSw.str
-; [nakarest] of element 10). widget record, element 11 of Viewable slot 0xd1 (table 0xed7bce, 13
-; [nakarest] entries, InitializeToshi) ("PMVIEW"): EditSw (40 B). text the records point at, in
-; [nakarest] Viewable slot 0xd1 (table 0xed7bce, 13 entries, InitializeToshi): "~80" (EditSw.str
-; [nakarest] of element 11). widget record, element 12 of Viewable slot 0xd1 (table 0xed7bce, 13
-; [nakarest] entries, InitializeToshi) ("PMVIEW"): IvIntEasySet (24 B).
+; [nakarest] widget records, elements 0-12 of Viewable slot 0xd1 (table 0xed7bce, 13 entries,
+; [nakarest] InitializeToshi) ("PMVIEW"): TtlScreen (42 B), AcPmBkEditBox (58 B), AcIndexWideES
+; [nakarest] (42 B), PsPageBox (32 B), Label (32 B) x6, EditSw (40 B) x2, IvIntEasySet (24 B).
+; [nakarest] 10 texts the records point at (Viewable slot 0xd1 (table 0xed7bce, 13 entries,
+; [nakarest] InitializeToshi)): "BANK VIEW" (TtlScreen.title of element 0); ""
+; [nakarest] (AcPmBkEditBox.caption of element 1); "PAGE 2/2" (Label.str of element 4); "BANK"
+; [nakarest] (Label.str of element 5); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x210E, 0x218
 ; [nakarest] naka_ctrl_menu_body+0x2326  +0x2326..+0x2432 (0xed620c, 268 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xd2 (table 0xed7c06, 7 entries,
-; [nakarest] InitializeToshi) ("PMNAME"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xd2 (table 0xed7c06, 7 entries, InitializeToshi): "NAMING"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0xd2
-; [nakarest] (table 0xed7c06, 7 entries, InitializeToshi) ("PMNAME"): IvNaming (26 B),
-; [nakarest] AcFuncEditSw (44 B), Label (32 B). text the records point at, in Viewable slot 0xd2
-; [nakarest] (table 0xed7c06, 7 entries, InitializeToshi): "P.MEM Memory" (Label.str of element
-; [nakarest] 3). widget records, elements 4-5 of Viewable slot 0xd2 (table 0xed7c06, 7 entries,
-; [nakarest] InitializeToshi) ("PMNAME"): PmBkNoBox (36 B), EditSw (40 B). text the records
-; [nakarest] point at, in Viewable slot 0xd2 (table 0xed7c06, 7 entries, InitializeToshi): "~80"
-; [nakarest] (EditSw.str of element 5). widget record, element 6 of Viewable slot 0xd2 (table
-; [nakarest] 0xed7c06, 7 entries, InitializeToshi) ("PMNAME"): IvExit (22 B).
+; [nakarest] widget records, elements 0-6 of Viewable slot 0xd2 (table 0xed7c06, 7 entries,
+; [nakarest] InitializeToshi) ("PMNAME"): TtlScreen (42 B), IvNaming (26 B), AcFuncEditSw (44
+; [nakarest] B), Label (32 B), PmBkNoBox (36 B), EditSw (40 B), IvExit (22 B). 3 texts the
+; [nakarest] records point at (Viewable slot 0xd2 (table 0xed7c06, 7 entries, InitializeToshi)):
+; [nakarest] "NAMING" (TtlScreen.title of element 0); "P.MEM Memory" (Label.str of element 3);
+; [nakarest] "~80" (EditSw.str of element 5).
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2326, 0x10C
 ; [nakarest] naka_ctrl_menu_body+0x2432  +0x2432..+0x253c (0xed6318, 266 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xd3 (table 0xed7c26, 7 entries,
-; [nakarest] InitializeToshi) ("PMBKNAME"): TtlScreen (42 B). text the records point at, in
-; [nakarest] Viewable slot 0xd3 (table 0xed7c26, 7 entries, InitializeToshi): "NAMING"
-; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0xd3
-; [nakarest] (table 0xed7c26, 7 entries, InitializeToshi) ("PMBKNAME"): IvNaming (26 B),
-; [nakarest] AcFuncEditSw (44 B), Label (32 B). text the records point at, in Viewable slot 0xd3
-; [nakarest] (table 0xed7c26, 7 entries, InitializeToshi): "P.MEM Bank" (Label.str of element
-; [nakarest] 3). widget records, elements 4-5 of Viewable slot 0xd3 (table 0xed7c26, 7 entries,
-; [nakarest] InitializeToshi) ("PMBKNAME"): BkNoBox (36 B), EditSw (40 B). text the records
-; [nakarest] point at, in Viewable slot 0xd3 (table 0xed7c26, 7 entries, InitializeToshi): "~80"
-; [nakarest] (EditSw.str of element 5). widget record, element 6 of Viewable slot 0xd3 (table
-; [nakarest] 0xed7c26, 7 entries, InitializeToshi) ("PMBKNAME"): IvExit (22 B).
+; [nakarest] widget records, elements 0-6 of Viewable slot 0xd3 (table 0xed7c26, 7 entries,
+; [nakarest] InitializeToshi) ("PMBKNAME"): TtlScreen (42 B), IvNaming (26 B), AcFuncEditSw (44
+; [nakarest] B), Label (32 B), BkNoBox (36 B), EditSw (40 B), IvExit (22 B). 3 texts the records
+; [nakarest] point at (Viewable slot 0xd3 (table 0xed7c26, 7 entries, InitializeToshi)):
+; [nakarest] "NAMING" (TtlScreen.title of element 0); "P.MEM Bank" (Label.str of element 3);
+; [nakarest] "~80" (EditSw.str of element 5).
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2432, 0x10A
 ; [nakarest] naka_ctrl_menu_body+0x253c  +0x253c..+0x2598 (0xed6422, 92 B)
 ; [nakarest] widget records, elements 0-1 of Viewable slot 0xe8 (table 0xed7c46, 2 entries,
@@ -660,27 +365,12 @@
 ; [nakarest] B).
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2598, 0x80
 ; [nakarest] naka_ctrl_menu_body+0x2618  +0x2618..+0x27b4 (0xed64fe, 412 B)
-; [nakarest] widget record, element 0 of Viewable slot 0xf4 (table 0xed7c62, 14 entries,
-; [nakarest] InitializeToshi): TtlScreen (42 B). text the records point at, in Viewable slot
-; [nakarest] 0xf4 (table 0xed7c62, 14 entries, InitializeToshi): "" (TtlScreen.title of element
-; [nakarest] 0). widget records, elements 1-2 of Viewable slot 0xf4 (table 0xed7c62, 14 entries,
-; [nakarest] InitializeToshi): Window (36 B), Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf4 (table 0xed7c62, 14 entries, InitializeToshi): "CAUTION!!"
-; [nakarest] (Label.str of element 2). widget record, element 3 of Viewable slot 0xf4 (table
-; [nakarest] 0xed7c62, 14 entries, InitializeToshi): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf4 (table 0xed7c62, 14 entries, InitializeToshi): "** ERROR in
-; [nakarest] back-up SRAM **" (Label.str of element 3). widget record, element 4 of Viewable
-; [nakarest] slot 0xf4 (table 0xed7c62, 14 entries, InitializeToshi): Label (32 B). text the
-; [nakarest] records point at, in Viewable slot 0xf4 (table 0xed7c62, 14 entries,
-; [nakarest] InitializeToshi): "Please try turning off and on again." (Label.str of element 4).
-; [nakarest] widget record, element 5 of Viewable slot 0xf4 (table 0xed7c62, 14 entries,
-; [nakarest] InitializeToshi): Label (32 B). text the records point at, in Viewable slot 0xf4
-; [nakarest] (table 0xed7c62, 14 entries, InitializeToshi): "If this message appears again,"
-; [nakarest] (Label.str of element 5). widget record, element 6 of Viewable slot 0xf4 (table
-; [nakarest] 0xed7c62, 14 entries, InitializeToshi): Label (32 B). text the records point at, in
-; [nakarest] Viewable slot 0xf4 (table 0xed7c62, 14 entries, InitializeToshi): "this unit needs
-; [nakarest] repairing." (Label.str of element 6). widget record, element 7 of Viewable slot
-; [nakarest] 0xf4 (table 0xed7c62, 14 entries, InitializeToshi): Window (36 B).
+; [nakarest] widget records, elements 0-7 of Viewable slot 0xf4 (table 0xed7c62, 14 entries,
+; [nakarest] InitializeToshi): TtlScreen (42 B), Window (36 B) x2, Label (32 B) x5. 6 texts the
+; [nakarest] records point at (Viewable slot 0xf4 (table 0xed7c62, 14 entries,
+; [nakarest] InitializeToshi)): "" (TtlScreen.title of element 0); "CAUTION!!" (Label.str of
+; [nakarest] element 2); "** ERROR in back-up SRAM **" (Label.str of element 3); "Please try
+; [nakarest] turning off and on again." (Label.str of element 4); ....
 	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2618, 0x19C
 
 
