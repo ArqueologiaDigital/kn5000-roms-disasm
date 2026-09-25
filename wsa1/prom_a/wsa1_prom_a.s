@@ -19066,174 +19066,118 @@ LowestSetBitIndex1Based_Copy:
 	pop C                                                ; F8A519  cb 05
 .LF8A51B:
 	ret                                                  ; F8A51B  0e
-sub_F8A51C:
+; ---------------------------------------------------------------------
+; IndexToBitMask8_DeadCopy -- E (0..8) -> E = one-hot mask.  The dead
+;          module's twin of IndexToBitMask8 (0xF8A927), 0x40B lower and
+;          identical but for its table operand (check C3).
+; Called by: the dead handler at 0xF8A619 (`calr` at 0xF8A620).
+; ---------------------------------------------------------------------
+IndexToBitMask8_DeadCopy:
 	push XIX                                             ; F8A51C  3c
 	cp E,0x08                                            ; F8A51D  cd cf 08
-	jr ule, 0x02                                         ; F8A520  63 02
+	jr ule, .LF8A524                                         ; F8A520  63 02
 	xor E,E                                              ; F8A522  cd d5
 .LF8A524:
-	ld XIX,0x00f8a530                                    ; F8A524  44 30 a5 f8 00
+	ld XIX,BitMask8ByIndex_DeadCopy                            ; F8A524  44 30 a5 f8 00
 	mx8_ld_rm MXB, ra_IX, rb_E, r5                       ; F8A529  c3 03 f0 e8 25
 	pop XIX                                              ; F8A52E  5c
 	ret                                                  ; F8A52F  0e
-	nop                                                  ; F8A530  00
-	normal                                               ; F8A531  01
-	push SR                                              ; F8A532  02
-	max                                                  ; F8A533  04
-	ld (0x10:8), 0x20:io                                      ; F8A534  08 10 20
-	ld XWA,0xcfcd3c80                                    ; F8A537  40 80 3c cd cf
-	rcf                                                  ; F8A53C  10
-	jr ule, 0x02                                         ; F8A53D  63 02
+; ---------------------------------------------------------------------
+; BitMask8ByIndex_DeadCopy -- 9 x u8: 0, then 1<<0 .. 1<<7 (entry k = 1 << (k-1)).
+; Read by: IndexToBitMask8_DeadCopy (0xF8A51C) -- `cp E,0x08 / jr ule / xor E,E /
+;          ld XIX,<this> / ld E,(XIX+E)`: any E above 8 reads entry 0.
+; COUNT 9 = that bound + 1; IndexToBitMask16_DeadCopy starts right after.
+; Byte-identical to BitMask8ByIndex (0xF8A93B), 0x40B higher (check C3).
+; ⚠ DEAD: 0xF8A44B-0xF8A7FF is unreachable -- nothing outside it names an
+;          address in it (check C4); see PanelGroupQueue_ExpandToEvents_DeadCopy.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+BitMask8ByIndex_DeadCopy:
+	.byte 0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80  ; F8A530  [0]
+
+; ---------------------------------------------------------------------
+; IndexToBitMask16_DeadCopy -- E (0..16) -> DE = one-hot mask; twin of
+;          IndexToBitMask16 (0xF8A944), identical but for its table operand.
+; Called by: nothing found -- no 24-bit reference in either ROM (C4) and
+;          no calr/jrl in prom_a lands on it (C4b).
+; ⚠ DEAD: 0xF8A44B-0xF8A7FF is unreachable -- nothing outside it names an
+;          address in it (check C4); see PanelGroupQueue_ExpandToEvents_DeadCopy.
+; ---------------------------------------------------------------------
+IndexToBitMask16_DeadCopy:
+	push XIX                                      ; F8A539  3c
+	cp E,0x10                                     ; F8A53A  cd cf 10
+	jr ule, .LF8A541                                         ; F8A53D  63 02
 	xor E,E                                              ; F8A53F  cd d5
 .LF8A541:
 	sla e, 0x01                                          ; F8A541  cd ec 01
-	ld XIX,0x00f8a550                                    ; F8A544  44 50 a5 f8 00
+	ld XIX,BitMask16ByIndex_DeadCopy                           ; F8A544  44 50 a5 f8 00
 	mx8_ld_rm MXW, ra_IX, rb_E, r2                       ; F8A549  d3 03 f0 e8 22
 	pop XIX                                              ; F8A54E  5c
 	ret                                                  ; F8A54F  0e
-	nop                                                  ; F8A550  00
-	nop                                                  ; F8A551  00
-	normal                                               ; F8A552  01
-	nop                                                  ; F8A553  00
-	push SR                                              ; F8A554  02
-	nop                                                  ; F8A555  00
-	max                                                  ; F8A556  04
-	nop                                                  ; F8A557  00
-	ld (0x00:8), 0x10:io                                      ; F8A558  08 00 10
-	nop                                                  ; F8A55B  00
-	ld w, 0x00:opc                                          ; F8A55C  20 00
-	ld XWA,0x00008000                                    ; F8A55E  40 00 80 00 00
-	normal                                               ; F8A563  01
-	nop                                                  ; F8A564  00
-	push SR                                              ; F8A565  02
-	nop                                                  ; F8A566  00
-	max                                                  ; F8A567  04
-	nop                                                  ; F8A568  00
-	ld (0x00:8), 0x10:io                                      ; F8A569  08 00 10
-	nop                                                  ; F8A56C  00
-	ld w, 0x00:opc                                          ; F8A56D  20 00
-	ld XWA,0xcd3c8000                                    ; F8A56F  40 00 80 3c cd
-	.byte 0xcf, 0x20, 0x63                               ; F8A574  cf 20 63   andcf 0x63,L
-	push SR                                              ; F8A577  02
+; ---------------------------------------------------------------------
+; BitMask16ByIndex_DeadCopy -- 17 x u16: 0, then 1<<0 .. 1<<15 (entry k = 1 << (k-1)).
+; Read by: IndexToBitMask16_DeadCopy (0xF8A539) -- `cp E,0x10 / jr ule / xor E,E /
+;          sla 1,E / ld XIX,<this> / ld DE,(XIX+E)`: any E above 16 reads entry 0.
+; COUNT 17 = that bound + 1; IndexToBitMask32_DeadCopy starts right after.
+; Byte-identical to BitMask16ByIndex (0xF8A95B), 0x40B higher (check C3).
+; ⚠ DEAD: 0xF8A44B-0xF8A7FF is unreachable -- nothing outside it names an
+;          address in it (check C4); see PanelGroupQueue_ExpandToEvents_DeadCopy.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+BitMask16ByIndex_DeadCopy:
+	.short 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040  ; F8A550  [0]
+	.short 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000  ; F8A560  [8]
+	.short 0x8000  ; F8A570  [16]
+
+; ---------------------------------------------------------------------
+; IndexToBitMask32_DeadCopy -- E (0..32) -> XDE = one-hot mask; twin of
+;          IndexToBitMask32 (0xF8A97D), identical but for its table operand.
+; Called by: nothing found (as IndexToBitMask16_DeadCopy).
+; ⚠ DEAD: 0xF8A44B-0xF8A7FF is unreachable -- nothing outside it names an
+;          address in it (check C4); see PanelGroupQueue_ExpandToEvents_DeadCopy.
+; ---------------------------------------------------------------------
+IndexToBitMask32_DeadCopy:
+	push XIX                                      ; F8A572  3c
+	cp E,0x20                                     ; F8A573  cd cf 20
+	jr ule, 0x02                                  ; F8A576  63 02
 	xor E,E                                              ; F8A578  cd d5
 	sla e, 0x02                                          ; F8A57A  cd ec 02
-	ld XIX,0x00f8a589                                    ; F8A57D  44 89 a5 f8 00
+	ld XIX,BitMask32ByIndex_DeadCopy                           ; F8A57D  44 89 a5 f8 00
 	mx8_ld_rm MXL, ra_IX, rb_E, r2                       ; F8A582  e3 03 f0 e8 22
 	pop XIX                                              ; F8A587  5c
 	ret                                                  ; F8A588  0e
-	nop                                                  ; F8A589  00
-	nop                                                  ; F8A58A  00
-	nop                                                  ; F8A58B  00
-	nop                                                  ; F8A58C  00
-	normal                                               ; F8A58D  01
-	nop                                                  ; F8A58E  00
-	nop                                                  ; F8A58F  00
-	nop                                                  ; F8A590  00
-	push SR                                              ; F8A591  02
-	nop                                                  ; F8A592  00
-	nop                                                  ; F8A593  00
-	nop                                                  ; F8A594  00
-	max                                                  ; F8A595  04
-	nop                                                  ; F8A596  00
-	nop                                                  ; F8A597  00
-	nop                                                  ; F8A598  00
-	ld (0x00:8), 0x00:io                                      ; F8A599  08 00 00
-	nop                                                  ; F8A59C  00
-	rcf                                                  ; F8A59D  10
-	nop                                                  ; F8A59E  00
-	nop                                                  ; F8A59F  00
-	nop                                                  ; F8A5A0  00
-	ld w, 0x00:opc                                          ; F8A5A1  20 00
-	nop                                                  ; F8A5A3  00
-	nop                                                  ; F8A5A4  00
-	ld XWA,0x80000000                                    ; F8A5A5  40 00 00 00 80
-	nop                                                  ; F8A5AA  00
-	nop                                                  ; F8A5AB  00
-	nop                                                  ; F8A5AC  00
-	nop                                                  ; F8A5AD  00
-	normal                                               ; F8A5AE  01
-	nop                                                  ; F8A5AF  00
-	nop                                                  ; F8A5B0  00
-	nop                                                  ; F8A5B1  00
-	push SR                                              ; F8A5B2  02
-	nop                                                  ; F8A5B3  00
-	nop                                                  ; F8A5B4  00
-	nop                                                  ; F8A5B5  00
-	max                                                  ; F8A5B6  04
-	nop                                                  ; F8A5B7  00
-	nop                                                  ; F8A5B8  00
-	nop                                                  ; F8A5B9  00
-	ld (0x00:8), 0x00:io                                      ; F8A5BA  08 00 00
-	nop                                                  ; F8A5BD  00
-	rcf                                                  ; F8A5BE  10
-	nop                                                  ; F8A5BF  00
-	nop                                                  ; F8A5C0  00
-	nop                                                  ; F8A5C1  00
-	ld w, 0x00:opc                                          ; F8A5C2  20 00
-	nop                                                  ; F8A5C4  00
-	nop                                                  ; F8A5C5  00
-	ld XWA,0x80000000                                    ; F8A5C6  40 00 00 00 80
-	nop                                                  ; F8A5CB  00
-	nop                                                  ; F8A5CC  00
-	nop                                                  ; F8A5CD  00
-	nop                                                  ; F8A5CE  00
-	normal                                               ; F8A5CF  01
-	nop                                                  ; F8A5D0  00
-	nop                                                  ; F8A5D1  00
-	nop                                                  ; F8A5D2  00
-	push SR                                              ; F8A5D3  02
-	nop                                                  ; F8A5D4  00
-	nop                                                  ; F8A5D5  00
-	nop                                                  ; F8A5D6  00
-	max                                                  ; F8A5D7  04
-	nop                                                  ; F8A5D8  00
-	nop                                                  ; F8A5D9  00
-	nop                                                  ; F8A5DA  00
-	ld (0x00:8), 0x00:io                                      ; F8A5DB  08 00 00
-	nop                                                  ; F8A5DE  00
-	rcf                                                  ; F8A5DF  10
-	nop                                                  ; F8A5E0  00
-	nop                                                  ; F8A5E1  00
-	nop                                                  ; F8A5E2  00
-	ld w, 0x00:opc                                          ; F8A5E3  20 00
-	nop                                                  ; F8A5E5  00
-	nop                                                  ; F8A5E6  00
-	ld XWA,0x80000000                                    ; F8A5E7  40 00 00 00 80
-	nop                                                  ; F8A5EC  00
-	nop                                                  ; F8A5ED  00
-	nop                                                  ; F8A5EE  00
-	nop                                                  ; F8A5EF  00
-	normal                                               ; F8A5F0  01
-	nop                                                  ; F8A5F1  00
-	nop                                                  ; F8A5F2  00
-	nop                                                  ; F8A5F3  00
-	push SR                                              ; F8A5F4  02
-	nop                                                  ; F8A5F5  00
-	nop                                                  ; F8A5F6  00
-	nop                                                  ; F8A5F7  00
-	max                                                  ; F8A5F8  04
-	nop                                                  ; F8A5F9  00
-	nop                                                  ; F8A5FA  00
-	nop                                                  ; F8A5FB  00
-	ld (0x00:8), 0x00:io                                      ; F8A5FC  08 00 00
-	nop                                                  ; F8A5FF  00
-	rcf                                                  ; F8A600  10
-	nop                                                  ; F8A601  00
-	nop                                                  ; F8A602  00
-	nop                                                  ; F8A603  00
-	ld w, 0x00:opc                                          ; F8A604  20 00
-	nop                                                  ; F8A606  00
-	nop                                                  ; F8A607  00
-	ld XWA,0x80000000                                    ; F8A608  40 00 00 00 80
+; ---------------------------------------------------------------------
+; BitMask32ByIndex_DeadCopy -- 33 x u32: 0, then 1<<0 .. 1<<31 (entry k = 1 << (k-1)).
+; Read by: IndexToBitMask32_DeadCopy (0xF8A572) -- `cp E,0x20 / jr ule / xor E,E /
+;          sla 2,E / ld XIX,<this> / ld XDE,(XIX+E)`: any E above 32 reads entry 0.
+; COUNT 33 = that bound + 1; the dead handler at 0xF8A60D starts right after.
+; Byte-identical to BitMask32ByIndex (0xF8A994), 0x40B higher (check C3).
+; ⚠ DEAD: 0xF8A44B-0xF8A7FF is unreachable -- nothing outside it names an
+;          address in it (check C4); see PanelGroupQueue_ExpandToEvents_DeadCopy.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+BitMask32ByIndex_DeadCopy:
+	.long 0x00000000, 0x00000001, 0x00000002, 0x00000004  ; F8A589  [0]
+	.long 0x00000008, 0x00000010, 0x00000020, 0x00000040  ; F8A599  [4]
+	.long 0x00000080, 0x00000100, 0x00000200, 0x00000400  ; F8A5A9  [8]
+	.long 0x00000800, 0x00001000, 0x00002000, 0x00004000  ; F8A5B9  [12]
+	.long 0x00008000, 0x00010000, 0x00020000, 0x00040000  ; F8A5C9  [16]
+	.long 0x00080000, 0x00100000, 0x00200000, 0x00400000  ; F8A5D9  [20]
+	.long 0x00800000, 0x01000000, 0x02000000, 0x04000000  ; F8A5E9  [24]
+	.long 0x08000000, 0x10000000, 0x20000000, 0x40000000  ; F8A5F9  [28]
+	.long 0x80000000  ; F8A609  [32]
 	cp e, 0x00:i3                                          ; F8A60D  cd d8
-	jr z, 0x04                                           ; F8A60F  66 04
+	jr z, .LF8A615                                           ; F8A60F  66 04
 	jp sub_F8A500                                        ; F8A611  1b 00 a5 f8
 .LF8A615:
 	jp sub_F8A504                                        ; F8A615  1b 04 a5 f8
 	cp e, 0x00:i3                                          ; F8A619  cd d8
-	jr z, 0x2b                                           ; F8A61B  66 2b
-	calr 0xfee8                                          ; F8A61D  1e e8 fe
-	calr 0xfef9                                          ; F8A620  1e f9 fe
+	jr z, .LF8A648                                           ; F8A61B  66 2b
+	calr LowestSetBitIndex1Based_Copy                                          ; F8A61D  1e e8 fe
+	calr IndexToBitMask8_DeadCopy                                          ; F8A620  1e f9 fe
 	ld d, 0x3f:opc                                          ; F8A623  24 3f
 	push XIX                                             ; F8A625  3c
 	ld XIX,0x00f8acf1                                    ; F8A626  44 f1 ac f8 00
@@ -19263,50 +19207,67 @@ sub_F8A51C:
 	calr LowestSetBitIndex1Based_Copy                                          ; F8A66D  1e 98 fe
 	extz DE                                              ; F8A670  da 12
 	extz XDE                                             ; F8A672  ea 12
-	add XDE,0x00f8a686                                   ; F8A674  ea c8 86 a6 f8 00
+	add XDE,PanelOrdinalToEventValue_A_DeadCopy                       ; F8A674  ea c8 86 a6 f8 00
 	ld E,(XDE)                                           ; F8A67A  82 25
 	ld d, 0xff:opc                                          ; F8A67C  24 ff
 	jp sub_F8A500                                        ; F8A67E  1b 00 a5 f8
 .LF8A682:
 	jp sub_F8A504                                        ; F8A682  1b 04 a5 f8
-	nop                                                  ; F8A686  00
-	push 0x0a                                            ; F8A687  09 0a
-	ccf                                                  ; F8A689  12
-	pop_a                                                ; F8A68A  15
-	ld (0x03:8), 0x00:io                                      ; F8A68B  08 03 00
-	nop                                                  ; F8A68E  00
+; ---------------------------------------------------------------------
+; PanelOrdinalToEventValue_A_DeadCopy -- 9 bytes, identical to
+;          PanelOrdinalToEventValue_A (0xF8AB39) (check C5).
+; Read by: the unlabelled handler at 0xF8A666 -- `add XDE,<this> / ld E,(XDE)`
+;          at 0xF8A674, then `ld D,0xFF / jp sub_F8A500`, the dead module's
+;          `ld (XIX+),DE`.  It is an OLDER form of the live handler 0xF8AB08:
+;          it lacks the value-3 / (0x3614) bit-0 case.  No pool record names
+;          0xF8A666 (check C1).
+; COUNT 9 = ordinals 0..8, as its live twin.
+; ⚠ DEAD: 0xF8A44B-0xF8A7FF is unreachable -- nothing outside it names an
+;          address in it (check C4); see PanelGroupQueue_ExpandToEvents_DeadCopy.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+PanelOrdinalToEventValue_A_DeadCopy:
+	.byte 0x00, 0x09, 0x0a, 0x12, 0x15, 0x08, 0x03, 0x00, 0x00  ; F8A686  [0]
 	m_cp_mi8 MB16, 0x2806, 0x00                          ; F8A68F  c1 06 28 3f 00
-	jr nz, 0x15                                          ; F8A694  6e 15
-	calr 0xfe6f                                          ; F8A696  1e 6f fe
+	jr nz, .LF8A6AB                                          ; F8A694  6e 15
+	calr LowestSetBitIndex1Based_Copy                                          ; F8A696  1e 6f fe
 	extz DE                                              ; F8A699  da 12
 	extz XDE                                             ; F8A69B  ea 12
-	add XDE,0x00f8a6af                                   ; F8A69D  ea c8 af a6 f8 00
+	add XDE,PanelOrdinalToEventValue_B_DeadCopy                       ; F8A69D  ea c8 af a6 f8 00
 	ld E,(XDE)                                           ; F8A6A3  82 25
 	ld d, 0xff:opc                                          ; F8A6A5  24 ff
 	jp sub_F8A500                                        ; F8A6A7  1b 00 a5 f8
 .LF8A6AB:
 	jp sub_F8A504                                        ; F8A6AB  1b 04 a5 f8
-	nop                                                  ; F8A6AF  00
-	normal                                               ; F8A6B0  01
-	push SR                                              ; F8A6B1  02
-	ldf 0x16                                             ; F8A6B2  17 16
-	nop                                                  ; F8A6B4  00
-	nop                                                  ; F8A6B5  00
-	nop                                                  ; F8A6B6  00
-	nop                                                  ; F8A6B7  00
+; ---------------------------------------------------------------------
+; PanelOrdinalToEventValue_B_DeadCopy -- 9 bytes, identical to
+;          PanelOrdinalToEventValue_B (0xF8AB67) (check C5).
+; Read by: the unlabelled handler at 0xF8A68F -- `add XDE,<this> / ld E,(XDE)`
+;          at 0xF8A69D, then `ld D,0xFF / jp sub_F8A500`.  An OLDER form of
+;          the live handler 0xF8AB42, which also clears bit 0 of (0x3614).
+;          No pool record names 0xF8A68F (check C1).
+; COUNT 9 = ordinals 0..8, as its live twin.
+; ⚠ DEAD: 0xF8A44B-0xF8A7FF is unreachable -- nothing outside it names an
+;          address in it (check C4); see PanelGroupQueue_ExpandToEvents_DeadCopy.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+PanelOrdinalToEventValue_B_DeadCopy:
+	.byte 0x00, 0x01, 0x02, 0x17, 0x16, 0x00, 0x00, 0x00, 0x00  ; F8A6AF  [0]
 	cp e, 0x00:i3                                          ; F8A6B8  cd d8
-	jr z, 0x66                                           ; F8A6BA  66 66
+	jr z, .LF8A722                                           ; F8A6BA  66 66
 	ld d, 0x3f:opc                                          ; F8A6BC  24 3f
 	ld a, (0x7f02:16)                                   ; F8A6BE  c1 02 7f 21
 	and A,0xf0                                           ; F8A6C2  c9 cc f0
 	cp a, 0x00:i3                                          ; F8A6C5  c9 d8
-	jr z, 0x39                                           ; F8A6C7  66 39
+	jr z, .LF8A702                                           ; F8A6C7  66 39
 	ld a, (0x7f04:16)                                   ; F8A6C9  c1 04 7f 21
 	and A,0x3f                                           ; F8A6CD  c9 cc 3f
 	ld w, (0x216a:16)                                   ; F8A6D0  c1 6a 21 20
 .LF8A6D4:
 	cp A,0x18                                            ; F8A6D4  c9 cf 18
-	jr c, 0x17                                           ; F8A6D7  67 17
+	jr c, .LF8A6F0                                           ; F8A6D7  67 17
 	cp A,0x1a                                            ; F8A6D9  c9 cf 1a
 	jr ugt, .LF8A6F0                                         ; F8A6DC  6b 12
 	cp W,0x18                                            ; F8A6DE  c8 cf 18
@@ -19891,7 +19852,7 @@ sub_F8AAAC:
 	calr LowestSetBitIndex1Based                                          ; F8AB0F  1e 01 fe
 	extz DE                                              ; F8AB12  da 12
 	extz XDE                                             ; F8AB14  ea 12
-	add XDE,0x00f8ab39                                   ; F8AB16  ea c8 39 ab f8 00
+	add XDE,PanelOrdinalToEventValue_A                       ; F8AB16  ea c8 39 ab f8 00
 	ld E,(XDE)                                           ; F8AB1C  82 25
 	ld d, 0xff:opc                                          ; F8AB1E  24 ff
 	cp e, 0x03:i3                                          ; F8AB20  cd db
@@ -19905,44 +19866,66 @@ sub_F8AAAC:
 	jp sub_F8A90B                                        ; F8AB31  1b 0b a9 f8
 .LF8AB35:
 	jp sub_F8A90F                                        ; F8AB35  1b 0f a9 f8
-	nop                                                  ; F8AB39  00
-	push 0x0a                                            ; F8AB3A  09 0a
-	ccf                                                  ; F8AB3C  12
-	pop_a                                                ; F8AB3D  15
-	ld (0x03:8), 0x00:io                                      ; F8AB3E  08 03 00
-	nop                                                  ; F8AB41  00
+; ---------------------------------------------------------------------
+; PanelOrdinalToEventValue_A -- 9 bytes: switch ordinal -> event VALUE byte.
+; Read by: the action handler at 0xF8AB08 -- `add XDE,<this> / ld E,(XDE)` at
+;          0xF8AB16 -- which 10 PanelGroupActionListPool records dispatch:
+;          v1 group 0x07 masks 01..20 and v2 group 0x06 masks 01..08 (check C1).
+;          Those groups' event-list records are all class 0xA9 code 0x20,
+;          shift 0, one bit each (check C2), so E arrives as that single
+;          bit and LowestSetBitIndex1Based makes it the ordinal 1..8.
+;          The handler runs only while (0x2806) is 0, sets D = 0xFF, turns
+;          a value of 3 into 8 when bit 0 of (0x3614) is set, clears that
+;          bit, and commits DE through sub_F8A90B (`ld (XIX+),DE`).
+; So every switch in those groups raises the SAME event (A9,20) and this
+;          table's byte is what tells them apart.
+; COUNT 9 = ordinals 0..8; the records reach 1..6 (v1) and 1..4 (v2).
+; ⚠ What the values 0x09 0x0A 0x12 0x15 0x08 0x03 denote is not established.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+PanelOrdinalToEventValue_A:
+	.byte 0x00, 0x09, 0x0a, 0x12, 0x15, 0x08, 0x03, 0x00, 0x00  ; F8AB39  [0]
 	m_cp_mi8 MB16, 0x2806, 0x00                          ; F8AB42  c1 06 28 3f 00
-	jr nz, 0x1a                                          ; F8AB47  6e 1a
-	calr 0xfdc7                                          ; F8AB49  1e c7 fd
+	jr nz, .LF8AB63                                          ; F8AB47  6e 1a
+	calr LowestSetBitIndex1Based                                          ; F8AB49  1e c7 fd
 	extz DE                                              ; F8AB4C  da 12
 	extz XDE                                             ; F8AB4E  ea 12
-	add XDE,0x00f8ab67                                   ; F8AB50  ea c8 67 ab f8 00
+	add XDE,PanelOrdinalToEventValue_B                       ; F8AB50  ea c8 67 ab f8 00
 	ld E,(XDE)                                           ; F8AB56  82 25
 	ld d, 0xff:opc                                          ; F8AB58  24 ff
 	m_and_mi8 MB16, 0x3614, 0xfe                         ; F8AB5A  c1 14 36 3c fe
 	jp sub_F8A90B                                        ; F8AB5F  1b 0b a9 f8
 .LF8AB63:
 	jp sub_F8A90F                                        ; F8AB63  1b 0f a9 f8
-	nop                                                  ; F8AB67  00
-	normal                                               ; F8AB68  01
-	push SR                                              ; F8AB69  02
-	ldf 0x16                                             ; F8AB6A  17 16
-	nop                                                  ; F8AB6C  00
-	nop                                                  ; F8AB6D  00
-	nop                                                  ; F8AB6E  00
-	nop                                                  ; F8AB6F  00
+; ---------------------------------------------------------------------
+; PanelOrdinalToEventValue_B -- 9 bytes: switch ordinal -> event VALUE byte.
+; Read by: the action handler at 0xF8AB42 -- `add XDE,<this> / ld E,(XDE)` at
+;          0xF8AB50 -- which 8 PanelGroupActionListPool records dispatch: v1
+;          and v2 group 0x00 masks 01..08 (check C1).  Those event-list
+;          records are class 0xA9 code 0x20, shift 0, one bit each (check C2),
+;          the same event PanelOrdinalToEventValue_A feeds.  The handler
+;          runs only while (0x2806) is 0, sets D = 0xFF, clears bit 0 of
+;          (0x3614) and commits DE through sub_F8A90B.
+; COUNT 9 = ordinals 0..8; the records reach 1..4.
+; ⚠ What the values 0x01 0x02 0x17 0x16 denote is not established.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+PanelOrdinalToEventValue_B:
+	.byte 0x00, 0x01, 0x02, 0x17, 0x16, 0x00, 0x00, 0x00, 0x00  ; F8AB67  [0]
 	cp e, 0x00:i3                                          ; F8AB70  cd d8
-	jrl z, 0x84                                          ; F8AB72  76 84 00
+	jrl z, .LF8ABF9                                          ; F8AB72  76 84 00
 	ld d, 0x3f:opc                                          ; F8AB75  24 3f
 	ld a, (0x2076:16)                                   ; F8AB77  c1 76 20 21
 	cp A,0x09                                            ; F8AB7B  c9 cf 09
-	jr z, 0x59                                           ; F8AB7E  66 59
+	jr z, .LF8ABD9                                           ; F8AB7E  66 59
 	cp A,0x08                                            ; F8AB80  c9 cf 08
-	jr z, 0x54                                           ; F8AB83  66 54
+	jr z, .LF8ABD9                                           ; F8AB83  66 54
 	cp a, 0x03:i3                                          ; F8AB85  c9 db
-	jr z, 0x50                                           ; F8AB87  66 50
+	jr z, .LF8ABD9                                           ; F8AB87  66 50
 	cp A,0x16                                            ; F8AB89  c9 cf 16
-	jr z, 0x4b                                           ; F8AB8C  66 4b
+	jr z, .LF8ABD9                                           ; F8AB8C  66 4b
 	m_cp_mi8 MB16, 0x207a, 0xb7                          ; F8AB8E  c1 7a 20 3f b7
 	jr z, .LF8ABD9                                           ; F8AB93  66 44
 	ld a, (0x7f02:16)                                   ; F8AB95  c1 02 7f 21
@@ -20150,7 +20133,7 @@ sub_F8ACFE:
 .LF8AD71:
 	extz DE                                              ; F8AD71  da 12
 	extz XDE                                             ; F8AD73  ea 12
-	add XDE,0x00f8adcd                                   ; F8AD75  ea c8 cd ad f8 00
+	add XDE,PanelKeypad_OrdinalToKey_V1                       ; F8AD75  ea c8 cd ad f8 00
 	ld E,(XDE)                                           ; F8AD7B  82 25
 	cp E,0x0f                                            ; F8AD7D  cd cf 0f
 	jr nz, .LF8AD8D                                          ; F8AD80  6e 0b
@@ -20172,7 +20155,7 @@ sub_F8ACFE:
 	jr .LF8ADC2                                              ; F8ADA6  68 1a
 .LF8ADA8:
 	cp E,0x09                                            ; F8ADA8  cd cf 09
-	jr ugt, 0x1c                                         ; F8ADAB  6b 1c
+	jr ugt, .LF8ADC9                                         ; F8ADAB  6b 1c
 	ld (XBC),E                                           ; F8ADAD  b1 45
 	ld XBC,0x00002821                                    ; F8ADAF  41 21 28 00 00
 	ld WA,(XBC+0x01)                                     ; F8ADB4  99 01 20
@@ -20186,24 +20169,40 @@ sub_F8ACFE:
 	jp sub_F8A90B                                        ; F8ADC5  1b 0b a9 f8
 .LF8ADC9:
 	jp sub_F8A90F                                        ; F8ADC9  1b 0f a9 f8
-	swi 7                                                ; F8ADCD  ff
-	normal                                               ; F8ADCE  01
-	push SR                                              ; F8ADCF  02
-	pop SR                                               ; F8ADD0  03
-	max                                                  ; F8ADD1  04
-	halt                                                 ; F8ADD2  05
-	ei 0x07                                              ; F8ADD3  06 07
-	ld (0x09:8), 0x00:io                                      ; F8ADD5  08 09 00
-	.byte 0x80, 0x0f                                     ; F8ADD8  80 0f
-	swi 7                                                ; F8ADDA  ff
-	swi 7                                                ; F8ADDB  ff
-	swi 7                                                ; F8ADDC  ff
-	swi 7                                                ; F8ADDD  ff
+; ---------------------------------------------------------------------
+; PanelKeypad_OrdinalToKey_V1 -- 17 bytes: keypad switch ordinal -> key.
+; Read by: `add XDE,<this> / ld E,(XDE)` at 0xF8AD75, in the keypad path
+;          (0xF8AD54, taken when bit 1 of (0x2075) is set) of the action
+;          handler at 0xF8ACE8, which the pool dispatches for v1 groups
+;          0x01 and 0x02, mask FF (check C1).  The path first rewrites the
+;          event's class/code word to 0x1BA9 -- the (A9,1B) that v2's
+;          keypad groups carry natively (check C2); E = 0 commits
+;          DE = 0x0200; otherwise E = LowestSetBitIndex1Based(E), plus 8
+;          unless the group (A) is 1, so group 1 gives ordinals 1-8 and
+;          group 2 ordinals 9-16.
+; What the handler does with the byte read (0xF8AD7D-0xF8ADC9):
+;   0..9  a DIGIT: stored to (0x2267); the bytes at 0x2822-0x2823 move
+;         down to 0x2821-0x2822 and `E + 0x30` (its ASCII) goes to 0x2823;
+;   0x80  stored to (0x2267); (0x2820) toggles between '+' (0x2B) and
+;         '-' (0x2D);
+;   0x0F  stored to (0x2267) -- unless (0x2823) holds 0x20 (a space),
+;         in which case the event is dropped;
+;   0xFF  above 9 and not special: dropped (`jp sub_F8A90F`).
+;         So 0x2820-0x2823 is a sign and three ASCII digits.
+; Here: ordinals 1-9 -> digits 1-9, 10 -> 0, 11 -> 0x80, 12 -> 0x0F,
+;          0 and 13-16 -> 0xFF.  COUNT 17 = ordinals 0..16.
+; ⚠ What 0x0F commits (an ENTER?) is not established from this code.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+PanelKeypad_OrdinalToKey_V1:
+	.byte 0xff, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00, 0x80, 0x0f, 0xff, 0xff, 0xff  ; F8ADCD  [0]
+	.byte 0xff  ; F8ADDD  [16]
 	m_ld_mi16 MDD+r4, 0xfe, 0x1ba9                       ; F8ADDE  bc fe 02 a9 1b
 	cp e, 0x00:i3                                          ; F8ADE3  cd d8
-	jr nz, 0x05                                          ; F8ADE5  6e 05
+	jr nz, .LF8ADEC                                          ; F8ADE5  6e 05
 	ldw de, 0x0200                                       ; F8ADE7  32 00 02
-	jr 0x63                                              ; F8ADEA  68 63
+	jr .LF8AE4F                                              ; F8ADEA  68 63
 .LF8ADEC:
 	ld XBC,0x00002267                                    ; F8ADEC  41 67 22 00 00
 	calr LowestSetBitIndex1Based                                          ; F8ADF1  1e 1f fb
@@ -20213,7 +20212,7 @@ sub_F8ACFE:
 .LF8ADFB:
 	extz DE                                              ; F8ADFB  da 12
 	extz XDE                                             ; F8ADFD  ea 12
-	add XDE,0x00f8ae57                                   ; F8ADFF  ea c8 57 ae f8 00
+	add XDE,PanelKeypad_OrdinalToKey_V2                       ; F8ADFF  ea c8 57 ae f8 00
 	ld E,(XDE)                                           ; F8AE05  82 25
 	cp E,0x0f                                            ; F8AE07  cd cf 0f
 	jr nz, .LF8AE17                                          ; F8AE0A  6e 0b
@@ -20249,25 +20248,30 @@ sub_F8ACFE:
 	jp sub_F8A90B                                        ; F8AE4F  1b 0b a9 f8
 .LF8AE53:
 	jp sub_F8A90F                                        ; F8AE53  1b 0f a9 f8
-	swi 7                                                ; F8AE57  ff
-	nop                                                  ; F8AE58  00
-	normal                                               ; F8AE59  01
-	push SR                                              ; F8AE5A  02
-	pop SR                                               ; F8AE5B  03
-	max                                                  ; F8AE5C  04
-	halt                                                 ; F8AE5D  05
-	ei 0x07                                              ; F8AE5E  06 07
-	ld (0x09:8), 0x80:io                                      ; F8AE60  08 09 80
-	retd 0xffff                                          ; F8AE63  0f ff ff
-	swi 7                                                ; F8AE66  ff
-	swi 7                                                ; F8AE67  ff
+; ---------------------------------------------------------------------
+; PanelKeypad_OrdinalToKey_V2 -- 17 bytes: keypad switch ordinal -> key.
+; Read by: `add XDE,<this> / ld E,(XDE)` at 0xF8ADFF in the action handler
+;          at 0xF8ADDE, which the pool dispatches for v2 group 0x01 mask FF
+;          and v2 group 0x02 mask 0F (check C1): 8 + 4 = 12 switches, event
+;          (A9,1B) (check C2).  The handler is the V1 keypad path
+;          (PanelKeypad_OrdinalToKey_V1) instruction for instruction but
+;          for this table (check C6): the same digit / 0x80 / 0x0F / 0xFF
+;          actions on the same RAM.
+; Here: ordinals 1-10 -> digits 0-9, 11 -> 0x80, 12 -> 0x0F, 0 and 13-16 -> 0xFF.
+;          COUNT 17 = ordinals 0..16 (v2's masks reach only 1..12).
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+PanelKeypad_OrdinalToKey_V2:
+	.byte 0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x80, 0x0f, 0xff, 0xff, 0xff  ; F8AE57  [0]
+	.byte 0xff  ; F8AE67  [16]
 	ld BC,DE                                             ; F8AE68  da 89
 	ld e, (xix-1)                                        ; F8AE6A  8c ff 25
 	inc 1,E                                              ; F8AE6D  cd 61
-	calr 0xfb0b                                          ; F8AE6F  1e 0b fb
+	calr IndexToBitMask32                                          ; F8AE6F  1e 0b fb
 	ld xwa, (0x2252:16)                                 ; F8AE72  e1 52 22 20
 	cp c, 0x00:i3                                          ; F8AE76  cb d8
-	jr z, 0x2d                                           ; F8AE78  66 2d
+	jr z, .LF8AEA7                                           ; F8AE78  66 2d
 	and XWA,XDE                                          ; F8AE7A  ea c0
 	jr z, .LF8AE93                                           ; F8AE7C  66 15
 	m_add_mi8 MBD+r4, 0xff, 0x11                         ; F8AE7E  8c ff 38 11
@@ -20402,7 +20406,7 @@ sub_F8ACFE:
 	sub A,0x0b                                           ; F8AFD0  c9 ca 0b
 	extz WA                                              ; F8AFD3  d8 12
 	extz XWA                                             ; F8AFD5  e8 12
-	add XWA,0x00f8b07e                                   ; F8AFD7  e8 c8 7e b0 f8 00
+	add XWA,PanelGroupToRam7F12Slot                       ; F8AFD7  e8 c8 7e b0 f8 00
 	ld A,(XWA)                                           ; F8AFDD  80 21
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8AFDF  c0 c4 3f 02
 	jr nz, .LF8AFF2                                          ; F8AFE3  6e 0d
@@ -20457,32 +20461,43 @@ sub_F8ACFE:
 	jp sub_F8A90B                                        ; F8B05F  1b 0b a9 f8
 .LF8B063:
 	cp A,0x40                                            ; F8B063  c9 cf 40
-	jr nz, 0x08                                          ; F8B066  6e 08
+	jr nz, .LF8B070                                          ; F8B066  6e 08
 	ld (xix-2), 0xb5                                     ; F8B068  bc fe 00 b5
 	jp sub_F8A90B                                        ; F8B06C  1b 0b a9 f8
 .LF8B070:
 	cp A,0x81                                            ; F8B070  c9 cf 81
-	jrl nz, -1895                                        ; F8B073  7e 99 f8
+	jrl nz, sub_F8A90F                                        ; F8B073  7e 99 f8
 	ld (xix-2), 0xb4                                     ; F8B076  bc fe 00 b4
 	jp sub_F8A90B                                        ; F8B07A  1b 0b a9 f8
-	scf                                                  ; F8B07E  11
-	nop                                                  ; F8B07F  00
-	ccf                                                  ; F8B080  12
-	nop                                                  ; F8B081  00
-	nop                                                  ; F8B082  00
-	ldf 0x18                                             ; F8B083  17 18
-	nop                                                  ; F8B085  00
-	push SR                                              ; F8B086  02
-	pop_a                                                ; F8B087  15
-	ex_ff                                                ; F8B088  16
-	max                                                  ; F8B089  04
-	halt                                                 ; F8B08A  05
+; ---------------------------------------------------------------------
+; PanelGroupToRam7F12Slot -- 13 bytes: panel group 0x0B..0x17 -> slot in the
+;          RAM byte array at 0x7F12 (index = group - 0x0B).
+; Read by: the action handler at 0xF8AFD0 (pool: v1 groups 0x0B 0x0D 0x10
+;          0x11 0x13 0x14 0x15, v2 groups 0x14 0x15, all mask 7F -- 7-bit
+;          controller values, event classes B2 BC BA BB BD B8 B9) and the
+;          one at 0xF8B08B (v1 groups 0x16 0x17, mask 01) (check C1):
+;          `sub A,0x0B / add XWA,<this> / ld A,(XWA)` at 0xF8AFD7 and
+;          0xF8B099, then both read the byte at 0x7F12 + that slot.
+;          0xF8AFD0 turns that byte into the event's CLASS (1->B2, 2->BC,
+;          4->BD, 0x0B->B3, 0x10->B8, 0x11->B9, 0x12->BA, 0x13->BB,
+;          0x40->B5, 0x81->B4, anything else drops the event); with
+;          (0xC4) = 2 it lets only slots 0x15/0x16 through.  0xF8B08B
+;          branches on it (0x40, 0x88, 0x89, ...).
+; So the RAM bytes at 0x7F12 + slot hold an ASSIGNMENT per controller.
+; COUNT 13 = groups 0x0B..0x17; the unused slots (groups 0x0C 0x0E 0x0F
+;          0x12, which the pool never sends here) are 0.
+; ⚠ Which physical controllers the groups are is not established here.
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+PanelGroupToRam7F12Slot:
+	.byte 0x11, 0x00, 0x12, 0x00, 0x00, 0x17, 0x18, 0x00, 0x02, 0x15, 0x16, 0x04, 0x05  ; F8B07E  [0]
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8B08B  c0 c4 3f 02
-	jrl z, -1923                                         ; F8B08F  76 7d f8
+	jrl z, sub_F8A90F                                         ; F8B08F  76 7d f8
 	sub A,0x0b                                           ; F8B092  c9 ca 0b
 	extz WA                                              ; F8B095  d8 12
 	extz XWA                                             ; F8B097  e8 12
-	add XWA,0x00f8b07e                                   ; F8B099  e8 c8 7e b0 f8 00
+	add XWA,PanelGroupToRam7F12Slot                       ; F8B099  e8 c8 7e b0 f8 00
 	ld A,(XWA)                                           ; F8B09F  80 21
 	extz WA                                              ; F8B0A1  d8 12
 	extz XWA                                             ; F8B0A3  e8 12
@@ -21914,7 +21929,7 @@ sub_F8BDC5:
 	jr ugt, .LF8BDF7                                     ; F8BDC9  6b 2c
 	ld E,L                                               ; F8BDCB  cf 8d
 	inc 1,E                                              ; F8BDCD  cd 61
-	calr sub_F8BE36                                      ; F8BDCF  1e 64 00
+	calr IndexToBitMask32_Copy                                      ; F8BDCF  1e 64 00
 	ld xbc, (0x2666:16)                                 ; F8BDD2  e1 66 26 21
 	bit 0x07,W                                           ; F8BDD6  c8 33 07
 	jr z, .LF8BDDF                                       ; F8BDD9  66 04
@@ -21937,7 +21952,7 @@ sub_F8BDF8:
 	push E                                               ; F8BDFE  cd 04
 	ld E,L                                               ; F8BE00  cf 8d
 	inc 1,E                                              ; F8BE02  cd 61
-	calr sub_F8BE36                                      ; F8BE04  1e 2f 00
+	calr IndexToBitMask32_Copy                                      ; F8BE04  1e 2f 00
 	ld xbc, (0x2666:16)                                 ; F8BE07  e1 66 26 21
 	bit 0x07,W                                           ; F8BE0B  c8 33 07
 sub_F8BE0E:
@@ -21959,122 +21974,44 @@ sub_F8BE0E:
 	call (xix)                                           ; F8BE33  b4 e8
 .LF8BE35:
 	ret                                                  ; F8BE35  0e
-sub_F8BE36:
+; ---------------------------------------------------------------------
+; IndexToBitMask32_Copy -- E (0..32) -> XDE = one-hot 32-bit mask, a LIVE
+;          second copy of IndexToBitMask32 (0xF8A97D): identical but for its
+;          table operand (check C3).  Renamed from sub_F8BE36.
+; Called by: sub_F8BDC5 (`calr` at 0xF8BDCF) and sub_F8BDF8 (0xF8BE04),
+;          each with E = L + 1.
+; ---------------------------------------------------------------------
+IndexToBitMask32_Copy:
 	push XIX                                             ; F8BE36  3c
 	cp E,0x20                                            ; F8BE37  cd cf 20
 	jr ule, .LF8BE3E                                     ; F8BE3A  63 02
 	xor E,E                                              ; F8BE3C  cd d5
 .LF8BE3E:
 	sla e, 0x02                                          ; F8BE3E  cd ec 02
-	ld XIX,0x00f8be4d                                    ; F8BE41  44 4d be f8 00
+	ld XIX,BitMask32ByIndex_Copy                      ; F8BE41  44 4d be f8 00
 	mx8_ld_rm MXL, ra_IX, rb_E, r2                       ; F8BE46  e3 03 f0 e8 22
 	pop XIX                                              ; F8BE4B  5c
 	ret                                                  ; F8BE4C  0e
-	nop                                                  ; F8BE4D  00
-	nop                                                  ; F8BE4E  00
-	nop                                                  ; F8BE4F  00
-	nop                                                  ; F8BE50  00
-	normal                                               ; F8BE51  01
-	nop                                                  ; F8BE52  00
-	nop                                                  ; F8BE53  00
-	nop                                                  ; F8BE54  00
-	push SR                                              ; F8BE55  02
-	nop                                                  ; F8BE56  00
-	nop                                                  ; F8BE57  00
-	nop                                                  ; F8BE58  00
-	max                                                  ; F8BE59  04
-	nop                                                  ; F8BE5A  00
-	nop                                                  ; F8BE5B  00
-	nop                                                  ; F8BE5C  00
-	ld (0x00:8), 0x00:io                                      ; F8BE5D  08 00 00
-	nop                                                  ; F8BE60  00
-	rcf                                                  ; F8BE61  10
-	nop                                                  ; F8BE62  00
-	nop                                                  ; F8BE63  00
-	nop                                                  ; F8BE64  00
-	ld w, 0x00:opc                                          ; F8BE65  20 00
-	nop                                                  ; F8BE67  00
-	nop                                                  ; F8BE68  00
-	ld XWA,0x80000000                                    ; F8BE69  40 00 00 00 80
-	nop                                                  ; F8BE6E  00
-	nop                                                  ; F8BE6F  00
-	nop                                                  ; F8BE70  00
-	nop                                                  ; F8BE71  00
-	normal                                               ; F8BE72  01
-	nop                                                  ; F8BE73  00
-	nop                                                  ; F8BE74  00
-	nop                                                  ; F8BE75  00
-	push SR                                              ; F8BE76  02
-sub_F8BE77:
-	nop                                                  ; F8BE77  00
-	nop                                                  ; F8BE78  00
-	nop                                                  ; F8BE79  00
-	max                                                  ; F8BE7A  04
-	nop                                                  ; F8BE7B  00
-	nop                                                  ; F8BE7C  00
-	nop                                                  ; F8BE7D  00
-	ld (0x00:8), 0x00:io                                      ; F8BE7E  08 00 00
-	nop                                                  ; F8BE81  00
-	rcf                                                  ; F8BE82  10
-	nop                                                  ; F8BE83  00
-	nop                                                  ; F8BE84  00
-	nop                                                  ; F8BE85  00
-	ld w, 0x00:opc                                          ; F8BE86  20 00
-	nop                                                  ; F8BE88  00
-	nop                                                  ; F8BE89  00
-	ld XWA,0x80000000                                    ; F8BE8A  40 00 00 00 80
-	nop                                                  ; F8BE8F  00
-	nop                                                  ; F8BE90  00
-	nop                                                  ; F8BE91  00
-	nop                                                  ; F8BE92  00
-	normal                                               ; F8BE93  01
-	nop                                                  ; F8BE94  00
-	nop                                                  ; F8BE95  00
-	nop                                                  ; F8BE96  00
-	push SR                                              ; F8BE97  02
-	nop                                                  ; F8BE98  00
-	nop                                                  ; F8BE99  00
-	nop                                                  ; F8BE9A  00
-	max                                                  ; F8BE9B  04
-	nop                                                  ; F8BE9C  00
-	nop                                                  ; F8BE9D  00
-	nop                                                  ; F8BE9E  00
-	ld (0x00:8), 0x00:io                                      ; F8BE9F  08 00 00
-	nop                                                  ; F8BEA2  00
-	rcf                                                  ; F8BEA3  10
-	nop                                                  ; F8BEA4  00
-	nop                                                  ; F8BEA5  00
-	nop                                                  ; F8BEA6  00
-	ld w, 0x00:opc                                          ; F8BEA7  20 00
-	nop                                                  ; F8BEA9  00
-	nop                                                  ; F8BEAA  00
-	ld XWA,0x80000000                                    ; F8BEAB  40 00 00 00 80
-	nop                                                  ; F8BEB0  00
-	nop                                                  ; F8BEB1  00
-	nop                                                  ; F8BEB2  00
-	nop                                                  ; F8BEB3  00
-	normal                                               ; F8BEB4  01
-	nop                                                  ; F8BEB5  00
-	nop                                                  ; F8BEB6  00
-	nop                                                  ; F8BEB7  00
-	push SR                                              ; F8BEB8  02
-	nop                                                  ; F8BEB9  00
-	nop                                                  ; F8BEBA  00
-	nop                                                  ; F8BEBB  00
-	max                                                  ; F8BEBC  04
-	nop                                                  ; F8BEBD  00
-	nop                                                  ; F8BEBE  00
-	nop                                                  ; F8BEBF  00
-	ld (0x00:8), 0x00:io                                      ; F8BEC0  08 00 00
-	nop                                                  ; F8BEC3  00
-	rcf                                                  ; F8BEC4  10
-	nop                                                  ; F8BEC5  00
-	nop                                                  ; F8BEC6  00
-	nop                                                  ; F8BEC7  00
-	ld w, 0x00:opc                                          ; F8BEC8  20 00
-	nop                                                  ; F8BECA  00
-	nop                                                  ; F8BECB  00
-	ld XWA,0x80000000                                    ; F8BECC  40 00 00 00 80
+; ---------------------------------------------------------------------
+; BitMask32ByIndex_Copy -- 33 x u32: 0, then 1<<0 .. 1<<31 (entry k = 1 << (k-1)).
+; Read by: IndexToBitMask32_Copy (0xF8BE36) -- `cp E,0x20 / jr ule / xor E,E /
+;          sla 2,E / ld XIX,<this> / ld XDE,(XIX+E)`: any E above 32 reads entry 0.
+; COUNT 33 = that bound + 1; sub_F8BED1 starts right after.
+; Byte-identical to BitMask32ByIndex (0xF8A994).  This copy is LIVE: its
+;          routine is called by sub_F8BDC5 (0xF8BDCF) and sub_F8BDF8 (0xF8BE04).
+; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
+;  headers from notes/proma-2026-09-25/retitle_panel_tables.py)
+; ---------------------------------------------------------------------
+BitMask32ByIndex_Copy:
+	.long 0x00000000, 0x00000001, 0x00000002, 0x00000004  ; F8BE4D  [0]
+	.long 0x00000008, 0x00000010, 0x00000020, 0x00000040  ; F8BE5D  [4]
+	.long 0x00000080, 0x00000100, 0x00000200, 0x00000400  ; F8BE6D  [8]
+	.long 0x00000800, 0x00001000, 0x00002000, 0x00004000  ; F8BE7D  [12]
+	.long 0x00008000, 0x00010000, 0x00020000, 0x00040000  ; F8BE8D  [16]
+	.long 0x00080000, 0x00100000, 0x00200000, 0x00400000  ; F8BE9D  [20]
+	.long 0x00800000, 0x01000000, 0x02000000, 0x04000000  ; F8BEAD  [24]
+	.long 0x08000000, 0x10000000, 0x20000000, 0x40000000  ; F8BEBD  [28]
+	.long 0x80000000  ; F8BECD  [32]
 sub_F8BED1:
 	push XIZ                                             ; F8BED1  3e
 	ld XIZ,XSP                                           ; F8BED2  ef 8e
