@@ -184,10 +184,13 @@ and they belong to lane `sys` to delete.
 
 ## What remains (and why)
 
-* v7: 16 `calr` to 0xFAFAC0 and 23 absolute `call`/`jp` (0xFDD89E x5,
-  0xFE2F1D x2, 0xFE2CBC x6, ...) point into OTHER lanes' files at addresses
-  where no label stands -- in each case inside a data line there, so the
-  owners' files are misframed or mis-typed at those addresses.
+* v7: 16 `calr` (9 to 0xFAFAC0, 7 to 0xFB02A9) and 23 absolute `call`/`jp`
+  (0xFF05BC x6, 0xFDD69E x5, 0xFEE40D x2, 0xFF081D x2, 0xFEE01B x2, and one
+  each to 0xFEB5D2, 0xFDAD86, 0xFDADAE, 0xFDAA84, 0xFEDE39, 0xFDD375) point
+  into OTHER lanes' files at addresses where no label stands; the shared
+  symboliser reported the ones it examined as mid-line targets, i.e. inside a
+  data or instruction line there, so those files are misframed or mis-typed
+  at those addresses.
 * backend has no spelling for `cp BC/IY,(XIX+IZ)` (d3 07 f0 f8 f1/f5) and
   `ldcf/stcf A,RH3` (c7 3d 2b/2c): still `.byte` with unidasm's reading.
 * honest unknowns: the 64-byte second part-name scheme after Str_TuningEq,
