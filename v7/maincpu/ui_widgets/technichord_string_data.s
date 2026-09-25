@@ -209,23 +209,320 @@ Str_DrawCtrl_MainMemDrawCtrl:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x704, 0x14
 Str_DrawCtrl_MainPreControl:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x718, 0x10
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_Accita16
+; Bitmap_Accita16  --  120 x 95 bitmap, 8 bpp, row stride 120, 11400 bytes
+;
+; What it shows (render): A piano accordion, body red, bellows black,
+; keyboard on the left, on the green (index 0xf7) background. Same
+; drawing as Bitmap_Accger16 with a different body colour; 'ita'/'ger'
+; in the firmware's names presumably mean Italian/German -- an inference
+; from the names, not from code.
+;
+; Reader: BitmapAccita16 (v10/v9 0xf7b46d, v7 0xf7b069) answers
+; 0x1e000a1 with this address, 0x1e000a2 with 0x78 (width 120) and
+; 0x1e000a3 with 0x5f (height 95). The routine is one entry of the
+; 44-entry ApFunction table that InitializeMurai (v10/v9 0xf7ad77, v7
+; 0xf7a973) registers with RegObjTabl 0x1600002, ApFunctionProc, 0x2c,
+; 0xe8070a, slot 0x121 (naka_widget_tables_2.c member ptrs_341); its
+; name string "BitmapAccita16" sits in the parallel name table at
+; 0xe807be, slot 0x421. Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function (+22 of the instance) with 0x1e000a1
+; (address), 0x1e000a2 (width) and 0x1e000a3 (height) through ApFuncCall
+; and hands the three to DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_Accita16[95][120] (rows of 120 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Accita16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x728, 0x2C88
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_Accger16
+; Bitmap_Accger16  --  120 x 95 bitmap, 8 bpp, row stride 120, 11400 bytes
+;
+; What it shows (render): The same piano accordion as Bitmap_Accita16
+; with the body grey instead of red.
+;
+; Reader: BitmapAccger16 (v10/v9 0xf7b49a, v7 0xf7b096) answers
+; 0x1e000a1 with this address, 0x1e000a2 with 0x78 (width 120) and
+; 0x1e000a3 with 0x5f (height 95). The routine is one entry of the
+; 44-entry ApFunction table that InitializeMurai (v10/v9 0xf7ad77, v7
+; 0xf7a973) registers with RegObjTabl 0x1600002, ApFunctionProc, 0x2c,
+; 0xe8070a, slot 0x121 (naka_widget_tables_2.c member ptrs_341); its
+; name string "BitmapAccger16" sits in the parallel name table at
+; 0xe807be, slot 0x421. Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function (+22 of the instance) with 0x1e000a1
+; (address), 0x1e000a2 (width) and 0x1e000a3 (height) through ApFuncCall
+; and hands the three to DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_Accger16[95][120] (rows of 120 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Accger16:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x33B0, 0x2C88
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_SomeArrows
+; Bitmap_SomeArrows  --  294 x 6 bitmap, 8 bpp, row stride 294, 1764 bytes
+;
+; What it shows (render): A 294 x 6 strip of red slanted wedge marks on
+; the green background, spaced unevenly across the width. What it marks
+; on screen was not traced (the instance that uses BitmapDrawsw was not
+; followed); the label name Bitmap_SomeArrows predates this header.
+;
+; Reader: BitmapDrawsw (v10/v9 0xf7b4c7, v7 0xf7b0c3) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x126 (width 294) and 0x1e000a3 with
+; 0x6 (height 6). The routine is one entry of the 44-entry ApFunction
+; table that InitializeMurai (v10/v9 0xf7ad77, v7 0xf7a973) registers
+; with RegObjTabl 0x1600002, ApFunctionProc, 0x2c, 0xe8070a, slot 0x121
+; (naka_widget_tables_2.c member ptrs_341); its name string
+; "BitmapDrawsw" sits in the parallel name table at 0xe807be, slot
+; 0x421. Drawn by the UserBitmap view class: VwUserBitmapProc (v10/v9
+; 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d), calls the instance's
+; function (+22 of the instance) with 0x1e000a1 (address), 0x1e000a2
+; (width) and 0x1e000a3 (height) through ApFuncCall and hands the three
+; to DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_SomeArrows[6][294] (rows of 294 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SomeArrows:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x6038, 0x6E4
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_DrawbarNumberedSlider_1
+; Bitmap_DrawbarNumberedSlider_1  --  22 x 222 bitmap, 8 bpp, row stride 22, 4884 bytes
+;
+; What it shows (render): A drawbar: a black scale numbered 8 (top) to 1
+; with tick marks, above a BROWN (dark red) handle and a grey shaft.
+;
+; Reader: Width and height: one of three near-identical handlers in
+; ui/drawbar_panel_ui.s that start at Bitmap_QueryProperties3x (v10/v9
+; 0xf7b4f1, v7 0xf7b0ed) (the first is labelled; the second and third
+; follow it unlabelled): each answers 0x1e000a1 with one slider bitmap's
+; address, 0x1e000a2 with 22 (width) and 0x1e000a3 with 222 (height),
+; which is how the 22 x 222 shape is pinned. None of the three handler
+; entry points (0xf7b4f1, 0xf7b51e, 0xf7b54b in v10) occurs as a 32-bit
+; or 24-bit little-endian value anywhere in the v10 program, table data,
+; custom data or HD-AE5000 images (searched 2026-09-25), so how -- or
+; whether -- they are reached is not established. The three bitmaps are
+; also pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
+; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
+; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
+; and 1 1/3' black; 1' white), which matches the renders: _1 has a brown
+; handle, _2 white, _3 black. The reader of that table was not traced.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_DrawbarNumberedSlider_1[222][22] (rows of 22 bytes).
+; -----------------------------------------------------------------------------
 BitmapBound_DrawbarSlider1_Start:
 Bitmap_DrawbarNumberedSlider_1:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x671C, 0x1314
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_DrawbarNumberedSlider_2
+; Bitmap_DrawbarNumberedSlider_2  --  22 x 222 bitmap, 8 bpp, row stride 22, 4884 bytes
+;
+; What it shows (render): The same drawbar with a WHITE handle.
+;
+; Reader: Width and height: one of three near-identical handlers in
+; ui/drawbar_panel_ui.s that start at Bitmap_QueryProperties3x (v10/v9
+; 0xf7b4f1, v7 0xf7b0ed) (the first is labelled; the second and third
+; follow it unlabelled): each answers 0x1e000a1 with one slider bitmap's
+; address, 0x1e000a2 with 22 (width) and 0x1e000a3 with 222 (height),
+; which is how the 22 x 222 shape is pinned. None of the three handler
+; entry points (0xf7b4f1, 0xf7b51e, 0xf7b54b in v10) occurs as a 32-bit
+; or 24-bit little-endian value anywhere in the v10 program, table data,
+; custom data or HD-AE5000 images (searched 2026-09-25), so how -- or
+; whether -- they are reached is not established. The three bitmaps are
+; also pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
+; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
+; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
+; and 1 1/3' black; 1' white), which matches the renders: _1 has a brown
+; handle, _2 white, _3 black. The reader of that table was not traced.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_DrawbarNumberedSlider_2[222][22] (rows of 22 bytes).
+; -----------------------------------------------------------------------------
 BitmapBound_DrawbarSlider2_Start:
 Bitmap_DrawbarNumberedSlider_2:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x7A30, 0x1314
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_DrawbarNumberedSlider_3
+; Bitmap_DrawbarNumberedSlider_3  --  22 x 222 bitmap, 8 bpp, row stride 22, 4884 bytes
+;
+; What it shows (render): The same drawbar with a BLACK handle.
+;
+; Reader: Width and height: one of three near-identical handlers in
+; ui/drawbar_panel_ui.s that start at Bitmap_QueryProperties3x (v10/v9
+; 0xf7b4f1, v7 0xf7b0ed) (the first is labelled; the second and third
+; follow it unlabelled): each answers 0x1e000a1 with one slider bitmap's
+; address, 0x1e000a2 with 22 (width) and 0x1e000a3 with 222 (height),
+; which is how the 22 x 222 shape is pinned. None of the three handler
+; entry points (0xf7b4f1, 0xf7b51e, 0xf7b54b in v10) occurs as a 32-bit
+; or 24-bit little-endian value anywhere in the v10 program, table data,
+; custom data or HD-AE5000 images (searched 2026-09-25), so how -- or
+; whether -- they are reached is not established. The three bitmaps are
+; also pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
+; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
+; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
+; and 1 1/3' black; 1' white), which matches the renders: _1 has a brown
+; handle, _2 white, _3 black. The reader of that table was not traced.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_DrawbarNumberedSlider_3[222][22] (rows of 22 bytes).
+; -----------------------------------------------------------------------------
 BitmapBound_DrawbarSlider3_Start:
 Bitmap_DrawbarNumberedSlider_3:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x8D44, 0x1314
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_Technics_Logo
+; Bitmap_Technics_Logo  --  312 x 45 bitmap, 8 bpp, row stride 312, 14040 bytes
+;
+; What it shows (render): The word Technics in the brand's serif
+; logotype, black on green.
+;
+; Reader: BitmapTechnics (v10/v9 0xf7b578, v7 0xf7b174) answers
+; 0x1e000a1 with this address, 0x1e000a2 with 0x138 (width 312) and
+; 0x1e000a3 with 0x2d (height 45). The routine is one entry of the
+; 44-entry ApFunction table that InitializeMurai (v10/v9 0xf7ad77, v7
+; 0xf7a973) registers with RegObjTabl 0x1600002, ApFunctionProc, 0x2c,
+; 0xe8070a, slot 0x121 (naka_widget_tables_2.c member ptrs_341); its
+; name string "BitmapTechnics" sits in the parallel name table at
+; 0xe807be, slot 0x421. Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function (+22 of the instance) with 0x1e000a1
+; (address), 0x1e000a2 (width) and 0x1e000a3 (height) through ApFuncCall
+; and hands the three to DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_Technics_Logo[45][312] (rows of 312 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Technics_Logo:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xA058, 0x36D8
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_KN5000_Logo
+; Bitmap_KN5000_Logo  --  199 x 36 bitmap, 8 bpp, row stride 200, 7200 bytes
+;
+; What it shows (render): 'KN-5000' in black italic sans-serif on green.
+;
+; Reader: BitmapKn5000 (v10/v9 0xf7b5a5, v7 0xf7b1a1) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0xc7 (width 199) and 0x1e000a3 with
+; 0x24 (height 36). The routine is one entry of the 44-entry ApFunction
+; table that InitializeMurai (v10/v9 0xf7ad77, v7 0xf7a973) registers
+; with RegObjTabl 0x1600002, ApFunctionProc, 0x2c, 0xe8070a, slot 0x121
+; (naka_widget_tables_2.c member ptrs_341); its name string
+; "BitmapKn5000" sits in the parallel name table at 0xe807be, slot
+; 0x421. Drawn by the UserBitmap view class: VwUserBitmapProc (v10/v9
+; 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d), calls the instance's
+; function (+22 of the instance) with 0x1e000a1 (address), 0x1e000a2
+; (width) and 0x1e000a3 (height) through ApFuncCall and hands the three
+; to DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_technichord_strings.c as uint8_t
+; Bitmap_KN5000_Logo[36][200] (rows of 200 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_KN5000_Logo:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xD730, 0x1C20
 Str_Mixer_ON:
