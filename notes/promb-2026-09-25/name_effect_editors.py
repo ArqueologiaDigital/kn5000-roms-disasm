@@ -63,6 +63,34 @@ EDITORS = {
 }
 
 
+# the two routines that drive the steppers: named with their own header text
+DRIVERS = {
+    0xF1069A: ("DspEffect_StepCursorValue", """; Name: DspEffect_StepCursorValue -- named 2026-09-25 (lane promb).
+; Evidence: does nothing while the block is bypassed (IndexedTable_GetByte(23,
+;          97 + (0x2797)) != 0 -- block byte 23, the flag EqGraph_Draw prints
+;          "BYPASS" for); on cursor row 8 (`cp (0x2794),0x08` at 0xF106B7) it
+;          calls DspEffect_StepAlgorithm (0xF10713); otherwise it takes group
+;          (0x2792) + (0x2794) of the algorithm's EffectDesc_* record, pushes its
+;          slot (+2) and type (+1) and jumps through ScreenTable_F131E4[type]
+;          (0xF10700) to that type's stepper, DspEffect_StepU8 .. StepEqGain.
+;          So the effect page is eight parameter lines (rows 0-7, scrolled by
+;          (0x2792)) plus the algorithm line (row 8).
+"""),
+    0xF105B8: ("DspEffect_MoveCursor", """; Name: DspEffect_MoveCursor -- named 2026-09-25 (lane promb).
+; Evidence: works on the cursor row at (0x2794) (`lda XIX,0x2794` at 0xF105BE)
+;          and the scroll offset (0x2792), and does nothing while the block is
+;          bypassed (IndexedTable_GetByte(23, 97 + (0x2797)) != 0).  With (0x28B0)
+;          bit 0 SET it moves on: row 8 (the algorithm line) wraps to 0, rows
+;          below 7 step down, row 7 scrolls (0x2792) -- but only while the next
+;          EffectDesc_* group's slot (+2, read at 4*(row+scroll)+6) is not 0xFF,
+;          and for block 99 ((0x2797) = 2) not onto slot 21, the byte that block
+;          lacks; with the bit CLEAR it moves back -- nothing on row 8, the
+;          scroll (0x2792) steps back at row 0, and row 8 is reached from the
+;          top.  Then it sets (0x2075) bit 3 and (0x2095) bit 4.
+"""),
+}
+
+
 def check(msg, cond):
     print("  %-4s %s" % ("ok" if cond else "FAIL", msg))
     if not cond:
@@ -92,6 +120,13 @@ def main():
     check("DspEffect_StepSlowFast: `calr 0xF1071B` at 0xF10CBD",
           at(0xF10CBD, 1) == b"\x1e" and
           0xF10CC0 + int.from_bytes(at(0xF10CBE, 2), "little", signed=True) == 0xF1071B)
+    check("DspEffect_MoveCursor: `lda XIX,0x2794` (f1 94 27 34) at 0xF105BE, `cp H,0xFF` "
+          "(ce cf ff) at 0xF1061B", at(0xF105BE, 4).hex() == "f1942734" and
+          at(0xF1061B, 3).hex() == "cecfff")
+    check("DspEffect_StepCursorValue: `cp (0x2794),0x08` (c1 94 27 3f 08) at 0xF106B7 and "
+          "`calr 0xF10476` at 0xF10713", at(0xF106B7, 5).hex() == "c194273f08" and
+          at(0xF10713, 1) == b"\x1e" and
+          0xF10716 + int.from_bytes(at(0xF10714, 2), "little", signed=True) == 0xF10476)
     for a, (n, _) in EDITORS.items():
         print("     %-24s types %s" % (n, ", ".join("0x%02X" % k for k in types.get(a, []))))
     if FAIL:
@@ -112,6 +147,8 @@ def apply(types):
     txt = open(SRC, "rb").read().decode("latin-1")
     for a, (name, what) in EDITORS.items():
         old = "sub_%06X" % a
+        if not re.search(r'^%s:' % old, txt, re.M):
+            continue
         m = re.search(r'%s(; -{74}\n%s:)' % (re.escape(UNK), old), txt)
         assert m, old
         body = ("Name: %s -- named 2026-09-25 (lane promb).  ScreenTable_F131E4 sends value "
@@ -130,7 +167,18 @@ def apply(types):
             ";          rule that a stated gap beats a plausible guess.`\n")
         txt = txt[:m.start()] + new.encode("utf-8").decode("latin-1") + m.group(1) + txt[m.end():]
         txt = re.sub(r'\b%s(\w*)\b' % old, lambda mm, name=name: name + mm.group(1), txt)
-    txt = reparent(txt, [n for n, _ in EDITORS.values()])
+    for a, (name, hdr) in DRIVERS.items():
+        old = "sub_%06X" % a
+        if not re.search(r'^%s:' % old, txt, re.M):
+            continue
+        m = re.search(r'%s(; -{74}\n%s:)' % (re.escape(UNK), old), txt)
+        assert m, old
+        new = hdr + ("; \u26a0 CORRECTED 2026-09-25: this header used to end `Unknown: what the routine\n"
+                     ";          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's\n"
+                     ";          rule that a stated gap beats a plausible guess.`\n")
+        txt = txt[:m.start()] + new.encode("utf-8").decode("latin-1") + m.group(1) + txt[m.end():]
+        txt = re.sub(r'\b%s(\w*)\b' % old, lambda mm, name=name: name + mm.group(1), txt)
+    txt = reparent(txt, [n for n, _ in EDITORS.values()] + [n for n, _ in DRIVERS.values()])
     data = txt.encode("latin-1")
     open(SRC, "wb").write(data)
     print("wrote", SRC)

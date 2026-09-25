@@ -27508,7 +27508,7 @@ sub_F0F2B2:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F105B8
+; Calls:   DspEffect_MoveCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -27520,7 +27520,7 @@ sub_F0F2B2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F2DB:
-	calr	sub_F105B8	; F0F2DB  calr 0xf105b8
+	calr	DspEffect_MoveCursor	; F0F2DB  calr 0xf105b8
 
 ; --------------------------------------------------------------------------
 ; sub_F0F2DE
@@ -27602,7 +27602,7 @@ DispatchTable_F0F2F8:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F105B8
+; Calls:   DspEffect_MoveCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -27750,7 +27750,7 @@ sub_F0F35F_Skip:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F105B8
+; Calls:   DspEffect_MoveCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -27762,7 +27762,7 @@ sub_F0F35F_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F377:
-	calr	sub_F105B8	; F0F377  calr 0xf105b8
+	calr	DspEffect_MoveCursor	; F0F377  calr 0xf105b8
 	jr	sub_F0F37C_Return	; F0F37A  jr T,0xf0f394
 
 ; --------------------------------------------------------------------------
@@ -27884,7 +27884,7 @@ sub_F0F3C6:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F105B8
+; Calls:   DspEffect_MoveCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -27896,7 +27896,7 @@ sub_F0F3C6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F3E8:
-	calr	sub_F105B8	; F0F3E8  calr 0xf105b8
+	calr	DspEffect_MoveCursor	; F0F3E8  calr 0xf105b8
 
 ; --------------------------------------------------------------------------
 ; sub_F0F3EB
@@ -27980,7 +27980,7 @@ DispatchTable_F0F40A:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1069A
+; Calls:   DspEffect_StepCursorValue
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -28126,7 +28126,7 @@ sub_F0F479:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1069A
+; Calls:   DspEffect_StepCursorValue
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -28138,7 +28138,7 @@ sub_F0F479:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F485:
-	calr	sub_F1069A	; F0F485  calr 0xf1069a
+	calr	DspEffect_StepCursorValue	; F0F485  calr 0xf1069a
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F488  or (XIX),0x01
 	jr	sub_F0F48D_Epilogue	; F0F48B  jr T,0xf0f4a4
 
@@ -28260,7 +28260,7 @@ sub_F0F4DC:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1069A
+; Calls:   DspEffect_StepCursorValue
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -28272,7 +28272,7 @@ sub_F0F4DC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F4F5:
-	calr	sub_F1069A	; F0F4F5  calr 0xf1069a
+	calr	DspEffect_StepCursorValue	; F0F4F5  calr 0xf1069a
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F4F8  or (XIX),0x01
 
 ; --------------------------------------------------------------------------
@@ -28356,7 +28356,7 @@ DispatchTable_F0F516:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2791)
-; Calls:   sub_F1069A
+; Calls:   DspEffect_StepCursorValue
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30908,7 +30908,7 @@ DspEffect_StepAlgorithm_Epilogue:
 	ret	; F105B7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F105B8
+; DspEffect_MoveCursor
 ; Called from: in-module: 0xF0F2DB 0xF0F310 0xF0F377 0xF0F3E8
 ; Touches: (0x2075) (0x2095) (0x2792) (0x2796) (0x2797) (0x28B0)
 ; Calls:   T_IndexedTable_GetByte
@@ -30917,10 +30917,22 @@ DspEffect_StepAlgorithm_Epilogue:
 ;                    0xF105B8 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_MoveCursor -- named 2026-09-25 (lane promb).
+; Evidence: works on the cursor row at (0x2794) (`lda XIX,0x2794` at 0xF105BE)
+;          and the scroll offset (0x2792), and does nothing while the block is
+;          bypassed (IndexedTable_GetByte(23, 97 + (0x2797)) != 0).  With (0x28B0)
+;          bit 0 SET it moves on: row 8 (the algorithm line) wraps to 0, rows
+;          below 7 step down, row 7 scrolls (0x2792) -- but only while the next
+;          EffectDesc_* group's slot (+2, read at 4*(row+scroll)+6) is not 0xFF,
+;          and for block 99 ((0x2797) = 2) not onto slot 21, the byte that block
+;          lacks; with the bit CLEAR it moves back -- nothing on row 8, the
+;          scroll (0x2792) steps back at row 0, and row 8 is reached from the
+;          top.  Then it sets (0x2075) bit 3 and (0x2095) bit 4.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F105B8:
+DspEffect_MoveCursor:
 	link XIZ,0xfffc	; F105B8  link XIZ,0xfffc
 	pushw	hl	; F105BC  push HL
 	push	xix	; F105BD  push XIX
@@ -30933,19 +30945,19 @@ sub_F105B8:
 	call	T_IndexedTable_GetByte	; F105D0  call 0xf42c90
 	pop	xiy	; F105D4  pop XIY
 	cp	a, 0:i3	; F105D5  cp A,0
-	jrl	nz, sub_F105B8_Skip8	; F105D7  jrl NZ,0xf10695
+	jrl	nz, DspEffect_MoveCursor_Skip8	; F105D7  jrl NZ,0xf10695
 	ld	c, (10416:16)	; F105DA  ld C,(0x28b0)
 	and	c, 1	; F105DE  and C,0x01
-	jrl	z, sub_F105B8_Skip5	; F105E1  jrl Z,0xf1066c
+	jrl	z, DspEffect_MoveCursor_Skip5	; F105E1  jrl Z,0xf1066c
 	ld	c, (xix)	; F105E4  ld C,(XIX)
 	cp	c, 8	; F105E6  cp C,0x08
-	jr	nz, sub_F105B8_Skip	; F105E9  jr NZ,0xf105f1
+	jr	nz, DspEffect_MoveCursor_Skip	; F105E9  jr NZ,0xf105f1
 	ld	(xix), 0	; F105EB  ld (XIX),0x00
-	jrl	sub_F105B8_Join	; F105EE  jrl T,0xf1068d
-sub_F105B8_Skip:
+	jrl	DspEffect_MoveCursor_Join	; F105EE  jrl T,0xf1068d
+DspEffect_MoveCursor_Skip:
 	ld	c, (xix)	; F105F1  ld C,(XIX)
 	cp	c, 7:i3	; F105F3  cp C,7
-	jr	nc, sub_F105B8_Skip3	; F105F5  jr NC,0xf10632
+	jr	nc, DspEffect_MoveCursor_Skip3	; F105F5  jr NC,0xf10632
 	ld	c, (xix)	; F105F7  ld C,(XIX)
 	add	c, (10130:16)	; F105F9  add C,(0x2792)
 	mul	c, 4	; F105FD  mul C,0x04
@@ -30960,15 +30972,15 @@ sub_F105B8_Skip:
 	add	xwa, xbc	; F10617  add XWA,XBC
 	ld	h, (xwa)	; F10619  ld H,(XWA)
 	cp	h, 255	; F1061B  cp H,0xff
-	jrl	z, sub_F105B8_Skip8	; F1061E  jrl Z,0xf10695
+	jrl	z, DspEffect_MoveCursor_Skip8	; F1061E  jrl Z,0xf10695
 	cp	h, 21	; F10621  cp H,0x15
-	jr	nz, sub_F105B8_Skip2	; F10624  jr NZ,0xf1062e
+	jr	nz, DspEffect_MoveCursor_Skip2	; F10624  jr NZ,0xf1062e
 	m_cp_mi8 MB16, 0x2797, 0x02	; F10626  cp (0x2797),0x02
-	jrl	z, sub_F105B8_Skip8	; F1062B  jrl Z,0xf10695
-sub_F105B8_Skip2:
+	jrl	z, DspEffect_MoveCursor_Skip8	; F1062B  jrl Z,0xf10695
+DspEffect_MoveCursor_Skip2:
 	incm8	1, (xix)	; F1062E  inc 1,(XIX)
-	jr	sub_F105B8_Join	; F10630  jr T,0xf1068d
-sub_F105B8_Skip3:
+	jr	DspEffect_MoveCursor_Join	; F10630  jr T,0xf1068d
+DspEffect_MoveCursor_Skip3:
 	ld	c, (xix)	; F10632  ld C,(XIX)
 	add	c, (10130:16)	; F10634  add C,(0x2792)
 	mul	c, 4	; F10638  mul C,0x04
@@ -30983,41 +30995,41 @@ sub_F105B8_Skip3:
 	add	xbc, xix	; F10651  add XBC,XIX
 	ld	h, (xbc)	; F10653  ld H,(XBC)
 	cp	h, 255	; F10655  cp H,0xff
-	jr	z, sub_F105B8_Skip8	; F10658  jr Z,0xf10695
+	jr	z, DspEffect_MoveCursor_Skip8	; F10658  jr Z,0xf10695
 	cp	h, 21	; F1065A  cp H,0x15
-	jr	nz, sub_F105B8_Skip4	; F1065D  jr NZ,0xf10666
+	jr	nz, DspEffect_MoveCursor_Skip4	; F1065D  jr NZ,0xf10666
 	m_cp_mi8 MB16, 0x2797, 0x02	; F1065F  cp (0x2797),0x02
-	jr	z, sub_F105B8_Skip8	; F10664  jr Z,0xf10695
-sub_F105B8_Skip4:
+	jr	z, DspEffect_MoveCursor_Skip8	; F10664  jr Z,0xf10695
+DspEffect_MoveCursor_Skip4:
 	inc	1, (10130:16)	; F10666  inc 1,(0x2792)
-	jr	sub_F105B8_Join	; F1066A  jr T,0xf1068d
-sub_F105B8_Skip5:
+	jr	DspEffect_MoveCursor_Join	; F1066A  jr T,0xf1068d
+DspEffect_MoveCursor_Skip5:
 	ld	c, (xix)	; F1066C  ld C,(XIX)
 	cp	c, 8	; F1066E  cp C,0x08
-	jr	z, sub_F105B8_Skip8	; F10671  jr Z,0xf10695
+	jr	z, DspEffect_MoveCursor_Skip8	; F10671  jr Z,0xf10695
 	ld	c, (xix)	; F10673  ld C,(XIX)
 	cp	c, 0:i3	; F10675  cp C,0
-	jr	z, sub_F105B8_Skip6	; F10677  jr Z,0xf1067d
+	jr	z, DspEffect_MoveCursor_Skip6	; F10677  jr Z,0xf1067d
 	decm8	1, (xix)	; F10679  dec 1,(XIX)
-	jr	sub_F105B8_Join	; F1067B  jr T,0xf1068d
-sub_F105B8_Skip6:
+	jr	DspEffect_MoveCursor_Join	; F1067B  jr T,0xf1068d
+DspEffect_MoveCursor_Skip6:
 	m_cp_mi8 MB16, 0x2792, 0x00	; F1067D  cp (0x2792),0x00
-	jr	z, sub_F105B8_Skip7	; F10682  jr Z,0xf1068a
+	jr	z, DspEffect_MoveCursor_Skip7	; F10682  jr Z,0xf1068a
 	dec	1, (10130:16)	; F10684  dec 1,(0x2792)
-	jr	sub_F105B8_Join	; F10688  jr T,0xf1068d
-sub_F105B8_Skip7:
+	jr	DspEffect_MoveCursor_Join	; F10688  jr T,0xf1068d
+DspEffect_MoveCursor_Skip7:
 	ld	(xix), 8	; F1068A  ld (XIX),0x08
-sub_F105B8_Join:
+DspEffect_MoveCursor_Join:
 	m_set 3, MD16, 0x2075	; F1068D  set 3,(0x2075)
 	m_set 4, MD16, 0x2095	; F10691  set 4,(0x2095)
-sub_F105B8_Skip8:
+DspEffect_MoveCursor_Skip8:
 	pop	xix	; F10695  pop XIX
 	popw	hl	; F10696  pop HL
 	unlk XIZ	; F10697  unlk XIZ
 	ret	; F10699  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1069A
+; DspEffect_StepCursorValue
 ; Called from: in-module: 0xF0F422 0xF0F485 0xF0F4F5 0xF0F52E
 ; Touches: (0x2792) (0x2794) (0x2796) (0x2797)
 ; Calls:   T_IndexedTable_GetByte DspEffect_StepAlgorithm
@@ -31026,10 +31038,21 @@ sub_F105B8_Skip8:
 ;                    0xF1069A is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepCursorValue -- named 2026-09-25 (lane promb).
+; Evidence: does nothing while the block is bypassed (IndexedTable_GetByte(23,
+;          97 + (0x2797)) != 0 -- block byte 23, the flag EqGraph_Draw prints
+;          "BYPASS" for); on cursor row 8 (`cp (0x2794),0x08` at 0xF106B7) it
+;          calls DspEffect_StepAlgorithm (0xF10713); otherwise it takes group
+;          (0x2792) + (0x2794) of the algorithm's EffectDesc_* record, pushes its
+;          slot (+2) and type (+1) and jumps through ScreenTable_F131E4[type]
+;          (0xF10700) to that type's stepper, DspEffect_StepU8 .. StepEqGain.
+;          So the effect page is eight parameter lines (rows 0-7, scrolled by
+;          (0x2792)) plus the algorithm line (row 8).
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F1069A:
+DspEffect_StepCursorValue:
 	link XIZ,0xfff8	; F1069A  link XIZ,0xfff8
 	pushw	hl	; F1069E  push HL
 	push	xix	; F1069F  push XIX
@@ -31041,9 +31064,9 @@ sub_F1069A:
 	call	T_IndexedTable_GetByte	; F106AE  call 0xf42c90
 	pop	xiy	; F106B2  pop XIY
 	cp	a, 0:i3	; F106B3  cp A,0
-	jr	nz, sub_F1069A_Join	; F106B5  jr NZ,0xf10716
+	jr	nz, DspEffect_StepCursorValue_Join	; F106B5  jr NZ,0xf10716
 	m_cp_mi8 MB16, 0x2794, 0x08	; F106B7  cp (0x2794),0x08
-	jr	z, sub_F1069A_Skip	; F106BC  jr Z,0xf10713
+	jr	z, DspEffect_StepCursorValue_Skip	; F106BC  jr Z,0xf10713
 	ld	c, (10130:16)	; F106BE  ld C,(0x2792)
 	add	c, (10132:16)	; F106C2  add C,(0x2794)
 	mul	c, 4	; F106C6  mul C,0x04
@@ -31072,15 +31095,15 @@ sub_F1069A:
 	extz	xbc	; F106FE  extz XBC
 	add	xbc, ScreenTable_F131E4	; F10700  add XBC,0x00f131e4
 	ld	xbc, (xbc)	; F10706  ld XBC,(XBC)
-	lda	xiy, (sub_F1069A_Resume:24)	; F10708  lda XIY,0xf10710
+	lda	xiy, (DspEffect_StepCursorValue_Resume:24)	; F10708  lda XIY,0xf10710
 	push	xiy	; F1070D  push XIY
 	jp	(xbc)	; F1070E  jp T,XBC
-sub_F1069A_Resume:
+DspEffect_StepCursorValue_Resume:
 	pop	xiy	; F10710  pop XIY
-	jr	sub_F1069A_Join	; F10711  jr T,0xf10716
-sub_F1069A_Skip:
+	jr	DspEffect_StepCursorValue_Join	; F10711  jr T,0xf10716
+DspEffect_StepCursorValue_Skip:
 	calr	DspEffect_StepAlgorithm	; F10713  calr 0xf10476
-sub_F1069A_Join:
+DspEffect_StepCursorValue_Join:
 	pop	xix	; F10716  pop XIX
 	popw	hl	; F10717  pop HL
 	unlk XIZ	; F10718  unlk XIZ
@@ -31101,7 +31124,7 @@ sub_F1069A_Join:
 ; Name: DspEffect_StepU8 -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x01, 0x06, 0x07, 0x08,
 ;          0x09, 0x0A, 0x0D, 0x0E, 0x0F, 0x10, 0x12, 0x13, 0x17, 0x19, 0x1D,
-;          0x1E here; sub_F1069A pushes (type, slot) first, so (XIZ+8) is
+;          0x1E here; DspEffect_StepCursorValue pushes (type, slot) first, so (XIZ+8) is
 ;          the type and (XIZ+10) the slot of the current effect block
 ;          (IndexedTable entry 97 + (0x2797)).  It steps an UNSIGNED 8-BIT
 ;          value: `ld L,(XIX)` of the slot, the unsigned tests `cp L,C / jr
@@ -31214,7 +31237,7 @@ DspEffect_StepU8_Skip5:
 ;                   asserted on every emit.  The name IS the address.
 ; Name: DspEffect_StepS8 -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x0C, 0x11 here;
-;          sub_F1069A pushes (type, slot) first, so (XIZ+8) is the type and
+;          DspEffect_StepCursorValue pushes (type, slot) first, so (XIZ+8) is the type and
 ;          (XIZ+10) the slot of the current effect block (IndexedTable entry
 ;          97 + (0x2797)).  It steps a SIGNED 8-BIT value: the same shape as
 ;          DspEffect_StepU8 but the floor test is `jr LT` (61 04 at
@@ -31328,7 +31351,7 @@ DspEffect_StepS8_Skip5:
 ;                   asserted on every emit.  The name IS the address.
 ; Name: DspEffect_StepU16 -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x14, 0x15, 0x16, 0x18,
-;          0x1A, 0x1B, 0x1C here; sub_F1069A pushes (type, slot) first, so
+;          0x1A, 0x1B, 0x1C here; DspEffect_StepCursorValue pushes (type, slot) first, so
 ;          (XIZ+8) is the type and (XIZ+10) the slot of the current effect
 ;          block (IndexedTable entry 97 + (0x2797)).  It steps a 16-BIT
 ;          value: the bounds are read as words (`ld IX,(XBC)` at 0xF108BB)
@@ -31468,7 +31491,7 @@ DspEffect_StepU16_Skip5:
 ;                   asserted on every emit.  The name IS the address.
 ; Name: DspEffect_StepEqFc -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x02, 0x03 here;
-;          sub_F1069A pushes (type, slot) first, so (XIZ+8) is the type and
+;          DspEffect_StepCursorValue pushes (type, slot) first, so (XIZ+8) is the type and
 ;          (XIZ+10) the slot of the current effect block (IndexedTable entry
 ;          97 + (0x2797)).  It steps BITS 6..10 of the 16-bit word at the
 ;          slot: `and BC,0x07C0 / srl 6,BC` at 0xF109F3 -- a PARAMETRIC EQ
@@ -31613,7 +31636,7 @@ DspEffect_StepEqFc_Skip5:
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
 ; Name: DspEffect_StepEqQ -- named 2026-09-25 (lane promb).
-;          ScreenTable_F131E4 sends value type(s) 0x04 here; sub_F1069A
+;          ScreenTable_F131E4 sends value type(s) 0x04 here; DspEffect_StepCursorValue
 ;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
 ;          the slot of the current effect block (IndexedTable entry 97 +
 ;          (0x2797)).  It steps BITS 11..15 of the word: `and BC,0xF800 /
@@ -31758,7 +31781,7 @@ DspEffect_StepEqQ_Skip5:
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
 ; Name: DspEffect_StepEqGain -- named 2026-09-25 (lane promb).
-;          ScreenTable_F131E4 sends value type(s) 0x05 here; sub_F1069A
+;          ScreenTable_F131E4 sends value type(s) 0x05 here; DspEffect_StepCursorValue
 ;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
 ;          the slot of the current effect block (IndexedTable entry 97 +
 ;          (0x2797)).  It steps BITS 0..5 of the word: `and L,0x3F` at
@@ -31899,7 +31922,7 @@ DspEffect_StepEqGain_Skip5:
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
 ; Name: DspEffect_StepSlowFast -- named 2026-09-25 (lane promb).
-;          ScreenTable_F131E4 sends value type(s) 0x0B here; sub_F1069A
+;          ScreenTable_F131E4 sends value type(s) 0x0B here; DspEffect_StepCursorValue
 ;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
 ;          the slot of the current effect block (IndexedTable entry 97 +
 ;          (0x2797)).  It steps nothing itself: it re-pushes its two
@@ -35247,10 +35270,10 @@ EqGraph_DisplayListTemplate:
 ;                stores it to (0x2640) to pick the units string
 ;                (DLTable_HzHzHzHzHzSSSSMsMsMs via DLB_Records_F157A8) and
 ;                indexes ScreenTable_F13264 / ScreenDisplayLists_F132E4 with
-;                4*type; sub_F1069A (0xF1069A) indexes ScreenTable_F131E4 with
+;                4*type; DspEffect_StepCursorValue (0xF1069A) indexes ScreenTable_F131E4 with
 ;                it (the editor).
 ;     +2  slot   the parameter's slot, 1-based; a 16-bit parameter takes two
-;                (DELAY L = 2, DELAY R = 4).  0xFF ends the list: sub_F105B8
+;                (DELAY L = 2, DELAY R = 4).  0xFF ends the list: DspEffect_MoveCursor
 ;                (0xF105B8) stops scrolling at the first group whose +2 is
 ;                0xFF, and sub_F116C4's loop (0xF116E3) stops on it too.
 ;     +3  mark   the group's OWN INDEX, or 0xFF -- in all 435 live groups,
@@ -36221,12 +36244,12 @@ EffectDesc_PeqOverdrDelay:
 ;              select its units string (DLTable_HzHzHzHzHzSSSSMsMsMs row, via
 ;              DLB_Records_F157A8), and times 4 it indexes ScreenTable_F13264
 ;              (the value painter), ScreenDisplayLists_F132E4 (the value list)
-;              and, in sub_F1069A, ScreenTable_F131E4 (the editor).  LFO SPEED
+;              and, in DspEffect_StepCursorValue, ScreenTable_F131E4 (the editor).  LFO SPEED
 ;              is type 0x06 ("Hz"), the delay times 0x14-0x1C ("ms"), REVERB
 ;              TIME 0x1D/0x1E ("s").
 ;      byte 2  a slot number, 1-based, pushed to those handlers; the 16-bit
 ;              delay times take two (DELAY L = 2, DELAY R = 4), and 0xFF marks
-;              an empty group -- the end test sub_F105B8 makes.
+;              an empty group -- the end test DspEffect_MoveCursor makes.
 ;      byte 3  0x00-0x07 or 0xFF: compared with the byte IndexedTable_GetByte
 ;              returns for (22, (0x2797)+97), and (0x2640) becomes 1 on a
 ;              match, 0 for 0xFF, else 2, before the next record is run.
