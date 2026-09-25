@@ -3265,3 +3265,10 @@
 	.set __pad_F63F8F_0x1A8, __pad_F63F8F + 424
 	.set __pad_F63F8F_0x33, __pad_F63F8F + 51
 	.set __pad_F67D15_0x7, __pad_F67D15 + 7
+
+	; FlashWrite_BlockRef_Type6_Skip (0xF1606C) is NOT a code entry: it is byte 9
+	; of the DrumDetailEdit_Entry_05 record (storage/flash_floppy_handlers.s, typed
+	; data since 2026-09-25).  Its only use is a `jrl ugt` in v9
+	; audio/sound_editor_ui.s that decodes data as code (ASCII "URV" next to it).
+	; Kept only so that file still assembles; delete it once that region is data.
+	.set FlashWrite_BlockRef_Type6_Skip, DrumDetailEdit_Entry_05 + 9

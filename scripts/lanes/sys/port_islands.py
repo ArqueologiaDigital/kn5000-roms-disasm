@@ -307,6 +307,7 @@ class Porter:
                     self.dlab_at[e[0]].add(lab)
         self.incdir = os.path.join(ROOT, dst, "maincpu")
         self.keep = None           # --whole: the only dst labels kept
+        self.whole = False
         self.dropped = set()
         self.lo_hi = (0, 0)
 
@@ -366,8 +367,10 @@ class Porter:
             if e[4] <= 0:
                 continue
             labs, body, com = split_line(e[3])
-            if not body or body.startswith((".include", ".incbin", ".byte")):
-                continue          # .byte -> .byte would gain nothing
+            if not body or body.startswith((".include", ".incbin")):
+                continue
+            if body.startswith(".byte") and not self.whole:
+                continue          # .byte -> .byte would gain nothing (--whole: structure)
             a, n = e[0], e[4]
             ds = {dm.get(a + q) for q in range(n)}
             if len(ds) != 1 or None in ds:
@@ -377,10 +380,43 @@ class Porter:
                 out.append((a7, n, k - 1))
         return out
 
+    def data_expr(self, body, a7, n, labs_new):
+        """`.long`/`.short`/`.word`/`.byte` whose operands are expressions of
+        symbols: keep the text when evaluating it with the DST symbol values
+        gives the dst bytes.  -> (newtext, testtext) or None."""
+        m = re.match(r'^\.(long|short|word|byte)\s+(.*)$', body)
+        if not m:
+            return None
+        w = {"long": 4, "short": 2, "word": 2, "byte": 1}[m.group(1)]
+        ops = [x.strip() for x in m.group(2).split(",")]
+        if len(ops) * w != n or not any(IDENT.search(x) for x in ops):
+            return None
+        bd = self.rd[a7 - BASE:a7 - BASE + n]
+        vals = []
+        for i, x in enumerate(ops):
+            env = {}
+            for t in IDENT.findall(x):
+                v = labs_new.get(t, self.sd.get(t))
+                if v is None:
+                    return None
+                env[t] = v
+            try:
+                v = eval(re.sub(r'(?<![\w.$])([A-Za-z_.$][\w.$]*)', lambda mm: "env[%r]" % mm.group(1), x),
+                         {"env": env})
+            except Exception:
+                return None
+            if (v & ((1 << (8 * w)) - 1)) != le(bd, i * w, w):
+                return None
+            vals.append(v)
+        return body, ".%s %s" % (m.group(1), ", ".join(hex(v & ((1 << (8 * w)) - 1)) for v in vals))
+
     def rewrite(self, k, a7, n, labs_new):
         """-> (newtext, testtext) for src line k at dst address a7."""
         e = self.os[k]
         labs, body, com = split_line(e[3])
+        de = self.data_expr(body, a7, n, labs_new)
+        if de is not None:
+            return de[0], de[1], com
         p = body.split(None, 1)
         mn, ops = p[0], (p[1] if len(p) > 1 else "")
         bs = self.rs[e[0] - BASE:e[0] - BASE + n]
@@ -576,8 +612,10 @@ class Porter:
                 for x in range(a + 1, a + it[1]):
                     out.extend(notes.pop(x, []))
                 tag = "; [%s] " % self.src
+                have = {x.strip() for v in notes.values() for x in v}
                 for c in it[6]:
-                    out.append(tag + c.lstrip(";").strip())
+                    if (tag + c.lstrip(";").strip()) not in have:
+                        out.append(tag + c.lstrip(";").strip())
                 com = it[5].strip()
                 if com:
                     com = tag + com.lstrip(";").strip()
@@ -593,17 +631,26 @@ class Porter:
         for x in sorted(notes):
             if x >= hi:
                 out.extend(notes[x])
+        for x in sorted(dlabs):
+            if x >= hi:
+                out.extend("%s:" % lab for lab in dlabs[x])
         return out
 
 
 def fast_build(dst, outdir):
     os.makedirs(outdir, exist_ok=True)
     o, elf, rbin = [os.path.join(outdir, "%s.%s" % (dst, x)) for x in ("o", "elf", "rom")]
+    for f in (o, elf, rbin):          # a stale artefact must never pass for a fresh one
+        if os.path.exists(f):
+            os.unlink(f)
     r = subprocess.run([MC, "-triple=tlcs900", "-filetype=obj", "-I", "%s/maincpu" % dst, "-o", o,
                         "%s/maincpu/kn5000_%s_program.s" % (dst, dst)], cwd=ROOT, capture_output=True, text=True)
     if r.returncode != 0:
         return None, r.stderr[-3000:]
-    subprocess.run([LLD, "-T", "%s/maincpu/maincpu.ld" % dst, "-o", elf, o], cwd=ROOT, capture_output=True)
+    r = subprocess.run([LLD, "-T", "%s/maincpu/maincpu.ld" % dst, "-o", elf, o], cwd=ROOT,
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        return None, r.stderr[-3000:]
     subprocess.run([OBJCOPY, "-O", "binary", elf, rbin], cwd=ROOT, check=True)
     return open(rbin, "rb").read(), ""
 
@@ -624,6 +671,7 @@ def main():
     P = Porter(a.src, a.dst)
     if a.keep is not None:
         P.keep = set(x for x in a.keep.split(",") if x)
+    P.whole = bool(a.whole)
     plan = []
     for rel in a.file:
         if a.whole:
