@@ -1269,21 +1269,22 @@ FileIdentifierStringsTable:
 ; IDENTIFIED 2026-09-25: Boot_LoadDiskData's jump-offset table.  Boot_LoadDiskData
 ; (0x9FC40B) checks disk type 1..8, computes 2*(type-1), loads the word at
 ; boot address 0xFFA140 + 2*(type-1) (ldw_sri) and jumps to
-; Boot_LoadDiskData__ldd_type1 + word (jp_ind).  Types as Boot_DetectDiskType
+; Boot_LoadDiskData__ldd_Program12 + word (jp_ind).  Types as Boot_DetectDiskType
 ; (0x9FBFC4) assigns them from the FileIdentifierStringsTable slot matched:
 ; 1 Program 1/2, 2 Program 2/2, 3 Table 1/2, 4 Table 2/2, 5 CMPCUSTOMDATA,
 ; 6 HD-AEPRG, 7 Program PCK, 8 Table PCK.  The second disks of a set (2, 4)
-; go to the error handler.  NOTE: the __ldd_typeN handler labels count
-; handlers in address order, not disk types (type 3 -> __ldd_type2, ...).
+; go to the error handler.  (The handlers were labelled __ldd_type1..5 and
+; __ldd_type678 in address order until 2026-09-25; renamed after the disk
+; type that reaches them -- scripts/renaming/rename_tdata_loaddiskdata_handlers.sed.)
 Boot_LoadDiskData_JumpOffsets:
-	.short	Boot_LoadDiskData__ldd_type1 - Boot_LoadDiskData__ldd_type1	; type 1
-	.short	Boot_LoadDiskData__ldd_error - Boot_LoadDiskData__ldd_type1	; type 2
-	.short	Boot_LoadDiskData__ldd_type2 - Boot_LoadDiskData__ldd_type1	; type 3
-	.short	Boot_LoadDiskData__ldd_error - Boot_LoadDiskData__ldd_type1	; type 4
-	.short	Boot_LoadDiskData__ldd_type3 - Boot_LoadDiskData__ldd_type1	; type 5
-	.short	Boot_LoadDiskData__ldd_type4 - Boot_LoadDiskData__ldd_type1	; type 6
-	.short	Boot_LoadDiskData__ldd_type5 - Boot_LoadDiskData__ldd_type1	; type 7
-	.short	Boot_LoadDiskData__ldd_type678 - Boot_LoadDiskData__ldd_type1	; type 8
+	.short	Boot_LoadDiskData__ldd_Program12 - Boot_LoadDiskData__ldd_Program12	; type 1
+	.short	Boot_LoadDiskData__ldd_error - Boot_LoadDiskData__ldd_Program12	; type 2
+	.short	Boot_LoadDiskData__ldd_Table12 - Boot_LoadDiskData__ldd_Program12	; type 3
+	.short	Boot_LoadDiskData__ldd_error - Boot_LoadDiskData__ldd_Program12	; type 4
+	.short	Boot_LoadDiskData__ldd_CustomData - Boot_LoadDiskData__ldd_Program12	; type 5
+	.short	Boot_LoadDiskData__ldd_HDAEPrg - Boot_LoadDiskData__ldd_Program12	; type 6
+	.short	Boot_LoadDiskData__ldd_ProgramPCK - Boot_LoadDiskData__ldd_Program12	; type 7
+	.short	Boot_LoadDiskData__ldd_TablePCK - Boot_LoadDiskData__ldd_Program12	; type 8
 
 ;HANDLE_UPDATE_BASE_ADDR		EQU HANDLE_UPDATE_FILE_TYPE_ID_001h
 ;
@@ -2880,7 +2881,7 @@ Boot_DetectDiskType:
 
 	; Check signature at offset 0xA000 -> type 1
 	pushw 0x26	; PUSH 0026h - signature length
-	pushw 0xFF	; PUSH 00FFh - ???
+	pushw 0xFF	; PUSH 00FFh - high word of the pointer 0x00FFA000 = boot alias of FileIdentifierStringsTable
 	pushw 0xA000	; PUSH 0A000h - offset
 	push xiz	; 3e - buffer ptr
 	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC - check signature
@@ -3397,11 +3398,12 @@ Boot_LoadDiskData:
 	add wa, wa	; ADD WA, WA - WA *= 2
 	lda xix, (Boot_LoadDiskData_JumpOffsets + 0x600000:24); LDA XIX, 0xFFA140 - jump table
 	ldw_sri WA, 0x07, 0xF0, 0xE0	; LD WA, (XIX+WA)
-	lda xix, (Boot_LoadDiskData__ldd_type1 + 0x600000:24); LDA XIX, 0xFFC44A - base addr
+	lda xix, (Boot_LoadDiskData__ldd_Program12 + 0x600000:24); LDA XIX, 0xFFC44A - base addr
 	jp_ind 8, 0x07, 0xF0, 0xE0	; JP T, XIX+WA - dispatch
 
-; Type 1 handler (0x9FC44A): Table data disk 1
-Boot_LoadDiskData__ldd_type1:
+; Disk type 1 handler, "Program DATA FILE 1/2" (0x9FC44A): copies disk 1 to
+; 0x800000, asks for disk 2 (type 2) and copies it to 0x900000
+Boot_LoadDiskData__ldd_Program12:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	ldw wa, 0x24	; LD WA, 0x0024 - start sector
@@ -3413,8 +3415,10 @@ Boot_LoadDiskData__ldd_type1:
 	ld xbc, 0x900000	; LD XBC, 0x00900000
 	jr Boot_LoadDiskData__ldd_copy2	; 68 1e
 
-; Type 2 handler (0x9FC46A): Table data disk 2 (start from disk 2)
-Boot_LoadDiskData__ldd_type2:
+; Disk type 3 handler, "Table DATA FILE 1/2" (0x9FC46A): same shape as type 1,
+; asking for disk type 4 (Table 2/2) second.  Boot_Init skips the update for
+; types 3 and 8 (cp l,3 / cp l,8 -> Boot_PrepareJump)
+Boot_LoadDiskData__ldd_Table12:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	ldw wa, 0x24	; LD WA, 0x0024
@@ -3429,8 +3433,8 @@ Boot_LoadDiskData__ldd_copy2:
 	calr Boot_CopySectors	; CALR Boot_CopySectors
 	jr Boot_LoadDiskData__ldd_done	; 68 55
 
-; Type 3 handler (0x9FC48D): Custom data flash
-Boot_LoadDiskData__ldd_type3:
+; Disk type 5 handler, "CMPCUSTOMDATA" (0x9FC48D): Custom data flash
+Boot_LoadDiskData__ldd_CustomData:
 	ld wa, 1:i3	; LD WA, 1
 	call Flash_ChipErase_16bit_Wait + 0x600000	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
@@ -3440,8 +3444,8 @@ Boot_LoadDiskData__ldd_type3:
 	ld xde, 0x300000	; LD XDE, 0x00300000 - dest
 	jr Boot_LoadDiskData__ldd_copy_ext	; 68 16
 
-; Type 4 handler (0x9FC4A5): HDAE5000 firmware
-Boot_LoadDiskData__ldd_type4:
+; Disk type 6 handler, "HD-AEPRG" (0x9FC4A5): HDAE5000 firmware
+Boot_LoadDiskData__ldd_HDAEPrg:
 	ld wa, 2:i3	; LD WA, 2
 	call Flash_ChipErase_16bit_Wait + 0x600000	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
@@ -3454,8 +3458,8 @@ Boot_LoadDiskData__ldd_copy_ext:
 	calr Boot_CopySectorsEx	; CALR Boot_CopySectorsEx
 	jr Boot_LoadDiskData__ldd_done	; 68 22
 
-; Type 5 handler (0x9FC4C0): Erase and reprogram
-Boot_LoadDiskData__ldd_type5:
+; Disk type 7 handler, "Program DATA FILE PCK" (0x9FC4C0): Erase and reprogram
+Boot_LoadDiskData__ldd_ProgramPCK:
 	ld wa, 1:i3	; LD WA, 1
 	ld xbc, 0x3FFFFF	; LD XBC, 0x003FFFFF - end addr
 	call Flash_SectorErase_16bit + 0x600000	; CALL 0xFFBA17 (Flash_SectorErase)
@@ -3465,8 +3469,9 @@ Boot_LoadDiskData__ldd_type5:
 	calr LZSS_ParseHeader	; CALR Boot_ProgramCustomFlash
 	jr Boot_LoadDiskData__ldd_done	; 68 09
 
-; Type 6/7/8 handlers continue
-Boot_LoadDiskData__ldd_type678:
+; Disk type 8 handler, "Table DATA FILE PCK" (0x9FC4D9) -- the only type that
+; reaches this entry (the old "Type 6/7/8" note predates the jump table)
+Boot_LoadDiskData__ldd_TablePCK:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	calr LZSS_Decompress	; CALR Flash_ProgramHDAE_Initialization
