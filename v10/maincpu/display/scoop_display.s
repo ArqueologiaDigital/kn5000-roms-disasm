@@ -436,6 +436,7 @@ UIRender_LoadTwoDescriptors:
 	ret
 
 	; Byte data, 129 B.  Read by UIRender_LoadTwoDescriptors (0xEF5DA3): `ld xiy, UIRender_DescriptorTable1`
+	; reader UIRender_LoadTwoDescriptors: `ld xiy, UIRender_DescriptorTable1`
 UIRender_DescriptorTable1:
 	.byte	0x0e, 0x08, 0x12, 0x06, 0x06, 0x00, 0x13, 0x00, 0x0e, 0x08, 0x52, 0x0c, 0x06, 0x00, 0x13, 0x00
 	.byte	0x0e, 0x08, 0x92, 0x12, 0x06, 0x00, 0x13, 0x00, 0x1b, 0x0a, 0x0b, 0x01, 0x9e, 0x00, 0x35, 0x01
@@ -2425,15 +2426,19 @@ TitleString_NullRet:
 	ret
 
 	; Lcd text, 5 B.  Read by Display_TitleString_Mode0 (0xEF71C0): `ld xiy, StringData_Tempo`
+	; reader Display_TitleString_Mode0: `ld xiy, StringData_Tempo`
 StringData_Tempo:	.ascii "TEMPO"
 
 	; Lcd text, 6 B.  Read by Display_TitleString_Mode2 (0xEF71D7): `ld xiy, StringData_Repeat`
+	; reader Display_TitleString_Mode2: `ld xiy, StringData_Repeat`
 StringData_Repeat:	.ascii "REPEAT"
 
 	; Lcd text, 5 B.  Read by Display_TitleString_Mode3 (0xEF71E2): `ld xiy, StringData_Start`
+	; reader Display_TitleString_Mode3: `ld xiy, StringData_Start`
 StringData_Start:	.ascii "START"
 
 	; Lcd text, 4 B.  Read by Display_TitleString_Mode4 (0xEF71ED): `ld xiy, StringData_Stop`
+	; reader Display_TitleString_Mode4: `ld xiy, StringData_Stop`
 StringData_Stop:	.ascii "STOP"
 
 	; Lcd text, 6 B.  Read by TitleString_LoadRhythmLabel (0xEF72A1): `ld xiy, StringData_Rhythm`
@@ -2442,6 +2447,7 @@ StringData_Stop:	.ascii "STOP"
 StringData_Rhythm:	.ascii "RHYTHM"
 
 	; Lcd text, 40 B.  Read by Display_TitleString_Mode5 (0xEF71F8): `ld xiy, StringData_VariNames`
+	; reader Display_TitleString_Mode5: `ld xiy, StringData_VariNames` then `lda_dri xiy, 0x07, 0xf4, 0xe0`
 StringData_VariNames:	.ascii "VARI 1    VARI 2    VARI 3    VARI 4    "
 
 	; Lcd text, 128 B.  Read by TitleString_BuildFromBank (0xEF728B): `ld xiy, StringData_StyleSections`
@@ -5963,6 +5969,7 @@ VoiceCtrl_ParamSetupBytecode_Skip11:
 	ld	a, 1:opc
 	ret
 	; Byte data, 18 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl`
+	; reader VoiceCtrl_ParamSetupBytecode: `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl` then `ld_rr8b a, xhl, a`
 VoiceCtrl_ParamSetupBytecode_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 	.byte	0x00, 0x00
@@ -5972,6 +5979,7 @@ VoiceCtrl_ParamSetupBytecode_Tbl2:
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte	0xff, 0xff, 0xff, 0xff
 	; Byte data, 20 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xde, VoiceCtrl_ParamSetupBytecode_Tbl3`
+	; reader VoiceCtrl_ParamSetupBytecode: `ld xde, VoiceCtrl_ParamSetupBytecode_Tbl3` then `ld_rrb l, xde, hl`
 VoiceCtrl_ParamSetupBytecode_Tbl3:
 	.byte	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte	0xff, 0xff, 0xff, 0xff
@@ -6530,6 +6538,7 @@ SerialPort_ModeHandler_0_Skip8:
 	ld	(0x342e:16), a
 	ret
 	; Byte data, 28 B.  Read by SerialPort_ModeHandler_0 (0xEF9E03): `ld xix, ScoopParam_ValueTable`
+	; reader SerialPort_ModeHandler_0: `ld xix, ScoopParam_ValueTable` then `ld_rrw bc, xix, hl`
 ScoopParam_ValueTable:
 	.byte	0x00, 0x00, 0x08, 0x00, 0x0c, 0x00, 0x10, 0x00, 0x18, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00
 	.byte	0x60, 0x00, 0xc0, 0x00, 0x80, 0x01, 0x00, 0x03, 0x80, 0x04, 0x00, 0x06
@@ -7206,6 +7215,7 @@ ScoopParam_ValueTable_Helper2:
 	stb_d8	(0x0d65), a
 	ret
 	; Byte data, 24 B.  Read by PortConfig_Handler_0 (0xEFA565): `ld xhl, PortConfig_DataTable_A`
+	; reader PortConfig_Handler_0: `ld xhl, PortConfig_DataTable_A` then `ld_rr8b a, xhl, a`
 PortConfig_DataTable_A:
 	.byte	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x02
 	.byte	0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
@@ -7259,6 +7269,7 @@ ScoopParam_ValueTable_Helper5:
 	ld (3567:16), a
 	ret
 	; Byte data, 4 B.  Read by PortConfig_Handler_0 (0xEFA565): `ld xhl, PortConfig_Handler_0_Tbl`
+	; reader PortConfig_Handler_0: `ld xhl, PortConfig_Handler_0_Tbl` then `ld_rr8b a, xhl, a`
 PortConfig_Handler_0_Tbl:
 	.byte	0x00, 0x00, 0x00, 0x0c
 PortConfig_DataTable_B_Return:
@@ -7339,9 +7350,11 @@ ScoopParam_ValueTable_Helper6_Skip:
 ScoopParam_ValueTable_Helper6_Return:
 	ret
 	; Byte data, 6 B.  Read by ClockConfig_Handler_0 (0xEFA7BE): `ld xiy, ClockConfig_Handler_0_Tbl`
+	; reader ClockConfig_Handler_0: `ld xiy, ClockConfig_Handler_0_Tbl`
 ClockConfig_Handler_0_Tbl:
 	.byte	0xc0, 0x00, 0x48, 0x00, 0x00, 0x00
 	; Byte data, 6 B.  Read by ClockConfig_Handler_0 (0xEFA7BE): `ld xiy, ClockConfig_Handler_0_Tbl2`
+	; reader ClockConfig_Handler_0: `ld xiy, ClockConfig_Handler_0_Tbl2`
 ClockConfig_Handler_0_Tbl2:
 	.byte	0xb0, 0x00, 0x48, 0x07, 0x00, 0x30
 ScoopParam_ValueTable_Sub_Helper2:
@@ -7711,6 +7724,7 @@ MemoryConfig_Handler_Table_Code_Skip3:
 	ldto_lerp	xiy, 56
 	ret
 	; Byte data, 97 B.  Read by SysEx_BytecodeDispatcher (0xEFAADB): `ld xiy, SysEx_BytecodeDispatcher_Tbl`
+	; reader SysEx_BytecodeDispatcher: `ld xiy, SysEx_BytecodeDispatcher_Tbl` then `lda_rr xiy, xiy, hl`
 SysEx_BytecodeDispatcher_Tbl:
 	.byte	0x04, 0x04, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x08, 0x08, 0x00, 0x03, 0x00, 0x08, 0x00, 0x00
 	.byte	0x10, 0x10, 0x00, 0x05, 0x00, 0x10, 0x2f, 0x02, 0x20, 0x20, 0x00, 0x05, 0x00, 0x20, 0x2f, 0x02
@@ -8863,10 +8877,12 @@ SystemInit_StepHandler_0_Tbl:
 	.byte	0x00, 0x04, 0x60, 0x04, 0x00, 0x03, 0x60, 0x03, 0x00, 0x02, 0x60, 0x02, 0x30, 0x01, 0x90, 0x01
 	.byte	0x00, 0x01, 0x60, 0x01, 0x30, 0x00, 0x30, 0x01
 	; Byte data, 6 B.  Read by SysEx_BytecodeDispatcher (0xEFAADB): `ld xix, SysInit_BytecodeBlock`
+	; reader SysEx_BytecodeDispatcher: `ld xix, SysInit_BytecodeBlock` then `ld_rrb w, xix, hl`
 SysInit_BytecodeBlock:
 	.ascii	"P@0 "
 	.byte	0x10, 0x00
 	; Byte data, 6 B.  Read by SysEx_BytecodeDispatcher (0xEFAADB): `ld xde, SysEx_BytecodeDispatcher_Tbl2`
+	; reader SysEx_BytecodeDispatcher: `ld xde, SysEx_BytecodeDispatcher_Tbl2` then `ld_rrb w, xde, hl`
 SysEx_BytecodeDispatcher_Tbl2:
 	.byte	0x01, 0x02, 0x03, 0x05, 0x04, 0x06
 	ld	b, (0xcef1:16)
@@ -11036,6 +11052,7 @@ VoiceSlot_StatusRet_DispatchTbl:
 VoiceSlot_StatusRet_Tbl:
 	.byte	0x00, 0x05, 0x05, 0x0f
 	; Byte data, 12 B.  Read by VoiceSlot_StatusRet (0xEFC7B2): `ld xhl, VoiceSlot_StatusRet_Tbl2`
+	; reader VoiceSlot_StatusRet: `ld xhl, VoiceSlot_StatusRet_Tbl2` then `ld_rr8b a, xhl, a`
 VoiceSlot_StatusRet_Tbl2:
 	.byte	0x00, 0x06, 0x04, 0x05, 0x03, 0x07, 0x02, 0x07, 0x01, 0x07, 0x07, 0x07
 
@@ -12046,6 +12063,7 @@ SubCPU_ToneParamDisplay_Join:
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 40 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xiy, Str_PanKeyShiftTuning`
+	; reader SubCPU_ToneParamDisplay: `ld xiy, Str_PanKeyShiftTuning` then `lda_rr xiy, xiy, wa`
 Str_PanKeyShiftTuning:
 	.byte 0x50, 0x41
 	.ascii "N      :KEY SHIFT:TUNING   :BEND SENS:"
@@ -12065,6 +12083,7 @@ SubCPU_ToneDispatch:
 	.long 0x0000fb3c, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0x0000faee, 0x0000fb08, 0x0000fb22
 	; Byte data, 4 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xiy, SubCPU_ToneParamDisplay_Tbl`
+	; reader SubCPU_ToneParamDisplay: `ld xiy, SubCPU_ToneParamDisplay_Tbl` then `ld_rrb a, xiy, hl`
 SubCPU_ToneParamDisplay_Tbl:
 	.byte	0x08, 0x09, 0x0a, 0x0b
 	; Entry 1 of SubCPU_ToneParamRet (a code pointer the table holds).
@@ -13792,6 +13811,7 @@ DisplayStr_BytecodeBlock_C_Skip:
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE71): `ld xiy, Str_TempoEq`
+	; reader DisplayStr_BytecodeBlock_C: `ld xiy, Str_TempoEq`
 Str_TempoEq:
 	.ascii	"  TEMPO  "
 	.byte	0x15
@@ -13819,6 +13839,7 @@ DisplayStr_BytecodeBlock_C_Skip2:
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE71): `ld xiy, DisplayStr_TempoString`
+	; reader DisplayStr_BytecodeBlock_C: `ld xiy, DisplayStr_TempoString`
 DisplayStr_TempoString:
 	.ascii	"  TEMPO  "
 	.byte	0x15
@@ -14049,9 +14070,11 @@ Display_BytecodeBlock_F_Skip5:
 	ldir85
 	ret
 	; Byte data, 16 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xhl, Display_BytecodeBlock_F_Tbl`
+	; reader Display_BytecodeBlock_F: `ld xhl, Display_BytecodeBlock_F_Tbl` then `ld_rr8b a, xhl, a`
 Display_BytecodeBlock_F_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 	; Byte data, 80 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Display_BytecodeBlock_F_Tbl2`
+	; reader Display_BytecodeBlock_F: `ld xiy, Display_BytecodeBlock_F_Tbl2` then `ld_rr8b a, xhl, a`
 Display_BytecodeBlock_F_Tbl2:
 	.ascii	"RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P15 KBP DUALMSP ----"
 	.byte	0x01, 0x02, 0x03, 0x04
@@ -14118,9 +14141,11 @@ Display_BytecodeBlock_F_Return2:
 Str_PBendModExpEq:
 	.ascii	"        P.BEND= MOD.  = EXP.  = P.MEM = AFT.  =                         "
 	; Lcd text, 3 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Str_On2`
+	; reader Display_BytecodeBlock_F: `ld xiy, Str_On2`
 Str_On2:
 	.ascii	" ON"
 	; Lcd text, 3 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Str_Off2`
+	; reader Display_BytecodeBlock_F: `ld xiy, Str_Off2`
 Str_Off2:
 	.ascii	"OFF"
 	xor	xwa, xwa
@@ -14184,6 +14209,7 @@ Display_BytecodeBlock_F_Skip10:
 	call	Display_UpdateRegion3
 	ret
 	; Byte data, 19 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Display_BytecodeBlock_F_Tbl3`
+	; reader Display_BytecodeBlock_F: `ld xiy, Display_BytecodeBlock_F_Tbl3`
 Display_BytecodeBlock_F_Tbl3:
 	.ascii	" TEMPO   "
 	.byte	0x15
@@ -14592,6 +14618,7 @@ ParamPopup_PartVolume:
 	call	Display_UpdateRegion3
 	ret
 	; "VOLUME=", 7 chars copied by ParamPopup_PartVolume (0xEFF8DA).
+	; reader ParamPopup_PartVolume: `ld xiy, Str_VolumeEq` then `ld bc, 7` + ldir (7 bytes copied)
 Str_VolumeEq:
 	.ascii "VOLUME="
 	; StringData_PartNames: 21 x 4 chars (RT1 RT2 LFT P 4 .. P15 KBP AC1 AC2 AC3 XXXX
@@ -14631,6 +14658,7 @@ ParamPopup_PartPanpot:
 	call	Display_UpdateRegion3
 	ret
 	; "PANPOT=", 7 chars copied by ParamPopup_PartPanpot (0xEFF98D).
+	; reader ParamPopup_PartPanpot: `ld xiy, Str_PanpotEq` then `ld bc, 7` + ldir (7 bytes copied)
 Str_PanpotEq:
 	.ascii	"PANPOT="
 	; ParamPopup_PartKeyShift -- LCD parameter pop-up.
@@ -14671,6 +14699,7 @@ StringData_PartNames_Code_Skip:
 	call	Display_UpdateRegion3
 	ret
 	; "KEY SHIFT=", 10 chars copied by ParamPopup_PartKeyShift (0xEFF9EC).
+	; reader ParamPopup_PartKeyShift: `ld xiy, Str_KeyShiftEq` then `ld bc, 10` + ldir (10 bytes copied)
 Str_KeyShiftEq:
 	.ascii	"KEY SHIFT="
 	; ParamPopup_PartTuning -- LCD parameter pop-up.
@@ -14747,6 +14776,7 @@ ParamPopup_PartBendSense:
 	call	Display_UpdateRegion3
 	ret
 	; "BEND SENS=", 10 chars copied by ParamPopup_PartBendSense (0xEFFB02).
+	; reader ParamPopup_PartBendSense: `ld xiy, Str_BendSensEq` then `ld bc, 10` + ldir (10 bytes copied)
 Str_BendSensEq:
 	.ascii "BEND SENS="
 	; ParamPopup_PartSustain -- LCD parameter pop-up.
@@ -14783,6 +14813,7 @@ StringData_PartNames_Code_Skip3:
 	call	Display_UpdateRegion3
 	ret
 	; "SUSTAIN ", 8 chars copied by ParamPopup_PartSustain (0xEFFB65).
+	; reader ParamPopup_PartSustain: `ld xiy, Str_Sustain` then `ld bc, 8` + ldir (8 bytes copied)
 Str_Sustain:
 	.ascii	"SUSTAIN "
 	; 2 x 4 chars "ON  " / "OFF ": +0 or +4 selected by a flag bit and 3 or 4
@@ -14821,6 +14852,7 @@ StringData_PartNames_Code_Skip4:
 	call	Display_UpdateRegion3
 	ret
 	; "DSP EFFECT ", 11 chars copied by ParamPopup_PartDspEffectOff (0xEFFBD0).
+	; reader ParamPopup_PartDspEffectOff: `ld xiy, Str_DspEffect` then `ld bc, 11` + ldir (11 bytes copied)
 Str_DspEffect:
 	.ascii	"DSP EFFECT "
 	; ParamPopup_PartEffect -- LCD parameter pop-up.
@@ -14890,6 +14922,7 @@ StringData_EffectLabel_Code_Skip:
 	call	Display_UpdateRegion3
 	ret
 	; "DSP EFFECT=", 11 chars copied by ParamPopup_PartDspEffectLevel (0xEFFC90).
+	; reader ParamPopup_PartDspEffectLevel: `ld xiy, Str_DspEffectEq` then `ld bc, 11` + ldir (11 bytes copied)
 Str_DspEffectEq:
 	.ascii	"DSP EFFECT="
 	; ParamPopup_PartReverb -- LCD parameter pop-up.
@@ -14923,6 +14956,7 @@ StringData_EffectLabel_Code_Skip2:
 	call	Display_UpdateRegion3
 	ret
 	; "REVERB=", 7 chars copied by ParamPopup_PartReverb (0xEFFCF0).
+	; reader ParamPopup_PartReverb: `ld xiy, Str_ReverbEq` then `ld bc, 7` + ldir (7 bytes copied)
 Str_ReverbEq:
 	.ascii	"REVERB="
 	; ParamPopup_PanelMemory -- LCD parameter pop-up.
@@ -14969,6 +15003,7 @@ StringData_EffectLabel_Code_Skip3:
 	call	Display_UpdateRegion3
 	ret
 	; "PANEL MEMORY=", 13 chars copied by ParamPopup_PanelMemory (0xEFFD4B).
+	; reader ParamPopup_PanelMemory: `ld xiy, Str_PanelMemoryEq` then `ld bc, 13` + ldir (13 bytes copied)
 Str_PanelMemoryEq:
 	.ascii "PANEL MEMORY="
 	; ParamPopup_FadeIn -- LCD parameter pop-up.
@@ -15001,12 +15036,15 @@ StringData_EffectLabel_Code_Skip4:
 	call	Display_UpdateRegion3
 	ret
 	; "FADE-IN ", 8 chars copied by ParamPopup_FadeIn (0xEFFDC1).
+	; reader ParamPopup_FadeIn: `ld xiy, Str_FadeIn` then `ld bc, 8` + ldir (8 bytes copied)
 Str_FadeIn:
 	.ascii	"FADE-IN "
 	; "ON ", 3 chars copied by ParamPopup_FadeIn and ParamPopup_FadeOut.
+	; reader ParamPopup_FadeIn: `ld xiy, Str_On` then `ld bc, 3` + ldir (3 bytes copied)
 Str_On:
 	.ascii	"ON "
 	; "OFF", 3 chars copied by ParamPopup_FadeIn and ParamPopup_FadeOut.
+	; reader ParamPopup_FadeIn: `ld xiy, Str_Off` then `ld bc, 3` + ldir (3 bytes copied)
 Str_Off:
 	.ascii	"OFF"
 	; ParamPopup_FadeOut -- LCD parameter pop-up.
@@ -15038,6 +15076,7 @@ ParamPopup_FadeOut:
 	call	Display_UpdateRegion3
 	ret
 	; "FADE-OUT ", 9 chars copied by ParamPopup_FadeOut (0xEFFE16).
+	; reader ParamPopup_FadeOut: `ld xiy, Str_FadeOut` then `ld bc, 9` + ldir (9 bytes copied)
 Str_FadeOut:
 	.ascii "FADE-OUT "
 	; ParamPopup_ApcMode -- LCD parameter pop-up.
@@ -15099,6 +15138,7 @@ StringData_APCModeNames_Code_Skip22:
 	call	Display_UpdateRegion3
 	ret
 	; "APC MEMORY ON ", 14 chars copied by ParamPopup_ApcMemory (0xEFFF31).
+	; reader ParamPopup_ApcMemory: `ld xiy, Str_ApcMemoryOn` then `ld bc, 14` + ldir (14 bytes copied)
 Str_ApcMemoryOn:
 	.ascii	"APC MEMORY ON "
 	; ParamPopup_AccompPart -- LCD parameter pop-up.
@@ -15187,6 +15227,7 @@ StringData_APCModeNames_Code_Skip26:
 	call	Display_UpdateRegion3
 	ret
 	; "DYNAMIC ACCOMP ON ", 17 chars copied by ParamPopup_DynamicAccomp (0xF00019).
+	; reader ParamPopup_DynamicAccomp: `ld xiy, Str_DynamicAccompOn` then `ld bc, 17` + ldir (17 bytes copied)
 Str_DynamicAccompOn:
 	.ascii "DYNAMIC ACCOMP ON "
 	; ParamPopup_TechniChord -- LCD parameter pop-up.
@@ -15217,6 +15258,7 @@ StringData_APCModeNames_Code_Skip28:
 	call	Display_UpdateRegion3
 	ret
 	; "TECHNI-CHORD ON ", 16 chars copied by ParamPopup_TechniChord (0xF0006B).
+	; reader ParamPopup_TechniChord: `ld xiy, Str_TechniChordOn` then `ld bc, 16` + ldir (16 bytes copied)
 Str_TechniChordOn:
 	.ascii "TECHNI-CHORD ON "
 	ret
@@ -15347,6 +15389,7 @@ StringData_APCModeNames_Code_Skip34:
 	call	Display_UpdateRegion3
 	ret
 	; "TREMOLO ", 8 chars copied by ParamPopup_PartTremolo (0xF00236).
+	; reader ParamPopup_PartTremolo: `ld xiy, Str_Tremolo` then `ld bc, 8` + ldir (8 bytes copied)
 Str_Tremolo:
 	.ascii "TREMOLO "
 	ret
@@ -15385,6 +15428,7 @@ StringData_APCModeNames_Code_Skip36:
 	call	Display_UpdateRegion3
 	ret
 	; "TOTAL REVERB ", 13 chars copied by ParamPopup_TotalReverb (0xF002B5).
+	; reader ParamPopup_TotalReverb: `ld xiy, Str_TotalReverb` then `ld bc, 13` + ldir (13 bytes copied)
 Str_TotalReverb:
 	.ascii	"TOTAL REVERB "
 	ret
@@ -15458,6 +15502,7 @@ StringData_APCModeNames_Code_Skip39:
 	call	Display_UpdateRegion3
 	ret
 	; "M.S.A. ", 7 chars copied by ParamPopup_Msa (0xF00379).
+	; reader ParamPopup_Msa: `ld xiy, Str_Msa` then `ld bc, 7` + ldir (7 bytes copied)
 Str_Msa:
 	.ascii	"M.S.A. "
 	; 4 x 4 chars OFF / ON / #2 / #3, read by ParamPopup_Msa (0xF00379):
