@@ -45,21 +45,65 @@ MiddleFuncCall_DispatchData:
 	push	xix
 	push	xiz
 	call	SetWall_MiscDataAndCode_0x2
-	.ascii "^\\[Zhi:;<>"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	SqTrSel_CaseC
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call MiddleFuncCall_DispatchData_Code_Helper
 	pop xiz
 	pop xix
-	.ascii "[Zh[:;<>"
+	pop	xhl
+	pop	xde
+	jr	91
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call MiddleFuncCall_DispatchData_Code_Helper2
-	.ascii "^\\[ZhM:;<>"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	77
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	SetWall_InitCallSequences
-	.ascii "^\\[Zh?:;<>"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	63
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call MiddleFuncCall_DispatchData_Code_Helper3
-	.ascii "^\\[Zh1:;<>"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	SqTrSel_CaseC
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call SetWall_InlineCodeBlock_Sub
 	pop xiz
 	pop xix
-	.ascii "[Zh#:;<>"
+	pop	xhl
+	pop	xde
+	jr	SqTrSel_CaseC
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	SetWall_InlineCodeBlock_0xC8
 	pop	xiz
 	pop	xix

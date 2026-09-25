@@ -3331,7 +3331,11 @@ TaskSched_ChangePriority_Inline_Return:
 	pop xwa
 	ret
 
-TaskSched_TCBTemplate:	.ascii "(<=;"
+TaskSched_TCBTemplate:
+	pushw	wa
+	push	xix
+	push	xiy
+	push	xhl
 	ei	0x06
 	mul	a, 12
 	add	wa, 1149

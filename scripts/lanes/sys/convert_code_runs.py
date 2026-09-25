@@ -64,7 +64,7 @@ def main():
     R = rm.Reframer(a.image)
     regs = [r for r in json.load(open(a.census))["regions"]
             if r["image"] == a.image and r["rel"] in a.file and r["grade"] != "CODE"
-            and (r.get("code_suspect") or r.get("embedded_in_code")) and ".byte" in r["details"]]
+            and (r.get("code_suspect") or r.get("embedded_in_code")) and (".byte" in r["details"] or ".ascii" in r["details"])]
     plans = collections.defaultdict(list)
     for r in sorted(regs, key=lambda r: (r["rel"], r["addr"])):
         lo, hi = r["addr"], r["addr"] + r["size"]
@@ -105,6 +105,16 @@ def main():
                         corr.append("-> %s" % R.addr_label[v])
             if len(ins) == 1:
                 corr.append("single instruction")
+            # sandwiched: an instruction line ends exactly at lo and another
+            # starts exactly at hi, and unidasm run from the former's start
+            # has instruction boundaries at both lo and hi
+            pv = [e for e in rows if e[0] is not None and e[4] > 0 and e[0] + e[4] == lo]
+            nx = [e for e in rows if e[0] == hi and e[4] > 0]
+            if pv and nx and rm.is_insn(pi.split_line(pv[-1][3])[1]) and rm.is_insn(pi.split_line(nx[0][3])[1]):
+                u = rm.unidasm(R.rom, pv[-1][0], hi + 8)
+                st = {x[0] for x in u}
+                if lo in st and hi in st:
+                    corr.append("continuous with the instructions on both sides")
             if not corr:
                 why = "no corroboration (no internal branch to an instruction start, no call/jp to a known label)"
         # source lines of the run
@@ -114,8 +124,8 @@ def main():
         if not why:
             if rows[idx[0]][0] != lo or rows[idx[-1]][0] + rows[idx[-1]][4] != hi:
                 why = "run does not start/end on source line boundaries"
-            elif any(not pi.split_line(rows[i][3])[1].startswith(".byte") for i in idx):
-                why = "run holds non-.byte lines"
+            elif any(not pi.split_line(rows[i][3])[1].startswith((".byte", ".ascii")) for i in idx):
+                why = "run holds lines other than .byte/.ascii"
         starts = {x[0] for x in ins}
         if not why:
             for i in range(idx[0], idx[-1] + 1):

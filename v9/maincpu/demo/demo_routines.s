@@ -84,10 +84,16 @@ DemoStyleTtlFunc:
 	lda xix, (DemoStyle_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoStyle_DispatchTable:
-	.ascii ":;<>"
-	.byte 0x1d, 0xd2, 0x69, 0xf8
-	.ascii "^\\[Zx"
-	.byte 0x80, 0x00
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	FDemo_IndicatorSetup
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jrl	DemoStyleTtlFunc_Exit
 
 DemoStyle_InputHandler:
 	cp xde, 0xf
@@ -159,9 +165,16 @@ DemoSoundTtlFunc:
 	lda xix, (DemoSound_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoSound_DispatchTable:
-	.ascii ":;<>"
-	.byte 0x1d, 0xd2, 0x69, 0xf8
-	.ascii "^\\[Zh|"
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	FDemo_IndicatorSetup
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	DemoSoundTtlFunc_Exit
 
 DemoSound_InputHandler:
 	cp xde, 0xf
@@ -233,9 +246,16 @@ DemoRhyTtlFunc:
 	lda xix, (DemoRhythm_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoRhythm_DispatchTable:
-	.ascii ":;<>"
-	.byte 0x1d, 0xd2, 0x69, 0xf8
-	.ascii "^\\[Zh|"
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	FDemo_IndicatorSetup
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	DemoRhyTtlFunc_Exit
 
 DemoRhythm_InputHandler:
 	cp xde, 0xf

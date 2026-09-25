@@ -60,6 +60,7 @@ ABS = re.compile(r'^(halt|incf|decf|ldf|normal|max|min|swi)\b|^(jr|jrl)\s+[a-z]+
                  r'|^(jr|jrl)\s+f\s*,')
 UABS = re.compile(r'^(halt|incf|decf|ldf|normal|max|min|swi|db)\b|^(jr|jrl)\s+f,', re.I)
 BACK, FWD, RESYNC = 12, 40, 4
+SHORT = int(os.environ.get('RFM_SHORT', '8'))   # max bytes of a data run treated as a misframe
 BRANCH = {"jr", "jrl", "calr", "djnz", "djnz16", "djnz8"}
 # llvm-mc printer name -> the parser spelling used across the tree
 CANON = {"cpdi8": "cp\t(%s:16), %s", "cpdi16": "cpw\t(%s:16), %s"}
@@ -136,7 +137,7 @@ class Reframer:
     @staticmethod
     def shortdata(e):
         b = body_of(e[3])
-        return bool(b) and e[0] is not None and 0 < e[4] <= 8 and b.startswith((".byte", ".ascii"))
+        return bool(b) and e[0] is not None and 0 < e[4] <= SHORT and b.startswith((".byte", ".ascii"))
 
     def data_run_bytes(self, rows, i):
         """total bytes of the run of consecutive data lines containing line i"""
@@ -159,7 +160,7 @@ class Reframer:
                 continue
             if is_insn(b) and ABS.search(b):
                 idx.append(i)
-            elif self.shortdata(e) and self.data_run_bytes(rows, i) <= 8:
+            elif self.shortdata(e) and self.data_run_bytes(rows, i) <= SHORT:
                 # short .byte / .ascii between instructions (or other short data)
                 prv = next((rows[j] for j in range(i - 1, -1, -1) if body_of(rows[j][3])), None)
                 nxt = next((rows[j] for j in range(i + 1, len(rows)) if body_of(rows[j][3])), None)
@@ -187,7 +188,7 @@ class Reframer:
             b = body_of(e[3])
             if b and e[0] is not None and e[4] > 0:
                 if not is_insn(b):
-                    if self.shortdata(e) and self.data_run_bytes(rows, j) <= 8:
+                    if self.shortdata(e) and self.data_run_bytes(rows, j) <= SHORT:
                         j -= 1
                         continue
                     break

@@ -8840,12 +8840,14 @@ FileIO_ErrorCodeByteBlock_Skip4:
 	cp a, 119
 	jr	z, FileIO_ErrorCodeByteBlock_Skip5
 	cp	a, 108
-	jr	z, 13
+	jr	z, FileIO_ErrorCodeByteBlock_Loop2
 	cp	a, 97
 	ret	nz
 	ldw	wa, 97
 	ldw	bc, 0x0064
-	.ascii "h>xLþ"
+	jr	FileIO_ErrorCodeByteBlock_Join3
+FileIO_ErrorCodeByteBlock_Loop2:
+	jrl	FileIO_DetectFileTypeAndPost
 FileIO_ErrorCodeByteBlock_Skip5:
 	extz	wa
 	jr	FileIO_ErrorCodeByteBlock_Join2
@@ -8867,11 +8869,12 @@ FileIO_ErrorCodeByteBlock_Skip6:
 	cp a, 119
 	jr	z, FileIO_ErrorCodeByteBlock_Skip7
 	cp	a, 108
-	jr	z, -51
+	jr	z, FileIO_ErrorCodeByteBlock_Loop2
 	cp	a, 97
 	ret	nz
 	ldw	wa, 97
 	ldw	bc, 100
+FileIO_ErrorCodeByteBlock_Join3:
 	jrl	FileIO_DiskEventDispatch
 FileIO_ErrorCodeByteBlock_Skip7:
 	extz	wa
