@@ -3082,2422 +3082,473 @@ PanelEvt_Handler_4_DualValueCheck:
 	ld	w, 6:opc
 	calr	62902
 	ret
-	.byte 0x90
-	halt
-	swi	5
-	nop
-	.byte 0xa7
-	halt
-	swi	5
-	nop
-	.byte 0xbe
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	ld	(0xfd05:16), 224
-	halt
-	swi	5
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	jr	ugt, 8
-	swi	5
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ldw	ix, 0xfd09
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	.byte 0x84
-	push	253
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ld	b, 10:opc
-	swi	5
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+9), iy
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ld	xiz, 0x7400fd0a
-	ldw	(253:8), 0x8f00:io
-	halt
-	swi	5
-	nop
-	cp	(xix+10), iy
-	nop
-	.byte 0xb9
-	ldw	(253:8), 4352:io
-	pushw	253
-	ld	xbc, 0x7100fd0b
-	pushw	253
-	.byte 0xc1
-	pushw	253
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ld	xwa, 0xa0b0701
-	pop	xiy
-	pop	xiz
-	pop	xhl
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x50, 0x52, 0x53
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	nop
-	ld	w, 255:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x06
-	ld	h, 101:opc
-	jr	ov, -1
-	swi	7
-	swi	7
-	swi	7
-	jrl	ge, -136
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	pop_f
-	swi	4
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pop_f
-	swi	4
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
+	; PanelEvt_Handler_4_DualValueCheck_0x77 (0xFD175E) -- MIDI CC handler table.
+	; INDEXING RULE, from the only site that loads it (MidiCC_Dispatch, this file):
+	;     cp c, 0xbf / jr ugt, <ret>      ; index = C, valid 0..0xBF
+	;     ld l, c / extz hl / sll hl, 2   ; scaled by 4
+	;     ld xix, ..._0x77 / ld_sril3 XIX, 0x07, 0xf0, 0xec   ; xix += hl
+	;     call (xix)                      ; entry is a CODE address
+	; => 192 entries of 4 bytes, index 0 at 0xFD175E, stride 4. Every entry
+	; resolves to a label in this file, which is what settles CODE-pointer over
+	; data-pointer. It was previously spelled as 1-byte .byte runs interleaved
+	; with resync garbage; the byte gate could not see the difference.
+
+	; Supersedes 3 v10_data_as_code_census.py notes inside this span (the first
+	; reads: 0xFD17AB-0xFD191E (371 B), unreached CODE-territory, was disassembled
+	; as 188 plausible-but-dead instruction lines). The census was RIGHT that this
+	; is data and WRONG about where it starts: it carved from 0xFD17AB, one byte
+	; past the entry boundary, so every record shown was a rotation of the real
+	; one. The array starts at 0xFD175E, immediately after the `ret` at 0xFD175D.
+	.long PanelEvt_CheckFlag7_Dispatch_A
+	.long PanelEvt_CheckFlag7_Dispatch_B
+	.long PanelEvt_CheckFlag7_Dispatch_C
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckChanZero_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch6Entry
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch3Entry_A
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch3Entry_B
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_TableA
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch11Entry
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_Ctrl40
+	.long MidiCC_ChannelDispatch_Ctrl41
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_SpecialCh1
+	.long MidiCC_ChannelDispatch_CtrlFlags
+	.long MidiCC_ChannelDispatch_Ctrl1
+	.long MidiCC_ChannelDispatch_Ctrl3
+	.long MidiCC_ChannelDispatch_CtrlFlags2
+	.long MidiCC_ChannelDispatch_Ctrl0
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	; PanelEvt_Handler_4_DualValueCheck_0x377 (0xFD1A5E) -- 48-entry byte table.
+	; INDEXING RULE, from MidiChanCfg_SetupParams (this file):
+	;     cp w, 0x2f / jr ugt, <exit>     ; index = W, valid 0..0x2F
+	;     ld xiz, ..._0x377 / ldb_sri W, 0x03, 0xf8, 0xe1   ; W = (xiz + W)
+	;     cp w, 0xff / jr z, <exit>       ; 0xFF means 'no entry'
+	; => 48 bytes, stride 1, 0xFF = absent. A genuine byte table: it is printed
+	; 8 per line only to show the six 8-entry groups, not because 8 is a record.
+	.byte 0x40, 0x01, 0x07, 0x0b, 0x0a, 0x5d, 0x5e, 0x5b
+
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x50, 0x52, 0x53, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x00, 0x20, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x06, 0x26, 0x65, 0x64, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x79, 0x78, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	; 0xFD1A8E..0xFD268F -- 24 records of 32 x u32, stride 0x80.
+	; INDEXING RULE, from the 26 sites in this file that load a record base
+	; (PanelEvt_Handler_4_DualValueCheck_0x3A7 .. _0xE28 in shared/positional_labels.s):
+	;     ldb_d8 l, (0x964c) / cp l, 31 / jr ugt, <skip>   ; index = L, valid 0..31
+	;     ld xix, <record base> / extz hl / sll l, 2
+	;     ld_rrl xix, xix, hl             ; xix = record[index]
+	;     cp xix, 0xffffffff / jr z, <skip>   ; 0xFFFFFFFF means 'no entry'
+	; => 32 entries of 4 bytes per record; present entries are work-RAM addresses
+	; 0x0000F9C3 + 26*k (26-byte parameter blocks); absent entries are 0xFFFFFFFF.
+	; Record bases run 0xFD1A8E + 0x80*k for k=0..4, then 0xFD1D0F + 0x80*k for
+	; k=0..18 -- there is a ONE-BYTE 0xFF pad at 0xFD1D0E, which is why the
+	; second block is offset by one and why this span is emitted in three
+	; segments. The positional labels are the evidence for that offset, not a
+	; guess: _0x5A7 = base+1447 and _0x628 = base+1576, a gap of 129.
+
+	; Previously this span was carved by v10_data_as_code_census.py at a start
+	; offset one byte past the true array start, so each record appeared as
+	; '.byte <tail>' plus fake instructions ('swi 1 / nop / nop') for its head.
+	; Those census notes are removed here because the offset they record is the
+	; wrong one; the census's finding -- that this is data, not code -- stands.
+
+	; Supersedes 44 v10_data_as_code_census.py notes inside this span, all carved
+	; one byte late for the same reason (e.g. 0xFD1A93-0xFD1AB2 (31 B) is the tail
+	; of the record that really starts at 0xFD1A8E).
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	; one-byte 0xFF pad; the record grid restarts at 0xFD1D0F
+	.byte 0xff
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 
 FileData_ValidateFormat:
 	pushw wa
