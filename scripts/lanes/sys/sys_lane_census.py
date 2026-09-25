@@ -15,8 +15,9 @@ QUESTION THIS ANSWERS
 
 RUN
     python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json A.json
-    python3 scripts/lanes/sys/sys_lane_census.py A.json [B.json]
-      (with B: prints A -> B per file where anything changed, and totals)
+    python3 scripts/lanes/sys/sys_lane_census.py A.json [B.json] [--rev REV]
+      (with B: prints A -> B per file where anything changed, and totals;
+       --rev: count markers / numeric branches in the sources at git REV)
 """
 import collections
 import json
@@ -51,13 +52,24 @@ def tally(census, files):
     return per
 
 
+REV = None       # --rev REV: count markers/numeric branches at a git revision
+
+
+def source_lines(p):
+    if REV:
+        import subprocess
+        r = subprocess.run(["git", "show", "%s:%s" % (REV, p)], cwd=ROOT, capture_output=True)
+        return r.stdout.decode("latin-1").split("\n") if r.returncode == 0 else []
+    return open(os.path.join(ROOT, p), encoding="latin-1").read().split("\n")
+
+
 def markers(files):
     out = {}
     for p in files:
         if not p.endswith(".s"):
             continue
         ab = nb = 0
-        for ln in open(os.path.join(ROOT, p), encoding="latin-1"):
+        for ln in source_lines(p):
             s = ln.split(";")[0].strip()
             if not s or s.endswith(":"):
                 continue
@@ -74,6 +86,11 @@ def row(c):
 
 
 def main():
+    global REV
+    if "--rev" in sys.argv:
+        k = sys.argv.index("--rev")
+        REV = sys.argv[k + 1]
+        del sys.argv[k:k + 2]
     files = owned()
     a = tally(sys.argv[1], files)
     b = tally(sys.argv[2], files) if len(sys.argv) > 2 else None
@@ -96,8 +113,8 @@ def main():
         print("%-52s%s" % ("TOTAL (B)", row(tot_b)))
     ab = sum(v[0] for v in mk.values())
     nb = sum(v[1] for v in mk.values())
-    print("sources now: data-as-code markers %d, numeric branch operands %d (%d owned .s files)"
-          % (ab, nb, len(mk)))
+    print("sources %s: data-as-code markers %d, numeric branch operands %d (%d owned .s files)"
+          % (("at " + REV) if REV else "now", ab, nb, len(mk)))
     for v in ("v10", "v9", "v7"):
         print("   %s markers %d numeric %d" % (
             v, sum(x[0] for p, x in mk.items() if p.startswith(v + "/")),
