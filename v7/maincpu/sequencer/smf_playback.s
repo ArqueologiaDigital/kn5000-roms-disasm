@@ -116,7 +116,7 @@ SoundBank_InitTrack_Loop:
 	xor iy, iy
 
 SoundBank_InitTrack_ByteFields:
-	ld	xix, 15872250
+	ld	xix, SoundBank_DefaultTrackData
 	ld_rrb	a, xix, iy
 	st_rrb	a, xhl, iy
 	inc	1, iy
