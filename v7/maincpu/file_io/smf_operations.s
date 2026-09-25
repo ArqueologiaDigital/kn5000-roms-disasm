@@ -723,7 +723,7 @@ SmfFN_Save_WriteSlot:
 	ld	c, (34988:16)
 	sll	xbc, 11
 	add	xwa, xbc
-	lda_dri	XWA, 0xe1, 0x00, 0x01
+	lda	xwa, (xwa+256)
 	lda	xbc, (xsp+8)
 	ldw	de, 16
 	call	FileIO_CopyString_WriteNull
@@ -731,7 +731,7 @@ SmfFN_Save_WriteSlot:
 	cp	a, (34988:16)
 	jr	nz, SmfFN_Save_Finish
 	lda	xwa, (61824:24)
-	lda_dri	XWA, 0xe1, 0x00, 0x01
+	lda	xwa, (xwa+256)
 	lda	xbc, (xsp+8)
 	ldw	de, 16
 	call	FileIO_CopyString_WriteNull

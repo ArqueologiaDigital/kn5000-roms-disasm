@@ -1,0 +1,6 @@
+old llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap.8e188b215251-a67c5632 sha256 a67c563269fc
+new llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 c949d618903c
+candidate sites: 136; refused before assembly: 0
+verified identical: 136   mismatched/unassemblable: 0
+files: 36
+wrote 136 lines in 36 files

@@ -8881,7 +8881,7 @@ PmExpFilter_EventDispatch:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	lda_dri	xwa, 0xfd, 0x00, 0x01
+	lda	xwa, (xsp+256)
 	ld	xbc, xde
 	srl	xbc, 0
 	ld	qbc, 0
@@ -8926,7 +8926,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	lda_dri	xbc, 0xfd, 0x00, 0x01
+	lda	xbc, (xsp+256)
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -8985,7 +8985,7 @@ PmExpFilterGridCheck_Loop:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	lda_dri	xbc, 0xfd, 0x00, 0x01
+	lda	xbc, (xsp+256)
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9006,7 +9006,7 @@ PmExpFilterGridCheck_Skip3:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	lda_dri	xde, 0xfd, 0x00, 0x01
+	lda	xde, (xsp+256)
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 PmExpFilterGridCheck_Skip4:
@@ -9031,7 +9031,7 @@ PmExpFilterGridCheck_Loop2:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	lda_dri	xbc, 0xfd, 0x00, 0x01
+	lda	xbc, (xsp+256)
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9052,7 +9052,7 @@ PmExpFilterGridCheck_Skip6:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	lda_dri	xde, 0xfd, 0x00, 0x01
+	lda	xde, (xsp+256)
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 PmExpFilterGridCheck_Skip7:
@@ -9061,7 +9061,7 @@ PmExpFilterGridCheck_Skip7:
 	jr	c, PmExpFilterGridCheck_Loop2
 	jrl	SeqLoad_StoreReturnZero
 PmExpFilterCheck_CellDecode:
-	lda_dri	xhl, 0xfd, 0x00, 0x01	; lda xhl, xsp+0x0100
+	lda	xhl, (xsp+256)	; lda xhl, xsp+0x0100
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -9101,7 +9101,7 @@ PmExpFilterCheck_SendNameA:
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	lda_dri	xde, 0xfd, 0x00, 0x01	; lda xde, xsp+0x0100
+	lda	xde, (xsp+256)	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
 	jr	PmExpFilterCheck_DoSend
 PmExpFilterCheck_AltDecode:
@@ -9136,7 +9136,7 @@ PmExpFilterCheck_StrcpySend:
 
 	ld xwa, xhl
 
-	lda_dri XDE, 0xfd, 0x00, 0x01
+	lda xde, (xsp+256)
 
 	ld xbc, 0x1e0008c
 

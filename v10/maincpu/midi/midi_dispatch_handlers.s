@@ -5886,7 +5886,7 @@ FileData_LoadAndParseType3_Continue:
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
-	lda_dri XWA, 0xe1, 0x00, 0x01
+	lda xwa, (xwa+256)
 	ld (xsp + 10), xwa
 	ld a, (xsp + 18)
 	extz wa

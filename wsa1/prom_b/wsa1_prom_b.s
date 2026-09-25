@@ -103826,7 +103826,7 @@ sub_F4C911_Join:
 	ld	wa, hl	; F4C927  ld WA,HL
 	mul	wa, 3072	; F4C929  mul WA,0x0c00
 	add	xwa, 6356992	; F4C92D  add XWA,0x00610000
-	.byte 0xF3, 0xE1, 0x00, 0x01, 0x36	; F4C933  lda XIZ,XWA+0x0100   [llvm-mc cannot encode this]
+	lda	xiz, (xwa+0x0100)	; F4C933  lda XIZ,XWA+0x0100
 	ld	xix, xiz	; F4C938  ld XIX,XIZ
 sub_F4C911_Join2:
 	lda	xwa, (xiz+51)	; F4C93A  lda XWA,XIZ+0x33
@@ -104667,7 +104667,7 @@ sub_F4D238_Loop5:
 	mul	de, 3072	; F4D2E2  mul DE,0x0c00
 	ld	xix, 6356992	; F4D2E6  ld XIX,0x00610000
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D2EB  lda XIX,XIX+DE
-	.byte 0xF3, 0xF1, 0x00, 0x01, 0x34	; F4D2F0  lda XIX,XIX+0x0100   [llvm-mc cannot encode this]
+	lda	xix, (xix+0x0100)	; F4D2F0  lda XIX,XIX+0x0100
 	ld	xiy, 6305024	; F4D2F5  ld XIY,0x00603500
 	ldir85	; F4D2FA  ldir
 	inc	1, wa	; F4D2FC  inc 1,WA
@@ -139856,7 +139856,7 @@ sub_F63CE0_Skip3:
 sub_F63CE0_Skip4:
 	ld	(3401:16), a	; F63E4A  ld (0x0d49),A
 	m_and_mi8 MB16, 0x0d49, 0x02	; F63E4E  and (0x0d49),0x02
-	.byte 0xC7, 0x3C, 0xAE	; F63E53  ld RL3,6   [llvm-mc cannot encode this]
+	ldib_erp	60, 6	; F63E53  ld RL3,6
 	m_sla_m MB16, 0x0d49	; F63E56  sla (0x0d49)
 	.byte 0xC7, 0x3C, 0x1C, 0xF8	; F63E5A  djnz RL3,0xf63e56   [llvm-mc cannot encode this]
 	push	xiz	; F63E5E  push XIZ
@@ -140336,7 +140336,7 @@ sub_F6418E_Skip2:
 sub_F6418E_Skip3:
 	ld	(3401:16), a	; F64334  ld (0x0d49),A
 	m_and_mi8 MB16, 0x0d49, 0x02	; F64338  and (0x0d49),0x02
-	.byte 0xC7, 0x3C, 0xAE	; F6433D  ld RL3,6   [llvm-mc cannot encode this]
+	ldib_erp	60, 6	; F6433D  ld RL3,6
 	m_sla_m MB16, 0x0d49	; F64340  sla (0x0d49)
 	.byte 0xC7, 0x3C, 0x1C, 0xF8	; F64344  djnz RL3,0xf64340   [llvm-mc cannot encode this]
 	push	xiz	; F64348  push XIZ
@@ -144043,7 +144043,7 @@ sub_F6682C:
 	ld	a, 255:opc	; F6685F  ld A,0xff
 sub_F6682C_Skip:
 	ld	(6304966:24), a	; F66861  ld (0x6034c6),A
-	.byte 0xC7, 0x34, 0xA8	; F66866  ld RC3,0   [llvm-mc cannot encode this]
+	ldib_erp	52, 0	; F66866  ld RC3,0
 sub_F6682C_Loop:
 	ld	xix, 6356992	; F66869  ld XIX,0x00610000
 	push	xbc	; F6686E  push XBC
@@ -144081,15 +144081,15 @@ sub_F6682C_Loop:
 	ld	a, 255:opc	; F668C1  ld A,0xff
 sub_F6682C_Skip2:
 	ld	(xix), a	; F668C3  ld (XIX),A
-	.byte 0xC7, 0x34, 0x61	; F668C5  inc 1,RC3   [llvm-mc cannot encode this]
-	.byte 0xC7, 0x34, 0xCF, 0x0A	; F668C8  cp RC3,0x0a   [llvm-mc cannot encode this]
+	inc1b_erp	52	; F668C5  inc 1,RC3
+	cp_erpb	52, 10	; F668C8  cp RC3,0x0a
 	jr	c, sub_F6682C_Loop	; F668CC  jr C,0xf66869
 	ld	xde, IndexMap_F667CC + 0x30	; F668CE  ld XDE,0x00f667fc
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F668D3  lda XIY,XDE+HL
 	ld	xix, 6304819	; F668D8  ld XIX,0x00603433
 	ldw	bc, 16	; F668DD  ld BC,0x0010
 	ldir85	; F668E0  ldir
-	.byte 0xC7, 0x34, 0xA8	; F668E2  ld RC3,0   [llvm-mc cannot encode this]
+	ldib_erp	52, 0	; F668E2  ld RC3,0
 sub_F6682C_Loop2:
 	ld	xix, 6356992	; F668E5  ld XIX,0x00610000
 	push	xbc	; F668EA  push XBC
@@ -144107,8 +144107,8 @@ sub_F6682C_Loop2:
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F66906  lda XIY,XDE+HL
 	ldw	bc, 16	; F6690B  ld BC,0x0010
 	ldir85	; F6690E  ldir
-	.byte 0xC7, 0x34, 0x61	; F66910  inc 1,RC3   [llvm-mc cannot encode this]
-	.byte 0xC7, 0x34, 0xCF, 0x0A	; F66913  cp RC3,0x0a   [llvm-mc cannot encode this]
+	inc1b_erp	52	; F66910  inc 1,RC3
+	cp_erpb	52, 10	; F66913  cp RC3,0x0a
 	jr	c, sub_F6682C_Loop2	; F66917  jr C,0xf668e5
 	m_cp_mi8 MB16, 0x0dfd, 0x03	; F66919  cp (0x0dfd),0x03
 	jr	z, sub_F6682C_Skip3	; F6691E  jr Z,0xf6692f
@@ -144172,7 +144172,7 @@ sub_F6682C_Loop3:
 	ld	c, 17:opc	; F669A4  ld C,0x11
 	ld	(xix+), a	; F669A6  ld (XIX+),A
 	djnz8	c, -6	; F669A9  djnz C,0xf669a6
-	.byte 0xC7, 0x34, 0xA8	; F669AC  ld RC3,0   [llvm-mc cannot encode this]
+	ldib_erp	52, 0	; F669AC  ld RC3,0
 	ld	xde, 6356992	; F669AF  ld XDE,0x00610000
 sub_F6682C_Loop4:
 	push	xbc	; F669B4  push XBC
@@ -144207,8 +144207,8 @@ sub_F6682C_Loop5:
 	ld	c, 17:opc	; F66A04  ld C,0x11
 	ld	(xix+), a	; F66A06  ld (XIX+),A
 	djnz8	c, -6	; F66A09  djnz C,0xf66a06
-	.byte 0xC7, 0x34, 0x61	; F66A0C  inc 1,RC3   [llvm-mc cannot encode this]
-	.byte 0xC7, 0x34, 0xCF, 0x0A	; F66A0F  cp RC3,0x0a   [llvm-mc cannot encode this]
+	inc1b_erp	52	; F66A0C  inc 1,RC3
+	cp_erpb	52, 10	; F66A0F  cp RC3,0x0a
 	jrl	c, sub_F6682C_Loop4	; F66A13  jrl C,0xf669b4
 	ld	xix, 3408	; F66A16  ld XIX,0x00000d50
 	xor	wa, wa	; F66A1B  xor WA,WA
@@ -162961,8 +162961,8 @@ sub_F6EBE9_Skip:
 	pop	xix	; F6EC25  pop XIX
 	pop	xiy	; F6EC26  pop XIY
 	pop	xhl	; F6EC27  pop XHL
-	.byte	0xF1, 0xD6, 0x0F, 0x06	; F6EC28  popw (0x0fd6)   [llvm-mc cannot encode this]
-	.byte	0xF1, 0xD4, 0x0F, 0x06	; F6EC2C  popw (0x0fd4)   [llvm-mc cannot encode this]
+	popw	(0xfd6:16)	; F6EC28  popw (0x0fd6)
+	popw	(0xfd4:16)	; F6EC2C  popw (0x0fd4)
 	ret	; F6EC30  ret
 
 
@@ -177320,7 +177320,7 @@ sub_F7615B:
 	mul	xwa, hl	; F76172  mul XWA,HL
 	ld	de, qwa	; F76174  ld DE,QWA
 	m_add_rm MW16, 0x108c, 0	; F76177  add WA,(0x108c)
-	.byte 0xD1, 0x8E, 0x10, 0x92	; F7617B  adc DE,(0x108e)   [llvm-mc cannot encode this]
+	adc	de, (0x108e:16)	; F7617B  adc DE,(0x108e)
 	ldw	hl, 24000	; F7617F  ld HL,0x5dc0
 	ld	qwa, de	; F76182  ld QWA,DE
 	div	xwa, hl	; F76185  div XWA,HL
@@ -178136,17 +178136,17 @@ sub_F7668A:
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
 sub_F7669D:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F7669D  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F7669D  bit 0,(0x133e)
 	jr	z, sub_F7669D_Code_Skip	; F766A1  jr Z,0xf766aa
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F766A3  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F766A3  bit 0,(0x11b1)
 	jrl	z, -1665	; F766A7  jrl Z,0xf76029
 sub_F7669D_Code_Skip:
 	ld	l, (4508:16)	; F766AA  ld L,(0x119c)
 	and	l, 127	; F766AE  and L,0x7f
 	jr	sub_F7669D_Code_Join	; F766B1  jr T,0xf766c4
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F766B3  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F766B3  bit 0,(0x133e)
 	jr	z, sub_F7669D_Code_Skip2	; F766B7  jr Z,0xf766c0
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F766B9  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F766B9  bit 0,(0x11b1)
 	jrl	z, -1687	; F766BD  jrl Z,0xf76029
 sub_F7669D_Code_Skip2:
 	ld	l, (4508:16)	; F766C0  ld L,(0x119c)
@@ -178158,25 +178158,25 @@ sub_F7669D_Code_Join:
 	calr	sub_F76B9B	; F766CD  calr 0xf76b9b
 	popw	hl	; F766D0  pop HL
 	popw	wa	; F766D1  pop WA
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F766D2  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F766D2  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F766D7  jrl NZ,0xf7678d
 	calr	sub_F76A6A	; F766DA  calr 0xf76a6a
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F766DD  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F766DD  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F766E2  jrl NZ,0xf7678d
 	jrl	-1727	; F766E5  jrl T,0xf76029
 	jrl	-1730	; F766E8  jrl T,0xf76029
 	ld	c, 0:opc	; F766EB  ld C,0x00
 	calr	sub_F76A25	; F766ED  calr 0xf76a25
 	calr	sub_F76B9B	; F766F0  calr 0xf76b9b
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F766F3  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F766F3  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F766F8  jrl NZ,0xf7678d
 	ld	a, 255:opc	; F766FB  ld A,0xff
 	ld	w, 47:opc	; F766FD  ld W,0x2f
 	ld	l, 0:opc	; F766FF  ld L,0x00
 	calr	sub_F76A6A	; F76701  calr 0xf76a6a
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76704  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F76704  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F76709  jrl NZ,0xf7678d
-	.byte 0xD1, 0x6C, 0x12, 0x3F, 0x00, 0x00	; F7670C  cp (0x126c),0x0000   [llvm-mc cannot encode this]
+	cpw	(0x126c:16), 0	; F7670C  cp (0x126c),0x0000
 	jr	nz, sub_F7669D_Code_Skip3	; F76712  jr NZ,0xf76723
 	call	sub_F77D4B	; F76714  call 0xf77d4b
 	ld	w, a	; F76718  ld W,A
@@ -178190,9 +178190,9 @@ sub_F7669D_Code_Skip3:
 	call	T_F41600	; F7672E  call 0xf41600
 	calr	SmfExport_ParamSysExTemplates + 0xDC	; F76732  calr 0xf750ab  (lands inside record 11 at +11; see SmfExport_ParamSysExTemplates)
 	ld	(8745:16), 0	; F76735  ld (0x2229),0x00
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F7673A  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	or	(0x34d4:16), 16	; F7673A  or (0x34d4),0x10
 	jr	sub_F7669D_Code_Entry2	; F7673F  jr T,0xf767ab
-	.byte 0xC1, 0x80, 0x28, 0x3F, 0x02	; F76741  cp (0x2880),0x02   [llvm-mc cannot encode this]
+	cp	(0x2880:16), 2	; F76741  cp (0x2880),0x02
 	jr	z, sub_F7669D_Code_Skip4	; F76746  jr Z,0xf76774
 	ld	xiy, 16210338	; F76748  ld XIY,0x00f759a2
 	ld	xix, 8648	; F7674D  ld XIX,0x000021c8
@@ -178216,7 +178216,7 @@ sub_F7669D_Code_Loop:
 	ld	(8745:16), 0	; F76786  ld (0x2229),0x00
 	jr	sub_F7669D_Code_Entry2	; F7678B  jr T,0xf767ab
 sub_F7669D_Code_Entry:
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x07	; F7678D  cp (0x1238),0x07   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 7	; F7678D  cp (0x1238),0x07
 	jr	z, sub_F7669D_Code_Loop	; F76792  jr Z,0xf7677e
 	ld	l, (4664:16)	; F76794  ld L,(0x1238)
 	calr	SmfExport_ParamSysExTemplates + 0xE9	; F76798  calr 0xf750b8  (lands inside record 12 at +5; see SmfExport_ParamSysExTemplates)
@@ -178227,10 +178227,10 @@ sub_F7669D_Code_Entry:
 	jr	sub_F7669D_Code_Entry2	; F767A4  jr T,0xf767ab
 	ld	(8745:16), 2	; F767A6  ld (0x2229),0x02
 sub_F7669D_Code_Entry2:
-	.byte 0xC1, 0xE8, 0x21, 0x3C, 0x7F	; F767AB  and (0x21e8),0x7f   [llvm-mc cannot encode this]
+	and	(0x21e8:16), 127	; F767AB  and (0x21e8),0x7f
 	popw	wa	; F767B0  pop WA
 	ld	(10021:16), a	; F767B1  ld (0x2725),A
-	.byte 0xC1, 0x71, 0x20, 0x3C, 0xFD	; F767B5  and (0x2071),0xfd   [llvm-mc cannot encode this]
+	and	(0x2071:16), 253	; F767B5  and (0x2071),0xfd
 	ret	; F767BA  ret
 
 
@@ -178372,7 +178372,7 @@ sub_F76836_Loop:
 	xor	hl, hl	; F7687A  xor HL,HL
 sub_F76836_Loop2:
 	ld	a, (xiy+)	; F7687C  ld A,(XIY+)
-	.byte 0x84, 0xF1	; F7687F  cp A,(XIX)   [llvm-mc cannot encode this]
+	cp	a, (xix)	; F7687F  cp A,(XIX)
 	jr	nz, sub_F76836_Skip2	; F76881  jr NZ,0xf76893
 	inc	1, xix	; F76883  inc 1,XIX
 	inc	1, l	; F76885  inc 1,L
@@ -178427,7 +178427,7 @@ sub_F768D0:
 	ld	xiy, 4666	; F768D0  ld XIY,0x0000123a
 	ld	xix, 8648	; F768D5  ld XIX,0x000021c8
 	ldw	bc, 4	; F768DA  ld BC,0x0004
-	.byte 0x95, 0x11	; F768DD  ldirw   [llvm-mc cannot encode this]
+	ldirw	; F768DD  ldirw
 	ret	; F768DF  ret
 
 ; --------------------------------------------------------------------------
@@ -178442,7 +178442,7 @@ sub_F768E0:
 	ld	xiy, 8648	; F768E0  ld XIY,0x000021c8
 	ld	xix, 4666	; F768E5  ld XIX,0x0000123a
 	ldw	bc, 4	; F768EA  ld BC,0x0004
-	.byte 0x95, 0x11	; F768ED  ldirw   [llvm-mc cannot encode this]
+	ldirw	; F768ED  ldirw
 	ret	; F768EF  ret
 
 ; --------------------------------------------------------------------------
@@ -178530,7 +178530,7 @@ sub_F76953_Loop:
 	calr	sub_F76ADF	; F76987  calr 0xf76adf
 	pop	xiy	; F7698A  pop XIY
 	popw	wa	; F7698B  pop WA
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F7698C  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F7698C  cp (0x1238),0x03
 	jrl	nz, sub_F76953_Return	; F76991  jrl NZ,0xf76a16
 	ld	xix, (4232:16)	; F76994  ld XIX,(0x1088)
 	bit	7, a	; F76998  bit 0x07,A
@@ -178538,37 +178538,37 @@ sub_F76953_Loop:
 	ld	a, 255:opc	; F7699D  ld A,0xff
 	ld	(xix+), a	; F7699F  ld (XIX+),A
 	calr	sub_F76ADF	; F769A2  calr 0xf76adf
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769A5  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F769A5  cp (0x1238),0x03
 	jrl	nz, sub_F76953_Return	; F769AA  jrl NZ,0xf76a16
 	ld	xix, (4232:16)	; F769AD  ld XIX,(0x1088)
 	ld	a, 81:opc	; F769B1  ld A,0x51
 	ld	(xix+), a	; F769B3  ld (XIX+),A
 	calr	sub_F76ADF	; F769B6  calr 0xf76adf
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769B9  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F769B9  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769BE  jr NZ,0xf76a16
 	ld	xix, (4232:16)	; F769C0  ld XIX,(0x1088)
 	ld	a, 3:opc	; F769C4  ld A,0x03
 	ld	(xix+), a	; F769C6  ld (XIX+),A
 	calr	sub_F76ADF	; F769C9  calr 0xf76adf
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769CC  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F769CC  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769D1  jr NZ,0xf76a16
 	ld	xix, (4232:16)	; F769D3  ld XIX,(0x1088)
 	ld	a, (4238:16)	; F769D7  ld A,(0x108e)
 	ld	(xix+), a	; F769DB  ld (XIX+),A
 	calr	sub_F76ADF	; F769DE  calr 0xf76adf
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769E1  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F769E1  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769E6  jr NZ,0xf76a16
 	ld	xix, (4232:16)	; F769E8  ld XIX,(0x1088)
 	ld	a, (4237:16)	; F769EC  ld A,(0x108d)
 	ld	(xix+), a	; F769F0  ld (XIX+),A
 	calr	sub_F76ADF	; F769F3  calr 0xf76adf
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769F6  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F769F6  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769FB  jr NZ,0xf76a16
 	ld	xix, (4232:16)	; F769FD  ld XIX,(0x1088)
 	ld	a, (4236:16)	; F76A01  ld A,(0x108c)
 	ld	(xix+), a	; F76A05  ld (XIX+),A
 	calr	sub_F76ADF	; F76A08  calr 0xf76adf
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76A0B  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F76A0B  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F76A10  jr NZ,0xf76a16
 	ld	xix, (4232:16)	; F76A12  ld XIX,(0x1088)
 sub_F76953_Return:
@@ -178600,11 +178600,11 @@ sub_F76A25:
 	ld	de, (4226:16)	; F76A3A  ld DE,(0x1082)
 	sub	wa, de	; F76A3E  sub WA,DE
 	ld	(4522:16), wa	; F76A40  ld (0x11aa),WA
-	.byte 0xF1, 0x68, 0x12, 0xC8	; F76A44  bit 0,(0x1268)   [llvm-mc cannot encode this]
+	bit	0, (0x1268:16)	; F76A44  bit 0,(0x1268)
 	jr	nz, sub_F76A25_Skip	; F76A48  jr NZ,0xf76a5b
-	.byte 0xF1, 0x3E, 0x13, 0xC9	; F76A4A  bit 1,(0x133e)   [llvm-mc cannot encode this]
+	bit	1, (0x133e:16)	; F76A4A  bit 1,(0x133e)
 	jr	z, sub_F76A25_Skip	; F76A4E  jr Z,0xf76a5b
-	.byte 0xD1, 0xAA, 0x11, 0x38, 0x80, 0x01	; F76A50  add (0x11aa),0x0180   [llvm-mc cannot encode this]
+	addw	(0x11aa:16), 384	; F76A50  add (0x11aa),0x0180
 	ld	(4712:16), 1	; F76A56  ld (0x1268),0x01
 sub_F76A25_Skip:
 	ld	(4226:16), bc	; F76A5B  ld (0x1082),BC
@@ -178638,7 +178638,7 @@ sub_F76A6A_Loop:
 	pop	xiy	; F76A81  pop XIY
 	popw	hl	; F76A82  pop HL
 	popw	wa	; F76A83  pop WA
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76A84  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F76A84  cp (0x1238),0x03
 	jr	z, sub_F76A6A_Skip	; F76A89  jr Z,0xf76a8e
 	popw	wa	; F76A8B  pop WA
 	jr	sub_F76A6A_Join	; F76A8C  jr T,0xf76ad9
@@ -178654,7 +178654,7 @@ sub_F76A6A_Skip:
 	calr	sub_F76ADF	; F76A9F  calr 0xf76adf
 	popw	hl	; F76AA2  pop HL
 	popw	wa	; F76AA3  pop WA
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76AA4  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F76AA4  cp (0x1238),0x03
 	jr	nz, sub_F76A6A_Join	; F76AA9  jr NZ,0xf76ad9
 	ld	xix, (4232:16)	; F76AAB  ld XIX,(0x1088)
 	ld	a, w	; F76AAF  ld A,W
@@ -178662,7 +178662,7 @@ sub_F76A6A_Skip:
 	pushw	hl	; F76AB4  push HL
 	calr	sub_F76ADF	; F76AB5  calr 0xf76adf
 	popw	hl	; F76AB8  pop HL
-	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76AB9  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	cp	(0x1238:16), 3	; F76AB9  cp (0x1238),0x03
 	jr	nz, sub_F76A6A_Join	; F76ABE  jr NZ,0xf76ad9
 	ld	xix, (4232:16)	; F76AC0  ld XIX,(0x1088)
 	and	h, 240	; F76AC4  and H,0xf0
@@ -178696,7 +178696,7 @@ sub_F76ADF:
 	ld	(4232:16), xix	; F76AEE  ld (0x1088),XIX
 	jr	sub_F76ADF_Epilogue	; F76AF2  jr T,0xf76b59
 sub_F76ADF_Entry:
-	.byte 0xD1, 0x6C, 0x12, 0x3F, 0x00, 0x00	; F76AF4  cp (0x126c),0x0000   [llvm-mc cannot encode this]
+	cpw	(0x126c:16), 0	; F76AF4  cp (0x126c),0x0000
 	jr	nz, sub_F76ADF_Skip	; F76AFA  jr NZ,0xf76b10
 	ld	c, a	; F76AFC  ld C,A
 	pushw	bc	; F76AFE  push BC
@@ -178759,7 +178759,7 @@ sub_F76ADF_Epilogue:
 	lda_rr	xiy, xiy, hl	; F76B71  lda XIY,XIY+HL
 	ld	xix, 8648	; F76B76  ld XIX,0x000021c8
 	ldw	bc, 4	; F76B7B  ld BC,0x0004
-	.byte 0x95, 0x11	; F76B7E  ldirw   [llvm-mc cannot encode this]
+	ldirw	; F76B7E  ldirw
 	ld	(8656:16), 63	; F76B80  ld (0x21d0),0x3f
 	ld	(8657:16), 63	; F76B85  ld (0x21d1),0x3f
 	ld	(8658:16), 63	; F76B8A  ld (0x21d2),0x3f
@@ -178844,21 +178844,21 @@ sub_F76C2C:
 	cp	iy, 0:i3	; F76C2C  cp IY,0
 	jr	z, sub_F76C2C_Return	; F76C2E  jr Z,0xf76c96
 	xor	de, de	; F76C30  xor DE,DE
-	.byte 0xC1, 0xD3, 0x10, 0x3F, 0xFF	; F76C32  cp (0x10d3),0xff   [llvm-mc cannot encode this]
+	cp	(0x10d3:16), 255	; F76C32  cp (0x10d3),0xff
 	jr	z, sub_F76C2C_Return	; F76C37  jr Z,0xf76c96
 sub_F76C2C_Loop:
 	ld	xiy, 4307	; F76C39  ld XIY,0x000010d3
 	ld	xix, 4310	; F76C3E  ld XIX,0x000010d6
 	lda_rr	xiy, xiy, de	; F76C43  lda XIY,XIY+DE
 	lda_rr	xix, xix, de	; F76C48  lda XIX,XIX+DE
-	.byte 0x85, 0x3F, 0xFF	; F76C4D  cp (XIY),0xff   [llvm-mc cannot encode this]
+	cp	(xiy), 255	; F76C4D  cp (XIY),0xff
 	jr	z, sub_F76C2C_Skip3	; F76C50  jr Z,0xf76c93
 	ld	wa, (xiy+1)	; F76C52  ld WA,(XIY+0x01)
 sub_F76C2C_Join:
 	ld	l, (xix)	; F76C55  ld L,(XIX)
 	cp	l, 255	; F76C57  cp L,0xff
 	jr	z, sub_F76C2C_Skip2	; F76C5A  jr Z,0xf76c89
-	.byte 0x9C, 0x01, 0xF0	; F76C5C  cp WA,(XIX+0x01)   [llvm-mc cannot encode this]
+	cp	wa, (xix+1)	; F76C5C  cp WA,(XIX+0x01)
 	jr	ugt, sub_F76C2C_Skip	; F76C5F  jr UGT,0xf76c71
 	add	xix, 3	; F76C61  add XIX,0x00000003
 	cp	xix, 4496	; F76C67  cp XIX,0x00001190
@@ -178972,14 +178972,14 @@ sub_F76C97_Skip2:
 sub_F76D38:
 	ldw	(4499:16), 0	; F76D38  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F76D3E  ld (0x1195),0x0000
-	.byte 0xC1, 0xAC, 0x11, 0x3F, 0x00	; F76D44  cp (0x11ac),0x00   [llvm-mc cannot encode this]
+	cp	(0x11ac:16), 0	; F76D44  cp (0x11ac),0x00
 	jr	nz, sub_F76D38_Entry	; F76D49  jr NZ,0xf76d5c
-	.byte 0xD1, 0xAA, 0x11, 0x3F, 0x7F, 0x00	; F76D4B  cp (0x11aa),0x007f   [llvm-mc cannot encode this]
+	cpw	(0x11aa:16), 127	; F76D4B  cp (0x11aa),0x007f
 	jrl	ule, sub_F76D38_Skip3	; F76D51  jrl ULE,0xf76ddb
-	.byte 0xD1, 0xAA, 0x11, 0x3F, 0xFF, 0x3F	; F76D54  cp (0x11aa),0x3fff   [llvm-mc cannot encode this]
+	cpw	(0x11aa:16), 16383	; F76D54  cp (0x11aa),0x3fff
 	jr	ule, sub_F76D38_Skip2	; F76D5A  jr ULE,0xf76db2
 sub_F76D38_Entry:
-	.byte 0xC1, 0xAC, 0x11, 0x3F, 0x1F	; F76D5C  cp (0x11ac),0x1f   [llvm-mc cannot encode this]
+	cp	(0x11ac:16), 31	; F76D5C  cp (0x11ac),0x1f
 	jr	ule, sub_F76D38_Skip	; F76D61  jr ULE,0xf76d72
 	ld	(4524:16), 31	; F76D63  ld (0x11ac),0x1f
 	ld	(4523:16), 255	; F76D68  ld (0x11ab),0xff
@@ -179152,10 +179152,10 @@ sub_F76E74_Skip:
 	ld	xiy, SmfFileTemplate_F77836	; F76EB5  ld XIY,0x00f77836
 	ld	xix, 6334208	; F76EBA  ld XIX,0x0060a700
 	ldw	bc, 7	; F76EBF  ld BC,0x0007
-	.byte 0x95, 0x11	; F76EC2  ldirw   [llvm-mc cannot encode this]
+	ldirw	; F76EC2  ldirw
 	ld	xiy, SmfFileTemplate_F77836 + 0xE	; F76EC4  ld XIY,0x00f77844
 	ldw	bc, 4	; F76EC9  ld BC,0x0004
-	.byte 0x95, 0x11	; F76ECC  ldirw   [llvm-mc cannot encode this]
+	ldirw	; F76ECC  ldirw
 	ld	(4232:16), xix	; F76ECE  ld (0x1088),XIX
 	ld	xix, (4232:16)	; F76ED2  ld XIX,(0x1088)
 	ld	xiy, SmfFileTemplate_F77836 + 0x16	; F76ED6  ld XIY,0x00f7784c
@@ -179196,7 +179196,7 @@ sub_F76E74_Loop:
 	calr	sub_F77918	; F76F42  calr 0xf77918
 	ld	(4665:16), 255	; F76F45  ld (0x1239),0xff
 	ld	xiy, GmSystemSysEx_F76E64	; F76F4A  ld XIY,0x00f76e64
-	.byte 0xF1, 0x4D, 0x7F, 0xCA	; F76F4F  bit 2,(0x7f4d)   [llvm-mc cannot encode this]
+	bit	2, (0x7f4d:16)	; F76F4F  bit 2,(0x7f4d)
 	jr	nz, sub_F76E74_Skip2	; F76F53  jr NZ,0xf76f5f
 	ld	xiy, GmSystemSysEx_F76E64 + 0x8	; F76F55  ld XIY,0x00f76e6c
 	ld	(4665:16), 0	; F76F5A  ld (0x1239),0x00
@@ -179215,7 +179215,7 @@ sub_F76E74_Skip2:
 	ld	xix, (4232:16)	; F76F75  ld XIX,(0x1088)
 	djnz16	bc, -22	; F76F79  djnz BC,0xf76f66
 	ld	(4232:16), xix	; F76F7C  ld (0x1088),XIX
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F76F80  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F76F80  bit 0,(0x133e)
 	jrl	z, sub_F76E74_Join4	; F76F84  jrl Z,0xf77245
 	ld	xiy, 6305440	; F76F87  ld XIY,0x006036a0
 	ld	(3184:16), 0	; F76F8C  ld (0x0c70),0x00
@@ -179264,8 +179264,8 @@ sub_F76E74_Join2:
 	ld	(4944:16), a	; F76FF8  ld (0x1350),A
 	ld	a, (xiy+9)	; F76FFC  ld A,(XIY+0x09)
 	ld	(4686:16), a	; F76FFF  ld (0x124e),A
-	.byte 0xC1, 0x70, 0x0C, 0x3C, 0x0F	; F77003  and (0x0c70),0x0f   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x39, 0x12, 0x3F, 0xFF	; F77008  cp (0x1239),0xff   [llvm-mc cannot encode this]
+	and	(0xc70:16), 15	; F77003  and (0x0c70),0x0f
+	cp	(0x1239:16), 255	; F77008  cp (0x1239),0xff
 	jr	nz, sub_F76E74_Skip3	; F7700D  jr NZ,0xf77070
 	ld	a, (3184:16)	; F7700F  ld A,(0x0c70)
 	ld	l, c	; F77013  ld L,C
@@ -179499,7 +179499,7 @@ sub_F76E74_Join3:
 	popw	wa	; F77238  pop WA
 sub_F76E74_Skip4:
 	inc	1, (3184:16)	; F77239  inc 1,(0x0c70)
-	.byte 0xC1, 0x70, 0x0C, 0x3F, 0x0F	; F7723D  cp (0x0c70),0x0f   [llvm-mc cannot encode this]
+	cp	(0xc70:16), 15	; F7723D  cp (0x0c70),0x0f
 	jrl	ule, sub_F76E74_Loop2	; F77242  jrl ULE,0xf76f91
 sub_F76E74_Join4:
 	calr	sub_F77899	; F77245  calr 0xf77899
@@ -179511,12 +179511,12 @@ sub_F76E74_Join4:
 	jr	z, sub_F76E74_Skip5	; F77258  jr Z,0xf77279
 	cp	a, 129	; F7725A  cp A,0x81
 	jr	z, sub_F76E74_Skip5	; F7725D  jr Z,0xf77279
-	.byte 0xD1, 0x5C, 0x34, 0x04	; F7725F  pushw (0x345c)   [llvm-mc cannot encode this]
-	.byte 0xD1, 0x5E, 0x34, 0x04	; F77263  pushw (0x345e)   [llvm-mc cannot encode this]
+	pushw	(0x345c:16)	; F7725F  pushw (0x345c)
+	pushw	(0x345e:16)	; F77263  pushw (0x345e)
 	calr	sub_F77CCC	; F77267  calr 0xf77ccc
 	calr	sub_F77CB7	; F7726A  calr 0xf77cb7
-	.byte 0xF1, 0x5E, 0x34, 0x06	; F7726D  popw (0x345e)   [llvm-mc cannot encode this]
-	.byte 0xF1, 0x5C, 0x34, 0x06	; F77271  popw (0x345c)   [llvm-mc cannot encode this]
+	popw	(0x345e:16)	; F7726D  popw (0x345e)
+	popw	(0x345c:16)	; F77271  popw (0x345c)
 	ld	(4228:16), a	; F77275  ld (0x1084),A
 sub_F76E74_Skip5:
 	ldw	(4230:16), 0	; F77279  ld (0x1086),0x0000
@@ -179678,7 +179678,7 @@ sub_F76E74_Loop6:
 	jr	ule, sub_F76E74_Loop6	; F77413  jr ULE,0xf773fd
 	jrl	sub_F76E74_Loop4	; F77415  jrl T,0xf7728b
 sub_F76E74_Entry:
-	.byte 0xC1, 0xB1, 0x11, 0x3E, 0x01	; F77418  or (0x11b1),0x01   [llvm-mc cannot encode this]
+	or	(0x11b1:16), 1	; F77418  or (0x11b1),0x01
 	pushw	hl	; F7741D  push HL
 	ld	c, (4505:16)	; F7741E  ld C,(0x1199)
 	calr	sub_F77990	; F77422  calr 0xf77990
@@ -179707,14 +179707,14 @@ sub_F76E74_Entry:
 sub_F76E74_Skip14:
 	cp	hl, 6:i3	; F7746B  cp HL,6
 	jrl	nz, sub_F76E74_Loop4	; F7746D  jrl NZ,0xf7728b
-	.byte 0xC1, 0x9A, 0x11, 0x3F, 0x7F	; F77470  cp (0x119a),0x7f   [llvm-mc cannot encode this]
+	cp	(0x119a:16), 127	; F77470  cp (0x119a),0x7f
 	jrl	z, sub_F76E74_Loop4	; F77475  jrl Z,0xf7728b
 	ld	a, (4507:16)	; F77478  ld A,(0x119b)
 	cp	a, 0:i3	; F7747C  cp A,0
 	jrl	nz, sub_F76E74_Loop4	; F7747E  jrl NZ,0xf7728b
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F77481  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F77481  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip15	; F77485  jr Z,0xf7748e
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77487  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F77487  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F7748B  jrl Z,0xf7728b
 sub_F76E74_Skip15:
 	ld	c, (4505:16)	; F7748E  ld C,(0x1199)
@@ -179722,7 +179722,7 @@ sub_F76E74_Skip15:
 	calr	sub_F77990	; F77493  calr 0xf77990
 	calr	sub_F77A4A	; F77496  calr 0xf77a4a
 	popw	wa	; F77499  pop WA
-	.byte 0xC1, 0x39, 0x12, 0x3F, 0x00	; F7749A  cp (0x1239),0x00   [llvm-mc cannot encode this]
+	cp	(0x1239:16), 0	; F7749A  cp (0x1239),0x00
 	jrl	z, sub_F76E74_Skip16	; F7749F  jrl Z,0xf77538
 	ld	l, (4504:16)	; F774A2  ld L,(0x1198)
 	ld	h, l	; F774A6  ld H,L
@@ -179794,7 +179794,7 @@ sub_F76E74_Skip16:
 sub_F76E74_Skip17:
 	cp	hl, 6:i3	; F7757B  cp HL,6
 	jrl	nz, sub_F76E74_Loop4	; F7757D  jrl NZ,0xf7728b
-	.byte 0xC1, 0x9A, 0x11, 0x3F, 0x7F	; F77580  cp (0x119a),0x7f   [llvm-mc cannot encode this]
+	cp	(0x119a:16), 127	; F77580  cp (0x119a),0x7f
 	jrl	z, sub_F76E74_Skip31	; F77585  jrl Z,0xf777fd
 	ld	l, (4507:16)	; F77588  ld L,(0x119b)
 	ld	a, (4506:16)	; F7758C  ld A,(0x119a)
@@ -179866,9 +179866,9 @@ sub_F76E74_Join6:
 	jr	z, sub_F76E74_Entry3	; F77636  jr Z,0xf776a7
 	jrl	nz, sub_F76E74_Loop4	; F77638  jrl NZ,0xf7728b
 sub_F76E74_Entry2:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F7763B  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F7763B  bit 0,(0x133e)
 	jrl	z, sub_F76E74_Skip20	; F7763F  jrl Z,0xf77649
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77642  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F77642  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F77646  jrl Z,0xf7728b
 sub_F76E74_Skip20:
 	ld	c, (4505:16)	; F77649  ld C,(0x1199)
@@ -179912,9 +179912,9 @@ sub_F76E74_Skip20:
 	popw	wa	; F776A3  pop WA
 	jrl	sub_F76E74_Loop4	; F776A4  jrl T,0xf7728b
 sub_F76E74_Entry3:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F776A7  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F776A7  bit 0,(0x133e)
 	jrl	z, sub_F76E74_Skip21	; F776AB  jrl Z,0xf776b5
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F776AE  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F776AE  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F776B2  jrl Z,0xf7728b
 sub_F76E74_Skip21:
 	ld	c, (4505:16)	; F776B5  ld C,(0x1199)
@@ -179949,9 +179949,9 @@ sub_F76E74_Skip21:
 	calr	sub_F779D5	; F776F4  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F776F7  jrl T,0xf7728b
 sub_F76E74_Entry4:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F776FA  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F776FA  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip22	; F776FE  jr Z,0xf77707
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77700  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F77700  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F77704  jrl Z,0xf7728b
 sub_F76E74_Skip22:
 	ld	c, (4505:16)	; F77707  ld C,(0x1199)
@@ -179986,9 +179986,9 @@ sub_F76E74_Skip22:
 	calr	sub_F779D5	; F77744  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F77747  jrl T,0xf7728b
 sub_F76E74_Entry5:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F7774A  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F7774A  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip23	; F7774E  jr Z,0xf77757
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77750  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F77750  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F77754  jrl Z,0xf7728b
 sub_F76E74_Skip23:
 	ld	c, (4505:16)	; F77757  ld C,(0x1199)
@@ -180010,26 +180010,26 @@ sub_F76E74_Skip24:
 	ld	bc, (4508:16)	; F7777C  ld BC,(0x119c)
 	jrl	sub_F76E74_Loop4	; F77780  jrl T,0xf7728b
 sub_F76E74_Entry6:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F77783  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F77783  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip25	; F77787  jr Z,0xf77790
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77789  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F77789  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F7778D  jrl Z,0xf7728b
 sub_F76E74_Skip25:
 	ld	w, 93:opc	; F77790  ld W,0x5d
 	ld	l, (4508:16)	; F77792  ld L,(0x119c)
 	jr	sub_F76E74_Join7	; F77796  jr T,0xf777e9
 sub_F76E74_Entry7:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F77798  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F77798  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip26	; F7779C  jr Z,0xf777a5
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F7779E  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F7779E  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F777A2  jrl Z,0xf7728b
 sub_F76E74_Skip26:
 	ld	w, 93:opc	; F777A5  ld W,0x5d
 	ld	l, (4508:16)	; F777A7  ld L,(0x119c)
 	jr	sub_F76E74_Join7	; F777AB  jr T,0xf777e9
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F777AD  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F777AD  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip27	; F777B1  jr Z,0xf777ba
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F777B3  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F777B3  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F777B7  jrl Z,0xf7728b
 sub_F76E74_Skip27:
 	ld	w, 64:opc	; F777BA  ld W,0x40
@@ -180037,18 +180037,18 @@ sub_F76E74_Skip27:
 sub_F76E74_Skip28:
 	ld	w, 91:opc	; F777BE  ld W,0x5b
 	ld	l, 0:opc	; F777C0  ld L,0x00
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F777C2  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F777C2  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip29	; F777C6  jr Z,0xf777cf
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F777C8  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F777C8  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F777CC  jrl Z,0xf7728b
 sub_F76E74_Skip29:
 	ld	l, (4508:16)	; F777CF  ld L,(0x119c)
 	and	l, 127	; F777D3  and L,0x7f
 	jr	sub_F76E74_Join7	; F777D6  jr T,0xf777e9
 sub_F76E74_Entry8:
-	.byte 0xF1, 0x3E, 0x13, 0xC8	; F777D8  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	bit	0, (0x133e:16)	; F777D8  bit 0,(0x133e)
 	jr	z, sub_F76E74_Skip30	; F777DC  jr Z,0xf777e5
-	.byte 0xF1, 0xB1, 0x11, 0xC8	; F777DE  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	bit	0, (0x11b1:16)	; F777DE  bit 0,(0x11b1)
 	jrl	z, sub_F76E74_Loop4	; F777E2  jrl Z,0xf7728b
 sub_F76E74_Skip30:
 	ld	l, (4508:16)	; F777E5  ld L,(0x119c)
@@ -180213,7 +180213,7 @@ sub_F778D2:
 	mul	xwa, hl	; F778E9  mul XWA,HL
 	ld	de, qwa	; F778EB  ld DE,QWA
 	add	wa, (4236:16)	; F778EE  add WA,(0x108c)
-	.byte 0xD1, 0x8E, 0x10, 0x92	; F778F2  adc DE,(0x108e)   [llvm-mc cannot encode this]
+	adc	de, (0x108e:16)	; F778F2  adc DE,(0x108e)
 	ldw	hl, 24000	; F778F6  ld HL,0x5dc0
 	ld	qwa, de	; F778F9  ld QWA,DE
 	div	xwa, hl	; F778FC  div XWA,HL
@@ -180311,11 +180311,11 @@ sub_F77990:
 	ld	de, (4226:16)	; F779A5  ld DE,(0x1082)
 	sub	wa, de	; F779A9  sub WA,DE
 	ld	(4522:16), wa	; F779AB  ld (0x11aa),WA
-	.byte 0xF1, 0x68, 0x12, 0xC8	; F779AF  bit 0,(0x1268)   [llvm-mc cannot encode this]
+	bit	0, (0x1268:16)	; F779AF  bit 0,(0x1268)
 	jr	nz, sub_F77990_Skip	; F779B3  jr NZ,0xf779c6
-	.byte 0xF1, 0x3E, 0x13, 0xC9	; F779B5  bit 1,(0x133e)   [llvm-mc cannot encode this]
+	bit	1, (0x133e:16)	; F779B5  bit 1,(0x133e)
 	jr	z, sub_F77990_Skip	; F779B9  jr Z,0xf779c6
-	.byte 0xD1, 0xAA, 0x11, 0x38, 0x80, 0x01	; F779BB  add (0x11aa),0x0180   [llvm-mc cannot encode this]
+	addw	(0x11aa:16), 384	; F779BB  add (0x11aa),0x0180
 	ld	(4712:16), 1	; F779C1  ld (0x1268),0x01
 sub_F77990_Skip:
 	ld	(4226:16), bc	; F779C6  ld (0x1082),BC

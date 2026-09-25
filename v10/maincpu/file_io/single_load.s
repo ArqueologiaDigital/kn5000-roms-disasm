@@ -3765,7 +3765,7 @@ BuildSlotLabel:
 	extz xwa
 	sll xwa, 11
 	add xbc, xwa
-	lda_dri XBC, 0xe5, 0x00, 0x01
+	lda xbc, (xbc+256)
 	ld wa, (xsp + 4)
 	mul wa, 0x15
 	lda xix, (0x8202:16)

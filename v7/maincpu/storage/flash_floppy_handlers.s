@@ -5549,7 +5549,7 @@ FileHdr_InitBasePointer:
 
 ToneData_SetupCopyPointers:
 	ld xbc, (3226:16)
-	lda_dri XBC, 0xe5, 0x00, 0x01
+	lda xbc, (xbc+256)
 	ld xwa, xbc
 	lda_dri XBC, 0xe5, 0x00, 0x02
 
@@ -7599,7 +7599,7 @@ S2cMemNoBox_ReturnZero:
 
 S2cMemNoBox_PopReturn:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 S2cMemNoBox_End:
 
@@ -7739,7 +7739,7 @@ PsSeqSongNo_HandleScroll:
 	ld	xhl, 0:i3
 PsSeqSongNo_PopReturn:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 PsSeqSongNo_End:
 

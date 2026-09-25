@@ -1308,7 +1308,7 @@ PostTitle_Function_Skip:
 	ld	bc, (xsp+264)
 	call	AudioCtrl_DataBlock_0x1BDC
 	popw	iz
-	.byte 0xf3, 0xfd, 0x00, 0x01, 0x37
+	lda	xsp, (xsp+256)
 	ret
 	ld	xwa, DiskWarning_ConfirmStrings_0xF00
 	call	DbMemo_DrawContent_Loop_0x61

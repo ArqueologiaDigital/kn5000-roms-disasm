@@ -17986,7 +17986,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip5:
 	ld	(xbc), 0
 	lda	xwa, (xsp+260)
 	ld	xhl, xwa
-	lda_dri XWA, 0xfd, 0x00, 0x01	; lda XWA,XSP+0x0100
+	lda xwa, (xsp+256)	; lda XWA,XSP+0x0100
 	ld	xbc, xwa
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -18190,7 +18190,7 @@ Scoop_GlideParam_Setup_Skip:
 	ld	(xbc), 0
 	lda	xwa, (xsp+260)
 	ld	xhl, xwa
-	lda_dri XWA, 0xfd, 0x00, 0x01	; lda XWA,XSP+0x0100
+	lda xwa, (xsp+256)	; lda XWA,XSP+0x0100
 	ld	xbc, xwa
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -18247,7 +18247,7 @@ Scoop_GlideParam_Setup_Skip2:
 	ld	(xbc), 0
 	lda	xwa, (xsp+260)
 	ld	xhl, xwa
-	lda_dri XWA, 0xfd, 0x00, 0x01	; lda XWA,XSP+0x0100
+	lda xwa, (xsp+256)	; lda XWA,XSP+0x0100
 	ld	xbc, xwa
 	lda	xwa, (xsp)
 	ld	xde, xwa

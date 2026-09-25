@@ -6650,7 +6650,7 @@ ImageDecode_PixelLoop:
 	ld c, 0x0:opc
 	ld xde, (xsp + 28)
 	ld xwa, xde
-	lda_dri XWA, 0xe1, 0x00, 0x01
+	lda xwa, (xwa+256)
 	ld (xsp + 44), xwa
 
 ImageDecode_SecondPassSetup:

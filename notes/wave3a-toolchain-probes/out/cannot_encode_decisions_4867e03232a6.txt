@@ -1,0 +1,166 @@
+toolchain: llvm-project HEAD 4867e03232a6, llvm-mc sha256 c949d618903c
+keep    wsa1/prom_b/wsa1_prom_b.s:17519  c8 ff                  llvm: <unknown>                    mame: srl A,W                  llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:21359  d7 e6 b9               llvm: <unknown>                    mame: ex BC,QBC                llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:21442  d7 e6 b9               llvm: <unknown>                    mame: ex BC,QBC                llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:65760  ed ff                  llvm: <unknown>                    mame: srl A,XIY                llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:65766  ed ff                  llvm: <unknown>                    mame: srl A,XIY                llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:66422  cb ff                  llvm: <unknown>                    mame: srl A,C                  llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:66453  cb ff                  llvm: <unknown>                    mame: srl A,C                  llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:75775  d8 24 00               llvm: <unknown>                    mame: stcf 0x00,WA             llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:75777  dc 24 00               llvm: <unknown>                    mame: stcf 0x00,IX             llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:75808  dd fd                  llvm: <unknown>                    mame: sra A,IY                 llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:75813  dd fd                  llvm: <unknown>                    mame: sra A,IY                 llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:75840  d8 24 00               llvm: <unknown>                    mame: stcf 0x00,WA             llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:75842  dd 24 00               llvm: <unknown>                    mame: stcf 0x00,IY             llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:95956  d3 03 e4 e0 fa         llvm: <unknown>                    mame: cp (XBC+A),DE            llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:95961  c3 03 e4 e0 fd         llvm: <unknown>                    mame: cp (XBC+A),E             llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:96390  d3 07 ec f4 61         llvm: <unknown>                    mame: incw 1,(XHL+IY)          llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:104898  d7 0a a8               llvm: <unknown>                    mame: ld QDE0,0                llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:112532  cb 23 00               llvm: <unknown>                    mame: ldcf 0x00,C              llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:112537  cb 23 00               llvm: <unknown>                    mame: ldcf 0x00,C              llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:126979  c8 ff                  llvm: <unknown>                    mame: srl A,W                  llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:127974  c8 ff                  llvm: <unknown>                    mame: srl A,W                  llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:128025  c8 ff                  llvm: <unknown>                    mame: srl A,W                  llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:128170  c8 ff                  llvm: <unknown>                    mame: srl A,W                  llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:129908  f5 27 3f               llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:135872  e7 38 03 00 00 61 00   llvm: <unknown>                    mame: ld XDE3,0x00610000       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:135918  e7 38 03 22 34 60 00   llvm: <unknown>                    mame: ld XDE3,0x00603422       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:136072  e7 38 03 00 00 61 00   llvm: <unknown>                    mame: ld XDE3,0x00610000       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:137041  d7 38 d8               llvm: <unknown>                    mame: cp RDE3,0                llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:137043  d7 34 d8               llvm: <unknown>                    mame: cp RBC3,0                llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:138577  83 13                  llvm: lddr83                       mame: lddr                     decoders disagree (MNEM_DIFF)
+keep    wsa1/prom_b/wsa1_prom_b.s:139049  cf e9 02               llvm: rrc l                        mame: rrc 0x02,L               llvm text does not re-encode
+CONVERT wsa1/prom_b/wsa1_prom_b.s:139859  c7 3c ae               llvm: ldib_erp 60, 6               mame: ld RL3,6                 
+keep    wsa1/prom_b/wsa1_prom_b.s:139861  c7 3c 1c f8            llvm: <unknown>                    mame: djnz RL3,0x0001fc        llvm refuses
+CONVERT wsa1/prom_b/wsa1_prom_b.s:140339  c7 3c ae               llvm: ldib_erp 60, 6               mame: ld RL3,6                 
+keep    wsa1/prom_b/wsa1_prom_b.s:140341  c7 3c 1c f8            llvm: <unknown>                    mame: djnz RL3,0x00021c        llvm refuses
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144046  c7 34 a8               llvm: ldib_erp 52, 0               mame: ld RC3,0                 
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144084  c7 34 61               llvm: inc1b_erp 52                 mame: inc 1,RC3                
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144085  c7 34 cf 0a            llvm: cp_erpb 52, 10               mame: cp RC3,0x0a              
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144092  c7 34 a8               llvm: ldib_erp 52, 0               mame: ld RC3,0                 
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144110  c7 34 61               llvm: inc1b_erp 52                 mame: inc 1,RC3                
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144111  c7 34 cf 0a            llvm: cp_erpb 52, 10               mame: cp RC3,0x0a              
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144175  c7 34 a8               llvm: ldib_erp 52, 0               mame: ld RC3,0                 
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144210  c7 34 61               llvm: inc1b_erp 52                 mame: inc 1,RC3                
+CONVERT wsa1/prom_b/wsa1_prom_b.s:144211  c7 34 cf 0a            llvm: cp_erpb 52, 10               mame: cp RC3,0x0a              
+keep    wsa1/prom_b/wsa1_prom_b.s:145928  56                     llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:145931  55                     llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:145935  1f                     llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:151457  cf e9 03               llvm: rrc l                        mame: rrc 0x03,L               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:152783  87 00                  llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:155087  ce e9 02               llvm: rrc h                        mame: rrc 0x02,H               llvm text does not re-encode
+CONVERT wsa1/prom_b/wsa1_prom_b.s:162964  f1 d6 0f 06            llvm: popw (4054:16)               mame: popw (0x0fd6)            
+CONVERT wsa1/prom_b/wsa1_prom_b.s:162965  f1 d4 0f 06            llvm: popw (4052:16)               mame: popw (0x0fd4)            
+keep    wsa1/prom_b/wsa1_prom_b.s:164408  f3 39 01 00 50         llvm: <unknown>                    mame: ld (XDE3+0x0001),WA      llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:165043  c9 e9 02               llvm: rrc a                        mame: rrc 0x02,A               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:165365  c8 e8 02               llvm: rlc w                        mame: rlc 0x02,W               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:166105  cf e8 02               llvm: rlc l                        mame: rlc 0x02,L               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:169645  c8 e8 02               llvm: rlc w                        mame: rlc 0x02,W               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:171800  c7 f4 09 03            llvm: muls_erpb 244, 3             mame: muls IYL,0x03            decoders disagree (MNEM_DIFF)
+keep    wsa1/prom_b/wsa1_prom_b.s:172460  c7 f4 09 03            llvm: muls_erpb 244, 3             mame: muls IYL,0x03            decoders disagree (MNEM_DIFF)
+keep    wsa1/prom_b/wsa1_prom_b.s:173734  cf e9 02               llvm: rrc l                        mame: rrc 0x02,L               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:174082  cf e9 02               llvm: rrc l                        mame: rrc 0x02,L               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:174411  ce e9 02               llvm: rrc h                        mame: rrc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:174422  cf e9 02               llvm: rrc l                        mame: rrc 0x02,L               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:175568  ce e8 02               llvm: rlc h                        mame: rlc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:176805  ce e9 02               llvm: rrc h                        mame: rrc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:176994  ce e9 02               llvm: rrc h                        mame: rrc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:177003  cf e9 02               llvm: rrc l                        mame: rrc 0x02,L               llvm text does not re-encode
+CONVERT wsa1/prom_b/wsa1_prom_b.s:177323  d1 8e 10 92            llvm: adc de, (4238:16)            mame: adc DE,(0x108e)          
+keep    wsa1/prom_b/wsa1_prom_b.s:177773  ce e8 02               llvm: rlc h                        mame: rlc 0x02,H               llvm text does not re-encode
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178139  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178141  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178147  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178149  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178161  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178164  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178171  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178177  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178179  d1 6c 12 3f 00 00      llvm: cpw (4716:16), 0             mame: cp (0x126c),0x0000       
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178193  c1 d4 34 3e 10         llvm: or (13524:16), 16            mame: or (0x34d4),0x10         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178195  c1 80 28 3f 02         llvm: cp (10368:16), 2             mame: cp (0x2880),0x02         
+keep    wsa1/prom_b/wsa1_prom_b.s:178200  85 11                  llvm: ldir85                       mame: ldir                     decoders disagree (MNEM_DIFF)
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178219  c1 38 12 3f 07         llvm: cp (4664:16), 7              mame: cp (0x1238),0x07         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178230  c1 e8 21 3c 7f         llvm: and (8680:16), 127           mame: and (0x21e8),0x7f        
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178233  c1 71 20 3c fd         llvm: and (8305:16), 253           mame: and (0x2071),0xfd        
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178375  84 f1                  llvm: cp a, (xix)                  mame: cp A,(XIX)               
+keep    wsa1/prom_b/wsa1_prom_b.s:178408  85 11                  llvm: ldir85                       mame: ldir                     decoders disagree (MNEM_DIFF)
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178430  95 11                  llvm: ldirw                        mame: ldirw                    
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178445  95 11                  llvm: ldirw                        mame: ldirw                    
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178533  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178541  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178547  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178553  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178559  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178565  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178571  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178603  f1 68 12 c8            llvm: bit 0, (4712:16)             mame: bit 0,(0x1268)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178605  f1 3e 13 c9            llvm: bit 1, (4926:16)             mame: bit 1,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178607  d1 aa 11 38 80 01      llvm: addw (4522:16), 384          mame: add (0x11aa),0x0180      
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178641  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178657  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178665  c1 38 12 3f 03         llvm: cp (4664:16), 3              mame: cp (0x1238),0x03         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178699  d1 6c 12 3f 00 00      llvm: cpw (4716:16), 0             mame: cp (0x126c),0x0000       
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178762  95 11                  llvm: ldirw                        mame: ldirw                    
+keep    wsa1/prom_b/wsa1_prom_b.s:178791  f3 07 f0 ec cf         llvm: <unknown>                    mame: bit 7,(XIX+HL)           llvm refuses
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178847  c1 d3 10 3f ff         llvm: cp (4307:16), 255            mame: cp (0x10d3),0xff         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178854  85 3f ff               llvm: cp (xiy), 255                mame: cp (XIY),0xff            
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178861  9c 01 f0               llvm: cp wa, (xix+1)               mame: cp WA,(XIX+0x01)         
+keep    wsa1/prom_b/wsa1_prom_b.s:178948  c3 07 e8 f0 3c 3f      llvm: <unknown>                    mame: and (XDE+IX),0x3f        llvm refuses
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178975  c1 ac 11 3f 00         llvm: cp (4524:16), 0              mame: cp (0x11ac),0x00         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178977  d1 aa 11 3f 7f 00      llvm: cpw (4522:16), 127           mame: cp (0x11aa),0x007f       
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178979  d1 aa 11 3f ff 3f      llvm: cpw (4522:16), 16383         mame: cp (0x11aa),0x3fff       
+CONVERT wsa1/prom_b/wsa1_prom_b.s:178982  c1 ac 11 3f 1f         llvm: cp (4524:16), 31             mame: cp (0x11ac),0x1f         
+keep    wsa1/prom_b/wsa1_prom_b.s:178996  ce e8 02               llvm: rlc h                        mame: rlc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:179134  f3 07 e8 ec cf         llvm: <unknown>                    mame: bit 7,(XDE+HL)           llvm refuses
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179155  95 11                  llvm: ldirw                        mame: ldirw                    
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179158  95 11                  llvm: ldirw                        mame: ldirw                    
+keep    wsa1/prom_b/wsa1_prom_b.s:179163  85 11                  llvm: ldir85                       mame: ldir                     decoders disagree (MNEM_DIFF)
+keep    wsa1/prom_b/wsa1_prom_b.s:179166  85 11                  llvm: ldir85                       mame: ldir                     decoders disagree (MNEM_DIFF)
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179199  f1 4d 7f ca            llvm: bit 2, (32589:16)            mame: bit 2,(0x7f4d)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179218  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+keep    wsa1/prom_b/wsa1_prom_b.s:179229  da 2a                  llvm: <unknown>                    mame: xorcf A,DE               llvm refuses
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179267  c1 70 0c 3c 0f         llvm: and (3184:16), 15            mame: and (0x0c70),0x0f        
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179268  c1 39 12 3f ff         llvm: cp (4665:16), 255            mame: cp (0x1239),0xff         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179502  c1 70 0c 3f 0f         llvm: cp (3184:16), 15             mame: cp (0x0c70),0x0f         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179514  d1 5c 34 04            llvm: pushw (13404:16)             mame: pushw (0x345c)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179515  d1 5e 34 04            llvm: pushw (13406:16)             mame: pushw (0x345e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179518  f1 5e 34 06            llvm: popw (13406:16)              mame: popw (0x345e)            
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179519  f1 5c 34 06            llvm: popw (13404:16)              mame: popw (0x345c)            
+keep    wsa1/prom_b/wsa1_prom_b.s:179673  f3 07 e8 ec cf         llvm: <unknown>                    mame: bit 7,(XDE+HL)           llvm refuses
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179681  c1 b1 11 3e 01         llvm: or (4529:16), 1              mame: or (0x11b1),0x01         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179710  c1 9a 11 3f 7f         llvm: cp (4506:16), 127            mame: cp (0x119a),0x7f         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179715  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179717  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179725  c1 39 12 3f 00         llvm: cp (4665:16), 0              mame: cp (0x1239),0x00         
+keep    wsa1/prom_b/wsa1_prom_b.s:179735  ce e9 02               llvm: rrc h                        mame: rrc 0x02,H               llvm text does not re-encode
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179797  c1 9a 11 3f 7f         llvm: cp (4506:16), 127            mame: cp (0x119a),0x7f         
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179869  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179871  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+keep    wsa1/prom_b/wsa1_prom_b.s:179900  ce e9 02               llvm: rrc h                        mame: rrc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:179909  cf e9 02               llvm: rrc l                        mame: rrc 0x02,L               llvm text does not re-encode
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179915  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179917  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179952  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179954  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179989  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:179991  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180013  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180015  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180022  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180024  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180030  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180032  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180040  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180042  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180049  f1 3e 13 c8            llvm: bit 0, (4926:16)             mame: bit 0,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180051  f1 b1 11 c8            llvm: bit 0, (4529:16)             mame: bit 0,(0x11b1)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180216  d1 8e 10 92            llvm: adc de, (4238:16)            mame: adc DE,(0x108e)          
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180314  f1 68 12 c8            llvm: bit 0, (4712:16)             mame: bit 0,(0x1268)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180316  f1 3e 13 c9            llvm: bit 1, (4926:16)             mame: bit 1,(0x133e)           
+CONVERT wsa1/prom_b/wsa1_prom_b.s:180318  d1 aa 11 38 80 01      llvm: addw (4522:16), 384          mame: add (0x11aa),0x0180      
+keep    wsa1/prom_b/wsa1_prom_b.s:180632  ce e8 02               llvm: rlc h                        mame: rlc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:180897  ce e8 02               llvm: rlc h                        mame: rlc 0x02,H               llvm text does not re-encode
+keep    wsa1/prom_b/wsa1_prom_b.s:183250  f3 39 01 00 55         llvm: <unknown>                    mame: ld (XDE3+0x0001),IY      llvm refuses
+convert 92 lines in 1 files
+  M wsa1/prom_b/wsa1_prom_b.s

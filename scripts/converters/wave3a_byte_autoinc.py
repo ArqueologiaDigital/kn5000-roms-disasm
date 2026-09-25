@@ -31,6 +31,12 @@ Everything else is listed with the reason and left alone.  Then gate-all.
 RUN (tree root)
     python3 scripts/converters/wave3a_byte_autoinc.py            # report
     python3 scripts/converters/wave3a_byte_autoinc.py --apply
+
+    # --cannot-encode: instead of the post-increment prefixes, every `.byte`
+    # line whose comment carries the SX-WSA1R lanes' tag "[llvm-mc cannot
+    # encode this]" (any prefix) -- the same four tests; the tag is dropped
+    # from a converted line.
+    python3 scripts/converters/wave3a_byte_autoinc.py --cannot-encode [--apply]
 """
 import os
 import re
@@ -43,6 +49,10 @@ import two_decoder_sweep as T  # noqa: E402
 
 PREFIXES = {0xc4, 0xc5, 0xd4, 0xd5, 0xe4, 0xe5, 0xf4, 0xf5}
 BYTE = re.compile(r'^([ \t]*(?:[A-Za-z_.$][\w.$@]*:[ \t]*)?)\.byte[ \t]+([^;]*?)[ \t]*(;.*)?$')
+
+
+TAG = "[llvm-mc cannot encode this]"
+CANNOT = "--cannot-encode" in sys.argv
 
 
 def main():
@@ -62,15 +72,22 @@ def main():
                 bs = bytes(int(x.strip(), 0) & 0xFF for x in m.group(2).split(",") if x.strip())
             except ValueError:
                 continue
-            if 3 <= len(bs) <= 7 and bs[0] in PREFIXES:
+            if CANNOT:
+                if TAG in (m.group(3) or "") and 1 <= len(bs) <= 8:
+                    cands.append((f, i, L, m, bs))
+            elif 3 <= len(bs) <= 7 and bs[0] in PREFIXES:
                 cands.append((f, i, L, m, bs))
     ld = T.llvm_decode([c[4] for c in cands])
     md = T.mame_decode([c[4] for c in cands])
     texts = [x[1] if x else "nop" for x in ld]
     enc = T.llvm_encode(texts)
     edits = {}
+    # direct addresses print in decimal; the tree writes them in hex
+    hexify = lambda t: re.sub(r'\((\d+):(8|16|24)\)',
+                              lambda mm: "(0x%x:%s)" % (int(mm.group(1)), mm.group(2)), t)
+    enc2 = T.llvm_encode([hexify(t) for t in texts])
     print("toolchain:", T.toolchain())
-    for (f, i, L, m, bs), l, u, e in zip(cands, ld, md, enc):
+    for (f, i, L, m, bs), l, u, e, e2 in zip(cands, ld, md, enc, enc2):
         why = None
         if not l or l[1].startswith("<unknown>"):
             why = "llvm refuses"
@@ -80,7 +97,7 @@ def main():
             why = "not one instruction (llvm %s, unidasm %s bytes)" % (l[0], u[0])
         elif T.classify(l[0], l[1], u[0], u[1]) != "AGREE":
             why = "decoders disagree (%s)" % T.classify(l[0], l[1], u[0], u[1])
-        elif e != bs:
+        elif e != bs or e2 != bs:
             why = "llvm text does not re-encode"
         else:
             com = (m.group(3) or "").lower()
@@ -92,14 +109,14 @@ def main():
         print("%-7s %s:%d  %-22s llvm: %-28s mame: %-24s %s" % (
             tag, f, i + 1, bs.hex(" "), l[1] if l else "-", u[1] if u else "-", why or ""))
         if not why:
-            com = m.group(3) or ""
+            com = (m.group(3) or "").replace("   " + TAG, "").replace(" " + TAG, "").replace(TAG, "").rstrip()
             # a comment that only restates the instruction goes (Comment
             # Quality policy); one that says more (wsa1's address/bytes
             # columns, prose) stays
             squash = lambda t: re.sub(r'[\s()]', '', t.lower())
             if squash(com.lstrip(";")) == squash(u[1]):
                 com = ""
-            new = m.group(1) + l[1].replace(" ", "\t", 1) + ("\t" + com if com else "")
+            new = m.group(1) + hexify(l[1]).replace(" ", "\t", 1) + ("\t" + com if com else "")
             edits.setdefault(f, []).append((i, new))
     n = sum(len(v) for v in edits.values())
     print("convert %d lines in %d files" % (n, len(edits)))

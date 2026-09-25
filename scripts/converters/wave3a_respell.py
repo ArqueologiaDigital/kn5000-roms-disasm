@@ -40,6 +40,13 @@ right bytes but name the wrong instruction or register
             stw_erp -> ldto_werp, ldw_erp -> ldfr_werp (ldto = load TO the
             named register, ldfr = load FROM it).  Operands untouched.
 
+  ldadri256 `lda_dri XDE, 0xe1, 0x00, 0x01` -- LDA through the (Xrr+d16) form,
+            written as raw bytes because `lda xde, (xwa+256)` silently meant
+            (xwa+0) until UPDATE 17 -> `lda xde, (xwa+256)`.  Only the d16 =
+            0x0100 sites (the ones the 256 sentinel forced into raw bytes);
+            the other lda_dri sites are convertible the same way (see
+            --all-lda-dri) but are a spelling convergence, not a false text.
+
   disp256   `(xrr+256)` -- the retired sentinel for "(Xrr+d8) carrying 0" --
             becomes `(xrr+0:8)`.  The value is matched, not the text
             (256, 0x100, 0x0100).
@@ -285,6 +292,32 @@ def rw_erp(mn, ops):
     return (new, ops) if new else None
 
 
+# ------------------------------------------------------------------ lda_dri
+ALL_LDA_DRI = False
+
+
+def rw_lda_dri(mn, ops):
+    if mn.lower() != "lda_dri" or len(ops) != 4:
+        return None
+    try:
+        b0, b1, b2 = (int(x, 0) for x in ops[1:])
+    except ValueError:
+        return "REFUSE:not-constant"
+    if b0 < 0xE0 or (b0 & 3) != 1:
+        return None                      # register-indexed or bank register
+    d = b1 | (b2 << 8)
+    if d >= 0x8000:
+        d -= 0x10000
+    if d != 256 and not ALL_LDA_DRI:
+        return None
+    base = R32[(b0 - 0xE0) >> 2]
+    if -128 <= d <= 255:
+        disp = ("+%d" % d if d >= 0 else "%d" % d) + ":16"
+    else:
+        disp = "+%d" % d if d >= 0 else "%d" % d
+    return "lda", [ops[0].lower(), "(%s%s)" % (base, disp)]
+
+
 # ------------------------------------------------------------------ disp256
 D256 = re.compile(r'(\(\s*x(?:wa|bc|de|hl|ix|iy|iz|sp)\s*\+\s*)(0x0*100|256)(\s*\))', re.I)
 
@@ -332,8 +365,10 @@ def rewrite_line(fam, line, equs):
             return rw_muldiv(mn, o)
         if fam == "erp":
             return rw_erp(mn, o)
+        if fam == "ldadri256":
+            return rw_lda_dri(mn, o)
         return rw_autoinc(mn, o, equs)
-    if "\\" in ops and fam != "erp":
+    if "\\" in ops and fam not in ("erp",):
         r = rw(split_ops(ops))
         return (None, "REFUSE:macro-parameter") if r else (None, None)
     r = rw(split_ops(ops))
@@ -407,12 +442,16 @@ def assemble(mc, lines, equs=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("family", choices=("muldiv", "autoinc", "disp256", "erp"))
+    ap.add_argument("family", choices=("muldiv", "autoinc", "disp256", "erp", "ldadri256"))
+    ap.add_argument("--all-lda-dri", action="store_true",
+                    help="ldadri256: every d16 lda_dri site, not only +256")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--old-mc", default=OLD_MC)
     ap.add_argument("--new-mc", default=NEW_MC)
     ap.add_argument("--show", type=int, default=12)
     a = ap.parse_args()
+    global ALL_LDA_DRI
+    ALL_LDA_DRI = a.all_lda_dri
     for label, mc in (("old", a.old_mc), ("new", a.new_mc)):
         print("%s llvm-mc %s sha256 %s" % (label, mc,
               hashlib.sha256(open(mc, "rb").read()).hexdigest()[:12]))

@@ -8905,7 +8905,7 @@ PmExpFilter_EventDispatch:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	lda_dri	xwa, 0xfd, 0x00, 0x01	; lda xwa, xsp+0x0100
+	lda	xwa, (xsp+256)	; lda xwa, xsp+0x0100
 	ld	xbc, xde
 	srl	xbc, 0
 	ld	qbc, 0
@@ -8947,7 +8947,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	lda_dri	xbc, 0xfd, 0x00, 0x01	; lda xbc, xsp+0x0100
+	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -8999,7 +8999,7 @@ FSWAss_RefreshAllVoices_Loop:
 	sla	bc, 2
 	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4	; cp xwa, (xix+bc)
 	jr	nz, FSWAss_RefreshAllVoices_Skip10
-	lda_dri	xbc, 0xfd, 0x00, 0x01	; lda xbc, xsp+0x0100
+	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9017,7 +9017,7 @@ FSWAss_RefreshAllVoices_Skip9:
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	lda_dri	xde, 0xfd, 0x00, 0x01	; lda xde, xsp+0x0100
+	lda	xde, (xsp+256)	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 FSWAss_RefreshAllVoices_Skip10:
@@ -9035,7 +9035,7 @@ FSWAss_RefreshAllVoices_Loop2:
 	sla	bc, 2
 	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4	; cp xwa, (xix+bc)
 	jr	nz, FSWAss_RefreshAllVoices_Skip13
-	lda_dri	xbc, 0xfd, 0x00, 0x01	; lda xbc, xsp+0x0100
+	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9053,7 +9053,7 @@ FSWAss_RefreshAllVoices_Skip12:
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	lda_dri	xde, 0xfd, 0x00, 0x01	; lda xde, xsp+0x0100
+	lda	xde, (xsp+256)	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 FSWAss_RefreshAllVoices_Skip13:
@@ -9063,7 +9063,7 @@ FSWAss_RefreshAllVoices_Skip13:
 	jrl	SeqLoad_StoreReturnZero
 
 PmExpFilterCheck_CellDecode:
-	lda_dri XHL, 0xfd, 0x00, 0x01
+	lda xhl, (xsp+256)
 	ld xwa, xde
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
@@ -9104,7 +9104,7 @@ PmExpFilterCheck_SendNameA:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x00, 0x01
+	lda xde, (xsp+256)
 	ld xbc, 0x1e0008c
 	jr PmExpFilterCheck_DoSend
 
@@ -9137,7 +9137,7 @@ PmExpFilterCheck_StrcpySend:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x00, 0x01
+	lda xde, (xsp+256)
 	ld xbc, 0x1e0008c
 
 PmExpFilterCheck_DoSend:

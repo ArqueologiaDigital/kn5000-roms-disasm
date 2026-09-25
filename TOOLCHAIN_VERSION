@@ -982,7 +982,26 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #                 Refused again; F0/F2 destinations stay decoded (sweep ASYM
 #                 42 -> 40).
 #
-# SOURCE RESPELL gated with the final pin:
+# SOURCE RESPELLS gated with the final pin:
+#   lda256   136 `lda_dri XSP, 0xfd, 0x00, 0x01`-style lines (36 files) -- LDA
+#            through (Xrr+d16) with d16 = 0x0100, raw because `lda xsp,
+#            (xsp+256)` meant (xsp+0) -- are `lda xsp, (xsp+256)`
+#            (wave3a_respell.py ldadri256, 136/136 verified); 6 `.byte 0xf3,
+#            .., 0x00, 0x01, ..` lines likewise (v10/v9/v7 presentation_sound_
+#            nav.s epilogue `lda xsp,(xsp+256)`, v7 accompaniment_engine.s
+#            whose v10 twin is the lda_dri form, wsa1 prom_b's two
+#            "[llvm-mc cannot encode this]").  The other 4,263 lda_dri d16
+#            sites convert the same way (--all-lda-dri, 4,399 verified in a
+#            dry run) -- a spelling convergence, left to wave 3b.
+#   wsa1     92 more `.byte` lines tagged "[llvm-mc cannot encode this]"
+#            (wsa1 prom_b) are instructions this toolchain now decodes and
+#            re-encodes -- mostly direct-address forms, `bit 0, (0x133e:16)`
+#            -- by wave3a_byte_autoinc.py --cannot-encode (same four tests;
+#            the stale tag dropped).  254 tagged lines remain: 71 single
+#            `.byte` lines, each with the reason it stays in
+#            out/cannot_encode_decisions_4867e03232a6.txt, and 183 tags on
+#            lines that are already instructions (link32/unlk32/extpfx*
+#            pseudos, commented-out rows) -- not examined here.
 #   erp      9,929 lines, 170 files: stb_erp -> ldto_berp, ldb_erp ->
 #            ldfr_berp, stw_erp -> ldto_werp, ldw_erp -> ldfr_werp
 #            (wave3a_respell.py erp, each line old-binary e09c359a vs new-
@@ -1035,10 +1054,14 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   * The codegen-only LD32mi keeps the encoding dst 0x08 + imm32 -- a store
 #     the CPU does not have (MAME `db`).  If isel ever selects it, clang emits
 #     an invalid instruction.  Not exercised by any CodeGen test.
-#   * clang in llvm-project/build/bin was last built 2026-04-19 and is NOT at
-#     any pin in this file; the C sources the gate compiles are data-only, and
-#     their bins are not rebuilt unless a .c/.h changes.  Rebuild clang at the
-#     pin before trusting any C-side result.
+#   * (RESOLVED in this update) clang in llvm-project/build/bin had last been
+#     built 2026-04-19 -- at no pin in this file -- and ld.lld 2026-09-02; the
+#     C bins are only rebuilt when a .c/.h changes, so nothing had noticed.
+#     Both are now built at 4867e03232a6 (clang-21 41b11ceeb59d, lld
+#     076533d91a2d, llvm-objcopy 4e53fb65100d), and `make clean` + wsa1
+#     `make clean` + `make gate-all` rebuilt everything from nothing: 13/13,
+#     and all 286 C-generated bins (v10 104, v9 91, v7 91) byte-identical to
+#     the April clang's.
 #   * Pseudo mnemonics with correct meaning remain (ret_cc_ri, jp_24, call_24,
 #     jp_dd8, ex8/ex16, djnz8/16, unlk32, push_a/pop_a/push_f/pop_f/ex_ff,
 #     jp16/call16; ldb_sri0/ldw_sri0/ld_sril, whose 4 tree sites spelling a

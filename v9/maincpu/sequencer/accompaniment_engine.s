@@ -28038,7 +28038,7 @@ VoiceTable_AdvWrite_ScanLoop:
 	bitm 7, (xde)
 	jr z, VoiceTable_AdvWrite_LinkEntry
 	inc 1, bc
-	lda_dri XDE, 0xe9, 0x00, 0x01
+	lda xde, (xde+256)
 	cp bc, 0x153
 	jr ule, VoiceTable_AdvWrite_ScanLoop
 
@@ -35974,7 +35974,7 @@ StyleConv_ClearEntryTables:
 	lda xwa, (0x4788:16)
 	ld xbc, xwa
 	lda xde, (0x3f88:16)
-	lda_dri XHL, 0xe1, 0x00, 0x01
+	lda xhl, (xwa+256)
 
 StyleConv_ClearEntry_Outer:
 	ld xwa, xde
@@ -37810,7 +37810,7 @@ StylCnv_Type6_Dispatch:
 	jrl nz, StyleConv_DispatchSoundMemState
 	lda xwa, (0x4788:16)
 	ld xbc, xwa
-	lda_dri XDE, 0xe1, 0x00, 0x01
+	lda xde, (xwa+256)
 
 StylCnv_Type6_ClearRegion:
 	ld xwa, 0:i3

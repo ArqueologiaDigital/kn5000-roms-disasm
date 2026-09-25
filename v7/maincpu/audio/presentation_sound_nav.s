@@ -1292,7 +1292,7 @@ PostTitle_Function_Skip:
 	ld	bc, (xsp+264)
 	call	PostTitle_Function_Helper
 	popw	iz
-	.byte 0xf3, 0xfd, 0x00, 0x01, 0x37
+	lda	xsp, (xsp+256)
 	ret
 	ld	xwa, 15375276
 	call	FDemoText_ByteData_DisplayRefresh_Helper

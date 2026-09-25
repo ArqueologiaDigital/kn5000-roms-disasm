@@ -15460,7 +15460,7 @@ PsCstmCpBnkBox_ReturnZero:
 
 PsCstmCpBnkBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 PsCstmCpSwBox_Entry:
 
@@ -15532,7 +15532,7 @@ PsCstmCpSwBox_ReturnZero:
 
 PsCstmCpSwBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 PsCstmCpNameBox_Entry:
 
@@ -15685,7 +15685,7 @@ PsCtmAttStrBox_ReturnZero:
 
 PsCtmAttStrBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcMemNoBox_Entry:
 
@@ -15943,7 +15943,7 @@ PsCmpQtzBox_ReturnZero:
 
 PsCmpQtzBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 PsCmpMeasBox_Entry:
 
@@ -16860,7 +16860,7 @@ PsMspNameBnk_SetReturnZero:
 
 PsMspNameBnk_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 PsMspNameBnk_End:
 
@@ -17756,7 +17756,7 @@ RgpSetBnkBox_SetReturnZero:
 
 RgpSetBnkBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 
 MspRGrpSetBnkFunc:
@@ -17897,7 +17897,7 @@ MspMeasBox_SetReturnZero:
 
 MspMeasBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 MspMeasBox_End:
 
@@ -17960,7 +17960,7 @@ MspMemBox_SetReturnZero:
 
 MspMemBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 MspMemBox_End:
 
@@ -18019,7 +18019,7 @@ MspRecBnkBox_SetReturnZero:
 
 MspRecBnkBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 MspRecBnkBox_End:
 
@@ -18083,7 +18083,7 @@ AcSndArgGrid_BnkCase1:
 ; AcSndArgGridBnk case 2
 AcSndArgGrid_BnkCase2:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 
 MspPlayModeFunc:

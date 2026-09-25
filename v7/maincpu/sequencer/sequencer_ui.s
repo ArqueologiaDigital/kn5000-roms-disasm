@@ -1839,7 +1839,7 @@ AcDiskFileName_ReturnZero:
 
 AcDiskFileName_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcDiskFileName_End:
 
@@ -1909,7 +1909,7 @@ AcSmfFileName_ReturnZero:
 
 AcSmfFileName_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcSmfFileName_End:
 
@@ -1979,7 +1979,7 @@ AcSmfSongName_ReturnZero:
 
 AcSmfSongName_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcSmfSongName_End:
 
@@ -2049,7 +2049,7 @@ AcDocSongName_ReturnZero:
 
 AcDocSongName_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcDocSongName_End:
 
@@ -2119,7 +2119,7 @@ AcDocFileNo_ReturnZero:
 
 AcDocFileNo_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcDocFileNo_End:
 
@@ -2189,7 +2189,7 @@ AcPDSongName_ReturnZero:
 
 AcPDSongName_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcPDSongName_End:
 
@@ -2259,7 +2259,7 @@ AcPDFileNo_ReturnZero:
 
 AcPDFileNo_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 
 IvNamingExitProc:
@@ -3804,7 +3804,7 @@ AcCurSong_ReturnZero:
 
 AcCurSong_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 AcCurSong_End:
 
@@ -3875,7 +3875,7 @@ MuteChSel_TtlSetup:
 ; SmfMuteChSelFunc title default
 MuteChSel_TtlDefault:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 
 DemoSongSelFunc:
@@ -4355,7 +4355,7 @@ DPPlayDsp_ReturnPath:
 ; DPPauseDspCheck entry
 DPPauseDsp_CheckEntry:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x00, 0x01
+	lda xsp, (xsp+256)
 	ret
 
 DemoMedDspCheck:

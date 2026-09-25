@@ -15360,7 +15360,7 @@ PartCopy16_ComputeAddr:
 	ld w, 0x0:opc
 	extz xwa
 	sll xwa, 11
-	lda_dri XWA, 0xe1, 0x00, 0x01
+	lda xwa, (xwa+256)
 	lda xhl, (0x0ab000:24)
 	add xhl, xwa
 
@@ -16052,7 +16052,7 @@ SeqCopy2K_ComputeAddr:
 	ld w, 0x0:opc
 	extz xwa
 	sll xwa, 11
-	lda_dri XWA, 0xe1, 0x00, 0x01
+	lda xwa, (xwa+256)
 	lda xhl, (0x0ab000:24)
 	add xhl, xwa
 
