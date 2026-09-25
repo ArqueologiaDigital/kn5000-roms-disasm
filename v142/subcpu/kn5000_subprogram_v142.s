@@ -28,9 +28,6 @@
 	.equ	Part_PatchRecord_Ptr, 0x04136E
 	.equ	Voice_GlobalFlags, 0x041343
 
-; --- TMP94C241 special-function register names (.equ only, no bytes) ---
-	.include "shared/sfr_tmp94c241.s"
-
 ; --- Interrupt Vector Table & Handlers ---
 	.include "subcpu_vectors.s"
 

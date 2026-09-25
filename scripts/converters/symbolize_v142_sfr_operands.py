@@ -4,11 +4,13 @@ r"""symbolize_v142_sfr_operands.py -- SFR operands of the sub-CPU v1.42 code by 
 QUESTION THIS ANSWERS / WHAT IT DOES
     v142/subcpu/shared/sfr_tmp94c241.s defines the TMP94C241 special-function registers
     (`.equ P6, 0x18`, `.equ T8RUN, 0x80`, `.equ INTES1, 0xEB` ...) and the payload's comments
-    cite it ("SFR 0x18 is PORT 6 (shared/sfr_tmp94c241.s: `.equ P6, 0x18`)"), but the payload
-    never included it, so every SFR access spells the number: `res_dd8 7, 0x18`,
+    cite it ("SFR 0x18 is PORT 6 (shared/sfr_tmp94c241.s: `.equ P6, 0x18`)"), and subcpu_vectors.s
+    includes it, yet no operand used its names -- every SFR access spells the number: `res_dd8 7, 0x18`,
     `ld (0xEB:8), 0xDD:io`.  This script
-      * includes the SFR file at the top of kn5000_subprogram_v142.s (it only defines .equ
-        symbols -- no bytes -- and none of its 185 names collides with a payload symbol);
+      * (the SFR file is already included, by subcpu_vectors.s, so its names are in scope; an
+        earlier run of this script added a second include to kn5000_subprogram_v142.s -- harmless
+        to llvm-mc, but it broke the census/symboliser mirrors, which label the file's lines and
+        then see every label twice; the include step is gone);
       * rewrites the 8-bit-direct SFR operands to the register name: the address operand of the
         `*_dd8` bit instructions (set/res/bit/stcf/ldcf/xorcf/chg) and every `(addr:8)` memory
         operand, whenever the address has exactly one name in the SFR file -- except names the
@@ -61,13 +63,6 @@ def main():
             code = MEM8.sub(sub, code)
             L[i] = code + sep + com
         txt = "\n".join(L)
-        if f == "kn5000_subprogram_v142.s":
-            anchor = "; --- Interrupt Vector Table & Handlers ---\n"
-            inc = ("; --- TMP94C241 special-function register names (.equ only, no bytes) ---\n"
-                   "\t.include \"shared/sfr_tmp94c241.s\"\n\n")
-            if inc not in txt:
-                assert txt.count(anchor) == 1
-                txt = txt.replace(anchor, inc + anchor)
         print("%-28s %4d operands" % (f, n))
         total += n
         if "--apply" in sys.argv:
