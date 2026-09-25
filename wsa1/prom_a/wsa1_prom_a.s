@@ -60295,9 +60295,12 @@ DisplayList_FA21BF:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 2 rows of 5 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA2216:
-	.byte 0x54, 0x4f, 0x54, 0x41, 0x4c, 0x53, 0x4f, 0x55, 0x4e, 0x44          ; FA2216
+	.ascii "TOTAL"                              ; FA2216  [0]
+	.ascii "SOUND"                              ; FA221B  [1]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA2220 -- 128 bytes, kind=operand_table
 ;
@@ -60308,16 +60311,26 @@ OperandTable_FA2216:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 16 rows of 8 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA2220:
-	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52, 0x41, 0x4e, 0x44, 0x4f, 0x4d, 0x20, 0x20  ; FA2220
-	.byte 0x50, 0x49, 0x41, 0x4e, 0x4f, 0x20, 0x20, 0x20, 0x4f, 0x52, 0x43, 0x48, 0x53, 0x54, 0x52, 0x41  ; FA2230
-	.byte 0x50, 0x59, 0x54, 0x48, 0x41, 0x47, 0x52, 0x4e, 0x57, 0x52, 0x4b, 0x4d, 0x49, 0x53, 0x54, 0x52  ; FA2240
-	.byte 0x4b, 0x52, 0x4e, 0x42, 0x45, 0x52, 0x47, 0x52, 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x31  ; FA2250
-	.byte 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x32, 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x33  ; FA2260
-	.byte 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x34, 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x35  ; FA2270
-	.byte 0x53, 0x4c, 0x45, 0x4e, 0x44, 0x52, 0x4f, 0x20, 0x50, 0x45, 0x4c, 0x4f, 0x47, 0x20, 0x20, 0x20  ; FA2280
-	.byte 0x55, 0x53, 0x45, 0x52, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x20, 0x20, 0x20  ; FA2290
+	.ascii "OFF     "                           ; FA2220  [0]
+	.ascii "RANDOM  "                           ; FA2228  [1]
+	.ascii "PIANO   "                           ; FA2230  [2]
+	.ascii "ORCHSTRA"                           ; FA2238  [3]
+	.ascii "PYTHAGRN"                           ; FA2240  [4]
+	.ascii "WRKMISTR"                           ; FA2248  [5]
+	.ascii "KRNBERGR"                           ; FA2250  [6]
+	.ascii "ARABIC 1"                           ; FA2258  [7]
+	.ascii "ARABIC 2"                           ; FA2260  [8]
+	.ascii "ARABIC 3"                           ; FA2268  [9]
+	.ascii "ARABIC 4"                           ; FA2270  [10]
+	.ascii "ARABIC 5"                           ; FA2278  [11]
+	.ascii "SLENDRO "                           ; FA2280  [12]
+	.ascii "PELOG   "                           ; FA2288  [13]
+	.ascii "USER    "                           ; FA2290  [14]
+	.ascii "USER    "                           ; FA2298  [15]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA22A0 -- 32 bytes, kind=operand_table
 ;
@@ -60328,10 +60341,28 @@ OperandTable_FA2220:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 16 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \x88 / \x8c sit where a chromatic scale puts the flats and
+;          the sharp -- a reading of the LCD font's glyphs, not a decode.
 ; ---------------------------------------------------------------------
 OperandTable_FA22A0:
-	.byte 0x43, 0x20, 0x44, 0x88, 0x44, 0x20, 0x45, 0x88, 0x45, 0x20, 0x46, 0x20, 0x47, 0x88, 0x47, 0x20  ; FA22A0
-	.byte 0x41, 0x88, 0x41, 0x20, 0x42, 0x88, 0x42, 0x20, 0x43, 0x20, 0x43, 0x20, 0x43, 0x20, 0x43, 0x20  ; FA22B0
+	.ascii "C "                                 ; FA22A0  [0]
+	.ascii "D\x88"                              ; FA22A2  [1]
+	.ascii "D "                                 ; FA22A4  [2]
+	.ascii "E\x88"                              ; FA22A6  [3]
+	.ascii "E "                                 ; FA22A8  [4]
+	.ascii "F "                                 ; FA22AA  [5]
+	.ascii "G\x88"                              ; FA22AC  [6]
+	.ascii "G "                                 ; FA22AE  [7]
+	.ascii "A\x88"                              ; FA22B0  [8]
+	.ascii "A "                                 ; FA22B2  [9]
+	.ascii "B\x88"                              ; FA22B4  [10]
+	.ascii "B "                                 ; FA22B6  [11]
+	.ascii "C "                                 ; FA22B8  [12]
+	.ascii "C "                                 ; FA22BA  [13]
+	.ascii "C "                                 ; FA22BC  [14]
+	.ascii "C "                                 ; FA22BE  [15]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA22C0 -- 11 bytes, kind=display_list
 ;
@@ -60430,9 +60461,28 @@ DisplayList_FA244B:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 16 rows of 1 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \xa9 is a character of the LCD font whose glyph is not
+;          established here.
 ; ---------------------------------------------------------------------
 OperandTable_FA2469:
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0xa9, 0xa9  ; FA2469
+	.ascii " "                                  ; FA2469  [0]
+	.ascii " "                                  ; FA246A  [1]
+	.ascii " "                                  ; FA246B  [2]
+	.ascii " "                                  ; FA246C  [3]
+	.ascii " "                                  ; FA246D  [4]
+	.ascii " "                                  ; FA246E  [5]
+	.ascii " "                                  ; FA246F  [6]
+	.ascii " "                                  ; FA2470  [7]
+	.ascii " "                                  ; FA2471  [8]
+	.ascii " "                                  ; FA2472  [9]
+	.ascii " "                                  ; FA2473  [10]
+	.ascii " "                                  ; FA2474  [11]
+	.ascii " "                                  ; FA2475  [12]
+	.ascii " "                                  ; FA2476  [13]
+	.ascii "\xa9"                               ; FA2477  [14]
+	.ascii "\xa9"                               ; FA2478  [15]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA2479 -- 143 bytes, kind=display_list
 ;
@@ -60767,9 +60817,12 @@ DisplayList_FA2BB2:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 2 rows of 1 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA2BC1:
-	.byte 0x31, 0x32                                                          ; FA2BC1
+	.ascii "1"                                  ; FA2BC1  [0]
+	.ascii "2"                                  ; FA2BC2  [1]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA2BC3 -- 384 bytes, kind=operand_table
 ;
@@ -60780,32 +60833,34 @@ OperandTable_FA2BC1:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 24 rows of 16 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA2BC3:
-	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2BC3
-	.byte 0x4d, 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x31, 0x28, 0x23, 0x20, 0x31, 0x29  ; FA2BD3
-	.byte 0x4d, 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x32, 0x28, 0x23, 0x20, 0x32, 0x29  ; FA2BE3
-	.byte 0x43, 0x54, 0x52, 0x4c, 0x2e, 0x50, 0x45, 0x44, 0x41, 0x4c, 0x20, 0x28, 0x23, 0x20, 0x34, 0x29  ; FA2BF3
-	.byte 0x45, 0x58, 0x50, 0x52, 0x45, 0x53, 0x53, 0x49, 0x4f, 0x4e, 0x20, 0x28, 0x23, 0x31, 0x31, 0x29  ; FA2C03
-	.byte 0x48, 0x4f, 0x4c, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x28, 0x23, 0x36, 0x34, 0x29  ; FA2C13
-	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x2e, 0x58, 0x28, 0x23, 0x31, 0x36, 0x29  ; FA2C23
-	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x2e, 0x59, 0x28, 0x23, 0x31, 0x37, 0x29  ; FA2C33
-	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x54, 0x52, 0x4c, 0x2e, 0x20, 0x58, 0x28, 0x23, 0x31, 0x38, 0x29  ; FA2C43
-	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x54, 0x52, 0x4c, 0x2e, 0x20, 0x59, 0x28, 0x23, 0x31, 0x39, 0x29  ; FA2C53
-	.byte 0x41, 0x46, 0x54, 0x45, 0x52, 0x20, 0x54, 0x4f, 0x55, 0x43, 0x48, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C63
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C73
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C83
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C93
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2CA3
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2CB3
-	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2CC3
-	.byte 0x48, 0x4f, 0x4c, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x28, 0x23, 0x36, 0x34, 0x29  ; FA2CD3
-	.byte 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x20, 0x49, 0x4e, 0x43, 0x20  ; FA2CE3
-	.byte 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x20, 0x44, 0x45, 0x43, 0x20  ; FA2CF3
-	.byte 0x53, 0x54, 0x41, 0x52, 0x54, 0x2f, 0x53, 0x54, 0x4f, 0x50, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D03
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D13
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D23
-	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D33
+	.ascii "OFF             "                   ; FA2BC3  [0]
+	.ascii "MODULATION1(# 1)"                   ; FA2BD3  [1]
+	.ascii "MODULATION2(# 2)"                   ; FA2BE3  [2]
+	.ascii "CTRL.PEDAL (# 4)"                   ; FA2BF3  [3]
+	.ascii "EXPRESSION (#11)"                   ; FA2C03  [4]
+	.ascii "HOLD       (#64)"                   ; FA2C13  [5]
+	.ascii "R.T.CREAT.X(#16)"                   ; FA2C23  [6]
+	.ascii "R.T.CREAT.Y(#17)"                   ; FA2C33  [7]
+	.ascii "R.T.CTRL. X(#18)"                   ; FA2C43  [8]
+	.ascii "R.T.CTRL. Y(#19)"                   ; FA2C53  [9]
+	.ascii "AFTER TOUCH     "                   ; FA2C63  [10]
+	.ascii "NO ASSIGN       "                   ; FA2C73  [11]
+	.ascii "NO ASSIGN       "                   ; FA2C83  [12]
+	.ascii "NO ASSIGN       "                   ; FA2C93  [13]
+	.ascii "NO ASSIGN       "                   ; FA2CA3  [14]
+	.ascii "NO ASSIGN       "                   ; FA2CB3  [15]
+	.ascii "OFF             "                   ; FA2CC3  [16]
+	.ascii "HOLD       (#64)"                   ; FA2CD3  [17]
+	.ascii "SOUND/COMBI INC "                   ; FA2CE3  [18]
+	.ascii "SOUND/COMBI DEC "                   ; FA2CF3  [19]
+	.ascii "START/STOP      "                   ; FA2D03  [20]
+	.ascii "NO ASSIGN       "                   ; FA2D13  [21]
+	.ascii "NO ASSIGN       "                   ; FA2D23  [22]
+	.ascii "NO ASSIGN       "                   ; FA2D33  [23]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA2D43 -- 2 bytes, kind=operand_table
 ;
@@ -60816,9 +60871,12 @@ OperandTable_FA2BC3:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 2 rows of 1 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA2D43:
-	.byte 0x2b, 0x2d                                                          ; FA2D43
+	.ascii "+"                                  ; FA2D43  [0]
+	.ascii "-"                                  ; FA2D44  [1]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA2D45 -- 22 bytes, kind=display_list
 ;
@@ -61168,9 +61226,12 @@ DisplayList_FA33C4:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 2 rows of 5 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA33CF:
-	.byte 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x43, 0x4f, 0x4d, 0x42, 0x49          ; FA33CF
+	.ascii "SOUND"                              ; FA33CF  [0]
+	.ascii "COMBI"                              ; FA33D4  [1]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA33D9 -- 96 bytes, kind=operand_table
 ;
@@ -61181,14 +61242,18 @@ OperandTable_FA33CF:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 8 rows of 12 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA33D9:
-	.byte 0x20, 0x20, 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52  ; FA33D9
-	.byte 0x4f, 0x4d, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20  ; FA33E9
-	.byte 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20  ; FA33F9
-	.byte 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x44, 0x52, 0x55, 0x4d, 0x53, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52  ; FA3409
-	.byte 0x20, 0x31, 0x20, 0x44, 0x52, 0x55, 0x4d, 0x53, 0x55, 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x44  ; FA3419
-	.byte 0x52, 0x55, 0x4d, 0x53, 0x20, 0x20, 0x20, 0x45, 0x58, 0x54, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20  ; FA3429
+	.ascii "   ROM 1    "                       ; FA33D9  [0]
+	.ascii "   ROM 2    "                       ; FA33E5  [1]
+	.ascii "   USER 1   "                       ; FA33F1  [2]
+	.ascii "   USER 2   "                       ; FA33FD  [3]
+	.ascii " ROM DRUMS  "                       ; FA3409  [4]
+	.ascii "USER 1 DRUMS"                       ; FA3415  [5]
+	.ascii "USER 2 DRUMS"                       ; FA3421  [6]
+	.ascii "   EXT 1    "                       ; FA342D  [7]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA3439 -- 36 bytes, kind=operand_table
 ;
@@ -61199,11 +61264,13 @@ OperandTable_FA33D9:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 3 rows of 12 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA3439:
-	.byte 0x20, 0x20, 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55  ; FA3439
-	.byte 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x45, 0x58, 0x54, 0x20, 0x31  ; FA3449
-	.byte 0x20, 0x20, 0x20, 0x20                                              ; FA3459
+	.ascii "   ROM 1    "                       ; FA3439  [0]
+	.ascii "   USER 1   "                       ; FA3445  [1]
+	.ascii "   EXT 1    "                       ; FA3451  [2]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA345D -- 48 bytes, kind=operand_table
 ;
@@ -61214,11 +61281,14 @@ OperandTable_FA3439:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 4 rows of 12 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA345D:
-	.byte 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45  ; FA345D
-	.byte 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50  ; FA346D
-	.byte 0x20, 0x33, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA347D
+	.ascii "  RE-MAP 1  "                       ; FA345D  [0]
+	.ascii "  RE-MAP 2  "                       ; FA3469  [1]
+	.ascii "  RE-MAP 3  "                       ; FA3475  [2]
+	.ascii "            "                       ; FA3481  [3]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA348D -- 16 bytes, kind=operand_table
 ;
@@ -61458,14 +61528,18 @@ DisplayList_FA3804:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 8 rows of 12 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA38F4:
-	.byte 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55  ; FA38F4
-	.byte 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50  ; FA3904
-	.byte 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x32, 0x20, 0x20  ; FA3914
-	.byte 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x33, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3924
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3934
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3944
+	.ascii "   USER 1   "                       ; FA38F4  [0]
+	.ascii "   USER 2   "                       ; FA3900  [1]
+	.ascii "  RE-MAP 1  "                       ; FA390C  [2]
+	.ascii "  RE-MAP 2  "                       ; FA3918  [3]
+	.ascii "  RE-MAP 3  "                       ; FA3924  [4]
+	.ascii "            "                       ; FA3930  [5]
+	.ascii "            "                       ; FA393C  [6]
+	.ascii "            "                       ; FA3948  [7]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA3954 -- 128 bytes, kind=operand_table
 ;
@@ -61555,11 +61629,14 @@ DisplayList_FA3A52:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 4 rows of 12 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA3A6C:
-	.byte 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45  ; FA3A6C
-	.byte 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50  ; FA3A7C
-	.byte 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x33, 0x20, 0x20  ; FA3A8C
+	.ascii "   USER 1   "                       ; FA3A6C  [0]
+	.ascii "  RE-MAP 1  "                       ; FA3A78  [1]
+	.ascii "  RE-MAP 2  "                       ; FA3A84  [2]
+	.ascii "  RE-MAP 3  "                       ; FA3A90  [3]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA3A9C -- 268 bytes, kind=display_list
 ;
@@ -61692,14 +61769,18 @@ DisplayList_FA3CC9:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 8 rows of 12 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA3CD4:
-	.byte 0x20, 0x20, 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52  ; FA3CD4
-	.byte 0x4f, 0x4d, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20  ; FA3CE4
-	.byte 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20  ; FA3CF4
-	.byte 0x20, 0x20, 0x20, 0x45, 0x58, 0x54, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3D04
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3D14
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3D24
+	.ascii "   ROM 1    "                       ; FA3CD4  [0]
+	.ascii "   ROM 2    "                       ; FA3CE0  [1]
+	.ascii "   USER 1   "                       ; FA3CEC  [2]
+	.ascii "   USER 2   "                       ; FA3CF8  [3]
+	.ascii "   EXT 1    "                       ; FA3D04  [4]
+	.ascii "            "                       ; FA3D10  [5]
+	.ascii "            "                       ; FA3D1C  [6]
+	.ascii "            "                       ; FA3D28  [7]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA3D34 -- 11 bytes, kind=display_list
 ;
@@ -61897,10 +61978,12 @@ DisplayList_FA406A:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 2 rows of 12 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4075:
-	.byte 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55  ; FA4075
-	.byte 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20                      ; FA4085
+	.ascii "   USER 1   "                       ; FA4075  [0]
+	.ascii "   USER 2   "                       ; FA4081  [1]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA408D -- 22 bytes, kind=display_list
 ;
@@ -62147,11 +62230,14 @@ DisplayList_FA447D:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 4 rows of 11 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4487:
-	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA4487
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x26, 0x43, 0x4f, 0x4d, 0x42  ; FA4497
-	.byte 0x49, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA44A7
+	.ascii "OFF        "                        ; FA4487  [0]
+	.ascii "COMBI      "                        ; FA4492  [1]
+	.ascii "SOUND&COMBI"                        ; FA449D  [2]
+	.ascii "           "                        ; FA44A8  [3]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA44B3 -- 44 bytes, kind=operand_table
 ;
@@ -62162,11 +62248,14 @@ OperandTable_FA4487:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 4 rows of 11 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA44B3:
-	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA44B3
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x26, 0x43, 0x4f, 0x4d, 0x42  ; FA44C3
-	.byte 0x49, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA44D3
+	.ascii "OFF        "                        ; FA44B3  [0]
+	.ascii "COMBI      "                        ; FA44BE  [1]
+	.ascii "SOUND&COMBI"                        ; FA44C9  [2]
+	.ascii "           "                        ; FA44D4  [3]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA44DF -- 3 bytes, kind=operand_table
 ;
@@ -62177,9 +62266,11 @@ OperandTable_FA44B3:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 3 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA44DF:
-	.byte 0x4f, 0x4e, 0x20                                                    ; FA44DF
+	.ascii "ON "                                ; FA44DF  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA44E2 -- 6 bytes, kind=operand_table
 ;
@@ -62190,9 +62281,12 @@ OperandTable_FA44DF:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 2 rows of 3 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA44E2:
-	.byte 0x4f, 0x46, 0x46, 0x4f, 0x4e, 0x20                                  ; FA44E2
+	.ascii "OFF"                                ; FA44E2  [0]
+	.ascii "ON "                                ; FA44E5  [1]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA44E8 -- 167 bytes, kind=display_list
 ;
@@ -62452,10 +62546,14 @@ DisplayList_FA4A7F:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 4 rows of 6 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B33:
-	.byte 0x4e, 0x4f, 0x52, 0x4d, 0x41, 0x4c, 0x55, 0x53, 0x45, 0x52, 0x31, 0x20, 0x55, 0x53, 0x45, 0x52  ; FA4B33
-	.byte 0x32, 0x20, 0x55, 0x53, 0x45, 0x52, 0x33, 0x20                      ; FA4B43
+	.ascii "NORMAL"                             ; FA4B33  [0]
+	.ascii "USER1 "                             ; FA4B39  [1]
+	.ascii "USER2 "                             ; FA4B3F  [2]
+	.ascii "USER3 "                             ; FA4B45  [3]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B4B -- 2 bytes, kind=operand_table
 ;
@@ -62466,9 +62564,11 @@ OperandTable_FA4B33:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B4B:
-	.byte 0x43, 0x20                                                          ; FA4B4B
+	.ascii "C "                                 ; FA4B4B  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B4D -- 2 bytes, kind=operand_table
 ;
@@ -62479,9 +62579,13 @@ OperandTable_FA4B4B:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \x88 / \x8c sit where a chromatic scale puts the flats and
+;          the sharp -- a reading of the LCD font's glyphs, not a decode.
 ; ---------------------------------------------------------------------
 OperandTable_FA4B4D:
-	.byte 0x44, 0x88                                                          ; FA4B4D
+	.ascii "D\x88"                              ; FA4B4D  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B4F -- 2 bytes, kind=operand_table
 ;
@@ -62492,9 +62596,11 @@ OperandTable_FA4B4D:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B4F:
-	.byte 0x44, 0x20                                                          ; FA4B4F
+	.ascii "D "                                 ; FA4B4F  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B51 -- 2 bytes, kind=operand_table
 ;
@@ -62505,9 +62611,13 @@ OperandTable_FA4B4F:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \x88 / \x8c sit where a chromatic scale puts the flats and
+;          the sharp -- a reading of the LCD font's glyphs, not a decode.
 ; ---------------------------------------------------------------------
 OperandTable_FA4B51:
-	.byte 0x45, 0x88                                                          ; FA4B51
+	.ascii "E\x88"                              ; FA4B51  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B53 -- 2 bytes, kind=operand_table
 ;
@@ -62518,9 +62628,11 @@ OperandTable_FA4B51:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B53:
-	.byte 0x45, 0x20                                                          ; FA4B53
+	.ascii "E "                                 ; FA4B53  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B55 -- 2 bytes, kind=operand_table
 ;
@@ -62531,9 +62643,11 @@ OperandTable_FA4B53:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B55:
-	.byte 0x46, 0x20                                                          ; FA4B55
+	.ascii "F "                                 ; FA4B55  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B57 -- 2 bytes, kind=operand_table
 ;
@@ -62544,9 +62658,13 @@ OperandTable_FA4B55:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \x88 / \x8c sit where a chromatic scale puts the flats and
+;          the sharp -- a reading of the LCD font's glyphs, not a decode.
 ; ---------------------------------------------------------------------
 OperandTable_FA4B57:
-	.byte 0x46, 0x8c                                                          ; FA4B57
+	.ascii "F\x8c"                              ; FA4B57  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B59 -- 2 bytes, kind=operand_table
 ;
@@ -62557,9 +62675,11 @@ OperandTable_FA4B57:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B59:
-	.byte 0x47, 0x20                                                          ; FA4B59
+	.ascii "G "                                 ; FA4B59  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B5B -- 2 bytes, kind=operand_table
 ;
@@ -62570,9 +62690,13 @@ OperandTable_FA4B59:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \x88 / \x8c sit where a chromatic scale puts the flats and
+;          the sharp -- a reading of the LCD font's glyphs, not a decode.
 ; ---------------------------------------------------------------------
 OperandTable_FA4B5B:
-	.byte 0x41, 0x88                                                          ; FA4B5B
+	.ascii "A\x88"                              ; FA4B5B  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B5D -- 2 bytes, kind=operand_table
 ;
@@ -62583,9 +62707,11 @@ OperandTable_FA4B5B:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B5D:
-	.byte 0x41, 0x20                                                          ; FA4B5D
+	.ascii "A "                                 ; FA4B5D  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B5F -- 2 bytes, kind=operand_table
 ;
@@ -62596,9 +62722,13 @@ OperandTable_FA4B5D:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 1 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \x88 / \x8c sit where a chromatic scale puts the flats and
+;          the sharp -- a reading of the LCD font's glyphs, not a decode.
 ; ---------------------------------------------------------------------
 OperandTable_FA4B5F:
-	.byte 0x42, 0x88                                                          ; FA4B5F
+	.ascii "B\x88"                              ; FA4B5F  [0]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B61 -- 28 bytes, kind=operand_table
 ;
@@ -62609,10 +62739,26 @@ OperandTable_FA4B5F:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 14 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
+;          \x88 / \x8c sit where a chromatic scale puts the flats and
+;          the sharp -- a reading of the LCD font's glyphs, not a decode.
 ; ---------------------------------------------------------------------
 OperandTable_FA4B61:
-	.byte 0x42, 0x20, 0x43, 0x20, 0x44, 0x88, 0x44, 0x20, 0x45, 0x88, 0x45, 0x20, 0x46, 0x20, 0x46, 0x8c  ; FA4B61
-	.byte 0x47, 0x20, 0x41, 0x88, 0x41, 0x20, 0x42, 0x88, 0x42, 0x20, 0x4f, 0x46  ; FA4B71
+	.ascii "B "                                 ; FA4B61  [0]
+	.ascii "C "                                 ; FA4B63  [1]
+	.ascii "D\x88"                              ; FA4B65  [2]
+	.ascii "D "                                 ; FA4B67  [3]
+	.ascii "E\x88"                              ; FA4B69  [4]
+	.ascii "E "                                 ; FA4B6B  [5]
+	.ascii "F "                                 ; FA4B6D  [6]
+	.ascii "F\x8c"                              ; FA4B6F  [7]
+	.ascii "G "                                 ; FA4B71  [8]
+	.ascii "A\x88"                              ; FA4B73  [9]
+	.ascii "A "                                 ; FA4B75  [10]
+	.ascii "B\x88"                              ; FA4B77  [11]
+	.ascii "B "                                 ; FA4B79  [12]
+	.ascii "OF"                                 ; FA4B7B  [13]
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4B7D -- 34 bytes, kind=operand_table
 ;
@@ -62623,11 +62769,27 @@ OperandTable_FA4B61:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 17 rows of 2 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4B7D:
-	.byte 0x2d, 0x32, 0x2d, 0x31, 0x20, 0x30, 0x20, 0x31, 0x20, 0x32, 0x20, 0x33, 0x20, 0x34, 0x20, 0x35  ; FA4B7D
-	.byte 0x20, 0x36, 0x20, 0x37, 0x20, 0x38, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA4B8D
-	.byte 0x46, 0x20                                                          ; FA4B9D
+	.ascii "-2"                                 ; FA4B7D  [0]
+	.ascii "-1"                                 ; FA4B7F  [1]
+	.ascii " 0"                                 ; FA4B81  [2]
+	.ascii " 1"                                 ; FA4B83  [3]
+	.ascii " 2"                                 ; FA4B85  [4]
+	.ascii " 3"                                 ; FA4B87  [5]
+	.ascii " 4"                                 ; FA4B89  [6]
+	.ascii " 5"                                 ; FA4B8B  [7]
+	.ascii " 6"                                 ; FA4B8D  [8]
+	.ascii " 7"                                 ; FA4B8F  [9]
+	.ascii " 8"                                 ; FA4B91  [10]
+	.ascii "  "                                 ; FA4B93  [11]
+	.ascii "  "                                 ; FA4B95  [12]
+	.ascii "  "                                 ; FA4B97  [13]
+	.ascii "  "                                 ; FA4B99  [14]
+	.ascii "  "                                 ; FA4B9B  [15]
+	.ascii "F "                                 ; FA4B9D  [16]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA4B9F -- 11 bytes, kind=display_list
 ;
@@ -62780,9 +62942,12 @@ DisplayList_FA4D9A:
 ; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; Text: 2 rows of 4 characters as `.ascii` (lane proma 2026-09-25,
+;          notes/proma-2026-09-25/ascii_operand_tables.py).
 ; ---------------------------------------------------------------------
 OperandTable_FA4E58:
-	.byte 0x4d, 0x4f, 0x4e, 0x4f, 0x50, 0x4f, 0x4c, 0x59                      ; FA4E58
+	.ascii "MONO"                               ; FA4E58  [0]
+	.ascii "POLY"                               ; FA4E5C  [1]
 ; ---------------------------------------------------------------------
 ; DisplayList_FA4E60 -- 11 bytes, kind=display_list
 ;
