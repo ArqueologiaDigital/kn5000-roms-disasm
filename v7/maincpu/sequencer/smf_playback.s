@@ -116,7 +116,7 @@ SoundBank_InitTrack_Loop:
 	xor iy, iy
 
 SoundBank_InitTrack_ByteFields:
-	ld	xix, 15872250
+	ld	xix, SoundBank_DefaultTrackData
 	ld_rrb	a, xix, iy
 	st_rrb	a, xhl, iy
 	inc	1, iy
@@ -152,15 +152,17 @@ SoundBank_InitTrack_ClearTail:
 	pop xix
 	ret
 
+; 16-byte default image of the head of each of the 10 bank records at DRAM
+; 0xAB000 + 0x800*k.  Read by SoundBank_InitTrack_ByteFields (0xF2309A):
+; bytes +0..+7 ("ZZZZ", 0, 1, 8, 0) are copied to record +0..+7 (IY = 0..7,
+; ld A,(XIX+IY) / ld (XHL+IY),A), then record +8 gets the byte at 0x8E6A;
+; SoundBank_InitTrack_WordFields copies the four LE16 words at +8 (via
+; SoundBank_DefaultTrackData_0x8) to record +0x14..+0x1B.  TYPED 2026-09-25
+; (lane seqeng): bytes +5..+15 were spelled normal / ld (0:8),0:io / nop /
+; nop / normal / pushw iz / nop / ld w,5.
 SoundBank_DefaultTrackData:	.asciz "ZZZZ"
-	normal
-	ld	(0:8), 0:io
-	nop
-	nop
-	normal
-	pushw	iz
-	nop
-	ld	w, 5:opc
+	.byte 0x01, 0x08, 0x00
+	.short 0x0000, 0x0100, 0x002e, 0x0520
 
 SoundBank_CopyChannelData:
 	push xhl
@@ -308,6 +310,11 @@ SoundBank_NextEntry3:
 	pop xhl
 	ret
 
+; Default name text: 10 spaces then 6 underscores.  Read by
+; SoundBank_CopyChData (0xF23158) with ldir: when record
+; byte +0xC1 is below 0x20 (no name), the 6 underscores at +0x0A
+; (SoundBank_DefaultNamePadding_0xA) go to record +0x100; then 10 spaces
+; from +0 follow them, and 6 spaces from +0 go to record +0xC1.
 SoundBank_DefaultNamePadding:	.ascii "          ______"
 
 SMF_SelectBankAndLoad:
@@ -547,7 +554,7 @@ SMF_ReadTrackData_FloppyErr:
 	jp SeqPlay_ResetAndStop
 
 SMF_ReadTrackData_Continue:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	djnz xbc, SMF_ReadTrackData_Loop
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return

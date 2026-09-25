@@ -56,6 +56,10 @@ SeqPlay_ReadyStateTransition:
 	call SeqStep_PlaybackNop
 	ret
 
+; Standard MIDI File chunk IDs "MThd" (+0) and "MTrk" (+4), compared
+; against bytes read from the file: read by smf_playback.s via
+; `ld xiy, SMF_HeaderMagic_MThdMTrk` (header chunk) and
+; `ld xiy, SMF_HeaderMagic_MThdMTrk_0x4` (track chunk).
 SMF_HeaderMagic_MThdMTrk:	.ascii "MThdMTrk"
 
 SeqTrack_ResetAllChannelSlots:
@@ -214,58 +218,18 @@ FloppyIO_SelectReadMode_Dispatch:
 	pop	xhl
 	pop	xwa
 	ret
-FloppyIO_SwitchboardChannelPtrs:
-	.byte 0x96, 0xf4
-	nop
-	nop
-	ret	ov
-	nop
-	nop
-	cp	d, b
-	nop
-	nop
-	.byte 0xe4, 0xf4
-	nop
-	nop
-	swi	6
-	.byte 0xf4
-	nop
-	nop
-	push_f
-	.byte 0xf5
-	nop
-	nop
-	ldw	de, 245
-	nop
-	popw	ix
-	.byte 0xf5
-	nop
-	nop
-	jr	z, -11
-	nop
-	nop
-	.byte 0x80, 0xf5
-	nop
-	nop
-	.byte 0x9a, 0xf5
-	nop
-	nop
-	.byte 0xb4, 0xf5
-	nop
-	nop
-	cp	e, h
-	nop
-	nop
-	cp	xiy, xwa
-	nop
-	nop
-	push	sr
-	.byte 0xf6
-	nop
-	nop
-	.byte 0x1c, 0xf6
-	nop
-	nop
+ChannelRecord_PtrTable:
+; 16 x 32-bit pointers to the sixteen 26-byte (0x1A) channel records at RAM 0xF496 + 26*k, k = 0..15 (the
+; same 64 bytes as VoiceChannel_ParamTable1 +0x00, a second copy).
+; Read by SeqPlay_InitChannelParams (0xF23E1B): for DE = 0..15,
+; XIY = long [this + DE*4], then record field +11 = 2 and field +10 = 0x80.
+; Stride 4, 16 entries (the loop count BC = 0x10).  Renamed 2026-09-25 from
+; FloppyIO_SwitchboardChannelPtrs: nothing here is floppy- or switchboard-specific.  TYPED 2026-09-25 (lane
+; seqeng); was spelled as nop / ret ov / swi 6 / push_f ... around .byte.
+	.long 0x0000f496, 0x0000f4b0, 0x0000f4ca, 0x0000f4e4
+	.long 0x0000f4fe, 0x0000f518, 0x0000f532, 0x0000f54c
+	.long 0x0000f566, 0x0000f580, 0x0000f59a, 0x0000f5b4
+	.long 0x0000f5ce, 0x0000f5e8, 0x0000f602, 0x0000f61c
 
 FloppyIO_ConfigureSwitchboard:
 	cp (4600:16), 0
@@ -298,7 +262,7 @@ FloppyIO_ConfigSwb_QueueEvent:
 
 FloppyIO_ConfigSwb_DispatchAndReinit:
 	call	16624640
-	call	15668398
+	call	SwbtWr_ReinitBothBanks
 	ret
 SeqPlay_PrepareAndScanChannels:
 	call SeqPlay_CheckStartConditions
@@ -417,7 +381,7 @@ FloppyIO_ReadTrackBuf_EarlyExit:
 	jp FloppyIO_ReadTrackBuf_Done
 
 FloppyIO_ReadTrackBuf_StoreByte:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	bit 7, a
 	jrl nz, FloppyIO_ReadTrackBuf_ReadLoop
 	sub xix, 0x106e
@@ -883,7 +847,7 @@ SMF_ReadMidiEventToBuffer:
 	ld (4010:16), a
 	xor bc, bc
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 
 SMF_ReadMidiEvt_ReadLoop:
@@ -908,7 +872,7 @@ SMF_ReadMidiEvt_ReadFailed:
 	jp SMF_ReadMidiEvt_Done
 
 SMF_ReadMidiEvt_CheckSize:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
@@ -935,12 +899,12 @@ FloppyIO_ReadMidiEventBytes:
 	ld l, a
 	and l, 0xf0
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	xor h, h
 	ld a, c
 
 FloppyIO_ReadMidiEvtBytes_Loop:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, h
 	ld c, 0x1:opc
 	cp l, 0xd0
@@ -1005,10 +969,15 @@ VoiceChannels_LoadPartMap_Mode1:
 	ret
 
 VoiceChannels_PartMapTable:
-	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03
-	.byte 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c
-	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03
-	.byte 0x04, 0x0c, 0x06, 0x07, 0x11, 0x12, 0x13, 0x05
+; Two 16-byte MIDI-channel -> part-number maps (values 0x00..0x13).
+; Read by VoiceChannels_LoadPartMapAndInitPan (0xF23DC7):
+; XIY = this table when the byte at 0x11F8 is 1, else +0x10
+; (VoiceChannels_PartMapTable_0x10); ldir copies BC = 16 bytes to RAM 0xF1A0.
+; The +0x10 map equals the +0x00 map with entries 9 and 15 swapped
+; (0x05 <-> 0x0C), the same channel-10/16 exchange VoiceChannel_ParamTable1
+; and SeqTrack_ChannelMapIdentity make in that mode.
+	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c
+	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x0c, 0x06, 0x07, 0x11, 0x12, 0x13, 0x05
 
 SeqPlay_DelayLoop_Outer:
 	ldw bc, 0xc00
@@ -1033,7 +1002,7 @@ SeqPlay_InitChannelParams:
 
 SeqPlay_InitChannelParams_Loop:
 	ld hl, de
-	ld xix, FloppyIO_SwitchboardChannelPtrs
+	ld xix, ChannelRecord_PtrTable
 	sla hl, 2
 	ld_sril3 XIY, 0x07, 0xf0, 0xec
 	ld (xiy + 11), a
@@ -1361,6 +1330,9 @@ SMF_VoiceData_SetErrorFlag:
 SMF_NullRet:
 	ret
 
+; SMF track-chunk ID "MTrk".  Read by SMF_ReadAndValidateMTrkHeader
+; (0xF23F00): BC = 4 bytes, XIY = this, each byte
+; from FloppyIO_ReadNextByte is compared with (XIY).
 SMF_HeaderMagic_MTrk_Ref:	.ascii "MTrk"
 
 SeqTrack_InitScoopAndSetWall:
@@ -1595,26 +1567,16 @@ SoundGen_ResetBitmapDone:
 	ret
 
 SeqTrack_ChannelMapIdentity:
-	nop
-	normal
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	retd	256
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(15:8), 10:io
-	pushw	3340
-	ret
-	.byte 0x09
+; Two 16-byte MIDI-channel maps: +0x00 is the identity 0..15, +0x10 is the
+; identity with entries 9 and 15 swapped.  Read by MidiSysEx_CC_LookupPartMap
+; (0xF24249) and MidiSysEx_Cmd_ProgramChange
+; (0xF2427F): XIX = this table when the byte at 0x11F8
+; is 1, else +0x10 (SeqTrack_ChannelMapIdentity_0x10), then ld A,(XIX+HL)
+; with HL = the channel byte at 0x1075, and A is written back there -- the
+; channel is remapped in place.  TYPED 2026-09-25 (lane seqeng); was spelled
+; nop / normal / push sr / pop sr / max / halt / ei 7 / ... / .byte 0x09.
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0f, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x09
 
 ToneGen_ComputeBlockPtr:
 	push xiy
@@ -2128,7 +2090,7 @@ SMF_ReadMidiEventWithStatus:
 	ld (4010:16), a
 	xor bc, bc
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 
 SMF_ReadMidiStatus_ReadLoop:
@@ -2153,7 +2115,7 @@ SMF_ReadMidiStatus_ReadFailed:
 	jp SMF_ReadMidiStatus_Done
 
 SMF_ReadMidiStatus_StoreByte:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
@@ -2593,7 +2555,7 @@ FloppyIO_ReadVarLen_ReadFailed:
 	jp FloppyIO_ReadVarLen_Done
 
 FloppyIO_ReadVarLen_StoreByte:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	bit 7, a
 	jrl nz, FloppyIO_ReadVarLen_ReadLoop
 	sub xix, 0x106e
@@ -2677,7 +2639,7 @@ MidiNoteOn_FoundFreeSlotA:
 	ld (4323:16), 0
 	jp VoiceSynth_NullRet2
 MidiNoteOn_SetupVoiceA:
-	.byte 0xc1, 0x8c, 0x10, 0x3e, 0x01
+	ordi8	(4236), 1
 	ld	iy, (4011:16)
 	and	iy, 15
 	extz	xiy
@@ -2973,6 +2935,18 @@ VoiceSynth_Cmd_NoteOffByCh:
 VoiceSynth_NullRet:
 	ret
 
+; VoiceSynth_Algorithm_Table: 16 x 32-bit handler pointers (stride 4).
+; Read by VoiceSynth_AlgoTableDispatch (0xF24F0A):
+; XHL = long [this + 4*A] then `call (xhl)`, reached from
+; VoiceSynth_CommandDispatch (0xF24EAF) when the byte
+; at 0x0FAC is < 0x10.  0x0FAC/0x0FAD are clamped to 0x7F as a pair by
+; MidiEvent_ClampVelocityA_High (7-bit data bytes); the dispatcher's other cases
+; are 0x20, 0x26, 0x40, 0x42, 0x43, 0x5B, 0x5D, 0x60-0x65, which are the
+; MIDI control-change numbers bank-select LSB, data-entry LSB, hold,
+; sostenuto, soft, reverb, chorus, data inc/dec, NRPN and RPN select --
+; so [INFERENCE] this table serves CC 0..15, and its non-null entries are
+; CC 0 (bank select MSB), 1 (modulation), 6 (data entry MSB), 7 (volume),
+; 10 (pan) and 11 (expression).
 VoiceSynth_Algorithm_Table:
 	.long VoiceSynth_Algo_SimpleStore
 	.long VoiceSynth_Algo_MultiPath
@@ -3052,38 +3026,95 @@ MidiPgmChg_CheckModeA:
 	jrl MidiPgmChg_Mode1_SetupA
 
 MidiPgmChg_Mode0_SetupA:
-	.byte 0x3c, 0x44, 0x82, 0x0f, 0x00, 0x00, 0xc3, 0x07
-	.byte 0xf0, 0xf4, 0x27, 0xf1, 0x57, 0x1a, 0x47, 0x44
-	.byte 0x72, 0x0f, 0x00, 0x00, 0xc3, 0x07, 0xf0, 0xf4
-	.byte 0x27, 0xf1, 0x58, 0x1a, 0x47, 0xc1, 0xac, 0x0f
-	.byte 0x27, 0xf1, 0x59, 0x1a, 0x47, 0x44, 0x41, 0x43
-	.byte 0xf2, 0x00, 0xc3, 0x07, 0xf0, 0xf4, 0x27, 0xf1
-	.byte 0x5c, 0x1a, 0x47, 0x5c, 0x40, 0x57, 0x1a, 0x00
-	.byte 0x00, 0x1d, 0x95, 0xe1, 0xfe, 0x3d, 0x3b, 0x1d
-	.byte 0x1d, 0x46, 0xf2, 0x5b, 0x21, 0xc0, 0xc1, 0x5a
-	.byte 0x1a, 0x20, 0xc8, 0xcc, 0x80, 0xc8, 0xe8, 0x01
-	.byte 0xc8, 0xe1, 0xc1, 0x5b, 0x1a, 0x20, 0xc8, 0xcc
-	.byte 0x80, 0xc8, 0xe8, 0x02, 0xc8, 0xe1, 0x3b, 0x1d
-	.byte 0xc5, 0x4b, 0xf2, 0x5b, 0x5d, 0xc1, 0xe3, 0x10
-	.byte 0x3f, 0x00, 0x7e, 0x6f, 0x02, 0xed, 0xec, 0x01
-	.byte 0x3c, 0x44, 0xae, 0x0f, 0x00, 0x00, 0xd3, 0x07
-	.byte 0xf0, 0xf4, 0x20, 0x5c, 0xed, 0xef, 0x01, 0x3b
-	.byte 0x3d, 0x1d, 0x11, 0x4c, 0xf2, 0x5d, 0x5b, 0x3b
-	.byte 0x3d, 0x1d, 0xc5, 0x4b, 0xf2, 0x5d, 0x5b, 0xc1
-	.byte 0xe3, 0x10, 0x3f, 0x00, 0x7e, 0x45, 0x02, 0x3c
-	.byte 0x44, 0x41, 0x43, 0xf2, 0x00, 0xc3, 0x07, 0xf0
-	.byte 0xf4, 0x21, 0x5c, 0x3b, 0x3d, 0x1d, 0xc5, 0x4b
-	.byte 0xf2, 0x5d, 0x5b, 0xc1, 0xe3, 0x10, 0x3f, 0x00
-	.byte 0x7e, 0x29, 0x02, 0xc9, 0xd1, 0x3b, 0x3d, 0x1d
-	.byte 0xc5, 0x4b, 0xf2, 0x5d, 0x5b, 0xc1, 0xe3, 0x10
-	.byte 0x3f, 0x00, 0x7e, 0x17, 0x02, 0xc1, 0x5a, 0x1a
-	.byte 0x21, 0xc9, 0xcc, 0x7f, 0x3d, 0x1d, 0xc5, 0x4b
-	.byte 0xf2, 0x5d, 0xc1, 0xe3, 0x10, 0x3f, 0x00, 0x7e
-	.byte 0x02, 0x02, 0xc1, 0x5b, 0x1a, 0x21, 0xc9, 0xcc
-	.byte 0x7f, 0x3d, 0x1d, 0xc5, 0x4b, 0xf2, 0x5d, 0xc1
-	.byte 0xe3, 0x10, 0x3f, 0x00, 0x7e, 0xed, 0x01, 0x1d
-	.byte 0xbb, 0x5d, 0xf2, 0x1d, 0x3d, 0x4b, 0xf2, 0xf1
-	.byte 0xe3, 0x10, 0x00, 0x00, 0x78, 0xdd, 0x01
+	push	xix
+	ld	xix, 3970
+	ld_rrb	l, xix, iy
+	stb_d8	(6743), l
+	ld	xix, 3954
+	ld_rrb	l, xix, iy
+	stb_d8	(6744), l
+	ldb_d8	l, (4012)
+	stb_d8	(6745), l
+	ld	xix, SeqTrack_ChannelMapIdentity_0x10
+	ld_rrb	l, xix, iy
+	stb_d8	(6748), l
+	pop	xix
+	ld	xwa, 6743
+	call	16703893
+	push	xiy
+	push	xhl
+	call	SoundGen_CaptureVoiceParams
+	pop	xhl
+	ld	a, 192:opc
+	ldb_d8	w, (6746)
+	and	w, 128
+	rlc	w
+	or	a, w
+	ldb_d8	w, (6747)
+	and	w, 128
+	.byte 0xc8, 0xe8, 0x02	; rlc 0x02,w
+	or	a, w
+	push	xhl
+	call	SoundGen_UpdateAndRefresh
+	pop	xhl
+	pop	xiy
+	cpdi8	(4323), 0
+	jrl	nz, SoundGen_NullReturn
+	sla	xiy, 1
+	push	xix
+	ld	xix, 4014
+	ld_rrw	wa, xix, iy
+	pop	xix
+	srl	xiy, 1
+	push	xhl
+	push	xiy
+	call	SoundGen_ScalePitchByTempo
+	pop	xiy
+	pop	xhl
+	push	xhl
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	pop	xhl
+	cpdi8	(4323), 0
+	jrl	nz, SoundGen_NullReturn
+	push	xix
+	ld	xix, SeqTrack_ChannelMapIdentity_0x10
+	ld_rrb	a, xix, iy
+	pop	xix
+	push	xhl
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	pop	xhl
+	cpdi8	(4323), 0
+	jrl	nz, SoundGen_NullReturn
+	xor	a, a
+	push	xhl
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	pop	xhl
+	cpdi8	(4323), 0
+	jrl	nz, SoundGen_NullReturn
+	ldb_d8	a, (6746)
+	and	a, 127
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	cpdi8	(4323), 0
+	jrl	nz, SoundGen_NullReturn
+	ldb_d8	a, (6747)
+	and	a, 127
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	cpdi8	(4323), 0
+	jrl	nz, SoundGen_NullReturn
+	call	ToneGen_SetSustainBit
+	call	ToneGen_WriteChannelRegs
+	stdi8	(4323), 0
+	jrl	SoundGen_NullReturn
 MidiPgmChg_Mode2_SetupA:
 	push XIX
 	ld XIX,0x00000f82
@@ -3319,7 +3350,7 @@ MidiNoteOn_FoundFreeSlotB:
 	ld (4323:16), 0
 	jp VoiceParam_NullRet2
 MidiNoteOn_SetupVoiceB:
-	.byte 0xc1, 0x8c, 0x10, 0x3e, 0x01
+	ordi8	(4236), 1
 	ld	iy, (4237:16)
 	extz	xiy
 	call	SoundGen_ClampVoiceIndexMin1
@@ -3623,6 +3654,12 @@ VoiceParam_NullRet:
 	ret
 
 
+; VoiceParam_ReadUpdate_Table: 16 x 32-bit handler pointers (stride 4),
+; the second-set twin of VoiceSynth_Algorithm_Table.  Read by
+; VoiceParam_ReadUpdateDispatch (0xF25623): XHL =
+; long [this + 4*A], `call (xhl)`, for A = byte at 0x0FAC < 0x10; its
+; caller's other cases are the same CC numbers as VoiceSynth_CommandDispatch
+; ([INFERENCE] CC 0..15, non-null at 0, 1, 6, 7, 10 and 11 as there).
 VoiceParam_ReadUpdate_Table:
 	.long VoiceSynth_Algo_DirectStore
 	.long VoiceSynth_Algo_PitchShift
@@ -3707,39 +3744,97 @@ MidiPgmChg_CheckModeB:
 	jrl MidiPgmChg_Mode1_SetupB
 
 MidiPgmChg_Mode0_SetupB:
-	.byte 0x3c, 0x3d, 0xd1, 0xab, 0x0f, 0x25, 0xdd, 0xcc
-	.byte 0x0f, 0x00, 0x44, 0x82, 0x0f, 0x00, 0x00, 0xc3
-	.byte 0x07, 0xf0, 0xf4, 0x27, 0xf1, 0x57, 0x1a, 0x47
-	.byte 0x44, 0x72, 0x0f, 0x00, 0x00, 0xc3, 0x07, 0xf0
-	.byte 0xf4, 0x27, 0xf1, 0x58, 0x1a, 0x47, 0xc1, 0xac
-	.byte 0x0f, 0x27, 0xf1, 0x59, 0x1a, 0x47, 0x44, 0x7a
-	.byte 0x5a, 0xf2, 0x00, 0xc3, 0x07, 0xf0, 0xf4, 0x27
-	.byte 0x5d, 0x5c, 0xf1, 0x5c, 0x1a, 0x47, 0x40, 0x57
-	.byte 0x1a, 0x00, 0x00, 0x1d, 0x95, 0xe1, 0xfe, 0x3d
-	.byte 0x3b, 0x1d, 0x8a, 0x5a, 0xf2, 0x5b, 0x21, 0xc0
-	.byte 0xc1, 0x5a, 0x1a, 0x20, 0xc8, 0xcc, 0x80, 0xc8
-	.byte 0xe8, 0x01, 0xc8, 0xe1, 0xc1, 0x5b, 0x1a, 0x20
-	.byte 0xc8, 0xcc, 0x80, 0xc8, 0xe8, 0x02, 0xc8, 0xe1
-	.byte 0x3b, 0x1d, 0xc5, 0x4b, 0xf2, 0x5b, 0x5d, 0xc1
-	.byte 0xe3, 0x10, 0x3f, 0x00, 0x7e, 0x7c, 0x02, 0xdd
-	.byte 0xec, 0x01, 0x3c, 0x44, 0xae, 0x0f, 0x00, 0x00
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20, 0x5c, 0xdd, 0xef
-	.byte 0x01, 0x3b, 0x3d, 0x1d, 0x11, 0x4c, 0xf2, 0x5d
-	.byte 0x5b, 0x3b, 0x3d, 0x1d, 0xc5, 0x4b, 0xf2, 0x5d
-	.byte 0x5b, 0xc1, 0xe3, 0x10, 0x3f, 0x00, 0x7e, 0x52
-	.byte 0x02, 0xc1, 0xab, 0x0f, 0x21, 0xc9, 0xcc, 0x0f
-	.byte 0x3b, 0x3d, 0x1d, 0xc5, 0x4b, 0xf2, 0x5d, 0x5b
-	.byte 0xc1, 0xe3, 0x10, 0x3f, 0x00, 0x7e, 0x3b, 0x02
-	.byte 0xc9, 0xd1, 0x3b, 0x3d, 0x1d, 0xc5, 0x4b, 0xf2
-	.byte 0x5d, 0x5b, 0xc1, 0xe3, 0x10, 0x3f, 0x00, 0x7e
-	.byte 0x29, 0x02, 0xc1, 0x5a, 0x1a, 0x21, 0xc9, 0xcc
-	.byte 0x7f, 0x3d, 0x1d, 0xc5, 0x4b, 0xf2, 0x5d, 0xc1
-	.byte 0xe3, 0x10, 0x3f, 0x00, 0x7e, 0x14, 0x02, 0xc1
-	.byte 0x5b, 0x1a, 0x21, 0xc9, 0xcc, 0x7f, 0x3d, 0x1d
-	.byte 0xc5, 0x4b, 0xf2, 0x5d, 0xc1, 0xe3, 0x10, 0x3f
-	.byte 0x00, 0x7e, 0xff, 0x01, 0x1d, 0xbb, 0x5d, 0xf2
-	.byte 0x1d, 0x4e, 0x62, 0xf2, 0xf1, 0xe3, 0x10, 0x00
-	.byte 0x00, 0x78, 0xef, 0x01
+	push	xix
+	push	xiy
+	ldw_d16	iy, (4011)
+	and	iy, 15
+	ld	xix, 3970
+	ld_rrb	l, xix, iy
+	stb_d8	(6743), l
+	ld	xix, 3954
+	ld_rrb	l, xix, iy
+	stb_d8	(6744), l
+	ldb_d8	l, (4012)
+	stb_d8	(6745), l
+	ld	xix, VoiceParam_ChannelMapRemapped
+	ld_rrb	l, xix, iy
+	pop	xiy
+	pop	xix
+	stb_d8	(6748), l
+	ld	xwa, 6743
+	call	16703893
+	push	xiy
+	push	xhl
+	call	SoundGen_ReadVoiceRegs
+	pop	xhl
+	ld	a, 192:opc
+	ldb_d8	w, (6746)
+	and	w, 128
+	rlc	w
+	or	a, w
+	ldb_d8	w, (6747)
+	and	w, 128
+	.byte 0xc8, 0xe8, 0x02	; rlc 0x02,w
+	or	a, w
+	push	xhl
+	call	SoundGen_UpdateAndRefresh
+	pop	xhl
+	pop	xiy
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_NullReturn
+	sla	iy, 1
+	push	xix
+	ld	xix, 4014
+	ld_rrw	wa, xix, iy
+	pop	xix
+	srl	iy, 1
+	push	xhl
+	push	xiy
+	call	SoundGen_ScalePitchByTempo
+	pop	xiy
+	pop	xhl
+	push	xhl
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	pop	xhl
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_NullReturn
+	ldb_d8	a, (4011)
+	and	a, 15
+	push	xhl
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	pop	xhl
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_NullReturn
+	xor	a, a
+	push	xhl
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	pop	xhl
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_NullReturn
+	ldb_d8	a, (6746)
+	and	a, 127
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_NullReturn
+	ldb_d8	a, (6747)
+	and	a, 127
+	push	xiy
+	call	SoundGen_UpdateAndRefresh
+	pop	xiy
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_NullReturn
+	call	ToneGen_SetSustainBit
+	call	SoundGen_WriteVoiceParams
+	stdi8	(4323), 0
+	jrl	VoiceParam_NullReturn
 MidiPgmChg_Mode2_SetupB:
 	push XIX
 	push XIY
@@ -3918,17 +4013,14 @@ VoiceParam_NullReturn:
 	ret
 
 VoiceParam_ChannelMapRemapped:
-	nop
-	normal
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(15:8), 10:io
-	pushw	3340
-	ret
-	.byte 0x09
+; 16-byte MIDI-channel map: identity with entries 9 and 15 swapped (a
+; third copy of SeqTrack_ChannelMapIdentity +0x10).  Read with
+; `ld xix, VoiceParam_ChannelMapRemapped / ld L,(XIX+IY)`, IY = MIDI channel,
+; by MidiPgmChg_Mode0_SetupB (0xF25786) and
+; MidiPgmChg_Mode2_SetupB (0xF2588A); the result goes to
+; the byte at 0x1A5C.  TYPED 2026-09-25 (lane seqeng); was spelled as
+; nop / normal / push sr / ... mnemonics.
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0f, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x09
 
 SoundGen_ReadVoiceRegs:
 	push xde
@@ -4357,9 +4449,23 @@ VoiceSynth_DataEntry_Done:
 	ret
 
 VoiceSynth_DataEntry_PtrTable:
-	.byte 0x1b, 0x1a, 0x00, 0x00
-	.byte 0xfb, 0x19, 0x00, 0x00
-	.byte 0x0b, 0x1a, 0x00, 0x00
+; Three 32-bit pointers to 16-byte per-channel RAM arrays (0x1A1B, 0x19FB,
+; 0x1A0B), selected by the per-channel parameter index 0..2 kept in the byte
+; array at 0x10B3 (0xFF = none selected).  Read by VoiceSynth_HandleDataEntry
+; (0xF25E22), VoiceChannel_SelectNextParam
+; (0xF25F0A) and VoiceChannel_SelectPrevParam
+; (0xF25F62): XHL = long [this + 4*index], then the
+; array element (XHL+IY), IY = channel, is written with the data byte
+; clamped to VoiceChannel_ParamLimitTable[index].  Stride 4, 3 entries
+; (index <= 2 is enforced where 0x10B3 is written).
+; [INFERENCE] the three are the GM registered parameters 0/1/2 (pitch-bend
+; sensitivity, fine tune, coarse tune): the dispatcher that reaches
+; VoiceSynth_HandleDataEntry compares the same byte against the CC numbers
+; of data entry, data inc/dec and (N)RPN select, and entry 0 is limited to
+; 12 (one octave of bend range).  Not confirmed against a manual.
+	.long 0x00001a1b
+	.long 0x000019fb
+	.long 0x00001a0b
 
 VoiceSynth_HandlePan:
 	bit 0, (4236:16)
@@ -4451,6 +4557,11 @@ VoiceChannel_NextParam_Done:
 	ret
 
 VoiceChannel_ParamLimitTable:
+; Upper limits (12, 127, 255) for the three per-channel parameters of
+; VoiceSynth_DataEntry_PtrTable, same index.  Read by
+; VoiceSynth_HandleDataEntry / VoiceChannel_SelectNextParam /
+; VoiceChannel_SelectPrevParam as `ld xiy, VoiceChannel_ParamLimitTable /
+; ld E,(XIY+IX)`, IX = index; a value above E is replaced by E.
 	.byte 0x0c, 0x7f, 0xff
 
 VoiceChannel_SelectPrevParam:
@@ -4647,7 +4758,7 @@ VoiceParam_ByMode_Mode0:
 	ld	(6744:16), l
 	ld	l, (4012:16)
 	ld	(6745:16), l
-	ld	xix, 15876929
+	ld	xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_rrb	l, xix, de
 	ld	(6748:16), l
 	pop	xde
@@ -4887,12 +4998,10 @@ ToneGen_AdvValidate_StoreAndDone:
 VoiceSynth_Algo_SimpleStore:
 	ld	iy, (4011:16)
 	and	iy, 15
-	.byte 0xc1, 0xad, 0x0f
-	.ascii "!<Dr"
-	retd	0
-	.byte 0xf3
-	reti
-	st_dd8b	a, 244
+	ldb_d8	a, (4013)
+	push	xix
+	ld	xix, 3954
+	st_rrb	a, xix, iy
 	pop	xix
 	ret
 VoiceSynth_Algo_MultiPath:
@@ -4903,10 +5012,7 @@ VoiceSynth_Algo_MultiPath:
 	ld	a, 209:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	sla	xiy, 1
 	push	xix
@@ -4920,19 +5026,13 @@ VoiceSynth_Algo_MultiPath:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
@@ -4954,14 +5054,14 @@ VoiceSynth_Algo_ChannelConfig:
 	xor	h, h
 	sla	hl, 2
 	push	xix
-	ld	xix, 15883906
+	ld	xix, VoiceSynth_DataEntry_PtrTable
 	ld_rrl	xhl, xix, hl
 	pop	xix
 	ld	a, (4013:16)
 	xor	b, b
 	ld	ix, bc
 	push	xiy
-	ld	xiy, 15884127
+	ld	xiy, VoiceChannel_ParamLimitTable
 	ld_rrb	e, xiy, ix
 	pop	xiy
 	cp	a, e
@@ -4984,7 +5084,7 @@ VoiceSynth_Algo_ConditionalUpdate:
 	; --- Main routine: bit test, store, conditional call (49 bytes) ---
 	bit	0, (4236:16)
 	jr nz, VoiceSynth_ConditionalUpdate_SetParams
-	call VoiceChannel_ParamTable1_0x80
+	call VoiceChannel_SetRecordField3
 	ld	(4323:16), 0
 VoiceSynth_ConditionalUpdate_SetParams:
 	ld	(4233:16), 3
@@ -5010,10 +5110,7 @@ VoiceSynth_Algo_MultiStage:
 	ld	a, 176:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceSynth_Algo_MultiStage_Return
 	sla	xiy, 1
 	push	xix
@@ -5027,63 +5124,43 @@ VoiceSynth_Algo_MultiStage:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
-	jr	nz, 113
+	cpdi8	(4323), 0
+	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	l, (4011:16)
 	and	l, 15
 	xor	h, h
 	extz	xhl
 	push	xix
 	ld	xix, SeqTrack_ChannelMapIdentity
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ld	a, 193:opc
-	swi	0
-	scf
-	push	xsp
-	normal
-	jr	z, 10
+	ld_rrb	a, xix, hl
+	cpdi8	(4600), 1
+	jr	z, VoiceSynth_Algo_MultiStage_Skip
 	ld	xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_rrb a, xix, hl
+VoiceSynth_Algo_MultiStage_Skip:
 	pop xix
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
-	jr	nz, 60
+	cpdi8	(4323), 0
+	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, 8:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
@@ -5099,10 +5176,7 @@ VoiceSynth_Algo_PitchModulated:
 	ld	a, 211:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	sla	xiy, 1
 	push	xix
@@ -5116,27 +5190,18 @@ VoiceSynth_Algo_PitchModulated:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
-	jr	nz, 41
+	cpdi8	(4323), 0
+	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	ld	a, (4013:16)
-	.byte 0xc1
-	swi	0
-	scf
-	push	xsp
-	push	sr
-	jr	nz, 4
+	cpdi8	(4600), 2
+	jr	nz, VoiceSynth_Algo_PitchModulated_Skip
 	call	VoiceSynth_ConditionalUpdate_Helper
+VoiceSynth_Algo_PitchModulated_Skip:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
-	jr	nz, 13
+	cpdi8	(4323), 0
+	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
 	ld	(4323:16), 0
@@ -5145,12 +5210,10 @@ VoiceSynth_Algo_PitchModulated_Return:
 VoiceSynth_Algo_DirectStore:
 	ld	iy, (4011:16)
 	and	iy, 15
-	.byte 0xc1, 0xad, 0x0f
-	.ascii "!<Dr"
-	retd	0
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xf4, 0x41
+	ldb_d8	a, (4013)
+	push	xix
+	ld	xix, 3954
+	st_rrb	a, xix, iy
 	pop	xix
 	ret
 VoiceSynth_Algo_PitchShift:
@@ -5165,10 +5228,7 @@ VoiceSynth_Algo_PitchShift:
 	or	a, w
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	sla	iy, 1
 	push	xix
@@ -5182,19 +5242,13 @@ VoiceSynth_Algo_PitchShift:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	push	xiy
 	ld	a, (4013:16)
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
@@ -5214,14 +5268,14 @@ VoiceParam_ReadUpdate_6:
 	xor	h, h
 	sla	hl, 2
 	push	xix
-	ld	xix, 15883906
+	ld	xix, VoiceSynth_DataEntry_PtrTable
 	ld_rrl	xhl, xix, hl
 	pop	xix
 	ld	a, (4013:16)
 	xor	b, b
 	ld	ix, bc
 	push	xiy
-	ld	xiy, 15884127
+	ld	xiy, VoiceChannel_ParamLimitTable
 	ld_rrb	e, xiy, ix
 	pop	xiy
 	cp	a, e
@@ -5232,29 +5286,26 @@ VoiceParam_ReadUpdate_6_Skip:
 	jr	nz, VoiceParam_ReadUpdate_6_Skip2
 	push	xhl
 	pushw	iy
-	call	15886684
+	call	VoiceChannel_GetCombinedStatus
 	popw	iy
 	pop	xhl
 VoiceParam_ReadUpdate_6_Skip2:
 	st_rrb	a, xhl, iy
-	call	15886753
+	call	VoiceChannel_LookupParams
 VoiceParam_ReadUpdate_6_Return:
 	ret
 VoiceParam_ReadUpdate_7:
-	.byte 0xf1
-	and	(xix+16), w
-	jr	nz, 9
-	call	VoiceChannel_ParamTable1_0x80
+	bitda	0, (4236)
+	jr	nz, VoiceParam_ReadUpdate_7_Skip
+	call	VoiceChannel_SetRecordField3
 	ld	(4323:16), 0
+VoiceParam_ReadUpdate_7_Skip:
 	ld	(4233:16), 3
 	ld	a, (4013:16)
-	.byte 0xc1
-	swi	0
-	scf
-	push	xsp
-	push	sr
-	jr	nz, 4
+	cpdi8	(4600), 2
+	jr	nz, VoiceParam_ReadUpdate_7_Skip2
 	call	VoiceSynth_ConditionalUpdate_Helper
+VoiceParam_ReadUpdate_7_Skip2:
 	ld	(4234:16), a
 	ld	(4235:16), 127
 	call	SoundGen_ClampUpdateVoice
@@ -5268,10 +5319,7 @@ VoiceParam_ReadUpdate_10:
 	ld	a, 176:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	sla	iy, 1
 	push	xix
@@ -5285,47 +5333,32 @@ VoiceParam_ReadUpdate_10:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, (4011:16)
 	and	a, 15
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, 8:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
@@ -5344,10 +5377,7 @@ VoiceParam_ReadUpdate_11:
 	or	a, w
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
+	cpdi8	(4323), 0
 	jrl	nz, VoiceParam_ReadUpdate_11_Return
 	sla	xiy, 1
 	push	xix
@@ -5361,27 +5391,18 @@ VoiceParam_ReadUpdate_11:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
-	jrl	nz, 42
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_ReadUpdate_11_Return
 	ld	a, (4013:16)
-	.byte 0xc1
-	swi	0
-	scf
-	push	xsp
-	push	sr
-	jr	nz, 4
+	cpdi8	(4600), 2
+	jr	nz, VoiceParam_ReadUpdate_11_Skip
 	call	VoiceSynth_ConditionalUpdate_Helper
+VoiceParam_ReadUpdate_11_Skip:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	.byte 0xc1, 0xe3
-	rcf
-	push	xsp
-	nop
-	jrl	nz, 13
+	cpdi8	(4323), 0
+	jrl	nz, VoiceParam_ReadUpdate_11_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
 	ld	(4323:16), 0

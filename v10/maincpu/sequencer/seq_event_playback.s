@@ -438,8 +438,13 @@ SeqEvtBuf_AdvanceRet:
 	ret
 
 SeqEvt_RotationOffsetTable:
-	.byte 0x00, 0x00, 0x09, 0x00, 0x12, 0x00, 0x1b, 0x00
-	.byte 0x24, 0x00, 0x2d, 0x00, 0x36, 0x00, 0x3f, 0x00
+; 8 LE16 byte offsets 0, 9, 18, ... 63: the starts of eight 9-byte slots.
+; Read by SeqEvt_WriteNoteOnRotating (0xF70CAB): A = byte
+; at 0x7E0A (a rotating index advanced by 2 per call and wrapped at the
+; byte at 0x7E06), IX = word [this + A]; the slot's bytes +0 and +2 are
+; then read at (XHL+IX).  Stride 2, 8 entries (16 B up to
+; SeqEvt_InitVoiceScan).  TYPED 2026-09-25 (lane seqeng).
+	.short 0x0000, 0x0009, 0x0012, 0x001b, 0x0024, 0x002d, 0x0036, 0x003f
 
 SeqEvt_InitVoiceScan:
 	ldw (0x7e00:16), 0xff5f
@@ -693,6 +698,16 @@ Voice_NoteChannelTable1:
 ; ending exactly where the +0x422 subroutine begins.
 	.short 0x000d, 0x010d, 0x020d, 0x030d, 0x040d, 0x050d, 0x000e, 0x010e
 	.short 0x020e, 0x030e, 0x040e, 0x050e, 0x000c, 0x000c, 0x000c, 0x000c
+; Voice_NoteChannelGrid_Lookup (= Voice_NoteChannelTable1 +0x422, the
+; address shared/positional_labels.s still calls Voice_NoteChannelTable1_0x422;
+; its one caller is AccompSeq_ProcessAfterNote in accompseq_routines.s).
+; In: L = row (low 4 bits used), H = column (low 3 bits used).
+; Out: HL = word [(L & 15) * 8 + (H & 7)] of the 16 x 8 grid at +0x43F below.
+; Clobbers nothing else (XIX saved).  RE-FRAMED 2026-09-25 (lane seqeng): the
+; five bytes d3 07 f0 ec 23 were written as `.byte 0xd3 / reti / .byte 0xf0,
+; 0xec / ld c, 92` -- a lone prefix plus its operands read as instructions;
+; unidasm and llvm-mc both read them as ONE instruction, ld HL,(XIX+HL).
+Voice_NoteChannelGrid_Lookup:
 	and	l, 15
 	and	h, 7
 	sla	l, 4
@@ -701,10 +716,8 @@ Voice_NoteChannelTable1:
 	xor	h, h
 	push	xix
 	ld	xix, Voice_NoteChannelTable1_0x43F
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ld	c, 92:opc
+	ldw_sri HL, 0x07, 0xf0, 0xec	; ld HL,(XIX+HL)
+	pop	xix
 	ret
 ; Voice_NoteChannelTable1 +0x43F (16 rows x 8 x LE16).
 ; RE-FRAMED 2026-09-02 (lane v10seq). Was ~160 lines of mnemonics with 12
@@ -944,8 +957,7 @@ Voice_NoteParamTable:
 ; `ld xix, Voice_NoteParamTable_0x2`, and 1026 B is exactly 2 + 128*8.
 ; +0x00 (2 B) head; the grid below is based at +0x02
 ; +0x00 (2 B) head; the grid below is based at +0x02
-	nop
-	nop
+	.byte 0x00, 0x00	; |..|  (was `nop / nop`: never executed, nothing jumps here)
 ; +0x02 (128 records x 4 LE16). The reader is ldw_sri, a WORD load, so each record is four 16-bit fields and the index (note<<3) + ((h and 3)<<1) selects one of them. One record per line, MIDI note 0..127.
 	.short 0x0100, 0x0103, 0x0203, 0x0303
 	.short 0x0100, 0x0103, 0x0203, 0x0303
@@ -1443,20 +1455,13 @@ Voice_InitSlotTemplate:
 	ret
 
 Voice_SlotTemplateData:
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	jrl	nc, 64
-	nop
-	nop
+; 16-byte template of one voice slot, copied as 8 LE16 words.  Read by
+; Voice_InitSlotTemplate (0xF7210D): XIX = the slot (XIY on
+; entry), XIY = this, BC = 8, ldirw; the slot's byte +0 then gets back its
+; own old high nibble (and 0xF0), so only the template's low nibble of
+; byte +0 survives.  TYPED 2026-09-25 (lane seqeng); was spelled
+; nop / swi 7 / jrl nc,64 (0xFF bytes read as swi 7).
+	.short 0x0000, 0xff00, 0x00ff, 0x0000, 0x0000, 0x7f00, 0x0040, 0x0000
 
 AccPlay_SetupSoundParams:
 	ld a, 0x17:opc
@@ -1654,10 +1659,14 @@ AccPlay_NoteAllocAndWrite:
 	ld (0x7e56:16), a
 	ld a, 0x90:opc
 	cp (0x7e54:16), 0
-	jr z, AccPlay_NoteSetType91
+	jr z, AccPlay_NoteWriteStatusByte
 	ld a, 0x91:opc
 
-AccPlay_NoteSetType91:
+; AccPlay_NoteWriteStatusByte (was AccPlay_NoteSetType91): A = 0x90, or 0x91
+; when AccPlay_NoteParamTable's flag byte for this note is nonzero; the branch
+; here is taken with A still 0x90.  Writes A, then the bytes at 0x7F37 and
+; 0x7F38, to the MIDI sequence buffer (MidiSeqBuf_WriteByte).
+AccPlay_NoteWriteStatusByte:
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
 	ld a, (0x7f37:16)
@@ -1701,33 +1710,27 @@ AccPlay_NoteAllocRet:
 	ret
 
 AccPlay_NoteParamTable:
-	.zero 8
-	nop
-	nop
-	nop
-	nop
-	normal
-	nop
-	scf
-	nop
-	normal
-	nop
-	scf
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	pop sr
-	nop
-	nop
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x11, 0x11, 0x00
+; 12 records x 4 bytes: +0 flag, +1 and +2 two extra event bytes, +3 unused
+; (0 in every record).  Read by AccPlay_NoteAllocAndWrite
+; (0xF722AB): L = byte at 0x7F38, A = byte
+; [Display_FontPalette_Table_0x12EA + L], HL = 4*A (12 records), then
+; +0/+1/+2 go to 0x7E54/0x7E55/0x7E56.  A nonzero +0 makes the event
+; status 0x91 instead of 0x90 and appends bytes +1 and +2 to the event.
+; Non-zero records: 3 and 4 = (1, 0x00, 0x11), 7 = (1, 0x03, 0x00),
+; 11 = (1, 0x11, 0x11).  TYPED 2026-09-25 (lane seqeng); it was spelled
+; as .zero / nop / normal / scf / pop sr.
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x01, 0x00, 0x11, 0x00
+	.byte 0x01, 0x00, 0x11, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x01, 0x03, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x01, 0x11, 0x11, 0x00
 
 AccPlay_FindActiveSlot:
 	ld xhl, 0x7e7b
@@ -2564,9 +2567,7 @@ AccPlay_InitAndStartLoop:
 	ret
 
 AccPlay_ToggleCodeFragment:
-	.byte 0xc1
-	pushw	0x3f7f
-	nop
+	cpdi8	(32523), 0
 	jr	z, AccPlay_ToggleCodeFragment_Code_Return
 	ld	(0x7f0b:16), 0
 	call	TempoRingBuf_ReInitAndRet
@@ -3096,16 +3097,11 @@ VocalistGridCheck_Skip:
 	ld	(xhl), wa
 	ld	bc, de
 	ld	(xhl+2), bc
-	.byte 0x93
-	push	xsp
-	normal
-	nop
-	jr	z, 7
-	.byte 0x93
-	push	xsp
-	push	sr
-	nop
-	jrl	nz, 1501
+	cpw	(xhl), 1
+	jr	z, VocalistGridCheck_Skip15
+	cpw	(xhl), 2
+	jrl	nz, AcVocalist_ReturnZero
+VocalistGridCheck_Skip15:
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
@@ -3125,40 +3121,42 @@ VocalistGridCheck_Skip:
 	ld	de, 2:i3
 VocalistGridCheck_Join:
 	call	MainLswAdd
-	jrl	1442
+	jrl	AcVocalist_ReturnZero
 	ld	(xsp+4), xbc
 	ld	xhl, xiy
 	ldw (xiy), 0
 	ld	xix, (xsp+8)
 	ld	xiz, xde
 	ld	xiy, xde
-	jr	50
-	.byte 0xd7, 0xe6, 0x99, 0xd7, 0xe6, 0xec
-	pop	sr
+	jr	VocalistGridCheck_Join15
+VocalistGridCheck_Loop:
+	ld	qbc, bc
+	.byte 0xd7, 0xe6, 0xec, 0x03	; sla 0x03,qbc
 	ld	xwa, (xiz)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe6, 0xf0
-	jr	nz, 4
+	.byte 0xe3, 0x07, 0xf0, 0xe6, 0xf0	; cp xwa,(xix+qbc)
+	jr	nz, VocalistGridCheck_Skip16
 	ld	bc, 1:i3
-	jr	19
+	jr	VocalistGridCheck_Join14
+VocalistGridCheck_Skip16:
 	ld wa, qbc
 	inc 4, wa
 	ld qbc, wa
 	ld xwa, (xiy)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe6, 0xf0
-	jr	nz, 9
+	.byte 0xe3, 0x07, 0xf0, 0xe6, 0xf0	; cp xwa,(xix+qbc)
+	jr	nz, VocalistGridCheck_Skip17
 	ld	bc, 2:i3
+VocalistGridCheck_Join14:
 	ld	xwa, (xsp+4)
 	ld	(xwa), bc
-	jr	12
+	jr	VocalistGridCheck_Join16
+VocalistGridCheck_Skip17:
 	inc	1, bc
 	ld	(xhl), bc
+VocalistGridCheck_Join15:
 	ld	bc, (xhl)
 	cp	bc, 12
-	jr	lt, -58
+	jr	lt, VocalistGridCheck_Loop
+VocalistGridCheck_Join16:
 	lda	xwa, (xsp+20)
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+4)
@@ -3172,8 +3170,7 @@ VocalistGridCheck_Join:
 	cp	xwa, 19
 	jrl	ugt, AcVocalist_ReturnZero
 	add	xwa, xwa
-	.byte 0xe8, 0xc8
-	.long MidiPart_ColWidthData
+	add	xwa, MidiPart_ColWidthData
 	ld	wa, (xwa)
 	lda	xix, (VocalistGrid_DispatchData_0x160:24)
 	jp_rr 8, xix, wa
@@ -3210,7 +3207,8 @@ VocalistGridCheck_Join3:
 	jrl	VocalistGridCheck_Join12
 	ld	wa, (xbc)
 	inc	1, wa
-	.long Bitmap_MIDIConnections_Header
+	pushw	wa
+	pushw	231
 	pushw	0xef04
 	ld	xwa, (xsp+14)
 	push	xwa
@@ -3259,9 +3257,8 @@ VocalistGridCheck_Join3:
 	cp	wa, 1:i3
 	jr	z, VocalistGridCheck_Skip4
 	cp	wa, 0:i3
-	.ascii "n%@("
-	or	xsp, xsp
-	nop
+	jr	nz, VocalistGridCheck_Skip18
+	ld	xwa, MidiPart_OctaveStr_m2 + 0xcc
 	jr	VocalistGridCheck_Join4
 VocalistGridCheck_Skip4:
 	ld	xwa, MidiPart_OctaveStr_m2_0xD8
@@ -3277,6 +3274,7 @@ VocalistGridCheck_Join4:
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
+VocalistGridCheck_Skip18:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
@@ -3345,14 +3343,12 @@ VocalistGridCheck_Join6:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	840
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, MidiPart_OctaveStr_m2_0x12E
-	.byte 0x91
-	push	xsp
-	nop
-	nop
-	jr	z, 5
+	cpw	(xbc), 0
+	jr	z, VocalistGridCheck_Skip19
 	ld	xwa, MidiPart_OctaveStr_m2_0x128
+VocalistGridCheck_Skip19:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -3362,7 +3358,7 @@ VocalistGridCheck_Join6:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	796
+	jrl	VocalistGridCheck_Join12
 
 ; VocalistGridCheck dispatch handler
 VocalistGrid_CheckHandler:
@@ -3496,8 +3492,7 @@ VocalistGridCheck_Skip12:
 	ld	xwa, MidiPart_OctaveStr_m2_0x194
 	jr	VocalistGridCheck_Join9
 VocalistGridCheck_Entry:
-	.byte 0x40
-	.long MidiPart_RecvTransStr
+	ld	xwa, MidiPart_RecvTransStr
 VocalistGridCheck_Join9:
 	push	xwa
 	lda	xwa, (xsp+24)
@@ -3520,8 +3515,7 @@ VocalistGridCheck_Skip13:
 	ld	xwa, MidiPart_RecvTransStr_0xC
 	jr	VocalistGridCheck_Join10
 VocalistGridCheck_Entry2:
-	.byte 0x40
-	.long MidiPart_AfterStr
+	ld	xwa, MidiPart_AfterStr
 VocalistGridCheck_Join10:
 	push	xwa
 	push	xbc
@@ -3611,22 +3605,19 @@ VocalistGridCheck_Join11:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jr	60
+	jr	VocalistGridCheck_Join12
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa)
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ld	w, 29:opc
-	.byte 0x37, 0xd4
-	swi	4
+	ld_rrl	xwa, xde, bc
+	call	SndParam_LookupReadOnly
 	ld	xwa, MidiPart_AfterStr_0x2E
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, VocalistGridCheck_Entry2_Code_Skip
 	ld	xwa, MidiPart_AfterStr_0x28
+VocalistGridCheck_Entry2_Code_Skip:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
@@ -3922,11 +3913,12 @@ VocalistPage1OK_Dispatch:
 	ld	xwa, 0x01d400
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	9
+	jr	VocalistPage2OKFunc_Join4
 VocalistPage2OKFunc_Skip:
 	ld	xwa, 0x01d400
 	ld	bc, 0:i3
 	ld	de, 2:i3
+VocalistPage2OKFunc_Join4:
 	call	SoundParam_NotifyChange
 	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
@@ -3936,8 +3928,7 @@ VocalistPage2OKFunc_Join:
 	call	ApPostEvent
 	ld	(0x7f40:16), 1
 	call	MidiSysEx_SendAllParams
-	.byte 0xf1, 0x40
-	jrl	nc, 0x0000
+	stdi8	(32576), 0
 
 ; Vocalist page handler
 VocalistPage_Handler:
@@ -3954,11 +3945,12 @@ VocalistPage1_DispatchData:
 	srl	xwa, 0
 	ld	qwa, 0
 	cp	wa, 0:i3
-	jr	z, 11
+	jr	z, VocalistPage2OKFunc_Skip3
 	ld	xwa, 0x018000
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	VocalistPage2OKFunc_Join2
+VocalistPage2OKFunc_Skip3:
 	ld	xwa, 0x018000
 	ld	bc, 0:i3
 	ld	de, 2:i3
