@@ -2064,7 +2064,9 @@ CalcTotalWidth:
 	ld XBC,(XIZ+0x0c)
 	or XBC,XBC
 	jr nz, CalcTotalWidth_KerningLoop_Init
-	.byte 0x96, 0x4b, 0xdb, 0x8e, 0x68, 0x2d
+	muls	hl, (xiz)
+	ld	iz, hl
+	jr	CalcTotalWidth_FreeAndReturn
 CalcTotalWidth_KerningLoop_Init:
 	ld iz, 0:i3
 	ld xix, xbc
@@ -2141,7 +2143,10 @@ Wordwrap_SkipSpaces:
 	jr nz, Wordwrap_SkipSpaces
 
 Wordwrap_MeasureWidth:
-	.byte 0xaf, 0x16, 0x20, 0x38, 0xaf, 0x0a, 0x20, 0x38
+	ld	xwa, (xsp+22)
+	push	xwa
+	ld	xwa, (xsp+10)
+	push	xwa
 	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, (xsp+6)
@@ -2149,8 +2154,11 @@ Wordwrap_MeasureWidth:
 	stib_ind 0x07, 0xe0, 0xe4, 0x00	; ld (XWA+BC),0x00
 	ld	xwa, (xsp+6)
 	ld	xbc, (xsp+18)
-	.byte 0x1e, 0xf6, 0xfe, 0x9f, 0x10, 0xf3, 0x6a, 0x06
-	.byte 0x9f, 0x04, 0x20, 0xbf, 0x0a, 0x50
+	calr	CalcTotalWidth
+	cp	hl, (xsp+16)
+	jr	gt, Wordwrap_CheckEndOfString
+	ld	wa, (xsp+4)
+	ld	(xsp+10), wa
 Wordwrap_CheckEndOfString:
 	cp (xiz), 0x0
 	jr nz, Wordwrap_ScanWordStart
@@ -4763,15 +4771,22 @@ MainSvariIni:
 	jr	nz, MainSvariIni_ReturnZero
 	pushw	6
 	call	SLIDE_Decompress_4K_Init_Helper2
-	.byte 0xef, 0x62, 0xeb, 0x8e, 0xc1, 0x9e, 0x8c, 0x21
-	.byte 0xd8, 0x12, 0xd9, 0xa8, 0x1d, 0x26, 0xcd, 0xfc
+	inc	2, xsp
+	ld	xiz, xhl
+	ldb_d8	a, (0x8c9e)
+	extz	wa
+	ld	bc, 0:i3
+	call	DkMdlyPly_CheckState_Helper
 	ld	(xiz+3), l
 	ldb_d8	a, (0x8c9e)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
-	.byte 0xbe, 0x04, 0x47, 0xbe, 0x02, 0x14, 0x9e, 0x8c
-	.byte 0xee, 0x88, 0x1d, 0x1b, 0xe0, 0xfe, 0x86, 0x21
+	ld	(xiz+4), l
+	ld	(xiz+2), (0x8c9e)
+	ld	xwa, xiz
+	call	16703515
+	ld	a, (xiz)
 	extz	wa
 	call	VariScreenProc_Helper
 	ld	(xiz+3), l
@@ -4782,7 +4797,8 @@ MainSvariIni:
 	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 0x1e00023
-	.byte 0xee, 0x8a, 0x1d, 0x4b, 0x99, 0xfa
+	ld	xde, xiz
+	call	ApPostEvent
 MainSvariIni_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz

@@ -6524,7 +6524,8 @@ ScoopParam_ValueTable_Return2:
 	jrl	z, ScoopParam_ValueTable_Entry3_Code_Skip
 	ld	(10430:16), 255
 	call	SeqBuf_Init
-	.byte 0xc1, 0x53, 0x0d, 0x3c, 0xfe, 0xc1, 0xa6, 0x28, 0x3c, 0xfe
+	anddi8	(0x0d53), 254
+	anddi8	(0x28a6), 254
 	call	AccWrap_PositionClear
 	ld	(32578:16), 0
 	call	VoiceCtrl_CheckAndReset
@@ -6572,39 +6573,52 @@ ScoopParam_ValueTable_Entry2:
 	ld	(3409:16), wa
 	ld	c, (3822:16)
 	dec	1, c
-	.byte 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
+	ldb_erp	a, 60
+	ldw_erp DE, 0x3e	; ld QHL3,DE
 	ld	de, (3407:16)
 	ld	a, c
 	scf
-	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
+	stcf_a_16 de	; stcf A,DE
+	stb_erp	a, 60
 	ld	(3407:16), de
-	.byte 0xd7, 0x3e, 0x8a, 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
+	stw_erp DE, 0x3e	; ld DE,QHL3
+	ldb_erp	a, 60
+	ldw_erp DE, 0x3e	; ld QHL3,DE
 	ld	de, (3409:16)
 	ld	a, c
 	scf
-	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
+	stcf_a_16 de	; stcf A,DE
+	stb_erp	a, 60
 	ld	(3409:16), de
-	.byte 0xd7, 0x3e, 0x8a, 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
+	stw_erp DE, 0x3e	; ld DE,QHL3
+	ldb_erp	a, 60
+	ldw_erp DE, 0x3e	; ld QHL3,DE
 	ld	de, (65516:24)
 	ld	a, c
 	rcf
-	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
+	stcf_a_16 de	; stcf A,DE
+	stb_erp	a, 60
 	ld	(65516:24), de
-	.byte 0xd7, 0x3e, 0x8a, 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
+	stw_erp DE, 0x3e	; ld DE,QHL3
+	ldb_erp	a, 60
+	ldw_erp DE, 0x3e	; ld QHL3,DE
 	ld	de, (61854:16)
 	ld	a, c
 	rcf
-	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
+	stcf_a_16 de	; stcf A,DE
+	stb_erp	a, 60
 	ld	(61854:16), de
-	.byte 0xd7, 0x3e, 0x8a
+	stw_erp DE, 0x3e	; ld DE,QHL3
 	ldw	(61854:16), 0
-	.byte 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
+	ldb_erp	a, 60
+	ldw_erp DE, 0x3e	; ld QHL3,DE
 	ld	de, (10357:16)
 	ld	a, c
 	rcf
-	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
+	stcf_a_16 de	; stcf A,DE
+	stb_erp	a, 60
 	ld	(10357:16), de
-	.byte 0xd7, 0x3e, 0x8a
+	stw_erp DE, 0x3e	; ld DE,QHL3
 	ldw	(3928:16), 65535
 	call	Audio_CheckSubsystemReady
 	call	ScoopParam_ValueTable_Helper11
@@ -6622,11 +6636,13 @@ ScoopParam_ValueTable_Join3:
 	jrl	z, ScoopParam_ValueTable_Entry3
 	call	Demo_PreSetupAndScan
 ScoopParam_ValueTable_Entry3:
-	.byte 0xc1, 0x6e, 0x34, 0x3c, 0xef, 0xc1, 0x5b, 0x04, 0x3c, 0xfc
+	anddi8	(0x346e), 239
+	anddi8	(0x045b), 252
 	call	ScoopParam_ValueTable_Helper12
 	ordi8	(0x28a7), 4
 	ld	xiy, 3411
-	.byte 0x85, 0x3e, 0x08, 0x85, 0x3c, 0xdf
+	ormi8	(xiy), 8
+	andmi8	(xiy), 223
 	call	AccPedal_CheckBitAndUpdate
 	setda	0, (0x0dd3)
 	ld	(14120:16), 0
@@ -7539,11 +7555,15 @@ MemoryConfig_Handler_Table_Code_Join:
 	stdi8	(0x0d6a), 0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
-	jr	nz, 4
-	.byte 0x1d, 0x2d, 0xa4, 0xef, 0x1d, 0x7e, 0xe1, 0xef
-	.byte 0x1d, 0x04, 0x90, 0xef, 0x1d, 0xb0, 0xb5, 0xef
+	jr	nz, MemoryConfig_Handler_Table_Code_Sub_Skip
+	call	Interrupt_FlagSetBytecode_0x13
+MemoryConfig_Handler_Table_Code_Sub_Skip:
+	call	SubCPU_ToneParamRet_0x4BD
+	call	DMA_FlagCheckWithCalls
+	call	SndDispatch_ProcessCommand_0x28B
 MemoryConfig_Handler_Table_Code_Entry:
-	.byte 0x20, 0x00, 0x0e
+	ld	w, 0:opc
+	ret
 
 MemConfig_VoiceSlotLookup:
 	call VoiceSlot_ComputeIndex

@@ -1379,9 +1379,12 @@ def cmd_islands(args):
             ok = ad in bound and (ad + n) in bound and all(k in code for k in rng)
         else:
             if all(k in code for k in rng):
-                # a whole instruction written as .byte is fine when the backend
-                # cannot spell it; decide below by rendering it
-                ok = ad in istarts and (ad + n) in bound and c.split()[0] == ".byte"
+                # instruction bytes written as data: always re-rendered, so each
+                # instruction gets the backend's spelling, the tree's own
+                # custom-mnemonic spelling, or `.byte` + unidasm's reading
+                # (a line that ALREADY carries that reading is left alone)
+                ok = (c.split()[0] == ".byte" and ad in istarts and (ad + n) in bound
+                      and "\t; " in ln and not any(x in istarts for x in range(ad + 1, ad + n)))
                 if ok:
                     rows.append((i, ad, n))
             elif all(k not in code for k in rng):
