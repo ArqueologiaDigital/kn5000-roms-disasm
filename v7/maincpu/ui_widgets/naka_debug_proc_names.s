@@ -5,6 +5,15 @@
 ; Extracted from kn5000_v10_program.s
 ; =============================================================================
 
+; [nakarest] DbgStr_NakaProcName_Table: entries 1-45 of the NAME table of ApFunction slot 0x427
+; [nakarest] (0xe2031c, 46 entries), registered by InitializeYoko with RegObjTabl 0x1600002,
+; [nakarest] ApFunctionProc, 0x2e, 0xe2031c, 0x427 (sequencer/sequencer_ui.s) -- the names of
+; [nakarest] the 46 procedures of the parallel ApFunction table, slot 0x127.  The label sits one
+; [nakarest] entry into the table: entry 0 (-> "PartSelLangCheck", DbgStr_PartSelLangCheck
+; [nakarest] below) is the LAST 4 bytes of sepaout_config.bin (ui/sepaout_config.s), whose C
+; [nakarest] blob runs 4 bytes into this table.  The strings follow in reverse order; entry 45
+; [nakarest] is the empty string (DbgStr_EmptyProc).  The DbgStr_ prefix is historical: nothing
+; [nakarest] here is debug-only.
 DbgStr_NakaProcName_Table:
 	.long DbgStr_AfterLangCheck
 	.long DbgStr_TrAsPreLangCheck
@@ -52,6 +61,9 @@ DbgStr_NakaProcName_Table:
 	.long DbgStr_AcDemoMedleyDispBoxProc
 	.long DbgStr_IvExitModeTrSelProc
 	.long DbgStr_EmptyProc
+; [nakarest] Name strings of the ApFunction name table above (slot 0x427, InitializeYoko),
+; [nakarest] entries 45 down to 0, each NUL-terminated and 0xff-padded to even length
+; [nakarest] (aligned_string).
 DbgStr_EmptyProc:			aligned_string ""
 DbgStr_IvExitModeTrSelProc:			aligned_string "IvExitModeTrSelProc"
 DbgStr_AcDemoMedleyDispBoxProc:			aligned_string "AcDemoMedleyDispBoxProc"

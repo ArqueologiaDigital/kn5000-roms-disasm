@@ -1620,6 +1620,51 @@ ErrorDialog_CautionHeader:
 ]
 
 
+# Evidence lines inserted directly above a label (idempotent): (file, label,
+# text).  Lines are `; [nakarest] ` comments, replaced on every run.
+LABEL_NOTES = [
+    ('naka_debug_proc_names.s', 'DbgStr_NakaProcName_Table',
+     'DbgStr_NakaProcName_Table: entries 1-45 of the NAME table of ApFunction slot 0x427 '
+     '(0xE2031C, 46 entries), registered by InitializeYoko with RegObjTabl 0x1600002, '
+     'ApFunctionProc, 0x2E, 0xE2031C, 0x427 (sequencer/sequencer_ui.s) -- the names of the '
+     '46 procedures of the parallel ApFunction table, slot 0x127.  The label sits one entry '
+     'into the table: entry 0 (-> "PartSelLangCheck", DbgStr_PartSelLangCheck below) is '
+     'the LAST 4 bytes of sepaout_config.bin (ui/sepaout_config.s), whose C blob runs 4 '
+     'bytes into this table.  The strings follow in reverse order; entry 45 is the empty '
+     'string (DbgStr_EmptyProc).  The DbgStr_ prefix is historical: nothing here is '
+     'debug-only.'),
+    ('naka_debug_proc_names.s', 'DbgStr_EmptyProc',
+     'Name strings of the ApFunction name table above (slot 0x427, InitializeYoko), '
+     'entries 45 down to 0, each NUL-terminated and 0xFF-padded to even length '
+     '(aligned_string).'),
+]
+
+
+def apply_label_notes(v, apply):
+    by = {}
+    for f, lab, text in LABEL_NOTES:
+        by.setdefault(f, []).append((lab, text))
+    for f, notes in by.items():
+        path = os.path.join(ui(v), f)
+        raw = open(path, 'rb').read()
+        lines = raw.decode('latin-1').split('\n')
+        for lab, text in notes:
+            idx = [i for i, l in enumerate(lines) if re.match(r'^%s:' % re.escape(lab), l)]
+            if len(idx) != 1:
+                raise SystemExit('%s: label %s found %d times' % (path, lab, len(idx)))
+            i = idx[0]
+            j = i
+            while j > 0 and lines[j - 1].startswith(CMARK):
+                j -= 1
+            lines[j:i] = [re.sub(r'0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), CMARK + w)
+                          for w in textwrap.wrap(text, width=96 - len(CMARK),
+                                                 break_long_words=False, break_on_hyphens=False)]
+        out = '\n'.join(lines).encode('latin-1')
+        print('%s %s: label notes %+d bytes' % (v, f, len(out) - len(raw)))
+        if apply and out != raw:
+            open(path, 'wb').write(out)
+
+
 def apply_text_fixes(v, apply):
     for sname, old, new in TEXT_FIXES:
         path = os.path.join(ui(v), sname)
@@ -1631,6 +1676,64 @@ def apply_text_fixes(v, apply):
         print('%s %s: comment correction applied' % (v, sname))
         if apply:
             open(path, 'wb').write(b.replace(old.encode(), new.encode()))
+
+
+def apply_style_ui_params(v, apply):
+    """style_ui_params.s: evidence lines above each ParamBlock / ScreenData
+    label and the pointer table (the blobs are typed in style_ui/*.c, another
+    lane's files; this is the .s side only)."""
+    path = os.path.join(ui(v), 'style_ui_params.s')
+    raw = open(path, 'rb').read()
+    lines = raw.decode('latin-1').split('\n')
+    lines = [l for l in lines if not l.startswith(CMARK)]
+    R = refs(v)
+    T = R.sym['StyleUI_ParamBlockPtrTable']
+    rom = R.rom
+    entries = [int.from_bytes(rom[T - 0xE00000 + 4 * i:T - 0xE00000 + 4 * i + 4], 'little')
+               for i in range(76)]
+    by_target = {}
+    for i, e in enumerate(entries):
+        by_target.setdefault(e, []).append(i)
+    names = {v_: n for n, v_ in R.sym.items() if n.startswith('StyleUI_')}
+    out = []
+    for l in lines:
+        m = re.match(r'^(StyleUI_\w+):', l)
+        if m:
+            lab = m.group(1)
+            a = R.sym[lab]
+            if lab == 'StyleUI_ParamBlockPtrTable':
+                text = ('StyleUI_ParamBlockPtrTable: 4 tables x 19 pointers (76 entries). '
+                        'Scoop_InitPartDisplay and Scoop_SelectModeTable_2Part scale a mode '
+                        'index by 4 (`sla hl, 2`), load xiy from +0x00 and xix from +0x4C -- '
+                        'or from +0x98 and +0xE4 when the byte at 0x0D65 is 2 -- and hand the '
+                        'pair to UIRender_TwoTableGeneral; Scoop_InitDisplayFull reads it '
+                        'too.  Every entry is one of the ParamBlock / ScreenData objects of '
+                        'this file (the .long lines below).')
+            else:
+                idx = by_target.get(a, [])
+                direct = sorted({u[5] for u in R.in_range(a, a + 1)
+                                 if u[5] and u[5] != 'StyleUI_ParamBlockPtrTable'})
+                kind = 'ParamBlock' if 'ParamBlock' in lab else 'ScreenData'
+                src = ('style_ui/paramblock/%s.c' % lab.split('_')[-1].lower() if kind == 'ParamBlock'
+                       else 'style_ui/%s.c' % lab.split('_')[-1].lower())
+                text = ('%s: Style-UI ScreenData bytecode -- the sd_* commands of '
+                        'style_ui/screendata_types.h (lines, rects, labelled refs, strings), '
+                        'typed in %s -- drawn by UIRender_TwoTableGeneral, which hands its '
+                        'xiy/xix pair to Scoop_EventLoop_12Entry (display/scoop_display.s).  '
+                        'Reached through %s%s.' % (
+                            lab, src,
+                            ('StyleUI_ParamBlockPtrTable entries %s' % _ranges(idx)) if idx
+                            else 'no StyleUI_ParamBlockPtrTable entry',
+                            ('; loaded directly by %s' % ', '.join(direct[:6])) if direct else ''))
+            wrapped = textwrap.wrap(text, width=96 - len(CMARK), break_long_words=False,
+                                    break_on_hyphens=False)
+            out += [re.sub(r'0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), CMARK + w)
+                    for w in wrapped]
+        out.append(l)
+    new = '\n'.join(out).encode('latin-1')
+    print('%s style_ui_params.s: %+d bytes' % (v, len(new) - len(raw)))
+    if apply and new != raw:
+        open(path, 'wb').write(new)
 
 
 def main():
@@ -1648,7 +1751,9 @@ def main():
         apply_s(v, args.apply)
         apply_regions_s(v, args.apply)
         apply_text_fixes(v, args.apply)
+        apply_label_notes(v, args.apply)
         apply_objruns(v, args.apply)
+        apply_style_ui_params(v, args.apply)
 
 
 if __name__ == '__main__':
