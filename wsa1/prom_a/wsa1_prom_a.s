@@ -12275,8 +12275,22 @@ PanelButton_BitMask32:
 ; Evidence: `and XDE,(0x2252)` at 0xF8669F and `and XDE,(0x2256)` at
 ;          0xF866A7, each followed by a `jr NZ` to the path that pops and
 ;          returns WITHOUT touching (0x2088) -- so a hit vetoes the press.
-; Unknown:  what (0x2252)/(0x2256) hold.  The bit space is NOT the button
-;          index space of the table above; it is offset by 17.
+; What (0x2252)/(0x2256) hold -- established 2026-09-25 (lane proma),
+;          notes/proma-2026-09-25/gen_held_sets.py S1-S4: two 32-bit sets of
+;          HELD panel event codes, bit c for code c.  Their only writers are
+;          the action handlers sub_F8AE68 / sub_F8AF4E ((0x2252)) and
+;          sub_F8AEDB / sub_F8AF81 ((0x2256)): mask = IndexToBitMask32(code
+;          + 1), `or` on press, `and ~` on release, and the event value
+;          becomes 0x0303 when the code is in both sets.  The pool routes
+;          different switches of one code to the two sets; the codes are A9
+;          0x00-0x10 (the soft keys, LCD rows, -1/+1, EXIT, PAGE of
+;          Dispatch_FF3D39's legend).
+; The 17: sub_F8AE68/sub_F8AEDB rewrite a press whose bit is ALREADY set
+;          to code + 0x11 and record it at bit + 17 (`add (XIX-1),0x11 /
+;          sla 16 / sla 1`).  So bits 17..24 are codes 0..7 pressed again
+;          while held -- exactly the bits this table tests for buttons
+;          0..7, which is the offset the old line noted.
+; ★ CORRECTED: this paragraph recorded both as open.
 ; ---------------------------------------------------------------------
 PanelButton_InterlockMask32:
 	.long 0x00020000                            ; F8679A  [ 0]  1 << 17
