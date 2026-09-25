@@ -490,28 +490,2115 @@ Bitmap_Dredt0k:
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0d:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x4E18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] WidgetData_DrawbarPositionTable
+; WidgetData_DrawbarPositionTable -- Historical name, kept for
+; positional_labels.s and the other files that use it; the object here
+; is a read by BmDrEdit_SetupScrollRegion_MelodicMode (v10/v9 0xf36f0a,
+; v7 0xf36ee0) (`lda xhl, (WidgetData_DrawbarPositionTable:24)`). 106
+; bytes to the next referenced object; the layout beyond that access is
+; not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; WidgetData_DrawbarPositionTable[106].
+; -----------------------------------------------------------------------------
 WidgetData_DrawbarPositionTable:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13618, 0x1BE
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13618, 0x6A
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPlay_SaveAndPrepareState_Table
+; SeqPlay_SaveAndPrepareState_Table -- read by
+; SeqPlay_SaveAndPrepareState (v10/v9 0xf39f39, v7 0xf39efe) (`lda xbc,
+; (WidgetData_DrawbarPositionTable_0x6a:24)`),
+; SeqPlay_SaveState_SetPlayFlags (v10/v9 0xf39fb7, v7 0xf39f7c) (`lda
+; xbc, (WidgetData_DrawbarPositionTable_0x6a:24)`). 24 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPlay_SaveAndPrepareState_Table[24].
+; -----------------------------------------------------------------------------
+SeqPlay_SaveAndPrepareState_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13682, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPlay_SaveState_ChordShiftDone_Table
+; SeqPlay_SaveState_ChordShiftDone_Table -- read by
+; SeqPlay_SaveState_ChordShiftDone (v10/v9 0xf3a022, v7 0xf39fe7) (`lda
+; xbc, (WidgetData_DrawbarPositionTable_0x82:24)`),
+; SeqPlay_SaveState_BassShiftDone (v10/v9 0xf3a066, v7 0xf3a02b) (`lda
+; xbc, (WidgetData_DrawbarPositionTable_0x82:24)`). 4 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPlay_SaveState_ChordShiftDone_Table[4].
+; -----------------------------------------------------------------------------
+SeqPlay_SaveState_ChordShiftDone_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1369A, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqNote_ProcessCurrent_DrumCheck_Table
+; SeqNote_ProcessCurrent_DrumCheck_Table -- read by
+; SeqNote_ProcessCurrent_DrumCheck (v10/v9 0xf3aaf3, v7 0xf3aab8) (`lda
+; xbc, (WidgetData_DrawbarPositionTable_0x86:24)`),
+; VoiceConfig_SlotCheck_GetChannel (v10/v9 0xf3ab7b, v7 0xf3ab40) (`lda
+; xbc, (WidgetData_DrawbarPositionTable_0x86:24)`),
+; VoiceConfig_EventType_GetChannel (v10/v9 0xf3abe6, v7 0xf3abab) (`lda
+; xhl, (WidgetData_DrawbarPositionTable_0x86:24)`). 32 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqNote_ProcessCurrent_DrumCheck_Table[32].
+; -----------------------------------------------------------------------------
+SeqNote_ProcessCurrent_DrumCheck_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1369E, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPlay_AssignChordVoices_LocalInit
+; SeqPlay_AssignChordVoices_LocalInit -- initializer of a local array:
+; SeqPlay_AssignChordVoices (v10/v9 0xf3c66a, v7 0xf3c62f) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0xa6`); `lda xix, (xsp + 2); ld bc,
+; 4:i3; ldirw` copies 8 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqPlay_AssignChordVoices_LocalInit[4].
+; -----------------------------------------------------------------------------
+SeqPlay_AssignChordVoices_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x136BE, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPlay_AssignChordVoices_LocalInit_Tail
+; SeqPlay_AssignChordVoices_LocalInit_Tail -- 16 bytes after
+; SeqPlay_AssignChordVoices_LocalInit that no code reference reaches
+; (searched: every label and positional-label name anchored on the
+; historical labels of this span, in all v10 .s files). Contents not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPlay_AssignChordVoices_LocalInit_Tail[16].
+; -----------------------------------------------------------------------------
+SeqPlay_AssignChordVoices_LocalInit_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x136C6, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] PartDetect_LookupAndApply_Table
+; PartDetect_LookupAndApply_Table -- read by PartDetect_LookupAndApply
+; (v10/v9 0xf3e098, v7 0xf3e07c) (`lda xbc,
+; (WidgetData_DrawbarPositionTable_0xbe:24)`),
+; Part_SendVoiceOffAndCCEvents (v10/v9 0xf3ebc3, v7 0xf3eba7) (`lda xbc,
+; (WidgetData_DrawbarPositionTable_0xbe:24)`),
+; SeqVoiceSingle_LookupAndApply (v10/v9 0xf3ec8f, v7 0xf3ec73) (`lda
+; xbc, (WidgetData_DrawbarPositionTable_0xbe:24)`). 20 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; PartDetect_LookupAndApply_Table[20].
+; -----------------------------------------------------------------------------
+PartDetect_LookupAndApply_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x136D6, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] PartSubBlkA_WriteLoop32_Table
+; PartSubBlkA_WriteLoop32_Table -- read by PartSubBlkA_WriteLoop32
+; (v10/v9 0xf418fd, v7 0xf418ef) (`lda xhl,
+; (WidgetData_DrawbarPositionTable_0xd2:24)`). 16 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; PartSubBlkA_WriteLoop32_Table[16].
+; -----------------------------------------------------------------------------
+PartSubBlkA_WriteLoop32_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x136EA, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] PartSubBlkB_WriteLoop32_Table
+; PartSubBlkB_WriteLoop32_Table -- read by PartSubBlkB_WriteLoop32
+; (v10/v9 0xf4195f, v7 0xf41951) (`lda xhl,
+; (WidgetData_DrawbarPositionTable_0xe2:24)`). 16 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; PartSubBlkB_WriteLoop32_Table[16].
+; -----------------------------------------------------------------------------
+PartSubBlkB_WriteLoop32_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x136FA, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] PartSubBlkA_WriteLoop48_Table
+; PartSubBlkA_WriteLoop48_Table -- read by PartSubBlkA_WriteLoop48
+; (v10/v9 0xf41927, v7 0xf41919) (`lda xhl,
+; (WidgetData_DrawbarPositionTable_0xf2:24)`), PartSubBlkB_WriteLoop48
+; (v10/v9 0xf41989, v7 0xf4197b) (`lda xhl,
+; (WidgetData_DrawbarPositionTable_0xf2:24)`). 48 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; PartSubBlkA_WriteLoop48_Table[48].
+; -----------------------------------------------------------------------------
+PartSubBlkA_WriteLoop48_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1370A, 0x30
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqVoice_ApplyTableEntry_Table
+; SeqVoice_ApplyTableEntry_Table -- read by SeqVoice_ApplyTableEntry
+; (v10/v9 0xf3ff42, v7 0xf3ff34) (`ld xwa,
+; WidgetData_DrawbarPositionTable_0x122`). 12 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqVoice_ApplyTableEntry_Table[12].
+; -----------------------------------------------------------------------------
+SeqVoice_ApplyTableEntry_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1373A, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_ExtendedHandler_Table
+; AppEvent_ExtendedHandler_Table -- read by AppEvent_ExtendedHandler
+; (v10/v9 0xf3ff1f, v7 0xf3ff11) (`ld xwa,
+; WidgetData_DrawbarPositionTable_0x12e`). 12 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AppEvent_ExtendedHandler_Table[12].
+; -----------------------------------------------------------------------------
+AppEvent_ExtendedHandler_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13746, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_ExtendedHandler_Table_2
+; AppEvent_ExtendedHandler_Table_2 -- read by AppEvent_ExtendedHandler
+; (v10/v9 0xf3ff1f, v7 0xf3ff11) (`ld xwa,
+; WidgetData_DrawbarPositionTable_0x13a`). 12 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AppEvent_ExtendedHandler_Table_2[12].
+; -----------------------------------------------------------------------------
+AppEvent_ExtendedHandler_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13752, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Part_ApplyVoiceTableB_Table
+; Part_ApplyVoiceTableB_Table -- read by Part_ApplyVoiceTableB (v10/v9
+; 0xf3ff2d, v7 0xf3ff1f) (`ld xwa,
+; WidgetData_DrawbarPositionTable_0x146`). 12 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Part_ApplyVoiceTableB_Table[12].
+; -----------------------------------------------------------------------------
+Part_ApplyVoiceTableB_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1375E, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Part_ApplyVoiceTableA_Table
+; Part_ApplyVoiceTableA_Table -- read by Part_ApplyVoiceTableA (v10/v9
+; 0xf3ff34, v7 0xf3ff26) (`ld xwa,
+; WidgetData_DrawbarPositionTable_0x152`). 12 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Part_ApplyVoiceTableA_Table[12].
+; -----------------------------------------------------------------------------
+Part_ApplyVoiceTableA_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1376A, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Part_ApplyVoiceTableC_Table
+; Part_ApplyVoiceTableC_Table -- read by Part_ApplyVoiceTableC (v10/v9
+; 0xf3ff3b, v7 0xf3ff2d) (`ld xwa,
+; WidgetData_DrawbarPositionTable_0x15e`). 12 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Part_ApplyVoiceTableC_Table[12].
+; -----------------------------------------------------------------------------
+Part_ApplyVoiceTableC_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13776, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPlay_WriteErrorToVoiceTable_Data
+; SeqPlay_WriteErrorToVoiceTable_Data -- read by
+; SeqPlay_WriteErrorToVoiceTable (v10/v9 0xf43a46, v7 0xf43a38) (`lda
+; xbc, (WidgetData_DrawbarPositionTable_0x16a:24)`). 12 bytes to the
+; next referenced object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPlay_WriteErrorToVoiceTable_Data[12].
+; -----------------------------------------------------------------------------
+SeqPlay_WriteErrorToVoiceTable_Data:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13782, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Seq_SyncPositionAndOutputMIDITiming_LocalInit
+; Seq_SyncPositionAndOutputMIDITiming_LocalInit -- initializer of a
+; local array: Seq_SyncPositionAndOutputMIDITiming (v10/v9 0xf3e1c9, v7
+; 0xf3e1ad) (`ld xiy, WidgetData_DrawbarPositionTable_0x176`); `lda xix,
+; (xsp + 4); ldi85; ldiw; cp (0xe388:16), 1; jr nz,
+; SeqSync_CheckDemoMode` copies 3 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Seq_SyncPositionAndOutputMIDITiming_LocalInit[3].
+; -----------------------------------------------------------------------------
+Seq_SyncPositionAndOutputMIDITiming_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1378E, 0x3
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Seq_SyncPositionAndOutputMIDITiming_LocalInit_Tail
+; Seq_SyncPositionAndOutputMIDITiming_LocalInit_Tail -- 1 bytes after
+; Seq_SyncPositionAndOutputMIDITiming_LocalInit that no code reference
+; reaches (searched: every label and positional-label name anchored on
+; the historical labels of this span, in all v10 .s files). Contents not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Seq_SyncPositionAndOutputMIDITiming_LocalInit_Tail[1].
+; -----------------------------------------------------------------------------
+Seq_SyncPositionAndOutputMIDITiming_LocalInit_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13791, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqValPTK_LookupAndReturn_Table
+; SeqValPTK_LookupAndReturn_Table -- read by SeqValPTK_LookupAndReturn
+; (v10/v9 0xf3f6ef, v7 0xf3f6e1) (`lda xix,
+; (WidgetData_DrawbarPositionTable_0x17a:24)`). 14 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqValPTK_LookupAndReturn_Table[14].
+; -----------------------------------------------------------------------------
+SeqValPTK_LookupAndReturn_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13792, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqData_CopyBlockWithLookup_LocalInit
+; SeqData_CopyBlockWithLookup_LocalInit -- initializer of a local array:
+; SeqData_CopyBlockWithLookup (v10/v9 0xf409f3, v7 0xf409e5) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x188`); `ld xix, xsp; ldw bc, 0x8;
+; ldirw` copies 16 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqData_CopyBlockWithLookup_LocalInit[8].
+; -----------------------------------------------------------------------------
+SeqData_CopyBlockWithLookup_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137A0, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Rhythm_DispatchNoteAlloc_LocalInit
+; Rhythm_DispatchNoteAlloc_LocalInit -- initializer of a local array:
+; Rhythm_DispatchNoteAlloc (v10/v9 0xf42852, v7 0xf42844) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x198`); `lda xix, (xsp + 10); ldiw;
+; ldiw; ld xiy, WidgetData_DrawbarPositionTable_0x19c; lda xix, (xsp +
+; 6)` copies 4 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Rhythm_DispatchNoteAlloc_LocalInit[2].
+; -----------------------------------------------------------------------------
+Rhythm_DispatchNoteAlloc_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137B0, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Rhythm_DispatchNoteAlloc_LocalInit_2
+; Rhythm_DispatchNoteAlloc_LocalInit_2 -- initializer of a local array:
+; Rhythm_DispatchNoteAlloc (v10/v9 0xf42852, v7 0xf42844) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x19c`); `lda xix, (xsp + 6); ldiw;
+; ldiw; calr SeqPart_FindActiveVoiceSlot; ldb_erp L, 0xfb` copies 4
+; bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Rhythm_DispatchNoteAlloc_LocalInit_2[2].
+; -----------------------------------------------------------------------------
+Rhythm_DispatchNoteAlloc_LocalInit_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137B4, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Rhythm_ExtendedNoteAlloc_LocalInit
+; Rhythm_ExtendedNoteAlloc_LocalInit -- initializer of a local array:
+; Rhythm_ExtendedNoteAlloc (v10/v9 0xf429a0, v7 0xf42992) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x1a0`); `lda xix, (xsp + 12); ldiw;
+; ldiw; ld xiy, WidgetData_DrawbarPositionTable_0x1a4; lda xix, (xsp +
+; 8)` copies 4 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Rhythm_ExtendedNoteAlloc_LocalInit[2].
+; -----------------------------------------------------------------------------
+Rhythm_ExtendedNoteAlloc_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137B8, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Rhythm_ExtendedNoteAlloc_LocalInit_2
+; Rhythm_ExtendedNoteAlloc_LocalInit_2 -- initializer of a local array:
+; Rhythm_ExtendedNoteAlloc (v10/v9 0xf429a0, v7 0xf42992) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x1a4`); `lda xix, (xsp + 8); ldiw;
+; ldiw; calr SeqPart_FindActiveVoiceSlot; ldb_erp L, 0xfa` copies 4
+; bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Rhythm_ExtendedNoteAlloc_LocalInit_2[2].
+; -----------------------------------------------------------------------------
+Rhythm_ExtendedNoteAlloc_LocalInit_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137BC, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqEvent_ProcessRhythm4Ch_LocalInit
+; SeqEvent_ProcessRhythm4Ch_LocalInit -- initializer of a local array:
+; SeqEvent_ProcessRhythm4Ch (v10/v9 0xf42b61, v7 0xf42b53) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x1a8`); `lda xix, (xsp + 2); ld bc,
+; 4:i3; ldirw` copies 8 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqEvent_ProcessRhythm4Ch_LocalInit[4].
+; -----------------------------------------------------------------------------
+SeqEvent_ProcessRhythm4Ch_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137C0, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqEvent_ProcessRhythm3Ch_LocalInit
+; SeqEvent_ProcessRhythm3Ch_LocalInit -- initializer of a local array:
+; SeqEvent_ProcessRhythm3Ch (v10/v9 0xf42bd2, v7 0xf42bc4) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x1b0`); `lda xix, (xsp + 2); ld bc,
+; 3:i3; ldirw` copies 6 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqEvent_ProcessRhythm3Ch_LocalInit[3].
+; -----------------------------------------------------------------------------
+SeqEvent_ProcessRhythm3Ch_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137C8, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqEvt_ProcessBlock_LocalInit
+; SeqEvt_ProcessBlock_LocalInit -- initializer of a local array:
+; SeqEvt_ProcessBlock (v10/v9 0xf42d0b, v7 0xf42cfd) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x1b6`); `lda xix, (xsp+4); ldiw;
+; ldiw; ld c, (xsp+8); extz bc` copies 4 bytes into the routine's stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqEvt_ProcessBlock_LocalInit[2].
+; -----------------------------------------------------------------------------
+SeqEvt_ProcessBlock_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137CE, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqEvt_ProcessBlock_LocalInit_2
+; SeqEvt_ProcessBlock_LocalInit_2 -- initializer of a local array:
+; SeqEvt_ProcessBlock (v10/v9 0xf42d0b, v7 0xf42cfd) (`ld xiy,
+; WidgetData_DrawbarPositionTable_0x1ba`); `lda xix, (xsp+4); ldiw;
+; ldiw; ld c, (xsp+8); extz bc` copies 4 bytes into the routine's stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqEvt_ProcessBlock_LocalInit_2[2].
+; -----------------------------------------------------------------------------
+SeqEvt_ProcessBlock_LocalInit_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137D2, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] WidgetData_CharsetMappingTable
+; WidgetData_CharsetMappingTable -- Historical name (it is no charset
+; map). Four u32 code addresses: SeqInit_SetBaseAddress,
+; SeqInit_ReturnStub, SeqInit_JumpToPartInit, SeqInit_FullReset.
+; SystemConfig_PointerTable (ui_widgets/widget_dispatch.s) holds `.long
+; WidgetData_CharsetMappingTable`, and MidiSysEx_ProcessBlock (v10/v9
+; 0xfd8137, v7 0xfd7d80) calls entry 2 directly: `ld xhl,(<this>+8);
+; call (xhl)`. The code also points into it at +0x8.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; WidgetData_CharsetMappingTable[4].
+; -----------------------------------------------------------------------------
 WidgetData_CharsetMappingTable:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137D6, 0x53C
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137D6, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Part_InitFromPreset_LocalInit
+; Part_InitFromPreset_LocalInit -- initializer of a local array:
+; Part_InitFromPreset (v10/v9 0xf42ea4, v7 0xf42e96) (`ld xiy,
+; WidgetData_CharsetMappingTable_0x10`); `lda xix, (xsp + 4); ldw bc,
+; 0x8; ldirw` copies 16 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Part_InitFromPreset_LocalInit[8].
+; -----------------------------------------------------------------------------
+Part_InitFromPreset_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137E6, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqData_SendVoiceTableBlock_LocalInit
+; SeqData_SendVoiceTableBlock_LocalInit -- initializer of a local array:
+; SeqData_SendVoiceTableBlock (v10/v9 0xf43a59, v7 0xf43a4b) (`ld xiy,
+; WidgetData_CharsetMappingTable_0x20`); `ld xix, xsp; ld bc, 2:i3;
+; ldirw` copies 5 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqData_SendVoiceTableBlock_LocalInit[5].
+; -----------------------------------------------------------------------------
+SeqData_SendVoiceTableBlock_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137F6, 0x5
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqData_SendVoiceTableBlock_LocalInit_Tail
+; SeqData_SendVoiceTableBlock_LocalInit_Tail -- 1 bytes after
+; SeqData_SendVoiceTableBlock_LocalInit that no code reference reaches
+; (searched: every label and positional-label name anchored on the
+; historical labels of this span, in all v10 .s files). Contents not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqData_SendVoiceTableBlock_LocalInit_Tail[1].
+; -----------------------------------------------------------------------------
+SeqData_SendVoiceTableBlock_LocalInit_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137FB, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffEdit_ParamChangeB_Table
+; EffEdit_ParamChangeB_Table -- read by EffEdit_ParamChangeB (v10/v9
+; 0xf45410, v7 0xf45402) (`lda xwa,
+; (WidgetData_CharsetMappingTable_0x26:24)`). 128 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EffEdit_ParamChangeB_Table[128].
+; -----------------------------------------------------------------------------
+EffEdit_ParamChangeB_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137FC, 0x80
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffEdit_ParamChangeB_Table_2
+; EffEdit_ParamChangeB_Table_2 -- read by EffEdit_ParamChangeB (v10/v9
+; 0xf45410, v7 0xf45402) (`lda xde,
+; (WidgetData_CharsetMappingTable_0xa6:24)`). 128 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EffEdit_ParamChangeB_Table_2[128].
+; -----------------------------------------------------------------------------
+EffEdit_ParamChangeB_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1387C, 0x80
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffEdit_ParamChangeA_Table
+; EffEdit_ParamChangeA_Table -- read by EffEdit_ParamChangeA (v10/v9
+; 0xf45398, v7 0xf4538a) (`lda xwa,
+; (WidgetData_CharsetMappingTable_0x126:24)`). 128 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EffEdit_ParamChangeA_Table[128].
+; -----------------------------------------------------------------------------
+EffEdit_ParamChangeA_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x138FC, 0x80
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffEdit_ParamChangeA_Table_2
+; EffEdit_ParamChangeA_Table_2 -- read by EffEdit_ParamChangeA (v10/v9
+; 0xf45398, v7 0xf4538a) (`lda xde,
+; (WidgetData_CharsetMappingTable_0x1a6:24)`). 128 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EffEdit_ParamChangeA_Table_2[128].
+; -----------------------------------------------------------------------------
+EffEdit_ParamChangeA_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1397C, 0x80
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_RecordDispatch_BitMasks
+; AppEvent_RecordDispatch_BitMasks -- Seventeen u16 single-bit masks: 1
+; << k for k = 0..15, then 1 again. AppEvent_RecordDispatch (v10/v9
+; 0xf45242, v7 0xf45234) picks one (`lda xbc,<this>`, word move to RAM
+; 0x0d4f).
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvent_RecordDispatch_BitMasks[17].
+; -----------------------------------------------------------------------------
+AppEvent_RecordDispatch_BitMasks:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x139FC, 0x22
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqEvent_MainHandler_CaseTable
+; SeqEvent_MainHandler_CaseTable -- jump table of a compiled `switch` in
+; SeqEvent_MainHandler (v10/v9 0xf43d4c, v7 0xf43d3e) (`lda xix,
+; (WidgetData_CharsetMappingTable_0x248:24)`): case k jumps to
+; SeqEvent_Dispatch + entry[k] (`lda xix,(SeqEvent_Dispatch); jp_ind`).
+; 14 u16 offsets; the reader's bound `cp ..., 13` pins 14 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqEvent_MainHandler_CaseTable[14].
+; -----------------------------------------------------------------------------
+SeqEvent_MainHandler_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13A1E, 0x1C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvtHandler_Branch_024_CaseTable
+; AppEvtHandler_Branch_024_CaseTable -- jump table of a compiled
+; `switch` in AppEvtHandler_Branch_024 (v10/v9 0xf445b0, v7 0xf445a2)
+; (`add xwa, WidgetData_CharsetMappingTable_0x264`): case k jumps to
+; AppEvtHandler_Branch_024_0x97 + entry[k] (`lda
+; xix,(AppEvtHandler_Branch_024_0x97); jp_ind`). 6 u16 offsets; the
+; reader's bound `cp ..., 5` pins 6 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvtHandler_Branch_024_CaseTable[6].
+; -----------------------------------------------------------------------------
+AppEvtHandler_Branch_024_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13A3A, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvtHandler_Branch_021_CaseTable
+; AppEvtHandler_Branch_021_CaseTable -- jump table of a compiled
+; `switch` in AppEvtHandler_Branch_021 (v10/v9 0xf444b9, v7 0xf444ab)
+; (`add xwa, WidgetData_CharsetMappingTable_0x270`): case k jumps to
+; AppEvtHandler_Branch_021_0x5e + entry[k] (`lda
+; xix,(AppEvtHandler_Branch_021_0x5e); jp_ind`). 6 u16 offsets; the
+; reader's bound `cp ..., 5` pins 6 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvtHandler_Branch_021_CaseTable[6].
+; -----------------------------------------------------------------------------
+AppEvtHandler_Branch_021_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13A46, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvtHandler_Branch_006_CaseTable
+; AppEvtHandler_Branch_006_CaseTable -- jump table of a compiled
+; `switch` in AppEvtHandler_Branch_006 (v10/v9 0xf44243, v7 0xf44235)
+; (`lda xix, (WidgetData_CharsetMappingTable_0x27c:24)`): case k jumps
+; to AppEvtHandler_Branch_006_0x3b + entry[k] (`lda
+; xix,(AppEvtHandler_Branch_006_0x3b); jp_ind`). 8 u16 offsets; the
+; reader's bound `cp ..., 7` pins 8 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvtHandler_Branch_006_CaseTable[8].
+; -----------------------------------------------------------------------------
+AppEvtHandler_Branch_006_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13A52, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvtHandler_Branch_002_CaseTable
+; AppEvtHandler_Branch_002_CaseTable -- jump table of a compiled
+; `switch` in AppEvtHandler_Branch_002 (v10/v9 0xf4417e, v7 0xf44170)
+; (`lda xix, (WidgetData_CharsetMappingTable_0x28c:24)`): case k jumps
+; to AppEvtHandler_Branch_002_0x4b + entry[k] (`lda
+; xix,(AppEvtHandler_Branch_002_0x4b); jp_ind`). 8 u16 offsets; the
+; reader's bound `cp ..., 7` pins 8 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvtHandler_Branch_002_CaseTable[8].
+; -----------------------------------------------------------------------------
+AppEvtHandler_Branch_002_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13A62, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvtHandler_Branch_002_RamPtrs
+; AppEvtHandler_Branch_002_RamPtrs -- Nine u32 RAM addresses (0xf1f1,
+; 0x261c, 0xf228, 0x260e, 0x2604, 0xf1db, 0x2604, 0xf1d6, 0x2604).
+; AppEvtHandler_Branch_002 (v10/v9 0xf4417e, v7 0xf44170): `lda
+; xix,<this>; ld xwa,(xix+wa)` then `cp (xwa),0x11; incm8 1,(xwa)` -- a
+; byte counter at the selected address.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; AppEvtHandler_Branch_002_RamPtrs[9].
+; -----------------------------------------------------------------------------
+AppEvtHandler_Branch_002_RamPtrs:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13A72, 0x24
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_ChainDispatch1_CaseTable
+; AppEvent_ChainDispatch1_CaseTable -- jump table of a compiled `switch`
+; in AppEvent_ChainDispatch1 (v10/v9 0xf44147, v7 0xf44139) (`add xbc,
+; WidgetData_CharsetMappingTable_0x2c0`): case k jumps to
+; APP_EVENT_HANDLER_TABLE + entry[k] (`lda
+; xix,(APP_EVENT_HANDLER_TABLE); jp_ind`). 32 u16 offsets; the reader's
+; bound `cp ..., 31` pins 32 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvent_ChainDispatch1_CaseTable[32].
+; -----------------------------------------------------------------------------
+AppEvent_ChainDispatch1_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13A96, 0x40
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_SubDispatch_CaseTable
+; AppEvent_SubDispatch_CaseTable -- jump table of a compiled `switch` in
+; AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) (`add xwa,
+; WidgetData_CharsetMappingTable_0x300`): case k jumps to
+; AppEvent_SubDispatch_0x4cc + entry[k] (`lda
+; xix,(AppEvent_SubDispatch_0x4cc); jp_ind`). 6 u16 offsets; the
+; reader's bound `cp ..., 5` pins 6 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvent_SubDispatch_CaseTable[6].
+; -----------------------------------------------------------------------------
+AppEvent_SubDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13AD6, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_SubDispatch_CaseTable_2
+; AppEvent_SubDispatch_CaseTable_2 -- jump table of a compiled `switch`
+; in AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) (`add xwa,
+; WidgetData_CharsetMappingTable_0x30c`): case k jumps to
+; AppEvent_SubDispatch_0x3a6 + entry[k] (`lda
+; xix,(AppEvent_SubDispatch_0x3a6); jp_ind`). 6 u16 offsets; the
+; reader's bound `cp ..., 5` pins 6 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvent_SubDispatch_CaseTable_2[6].
+; -----------------------------------------------------------------------------
+AppEvent_SubDispatch_CaseTable_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13AE2, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_SubDispatch_Table
+; AppEvent_SubDispatch_Table -- read by AppEvent_SubDispatch (v10/v9
+; 0xf448a4, v7 0xf44896) (`lda xix,
+; (WidgetData_CharsetMappingTable_0x318:24)`). 16 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AppEvent_SubDispatch_Table[16].
+; -----------------------------------------------------------------------------
+AppEvent_SubDispatch_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13AEE, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_SubDispatch_Table_2
+; AppEvent_SubDispatch_Table_2 -- read by AppEvent_SubDispatch (v10/v9
+; 0xf448a4, v7 0xf44896) (`lda xix,
+; (WidgetData_CharsetMappingTable_0x328:24)`). 16 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AppEvent_SubDispatch_Table_2[16].
+; -----------------------------------------------------------------------------
+AppEvent_SubDispatch_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13AFE, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_SubDispatch_RamPtrs
+; AppEvent_SubDispatch_RamPtrs -- Byte-identical to
+; AppEvtHandler_Branch_002_RamPtrs (nine u32 RAM addresses).
+; AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) loads it with `lda
+; xix,<this>`; the instructions after that load are still misframed as
+; .byte in sequencer_engine.s (`e3 07 f0 e0` = ld xwa,(xix+wa)).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; AppEvent_SubDispatch_RamPtrs[9].
+; -----------------------------------------------------------------------------
+AppEvent_SubDispatch_RamPtrs:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13B0E, 0x24
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_InlineHandler_CaseTable
+; AppEvent_InlineHandler_CaseTable -- jump table of a compiled `switch`
+; in AppEvent_InlineHandler (v10/v9 0xf44882, v7 0xf44874) (`add xbc,
+; WidgetData_CharsetMappingTable_0x35c`): case k jumps to
+; AppEvent_SubDispatch + entry[k] (`lda xix,(AppEvent_SubDispatch);
+; jp_ind`). 32 u16 offsets; the reader's bound `cp ..., 31` pins 32
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AppEvent_InlineHandler_CaseTable[32].
+; -----------------------------------------------------------------------------
+AppEvent_InlineHandler_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13B32, 0x40
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AppEvent_RecordDispatch_Table
+; AppEvent_RecordDispatch_Table -- read by AppEvent_RecordDispatch
+; (v10/v9 0xf45242, v7 0xf45234) (`lda xix,
+; (WidgetData_CharsetMappingTable_0x39c:24)`). 16 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AppEvent_RecordDispatch_Table[16].
+; -----------------------------------------------------------------------------
+AppEvent_RecordDispatch_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13B72, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqState_LabelDispatch_CaseTable
+; SeqState_LabelDispatch_CaseTable -- jump table of a compiled `switch`
+; in SeqState_LabelDispatch (v10/v9 0xf4519b, v7 0xf4518d) (`lda xix,
+; (WidgetData_CharsetMappingTable_0x3ac:24)`): case k jumps to
+; SoundData_HandlerDispatch + entry[k] (`lda
+; xix,(SoundData_HandlerDispatch); jp_ind`). 16 u16 offsets; the
+; reader's bound `cp ..., 15` pins 16 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqState_LabelDispatch_CaseTable[16].
+; -----------------------------------------------------------------------------
+SeqState_LabelDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13B82, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqAccomp_SubChain_CaseTable
+; SeqAccomp_SubChain_CaseTable -- jump table of a compiled `switch` in
+; SeqAccomp_SubChain (v10/v9 0xf45fd9, v7 0xf45fcb) (`add xwa,
+; WidgetData_CharsetMappingTable_0x3cc`): case k jumps to
+; SeqAccomp_SubHandlerB + entry[k] (`lda xix,(SeqAccomp_SubHandlerB);
+; jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqAccomp_SubChain_CaseTable[12].
+; -----------------------------------------------------------------------------
+SeqAccomp_SubChain_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13BA2, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqAccomp_ParamDelivery_CaseTable
+; SeqAccomp_ParamDelivery_CaseTable -- jump table of a compiled `switch`
+; in SeqAccomp_ParamDelivery (v10/v9 0xf45dc1, v7 0xf45db3) (`add xwa,
+; WidgetData_CharsetMappingTable_0x3e4`): case k jumps to
+; SeqAccomp_SubHandlerA + entry[k] (`lda xix,(SeqAccomp_SubHandlerA);
+; jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqAccomp_ParamDelivery_CaseTable[12].
+; -----------------------------------------------------------------------------
+SeqAccomp_ParamDelivery_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13BBA, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ApPlaySyori_CaseTable
+; ApPlaySyori_CaseTable -- jump table of a compiled `switch` in
+; ApPlaySyori (v10/v9 0xf45ab8, v7 0xf45aaa) (`lda xix,
+; (WidgetData_CharsetMappingTable_0x3fc:24)`): case k jumps to
+; SeqAccomp_EventDispatch + entry[k] (`lda
+; xix,(SeqAccomp_EventDispatch); jp_ind`). 8 u16 offsets; the reader's
+; bound `cp ..., 7` pins 8 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; ApPlaySyori_CaseTable[8].
+; -----------------------------------------------------------------------------
+ApPlaySyori_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13BD2, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditSy_SendModeScrollReset_CaseTable
+; NoteEditSy_SendModeScrollReset_CaseTable -- jump table of a compiled
+; `switch` in NoteEditSy_SendModeScrollReset (v10/v9 0xf464e4, v7
+; 0xf464d6) (`lda xix, (WidgetData_CharsetMappingTable_0x40c:24)`): case
+; k jumps to NoteEditSy_ModeDispatch + entry[k] (`lda
+; xix,(NoteEditSy_ModeDispatch); jp_ind`). 8 u16 offsets; the reader's
+; bound `cp ..., 7` pins 8 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEditSy_SendModeScrollReset_CaseTable[8].
+; -----------------------------------------------------------------------------
+NoteEditSy_SendModeScrollReset_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13BE2, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditSy_HandleDownScroll_CaseTable
+; NoteEditSy_HandleDownScroll_CaseTable -- jump table of a compiled
+; `switch` in NoteEditSy_HandleDownScroll (v10/v9 0xf46762, v7 0xf46754)
+; (`add xde, WidgetData_CharsetMappingTable_0x41c`): case k jumps to
+; NoteEditSy_DownScroll_Param0 + entry[k] (`lda
+; xix,(NoteEditSy_DownScroll_Param0); jp_ind`). 12 u16 offsets; the
+; reader's bound `cp ..., 11` pins 12 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEditSy_HandleDownScroll_CaseTable[12].
+; -----------------------------------------------------------------------------
+NoteEditSy_HandleDownScroll_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13BF2, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditSy_HandleUpScroll_CaseTable
+; NoteEditSy_HandleUpScroll_CaseTable -- jump table of a compiled
+; `switch` in NoteEditSy_HandleUpScroll (v10/v9 0xf466f2, v7 0xf466e4)
+; (`add xde, WidgetData_CharsetMappingTable_0x434`): case k jumps to
+; NoteEditSy_UpScroll_Param0 + entry[k] (`lda
+; xix,(NoteEditSy_UpScroll_Param0); jp_ind`). 15 u16 offsets; the
+; reader's bound `cp ..., 14` pins 15 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEditSy_HandleUpScroll_CaseTable[15].
+; -----------------------------------------------------------------------------
+NoteEditSy_HandleUpScroll_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13C0A, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MainExeCall_CaseTable
+; MainExeCall_CaseTable -- jump table of a compiled `switch` in
+; MainExeCall (v10/v9 0xf470a4, v7 0xf47096) (`lda xix,
+; (WidgetData_CharsetMappingTable_0x452:24)`): case k jumps to
+; MainExe_HandleD6 + entry[k] (`lda xix,(MainExe_HandleD6); jp_ind`). 17
+; u16 offsets; the reader's bound `cp ..., 16` pins 17 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; MainExeCall_CaseTable[17].
+; -----------------------------------------------------------------------------
+MainExeCall_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13C28, 0x22
+; -----------------------------------------------------------------------------
+; [naka_s_headers] HelpLang_ByteTable0
+; HelpLang_ByteTable0 -- One of five 50-byte tables at 50-byte spacing.
+; HelpLang_DispatchDataBlock (v10/v9 0xf47667, v7 0xf47659) picks one of
+; the five addresses (0xe44aaa, 0xe44adc, 0xe44b0e, 0xe44b40, 0xe44b72)
+; and reads `ld a,(xwa+bc)`; which help language selects which table,
+; and what the bytes mean, is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t HelpLang_ByteTable0[50].
+; -----------------------------------------------------------------------------
+HelpLang_ByteTable0:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13C4A, 0x32
+; -----------------------------------------------------------------------------
+; [naka_s_headers] HelpLang_ByteTable1
+; HelpLang_ByteTable1 -- One of five 50-byte tables at 50-byte spacing.
+; HelpLang_DispatchDataBlock (v10/v9 0xf47667, v7 0xf47659) picks one of
+; the five addresses (0xe44aaa, 0xe44adc, 0xe44b0e, 0xe44b40, 0xe44b72)
+; and reads `ld a,(xwa+bc)`; which help language selects which table,
+; and what the bytes mean, is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t HelpLang_ByteTable1[50].
+; -----------------------------------------------------------------------------
+HelpLang_ByteTable1:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13C7C, 0x32
+; -----------------------------------------------------------------------------
+; [naka_s_headers] HelpLang_ByteTable2
+; HelpLang_ByteTable2 -- One of five 50-byte tables at 50-byte spacing.
+; HelpLang_DispatchDataBlock (v10/v9 0xf47667, v7 0xf47659) picks one of
+; the five addresses (0xe44aaa, 0xe44adc, 0xe44b0e, 0xe44b40, 0xe44b72)
+; and reads `ld a,(xwa+bc)`; which help language selects which table,
+; and what the bytes mean, is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t HelpLang_ByteTable2[50].
+; -----------------------------------------------------------------------------
+HelpLang_ByteTable2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13CAE, 0x32
+; -----------------------------------------------------------------------------
+; [naka_s_headers] HelpLang_ByteTable3
+; HelpLang_ByteTable3 -- One of five 50-byte tables at 50-byte spacing.
+; HelpLang_DispatchDataBlock (v10/v9 0xf47667, v7 0xf47659) picks one of
+; the five addresses (0xe44aaa, 0xe44adc, 0xe44b0e, 0xe44b40, 0xe44b72)
+; and reads `ld a,(xwa+bc)`; which help language selects which table,
+; and what the bytes mean, is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t HelpLang_ByteTable3[50].
+; -----------------------------------------------------------------------------
+HelpLang_ByteTable3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13CE0, 0x32
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FontPalette_Gradient7
+; FontPalette_Gradient7 -- Historical name (no palette). One of five
+; 50-byte tables at 50-byte spacing. HelpLang_DispatchDataBlock (v10/v9
+; 0xf47667, v7 0xf47659) picks one of the five addresses (0xe44aaa,
+; 0xe44adc, 0xe44b0e, 0xe44b40, 0xe44b72) and reads `ld a,(xwa+bc)`;
+; which help language selects which table, and what the bytes mean, is
+; not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FontPalette_Gradient7[50].
+; -----------------------------------------------------------------------------
 FontPalette_Gradient7:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13D12, 0x46
-FontPalette_Gradient6:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13D12, 0x32
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqStep_ParseRhythm_ByteMap
+; SeqStep_ParseRhythm_ByteMap -- 20 bytes 00 02 01 07 08 09 0A 0B 04 05
+; 06 03 0F FF FF FF FF 0C 0D 0E. SeqStep_ParseRhythm (v10/v9 0xf4e372,
+; v7 0xf4df6e) compares against it (`lda xhl,<this>; cpb_sri_rm
+; A,(xhl+de)`); SeqPart_InitValidOk (v10/v9 0xf4a073, v7 0xf49c89) and
+; SeqPart_DualLoadPartB (v10/v9 0xf4b341, v7 0xf4af57) move one byte of
+; it to RAM 0x287c. What the values stand for is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqStep_ParseRhythm_ByteMap[20].
+; -----------------------------------------------------------------------------
+SeqStep_ParseRhythm_ByteMap:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13D44, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] QuantizeMap_Grid96
+; QuantizeMap_Grid96 -- Tick-quantize map for a 96-tick grid (the
+; 96-tick unit of the sequencer): byte t is t rounded to the nearest
+; multiple of 96, and 0x7f where that rounds into the next unit --
+; exactly, for all 96 bytes (checked). Reached through
+; Display_FontPalette_Table (entry 6); was FontPalette_Gradient6, a name
+; no code used.
+;
+; Typed in naka_widget_descriptors.c as uint8_t QuantizeMap_Grid96[96].
+; -----------------------------------------------------------------------------
+QuantizeMap_Grid96:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13D58, 0x60
-FontPalette_Gradient5:
+; -----------------------------------------------------------------------------
+; [naka_s_headers] QuantizeMap_Grid48
+; QuantizeMap_Grid48 -- Tick-quantize map for a 48-tick grid (the
+; 96-tick unit of the sequencer): byte t is t rounded to the nearest
+; multiple of 48, and 0x7f where that rounds into the next unit --
+; exactly, for all 96 bytes (checked). Reached through
+; Display_FontPalette_Table (entry 5); was FontPalette_Gradient5, a name
+; no code used.
+;
+; Typed in naka_widget_descriptors.c as uint8_t QuantizeMap_Grid48[96].
+; -----------------------------------------------------------------------------
+QuantizeMap_Grid48:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13DB8, 0x60
-FontPalette_Gradient4:
+; -----------------------------------------------------------------------------
+; [naka_s_headers] QuantizeMap_Grid24
+; QuantizeMap_Grid24 -- Tick-quantize map for a 24-tick grid (the
+; 96-tick unit of the sequencer): byte t is t rounded to the nearest
+; multiple of 24, and 0x7f where that rounds into the next unit --
+; exactly, for all 96 bytes (checked). Reached through
+; Display_FontPalette_Table (entry 3); was FontPalette_Gradient4, a name
+; no code used.
+;
+; Typed in naka_widget_descriptors.c as uint8_t QuantizeMap_Grid24[96].
+; -----------------------------------------------------------------------------
+QuantizeMap_Grid24:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13E18, 0x60
-FontPalette_Gradient3:
+; -----------------------------------------------------------------------------
+; [naka_s_headers] QuantizeMap_Grid12
+; QuantizeMap_Grid12 -- Tick-quantize map for a 12-tick grid (the
+; 96-tick unit of the sequencer): byte t is t rounded to the nearest
+; multiple of 12, and 0x7f where that rounds into the next unit --
+; checked byte by byte, with one exception: the run for 72 (t = 66..77)
+; is stored as 0x49 = 73. Reached through Display_FontPalette_Table
+; (entry 1); was FontPalette_Gradient3, a name no code used.
+;
+; Typed in naka_widget_descriptors.c as uint8_t QuantizeMap_Grid12[96].
+; -----------------------------------------------------------------------------
+QuantizeMap_Grid12:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13E78, 0x60
-FontPalette_Gradient2:
+; -----------------------------------------------------------------------------
+; [naka_s_headers] QuantizeMap_Grid32
+; QuantizeMap_Grid32 -- Tick-quantize map for a 32-tick grid (the
+; 96-tick unit of the sequencer): byte t is t rounded to the nearest
+; multiple of 32, and 0x7f where that rounds into the next unit --
+; exactly, for all 96 bytes (checked). Reached through
+; Display_FontPalette_Table (entry 4); was FontPalette_Gradient2, a name
+; no code used.
+;
+; Typed in naka_widget_descriptors.c as uint8_t QuantizeMap_Grid32[96].
+; -----------------------------------------------------------------------------
+QuantizeMap_Grid32:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13ED8, 0x60
-FontPalette_Gradient1:
+; -----------------------------------------------------------------------------
+; [naka_s_headers] QuantizeMap_Grid16
+; QuantizeMap_Grid16 -- Tick-quantize map for a 16-tick grid (the
+; 96-tick unit of the sequencer): byte t is t rounded to the nearest
+; multiple of 16, and 0x7f where that rounds into the next unit --
+; exactly, for all 96 bytes (checked). Reached through
+; Display_FontPalette_Table (entry 2); was FontPalette_Gradient1, a name
+; no code used.
+;
+; Typed in naka_widget_descriptors.c as uint8_t QuantizeMap_Grid16[96].
+; -----------------------------------------------------------------------------
+QuantizeMap_Grid16:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13F38, 0x60
-FontPalette_Gradient0:
+; -----------------------------------------------------------------------------
+; [naka_s_headers] QuantizeMap_Grid8
+; QuantizeMap_Grid8 -- Tick-quantize map for a 8-tick grid (the 96-tick
+; unit of the sequencer): byte t is t rounded to the nearest multiple of
+; 8, and 0x7f where that rounds into the next unit -- exactly, for all
+; 96 bytes (checked). Reached through Display_FontPalette_Table (entry
+; 0); was FontPalette_Gradient0, a name no code used.
+;
+; Typed in naka_widget_descriptors.c as uint8_t QuantizeMap_Grid8[96].
+; -----------------------------------------------------------------------------
+QuantizeMap_Grid8:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13F98, 0x60
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Display_FontPalette_Table
+; Display_FontPalette_Table -- Historical name (it is no font palette).
+; Seven pointers to the QuantizeMap_Grid* tables above, in grid order 8,
+; 12, 16, 24, 32, 48, 96 ticks. SeqPart_VelExprEdit (v10/v9 0xf4c5d3, v7
+; 0xf4c1e9) takes entry ((byte 0x25fe) >> 1): `lda xbc,<this>; ld
+; xwa,(xbc+4*i)`.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; Display_FontPalette_Table[7].
+; -----------------------------------------------------------------------------
 Display_FontPalette_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13FF8, 0x71EC
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13FF8, 0x1C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Display_FontPalette_Table_Tail
+; Display_FontPalette_Table_Tail -- 2 bytes after
+; Display_FontPalette_Table that no code reference reaches (searched:
+; every label and positional-label name anchored on the historical
+; labels of this span, in all v10 .s files). Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Display_FontPalette_Table_Tail[2].
+; -----------------------------------------------------------------------------
+Display_FontPalette_Table_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14014, 0x2
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelCurveData_Table
+; SeqPart_VelCurveData_Table -- read by SeqPart_VelCurveData (v10/v9
+; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
+; (Display_FontPalette_Table_0x1e:24)`). 2 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelCurveData_Table[2].
+; -----------------------------------------------------------------------------
+SeqPart_VelCurveData_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14016, 0x2
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelCurveData_Table_2
+; SeqPart_VelCurveData_Table_2 -- read by SeqPart_VelCurveData (v10/v9
+; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
+; (Display_FontPalette_Table_0x20:24)`). 4 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelCurveData_Table_2[4].
+; -----------------------------------------------------------------------------
+SeqPart_VelCurveData_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14018, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelCurveData_Table_3
+; SeqPart_VelCurveData_Table_3 -- read by SeqPart_VelCurveData (v10/v9
+; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
+; (Display_FontPalette_Table_0x24:24)`). 8 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelCurveData_Table_3[8].
+; -----------------------------------------------------------------------------
+SeqPart_VelCurveData_Table_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1401C, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelCurveData_Table_4
+; SeqPart_VelCurveData_Table_4 -- read by SeqPart_VelCurveData (v10/v9
+; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
+; (Display_FontPalette_Table_0x2c:24)`). 4 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelCurveData_Table_4[4].
+; -----------------------------------------------------------------------------
+SeqPart_VelCurveData_Table_4:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14024, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelCurveData_Table_5
+; SeqPart_VelCurveData_Table_5 -- read by SeqPart_VelCurveData (v10/v9
+; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
+; (Display_FontPalette_Table_0x30:24)`). 6 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelCurveData_Table_5[6].
+; -----------------------------------------------------------------------------
+SeqPart_VelCurveData_Table_5:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14028, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelZoneLookup_Table
+; SeqPart_VelZoneLookup_Table -- read by SeqPart_VelZoneLookup (v10/v9
+; 0xf4c56d, v7 0xf4c183) (`lda xbc,
+; (Display_FontPalette_Table_0x36:24)`). 14 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelZoneLookup_Table[14].
+; -----------------------------------------------------------------------------
+SeqPart_VelZoneLookup_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1402E, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelCurveData_Table_6
+; SeqPart_VelCurveData_Table_6 -- read by SeqPart_VelCurveData (v10/v9
+; 0xf4c38c, v7 0xf4bfa2) (`ld xbc, Display_FontPalette_Table_0x44`). 2
+; bytes to the next referenced object; the layout beyond that access is
+; not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelCurveData_Table_6[2].
+; -----------------------------------------------------------------------------
+SeqPart_VelCurveData_Table_6:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1403C, 0x2
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelCurveData_Table_7
+; SeqPart_VelCurveData_Table_7 -- read by SeqPart_VelCurveData (v10/v9
+; 0xf4c38c, v7 0xf4bfa2) (`ld xbc, Display_FontPalette_Table_0x46`). 22
+; bytes to the next referenced object; the layout beyond that access is
+; not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelCurveData_Table_7[22].
+; -----------------------------------------------------------------------------
+SeqPart_VelCurveData_Table_7:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1403E, 0x16
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelZoneLookup_Table_2
+; SeqPart_VelZoneLookup_Table_2 -- read by SeqPart_VelZoneLookup (v10/v9
+; 0xf4c56d, v7 0xf4c183) (`ld xbc, Display_FontPalette_Table_0x5c`). 12
+; bytes to the next referenced object; the layout beyond that access is
+; not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqPart_VelZoneLookup_Table_2[12].
+; -----------------------------------------------------------------------------
+SeqPart_VelZoneLookup_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14054, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqPart_VelocityCurveCalc_CaseTable
+; SeqPart_VelocityCurveCalc_CaseTable -- jump table of a compiled
+; `switch` in SeqPart_VelocityCurveCalc (v10/v9 0xf4c360, v7 0xf4bf76)
+; (`lda xix, (Display_FontPalette_Table_0x68:24)`): case k jumps to
+; SeqPart_VelCurveData + entry[k] (`lda xix,(SeqPart_VelCurveData);
+; jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqPart_VelocityCurveCalc_CaseTable[11].
+; -----------------------------------------------------------------------------
+SeqPart_VelocityCurveCalc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14060, 0x16
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqStep_NoteReadEvent_CaseTable
+; SeqStep_NoteReadEvent_CaseTable -- jump table of a compiled `switch`
+; in SeqStep_NoteReadEvent (v10/v9 0xf4ce61, v7 0xf4ca77) (`lda xix,
+; (Display_FontPalette_Table_0x7e:24)`): case k jumps to
+; SeqStep_NoteByteBlock + entry[k] (`lda xix,(SeqStep_NoteByteBlock);
+; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqStep_NoteReadEvent_CaseTable[7].
+; -----------------------------------------------------------------------------
+SeqStep_NoteReadEvent_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14076, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqStep_EventPosConsumeAdvance_CaseTable
+; SeqStep_EventPosConsumeAdvance_CaseTable -- jump table of a compiled
+; `switch` in SeqStep_EventPosConsumeAdvance (v10/v9 0xf4d127, v7
+; 0xf4cd3d) (`lda xix, (Display_FontPalette_Table_0x8c:24)`): case k
+; jumps to SeqStep_EventPosFinish + entry[k] (`lda
+; xix,(SeqStep_EventPosFinish); jp_ind`). 7 u16 offsets; the reader's
+; bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqStep_EventPosConsumeAdvance_CaseTable[7].
+; -----------------------------------------------------------------------------
+SeqStep_EventPosConsumeAdvance_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14084, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqStep_DeleteDone_CaseTable
+; SeqStep_DeleteDone_CaseTable -- jump table of a compiled `switch` in
+; SeqStep_DeleteDone (v10/v9 0xf4d37d, v7 0xf4cf93) (`lda xix,
+; (Display_FontPalette_Table_0x9a:24)`): case k jumps to
+; SeqStep_DeleteExitRestore + entry[k] (`lda
+; xix,(SeqStep_DeleteExitRestore); jp_ind`). 7 u16 offsets; the reader's
+; bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqStep_DeleteDone_CaseTable[7].
+; -----------------------------------------------------------------------------
+SeqStep_DeleteDone_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14092, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqStep_TimerDispatch_ProcTables
+; SeqStep_TimerDispatch_ProcTables -- Three tables of 23 u32 code
+; addresses, one per timer dispatcher: SeqStep_TimerDispatchA (v10/v9
+; 0xf4e65a, v7 0xf4e256) uses +0x00, SeqStep_TimerDispatchB (v10/v9
+; 0xf4e66f, v7 0xf4e26b) +0x5c, SeqStep_TimerDispatchC (v10/v9 0xf4e684,
+; v7 0xf4e280) +0xb8 -- each `lda xbc,<table>; ld xhl,(xbc+4*i); jp
+; (xhl)`. The targets (SeqStep_PlaybackMaxPart,
+; SeqPlay_BufferUpdateBlock, SeqNotify_DataBlock and three unlabelled
+; addresses) are the handlers; 23 = (0x104-0xa8)/4, and all 69 values
+; are code addresses (v7 relocates them through v7_c_divergence.json).
+; The code also points into it at +0x5c, +0xb8.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; SeqStep_TimerDispatch_ProcTables[3][23].
+; -----------------------------------------------------------------------------
+SeqStep_TimerDispatch_ProcTables:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x140A0, 0x114
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqStep_TimerDispatch_ProcTables_Tail
+; SeqStep_TimerDispatch_ProcTables_Tail -- 66 bytes after
+; SeqStep_TimerDispatch_ProcTables that no code reference reaches
+; (searched: every label and positional-label name anchored on the
+; historical labels of this span, in all v10 .s files). Holds short
+; NUL-terminated strings -- "A", "w~", "d", "wb", "r", "d", "r", "a",
+; "d", ". " padded to 11 characters, "r" -- then zeros and 02 02 01 00
+; 02 70 00 A0 05 F9 03 00 09 00 02 00, the 2DD geometry fields of
+; FDC_Format2DD_BootSectorHead. Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SeqStep_TimerDispatch_ProcTables_Tail[66].
+; -----------------------------------------------------------------------------
+SeqStep_TimerDispatch_ProcTables_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141B4, 0x42
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2DD_Step2_FdcCmd
+; FDC_Format2DD_Step2_FdcCmd -- FDC command block: FDC_Format2DD_Step2
+; (v10/v9 0xf51ed7, v7 0xf51ad3) (`lda xwa,
+; (Display_FontPalette_Table_0x1fe:24)`), FDC_Format2HD_Step2 (v10/v9
+; 0xf522bd, v7 0xf51eb9) (`lda xwa,
+; (Display_FontPalette_Table_0x1fe:24)`) passes its address to
+; FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
+; 32 bytes to the next referenced object; the field layout is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2DD_Step2_FdcCmd[32].
+; -----------------------------------------------------------------------------
+FDC_Format2DD_Step2_FdcCmd:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141F6, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2DD_Start_FdcCmd
+; FDC_Format2DD_Start_FdcCmd -- FDC command block: FDC_Format2DD_Start
+; (v10/v9 0xf51eab, v7 0xf51aa7) (`lda xwa,
+; (Display_FontPalette_Table_0x21e:24)`), GetMediaType_Try2DDHeader
+; (v10/v9 0xf526d4, v7 0xf522d0) (`lda xwa,
+; (Display_FontPalette_Table_0x21e:24)`) passes its address to
+; FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
+; 32 bytes to the next referenced object; the field layout is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2DD_Start_FdcCmd[32].
+; -----------------------------------------------------------------------------
+FDC_Format2DD_Start_FdcCmd:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14216, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2HD_Start_FdcCmd
+; FDC_Format2HD_Start_FdcCmd -- FDC command block: FDC_Format2HD_Start
+; (v10/v9 0xf52291, v7 0xf51e8d) (`lda xwa,
+; (Display_FontPalette_Table_0x23e:24)`), GetMediaType_TryFormat2HD
+; (v10/v9 0xf5266d, v7 0xf52269) (`lda xwa,
+; (Display_FontPalette_Table_0x23e:24)`) passes its address to
+; FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
+; 16 bytes to the next referenced object; the field layout is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2HD_Start_FdcCmd[16].
+; -----------------------------------------------------------------------------
+FDC_Format2HD_Start_FdcCmd:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14236, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] GetMediaType_TryRecalib_FdcCmd
+; GetMediaType_TryRecalib_FdcCmd -- FDC command block:
+; GetMediaType_TryRecalib (v10/v9 0xf52657, v7 0xf52253) (`lda xwa,
+; (Display_FontPalette_Table_0x24e:24)`) passes its address to
+; FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
+; 16 bytes to the next referenced object; the field layout is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; GetMediaType_TryRecalib_FdcCmd[16].
+; -----------------------------------------------------------------------------
+GetMediaType_TryRecalib_FdcCmd:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14246, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2DD_BootSectorHead
+; FDC_Format2DD_BootSectorHead -- First 32 bytes of the boot sector
+; written by FDC_Format2DD_WriteBoot (v10/v9 0xf51f0f, v7 0xf51b0b)
+; (Mem_Copy source): EB 1C 90, OEM name "Technics", then a FAT12 BIOS
+; parameter block for a 720 KB 2DD disk -- 512 bytes/sector, 2
+; sectors/cluster, 1 reserved, 2 FATs, 112 root entries, 1440 sectors,
+; media F9, 3 sectors/FAT, 9 sectors/track, 2 heads -- and EB FE.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2DD_BootSectorHead[32].
+; -----------------------------------------------------------------------------
+FDC_Format2DD_BootSectorHead:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14256, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2DD_FatHead
+; FDC_Format2DD_FatHead -- F9 FF FF FF: the first FAT bytes (media byte
+; F9) that FDC_Format2DD_WriteFAT1 (v10/v9 0xf51f7c, v7 0xf51b78) copies
+; with Mem_Copy.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2DD_FatHead[4].
+; -----------------------------------------------------------------------------
+FDC_Format2DD_FatHead:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14276, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2HD_BootSectorHead
+; FDC_Format2HD_BootSectorHead -- First 32 bytes of the boot sector
+; written by FDC_Format2HD_WriteBoot (v10/v9 0xf522f5, v7 0xf51ef1): EB
+; 1C 90, "Technics", FAT12 BPB for a 1.44 MB 2HD disk -- 512
+; bytes/sector, 1 sector/cluster, 1 reserved, 2 FATs, 224 root entries,
+; 2880 sectors, media F0, 9 sectors/FAT, 18 sectors/track, 2 heads -- EB
+; FE.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2HD_BootSectorHead[32].
+; -----------------------------------------------------------------------------
+FDC_Format2HD_BootSectorHead:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1427A, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2HD_FatHead
+; FDC_Format2HD_FatHead -- F0 FF FF FF: first FAT bytes (media F0)
+; copied by FDC_Format2HD_WriteFAT1 (v10/v9 0xf52362, v7 0xf51f5e) and
+; FDC_Format2HD_TrackTest (v10/v9 0xf52412, v7 0xf5200e).
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2HD_FatHead[4].
+; -----------------------------------------------------------------------------
+FDC_Format2HD_FatHead:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429A, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] FDC_Format2HD_FatHead_Tail
+; FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that
+; no code reference reaches (searched: every label and positional-label
+; name anchored on the historical labels of this span, in all v10 .s
+; files). Holds the strings "d" and "A:\". Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; FDC_Format2HD_FatHead_Tail[6].
+; -----------------------------------------------------------------------------
+FDC_Format2HD_FatHead_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429E, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] GetDiskFreeSpace_CaseTable
+; GetDiskFreeSpace_CaseTable -- jump table of a compiled `switch` in
+; GetDiskFreeSpace (v10/v9 0xf52751, v7 0xf5234d) (`lda xix,
+; (Display_FontPalette_Table_0x2ac:24)`): case k jumps to
+; GetDiskFreeSpace_JumpTable + entry[k] (`lda
+; xix,(GetDiskFreeSpace_JumpTable); jp_ind`). 7 u16 offsets; the
+; reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; GetDiskFreeSpace_CaseTable[7].
+; -----------------------------------------------------------------------------
+GetDiskFreeSpace_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142A4, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] GetDiskFreeSpace_CaseTable_Tail
+; GetDiskFreeSpace_CaseTable_Tail -- 6 bytes after
+; GetDiskFreeSpace_CaseTable that no code reference reaches (searched:
+; every label and positional-label name anchored on the historical
+; labels of this span, in all v10 .s files). Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; GetDiskFreeSpace_CaseTable_Tail[6].
+; -----------------------------------------------------------------------------
+GetDiskFreeSpace_CaseTable_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B2, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] GetVolumeLabel_CaseTable
+; GetVolumeLabel_CaseTable -- jump table of a compiled `switch` in
+; GetVolumeLabel (v10/v9 0xf527ce, v7 0xf523ca) (`lda xix,
+; (Display_FontPalette_Table_0x2c0:24)`): case k jumps to
+; GetVolumeLabel_JumpTable + entry[k] (`lda
+; xix,(GetVolumeLabel_JumpTable); jp_ind`). 7 u16 offsets; the reader's
+; bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; GetVolumeLabel_CaseTable[7].
+; -----------------------------------------------------------------------------
+GetVolumeLabel_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B8, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] GetVolumeLabel_CaseTable_Tail
+; GetVolumeLabel_CaseTable_Tail -- 28 bytes after
+; GetVolumeLabel_CaseTable that no code reference reaches (searched:
+; every label and positional-label name anchored on the historical
+; labels of this span, in all v10 .s files). Holds the strings "A:\",
+; "+wb", "\", "d", "rb", then 0xff and "1 PianoDisc". Contents not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; GetVolumeLabel_CaseTable_Tail[28].
+; -----------------------------------------------------------------------------
+GetVolumeLabel_CaseTable_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142C6, 0x1C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] RhythmROM_BankProgramLocators
+; RhythmROM_BankProgramLocators -- 8 banks x 128 programs x {u16 hi, u16
+; lo}. AccVoice_ComputeChannelIndex (v10/v9 0xf53d77, v7 0xf53973) shows
+; the index: hl = (h & 7) * 512 + a * 4, then `ld wa,(xiy+hl)`, `add
+; hl,2`, `ld iy,(xiy+hl)`; RhythmROM_PatternDispatcher (v10/v9 0xf634f3,
+; v7 0xf630ef) stores the two words at 0x355a/0x355c, DrumVoice_Handler7
+; (v10/v9 0xf654b0, v7 0xf650ac) and VoiceAssign_ProcessRequest (v10/v9
+; 0xf67128, v7 0xf66d24) read them the same way. Measured: every
+; non-zero pair forms hi:lo = a multiple of 0x800 below 0x70000; zero
+; pairs mark unused (bank, program) slots. What the 32-bit value locates
+; is not established.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; RhythmROM_BankProgramLocators[8][128][2].
+; -----------------------------------------------------------------------------
+RhythmROM_BankProgramLocators:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142E2, 0x1000
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccPatch_Transpose_LookupTable_Data
+; AccPatch_Transpose_LookupTable_Data -- read by
+; AccPatch_Transpose_LookupTable (v10/v9 0xf60874, v7 0xf60470) (`add
+; xhl, Display_FontPalette_Table_0x12ea`), AccPlayback_TrackPosition
+; (v10/v9 0xf61f6e, v7 0xf61b6a) (`ld xix,
+; Display_FontPalette_Table_0x12ea`), ToneGen_WriteMultiChanParam
+; (v10/v9 0xf62986, v7 0xf62582) (`ld xix,
+; Display_FontPalette_Table_0x12ea`), __pad_F62B29 (v10/v9 0xf62b29, v7
+; 0xf62725) (`ld xix, Display_FontPalette_Table_0x12ea`),
+; Rhythm_CrossVoice_Apply (v10/v9 0xf54ffe, v7 0xf54bfa) (`ld xiy,
+; Display_FontPalette_Table_0x12ea`), Rhythm_NoteRangeCheck (v10/v9
+; 0xf55030, v7 0xf54c2c) (`ld xiy, Display_FontPalette_Table_0x12ea`),
+; Rhythm_InstrBaseLookup (v10/v9 0xf550bb, v7 0xf54cb7) (`ld xiy,
+; Display_FontPalette_Table_0x12ea`), Rhythm_TranspMod_BaseApply (v10/v9
+; 0xf55b44, v7 0xf55740) (`ld xiy, Display_FontPalette_Table_0x12ea`),
+; AccPlay_NoteAllocAndWrite (v10/v9 0xf722ab, v7 0xf71ea7) (`ld xix,
+; Display_FontPalette_Table_0x12ea`). 128 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccPatch_Transpose_LookupTable_Data[128].
+; -----------------------------------------------------------------------------
+AccPatch_Transpose_LookupTable_Data:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x152E2, 0x80
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Rhythm_VelLookA_TableLookup_Table
+; Rhythm_VelLookA_TableLookup_Table -- read by
+; Rhythm_VelLookA_TableLookup (v10/v9 0xf5509a, v7 0xf54c96) (`ld xiy,
+; Display_FontPalette_Table_0x136a`), Rhythm_VoiceMap_Inst2Bit3 (v10/v9
+; 0xf5524e, v7 0xf54e4a) (`ld xiy, Display_FontPalette_Table_0x136a`),
+; Rhythm_VelComp_Lookup (v10/v9 0xf5530d, v7 0xf54f09) (`ld xiy,
+; Display_FontPalette_Table_0x136a`), Rhythm_TranspMod_BaseLookup
+; (v10/v9 0xf55b5b, v7 0xf55757) (`ld xiy,
+; Display_FontPalette_Table_0x136a`). 456 bytes to the next referenced
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Rhythm_VelLookA_TableLookup_Table[456].
+; -----------------------------------------------------------------------------
+Rhythm_VelLookA_TableLookup_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15362, 0x1C8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] VoiceParam_BankProgramWords
+; VoiceParam_BankProgramWords -- 8 x 128 u16.
+; VoiceParam_Clamp_LookupTable (v10/v9 0xf5345a, v7 0xf53056): `ld
+; xwa,<this>; sla l,1; and h,7; ld hl,(xwa+hl)` -- row h (bank, clamped
+; to 0..7 by VoiceParam_Clamp_CheckBank), column l. Meaning of the words
+; not established.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; VoiceParam_BankProgramWords[8][128].
+; -----------------------------------------------------------------------------
+VoiceParam_BankProgramWords:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1552A, 0x800
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTone_LookupByProgram_Table
+; AccTone_LookupByProgram_Table -- read by AccTone_LookupByProgram
+; (v10/v9 0xf5d640, v7 0xf5d23c) (`lda xbc,
+; (Display_FontPalette_Table_0x1d32:24)`),
+; AccTone_ExtendAndDispatch_Body (v10/v9 0xf5d740, v7 0xf5d33c) (`lda
+; xhl, (Display_FontPalette_Table_0x1d32:24)`),
+; AccTone_FoundMatch_IncRet (v10/v9 0xf5d7f4, v7 0xf5d3f0) (`lda xbc,
+; (Display_FontPalette_Table_0x1d32:24)`), AccPatch_SlotScanByteData
+; (v10/v9 0xf5eb9c, v7 0xf5e798) (`add xwa,
+; Display_FontPalette_Table_0x1d32`), AccPatch_FillEntryWithVoiceData
+; (v10/v9 0xf5ef3b, v7 0xf5eb37) (`ld xbc,
+; Display_FontPalette_Table_0x1d32`), AccPatch_ReadVoiceStride (v10/v9
+; 0xf5f108, v7 0xf5ed04) (`ld xbc, Display_FontPalette_Table_0x1d32`),
+; AccPatch_RebuildChannelSlot (v10/v9 0xf5f1b7, v7 0xf5edb3) (`add xhl,
+; Display_FontPalette_Table_0x1d32`), AccPatch_ComplexDataBlock (v10/v9
+; 0xf5fac8, v7 0xf5f6c4) (`ld xbc, Display_FontPalette_Table_0x1d32`),
+; AccPatch_FillSlotWithVoiceData (v10/v9 0xf5fd29, v7 0xf5f925) (`ld
+; xbc, Display_FontPalette_Table_0x1d32`), VoiceResolve_FindSlot (v10/v9
+; 0xf67448, v7 0xf67044) (`ld xbc, Display_FontPalette_Table_0x1d32`),
+; AccStyle_ReadVoiceParam (v10/v9 0xf53ddc, v7 0xf539d8) (`ld xhl,
+; Display_FontPalette_Table_0x1d32`), AccPatch_ClampedSetParam (v10/v9
+; 0xf53df8, v7 0xf539f4) (`ld xhl, Display_FontPalette_Table_0x1d32`).
+; 20 bytes to the next referenced object; the layout beyond that access
+; is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTone_LookupByProgram_Table[20].
+; -----------------------------------------------------------------------------
+AccTone_LookupByProgram_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15D2A, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccVoice_LookupTableAddress_Table
+; AccVoice_LookupTableAddress_Table -- read by
+; AccVoice_LookupTableAddress (v10/v9 0xf569db, v7 0xf565d7) (`ld xde,
+; Display_FontPalette_Table_0x1d46`), AccVoice_LookupExtParamAddr
+; (v10/v9 0xf569f0, v7 0xf565ec) (`ld xde,
+; Display_FontPalette_Table_0x1d46`), AccTempo_ComputeDelta (v10/v9
+; 0xf570f8, v7 0xf56cf4) (`add xwa, Display_FontPalette_Table_0x1d46`),
+; AccVoice_PatchFromDirect (v10/v9 0xf53dbc, v7 0xf539b8) (`ld xhl,
+; Display_FontPalette_Table_0x1d46`), Seq_ProcessAllInputState (v10/v9
+; 0xf53509, v7 0xf53105) (`add xhl, Display_FontPalette_Table_0x1d46`).
+; 18 bytes to the next referenced object; the layout beyond that access
+; is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccVoice_LookupTableAddress_Table[18].
+; -----------------------------------------------------------------------------
+AccVoice_LookupTableAddress_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15D3E, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_ApplyExt_SkipClamp_Table
+; AccStyle_ApplyExt_SkipClamp_Table -- read by
+; AccStyle_ApplyExt_SkipClamp (v10/v9 0xf560c5, v7 0xf55cc1) (`ld xhl,
+; Display_FontPalette_Table_0x1d58`), AccVoice_Reassign_Mode2 (v10/v9
+; 0xf58afd, v7 0xf586f9) (`ld xhl, Display_FontPalette_Table_0x1d58`),
+; AccTone_FoundMatch_IncRet (v10/v9 0xf5d7f4, v7 0xf5d3f0) (`lda xbc,
+; (Display_FontPalette_Table_0x1d58:24)`), AccPedal_ProcessAllChanges
+; (v10/v9 0xf537f0, v7 0xf533ec) (`ld xhl,
+; Display_FontPalette_Table_0x1d58`), AccVoice_ReadBankAssign (v10/v9
+; 0xf5387b, v7 0xf53477) (`ld xhl, Display_FontPalette_Table_0x1d58`),
+; AccChord_DispatchVoiceChange (v10/v9 0xf53b62, v7 0xf5375e) (`ld xhl,
+; Display_FontPalette_Table_0x1d58`), RhythmPart_ProcessBit1 (v10/v9
+; 0xf53c2f, v7 0xf5382b) (`ld xhl, Display_FontPalette_Table_0x1d58`). 9
+; bytes to the next referenced object; the layout beyond that access is
+; not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccStyle_ApplyExt_SkipClamp_Table[9].
+; -----------------------------------------------------------------------------
+AccStyle_ApplyExt_SkipClamp_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15D50, 0x9
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_DefaultStream
+; AccStyle_DefaultStream -- A 64-byte event stream: 03 FF FF FF FF 87,
+; then fifteen `90 00 7D/7E 40 01 00` events separated by 81, then 81 83
+; 87 -- it parses exactly under the ASEQ_* byte grammar of naka_types.h.
+; AccStyle_SetupPartAddresses (v10/v9 0xf55fde, v7 0xf55bda),
+; AccStyle_SetupPartAddressesByHL (v10/v9 0xf56208, v7 0xf55e04),
+; AccPart_InitPositionsAndBase (v10/v9 0xf562c6, v7 0xf55ec2),
+; AccSeq_NextBarPage (v10/v9 0xf57465, v7 0xf57061) and
+; AccSeq_ResetToStart (v10/v9 0xf574a2, v7 0xf5709e) load <this>+6 into
+; the accompaniment cursor at RAM 0x3293.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccStyle_DefaultStream[64].
+; -----------------------------------------------------------------------------
+AccStyle_DefaultStream:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15D59, 0x40
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_ExtStyleMap
+; AccStyle_ExtStyleMap -- 30 bytes: 00 01 02 03 three times, then zeros.
+; AccStyle_ApplyExtendedStyle (v10/v9 0xf5607e, v7 0xf55c7a) and
+; AccStyle_ExtendedInit (v10/v9 0xf58754, v7 0xf58350) index it with
+; (byte 0x32e5) & 0x7f, clamped to 0..0x1d -- the clamp pins the 30
+; entries.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccStyle_ExtStyleMap[30].
+; -----------------------------------------------------------------------------
+AccStyle_ExtStyleMap:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15D99, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Seq_TempoByteMap
+; Seq_TempoByteMap -- 256 bytes indexed by the low byte of RAM word
+; 0x0409: Seq_ReadTempoLookup (v10/v9 0xf534f4, v7 0xf530f0) (`add
+; xhl,<this>; ld a,(xhl)`) stores the result at 0x334b. Meaning of the
+; values not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t Seq_TempoByteMap[256].
+; -----------------------------------------------------------------------------
+Seq_TempoByteMap:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15DB7, 0x100
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTone_NoteLookup_Table
+; AccTone_NoteLookup_Table -- read by AccTone_NoteLookup (v10/v9
+; 0xf5d6ed, v7 0xf5d2e9) (`lda xhl,
+; (Display_FontPalette_Table_0x1ebf:24)`). 816 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTone_NoteLookup_Table[816].
+; -----------------------------------------------------------------------------
+AccTone_NoteLookup_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15EB7, 0x330
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccVoice_RomRecords16
+; AccVoice_RomRecords16 -- 16 records x 16 bytes.
+; AccVoice_CopyFromROM_Do (v10/v9 0xf5c4a3, v7 0xf5c09f): record l (l <
+; 16, else 0) is copied with `ldir` of 0x10 bytes to RAM 0x34ab.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccVoice_RomRecords16[16][16].
+; -----------------------------------------------------------------------------
+AccVoice_RomRecords16:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x161E7, 0x100
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccVoice_RomRecords13
+; AccVoice_RomRecords13 -- 280 records x 13 bytes (3640 = 280 x 13
+; exactly). AccVoice_ComputedCopy (v10/v9 0xf5c0d4, v7 0xf5bcd0): record
+; (l * 20 + h) is copied with `ldir` of 0x0d bytes to RAM 0x34ab (the
+; same buffer AccVoice_RomRecords16 fills).
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccVoice_RomRecords13[280][13].
+; -----------------------------------------------------------------------------
+AccVoice_RomRecords13:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x162E7, 0xE38
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_RamImage_1E7800
+; AccStyle_RamImage_1E7800 -- Initial image of RAM 0x1e7800..0x1e7fdf:
+; AccStyle_InitVRAM (v10/v9 0xf5cd52, v7 0xf5c94e) copies exactly 0x7e0
+; bytes from here (`ld xix,0x1e7800; ldw bc,0x7e0; ldir`).
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccStyle_RamImage_1E7800[2016].
+; -----------------------------------------------------------------------------
+AccStyle_RamImage_1E7800:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1711F, 0x7E0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_RamImage_1E7800_Tail
+; AccStyle_RamImage_1E7800_Tail -- 3072 bytes after
+; AccStyle_RamImage_1E7800 that no code reference reaches (searched:
+; every label and positional-label name anchored on the historical
+; labels of this span, in all v10 .s files). Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccStyle_RamImage_1E7800_Tail[3072].
+; -----------------------------------------------------------------------------
+AccStyle_RamImage_1E7800_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x178FF, 0xC00
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_VelocityTableMain
+; AccStyle_VelocityTableMain -- 128 x 8 u16.
+; AccStyle_LookupVelocityTable (v10/v9 0xf55c4f, v7 0xf5584b), for byte
+; 0x90ea < 128: index = 0x90ea * 8 + (byte 0x90eb & 7); the word goes to
+; 0x90ee/0x90ef.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AccStyle_VelocityTableMain[128][8].
+; -----------------------------------------------------------------------------
+AccStyle_VelocityTableMain:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x184FF, 0x800
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_TempoWordTable
+; AccStyle_TempoWordTable -- 378 u16. AccStyle_LookupTempo_AddAndStore
+; (v10/v9 0xf55c17, v7 0xf55813): index =
+; AccStyle_TempoMultiplierTable[byte 0x90ea] + (byte 0x90eb, forced to 0
+; above 0x4f); the word goes to 0x90ee/0x90ef. The extent is to the next
+; referenced object; the index range was not bounded exactly.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AccStyle_TempoWordTable[378].
+; -----------------------------------------------------------------------------
+AccStyle_TempoWordTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x18CFF, 0x2F4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_VelocityTableExt
+; AccStyle_VelocityTableExt -- 16 x 8 u16. AccStyle_Velocity_ExtClamp
+; (v10/v9 0xf55c90, v7 0xf5588c), for 128 <= byte 0x90ea < 240: row =
+; 0x90ea & 0x7f (0 if above 0x0b), column = byte 0x90eb & 7 -- so rows
+; 0..11 are reachable.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AccStyle_VelocityTableExt[16][8].
+; -----------------------------------------------------------------------------
+AccStyle_VelocityTableExt:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x18FF3, 0x100
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_VelocityTableHigh
+; AccStyle_VelocityTableHigh -- 5 u16. AccStyle_Velocity_HighClamp
+; (v10/v9 0xf55cba, v7 0xf558b6), for byte 0x90ea >= 240: index = 0x90ea
+; & 0x0f (0 if above 4).
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AccStyle_VelocityTableHigh[5].
+; -----------------------------------------------------------------------------
+AccStyle_VelocityTableHigh:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x190F3, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_VelocityTableHigh_Tail
+; AccStyle_VelocityTableHigh_Tail -- 23 bytes after
+; AccStyle_VelocityTableHigh that no code reference reaches (searched:
+; every label and positional-label name anchored on the historical
+; labels of this span, in all v10 .s files). Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccStyle_VelocityTableHigh_Tail[23].
+; -----------------------------------------------------------------------------
+AccStyle_VelocityTableHigh_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x190FD, 0x17
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTone_ExtendAndDispatch_Body_Table
+; AccTone_ExtendAndDispatch_Body_Table -- read by
+; AccTone_ExtendAndDispatch_Body (v10/v9 0xf5d740, v7 0xf5d33c) (`lda
+; xiz, (Display_FontPalette_Table_0x511c:24)`). 32 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTone_ExtendAndDispatch_Body_Table[32].
+; -----------------------------------------------------------------------------
+AccTone_ExtendAndDispatch_Body_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19114, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTone_ExtendAndDispatch_Body_Table_2
+; AccTone_ExtendAndDispatch_Body_Table_2 -- read by
+; AccTone_ExtendAndDispatch_Body (v10/v9 0xf5d740, v7 0xf5d33c) (`lda
+; xde, (Display_FontPalette_Table_0x513c:24)`),
+; AccTone_FoundMatch_IncRet (v10/v9 0xf5d7f4, v7 0xf5d3f0) (`lda xde,
+; (Display_FontPalette_Table_0x513c:24)`). 32 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTone_ExtendAndDispatch_Body_Table_2[32].
+; -----------------------------------------------------------------------------
+AccTone_ExtendAndDispatch_Body_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19134, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTone_LookupByProgram_Table_2
+; AccTone_LookupByProgram_Table_2 -- read by AccTone_LookupByProgram
+; (v10/v9 0xf5d640, v7 0xf5d23c) (`lda xbc,
+; (Display_FontPalette_Table_0x515c:24)`), AccTone_Process_UnderF0
+; (v10/v9 0xf5d6cb, v7 0xf5d2c7) (`lda xbc,
+; (Display_FontPalette_Table_0x515c:24)`). 20 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTone_LookupByProgram_Table_2[20].
+; -----------------------------------------------------------------------------
+AccTone_LookupByProgram_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19154, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTuning_ReadAndApplyOffset_Table
+; AccTuning_ReadAndApplyOffset_Table -- read by
+; AccTuning_ReadAndApplyOffset (v10/v9 0xf5e393, v7 0xf5df8f) (`lda xbc,
+; (Display_FontPalette_Table_0x5170:24)`). 116 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTuning_ReadAndApplyOffset_Table[116].
+; -----------------------------------------------------------------------------
+AccTuning_ReadAndApplyOffset_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19168, 0x74
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTone_ExtendAndDispatch_Body_Table_3
+; AccTone_ExtendAndDispatch_Body_Table_3 -- read by
+; AccTone_ExtendAndDispatch_Body (v10/v9 0xf5d740, v7 0xf5d33c) (`lda
+; xde, (Display_FontPalette_Table_0x51e4:24)`). 4 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTone_ExtendAndDispatch_Body_Table_3[4].
+; -----------------------------------------------------------------------------
+AccTone_ExtendAndDispatch_Body_Table_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x191DC, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccTone_ExtendAndDispatch_PopRet_Table
+; AccTone_ExtendAndDispatch_PopRet_Table -- read by
+; AccTone_ExtendAndDispatch_PopRet (v10/v9 0xf5d7c1, v7 0xf5d3bd) (`lda
+; xde, (Display_FontPalette_Table_0x51e8:24)`). 4 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccTone_ExtendAndDispatch_PopRet_Table[4].
+; -----------------------------------------------------------------------------
+AccTone_ExtendAndDispatch_PopRet_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x191E0, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] TimeSig_ProcTable
+; TimeSig_ProcTable -- 24 u32 code addresses (Tempo_AdjustStartMeasure,
+; Tempo_AdjustEndMeasure, Tempo_AdjustQuantize, Tempo_AdjustEffect,
+; ...). TimeSig_DisplayStrings (v10/v9 0xf65909, v7 0xf65505): `ld
+; xde,<this>; add xde,xbc; ld xhl,(xde); call (xhl)`.
+;
+; Typed in naka_widget_descriptors.c as uint32_t TimeSig_ProcTable[24].
+; -----------------------------------------------------------------------------
+TimeSig_ProcTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x191E4, 0x60
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Tempo_AdjustEffect_Table
+; Tempo_AdjustEffect_Table -- read by Tempo_AdjustEffect (v10/v9
+; 0xf66346, v7 0xf65f42) (`lda xbc,
+; (Display_FontPalette_Table_0x524c:24)`). 20 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Tempo_AdjustEffect_Table[20].
+; -----------------------------------------------------------------------------
+Tempo_AdjustEffect_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19244, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Tempo_DisplayBPMReturn_LocalInit
+; Tempo_DisplayBPMReturn_LocalInit -- initializer of a local array:
+; Tempo_DisplayBPMReturn (v10/v9 0xf66779, v7 0xf66375) (`ld xiy,
+; Display_FontPalette_Table_0x5260`); `lda xix, (xsp + 6); ldw bc, 0x8;
+; ldirw` copies 16 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Tempo_DisplayBPMReturn_LocalInit[8].
+; -----------------------------------------------------------------------------
+Tempo_DisplayBPMReturn_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19258, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Tempo_RefreshDisplay5_Table
+; Tempo_RefreshDisplay5_Table -- read by Tempo_RefreshDisplay5 (v10/v9
+; 0xf66899, v7 0xf66495) (`lda xbc,
+; (Display_FontPalette_Table_0x5270:24)`). 80 bytes to the next
+; referenced object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Tempo_RefreshDisplay5_Table[80].
+; -----------------------------------------------------------------------------
+Tempo_RefreshDisplay5_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19268, 0x50
+; -----------------------------------------------------------------------------
+; [naka_s_headers] VoiceSlot_Dispatch_CaseTable
+; VoiceSlot_Dispatch_CaseTable -- jump table of a compiled `switch` in
+; VoiceSlot_Dispatch (v10/v9 0xf66e99, v7 0xf66a95) (`lda xix,
+; (Display_FontPalette_Table_0x52c0:24)`): case k jumps to
+; Voice_ClearSlotAndRet + entry[k] (`lda xix,(Voice_ClearSlotAndRet);
+; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; VoiceSlot_Dispatch_CaseTable[7].
+; -----------------------------------------------------------------------------
+VoiceSlot_Dispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x192B8, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] RhythmParam_Dispatch_CaseTable
+; RhythmParam_Dispatch_CaseTable -- jump table of a compiled `switch` in
+; RhythmParam_Dispatch (v10/v9 0xf66d36, v7 0xf66932) (`lda xix,
+; (Display_FontPalette_Table_0x52ce:24)`): case k jumps to
+; RhythmParam_CheckExit + entry[k] (`lda xix,(RhythmParam_CheckExit);
+; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; RhythmParam_Dispatch_CaseTable[7].
+; -----------------------------------------------------------------------------
+RhythmParam_Dispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x192C6, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccRhythm_Ram3888_Records
+; AccRhythm_Ram3888_Records -- 10 records x 16 bytes. The code after the
+; label __pad_F67459 (sequencer/accompaniment_engine.s): `ld xiy,<this>;
+; add xiy,xwa; ld xix,0x3888; ld xbc,0x10; ldir` -- one record is copied
+; to RAM 0x3888. 160 = 10 x 16 is the extent to the next referenced
+; object.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccRhythm_Ram3888_Records[10][16].
+; -----------------------------------------------------------------------------
+AccRhythm_Ram3888_Records:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x192D4, 0xA0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] RhythmDrum_EntryCounts
+; RhythmDrum_EntryCounts -- 7 x 10 byte counts.
+; RhythmDrum_LoadVoiceParams (v10/v9 0xf6710b, v7 0xf66d07) and
+; DrumParam_ReadMaxCount (v10/v9 0xf674d4, v7 0xf670d0) index it with
+; drum * 10 + (byte 0x37ab + drum); VoiceAssign_ProcessRequest (v10/v9
+; 0xf67128, v7 0xf66d24) sums the counts before an index to find that
+; group's start in RhythmDrum_Entries. The counts sum to 1718, exactly
+; the size of RhythmDrum_Entries.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; RhythmDrum_EntryCounts[7][10].
+; -----------------------------------------------------------------------------
+RhythmDrum_EntryCounts:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19374, 0x46
+; -----------------------------------------------------------------------------
+; [naka_s_headers] RhythmDrum_Entries
+; RhythmDrum_Entries -- 1718 u32 in 70 consecutive groups whose sizes
+; are RhythmDrum_EntryCounts (sum 1718 = 6872 / 4 -- the layout is
+; pinned by that sum). VoiceAssign_ProcessRequest (v10/v9 0xf67128, v7
+; 0xf66d24): xde = (sum of the counts before the group + byte 0x37b2 +
+; drum) * 4; `ld xhl,(<this>+xde)`. The values (0x100, 0x10100, 0x20100,
+; ...) are not addresses; their field meaning is not established.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; RhythmDrum_Entries[1718].
+; -----------------------------------------------------------------------------
+RhythmDrum_Entries:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x193BA, 0x1AD8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccVoice_SlotRows
+; AccVoice_SlotRows -- 3 rows x 128 bytes. The code after
+; AccVoice_SetupSlots_DataBlock: `sll de,7; add xde,<this>; ld
+; c,(xde+a)` -- row de, column a. Meaning of the bytes not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccVoice_SlotRows[3][128].
+; -----------------------------------------------------------------------------
+AccVoice_SlotRows:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1AE92, 0x180
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpMenuTtlFunc_CaseTable
+; CmpMenuTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CmpMenuTtlFunc (v10/v9 0xf67dd0, v7 0xf679cc) (`add xde,
+; Display_FontPalette_Table_0x701a`): case k jumps to
+; CmpMenuTtl_Dispatch + entry[k] (`lda xix,(CmpMenuTtl_Dispatch);
+; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpMenuTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CmpMenuTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B012, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpSetTtl_DynamicLookup_CaseTable
+; CmpSetTtl_DynamicLookup_CaseTable -- jump table of a compiled `switch`
+; in CmpSetTtl_DynamicLookup (v10/v9 0xf67f79, v7 0xf67b75) (`add xde,
+; Display_FontPalette_Table_0x7028`): case k jumps to
+; CmpSetTtl_Dispatch2 + entry[k] (`lda xix,(CmpSetTtl_Dispatch2);
+; jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpSetTtl_DynamicLookup_CaseTable[12].
+; -----------------------------------------------------------------------------
+CmpSetTtl_DynamicLookup_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B020, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpSetTtlFunc_CaseTable
+; CmpSetTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CmpSetTtlFunc (v10/v9 0xf67e59, v7 0xf67a55) (`add xde,
+; Display_FontPalette_Table_0x7040`): case k jumps to CmpSetTtl_Dispatch
+; + entry[k] (`lda xix,(CmpSetTtl_Dispatch); jp_ind`). 7 u16 offsets;
+; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpSetTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CmpSetTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B038, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpRealTtl_MajorDispatch_CaseTable
+; CmpRealTtl_MajorDispatch_CaseTable -- jump table of a compiled
+; `switch` in CmpRealTtl_MajorDispatch (v10/v9 0xf68048, v7 0xf67c44)
+; (`add xwa, Display_FontPalette_Table_0x704e`): case k jumps to
+; CmpRealTtl_RhythmVar0 + entry[k] (`lda xix,(CmpRealTtl_RhythmVar0);
+; jp_ind`). 13 u16 offsets; the reader's bound `cp ..., 12` pins 13
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpRealTtl_MajorDispatch_CaseTable[13].
+; -----------------------------------------------------------------------------
+CmpRealTtl_MajorDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B046, 0x1A
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpRealTtlFunc_CaseTable
+; CmpRealTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CmpRealTtlFunc (v10/v9 0xf67fee, v7 0xf67bea) (`add xde,
+; Display_FontPalette_Table_0x7068`): case k jumps to
+; CmpRealTtl_Dispatch + entry[k] (`lda xix,(CmpRealTtl_Dispatch);
+; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpRealTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CmpRealTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B060, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpBkslTtlFunc_CaseTable
+; CmpBkslTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CmpBkslTtlFunc (v10/v9 0xf682e2, v7 0xf67ede) (`add xde,
+; Display_FontPalette_Table_0x7076`): case k jumps to
+; CmpBkslTtl_Dispatch + entry[k] (`lda xix,(CmpBkslTtl_Dispatch);
+; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpBkslTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CmpBkslTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B06E, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpBkslSTtl_DirectMode_CaseTable
+; CmpBkslSTtl_DirectMode_CaseTable -- jump table of a compiled `switch`
+; in CmpBkslSTtl_DirectMode (v10/v9 0xf684bf, v7 0xf680bb) (`add xwa,
+; Display_FontPalette_Table_0x7084`): case k jumps to
+; CmpBkslSTtl_FillIn4 + entry[k] (`lda xix,(CmpBkslSTtl_FillIn4);
+; jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpBkslSTtl_DirectMode_CaseTable[11].
+; -----------------------------------------------------------------------------
+CmpBkslSTtl_DirectMode_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B07C, 0x16
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpBksl_STtlFunc_CaseTable
+; CmpBksl_STtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CmpBksl_STtlFunc (v10/v9 0xf6845b, v7 0xf68057) (`add xde,
+; Display_FontPalette_Table_0x709a`): case k jumps to
+; CmpBkslSTtl_Dispatch + entry[k] (`lda xix,(CmpBkslSTtl_Dispatch);
+; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpBksl_STtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CmpBksl_STtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B092, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpNcpTtl_TableDispatch_CaseTable
+; CmpNcpTtl_TableDispatch_CaseTable -- jump table of a compiled `switch`
+; in CmpNcpTtl_TableDispatch (v10/v9 0xf686e3, v7 0xf682df) (`add xde,
+; Display_FontPalette_Table_0x70a8`): case k jumps to
+; CmpNcpTtl_Dispatch2 + entry[k] (`lda xix,(CmpNcpTtl_Dispatch2);
+; jp_ind`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpNcpTtl_TableDispatch_CaseTable[20].
+; -----------------------------------------------------------------------------
+CmpNcpTtl_TableDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B0A0, 0x28
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpNcpTtlFunc_CaseTable
+; CmpNcpTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CmpNcpTtlFunc (v10/v9 0xf685f9, v7 0xf681f5) (`add xde,
+; Display_FontPalette_Table_0x70d0`): case k jumps to CmpNcpTtl_Dispatch
+; + entry[k] (`lda xix,(CmpNcpTtl_Dispatch); jp_ind`). 7 u16 offsets;
+; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpNcpTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CmpNcpTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B0C8, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpEsyTtl_Mode2_Table
+; CmpEsyTtl_Mode2_Table -- read by CmpEsyTtl_Mode2 (v10/v9 0xf68cfb, v7
+; 0xf688f7) (`add xde, Display_FontPalette_Table_0x70de`). 20 bytes to
+; the next referenced object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; CmpEsyTtl_Mode2_Table[20].
+; -----------------------------------------------------------------------------
+CmpEsyTtl_Mode2_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B0D6, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpEsyTtl_Mode2_CaseTable
+; CmpEsyTtl_Mode2_CaseTable -- jump table of a compiled `switch` in
+; CmpEsyTtl_Mode2 (v10/v9 0xf68cfb, v7 0xf688f7) (`ld xix,
+; Display_FontPalette_Table_0x70f2`): case k jumps to CmEsyTtl_Dispatch2
+; + entry[k] (`lda xix,(CmEsyTtl_Dispatch2); jp_ind`). 6 u16 offsets;
+; the reader's bound is not visible in the source (the code after the
+; load is still misframed), so the 6 entries are the extent to the next
+; referenced object.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpEsyTtl_Mode2_CaseTable[6].
+; -----------------------------------------------------------------------------
+CmpEsyTtl_Mode2_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B0EA, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmEsyTtlFunc_CaseTable
+; CmEsyTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CmEsyTtlFunc (v10/v9 0xf68c19, v7 0xf68815) (`add xde,
+; Display_FontPalette_Table_0x70fe`): case k jumps to CmEsyTtl_Dispatch
+; + entry[k] (`lda xix,(CmEsyTtl_Dispatch); jp_ind`). 7 u16 offsets; the
+; reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmEsyTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CmEsyTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B0F6, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpEsyTtl_E_Var1_CaseTable
+; CmpEsyTtl_E_Var1_CaseTable -- jump table of a compiled `switch` in
+; CmpEsyTtl_E_Var1 (v10/v9 0xf68e86, v7 0xf68a82) (`add xwa,
+; Display_FontPalette_Table_0x710c`): case k jumps to
+; CmpEsy_E_DispatchDataBlock + entry[k] (`lda
+; xix,(CmpEsy_E_DispatchDataBlock); jp_ind`). 12 u16 offsets; the
+; reader's bound `cp ..., 11` pins 12 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CmpEsyTtl_E_Var1_CaseTable[12].
+; -----------------------------------------------------------------------------
+CmpEsyTtl_E_Var1_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B104, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] S2cTtlFunc_CaseTable
+; S2cTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; S2cTtlFunc (v10/v9 0xf68de2, v7 0xf689de) (`add xde,
+; Display_FontPalette_Table_0x7124`): case k jumps to S2cTtl_Dispatch +
+; entry[k] (`lda xix,(S2cTtl_Dispatch); jp_ind`). 7 u16 offsets; the
+; reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; S2cTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+S2cTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B11C, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CstmCpTtl_RecMode2_CaseTable
+; CstmCpTtl_RecMode2_CaseTable -- jump table of a compiled `switch` in
+; CstmCpTtl_RecMode2 (v10/v9 0xf692fc, v7 0xf68ef8) (`add xde,
+; Display_FontPalette_Table_0x7132`): case k jumps to
+; CstmCpTtl_Dispatch2 + entry[k] (`lda xix,(CstmCpTtl_Dispatch2);
+; jp_ind`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
+; cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CstmCpTtl_RecMode2_CaseTable[20].
+; -----------------------------------------------------------------------------
+CstmCpTtl_RecMode2_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B12A, 0x28
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CstmCpTtlFunc_CaseTable
+; CstmCpTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; CstmCpTtlFunc (v10/v9 0xf69227, v7 0xf68e23) (`add xde,
+; Display_FontPalette_Table_0x715a`): case k jumps to CstmCpTtl_Dispatch
+; + entry[k] (`lda xix,(CstmCpTtl_Dispatch); jp_ind`). 7 u16 offsets;
+; the reader's bound `cp ..., 6` pins 7 cases.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; CstmCpTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+CstmCpTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B152, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MainCstmNameFunc_LocalInit
+; MainCstmNameFunc_LocalInit -- initializer of a local array:
+; MainCstmNameFunc (v10/v9 0xf695ca, v7 0xf691c6) (`ld xiy,
+; Display_FontPalette_Table_0x7168`); `lda xix, (xsp + 4); ldw bc, 0x3c;
+; ldirw` copies 120 bytes into the routine's stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; MainCstmNameFunc_LocalInit[60].
+; -----------------------------------------------------------------------------
+MainCstmNameFunc_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B160, 0x78
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MainCmpCpFunc_LocalInit
+; MainCmpCpFunc_LocalInit -- Initializer of a local array of three
+; string pointers -- " MEMORY-A ", " MEMORY-B ", " MEMORY-C "
+; (NakaInst_MEMORY_A/B/C, which follow). MainCmpCpFunc (v10/v9 0xf6985d,
+; v7 0xf69459): `ld xiy,<this>; lda xix,(xsp+10); ld bc,6; ldirw` copies
+; the 12 bytes into its stack frame.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; MainCmpCpFunc_LocalInit[3].
+; -----------------------------------------------------------------------------
+MainCmpCpFunc_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B1D8, 0xC
 NakaInst_MEMORY_C:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B1E4, 0xE
 NakaInst_MEMORY_B:

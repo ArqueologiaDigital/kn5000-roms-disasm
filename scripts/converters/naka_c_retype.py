@@ -551,10 +551,19 @@ CUSTOM = [
     # (blob, anchor label, builder)
     ('naka_widget_descriptors', 'NakaInst_OFF_Str', build_accseq_region),
 ]
+def build_seq_rodata(cb, data, off0):
+    """The sequencer constant data at +0x13618..+0x1B1E4 -- see
+    naka_seq_rodata.py for the partition and its evidence."""
+    import naka_seq_rodata as SR
+    new, reexp = SR.new_members(cb, data, fmt)
+    return SR.LO, SR.HI, new, reexp
+
+
 CUSTOM_AT = [
     # (blob, blob offset, builder) -- for objects whose .s label does not
     # exist yet (it is written by naka_s_headers.py)
     ('naka_widget_descriptors', 0x243B0, build_apfunction_tables),
+    ('naka_widget_descriptors', 0x13618, build_seq_rodata),
 ]
 
 

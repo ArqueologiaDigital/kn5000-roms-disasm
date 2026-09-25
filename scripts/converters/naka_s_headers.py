@@ -36,6 +36,9 @@ import naka_c_retype as R  # noqa: E402
 import naka_c_model as M  # noqa: E402
 
 RULE = '; ' + '-' * 77
+# historical slice labels that no other file uses and that the typed C
+# renames (FontPalette_Gradient0..6 are the seven quantize maps)
+RENAMED_OK = {'FontPalette_Gradient%d' % k for k in range(7)}
 MARK = '; [naka_s_headers] '
 
 
@@ -114,7 +117,8 @@ def split_slices(lines, blob, label, pieces):
     m = INCBIN_RE.match(lines[i + 1])
     assert m and m.group(1) == blob, lines[i + 1]
     off, ln = int(m.group(2), 0), int(m.group(3), 0)
-    assert pieces[0][0] == label and pieces[0][1] == off, pieces[0]
+    assert pieces[0][1] == off, pieces[0]
+    assert pieces[0][0] == label or label in RENAMED_OK, (label, pieces[0])
     assert sum(p[2] for p in pieces) == ln, (sum(p[2] for p in pieces), ln)
     new = []
     for nm, o, n in pieces:
@@ -173,6 +177,30 @@ def restructure_descriptors(lines, cb, data):
     return len(pieces)
 
 
+def restructure_seq_rodata(lines, cb):
+    """Split the 11 historical slices over +0x13618..+0x1B1E4 into one
+    labelled slice per object typed by naka_seq_rodata.py."""
+    import naka_seq_rodata as SR
+    if 'QuantizeMap_Grid8:' in lines:
+        return 0
+    blob = 'naka_widget_descriptors'
+    mem = [mb for mb in cb.members if SR.LO <= mb.offset < SR.HI]
+    old = []
+    for j in range(len(lines) - 1):
+        m = INCBIN_RE.match(lines[j + 1])
+        if lines[j].endswith(':') and m and m.group(1) == blob:
+            o, n = int(m.group(2), 0), int(m.group(3), 0)
+            if SR.LO <= o < SR.HI:
+                old.append((lines[j][:-1], o, n))
+    assert sum(n for _, _, n in old) == SR.HI - SR.LO, old
+    count = 0
+    for label, o, n in old:
+        pieces = [[mb.name, mb.offset, mb.size] for mb in mem if o <= mb.offset < o + n]
+        split_slices(lines, blob, label, pieces)
+        count += len(pieces)
+    return count
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true')
@@ -196,6 +224,13 @@ def main():
                      'stream, AccompSeq_Stream_00_a .. AccompSeq_Stream_77_b.')
         from_c.append(dict(kind='c', blob='naka_widget_descriptors', label=label,
                            header=c_header(cb, mb.name), typed=typed))
+    import naka_seq_rodata as SR
+    for mb in cb.members:
+        if SR.LO <= mb.offset < SR.HI:
+            from_c.append(dict(kind='c', blob='naka_widget_descriptors', label=mb.name,
+                               header=c_header(cb, mb.name),
+                               typed='Typed in naka_widget_descriptors.c as %s %s%s.'
+                                     % (mb.ctype, mb.name, mb.dims)))
     byfile.setdefault('widget_descriptors.s', []).extend(from_c)
     for v in ('v10', 'v9', 'v7'):
         for sname, objs in sorted(byfile.items()):
@@ -204,6 +239,7 @@ def main():
                 raw = open(path, 'rb').read()
                 lines = raw.decode('latin-1').split('\n')
                 n = restructure_descriptors(lines, cb, data)
+                n += restructure_seq_rodata(lines, cb)
                 if n and args.apply:
                     open(path, 'wb').write('\n'.join(lines).encode('latin-1'))
                 print('%-4s %-26s split into %d slices%s' % (v, sname, n, '' if args.apply else '  (dry run)'))
