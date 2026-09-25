@@ -13162,11 +13162,11 @@ INIT_RING_BUFFERS:
 	ld (4148:16), 0
 	set 0, (4148:16)
 	ld (4152:16), 0
-	ld xiy, 0xF434
+	ld xiy, Serial1_TxBuf_Struct
 	ld xix, 0xE00
 	ldw bc, 0xB
 	ldirw
-	ld xiy, 0xF44A
+	ld xiy, Serial1_RxBuf_Struct
 	ld xix, 0x1016
 	ldw bc, 0xB
 	ldirw

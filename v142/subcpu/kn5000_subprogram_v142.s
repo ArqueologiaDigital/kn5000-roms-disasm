@@ -6953,7 +6953,7 @@ TVF_Calc_Cutoff:
 	and de, 0x7F
 	extz xde
 	lda_dri XDE, 0x07, 0xE8, 0xF4
-	ld xiy, 0x11519
+	ld xiy, TVF_KeyFollow_Curves
 	add xiy, xde
 	ld e, (xiy)
 	ldb_erp E, 0xF4
@@ -7030,7 +7030,7 @@ TVF_Calc_Cutoff_NoKeyFollow:
 	and wa, 0x7F
 	extz xwa
 	lda_dri XWA, 0x07, 0xE0, 0xE8
-	ld xde, 0x11519
+	ld xde, TVF_KeyFollow_Curves
 	add xde, xwa
 	ld a, (xde)
 	ld e, a
@@ -7092,7 +7092,7 @@ TVF_Lookup_Depth_Amount:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	ld xwa, 0x11A25
+	ld xwa, TVF_DepthRecords_B
 	add xwa, xbc
 	ld a, (xwa)
 	ldb_erp A, 0xF0
@@ -7127,7 +7127,7 @@ TVF_Lookup_Depth_Amount_SetA:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	ld xwa, 0x119FB
+	ld xwa, TVF_DepthRecords_A
 	add xwa, xbc
 	ld a, (xwa)
 	ldb_erp A, 0xF0
@@ -7739,7 +7739,7 @@ Voice_Colour_LookupIndex:
 	and c, 0xE0
 	srl c, 5
 	extz xwa
-	ld xde, 0x106E4
+	ld xde, Voice_Colour_RowOffset_Table
 	add xde, xwa
 	ld a, (xde)
 	ld e, a
@@ -8194,7 +8194,7 @@ Voice_Build_OutputLevel_NoPanOverride:
 	srl wa, 8
 	extz xwa
 	add xwa, xwa
-	ld xde, 0xFBE4
+	ld xde, Voice_Reg080_NoteField_Table
 	add xde, xwa
 	ld wa, (xde)
 
@@ -14262,7 +14262,7 @@ Voice_ComputePitch_CheckSysExTune:
 Voice_ComputePitch_SysExTable:
 	ld wa, bc
 	extz xwa
-	ld xbc, 0x11C96
+	ld xbc, Voice_AltNoteMap_Curve
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -14277,7 +14277,7 @@ Voice_ComputePitch_CheckAltTune:
 	jr z, Voice_ComputePitch_NormalTune
 	ld wa, bc
 	extz xwa
-	ld xbc, 0x11C96
+	ld xbc, Voice_AltNoteMap_Curve
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -14292,7 +14292,7 @@ Voice_ComputePitch_NormalTune:
 	jr ge, Voice_ComputePitch_PortaPositive
 	ld wa, bc
 	extz xwa
-	ld xbc, 0xFEE4
+	ld xbc, Voice_DepthMirror_Table
 	add xbc, xwa
 	ld a, (xbc)
 	ld c, a
@@ -14367,7 +14367,7 @@ Voice_ComputePitch_ApplyLFO:
 	ld wa, (xwa + 43)
 	and wa, 0x7F
 	extz xwa
-	ld xbc, 0x11A4F
+	ld xbc, Voice_FineTune_Curve
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
@@ -14456,7 +14456,7 @@ Voice_ComputePitch_Mono:
 Voice_ComputePitch_Mono_SysExTable:
 	ld wa, de
 	extz xwa
-	ld xbc, 0x11C96
+	ld xbc, Voice_AltNoteMap_Curve
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -14471,7 +14471,7 @@ Voice_ComputePitch_Mono_CheckAltTune:
 	jr z, Voice_ComputePitch_Mono_CheckPorta
 	ld wa, de
 	extz xwa
-	ld xbc, 0x11C96
+	ld xbc, Voice_AltNoteMap_Curve
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -14484,7 +14484,7 @@ Voice_ComputePitch_Mono_CheckPorta:
 	jr ge, Voice_ComputePitch_Mono_PortaPositive
 	ld wa, de
 	extz xwa
-	ld xbc, 0xFEE4
+	ld xbc, Voice_DepthMirror_Table
 	add xbc, xwa
 	ld a, (xbc)
 	ld e, a
@@ -14532,7 +14532,7 @@ Voice_ComputePitch_Mono_ApplyLFO:
 	ld wa, (xwa + 43)
 	and wa, 0x7F
 	extz xwa
-	ld xbc, 0x11A4F
+	ld xbc, Voice_FineTune_Curve
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
@@ -16035,7 +16035,7 @@ Pitch_Bend_Ramp_Tick_Bit13Check:
 	incw 2, (267100:24)
 	ld wa, (0x04135c:24)
 	extz xwa
-	ld xbc, 0x11C7C
+	ld xbc, Voice_KeyShiftRamp_Steps
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
@@ -16053,7 +16053,7 @@ Pitch_Bend_Ramp_Tick_Bit14Clear:
 	incw 1, (267100:24)
 	ld wa, (0x04135c:24)
 	extz xwa
-	ld xbc, 0x11C7C
+	ld xbc, Voice_KeyShiftRamp_Steps
 	add xbc, xwa
 	ld a, (xbc)
 	exts wa
@@ -29431,7 +29431,7 @@ DSP_Config_Init:
 	calr ToneGen_WriteGlobalConfig
 	lda xwa, (10916:16)
 	ld (xsp + 2), xwa
-	ld xiy, 0xF8D5
+	ld xiy, ToneGen_VoiceParamShadow_Defaults
 	ld xix, xwa
 	ldw bc, 0x22
 	ldirw
@@ -32386,7 +32386,7 @@ Audio_Cmd_EffParam_TableJump:
 	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
-	ld	xix, 64056
+	ld	xix, AUDIO_CMD_EFFPARAM_JUMPTABLE
 	ld_rrw	wa, xix, wa
 	lda	xix, (Audio_Cmd_EffParam_TableJump_CaseBase:24)
 	jp_rr	8, xix, wa
@@ -33064,7 +33064,7 @@ Audio_Cmd_DSPUnit_TableJump:
 	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
-	ld	xix, 64182
+	ld	xix, AUDIO_CMD_DSPUNIT_JUMPTABLE
 	ld_rrw	wa, xix, wa
 	lda	xix, (Audio_Cmd_DSPUnit_Op01:24)
 	jp_rr	8, xix, wa
@@ -33620,7 +33620,7 @@ Audio_Cmd_ToneEdit_Reply_TableJump:
 	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
-	ld	xix, 64224
+	ld	xix, AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE
 	ld_rrw	wa, xix, wa
 	lda	xix, (Audio_Cmd_ToneEdit_Reply_Case_Pan:24)
 	jp_rr	8, xix, wa
@@ -34994,7 +34994,7 @@ DSP_VoiceParam_MultiSlot_CheckResult:
 	jr nz, DSP_VoiceParam_MultiSlot_StoreResult
 	ld wa, (xsp + 14)
 	extz xwa
-	ld xbc, 0xF95D
+	ld xbc, DSP_VOICEPARAM_DEFAULT_TABLE
 	add xbc, xwa
 	ld a, (xbc)
 
@@ -42606,7 +42606,7 @@ DSP_FlushAllSlots_Loop3:
 	add xde, (283420:24)
 	ld wa, iz
 	extz xwa
-	ld xbc, 0x120F4
+	ld xbc, DSP1_ImageHeader_UserKit
 	add xbc, xwa
 	ld a, (xbc)
 	ld (xde), a
@@ -42682,7 +42682,7 @@ DSP_ResetAlgoDefaults_Loop:
 	add xde, (283420:24)
 	ld wa, hl
 	extz xwa
-	ld xbc, 0x120E3
+	ld xbc, DSP1_ImageHeader_SoundRAM
 	add xbc, xwa
 	ld a, (xbc)
 	ld (xde), a
@@ -43157,7 +43157,7 @@ ToneGen_SetupPolyVoice:
 	ld (xsp), e
 	ld e, c
 	ld (xsp + 2), a
-	ld xiy, 0x12115
+	ld xiy, ToneGen_Voice_Param_Template
 	ld xix, 0x3B1C
 	ldw bc, 0x22
 	ldirw
@@ -43222,7 +43222,7 @@ ToneGen_SetupPolyVoice_Path:
 ToneGen_SetupPercussionVoice:
 	dec 2, xsp
 	ld (xsp), a
-	ld xiy, 0x12115
+	ld xiy, ToneGen_Voice_Param_Template
 	ld xix, 0x3B1C
 	ldw bc, 0x22
 	ldirw
@@ -48955,7 +48955,7 @@ EFF_MuteLoop_SlotBody:
 	add xwa, xbc
 	ld wa, (xwa)
 	extz xwa
-	ld xbc, 0x12226
+	ld xbc, DSP_EffectClass_Table
 	add xbc, xwa
 	cp (xbc), 0x0
 	jr z, EFF_MuteLoop_NoMute
@@ -49897,7 +49897,7 @@ DSP_StateDispatcher_AlgoLoop:
 	jr nz, DSP_StateDispatcher_AlgoNext
 	ld wa, ix
 	extz xwa
-	ld xbc, 0x12226
+	ld xbc, DSP_EffectClass_Table
 	add xbc, xwa
 	cp (xbc), 0x0
 	jr z, DSP_StateDispatcher_AlgoClear
@@ -49909,7 +49909,7 @@ DSP_StateDispatcher_AlgoLoop:
 	add xhl, xbc
 	ld wa, ix
 	extz xwa
-	ld xbc, 0x12226
+	ld xbc, DSP_EffectClass_Table
 	add xbc, xwa
 	ld a, (xbc)
 	inc 1, a
@@ -49943,7 +49943,7 @@ DSP_StateDispatcher_Epilogue:
 ; 11 twos over effect numbers 0..127.
 DSP_State_LookupAlgoIndex:
 	extz xwa
-	ld xbc, 0x12226
+	ld xbc, DSP_EffectClass_Table
 	add xbc, xwa
 	ld l, (xbc)
 	extz hl
@@ -51963,7 +51963,7 @@ DSP_State_LoadAndApplyAll:
 ; ★ Renamed 2026-09-25 from DSP_State_LoadAndApply_InlineData: header: table fetch XHL = *(0x0129A3 + 4*XBC), the decoder of byte-code opcode 0x61.
 DSP_ParamFetch_Op61Table:
 	sll	xbc, 2
-	ld	xwa, 76195
+	ld	xwa, DSP_OscParamCurve
 	add	xwa, xbc
 	ld	xhl, (xwa)
 	ret
@@ -51974,7 +51974,7 @@ DSP_ParamFetch_Op61Table:
 ; log-spaced Q23 coefficient ladder ending just under 2^23 * 0.706.
 DSP_ParamFetch_SingleTable:
 	sll xbc, 2
-	ld xwa, 0x12B33
+	ld xwa, DSP_CoeffCurve_Op62
 	add xwa, xbc
 	ld xhl, (xwa)
 	ret
@@ -51997,7 +51997,7 @@ DSP_ParamFetch_AlgoTypeTable:
 	cp e, 0:i3
 	jr nz, DSP_ParamFetch_AlgoTypeReturn
 	sll xbc, 2
-	ld xde, 0x12483
+	ld xde, DSP_FreqParamCurve_Algo0
 	add xde, xbc
 	ld xhl, (xde)
 	jr DSP_ParamFetch_AlgoTypeReturn
@@ -52005,7 +52005,7 @@ DSP_ParamFetch_AlgoTypeTable:
 ; type == 1 arm: fetch from the 0x012613 table.
 DSP_ParamFetch_AlgoType1:
 	sll xbc, 2
-	ld xde, 0x12613
+	ld xde, DSP_FreqParamCurve_Algo1
 	add xde, xbc
 	ld xhl, (xde)
 	jr DSP_ParamFetch_AlgoTypeReturn
@@ -52013,7 +52013,7 @@ DSP_ParamFetch_AlgoType1:
 ; type == 2 arm: fetch from the 0x0127A3 table.
 DSP_ParamFetch_AlgoType2:
 	sll xbc, 2
-	ld xde, 0x127A3
+	ld xde, DSP_FreqParamCurve_Algo2
 	add xde, xbc
 	ld xhl, (xde)
 
@@ -52044,7 +52044,7 @@ DSP_AlgoParam_Decode:
 	cp a, 1:i3
 	jr z, DSP_AlgoParam_Decode_Type1
 	sll xbc, 2
-	ld xwa, 0x127A3
+	ld xwa, DSP_FreqParamCurve_Algo2
 	add xwa, xbc
 	ld xwa, (xwa)
 	cpl wa
@@ -56578,7 +56578,7 @@ DSP_MixerCoeff_Compute:
 	ld wa, bc
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x131CF
+	ld xbc, DSP_MixerGain_Curve
 	add xbc, xwa
 	ld xde, (xbc)
 	srl xde, 15
