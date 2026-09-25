@@ -36,6 +36,14 @@ NEW2 = (";      step and the symmetry are in the bytes.  (Corrected 2026-09-25, 
         ";      bytes, the width P7Unit_SendValueTable reads with Stream_ReadU24BE at\n"
         ";      0xF9F84F -- see the Layout line below.)\n" + NEW)
 
+OLD3 = "\t;           A second entry point into this object; its own extent is not established.\n"
+NEW3 = ("\t;           A second entry point into this object.  Its extent is 109 bytes, 1 + the\n"
+        "\t;           0x6C length P7Unit_SelectStreamsForRecord installs beside the pointer --\n"
+        "\t;           the three 109-byte tables tile the 327-byte object exactly (banner at the\n"
+        "\t;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line said the\n"
+        "\t;           extent was not established.\n")
+
+
 if __name__ == "__main__":
     for a, enc in CODE:
         want = bytes.fromhex(enc.replace(" ", ""))
@@ -43,8 +51,11 @@ if __name__ == "__main__":
     print("  %d cited encodings hold" % len(CODE))
     if "--apply" in sys.argv:
         s = open(SRC, "rb").read().decode("latin-1")
-        assert s.count(OLD1) == 4 and s.count(OLD2) == 1
-        s = s.replace(OLD1, NEW).replace(OLD2, NEW2)
+        if s.count(OLD1) == 4 and s.count(OLD2) == 1:
+            s = s.replace(OLD1, NEW).replace(OLD2, NEW2)
+        # second pass (added the same session): the two inner entry points
+        if s.count(OLD3) == 2:
+            s = s.replace(OLD3, NEW3)
         data = s.encode("latin-1")
         open(SRC, "wb").write(data)
         print("applied: 5 objects")
