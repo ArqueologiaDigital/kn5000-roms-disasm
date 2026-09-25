@@ -75,6 +75,7 @@ UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
 BASE = 0xE00000
 ABSURD = re.compile(r'^(halt|incf|decf|ldf|normal|max|min|swi)\b|^(jr|jrl)\s+[a-z]+\s*,\s*0+$')
 TERM = re.compile(r'^(ret|reti|retd)\b|^(jp|jr|jrl)\s+(t\s*,\s*)?[^,]+$')
+DROP_COMMENT = None     # --drop-comment REGEX: inline comments PROVEN false by the re-frame
 LBL = re.compile(r'^\s*([A-Za-z_.$][\w.$@]*):\s*(;.*)?$')
 
 
@@ -210,6 +211,12 @@ def fallback_spellings(udm, raw):
         b = ", ".join("0x%02x" % x for x in raw[1:4])
         for form in ("%s%s_sri_rm", "%s_sri%s_rm", "%s%s_sri_mr", "%s_sri%s_mr"):
             out.append("%s %s, %s" % (form % (op, sz), reg, b))
+    m = re.match(r'^(\w+) \((X\w\w)\+(\w+)\),(0x[0-9a-f]+)$', udm)
+    if m and raw[0] == 0xc3 and raw[1] == 0x07 and len(raw) == 6:
+        op = m.group(1).lower()
+        b = ", ".join("0x%02x" % x for x in raw[1:4])
+        for form in ("%sib_sri", "%s_srib_im", "%sib_dri"):
+            out.append("%s %s, %s" % (form % op, b, m.group(4)))
     return out
 
 
@@ -323,7 +330,7 @@ def plan(ctx, lo, hi, allow_after_term=False):
     for a, n, t, s, used in texts:
         report.append("    0x%06X  %-40s || unidasm: %s" % (a, rendered[a].strip(), udm.get(a)))
     # emit
-    out, dropped = [], []
+    out, dropped, dropped_comments = [], [], []
     newstarts = {a for a, _, _ in new}
     li = first_li
     prev_code = None
@@ -350,14 +357,27 @@ def plan(ctx, lo, hi, allow_after_term=False):
                 emitted_upto = e
                 prev_code = drc.strip_comment(text).strip()
             else:
+                labelled_target = False
+                k2 = li - 1
+                while k2 >= first_li and k2 not in ctx.span:
+                    mm = LBL.match(ctx.lines[k2])
+                    if mm and refs_elsewhere(mm.group(1), ctx.path) > 0:
+                        labelled_target = True
+                    k2 -= 1
                 if emitted_upto == a and prev_code and TERM.match(prev_code.lower()) \
                         and not allow_after_term and a not in targets \
+                        and not labelled_target \
                         and not any(x < a for x in computed):
                     raise SystemExit("REFUSED: dirty stretch at 0x%06X follows a terminator "
                                      "(%s) -- could be a data island" % (a, prev_code))
                 c0 = drc.strip_comment(text)
                 if len(c0) < len(text):
                     cm = text[len(c0) + 1:].strip()
+                    if cm and DROP_COMMENT and re.search(DROP_COMMENT, cm):
+                        dropped_comments.append(cm)
+                        cm = ""
+                    if cm and cm in inline.get(max(x for x in newstarts if x <= a), []):
+                        cm = ""          # the same comment already rides on this instruction
                     if cm:
                         # carry onto the new instruction containing a
                         host = max(x for x in newstarts if x <= a)
@@ -394,7 +414,9 @@ def plan(ctx, lo, hi, allow_after_term=False):
     report.insert(0, "0x%06X-0x%06X: %d old lines (%d dirty) -> %d new instrs replaced, "
                   "%d .byte fallbacks, dropped labels %s"
                   % (lo, hi, len(lis), ndirty, len(need), fallbacks,
-                     ", ".join("%s@0x%06X" % d for d in dropped) or "-"))
+                     ", ".join("%s@0x%06X" % d for d in dropped) or "-")
+                  + ("; dropped %d comment(s) matching --drop-comment" % len(dropped_comments)
+                     if dropped_comments else ""))
     return out, first_li, end_li, report
 
 
@@ -427,56 +449,45 @@ def render_range(rendered, new, a, b, inline):
     return out
 
 
-def auto_spans(ctx):
-    """One span per data fragment inside code, widened to agreement."""
+def auto_spans(ctx, maxrun=4096):
+    """One span per RUN of data lines sitting inside code (code within 3
+    emitting lines on both sides), widened until old and new framing agree on
+    4 consecutive instruction lines after it."""
     lis = sorted(ctx.span)
-    idx = {li: i for i, li in enumerate(lis)}
-    spans = []
-    for li in lis:
-        k, c = ctx.kind(li)
-        if k != "data":
+    kinds = [ctx.kind(li)[0] for li in lis]
+    runs, i = [], 0
+    while i < len(lis):
+        if kinds[i] != "data":
+            i += 1
             continue
-        i = idx[li]
-        # code on both sides?
-        before = [lis[j] for j in range(max(0, i - 3), i)]
-        after = [lis[j] for j in range(i + 1, min(len(lis), i + 4))]
-        if not before or not after:
-            continue
-        if not all(ctx.kind(x)[0] in ("code", "data") for x in before + after):
-            continue
-        if not any(ctx.kind(x)[0] == "code" for x in before) or \
-                not any(ctx.kind(x)[0] == "code" for x in after):
-            continue
-        spans.append(i)
-    # widen each: start 6 lines back, extend until 4 consecutive agreeing lines
+        j = i
+        while j + 1 < len(lis) and kinds[j + 1] == "data":
+            j += 1
+        before = kinds[max(0, i - 3):i]
+        after = kinds[j + 1:j + 4]
+        nbytes = ctx.span[lis[j]][1] - ctx.span[lis[i]][0]
+        if before and after and "code" in before and "code" in after \
+                and all(k in ("code", "data") for k in before + after) and nbytes <= maxrun:
+            runs.append((i, j))
+        i = j + 1
     out = []
-    for i in spans:
+    for i, j in runs:
         s = max(0, i - 6)
-        while s > 0 and ctx.kind(lis[s])[0] != "code":
+        while s > 0 and kinds[s] != "code":
             s -= 1
         lo = ctx.span[lis[s]][0]
-        e = i + 1
+        top = min(len(lis) - 1, j + 60)
+        data = ctx.rom[lo - BASE:ctx.span[lis[top]][1] + 16 - BASE]
+        starts = {a for a, _, _ in unidasm(data, lo)}
         hi = None
-        while e < len(lis) and e < i + 60:
+        for e in range(j + 1, top - 3):
             lo_e = ctx.span[lis[e]][0]
-            try:
-                data = ctx.rom[lo - BASE:lo_e + 64 - BASE]
-                ud = unidasm(data, lo)
-            except Exception:
-                break
-            starts = {a for a, _, _ in ud}
-            ok = 0
-            for j in range(e, min(len(lis), e + 4)):
-                a, en = ctx.span[lis[j]]
-                if a in starts and ctx.kind(lis[j])[0] == "code":
-                    ok += 1
-            if ok == 4 and lo_e in starts:
+            if lo_e in starts and all(ctx.span[lis[x]][0] in starts and kinds[x] == "code"
+                                      for x in range(e, e + 4)):
                 hi = lo_e
                 break
-            e += 1
         if hi:
             out.append((lo, hi))
-    # merge overlaps
     out.sort()
     merged = []
     for lo, hi in out:
@@ -509,7 +520,11 @@ def main():
     ap.add_argument("--auto", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--allow-after-terminator", action="store_true")
+    ap.add_argument("--drop-comment", help="regex: inline comments on DIRTY lines that the "
+                    "re-frame proves false (e.g. 'cannot be spelled') are dropped, not carried")
     a = ap.parse_args()
+    global DROP_COMMENT
+    DROP_COMMENT = a.drop_comment
     ctx = Ctx(a.image, a.file)
     spans = [tuple(int(x, 0) for x in s.split(":")) for s in a.span]
     if a.auto:

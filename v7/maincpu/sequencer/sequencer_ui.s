@@ -1555,12 +1555,23 @@ LyricsTrack_ReadAndParse:
 	jr	c, LyricsTrack_CheckEmpty
 	ld	(134767:24), 0
 LyricsTrack_CheckEmpty:
-	.byte 0xf2, 0x4e, 0x0e, 0x02, 0x30, 0x80, 0x3f, 0x00
-	.byte 0xb0, 0xf6, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef
-	.byte 0x64, 0xdb, 0x69, 0xeb, 0x12, 0xf2, 0x4e, 0x0e
-	.byte 0x02, 0x30, 0xe8, 0x8a, 0xeb, 0x82, 0x82, 0x23
-	.byte 0x38, 0xcb, 0xcf, 0x0a, 0x66, 0x06, 0xcb, 0xcf
-	.byte 0x0d, 0x7e, 0x8e, 0x00
+	lda_24 xwa, (0x20e4e)
+	cp (xwa), 0
+	ret z
+	push xwa
+	call LyricsTrack_ReadAndParse_Helper2
+	inc 4, xsp
+	dec 1, hl
+	extz xhl
+	lda_24 xwa, (0x20e4e)
+	ld xde, xwa
+	add xde, xhl
+	ld c, (xde)
+	push xwa
+	cp c, 10
+	jr z, LyricsTrack_HandleNewline
+	cp c, 13
+	jrl nz, LyricsTrack_HandleNormalChar
 LyricsTrack_HandleNewline:
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -1739,21 +1750,41 @@ LyricsFile_CheckLinefeed:
 	jr LyricsBox_PopIzRet
 
 LyricsFile_InsertNormalChar:
-	.byte 0x91, 0x80, 0xc3, 0x07, 0xec, 0xe0, 0x3f, 0x0d
-	.byte 0xf2, 0x57, 0xb0, 0xf2, 0xe6, 0x0b, 0x02, 0x00
-	.byte 0x0b, 0x4e, 0x0f, 0x1d, 0xc3, 0x07, 0xff, 0xdb
-	.byte 0x8e, 0x2e, 0x0b, 0x02, 0x00, 0x0b, 0x4e, 0x0f
-	.byte 0xf2, 0x42, 0x0e, 0x02, 0x30, 0x98, 0x02, 0x21
-	.byte 0xd9, 0xec, 0x06, 0x90, 0x81, 0xf2, 0xbe, 0x0c
-	.byte 0x02, 0x30, 0xf3, 0x07, 0xe0, 0xe4, 0x30, 0x38
-	.byte 0x1d, 0x16, 0x05, 0xff, 0xbf, 0x0e, 0x37, 0xf2
-	.byte 0x42, 0x0e, 0x02, 0x30, 0xde, 0x89, 0x90, 0x81
-	.byte 0xb0, 0x51, 0x40, 0x27, 0x00, 0x6f, 0x00, 0x41
-	.byte 0x0c, 0x00, 0xc7, 0x01, 0xea, 0xa8, 0x1d, 0x53
-	.byte 0x92, 0xfa, 0x1d, 0x10, 0xa2, 0xfa, 0xf2, 0x42
-	.byte 0x0e, 0x02, 0x30, 0x98, 0x02, 0x21, 0xd9, 0xec
-	.byte 0x06, 0x90, 0x81, 0xf2, 0xbe, 0x0c, 0x02, 0x30
-	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x3f, 0x0d, 0x6e, 0x03
+	add wa, (xbc)
+	cpib_sri 0x07, 0xec, 0xe0, 0x0d
+	call_24 z, (LyricsTrack_ResetAllBuffers)
+	pushw 0x0002
+	pushw 0x0f4e
+	call LyricsTrack_ReadAndParse_Helper2
+	ld iz, hl
+	pushw iz
+	pushw 0x0002
+	pushw 0x0f4e
+	lda_24 xwa, (0x20e42)
+	ld bc, (xwa+2)
+	sla bc, 6
+	add bc, (xwa)
+	lda_24 xwa, (0x20cbe)
+	lda_rr xwa, xwa, bc
+	push xwa
+	call 16712982
+	lda xsp, (xsp+14)
+	lda_24 xwa, (0x20e42)
+	ld bc, iz
+	add bc, (xwa)
+	ld (xwa), bc
+	ld xwa, 0x006f0027
+	ld xbc, 0x01c7000c
+	ld xde, 0:i3
+	call SendEvent
+	call LcdOff_Epilogue
+	lda_24 xwa, (0x20e42)
+	ld bc, (xwa+2)
+	sla bc, 6
+	add bc, (xwa)
+	lda_24 xwa, (0x20cbe)
+	cpib_sri 0x07, 0xe0, 0xe4, 0x0d
+	jr nz, LyricsBox_PopIzRet
 LyricsFile_ResetBuffers:
 	calr LyricsTrack_ResetAllBuffers
 
@@ -2223,10 +2254,15 @@ MeasureBoxFunc:
 	jr MeasureBoxFunc_Epilogue
 
 MeasureBoxFunc_DrawMeasure:
-	.byte 0xd1, 0x68, 0x26, 0x04, 0x0b, 0xe2, 0x00, 0x0b
-	.byte 0x00, 0x62, 0xaa, 0x12, 0x20, 0x38, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xbf, 0x0a, 0x37, 0xee, 0x8b, 0x68
-	.byte 0x04
+	pushdi_w (0x2668)
+	pushw 0x00e2
+	pushw 0x6200
+	ld xwa, (xde+18)
+	push xwa
+	call Scoop_EventLoop_12Entry_Helper
+	lda xsp, (xsp+10)
+	ld xhl, xiz
+	jr MeasureBoxFunc_Epilogue
 MeasureBoxFunc_LoadAddr:
 	lda xhl, (9832:16)
 
@@ -2816,7 +2852,7 @@ IvNamingExit_ScreenData:
 	ld	xwa, (xiz+34)
 	ld	xbc, 31916034
 	call	MainFuncCall
-	.byte 0x9e, 0x2e, 0x3f, 0x00, 0x00
+	cpw (xiz+46), 0
 	jrl	z, IvNamingExit_ScreenData_Join3
 	ld	xwa, (xsp+178)
 	ld	xbc, 29360152
@@ -2843,17 +2879,17 @@ IvNamingExit_ScreenData_Skip:
 	ld	xde, (xsp+170)
 	call	MainFuncCall
 	ld	xwa, (xsp+22)
-	.byte 0x98, 0x26, 0x3f, 0x02, 0x00
+	cpw (xwa+38), 2
 	jrl	lt, IvNamingExit_ScreenData_Join3
 	lda	xbc, (xsp+154)
 	ld	xwa, (xsp+178)
 	call	GetClientBox
 	lda	xde, (xsp+154)
 	ld	bc, (xde+4)
-	.byte 0x92, 0xa1
+	sub bc, (xde)
 	exts	xbc
 	ld	xwa, (xsp+22)
-	.byte 0x98, 0x26, 0x59
+	divs bc, (xwa+38)
 	ld	(xsp+8), bc
 	ld	wa, (xde+2)
 	inc	1, wa
@@ -2865,7 +2901,7 @@ IvNamingExit_ScreenData_Skip:
 	jr	IvNamingExit_ScreenData_Join
 IvNamingExit_ScreenData_Loop:
 	ld	wa, (xsp+8)
-	.byte 0x9f, 0x14, 0x40
+	mul wa, (xsp+20)
 	ld	bc, (xsp+154)
 	add	bc, wa
 	dec	1, bc
@@ -2897,7 +2933,7 @@ IvNamingExit_ScreenData_Skip2:
 	or	xde, xde
 	jrl	z, IvNamingExit_ScreenData_Skip4
 	ld	bc, (xwa+38)
-	.byte 0x98, 0x28, 0x49
+	muls bc, (xwa+40)
 	ld	a, (xde)
 	exts	wa
 	cp	wa, bc
@@ -2909,10 +2945,10 @@ IvNamingExit_ScreenData_Skip2:
 	lda	xwa, (xbc+4)
 	ld	(xsp+18), xwa
 	ld	de, (xwa)
-	.byte 0x91, 0xa2
+	sub de, (xbc)
 	exts	xde
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x26, 0x5a
+	divs de, (xhl+38)
 	ld	(xsp+8), de
 	lda	xwa, (xbc+6)
 	ld	(xsp+14), xwa
@@ -2951,7 +2987,7 @@ IvNamingExit_ScreenData_Skip2:
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)
-	.byte 0x9f, 0x08, 0x82
+	add de, (xsp+8)
 	ld	xwa, (xsp+18)
 	ld	(xwa), de
 	lda	xde, (xsp+166)
@@ -2976,7 +3012,7 @@ IvNamingExit_ScreenData_Skip2:
 	lda	xhl, (xbc+28)
 	lda	xbc, (xsp+166)
 	lda	xwa, (xsp+154)
-	.byte 0x94, 0xf5
+	cp iy, (xix)
 	jr	nz, IvNamingExit_ScreenData_Skip3
 	ld	xhl, (xhl)
 	push	xhl
@@ -2987,16 +3023,16 @@ IvNamingExit_ScreenData_Skip3:
 	ld	xhl, (xhl)
 	push	xhl
 	ld	xhl, (xsp+14)
-	.byte 0x9b, 0x20, 0x04
+	pushm (xhl+32)
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04
+	pushm (xhl+22)
 IvNamingExit_ScreenData_Join2:
 	call	DrawString
 IvNamingExit_ScreenData_Skip4:
 	ld	xwa, (xsp+178)
 	call	GetViewInstance
 	ld	wa, (xhl+38)
-	.byte 0x9b, 0x28, 0x48
+	muls wa, (xhl+40)
 	exts	xwa
 	cp	(xsp+170), xwa
 	jr	nc, IvNamingExit_ScreenData_Join3
@@ -3016,7 +3052,7 @@ IvNamingExit_ScreenData_Skip5:
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	MainFuncCall
-	.byte 0x9e, 0x30, 0x3f, 0x00, 0x00
+	cpw (xiz+48), 0
 	jr	z, IvNamingExit_ScreenData_Join3
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
@@ -3493,20 +3529,20 @@ TrAsGrid_ByteData1:
 	lda	xde, (NakaWidgetPtrTbl_SmfDp_0x23B8:24)
 	ld_rrb a, xde, wa
 	cp c, 0:i3
-	jr nz, 9
+	jr nz, TrAsGrid_ByteData1_Skip
 	cp a, 19
-	jr	nc, 10
+	jr	nc, TrAsGrid_ByteData1_Join
 	inc	1, a
-	jr	6
+	jr	TrAsGrid_ByteData1_Join
+TrAsGrid_ByteData1_Skip:
 	cp	a, 0:i3
-	jr	z, 2
+	jr	z, TrAsGrid_ByteData1_Join
 	dec	1, a
+TrAsGrid_ByteData1_Join:
 	extz	wa
 	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x23CC
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ld	l, 14:opc
+	ld_rrb l, xbc, wa
+	ret
 
 TrAsGrid_CheckTrackType:
 	cp a, 0:i3
@@ -3575,19 +3611,14 @@ TrAsGridChk_ByteData:
 	cp	bc, 2:i3
 	jr	z, TrAsGrid_CheckTrackType_Skip
 	cp	bc, 1:i3
-	jrl	nz, 1197
+	jrl	nz, TrAsGridChk_ReturnZero
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 0:i3
-	calr	65318
+	calr	TrAsGrid_ByteData1
 	ld	(0x2873:16), l
-	.byte 0xf2, 0x82
-	rcf
-	push	sr
-	push_a
-	jrl ule, 16424
-	call16 18176
-	normal
+	ld (0x021082:24), (0x2873:16)
+	ld xwa, 0x0147001c
 	ld	xbc, 0x01e70006
 	ld	xde, xiz
 	call	MainFuncCall
@@ -3685,19 +3716,14 @@ TrAsGrid_CheckTrackType_Join2:
 	cp	bc, 2:i3
 	jr	z, TrAsGrid_CheckTrackType_Skip5
 	cp	bc, 1:i3
-	jrl	nz, 881
+	jrl	nz, TrAsGridChk_ReturnZero
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 1:i3
-	calr	65002
+	calr	TrAsGrid_ByteData1
 	ld	(0x2873:16), l
-	.byte 0xf2, 0x82
-	rcf
-	push	sr
-	push_a
-	jrl ule, 16424
-	call16 18176
-	normal
+	ld (0x021082:24), (0x2873:16)
+	ld xwa, 0x0147001c
 	ld	xbc, 0x01e70007
 	ld	xde, xiz
 	call	MainFuncCall
@@ -7436,10 +7462,10 @@ InitializeKubo_Skip:
 	ld	bc, (xde+2)
 	ld	(xhl), bc
 	ld	bc, (xwa)
-	.byte 0x9a, 0x04, 0x81
+	add bc, (xde+4)
 	ld	(xwa+4), bc
 	ld	bc, (xhl)
-	.byte 0x9a, 0x06, 0x81
+	add bc, (xde+6)
 	ld	(xwa+6), bc
 	ld	bc, 0:i3
 	ldw	de, 245
@@ -7457,7 +7483,7 @@ InitializeKubo_Skip2:
 	call	ApFuncCall
 	lda	xix, (xsp+28)
 	ld	(xix), hl
-	.byte 0x94, 0x3f, 0x00, 0x00
+	cpw (xix), 0
 	jr	z, InitializeKubo_Skip3
 	lda	xde, (xix+2)
 	ld	a, (xsp+10)
@@ -7468,15 +7494,15 @@ InitializeKubo_Skip2:
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xix)
@@ -7521,15 +7547,15 @@ InitializeKubo_Skip3:
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xix)
@@ -7572,7 +7598,7 @@ InitializeKubo_Skip3:
 	ld	de, (xwa)
 	ld	(xbc), de
 	ld	de, (xhl)
-	.byte 0x9c, 0x46, 0x82
+	add de, (xix+70)
 	ld	(xbc+2), de
 	ldw	de, 242
 	call	DrawLine
@@ -7617,7 +7643,7 @@ InitializeKubo_Loop:
 	ldw	(xwa+6), 43
 	cpib_erp	251, 0
 	jr	nz, InitializeKubo_Skip4
-	.byte 0x9f, 0x08, 0x04
+	pushm (xsp+8)
 	ld	xwa, 14894612
 	jr	InitializeKubo_Join3
 InitializeKubo_Skip4:
@@ -7643,7 +7669,9 @@ InitializeKubo_Skip5:
 	lda	xwa, (xsp+28)
 	ldw	(xwa+2), 33
 	ldw	(xwa+6), 42
-	.byte 0x9f, 0x0a, 0x04, 0x0b, 0xe3, 0x00, 0x0b, 0x1c, 0x46
+	pushm (xsp+10)
+	pushw 0x00e3
+	pushw 0x461c
 	lda	xwa, (xsp+42)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7654,7 +7682,7 @@ InitializeKubo_Join4:
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90, 0xa1
+	sub bc, (xwa)
 	exts	xbc
 	divs	bc, 2
 	ld	de, (xwa)
@@ -7711,7 +7739,7 @@ InitializeKubo_Loop2:
 	ldw	(xix), 49
 	cpib_erp	251, 0
 	jr	nz, InitializeKubo_Skip6
-	.byte 0x9f, 0x08, 0x04
+	pushm (xsp+8)
 	ld	xwa, 14894624
 	jr	InitializeKubo_Join5
 InitializeKubo_Skip6:
@@ -7735,7 +7763,9 @@ InitializeKubo_Skip7:
 	ld	(xsp+4), xwa
 	ldw	(xbc), 40
 	ldw	(xix), 49
-	.byte 0x9f, 0x0a, 0x04, 0x0b, 0xe3, 0x00, 0x0b, 0x28, 0x46
+	pushm (xsp+10)
+	pushw 0x00e3
+	pushw 0x4628
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -7745,7 +7775,7 @@ InitializeKubo_Join6:
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90, 0xa1
+	sub bc, (xwa)
 	exts	xbc
 	divs	bc, 2
 	ld	de, (xwa)
@@ -7799,7 +7829,7 @@ InitializeKubo_Join7:
 	inc	6, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -7846,7 +7876,7 @@ InitializeKubo_Loop3:
 	lda	xde, (xhl+6)
 	ldw	(xde), 161
 	ld	wa, (xhl+4)
-	.byte 0x93, 0xa0
+	sub wa, (xhl)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xhl)
@@ -7916,7 +7946,7 @@ InitializeKubo_Loop5:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -7971,7 +8001,7 @@ InitializeKubo_Join9:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -8178,7 +8208,7 @@ NoteEdit_FormatTempoString:
 	ld	xwa, 14894708
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
-	.byte 0xd1, 0x84, 0x27, 0x04
+	pushdi_w (0x2784)
 	ld	xwa, 14894714
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
@@ -9050,7 +9080,7 @@ SndParam_Dispatch:
 	ld	(xbc), wa
 	ld	xde, (xsp+58)
 	ld	(xbc+2), de
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw (xbc), 1
 	jrl	nz, SndParam_ReturnZero
 	ld	wa, de
 	cp	wa, 0:i3
@@ -9102,7 +9132,7 @@ SndParam_Dispatch_Join:
 	ld	(xbc), wa
 	ld	xhl, (xsp+58)
 	ld	(xbc+2), hl
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw (xbc), 1
 	jrl	nz, SndParam_ReturnZero
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -9153,7 +9183,7 @@ SndParam_Dispatch_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
+	cpl_sri_rm xwa, 0x07, 0xf0, 0xf4
 	jr	z, SndParam_Dispatch_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -9171,7 +9201,9 @@ SndParam_Dispatch_Skip3:
 	jr	z, SndParam_Dispatch_Skip4
 	cp	xhl, 16705
 	jrl	nz, SndParam_ReturnZero
-	.byte 0x92, 0x04, 0x0b, 0xe3, 0x00, 0x0b, 0x7e, 0x47
+	pushm (xde)
+	pushw 0x00e3
+	pushw 0x477e
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -9182,7 +9214,7 @@ SndParam_Dispatch_Skip3:
 	jrl	SndParam_SendEventReturnZero
 SndParam_Dispatch_Skip4:
 	ld	xwa, 14894994
-	.byte 0x92, 0x3f, 0x00, 0x00
+	cpw (xde), 0
 	jr	z, SndParam_Dispatch_Skip5
 	ld	xwa, 14894984
 SndParam_Dispatch_Skip5:
@@ -9279,11 +9311,11 @@ EntGridCheck_Handle4E00:
 	call	16712982
 	lda	xsp, (xsp+10)
 	ld	(xsp+57), 0
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	602
+	jrl	SndParam_SendEventReturnZero
 EntGridCheck_Handle4E10:
 	ld	xwa, (xsp+20)
 	ld	(xwa), 32
@@ -9387,8 +9419,8 @@ EntGridCheck_Handle4E13:
 	lda xde, (xsp + 40)
 
 	ld xbc, 0x1e0008c
+	jrl SndParam_SendEventReturnZero	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
-	.byte 0x78, 0x52, 0x01	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
 
 
@@ -9431,15 +9463,15 @@ EntGridCheck_Return:
 
 	ld (xsp + 57), 0x0
 
-	call	16400579
+	call	GetFocusObject
 
 	ld xwa, xhl
 
 	lda xde, (xsp + 40)
 
 	ld xbc, 0x1e0008c
+	jrl SndParam_SendEventReturnZero	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
-	.byte 0x78, 0x0e, 0x01	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
 
 
@@ -9508,7 +9540,7 @@ EntGridCheck_DefaultCase1:
 	ld	(xwa+6), 72
 	ld	(xwa+7), 122
 	ld	(xwa+8), 32
-	jr	53
+	jr	EntGridCheck_NullTerminate
 EntGridCheck_DefaultCase2:
 	ld	(xbc), 32
 	ld	xwa, (xsp+36)
@@ -9958,11 +9990,8 @@ SqplyVal_ExtraParamsData_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+10)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 SqplyVal_ExtraParamsData_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+68)
@@ -10432,11 +10461,8 @@ SqedtVal_DrawParamsData_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 SqedtVal_DrawParamsData_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+74)
@@ -12080,11 +12106,8 @@ AccIll_Dispatch_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 AccIll_Dispatch_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+4)
@@ -12109,9 +12132,8 @@ AccIll_Dispatch_Join2:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95
-	or	(xwa), xwa
-	zcf
+	sub wa, (xiy)
+	exts xwa
 	divs	wa, 2
 	ld	iy, (xiy)
 	add	iy, wa
@@ -12158,9 +12180,8 @@ AccIll_Dispatch_Skip2:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95
-	or	(xwa), xwa
-	zcf
+	sub wa, (xiy)
+	exts xwa
 	divs	wa, 2
 	ld	iy, (xiy)
 	add	iy, wa
@@ -12182,11 +12203,8 @@ AccIll_Dispatch_Skip3:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 AccIll_Dispatch_Join4:
 	call	DrawStringLeftJustify
 	jrl	AccIll_ReturnZero2
@@ -13622,26 +13640,59 @@ EffectBox_FillBufferLoop2:
 	ld iz, 0:i3
 
 EffectBox_PostFillSetup:
-	.byte 0xf3, 0xfd, 0x3e, 0x01, 0x32, 0xba, 0x02, 0x31
-	.byte 0xde, 0x88, 0xe8, 0x12, 0x43, 0x82, 0x35, 0xe3
-	.byte 0x00, 0xe8, 0x83, 0x83, 0x21, 0xd8, 0x12, 0xb1
-	.byte 0x50, 0xd8, 0xc8, 0x0c, 0x00, 0xba, 0x06, 0x50
-	.byte 0x91, 0x21, 0xd9, 0xa0, 0xe8, 0x13, 0xd8, 0x0b
-	.byte 0x02, 0x00, 0xd8, 0x81, 0xf3, 0xfd, 0x3c, 0x01
-	.byte 0x51, 0x0b, 0x11, 0x00, 0xde, 0x88, 0xd8, 0x08
-	.byte 0x11, 0x00, 0xbf, 0x3c, 0x31, 0xe8, 0x81, 0x39
-	.byte 0xbf, 0x2c, 0x30, 0x38, 0x1d, 0x16, 0x05, 0xff
-	.byte 0xbf, 0x0a, 0x37, 0xf3, 0xfd, 0x3e, 0x01, 0x30
-	.byte 0xf3, 0xfd, 0x3a, 0x01, 0x31, 0xbf, 0x26, 0x32
-	.byte 0xeb, 0xa8, 0x3b, 0x0b, 0xff, 0x00, 0xaf, 0x0a
-	.byte 0x23, 0x9b, 0x16, 0x04, 0x1d, 0x3d, 0xcb, 0xfa
-	.byte 0xde, 0x61, 0xde, 0xcf, 0x08, 0x00, 0x67, 0x90
-	.byte 0xf3, 0xfd, 0x3e, 0x01, 0x31, 0xb1, 0x02, 0x00
-	.byte 0x01, 0x30, 0x00, 0x01, 0xd8, 0xc8, 0x14, 0x00
-	.byte 0xb9, 0x04, 0x50, 0x91, 0xa0, 0xe8, 0x13, 0xd8
-	.byte 0x0b, 0x02, 0x00, 0x91, 0x21, 0xd8, 0x81, 0xf3
-	.byte 0xfd, 0x3a, 0x01, 0x51, 0xbf, 0x26, 0x31, 0xe9
-	.byte 0x88, 0xb9, 0x14, 0x31
+	lda xde, (xsp+318)
+	lda xbc, (xde+2)
+	ld wa, iz
+	extz xwa
+	ld xhl, NakaInst_NO_OPERATION_0x1A
+	add xhl, xwa
+	ld a, (xhl)
+	extz wa
+	ld (xbc), wa
+	add wa, 12
+	ld (xde+6), wa
+	ld bc, (xbc)
+	sub wa, bc
+	exts xwa
+	divs wa, 2
+	add bc, wa
+	ld (xsp+316), bc
+	pushw 0x0011
+	ld wa, iz
+	mul wa, 17
+	lda xbc, (xsp+60)
+	add xbc, xwa
+	push xbc
+	lda xwa, (xsp+44)
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	lda xwa, (xsp+318)
+	lda xbc, (xsp+314)
+	lda xde, (xsp+38)
+	ld xhl, 0:i3
+	push xhl
+	pushw 0x00ff
+	ld xhl, (xsp+10)
+	pushm (xhl+22)
+	call DrawStringLeftJustify
+	inc 1, iz
+	cp iz, 8
+	jr c, EffectBox_PostFillSetup
+	lda xbc, (xsp+318)
+	ldw (xbc), 256
+	ldw wa, 256
+	add wa, 20
+	ld (xbc+4), wa
+	sub wa, (xbc)
+	exts xwa
+	divs wa, 2
+	ld bc, (xbc)
+	add bc, wa
+	ld (xsp+314), bc
+	lda xbc, (xsp+38)
+	ld xwa, xbc
+	lda xbc, (xbc+20)
 EffectBox_FillBufferLoop3:
 	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
@@ -13684,7 +13735,7 @@ EffectBox_PostFill3Setup:
 	push	xhl
 	pushw 255
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04
+	pushm (xhl+22)
 	call	DrawStringLeftJustify
 	inc	1, iz
 	cp	iz, 8
@@ -13700,7 +13751,7 @@ EffectBox_PostFill3Setup:
 	lda	xhl, (xix+6)
 	ldw	(xhl), 84
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -13721,7 +13772,7 @@ EffectBox_PostFill3Setup:
 	call	ApFuncCall
 	or	xhl, xhl
 	jr	z, EffectBox_SetEmptyString1
-	.byte 0x0b, 0x04, 0x00
+	pushw 0x0004
 	lda	xwa, (xsp+14)
 	push	xwa
 	lda	xwa, (xsp+44)
@@ -13742,7 +13793,7 @@ EffectBox_DrawField1:
 	push	xhl
 	pushw 255
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04
+	pushm (xhl+22)
 	call	DrawStringLeftJustify
 	lda	xbc, (xsp+318)
 	lda	xwa, (xbc+2)
@@ -13774,7 +13825,7 @@ EffectBox_DrawField1:
 	lda	xwa, (xsp+38)
 	or	xhl, xhl
 	jr	z, EffectBox_SetEmptyString2
-	.byte 0x0b, 0x04, 0x00
+	pushw 0x0004
 	lda	xbc, (xsp+10)
 	push	xbc
 	push	xwa
@@ -13890,38 +13941,54 @@ EffectBox_NameSetup:
 EffectBox_Dispatch:
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80002
-	jr	65
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80003
-	jr	56
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80004
-	jr	47
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80005
-	jr	38
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80006
-	jr	29
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80007
-	jr	20
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80008
-	jr	11
+	jr	EffectBox_Dispatch_Join
 
 EffectBoxProc_CopyNameAndSetup:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x1c, 0x20, 0x41, 0x01
-	.byte 0x00, 0xe8, 0x01, 0x1d, 0xaa, 0x45, 0xfa, 0x0b
-	.byte 0x07, 0x00, 0xbf, 0x3c, 0x30, 0x38, 0xbf, 0x2c
-	.byte 0x30, 0x38, 0x1d, 0x16, 0x05, 0xff, 0xbf, 0x0a
-	.byte 0x37, 0xaf, 0x04, 0x20, 0xa8, 0x1c, 0x20, 0x41
-	.byte 0x0b, 0x00, 0xe8, 0x01, 0xea, 0xa8, 0x1d, 0xaa
-	.byte 0x45, 0xfa, 0xf3, 0xfd, 0x3e, 0x01, 0x30, 0xf3
-	.byte 0xfd, 0x3a, 0x01, 0x31, 0xe3, 0xfd, 0x4e, 0x01
-	.byte 0xf3, 0x6e, 0x0e, 0xbf, 0x26, 0x32, 0xeb, 0xa8
-	.byte 0x3b, 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00, 0x68
-	.byte 0x0f
+	ld xwa, (xsp+4)
+	ld xwa, (xwa+28)
+	ld xbc, 0x01e80001
+EffectBox_Dispatch_Join:
+	call ApFuncCall
+	pushw 0x0007
+	lda xwa, (xsp+60)
+	push xwa
+	lda xwa, (xsp+44)
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	ld xwa, (xsp+4)
+	ld xwa, (xwa+28)
+	ld xbc, 0x01e8000b
+	ld xde, 0:i3
+	call ApFuncCall
+	lda xwa, (xsp+318)
+	lda xbc, (xsp+314)
+	cp xhl, (xsp+334)
+	jr nz, EffectBox_DrawWithFBColor
+	lda xde, (xsp+38)
+	ld xhl, 0:i3
+	push xhl
+	pushw 0x0000
+	pushw 0x00ff
+	jr EffectBox_DrawStringAndSetDial
 EffectBox_DrawWithFBColor:
 	lda xde, (xsp + 38)
 	ld xhl, 0:i3
@@ -14424,10 +14491,10 @@ SeqAccomp_Dispatch:
 	ld	xbc, 0x01e80062
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join
 	ld	xbc, 0x01e80063
-	.asciz "h*Ad"
-	.byte 0xe8, 0x01
-	.asciz "h#Ae"
-	.byte 0xe8, 0x01
+	jr EffectBoxProc_CopyNameAndSetup_Code_Join
+	ld xbc, 0x01e80064
+	jr EffectBoxProc_CopyNameAndSetup_Code_Join
+	ld xbc, 0x01e80065
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join
 	ld	xbc, 0x01e80066
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join
@@ -14971,7 +15038,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip2:
 	lda	xbc, (xwa+18)
 	cp	l, 130
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip4
-	.byte 0xf1, 0xb1, 0x28, 0xc8
+	bitda 0, (0x28b1)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip3
 	ld	xwa, 14895794
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join3
@@ -14984,7 +15051,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join3:
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
 EffectBoxProc_CopyNameAndSetup_Code_Skip4:
 	ld	xbc, (xbc)
-	.byte 0xf1, 0xb1, 0x28, 0xc9
+	bitda 1, (0x28b1)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip5
 	ld	xwa, 14895806
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join4
@@ -15014,11 +15081,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join5:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry
-	.byte 0xd1, 0x20, 0x25, 0x04
+	pushdi_w (0x2520)
 	ld	xwa, 14895830
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join6
 EffectBoxProc_CopyNameAndSetup_Code_Entry:
-	.byte 0xd1, 0x1c, 0x25, 0x04
+	pushdi_w (0x251c)
 	ld	xwa, 14895836
 EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	jrl	SqplyFunc_PushFormatAddr
@@ -15027,11 +15094,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry2
-	.byte 0xd1, 0x22, 0x25, 0x04
+	pushdi_w (0x2522)
 	ld	xwa, 14895842
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join7
 EffectBoxProc_CopyNameAndSetup_Code_Entry2:
-	.byte 0xd1, 0x1e, 0x25, 0x04
+	pushdi_w (0x251e)
 	ld	xwa, 14895848
 EffectBoxProc_CopyNameAndSetup_Code_Join7:
 	jr	SqplyFunc_PushFormatAddr
@@ -15358,46 +15425,26 @@ EffectBoxProc_CopyNameAndSetup_Code_Join9:
 	ld_rrw	hl, xix, hl
 	lda	xix, (15944372:24)
 	jp_rr	8, xix, hl
-	.byte 0xd1	; v10 does not spell this byte either
-	rcf
-	ld	h, 4:opc
+	pushdi_w (0x2610)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x674
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	calr	1062
+	pushdi_w (0x261e)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x67A
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0xd7	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
+	pushdi_w (0xf1d7)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x680
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	cp	bc, ix
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0x5e	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	pushdi_w (0xf1dc)
+	ld xwa, FmtStr_pct3d_4B5E
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	(4195569:24), xix
-	popw	hl
-	.byte 0xe3	; v10 does not spell this byte either
-	nop
+	pushdi_w (0xf1f2)
+	ld xwa, 0x00e34b64
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	bc
-	.byte 0xf2	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
+	pushdi_w (0xf229)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x692
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
 EffectBoxProc_CopyNameAndSetup_Code_Entry3:
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	ld	h, 4:opc
+	pushdi_w (0x2606)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x698
 EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
@@ -15408,65 +15455,48 @@ EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	cp	hl, 0:i3
 	jr	lt, EffectBoxProc_CopyNameAndSetup_Code_Entry4
 	cp	hl, 7:i3
-	jr	gt, 88
+	jr	gt, EffectBoxProc_CopyNameAndSetup_Code_Entry4
 	add	hl, hl
 	lda	xix, (NakaInst_2d_0xA0:24)
 	ld_rrw	hl, xix, hl
 	lda	xix, (15944492:24)
 	jp_rr	8, xix, hl
-	.byte 0xd1	; v10 does not spell this byte either
-	ccf
-	ld	h, 4:opc
+	pushdi_w (0x2612)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E
-	jr	64
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	w, 38:opc
-	max
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	pushdi_w (0x2620)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
-	jr	53
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	ix
-	ld	h, 4:opc
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	pushdi_w (0x262c)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA
-	jr	42
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	h, 38:opc
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0x88	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
-	jr	31
-	.byte 0xd1	; v10 does not spell this byte either
-	swi	4
-	ld	e, 4:opc
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	pushdi_w (0x2626)
+	ld xwa, NakaInst_3d
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	pushdi_w (0x25fc)
 	ld	xwa, NakaInst_3d_0x6
-	jr	20
-	.byte 0xd1	; v10 does not spell this byte either
-	swi	2
-	ld	e, 4:opc
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	pushdi_w (0x25fa)
 	ld	xwa, NakaInst_3d_0xC
-	jr	9
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
 EffectBoxProc_CopyNameAndSetup_Code_Entry4:
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	(38:8), 4:io
+	pushdi_w (0x2608)
 	ld	xwa, NakaInst_3d_0x12
-	jrl	1031
+EffectBoxProc_CopyNameAndSetup_Code_Join10_Join:
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9740:16)
 	cp	e, 0:i3
-	jr	le, 17
+	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Entry4_Skip
 	exts	de
-	.byte 0x2a	; v10 does not spell this byte either
-	.byte 0x0b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	pushw de
+	pushw 0x00e3
 	pushw	19360
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join11
+EffectBoxProc_CopyNameAndSetup_Code_Entry4_Skip:
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+18)
 	cp	e, 0:i3
@@ -15493,11 +15523,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip8:
 	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Skip9
 	exts	de
 	pushw	de
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0xb6	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xwa, FmtStr_pluspct3d
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join12
 EffectBoxProc_CopyNameAndSetup_Code_Skip9:
 	cp	e, 0:i3
@@ -15505,11 +15531,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip9:
 	neg	e
 	exts	de
 	pushw	de
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0xbe	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xwa, FmtStr_minuspct3d
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join12
 EffectBoxProc_CopyNameAndSetup_Code_Skip10:
 	exts	de
@@ -15673,51 +15695,45 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x92
-	jrl	501
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61929:16)
-	jrl	175
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	cp	xbc, xde
-	max
+	pushdi_w (0xf1ea)
 	ld	xwa, NakaInst_3d_0x98
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	409
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	wa
-	ld	h, 4:opc
+	pushdi_w (0x2628)
 	ld	xwa, NakaInst_3d_0x9E
-	jrl	442
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61934:16)
-	jr	117
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	cp	xbc, xsp
-	max
+	pushdi_w (0xf1ef)
 	ld	xwa, NakaInst_3d_0xA4
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	351
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9770:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0xAA
-	jrl	381
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
@@ -15725,10 +15741,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0xe2	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
+	pushdi_w (0xf1e2)
 	ld	xwa, NakaInst_3d_0xB0
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -15736,9 +15749,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	iz
-	ld	h, 4:opc
+	pushdi_w (0x262e)
 	ld	xwa, NakaInst_3d_0xB6
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
@@ -15748,23 +15759,15 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	extz	wa
 	muls	wa, 5
-	.byte 0x41	; v10 does not spell this byte either
-	.byte 0x44	; v10 does not spell this byte either
-	.byte 0x49	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xbc, LongStr_1_2_3
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
 	jrl	SqedtFunc_ModeC_Entry
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0xe7	; v10 does not spell this byte either
-	ld	(16388:16), d
-	popw	ix
-	.byte 0xe3	; v10 does not spell this byte either
-	nop
+	pushdi_w (0xf1e7)
+	ld xwa, 0x00e34c44
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -15781,35 +15784,28 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	ld	a, (9992:16)
 	extz	wa
 	pushw	wa
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0x50	; v10 does not spell this byte either
-	.byte 0x4c	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xwa, NakaInst_2d
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	166
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
-	.byte 0xc1	; v10 does not spell this byte either
-	incf
-	.byte 0x27	; v10 does not spell this byte either
-	.byte 0x21	; v10 does not spell this byte either
-	.byte 0x68	; v10 does not spell this byte either
-	.byte 0x22	; v10 does not spell this byte either
+	ldb_d8 a, (0x270c)
+	jr EffectBoxProc_CopyNameAndSetup_Code_Join16_Join
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9994:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_2d_0x6
-	jrl	181
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
 	ld	a, (9998:16)
+EffectBoxProc_CopyNameAndSetup_Code_Join16_Join:
 	extz	wa
 	muls	wa, 3
 	ld	xbc, ExtDevice_ModeDispatch_Table_0x4C6
@@ -16553,37 +16549,92 @@ DspItem0_DisplayEffectName:
 	ld	(xsp), xde
 	ldw	(xsp+18), 0
 DspItem0_DisplayParamNames:
-	.byte 0x0b, 0x11, 0x00, 0xc2, 0x98, 0x10, 0x02, 0x21
-	.byte 0xd8, 0x12, 0x9f, 0x14, 0x80, 0xf1, 0xac, 0x29
-	.byte 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x80, 0x21, 0xd8
-	.byte 0x12, 0xd8, 0x09, 0x11, 0x00, 0xf2, 0xc4, 0x24
-	.byte 0xe3, 0x31, 0xe8, 0x13, 0xe9, 0x80, 0x38, 0x9f
-	.byte 0x18, 0x21, 0xd9, 0x08, 0x11, 0x00, 0xaf, 0x06
-	.byte 0x20, 0xa8, 0x12, 0x20, 0xe9, 0x80, 0x38, 0x1d
-	.byte 0x16, 0x05, 0xff, 0xbf, 0x0a, 0x37, 0x9f, 0x12
-	.byte 0x61, 0x9f, 0x12, 0x3f, 0x08, 0x00, 0x67, 0xb8
-	.byte 0xbf, 0x12, 0x02, 0x00, 0x00
+	pushw 0x0011
+	ldb_da a, (0x21098)
+	extz wa
+	add wa, (xsp+20)
+	lda_d16 xbc, (0x29ac)
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)
+	extz wa
+	muls wa, 17
+	lda_24 xbc, (DspParamName_00_Blank)
+	exts xwa
+	add xwa, xbc
+	push xwa
+	ld bc, (xsp+24)
+	mul bc, 17
+	ld xwa, (xsp+6)
+	ld xwa, (xwa+18)
+	add xwa, xbc
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	incm 1, (xsp+18)
+	cpw (xsp+18), 8
+	jr c, DspItem0_DisplayParamNames
+	ldw (xsp+18), 0
 DspItem0_DisplayParamValues:
-	.byte 0x0b, 0x02, 0x00, 0xc2, 0x98, 0x10, 0x02, 0x21
-	.byte 0xd8, 0x12, 0x9f, 0x14, 0x80, 0xf1, 0xac, 0x29
-	.byte 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x80, 0x21, 0xd8
-	.byte 0x12, 0xd8, 0x80, 0xf2, 0x18, 0x24, 0xe3, 0x31
-	.byte 0xe8, 0x13, 0xe9, 0x80, 0x38, 0x9f, 0x18, 0x20
-	.byte 0xd8, 0x80, 0xe8, 0x12, 0xf3, 0xe1, 0x88, 0x00
-	.byte 0x31, 0xaf, 0x06, 0x20, 0xa8, 0x12, 0x20, 0xe9
-	.byte 0x80, 0x38, 0x1d, 0x16, 0x05, 0xff, 0xbf, 0x0a
-	.byte 0x37, 0x9f, 0x12, 0x61, 0x9f, 0x12, 0x3f, 0x08
-	.byte 0x00, 0x67, 0xb5, 0x68, 0x6c, 0xb7, 0x62, 0xaa
-	.byte 0x12, 0x22, 0xd9, 0x88, 0xea, 0x89, 0x68, 0x41
-	.byte 0xb7, 0x62, 0xaa, 0x12, 0x21, 0x68, 0x3a, 0xb7
-	.byte 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x08, 0x20, 0x68
-	.byte 0x30, 0xb7, 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x0a
-	.byte 0x20, 0x68, 0x26, 0xb7, 0x62, 0xaa, 0x12, 0x21
-	.byte 0x9f, 0x0c, 0x20, 0x68, 0x1c, 0xb7, 0x62, 0xaa
-	.byte 0x12, 0x21, 0x9f, 0x0e, 0x20, 0x68, 0x12, 0xb7
-	.byte 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x10, 0x20, 0x68
-	.byte 0x08, 0xb7, 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x12
-	.byte 0x20
+	pushw 0x0002
+	ldb_da a, (0x21098)
+	extz wa
+	add wa, (xsp+20)
+	lda_d16 xbc, (0x29ac)
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)
+	extz wa
+	add wa, wa
+	lda_24 xbc, (DspParamUnit_Table)
+	exts xwa
+	add xwa, xbc
+	push xwa
+	ld wa, (xsp+24)
+	add wa, wa
+	extz xwa
+	lda xbc, (xwa+136)
+	ld xwa, (xsp+6)
+	ld xwa, (xwa+18)
+	add xwa, xbc
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	incm 1, (xsp+18)
+	cpw (xsp+18), 8
+	jr c, DspItem0_DisplayParamValues
+	jr DspItem0_ExitWithHL
+	ld (xsp), xde
+	ld xde, (xde+18)
+	ld wa, bc
+	ld xbc, xde
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+8)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+10)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+12)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+14)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+16)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+18)
 DspItem0_FormatParamValue:
 	calr FormatParamValueStr
 	jr DspItem0_ExitWithHL
@@ -16880,11 +16931,11 @@ FormatEqParam_CopyAndReturn:
 	call	16712982
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
-	jr	12
-	call	16405594
+	jr	Equalizer_PopIzRet
+	call	GetTitleNow
 	ld	h, 0:opc
 	extz	xhl
-	jr	2
+	jr	Equalizer_PopIzRet
 Equalizer_ParamString:
 	ld xhl, 0:i3
 
@@ -17048,11 +17099,15 @@ Equalizer_FormatDispatch:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 EqFormat_DispatchTable:
-	.byte 0x0b, 0x05, 0x00, 0x40, 0x90, 0x23, 0xe3, 0x00
-	.byte 0x78, 0xc2, 0x00, 0x0b, 0x05, 0x00, 0x40, 0xf0
-	.byte 0x22, 0xe3, 0x00, 0x78, 0xb7, 0x00, 0x0b, 0x05
-	.byte 0x00, 0x40, 0xfa, 0x21, 0xe3, 0x00, 0x78, 0xac
-	nop
+	pushw 0x0005
+	ld xwa, NakaData_WidgetDescriptors_0x1530
+	jrl FormatParamStr_CopyEnumName
+	pushw 0x0005
+	ld xwa, 0x00e322f0
+	jrl FormatParamStr_CopyEnumName
+	pushw 0x0005
+	ld xwa, NakaData_WidgetDescriptors_0x139A
+	jrl FormatParamStr_CopyEnumName
 
 FormatParamString:
 	pushw 0x5
