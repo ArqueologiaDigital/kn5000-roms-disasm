@@ -26252,6 +26252,12 @@ Blink_CmdArm_Ret:
 ;
 ; REGENERATE:  python3 notes/gen_prom_b_f0ea9f_module.py
 ; CHECKS:      python3 notes/gen_prom_b_f0ea9f_module.py --checks
+; ⚠ 2026-09-25 (lane promb): THIS TEXT IS NO LONGER THE EMITTER'S OUTPUT.  The
+;   emitter prints to stdout and never writes this file; since wave 8 its text has
+;   been edited in place, and 0xF124A6-0xF12F23 and 0xF13124-0xF13D33 are now typed
+;   from their readers by notes/promb-2026-09-25/effect_descriptor_pool.py and
+;   dsp_effect_tables.py.  Re-pasting the emitter's output would discard all of
+;   that; --checks (ROM framing only) still passes and is still worth running.
 ; ==============================================================================
 
 
@@ -26909,7 +26915,7 @@ sub_F0F047:
 	ld	bc, (10128:16)	; F0F04E  ld BC,(0x2790)
 	extz	bc	; F0F052  extz BC
 	extz	xbc	; F0F054  extz XBC
-	add	xbc, 15807991	; F0F056  add XBC,0x00f135f7
+	add	xbc, EffectPage_BlockIndex	; F0F056  add XBC,0x00f135f7
 	m_ld_m16m MBI+r1, 0, 0x2797	; F0F05C  ld (0x2797),(XBC)
 sub_F0F047_Return:
 	ret	; F0F060  ret
@@ -27714,7 +27720,7 @@ DispatchTable_F0F347:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2798)
-; Calls:   sub_F10476 T_F418D0
+; Calls:   DspEffect_StepAlgorithm T_F418D0
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -27728,7 +27734,7 @@ DispatchTable_F0F347:
 sub_F0F35F:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F35F  cp (0x2798),0x00
 	jr	nz, 5	; F0F364  jr NZ,0xf0f36b
-	calr	sub_F10476	; F0F366  calr 0xf10476
+	calr	DspEffect_StepAlgorithm	; F0F366  calr 0xf10476
 	jr	sub_F0F37C_Join2	; F0F369  jr T,0xf0f386
 	pushw	0	; F0F36B  push 0x0000
 	pushw	32	; F0F36E  push 0x0020
@@ -30302,7 +30308,7 @@ sub_F1018F:
 sub_F101C8:
 	m_cp_mi8 MB16, 0x2797, 0x02	; F101C8  cp (0x2797),0x02
 	jr	z, sub_F1018F_Return	; F101CD  jr Z,0xf101e6
-	lda	xbc, (Data_F13659:24)	; F101CF  lda XBC,0xf13659
+	lda	xbc, (AdjustDesc_EffectBlockByte21:24)	; F101CF  lda XBC,0xf13659
 	push	xbc	; F101D4  push XBC
 	ld	wa, (10135:16)	; F101D5  ld WA,(0x2797)
 	extz	wa	; F101D9  extz WA
@@ -30337,7 +30343,7 @@ sub_F101E7:
 	jr	z, sub_F101E7_Return	; F101F7  jr Z,0xf10221
 	jr	sub_F101E7_Return	; F101F9  jr T,0xf10221
 sub_F101E7_Skip:
-	lda	xbc, (Data_F13659 + 0x9:24)	; F101FB  lda XBC,0xf13662
+	lda	xbc, (AdjustDesc_Entry121Byte5Low:24)	; F101FB  lda XBC,0xf13662
 	push	xbc	; F10200  push XBC
 	jr	sub_F101E7_Join	; F10201  jr T,0xf10218
 sub_F101E7_Skip2:
@@ -30347,7 +30353,7 @@ sub_F101E7_Skip2:
 	pop	xiy	; F1020D  pop XIY
 	cp	a, 0:i3	; F1020E  cp A,0
 	jr	nz, sub_F101E7_Return	; F10210  jr NZ,0xf10221
-	lda	xbc, (Data_F13659 + 0x12:24)	; F10212  lda XBC,0xf1366b
+	lda	xbc, (AdjustDesc_Entry121Byte5High:24)	; F10212  lda XBC,0xf1366b
 	push	xbc	; F10217  push XBC
 sub_F101E7_Join:
 	pushw	121	; F10218  push 0x0079
@@ -30670,19 +30676,30 @@ sub_F103AB_Skip5:
 	ret	; F10475  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10476
+; DspEffect_StepAlgorithm
 ; Called from: in-module: 0xF0F366 0xF10713
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_IndexedTable_GetPtr sub_F11365
+; Calls:   T_IndexedTable_GetPtr DspEffect_SetAlgorithm
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF10476 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    DspEffect_StepAlgorithm -- named 2026-09-25 (lane promb).
+; Evidence: for the block entry 97 + (0x2797) it looks the block's byte 0 (the
+;          algorithm) up in EffectAlgoToPos_Block97/98/99, steps the position
+;          down ((0x28B0) bit 0 set, not below 0) or up (not past the 0xFF
+;          that ends EffectPosToAlgo_BlockNN), and reads the new algorithm
+;          back from EffectPosToAlgo_BlockNN; an algorithm the block does not
+;          offer becomes 1, 35 or 20.  If it changed, it is stored to byte 0
+;          and DspEffect_SetAlgorithm (DspEffect_SetAlgorithm) is called with it, which
+;          loads that algorithm's EffectDefaults_* record.
+;          python3 notes/promb-2026-09-25/dsp_effect_tables.py checks the maps.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F10476:
+DspEffect_StepAlgorithm:
 	pushw	hl	; F10476  push HL
 	pushw	de	; F10477  push DE
 	push	xix	; F10478  push XIX
@@ -30696,135 +30713,135 @@ sub_F10476:
 	extz	bc	; F1048E  extz BC
 	popw	wa	; F10490  pop WA
 	cp	bc, 0:i3	; F10491  cp BC,0
-	jr	z, sub_F10476_Skip	; F10493  jr Z,0xf104a1
+	jr	z, DspEffect_StepAlgorithm_Skip	; F10493  jr Z,0xf104a1
 	cp	bc, 1:i3	; F10495  cp BC,1
-	jr	z, sub_F10476_Skip4	; F10497  jr Z,0xf104f6
+	jr	z, DspEffect_StepAlgorithm_Skip4	; F10497  jr Z,0xf104f6
 	cp	bc, 2:i3	; F10499  cp BC,2
-	jrl	z, sub_F10476_Skip7	; F1049B  jrl Z,0xf10549
-	jrl	sub_F10476_Join4	; F1049E  jrl T,0xf1059a
-sub_F10476_Skip:
+	jrl	z, DspEffect_StepAlgorithm_Skip7	; F1049B  jrl Z,0xf10549
+	jrl	DspEffect_StepAlgorithm_Join4	; F1049E  jrl T,0xf1059a
+DspEffect_StepAlgorithm_Skip:
 	ld	c, (xix)	; F104A1  ld C,(XIX)
 	extz	bc	; F104A3  extz BC
 	extz	xbc	; F104A5  extz XBC
-	add	xbc, ByteMap_F133E4	; F104A7  add XBC,0x00f133e4
+	add	xbc, EffectAlgoToPos_Block97	; F104A7  add XBC,0x00f133e4
 	ld	h, (xbc)	; F104AD  ld H,(XBC)
 	ld	d, h	; F104AF  ld D,H
 	cp	h, 255	; F104B1  cp H,0xff
-	jr	z, sub_F10476_Skip3	; F104B4  jr Z,0xf104ef
+	jr	z, DspEffect_StepAlgorithm_Skip3	; F104B4  jr Z,0xf104ef
 	ld	a, (10416:16)	; F104B6  ld A,(0x28b0)
 	and	a, 1	; F104BA  and A,0x01
-	jr	z, sub_F10476_Skip2	; F104BD  jr Z,0xf104c7
+	jr	z, DspEffect_StepAlgorithm_Skip2	; F104BD  jr Z,0xf104c7
 	cp	h, 0:i3	; F104BF  cp H,0
-	jr	z, sub_F10476_Join	; F104C1  jr Z,0xf104de
+	jr	z, DspEffect_StepAlgorithm_Join	; F104C1  jr Z,0xf104de
 	dec	1, h	; F104C3  dec 1,H
-	jr	sub_F10476_Join	; F104C5  jr T,0xf104de
-sub_F10476_Skip2:
+	jr	DspEffect_StepAlgorithm_Join	; F104C5  jr T,0xf104de
+DspEffect_StepAlgorithm_Skip2:
 	ld	c, h	; F104C7  ld C,H
 	extz	bc	; F104C9  extz BC
 	extz	xbc	; F104CB  extz XBC
 	inc	1, xbc	; F104CD  inc 1,XBC
-	add	xbc, ByteMap_F13464	; F104CF  add XBC,0x00f13464
+	add	xbc, EffectPosToAlgo_Block97	; F104CF  add XBC,0x00f13464
 	ld	a, (xbc)	; F104D5  ld A,(XBC)
 	cp	a, 255	; F104D7  cp A,0xff
-	jr	z, sub_F10476_Join	; F104DA  jr Z,0xf104de
+	jr	z, DspEffect_StepAlgorithm_Join	; F104DA  jr Z,0xf104de
 	inc	1, h	; F104DC  inc 1,H
-sub_F10476_Join:
+DspEffect_StepAlgorithm_Join:
 	ld	c, h	; F104DE  ld C,H
 	extz	bc	; F104E0  extz BC
 	extz	xbc	; F104E2  extz XBC
-	add	xbc, ByteMap_F13464	; F104E4  add XBC,0x00f13464
+	add	xbc, EffectPosToAlgo_Block97	; F104E4  add XBC,0x00f13464
 	ld	l, (xbc)	; F104EA  ld L,(XBC)
-	jrl	sub_F10476_Join4	; F104EC  jrl T,0xf1059a
-sub_F10476_Skip3:
+	jrl	DspEffect_StepAlgorithm_Join4	; F104EC  jrl T,0xf1059a
+DspEffect_StepAlgorithm_Skip3:
 	inc	1, h	; F104EF  inc 1,H
 	ld	l, 1:opc	; F104F1  ld L,0x01
-	jrl	sub_F10476_Join4	; F104F3  jrl T,0xf1059a
-sub_F10476_Skip4:
+	jrl	DspEffect_StepAlgorithm_Join4	; F104F3  jrl T,0xf1059a
+DspEffect_StepAlgorithm_Skip4:
 	ld	c, (xix)	; F104F6  ld C,(XIX)
 	extz	bc	; F104F8  extz BC
 	extz	xbc	; F104FA  extz XBC
-	add	xbc, ByteMap_F13491	; F104FC  add XBC,0x00f13491
+	add	xbc, EffectAlgoToPos_Block98	; F104FC  add XBC,0x00f13491
 	ld	h, (xbc)	; F10502  ld H,(XBC)
 	ld	d, h	; F10504  ld D,H
 	cp	h, 255	; F10506  cp H,0xff
-	jr	z, sub_F10476_Skip6	; F10509  jr Z,0xf10543
+	jr	z, DspEffect_StepAlgorithm_Skip6	; F10509  jr Z,0xf10543
 	ld	a, (10416:16)	; F1050B  ld A,(0x28b0)
 	and	a, 1	; F1050F  and A,0x01
-	jr	z, sub_F10476_Skip5	; F10512  jr Z,0xf1051c
+	jr	z, DspEffect_StepAlgorithm_Skip5	; F10512  jr Z,0xf1051c
 	cp	h, 0:i3	; F10514  cp H,0
-	jr	z, sub_F10476_Join2	; F10516  jr Z,0xf10533
+	jr	z, DspEffect_StepAlgorithm_Join2	; F10516  jr Z,0xf10533
 	dec	1, h	; F10518  dec 1,H
-	jr	sub_F10476_Join2	; F1051A  jr T,0xf10533
-sub_F10476_Skip5:
+	jr	DspEffect_StepAlgorithm_Join2	; F1051A  jr T,0xf10533
+DspEffect_StepAlgorithm_Skip5:
 	ld	c, h	; F1051C  ld C,H
 	extz	bc	; F1051E  extz BC
 	extz	xbc	; F10520  extz XBC
 	inc	1, xbc	; F10522  inc 1,XBC
-	add	xbc, ByteMap_F13511	; F10524  add XBC,0x00f13511
+	add	xbc, EffectPosToAlgo_Block98	; F10524  add XBC,0x00f13511
 	ld	a, (xbc)	; F1052A  ld A,(XBC)
 	cp	a, 255	; F1052C  cp A,0xff
-	jr	z, sub_F10476_Join2	; F1052F  jr Z,0xf10533
+	jr	z, DspEffect_StepAlgorithm_Join2	; F1052F  jr Z,0xf10533
 	inc	1, h	; F10531  inc 1,H
-sub_F10476_Join2:
+DspEffect_StepAlgorithm_Join2:
 	ld	c, h	; F10533  ld C,H
 	extz	bc	; F10535  extz BC
 	extz	xbc	; F10537  extz XBC
-	add	xbc, ByteMap_F13511	; F10539  add XBC,0x00f13511
+	add	xbc, EffectPosToAlgo_Block98	; F10539  add XBC,0x00f13511
 	ld	l, (xbc)	; F1053F  ld L,(XBC)
-	jr	sub_F10476_Join4	; F10541  jr T,0xf1059a
-sub_F10476_Skip6:
+	jr	DspEffect_StepAlgorithm_Join4	; F10541  jr T,0xf1059a
+DspEffect_StepAlgorithm_Skip6:
 	inc	1, h	; F10543  inc 1,H
 	ld	l, 35:opc	; F10545  ld L,0x23
-	jr	sub_F10476_Join4	; F10547  jr T,0xf1059a
-sub_F10476_Skip7:
+	jr	DspEffect_StepAlgorithm_Join4	; F10547  jr T,0xf1059a
+DspEffect_StepAlgorithm_Skip7:
 	ld	c, (xix)	; F10549  ld C,(XIX)
 	extz	bc	; F1054B  extz BC
 	extz	xbc	; F1054D  extz XBC
-	add	xbc, 15807806	; F1054F  add XBC,0x00f1353e
+	add	xbc, EffectAlgoToPos_Block99	; F1054F  add XBC,0x00f1353e
 	ld	h, (xbc)	; F10555  ld H,(XBC)
 	ld	d, h	; F10557  ld D,H
 	cp	h, 255	; F10559  cp H,0xff
-	jr	z, sub_F10476_Skip9	; F1055C  jr Z,0xf10596
+	jr	z, DspEffect_StepAlgorithm_Skip9	; F1055C  jr Z,0xf10596
 	ld	a, (10416:16)	; F1055E  ld A,(0x28b0)
 	and	a, 1	; F10562  and A,0x01
-	jr	z, sub_F10476_Skip8	; F10565  jr Z,0xf1056f
+	jr	z, DspEffect_StepAlgorithm_Skip8	; F10565  jr Z,0xf1056f
 	cp	h, 0:i3	; F10567  cp H,0
-	jr	z, sub_F10476_Join3	; F10569  jr Z,0xf10586
+	jr	z, DspEffect_StepAlgorithm_Join3	; F10569  jr Z,0xf10586
 	dec	1, h	; F1056B  dec 1,H
-	jr	sub_F10476_Join3	; F1056D  jr T,0xf10586
-sub_F10476_Skip8:
+	jr	DspEffect_StepAlgorithm_Join3	; F1056D  jr T,0xf10586
+DspEffect_StepAlgorithm_Skip8:
 	ld	c, h	; F1056F  ld C,H
 	extz	bc	; F10571  extz BC
 	extz	xbc	; F10573  extz XBC
 	inc	1, xbc	; F10575  inc 1,XBC
-	add	xbc, 15807934	; F10577  add XBC,0x00f135be
+	add	xbc, EffectPosToAlgo_Block99	; F10577  add XBC,0x00f135be
 	ld	a, (xbc)	; F1057D  ld A,(XBC)
 	cp	a, 255	; F1057F  cp A,0xff
-	jr	z, sub_F10476_Join3	; F10582  jr Z,0xf10586
+	jr	z, DspEffect_StepAlgorithm_Join3	; F10582  jr Z,0xf10586
 	inc	1, h	; F10584  inc 1,H
-sub_F10476_Join3:
+DspEffect_StepAlgorithm_Join3:
 	ld	c, h	; F10586  ld C,H
 	extz	bc	; F10588  extz BC
 	extz	xbc	; F1058A  extz XBC
-	add	xbc, 15807934	; F1058C  add XBC,0x00f135be
+	add	xbc, EffectPosToAlgo_Block99	; F1058C  add XBC,0x00f135be
 	ld	l, (xbc)	; F10592  ld L,(XBC)
-	jr	sub_F10476_Join4	; F10594  jr T,0xf1059a
-sub_F10476_Skip9:
+	jr	DspEffect_StepAlgorithm_Join4	; F10594  jr T,0xf1059a
+DspEffect_StepAlgorithm_Skip9:
 	inc	1, h	; F10596  inc 1,H
 	ld	l, 20:opc	; F10598  ld L,0x14
-sub_F10476_Join4:
+DspEffect_StepAlgorithm_Join4:
 	cp	d, h	; F1059A  cp D,H
-	jr	z, sub_F10476_Epilogue	; F1059C  jr Z,0xf105b4
+	jr	z, DspEffect_StepAlgorithm_Epilogue	; F1059C  jr Z,0xf105b4
 	ld	(xix), l	; F1059E  ld (XIX),L
 	pushw	hl	; F105A0  push HL
 	ld	bc, (10135:16)	; F105A1  ld BC,(0x2797)
 	extz	bc	; F105A5  extz BC
 	add	bc, 97	; F105A7  add BC,0x0061
 	pushw	bc	; F105AB  push BC
-	calr	sub_F11365	; F105AC  calr 0xf11365
+	calr	DspEffect_SetAlgorithm	; F105AC  calr 0xf11365
 	m_set 3, MD16, 0x2075	; F105AF  set 3,(0x2075)
 	pop	xiy	; F105B3  pop XIY
-sub_F10476_Epilogue:
+DspEffect_StepAlgorithm_Epilogue:
 	pop	xix	; F105B4  pop XIX
 	popw	de	; F105B5  pop DE
 	popw	hl	; F105B6  pop HL
@@ -30943,7 +30960,7 @@ sub_F105B8_Skip8:
 ; sub_F1069A
 ; Called from: in-module: 0xF0F422 0xF0F485 0xF0F4F5 0xF0F52E
 ; Touches: (0x2792) (0x2794) (0x2796) (0x2797)
-; Calls:   T_IndexedTable_GetByte sub_F10476
+; Calls:   T_IndexedTable_GetByte DspEffect_StepAlgorithm
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF1069A is an instruction boundary of this
@@ -31002,7 +31019,7 @@ sub_F1069A_Resume:
 	pop	xiy	; F10710  pop XIY
 	jr	sub_F1069A_Join	; F10711  jr T,0xf10716
 sub_F1069A_Skip:
-	calr	sub_F10476	; F10713  calr 0xf10476
+	calr	DspEffect_StepAlgorithm	; F10713  calr 0xf10476
 sub_F1069A_Join:
 	pop	xix	; F10716  pop XIX
 	popw	hl	; F10717  pop HL
@@ -31037,7 +31054,7 @@ sub_F1071B:
 	m_mul MBD+r6, 0x08, 3	; F1072F  mul BC,(XIZ+0x08)
 	extz	xbc	; F10732  extz XBC
 	inc	4, xbc	; F10734  inc 4,XBC
-	add	xbc, Data_F13124	; F10736  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F10736  add XBC,0x00f13124
 	ld	h, (xbc)	; F1073C  ld H,(XBC)
 sub_F1071B_Skip:
 	ld	c, 6:opc	; F1073E  ld C,0x06
@@ -31045,9 +31062,9 @@ sub_F1071B_Skip:
 	extz	xbc	; F10743  extz XBC
 	ld	(xiz-4), xbc	; F10745  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F10748  inc 2,XBC
-	add	xbc, Data_F13124	; F1074A  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F1074A  add XBC,0x00f13124
 	ld	d, (xbc)	; F10750  ld D,(XBC)
-	lda	xbc, (Data_F13124:24)	; F10752  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F10752  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xfc, 1	; F10757  add XBC,(XIZ+0xfc)
 	ld	e, (xbc)	; F1075A  ld E,(XBC)
 	ld	bc, (10135:16)	; F1075C  ld BC,(0x2797)
@@ -31136,7 +31153,7 @@ sub_F107D0:
 	m_mul MBD+r6, 0x08, 3	; F107E4  mul BC,(XIZ+0x08)
 	extz	xbc	; F107E7  extz XBC
 	inc	4, xbc	; F107E9  inc 4,XBC
-	add	xbc, Data_F13124	; F107EB  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F107EB  add XBC,0x00f13124
 	ld	h, (xbc)	; F107F1  ld H,(XBC)
 sub_F1071B_Skip6:
 	ld	c, 6:opc	; F107F3  ld C,0x06
@@ -31144,9 +31161,9 @@ sub_F1071B_Skip6:
 	extz	xbc	; F107F8  extz XBC
 	ld	(xiz-4), xbc	; F107FA  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F107FD  inc 2,XBC
-	add	xbc, Data_F13124	; F107FF  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F107FF  add XBC,0x00f13124
 	ld	d, (xbc)	; F10805  ld D,(XBC)
-	lda	xbc, (Data_F13124:24)	; F10807  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F10807  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xfc, 1	; F1080C  add XBC,(XIZ+0xfc)
 	ld	e, (xbc)	; F1080F  ld E,(XBC)
 	ld	bc, (10135:16)	; F10811  ld BC,(0x2797)
@@ -31235,7 +31252,7 @@ sub_F10885:
 	m_mul MBD+r6, 0x08, 3	; F1089A  mul BC,(XIZ+0x08)
 	extz	xbc	; F1089D  extz XBC
 	inc	4, xbc	; F1089F  inc 4,XBC
-	add	xbc, Data_F13124	; F108A1  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F108A1  add XBC,0x00f13124
 	ld	de, (xbc)	; F108A7  ld DE,(XBC)
 sub_F1071B_Skip11:
 	ld	c, 6:opc	; F108A9  ld C,0x06
@@ -31243,9 +31260,9 @@ sub_F1071B_Skip11:
 	extz	xbc	; F108AE  extz XBC
 	ld	(xiz-14), xbc	; F108B0  ld (XIZ+0xf2),XBC
 	inc	2, xbc	; F108B3  inc 2,XBC
-	add	xbc, Data_F13124	; F108B5  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F108B5  add XBC,0x00f13124
 	ld	ix, (xbc)	; F108BB  ld IX,(XBC)
-	lda	xbc, (Data_F13124:24)	; F108BD  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F108BD  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xf2, 1	; F108C2  add XBC,(XIZ+0xf2)
 	ld	wa, (xbc)	; F108C5  ld WA,(XBC)
 	ld	(xiz-4), wa	; F108C7  ld (XIZ+0xfc),WA
@@ -31360,7 +31377,7 @@ sub_F10985:
 	m_mul MBD+r6, 0x08, 3	; F1099B  mul BC,(XIZ+0x08)
 	extz	xbc	; F1099E  extz XBC
 	inc	4, xbc	; F109A0  inc 4,XBC
-	add	xbc, Data_F13124	; F109A2  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F109A2  add XBC,0x00f13124
 	ld	a, (xbc)	; F109A8  ld A,(XBC)
 	ld	(xiz-1), a	; F109AA  ld (XIZ+0xff),A
 sub_F1071B_Skip16:
@@ -31369,9 +31386,9 @@ sub_F1071B_Skip16:
 	extz	xbc	; F109B2  extz XBC
 	ld	(xiz-8), xbc	; F109B4  ld (XIZ+0xf8),XBC
 	inc	2, xbc	; F109B7  inc 2,XBC
-	add	xbc, Data_F13124	; F109B9  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F109B9  add XBC,0x00f13124
 	ld	d, (xbc)	; F109BF  ld D,(XBC)
-	lda	xbc, (Data_F13124:24)	; F109C1  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F109C1  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xf8, 1	; F109C6  add XBC,(XIZ+0xf8)
 	ld	e, (xbc)	; F109C9  ld E,(XBC)
 	ld	bc, (10135:16)	; F109CB  ld BC,(0x2797)
@@ -31492,7 +31509,7 @@ sub_F10A97:
 	m_mul MBD+r6, 0x08, 3	; F10AAD  mul BC,(XIZ+0x08)
 	extz	xbc	; F10AB0  extz XBC
 	inc	4, xbc	; F10AB2  inc 4,XBC
-	add	xbc, Data_F13124	; F10AB4  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F10AB4  add XBC,0x00f13124
 	ld	a, (xbc)	; F10ABA  ld A,(XBC)
 	ld	(xiz-1), a	; F10ABC  ld (XIZ+0xff),A
 sub_F1071B_Skip21:
@@ -31501,9 +31518,9 @@ sub_F1071B_Skip21:
 	extz	xbc	; F10AC4  extz XBC
 	ld	(xiz-8), xbc	; F10AC6  ld (XIZ+0xf8),XBC
 	inc	2, xbc	; F10AC9  inc 2,XBC
-	add	xbc, Data_F13124	; F10ACB  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F10ACB  add XBC,0x00f13124
 	ld	d, (xbc)	; F10AD1  ld D,(XBC)
-	lda	xbc, (Data_F13124:24)	; F10AD3  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F10AD3  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xf8, 1	; F10AD8  add XBC,(XIZ+0xf8)
 	ld	e, (xbc)	; F10ADB  ld E,(XBC)
 	ld	bc, (10135:16)	; F10ADD  ld BC,(0x2797)
@@ -31624,7 +31641,7 @@ sub_F10BA9:
 	m_mul MBD+r6, 0x08, 3	; F10BBF  mul BC,(XIZ+0x08)
 	extz	xbc	; F10BC2  extz XBC
 	inc	4, xbc	; F10BC4  inc 4,XBC
-	add	xbc, Data_F13124	; F10BC6  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F10BC6  add XBC,0x00f13124
 	ld	a, (xbc)	; F10BCC  ld A,(XBC)
 	ld	(xiz-1), a	; F10BCE  ld (XIZ+0xff),A
 sub_F1071B_Skip26:
@@ -31633,9 +31650,9 @@ sub_F1071B_Skip26:
 	extz	xbc	; F10BD6  extz XBC
 	ld	(xiz-8), xbc	; F10BD8  ld (XIZ+0xf8),XBC
 	inc	2, xbc	; F10BDB  inc 2,XBC
-	add	xbc, Data_F13124	; F10BDD  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F10BDD  add XBC,0x00f13124
 	ld	d, (xbc)	; F10BE3  ld D,(XBC)
-	lda	xbc, (Data_F13124:24)	; F10BE5  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F10BE5  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xf8, 1	; F10BEA  add XBC,(XIZ+0xf8)
 	ld	e, (xbc)	; F10BED  ld E,(XBC)
 	ld	bc, (10135:16)	; F10BEF  ld BC,(0x2797)
@@ -32562,7 +32579,7 @@ sub_F11329_Skip:
 	ret	; F11364  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11365
+; DspEffect_SetAlgorithm
 ; Called from: T_F42F60 (x0); in-module: 0xF105AC 0xF11DCD
 ; Touches: nothing with an absolute address
 ; Calls:   T_IndexedTable_GetPtr T_Queue2E00_Append4
@@ -32571,10 +32588,23 @@ sub_F11329_Skip:
 ;                   names it.  0xF11365 is an instruction boundary of this
 ;                   transcription, re-asserted on every emit.  The name IS
 ;                   the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    DspEffect_SetAlgorithm -- named 2026-09-25 (lane promb).
+; Inputs:  (XIZ+8) = block entry 97..99 (anything else returns at once),
+;          (XIZ+10) = algorithm.
+; Evidence: an algorithm the block does not offer (EffectAlgoToPos_BlockNN
+;          byte 0xFF) becomes 1 / 35 / 20; the algorithm is stored to byte 0
+;          of the block's IndexedTable object and queued; then
+;          EffectDefaultParams[algorithm] is fetched (`add XBC,this` at
+;          0xF113FC) and its EffectDefaults_* record copied: +0 -> byte 22,
+;          +1..+4 -> bytes 17..20 (skipped for block 98), values -> bytes 1..16
+;          up to the first 0xFF, zero after it -- each byte also queued with
+;          T_Queue2E00_Append4(block, byte, value, 0xFF).
+;          python3 notes/promb-2026-09-25/dsp_effect_tables.py.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F11365:		; <- T_F42F60
+DspEffect_SetAlgorithm:		; <- T_F42F60
 	link XIZ,0xfff2	; F11365  link XIZ,0xfff2
 	pushw	hl	; F11369  push HL
 	pushw	de	; F1136A  push DE
@@ -32582,49 +32612,49 @@ sub_F11365:		; <- T_F42F60
 	ld	e, (xiz+10)	; F1136C  ld E,(XIZ+0x0a)
 	ld	d, (xiz+8)	; F1136F  ld D,(XIZ+0x08)
 	cp	d, 97	; F11372  cp D,0x61
-	jrl	c, sub_F11365_Skip6	; F11375  jrl C,0xf114d4
+	jrl	c, DspEffect_SetAlgorithm_Skip6	; F11375  jrl C,0xf114d4
 	cp	d, 99	; F11378  cp D,0x63
-	jrl	ugt, sub_F11365_Skip6	; F1137B  jrl UGT,0xf114d4
+	jrl	ugt, DspEffect_SetAlgorithm_Skip6	; F1137B  jrl UGT,0xf114d4
 	ld	(xiz-1), 0	; F1137E  ld (XIZ+0xff),0x00
 	ld	c, d	; F11382  ld C,D
 	extz	bc	; F11384  extz BC
 	cp	bc, 97	; F11386  cp BC,0x0061
-	jr	z, sub_F11365_Skip	; F1138A  jr Z,0xf1139a
+	jr	z, DspEffect_SetAlgorithm_Skip	; F1138A  jr Z,0xf1139a
 	cp	bc, 98	; F1138C  cp BC,0x0062
-	jr	z, sub_F11365_Skip2	; F11390  jr Z,0xf113b1
+	jr	z, DspEffect_SetAlgorithm_Skip2	; F11390  jr Z,0xf113b1
 	cp	bc, 99	; F11392  cp BC,0x0063
-	jr	z, sub_F11365_Skip3	; F11396  jr Z,0xf113c8
-	jr	sub_F11365_Join	; F11398  jr T,0xf113dd
-sub_F11365_Skip:
+	jr	z, DspEffect_SetAlgorithm_Skip3	; F11396  jr Z,0xf113c8
+	jr	DspEffect_SetAlgorithm_Join	; F11398  jr T,0xf113dd
+DspEffect_SetAlgorithm_Skip:
 	ld	c, e	; F1139A  ld C,E
 	extz	bc	; F1139C  extz BC
 	extz	xbc	; F1139E  extz XBC
-	add	xbc, ByteMap_F133E4	; F113A0  add XBC,0x00f133e4
+	add	xbc, EffectAlgoToPos_Block97	; F113A0  add XBC,0x00f133e4
 	ld	a, (xbc)	; F113A6  ld A,(XBC)
 	cp	a, 255	; F113A8  cp A,0xff
-	jr	nz, sub_F11365_Join	; F113AB  jr NZ,0xf113dd
+	jr	nz, DspEffect_SetAlgorithm_Join	; F113AB  jr NZ,0xf113dd
 	ld	e, 1:opc	; F113AD  ld E,0x01
-	jr	sub_F11365_Join	; F113AF  jr T,0xf113dd
-sub_F11365_Skip2:
+	jr	DspEffect_SetAlgorithm_Join	; F113AF  jr T,0xf113dd
+DspEffect_SetAlgorithm_Skip2:
 	ld	c, e	; F113B1  ld C,E
 	extz	bc	; F113B3  extz BC
 	extz	xbc	; F113B5  extz XBC
-	add	xbc, ByteMap_F13491	; F113B7  add XBC,0x00f13491
+	add	xbc, EffectAlgoToPos_Block98	; F113B7  add XBC,0x00f13491
 	ld	a, (xbc)	; F113BD  ld A,(XBC)
 	cp	a, 255	; F113BF  cp A,0xff
-	jr	nz, sub_F11365_Join	; F113C2  jr NZ,0xf113dd
+	jr	nz, DspEffect_SetAlgorithm_Join	; F113C2  jr NZ,0xf113dd
 	ld	e, 35:opc	; F113C4  ld E,0x23
-	jr	sub_F11365_Join	; F113C6  jr T,0xf113dd
-sub_F11365_Skip3:
+	jr	DspEffect_SetAlgorithm_Join	; F113C6  jr T,0xf113dd
+DspEffect_SetAlgorithm_Skip3:
 	ld	c, e	; F113C8  ld C,E
 	extz	bc	; F113CA  extz BC
 	extz	xbc	; F113CC  extz XBC
-	add	xbc, 15807806	; F113CE  add XBC,0x00f1353e
+	add	xbc, EffectAlgoToPos_Block99	; F113CE  add XBC,0x00f1353e
 	ld	a, (xbc)	; F113D4  ld A,(XBC)
 	cp	a, 255	; F113D6  cp A,0xff
-	jr	nz, sub_F11365_Join	; F113D9  jr NZ,0xf113dd
+	jr	nz, DspEffect_SetAlgorithm_Join	; F113D9  jr NZ,0xf113dd
 	ld	e, 20:opc	; F113DB  ld E,0x14
-sub_F11365_Join:
+DspEffect_SetAlgorithm_Join:
 	push	0	; F113DD  push 0x00
 	push	d	; F113DF  push D
 	call	T_IndexedTable_GetPtr	; F113E1  call 0xf42c8c
@@ -32638,7 +32668,7 @@ sub_F11365_Join:
 	ld	c, 4:opc	; F113F6  ld C,0x04
 	mul8rr	c, e	; F113F8  mul BC,E
 	extz	xbc	; F113FA  extz XBC
-	add	xbc, DataPtrTable_F13674	; F113FC  add XBC,0x00f13674
+	add	xbc, EffectDefaultParams	; F113FC  add XBC,0x00f13674
 	ld	xbc, (xbc)	; F11402  ld XBC,(XBC)
 	ld	(xiz-10), xbc	; F11404  ld (XIZ+0xf6),XBC
 	push	0	; F11407  push 0x00
@@ -32664,9 +32694,9 @@ sub_F11365_Join:
 	ld	(xiz-6), xbc	; F1143D  ld (XIZ+0xfa),XBC
 	ld	h, 17:opc	; F11440  ld H,0x11
 	add	xsp, 20	; F11442  add XSP,0x00000014
-sub_F11365_Loop:
+DspEffect_SetAlgorithm_Loop:
 	cp	d, 98	; F11448  cp D,0x62
-	jr	z, sub_F11365_Skip4	; F1144B  jr Z,0xf11471
+	jr	z, DspEffect_SetAlgorithm_Skip4	; F1144B  jr Z,0xf11471
 	ld	c, (xix)	; F1144D  ld C,(XIX)
 	ld	l, c	; F1144F  ld L,C
 	ld	xbc, (xiz-6)	; F11451  ld XBC,(XIZ+0xfa)
@@ -32683,11 +32713,11 @@ sub_F11365_Loop:
 	inc	1, xbc	; F1146A  inc 1,XBC
 	add	(xiz-6), xbc	; F1146C  add (XIZ+0xfa),XBC
 	inc	8, xsp	; F1146F  inc 0,XSP
-sub_F11365_Skip4:
+DspEffect_SetAlgorithm_Skip4:
 	inc	1, xix	; F11471  inc 1,XIX
 	inc	1, h	; F11473  inc 1,H
 	cp	h, 20	; F11475  cp H,0x14
-	jr	ule, sub_F11365_Loop	; F11478  jr ULE,0xf11448
+	jr	ule, DspEffect_SetAlgorithm_Loop	; F11478  jr ULE,0xf11448
 	push	0	; F1147A  push 0x00
 	push	d	; F1147C  push D
 	call	T_IndexedTable_GetPtr	; F1147E  call 0xf42c8c
@@ -32695,27 +32725,27 @@ sub_F11365_Skip4:
 	ld	(xiz-6), xiy	; F11484  ld (XIZ+0xfa),XIY
 	ld	h, 1:opc	; F11487  ld H,0x01
 	popw	bc	; F11489  pop BC
-sub_F11365_Loop2:
+DspEffect_SetAlgorithm_Loop2:
 	ld	l, (xix)	; F1148A  ld L,(XIX)
 	cp	l, 255	; F1148C  cp L,0xff
-	jr	nz, sub_F11365_Skip5	; F1148F  jr NZ,0xf11497
+	jr	nz, DspEffect_SetAlgorithm_Skip5	; F1148F  jr NZ,0xf11497
 	ld	(xiz-1), 1	; F11491  ld (XIZ+0xff),0x01
-	jr	sub_F11365_Join2	; F11495  jr T,0xf114aa
-sub_F11365_Skip5:
+	jr	DspEffect_SetAlgorithm_Join2	; F11495  jr T,0xf114aa
+DspEffect_SetAlgorithm_Skip5:
 	m_cp_mi8 MBD+r6, 0xff, 0x00	; F11497  cp (XIZ+0xff),0x00
-	jr	nz, sub_F11365_Join2	; F1149B  jr NZ,0xf114aa
+	jr	nz, DspEffect_SetAlgorithm_Join2	; F1149B  jr NZ,0xf114aa
 	ld	xbc, (xiz-6)	; F1149D  ld XBC,(XIZ+0xfa)
 	ld	(xbc), l	; F114A0  ld (XBC),L
 	pushw	255	; F114A2  push 0x00ff
 	ld	c, (xix)	; F114A5  ld C,(XIX)
 	pushw	bc	; F114A7  push BC
-	jr	sub_F11365_Join3	; F114A8  jr T,0xf114b6
-sub_F11365_Join2:
+	jr	DspEffect_SetAlgorithm_Join3	; F114A8  jr T,0xf114b6
+DspEffect_SetAlgorithm_Join2:
 	ld	xbc, (xiz-6)	; F114AA  ld XBC,(XIZ+0xfa)
 	ld	(xbc), 0	; F114AD  ld (XBC),0x00
 	pushw	255	; F114B0  push 0x00ff
 	pushw	0	; F114B3  push 0x0000
-sub_F11365_Join3:
+DspEffect_SetAlgorithm_Join3:
 	push	0	; F114B6  push 0x00
 	push	h	; F114B8  push H
 	push	0	; F114BA  push 0x00
@@ -32728,8 +32758,8 @@ sub_F11365_Join3:
 	add	h, c	; F114CB  add H,C
 	inc	8, xsp	; F114CD  inc 0,XSP
 	cp	h, 16	; F114CF  cp H,0x10
-	jr	ule, sub_F11365_Loop2	; F114D2  jr ULE,0xf1148a
-sub_F11365_Skip6:
+	jr	ule, DspEffect_SetAlgorithm_Loop2	; F114D2  jr ULE,0xf1148a
+DspEffect_SetAlgorithm_Skip6:
 	pop	xix	; F114D4  pop XIX
 	popw	de	; F114D5  pop DE
 	popw	hl	; F114D6  pop HL
@@ -32756,41 +32786,41 @@ sub_F114DA:		; <- T_F42F58
 	ld	d, (xiz+8)	; F114E0  ld D,(XIZ+0x08)
 	ld	l, (xiz+10)	; F114E3  ld L,(XIZ+0x0a)
 	cp	d, 97	; F114E6  cp D,0x61
-	jr	c, sub_F11365_Skip10	; F114E9  jr C,0xf1154e
+	jr	c, DspEffect_SetAlgorithm_Skip10	; F114E9  jr C,0xf1154e
 	cp	d, 99	; F114EB  cp D,0x63
-	jr	ugt, sub_F11365_Skip10	; F114EE  jr UGT,0xf1154e
+	jr	ugt, DspEffect_SetAlgorithm_Skip10	; F114EE  jr UGT,0xf1154e
 	ld	c, d	; F114F0  ld C,D
 	extz	bc	; F114F2  extz BC
 	cp	bc, 97	; F114F4  cp BC,0x0061
-	jr	z, sub_F11365_Skip7	; F114F8  jr Z,0xf11508
+	jr	z, DspEffect_SetAlgorithm_Skip7	; F114F8  jr Z,0xf11508
 	cp	bc, 98	; F114FA  cp BC,0x0062
-	jr	z, sub_F11365_Skip8	; F114FE  jr Z,0xf11518
+	jr	z, DspEffect_SetAlgorithm_Skip8	; F114FE  jr Z,0xf11518
 	cp	bc, 99	; F11500  cp BC,0x0063
-	jr	z, sub_F11365_Skip9	; F11504  jr Z,0xf11528
-	jr	sub_F11365_Join4	; F11506  jr T,0xf11536
-sub_F11365_Skip7:
+	jr	z, DspEffect_SetAlgorithm_Skip9	; F11504  jr Z,0xf11528
+	jr	DspEffect_SetAlgorithm_Join4	; F11506  jr T,0xf11536
+DspEffect_SetAlgorithm_Skip7:
 	ld	c, l	; F11508  ld C,L
 	extz	bc	; F1150A  extz BC
 	extz	xbc	; F1150C  extz XBC
-	add	xbc, ByteMap_F133E4	; F1150E  add XBC,0x00f133e4
+	add	xbc, EffectAlgoToPos_Block97	; F1150E  add XBC,0x00f133e4
 	ld	h, (xbc)	; F11514  ld H,(XBC)
-	jr	sub_F11365_Join4	; F11516  jr T,0xf11536
-sub_F11365_Skip8:
+	jr	DspEffect_SetAlgorithm_Join4	; F11516  jr T,0xf11536
+DspEffect_SetAlgorithm_Skip8:
 	ld	c, l	; F11518  ld C,L
 	extz	bc	; F1151A  extz BC
 	extz	xbc	; F1151C  extz XBC
-	add	xbc, ByteMap_F13491	; F1151E  add XBC,0x00f13491
+	add	xbc, EffectAlgoToPos_Block98	; F1151E  add XBC,0x00f13491
 	ld	h, (xbc)	; F11524  ld H,(XBC)
-	jr	sub_F11365_Join4	; F11526  jr T,0xf11536
-sub_F11365_Skip9:
+	jr	DspEffect_SetAlgorithm_Join4	; F11526  jr T,0xf11536
+DspEffect_SetAlgorithm_Skip9:
 	ld	c, l	; F11528  ld C,L
 	extz	bc	; F1152A  extz BC
 	extz	xbc	; F1152C  extz XBC
-	add	xbc, 15807806	; F1152E  add XBC,0x00f1353e
+	add	xbc, EffectAlgoToPos_Block99	; F1152E  add XBC,0x00f1353e
 	ld	h, (xbc)	; F11534  ld H,(XBC)
-sub_F11365_Join4:
+DspEffect_SetAlgorithm_Join4:
 	cp	h, 255	; F11536  cp H,0xff
-	jr	z, sub_F11365_Skip10	; F11539  jr Z,0xf1154e
+	jr	z, DspEffect_SetAlgorithm_Skip10	; F11539  jr Z,0xf1154e
 	push	0	; F1153B  push 0x00
 	push	d	; F1153D  push D
 	call	T_IndexedTable_GetPtr	; F1153F  call 0xf42c8c
@@ -32799,10 +32829,10 @@ sub_F11365_Join4:
 	calr	sub_F1162E	; F11545  calr 0xf1162e
 	inc	8, xsp	; F11548  inc 0,XSP
 	sub	wa, wa	; F1154A  sub WA,WA
-	jr	sub_F11365_Join5	; F1154C  jr T,0xf11551
-sub_F11365_Skip10:
+	jr	DspEffect_SetAlgorithm_Join5	; F1154C  jr T,0xf11551
+DspEffect_SetAlgorithm_Skip10:
 	ldw	wa, 65535	; F1154E  ld WA,0xffff
-sub_F11365_Join5:
+DspEffect_SetAlgorithm_Join5:
 	popw	de	; F11551  pop DE
 	popw	hl	; F11552  pop HL
 	unlk XIZ	; F11553  unlk XIZ
@@ -32865,21 +32895,21 @@ sub_F1156B_Skip:
 	ld	c, h	; F11592  ld C,H
 	extz	bc	; F11594  extz BC
 	extz	xbc	; F11596  extz XBC
-	add	xbc, ByteMap_F133E4	; F11598  add XBC,0x00f133e4
+	add	xbc, EffectAlgoToPos_Block97	; F11598  add XBC,0x00f133e4
 	ld	l, (xbc)	; F1159E  ld L,(XBC)
 	jr	sub_F1156B_Join	; F115A0  jr T,0xf115c0
 sub_F1156B_Skip2:
 	ld	c, h	; F115A2  ld C,H
 	extz	bc	; F115A4  extz BC
 	extz	xbc	; F115A6  extz XBC
-	add	xbc, ByteMap_F13491	; F115A8  add XBC,0x00f13491
+	add	xbc, EffectAlgoToPos_Block98	; F115A8  add XBC,0x00f13491
 	ld	l, (xbc)	; F115AE  ld L,(XBC)
 	jr	sub_F1156B_Join	; F115B0  jr T,0xf115c0
 sub_F1156B_Skip3:
 	ld	c, h	; F115B2  ld C,H
 	extz	bc	; F115B4  extz BC
 	extz	xbc	; F115B6  extz XBC
-	add	xbc, 15807806	; F115B8  add XBC,0x00f1353e
+	add	xbc, EffectAlgoToPos_Block99	; F115B8  add XBC,0x00f1353e
 	ld	l, (xbc)	; F115BE  ld L,(XBC)
 sub_F1156B_Join:
 	ld	xix, (xiz+10)	; F115C0  ld XIX,(XIZ+0x0a)
@@ -32962,7 +32992,7 @@ sub_F1162E:
 	ld	c, 4:opc	; F1163F  ld C,0x04
 	m_mul MBD+r6, 0x08, 3	; F11641  mul BC,(XIZ+0x08)
 	extz	xbc	; F11644  extz XBC
-	add	xbc, DataPtrTable_F13674	; F11646  add XBC,0x00f13674
+	add	xbc, EffectDefaultParams	; F11646  add XBC,0x00f13674
 	ld	xbc, (xbc)	; F1164C  ld XBC,(XBC)
 	ld	(xiz-4), xbc	; F1164E  ld (XIZ+0xfc),XBC
 	ld	xwa, (xiz+10)	; F11651  ld XWA,(XIZ+0x0a)
@@ -33400,9 +33430,9 @@ sub_F1195A:
 	extz	xbc	; F11969  extz XBC
 	ld	(xiz-4), xbc	; F1196B  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F1196E  inc 2,XBC
-	add	xbc, Data_F13124	; F11970  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F11970  add XBC,0x00f13124
 	ld	d, (xbc)	; F11976  ld D,(XBC)
-	lda	xbc, (Data_F13124:24)	; F11978  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F11978  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xfc, 1	; F1197D  add XBC,(XIZ+0xfc)
 	ld	l, (xbc)	; F11980  ld L,(XBC)
 	ld	bc, (xiz+10)	; F11982  ld BC,(XIZ+0x0a)
@@ -33454,9 +33484,9 @@ sub_F119A9:
 	extz	xbc	; F119B8  extz XBC
 	ld	(xiz-4), xbc	; F119BA  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F119BD  inc 2,XBC
-	add	xbc, Data_F13124	; F119BF  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F119BF  add XBC,0x00f13124
 	ld	d, (xbc)	; F119C5  ld D,(XBC)
-	lda	xbc, (Data_F13124:24)	; F119C7  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F119C7  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xfc, 1	; F119CC  add XBC,(XIZ+0xfc)
 	ld	l, (xbc)	; F119CF  ld L,(XBC)
 	ld	bc, (xiz+10)	; F119D1  ld BC,(XIZ+0x0a)
@@ -33508,10 +33538,10 @@ sub_F119F8:
 	extz	xbc	; F11A07  extz XBC
 	ld	(xiz-4), xbc	; F11A09  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F11A0C  inc 2,XBC
-	add	xbc, Data_F13124	; F11A0E  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F11A0E  add XBC,0x00f13124
 	ld	bc, (xbc)	; F11A14  ld BC,(XBC)
 	ld	(xiz-6), bc	; F11A16  ld (XIZ+0xfa),BC
-	lda	xwa, (Data_F13124:24)	; F11A19  lda XWA,0xf13124
+	lda	xwa, (EffectValueRanges:24)	; F11A19  lda XWA,0xf13124
 	m_add_rm MLD+r6, 0xfc, 0	; F11A1E  add XWA,(XIZ+0xfc)
 	ld	de, (xwa)	; F11A21  ld DE,(XWA)
 	ld	wa, (xiz+10)	; F11A23  ld WA,(XIZ+0x0a)
@@ -33572,9 +33602,9 @@ sub_F11A61:
 	extz	xbc	; F11A70  extz XBC
 	ld	(xiz-4), xbc	; F11A72  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F11A75  inc 2,XBC
-	add	xbc, Data_F13124	; F11A77  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F11A77  add XBC,0x00f13124
 	ld	e, (xbc)	; F11A7D  ld E,(XBC)
-	lda	xbc, (Data_F13124:24)	; F11A7F  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F11A7F  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xfc, 1	; F11A84  add XBC,(XIZ+0xfc)
 	ld	d, (xbc)	; F11A87  ld D,(XBC)
 	ld	bc, (xiz+10)	; F11A89  ld BC,(XIZ+0x0a)
@@ -33653,9 +33683,9 @@ sub_F11AF3:
 	extz	xbc	; F11B02  extz XBC
 	ld	(xiz-4), xbc	; F11B04  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F11B07  inc 2,XBC
-	add	xbc, Data_F13124	; F11B09  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F11B09  add XBC,0x00f13124
 	ld	e, (xbc)	; F11B0F  ld E,(XBC)
-	lda	xbc, (Data_F13124:24)	; F11B11  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F11B11  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xfc, 1	; F11B16  add XBC,(XIZ+0xfc)
 	ld	d, (xbc)	; F11B19  ld D,(XBC)
 	ld	bc, (xiz+10)	; F11B1B  ld BC,(XIZ+0x0a)
@@ -33734,9 +33764,9 @@ sub_F11B85:
 	extz	xbc	; F11B94  extz XBC
 	ld	(xiz-4), xbc	; F11B96  ld (XIZ+0xfc),XBC
 	inc	2, xbc	; F11B99  inc 2,XBC
-	add	xbc, Data_F13124	; F11B9B  add XBC,0x00f13124
+	add	xbc, EffectValueRanges	; F11B9B  add XBC,0x00f13124
 	ld	e, (xbc)	; F11BA1  ld E,(XBC)
-	lda	xbc, (Data_F13124:24)	; F11BA3  lda XBC,0xf13124
+	lda	xbc, (EffectValueRanges:24)	; F11BA3  lda XBC,0xf13124
 	m_add_rm MLD+r6, 0xfc, 1	; F11BA8  add XBC,(XIZ+0xfc)
 	ld	d, (xbc)	; F11BAB  ld D,(XBC)
 	ld	bc, (xiz+10)	; F11BAD  ld BC,(XIZ+0x0a)
@@ -33819,19 +33849,31 @@ sub_F11C10:
 	ret	; F11C2F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11C30
+; DspParam_WriteByNumber
 ; Called from: T_F434A0 (x2)
 ; Touches: (0x279A) (0x279B)
-; Calls:   T_IndexedTable_GetPtr sub_F11365 T_IndexedTable_GetByte T_Queue2E00_Append4 sub_F1156B
+; Calls:   T_IndexedTable_GetPtr DspEffect_SetAlgorithm T_IndexedTable_GetByte T_Queue2E00_Append4 sub_F1156B
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF11C30 is an instruction boundary of this
 ;                   transcription, re-asserted on every emit.  The name IS
 ;                   the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    DspParam_WriteByNumber -- named 2026-09-25 (lane promb).
+; Inputs:  (XIZ+8) = parameter number n (refused above 0x48),
+;          (XIZ+10) = value.
+; Evidence: the record EffectParamNumberMap[n] (`ldw bc,3 / mul XBC,(XIZ+8) /
+;          add XIX,EffectParamNumberMap` at 0xF11C3F) names the IndexedTable
+;          entry, byte and mask; an entry of 0xFF ends at once; n is then
+;          range-checked per parameter (the `cp BC,n` ladder from 0xF11C70)
+;          and the value stored under the mask -- for n = 1/24/47, the
+;          algorithm, only if EffectAlgoToPos_BlockNN offers it, and then
+;          through DspEffect_SetAlgorithm.  Reached from prom_a 0xFB3AFD via
+;          T_F434A0 with n from IndexMap_F4FA9B + 1 (0xF4FA9C).
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F11C30:		; <- T_F434A0
+DspParam_WriteByNumber:		; <- T_F434A0
 	link XIZ,0xffa4	; F11C30  link XIZ,0xffa4
 	pushw	hl	; F11C34  push HL
 	pushw	de	; F11C35  push DE
@@ -33841,7 +33883,7 @@ sub_F11C30:		; <- T_F434A0
 	ldw	bc, 3	; F11C3F  ld BC,0x0003
 	m_mul MWD+r6, 0x08, 1	; F11C42  mul XBC,(XIZ+0x08)
 	ld	xix, xbc	; F11C45  ld XIX,XBC
-	add	xix, Data_F13874	; F11C47  add XIX,0x00f13874
+	add	xix, EffectParamNumberMap	; F11C47  add XIX,0x00f13874
 	ld	h, (xix)	; F11C4D  ld H,(XIX)
 	cp	h, 255	; F11C4F  cp H,0xff
 	jrl	z, sub_F1195A_Skip31	; F11C52  jrl Z,0xf1216c
@@ -33947,21 +33989,21 @@ sub_F1195A_Skip18:
 	ld	bc, (xiz+10)	; F11D77  ld BC,(XIZ+0x0a)
 	extz	bc	; F11D7A  extz BC
 	extz	xbc	; F11D7C  extz XBC
-	add	xbc, ByteMap_F133E4	; F11D7E  add XBC,0x00f133e4
+	add	xbc, EffectAlgoToPos_Block97	; F11D7E  add XBC,0x00f133e4
 	ld	h, (xbc)	; F11D84  ld H,(XBC)
 	jr	sub_F1195A_Join	; F11D86  jr T,0xf11da8
 sub_F1195A_Skip19:
 	ld	bc, (xiz+10)	; F11D88  ld BC,(XIZ+0x0a)
 	extz	bc	; F11D8B  extz BC
 	extz	xbc	; F11D8D  extz XBC
-	add	xbc, ByteMap_F13491	; F11D8F  add XBC,0x00f13491
+	add	xbc, EffectAlgoToPos_Block98	; F11D8F  add XBC,0x00f13491
 	ld	h, (xbc)	; F11D95  ld H,(XBC)
 	jr	sub_F1195A_Join	; F11D97  jr T,0xf11da8
 sub_F1195A_Skip20:
 	ld	bc, (xiz+10)	; F11D99  ld BC,(XIZ+0x0a)
 	extz	bc	; F11D9C  extz BC
 	extz	xbc	; F11D9E  extz XBC
-	add	xbc, 15807806	; F11DA0  add XBC,0x00f1353e
+	add	xbc, EffectAlgoToPos_Block99	; F11DA0  add XBC,0x00f1353e
 	ld	h, (xbc)	; F11DA6  ld H,(XBC)
 sub_F1195A_Join:
 	cp	h, 255	; F11DA8  cp H,0xff
@@ -33980,7 +34022,7 @@ sub_F1195A_Join:
 	push	h	; F11DC8  push H
 	ld	c, (xix)	; F11DCA  ld C,(XIX)
 	pushw	bc	; F11DCC  push BC
-	calr	sub_F11365	; F11DCD  calr 0xf11365
+	calr	DspEffect_SetAlgorithm	; F11DCD  calr 0xf11365
 	pop	xiy	; F11DD0  pop XIY
 	jrl	sub_F1195A_Join12	; F11DD1  jrl T,0xf12205
 sub_F1195A_Skip21:
@@ -34442,7 +34484,7 @@ sub_F1195A_Join12:
 	ret	; F1220A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1220B
+; DspParam_ReadByNumber
 ; Called from: T_F434A4 (x2)
 ; Touches: nothing with an absolute address
 ; Calls:   T_IndexedTable_GetByte
@@ -34451,10 +34493,21 @@ sub_F1195A_Join12:
 ;                   names it.  0xF1220B is an instruction boundary of this
 ;                   transcription, re-asserted on every emit.  The name IS
 ;                   the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    DspParam_ReadByNumber -- named 2026-09-25 (lane promb).
+; Inputs:  (XIZ+8) = first parameter number, (XIZ+10) = count,
+;          (XIZ+12) = destination.
+; Evidence: for each n it reads EffectParamNumberMap[n] (`add XIX,this` at
+;          0xF1221A, `inc 3,XIX` per step at 0xF122B7) and stores
+;          IndexedTable_GetByte(entry, byte) AND mask to the destination; an
+;          absent record gives 0, except n = 70, which is built from entry 6
+;          byte 0 and the low nibbles of entry 32 bytes 3 and 4.  Reached from
+;          prom_a 0xFB4A41 via T_F434A4 (count 1) with n from IndexMap_F4FA9B
+;          + 1 (0xF4FA9C).
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F1220B:		; <- T_F434A4
+DspParam_ReadByNumber:		; <- T_F434A4
 	link XIZ,0xfffe	; F1220B  link XIZ,0xfffe
 	pushw	hl	; F1220F  push HL
 	pushw	de	; F12210  push DE
@@ -34462,7 +34515,7 @@ sub_F1220B:		; <- T_F434A4
 	ldw	bc, 3	; F12212  ld BC,0x0003
 	m_mul MWD+r6, 0x08, 1	; F12215  mul XBC,(XIZ+0x08)
 	ld	xix, xbc	; F12218  ld XIX,XBC
-	add	xix, Data_F13874	; F1221A  add XIX,0x00f13874
+	add	xix, EffectParamNumberMap	; F1221A  add XIX,0x00f13874
 	ldw	de, 0	; F12220  ld DE,0x0000
 sub_F1195A_Join13:
 	ld	bc, (xiz+10)	; F12223  ld BC,(XIZ+0x0a)
@@ -35924,40 +35977,63 @@ EffectParamDescriptors_F12F24:
 	.long	EffectDesc_Unused	; F13120  [127] -> 0xF124EC  ----------
 
 
-; --------------------------------------------------------------------------
-; Data_F13124 -- 192 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |........c.......................0.....c........
-;           ...c.....c.....c...........$.....^.....c.....c.....c.....c......
-;           ...........^.....^.................^.................,..........
-;           .M.....a.........|
-; Read by: 18 byte-scan hits: 18 instruction operands -- `add
-;          XBC,0x00f13124` at 0xF10736 (operand field 2 bytes in); `add
-;          XBC,0x00f13124` at 0xF1074A (operand field 2 bytes in); `add
-;          XBC,0x00f13124` at 0xF107EB (operand field 2 bytes in); `add
-;          XBC,0x00f13124` at 0xF107FF (operand field 2 bytes in) +14 more
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F13124:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x05, 0x00, 0x01, 0x00, 0x1A, 0x00	; F13124  [0..15]
-	.byte	0x02, 0x00, 0x01, 0x00, 0x1A, 0x00, 0x02, 0x00, 0x00, 0x00, 0x1F, 0x00, 0x02, 0x00, 0x00, 0x00	; F13134  [16..31]
-	.byte	0x30, 0x00, 0x02, 0x00, 0x00, 0x00, 0x63, 0x00, 0x05, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, 0x00	; F13144  [32..47]
-	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x00, 0x00, 0x00, 0x63, 0x00, 0x05, 0x00, 0x00, 0x00, 0x63, 0x00	; F13154  [48..63]
-	.byte	0x05, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDC, 0xFF, 0x24, 0x00, 0x04, 0x00, 0x00, 0x00	; F13164  [64..79]
-	.byte	0x5E, 0x00, 0x05, 0x00, 0x00, 0x00, 0x63, 0x00, 0x05, 0x00, 0x00, 0x00, 0x63, 0x00, 0x05, 0x00	; F13174  [80..95]
-	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x00, 0x9D, 0xFF, 0x63, 0x00, 0x05, 0x00, 0x00, 0x00, 0x02, 0x00	; F13184  [96..111]
-	.byte	0x01, 0x00, 0x00, 0x00, 0xB4, 0x00, 0x05, 0x00, 0x00, 0x00, 0x5E, 0x01, 0x0A, 0x00, 0x00, 0x00	; F13194  [112..127]
-	.byte	0x5E, 0x01, 0x0A, 0x00, 0x00, 0x00, 0xF4, 0x01, 0x14, 0x00, 0x00, 0x00, 0xC8, 0x00, 0x0A, 0x00	; F131A4  [128..143]
-	.byte	0x00, 0x00, 0x5E, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x18, 0x00, 0x03, 0x00, 0x00, 0x00, 0xBC, 0x02	; F131B4  [144..159]
-	.byte	0x14, 0x00, 0x00, 0x00, 0x2C, 0x01, 0x0A, 0x00, 0x00, 0x00, 0xB4, 0x00, 0x0A, 0x00, 0x00, 0x00	; F131C4  [160..175]
-	.byte	0x4D, 0x00, 0x05, 0x00, 0x0F, 0x00, 0x61, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F131D4  [176..191]
+;--------------------------------------------------------------------------
+; EffectValueRanges -- 0xF13124-0xF131E3, 32 records of 6 bytes, one per
+;   effect VALUE TYPE (byte +1 of an EffectDesc_* parameter group):
+;     +0  s16  lower bound      +2  s16  upper bound
+;     +4  u16  the COARSE step
+; Read by: sub_F1071B (0xF1071B) and its siblings sub_F107D0, sub_F10885,
+;   sub_F10985, sub_F10A97, sub_F10BA9 -- the value editors ScreenTable_F131E4
+;   dispatches to by type -- with `ld C,6 / mul BC,(XIZ+8)` on the type: +4
+;   becomes the step when (0x28B0) bit 2 is set (else the step is 1), +0 the
+;   floor and +2 the ceiling the stepped value is clamped to (0xF1078D-0xF107A1:
+;   `sub (XIX),H` unless below floor+step, `add (XIX),H` unless above
+;   ceiling-step).  sub_F1195A (0xF1195A) and its siblings sub_F119A9,
+;   sub_F119F8, sub_F11A61, sub_F11AF3 and sub_F11B85 read +0/+2 again and
+;   reset a value outside [+0, +2] from a default array.
+; Why these are the parameters' ranges: type 0x05 (the three BAND EMPHASIS G
+;   groups) spans 0..48 and its units column is DLBTable_F15C93, exactly 49
+;   strings "-12.0".."+12.0"; type 0x07 (LFO/OSC WAVEFORM) spans 0..2; type
+;   0x0C (PITCH L/R) spans -36..+36.
+; Types 0x00 and 0x1F are all-zero and used by no descriptor group.  Each
+;   record's comment lists the parameter names whose groups carry that type.
+; Re-derived by python3 notes/promb-2026-09-25/dsp_effect_tables.py.
+; ⚠ REPLACES `EffectValueRanges`, whose header said "Unknown: everything about it
+;   except its bytes".
+;--------------------------------------------------------------------------
+EffectValueRanges:
+	.short	0, 0, 0	; F13124  type 0x00  (no group)
+	.short	0, 99, 5	; F1312A  type 0x01  ADJUST, BALANCE L, BALANCE R, BASS       DEPTH, CHORUS DRY/WET, DELAY DRY/WET, DELAY WET, DELAY1 WET, DELAY2 DRY/WET, DEPTH, DRIVE, EARLY REFL LEVEL, EMPHASIS GAIN, FAST LFO BALANCE, FLANGER DRY/WET, HIGH MIX, LOW  MIX, MANUAL, MODULATION DEPTH, PAN   1, PAN   2, PAN   3, PAN   4, PHASER DRY/WET, RATIO, SWEEP RANGE, THRESHOLD, TREBLE     DEPTH, VIBRATO DRY/WET, VOLUME, VOLUME ADJUST, WAH CENTER Fc, WAH WET, WET
+	.short	1, 26, 2	; F13130  type 0x02  EMPHASIS Fc
+	.short	1, 26, 2	; F13136  type 0x03  BAND EMPHASIS Fc
+	.short	0, 31, 2	; F1313C  type 0x04  (1)      Q, (2)      Q, (3)      Q, (4)      Q, (5)      Q, (6)      Q, BAND EMPHASIS Q
+	.short	0, 48, 2	; F13142  type 0x05  BAND EMPHASIS G, G
+	.short	0, 99, 5	; F13148  type 0x06  FAST LFO SPEED, FAST LFO SPEED L, FAST LFO SPEED R, LFO SPEED, SLOW LFO SPEED
+	.short	0, 2, 1	; F1314E  type 0x07  LFO WAVEFORM, OSC WAVEFORM
+	.short	0, 99, 5	; F13154  type 0x08  OSC SPEED
+	.short	0, 99, 5	; F1315A  type 0x09  FAST, SLOW
+	.short	0, 99, 5	; F13160  type 0x0A  WIND DOWN, WIND UP
+	.short	0, 1, 1	; F13166  type 0x0B  SLOW/FAST
+	.short	-36, 36, 4	; F1316C  type 0x0C  PITCH L, PITCH R
+	.short	0, 94, 5	; F13172  type 0x0D  ATTACK SENS., RELEASE SENS.
+	.short	0, 99, 5	; F13178  type 0x0E  ATTACK RATE
+	.short	0, 99, 5	; F1317E  type 0x0F  RELEASE RATE
+	.short	0, 99, 5	; F13184  type 0x10  GATE TIME, MASK TIME
+	.short	-99, 99, 5	; F1318A  type 0x11  FEEDBACK, FEEDBACK L, FEEDBACK R, RESONANCE
+	.short	0, 2, 1	; F13190  type 0x12  RESONANCE
+	.short	0, 180, 5	; F13196  type 0x13  PHASE
+	.short	0, 350, 10	; F1319C  type 0x14  DELAY TIME L, DELAY TIME R
+	.short	0, 350, 10	; F131A2  type 0x15  DELAY TIME L, DELAY TIME R
+	.short	0, 500, 20	; F131A8  type 0x16  (no group)
+	.short	0, 200, 10	; F131AE  type 0x17  PRE DELAY
+	.short	0, 350, 10	; F131B4  type 0x18  DELAY L, DELAY R
+	.short	0, 24, 3	; F131BA  type 0x19  HIGH DAMP GAIN
+	.short	0, 700, 20	; F131C0  type 0x1A  DELAY 1, DELAY 2, DELAY 3, DELAY 4
+	.short	0, 300, 10	; F131C6  type 0x1B  DELAY L, DELAY R
+	.short	0, 180, 10	; F131CC  type 0x1C  DELAY L, DELAY R
+	.short	0, 77, 5	; F131D2  type 0x1D  REVERB TIME
+	.short	15, 97, 5	; F131D8  type 0x1E  REVERB TIME
+	.short	0, 0, 0	; F131DE  type 0x1F  (no group)
 
 
 ; --------------------------------------------------------------------------
@@ -36137,330 +36213,221 @@ ScreenTable_F13364:
 	.long	T_F42C70	; F133E0  [127] -> 0xF42C70
 
 
-; --------------------------------------------------------------------------
-; ByteMap_F133E4 -- 100 bytes: a BYTE MAP.  56 of them are 0xFF and the
-;                   other 44 ASCEND STRICTLY, 0x00 to 0x2B, with jumps.
-;                   0xFF is the absent marker the consumer tests for -- `ld
-;                   H,(XWA)` at 0xF10619, `cp H,0xff` at 0xF1061B.
-; Read by: 5 byte-scan hits: 5 instruction operands -- `add XBC,0x00f133e4`
-;          at 0xF104A7 (operand field 2 bytes in); `add XBC,0x00f133e4` at
-;          0xF113A0 (operand field 2 bytes in); `add XBC,0x00f133e4` at
-;          0xF1150E (operand field 2 bytes in); `add XBC,0x00f133e4` at
-;          0xF11598 (operand field 2 bytes in) +1 more
-; Entry count: 100 bytes.  The run is trimmed of trailing 0xFF, so it claims
-;              no padding it did not earn; the byte before it is 0x00.
-; Evidence: every non-0xFF byte is compared with its predecessor on every
-;           emit.  The BYTEMAP rule fires ZERO times over the proven prom_b
-;           instruction text at (16 bytes, 12 values) and also at (20,14),
-;           (24,16) and (16,16) (`python3 notes/prom_b_f0ea9f_layout.py
-;           --null-ptr`).
-; Unknown: what the two index spaces ARE.  The name describes the CONTENT.
-; --------------------------------------------------------------------------
-ByteMap_F133E4:
-	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xFF, 0x07, 0x08, 0x09, 0x0A, 0xFF, 0xFF, 0xFF, 0xFF	; F133E4  [0..15]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F133F4  [16..31]
-	.byte	0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F13404  [32..47]
-	.byte	0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F13414  [48..63]
-	.byte	0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0xFF, 0xFF, 0xFF, 0xFF	; F13424  [64..79]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F13434  [80..95]
-	.byte	0x28, 0x29, 0x2A, 0x2B	; F13444  [96..99]
-
-
-; --------------------------------------------------------------------------
-; Data_F13448 -- 28 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F13448:
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F13448  [0..15]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F13458  [16..27]
-
-
-; --------------------------------------------------------------------------
-; ByteMap_F13464 -- 44 bytes: a BYTE MAP.  0 of them are 0xFF and the other
-;                   44 ASCEND STRICTLY, 0x00 to 0x63, with jumps.  0xFF is
-;                   the absent marker the consumer tests for -- `ld H,(XWA)`
-;                   at 0xF10619, `cp H,0xff` at 0xF1061B.
-; ⚠ 33 bytes of this run form a maximal printable run of 20 or more
-;   (0xF1346F-0xF1348F), so the ASCII rule framed that part as a STRING.  It
-;   is not one: those are this map's own ascending values, which happen to
-;   fall in 0x20-0x7E.  BYTEMAP is painted OVER ascii for exactly this
-;   reason.
-; Read by: 2 byte-scan hits: 2 instruction operands -- `add XBC,0x00f13464`
-;          at 0xF104CF (operand field 2 bytes in); `add XBC,0x00f13464` at
-;          0xF104E4 (operand field 2 bytes in)
-; Entry count: 44 bytes.  The run is trimmed of trailing 0xFF, so it claims
-;              no padding it did not earn; the byte before it is 0xFF.
-; Evidence: every non-0xFF byte is compared with its predecessor on every
-;           emit.  The BYTEMAP rule fires ZERO times over the proven prom_b
-;           instruction text at (16 bytes, 12 values) and also at (20,14),
-;           (24,16) and (16,16) (`python3 notes/prom_b_f0ea9f_layout.py
-;           --null-ptr`).
-; Unknown: what the two index spaces ARE.  The name describes the CONTENT.
-; --------------------------------------------------------------------------
-ByteMap_F13464:
-	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x08, 0x09, 0x0A, 0x0B, 0x20, 0x21, 0x22, 0x23, 0x24	; F13464  [0..15]
-	.byte	0x25, 0x26, 0x27, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x40, 0x41, 0x42, 0x43	; F13474  [16..31]
-	.byte	0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x60, 0x61, 0x62, 0x63	; F13484  [32..43]
-
-
-; --------------------------------------------------------------------------
-; Data_F13490 -- 1 byte this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F13490:
-	.byte	0xFF	; F13490  [0..0]
-
-
-; --------------------------------------------------------------------------
-; ByteMap_F13491 -- 100 bytes: a BYTE MAP.  56 of them are 0xFF and the
-;                   other 44 ASCEND STRICTLY, 0x00 to 0x2B, with jumps.
-;                   0xFF is the absent marker the consumer tests for -- `ld
-;                   H,(XWA)` at 0xF10619, `cp H,0xff` at 0xF1061B.
-; Read by: 5 byte-scan hits: 5 instruction operands -- `add XBC,0x00f13491`
-;          at 0xF104FC (operand field 2 bytes in); `add XBC,0x00f13491` at
-;          0xF113B7 (operand field 2 bytes in); `add XBC,0x00f13491` at
-;          0xF1151E (operand field 2 bytes in); `add XBC,0x00f13491` at
-;          0xF115A8 (operand field 2 bytes in) +1 more
-; Entry count: 100 bytes.  The run is trimmed of trailing 0xFF, so it claims
-;              no padding it did not earn; the byte before it is 0xFF.
-; Evidence: every non-0xFF byte is compared with its predecessor on every
-;           emit.  The BYTEMAP rule fires ZERO times over the proven prom_b
-;           instruction text at (16 bytes, 12 values) and also at (20,14),
-;           (24,16) and (16,16) (`python3 notes/prom_b_f0ea9f_layout.py
-;           --null-ptr`).
-; Unknown: what the two index spaces ARE.  The name describes the CONTENT.
-; --------------------------------------------------------------------------
-ByteMap_F13491:
-	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xFF, 0x07, 0x08, 0x09, 0x0A, 0xFF, 0xFF, 0xFF, 0xFF	; F13491  [0..15]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F134A1  [16..31]
-	.byte	0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F134B1  [32..47]
-	.byte	0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F134C1  [48..63]
-	.byte	0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0xFF, 0xFF, 0xFF, 0xFF	; F134D1  [64..79]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F134E1  [80..95]
-	.byte	0x28, 0x29, 0x2A, 0x2B	; F134F1  [96..99]
-
-
-; --------------------------------------------------------------------------
-; Data_F134F5 -- 28 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F134F5:
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F134F5  [0..15]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F13505  [16..27]
-
-
-; --------------------------------------------------------------------------
-; ByteMap_F13511 -- 44 bytes: a BYTE MAP.  0 of them are 0xFF and the other
-;                   44 ASCEND STRICTLY, 0x00 to 0x63, with jumps.  0xFF is
-;                   the absent marker the consumer tests for -- `ld H,(XWA)`
-;                   at 0xF10619, `cp H,0xff` at 0xF1061B.
-; ⚠ 33 bytes of this run form a maximal printable run of 20 or more
-;   (0xF1351C-0xF1353C), so the ASCII rule framed that part as a STRING.  It
-;   is not one: those are this map's own ascending values, which happen to
-;   fall in 0x20-0x7E.  BYTEMAP is painted OVER ascii for exactly this
-;   reason.
-; Read by: 2 byte-scan hits: 2 instruction operands -- `add XBC,0x00f13511`
-;          at 0xF10524 (operand field 2 bytes in); `add XBC,0x00f13511` at
-;          0xF10539 (operand field 2 bytes in)
-; Entry count: 44 bytes.  The run is trimmed of trailing 0xFF, so it claims
-;              no padding it did not earn; the byte before it is 0xFF.
-; Evidence: every non-0xFF byte is compared with its predecessor on every
-;           emit.  The BYTEMAP rule fires ZERO times over the proven prom_b
-;           instruction text at (16 bytes, 12 values) and also at (20,14),
-;           (24,16) and (16,16) (`python3 notes/prom_b_f0ea9f_layout.py
-;           --null-ptr`).
-; Unknown: what the two index spaces ARE.  The name describes the CONTENT.
-; --------------------------------------------------------------------------
-ByteMap_F13511:
-	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x08, 0x09, 0x0A, 0x0B, 0x20, 0x21, 0x22, 0x23, 0x24	; F13511  [0..15]
-	.byte	0x25, 0x26, 0x27, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x40, 0x41, 0x42, 0x43	; F13521  [16..31]
-	.byte	0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x60, 0x61, 0x62, 0x63	; F13531  [32..43]
-
-
-; --------------------------------------------------------------------------
-; Data_F1353D -- 17 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F1353D:
-	.byte	0xFF, 0x00, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0xFF, 0x13, 0x14, 0x15, 0x16, 0xFF, 0xFF, 0xFF	; F1353D  [0..15]
-	.byte	0xFF	; F1354D  [16..16]
-
-
-; --------------------------------------------------------------------------
-; ByteMap_F1354E -- 84 bytes: a BYTE MAP.  39 of them are 0xFF and the other
-;                   45 ASCEND STRICTLY, 0x01 to 0x37, with jumps.  0xFF is
-;                   the absent marker the consumer tests for -- `ld H,(XWA)`
-;                   at 0xF10619, `cp H,0xff` at 0xF1061B.
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Entry count: 84 bytes.  The run is trimmed of trailing 0xFF, so it claims
-;              no padding it did not earn; the byte before it is 0xFF.
-; Evidence: every non-0xFF byte is compared with its predecessor on every
-;           emit.  The BYTEMAP rule fires ZERO times over the proven prom_b
-;           instruction text at (16 bytes, 12 values) and also at (20,14),
-;           (24,16) and (16,16) (`python3 notes/prom_b_f0ea9f_layout.py
-;           --null-ptr`).
-; Unknown: what the two index spaces ARE.  The name describes the CONTENT.
-; --------------------------------------------------------------------------
-ByteMap_F1354E:
-	.byte	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0xFF, 0xFF, 0xFF, 0xFF	; F1354E  [0..15]
-	.byte	0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F1355E  [16..31]
-	.byte	0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F1356E  [32..47]
-	.byte	0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0xFF, 0xFF, 0xFF, 0xFF	; F1357E  [48..63]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F1358E  [64..79]
-	.byte	0x34, 0x35, 0x36, 0x37	; F1359E  [80..83]
-
-
-; --------------------------------------------------------------------------
-; Data_F135A2 -- 29 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F135A2:
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F135A2  [0..15]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00	; F135B2  [16..28]
-
-
-; --------------------------------------------------------------------------
-; IndexMap_F135BF -- 12 bytes at 0xF135BF counting 0x10..0x1B.  The name
-;                    describes the CONTENT and claims nothing about the
-;                    purpose.
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Entry count: 12 bytes.  The byte before 0xF135BF is 0x00 and the byte at
-;              0xF135CB is 0x01, so neither end extends.
-; Evidence: every byte is compared with its predecessor + 1 on every emit.
-;           The IDENT rule fires ZERO times over the proven prom_b
-;           instruction text.
-; Unknown: why an index map that returns its own index exists.  Recorded,
-;          not explained.
-; --------------------------------------------------------------------------
-IndexMap_F135BF:
-	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B	; F135BF  [0..11]
-
-
-; --------------------------------------------------------------------------
-; ByteMap_F135CB -- 43 bytes: a BYTE MAP.  0 of them are 0xFF and the other
-;                   43 ASCEND STRICTLY, 0x01 to 0x63, with jumps.  0xFF is
-;                   the absent marker the consumer tests for -- `ld H,(XWA)`
-;                   at 0xF10619, `cp H,0xff` at 0xF1061B.
-; ⚠ 33 bytes of this run form a maximal printable run of 20 or more
-;   (0xF135D5-0xF135F5), so the ASCII rule framed that part as a STRING.  It
-;   is not one: those are this map's own ascending values, which happen to
-;   fall in 0x20-0x7E.  BYTEMAP is painted OVER ascii for exactly this
-;   reason.
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Entry count: 43 bytes.  The run is trimmed of trailing 0xFF, so it claims
-;              no padding it did not earn; the byte before it is 0x1B.
-; Evidence: every non-0xFF byte is compared with its predecessor on every
-;           emit.  The BYTEMAP rule fires ZERO times over the proven prom_b
-;           instruction text at (16 bytes, 12 values) and also at (20,14),
-;           (24,16) and (16,16) (`python3 notes/prom_b_f0ea9f_layout.py
-;           --null-ptr`).
-; Unknown: what the two index spaces ARE.  The name describes the CONTENT.
-; --------------------------------------------------------------------------
-ByteMap_F135CB:
-	.byte	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x08, 0x09, 0x0A, 0x0B, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25	; F135CB  [0..15]
-	.byte	0x26, 0x27, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x40, 0x41, 0x42, 0x43, 0x44	; F135DB  [16..31]
-	.byte	0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x60, 0x61, 0x62, 0x63	; F135EB  [32..42]
-
-
-; --------------------------------------------------------------------------
-; Data_F135F6 -- 7 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F135F6:
-	.byte	0xFF, 0x00, 0x00, 0x01, 0x02, 0x00, 0x02	; F135F6  [0..6]
+;--------------------------------------------------------------------------
+; EffectAlgoMaps -- 0xF133E4-0xF135FC: which effect ALGORITHMS each DSP effect
+;   BLOCK offers, and in what order the editor steps through them.
+; A block is IndexedTable entry 97, 98 or 99 ((0x2797) = entry - 97); its byte
+;   0 is the algorithm number (0..127, an EffectNames_F147AC row).  Per block:
+;     EffectAlgoToPos_BlockNN   128 bytes: algorithm -> position in the block's
+;                               list, 0xFF = not offered (0xFF from 100 on)
+;     EffectPosToAlgo_BlockNN   position -> algorithm, one byte per offered
+;                               algorithm, then an 0xFF that ends the list
+; Read by: DspEffect_StepAlgorithm = DspEffect_StepAlgorithm (0xF10476): position =
+;   AlgoToPos[current]; (0x28B0) bit 0 set steps down to 0, clear steps up
+;   unless PosToAlgo[position+1] is 0xFF; the new algorithm is
+;   PosToAlgo[position].  An algorithm the block does not offer is replaced by
+;   1, 35 or 20 (blocks 97/98/99).  DspEffect_SetAlgorithm = DspEffect_SetAlgorithm makes
+;   the same substitution, and DspParam_WriteByNumber refuses a SysEx algorithm number
+;   whose AlgoToPos byte is 0xFF.
+; Checked by python3 notes/promb-2026-09-25/dsp_effect_tables.py: each pair
+;   is mutually inverse, every offered algorithm has a real name, the lists
+;   end in 0xFF and the three pairs tile the span with nothing between.
+; ⚠ REPLACES EffectAlgoToPos_Block97, Data_F13448, EffectPosToAlgo_Block97, Data_F13490,
+;   EffectAlgoToPos_Block98, Data_F134F5, EffectPosToAlgo_Block98, Data_F1353D, ByteMap_F1354E,
+;   Data_F135A2, IndexMap_F135BF, ByteMap_F135CB and Data_F135F6.  The two
+;   ByteMap headers said "Unknown: what the two index spaces ARE" -- they are
+;   algorithm numbers and list positions -- and the block-99 pair was split
+;   across five objects because its map starts one byte after an 0xFF.
+;--------------------------------------------------------------------------
+; block 97: 44 algorithms offered, fall-back 1 `CHORUS`
+EffectAlgoToPos_Block97:
+	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x07, 0x08, 0x09, 0x0a, 0xff, 0xff, 0xff, 0xff	; F133E4  algorithms 0..15
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F133F4  algorithms 16..31
+	.byte	0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13404  algorithms 32..47
+	.byte	0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13414  algorithms 48..63
+	.byte	0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0xff, 0xff, 0xff, 0xff	; F13424  algorithms 64..79
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13434  algorithms 80..95
+	.byte	0x28, 0x29, 0x2a, 0x2b, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13444  algorithms 96..111
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13454  algorithms 112..127
+EffectPosToAlgo_Block97:
+	.byte	0	; F13464  [0] NO OPERATION
+	.byte	1	; F13465  [1] CHORUS
+	.byte	2	; F13466  [2] MODULATED CHORUS
+	.byte	3	; F13467  [3] ENHANCER
+	.byte	4	; F13468  [4] FLANGER
+	.byte	5	; F13469  [5] PHASER
+	.byte	6	; F1346A  [6] ENSEMBLE
+	.byte	8	; F1346B  [7] GATED REVERB
+	.byte	9	; F1346C  [8] SINGLE DELAY
+	.byte	10	; F1346D  [9] MULTI TAP DELAY
+	.byte	11	; F1346E  [10] MANUAL DELAY
+	.byte	32	; F1346F  [11] DISTORTION
+	.byte	33	; F13470  [12] OVERDRIVE
+	.byte	34	; F13471  [13] FUZZ
+	.byte	35	; F13472  [14] EXCITER
+	.byte	36	; F13473  [15] COMPRESSOR
+	.byte	37	; F13474  [16] SLOW ATTACKER
+	.byte	38	; F13475  [17] NOISE GENERATOR
+	.byte	39	; F13476  [18] PARAMETRIC EQ
+	.byte	48	; F13477  [19] AUTO PAN
+	.byte	49	; F13478  [20] PITCH SHIFTER
+	.byte	50	; F13479  [21] VIBRATO
+	.byte	51	; F1347A  [22] PEDAL WAH
+	.byte	52	; F1347B  [23] AUTO WAH
+	.byte	53	; F1347C  [24] ROTARY SPEAKER
+	.byte	54	; F1347D  [25] RING MODULATOR
+	.byte	55	; F1347E  [26] HAAS EFFECT
+	.byte	56	; F1347F  [27] MIX UP
+	.byte	64	; F13480  [28] S.DELAY+CHORUS
+	.byte	65	; F13481  [29] S.DELAY+S.DELAY
+	.byte	66	; F13482  [30] S.DELAY+FLANGER
+	.byte	67	; F13483  [31] S.DELAY+VIBRATO
+	.byte	68	; F13484  [32] S.DELAY+PHASER
+	.byte	69	; F13485  [33] PEDAL WAH+DELAY
+	.byte	70	; F13486  [34] AUTO WAH+S.DELAY
+	.byte	71	; F13487  [35] PEQ+CHORUS
+	.byte	72	; F13488  [36] PEQ+S.DELAY
+	.byte	73	; F13489  [37] PEQ+FLANGER
+	.byte	74	; F1348A  [38] PEQ+VIBRATO
+	.byte	75	; F1348B  [39] PEQ+COMPRESSOR
+	.byte	96	; F1348C  [40] PEQ+COMPR+DIST
+	.byte	97	; F1348D  [41] PEQ+COMPR+OVERDR
+	.byte	98	; F1348E  [42] PEQ+DIST+DELAY
+	.byte	99	; F1348F  [43] PEQ+OVERDR+DELAY
+	.byte	0xff	; F13490  end of list
+; block 98: 44 algorithms offered, fall-back 35 `EXCITER`
+EffectAlgoToPos_Block98:
+	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x07, 0x08, 0x09, 0x0a, 0xff, 0xff, 0xff, 0xff	; F13491  algorithms 0..15
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134A1  algorithms 16..31
+	.byte	0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134B1  algorithms 32..47
+	.byte	0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134C1  algorithms 48..63
+	.byte	0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0xff, 0xff, 0xff, 0xff	; F134D1  algorithms 64..79
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134E1  algorithms 80..95
+	.byte	0x28, 0x29, 0x2a, 0x2b, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134F1  algorithms 96..111
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13501  algorithms 112..127
+EffectPosToAlgo_Block98:
+	.byte	0	; F13511  [0] NO OPERATION
+	.byte	1	; F13512  [1] CHORUS
+	.byte	2	; F13513  [2] MODULATED CHORUS
+	.byte	3	; F13514  [3] ENHANCER
+	.byte	4	; F13515  [4] FLANGER
+	.byte	5	; F13516  [5] PHASER
+	.byte	6	; F13517  [6] ENSEMBLE
+	.byte	8	; F13518  [7] GATED REVERB
+	.byte	9	; F13519  [8] SINGLE DELAY
+	.byte	10	; F1351A  [9] MULTI TAP DELAY
+	.byte	11	; F1351B  [10] MANUAL DELAY
+	.byte	32	; F1351C  [11] DISTORTION
+	.byte	33	; F1351D  [12] OVERDRIVE
+	.byte	34	; F1351E  [13] FUZZ
+	.byte	35	; F1351F  [14] EXCITER
+	.byte	36	; F13520  [15] COMPRESSOR
+	.byte	37	; F13521  [16] SLOW ATTACKER
+	.byte	38	; F13522  [17] NOISE GENERATOR
+	.byte	39	; F13523  [18] PARAMETRIC EQ
+	.byte	48	; F13524  [19] AUTO PAN
+	.byte	49	; F13525  [20] PITCH SHIFTER
+	.byte	50	; F13526  [21] VIBRATO
+	.byte	51	; F13527  [22] PEDAL WAH
+	.byte	52	; F13528  [23] AUTO WAH
+	.byte	53	; F13529  [24] ROTARY SPEAKER
+	.byte	54	; F1352A  [25] RING MODULATOR
+	.byte	55	; F1352B  [26] HAAS EFFECT
+	.byte	56	; F1352C  [27] MIX UP
+	.byte	64	; F1352D  [28] S.DELAY+CHORUS
+	.byte	65	; F1352E  [29] S.DELAY+S.DELAY
+	.byte	66	; F1352F  [30] S.DELAY+FLANGER
+	.byte	67	; F13530  [31] S.DELAY+VIBRATO
+	.byte	68	; F13531  [32] S.DELAY+PHASER
+	.byte	69	; F13532  [33] PEDAL WAH+DELAY
+	.byte	70	; F13533  [34] AUTO WAH+S.DELAY
+	.byte	71	; F13534  [35] PEQ+CHORUS
+	.byte	72	; F13535  [36] PEQ+S.DELAY
+	.byte	73	; F13536  [37] PEQ+FLANGER
+	.byte	74	; F13537  [38] PEQ+VIBRATO
+	.byte	75	; F13538  [39] PEQ+COMPRESSOR
+	.byte	96	; F13539  [40] PEQ+COMPR+DIST
+	.byte	97	; F1353A  [41] PEQ+COMPR+OVERDR
+	.byte	98	; F1353B  [42] PEQ+DIST+DELAY
+	.byte	99	; F1353C  [43] PEQ+OVERDR+DELAY
+	.byte	0xff	; F1353D  end of list
+; block 99: 56 algorithms offered, fall-back 20 `CONCERT REVERB 1`
+EffectAlgoToPos_Block99:
+	.byte	0x00, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0xff, 0x13, 0x14, 0x15, 0x16, 0xff, 0xff, 0xff, 0xff	; F1353E  algorithms 0..15
+	.byte	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0xff, 0xff, 0xff, 0xff	; F1354E  algorithms 16..31
+	.byte	0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F1355E  algorithms 32..47
+	.byte	0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F1356E  algorithms 48..63
+	.byte	0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0xff, 0xff, 0xff, 0xff	; F1357E  algorithms 64..79
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F1358E  algorithms 80..95
+	.byte	0x34, 0x35, 0x36, 0x37, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F1359E  algorithms 96..111
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F135AE  algorithms 112..127
+EffectPosToAlgo_Block99:
+	.byte	0	; F135BE  [0] NO OPERATION
+	.byte	16	; F135BF  [1] ROOM REVERB 1
+	.byte	17	; F135C0  [2] ROOM REVERB 2
+	.byte	18	; F135C1  [3] PLATE REVERB 1
+	.byte	19	; F135C2  [4] PLATE REVERB 2
+	.byte	20	; F135C3  [5] CONCERT REVERB 1
+	.byte	21	; F135C4  [6] CONCERT REVERB 2
+	.byte	22	; F135C5  [7] DARK REVERB 1
+	.byte	23	; F135C6  [8] DARK REVERB 2
+	.byte	24	; F135C7  [9] BRIGHT REVERB 1
+	.byte	25	; F135C8  [10] BRIGHT REVERB 2
+	.byte	26	; F135C9  [11] WAVE REVERB 1
+	.byte	27	; F135CA  [12] WAVE REVERB 2
+	.byte	1	; F135CB  [13] CHORUS
+	.byte	2	; F135CC  [14] MODULATED CHORUS
+	.byte	3	; F135CD  [15] ENHANCER
+	.byte	4	; F135CE  [16] FLANGER
+	.byte	5	; F135CF  [17] PHASER
+	.byte	6	; F135D0  [18] ENSEMBLE
+	.byte	8	; F135D1  [19] GATED REVERB
+	.byte	9	; F135D2  [20] SINGLE DELAY
+	.byte	10	; F135D3  [21] MULTI TAP DELAY
+	.byte	11	; F135D4  [22] MANUAL DELAY
+	.byte	32	; F135D5  [23] DISTORTION
+	.byte	33	; F135D6  [24] OVERDRIVE
+	.byte	34	; F135D7  [25] FUZZ
+	.byte	35	; F135D8  [26] EXCITER
+	.byte	36	; F135D9  [27] COMPRESSOR
+	.byte	37	; F135DA  [28] SLOW ATTACKER
+	.byte	38	; F135DB  [29] NOISE GENERATOR
+	.byte	39	; F135DC  [30] PARAMETRIC EQ
+	.byte	48	; F135DD  [31] AUTO PAN
+	.byte	49	; F135DE  [32] PITCH SHIFTER
+	.byte	50	; F135DF  [33] VIBRATO
+	.byte	51	; F135E0  [34] PEDAL WAH
+	.byte	52	; F135E1  [35] AUTO WAH
+	.byte	53	; F135E2  [36] ROTARY SPEAKER
+	.byte	54	; F135E3  [37] RING MODULATOR
+	.byte	55	; F135E4  [38] HAAS EFFECT
+	.byte	56	; F135E5  [39] MIX UP
+	.byte	64	; F135E6  [40] S.DELAY+CHORUS
+	.byte	65	; F135E7  [41] S.DELAY+S.DELAY
+	.byte	66	; F135E8  [42] S.DELAY+FLANGER
+	.byte	67	; F135E9  [43] S.DELAY+VIBRATO
+	.byte	68	; F135EA  [44] S.DELAY+PHASER
+	.byte	69	; F135EB  [45] PEDAL WAH+DELAY
+	.byte	70	; F135EC  [46] AUTO WAH+S.DELAY
+	.byte	71	; F135ED  [47] PEQ+CHORUS
+	.byte	72	; F135EE  [48] PEQ+S.DELAY
+	.byte	73	; F135EF  [49] PEQ+FLANGER
+	.byte	74	; F135F0  [50] PEQ+VIBRATO
+	.byte	75	; F135F1  [51] PEQ+COMPRESSOR
+	.byte	96	; F135F2  [52] PEQ+COMPR+DIST
+	.byte	97	; F135F3  [53] PEQ+COMPR+OVERDR
+	.byte	98	; F135F4  [54] PEQ+DIST+DELAY
+	.byte	99	; F135F5  [55] PEQ+OVERDR+DELAY
+	.byte	0xff	; F135F6  end of list
+;--------------------------------------------------------------------------
+; EffectPage_BlockIndex -- 0xF135F7, 6 bytes indexed by (0x2790).
+; Read by: sub_F0F047 (0xF0F047): when (0x2790) is non-zero, `add XBC,this /
+;   ld (0x2797),(XBC)` -- so the byte is the effect-block index (0..2, entry
+;   97 + it) the page numbered (0x2790) edits.  Entry 0 is never read (the
+;   routine returns first when (0x2790) is 0).
+;--------------------------------------------------------------------------
+EffectPage_BlockIndex:
+	.byte	0, 0, 1, 2, 0, 2	; F135F7  pages 0..5
 
 
 ; --------------------------------------------------------------------------
@@ -36522,33 +36489,35 @@ DispatchTable_F135FD:
 	.long	T_F42C70	; F13655  [22] -> 0xF42C70
 
 
-; --------------------------------------------------------------------------
-; Data_F13659 -- 27 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Contains: printable bytes |...c.......................|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F13659:
-	.byte	0x15, 0xFF, 0x00, 0x63, 0x00, 0x01, 0x05, 0x00, 0x00, 0x05, 0x0F, 0x00, 0x04, 0x01, 0x01, 0x01	; F13659  [0..15]
-	.byte	0x00, 0x00, 0x05, 0xF0, 0x04, 0x04, 0x01, 0x01, 0x01, 0x00, 0x00	; F13669  [16..26]
+;--------------------------------------------------------------------------
+; AdjustDesc_* -- 0xF13659-0xF13673: three IndexedParam_AdjustField descriptors,
+;   9 bytes apart.  Bytes +0..+7 are the descriptor that routine documents
+;   (+0 byte offset, +1 mask, +2 right shift, +3 upper bound, +4 lower bound,
+;   +5/+6 the two coarse steps, +7 XORed into (0x28B0)); +8 is 0x00 in all
+;   three and IndexedParam_AdjustField does not read it.
+; Read by: sub_F101C8 (0xF101C8) passes the first with entry 97 + (0x2797)
+;   unless (0x2797) is 2 -- byte 21 of effect blocks 97/98, 0..99, which is
+;   also why the SysEx parameter map (EffectParamNumberMap) has a byte-21
+;   parameter for blocks 97 and 98 and none for 99.  sub_F101E7 (0xF101E7)
+;   passes the second (block index 0) or the third (block index 1, when
+;   IndexedTable_GetByte(96, 0) is 0) with entry 121 (`push 0x0079`): the low
+;   and the high nibble of that entry's byte 5, each 1..4.
+; What byte 21 and entry 121's byte 5 MEAN is not decoded here; the names
+;   say where the bytes are, which the readers establish.
+;--------------------------------------------------------------------------
+AdjustDesc_EffectBlockByte21:
+	.byte	21, 0xff, 0, 99, 0, 1, 5, 0x00	; F13659  offset, mask, shift, upper, lower, step, step, xor
+	.byte	0x00	; F13661  not read
+AdjustDesc_Entry121Byte5Low:
+	.byte	5, 0x0f, 0, 4, 1, 1, 1, 0x00	; F13662  offset, mask, shift, upper, lower, step, step, xor
+	.byte	0x00	; F1366A  not read
+AdjustDesc_Entry121Byte5High:
+	.byte	5, 0xf0, 4, 4, 1, 1, 1, 0x00	; F1366B  offset, mask, shift, upper, lower, step, step, xor
+	.byte	0x00	; F13673  not read
 
 
 ; --------------------------------------------------------------------------
-; DataPtrTable_F13674 -- 128 32-bit words, every one an address in
+; EffectDefaultParams -- 128 32-bit words, every one an address in
 ;                        0x00F00000-0x00F7FFFF, i.e. inside this image.  57
 ;                        distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                        classes it DEREF.
@@ -36569,173 +36538,242 @@ Data_F13659:
 ;           notes/prom_b_f0ea9f_layout.py --null-ptr`), and the STRIDED rule
 ;           fires zero times over the 33 proven dispatch tables of this
 ;           image (`--null-stride`).
-; Unknown: what indexes it, and what the entries mean.
+; ⚠ ANSWERED 2026-09-25 (lane promb).  This header used to end `Unknown: what
+;    indexes it, and what the entries mean.`  DspEffect_SetAlgorithm (0xF11365)
+;    indexes it with 4 * the ALGORITHM number (`mul BC,E` / `add XBC,this` at
+;    0xF113F6-0xF113FC; sub_F1162E does the same at 0xF11646), and an entry
+;    points at that algorithm's DEFAULT PARAMETER record, EffectDefaults_* --
+;    layout and checks in that block's header.  The 72 slots that share one
+;    target are the 72 `----------` placeholder algorithms, as in
+;    EffectParamDescriptors_F12F24.  Renamed EffectDefaultParams.
 ; --------------------------------------------------------------------------
-DataPtrTable_F13674:
-	.long	Data_F139AB + 0xBA	; F13674  [0] -> 0xF13A65
-	.long	Data_F139AB + 0x4A	; F13678  [1] -> 0xF139F5
-	.long	Data_F139AB + 0x56	; F1367C  [2] -> 0xF13A01
-	.long	Data_F139AB + 0x64	; F13680  [3] -> 0xF13A0F
-	.long	Data_F139AB + 0x74	; F13684  [4] -> 0xF13A1F
-	.long	Data_F139AB + 0x83	; F13688  [5] -> 0xF13A2E
-	.long	Data_F139AB + 0x12E	; F1368C  [6] -> 0xF13AD9
-	.long	Data_F139AB	; F13690  [7] -> Data_F139AB
-	.long	Data_F139AB + 0x112	; F13694  [8] -> 0xF13ABD
-	.long	Data_F139AB + 0x156	; F13698  [9] -> 0xF13B01
-	.long	Data_F139AB + 0x166	; F1369C  [10] -> 0xF13B11
-	.long	Data_F139AB + 0x17D	; F136A0  [11] -> 0xF13B28
-	.long	Data_F139AB	; F136A4  [12] -> Data_F139AB
-	.long	Data_F139AB	; F136A8  [13] -> Data_F139AB
-	.long	Data_F139AB	; F136AC  [14] -> Data_F139AB
-	.long	Data_F139AB	; F136B0  [15] -> Data_F139AB
-	.long	Data_F139AB + 0x18E	; F136B4  [16] -> 0xF13B39
-	.long	Data_F139AB + 0x19A	; F136B8  [17] -> 0xF13B45
-	.long	Data_F139AB + 0x1A6	; F136BC  [18] -> 0xF13B51
-	.long	Data_F139AB + 0x1B2	; F136C0  [19] -> 0xF13B5D
-	.long	Data_F139AB + 0x1BE	; F136C4  [20] -> 0xF13B69
-	.long	Data_F139AB + 0x1CA	; F136C8  [21] -> 0xF13B75
-	.long	Data_F139AB + 0x1D6	; F136CC  [22] -> 0xF13B81
-	.long	Data_F139AB + 0x1E2	; F136D0  [23] -> 0xF13B8D
-	.long	Data_F139AB + 0x1EE	; F136D4  [24] -> 0xF13B99
-	.long	Data_F139AB + 0x1FA	; F136D8  [25] -> 0xF13BA5
-	.long	Data_F139AB + 0x206	; F136DC  [26] -> 0xF13BB1
-	.long	Data_F139AB + 0x212	; F136E0  [27] -> 0xF13BBD
-	.long	Data_F139AB	; F136E4  [28] -> Data_F139AB
-	.long	Data_F139AB	; F136E8  [29] -> Data_F139AB
-	.long	Data_F139AB	; F136EC  [30] -> Data_F139AB
-	.long	Data_F139AB	; F136F0  [31] -> Data_F139AB
-	.long	Data_F139AB + 0x3	; F136F4  [32] -> 0xF139AE
-	.long	Data_F139AB + 0xF	; F136F8  [33] -> 0xF139BA
-	.long	Data_F139AB + 0x1B	; F136FC  [34] -> 0xF139C6
-	.long	Data_F139AB + 0x27	; F13700  [35] -> 0xF139D2
-	.long	Data_F139AB + 0x13A	; F13704  [36] -> 0xF13AE5
-	.long	Data_F139AB + 0x106	; F13708  [37] -> 0xF13AB1
-	.long	Data_F139AB + 0xFE	; F1370C  [38] -> 0xF13AA9
-	.long	Data_F139AB + 0x36	; F13710  [39] -> 0xF139E1
-	.long	Data_F139AB	; F13714  [40] -> Data_F139AB
-	.long	Data_F139AB	; F13718  [41] -> Data_F139AB
-	.long	Data_F139AB	; F1371C  [42] -> Data_F139AB
-	.long	Data_F139AB	; F13720  [43] -> Data_F139AB
-	.long	Data_F139AB	; F13724  [44] -> Data_F139AB
-	.long	Data_F139AB	; F13728  [45] -> Data_F139AB
-	.long	Data_F139AB	; F1372C  [46] -> Data_F139AB
-	.long	Data_F139AB	; F13730  [47] -> Data_F139AB
-	.long	Data_F139AB + 0x92	; F13734  [48] -> 0xF13A3D
-	.long	Data_F139AB + 0x9F	; F13738  [49] -> 0xF13A4A
-	.long	Data_F139AB + 0xAD	; F1373C  [50] -> 0xF13A58
-	.long	Data_F139AB + 0xC2	; F13740  [51] -> 0xF13A6D
-	.long	Data_F139AB + 0xCF	; F13744  [52] -> 0xF13A7A
-	.long	Data_F139AB + 0xDB	; F13748  [53] -> 0xF13A86
-	.long	Data_F139AB + 0xF2	; F1374C  [54] -> 0xF13A9D
-	.long	Data_F139AB + 0x11F	; F13750  [55] -> 0xF13ACA
-	.long	Data_F139AB + 0x147	; F13754  [56] -> 0xF13AF2
-	.long	Data_F139AB	; F13758  [57] -> Data_F139AB
-	.long	Data_F139AB	; F1375C  [58] -> Data_F139AB
-	.long	Data_F139AB	; F13760  [59] -> Data_F139AB
-	.long	Data_F139AB	; F13764  [60] -> Data_F139AB
-	.long	Data_F139AB	; F13768  [61] -> Data_F139AB
-	.long	Data_F139AB	; F1376C  [62] -> Data_F139AB
-	.long	Data_F139AB	; F13770  [63] -> Data_F139AB
-	.long	Data_F139AB + 0x21E	; F13774  [64] -> 0xF13BC9
-	.long	Data_F139AB + 0x231	; F13778  [65] -> 0xF13BDC
-	.long	Data_F139AB + 0x247	; F1377C  [66] -> 0xF13BF2
-	.long	Data_F139AB + 0x25D	; F13780  [67] -> 0xF13C08
-	.long	Data_F139AB + 0x271	; F13784  [68] -> 0xF13C1C
-	.long	Data_F139AB + 0x287	; F13788  [69] -> 0xF13C32
-	.long	Data_F139AB + 0x29B	; F1378C  [70] -> 0xF13C46
-	.long	Data_F139AB + 0x2AE	; F13790  [71] -> 0xF13C59
-	.long	Data_F139AB + 0x2BE	; F13794  [72] -> 0xF13C69
-	.long	Data_F139AB + 0x2D1	; F13798  [73] -> 0xF13C7C
-	.long	Data_F139AB + 0x2E4	; F1379C  [74] -> 0xF13C8F
-	.long	Data_F139AB + 0x2F5	; F137A0  [75] -> 0xF13CA0
-	.long	Data_F139AB	; F137A4  [76] -> Data_F139AB
-	.long	Data_F139AB	; F137A8  [77] -> Data_F139AB
-	.long	Data_F139AB	; F137AC  [78] -> Data_F139AB
-	.long	Data_F139AB	; F137B0  [79] -> Data_F139AB
-	.long	Data_F139AB	; F137B4  [80] -> Data_F139AB
-	.long	Data_F139AB	; F137B8  [81] -> Data_F139AB
-	.long	Data_F139AB	; F137BC  [82] -> Data_F139AB
-	.long	Data_F139AB	; F137C0  [83] -> Data_F139AB
-	.long	Data_F139AB	; F137C4  [84] -> Data_F139AB
-	.long	Data_F139AB	; F137C8  [85] -> Data_F139AB
-	.long	Data_F139AB	; F137CC  [86] -> Data_F139AB
-	.long	Data_F139AB	; F137D0  [87] -> Data_F139AB
-	.long	Data_F139AB	; F137D4  [88] -> Data_F139AB
-	.long	Data_F139AB	; F137D8  [89] -> Data_F139AB
-	.long	Data_F139AB	; F137DC  [90] -> Data_F139AB
-	.long	Data_F139AB	; F137E0  [91] -> Data_F139AB
-	.long	Data_F139AB	; F137E4  [92] -> Data_F139AB
-	.long	Data_F139AB	; F137E8  [93] -> Data_F139AB
-	.long	Data_F139AB	; F137EC  [94] -> Data_F139AB
-	.long	Data_F139AB	; F137F0  [95] -> Data_F139AB
-	.long	Data_F139AB + 0x305	; F137F4  [96] -> 0xF13CB0
-	.long	Data_F139AB + 0x318	; F137F8  [97] -> 0xF13CC3
-	.long	Data_F139AB + 0x329	; F137FC  [98] -> 0xF13CD4
-	.long	Data_F139AB + 0x33F	; F13800  [99] -> 0xF13CEA
-	.long	Data_F139AB	; F13804  [100] -> Data_F139AB
-	.long	Data_F139AB	; F13808  [101] -> Data_F139AB
-	.long	Data_F139AB	; F1380C  [102] -> Data_F139AB
-	.long	Data_F139AB	; F13810  [103] -> Data_F139AB
-	.long	Data_F139AB	; F13814  [104] -> Data_F139AB
-	.long	Data_F139AB	; F13818  [105] -> Data_F139AB
-	.long	Data_F139AB	; F1381C  [106] -> Data_F139AB
-	.long	Data_F139AB	; F13820  [107] -> Data_F139AB
-	.long	Data_F139AB	; F13824  [108] -> Data_F139AB
-	.long	Data_F139AB	; F13828  [109] -> Data_F139AB
-	.long	Data_F139AB	; F1382C  [110] -> Data_F139AB
-	.long	Data_F139AB	; F13830  [111] -> Data_F139AB
-	.long	Data_F139AB	; F13834  [112] -> Data_F139AB
-	.long	Data_F139AB	; F13838  [113] -> Data_F139AB
-	.long	Data_F139AB	; F1383C  [114] -> Data_F139AB
-	.long	Data_F139AB	; F13840  [115] -> Data_F139AB
-	.long	Data_F139AB	; F13844  [116] -> Data_F139AB
-	.long	Data_F139AB	; F13848  [117] -> Data_F139AB
-	.long	Data_F139AB	; F1384C  [118] -> Data_F139AB
-	.long	Data_F139AB	; F13850  [119] -> Data_F139AB
-	.long	Data_F139AB	; F13854  [120] -> Data_F139AB
-	.long	Data_F139AB	; F13858  [121] -> Data_F139AB
-	.long	Data_F139AB	; F1385C  [122] -> Data_F139AB
-	.long	Data_F139AB	; F13860  [123] -> Data_F139AB
-	.long	Data_F139AB	; F13864  [124] -> Data_F139AB
-	.long	Data_F139AB	; F13868  [125] -> Data_F139AB
-	.long	Data_F139AB	; F1386C  [126] -> Data_F139AB
-	.long	Data_F139AB	; F13870  [127] -> Data_F139AB
+EffectDefaultParams:
+	.long	EffectDefaults_NoOperation	; F13674  [0] -> 0xF13A65  NO OPERATION
+	.long	EffectDefaults_Chorus	; F13678  [1] -> 0xF139F5  CHORUS
+	.long	EffectDefaults_ModulatedChorus	; F1367C  [2] -> 0xF13A01  MODULATED CHORUS
+	.long	EffectDefaults_Enhancer	; F13680  [3] -> 0xF13A0F  ENHANCER
+	.long	EffectDefaults_Flanger	; F13684  [4] -> 0xF13A1F  FLANGER
+	.long	EffectDefaults_Phaser	; F13688  [5] -> 0xF13A2E  PHASER
+	.long	EffectDefaults_Ensemble	; F1368C  [6] -> 0xF13AD9  ENSEMBLE
+	.long	EffectDefaults_Unused	; F13690  [7] -> 0xF139AB  ----------
+	.long	EffectDefaults_GatedReverb	; F13694  [8] -> 0xF13ABD  GATED REVERB
+	.long	EffectDefaults_SingleDelay	; F13698  [9] -> 0xF13B01  SINGLE DELAY
+	.long	EffectDefaults_MultiTapDelay	; F1369C  [10] -> 0xF13B11  MULTI TAP DELAY
+	.long	EffectDefaults_ManualDelay	; F136A0  [11] -> 0xF13B28  MANUAL DELAY
+	.long	EffectDefaults_Unused	; F136A4  [12] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F136A8  [13] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F136AC  [14] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F136B0  [15] -> 0xF139AB  ----------
+	.long	EffectDefaults_RoomReverb1	; F136B4  [16] -> 0xF13B39  ROOM REVERB 1
+	.long	EffectDefaults_RoomReverb2	; F136B8  [17] -> 0xF13B45  ROOM REVERB 2
+	.long	EffectDefaults_PlateReverb1	; F136BC  [18] -> 0xF13B51  PLATE REVERB 1
+	.long	EffectDefaults_PlateReverb2	; F136C0  [19] -> 0xF13B5D  PLATE REVERB 2
+	.long	EffectDefaults_ConcertReverb1	; F136C4  [20] -> 0xF13B69  CONCERT REVERB 1
+	.long	EffectDefaults_ConcertReverb2	; F136C8  [21] -> 0xF13B75  CONCERT REVERB 2
+	.long	EffectDefaults_DarkReverb1	; F136CC  [22] -> 0xF13B81  DARK REVERB 1
+	.long	EffectDefaults_DarkReverb2	; F136D0  [23] -> 0xF13B8D  DARK REVERB 2
+	.long	EffectDefaults_BrightReverb1	; F136D4  [24] -> 0xF13B99  BRIGHT REVERB 1
+	.long	EffectDefaults_BrightReverb2	; F136D8  [25] -> 0xF13BA5  BRIGHT REVERB 2
+	.long	EffectDefaults_WaveReverb1	; F136DC  [26] -> 0xF13BB1  WAVE REVERB 1
+	.long	EffectDefaults_WaveReverb2	; F136E0  [27] -> 0xF13BBD  WAVE REVERB 2
+	.long	EffectDefaults_Unused	; F136E4  [28] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F136E8  [29] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F136EC  [30] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F136F0  [31] -> 0xF139AB  ----------
+	.long	EffectDefaults_Distortion	; F136F4  [32] -> 0xF139AE  DISTORTION
+	.long	EffectDefaults_Overdrive	; F136F8  [33] -> 0xF139BA  OVERDRIVE
+	.long	EffectDefaults_Fuzz	; F136FC  [34] -> 0xF139C6  FUZZ
+	.long	EffectDefaults_Exciter	; F13700  [35] -> 0xF139D2  EXCITER
+	.long	EffectDefaults_Compressor	; F13704  [36] -> 0xF13AE5  COMPRESSOR
+	.long	EffectDefaults_SlowAttacker	; F13708  [37] -> 0xF13AB1  SLOW ATTACKER
+	.long	EffectDefaults_NoiseGenerator	; F1370C  [38] -> 0xF13AA9  NOISE GENERATOR
+	.long	EffectDefaults_ParametricEq	; F13710  [39] -> 0xF139E1  PARAMETRIC EQ
+	.long	EffectDefaults_Unused	; F13714  [40] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13718  [41] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1371C  [42] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13720  [43] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13724  [44] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13728  [45] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1372C  [46] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13730  [47] -> 0xF139AB  ----------
+	.long	EffectDefaults_AutoPan	; F13734  [48] -> 0xF13A3D  AUTO PAN
+	.long	EffectDefaults_PitchShifter	; F13738  [49] -> 0xF13A4A  PITCH SHIFTER
+	.long	EffectDefaults_Vibrato	; F1373C  [50] -> 0xF13A58  VIBRATO
+	.long	EffectDefaults_PedalWah	; F13740  [51] -> 0xF13A6D  PEDAL WAH
+	.long	EffectDefaults_AutoWah	; F13744  [52] -> 0xF13A7A  AUTO WAH
+	.long	EffectDefaults_RotarySpeaker	; F13748  [53] -> 0xF13A86  ROTARY SPEAKER
+	.long	EffectDefaults_RingModulator	; F1374C  [54] -> 0xF13A9D  RING MODULATOR
+	.long	EffectDefaults_HaasEffect	; F13750  [55] -> 0xF13ACA  HAAS EFFECT
+	.long	EffectDefaults_MixUp	; F13754  [56] -> 0xF13AF2  MIX UP
+	.long	EffectDefaults_Unused	; F13758  [57] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1375C  [58] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13760  [59] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13764  [60] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13768  [61] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1376C  [62] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13770  [63] -> 0xF139AB  ----------
+	.long	EffectDefaults_SDelayChorus	; F13774  [64] -> 0xF13BC9  S.DELAY+CHORUS
+	.long	EffectDefaults_SDelaySDelay	; F13778  [65] -> 0xF13BDC  S.DELAY+S.DELAY
+	.long	EffectDefaults_SDelayFlanger	; F1377C  [66] -> 0xF13BF2  S.DELAY+FLANGER
+	.long	EffectDefaults_SDelayVibrato	; F13780  [67] -> 0xF13C08  S.DELAY+VIBRATO
+	.long	EffectDefaults_SDelayPhaser	; F13784  [68] -> 0xF13C1C  S.DELAY+PHASER
+	.long	EffectDefaults_PedalWahDelay	; F13788  [69] -> 0xF13C32  PEDAL WAH+DELAY
+	.long	EffectDefaults_AutoWahSDelay	; F1378C  [70] -> 0xF13C46  AUTO WAH+S.DELAY
+	.long	EffectDefaults_PeqChorus	; F13790  [71] -> 0xF13C59  PEQ+CHORUS
+	.long	EffectDefaults_PeqSDelay	; F13794  [72] -> 0xF13C69  PEQ+S.DELAY
+	.long	EffectDefaults_PeqFlanger	; F13798  [73] -> 0xF13C7C  PEQ+FLANGER
+	.long	EffectDefaults_PeqVibrato	; F1379C  [74] -> 0xF13C8F  PEQ+VIBRATO
+	.long	EffectDefaults_PeqCompressor	; F137A0  [75] -> 0xF13CA0  PEQ+COMPRESSOR
+	.long	EffectDefaults_Unused	; F137A4  [76] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137A8  [77] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137AC  [78] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137B0  [79] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137B4  [80] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137B8  [81] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137BC  [82] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137C0  [83] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137C4  [84] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137C8  [85] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137CC  [86] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137D0  [87] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137D4  [88] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137D8  [89] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137DC  [90] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137E0  [91] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137E4  [92] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137E8  [93] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137EC  [94] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F137F0  [95] -> 0xF139AB  ----------
+	.long	EffectDefaults_PeqComprDist	; F137F4  [96] -> 0xF13CB0  PEQ+COMPR+DIST
+	.long	EffectDefaults_PeqComprOverdr	; F137F8  [97] -> 0xF13CC3  PEQ+COMPR+OVERDR
+	.long	EffectDefaults_PeqDistDelay	; F137FC  [98] -> 0xF13CD4  PEQ+DIST+DELAY
+	.long	EffectDefaults_PeqOverdrDelay	; F13800  [99] -> 0xF13CEA  PEQ+OVERDR+DELAY
+	.long	EffectDefaults_Unused	; F13804  [100] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13808  [101] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1380C  [102] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13810  [103] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13814  [104] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13818  [105] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1381C  [106] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13820  [107] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13824  [108] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13828  [109] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1382C  [110] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13830  [111] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13834  [112] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13838  [113] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1383C  [114] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13840  [115] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13844  [116] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13848  [117] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1384C  [118] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13850  [119] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13854  [120] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13858  [121] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1385C  [122] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13860  [123] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13864  [124] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13868  [125] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F1386C  [126] -> 0xF139AB  ----------
+	.long	EffectDefaults_Unused	; F13870  [127] -> 0xF139AB  ----------
 
 
-; --------------------------------------------------------------------------
-; Data_F13874 -- 219 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |`..a..a..a..a..a..a..a..a..a..a..a..a..a..a..a.
-;           .a..a..a..a..a..a..a..a..b..b..b..b..b..b..b..b..b..b..b..b..b..
-;           b..b..b..b..............b..b..c..c..c..c..c..c..c..c..c..c..c..c
-;           ..c..c..c..c..c..c..c..c..c..c..y...........|
-; Read by: 2 byte-scan hits: 2 instruction operands -- `add XIX,0x00f13874`
-;          at 0xF11C47 (operand field 2 bytes in); `add XIX,0x00f13874` at
-;          0xF1221A (operand field 2 bytes in)
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F13874:
-	.byte	0x60, 0x00, 0x01, 0x61, 0x00, 0xFF, 0x61, 0x01, 0xFF, 0x61, 0x02, 0xFF, 0x61, 0x03, 0xFF, 0x61	; F13874  [0..15]
-	.byte	0x04, 0xFF, 0x61, 0x05, 0xFF, 0x61, 0x06, 0xFF, 0x61, 0x07, 0xFF, 0x61, 0x08, 0xFF, 0x61, 0x09	; F13884  [16..31]
-	.byte	0xFF, 0x61, 0x0A, 0xFF, 0x61, 0x0B, 0xFF, 0x61, 0x0C, 0xFF, 0x61, 0x0D, 0xFF, 0x61, 0x0E, 0xFF	; F13894  [32..47]
-	.byte	0x61, 0x0F, 0xFF, 0x61, 0x10, 0xFF, 0x61, 0x11, 0xFF, 0x61, 0x12, 0xFF, 0x61, 0x13, 0xFF, 0x61	; F138A4  [48..63]
-	.byte	0x14, 0xFF, 0x61, 0x15, 0xFF, 0x61, 0x16, 0xFF, 0x62, 0x00, 0xFF, 0x62, 0x01, 0xFF, 0x62, 0x02	; F138B4  [64..79]
-	.byte	0xFF, 0x62, 0x03, 0xFF, 0x62, 0x04, 0xFF, 0x62, 0x05, 0xFF, 0x62, 0x06, 0xFF, 0x62, 0x07, 0xFF	; F138C4  [80..95]
-	.byte	0x62, 0x08, 0xFF, 0x62, 0x09, 0xFF, 0x62, 0x0A, 0xFF, 0x62, 0x0B, 0xFF, 0x62, 0x0C, 0xFF, 0x62	; F138D4  [96..111]
-	.byte	0x0D, 0xFF, 0x62, 0x0E, 0xFF, 0x62, 0x0F, 0xFF, 0x62, 0x10, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F138E4  [112..127]
-	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x62, 0x15, 0xFF, 0x62, 0x16, 0xFF, 0x63, 0x00, 0xFF	; F138F4  [128..143]
-	.byte	0x63, 0x01, 0xFF, 0x63, 0x02, 0xFF, 0x63, 0x03, 0xFF, 0x63, 0x04, 0xFF, 0x63, 0x05, 0xFF, 0x63	; F13904  [144..159]
-	.byte	0x06, 0xFF, 0x63, 0x07, 0xFF, 0x63, 0x08, 0xFF, 0x63, 0x09, 0xFF, 0x63, 0x0A, 0xFF, 0x63, 0x0B	; F13914  [160..175]
-	.byte	0xFF, 0x63, 0x0C, 0xFF, 0x63, 0x0D, 0xFF, 0x63, 0x0E, 0xFF, 0x63, 0x0F, 0xFF, 0x63, 0x10, 0xFF	; F13924  [176..191]
-	.byte	0x63, 0x11, 0xFF, 0x63, 0x12, 0xFF, 0x63, 0x13, 0xFF, 0x63, 0x14, 0xFF, 0x63, 0x16, 0xFF, 0x79	; F13934  [192..207]
-	.byte	0x05, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x05, 0x7F, 0x00, 0x07, 0x7F	; F13944  [208..218]
+;--------------------------------------------------------------------------
+; EffectParamNumberMap -- 0xF13874-0xF1394E, 73 records of 3 bytes, indexed by
+;   an effect PARAMETER NUMBER n (0..72):
+;     +0  IndexedTable entry (0xFF = no such parameter)
+;     +1  byte offset in that entry's object
+;     +2  mask
+; Read by: DspParam_WriteByNumber = DspParam_WriteByNumber (0xF11C30, thunk T_F434A0) and
+;   DspParam_ReadByNumber = DspParam_ReadByNumber (0xF1220B, thunk T_F434A4), both with
+;   `ldw bc,3 / mul XBC,(XIZ+8) / add XIX,this`; the writer refuses n > 0x48.
+;   prom_a calls the two thunks at 0xFB3AFD and 0xFB4A41 with n taken from
+;   IndexMap_F4FA9B + 1 (0xF4FA9C) -- the dense index that map gives the
+;   result of prom_a sub_FB62D3.
+; Layout, checked by python3 notes/promb-2026-09-25/dsp_effect_tables.py:
+;   n = 0 entry 96 byte 0 bit 0; n = 1-23 block 97 bytes 0-22; n = 24-46
+;   block 98 bytes 0-22 with 17-20 ABSENT (exactly the four bytes
+;   DspEffect_SetAlgorithm does not write for block 98); n = 47-68 block 99
+;   bytes 0-20 and 22 (no byte 21, as AdjustDesc_EffectBlockByte21's reader
+;   skips block 99); n = 69 entry 121 byte 5; n = 70 absent in the table --
+;   the reader special-cases it from entries 6 and 32; n = 71/72 entry 0
+;   bytes 5 and 7, masked 0x7F.
+; ⚠ REPLACES `EffectParamNumberMap` ("Unknown: everything about it except its bytes").
+;--------------------------------------------------------------------------
+EffectParamNumberMap:
+	.byte	96, 0, 0x01	; F13874  n=0  entry 96 byte 0, mask 0x01
+	.byte	97, 0, 0xff	; F13877  n=1  block 97 byte 0
+	.byte	97, 1, 0xff	; F1387A  n=2  block 97 byte 1
+	.byte	97, 2, 0xff	; F1387D  n=3  block 97 byte 2
+	.byte	97, 3, 0xff	; F13880  n=4  block 97 byte 3
+	.byte	97, 4, 0xff	; F13883  n=5  block 97 byte 4
+	.byte	97, 5, 0xff	; F13886  n=6  block 97 byte 5
+	.byte	97, 6, 0xff	; F13889  n=7  block 97 byte 6
+	.byte	97, 7, 0xff	; F1388C  n=8  block 97 byte 7
+	.byte	97, 8, 0xff	; F1388F  n=9  block 97 byte 8
+	.byte	97, 9, 0xff	; F13892  n=10  block 97 byte 9
+	.byte	97, 10, 0xff	; F13895  n=11  block 97 byte 10
+	.byte	97, 11, 0xff	; F13898  n=12  block 97 byte 11
+	.byte	97, 12, 0xff	; F1389B  n=13  block 97 byte 12
+	.byte	97, 13, 0xff	; F1389E  n=14  block 97 byte 13
+	.byte	97, 14, 0xff	; F138A1  n=15  block 97 byte 14
+	.byte	97, 15, 0xff	; F138A4  n=16  block 97 byte 15
+	.byte	97, 16, 0xff	; F138A7  n=17  block 97 byte 16
+	.byte	97, 17, 0xff	; F138AA  n=18  block 97 byte 17
+	.byte	97, 18, 0xff	; F138AD  n=19  block 97 byte 18
+	.byte	97, 19, 0xff	; F138B0  n=20  block 97 byte 19
+	.byte	97, 20, 0xff	; F138B3  n=21  block 97 byte 20
+	.byte	97, 21, 0xff	; F138B6  n=22  block 97 byte 21
+	.byte	97, 22, 0xff	; F138B9  n=23  block 97 byte 22
+	.byte	98, 0, 0xff	; F138BC  n=24  block 98 byte 0
+	.byte	98, 1, 0xff	; F138BF  n=25  block 98 byte 1
+	.byte	98, 2, 0xff	; F138C2  n=26  block 98 byte 2
+	.byte	98, 3, 0xff	; F138C5  n=27  block 98 byte 3
+	.byte	98, 4, 0xff	; F138C8  n=28  block 98 byte 4
+	.byte	98, 5, 0xff	; F138CB  n=29  block 98 byte 5
+	.byte	98, 6, 0xff	; F138CE  n=30  block 98 byte 6
+	.byte	98, 7, 0xff	; F138D1  n=31  block 98 byte 7
+	.byte	98, 8, 0xff	; F138D4  n=32  block 98 byte 8
+	.byte	98, 9, 0xff	; F138D7  n=33  block 98 byte 9
+	.byte	98, 10, 0xff	; F138DA  n=34  block 98 byte 10
+	.byte	98, 11, 0xff	; F138DD  n=35  block 98 byte 11
+	.byte	98, 12, 0xff	; F138E0  n=36  block 98 byte 12
+	.byte	98, 13, 0xff	; F138E3  n=37  block 98 byte 13
+	.byte	98, 14, 0xff	; F138E6  n=38  block 98 byte 14
+	.byte	98, 15, 0xff	; F138E9  n=39  block 98 byte 15
+	.byte	98, 16, 0xff	; F138EC  n=40  block 98 byte 16
+	.byte	0xff, 0xff, 0xff	; F138EF  n=41  (none)
+	.byte	0xff, 0xff, 0xff	; F138F2  n=42  (none)
+	.byte	0xff, 0xff, 0xff	; F138F5  n=43  (none)
+	.byte	0xff, 0xff, 0xff	; F138F8  n=44  (none)
+	.byte	98, 21, 0xff	; F138FB  n=45  block 98 byte 21
+	.byte	98, 22, 0xff	; F138FE  n=46  block 98 byte 22
+	.byte	99, 0, 0xff	; F13901  n=47  block 99 byte 0
+	.byte	99, 1, 0xff	; F13904  n=48  block 99 byte 1
+	.byte	99, 2, 0xff	; F13907  n=49  block 99 byte 2
+	.byte	99, 3, 0xff	; F1390A  n=50  block 99 byte 3
+	.byte	99, 4, 0xff	; F1390D  n=51  block 99 byte 4
+	.byte	99, 5, 0xff	; F13910  n=52  block 99 byte 5
+	.byte	99, 6, 0xff	; F13913  n=53  block 99 byte 6
+	.byte	99, 7, 0xff	; F13916  n=54  block 99 byte 7
+	.byte	99, 8, 0xff	; F13919  n=55  block 99 byte 8
+	.byte	99, 9, 0xff	; F1391C  n=56  block 99 byte 9
+	.byte	99, 10, 0xff	; F1391F  n=57  block 99 byte 10
+	.byte	99, 11, 0xff	; F13922  n=58  block 99 byte 11
+	.byte	99, 12, 0xff	; F13925  n=59  block 99 byte 12
+	.byte	99, 13, 0xff	; F13928  n=60  block 99 byte 13
+	.byte	99, 14, 0xff	; F1392B  n=61  block 99 byte 14
+	.byte	99, 15, 0xff	; F1392E  n=62  block 99 byte 15
+	.byte	99, 16, 0xff	; F13931  n=63  block 99 byte 16
+	.byte	99, 17, 0xff	; F13934  n=64  block 99 byte 17
+	.byte	99, 18, 0xff	; F13937  n=65  block 99 byte 18
+	.byte	99, 19, 0xff	; F1393A  n=66  block 99 byte 19
+	.byte	99, 20, 0xff	; F1393D  n=67  block 99 byte 20
+	.byte	99, 22, 0xff	; F13940  n=68  block 99 byte 22
+	.byte	121, 5, 0xff	; F13943  n=69  entry 121 byte 5
+	.byte	0xff, 0xff, 0xff	; F13946  n=70  (none)
+	.byte	0, 5, 0x7f	; F13949  n=71  entry 0 byte 5, mask 0x7F
+	.byte	0, 7, 0x7f	; F1394C  n=72  entry 0 byte 7, mask 0x7F
 
 
 ; --------------------------------------------------------------------------
@@ -36798,94 +36836,792 @@ DispatchTable_F1394F:
 
 
 ; --------------------------------------------------------------------------
-; Data_F139AB -- 905 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |......X.cPPT......X.cZNT......X.cFRT......X.c.Y
-;           ..FT......X.XY.Z.Z.[.\.]T.....X.c...T.....X.c(.<..T.....X.c2cc..
-;           ..T.....X.cP.<.Z.T.....X.cT.@2Z.T.....X.cP.Z.T.....X.c....T.....
-;           .X.c.(Z.T.....X.T.....X.c..c.c.....X.c..cc.....X.c.K@-
-;           ...<(.HOT.......X.c@Z.T.....X.......X.c.1'T.....X.c..(.2.....X.c
-;           P...ccT.....X.c...T.....X.c..1.T.....X.c2.TQZ.T.....X.c^.^....T.
-;           ....X.c...... ...<c..T.....X.c2^.^....T.....X....2^.....X....2Z.
-;           ....X.#-.2F.....X.)-.2F.....X.#..2F.....X.'<.PF.......--
-;           .2F.......7Z.2F.....`.)..2F.....`.-..2F.....X.--.2F.....T.7-
-;           .2F.....X..,.,...2(..T.....X.........d.d...T.....X..,.,...PP.<2Z
-;           .T.....X..,.,...c(.Z.T.....X..,.,...PT.@2Z.T.....X.c..c..,.,...c
-;           .....X.c..c.,.,...c.....X..Zd\2...T.....X..Zd\.,.,...T.....X..Zd
-;           \PP.<2Z.T.....X..Zd\c(.Z.T.....X..Zd\.U1.T.....X..Zd\.U1.ATT....
-;           ..X.d\.U1.P\T......X..Zd\PL.,.,...T......X..Zd\PZ.,.,...T.....
-;           @A@@  ...`0P......`...  @.@@  ...`0P......`.....|
-; Read by: 72 byte-scan hits: 72 dispatch-table entries
-;          (DispatchTable_F13674[7] DispatchTable_F13674[12]
-;          DispatchTable_F13674[13] DispatchTable_F13674[14]
-;          DispatchTable_F13674[15] DispatchTable_F13674[28] +66 more)
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; EffectDefaults_* -- 0xF139AB-0xF13CFF: the DEFAULT PARAMETER VALUES of each
+;   effect algorithm, 57 records, one per distinct entry of
+;   EffectDefaultParams (above).  The 56 named records tile 0xF139AE-0xF13CFF
+;   exactly behind a 3-byte 0xFF placeholder.  Record:
+;     +0  the selected-parameter index: 0xFF or the +3 mark of one of the
+;         algorithm's EffectDesc_* groups (checked for all 56)
+;     +1  four bytes, written to fields 17..20 of the block (not for block 98)
+;     +5  the parameter values, one byte per slot from slot 1, then 0xFF 0xFF
+; Read by: DspEffect_SetAlgorithm = DspEffect_SetAlgorithm (0xF11365), with E = the
+;   algorithm: `mul BC,E` by 4 / `add XBC,EffectDefaultParams` / `ld XBC,(XBC)`
+;   at 0xF113F6.  It stores +0 to byte 22 of the block (the byte
+;   DspEffect_PaintParamEditor compares with each group's +3 mark), copies
+;   +1..+4 to bytes 17..20 unless the block is 98, then copies values into
+;   bytes 1..16 until the first 0xFF and zero-fills the rest; every byte it
+;   writes is also queued with T_Queue2E00_Append4(block, byte, value, 0xFF).
+; The values read correctly against EffectDesc_* and EffectValueRanges: CHORUS
+;   gets WET 99, DEPTH 30, LFO SPEED 6, WAVEFORM 0, VOLUME 84; the PARAMETRIC
+;   EQ's six bands are one 16-bit word each (Fc, Q and G share a slot:
+;   sub_F10985, the type-2/3 editor, does `ld BC,(XIX)` and takes Fc from bits
+;   6..10 with `and BC,0x07C0 / srl 6,BC` at 0xF109F3).  Some
+;   records carry values past the descriptor's last slot (DISTORTION /
+;   OVERDRIVE / FUZZ end 00 / 01 / 02) -- bytes no editor page shows.
+; Re-derived by python3 notes/promb-2026-09-25/dsp_effect_tables.py.
+; ⚠ REPLACES the defaults part of `Data_F139AB`, whose header said "Unknown:
+;   everything about it except its bytes".
 ; --------------------------------------------------------------------------
-Data_F139AB:
-	.byte	0xFF, 0xFF, 0xFF, 0x01, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x50, 0x50, 0x54, 0x00, 0xFF, 0xFF, 0x01	; F139AB  [0..15]
-	.byte	0xD8, 0x02, 0x58, 0x04, 0x63, 0x5A, 0x4E, 0x54, 0x01, 0xFF, 0xFF, 0x01, 0xD8, 0x02, 0x58, 0x04	; F139BB  [16..31]
-	.byte	0x63, 0x46, 0x52, 0x54, 0x02, 0xFF, 0xFF, 0x01, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x1E, 0x59, 0x00	; F139CB  [32..47]
-	.byte	0x05, 0x46, 0x54, 0x00, 0xFF, 0xFF, 0x12, 0xD8, 0x02, 0x58, 0x04, 0x58, 0x59, 0x18, 0x5A, 0xD8	; F139DB  [48..63]
-	.byte	0x5A, 0x98, 0x5B, 0x98, 0x5C, 0x18, 0x5D, 0x54, 0xFF, 0xFF, 0x02, 0xD8, 0x02, 0x58, 0x04, 0x63	; F139EB  [64..79]
-	.byte	0x1E, 0x06, 0x00, 0x54, 0xFF, 0xFF, 0x02, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x28, 0x06, 0x3C, 0x0F	; F139FB  [80..95]
-	.byte	0x00, 0x54, 0xFF, 0xFF, 0x01, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x32, 0x63, 0x63, 0x02, 0x00, 0x00	; F13A0B  [96..111]
-	.byte	0x00, 0x54, 0xFF, 0xFF, 0x03, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x50, 0x02, 0x3C, 0x00, 0x5A, 0x00	; F13A1B  [112..127]
-	.byte	0x54, 0xFF, 0xFF, 0x04, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x54, 0x04, 0x40, 0x32, 0x5A, 0x00, 0x54	; F13A2B  [128..143]
-	.byte	0xFF, 0xFF, 0x02, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x50, 0x14, 0x5A, 0x00, 0x54, 0xFF, 0xFF, 0x04	; F13A3B  [144..159]
-	.byte	0xD8, 0x02, 0x58, 0x04, 0x63, 0x0A, 0xF6, 0x00, 0x00, 0x54, 0x02, 0xFF, 0xFF, 0x02, 0xD8, 0x02	; F13A4B  [160..175]
-	.byte	0x58, 0x04, 0x63, 0x14, 0x28, 0x5A, 0x00, 0x54, 0xFF, 0xFF, 0xFF, 0xD8, 0x02, 0x58, 0x04, 0x54	; F13A5B  [176..191]
-	.byte	0xFF, 0xFF, 0x04, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x02, 0x00, 0x63, 0x1E, 0x63, 0xFF, 0xFF, 0x00	; F13A6B  [192..207]
-	.byte	0xD8, 0x02, 0x58, 0x04, 0x63, 0x02, 0x00, 0x63, 0x63, 0xFF, 0xFF, 0x0E, 0xD8, 0x02, 0x58, 0x04	; F13A7B  [208..223]
-	.byte	0x63, 0x00, 0x4B, 0x40, 0x2D, 0x07, 0x0A, 0x0A, 0x3C, 0x28, 0x06, 0x48, 0x4F, 0x54, 0x01, 0x00	; F13A8B  [224..239]
-	.byte	0xFF, 0xFF, 0x01, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x40, 0x5A, 0x00, 0x54, 0xFF, 0xFF, 0x00, 0xD8	; F13A9B  [240..255]
-	.byte	0x02, 0x58, 0x04, 0x00, 0xFF, 0xFF, 0x02, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x0C, 0x31, 0x27, 0x54	; F13AAB  [256..271]
-	.byte	0xFF, 0xFF, 0x01, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x14, 0x0C, 0x28, 0x05, 0x32, 0xFF, 0xFF, 0x01	; F13ABB  [272..287]
-	.byte	0xD8, 0x02, 0x58, 0x04, 0x63, 0x50, 0x00, 0x00, 0x00, 0x63, 0x63, 0x54, 0xFF, 0xFF, 0x02, 0xD8	; F13ACB  [288..303]
-	.byte	0x02, 0x58, 0x04, 0x63, 0x1E, 0x04, 0x00, 0x54, 0xFF, 0xFF, 0x03, 0xD8, 0x02, 0x58, 0x04, 0x63	; F13ADB  [304..319]
-	.byte	0x0E, 0x1C, 0x31, 0x13, 0x54, 0xFF, 0xFF, 0x02, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x32, 0x1E, 0x54	; F13AEB  [320..335]
-	.byte	0x51, 0x5A, 0x00, 0x54, 0xFF, 0xFF, 0x06, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x5E, 0x01, 0x5E, 0x01	; F13AFB  [336..351]
-	.byte	0xC4, 0xC4, 0x12, 0x54, 0xFF, 0xFF, 0x09, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x88, 0x00, 0x10, 0x01	; F13B0B  [352..367]
-	.byte	0x98, 0x01, 0x20, 0x02, 0x00, 0x1E, 0x3C, 0x63, 0xE7, 0x12, 0x54, 0xFF, 0xFF, 0x01, 0xD8, 0x02	; F13B1B  [368..383]
-	.byte	0x58, 0x04, 0x63, 0x32, 0x5E, 0x01, 0x5E, 0x01, 0xC4, 0xC4, 0x12, 0x54, 0xFF, 0xFF, 0x00, 0xDC	; F13B2B  [384..399]
-	.byte	0x02, 0x58, 0x04, 0x13, 0x0C, 0x12, 0x32, 0x5E, 0xFF, 0xFF, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x19	; F13B3B  [400..415]
-	.byte	0x0C, 0x14, 0x32, 0x5A, 0xFF, 0xFF, 0x00, 0xDA, 0x02, 0x58, 0x04, 0x23, 0x2D, 0x0C, 0x32, 0x46	; F13B4B  [416..431]
-	.byte	0xFF, 0xFF, 0x00, 0xDC, 0x02, 0x58, 0x04, 0x29, 0x2D, 0x10, 0x32, 0x46, 0xFF, 0xFF, 0x00, 0xDE	; F13B5B  [432..447]
-	.byte	0x02, 0x58, 0x04, 0x23, 0x0B, 0x14, 0x32, 0x46, 0xFF, 0xFF, 0x00, 0xDA, 0x02, 0x58, 0x04, 0x27	; F13B6B  [448..463]
-	.byte	0x3C, 0x12, 0x50, 0x46, 0xFF, 0xFF, 0x00, 0xE0, 0x02, 0x88, 0x03, 0x2D, 0x2D, 0x0C, 0x32, 0x46	; F13B7B  [464..479]
-	.byte	0xFF, 0xFF, 0x00, 0xDA, 0x02, 0x82, 0x03, 0x37, 0x5A, 0x0C, 0x32, 0x46, 0xFF, 0xFF, 0x00, 0xD8	; F13B8B  [480..495]
-	.byte	0x02, 0x60, 0x04, 0x29, 0x19, 0x14, 0x32, 0x46, 0xFF, 0xFF, 0x00, 0xD8, 0x02, 0x60, 0x04, 0x2D	; F13B9B  [496..511]
-	.byte	0x1E, 0x06, 0x32, 0x46, 0xFF, 0xFF, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x2D, 0x2D, 0x12, 0x32, 0x46	; F13BAB  [512..527]
-	.byte	0xFF, 0xFF, 0x00, 0xDA, 0x02, 0x54, 0x04, 0x37, 0x2D, 0x12, 0x32, 0x46, 0xFF, 0xFF, 0x07, 0xD8	; F13BBB  [528..543]
-	.byte	0x02, 0x58, 0x04, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8, 0xD8, 0x32, 0x28, 0x06, 0x00, 0x54, 0xFF	; F13BCB  [544..559]
-	.byte	0xFF, 0x05, 0xD8, 0x02, 0x58, 0x04, 0x1E, 0xB4, 0x00, 0xB4, 0x00, 0xC4, 0xC4, 0x1E, 0x64, 0x00	; F13BDB  [560..575]
-	.byte	0x64, 0x00, 0xB0, 0xB0, 0x54, 0xFF, 0xFF, 0x08, 0xD8, 0x02, 0x58, 0x04, 0x14, 0x2C, 0x01, 0x2C	; F13BEB  [576..591]
-	.byte	0x01, 0xD8, 0xD8, 0x50, 0x50, 0x02, 0x3C, 0x32, 0x5A, 0x00, 0x54, 0xFF, 0xFF, 0x07, 0xD8, 0x02	; F13BFB  [592..607]
-	.byte	0x58, 0x04, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8, 0xD8, 0x63, 0x28, 0x06, 0x5A, 0x00, 0x54, 0xFF	; F13C0B  [608..623]
-	.byte	0xFF, 0x09, 0xD8, 0x02, 0x58, 0x04, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8, 0xD8, 0x50, 0x54, 0x04	; F13C1B  [624..639]
-	.byte	0x40, 0x32, 0x5A, 0x00, 0x54, 0xFF, 0xFF, 0x04, 0xD8, 0x02, 0x58, 0x04, 0x63, 0x02, 0x00, 0x63	; F13C2B  [640..655]
-	.byte	0x1E, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8, 0xD8, 0x63, 0xFF, 0xFF, 0x04, 0xD8, 0x02, 0x58, 0x04	; F13C3B  [656..671]
-	.byte	0x63, 0x02, 0x00, 0x63, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8, 0xD8, 0x63, 0xFF, 0xFF, 0x08, 0xD8	; F13C4B  [672..687]
-	.byte	0x02, 0x58, 0x04, 0xE4, 0x5A, 0x64, 0x5C, 0x32, 0x1E, 0x06, 0x00, 0x54, 0xFF, 0xFF, 0x06, 0xD8	; F13C5B  [688..703]
-	.byte	0x02, 0x58, 0x04, 0xE4, 0x5A, 0x64, 0x5C, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8, 0xD8, 0x54, 0xFF	; F13C6B  [704..719]
-	.byte	0xFF, 0x09, 0xD8, 0x02, 0x58, 0x04, 0xE4, 0x5A, 0x64, 0x5C, 0x50, 0x50, 0x02, 0x3C, 0x32, 0x5A	; F13C7B  [720..735]
-	.byte	0x00, 0x54, 0xFF, 0xFF, 0x08, 0xD8, 0x02, 0x58, 0x04, 0xE4, 0x5A, 0x64, 0x5C, 0x63, 0x28, 0x06	; F13C8B  [736..751]
-	.byte	0x5A, 0x00, 0x54, 0xFF, 0xFF, 0x08, 0xD8, 0x02, 0x58, 0x04, 0xE4, 0x5A, 0x64, 0x5C, 0x0E, 0x55	; F13C9B  [752..767]
-	.byte	0x31, 0x13, 0x54, 0xFF, 0xFF, 0x08, 0xD8, 0x02, 0x58, 0x04, 0xE4, 0x5A, 0x64, 0x5C, 0x0E, 0x55	; F13CAB  [768..783]
-	.byte	0x31, 0x13, 0x41, 0x54, 0x54, 0x00, 0xFF, 0xFF, 0x05, 0xD8, 0x02, 0x58, 0x04, 0x64, 0x5C, 0x0E	; F13CBB  [784..799]
-	.byte	0x55, 0x31, 0x13, 0x50, 0x5C, 0x54, 0x01, 0xFF, 0xFF, 0x08, 0xD8, 0x02, 0x58, 0x04, 0xE4, 0x5A	; F13CCB  [800..815]
-	.byte	0x64, 0x5C, 0x50, 0x4C, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8, 0xD8, 0x54, 0x00, 0xFF, 0xFF, 0x08	; F13CDB  [816..831]
-	.byte	0xD8, 0x02, 0x58, 0x04, 0xE4, 0x5A, 0x64, 0x5C, 0x50, 0x5A, 0x14, 0x2C, 0x01, 0x2C, 0x01, 0xD8	; F13CEB  [832..847]
-	.byte	0xD8, 0x54, 0x01, 0xFF, 0xFF, 0x07, 0x18, 0x20, 0x20, 0x40, 0x41, 0x40, 0x40, 0x20, 0x20, 0x18	; F13CFB  [848..863]
-	.byte	0x07, 0x80, 0x60, 0x30, 0x50, 0x88, 0x08, 0x08, 0x08, 0x10, 0x10, 0x60, 0x80, 0x07, 0x18, 0x20	; F13D0B  [864..879]
-	.byte	0x20, 0x40, 0xC1, 0x40, 0x40, 0x20, 0x20, 0x18, 0x07, 0x80, 0x60, 0x30, 0x50, 0x88, 0x0F, 0x08	; F13D1B  [880..895]
-	.byte	0x08, 0x10, 0x10, 0x60, 0x80, 0x00, 0x00, 0x03, 0x0E	; F13D2B  [896..904]
+EffectDefaults_Unused:
+	.byte	0xff, 0xff, 0xff	; F139AB  the 72 placeholder algorithms -- never read: the
+				;         block maps replace an unoffered algorithm first
+; EffectDefaults_Distortion -- algorithm 32 `DISTORTION`: 5 value bytes (W-1 = 4)
+EffectDefaults_Distortion:
+	.byte	1	; F139AE  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F139AF  -> block bytes 17..20
+	.byte	99	; F139B3  slot 1  WET
+	.byte	80	; F139B4  slot 2  DRIVE
+	.byte	80	; F139B5  slot 3  ADJUST
+	.byte	84	; F139B6  slot 4  VOLUME
+	.byte	0	; F139B7  slot 5  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F139B8  end
+; EffectDefaults_Overdrive -- algorithm 33 `OVERDRIVE`: 5 value bytes (W-1 = 4)
+EffectDefaults_Overdrive:
+	.byte	1	; F139BA  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F139BB  -> block bytes 17..20
+	.byte	99	; F139BF  slot 1  WET
+	.byte	90	; F139C0  slot 2  DRIVE
+	.byte	78	; F139C1  slot 3  ADJUST
+	.byte	84	; F139C2  slot 4  VOLUME
+	.byte	1	; F139C3  slot 5  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F139C4  end
+; EffectDefaults_Fuzz -- algorithm 34 `FUZZ`: 5 value bytes (W-1 = 4)
+EffectDefaults_Fuzz:
+	.byte	1	; F139C6  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F139C7  -> block bytes 17..20
+	.byte	99	; F139CB  slot 1  WET
+	.byte	70	; F139CC  slot 2  DRIVE
+	.byte	82	; F139CD  slot 3  ADJUST
+	.byte	84	; F139CE  slot 4  VOLUME
+	.byte	2	; F139CF  slot 5  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F139D0  end
+; EffectDefaults_Exciter -- algorithm 35 `EXCITER`: 8 value bytes (W-1 = 7)
+EffectDefaults_Exciter:
+	.byte	1	; F139D2  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F139D3  -> block bytes 17..20
+	.byte	99	; F139D7  slot 1  WET
+	.byte	30	; F139D8  slot 2  DRIVE
+	.byte	89	; F139D9  slot 3  ADJUST
+	.byte	0	; F139DA  slot 4  EMPHASIS Fc
+	.byte	5	; F139DB  slot 5  (second byte of slot 4's word)
+	.byte	70	; F139DC  slot 6  EMPHASIS GAIN
+	.byte	84	; F139DD  slot 7  VOLUME
+	.byte	0	; F139DE  slot 8  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F139DF  end
+; EffectDefaults_ParametricEq -- algorithm 39 `PARAMETRIC EQ`: 13 value bytes (W-1 = 13)
+EffectDefaults_ParametricEq:
+	.byte	18	; F139E1  selected parameter = group 18
+	.short	0x02d8, 0x0458	; F139E2  -> block bytes 17..20
+	.byte	88	; F139E6  slot 1  BAND EMPHASIS Fc
+	.byte	89	; F139E7  slot 2  (second byte of slot 1's word)
+	.byte	24	; F139E8  slot 3  BAND EMPHASIS Fc
+	.byte	90	; F139E9  slot 4  (second byte of slot 3's word)
+	.byte	216	; F139EA  slot 5  BAND EMPHASIS Fc
+	.byte	90	; F139EB  slot 6  (second byte of slot 5's word)
+	.byte	152	; F139EC  slot 7  BAND EMPHASIS Fc
+	.byte	91	; F139ED  slot 8  (second byte of slot 7's word)
+	.byte	152	; F139EE  slot 9  BAND EMPHASIS Fc
+	.byte	92	; F139EF  slot 10  (second byte of slot 9's word)
+	.byte	24	; F139F0  slot 11  BAND EMPHASIS Fc
+	.byte	93	; F139F1  slot 12  (second byte of slot 11's word)
+	.byte	84	; F139F2  slot 13  VOLUME
+	.byte	0xff, 0xff	; F139F3  end
+; EffectDefaults_Chorus -- algorithm 1 `CHORUS`: 5 value bytes (W-1 = 5)
+EffectDefaults_Chorus:
+	.byte	2	; F139F5  selected parameter = group 2
+	.short	0x02d8, 0x0458	; F139F6  -> block bytes 17..20
+	.byte	99	; F139FA  slot 1  WET
+	.byte	30	; F139FB  slot 2  DEPTH
+	.byte	6	; F139FC  slot 3  LFO SPEED
+	.byte	0	; F139FD  slot 4  LFO WAVEFORM
+	.byte	84	; F139FE  slot 5  VOLUME
+	.byte	0xff, 0xff	; F139FF  end
+; EffectDefaults_ModulatedChorus -- algorithm 2 `MODULATED CHORUS`: 7 value bytes (W-1 = 7)
+EffectDefaults_ModulatedChorus:
+	.byte	2	; F13A01  selected parameter = group 2
+	.short	0x02d8, 0x0458	; F13A02  -> block bytes 17..20
+	.byte	99	; F13A06  slot 1  WET
+	.byte	40	; F13A07  slot 2  DEPTH
+	.byte	6	; F13A08  slot 3  SLOW LFO SPEED
+	.byte	60	; F13A09  slot 4  FAST LFO SPEED
+	.byte	15	; F13A0A  slot 5  FAST LFO BALANCE
+	.byte	0	; F13A0B  slot 6  LFO WAVEFORM
+	.byte	84	; F13A0C  slot 7  VOLUME
+	.byte	0xff, 0xff	; F13A0D  end
+; EffectDefaults_Enhancer -- algorithm 3 `ENHANCER`: 9 value bytes (W-1 = 9)
+EffectDefaults_Enhancer:
+	.byte	1	; F13A0F  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F13A10  -> block bytes 17..20
+	.byte	99	; F13A14  slot 1  WET
+	.byte	50	; F13A15  slot 2  MANUAL
+	.byte	99	; F13A16  slot 3  LOW  MIX
+	.byte	99	; F13A17  slot 4  HIGH MIX
+	.byte	2	; F13A18  slot 5  DELAY TIME L
+	.byte	0	; F13A19  slot 6  (second byte of slot 5's word)
+	.byte	0	; F13A1A  slot 7  DELAY TIME R
+	.byte	0	; F13A1B  slot 8  (second byte of slot 7's word)
+	.byte	84	; F13A1C  slot 9  VOLUME
+	.byte	0xff, 0xff	; F13A1D  end
+; EffectDefaults_Flanger -- algorithm 4 `FLANGER`: 8 value bytes (W-1 = 8)
+EffectDefaults_Flanger:
+	.byte	3	; F13A1F  selected parameter = group 3
+	.short	0x02d8, 0x0458	; F13A20  -> block bytes 17..20
+	.byte	99	; F13A24  slot 1  WET
+	.byte	80	; F13A25  slot 2  DEPTH
+	.byte	2	; F13A26  slot 3  LFO SPEED
+	.byte	60	; F13A27  slot 4  RESONANCE
+	.byte	0	; F13A28  slot 5  MANUAL
+	.byte	90	; F13A29  slot 6  PHASE
+	.byte	0	; F13A2A  slot 7  LFO WAVEFORM
+	.byte	84	; F13A2B  slot 8  VOLUME
+	.byte	0xff, 0xff	; F13A2C  end
+; EffectDefaults_Phaser -- algorithm 5 `PHASER`: 8 value bytes (W-1 = 8)
+EffectDefaults_Phaser:
+	.byte	4	; F13A2E  selected parameter = group 4
+	.short	0x02d8, 0x0458	; F13A2F  -> block bytes 17..20
+	.byte	99	; F13A33  slot 1  WET
+	.byte	84	; F13A34  slot 2  DEPTH
+	.byte	4	; F13A35  slot 3  LFO SPEED
+	.byte	64	; F13A36  slot 4  RESONANCE
+	.byte	50	; F13A37  slot 5  MANUAL
+	.byte	90	; F13A38  slot 6  PHASE
+	.byte	0	; F13A39  slot 7  LFO WAVEFORM
+	.byte	84	; F13A3A  slot 8  VOLUME
+	.byte	0xff, 0xff	; F13A3B  end
+; EffectDefaults_AutoPan -- algorithm 48 `AUTO PAN`: 6 value bytes (W-1 = 6)
+EffectDefaults_AutoPan:
+	.byte	2	; F13A3D  selected parameter = group 2
+	.short	0x02d8, 0x0458	; F13A3E  -> block bytes 17..20
+	.byte	99	; F13A42  slot 1  WET
+	.byte	80	; F13A43  slot 2  DEPTH
+	.byte	20	; F13A44  slot 3  LFO SPEED
+	.byte	90	; F13A45  slot 4  PHASE
+	.byte	0	; F13A46  slot 5  LFO WAVEFORM
+	.byte	84	; F13A47  slot 6  VOLUME
+	.byte	0xff, 0xff	; F13A48  end
+; EffectDefaults_PitchShifter -- algorithm 49 `PITCH SHIFTER`: 7 value bytes (W-1 = 6)
+EffectDefaults_PitchShifter:
+	.byte	4	; F13A4A  selected parameter = group 4
+	.short	0x02d8, 0x0458	; F13A4B  -> block bytes 17..20
+	.byte	99	; F13A4F  slot 1  WET
+	.byte	10	; F13A50  slot 2  PITCH L
+	.byte	246	; F13A51  slot 3  PITCH R
+	.byte	0	; F13A52  slot 4  PRE DELAY
+	.byte	0	; F13A53  slot 5  FEEDBACK
+	.byte	84	; F13A54  slot 6  VOLUME
+	.byte	2	; F13A55  slot 7  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F13A56  end
+; EffectDefaults_Vibrato -- algorithm 50 `VIBRATO`: 6 value bytes (W-1 = 6)
+EffectDefaults_Vibrato:
+	.byte	2	; F13A58  selected parameter = group 2
+	.short	0x02d8, 0x0458	; F13A59  -> block bytes 17..20
+	.byte	99	; F13A5D  slot 1  WET
+	.byte	20	; F13A5E  slot 2  DEPTH
+	.byte	40	; F13A5F  slot 3  LFO SPEED
+	.byte	90	; F13A60  slot 4  PHASE
+	.byte	0	; F13A61  slot 5  LFO WAVEFORM
+	.byte	84	; F13A62  slot 6  VOLUME
+	.byte	0xff, 0xff	; F13A63  end
+; EffectDefaults_NoOperation -- algorithm 0 `NO OPERATION`: 1 value bytes (W-1 = 0)
+EffectDefaults_NoOperation:
+	.byte	0xff	; F13A65  selected parameter
+	.short	0x02d8, 0x0458	; F13A66  -> block bytes 17..20
+	.byte	84	; F13A6A  slot 1  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F13A6B  end
+; EffectDefaults_PedalWah -- algorithm 51 `PEDAL WAH`: 6 value bytes (W-1 = 6)
+EffectDefaults_PedalWah:
+	.byte	4	; F13A6D  selected parameter = group 4
+	.short	0x02d8, 0x0458	; F13A6E  -> block bytes 17..20
+	.byte	99	; F13A72  slot 1  WET
+	.byte	2	; F13A73  slot 2  RESONANCE
+	.byte	0	; F13A74  slot 3  MANUAL
+	.byte	99	; F13A75  slot 4  SWEEP RANGE
+	.byte	30	; F13A76  slot 5  WAH CENTER Fc
+	.byte	99	; F13A77  slot 6  VOLUME
+	.byte	0xff, 0xff	; F13A78  end
+; EffectDefaults_AutoWah -- algorithm 52 `AUTO WAH`: 5 value bytes (W-1 = 5)
+EffectDefaults_AutoWah:
+	.byte	0	; F13A7A  selected parameter = group 0
+	.short	0x02d8, 0x0458	; F13A7B  -> block bytes 17..20
+	.byte	99	; F13A7F  slot 1  WET
+	.byte	2	; F13A80  slot 2  RESONANCE
+	.byte	0	; F13A81  slot 3  MANUAL
+	.byte	99	; F13A82  slot 4  SWEEP RANGE
+	.byte	99	; F13A83  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13A84  end
+; EffectDefaults_RotarySpeaker -- algorithm 53 `ROTARY SPEAKER`: 16 value bytes (W-1 = 15)
+EffectDefaults_RotarySpeaker:
+	.byte	14	; F13A86  selected parameter = group 14
+	.short	0x02d8, 0x0458	; F13A87  -> block bytes 17..20
+	.byte	99	; F13A8B  slot 1  WET
+	.byte	0	; F13A8C  slot 2  DRIVE
+	.byte	75	; F13A8D  slot 3  VOLUME ADJUST
+	.byte	64	; F13A8E  slot 4  TREBLE     DEPTH
+	.byte	45	; F13A8F  slot 5  FAST
+	.byte	7	; F13A90  slot 6  SLOW
+	.byte	10	; F13A91  slot 7  WIND UP
+	.byte	10	; F13A92  slot 8  WIND DOWN
+	.byte	60	; F13A93  slot 9  BASS       DEPTH
+	.byte	40	; F13A94  slot 10  FAST
+	.byte	6	; F13A95  slot 11  SLOW
+	.byte	72	; F13A96  slot 12  WIND UP
+	.byte	79	; F13A97  slot 13  WIND DOWN
+	.byte	84	; F13A98  slot 14  VOLUME
+	.byte	1	; F13A99  slot 15  SLOW/FAST
+	.byte	0	; F13A9A  slot 16  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F13A9B  end
+; EffectDefaults_RingModulator -- algorithm 54 `RING MODULATOR`: 5 value bytes (W-1 = 5)
+EffectDefaults_RingModulator:
+	.byte	1	; F13A9D  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F13A9E  -> block bytes 17..20
+	.byte	99	; F13AA2  slot 1  WET
+	.byte	64	; F13AA3  slot 2  OSC SPEED
+	.byte	90	; F13AA4  slot 3  PHASE
+	.byte	0	; F13AA5  slot 4  OSC WAVEFORM
+	.byte	84	; F13AA6  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13AA7  end
+; EffectDefaults_NoiseGenerator -- algorithm 38 `NOISE GENERATOR`: 1 value bytes (W-1 = 1)
+EffectDefaults_NoiseGenerator:
+	.byte	0	; F13AA9  selected parameter = group 0
+	.short	0x02d8, 0x0458	; F13AAA  -> block bytes 17..20
+	.byte	0	; F13AAE  slot 1  VOLUME
+	.byte	0xff, 0xff	; F13AAF  end
+; EffectDefaults_SlowAttacker -- algorithm 37 `SLOW ATTACKER`: 5 value bytes (W-1 = 5)
+EffectDefaults_SlowAttacker:
+	.byte	2	; F13AB1  selected parameter = group 2
+	.short	0x02d8, 0x0458	; F13AB2  -> block bytes 17..20
+	.byte	99	; F13AB6  slot 1  WET
+	.byte	12	; F13AB7  slot 2  THRESHOLD
+	.byte	49	; F13AB8  slot 3  ATTACK RATE
+	.byte	39	; F13AB9  slot 4  RELEASE RATE
+	.byte	84	; F13ABA  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13ABB  end
+; EffectDefaults_GatedReverb -- algorithm 8 `GATED REVERB`: 6 value bytes (W-1 = 6)
+EffectDefaults_GatedReverb:
+	.byte	1	; F13ABD  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F13ABE  -> block bytes 17..20
+	.byte	99	; F13AC2  slot 1  WET
+	.byte	20	; F13AC3  slot 2  GATE TIME
+	.byte	12	; F13AC4  slot 3  HIGH DAMP GAIN
+	.byte	40	; F13AC5  slot 4  THRESHOLD
+	.byte	5	; F13AC6  slot 5  MASK TIME
+	.byte	50	; F13AC7  slot 6  VOLUME
+	.byte	0xff, 0xff	; F13AC8  end
+; EffectDefaults_HaasEffect -- algorithm 55 `HAAS EFFECT`: 8 value bytes (W-1 = 8)
+EffectDefaults_HaasEffect:
+	.byte	1	; F13ACA  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F13ACB  -> block bytes 17..20
+	.byte	99	; F13ACF  slot 1  WET
+	.byte	80	; F13AD0  slot 2  DELAY TIME L
+	.byte	0	; F13AD1  slot 3  (second byte of slot 2's word)
+	.byte	0	; F13AD2  slot 4  DELAY TIME R
+	.byte	0	; F13AD3  slot 5  (second byte of slot 4's word)
+	.byte	99	; F13AD4  slot 6  BALANCE L
+	.byte	99	; F13AD5  slot 7  BALANCE R
+	.byte	84	; F13AD6  slot 8  VOLUME
+	.byte	0xff, 0xff	; F13AD7  end
+; EffectDefaults_Ensemble -- algorithm 6 `ENSEMBLE`: 5 value bytes (W-1 = 5)
+EffectDefaults_Ensemble:
+	.byte	2	; F13AD9  selected parameter = group 2
+	.short	0x02d8, 0x0458	; F13ADA  -> block bytes 17..20
+	.byte	99	; F13ADE  slot 1  WET
+	.byte	30	; F13ADF  slot 2  DEPTH
+	.byte	4	; F13AE0  slot 3  LFO SPEED
+	.byte	0	; F13AE1  slot 4  LFO WAVEFORM
+	.byte	84	; F13AE2  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13AE3  end
+; EffectDefaults_Compressor -- algorithm 36 `COMPRESSOR`: 6 value bytes (W-1 = 6)
+EffectDefaults_Compressor:
+	.byte	3	; F13AE5  selected parameter = group 3
+	.short	0x02d8, 0x0458	; F13AE6  -> block bytes 17..20
+	.byte	99	; F13AEA  slot 1  WET
+	.byte	14	; F13AEB  slot 2  THRESHOLD
+	.byte	28	; F13AEC  slot 3  RATIO
+	.byte	49	; F13AED  slot 4  ATTACK SENS.
+	.byte	19	; F13AEE  slot 5  RELEASE SENS.
+	.byte	84	; F13AEF  slot 6  VOLUME
+	.byte	0xff, 0xff	; F13AF0  end
+; EffectDefaults_MixUp -- algorithm 56 `MIX UP`: 8 value bytes (W-1 = 8)
+EffectDefaults_MixUp:
+	.byte	2	; F13AF2  selected parameter = group 2
+	.short	0x02d8, 0x0458	; F13AF3  -> block bytes 17..20
+	.byte	99	; F13AF7  slot 1  WET
+	.byte	50	; F13AF8  slot 2  DEPTH
+	.byte	30	; F13AF9  slot 3  SLOW LFO SPEED
+	.byte	84	; F13AFA  slot 4  FAST LFO SPEED L
+	.byte	81	; F13AFB  slot 5  FAST LFO SPEED R
+	.byte	90	; F13AFC  slot 6  PHASE
+	.byte	0	; F13AFD  slot 7  LFO WAVEFORM
+	.byte	84	; F13AFE  slot 8  VOLUME
+	.byte	0xff, 0xff	; F13AFF  end
+; EffectDefaults_SingleDelay -- algorithm 9 `SINGLE DELAY`: 9 value bytes (W-1 = 9)
+EffectDefaults_SingleDelay:
+	.byte	6	; F13B01  selected parameter = group 6
+	.short	0x02d8, 0x0458	; F13B02  -> block bytes 17..20
+	.byte	99	; F13B06  slot 1  WET
+	.byte	94	; F13B07  slot 2  DELAY L
+	.byte	1	; F13B08  slot 3  (second byte of slot 2's word)
+	.byte	94	; F13B09  slot 4  DELAY R
+	.byte	1	; F13B0A  slot 5  (second byte of slot 4's word)
+	.byte	196	; F13B0B  slot 6  FEEDBACK L
+	.byte	196	; F13B0C  slot 7  FEEDBACK R
+	.byte	18	; F13B0D  slot 8  HIGH DAMP GAIN
+	.byte	84	; F13B0E  slot 9  VOLUME
+	.byte	0xff, 0xff	; F13B0F  end
+; EffectDefaults_MultiTapDelay -- algorithm 10 `MULTI TAP DELAY`: 16 value bytes (W-1 = 16)
+EffectDefaults_MultiTapDelay:
+	.byte	9	; F13B11  selected parameter = group 9
+	.short	0x02d8, 0x0458	; F13B12  -> block bytes 17..20
+	.byte	99	; F13B16  slot 1  WET
+	.byte	136	; F13B17  slot 2  DELAY 1
+	.byte	0	; F13B18  slot 3  (second byte of slot 2's word)
+	.byte	16	; F13B19  slot 4  DELAY 2
+	.byte	1	; F13B1A  slot 5  (second byte of slot 4's word)
+	.byte	152	; F13B1B  slot 6  DELAY 3
+	.byte	1	; F13B1C  slot 7  (second byte of slot 6's word)
+	.byte	32	; F13B1D  slot 8  DELAY 4
+	.byte	2	; F13B1E  slot 9  (second byte of slot 8's word)
+	.byte	0	; F13B1F  slot 10  PAN   1
+	.byte	30	; F13B20  slot 11  PAN   2
+	.byte	60	; F13B21  slot 12  PAN   3
+	.byte	99	; F13B22  slot 13  PAN   4
+	.byte	231	; F13B23  slot 14  FEEDBACK
+	.byte	18	; F13B24  slot 15  HIGH DAMP GAIN
+	.byte	84	; F13B25  slot 16  VOLUME
+	.byte	0xff, 0xff	; F13B26  end
+; EffectDefaults_ManualDelay -- algorithm 11 `MANUAL DELAY`: 10 value bytes (W-1 = 10)
+EffectDefaults_ManualDelay:
+	.byte	1	; F13B28  selected parameter = group 1
+	.short	0x02d8, 0x0458	; F13B29  -> block bytes 17..20
+	.byte	99	; F13B2D  slot 1  WET
+	.byte	50	; F13B2E  slot 2  MODULATION DEPTH
+	.byte	94	; F13B2F  slot 3  DELAY L
+	.byte	1	; F13B30  slot 4  (second byte of slot 3's word)
+	.byte	94	; F13B31  slot 5  DELAY R
+	.byte	1	; F13B32  slot 6  (second byte of slot 5's word)
+	.byte	196	; F13B33  slot 7  FEEDBACK L
+	.byte	196	; F13B34  slot 8  FEEDBACK R
+	.byte	18	; F13B35  slot 9  HIGH DAMP GAIN
+	.byte	84	; F13B36  slot 10  VOLUME
+	.byte	0xff, 0xff	; F13B37  end
+; EffectDefaults_RoomReverb1 -- algorithm 16 `ROOM REVERB 1`: 5 value bytes (W-1 = 5)
+EffectDefaults_RoomReverb1:
+	.byte	0	; F13B39  selected parameter = group 0
+	.short	0x02dc, 0x0458	; F13B3A  -> block bytes 17..20
+	.byte	19	; F13B3E  slot 1  REVERB TIME
+	.byte	12	; F13B3F  slot 2  PRE DELAY
+	.byte	18	; F13B40  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13B41  slot 4  EARLY REFL LEVEL
+	.byte	94	; F13B42  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B43  end
+; EffectDefaults_RoomReverb2 -- algorithm 17 `ROOM REVERB 2`: 5 value bytes (W-1 = 5)
+EffectDefaults_RoomReverb2:
+	.byte	0	; F13B45  selected parameter = group 0
+	.short	0x02de, 0x0458	; F13B46  -> block bytes 17..20
+	.byte	25	; F13B4A  slot 1  REVERB TIME
+	.byte	12	; F13B4B  slot 2  PRE DELAY
+	.byte	20	; F13B4C  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13B4D  slot 4  EARLY REFL LEVEL
+	.byte	90	; F13B4E  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B4F  end
+; EffectDefaults_PlateReverb1 -- algorithm 18 `PLATE REVERB 1`: 5 value bytes (W-1 = 5)
+EffectDefaults_PlateReverb1:
+	.byte	0	; F13B51  selected parameter = group 0
+	.short	0x02da, 0x0458	; F13B52  -> block bytes 17..20
+	.byte	35	; F13B56  slot 1  REVERB TIME
+	.byte	45	; F13B57  slot 2  PRE DELAY
+	.byte	12	; F13B58  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13B59  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13B5A  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B5B  end
+; EffectDefaults_PlateReverb2 -- algorithm 19 `PLATE REVERB 2`: 5 value bytes (W-1 = 5)
+EffectDefaults_PlateReverb2:
+	.byte	0	; F13B5D  selected parameter = group 0
+	.short	0x02dc, 0x0458	; F13B5E  -> block bytes 17..20
+	.byte	41	; F13B62  slot 1  REVERB TIME
+	.byte	45	; F13B63  slot 2  PRE DELAY
+	.byte	16	; F13B64  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13B65  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13B66  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B67  end
+; EffectDefaults_ConcertReverb1 -- algorithm 20 `CONCERT REVERB 1`: 5 value bytes (W-1 = 5)
+EffectDefaults_ConcertReverb1:
+	.byte	0	; F13B69  selected parameter = group 0
+	.short	0x02de, 0x0458	; F13B6A  -> block bytes 17..20
+	.byte	35	; F13B6E  slot 1  REVERB TIME
+	.byte	11	; F13B6F  slot 2  PRE DELAY
+	.byte	20	; F13B70  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13B71  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13B72  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B73  end
+; EffectDefaults_ConcertReverb2 -- algorithm 21 `CONCERT REVERB 2`: 5 value bytes (W-1 = 5)
+EffectDefaults_ConcertReverb2:
+	.byte	0	; F13B75  selected parameter = group 0
+	.short	0x02da, 0x0458	; F13B76  -> block bytes 17..20
+	.byte	39	; F13B7A  slot 1  REVERB TIME
+	.byte	60	; F13B7B  slot 2  PRE DELAY
+	.byte	18	; F13B7C  slot 3  HIGH DAMP GAIN
+	.byte	80	; F13B7D  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13B7E  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B7F  end
+; EffectDefaults_DarkReverb1 -- algorithm 22 `DARK REVERB 1`: 5 value bytes (W-1 = 5)
+EffectDefaults_DarkReverb1:
+	.byte	0	; F13B81  selected parameter = group 0
+	.short	0x02e0, 0x0388	; F13B82  -> block bytes 17..20
+	.byte	45	; F13B86  slot 1  REVERB TIME
+	.byte	45	; F13B87  slot 2  PRE DELAY
+	.byte	12	; F13B88  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13B89  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13B8A  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B8B  end
+; EffectDefaults_DarkReverb2 -- algorithm 23 `DARK REVERB 2`: 5 value bytes (W-1 = 5)
+EffectDefaults_DarkReverb2:
+	.byte	0	; F13B8D  selected parameter = group 0
+	.short	0x02da, 0x0382	; F13B8E  -> block bytes 17..20
+	.byte	55	; F13B92  slot 1  REVERB TIME
+	.byte	90	; F13B93  slot 2  PRE DELAY
+	.byte	12	; F13B94  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13B95  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13B96  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13B97  end
+; EffectDefaults_BrightReverb1 -- algorithm 24 `BRIGHT REVERB 1`: 5 value bytes (W-1 = 5)
+EffectDefaults_BrightReverb1:
+	.byte	0	; F13B99  selected parameter = group 0
+	.short	0x02d8, 0x0460	; F13B9A  -> block bytes 17..20
+	.byte	41	; F13B9E  slot 1  REVERB TIME
+	.byte	25	; F13B9F  slot 2  PRE DELAY
+	.byte	20	; F13BA0  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13BA1  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13BA2  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13BA3  end
+; EffectDefaults_BrightReverb2 -- algorithm 25 `BRIGHT REVERB 2`: 5 value bytes (W-1 = 5)
+EffectDefaults_BrightReverb2:
+	.byte	0	; F13BA5  selected parameter = group 0
+	.short	0x02d8, 0x0460	; F13BA6  -> block bytes 17..20
+	.byte	45	; F13BAA  slot 1  REVERB TIME
+	.byte	30	; F13BAB  slot 2  PRE DELAY
+	.byte	6	; F13BAC  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13BAD  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13BAE  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13BAF  end
+; EffectDefaults_WaveReverb1 -- algorithm 26 `WAVE REVERB 1`: 5 value bytes (W-1 = 5)
+EffectDefaults_WaveReverb1:
+	.byte	0	; F13BB1  selected parameter = group 0
+	.short	0x02de, 0x0458	; F13BB2  -> block bytes 17..20
+	.byte	45	; F13BB6  slot 1  REVERB TIME
+	.byte	45	; F13BB7  slot 2  PRE DELAY
+	.byte	18	; F13BB8  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13BB9  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13BBA  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13BBB  end
+; EffectDefaults_WaveReverb2 -- algorithm 27 `WAVE REVERB 2`: 5 value bytes (W-1 = 5)
+EffectDefaults_WaveReverb2:
+	.byte	0	; F13BBD  selected parameter = group 0
+	.short	0x02da, 0x0454	; F13BBE  -> block bytes 17..20
+	.byte	55	; F13BC2  slot 1  REVERB TIME
+	.byte	45	; F13BC3  slot 2  PRE DELAY
+	.byte	18	; F13BC4  slot 3  HIGH DAMP GAIN
+	.byte	50	; F13BC5  slot 4  EARLY REFL LEVEL
+	.byte	70	; F13BC6  slot 5  VOLUME
+	.byte	0xff, 0xff	; F13BC7  end
+; EffectDefaults_SDelayChorus -- algorithm 64 `S.DELAY+CHORUS`: 12 value bytes (W-1 = 12)
+EffectDefaults_SDelayChorus:
+	.byte	7	; F13BC9  selected parameter = group 7
+	.short	0x02d8, 0x0458	; F13BCA  -> block bytes 17..20
+	.byte	20	; F13BCE  slot 1  DELAY WET
+	.byte	44	; F13BCF  slot 2  DELAY L
+	.byte	1	; F13BD0  slot 3  (second byte of slot 2's word)
+	.byte	44	; F13BD1  slot 4  DELAY R
+	.byte	1	; F13BD2  slot 5  (second byte of slot 4's word)
+	.byte	216	; F13BD3  slot 6  FEEDBACK L
+	.byte	216	; F13BD4  slot 7  FEEDBACK R
+	.byte	50	; F13BD5  slot 8  CHORUS DRY/WET
+	.byte	40	; F13BD6  slot 9  DEPTH
+	.byte	6	; F13BD7  slot 10  LFO SPEED
+	.byte	0	; F13BD8  slot 11  LFO WAVEFORM
+	.byte	84	; F13BD9  slot 12  VOLUME
+	.byte	0xff, 0xff	; F13BDA  end
+; EffectDefaults_SDelaySDelay -- algorithm 65 `S.DELAY+S.DELAY`: 15 value bytes (W-1 = 15)
+EffectDefaults_SDelaySDelay:
+	.byte	5	; F13BDC  selected parameter = group 5
+	.short	0x02d8, 0x0458	; F13BDD  -> block bytes 17..20
+	.byte	30	; F13BE1  slot 1  DELAY1 WET
+	.byte	180	; F13BE2  slot 2  DELAY L
+	.byte	0	; F13BE3  slot 3  (second byte of slot 2's word)
+	.byte	180	; F13BE4  slot 4  DELAY R
+	.byte	0	; F13BE5  slot 5  (second byte of slot 4's word)
+	.byte	196	; F13BE6  slot 6  FEEDBACK L
+	.byte	196	; F13BE7  slot 7  FEEDBACK R
+	.byte	30	; F13BE8  slot 8  DELAY2 DRY/WET
+	.byte	100	; F13BE9  slot 9  DELAY L
+	.byte	0	; F13BEA  slot 10  (second byte of slot 9's word)
+	.byte	100	; F13BEB  slot 11  DELAY R
+	.byte	0	; F13BEC  slot 12  (second byte of slot 11's word)
+	.byte	176	; F13BED  slot 13  FEEDBACK L
+	.byte	176	; F13BEE  slot 14  FEEDBACK R
+	.byte	84	; F13BEF  slot 15  VOLUME
+	.byte	0xff, 0xff	; F13BF0  end
+; EffectDefaults_SDelayFlanger -- algorithm 66 `S.DELAY+FLANGER`: 15 value bytes (W-1 = 15)
+EffectDefaults_SDelayFlanger:
+	.byte	8	; F13BF2  selected parameter = group 8
+	.short	0x02d8, 0x0458	; F13BF3  -> block bytes 17..20
+	.byte	20	; F13BF7  slot 1  DELAY WET
+	.byte	44	; F13BF8  slot 2  DELAY L
+	.byte	1	; F13BF9  slot 3  (second byte of slot 2's word)
+	.byte	44	; F13BFA  slot 4  DELAY R
+	.byte	1	; F13BFB  slot 5  (second byte of slot 4's word)
+	.byte	216	; F13BFC  slot 6  FEEDBACK L
+	.byte	216	; F13BFD  slot 7  FEEDBACK R
+	.byte	80	; F13BFE  slot 8  FLANGER DRY/WET
+	.byte	80	; F13BFF  slot 9  DEPTH
+	.byte	2	; F13C00  slot 10  LFO SPEED
+	.byte	60	; F13C01  slot 11  RESONANCE
+	.byte	50	; F13C02  slot 12  MANUAL
+	.byte	90	; F13C03  slot 13  PHASE
+	.byte	0	; F13C04  slot 14  LFO WAVEFORM
+	.byte	84	; F13C05  slot 15  VOLUME
+	.byte	0xff, 0xff	; F13C06  end
+; EffectDefaults_SDelayVibrato -- algorithm 67 `S.DELAY+VIBRATO`: 13 value bytes (W-1 = 13)
+EffectDefaults_SDelayVibrato:
+	.byte	7	; F13C08  selected parameter = group 7
+	.short	0x02d8, 0x0458	; F13C09  -> block bytes 17..20
+	.byte	20	; F13C0D  slot 1  DELAY WET
+	.byte	44	; F13C0E  slot 2  DELAY L
+	.byte	1	; F13C0F  slot 3  (second byte of slot 2's word)
+	.byte	44	; F13C10  slot 4  DELAY R
+	.byte	1	; F13C11  slot 5  (second byte of slot 4's word)
+	.byte	216	; F13C12  slot 6  FEEDBACK L
+	.byte	216	; F13C13  slot 7  FEEDBACK R
+	.byte	99	; F13C14  slot 8  VIBRATO DRY/WET
+	.byte	40	; F13C15  slot 9  DEPTH
+	.byte	6	; F13C16  slot 10  LFO SPEED
+	.byte	90	; F13C17  slot 11  PHASE
+	.byte	0	; F13C18  slot 12  LFO WAVEFORM
+	.byte	84	; F13C19  slot 13  VOLUME
+	.byte	0xff, 0xff	; F13C1A  end
+; EffectDefaults_SDelayPhaser -- algorithm 68 `S.DELAY+PHASER`: 15 value bytes (W-1 = 15)
+EffectDefaults_SDelayPhaser:
+	.byte	9	; F13C1C  selected parameter = group 9
+	.short	0x02d8, 0x0458	; F13C1D  -> block bytes 17..20
+	.byte	20	; F13C21  slot 1  DELAY WET
+	.byte	44	; F13C22  slot 2  DELAY L
+	.byte	1	; F13C23  slot 3  (second byte of slot 2's word)
+	.byte	44	; F13C24  slot 4  DELAY R
+	.byte	1	; F13C25  slot 5  (second byte of slot 4's word)
+	.byte	216	; F13C26  slot 6  FEEDBACK L
+	.byte	216	; F13C27  slot 7  FEEDBACK R
+	.byte	80	; F13C28  slot 8  PHASER DRY/WET
+	.byte	84	; F13C29  slot 9  DEPTH
+	.byte	4	; F13C2A  slot 10  LFO SPEED
+	.byte	64	; F13C2B  slot 11  RESONANCE
+	.byte	50	; F13C2C  slot 12  MANUAL
+	.byte	90	; F13C2D  slot 13  PHASE
+	.byte	0	; F13C2E  slot 14  LFO WAVEFORM
+	.byte	84	; F13C2F  slot 15  VOLUME
+	.byte	0xff, 0xff	; F13C30  end
+; EffectDefaults_PedalWahDelay -- algorithm 69 `PEDAL WAH+DELAY`: 13 value bytes (W-1 = 13)
+EffectDefaults_PedalWahDelay:
+	.byte	4	; F13C32  selected parameter = group 4
+	.short	0x02d8, 0x0458	; F13C33  -> block bytes 17..20
+	.byte	99	; F13C37  slot 1  WAH WET
+	.byte	2	; F13C38  slot 2  RESONANCE
+	.byte	0	; F13C39  slot 3  MANUAL
+	.byte	99	; F13C3A  slot 4  SWEEP RANGE
+	.byte	30	; F13C3B  slot 5  WAH CENTER Fc
+	.byte	20	; F13C3C  slot 6  DELAY DRY/WET
+	.byte	44	; F13C3D  slot 7  DELAY L
+	.byte	1	; F13C3E  slot 8  (second byte of slot 7's word)
+	.byte	44	; F13C3F  slot 9  DELAY R
+	.byte	1	; F13C40  slot 10  (second byte of slot 9's word)
+	.byte	216	; F13C41  slot 11  FEEDBACK L
+	.byte	216	; F13C42  slot 12  FEEDBACK R
+	.byte	99	; F13C43  slot 13  VOLUME
+	.byte	0xff, 0xff	; F13C44  end
+; EffectDefaults_AutoWahSDelay -- algorithm 70 `AUTO WAH+S.DELAY`: 12 value bytes (W-1 = 12)
+EffectDefaults_AutoWahSDelay:
+	.byte	4	; F13C46  selected parameter = group 4
+	.short	0x02d8, 0x0458	; F13C47  -> block bytes 17..20
+	.byte	99	; F13C4B  slot 1  WAH WET
+	.byte	2	; F13C4C  slot 2  RESONANCE
+	.byte	0	; F13C4D  slot 3  MANUAL
+	.byte	99	; F13C4E  slot 4  SWEEP RANGE
+	.byte	20	; F13C4F  slot 5  DELAY DRY/WET
+	.byte	44	; F13C50  slot 6  DELAY L
+	.byte	1	; F13C51  slot 7  (second byte of slot 6's word)
+	.byte	44	; F13C52  slot 8  DELAY R
+	.byte	1	; F13C53  slot 9  (second byte of slot 8's word)
+	.byte	216	; F13C54  slot 10  FEEDBACK L
+	.byte	216	; F13C55  slot 11  FEEDBACK R
+	.byte	99	; F13C56  slot 12  VOLUME
+	.byte	0xff, 0xff	; F13C57  end
+; EffectDefaults_PeqChorus -- algorithm 71 `PEQ+CHORUS`: 9 value bytes (W-1 = 9)
+EffectDefaults_PeqChorus:
+	.byte	8	; F13C59  selected parameter = group 8
+	.short	0x02d8, 0x0458	; F13C5A  -> block bytes 17..20
+	.byte	228	; F13C5E  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13C5F  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13C60  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13C61  slot 4  (second byte of slot 3's word)
+	.byte	50	; F13C62  slot 5  CHORUS DRY/WET
+	.byte	30	; F13C63  slot 6  DEPTH
+	.byte	6	; F13C64  slot 7  LFO SPEED
+	.byte	0	; F13C65  slot 8  LFO WAVEFORM
+	.byte	84	; F13C66  slot 9  VOLUME
+	.byte	0xff, 0xff	; F13C67  end
+; EffectDefaults_PeqSDelay -- algorithm 72 `PEQ+S.DELAY`: 12 value bytes (W-1 = 12)
+EffectDefaults_PeqSDelay:
+	.byte	6	; F13C69  selected parameter = group 6
+	.short	0x02d8, 0x0458	; F13C6A  -> block bytes 17..20
+	.byte	228	; F13C6E  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13C6F  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13C70  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13C71  slot 4  (second byte of slot 3's word)
+	.byte	20	; F13C72  slot 5  DELAY DRY/WET
+	.byte	44	; F13C73  slot 6  DELAY L
+	.byte	1	; F13C74  slot 7  (second byte of slot 6's word)
+	.byte	44	; F13C75  slot 8  DELAY R
+	.byte	1	; F13C76  slot 9  (second byte of slot 8's word)
+	.byte	216	; F13C77  slot 10  FEEDBACK L
+	.byte	216	; F13C78  slot 11  FEEDBACK R
+	.byte	84	; F13C79  slot 12  VOLUME
+	.byte	0xff, 0xff	; F13C7A  end
+; EffectDefaults_PeqFlanger -- algorithm 73 `PEQ+FLANGER`: 12 value bytes (W-1 = 12)
+EffectDefaults_PeqFlanger:
+	.byte	9	; F13C7C  selected parameter = group 9
+	.short	0x02d8, 0x0458	; F13C7D  -> block bytes 17..20
+	.byte	228	; F13C81  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13C82  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13C83  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13C84  slot 4  (second byte of slot 3's word)
+	.byte	80	; F13C85  slot 5  FLANGER DRY/WET
+	.byte	80	; F13C86  slot 6  DEPTH
+	.byte	2	; F13C87  slot 7  LFO SPEED
+	.byte	60	; F13C88  slot 8  RESONANCE
+	.byte	50	; F13C89  slot 9  MANUAL
+	.byte	90	; F13C8A  slot 10  PHASE
+	.byte	0	; F13C8B  slot 11  LFO WAVEFORM
+	.byte	84	; F13C8C  slot 12  VOLUME
+	.byte	0xff, 0xff	; F13C8D  end
+; EffectDefaults_PeqVibrato -- algorithm 74 `PEQ+VIBRATO`: 10 value bytes (W-1 = 10)
+EffectDefaults_PeqVibrato:
+	.byte	8	; F13C8F  selected parameter = group 8
+	.short	0x02d8, 0x0458	; F13C90  -> block bytes 17..20
+	.byte	228	; F13C94  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13C95  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13C96  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13C97  slot 4  (second byte of slot 3's word)
+	.byte	99	; F13C98  slot 5  VIBRATO DRY/WET
+	.byte	40	; F13C99  slot 6  DEPTH
+	.byte	6	; F13C9A  slot 7  LFO SPEED
+	.byte	90	; F13C9B  slot 8  PHASE
+	.byte	0	; F13C9C  slot 9  LFO WAVEFORM
+	.byte	84	; F13C9D  slot 10  VOLUME
+	.byte	0xff, 0xff	; F13C9E  end
+; EffectDefaults_PeqCompressor -- algorithm 75 `PEQ+COMPRESSOR`: 9 value bytes (W-1 = 9)
+EffectDefaults_PeqCompressor:
+	.byte	8	; F13CA0  selected parameter = group 8
+	.short	0x02d8, 0x0458	; F13CA1  -> block bytes 17..20
+	.byte	228	; F13CA5  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13CA6  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13CA7  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13CA8  slot 4  (second byte of slot 3's word)
+	.byte	14	; F13CA9  slot 5  THRESHOLD
+	.byte	85	; F13CAA  slot 6  RATIO
+	.byte	49	; F13CAB  slot 7  ATTACK SENS.
+	.byte	19	; F13CAC  slot 8  RELEASE SENS.
+	.byte	84	; F13CAD  slot 9  VOLUME
+	.byte	0xff, 0xff	; F13CAE  end
+; EffectDefaults_PeqComprDist -- algorithm 96 `PEQ+COMPR+DIST`: 12 value bytes (W-1 = 11)
+EffectDefaults_PeqComprDist:
+	.byte	8	; F13CB0  selected parameter = group 8
+	.short	0x02d8, 0x0458	; F13CB1  -> block bytes 17..20
+	.byte	228	; F13CB5  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13CB6  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13CB7  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13CB8  slot 4  (second byte of slot 3's word)
+	.byte	14	; F13CB9  slot 5  THRESHOLD
+	.byte	85	; F13CBA  slot 6  RATIO
+	.byte	49	; F13CBB  slot 7  ATTACK SENS.
+	.byte	19	; F13CBC  slot 8  RELEASE SENS.
+	.byte	65	; F13CBD  slot 9  DRIVE
+	.byte	84	; F13CBE  slot 10  ADJUST
+	.byte	84	; F13CBF  slot 11  VOLUME
+	.byte	0	; F13CC0  slot 12  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F13CC1  end
+; EffectDefaults_PeqComprOverdr -- algorithm 97 `PEQ+COMPR+OVERDR`: 10 value bytes (W-1 = 9)
+EffectDefaults_PeqComprOverdr:
+	.byte	5	; F13CC3  selected parameter = group 5
+	.short	0x02d8, 0x0458	; F13CC4  -> block bytes 17..20
+	.byte	100	; F13CC8  slot 1  BAND EMPHASIS Fc
+	.byte	92	; F13CC9  slot 2  (second byte of slot 1's word)
+	.byte	14	; F13CCA  slot 3  THRESHOLD
+	.byte	85	; F13CCB  slot 4  RATIO
+	.byte	49	; F13CCC  slot 5  ATTACK SENS.
+	.byte	19	; F13CCD  slot 6  RELEASE SENS.
+	.byte	80	; F13CCE  slot 7  DRIVE
+	.byte	92	; F13CCF  slot 8  ADJUST
+	.byte	84	; F13CD0  slot 9  VOLUME
+	.byte	1	; F13CD1  slot 10  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F13CD2  end
+; EffectDefaults_PeqDistDelay -- algorithm 98 `PEQ+DIST+DELAY`: 15 value bytes (W-1 = 14)
+EffectDefaults_PeqDistDelay:
+	.byte	8	; F13CD4  selected parameter = group 8
+	.short	0x02d8, 0x0458	; F13CD5  -> block bytes 17..20
+	.byte	228	; F13CD9  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13CDA  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13CDB  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13CDC  slot 4  (second byte of slot 3's word)
+	.byte	80	; F13CDD  slot 5  DRIVE
+	.byte	76	; F13CDE  slot 6  ADJUST
+	.byte	20	; F13CDF  slot 7  DELAY DRY/WET
+	.byte	44	; F13CE0  slot 8  DELAY L
+	.byte	1	; F13CE1  slot 9  (second byte of slot 8's word)
+	.byte	44	; F13CE2  slot 10  DELAY R
+	.byte	1	; F13CE3  slot 11  (second byte of slot 10's word)
+	.byte	216	; F13CE4  slot 12  FEEDBACK L
+	.byte	216	; F13CE5  slot 13  FEEDBACK R
+	.byte	84	; F13CE6  slot 14  VOLUME
+	.byte	0	; F13CE7  slot 15  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F13CE8  end
+; EffectDefaults_PeqOverdrDelay -- algorithm 99 `PEQ+OVERDR+DELAY`: 15 value bytes (W-1 = 14)
+EffectDefaults_PeqOverdrDelay:
+	.byte	8	; F13CEA  selected parameter = group 8
+	.short	0x02d8, 0x0458	; F13CEB  -> block bytes 17..20
+	.byte	228	; F13CEF  slot 1  BAND EMPHASIS Fc
+	.byte	90	; F13CF0  slot 2  (second byte of slot 1's word)
+	.byte	100	; F13CF1  slot 3  BAND EMPHASIS Fc
+	.byte	92	; F13CF2  slot 4  (second byte of slot 3's word)
+	.byte	80	; F13CF3  slot 5  DRIVE
+	.byte	90	; F13CF4  slot 6  ADJUST
+	.byte	20	; F13CF5  slot 7  DELAY DRY/WET
+	.byte	44	; F13CF6  slot 8  DELAY L
+	.byte	1	; F13CF7  slot 9  (second byte of slot 8's word)
+	.byte	44	; F13CF8  slot 10  DELAY R
+	.byte	1	; F13CF9  slot 11  (second byte of slot 10's word)
+	.byte	216	; F13CFA  slot 12  FEEDBACK L
+	.byte	216	; F13CFB  slot 13  FEEDBACK R
+	.byte	84	; F13CFC  slot 14  VOLUME
+	.byte	1	; F13CFD  slot 15  (no descriptor group names this slot)
+	.byte	0xff, 0xff	; F13CFE  end
+; --------------------------------------------------------------------------
+; Bitmap_Knob_16x12 / Bitmap_KnobWithLine_16x12 -- 0xF13D00 and 0xF13D18,
+;   24 bytes each: 16 x 12, 1 bit per pixel, COLUMN-major (2 byte columns of
+;   12 rows).  Drawn by the op-0x03 display-list records at 0xF13F50 /
+;   0xF13F5C (0xF13D00) and 0xF14311 / 0xF1431D (0xF13D18) -- `03 0C`, BC = 2,
+;   HL = 12 -> LCD_Svc_03_BlitColumns.  The pictures, the column-major reading
+;   and its evidence are in the res02f note below; the NAMES are a visual
+;   identification of those pictures (a circle with a pointer; the same with a
+;   line through it) and claim nothing else.  Bitmap_F13D30 is the third of
+;   the four; its first four bytes end this span.
+; --------------------------------------------------------------------------
+Bitmap_Knob_16x12:
+	.byte	0x07, 0x18, 0x20, 0x20, 0x40, 0x41, 0x40, 0x40, 0x20, 0x20, 0x18, 0x07	; F13D00  column 0, rows 0..11
+	.byte	0x80, 0x60, 0x30, 0x50, 0x88, 0x08, 0x08, 0x08, 0x10, 0x10, 0x60, 0x80	; F13D0C  column 1, rows 0..11
+Bitmap_KnobWithLine_16x12:
+	.byte	0x07, 0x18, 0x20, 0x20, 0x40, 0xc1, 0x40, 0x40, 0x20, 0x20, 0x18, 0x07	; F13D18  column 0, rows 0..11
+	.byte	0x80, 0x60, 0x30, 0x50, 0x88, 0x0f, 0x08, 0x08, 0x10, 0x10, 0x60, 0x80	; F13D24  column 1, rows 0..11
+Bitmap_F13D30:		; the 2 x 12 bitmap the record at 0xF14556 draws
+	.byte	0x00, 0x00, 0x03, 0x0e	; F13D30  column 0, rows 0..3 (rows 4..11 follow the note below)
 
 ; --- 0xF13D34-0xF147AB: CONVERTED.  0xF13D34-0xF13D5F by lane res02f 2026-09-02
 ; (notes/gen_res02f_spans.py) was the last `.incbin` anywhere in this range. ---
@@ -37029,6 +37765,9 @@ Data_F139AB:
 ; ------------------------------------------------------------------
 ; 0xF13D30's column 0, rows 4..11 -- rows 0..3 are the last four bytes of
 ; the `.byte` run above and are NOT relabelled here (see the ⚠ above).
+; ⚠ 2026-09-25 (lane promb): rows 0..3 now sit under the label Bitmap_F13D30, which
+;   ends the typed DSP-effect span above (notes/promb-2026-09-25/dsp_effect_tables.py);
+;   the boundary moved in this text only -- notes/prom_b_f0ea9f_layout.py is unchanged.
 	.byte	0x70, 0xF0, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00	; F13D34  column 0, rows 4..11
 	.byte	0x1C, 0x70, 0x80, 0x00, 0x1C, 0x1F, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00	; F13D3C  column 1, rows 0..11
 Data_F13D48:		; the 2 x 12 bitmap the record at 0xF1454A draws
@@ -37276,13 +38015,13 @@ DL_F13F41:
 	.ascii "ALGORITHM :"
 DL_F13F50:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long Data_F139AB + 0x355
+	.long Bitmap_Knob_16x12
 	.short 0x0E4B
 	.short 0x0002
 	.short 0x000C
 DL_F13F5C:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long Data_F139AB + 0x355
+	.long Bitmap_Knob_16x12
 	.short 0x1439
 	.short 0x0002
 	.short 0x000C
@@ -37848,13 +38587,13 @@ DL_F14307:
 	.short 0x00BC
 DL_F14311:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long Data_F139AB + 0x36D
+	.long Bitmap_KnobWithLine_16x12
 	.short 0x0B6C
 	.short 0x0002
 	.short 0x000C
 DL_F1431D:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long Data_F139AB + 0x36D
+	.long Bitmap_KnobWithLine_16x12
 	.short 0x1774
 	.short 0x0002
 	.short 0x000C
@@ -86706,7 +87445,7 @@ T_F42F50:	jp sub_F0F17C  ; -> prom_b 0x0F17C   x3
 T_F42F54:	jp sub_F0F061  ; -> prom_b 0x0F061
 T_F42F58:	jp sub_F114DA  ; -> prom_b 0x114DA   x8
 T_F42F5C:	jp sub_F1156B  ; -> prom_b 0x1156B   x4
-T_F42F60:	jp sub_F11365  ; -> prom_b 0x11365
+T_F42F60:	jp DspEffect_SetAlgorithm  ; -> prom_b 0x11365
 T_F42F64:	jp sub_F11556  ; -> prom_b 0x11556
 T_F42F68:	jp sub_F122C5  ; -> prom_b 0x122C5   x1
 T_F42F6C:	jp sub_F12334  ; -> prom_b 0x12334   x1
@@ -87107,8 +87846,8 @@ T_F43484:	jp sub_FDA911  ; -> prom_a 0x5A911   x1
 T_F43488:	jp sub_FD665C  ; -> prom_a 0x5665C   x2
 T_F4348C:	jp sub_FD6513  ; -> prom_a 0x56513   x1
 	.fill 0x10, 1, 0x0E  ; 0xF43490: 16 x ret
-T_F434A0:	jp sub_F11C30  ; -> prom_b 0x11C30   x2
-T_F434A4:	jp sub_F1220B  ; -> prom_b 0x1220B   x2
+T_F434A0:	jp DspParam_WriteByNumber  ; -> prom_b 0x11C30   x2
+T_F434A4:	jp DspParam_ReadByNumber  ; -> prom_b 0x1220B   x2
 	.fill 0x18, 1, 0x0E  ; 0xF434A8: 24 x ret
 T_F434C0:	jp sub_F9EEAB  ; -> prom_a 0x1EEAB
 T_F434C4:	jp sub_F9EEDF  ; -> prom_a 0x1EEDF
