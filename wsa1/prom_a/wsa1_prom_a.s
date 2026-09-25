@@ -73040,10 +73040,11 @@ sub_FAA4B7:
 ; ---------------------------------------------------------------------
 ; Queue2C00_PublishStaged -- the same, with no (0x60F083) test
 ;
-; Called from: no directory slot and no proven call site found; it is
-;          reached by falling out of Queue2C00_PublishStagedIfPending's
-;          `ret` only if something jumps here, which nothing does.  Stated
-;          as a searched negative, not as a fact about the hardware.
+; Called from: `call` at 0xFABE9D in Queue2C00_FanOutToPartMask_Publish.
+;          ★ CORRECTED 2026-09-25 (lane proma): this said "no directory slot
+;          and no proven call site found ... nothing does"; the call became
+;          visible when 0xFABE9D's operand was symbolised (check M8).  No
+;          directory slot names it.
 ; Body:    identical to Queue2C00_PublishStagedIfPending from its second
 ;          instruction on, including the same `jr c` into that routine's
 ;          own tail at 0xFAA4CA, and then a SECOND copy of the same tail
@@ -74532,7 +74533,21 @@ sub_FAAF91:
 	popw hl                                              ; FAB160  4b
 	unlk XIZ                                             ; FAB161  ee 0d
 	ret                                                  ; FAB163  0e
-sub_FAB164:
+; ---------------------------------------------------------------------
+; List2030_LoadRecord -- copy the list record at 0x2030 + (0x60F08C) into the
+;          module's working cells and step the cursor over it.
+; Called from: List2030_TranslateToQueue2C00 (`calr` at 0xFAB844).
+; Body:    byte 0, the parameter NUMBER -> (0x60F080), and
+;          ParamNumber_RecordPtrs[number] (via sub_FAC8AA) -> (0x60F084);
+;          byte 1, the CLASS -> (0x60F088) and (0x60F081); byte 2, the
+;          VALUE -> (0x60F089); byte 3, the MASK -> (0x60F08A); (0x60F082)
+;          and (0x60F083) zeroed.  (0x60F080..0x60F083) is the staged record
+;          Queue2C00_AppendStagedIfPending emits.
+; Evidence: `ld H,(XBC+0x2030) / ld (0x60F080),H` at 0xFAB170-0xFAB175 and
+;          three more `(XBC+0x2030)` loads at 0xFAB18C, 0xFAB1A5, 0xFAB1BD,
+;          each after a cursor step.  (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
+; ---------------------------------------------------------------------
+List2030_LoadRecord:
 	push XHL                                             ; FAB164  3b
 	push XDE                                             ; FAB165  3a
 	push XIX                                             ; FAB166  3c
@@ -74597,7 +74612,17 @@ sub_FAB1D8:
 	pop XIX                                              ; FAB207  5c
 	unlk XIZ                                             ; FAB208  ee 0d
 	ret                                                  ; FAB20A  0e
-sub_FAB20B:
+; ---------------------------------------------------------------------
+; Queue2C00_AppendStagedIfPending -- this module's byte-wise copy of
+;          Queue2C00_PublishStagedIfPending: nothing if the staged mask
+;          (0x60F083) is 0; otherwise drain the 0x2C00 queue when its cursor
+;          (0x60F000) has reached 0x1FC, then Queue2C00_AppendStaged.
+; Called from: 23 `calr` sites in this module, among them the fan-out
+;          loop Queue2C00_FanOutToPartMask.
+; Evidence: `cp (0x60F083),0` at 0xFAB20B, `cp (0x60F000),0x1FC` at 0xFAB213,
+;          `call T_Queue2C00_DrainPassAB` at 0xFAB220.  (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
+; ---------------------------------------------------------------------
+Queue2C00_AppendStagedIfPending:
 	m_cp_mi8 MB24, 0x60f083, 0x00                        ; FAB20B  c2 83 f0 60 3f 00
 	jr z, .LFAB232                                       ; FAB211  66 1f
 	m_cp_mi16 MW24, 0x60f000, 0x01fc                     ; FAB213  d2 00 f0 60 3f fc 01
@@ -74613,7 +74638,7 @@ sub_FAB20B:
 	pop XDE                                              ; FAB227  5a
 	ldw (0x60f000:24), 0x00                             ; FAB228  f2 00 f0 60 02 00 00
 .LFAB22F:
-	calr sub_FAC846                                          ; FAB22F  1e 14 16
+	calr Queue2C00_AppendStaged                                          ; FAB22F  1e 14 16
 .LFAB232:
 	ret                                                  ; FAB232  0e
 sub_FAB233:
@@ -74630,7 +74655,7 @@ sub_FAB233:
 	pop XDE                                              ; FAB247  5a
 	ldw (0x60f000:24), 0x00                             ; FAB248  f2 00 f0 60 02 00 00
 .LFAB24F:
-	calr sub_FAC846                                          ; FAB24F  1e f4 15
+	calr Queue2C00_AppendStaged                                          ; FAB24F  1e f4 15
 	ret                                                  ; FAB252  0e
 sub_FAB253:
 	link XIZ,0xfffc                                      ; FAB253  ee 0c fc ff
@@ -75025,7 +75050,7 @@ sub_FAB5EB:
 	ld c, (0x24f1:16)                                   ; FAB609  c1 f1 24 23
 	ld (0x60f082:24), c                                 ; FAB60D  f2 82 f0 60 43
 	ld (0x60f083:24), 0x7f                             ; FAB612  f2 83 f0 60 00 7f
-	calr sub_FAB20B                                      ; FAB618  1e f0 fb
+	calr Queue2C00_AppendStagedIfPending                                      ; FAB618  1e f0 fb
 .LFAB61B:
 	ld C,(XIX)                                           ; FAB61B  84 23
 	and C,0x80                                           ; FAB61D  cb cc 80
@@ -75036,7 +75061,7 @@ sub_FAB5EB:
 	ld C,(XIX)                                           ; FAB631  84 23
 	ld (0x60f082:24), c                                 ; FAB633  f2 82 f0 60 43
 	ld (0x60f083:24), 0x7f                             ; FAB638  f2 83 f0 60 00 7f
-	calr sub_FAB20B                                      ; FAB63E  1e ca fb
+	calr Queue2C00_AppendStagedIfPending                                      ; FAB63E  1e ca fb
 .LFAB641:
 	pop XIX                                              ; FAB641  5c
 	ret                                                  ; FAB642  0e
@@ -75205,7 +75230,7 @@ sub_FAB7E6:
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAB7F4  f2 ea cd fa 31
 sub_FAB7F9:
 	ld (0x60f018:24), xbc                               ; FAB7F9  f2 18 f0 60 61
-	calr sub_FAB81F                                      ; FAB7FE  1e 1e 00
+	calr List2030_TranslateToQueue2C00                                      ; FAB7FE  1e 1e 00
 	push XDE                                             ; FAB801  3a
 	push XHL                                             ; FAB802  3b
 	push XIX                                             ; FAB803  3c
@@ -75221,7 +75246,22 @@ sub_FAB7F9:
 	m_res 1, MD24, 0x60f020                              ; FAB819  f2 20 f0 60 b1
 .LFAB81E:
 	ret                                                  ; FAB81E  0e
-sub_FAB81F:
+; ---------------------------------------------------------------------
+; List2030_TranslateToQueue2C00 -- turn each record of the 0xFF-terminated
+;          4-byte list at RAM 0x2030 into records of the queue at RAM 0x2C00,
+;          dispatching on the record's parameter NUMBER.
+; Called from: sub_FAB7E6 (`calr` at 0xFAB7FE), which first checks (0x2030)
+;          is not 0xFF and sets (0x60F018) = ParamNumber_RecordPtrs.
+; Body:    (0x60F08C) = 0 is the list cursor.  Per record: stop on 0xFF;
+;          List2030_LoadRecord; `ld C,4 / mul BC,(0x60F080)` and call
+;          Dispatch_By_60F080[number] with 0xFAB860 pushed as its return.
+;          Whenever the queue cursor (0x60F000) has reached 0x1FC the queue
+;          is drained (T_Queue2C00_DrainPassAB) and (0x60F002) zeroed.  At
+;          the end bit 4 of (0x60F021) is cleared, 0xFF is written at
+;          0x2C00 + (0x60F000) and (0x60F01E) = 0x7F.
+; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
+; ---------------------------------------------------------------------
+List2030_TranslateToQueue2C00:
 	push XIX                                             ; FAB81F  3c
 	lda xix, (0x60f000:24)                               ; FAB820  f2 00 f0 60 34
 	ldw (0x60f08c:24), 0x00                             ; FAB825  f2 8c f0 60 02 00 00
@@ -75233,7 +75273,7 @@ sub_FAB81F:
 	ld A,(XBC+0x2030)                                    ; FAB83A  c3 e5 30 20 21
 	cp A,0xff                                            ; FAB83F  c9 cf ff
 	jr z, .LFAB87D                                       ; FAB842  66 39
-	calr sub_FAB164                                      ; FAB844  1e 1d f9
+	calr List2030_LoadRecord                                      ; FAB844  1e 1d f9
 	ld c, 0x04:opc                                          ; FAB847  23 04
 	m_mul MB24, 0x60f080, 3                              ; FAB849  c2 80 f0 60 43
 	extz XBC                                             ; FAB84E  e9 12
@@ -75303,14 +75343,22 @@ sub_FAB8B0:
 ;          which is where the linear decode resynchronises; 11 or 13 entries
 ;          land at 0xFAB8E0 or 0xFAB8E8 and neither is an instruction boundary.
 ;          Re-derived by notes/prom_a_jumptables.py.
-; Unknown:  what the selector at (0x60F088) means.
+; Selector: (0x60F088) is byte 1, the CLASS, of the list record
+;          (List2030_LoadRecord), and for numbers 0x00-0x1F the class names
+;          the part attribute: MidiOut_ParamClassTable, indexed by the same
+;          class, is 0 MidiOut_ProgramChange, 3 MidiOut_CC07_Volume, 5/6/7 the
+;          effect depths, 8 MidiOut_CC0A_Pan, 9-11 the three RPN tunings,
+;          and the MIDI-in tables confirm classes 3, 5, 6, 7 and 8.
+; ★ 2026-09-25 (lane proma): this line said "Unknown: what the selector at
+;          (0x60F088) means".  What each entry here DOES with it is still
+;          not decoded.
 ; Evidence: the fixed reader shape in the ten bytes before the base
 ;          (`add XBC,0x00FAB8B4 / ld XBC,(XBC) / jp T,XBC`) plus the count
 ;          taken from its own `cp BC`; both re-derived by
 ;          notes/prom_a_byte_checks.py and notes/prom_a_jumptables.py.
 ; ---------------------------------------------------------------------
 JumpTable_FAB8B4:
-	.long 0x00fab8e4                                 ; FAB8B4  [  0]
+	.long sub_FAB8E4                                 ; FAB8B4  [  0]
 	.long .LFAB914                                   ; FAB8B8  [  1]
 	.long .LFAB914                                   ; FAB8BC  [  2]
 	.long sub_FAB8E9                                 ; FAB8C0  [  3]
@@ -75322,6 +75370,7 @@ JumpTable_FAB8B4:
 	.long sub_FAB907                                 ; FAB8D8  [  9]
 	.long sub_FAB90C                                 ; FAB8DC  [ 10]
 	.long sub_FAB911                                 ; FAB8E0  [ 11]
+sub_FAB8E4:   ; entry: JumpTable_FAB8B4[0], class 0
 	calr sub_FAB915                                      ; FAB8E4  1e 2e 00
 	jr .LFAB914                                          ; FAB8E7  68 2b
 sub_FAB8E9:   ; entry: named by 1 `.long` operand, first at 0xFAB8C0
@@ -75410,12 +75459,12 @@ sub_FAB915:
 	ld c, (0x60f165:24)                                 ; FAB9CB  c2 65 f1 60 23
 	ld (0x60f082:24), c                                 ; FAB9D0  f2 82 f0 60 43
 	ld (0x60f083:24), 0x7f                             ; FAB9D5  f2 83 f0 60 00 7f
-	calr sub_FAB20B                                          ; FAB9DB  1e 2d f8
+	calr Queue2C00_AppendStagedIfPending                                          ; FAB9DB  1e 2d f8
 	ld (0x60f081:24), 0x00                             ; FAB9DE  f2 81 f0 60 00 00
 	ld c, (0x60f164:24)                                 ; FAB9E4  c2 64 f1 60 23
 	ld (0x60f082:24), c                                 ; FAB9E9  f2 82 f0 60 43
 	ld (0x60f083:24), 0xff                             ; FAB9EE  f2 83 f0 60 00 ff
-	calr sub_FAB20B                                          ; FAB9F4  1e 14 f8
+	calr Queue2C00_AppendStagedIfPending                                          ; FAB9F4  1e 14 f8
 	popw bc                                              ; FAB9F7  49
 .LFAB9F8:
 	pop XIX                                              ; FAB9F8  5c
@@ -75425,7 +75474,7 @@ sub_FAB915:
 sub_FAB9FD:
 	pushw 0x7f                                           ; FAB9FD  0b 7f 00
 	calr sub_FAB337                                          ; FABA00  1e 34 f9
-	calr sub_FAB20B                                          ; FABA03  1e 05 f8
+	calr Queue2C00_AppendStagedIfPending                                          ; FABA03  1e 05 f8
 	popw bc                                              ; FABA06  49
 	ret                                                  ; FABA07  0e
 sub_FABA08:
@@ -75486,7 +75535,7 @@ sub_FABA08:
 	calr sub_FAB410                                          ; FABAA4  1e 69 f9
 	pop XIY                                              ; FABAA7  5d
 .LFABAA8:
-	calr sub_FAB20B                                          ; FABAA8  1e 60 f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABAA8  1e 60 f7
 	pop XIX                                              ; FABAAB  5c
 	popw hl                                              ; FABAAC  4b
 	unlk XIZ                                             ; FABAAD  ee 0d
@@ -75494,43 +75543,43 @@ sub_FABA08:
 sub_FABAB0:
 	pushw 0x7f                                           ; FABAB0  0b 7f 00
 	calr sub_FAB337                                          ; FABAB3  1e 81 f8
-	calr sub_FAB20B                                          ; FABAB6  1e 52 f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABAB6  1e 52 f7
 	popw bc                                              ; FABAB9  49
 	ret                                                  ; FABABA  0e
 sub_FABABB:
 	pushw 0x7f                                           ; FABABB  0b 7f 00
 	calr sub_FAB337                                          ; FABABE  1e 76 f8
-	calr sub_FAB20B                                          ; FABAC1  1e 47 f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABAC1  1e 47 f7
 	popw bc                                              ; FABAC4  49
 	ret                                                  ; FABAC5  0e
 sub_FABAC6:
 	pushw 0x7f                                           ; FABAC6  0b 7f 00
 	calr sub_FAB337                                          ; FABAC9  1e 6b f8
-	calr sub_FAB20B                                          ; FABACC  1e 3c f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABACC  1e 3c f7
 	popw bc                                              ; FABACF  49
 	ret                                                  ; FABAD0  0e
 sub_FABAD1:
 	pushw 0x7f                                           ; FABAD1  0b 7f 00
 	calr sub_FAB337                                          ; FABAD4  1e 60 f8
-	calr sub_FAB20B                                          ; FABAD7  1e 31 f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABAD7  1e 31 f7
 	popw bc                                              ; FABADA  49
 	ret                                                  ; FABADB  0e
 sub_FABADC:
 	pushw 0x7f                                           ; FABADC  0b 7f 00
 	calr sub_FAB337                                          ; FABADF  1e 55 f8
-	calr sub_FAB20B                                          ; FABAE2  1e 26 f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABAE2  1e 26 f7
 	popw bc                                              ; FABAE5  49
 	ret                                                  ; FABAE6  0e
 sub_FABAE7:
 	pushw 0xff                                           ; FABAE7  0b ff 00
 	calr sub_FAB337                                          ; FABAEA  1e 4a f8
-	calr sub_FAB20B                                          ; FABAED  1e 1b f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABAED  1e 1b f7
 	popw bc                                              ; FABAF0  49
 	ret                                                  ; FABAF1  0e
 sub_FABAF2:
 	pushw 0x7f                                           ; FABAF2  0b 7f 00
 	calr sub_FAB337                                          ; FABAF5  1e 3f f8
-	calr sub_FAB20B                                          ; FABAF8  1e 10 f7
+	calr Queue2C00_AppendStagedIfPending                                          ; FABAF8  1e 10 f7
 	popw bc                                              ; FABAFB  49
 	ret                                                  ; FABAFC  0e
 sub_FABAFD:   ; entry: named by 32 `.long` operands, first at 0xFAC96A
@@ -75562,7 +75611,7 @@ sub_FABB29:
 	calr sub_FAB1D8                                          ; FABB31  1e a4 f6
 	pushw 0x01                                           ; FABB34  0b 01 00
 	calr sub_FAB337                                          ; FABB37  1e fd f7
-	calr sub_FAB20B                                          ; FABB3A  1e ce f6
+	calr Queue2C00_AppendStagedIfPending                                          ; FABB3A  1e ce f6
 	inc 1,H                                              ; FABB3D  ce 61
 	popw bc                                              ; FABB3F  49
 	cp H,0x3f                                            ; FABB40  ce cf 3f
@@ -75572,13 +75621,13 @@ sub_FABB29:
 sub_FABB47:
 	pushw 0x3f                                           ; FABB47  0b 3f 00
 	calr sub_FAB337                                          ; FABB4A  1e ea f7
-	calr sub_FAB20B                                          ; FABB4D  1e bb f6
+	calr Queue2C00_AppendStagedIfPending                                          ; FABB4D  1e bb f6
 	popw bc                                              ; FABB50  49
 	ret                                                  ; FABB51  0e
 sub_FABB52:
 	pushw 0x3f                                           ; FABB52  0b 3f 00
 	calr sub_FAB337                                          ; FABB55  1e df f7
-	calr sub_FAB20B                                          ; FABB58  1e b0 f6
+	calr Queue2C00_AppendStagedIfPending                                          ; FABB58  1e b0 f6
 	popw bc                                              ; FABB5B  49
 	ret                                                  ; FABB5C  0e
 sub_FABB5D:   ; entry: named by 3 `.long` operands, first at 0xFAC9FA
@@ -75618,12 +75667,12 @@ sub_FABB75:
 	ld A,(XBC)                                           ; FABBA2  81 21
 	ld (0x60f082:24), a                                 ; FABBA4  f2 82 f0 60 41
 	ld (0x60f083:24), 0xff                             ; FABBA9  f2 83 f0 60 00 ff
-	calr sub_FAB20B                                          ; FABBAF  1e 59 f6
+	calr Queue2C00_AppendStagedIfPending                                          ; FABBAF  1e 59 f6
 	ld (0x60f081:24), 0x01                             ; FABBB2  f2 81 f0 60 00 01
 	ld C,(XIX+0x01)                                      ; FABBB8  8c 01 23
 	ld (0x60f082:24), c                                 ; FABBBB  f2 82 f0 60 43
 	ld (0x60f083:24), 0x01                             ; FABBC0  f2 83 f0 60 00 01
-	calr sub_FAB20B                                          ; FABBC6  1e 42 f6
+	calr Queue2C00_AppendStagedIfPending                                          ; FABBC6  1e 42 f6
 	call sub_FAA742                                      ; FABBC9  1d 42 a7 fa
 .LFABBCD:
 	pop XIX                                              ; FABBCD  5c
@@ -75712,12 +75761,12 @@ sub_FABBEB:
 	ld c, (0x60f186:24)                                 ; FABCA4  c2 86 f1 60 23
 	ld (0x60f082:24), c                                 ; FABCA9  f2 82 f0 60 43
 	ld (0x60f083:24), 0x3f                             ; FABCAE  f2 83 f0 60 00 3f
-	calr sub_FAB20B                                          ; FABCB4  1e 54 f5
+	calr Queue2C00_AppendStagedIfPending                                          ; FABCB4  1e 54 f5
 	ld (0x60f081:24), 0x01                             ; FABCB7  f2 81 f0 60 00 01
 	ld c, (0x60f185:24)                                 ; FABCBD  c2 85 f1 60 23
 	ld (0x60f082:24), c                                 ; FABCC2  f2 82 f0 60 43
 	ld (0x60f083:24), 0x7f                             ; FABCC7  f2 83 f0 60 00 7f
-	calr sub_FAB20B                                          ; FABCCD  1e 3b f5
+	calr Queue2C00_AppendStagedIfPending                                          ; FABCCD  1e 3b f5
 .LFABCD0:
 	pop XIX                                              ; FABCD0  5c
 	popw hl                                              ; FABCD1  4b
@@ -75730,7 +75779,7 @@ sub_FABCD7:   ; entry: named by 1 `.long` operand, first at 0xFACB8A
 	ld (0x60f082:24), c                                 ; FABCDC  f2 82 f0 60 43
 	ld a, (0x60f08a:24)                                 ; FABCE1  c2 8a f0 60 21
 	ld (0x60f083:24), a                                 ; FABCE6  f2 83 f0 60 41
-	calr sub_FAB20B                                          ; FABCEB  1e 1d f5
+	calr Queue2C00_AppendStagedIfPending                                          ; FABCEB  1e 1d f5
 	ret                                                  ; FABCEE  0e
 sub_FABCEF:   ; entry: named by 1 `.long` operand, first at 0xFACBAA
 	ld bc, (0x60f088:24)                                ; FABCEF  d2 88 f0 60 21
@@ -75759,121 +75808,161 @@ sub_FABD33:
 	m_res 7, MD16, 0x34d8                                ; FABD33  f1 d8 34 b7
 	calr sub_FAB5EB                                          ; FABD37  1e b1 f8
 	ret                                                  ; FABD3A  0e
-sub_FABD3B:   ; entry: named by 1 `.long` operand, first at 0xFACBAE
+; ---------------------------------------------------------------------
+; ParamMsg_B1_PitchBend .. ParamMsg_B3_CC0B_Expression -- the eleven MIDI
+;          controller entries of Dispatch_By_60F080, 0xFABD3B-0xFABE2A.
+; Each:    if bit 5 of (0x7F36) is clear, push the 32-bit part mask held in
+;          one RAM cell and fan the record out over it
+;          (Queue2C00_FanOutToPartMask; the _Publish variant for 0xB1).
+;          ParamMsg_B3 and ParamMsg_B5 also copy the value to (0x60F191) /
+;          (0x60F192).
+;   0xB1  ParamMsg_B1_PitchBend         cell 0x60F280
+;   0xB2  ParamMsg_B2_CC01_Modulation   cell 0x60F284
+;   0xB3  ParamMsg_B3_CC0B_Expression   cell 0x60F2A8
+;   0xB4  ParamMsg_B4_ChannelPressure   cell 0x60F28C
+;   0xB5  ParamMsg_B5_CC40_Hold         cell 0x60F294
+;   0xB8  ParamMsg_B8_CC10_RTCreatX     cell 0x60F298
+;   0xB9  ParamMsg_B9_CC11_RTCreatY     cell 0x60F29C
+;   0xBA  ParamMsg_BA_CC12_RTCtrlX      cell 0x60F2A0
+;   0xBB  ParamMsg_BB_CC13_RTCtrlY      cell 0x60F2A4
+;   0xBC  ParamMsg_BC_CC02_Modulation2  cell 0x60F288
+;   0xBD  ParamMsg_BD_CC04_CtrlPedal    cell 0x60F290
+; ★ Number -> controller is pinned twice: the MIDI-in table named for the
+;          controller holds that number in every record (check M5), and
+;          MidiOut_ParamNumberTable[number] is the MidiOut_ handler of the
+;          same controller.  MidiIn_ControlRecordHandlers loads the SAME
+;          cell for each number (check M4): two readers of eleven cells.
+; ⚠ What bit 5 of (0x7F36) switches off is not established.
+; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
+; ---------------------------------------------------------------------
+ParamMsg_B1_PitchBend:   ; entry: named by 1 `.long` operand, first at 0xFACBAE
 	ld c, (0x7f36:16)                                   ; FABD3B  c1 36 7f 23
 	and C,0x20                                           ; FABD3F  cb cc 20
 	jr nz, .LFABD4E                                      ; FABD42  6e 0a
 	ld xbc, (0x60f280:24)                               ; FABD44  e2 80 f2 60 21
 	push XBC                                             ; FABD49  39
-	calr sub_FABE6F                                      ; FABD4A  1e 22 01
+	calr Queue2C00_FanOutToPartMask_Publish                                      ; FABD4A  1e 22 01
 	pop XIY                                              ; FABD4D  5d
 .LFABD4E:
 	ret                                                  ; FABD4E  0e
-sub_FABD4F:   ; entry: named by 1 `.long` operand, first at 0xFACBB2
+ParamMsg_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xFACBB2
 	ld c, (0x7f36:16)                                   ; FABD4F  c1 36 7f 23
 	and C,0x20                                           ; FABD53  cb cc 20
 	jr nz, .LFABD62                                      ; FABD56  6e 0a
 	ld xbc, (0x60f284:24)                               ; FABD58  e2 84 f2 60 21
 	push XBC                                             ; FABD5D  39
-	calr sub_FABE2B                                      ; FABD5E  1e ca 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABD5E  1e ca 00
 	pop XIY                                              ; FABD61  5d
 .LFABD62:
 	ret                                                  ; FABD62  0e
-sub_FABD63:   ; entry: named by 1 `.long` operand, first at 0xFACBDA
+ParamMsg_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0xFACBDA
 	ld c, (0x7f36:16)                                   ; FABD63  c1 36 7f 23
 	and C,0x20                                           ; FABD67  cb cc 20
 	jr nz, .LFABD76                                      ; FABD6A  6e 0a
 	ld xbc, (0x60f288:24)                               ; FABD6C  e2 88 f2 60 21
 	push XBC                                             ; FABD71  39
-	calr sub_FABE2B                                      ; FABD72  1e b6 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABD72  1e b6 00
 	pop XIY                                              ; FABD75  5d
 .LFABD76:
 	ret                                                  ; FABD76  0e
-sub_FABD77:   ; entry: named by 1 `.long` operand, first at 0xFACBBA
+ParamMsg_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xFACBBA
 	ld c, (0x7f36:16)                                   ; FABD77  c1 36 7f 23
 	and C,0x20                                           ; FABD7B  cb cc 20
 	jr nz, .LFABD8A                                      ; FABD7E  6e 0a
 	ld xbc, (0x60f28c:24)                               ; FABD80  e2 8c f2 60 21
 	push XBC                                             ; FABD85  39
-	calr sub_FABE2B                                      ; FABD86  1e a2 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABD86  1e a2 00
 	pop XIY                                              ; FABD89  5d
 .LFABD8A:
 	ret                                                  ; FABD8A  0e
-sub_FABD8B:   ; entry: named by 1 `.long` operand, first at 0xFACBDE
+ParamMsg_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFACBDE
 	ld c, (0x7f36:16)                                   ; FABD8B  c1 36 7f 23
 	and C,0x20                                           ; FABD8F  cb cc 20
 	jr nz, .LFABD9E                                      ; FABD92  6e 0a
 	ld xbc, (0x60f290:24)                               ; FABD94  e2 90 f2 60 21
 	push XBC                                             ; FABD99  39
-	calr sub_FABE2B                                      ; FABD9A  1e 8e 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABD9A  1e 8e 00
 	pop XIY                                              ; FABD9D  5d
 .LFABD9E:
 	ret                                                  ; FABD9E  0e
-sub_FABD9F:   ; entry: named by 1 `.long` operand, first at 0xFACBBE
+ParamMsg_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFACBBE
 	ld c, (0x7f36:16)                                   ; FABD9F  c1 36 7f 23
 	and C,0x20                                           ; FABDA3  cb cc 20
 	jr nz, .LFABDBC                                      ; FABDA6  6e 14
 	ld xbc, (0x60f294:24)                               ; FABDA8  e2 94 f2 60 21
 	push XBC                                             ; FABDAD  39
-	calr sub_FABE2B                                      ; FABDAE  1e 7a 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABDAE  1e 7a 00
 	ld c, (0x60f089:24)                                 ; FABDB1  c2 89 f0 60 23
 	ld (0x60f192:24), c                                 ; FABDB6  f2 92 f1 60 43
 	pop XIY                                              ; FABDBB  5d
 .LFABDBC:
 	ret                                                  ; FABDBC  0e
-sub_FABDBD:   ; entry: named by 1 `.long` operand, first at 0xFACBCA
+ParamMsg_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFACBCA
 	ld c, (0x7f36:16)                                   ; FABDBD  c1 36 7f 23
 	and C,0x20                                           ; FABDC1  cb cc 20
 	jr nz, .LFABDD0                                      ; FABDC4  6e 0a
 	ld xbc, (0x60f298:24)                               ; FABDC6  e2 98 f2 60 21
 	push XBC                                             ; FABDCB  39
-	calr sub_FABE2B                                      ; FABDCC  1e 5c 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABDCC  1e 5c 00
 	pop XIY                                              ; FABDCF  5d
 .LFABDD0:
 	ret                                                  ; FABDD0  0e
-sub_FABDD1:   ; entry: named by 1 `.long` operand, first at 0xFACBCE
+ParamMsg_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFACBCE
 	ld c, (0x7f36:16)                                   ; FABDD1  c1 36 7f 23
 	and C,0x20                                           ; FABDD5  cb cc 20
 	jr nz, .LFABDE4                                      ; FABDD8  6e 0a
 	ld xbc, (0x60f29c:24)                               ; FABDDA  e2 9c f2 60 21
 	push XBC                                             ; FABDDF  39
-	calr sub_FABE2B                                      ; FABDE0  1e 48 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABDE0  1e 48 00
 	pop XIY                                              ; FABDE3  5d
 .LFABDE4:
 	ret                                                  ; FABDE4  0e
-sub_FABDE5:   ; entry: named by 1 `.long` operand, first at 0xFACBD2
+ParamMsg_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFACBD2
 	ld c, (0x7f36:16)                                   ; FABDE5  c1 36 7f 23
 	and C,0x20                                           ; FABDE9  cb cc 20
 	jr nz, .LFABDF8                                      ; FABDEC  6e 0a
 	ld xbc, (0x60f2a0:24)                               ; FABDEE  e2 a0 f2 60 21
 	push XBC                                             ; FABDF3  39
-	calr sub_FABE2B                                      ; FABDF4  1e 34 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABDF4  1e 34 00
 	pop XIY                                              ; FABDF7  5d
 .LFABDF8:
 	ret                                                  ; FABDF8  0e
-sub_FABDF9:   ; entry: named by 1 `.long` operand, first at 0xFACBD6
+ParamMsg_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFACBD6
 	ld c, (0x7f36:16)                                   ; FABDF9  c1 36 7f 23
 	and C,0x20                                           ; FABDFD  cb cc 20
 	jr nz, .LFABE0C                                      ; FABE00  6e 0a
 	ld xbc, (0x60f2a4:24)                               ; FABE02  e2 a4 f2 60 21
 	push XBC                                             ; FABE07  39
-	calr sub_FABE2B                                      ; FABE08  1e 20 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABE08  1e 20 00
 	pop XIY                                              ; FABE0B  5d
 .LFABE0C:
 	ret                                                  ; FABE0C  0e
-sub_FABE0D:   ; entry: named by 1 `.long` operand, first at 0xFACBB6
+ParamMsg_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, first at 0xFACBB6
 	ld c, (0x7f36:16)                                   ; FABE0D  c1 36 7f 23
 	and C,0x20                                           ; FABE11  cb cc 20
 	jr nz, .LFABE2A                                      ; FABE14  6e 14
 	ld xbc, (0x60f2a8:24)                               ; FABE16  e2 a8 f2 60 21
 	push XBC                                             ; FABE1B  39
-	calr sub_FABE2B                                      ; FABE1C  1e 0c 00
+	calr Queue2C00_FanOutToPartMask                                      ; FABE1C  1e 0c 00
 	ld c, (0x60f089:24)                                 ; FABE1F  c2 89 f0 60 23
 	ld (0x60f191:24), c                                 ; FABE24  f2 91 f1 60 43
 	pop XIY                                              ; FABE29  5d
 .LFABE2A:
 	ret                                                  ; FABE2A  0e
-sub_FABE2B:
+; ---------------------------------------------------------------------
+; Queue2C00_FanOutToPartMask -- emit the current record once per set bit of
+;          a 32-bit mask, with the bit's index as the record's CLASS.
+; Inputs:  (XIZ+8) = the mask, pushed by the caller.
+; Body:    for H = 0..31, low bit first: if set, (0x60F081) = H, (0x60F082)
+;          = the value (0x60F089), (0x60F083) = the mask (0x60F08A), then
+;          Queue2C00_AppendStagedIfPending.
+; Called from: ten of the eleven ParamMsg_ controller entries below, and the
+;          common tail of MidiIn_ControlRecordHandlers (0xFABFD9).
+; ★ The index is a PART: for these numbers every MIDI-in table puts the
+;          part in the class byte (check M5), so a controller record goes
+;          out once per part whose bit is set.  (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
+; ---------------------------------------------------------------------
+Queue2C00_FanOutToPartMask:
 	link XIZ,0x0000                                      ; FABE2B  ee 0c 00 00
 	pushw hl                                             ; FABE2F  2b
 	push XIX                                             ; FABE30  3c
@@ -75888,7 +75977,7 @@ sub_FABE2B:
 	ld (0x60f082:24), c                                 ; FABE4A  f2 82 f0 60 43
 	ld a, (0x60f08a:24)                                 ; FABE4F  c2 8a f0 60 21
 	ld (0x60f083:24), a                                 ; FABE54  f2 83 f0 60 41
-	calr sub_FAB20B                                          ; FABE59  1e af f3
+	calr Queue2C00_AppendStagedIfPending                                          ; FABE59  1e af f3
 .LFABE5C:
 	inc 1,H                                              ; FABE5C  ce 61
 	ld XIY,XIX                                           ; FABE5E  ec 8d
@@ -75900,7 +75989,15 @@ sub_FABE2B:
 	popw hl                                              ; FABE6B  4b
 	unlk XIZ                                             ; FABE6C  ee 0d
 	ret                                                  ; FABE6E  0e
-sub_FABE6F:
+; ---------------------------------------------------------------------
+; Queue2C00_FanOutToPartMask_Publish -- Queue2C00_FanOutToPartMask with
+;          Queue2C00_PublishStaged (no zero-mask test) instead of
+;          Queue2C00_AppendStagedIfPending, the `call` at 0xFABE9D.
+; Called from: ParamMsg_B1_PitchBend (0xFABD4A) and the 0xB1 arm of
+;          MidiIn_ControlRecord_Dispatch (0xFABF26) -- pitch bend only.
+; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
+; ---------------------------------------------------------------------
+Queue2C00_FanOutToPartMask_Publish:
 	link XIZ,0x0000                                      ; FABE6F  ee 0c 00 00
 	pushw hl                                             ; FABE73  2b
 	push XIX                                             ; FABE74  3c
@@ -75978,9 +76075,19 @@ sub_FABEF4:
 ;           MidiIn_CC01, CC02, CC04, CC0B, CC10, CC11, CC12, CC13, CC40,
 ;           MidiIn_ChannelPressure and MidiIn_PitchBend -- which is what
 ;           the `MidiIn_` prefix claims and all it claims
-; Unknown:  what a record IS. Its first byte selects one of thirteen
-;           arms and the twelve jump-table arms are not decoded here;
-;           JumpTable_FABF4A's own header states the same gap
+; ★ CORRECTED 2026-09-25 (lane proma).  This said "Unknown: what a record
+;           IS ... the twelve jump-table arms are not decoded here".  The
+;           record is the 4-byte parameter-change record the MIDI-in
+;           controller handlers build at RAM 0x1950 -- [number] [class]
+;           [value] [mask], see MidiIn_CC01_ParamTable's header -- so its
+;           first byte is the parameter number, and the MIDI-in tables pin
+;           all eleven of 0xB1-0xB5 / 0xB8-0xBD to their controllers.  Each
+;           arm loads its number's 32-bit part mask (the MidiIn_CtrlRec_
+;           labels) and the common tail fans the record out over it with
+;           Queue2C00_FanOutToPartMask -- the same cells, number for
+;           number, that the ParamMsg_ entries of Dispatch_By_60F080 use
+;           (check M4).  0xB6/0xB7 take the skip arm.
+; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
 ; Was `sub_FABEFB`, named by notes/prom_a_census_round8.py (bucket round 10).
 ; ---------------------------------------------------------------------
 MidiIn_ControlRecord_Dispatch:
@@ -75998,7 +76105,7 @@ MidiIn_ControlRecord_Dispatch:
 	ld W,(XBC+0x03)                                      ; FABF1D  89 03 20
 	ld (0x60f08a:24), w                                 ; FABF20  f2 8a f0 60 40
 	push XIX                                             ; FABF25  3c
-	calr sub_FABE6F                                      ; FABF26  1e 46 ff
+	calr Queue2C00_FanOutToPartMask_Publish                                      ; FABF26  1e 46 ff
 	jrl MidiIn_ControlRecordHandlers_Code_Join                                             ; FABF29  78 b0 00
 .LFABF2C:
 	ld C,H                                               ; FABF2C  ce 8b
@@ -76032,46 +76139,46 @@ MidiIn_ControlRecord_Dispatch:
 ; are unchanged and stay in the header above
 ; ---------------------------------------------------------------------
 MidiIn_ControlRecordHandlers:
-	.long sub_FABF7A                                 ; FABF4A  [  0]
-	.long sub_FABFB9                                 ; FABF4E  [  1]
-	.long sub_FABFA4                                 ; FABF52  [  2]
-	.long sub_FABFB2                                 ; FABF56  [  3]
+	.long MidiIn_CtrlRec_B2_CC01_Modulation                                 ; FABF4A  [  0]
+	.long MidiIn_CtrlRec_B3_CC0B_Expression                                 ; FABF4E  [  1]
+	.long MidiIn_CtrlRec_B4_ChannelPressure                                 ; FABF52  [  2]
+	.long MidiIn_CtrlRec_B5_CC40_Hold                                 ; FABF56  [  3]
 	.long MidiIn_ControlRecordHandlers_Code_Skip     ; FABF5A  [  4]
 	.long MidiIn_ControlRecordHandlers_Code_Skip     ; FABF5E  [  5]
-	.long sub_FABF88                                 ; FABF62  [  6]
-	.long sub_FABF8F                                 ; FABF66  [  7]
-	.long sub_FABF96                                 ; FABF6A  [  8]
-	.long sub_FABF9D                                 ; FABF6E  [  9]
-	.long sub_FABF81                                 ; FABF72  [ 10]
-	.long sub_FABFAB                                 ; FABF76  [ 11]
-sub_FABF7A:   ; entry: named by 1 `.long` operand, first at 0xFABF4A
+	.long MidiIn_CtrlRec_B8_CC10_RTCreatX                                 ; FABF62  [  6]
+	.long MidiIn_CtrlRec_B9_CC11_RTCreatY                                 ; FABF66  [  7]
+	.long MidiIn_CtrlRec_BA_CC12_RTCtrlX                                 ; FABF6A  [  8]
+	.long MidiIn_CtrlRec_BB_CC13_RTCtrlY                                 ; FABF6E  [  9]
+	.long MidiIn_CtrlRec_BC_CC02_Modulation2                                 ; FABF72  [ 10]
+	.long MidiIn_CtrlRec_BD_CC04_CtrlPedal                                 ; FABF76  [ 11]
+MidiIn_CtrlRec_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xFABF4A
 	ld xix, (0x60f284:24)                               ; FABF7A  e2 84 f2 60 24
 	jr .LFABFBE                                          ; FABF7F  68 3d
-sub_FABF81:   ; entry: named by 1 `.long` operand, first at 0xFABF72
+MidiIn_CtrlRec_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0xFABF72
 	ld xix, (0x60f288:24)                               ; FABF81  e2 88 f2 60 24
 	jr .LFABFBE                                          ; FABF86  68 36
-sub_FABF88:   ; entry: named by 1 `.long` operand, first at 0xFABF62
+MidiIn_CtrlRec_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFABF62
 	ld xix, (0x60f298:24)                               ; FABF88  e2 98 f2 60 24
 	jr .LFABFBE                                          ; FABF8D  68 2f
-sub_FABF8F:   ; entry: named by 1 `.long` operand, first at 0xFABF66
+MidiIn_CtrlRec_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFABF66
 	ld xix, (0x60f29c:24)                               ; FABF8F  e2 9c f2 60 24
 	jr .LFABFBE                                          ; FABF94  68 28
-sub_FABF96:   ; entry: named by 1 `.long` operand, first at 0xFABF6A
+MidiIn_CtrlRec_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFABF6A
 	ld xix, (0x60f2a0:24)                               ; FABF96  e2 a0 f2 60 24
 	jr .LFABFBE                                          ; FABF9B  68 21
-sub_FABF9D:   ; entry: named by 1 `.long` operand, first at 0xFABF6E
+MidiIn_CtrlRec_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFABF6E
 	ld xix, (0x60f2a4:24)                               ; FABF9D  e2 a4 f2 60 24
 	jr .LFABFBE                                          ; FABFA2  68 1a
-sub_FABFA4:   ; entry: named by 1 `.long` operand, first at 0xFABF52
+MidiIn_CtrlRec_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xFABF52
 	ld xix, (0x60f28c:24)                               ; FABFA4  e2 8c f2 60 24
 	jr .LFABFBE                                          ; FABFA9  68 13
-sub_FABFAB:   ; entry: named by 1 `.long` operand, first at 0xFABF76
+MidiIn_CtrlRec_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFABF76
 	ld xix, (0x60f290:24)                               ; FABFAB  e2 90 f2 60 24
 	jr .LFABFBE                                          ; FABFB0  68 0c
-sub_FABFB2:   ; entry: named by 1 `.long` operand, first at 0xFABF56
+MidiIn_CtrlRec_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFABF56
 	ld xix, (0x60f294:24)                               ; FABFB2  e2 94 f2 60 24
 	jr .LFABFBE                                          ; FABFB7  68 05
-sub_FABFB9:   ; entry: named by 1 `.long` operand, first at 0xFABF4E
+MidiIn_CtrlRec_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, first at 0xFABF4E
 	ld xix, (0x60f2a8:24)                               ; FABFB9  e2 a8 f2 60 24
 .LFABFBE:
 	ld XBC,(XIZ+0x08)                                    ; FABFBE  ae 08 21
@@ -76082,7 +76189,7 @@ sub_FABFB9:   ; entry: named by 1 `.long` operand, first at 0xFABF4E
 	ld A,(XBC+0x03)                                      ; FABFD0  89 03 21
 	ld (0x60f08a:24), a                                 ; FABFD3  f2 8a f0 60 41
 	push XIX                                             ; FABFD8  3c
-	calr sub_FABE2B                                          ; FABFD9  1e 4f fe
+	calr Queue2C00_FanOutToPartMask                                          ; FABFD9  1e 4f fe
 MidiIn_ControlRecordHandlers_Code_Join:
 	pop XIY                                              ; FABFDC  5d
 MidiIn_ControlRecordHandlers_Code_Skip:
@@ -76904,7 +77011,7 @@ sub_FAC7C4:
 	ld C,(XIX)                                           ; FAC7F2  84 23
 	ld (0x60f082:24), c                                 ; FAC7F4  f2 82 f0 60 43
 	ld (0x60f083:24), 0x01                             ; FAC7F9  f2 83 f0 60 00 01
-	calr sub_FAB20B                                          ; FAC7FF  1e 09 ea
+	calr Queue2C00_AppendStagedIfPending                                          ; FAC7FF  1e 09 ea
 	inc 1,L                                              ; FAC802  cf 61
 	popw bc                                              ; FAC804  49
 	cp L,0x3f                                            ; FAC805  cf cf 3f
@@ -76939,7 +77046,15 @@ sub_FAC80F:
 	ret                                                  ; FAC844  0e
 sub_FAC845:   ; entry: named by 232 `.long` operands, first at 0xFAC9EA
 	ret                                                  ; FAC845  0e
-sub_FAC846:
+; ---------------------------------------------------------------------
+; Queue2C00_AppendStaged -- store the staged record (0x60F080), (0x60F081),
+;          (0x60F082), (0x60F083) as four bytes at 0x2C00 + (0x60F000),
+;          advance the cursor by 4, write 0xFF after them, clear (0x60F083).
+; Called from: Queue2C00_AppendStagedIfPending (0xFAB22F) and 0xFAB24F.
+; Notes:   same buffer, cursor and terminator as the word-wise tail of
+;          Queue2C00_PublishStagedIfPending (0xFAA4CA).  (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
+; ---------------------------------------------------------------------
+Queue2C00_AppendStaged:
 	push XHL                                             ; FAC846  3b
 	push XDE                                             ; FAC847  3a
 	push XIX                                             ; FAC848  3c
@@ -77044,10 +77159,27 @@ Gap_FAC8E6:
 ;          The 24 real handlers lie in 0xFAB894-0xFABE0D, inside this module.
 ;          All five numbers come from notes/prom_a_byte_checks.py, checks named
 ;          "Dispatch_By_60F080:".
-; Unknown:  what any command byte MEANS.  (0x60F080) is written by other code
-;          in this module -- 0xFAC39B is `ld (0x60F080),C` with C loaded from
-;          (XIZ+0x08) three bytes earlier -- and its values are not traced to a
-;          source here.
+; Index:   (0x60F080) is written by other code in this module too -- 0xFAC39B
+;          is `ld (0x60F080),C` with C loaded from (XIZ+0x08) three bytes
+;          earlier -- but for THIS reader it is traced:
+; ★ CORRECTED 2026-09-25 (lane proma).  This paragraph said the byte's
+;          values were "not traced to a source here" and that what a command
+;          byte MEANS is unknown.  The loop around the reader,
+;          List2030_TranslateToQueue2C00, calls List2030_LoadRecord first,
+;          which copies byte 0 of the current record of the RAM 0x2030 list
+;          into (0x60F080).  So the index is that record's PARAMETER NUMBER,
+;          the number space of Evt2030_ClassHandlers and
+;          MidiOut_ParamNumberTable.  What the populated entries serve:
+;   0x00-0x1F  sub_FAB894 -- part parameters (number = the part); it
+;              dispatches again on the record's CLASS, JumpTable_FAB8B4
+;   0x20-0x3F  sub_FABAFD -- the other half of each part record
+;              (ParamNumber_RecordPtrs, pin 3)
+;   0x44, 0x45, 0x46, 0x48, 0x60, 0x70, 0x72, 0x7A, 0x90, 0x91, 0x98, 0xA8, 0xB0 -- one handler
+;              each, not decoded here
+;   0xB1-0xB5, 0xB8-0xBD -- the eleven MIDI controllers, ParamMsg_B1_PitchBend
+;              and its block header
+;   the other 168 numbers: sub_FAC845, one `ret`.
+; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
 ; ---------------------------------------------------------------------
 Dispatch_By_60F080:
 	.long sub_FAB894                                 ; FAC8EA  [  0]
@@ -77227,19 +77359,19 @@ Dispatch_By_60F080:
 	.long sub_FAC845                                 ; FACBA2  [174]
 	.long sub_FAC845                                 ; FACBA6  [175]
 	.long sub_FABCEF                                 ; FACBAA  [176]
-	.long sub_FABD3B                                 ; FACBAE  [177]
-	.long sub_FABD4F                                 ; FACBB2  [178]
-	.long sub_FABE0D                                 ; FACBB6  [179]
-	.long sub_FABD77                                 ; FACBBA  [180]
-	.long sub_FABD9F                                 ; FACBBE  [181]
+	.long ParamMsg_B1_PitchBend                                 ; FACBAE  [177]
+	.long ParamMsg_B2_CC01_Modulation                                 ; FACBB2  [178]
+	.long ParamMsg_B3_CC0B_Expression                                 ; FACBB6  [179]
+	.long ParamMsg_B4_ChannelPressure                                 ; FACBBA  [180]
+	.long ParamMsg_B5_CC40_Hold                                 ; FACBBE  [181]
 	.long sub_FAC845                                 ; FACBC2  [182]
 	.long sub_FAC845                                 ; FACBC6  [183]
-	.long sub_FABDBD                                 ; FACBCA  [184]
-	.long sub_FABDD1                                 ; FACBCE  [185]
-	.long sub_FABDE5                                 ; FACBD2  [186]
-	.long sub_FABDF9                                 ; FACBD6  [187]
-	.long sub_FABD63                                 ; FACBDA  [188]
-	.long sub_FABD8B                                 ; FACBDE  [189]
+	.long ParamMsg_B8_CC10_RTCreatX                                 ; FACBCA  [184]
+	.long ParamMsg_B9_CC11_RTCreatY                                 ; FACBCE  [185]
+	.long ParamMsg_BA_CC12_RTCtrlX                                 ; FACBD2  [186]
+	.long ParamMsg_BB_CC13_RTCtrlY                                 ; FACBD6  [187]
+	.long ParamMsg_BC_CC02_Modulation2                                 ; FACBDA  [188]
+	.long ParamMsg_BD_CC04_CtrlPedal                                 ; FACBDE  [189]
 	.long sub_FAC845                                 ; FACBE2  [190]
 	.long sub_FAC845                                 ; FACBE6  [191]
 	.long sub_FAC845                                 ; FACBEA  [192]
