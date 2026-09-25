@@ -232,6 +232,33 @@ def main():
                                typed='Typed in naka_widget_descriptors.c as %s %s%s.'
                                      % (mb.ctype, mb.name, mb.dims)))
     byfile.setdefault('widget_descriptors.s', []).extend(from_c)
+    # naka_span.py spans: partition, slicing and headers come from the span
+    import naka_span as NS
+    span_objs = {}
+    for span, sp in NS.SPANS.items():
+        scb = M.CBlob(os.path.join(ROOT, R.UI, sp['blob'] + '.c'))
+        sdata = open(os.path.join(ROOT, R.GEN, sp['blob'] + '.bin'), 'rb').read()
+        objs = NS.build(span, scb, sdata, R.fmt)
+        span_objs[span] = (objs, NS.symbolic_longs(span, scb, sdata, objs))
+        for off, size, name, ctype, dims, hdr, kind in objs:
+            byfile.setdefault(sp['sfile'], []).append(dict(
+                kind='c', blob=sp['blob'], label=name, header=R.wrap(hdr),
+                typed=('Typed in %s.c as uint32_t %s%s and char %s_Names[].'
+                       % (sp['blob'], name, dims, name)) if kind == 'classprops' else
+                      ('Typed in %s.c as %s %s%s.' % (sp['blob'], ctype, name, dims))))
+    for v in ('v10', 'v9', 'v7'):
+        for span, sp in NS.SPANS.items():
+            path = os.path.join(ROOT, v, 'maincpu/ui_widgets', sp['sfile'])
+            raw = open(path, 'rb').read()
+            lines = raw.decode('latin-1').split('\n')
+            objs, longs = span_objs[span]
+            if objs[0][2] + ':' in lines and any(l.startswith('; [naka_s_headers]') for l in lines):
+                continue
+            n = NS.s_restructure(span, lines, objs, sp['blob'], longs)
+            if args.apply:
+                open(path, 'wb').write('\n'.join(lines).encode('latin-1'))
+            print('%-4s %-26s span %s: %d slices%s' % (v, sp['sfile'], span, n,
+                                                       '' if args.apply else '  (dry run)'))
     for v in ('v10', 'v9', 'v7'):
         for sname, objs in sorted(byfile.items()):
             path = os.path.join(ROOT, v, 'maincpu/ui_widgets', sname)

@@ -270,6 +270,36 @@ typedef struct __attribute__((packed)) {
 } accseq_record_t;         /* 32 bytes */
 
 /**
+ * Class descriptor, 24 bytes: the records a ClassProc (0x1600004) registration
+ * hands to RegisterObjectTable (`RegObjTable 0x1600004, ClassProc, &count,
+ * table, id`).  ClassProc (ui/ui_widget_defs.s) indexes them with index * 24.
+ *
+ * Checked over all 292 descriptors of the 10 ClassProc tables registered in
+ * v10 by scripts/analysis/naka_class_descriptors.py:
+ *   - record_size - props_size is ONE constant per base_class (37 base
+ *     classes, no exception): the size of the base class's record, which
+ *     every derived record starts with.  E.g. base 0x160002B -> 32 (=
+ *     naka_label_t), 0x1600034 -> 42 (= naka_container_t), 0x1600031 -> 26
+ *     (= naka_group_t);
+ *   - `sig` holds one type letter per property, and `props` points at one
+ *     name pointer per letter followed by a pointer to "" (292 of 292);
+ *   - props_size is the sum of the letters' sizes, j c X ` = 4 bytes and
+ *     B C ^ _ A G f = 2 bytes, for 80 of the 81 descriptors that use only
+ *     those letters (AcCmpRecBox "CC" says 2).
+ * base_class is the same u32 that begins every NAKA widget record: its
+ * "XX 00 60 01" header read little-endian is class 0x16000XX.
+ */
+typedef struct __attribute__((packed)) {
+    uint32_t proc;         /* +0x00  class procedure (EffectBoxProc, ...) */
+    uint32_t base_class;   /* +0x04  0x16000xx */
+    uint16_t record_size;  /* +0x08  bytes of an instance record, base included */
+    uint16_t props_size;   /* +0x0A  bytes this class adds */
+    uint32_t name;         /* +0x0C -> class name string */
+    uint32_t sig;          /* +0x10 -> one type letter per property */
+    uint32_t props;        /* +0x14 -> property-name pointers, "" last, then the names */
+} naka_class_t;            /* 24 bytes */
+
+/**
  * AccompSeq event streams (the byte arrays accseq_part_t.stream points at).
  * The grammar is the one AccompSeq_ParseEvents / AccompSeq_InitEventDispatch
  * and AccompSeq_ParseSequenceData (sequencer/accompseq_routines.s) walk; it

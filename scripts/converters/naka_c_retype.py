@@ -559,11 +559,23 @@ def build_seq_rodata(cb, data, off0):
     return SR.LO, SR.HI, new, reexp
 
 
+def span_builder(span):
+    """Builder for a naka_span.py span (registry + references + strings)."""
+    def fn(cb, data, off0):
+        import naka_span as NS
+        sp = NS.SPANS[span]
+        new, reexp = NS.new_members(span, cb, data, fmt)
+        return sp['lo'], sp['hi'], new, reexp
+    fn.__name__ = 'span_%s' % span
+    return fn
+
+
 CUSTOM_AT = [
     # (blob, blob offset, builder) -- for objects whose .s label does not
     # exist yet (it is written by naka_s_headers.py)
     ('naka_widget_descriptors', 0x243B0, build_apfunction_tables),
     ('naka_widget_descriptors', 0x13618, build_seq_rodata),
+    ('naka_widget_tables_1', 0x0, span_builder('t1')),
 ]
 
 
@@ -608,6 +620,8 @@ def build(apply, render_dir):
     blobs = {}
     for o in OBJECTS:
         blobs.setdefault(o['blob'], []).append(o)
+    for b_, _, _ in CUSTOM + CUSTOM_AT:
+        blobs.setdefault(b_, [])
     for blob, objs in blobs.items():
         cpath = os.path.join(ROOT, UI, blob + '.c')
         bpath = os.path.join(ROOT, GEN, blob + '.bin')

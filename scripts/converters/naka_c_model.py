@@ -46,7 +46,7 @@ TYPE_SIZES = {
     'naka_header_t': 4, 'naka_dispatch_t': 24, 'naka_container_t': 42,
     'naka_menu_item_t': 54, 'naka_label_t': 32, 'naka_group_t': 26,
     'naka_slider_t': 44, 'naka_type_0x48_t': 26,
-    'accseq_part_t': 16, 'accseq_record_t': 32,
+    'accseq_part_t': 16, 'accseq_record_t': 32, 'naka_class_t': 24,
 }
 
 MEMBER_RE = re.compile(

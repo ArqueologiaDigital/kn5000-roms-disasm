@@ -26,7 +26,6 @@ extern const char BitmapDredt0k;
 extern const char BitmapNtedt0d;
 extern const char BitmapNtedt0k;
 extern const char CDlikeSwTtlFunc;
-extern const char CRTC_LINE_COMPARE;
 extern const char CycleOnOffFunc;
 extern const char DemoMenuTtlFunc;
 extern const char DemoModeFunc;
@@ -400,1316 +399,1219 @@ extern const char TrkMixerIntTtlFunc;
 #define BASE  0x00E24056u
 
 typedef struct __attribute__((packed)) {
-    uint16_t field_0000;
-    uint16_t field_0002;
-    uint16_t field_0004;
-    uint16_t field_0006;
-    char str_0[8];
-    char str_1[8];
-    naka_dispatch_t w0;  /* 0x29 */
-    uint16_t field_0030;
-    uint16_t field_0032;
-    uint16_t field_0034;
-    uint8_t pad_0[2];  /* zero padding */
-    uint16_t field_0038;
-    uint16_t field_003a;
-    uint16_t field_003c;
-    uint16_t field_003e;
-    char str_2[2];
-    char str_3[2];
-    uint16_t field_0044;
-    char str_4[2];
-    uint16_t field_0048;
-    uint8_t pad_1[2];  /* zero padding */
-    uint16_t field_004c;
-    uint16_t field_004e;
-    uint8_t pad_2[2];  /* zero padding */
-    uint16_t field_0052;
-    uint8_t pad_3[2];  /* zero padding */
-    uint32_t ptrs_0[188];  /* 188 pointers */
-    uint16_t field_0346;
-    uint16_t field_0348;
-    uint32_t ptrs_1[5];  /* 5 pointers */
-    uint16_t field_035e;
-    uint16_t field_0360;
-    uint32_t ptrs_2[156];  /* 156 pointers */
-    char w1_code[2];
-    char w1_name[10];
-    char str_5[12];
-    char w2_code[2];
-    char w2_name[12];
-    char w3_code[8];
-    char w3_name[10];
-    char str_6[10];
-    char str_7[2];
-    char str_8[2];
-    char str_9[2];
-    char str_10[2];
-    char str_11[2];
-    char str_12[2];
-    char str_13[2];
-    char str_14[2];
-    char str_15[2];
-    char str_16[2];
-    char str_17[2];
-    char str_18[12];
-    char str_19[2];
-    char str_20[2];
-    char str_21[2];
-    char str_22[2];
-    char str_23[2];
-    char str_24[2];
-    char str_25[2];
-    char str_26[2];
-    char str_27[2];
-    char str_28[2];
-    char str_29[2];
-    char str_30[2];
-    char str_31[2];
-    char str_32[10];
-    char str_33[2];
-    char str_34[2];
-    char str_35[2];
-    char str_36[2];
-    char str_37[2];
-    char str_38[2];
-    char str_39[2];
-    char str_40[2];
-    char w4_code[2];
-    char w4_name[6];
-    uint32_t ptrs_3[13];  /* 13 pointers */
-    char str_41[2];
-    char str_42[2];
-    char str_43[2];
-    char str_44[10];
-    char str_45[8];
-    char str_46[8];
-    char str_47[2];
-    char str_48[2];
-    char str_49[2];
-    char str_50[2];
-    char str_51[2];
-    char w5_code[2];
-    char w5_name[6];
-    uint32_t ptrs_4[12];  /* 12 pointers */
-    char str_52[2];
-    char str_53[2];
-    char str_54[2];
-    char str_55[10];
-    char str_56[8];
-    char str_57[2];
-    char str_58[2];
-    char str_59[2];
-    char str_60[2];
-    char str_61[2];
-    char w6_code[2];
-    char w6_name[6];
-    uint32_t ptrs_5[8];  /* 8 pointers */
-    char w7_code[2];
-    char w7_name[12];
-    char str_62[2];
-    char str_63[2];
-    char str_64[2];
-    char str_65[2];
-    char w8_code[2];
-    char w8_name[10];
-    uint32_t ptrs_6[17];  /* 17 pointers */
-    char str_66[2];
-    char str_67[2];
-    char str_68[2];
-    char str_69[2];
-    char str_70[14];
-    char str_71[2];
-    char str_72[2];
-    char str_73[2];
-    char str_74[2];
-    char str_75[2];
-    char str_76[2];
-    char str_77[2];
-    char str_78[2];
-    char str_79[2];
-    char str_80[2];
-    char w9_code[2];
-    char w9_name[10];
-    uint32_t ptrs_7[16];  /* 16 pointers */
-    char str_81[2];
-    char str_82[2];
-    char str_83[2];
-    char str_84[14];
-    char str_85[12];
-    char str_86[12];
-    char str_87[2];
-    char str_88[2];
-    char str_89[2];
-    char str_90[2];
-    char str_91[2];
-    char str_92[2];
-    char str_93[2];
-    char w10_code[2];
-    char w10_name[10];
-    char str_94[2];
-    uint32_t ptrs_8[14];  /* 14 pointers */
-    char str_95[2];
-    char str_96[2];
-    char str_97[2];
-    char str_98[12];
-    char str_99[10];
-    char str_100[2];
-    char str_101[2];
-    char str_102[2];
-    char str_103[2];
-    char str_104[2];
-    char str_105[2];
-    char str_106[2];
-    char w11_code[2];
-    char w11_name[10];
-    uint32_t ptrs_9[9];  /* 9 pointers */
-    char str_107[2];
-    char str_108[2];
-    char str_109[2];
-    char str_110[2];
-    char str_111[2];
-    char str_112[2];
-    char str_113[2];
-    char w12_code[2];
-    char w12_name[14];
-    uint32_t ptrs_10[31];  /* 31 pointers */
-    char str_114[2];
-    char str_115[2];
-    char str_116[2];
-    char str_117[2];
-    char str_118[2];
-    char str_119[2];
-    char str_120[2];
-    char str_121[2];
-    char str_122[2];
-    char str_123[2];
-    char str_124[2];
-    char str_125[2];
-    char str_126[2];
-    char str_127[2];
-    char str_128[2];
-    char str_129[2];
-    char str_130[2];
-    char str_131[2];
-    char str_132[2];
-    char str_133[2];
-    char str_134[2];
-    char str_135[2];
-    char str_136[2];
-    char str_137[2];
-    char str_138[2];
-    char str_139[2];
-    char str_140[2];
-    char str_141[2];
-    char str_142[2];
-    char w13_code[2];
-    char w13_name[10];
-    uint32_t ptrs_11[13];  /* 13 pointers */
-    char str_143[2];
-    char str_144[2];
-    char str_145[2];
-    char str_146[2];
-    char str_147[2];
-    char str_148[2];
-    char str_149[2];
-    char str_150[2];
-    char str_151[2];
-    char str_152[2];
-    char str_153[2];
-    char w14_code[2];
-    char w14_name[10];
-    uint32_t ptrs_12[6];  /* 6 pointers */
-    char str_154[2];
-    char str_155[2];
-    char str_156[2];
-    char str_157[2];
-    char w15_code[2];
-    char w15_name[8];
-    uint32_t ptr_0a68;
-    uint32_t ptr_0a6c;
-    char str_158[2];
-    char str_159[2];
-    uint32_t ptrs_13[23];  /* 23 pointers */
-    char str_160[2];
-    char str_161[2];
-    char str_162[2];
-    char str_163[2];
-    char str_164[2];
-    char str_165[2];
-    char str_166[2];
-    char str_167[2];
-    char w16_code[2];
-    char w16_name[12];
-    char str_168[2];
-    char str_169[2];
-    char w17_code[2];
-    char w17_name[14];
-    char str_170[2];
-    char str_171[2];
-    char str_172[2];
-    char w18_code[2];
-    char w18_name[10];
-    char str_173[10];
-    char str_174[2];
-    char w19_code[2];
-    char w19_name[8];
-    uint32_t ptrs_14[29];  /* 29 pointers */
-    char str_175[2];
-    char str_176[2];
-    char str_177[2];
-    char str_178[2];
-    char str_179[2];
-    char str_180[2];
-    char str_181[2];
-    char str_182[2];
-    char w20_code[2];
-    char w20_name[14];
-    char str_183[2];
-    char str_184[2];
-    char str_185[2];
-    char str_186[2];
-    char str_187[2];
-    char str_188[2];
-    char str_189[2];
-    char w21_code[2];
-    char w21_name[14];
-    char str_190[2];
-    char str_191[2];
-    char w22_code[2];
-    char w22_name[12];
-    char str_192[14];
-    char str_193[14];
-    char str_194[2];
-    char str_195[2];
-    char w23_code[2];
-    char w23_name[10];
-    uint32_t ptrs_15[6];  /* 6 pointers */
-    char str_196[2];
-    char str_197[2];
-    char str_198[2];
-    char str_199[2];
-    char w24_code[2];
-    char w24_name[10];
-    uint32_t ptrs_16[7];  /* 7 pointers */
-    char str_200[2];
-    char str_201[2];
-    char str_202[2];
-    char str_203[2];
-    char str_204[2];
-    char w25_code[2];
-    char w25_name[10];
-    uint32_t ptrs_17[5];  /* 5 pointers */
-    char str_205[2];
-    char str_206[2];
-    char str_207[2];
-    char w26_code[2];
-    char w26_name[14];
-    uint32_t ptr_0ca2;
-    char str_208[2];
-    uint32_t ptrs_18[7];  /* 7 pointers */
-    char str_209[2];
-    char str_210[2];
-    char str_211[2];
-    char str_212[2];
-    char str_213[2];
-    char w27_code[2];
-    char w27_name[12];
-    uint32_t ptrs_19[5];  /* 5 pointers */
-    char str_214[2];
-    char str_215[2];
-    char str_216[2];
-    char w28_code[2];
-    char w28_name[10];
-    uint32_t ptrs_20[13];  /* 13 pointers */
-    char w29_code[2];
-    char w29_name[10];
-    char str_217[2];
-    char str_218[2];
-    char str_219[2];
-    char w30_code[2];
-    char w30_name[10];
-    char w31_code[10];
-    char w31_name[10];
-    char w32_code[10];
-    char w32_name[10];
-    char w33_code[10];
-    char w33_name[10];
-    uint32_t ptrs_21[13];  /* 13 pointers */
-    char w34_code[2];
-    char w34_name[10];
-    char str_220[2];
-    char str_221[2];
-    char str_222[2];
-    char w35_code[2];
-    char w35_name[12];
-    char w36_code[12];
-    char w36_name[10];
-    char w37_code[10];
-    char w37_name[10];
-    char w38_code[10];
-    char w38_name[10];
-    uint32_t ptrs_22[13];  /* 13 pointers */
-    char w39_code[2];
-    char w39_name[10];
-    char str_223[2];
-    char str_224[2];
-    char str_225[2];
-    char w40_code[2];
-    char w40_name[12];
-    char w41_code[12];
-    char w41_name[12];
-    char w42_code[12];
-    char w42_name[12];
-    char w43_code[12];
-    char w43_name[8];
-    char str_226[12];
-    char str_227[8];
-    char str_228[10];
-    char str_229[10];
-    char str_230[8];
-    char str_231[12];
-    char str_232[14];
-    char str_233[14];
-    char str_234[12];
-    char str_235[16];
-    char str_236[14];
-    char str_237[14];
-    char str_238[12];
-    char str_239[10];
-    char str_240[10];
-    char str_241[12];
-    char str_242[12];
-    char str_243[14];
-    char str_244[12];
-    char str_245[14];
-    char str_246[14];
-    char str_247[12];
-    char str_248[14];
-    char str_249[14];
-    char str_250[12];
-    uint32_t ptrs_23[64];  /* 64 pointers */
-    char w44_code[2];
-    char w44_name[12];
-    char str_251[16];
-    char str_252[16];
-    char str_253[16];
-    char str_254[18];
-    char str_255[18];
-    char str_256[16];
-    char str_257[14];
-    char str_258[14];
-    char str_259[16];
-    char str_260[16];
-    char str_261[16];
-    char str_262[14];
-    char str_263[12];
-    char str_264[14];
-    char str_265[20];
-    char str_266[18];
-    char str_267[16];
-    char str_268[18];
-    char str_269[18];
-    char str_270[18];
-    char str_271[18];
-    char str_272[16];
-    char str_273[16];
-    char str_274[14];
-    char str_275[18];
-    char str_276[16];
-    char str_277[16];
-    char str_278[16];
-    char str_279[18];
-    char str_280[16];
-    char str_281[100];
-    uint16_t field_1346;
-    uint16_t field_1348;
-    uint16_t field_134a;
-    uint16_t field_134c;
-    uint16_t field_134e;
-    uint16_t field_1350;
-    uint16_t field_1352;
-    uint16_t field_1354;
-    uint16_t field_1356;
-    uint16_t field_1358;
-    uint16_t field_135a;
-    uint16_t field_135c;
-    uint16_t field_135e;
-    uint16_t field_1360;
-    uint16_t field_1362;
-    uint16_t field_1364;
-    uint16_t field_1366;
-    uint16_t field_1368;
-    uint16_t field_136a;
-    uint16_t field_136c;
-    uint16_t field_136e;
-    uint16_t field_1370;
-    uint16_t field_1372;
-    uint16_t field_1374;
-    uint16_t field_1376;
-    uint16_t field_1378;
-    uint16_t field_137a;
-    uint16_t field_137c;
-    uint16_t field_137e;
-    uint16_t field_1380;
-    uint16_t field_1382;
-    uint16_t field_1384;
-    uint16_t field_1386;
-    uint16_t field_1388;
-    uint16_t field_138a;
-    uint16_t field_138c;
-    uint16_t field_138e;
-    uint16_t field_1390;
-    uint16_t field_1392;
-    uint16_t field_1394;
-    uint16_t field_1396;
-    uint16_t field_1398;
-    uint16_t field_139a;
-    uint16_t field_139c;
-    uint16_t field_139e;
-    uint16_t field_13a0;
-    uint16_t field_13a2;
-    uint16_t field_13a4;
-    uint16_t field_13a6;
-    uint16_t field_13a8;
-    uint16_t field_13aa;
-    uint16_t field_13ac;
-    uint16_t field_13ae;
-    uint16_t field_13b0;
-    uint16_t field_13b2;
-    uint16_t field_13b4;
-    char str_282[8];
-    char str_283[100];
-    char str_284[100];
-    char str_285[100];
-    char str_286[100];
-    char str_287[60];
-    uint16_t field_158a;
-    char str_288[76];
-    char str_289[60];
-    char str_290[60];
-    char str_291[60];
-    char str_292[60];
-    char str_293[56];
-    uint16_t field_1700;
-    uint16_t field_1702;
-    uint16_t field_1704;
-    uint16_t field_1706;
-    uint16_t field_1708;
-    uint16_t field_170a;
-    uint16_t field_170c;
-    uint16_t field_170e;
-    uint16_t field_1710;
-    uint16_t field_1712;
-    uint16_t field_1714;
-    uint16_t field_1716;
-    uint16_t field_1718;
-    uint16_t field_171a;
-    uint16_t field_171c;
-    uint16_t field_171e;
-    uint16_t field_1720;
-    uint16_t field_1722;
-    uint16_t field_1724;
-    uint16_t field_1726;
-    uint16_t field_1728;
-    uint16_t field_172a;
-    uint16_t field_172c;
-    uint16_t field_172e;
-    uint16_t field_1730;
-    uint16_t field_1732;
-    uint16_t field_1734;
-    uint16_t field_1736;
-    uint16_t field_1738;
-    uint16_t field_173a;
-    uint16_t field_173c;
-    uint16_t field_173e;
-    uint16_t field_1740;
-    uint16_t field_1742;
-    uint16_t field_1744;
-    char str_294[8];
-    char str_295[56];
-    char str_296[56];
-    char str_297[56];
-    char str_298[56];
-    char str_299[12];
-    char str_300[10];
-    char str_301[12];
-    uint16_t field_1850;
-    uint16_t field_1852;
-    uint16_t field_1854;
-    uint16_t field_1856;
-    char str_302[4];
-    char str_303[12];
-    char str_304[12];
-    char str_305[14];
-    char str_306[18];
-    uint16_t field_1894;
-    uint16_t field_1896;
-    uint16_t field_1898;
-    uint16_t field_189a;
-    uint16_t field_189c;
-    uint16_t field_189e;
-    char str_307[4];
-    uint16_t field_18a4;
-    uint16_t field_18a6;
-    uint16_t field_18a8;
-    char str_308[8];
-    char str_309[14];
-    char str_310[28];
-    char str_311[92];
-    uint16_t field_1938;
-    uint16_t field_193a;
-    uint16_t field_193c;
-    uint16_t field_193e;
-    uint16_t field_1940;
-    uint16_t field_1942;
-    uint16_t field_1944;
-    uint16_t field_1946;
-    uint16_t field_1948;
-    uint16_t field_194a;
-    uint16_t field_194c;
-    uint16_t field_194e;
-    uint16_t field_1950;
-    uint16_t field_1952;
-    uint16_t field_1954;
-    uint16_t field_1956;
-    uint16_t field_1958;
-    uint16_t field_195a;
-    uint16_t field_195c;
-    uint16_t field_195e;
-    uint16_t field_1960;
-    uint16_t field_1962;
-    uint16_t field_1964;
-    uint16_t field_1966;
-    uint16_t field_1968;
-    uint16_t field_196a;
-    uint16_t field_196c;
-    uint16_t field_196e;
-    uint16_t field_1970;
-    uint16_t field_1972;
-    uint16_t field_1974;
-    uint16_t field_1976;
-    uint16_t field_1978;
-    uint16_t field_197a;
-    uint16_t field_197c;
-    uint16_t field_197e;
-    uint16_t field_1980;
-    uint16_t field_1982;
-    uint16_t field_1984;
-    uint16_t field_1986;
-    uint16_t field_1988;
-    uint16_t field_198a;
-    uint16_t field_198c;
-    uint16_t field_198e;
-    uint16_t field_1990;
-    uint16_t field_1992;
-    uint16_t field_1994;
-    uint16_t field_1996;
-    uint16_t field_1998;
-    uint16_t field_199a;
-    uint16_t field_199c;
-    uint16_t field_199e;
-    char str_312[6];
-    uint16_t field_19a6;
-    uint16_t field_19a8;
-    uint16_t field_19aa;
-    uint16_t field_19ac;
-    uint16_t field_19ae;
-    uint16_t field_19b0;
-    uint16_t field_19b2;
-    uint16_t field_19b4;
-    uint16_t field_19b6;
-    uint16_t field_19b8;
-    uint16_t field_19ba;
-    uint16_t field_19bc;
-    uint16_t field_19be;
-    uint16_t field_19c0;
-    uint16_t field_19c2;
-    uint16_t field_19c4;
-    uint16_t field_19c6;
-    uint16_t field_19c8;
-    uint16_t field_19ca;
-    uint16_t field_19cc;
-    uint16_t field_19ce;
-    uint16_t field_19d0;
-    uint16_t field_19d2;
-    uint16_t field_19d4;
-    uint16_t field_19d6;
-    uint16_t field_19d8;
-    uint16_t field_19da;
-    uint16_t field_19dc;
-    uint16_t field_19de;
-    uint16_t field_19e0;
-    uint16_t field_19e2;
-    uint16_t field_19e4;
-    uint16_t field_19e6;
-    uint16_t field_19e8;
-    uint16_t field_19ea;
-    uint16_t field_19ec;
-    uint16_t field_19ee;
-    uint16_t field_19f0;
-    uint16_t field_19f2;
-    uint16_t field_19f4;
-    uint16_t field_19f6;
-    uint16_t field_19f8;
-    uint16_t field_19fa;
-    char str_313[22];
-    uint16_t field_1a12;
-    char str_314[110];
-    char str_315[92];
-    char str_316[82];
-    char str_317[106];
-    char str_318[120];
-    uint16_t field_1c12;
-    uint16_t field_1c14;
-    uint16_t field_1c16;
-    uint16_t field_1c18;
-    uint16_t field_1c1a;
-    uint16_t field_1c1c;
-    uint16_t field_1c1e;
-    uint16_t field_1c20;
-    uint16_t field_1c22;
-    uint16_t field_1c24;
-    uint16_t field_1c26;
-    uint16_t field_1c28;
-    uint16_t field_1c2a;
-    uint16_t field_1c2c;
-    uint16_t field_1c2e;
-    uint16_t field_1c30;
-    uint16_t field_1c32;
-    uint16_t field_1c34;
-    uint16_t field_1c36;
-    uint16_t field_1c38;
-    uint16_t field_1c3a;
-    uint16_t field_1c3c;
-    uint16_t field_1c3e;
-    uint16_t field_1c40;
-    uint16_t field_1c42;
-    uint16_t field_1c44;
-    uint16_t field_1c46;
-    uint16_t field_1c48;
-    uint16_t field_1c4a;
-    uint16_t field_1c4c;
-    uint16_t field_1c4e;
-    uint16_t field_1c50;
-    uint16_t field_1c52;
-    uint16_t field_1c54;
-    uint16_t field_1c56;
-    uint16_t field_1c58;
-    uint16_t field_1c5a;
-    uint16_t field_1c5c;
-    uint16_t field_1c5e;
-    uint16_t field_1c60;
-    uint16_t field_1c62;
-    uint16_t field_1c64;
-    uint16_t field_1c66;
-    uint16_t field_1c68;
-    uint16_t field_1c6a;
-    uint16_t field_1c6c;
-    uint16_t field_1c6e;
-    uint16_t field_1c70;
-    char str_319[16];
-    uint16_t field_1c82;
-    uint16_t field_1c84;
-    uint16_t field_1c86;
-    uint16_t field_1c88;
-    uint16_t field_1c8a;
-    uint16_t field_1c8c;
-    uint16_t field_1c8e;
-    uint16_t field_1c90;
-    uint16_t field_1c92;
-    uint16_t field_1c94;
-    uint16_t field_1c96;
-    uint16_t field_1c98;
-    uint16_t field_1c9a;
-    uint16_t field_1c9c;
-    uint16_t field_1c9e;
-    uint16_t field_1ca0;
-    uint16_t field_1ca2;
-    uint16_t field_1ca4;
-    uint16_t field_1ca6;
-    uint16_t field_1ca8;
-    uint16_t field_1caa;
-    uint16_t field_1cac;
-    uint16_t field_1cae;
-    uint16_t field_1cb0;
-    uint16_t field_1cb2;
-    uint16_t field_1cb4;
-    uint16_t field_1cb6;
-    uint16_t field_1cb8;
-    uint16_t field_1cba;
-    uint16_t field_1cbc;
-    uint16_t field_1cbe;
-    uint16_t field_1cc0;
-    uint16_t field_1cc2;
-    uint16_t field_1cc4;
-    uint16_t field_1cc6;
-    uint16_t field_1cc8;
-    uint16_t field_1cca;
-    uint16_t field_1ccc;
-    uint16_t field_1cce;
-    uint16_t field_1cd0;
-    uint16_t field_1cd2;
-    uint16_t field_1cd4;
-    uint16_t field_1cd6;
-    uint16_t field_1cd8;
-    uint16_t field_1cda;
-    uint16_t field_1cdc;
-    uint16_t field_1cde;
-    uint16_t field_1ce0;
-    uint16_t field_1ce2;
-    uint16_t field_1ce4;
-    uint16_t field_1ce6;
-    uint16_t field_1ce8;
-    uint16_t field_1cea;
-    uint16_t field_1cec;
-    uint16_t field_1cee;
-    uint16_t field_1cf0;
-    uint16_t field_1cf2;
-    uint16_t field_1cf4;
-    uint16_t field_1cf6;
-    uint16_t field_1cf8;
-    uint16_t field_1cfa;
-    uint16_t field_1cfc;
-    uint16_t field_1cfe;
-    char str_320[8];
-    char str_321[106];
-    char str_322[136];
-    uint32_t ptrs_24[6];  /* 6 pointers */
-    char str_323[90];
-    char str_324[84];
-    uint16_t field_1ec0;
-    uint16_t field_1ec2;
-    uint16_t field_1ec4;
-    uint16_t field_1ec6;
-    uint16_t field_1ec8;
-    uint16_t field_1eca;
-    uint16_t field_1ecc;
-    uint16_t field_1ece;
-    uint16_t field_1ed0;
-    uint16_t field_1ed2;
-    uint16_t field_1ed4;
-    uint16_t field_1ed6;
-    uint16_t field_1ed8;
-    uint16_t field_1eda;
-    uint16_t field_1edc;
-    uint16_t field_1ede;
-    uint16_t field_1ee0;
-    uint16_t field_1ee2;
-    uint16_t field_1ee4;
-    uint16_t field_1ee6;
-    uint16_t field_1ee8;
-    uint16_t field_1eea;
-    uint16_t field_1eec;
-    uint16_t field_1eee;
-    uint16_t field_1ef0;
-    uint16_t field_1ef2;
-    uint16_t field_1ef4;
-    uint16_t field_1ef6;
-    uint16_t field_1ef8;
-    uint16_t field_1efa;
-    char str_325[28];
-    uint16_t field_1f18;
-    uint16_t field_1f1a;
-    uint16_t field_1f1c;
-    uint16_t field_1f1e;
-    uint16_t field_1f20;
-    uint16_t field_1f22;
-    uint16_t field_1f24;
-    uint16_t field_1f26;
-    uint16_t field_1f28;
-    uint16_t field_1f2a;
-    uint16_t field_1f2c;
-    uint16_t field_1f2e;
-    uint16_t field_1f30;
-    uint16_t field_1f32;
-    uint16_t field_1f34;
-    uint16_t field_1f36;
-    uint16_t field_1f38;
-    uint16_t field_1f3a;
-    uint16_t field_1f3c;
-    uint16_t field_1f3e;
-    uint16_t field_1f40;
-    uint16_t field_1f42;
-    uint16_t field_1f44;
-    uint16_t field_1f46;
-    uint16_t field_1f48;
-    uint16_t field_1f4a;
-    uint16_t field_1f4c;
-    uint16_t field_1f4e;
-    uint16_t field_1f50;
-    uint16_t field_1f52;
-    uint16_t field_1f54;
-    uint16_t field_1f56;
-    uint16_t field_1f58;
-    uint16_t field_1f5a;
-    uint16_t field_1f5c;
-    uint16_t field_1f5e;
-    uint16_t field_1f60;
-    uint16_t field_1f62;
-    uint16_t field_1f64;
-    uint16_t field_1f66;
-    char str_326[14];
-    uint16_t field_1f76;
-    uint16_t field_1f78;
-    uint16_t field_1f7a;
-    char str_327[82];
-    char str_328[84];
-    uint32_t ptrs_25[62];  /* 62 pointers */
-    char str_329[8];
-    char str_330[8];
-    char str_331[8];
-    char str_332[8];
-    char str_333[8];
-    char str_334[4];
-    char str_335[6];
-    char str_336[6];
-    char str_337[6];
-    char str_338[6];
-    char str_339[6];
-    char str_340[6];
-    char str_341[8];
-    char str_342[8];
-    char str_343[8];
-    char str_344[6];
-    char str_345[6];
-    char str_346[8];
-    char str_347[6];
-    char str_348[8];
-    char str_349[6];
-    char str_350[14];
-    char str_351[26];
-    char str_352[26];
-    char str_353[26];
-    char str_354[26];
-    char str_355[26];
-    char str_356[26];
-    char str_357[26];
-    char str_358[6];
-    uint32_t ptrs_26[20];  /* 20 pointers */
-    char str_359[10];
-    char str_360[10];
-    char str_361[10];
-    char str_362[10];
-    char str_363[10];
-    char str_364[10];
-    char str_365[10];
-    char str_366[10];
-    char str_367[10];
-    char str_368[10];
-    char str_369[10];
-    char str_370[10];
-    char str_371[10];
-    char str_372[10];
-    char str_373[10];
-    char str_374[10];
-    char str_375[10];
-    char str_376[10];
-    char str_377[10];
-    char str_378[10];
-    char str_379[44];
-    char str_380[44];
-    uint16_t field_23e4;
-    uint16_t field_23e6;
-    uint16_t field_23e8;
-    uint16_t field_23ea;
-    uint16_t field_23ec;
-    uint16_t field_23ee;
-    uint16_t field_23f0;
-    uint16_t field_23f2;
-    uint16_t field_23f4;
-    uint16_t field_23f6;
-    uint16_t field_23f8;
-    uint16_t field_23fa;
-    char str_381[2];
-    char str_382[2];
-    uint16_t field_2400;
-    uint16_t field_2402;
-    uint16_t field_2404;
-    uint16_t field_2406;
-    uint16_t field_2408;
-    uint16_t field_240a;
-    uint16_t field_240c;
-    uint16_t field_240e;
-    uint16_t field_2410;
-    uint16_t field_2412;
-    uint16_t field_2414;
-    uint16_t field_2416;
-    uint16_t field_2418;
-    uint16_t field_241a;
-    uint16_t field_241c;
-    uint16_t field_241e;
-    uint16_t field_2420;
-    uint16_t field_2422;
-    uint16_t field_2424;
-    uint16_t field_2426;
-    uint16_t field_2428;
-    uint16_t field_242a;
-    uint16_t field_242c;
-    uint16_t field_242e;
-    uint16_t field_2430;
-    uint16_t field_2432;
-    uint16_t field_2434;
-    uint16_t field_2436;
-    uint16_t field_2438;
-    char str_383[4];
-    char str_384[4];
-    char str_385[4];
-    char str_386[4];
-    char str_387[4];
-    char str_388[4];
-    char str_389[4];
-    char str_390[4];
-    char str_391[4];
-    char str_392[4];
-    char str_393[4];
-    char str_394[4];
-    char str_395[4];
-    char str_396[4];
-    char str_397[4];
-    char str_398[4];
-    uint8_t pad_4[2];  /* zero padding */
-    uint16_t field_247c;
-    uint8_t pad_5[2];  /* zero padding */
-    uint16_t field_2480;
-    uint16_t field_2482;
-    uint16_t field_2484;
-    uint16_t field_2486;
-    uint16_t field_2488;
-    uint16_t field_248a;
-    uint16_t field_248c;
-    uint16_t field_248e;
-    uint16_t field_2490;
-    uint16_t field_2492;
-    uint16_t field_2494;
-    uint16_t field_2496;
-    uint16_t field_2498;
-    char str_399[8];
-    char str_400[24];
-    uint32_t ptrs_27[16];  /* 16 pointers */
-    char str_401[6];
-    char str_402[6];
-    char str_403[6];
-    char str_404[6];
-    char str_405[6];
-    char str_406[6];
-    char str_407[6];
-    char str_408[6];
-    char str_409[6];
-    char str_410[6];
-    char str_411[6];
-    char str_412[6];
-    char str_413[6];
-    char str_414[6];
-    char str_415[6];
-    char str_416[6];
-    uint16_t field_255a;
-    uint16_t field_255c;
-    char str_417[2];
-    char str_418[2];
-    char str_419[2];
-    char str_420[2];
-    char str_421[2];
-    char str_422[2];
-    uint16_t field_256a;
-    uint8_t pad_6[2];  /* zero padding */
-    uint32_t ptrs_28[11];  /* 11 pointers */
-    char str_423[10];
-    char str_424[10];
-    char str_425[10];
-    char str_426[10];
-    char str_427[10];
-    char str_428[10];
-    char str_429[10];
-    char str_430[10];
-    char str_431[10];
-    char str_432[10];
-    char str_433[10];
-    uint16_t field_2608;
-    uint16_t field_260a;
-    char str_434[2];
-    char str_435[2];
-    char str_436[2];
-    char str_437[2];
-    char str_438[2];
-    char str_439[2];
-    uint16_t field_2618;
-    uint8_t pad_7[2];  /* zero padding */
-    uint32_t ptr_261c;
-    uint32_t ptr_2620;
-    char str_440[6];
-    char str_441[6];
-    uint16_t field_2630;
-    uint16_t field_2632;
-    uint16_t field_2634;
-    uint16_t field_2636;
-    uint16_t field_2638;
-    char str_442[2];
-    char str_443[2];
-    uint16_t field_263e;
-    uint16_t field_2640;
-    uint16_t field_2642;
-    uint16_t field_2644;
-    uint16_t field_2646;
-    uint16_t field_2648;
-    uint16_t field_264a;
-    uint16_t field_264c;
-    uint16_t field_264e;
-    uint32_t ptrs_29[16];  /* 16 pointers */
-    char str_444[8];
-    char str_445[8];
-    char str_446[8];
-    char str_447[8];
-    char str_448[8];
-    char str_449[8];
-    char str_450[8];
-    char str_451[8];
-    char str_452[8];
-    char str_453[8];
-    char str_454[8];
-    char str_455[8];
-    char str_456[8];
-    char str_457[8];
-    char str_458[8];
-    char str_459[8];
-    uint16_t field_2710;
-    uint16_t field_2712;
-    char str_460[2];
-    char str_461[2];
-    char str_462[2];
-    char str_463[2];
-    char str_464[2];
-    char str_465[2];
-    uint16_t field_2720;
-    uint8_t pad_8[2];  /* zero padding */
-    char str_466[12];
-    char str_467[12];
-    char str_468[12];
-    char str_469[12];
-    char str_470[2];
-    char str_471[2];
-    char str_472[2];
-    char str_473[2];
-    char str_474[2];
-    char str_475[2];
-    char str_476[2];
-    char str_477[2];
-    char str_478[2];
-    uint8_t pad_9[2];  /* zero padding */
-    char str_479[6];
-    char str_480[6];
-    char str_481[2];
-    char str_482[2];
-    char str_483[2];
-    char str_484[2];
-    char str_485[2];
-    char str_486[2];
-    char str_487[2];
-    char str_488[2];
-    char str_489[2];
-    uint8_t pad_10[2];  /* zero padding */
-    char str_490[6];
-    char str_491[6];
-    char str_492[2];
-    char str_493[2];
-    char str_494[2];
-    char str_495[2];
-    char str_496[2];
-    char str_497[2];
-    char str_498[2];
-    char str_499[2];
-    char str_500[2];
-    uint8_t pad_11[2];  /* zero padding */
-    char str_501[6];
-    uint32_t ptrs_30[148];  /* 148 pointers */
-    char w45_code[2];
-    char w45_name[20];
-    char w46_code[10];
-    char w46_name[14];
-    char str_502[16];
-    char str_503[16];
-    char str_504[16];
-    char str_505[14];
-    char str_506[14];
-    char str_507[16];
-    char str_508[16];
-    char str_509[16];
-    char str_510[14];
-    char str_511[16];
-    char str_512[12];
-    char str_513[22];
-    char str_514[16];
-    char str_515[16];
-    char str_516[18];
-    char str_517[16];
-    char str_518[16];
-    char str_519[16];
-    char str_520[18];
-    char str_521[18];
-    char str_522[18];
-    char str_523[18];
-    char str_524[18];
-    char str_525[20];
-    char str_526[14];
-    char str_527[14];
-    char str_528[14];
-    char str_529[14];
-    char str_530[14];
-    char str_531[20];
-    char str_532[12];
-    char str_533[14];
-    char str_534[16];
-    char str_535[16];
-    char str_536[14];
-    char w47_code[12];
-    char w47_name[22];
-    char w48_code[10];
-    char w48_name[16];
-    char str_537[16];
-    char str_538[12];
-    char w49_code[10];
-    char w49_name[18];
-    char str_539[16];
-    char str_540[18];
-    char str_541[18];
-    char str_542[20];
-    char str_543[16];
-    char str_544[12];
-    char str_545[12];
-    char str_546[12];
-    char str_547[16];
-    char str_548[12];
-    char str_549[16];
-    char str_550[22];
-    char str_551[14];
-    char str_552[22];
-    char str_553[16];
-    char str_554[12];
-    char w50_code[12];
-    char w50_name[26];
-    char w51_code[12];
-    char w51_name[14];
-    char str_555[14];
-    char str_556[20];
-    char str_557[14];
-    char str_558[14];
-    char str_559[14];
-    char str_560[18];
-    char str_561[14];
-    uint32_t ptrs_31[5];  /* 5 pointers */
-    char str_562[2];
-    char str_563[8];
-    char str_564[6];
-    char str_565[6];
-    char str_566[6];
-    uint32_t ptrs_32[3];  /* 3 pointers */
-    char str_567[2];
-    char str_568[8];
-    char str_569[6];
-    uint32_t ptrs_33[5];  /* 5 pointers */
-    char str_570[2];
-    char str_571[8];
-    char str_572[6];
-    char str_573[10];
-    char str_574[6];
-    uint32_t ptrs_34[4];  /* 4 pointers */
-    char str_575[2];
-    char str_576[6];
-    char str_577[10];
-    char str_578[6];
-    uint32_t ptrs_35[4];  /* 4 pointers */
-    char str_579[2];
-    char str_580[8];
-    char str_581[10];
-    char str_582[6];
-    uint32_t ptr_2f4a;
-    char str_583[2];
-    uint32_t ptrs_36[5];  /* 5 pointers */
-    char str_584[2];
-    char str_585[8];
-    char str_586[6];
-    char str_587[10];
-    char str_588[6];
-    uint32_t ptrs_37[4];  /* 4 pointers */
-    char str_589[2];
-    char str_590[6];
-    char str_591[10];
-    char str_592[6];
-    uint32_t ptrs_38[5];  /* 5 pointers */
-    char str_593[2];
-    char str_594[8];
-    char str_595[6];
-    char str_596[10];
-    char str_597[6];
-    uint32_t ptrs_39[4];  /* 4 pointers */
-    char str_598[2];
-    char str_599[6];
-    char str_600[10];
-    char str_601[10];
-    uint32_t ptrs_40[6];  /* 6 pointers */
-    char str_602[2];
-    char str_603[8];
-    char str_604[6];
-    char str_605[10];
-    char str_606[6];
-    char str_607[6];
-    uint32_t ptr_304a;
-    char str_608[2];
-    uint32_t ptrs_41[3];  /* 3 pointers */
-    char str_609[2];
-    char str_610[8];
-    char str_611[6];
-    uint32_t ptr_306c;
-    char str_612[2];
-    uint32_t ptr_3072;
-    char str_613[2];
-    uint32_t ptrs_42[4];  /* 4 pointers */
-    char str_614[2];
-    char str_615[6];
-    char str_616[4];
-    char str_617[6];
-    uint32_t ptr_309a;
-    uint32_t ptr_309e;
-    char str_618[2];
-    char str_619[6];
-    uint32_t ptrs_43[6];  /* 6 pointers */
-    char str_620[2];
-    char str_621[6];
-    char str_622[6];
-    char str_623[6];
-    char str_624[10];
-    char str_625[6];
-    uint32_t ptr_30e6;
-    char str_626[2];
-    uint32_t ptr_30ec;
-    char str_627[2];
-    uint32_t ptr_30f2;
-    char str_628[2];
-    uint32_t ptr_30f8;
-    char str_629[2];
-    uint32_t ptr_30fe;
-    char str_630[2];
-    uint32_t ptr_3104;
-    char str_631[2];
-    uint32_t ptrs_44[3];  /* 3 pointers */
-    char str_632[2];
-    char str_633[6];
-    char str_634[6];
-    uint32_t ptr_3124;
-    char str_635[2];
-    uint32_t ptr_312a;
-    naka_dispatch_t w52;  /* 0x11 */
-    naka_dispatch_t w53;  /* 0x11 */
-    naka_dispatch_t w54;  /* 0x10 */
-    naka_dispatch_t w55;  /* 0x10 */
-    naka_dispatch_t w56;  /* 0x10 */
-    naka_dispatch_t w57;  /* 0x47 */
-    naka_dispatch_t w58;  /* 0x10 */
-    naka_dispatch_t w59;  /* 0x10 */
-    naka_dispatch_t w60;  /* 0x10 */
-    naka_dispatch_t w61;  /* 0x54 */
-    naka_dispatch_t w62;  /* 0x10 */
-    naka_dispatch_t w63;  /* 0x10 */
+    /* ---------------------------------------------------------------------
+     * [typed] by span_t1
+     * NakaData_WidgetTables1 -- 24 bytes at the start of the blob that no
+     * registration or code reference reaches (searched: RegObjTabl tables,
+     * slice and positional labels). Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaData_WidgetTables1[24];
+    /* ---------------------------------------------------------------------
+     * NakaHdr_Perf2MeasureBoxData -- widget record, entry 10 of
+     * Yoko_ViewTable_0E3 (registered by InitializeYoko (v10/v9 0xF29E6D, v7
+     * 0xF29E43), sequencer/sequencer_ui.s:65): it begins with class id
+     * 0x1600029 = IvMainEditSw, whose descriptor gives record_size 26.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaHdr_Perf2MeasureBoxData[26];
+    /* ---------------------------------------------------------------------
+     * NakaHdr_Perf2FileListData -- widget record, entry 11 of
+     * Yoko_ViewTable_0E3 (registered by InitializeYoko (v10/v9 0xF29E6D, v7
+     * 0xF29E43), sequencer/sequencer_ui.s:65): it begins with class id
+     * 0x1670014 = AcDemoMedleyDispBox, whose descriptor gives record_size
+     * 36.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaHdr_Perf2FileListData[36];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_06F -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:21) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 43, 0xE240AC, 0x6F` -- class
+     * 0x1600010 (ViewableProc), 43 objects, base id 0x6F. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_06F[44];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_070 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:23) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 12, 0xE2415C, 0x70` -- class
+     * 0x1600010 (ViewableProc), 12 objects, base id 0x70. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_070[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_071 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:25) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 11, 0xE24190, 0x71` -- class
+     * 0x1600010 (ViewableProc), 11 objects, base id 0x71. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_071[12];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_072 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:27) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 7, 0xE241C0, 0x72` -- class
+     * 0x1600010 (ViewableProc), 7 objects, base id 0x72. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_072[8];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_073 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:29) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 16, 0xE241E0, 0x73` -- class
+     * 0x1600010 (ViewableProc), 16 objects, base id 0x73. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_073[17];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_074 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:31) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 15, 0xE24224, 0x74` -- class
+     * 0x1600010 (ViewableProc), 15 objects, base id 0x74. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_074[16];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_075 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:33) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 13, 0xE24264, 0x75` -- class
+     * 0x1600010 (ViewableProc), 13 objects, base id 0x75. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_075[14];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_076 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:35) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 8, 0xE2429C, 0x76` -- class
+     * 0x1600010 (ViewableProc), 8 objects, base id 0x76. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_076[9];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_078 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:37) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 30, 0xE242C0, 0x78` -- class
+     * 0x1600010 (ViewableProc), 30 objects, base id 0x78. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_078[31];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_07A -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:39) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 12, 0xE2433C, 0x7A` -- class
+     * 0x1600010 (ViewableProc), 12 objects, base id 0x7A. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_07A[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_089 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:41) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 5, 0xE24370, 0x89` -- class
+     * 0x1600010 (ViewableProc), 5 objects, base id 0x89. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_089[6];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_08A -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:43) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 1, 0xE24388, 0x8A` -- class
+     * 0x1600010 (ViewableProc), 1 objects, base id 0x8A. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_08A[2];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_08B -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:45) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 22, 0xE24390, 0x8B` -- class
+     * 0x1600010 (ViewableProc), 22 objects, base id 0x8B. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_08B[23];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_08C -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:47) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 28, 0xE243EC, 0x8C` -- class
+     * 0x1600010 (ViewableProc), 28 objects, base id 0x8C. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_08C[29];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_08E -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:49) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 5, 0xE24460, 0x8E` -- class
+     * 0x1600010 (ViewableProc), 5 objects, base id 0x8E. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_08E[6];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_08F -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:51) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 6, 0xE24478, 0x8F` -- class
+     * 0x1600010 (ViewableProc), 6 objects, base id 0x8F. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_08F[7];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_092 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:53) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 4, 0xE24494, 0x92` -- class
+     * 0x1600010 (ViewableProc), 4 objects, base id 0x92. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_092[5];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_0A7 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:55) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 0, 0xE244A8, 0xA7` -- class
+     * 0x1600010 (ViewableProc), 0 objects, base id 0xA7. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_0A7[1];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_0A9 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:57) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 6, 0xE244AC, 0xA9` -- class
+     * 0x1600010 (ViewableProc), 6 objects, base id 0xA9. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_0A9[7];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_0E0 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:59) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 4, 0xE244C8, 0xE0` -- class
+     * 0x1600010 (ViewableProc), 4 objects, base id 0xE0. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_0E0[5];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_0E1 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:61) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 12, 0xE244DC, 0xE1` -- class
+     * 0x1600010 (ViewableProc), 12 objects, base id 0xE1. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_0E1[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_0E2 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:63) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 12, 0xE24510, 0xE2` -- class
+     * 0x1600010 (ViewableProc), 12 objects, base id 0xE2. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_0E2[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ViewTable_0E3 -- object table: InitializeYoko (v10/v9 0xF29E6D,
+     * v7 0xF29E43) (sequencer/sequencer_ui.s:65) registers it with
+     * `RegObjTabl 0x1600010, ViewableProc, 12, 0xE24544, 0xE3` -- class
+     * 0x1600010 (ViewableProc), 12 objects, base id 0xE3. Entries: pointers
+     * to widget records then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ViewTable_0E3[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_36F -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:22) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 43, 0xE24578, 0x36F` -- class
+     * 0x160000f (ResNameProc), 43 objects, base id 0x36F. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_36F[44];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_36F -- the strings Yoko_ResNameTable_36F points at: 44
+     * NUL-terminated names (0xFF pads to even length), 160 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_36F[160];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_370 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:24) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 12, 0xE246C8, 0x370` -- class
+     * 0x160000f (ResNameProc), 12 objects, base id 0x370. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_370[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_370 -- the strings Yoko_ResNameTable_370 points at: 13
+     * NUL-terminated names (0xFF pads to even length), 50 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_370[50];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_371 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:26) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 11, 0xE2472E, 0x371` -- class
+     * 0x160000f (ResNameProc), 11 objects, base id 0x371. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_371[12];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_371 -- the strings Yoko_ResNameTable_371 points at: 12
+     * NUL-terminated names (0xFF pads to even length), 42 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_371[42];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_372 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:28) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 7, 0xE24788, 0x372` -- class
+     * 0x160000f (ResNameProc), 7 objects, base id 0x372. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_372[8];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_372 -- the strings Yoko_ResNameTable_372 points at: 8
+     * NUL-terminated names (0xFF pads to even length), 34 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_372[34];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_373 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:30) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 16, 0xE247CA, 0x373` -- class
+     * 0x160000f (ResNameProc), 16 objects, base id 0x373. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_373[17];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_373 -- the strings Yoko_ResNameTable_373 points at: 17
+     * NUL-terminated names (0xFF pads to even length), 54 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_373[54];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_374 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:32) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 15, 0xE24844, 0x374` -- class
+     * 0x160000f (ResNameProc), 15 objects, base id 0x374. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_374[16];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_374 -- the strings Yoko_ResNameTable_374 points at: 16
+     * NUL-terminated names (0xFF pads to even length), 72 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_374[72];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_375 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:34) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 13, 0xE248CC, 0x375` -- class
+     * 0x160000f (ResNameProc), 13 objects, base id 0x375. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_375[14];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_375 -- the strings Yoko_ResNameTable_375 points at: 14
+     * NUL-terminated names (0xFF pads to even length), 54 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_375[54];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_376 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:36) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 8, 0xE2493A, 0x376` -- class
+     * 0x160000f (ResNameProc), 8 objects, base id 0x376. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_376[9];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_376 -- the strings Yoko_ResNameTable_376 points at: 9
+     * NUL-terminated names (0xFF pads to even length), 30 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_376[30];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_378 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:38) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 30, 0xE2497C, 0x378` -- class
+     * 0x160000f (ResNameProc), 30 objects, base id 0x378. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_378[31];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_378 -- the strings Yoko_ResNameTable_378 points at: 31
+     * NUL-terminated names (0xFF pads to even length), 70 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_378[70];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_37A -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:40) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 12, 0xE24A3E, 0x37A` -- class
+     * 0x160000f (ResNameProc), 12 objects, base id 0x37A. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_37A[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_37A -- the strings Yoko_ResNameTable_37A points at: 13
+     * NUL-terminated names (0xFF pads to even length), 34 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_37A[34];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_389 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:42) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 5, 0xE24A94, 0x389` -- class
+     * 0x160000f (ResNameProc), 5 objects, base id 0x389. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_389[6];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_389 -- the strings Yoko_ResNameTable_389 points at: 6
+     * NUL-terminated names (0xFF pads to even length), 18 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_389[18];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_38A -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:44) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 1, 0xE24ABE, 0x38A` -- class
+     * 0x160000f (ResNameProc), 1 objects, base id 0x38A. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_38A[2];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_38A -- the strings Yoko_ResNameTable_38A points at: 2
+     * NUL-terminated names (0xFF pads to even length), 4 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_38A[4];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_38B -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:46) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 22, 0xE24ACA, 0x38B` -- class
+     * 0x160000f (ResNameProc), 22 objects, base id 0x38B. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_38B[23];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_38B -- the strings Yoko_ResNameTable_38B points at: 23
+     * NUL-terminated names (0xFF pads to even length), 90 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_38B[90];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_38C -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:48) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 28, 0xE24B80, 0x38C` -- class
+     * 0x160000f (ResNameProc), 28 objects, base id 0x38C. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_38C[29];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_38C -- the strings Yoko_ResNameTable_38C points at: 29
+     * NUL-terminated names (0xFF pads to even length), 124 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_38C[124];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_38E -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:50) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 5, 0xE24C70, 0x38E` -- class
+     * 0x160000f (ResNameProc), 5 objects, base id 0x38E. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_38E[6];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_38E -- the strings Yoko_ResNameTable_38E points at: 6
+     * NUL-terminated names (0xFF pads to even length), 20 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_38E[20];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_38F -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:52) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 6, 0xE24C9C, 0x38F` -- class
+     * 0x160000f (ResNameProc), 6 objects, base id 0x38F. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_38F[7];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_38F -- the strings Yoko_ResNameTable_38F points at: 7
+     * NUL-terminated names (0xFF pads to even length), 22 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_38F[22];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_392 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:54) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 4, 0xE24CCE, 0x392` -- class
+     * 0x160000f (ResNameProc), 4 objects, base id 0x392. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_392[5];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_392 -- the strings Yoko_ResNameTable_392 points at: 5
+     * NUL-terminated names (0xFF pads to even length), 22 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_392[22];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_3A7 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:56) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 0, 0xE24CF8, 0x3A7` -- class
+     * 0x160000f (ResNameProc), 0 objects, base id 0x3A7. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_3A7[1];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_3A7 -- the strings Yoko_ResNameTable_3A7 points at: 1
+     * NUL-terminated names (0xFF pads to even length), 2 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_3A7[2];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_3A9 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:58) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 6, 0xE24CFE, 0x3A9` -- class
+     * 0x160000f (ResNameProc), 6 objects, base id 0x3A9. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_3A9[7];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_3A9 -- the strings Yoko_ResNameTable_3A9 points at: 7
+     * NUL-terminated names (0xFF pads to even length), 24 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_3A9[24];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_3E0 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:60) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 4, 0xE24D32, 0x3E0` -- class
+     * 0x160000f (ResNameProc), 4 objects, base id 0x3E0. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_3E0[5];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_3E0 -- the strings Yoko_ResNameTable_3E0 points at: 5
+     * NUL-terminated names (0xFF pads to even length), 18 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_3E0[18];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_3E1 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:62) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 12, 0xE24D58, 0x3E1` -- class
+     * 0x160000f (ResNameProc), 12 objects, base id 0x3E1. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_3E1[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_3E1 -- the strings Yoko_ResNameTable_3E1 points at: 13
+     * NUL-terminated names (0xFF pads to even length), 90 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_3E1[90];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_3E2 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:64) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 12, 0xE24DE6, 0x3E2` -- class
+     * 0x160000f (ResNameProc), 12 objects, base id 0x3E2. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_3E2[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_3E2 -- the strings Yoko_ResNameTable_3E2 points at: 13
+     * NUL-terminated names (0xFF pads to even length), 94 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_3E2[94];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNameTable_3E3 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:66) registers it with
+     * `RegObjTabl 0x160000f, ResNameProc, 12, 0xE24E78, 0x3E3` -- class
+     * 0x160000f (ResNameProc), 12 objects, base id 0x3E3. Entries: pointers
+     * to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_ResNameTable_3E3[13];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_3E3 -- the strings Yoko_ResNameTable_3E3 points at: 13
+     * NUL-terminated names (0xFF pads to even length), 100 bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_3E3[100];
+    /* ---------------------------------------------------------------------
+     * Yoko_ResNames_3E3_Strings -- 306 bytes of NUL-terminated strings after
+     * Yoko_ResNames_3E3; no registration or code reference reaches them
+     * (searched: RegObjTabl tables, slice and positional labels). Which code
+     * uses them is not established.
+     * --------------------------------------------------------------------- */
+    char Yoko_ResNames_3E3_Strings[306];
+    /* ---------------------------------------------------------------------
+     * Yoko_MainFuncTable_147 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:19) registers it with
+     * `RegObjTabl 0x1600003, MainFunctionProc, 31, 0xE25042, 0x147` -- class
+     * 0x1600003 (MainFunctionProc), 31 objects, base id 0x147. Entries:
+     * procedure addresses then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_MainFuncTable_147[32];
+    /* ---------------------------------------------------------------------
+     * Yoko_MainFuncNameTable_447 -- object table: InitializeYoko (v10/v9
+     * 0xF29E6D, v7 0xF29E43) (sequencer/sequencer_ui.s:20) registers it with
+     * `RegObjTabl 0x1600003, MainFunctionProc, 31, 0xE250C2, 0x447` -- class
+     * 0x1600003 (MainFunctionProc), 31 objects, base id 0x447. Entries:
+     * pointers to the procedures' name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Yoko_MainFuncNameTable_447[32];
+    /* ---------------------------------------------------------------------
+     * Yoko_MainFuncNames_447 -- the strings Yoko_MainFuncNameTable_447
+     * points at: 32 NUL-terminated names (0xFF pads to even length), 502
+     * bytes.
+     * --------------------------------------------------------------------- */
+    char Yoko_MainFuncNames_447[502];
+    /* ---------------------------------------------------------------------
+     * PartSelLangCheck_Strings -- the 6 strings PartSelLangCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 620 bytes.
+     * --------------------------------------------------------------------- */
+    char PartSelLangCheck_Strings[620];
+    /* ---------------------------------------------------------------------
+     * AfterLangCheck_Strings -- the 6 strings AfterLangCheck_PtrTable points
+     * at (NUL-terminated, 0xFF pad to even length), 378 bytes.
+     * --------------------------------------------------------------------- */
+    char AfterLangCheck_Strings[378];
+    /* ---------------------------------------------------------------------
+     * TrAsPreLangCheck_Strings -- the 6 strings TrAsPreLangCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 358 bytes.
+     * --------------------------------------------------------------------- */
+    char TrAsPreLangCheck_Strings[358];
+    /* ---------------------------------------------------------------------
+     * AtentionLangCheck_Strings -- the 6 strings AtentionLangCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 70 bytes.
+     * --------------------------------------------------------------------- */
+    char AtentionLangCheck_Strings[70];
+    /* ---------------------------------------------------------------------
+     * AreYouSureLangCheck_Strings -- the 6 strings
+     * AreYouSureLangCheck_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 104 bytes.
+     * --------------------------------------------------------------------- */
+    char AreYouSureLangCheck_Strings[104];
+    /* ---------------------------------------------------------------------
+     * GmOnSureLangCheck_Strings -- the 6 strings GmOnSureLangCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 596 bytes.
+     * --------------------------------------------------------------------- */
+    char GmOnSureLangCheck_Strings[596];
+    /* ---------------------------------------------------------------------
+     * GmOffSureLangCheck_Strings -- the 6 strings
+     * GmOffSureLangCheck_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 714 bytes.
+     * --------------------------------------------------------------------- */
+    char GmOffSureLangCheck_Strings[714];
+    /* ---------------------------------------------------------------------
+     * TrAsSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
+     * (NakaWidgetPtrTbl_SmfDp_0x1DA0:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t TrAsSureLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * TrAsSureLangCheck_Strings -- the 6 strings TrAsSureLangCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 528 bytes.
+     * --------------------------------------------------------------------- */
+    char TrAsSureLangCheck_Strings[528];
+    /* ---------------------------------------------------------------------
+     * PartSelLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * PartSelLangCheck (v10/v9 0xF2A92C, v7 0xF2A902) (`lda xhl,
+     * (NakaWidgetPtrTbl_SmfDp_0x1FC8:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t PartSelLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * AfterLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * AfterLangCheck (v10/v9 0xF2A93D, v7 0xF2A913) (`lda xhl,
+     * (NakaWidgetPtrTbl_SmfDp_0x1FE0:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AfterLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * TrAsPreLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * TrAsPreLangCheck (v10/v9 0xF2A94E, v7 0xF2A924) (`lda xhl,
+     * (NakaWidgetPtrTbl_SmfDp_0x1FF8:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t TrAsPreLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * AtentionLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * AtentionLangCheck (v10/v9 0xF2A95F, v7 0xF2A935) (`lda xhl,
+     * (NakaWidgetPtrTbl_SmfDp_0x2010:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AtentionLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * AreYouSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * AreYouSureLangCheck (v10/v9 0xF2A970, v7 0xF2A946) (`lda xhl,
+     * (NakaWidgetPtrTbl_SmfDp_0x2028:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AreYouSureLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * GmOnSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * GmOnSureLangCheck (v10/v9 0xF2A981, v7 0xF2A957) (`lda xhl,
+     * (NakaWidgetPtrTbl_SmfDp_0x2040:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t GmOnSureLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * GmOffSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * GmOffSureLangCheck (v10/v9 0xF2A992, v7 0xF2A968) (`lda xhl,
+     * (NakaWidgetPtrTbl_SmfDp_0x2058:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t GmOffSureLangCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * TrAsSureLangCheck_PtrTable_2 -- 20 u32 ROM addresses (or 0), read by
+     * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
+     * (NakaWidgetPtrTbl_SmfDp_0x2070:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t TrAsSureLangCheck_PtrTable_2[20];
+    /* ---------------------------------------------------------------------
+     * TrAsSureLangCheck_Strings_2 -- the 20 strings
+     * TrAsSureLangCheck_PtrTable_2 points at (NUL-terminated, 0xFF pad to
+     * even length), 138 bytes.
+     * --------------------------------------------------------------------- */
+    char TrAsSureLangCheck_Strings_2[138];
+    /* ---------------------------------------------------------------------
+     * PtrTarget_Strings -- 208 bytes of NUL-terminated strings after
+     * PtrTarget; no registration or code reference reaches them (searched:
+     * RegObjTabl tables, slice and positional labels). Which code uses them
+     * is not established.
+     * --------------------------------------------------------------------- */
+    char PtrTarget_Strings[208];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 ROM addresses (or 0),
+     * read by TrAsGridChk_Part1_SendAudio (v10/v9 0xF2C798, v7 0xF2C76E)
+     * (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x221A`).
+     * --------------------------------------------------------------------- */
+    uint32_t TrAsGridChk_Part1_SendAudio_PtrTable[20];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part1_SendAudio_Strings -- the 20 strings
+     * TrAsGridChk_Part1_SendAudio_PtrTable points at (NUL-terminated, 0xFF
+     * pad to even length), 200 bytes.
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part1_SendAudio_Strings[200];
+    /* ---------------------------------------------------------------------
+     * TrAsGrid_GetDirectionLabel_Str -- NUL-terminated string(s), 44 bytes,
+     * used by TrAsGrid_GetDirectionLabel (v10/v9 0xF2C2FF, v7 0xF2C2D5) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x2332`).
+     * --------------------------------------------------------------------- */
+    char TrAsGrid_GetDirectionLabel_Str[44];
+    /* ---------------------------------------------------------------------
+     * TrAsGrid_DirectionLabel2_Str -- NUL-terminated string(s), 44 bytes,
+     * used by TrAsGrid_DirectionLabel2 (v10/v9 0xF2C30C, v7 0xF2C2E2) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x235E`).
+     * --------------------------------------------------------------------- */
+    char TrAsGrid_DirectionLabel2_Str[44];
+    /* ---------------------------------------------------------------------
+     * AcTrAsGridBoxProc_CaseTable -- jump table of a compiled `switch` in
+     * AcTrAsGridBoxProc (v10/v9 0xF2BF1E, v7 0xF2BEF4) (`add xbc,
+     * NakaWidgetPtrTbl_SmfDp_0x238A`): 7 u16 case offsets from
+     * TrAsGrid_HandleInit.
+     * --------------------------------------------------------------------- */
+    uint16_t AcTrAsGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * TrAsGrid_LookupTable_Table -- read by TrAsGrid_LookupTable (v10/v9
+     * 0xF2C40B, v7 0xF2C3E1) (`lda xbc,
+     * (NakaWidgetPtrTbl_SmfDp_0x2398:24)`). 32 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t TrAsGrid_LookupTable_Table[32];
+    /* ---------------------------------------------------------------------
+     * TrAsGrid_ByteData1_Table -- read by TrAsGrid_ByteData1 (v10/v9
+     * 0xF2C41A, v7 0xF2C3F0) (`lda xde,
+     * (NakaWidgetPtrTbl_SmfDp_0x23B8:24)`). 20 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t TrAsGrid_ByteData1_Table[20];
+    /* ---------------------------------------------------------------------
+     * TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_ByteData1 (v10/v9
+     * 0xF2C41A, v7 0xF2C3F0) (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x23CC`). 20
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t TrAsGrid_ByteData1_Table_2[20];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_Start_Str -- NUL-terminated string(s), 4 bytes, used
+     * by TrAsGridChk_Part2_Start (v10/v9 0xF2C7C3, v7 0xF2C799) (`ld xwa,
+     * NakaWidgetPtrTbl_SmfDp_0x23E0`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_Start_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_Start_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part2_Start (v10/v9 0xF2C7C3, v7 0xF2C799) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x23E4`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_Start_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part2_PushCmd (v10/v9 0xF2C7E5, v7 0xF2C7BB) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x23E8`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_PushCmd_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part2_PushCmd (v10/v9 0xF2C7E5, v7 0xF2C7BB) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x23EC`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_PushCmd_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_UpDir_Str -- NUL-terminated string(s), 4 bytes, used
+     * by TrAsGridChk_Part2_UpDir (v10/v9 0xF2C82E, v7 0xF2C804) (`ld xwa,
+     * NakaWidgetPtrTbl_SmfDp_0x23F0`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_UpDir_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_UpDir_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part2_UpDir (v10/v9 0xF2C82E, v7 0xF2C804) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x23F4`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_UpDir_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part2_UpPushCmd (v10/v9 0xF2C84A, v7 0xF2C820)
+     * (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F8`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_UpPushCmd_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part2_UpCheckType0_Str -- NUL-terminated string(s), 4
+     * bytes, used by TrAsGridChk_Part2_UpCheckType0 (v10/v9 0xF2C882, v7
+     * 0xF2C858) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x23FC`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part2_UpCheckType0_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_Start_Str -- NUL-terminated string(s), 4 bytes, used
+     * by TrAsGridChk_Part3_Start (v10/v9 0xF2C8AC, v7 0xF2C882) (`ld xwa,
+     * NakaWidgetPtrTbl_SmfDp_0x2400`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_Start_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_Start_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part3_Start (v10/v9 0xF2C8AC, v7 0xF2C882) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x2404`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_Start_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part3_PushCmd (v10/v9 0xF2C8CB, v7 0xF2C8A1) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x2408`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_PushCmd_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part3_PushCmd (v10/v9 0xF2C8CB, v7 0xF2C8A1) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x240C`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_PushCmd_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_UpDir_Str -- NUL-terminated string(s), 4 bytes, used
+     * by TrAsGridChk_Part3_UpDir (v10/v9 0xF2C917, v7 0xF2C8ED) (`ld xwa,
+     * NakaWidgetPtrTbl_SmfDp_0x2410`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_UpDir_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_UpDir_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part3_UpDir (v10/v9 0xF2C917, v7 0xF2C8ED) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x2414`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_UpDir_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
+     * used by TrAsGridChk_Part3_UpPushCmd (v10/v9 0xF2C930, v7 0xF2C906)
+     * (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x2418`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_UpPushCmd_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridChk_Part3_UpCheckType0_Str -- NUL-terminated string(s), 4
+     * bytes, used by TrAsGridChk_Part3_UpCheckType0 (v10/v9 0xF2C96B, v7
+     * 0xF2C941) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x241C`).
+     * --------------------------------------------------------------------- */
+    char TrAsGridChk_Part3_UpCheckType0_Str[4];
+    /* ---------------------------------------------------------------------
+     * TrAsGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * TrAsGridCheck (v10/v9 0xF2C477, v7 0xF2C44D) (`add xwa,
+     * NakaWidgetPtrTbl_SmfDp_0x2420`): 7 u16 case offsets from
+     * TrAsGridChk_ByteData.
+     * --------------------------------------------------------------------- */
+    uint16_t TrAsGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * VoiceConfig_LookupByScreenType_Table -- read by
+     * VoiceConfig_LookupByScreenType (v10/v9 0xF2CA12, v7 0xF2C9E8) (`ld
+     * xwa, NakaWidgetPtrTbl_SmfDp_0x242E`). 6 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t VoiceConfig_LookupByScreenType_Table[6];
+    /* ---------------------------------------------------------------------
+     * VoiceConfig_LoadTableA_Table -- read by VoiceConfig_LoadTableA (v10/v9
+     * 0xF2CA4A, v7 0xF2CA20) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x2434`). 6
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t VoiceConfig_LoadTableA_Table[6];
+    /* ---------------------------------------------------------------------
+     * VoiceConfig_LoadTableB_Table -- read by VoiceConfig_LoadTableB (v10/v9
+     * 0xF2CA51, v7 0xF2CA27) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x243A`). 38
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t VoiceConfig_LoadTableB_Table[38];
+    /* ---------------------------------------------------------------------
+     * MuteChSel_Dispatch_PtrTable -- 16 u32 ROM addresses (or 0), read by
+     * MuteChSel_Dispatch (v10/v9 0xF2CC54, v7 0xF2CC2A) (`ld xbc,
+     * NakaWidgetPtrTbl_SmfDp_0x2460`).
+     * --------------------------------------------------------------------- */
+    uint32_t MuteChSel_Dispatch_PtrTable[16];
+    /* ---------------------------------------------------------------------
+     * MuteChSel_Dispatch_Strings -- the 16 strings
+     * MuteChSel_Dispatch_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 96 bytes.
+     * --------------------------------------------------------------------- */
+    char MuteChSel_Dispatch_Strings[96];
+    /* ---------------------------------------------------------------------
+     * SmfMuteChSelFunc_CaseTable -- jump table of a compiled `switch` in
+     * SmfMuteChSelFunc (v10/v9 0xF2CC27, v7 0xF2CBFD) (`add xbc,
+     * NakaWidgetPtrTbl_SmfDp_0x2500`): 10 u16 case offsets from
+     * MuteChSel_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SmfMuteChSelFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 ROM addresses (or 0), read by
+     * SqTrAsPsSong_Dispatch (v10/v9 0xF2CCB5, v7 0xF2CC8B) (`ld xbc,
+     * NakaWidgetPtrTbl_SmfDp_0x2514`).
+     * --------------------------------------------------------------------- */
+    uint32_t SqTrAsPsSong_Dispatch_PtrTable[11];
+    /* ---------------------------------------------------------------------
+     * SqTrAsPsSong_Dispatch_Strings -- the 11 strings
+     * SqTrAsPsSong_Dispatch_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 110 bytes.
+     * --------------------------------------------------------------------- */
+    char SqTrAsPsSong_Dispatch_Strings[110];
+    /* ---------------------------------------------------------------------
+     * SqTrAsPsSongFunc_CaseTable -- jump table of a compiled `switch` in
+     * SqTrAsPsSongFunc (v10/v9 0xF2CC88, v7 0xF2CC5E) (`add xbc,
+     * NakaWidgetPtrTbl_SmfDp_0x25AE`): 10 u16 case offsets from
+     * SqTrAsPsSong_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SqTrAsPsSongFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * SqAftSetFunc_PtrTable -- 2 u32 ROM addresses (or 0), read by
+     * SqAftSetFunc (v10/v9 0xF2CCE8, v7 0xF2CCBE) (`lda xbc,
+     * (NakaWidgetPtrTbl_SmfDp_0x25C2:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t SqAftSetFunc_PtrTable[2];
+    /* ---------------------------------------------------------------------
+     * SqAftSetFunc_Strings -- the 2 strings SqAftSetFunc_PtrTable points at
+     * (NUL-terminated, 0xFF pad to even length), 12 bytes.
+     * --------------------------------------------------------------------- */
+    char SqAftSetFunc_Strings[12];
+    /* ---------------------------------------------------------------------
+     * SqAftSet_LookupTableEntry_Table -- read by SqAftSet_LookupTableEntry
+     * (v10/v9 0xF2CD39, v7 0xF2CD0F) (`lda xbc,
+     * (NakaWidgetPtrTbl_SmfDp_0x25D6:24)`). 32 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqAftSet_LookupTableEntry_Table[32];
+    /* ---------------------------------------------------------------------
+     * MuteChSet_Dispatch_PtrTable -- 16 u32 ROM addresses (or 0), read by
+     * MuteChSet_Dispatch (v10/v9 0xF2CD84, v7 0xF2CD5A) (`ld xbc,
+     * NakaWidgetPtrTbl_SmfDp_0x25F6`).
+     * --------------------------------------------------------------------- */
+    uint32_t MuteChSet_Dispatch_PtrTable[16];
+    /* ---------------------------------------------------------------------
+     * MuteChSet_Dispatch_Strings -- the 16 strings
+     * MuteChSet_Dispatch_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 128 bytes.
+     * --------------------------------------------------------------------- */
+    char MuteChSet_Dispatch_Strings[128];
+    /* ---------------------------------------------------------------------
+     * MuteChSetFunc_CaseTable -- jump table of a compiled `switch` in
+     * MuteChSetFunc (v10/v9 0xF2CD4D, v7 0xF2CD23) (`add xwa,
+     * NakaWidgetPtrTbl_SmfDp_0x26B6`): 10 u16 case offsets from
+     * MuteChSet_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t MuteChSetFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * AcDemoMedley_HandleScrollEvent_Str -- NUL-terminated string(s), 12
+     * bytes, used by AcDemoMedley_HandleScrollEvent (v10/v9 0xF2D078, v7
+     * 0xF2D04E) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x26CA`).
+     * --------------------------------------------------------------------- */
+    char AcDemoMedley_HandleScrollEvent_Str[12];
+    /* ---------------------------------------------------------------------
+     * AcDemoMedley_HandleScrollEvent_Str_2 -- NUL-terminated string(s), 12
+     * bytes, used by AcDemoMedley_HandleScrollEvent (v10/v9 0xF2D078, v7
+     * 0xF2D04E) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x26D6`).
+     * --------------------------------------------------------------------- */
+    char AcDemoMedley_HandleScrollEvent_Str_2[12];
+    /* ---------------------------------------------------------------------
+     * MedleyDisp_Blank -- NUL-terminated string(s), 12 bytes, used by
+     * DemoMedDsp_Dispatch (v10/v9 0xF2D0E9, v7 0xF2D0BF) (`.long
+     * MedleyDisp_Blank`).
+     * --------------------------------------------------------------------- */
+    char MedleyDisp_Blank[12];
+    /* ---------------------------------------------------------------------
+     * DemoMedDsp_Dispatch_Str -- NUL-terminated string(s), 12 bytes, used by
+     * DemoMedDsp_Dispatch (v10/v9 0xF2D0E9, v7 0xF2D0BF) (`ld xwa,
+     * MedleyDisp_Blank_0xC`).
+     * --------------------------------------------------------------------- */
+    char DemoMedDsp_Dispatch_Str[12];
+    /* ---------------------------------------------------------------------
+     * DemoMedDspCheck_CaseTable -- jump table of a compiled `switch` in
+     * DemoMedDspCheck (v10/v9 0xF2D0B2, v7 0xF2D088) (`add xwa,
+     * MedleyDisp_Blank_0x18`): 10 u16 case offsets from DemoMedDsp_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t DemoMedDspCheck_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * PlayModeStr_Play -- NUL-terminated string(s), 6 bytes, used by
+     * DPPlayDsp_Dispatch (v10/v9 0xF2D161, v7 0xF2D137) (`.long
+     * PlayModeStr_Play`).
+     * --------------------------------------------------------------------- */
+    char PlayModeStr_Play[6];
+    /* ---------------------------------------------------------------------
+     * DPPlayDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
+     * DPPlayDsp_Dispatch (v10/v9 0xF2D161, v7 0xF2D137) (`ld xwa,
+     * PlayModeStr_Play_0x6`).
+     * --------------------------------------------------------------------- */
+    char DPPlayDsp_Dispatch_Str[6];
+    /* ---------------------------------------------------------------------
+     * DPPlayDspCheck_CaseTable -- jump table of a compiled `switch` in
+     * DPPlayDspCheck (v10/v9 0xF2D12A, v7 0xF2D100) (`add xwa,
+     * PlayModeStr_Play_0xC`): 10 u16 case offsets from DPPlayDsp_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t DPPlayDspCheck_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * PlayModeStr_Pause -- NUL-terminated string(s), 6 bytes, used by
+     * DPPauseDsp_Dispatch (v10/v9 0xF2D1D9, v7 0xF2D1AF) (`.long
+     * PlayModeStr_Pause`).
+     * --------------------------------------------------------------------- */
+    char PlayModeStr_Pause[6];
+    /* ---------------------------------------------------------------------
+     * DPPauseDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
+     * DPPauseDsp_Dispatch (v10/v9 0xF2D1D9, v7 0xF2D1AF) (`ld xwa,
+     * PlayModeStr_Pause_0x6`).
+     * --------------------------------------------------------------------- */
+    char DPPauseDsp_Dispatch_Str[6];
+    /* ---------------------------------------------------------------------
+     * DPPauseDspCheck_CaseTable -- jump table of a compiled `switch` in
+     * DPPauseDspCheck (v10/v9 0xF2D1A2, v7 0xF2D178) (`add xwa,
+     * PlayModeStr_Pause_0xC`): 10 u16 case offsets from DPPauseDsp_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t DPPauseDspCheck_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * DPPauseDspCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings
+     * after DPPauseDspCheck_CaseTable; no registration or code reference
+     * reaches them (searched: RegObjTabl tables, slice and positional
+     * labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char DPPauseDspCheck_CaseTable_Strings[6];
+    /* ---------------------------------------------------------------------
+     * Kubo_ApFuncTable_128 -- object table: InitializeKubo (v10/v9 0xF2D2C4,
+     * v7 0xF2D29A) (sequencer/sequencer_ui.s:4301) registers it with
+     * `RegObjTabl 0x1600002, ApFunctionProc, 73, 0xE26804, 0x128` -- class
+     * 0x1600002 (ApFunctionProc), 73 objects, base id 0x128. Entries:
+     * procedure addresses then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Kubo_ApFuncTable_128[74];
+    /* ---------------------------------------------------------------------
+     * Kubo_ApFuncNameTable_428 -- object table: InitializeKubo (v10/v9
+     * 0xF2D2C4, v7 0xF2D29A) (sequencer/sequencer_ui.s:4302) registers it
+     * with `RegObjTabl 0x1600002, ApFunctionProc, 73, 0xE2692C, 0x428` --
+     * class 0x1600002 (ApFunctionProc), 73 objects, base id 0x428. Entries:
+     * pointers to the procedures' name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Kubo_ApFuncNameTable_428[74];
+    /* ---------------------------------------------------------------------
+     * Kubo_ApFuncNames_428 -- the strings Kubo_ApFuncNameTable_428 points
+     * at: 74 NUL-terminated names (0xFF pads to even length), 1146 bytes.
+     * --------------------------------------------------------------------- */
+    char Kubo_ApFuncNames_428[1146];
+    /* ---------------------------------------------------------------------
+     * ClassProps_EffectBox -- property names of class EffectBox (descriptor
+     * 0 of Kubo_ClassTable_168, whose +0x14 points here): 4 pointers, one
+     * per letter of its signature "jBBC" -- "func", "data", "data2",
+     * "ttl_no" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_EffectBox[5];
+    char ClassProps_EffectBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_EqualizerBox -- property names of class EqualizerBox
+     * (descriptor 1 of Kubo_ClassTable_168, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "jC" -- "func", "ttl_no" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_EqualizerBox[3];
+    char ClassProps_EqualizerBox_Names[16];
+    /* ---------------------------------------------------------------------
+     * ClassProps_SqedtVal -- property names of class SqedtVal (descriptor 2
+     * of Kubo_ClassTable_168, whose +0x14 points here): 4 pointers, one per
+     * letter of its signature "^^jC" -- "color", "fontcolor", "func",
+     * "ttl_no" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_SqedtVal[5];
+    char ClassProps_SqedtVal_Names[32];
+    /* ---------------------------------------------------------------------
+     * ClassProps_SqedtVal2 -- property names of class SqedtVal2 (descriptor
+     * 3 of Kubo_ClassTable_168, whose +0x14 points here): 3 pointers, one
+     * per letter of its signature "^^j" -- "color", "fontcolor", "func" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_SqedtVal2[4];
+    char ClassProps_SqedtVal2_Names[24];
+    /* ---------------------------------------------------------------------
+     * ClassProps_SqedtFix -- property names of class SqedtFix (descriptor 4
+     * of Kubo_ClassTable_168, whose +0x14 points here): 3 pointers, one per
+     * letter of its signature "^^_" -- "color", "fontcolor", "border" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_SqedtFix[4];
+    char ClassProps_SqedtFix_Names[26];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSongCopyExit -- property names of class IvSongCopyExit
+     * (descriptor 5 of Kubo_ClassTable_168, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSongCopyExit[1];
+    char ClassProps_IvSongCopyExit_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_SqplyVal -- property names of class SqplyVal (descriptor 6
+     * of Kubo_ClassTable_168, whose +0x14 points here): 4 pointers, one per
+     * letter of its signature "^^jC" -- "color", "fontcolor", "func",
+     * "ttl_no" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_SqplyVal[5];
+    char ClassProps_SqplyVal_Names[32];
+    /* ---------------------------------------------------------------------
+     * ClassProps_SqedtVal3 -- property names of class SqedtVal3 (descriptor
+     * 7 of Kubo_ClassTable_168, whose +0x14 points here): 3 pointers, one
+     * per letter of its signature "^^j" -- "color", "fontcolor", "func" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_SqedtVal3[4];
+    char ClassProps_SqedtVal3_Names[24];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AccIll -- property names of class AccIll (descriptor 8 of
+     * Kubo_ClassTable_168, whose +0x14 points here): 4 pointers, one per
+     * letter of its signature "^^jC" -- "color", "fontcolor", "func",
+     * "ttl_no" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AccIll[5];
+    char ClassProps_AccIll_Names[32];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcEntertainerGridBox -- property names of class
+     * AcEntertainerGridBox (descriptor 9 of Kubo_ClassTable_168, whose +0x14
+     * points here): 3 pointers, one per letter of its signature "XXj" --
+     * "fixedcol", "fixedrow", "func" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcEntertainerGridBox[4];
+    char ClassProps_AcEntertainerGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_SngSel -- property names of class SngSel (descriptor 10 of
+     * Kubo_ClassTable_168, whose +0x14 points here): 5 pointers, one per
+     * letter of its signature "c^^jC" -- "font", "color", "fontcolor",
+     * "func", "ttl_no" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_SngSel[6];
+    char ClassProps_SngSel_Names[38];
+    /* ---------------------------------------------------------------------
+     * ClassProps_SngSel2 -- property names of class SngSel2 (descriptor 11
+     * of Kubo_ClassTable_168, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_SngSel2[1];
+    char ClassProps_SngSel2_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_NoteEditBox -- property names of class NoteEditBox
+     * (descriptor 12 of Kubo_ClassTable_168, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "jC" -- "func", "ttl_no" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_NoteEditBox[3];
+    char ClassProps_NoteEditBox_Names[16];
+    /* ---------------------------------------------------------------------
+     * ClassProps_EqOnOffFuncToggle -- property names of class
+     * EqOnOffFuncToggle (descriptor 13 of Kubo_ClassTable_168, whose +0x14
+     * points here): 0 pointers, one per letter of its signature "" -- none
+     * -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_EqOnOffFuncToggle[1];
+    char ClassProps_EqOnOffFuncToggle_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_MsgToTtl -- property names of class MsgToTtl (descriptor 14
+     * of Kubo_ClassTable_168, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_MsgToTtl[1];
+    char ClassProps_MsgToTtl_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcIndexWideToggle -- property names of class
+     * AcIndexWideToggle (descriptor 15 of Kubo_ClassTable_168, whose +0x14
+     * points here): 3 pointers, one per letter of its signature "AAj" --
+     * "index", "tag", "func" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcIndexWideToggle[4];
+    char ClassProps_AcIndexWideToggle_Names[18];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvPlayExit -- property names of class IvPlayExit
+     * (descriptor 16 of Kubo_ClassTable_168, whose +0x14 points here): 1
+     * pointers, one per letter of its signature "`" -- "mode" -- then a
+     * pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvPlayExit[2];
+    char ClassProps_IvPlayExit_Names[8];
+    /* ---------------------------------------------------------------------
+     * ClassProps_HelpTtl -- property names of class HelpTtl (descriptor 17
+     * of Kubo_ClassTable_168, whose +0x14 points here): 5 pointers, one per
+     * letter of its signature "^^cGj" -- "color", "fontcolor", "font",
+     * "page", "func" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_HelpTtl[6];
+    char ClassProps_HelpTtl_Names[36];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvPnlWrExit -- property names of class IvPnlWrExit
+     * (descriptor 18 of Kubo_ClassTable_168, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvPnlWrExit[1];
+    char ClassProps_IvPnlWrExit_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSdrev -- property names of class IvSdrev (descriptor 19
+     * of Kubo_ClassTable_168, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSdrev[1];
+    char ClassProps_IvSdrev_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSddsp -- property names of class IvSddsp (descriptor 20
+     * of Kubo_ClassTable_168, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSddsp[1];
+    char ClassProps_IvSddsp_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSdacc -- property names of class IvSdacc (descriptor 21
+     * of Kubo_ClassTable_168, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSdacc[1];
+    char ClassProps_IvSdacc_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvPunchExit -- property names of class IvPunchExit
+     * (descriptor 22 of Kubo_ClassTable_168, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvPunchExit[1];
+    char ClassProps_IvPunchExit_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvAutoPunchExit -- property names of class IvAutoPunchExit
+     * (descriptor 23 of Kubo_ClassTable_168, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvAutoPunchExit[1];
+    char ClassProps_IvAutoPunchExit_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPanicEditSw -- property names of class AcPanicEditSw
+     * (descriptor 24 of Kubo_ClassTable_168, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "fj" -- "style", "func" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPanicEditSw[3];
+    char ClassProps_AcPanicEditSw_Names[14];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvRealRecExit -- property names of class IvRealRecExit
+     * (descriptor 25 of Kubo_ClassTable_168, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvRealRecExit[1];
+    char ClassProps_IvRealRecExit_Names[2];
+    /* ---------------------------------------------------------------------
+     * Kubo_ClassTable_168 -- class table: InitializeKubo (v10/v9 0xF2D2C4,
+     * v7 0xF2D29A) (sequencer/sequencer_ui.s:4298) registers it with
+     * `RegObjTable 0x1600004, 0xfa44e2, (count at 0xe27596 = 26), 0xE27180,
+     * 0x168` -- 26 naka_class_t descriptors (naka_types.h: proc, base class,
+     * two u16, name, field-type letters, property data), 12 of them inside
+     * this blob; the table runs on into the next blob, and the 4 bytes left
+     * here begin descriptor 12.
+     * --------------------------------------------------------------------- */
+    naka_class_t Kubo_ClassTable_168[12];
+    /* ---------------------------------------------------------------------
+     * Kubo_ClassTable_168_Desc12Head -- the first u32 (proc) of descriptor
+     * 12 of Kubo_ClassTable_168; the rest of that table is in the next blob.
+     * --------------------------------------------------------------------- */
+    uint32_t Kubo_ClassTable_168_Desc12Head[1];
 } naka_widget_tables_1_t;
 
 #define SELF(field) \
@@ -1721,67 +1623,23 @@ _Static_assert(sizeof(naka_widget_tables_1_t) == 12878,
 const naka_widget_tables_1_t naka_widget_tables_1_data
     __attribute__((section(".text"), used)) = {
 
-    .field_0000 = 0xDEA0,
-
-    .field_0002 = 0x0003,
-
-    .field_0004 = 0x0006,
-
-    .field_0006 = 0x0007,
-
-    .str_0 = ALIGNED_STRING("RHYTHM"),
-
-    .str_1 = ALIGNED_STRING("RHYTHM"),
-
-    .w0 = {
-        .header    = NAKA_HDR(0x29),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0009000B,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0000,
-        .proc_addr  = 0x001B001F,
+    .NakaData_WidgetTables1 = {
+        0xA0, 0xDE, 0x03, 0x00, 0x06, 0x00, 0x07, 0x00, 0x52, 0x48, 0x59, 0x54, 0x48, 0x4D, 0x00, 0xFF,
+        0x52, 0x48, 0x59, 0x54, 0x48, 0x4D, 0x00, 0xFF,
     },
 
-    .field_0030 = 0x0147,
+    .NakaHdr_Perf2MeasureBoxData = {
+        0x29, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0x0B, 0x00, 0x09, 0x00, 0x18, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1B, 0x00, 0x47, 0x01,
+    },
 
-    .field_0032 = 0x0014,
+    .NakaHdr_Perf2FileListData = {
+        0x14, 0x00, 0x67, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x0A, 0x00, 0x08, 0x00, 0x64, 0x00,
+        0x28, 0x00, 0xD5, 0x00, 0x3A, 0x00, 0xF5, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x04, 0x00, 0x00, 0x00,
+        0xFF, 0x00, 0x00, 0x00,
+    },
 
-    .field_0034 = 0x0167,
-
-    .pad_0 = { 0 },
-
-    .field_0038 = NAKA_NONE,
-
-    .field_003a = NAKA_NONE,
-
-    .field_003c = 0x000A,
-
-    .field_003e = 0x0008,
-
-    .str_2 = "d",
-
-    .str_3 = "(",
-
-    .field_0044 = 0x00D5,
-
-    .str_4 = ":",
-
-    .field_0048 = 0x00F5,
-
-    .pad_1 = { 0 },
-
-    .field_004c = NAKA_NONE,
-
-    .field_004e = 0x0004,
-
-    .pad_2 = { 0 },
-
-    .field_0052 = 0x00FF,
-
-    .pad_3 = { 0 },
-
-    .ptrs_0 = {
+    .Yoko_ViewTable_06F = {
         0x00E21090,
         NAKA_ADDR(NakaWidget_SmfDpContainer),
         NAKA_ADDR(NakaWidget_SmfDpVolume),
@@ -1826,6 +1684,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfDpMuteSwRow1),
         NAKA_ADDR(NakaWidget_SmfDpMuteSwRow2),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_070 = {
         0x00E2176E,
         NAKA_ADDR(NakaWidget_DocDpContainer),
         NAKA_ADDR(NakaWidget_DocDpVolume),
@@ -1839,6 +1700,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_DocDpMixer),
         NAKA_ADDR(NakaWidget_DocDpMic),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_071 = {
         NAKA_ADDR(NakaWidget_PdDpContainer),
         NAKA_ADDR(NakaWidget_PdDpVolume),
         NAKA_ADDR(NakaWidget_PdDpGroup),
@@ -1851,6 +1715,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_PdDpMixer),
         NAKA_ADDR(NakaWidget_PdDpMic),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_072 = {
         NAKA_ADDR(NakaWidget_SmfMdlyContainer),
         NAKA_ADDR(NakaWidget_SmfMdlyVolume),
         NAKA_ADDR(NakaWidget_SmfMdlyMeasure),
@@ -1859,6 +1726,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfMdlyOrchSel),
         NAKA_ADDR(NakaWidget_SmfMdlyOrchRow),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_073 = {
         NAKA_ADDR(NakaWidget_SmfMdlyContainer2),
         NAKA_ADDR(NakaWidget_SmfMdlyLyricsItem),
         NAKA_ADDR(NakaWidget_SmfMdlySubPanel),
@@ -1876,6 +1746,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfMdlyMicWidget2),
         NAKA_ADDR(NakaWidget_SmfMdlyMuteChLabel),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_074 = {
         0x00E21EF4,
         NAKA_ADDR(NakaWidget_SmfMdlyRootContainer),
         NAKA_ADDR(NakaWidget_DocMdlyContainer),
@@ -1892,6 +1765,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_DocMdlyMixer),
         NAKA_ADDR(NakaWidget_DocMdlyMic),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_075 = {
         0x00E22178,
         NAKA_ADDR(NakaWidget_PdMdlyContainer),
         NAKA_ADDR(NakaWidget_PdMdlyGroup),
@@ -1906,6 +1782,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_PdMdlyMixer),
         NAKA_ADDR(NakaWidget_PdMdlyMic),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_076 = {
         0x00E2239C,
         NAKA_ADDR(NakaWidget_SmfMdly2Container),
         NAKA_ADDR(NakaWidget_SmfMdly2MuteToggle),
@@ -1915,6 +1794,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfMdly2MicWidget),
         NAKA_ADDR(NakaWidget_SmfMdly2OrchSel),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_078 = {
         NAKA_ADDR(NakaWidget_SongMdlyContainer),
         NAKA_ADDR(NakaWidget_SongMdlyGroup),
         NAKA_ADDR(NakaWidget_SongMdlyVolume),
@@ -1946,6 +1828,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SongMdlySongSel15),
         NAKA_ADDR(NakaWidget_SongMdlySongSel16),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_07A = {
         0x00E22906,
         NAKA_ADDR(NakaWidget_SongMdly2Group),
         NAKA_ADDR(NakaWidget_SongMdly2Volume),
@@ -1959,36 +1844,33 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SongMdly2OffOnSel),
         NAKA_ADDR(NakaWidget_SongMdly2Mixer),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_089 = {
         NAKA_ADDR(NakaWidget_StepRecContainer),
         NAKA_ADDR(NakaWidget_StepRecPartLabel),
         NAKA_ADDR(NakaWidget_StepRecPartPanel),
         NAKA_ADDR(NakaWidget_StepRecPartList),
         NAKA_ADDR(NakaWidget_StepRecOrchRow),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_08A = {
         NAKA_ADDR(NakaWidget_StepRecSubPanel),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_08B = {
         NAKA_ADDR(NakaWidget_TrAsContainer),
         NAKA_ADDR(NakaWidget_TrAsPresetItem),
         NAKA_ADDR(NakaWidget_TrAsFileList),
-    },
-
-    .field_0346 = 0xDEA2,
-
-    .field_0348 = 0x0003,
-
-    .ptrs_1 = {
+        0x0003DEA2,
         NAKA_ADDR(NakaWidget_TrAsGridDisplay),
         NAKA_ADDR(NakaWidget_TrAsTrackAssign),
         NAKA_ADDR(NakaWidget_TrAsLocalCont),
         NAKA_ADDR(NakaWidget_TrAsMidiOut),
         NAKA_ADDR(NakaWidget_TrAsMatrix),
-    },
-
-    .field_035e = 0xDECE,
-
-    .field_0360 = 0x0003,
-
-    .ptrs_2 = {
+        0x0003DECE,
         NAKA_ADDR(NakaWidget_TrAsRT1Toggle),
         NAKA_ADDR(NakaWidget_TrAsRT2Toggle),
         NAKA_ADDR(NakaWidget_TrAsMeasureBox),
@@ -2002,6 +1884,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_TrAsRT2Selector),
         NAKA_ADDR(NakaWidget_TrAsPresetSel),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_08C = {
         0x00E22F50,
         NAKA_ADDR(NakaWidget_TrAsPresetSong),
         NAKA_ADDR(NakaWidget_TrAsPresetMatrix),
@@ -2031,12 +1916,18 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_TrAsPresetRT1Sel2),
         NAKA_ADDR(NakaWidget_TrAsPresetRT2Sel3),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_08E = {
         NAKA_ADDR(NakaWidget_SongSelNamContainer),
         NAKA_ADDR(NakaWidget_SongSelNamNameItem),
         NAKA_ADDR(NakaWidget_SongSelNamSongSel),
         NAKA_ADDR(NakaWidget_SongSelNamNameEdit),
         NAKA_ADDR(NakaWidget_SongSelNamDuration),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_08F = {
         NAKA_ADDR(NakaWidget_NamingContainer),
         NAKA_ADDR(NakaWidget_NamingCharSel),
         NAKA_ADDR(NakaWidget_NamingSeqLabel),
@@ -2044,12 +1935,19 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_NamingDisplayMode),
         NAKA_ADDR(NakaWidget_NamingOrchRow),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_092 = {
         0x00E23620,
         NAKA_ADDR(NakaWidget_AftTouchDuration),
         NAKA_ADDR(NakaWidget_AftTouchChSel),
         NAKA_ADDR(NakaWidget_AftTouchList),
         0x00000000,
-        0x00000000,
+    },
+
+    .Yoko_ViewTable_0A7 = { 0x00000000 },
+
+    .Yoko_ViewTable_0A9 = {
         0x00E23704,
         NAKA_ADDR(NakaWidget_PartBal0),
         NAKA_ADDR(NakaWidget_PartBal1),
@@ -2057,11 +1955,17 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_PartBal3),
         NAKA_ADDR(NakaWidget_PartBal4),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_0E0 = {
         NAKA_ADDR(NakaWidget_DemoContainer),
         NAKA_ADDR(NakaWidget_DemoPerfItem),
         NAKA_ADDR(NakaWidget_DemoFeatPresItem),
         NAKA_ADDR(NakaWidget_DemoMeasureBox),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_0E1 = {
         0x00E238BE,
         NAKA_ADDR(NakaWidget_PerfMainMedley),
         NAKA_ADDR(NakaWidget_PerfAccordionMedley),
@@ -2075,6 +1979,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_PerfMeasureBox),
         NAKA_ADDR(NakaWidget_PerfFileList),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_0E2 = {
         NAKA_ADDR(NakaWidget_Perf2Container),
         NAKA_ADDR(NakaWidget_Perf2Strings),
         NAKA_ADDR(NakaWidget_Perf2Gamelan),
@@ -2088,6 +1995,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_Perf2MeasureBox),
         NAKA_ADDR(NakaWidget_Perf2FileList),
         0x00000000,
+    },
+
+    .Yoko_ViewTable_0E3 = {
         0x00E23DF4,
         NAKA_ADDR(NakaWidget_Perf3HokieDance),
         NAKA_ADDR(NakaWidget_Perf3JazzBand),
@@ -2098,1046 +2008,768 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_Perf3StyleSel),
         NAKA_ADDR(NakaWidget_Perf3SoundSel),
         NAKA_ADDR(NakaWidget_Perf3RhythmSel),
-        SELF(w0),
-        SELF(field_0032),
+        SELF(NakaHdr_Perf2MeasureBoxData),
+        SELF(NakaHdr_Perf2FileListData),
         0x00000000,
-        SELF(w4_name),
-        SELF(w4_code),
-        SELF(str_40),
-        SELF(str_39),
-        SELF(str_38),
-        SELF(str_37),
-        SELF(str_36),
-        SELF(str_35),
-        SELF(str_34),
-        SELF(str_33),
-        SELF(str_32),
-        SELF(str_31),
-        SELF(str_30),
-        SELF(str_29),
-        SELF(str_28),
-        SELF(str_27),
-        SELF(str_26),
-        SELF(str_25),
-        SELF(str_24),
-        SELF(str_23),
-        SELF(str_22),
-        SELF(str_21),
-        SELF(str_20),
-        SELF(str_19),
-        SELF(str_18),
-        SELF(str_17),
-        SELF(str_16),
-        SELF(str_15),
-        SELF(str_14),
-        SELF(str_13),
-        SELF(str_12),
-        SELF(str_11),
-        SELF(str_10),
-        SELF(str_9),
-        SELF(str_8),
-        SELF(str_7),
-        SELF(str_6),
-        SELF(w3_name),
-        SELF(w3_code),
-        SELF(w2_name),
-        SELF(w2_code),
-        SELF(str_5),
-        SELF(w1_name),
-        SELF(w1_code),
     },
 
-    .w1_code = ALIGNED_STRING(""),
-
-    .w1_name = "Comporser",
-
-    .str_5 = ALIGNED_STRING("LyricsSong"),
-
-    .w2_code = ALIGNED_STRING(""),
-
-    .w2_name = ALIGNED_STRING("LyricsData"),
-
-    .w3_code = ALIGNED_STRING("Lyrics"),
-
-    .w3_name = ALIGNED_STRING("PlayDisp"),
-
-    .str_6 = "PauseDisp",
-
-    .str_7 = ALIGNED_STRING(""),
-
-    .str_8 = ALIGNED_STRING(""),
-
-    .str_9 = ALIGNED_STRING(""),
-
-    .str_10 = ALIGNED_STRING(""),
-
-    .str_11 = ALIGNED_STRING(""),
-
-    .str_12 = ALIGNED_STRING(""),
-
-    .str_13 = ALIGNED_STRING(""),
-
-    .str_14 = ALIGNED_STRING(""),
-
-    .str_15 = ALIGNED_STRING(""),
-
-    .str_16 = ALIGNED_STRING(""),
-
-    .str_17 = ALIGNED_STRING(""),
-
-    .str_18 = ALIGNED_STRING("CDswWindow"),
-
-    .str_19 = ALIGNED_STRING(""),
-
-    .str_20 = ALIGNED_STRING(""),
-
-    .str_21 = ALIGNED_STRING(""),
-
-    .str_22 = ALIGNED_STRING(""),
-
-    .str_23 = ALIGNED_STRING(""),
-
-    .str_24 = ALIGNED_STRING(""),
-
-    .str_25 = ALIGNED_STRING(""),
-
-    .str_26 = ALIGNED_STRING(""),
-
-    .str_27 = ALIGNED_STRING(""),
-
-    .str_28 = ALIGNED_STRING(""),
-
-    .str_29 = ALIGNED_STRING(""),
-
-    .str_30 = ALIGNED_STRING(""),
-
-    .str_31 = ALIGNED_STRING(""),
-
-    .str_32 = "SMFMuteSw",
-
-    .str_33 = ALIGNED_STRING(""),
-
-    .str_34 = ALIGNED_STRING(""),
-
-    .str_35 = ALIGNED_STRING(""),
-
-    .str_36 = ALIGNED_STRING(""),
-
-    .str_37 = ALIGNED_STRING(""),
-
-    .str_38 = ALIGNED_STRING(""),
-
-    .str_39 = ALIGNED_STRING(""),
-
-    .str_40 = ALIGNED_STRING(""),
-
-    .w4_code = ALIGNED_STRING(""),
-
-    .w4_name = "DpSmf",
-
-    .ptrs_3 = {
-        SELF(w5_name),
-        SELF(w5_code),
-        SELF(str_51),
-        SELF(str_50),
-        SELF(str_49),
-        SELF(str_48),
-        SELF(str_47),
-        SELF(str_46),
-        SELF(str_45),
-        SELF(str_44),
-        SELF(str_43),
-        SELF(str_42),
-        SELF(str_41),
+    .Yoko_ResNameTable_36F = {
+        SELF(Yoko_ResNames_36F[154]),
+        SELF(Yoko_ResNames_36F[152]),
+        SELF(Yoko_ResNames_36F[150]),
+        SELF(Yoko_ResNames_36F[148]),
+        SELF(Yoko_ResNames_36F[146]),
+        SELF(Yoko_ResNames_36F[144]),
+        SELF(Yoko_ResNames_36F[142]),
+        SELF(Yoko_ResNames_36F[140]),
+        SELF(Yoko_ResNames_36F[138]),
+        SELF(Yoko_ResNames_36F[136]),
+        SELF(Yoko_ResNames_36F[126]),
+        SELF(Yoko_ResNames_36F[124]),
+        SELF(Yoko_ResNames_36F[122]),
+        SELF(Yoko_ResNames_36F[120]),
+        SELF(Yoko_ResNames_36F[118]),
+        SELF(Yoko_ResNames_36F[116]),
+        SELF(Yoko_ResNames_36F[114]),
+        SELF(Yoko_ResNames_36F[112]),
+        SELF(Yoko_ResNames_36F[110]),
+        SELF(Yoko_ResNames_36F[108]),
+        SELF(Yoko_ResNames_36F[106]),
+        SELF(Yoko_ResNames_36F[104]),
+        SELF(Yoko_ResNames_36F[102]),
+        SELF(Yoko_ResNames_36F[100]),
+        SELF(Yoko_ResNames_36F[88]),
+        SELF(Yoko_ResNames_36F[86]),
+        SELF(Yoko_ResNames_36F[84]),
+        SELF(Yoko_ResNames_36F[82]),
+        SELF(Yoko_ResNames_36F[80]),
+        SELF(Yoko_ResNames_36F[78]),
+        SELF(Yoko_ResNames_36F[76]),
+        SELF(Yoko_ResNames_36F[74]),
+        SELF(Yoko_ResNames_36F[72]),
+        SELF(Yoko_ResNames_36F[70]),
+        SELF(Yoko_ResNames_36F[68]),
+        SELF(Yoko_ResNames_36F[66]),
+        SELF(Yoko_ResNames_36F[56]),
+        SELF(Yoko_ResNames_36F[46]),
+        SELF(Yoko_ResNames_36F[38]),
+        SELF(Yoko_ResNames_36F[26]),
+        SELF(Yoko_ResNames_36F[24]),
+        SELF(Yoko_ResNames_36F[12]),
+        SELF(Yoko_ResNames_36F[2]),
+        SELF(Yoko_ResNames_36F),
     },
 
-    .str_41 = ALIGNED_STRING(""),
+    .Yoko_ResNames_36F = 
+        "\0\xFF"
+        "Comporser\0"
+        "LyricsSong\0\xFF"
+        "\0\xFF"
+        "LyricsData\0\xFF"
+        "Lyrics\0\xFF"
+        "PlayDisp\0\xFF"
+        "PauseDisp\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "CDswWindow\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SMFMuteSw\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpSmf",
 
-    .str_42 = ALIGNED_STRING(""),
-
-    .str_43 = ALIGNED_STRING(""),
-
-    .str_44 = "DOCOrchSw",
-
-    .str_45 = "DOCR2Sw",
-
-    .str_46 = "DOCR1Sw",
-
-    .str_47 = ALIGNED_STRING(""),
-
-    .str_48 = ALIGNED_STRING(""),
-
-    .str_49 = ALIGNED_STRING(""),
-
-    .str_50 = ALIGNED_STRING(""),
-
-    .str_51 = ALIGNED_STRING(""),
-
-    .w5_code = ALIGNED_STRING(""),
-
-    .w5_name = "DpDoc",
-
-    .ptrs_4 = {
-        SELF(w6_name),
-        SELF(w6_code),
-        SELF(str_61),
-        SELF(str_60),
-        SELF(str_59),
-        SELF(str_58),
-        SELF(str_57),
-        SELF(str_56),
-        SELF(str_55),
-        SELF(str_54),
-        SELF(str_53),
-        SELF(str_52),
+    .Yoko_ResNameTable_370 = {
+        SELF(Yoko_ResNames_370[44]),
+        SELF(Yoko_ResNames_370[42]),
+        SELF(Yoko_ResNames_370[40]),
+        SELF(Yoko_ResNames_370[38]),
+        SELF(Yoko_ResNames_370[36]),
+        SELF(Yoko_ResNames_370[34]),
+        SELF(Yoko_ResNames_370[32]),
+        SELF(Yoko_ResNames_370[24]),
+        SELF(Yoko_ResNames_370[16]),
+        SELF(Yoko_ResNames_370[6]),
+        SELF(Yoko_ResNames_370[4]),
+        SELF(Yoko_ResNames_370[2]),
+        SELF(Yoko_ResNames_370),
     },
 
-    .str_52 = ALIGNED_STRING(""),
+    .Yoko_ResNames_370 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DOCOrchSw\0"
+        "DOCR2Sw\0"
+        "DOCR1Sw\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpDoc",
 
-    .str_53 = ALIGNED_STRING(""),
-
-    .str_54 = ALIGNED_STRING(""),
-
-    .str_55 = ALIGNED_STRING("PDOrchSw"),
-
-    .str_56 = ALIGNED_STRING("PDR1Sw"),
-
-    .str_57 = ALIGNED_STRING(""),
-
-    .str_58 = ALIGNED_STRING(""),
-
-    .str_59 = ALIGNED_STRING(""),
-
-    .str_60 = ALIGNED_STRING(""),
-
-    .str_61 = ALIGNED_STRING(""),
-
-    .w6_code = ALIGNED_STRING(""),
-
-    .w6_name = ALIGNED_STRING("DpPd"),
-
-    .ptrs_5 = {
-        SELF(w8_name),
-        SELF(w8_code),
-        SELF(str_65),
-        SELF(str_64),
-        SELF(str_63),
-        SELF(str_62),
-        SELF(w7_name),
-        SELF(w7_code),
+    .Yoko_ResNameTable_371 = {
+        SELF(Yoko_ResNames_371[36]),
+        SELF(Yoko_ResNames_371[34]),
+        SELF(Yoko_ResNames_371[32]),
+        SELF(Yoko_ResNames_371[30]),
+        SELF(Yoko_ResNames_371[28]),
+        SELF(Yoko_ResNames_371[26]),
+        SELF(Yoko_ResNames_371[24]),
+        SELF(Yoko_ResNames_371[16]),
+        SELF(Yoko_ResNames_371[6]),
+        SELF(Yoko_ResNames_371[4]),
+        SELF(Yoko_ResNames_371[2]),
+        SELF(Yoko_ResNames_371),
     },
 
-    .w7_code = ALIGNED_STRING(""),
+    .Yoko_ResNames_371 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "PDOrchSw\0\xFF"
+        "PDR1Sw\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpPd\0\xFF",
 
-    .w7_name = ALIGNED_STRING("LyricsFunc"),
-
-    .str_62 = ALIGNED_STRING(""),
-
-    .str_63 = ALIGNED_STRING(""),
-
-    .str_64 = ALIGNED_STRING(""),
-
-    .str_65 = ALIGNED_STRING(""),
-
-    .w8_code = ALIGNED_STRING(""),
-
-    .w8_name = ALIGNED_STRING("DpSmfLyr"),
-
-    .ptrs_6 = {
-        SELF(w9_name),
-        SELF(w9_code),
-        SELF(str_80),
-        SELF(str_79),
-        SELF(str_78),
-        SELF(str_77),
-        SELF(str_76),
-        SELF(str_75),
-        SELF(str_74),
-        SELF(str_73),
-        SELF(str_72),
-        SELF(str_71),
-        SELF(str_70),
-        SELF(str_69),
-        SELF(str_68),
-        SELF(str_67),
-        SELF(str_66),
+    .Yoko_ResNameTable_372 = {
+        SELF(Yoko_ResNames_372[24]),
+        SELF(Yoko_ResNames_372[22]),
+        SELF(Yoko_ResNames_372[20]),
+        SELF(Yoko_ResNames_372[18]),
+        SELF(Yoko_ResNames_372[16]),
+        SELF(Yoko_ResNames_372[14]),
+        SELF(Yoko_ResNames_372[2]),
+        SELF(Yoko_ResNames_372),
     },
 
-    .str_66 = ALIGNED_STRING(""),
+    .Yoko_ResNames_372 = 
+        "\0\xFF"
+        "LyricsFunc\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpSmfLyr\0\xFF",
 
-    .str_67 = ALIGNED_STRING(""),
-
-    .str_68 = ALIGNED_STRING(""),
-
-    .str_69 = ALIGNED_STRING(""),
-
-    .str_70 = ALIGNED_STRING("SMFMedMuteSw"),
-
-    .str_71 = ALIGNED_STRING(""),
-
-    .str_72 = ALIGNED_STRING(""),
-
-    .str_73 = ALIGNED_STRING(""),
-
-    .str_74 = ALIGNED_STRING(""),
-
-    .str_75 = ALIGNED_STRING(""),
-
-    .str_76 = ALIGNED_STRING(""),
-
-    .str_77 = ALIGNED_STRING(""),
-
-    .str_78 = ALIGNED_STRING(""),
-
-    .str_79 = ALIGNED_STRING(""),
-
-    .str_80 = ALIGNED_STRING(""),
-
-    .w9_code = ALIGNED_STRING(""),
-
-    .w9_name = "DpMdlySmf",
-
-    .ptrs_7 = {
-        SELF(str_94),
-        SELF(w10_name),
-        SELF(w10_code),
-        SELF(str_93),
-        SELF(str_92),
-        SELF(str_91),
-        SELF(str_90),
-        SELF(str_89),
-        SELF(str_88),
-        SELF(str_87),
-        SELF(str_86),
-        SELF(str_85),
-        SELF(str_84),
-        SELF(str_83),
-        SELF(str_82),
-        SELF(str_81),
+    .Yoko_ResNameTable_373 = {
+        SELF(Yoko_ResNames_373[44]),
+        SELF(Yoko_ResNames_373[42]),
+        SELF(Yoko_ResNames_373[40]),
+        SELF(Yoko_ResNames_373[38]),
+        SELF(Yoko_ResNames_373[36]),
+        SELF(Yoko_ResNames_373[34]),
+        SELF(Yoko_ResNames_373[32]),
+        SELF(Yoko_ResNames_373[30]),
+        SELF(Yoko_ResNames_373[28]),
+        SELF(Yoko_ResNames_373[26]),
+        SELF(Yoko_ResNames_373[24]),
+        SELF(Yoko_ResNames_373[22]),
+        SELF(Yoko_ResNames_373[8]),
+        SELF(Yoko_ResNames_373[6]),
+        SELF(Yoko_ResNames_373[4]),
+        SELF(Yoko_ResNames_373[2]),
+        SELF(Yoko_ResNames_373),
     },
 
-    .str_81 = ALIGNED_STRING(""),
+    .Yoko_ResNames_373 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SMFMedMuteSw\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpMdlySmf",
 
-    .str_82 = ALIGNED_STRING(""),
-
-    .str_83 = ALIGNED_STRING(""),
-
-    .str_84 = ALIGNED_STRING("DOCMedOrchSw"),
-
-    .str_85 = ALIGNED_STRING("DOCMedR2Sw"),
-
-    .str_86 = ALIGNED_STRING("DOCMedR1Sw"),
-
-    .str_87 = ALIGNED_STRING(""),
-
-    .str_88 = ALIGNED_STRING(""),
-
-    .str_89 = ALIGNED_STRING(""),
-
-    .str_90 = ALIGNED_STRING(""),
-
-    .str_91 = ALIGNED_STRING(""),
-
-    .str_92 = ALIGNED_STRING(""),
-
-    .str_93 = ALIGNED_STRING(""),
-
-    .w10_code = ALIGNED_STRING(""),
-
-    .w10_name = "DpMdlyDoc",
-
-    .str_94 = ALIGNED_STRING(""),
-
-    .ptrs_8 = {
-        SELF(w11_name),
-        SELF(w11_code),
-        SELF(str_106),
-        SELF(str_105),
-        SELF(str_104),
-        SELF(str_103),
-        SELF(str_102),
-        SELF(str_101),
-        SELF(str_100),
-        SELF(str_99),
-        SELF(str_98),
-        SELF(str_97),
-        SELF(str_96),
-        SELF(str_95),
+    .Yoko_ResNameTable_374 = {
+        SELF(Yoko_ResNames_374[70]),
+        SELF(Yoko_ResNames_374[60]),
+        SELF(Yoko_ResNames_374[58]),
+        SELF(Yoko_ResNames_374[56]),
+        SELF(Yoko_ResNames_374[54]),
+        SELF(Yoko_ResNames_374[52]),
+        SELF(Yoko_ResNames_374[50]),
+        SELF(Yoko_ResNames_374[48]),
+        SELF(Yoko_ResNames_374[46]),
+        SELF(Yoko_ResNames_374[44]),
+        SELF(Yoko_ResNames_374[32]),
+        SELF(Yoko_ResNames_374[20]),
+        SELF(Yoko_ResNames_374[6]),
+        SELF(Yoko_ResNames_374[4]),
+        SELF(Yoko_ResNames_374[2]),
+        SELF(Yoko_ResNames_374),
     },
 
-    .str_95 = ALIGNED_STRING(""),
+    .Yoko_ResNames_374 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DOCMedOrchSw\0\xFF"
+        "DOCMedR2Sw\0\xFF"
+        "DOCMedR1Sw\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpMdlyDoc\0"
+        "\0\xFF",
 
-    .str_96 = ALIGNED_STRING(""),
-
-    .str_97 = ALIGNED_STRING(""),
-
-    .str_98 = "PDMedOrchSw",
-
-    .str_99 = "PDMedR1Sw",
-
-    .str_100 = ALIGNED_STRING(""),
-
-    .str_101 = ALIGNED_STRING(""),
-
-    .str_102 = ALIGNED_STRING(""),
-
-    .str_103 = ALIGNED_STRING(""),
-
-    .str_104 = ALIGNED_STRING(""),
-
-    .str_105 = ALIGNED_STRING(""),
-
-    .str_106 = ALIGNED_STRING(""),
-
-    .w11_code = ALIGNED_STRING(""),
-
-    .w11_name = ALIGNED_STRING("DpMdlyPd"),
-
-    .ptrs_9 = {
-        SELF(w12_name),
-        SELF(w12_code),
-        SELF(str_113),
-        SELF(str_112),
-        SELF(str_111),
-        SELF(str_110),
-        SELF(str_109),
-        SELF(str_108),
-        SELF(str_107),
+    .Yoko_ResNameTable_375 = {
+        SELF(Yoko_ResNames_375[44]),
+        SELF(Yoko_ResNames_375[42]),
+        SELF(Yoko_ResNames_375[40]),
+        SELF(Yoko_ResNames_375[38]),
+        SELF(Yoko_ResNames_375[36]),
+        SELF(Yoko_ResNames_375[34]),
+        SELF(Yoko_ResNames_375[32]),
+        SELF(Yoko_ResNames_375[30]),
+        SELF(Yoko_ResNames_375[28]),
+        SELF(Yoko_ResNames_375[18]),
+        SELF(Yoko_ResNames_375[6]),
+        SELF(Yoko_ResNames_375[4]),
+        SELF(Yoko_ResNames_375[2]),
+        SELF(Yoko_ResNames_375),
     },
 
-    .str_107 = ALIGNED_STRING(""),
+    .Yoko_ResNames_375 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "PDMedOrchSw\0"
+        "PDMedR1Sw\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpMdlyPd\0\xFF",
 
-    .str_108 = ALIGNED_STRING(""),
-
-    .str_109 = ALIGNED_STRING(""),
-
-    .str_110 = ALIGNED_STRING(""),
-
-    .str_111 = ALIGNED_STRING(""),
-
-    .str_112 = ALIGNED_STRING(""),
-
-    .str_113 = ALIGNED_STRING(""),
-
-    .w12_code = ALIGNED_STRING(""),
-
-    .w12_name = ALIGNED_STRING("DpMdlySmfLyr"),
-
-    .ptrs_10 = {
-        SELF(w13_name),
-        SELF(w13_code),
-        SELF(str_142),
-        SELF(str_141),
-        SELF(str_140),
-        SELF(str_139),
-        SELF(str_138),
-        SELF(str_137),
-        SELF(str_136),
-        SELF(str_135),
-        SELF(str_134),
-        SELF(str_133),
-        SELF(str_132),
-        SELF(str_131),
-        SELF(str_130),
-        SELF(str_129),
-        SELF(str_128),
-        SELF(str_127),
-        SELF(str_126),
-        SELF(str_125),
-        SELF(str_124),
-        SELF(str_123),
-        SELF(str_122),
-        SELF(str_121),
-        SELF(str_120),
-        SELF(str_119),
-        SELF(str_118),
-        SELF(str_117),
-        SELF(str_116),
-        SELF(str_115),
-        SELF(str_114),
+    .Yoko_ResNameTable_376 = {
+        SELF(Yoko_ResNames_376[16]),
+        SELF(Yoko_ResNames_376[14]),
+        SELF(Yoko_ResNames_376[12]),
+        SELF(Yoko_ResNames_376[10]),
+        SELF(Yoko_ResNames_376[8]),
+        SELF(Yoko_ResNames_376[6]),
+        SELF(Yoko_ResNames_376[4]),
+        SELF(Yoko_ResNames_376[2]),
+        SELF(Yoko_ResNames_376),
     },
 
-    .str_114 = ALIGNED_STRING(""),
+    .Yoko_ResNames_376 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DpMdlySmfLyr\0\xFF",
 
-    .str_115 = ALIGNED_STRING(""),
-
-    .str_116 = ALIGNED_STRING(""),
-
-    .str_117 = ALIGNED_STRING(""),
-
-    .str_118 = ALIGNED_STRING(""),
-
-    .str_119 = ALIGNED_STRING(""),
-
-    .str_120 = ALIGNED_STRING(""),
-
-    .str_121 = ALIGNED_STRING(""),
-
-    .str_122 = ALIGNED_STRING(""),
-
-    .str_123 = ALIGNED_STRING(""),
-
-    .str_124 = ALIGNED_STRING(""),
-
-    .str_125 = ALIGNED_STRING(""),
-
-    .str_126 = ALIGNED_STRING(""),
-
-    .str_127 = ALIGNED_STRING(""),
-
-    .str_128 = ALIGNED_STRING(""),
-
-    .str_129 = ALIGNED_STRING(""),
-
-    .str_130 = ALIGNED_STRING(""),
-
-    .str_131 = ALIGNED_STRING(""),
-
-    .str_132 = ALIGNED_STRING(""),
-
-    .str_133 = ALIGNED_STRING(""),
-
-    .str_134 = ALIGNED_STRING(""),
-
-    .str_135 = ALIGNED_STRING(""),
-
-    .str_136 = ALIGNED_STRING(""),
-
-    .str_137 = ALIGNED_STRING(""),
-
-    .str_138 = ALIGNED_STRING(""),
-
-    .str_139 = ALIGNED_STRING(""),
-
-    .str_140 = ALIGNED_STRING(""),
-
-    .str_141 = ALIGNED_STRING(""),
-
-    .str_142 = ALIGNED_STRING(""),
-
-    .w13_code = ALIGNED_STRING(""),
-
-    .w13_name = "DkMdlyPly",
-
-    .ptrs_11 = {
-        SELF(w14_name),
-        SELF(w14_code),
-        SELF(str_153),
-        SELF(str_152),
-        SELF(str_151),
-        SELF(str_150),
-        SELF(str_149),
-        SELF(str_148),
-        SELF(str_147),
-        SELF(str_146),
-        SELF(str_145),
-        SELF(str_144),
-        SELF(str_143),
+    .Yoko_ResNameTable_378 = {
+        SELF(Yoko_ResNames_378[60]),
+        SELF(Yoko_ResNames_378[58]),
+        SELF(Yoko_ResNames_378[56]),
+        SELF(Yoko_ResNames_378[54]),
+        SELF(Yoko_ResNames_378[52]),
+        SELF(Yoko_ResNames_378[50]),
+        SELF(Yoko_ResNames_378[48]),
+        SELF(Yoko_ResNames_378[46]),
+        SELF(Yoko_ResNames_378[44]),
+        SELF(Yoko_ResNames_378[42]),
+        SELF(Yoko_ResNames_378[40]),
+        SELF(Yoko_ResNames_378[38]),
+        SELF(Yoko_ResNames_378[36]),
+        SELF(Yoko_ResNames_378[34]),
+        SELF(Yoko_ResNames_378[32]),
+        SELF(Yoko_ResNames_378[30]),
+        SELF(Yoko_ResNames_378[28]),
+        SELF(Yoko_ResNames_378[26]),
+        SELF(Yoko_ResNames_378[24]),
+        SELF(Yoko_ResNames_378[22]),
+        SELF(Yoko_ResNames_378[20]),
+        SELF(Yoko_ResNames_378[18]),
+        SELF(Yoko_ResNames_378[16]),
+        SELF(Yoko_ResNames_378[14]),
+        SELF(Yoko_ResNames_378[12]),
+        SELF(Yoko_ResNames_378[10]),
+        SELF(Yoko_ResNames_378[8]),
+        SELF(Yoko_ResNames_378[6]),
+        SELF(Yoko_ResNames_378[4]),
+        SELF(Yoko_ResNames_378[2]),
+        SELF(Yoko_ResNames_378),
     },
 
-    .str_143 = ALIGNED_STRING(""),
+    .Yoko_ResNames_378 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DkMdlyPly",
 
-    .str_144 = ALIGNED_STRING(""),
-
-    .str_145 = ALIGNED_STRING(""),
-
-    .str_146 = ALIGNED_STRING(""),
-
-    .str_147 = ALIGNED_STRING(""),
-
-    .str_148 = ALIGNED_STRING(""),
-
-    .str_149 = ALIGNED_STRING(""),
-
-    .str_150 = ALIGNED_STRING(""),
-
-    .str_151 = ALIGNED_STRING(""),
-
-    .str_152 = ALIGNED_STRING(""),
-
-    .str_153 = ALIGNED_STRING(""),
-
-    .w14_code = ALIGNED_STRING(""),
-
-    .w14_name = "SqMdlyPly",
-
-    .ptrs_12 = {
-        SELF(w15_name),
-        SELF(w15_code),
-        SELF(str_157),
-        SELF(str_156),
-        SELF(str_155),
-        SELF(str_154),
+    .Yoko_ResNameTable_37A = {
+        SELF(Yoko_ResNames_37A[24]),
+        SELF(Yoko_ResNames_37A[22]),
+        SELF(Yoko_ResNames_37A[20]),
+        SELF(Yoko_ResNames_37A[18]),
+        SELF(Yoko_ResNames_37A[16]),
+        SELF(Yoko_ResNames_37A[14]),
+        SELF(Yoko_ResNames_37A[12]),
+        SELF(Yoko_ResNames_37A[10]),
+        SELF(Yoko_ResNames_37A[8]),
+        SELF(Yoko_ResNames_37A[6]),
+        SELF(Yoko_ResNames_37A[4]),
+        SELF(Yoko_ResNames_37A[2]),
+        SELF(Yoko_ResNames_37A),
     },
 
-    .str_154 = ALIGNED_STRING(""),
+    .Yoko_ResNames_37A = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqMdlyPly",
 
-    .str_155 = ALIGNED_STRING(""),
-
-    .str_156 = ALIGNED_STRING(""),
-
-    .str_157 = ALIGNED_STRING(""),
-
-    .w15_code = ALIGNED_STRING(""),
-
-    .w15_name = "SqTrSel",
-
-    .ptr_0a68 = SELF(str_159),
-
-    .ptr_0a6c = SELF(str_158),
-
-    .str_158 = ALIGNED_STRING(""),
-
-    .str_159 = ALIGNED_STRING(""),
-
-    .ptrs_13 = {
-        SELF(w19_name),
-        SELF(w19_code),
-        SELF(str_174),
-        SELF(str_173),
-        SELF(w18_name),
-        SELF(w18_code),
-        SELF(str_172),
-        SELF(str_171),
-        SELF(str_170),
-        SELF(w17_name),
-        SELF(w17_code),
-        SELF(str_169),
-        SELF(str_168),
-        SELF(w16_name),
-        SELF(w16_code),
-        SELF(str_167),
-        SELF(str_166),
-        SELF(str_165),
-        SELF(str_164),
-        SELF(str_163),
-        SELF(str_162),
-        SELF(str_161),
-        SELF(str_160),
+    .Yoko_ResNameTable_389 = {
+        SELF(Yoko_ResNames_389[10]),
+        SELF(Yoko_ResNames_389[8]),
+        SELF(Yoko_ResNames_389[6]),
+        SELF(Yoko_ResNames_389[4]),
+        SELF(Yoko_ResNames_389[2]),
+        SELF(Yoko_ResNames_389),
     },
 
-    .str_160 = ALIGNED_STRING(""),
+    .Yoko_ResNames_389 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqTrSel",
 
-    .str_161 = ALIGNED_STRING(""),
-
-    .str_162 = ALIGNED_STRING(""),
-
-    .str_163 = ALIGNED_STRING(""),
-
-    .str_164 = ALIGNED_STRING(""),
-
-    .str_165 = ALIGNED_STRING(""),
-
-    .str_166 = ALIGNED_STRING(""),
-
-    .str_167 = ALIGNED_STRING(""),
-
-    .w16_code = ALIGNED_STRING(""),
-
-    .w16_name = ALIGNED_STRING("SqTrAsSure"),
-
-    .str_168 = ALIGNED_STRING(""),
-
-    .str_169 = ALIGNED_STRING(""),
-
-    .w17_code = ALIGNED_STRING(""),
-
-    .w17_name = "TrAsPartSelSw",
-
-    .str_170 = ALIGNED_STRING(""),
-
-    .str_171 = ALIGNED_STRING(""),
-
-    .str_172 = ALIGNED_STRING(""),
-
-    .w18_code = ALIGNED_STRING(""),
-
-    .w18_name = ALIGNED_STRING("TrAsGrid"),
-
-    .str_173 = ALIGNED_STRING("TrAsOkSw"),
-
-    .str_174 = ALIGNED_STRING(""),
-
-    .w19_code = ALIGNED_STRING(""),
-
-    .w19_name = ALIGNED_STRING("SqTrAs"),
-
-    .ptrs_14 = {
-        SELF(w23_name),
-        SELF(w23_code),
-        SELF(str_195),
-        SELF(str_194),
-        SELF(str_193),
-        SELF(str_192),
-        SELF(w22_name),
-        SELF(w22_code),
-        SELF(str_191),
-        SELF(str_190),
-        SELF(w21_name),
-        SELF(w21_code),
-        SELF(str_189),
-        SELF(str_188),
-        SELF(str_187),
-        SELF(str_186),
-        SELF(str_185),
-        SELF(str_184),
-        SELF(str_183),
-        SELF(w20_name),
-        SELF(w20_code),
-        SELF(str_182),
-        SELF(str_181),
-        SELF(str_180),
-        SELF(str_179),
-        SELF(str_178),
-        SELF(str_177),
-        SELF(str_176),
-        SELF(str_175),
+    .Yoko_ResNameTable_38A = {
+        SELF(Yoko_ResNames_38A[2]),
+        SELF(Yoko_ResNames_38A),
     },
 
-    .str_175 = ALIGNED_STRING(""),
+    .Yoko_ResNames_38A = 
+        "\0\xFF"
+        "\0\xFF",
 
-    .str_176 = ALIGNED_STRING(""),
-
-    .str_177 = ALIGNED_STRING(""),
-
-    .str_178 = ALIGNED_STRING(""),
-
-    .str_179 = ALIGNED_STRING(""),
-
-    .str_180 = ALIGNED_STRING(""),
-
-    .str_181 = ALIGNED_STRING(""),
-
-    .str_182 = ALIGNED_STRING(""),
-
-    .w20_code = ALIGNED_STRING(""),
-
-    .w20_name = "SqTrAsPsSure2",
-
-    .str_183 = ALIGNED_STRING(""),
-
-    .str_184 = ALIGNED_STRING(""),
-
-    .str_185 = ALIGNED_STRING(""),
-
-    .str_186 = ALIGNED_STRING(""),
-
-    .str_187 = ALIGNED_STRING(""),
-
-    .str_188 = ALIGNED_STRING(""),
-
-    .str_189 = ALIGNED_STRING(""),
-
-    .w21_code = ALIGNED_STRING(""),
-
-    .w21_name = "SqTrAsPsSure1",
-
-    .str_190 = ALIGNED_STRING(""),
-
-    .str_191 = ALIGNED_STRING(""),
-
-    .w22_code = ALIGNED_STRING(""),
-
-    .w22_name = "TrAsPsGmSel",
-
-    .str_192 = "TrAsPsTechSel",
-
-    .str_193 = ALIGNED_STRING("TrAsPsIniSel"),
-
-    .str_194 = ALIGNED_STRING(""),
-
-    .str_195 = ALIGNED_STRING(""),
-
-    .w23_code = ALIGNED_STRING(""),
-
-    .w23_name = ALIGNED_STRING("SqTrAsPs"),
-
-    .ptrs_15 = {
-        SELF(w24_name),
-        SELF(w24_code),
-        SELF(str_199),
-        SELF(str_198),
-        SELF(str_197),
-        SELF(str_196),
+    .Yoko_ResNameTable_38B = {
+        SELF(Yoko_ResNames_38B[82]),
+        SELF(Yoko_ResNames_38B[80]),
+        SELF(Yoko_ResNames_38B[78]),
+        SELF(Yoko_ResNames_38B[68]),
+        SELF(Yoko_ResNames_38B[58]),
+        SELF(Yoko_ResNames_38B[56]),
+        SELF(Yoko_ResNames_38B[54]),
+        SELF(Yoko_ResNames_38B[52]),
+        SELF(Yoko_ResNames_38B[50]),
+        SELF(Yoko_ResNames_38B[36]),
+        SELF(Yoko_ResNames_38B[34]),
+        SELF(Yoko_ResNames_38B[32]),
+        SELF(Yoko_ResNames_38B[30]),
+        SELF(Yoko_ResNames_38B[18]),
+        SELF(Yoko_ResNames_38B[16]),
+        SELF(Yoko_ResNames_38B[14]),
+        SELF(Yoko_ResNames_38B[12]),
+        SELF(Yoko_ResNames_38B[10]),
+        SELF(Yoko_ResNames_38B[8]),
+        SELF(Yoko_ResNames_38B[6]),
+        SELF(Yoko_ResNames_38B[4]),
+        SELF(Yoko_ResNames_38B[2]),
+        SELF(Yoko_ResNames_38B),
     },
 
-    .str_196 = ALIGNED_STRING(""),
+    .Yoko_ResNames_38B = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqTrAsSure\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "TrAsPartSelSw\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "TrAsGrid\0\xFF"
+        "TrAsOkSw\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqTrAs\0\xFF",
 
-    .str_197 = ALIGNED_STRING(""),
-
-    .str_198 = ALIGNED_STRING(""),
-
-    .str_199 = ALIGNED_STRING(""),
-
-    .w24_code = ALIGNED_STRING(""),
-
-    .w24_name = ALIGNED_STRING("SqSngSel"),
-
-    .ptrs_16 = {
-        SELF(w25_name),
-        SELF(w25_code),
-        SELF(str_204),
-        SELF(str_203),
-        SELF(str_202),
-        SELF(str_201),
-        SELF(str_200),
+    .Yoko_ResNameTable_38C = {
+        SELF(Yoko_ResNames_38C[114]),
+        SELF(Yoko_ResNames_38C[112]),
+        SELF(Yoko_ResNames_38C[110]),
+        SELF(Yoko_ResNames_38C[108]),
+        SELF(Yoko_ResNames_38C[94]),
+        SELF(Yoko_ResNames_38C[80]),
+        SELF(Yoko_ResNames_38C[68]),
+        SELF(Yoko_ResNames_38C[66]),
+        SELF(Yoko_ResNames_38C[64]),
+        SELF(Yoko_ResNames_38C[62]),
+        SELF(Yoko_ResNames_38C[48]),
+        SELF(Yoko_ResNames_38C[46]),
+        SELF(Yoko_ResNames_38C[44]),
+        SELF(Yoko_ResNames_38C[42]),
+        SELF(Yoko_ResNames_38C[40]),
+        SELF(Yoko_ResNames_38C[38]),
+        SELF(Yoko_ResNames_38C[36]),
+        SELF(Yoko_ResNames_38C[34]),
+        SELF(Yoko_ResNames_38C[32]),
+        SELF(Yoko_ResNames_38C[18]),
+        SELF(Yoko_ResNames_38C[16]),
+        SELF(Yoko_ResNames_38C[14]),
+        SELF(Yoko_ResNames_38C[12]),
+        SELF(Yoko_ResNames_38C[10]),
+        SELF(Yoko_ResNames_38C[8]),
+        SELF(Yoko_ResNames_38C[6]),
+        SELF(Yoko_ResNames_38C[4]),
+        SELF(Yoko_ResNames_38C[2]),
+        SELF(Yoko_ResNames_38C),
     },
 
-    .str_200 = ALIGNED_STRING(""),
+    .Yoko_ResNames_38C = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqTrAsPsSure2\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqTrAsPsSure1\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "TrAsPsGmSel\0"
+        "TrAsPsTechSel\0"
+        "TrAsPsIniSel\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqTrAsPs\0\xFF",
 
-    .str_201 = ALIGNED_STRING(""),
-
-    .str_202 = ALIGNED_STRING(""),
-
-    .str_203 = ALIGNED_STRING(""),
-
-    .str_204 = ALIGNED_STRING(""),
-
-    .w25_code = ALIGNED_STRING(""),
-
-    .w25_name = "SqNameing",
-
-    .ptrs_17 = {
-        SELF(w26_name),
-        SELF(w26_code),
-        SELF(str_207),
-        SELF(str_206),
-        SELF(str_205),
+    .Yoko_ResNameTable_38E = {
+        SELF(Yoko_ResNames_38E[10]),
+        SELF(Yoko_ResNames_38E[8]),
+        SELF(Yoko_ResNames_38E[6]),
+        SELF(Yoko_ResNames_38E[4]),
+        SELF(Yoko_ResNames_38E[2]),
+        SELF(Yoko_ResNames_38E),
     },
 
-    .str_205 = ALIGNED_STRING(""),
+    .Yoko_ResNames_38E = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqSngSel\0\xFF",
 
-    .str_206 = ALIGNED_STRING(""),
-
-    .str_207 = ALIGNED_STRING(""),
-
-    .w26_code = ALIGNED_STRING(""),
-
-    .w26_name = "AfterTouchSet",
-
-    .ptr_0ca2 = SELF(str_208),
-
-    .str_208 = ALIGNED_STRING(""),
-
-    .ptrs_18 = {
-        SELF(w27_name),
-        SELF(w27_code),
-        SELF(str_213),
-        SELF(str_212),
-        SELF(str_211),
-        SELF(str_210),
-        SELF(str_209),
+    .Yoko_ResNameTable_38F = {
+        SELF(Yoko_ResNames_38F[12]),
+        SELF(Yoko_ResNames_38F[10]),
+        SELF(Yoko_ResNames_38F[8]),
+        SELF(Yoko_ResNames_38F[6]),
+        SELF(Yoko_ResNames_38F[4]),
+        SELF(Yoko_ResNames_38F[2]),
+        SELF(Yoko_ResNames_38F),
     },
 
-    .str_209 = ALIGNED_STRING(""),
+    .Yoko_ResNames_38F = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SqNameing",
 
-    .str_210 = ALIGNED_STRING(""),
-
-    .str_211 = ALIGNED_STRING(""),
-
-    .str_212 = ALIGNED_STRING(""),
-
-    .str_213 = ALIGNED_STRING(""),
-
-    .w27_code = ALIGNED_STRING(""),
-
-    .w27_name = "StepPartBal",
-
-    .ptrs_19 = {
-        SELF(w28_name),
-        SELF(w28_code),
-        SELF(str_216),
-        SELF(str_215),
-        SELF(str_214),
+    .Yoko_ResNameTable_392 = {
+        SELF(Yoko_ResNames_392[8]),
+        SELF(Yoko_ResNames_392[6]),
+        SELF(Yoko_ResNames_392[4]),
+        SELF(Yoko_ResNames_392[2]),
+        SELF(Yoko_ResNames_392),
     },
 
-    .str_214 = ALIGNED_STRING(""),
+    .Yoko_ResNames_392 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "AfterTouchSet",
 
-    .str_215 = ALIGNED_STRING(""),
-
-    .str_216 = ALIGNED_STRING(""),
-
-    .w28_code = ALIGNED_STRING(""),
-
-    .w28_name = ALIGNED_STRING("DemoMenu"),
-
-    .ptrs_20 = {
-        SELF(w33_name),
-        SELF(w33_code),
-        SELF(w32_name),
-        SELF(w32_code),
-        SELF(w31_name),
-        SELF(w31_code),
-        SELF(w30_name),
-        SELF(w30_code),
-        SELF(str_219),
-        SELF(str_218),
-        SELF(str_217),
-        SELF(w29_name),
-        SELF(w29_code),
+    .Yoko_ResNameTable_3A7 = {
+        SELF(Yoko_ResNames_3A7),
     },
 
-    .w29_code = ALIGNED_STRING(""),
+    .Yoko_ResNames_3A7 = 
+        "\0\xFF",
 
-    .w29_name = ALIGNED_STRING("DemoMed1"),
-
-    .str_217 = ALIGNED_STRING(""),
-
-    .str_218 = ALIGNED_STRING(""),
-
-    .str_219 = ALIGNED_STRING(""),
-
-    .w30_code = ALIGNED_STRING(""),
-
-    .w30_name = "DemoSong5",
-
-    .w31_code = "DemoSong4",
-
-    .w31_name = "DemoSong3",
-
-    .w32_code = "DemoSong2",
-
-    .w32_name = "DemoSong1",
-
-    .w33_code = "DemoSong0",
-
-    .w33_name = "DemoStyle",
-
-    .ptrs_21 = {
-        SELF(w38_name),
-        SELF(w38_code),
-        SELF(w37_name),
-        SELF(w37_code),
-        SELF(w36_name),
-        SELF(w36_code),
-        SELF(w35_name),
-        SELF(w35_code),
-        SELF(str_222),
-        SELF(str_221),
-        SELF(str_220),
-        SELF(w34_name),
-        SELF(w34_code),
+    .Yoko_ResNameTable_3A9 = {
+        SELF(Yoko_ResNames_3A9[12]),
+        SELF(Yoko_ResNames_3A9[10]),
+        SELF(Yoko_ResNames_3A9[8]),
+        SELF(Yoko_ResNames_3A9[6]),
+        SELF(Yoko_ResNames_3A9[4]),
+        SELF(Yoko_ResNames_3A9[2]),
+        SELF(Yoko_ResNames_3A9),
     },
 
-    .w34_code = ALIGNED_STRING(""),
+    .Yoko_ResNames_3A9 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "StepPartBal",
 
-    .w34_name = ALIGNED_STRING("DemoMed2"),
-
-    .str_220 = ALIGNED_STRING(""),
-
-    .str_221 = ALIGNED_STRING(""),
-
-    .str_222 = ALIGNED_STRING(""),
-
-    .w35_code = ALIGNED_STRING(""),
-
-    .w35_name = ALIGNED_STRING("DemoSong11"),
-
-    .w36_code = ALIGNED_STRING("DemoSong10"),
-
-    .w36_name = "DemoSong9",
-
-    .w37_code = "DemoSong8",
-
-    .w37_name = "DemoSong7",
-
-    .w38_code = "DemoSong6",
-
-    .w38_name = "DemoSound",
-
-    .ptrs_22 = {
-        SELF(w43_name),
-        SELF(w43_code),
-        SELF(w42_name),
-        SELF(w42_code),
-        SELF(w41_name),
-        SELF(w41_code),
-        SELF(w40_name),
-        SELF(w40_code),
-        SELF(str_225),
-        SELF(str_224),
-        SELF(str_223),
-        SELF(w39_name),
-        SELF(w39_code),
+    .Yoko_ResNameTable_3E0 = {
+        SELF(Yoko_ResNames_3E0[8]),
+        SELF(Yoko_ResNames_3E0[6]),
+        SELF(Yoko_ResNames_3E0[4]),
+        SELF(Yoko_ResNames_3E0[2]),
+        SELF(Yoko_ResNames_3E0),
     },
 
-    .w39_code = ALIGNED_STRING(""),
+    .Yoko_ResNames_3E0 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DemoMenu\0\xFF",
 
-    .w39_name = ALIGNED_STRING("DemoMed3"),
+    .Yoko_ResNameTable_3E1 = {
+        SELF(Yoko_ResNames_3E1[80]),
+        SELF(Yoko_ResNames_3E1[70]),
+        SELF(Yoko_ResNames_3E1[60]),
+        SELF(Yoko_ResNames_3E1[50]),
+        SELF(Yoko_ResNames_3E1[40]),
+        SELF(Yoko_ResNames_3E1[30]),
+        SELF(Yoko_ResNames_3E1[20]),
+        SELF(Yoko_ResNames_3E1[18]),
+        SELF(Yoko_ResNames_3E1[16]),
+        SELF(Yoko_ResNames_3E1[14]),
+        SELF(Yoko_ResNames_3E1[12]),
+        SELF(Yoko_ResNames_3E1[2]),
+        SELF(Yoko_ResNames_3E1),
+    },
 
-    .str_223 = ALIGNED_STRING(""),
+    .Yoko_ResNames_3E1 = 
+        "\0\xFF"
+        "DemoMed1\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DemoSong5\0"
+        "DemoSong4\0"
+        "DemoSong3\0"
+        "DemoSong2\0"
+        "DemoSong1\0"
+        "DemoSong0\0"
+        "DemoStyle",
 
-    .str_224 = ALIGNED_STRING(""),
+    .Yoko_ResNameTable_3E2 = {
+        SELF(Yoko_ResNames_3E2[84]),
+        SELF(Yoko_ResNames_3E2[74]),
+        SELF(Yoko_ResNames_3E2[64]),
+        SELF(Yoko_ResNames_3E2[54]),
+        SELF(Yoko_ResNames_3E2[44]),
+        SELF(Yoko_ResNames_3E2[32]),
+        SELF(Yoko_ResNames_3E2[20]),
+        SELF(Yoko_ResNames_3E2[18]),
+        SELF(Yoko_ResNames_3E2[16]),
+        SELF(Yoko_ResNames_3E2[14]),
+        SELF(Yoko_ResNames_3E2[12]),
+        SELF(Yoko_ResNames_3E2[2]),
+        SELF(Yoko_ResNames_3E2),
+    },
 
-    .str_225 = ALIGNED_STRING(""),
+    .Yoko_ResNames_3E2 = 
+        "\0\xFF"
+        "DemoMed2\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DemoSong11\0\xFF"
+        "DemoSong10\0\xFF"
+        "DemoSong9\0"
+        "DemoSong8\0"
+        "DemoSong7\0"
+        "DemoSong6\0"
+        "DemoSound",
 
-    .w40_code = ALIGNED_STRING(""),
+    .Yoko_ResNameTable_3E3 = {
+        SELF(Yoko_ResNames_3E3[92]),
+        SELF(Yoko_ResNames_3E3[80]),
+        SELF(Yoko_ResNames_3E3[68]),
+        SELF(Yoko_ResNames_3E3[56]),
+        SELF(Yoko_ResNames_3E3[44]),
+        SELF(Yoko_ResNames_3E3[32]),
+        SELF(Yoko_ResNames_3E3[20]),
+        SELF(Yoko_ResNames_3E3[18]),
+        SELF(Yoko_ResNames_3E3[16]),
+        SELF(Yoko_ResNames_3E3[14]),
+        SELF(Yoko_ResNames_3E3[12]),
+        SELF(Yoko_ResNames_3E3[2]),
+        SELF(Yoko_ResNames_3E3),
+    },
 
-    .w40_name = ALIGNED_STRING("DemoSong17"),
+    .Yoko_ResNames_3E3 = 
+        "\0\xFF"
+        "DemoMed3\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "DemoSong17\0\xFF"
+        "DemoSong16\0\xFF"
+        "DemoSong15\0\xFF"
+        "DemoSong14\0\xFF"
+        "DemoSong13\0\xFF"
+        "DemoSong12\0\xFF"
+        "DemoRhy",
 
-    .w41_code = ALIGNED_STRING("DemoSong16"),
+    .Yoko_ResNames_3E3_Strings = 
+        "MD_SEQ_STEP\0"
+        "MD_DEMO\0"
+        "TT_DPSMF\0\xFF"
+        "TT_DPDOC\0\xFF"
+        "TT_DPPD\0"
+        "TT_DPSMFLYR\0"
+        "TT_DPMDLYSMF\0\xFF"
+        "TT_DPMDLYDOC\0\xFF"
+        "TT_DPMDLYPD\0"
+        "TT_DPMDLYSMFLYR\0"
+        "TT_DKMDLYPLY\0\xFF"
+        "TT_SQMDLYPLY\0\xFF"
+        "TT_SQTRSEL\0\xFF"
+        "TT_SQSTEP\0"
+        "TT_SQTRAS\0"
+        "TT_SQTRASPS\0"
+        "TT_SQSNGSEL\0"
+        "TT_SQSNGNAME\0\xFF"
+        "TT_SQAFTSET\0"
+        "TT_SQEASYNAME\0"
+        "TT_SQSTEPBAL\0\xFF"
+        "TT_DEMOMENU\0"
+        "TT_DEMOSTYLE\0\xFF"
+        "TT_DEMOSOUND\0\xFF"
+        "TT_DEMORHY\0\xFF",
 
-    .w41_name = ALIGNED_STRING("DemoSong15"),
-
-    .w42_code = ALIGNED_STRING("DemoSong14"),
-
-    .w42_name = ALIGNED_STRING("DemoSong13"),
-
-    .w43_code = ALIGNED_STRING("DemoSong12"),
-
-    .w43_name = "DemoRhy",
-
-    .str_226 = "MD_SEQ_STEP",
-
-    .str_227 = "MD_DEMO",
-
-    .str_228 = ALIGNED_STRING("TT_DPSMF"),
-
-    .str_229 = ALIGNED_STRING("TT_DPDOC"),
-
-    .str_230 = "TT_DPPD",
-
-    .str_231 = "TT_DPSMFLYR",
-
-    .str_232 = ALIGNED_STRING("TT_DPMDLYSMF"),
-
-    .str_233 = ALIGNED_STRING("TT_DPMDLYDOC"),
-
-    .str_234 = "TT_DPMDLYPD",
-
-    .str_235 = "TT_DPMDLYSMFLYR",
-
-    .str_236 = ALIGNED_STRING("TT_DKMDLYPLY"),
-
-    .str_237 = ALIGNED_STRING("TT_SQMDLYPLY"),
-
-    .str_238 = ALIGNED_STRING("TT_SQTRSEL"),
-
-    .str_239 = "TT_SQSTEP",
-
-    .str_240 = "TT_SQTRAS",
-
-    .str_241 = "TT_SQTRASPS",
-
-    .str_242 = "TT_SQSNGSEL",
-
-    .str_243 = ALIGNED_STRING("TT_SQSNGNAME"),
-
-    .str_244 = "TT_SQAFTSET",
-
-    .str_245 = "TT_SQEASYNAME",
-
-    .str_246 = ALIGNED_STRING("TT_SQSTEPBAL"),
-
-    .str_247 = "TT_DEMOMENU",
-
-    .str_248 = ALIGNED_STRING("TT_DEMOSTYLE"),
-
-    .str_249 = ALIGNED_STRING("TT_DEMOSOUND"),
-
-    .str_250 = ALIGNED_STRING("TT_DEMORHY"),
-
-    .ptrs_23 = {
+    .Yoko_MainFuncTable_147 = {
         NAKA_ADDR(SeqSongNameFunc),
         NAKA_ADDR(SeqSongMemoryFunc),
         NAKA_ADDR(CDlikeSwTtlFunc),
@@ -3170,1642 +2802,571 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NameGetFuncCall),
         NAKA_ADDR(ApPlaySyori),
         0x00000000,
-        SELF(str_280),
-        SELF(str_279),
-        SELF(str_278),
-        SELF(str_277),
-        SELF(str_276),
-        SELF(str_275),
-        SELF(str_274),
-        SELF(str_273),
-        SELF(str_272),
-        SELF(str_271),
-        SELF(str_270),
-        SELF(str_269),
-        SELF(str_268),
-        SELF(str_267),
-        SELF(str_266),
-        SELF(str_265),
-        SELF(str_264),
-        SELF(str_263),
-        SELF(str_262),
-        SELF(str_261),
-        SELF(str_260),
-        SELF(str_259),
-        SELF(str_258),
-        SELF(str_257),
-        SELF(str_256),
-        SELF(str_255),
-        SELF(str_254),
-        SELF(str_253),
-        SELF(str_252),
-        SELF(str_251),
-        SELF(w44_name),
-        SELF(w44_code),
     },
 
-    .w44_code = ALIGNED_STRING(""),
-
-    .w44_name = "ApPlaySyori",
-
-    .str_251 = "NameGetFuncCall",
-
-    .str_252 = ALIGNED_STRING("MiddleFuncCall"),
-
-    .str_253 = ALIGNED_STRING("DemoRhyTtlFunc"),
-
-    .str_254 = ALIGNED_STRING("DemoSoundTtlFunc"),
-
-    .str_255 = ALIGNED_STRING("DemoStyleTtlFunc"),
-
-    .str_256 = "DemoMenuTtlFunc",
-
-    .str_257 = ALIGNED_STRING("DemoModeFunc"),
-
-    .str_258 = "SqStepTtlFunc",
-
-    .str_259 = ALIGNED_STRING("SqTrSelTtlFunc"),
-
-    .str_260 = "SeqStepModeFunc",
-
-    .str_261 = "DpSmfLyrTtlFunc",
-
-    .str_262 = ALIGNED_STRING("DpSmfTtlFunc"),
-
-    .str_263 = "DpPdTtlFunc",
-
-    .str_264 = ALIGNED_STRING("DpDocTtlFunc"),
-
-    .str_265 = "DpMdlySmfLyrTtlFunc",
-
-    .str_266 = ALIGNED_STRING("DpMdlySmfTtlFunc"),
-
-    .str_267 = "DpMdlyPdTtlFunc",
-
-    .str_268 = ALIGNED_STRING("DpMdlyDocTtlFunc"),
-
-    .str_269 = ALIGNED_STRING("DkMdlyPlyTtlFunc"),
-
-    .str_270 = ALIGNED_STRING("SqMdlyPlyTtlFunc"),
-
-    .str_271 = ALIGNED_STRING("SqTrAsPsSureFunc"),
-
-    .str_272 = "SqTrAsPsTtlFunc",
-
-    .str_273 = ALIGNED_STRING("SqTrAsSureFunc"),
-
-    .str_274 = "SqTrAsTtlFunc",
-
-    .str_275 = ALIGNED_STRING("SqSngNameTtlFunc"),
-
-    .str_276 = "SqSngSelTtlFunc",
-
-    .str_277 = "SqAftSetTtlFunc",
-
-    .str_278 = "CDlikeSwTtlFunc",
-
-    .str_279 = "SeqSongMemoryFunc",
-
-    .str_280 = "SeqSongNameFunc",
-
-    .str_281 = ALIGNED_STRING("Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."),
-
-    .field_1346 = 0x7244,
-
-    .field_1348 = 0x63FC,
-
-    .field_134a = 0x656B,
-
-    .field_134c = 0x206E,
-
-    .field_134e = 0x6953,
-
-    .field_1350 = 0x2065,
-
-    .field_1352 = 0x6965,
-
-    .field_1354 = 0x656E,
-
-    .field_1356 = 0x6420,
-
-    .field_1358 = 0x7265,
-
-    .field_135a = 0x4420,
-
-    .field_135c = 0x706F,
-
-    .field_135e = 0x6570,
-
-    .field_1360 = 0x746C,
-
-    .field_1362 = 0x7361,
-
-    .field_1364 = 0x6574,
-
-    .field_1366 = 0x206E,
-
-    .field_1368 = 0x6E75,
-
-    .field_136a = 0x6574,
-
-    .field_136c = 0x2072,
-
-    .field_136e = 0x6564,
-
-    .field_1370 = 0x206D,
-
-    .field_1372 = 0x6944,
-
-    .field_1374 = 0x7073,
-
-    .field_1376 = 0x616C,
-
-    .field_1378 = 0x2C79,
-
-    .field_137a = 0x6520,
-
-    .field_137c = 0x746E,
-
-    .field_137e = 0x7073,
-
-    .field_1380 = 0x6572,
-
-    .field_1382 = 0x6863,
-
-    .field_1384 = 0x6E65,
-
-    .field_1386 = 0x2064,
-
-    .field_1388 = 0x6564,
-
-    .field_138a = 0x2072,
-
-    .field_138c = 0x7053,
-
-    .field_138e = 0x7275,
-
-    .field_1390 = 0x202C,
-
-    .field_1392 = 0x6964,
-
-    .field_1394 = 0x2065,
-
-    .field_1396 = 0x6953,
-
-    .field_1398 = 0x2065,
-
-    .field_139a = 0x6570,
-
-    .field_139c = 0x2072,
-
-    .field_139e = 0x5453,
-
-    .field_13a0 = 0x5045,
-
-    .field_13a2 = 0x5220,
-
-    .field_13a4 = 0x4345,
-
-    .field_13a6 = 0x524F,
-
-    .field_13a8 = 0x2044,
-
-    .field_13aa = 0x7561,
-
-    .field_13ac = 0x6E66,
-
-    .field_13ae = 0x6865,
-
-    .field_13b0 = 0x656D,
-
-    .field_13b2 = 0x206E,
-
-    .field_13b4 = 0xF66D,
-
-    .str_282 = ALIGNED_STRING("chten."),
-
-    .str_283 = ALIGNED_STRING("Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."),
-
-    .str_284 = ALIGNED_STRING("Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."),
-
-    .str_285 = ALIGNED_STRING("Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."),
-
-    .str_286 = ALIGNED_STRING("Press the up/down button under the screen corresponding to the track that you want to STEP RECORD."),
-
-    .str_287 = "Select whether or not After Touch is recorded by Sequencer.",
-
-    .field_158a = 0xE457,
-
-    .str_288 = "hlen Sie, ob After Touch Effekte vom Sequenzer aufgezeichnet werden sollen.",
-
-    .str_289 = "Select whether or not After Touch is recorded by Sequencer.",
-
-    .str_290 = "Select whether or not After Touch is recorded by Sequencer.",
-
-    .str_291 = "Select whether or not After Touch is recorded by Sequencer.",
-
-    .str_292 = "Select whether or not After Touch is recorded by Sequencer.",
-
-    .str_293 = "Any existing song will be cleared. Press OK to proceed.",
-
-    .field_1700 = 0x654A,
-
-    .field_1702 = 0x6564,
-
-    .field_1704 = 0x2072,
-
-    .field_1706 = 0x6F53,
-
-    .field_1708 = 0x676E,
-
-    .field_170a = 0x6920,
-
-    .field_170c = 0x206D,
-
-    .field_170e = 0x7241,
-
-    .field_1710 = 0x6562,
-
-    .field_1712 = 0x7469,
-
-    .field_1714 = 0x7373,
-
-    .field_1716 = 0x6570,
-
-    .field_1718 = 0x6369,
-
-    .field_171a = 0x6568,
-
-    .field_171c = 0x2072,
-
-    .field_171e = 0x6977,
-
-    .field_1720 = 0x6472,
-
-    .field_1722 = 0x6720,
-
-    .field_1724 = 0x6C65,
-
-    .field_1726 = 0x73F6,
-
-    .field_1728 = 0x6863,
-
-    .field_172a = 0x2E74,
-
-    .field_172c = 0x4420,
-
-    .field_172e = 0xFC72,
-
-    .field_1730 = 0x6B63,
-
-    .field_1732 = 0x6E65,
-
-    .field_1734 = 0x5320,
-
-    .field_1736 = 0x6569,
-
-    .field_1738 = 0x4F20,
-
-    .field_173a = 0x204B,
-
-    .field_173c = 0x757A,
-
-    .field_173e = 0x2072,
-
-    .field_1740 = 0x6542,
-
-    .field_1742 = 0x7473,
-
-    .field_1744 = 0x74E4,
-
-    .str_294 = ALIGNED_STRING("igung."),
-
-    .str_295 = "Any existing song will be cleared. Press OK to proceed.",
-
-    .str_296 = "Any existing song will be cleared. Press OK to proceed.",
-
-    .str_297 = "Any existing song will be cleared. Press OK to proceed.",
-
-    .str_298 = "Any existing song will be cleared. Press OK to proceed.",
-
-    .str_299 = ALIGNED_STRING("ATTENTION!"),
-
-    .str_300 = "ACHTUNG !",
-
-    .str_301 = ALIGNED_STRING("ATTENTION!"),
-
-    .field_1850 = 0x41A1,
-
-    .field_1852 = 0x4554,
-
-    .field_1854 = 0x434E,
-
-    .field_1856 = 0xD349,
-
-    .str_302 = ALIGNED_STRING("N!"),
-
-    .str_303 = ALIGNED_STRING("ATTENTION!"),
-
-    .str_304 = "Perhatian !",
-
-    .str_305 = "Are You Sure?",
-
-    .str_306 = "Sind Sie sicher ?",
-
-    .field_1894 = 0x7445,
-
-    .field_1896 = 0x7365,
-
-    .field_1898 = 0x7620,
-
-    .field_189a = 0x756F,
-
-    .field_189c = 0x2073,
-
-    .field_189e = 0xFB73,
-
-    .str_307 = ALIGNED_STRING("r?"),
-
-    .field_18a4 = 0x45BF,
-
-    .field_18a6 = 0x7473,
-
-    .field_18a8 = 0x20E1,
-
-    .str_308 = "seguro?",
-
-    .str_309 = "Are You Sure?",
-
-    .str_310 = "Apakah yakin akan dihapus ?",
-
-    .str_311 = "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!",
-
-    .field_1938 = 0x7544,
-
-    .field_193a = 0x6372,
-
-    .field_193c = 0x2068,
-
-    .field_193e = 0x6164,
-
-    .field_1940 = 0x2073,
-
-    .field_1942 = 0x6945,
-
-    .field_1944 = 0x736E,
-
-    .field_1946 = 0x6863,
-
-    .field_1948 = 0x6C61,
-
-    .field_194a = 0x6574,
-
-    .field_194c = 0x206E,
-
-    .field_194e = 0x6564,
-
-    .field_1950 = 0x2073,
-
-    .field_1952 = 0x4547,
-
-    .field_1954 = 0x454E,
-
-    .field_1956 = 0x4152,
-
-    .field_1958 = 0x204C,
-
-    .field_195a = 0x494D,
-
-    .field_195c = 0x4944,
-
-    .field_195e = 0x4D20,
-
-    .field_1960 = 0x444F,
-
-    .field_1962 = 0x2045,
-
-    .field_1964 = 0x6577,
-
-    .field_1966 = 0x6472,
-
-    .field_1968 = 0x6E65,
-
-    .field_196a = 0x6120,
-
-    .field_196c = 0x6C6C,
-
-    .field_196e = 0x2065,
-
-    .field_1970 = 0x6945,
-
-    .field_1972 = 0x736E,
-
-    .field_1974 = 0x6574,
-
-    .field_1976 = 0x6C6C,
-
-    .field_1978 = 0x6E75,
-
-    .field_197a = 0x6567,
-
-    .field_197c = 0x206E,
-
-    .field_197e = 0x757A,
-
-    .field_1980 = 0x4720,
-
-    .field_1982 = 0x4E45,
-
-    .field_1984 = 0x5245,
-
-    .field_1986 = 0x4C41,
-
-    .field_1988 = 0x4D20,
-
-    .field_198a = 0x4449,
-
-    .field_198c = 0x2049,
-
-    .field_198e = 0x6945,
-
-    .field_1990 = 0x736E,
-
-    .field_1992 = 0x6574,
-
-    .field_1994 = 0x6C6C,
-
-    .field_1996 = 0x6E75,
-
-    .field_1998 = 0x6567,
-
-    .field_199a = 0x206E,
-
-    .field_199c = 0x6567,
-
-    .field_199e = 0x6EE4,
-
-    .str_312 = "dert!",
-
-    .field_19a6 = 0x274C,
-
-    .field_19a8 = 0x6361,
-
-    .field_19aa = 0x6974,
-
-    .field_19ac = 0x6176,
-
-    .field_19ae = 0x6974,
-
-    .field_19b0 = 0x6E6F,
-
-    .field_19b2 = 0x6420,
-
-    .field_19b4 = 0x2075,
-
-    .field_19b6 = 0x6F6D,
-
-    .field_19b8 = 0x6564,
-
-    .field_19ba = 0x4720,
-
-    .field_19bc = 0x4E45,
-
-    .field_19be = 0x5245,
-
-    .field_19c0 = 0x4C41,
-
-    .field_19c2 = 0x4D20,
-
-    .field_19c4 = 0x4449,
-
-    .field_19c6 = 0x2049,
-
-    .field_19c8 = 0x4F4D,
-
-    .field_19ca = 0x4544,
-
-    .field_19cc = 0x7220,
-
-    .field_19ce = 0x6D65,
-
-    .field_19d0 = 0x6C70,
-
-    .field_19d2 = 0x6361,
-
-    .field_19d4 = 0x7265,
-
-    .field_19d6 = 0x2061,
-
-    .field_19d8 = 0x6F74,
-
-    .field_19da = 0x7375,
-
-    .field_19dc = 0x6C20,
-
-    .field_19de = 0x7365,
-
-    .field_19e0 = 0x7220,
-
-    .field_19e2 = 0x67E9,
-
-    .field_19e4 = 0x616C,
-
-    .field_19e6 = 0x6567,
-
-    .field_19e8 = 0x2073,
-
-    .field_19ea = 0x6361,
-
-    .field_19ec = 0x7574,
-
-    .field_19ee = 0x6C65,
-
-    .field_19f0 = 0x2073,
-
-    .field_19f2 = 0x6170,
-
-    .field_19f4 = 0x2072,
-
-    .field_19f6 = 0x656C,
-
-    .field_19f8 = 0x2073,
-
-    .field_19fa = 0xE972,
-
-    .str_313 = ALIGNED_STRING("glages GENERAL MIDI!"),
-
-    .field_1a12 = 0x41A1,
-
-    .str_314 = "l activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!",
-
-    .str_315 = "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!",
-
-    .str_316 = "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. ",
-
-    .str_317 = ALIGNED_STRING("Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"),
-
-    .str_318 = "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt.",
-
-    .field_1c12 = 0x614C,
-
-    .field_1c14 = 0x6420,
-
-    .field_1c16 = 0x73E9,
-
-    .field_1c18 = 0x6361,
-
-    .field_1c1a = 0x6974,
-
-    .field_1c1c = 0x6176,
-
-    .field_1c1e = 0x6974,
-
-    .field_1c20 = 0x6E6F,
-
-    .field_1c22 = 0x6420,
-
-    .field_1c24 = 0x2075,
-
-    .field_1c26 = 0x6F6D,
-
-    .field_1c28 = 0x6564,
-
-    .field_1c2a = 0x4720,
-
-    .field_1c2c = 0x4E45,
-
-    .field_1c2e = 0x5245,
-
-    .field_1c30 = 0x4C41,
-
-    .field_1c32 = 0x4D20,
-
-    .field_1c34 = 0x4449,
-
-    .field_1c36 = 0x2049,
-
-    .field_1c38 = 0x4F4D,
-
-    .field_1c3a = 0x4544,
-
-    .field_1c3c = 0x7220,
-
-    .field_1c3e = 0x6D65,
-
-    .field_1c40 = 0x6C70,
-
-    .field_1c42 = 0x6361,
-
-    .field_1c44 = 0x7265,
-
-    .field_1c46 = 0x2061,
-
-    .field_1c48 = 0x6F74,
-
-    .field_1c4a = 0x7375,
-
-    .field_1c4c = 0x6C20,
-
-    .field_1c4e = 0x7365,
-
-    .field_1c50 = 0x7220,
-
-    .field_1c52 = 0x67E9,
-
-    .field_1c54 = 0x616C,
-
-    .field_1c56 = 0x6567,
-
-    .field_1c58 = 0x2073,
-
-    .field_1c5a = 0x4547,
-
-    .field_1c5c = 0x454E,
-
-    .field_1c5e = 0x4152,
-
-    .field_1c60 = 0x204C,
-
-    .field_1c62 = 0x494D,
-
-    .field_1c64 = 0x4944,
-
-    .field_1c66 = 0x7020,
-
-    .field_1c68 = 0x7261,
-
-    .field_1c6a = 0x6C20,
-
-    .field_1c6c = 0x7365,
-
-    .field_1c6e = 0x7220,
-
-    .field_1c70 = 0x67E9,
-
-    .str_319 = "lages d'usines!",
-
-    .field_1c82 = 0x41A1,
-
-    .field_1c84 = 0x206C,
-
-    .field_1c86 = 0x6564,
-
-    .field_1c88 = 0x6373,
-
-    .field_1c8a = 0x6E6F,
-
-    .field_1c8c = 0x6365,
-
-    .field_1c8e = 0x6174,
-
-    .field_1c90 = 0x2072,
-
-    .field_1c92 = 0x6C65,
-
-    .field_1c94 = 0x6D20,
-
-    .field_1c96 = 0x646F,
-
-    .field_1c98 = 0x206F,
-
-    .field_1c9a = 0x494D,
-
-    .field_1c9c = 0x4944,
-
-    .field_1c9e = 0x4720,
-
-    .field_1ca0 = 0x6E65,
-
-    .field_1ca2 = 0x7265,
-
-    .field_1ca4 = 0x6C61,
-
-    .field_1ca6 = 0x7320,
-
-    .field_1ca8 = 0x2065,
-
-    .field_1caa = 0x6572,
-
-    .field_1cac = 0x6D65,
-
-    .field_1cae = 0x6C70,
-
-    .field_1cb0 = 0x7A61,
-
-    .field_1cb2 = 0x6E61,
-
-    .field_1cb4 = 0x6C20,
-
-    .field_1cb6 = 0x7361,
-
-    .field_1cb8 = 0x6320,
-
-    .field_1cba = 0x6E6F,
-
-    .field_1cbc = 0x6966,
-
-    .field_1cbe = 0x7567,
-
-    .field_1cc0 = 0x6172,
-
-    .field_1cc2 = 0x6963,
-
-    .field_1cc4 = 0x6E6F,
-
-    .field_1cc6 = 0x7365,
-
-    .field_1cc8 = 0x4D20,
-
-    .field_1cca = 0x4449,
-
-    .field_1ccc = 0x2049,
-
-    .field_1cce = 0x6547,
-
-    .field_1cd0 = 0x656E,
-
-    .field_1cd2 = 0x6172,
-
-    .field_1cd4 = 0x656C,
-
-    .field_1cd6 = 0x2073,
-
-    .field_1cd8 = 0x6F70,
-
-    .field_1cda = 0x2072,
-
-    .field_1cdc = 0x616C,
-
-    .field_1cde = 0x2073,
-
-    .field_1ce0 = 0x6F63,
-
-    .field_1ce2 = 0x666E,
-
-    .field_1ce4 = 0x6769,
-
-    .field_1ce6 = 0x7275,
-
-    .field_1ce8 = 0x6361,
-
-    .field_1cea = 0x6F69,
-
-    .field_1cec = 0x656E,
-
-    .field_1cee = 0x2073,
-
-    .field_1cf0 = 0x726F,
-
-    .field_1cf2 = 0x6769,
-
-    .field_1cf4 = 0x6E69,
-
-    .field_1cf6 = 0x6C61,
-
-    .field_1cf8 = 0x7365,
-
-    .field_1cfa = 0x6420,
-
-    .field_1cfc = 0x2065,
-
-    .field_1cfe = 0xE166,
-
-    .str_320 = ALIGNED_STRING("brica!"),
-
-    .str_321 = ALIGNED_STRING("Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"),
-
-    .str_322 = ALIGNED_STRING("Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."),
-
-    .ptrs_24 = {
-        SELF(str_328),
-        SELF(field_1f76),
-        SELF(field_1f18),
-        SELF(field_1ec0),
-        SELF(str_324),
-        SELF(str_323),
+    .Yoko_MainFuncNameTable_447 = {
+        SELF(Yoko_MainFuncNames_447[486]),
+        SELF(Yoko_MainFuncNames_447[468]),
+        SELF(Yoko_MainFuncNames_447[452]),
+        SELF(Yoko_MainFuncNames_447[436]),
+        SELF(Yoko_MainFuncNames_447[420]),
+        SELF(Yoko_MainFuncNames_447[402]),
+        SELF(Yoko_MainFuncNames_447[388]),
+        SELF(Yoko_MainFuncNames_447[372]),
+        SELF(Yoko_MainFuncNames_447[356]),
+        SELF(Yoko_MainFuncNames_447[338]),
+        SELF(Yoko_MainFuncNames_447[320]),
+        SELF(Yoko_MainFuncNames_447[302]),
+        SELF(Yoko_MainFuncNames_447[284]),
+        SELF(Yoko_MainFuncNames_447[268]),
+        SELF(Yoko_MainFuncNames_447[250]),
+        SELF(Yoko_MainFuncNames_447[230]),
+        SELF(Yoko_MainFuncNames_447[216]),
+        SELF(Yoko_MainFuncNames_447[204]),
+        SELF(Yoko_MainFuncNames_447[190]),
+        SELF(Yoko_MainFuncNames_447[174]),
+        SELF(Yoko_MainFuncNames_447[158]),
+        SELF(Yoko_MainFuncNames_447[142]),
+        SELF(Yoko_MainFuncNames_447[128]),
+        SELF(Yoko_MainFuncNames_447[114]),
+        SELF(Yoko_MainFuncNames_447[98]),
+        SELF(Yoko_MainFuncNames_447[80]),
+        SELF(Yoko_MainFuncNames_447[62]),
+        SELF(Yoko_MainFuncNames_447[46]),
+        SELF(Yoko_MainFuncNames_447[30]),
+        SELF(Yoko_MainFuncNames_447[14]),
+        SELF(Yoko_MainFuncNames_447[2]),
+        SELF(Yoko_MainFuncNames_447),
     },
 
-    .str_323 = "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang.",
-
-    .str_324 = "Changing the assignment of Track %2d from %s to %s will erase all the current data.",
-
-    .field_1ec0 = 0x6C41,
-
-    .field_1ec2 = 0x6320,
-
-    .field_1ec4 = 0x6D61,
-
-    .field_1ec6 = 0x6962,
-
-    .field_1ec8 = 0x7261,
-
-    .field_1eca = 0x6C20,
-
-    .field_1ecc = 0x2061,
-
-    .field_1ece = 0x7361,
-
-    .field_1ed0 = 0x6769,
-
-    .field_1ed2 = 0x616E,
-
-    .field_1ed4 = 0x6963,
-
-    .field_1ed6 = 0x6EF3,
-
-    .field_1ed8 = 0x6420,
-
-    .field_1eda = 0x2065,
-
-    .field_1edc = 0x6970,
-
-    .field_1ede = 0x7473,
-
-    .field_1ee0 = 0x7361,
-
-    .field_1ee2 = 0x2520,
-
-    .field_1ee4 = 0x6432,
-
-    .field_1ee6 = 0x6420,
-
-    .field_1ee8 = 0x2065,
-
-    .field_1eea = 0x7325,
-
-    .field_1eec = 0x6120,
-
-    .field_1eee = 0x2520,
-
-    .field_1ef0 = 0x2073,
-
-    .field_1ef2 = 0x6573,
-
-    .field_1ef4 = 0x6220,
-
-    .field_1ef6 = 0x726F,
-
-    .field_1ef8 = 0x6172,
-
-    .field_1efa = 0xE172,
-
-    .str_325 = "n todos los datos actuales.",
-
-    .field_1f18 = 0x6F54,
-
-    .field_1f1a = 0x7475,
-
-    .field_1f1c = 0x6320,
-
-    .field_1f1e = 0x6168,
-
-    .field_1f20 = 0x676E,
-
-    .field_1f22 = 0x6D65,
-
-    .field_1f24 = 0x6E65,
-
-    .field_1f26 = 0x2074,
-
-    .field_1f28 = 0x2764,
-
-    .field_1f2a = 0x7361,
-
-    .field_1f2c = 0x6973,
-
-    .field_1f2e = 0x6E67,
-
-    .field_1f30 = 0x7461,
-
-    .field_1f32 = 0x6F69,
-
-    .field_1f34 = 0x206E,
-
-    .field_1f36 = 0x6564,
-
-    .field_1f38 = 0x2073,
-
-    .field_1f3a = 0x6970,
-
-    .field_1f3c = 0x7473,
-
-    .field_1f3e = 0x7365,
-
-    .field_1f40 = 0x2520,
-
-    .field_1f42 = 0x6432,
-
-    .field_1f44 = 0x6420,
-
-    .field_1f46 = 0x2565,
-
-    .field_1f48 = 0x2073,
-
-    .field_1f4a = 0x25E0,
-
-    .field_1f4c = 0x2073,
-
-    .field_1f4e = 0x6665,
-
-    .field_1f50 = 0x6166,
-
-    .field_1f52 = 0x6563,
-
-    .field_1f54 = 0x6172,
-
-    .field_1f56 = 0x7420,
-
-    .field_1f58 = 0x756F,
-
-    .field_1f5a = 0x6574,
-
-    .field_1f5c = 0x2073,
-
-    .field_1f5e = 0x656C,
-
-    .field_1f60 = 0x2073,
-
-    .field_1f62 = 0x6F64,
-
-    .field_1f64 = 0x6E6E,
-
-    .field_1f66 = 0x65E9,
-
-    .str_326 = ALIGNED_STRING("s actuelles."),
-
-    .field_1f76 = 0x6144,
-
-    .field_1f78 = 0x2073,
-
-    .field_1f7a = 0x6EC4,
-
-    .str_327 = ALIGNED_STRING("dern der Spurzuordnung %2d von %s nach %s hat einen Verlust der Daten zur folge."),
-
-    .str_328 = "Changing the assignment of Track %2d from %s to %s will erase all the current data.",
-
-    .ptrs_25 = {
-        SELF(str_281),
-        SELF(field_1346),
-        SELF(str_283),
-        SELF(str_284),
-        SELF(str_285),
-        SELF(str_286),
-        SELF(str_287),
-        SELF(field_158a),
-        SELF(str_289),
-        SELF(str_290),
-        SELF(str_291),
-        SELF(str_292),
-        SELF(str_293),
-        SELF(field_1700),
-        SELF(str_295),
-        SELF(str_296),
-        SELF(str_297),
-        SELF(str_298),
-        SELF(str_299),
-        SELF(str_300),
-        SELF(str_301),
-        SELF(field_1850),
-        SELF(str_303),
-        SELF(str_304),
-        SELF(str_305),
-        SELF(str_306),
-        SELF(field_1894),
-        SELF(field_18a4),
-        SELF(str_309),
-        SELF(str_310),
-        SELF(str_311),
-        SELF(field_1938),
-        SELF(field_19a6),
-        SELF(field_1a12),
-        SELF(str_315),
-        SELF(str_316),
-        SELF(str_317),
-        SELF(str_318),
-        SELF(field_1c12),
-        SELF(field_1c82),
-        SELF(str_321),
-        SELF(str_322),
-        SELF(str_348),
-        SELF(str_347),
-        SELF(str_346),
-        SELF(str_345),
-        SELF(str_344),
-        SELF(str_343),
-        SELF(str_342),
-        SELF(str_341),
-        SELF(str_340),
-        SELF(str_339),
-        SELF(str_338),
-        SELF(str_337),
-        SELF(str_336),
-        SELF(str_335),
-        SELF(str_334),
-        SELF(str_333),
-        SELF(str_332),
-        SELF(str_331),
-        SELF(str_330),
-        SELF(str_329),
+    .Yoko_MainFuncNames_447 = 
+        "\0\xFF"
+        "ApPlaySyori\0"
+        "NameGetFuncCall\0"
+        "MiddleFuncCall\0\xFF"
+        "DemoRhyTtlFunc\0\xFF"
+        "DemoSoundTtlFunc\0\xFF"
+        "DemoStyleTtlFunc\0\xFF"
+        "DemoMenuTtlFunc\0"
+        "DemoModeFunc\0\xFF"
+        "SqStepTtlFunc\0"
+        "SqTrSelTtlFunc\0\xFF"
+        "SeqStepModeFunc\0"
+        "DpSmfLyrTtlFunc\0"
+        "DpSmfTtlFunc\0\xFF"
+        "DpPdTtlFunc\0"
+        "DpDocTtlFunc\0\xFF"
+        "DpMdlySmfLyrTtlFunc\0"
+        "DpMdlySmfTtlFunc\0\xFF"
+        "DpMdlyPdTtlFunc\0"
+        "DpMdlyDocTtlFunc\0\xFF"
+        "DkMdlyPlyTtlFunc\0\xFF"
+        "SqMdlyPlyTtlFunc\0\xFF"
+        "SqTrAsPsSureFunc\0\xFF"
+        "SqTrAsPsTtlFunc\0"
+        "SqTrAsSureFunc\0\xFF"
+        "SqTrAsTtlFunc\0"
+        "SqSngNameTtlFunc\0\xFF"
+        "SqSngSelTtlFunc\0"
+        "SqAftSetTtlFunc\0"
+        "CDlikeSwTtlFunc\0"
+        "SeqSongMemoryFunc\0"
+        "SeqSongNameFunc",
+
+    .PartSelLangCheck_Strings = 
+        "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
+        "Dr\xFC" "cken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie per STEP RECORD aufnehmen m\xF6" "chten.\0\xFF"
+        "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
+        "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
+        "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
+        "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF",
+
+    .AfterLangCheck_Strings = 
+        "Select whether or not After Touch is recorded by Sequencer.\0"
+        "W\xE4hlen Sie, ob After Touch Effekte vom Sequenzer aufgezeichnet werden sollen.\0"
+        "Select whether or not After Touch is recorded by Sequencer.\0"
+        "Select whether or not After Touch is recorded by Sequencer.\0"
+        "Select whether or not After Touch is recorded by Sequencer.\0"
+        "Select whether or not After Touch is recorded by Sequencer.",
+
+    .TrAsPreLangCheck_Strings = 
+        "Any existing song will be cleared. Press OK to proceed.\0"
+        "Jeder Song im Arbeitsspeicher wird gel\xF6scht. Dr\xFC" "cken Sie OK zur Best\xE4tigung.\0\xFF"
+        "Any existing song will be cleared. Press OK to proceed.\0"
+        "Any existing song will be cleared. Press OK to proceed.\0"
+        "Any existing song will be cleared. Press OK to proceed.\0"
+        "Any existing song will be cleared. Press OK to proceed.",
+
+    .AtentionLangCheck_Strings = 
+        "ATTENTION!\0\xFF"
+        "ACHTUNG !\0"
+        "ATTENTION!\0\xFF"
+        "\xA1" "ATENCI\xD3N!\0\xFF"
+        "ATTENTION!\0\xFF"
+        "Perhatian !",
+
+    .AreYouSureLangCheck_Strings = 
+        "Are You Sure?\0"
+        "Sind Sie sicher ?\0"
+        "Etes vous s\xFBr?\0\xFF"
+        "\xBF" "Est\xE1 seguro?\0"
+        "Are You Sure?\0"
+        "Apakah yakin akan dihapus ?",
+
+    .GmOnSureLangCheck_Strings = 
+        "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
+        "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge\xE4ndert!\0"
+        "L'activation du mode GENERAL MIDI MODE remplacera tous les r\xE9glages actuels par les r\xE9glages GENERAL MIDI!\0\xFF"
+        "\xA1" "Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!\0"
+        "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
+        "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. ",
+
+    .GmOffSureLangCheck_Strings = 
+        "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!\0\xFF"
+        "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt.\0"
+        "La d\xE9sactivation du mode GENERAL MIDI MODE remplacera tous les r\xE9glages GENERAL MIDI par les r\xE9glages d'usines!\0"
+        "\xA1" "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f\xE1" "brica!\0\xFF"
+        "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!\0\xFF"
+        "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings).\0\xFF",
+
+    .TrAsSureLangCheck_PtrTable = {
+        SELF(TrAsSureLangCheck_Strings[444]),
+        SELF(TrAsSureLangCheck_Strings[356]),
+        SELF(TrAsSureLangCheck_Strings[262]),
+        SELF(TrAsSureLangCheck_Strings[174]),
+        SELF(TrAsSureLangCheck_Strings[90]),
+        SELF(TrAsSureLangCheck_Strings),
     },
 
-    .str_329 = ALIGNED_STRING("PART15"),
+    .TrAsSureLangCheck_Strings = 
+        "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang.\0"
+        "Changing the assignment of Track %2d from %s to %s will erase all the current data.\0"
+        "Al cambiar la asignaci\xF3n de pistas %2d de %s a %s se borrar\xE1n todos los datos actuales.\0"
+        "Tout changement d'assignation des pistes %2d de%s \xE0%s effacera toutes les donn\xE9" "es actuelles.\0\xFF"
+        "Das \xC4ndern der Spurzuordnung %2d von %s nach %s hat einen Verlust der Daten zur folge.\0\xFF"
+        "Changing the assignment of Track %2d from %s to %s will erase all the current data.",
 
-    .str_330 = ALIGNED_STRING("PART14"),
-
-    .str_331 = ALIGNED_STRING("PART13"),
-
-    .str_332 = ALIGNED_STRING("RHYTHM"),
-
-    .str_333 = "CONTROL",
-
-    .str_334 = "APC",
-
-    .str_335 = "CHORD",
-
-    .str_336 = "DRUMS",
-
-    .str_337 = "PART4",
-
-    .str_338 = "PART7",
-
-    .str_339 = "PART6",
-
-    .str_340 = "PART5",
-
-    .str_341 = ALIGNED_STRING("PART12"),
-
-    .str_342 = ALIGNED_STRING("PART11"),
-
-    .str_343 = ALIGNED_STRING("PART10"),
-
-    .str_344 = "PART9",
-
-    .str_345 = "PART8",
-
-    .str_346 = ALIGNED_STRING("RIGHT2"),
-
-    .str_347 = ALIGNED_STRING("LEFT"),
-
-    .str_348 = ALIGNED_STRING("RIGHT1"),
-
-    .str_349 = ALIGNED_STRING("Lyrc"),
-
-    .str_350 = "MEASURE = %3d",
-
-    .str_351 = "                         ",
-
-    .str_352 = "                         ",
-
-    .str_353 = "                         ",
-
-    .str_354 = "                         ",
-
-    .str_355 = "                         ",
-
-    .str_356 = "                         ",
-
-    .str_357 = "                         ",
-
-    .str_358 = ALIGNED_STRING("ExMD"),
-
-    .ptrs_26 = {
-        SELF(str_378),
-        SELF(str_377),
-        SELF(str_376),
-        SELF(str_375),
-        SELF(str_374),
-        SELF(str_373),
-        SELF(str_372),
-        SELF(str_371),
-        SELF(str_370),
-        SELF(str_369),
-        SELF(str_368),
-        SELF(str_367),
-        SELF(str_366),
-        SELF(str_365),
-        SELF(str_364),
-        SELF(str_363),
-        SELF(str_362),
-        SELF(str_361),
-        SELF(str_360),
-        SELF(str_359),
+    .PartSelLangCheck_PtrTable = {
+        SELF(PartSelLangCheck_Strings),
+        SELF(PartSelLangCheck_Strings[100]),
+        SELF(PartSelLangCheck_Strings[220]),
+        SELF(PartSelLangCheck_Strings[320]),
+        SELF(PartSelLangCheck_Strings[420]),
+        SELF(PartSelLangCheck_Strings[520]),
     },
 
-    .str_359 = " PART 15 ",
-
-    .str_360 = " PART 14 ",
-
-    .str_361 = " PART 13 ",
-
-    .str_362 = " RHYTHM  ",
-
-    .str_363 = " CONTROL ",
-
-    .str_364 = " APC     ",
-
-    .str_365 = " CHORD   ",
-
-    .str_366 = " DRUMS   ",
-
-    .str_367 = " PART 4  ",
-
-    .str_368 = " PART 7  ",
-
-    .str_369 = " PART 6  ",
-
-    .str_370 = " PART 5  ",
-
-    .str_371 = " PART 12 ",
-
-    .str_372 = " PART 11 ",
-
-    .str_373 = " PART 10 ",
-
-    .str_374 = " PART 9  ",
-
-    .str_375 = " PART 8  ",
-
-    .str_376 = " RIGHT2  ",
-
-    .str_377 = " LEFT    ",
-
-    .str_378 = " RIGHT1  ",
-
-    .str_379 = ALIGNED_STRING("|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8"),
-
-    .str_380 = ALIGNED_STRING("|-|TR 9|TR10|TR11|TR12|TR13|TR14|TR15|TR16"),
-
-    .field_23e4 = 0x008D,
-
-    .field_23e6 = 0x01FA,
-
-    .field_23e8 = 0x008D,
-
-    .field_23ea = 0x01FA,
-
-    .field_23ec = 0x0470,
-
-    .field_23ee = 0x0396,
-
-    .field_23f0 = 0x0396,
-
-    .field_23f2 = 0x0001,
-
-    .field_23f4 = 0x0002,
-
-    .field_23f6 = 0x0004,
-
-    .field_23f8 = 0x0008,
-
-    .field_23fa = 0x0010,
-
-    .str_381 = " ",
-
-    .str_382 = "@",
-
-    .field_2400 = 0x0080,
-
-    .field_2402 = 0x0100,
-
-    .field_2404 = 0x0200,
-
-    .field_2406 = 0x0400,
-
-    .field_2408 = 0x0800,
-
-    .field_240a = 0x1000,
-
-    .field_240c = 0x2000,
-
-    .field_240e = 0x4000,
-
-    .field_2410 = 0x8000,
-
-    .field_2412 = 0x0200,
-
-    .field_2414 = 0x0701,
-
-    .field_2416 = 0x0908,
-
-    .field_2418 = 0x0B0A,
-
-    .field_241a = 0x0504,
-
-    .field_241c = 0x0306,
-
-    .field_241e = 0x120F,
-
-    .field_2420 = 0x1110,
-
-    .field_2422 = 0x0C13,
-
-    .field_2424 = 0x0E0D,
-
-    .field_2426 = 0x0200,
-
-    .field_2428 = 0x0B01,
-
-    .field_242a = 0x0908,
-
-    .field_242c = 0x030A,
-
-    .field_242e = 0x0504,
-
-    .field_2430 = 0x0706,
-
-    .field_2432 = 0x1211,
-
-    .field_2434 = 0x0C13,
-
-    .field_2436 = 0x0F0E,
-
-    .field_2438 = 0x100D,
-
-    .str_383 = "ON ",
-
-    .str_384 = "OFF",
-
-    .str_385 = "-- ",
-
-    .str_386 = "-- ",
-
-    .str_387 = "ON ",
-
-    .str_388 = "OFF",
-
-    .str_389 = "-- ",
-
-    .str_390 = "-- ",
-
-    .str_391 = "ON ",
-
-    .str_392 = "OFF",
-
-    .str_393 = "-- ",
-
-    .str_394 = "-- ",
-
-    .str_395 = "ON ",
-
-    .str_396 = "OFF",
-
-    .str_397 = "-- ",
-
-    .str_398 = "-- ",
-
-    .pad_4 = { 0 },
-
-    .field_247c = 0x013C,
-
-    .pad_5 = { 0 },
-
-    .field_2480 = 0x013C,
-
-    .field_2482 = 0x04E2,
-
-    .field_2484 = 0x04E2,
-
-    .field_2486 = 0x04E2,
-
-    .field_2488 = 0x0100,
-
-    .field_248a = 0x0302,
-
-    .field_248c = 0x0504,
-
-    .field_248e = 0x0706,
-
-    .field_2490 = 0x0908,
-
-    .field_2492 = 0x0B0A,
-
-    .field_2494 = 0x0D0C,
-
-    .field_2496 = 0x0F0E,
-
-    .field_2498 = 0x1110,
-
-    .str_399 = "SONG%2d",
-
-    .str_400 = ALIGNED_STRING("                      "),
-
-    .ptrs_27 = {
-        SELF(str_416),
-        SELF(str_415),
-        SELF(str_414),
-        SELF(str_413),
-        SELF(str_412),
-        SELF(str_411),
-        SELF(str_410),
-        SELF(str_409),
-        SELF(str_408),
-        SELF(str_407),
-        SELF(str_406),
-        SELF(str_405),
-        SELF(str_404),
-        SELF(str_403),
-        SELF(str_402),
-        SELF(str_401),
+    .AfterLangCheck_PtrTable = {
+        SELF(AfterLangCheck_Strings),
+        SELF(AfterLangCheck_Strings[60]),
+        SELF(AfterLangCheck_Strings[138]),
+        SELF(AfterLangCheck_Strings[198]),
+        SELF(AfterLangCheck_Strings[258]),
+        SELF(AfterLangCheck_Strings[318]),
     },
 
-    .str_401 = ALIGNED_STRING(" 16 "),
-
-    .str_402 = ALIGNED_STRING(" 15 "),
-
-    .str_403 = ALIGNED_STRING(" 14 "),
-
-    .str_404 = ALIGNED_STRING(" 13 "),
-
-    .str_405 = ALIGNED_STRING(" 12 "),
-
-    .str_406 = ALIGNED_STRING(" 11 "),
-
-    .str_407 = ALIGNED_STRING(" 10 "),
-
-    .str_408 = ALIGNED_STRING("  9 "),
-
-    .str_409 = ALIGNED_STRING("  8 "),
-
-    .str_410 = ALIGNED_STRING("  7 "),
-
-    .str_411 = ALIGNED_STRING("  6 "),
-
-    .str_412 = ALIGNED_STRING("  5 "),
-
-    .str_413 = ALIGNED_STRING("  4 "),
-
-    .str_414 = ALIGNED_STRING("  3 "),
-
-    .str_415 = ALIGNED_STRING("  2 "),
-
-    .str_416 = ALIGNED_STRING("  1 "),
-
-    .field_255a = 0x001E,
-
-    .field_255c = 0x001E,
-
-    .str_417 = ")",
-
-    .str_418 = ")",
-
-    .str_419 = ")",
-
-    .str_420 = "\"",
-
-    .str_421 = ")",
-
-    .str_422 = "-",
-
-    .field_256a = 0x001E,
-
-    .pad_6 = { 0 },
-
-    .ptrs_28 = {
-        SELF(str_433),
-        SELF(str_432),
-        SELF(str_431),
-        SELF(str_430),
-        SELF(str_429),
-        SELF(str_428),
-        SELF(str_427),
-        SELF(str_426),
-        SELF(str_425),
-        SELF(str_424),
-        SELF(str_423),
+    .TrAsPreLangCheck_PtrTable = {
+        SELF(TrAsPreLangCheck_Strings),
+        SELF(TrAsPreLangCheck_Strings[56]),
+        SELF(TrAsPreLangCheck_Strings[134]),
+        SELF(TrAsPreLangCheck_Strings[190]),
+        SELF(TrAsPreLangCheck_Strings[246]),
+        SELF(TrAsPreLangCheck_Strings[302]),
     },
 
-    .str_423 = ALIGNED_STRING("  ALL   "),
-
-    .str_424 = ALIGNED_STRING(" SONG10 "),
-
-    .str_425 = ALIGNED_STRING(" SONG 9 "),
-
-    .str_426 = ALIGNED_STRING(" SONG 8 "),
-
-    .str_427 = ALIGNED_STRING(" SONG 7 "),
-
-    .str_428 = ALIGNED_STRING(" SONG 6 "),
-
-    .str_429 = ALIGNED_STRING(" SONG 5 "),
-
-    .str_430 = ALIGNED_STRING(" SONG 4 "),
-
-    .str_431 = ALIGNED_STRING(" SONG 3 "),
-
-    .str_432 = ALIGNED_STRING(" SONG 2 "),
-
-    .str_433 = ALIGNED_STRING(" SONG 1 "),
-
-    .field_2608 = 0x001E,
-
-    .field_260a = 0x001E,
-
-    .str_434 = ")",
-
-    .str_435 = ")",
-
-    .str_436 = ")",
-
-    .str_437 = "\"",
-
-    .str_438 = ")",
-
-    .str_439 = "-",
-
-    .field_2618 = 0x001E,
-
-    .pad_7 = { 0 },
-
-    .ptr_261c = SELF(str_441),
-
-    .ptr_2620 = SELF(str_440),
-
-    .str_440 = " ON  ",
-
-    .str_441 = " OFF ",
-
-    .field_2630 = 0x0001,
-
-    .field_2632 = 0x0002,
-
-    .field_2634 = 0x0004,
-
-    .field_2636 = 0x0008,
-
-    .field_2638 = 0x0010,
-
-    .str_442 = " ",
-
-    .str_443 = "@",
-
-    .field_263e = 0x0080,
-
-    .field_2640 = 0x0100,
-
-    .field_2642 = 0x0200,
-
-    .field_2644 = 0x0400,
-
-    .field_2646 = 0x0800,
-
-    .field_2648 = 0x1000,
-
-    .field_264a = 0x2000,
-
-    .field_264c = 0x4000,
-
-    .field_264e = 0x8000,
-
-    .ptrs_29 = {
-        SELF(str_459),
-        SELF(str_458),
-        SELF(str_457),
-        SELF(str_456),
-        SELF(str_455),
-        SELF(str_454),
-        SELF(str_453),
-        SELF(str_452),
-        SELF(str_451),
-        SELF(str_450),
-        SELF(str_449),
-        SELF(str_448),
-        SELF(str_447),
-        SELF(str_446),
-        SELF(str_445),
-        SELF(str_444),
+    .AtentionLangCheck_PtrTable = {
+        SELF(AtentionLangCheck_Strings),
+        SELF(AtentionLangCheck_Strings[12]),
+        SELF(AtentionLangCheck_Strings[22]),
+        SELF(AtentionLangCheck_Strings[34]),
+        SELF(AtentionLangCheck_Strings[46]),
+        SELF(AtentionLangCheck_Strings[58]),
     },
 
-    .str_444 = ALIGNED_STRING(" CH16 "),
+    .AreYouSureLangCheck_PtrTable = {
+        SELF(AreYouSureLangCheck_Strings),
+        SELF(AreYouSureLangCheck_Strings[14]),
+        SELF(AreYouSureLangCheck_Strings[32]),
+        SELF(AreYouSureLangCheck_Strings[48]),
+        SELF(AreYouSureLangCheck_Strings[62]),
+        SELF(AreYouSureLangCheck_Strings[76]),
+    },
+
+    .GmOnSureLangCheck_PtrTable = {
+        SELF(GmOnSureLangCheck_Strings),
+        SELF(GmOnSureLangCheck_Strings[92]),
+        SELF(GmOnSureLangCheck_Strings[202]),
+        SELF(GmOnSureLangCheck_Strings[310]),
+        SELF(GmOnSureLangCheck_Strings[422]),
+        SELF(GmOnSureLangCheck_Strings[514]),
+    },
+
+    .GmOffSureLangCheck_PtrTable = {
+        SELF(GmOffSureLangCheck_Strings),
+        SELF(GmOffSureLangCheck_Strings[106]),
+        SELF(GmOffSureLangCheck_Strings[226]),
+        SELF(GmOffSureLangCheck_Strings[338]),
+        SELF(GmOffSureLangCheck_Strings[472]),
+        SELF(GmOffSureLangCheck_Strings[578]),
+    },
+
+    .TrAsSureLangCheck_PtrTable_2 = {
+        SELF(TrAsSureLangCheck_Strings_2[130]),
+        SELF(TrAsSureLangCheck_Strings_2[124]),
+        SELF(TrAsSureLangCheck_Strings_2[116]),
+        SELF(TrAsSureLangCheck_Strings_2[110]),
+        SELF(TrAsSureLangCheck_Strings_2[104]),
+        SELF(TrAsSureLangCheck_Strings_2[96]),
+        SELF(TrAsSureLangCheck_Strings_2[88]),
+        SELF(TrAsSureLangCheck_Strings_2[80]),
+        SELF(TrAsSureLangCheck_Strings_2[74]),
+        SELF(TrAsSureLangCheck_Strings_2[68]),
+        SELF(TrAsSureLangCheck_Strings_2[62]),
+        SELF(TrAsSureLangCheck_Strings_2[56]),
+        SELF(TrAsSureLangCheck_Strings_2[50]),
+        SELF(TrAsSureLangCheck_Strings_2[44]),
+        SELF(TrAsSureLangCheck_Strings_2[40]),
+        SELF(TrAsSureLangCheck_Strings_2[32]),
+        SELF(TrAsSureLangCheck_Strings_2[24]),
+        SELF(TrAsSureLangCheck_Strings_2[16]),
+        SELF(TrAsSureLangCheck_Strings_2[8]),
+        SELF(TrAsSureLangCheck_Strings_2),
+    },
+
+    .TrAsSureLangCheck_Strings_2 = 
+        "PART15\0\xFF"
+        "PART14\0\xFF"
+        "PART13\0\xFF"
+        "RHYTHM\0\xFF"
+        "CONTROL\0"
+        "APC\0"
+        "CHORD\0"
+        "DRUMS\0"
+        "PART4\0"
+        "PART7\0"
+        "PART6\0"
+        "PART5\0"
+        "PART12\0\xFF"
+        "PART11\0\xFF"
+        "PART10\0\xFF"
+        "PART9\0"
+        "PART8\0"
+        "RIGHT2\0\xFF"
+        "LEFT\0\xFF"
+        "RIGHT1\0\xFF",
+
+    .PtrTarget_Strings = 
+        "Lyrc\0\xFF"
+        "MEASURE = %3d\0"
+        "                         \0"
+        "                         \0"
+        "                         \0"
+        "                         \0"
+        "                         \0"
+        "                         \0"
+        "                         \0"
+        "ExMD\0\xFF",
+
+    .TrAsGridChk_Part1_SendAudio_PtrTable = {
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[190]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[180]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[170]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[160]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[150]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[140]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[130]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[120]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[110]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[100]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[90]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[80]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[70]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[60]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[50]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[40]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[30]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[20]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings[10]),
+        SELF(TrAsGridChk_Part1_SendAudio_Strings),
+    },
 
-    .str_445 = ALIGNED_STRING(" CH15 "),
-
-    .str_446 = ALIGNED_STRING(" CH14 "),
-
-    .str_447 = ALIGNED_STRING(" CH13 "),
-
-    .str_448 = ALIGNED_STRING(" CH12 "),
-
-    .str_449 = ALIGNED_STRING(" CH11 "),
-
-    .str_450 = ALIGNED_STRING(" CH10 "),
-
-    .str_451 = ALIGNED_STRING(" CH 9 "),
-
-    .str_452 = ALIGNED_STRING(" CH 8 "),
-
-    .str_453 = ALIGNED_STRING(" CH 7 "),
-
-    .str_454 = ALIGNED_STRING(" CH 6 "),
-
-    .str_455 = ALIGNED_STRING(" CH 5 "),
-
-    .str_456 = ALIGNED_STRING(" CH 4 "),
-
-    .str_457 = ALIGNED_STRING(" CH 3 "),
-
-    .str_458 = ALIGNED_STRING(" CH 2 "),
-
-    .str_459 = ALIGNED_STRING(" CH 1 "),
-
-    .field_2710 = 0x001E,
-
-    .field_2712 = 0x001E,
-
-    .str_460 = "R",
-
-    .str_461 = "R",
-
-    .str_462 = "R",
-
-    .str_463 = "\"",
-
-    .str_464 = "R",
-
-    .str_465 = ")",
-
-    .field_2720 = 0x001E,
-
-    .pad_8 = { 0 },
-
-    .str_466 = ALIGNED_STRING("( MEDLEY )"),
-
-    .str_467 = ALIGNED_STRING("          "),
-
-    .str_468 = ALIGNED_STRING("          "),
-
-    .str_469 = ALIGNED_STRING("( MEDLEY )"),
-
-    .str_470 = " ",
-
-    .str_471 = "$",
-
-    .str_472 = "=",
-
-    .str_473 = "=",
-
-    .str_474 = "=",
-
-    .str_475 = "(",
-
-    .str_476 = "/",
-
-    .str_477 = "6",
-
-    .str_478 = "$",
-
-    .pad_9 = { 0 },
-
-    .str_479 = ALIGNED_STRING("    "),
-
-    .str_480 = ALIGNED_STRING("PLAY"),
-
-    .str_481 = " ",
-
-    .str_482 = "$",
-
-    .str_483 = "=",
-
-    .str_484 = "=",
-
-    .str_485 = "=",
-
-    .str_486 = "(",
-
-    .str_487 = "/",
-
-    .str_488 = "6",
-
-    .str_489 = "$",
-
-    .pad_10 = { 0 },
-
-    .str_490 = "     ",
-
-    .str_491 = "PAUSE",
-
-    .str_492 = " ",
-
-    .str_493 = "$",
-
-    .str_494 = "=",
-
-    .str_495 = "=",
-
-    .str_496 = "=",
-
-    .str_497 = "(",
-
-    .str_498 = "/",
-
-    .str_499 = "6",
-
-    .str_500 = "$",
-
-    .pad_11 = { 0 },
-
-    .str_501 = ALIGNED_STRING("ExMD"),
-
-    .ptrs_30 = {
+    .TrAsGridChk_Part1_SendAudio_Strings = 
+        " PART 15 \0"
+        " PART 14 \0"
+        " PART 13 \0"
+        " RHYTHM  \0"
+        " CONTROL \0"
+        " APC     \0"
+        " CHORD   \0"
+        " DRUMS   \0"
+        " PART 4  \0"
+        " PART 7  \0"
+        " PART 6  \0"
+        " PART 5  \0"
+        " PART 12 \0"
+        " PART 11 \0"
+        " PART 10 \0"
+        " PART 9  \0"
+        " PART 8  \0"
+        " RIGHT2  \0"
+        " LEFT    \0"
+        " RIGHT1  ",
+
+    .TrAsGrid_GetDirectionLabel_Str = 
+        "|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8\0\xFF",
+
+    .TrAsGrid_DirectionLabel2_Str = 
+        "|-|TR 9|TR10|TR11|TR12|TR13|TR14|TR15|TR16\0\xFF",
+
+    .AcTrAsGridBoxProc_CaseTable = { 0x008D, 0x01FA, 0x008D, 0x01FA, 0x0470, 0x0396, 0x0396 },
+
+    .TrAsGrid_LookupTable_Table = {
+        0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80, 0x00,
+        0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80,
+    },
+
+    .TrAsGrid_ByteData1_Table = {
+        0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x04, 0x05, 0x06, 0x03, 0x0F, 0x12, 0x10, 0x11,
+        0x13, 0x0C, 0x0D, 0x0E,
+    },
+
+    .TrAsGrid_ByteData1_Table_2 = {
+        0x00, 0x02, 0x01, 0x0B, 0x08, 0x09, 0x0A, 0x03, 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x0C,
+        0x0E, 0x0F, 0x0D, 0x10,
+    },
+
+    .TrAsGridChk_Part2_Start_Str = 
+        "ON ",
+
+    .TrAsGridChk_Part2_Start_Str_2 = 
+        "OFF",
+
+    .TrAsGridChk_Part2_PushCmd_Str = 
+        "-- ",
+
+    .TrAsGridChk_Part2_PushCmd_Str_2 = 
+        "-- ",
+
+    .TrAsGridChk_Part2_UpDir_Str = 
+        "ON ",
+
+    .TrAsGridChk_Part2_UpDir_Str_2 = 
+        "OFF",
+
+    .TrAsGridChk_Part2_UpPushCmd_Str = 
+        "-- ",
+
+    .TrAsGridChk_Part2_UpCheckType0_Str = 
+        "-- ",
+
+    .TrAsGridChk_Part3_Start_Str = 
+        "ON ",
+
+    .TrAsGridChk_Part3_Start_Str_2 = 
+        "OFF",
+
+    .TrAsGridChk_Part3_PushCmd_Str = 
+        "-- ",
+
+    .TrAsGridChk_Part3_PushCmd_Str_2 = 
+        "-- ",
+
+    .TrAsGridChk_Part3_UpDir_Str = 
+        "ON ",
+
+    .TrAsGridChk_Part3_UpDir_Str_2 = 
+        "OFF",
+
+    .TrAsGridChk_Part3_UpPushCmd_Str = 
+        "-- ",
+
+    .TrAsGridChk_Part3_UpCheckType0_Str = 
+        "-- ",
+
+    .TrAsGridCheck_CaseTable = { 0x0000, 0x013C, 0x0000, 0x013C, 0x04E2, 0x04E2, 0x04E2 },
+
+    .VoiceConfig_LookupByScreenType_Table = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 },
+
+    .VoiceConfig_LoadTableA_Table = { 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B },
+
+    .VoiceConfig_LoadTableB_Table = {
+        0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x53, 0x4F, 0x4E, 0x47, 0x25, 0x32, 0x64, 0x00, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x00, 0xFF,
+    },
+
+    .MuteChSel_Dispatch_PtrTable = {
+        SELF(MuteChSel_Dispatch_Strings[90]),
+        SELF(MuteChSel_Dispatch_Strings[84]),
+        SELF(MuteChSel_Dispatch_Strings[78]),
+        SELF(MuteChSel_Dispatch_Strings[72]),
+        SELF(MuteChSel_Dispatch_Strings[66]),
+        SELF(MuteChSel_Dispatch_Strings[60]),
+        SELF(MuteChSel_Dispatch_Strings[54]),
+        SELF(MuteChSel_Dispatch_Strings[48]),
+        SELF(MuteChSel_Dispatch_Strings[42]),
+        SELF(MuteChSel_Dispatch_Strings[36]),
+        SELF(MuteChSel_Dispatch_Strings[30]),
+        SELF(MuteChSel_Dispatch_Strings[24]),
+        SELF(MuteChSel_Dispatch_Strings[18]),
+        SELF(MuteChSel_Dispatch_Strings[12]),
+        SELF(MuteChSel_Dispatch_Strings[6]),
+        SELF(MuteChSel_Dispatch_Strings),
+    },
+
+    .MuteChSel_Dispatch_Strings = 
+        " 16 \0\xFF"
+        " 15 \0\xFF"
+        " 14 \0\xFF"
+        " 13 \0\xFF"
+        " 12 \0\xFF"
+        " 11 \0\xFF"
+        " 10 \0\xFF"
+        "  9 \0\xFF"
+        "  8 \0\xFF"
+        "  7 \0\xFF"
+        "  6 \0\xFF"
+        "  5 \0\xFF"
+        "  4 \0\xFF"
+        "  3 \0\xFF"
+        "  2 \0\xFF"
+        "  1 \0\xFF",
+
+    .SmfMuteChSelFunc_CaseTable = {
+        0x001E, 0x001E, 0x0029, 0x0029, 0x0029, 0x0022, 0x0029, 0x002D,
+        0x001E, 0x0000,
+    },
+
+    .SqTrAsPsSong_Dispatch_PtrTable = {
+        SELF(SqTrAsPsSong_Dispatch_Strings[100]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[90]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[80]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[70]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[60]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[50]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[40]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[30]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[20]),
+        SELF(SqTrAsPsSong_Dispatch_Strings[10]),
+        SELF(SqTrAsPsSong_Dispatch_Strings),
+    },
+
+    .SqTrAsPsSong_Dispatch_Strings = 
+        "  ALL   \0\xFF"
+        " SONG10 \0\xFF"
+        " SONG 9 \0\xFF"
+        " SONG 8 \0\xFF"
+        " SONG 7 \0\xFF"
+        " SONG 6 \0\xFF"
+        " SONG 5 \0\xFF"
+        " SONG 4 \0\xFF"
+        " SONG 3 \0\xFF"
+        " SONG 2 \0\xFF"
+        " SONG 1 \0\xFF",
+
+    .SqTrAsPsSongFunc_CaseTable = {
+        0x001E, 0x001E, 0x0029, 0x0029, 0x0029, 0x0022, 0x0029, 0x002D,
+        0x001E, 0x0000,
+    },
+
+    .SqAftSetFunc_PtrTable = {
+        SELF(SqAftSetFunc_Strings[6]),
+        SELF(SqAftSetFunc_Strings),
+    },
+
+    .SqAftSetFunc_Strings = 
+        " ON  \0"
+        " OFF ",
+
+    .SqAftSet_LookupTableEntry_Table = {
+        0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80, 0x00,
+        0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80,
+    },
+
+    .MuteChSet_Dispatch_PtrTable = {
+        SELF(MuteChSet_Dispatch_Strings[120]),
+        SELF(MuteChSet_Dispatch_Strings[112]),
+        SELF(MuteChSet_Dispatch_Strings[104]),
+        SELF(MuteChSet_Dispatch_Strings[96]),
+        SELF(MuteChSet_Dispatch_Strings[88]),
+        SELF(MuteChSet_Dispatch_Strings[80]),
+        SELF(MuteChSet_Dispatch_Strings[72]),
+        SELF(MuteChSet_Dispatch_Strings[64]),
+        SELF(MuteChSet_Dispatch_Strings[56]),
+        SELF(MuteChSet_Dispatch_Strings[48]),
+        SELF(MuteChSet_Dispatch_Strings[40]),
+        SELF(MuteChSet_Dispatch_Strings[32]),
+        SELF(MuteChSet_Dispatch_Strings[24]),
+        SELF(MuteChSet_Dispatch_Strings[16]),
+        SELF(MuteChSet_Dispatch_Strings[8]),
+        SELF(MuteChSet_Dispatch_Strings),
+    },
+
+    .MuteChSet_Dispatch_Strings = 
+        " CH16 \0\xFF"
+        " CH15 \0\xFF"
+        " CH14 \0\xFF"
+        " CH13 \0\xFF"
+        " CH12 \0\xFF"
+        " CH11 \0\xFF"
+        " CH10 \0\xFF"
+        " CH 9 \0\xFF"
+        " CH 8 \0\xFF"
+        " CH 7 \0\xFF"
+        " CH 6 \0\xFF"
+        " CH 5 \0\xFF"
+        " CH 4 \0\xFF"
+        " CH 3 \0\xFF"
+        " CH 2 \0\xFF"
+        " CH 1 \0\xFF",
+
+    .MuteChSetFunc_CaseTable = {
+        0x001E, 0x001E, 0x0052, 0x0052, 0x0052, 0x0022, 0x0052, 0x0029,
+        0x001E, 0x0000,
+    },
+
+    .AcDemoMedley_HandleScrollEvent_Str = 
+        "( MEDLEY )\0\xFF",
+
+    .AcDemoMedley_HandleScrollEvent_Str_2 = 
+        "          \0\xFF",
+
+    .MedleyDisp_Blank = 
+        "          \0\xFF",
+
+    .DemoMedDsp_Dispatch_Str = 
+        "( MEDLEY )\0\xFF",
+
+    .DemoMedDspCheck_CaseTable = {
+        0x0020, 0x0024, 0x003D, 0x003D, 0x003D, 0x0028, 0x002F, 0x0036,
+        0x0024, 0x0000,
+    },
+
+    .PlayModeStr_Play = 
+        "    \0\xFF",
+
+    .DPPlayDsp_Dispatch_Str = 
+        "PLAY\0\xFF",
+
+    .DPPlayDspCheck_CaseTable = {
+        0x0020, 0x0024, 0x003D, 0x003D, 0x003D, 0x0028, 0x002F, 0x0036,
+        0x0024, 0x0000,
+    },
+
+    .PlayModeStr_Pause = 
+        "     ",
+
+    .DPPauseDsp_Dispatch_Str = 
+        "PAUSE",
+
+    .DPPauseDspCheck_CaseTable = {
+        0x0020, 0x0024, 0x003D, 0x003D, 0x003D, 0x0028, 0x002F, 0x0036,
+        0x0024, 0x0000,
+    },
+
+    .DPPauseDspCheck_CaseTable_Strings = 
+        "ExMD\0\xFF",
+
+    .Kubo_ApFuncTable_128 = {
         NAKA_ADDR(EffectBoxProc),
         NAKA_ADDR(EqualizerBoxProc),
         NAKA_ADDR(SqedtValProc),
@@ -4880,627 +3441,456 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(PanicFunc),
         NAKA_ADDR(AutoPunchTtlRqFunc),
         0x00000000,
-        SELF(str_561),
-        SELF(str_560),
-        SELF(str_559),
-        SELF(str_558),
-        SELF(str_557),
-        SELF(str_556),
-        SELF(str_555),
-        SELF(w51_name),
-        SELF(w51_code),
-        SELF(w50_name),
-        SELF(w50_code),
-        SELF(str_554),
-        SELF(str_553),
-        SELF(str_552),
-        SELF(str_551),
-        SELF(str_550),
-        SELF(str_549),
-        SELF(str_548),
-        SELF(str_547),
-        SELF(str_546),
-        SELF(str_545),
-        SELF(str_544),
-        SELF(str_543),
-        SELF(str_542),
-        SELF(str_541),
-        SELF(str_540),
-        SELF(str_539),
-        SELF(w49_name),
-        SELF(w49_code),
-        SELF(str_538),
-        SELF(str_537),
-        SELF(w48_name),
-        SELF(w48_code),
-        SELF(w47_name),
-        SELF(w47_code),
-        SELF(str_536),
-        SELF(str_535),
-        SELF(str_534),
-        SELF(str_533),
-        SELF(str_532),
-        SELF(str_531),
-        SELF(str_530),
-        SELF(str_529),
-        SELF(str_528),
-        SELF(str_527),
-        SELF(str_526),
-        SELF(str_525),
-        SELF(str_524),
-        SELF(str_523),
-        SELF(str_522),
-        SELF(str_521),
-        SELF(str_520),
-        SELF(str_519),
-        SELF(str_518),
-        SELF(str_517),
-        SELF(str_516),
-        SELF(str_515),
-        SELF(str_514),
-        SELF(str_513),
-        SELF(str_512),
-        SELF(str_511),
-        SELF(str_510),
-        SELF(str_509),
-        SELF(str_508),
-        SELF(str_507),
-        SELF(str_506),
-        SELF(str_505),
-        SELF(str_504),
-        SELF(str_503),
-        SELF(str_502),
-        SELF(w46_name),
-        SELF(w46_code),
-        SELF(w45_name),
-        SELF(w45_code),
     },
 
-    .w45_code = ALIGNED_STRING(""),
-
-    .w45_name = ALIGNED_STRING("AutoPunchTtlRqFunc"),
-
-    .w46_code = "PanicFunc",
-
-    .w46_name = "SureJudgeFunc",
-
-    .str_502 = ALIGNED_STRING("EdMenuPageFunc"),
-
-    .str_503 = "StsAtPunchCheck",
-
-    .str_504 = "HelpFuncChkFunc",
-
-    .str_505 = ALIGNED_STRING("HelpOkSwFunc"),
-
-    .str_506 = "HelpMenuCheck",
-
-    .str_507 = ALIGNED_STRING("HelpStsP4Check"),
-
-    .str_508 = ALIGNED_STRING("HelpStsP3Check"),
-
-    .str_509 = ALIGNED_STRING("HelpStsP2Check"),
-
-    .str_510 = ALIGNED_STRING("HelpStsCheck"),
-
-    .str_511 = "HelpLangChkFunc",
-
-    .str_512 = "HelpTtlFunc",
-
-    .str_513 = "AcIndexWideToggleFunc",
-
-    .str_514 = "AttSongClrCheck",
-
-    .str_515 = ALIGNED_STRING("AttTrkClrCheck"),
-
-    .str_516 = ALIGNED_STRING("StsNtDrEditCheck"),
-
-    .str_517 = "StsTrkClr2Check",
-
-    .str_518 = "StsTrkClr1Check",
-
-    .str_519 = ALIGNED_STRING("StsPnlWrtCheck"),
-
-    .str_520 = ALIGNED_STRING("StsEasyRec2Check"),
-
-    .str_521 = ALIGNED_STRING("StsEasyRec1Check"),
-
-    .str_522 = ALIGNED_STRING("StsSeqMenu2Check"),
-
-    .str_523 = ALIGNED_STRING("StsSeqMenu1Check"),
-
-    .str_524 = "AttAttentionCheck",
-
-    .str_525 = ALIGNED_STRING("AttAreYouSureCheck"),
-
-    .str_526 = "MimeOnOffFunc",
-
-    .str_527 = "BitmapDredt0k",
-
-    .str_528 = "BitmapDredt0d",
-
-    .str_529 = "BitmapNtedt0k",
-
-    .str_530 = "BitmapNtedt0d",
-
-    .str_531 = ALIGNED_STRING("TrkMixerIntTtlFunc"),
-
-    .str_532 = "EqInOutFunc",
-
-    .str_533 = ALIGNED_STRING("NoteEditFunc"),
-
-    .str_534 = ALIGNED_STRING("PunchInOutFunc"),
-
-    .str_535 = ALIGNED_STRING("PlySngSel2Func"),
-
-    .str_536 = "PlySngSelFunc",
-
-    .w47_code = ALIGNED_STRING("SngSelFunc"),
-
-    .w47_name = ALIGNED_STRING("EntertainerGridCheck"),
-
-    .w48_code = "SqplyFunc",
-
-    .w48_name = ALIGNED_STRING("MetroOnOffFunc"),
-
-    .str_537 = ALIGNED_STRING("CycleOnOffFunc"),
-
-    .str_538 = "MainExeFunc",
-
-    .w49_code = "SqedtFunc",
-
-    .w49_name = ALIGNED_STRING("EqualizerCngFunc"),
-
-    .str_539 = "DspItem0CngFunc",
-
-    .str_540 = "IvRealRecExitProc",
-
-    .str_541 = "AcPanicEditSwProc",
-
-    .str_542 = "IvAutoPunchExitProc",
-
-    .str_543 = "IvPunchExitProc",
-
-    .str_544 = "IvSdaccProc",
-
-    .str_545 = "IvSddspProc",
-
-    .str_546 = "IvSdrevProc",
-
-    .str_547 = "IvPnlWrExitProc",
-
-    .str_548 = "HelpTtlProc",
-
-    .str_549 = ALIGNED_STRING("IvPlayExitProc"),
-
-    .str_550 = "AcIndexWideToggleProc",
-
-    .str_551 = ALIGNED_STRING("MsgToTtlProc"),
-
-    .str_552 = "EqOnOffFuncToggleProc",
-
-    .str_553 = "NoteEditBoxProc",
-
-    .str_554 = "SngSel2Proc",
-
-    .w50_code = ALIGNED_STRING("SngSelProc"),
-
-    .w50_name = ALIGNED_STRING("AcEntertainerGridBoxProc"),
-
-    .w51_code = ALIGNED_STRING("AccIllProc"),
-
-    .w51_name = "SqedtVal3Proc",
-
-    .str_555 = ALIGNED_STRING("SqplyValProc"),
-
-    .str_556 = ALIGNED_STRING("IvSongCopyExitProc"),
-
-    .str_557 = ALIGNED_STRING("SqedtFixProc"),
-
-    .str_558 = "SqedtVal2Proc",
-
-    .str_559 = ALIGNED_STRING("SqedtValProc"),
-
-    .str_560 = ALIGNED_STRING("EqualizerBoxProc"),
-
-    .str_561 = "EffectBoxProc",
-
-    .ptrs_31 = {
-        SELF(str_566),
-        SELF(str_565),
-        SELF(str_564),
-        SELF(str_563),
-        SELF(str_562),
+    .Kubo_ApFuncNameTable_428 = {
+        SELF(Kubo_ApFuncNames_428[1132]),
+        SELF(Kubo_ApFuncNames_428[1114]),
+        SELF(Kubo_ApFuncNames_428[1100]),
+        SELF(Kubo_ApFuncNames_428[1086]),
+        SELF(Kubo_ApFuncNames_428[1072]),
+        SELF(Kubo_ApFuncNames_428[1052]),
+        SELF(Kubo_ApFuncNames_428[1038]),
+        SELF(Kubo_ApFuncNames_428[1024]),
+        SELF(Kubo_ApFuncNames_428[1012]),
+        SELF(Kubo_ApFuncNames_428[986]),
+        SELF(Kubo_ApFuncNames_428[974]),
+        SELF(Kubo_ApFuncNames_428[962]),
+        SELF(Kubo_ApFuncNames_428[946]),
+        SELF(Kubo_ApFuncNames_428[924]),
+        SELF(Kubo_ApFuncNames_428[910]),
+        SELF(Kubo_ApFuncNames_428[888]),
+        SELF(Kubo_ApFuncNames_428[872]),
+        SELF(Kubo_ApFuncNames_428[860]),
+        SELF(Kubo_ApFuncNames_428[844]),
+        SELF(Kubo_ApFuncNames_428[832]),
+        SELF(Kubo_ApFuncNames_428[820]),
+        SELF(Kubo_ApFuncNames_428[808]),
+        SELF(Kubo_ApFuncNames_428[792]),
+        SELF(Kubo_ApFuncNames_428[772]),
+        SELF(Kubo_ApFuncNames_428[754]),
+        SELF(Kubo_ApFuncNames_428[736]),
+        SELF(Kubo_ApFuncNames_428[720]),
+        SELF(Kubo_ApFuncNames_428[702]),
+        SELF(Kubo_ApFuncNames_428[692]),
+        SELF(Kubo_ApFuncNames_428[680]),
+        SELF(Kubo_ApFuncNames_428[664]),
+        SELF(Kubo_ApFuncNames_428[648]),
+        SELF(Kubo_ApFuncNames_428[638]),
+        SELF(Kubo_ApFuncNames_428[616]),
+        SELF(Kubo_ApFuncNames_428[604]),
+        SELF(Kubo_ApFuncNames_428[590]),
+        SELF(Kubo_ApFuncNames_428[574]),
+        SELF(Kubo_ApFuncNames_428[558]),
+        SELF(Kubo_ApFuncNames_428[544]),
+        SELF(Kubo_ApFuncNames_428[532]),
+        SELF(Kubo_ApFuncNames_428[512]),
+        SELF(Kubo_ApFuncNames_428[498]),
+        SELF(Kubo_ApFuncNames_428[484]),
+        SELF(Kubo_ApFuncNames_428[470]),
+        SELF(Kubo_ApFuncNames_428[456]),
+        SELF(Kubo_ApFuncNames_428[442]),
+        SELF(Kubo_ApFuncNames_428[422]),
+        SELF(Kubo_ApFuncNames_428[404]),
+        SELF(Kubo_ApFuncNames_428[386]),
+        SELF(Kubo_ApFuncNames_428[368]),
+        SELF(Kubo_ApFuncNames_428[350]),
+        SELF(Kubo_ApFuncNames_428[332]),
+        SELF(Kubo_ApFuncNames_428[316]),
+        SELF(Kubo_ApFuncNames_428[300]),
+        SELF(Kubo_ApFuncNames_428[284]),
+        SELF(Kubo_ApFuncNames_428[266]),
+        SELF(Kubo_ApFuncNames_428[250]),
+        SELF(Kubo_ApFuncNames_428[234]),
+        SELF(Kubo_ApFuncNames_428[212]),
+        SELF(Kubo_ApFuncNames_428[200]),
+        SELF(Kubo_ApFuncNames_428[184]),
+        SELF(Kubo_ApFuncNames_428[170]),
+        SELF(Kubo_ApFuncNames_428[154]),
+        SELF(Kubo_ApFuncNames_428[138]),
+        SELF(Kubo_ApFuncNames_428[122]),
+        SELF(Kubo_ApFuncNames_428[108]),
+        SELF(Kubo_ApFuncNames_428[94]),
+        SELF(Kubo_ApFuncNames_428[78]),
+        SELF(Kubo_ApFuncNames_428[62]),
+        SELF(Kubo_ApFuncNames_428[46]),
+        SELF(Kubo_ApFuncNames_428[32]),
+        SELF(Kubo_ApFuncNames_428[22]),
+        SELF(Kubo_ApFuncNames_428[2]),
+        SELF(Kubo_ApFuncNames_428),
     },
 
-    .str_562 = ALIGNED_STRING(""),
+    .Kubo_ApFuncNames_428 = 
+        "\0\xFF"
+        "AutoPunchTtlRqFunc\0\xFF"
+        "PanicFunc\0"
+        "SureJudgeFunc\0"
+        "EdMenuPageFunc\0\xFF"
+        "StsAtPunchCheck\0"
+        "HelpFuncChkFunc\0"
+        "HelpOkSwFunc\0\xFF"
+        "HelpMenuCheck\0"
+        "HelpStsP4Check\0\xFF"
+        "HelpStsP3Check\0\xFF"
+        "HelpStsP2Check\0\xFF"
+        "HelpStsCheck\0\xFF"
+        "HelpLangChkFunc\0"
+        "HelpTtlFunc\0"
+        "AcIndexWideToggleFunc\0"
+        "AttSongClrCheck\0"
+        "AttTrkClrCheck\0\xFF"
+        "StsNtDrEditCheck\0\xFF"
+        "StsTrkClr2Check\0"
+        "StsTrkClr1Check\0"
+        "StsPnlWrtCheck\0\xFF"
+        "StsEasyRec2Check\0\xFF"
+        "StsEasyRec1Check\0\xFF"
+        "StsSeqMenu2Check\0\xFF"
+        "StsSeqMenu1Check\0\xFF"
+        "AttAttentionCheck\0"
+        "AttAreYouSureCheck\0\xFF"
+        "MimeOnOffFunc\0"
+        "BitmapDredt0k\0"
+        "BitmapDredt0d\0"
+        "BitmapNtedt0k\0"
+        "BitmapNtedt0d\0"
+        "TrkMixerIntTtlFunc\0\xFF"
+        "EqInOutFunc\0"
+        "NoteEditFunc\0\xFF"
+        "PunchInOutFunc\0\xFF"
+        "PlySngSel2Func\0\xFF"
+        "PlySngSelFunc\0"
+        "SngSelFunc\0\xFF"
+        "EntertainerGridCheck\0\xFF"
+        "SqplyFunc\0"
+        "MetroOnOffFunc\0\xFF"
+        "CycleOnOffFunc\0\xFF"
+        "MainExeFunc\0"
+        "SqedtFunc\0"
+        "EqualizerCngFunc\0\xFF"
+        "DspItem0CngFunc\0"
+        "IvRealRecExitProc\0"
+        "AcPanicEditSwProc\0"
+        "IvAutoPunchExitProc\0"
+        "IvPunchExitProc\0"
+        "IvSdaccProc\0"
+        "IvSddspProc\0"
+        "IvSdrevProc\0"
+        "IvPnlWrExitProc\0"
+        "HelpTtlProc\0"
+        "IvPlayExitProc\0\xFF"
+        "AcIndexWideToggleProc\0"
+        "MsgToTtlProc\0\xFF"
+        "EqOnOffFuncToggleProc\0"
+        "NoteEditBoxProc\0"
+        "SngSel2Proc\0"
+        "SngSelProc\0\xFF"
+        "AcEntertainerGridBoxProc\0\xFF"
+        "AccIllProc\0\xFF"
+        "SqedtVal3Proc\0"
+        "SqplyValProc\0\xFF"
+        "IvSongCopyExitProc\0\xFF"
+        "SqedtFixProc\0\xFF"
+        "SqedtVal2Proc\0"
+        "SqedtValProc\0\xFF"
+        "EqualizerBoxProc\0\xFF"
+        "EffectBoxProc",
 
-    .str_563 = ALIGNED_STRING("ttl_no"),
-
-    .str_564 = "data2",
-
-    .str_565 = ALIGNED_STRING("data"),
-
-    .str_566 = ALIGNED_STRING("func"),
-
-    .ptrs_32 = {
-        SELF(str_569),
-        SELF(str_568),
-        SELF(str_567),
+    .ClassProps_EffectBox = {
+        SELF(ClassProps_EffectBox_Names[22]),
+        SELF(ClassProps_EffectBox_Names[16]),
+        SELF(ClassProps_EffectBox_Names[10]),
+        SELF(ClassProps_EffectBox_Names[2]),
+        SELF(ClassProps_EffectBox_Names),
     },
 
-    .str_567 = ALIGNED_STRING(""),
+    .ClassProps_EffectBox_Names = 
+        "\0\xFF"
+        "ttl_no\0\xFF"
+        "data2\0"
+        "data\0\xFF"
+        "func\0\xFF",
 
-    .str_568 = ALIGNED_STRING("ttl_no"),
-
-    .str_569 = ALIGNED_STRING("func"),
-
-    .ptrs_33 = {
-        SELF(str_574),
-        SELF(str_573),
-        SELF(str_572),
-        SELF(str_571),
-        SELF(str_570),
+    .ClassProps_EqualizerBox = {
+        SELF(ClassProps_EqualizerBox_Names[10]),
+        SELF(ClassProps_EqualizerBox_Names[2]),
+        SELF(ClassProps_EqualizerBox_Names),
     },
 
-    .str_570 = ALIGNED_STRING(""),
+    .ClassProps_EqualizerBox_Names = 
+        "\0\xFF"
+        "ttl_no\0\xFF"
+        "func\0\xFF",
 
-    .str_571 = ALIGNED_STRING("ttl_no"),
-
-    .str_572 = ALIGNED_STRING("func"),
-
-    .str_573 = "fontcolor",
-
-    .str_574 = "color",
-
-    .ptrs_34 = {
-        SELF(str_578),
-        SELF(str_577),
-        SELF(str_576),
-        SELF(str_575),
+    .ClassProps_SqedtVal = {
+        SELF(ClassProps_SqedtVal_Names[26]),
+        SELF(ClassProps_SqedtVal_Names[16]),
+        SELF(ClassProps_SqedtVal_Names[10]),
+        SELF(ClassProps_SqedtVal_Names[2]),
+        SELF(ClassProps_SqedtVal_Names),
     },
 
-    .str_575 = ALIGNED_STRING(""),
+    .ClassProps_SqedtVal_Names = 
+        "\0\xFF"
+        "ttl_no\0\xFF"
+        "func\0\xFF"
+        "fontcolor\0"
+        "color",
 
-    .str_576 = ALIGNED_STRING("func"),
-
-    .str_577 = "fontcolor",
-
-    .str_578 = "color",
-
-    .ptrs_35 = {
-        SELF(str_582),
-        SELF(str_581),
-        SELF(str_580),
-        SELF(str_579),
+    .ClassProps_SqedtVal2 = {
+        SELF(ClassProps_SqedtVal2_Names[18]),
+        SELF(ClassProps_SqedtVal2_Names[8]),
+        SELF(ClassProps_SqedtVal2_Names[2]),
+        SELF(ClassProps_SqedtVal2_Names),
     },
 
-    .str_579 = ALIGNED_STRING(""),
+    .ClassProps_SqedtVal2_Names = 
+        "\0\xFF"
+        "func\0\xFF"
+        "fontcolor\0"
+        "color",
 
-    .str_580 = ALIGNED_STRING("border"),
-
-    .str_581 = "fontcolor",
-
-    .str_582 = "color",
-
-    .ptr_2f4a = SELF(str_583),
-
-    .str_583 = ALIGNED_STRING(""),
-
-    .ptrs_36 = {
-        SELF(str_588),
-        SELF(str_587),
-        SELF(str_586),
-        SELF(str_585),
-        SELF(str_584),
+    .ClassProps_SqedtFix = {
+        SELF(ClassProps_SqedtFix_Names[20]),
+        SELF(ClassProps_SqedtFix_Names[10]),
+        SELF(ClassProps_SqedtFix_Names[2]),
+        SELF(ClassProps_SqedtFix_Names),
     },
 
-    .str_584 = ALIGNED_STRING(""),
+    .ClassProps_SqedtFix_Names = 
+        "\0\xFF"
+        "border\0\xFF"
+        "fontcolor\0"
+        "color",
 
-    .str_585 = ALIGNED_STRING("ttl_no"),
-
-    .str_586 = ALIGNED_STRING("func"),
-
-    .str_587 = "fontcolor",
-
-    .str_588 = "color",
-
-    .ptrs_37 = {
-        SELF(str_592),
-        SELF(str_591),
-        SELF(str_590),
-        SELF(str_589),
+    .ClassProps_IvSongCopyExit = {
+        SELF(ClassProps_IvSongCopyExit_Names),
     },
 
-    .str_589 = ALIGNED_STRING(""),
+    .ClassProps_IvSongCopyExit_Names = 
+        "\0\xFF",
 
-    .str_590 = ALIGNED_STRING("func"),
-
-    .str_591 = "fontcolor",
-
-    .str_592 = "color",
-
-    .ptrs_38 = {
-        SELF(str_597),
-        SELF(str_596),
-        SELF(str_595),
-        SELF(str_594),
-        SELF(str_593),
+    .ClassProps_SqplyVal = {
+        SELF(ClassProps_SqplyVal_Names[26]),
+        SELF(ClassProps_SqplyVal_Names[16]),
+        SELF(ClassProps_SqplyVal_Names[10]),
+        SELF(ClassProps_SqplyVal_Names[2]),
+        SELF(ClassProps_SqplyVal_Names),
     },
 
-    .str_593 = ALIGNED_STRING(""),
+    .ClassProps_SqplyVal_Names = 
+        "\0\xFF"
+        "ttl_no\0\xFF"
+        "func\0\xFF"
+        "fontcolor\0"
+        "color",
 
-    .str_594 = ALIGNED_STRING("ttl_no"),
-
-    .str_595 = ALIGNED_STRING("func"),
-
-    .str_596 = "fontcolor",
-
-    .str_597 = "color",
-
-    .ptrs_39 = {
-        SELF(str_601),
-        SELF(str_600),
-        SELF(str_599),
-        SELF(str_598),
+    .ClassProps_SqedtVal3 = {
+        SELF(ClassProps_SqedtVal3_Names[18]),
+        SELF(ClassProps_SqedtVal3_Names[8]),
+        SELF(ClassProps_SqedtVal3_Names[2]),
+        SELF(ClassProps_SqedtVal3_Names),
     },
 
-    .str_598 = ALIGNED_STRING(""),
+    .ClassProps_SqedtVal3_Names = 
+        "\0\xFF"
+        "func\0\xFF"
+        "fontcolor\0"
+        "color",
 
-    .str_599 = ALIGNED_STRING("func"),
-
-    .str_600 = ALIGNED_STRING("fixedrow"),
-
-    .str_601 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_40 = {
-        SELF(str_607),
-        SELF(str_606),
-        SELF(str_605),
-        SELF(str_604),
-        SELF(str_603),
-        SELF(str_602),
+    .ClassProps_AccIll = {
+        SELF(ClassProps_AccIll_Names[26]),
+        SELF(ClassProps_AccIll_Names[16]),
+        SELF(ClassProps_AccIll_Names[10]),
+        SELF(ClassProps_AccIll_Names[2]),
+        SELF(ClassProps_AccIll_Names),
     },
 
-    .str_602 = ALIGNED_STRING(""),
+    .ClassProps_AccIll_Names = 
+        "\0\xFF"
+        "ttl_no\0\xFF"
+        "func\0\xFF"
+        "fontcolor\0"
+        "color",
 
-    .str_603 = ALIGNED_STRING("ttl_no"),
-
-    .str_604 = ALIGNED_STRING("func"),
-
-    .str_605 = "fontcolor",
-
-    .str_606 = "color",
-
-    .str_607 = ALIGNED_STRING("font"),
-
-    .ptr_304a = SELF(str_608),
-
-    .str_608 = ALIGNED_STRING(""),
-
-    .ptrs_41 = {
-        SELF(str_611),
-        SELF(str_610),
-        SELF(str_609),
+    .ClassProps_AcEntertainerGridBox = {
+        SELF(ClassProps_AcEntertainerGridBox_Names[18]),
+        SELF(ClassProps_AcEntertainerGridBox_Names[8]),
+        SELF(ClassProps_AcEntertainerGridBox_Names[2]),
+        SELF(ClassProps_AcEntertainerGridBox_Names),
     },
 
-    .str_609 = ALIGNED_STRING(""),
+    .ClassProps_AcEntertainerGridBox_Names = 
+        "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_610 = ALIGNED_STRING("ttl_no"),
-
-    .str_611 = ALIGNED_STRING("func"),
-
-    .ptr_306c = SELF(str_612),
-
-    .str_612 = ALIGNED_STRING(""),
-
-    .ptr_3072 = SELF(str_613),
-
-    .str_613 = ALIGNED_STRING(""),
-
-    .ptrs_42 = {
-        SELF(str_617),
-        SELF(str_616),
-        SELF(str_615),
-        SELF(str_614),
+    .ClassProps_SngSel = {
+        SELF(ClassProps_SngSel_Names[32]),
+        SELF(ClassProps_SngSel_Names[26]),
+        SELF(ClassProps_SngSel_Names[16]),
+        SELF(ClassProps_SngSel_Names[10]),
+        SELF(ClassProps_SngSel_Names[2]),
+        SELF(ClassProps_SngSel_Names),
     },
 
-    .str_614 = ALIGNED_STRING(""),
+    .ClassProps_SngSel_Names = 
+        "\0\xFF"
+        "ttl_no\0\xFF"
+        "func\0\xFF"
+        "fontcolor\0"
+        "color\0"
+        "font\0\xFF",
 
-    .str_615 = ALIGNED_STRING("func"),
-
-    .str_616 = "tag",
-
-    .str_617 = "index",
-
-    .ptr_309a = SELF(str_619),
-
-    .ptr_309e = SELF(str_618),
-
-    .str_618 = ALIGNED_STRING(""),
-
-    .str_619 = ALIGNED_STRING("mode"),
-
-    .ptrs_43 = {
-        SELF(str_625),
-        SELF(str_624),
-        SELF(str_623),
-        SELF(str_622),
-        SELF(str_621),
-        SELF(str_620),
+    .ClassProps_SngSel2 = {
+        SELF(ClassProps_SngSel2_Names),
     },
 
-    .str_620 = ALIGNED_STRING(""),
+    .ClassProps_SngSel2_Names = 
+        "\0\xFF",
 
-    .str_621 = ALIGNED_STRING("func"),
-
-    .str_622 = ALIGNED_STRING("page"),
-
-    .str_623 = ALIGNED_STRING("font"),
-
-    .str_624 = "fontcolor",
-
-    .str_625 = "color",
-
-    .ptr_30e6 = SELF(str_626),
-
-    .str_626 = ALIGNED_STRING(""),
-
-    .ptr_30ec = SELF(str_627),
-
-    .str_627 = ALIGNED_STRING(""),
-
-    .ptr_30f2 = SELF(str_628),
-
-    .str_628 = ALIGNED_STRING(""),
-
-    .ptr_30f8 = SELF(str_629),
-
-    .str_629 = ALIGNED_STRING(""),
-
-    .ptr_30fe = SELF(str_630),
-
-    .str_630 = ALIGNED_STRING(""),
-
-    .ptr_3104 = SELF(str_631),
-
-    .str_631 = ALIGNED_STRING(""),
-
-    .ptrs_44 = {
-        SELF(str_634),
-        SELF(str_633),
-        SELF(str_632),
+    .ClassProps_NoteEditBox = {
+        SELF(ClassProps_NoteEditBox_Names[10]),
+        SELF(ClassProps_NoteEditBox_Names[2]),
+        SELF(ClassProps_NoteEditBox_Names),
     },
 
-    .str_632 = ALIGNED_STRING(""),
+    .ClassProps_NoteEditBox_Names = 
+        "\0\xFF"
+        "ttl_no\0\xFF"
+        "func\0\xFF",
 
-    .str_633 = ALIGNED_STRING("func"),
-
-    .str_634 = "style",
-
-    .ptr_3124 = SELF(str_635),
-
-    .str_635 = ALIGNED_STRING(""),
-
-    .ptr_312a = NAKA_ADDR(EffectBoxProc),
-
-    .w52 = {
-        .header    = NAKA_HDR(0x11),
-        .field_04   = 0x0026,
-        .field_06   = 0x000A,
-        .name_ptr   = 0x00E2758C,
-        .inst_ptr   = NAKA_ADDR(NakaInst_EqualizerBox),
-        .link_ptr   = SELF(ptrs_31),
-        .proc_addr  = NAKA_ADDR(EqualizerBoxProc),
+    .ClassProps_EqOnOffFuncToggle = {
+        SELF(ClassProps_EqOnOffFuncToggle_Names),
     },
 
-    .w53 = {
-        .header    = NAKA_HDR(0x11),
-        .field_04   = 0x0022,
-        .field_06   = 0x0006,
-        .name_ptr   = 0x00E27578,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SqedtVal_B),
-        .link_ptr   = SELF(ptrs_32),
-        .proc_addr  = NAKA_ADDR(SqedtValProc),
+    .ClassProps_EqOnOffFuncToggle_Names = 
+        "\0\xFF",
+
+    .ClassProps_MsgToTtl = {
+        SELF(ClassProps_MsgToTtl_Names),
     },
 
-    .w54 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x0020,
-        .field_06   = 0x000A,
-        .name_ptr   = 0x00E2756A,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SqedtVal),
-        .link_ptr   = SELF(ptrs_33),
-        .proc_addr  = NAKA_ADDR(SqedtVal2Proc),
+    .ClassProps_MsgToTtl_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcIndexWideToggle = {
+        SELF(ClassProps_AcIndexWideToggle_Names[12]),
+        SELF(ClassProps_AcIndexWideToggle_Names[8]),
+        SELF(ClassProps_AcIndexWideToggle_Names[2]),
+        SELF(ClassProps_AcIndexWideToggle_Names),
     },
 
-    .w55 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x001E,
-        .field_06   = 0x0008,
-        .name_ptr   = 0x00E2755A,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SqedtVal2_End),
-        .link_ptr   = SELF(ptrs_34),
-        .proc_addr  = NAKA_ADDR(SqedtFixProc),
+    .ClassProps_AcIndexWideToggle_Names = 
+        "\0\xFF"
+        "func\0\xFF"
+        "tag\0"
+        "index",
+
+    .ClassProps_IvPlayExit = {
+        SELF(ClassProps_IvPlayExit_Names[2]),
+        SELF(ClassProps_IvPlayExit_Names),
     },
 
-    .w56 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x001C,
-        .field_06   = 0x0006,
-        .name_ptr   = 0x00E2754C,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SqedtFix),
-        .link_ptr   = SELF(ptrs_35),
-        .proc_addr  = NAKA_ADDR(IvSongCopyExitProc),
+    .ClassProps_IvPlayExit_Names = 
+        "\0\xFF"
+        "mode\0\xFF",
+
+    .ClassProps_HelpTtl = {
+        SELF(ClassProps_HelpTtl_Names[30]),
+        SELF(ClassProps_HelpTtl_Names[20]),
+        SELF(ClassProps_HelpTtl_Names[14]),
+        SELF(ClassProps_HelpTtl_Names[8]),
+        SELF(ClassProps_HelpTtl_Names[2]),
+        SELF(ClassProps_HelpTtl_Names),
     },
 
-    .w57 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E27538,
-        .inst_ptr   = NAKA_ADDR(NakaInst_IvSongCopyExit),
-        .link_ptr   = SELF(ptr_2f4a),
-        .proc_addr  = NAKA_ADDR(SqplyValProc),
+    .ClassProps_HelpTtl_Names = 
+        "\0\xFF"
+        "func\0\xFF"
+        "page\0\xFF"
+        "font\0\xFF"
+        "fontcolor\0"
+        "color",
+
+    .ClassProps_IvPnlWrExit = {
+        SELF(ClassProps_IvPnlWrExit_Names),
     },
 
-    .w58 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x0020,
-        .field_06   = 0x000A,
-        .name_ptr   = 0x00E2752C,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SqplyVal),
-        .link_ptr   = SELF(ptrs_36),
-        .proc_addr  = NAKA_ADDR(SqedtVal3Proc),
+    .ClassProps_IvPnlWrExit_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvSdrev = {
+        SELF(ClassProps_IvSdrev_Names),
     },
 
-    .w59 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x001E,
-        .field_06   = 0x0008,
-        .name_ptr   = 0x00E2751C,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SqedtVal3),
-        .link_ptr   = SELF(ptrs_37),
-        .proc_addr  = NAKA_ADDR(AccIllProc),
+    .ClassProps_IvSdrev_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvSddsp = {
+        SELF(ClassProps_IvSddsp_Names),
     },
 
-    .w60 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x0020,
-        .field_06   = 0x000A,
-        .name_ptr   = 0x00E27510,
-        .inst_ptr   = NAKA_ADDR(NakaInst_AccIll),
-        .link_ptr   = SELF(ptrs_38),
-        .proc_addr  = NAKA_ADDR(AcEntertainerGridBoxProc),
+    .ClassProps_IvSddsp_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvSdacc = {
+        SELF(ClassProps_IvSdacc_Names),
     },
 
-    .w61 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E274F4,
-        .inst_ptr   = NAKA_ADDR(NakaInst_AcEntertainerGridBox),
-        .link_ptr   = SELF(ptrs_39),
-        .proc_addr  = NAKA_ADDR(SngSelProc),
+    .ClassProps_IvSdacc_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvPunchExit = {
+        SELF(ClassProps_IvPunchExit_Names),
     },
 
-    .w62 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x0024,
-        .field_06   = 0x000E,
-        .name_ptr   = 0x00E274E8,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SngSel),
-        .link_ptr   = SELF(ptrs_40),
-        .proc_addr  = NAKA_ADDR(SngSel2Proc),
+    .ClassProps_IvPunchExit_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvAutoPunchExit = {
+        SELF(ClassProps_IvAutoPunchExit_Names),
     },
 
-    .w63 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E274DA,
-        .inst_ptr   = NAKA_ADDR(NakaInst_SngSel2),
-        .link_ptr   = SELF(ptr_304a),
-        .proc_addr  = NAKA_ADDR(NoteEditBoxProc),
+    .ClassProps_IvAutoPunchExit_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcPanicEditSw = {
+        SELF(ClassProps_AcPanicEditSw_Names[8]),
+        SELF(ClassProps_AcPanicEditSw_Names[2]),
+        SELF(ClassProps_AcPanicEditSw_Names),
+    },
+
+    .ClassProps_AcPanicEditSw_Names = 
+        "\0\xFF"
+        "func\0\xFF"
+        "style",
+
+    .ClassProps_IvRealRecExit = {
+        SELF(ClassProps_IvRealRecExit_Names),
+    },
+
+    .ClassProps_IvRealRecExit_Names = 
+        "\0\xFF",
+
+    .Kubo_ClassTable_168 = {
+        { NAKA_ADDR(EffectBoxProc), 0x01600011, 38, 10, 0x00E2758C, NAKA_ADDR(NakaInst_EqualizerBox), SELF(ClassProps_EffectBox) },
+        { NAKA_ADDR(EqualizerBoxProc), 0x01600011, 34, 6, 0x00E27578, NAKA_ADDR(NakaInst_SqedtVal_B), SELF(ClassProps_EqualizerBox) },
+        { NAKA_ADDR(SqedtValProc), 0x01600010, 32, 10, 0x00E2756A, NAKA_ADDR(NakaInst_SqedtVal), SELF(ClassProps_SqedtVal) },
+        { NAKA_ADDR(SqedtVal2Proc), 0x01600010, 30, 8, 0x00E2755A, NAKA_ADDR(NakaInst_SqedtVal2_End), SELF(ClassProps_SqedtVal2) },
+        { NAKA_ADDR(SqedtFixProc), 0x01600010, 28, 6, 0x00E2754C, NAKA_ADDR(NakaInst_SqedtFix), SELF(ClassProps_SqedtFix) },
+        { NAKA_ADDR(IvSongCopyExitProc), 0x01600047, 22, 0, 0x00E27538, NAKA_ADDR(NakaInst_IvSongCopyExit), SELF(ClassProps_IvSongCopyExit) },
+        { NAKA_ADDR(SqplyValProc), 0x01600010, 32, 10, 0x00E2752C, NAKA_ADDR(NakaInst_SqplyVal), SELF(ClassProps_SqplyVal) },
+        { NAKA_ADDR(SqedtVal3Proc), 0x01600010, 30, 8, 0x00E2751C, NAKA_ADDR(NakaInst_SqedtVal3), SELF(ClassProps_SqedtVal3) },
+        { NAKA_ADDR(AccIllProc), 0x01600010, 32, 10, 0x00E27510, NAKA_ADDR(NakaInst_AccIll), SELF(ClassProps_AccIll) },
+        { NAKA_ADDR(AcEntertainerGridBoxProc), 0x01600054, 74, 12, 0x00E274F4, NAKA_ADDR(NakaInst_AcEntertainerGridBox), SELF(ClassProps_AcEntertainerGridBox) },
+        { NAKA_ADDR(SngSelProc), 0x01600010, 36, 14, 0x00E274E8, NAKA_ADDR(NakaInst_SngSel), SELF(ClassProps_SngSel) },
+        { NAKA_ADDR(SngSel2Proc), 0x01600010, 22, 0, 0x00E274DA, NAKA_ADDR(NakaInst_SngSel2), SELF(ClassProps_SngSel2) },
+    },
+
+    .Kubo_ClassTable_168_Desc12Head = {
+        NAKA_ADDR(NoteEditBoxProc),
     },
 
 };
