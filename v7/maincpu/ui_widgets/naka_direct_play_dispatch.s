@@ -6,7 +6,7 @@
 ; =============================================================================
 
 	naka_header NAKA_TYPE_0x47
-	ex_ff
+	.byte 0x16
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
@@ -152,20 +152,12 @@ NakaBoxName_ComporserNameBox:	aligned_string "ComporserNameBox"
 NakaBoxData_SongNameBox:	aligned_string "c^dB"
 NakaBoxName_SongNameBox:	aligned_string "SongNameBox"
 NakaBoxData_LyricsBox:
-	jr	ule, 0x5e
-	pop xiz
-	jr	pe, 66
-	nop
-	popw ix
-	jrl ge, 26994
-	jr ule, 115
-	ld xde, 30831
-	swi 7
+	aligned_string "c^^dB"
+	aligned_string "LyricsBox"
+	.byte 0x00, 0xff
 NakaBoxName_AcMuteToggleBox:	aligned_string "AcMuteToggleBox"
 NakaBoxData_MeasureBox:
-	pop xiz
-	pop xiz
-	jr gt, 0
+	aligned_string "^^j"
 NakaBoxName_MeasureBox:		aligned_string "MeasureBox"
 NakaBoxData_AcPDSongNameBox:	aligned_string ""
 NakaBoxName_AcPDSongNameBox:	aligned_string "AcPDSongNameBox"
@@ -182,16 +174,14 @@ NakaBoxName_AcSmfFileNameBox:	aligned_string "AcSmfFileNameBox"
 NakaBoxData_AcDiskFileNameBox:	aligned_string ""
 NakaBoxName_AcDiskFileNameBox:	aligned_string "AcDiskFileNameBox"
 NakaBoxData_AcTrAsGridBox:
-	pop xwa
-	pop xwa
-	jr gt, 0
+	aligned_string "XXj"
 NakaBoxName_AcTrAsGridBox:	aligned_string "AcTrAsGridBox"
 NakaBoxData_AcCurSongNameBox:	aligned_string ""
 NakaBoxName_AcCurSongNameBox:	aligned_string "AcCurSongNameBox"
 NakaBoxData_AcCurrentSongBox:	aligned_string ""
 NakaBoxName_AcCurrentSongBox:	aligned_string "AcCurrentSongBox"
 NakaBoxData_AcDemoSongBox:
-	jr gt, 0
+	.byte 0x6a, 0x00
 NakaBoxName_AcDemoSongBox:	aligned_string "AcDemoSongBox"
 NakaBoxData_AcModeSelBox:
 	.byte 0x43, 0x00

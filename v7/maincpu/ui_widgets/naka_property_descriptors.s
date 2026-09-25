@@ -68,8 +68,7 @@ StrDesc_ApcDataPair:
 StrVal_ApcDataPair_Empty:	aligned_string ""
 StrFld_ApcDataPair_ApcData:	aligned_string "apcdata"
 StrDesc_MspBnkPair_0:
-	jr	f, 0x6a
-	.byte 0xe1, 0x00
+	.byte 0x60, 0x6a, 0xe1, 0x00
 	.long StrVal_MspBnkPair_0_Empty
 StrVal_MspBnkPair_0_Empty:	aligned_string ""
 StrFld_MspBnkPair_0_MspBnk:	aligned_string "mspbnk"
@@ -162,17 +161,14 @@ StrDesc_PsParaListBox:
 StrVal_Empty_PsParaList:	aligned_string ""
 StrFld_ParaList_SelNum:		aligned_string "sel_num"
 StrFld_ParaList_Row:
-	jrl	le, 30575
-	nop
+	aligned_string "row"
 StrFld_ParaList_Column:		aligned_string "column"
 StrFld_ParaList_FontColor:	aligned_string "fontcolor"
 StrFld_ParaList_Font:
-	jr	z, 0x6f
-	jr	nz, 116
+	.byte 0x66, 0x6f, 0x6e, 0x74
 	.byte 0x00			; padding
 	.byte 0xff			; padding
-	.byte 0xb0, 0x6b
-	cp	(0:16), xsp
+	.byte 0xb0, 0x6b, 0xe1, 0x00, 0x00, 0xff
 StrDesc_PsSCTxtBox2:
 	.long StrVal_Empty_PsSCTxtBox2
 StrVal_Empty_PsSCTxtBox2:	aligned_string ""
@@ -306,22 +302,19 @@ Suna_ClassTable_164:
 	.long StrDesc_RamField
 	.long AcCmpMdBoxProc
 	naka_header NAKA_TYPE_0x15
-	ldw ix, 512
-	nop
+	.byte 0x34, 0x00, 0x02, 0x00
 	.long StrName_AcCmpMdBox
 	.long StrPrefix_AcCmpMdBox
 	.long StrDesc_RamNamePair
 	.long AcApcMdBoxProc
 	naka_header NAKA_TYPE_0x15
-	ldw ix, 512
-	nop
+	.byte 0x34, 0x00, 0x02, 0x00
 	.long StrName_AcApcMdBox
 	.long StrPrefix_AcApcMdBox
 	.long StrDesc_ApcDataPair
 	.long AcMspBnkSlBoxProc
 	naka_header NAKA_TYPE_0x15
-	ldw ix, 512
-	nop
+	.byte 0x34, 0x00, 0x02, 0x00
 	.long StrName_AcMspBnkSlBox
 	.long StrPrefix_AcMspBnkSlBox
 	.long StrDesc_MspBnkPair_0
@@ -363,10 +356,7 @@ Suna_ClassTable_164:
 	.long StrDesc_Empty_13
 	.long AcCmpSetGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	popw de
-	nop
-	incf
-	nop
+	.byte 0x4a, 0x00, 0x0c, 0x00
 	.long StrName_AcCmpSetGridBox
 	.long StrPrefix_AcCmpSetGrid
 	.long GridProperty_Config_Table
@@ -378,10 +368,7 @@ Suna_ClassTable_164:
 	.long StrDesc_Empty_14
 	.long AcEasyCmpGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	popw de
-	nop
-	incf
-	nop
+	.byte 0x4a, 0x00, 0x0c, 0x00
 	.long StrName_AcEasyCmpGridBox
 	.long StrPrefix_AcEasyCmpGrid
 	.long GridProperty_AltConfig_Table
@@ -423,26 +410,19 @@ Suna_ClassTable_164:
 	.long StrDesc_CstmCpNameBox
 	.long AcApcToggleProc
 	naka_header NAKA_TYPE_0x26
-	ldw wa, 2048
-	nop
+	.byte 0x30, 0x00, 0x08, 0x00
 	.long NakaInst_AcApcToggle
 	.long StrPrefix_AcApcToggle
 	.long StrDesc_AcApcToggle
 	.long AcSndArgGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	popw de
-	nop
-	incf
-	nop
+	.byte 0x4a, 0x00, 0x0c, 0x00
 	.long StrName_AcSndArgGridBox
 	.long StrPrefix_AcSndArgGrid
 	.long StrDesc_AcSndArgGrid
 	.long PsParaListBoxProc
 	naka_header NAKA_TYPE_0x11
-	pushw de
-	nop
-	ret
-	nop
+	.byte 0x2a, 0x00, 0x0e, 0x00
 	.long StrName_PsParaListBox
 	.long StrExtra_ParaList_JpChars
 	.long StrDesc_PsParaListBox
@@ -454,9 +434,7 @@ Suna_ClassTable_164:
 	.long StrFld_ParaList_Font_0x06
 	.long PsSCTxtBox2Proc
 	naka_header NAKA_TYPE_0x65
-	ld h, 0:opc
-	nop
-	nop
+	.byte 0x26, 0x00, 0x00, 0x00
 	.long StrName_PsSCTxtBox2
 	.long StrEmpty_PsSCTxtBox2
 	.long StrDesc_PsSCTxtBox2
@@ -499,12 +477,9 @@ NakaDesc_VwVariBox_DataPtrs:
 StrEmpty_PsStylCnvVer:	aligned_string ""
 StrName_PsStylCnvVer:	aligned_string "PsStylCnvVer"
 StrPrefix_S2cGridBox:
-	pop xwa
-	pop xwa
-	jr	gt, 0x00
+	aligned_string "XXj"
 	aligned_string "S2cGridBox"
-	nop
-	swi 7
+	.byte 0x00, 0xff
 StrName_CmpNameMenuBox:		aligned_string "CmpNameMenuBox"
 StrExtra_Yajirushi_JpChars:	aligned_string "^GBBB"
 StrName_YajirushiBox:		aligned_string "Yajirushi"
@@ -517,14 +492,10 @@ StrName_PsSCTxtBox:		aligned_string "PsSCTxtBox"
 StrExtra_ParaList_JpChars:	.asciz "c^AAn"
 StrName_PsParaListBox:		aligned_string "PsParaListBox"
 StrPrefix_AcSndArgGrid:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0
+	aligned_string "XXj"
 StrName_AcSndArgGridBox:	aligned_string "AcSndArgGridBox"
 StrPrefix_AcApcToggle:
-	jr	gt, 0x46
-	nop
-	swi 7
+	.byte 0x6a, 0x46, 0x00, 0xff
 	aligned_string "AcApcToggle"
 	.byte 0x43, 0x00
 StrName_PsCstmCpNameBox:	aligned_string "PsCstmCpNameBox"
@@ -539,16 +510,12 @@ StrName_PsMspMemBox:		aligned_string "PsMspMemBox"
 StrEmpty_PsMspMeasBox:		aligned_string ""
 StrName_PsMspMeasBox:		aligned_string "PsMspMeasBox"
 StrPrefix_AcEasyCmpGrid:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0
+	aligned_string "XXj"
 StrName_AcEasyCmpGridBox:	aligned_string "AcEasyCmpGridBox"
 StrEmpty_PsRgpSetBnkBox:	aligned_string ""
 StrName_PsRgpSetBnkBox:		aligned_string "PsRgpSetBnkBox"
 StrPrefix_AcCmpSetGrid:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0
+	aligned_string "XXj"
 StrName_AcCmpSetGridBox:	aligned_string "AcCmpSetGridBox"
 StrEmpty_PsNameMemBox:		aligned_string ""
 StrName_PsNameMemBox:		aligned_string "PsNameMemBox"

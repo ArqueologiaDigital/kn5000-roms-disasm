@@ -31,10 +31,7 @@ EvtEffDraw_PtrTable:
 	.long EvtName_EqLineDraw
 	.long EvtName_EqStrDraw
 	.long EvtName_GraphDraw
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x00, 0x00
 EvtName_GraphDraw:	aligned_string "EV_GRAPHDRAW"
 EvtName_EqStrDraw:	aligned_string "EV_EQSTRDRAW"
 EvtName_EqLineDraw:	aligned_string "EV_EQLINEDRAW"

@@ -60,7 +60,7 @@ NakaWidget_SoundMenu_PageControl:
 
 NakaMenuItem_PartSetting:
 	naka_header NAKA_TYPE_MENU_ITEM
-	ei	0
+	.byte 0x06, 0x00
 	.short 0xffff, 0x8
 	.short 0xffff, 0x8
 	.short 0x8, 0x1e

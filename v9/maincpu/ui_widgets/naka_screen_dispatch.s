@@ -47,8 +47,7 @@ Naka_SeqToComposer_Screens:
 	.long NakaLabel_SeqToComposer_LastLabel
 	.long NakaLabel_SeqToComposer_MeasLastLabel
 	.long NakaGroup_SeqToComposer_TransGroup
-	ld	h, 0xd9:opc
-	.byte 0x03, 0x00
+	.byte 0x26, 0xd9, 0x03, 0x00
 	.long NakaLabel_SeqToComposer_TrnLabel
 	.long NakaLabel_SeqToComposer_MemLabel
 	.long NakaLabel_SeqToComposer_ComposerMemory
@@ -639,8 +638,7 @@ NakaInst_CmpRealScreen:	aligned_string "CmpRealScreen"
 ; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6169): `RegObjTabl 0x160000f, 0xfa62cb, 0x1, 0xe1c076, 0x3b6`
 ; = class 0x160000F (ResNameProc), 1 entries (immediate count), id 0x3B6.
 Suna_ResNameTable_3B6:
-	and	w, (xwa)
-	.byte 0xe1, 0x00
+	.byte 0x80, 0xc0, 0xe1, 0x00
 	.long NakaEmpty_CmpReal_Slot24
 NakaEmpty_CmpReal_Slot24:	aligned_string ""
 NakaEmpty_CmpReal_Slot25:	aligned_string ""
@@ -1074,8 +1072,7 @@ StrMspMenuScreen:		aligned_string "MspMenuScreen"
 ; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6191): `RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1c7ce, 0x3cb`
 ; = class 0x160000F (ResNameProc), 4 entries (immediate count), id 0x3CB.
 Suna_ResNameTable_3CB:
-	and	xsp, xde
-	.byte 0xe1, 0x00
+	.byte 0xea, 0xc7, 0xe1, 0x00
 
 
 PtrTbl_MspNamingScreenStrs:
@@ -1309,20 +1306,27 @@ StrCmpSetTtlFunc:	aligned_string "CmpSetTtlFunc"
 StrCmpModeFunc:		aligned_string "CmpModeFunc"
 
 NoteStepDisplayData:
-	ld	w, 0x31:opc
-	.byte 0x32, 0x00, 0x20, 0x31, 0x31, 0x00, 0x20, 0x31
-	.byte 0x30, 0x00, 0x20, 0x20, 0x39, 0x00, 0x20, 0x20
-	.byte 0x38, 0x00, 0x20, 0x20, 0x37, 0x00, 0x20, 0x20
-	.byte 0x36, 0x00, 0x20, 0x20, 0x35, 0x00, 0x20, 0x20
-	.byte 0x34, 0x00, 0x20, 0x20, 0x33, 0x00, 0x20, 0x20
-	.byte 0x32, 0x00, 0x20, 0x20, 0x31, 0x00, 0x20, 0x20
-	.byte 0x30, 0x00, 0x45, 0x52, 0x52, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00
-	.byte 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x03, 0x00, 0x02, 0x00
+	aligned_string " 12"
+	aligned_string " 11"
+	aligned_string " 10"
+	aligned_string "  9"
+	aligned_string "  8"
+	aligned_string "  7"
+	aligned_string "  6"
+	aligned_string "  5"
+	aligned_string "  4"
+	aligned_string "  3"
+	aligned_string "  2"
+	aligned_string "  1"
+	aligned_string "  0"
+	aligned_string "ERR"
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x6a, 0x00, 0x1c, 0x01, 0x6a, 0x00
-	.byte 0x1c, 0x01, 0x0c, 0x02, 0xf5, 0x01, 0xf5, 0x01
+	.byte 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00
+	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x03, 0x00
+	.byte 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
+	.byte 0x01, 0x00, 0x01, 0x00, 0x6a, 0x00, 0x1c, 0x01
+	.byte 0x6a, 0x00, 0x1c, 0x01, 0x0c, 0x02, 0xf5, 0x01
+	.byte 0xf5, 0x01
 NoteDataB_Natural:
 	.byte 0x42, 0x20, 0x00, 0xff
 NoteDataB_Flat:
@@ -1384,32 +1388,16 @@ StrTimeSig_3_2:
 StrTimeSig_2_2:
 	.byte 0x32, 0x2f, 0x32, 0x00
 StrTimeSig_1_2:
-	ldw	bc, 0x322f
-	nop
-	ld	e, 100:opc
-	nop
-	swi 7
+	aligned_string "1/2"
+	.byte 0x25, 0x64, 0x00, 0xff
 	aligned_string "%s (%s)"
-	nop
-	nop
-	jp16	0xa400
+	.byte 0x00, 0x00, 0x1a, 0x00, 0xa4
 	.byte 0x00			; padding
 	.byte 0xa4, 0x00, 0x55
 	.byte 0x00			; padding
-	jr	f, 0
-	jrl	nz, 0x8200
-	nop
-	nop
-	nop
-	push xwa
-	nop
-	nop
-	nop
-	push xwa
-	nop
-	jrl	le, 29185
-	normal
-	.byte 0x72, 0x01
+	.byte 0x60, 0x00, 0x7e, 0x00, 0x82, 0x00, 0x00, 0x00
+	.byte 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0x72, 0x01
+	.byte 0x72, 0x01, 0x72, 0x01
 StrPanRight63:	aligned_string "Right 63"
 StrPanRight62:	aligned_string "Right 62"
 StrPanRight61:	aligned_string "Right 61"
@@ -1601,10 +1589,8 @@ StrStyleSect_A_Vari4:	aligned_string "A-vari4"
 StrStyleSect_A_Vari3:	aligned_string "A-vari3"
 StrStyleSect_A_Vari2:	aligned_string "A-vari2"
 StrStyleSect_A_Vari1:	aligned_string "A-vari1"
-	ld	e, 51:opc
-	jr	pe, 0
-	ld	e, 51:opc
-	jr	pe, 0
+	aligned_string "%3d"
+	aligned_string "%3d"
 	aligned_string "(SONG:%2d)"
 PtrTbl_TransposeStrs:
 	.long StrTranspose_Minus25
@@ -1763,36 +1749,28 @@ StrTranspose_Minus25:
 	.byte 0x00, 0x00, 0x94, 0x39, 0x00, 0x00, 0x95, 0x39
 	.byte 0x00, 0x00
 StrBeat16:
-	ldw bc, 8246
-	nop
+	aligned_string "16 "
 StrBeat15:	.asciz "15 "
 StrBeat14:
-	ldw bc, 8244
-	nop
+	aligned_string "14 "
 StrBeat13:	.asciz "13 "
 StrBeat12:
-	ldw bc, 8242
-	nop
+	aligned_string "12 "
 StrBeat11:	.asciz "11 "
 StrBeat10:
-	ldw bc, 8240
-	nop
+	aligned_string "10 "
 StrBeat09:	.asciz " 9 "
 StrBeat08:
-	ld w, 56:opc
-	ld w, 0:opc
+	aligned_string " 8 "
 StrBeat07:	.asciz " 7 "
 StrBeat06:
-	ld w, 54:opc
-	ld w, 0:opc
+	aligned_string " 6 "
 StrBeat05:	.asciz " 5 "
 StrBeat04:
-	ld w, 52:opc
-	ld w, 0:opc
+	aligned_string " 4 "
 StrBeat03:	.asciz " 3 "
 StrBeat02:
-	ld w, 50:opc
-	ld w, 0:opc
+	aligned_string " 2 "
 StrBeat01:	.asciz " 1 "
 StrBeatOff:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x00, 0x00
@@ -1915,16 +1893,14 @@ StrRhySlot_MemoryB:		aligned_string "MEMORY B "
 StrRhySlot_MemoryA:		aligned_string "MEMORY A "
 	aligned_string "MEMORY"
 	aligned_string "CUSTOM"
-	popw iy
-	ld	xiy, 0x59524f4d
+	.byte 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59
 	.byte 0x00			; padding
 	.byte 0xff			; padding
-	ld	xhl, 0x4f545355
-	popw iy
+	.byte 0x43, 0x55, 0x53, 0x54, 0x4f, 0x4d
 	.byte 0x00			; padding
 	.byte 0xff			; padding
 	.byte 0x00			; padding
-	or	bc, iy
+	.byte 0xdd, 0xe1
 	.byte 0x00			; padding
 PtrTbl_StyleSectShortNames2:
 	.long StrStyleSect2_A_Vari2
@@ -2008,9 +1984,7 @@ PtrTbl_NotePositionStrs:
 	.long StrNotePos_FlatAlt
 	.long StrNotePos_Natural
 StrNotePos_Natural:
-	ld	w, 0x7e:opc
-	jr	lt, 97
-	ld	w, 0:opc
+	aligned_string " ~aa "
 	aligned_string " ~ab "
 	aligned_string " ~ab~b8"
 	aligned_string " ~ac "
@@ -2235,7 +2209,7 @@ StrCompileBank2:	aligned_string "COMPILE BANK:2"
 StrCompileBank1:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEASURE = %d"
 	aligned_string "MEMORY = %2d"
-	ld	e, 100:opc
+	.byte 0x25, 0x64
 	.byte 0x00			; padding
 	.byte 0xff			; padding
 	.long StrInstantStart
@@ -2303,20 +2277,9 @@ SLOT_NAME_MEMORY_A:	aligned_string "MEMORY A "
 
 MsgBox_AttentionHeader:
 	; Control codes/header
-	call16 7168
-	nop
-	pushw iy
-	nop
-	pushw iy
-	nop
-	pushw iy
-	nop
-	ld w, 0:opc
-	pushw iy
-	nop
-	ld l, 0:opc
-	call16 0
-	nop
+	.byte 0x1c, 0x00, 0x1c, 0x00, 0x2d, 0x00, 0x2d, 0x00
+	.byte 0x2d, 0x00, 0x20, 0x00, 0x2d, 0x00, 0x27, 0x00
+	.byte 0x1c, 0x00, 0x00, 0x00
 	; Localization: Attention (6 languages)
 MSG_ATTENTION_EN:	aligned_string "ATTENTION!"	; English (12 bytes)
 MSG_ATTENTION_DE:	.asciz "ACHTUNG !"	; German (10 bytes)
