@@ -50,7 +50,7 @@ DrawLine_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawLine_ParamBlock:24)
+	lda xbc, (DrawLine_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -70,10 +70,21 @@ DrawLine_Return:
 	inc 6, xsp
 	ret
 
-DrawLine_ParamBlock:
-	.byte 0xb8, 0x04, 0x33, 0xb8, 0x08, 0x31, 0x98, 0x0c
-	.byte 0x22, 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
-	.byte 0xb0, 0xf6, 0xeb, 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawLine: DrawLine_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawLine makes before drawing directly) and otherwise calls DrawLine_Impl.
+; (Formerly DrawLine_ParamBlock, held as `.byte`.)
+DrawLine_QueuedExec:
+	lda xhl, (xwa + 4)
+	lda xbc, (xwa + 8)
+	ld de, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xhl
+	calr DrawLine_Impl
+	ret
 
 DrawLine_Impl:
 	lda xsp, (xsp - 66)
@@ -153,23 +164,51 @@ DrawLine_Impl_CalcDyDone:
 	jrl z, DrawLine_Impl_Return
 
 DrawLine_Impl_CopyStartPos:
-	.byte 0xaf, 0x42, 0x20, 0xe8, 0x8d, 0xbf, 0x38, 0x34
-	.byte 0x95, 0x10, 0x95, 0x10, 0xf2, 0x00, 0x3c, 0x04
-	.byte 0x30, 0xbf, 0x24, 0x60, 0xbf, 0x14, 0x60, 0xaf
-	.byte 0x04, 0x20, 0xbf, 0x28, 0x60, 0xe8, 0xec, 0x00
-	.byte 0xbf, 0x28, 0x60, 0xaf, 0x08, 0x21, 0xe9, 0xec
-	.byte 0x00, 0x9f, 0x2e, 0x20, 0xe8, 0x13, 0xbf, 0x2c
-	.byte 0x60, 0xe9, 0x88, 0xaf, 0x04, 0x21, 0x1d, 0x31
-	.byte 0x04, 0xff, 0xbf, 0x1c, 0x63, 0xaf, 0x28, 0x20
-	.byte 0xaf, 0x08, 0x21, 0x1d, 0x31, 0x04, 0xff, 0xbf
-	.byte 0x18, 0x63, 0xaf, 0x2c, 0x21, 0xbf, 0x20, 0x61
-	.byte 0xe9, 0x88, 0xe8, 0xee, 0x02, 0xbf, 0x20, 0x60
-	.byte 0xaf, 0x20, 0x89, 0xaf, 0x20, 0x20, 0xe8, 0xee
-	.byte 0x06, 0xbf, 0x20, 0x60, 0xaf, 0x04, 0x20, 0xd8
-	.byte 0x89, 0xd9, 0x61, 0x9f, 0x3c, 0x3f, 0xf5, 0x00
-	.byte 0x76, 0xa1, 0x01, 0xe8, 0xe0, 0x6e, 0x47, 0xe9
-	.byte 0xa8, 0xaf, 0x08, 0x20, 0xe8, 0xcf, 0x00, 0x00
-	.byte 0x00, 0x00, 0x71, 0xbc, 0x03
+	ld xwa, (xsp+66)
+	ld xiy, xwa
+	lda xix, (xsp+56)
+	ldiw
+	ldiw
+	lda_24 xwa, (OFFSCREEN_BUFFER_1)
+	ld (xsp+36), xwa
+	ld (xsp+20), xwa
+	ld xwa, (xsp+4)
+	ld (xsp+40), xwa
+	sla xwa, 0
+	ld (xsp+40), xwa
+	ld xbc, (xsp+8)
+	sla xbc, 0
+	ld wa, (xsp+46)
+	exts xwa
+	ld (xsp+44), xwa
+	ld xwa, xbc
+	ld xbc, (xsp+4)
+	call 16712753
+	ld (xsp+28), xhl
+	ld xwa, (xsp+40)
+	ld xbc, (xsp+8)
+	call 16712753
+	ld (xsp+24), xhl
+	ld xbc, (xsp+44)
+	ld (xsp+32), xbc
+	ld xwa, xbc
+	sll xwa, 2
+	ld (xsp+32), xwa
+	add (xsp+32), xbc
+	ld xwa, (xsp+32)
+	sll xwa, 6
+	ld (xsp+32), xwa
+	ld xwa, (xsp+4)
+	ld bc, wa
+	inc 1, bc
+	cpw (xsp+60), 245
+	jrl z, DrawLine_Impl_PatternSetup
+	or xwa, xwa
+	jr nz, DrawLine_Impl_HorizontalCheck
+	ld xbc, 0:i3
+	ld xwa, (xsp+8)
+	cp xwa, 0
+	jrl lt, DrawLine_Impl_BuildDirtyRect
 DrawLine_Impl_VerticalLoop:
 	lda xde, (xsp + 56)
 	lda xwa, (xde + 2)
@@ -235,14 +274,26 @@ DrawLine_Impl_HorzMemset:
 	inc	8, xsp
 	jrl	814
 DrawLine_Impl_SteepCheck:
-	.byte 0xaf, 0x08, 0x20, 0xaf, 0x04, 0xf0, 0x62, 0x7d
-	.byte 0xaf, 0x0c, 0x20, 0xaf, 0x18, 0x21, 0x1d, 0x7f
-	.byte 0x02, 0xff, 0xbf, 0x0c, 0x63, 0xbf, 0x38, 0x30
-	.byte 0xbf, 0x28, 0x60, 0x90, 0x20, 0xe8, 0x13, 0xbf
-	.byte 0x04, 0x60, 0xe8, 0xec, 0x00, 0xbf, 0x04, 0x60
-	.byte 0x40, 0x00, 0x80, 0x00, 0x00, 0xaf, 0x04, 0x88
-	.byte 0xe9, 0xa8, 0xaf, 0x08, 0x20, 0xe8, 0xcf, 0x00
-	.byte 0x00, 0x00, 0x00, 0x71, 0xf0, 0x02
+	ld xwa, (xsp+8)
+	cp xwa, (xsp+4)
+	jr le, DrawLine_Impl_ShallowSetup
+	ld xwa, (xsp+12)
+	ld xbc, (xsp+24)
+	call InitializeKubo_Helper
+	ld (xsp+12), xhl
+	lda xwa, (xsp+56)
+	ld (xsp+40), xwa
+	ld wa, (xwa)
+	exts xwa
+	ld (xsp+4), xwa
+	sla xwa, 0
+	ld (xsp+4), xwa
+	ld xwa, 32768
+	add (xsp+4), xwa
+	ld xbc, 0:i3
+	ld xwa, (xsp+8)
+	cp xwa, 0
+	jrl lt, DrawLine_Impl_BuildDirtyRect
 DrawLine_Impl_SteepLoop:
 	ld xhl, (xsp + 40)
 	lda xwa, (xhl + 2)
@@ -426,7 +477,7 @@ DrawLine_Impl_PatternDiagCheck:
 
 	cp xwa, (xsp + 4)
 
-	.byte 0x72, 0x9b, 0x00	; jrl le, DrawLine_Impl_PatternShallowSetup (v7 displacement)
+	jrl le, DrawLine_Impl_PatternShallowSetup	; jrl le, DrawLine_Impl_PatternShallowSetup (v7 displacement)
 
 	ld xwa, (xsp + 12)
 
@@ -460,7 +511,7 @@ DrawLine_Impl_PatternDiagCheck:
 
 	cp xwa, 0x0
 
-	.byte 0x71, 0xfc, 0x00	; jrl lt, DrawLine_Impl_BuildDirtyRect (v7 displacement)
+	jrl lt, DrawLine_Impl_BuildDirtyRect	; jrl lt, DrawLine_Impl_BuildDirtyRect (v7 displacement)
 
 
 
@@ -802,7 +853,7 @@ DrawLineEx_DiagSetup:
 
 	cp xwa, (xsp + 4)
 
-	.byte 0x72, 0xa9, 0x00	; jrl le, DrawLineEx_ShallowSetup (v7 displacement)
+	jrl le, DrawLineEx_ShallowSetup	; jrl le, DrawLineEx_ShallowSetup (v7 displacement)
 
 	ld xwa, (xsp + 4)
 
@@ -848,7 +899,7 @@ DrawLineEx_DiagSetup:
 
 	cp xwa, 0x0
 
-	.byte 0x71, 0x01, 0x01	; jrl lt, DrawLineEx_BuildDirtyRect (v7 displacement)
+	jrl lt, DrawLineEx_BuildDirtyRect	; jrl lt, DrawLineEx_BuildDirtyRect (v7 displacement)
 
 
 
@@ -1021,7 +1072,7 @@ DrawBox_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBox_ParamBlock:24)
+	lda xbc, (DrawBox_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1036,10 +1087,20 @@ DrawBox_Return:
 	inc 2, xsp
 	ret
 
-DrawBox_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0x98, 0x0c, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBox: DrawBox_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBox makes before drawing directly) and otherwise calls DrawBox_Impl.
+; (Formerly DrawBox_ParamBlock, held as `.byte`.)
+DrawBox_QueuedExec:
+	lda xde, (xwa + 4)
+	ld bc, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBox_Impl
+	ret
 
 DrawBox_Impl:
 	lda xsp, (xsp - 16)
@@ -1106,11 +1167,20 @@ DrawBox_Impl_ClipYMax:
 	jr gt, DrawBox_Impl_SetChangeRect
 
 DrawBox_Impl_FillRowLoop:
-	.byte 0x9f, 0x0a, 0x04, 0x9f, 0x0e, 0x04, 0xaf, 0x06
-	.byte 0x20, 0x38, 0x1d, 0x1d, 0x08, 0xff, 0xef, 0x60
-	.byte 0xaf, 0x02, 0x20, 0xf3, 0xe1, 0x40, 0x01, 0x30
-	.byte 0xbf, 0x02, 0x60, 0xde, 0x61, 0xaf, 0x0e, 0x20
-	.byte 0x98, 0x06, 0xf6, 0x62, 0xdb, 0x68, 0x49
+	pushm (xsp+10)
+	pushm (xsp+14)
+	ld xwa, (xsp+6)
+	push xwa
+	call 16713757
+	inc 8, xsp
+	ld xwa, (xsp+2)
+	lda xwa, (xwa+320)
+	ld (xsp+2), xwa
+	inc 1, iz
+	ld xwa, (xsp+14)
+	cp iz, (xwa+6)
+	jr le, -37
+	jr 73
 DrawBox_Impl_PatternSetup:
 	ld xwa, (0x030452:24)
 	ld (xsp + 6), xwa
@@ -1124,12 +1194,22 @@ DrawBox_Impl_PatternSetup:
 	jr gt, DrawBox_Impl_SetChangeRect
 
 DrawBox_Impl_PatternRowLoop:
-	.byte 0x9f, 0x0a, 0x04, 0xaf, 0x08, 0x20, 0x38, 0xaf
-	.byte 0x08, 0x20, 0x38, 0x1d, 0xbc, 0x05, 0xff, 0xbf
-	.byte 0x0a, 0x37, 0x40, 0x40, 0x01, 0x00, 0x00, 0xaf
-	.byte 0x06, 0x88, 0xaf, 0x02, 0x20, 0xf3, 0xe1, 0x40
-	.byte 0x01, 0x30, 0xbf, 0x02, 0x60, 0xde, 0x61, 0xaf
-	.byte 0x0e, 0x20, 0x98, 0x06, 0xf6, 0x62, 0xd1
+	pushm (xsp+10)
+	ld xwa, (xsp+8)
+	push xwa
+	ld xwa, (xsp+8)
+	push xwa
+	call 16713148
+	lda xsp, (xsp+10)
+	ld xwa, 320
+	add (xsp+6), xwa
+	ld xwa, (xsp+2)
+	lda xwa, (xwa+320)
+	ld (xsp+2), xwa
+	inc 1, iz
+	ld xwa, (xsp+14)
+	cp iz, (xwa+6)
+	jr le, -47
 DrawBox_Impl_SetChangeRect:
 	ld xwa, (xsp + 14)
 	calr SetChangeRect
@@ -1168,7 +1248,7 @@ DrawFrame_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawFrame_ParamBlock:24)
+	lda xbc, (DrawFrame_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1183,10 +1263,20 @@ DrawFrame_Return:
 	inc 2, xsp
 	ret
 
-DrawFrame_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0x98, 0x0c, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawFrame: DrawFrame_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawFrame makes before drawing directly) and otherwise calls DrawFrame_Impl.
+; (Formerly DrawFrame_ParamBlock, held as `.byte`.)
+DrawFrame_QueuedExec:
+	lda xde, (xwa + 4)
+	ld bc, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawFrame_Impl
+	ret
 
 DrawFrame_Impl:
 	lda xsp, (xsp - 44)
@@ -1226,36 +1316,90 @@ DrawFrame_Impl_ClipXMax:
 	ldw (xwa), 0xef
 
 DrawFrame_Impl_ClipYMax:
-	.byte 0xaf, 0x26, 0x20, 0x90, 0x20, 0xbf, 0x22, 0x50
-	.byte 0x9f, 0x22, 0x20, 0xe8, 0x13, 0xe8, 0x89, 0xe9
-	.byte 0xee, 0x02, 0xe8, 0x81, 0xe9, 0xee, 0x06, 0x9f
-	.byte 0x2a, 0x3f, 0xf5, 0x00, 0x76, 0x79, 0x01, 0x9f
-	.byte 0x2a, 0x20, 0xd8, 0x12, 0xbf, 0x28, 0x50, 0xbf
-	.byte 0x24, 0x61, 0xaf, 0x1a, 0x20, 0x90, 0x20, 0x9f
-	.byte 0x22, 0xf0, 0x6e, 0x2b, 0xaf, 0x1e, 0x20, 0x90
-	.byte 0x21, 0xaf, 0x2c, 0x20, 0x90, 0xa1, 0xd9, 0x61
-	.byte 0x29, 0x9f, 0x2a, 0x04, 0x90, 0x21, 0xaf, 0x28
-	.byte 0x20, 0xf3, 0x07, 0xe0, 0xe4, 0x30, 0x41, 0x00
-	.byte 0x3c, 0x04, 0x00, 0xe8, 0x81, 0x39, 0x1d, 0x1d
-	.byte 0x08, 0xff, 0xef, 0x60, 0x78, 0x0f, 0x03
+	ld xwa, (xsp+38)
+	ld wa, (xwa)
+	ld (xsp+34), wa
+	ld wa, (xsp+34)
+	exts xwa
+	ld xbc, xwa
+	sll xbc, 2
+	add xbc, xwa
+	sll xbc, 6
+	cpw (xsp+42), 245
+	jrl z, DrawFrame_Impl_PatternSetup
+	ld wa, (xsp+42)
+	extz wa
+	ld (xsp+40), wa
+	ld (xsp+36), xbc
+	ld xwa, (xsp+26)
+	ld wa, (xwa)
+	cp wa, (xsp+34)
+	jr nz, DrawFrame_Impl_SolidTwoEdges
+	ld xwa, (xsp+30)
+	ld bc, (xwa)
+	ld xwa, (xsp+44)
+	sub bc, (xwa)
+	inc 1, bc
+	pushw bc
+	pushm (xsp+42)
+	ld bc, (xwa)
+	ld xwa, (xsp+40)
+	lda_rr xwa, xwa, bc
+	ld xbc, OFFSCREEN_BUFFER_1
+	add xbc, xwa
+	push xbc
+	call 16713757
+	inc 8, xsp
+	jrl DrawFrame_Impl_SetChangeRect
 DrawFrame_Impl_SolidTwoEdges:
-	.byte 0xaf, 0x1e, 0x20, 0x90, 0x21, 0xaf, 0x2c, 0x20
-	.byte 0x90, 0xa1, 0xd9, 0x61, 0x29, 0x9f, 0x2a, 0x04
-	.byte 0x90, 0x21, 0xaf, 0x28, 0x20, 0xf3, 0x07, 0xe0
-	.byte 0xe4, 0x30, 0x41, 0x00, 0x3c, 0x04, 0x00, 0xe8
-	.byte 0x81, 0x39, 0x1d, 0x1d, 0x08, 0xff, 0xaf, 0x34
-	.byte 0x22, 0x9a, 0x04, 0x21, 0x92, 0xa1, 0xd9, 0x61
-	.byte 0x29, 0x9f, 0x34, 0x20, 0xd8, 0x12, 0x28, 0x9a
-	.byte 0x06, 0x20, 0xe8, 0x13, 0xe8, 0x89, 0xe9, 0xee
-	.byte 0x02, 0xe8, 0x81, 0xe9, 0xee, 0x06, 0x92, 0x20
-	.byte 0xe8, 0x13, 0xe9, 0x80, 0x41, 0x00, 0x3c, 0x04
-	.byte 0x00, 0xe8, 0x81, 0x39, 0x1d, 0x1d, 0x08, 0xff
-	.byte 0xbf, 0x10, 0x37, 0xbf, 0x1c, 0x02, 0xff, 0xff
-	.byte 0xaf, 0x2c, 0x21, 0xb9, 0x06, 0x30, 0xbf, 0x1e
-	.byte 0x60, 0x90, 0x20, 0xbf, 0x28, 0x50, 0x99, 0x02
-	.byte 0x20, 0xbf, 0x26, 0x50, 0x9f, 0x28, 0x20, 0x9f
-	.byte 0x26, 0xf0, 0x62, 0x05, 0xbf, 0x1c, 0x02, 0x01
-	.byte 0x00
+	ld xwa, (xsp+30)
+	ld bc, (xwa)
+	ld xwa, (xsp+44)
+	sub bc, (xwa)
+	inc 1, bc
+	pushw bc
+	pushm (xsp+42)
+	ld bc, (xwa)
+	ld xwa, (xsp+40)
+	lda_rr xwa, xwa, bc
+	ld xbc, OFFSCREEN_BUFFER_1
+	add xbc, xwa
+	push xbc
+	call 16713757
+	ld xde, (xsp+52)
+	ld bc, (xde+4)
+	sub bc, (xde)
+	inc 1, bc
+	pushw bc
+	ld wa, (xsp+52)
+	extz wa
+	pushw wa
+	ld wa, (xde+6)
+	exts xwa
+	ld xbc, xwa
+	sll xbc, 2
+	add xbc, xwa
+	sll xbc, 6
+	ld wa, (xde)
+	exts xwa
+	add xwa, xbc
+	ld xbc, OFFSCREEN_BUFFER_1
+	add xbc, xwa
+	push xbc
+	call 16713757
+	lda xsp, (xsp+16)
+	ldw (xsp+28), 65535
+	ld xbc, (xsp+44)
+	lda xwa, (xbc+6)
+	ld (xsp+30), xwa
+	ld wa, (xwa)
+	ld (xsp+40), wa
+	ld wa, (xbc+2)
+	ld (xsp+38), wa
+	ld wa, (xsp+40)
+	cp wa, (xsp+38)
+	jr le, DrawFrame_Impl_SolidYStepPositive
+	ldw (xsp+28), 1
 DrawFrame_Impl_SolidYStepPositive:
 	ld wa, (xsp + 28)
 	ld (xsp + 26), wa
@@ -1337,34 +1481,86 @@ DrawFrame_Impl_SolidTwoSideCheck:
 	jrl DrawFrame_Impl_SetChangeRect
 
 DrawFrame_Impl_PatternSetup:
-	.byte 0xbf, 0x26, 0x61, 0xaf, 0x1a, 0x20, 0x90, 0x20
-	.byte 0x9f, 0x22, 0xf0, 0x6e, 0x38, 0xaf, 0x1e, 0x20
-	.byte 0x90, 0x21, 0xaf, 0x2c, 0x22, 0x92, 0xa1, 0xd9
-	.byte 0x61, 0x29, 0x92, 0x20, 0xe8, 0x13, 0xaf, 0x28
-	.byte 0x21, 0xe8, 0x81, 0xe2, 0x52, 0x04, 0x03, 0x81
-	.byte 0x39, 0x92, 0x21, 0xaf, 0x2c, 0x20, 0xf3, 0x07
-	.byte 0xe0, 0xe4, 0x30, 0x41, 0x00, 0x3c, 0x04, 0x00
-	.byte 0xe8, 0x81, 0x39, 0x1d, 0xbc, 0x05, 0xff, 0xbf
-	.byte 0x0a, 0x37, 0x78, 0x91, 0x01
+	ld (xsp+38), xbc
+	ld xwa, (xsp+26)
+	ld wa, (xwa)
+	cp wa, (xsp+34)
+	jr nz, DrawFrame_Impl_PatternTwoEdges
+	ld xwa, (xsp+30)
+	ld bc, (xwa)
+	ld xde, (xsp+44)
+	sub bc, (xde)
+	inc 1, bc
+	pushw bc
+	ld wa, (xde)
+	exts xwa
+	ld xbc, (xsp+40)
+	add xbc, xwa
+	addda32_24 xbc, (197714)
+	push xbc
+	ld bc, (xde)
+	ld xwa, (xsp+44)
+	lda_rr xwa, xwa, bc
+	ld xbc, OFFSCREEN_BUFFER_1
+	add xbc, xwa
+	push xbc
+	call 16713148
+	lda xsp, (xsp+10)
+	jrl DrawFrame_Impl_SetChangeRect
 DrawFrame_Impl_PatternTwoEdges:
-	.byte 0xaf, 0x1e, 0x20, 0x90, 0x21, 0xaf, 0x2c, 0x22
-	.byte 0x92, 0xa1, 0xd9, 0x61, 0x29, 0x92, 0x20, 0xe8
-	.byte 0x13, 0xaf, 0x28, 0x21, 0xe8, 0x81, 0xe2, 0x52
-	.byte 0x04, 0x03, 0x81, 0x39, 0x92, 0x21, 0xaf, 0x2c
-	.byte 0x20, 0xf3, 0x07, 0xe0, 0xe4, 0x30, 0x41, 0x00
-	.byte 0x3c, 0x04, 0x00, 0xe8, 0x81, 0x39, 0x1d, 0xbc
-	.byte 0x05, 0xff, 0xaf, 0x36, 0x23, 0x9b, 0x04, 0x21
-	.byte 0x93, 0xa1, 0xd9, 0x61, 0x29, 0x93, 0x22, 0xea
-	.byte 0x13, 0x9b, 0x06, 0x20, 0xe8, 0x13, 0xe8, 0x89
-	.byte 0xe9, 0xee, 0x02, 0xe8, 0x81, 0xe9, 0xee, 0x06
-	.byte 0xe9, 0x88, 0xea, 0x80, 0xe2, 0x52, 0x04, 0x03
-	.byte 0x80, 0x38, 0x93, 0x20, 0xe8, 0x13, 0xe9, 0x80
-	.byte 0x41, 0x00, 0x3c, 0x04, 0x00, 0xe8, 0x81, 0x39
-	.byte 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x14, 0x37, 0xbf
-	.byte 0x04, 0x02, 0xff, 0xff, 0xaf, 0x2c, 0x22, 0xba
-	.byte 0x06, 0x30, 0xbf, 0x16, 0x60, 0x90, 0x21, 0x9a
-	.byte 0x02, 0x22, 0xda, 0xf1, 0x62, 0x05, 0xbf, 0x04
-	.byte 0x02, 0x01, 0x00
+	ld xwa, (xsp+30)
+	ld bc, (xwa)
+	ld xde, (xsp+44)
+	sub bc, (xde)
+	inc 1, bc
+	pushw bc
+	ld wa, (xde)
+	exts xwa
+	ld xbc, (xsp+40)
+	add xbc, xwa
+	addda32_24 xbc, (197714)
+	push xbc
+	ld bc, (xde)
+	ld xwa, (xsp+44)
+	lda_rr xwa, xwa, bc
+	ld xbc, OFFSCREEN_BUFFER_1
+	add xbc, xwa
+	push xbc
+	call 16713148
+	ld xhl, (xsp+54)
+	ld bc, (xhl+4)
+	sub bc, (xhl)
+	inc 1, bc
+	pushw bc
+	ld de, (xhl)
+	exts xde
+	ld wa, (xhl+6)
+	exts xwa
+	ld xbc, xwa
+	sll xbc, 2
+	add xbc, xwa
+	sll xbc, 6
+	ld xwa, xbc
+	add xwa, xde
+	addda32_24 xwa, (197714)
+	push xwa
+	ld wa, (xhl)
+	exts xwa
+	add xwa, xbc
+	ld xbc, OFFSCREEN_BUFFER_1
+	add xbc, xwa
+	push xbc
+	call 16713148
+	lda xsp, (xsp+20)
+	ldw (xsp+4), 65535
+	ld xde, (xsp+44)
+	lda xwa, (xde+6)
+	ld (xsp+22), xwa
+	ld bc, (xwa)
+	ld de, (xde+2)
+	cp bc, de
+	jr le, DrawFrame_Impl_PatternYStepPositive
+	ldw (xsp+4), 1
 DrawFrame_Impl_PatternYStepPositive:
 	ld wa, de
 	add wa, (xsp + 4)
@@ -1807,7 +2003,7 @@ MovePixels_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (MovePixels_ParamBlock:24)
+	lda xbc, (MovePixels_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1825,10 +2021,20 @@ MovePixels_Return:
 	inc 4, xsp
 	ret
 
-MovePixels_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xb8, 0x0c, 0x31, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued MovePixels: MovePixels_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; MovePixels makes before drawing directly) and otherwise calls MovePixels_Impl.
+; (Formerly MovePixels_ParamBlock, held as `.byte`.)
+MovePixels_QueuedExec:
+	lda xde, (xwa + 4)
+	lda xbc, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr MovePixels_Impl
+	ret
 
 MovePixels_Impl:
 	lda xsp, (xsp - 22)
@@ -2082,7 +2288,7 @@ DrawBitmap_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmap_ParamBlock:24)
+	lda xbc, (DrawBitmap_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2097,10 +2303,20 @@ DrawBitmap_Return:
 	inc 4, xsp
 	ret
 
-DrawBitmap_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBitmap: DrawBitmap_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBitmap makes before drawing directly) and otherwise calls DrawBitmap_Impl.
+; (Formerly DrawBitmap_ParamBlock, held as `.byte`.)
+DrawBitmap_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBitmap_Impl
+	ret
 
 DrawBitmap_Impl:
 	lda xsp, (xsp - 26)
@@ -2308,7 +2524,7 @@ DrawBitmapFast_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmapFast_ParamBlock:24)
+	lda xbc, (DrawBitmapFast_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2323,10 +2539,20 @@ DrawBitmapFast_Return:
 	inc 4, xsp
 	ret
 
-DrawBitmapFast_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBitmapFast: DrawBitmapFast_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBitmapFast makes before drawing directly) and otherwise calls DrawBitmapFast_Impl.
+; (Formerly DrawBitmapFast_ParamBlock, held as `.byte`.)
+DrawBitmapFast_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBitmapFast_Impl
+	ret
 
 DrawBitmapFast_Impl:
 	lda xsp, (xsp - 24)
@@ -2362,15 +2588,31 @@ DrawBitmapFast_Impl:
 	jr DrawBitmapFast_Impl_RowCheck
 
 DrawBitmapFast_Impl_RowLoop:
-	.byte 0x9f, 0x08, 0x3f, 0xf0, 0x00, 0x6f, 0x47, 0x96
-	.byte 0x20, 0x28, 0xaf, 0x06, 0x20, 0x38, 0xaf, 0x12
-	.byte 0x20, 0x38, 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0a
-	.byte 0x37, 0x96, 0x20, 0xe8, 0x13, 0xd8, 0x0b, 0x02
-	.byte 0x00, 0xd7, 0xe2, 0x88, 0x96, 0x80, 0xe8, 0x13
-	.byte 0xd8, 0x0b, 0x02, 0x00, 0xe8, 0x13, 0xe8, 0x80
-	.byte 0xaf, 0x04, 0x88, 0xaf, 0x0c, 0x20, 0xf3, 0xe1
-	.byte 0x40, 0x01, 0x30, 0xbf, 0x0c, 0x60, 0x9f, 0x08
-	.byte 0x61, 0x9f, 0x0a, 0x61
+	cpw (xsp+8), 240
+	jr nc, DrawBitmapFast_Impl_BuildDirtyRect
+	ld wa, (xiz)
+	pushw wa
+	ld xwa, (xsp+6)
+	push xwa
+	ld xwa, (xsp+18)
+	push xwa
+	call 16713148
+	lda xsp, (xsp+10)
+	ld wa, (xiz)
+	exts xwa
+	divs wa, 2
+	ld wa, qwa
+	add wa, (xiz)
+	exts xwa
+	divs wa, 2
+	exts xwa
+	add xwa, xwa
+	add (xsp+4), xwa
+	ld xwa, (xsp+12)
+	lda xwa, (xwa+320)
+	ld (xsp+12), xwa
+	incm 1, (xsp+8)
+	incm 1, (xsp+10)
 DrawBitmapFast_Impl_RowCheck:
 	lda xde, (xiz + 2)
 	ld wa, (xde)
@@ -2430,7 +2672,7 @@ DrawIcons_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawIcons_ParamBlock:24)
+	lda xbc, (DrawIcons_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2445,10 +2687,20 @@ DrawIcons_Return:
 	inc 4, xsp
 	ret
 
-DrawIcons_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawIcons: DrawIcons_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawIcons makes before drawing directly) and otherwise calls DrawIcons_Impl.
+; (Formerly DrawIcons_ParamBlock, held as `.byte`.)
+DrawIcons_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawIcons_Impl
+	ret
 
 DrawIcons_Impl:
 	lda xsp, (xsp - 36)
@@ -2567,7 +2819,7 @@ DrawFrameSP_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawFrameSP_ParamBlock:24)
+	lda xbc, (DrawFrameSP_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2584,10 +2836,21 @@ DrawFrameSP_Return:
 	inc 4, xsp
 	ret
 
-DrawFrameSP_ParamBlock:
-	.byte 0xb8, 0x04, 0x33, 0x98, 0x08, 0x21, 0x98, 0x0a
-	.byte 0x22, 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
-	.byte 0xb0, 0xf6, 0xeb, 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawFrameSP: DrawFrameSP_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawFrameSP makes before drawing directly) and otherwise calls DrawFrameSP_Impl.
+; (Formerly DrawFrameSP_ParamBlock, held as `.byte`.)
+DrawFrameSP_QueuedExec:
+	lda xhl, (xwa + 4)
+	ld bc, (xwa + 8)
+	ld de, (xwa + 10)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xhl
+	calr DrawFrameSP_Impl
+	ret
 
 DrawFrameSP_Impl:
 	lda xsp, (xsp - 34)
@@ -3023,14 +3286,28 @@ DrawBitmapSPFast_Impl:
 	jr ule, DrawBitmapSPFast_Impl_BuildDirtyRect
 
 DrawBitmapSPFast_Impl_RowLoop:
-	.byte 0x9f, 0x06, 0x3f, 0xf0, 0x00, 0x6f, 0x35, 0x9f
-	.byte 0x10, 0x20, 0x28, 0xaf, 0x14, 0x20, 0x38, 0x3e
-	.byte 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0a, 0x37, 0x9f
-	.byte 0x10, 0x20, 0xd8, 0x61, 0xe8, 0x13, 0xd8, 0x0b
-	.byte 0x02, 0x00, 0xe8, 0x13, 0xe8, 0x80, 0xaf, 0x12
-	.byte 0x88, 0xf3, 0xf9, 0x40, 0x01, 0x36, 0x9f, 0x06
-	.byte 0x61, 0x9f, 0x04, 0x61, 0x9f, 0x1e, 0x20, 0x9f
-	.byte 0x04, 0xf8, 0x67, 0xc4
+	cpw (xsp+6), 240
+	jr nc, 53
+	ld wa, (xsp+16)
+	pushw wa
+	ld xwa, (xsp+20)
+	push xwa
+	push xiz
+	call 16713148
+	lda xsp, (xsp+10)
+	ld wa, (xsp+16)
+	inc 1, wa
+	exts xwa
+	divs wa, 2
+	exts xwa
+	add xwa, xwa
+	add (xsp+18), xwa
+	lda xiz, (xiz+320)
+	incm 1, (xsp+6)
+	incm 1, (xsp+4)
+	ld wa, (xsp+30)
+	cp (xsp+4), wa
+	jr c, -60
 DrawBitmapSPFast_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 8)
 	ld xhl, (xsp + 22)
@@ -3248,7 +3525,7 @@ DrawBitmapFile_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmapFile_ParamBlock:24)
+	lda xbc, (DrawBitmapFile_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3263,10 +3540,20 @@ DrawBitmapFile_Return:
 	inc 4, xsp
 	ret
 
-DrawBitmapFile_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBitmapFile: DrawBitmapFile_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBitmapFile makes before drawing directly) and otherwise calls DrawBitmapFile_Impl.
+; (Formerly DrawBitmapFile_ParamBlock, held as `.byte`.)
+DrawBitmapFile_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBitmapFile_Impl
+	ret
 
 DrawBitmapFile_Impl:
 	lda xsp, (xsp - 0x0438)
@@ -3370,22 +3657,46 @@ DrawBitmapFile_Impl_LoadPalette:
 	jr c, DrawBitmapFile_Impl_LoadPalette
 
 DrawBitmapFile_Impl_ParseDimensions:
-	.byte 0xaf, 0x24, 0x21, 0xa9, 0x04, 0x20, 0xbf, 0x10
-	.byte 0x60, 0xa9, 0x08, 0x20, 0xbf, 0x08, 0x60, 0x41
-	.byte 0x08, 0x00, 0x00, 0x00, 0xaf, 0x04, 0x20, 0x98
-	.byte 0x0e, 0x51, 0xd9, 0x8e, 0xee, 0x12, 0xee, 0x89
-	.byte 0xe9, 0xec, 0x02, 0xe9, 0x88, 0xe8, 0x69, 0xaf
-	.byte 0x10, 0x80, 0x1d, 0x31, 0x04, 0xff, 0xbf, 0x14
-	.byte 0x63, 0xeb, 0xec, 0x02, 0xbf, 0x14, 0x63, 0xeb
-	.byte 0x88, 0xee, 0x89, 0x1d, 0x7f, 0x02, 0xff, 0x2b
-	.byte 0x1d, 0xa3, 0x06, 0xff, 0xef, 0x62, 0xbf, 0x28
-	.byte 0x63, 0xaf, 0x28, 0x20, 0xbf, 0x18, 0x60, 0xaf
-	.byte 0x20, 0x20, 0xe8, 0xee, 0x02, 0xe8, 0xc8, 0x36
-	.byte 0x00, 0x00, 0x00, 0xe3, 0xfd, 0x34, 0x04, 0x88
-	.byte 0xaf, 0x08, 0x20, 0xe8, 0xcf, 0xf0, 0x00, 0x00
-	.byte 0x00, 0x62, 0x2a, 0xe8, 0xa8, 0xbf, 0x0c, 0x60
-	.byte 0xaf, 0x08, 0x21, 0xe9, 0xca, 0xf0, 0x00, 0x00
-	.byte 0x00, 0x62, 0x12
+	ld xbc, (xsp+36)
+	ld xwa, (xbc+4)
+	ld (xsp+16), xwa
+	ld xwa, (xbc+8)
+	ld (xsp+8), xwa
+	ld xbc, 8
+	ld xwa, (xsp+4)
+	div bc, (xwa+14)
+	ld iz, bc
+	extz xiz
+	ld xbc, xiz
+	sla xbc, 2
+	ld xwa, xbc
+	dec 1, xwa
+	add xwa, (xsp+16)
+	call 16712753
+	ld (xsp+20), xhl
+	sla xhl, 2
+	ld (xsp+20), xhl
+	ld xwa, xhl
+	ld xbc, xiz
+	call InitializeKubo_Helper
+	pushw hl
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+40), xhl
+	ld xwa, (xsp+40)
+	ld (xsp+24), xwa
+	ld xwa, (xsp+32)
+	sll xwa, 2
+	add xwa, 54
+	add (xsp+1076), xwa
+	ld xwa, (xsp+8)
+	cp xwa, 240
+	jr le, DrawBitmapFile_Impl_ComputeStride
+	ld xwa, 0:i3
+	ld (xsp+12), xwa
+	ld xbc, (xsp+8)
+	sub xbc, 240
+	jr le, DrawBitmapFile_Impl_ClampHeight
 DrawBitmapFile_Impl_SkipExtraRows:
 	ld xwa, (xsp + 20)
 	add_sril_mr XWA, 0xfd, 0x34, 0x04
@@ -3444,12 +3755,23 @@ DrawBitmapFile_Impl_TileRow:
 	cp	xhl, 0
 	jr	le, 46
 DrawBitmapFile_Impl_TileLoop:
-	.byte 0xaf, 0x10, 0x20, 0x28, 0xaf, 0x1a, 0x20, 0x38
-	.byte 0xee, 0x88, 0xaf, 0x16, 0x21, 0x1d, 0x7f, 0x02
-	.byte 0xff, 0xaf, 0x22, 0x83, 0x3b, 0x1d, 0xbc, 0x05
-	.byte 0xff, 0xbf, 0x0a, 0x37, 0xee, 0x61, 0xaf, 0x10
-	.byte 0x21, 0x40, 0x40, 0x01, 0x00, 0x00, 0x1d, 0x31
-	.byte 0x04, 0xff, 0xeb, 0xf6, 0x61, 0xd2
+	ld xwa, (xsp+16)
+	pushw wa
+	ld xwa, (xsp+26)
+	push xwa
+	ld xwa, xiz
+	ld xbc, (xsp+22)
+	call InitializeKubo_Helper
+	add xhl, (xsp+34)
+	push xhl
+	call 16713148
+	lda xsp, (xsp+10)
+	inc 1, xiz
+	ld xbc, (xsp+16)
+	ld xwa, 320
+	call 16712753
+	cp xiz, xhl
+	jr lt, -46
 DrawBitmapFile_Impl_TileRemainder:
 	ld xwa, xiz
 
@@ -3494,7 +3816,7 @@ DrawBitmapFile_Impl_RowCopy:
 
 	cp xwa, (xsp + 8)
 
-	.byte 0x71, 0x42, 0xff	; jrl lt, DrawBitmapFile_Impl_DecodeRowLoop (v7 displacement)
+	jrl lt, -190	; jrl lt, DrawBitmapFile_Impl_DecodeRowLoop (v7 displacement)
 
 
 
@@ -3564,13 +3886,23 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	cp	wa, 0:i3
 	jr	ule, DrawBitmapFile_Impl_BuildDirtyRect	; -> 0xFAC68A
 DrawBitmapFile_Impl_VRAMRowLoop:
-	.byte 0x9f, 0x22, 0x3f, 0xf0, 0x00, 0x6f, 0x2b, 0x9f
-	.byte 0x28, 0x20, 0x28, 0xaf, 0x26, 0x20, 0x38, 0x3e
-	.byte 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0a, 0x37, 0x40
-	.byte 0x40, 0x01, 0x00, 0x00, 0xaf, 0x24, 0x88, 0xf3
-	.byte 0xf9, 0x40, 0x01, 0x36, 0x9f, 0x22, 0x61, 0x9f
-	.byte 0x20, 0x61, 0x9f, 0x2a, 0x20, 0x9f, 0x20, 0xf8
-	.byte 0x67, 0xce
+	cpw (xsp+34), 240
+	jr nc, 43
+	ld wa, (xsp+40)
+	pushw wa
+	ld xwa, (xsp+38)
+	push xwa
+	push xiz
+	call 16713148
+	lda xsp, (xsp+10)
+	ld xwa, 320
+	add (xsp+36), xwa
+	lda xiz, (xiz+320)
+	incm 1, (xsp+34)
+	incm 1, (xsp+32)
+	ld wa, (xsp+42)
+	cp (xsp+32), wa
+	jr c, -50
 DrawBitmapFile_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 44)
 	ld XHL, (xsp + 0x0438)
@@ -3642,19 +3974,44 @@ DrawString:
 	jr DrawString_Return
 
 DrawString_DeferredPath:
-	.byte 0xaf, 0x08, 0x20, 0x38, 0x1d, 0xc3, 0x07, 0xff
-	.byte 0xef, 0x64, 0xdb, 0x61, 0xdb, 0x88, 0x1e, 0x34
-	.byte 0xd9, 0xbf, 0x04, 0x63, 0x30, 0x1c, 0x00, 0x1e
-	.byte 0x2b, 0xd9, 0xeb, 0x8e, 0xf2, 0x5c, 0xc7, 0xfa
-	.byte 0x30, 0xb3, 0x60, 0xaf, 0x10, 0x20, 0xe8, 0x8d
-	.byte 0xbb, 0x04, 0x34, 0xd9, 0xac, 0x95, 0x11, 0xaf
-	.byte 0x0c, 0x20, 0xe8, 0x8d, 0xbb, 0x0c, 0x34, 0x95
-	.byte 0x10, 0x95, 0x10, 0xaf, 0x04, 0x21, 0xbb, 0x10
-	.byte 0x61, 0xaf, 0x08, 0x20, 0x38, 0x39, 0x1d, 0x70
-	.byte 0x07, 0xff, 0xef, 0x60, 0xaf, 0x1c, 0x20, 0xbe
-	.byte 0x14, 0x60, 0x9f, 0x1a, 0x20, 0xbe, 0x18, 0x50
-	.byte 0x9f, 0x18, 0x20, 0xbe, 0x1a, 0x50, 0xee, 0x88
-	.byte 0x1e, 0x0a, 0xd8
+	ld xwa, (xsp+8)
+	push xwa
+	call LyricsTrack_ReadAndParse_Helper2
+	inc 4, xsp
+	inc 1, hl
+	ld wa, hl
+	calr DrawQueue_Alloc
+	ld (xsp+4), xhl
+	ldw wa, 28
+	calr DrawQueue_Alloc
+	ld xiz, xhl
+	lda_24 xwa, (DrawString_Return_0x7)
+	ld (xhl), xwa
+	ld xwa, (xsp+16)
+	ld xiy, xwa
+	lda xix, (xhl+4)
+	ld bc, 4:i3
+	ldirw
+	ld xwa, (xsp+12)
+	ld xiy, xwa
+	lda xix, (xhl+12)
+	ldiw
+	ldiw
+	ld xbc, (xsp+4)
+	ld (xhl+16), xbc
+	ld xwa, (xsp+8)
+	push xwa
+	push xbc
+	call Free_Compare2
+	inc 8, xsp
+	ld xwa, (xsp+28)
+	ld (xiz+20), xwa
+	ld wa, (xsp+26)
+	ld (xiz+24), wa
+	ld wa, (xsp+24)
+	ld (xiz+26), wa
+	ld xwa, xiz
+	calr DisplayCmd_DequeueAndExecute
 DrawString_Return:
 	pop xiz
 	lda xsp, (xsp + 16)

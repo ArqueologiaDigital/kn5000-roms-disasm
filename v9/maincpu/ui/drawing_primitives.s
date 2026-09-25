@@ -50,7 +50,7 @@ DrawLine_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawLine_ParamBlock:24)
+	lda xbc, (DrawLine_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -70,10 +70,21 @@ DrawLine_Return:
 	inc 6, xsp
 	ret
 
-DrawLine_ParamBlock:
-	.byte 0xb8, 0x04, 0x33, 0xb8, 0x08, 0x31, 0x98, 0x0c
-	.byte 0x22, 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
-	.byte 0xb0, 0xf6, 0xeb, 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawLine: DrawLine_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawLine makes before drawing directly) and otherwise calls DrawLine_Impl.
+; (Formerly DrawLine_ParamBlock, held as `.byte`.)
+DrawLine_QueuedExec:
+	lda xhl, (xwa + 4)
+	lda xbc, (xwa + 8)
+	ld de, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xhl
+	calr DrawLine_Impl
+	ret
 
 DrawLine_Impl:
 	lda xsp, (xsp - 66)
@@ -1018,7 +1029,7 @@ DrawBox_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBox_ParamBlock:24)
+	lda xbc, (DrawBox_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1033,10 +1044,20 @@ DrawBox_Return:
 	inc 2, xsp
 	ret
 
-DrawBox_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0x98, 0x0c, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBox: DrawBox_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBox makes before drawing directly) and otherwise calls DrawBox_Impl.
+; (Formerly DrawBox_ParamBlock, held as `.byte`.)
+DrawBox_QueuedExec:
+	lda xde, (xwa + 4)
+	ld bc, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBox_Impl
+	ret
 
 DrawBox_Impl:
 	lda xsp, (xsp - 16)
@@ -1186,7 +1207,7 @@ DrawFrame_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawFrame_ParamBlock:24)
+	lda xbc, (DrawFrame_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1201,10 +1222,20 @@ DrawFrame_Return:
 	inc 2, xsp
 	ret
 
-DrawFrame_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0x98, 0x0c, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawFrame: DrawFrame_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawFrame makes before drawing directly) and otherwise calls DrawFrame_Impl.
+; (Formerly DrawFrame_ParamBlock, held as `.byte`.)
+DrawFrame_QueuedExec:
+	lda xde, (xwa + 4)
+	ld bc, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawFrame_Impl
+	ret
 
 DrawFrame_Impl:
 	lda xsp, (xsp - 44)
@@ -1935,7 +1966,7 @@ MovePixels_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (MovePixels_ParamBlock:24)
+	lda xbc, (MovePixels_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1953,10 +1984,20 @@ MovePixels_Return:
 	inc 4, xsp
 	ret
 
-MovePixels_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xb8, 0x0c, 0x31, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued MovePixels: MovePixels_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; MovePixels makes before drawing directly) and otherwise calls MovePixels_Impl.
+; (Formerly MovePixels_ParamBlock, held as `.byte`.)
+MovePixels_QueuedExec:
+	lda xde, (xwa + 4)
+	lda xbc, (xwa + 12)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr MovePixels_Impl
+	ret
 
 MovePixels_Impl:
 	lda xsp, (xsp - 22)
@@ -2163,7 +2204,7 @@ DrawBitmap_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmap_ParamBlock:24)
+	lda xbc, (DrawBitmap_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2178,10 +2219,20 @@ DrawBitmap_Return:
 	inc 4, xsp
 	ret
 
-DrawBitmap_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBitmap: DrawBitmap_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBitmap makes before drawing directly) and otherwise calls DrawBitmap_Impl.
+; (Formerly DrawBitmap_ParamBlock, held as `.byte`.)
+DrawBitmap_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBitmap_Impl
+	ret
 
 DrawBitmap_Impl:
 	lda xsp, (xsp - 26)
@@ -2389,7 +2440,7 @@ DrawBitmapFast_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmapFast_ParamBlock:24)
+	lda xbc, (DrawBitmapFast_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2404,10 +2455,20 @@ DrawBitmapFast_Return:
 	inc 4, xsp
 	ret
 
-DrawBitmapFast_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBitmapFast: DrawBitmapFast_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBitmapFast makes before drawing directly) and otherwise calls DrawBitmapFast_Impl.
+; (Formerly DrawBitmapFast_ParamBlock, held as `.byte`.)
+DrawBitmapFast_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBitmapFast_Impl
+	ret
 
 DrawBitmapFast_Impl:
 	lda xsp, (xsp - 24)
@@ -2528,7 +2589,7 @@ DrawIcons_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawIcons_ParamBlock:24)
+	lda xbc, (DrawIcons_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2543,10 +2604,20 @@ DrawIcons_Return:
 	inc 4, xsp
 	ret
 
-DrawIcons_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawIcons: DrawIcons_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawIcons makes before drawing directly) and otherwise calls DrawIcons_Impl.
+; (Formerly DrawIcons_ParamBlock, held as `.byte`.)
+DrawIcons_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawIcons_Impl
+	ret
 
 DrawIcons_Impl:
 	lda xsp, (xsp - 36)
@@ -2665,7 +2736,7 @@ DrawFrameSP_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawFrameSP_ParamBlock:24)
+	lda xbc, (DrawFrameSP_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2682,10 +2753,21 @@ DrawFrameSP_Return:
 	inc 4, xsp
 	ret
 
-DrawFrameSP_ParamBlock:
-	.byte 0xb8, 0x04, 0x33, 0x98, 0x08, 0x21, 0x98, 0x0a
-	.byte 0x22, 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
-	.byte 0xb0, 0xf6, 0xeb, 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawFrameSP: DrawFrameSP_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawFrameSP makes before drawing directly) and otherwise calls DrawFrameSP_Impl.
+; (Formerly DrawFrameSP_ParamBlock, held as `.byte`.)
+DrawFrameSP_QueuedExec:
+	lda xhl, (xwa + 4)
+	ld bc, (xwa + 8)
+	ld de, (xwa + 10)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xhl
+	calr DrawFrameSP_Impl
+	ret
 
 DrawFrameSP_Impl:
 	lda xsp, (xsp - 34)
@@ -3361,7 +3443,7 @@ DrawBitmapFile_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmapFile_ParamBlock:24)
+	lda xbc, (DrawBitmapFile_QueuedExec:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3376,10 +3458,20 @@ DrawBitmapFile_Return:
 	inc 4, xsp
 	ret
 
-DrawBitmapFile_ParamBlock:
-	.byte 0xb8, 0x04, 0x32, 0xa8, 0x08, 0x21, 0xd2, 0x4e
-	.byte 0x04, 0x03, 0x3f, 0x00, 0x00, 0xb0, 0xf6, 0xea
-	.byte 0x88, 0x1e, 0x01, 0x00, 0x0e
+; Executor of a queued DrawBitmapFile: DrawBitmapFile_DeferredPath stores this address at +0 of a
+; DrawQueue_Alloc entry and the call's parameters at +4.., and DrawTask_FuncDispatch
+; (ui/ui_widget_defs.s) runs `ld xhl,(xiz); ld xwa,xiz; call (xhl)`.  It reloads the
+; parameters from (xwa + 4..), returns when the word at RAM 0x3044E is 0 (the test
+; DrawBitmapFile makes before drawing directly) and otherwise calls DrawBitmapFile_Impl.
+; (Formerly DrawBitmapFile_ParamBlock, held as `.byte`.)
+DrawBitmapFile_QueuedExec:
+	lda xde, (xwa + 4)
+	ld xbc, (xwa + 8)
+	cpw (0x03044e:24), 0
+	ret z
+	ld xwa, xde
+	calr DrawBitmapFile_Impl
+	ret
 
 DrawBitmapFile_Impl:
 	lda_dri XSP, 0xfd, 0xc8, 0xfb

@@ -5,6 +5,8 @@
 // ReverbEqPresets, Reverb, Equalizer, DspEffect, AcousticIllusion,
 // LeftHold, TechniChord), SoundEdit widget, and associated string data.
 
+; Tail of the NAKA record whose header (naka_header type 0x25) is at 0xE818E6,
+; in the previous file; a 32-bit pointer to that record is at 0xE85474.
 	.short 0xffff, 0x2
 	.short 0xffff, 0x8
 	.short 0xf5	; X-left coord of the button
@@ -58,7 +60,7 @@ NakaWidget_SoundMenu_PageControl:
 
 NakaMenuItem_PartSetting:
 	naka_header NAKA_TYPE_MENU_ITEM
-	ei	0
+	.byte 0x06, 0x00
 	.short 0xffff, 0x8
 	.short 0xffff, 0x8
 	.short 0x8, 0x1e

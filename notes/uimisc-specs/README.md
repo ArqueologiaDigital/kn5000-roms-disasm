@@ -1,0 +1,49 @@
+# Lane uimisc -- data-object specs and how they were derived (2026-09-25)
+
+Each `mk_spec_*.py` here prints the JSON spec that
+`scripts/converters/retype_data_objects.py` applies: for every object its
+address range, label, header (reader routine by name AND v10 address, element
+width, stride, how the entry count was pinned) and render type.  The tool
+renders the bytes from the ROM, keeps every label other files use (as `.set`
+aliases where the object got a better name), rebuilds the image and refuses the
+edit unless the ROM is byte-identical.
+
+| file | question it answers | command |
+|---|---|---|
+| `mk_spec_eec288.py` | what are the tree's "Character Mapping Tables" (0xEEC288-0xEED117)? the Subsys handler table 18, 128 bytes of 0xFF, and 28 byte maps (identity, permutations, sparse) that only CharMap_ModeDispatchTable points at -- reader NOT established, the scans that were run are listed | same command with this spec |
+| `mk_spec_eedd36.py` | what is the tree's `ScaleNote_Display_Table` (0xEEDD36-0xEEE077)? the power-on image of nine RAM string-pointer tables (number, note-name, pan, beat, genre ... strings) that the UI reads at RAM 0x3D992+ | same command with this spec |
+| `mk_spec_eed118.py` | what are the 41 objects in 0xEED118-0xEEDD35 (the tree's `CharMap_FullPermutation` + ~40 positional names)? note maps, messages, value curves, two-level switch tables, Sound-RAM model identifiers, the C-library ctype table, printf hex digits, and the start of the boot-time RAM initialisation image | same command with this spec |
+| `mk_spec_ee49e8.py` | what are the 76 objects in 0xEE49E8-0xEE4FC5 (the tree's `ToneKit_FrequencyTable`, `WidgetParam_SelfRef_Table`)? 41 twenty-byte MIDI control records, the sentinel-terminated match lists and select tables that point at them, three handler tables indexed by record +16/+17/+18, gate records, MIDI all-off template | same command with this spec |
+| `mk_spec_ee2d6c.py` | what are the 80 objects in 0xEE2D6C-0xEE3678 (the tree's `SeqChan_CommandDispatch_Table`, `SeqFormat_ReferenceData`, `SeqData_SubDispatch_Table`, `MidiPkt_EventType_Table` and its tail)? handler tables, SysEx messages (GM System On/Off, Technics F0 50 ...), per-channel word tables with `cp c,N` counts | same command with this spec |
+| `mk_spec_ee0142.py` | what are the 12 objects in 0xEE0142-0xEE1574 (the tree's `Naka_SubDispatch_A/B_Table`, `Naka_MainDispatch_Table`)? the 972-entry SndParam registry, five per-type handler tables, the 256-entry block RAM pointer table | same command with this spec |
+| `mk_spec_eeae44.py` | what are the 38 objects in 0xEEAE44-0xEEC288 (the tree's `SoundEffect_Dispatch_Table` tail + 36 positional names)? chord-recognition table, semitone tables, SMF chunk ids, "COM-ESEQ", switch tables | same command with this spec |
+| `mk_spec_ee8c7e.py` | what are the 42 objects in 0xEE8C7E-0xEEAE44 (the tree's `SystemConfig_PointerTable`, `AudioInit_VoiceDispatch_Table`, `CharMap_ValueData_A/B`, 4 B of `SoundEffect_Dispatch_Table`)? | `python3 notes/uimisc-specs/mk_spec_ee8c7e.py > s.json; python3 scripts/converters/retype_data_objects.py --image v10 --file ui_widgets/widget_dispatch.s --spec s.json --nearest --apply` (v9/v7: add `--v10-names`) |
+
+How the readers were found (repeat for any range):
+
+    make rebuilt_ROMs/kn5000_v10_program.llvm.elf
+    python3 scripts/analysis/data_readers_profile.py --image v10 0xEE8C7E 0xEEAE08 --next 7
+    python3 scripts/analysis/data_pointer_scan.py   --image v10 0xEE8C7E 0xEEAE08
+
+`data_readers_profile.py` lists every instruction operand that names an
+address in the range, with the following instructions (element width from
+`ld_rrb`/`ld_rrw`/`ld_rrl`/`ldb_sri`, strides from `muls`/`sla`, use from
+`call (xhl)` / `jp_rr` switches).  `data_pointer_scan.py` lists 32-bit words
+anywhere in the ROM that point into the range.  Both have blind spots (a base
+passed in a register from afar, `TABLE - 4*k` constants, misframed code); a
+header that says "no reader" names the two scans it ran.
+
+Measured facts the headers rely on (v10 ROM, re-derivable with the commands
+above):
+
+* the seven chord-row tables 0xEE8FCE-0xEEADFE: six of them are exactly
+  28 x 12 x k bytes up to the next referenced object (k = 1,2,4,1,3,3 from each
+  reader's `muls wa,12k`), the seventh (0xEEA8BE) likewise 28 x 48; the 1680
+  bytes 0xEEA22E-0xEEA8BE have no reader in either scan;
+* `Harmony_HandlerTable` entries 1-13 are exactly SoundFX_Handler_0..12, the
+  routines that read the chord-row tables.
+
+Also here, not a spec: `scripts/generators/gen_sysex_rx_trie.py` (0xEE3678-0xEE49E7,
+the incoming-SysEx trie) and `scripts/generators/gen_dsp_effect_records.py`,
+`scripts/generators/gen_swbt_listener_banks.py` (0xEE6048-0xEE8C7D) -- generators
+with their own `--probe` evidence, written before the generic tool existed.

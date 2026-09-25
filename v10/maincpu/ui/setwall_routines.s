@@ -12,10 +12,7 @@ SetWall_X:
 	ret
 
 SetWall_JumpStubData:
-	.byte 0xc1, 0xe0
-	incf
-	push	xix
-	swi	6
+	anddi8 (3296), 254
 	ld	(3295:16), 0
 	call	CDlikeSwTtl_SendStartEvt
 	call	SetWall_UpdateSlotIndex
@@ -35,72 +32,53 @@ SetWall_InlineCodeBlock:
 	ret
 MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
-	.byte 0xc1, 0xdf
-	incf
-	push	xsp
-	reti
-	jr	z, 4
+	cpdi8 (3295), 7
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
+MiddleFuncCall_DispatchData_Code_Helper_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 15
-	jr	z, 2
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip2
 	inc	1, a
+MiddleFuncCall_DispatchData_Code_Helper_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
 MiddleFuncCall_DispatchData_Code_Helper2:
 	call	SetWall_InlineCodeBlock2
-	.byte 0xc1, 0xdf
-	incf
-	push	xsp
-	ld	(102:8), 4:io
+	cpdi8 (3295), 8
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
+MiddleFuncCall_DispatchData_Code_Helper2_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 0:i3
-	jr	z, 2
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip2
 	dec	1, a
+MiddleFuncCall_DispatchData_Code_Helper2_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
-	nop
-	push	sr
-	nop
-	ldw	(3:8), 1284:io
-	.byte 0x06
-	pushw	2312
-	.byte 0x01
-	zcf
-	incf
-	decf
-	ret
-	retd	4359
-	ccf
-	push	sr
-	pushw	1025
-	halt
-	ei	7
-	scf
-	push	10
-	pop	sr
-	ld	(13:8), 14:io
-	retd	4112
-	ccf
-	zcf
-	incf
+; Two 20-byte permutations of 0..0x13 (the SetWall slot numbers).  No reader:
+; no instruction operand and no 32-bit data pointer in the v10 ROM names
+; 0xF1EE8D..0xF1EEB4; purpose not established.  Was decoded as `nop / push sr
+; / ldw (3:8),1284:io / halt / ei 7 ...` after the `ret` above.
+NoRef_SetWall_SlotPerm20x2:
+	.byte 0x00, 0x02, 0x00, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x0b, 0x08, 0x09, 0x01, 0x13, 0x0c, 0x0d, 0x0e, 0x0f, 0x07, 0x11, 0x12
+	.byte 0x02, 0x0b, 0x01, 0x04, 0x05, 0x06, 0x07, 0x11, 0x09, 0x0a, 0x03, 0x08, 0x0d, 0x0e, 0x0f, 0x10, 0x10, 0x12, 0x13, 0x0c
 SetWall_InlineCodeBlock_Sub:
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
 	ld	a, (0x2873:16)
 	cp	a, 13
-	jr	z, 59
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 16
-	jr	z, 54
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 15
-	jr	z, 49
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 14
-	jr	z, 44
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	call	CDlikeSwTtl_SendStartEvt
 	ld	xhl, 0xf1a0
 	xor	w, w
@@ -108,31 +86,26 @@ SetWall_InlineCodeBlock_Sub:
 	ld	iy, wa
 	ld_rrb a, xhl, iy
 	cp a, 13
-	jr	z, 17
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 16
-	jr	z, 12
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 15
-	jr	z, 7
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 14
-	jr	z, 2
-	jr	4
+	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	SetWall_InlineCodeBlock_Sub_Return
+SetWall_InlineCodeBlock_Sub_Skip:
 	call	CDlikeSwTtl_DispatchData_0x4A
+SetWall_InlineCodeBlock_Sub_Return:
 	ret
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
+; 20 x u8 mask per SetWall slot number 0..0x13 (0xFF, or 0 for slots 13-16):
+; SetWall_CompareAndSwap (0xF1EFF7) and SetWall_InlineCodeBlock2_Skip read it with
+; `ld xde,<this>; ld_rrb c,xde,iy`, iy = a slot number from the RAM slot table
+; at 0xF1A0 -- two such masks are then ANDed (`and a,c`) to test a pair of slots.
+SetWall_SlotMaskTable:
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff
 
 SetWall_EventHandler:
 	bit 2, (1056:16)
@@ -658,20 +631,13 @@ SetWall_CrossTypeChange:
 	call Audio_CheckSubsystemReady
 	ret
 
+; 20 x u8 slot -> type map, 0xFF = no type.  SetWall_CrossType_MapLookup reads it with
+; `ld xde,<this>; ld l,(xde+hl)` (hl = slot) and branches to SetWall_CrossType_Reset on
+; 0xFF; SetWall_ParseB0ControlChange does the same lookup and compares the entry with a.
+; (Formerly decoded as instructions.)
 SetWall_SlotTypeMap:
-	nop
-	push	sr
-	normal
-	reti
-	ld	(9:8), 10:io
-	pushw	1284
-	ei	3
-	retd	0xffff
-	swi	7
-	swi	7
-	incf
-	decf
-	ret
+	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05
+	.byte 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff, 0xff, 0x0c, 0x0d, 0x0e
 
 SetWall_CrossType_Validate:
 	and (0x2879:16), 252
@@ -740,6 +706,9 @@ SetWall_CrossType_Reset:
 	and (0x2879:16), 252
 	ret
 
+; 3 rows x 16 slot numbers.  SetWall_WriteSingleSlot, SetWall_WriteAllSlots and SetWall_LocalWriteAll
+; run `ld l,(0x0D3E); dec 1,l; sla l,4; ld xde,<this>; lda xiy,(xde+hl)`:
+; row = (byte at RAM 0x0D3E) - 1, 16 bytes per row.
 SetWall_SlotOrderTable:
 	.byte 0x00, 0x02, 0x01, 0x0d, 0x0f, 0x10, 0x0c, 0x0b
 	.byte 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07
@@ -1924,16 +1893,14 @@ SetWall_ForwardSkip_Return:
 SetWall_InlineCodeBlock3:
 	ret
 	call	AccWrap_PlayModeDispatch
-	.byte 0xc1, 0xa7
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10407), 4
 	ld	wa, (0xffec:24)
 	ld	(0xf19e:16), wa
 	push	xix
 	pushw	bc
 	ld	xix, 4421
 	ld	bc, 0:i3
+SetWall_ForwardSkip_Loop2:
 	ld	(0x286b:16), c
 	push	xix
 	call	SetWall_MiscDataAndCode_0x52
@@ -1944,14 +1911,11 @@ SetWall_InlineCodeBlock3:
 	st_rrb a, xix, bc
 	inc 1, bc
 	cp bc, 10
-	jr lt, -33
+	jr lt, SetWall_ForwardSkip_Loop2
 	popw	bc
 	pop	xix
 	ret
-	.byte 0xc1, 0xa7
-	pushw	wa
-	push	xix
-	swi	3
+	anddi8 (10407), 251
 	xor	wa, wa
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
@@ -1978,8 +1942,7 @@ SetWall_MiscDataAndCode:
 	ld	xix, 0xf280
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85
-	scf
+	ldir85
 	xor	xwa, xwa
 	ld	a, (0xffe3:24)
 	sla	xwa, 11
@@ -1989,15 +1952,10 @@ SetWall_MiscDataAndCode:
 	add	xix, xwa
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85
-	scf
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0x8f
+	ldir85
+	cpdi8 (36150), 143
 	jr	z, SetWall_MiscDataAndCode_Skip
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0xa7
+	cpdi8 (36150), 167
 	jr	z, SetWall_MiscDataAndCode_Skip2
 SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc
@@ -2051,8 +2009,8 @@ SetWall_MiscDataAndCode_Loop:
 	jr	c, SetWall_MiscDataAndCode_Entry
 	ldw	bc, 99
 SetWall_MiscDataAndCode_Entry:
-	.byte 0xf1
-	.ascii "l(CX"
+	stb_d8 (10348), c
+	pop xwa
 	ld	(4349:16), xwa
 	ret
 	.byte 0xe7
@@ -2062,24 +2020,19 @@ SetWall_MiscDataAndCode_Entry:
 	cp hl, 65535
 	jr	z, 55
 	push	xhl
-	.byte 0xe7
-	ldw	ix, 7428
-	.byte 0x04
-	push	sr
-	.byte 0xf2, 0xe7
-	ldw	ix, 0xe105
-	swi	5
-	rcf
-	ld	c, 179:opc
-	divs8rr	c, l
+	push_lerp 52
+	call 15860228
+	pop_lerp 52
+	ldda32 xhl, (4349)
+	bitm 7, (xhl)
+	pop xhl
 	jr	z, 35
 	.byte 0xe7
 	ldw	ix, 0xe761
 	ldw	ix, 7428
 	max
 	push	sr
-	.byte 0xf2, 0xe7
-	ldw	ix, 0xe105
+	call_24 lt, (341223)
 	swi	5
 	rcf
 	ld	c, 179:opc

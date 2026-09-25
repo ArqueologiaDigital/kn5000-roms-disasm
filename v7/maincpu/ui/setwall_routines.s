@@ -12,10 +12,7 @@ SetWall_X:
 	ret
 
 SetWall_JumpStubData:
-	.byte 0xc1, 0xe0
-	incf
-	push	xix
-	swi	6
+	anddi8 (3296), 254
 	ld	(3295:16), 0
 	call	CDlikeSwTtl_SendStartEvt
 	call	SetWall_UpdateSlotIndex
@@ -35,27 +32,25 @@ SetWall_InlineCodeBlock:
 	ret
 MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
-	.byte 0xc1, 0xdf
-	incf
-	push	xsp
-	reti
-	jr	z, 4
+	cpdi8 (3295), 7
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
+MiddleFuncCall_DispatchData_Code_Helper_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 15
-	jr	z, 2
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip2
 	inc	1, a
+MiddleFuncCall_DispatchData_Code_Helper_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
 MiddleFuncCall_DispatchData_Code_Helper2:
 	call	SetWall_InlineCodeBlock2
-	.byte 0xc1, 0xdf
-	incf
-	push	xsp
-	ld	(102:8), 4:io
+	cpdi8 (3295), 8
+	jr z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
+MiddleFuncCall_DispatchData_Code_Helper2_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 0:i3
@@ -688,28 +683,21 @@ SetWall_CrossTypeChange:
 
 	ld (3301:16), a
 
-	.byte 0x1d, 0x31, 0xf4, 0xf1	; call SetWall_CrossType_Validate (v7 addr)
+	call SetWall_CrossType_Validate	; call SetWall_CrossType_Validate (v7 addr)
 
-	.byte 0x1d, 0x9e, 0xd6, 0xfd	; call Audio_CheckSubsystemReady (v7 addr)
+	call 16635550	; call Audio_CheckSubsystemReady (v7 addr)
 
 	ret
 
 
 
+; 20 x u8 slot -> type map, 0xFF = no type.  SetWall_CrossType_MapLookup reads it with
+; `ld xde,<this>; ld l,(xde+hl)` (hl = slot) and branches to SetWall_CrossType_Reset on
+; 0xFF; SetWall_ParseB0ControlChange does the same lookup and compares the entry with a.
+; (Formerly decoded as instructions.)
 SetWall_SlotTypeMap:
-	nop
-	push	sr
-	normal
-	reti
-	ld	(9:8), 10:io
-	pushw	1284
-	ei	3
-	retd	0xffff
-	swi	7
-	swi	7
-	incf
-	decf
-	ret
+	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05
+	.byte 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff, 0xff, 0x0c, 0x0d, 0x0e
 
 SetWall_CrossType_Validate:
 	and (0x2879:16), 252
@@ -778,6 +766,9 @@ SetWall_CrossType_Reset:
 	and (0x2879:16), 252
 	ret
 
+; 3 rows x 16 slot numbers.  SetWall_WriteSingleSlot, SetWall_WriteAllSlots and SetWall_LocalWriteAll
+; run `ld l,(0x0D3E); dec 1,l; sla l,4; ld xde,<this>; lda xiy,(xde+hl)`:
+; row = (byte at RAM 0x0D3E) - 1, 16 bytes per row.
 SetWall_SlotOrderTable:
 	.byte 0x00, 0x02, 0x01, 0x0d, 0x0f, 0x10, 0x0c, 0x0b
 	.byte 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07
@@ -1970,16 +1961,14 @@ SetWall_ForwardSkip_Return:
 SetWall_InlineCodeBlock3:
 	ret
 	call	AccWrap_PlayModeDispatch
-	.byte 0xc1, 0xa7
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10407), 4
 	ld	wa, (0xffec:24)
 	ld	(0xf19e:16), wa
 	push	xix
 	pushw	bc
 	ld	xix, 4421
 	ld	bc, 0:i3
+SetWall_ForwardSkip_Loop2:
 	ld	(0x286b:16), c
 	push	xix
 	call	SetWall_MiscDataAndCode_0x52
@@ -1990,14 +1979,11 @@ SetWall_InlineCodeBlock3:
 	st_rrb a, xix, bc
 	inc 1, bc
 	cp bc, 10
-	jr lt, -33
+	jr lt, SetWall_ForwardSkip_Loop2
 	popw	bc
 	pop	xix
 	ret
-	.byte 0xc1, 0xa7
-	pushw	wa
-	push	xix
-	swi	3
+	anddi8 (10407), 251
 	xor	wa, wa
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
@@ -2025,7 +2011,7 @@ MiddleFuncCall_DispatchData_Code_Helper5:
 	ld	xix, 62080
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85, 0x11
+	ldir85
 	xor	xwa, xwa
 	ld	a, (65507:24)
 	sla	xwa, 11
@@ -2035,7 +2021,7 @@ MiddleFuncCall_DispatchData_Code_Helper5:
 	add	xix, xwa
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85, 0x11
+	ldir85
 	cp	(35994:16), 143
 	jr	z, SetWall_MiscDataAndCode_Skip
 	cp	(35994:16), 167
@@ -2105,11 +2091,11 @@ SetWall_MiscDataAndCode_Helper:
 	cp	hl, 65535
 	jr	z, SetWall_MiscDataAndCode_Return2
 	push	xhl
-	.byte 0xe7, 0x34, 0x04
+	push_lerp 52
 	call	SetWall_MiscDataAndCode_Helper2
 	pop_lerp 52
 	ld	xhl, (4349:16)
-	.byte 0xb3, 0xcf
+	bitm 7, (xhl)
 	pop	xhl
 	jr	z, SetWall_MiscDataAndCode_Return2
 	.byte 0xe7, 0x34, 0x61, 0xe7, 0x34, 0x04
@@ -2192,7 +2178,7 @@ SetWall_Sync_FinalUpdate:
 
 	and (0x28a7:16), 247
 
-	.byte 0x1d, 0xc8, 0xc8, 0xf3	; call SeqPlay_CheckStartConditions (v7 addr)
+	call SeqPlay_CheckStartConditions	; call SeqPlay_CheckStartConditions (v7 addr)
 
 	and (0x28b1:16), 254
 

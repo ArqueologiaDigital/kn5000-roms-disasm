@@ -6,7 +6,7 @@
 ; =============================================================================
 
 	naka_header NAKA_TYPE_0x47
-	ex_ff
+	.byte 0x16
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
@@ -152,20 +152,12 @@ NakaBoxName_ComporserNameBox:	aligned_string "ComporserNameBox"
 NakaBoxData_SongNameBox:	aligned_string "c^dB"
 NakaBoxName_SongNameBox:	aligned_string "SongNameBox"
 NakaBoxData_LyricsBox:
-	jr	ule, 0x5e
-	pop xiz
-	jr	pe, 66
-	nop
-	popw ix
-	jrl ge, 26994
-	jr ule, 115
-	ld xde, 30831
-	swi 7
+	aligned_string "c^^dB"
+	aligned_string "LyricsBox"
+	.byte 0x00, 0xff
 NakaBoxName_AcMuteToggleBox:	aligned_string "AcMuteToggleBox"
 NakaBoxData_MeasureBox:
-	pop xiz
-	pop xiz
-	jr gt, 0
+	aligned_string "^^j"
 NakaBoxName_MeasureBox:		aligned_string "MeasureBox"
 NakaBoxData_AcPDSongNameBox:	aligned_string ""
 NakaBoxName_AcPDSongNameBox:	aligned_string "AcPDSongNameBox"
@@ -182,16 +174,14 @@ NakaBoxName_AcSmfFileNameBox:	aligned_string "AcSmfFileNameBox"
 NakaBoxData_AcDiskFileNameBox:	aligned_string ""
 NakaBoxName_AcDiskFileNameBox:	aligned_string "AcDiskFileNameBox"
 NakaBoxData_AcTrAsGridBox:
-	pop xwa
-	pop xwa
-	jr gt, 0
+	aligned_string "XXj"
 NakaBoxName_AcTrAsGridBox:	aligned_string "AcTrAsGridBox"
 NakaBoxData_AcCurSongNameBox:	aligned_string ""
 NakaBoxName_AcCurSongNameBox:	aligned_string "AcCurSongNameBox"
 NakaBoxData_AcCurrentSongBox:	aligned_string ""
 NakaBoxName_AcCurrentSongBox:	aligned_string "AcCurrentSongBox"
 NakaBoxData_AcDemoSongBox:
-	jr gt, 0
+	.byte 0x6a, 0x00
 NakaBoxName_AcDemoSongBox:	aligned_string "AcDemoSongBox"
 NakaBoxData_AcModeSelBox:
 	.byte 0x43, 0x00
@@ -200,7 +190,14 @@ NakaBoxEnc_PsSongSelBox:	aligned_string "c^kAAnGG"
 NakaBoxName_PsSongSelBoxProc:	aligned_string "PsSongSelBox"
 NakaBoxData_IvNamingExit:	aligned_string ""
 NakaBoxName_IvNamingExit:	aligned_string "IvNamingExit"
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:12): `RegObjTable 0x1600004, 0xfa44e2, 0xe20cae, 0xe208ec, 0x167`
+; = u16 22, the entry count of that class 0x1600004 (ClassProc) table, read with `ldw_da`.
+; v7 names this address as a 24-bit operand at 0xF29E58.
+Yoko_ClassCount_167:
 	.byte 0x16, 0x00
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:13): `RegObjTable 0x160000c, 0xfa58fb, 0xe20e22, 0xe20cb0, 0x1c7`
+; = class 0x160000C (ResEventProc), 20 entries (count word at 0xE20E22), id 0x1C7.
+; v7 names this label's address (0xE20CB0) as a 24-bit operand at 0xF29E88.
 EvtName_PtrTable:
 	.long EvtName_CurSongName
 	.long EvtName_DiskFileName
@@ -246,12 +243,16 @@ EvtName_SmfSongName:	aligned_string "EV_SMFSONGNAME"
 EvtName_SmfFileName:	aligned_string "EV_SMFFILENAME"
 EvtName_DiskFileName:	aligned_string "EV_DISKFILENAME"
 EvtName_CurSongName:	aligned_string "EV_CURSONGNAME"
-	push_a
-	.byte 0x00			; padding
-	pop	xde
-	rcf
-	.byte 0xe2, 0x00
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:13): `RegObjTable 0x160000c, 0xfa58fb, 0xe20e22, 0xe20cb0, 0x1c7`
+; = u16 20, the entry count of that class 0x160000C (ResEventProc) table, read with `ldw_da`.
+; v7 names this label's address (0xE20E22) as a 24-bit operand at 0xF29E80.
+Yoko_ResEventCount_1C7:
+	.short 20
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:14): `RegObjTable 0x160000d, 0xfa5948, 0xe2106a, 0xe20e24, 0x1e7`
+; = class 0x160000D (ResMethodProc), 27 entries (count word at 0xE2106A), id 0x1E7.
+; v7 names this label's address (0xE20E24) as a 24-bit operand at 0xF29EB0.
 MtName_PtrTable:
+	.long MtName_DemoSongSel
 	.long MtName_SongNameSet
 	.long MtName_PsSongSelBoxID
 	.long MtName_SetSelectedFileNum
@@ -307,5 +308,22 @@ MtName_TrAsTrackDec:		aligned_string "MT_TrAsTrackDec"
 MtName_TrAsTrackInc:		aligned_string "MT_TrAsTrackInc"
 MtName_SetSelectedFileNum:	aligned_string "MT_SetSelectedFileNum"
 MtName_PsSongSelBoxID:		aligned_string "MT_PsSongSelBoxID"
-MtName_SongNameSet:	.incbin "includes/romslices/v7_data_mtname_songnameset.bin"
+MtName_SongNameSet:		aligned_string "MT_SongNameSet"
+MtName_DemoSongSel:		aligned_string "MT_DemoSongSel"
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:14): `RegObjTable 0x160000d, 0xfa5948, 0xe2106a, 0xe20e24, 0x1e7`
+; = u16 27, the entry count of that class 0x160000D (ResMethodProc) table, read with `ldw_da`.
+; v7 names this label's address (0xE2106A) as a 24-bit operand at 0xF29EA8.
+Yoko_ResMethodCount_1E7:
+	.short 27
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:17): `RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe2106c, 0x107`
+; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x107.
+; v7 names this label's address (0xE2106C) as a 24-bit operand at 0xF29F1F.
+Yoko_FunctionTable_107:
+	.long IvNamingExit_ScreenData	; the routine named "PsSongSelBoxProc" by the next table
+	.long 0
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:18): `RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe21074, 0x407`
+; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x407.
+; v7 names this label's address (0xE21074) as a 24-bit operand at 0xF29F44.
+Yoko_FunctionTable_407:
+	.long 0x00e2107e	; -> "PsSongSelBoxProc" name string (next file)
 	.long NakaBoxData_PsSongSelBox

@@ -62,11 +62,11 @@ ParaLoadOpt_BuildFromIZ3:
 
 	push xwa
 
-	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 addr)
+	call Free_Compare2	; call Strcpy (v7 addr)
 
 	inc 8, xsp
 
-	.byte 0x1d, 0xc3, 0x40, 0xfa	; call GetFocusObject (v7 addr)
+	call GetFocusObject	; call GetFocusObject (v7 addr)
 
 	ld xwa, xhl
 
@@ -1911,7 +1911,7 @@ EditControlProc:
 ; Sends event 0x1c00038 to trigger GroupBoxProc_StartSSFPresentation.
 ;
 ; This function appears as a function-pointer entry in many widget handler
-; chains (tables at UIState_HandlerTable_WithProbe, UIState_HandlerTable_Standard, UIState_HandlerTable_Compact, etc.).
+; chains (SwbtWr bank-2 listener lists SwbtB2_Code00_Listeners, SwbtB2_Code01_Listeners, SwbtB2_Code02_Listeners, etc.).
 ; It fires when a widget in one of those chains processes user-interaction events.
 ;
 ; Logic (decoded via unidasm):
@@ -1957,17 +1957,35 @@ EditControlProc:
 ; Plugged into each UI state as the standard key-scan handler.
 ; ============================================================================
 UIState_KeyScan_Dispatch:
-	.byte 0x1d, 0x6d, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
-	.byte 0xc1, 0x9c, 0x8c, 0x21, 0xd8, 0x12, 0xd8, 0xec
-	.byte 0x02, 0xf2, 0x80, 0x1f, 0xe0, 0x31, 0xe3, 0x07
-	.byte 0xe4, 0xe0, 0x24, 0xec, 0xe4, 0xb0, 0xf6, 0x94
-	.byte 0x3f, 0xfe, 0xff, 0x6e, 0x33, 0xea, 0xa8, 0xc1
-	.byte 0xe4, 0xbf, 0x25, 0xea, 0xee, 0x08, 0xe8, 0xa8
-	.byte 0xc1, 0xe1, 0xbf, 0x21, 0xe8, 0x82, 0xea, 0xee
-	.byte 0x08, 0xe8, 0xa8, 0xc1, 0xe2, 0xbf, 0x21, 0xe8
-	.byte 0x82, 0xea, 0xee, 0x08, 0xe8, 0xa8, 0xc1, 0xe3
-	.byte 0xbf, 0x21, 0xe8, 0x82, 0x40, 0xff, 0xff, 0xff
-	.byte 0xff, 0x41, 0x38, 0x00, 0xc0, 0x01, 0x68, 0x4c
+	call Boot_CheckConfigFlag7
+	cp hl, 0:i3
+	ret z
+	ldb_d8 a, (35996)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (SSF_PresentationGateTable)
+	ld_rrl xix, xbc, wa
+	or xix, xix
+	ret z
+	cpw (xix), 65534
+	jr nz, KeyScan_CheckEmptyMarker
+	ld xde, 0:i3
+	ldb_d8 e, (49124)
+	sll xde, 8
+	ld xwa, 0:i3
+	ldb_d8 a, (49121)
+	add xde, xwa
+	sll xde, 8
+	ld xwa, 0:i3
+	ldb_d8 a, (49122)
+	add xde, xwa
+	sll xde, 8
+	ld xwa, 0:i3
+	ldb_d8 a, (49123)
+	add xde, xwa
+	ld xwa, 4294967295
+	ld xbc, 29360184
+	jr KeyScan_DispatchEvent
 KeyScan_CheckEmptyMarker:
 	cpw (xix), 0xffff			; Check for EMPTY marker
 
@@ -2220,19 +2238,42 @@ MainAutoFree:
 	ld	xhl, 0:i3
 	ret
 MainRamControl:
-	.byte 0xbf, 0xf0, 0x37, 0xe9, 0xcf, 0x68, 0x00, 0xe0
-	.byte 0x01, 0x76, 0xb7, 0x01, 0xe9, 0xcf, 0x6a, 0x00
-	.byte 0xe0, 0x01, 0x76, 0x99, 0x00, 0xe9, 0xcf, 0x69
-	.byte 0x00, 0xe0, 0x01, 0x7e, 0x23, 0x02, 0xb7, 0x62
-	.byte 0xa2, 0x20, 0xbf, 0x04, 0x60, 0x0b, 0x16, 0x00
-	.byte 0x1d, 0xa3, 0x06, 0xff, 0xef, 0x62, 0xbf, 0x0c
-	.byte 0x63, 0xa7, 0x23, 0xaf, 0x0c, 0x22, 0xeb, 0x8d
-	.byte 0xea, 0x8c, 0x31, 0x0b, 0x00, 0x95, 0x11, 0x9b
-	.byte 0x04, 0x20, 0xd8, 0xdc, 0x66, 0x34, 0xd8, 0xda
-	.byte 0x66, 0x1b, 0xd8, 0xd9, 0x6e, 0x38, 0xeb, 0x89
-	.byte 0xb9, 0x0e, 0x31, 0xa1, 0x20, 0xc9, 0x8d, 0xaf
-	.byte 0x04, 0x20, 0xb0, 0x45, 0x40, 0xff, 0x00, 0x00
-	.byte 0x00, 0xa1, 0xc8, 0x68, 0x28
+	lda xsp, (xsp-16)
+	cp xbc, 31457384
+	jrl z, RamCtrl_Set_Entry
+	cp xbc, 31457386
+	jrl z, RamCtrl_Adjust_Entry
+	cp xbc, 31457385
+	jrl nz, RamCtrl_Return
+	ld (xsp), xde
+	ld xwa, (xde)
+	ld (xsp+4), xwa
+	pushw 22
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+12), xhl
+	ld xhl, (xsp)
+	ld xde, (xsp+12)
+	ld xiy, xhl
+	ld xix, xde
+	ldw bc, 11
+	ldirw
+	ld wa, (xhl+4)
+	cp wa, 4:i3
+	jr z, RamCtrl_Read_Dword
+	cp wa, 2:i3
+	jr z, RamCtrl_Read_Word
+	cp wa, 1:i3
+	jr nz, RamCtrl_Read_InvalidSize
+	ld xbc, xhl
+	lda xbc, (xbc+14)
+	ld xwa, (xbc)
+	ld e, a
+	ld xwa, (xsp+4)
+	ld (xwa), e
+	ld xwa, 255
+	and (xbc), xwa
+	jr RamCtrl_Read_Dispatch
 RamCtrl_Read_Word:
 	ld xwa, (xsp)
 	lda xbc, (xwa + 14)
@@ -2352,13 +2393,28 @@ RamCtrl_Adjust_StoreMax:
 	ld (xsp + 8), xwa
 
 RamCtrl_Adjust_WriteBack:
-	.byte 0x0b, 0x16, 0x00, 0x1d, 0xa3, 0x06, 0xff, 0xef
-	.byte 0x62, 0xbf, 0x0c, 0x63, 0xa7, 0x23, 0xaf, 0x0c
-	.byte 0x20, 0xeb, 0x8d, 0xe8, 0x8c, 0x31, 0x0b, 0x00
-	.byte 0x95, 0x11, 0xaf, 0x08, 0x21, 0xb8, 0x0e, 0x61
-	.byte 0x9b, 0x04, 0x20, 0xd8, 0xdc, 0x66, 0x19, 0xd8
-	.byte 0xda, 0x66, 0x0b, 0xd8, 0xd9, 0x6e, 0x1b, 0xaf
-	.byte 0x04, 0x20, 0xb0, 0x43, 0x68, 0x1b
+	pushw 22
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+12), xhl
+	ld xhl, (xsp)
+	ld xwa, (xsp+12)
+	ld xiy, xhl
+	ld xix, xwa
+	ldw bc, 11
+	ldirw
+	ld xbc, (xsp+8)
+	ld (xwa+14), xbc
+	ld wa, (xhl+4)
+	cp wa, 4:i3
+	jr z, RamCtrl_Adjust_Write_Dword
+	cp wa, 2:i3
+	jr z, RamCtrl_Adjust_Write_Word
+	cp wa, 1:i3
+	jr nz, RamCtrl_Adjust_Write_InvalidSize
+	ld xwa, (xsp+4)
+	ld (xwa), c
+	jr RamCtrl_Adjust_Dispatch
 RamCtrl_Adjust_Write_Word:
 	ld xbc, (xsp + 8)
 	ld xwa, (xsp + 4)
@@ -2469,16 +2525,33 @@ RamCtrl_Return:
 	ret
 
 MainBitControl:
-	.byte 0xef, 0x68, 0x3e, 0xe9, 0xcf, 0x66, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x72, 0xe9, 0xcf, 0x67, 0x00, 0xe0
-	.byte 0x01, 0x7e, 0xc2, 0x00, 0xea, 0x8e, 0xa6, 0x20
-	.byte 0xbf, 0x04, 0x60, 0x0b, 0x0e, 0x00, 0x1d, 0xa3
-	.byte 0x06, 0xff, 0xef, 0x62, 0xbf, 0x08, 0x63, 0xaf
-	.byte 0x08, 0x20, 0xee, 0x8d, 0xe8, 0x8c, 0xd9, 0xaf
-	.byte 0x95, 0x11, 0xbe, 0x04, 0x31, 0xb8, 0x08, 0x32
-	.byte 0x9e, 0x08, 0x3f, 0x00, 0x00, 0x66, 0x0d, 0xaf
-	.byte 0x04, 0x20, 0xa1, 0x21, 0xa0, 0xe9, 0xb2, 0x02
-	.byte 0x01, 0x00, 0x68, 0x11
+	dec 8, xsp
+	push xiz
+	cp xbc, 31457382
+	jr z, BitCtrl_ReadBit
+	cp xbc, 31457383
+	jrl nz, BitCtrl_Return
+	ld xiz, xde
+	ld xwa, (xiz)
+	ld (xsp+4), xwa
+	pushw 14
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+8), xhl
+	ld xwa, (xsp+8)
+	ld xiy, xiz
+	ld xix, xwa
+	ld bc, 7:i3
+	ldirw
+	lda xbc, (xiz+4)
+	lda xde, (xwa+8)
+	cpw (xiz+8), 0
+	jr z, BitCtrl_ClearBit
+	ld xwa, (xsp+4)
+	ld xbc, (xbc)
+	or (xwa), xbc
+	ldw (xde), 1
+	jr BitCtrl_PostBitChangeEvent
 BitCtrl_ClearBit:
 	ld xbc, (xbc)
 	xor xbc, 0xffffffff
@@ -2577,16 +2650,108 @@ MainPmanControl:
 	lda xix, (MainPmanCtrl_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
+; MainPmanControl's six switch cases, not a table: it takes event - 0x1E00057 as
+; the case, `ld wa,(<offset word>)` from the six s16 at 0xEA99F8 (0, 17, 34, 100,
+; 125, 150; spelled DiskWarning_ConfirmStrings_0xD4C above), then `lda xix,(<this>);
+; jp t,xix+wa`.  Held as `.byte` (v10/v9) or a romslice `.incbin` (v7) before
+; scripts/converters/convert_mainpman_switch.py; each case offset is an
+; instruction boundary and every instruction re-encodes to the ROM bytes.
 MainPmanCtrl_DispatchTable:
-	.incbin "includes/romslices/v7_transplant_MainPmanCtrl_DispatchTable.bin"
+MainPmanCtrl_Case0:
+	ld xiz, xde
+	ld xwa, (xiz)
+	ld bc, (xiz+4)
+	ld de, (xiz+6)
+	call 16566832
+	jrl 301
+MainPmanCtrl_Case1:
+	ld xiz, xde
+	ld xwa, (xiz)
+	ld bc, (xiz+4)
+	ld de, (xiz+6)
+	call 16567134
+	jrl 284
+MainPmanCtrl_Case2:
+	ld xiz, xde
+	ld xwa, (xiz)
+	call AcApcToggleProc_Helper
+	ld (xiz+4), hl
+	pushw 12
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+4), xhl
+	ld xwa, (xsp+4)
+	ld xiy, xiz
+	ld xix, xwa
+	ld bc, 6:i3
+	ldirw
+	ld xwa, 4294967295
+	ld xbc, 29360156
+	ld xde, (xsp+4)
+	call ApPostEvent
+	ld xwa, 4294967295
+	ld xbc, 31457315
+	ld xde, (xsp+4)
+	jr MainBitControl_Code_Join
+MainPmanCtrl_Case3:
+	ld xiz, xde
+	ld xwa, (xiz)
+	srl xwa, 0
+	ld qwa, 0
+	ld xbc, (xiz)
+	pushm (xiz+6)
+	ld de, (xiz+4)
+	call 16567114
+	jrl 193
+MainPmanCtrl_Case4:
+	ld xiz, xde
+	ld xwa, (xiz)
+	srl xwa, 0
+	ld qwa, 0
+	ld xbc, (xiz)
+	pushm (xiz+6)
+	ld de, (xiz+4)
+	call 16567378
+	jrl 168
+MainPmanCtrl_Case5:
+	ld xiz, xde
+	ld xwa, (xiz)
+	srl xwa, 0
+	ld qwa, 0
+	ld xbc, (xiz)
+	call DkMdlyPly_CheckState_Helper
+	ld (xiz+4), hl
+	pushw 12
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+4), xhl
+	ld xwa, (xsp+4)
+	ld xiy, xiz
+	ld xix, xwa
+	ld bc, 6:i3
+	ldirw
+	ld xwa, 4294967295
+	ld xbc, 29360156
+	ld xde, (xsp+4)
+	call ApPostEvent
+	ld xwa, 4294967295
+	ld xbc, 31457315
+	ld xde, (xsp+4)
+MainBitControl_Code_Join:
+	call ApPostEvent
+	jr MainTitle_SendEventDone
+
 MainPmanCtrl_HandleA0:
-	.byte 0xbf, 0x06, 0x14, 0x9e, 0x8c, 0xea, 0xcf, 0x10
-	.byte 0x00, 0x00, 0x00, 0x67, 0x10, 0xea, 0xcf, 0x15
-	.byte 0x00, 0x00, 0x00, 0x66, 0x08, 0xea, 0xcf, 0x16
-	.byte 0x00, 0x00, 0x00, 0x6e, 0x06
+	ld (xsp+6), (35998)
+	cp xde, 16
+	jr c, MainPmanCtrl_StorePartSelect
+	cp xde, 21
+	jr z, MainPmanCtrl_StorePartSelect
+	cp xde, 22
+	jr nz, MainPmanCtrl_CheckSoundParam
 MainPmanCtrl_StorePartSelect:
 	ld	(35998:16), e
-	jr	31
+	jr	MainPmanCtrl_LoadPartSelect
 MainPmanCtrl_CheckSoundParam:
 	ld	xwa, 16640
 	call	AcApcToggleProc_Helper
@@ -2603,9 +2768,13 @@ MainPmanCtrl_SetPartSelectZero:
 MainPmanCtrl_LoadPartSelect:
 	ld	e, (35998:16)
 MainPmanCtrl_CompareAndUpdate:
-	.byte 0x8f, 0x06, 0xf5, 0x66, 0x0f, 0xda, 0x12, 0x0b
-	.byte 0xff, 0x00, 0x30, 0x90, 0x00, 0x31, 0x10, 0x00
-	.byte 0x1d, 0x53, 0xaa, 0xfd
+	cp e, (xsp+6)
+	jr z, 15
+	extz de
+	pushw 255
+	ldw wa, 144
+	ldw bc, 16
+	call 16624211
 MainTitle_SendEventDone:
 	ld xhl, 0:i3
 	pop xiz
@@ -2632,7 +2801,7 @@ MainTitleControl:
 	jr	z, SeqState_TransitionMode
 	cp	xbc, 29360148
 	jrl	nz, UIWidget_ReturnZero
-	.byte 0xc1, 0x98, 0x8c, 0x19, 0x99, 0x8c
+	ldmm8 35993, 35992
 	ld	(35992:16), l
 	ldw	wa, 72
 	call	CtrlPanel_SetIndicatorBit
@@ -2643,13 +2812,13 @@ MainTitleControl:
 	jrl	UIWidget_ReturnZero
 SeqState_TransitionMode:
 	ld	(35995:16), a
-	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
+	ldmm8 35997, 35996
 	ld	(35994:16), l
 	ld	(35996:16), l
 	ldw	wa, 97
 	jr	MainTitleCtrl_SetIndicatorAndClear
 MainTitleCtrl_SaveAndTransition:
-	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
+	ldmm8 35997, 35996
 	ld	(35996:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
@@ -2667,8 +2836,9 @@ SeqState_DemoModeHandler:
 	jr	nz, SeqDemo_SaveCurrentState
 	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
-	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c, 0xc1, 0x98
-	.byte 0x8c, 0x19, 0x99, 0x8c, 0x68, 0x68
+	ldmm8 35997, 35996
+	ldmm8 35993, 35992
+	jr UIWidget_ReturnZero
 MainTitleCtrl_HandleAB:
 	ld (0x0274ac:24), de
 	ldw (0x0274ae:24), 0x000a
@@ -2691,13 +2861,19 @@ MainTitleCtrl_HandleBB:
 	ld (0x0274a6:24), wa
 
 MainTitleCtrl_CheckSecondTimer:
-	.byte 0xd2, 0xae, 0x74, 0x02, 0x20, 0xd8, 0xd8, 0x66
-	.byte 0x25, 0xd8, 0x69, 0xf2, 0xae, 0x74, 0x02, 0x50
-	.byte 0xd8, 0xd8, 0x6e, 0x1a, 0xd2, 0xac, 0x74, 0x02
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x06, 0xf1, 0xc0, 0x8e
-	.byte 0xb8, 0x68, 0x04
+	ldw_da wa, (160942)
+	cp wa, 0:i3
+	jr z, UIWidget_ReturnZero
+	dec 1, wa
+	stw_da (160942), wa
+	cp wa, 0:i3
+	jr nz, UIWidget_ReturnZero
+	cpw_da (160940), 0
+	jr z, MainTitleCtrl_ClearIndicatorBit
+	setda 0, (36544)
+	jr MainTitleCtrl_SetIndicator60
 MainTitleCtrl_ClearIndicatorBit:
-	.byte 0xf1, 0xc0, 0x8e, 0xb0	; resda 0, 0x8f5c (v7 patched)
+	resda 0, (36544)	; resda 0, 0x8f5c (v7 patched)
 
 
 
@@ -2823,9 +2999,16 @@ UI_PostDialEnable:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0006f
 	jp ApPostEvent
-UI_DialRangeData:
-	.byte 0xf2, 0x94, 0x74, 0x02, 0x41, 0x0e, 0xf2, 0x95
-	.byte 0x74, 0x02, 0x41, 0x0e
+; Two setters, `ld (RAM),a; ret`, for RAM 0x27494 and 0x27495.  Nothing
+; calls or points at either: no 24- or 32-bit value in the ROM and no
+; jr/jrl/calr displacement reaches 0xF9912C or 0xF99132.  (Formerly UI_DialRangeData,
+; held as `.byte`; it is not data.)
+UI_StoreA_Ram27494:
+	ld (0x027494:24), a
+	ret
+UI_StoreA_Ram27495:
+	ld (0x027495:24), a
+	ret
 
 UI_PostEvent_0x6E:
 	ld e, a

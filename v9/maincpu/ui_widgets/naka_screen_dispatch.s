@@ -7,20 +7,21 @@
 ; layouts. Pointer tables for widget instantiation.
 ; =============================================================================
 
-	xor	(xiz), wa
-	pop	sr
-	.byte 0x00			; padding
-	.byte 0xba, 0xd8, 0x03
-	.byte 0x00			; padding
+; Entries 26-32 and the NULL end of the 33-entry table at 0xE1B786 (it starts
+; in the previous file) that InitializeSuna registers: `RegObjTabl 0x1600010,
+; ViewableProc, 0x21, 0xe1b786, 0xb8` (storage/flash_floppy_handlers.s).
+; 0x0003Dxxx entries are RAM addresses of widgets that Boot_InitWorkRAM_ROMCopy1
+; initialises from WorkRamInit_Image (RAM 0x3D524 + k <- ROM 0xEED8C8 + k).
+	.long 0x0003D896	; RAM; from ROM 0xEEDC3A
+	.long 0x0003D8BA	; RAM; from ROM 0xEEDC5E
 	.long NakaLabel_PatternCopy_MemoryLabel
 	.long NakaLabel_PatternCopy_PatMemLabel
-	cp	iz, 0:i3
-	pop	sr
-	.byte 0x00			; padding
-	push	sr
-	.byte 0xd9, 0x03, 0x00
+	.long 0x0003D8DE	; RAM; from ROM 0xEEDC82
+	.long 0x0003D902	; RAM; from ROM 0xEEDCA6
 	.long NakaNode_PatternCopy_ProgressBar
-	.byte 0x00, 0x00, 0x00, 0x00
+	.long 0	; end of the table
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6174): `RegObjTabl 0x1600010, 0xfa5995, 0x25, 0xe1b80e, 0xb9`
+; = class 0x1600010 (ViewableProc), 37 entries (immediate count), id 0xB9.
 Naka_SeqToComposer_Screens:
 	.long NakaContainer_SeqToComposer_Root
 	.long Naka0x3E_SeqToComposer_DrmBtn
@@ -46,8 +47,7 @@ Naka_SeqToComposer_Screens:
 	.long NakaLabel_SeqToComposer_LastLabel
 	.long NakaLabel_SeqToComposer_MeasLastLabel
 	.long NakaGroup_SeqToComposer_TransGroup
-	ld	h, 0xd9:opc
-	.byte 0x03, 0x00
+	.byte 0x26, 0xd9, 0x03, 0x00
 	.long NakaLabel_SeqToComposer_TrnLabel
 	.long NakaLabel_SeqToComposer_MemLabel
 	.long NakaLabel_SeqToComposer_ComposerMemory
@@ -65,6 +65,8 @@ Naka_SeqCopy_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6176): `RegObjTabl 0x1600010, 0xfa5995, 0xe, 0xe1b8a6, 0xba`
+; = class 0x1600010 (ViewableProc), 14 entries (immediate count), id 0xBA.
 Naka_EasyComposer_Screens:
 	.long NakaContainer_EasyComposer_Root
 	.long Naka0x29_EasyComposer_Scrollbar
@@ -83,6 +85,8 @@ Naka_EasyComposer_Screens:
 	.zero 4
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6178): `RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1b8e2, 0xbb`
+; = class 0x1600010 (ViewableProc), 4 entries (immediate count), id 0xBB.
 Naka_EasyComposer2_Screens:
 	.long NakaContainer_BendRange_Root
 	.long Naka0x22_BendRange_PartSelector
@@ -91,6 +95,8 @@ Naka_EasyComposer2_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6180): `RegObjTabl 0x1600010, 0xfa5995, 0xb, 0xe1b8f6, 0xbd`
+; = class 0x1600010 (ViewableProc), 11 entries (immediate count), id 0xBD.
 Naka_ModeSelect_Screens:
 	.long NakaContainer_ModeSelect_Root
 	.long NakaLabel_ModeSelect_IntroFillIns
@@ -106,6 +112,8 @@ Naka_ModeSelect_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6182): `RegObjTabl 0x1600010, 0xfa5995, 0x21, 0xe1b926, 0xbe`
+; = class 0x1600010 (ViewableProc), 33 entries (immediate count), id 0xBE.
 Naka_ExpandMode_Screens:
 	.long NakaNode_CustomCopy_RootOuter
 	.long NakaLabel_CustomCopy_FromLabel
@@ -143,6 +151,8 @@ Naka_ExpandMode_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6184): `RegObjTabl 0x1600010, 0xfa5995, 0x1b, 0xe1b9ae, 0xc8`
+; = class 0x1600010 (ViewableProc), 27 entries (immediate count), id 0xC8.
 Naka_Accomp7_Screens:
 	.long NakaContainer_CustomCopy_FinalRoot
 	.long NakaNode_Accomp7_Widget01
@@ -172,6 +182,9 @@ Naka_Accomp7_Screens:
 	.long NakaNode_Accomp7_Widget25
 	.long NakaNode_Accomp7_Widget26
 	.byte 0x00, 0x00, 0x00, 0x00
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6186): `RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe1ba1e, 0xc9`
+; = class 0x1600010 (ViewableProc), 16 entries (immediate count), id 0xC9.
+Suna_ViewableTable_C9:
 	.long NakaNode_Accomp7_Widget27
 
 Naka_Accomp8_Screens:
@@ -193,6 +206,8 @@ Naka_Accomp8_Screens:
 	.zero 4
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6188): `RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe1ba62, 0xca`
+; = class 0x1600010 (ViewableProc), 6 entries (immediate count), id 0xCA.
 Naka_Accomp9_Screens:
 	.long NakaNode_Accomp9_Widget01
 	.long NakaNode_Accomp9_Widget02
@@ -203,6 +218,8 @@ Naka_Accomp9_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6190): `RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1ba7e, 0xcb`
+; = class 0x1600010 (ViewableProc), 4 entries (immediate count), id 0xCB.
 Naka_Accomp10_Screens:
 	.long NakaNode_Accomp10_Widget01
 	.long NakaNode_Accomp10_Widget02
@@ -211,6 +228,8 @@ Naka_Accomp10_Screens:
 	.zero 4
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6192): `RegObjTabl 0x1600010, 0xfa5995, 0x9, 0xe1ba92, 0xcc`
+; = class 0x1600010 (ViewableProc), 9 entries (immediate count), id 0xCC.
 Naka_Accomp11_Screens:
 	.long NakaNode_Accomp11_Widget01
 	.long NakaNode_Accomp11_Widget02
@@ -224,6 +243,8 @@ Naka_Accomp11_Screens:
 	.zero 4
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6194): `RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe1baba, 0xdc`
+; = class 0x1600010 (ViewableProc), 8 entries (immediate count), id 0xDC.
 Naka_Accomp12_Screens:
 	.long NakaNode_Accomp12_Widget01
 	.long NakaNode_Accomp12_Widget02
@@ -236,6 +257,8 @@ Naka_Accomp12_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6196): `RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe1bade, 0xed`
+; = class 0x1600010 (ViewableProc), 6 entries (immediate count), id 0xED.
 Naka_Accomp13_Screens:
 	.long NakaNode_Accomp13_Widget01
 	.long NakaNode_Accomp13_Widget02
@@ -246,6 +269,8 @@ Naka_Accomp13_Screens:
 	.zero 4
 
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6143): `RegObjTabl 0x160000f, 0xfa62cb, 0x3, 0xe1bafa, 0x310`
+; = class 0x160000F (ResNameProc), 3 entries (immediate count), id 0x310.
 Naka_Accomp14_Screens:
 	.long NakaInst_StylCnvWaitScreen
 	.long NakaEmpty_Accomp14_Slot1
@@ -255,6 +280,8 @@ NakaEmpty_Accomp14_Slot3:	aligned_string ""
 NakaEmpty_Accomp14_Slot2:	aligned_string ""
 NakaEmpty_Accomp14_Slot1:	aligned_string ""
 NakaInst_StylCnvWaitScreen:	aligned_string "StylCnvWaitScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6145): `RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1bb22, 0x311`
+; = class 0x160000F (ResNameProc), 8 entries (immediate count), id 0x311.
 Naka_StylCnvWait_Screens:
 	.long NakaInst_StylCnvModlScreen
 	.long NakaEmpty_StylCnvModl_Slot1
@@ -274,6 +301,8 @@ NakaEmpty_StylCnvWait_Slot5:	aligned_string ""
 NakaInst_StylCnvModlBox:	aligned_string "StylCnvModlBox"
 NakaEmpty_StylCnvModl_Slot1:	aligned_string ""
 NakaInst_StylCnvModlScreen:	aligned_string "StylCnvModlScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6147): `RegObjTabl 0x160000f, 0xfa62cb, 0x7, 0xe1bb80, 0x312`
+; = class 0x160000F (ResNameProc), 7 entries (immediate count), id 0x312.
 Naka_StylCnvVer_Screens:
 	.long NakaInst_StylCnvCnvtScreen
 	.long NakaEmpty_StylCnvCnvt_Slot1
@@ -291,6 +320,9 @@ NakaEmpty_StylCnvVer_Slot1:	aligned_string ""
 NakaInst_StylCnvCnvtBox:	aligned_string "StylCnvCnvtBox"
 NakaEmpty_StylCnvCnvt_Slot1:	aligned_string ""
 NakaInst_StylCnvCnvtScreen:	aligned_string "StylCnvCnvtScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6149): `RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1bbce, 0x313`
+; = class 0x160000F (ResNameProc), 4 entries (immediate count), id 0x313.
+Suna_ResNameTable_313:
 	.byte 0xea, 0xbb
 	.byte 0xe1, 0x00
 Naka_StylCnvCnvtBox_Screens:
@@ -303,6 +335,9 @@ NakaEmpty_StylCnvCnvtBox_Slot3:	aligned_string ""
 NakaEmpty_StylCnvCnvtBox_Slot2:	aligned_string ""
 NakaEmpty_StylCnvCnvtBox_Slot1:	aligned_string ""
 NakaInst_StylCnvStorScreen:	aligned_string "StylCnvStorScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6151): `RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1bbfc, 0x314`
+; = class 0x160000F (ResNameProc), 4 entries (immediate count), id 0x314.
+Suna_ResNameTable_314:
 	.long NakaInst_StylCnvTxtScreen
 Naka_StylCnvStor_Screens:
 	.long NakaEmpty_StylCnvStor_Slot1
@@ -314,6 +349,8 @@ NakaEmpty_StylCnvStor_Slot3:	aligned_string ""
 NakaEmpty_StylCnvStor_Slot2:	aligned_string ""
 NakaEmpty_StylCnvStor_Slot1:	aligned_string ""
 NakaInst_StylCnvTxtScreen:	aligned_string "StylCnvTxtScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6153): `RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1bc2a, 0x315`
+; = class 0x160000F (ResNameProc), 8 entries (immediate count), id 0x315.
 Naka_StylCnvTxt_Screens:
 	.long NakaInst_StylCnvSelScreen
 	.long NakaEmpty_StylCnvSel_Slot1
@@ -333,6 +370,9 @@ NakaEmpty_StylCnvTxt_Slot1:	aligned_string ""
 NakaInst_StylCnvSelBox:	aligned_string "StylCnvSelBox"
 NakaEmpty_StylCnvSel_Slot1:	aligned_string ""
 NakaInst_StylCnvSelScreen:	aligned_string "StylCnvSelScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6155): `RegObjTabl 0x160000f, 0xfa62cb, 0x7, 0xe1bc7c, 0x316`
+; = class 0x160000F (ResNameProc), 7 entries (immediate count), id 0x316.
+Suna_ResNameTable_316:
 	.long NakaInst_StylCnvContScreen
 Naka_StylCnvSelBox_Screens:
 	.long NakaEmpty_StylCnvSelBox_Slot1
@@ -350,6 +390,9 @@ NakaEmpty_StylCnvSelBox_Slot3:	aligned_string ""
 NakaEmpty_StylCnvSelBox_Slot2:	aligned_string ""
 NakaEmpty_StylCnvSelBox_Slot1:	aligned_string ""
 NakaInst_StylCnvContScreen:	aligned_string "StylCnvContScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6157): `RegObjTabl 0x160000f, 0xfa62cb, 0x12, 0xe1bcbc, 0x3b0`
+; = class 0x160000F (ResNameProc), 18 entries (immediate count), id 0x3B0.
+Suna_ResNameTable_3B0:
 	.long NakaInst_CmpMenuScreen
 Naka_StylCnvCont_Screens:
 	.long NakaEmpty_StylCnvCont_Slot1
@@ -389,6 +432,8 @@ NakaEmpty_StylCnvCont_Slot3:	aligned_string ""
 NakaEmpty_StylCnvCont_Slot2:	aligned_string ""
 NakaEmpty_StylCnvCont_Slot1:	aligned_string ""
 NakaInst_CmpMenuScreen:	aligned_string "CmpMenuScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6159): `RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe1bd3a, 0x3b1`
+; = class 0x160000F (ResNameProc), 12 entries (immediate count), id 0x3B1.
 Naka_CmpMenu_Screens:
 	.long NakaInst_CmpBkslScreen
 	.long NakaEmpty_CmpMenu_Slot1
@@ -416,6 +461,9 @@ NakaEmpty_CmpMenu_Slot3:	aligned_string ""
 NakaEmpty_CmpMenu_Slot2:	aligned_string ""
 NakaEmpty_CmpMenu_Slot1:	aligned_string ""
 NakaInst_CmpBkslScreen:	aligned_string "CmpBkslScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6161): `RegObjTabl 0x160000f, 0xfa62cb, 0x16, 0xe1bd94, 0x3b2`
+; = class 0x160000F (ResNameProc), 22 entries (immediate count), id 0x3B2.
+Suna_ResNameTable_3B2:
 	.long NakaInst_CmpBkslSScreen
 Naka_CmpBookshelf_Screens:
 	.long NakaEmpty_CmpBksl_Slot16
@@ -463,6 +511,9 @@ NakaEmpty_CmpBksl_Slot18:	aligned_string ""
 NakaEmpty_CmpBksl_Slot17:	aligned_string ""
 NakaEmpty_CmpBksl_Slot16:	aligned_string ""
 NakaInst_CmpBkslSScreen:	aligned_string "CmpBkslSScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6163): `RegObjTabl 0x160000f, 0xfa62cb, 0x5, 0xe1be54, 0x3b3`
+; = class 0x160000F (ResNameProc), 5 entries (immediate count), id 0x3B3.
+Suna_ResNameTable_3B3:
 	.long NakaInst_CmpNamingScreen
 Naka_CmpBookshelfSub_Screens:
 	.long NakaEmpty_CmpBkslSub_Slot2
@@ -476,6 +527,8 @@ NakaInst_NameMemLabel:	aligned_string "NameMemLabel"
 NakaEmpty_CmpBkslSub_Slot3:	aligned_string ""
 NakaEmpty_CmpBkslSub_Slot2:	aligned_string ""
 NakaInst_CmpNamingScreen:	aligned_string "CmpNamingScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6165): `RegObjTabl 0x160000f, 0xfa62cb, 0x12, 0xe1be9a, 0x3b4`
+; = class 0x160000F (ResNameProc), 18 entries (immediate count), id 0x3B4.
 Naka_NamingMem_Screens:
 	.long NakaInst_CmpSetScreen
 	.long NakaEmpty_CmpSet_Slot8
@@ -515,6 +568,8 @@ NakaInst_CmSetP1Ctl:	aligned_string "CmSetP1Ctl"
 NakaInst_CmSetPage:	aligned_string "CmSetPage"
 NakaEmpty_CmpSet_Slot8:	aligned_string ""
 NakaInst_CmpSetScreen:	aligned_string "CmpSetScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6167): `RegObjTabl 0x160000f, 0xfa62cb, 0x1f, 0xe1bf7a, 0x3b5`
+; = class 0x160000F (ResNameProc), 31 entries (immediate count), id 0x3B5.
 Naka_CmSetP1Grid_Screens:
 	.long NakaInst_CmpRealScreen
 	.long NakaEmpty_CmpReal_Slot23
@@ -580,11 +635,15 @@ NakaEmpty_CmpReal_Slot2:	aligned_string ""
 NakaInst_CmpMem:	aligned_string "CmpMem"
 NakaEmpty_CmpReal_Slot23:	aligned_string ""
 NakaInst_CmpRealScreen:	aligned_string "CmpRealScreen"
-	and	w, (xwa)
-	.byte 0xe1, 0x00
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6169): `RegObjTabl 0x160000f, 0xfa62cb, 0x1, 0xe1c076, 0x3b6`
+; = class 0x160000F (ResNameProc), 1 entries (immediate count), id 0x3B6.
+Suna_ResNameTable_3B6:
+	.byte 0x80, 0xc0, 0xe1, 0x00
 	.long NakaEmpty_CmpReal_Slot24
 NakaEmpty_CmpReal_Slot24:	aligned_string ""
 NakaEmpty_CmpReal_Slot25:	aligned_string ""
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6171): `RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c082, 0x3b7`
+; = class 0x160000F (ResNameProc), 6 entries (immediate count), id 0x3B7.
 Naka_CmpMem_Screens:
 	.long NakaInst_CmpBalScreen
 	.long NakaInst_CmpDrmVol
@@ -600,6 +659,8 @@ NakaInst_CmpAc2Vol:	aligned_string "CmpAc2Vol"
 NakaInst_CmpAc3Vol:	aligned_string "CmpAc3Vol"
 NakaInst_CmpDrmVol:	aligned_string "CmpDrmVol"
 NakaInst_CmpBalScreen:	aligned_string "CmpBalScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6173): `RegObjTabl 0x160000f, 0xfa62cb, 0x21, 0xe1c0e0, 0x3b8`
+; = class 0x160000F (ResNameProc), 33 entries (immediate count), id 0x3B8.
 PtrTbl_CmpNcpScreenStrs:
 	.long StrCmpNcpScreen
 	.long StrCmpNcpFitmSw_Empty
@@ -669,6 +730,8 @@ StrCmpNcpTitmSw_Empty:	aligned_string ""
 StrCmpNcpFitmSw:	aligned_string "CmpNcpFitmSw"
 StrCmpNcpFitmSw_Empty:	aligned_string ""
 StrCmpNcpScreen:	aligned_string "CmpNcpScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6175): `RegObjTabl 0x160000f, 0xfa62cb, 0x25, 0xe1c1fa, 0x3b9`
+; = class 0x160000F (ResNameProc), 37 entries (immediate count), id 0x3B9.
 PtrTbl_S2cScreenStrs:
 	.long StrS2cScreen
 	.long StrS2cTrans_Empty17
@@ -746,6 +809,8 @@ StrS2cTrans_Empty15:	aligned_string ""
 StrS2cTrans_Empty16:	aligned_string ""
 StrS2cTrans_Empty17:	aligned_string ""
 StrS2cScreen:		aligned_string "S2CScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6177): `RegObjTabl 0x160000f, 0xfa62cb, 0xe, 0xe1c318, 0x3ba`
+; = class 0x160000F (ResNameProc), 14 entries (immediate count), id 0x3BA.
 PtrTbl_EasyCompScreenStrs:
 	.long StrCmpEasyScreen
 	.long StrEsCmpMemNo_Empty8
@@ -777,6 +842,8 @@ StrEsCmpMemNo_Empty6:	aligned_string ""
 StrEsCmpMemNo_Empty7:	aligned_string ""
 StrEsCmpMemNo_Empty8:	aligned_string ""
 StrCmpEasyScreen:	aligned_string "CmpEasyScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6179): `RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1c392, 0x3bb`
+; = class 0x160000F (ResNameProc), 4 entries (immediate count), id 0x3BB.
 PtrTbl_BendScreenStrs:
 	.long StrCmpBendScreen
 	.long StrCmpBendScreen_Empty4
@@ -788,6 +855,9 @@ StrCmpBendScreen_Empty2:	aligned_string ""
 StrCmpBendScreen_Empty3:	aligned_string ""
 StrCmpBendScreen_Empty4:	aligned_string ""
 StrCmpBendScreen:		aligned_string "CmpBendScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6181): `RegObjTabl 0x160000f, 0xfa62cb, 0xb, 0xe1c3bc, 0x3bd`
+; = class 0x160000F (ResNameProc), 11 entries (immediate count), id 0x3BD.
+Suna_ResNameTable_3BD:
 	.long StrCmpModeScreen
 PtrTbl_ModeScreenStrs:
 	.long StrCmpModeScreen_EmptyB
@@ -813,6 +883,8 @@ StrCmpModeScreen_Empty9:	aligned_string ""
 StrCmpModeScreen_EmptyA:	aligned_string ""
 StrCmpModeScreen_EmptyB:	aligned_string ""
 StrCmpModeScreen:		aligned_string "CmpModeScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6183): `RegObjTabl 0x160000f, 0xfa62cb, 0x21, 0xe1c410, 0x3be`
+; = class 0x160000F (ResNameProc), 33 entries (immediate count), id 0x3BE.
 PtrTbl_CstmCpScreenStrs:
 	.long StrCmpCstmCpScreen
 	.long StrCmpCstmCpScreen_Empty2
@@ -882,6 +954,8 @@ StrCstmCpFrmVal:		aligned_string "CstmCpFrmVal"
 StrCmpCstmCpScreen_Empty1:	aligned_string ""
 StrCmpCstmCpScreen_Empty2:	aligned_string ""
 StrCmpCstmCpScreen:		aligned_string "CmpCstmCpScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6185): `RegObjTabl 0x160000f, 0xfa62cb, 0x1b, 0xe1c560, 0x3c8`
+; = class 0x160000F (ResNameProc), 27 entries (immediate count), id 0x3C8.
 PtrTbl_MspBkslScreenStrs:
 	.long StrMspBkslScreen
 	.long StrMspBkslWin
@@ -940,6 +1014,9 @@ StrMspBnkP2Ctl:		aligned_string "MspBnkP2Ctl"
 StrMspBnkP1Ctl:		aligned_string "MspBnkP1Ctl"
 StrMspBkslWin:		aligned_string "MspBkslWin"
 StrMspBkslScreen:	aligned_string "MspBkslScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6187): `RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe1c6dc, 0x3c9`
+; = class 0x160000F (ResNameProc), 16 entries (immediate count), id 0x3C9.
+Suna_ResNameTable_3C9:
 	.long StrMspRecScreen
 PtrTbl_MspRecScreenStrs:
 	.long StrMspRecBox1
@@ -975,6 +1052,8 @@ StrMspBnkLbl:		aligned_string "MspBnkLbl"
 StrMspRecBox1_Empty:	aligned_string ""
 StrMspRecBox1:		aligned_string "MspRecBox1"
 StrMspRecScreen:	aligned_string "MspRecScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6189): `RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c798, 0x3ca`
+; = class 0x160000F (ResNameProc), 6 entries (immediate count), id 0x3CA.
 PtrTbl_MspMenuScreenStrs:
 	.long StrMspMenuScreen
 	.long StrMspMenuScreen_Empty6
@@ -990,8 +1069,10 @@ StrMspMenuScreen_Empty4:	aligned_string ""
 StrMspMenuScreen_Empty5:	aligned_string ""
 StrMspMenuScreen_Empty6:	aligned_string ""
 StrMspMenuScreen:		aligned_string "MspMenuScreen"
-	and	xsp, xde
-	.byte 0xe1, 0x00
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6191): `RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1c7ce, 0x3cb`
+; = class 0x160000F (ResNameProc), 4 entries (immediate count), id 0x3CB.
+Suna_ResNameTable_3CB:
+	.byte 0xea, 0xc7, 0xe1, 0x00
 
 
 PtrTbl_MspNamingScreenStrs:
@@ -1004,6 +1085,8 @@ StrMspNamingScreen_Empty2:	aligned_string ""
 StrMspNamingScreen_Empty3:	aligned_string ""
 StrMspNamingScreen_Empty4:	aligned_string ""
 StrMspNamingScreen:		aligned_string "MspNamingScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6193): `RegObjTabl 0x160000f, 0xfa62cb, 0x9, 0xe1c7fa, 0x3cc`
+; = class 0x160000F (ResNameProc), 9 entries (immediate count), id 0x3CC.
 PtrTbl_MspReGrpScreenStrs:
 	.long StrMspReGrpScreen
 	.long StrRGrpBnkSw
@@ -1025,6 +1108,8 @@ StrMspRGrpGrid:		aligned_string "MspRGrpGrid"
 StrRGrpBnkSw_Empty:	aligned_string ""
 StrRGrpBnkSw:		aligned_string "RGrpBnkSw"
 StrMspReGrpScreen:	aligned_string "MspReGrpScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6195): `RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1c85e, 0x3dc`
+; = class 0x160000F (ResNameProc), 8 entries (immediate count), id 0x3DC.
 PtrTbl_SndArgrScreenStrs:
 	.long StrSndArgrScreen
 	.long StrSndArgrScreen_Empty
@@ -1044,6 +1129,8 @@ StrSndArgRhyName_Empty2:	aligned_string ""
 StrSndArgRhyName:		aligned_string "SndArgRhyName"
 StrSndArgrScreen_Empty:		aligned_string ""
 StrSndArgrScreen:		aligned_string "SndArgrScreen"
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6197): `RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c8b6, 0x3ed`
+; = class 0x160000F (ResNameProc), 6 entries (immediate count), id 0x3ED.
 PtrTbl_ApcSelScreenStrs:
 	.long StrApcSelScreen
 	.long StrApcSelScreen_Empty3
@@ -1097,6 +1184,9 @@ StrApcSelScreen:	aligned_string "ApcSelScreen"
 	aligned_string "TT_SNDARG"
 	aligned_string "TT_APCSEL"
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6140): `RegObjTabl 0x1600003, 0xfa4a18, 0x24, 0xe1ca6e, 0x144`
+; = class 0x1600003 (MainFunctionProc), 36 entries (immediate count), id 0x144.
+Suna_MainFunctionTable_144:
 	.long CmpModeFunc
 	.long CmpSetTtlFunc
 	.long CmpRealTtlFunc
@@ -1135,6 +1225,8 @@ StrApcSelScreen:	aligned_string "ApcSelScreen"
 	.long MainStylCnvFunc
 	.long 0x0
 
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:6141): `RegObjTabl 0x1600003, 0xfa4a18, 0x24, 0xe1cb02, 0x444`
+; = class 0x1600003 (MainFunctionProc), 36 entries (immediate count), id 0x444.
 PtrTbl_FuncNameStrs:
 	.long StrCmpModeFunc
 	.long StrCmpSetTtlFunc
@@ -1214,20 +1306,27 @@ StrCmpSetTtlFunc:	aligned_string "CmpSetTtlFunc"
 StrCmpModeFunc:		aligned_string "CmpModeFunc"
 
 NoteStepDisplayData:
-	ld	w, 0x31:opc
-	.byte 0x32, 0x00, 0x20, 0x31, 0x31, 0x00, 0x20, 0x31
-	.byte 0x30, 0x00, 0x20, 0x20, 0x39, 0x00, 0x20, 0x20
-	.byte 0x38, 0x00, 0x20, 0x20, 0x37, 0x00, 0x20, 0x20
-	.byte 0x36, 0x00, 0x20, 0x20, 0x35, 0x00, 0x20, 0x20
-	.byte 0x34, 0x00, 0x20, 0x20, 0x33, 0x00, 0x20, 0x20
-	.byte 0x32, 0x00, 0x20, 0x20, 0x31, 0x00, 0x20, 0x20
-	.byte 0x30, 0x00, 0x45, 0x52, 0x52, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00
-	.byte 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x03, 0x00, 0x02, 0x00
+	aligned_string " 12"
+	aligned_string " 11"
+	aligned_string " 10"
+	aligned_string "  9"
+	aligned_string "  8"
+	aligned_string "  7"
+	aligned_string "  6"
+	aligned_string "  5"
+	aligned_string "  4"
+	aligned_string "  3"
+	aligned_string "  2"
+	aligned_string "  1"
+	aligned_string "  0"
+	aligned_string "ERR"
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x6a, 0x00, 0x1c, 0x01, 0x6a, 0x00
-	.byte 0x1c, 0x01, 0x0c, 0x02, 0xf5, 0x01, 0xf5, 0x01
+	.byte 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00
+	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x03, 0x00
+	.byte 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
+	.byte 0x01, 0x00, 0x01, 0x00, 0x6a, 0x00, 0x1c, 0x01
+	.byte 0x6a, 0x00, 0x1c, 0x01, 0x0c, 0x02, 0xf5, 0x01
+	.byte 0xf5, 0x01
 NoteDataB_Natural:
 	.byte 0x42, 0x20, 0x00, 0xff
 NoteDataB_Flat:
@@ -1289,32 +1388,16 @@ StrTimeSig_3_2:
 StrTimeSig_2_2:
 	.byte 0x32, 0x2f, 0x32, 0x00
 StrTimeSig_1_2:
-	ldw	bc, 0x322f
-	nop
-	ld	e, 100:opc
-	nop
-	swi 7
+	aligned_string "1/2"
+	.byte 0x25, 0x64, 0x00, 0xff
 	aligned_string "%s (%s)"
-	nop
-	nop
-	jp16	0xa400
+	.byte 0x00, 0x00, 0x1a, 0x00, 0xa4
 	.byte 0x00			; padding
 	.byte 0xa4, 0x00, 0x55
 	.byte 0x00			; padding
-	jr	f, 0
-	jrl	nz, 0x8200
-	nop
-	nop
-	nop
-	push xwa
-	nop
-	nop
-	nop
-	push xwa
-	nop
-	jrl	le, 29185
-	normal
-	.byte 0x72, 0x01
+	.byte 0x60, 0x00, 0x7e, 0x00, 0x82, 0x00, 0x00, 0x00
+	.byte 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0x72, 0x01
+	.byte 0x72, 0x01, 0x72, 0x01
 StrPanRight63:	aligned_string "Right 63"
 StrPanRight62:	aligned_string "Right 62"
 StrPanRight61:	aligned_string "Right 61"
@@ -1506,10 +1589,8 @@ StrStyleSect_A_Vari4:	aligned_string "A-vari4"
 StrStyleSect_A_Vari3:	aligned_string "A-vari3"
 StrStyleSect_A_Vari2:	aligned_string "A-vari2"
 StrStyleSect_A_Vari1:	aligned_string "A-vari1"
-	ld	e, 51:opc
-	jr	pe, 0
-	ld	e, 51:opc
-	jr	pe, 0
+	aligned_string "%3d"
+	aligned_string "%3d"
 	aligned_string "(SONG:%2d)"
 PtrTbl_TransposeStrs:
 	.long StrTranspose_Minus25
@@ -1668,36 +1749,28 @@ StrTranspose_Minus25:
 	.byte 0x00, 0x00, 0x94, 0x39, 0x00, 0x00, 0x95, 0x39
 	.byte 0x00, 0x00
 StrBeat16:
-	ldw bc, 8246
-	nop
+	aligned_string "16 "
 StrBeat15:	.asciz "15 "
 StrBeat14:
-	ldw bc, 8244
-	nop
+	aligned_string "14 "
 StrBeat13:	.asciz "13 "
 StrBeat12:
-	ldw bc, 8242
-	nop
+	aligned_string "12 "
 StrBeat11:	.asciz "11 "
 StrBeat10:
-	ldw bc, 8240
-	nop
+	aligned_string "10 "
 StrBeat09:	.asciz " 9 "
 StrBeat08:
-	ld w, 56:opc
-	ld w, 0:opc
+	aligned_string " 8 "
 StrBeat07:	.asciz " 7 "
 StrBeat06:
-	ld w, 54:opc
-	ld w, 0:opc
+	aligned_string " 6 "
 StrBeat05:	.asciz " 5 "
 StrBeat04:
-	ld w, 52:opc
-	ld w, 0:opc
+	aligned_string " 4 "
 StrBeat03:	.asciz " 3 "
 StrBeat02:
-	ld w, 50:opc
-	ld w, 0:opc
+	aligned_string " 2 "
 StrBeat01:	.asciz " 1 "
 StrBeatOff:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x00, 0x00
@@ -1820,16 +1893,14 @@ StrRhySlot_MemoryB:		aligned_string "MEMORY B "
 StrRhySlot_MemoryA:		aligned_string "MEMORY A "
 	aligned_string "MEMORY"
 	aligned_string "CUSTOM"
-	popw iy
-	ld	xiy, 0x59524f4d
+	.byte 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59
 	.byte 0x00			; padding
 	.byte 0xff			; padding
-	ld	xhl, 0x4f545355
-	popw iy
+	.byte 0x43, 0x55, 0x53, 0x54, 0x4f, 0x4d
 	.byte 0x00			; padding
 	.byte 0xff			; padding
 	.byte 0x00			; padding
-	or	bc, iy
+	.byte 0xdd, 0xe1
 	.byte 0x00			; padding
 PtrTbl_StyleSectShortNames2:
 	.long StrStyleSect2_A_Vari2
@@ -1913,9 +1984,7 @@ PtrTbl_NotePositionStrs:
 	.long StrNotePos_FlatAlt
 	.long StrNotePos_Natural
 StrNotePos_Natural:
-	ld	w, 0x7e:opc
-	jr	lt, 97
-	ld	w, 0:opc
+	aligned_string " ~aa "
 	aligned_string " ~ab "
 	aligned_string " ~ab~b8"
 	aligned_string " ~ac "
@@ -2140,7 +2209,7 @@ StrCompileBank2:	aligned_string "COMPILE BANK:2"
 StrCompileBank1:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEASURE = %d"
 	aligned_string "MEMORY = %2d"
-	ld	e, 100:opc
+	.byte 0x25, 0x64
 	.byte 0x00			; padding
 	.byte 0xff			; padding
 	.long StrInstantStart
@@ -2208,20 +2277,9 @@ SLOT_NAME_MEMORY_A:	aligned_string "MEMORY A "
 
 MsgBox_AttentionHeader:
 	; Control codes/header
-	call16 7168
-	nop
-	pushw iy
-	nop
-	pushw iy
-	nop
-	pushw iy
-	nop
-	ld w, 0:opc
-	pushw iy
-	nop
-	ld l, 0:opc
-	call16 0
-	nop
+	.byte 0x1c, 0x00, 0x1c, 0x00, 0x2d, 0x00, 0x2d, 0x00
+	.byte 0x2d, 0x00, 0x20, 0x00, 0x2d, 0x00, 0x27, 0x00
+	.byte 0x1c, 0x00, 0x00, 0x00
 	; Localization: Attention (6 languages)
 MSG_ATTENTION_EN:	aligned_string "ATTENTION!"	; English (12 bytes)
 MSG_ATTENTION_DE:	.asciz "ACHTUNG !"	; German (10 bytes)
