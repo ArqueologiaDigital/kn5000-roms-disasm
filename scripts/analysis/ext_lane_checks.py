@@ -28,6 +28,8 @@ FAIL and the numbers it saw; exit status is non-zero if any check fails.
   counts     the count words InitializeToshi reads with `ldw_da`: 0xED2D02 = 28,
              0xED2D92 = 8, 0xED2F64 = 26, and the tables they count end in NULL
              after exactly that many entries.
+  vmaps      the 11 value-map descriptors the table at 0xEE0154 points at:
+             {u32 map in 0xED...., u16 count, u8, u16 (+7) < count, 0xFF}.
   widgets    the NAKA widget records 0xED37DA-0xED3C95 are elements 25-62 of
              the Toshi_Viewable_NORMAL table (slot 1, 0xED77CE), and in every
              one +4 is the parent element, +6 the first child, +8 the next
@@ -188,7 +190,21 @@ def test1(r):
         ",".join("0x%06X" % a for a in elems[7:13]), bad or "none")
 
 
-CHECKS = {"test1": test1, "chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
+def vmaps(r):
+    bad = []
+    zero_hits = 0
+    for k in range(11):
+        d = r.u32(0xEE0154 + 4 * k)
+        mp, cnt, b9, i7 = r.u32(d), r.u16(d + 4), r.u8(d + 9), r.u16(d + 7)
+        if not (0xED0000 <= d < 0xEE0000 and 0xED0000 <= mp < 0xEE0000 and b9 == 0xFF and 0 < cnt < 256 and i7 < cnt):
+            bad.append(k)
+        if i7 and r.u8(mp + i7) == 0:
+            zero_hits += 1
+    return not bad, "11 descriptors at 0xEE0154, layout failures: %s; +7 indexes a 0x00 entry in %d" % (
+        bad or "none", zero_hits)
+
+
+CHECKS = {"vmaps": vmaps, "test1": test1, "chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
 
 
 def main():

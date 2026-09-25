@@ -200,9 +200,8 @@ def main():
             j = i
             while j < n and src[j].startswith(";"):
                 j += 1
-            if not macro_emitted:
-                out.extend(MACRO_DEF.rstrip("\n").split("\n"))
-                macro_emitted = True
+            # (the sndparam_descriptor macro is defined in the v10 text itself
+            # since 2026-09-25, so it is carried over like any other line)
             out.append(";  %s x 18-byte sound-parameter descriptors, %s-%s, one" % (cnt, lo_s, hi_s))
             out.append(";  `sndparam_descriptor` per record (fields: the macro above).  v10")
             out.append(";  compiles the same records from audio/sndparam_records/%s.c;" %
