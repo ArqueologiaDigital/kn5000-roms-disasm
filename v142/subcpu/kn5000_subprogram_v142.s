@@ -52401,22 +52401,22 @@ DSP_VolumeCurve_FP:
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 36)
-	lda xde, (DSP_FP_ConstPool:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_30:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (0x012cd7:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_44100:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (0x012cdb:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_3307500:24)
 	lda xwa, (xsp + 36)
 	call FP_fadd
-	lda xbc, (0x012cdf:24)
+	lda xbc, (FPConst_DSP_VolumeCurve_FP_75:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call FP_SP_Sub
-	lda xbc, (0x012ce3:24)
+	lda xbc, (FPConst_DSP_VolumeCurve_FP_1800:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call FP_fdiv
@@ -52428,7 +52428,7 @@ DSP_VolumeCurve_FP:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012ce7:24)
+	lda xiy, (FPConst_DSP_VolumeCurve_FP_2:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -52448,22 +52448,22 @@ DSP_VolumeCurve_FP_HighRange:
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 36)
-	lda xde, (0x012cef:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_30:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (0x012cf3:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_44100:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (0x012cf7:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_65091600:24)
 	lda xwa, (xsp + 36)
 	call FP_SP_Sub
-	lda xbc, (0x012cfb:24)
+	lda xbc, (FPConst_DSP_VolumeCurve_FP_HighRange_24:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call FP_SP_Sub
-	lda xbc, (0x012cff:24)
+	lda xbc, (FPConst_DSP_VolumeCurve_FP_HighRange_576:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
 	call FP_fdiv
@@ -52475,7 +52475,7 @@ DSP_VolumeCurve_FP_HighRange:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012d03:24)
+	lda xiy, (FPConst_DSP_VolumeCurve_FP_HighRange_2:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -52492,7 +52492,7 @@ DSP_VolumeCurve_FP_HighRange:
 ; produce the integer result at (XSP+0x38); unwind the 0x44-byte frame.
 DSP_VolumeCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
-	lda xde, (0x012d0b:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_Finalize_8388608:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
@@ -52673,17 +52673,17 @@ DSP_ReverbCurve_FP:
 	lda xwa, (xsp + 28)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 28)
-	lda xde, (0x012d0f:24)
+	lda xde, (FPConst_DSP_ReverbCurve_FP_1:24)
 	lda xwa, (xsp + 28)
 	call FP_fadd
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 40)
 	call FP_ftod
 	lda xbc, (xsp + 40)
-	lda xde, (0x012d13:24)
+	lda xde, (FPConst_DSP_ReverbCurve_FP_441:24)
 	lda xwa, (xsp + 40)
 	call FP_dmul
-	lda xbc, (0x012d1b:24)
+	lda xbc, (FPConst_DSP_ReverbCurve_FP_10:24)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 40)
 	call FP_ddiv
@@ -52692,7 +52692,7 @@ DSP_ReverbCurve_FP:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012d23:24)
+	lda xiy, (FPConst_DSP_ReverbCurve_FP_0p4270422:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -52701,7 +52701,7 @@ DSP_ReverbCurve_FP:
 	push xwa
 	call FP_pow
 	lda xsp, (xsp + 20)
-	lda xbc, (0x012d2b:24)
+	lda xbc, (FPConst_DSP_ReverbCurve_FP_1_2:24)
 	lda xde, (xsp + 48)
 	lda xwa, (xsp + 40)
 	call FP_DP_Sub
@@ -52716,14 +52716,14 @@ DSP_ReverbCurve_FP_HighRange:
 	lda xwa, (xsp + 28)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 28)
-	lda xde, (0x012d33:24)
+	lda xde, (FPConst_DSP_ReverbCurve_FP_HighRange_44100:24)
 	lda xwa, (xsp + 28)
 	call FP_fmul
 	lda xbc, (xsp + 28)
-	lda xde, (0x012d37:24)
+	lda xde, (FPConst_DSP_ReverbCurve_FP_HighRange_3924900:24)
 	lda xwa, (xsp + 28)
 	call FP_SP_Sub
-	lda xbc, (0x012d3b:24)
+	lda xbc, (FPConst_DSP_ReverbCurve_FP_HighRange_10:24)
 	lda xde, (xsp + 28)
 	lda xwa, (xsp + 28)
 	call FP_fdiv
@@ -52735,7 +52735,7 @@ DSP_ReverbCurve_FP_HighRange:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012d3f:24)
+	lda xiy, (FPConst_DSP_ReverbCurve_FP_HighRange_0p4270422:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -52744,7 +52744,7 @@ DSP_ReverbCurve_FP_HighRange:
 	push xwa
 	call FP_pow
 	lda xsp, (xsp + 20)
-	lda xbc, (0x012d47:24)
+	lda xbc, (FPConst_DSP_ReverbCurve_FP_HighRange_1:24)
 	lda xde, (xsp + 32)
 	lda xwa, (xsp + 40)
 	call FP_DP_Sub
@@ -52755,7 +52755,7 @@ DSP_ReverbCurve_FP_HighRange:
 ; Shared tail: FP_fmul(0x012D4F), FP_ftoi, result from (XSP+0x38).
 DSP_ReverbCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
-	lda xde, (0x012d4f:24)
+	lda xde, (FPConst_DSP_ReverbCurve_FP_Finalize_8388608:24)
 	lda xwa, (xsp + 28)
 	call FP_fmul
 	lda xbc, (xsp + 28)
@@ -52794,11 +52794,11 @@ DSP_ParamInterp_FPComplex:
 	lda xwa, (xsp + 20)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 20)
-	lda xde, (0x012d53:24)
+	lda xde, (FPConst_DSP_ParamInterp_FPComplex_32768:24)
 	lda xwa, (xsp + 20)
 	call FP_fdiv
 	lda xbc, (xsp + 20)
-	lda xde, (0x012d57:24)
+	lda xde, (FPConst_DSP_ParamInterp_FPComplex_65536:24)
 	lda xwa, (xsp + 28)
 	call FP_fdiv
 	lda xwa, (xsp + 36)
@@ -52825,7 +52825,7 @@ DSP_ParamInterp_FPComplex:
 	lda xwa, (xsp + 24)
 	call FP_fmul
 	lda xbc, (xsp + 28)
-	lda xde, (0x012d5b:24)
+	lda xde, (FPConst_DSP_ParamInterp_FPComplex_99:24)
 	lda xwa, (xsp + 20)
 	call FP_fmul
 	lda xbc, (xsp + 20)
@@ -52833,14 +52833,14 @@ DSP_ParamInterp_FPComplex:
 	lda xwa, (xsp + 24)
 	call FP_fadd
 	lda xbc, (xsp + 24)
-	lda xde, (0x012d5f:24)
+	lda xde, (FPConst_DSP_ParamInterp_FPComplex_44100:24)
 	lda xwa, (xsp + 24)
 	call FP_fmul
-	lda xbc, (0x012d63:24)
+	lda xbc, (FPConst_DSP_ParamInterp_FPComplex_99_2:24)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
 	call FP_SP_Sub
-	lda xbc, (0x012d67:24)
+	lda xbc, (FPConst_DSP_ParamInterp_FPComplex_2376:24)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
 	call FP_fdiv
@@ -52852,7 +52852,7 @@ DSP_ParamInterp_FPComplex:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012d6b:24)
+	lda xiy, (FPConst_DSP_ParamInterp_FPComplex_2:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -52867,7 +52867,7 @@ DSP_ParamInterp_FPComplex:
 	ld xwa, (xsp + 52)
 	ld (xwa), xiz
 	lda xbc, (xsp + 44)
-	lda xde, (0x012d73:24)
+	lda xde, (FPConst_DSP_ParamInterp_FPComplex_8388608:24)
 	lda xwa, (xsp + 24)
 	call FP_fmul
 	lda xbc, (xsp + 24)
@@ -53021,7 +53021,7 @@ DSP_DetuneCurve_Range1_Compute:
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 36)
-	lda xde, (0x012d77:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Range1_Compute_2:24)
 	lda xwa, (xsp + 68)
 	call FP_fmul
 	jrl DSP_DetuneCurve_ApplySign
@@ -53063,11 +53063,11 @@ DSP_DetuneCurve_Range2_Compute:
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 36)
-	lda xde, (0x012d7b:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Range2_Compute_20:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (0x012d7f:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Range2_Compute_180:24)
 	lda xwa, (xsp + 68)
 	call FP_SP_Sub
 	jrl DSP_DetuneCurve_ApplySign
@@ -53109,11 +53109,11 @@ DSP_DetuneCurve_Range3_Compute:
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 36)
-	lda xde, (0x012d83:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Range3_Compute_100:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (0x012d87:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Range3_Compute_1700:24)
 	lda xwa, (xsp + 68)
 	call FP_SP_Sub
 	jr DSP_DetuneCurve_ApplySign
@@ -53139,11 +53139,11 @@ DSP_DetuneCurve_Range4_Compute:
 	lda xwa, (xsp + 36)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 36)
-	lda xde, (0x012d8b:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Range4_Compute_200:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (0x012d8f:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Range4_Compute_4800:24)
 	lda xwa, (xsp + 68)
 	call FP_SP_Sub
 
@@ -53159,7 +53159,7 @@ DSP_DetuneCurve_ApplySign:
 ; 0x012DA7 and the 2.0 base at 0x012D97.
 DSP_DetuneCurve_Finalize:
 	lda xbc, (xsp + 68)
-	lda xde, (0x012d93:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Finalize_2400:24)
 	lda xwa, (xsp + 36)
 	call FP_fdiv
 	lda xbc, (xsp + 36)
@@ -53170,7 +53170,7 @@ DSP_DetuneCurve_Finalize:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012d97:24)
+	lda xiy, (FPConst_DSP_DetuneCurve_Finalize_2:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53179,19 +53179,19 @@ DSP_DetuneCurve_Finalize:
 	push xwa
 	call FP_pow
 	lda xsp, (xsp + 20)
-	lda xbc, (0x012d9f:24)
+	lda xbc, (FPConst_DSP_DetuneCurve_Finalize_1:24)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 28)
 	call FP_DP_Sub
 	lda xbc, (xsp + 28)
-	lda xde, (0x012da7:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Finalize_2400_2:24)
 	lda xwa, (xsp + 28)
 	call FP_ddiv
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 72)
 	call FP_dtof
 	lda xbc, (xsp + 72)
-	lda xde, (0x012daf:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Finalize_8388608:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
@@ -53290,7 +53290,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 58)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 58)
-	lda xde, (0x012db3:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_Neg0p0697:24)
 	lda xwa, (xsp + 58)
 	call FP_dmul
 	lda xiy, (xsp + 58)
@@ -53298,7 +53298,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012dbb:24)
+	lda xiy, (FPConst_DSP_BiquadWarp_ComputeCoeffs_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53308,7 +53308,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 50)
-	lda xde, (0x012dc3:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_0p9999:24)
 	lda xwa, (xsp + 58)
 	call FP_dmul
 	lda xbc, (xsp + 58)
@@ -53322,7 +53322,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 58)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 58)
-	lda xde, (0x012dcb:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_Neg0p0697_2:24)
 	lda xwa, (xsp + 58)
 	call FP_dmul
 	lda xiy, (xsp + 58)
@@ -53330,7 +53330,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012dd3:24)
+	lda xiy, (FPConst_DSP_BiquadWarp_ComputeCoeffs_10_2:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53340,7 +53340,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 42)
-	lda xde, (0x012ddb:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_0p9999_2:24)
 	lda xwa, (xsp + 58)
 	call FP_dmul
 	lda xbc, (xsp + 58)
@@ -53349,11 +53349,11 @@ DSP_BiquadWarp_ComputeCoeffs:
 	ld xwa, 0x40400000
 	ld (xsp + 78), xwa
 	lda xbc, (xsp + 82)
-	lda xde, (0x012de3:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2:24)
 	lda xwa, (xsp + 10)
 	call FP_SP_Sub
 	lda xbc, (xsp + 82)
-	lda xde, (0x012de7:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2_2:24)
 	lda xwa, (xsp + 6)
 	call FP_SP_Sub
 	lda xbc, (xsp + 6)
@@ -53361,7 +53361,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
-	lda xde, (0x012deb:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_1:24)
 	lda xwa, (xsp + 6)
 	call FP_SP_Sub
 	lda xbc, (xsp + 78)
@@ -53373,7 +53373,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 70)
 	call FP_fdiv
 	lda xbc, (xsp + 70)
-	lda xde, (0x012def:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_3:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53381,7 +53381,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 66)
 	call FP_fadd
 	lda xbc, (xsp + 78)
-	lda xde, (0x012df3:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53393,7 +53393,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	ld de, (xsp + 98)
 	call DSP_WriteOscParam
 	lda xbc, (xsp + 82)
-	lda xde, (0x012df7:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53407,7 +53407,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 6)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 6)
-	lda xde, (0x012dfb:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53418,7 +53418,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	ld de, (xsp + 94)
 	call DSP_WriteCoeffData_5B_Direct
 	lda xbc, (xsp + 70)
-	lda xde, (0x012dff:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_2:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53429,7 +53429,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	ld de, (xsp + 94)
 	call DSP_WriteCoeffData_5B_Direct
 	lda xbc, (xsp + 66)
-	lda xde, (0x012e03:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_3:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53527,11 +53527,11 @@ DSP_ParamEQ_Curve_FP:
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 12)
-	lda xde, (0x012e07:24)
+	lda xde, (FPConst_DSP_ParamEQ_Curve_FP_32768:24)
 	lda xwa, (xsp + 12)
 	call FP_fdiv
 	lda xbc, (xsp + 12)
-	lda xde, (0x012e0b:24)
+	lda xde, (FPConst_DSP_ParamEQ_Curve_FP_65536:24)
 	lda xwa, (xsp + 80)
 	call FP_fdiv
 	ld xwa, (xsp + 96)
@@ -53544,14 +53544,14 @@ DSP_ParamEQ_Curve_FP:
 	lda xwa, (xsp + 40)
 	call FP_ftod
 	lda xbc, (xsp + 40)
-	lda xde, (0x012e0f:24)
+	lda xde, (FPConst_DSP_ParamEQ_Curve_FP_0p02:24)
 	lda xwa, (xsp + 40)
 	call FP_dmul
 	lda xbc, (xsp + 40)
-	lda xde, (0x012e17:24)
+	lda xde, (FPConst_DSP_ParamEQ_Curve_FP_0p1:24)
 	lda xwa, (xsp + 40)
 	call FP_dadd
-	lda xbc, (0x012e1f:24)
+	lda xbc, (FPConst_DSP_ParamEQ_Curve_FP_1:24)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 40)
 	call FP_ddiv
@@ -53569,7 +53569,7 @@ DSP_ParamEQ_Curve_FP:
 	lda xwa, (xsp + 64)
 	call FP_dmul
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e27:24)
+	lda xde, (FPConst_DSP_ParamEQ_Curve_FP_Neg4p816:24)
 	lda xwa, (xsp + 64)
 	call FP_dmul
 	lda xbc, (xsp + 64)
@@ -53579,7 +53579,7 @@ DSP_ParamEQ_Curve_FP:
 	lda xwa, (xsp + 64)
 	call FP_ftod
 	lda xwa, (xsp + 64)
-	lda xbc, (0x012e2f:24)
+	lda xbc, (FPConst_DSP_ParamEQ_Curve_FP_Neg7:24)
 	ld de, 1:i3
 	call ToneGen_Compare_Voice
 	cp hl, 0:i3
@@ -53592,7 +53592,7 @@ DSP_ParamEQ_Curve_FP:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012e37:24)
+	lda xiy, (FPConst_DSP_ParamEQ_Curve_FP_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53605,7 +53605,7 @@ DSP_ParamEQ_Curve_FP:
 	lda xwa, (xsp + 64)
 	call FP_DP_CopyOrNegate8
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e3f:24)
+	lda xde, (FPConst_DSP_ParamEQ_Curve_FP_2:24)
 	lda xwa, (xsp + 64)
 	call FP_ddiv
 	lda xbc, (xsp + 64)
@@ -53617,7 +53617,7 @@ DSP_ParamEQ_Curve_FP:
 ; constant at 0x012E47 (7.0) and runs the pow-style helper against 0x012E4B instead.
 DSP_ParamEQ_Range1_NonzeroCoeff:
 	lda xbc, (xsp + 72)
-	lda xde, (0x012e47:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_7:24)
 	lda xwa, (xsp + 12)
 	call FP_fadd
 	lda xbc, (xsp + 12)
@@ -53628,7 +53628,7 @@ DSP_ParamEQ_Range1_NonzeroCoeff:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012e4b:24)
+	lda xiy, (FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53641,11 +53641,11 @@ DSP_ParamEQ_Range1_NonzeroCoeff:
 	lda xwa, (xsp + 64)
 	call FP_DP_CopyOrNegate8
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e53:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_1em7:24)
 	lda xwa, (xsp + 64)
 	call FP_dmul
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e5b:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_2:24)
 	lda xwa, (xsp + 64)
 	call FP_ddiv
 	lda xbc, (xsp + 64)
@@ -53662,25 +53662,25 @@ DSP_ParamEQ_Range2:
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 12)
-	lda xde, (0x012e63:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range2_16:24)
 	lda xwa, (xsp + 12)
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call FP_ftod
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e67:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range2_0p05:24)
 	lda xwa, (xsp + 64)
 	call FP_dmul
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e6f:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range2_0p45:24)
 	lda xwa, (xsp + 64)
 	call FP_dadd
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
 	call FP_ftod
 	lda xbc, (xsp + 40)
-	lda xde, (0x012e77:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range2_Neg4p816:24)
 	lda xwa, (xsp + 40)
 	call FP_dmul
 	lda xbc, (xsp + 40)
@@ -53692,7 +53692,7 @@ DSP_ParamEQ_Range2:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012e7f:24)
+	lda xiy, (FPConst_DSP_ParamEQ_Range2_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53705,7 +53705,7 @@ DSP_ParamEQ_Range2:
 	lda xwa, (xsp + 64)
 	call FP_DP_CopyOrNegate8
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e87:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range2_2:24)
 	lda xwa, (xsp + 64)
 	call FP_ddiv
 	lda xbc, (xsp + 64)
@@ -53722,25 +53722,25 @@ DSP_ParamEQ_Range3:
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 12)
-	lda xde, (0x012e8f:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range3_24:24)
 	lda xwa, (xsp + 12)
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call FP_ftod
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e93:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range3_0p1:24)
 	lda xwa, (xsp + 64)
 	call FP_dmul
 	lda xbc, (xsp + 64)
-	lda xde, (0x012e9b:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range3_0p9:24)
 	lda xwa, (xsp + 64)
 	call FP_dadd
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
 	call FP_ftod
 	lda xbc, (xsp + 40)
-	lda xde, (0x012ea3:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range3_Neg4p816:24)
 	lda xwa, (xsp + 40)
 	call FP_dmul
 	lda xbc, (xsp + 40)
@@ -53752,7 +53752,7 @@ DSP_ParamEQ_Range3:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012eab:24)
+	lda xiy, (FPConst_DSP_ParamEQ_Range3_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53765,7 +53765,7 @@ DSP_ParamEQ_Range3:
 	lda xwa, (xsp + 64)
 	call FP_DP_CopyOrNegate8
 	lda xbc, (xsp + 64)
-	lda xde, (0x012eb3:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range3_2:24)
 	lda xwa, (xsp + 64)
 	call FP_ddiv
 	lda xbc, (xsp + 64)
@@ -53782,25 +53782,25 @@ DSP_ParamEQ_Range4:
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 12)
-	lda xde, (0x012ebb:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range4_56:24)
 	lda xwa, (xsp + 12)
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call FP_ftod
 	lda xbc, (xsp + 64)
-	lda xde, (0x012ebf:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range4_0p2:24)
 	lda xwa, (xsp + 64)
 	call FP_dmul
 	lda xbc, (xsp + 64)
-	lda xde, (0x012ec7:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range4_4p2:24)
 	lda xwa, (xsp + 64)
 	call FP_dadd
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
 	call FP_ftod
 	lda xbc, (xsp + 40)
-	lda xde, (0x012ecf:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range4_Neg4p816:24)
 	lda xwa, (xsp + 40)
 	call FP_dmul
 	lda xbc, (xsp + 40)
@@ -53812,7 +53812,7 @@ DSP_ParamEQ_Range4:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012ed7:24)
+	lda xiy, (FPConst_DSP_ParamEQ_Range4_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53825,7 +53825,7 @@ DSP_ParamEQ_Range4:
 	lda xwa, (xsp + 64)
 	call FP_DP_CopyOrNegate8
 	lda xbc, (xsp + 64)
-	lda xde, (0x012edf:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range4_2:24)
 	lda xwa, (xsp + 64)
 	call FP_ddiv
 	lda xbc, (xsp + 64)
@@ -53839,7 +53839,7 @@ DSP_ParamEQ_Range5:
 	lda xwa, (xsp + 12)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 12)
-	lda xde, (0x012ee7:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range5_67:24)
 	lda xwa, (xsp + 12)
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
@@ -53849,7 +53849,7 @@ DSP_ParamEQ_Range5:
 	lda xwa, (xsp + 40)
 	call FP_ftod
 	lda xbc, (xsp + 40)
-	lda xde, (0x012eeb:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range5_Neg4p816:24)
 	lda xwa, (xsp + 40)
 	call FP_dmul
 	lda xbc, (xsp + 40)
@@ -53861,7 +53861,7 @@ DSP_ParamEQ_Range5:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012ef3:24)
+	lda xiy, (FPConst_DSP_ParamEQ_Range5_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -53874,7 +53874,7 @@ DSP_ParamEQ_Range5:
 	lda xwa, (xsp + 64)
 	call FP_DP_CopyOrNegate8
 	lda xbc, (xsp + 64)
-	lda xde, (0x012efb:24)
+	lda xde, (FPConst_DSP_ParamEQ_Range5_2:24)
 	lda xwa, (xsp + 64)
 	call FP_ddiv
 	lda xbc, (xsp + 64)
@@ -53888,7 +53888,7 @@ DSP_ParamEQ_Finalize:
 	ld xwa, (xsp + 100)
 	ld (xwa), xiz
 	lda xbc, (xsp + 92)
-	lda xde, (0x012f03:24)
+	lda xde, (FPConst_DSP_ParamEQ_Finalize_8388608:24)
 	lda xwa, (xsp + 12)
 	call FP_fmul
 	lda xbc, (xsp + 12)
@@ -54426,11 +54426,11 @@ DSP_FilterLUT_Fetch:
 	lda xwa, (xsp + 24)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f07:24)
+	lda xde, (FPConst_DSP_FilterLUT_Fetch_0p5:24)
 	lda xwa, (xsp + 24)
 	call FP_dmul
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f0f:24)
+	lda xde, (FPConst_DSP_FilterLUT_Fetch_Neg12:24)
 	lda xwa, (xsp + 24)
 	call FP_dadd
 	lda xbc, (xsp + 24)
@@ -54473,11 +54473,11 @@ DSP_FilterLUT_Mode0x10:
 	lda xwa, (xsp + 24)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f17:24)
+	lda xde, (FPConst_DSP_FilterLUT_Mode0x10_0p5:24)
 	lda xwa, (xsp + 24)
 	call FP_dmul
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f1f:24)
+	lda xde, (FPConst_DSP_FilterLUT_Mode0x10_Neg12:24)
 	lda xwa, (xsp + 24)
 	call FP_dadd
 	lda xbc, (xsp + 24)
@@ -54520,11 +54520,11 @@ DSP_FilterLUT_Mode0x20:
 	lda xwa, (xsp + 24)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f27:24)
+	lda xde, (FPConst_DSP_FilterLUT_Mode0x20_0p5:24)
 	lda xwa, (xsp + 24)
 	call FP_dmul
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f2f:24)
+	lda xde, (FPConst_DSP_FilterLUT_Mode0x20_Neg12:24)
 	lda xwa, (xsp + 24)
 	call FP_dadd
 	lda xbc, (xsp + 24)
@@ -54579,11 +54579,11 @@ DSP_FilterLUT_ModeType2:
 	lda xwa, (xsp + 24)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f37:24)
+	lda xde, (FPConst_DSP_FilterLUT_ModeType2_0p5:24)
 	lda xwa, (xsp + 24)
 	call FP_dmul
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f3f:24)
+	lda xde, (FPConst_DSP_FilterLUT_ModeType2_Neg12:24)
 	lda xwa, (xsp + 24)
 	call FP_dadd
 	lda xbc, (xsp + 24)
@@ -54615,11 +54615,11 @@ DSP_FilterLUT_ModeType2_SubMode:
 	lda xwa, (xsp + 24)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f47:24)
+	lda xde, (FPConst_DSP_FilterLUT_ModeType2_SubMode_0p5:24)
 	lda xwa, (xsp + 24)
 	call FP_dmul
 	lda xbc, (xsp + 24)
-	lda xde, (0x012f4f:24)
+	lda xde, (FPConst_DSP_FilterLUT_ModeType2_SubMode_Neg12:24)
 	lda xwa, (xsp + 24)
 	call FP_dadd
 	lda xbc, (xsp + 24)
@@ -54698,7 +54698,7 @@ DSP_BiquadCoeff_Compute:
 	lda xwa, (xsp + 78)
 	call FP_ftod
 	lda xbc, (xsp + 78)
-	lda xde, (0x012f57:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Compute_7p1237929em5:24)
 	lda xwa, (xsp + 78)
 	call FP_dmul
 	lda xiy, (xsp + 78)
@@ -54726,15 +54726,15 @@ DSP_BiquadCoeff_Compute:
 	lda xwa, (xsp + 86)
 	call FP_fadd
 	lda xbc, (xsp + 86)
-	lda xde, (0x012f5f:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Compute_1:24)
 	lda_dri XWA, 0xFD, 0xD6, 0x00
 	call FP_fadd
-	lda xbc, (0x012f63:24)
+	lda xbc, (FPConst_DSP_BiquadCoeff_Compute_1_2:24)
 	lda_dri XDE, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_Sub
 	lda xbc, (xsp + 86)
-	lda xde, (0x012f67:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Compute_Neg2:24)
 	lda_dri XWA, 0xFD, 0xD2, 0x00
 	call FP_fmul
 	lda_dri XBC, 0xFD, 0xA6, 0x00
@@ -54742,7 +54742,7 @@ DSP_BiquadCoeff_Compute:
 	lda xwa, (xsp + 86)
 	call FP_SP_Sub
 	lda xbc, (xsp + 86)
-	lda xde, (0x012f6b:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Compute_1_3:24)
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	call FP_fadd
 	lda_dri XWA, 0xFD, 0xDE, 0x00
@@ -54763,7 +54763,7 @@ DSP_BiquadCoeff_Algo0_SignZero:
 ; Algo0: join point; divides the dB gain by 20.0 and calls pow(10, dB/20).
 DSP_BiquadCoeff_Algo0_AfterSign:
 	lda_dri XBC, 0xFD, 0x8A, 0x00
-	lda xde, (0x012f6f:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_AfterSign_20:24)
 	lda xwa, (xsp + 86)
 	call FP_fdiv
 	lda xbc, (xsp + 86)
@@ -54774,7 +54774,7 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012f73:24)
+	lda xiy, (FPConst_DSP_BiquadCoeff_Algo0_AfterSign_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -54791,7 +54791,7 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	lda xwa, (xsp + 78)
 	call FP_dmul
 	lda xbc, (xsp + 78)
-	lda xde, (0x012f7b:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_AfterSign_1:24)
 	lda xwa, (xsp + 78)
 	call FP_dadd
 	lda_dri XBC, 0xFD, 0xA6, 0x00
@@ -54824,7 +54824,7 @@ DSP_BiquadCoeff_Algo0_Sign2Zero:
 ; Algo0: join point after the second sign test; continues assembling the denominator.
 DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda xbc, (xsp + 126)
-	lda xde, (0x012f83:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_20:24)
 	lda xwa, (xsp + 86)
 	call FP_fdiv
 	lda xbc, (xsp + 86)
@@ -54835,7 +54835,7 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x012f87:24)
+	lda xiy, (FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -54851,7 +54851,7 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda_dri XDE, 0xFD, 0x82, 0x00
 	lda xwa, (xsp + 118)
 	call FP_dmul
-	lda xbc, (0x012f8f:24)
+	lda xbc, (FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_1:24)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call FP_DP_Sub
@@ -54942,7 +54942,7 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 86)
 	call FP_fadd
-	lda xbc, (0x012f97:24)
+	lda xbc, (FPConst_DSP_BiquadCoeff_Algo0_Assembly_1:24)
 	lda_dri XDE, 0xFD, 0xB2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
@@ -54955,7 +54955,7 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	lda_dri XWA, 0xFD, 0x9E, 0x00
 	call FP_fdiv
 	lda_dri XWA, 0xFD, 0x9E, 0x00
-	lda xbc, (0x012f9b:24)
+	lda xbc, (FPConst_DSP_BiquadCoeff_Algo0_Assembly_1_2:24)
 	ld de, 0:i3
 	call ToneGen_Compare_Voice_32
 	cp hl, 0:i3
@@ -54976,7 +54976,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
-	lda xde, (0x012f9f:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_2:24)
 	lda_dri XWA, 0xFD, 0xBE, 0x00
 	call FP_fdiv
 	lda_dri XBC, 0xFD, 0x9E, 0x00
@@ -54984,7 +54984,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
-	lda xde, (0x012fa3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_2:24)
 	lda_dri XWA, 0xFD, 0xBA, 0x00
 	call FP_fdiv
 	lda_dri XBC, 0xFD, 0x9E, 0x00
@@ -54992,11 +54992,11 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
-	lda xde, (0x012fa7:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_3:24)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
 	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xBA, 0x00
-	lda xde, (0x012fab:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55009,7 +55009,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteOscParam
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xBE, 0x00
-	lda xde, (0x012faf:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_2:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55021,7 +55021,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xB6, 0x00
-	lda xde, (0x012fb3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_3:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55033,7 +55033,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xB2, 0x00
-	lda xde, (0x012fb7:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_4:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55045,7 +55045,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xAE, 0x00
-	lda xde, (0x012fbb:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55068,7 +55068,7 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 118)
 	call FP_ftod
 	lda xbc, (xsp + 118)
-	lda xde, (0x012fbf:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_7p1237929em5:24)
 	lda xwa, (xsp + 118)
 	call FP_dmul
 	lda xiy, (xsp + 118)
@@ -55096,15 +55096,15 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 2)
 	call FP_fadd
 	lda xbc, (xsp + 2)
-	lda xde, (0x012fc7:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_1:24)
 	lda_dri XWA, 0xFD, 0xD6, 0x00
 	call FP_fadd
-	lda xbc, (0x012fcb:24)
+	lda xbc, (FPConst_DSP_BiquadCoeff_Algo1_1_2:24)
 	lda_dri XDE, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
-	lda xde, (0x012fcf:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_Neg2:24)
 	lda_dri XWA, 0xFD, 0xD2, 0x00
 	call FP_fmul
 	lda_dri XBC, 0xFD, 0xA6, 0x00
@@ -55112,7 +55112,7 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
-	lda xde, (0x012fd3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_1_3:24)
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	call FP_fadd
 	lda_dri XBC, 0xFD, 0xAA, 0x00
@@ -55139,7 +55139,7 @@ DSP_BiquadCoeff_Algo1:
 	lda_dri XWA, 0xFD, 0xAE, 0x00
 	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xBA, 0x00
-	lda xde, (0x012fd7:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55152,7 +55152,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteOscParam
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xBE, 0x00
-	lda xde, (0x012fdb:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304_2:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55164,7 +55164,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xB6, 0x00
-	lda xde, (0x012fdf:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304_3:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55176,7 +55176,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xB2, 0x00
-	lda xde, (0x012fe3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304_4:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55188,7 +55188,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xAE, 0x00
-	lda xde, (0x012fe7:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_8388608:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55209,7 +55209,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 118)
 	call FP_ftod
 	lda xbc, (xsp + 118)
-	lda xde, (0x012feb:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5:24)
 	lda xwa, (xsp + 118)
 	call FP_dmul
 	lda xiy, (xsp + 118)
@@ -55222,7 +55222,7 @@ DSP_BiquadCoeff_Algo2:
 	call FP_tan
 	lda xsp, (xsp + 12)
 	lda xbc, (xsp + 50)
-	lda xde, (0x012ff3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_2:24)
 	lda xwa, (xsp + 118)
 	call FP_ddiv
 	lda xbc, (xsp + 118)
@@ -55236,7 +55236,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 118)
 	call FP_ftod
 	lda xbc, (xsp + 118)
-	lda xde, (0x012ffb:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_3:24)
 	lda xwa, (xsp + 118)
 	call FP_dmul
 	lda xbc, (xsp + 118)
@@ -55246,7 +55246,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 118)
 	call FP_ftod
 	lda xbc, (xsp + 118)
-	lda xde, (0x013003:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_4:24)
 	lda xwa, (xsp + 118)
 	call FP_dmul
 	lda_dri XBC, 0xFD, 0xDA, 0x00
@@ -55257,7 +55257,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 118)
 	call FP_dmul
 	lda xbc, (xsp + 118)
-	lda xde, (0x01300b:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_5:24)
 	lda xwa, (xsp + 118)
 	call FP_dmul
 	lda xbc, (xsp + 118)
@@ -55268,15 +55268,15 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 2)
 	call FP_fadd
 	lda xbc, (xsp + 2)
-	lda xde, (0x013013:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_1:24)
 	lda_dri XWA, 0xFD, 0xD6, 0x00
 	call FP_fadd
-	lda xbc, (0x013017:24)
+	lda xbc, (FPConst_DSP_BiquadCoeff_Algo2_1_2:24)
 	lda_dri XDE, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
-	lda xde, (0x01301b:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_Neg2:24)
 	lda_dri XWA, 0xFD, 0xD2, 0x00
 	call FP_fmul
 	lda_dri XBC, 0xFD, 0xA2, 0x00
@@ -55284,7 +55284,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xwa, (xsp + 2)
 	call FP_SP_Sub
 	lda xbc, (xsp + 2)
-	lda xde, (0x01301f:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_1_3:24)
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	call FP_fadd
 	lda_dri XWA, 0xFD, 0xDE, 0x00
@@ -55305,7 +55305,7 @@ DSP_BiquadCoeff_Algo2_Sign1Zero:
 ; Algo2: join point after the first sign test; divides the dB gain by 20.0.
 DSP_BiquadCoeff_Algo2_AfterSign1:
 	lda xbc, (xsp + 38)
-	lda xde, (0x013023:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_20:24)
 	lda xwa, (xsp + 2)
 	call FP_fdiv
 	lda xbc, (xsp + 2)
@@ -55316,7 +55316,7 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x013027:24)
+	lda xiy, (FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -55333,7 +55333,7 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	lda xwa, (xsp + 118)
 	call FP_dmul
 	lda xbc, (xsp + 118)
-	lda xde, (0x01302f:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_1:24)
 	lda xwa, (xsp + 118)
 	call FP_dadd
 	lda_dri XBC, 0xFD, 0xA2, 0x00
@@ -55366,7 +55366,7 @@ DSP_BiquadCoeff_Algo2_Sign2Zero:
 ; Algo2: join point after the second sign test.
 DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xbc, (xsp + 26)
-	lda xde, (0x013037:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_20:24)
 	lda xwa, (xsp + 2)
 	call FP_fdiv
 	lda xbc, (xsp + 2)
@@ -55377,7 +55377,7 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x01303b:24)
+	lda xiy, (FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -55393,7 +55393,7 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xde, (xsp + 30)
 	lda xwa, (xsp + 118)
 	call FP_dmul
-	lda xbc, (0x013043:24)
+	lda xbc, (FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_1:24)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call FP_DP_Sub
@@ -55474,7 +55474,7 @@ DSP_BiquadCoeff_Algo2_NegBranch:
 ; DSP_BiquadCoeff_Algo0_Fixup.
 DSP_BiquadCoeff_Algo2_WriteParams:
 	lda_dri XBC, 0xFD, 0xBA, 0x00
-	lda xde, (0x01304b:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55487,7 +55487,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteOscParam
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xB6, 0x00
-	lda xde, (0x01304f:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_2:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55498,7 +55498,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteParamWord
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xAE, 0x00
-	lda xde, (0x013053:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55509,7 +55509,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteParamWord
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xBE, 0x00
-	lda xde, (0x013057:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_3:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55520,7 +55520,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteParamWord
 	ld iz, hl
 	lda_dri XBC, 0xFD, 0xB2, 0x00
-	lda xde, (0x01305b:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_4:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55600,11 +55600,11 @@ DSP_SOS_LUT_Fetch:
 	lda xwa, (xsp + 12)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 12)
-	lda xde, (0x01305f:24)
+	lda xde, (FPConst_DSP_SOS_LUT_Fetch_0p5:24)
 	lda xwa, (xsp + 12)
 	call FP_dmul
 	lda xbc, (xsp + 12)
-	lda xde, (0x013067:24)
+	lda xde, (FPConst_DSP_SOS_LUT_Fetch_Neg12:24)
 	lda xwa, (xsp + 12)
 	call FP_dadd
 	lda xbc, (xsp + 12)
@@ -55637,11 +55637,11 @@ DSP_SOS_LUT_Mode0x10:
 	lda xwa, (xsp + 12)
 	call FP_ScalarToDP
 	lda xbc, (xsp + 12)
-	lda xde, (0x01306f:24)
+	lda xde, (FPConst_DSP_SOS_LUT_Mode0x10_0p5:24)
 	lda xwa, (xsp + 12)
 	call FP_dmul
 	lda xbc, (xsp + 12)
-	lda xde, (0x013077:24)
+	lda xde, (FPConst_DSP_SOS_LUT_Mode0x10_Neg12:24)
 	lda xwa, (xsp + 12)
 	call FP_dadd
 	lda xbc, (xsp + 12)
@@ -55716,7 +55716,7 @@ DSP_SOS_Coeff_Compute:
 	cp wa, 0:i3
 	jrl nz, DSP_SOS_Coeff_Epilogue
 	lda_dri XBC, 0xFD, 0xCE, 0x00
-	lda xde, (0x01307f:24)
+	lda xde, (FPConst_DSP_SOS_Coeff_Compute_20:24)
 	lda xwa, (xsp + 56)
 	call FP_fdiv
 	lda xbc, (xsp + 56)
@@ -55727,7 +55727,7 @@ DSP_SOS_Coeff_Compute:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x013083:24)
+	lda xiy, (FPConst_DSP_SOS_Coeff_Compute_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -55748,7 +55748,7 @@ DSP_SOS_Coeff_Compute:
 	lda xwa, (xsp + 72)
 	call FP_ftod
 	lda xbc, (xsp + 72)
-	lda xde, (0x01308b:24)
+	lda xde, (FPConst_DSP_SOS_Coeff_Compute_0p00014247586:24)
 	lda xwa, (xsp + 72)
 	call FP_dmul
 	lda xiy, (xsp + 72)
@@ -55763,7 +55763,7 @@ DSP_SOS_Coeff_Compute:
 	lda xwa, (xsp + 84)
 	call FP_ftod
 	lda xbc, (xsp + 84)
-	lda xde, (0x013093:24)
+	lda xde, (FPConst_DSP_SOS_Coeff_Compute_0p00014247586_2:24)
 	lda xwa, (xsp + 84)
 	call FP_dmul
 	lda xiy, (xsp + 84)
@@ -55776,7 +55776,7 @@ DSP_SOS_Coeff_Compute:
 	call FP_sin
 	lda xsp, (xsp + 24)
 	lda_dri XBC, 0xFD, 0x98, 0x00
-	lda xde, (0x01309b:24)
+	lda xde, (FPConst_DSP_SOS_Coeff_Compute_1:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -55786,12 +55786,12 @@ DSP_SOS_Coeff_Compute:
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
 	call FP_dtof
-	lda xbc, (0x0130a3:24)
+	lda xbc, (FPConst_DSP_SOS_Coeff_Compute_1_2:24)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda_dri XBC, 0xFD, 0xCA, 0x00
-	lda xde, (0x0130a7:24)
+	lda xde, (FPConst_DSP_SOS_Coeff_Compute_1_3:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
 	lda xbc, (xsp + 120)
@@ -55802,7 +55802,7 @@ DSP_SOS_Coeff_Compute:
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call FP_fdiv
-	lda xbc, (0x0130ab:24)
+	lda xbc, (FPConst_DSP_SOS_Coeff_Compute_1_4:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
@@ -55811,7 +55811,7 @@ DSP_SOS_Coeff_Compute:
 	lda xwa, (xsp + 56)
 	call FP_fdiv
 	lda xbc, (xsp + 56)
-	lda xde, (0x0130af:24)
+	lda xde, (FPConst_DSP_SOS_Coeff_Compute_1_5:24)
 	lda xwa, (xsp + 56)
 	call FP_fadd
 	lda xbc, (xsp + 120)
@@ -55827,7 +55827,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xwa, (xsp + 72)
 	call FP_ftod
 	lda xbc, (xsp + 72)
-	lda xde, (0x0130b3:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_0p00014247586:24)
 	lda xwa, (xsp + 72)
 	call FP_dmul
 	lda xiy, (xsp + 72)
@@ -55842,7 +55842,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xwa, (xsp + 84)
 	call FP_ftod
 	lda xbc, (xsp + 84)
-	lda xde, (0x0130bb:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_0p00014247586_2:24)
 	lda xwa, (xsp + 84)
 	call FP_dmul
 	lda xiy, (xsp + 84)
@@ -55855,7 +55855,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	call FP_sin
 	lda xsp, (xsp + 24)
 	lda_dri XBC, 0xFD, 0x88, 0x00
-	lda xde, (0x0130c3:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -55866,10 +55866,10 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda_dri XWA, 0xFD, 0xC6, 0x00
 	call FP_dtof
 	lda_dri XBC, 0xFD, 0xC6, 0x00
-	lda xde, (0x0130cb:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
-	lda xbc, (0x0130cf:24)
+	lda xbc, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_3:24)
 	lda_dri XDE, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
@@ -55882,7 +55882,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xwa, (xsp + 120)
 	call FP_fdiv
 	lda xbc, (xsp + 120)
-	lda xde, (0x0130d3:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_4:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
 	lda_dri XBC, 0xFD, 0xB2, 0x00
@@ -55890,7 +55890,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xwa, (xsp + 56)
 	call FP_fdiv
 	lda xbc, (xsp + 56)
-	lda xde, (0x0130d7:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_5:24)
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
@@ -55902,11 +55902,11 @@ DSP_SOS_Algo0_NonzeroCoeff:
 ; (0x0130E3, 0x0130E7), converts float->int and emits the taps through DSP_WriteOscParam /
 ; DSP_WriteCoeffData_5B_Direct, accumulating status in IZ.
 DSP_SOS_Algo0_FinalChain:
-	lda xbc, (0x0130db:24)
+	lda xbc, (FPConst_DSP_SOS_Algo0_FinalChain_1:24)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
-	lda xbc, (0x0130df:24)
+	lda xbc, (FPConst_DSP_SOS_Algo0_FinalChain_1_2:24)
 	lda_dri XDE, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
@@ -55922,7 +55922,7 @@ DSP_SOS_Algo0_FinalChain:
 	lda_dri XWA, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
 	lda_dri XBC, 0xFD, 0xBE, 0x00
-	lda xde, (0x0130e3:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_4194304:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55935,7 +55935,7 @@ DSP_SOS_Algo0_FinalChain:
 	call DSP_WriteOscParam
 	ldw_erp HL, 0xFA
 	lda_dri XBC, 0xFD, 0xBA, 0x00
-	lda xde, (0x0130e7:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_4194304_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55946,7 +55946,7 @@ DSP_SOS_Algo0_FinalChain:
 	call DSP_WriteParamWord
 	ldw_erp HL, 0xFA
 	lda_dri XBC, 0xFD, 0xC2, 0x00
-	lda xde, (0x0130eb:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_4194304_3:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55964,7 +55964,7 @@ DSP_SOS_Algo0_FinalChain:
 ; Entered by `jrl`, exits via DSP_SOS_Coeff_Epilogue.
 DSP_SOS_Algo1:
 	lda_dri XBC, 0xFD, 0xCE, 0x00
-	lda xde, (0x0130ef:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_20:24)
 	lda xwa, (xsp + 120)
 	call FP_fdiv
 	lda xbc, (xsp + 120)
@@ -55975,7 +55975,7 @@ DSP_SOS_Algo1:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x0130f3:24)
+	lda xiy, (FPConst_DSP_SOS_Algo1_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -55996,7 +55996,7 @@ DSP_SOS_Algo1:
 	lda xwa, (xsp + 72)
 	call FP_ftod
 	lda xbc, (xsp + 72)
-	lda xde, (0x0130fb:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_0p00014247586:24)
 	lda xwa, (xsp + 72)
 	call FP_dmul
 	lda xiy, (xsp + 72)
@@ -56011,7 +56011,7 @@ DSP_SOS_Algo1:
 	lda xwa, (xsp + 84)
 	call FP_ftod
 	lda xbc, (xsp + 84)
-	lda xde, (0x013103:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_0p00014247586_2:24)
 	lda xwa, (xsp + 84)
 	call FP_dmul
 	lda xiy, (xsp + 84)
@@ -56024,7 +56024,7 @@ DSP_SOS_Algo1:
 	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 96)
-	lda xde, (0x01310b:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_1:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -56035,10 +56035,10 @@ DSP_SOS_Algo1:
 	lda_dri XWA, 0xFD, 0xCA, 0x00
 	call FP_dtof
 	lda_dri XBC, 0xFD, 0xCA, 0x00
-	lda xde, (0x013113:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_1_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
-	lda xbc, (0x013117:24)
+	lda xbc, (FPConst_DSP_SOS_Algo1_1_3:24)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
@@ -56051,7 +56051,7 @@ DSP_SOS_Algo1:
 	lda xwa, (xsp + 120)
 	call FP_fdiv
 	lda xbc, (xsp + 120)
-	lda xde, (0x01311b:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_1_4:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
 	lda_dri XBC, 0xFD, 0xB2, 0x00
@@ -56059,7 +56059,7 @@ DSP_SOS_Algo1:
 	lda xwa, (xsp + 56)
 	call FP_fdiv
 	lda xbc, (xsp + 56)
-	lda xde, (0x01311f:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_1_5:24)
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
@@ -56074,7 +56074,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xwa, (xsp + 72)
 	call FP_ftod
 	lda xbc, (xsp + 72)
-	lda xde, (0x013123:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_0p00014247586:24)
 	lda xwa, (xsp + 72)
 	call FP_dmul
 	lda xiy, (xsp + 72)
@@ -56089,7 +56089,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xwa, (xsp + 84)
 	call FP_ftod
 	lda xbc, (xsp + 84)
-	lda xde, (0x01312b:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_0p00014247586_2:24)
 	lda xwa, (xsp + 84)
 	call FP_dmul
 	lda xiy, (xsp + 84)
@@ -56102,7 +56102,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 80)
-	lda xde, (0x013133:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -56112,12 +56112,12 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
 	call FP_dtof
-	lda xbc, (0x01313b:24)
+	lda xbc, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_2:24)
 	lda_dri XDE, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
 	lda_dri XBC, 0xFD, 0xC6, 0x00
-	lda xde, (0x01313f:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_3:24)
 	lda xwa, (xsp + 56)
 	call FP_fadd
 	lda xbc, (xsp + 56)
@@ -56128,7 +56128,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call FP_fdiv
-	lda xbc, (0x013143:24)
+	lda xbc, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_4:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
@@ -56137,7 +56137,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xwa, (xsp + 56)
 	call FP_fdiv
 	lda xbc, (xsp + 56)
-	lda xde, (0x013147:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_5:24)
 	lda xwa, (xsp + 56)
 	call FP_fadd
 	lda xbc, (xsp + 120)
@@ -56148,11 +56148,11 @@ DSP_SOS_Algo1_NonzeroCoeff:
 ; Algo1's normalise / scale / float->int / write chain.
 DSP_SOS_Algo1_FinalChain:
 	lda_dri XBC, 0xFD, 0xCA, 0x00
-	lda xde, (0x01314b:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_1:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
 	lda_dri XBC, 0xFD, 0xC6, 0x00
-	lda xde, (0x01314f:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_1_2:24)
 	lda xwa, (xsp + 56)
 	call FP_fadd
 	lda xbc, (xsp + 56)
@@ -56167,7 +56167,7 @@ DSP_SOS_Algo1_FinalChain:
 	lda_dri XWA, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
 	lda_dri XBC, 0xFD, 0xBE, 0x00
-	lda xde, (0x013153:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_2097152:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56180,7 +56180,7 @@ DSP_SOS_Algo1_FinalChain:
 	call DSP_WriteOscParam
 	ldw_erp HL, 0xFA
 	lda_dri XBC, 0xFD, 0xBA, 0x00
-	lda xde, (0x013157:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_4194304:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56191,7 +56191,7 @@ DSP_SOS_Algo1_FinalChain:
 	call DSP_WriteParamWord
 	ldw_erp HL, 0xFA
 	lda_dri XBC, 0xFD, 0xC2, 0x00
-	lda xde, (0x01315b:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_2097152_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56208,7 +56208,7 @@ DSP_SOS_Algo1_FinalChain:
 ; Entered by `jrl`, exits via DSP_SOS_Coeff_Epilogue.
 DSP_SOS_Algo2:
 	lda_dri XBC, 0xFD, 0xCE, 0x00
-	lda xde, (0x01315f:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_20:24)
 	lda xwa, (xsp + 120)
 	call FP_fdiv
 	lda xbc, (xsp + 120)
@@ -56219,7 +56219,7 @@ DSP_SOS_Algo2:
 	push xix
 	ld xix, (xiy)
 	push xix
-	lda xiy, (0x013163:24)
+	lda xiy, (FPConst_DSP_SOS_Algo2_10:24)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -56240,7 +56240,7 @@ DSP_SOS_Algo2:
 	lda xwa, (xsp + 72)
 	call FP_ftod
 	lda xbc, (xsp + 72)
-	lda xde, (0x01316b:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_0p00014247586:24)
 	lda xwa, (xsp + 72)
 	call FP_dmul
 	lda xiy, (xsp + 72)
@@ -56255,7 +56255,7 @@ DSP_SOS_Algo2:
 	lda xwa, (xsp + 84)
 	call FP_ftod
 	lda xbc, (xsp + 84)
-	lda xde, (0x013173:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_0p00014247586_2:24)
 	lda xwa, (xsp + 84)
 	call FP_dmul
 	lda xiy, (xsp + 84)
@@ -56268,7 +56268,7 @@ DSP_SOS_Algo2:
 	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 32)
-	lda xde, (0x01317b:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_1:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -56279,10 +56279,10 @@ DSP_SOS_Algo2:
 	lda_dri XWA, 0xFD, 0xCA, 0x00
 	call FP_dtof
 	lda_dri XBC, 0xFD, 0xCA, 0x00
-	lda xde, (0x013183:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_1_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
-	lda xbc, (0x013187:24)
+	lda xbc, (FPConst_DSP_SOS_Algo2_1_3:24)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
@@ -56295,7 +56295,7 @@ DSP_SOS_Algo2:
 	lda xwa, (xsp + 120)
 	call FP_fdiv
 	lda xbc, (xsp + 120)
-	lda xde, (0x01318b:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_1_4:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
 	lda_dri XBC, 0xFD, 0xB2, 0x00
@@ -56303,7 +56303,7 @@ DSP_SOS_Algo2:
 	lda xwa, (xsp + 56)
 	call FP_fdiv
 	lda xbc, (xsp + 56)
-	lda xde, (0x01318f:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_1_5:24)
 	lda xwa, (xsp + 56)
 	call FP_SP_Sub
 	lda xbc, (xsp + 56)
@@ -56318,7 +56318,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xwa, (xsp + 72)
 	call FP_ftod
 	lda xbc, (xsp + 72)
-	lda xde, (0x013193:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_0p00014247586:24)
 	lda xwa, (xsp + 72)
 	call FP_dmul
 	lda xiy, (xsp + 72)
@@ -56333,7 +56333,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xwa, (xsp + 84)
 	call FP_ftod
 	lda xbc, (xsp + 84)
-	lda xde, (0x01319b:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_0p00014247586_2:24)
 	lda xwa, (xsp + 84)
 	call FP_dmul
 	lda xiy, (xsp + 84)
@@ -56346,7 +56346,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 16)
-	lda xde, (0x0131a3:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_Sub
 	lda xbc, (xsp + 72)
@@ -56356,12 +56356,12 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
 	call FP_dtof
-	lda xbc, (0x0131ab:24)
+	lda xbc, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_2:24)
 	lda_dri XDE, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
 	lda_dri XBC, 0xFD, 0xC6, 0x00
-	lda xde, (0x0131af:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_3:24)
 	lda xwa, (xsp + 56)
 	call FP_fadd
 	lda xbc, (xsp + 56)
@@ -56372,7 +56372,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
 	call FP_fdiv
-	lda xbc, (0x0131b3:24)
+	lda xbc, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_4:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
 	call FP_SP_Sub
@@ -56381,7 +56381,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xwa, (xsp + 56)
 	call FP_fdiv
 	lda xbc, (xsp + 56)
-	lda xde, (0x0131b7:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_5:24)
 	lda xwa, (xsp + 56)
 	call FP_fadd
 	lda xbc, (xsp + 120)
@@ -56392,11 +56392,11 @@ DSP_SOS_Algo2_NonzeroCoeff:
 ; Algo2's normalise / scale / float->int / write chain.
 DSP_SOS_Algo2_FinalChain:
 	lda_dri XBC, 0xFD, 0xCA, 0x00
-	lda xde, (0x0131bb:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_1:24)
 	lda xwa, (xsp + 120)
 	call FP_fadd
 	lda_dri XBC, 0xFD, 0xC6, 0x00
-	lda xde, (0x0131bf:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_1_2:24)
 	lda xwa, (xsp + 56)
 	call FP_fadd
 	lda xbc, (xsp + 56)
@@ -56409,7 +56409,7 @@ DSP_SOS_Algo2_FinalChain:
 	lda_dri XWA, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
 	lda_dri XBC, 0xFD, 0xBA, 0x00
-	lda xde, (0x0131c3:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_4194304:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56422,7 +56422,7 @@ DSP_SOS_Algo2_FinalChain:
 	call DSP_WriteOscParam
 	ldw_erp HL, 0xFA
 	lda_dri XBC, 0xFD, 0xC2, 0x00
-	lda xde, (0x0131c7:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_4194304_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56434,7 +56434,7 @@ DSP_SOS_Algo2_FinalChain:
 	call DSP_WriteCoeffData_5B_Direct
 	ldw_erp HL, 0xFA
 	lda_dri XBC, 0xFD, 0xBE, 0x00
-	lda xde, (0x0131cb:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_4194304_3:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)

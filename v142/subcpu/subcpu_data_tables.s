@@ -2849,230 +2849,236 @@ FP_Const_0p552_Add:
 ; dominates: 44100/88200 Hz, 2*pi/44100 (1.4247585730e-4), 2*pi/88200 (7.123792865e-5),
 ; 2^23 Q23 scale, EQ gain steps.  Sizes follow the consumer calls exactly (FP_SP_* = f32,
 ; FP_DP_* = f64); the reference stride tiles the pool with no gap.
-DSP_FP_ConstPool:
-	.float 3e+01
-	.float 4.41e+04
-	.float 3.3075e+06
-	.float 75
-	.float 1.8e+03
-	.double 2.0
-	.float 3e+01
-	.float 4.41e+04
-	.float 6.50916e+07
-	.float 24
-	.float 576
-	.double 2.0
-	.float 8388608	; 2^23
-	.float 1
-	.double 441.0
-	.double 10.0
-	.double 0.4270422
-	.double 1.0
-	.float 4.41e+04
-	.float 3.9249e+06
-	.float 1e+01
-	.double 0.4270422
-	.double 1.0
-	.float 8388608	; 2^23
-	.float 32768
-	.float 65536
-	.float 99
-	.float 4.41e+04
-	.float 99
-	.float 2376
-	.double 2.0
-	.float 8388608	; 2^23
-	.float 2
-	.float 2e+01
-	.float 1.8e+02
-	.float 1e+02
-	.float 1.7e+03
-	.float 2e+02
-	.float 4.8e+03
-	.float 2.4e+03
-	.double 2.0
-	.double 1.0
-	.double 2400.0
-	.float 8388608	; 2^23
-	.double -0.0697
-	.double 10.0
-	.double 0.9999
-	.double -0.0697
-	.double 10.0
-	.double 0.9999
-	.float 2
-	.float 2
-	.float 1
-	.float 3
-	.float 2097152
-	.float 8388608	; 2^23
-	.float 4194304
-	.float 2097152
-	.float 2097152
-	.float 32768
-	.float 65536
-	.double 0.02
-	.double 0.1
-	.double 1.0
-	.double -4.816
-	.double -7.0
-	.double 10.0
-	.double 2.0
-	.float 7
-	.double 10.0
-	.double 1.0000000000000002e-07
-	.double 2.0
-	.float 16
-	.double 0.05
-	.double 0.45
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 24
-	.double 0.1
-	.double 0.9
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 56
-	.double 0.2
-	.double 4.2
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 67
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 8388608	; 2^23
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 7.123792865e-05
-	.float 1
-	.float 1
-	.float -2
-	.float 1
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 1
-	.float 1
-	.float 2
-	.float 2
-	.float 2
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 8388608	; 2^23
-	.double 7.123792865e-05
-	.float 1
-	.float 1
-	.float -2
-	.float 1
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 8388608	; 2^23
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.float 1
-	.float 1
-	.float -2
-	.float 1
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 4194304
-	.float 4194304
-	.float 8388608	; 2^23
-	.float 4194304
-	.float 4194304
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.float 2e+01
-	.double 10.0
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 2e+01
-	.double 10.0
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 2097152
-	.float 4194304
-	.float 2097152
-	.float 2e+01
-	.double 10.0
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 4194304
-	.float 4194304
-	.float 4194304
+; ★ CORRECTED 2026-09-25: the code CAN reference them symbolically -- `lda r,(Label:24)`
+; assembles to the same bytes -- so
+; each constant now carries its own label, FPConst_<reading routine>_<value>, and its
+; reader reads it by name (scripts/converters/label_v142_dsp_fp_constpool.py).  The pool
+; label DSP_FP_ConstPool is gone: an address carries one name, and the first constant has
+; its own.  Measured by that script: 127 x f32 + 96 x f64 = 1,276 bytes tile
+; 0x012CD3-0x0131CE exactly, read by 223 sites, one per constant (so "98 x f64" above is 2 high).
+FPConst_DSP_VolumeCurve_FP_30:	.float 3e+01	; f32 3e+01, read by DSP_VolumeCurve_FP (operand at 0x039311)
+FPConst_DSP_VolumeCurve_FP_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP (operand at 0x039320)
+FPConst_DSP_VolumeCurve_FP_3307500:	.float 3.3075e+06	; f32 3.3075e+06, read by DSP_VolumeCurve_FP (operand at 0x03932F)
+FPConst_DSP_VolumeCurve_FP_75:	.float 75	; f32 75, read by DSP_VolumeCurve_FP (operand at 0x03933B)
+FPConst_DSP_VolumeCurve_FP_1800:	.float 1.8e+03	; f32 1.8e+03, read by DSP_VolumeCurve_FP (operand at 0x03934A)
+FPConst_DSP_VolumeCurve_FP_2:	.double 2.0	; f64 2.0, read by DSP_VolumeCurve_FP (operand at 0x03936D)
+FPConst_DSP_VolumeCurve_FP_HighRange_30:	.float 3e+01	; f32 3e+01, read by DSP_VolumeCurve_FP_HighRange (operand at 0x03939E)
+FPConst_DSP_VolumeCurve_FP_HighRange_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393AD)
+FPConst_DSP_VolumeCurve_FP_HighRange_65091600:	.float 6.50916e+07	; f32 6.50916e+07, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393BC)
+FPConst_DSP_VolumeCurve_FP_HighRange_24:	.float 24	; f32 24, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393C8)
+FPConst_DSP_VolumeCurve_FP_HighRange_576:	.float 576	; f32 576, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393D7)
+FPConst_DSP_VolumeCurve_FP_HighRange_2:	.double 2.0	; f64 2.0, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393FA)
+FPConst_DSP_VolumeCurve_FP_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_VolumeCurve_FP_Finalize (operand at 0x03941E)
+FPConst_DSP_ReverbCurve_FP_1:	.float 1	; f32 1, read by DSP_ReverbCurve_FP (operand at 0x0395B7)
+FPConst_DSP_ReverbCurve_FP_441:	.double 441.0	; f64 441.0, read by DSP_ReverbCurve_FP (operand at 0x0395D0)
+FPConst_DSP_ReverbCurve_FP_10:	.double 10.0	; f64 10.0, read by DSP_ReverbCurve_FP (operand at 0x0395DC)
+FPConst_DSP_ReverbCurve_FP_0p4270422:	.double 0.4270422	; f64 0.4270422, read by DSP_ReverbCurve_FP (operand at 0x0395F5)
+FPConst_DSP_ReverbCurve_FP_1_2:	.double 1.0	; f64 1.0, read by DSP_ReverbCurve_FP (operand at 0x03960C)
+FPConst_DSP_ReverbCurve_FP_HighRange_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039634)
+FPConst_DSP_ReverbCurve_FP_HighRange_3924900:	.float 3.9249e+06	; f32 3.9249e+06, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039643)
+FPConst_DSP_ReverbCurve_FP_HighRange_10:	.float 1e+01	; f32 1e+01, read by DSP_ReverbCurve_FP_HighRange (operand at 0x03964F)
+FPConst_DSP_ReverbCurve_FP_HighRange_0p4270422:	.double 0.4270422	; f64 0.4270422, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039672)
+FPConst_DSP_ReverbCurve_FP_HighRange_1:	.double 1.0	; f64 1.0, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039689)
+FPConst_DSP_ReverbCurve_FP_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ReverbCurve_FP_Finalize (operand at 0x0396A5)
+FPConst_DSP_ParamInterp_FPComplex_32768:	.float 32768	; f32 32768, read by DSP_ParamInterp_FPComplex (operand at 0x0396EB)
+FPConst_DSP_ParamInterp_FPComplex_65536:	.float 65536	; f32 65536, read by DSP_ParamInterp_FPComplex (operand at 0x0396FA)
+FPConst_DSP_ParamInterp_FPComplex_99:	.float 99	; f32 99, read by DSP_ParamInterp_FPComplex (operand at 0x039752)
+FPConst_DSP_ParamInterp_FPComplex_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_ParamInterp_FPComplex (operand at 0x03976E)
+FPConst_DSP_ParamInterp_FPComplex_99_2:	.float 99	; f32 99, read by DSP_ParamInterp_FPComplex (operand at 0x03977A)
+FPConst_DSP_ParamInterp_FPComplex_2376:	.float 2376	; f32 2376, read by DSP_ParamInterp_FPComplex (operand at 0x039789)
+FPConst_DSP_ParamInterp_FPComplex_2:	.double 2.0	; f64 2.0, read by DSP_ParamInterp_FPComplex (operand at 0x0397AC)
+FPConst_DSP_ParamInterp_FPComplex_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamInterp_FPComplex (operand at 0x0397D5)
+FPConst_DSP_DetuneCurve_Range1_Compute_2:	.float 2	; f32 2, read by DSP_DetuneCurve_Range1_Compute (operand at 0x039917)
+FPConst_DSP_DetuneCurve_Range2_Compute_20:	.float 2e+01	; f32 2e+01, read by DSP_DetuneCurve_Range2_Compute (operand at 0x039969)
+FPConst_DSP_DetuneCurve_Range2_Compute_180:	.float 1.8e+02	; f32 1.8e+02, read by DSP_DetuneCurve_Range2_Compute (operand at 0x039978)
+FPConst_DSP_DetuneCurve_Range3_Compute_100:	.float 1e+02	; f32 1e+02, read by DSP_DetuneCurve_Range3_Compute (operand at 0x0399CA)
+FPConst_DSP_DetuneCurve_Range3_Compute_1700:	.float 1.7e+03	; f32 1.7e+03, read by DSP_DetuneCurve_Range3_Compute (operand at 0x0399D9)
+FPConst_DSP_DetuneCurve_Range4_Compute_200:	.float 2e+02	; f32 2e+02, read by DSP_DetuneCurve_Range4_Compute (operand at 0x039A0D)
+FPConst_DSP_DetuneCurve_Range4_Compute_4800:	.float 4.8e+03	; f32 4.8e+03, read by DSP_DetuneCurve_Range4_Compute (operand at 0x039A1C)
+FPConst_DSP_DetuneCurve_Finalize_2400:	.float 2.4e+03	; f32 2.4e+03, read by DSP_DetuneCurve_Finalize (operand at 0x039A3D)
+FPConst_DSP_DetuneCurve_Finalize_2:	.double 2.0	; f64 2.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A5D)
+FPConst_DSP_DetuneCurve_Finalize_1:	.double 1.0	; f64 1.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A74)
+FPConst_DSP_DetuneCurve_Finalize_2400_2:	.double 2400.0	; f64 2400.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A86)
+FPConst_DSP_DetuneCurve_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_DetuneCurve_Finalize (operand at 0x039A9F)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Neg0p0697:	.double -0.0697	; f64 -0.0697, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B31)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_10:	.double 10.0	; f64 10.0, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B47)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_0p9999:	.double 0.9999	; f64 0.9999, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B61)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Neg0p0697_2:	.double -0.0697	; f64 -0.0697, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B8E)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_10_2:	.double 10.0	; f64 10.0, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BA4)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_0p9999_2:	.double 0.9999	; f64 0.9999, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BBE)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2:	.float 2	; f32 2, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BDF)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2_2:	.float 2	; f32 2, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BEE)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_1:	.float 1	; f32 1, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C0A)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_3:	.float 3	; f32 3, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C33)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C4F)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C78)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CA8)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_2:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CCE)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_3:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CF4)
+FPConst_DSP_ParamEQ_Curve_FP_32768:	.float 32768	; f32 32768, read by DSP_ParamEQ_Curve_FP (operand at 0x039DC1)
+FPConst_DSP_ParamEQ_Curve_FP_65536:	.float 65536	; f32 65536, read by DSP_ParamEQ_Curve_FP (operand at 0x039DD0)
+FPConst_DSP_ParamEQ_Curve_FP_0p02:	.double 0.02	; f64 0.02, read by DSP_ParamEQ_Curve_FP (operand at 0x039DFF)
+FPConst_DSP_ParamEQ_Curve_FP_0p1:	.double 0.1	; f64 0.1, read by DSP_ParamEQ_Curve_FP (operand at 0x039E0E)
+FPConst_DSP_ParamEQ_Curve_FP_1:	.double 1.0	; f64 1.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039E1A)
+FPConst_DSP_ParamEQ_Curve_FP_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Curve_FP (operand at 0x039E57)
+FPConst_DSP_ParamEQ_Curve_FP_Neg7:	.double -7.0	; f64 -7.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039E7A)
+FPConst_DSP_ParamEQ_Curve_FP_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039E9D)
+FPConst_DSP_ParamEQ_Curve_FP_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039EC1)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_7:	.float 7	; f32 7, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039EDD)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039EFD)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_1em7:	.double 1.0000000000000002e-07	; f64 1.0000000000000002e-07, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039F21)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039F30)
+FPConst_DSP_ParamEQ_Range2_16:	.float 16	; f32 16, read by DSP_ParamEQ_Range2 (operand at 0x039F62)
+FPConst_DSP_ParamEQ_Range2_0p05:	.double 0.05	; f64 0.05, read by DSP_ParamEQ_Range2 (operand at 0x039F7B)
+FPConst_DSP_ParamEQ_Range2_0p45:	.double 0.45	; f64 0.45, read by DSP_ParamEQ_Range2 (operand at 0x039F8A)
+FPConst_DSP_ParamEQ_Range2_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range2 (operand at 0x039FA3)
+FPConst_DSP_ParamEQ_Range2_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range2 (operand at 0x039FC6)
+FPConst_DSP_ParamEQ_Range2_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range2 (operand at 0x039FEA)
+FPConst_DSP_ParamEQ_Range3_24:	.float 24	; f32 24, read by DSP_ParamEQ_Range3 (operand at 0x03A01C)
+FPConst_DSP_ParamEQ_Range3_0p1:	.double 0.1	; f64 0.1, read by DSP_ParamEQ_Range3 (operand at 0x03A035)
+FPConst_DSP_ParamEQ_Range3_0p9:	.double 0.9	; f64 0.9, read by DSP_ParamEQ_Range3 (operand at 0x03A044)
+FPConst_DSP_ParamEQ_Range3_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range3 (operand at 0x03A05D)
+FPConst_DSP_ParamEQ_Range3_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range3 (operand at 0x03A080)
+FPConst_DSP_ParamEQ_Range3_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range3 (operand at 0x03A0A4)
+FPConst_DSP_ParamEQ_Range4_56:	.float 56	; f32 56, read by DSP_ParamEQ_Range4 (operand at 0x03A0D6)
+FPConst_DSP_ParamEQ_Range4_0p2:	.double 0.2	; f64 0.2, read by DSP_ParamEQ_Range4 (operand at 0x03A0EF)
+FPConst_DSP_ParamEQ_Range4_4p2:	.double 4.2	; f64 4.2, read by DSP_ParamEQ_Range4 (operand at 0x03A0FE)
+FPConst_DSP_ParamEQ_Range4_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range4 (operand at 0x03A117)
+FPConst_DSP_ParamEQ_Range4_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range4 (operand at 0x03A13A)
+FPConst_DSP_ParamEQ_Range4_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range4 (operand at 0x03A15E)
+FPConst_DSP_ParamEQ_Range5_67:	.float 67	; f32 67, read by DSP_ParamEQ_Range5 (operand at 0x03A184)
+FPConst_DSP_ParamEQ_Range5_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range5 (operand at 0x03A1A7)
+FPConst_DSP_ParamEQ_Range5_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range5 (operand at 0x03A1CA)
+FPConst_DSP_ParamEQ_Range5_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range5 (operand at 0x03A1EE)
+FPConst_DSP_ParamEQ_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamEQ_Finalize (operand at 0x03A20C)
+FPConst_DSP_FilterLUT_Fetch_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Fetch (operand at 0x03A6CD)
+FPConst_DSP_FilterLUT_Fetch_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_Fetch (operand at 0x03A6DC)
+FPConst_DSP_FilterLUT_Mode0x10_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Mode0x10 (operand at 0x03A754)
+FPConst_DSP_FilterLUT_Mode0x10_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_Mode0x10 (operand at 0x03A763)
+FPConst_DSP_FilterLUT_Mode0x20_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Mode0x20 (operand at 0x03A7DB)
+FPConst_DSP_FilterLUT_Mode0x20_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_Mode0x20 (operand at 0x03A7EA)
+FPConst_DSP_FilterLUT_ModeType2_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_ModeType2 (operand at 0x03A87F)
+FPConst_DSP_FilterLUT_ModeType2_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_ModeType2 (operand at 0x03A88E)
+FPConst_DSP_FilterLUT_ModeType2_SubMode_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_ModeType2_SubMode (operand at 0x03A8E4)
+FPConst_DSP_FilterLUT_ModeType2_SubMode_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_ModeType2_SubMode (operand at 0x03A8F3)
+FPConst_DSP_BiquadCoeff_Compute_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Compute (operand at 0x03A98D)
+FPConst_DSP_BiquadCoeff_Compute_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Compute (operand at 0x03A9F8)
+FPConst_DSP_BiquadCoeff_Compute_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Compute (operand at 0x03AA06)
+FPConst_DSP_BiquadCoeff_Compute_Neg2:	.float -2	; f32 -2, read by DSP_BiquadCoeff_Compute (operand at 0x03AA1A)
+FPConst_DSP_BiquadCoeff_Compute_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Compute (operand at 0x03AA3C)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo0_AfterSign (operand at 0x03AA78)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo0_AfterSign (operand at 0x03AA98)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo0_AfterSign (operand at 0x03AACF)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo0_AfterSign2 (operand at 0x03AB32)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo0_AfterSign2 (operand at 0x03AB52)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo0_AfterSign2 (operand at 0x03AB86)
+FPConst_DSP_BiquadCoeff_Algo0_Assembly_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo0_Assembly (operand at 0x03ACD1)
+FPConst_DSP_BiquadCoeff_Algo0_Assembly_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo0_Assembly (operand at 0x03AD05)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_2:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD32)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_2:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD54)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_3:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD76)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD89)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADBC)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADEA)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE18)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE46)
+FPConst_DSP_BiquadCoeff_Algo1_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AE81)
+FPConst_DSP_BiquadCoeff_Algo1_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AEE8)
+FPConst_DSP_BiquadCoeff_Algo1_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AEF6)
+FPConst_DSP_BiquadCoeff_Algo1_Neg2:	.float -2	; f32 -2, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AF0A)
+FPConst_DSP_BiquadCoeff_Algo1_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AF2C)
+FPConst_DSP_BiquadCoeff_Algo1_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFA1)
+FPConst_DSP_BiquadCoeff_Algo1_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFD4)
+FPConst_DSP_BiquadCoeff_Algo1_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B002)
+FPConst_DSP_BiquadCoeff_Algo1_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B030)
+FPConst_DSP_BiquadCoeff_Algo1_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B05E)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B099)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_2:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B0BD)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_3:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B0F3)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_4:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B11A)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B142)
+FPConst_DSP_BiquadCoeff_Algo2_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B16E)
+FPConst_DSP_BiquadCoeff_Algo2_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B17C)
+FPConst_DSP_BiquadCoeff_Algo2_Neg2:	.float -2	; f32 -2, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B190)
+FPConst_DSP_BiquadCoeff_Algo2_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B1B2)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo2_AfterSign1 (operand at 0x03B1E8)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo2_AfterSign1 (operand at 0x03B208)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo2_AfterSign1 (operand at 0x03B23B)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B29E)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B2BE)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B2EE)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B41E)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B451)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B47A)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4A3)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4CC)
+FPConst_DSP_SOS_LUT_Fetch_0p5:	.double 0.5	; f64 0.5, read by DSP_SOS_LUT_Fetch (operand at 0x03B56F)
+FPConst_DSP_SOS_LUT_Fetch_Neg12:	.double -12.0	; f64 -12.0, read by DSP_SOS_LUT_Fetch (operand at 0x03B57E)
+FPConst_DSP_SOS_LUT_Mode0x10_0p5:	.double 0.5	; f64 0.5, read by DSP_SOS_LUT_Mode0x10 (operand at 0x03B5D4)
+FPConst_DSP_SOS_LUT_Mode0x10_Neg12:	.double -12.0	; f64 -12.0, read by DSP_SOS_LUT_Mode0x10 (operand at 0x03B5E3)
+FPConst_DSP_SOS_Coeff_Compute_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Coeff_Compute (operand at 0x03B68D)
+FPConst_DSP_SOS_Coeff_Compute_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Coeff_Compute (operand at 0x03B6AD)
+FPConst_DSP_SOS_Coeff_Compute_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Coeff_Compute (operand at 0x03B6F3)
+FPConst_DSP_SOS_Coeff_Compute_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Coeff_Compute (operand at 0x03B722)
+FPConst_DSP_SOS_Coeff_Compute_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Coeff_Compute (operand at 0x03B74A)
+FPConst_DSP_SOS_Coeff_Compute_1_2:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B771)
+FPConst_DSP_SOS_Coeff_Compute_1_3:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B787)
+FPConst_DSP_SOS_Coeff_Compute_1_4:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B7B3)
+FPConst_DSP_SOS_Coeff_Compute_1_5:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B7D6)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B803)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B832)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B85A)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B886)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B892)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B8C6)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B8E6)
+FPConst_DSP_SOS_Algo0_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B901)
+FPConst_DSP_SOS_Algo0_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B912)
+FPConst_DSP_SOS_Algo0_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B958)
+FPConst_DSP_SOS_Algo0_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B98D)
+FPConst_DSP_SOS_Algo0_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B9B8)
+FPConst_DSP_SOS_Algo1_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo1 (operand at 0x03B9E2)
+FPConst_DSP_SOS_Algo1_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Algo1 (operand at 0x03BA02)
+FPConst_DSP_SOS_Algo1_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1 (operand at 0x03BA46)
+FPConst_DSP_SOS_Algo1_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1 (operand at 0x03BA73)
+FPConst_DSP_SOS_Algo1_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo1 (operand at 0x03BA97)
+FPConst_DSP_SOS_Algo1_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BAC1)
+FPConst_DSP_SOS_Algo1_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BACD)
+FPConst_DSP_SOS_Algo1_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BB01)
+FPConst_DSP_SOS_Algo1_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BB21)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BB4E)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BB7B)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BB9F)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BBC4)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BBDA)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BC06)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BC29)
+FPConst_DSP_SOS_Algo1_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC49)
+FPConst_DSP_SOS_Algo1_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC5A)
+FPConst_DSP_SOS_Algo1_FinalChain_2097152:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC9B)
+FPConst_DSP_SOS_Algo1_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCCC)
+FPConst_DSP_SOS_Algo1_FinalChain_2097152_2:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCF3)
+FPConst_DSP_SOS_Algo2_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo2 (operand at 0x03BD1D)
+FPConst_DSP_SOS_Algo2_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Algo2 (operand at 0x03BD3D)
+FPConst_DSP_SOS_Algo2_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2 (operand at 0x03BD7F)
+FPConst_DSP_SOS_Algo2_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2 (operand at 0x03BDAC)
+FPConst_DSP_SOS_Algo2_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo2 (operand at 0x03BDD0)
+FPConst_DSP_SOS_Algo2_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BDFA)
+FPConst_DSP_SOS_Algo2_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BE06)
+FPConst_DSP_SOS_Algo2_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BE3A)
+FPConst_DSP_SOS_Algo2_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BE5A)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BE87)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BEB4)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BED8)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BEFD)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BF13)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BF3F)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BF62)
+FPConst_DSP_SOS_Algo2_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BF82)
+FPConst_DSP_SOS_Algo2_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BF93)
+FPConst_DSP_SOS_Algo2_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFCB)
+FPConst_DSP_SOS_Algo2_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFFC)
+FPConst_DSP_SOS_Algo2_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03C028)
 
 ; --- 0x0131cf-0x0133ce  128 x u32 monotonic gain curve, read by DSP_MixerCoeff_Compute:
 ; g = curve[index] >> 15 enters the Q15/Q16 two-stage mixer-gain product that lands in

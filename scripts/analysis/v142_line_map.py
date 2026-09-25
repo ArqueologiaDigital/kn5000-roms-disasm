@@ -30,7 +30,7 @@ ROM = os.path.join(ROOT, "original_ROMs/kn5000_subprogram_v142.rom")
 LLVM = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
 FILES = ["kn5000_subprogram_v142.s", "subcpu_data_tables.s", "subcpu_fp_math.s", "subcpu_vectors.s"]
 MARK = "__v142lm_"
-DIRECTIVE_EMIT = re.compile(r"^\s*\.(byte|short|word|long|ascii|asciz|string|zero|fill|space|incbin|align)\b")
+DIRECTIVE_EMIT = re.compile(r"^\s*\.(byte|short|hword|word|long|int|quad|float|single|double|ascii|asciz|string|zero|fill|space|incbin|align)\b")
 LABEL = re.compile(r"^\s*[A-Za-z_.$][\w.$@]*:\s*")
 
 
