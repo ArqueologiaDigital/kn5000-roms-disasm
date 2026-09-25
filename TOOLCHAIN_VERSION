@@ -875,13 +875,22 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #            (`ldb_spi a, 232`, `stw_dpi bc, 225` ...) is the real instruction
 #            with a `(R+)` / `(-R)` operand -- including the 909 swapped ones:
 #            `stb_dpi a, 224` -> `lda xbc, (xwa+:1)`, `lda_dpi xbc, 232` ->
-#            `ld (xde+), a` -- and the 113 `(backend mnemonic is swapped)` /
-#            `(unidasm)` annotations wave 2 appended are gone.  Bank registers
+#            `ld (xde+), a` -- and the 105 `(backend mnemonic is swapped)`
+#            annotations wave 2 appended are gone (this line said 113 when
+#            first committed; 105 is `git show 166c9dc3 -- '*.s'`).  Bank registers
 #            spelled: `ld e, (xbc3+)`.  wsa1's MEM_XIX_PI2/PI4 bases resolved
 #            to `(xix+)`.  3 more sites had a register byte naming no register
 #            (0xa6/0xa2: misframed 0x00f6a6xx pointer tables in accompaniment_
 #            engine.s) and are `.byte` with a comment.  Gate 13/13; FOIL: one
 #            `ld (xde+), a` changed to `lda xbc, (xde+:1)` -> v10 1 byte differs.
+#   disp256  1,041 lines, 61 files: `(xrr+256)` / `(xrr+0x100)` /
+#            `(xrr+0x0100)` -- the retired d8-carrying-0 sentinel -- is
+#            `(xrr+0:8)`.  ⚠ 4 sites spell a REAL +256 and are left alone:
+#            the SriD16Reg pseudos `ldw_sri0 WA, (xde + 0x0100)` (v10/v9/v7
+#            sequencer_ui.s) and `ld_sril XWA, (xsp + 0x0100)` (v142) encode
+#            their own d16 and never read 256 as the sentinel.  Gate 13/13;
+#            FOIL: hdae5000 `ld (xsp + 0:8), xwa` -> `(xsp + 0)` -> image 2
+#            bytes short.
 #
 # Two-decoder SYNTHETIC SWEEP (notes/wave3a-toolchain-probes/two_decoder_sweep.py:
 # 9,984 probes, every addressing prefix x every sub-opcode + the primary map;

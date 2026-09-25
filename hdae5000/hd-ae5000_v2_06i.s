@@ -492,7 +492,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; Data table = 0x29C0AA (13 records x 24 bytes each)
 	; Handler function = ClassProc (0xFA44E2) via workspace[0x0E0A][0x0168]
 	ld xwa, 0x1600004	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA  ; class id
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA  ; class id
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)             ; Handler dispatch table
 	ld XWA, (xwa + RootFn_ClassProc)             ; Handler function via table offset 0x0168
@@ -511,7 +511,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x1CA: ResEventProc (class id 0x0160000C) ===
 	ld xwa, 0x160000C	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_ResEventProc)             ; Handler function via table offset 0x013C
@@ -530,7 +530,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x1EA: ResMethodProc (class id 0x0160000D) ===
 	ld xwa, 0x160000D	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_ResMethodProc)             ; Handler function via table offset 0x0140
@@ -549,7 +549,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x12A: ApFunctionProc, the module's ApFunction table (class id 0x01600002) ===
 	ld xwa, 0x1600002	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_ApFunctionProc)             ; Handler function via table offset 0x0248
@@ -567,7 +567,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x42A: the names of table 0x12A ===
 	ld xwa, 0x1600002	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_ApFunctionProc)             ; Handler function via table offset 0x0248
@@ -585,7 +585,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x10A: FunctionProc, the module's Function table (class id 0x01600001) ===
 	ld xwa, 0x1600001	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_FunctionProc)             ; Handler function via table offset 0x0244
@@ -603,7 +603,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x40A: the names of table 0x10A ===
 	ld xwa, 0x1600001	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_FunctionProc)             ; Handler function via table offset 0x0244
@@ -621,7 +621,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x14A: MainFunctionProc, the module's MainFunction table (class id 0x01600003) ===
 	ld xwa, 0x1600003	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_MainFunctionProc)             ; Handler function via table offset 0x024C
@@ -639,7 +639,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x44A: the names of table 0x14A ===
 	ld xwa, 0x1600003	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_MainFunctionProc)             ; Handler function via table offset 0x024C
@@ -657,7 +657,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x7F: ViewableProc, the UI object descriptor table (class id 0x01600010) ===
 	ld xwa, 0x1600010	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_ViewableProc)             ; Handler function via table offset 0x0280
@@ -675,7 +675,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === table 0x37F: ResNameProc, the UI object names (class id 0x0160000F) ===
 	ld xwa, 0x160000F	; class id
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
+	ld (xsp + 0:8), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
 	ld XWA, (xwa + RootFn_ResNameProc)             ; Handler function via table offset 0x0148

@@ -1536,7 +1536,7 @@ MidiChanCfg_SetupParams:
 	ldb_sri W, 0x03, 0xf8, 0xe1
 	cp w, 0xff
 	jr	z, MidiChannel_ConfigureExit
-	ld (xiy + 256), wa
+	ld (xiy + 0:8), wa
 	ld (xiy + 2), e
 	calr	FileData_ValidateAndDispatch
 MidiChannel_ConfigureExit:
@@ -1558,7 +1558,7 @@ FileData_ProcessWithLookup_Skip:
 	and	a, 15
 	or	a, 176
 	ld	w, 100:opc
-	ld (xiy+256), wa
+	ld (xiy+0:8), wa
 	ld	(xiy+2), c
 	calr	FileData_ValidateAndDispatch
 	ld	a, 101:opc
@@ -1597,7 +1597,7 @@ MidiCC_DualSend_SetupParams:
 	and a, 0xf
 	or a, 0xb0
 	ld w, 0x0:opc
-	ld (xiy + 256), wa
+	ld (xiy + 0:8), wa
 	res 7, d
 	ld (xiy + 2), d
 	calr	FileData_ValidateAndDispatch
@@ -1618,7 +1618,7 @@ FileData_ValidateAndDispatch:
 	push xhl
 	ld	xix, 0x95a0
 	ld c, (xix + 4)
-	ld w, (xix + 256)
+	ld w, (xix + 0:8)
 	ld	xiy, 0xfdafa2
 	ld xiz, 0x424
 	pushw wa
@@ -11944,7 +11944,7 @@ TGReg_ClearTerminator:
 	ret
 TGReg_WriteCC0_Volume:
 	dec 4, xsp
-	ld (xsp + 256), 0x0
+	ld (xsp + 0:8), 0x0
 	jr	TGReg_WriteCC0_Check
 TGReg_WriteCC0_Body:
 	ld (xbc), 0x0
@@ -11956,7 +11956,7 @@ TGReg_WriteCC0_Body:
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x7f
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC0_Check:
 	lda xwa, (xsp)
 	lda xbc, (xwa + 1)
@@ -11979,7 +11979,7 @@ TGReg_WriteCC0_Check:
 	ret
 TGReg_WriteCC0_AltMask:
 	dec 4, xsp
-	ld (xsp + 256), 0x0
+	ld (xsp + 0:8), 0x0
 	jr	TGReg_WriteCC0_AltCheck
 TGReg_WriteCC0_AltBody:
 	ld (xbc), 0x0
@@ -11991,7 +11991,7 @@ TGReg_WriteCC0_AltBody:
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x7f
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC0_AltCheck:
 	lda xwa, (xsp)
 	lda xbc, (xwa + 1)
@@ -12022,7 +12022,7 @@ TGReg_WriteCC3_Expression:
 	jr	TGReg_WriteCC3_Check
 TGReg_WriteCC3_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC3_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12039,7 +12039,7 @@ TGReg_WriteCC4_Pan:
 	jr	TGReg_WriteCC4_Check
 TGReg_WriteCC4_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC4_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12056,7 +12056,7 @@ TGReg_WriteCC5_Modulation:
 	jr	TGReg_WriteCC5_Check
 TGReg_WriteCC5_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC5_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12073,7 +12073,7 @@ TGReg_WriteCC4_Sustain:
 	jr	TGReg_WriteCC4_SustainCheck
 TGReg_WriteCC4_SustainBody:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC4_SustainCheck:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12092,7 +12092,7 @@ TGReg_WriteCC7_Reverb:
 	jr	TGReg_WriteCC7_Check
 TGReg_WriteCC7_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC7_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12109,7 +12109,7 @@ TGReg_WriteCC8_Chorus:
 	jr	TGReg_WriteCC8_Check
 TGReg_WriteCC8_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC8_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12126,7 +12126,7 @@ TGReg_WriteCC9_Variation:
 	jr	TGReg_WriteCC9_Check
 TGReg_WriteCC9_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC9_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12143,7 +12143,7 @@ TGReg_WriteCC10_KeyShift:
 	jr	TGReg_WriteCC10_Check
 TGReg_WriteCC10_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC10_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12160,7 +12160,7 @@ SoundMode_FullRenderUpdate_Helper:
 	jr	TGReg_WriteCC11_Check
 TGReg_WriteCC11_Body:
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC11_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf
@@ -12246,14 +12246,14 @@ SoundParam_Bit15Jump:
 	jr	SoundParam_ApplyBit15Toggle
 TGReg_WriteCC12_Assign:
 	dec 4, xsp
-	ld (xsp + 256), 0x0
+	ld (xsp + 0:8), 0x0
 	jr	TGReg_WriteCC12_Check
 TGReg_WriteCC12_Body:
 	ld (xwa + 1), 0xc
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x10
 	call	MidiTG_WriteRegByDescriptor
-	incm8 1, (xsp + 256)
+	incm8 1, (xsp + 0:8)
 TGReg_WriteCC12_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xf

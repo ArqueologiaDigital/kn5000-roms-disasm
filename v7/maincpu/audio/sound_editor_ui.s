@@ -1506,7 +1506,7 @@ UpdSeSel_DetailedUpdate_Helper12_Loop:
 UpdSeSel_DetailedUpdate_Skip10:
 	lda	xwa, (xsp)
 	call	SeMenu_FillEntryTable
-	ld	c, (xsp+256)
+	ld	c, (xsp+0:8)
 	extz	bc
 	ld	wa, 0:i3
 	call	SeMenu_StorePartParam
@@ -7496,7 +7496,7 @@ SeMenu_NameEditor_Init:
 	lda xsp, (xsp - 36)
 	lda xwa, (xsp)
 	call SeMenu_FillObjTable
-	ld c, (xsp + 256)
+	ld c, (xsp + 0:8)
 	extz bc
 	ld wa, 1:i3
 	call SeMenu_StorePartParam

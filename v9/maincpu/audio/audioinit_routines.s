@@ -394,7 +394,7 @@ AudioInit_CompareAndSendMIDI:
 	cp (0xc5a8:16), c
 	jr z, AudioInit_VoiceParamDone
 	ld (0xc5a8:16), c
-	ld (xsp + 256), 0x4	; LD (XSP + 000h), 004h - explicit displacement encoding
+	ld (xsp + 0:8), 0x4	; LD (XSP + 000h), 004h - explicit displacement encoding
 	ld (xsp + 1), 0xf0
 	ld (xsp + 2), 0x50
 	ld (xsp + 3), 0x91

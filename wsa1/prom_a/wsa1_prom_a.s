@@ -22933,7 +22933,7 @@ BucketTable_F8C536:   ; 3 entries (index 0-2) + 1 pad byte duplicating the last 
 .LF8C58C:
 	ld a, 0x04:opc                                   ; F8C58C  21 04
 .LF8C58E:
-	or (xix+0x0100), a                            ; F8C58E  8c 00 e9
+	or (xix+0:8), a                            ; F8C58E  8c 00 e9
 	ret                                           ; F8C591  0e
 BucketTable_F8C592:   ; 3 entries (index 0-2) + 1 pad byte duplicating the last entry
 	.byte 0x01, 0x02, 0x04, 0x04   ; F8C592

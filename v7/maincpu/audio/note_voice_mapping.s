@@ -1747,8 +1747,8 @@ VoiceEvent_FlushAndReturn:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jrl	z, Audio_StoreParamAndReturn
-	ld	(xsp + 256), 0x4
-	ld	(xsp + 256), 0xb0
+	ld	(xsp + 0:8), 0x4
+	ld	(xsp + 0:8), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 1), a
 	ld	(xsp + 2), 0x7b
@@ -1805,7 +1805,7 @@ VoiceClaim_Slot0_Alt:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jrl	z, VoiceClaim_Extended_Init
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 2), a
@@ -2023,7 +2023,7 @@ VoiceClaim_Extended_Init:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jrl	z, VoiceClaim_Extended_Return
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 2), a
@@ -2192,7 +2192,7 @@ VoiceClaim_Extended_Return:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jrl	z, VoiceClaimExt2_Slot3_WriteReg
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 2), a
@@ -2321,7 +2321,7 @@ VoiceClaimExt2_Slot3_WriteReg:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jrl	z, VoiceClaimExt2_Slot3_WriteReg2
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 2), a
@@ -2410,7 +2410,7 @@ VoiceClaimExt2_Slot3_WriteReg2:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jr	z, Audio_StoreParamAndReturn
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 2), a
@@ -2473,8 +2473,8 @@ MidiEvent_ConfigChannel:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jrl	z, MidiConfig_Return
-	ld	(xsp + 256), 0x4
-	ld	(xsp + 256), 0xb0
+	ld	(xsp + 0:8), 0x4
+	ld	(xsp + 0:8), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 1), a
 	ld	(xsp + 2), 0x7b
@@ -2513,7 +2513,7 @@ MidiConfig_Slot6Path:
 	call	NoteMap_ClaimVoiceSlot
 	cp	l, 0:i3
 	jr	z, MidiConfig_Return
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xb0
 	ldb_sri0	A, (xsp + 0x014e)
 	ld	(xsp + 2), a
@@ -9989,7 +9989,7 @@ SelectTone_Continue_Prologue:
 	ld	(xsp + 2), 0x0
 	lda	xwa, (xsp)
 	call	SndParam_FetchOscTableEntry
-	ld	a, (xsp + 256)
+	ld	a, (xsp + 0:8)
 	add	a, 0xf0
 SelectTone_Continue_LoadReg:
 	ld	l, a
@@ -9997,7 +9997,7 @@ SelectTone_Continue_LoadReg:
 	ret
 Rhythm_DispatchCCCommand:
 	dec	6, xsp
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0x90
 	ld	(xsp + 2), 0x19
 	ld	(xsp + 3), a
@@ -14382,10 +14382,10 @@ DecayTimer_Return:
 	ret
 Voice_MatchVoicePairs:
 	ld	xiy, 0xce63
-	ld	bc, (xiy + 256)
+	ld	bc, (xiy + 0:8)
 	ld	xix, 0xce7b
 VoicePair_OuterLoop:
-	ld	de, (xix + 256)
+	ld	de, (xix + 0:8)
 	ld	w, (xiy + 5)
 VoicePair_InnerScan:
 	cp	w, (xix + 5)
@@ -15611,7 +15611,7 @@ VoiceSlot_IterateAlloc_LoadReg:
 	ld	xix, 0xcec3
 	ld	c, (0xce49:24)
 	xor	b, b
-	ld	(xix + 256), bc
+	ld	(xix + 0:8), bc
 VoiceSlot_IterateAlloc_LoadReg2:
 	ld	w, (xiy)
 	ld	a, 0x40:opc
@@ -15765,7 +15765,7 @@ ChordTables_PitchMask:
 VoiceSlot_CheckAndApply_LoadReg:
 	ld	xiy, 0xce63
 	ld	xix, 0xce7b
-	ld	bc, (xiy + 256)
+	ld	bc, (xiy + 0:8)
 	inc	1, bc
 	ldirw
 	ret
@@ -15904,7 +15904,7 @@ VoiceSlot_CheckAndApply_Prologue:
 	push	xde
 	ld	xiy, (xiz + 8)
 	xor	xix, xix
-	ld	bc, (xiy + 256)
+	ld	bc, (xiy + 0:8)
 	sla	bc, 1
 	ld	xiz, xiy
 	add	xiz, 0x4
@@ -16035,7 +16035,7 @@ MIDI_FinalizeParamBlock:
 	ret
 SndParam_Init:
 	dec	6, xsp
-	ld	(xsp + 256), 0x5
+	ld	(xsp + 0:8), 0x5
 	ld	(xsp + 1), 0xc0
 	ld	(xsp + 2), 0x19
 	ld	(xsp + 3), 0x0
@@ -16056,7 +16056,7 @@ SndParam_Init:
 ; machine to the appropriate page handler.
 ; ============================================================================
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16074,7 +16074,7 @@ SndParam_Init:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+0x100)
+	ld	a, (xsp+0:8)
 	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
@@ -16093,7 +16093,7 @@ SndParam_Init:
 ; v10 name for this address: SndParam_ProcessEntry -- not a label here: v7 keeps that name at 0xFEA4CA for ui_widgets/widget_dispatch.s
 	cp	a, 0:i3
 	jrl	z, SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+0x100)
+	ld	a, (xsp+0:8)
 	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
@@ -16139,7 +16139,7 @@ SndParam_ProcessEntry_Entry:
 SndParam_Init_Skip:
 	bitm	6, (xsp+0x3)
 	jrl	z, SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+0x100)
+	ld	a, (xsp+0:8)
 	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
@@ -16185,7 +16185,7 @@ VoiceSlot_CheckAndApply_Data2:
 	res	7, a
 	cp	a, 0:i3
 	jrl	z, SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+0x100)
+	ld	a, (xsp+0:8)
 	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
@@ -16263,7 +16263,7 @@ SndParam_ProcessEntry_Epilogue:
 	ret
 HdaeRom_Entry:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16307,7 +16307,7 @@ VoiceSlot_CheckAndApply_Data2_Epilogue:
 	ret
 HdaeRom_ProcessBlock:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16334,7 +16334,7 @@ VoiceSlot_CheckAndApply_Data2_Epilogue2:
 HdaeRom_ReadParam:
 	ret
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16360,7 +16360,7 @@ VoiceSlot_CheckAndApply_Data2_Epilogue3:
 	ret
 HdaeRom_WriteParam:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16386,7 +16386,7 @@ VoiceSlot_CheckAndApply_Data2_Epilogue4:
 	ret
 HdaeRom_CheckResult:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16412,7 +16412,7 @@ VoiceSlot_CheckAndApply_Data2_Epilogue5:
 	ret
 HdaeRom_FinishBlock:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16444,7 +16444,7 @@ HdaeRom_TableEntry1:
 	ret
 HdaeRom_TableEntry2:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16510,7 +16510,7 @@ HdaeRom_AltEntry:
 	ret
 UIStateEvt_ProcessHandler:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16566,7 +16566,7 @@ UIStateEvt_ProcessHandler_Epilogue:
 	ret
 HdaeRom_AltProcessBlock:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16609,7 +16609,7 @@ HdaeRom_AltProcessBlock_Epilogue:
 	ret
 HdaeRom_AltReadParam:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16652,7 +16652,7 @@ HdaeRom_AltReadParam_Epilogue:
 	ret
 HdaeRom_AltCheckResult:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16700,7 +16700,7 @@ HdaeRom_AltCheckResult_Epilogue:
 	inc	4, xsp
 	ret
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16741,7 +16741,7 @@ HdaeRom_AltCheckResult_Epilogue2:
 	ret
 HdaeRom_AltTableEntry0:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16757,7 +16757,7 @@ HdaeRom_AltTableEntry0:
 	ret
 HdaeRom_AltTableEntry1:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16798,7 +16798,7 @@ HdaeRom_AltTableEntry1_Epilogue:
 	ret
 HdaeRom_AltTableEntry2:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16814,7 +16814,7 @@ HdaeRom_AltTableEntry2:
 	ret
 HdaeRom_AltTableEntry3:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16830,7 +16830,7 @@ HdaeRom_AltTableEntry3:
 	ret
 HdaeRom_AltTableEntry4:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16852,7 +16852,7 @@ SndParam_ProcessEntry_Epilogue2:
 	ret
 HdaeRom_AltTableEntry5:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16868,7 +16868,7 @@ HdaeRom_AltTableEntry5:
 	ret
 HdaeRom_AltTableEntry6:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -16888,7 +16888,7 @@ HdaeRom_AltTableEntry8:
 	ret
 HdaeRom_AltTableEntry9:
 	dec	4, xsp
-	ld	(xsp+0x100), (0xbfe4)
+	ld	(xsp+0:8), (0xbfe4)
 	ld	(xsp+0x1), (0xbfe1)
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
@@ -17968,7 +17968,7 @@ SendDataReturn_LoadReg:
 ; ============================================================================
 MIDI_SendControlChange:
 	dec	6, xsp
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xb0
 	ld	(xsp + 2), a
 	ld	(xsp + 3), c
@@ -17980,7 +17980,7 @@ MIDI_SendControlChange:
 	ret
 MIDI_SendPitchBend:
 	dec	6, xsp
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xe0
 	ld	(xsp + 2), a
 	ld	a, c
@@ -17998,7 +17998,7 @@ MIDI_SendPitchBend:
 ; v10 name for this address: MIDI_SendChannelPressure -- not a label here: v7 keeps that name at 0xFEB7B0 for boot/system_handlers.s
 SndPart_SetParam_Helper:
 	dec	6, xsp
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xd0
 	ld	(xsp + 2), a
 	ld	(xsp + 3), 0x0
@@ -18076,7 +18076,7 @@ SeqVoice_CheckAndRet_RestoreReg:
 	retd	0x2
 SeqVoice_CheckAndRet_Prologue:
 	dec	6, xsp
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xf0
 	ld	(xsp + 2), a
 	ld	(xsp + 3), c
@@ -18211,7 +18211,7 @@ SeqVoice_CheckAndRet_Data_Return2:
 	ret
 MIDI_SendSysExCmd:
 	dec	6, xsp
-	ld	(xsp + 256), 0x4
+	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xf0
 	ld	(xsp + 2), 0x50
 	ld	(xsp + 3), 0x87

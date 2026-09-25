@@ -882,7 +882,7 @@ FDemoText_ProbeVoiceType:
 
 	call	16703515
 
-	ld l, (xsp + 256)
+	ld l, (xsp + 0:8)
 
 	inc 8, xsp
 

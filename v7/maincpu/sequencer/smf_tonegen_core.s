@@ -4769,7 +4769,7 @@ VoiceParam_ByMode_Mode0:
 	pop	xiy
 	ld	l, (6746:16)
 	ld	h, (6747:16)
-	ld	(xiy+256), l
+	ld	(xiy+0:8), l
 	ld	(xiy+1), h
 	jrl	VoiceParam_ByMode_StoreAndReturn	; -> 0xF2624C
 VoiceParam_ByMode_Mode2:
@@ -4809,7 +4809,7 @@ VoiceParam_ByMode_Mode2_Apply:
 	pop xiy
 	ld l, (6746:16)
 	ld h, (6747:16)
-	ld (xiy + 256), l
+	ld (xiy + 0:8), l
 	ld (xiy + 1), h
 	jr VoiceParam_ByMode_StoreAndReturn
 
@@ -4826,7 +4826,7 @@ VoiceParam_ByMode_Mode1:
 	rrc c
 	and a, 0x7f
 	or a, c
-	ld (xiy + 256), a
+	ld (xiy + 0:8), a
 	xor h, h
 	ld l, (4011:16)
 	and l, 0xf

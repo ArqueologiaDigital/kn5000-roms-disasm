@@ -399,7 +399,7 @@ SeqEvt_UpdateMinTempo:
 SeqEvt_HandleBufferWrap:
 	sub ix, (xhl + 2)
 	dec 1, ix
-	add ix, (xhl + 256)
+	add ix, (xhl + 0:8)
 	ld (0x7e0f:16), ix
 
 SeqEvt_CalcTempoRet:
@@ -432,7 +432,7 @@ SeqEvtBuf_AdvanceReadPos:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr le, SeqEvtBuf_AdvanceRet
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 SeqEvtBuf_AdvanceRet:
 	ret
@@ -1405,7 +1405,7 @@ AccPlay_StopRet:
 
 AccPlay_ProcessVoiceBank:
 	calr Voice_GetBankEntryPointer
-	ld a, (xiy + 256)
+	ld a, (xiy + 0:8)
 	bit 0, a
 	jr z, AccPlay_VoiceBankRet
 	calr Voice_ReleaseChain
@@ -1544,7 +1544,7 @@ AccPlay_AllocateVoiceSlot:
 	pop xiy
 	ld (xiy + 3), wa
 	ld l, 0x1:opc
-	or (xiy + 256), l
+	or (xiy + 0:8), l
 	ld (0x7f10:16), wa
 	ld wa, 6:i3
 	ld (0x7f12:16), wa

@@ -795,7 +795,7 @@ TaskSched_Init_FreeList_B:
 	djnz8 b, TaskSched_Init_FreeList_B
 	ldw iy, 0x10C6
 	extz xiy
-	ld (xiy + 256), iy
+	ld (xiy + 0:8), iy
 	ld (xiy + 2), iy
 	ldw ix, 0x10A6
 	ld b, 0x4:opc
@@ -804,7 +804,7 @@ TaskSched_Init_LinkFreeNodes:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -893,7 +893,7 @@ TaskSched_Dispatch_ScanQueues:
 	extz xix
 
 TaskSched_Dispatch_ScanLoop:
-	ld hl, (xix + 256)
+	ld hl, (xix + 0:8)
 	cp hl, ix
 	jr nz, TaskSched_Dispatch_SwitchTo
 	inc 4, ix
@@ -944,9 +944,9 @@ TaskSched_SoftTimer_Entry:
 	ld	xwa, (xix+4)
 	cp	xwa, 4294967295
 	jr	z, TaskSched_SoftTimer_Next
-	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
+	ld	wa, (xix+0:8)	; ld wa,(XIX+0x00)
 	dec	1, wa
-	ld	(xix+256), wa	; ld (XIX+0x00),wa
+	ld	(xix+0:8), wa	; ld (XIX+0x00),wa
 	or	wa, wa
 	jr	z, TaskSched_SoftTimer_Fire
 ; Advance XIX by 8 and djnz; also the synthetic return address pushed for a fired callback.
@@ -964,7 +964,7 @@ TaskSched_SoftTimer_Unlock:
 ; Reload counter from +2, push 0x01FFA8, jp (XIX+4) -- i.e. tail-call the callback.
 TaskSched_SoftTimer_Fire:
 	ld16_src_rid8	xix, 0x02, wa	; ld wa,(XIX+0x02)
-	ld	(xix+256), wa	; ld (XIX+0x00),wa
+	ld	(xix+0:8), wa	; ld (XIX+0x00),wa
 	lda	xwa, (TaskSched_SoftTimer_Next:24)
 	push	xwa
 	ld	xwa, (xix+4)
@@ -1026,7 +1026,7 @@ TaskSched_SpawnTask:
 	sub xiy, 0x22
 	ld wa, (xhl + 8)
 	ld (xiy + 28), wa
-	ld xwa, (xhl + 256)
+	ld xwa, (xhl + 0:8)
 	ld (xiy + 30), xwa
 	ld (xix + 4), xiy
 	ld a, (xhl + 10)
@@ -1041,7 +1041,7 @@ TaskSched_SpawnTask:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1064,9 +1064,9 @@ TaskSched_ExitCurrentTask:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	jrl TaskSched_Dispatch
 
@@ -1103,20 +1103,20 @@ TaskSched_PreemptiveYield:
 	add wa, 0x1068
 	ld iy, wa
 	extz xiy
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, (xiy + 2)
 	jrl z, TaskSched_ContextRestore
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1133,20 +1133,20 @@ TaskQueue_Dequeue:
 	add wa, 0x1068
 	ld iy, wa
 	extz xiy
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, (xiy + 2)
 	jr z, TaskQueue_Dequeue_Return
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1185,9 +1185,9 @@ TaskSched_Block_Self:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
+	ld	wa, (xix+0:8)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld	(xhl+256), wa	; ld (XHL+0x00),wa
+	ld	(xhl+0:8), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 3
 	jrl	TaskSched_Dispatch
@@ -1228,7 +1228,7 @@ TaskSched_Wake_Task:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld	(xix+256), iy	; ld (XIX+0x00),iy
+	ld	(xix+0:8), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1263,7 +1263,7 @@ TaskSched_Wake_Task_NoResched:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld	(xix+256), iy	; ld (XIX+0x00),iy
+	ld	(xix+0:8), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1323,7 +1323,7 @@ TaskEvent_Signal:
 	add	wa, 4212
 	ld	iy, wa
 	extz	xiy
-	ld	ix, (xiy+256)	; ld ix,(XIY+0x00)
+	ld	ix, (xiy+0:8)	; ld ix,(XIY+0x00)
 	cp	ix, iy
 	jr	nz, TaskEvent_Signal_Wake
 	extz	hl
@@ -1336,9 +1336,9 @@ TaskEvent_Signal_Wake:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
+	ld	wa, (xix+0:8)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld	(xhl+256), wa	; ld (XHL+0x00),wa
+	ld	(xhl+0:8), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 4
 	ld8_src_rid8	xix, 0x08, a	; ld a,(XIX+0x08)
@@ -1349,7 +1349,7 @@ TaskEvent_Signal_Wake:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld	(xix+256), iy	; ld (XIX+0x00),iy
+	ld	(xix+0:8), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1370,7 +1370,7 @@ TaskEvent_Signal_NoResched:
 	extz	xiy
 	push	sr
 	ei	6
-	ld	ix, (xiy+256)	; ld ix,(XIY+0x00)
+	ld	ix, (xiy+0:8)	; ld ix,(XIY+0x00)
 	cp	ix, iy
 	jr	nz, TaskEvent_Signal_NoResched_Wake
 	extz	hl
@@ -1390,9 +1390,9 @@ TaskEvent_Signal_NoResched_Wake:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
+	ld	wa, (xix+0:8)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld	(xhl+256), wa	; ld (XHL+0x00),wa
+	ld	(xhl+0:8), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 4
 	ld8_src_rid8	xix, 0x08, a	; ld a,(XIX+0x08)
@@ -1403,7 +1403,7 @@ TaskEvent_Signal_NoResched_Wake:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld	(xix+256), iy	; ld (XIX+0x00),iy
+	ld	(xix+0:8), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1443,9 +1443,9 @@ TaskEvent_Wait_Block:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
+	ld	wa, (xix+0:8)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld	(xhl+256), wa	; ld (XHL+0x00),wa
+	ld	(xhl+0:8), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 3
 	sll	e, 2
@@ -1455,7 +1455,7 @@ TaskEvent_Wait_Block:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld	(xix+256), iy	; ld (XIX+0x00),iy
+	ld	(xix+0:8), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1500,7 +1500,7 @@ TaskSem_Release:
 	add wa, 0x107E
 	ld iy, wa
 	extz xiy
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, iy
 	jr nz, TaskSem_Release_WakeWaiter
 	extz hl
@@ -1518,9 +1518,9 @@ TaskSem_Release_WakeWaiter:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 9), 0x4
 	ld a, (xix + 8)
@@ -1531,7 +1531,7 @@ TaskSem_Release_WakeWaiter:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1558,7 +1558,7 @@ TaskSem_Release_NoResched:
 	extz xiy
 	push	sr
 	ei 6
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, iy
 	jr nz, TaskSem_Release_NoResched_WakeWaiter
 	extz hl
@@ -1581,9 +1581,9 @@ TaskSem_Release_NoResched_WakeWaiter:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 9), 0x4
 	ld a, (xix + 8)
@@ -1594,7 +1594,7 @@ TaskSem_Release_NoResched_WakeWaiter:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1630,9 +1630,9 @@ TaskSched_Wait_Block:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 9), 0x3
 	sll e, 2
@@ -1642,7 +1642,7 @@ TaskSched_Wait_Block:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1702,21 +1702,21 @@ TaskMsgQ_Send:
 	add wa, 0x1092
 	ld iy, wa
 	extz xiy
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, iy
 	jr nz, TaskMsgQ_Send_DirectDeliver
 	ld ix, (4294:16)
 	extz xix
-	ld iy, (xix + 256)
+	ld iy, (xix + 0:8)
 	cp iy, ix
 	jrl z, TaskMsgQ_Send_PoolEmpty
 	ldw (xsp + 24), 0x0
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 4), xiz
 	extz bc
@@ -1725,7 +1725,7 @@ TaskMsgQ_Send:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1741,9 +1741,9 @@ TaskMsgQ_Send_DirectDeliver:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 9), 0x4
 	ld xwa, (xix + 4)
@@ -1756,7 +1756,7 @@ TaskMsgQ_Send_DirectDeliver:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1784,21 +1784,21 @@ TaskMsgQ_Send_NoResched:
 	extz xiy
 	push	sr
 	ei 6
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, iy
 	jr nz, TaskMsgQ_Send_Guard_DirectDeliver
 	ld ix, (4294:16)
 	extz xix
-	ld iy, (xix + 256)
+	ld iy, (xix + 0:8)
 	cp iy, ix
 	jrl z, TaskMsgQ_Send_Guard_PoolEmpty
 	ldw (xsp + 4), 0x0
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 4), xiz
 	extz bc
@@ -1807,7 +1807,7 @@ TaskMsgQ_Send_NoResched:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1831,9 +1831,9 @@ TaskMsgQ_Send_Guard_DirectDeliver:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 9), 0x4
 	ld xwa, (xix + 4)
@@ -1846,7 +1846,7 @@ TaskMsgQ_Send_Guard_DirectDeliver:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1876,15 +1876,15 @@ TaskMsgQ_Receive:
 	add wa, 0x109A
 	ld iy, wa
 	extz xiy
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, iy
 	jr z, TaskMsgQ_Receive_Empty
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld xiz, (xix + 4)
 	ld xbc, 0xFFFFFFFF
@@ -1893,7 +1893,7 @@ TaskMsgQ_Receive:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1906,9 +1906,9 @@ TaskMsgQ_Receive_Empty:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 9), 0x3
 	add de, 0x1092
@@ -1916,7 +1916,7 @@ TaskMsgQ_Receive_Empty:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1933,15 +1933,15 @@ TaskMsgQ_TryReceive:
 	push	sr
 	ei 6
 	extz xiy
-	ld ix, (xiy + 256)
+	ld ix, (xiy + 0:8)
 	cp ix, iy
 	jr z, TaskMsgQ_TryReceive_Empty
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld xiz, (xix + 4)
 	ld xwa, 0xFFFFFFFF
@@ -1950,7 +1950,7 @@ TaskMsgQ_TryReceive:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -1978,13 +1978,13 @@ Task_ConfigTimer:
 	push xiy
 	push xiz
 	ld xix, xwa
-	ld a, (xix + 256)
+	ld a, (xix + 0:8)
 	mul a, 0x8
 	add wa, 0x10C2
 	ld iy, wa
 	extz xiy
 	ld wa, (xix + 2)
-	ld (xiy + 256), wa
+	ld (xiy + 0:8), wa
 	ld (xiy + 2), wa
 	ld xwa, (xix + 4)
 	ld (xiy + 4), xwa
@@ -2014,9 +2014,9 @@ TaskSched_ChangePriority:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 8), e
 	sll e, 2
@@ -2026,7 +2026,7 @@ TaskSched_ChangePriority:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -2057,9 +2057,9 @@ TaskSched_ChangePriority_NoResched:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
-	ld wa, (xix + 256)
+	ld wa, (xix + 0:8)
 	ld hl, (xix + 2)
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xwa + 2), hl
 	ld (xix + 8), e
 	sll e, 2
@@ -2069,7 +2069,7 @@ TaskSched_ChangePriority_NoResched:
 	extz xix
 	extz xiy
 	xor xwa, xwa
-	ld (xix + 256), iy
+	ld (xix + 0:8), iy
 	ld wa, (xiy + 2)
 	ld (xix + 2), wa
 	ld (xwa), ix
@@ -2111,9 +2111,9 @@ TaskSched_TerminateTask:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
+	ld	wa, (xix+0:8)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld	(xhl+256), wa	; ld (XHL+0x00),wa
+	ld	(xhl+0:8), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 0
 	ld	(xix+10), 0
@@ -58532,14 +58532,14 @@ ToneGen_Process_Notes:	; 03D01Eh
 ToneGen_Note_Loop:	; 03D02Eh
 	cp (xsp + 1), 0x0	; Check velocity
 	jr z, ToneGen_Note_Off_Slot
-	ld a, (xsp + 256)	; Get note number
+	ld a, (xsp + 0:8)	; Get note number
 	extz wa
 	lda xbc, (19020:16)	; Voice slot table
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xFF	; Mark slot as note-on
 	ld (19010:16), 144	; DMA command: note on
-	ld a, (xsp + 256)
+	ld a, (xsp + 0:8)
 	ld (19011:16), a	; Store note number
 	ld a, (xsp + 1)
 	ld (19012:16), a	; Store velocity
@@ -58554,21 +58554,21 @@ ToneGen_Note_Loop:	; 03D02Eh
 ; Already named.  Note-off arm; suppresses the message unless the per-note byte at
 ; 0x004A4C + note was 0xFF, so a key-up without a matching key-down sends nothing.
 ToneGen_Note_Off_Slot:	; 03D06Dh
-	ld a, (xsp + 256)
+	ld a, (xsp + 0:8)
 	extz wa
 	lda xbc, (19020:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xFF	; Check if slot was active
 	jr nz, ToneGen_Note_Continue
-	ld a, (xsp + 256)
+	ld a, (xsp + 0:8)
 	extz wa
 	lda xbc, (19020:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x0	; Clear slot
 	ld (19010:16), 144	; DMA command: note off
-	ld a, (xsp + 256)
+	ld a, (xsp + 0:8)
 	ld (19011:16), a
 	ld a, (xsp + 1)
 	ld (19012:16), a

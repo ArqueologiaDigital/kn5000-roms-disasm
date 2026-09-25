@@ -1027,7 +1027,7 @@ RingBuf_AdvanceIndex:
 	add iy, 0x1
 	cp iy, bc
 	jr ule, RingBuf_IndexOK
-	ld iy, (xhl + 256)
+	ld iy, (xhl + 0:8)
 
 RingBuf_IndexOK:
 	ret

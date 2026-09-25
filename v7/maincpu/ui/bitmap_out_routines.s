@@ -143,7 +143,7 @@ BitMapOut_ByteData_RenderB:
 	ld	(xwa+4), l
 	ld (xwa+2), (35998)
 	call	SndParam_ResolveVoiceEntry
-	ld	a, (xsp+256)
+	ld	a, (xsp+0:8)
 	cp	a, 13
 	jr	z, BitMapOut_ByteData_RenderB_Skip
 	cp	a, 12
@@ -196,7 +196,7 @@ BitMapOut_ByteData_RenderD:
 	ld	(xwa+4), l
 	ld (xwa+2), (35998)	; (at +3) differs from v10 here
 	call	SndParam_ResolveVoiceEntry
-	ld	a, (xsp+256)
+	ld	a, (xsp+0:8)
 	cp	a, 13
 	jr	z, BitMapOut_ByteData_RenderD_Skip
 	cp	a, 12

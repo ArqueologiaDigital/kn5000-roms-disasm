@@ -970,7 +970,7 @@ SeqPlay_CheckAndReactivate:
 	jr z, SeqPlay_CheckAndReactivate_Return
 	lda xwa, (xsp)
 	call TempoRingBuf_ReadEventBytes
-	bitm 7, (xsp + 256)
+	bitm 7, (xsp + 0:8)
 	jr nz, SeqPlay_CheckAndReactivate_CopyPos
 	ldw wa, 0x68
 	call SeqData_SetErrorCode
@@ -16548,12 +16548,12 @@ PartCtrl_DeallocAndWriteEnd:
 	cp wa, 0xffff
 	jr z, PartCtrl_DeallocAndWrite_WriteByte
 	calr Part_StealAndReallocVoices
-	ld wa, (xsp + 256)
+	ld wa, (xsp + 0:8)
 	ldw bc, 0xffff
 	calr PartCtrl_WriteWord
 
 PartCtrl_DeallocAndWrite_WriteByte:
-	ld wa, (xsp + 256)
+	ld wa, (xsp + 0:8)
 	ld bc, 5:i3
 	ldw de, 0x82
 	calr PartCtrl_WriteByteToBuf

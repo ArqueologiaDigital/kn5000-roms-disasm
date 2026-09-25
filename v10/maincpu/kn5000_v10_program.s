@@ -1799,7 +1799,7 @@ Voice_ResetToFactoryBanks:
 	ret
 
 Voice_SetBankParams:
-	ld (xhl + 256), wa
+	ld (xhl + 0:8), wa
 	ld (xhl + 2), bc
 	ld (xhl + 4), wa
 	ld (xhl + 6), wa

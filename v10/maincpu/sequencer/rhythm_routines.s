@@ -365,7 +365,7 @@ Rhythm_AdvancePosition:
 	inc 1, iy
 	cp iy, bc
 	jr ule, Rhythm_AdvancePos_Step2
-	ld iy, (xhl + 256)
+	ld iy, (xhl + 0:8)
 	inc 2, iy
 	jr Rhythm_AdvanceDone
 
@@ -373,7 +373,7 @@ Rhythm_AdvancePos_Step2:
 	inc 1, iy
 	cp iy, bc
 	jr ule, Rhythm_AdvancePos_Step3
-	ld iy, (xhl + 256)
+	ld iy, (xhl + 0:8)
 	inc 1, iy
 	jr Rhythm_AdvanceDone
 
@@ -381,7 +381,7 @@ Rhythm_AdvancePos_Step3:
 	inc 1, iy
 	cp iy, bc
 	jr ule, Rhythm_AdvanceDone
-	ld iy, (xhl + 256)
+	ld iy, (xhl + 0:8)
 
 Rhythm_AdvanceDone:
 	ret

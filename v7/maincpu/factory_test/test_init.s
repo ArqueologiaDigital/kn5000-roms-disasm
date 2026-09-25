@@ -24,7 +24,7 @@
 	.else
 	ld xwa, \ParamA
 	.endif
-	ld (xsp + 256), xwa
+	ld (xsp + 0:8), xwa
 	lda_24 xwa, (\ParamB)
 	ld (xsp + 4), xwa
 	ldw_da xwa, (\ParamC)
@@ -48,7 +48,7 @@
 	.else
 	ld xwa, \ParamA
 	.endif
-	ld (xsp + 256), xwa
+	ld (xsp + 0:8), xwa
 	lda_24 xwa, (\ParamB)
 	ld (xsp + 4), xwa
 	ldw (xsp + 8), \ParamC
@@ -89,7 +89,7 @@
 InitializeHama:
 	lda	xsp, (xsp-14)
 	ld	xwa, 23068676
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16400597:24)
 	ld	(xsp+4), xwa
 	ld	wa, (14807228:24)
@@ -101,7 +101,7 @@ InitializeHama:
 	ldw	wa, 361
 	call	RegisterObjectTable
 	ld	xwa, 23068684
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16405742:24)
 	ld	(xsp+4), xwa
 	ld	wa, (14807252:24)
@@ -113,7 +113,7 @@ InitializeHama:
 	ldw	wa, 457
 	call	RegisterObjectTable
 	ld	xwa, 23068685
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16405819:24)
 	ld	(xsp+4), xwa
 	ld	wa, (14807274:24)
@@ -125,7 +125,7 @@ InitializeHama:
 	ldw	wa, 489
 	call	RegisterObjectTable
 	ld	xwa, 23068674
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16401759:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
@@ -136,7 +136,7 @@ InitializeHama:
 	ldw	wa, 297
 	call	RegisterObjectTable
 	ld	xwa, 23068674
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16401759:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
@@ -147,7 +147,7 @@ InitializeHama:
 	ldw	wa, 1065
 	call	RegisterObjectTable
 	ld	xwa, 23068673
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16401564:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
@@ -158,7 +158,7 @@ InitializeHama:
 	ldw	wa, 265
 	call	RegisterObjectTable
 	ld	xwa, 23068673
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16401564:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
@@ -169,7 +169,7 @@ InitializeHama:
 	ldw	wa, 1033
 	call	RegisterObjectTable
 	ld	xwa, 23068675
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16401931:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
@@ -180,7 +180,7 @@ InitializeHama:
 	ldw	wa, 329
 	call	RegisterObjectTable
 	ld	xwa, 23068675
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16401931:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
@@ -191,7 +191,7 @@ InitializeHama:
 	ldw	wa, 1097
 	call	RegisterObjectTable
 	ld	xwa, 23068688
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16405896:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
@@ -202,7 +202,7 @@ InitializeHama:
 	ldw	wa, 127
 	call	RegisterObjectTable
 	ld	xwa, 23068687
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16408254:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
@@ -213,7 +213,7 @@ InitializeHama:
 	ldw	wa, 895
 	call	RegisterObjectTable
 	ld	xwa, 23068688
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16405896:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 26
@@ -224,7 +224,7 @@ InitializeHama:
 	ldw	wa, 252
 	call	RegisterObjectTable
 	ld	xwa, 23068687
-	ld	(xsp+256), xwa
+	ld	(xsp+0:8), xwa
 	lda	xwa, (16408254:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 26
@@ -454,7 +454,7 @@ CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
 	lda xwa, (FDTest_String_TestTitleFunc_0xFA:24)
 	calr FDTest_PrintDiag
-	ldw (xsp+256), 0
+	ldw (xsp+0:8), 0
 	ldw (xsp + 6), 0xe0
 	ldw (xsp + 2), 0x0
 	ldw (xsp + 4), 0x0

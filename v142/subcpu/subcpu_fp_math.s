@@ -1337,7 +1337,7 @@ FP_dtof:
 	inc 1, xhl
 	bit_erpw 0xEE, 0x07
 	jr nz, FP_dtof_StoreHL
-	incw 1, (xsp + 256)
+	incw 1, (xsp + 0:8)
 	srl xhl, 1
 
 ; Store the rounded 24-bit mantissa back into the unpacked record.
@@ -1473,7 +1473,7 @@ FP_DP_NormCore_Shift:
 	ld hl, 0:i3
 	ld (xiy + 2), hl
 	ld l, a
-	ld (xiy + 256), hl
+	ld (xiy + 0:8), hl
 	cp l, 0x17
 	jr z, FP_DP_NormCore_StoreResult
 	jr lt, FP_DP_NormCore_ShiftLeft
@@ -1485,7 +1485,7 @@ FP_DP_NormCore_Shift:
 	bit_erpb 0xE7, 0x00
 	jr z, FP_DP_NormCore_StoreResult
 	srl xbc, 1
-	incm8 1, (xiy + 256)
+	incm8 1, (xiy + 0:8)
 	jr FP_DP_NormCore_StoreResult
 
 ; Shift left, 16 bits at a time then the remainder.
@@ -1612,7 +1612,7 @@ FP_DP_AddMantissa:
 	extpfx3 0xD9, 0x23, 0x01
 	stcf_erpw 0xEA, 0x0F
 	extpfx3 0xD9, 0x23, 0x00
-	incw 1, (xwa + 256)
+	incw 1, (xwa + 0:8)
 	jr nc, FP_DP_AddMantissa_Store
 	add xde, 0x1
 	adc xhl, 0x0
@@ -1633,7 +1633,7 @@ FP_SP_AddMantissa:
 	add xix, (xbc + 4)
 	bit_erpw 0xF2, 0x08
 	jr z, FP_SP_AddMantissa_Store
-	incw 1, (xwa + 256)
+	incw 1, (xwa + 0:8)
 	srl xix, 1
 	adc xix, 0x0
 
@@ -1754,7 +1754,7 @@ FP_SP_NormCore_Shift:
 	ld hl, 0:i3
 	ld (xiy + 2), hl
 	ld l, a
-	ld (xiy + 256), hl
+	ld (xiy + 0:8), hl
 	ld xix, 0:i3
 	cp l, 0x14
 	jr z, FP_SP_NormCore_StoreResult
@@ -2230,19 +2230,19 @@ FP_DP_AlignMantissa:
 	ld h, (xwa + 2)
 	or h, (xbc + 2)
 	ret nz
-	ld ix, (xwa + 256)
-	ld iy, (xbc + 256)
+	ld ix, (xwa + 0:8)
+	ld iy, (xbc + 0:8)
 	cp ix, iy
 	ret z
 	jr lt, FP_DP_AlignMantissa_ShiftA
-	ld (xbc + 256), ix
+	ld (xbc + 0:8), ix
 	ld xwa, xbc
 	sub ix, iy
 	jr FP_DP_AlignMantissa_Shift
 
 ; The first operand has the smaller exponent: shift it instead.
 FP_DP_AlignMantissa_ShiftA:
-	ld (xwa + 256), iy
+	ld (xwa + 0:8), iy
 	sub ix, iy
 	neg ix
 
@@ -2326,8 +2326,8 @@ FP_SP_AlignMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
 	ret nz
-	ld ix, (xwa + 256)
-	ld hl, (xbc + 256)
+	ld ix, (xwa + 0:8)
+	ld hl, (xbc + 0:8)
 	cp ix, hl
 	ret z
 	jr lt, FP_SP_AlignMantissa_ShiftA
@@ -2342,7 +2342,7 @@ FP_SP_AlignMantissa_ShiftA:
 FP_SP_AlignMantissa_Shift:
 	ld xde, (xbc + 3)
 	ld e, 0x0:opc
-	ld (xbc + 256), hl
+	ld (xbc + 0:8), hl
 	sub hl, ix
 	cp hl, 0x18
 	jr gt, FP_SP_AlignMantissa_MaxShift
@@ -2394,8 +2394,8 @@ FP_DP_DivCore:
 	jp nz, (FP_NaN_Handler:24)
 	ld l, (xbc + 3)
 	xor (xwa + 3), l
-	ld hl, (xbc + 256)
-	sub (xwa + 256), hl
+	ld hl, (xbc + 0:8)
+	sub (xwa + 0:8), hl
 	ld xhl, (xbc + 8)
 	ld xde, (xbc + 4)
 	cp xhl, 0x100000
@@ -2426,7 +2426,7 @@ FP_DP_MulMantissaCore:
 	sll xix, 1
 	stcf_erpw 0xF6, 0x0F
 	rlc xiy
-	decm 1, (xwa + 256)
+	decm 1, (xwa + 0:8)
 
 ; Re-pack the quotient into the record's 53-bit layout and round to nearest on the
 ; discarded byte, re-normalising if the round carries.
@@ -2455,7 +2455,7 @@ FP_DP_MulMantissaCore_Round:
 	srl xiy, 1
 	extpfx3 0xDC, 0x24, 0x00
 	rrc xix
-	incw 1, (xwa + 256)
+	incw 1, (xwa + 0:8)
 
 ; Store the quotient mantissa back into the record.
 FP_DP_MulMantissaCore_Store:
@@ -2484,8 +2484,8 @@ FP_SP_DivCore:
 	jp nz, (FP_NaN_Handler:24)
 	push xiz
 	push xwa
-	ld hl, (xbc + 256)
-	sub (xwa + 256), hl
+	ld hl, (xbc + 0:8)
+	sub (xwa + 0:8), hl
 	ld l, (xbc + 3)
 	xor (xwa + 3), l
 	ld xwa, (xwa + 4)
@@ -2544,7 +2544,7 @@ FP_SP_MulMantissaCore_Round:
 	bit_erpw 0xEE, 0x0F
 	jr nz, FP_SP_MulMantissaCore_RoundUp
 	sll xhl, 1
-	decm 1, (xwa + 256)
+	decm 1, (xwa + 0:8)
 
 ; Round-to-nearest on the guard byte, with carry re-normalisation.
 FP_SP_MulMantissaCore_RoundUp:
@@ -2607,7 +2607,7 @@ FP_DP_SubMantissa_Normalize:
 	bit_erpw 0xEE, 0x04
 	jr nz, FP_DP_SubMantissa_Store
 	ld iy, wa
-	ld ix, (xwa + 256)
+	ld ix, (xwa + 0:8)
 
 ; Bit-search the high word; when it is empty, shift 16 bits at a time and retry.
 ; Terminates because the zero case was excluded above.
@@ -2656,7 +2656,7 @@ FP_DP_SubMantissa_ShiftLeft:
 ; Write the corrected exponent back.
 FP_DP_SubMantissa_StoreExp:
 	ld wa, iy
-	ld (xwa + 256), ix
+	ld (xwa + 0:8), ix
 
 ; Store the mantissa and XOR the borrow flag into the sign byte.
 FP_DP_SubMantissa_Store:
@@ -2677,7 +2677,7 @@ FP_SP_SubMantissa:
 	or e, (xbc + 2)
 	jp nz, (FP_DP_NegNoSign:24)
 	ld xiy, xwa
-	ld de, (xwa + 256)
+	ld de, (xwa + 0:8)
 	ld xix, (xwa + 4)
 	sub xix, (xbc + 4)
 	ld b, 0x0:opc
@@ -2710,7 +2710,7 @@ FP_SP_SubMantissa_AlignBits:
 ; Store mantissa, exponent and the borrow-derived sign.
 FP_SP_SubMantissa_Store:
 	ld (xiy + 4), xix
-	ld (xiy + 256), de
+	ld (xiy + 0:8), de
 	xor (xiy + 3), b
 	ret
 
@@ -3497,7 +3497,7 @@ FP_DP_MulAdd:
 	push xiz
 	lda xsp, (xsp - 16)
 	ld xhl, (xbc)
-	add (xwa + 256), hl
+	add (xwa + 0:8), hl
 	stb_erp L, 0xEF
 	xor (xwa + 3), l
 	ld xhl, (xwa + 4)
@@ -3537,7 +3537,7 @@ FP_DP_MulAdd_Sum2:
 	ld xhl, (xsp + 11)
 	bit_erpw 0xEE, 0x01
 	jr z, FP_DP_MulAdd_Round
-	incw 1, (xwa + 256)
+	incw 1, (xwa + 0:8)
 	srl xhl, 1
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
@@ -3564,7 +3564,7 @@ FP_DP_MulAdd_Round:
 	srl xhl, 1
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
-	incw 1, (xwa + 256)
+	incw 1, (xwa + 0:8)
 
 ; Store the product mantissa back into the record.
 FP_DP_MulAdd_Store:
@@ -3584,7 +3584,7 @@ FP_SP_MulAdd:
 	push xiz
 	ld xiz, xwa
 	ld xhl, (xbc)
-	add (xwa + 256), hl
+	add (xwa + 0:8), hl
 	stb_erp L, 0xEF
 	xor (xwa + 3), l
 	ld xwa, (xwa + 4)
@@ -3604,7 +3604,7 @@ FP_SP_MulAdd:
 	add xde, xhl
 	bit_erpw 0xEA, 0x0F
 	jr z, FP_SP_MulAdd_NormCheck
-	incw 1, (xiz + 256)
+	incw 1, (xiz + 0:8)
 	jr FP_SP_MulAdd_Round
 
 ; Leading bit did not land: shift left one instead of incrementing the exponent.
@@ -3621,7 +3621,7 @@ FP_SP_MulAdd_Round:
 	jr nc, FP_SP_MulAdd_Store
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
-	incw 1, (xiz + 256)
+	incw 1, (xiz + 0:8)
 
 ; Drop the guard byte and store the product mantissa.
 FP_SP_MulAdd_Store:

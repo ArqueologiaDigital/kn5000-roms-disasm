@@ -294,6 +294,13 @@ def rewrite_line(fam, line, equs):
         code, sep, com = line.partition(";")
         if not D256.search(code):
             return None, None
+        # ⚠ The SriD16Reg pseudos (ldb_sri0 / ldw_sri0 / ld_sril) encode their
+        # displacement themselves and NEVER read 256 as the sentinel: in
+        # `ldw_sri0 WA, (xde + 0x0100)` it is a real +256 (d3 e9 00 01 20),
+        # written that way precisely because `ld wa, (xde+256)` could not say it.
+        mm = LINE.match(line)
+        if mm and mm.group(2).lower() in ("ldb_sri0", "ldw_sri0", "ld_sril"):
+            return None, None
         return D256.sub(lambda m: m.group(1) + "0:8" + m.group(3), code) + sep + com, "ok"
     m = LINE.match(line)
     if not m:

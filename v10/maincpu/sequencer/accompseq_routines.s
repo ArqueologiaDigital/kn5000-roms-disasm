@@ -555,13 +555,13 @@ AccompSeq_CalcEventSize:
 	jr c, AccompSeq_CalcSize_Negative
 	jr ugt, AccompSeq_CalcSize_Positive
 	ld wa, (xhl + 2)
-	sub wa, (xhl + 256)
+	sub wa, (xhl + 0:8)
 	inc 1, wa
 	jr AccompSeq_CalcSize_Store
 
 AccompSeq_CalcSize_Negative:
 	ld wa, (xhl + 2)
-	sub wa, (xhl + 256)
+	sub wa, (xhl + 0:8)
 	inc 1, wa
 	sub wa, (xhl + 4)
 	add wa, (xhl + 6)
@@ -576,7 +576,7 @@ AccompSeq_CalcSize_Store:
 
 AccompSeq_ResetCounters:
 	ld xhl, (0x7e4c:16)
-	ldw (xhl + 256), 0xa
+	ldw (xhl + 0:8), 0xa
 	ldw (xhl + 2), 0xff
 	ldw (xhl + 4), 0xa
 	ldw (xhl + 6), 0xa
@@ -817,7 +817,7 @@ AccompSeq_AdvanceBufferPtr:
 	inc 1, iy
 	cp iy, bc
 	jr ule, AccompSeq_AdvanceBuf_Return
-	ld iy, (xhl + 256)
+	ld iy, (xhl + 0:8)
 
 AccompSeq_AdvanceBuf_Return:
 	ret
@@ -1192,7 +1192,7 @@ AccompSeq_LoadParams:
 	ld xiy, xwa
 	cp (0x7e25:16), 128
 	jr nc, AccompSeq_LoadParams_Alt
-	ld a, (xiy + 256)
+	ld a, (xiy + 0:8)
 	and a, 0x1d
 	ld (0x7e27:16), a
 	ld xwa, (xiy + 1)
@@ -1222,7 +1222,7 @@ AccompSeq_LoadParams_Bit0Set:
 	jr AccompSeq_LoadParams_OverrideCheck
 
 AccompSeq_LoadParams_Alt:
-	ld a, (xiy + 256)
+	ld a, (xiy + 0:8)
 	and a, 0x1d
 	ld (0x7e27:16), a
 	ld wa, (xiy + 3)
@@ -1507,7 +1507,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	inc	1, iy
 	cp	iy, bc
 	jr	ule, AccompSeq_WriteMidiToBuffer_Return
-	ld iy, (xhl+256)
+	ld iy, (xhl+0:8)
 AccompSeq_WriteMidiToBuffer_Return:
 	ret
 AccompSeq_ProcessAfterNote_Helper:
@@ -1862,7 +1862,7 @@ AccompSeq_CompareChord:
 	ldw_erp WA, 0xe2
 	ld wa, (0x7e2a:16)
 	ld xiy, xwa
-	ld a, (xiy + 256)
+	ld a, (xiy + 0:8)
 	bit 4, a
 	jr z, AccompSeq_CompareChord_RestorePos
 	ld a, (1075:16)

@@ -8993,7 +8993,7 @@ SysEx_BytecodeDispatcher_Helper2_Join:
 	ld	(3438:16), a
 	ld	a, (36008:16)
 	ld	(4391:16), a
-	ld	(xiz+256), 144
+	ld	(xiz+0:8), 144
 	ld	a, (3415:16)
 	ld	(xiz+1), a
 	ld	a, (xiy)
@@ -14582,7 +14582,7 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	ld XIY,Tbl_NoteValueNames
 	lda_rr	xiy, xiy, hl
 	ld	wa, (xiy)
-	ld	(xix+256), wa
+	ld	(xix+0:8), wa
 	ld	w, (xiy+2)
 	ld	(xix+2), w
 	ld	xix, 3805
@@ -14594,8 +14594,8 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	ld	hl, wa
 	ld	xiy, Tbl_NoteValuePlusNames
 	lda_rr	xiy, xiy, hl
-	ld	wa, (xiy+256)
-	ld	(xix+256), wa
+	ld	wa, (xiy+0:8)
+	ld	(xix+0:8), wa
 	ld	wa, (xiy+2)
 	ld	(xix+2), wa
 	ld	a, (xiy+4)
@@ -14607,8 +14607,8 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	sla	hl, 2
 	ld	xiy, Tbl_ArticulationNames
 	lda_rr	xiy, xiy, hl
-	ld	wa, (xiy+256)
-	ld	(xix+256), wa
+	ld	wa, (xiy+0:8)
+	ld	(xix+0:8), wa
 	ld	wa, (xiy+2)
 	ld	(xix+2), wa
 	ret
@@ -14689,7 +14689,7 @@ DisplayMode_Handler_3_Helper20:
 	cp	(13947:16), 255
 	jrl	nz, Disp_ShowNoteNameAndVelocity_Skip
 	ldw	wa, 8224
-	ld	(xix+256), wa
+	ld	(xix+0:8), wa
 	ld	(xix+2), wa
 	ld	(xix+4), wa
 	ld	(xix+6), wa
@@ -17866,13 +17866,13 @@ Scoop_CurveUpdate_SegmentEnd_Skip3:
 	div	wa, 40
 	ld wa, qwa
 	sll wa, 3
-	ld (xsp+256), wa
+	ld (xsp+0:8), wa
 	ld	wa, (xsp+2)
 	add	wa, (xbc+4)
 	ld	(xsp+6), wa
 	ld	wa, (xbc+2)
 	sll	wa, 3
-	ld bc, (xsp+256)
+	ld bc, (xsp+0:8)
 	add bc, wa
 	ld	(xsp+4), bc
 	lda	xwa, (xsp)
@@ -17901,7 +17901,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip4:
 	ld	xbc, (xbc+7)
 	lda_rr xbc, xbc, wa
 	ld wa, (xbc)
-	ld (xsp+256), wa
+	ld (xsp+0:8), wa
 	ld	wa, (xbc+2)
 	ld	(xsp+2), wa
 	ld	wa, (xbc+4)
@@ -17924,13 +17924,13 @@ Scoop_EnvCalc_Handler0:
 	div	bc, 40
 	ld bc, qbc
 	sll bc, 3
-	ld (xsp+256), bc
+	ld (xsp+0:8), bc
 	ld	bc, (xsp+2)
 	add	bc, (xwa+6)
 	ld	(xsp+6), bc
 	ld	wa, (xwa+4)
 	sll	wa, 3
-	ld bc, (xsp+256)
+	ld bc, (xsp+0:8)
 	add bc, wa
 	ld	(xsp+4), bc
 	lda	xwa, (xsp)
@@ -18005,7 +18005,7 @@ Scoop_EnvCalc_Handler2:
 	ld	bc, (xwa+4)
 	ld	(xsp+6), bc
 	ld	bc, (xwa+6)
-	ld (xsp+256), bc
+	ld (xsp+0:8), bc
 	ld	wa, (xwa+8)
 	ld	(xsp+2), wa
 	lda	xwa, (xsp+4)
@@ -18262,7 +18262,7 @@ Scoop_GlideParam_Setup_Skip2:
 Scoop_GlideCalc_Handler1:
 	dec	8, xsp
 	ld	bc, (xwa+2)
-	ld (xsp+256), bc
+	ld (xsp+0:8), bc
 	ld	bc, (xwa+4)
 	ld	(xsp+2), bc
 	ld	bc, (xwa+6)
@@ -18380,7 +18380,7 @@ Scoop_Dispatch_CallFAA98A:
 	ld bc, (xwa+4)
 	ld (xsp+6), bc
 	ld bc, (xwa+6)
-	ld (xsp+256), bc
+	ld (xsp+0:8), bc
 	ld wa, (xwa+8)
 	ld (xsp+2), wa
 	lda	xwa, (xsp+4)
@@ -18396,7 +18396,7 @@ Scoop_Dispatch_CallFAB273:
 	; --- Routine 2: copy (XWA+2..8) to stack, call FAB273 with BC=0xf5 (38 bytes) ---
 	dec 8, xsp
 	ld bc, (xwa+2)
-	ld (xsp+256), bc
+	ld (xsp+0:8), bc
 	ld bc, (xwa+4)
 	ld (xsp+2), bc
 	ld bc, (xwa+6)

@@ -885,12 +885,12 @@ AccStyle_ReadParamOffset:
 	add	xhl, xiy
 	cp	(0x3338:16), 1
 	jr	nz, AccStyle_ReadParamOff_Part2
-	ld	w, (xhl+256)
+	ld	w, (xhl+0:8)
 	jr	AccStyle_ReadParamRet
 AccStyle_ReadParamOff_Part2:
 	cp	(0x3338:16), 2
 	jr	nz, AccStyle_ReadParamOff_Part4
-	ld	w, (xhl+256)
+	ld	w, (xhl+0:8)
 	jr	AccStyle_ReadParamRet
 AccStyle_ReadParamOff_Part4:
 	cp	(0x3338:16), 4
@@ -2025,13 +2025,13 @@ AccBuf_ComputeFillLevel:
 	jr c, AccBuf_FillLevel_Wrapped
 	jr ugt, AccBuf_FillLevel_Simple
 	ld wa, (xhl + 2)
-	sub wa, (xhl + 256)
+	sub wa, (xhl + 0:8)
 	inc 1, wa
 	jr AccBuf_FillLevel_Store
 
 AccBuf_FillLevel_Wrapped:
 	ld wa, (xhl + 2)
-	sub wa, (xhl + 256)
+	sub wa, (xhl + 0:8)
 	inc 1, wa
 	sub wa, (xhl + 4)
 	add wa, (xhl + 6)
@@ -2201,7 +2201,7 @@ AccBuf_ProcessNoteEvent:
 	inc 1, iy
 	cp iy, bc
 	jr ule, AccBuf_NoteEvent_WrapPos
-	ld iy, (xhl + 256)
+	ld iy, (xhl + 0:8)
 
 AccBuf_NoteEvent_WrapPos:
 	ld_rrb	d, xhl, iy
@@ -2846,7 +2846,7 @@ AccCh_OverlapReturn:
 	ret
 
 AccBuf_InitWithDefaults:
-	ldw (xhl+0x100), 0x000a
+	ldw (xhl+0:8), 0x000a
 	ldw (XHL+0x02), 0x00ff
 	ldw (XHL+0x04), 0x000a
 	ldw (XHL+0x06), 0x000a
@@ -5455,7 +5455,7 @@ AccBuf_ResetAll4Positions:
 	calr	AccBuf_ResetOnePosition
 	ret
 AccBuf_ResetOnePosition:
-	ld (xhl + 256), 0xa
+	ld (xhl + 0:8), 0xa
 	ld (xhl + 2), 0xff
 	ldw wa, 0xa
 	ldw bc, 0xa
@@ -5670,7 +5670,7 @@ AccTuning_LoadFromROM:
 	and	a, 128
 	srl	a, 7
 	ld	(0x31b4:16), a
-	ld	a, (xhl+256)
+	ld	a, (xhl+0:8)
 	ld	(0x31aa:16), a
 	ld	a, (xhl+1)
 	and	a, 127
@@ -5685,7 +5685,7 @@ AccTuning_LoadMaster:
 	add	xhl, 1996816
 	bit	7, (xhl+1)
 	jr	z, AccTuning_LoadMasterReturn
-	ld	a, (xhl+256)
+	ld	a, (xhl+0:8)
 	ld	(0x31aa:16), a
 	ld	a, (xhl+1)
 	and	a, 127
@@ -6254,7 +6254,7 @@ AccPedal_ExprToggle:
 	ld	e, (0xfc5f:16)
 	and	e, 2
 	ld	xix, 14412
-	ld	(xix+256), 72
+	ld	(xix+0:8), 72
 	ld	(xix+1), 5
 	ld	(xix+2), e
 	ld	(xix+3), 2
@@ -6606,7 +6606,7 @@ AccPedal_SendCtrl1:
 	ld	d, a
 	ld	e, (0x33e6:16)
 	ld	xix, 14412
-	ld	(xix+256), 72
+	ld	(xix+0:8), 72
 	ld	(xix+1), b
 	ld	(xix+2), e
 	ld	(xix+3), d
@@ -6646,7 +6646,7 @@ AccPedal_SendCtrl2:
 	ld	d, a
 	ld	e, (0x33ea:16)
 	ld	xix, 14412
-	ld	(xix+256), 72
+	ld	(xix+0:8), 72
 	ld	(xix+1), b
 	ld	(xix+2), e
 	ld	(xix+3), d
@@ -6685,7 +6685,7 @@ AccPedal_SendCtrl3:
 	ld	d, a
 	ld	e, (0x33e6:16)
 	ld	xix, 14412
-	ld	(xix+256), 72
+	ld	(xix+0:8), 72
 	ld	(xix+1), b
 	ld	(xix+2), e
 	ld	(xix+3), d
@@ -6723,7 +6723,7 @@ AccPedal_SendCtrl4:
 	ld	d, a
 	ld	e, (0x33ea:16)
 	ld	xix, 14412
-	ld	(xix+256), 72
+	ld	(xix+0:8), 72
 	ld	(xix+1), b
 	ld	(xix+2), e
 	ld	(xix+3), d
@@ -7514,7 +7514,7 @@ AccAutoPlay_ZoneTrack_Store:
 
 	ldw (14412:16), 0
 
-	ld bc, (xix + 256)
+	ld bc, (xix + 0:8)
 
 	ld e, 0x5:opc
 
@@ -8978,7 +8978,7 @@ AccKbdTiming_EventLoop:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_ClassifyEvent
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_ClassifyEvent:
 	ld w, a
@@ -9012,7 +9012,7 @@ AccKbdTiming_StoreEventData:
 	inc	1, ix
 	cp	ix, (xhl+2)
 	jr	ule, AccKbdTiming_CheckTimestamp
-	ld	ix, (xhl+256)
+	ld	ix, (xhl+0:8)
 AccKbdTiming_CheckTimestamp:
 	cp	a, (0x45d:16)
 	jrl	ugt, AccKbdTiming_TimestampOverflow
@@ -9088,7 +9088,7 @@ AccKbdTiming_WriteNoteEvent:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNote_Byte2
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNote_Byte2:
 	calr AccSeq_WriteByte
@@ -9098,7 +9098,7 @@ AccKbdTiming_WriteNote_Byte2:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNote_Byte3
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNote_Byte3:
 	calr AccSeq_WriteByte
@@ -9108,14 +9108,14 @@ AccKbdTiming_WriteNote_Byte3:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNote_ReadTiming
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNote_ReadTiming:
 	ldb_sri W, 0x07, 0xec, 0xf0
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNote_ClampTiming
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNote_ClampTiming:
 	cp wa, 0xa
@@ -9148,7 +9148,7 @@ AccKbdTiming_WriteNonNote:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNonNote_Byte2
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNonNote_Byte2:
 	calr AccSeq_WriteByte
@@ -9156,7 +9156,7 @@ AccKbdTiming_WriteNonNote_Byte2:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNonNote_Byte3
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNonNote_Byte3:
 	calr	AccSeq_WriteByte
@@ -9177,7 +9177,7 @@ AccKbdTiming_WriteNonNote_CheckType:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNonNote_Byte4
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNonNote_Byte4:
 	calr AccSeq_WriteByte
@@ -9185,7 +9185,7 @@ AccKbdTiming_WriteNonNote_Byte4:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNonNote_Byte5
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNonNote_Byte5:
 	calr AccSeq_WriteByte
@@ -9193,7 +9193,7 @@ AccKbdTiming_WriteNonNote_Byte5:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_WriteNonNote_Byte6
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_WriteNonNote_Byte6:
 	calr AccSeq_WriteByte
@@ -9217,7 +9217,7 @@ AccKbdTiming_Overflow_CalcSkip:
 	inc	1, ix
 	cp	ix, (xhl+2)
 	jr	ule, AccKbdTiming_Overflow_AdvancePos
-	ld	ix, (xhl+256)
+	ld	ix, (xhl+0:8)
 AccKbdTiming_Overflow_AdvancePos:
 	xor wa, wa
 
@@ -9233,7 +9233,7 @@ AccKbdTiming_Overflow_AdvancePos:
 
 	dec 1, ix
 
-	add ix, (xhl + 256)
+	add ix, (xhl + 0:8)
 
 	; jrl AccKbdTiming_EventLoop (v7 displacement)
 	jrl	AccKbdTiming_EventLoop
@@ -9298,7 +9298,7 @@ AccKbdTiming_AdvancePos:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccKbdTiming_AdvancePos_Ret
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccKbdTiming_AdvancePos_Ret:
 	ret
@@ -9381,7 +9381,7 @@ AccAccTiming_EventLoop:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_ClassifyEvent
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_ClassifyEvent:
 	ld	w, a
@@ -9416,7 +9416,7 @@ AccAccTiming_StoreEventData:
 	inc	1, ix
 	cp	ix, (xhl+2)
 	jr	ule, AccAccTiming_CheckTimestamp
-	ld	ix, (xhl+256)
+	ld	ix, (xhl+0:8)
 AccAccTiming_CheckTimestamp:
 	cp	a, (0x45d:16)
 	jrl	ugt, AccAccTiming_TimestampOverflow
@@ -9525,7 +9525,7 @@ AccAccTiming_WriteNoteEvent:
 	inc	1, ix
 	cp	ix, (xhl+2)
 	jr	ule, AccAccTiming_WriteNote_Byte2
-	ld	ix, (xhl+256)
+	ld	ix, (xhl+0:8)
 AccAccTiming_WriteNote_Byte2:
 	calr AccSeq_WriteByte
 	stb_dri A, 0x07, 0xe4, 0xf8
@@ -9534,7 +9534,7 @@ AccAccTiming_WriteNote_Byte2:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNote_Byte3
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNote_Byte3:
 	calr AccSeq_WriteByte
@@ -9545,14 +9545,14 @@ AccAccTiming_WriteNote_Byte3:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNote_ReadTimingLo
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNote_ReadTimingLo:
 	ldb_sri W, 0x07, 0xec, 0xf0
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNote_ReadTimingHi
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNote_ReadTimingHi:
 	add wa, (1118:16)
@@ -9573,7 +9573,7 @@ AccAccTiming_WriteNote_ExtraBytes:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNote_StoreExtra1
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNote_StoreExtra1:
 	stb_dri A, 0x07, 0xe4, 0xf8
@@ -9584,7 +9584,7 @@ AccAccTiming_WriteNote_StoreExtra1:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNote_StoreExtra2
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNote_StoreExtra2:
 	stb_dri A, 0x07, 0xe4, 0xf8
@@ -9595,7 +9595,7 @@ AccAccTiming_WriteNote_StoreExtra2:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNote_StoreExtra3
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNote_StoreExtra3:
 	stb_dri A, 0x07, 0xe4, 0xf8
@@ -9613,7 +9613,7 @@ AccAccTiming_WriteNonNote:
 	inc	1, ix
 	cp	ix, (xhl+2)
 	jr	ule, AccAccTiming_WriteNonNote_Byte2
-	ld	ix, (xhl+256)
+	ld	ix, (xhl+0:8)
 AccAccTiming_WriteNonNote_Byte2:
 	calr	AccSeq_WriteByte
 	ld	(0x3298:16), a
@@ -9621,7 +9621,7 @@ AccAccTiming_WriteNonNote_Byte2:
 	inc	1, ix
 	cp	ix, (xhl+2)
 	jr	ule, AccAccTiming_WriteNonNote_Byte3
-	ld	ix, (xhl+256)
+	ld	ix, (xhl+0:8)
 AccAccTiming_WriteNonNote_Byte3:
 	calr	AccSeq_WriteByte
 	cp	w, 208
@@ -9635,7 +9635,7 @@ AccAccTiming_WriteNonNote_ExtBytes:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNonNote_Byte5
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNonNote_Byte5:
 	calr AccSeq_WriteByte
@@ -9643,7 +9643,7 @@ AccAccTiming_WriteNonNote_Byte5:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNonNote_Byte6
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNonNote_Byte6:
 	calr AccSeq_WriteByte
@@ -9651,7 +9651,7 @@ AccAccTiming_WriteNonNote_Byte6:
 	inc 1, ix
 	cp ix, (xhl + 2)
 	jr ule, AccAccTiming_WriteNonNote_Byte7
-	ld ix, (xhl + 256)
+	ld ix, (xhl + 0:8)
 
 AccAccTiming_WriteNonNote_Byte7:
 	calr AccSeq_WriteByte
@@ -9675,7 +9675,7 @@ AccAccTiming_Overflow_CalcSkip:
 	inc	1, ix
 	cp	ix, (xhl+2)
 	jr	ule, AccAccTiming_Overflow_AdvancePos
-	ld	ix, (xhl+256)
+	ld	ix, (xhl+0:8)
 AccAccTiming_Overflow_AdvancePos:
 	xor wa, wa
 
@@ -9691,7 +9691,7 @@ AccAccTiming_Overflow_AdvancePos:
 
 	dec 1, ix
 
-	add ix, (xhl + 256)
+	add ix, (xhl + 0:8)
 
 	; jrl AccAccTiming_EventLoop (v7 displacement)
 	jrl	AccAccTiming_EventLoop
@@ -10887,7 +10887,7 @@ AccVoiceState_Snapshot:
 	and W,0x7f
 	ld (0x32f9:16), wa
 	and A,0x0f
-	ld	(xiy+256), a
+	ld	(xiy+0:8), a
 	and	(xiy+1), 128
 	or	(xiy+1), w
 	ld	a, (0xfba4:16)
@@ -10989,7 +10989,7 @@ AccVoiceDelta_Part1:
 	cp	(0x32f9:16), wa
 	jr	z, AccVoiceDelta_Part1_Store
 	and	a, 15
-	ld	(xiy+256), a
+	ld	(xiy+0:8), a
 	and	(xiy+1), 128
 	or	(xiy+1), w
 	or	a, 240
@@ -13626,7 +13626,7 @@ AccPatch_MiscByteData:
 	calr	AccPatch_ScanToSequenceStart
 	ret
 AccPatch_FreeAllChains:
-	ld hl, (xiy + 256)
+	ld hl, (xiy + 0:8)
 	calr AccPatch_FreeChainEntries
 	ld hl, (xiy + 4)
 	calr AccPatch_FreeChainEntries
@@ -13661,7 +13661,7 @@ AccPatch_FreeChain_Done:
 	ret
 
 AccPatch_FillAllVoiceData:
-	ld hl, (xiy + 256)
+	ld hl, (xiy + 0:8)
 	calr AccPatch_FillEntryWithVoiceData
 	ld hl, (xiy + 4)
 	calr AccPatch_FillEntryWithVoiceData
@@ -13868,7 +13868,7 @@ AccPatch_InitAllSentinels:
 
 	ld c, a
 
-	ld hl, (xiy + 256)
+	ld hl, (xiy + 0:8)
 
 	calr	AccPatch_InitSlotSentinels
 
@@ -14405,9 +14405,9 @@ AccPatch_UpdateChain_Rhythm:
 	and (XIX+0x01),0x80
 	or (XIX+0x01),A
 	ld D,A
-	ld	a, (xiy+256)
-	and	(xix+256), 0
-	or	(xix+256), a
+	ld	a, (xiy+0:8)
+	and	(xix+0:8), 0
+	or	(xix+0:8), a
 	ld	e, a
 	sll	b, 1
 	ld	(13381:16), e
@@ -14459,10 +14459,10 @@ AccPatch_UpdateChain_Bass:
 	and (XIX+0x01),0x80
 	or (XIX+0x01),A
 	ld D,A
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	or	a, 240
-	and	(xix+256), 0
-	or	(xix+256), a
+	and	(xix+0:8), 0
+	or	(xix+0:8), a
 	ld	e, a
 	sll	b, 1
 	ld	(13379:16), e
@@ -14514,9 +14514,9 @@ AccPatch_UpdateChain_Acc1:
 	and (XIX+0x01),0x80
 	or (XIX+0x01),A
 	ld D,A
-	ld	a, (xiy+256)
-	and	(xix+256), 0
-	or	(xix+256), a
+	ld	a, (xiy+0:8)
+	and	(xix+0:8), 0
+	or	(xix+0:8), a
 	ld	e, a
 	sll	b, 1
 	ld	(13383:16), e
@@ -14568,9 +14568,9 @@ AccPatch_UpdateChain_Acc2:
 	and (XIX+0x01),0x80
 	or (XIX+0x01),A
 	ld D,A
-	ld	a, (xiy+256)
-	and	(xix+256), 0
-	or	(xix+256), a
+	ld	a, (xiy+0:8)
+	and	(xix+0:8), 0
+	or	(xix+0:8), a
 	ld	e, a
 	sll	b, 1
 	ld	(13385:16), e
@@ -14622,9 +14622,9 @@ AccPatch_UpdateChain_Acc3:
 	and (XIX+0x01),0x80
 	or (XIX+0x01),A
 	ld D,A
-	ld	a, (xiy+256)
-	and	(xix+256), 0
-	or	(xix+256), a
+	ld	a, (xiy+0:8)
+	and	(xix+0:8), 0
+	or	(xix+0:8), a
 	ld	e, a
 	sll	b, 1
 	ld	(13387:16), e
@@ -14679,7 +14679,7 @@ AccPatch_SyncVoice_Rhythm:
 	push xiy
 	add xiy, 0x20
 	ld xix, 0xfba4
-	ld w, (xix + 256)
+	ld w, (xix + 0:8)
 	and w, 0xff
 	ld a, (xix + 1)
 	and a, 0x7f
@@ -14695,7 +14695,7 @@ AccPatch_SyncRhythm_HasBank:
 	cp	hl, wa
 	jr	z, AccPatch_SyncRhythm_Done
 	pushw	wa
-	ld	(xiy+256), w
+	ld	(xiy+0:8), w
 	ld	c, a
 	and	c, 127
 	ld	(xiy+1), c
@@ -14715,7 +14715,7 @@ AccPatch_SyncVoice_Bass:
 	push xiy
 	add xiy, 0x18
 	ld xix, 0xfbbe
-	ld w, (xix + 256)
+	ld w, (xix + 0:8)
 	and w, 0xff
 	and w, 0xf
 	ld a, (xix + 1)
@@ -14732,7 +14732,7 @@ AccPatch_SyncBass_HasBank:
 	cp	hl, wa
 	jr	z, AccPatch_SyncBass_Done
 	pushw	wa
-	ld	(xiy+256), w
+	ld	(xiy+0:8), w
 	ld	c, a
 	and	c, 127
 	ld	(xiy+1), c
@@ -14752,7 +14752,7 @@ AccPatch_SyncVoice_Acc1:
 	push xiy
 	add xiy, 0x28
 	ld xix, 0xfb56
-	ld w, (xix + 256)
+	ld w, (xix + 0:8)
 	and w, 0xff
 	ld a, (xix + 1)
 	and a, 0x7f
@@ -14768,7 +14768,7 @@ AccPatch_SyncAcc1_HasBank:
 	cp	hl, wa
 	jr	z, AccPatch_SyncAcc1_Done	; -> 0xF5F5A9
 	pushw	wa
-	ld	(xiy+256), w
+	ld	(xiy+0:8), w
 	ld	c, a
 	and	c, 127
 	ld	(xiy+1), c
@@ -14788,7 +14788,7 @@ AccPatch_SyncVoice_Acc2:
 	push xiy
 	add xiy, 0x30
 	ld xix, 0xfb70
-	ld w, (xix + 256)
+	ld w, (xix + 0:8)
 	and w, 0xff
 	ld a, (xix + 1)
 	and a, 0x7f
@@ -14804,7 +14804,7 @@ AccPatch_SyncAcc2_HasBank:
 	cp	hl, wa
 	jr	z, AccPatch_SyncAcc2_Done
 	pushw	wa
-	ld	(xiy+256), w
+	ld	(xiy+0:8), w
 	ld	c, a
 	and	c, 127
 	ld	(xiy+1), c
@@ -14824,7 +14824,7 @@ AccPatch_SyncVoice_Acc3:
 	push xiy
 	add xiy, 0x38
 	ld xix, 0xfb8a
-	ld w, (xix + 256)
+	ld w, (xix + 0:8)
 	and w, 0xff
 	ld a, (xix + 1)
 	and a, 0x7f
@@ -14840,7 +14840,7 @@ AccPatch_SyncAcc3_HasBank:
 	cp	hl, wa
 	jr	z, AccPatch_SyncAcc3_Done
 	pushw	wa
-	ld	(xiy+256), w
+	ld	(xiy+0:8), w
 	ld	c, a
 	and	c, 127
 	ld	(xiy+1), c
@@ -14856,7 +14856,7 @@ AccPatch_SyncAcc3_Done:
 	pop xiy
 	ret
 AccPatch_LoadVoiceParams:
-	ld	e, (xiy+256)
+	ld	e, (xiy+0:8)
 	ld	d, (xiy+1)
 	ld	a, (xiy+2)
 	ld	(13203:16), a
@@ -14939,7 +14939,7 @@ AccDemo_InitWithFlag_Helper:
 	ld XIY,0x00094800
 	add XIY,0x00000000
 	add XIY,0x00000000
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 72
 	jr	nz, AccPatch_CallParamLookup_Skip2
 	ld	a, (xiy+1)
@@ -14956,7 +14956,7 @@ AccPatch_CallParamLookup_Return3:
 AccPatch_CallParamLookup_Helper2:
 	add	xiy, 0
 	add	xiy, 0
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 72
 	jr	nz, AccPatch_CallParamLookup_Entry
 	ld	a, (xiy+1)
@@ -14978,7 +14978,7 @@ AccPatch_CallParamLookup_Entry:
 	call	AccPatch_CallParamLookup_Helper4
 	jr	AccPatch_CallParamLookup_Return4
 AccPatch_CallParamLookup_Skip3:
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 71
 	jr	nz, AccPatch_CallParamLookup_Skip4
 	ld	a, (xiy+1)
@@ -14991,7 +14991,7 @@ AccPatch_CallParamLookup_Skip3:
 	call	AccPatch_CallParamLookup_Helper4
 	jr	AccPatch_CallParamLookup_Return4
 AccPatch_CallParamLookup_Skip4:
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 70
 	jr	nz, AccPatch_CallParamLookup_Skip5
 	ld	a, (xiy+1)
@@ -15002,7 +15002,7 @@ AccPatch_CallParamLookup_Skip4:
 	jr	nz, AccPatch_CallParamLookup_Skip5
 	jr	AccPatch_CallParamLookup_Join
 AccPatch_CallParamLookup_Skip5:
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 77
 	jr	nz, AccPatch_CallParamLookup_Skip7
 	ld	a, (xiy+1)
@@ -15031,7 +15031,7 @@ AccPatch_CallParamLookup_Helper4:
 	add	xiy, 0
 	add	xiy, 0
 	ld	a, 72:opc
-	ld	(xiy+256), a
+	ld	(xiy+0:8), a
 	ld	a, 0:opc
 	ld	(xiy+1), a
 	ld	a, 75:opc
@@ -15042,7 +15042,7 @@ AccPatch_CallParamLookup_Helper4:
 	calr	AccPatch_CallParamLookup_Helper5
 	ret
 AccPatch_CallParamLookup_Helper5:
-	ld	hl, (xiy+256)
+	ld	hl, (xiy+0:8)
 	calr	AccPatch_CallParamLookup_Helper6
 	ld	hl, (xiy+4)
 	calr	AccPatch_CallParamLookup_Helper6
@@ -15081,7 +15081,7 @@ AccPatch_CallParamLookup_Loop:
 	pop	xiy
 	ret
 AccPatch_FreeAllChains_Alt:
-	ld hl, (xiy + 256)
+	ld hl, (xiy + 0:8)
 	calr AccPatch_ClearLinkedListEntries
 	ld hl, (xiy + 4)
 	calr AccPatch_ClearLinkedListEntries
@@ -15131,7 +15131,7 @@ AccPatch_ResolveSlotAddr_Ret:
 	ret
 
 AccPatch_FillAllSlots_Alt:
-	ld hl, (xiy + 256)
+	ld hl, (xiy + 0:8)
 	calr AccPatch_FillSlotWithVoiceData
 	ld hl, (xiy + 4)
 	calr AccPatch_FillSlotWithVoiceData
@@ -17456,7 +17456,7 @@ AccPatch_AdvanceNextEntry_IY:
 	ld HL,(XIY+0x01)
 	ld (0x35bc:16), hl
 	calr AccPatch_GetEntryAddr
-	bit	7, (xix+256)
+	bit	7, (xix+0:8)
 	jr	nz, AdvNextEntry_IY_StoreAndReset
 	ld	(0x7ea6:16), 11
 	jr	AdvNextEntry_IY_Return
@@ -17473,7 +17473,7 @@ AccPatch_AdvanceNextEntry_IX:
 	ld HL,(XIX+0x01)
 	ld (0x35be:16), hl
 	calr AccPatch_GetEntryAddr
-	bit	7, (xix+256)
+	bit	7, (xix+0:8)
 	jr	nz, AdvNextEntry_IX_StoreAndReset
 	ld	(0x7ea6:16), 11
 	jr	AdvNextEntry_IX_Return
@@ -20580,7 +20580,7 @@ ToneGen_AdvanceBeatCounter:
 	inc	1, iy
 	cp	iy, bc
 	jr	ule, 3
-	ld iy, (xhl+256)
+	ld iy, (xhl+0:8)
 	ret
 	nop
 	nop
@@ -21308,7 +21308,7 @@ AccPatch_LoadDualVoiceParams_Skip:
 AccPat_DualVoice_ReadParamsA:
 	ld xiy, (13504:16)
 
-	ld hl, (xiy + 256)
+	ld hl, (xiy + 0:8)
 
 	ld (13576:16), hl
 
@@ -21339,7 +21339,7 @@ __pad_F6333A:
 AccPatch_LoadDualVoiceParamsB:
 	ld xiy, (13508:16)
 
-	ld hl, (xiy + 256)
+	ld hl, (xiy + 0:8)
 
 	ld (13564:16), hl
 
@@ -21890,7 +21890,7 @@ DrumKit_DataTable_Entry4:
 DrumKit_DataTable_Entry5:
 .Lc_f6348b:
 	add XHL,XIY
-	ld	a, (xix+256)
+	ld	a, (xix+0:8)
 	calr	ToneData_LookupEffectParam
 	ld	(0x34f0:16), a
 	ld	(0x34ce:16), hl
@@ -33436,7 +33436,7 @@ AccPatch_VoiceAssignDataBlock:
 	ret
 	ret
 	ld	xiy, (14002:16)
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 109
 	jr	nz, AccPatch_VoiceAssignDataBlock_Skip
 	ld	a, (xiy+1)
@@ -33448,7 +33448,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	(14078:16), 0
 	jr	AccPatch_VoiceAssignDataBlock_Return
 AccPatch_VoiceAssignDataBlock_Skip:
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 102
 	jr	nz, AccPatch_VoiceAssignDataBlock_Skip2
 	ld	a, (xiy+1)
@@ -33460,7 +33460,7 @@ AccPatch_VoiceAssignDataBlock_Skip:
 	ld	(14078:16), 0
 	jr	AccPatch_VoiceAssignDataBlock_Return
 AccPatch_VoiceAssignDataBlock_Skip2:
-	ld	a, (xiy+256)
+	ld	a, (xiy+0:8)
 	cp	a, 109
 	jr	nz, AccPatch_VoiceAssignDataBlock_Skip3
 	ld	a, (xiy+1)
@@ -33683,7 +33683,7 @@ AccPatch_VoiceAssignDataBlock_Helper4:
 	ld	w, 5:opc
 	jr	AccPatch_VoiceAssignDataBlock_Return4
 AccPatch_VoiceAssignDataBlock_Skip11:
-	ld	a, (xhl+256)
+	ld	a, (xhl+0:8)
 	cp	a, 103
 	jr	nz, AccPatch_VoiceAssignDataBlock_Skip12
 	ld	a, (xhl+1)
@@ -33695,7 +33695,7 @@ AccPatch_VoiceAssignDataBlock_Skip11:
 	ld	w, 5:opc
 	jr	AccPatch_VoiceAssignDataBlock_Return4
 AccPatch_VoiceAssignDataBlock_Skip12:
-	ld	a, (xhl+256)
+	ld	a, (xhl+0:8)
 	cp	a, 76
 	jr	nz, AccPatch_VoiceAssignDataBlock_Skip13
 	ld	a, (xhl+1)
@@ -33865,7 +33865,7 @@ AccPatch_VoiceAssignDataBlock_Helper10:
 	ld	(14526:16), wa
 	ld	ix, (14560:16)
 	add	xix, 608256
-	ld	wa, (xix+256)
+	ld	wa, (xix+0:8)
 	ld	(14528:16), wa
 	ld	wa, (xix+4)
 	ld	(14530:16), wa

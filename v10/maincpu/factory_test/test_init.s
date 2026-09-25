@@ -24,7 +24,7 @@
 	.else
 	ld xwa, \ParamA
 	.endif
-	ld (xsp + 256), xwa
+	ld (xsp + 0:8), xwa
 	lda_24 xwa, (\ParamB)
 	ld (xsp + 4), xwa
 	ldw_da xwa, (\ParamC)
@@ -48,7 +48,7 @@
 	.else
 	ld xwa, \ParamA
 	.endif
-	ld (xsp + 256), xwa
+	ld (xsp + 0:8), xwa
 	lda_24 xwa, (\ParamB)
 	ld (xsp + 4), xwa
 	ldw (xsp + 8), \ParamC
@@ -321,7 +321,7 @@ CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
 	lda xwa, (FDTest_String_TestTitleFunc_0xFA:24)
 	calr FDTest_PrintDiag
-	ldw (xsp+256), 0
+	ldw (xsp+0:8), 0
 	ldw (xsp + 6), 0xe0
 	ldw (xsp + 2), 0x0
 	ldw (xsp + 4), 0x0

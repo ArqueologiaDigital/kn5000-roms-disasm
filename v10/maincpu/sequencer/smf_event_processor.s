@@ -1089,7 +1089,7 @@ SMF_ScanChannel_PopAndWrite:
 
 SMF_WriteChannelNoteData:
 	lda_dri XIY, 0x07, 0xf4, 0xec
-	ld c, (xiy + 256)
+	ld c, (xiy + 0:8)
 	ld d, (xiy + 1)
 	ld b, (xiy + 3)
 	ld e, (xiy + 4)
@@ -7905,7 +7905,7 @@ SeqStep_SectorCompareBlock_Skip3:
 SeqStep_ParseVariableHeader:
 	lda xsp, (xsp - 16)
 	ld wa, (xsp + 20)
-	ld (xsp + 256), wa
+	ld (xsp + 0:8), wa
 	ld wa, (xsp + 22)
 	ld (xsp + 2), wa
 	ld wa, (xsp + 24)
@@ -10496,7 +10496,7 @@ FDC_DetectSector_ReturnPD3:
 
 FDC_ResetHeadCommand:
 	lda xsp, (xsp - 16)
-	ldw (xsp + 256), 0x0
+	ldw (xsp + 0:8), 0x0
 	ldw (xsp + 2), 0x0
 	ldw (xsp + 6), 0xe0
 	lda xwa, (xsp)
@@ -10508,7 +10508,7 @@ FDC_ResetHeadCommand:
 
 FDC_RecalibrateCommand:
 	lda xsp, (xsp - 16)
-	ldw (xsp + 256), 0x7
+	ldw (xsp + 0:8), 0x7
 	lda xwa, (xsp)
 	push xwa
 	call FDC_CommandEntry
