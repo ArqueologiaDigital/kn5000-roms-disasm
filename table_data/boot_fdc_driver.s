@@ -777,7 +777,7 @@ FDC_WaitRQM_Timeout__done:
 FDC_ReadResultPhase:
 	dec 2, xsp	; dec 2,XSP
 	push xiz	; push XIZ
-	.byte 0xbf, 0x04, 0x16, 0x00, 0x0c	; LDW (XSP+0x04), (0x0C00) - snapshot the tick counter (word mem-to-mem store, no assembler mnemonic)
+	ldw (xsp+4), (0x0c00)	; LDW (XSP+0x04), (0x0C00) - snapshot the tick counter (word mem-to-mem store; bf 04 16 00 0c, formerly emitted as .byte because the assembler lacked the form)
 	ldi_erpw 0xfa, 0x80, 0x00	; ld QIZ,0x0080
 	cpw qiz, 0x80	; cp QIZ,0x0080
 	jr nz, FDC_ReadResultPhase__check_result	; jr NZ,0xffde9c
