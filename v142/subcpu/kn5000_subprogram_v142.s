@@ -121,6 +121,15 @@ PostReset_InitAudio:
 	lda xwa, (0x04069a:24)
 	ld xsp, xwa
 	call TaskSched_Init
+; ★ TASK 1 ENTRY POINT (0x01FAB1).  The `call` above never returns here in the ordinary way:
+; record 1 of TaskSched_TaskDescriptorTable holds this address in its +0 (entry PC) field, and
+; TaskSched_SpawnTask(1) -- issued by TaskSched_ConfigAndDispatch at the end of TaskSched_Init --
+; copies it into the saved-PC slot (+30) of a fresh 34-byte context frame built just below the
+; record's stack top 0x04069A, the same value loaded into XSP two instructions up.
+; TaskSched_Dispatch then enters it through TaskSched_ContextRestore (7 x pop, pop sr, ret),
+; so everything from here on -- Audio_System_Init and Audio_Main_Loop -- runs as task 1,
+; ready-queue priority 3.  The return address the `call` pushed is simply abandoned.
+Task1_AudioMain_Entry:
 	lda_dd8l XBC, 0xE4
 	ld a, (xbc)
 	and a, 0x8F
@@ -354,8 +363,16 @@ MemClear_ExtRAM_Finish:
 	ret
 
 
-Const_0x0E:
-	.byte 0x0e
+; ★ TASK 2 ENTRY POINT (0x01FC6F) -- was `Const_0x0E: .byte 0x0e`; 0x0E is the RET opcode and
+; this byte is CODE, not a constant.  Evidence: record 2 of TaskSched_TaskDescriptorTable
+; holds 0x0001FC6F in its +0 (entry PC) field, which TaskSched_SpawnTask would copy into the
+; saved-PC slot of task 2's context frame.  Task 2 is never spawned in v1.42: the only
+; TaskSched_SpawnTask call sites are TaskSched_ConfigAndDispatch (A = 1) and
+; DSP_State_DmaLoadPresets (A = 3), and no numeric branch operand left in this image targets
+; 0x01FFFD.  So this is an unused task slot whose body is a bare RET (if it ever ran, the RET
+; would pop the first long above its fresh stack top 0x040C20, not a return address).
+Task2_Entry_Stub:
+	ret
 
 
 Audio_InitRingBuffers:
@@ -567,19 +584,62 @@ DSP_ChecksumRange_Loop:
 	cpl hl				; One's complement
 	ret
 
-; DSP channel configuration data table (42 bytes)
-DSP_ChannelConfigTable:
-	.byte 0xb1, 0xfa, 0x01, 0x00
-	.byte 0x9a, 0x06, 0x04, 0x00, 0x00, 0x88, 0x03, 0x00
-	.byte 0x6f, 0xfc, 0x01, 0x00
-	.byte 0x20, 0x0c, 0x04, 0x00, 0x00, 0x88, 0x01, 0x00
-	.byte 0x27, 0x63, 0x03, 0x00
-	.byte 0x9c, 0x0a, 0x04, 0x00, 0x00, 0x88, 0x03, 0x00
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+; ============================================================================
+; TaskSched_TaskDescriptorTable -- the scheduler's static TASK TABLE (0x01FD98, 3 x 12 bytes)
+; ============================================================================
+; CORRECTED: this was labelled `DSP_ChannelConfigTable` with the comment "DSP channel
+; configuration data table (42 bytes)".  Nothing in the DSP code reads it.  Its reader is
+; TaskSched_SpawnTask (0x01FFFD):
+;     ld l,12 / mul8rr l,a / extz xhl / add xhl, TaskSched_TaskDescriptorTable - 12
+; i.e. record = table + 12*(A-1) for task id A = 1..3 (the constant in the instruction is
+; the table MINUS one record, 0x01FD8C, which is why a search for 0x01FD98 found nothing).
+; Record layout, derived field by field from the loads in TaskSched_SpawnTask:
+;   +0  long   entry PC       `ld xwa,(xhl+0)` -> frame+30, the slot TaskSched_ContextRestore
+;                             pops with its final RET
+;   +4  long   stack top      `ld xiy,(xhl+4)`; the 34-byte (0x22) context frame is built at
+;                             stack top - 0x22 and stored as the descriptor's saved XSP (+4)
+;   +8  word   initial SR     `ld wa,(xhl+8)` -> frame+28, popped by TaskSched_ContextRestore's
+;                             `pop sr`
+;   +10 byte   priority       `ld a,(xhl+10)` -> descriptor +8, and selects the ready-queue head
+;                             at 0x1068 + 4*priority
+;   +11 byte   0              not read by TaskSched_SpawnTask
+; Entry count 3: TaskSched_Init initialises exactly three 12-byte run-time descriptors at
+; 0x1048/0x1054/0x1060 (= 0x103C + 12*A, `ld b,3`), and the six bytes after record 3 are
+; independently claimed by TaskSched_Init's two ldir copies (below), so the table cannot be
+; longer.  Entry PCs resolve to: task 1 Task1_AudioMain_Entry (inside PostReset_InitAudio),
+; task 2 Task2_Entry_Stub (a bare RET; never spawned), task 3 Task3_Entry_Thunk (`jp` to the
+; DSP apply-task loop DSP_ApplyTask_Body).  The three stack tops partition DRAM
+; 0x040000.. as: task 1 below 0x04069A, task 3 0x04069A-0x040A9B, the scheduler's own stack
+; (`ld xsp, 0x40B1E`) 0x040A9C-0x040B1D, task 2 0x040B1E-0x040C1F.
+TaskSched_TaskDescriptorTable:
+	.long	Task1_AudioMain_Entry, 0x0004069a	; task 1: entry, stack top
+	.short	0x8800					;         initial SR
+	.byte	3, 0					;         priority 3
+	.long	Task2_Entry_Stub, 0x00040c20		; task 2: entry, stack top
+	.short	0x8800
+	.byte	1, 0					;         priority 1
+	.long	Task3_Entry_Thunk, 0x00040a9c		; task 3: entry, stack top
+	.short	0x8800
+	.byte	3, 0					;         priority 3
+; Initial values of the two EVENT flag bytes 0x1080/0x1081 (events 1, 2): TaskSched_Init
+; copies these 2 bytes there with `ld xhl, TaskSched_EventFlagInit / ld de,0x1080 / ld bc,2 /
+; ldir`.  1 = "already signalled"; see TaskEvent_Signal.
+TaskSched_EventFlagInit:
+	.byte	1, 1
+; Initial counts of the four SEMAPHORES 0x1092..0x1095 (ids 1..4): TaskSched_Init copies these 4
+; bytes with `ld xhl, TaskSched_SemaphoreInit / ld de,0x1092 / ld bc,4 / ldir`.  See
+; TaskSem_AddrCalc_Opaque, which reads them back.
+TaskSched_SemaphoreInit:
+	.byte	1, 1, 1, 1
 
 Task_DequeueDispatch_Prio3:
 	ld a, 0x3:opc
 	jrl TaskQueue_Dequeue
+; A separate one-instruction routine, not dead code after the tail jump: 0x01FDC7 is the
+; callback pointer (+4) of TaskSched_Init_ConfigData, which Task_ConfigTimer copies into soft
+; timer slot 1 (0x10CA).  TaskSched_SoftTimer_Service pushes its loop-advance address and
+; jumps here every time that slot's 1-tick period expires, so this RET is a no-op callback.
+TaskSched_NullTimerCallback:
 	ret
 
 
@@ -630,7 +690,7 @@ TaskSched_Init_FreeList_A:
 	ld (xix + 4), xwa
 	add ix, 0x8
 	djnz8 b, TaskSched_Init_FreeList_A
-	ld xhl, 0x1FDBC
+	ld xhl, TaskSched_EventFlagInit
 	ldw de, 0x1080
 	extz xde
 	ld bc, 2:i3
@@ -644,7 +704,7 @@ TaskSched_Init_QueueGroup_B:
 	stw_dpi IX, 0xED
 	stw_dpi IX, 0xED
 	djnz8 b, TaskSched_Init_QueueGroup_B
-	ld xhl, 0x1FDBE
+	ld xhl, TaskSched_SemaphoreInit
 	ldw de, 0x1092
 	extz xde
 	ld bc, 4:i3
@@ -703,7 +763,7 @@ TaskSched_Init_QueueGroup_E:
 	stw_dpi IX, 0xED
 	stw_dpi IX, 0xED
 	djnz8 b, TaskSched_Init_QueueGroup_E
-	ld xwa, 0x1FEDF
+	ld xwa, TaskSched_Init_ConfigData
 	jr TaskSched_ConfigAndDispatch
 
 ; Data, not code: TaskSched_Init loads its ADDRESS ("ld xwa, 0x1FEDF" above) rather than
@@ -711,8 +771,15 @@ TaskSched_Init_QueueGroup_E:
 ; struct, not an instruction stream. It happens to disassemble as several short instructions
 ; if fed to a byte-stream decoder (that reading was audited and refused, see notes/README.md),
 ; which is why it is correctly left as .byte rather than converted.
+; Layout, from its only reader Task_ConfigTimer (0x02072A), XIX = this struct:
+;   +0 byte  timer slot id (1)   `ld a,(xix+0) / mul a,8 / add wa,0x10C2` -> slot 0x10CA
+;   +1 byte  0                   not read
+;   +2 word  period in ticks (1) copied to BOTH the slot's down-counter (+0) and reload (+2)
+;   +4 long  callback            copied to the slot's +4; TaskSched_SoftTimer_Service calls it
 TaskSched_Init_ConfigData:
-	.byte 0x01, 0x00, 0x01, 0x00, 0xc7, 0xfd, 0x01, 0x00
+	.byte	1, 0
+	.short	1
+	.long	TaskSched_NullTimerCallback
 
 TaskSched_ConfigAndDispatch:
 	call Task_ConfigTimer
@@ -879,7 +946,7 @@ TaskSched_SpawnTask:
 	ld l, 0xC:opc
 	mul8rr l, a
 	extz xhl
-	add xhl, 0x1FD8C
+	add xhl, TaskSched_TaskDescriptorTable - 12
 	ld c, 0xC:opc
 	mul8rr c, a
 	add bc, 0x103C
@@ -44331,10 +44398,14 @@ DSP_WaitForTaskSlot_Epilogue:
 	ret
 
 ; --- 0x036327-0x03632A  DSP_WaitForTaskSlot_Data -- four bytes 1b 0f 8e 03
-; `jp 0x038E0F` -- an unreachable tail jump left between DSP_WaitForDelay's epilogue and
-; DSP_WakeAudioTask. 0x038E0F is inside the DSP_State_* group.
-DSP_WaitForTaskSlot_Data:
-	jp	DSP_State_InlineData
+; ★ CORRECTED: this is TASK 3's ENTRY POINT, not "an unreachable tail jump".  Record 3 of
+; TaskSched_TaskDescriptorTable holds 0x00036327 in its +0 (entry PC) field; TaskSched_SpawnTask(3),
+; called from DSP_State_DmaLoadPresets, puts it in the saved-PC slot of task 3's first context
+; frame, so the first dispatch of task 3 lands here and jumps to the task body
+; DSP_ApplyTask_Body (0x038E0F, formerly DSP_State_InlineData).  Renamed from
+; DSP_WaitForTaskSlot_Data.
+Task3_Entry_Thunk:
+	jp	DSP_ApplyTask_Body
 
 ; ALREADY NAMED -- doc header only. `TaskSched_Wait(1)` as a tail jump. Called at the top of
 ; DSP2_Send_Command so the bit-bang burst starts on a fresh scheduler slice.
@@ -51056,6 +51127,8 @@ DSP_TuneOffset_WriteSequence:
 ; i.e. exactly TWO 0x122-byte buffers are ever in circulation.  Called once, from DSP_Reset
 ; (0x0360F9).  Task 3's body is the loop at 0x038E0F, reached through the thunk
 ; DSP_WaitForTaskSlot_Data (0x036327) = `jp 0x038E0F`.
+; (Now labelled Task3_Entry_Thunk -> DSP_ApplyTask_Body; the thunk is found through record 3 of
+; TaskSched_TaskDescriptorTable.)
 ; The pool size of two is the reason DSP_State_ApplyBuf can wedge -- see [UNCERTAIN].
 DSP_State_DmaLoadPresets:
 	ld wa, 3:i3
@@ -51077,7 +51150,8 @@ DSP_State_DmaLoadPresets:
 ;   }
 ; The only producer for queue 2 is DSP_State_ApplyBuf (0x038E31); the only consumer of queue 1
 ; is DSP_State_ApplyBuf.  Entered through the thunk at 0x036327.
-DSP_State_InlineData:
+; (Renamed DSP_State_InlineData -> DSP_ApplyTask_Body; the thunk is Task3_Entry_Thunk.)
+DSP_ApplyTask_Body:
 	push xiz
 ; Top of the task's forever-loop; target of the `jr T,0x038E10` at 0x038E2F.  This is the only
 ; branch target in the whole region with no symbol in the LLVM build -- genuinely new.
