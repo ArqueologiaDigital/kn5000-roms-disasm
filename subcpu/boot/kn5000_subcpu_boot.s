@@ -73,9 +73,9 @@
 ; ==============================================================================
 
 ; Port Function Control Registers
-.equ P0FC, 0x7	; Port 0 Function Control
-.equ P1FC, 0xB	; Port 1 Function Control
-.equ P2FC, 0xF	; Port 2 Function Control
+.equ P0FC, 0x3	; Port 0 Function Control  [★ value corrected 2026-09-25, was 0x7: MAME tmp94c241 map]
+.equ P1FC, 0x7	; Port 1 Function Control  [★ value corrected 2026-09-25, was 0xB: MAME tmp94c241 map]
+.equ P2FC, 0xB	; Port 2 Function Control  [★ value corrected 2026-09-25, was 0xF: MAME tmp94c241 map]
 .equ P7, 0x1C	; Port 7 Data
 .equ P7CR, 0x1E	; Port 7 Control
 .equ P7FC, 0x1F	; Port 7 Function Control
@@ -101,12 +101,12 @@
 .equ INTERCPU_STATUS, 0x34
 
 ; Port 8 area (legacy names for compatibility)
-.equ SC0BUF, 0x34	; Alias for INTERCPU_STATUS
-.equ SC0CR, 0x36
-.equ SC0MOD, 0x38
-.equ SC1BUF, 0x3A
-.equ SC1CR, 0x3C
-.equ SC1MOD, 0x3E
+.equ SC0BUF, 0x34	; Alias for INTERCPU_STATUS    [★ WRONG NAME for this address on the TMP94C241: 0x34 is port D (PD); SC0BUF is 0xD0 (SER0_BUF)]
+.equ SC0CR, 0x36	;  [★ WRONG NAME for this address on the TMP94C241: 0x36 is PDCR]
+.equ SC0MOD, 0x38	;  [★ WRONG NAME for this address on the TMP94C241: 0x38 is port E (PE)]
+.equ SC1BUF, 0x3A	;  [★ WRONG NAME for this address on the TMP94C241: 0x3A is PECR]
+.equ SC1CR, 0x3C	;  [★ WRONG NAME for this address on the TMP94C241: 0x3C is port F (PF)]
+.equ SC1MOD, 0x3E	;  [★ WRONG NAME for this address on the TMP94C241: 0x3E is PFCR]
 
 ; ⚠ CORRECTED 2026-09-01.  These six names were wrong, and they were wrong about
 ; the SOUND CONTROL PINS.  The TMP94C241's port SFRs run P0..P8 at 0x00..0x20 and
@@ -132,25 +132,44 @@
 .equ PE_CR, PZCR	; superseded name
 
 ; 8-Bit Timer Registers (0x80-0x8F)
-.equ T01MOD, 0x80	; Timer 0/1 Mode (NOT watchdog - that's at 110h)
+.equ T01MOD, 0x84	; Timer 0/1 Mode (NOT watchdog - that's at 110h)  [★ value corrected 2026-09-25, was 0x80: MAME tmp94c241 map]
 				; Bit 0: PRRUN (Prescaler run)
 				; Bit 1-2: T0CLK (Timer 0 clock source)
 				; Bit 3-4: T01M (Timer 0/1 mode)
 				; Bit 5: PWM0
 				; Bit 6-7: T1CLK (Timer 1 clock source)
-.equ T01FFCR, 0x81	; Timer 0/1 Flip-Flop Control
-.equ T8RUN, 0x82	; 8-bit Timer Run Control (T0RUN, T1RUN, T2RUN, T3RUN)
-.equ TRDC, 0x83	; Timer Register Double-buffer Control
-.equ TREG0, 0x84	; Timer 0 Register (write-only)
-.equ TREG1, 0x85	; Timer 1 Register (write-only)
-.equ T23MOD, 0x88	; Timer 2/3 Mode
-.equ T23FFCR, 0x89	; Timer 2/3 Flip-Flop Control
+.equ T01FFCR, 0x81	; Timer 0/1 Flip-Flop Control    [★ WRONG NAME for this address on the TMP94C241: 0x81 is TRDC; the timers' flip-flop control is T02FFCR, 0x82]
+.equ T8RUN, 0x80	; 8-bit Timer Run Control (T0RUN, T1RUN, T2RUN, T3RUN)  [★ value corrected 2026-09-25, was 0x82: MAME tmp94c241 map]
+.equ TRDC, 0x81	; Timer Register Double-buffer Control  [★ value corrected 2026-09-25, was 0x83: MAME tmp94c241 map]
+.equ TREG0, 0x88	; Timer 0 Register (write-only)  [★ value corrected 2026-09-25, was 0x84: MAME tmp94c241 map]
+.equ TREG1, 0x89	; Timer 1 Register (write-only)  [★ value corrected 2026-09-25, was 0x85: MAME tmp94c241 map]
+.equ T23MOD, 0x85	; Timer 2/3 Mode  [★ value corrected 2026-09-25, was 0x88: MAME tmp94c241 map]
+.equ T23FFCR, 0x89	; Timer 2/3 Flip-Flop Control    [★ WRONG NAME for this address on the TMP94C241: 0x89 is TREG1; there is no separate timer-2/3 flip-flop register]
 .equ TREG2, 0x8A	; Timer 2 Register (write-only)
 .equ TREG3, 0x8B	; Timer 3 Register (write-only)
 
+; TMP94C241 SFR names this file lacked, with the values of v142/subcpu/shared/sfr_tmp94c241.s
+; and MAME's tmp94c241 map (added 2026-09-25 for the symbolic operands below).
+.equ P3FC, 0xF
+.equ PCCR, 0x32
+.equ PCFC, 0x33
+.equ PD, 0x34
+.equ PDCR, 0x36
+.equ PDFC, 0x37
+.equ PE, 0x38
+.equ PECR, 0x3A
+.equ PEFC, 0x3B
+.equ PF, 0x3C
+.equ PFCR, 0x3E
+.equ PFFC, 0x3F
+.equ T02FFCR, 0x82
+.equ T16RUN, 0x9E
+.equ T16CR, 0x9F
+.equ IIMC, 0xF6
+
 ; Legacy aliases for backward compatibility with existing code
-.equ WDMOD, 0x80	; Legacy alias - actually T01MOD, not watchdog!
-.equ WDCR, 0x81	; Legacy alias - actually T01FFCR
+.equ WDMOD, 0x110	; Legacy alias - actually T01MOD, not watchdog!  [★ value corrected 2026-09-25, was 0x80: MAME tmp94c241 map]
+.equ WDCR, 0x111	; Legacy alias - actually T01FFCR  [★ value corrected 2026-09-25, was 0x81: MAME tmp94c241 map]
 .equ REG_40, 0x40	; = P8_DATA
 .equ REG_44, 0x44	; = P8_FC_LO
 .equ REG_46, 0x46	; = P8_FC_HI
@@ -161,8 +180,8 @@
 ; 16-Bit Timer 4 Registers (0x98-0x9F)
 .equ T4MOD, 0x98	; Timer 4 Mode
 .equ T4FFCR, 0x99	; Timer 4 Flip-Flop Control
-.equ CAP4L, 0x9E	; Timer 4 Capture Low
-.equ CAP4H, 0x9F	; Timer 4 Capture High
+.equ CAP4L, 0x94	; Timer 4 Capture Low  [★ value corrected 2026-09-25, was 0x9E: MAME tmp94c241 map]
+.equ CAP4H, 0x95	; Timer 4 Capture High  [★ value corrected 2026-09-25, was 0x9F: MAME tmp94c241 map]
 
 ; Serial Channel 0 Registers (0xD0-0xD3)
 .equ SER0_BUF, 0xD0	; Serial 0 Buffer (TX/RX)
@@ -179,13 +198,13 @@
 ; (Legacy aliases removed - now using primary names SER0_CR, SER0_MOD, etc.)
 
 ; Port F area (Serial I/O pins)
-.equ PF_FC, 0xE5	; Port F Function Control
+.equ PF_FC, 0xE5	; Port F Function Control    [★ WRONG NAME for this address on the TMP94C241: 0xE5 is INTET23 (interrupt level, timers 2/3)]
 
 ; Other Port Function Controls
-.equ PORT_FC_1, 0xEC	; Port function control
-.equ PORT_FC_2, 0xED	; Port function control
-.equ PORT_FC_3, 0xF0	; Port function control
-.equ PORT_FC_4, 0xF6	; Port function control
+.equ PORT_FC_1, 0xEC	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xEC is INTETC01]
+.equ PORT_FC_2, 0xED	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xED is INTETC23]
+.equ PORT_FC_3, 0xF0	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xF0 is INTE0AD]
+.equ PORT_FC_4, 0xF6	; Port function control    [★ WRONG NAME for this address on the TMP94C241: 0xF6 is IIMC]
 
 ; ==============================================================================
 ; Extended SFR (0x0100+)
@@ -566,55 +585,55 @@ BOOT_INIT:
 	ld (266:16), 4
 
 	; Initialize port function control registers (set all pins to function mode)
-	ld (0x07:8), 0xFF:io	; Port 0 all function
-	ld (0x0B:8), 0xFF:io	; Port 1 all function
-	ld (0x0F:8), 0xFF:io	; Port 2 all function
-	ld (0x1C:8), 0xFF:io	; Port 7 data
-	ld (0x1F:8), 0x07:io	; Port 7 function
-	ld (0x1E:8), 0x78:io	; Port 7 control
-	ld (0x20:8), 0x3B:io	; Port 8 data
-	ld (0x23:8), 0x3F:io	; Port 8 function
-	ld (0x22:8), 0xFF:io	; Port 8 control
-	ld (0x28:8), 0xFF:io	; Port A data
-	ld (0x2B:8), 0x08:io	; Port A function
-	ld (0x2C:8), 0xFF:io	; Port B data
-	ld (0x2F:8), 0x1F:io	; Port B function
+	ld (P1FC:8), 0xFF:io	; Port 1 all function (★ was "Port 0": 0x07 is P1FC, port 0's FC is 0x03)
+	ld (P2FC:8), 0xFF:io	; Port 2 all function (★ was "Port 1": 0x0B is P2FC)
+	ld (P3FC:8), 0xFF:io	; Port 3 all function (★ was "Port 2": 0x0F is P3FC)
+	ld (P7:8), 0xFF:io	; Port 7 data
+	ld (P7FC:8), 0x07:io	; Port 7 function
+	ld (P7CR:8), 0x78:io	; Port 7 control
+	ld (P8:8), 0x3B:io	; Port 8 data
+	ld (P8FC:8), 0x3F:io	; Port 8 function
+	ld (P8CR:8), 0xFF:io	; Port 8 control
+	ld (PA:8), 0xFF:io	; Port A data
+	ld (PAFC:8), 0x08:io	; Port A function
+	ld (PB:8), 0xFF:io	; Port B data
+	ld (PBFC:8), 0x1F:io	; Port B function
 
 	; Initialize ports C, D, E and F (SFRs 0x30-0x3F: data, CR and FC registers;
 	; 0x30/0x33/0x32 = PC/PCFC/PCCR, so PC.0 is an input and PC.1 an output)
 	ld (0x30:8), 0x03:io
-	ld (0x33:8), 0x00:io
-	ld (0x32:8), 0x02:io
-	ld (0x34:8), 0xFF:io
-	ld (0x37:8), 0x00:io
-	ld (0x36:8), 0x63:io
-	ld (0x38:8), 0xFE:io
-	ld (0x3B:8), 0x00:io
-	ld (0x3A:8), 0x71:io
-	ld (0x3C:8), 0xFF:io
-	ld (0x3F:8), 0x70:io
-	ld (0x3E:8), 0x17:io
+	ld (PCFC:8), 0x00:io
+	ld (PCCR:8), 0x02:io
+	ld (PD:8), 0xFF:io
+	ld (PDFC:8), 0x00:io
+	ld (PDCR:8), 0x63:io
+	ld (PE:8), 0xFE:io
+	ld (PEFC:8), 0x00:io
+	ld (PECR:8), 0x71:io
+	ld (PF:8), 0xFF:io
+	ld (PFFC:8), 0x70:io
+	ld (PFCR:8), 0x17:io
 
 	; Initialize more registers
-	ld (0x44:8), 0xFF:io
-	ld (0x47:8), 0x18:io
-	ld (0x46:8), 0x07:io
-	ld (0x68:8), 0x00:io
-	ld (0x6A:8), 0xFF:io
-	ld (0x84:8), 0x1D:io
-	ld (0x85:8), 0x1D:io
-	ld (0x82:8), 0x00:io
-	ld (0x88:8), 0x0A:io
-	ld (0x89:8), 0x10:io
-	ld (0x8A:8), 0x40:io
-	ld (0x8B:8), 0x20:io
-	ld (0x81:8), 0x00:io	; Watchdog control
-	set_dd8 1, 0x80	; Watchdog mode
-	ld (0x98:8), 0x05:io
-	ld (0x99:8), 0x00:io
-	ld (0x9F:8), 0x00:io
-	ld (0x9E:8), 0x00:io
-	set_dd8 7, 0x9E
+	ld (PH:8), 0xFF:io
+	ld (PHFC:8), 0x18:io
+	ld (PHCR:8), 0x07:io
+	ld (PZ:8), 0x00:io
+	ld (PZCR:8), 0xFF:io
+	ld (T01MOD:8), 0x1D:io
+	ld (T23MOD:8), 0x1D:io
+	ld (T02FFCR:8), 0x00:io
+	ld (TREG0:8), 0x0A:io
+	ld (TREG1:8), 0x10:io
+	ld (TREG2:8), 0x40:io
+	ld (TREG3:8), 0x20:io
+	ld (TRDC:8), 0x00:io	; TRDC, timer double-buffer control (★ was "Watchdog control"; the watchdog is 0x110/0x111)
+	set_dd8 1, T8RUN	; T8RUN bit 1: run 8-bit timer 1 (★ was "Watchdog mode": 0x80 is T8RUN)
+	ld (T4MOD:8), 0x05:io
+	ld (T4FFCR:8), 0x00:io
+	ld (T16CR:8), 0x00:io
+	ld (T16RUN:8), 0x00:io
+	set_dd8 7, T16RUN
 
 	; Initialize timer registers
 	ld (323:16), 16
@@ -628,7 +647,7 @@ BOOT_INIT:
 	ld (330:16), 1
 
 	; Check bit 0 of register 0x40 for clock configuration
-	bit_dd8 0, 0x40
+	bit_dd8 0, PG
 	jr nz, BOOT_INIT__clock_alt
 	ld (334:16), 31
 	jr BOOT_INIT__clock_done
@@ -639,17 +658,17 @@ BOOT_INIT__clock_done:
 	ld (342:16), 1
 
 	; Initialize serial/DMA registers
-	ld (0xD2:8), 0x01:io
-	ld (0xD1:8), 0x00:io
+	ld (SER0_MOD:8), 0x01:io
+	ld (SER0_CR:8), 0x00:io
 	and_sd8b_im 0xD3, 0xCF
 	and_sd8b_im 0xD3, 0xF0
-	ld (0xD6:8), 0x29:io
+	ld (SER1_MOD:8), 0x29:io
 	lda_dd8l XBC, (0xD6)
 	ld a, (xbc)
 	and a, 0xFC
 	set 0, a
 	ld (xbc), a
-	ld (0xD5:8), 0x00:io
+	ld (SER1_CR:8), 0x00:io
 	and_sd8b_im 0xD7, 0xCF
 	and_sd8b_im 0xD7, 0xF0
 
@@ -671,7 +690,7 @@ BOOT_INIT__clock_done:
 	ld (329:16), 192
 
 	; Check clock config again
-	bit_dd8 0, 0x40
+	bit_dd8 0, PG
 	jr nz, BOOT_INIT__clock_alt2
 	ld (333:16), 138
 	jr BOOT_INIT__clock_done2
@@ -680,7 +699,7 @@ BOOT_INIT__clock_alt2:
 BOOT_INIT__clock_done2:
 	ld (337:16), 128
 	ld (341:16), 129
-	ld (0xF6:8), 0x00:io
+	ld (IIMC:8), 0x00:io
 
 	; Set up stack pointer
 	lda xwa, (0x0005a2:24); lda XWA, 0x0005a2 (24-bit encoding)
@@ -792,7 +811,7 @@ COPY_VECTORS__done:
 	.org 0xFF8490 - 0xFE0000, 0xFF
 
 HALT_LOOP:
-	res_dd8 0, 0x38	; Disable serial
+	res_dd8 0, PE	; Disable serial
 HALT_LOOP__halt:
 	halt	; Halt CPU
 	jr HALT_LOOP__halt	; Loop forever if we wake (jump to halt, not start)
@@ -1030,7 +1049,7 @@ CmdHandler_Stub_Cmd6And7:
 
 INIT_DMA_SERIAL:
 	and_sd8b_im 0xE5, 0xF8	; Clear E5 bits
-	res_dd8 2, 0x80	; Watchdog mode
+	res_dd8 2, T8RUN	; Watchdog mode
 	lda_dd8l XBC, (0xEC)
 	ld a, (xbc)
 	and a, 0xF8
@@ -1046,7 +1065,7 @@ INIT_DMA_SERIAL:
 	and a, 0xF8
 	set 0, a
 	ld (xbc), a
-	ld (0x8A:8), 0x0A:io
+	ld (TREG2:8), 0x0A:io
 
 	; Set up DMA for inter-CPU latch at 0x120000
 	lda xwa, (0x120000:24)
@@ -1167,9 +1186,9 @@ SendData_Block:
 	ret z	; Yes - nothing to send
 	ld ix, 0:i3	; IX = timeout counter
 SendData_Block__wait_ready1:
-	bit_dd8 4, 0x34	; Check if other CPU ready
+	bit_dd8 4, PD	; Check if other CPU ready
 	jr z, SendData_Block__timeout1	; Not ready - check timeout
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (1302:16), 1; Set DMA sync flag
 	ld l, c	; L = byte count
 	dec 1, l	; L = count - 1
@@ -1178,14 +1197,14 @@ SendData_Block__wait_ready1:
 	ld (0x120000:24), a; Send command+count to main CPU
 	ld ix, 0:i3	; Reset timeout counter
 SendData_Block__wait_ready2:
-	bit_dd8 4, 0x34	; Check if main CPU acknowledged
+	bit_dd8 4, PD	; Check if main CPU acknowledged
 	jr nz, SendData_Block__timeout2	; Main CPU responded - check timeout
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	ldc_cr32 xde, 0x08	; DMA source = XDE
 	extpfx2 0xD9, 0x12	; Zero-extend BC (count)
 	ldc_cr16 bc, 0x48	; DMA count = BC
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	cp (1302:16), 0; Is DMA complete?
 	ret z	; Yes - return
 SendData_Block__wait_dma_done:
@@ -1203,7 +1222,7 @@ SendData_Block__timeout2:
 	inc 1, ix	; Increment counter
 	cp wa, 0xEA60	; Timeout limit
 	jr ule, SendData_Block__wait_ready2	; Keep waiting if not timed out
-	set_dd8 0, 0x34	; Set ready flag before returning
+	set_dd8 0, PD	; Set ready flag before returning
 	ret
 
 ; ------------------------------------------------------------------------------
@@ -1227,15 +1246,15 @@ SendData_Block__timeout2:
 SendCmd_E3:
 	ld bc, 0:i3	; BC = timeout counter
 SendCmd_E3__wait_ready:
-	bit_dd8 4, 0x34	; Check if main CPU ready
+	bit_dd8 4, PD	; Check if main CPU ready
 	jr z, SendCmd_E3__timeout1	; Not ready - check timeout
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (0x120000:24), 0xe3; Send E3 command to main CPU
 SendCmd_E3__wait_ack:
-	bit_dd8 4, 0x34	; Check for acknowledgment
+	bit_dd8 4, PD	; Check for acknowledgment
 	jr nz, SendCmd_E3__timeout2	; Got response - handle in timeout2
 SendCmd_E3__set_flag_ret:	; Success path AND timeout2 target
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	ret	; Done
 SendCmd_E3__timeout1:
 	ld wa, bc	; WA = timeout counter
@@ -1285,14 +1304,14 @@ SendParams_E2__timeout_wait:
 	cp (1302:16), 0; Check sync flag again
 	jr nz, SendParams_E2__timeout_wait	; Still not clear - keep waiting
 SendParams_E2__sync_cleared:
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (1302:16), 1; Set DMA sync flag
 	ld (0x120000:24), 0xe2; Send E2 command to main CPU
 	ld ix, 0:i3	; Reset timeout counter
 SendParams_E2__wait_cpu_ready:
-	bit_dd8 4, 0x34	; Check if main CPU ready
+	bit_dd8 4, PD	; Check if main CPU ready
 	jr nz, SendParams_E2__timeout2	; Not ready yet - check timeout
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	lda xhl, (1282:16); XHL = address of DMA parameter block
 	ld (xhl), xwa	; Store XWA parameter
 	ld (xhl + 4), xde	; Store XDE parameter
@@ -1301,7 +1320,7 @@ SendParams_E2__wait_cpu_ready:
 	ldw wa, 0xA	; WA = 10 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 10
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	set 7, (1278:16)	; Set DMA ready flag
 	cp (1302:16), 0; Is DMA complete?
 	ret z	; Yes - return
@@ -1314,7 +1333,7 @@ SendParams_E2__timeout2:
 	inc 1, ix	; Increment counter
 	cp hl, 0xEA60	; Timeout limit
 	jr ule, SendParams_E2__wait_cpu_ready	; Keep waiting if not timed out
-	set_dd8 0, 0x34	; Set ready flag before returning
+	set_dd8 0, PD	; Set ready flag before returning
 	ret
 
 ; ------------------------------------------------------------------------------
@@ -1358,16 +1377,16 @@ TwoPhase_Transfer__timeout_sync:
 TwoPhase_Transfer__sync_cleared:
 	ld iz, 0:i3	; Reset timeout counter
 TwoPhase_Transfer__wait_cpu_ready:
-	bit_dd8 4, 0x34	; Check if CPU ready
+	bit_dd8 4, PD	; Check if CPU ready
 	jrl z, TwoPhase_Transfer__timeout_ready1	; Not ready - timeout handler
-	res_dd8 0, 0x34	; Clear our ready flag
+	res_dd8 0, PD	; Clear our ready flag
 	ld (1302:16), 2; Set sync flag to E1 mode
 	ld (0x120000:24), 0xe1; Send E1 command
 	ld iz, 0:i3	; Reset timeout counter
 TwoPhase_Transfer__wait_ack:
-	bit_dd8 4, 0x34	; Check for acknowledgment
+	bit_dd8 4, PD	; Check for acknowledgment
 	jrl nz, TwoPhase_Transfer__timeout_ack	; Not acknowledged - timeout handler
-	set_dd8 0, 0x34	; Set our ready flag
+	set_dd8 0, PD	; Set our ready flag
 	; Phase 1: Set up first DMA transfer
 	lda xhl, (1342:16); XHL = 0x053E (second buffer)
 	ld (xhl), xwa	; Store XWA to buffer
@@ -1379,7 +1398,7 @@ TwoPhase_Transfer__wait_ack:
 	ld wa, 6:i3	; WA = 6 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 6
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	; Wait for first transfer to complete (sync flag = 1)
 	cp (1302:16), 1; Is sync flag = 1?
 	jr z, TwoPhase_Transfer__phase1_done	; Yes - phase 1 complete
@@ -1404,7 +1423,7 @@ TwoPhase_Transfer__delay1_done:
 	ld wa, (xwa + 4)	; WA = count from buffer+4
 	ldc_cr16 wa, 0x48	; DMA count = WA
 	ld (258:16), 22; Set DMA mode
-	set_dd8 2, 0x80	; Start DMA transfer
+	set_dd8 2, T8RUN	; Start DMA transfer
 	; Wait for second transfer to complete (sync flag = 0)
 	cp (1302:16), 0; Is sync flag = 0?
 	jr z, TwoPhase_Transfer__phase2_done	; Yes - phase 2 complete
@@ -1434,7 +1453,7 @@ TwoPhase_Transfer__timeout_ack:
 	inc 1, iz	; Increment counter
 	cp hl, 0xEA60	; Timeout limit
 	jrl ule, TwoPhase_Transfer__wait_ack	; Keep waiting if not timed out
-	set_dd8 0, 0x34	; Set ready flag before exit
+	set_dd8 0, PD	; Set ready flag before exit
 TwoPhase_Transfer__exit:
 	popw iz	; Restore IZ
 	ret
@@ -1473,7 +1492,7 @@ TwoPhase_Transfer__exit:
 
 InterCPU_RX_Handler:
 	push xwa
-	bit_dd8 2, 0x34	; Check serial status
+	bit_dd8 2, PD	; Check serial status
 	jr nz, InterCPU_RX_Handler__exit
 	ld a, (0x120000:24); Read command from main CPU
 	ld (1306:16), a; Save received byte
@@ -1518,7 +1537,7 @@ InterCPU_RX_Handler__default_cmd:
 InterCPU_RX_Handler__start_dma:
 	ld (256:16), 10; Trigger DMA
 InterCPU_RX_Handler__clear_flag:
-	res_dd8 1, 0x34
+	res_dd8 1, PD
 InterCPU_RX_Handler__exit:
 	pop xwa
 	reti
@@ -1540,7 +1559,7 @@ InterCPU_RX_Handler__exit:
 	.org 0xFF889A - 0xFE0000, 0xFF
 
 DMA_Complete_Handler:
-	res_dd8 2, 0x80	; Clear watchdog bit
+	res_dd8 2, T8RUN	; Clear watchdog bit
 	cp (1302:16), 1; State 1?
 	jr nz, DMA_Complete_Handler__not_state1
 	ld (1302:16), 0; -> State 0
@@ -1624,7 +1643,7 @@ CMD_Dispatch_Handler__state3:
 	; State 3: Set completion flags
 	ld (1308:16), 255
 	ld (1304:16), 0
-	set_dd8 1, 0x34
+	set_dd8 1, PD
 	set 7, (1364:16)
 	jr CMD_Dispatch_Handler__check_watchdog
 CMD_Dispatch_Handler__state4:
@@ -1632,14 +1651,14 @@ CMD_Dispatch_Handler__state4:
 	ld (1304:16), 0
 	res 7, (1278:16)
 CMD_Dispatch_Handler__set_flag_exit:
-	set_dd8 1, 0x34
+	set_dd8 1, PD
 CMD_Dispatch_Handler__check_watchdog:
-	bit_dd8 2, 0x80
+	bit_dd8 2, T8RUN
 	jr z, CMD_Dispatch_Handler__exit
-	res_dd8 2, 0x80
+	res_dd8 2, T8RUN
 	nop
 	nop
-	set_dd8 2, 0x80
+	set_dd8 2, T8RUN
 CMD_Dispatch_Handler__exit:
 	pop xwa
 	pop xbc
