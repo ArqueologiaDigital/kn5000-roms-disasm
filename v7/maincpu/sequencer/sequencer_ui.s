@@ -8,559 +8,61 @@
 
 InitializeYoko:
 	lda xsp, (xsp - 0x0e)
-	lda XBC, (XSP)
-	ld XWA,0x01600004
-	ld (XBC),XWA
-	lda xwa, (ClassProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe20cae:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xe208ec:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0167
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000c
-	ld (XBC),XWA
-	lda xwa, (ResEventProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe20e22:24)
-	ld (XBC+0x08),WA
-	lda xwa, (EvtName_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01c7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000d
-	ld (XBC),XWA
-	lda xwa, (ResMethodProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe2106a:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xe20e24:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01e7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002e
-	lda xwa, (0xe20260:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0127
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002e
-	lda xwa, (0xe2031c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0427
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe2106c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0107
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe21074:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0407
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001f
-	lda xwa, (0xe25042:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0147
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001f
-	lda xwa, (0xe250c2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0447
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002b
-	lda xwa, (0xe240ac:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x006f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002b
-	lda xwa, (0xe24578:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x036f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2415c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0070
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe246c8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0370
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe24190:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0071
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe2472e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0371
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe241c0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0072
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe24788:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0372
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe241e0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0073
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe247ca:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0373
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe24224:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0074
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe24844:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0374
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000d
-	lda xwa, (0xe24264:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0075
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000d
-	lda xwa, (0xe248cc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0375
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2429c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0076
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2493a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0376
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001e
-	lda xwa, (0xe242c0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0078
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001e
-	lda xwa, (0xe2497c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0378
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2433c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x007a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24a3e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x037a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24370:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0089
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24a94:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0389
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe24388:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe24abe:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe24390:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe24aca:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe243ec:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe24b80:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24460:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24c70:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe24478:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe24c9c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe24494:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0092
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe24cce:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0392
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe244a8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe24cf8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe244ac:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe24cfe:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe244c8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe24d32:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe244dc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24d58:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24510:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24de6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24544:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24e78:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e3
-	call RegisterObjectTable
+	RegObjTable 0x1600004, ClassProc, 0xe20cae, 0xe208ec, 0x167
+	RegObjTable 0x160000c, ResEventProc, 0xe20e22, EvtName_PtrTable, 0x1c7
+	RegObjTable 0x160000d, ResMethodProc, 0xe2106a, 0xe20e24, 0x1e7
+	RegObjTabl 0x1600002, ApFunctionProc, 0x2e, 0xe20260, 0x127
+	RegObjTabl 0x1600002, ApFunctionProc, 0x2e, 0xe2031c, 0x427
+	RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe2106c, 0x107
+	RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe21074, 0x407
+	RegObjTabl 0x1600003, MainFunctionProc, 0x1f, 0xe25042, 0x147
+	RegObjTabl 0x1600003, MainFunctionProc, 0x1f, 0xe250c2, 0x447
+	RegObjTabl 0x1600010, ViewableProc, 0x2b, 0xe240ac, 0x6f
+	RegObjTabl 0x160000f, ResNameProc, 0x2b, 0xe24578, 0x36f
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2415c, 0x70
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe246c8, 0x370
+	RegObjTabl 0x1600010, ViewableProc, 0xb, 0xe24190, 0x71
+	RegObjTabl 0x160000f, ResNameProc, 0xb, 0xe2472e, 0x371
+	RegObjTabl 0x1600010, ViewableProc, 0x7, 0xe241c0, 0x72
+	RegObjTabl 0x160000f, ResNameProc, 0x7, 0xe24788, 0x372
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe241e0, 0x73
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe247ca, 0x373
+	RegObjTabl 0x1600010, ViewableProc, 0xf, 0xe24224, 0x74
+	RegObjTabl 0x160000f, ResNameProc, 0xf, 0xe24844, 0x374
+	RegObjTabl 0x1600010, ViewableProc, 0xd, 0xe24264, 0x75
+	RegObjTabl 0x160000f, ResNameProc, 0xd, 0xe248cc, 0x375
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2429c, 0x76
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2493a, 0x376
+	RegObjTabl 0x1600010, ViewableProc, 0x1e, 0xe242c0, 0x78
+	RegObjTabl 0x160000f, ResNameProc, 0x1e, 0xe2497c, 0x378
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2433c, 0x7a
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24a3e, 0x37a
+	RegObjTabl 0x1600010, ViewableProc, 0x5, 0xe24370, 0x89
+	RegObjTabl 0x160000f, ResNameProc, 0x5, 0xe24a94, 0x389
+	RegObjTabl 0x1600010, ViewableProc, 0x1, 0xe24388, 0x8a
+	RegObjTabl 0x160000f, ResNameProc, 0x1, 0xe24abe, 0x38a
+	RegObjTabl 0x1600010, ViewableProc, 0x16, 0xe24390, 0x8b
+	RegObjTabl 0x160000f, ResNameProc, 0x16, 0xe24aca, 0x38b
+	RegObjTabl 0x1600010, ViewableProc, 0x1c, 0xe243ec, 0x8c
+	RegObjTabl 0x160000f, ResNameProc, 0x1c, 0xe24b80, 0x38c
+	RegObjTabl 0x1600010, ViewableProc, 0x5, 0xe24460, 0x8e
+	RegObjTabl 0x160000f, ResNameProc, 0x5, 0xe24c70, 0x38e
+	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe24478, 0x8f
+	RegObjTabl 0x160000f, ResNameProc, 0x6, 0xe24c9c, 0x38f
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe24494, 0x92
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe24cce, 0x392
+	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe244a8, 0xa7
+	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe24cf8, 0x3a7
+	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe244ac, 0xa9
+	RegObjTabl 0x160000f, ResNameProc, 0x6, 0xe24cfe, 0x3a9
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe244c8, 0xe0
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe24d32, 0x3e0
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe244dc, 0xe1
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24d58, 0x3e1
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe24510, 0xe2
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24de6, 0x3e2
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe24544, 0xe3
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24e78, 0x3e3
 	pushw 0x0007
 	pushw 0x00e2
 	pushw 0x4f10
@@ -5067,880 +4569,96 @@ IvExitTrSel_Epilogue:
 
 
 InitializeKubo:
-	lda xsp, (xsp - 0x0e)
-	lda XBC, (XSP)
-	ld XWA,0x01600004
-	ld (XBC),XWA
-	lda xwa, (ClassProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe27596:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xe27180:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0168
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000c
-	ld (XBC),XWA
-	lda xwa, (ResEventProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe275f8:24)
-	ld (XBC+0x08),WA
-	lda xwa, (EvtEffDraw_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01c8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000d
-	ld (XBC),XWA
-	lda xwa, (ResMethodProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (EffectsEditor_GapByte:24)
-	ld (XBC+0x08),WA
-	lda xwa, (MT_FuncName_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01e8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0049
-	lda xwa, (0xe26804:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0128
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0049
-	lda xwa, (0xe2692c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0428
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0x03df10:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0108
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0x03df14:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0408
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe3051c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0148
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe305d0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0448
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e624:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f0ac:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e658:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f0fa:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe2e68c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe2f148:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e724:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f232:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e758:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0080
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f280:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0380
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe2e78c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0081
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe2f2ce:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0381
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2e800:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0082
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2f3aa:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0382
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2e824:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0083
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2f3e0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0383
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000a
-	lda xwa, (0xe2e868:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0084
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000a
-	lda xwa, (0xe2f446:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0384
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2e894:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0085
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2f488:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0385
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe2e8fc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0086
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe2f560:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0386
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0018
-	lda xwa, (0xe2e92c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0087
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0018
-	lda xwa, (0xe2f5b2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0387
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e990:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0088
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f66a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0388
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2e9c4:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2f6c2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2e9d8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0090
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2f6e0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0390
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xe2ea20:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0091
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xe2f758:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0391
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2ea70:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0093
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2f7dc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0393
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2eadc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0094
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2f898:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0394
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001b
-	lda xwa, (0xe2eaf0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0095
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001b
-	lda xwa, (0xe2f8b6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0395
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2eb60:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0096
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2f966:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0396
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2eb84:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0097
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2f99c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0397
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2eb98:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0098
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2f9ba:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0398
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2ec04:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0099
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2fa64:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0399
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000e
-	lda xwa, (0xe2ec28:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000e
-	lda xwa, (0xe2fa9a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe2ec64:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe2fb02:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xe2ecc0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xe2fb9a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ed18:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fc28:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ed5c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fc9a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2eda0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2fd0c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ee08:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fdb4:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ee4c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fe24:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2ee90:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2fe96:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe2eed8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe2ff0c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2ef18:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2ff78:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2ef60:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2fff0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2ef64:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00aa
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2fff6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03aa
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xe2ef68:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00ab
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xe2fffc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03ab
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe2ef74:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00d6
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe3000e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03d6
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x003d
-	lda xwa, (0xe2efb4:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x003d
-	lda xwa, (0xe3009e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e7
-	call RegisterObjectTable
+	lda xsp, (xsp - 14)
+
+	RegObjTable 0x1600004, ClassProc, 0xe27596, 0xe27180, 0x168
+	RegObjTable 0x160000c, ResEventProc, 0xe275f8, EvtEffDraw_PtrTable, 0x1c8
+	RegObjTable 0x160000d, ResMethodProc, EffectsEditor_GapByte, MT_FuncName_PtrTable, 0x1e8
+	RegObjTabl 0x1600002, ApFunctionProc, 0x49, 0xe26804, 0x128
+	RegObjTabl 0x1600002, ApFunctionProc, 0x49, 0xe2692c, 0x428
+	RegObjTabl 0x1600001, FunctionProc, 0x0, 0x3df10, 0x108
+	RegObjTabl 0x1600001, FunctionProc, 0x0, 0x3df14, 0x408
+	RegObjTabl 0x1600003, MainFunctionProc, 0x2c, 0xe3051c, 0x148
+	RegObjTabl 0x1600003, MainFunctionProc, 0x2c, 0xe305d0, 0x448
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e624, 0xa
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f0ac, 0x30a
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e658, 0xb
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f0fa, 0x30b
+	RegObjTabl 0x1600010, ViewableProc, 0x25, 0xe2e68c, 0xc
+	RegObjTabl 0x160000f, ResNameProc, 0x25, 0xe2f148, 0x30c
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e724, 0xe
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f232, 0x30e
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e758, 0x80
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f280, 0x380
+	RegObjTabl 0x1600010, ViewableProc, 0x1c, 0xe2e78c, 0x81
+	RegObjTabl 0x160000f, ResNameProc, 0x1c, 0xe2f2ce, 0x381
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2e800, 0x82
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2f3aa, 0x382
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2e824, 0x83
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2f3e0, 0x383
+	RegObjTabl 0x1600010, ViewableProc, 0xa, 0xe2e868, 0x84
+	RegObjTabl 0x160000f, ResNameProc, 0xa, 0xe2f446, 0x384
+	RegObjTabl 0x1600010, ViewableProc, 0x19, 0xe2e894, 0x85
+	RegObjTabl 0x160000f, ResNameProc, 0x19, 0xe2f488, 0x385
+	RegObjTabl 0x1600010, ViewableProc, 0xb, 0xe2e8fc, 0x86
+	RegObjTabl 0x160000f, ResNameProc, 0xb, 0xe2f560, 0x386
+	RegObjTabl 0x1600010, ViewableProc, 0x18, 0xe2e92c, 0x87
+	RegObjTabl 0x160000f, ResNameProc, 0x18, 0xe2f5b2, 0x387
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e990, 0x88
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f66a, 0x388
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe2e9c4, 0x8d
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe2f6c2, 0x38d
+	RegObjTabl 0x1600010, ViewableProc, 0x11, 0xe2e9d8, 0x90
+	RegObjTabl 0x160000f, ResNameProc, 0x11, 0xe2f6e0, 0x390
+	RegObjTabl 0x1600010, ViewableProc, 0x13, 0xe2ea20, 0x91
+	RegObjTabl 0x160000f, ResNameProc, 0x13, 0xe2f758, 0x391
+	RegObjTabl 0x1600010, ViewableProc, 0x1a, 0xe2ea70, 0x93
+	RegObjTabl 0x160000f, ResNameProc, 0x1a, 0xe2f7dc, 0x393
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe2eadc, 0x94
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe2f898, 0x394
+	RegObjTabl 0x1600010, ViewableProc, 0x1b, 0xe2eaf0, 0x95
+	RegObjTabl 0x160000f, ResNameProc, 0x1b, 0xe2f8b6, 0x395
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2eb60, 0x96
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2f966, 0x396
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe2eb84, 0x97
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe2f99c, 0x397
+	RegObjTabl 0x1600010, ViewableProc, 0x1a, 0xe2eb98, 0x98
+	RegObjTabl 0x160000f, ResNameProc, 0x1a, 0xe2f9ba, 0x398
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2ec04, 0x99
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2fa64, 0x399
+	RegObjTabl 0x1600010, ViewableProc, 0xe, 0xe2ec28, 0x9a
+	RegObjTabl 0x160000f, ResNameProc, 0xe, 0xe2fa9a, 0x39a
+	RegObjTabl 0x1600010, ViewableProc, 0x16, 0xe2ec64, 0x9b
+	RegObjTabl 0x160000f, ResNameProc, 0x16, 0xe2fb02, 0x39b
+	RegObjTabl 0x1600010, ViewableProc, 0x15, 0xe2ecc0, 0x9c
+	RegObjTabl 0x160000f, ResNameProc, 0x15, 0xe2fb9a, 0x39c
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ed18, 0x9d
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fc28, 0x39d
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ed5c, 0x9e
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fc9a, 0x39e
+	RegObjTabl 0x1600010, ViewableProc, 0x19, 0xe2eda0, 0x9f
+	RegObjTabl 0x160000f, ResNameProc, 0x19, 0xe2fd0c, 0x39f
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ee08, 0xa0
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fdb4, 0x3a0
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ee4c, 0xa1
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fe24, 0x3a1
+	RegObjTabl 0x1600010, ViewableProc, 0x11, 0xe2ee90, 0xa2
+	RegObjTabl 0x160000f, ResNameProc, 0x11, 0xe2fe96, 0x3a2
+	RegObjTabl 0x1600010, ViewableProc, 0xf, 0xe2eed8, 0xa3
+	RegObjTabl 0x160000f, ResNameProc, 0xf, 0xe2ff0c, 0x3a3
+	RegObjTabl 0x1600010, ViewableProc, 0x11, 0xe2ef18, 0xa4
+	RegObjTabl 0x160000f, ResNameProc, 0x11, 0xe2ff78, 0x3a4
+	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe2ef60, 0xa8
+	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe2fff0, 0x3a8
+	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe2ef64, 0xaa
+	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe2fff6, 0x3aa
+	RegObjTabl 0x1600010, ViewableProc, 0x2, 0xe2ef68, 0xab
+	RegObjTabl 0x160000f, ResNameProc, 0x2, 0xe2fffc, 0x3ab
+	RegObjTabl 0x1600010, ViewableProc, 0xf, 0xe2ef74, 0xd6
+	RegObjTabl 0x160000f, ResNameProc, 0xf, 0xe3000e, 0x3d6
+	RegObjTabl 0x1600010, ViewableProc, 0x3d, 0xe2efb4, 0xe7
+	RegObjTabl 0x160000f, ResNameProc, 0x3d, 0xe3009e, 0x3e7
+
 	RegMode 0x8, 0xe3, 0x2f8, 0x7, 0x1200000, 0x1a000d6
 	RegMode 0x8, 0xe3, 0x308, 0x8, 0x1480004, 0x1a00080
 	RegMode 0x8, 0xe3, 0x310, 0x9, 0x1480007, 0x1a00083
