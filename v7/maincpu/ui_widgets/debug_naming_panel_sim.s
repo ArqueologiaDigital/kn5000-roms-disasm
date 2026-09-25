@@ -13,18 +13,22 @@
 ; each element, an ApFunction / Function / MainFunction table (slot
 ; 0x1xx) at procedures and its slot + 0x300 twin at their names. Each
 ; piece below starts at one such run of objects or at a label that
-; already existed. A widget record starts TT 00 6x 01 (TT = type byte);
-; +4 parent, +6 first child, +8 next sibling, +10 previous sibling are
-; element indices of the same table (0xffff = none), checked against
-; each other for every table (the Links result per table). Name strings
-; are NUL-terminated and 0xff-padded to even length. The first word of a
-; widget record is its CLASS ID 0x016S_KKKK: ClassProc
-; (ui/ui_widget_defs.s) takes (id >> 16) & 0xfff as a registry slot --
-; the Class table that RegObjTable 0x1600004 put there -- and 0x18 * (id
-; & 0xffff) into it. Each class definition gives the instance size (+8
-; allsize), and all 3,340 in-ROM widget records of v10 resolve to a
-; class and are at least that far apart (THE CLASS SYSTEM,
-; scripts/analysis/nakarest_objtab_map.py).
+; already existed. A widget record begins with the Viewable fields (the
+; firmware's own names): +0 class (class id), +4 super, +6 sub, +8 next,
+; +10 prev (element indices of the same table, 0xffff = none -- parent,
+; first child, next and previous sibling, checked against each other for
+; every table: the Links result per table), +12 flag, +14 rect (x1, y1,
+; x2, y2). Name strings are NUL-terminated and 0xff-padded to even
+; length. Strings a record's `X` field (str, title, caption, name)
+; points at are indexed too, so the bytes after a record are accounted
+; for (in v10, 4 of the 3,340 records are followed by bytes nothing
+; indexed starts at). The first word of a widget record is its CLASS ID
+; 0x016S_KKKK: ClassProc (ui/ui_widget_defs.s) takes (id >> 16) & 0xfff
+; as a registry slot -- the Class table that RegObjTable 0x1600004 put
+; there -- and 0x18 * (id & 0xffff) into it. Each class definition gives
+; the instance size (+8 allsize), and all 3,340 in-ROM widget records of
+; v10 resolve to a class and are at least that far apart (THE CLASS
+; SYSTEM, scripts/analysis/nakarest_objtab_map.py).
 ;
 ; Tables with objects in this file:
 ;
@@ -61,381 +65,243 @@
 ; RegisterObjectTable stores {class, proc, 13, table} at 0x27ed2 +
 ; 14*0x440.
 ; -----------------------------------------------------------------------------
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaDbg_PanelSimTitle
-; NakaDbg_PanelSimTitle  --  naka_debug_naming +0x0..+0x37c (ROM 0xeb2afe..0xeb2e7a), 892 bytes
-; Widget records of elements 2-22 of Viewable slot 0x0 (table 0xeb3374,
-; 51 entries, InitializeRoot), element 0 "PanelSimulator"; classes:
-; Label (32 B, id 0x0160002b) x7, AcTitleMenu (54 B, id 0x0160001d),
-; IvExitMode (26 B, id 0x01600048), AcWindowMenu (54 B, id 0x01600042),
-; Screen (34 B, id 0x01600033), Window (36 B, id 0x01600035),
-; DbDebugMenu (46 B, id 0x01600057), AcNamingWindow (36 B, id
-; 0x0160004b), AcIndexEditSw (40 B, id 0x0160001f) x6, PsCursorBox (40
-; B, id 0x0160004c).
-; -----------------------------------------------------------------------------
+
+; [nakarest] NakaDbg_PanelSimTitle  +0x0..+0x37c (0xeb2afe, 892 B)
+; [nakarest] widget record, element 2 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
+; [nakarest] InitializeRoot) ("PanelSimulator"): Label (32 B). text the records point at, in
+; [nakarest] Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot): "Panel Simulator
+; [nakarest] for HK" (Label.str of element 2). widget record, element 3 of Viewable slot 0x0
+; [nakarest] (table 0xeb3374, 51 entries, InitializeRoot) ("PanelSimulator"): AcTitleMenu (54
+; [nakarest] B). text the records point at, in Viewable slot 0x0 (table 0xeb3374, 51 entries,
+; [nakarest] InitializeRoot): "CHECK TITLE" (AcTitleMenu.str of element 3). widget records,
+; [nakarest] elements 4-5 of Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot)
+; [nakarest] ("PanelSimulator"): IvExitMode (26 B), AcWindowMenu (54 B). text the records point
+; [nakarest] at, in Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot): "DEBUG
+; [nakarest] WINDOW" (AcWindowMenu.str of element 5). widget records, elements 6-8 of Viewable
+; [nakarest] slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot) ("PanelSimulator"): Screen
+; [nakarest] (34 B), Window (36 B), Label (32 B). text the records point at, in Viewable slot
+; [nakarest] 0x0 (table 0xeb3374, 51 entries, InitializeRoot): "DEBUG TIME !" (Label.str of
+; [nakarest] element 8). widget records, elements 9-12 of Viewable slot 0x0 (table 0xeb3374, 51
+; [nakarest] entries, InitializeRoot) ("PanelSimulator"): DbDebugMenu (46 B), AcNamingWindow (36
+; [nakarest] B), AcIndexEditSw (40 B), Label (32 B). text the records point at, in Viewable slot
+; [nakarest] 0x0 (table 0xeb3374, 51 entries, InitializeRoot): "DEL" (Label.str of element 12).
+; [nakarest] widget records, elements 13-14 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
+; [nakarest] InitializeRoot) ("PanelSimulator"): AcIndexEditSw (40 B), Label (32 B). text the
+; [nakarest] records point at, in Viewable slot 0x0 (table 0xeb3374, 51 entries,
+; [nakarest] InitializeRoot): "INS" (Label.str of element 14). widget records, elements 15-16 of
+; [nakarest] Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot) ("PanelSimulator"):
+; [nakarest] AcIndexEditSw (40 B), Label (32 B). text the records point at, in Viewable slot 0x0
+; [nakarest] (table 0xeb3374, 51 entries, InitializeRoot): "CLR" (Label.str of element 16).
+; [nakarest] widget records, elements 17-18 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
+; [nakarest] InitializeRoot) ("PanelSimulator"): AcIndexEditSw (40 B), Label (32 B). text the
+; [nakarest] records point at, in Viewable slot 0x0 (table 0xeb3374, 51 entries,
+; [nakarest] InitializeRoot): "~8d ~8b" (Label.str of element 18). widget records, elements
+; [nakarest] 19-21 of Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot)
+; [nakarest] ("PanelSimulator"): AcIndexEditSw (40 B) x2, Label (32 B). text the records point
+; [nakarest] at, in Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot): "POSITION"
+; [nakarest] (Label.str of element 21). widget record, element 22 of Viewable slot 0x0 (table
+; [nakarest] 0xeb3374, 51 entries, InitializeRoot) ("PanelSimulator"): PsCursorBox (40 B).
 NakaDbg_PanelSimTitle:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x0, 0x37C
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaDbg_LowerCaseChars
-; NakaDbg_LowerCaseChars  --  naka_debug_naming +0x37c..+0x380 (ROM 0xeb2e7a..0xeb2e7e), 4 bytes
-; No RegObjTabl-registered table points at the start of these 4 bytes
-; (0xeb2e7a..0xeb2e7e); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaDbg_LowerCaseChars  +0x37c..+0x380 (0xeb2e7a, 4 B)
+; [nakarest] purpose not established: 4 bytes at 0xeb2e7a that no registered NAKA table points into
 NakaDbg_LowerCaseChars:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x37C, 0x4
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaDbg_LowerCaseChars2
-; NakaDbg_LowerCaseChars2  --  naka_debug_naming +0x380..+0x704 (ROM 0xeb2e7e..0xeb3202), 900 bytes
-; No RegObjTabl-registered table points at the start of these 12 bytes
-; (0xeb2e7e..0xeb2e8a); purpose not established by that route. Widget
-; records of elements 26-50 of Viewable slot 0x0 (table 0xeb3374, 51
-; entries, InitializeRoot), element 0 "PanelSimulator"; classes:
-; AcIndexEditSw (40 B, id 0x0160001f) x3, PsParaBox (36 B, id
-; 0x01600012), Window (36 B, id 0x01600035) x3, DbMemo (22 B, id
-; 0x01600046), AcTrackSwitch (36 B, id 0x01600059) x16, DbMemoryDump (26
-; B, id 0x0160005d).
-; -----------------------------------------------------------------------------
+; [nakarest] NakaDbg_LowerCaseChars2  +0x380..+0x704 (0xeb2e7e, 900 B)
+; [nakarest] purpose not established: 12 bytes at 0xeb2e7e that no registered NAKA table points into
+; [nakarest] widget records, elements 26-50 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
+; [nakarest] InitializeRoot) ("PanelSimulator"): AcIndexEditSw (40 B) x3, PsParaBox (36 B),
+; [nakarest] Window (36 B) x3, DbMemo (22 B), AcTrackSwitch (36 B) x16, DbMemoryDump (26 B).
 NakaDbg_LowerCaseChars2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x380, 0x384
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0x704
-; naka_debug_naming+0x704  --  naka_debug_naming +0x704..+0x876 (ROM 0xeb3202..0xeb3374), 370 bytes
-; Widget records of elements 0-8 of Viewable slot 0xff (table 0xeb3444,
-; 9 entries, InitializeRoot), element 0 "CheckTitle"; classes: TtlScreen
-; (42 B, id 0x01600034) x2, IvExitScreen (26 B, id 0x01600049) x3,
-; AcScreenMenu (54 B, id 0x01600041) x2, IvNaming (26 B, id 0x0160004d),
-; Screen (34 B, id 0x01600033).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0x704  +0x704..+0x876 (0xeb3202, 370 B)
+; [nakarest] widget record, element 0 of Viewable slot 0xff (table 0xeb3444, 9 entries,
+; [nakarest] InitializeRoot) ("CheckTitle"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0xff (table 0xeb3444, 9 entries, InitializeRoot): "CHECK TITLE"
+; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0xff
+; [nakarest] (table 0xeb3444, 9 entries, InitializeRoot) ("CheckTitle"): IvExitScreen (26 B),
+; [nakarest] AcScreenMenu (54 B). text the records point at, in Viewable slot 0xff (table
+; [nakarest] 0xeb3444, 9 entries, InitializeRoot): "Naming" (AcScreenMenu.str of element 2).
+; [nakarest] widget record, element 3 of Viewable slot 0xff (table 0xeb3444, 9 entries,
+; [nakarest] InitializeRoot) ("CheckTitle"): AcScreenMenu (54 B). text the records point at, in
+; [nakarest] Viewable slot 0xff (table 0xeb3444, 9 entries, InitializeRoot): "Wall"
+; [nakarest] (AcScreenMenu.str of element 3). widget record, element 4 of Viewable slot 0xff
+; [nakarest] (table 0xeb3444, 9 entries, InitializeRoot) ("CheckTitle"): TtlScreen (42 B). text
+; [nakarest] the records point at, in Viewable slot 0xff (table 0xeb3444, 9 entries,
+; [nakarest] InitializeRoot): "Check Naming" (TtlScreen.title of element 4). widget records,
+; [nakarest] elements 5-8 of Viewable slot 0xff (table 0xeb3444, 9 entries, InitializeRoot)
+; [nakarest] ("CheckTitle"): IvNaming (26 B), IvExitScreen (26 B) x2, Screen (34 B).
 	.incbin "includes/generated/naka_debug_naming.bin", 0x704, 0x172
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0x876
-; naka_debug_naming+0x876  --  naka_debug_naming +0x876..+0x946 (ROM 0xeb3374..0xeb3444), 208 bytes
-; The table itself: Viewable slot 0x0 (table 0xeb3374, 51 entries,
-; InitializeRoot) -- 51 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0x876  +0x876..+0x946 (0xeb3374, 208 B)
+; [nakarest] the table itself: Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot),
+; [nakarest] 51 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_debug_naming.bin", 0x876, 0xD0
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0x946
-; naka_debug_naming+0x946  --  naka_debug_naming +0x946..+0x96e (ROM 0xeb3444..0xeb346c), 40 bytes
-; The table itself: Viewable slot 0xff (table 0xeb3444, 9 entries,
-; InitializeRoot) -- 9 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0x946  +0x946..+0x96e (0xeb3444, 40 B)
+; [nakarest] the table itself: Viewable slot 0xff (table 0xeb3444, 9 entries, InitializeRoot), 9
+; [nakarest] entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_debug_naming.bin", 0x946, 0x28
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0x96e
-; naka_debug_naming+0x96e  --  naka_debug_naming +0x96e..+0xa40 (ROM 0xeb346c..0xeb353e), 210 bytes
-; The table itself: ResName slot 0x300 (table 0xeb346c, 51 entries,
-; InitializeRoot) -- 51 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0x96e  +0x96e..+0xa40 (0xeb346c, 210 B)
+; [nakarest] the table itself: ResName slot 0x300 (table 0xeb346c, 51 entries, InitializeRoot),
+; [nakarest] 51 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_debug_naming.bin", 0x96E, 0xD2
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0xa40
-; naka_debug_naming+0xa40  --  naka_debug_naming +0xa40..+0xb2c (ROM 0xeb353e..0xeb362a), 236 bytes
-; Name strings of elements 0-50 of ResName slot 0x300 (table 0xeb346c,
-; 51 entries, InitializeRoot), names for Viewable slot 0x0: "",
-; "MemDumpWindow", "", "", "", "", ....
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0xa40  +0xa40..+0xb2c (0xeb353e, 236 B)
+; [nakarest] name strings, entries 0-50 of ResName slot 0x300 (table 0xeb346c, 51 entries,
+; [nakarest] InitializeRoot) (names for Viewable slot 0x0): "", "MemDumpWindow", "", "", "", "",
+; [nakarest] ....
 	.incbin "includes/generated/naka_debug_naming.bin", 0xA40, 0xEC
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0xb2c
-; naka_debug_naming+0xb2c  --  naka_debug_naming +0xb2c..+0xb56 (ROM 0xeb362a..0xeb3654), 42 bytes
-; The table itself: ResName slot 0x3ff (table 0xeb362a, 9 entries,
-; InitializeRoot) -- 9 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0xb2c  +0xb2c..+0xb56 (0xeb362a, 42 B)
+; [nakarest] the table itself: ResName slot 0x3ff (table 0xeb362a, 9 entries, InitializeRoot), 9
+; [nakarest] entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_debug_naming.bin", 0xB2C, 0x2A
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0xb56
-; naka_debug_naming+0xb56  --  naka_debug_naming +0xb56..+0xb9a (ROM 0xeb3654..0xeb3698), 68 bytes
-; Name strings of elements 0-8 of ResName slot 0x3ff (table 0xeb362a, 9
-; entries, InitializeRoot), names for Viewable slot 0xff: "",
-; "CheckWall", "", "", "CheckNaming", "", ....
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0xb56  +0xb56..+0xb9a (0xeb3654, 68 B)
+; [nakarest] name strings, entries 0-8 of ResName slot 0x3ff (table 0xeb362a, 9 entries,
+; [nakarest] InitializeRoot) (names for Viewable slot 0xff): "", "CheckWall", "", "",
+; [nakarest] "CheckNaming", "", ....
 	.incbin "includes/generated/naka_debug_naming.bin", 0xB56, 0x44
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0xb9a
-; naka_debug_naming+0xb9a  --  naka_debug_naming +0xb9a..+0xbd2 (ROM 0xeb3698..0xeb36d0), 56 bytes
-; The table itself: MainFunction slot 0x140 (table 0xeb3698, 13 entries,
-; InitializeRoot) -- 13 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0xb9a  +0xb9a..+0xbd2 (0xeb3698, 56 B)
+; [nakarest] the table itself: MainFunction slot 0x140 (table 0xeb3698, 13 entries,
+; [nakarest] InitializeRoot), 13 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_debug_naming.bin", 0xB9A, 0x38
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0xbd2
-; naka_debug_naming+0xbd2  --  naka_debug_naming +0xbd2..+0xc0c (ROM 0xeb36d0..0xeb370a), 58 bytes
-; The table itself: MainFunction slot 0x440 (table 0xeb36d0, 13 entries,
-; InitializeRoot) -- 13 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0xbd2  +0xbd2..+0xc0c (0xeb36d0, 58 B)
+; [nakarest] the table itself: MainFunction slot 0x440 (table 0xeb36d0, 13 entries,
+; [nakarest] InitializeRoot), 13 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_debug_naming.bin", 0xBD2, 0x3A
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_debug_naming+0xc0c
-; naka_debug_naming+0xc0c  --  naka_debug_naming +0xc0c..+0x10e0 (ROM 0xeb370a..0xeb3bde), 1236 bytes
-; Name strings of elements 0-12 of MainFunction slot 0x440 (table
-; 0xeb36d0, 13 entries, InitializeRoot), names for MainFunction slot
-; 0x140: "MainTaskControl", "DirmdTitleFunc", "MainTrSwControl",
-; "CheckTitleFunc", "MainRamControl", "MainBitControl", ....
-; -----------------------------------------------------------------------------
+; [nakarest] naka_debug_naming+0xc0c  +0xc0c..+0x10e0 (0xeb370a, 1236 B)
+; [nakarest] name strings, entries 0-12 of MainFunction slot 0x440 (table 0xeb36d0, 13 entries,
+; [nakarest] InitializeRoot) (names for MainFunction slot 0x140): "MainTaskControl",
+; [nakarest] "DirmdTitleFunc", "MainTrSwControl", "CheckTitleFunc", "MainRamControl",
+; [nakarest] "MainBitControl", ....
 	.incbin "includes/generated/naka_debug_naming.bin", 0xC0C, 0x4D4
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette1
-; NakaColor_Palette1  --  naka_debug_naming +0x10e0..+0x14e0 (ROM 0xeb3bde..0xeb3fde), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb3bde..0xeb3fde); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette1  +0x10e0..+0x14e0 (0xeb3bde, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb3bde that no registered NAKA table points into
 NakaColor_Palette1:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x10E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette2
-; NakaColor_Palette2  --  naka_debug_naming +0x14e0..+0x18e0 (ROM 0xeb3fde..0xeb43de), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb3fde..0xeb43de); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette2  +0x14e0..+0x18e0 (0xeb3fde, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb3fde that no registered NAKA table points into
 NakaColor_Palette2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x14E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette3
-; NakaColor_Palette3  --  naka_debug_naming +0x18e0..+0x1ce0 (ROM 0xeb43de..0xeb47de), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb43de..0xeb47de); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette3  +0x18e0..+0x1ce0 (0xeb43de, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb43de that no registered NAKA table points into
 NakaColor_Palette3:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x18E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette4
-; NakaColor_Palette4  --  naka_debug_naming +0x1ce0..+0x20e0 (ROM 0xeb47de..0xeb4bde), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb47de..0xeb4bde); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette4  +0x1ce0..+0x20e0 (0xeb47de, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb47de that no registered NAKA table points into
 NakaColor_Palette4:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x1CE0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette5
-; NakaColor_Palette5  --  naka_debug_naming +0x20e0..+0x24e0 (ROM 0xeb4bde..0xeb4fde), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb4bde..0xeb4fde); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette5  +0x20e0..+0x24e0 (0xeb4bde, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb4bde that no registered NAKA table points into
 NakaColor_Palette5:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x20E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette6
-; NakaColor_Palette6  --  naka_debug_naming +0x24e0..+0x28e0 (ROM 0xeb4fde..0xeb53de), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb4fde..0xeb53de); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette6  +0x24e0..+0x28e0 (0xeb4fde, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb4fde that no registered NAKA table points into
 NakaColor_Palette6:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x24E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette7
-; NakaColor_Palette7  --  naka_debug_naming +0x28e0..+0x2ce0 (ROM 0xeb53de..0xeb57de), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb53de..0xeb57de); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette7  +0x28e0..+0x2ce0 (0xeb53de, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb53de that no registered NAKA table points into
 NakaColor_Palette7:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x28E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette8
-; NakaColor_Palette8  --  naka_debug_naming +0x2ce0..+0x30e0 (ROM 0xeb57de..0xeb5bde), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb57de..0xeb5bde); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette8  +0x2ce0..+0x30e0 (0xeb57de, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb57de that no registered NAKA table points into
 NakaColor_Palette8:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x2CE0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette9
-; NakaColor_Palette9  --  naka_debug_naming +0x30e0..+0x34e0 (ROM 0xeb5bde..0xeb5fde), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb5bde..0xeb5fde); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette9  +0x30e0..+0x34e0 (0xeb5bde, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb5bde that no registered NAKA table points into
 NakaColor_Palette9:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x30E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_Palette10
-; NakaColor_Palette10  --  naka_debug_naming +0x34e0..+0x38e0 (ROM 0xeb5fde..0xeb63de), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb5fde..0xeb63de); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_Palette10  +0x34e0..+0x38e0 (0xeb5fde, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb5fde that no registered NAKA table points into
 NakaColor_Palette10:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x34E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaColor_PaletteBlank
-; NakaColor_PaletteBlank  --  naka_debug_naming +0x38e0..+0x3ce0 (ROM 0xeb63de..0xeb67de), 1024 bytes
-; No RegObjTabl-registered table points at the start of these 1024 bytes
-; (0xeb63de..0xeb67de); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaColor_PaletteBlank  +0x38e0..+0x3ce0 (0xeb63de, 1024 B)
+; [nakarest] purpose not established: 1024 bytes at 0xeb63de that no registered NAKA table points into
 NakaColor_PaletteBlank:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x38E0, 0x400
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_FontEntry0
-; NakaProp_FontEntry0  --  naka_debug_naming +0x3ce0..+0x3cf4 (ROM 0xeb67de..0xeb67f2), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb67de..0xeb67f2); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_FontEntry0  +0x3ce0..+0x3cf4 (0xeb67de, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb67de that no registered NAKA table points into
 NakaProp_FontEntry0:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3CE0, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_FontEntry1
-; NakaProp_FontEntry1  --  naka_debug_naming +0x3cf4..+0x3d08 (ROM 0xeb67f2..0xeb6806), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb67f2..0xeb6806); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_FontEntry1  +0x3cf4..+0x3d08 (0xeb67f2, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb67f2 that no registered NAKA table points into
 NakaProp_FontEntry1:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3CF4, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_FontEntry2
-; NakaProp_FontEntry2  --  naka_debug_naming +0x3d08..+0x3d1c (ROM 0xeb6806..0xeb681a), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb6806..0xeb681a); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_FontEntry2  +0x3d08..+0x3d1c (0xeb6806, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb6806 that no registered NAKA table points into
 NakaProp_FontEntry2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D08, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaInst_False
-; NakaInst_False  --  naka_debug_naming +0x3d1c..+0x3d4c (ROM 0xeb681a..0xeb684a), 48 bytes
-; No RegObjTabl-registered table points at the start of these 48 bytes
-; (0xeb681a..0xeb684a); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaInst_False  +0x3d1c..+0x3d4c (0xeb681a, 48 B)
+; [nakarest] purpose not established: 48 bytes at 0xeb681a that no registered NAKA table points into
 NakaInst_False:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D1C, 0x30
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry1
-; NakaProp_BoolEntry1  --  naka_debug_naming +0x3d4c..+0x3d60 (ROM 0xeb684a..0xeb685e), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb684a..0xeb685e); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry1  +0x3d4c..+0x3d60 (0xeb684a, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb684a that no registered NAKA table points into
 NakaProp_BoolEntry1:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D4C, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry2
-; NakaProp_BoolEntry2  --  naka_debug_naming +0x3d60..+0x3d74 (ROM 0xeb685e..0xeb6872), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb685e..0xeb6872); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry2  +0x3d60..+0x3d74 (0xeb685e, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb685e that no registered NAKA table points into
 NakaProp_BoolEntry2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D60, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry3
-; NakaProp_BoolEntry3  --  naka_debug_naming +0x3d74..+0x3d88 (ROM 0xeb6872..0xeb6886), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb6872..0xeb6886); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry3  +0x3d74..+0x3d88 (0xeb6872, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb6872 that no registered NAKA table points into
 NakaProp_BoolEntry3:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D74, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry4
-; NakaProp_BoolEntry4  --  naka_debug_naming +0x3d88..+0x3d9c (ROM 0xeb6886..0xeb689a), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb6886..0xeb689a); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry4  +0x3d88..+0x3d9c (0xeb6886, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb6886 that no registered NAKA table points into
 NakaProp_BoolEntry4:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D88, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry5
-; NakaProp_BoolEntry5  --  naka_debug_naming +0x3d9c..+0x3db0 (ROM 0xeb689a..0xeb68ae), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb689a..0xeb68ae); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry5  +0x3d9c..+0x3db0 (0xeb689a, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb689a that no registered NAKA table points into
 NakaProp_BoolEntry5:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D9C, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry6
-; NakaProp_BoolEntry6  --  naka_debug_naming +0x3db0..+0x3dc4 (ROM 0xeb68ae..0xeb68c2), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb68ae..0xeb68c2); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry6  +0x3db0..+0x3dc4 (0xeb68ae, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb68ae that no registered NAKA table points into
 NakaProp_BoolEntry6:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DB0, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry7
-; NakaProp_BoolEntry7  --  naka_debug_naming +0x3dc4..+0x3dd8 (ROM 0xeb68c2..0xeb68d6), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb68c2..0xeb68d6); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry7  +0x3dc4..+0x3dd8 (0xeb68c2, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb68c2 that no registered NAKA table points into
 NakaProp_BoolEntry7:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DC4, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BoolEntry8
-; NakaProp_BoolEntry8  --  naka_debug_naming +0x3dd8..+0x3dec (ROM 0xeb68d6..0xeb68ea), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb68d6..0xeb68ea); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BoolEntry8  +0x3dd8..+0x3dec (0xeb68d6, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb68d6 that no registered NAKA table points into
 NakaProp_BoolEntry8:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DD8, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_CFlagEntry
-; NakaProp_CFlagEntry  --  naka_debug_naming +0x3dec..+0x3e24 (ROM 0xeb68ea..0xeb6922), 56 bytes
-; No RegObjTabl-registered table points at the start of these 56 bytes
-; (0xeb68ea..0xeb6922); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_CFlagEntry  +0x3dec..+0x3e24 (0xeb68ea, 56 B)
+; [nakarest] purpose not established: 56 bytes at 0xeb68ea that no registered NAKA table points into
 NakaProp_CFlagEntry:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DEC, 0x38
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_VisFlag_Header
-; NakaProp_VisFlag_Header  --  naka_debug_naming +0x3e24..+0x3e2e (ROM 0xeb6922..0xeb692c), 10 bytes
-; No RegObjTabl-registered table points at the start of these 10 bytes
-; (0xeb6922..0xeb692c); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_VisFlag_Header  +0x3e24..+0x3e2e (0xeb6922, 10 B)
+; [nakarest] purpose not established: 10 bytes at 0xeb6922 that no registered NAKA table points into
 NakaProp_VisFlag_Header:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3E24, 0xA
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_VisFlag_Chain
-; NakaProp_VisFlag_Chain  --  naka_debug_naming +0x3e2e..+0x40d2 (ROM 0xeb692c..0xeb6bd0), 676 bytes
-; No RegObjTabl-registered table points at the start of these 676 bytes
-; (0xeb692c..0xeb6bd0); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_VisFlag_Chain  +0x3e2e..+0x40d2 (0xeb692c, 676 B)
+; [nakarest] purpose not established: 676 bytes at 0xeb692c that no registered NAKA table points into
 NakaProp_VisFlag_Chain:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3E2E, 0x2A4
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_BorderDefs
-; NakaProp_BorderDefs  --  naka_debug_naming +0x40d2..+0x426e (ROM 0xeb6bd0..0xeb6d6c), 412 bytes
-; No RegObjTabl-registered table points at the start of these 412 bytes
-; (0xeb6bd0..0xeb6d6c); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_BorderDefs  +0x40d2..+0x426e (0xeb6bd0, 412 B)
+; [nakarest] purpose not established: 412 bytes at 0xeb6bd0 that no registered NAKA table points into
 NakaProp_BorderDefs:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x40D2, 0x19C
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_Align_Header
-; NakaProp_Align_Header  --  naka_debug_naming +0x426e..+0x4282 (ROM 0xeb6d6c..0xeb6d80), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb6d6c..0xeb6d80); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_Align_Header  +0x426e..+0x4282 (0xeb6d6c, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb6d6c that no registered NAKA table points into
 NakaProp_Align_Header:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x426E, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_Align_PtrEntry
-; NakaProp_Align_PtrEntry  --  naka_debug_naming +0x4282..+0x42d8 (ROM 0xeb6d80..0xeb6dd6), 86 bytes
-; No RegObjTabl-registered table points at the start of these 86 bytes
-; (0xeb6d80..0xeb6dd6); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_Align_PtrEntry  +0x4282..+0x42d8 (0xeb6d80, 86 B)
+; [nakarest] purpose not established: 86 bytes at 0xeb6d80 that no registered NAKA table points into
 NakaProp_Align_PtrEntry:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x4282, 0x56
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_EditSwitch_Chain
-; NakaProp_EditSwitch_Chain  --  naka_debug_naming +0x42d8..+0x457c (ROM 0xeb6dd6..0xeb707a), 676 bytes
-; No RegObjTabl-registered table points at the start of these 676 bytes
-; (0xeb6dd6..0xeb707a); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_EditSwitch_Chain  +0x42d8..+0x457c (0xeb6dd6, 676 B)
+; [nakarest] purpose not established: 676 bytes at 0xeb6dd6 that no registered NAKA table points into
 NakaProp_EditSwitch_Chain:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x42D8, 0x2A4
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaInst_LM_RightDown
-; NakaInst_LM_RightDown  --  naka_debug_naming +0x457c..+0x45dc (ROM 0xeb707a..0xeb70da), 96 bytes
-; No RegObjTabl-registered table points at the start of these 96 bytes
-; (0xeb707a..0xeb70da); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaInst_LM_RightDown  +0x457c..+0x45dc (0xeb707a, 96 B)
+; [nakarest] purpose not established: 96 bytes at 0xeb707a that no registered NAKA table points into
 NakaInst_LM_RightDown:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x457C, 0x60
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_Frame_Header
-; NakaProp_Frame_Header  --  naka_debug_naming +0x45dc..+0x45f0 (ROM 0xeb70da..0xeb70ee), 20 bytes
-; No RegObjTabl-registered table points at the start of these 20 bytes
-; (0xeb70da..0xeb70ee); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_Frame_Header  +0x45dc..+0x45f0 (0xeb70da, 20 B)
+; [nakarest] purpose not established: 20 bytes at 0xeb70da that no registered NAKA table points into
 NakaProp_Frame_Header:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x45DC, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaProp_Frame_Chain
-; NakaProp_Frame_Chain  --  naka_debug_naming +0x45f0..+0x46c0 (ROM 0xeb70ee..0xeb71be), 208 bytes
-; No RegObjTabl-registered table points at the start of these 208 bytes
-; (0xeb70ee..0xeb71be); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaProp_Frame_Chain  +0x45f0..+0x46c0 (0xeb70ee, 208 B)
+; [nakarest] purpose not established: 208 bytes at 0xeb70ee that no registered NAKA table points into
 NakaProp_Frame_Chain:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x45F0, 0xD0
 ; External label offsets within the binary blob above.

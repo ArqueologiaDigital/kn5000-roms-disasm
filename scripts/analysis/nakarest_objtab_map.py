@@ -121,6 +121,7 @@ class Map:
         self.by_slot = {r['slot']: r for r in self.regs}
         self.addr = {}           # address -> list of (kind, reg, k)
         self._index()
+        self.index_texts()
 
     # ---------------------------------------------------------------- source
     def _val(self, tok):
@@ -254,6 +255,70 @@ class Map:
                     self.addr.setdefault(e, []).append(('record', r, k))
                 elif name in ('ResName', 'ResEvent', 'ResMethod') or r['slot'] >= 0x400:
                     self.addr.setdefault(e, []).append(('name', r, k))
+
+    def class_fields(self, c):
+        """[(offset, name, sigchar)] of every field of class c, inherited
+        first (Object contributes no prefix)."""
+        chain = []
+        while c is not None:
+            chain.append(c)
+            p = c['parent']
+            c = self.klass(p) if p not in (0xFFFFFFFF, 0x01600000) else None
+        out, off = [], 0
+        for c in reversed(chain):
+            for ch, name in zip(c['sig'], c['fields']):
+                out.append((off, name, ch))
+                off += SIG_SIZE.get(ch, 0)
+        return out
+
+    def strlen_even(self, a):
+        n = 0
+        while self.inrom(a + n) and self.u8(a + n) != 0:
+            n += 1
+        n += 1
+        return n + (n & 1)
+
+    def extent(self, kind, r, k, a):
+        """Byte length of the object of `kind` starting at `a` (0 = unknown)."""
+        if kind == 'record':
+            c = self.record_class(a)
+            return c['allsize'] if c else 0
+        if kind in ('name', 'classname', 'classsig', 'text'):
+            return self.strlen_even(a)
+        if kind == 'table':
+            return (24 if r['cls'] == 0x1600004 else 4) * r['count']
+        if kind == 'classdef':
+            return 24
+        if kind == 'propnames':
+            c = self.classes.get(((r['slot'] & 0xFFF) << 16) | k)
+            n = c['pn_count']
+            end = a + 4 * n
+            for i in range(n):
+                t = self.u32(a + 4 * i)
+                if a <= t < a + 4 * n + 256:
+                    end = max(end, t + self.strlen_even(t))
+            return end - a
+        return 0
+
+    def index_texts(self):
+        """Index the strings the widget records' `X` fields point at
+        (str, title, caption, name...) as ('text', reg, k) with the field name
+        in self.text_field[addr]."""
+        self.text_field = {}
+        for a, vs in list(self.addr.items()):
+            for kind, r, k in vs:
+                if kind != 'record' or not self.inrom(a):
+                    continue
+                c = self.record_class(a)
+                if not c:
+                    continue
+                for off, fname, ch in self.class_fields(c):
+                    if ch != 'X':
+                        continue
+                    t = self.u32(a + off)
+                    if self.inrom(t) and t != a:
+                        self.addr.setdefault(t, []).append(('text', r, k))
+                        self.text_field.setdefault(t, []).append((c['name'], fname, k))
 
     def klass(self, cid):
         """The class definition for a class id 0x016S_KKKK: table of Class

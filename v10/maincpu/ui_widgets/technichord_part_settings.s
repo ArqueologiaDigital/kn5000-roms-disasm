@@ -13,18 +13,22 @@
 ; each element, an ApFunction / Function / MainFunction table (slot
 ; 0x1xx) at procedures and its slot + 0x300 twin at their names. Each
 ; piece below starts at one such run of objects or at a label that
-; already existed. A widget record starts TT 00 6x 01 (TT = type byte);
-; +4 parent, +6 first child, +8 next sibling, +10 previous sibling are
-; element indices of the same table (0xffff = none), checked against
-; each other for every table (the Links result per table). Name strings
-; are NUL-terminated and 0xff-padded to even length. The first word of a
-; widget record is its CLASS ID 0x016S_KKKK: ClassProc
-; (ui/ui_widget_defs.s) takes (id >> 16) & 0xfff as a registry slot --
-; the Class table that RegObjTable 0x1600004 put there -- and 0x18 * (id
-; & 0xffff) into it. Each class definition gives the instance size (+8
-; allsize), and all 3,340 in-ROM widget records of v10 resolve to a
-; class and are at least that far apart (THE CLASS SYSTEM,
-; scripts/analysis/nakarest_objtab_map.py).
+; already existed. A widget record begins with the Viewable fields (the
+; firmware's own names): +0 class (class id), +4 super, +6 sub, +8 next,
+; +10 prev (element indices of the same table, 0xffff = none -- parent,
+; first child, next and previous sibling, checked against each other for
+; every table: the Links result per table), +12 flag, +14 rect (x1, y1,
+; x2, y2). Name strings are NUL-terminated and 0xff-padded to even
+; length. Strings a record's `X` field (str, title, caption, name)
+; points at are indexed too, so the bytes after a record are accounted
+; for (in v10, 4 of the 3,340 records are followed by bytes nothing
+; indexed starts at). The first word of a widget record is its CLASS ID
+; 0x016S_KKKK: ClassProc (ui/ui_widget_defs.s) takes (id >> 16) & 0xfff
+; as a registry slot -- the Class table that RegObjTable 0x1600004 put
+; there -- and 0x18 * (id & 0xffff) into it. Each class definition gives
+; the instance size (+8 allsize), and all 3,340 in-ROM widget records of
+; v10 resolve to a class and are at least that far apart (THE CLASS
+; SYSTEM, scripts/analysis/nakarest_objtab_map.py).
 ;
 ; Tables with objects in this file:
 ;
@@ -142,297 +146,686 @@
 ; RegisterObjectTable stores {class, proc, 4, table} at 0x27ed2 +
 ; 14*0x308.
 ; -----------------------------------------------------------------------------
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaInst_TECHNI_CHORD
-; NakaInst_TECHNI_CHORD  --  naka_technichord_part +0x0..+0xe (ROM 0xe81cce..0xe81cdc), 14 bytes
-; No RegObjTabl-registered table points at the start of these 14 bytes
-; (0xe81cce..0xe81cdc); purpose not established by that route.
-; -----------------------------------------------------------------------------
+
+; [nakarest] NakaInst_TECHNI_CHORD  +0x0..+0xe (0xe81cce, 14 B)
+; [nakarest] text the records point at, in Viewable slot 0x2 (table 0xe85470, 20 entries,
+; [nakarest] InitializeMurai): "TECHNI-CHORD" (AcTitleMenu.str of element 19).
 NakaInst_TECHNI_CHORD:
 	.incbin "includes/generated/naka_technichord_part.bin", 0x0, 0xE
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0xe
-; naka_technichord_part+0xe  --  naka_technichord_part +0xe..+0x1064 (ROM 0xe81cdc..0xe82d32), 4182 bytes
-; Widget records of elements 0-83 of Viewable slot 0x3 (table 0xe854c4,
-; 84 entries, InitializeMurai), element 0 "Sdpart"; classes: TtlScreen
-; (42 B, id 0x01600034), AcIndexEditSw (40 B, id 0x0160001f) x10, Line
-; (26 B, id 0x0160002e) x6, Label (32 B, id 0x0160002b) x2, PsParaBox
-; (36 B, id 0x01600012) x2, AcStrRadioBox (48 B, id 0x01600051) x8,
-; VwEditSwBox (44 B, id 0x0160003e) x8, IvSdpart (22 B, id 0x01610000),
-; Window (36 B, id 0x01600035) x9, AcLswPartEditBox (58 B, id
-; 0x01610001) x25, VwBox (28 B, id 0x01600011) x9, AcVolPartEditBox (62
-; B, id 0x01610002) x2, AcLswPartPan (36 B, id 0x0161001c).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0xe  +0xe..+0x1064 (0xe81cdc, 4182 B)
+; [nakarest] widget record, element 0 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "SOUND PART
+; [nakarest] SETTING" (TtlScreen.title of element 0). widget records, elements 1-9 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcIndexEditSw
+; [nakarest] (40 B) x2, Line (26 B) x6, Label (32 B). text the records point at, in Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "PART SELECT :" (Label.str
+; [nakarest] of element 9). widget records, elements 10-12 of Viewable slot 0x3 (table 0xe854c4,
+; [nakarest] 84 entries, InitializeMurai) ("Sdpart"): PsParaBox (36 B) x2, AcStrRadioBox (48 B).
+; [nakarest] text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "VOL" (AcStrRadioBox.str of element 12). widget record, element
+; [nakarest] 13 of Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"):
+; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "PAN" (AcStrRadioBox.str of element 13).
+; [nakarest] widget record, element 14 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcStrRadioBox (48 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "EFF"
+; [nakarest] (AcStrRadioBox.str of element 14). widget record, element 15 of Viewable slot 0x3
+; [nakarest] (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcStrRadioBox (48 B).
+; [nakarest] text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "SUS" (AcStrRadioBox.str of element 15). widget record, element
+; [nakarest] 16 of Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"):
+; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "KEY" (AcStrRadioBox.str of element 16).
+; [nakarest] widget record, element 17 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcStrRadioBox (48 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "TUN"
+; [nakarest] (AcStrRadioBox.str of element 17). widget record, element 18 of Viewable slot 0x3
+; [nakarest] (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcStrRadioBox (48 B).
+; [nakarest] text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "BND" (AcStrRadioBox.str of element 18). widget record, element
+; [nakarest] 19 of Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"):
+; [nakarest] AcStrRadioBox (48 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "OTH" (AcStrRadioBox.str of element 19).
+; [nakarest] widget record, element 20 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): VwEditSwBox (44 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): ""
+; [nakarest] (VwEditSwBox.str of element 20). widget record, element 21 of Viewable slot 0x3
+; [nakarest] (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): VwEditSwBox (44 B). text
+; [nakarest] the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "" (VwEditSwBox.str of element 21). widget record, element 22 of
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"):
+; [nakarest] VwEditSwBox (44 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "" (VwEditSwBox.str of element 22). widget
+; [nakarest] record, element 23 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): VwEditSwBox (44 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): ""
+; [nakarest] (VwEditSwBox.str of element 23). widget record, element 24 of Viewable slot 0x3
+; [nakarest] (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): VwEditSwBox (44 B). text
+; [nakarest] the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "" (VwEditSwBox.str of element 24). widget record, element 25 of
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"):
+; [nakarest] VwEditSwBox (44 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "" (VwEditSwBox.str of element 25). widget
+; [nakarest] record, element 26 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): VwEditSwBox (44 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): ""
+; [nakarest] (VwEditSwBox.str of element 26). widget record, element 27 of Viewable slot 0x3
+; [nakarest] (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): VwEditSwBox (44 B). text
+; [nakarest] the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "" (VwEditSwBox.str of element 27). widget records, elements
+; [nakarest] 28-30 of Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai)
+; [nakarest] ("Sdpart"): IvSdpart (22 B), Window (36 B), AcLswPartEditBox (58 B). text the
+; [nakarest] records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "PAN :" (AcLswPartEditBox.caption of element 30). widget record,
+; [nakarest] element 31 of Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai)
+; [nakarest] ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in Viewable slot
+; [nakarest] 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "REV. DEPTH :"
+; [nakarest] (AcLswPartEditBox.caption of element 31). widget record, element 32 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "DSP EFFECT :" (AcLswPartEditBox.caption of element 32).
+; [nakarest] widget record, element 33 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "DIG.EFFECT :"
+; [nakarest] (AcLswPartEditBox.caption of element 33). widget record, element 34 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "SUSTAIN :" (AcLswPartEditBox.caption of element 34).
+; [nakarest] widget records, elements 35-36 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): VwBox (28 B), AcLswPartEditBox (58 B). text the
+; [nakarest] records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "SUS LENGTH :" (AcLswPartEditBox.caption of element 36). widget
+; [nakarest] record, element 37 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "KEY SHIFT :"
+; [nakarest] (AcLswPartEditBox.caption of element 37). widget record, element 38 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "TUNING :" (AcLswPartEditBox.caption of element 38).
+; [nakarest] widget record, element 39 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "BEND RANGE :"
+; [nakarest] (AcLswPartEditBox.caption of element 39). widget record, element 40 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "GLIDE PEDAL:" (AcLswPartEditBox.caption of element 40).
+; [nakarest] widget record, element 41 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "SUST.PEDAL :"
+; [nakarest] (AcLswPartEditBox.caption of element 41). widget record, element 42 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcVolPartEditBox
+; [nakarest] (62 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "VOLUME :" (AcVolPartEditBox.caption of element 42).
+; [nakarest] widget records, elements 43-46 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): Window (36 B), AcIndexEditSw (40 B), VwBox (28 B),
+; [nakarest] AcVolPartEditBox (62 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "VOLUME :" (AcVolPartEditBox.caption of
+; [nakarest] element 46). widget records, elements 47-49 of Viewable slot 0x3 (table 0xe854c4,
+; [nakarest] 84 entries, InitializeMurai) ("Sdpart"): Window (36 B), VwBox (28 B),
+; [nakarest] AcLswPartEditBox (58 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "PAN =" (AcLswPartEditBox.caption of
+; [nakarest] element 49). widget record, element 50 of Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai) ("Sdpart"): Label (32 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "LEFT CENTER
+; [nakarest] RIGHT" (Label.str of element 50). widget records, elements 51-55 of Viewable slot
+; [nakarest] 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartPan (36 B),
+; [nakarest] AcIndexEditSw (40 B), VwBox (28 B), Window (36 B), AcLswPartEditBox (58 B). text
+; [nakarest] the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "REVERB DEPTH:" (AcLswPartEditBox.caption of element 55). widget
+; [nakarest] record, element 56 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "DSP EFFECT :"
+; [nakarest] (AcLswPartEditBox.caption of element 56). widget record, element 57 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "DIGITAL EFF.:" (AcLswPartEditBox.caption of element
+; [nakarest] 57). widget records, elements 58-62 of Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai) ("Sdpart"): AcIndexEditSw (40 B) x2, VwBox (28 B), Window
+; [nakarest] (36 B), AcLswPartEditBox (58 B). text the records point at, in Viewable slot 0x3
+; [nakarest] (table 0xe854c4, 84 entries, InitializeMurai): "SUSTAIN ON/OFF :"
+; [nakarest] (AcLswPartEditBox.caption of element 62). widget record, element 63 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "SUSTAIN LENGTH :" (AcLswPartEditBox.caption of element
+; [nakarest] 63). widget records, elements 64-66 of Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai) ("Sdpart"): VwBox (28 B), Window (36 B), AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "KEY SHIFT :" (AcLswPartEditBox.caption of element 66).
+; [nakarest] widget records, elements 67-70 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcIndexEditSw (40 B), VwBox (28 B), Window (36 B),
+; [nakarest] AcLswPartEditBox (58 B). text the records point at, in Viewable slot 0x3 (table
+; [nakarest] 0xe854c4, 84 entries, InitializeMurai): "TUNING :" (AcLswPartEditBox.caption of
+; [nakarest] element 70). widget records, elements 71-74 of Viewable slot 0x3 (table 0xe854c4,
+; [nakarest] 84 entries, InitializeMurai) ("Sdpart"): AcIndexEditSw (40 B), VwBox (28 B), Window
+; [nakarest] (36 B), AcLswPartEditBox (58 B). text the records point at, in Viewable slot 0x3
+; [nakarest] (table 0xe854c4, 84 entries, InitializeMurai): "PITCH BEND RANGE :"
+; [nakarest] (AcLswPartEditBox.caption of element 74). widget records, elements 75-78 of
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"):
+; [nakarest] AcIndexEditSw (40 B), VwBox (28 B), Window (36 B), AcLswPartEditBox (58 B). text
+; [nakarest] the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "GLIDE PEDAL :" (AcLswPartEditBox.caption of element 78). widget
+; [nakarest] record, element 79 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "SUSTAIN PDL :"
+; [nakarest] (AcLswPartEditBox.caption of element 79). widget record, element 80 of Viewable
+; [nakarest] slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai) ("Sdpart"): AcLswPartEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai): "AFTER TOUCH :" (AcLswPartEditBox.caption of element
+; [nakarest] 80). widget records, elements 81-82 of Viewable slot 0x3 (table 0xe854c4, 84
+; [nakarest] entries, InitializeMurai) ("Sdpart"): AcIndexEditSw (40 B), AcLswPartEditBox (58
+; [nakarest] B). text the records point at, in Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai): "KEY SCALING :" (AcLswPartEditBox.caption of element 82). widget
+; [nakarest] record, element 83 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
+; [nakarest] InitializeMurai) ("Sdpart"): AcLswPartEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai): "PART EXP PDL:"
+; [nakarest] (AcLswPartEditBox.caption of element 83).
 	.incbin "includes/generated/naka_technichord_part.bin", 0xE, 0x1056
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x1064
-; naka_technichord_part+0x1064  --  naka_technichord_part +0x1064..+0x1132 (ROM 0xe82d32..0xe82e00), 206 bytes
-; Widget records of elements 0-3 of Viewable slot 0x4 (table 0xe85618, 4
-; entries, InitializeMurai), element 0 "Sdmtune"; classes: TtlScreen (42
-; B, id 0x01600034), AcLswEditBox (58 B, id 0x0160001a), Label (32 B, id
-; 0x0160002b), AcIndexWideES (42 B, id 0x01600022).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x1064  +0x1064..+0x1132 (0xe82d32, 206 B)
+; [nakarest] widget record, element 0 of Viewable slot 0x4 (table 0xe85618, 4 entries,
+; [nakarest] InitializeMurai) ("Sdmtune"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0x4 (table 0xe85618, 4 entries, InitializeMurai): "MASTER TUNING"
+; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0x4
+; [nakarest] (table 0xe85618, 4 entries, InitializeMurai) ("Sdmtune"): AcLswEditBox (58 B). text
+; [nakarest] the records point at, in Viewable slot 0x4 (table 0xe85618, 4 entries,
+; [nakarest] InitializeMurai): "MASTER TUNING :" (AcLswEditBox.caption of element 1). widget
+; [nakarest] record, element 2 of Viewable slot 0x4 (table 0xe85618, 4 entries, InitializeMurai)
+; [nakarest] ("Sdmtune"): Label (32 B). text the records point at, in Viewable slot 0x4 (table
+; [nakarest] 0xe85618, 4 entries, InitializeMurai): "Hz" (Label.str of element 2). widget
+; [nakarest] record, element 3 of Viewable slot 0x4 (table 0xe85618, 4 entries, InitializeMurai)
+; [nakarest] ("Sdmtune"): AcIndexWideES (42 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x1064, 0xCE
-; -----------------------------------------------------------------------------
-; [nakarest_retype] Naka_KeyScaling_NavTrail
-; Naka_KeyScaling_NavTrail  --  naka_technichord_part +0x1132..+0x1136 (ROM 0xe82e00..0xe82e04), 4 bytes
-; No RegObjTabl-registered table points at the start of these 4 bytes
-; (0xe82e00..0xe82e04); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] Naka_KeyScaling_NavTrail  +0x1132..+0x1136 (0xe82e00, 4 B)
+; [nakarest] Continues widget record, element 3 of Viewable slot 0x4 (table 0xe85618, 4 entries,
+; [nakarest] InitializeMurai) ("Sdmtune"): AcIndexWideES (42 B) (starts 0xe82dda, 4 of its 42
+; [nakarest] bytes are here or later).
 Naka_KeyScaling_NavTrail:
 	.incbin "includes/generated/naka_technichord_part.bin", 0x1132, 0x4
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x1136
-; naka_technichord_part+0x1136  --  naka_technichord_part +0x1136..+0x1996 (ROM 0xe82e04..0xe83664), 2144 bytes
-; Widget records of elements 0-53 of Viewable slot 0x5 (table 0xe8562c,
-; 54 entries, InitializeMurai), element 0 "Sdscltyp"; classes: TtlScreen
-; (42 B, id 0x01600034), AcWindowPage (36 B, id 0x01600025),
-; IvPageControl (28 B, id 0x01600028) x2, IvShowHide (26 B, id
-; 0x01600064), Window (36 B, id 0x01600035) x2, AcIndexWideES (42 B, id
-; 0x01600022) x4, AcLswEditBox (58 B, id 0x0160001a) x15, AcLswBox (44
-; B, id 0x01600013), Label (32 B, id 0x0160002b), Icon (26 B, id
-; 0x0160002d), VwBox (28 B, id 0x01600011) x12, Line (26 B, id
-; 0x0160002e) x12, IvSdscltyp2 (22 B, id 0x0161000a).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x1136  +0x1136..+0x1996 (0xe82e04, 2144 B)
+; [nakarest] widget record, element 0 of Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai) ("Sdscltyp"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai): "KEY SCALING"
+; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-7 of Viewable slot 0x5
+; [nakarest] (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"): AcWindowPage (36 B),
+; [nakarest] IvPageControl (28 B) x2, IvShowHide (26 B), Window (36 B), AcIndexWideES (42 B),
+; [nakarest] AcLswEditBox (58 B). text the records point at, in Viewable slot 0x5 (table
+; [nakarest] 0xe8562c, 54 entries, InitializeMurai): "SCALING TYPE :" (AcLswEditBox.caption of
+; [nakarest] element 7). widget record, element 8 of Viewable slot 0x5 (table 0xe8562c, 54
+; [nakarest] entries, InitializeMurai) ("Sdscltyp"): AcLswEditBox (58 B). text the records point
+; [nakarest] at, in Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai): "SCALING
+; [nakarest] SHIFT :" (AcLswEditBox.caption of element 8). widget records, elements 9-10 of
+; [nakarest] Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"):
+; [nakarest] AcLswBox (44 B), AcLswEditBox (58 B). text the records point at, in Viewable slot
+; [nakarest] 0x5 (table 0xe8562c, 54 entries, InitializeMurai): "SCALING MODE :"
+; [nakarest] (AcLswEditBox.caption of element 10). widget records, elements 11-12 of Viewable
+; [nakarest] slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"): Window (36 B),
+; [nakarest] Label (32 B). text the records point at, in Viewable slot 0x5 (table 0xe8562c, 54
+; [nakarest] entries, InitializeMurai): "USER KEY SCALING" (Label.str of element 12). widget
+; [nakarest] records, elements 13-17 of Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai) ("Sdscltyp"): Icon (26 B), AcIndexWideES (42 B) x3, AcLswEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0x5 (table 0xe8562c, 54
+; [nakarest] entries, InitializeMurai): "" (AcLswEditBox.caption of element 17). widget record,
+; [nakarest] element 18 of Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai)
+; [nakarest] ("Sdscltyp"): AcLswEditBox (58 B). text the records point at, in Viewable slot 0x5
+; [nakarest] (table 0xe8562c, 54 entries, InitializeMurai): "" (AcLswEditBox.caption of element
+; [nakarest] 18). widget record, element 19 of Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai) ("Sdscltyp"): AcLswEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai): ""
+; [nakarest] (AcLswEditBox.caption of element 19). widget record, element 20 of Viewable slot
+; [nakarest] 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"): AcLswEditBox (58
+; [nakarest] B). text the records point at, in Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai): "" (AcLswEditBox.caption of element 20). widget record, element
+; [nakarest] 21 of Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"):
+; [nakarest] AcLswEditBox (58 B). text the records point at, in Viewable slot 0x5 (table
+; [nakarest] 0xe8562c, 54 entries, InitializeMurai): "" (AcLswEditBox.caption of element 21).
+; [nakarest] widget record, element 22 of Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai) ("Sdscltyp"): AcLswEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai): ""
+; [nakarest] (AcLswEditBox.caption of element 22). widget record, element 23 of Viewable slot
+; [nakarest] 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"): AcLswEditBox (58
+; [nakarest] B). text the records point at, in Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai): "" (AcLswEditBox.caption of element 23). widget record, element
+; [nakarest] 24 of Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"):
+; [nakarest] AcLswEditBox (58 B). text the records point at, in Viewable slot 0x5 (table
+; [nakarest] 0xe8562c, 54 entries, InitializeMurai): "" (AcLswEditBox.caption of element 24).
+; [nakarest] widget record, element 25 of Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai) ("Sdscltyp"): AcLswEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai): ""
+; [nakarest] (AcLswEditBox.caption of element 25). widget record, element 26 of Viewable slot
+; [nakarest] 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"): AcLswEditBox (58
+; [nakarest] B). text the records point at, in Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai): "" (AcLswEditBox.caption of element 26). widget record, element
+; [nakarest] 27 of Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"):
+; [nakarest] AcLswEditBox (58 B). text the records point at, in Viewable slot 0x5 (table
+; [nakarest] 0xe8562c, 54 entries, InitializeMurai): "" (AcLswEditBox.caption of element 27).
+; [nakarest] widget record, element 28 of Viewable slot 0x5 (table 0xe8562c, 54 entries,
+; [nakarest] InitializeMurai) ("Sdscltyp"): AcLswEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai): ""
+; [nakarest] (AcLswEditBox.caption of element 28). widget records, elements 29-53 of Viewable
+; [nakarest] slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai) ("Sdscltyp"): VwBox (28 B)
+; [nakarest] x12, Line (26 B) x12, IvSdscltyp2 (22 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x1136, 0x860
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x1996
-; naka_technichord_part+0x1996  --  naka_technichord_part +0x1996..+0x1a48 (ROM 0xe83664..0xe83716), 178 bytes
-; Widget records of elements 0-2 of Viewable slot 0x7 (table 0xe85708, 3
-; entries, InitializeMurai), element 0 "Sdlfthld"; classes: TtlScreen
-; (42 B, id 0x01600034), AcIndexWideES (42 B, id 0x01600022),
-; AcLswEditBox (58 B, id 0x0160001a).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x1996  +0x1996..+0x1a48 (0xe83664, 178 B)
+; [nakarest] widget record, element 0 of Viewable slot 0x7 (table 0xe85708, 3 entries,
+; [nakarest] InitializeMurai) ("Sdlfthld"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0x7 (table 0xe85708, 3 entries, InitializeMurai): "LEFT HOLD SETTING"
+; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0x7
+; [nakarest] (table 0xe85708, 3 entries, InitializeMurai) ("Sdlfthld"): AcIndexWideES (42 B),
+; [nakarest] AcLswEditBox (58 B). text the records point at, in Viewable slot 0x7 (table
+; [nakarest] 0xe85708, 3 entries, InitializeMurai): "LEFT HOLD :" (AcLswEditBox.caption of
+; [nakarest] element 2).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x1996, 0xB2
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x1a48
-; naka_technichord_part+0x1a48  --  naka_technichord_part +0x1a48..+0x1ad6 (ROM 0xe83716..0xe837a4), 142 bytes
-; Widget records of elements 0-3 of Viewable slot 0x8 (table 0xe85718, 4
-; entries, InitializeMurai), element 0 "Sdmixer"; classes: TtlScreen (42
-; B, id 0x01600034), AcResetPage (36 B, id 0x01610016), AcPartMixer (36
-; B, id 0x0161000d), IvExit (22 B, id 0x01600047).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x1a48  +0x1a48..+0x1ad6 (0xe83716, 142 B)
+; [nakarest] widget record, element 0 of Viewable slot 0x8 (table 0xe85718, 4 entries,
+; [nakarest] InitializeMurai) ("Sdmixer"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0x8 (table 0xe85718, 4 entries, InitializeMurai): "MIXER"
+; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0x8
+; [nakarest] (table 0xe85718, 4 entries, InitializeMurai) ("Sdmixer"): AcResetPage (36 B),
+; [nakarest] AcPartMixer (36 B), IvExit (22 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x1A48, 0x8E
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x1ad6
-; naka_technichord_part+0x1ad6  --  naka_technichord_part +0x1ad6..+0x2026 (ROM 0xe837a4..0xe83cf4), 1360 bytes
-; Widget records of elements 0-28 of Viewable slot 0xd (table 0xe8572c,
-; 29 entries, InitializeMurai), element 0 "Sdtecd"; classes: TtlScreen
-; (42 B, id 0x01600034), AcWindowPage (36 B, id 0x01600025),
-; IvPageControl (28 B, id 0x01600028) x2, IvSdtecd (22 B, id
-; 0x01610008), IvIntEasySet (24 B, id 0x01600063), Window (36 B, id
-; 0x01600035) x2, AcIndexWideES (42 B, id 0x01600022) x2, AcIndexEditSw
-; (40 B, id 0x0160001f) x2, PsLabelBox (48 B, id 0x01610007) x14,
-; IvSdtecd1 (22 B, id 0x01610009), AcLswEditBox (58 B, id 0x0160001a),
-; Label (32 B, id 0x0160002b).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x1ad6  +0x1ad6..+0x2026 (0xe837a4, 1360 B)
+; [nakarest] widget record, element 0 of Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai) ("Sdtecd"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai): "TECHNI-CHORD"
+; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-10 of Viewable slot 0xd
+; [nakarest] (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"): AcWindowPage (36 B),
+; [nakarest] IvPageControl (28 B) x2, IvSdtecd (22 B), IvIntEasySet (24 B), Window (36 B),
+; [nakarest] AcIndexWideES (42 B), AcIndexEditSw (40 B) x2, PsLabelBox (48 B). text the records
+; [nakarest] point at, in Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai):
+; [nakarest] "CLOSE" (PsLabelBox.str of element 10). widget record, element 11 of Viewable slot
+; [nakarest] 0xd (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"): PsLabelBox (48 B).
+; [nakarest] text the records point at, in Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai): "OPEN 1" (PsLabelBox.str of element 11). widget record, element
+; [nakarest] 12 of Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"):
+; [nakarest] PsLabelBox (48 B). text the records point at, in Viewable slot 0xd (table 0xe8572c,
+; [nakarest] 29 entries, InitializeMurai): "OPEN 2" (PsLabelBox.str of element 12). widget
+; [nakarest] record, element 13 of Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text the records point at, in
+; [nakarest] Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai): "DUET 1"
+; [nakarest] (PsLabelBox.str of element 13). widget record, element 14 of Viewable slot 0xd
+; [nakarest] (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text
+; [nakarest] the records point at, in Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai): "DUET 2" (PsLabelBox.str of element 14). widget record, element
+; [nakarest] 15 of Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"):
+; [nakarest] PsLabelBox (48 B). text the records point at, in Viewable slot 0xd (table 0xe8572c,
+; [nakarest] 29 entries, InitializeMurai): "COUNTRY" (PsLabelBox.str of element 15). widget
+; [nakarest] record, element 16 of Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text the records point at, in
+; [nakarest] Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai): "THEATRE"
+; [nakarest] (PsLabelBox.str of element 16). widget record, element 17 of Viewable slot 0xd
+; [nakarest] (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text
+; [nakarest] the records point at, in Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai): "HYMN" (PsLabelBox.str of element 17). widget record, element 18
+; [nakarest] of Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"):
+; [nakarest] PsLabelBox (48 B). text the records point at, in Viewable slot 0xd (table 0xe8572c,
+; [nakarest] 29 entries, InitializeMurai): "BIG BAND BRASS" (PsLabelBox.str of element 18).
+; [nakarest] widget record, element 19 of Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text the records point at, in
+; [nakarest] Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai): "BIG BAND REEDS"
+; [nakarest] (PsLabelBox.str of element 19). widget record, element 20 of Viewable slot 0xd
+; [nakarest] (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text
+; [nakarest] the records point at, in Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai): "OCTAVE" (PsLabelBox.str of element 20). widget record, element
+; [nakarest] 21 of Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"):
+; [nakarest] PsLabelBox (48 B). text the records point at, in Viewable slot 0xd (table 0xe8572c,
+; [nakarest] 29 entries, InitializeMurai): "BLOCK" (PsLabelBox.str of element 21). widget
+; [nakarest] record, element 22 of Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text the records point at, in
+; [nakarest] Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai): "HARD ROCK"
+; [nakarest] (PsLabelBox.str of element 22). widget record, element 23 of Viewable slot 0xd
+; [nakarest] (table 0xe8572c, 29 entries, InitializeMurai) ("Sdtecd"): PsLabelBox (48 B). text
+; [nakarest] the records point at, in Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai): "FANFARE" (PsLabelBox.str of element 23). widget records,
+; [nakarest] elements 24-27 of Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai)
+; [nakarest] ("Sdtecd"): IvSdtecd1 (22 B), Window (36 B), AcIndexWideES (42 B), AcLswEditBox (58
+; [nakarest] B). text the records point at, in Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai): "ORCHESTRATOR :" (AcLswEditBox.caption of element 27). widget
+; [nakarest] record, element 28 of Viewable slot 0xd (table 0xe8572c, 29 entries,
+; [nakarest] InitializeMurai) ("Sdtecd"): Label (32 B). text the records point at, in Viewable
+; [nakarest] slot 0xd (table 0xe8572c, 29 entries, InitializeMurai): "VALUE" (Label.str of
+; [nakarest] element 28).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x1AD6, 0x550
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x2026
-; naka_technichord_part+0x2026  --  naka_technichord_part +0x2026..+0x20ba (ROM 0xe83cf4..0xe83d88), 148 bytes
-; Widget records of elements 0-3 of Viewable slot 0xa5 (table 0xe857a4,
-; 4 entries, InitializeMurai), element 0 "Sqmixer"; classes: TtlScreen
-; (42 B, id 0x01600034), AcResetPage (36 B, id 0x01610016), AcTrackMixer
-; (36 B, id 0x0161000e), IvExit (22 B, id 0x01600047).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x2026  +0x2026..+0x20ba (0xe83cf4, 148 B)
+; [nakarest] widget record, element 0 of Viewable slot 0xa5 (table 0xe857a4, 4 entries,
+; [nakarest] InitializeMurai) ("Sqmixer"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0xa5 (table 0xe857a4, 4 entries, InitializeMurai): "TRACK MIXER"
+; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-3 of Viewable slot 0xa5
+; [nakarest] (table 0xe857a4, 4 entries, InitializeMurai) ("Sqmixer"): AcResetPage (36 B),
+; [nakarest] AcTrackMixer (36 B), IvExit (22 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x2026, 0x94
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x20ba
-; naka_technichord_part+0x20ba  --  naka_technichord_part +0x20ba..+0x2338 (ROM 0xe83d88..0xe84006), 638 bytes
-; Widget records of elements 0-14 of Viewable slot 0xe4 (table 0xe857b8,
-; 15 entries, InitializeMurai), element 0 "Demofeature"; classes:
-; AcFdemoScreen (42 B, id 0x0161001f), AcPresentationBox (48 B, id
-; 0x0161001d) x2, Window (36 B, id 0x01600035) x2, IvDemofeature1 (22 B,
-; id 0x01610019), AcLanguageText (42 B, id 0x01600066), IvDemofeature2
-; (22 B, id 0x0161001a), PsParaBox (36 B, id 0x01600012) x2, Screen (34
-; B, id 0x01600033) x2, AcPresentationControl (36 B, id 0x01610018),
-; Label (32 B, id 0x0160002b) x2.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x20ba  +0x20ba..+0x2338 (0xe83d88, 638 B)
+; [nakarest] widget record, element 0 of Viewable slot 0xe4 (table 0xe857b8, 15 entries,
+; [nakarest] InitializeMurai) ("Demofeature"): AcFdemoScreen (42 B). text the records point at,
+; [nakarest] in Viewable slot 0xe4 (table 0xe857b8, 15 entries, InitializeMurai): "FEATURE
+; [nakarest] PRESENTATION" (AcFdemoScreen.title of element 0). widget record, element 1 of
+; [nakarest] Viewable slot 0xe4 (table 0xe857b8, 15 entries, InitializeMurai) ("Demofeature"):
+; [nakarest] AcPresentationBox (48 B). text the records point at, in Viewable slot 0xe4 (table
+; [nakarest] 0xe857b8, 15 entries, InitializeMurai): "Start the internal DEMO"
+; [nakarest] (AcPresentationBox.str of element 1). widget records, elements 2-7 of Viewable slot
+; [nakarest] 0xe4 (table 0xe857b8, 15 entries, InitializeMurai) ("Demofeature"): Window (36 B)
+; [nakarest] x2, IvDemofeature1 (22 B), AcLanguageText (42 B), IvDemofeature2 (22 B),
+; [nakarest] AcPresentationBox (48 B). text the records point at, in Viewable slot 0xe4 (table
+; [nakarest] 0xe857b8, 15 entries, InitializeMurai): "Start the loaded DEMO"
+; [nakarest] (AcPresentationBox.str of element 7). widget records, elements 8-11 of Viewable
+; [nakarest] slot 0xe4 (table 0xe857b8, 15 entries, InitializeMurai) ("Demofeature"): PsParaBox
+; [nakarest] (36 B), Screen (34 B), AcPresentationControl (36 B), Label (32 B). text the records
+; [nakarest] point at, in Viewable slot 0xe4 (table 0xe857b8, 15 entries, InitializeMurai):
+; [nakarest] "Presentation Mode" (Label.str of element 11). widget records, elements 12-13 of
+; [nakarest] Viewable slot 0xe4 (table 0xe857b8, 15 entries, InitializeMurai) ("Demofeature"):
+; [nakarest] Screen (34 B), Label (32 B). text the records point at, in Viewable slot 0xe4
+; [nakarest] (table 0xe857b8, 15 entries, InitializeMurai): "Loading Now...." (Label.str of
+; [nakarest] element 13). widget record, element 14 of Viewable slot 0xe4 (table 0xe857b8, 15
+; [nakarest] entries, InitializeMurai) ("Demofeature"): PsParaBox (36 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x20BA, 0x27E
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x2338
-; naka_technichord_part+0x2338  --  naka_technichord_part +0x2338..+0x2a16 (ROM 0xe84006..0xe846e4), 1758 bytes
-; Widget records of elements 0-43 of Viewable slot 0xea (table 0xe857f8,
-; 44 entries, InitializeMurai), element 0 "Drawbar"; classes: TtlScreen
-; (42 B, id 0x01600034), IvIntVari (24 B, id 0x01600062), AcIndexToggle
-; (44 B, id 0x0160004e) x3, Label (32 B, id 0x0160002b) x11, IvExit (22
-; B, id 0x01600047), IvPageOverWrite (28 B, id 0x01610010) x2, IvDrawbar
-; (22 B, id 0x01610011), AcDrawSetting (44 B, id 0x01610022), Window (36
-; B, id 0x01600035) x4, VwBox (28 B, id 0x01600011) x3, StringBox (38 B,
-; id 0x01600037), IvDrawbar1 (22 B, id 0x01610012), VwUserBitmapSp (26
-; B, id 0x0161001e), AcDrawEditBox (58 B, id 0x0161001b) x4,
-; AcIndexWideES (42 B, id 0x01600022), IvDrawbar2 (22 B, id 0x01610013),
-; AcDrawbarName (40 B, id 0x01610023), PsParaBox (36 B, id 0x01600012),
-; IvDrawbarNorm (22 B, id 0x01610014), Icon (26 B, id 0x0160002d) x2,
-; IvDrawbarSndE (22 B, id 0x01610015), AcTitleMenu (54 B, id
-; 0x0160001d).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x2338  +0x2338..+0x2a16 (0xe84006, 1758 B)
+; [nakarest] widget record, element 0 of Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai) ("Drawbar"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai): ""
+; [nakarest] (TtlScreen.title of element 0). widget records, elements 1-2 of Viewable slot 0xea
+; [nakarest] (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): IvIntVari (24 B),
+; [nakarest] AcIndexToggle (44 B). text the records point at, in Viewable slot 0xea (table
+; [nakarest] 0xe857f8, 44 entries, InitializeMurai): " 4'" (AcIndexToggle.stroff of element 2);
+; [nakarest] " 4'" (AcIndexToggle.stron of element 2). widget record, element 3 of Viewable slot
+; [nakarest] 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): AcIndexToggle (44
+; [nakarest] B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai): "2 '" (AcIndexToggle.stroff of element 3); "2 '"
+; [nakarest] (AcIndexToggle.stron of element 3). widget record, element 4 of Viewable slot 0xea
+; [nakarest] (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): Label (32 B). text the
+; [nakarest] records point at, in Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai): "2/3" (Label.str of element 4). widget record, element 5 of
+; [nakarest] Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): Label
+; [nakarest] (32 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "2/3" (Label.str of element 5). widget record, element 6
+; [nakarest] of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"):
+; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "PERCUSSIVE" (Label.str of element 6). widget records,
+; [nakarest] elements 7-8 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai)
+; [nakarest] ("Drawbar"): IvExit (22 B), Label (32 B). text the records point at, in Viewable
+; [nakarest] slot 0xea (table 0xe857f8, 44 entries, InitializeMurai): "TONE" (Label.str of
+; [nakarest] element 8). widget records, elements 9-12 of Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai) ("Drawbar"): IvPageOverWrite (28 B) x2, IvDrawbar (22 B),
+; [nakarest] AcDrawSetting (44 B). text the records point at, in Viewable slot 0xea (table
+; [nakarest] 0xe857f8, 44 entries, InitializeMurai): "DRAWBAR SETTING" (AcDrawSetting.stroff of
+; [nakarest] element 12); "DRAWBAR SETTING" (AcDrawSetting.stron of element 12). widget records,
+; [nakarest] elements 13-15 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai)
+; [nakarest] ("Drawbar"): Window (36 B), VwBox (28 B), StringBox (38 B). text the records point
+; [nakarest] at, in Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai): "16' 5 '
+; [nakarest] 8' 4' 2 ' 2' 1 '1 ' 1'" (StringBox.str of element 15). widget record, element 16 of
+; [nakarest] Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): Label
+; [nakarest] (32 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "1/3" (Label.str of element 16). widget record, element
+; [nakarest] 17 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"):
+; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "2/3" (Label.str of element 17). widget record, element
+; [nakarest] 18 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"):
+; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "3/5" (Label.str of element 18). widget record, element
+; [nakarest] 19 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"):
+; [nakarest] Label (32 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "1/3" (Label.str of element 19). widget records,
+; [nakarest] elements 20-23 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai)
+; [nakarest] ("Drawbar"): IvDrawbar1 (22 B), VwUserBitmapSp (26 B), Window (36 B), AcDrawEditBox
+; [nakarest] (58 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "DECAY :" (AcDrawEditBox.caption of element 23). widget
+; [nakarest] record, element 24 of Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai) ("Drawbar"): AcDrawEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai): "LEVEL :"
+; [nakarest] (AcDrawEditBox.caption of element 24). widget record, element 25 of Viewable slot
+; [nakarest] 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): AcDrawEditBox (58
+; [nakarest] B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai): "ATTACK TIME :" (AcDrawEditBox.caption of element 25). widget
+; [nakarest] record, element 26 of Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai) ("Drawbar"): AcDrawEditBox (58 B). text the records point at, in
+; [nakarest] Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai): "RELEASE TIME :"
+; [nakarest] (AcDrawEditBox.caption of element 26). widget records, elements 27-32 of Viewable
+; [nakarest] slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): AcIndexWideES
+; [nakarest] (42 B), IvDrawbar2 (22 B), AcDrawbarName (40 B), Window (36 B), PsParaBox (36 B),
+; [nakarest] AcIndexToggle (44 B). text the records point at, in Viewable slot 0xea (table
+; [nakarest] 0xe857f8, 44 entries, InitializeMurai): "SLOW" (AcIndexToggle.stroff of element
+; [nakarest] 32); "FAST" (AcIndexToggle.stron of element 32). widget record, element 33 of
+; [nakarest] Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai) ("Drawbar"): Label
+; [nakarest] (32 B). text the records point at, in Viewable slot 0xea (table 0xe857f8, 44
+; [nakarest] entries, InitializeMurai): "TREMOLO" (Label.str of element 33). widget records,
+; [nakarest] elements 34-37 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai)
+; [nakarest] ("Drawbar"): IvDrawbarNorm (22 B), VwBox (28 B), Icon (26 B), Label (32 B). text
+; [nakarest] the records point at, in Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai): "DRAWBAR" (Label.str of element 37). widget records, elements
+; [nakarest] 38-40 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai)
+; [nakarest] ("Drawbar"): Window (36 B), IvDrawbarSndE (22 B), AcTitleMenu (54 B). text the
+; [nakarest] records point at, in Viewable slot 0xea (table 0xe857f8, 44 entries,
+; [nakarest] InitializeMurai): "WRITE" (AcTitleMenu.str of element 40). widget records, elements
+; [nakarest] 41-43 of Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai)
+; [nakarest] ("Drawbar"): VwBox (28 B), Icon (26 B), Label (32 B). text the records point at, in
+; [nakarest] Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai): "DRAWBAR EDIT"
+; [nakarest] (Label.str of element 43).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x2338, 0x6DE
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x2a16
-; naka_technichord_part+0x2a16  --  naka_technichord_part +0x2a16..+0x3182 (ROM 0xe846e4..0xe84e50), 1900 bytes
-; Widget records of elements 0-36 of Viewable slot 0xeb (table 0xe858ac,
-; 37 entries, InitializeMurai), element 0 "Accordion"; classes: Screen
-; (34 B, id 0x01600033), Icon (26 B, id 0x0160002d), IvIntVari (24 B, id
-; 0x01600062), Label (32 B, id 0x0160002b) x4, AcIndexEditSw (40 B, id
-; 0x0160001f) x2, PsParaBox (36 B, id 0x01600012), IvAccordion (22 B, id
-; 0x01610004), Window (36 B, id 0x01600035) x2, VwUserBitmapSp (26 B, id
-; 0x0161001e) x2, AcIndexToggle (44 B, id 0x0160004e) x4, AcAccordionTab
-; (52 B, id 0x01610006) x16, IvAccordionX (22 B, id 0x01610005) x2.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x2a16  +0x2a16..+0x3182 (0xe846e4, 1900 B)
+; [nakarest] widget records, elements 0-3 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): Screen (34 B), Icon (26 B), IvIntVari (24 B), Label
+; [nakarest] (32 B). text the records point at, in Viewable slot 0xeb (table 0xe858ac, 37
+; [nakarest] entries, InitializeMurai): "ACCORDION REGISTER" (Label.str of element 3). widget
+; [nakarest] records, elements 4-6 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcIndexEditSw (40 B) x2, Label (32 B). text the
+; [nakarest] records point at, in Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai): "TYPE" (Label.str of element 6). widget records, elements 7-10 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] PsParaBox (36 B), IvAccordion (22 B), Window (36 B), Label (32 B). text the records
+; [nakarest] point at, in Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai):
+; [nakarest] "TYPE : GERMAN" (Label.str of element 10). widget records, elements 11-12 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] VwUserBitmapSp (26 B), AcIndexToggle (44 B). text the records point at, in Viewable
+; [nakarest] slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "BASS1"
+; [nakarest] (AcIndexToggle.stroff of element 12); "BASS1" (AcIndexToggle.stron of element 12).
+; [nakarest] widget record, element 13 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcIndexToggle (44 B). text the records point at, in
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "BASS2"
+; [nakarest] (AcIndexToggle.stroff of element 13); "BASS2" (AcIndexToggle.stron of element 13).
+; [nakarest] widget record, element 14 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcAccordionTab (52 B). text the records point at,
+; [nakarest] in Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "~95"
+; [nakarest] (AcAccordionTab.str3 of element 14); "~95" (AcAccordionTab.str1 of element 14);
+; [nakarest] "~95" (AcAccordionTab.stroff of element 14); "~95" (AcAccordionTab.stron of element
+; [nakarest] 14). widget record, element 15 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcAccordionTab (52 B). text the records point at,
+; [nakarest] in Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "~95"
+; [nakarest] (AcAccordionTab.str3 of element 15); "" (AcAccordionTab.str1 of element 15); "~95"
+; [nakarest] (AcAccordionTab.stroff of element 15); "~95" (AcAccordionTab.stron of element 15).
+; [nakarest] widget record, element 16 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcAccordionTab (52 B). text the records point at,
+; [nakarest] in Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "~95"
+; [nakarest] (AcAccordionTab.str3 of element 16); "~95" (AcAccordionTab.str1 of element 16); ""
+; [nakarest] (AcAccordionTab.stroff of element 16); "" (AcAccordionTab.stron of element 16).
+; [nakarest] widget record, element 17 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcAccordionTab (52 B). text the records point at,
+; [nakarest] in Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "~95"
+; [nakarest] (AcAccordionTab.str3 of element 17); "~95" (AcAccordionTab.str1 of element 17);
+; [nakarest] "~95~95~95" (AcAccordionTab.stroff of element 17); "~95~95~95"
+; [nakarest] (AcAccordionTab.stron of element 17). widget record, element 18 of Viewable slot
+; [nakarest] 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"): AcAccordionTab
+; [nakarest] (52 B). text the records point at, in Viewable slot 0xeb (table 0xe858ac, 37
+; [nakarest] entries, InitializeMurai): "" (AcAccordionTab.str3 of element 18); "~95"
+; [nakarest] (AcAccordionTab.str1 of element 18); "~95 ~95" (AcAccordionTab.stroff of element
+; [nakarest] 18); "~95 ~95" (AcAccordionTab.stron of element 18). widget record, element 19 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] AcAccordionTab (52 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "" (AcAccordionTab.str3 of element 19); ""
+; [nakarest] (AcAccordionTab.str1 of element 19); "~95~95~95" (AcAccordionTab.stroff of element
+; [nakarest] 19); "~95~95~95" (AcAccordionTab.stron of element 19). widget record, element 20 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] AcAccordionTab (52 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "" (AcAccordionTab.str3 of element 20);
+; [nakarest] "~95" (AcAccordionTab.str1 of element 20); "~95" (AcAccordionTab.stroff of element
+; [nakarest] 20); "~95" (AcAccordionTab.stron of element 20). widget record, element 21 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] AcAccordionTab (52 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "" (AcAccordionTab.str3 of element 21); ""
+; [nakarest] (AcAccordionTab.str1 of element 21); "~95" (AcAccordionTab.stroff of element 21);
+; [nakarest] "~95" (AcAccordionTab.stron of element 21). widget records, elements 22-24 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] IvAccordionX (22 B), Window (36 B), Label (32 B). text the records point at, in
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "TYPE : ITALIAN"
+; [nakarest] (Label.str of element 24). widget records, elements 25-26 of Viewable slot 0xeb
+; [nakarest] (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"): VwUserBitmapSp (26 B),
+; [nakarest] AcIndexToggle (44 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "BASS1" (AcIndexToggle.stroff of element
+; [nakarest] 26); "BASS1" (AcIndexToggle.stron of element 26). widget record, element 27 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] AcIndexToggle (44 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "BASS2" (AcIndexToggle.stroff of element
+; [nakarest] 27); "BASS2" (AcIndexToggle.stron of element 27). widget record, element 28 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] AcAccordionTab (52 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "~95" (AcAccordionTab.str3 of element 28);
+; [nakarest] "" (AcAccordionTab.str1 of element 28); "~95" (AcAccordionTab.stroff of element
+; [nakarest] 28); "~95" (AcAccordionTab.stron of element 28). widget record, element 29 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] AcAccordionTab (52 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "~95" (AcAccordionTab.str3 of element 29);
+; [nakarest] "" (AcAccordionTab.str1 of element 29); "" (AcAccordionTab.stroff of element 29);
+; [nakarest] "" (AcAccordionTab.stron of element 29). widget record, element 30 of Viewable slot
+; [nakarest] 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"): AcAccordionTab
+; [nakarest] (52 B). text the records point at, in Viewable slot 0xeb (table 0xe858ac, 37
+; [nakarest] entries, InitializeMurai): "~95" (AcAccordionTab.str3 of element 30); "~95"
+; [nakarest] (AcAccordionTab.str1 of element 30); "" (AcAccordionTab.stroff of element 30); ""
+; [nakarest] (AcAccordionTab.stron of element 30). widget record, element 31 of Viewable slot
+; [nakarest] 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"): AcAccordionTab
+; [nakarest] (52 B). text the records point at, in Viewable slot 0xeb (table 0xe858ac, 37
+; [nakarest] entries, InitializeMurai): "~95" (AcAccordionTab.str3 of element 31); "~95"
+; [nakarest] (AcAccordionTab.str1 of element 31); "~95 ~95" (AcAccordionTab.stroff of element
+; [nakarest] 31); "~95 ~95" (AcAccordionTab.stron of element 31). widget record, element 32 of
+; [nakarest] Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai) ("Accordion"):
+; [nakarest] AcAccordionTab (52 B). text the records point at, in Viewable slot 0xeb (table
+; [nakarest] 0xe858ac, 37 entries, InitializeMurai): "" (AcAccordionTab.str3 of element 32);
+; [nakarest] "~95" (AcAccordionTab.str1 of element 32); "~95 ~95" (AcAccordionTab.stroff of
+; [nakarest] element 32); "~95 ~95" (AcAccordionTab.stron of element 32). widget record, element
+; [nakarest] 33 of Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai)
+; [nakarest] ("Accordion"): AcAccordionTab (52 B). text the records point at, in Viewable slot
+; [nakarest] 0xeb (table 0xe858ac, 37 entries, InitializeMurai): "" (AcAccordionTab.str3 of
+; [nakarest] element 33); "" (AcAccordionTab.str1 of element 33); "~95 ~95"
+; [nakarest] (AcAccordionTab.stroff of element 33); "~95 ~95" (AcAccordionTab.stron of element
+; [nakarest] 33). widget record, element 34 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcAccordionTab (52 B). text the records point at,
+; [nakarest] in Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): ""
+; [nakarest] (AcAccordionTab.str3 of element 34); "~95" (AcAccordionTab.str1 of element 34);
+; [nakarest] "~95" (AcAccordionTab.stroff of element 34); "~95" (AcAccordionTab.stron of element
+; [nakarest] 34). widget record, element 35 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): AcAccordionTab (52 B). text the records point at,
+; [nakarest] in Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai): ""
+; [nakarest] (AcAccordionTab.str3 of element 35); "" (AcAccordionTab.str1 of element 35); "~95"
+; [nakarest] (AcAccordionTab.stroff of element 35); "~95" (AcAccordionTab.stron of element 35).
+; [nakarest] widget record, element 36 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
+; [nakarest] InitializeMurai) ("Accordion"): IvAccordionX (22 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x2A16, 0x76C
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3182
-; naka_technichord_part+0x3182  --  naka_technichord_part +0x3182..+0x34fa (ROM 0xe84e50..0xe851c8), 888 bytes
-; Widget records of elements 0-23 of Viewable slot 0xee (table 0xe85944,
-; 24 entries, InitializeMurai), element 0 "Mesage"; classes: IvScreen
-; (34 B, id 0x0160006a), IvMesage (22 B, id 0x01610003), Window (36 B,
-; id 0x01600035) x7, AcLanguageText (42 B, id 0x01600066) x6,
-; IvIntComplete (24 B, id 0x01600061), IvIntReminder (24 B, id
-; 0x0160005f), IvIntError (24 B, id 0x01600060), EditSw (40 B, id
-; 0x01600030) x2, AcRamBox (44 B, id 0x0160004f) x3, AcPleaseWait (36 B,
-; id 0x01610021).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3182  +0x3182..+0x34fa (0xe84e50, 888 B)
+; [nakarest] widget records, elements 0-16 of Viewable slot 0xee (table 0xe85944, 24 entries,
+; [nakarest] InitializeMurai) ("Mesage"): IvScreen (34 B), IvMesage (22 B), Window (36 B) x5,
+; [nakarest] AcLanguageText (42 B) x6, IvIntComplete (24 B), IvIntReminder (24 B), IvIntError
+; [nakarest] (24 B), EditSw (40 B). text the records point at, in Viewable slot 0xee (table
+; [nakarest] 0xe85944, 24 entries, InitializeMurai): "~81" (EditSw.str of element 16). widget
+; [nakarest] records, elements 17-19 of Viewable slot 0xee (table 0xe85944, 24 entries,
+; [nakarest] InitializeMurai) ("Mesage"): AcRamBox (44 B) x2, EditSw (40 B). text the records
+; [nakarest] point at, in Viewable slot 0xee (table 0xe85944, 24 entries, InitializeMurai):
+; [nakarest] "~81" (EditSw.str of element 19). widget records, elements 20-23 of Viewable slot
+; [nakarest] 0xee (table 0xe85944, 24 entries, InitializeMurai) ("Mesage"): Window (36 B) x2,
+; [nakarest] AcRamBox (44 B), AcPleaseWait (36 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3182, 0x378
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x34fa
-; naka_technichord_part+0x34fa  --  naka_technichord_part +0x34fa..+0x364c (ROM 0xe851c8..0xe8531a), 338 bytes
-; Widget records of elements 0-10 of Viewable slot 0xef (table 0xe859a8,
-; 11 entries, InitializeMurai), element 0 "Welcom"; classes:
-; AcWelcomScreen (34 B, id 0x0161000b), IvIntWelcome (24 B, id
-; 0x0160006b) x3, VwUserBitmapSp (26 B, id 0x0161001e) x2, Screen (34 B,
-; id 0x01600033) x2, Label (32 B, id 0x0160002b), IvMPver (22 B, id
-; 0x01610024), PsParaBox (36 B, id 0x01600012).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x34fa  +0x34fa..+0x364c (0xe851c8, 338 B)
+; [nakarest] widget records, elements 0-5 of Viewable slot 0xef (table 0xe859a8, 11 entries,
+; [nakarest] InitializeMurai) ("Welcom"): AcWelcomScreen (34 B), IvIntWelcome (24 B),
+; [nakarest] VwUserBitmapSp (26 B) x2, Screen (34 B), Label (32 B). text the records point at,
+; [nakarest] in Viewable slot 0xef (table 0xe859a8, 11 entries, InitializeMurai): "ALL INITIAL
+; [nakarest] SETTING!" (Label.str of element 5). widget records, elements 6-10 of Viewable slot
+; [nakarest] 0xef (table 0xe859a8, 11 entries, InitializeMurai) ("Welcom"): IvIntWelcome (24 B)
+; [nakarest] x2, Screen (34 B), IvMPver (22 B), PsParaBox (36 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x34FA, 0x152
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x364c
-; naka_technichord_part+0x364c  --  naka_technichord_part +0x364c..+0x37a2 (ROM 0xe8531a..0xe85470), 342 bytes
-; Widget records of elements 0-5 of Viewable slot 0xf0 (table 0xe859d8,
-; 6 entries, InitializeMurai), element 0 "Softver"; classes: TtlScreen
-; (42 B, id 0x01600034), PsEditBox (50 B, id 0x01600015) x4, IvSoftver
-; (22 B, id 0x0161000f).
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x364c  +0x364c..+0x37a2 (0xe8531a, 342 B)
+; [nakarest] widget record, element 0 of Viewable slot 0xf0 (table 0xe859d8, 6 entries,
+; [nakarest] InitializeMurai) ("Softver"): TtlScreen (42 B). text the records point at, in
+; [nakarest] Viewable slot 0xf0 (table 0xe859d8, 6 entries, InitializeMurai): "SOFT VERSION"
+; [nakarest] (TtlScreen.title of element 0). widget record, element 1 of Viewable slot 0xf0
+; [nakarest] (table 0xe859d8, 6 entries, InitializeMurai) ("Softver"): PsEditBox (50 B). text
+; [nakarest] the records point at, in Viewable slot 0xf0 (table 0xe859d8, 6 entries,
+; [nakarest] InitializeMurai): "MAIN PROGRAM :" (PsEditBox.caption of element 1). widget record,
+; [nakarest] element 2 of Viewable slot 0xf0 (table 0xe859d8, 6 entries, InitializeMurai)
+; [nakarest] ("Softver"): PsEditBox (50 B). text the records point at, in Viewable slot 0xf0
+; [nakarest] (table 0xe859d8, 6 entries, InitializeMurai): "MAIN TABLE :" (PsEditBox.caption of
+; [nakarest] element 2). widget record, element 3 of Viewable slot 0xf0 (table 0xe859d8, 6
+; [nakarest] entries, InitializeMurai) ("Softver"): PsEditBox (50 B). text the records point at,
+; [nakarest] in Viewable slot 0xf0 (table 0xe859d8, 6 entries, InitializeMurai): "SUB PROGRAM :"
+; [nakarest] (PsEditBox.caption of element 3). widget record, element 4 of Viewable slot 0xf0
+; [nakarest] (table 0xe859d8, 6 entries, InitializeMurai) ("Softver"): PsEditBox (50 B). text
+; [nakarest] the records point at, in Viewable slot 0xf0 (table 0xe859d8, 6 entries,
+; [nakarest] InitializeMurai): "SOUND TABLE :" (PsEditBox.caption of element 4). widget record,
+; [nakarest] element 5 of Viewable slot 0xf0 (table 0xe859d8, 6 entries, InitializeMurai)
+; [nakarest] ("Softver"): IvSoftver (22 B).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x364C, 0x156
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x37a2
-; naka_technichord_part+0x37a2  --  naka_technichord_part +0x37a2..+0x37f6 (ROM 0xe85470..0xe854c4), 84 bytes
-; The table itself: Viewable slot 0x2 (table 0xe85470, 20 entries,
-; InitializeMurai) -- 20 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x37a2  +0x37a2..+0x37f6 (0xe85470, 84 B)
+; [nakarest] the table itself: Viewable slot 0x2 (table 0xe85470, 20 entries, InitializeMurai),
+; [nakarest] 20 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x37A2, 0x54
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x37f6
-; naka_technichord_part+0x37f6  --  naka_technichord_part +0x37f6..+0x394a (ROM 0xe854c4..0xe85618), 340 bytes
-; The table itself: Viewable slot 0x3 (table 0xe854c4, 84 entries,
-; InitializeMurai) -- 84 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x37f6  +0x37f6..+0x394a (0xe854c4, 340 B)
+; [nakarest] the table itself: Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai),
+; [nakarest] 84 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x37F6, 0x154
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x394a
-; naka_technichord_part+0x394a  --  naka_technichord_part +0x394a..+0x395e (ROM 0xe85618..0xe8562c), 20 bytes
-; The table itself: Viewable slot 0x4 (table 0xe85618, 4 entries,
-; InitializeMurai) -- 4 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x394a  +0x394a..+0x395e (0xe85618, 20 B)
+; [nakarest] the table itself: Viewable slot 0x4 (table 0xe85618, 4 entries, InitializeMurai), 4
+; [nakarest] entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x394A, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x395e
-; naka_technichord_part+0x395e  --  naka_technichord_part +0x395e..+0x3a3a (ROM 0xe8562c..0xe85708), 220 bytes
-; The table itself: Viewable slot 0x5 (table 0xe8562c, 54 entries,
-; InitializeMurai) -- 54 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x395e  +0x395e..+0x3a3a (0xe8562c, 220 B)
+; [nakarest] the table itself: Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai),
+; [nakarest] 54 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x395E, 0xDC
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3a3a
-; naka_technichord_part+0x3a3a  --  naka_technichord_part +0x3a3a..+0x3a4a (ROM 0xe85708..0xe85718), 16 bytes
-; The table itself: Viewable slot 0x7 (table 0xe85708, 3 entries,
-; InitializeMurai) -- 3 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3a3a  +0x3a3a..+0x3a4a (0xe85708, 16 B)
+; [nakarest] the table itself: Viewable slot 0x7 (table 0xe85708, 3 entries, InitializeMurai), 3
+; [nakarest] entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3A3A, 0x10
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3a4a
-; naka_technichord_part+0x3a4a  --  naka_technichord_part +0x3a4a..+0x3a5e (ROM 0xe85718..0xe8572c), 20 bytes
-; The table itself: Viewable slot 0x8 (table 0xe85718, 4 entries,
-; InitializeMurai) -- 4 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3a4a  +0x3a4a..+0x3a5e (0xe85718, 20 B)
+; [nakarest] the table itself: Viewable slot 0x8 (table 0xe85718, 4 entries, InitializeMurai), 4
+; [nakarest] entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3A4A, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3a5e
-; naka_technichord_part+0x3a5e  --  naka_technichord_part +0x3a5e..+0x3ad6 (ROM 0xe8572c..0xe857a4), 120 bytes
-; The table itself: Viewable slot 0xd (table 0xe8572c, 29 entries,
-; InitializeMurai) -- 29 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3a5e  +0x3a5e..+0x3ad6 (0xe8572c, 120 B)
+; [nakarest] the table itself: Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai),
+; [nakarest] 29 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3A5E, 0x78
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3ad6
-; naka_technichord_part+0x3ad6  --  naka_technichord_part +0x3ad6..+0x3aea (ROM 0xe857a4..0xe857b8), 20 bytes
-; The table itself: Viewable slot 0xa5 (table 0xe857a4, 4 entries,
-; InitializeMurai) -- 4 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3ad6  +0x3ad6..+0x3aea (0xe857a4, 20 B)
+; [nakarest] the table itself: Viewable slot 0xa5 (table 0xe857a4, 4 entries, InitializeMurai),
+; [nakarest] 4 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3AD6, 0x14
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3aea
-; naka_technichord_part+0x3aea  --  naka_technichord_part +0x3aea..+0x3b2a (ROM 0xe857b8..0xe857f8), 64 bytes
-; The table itself: Viewable slot 0xe4 (table 0xe857b8, 15 entries,
-; InitializeMurai) -- 15 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3aea  +0x3aea..+0x3b2a (0xe857b8, 64 B)
+; [nakarest] the table itself: Viewable slot 0xe4 (table 0xe857b8, 15 entries, InitializeMurai),
+; [nakarest] 15 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3AEA, 0x40
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3b2a
-; naka_technichord_part+0x3b2a  --  naka_technichord_part +0x3b2a..+0x3bde (ROM 0xe857f8..0xe858ac), 180 bytes
-; The table itself: Viewable slot 0xea (table 0xe857f8, 44 entries,
-; InitializeMurai) -- 44 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3b2a  +0x3b2a..+0x3bde (0xe857f8, 180 B)
+; [nakarest] the table itself: Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai),
+; [nakarest] 44 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3B2A, 0xB4
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3bde
-; naka_technichord_part+0x3bde  --  naka_technichord_part +0x3bde..+0x3c76 (ROM 0xe858ac..0xe85944), 152 bytes
-; The table itself: Viewable slot 0xeb (table 0xe858ac, 37 entries,
-; InitializeMurai) -- 37 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3bde  +0x3bde..+0x3c76 (0xe858ac, 152 B)
+; [nakarest] the table itself: Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai),
+; [nakarest] 37 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3BDE, 0x98
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3c76
-; naka_technichord_part+0x3c76  --  naka_technichord_part +0x3c76..+0x3cda (ROM 0xe85944..0xe859a8), 100 bytes
-; The table itself: Viewable slot 0xee (table 0xe85944, 24 entries,
-; InitializeMurai) -- 24 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3c76  +0x3c76..+0x3cda (0xe85944, 100 B)
+; [nakarest] the table itself: Viewable slot 0xee (table 0xe85944, 24 entries, InitializeMurai),
+; [nakarest] 24 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3C76, 0x64
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3cda
-; naka_technichord_part+0x3cda  --  naka_technichord_part +0x3cda..+0x3d0a (ROM 0xe859a8..0xe859d8), 48 bytes
-; The table itself: Viewable slot 0xef (table 0xe859a8, 11 entries,
-; InitializeMurai) -- 11 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3cda  +0x3cda..+0x3d0a (0xe859a8, 48 B)
+; [nakarest] the table itself: Viewable slot 0xef (table 0xe859a8, 11 entries, InitializeMurai),
+; [nakarest] 11 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3CDA, 0x30
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3d0a
-; naka_technichord_part+0x3d0a  --  naka_technichord_part +0x3d0a..+0x3d26 (ROM 0xe859d8..0xe859f4), 28 bytes
-; The table itself: Viewable slot 0xf0 (table 0xe859d8, 6 entries,
-; InitializeMurai) -- 6 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3d0a  +0x3d0a..+0x3d26 (0xe859d8, 28 B)
+; [nakarest] the table itself: Viewable slot 0xf0 (table 0xe859d8, 6 entries, InitializeMurai),
+; [nakarest] 6 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3D0A, 0x1C
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3d26
-; naka_technichord_part+0x3d26  --  naka_technichord_part +0x3d26..+0x3d7c (ROM 0xe859f4..0xe85a4a), 86 bytes
-; The table itself: ResName slot 0x302 (table 0xe859f4, 20 entries,
-; InitializeMurai) -- 20 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3d26  +0x3d26..+0x3d7c (0xe859f4, 86 B)
+; [nakarest] the table itself: ResName slot 0x302 (table 0xe859f4, 20 entries, InitializeMurai),
+; [nakarest] 20 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3D26, 0x56
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3d7c
-; naka_technichord_part+0x3d7c  --  naka_technichord_part +0x3d7c..+0x3dc0 (ROM 0xe85a4a..0xe85a8e), 68 bytes
-; Name strings of elements 0-19 of ResName slot 0x302 (table 0xe859f4,
-; 20 entries, InitializeMurai), names for Viewable slot 0x2: "", "",
-; "Sdmenu2", "", "", "", ....
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3d7c  +0x3d7c..+0x3dc0 (0xe85a4a, 68 B)
+; [nakarest] name strings, entries 0-19 of ResName slot 0x302 (table 0xe859f4, 20 entries,
+; [nakarest] InitializeMurai) (names for Viewable slot 0x2): "", "", "Sdmenu2", "", "", "", ....
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3D7C, 0x44
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3dc0
-; naka_technichord_part+0x3dc0  --  naka_technichord_part +0x3dc0..+0x3e00 (ROM 0xe85a8e..0xe85ace), 64 bytes
-; The table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries,
-; InitializeMurai) -- 84 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3dc0  +0x3dc0..+0x3e00 (0xe85a8e, 64 B)
+; [nakarest] the table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries, InitializeMurai),
+; [nakarest] 84 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3DC0, 0x40
 EmbeddedPtrTable_v10_naka_technichord_part_003E00:
 	.long 0x00E85CB4
@@ -499,80 +892,47 @@ EmbeddedPtrTable_v10_naka_technichord_part_003E00:
 	.long 0x00E85BF0
 	.long 0x00E85BEE
 	.long 0x00E85BEC
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3f00
-; naka_technichord_part+0x3f00  --  naka_technichord_part +0x3f00..+0x3f16 (ROM 0xe85bce..0xe85be4), 22 bytes
-; No RegObjTabl-registered table points at the start of these 22 bytes
-; (0xe85bce..0xe85be4); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3f00  +0x3f00..+0x3f16 (0xe85bce, 22 B)
+; [nakarest] purpose not established: 6 bytes at 0xe85bde that no registered NAKA table points into
+; [nakarest] Continues the table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries,
+; [nakarest] InitializeMurai), 84 entry pointers x 4 bytes (starts 0xe85a8e, 16 of its 336 bytes
+; [nakarest] are here or later).
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3F00, 0x16
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x3f16
-; naka_technichord_part+0x3f16  --  naka_technichord_part +0x3f16..+0x4022 (ROM 0xe85be4..0xe85cf0), 268 bytes
-; Name strings of elements 0-83 of ResName slot 0x303 (table 0xe85a8e,
-; 84 entries, InitializeMurai), names for Viewable slot 0x3: "", "", "",
-; "", "", "", ....
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x3f16  +0x3f16..+0x4022 (0xe85be4, 268 B)
+; [nakarest] name strings, entries 0-83 of ResName slot 0x303 (table 0xe85a8e, 84 entries,
+; [nakarest] InitializeMurai) (names for Viewable slot 0x3): "", "", "", "", "", "", ....
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3F16, 0x10C
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x4022
-; naka_technichord_part+0x4022  --  naka_technichord_part +0x4022..+0x4038 (ROM 0xe85cf0..0xe85d06), 22 bytes
-; The table itself: ResName slot 0x304 (table 0xe85cf0, 4 entries,
-; InitializeMurai) -- 4 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x4022  +0x4022..+0x4038 (0xe85cf0, 22 B)
+; [nakarest] the table itself: ResName slot 0x304 (table 0xe85cf0, 4 entries, InitializeMurai),
+; [nakarest] 4 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x4022, 0x16
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x4038
-; naka_technichord_part+0x4038  --  naka_technichord_part +0x4038..+0x4046 (ROM 0xe85d06..0xe85d14), 14 bytes
-; Name strings of elements 0-3 of ResName slot 0x304 (table 0xe85cf0, 4
-; entries, InitializeMurai), names for Viewable slot 0x4: "", "", "",
-; "Sdmtune".
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x4038  +0x4038..+0x4046 (0xe85d06, 14 B)
+; [nakarest] name strings, entries 0-3 of ResName slot 0x304 (table 0xe85cf0, 4 entries,
+; [nakarest] InitializeMurai) (names for Viewable slot 0x4): "", "", "", "Sdmtune".
 	.incbin "includes/generated/naka_technichord_part.bin", 0x4038, 0xE
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x4046
-; naka_technichord_part+0x4046  --  naka_technichord_part +0x4046..+0x4124 (ROM 0xe85d14..0xe85df2), 222 bytes
-; The table itself: ResName slot 0x305 (table 0xe85d14, 54 entries,
-; InitializeMurai) -- 54 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x4046  +0x4046..+0x4124 (0xe85d14, 222 B)
+; [nakarest] the table itself: ResName slot 0x305 (table 0xe85d14, 54 entries, InitializeMurai),
+; [nakarest] 54 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x4046, 0xDE
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x4124
-; naka_technichord_part+0x4124  --  naka_technichord_part +0x4124..+0x423c (ROM 0xe85df2..0xe85f0a), 280 bytes
-; Name strings of elements 0-53 of ResName slot 0x305 (table 0xe85d14,
-; 54 entries, InitializeMurai), names for Viewable slot 0x5: "", "", "",
-; "", "", "", ....
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x4124  +0x4124..+0x423c (0xe85df2, 280 B)
+; [nakarest] name strings, entries 0-53 of ResName slot 0x305 (table 0xe85d14, 54 entries,
+; [nakarest] InitializeMurai) (names for Viewable slot 0x5): "", "", "", "", "", "", ....
 	.incbin "includes/generated/naka_technichord_part.bin", 0x4124, 0x118
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x423c
-; naka_technichord_part+0x423c  --  naka_technichord_part +0x423c..+0x424e (ROM 0xe85f0a..0xe85f1c), 18 bytes
-; The table itself: ResName slot 0x307 (table 0xe85f0a, 3 entries,
-; InitializeMurai) -- 3 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x423c  +0x423c..+0x424e (0xe85f0a, 18 B)
+; [nakarest] the table itself: ResName slot 0x307 (table 0xe85f0a, 3 entries, InitializeMurai),
+; [nakarest] 3 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x423C, 0x12
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x424e
-; naka_technichord_part+0x424e  --  naka_technichord_part +0x424e..+0x425c (ROM 0xe85f1c..0xe85f2a), 14 bytes
-; Name strings of elements 0-2 of ResName slot 0x307 (table 0xe85f0a, 3
-; entries, InitializeMurai), names for Viewable slot 0x7: "", "",
-; "Sdlfthld".
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x424e  +0x424e..+0x425c (0xe85f1c, 14 B)
+; [nakarest] name strings, entries 0-2 of ResName slot 0x307 (table 0xe85f0a, 3 entries,
+; [nakarest] InitializeMurai) (names for Viewable slot 0x7): "", "", "Sdlfthld".
 	.incbin "includes/generated/naka_technichord_part.bin", 0x424E, 0xE
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x425c
-; naka_technichord_part+0x425c  --  naka_technichord_part +0x425c..+0x4272 (ROM 0xe85f2a..0xe85f40), 22 bytes
-; The table itself: ResName slot 0x308 (table 0xe85f2a, 4 entries,
-; InitializeMurai) -- 4 x u32 entry pointers.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x425c  +0x425c..+0x4272 (0xe85f2a, 22 B)
+; [nakarest] the table itself: ResName slot 0x308 (table 0xe85f2a, 4 entries, InitializeMurai),
+; [nakarest] 4 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_technichord_part.bin", 0x425C, 0x16
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_technichord_part+0x4272
-; naka_technichord_part+0x4272  --  naka_technichord_part +0x4272..+0x4280 (ROM 0xe85f40..0xe85f4e), 14 bytes
-; Name strings of elements 0-3 of ResName slot 0x308 (table 0xe85f2a, 4
-; entries, InitializeMurai), names for Viewable slot 0x8: "", "", "",
-; "Sdmixer".
-; -----------------------------------------------------------------------------
+; [nakarest] naka_technichord_part+0x4272  +0x4272..+0x4280 (0xe85f40, 14 B)
+; [nakarest] name strings, entries 0-3 of ResName slot 0x308 (table 0xe85f2a, 4 entries,
+; [nakarest] InitializeMurai) (names for Viewable slot 0x8): "", "", "", "Sdmixer".
 	.incbin "includes/generated/naka_technichord_part.bin", 0x4272, 0xE
 
 ; External label offsets within the binary blob above.

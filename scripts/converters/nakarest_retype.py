@@ -347,9 +347,11 @@ class Piece:
     (None = no header) and the .s `labels` it carries (existing labels that
     other files reference MUST be listed, or the rewrite refuses)."""
 
-    def __init__(self, name, off, size, header=None, member=None, labels=(), typed=''):
+    def __init__(self, name, off, size, header=None, member=None, labels=(), typed='',
+                 compact=False):
         self.name, self.off, self.size = name, off, size
         self.header, self.member, self.labels, self.typed = header, member, list(labels), typed
+        self.compact = compact
 
 
 def ensure_typedef(cb, tname):
@@ -919,9 +921,22 @@ def apply_s(v, apply):
             open(path, 'wb').write(out)
 
 
+CMARK = '; [nakarest] '
+
+
 def piece_lines(p, blob):
     out = []
-    if p.header:
+    if p.header and p.compact:
+        parts = p.header.split('\n')
+        out.append(CMARK + parts[0])
+        if len(parts) > 2:                      # an admission line, never wrapped
+            out.append(CMARK + parts[1])
+        body = parts[-1] if len(parts) > 1 else ''
+        for ln in textwrap.wrap(' '.join(body.split()), width=96 - len(CMARK),
+                                break_long_words=False, break_on_hyphens=False):
+            out.append(CMARK + ln)
+        out = [re.sub(r'0x[0-9A-Fa-f]+', lambda m: m.group(0).lower(), l) for l in out]
+    elif p.header:
         out += [RULE, MARK + p.name]
         for ln in p.header.split('\n'):
             out.append(('; ' + ln).rstrip())
@@ -970,7 +985,8 @@ def rewrite_s_span(path, lines, blob, pieces):
             raise SystemExit('%s: gap/overlap at +0x%X' % (path, a + n))
     first, last = span[0][0], span[-1][0]
     # walk back over the labels and our own header block above the first slice
-    while first > 0 and re.match(r'^[A-Za-z_][A-Za-z0-9_]*:$', lines[first - 1]):
+    while first > 0 and (re.match(r'^[A-Za-z_][A-Za-z0-9_]*:$', lines[first - 1]) or
+                         lines[first - 1].startswith(CMARK)):
         first -= 1
     if first >= 1 and lines[first - 1] == RULE:
         k = first - 2
@@ -985,7 +1001,8 @@ def rewrite_s_span(path, lines, blob, pieces):
         if l == RULE:
             in_hdr = not in_hdr
             continue
-        if in_hdr or not l.strip() or rx.match(l) or re.match(r'^[A-Za-z_][A-Za-z0-9_]*:$', l):
+        if in_hdr or not l.strip() or rx.match(l) or re.match(r'^[A-Za-z_][A-Za-z0-9_]*:$', l) \
+                or l.startswith(CMARK):
             continue
         raise SystemExit('%s: refusing to replace line %r' % (path, l))
     old_labels = {l[:-1] for l in old if re.match(r'^[A-Za-z_][A-Za-z0-9_]*:$', l)}
@@ -1049,6 +1066,9 @@ OBJRUN_FILES = [
     ('extension_device_screens.s', 'naka_extension_device'),
     ('performance_style_screens.s', 'naka_perf_style'),
     ('technichord_part_settings.s', 'naka_technichord_part'),
+    ('technichord_string_data.s', 'naka_technichord_strings'),
+    ('style_bitmaps.s', 'naka_style_bitmaps'),
+    ('widget_names_charmap.s', 'naka_widget_names_charmap'),
 ]
 
 
@@ -1138,11 +1158,15 @@ FORMAT_NOTE = (
     "an ApFunction / Function / MainFunction table (slot 0x1xx) at procedures "
     "and its slot + 0x300 twin at their names.  Each piece below starts at one "
     "such run of objects or at a label that already existed.  A widget record "
-    "starts TT 00 6x 01 (TT = type byte); +4 parent, +6 first child, +8 next "
-    "sibling, +10 previous sibling are element indices of the same table "
-    "(0xFFFF = none), checked against each other for every table (the Links "
-    "result per table).  Name strings are NUL-terminated and 0xFF-padded to "
-    "even length.  The first word of a widget record is its CLASS ID 0x016S_KKKK: "
+    "begins with the Viewable fields (the firmware's own names): +0 class "
+    "(class id), +4 super, +6 sub, +8 next, +10 prev (element indices of the "
+    "same table, 0xFFFF = none -- parent, first child, next and previous "
+    "sibling, checked against each other for every table: the Links result "
+    "per table), +12 flag, +14 rect (x1, y1, x2, y2).  Name strings are NUL-terminated and 0xFF-padded to "
+    "even length.  Strings a record's `X` field (str, title, caption, name) "
+    "points at are indexed too, so the bytes after a record are accounted "
+    "for (in v10, 4 of the 3,340 records are followed by bytes nothing "
+    "indexed starts at).  The first word of a widget record is its CLASS ID 0x016S_KKKK: "
     "ClassProc (ui/ui_widget_defs.s) takes (id >> 16) & 0xFFF as a registry "
     "slot -- the Class table that RegObjTable 0x1600004 put there -- and "
     "0x18 * (id & 0xFFFF) into it.  Each class definition gives the instance "
@@ -1151,20 +1175,30 @@ FORMAT_NOTE = (
     "(THE CLASS SYSTEM, scripts/analysis/nakarest_objtab_map.py).")
 
 
-def _group_text(m, kind, r, ks, starts):
+def _cls_hist(m, starts):
     from collections import Counter
+    cl = Counter()
+    for a in starts:
+        c = m.record_class(a)
+        cl['%s (%d B)' % (c['name'], c['allsize']) if c else 'unresolved 0x%08X' % m.u32(a)] += 1
+    return ', '.join('%s x%d' % (n, c) if c > 1 else n for n, c in cl.items())
+
+
+def _group_text(m, kind, r, ks, starts):
     if kind == 'record':
         rn = m.by_slot.get(r['slot'] + 0x300)
         n0 = m.string_at(m.entries(rn)[0]) if rn and m.entries(rn) and m.inrom(m.entries(rn)[0]) else ''
-        cl = Counter()
+        return ('widget record%s, element%s %s of %s%s: %s.'
+                % ('s' if len(ks) > 1 else '', 's' if len(ks) > 1 else '', _ranges(ks),
+                   _reg_short(r), ' ("%s")' % n0 if n0 else '', _cls_hist(m, starts)))
+    if kind == 'text':
+        shown = []
         for a in starts:
-            c = m.record_class(a)
-            cl['%s (%d B, id 0x%08X)' % (c['name'], c['allsize'], m.u32(a)) if c else
-               'unresolved id 0x%08X' % m.u32(a)] += 1
-        return ('Widget records of element%s %s of %s%s; classes: %s.'
-                % ('s' if len(ks) > 1 else '', _ranges(ks), _reg_short(r),
-                   ', element 0 "%s"' % n0 if n0 else '',
-                   ', '.join('%s x%d' % (n, c) if c > 1 else n for n, c in cl.items())))
+            fl = m.text_field.get(a, [])
+            who = ', '.join(sorted({'%s.%s of element %d' % (cn, fn, k) for cn, fn, k in fl}))
+            shown.append('"%s" (%s)' % (m.string_at(a, 48), who))
+        return ('text the records point at, in %s: %s.'
+                % (_reg_short(r), '; '.join(shown[:4]) + ('; ...' if len(shown) > 4 else '')))
     if kind in ('classdef', 'classname', 'classsig', 'propnames'):
         names = []
         for k in ks:
@@ -1173,58 +1207,62 @@ def _group_text(m, kind, r, ks, starts):
                 names.append(c['name'])
         shown = ', '.join(names[:10]) + (', ...' if len(names) > 10 else '')
         if kind == 'classdef':
-            return ('Class definitions %s of %s: %s.  24 bytes each: +0 proc, +4 parent '
-                    '(class id), +8 allsize, +10 selfsize, +12 name, +16 propdata, +20 '
-                    'propname -- the firmware\'s own field names, from the propname '
-                    'table of the root class "Class".' % (_ranges(ks), _reg_short(r), shown))
+            return ('class definition entries %s of %s (24 bytes each: proc, parent, allsize, '
+                    'selfsize, name, propdata, propname): %s.' % (_ranges(ks), _reg_short(r), shown))
         if kind == 'classname':
-            return 'Class-name strings (the +12 name of classes %s of %s): %s.' % (
+            return 'class-name strings (the +12 name) of classes %s of %s: %s.' % (
                 _ranges(ks), _reg_short(r), shown)
         if kind == 'classsig':
             sig = [m.string_at(a) for a in starts]
-            return ('propdata strings (the +16 field signature, one character per own '
-                    'field) of class%s %s of %s (%s): %s.' % (
-                        'es' if len(ks) > 1 else '', _ranges(ks), _reg_short(r), shown,
-                        ', '.join('"%s"' % x for x in sig[:8]) + (', ...' if len(sig) > 8 else '')))
-        # propnames: the class's field names, in field order
+            return ('propdata strings (the +16 field signature) of class%s %s of %s: %s.' % (
+                'es' if len(ks) > 1 else '', _ranges(ks), _reg_short(r),
+                ', '.join('%s "%s"' % (n, g) for n, g in list(zip(names, sig))[:6])
+                + (', ...' if len(sig) > 6 else '')))
         ex = []
-        for k in ks[:4]:
+        for k in ks[:3]:
             c = m.classes.get(((r['slot'] & 0xFFF) << 16) | k)
             if c:
                 ex.append('%s {%s}' % (c['name'], ', '.join(c['fields'][:-1])))
-        return ('propname blocks (the +20 of class%s %s of %s): len(propdata) + 1 '
-                'pointers -- one per own field, the last to an empty string -- then '
-                'the field-name strings; e.g. %s%s.' % (
-                    'es' if len(ks) > 1 else '', _ranges(ks), _reg_short(r),
-                    '; '.join(ex), '; ...' if len(ks) > 4 else ''))
+        return ('propname block%s (the +20 field-name table) of class%s %s of %s: %s%s.'
+                % ('s' if len(ks) > 1 else '', 'es' if len(ks) > 1 else '', _ranges(ks),
+                   _reg_short(r), '; '.join(ex), '; ...' if len(ks) > 3 else ''))
     if kind == 'name':
         names = [m.string_at(a) for a in starts]
         shown = ', '.join('"%s"' % x for x in names[:6]) + (', ...' if len(names) > 6 else '')
         par = m.by_slot.get(r['slot'] - 0x300)
-        return ('Name strings of element%s %s of %s%s: %s.'
-                % ('s' if len(ks) > 1 else '', _ranges(ks), _reg_short(r),
-                   ', names for %s slot 0x%X' % (CLS_NAME[par['cls']], par['slot']) if par else '',
-                   shown))
+        return ('name string%s, entr%s %s of %s%s: %s.'
+                % ('s' if len(ks) > 1 else '', 'ies' if len(ks) > 1 else 'y', _ranges(ks),
+                   _reg_short(r), ' (names for %s slot 0x%X)' % (CLS_NAME[par['cls']], par['slot'])
+                   if par else '', shown))
     if kind == 'table':
         if r['cls'] == 0x1600004:
-            return ('The table itself: %s -- %d class definitions of 24 bytes.'
-                    % (_reg_short(r), r['count']))
-        return ('The table itself: %s -- %d x u32 entry pointers.' % (_reg_short(r), r['count']))
+            return 'the table itself: %s, %d class definitions x 24 bytes.' % (_reg_short(r), r['count'])
+        return 'the table itself: %s, %d entry pointers x 4 bytes.' % (_reg_short(r), r['count'])
     raise ValueError(kind)
+
+
+def _objects(m, base, lo, hi):
+    """[(off, end, kind, reg, k)] of indexed objects starting in [lo, hi)."""
+    out = []
+    for a, vs in m.in_range(base + lo, base + hi):
+        for kind, r, k in vs:
+            out.append((a - base, a - base + m.extent(kind, r, k, a), kind, r, k))
+    return out
 
 
 def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
     """Pieces for the blob span [S0, S1): cut at the start of every run of
-    registered objects of one (kind, slot), and at every existing label.
-    Registered tables mentioned are added to `used`."""
-    objs = []
-    for a, vs in m.in_range(base + S0, base + S1):
-        for kind, r, k in vs:
-            objs.append((a - base, kind, r, k))
+    objects of one (kind, slot) and at every existing label; each piece says
+    what starts in it and, when it starts inside an object, which one."""
+    objs = _objects(m, base, S0 - 0x2000 if S0 > 0x2000 else 0, S1)
     cuts = {S0} | set(labels_at)
     prev = None
-    for off, kind, r, k in objs:
-        key = (kind, r['slot'])
+    for off, end, kind, r, k in objs:
+        if off < S0:
+            continue
+        # a record's texts belong to its run (records and the strings they
+        # point at alternate); so do a class table's definitions
+        key = ({'text': 'record'}.get(kind, kind), r['slot'])
         if key != prev:
             cuts.add(off)
         prev = key
@@ -1233,8 +1271,11 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
     for i, c in enumerate(cuts):
         e = cuts[i + 1] if i + 1 < len(cuts) else S1
         inside = [o for o in objs if c <= o[0] < e]
+        # the object this piece starts inside, if any (latest start before c
+        # whose extent reaches past c)
+        cont = [o for o in objs if o[0] < c < o[1]]
         groups = []
-        for off, kind, r, k in inside:
+        for off, end, kind, r, k in inside:
             used.setdefault(r['slot'], r)
             if groups and groups[-1][0] == kind and groups[-1][1] is r:
                 groups[-1][2].append(k)
@@ -1243,20 +1284,30 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
                 groups.append([kind, r, [k], [base + off]])
         labs = labels_at.get(c, [])
         name = labs[0] if labs else '%s+0x%X' % (blob, c)
-        title = ('%s  --  %s +0x%X..+0x%X (ROM 0x%06X..0x%06X), %d bytes'
-                 % (name, blob, c, e, base + c, base + e, e - c))
         paras = []
-        if not inside or inside[0][0] != c:
-            first = inside[0][0] if inside else e
-            paras.append('No RegObjTabl-registered table points at the start of these '
-                         '%d bytes (0x%06X..0x%06X); purpose not established by that '
-                         'route.' % (first - c, base + c, base + first))
+        if cont:
+            off, end, kind, r, k = max(cont, key=lambda o: o[0])
+            paras.append('Continues %s (starts 0x%06X, %d of its %d bytes are here or later)'
+                         % (_group_text(m, kind, r, [k], [base + off]).rstrip('.'),
+                            base + off, end - c, end - off) + '.')
+            used.setdefault(r['slot'], r)
+        first = inside[0][0] if inside else e
+        covered = max([o[1] for o in cont], default=c)
+        admit = None
+        if first > covered:
+            # kept on ONE line: the census looks for the phrase, and a wrap
+            # between its words would hide the admission
+            admit = ('purpose not established: %d bytes at 0x%06X that no registered '
+                     'NAKA table points into' % (first - covered, base + covered))
         for kind, r, ks, starts in groups:
             paras.append(_group_text(m, kind, r, ks, starts))
         if len(labs) > 1:
-            paras.append('Other labels on this address: %s.' % ', '.join(labs[1:]))
-        hdr = title + '\n' + wrap(' '.join(paras))
-        pieces.append(Piece(name, c, e - c, hdr, None, labs))
+            paras.append('Other labels here: %s.' % ', '.join(labs[1:]))
+        text = '%s  +0x%X..+0x%X (0x%06X, %d B)\n%s' % (name, c, e, base + c, e - c,
+                                                       ' '.join(paras))
+        if admit:
+            text = text.replace('\n', '\n' + admit + '\n', 1)
+        pieces.append(Piece(name, c, e - c, text, None, labs, compact=True))
     return pieces
 
 
@@ -1266,13 +1317,16 @@ def write_file_note(lines, blob, text):
     mark = MARK + 'registered NAKA tables: ' + blob
     block = [RULE, mark] + ['; ' + l if l else ';' for l in text.split('\n')] + [RULE]
     block = [re.sub(r'0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), l).rstrip() for l in block]
+    block.append('')      # keep it a separate comment run from the first piece
     if mark in lines:
         i = lines.index(mark) - 1
         j = lines.index(RULE, i + 2)
+        if j + 1 < len(lines) and lines[j + 1] == '':
+            j += 1
         lines[i:j + 1] = block
         return
     i = 0
-    while i < len(lines) and lines[i] != RULE and \
+    while i < len(lines) and lines[i] != RULE and not lines[i].startswith(CMARK) and \
             (lines[i].startswith(';') or not lines[i].strip()):
         i += 1
     lines[i:i] = block
@@ -1289,7 +1343,7 @@ def _incbin_spans(lines, blob):
         if l == RULE:
             in_hdr = not in_hdr
             continue
-        if in_hdr:
+        if in_hdr or l.startswith(CMARK):
             continue
         m = rx.match(l)
         if m:
@@ -1313,6 +1367,23 @@ def _incbin_spans(lines, blob):
     return spans
 
 
+def protected_ranges(v, blob, path, lines):
+    """Blob offset ranges already typed by OBJECTS / REGIONS (their own
+    headers must not be replaced by an object-run header)."""
+    out = []
+    sl = s_slices(path, blob, lines)
+    for o in OBJECTS:
+        if o['blob'] == blob and o['label'] in sl:
+            a, n = sl[o['label']]
+            out.append((a, a + n))
+    for R in REGIONS:
+        if R['blob'] == blob:
+            cb = M.CBlob(os.path.join(ui(v), blob + '.c'))
+            start, end, _, _ = R['builder'](cb, compile_blob(v, blob), sl)
+            out.append((start, end))
+    return sorted(out)
+
+
 def apply_objruns(v, apply):
     m = objmap(v)
     for sname, blob in OBJRUN_FILES:
@@ -1328,9 +1399,22 @@ def apply_objruns(v, apply):
         base = blob_base(v, path, blob, lines)
         total = 0
         used = {}
+        prot = protected_ranges(v, blob, path, lines)
         for S0, S1, labels_at in _incbin_spans(lines, blob):
-            pieces = objrun_pieces(m, blob, base, S0, S1, labels_at, used)
-            total += rewrite_s_span(path, lines, blob, pieces)
+            # split the span around already-typed ranges
+            segs, a = [], S0
+            for p0, p1 in prot:
+                if p1 <= a or p0 >= S1:
+                    continue
+                if p0 > a:
+                    segs.append((a, p0))
+                a = max(a, p1)
+            if a < S1:
+                segs.append((a, S1))
+            for a0, a1 in segs:
+                la = {k: w for k, w in labels_at.items() if a0 <= k < a1}
+                pieces = objrun_pieces(m, blob, base, a0, a1, la, used)
+                total += rewrite_s_span(path, lines, blob, pieces)
         if used:
             note = wrap(FORMAT_NOTE) + '\n\nTables with objects in this file:\n\n' + \
                 '\n\n'.join(wrap(_reg_full(m, r)) for _, r in sorted(used.items()))

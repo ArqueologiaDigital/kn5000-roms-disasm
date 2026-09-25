@@ -1,52 +1,28 @@
 
 ; Sequencer Channel Containers + Drawbar/Mixer Data (13 widgets, 7936 bytes)
 ; Source: maincpu/ui_widgets/naka_sequencer_channels.c (C struct with named fields)
-; -----------------------------------------------------------------------------
-; [nakarest_retype] NakaData_SeqChannels
-; NakaData_SeqChannels  --  naka_sequencer_channels +0x0..+0x6a0 (ROM 0xeee078..0xeee718), 1696 bytes
-; No RegObjTabl-registered table points at the start of these 1696 bytes
-; (0xeee078..0xeee718); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] NakaData_SeqChannels  +0x0..+0x6a0 (0xeee078, 1696 B)
+; [nakarest] purpose not established: 1696 bytes at 0xeee078 that no registered NAKA table points into
 NakaData_SeqChannels:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x6A0
-; -----------------------------------------------------------------------------
-; [nakarest_retype] Naka_DrawbarOrgan_Screens
-; Naka_DrawbarOrgan_Screens  --  naka_sequencer_channels +0x6a0..+0x7a8 (ROM 0xeee718..0xeee820), 264 bytes
-; No RegObjTabl-registered table points at the start of these 264 bytes
-; (0xeee718..0xeee820); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] Naka_DrawbarOrgan_Screens  +0x6a0..+0x7a8 (0xeee718, 264 B)
+; [nakarest] purpose not established: 264 bytes at 0xeee718 that no registered NAKA table points into
 Naka_DrawbarOrgan_Screens:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0x108
-; -----------------------------------------------------------------------------
-; [nakarest_retype] SeqCh_FeatureDemoCallbackData
-; SeqCh_FeatureDemoCallbackData  --  naka_sequencer_channels +0x7a8..+0x888 (ROM 0xeee820..0xeee900), 224 bytes
-; No RegObjTabl-registered table points at the start of these 224 bytes
-; (0xeee820..0xeee900); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] SeqCh_FeatureDemoCallbackData  +0x7a8..+0x888 (0xeee820, 224 B)
+; [nakarest] purpose not established: 224 bytes at 0xeee820 that no registered NAKA table points into
 SeqCh_FeatureDemoCallbackData:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x7A8, 0xE0
-; -----------------------------------------------------------------------------
-; [nakarest_retype] SeqCh_SystemHandlerData
-; SeqCh_SystemHandlerData  --  naka_sequencer_channels +0x888..+0xc48 (ROM 0xeee900..0xeeecc0), 960 bytes
-; No RegObjTabl-registered table points at the start of these 960 bytes
-; (0xeee900..0xeeecc0); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] SeqCh_SystemHandlerData  +0x888..+0xc48 (0xeee900, 960 B)
+; [nakarest] purpose not established: 960 bytes at 0xeee900 that no registered NAKA table points into
 SeqCh_SystemHandlerData:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x888, 0x3C0
-; -----------------------------------------------------------------------------
-; [nakarest_retype] MixerPart_NamePtrTable
-; MixerPart_NamePtrTable  --  naka_sequencer_channels +0xc48..+0xccc (ROM 0xeeecc0..0xeeed44), 132 bytes
-; No RegObjTabl-registered table points at the start of these 132 bytes
-; (0xeeecc0..0xeeed44); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] MixerPart_NamePtrTable  +0xc48..+0xccc (0xeeecc0, 132 B)
+; [nakarest] purpose not established: 132 bytes at 0xeeecc0 that no registered NAKA table points into
 MixerPart_NamePtrTable:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC48, 0x84
-; -----------------------------------------------------------------------------
-; [nakarest_retype] Naka_DrawbarControl_Table
-; Naka_DrawbarControl_Table  --  naka_sequencer_channels +0xccc..+0xd00 (ROM 0xeeed44..0xeeed78), 52 bytes
-; No RegObjTabl-registered table points at the start of these 52 bytes
-; (0xeeed44..0xeeed78); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] Naka_DrawbarControl_Table  +0xccc..+0xd00 (0xeeed44, 52 B)
+; [nakarest] purpose not established: 52 bytes at 0xeeed44 that no registered NAKA table points into
 Naka_DrawbarControl_Table:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xCCC, 0x34
 EmbeddedPtrTable_v7_naka_sequencer_channels_000D00:
@@ -71,12 +47,8 @@ EmbeddedPtrTable_v7_naka_sequencer_channels_000D00:
 	.long 0xFFFFFFFF
 	.long 0xFFFF0002
 	.long 0x00000000
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_sequencer_channels+0xd54
-; naka_sequencer_channels+0xd54  --  naka_sequencer_channels +0xd54..+0xd5c (ROM 0xeeedcc..0xeeedd4), 8 bytes
-; No RegObjTabl-registered table points at the start of these 8 bytes
-; (0xeeedcc..0xeeedd4); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_sequencer_channels+0xd54  +0xd54..+0xd5c (0xeeedcc, 8 B)
+; [nakarest] purpose not established: 8 bytes at 0xeeedcc that no registered NAKA table points into
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xD54, 0x8
 MidiPart_ConfigNameTable:
 	.long MidiParam_PanelCfgTable
@@ -184,35 +156,19 @@ MidiPart_ConfigNameTable:
 	.long TrackName6_Unassigned_08
 	.long TrackName6_Unassigned_07
 	.long TrackName6_Unassigned_06
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_sequencer_channels+0xf00
-; naka_sequencer_channels+0xf00  --  naka_sequencer_channels +0xf00..+0xf48 (ROM 0xeeef78..0xeeefc0), 72 bytes
-; No RegObjTabl-registered table points at the start of these 72 bytes
-; (0xeeef78..0xeeefc0); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_sequencer_channels+0xf00  +0xf00..+0xf48 (0xeeef78, 72 B)
+; [nakarest] purpose not established: 72 bytes at 0xeeef78 that no registered NAKA table points into
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF00, 0x48
-; -----------------------------------------------------------------------------
-; [nakarest_retype] Naka_DrawbarSlider_Resources
-; Naka_DrawbarSlider_Resources  --  naka_sequencer_channels +0xf48..+0x12d8 (ROM 0xeeefc0..0xeef350), 912 bytes
-; No RegObjTabl-registered table points at the start of these 912 bytes
-; (0xeeefc0..0xeef350); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] Naka_DrawbarSlider_Resources  +0xf48..+0x12d8 (0xeeefc0, 912 B)
+; [nakarest] purpose not established: 912 bytes at 0xeeefc0 that no registered NAKA table points into
 Naka_DrawbarSlider_Resources:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390
-; -----------------------------------------------------------------------------
-; [nakarest_retype] Naka_DrawbarDisplay_Table1
-; Naka_DrawbarDisplay_Table1  --  naka_sequencer_channels +0x12d8..+0x1358 (ROM 0xeef350..0xeef3d0), 128 bytes
-; No RegObjTabl-registered table points at the start of these 128 bytes
-; (0xeef350..0xeef3d0); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] Naka_DrawbarDisplay_Table1  +0x12d8..+0x1358 (0xeef350, 128 B)
+; [nakarest] purpose not established: 128 bytes at 0xeef350 that no registered NAKA table points into
 Naka_DrawbarDisplay_Table1:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
-; -----------------------------------------------------------------------------
-; [nakarest_retype] Naka_DrawbarDisplay_Table2
-; Naka_DrawbarDisplay_Table2  --  naka_sequencer_channels +0x1358..+0x1510 (ROM 0xeef3d0..0xeef588), 440 bytes
-; No RegObjTabl-registered table points at the start of these 440 bytes
-; (0xeef3d0..0xeef588); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] Naka_DrawbarDisplay_Table2  +0x1358..+0x1510 (0xeef3d0, 440 B)
+; [nakarest] purpose not established: 440 bytes at 0xeef3d0 that no registered NAKA table points into
 Naka_DrawbarDisplay_Table2:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x1B8
 Naka_DrawbarReg_Table:
@@ -276,19 +232,11 @@ Naka_DrawbarReg_Table:
 	.long 0x00ED0212
 	.long 0x00ED0212
 	.long NoteNameStr_Table_1
-; -----------------------------------------------------------------------------
-; [nakarest_retype] naka_sequencer_channels+0x1600
-; naka_sequencer_channels+0x1600  --  naka_sequencer_channels +0x1600..+0x1a78 (ROM 0xeef678..0xeefaf0), 1144 bytes
-; No RegObjTabl-registered table points at the start of these 1144 bytes
-; (0xeef678..0xeefaf0); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] naka_sequencer_channels+0x1600  +0x1600..+0x1a78 (0xeef678, 1144 B)
+; [nakarest] purpose not established: 1144 bytes at 0xeef678 that no registered NAKA table points into
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x478
-; -----------------------------------------------------------------------------
-; [nakarest_retype] Palette_8bit_RGBA_2_Data
-; Palette_8bit_RGBA_2_Data  --  naka_sequencer_channels +0x1a78..+0x1ed6 (ROM 0xeefaf0..0xeeff4e), 1118 bytes
-; No RegObjTabl-registered table points at the start of these 1118 bytes
-; (0xeefaf0..0xeeff4e); purpose not established by that route.
-; -----------------------------------------------------------------------------
+; [nakarest] Palette_8bit_RGBA_2_Data  +0x1a78..+0x1ed6 (0xeefaf0, 1118 B)
+; [nakarest] purpose not established: 1118 bytes at 0xeefaf0 that no registered NAKA table points into
 Palette_8bit_RGBA_2_Data:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x45E
 
