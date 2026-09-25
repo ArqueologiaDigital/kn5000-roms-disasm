@@ -30409,6 +30409,7 @@ VoiceParam_Set_Tone_Option_Case0:
 	extz	wa
 	call	Voice_ActiveFlag_CheckAndLoad
 	jr	t, VoiceParam_Set_Tone_Option_Epilogue
+VoiceParam_Set_Tone_Option_Case1:
 	ld	a, (xsp+2)
 	extz	wa
 	call	Voice_Part_ResetSlotRouting
@@ -30423,6 +30424,7 @@ VoiceParam_Set_Tone_Option_Skip:
 	ld	bc, 0:i3
 	calr	VoiceAlloc_Apply_Algo_Group0
 	jr	VoiceParam_Set_Tone_Option_Epilogue
+VoiceParam_Set_Tone_Option_Case2:
 	ld	a, (xsp+2)
 	extz	wa
 	call	DSP_SlotParam_Write_Slot1
@@ -30431,6 +30433,7 @@ VoiceParam_Set_Tone_Option_Skip:
 	ld	bc, 0:i3
 	calr	VoiceAlloc_Apply_Algo_Group0
 	jr	VoiceParam_Set_Tone_Option_Epilogue
+VoiceParam_Set_Tone_Option_Case3:
 	ld	a, (xsp+2)
 	extz	wa
 	call	DSP_SlotParam_Write_Slot2
@@ -30439,10 +30442,12 @@ VoiceParam_Set_Tone_Option_Skip:
 	ld	bc, 0:i3
 	calr	VoiceAlloc_Apply_Algo_Group0
 	jr	VoiceParam_Set_Tone_Option_Epilogue
+VoiceParam_Set_Tone_Option_Case5:
 	ld	a, (xsp+2)
 	extz	wa
 	call	DSP_SlotParam_Write_Slot3
 	jr	t, VoiceParam_Set_Tone_Option_Epilogue
+VoiceParam_Set_Tone_Option_Case6:
 	ld	a, (xsp+2)
 	extz	wa
 	call	DSP_SlotParam_Write_Slot4
@@ -32330,8 +32335,9 @@ Audio_Cmd_EffParam_TableJump:
 	sll	wa, 1
 	ld	xix, 64056
 	ld_rrw	wa, xix, wa
-	lda	xix, (195066:24)
+	lda	xix, (Audio_Cmd_EffParam_TableJump_CaseBase:24)
 	jp_rr	8, xix, wa
+Audio_Cmd_EffParam_TableJump_CaseBase:
 	jrl	t, Audio_Cmd_EffParam_Return
 ; Opcode 0x11: Partial_Build_Present_Word(part) then EnvTranspose_UpdateLoop(part).
 Audio_Cmd_EffParam_Op11:
@@ -35892,8 +35898,9 @@ DSP_SetCoeff_MasterConfig:
 	add	wa, wa
 	lda	xix, (DSP_SETCOEFF_MASTERCONFIG_JUMPTABLE:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (202703:24)
+	lda	xix, (DSP_SetCoeff_MasterConfig_CaseBase:24)
 	jp_rr	8, xix, wa
+DSP_SetCoeff_MasterConfig_CaseBase:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -35904,6 +35911,7 @@ DSP_SetCoeff_MasterConfig:
 	calr	DSP_EffectStateQuery
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case1:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -35929,6 +35937,7 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_AlgoSelect
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case4:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	l, a
@@ -35943,6 +35952,7 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_MixSendConfig
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case5:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	e, a
@@ -35955,6 +35965,7 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_RouteCoeffs_TypeA
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case6:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	e, a
@@ -35967,6 +35978,7 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_RouteCoeffs_TypeB
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case7:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -35979,6 +35991,7 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_CopyCoeffs_TypeA
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case8:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -35991,6 +36004,7 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_CopyCoeffs_TypeB
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case9:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -36003,6 +36017,7 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_VoiceCoeffRoute
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case10:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -36015,12 +36030,14 @@ DSP_SetCoeff_MasterConfig_Skip:
 	calr	DSP_VoiceCoeffRoute2
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case11:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	extz	wa
 	calr	DSP_AlgoCoeffLookup
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case12:
 	ldw	iz, 8
 	cp	(xsp+2), iz
 	jrl	nc, DSP_SetCoeff_MasterConfig_Epilogue
@@ -36041,6 +36058,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	cp	(xsp+2), iz
 	jr	c, DSP_SetCoeff_MasterConfig_Loop
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case13:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	l, a
@@ -36055,6 +36073,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	calr	DSP_ReadVoiceParam5D
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case14:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	l, a
@@ -36069,6 +36088,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	calr	DSP_VoiceParam_Dispatch
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case15:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -36081,6 +36101,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	calr	DSP_SetCoeff_CopyDirect
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case16:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -36093,6 +36114,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	calr	DSP_SetCoeff_RouteComplex
 	ld	iz, hl
 	jrl	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case17:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -36105,6 +36127,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	calr	DSP_SetCoeff_CopyDirect2
 	ld	iz, hl
 	jr	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case18:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	l, a
@@ -36121,6 +36144,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	calr	DSP_SetCoeff_RouteWithCallback
 	ld	iz, hl
 	jr	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case19:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	l, a
@@ -36137,6 +36161,7 @@ DSP_SetCoeff_MasterConfig_Loop:
 	calr	DSP_SetCoeff_FullPipeline
 	ld	iz, hl
 	jr	t, DSP_SetCoeff_MasterConfig_Epilogue
+DSP_SetCoeff_MasterConfig_Case23:
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -56807,17 +56832,19 @@ DSP_BytecodeInterpreter_Loop:
 	add wa, wa
 	lda xix, (OFFSETS_14739:24)
 	ldw_sri WA, 0x07, 0xF0, 0xE0
-	lda xix, (DSP_Bytecode_Programs:24)
+	lda xix, (DSP_Bytecode_Op00_Groups5_ParamMix:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
 
-// DSP_Bytecode_Programs: 1613 bytes of native TLCS-900 code implementing
-// 6 opcode handlers (0-5) for the DSP bytecode interpreter.
-// Dispatch table at OFFSETS_14739 contains 16-bit offsets from this address.
-//
-// Uses prevbank registers (D7), auto-increment addressing ld C,(XWA+),
-// and compact register forms. Cannot be converted to LLVM native instructions
-// due to unsupported addressing modes.
+;  DSP_Bytecode_Programs: 1613 bytes of native TLCS-900 code implementing
+;  6 opcode handlers (0-5) for the DSP bytecode interpreter.
+;  Dispatch table at OFFSETS_14739 contains 16-bit offsets from this address.
+;
+;  Uses prevbank registers (D7), auto-increment addressing ld C,(XWA+),
+;  and compact register forms. Cannot be converted to LLVM native instructions
+;  due to unsupported addressing modes.
+; ★ CORRECTED 2026-09-25: "Cannot be converted to LLVM native instructions" no longer holds -- all
+; six handlers below are instructions now (converted and byte-gated by an earlier pass of this lane).
 //
 // Handler 0 (offset 0x000, 570 bytes): Command + 2 preamble + groups-of-5
 //   3-way branch per group: 0x00=static addr, 0x0A=raw, else=param-modified
@@ -56844,7 +56871,10 @@ DSP_BytecodeInterpreter_Loop:
 ; (0x00 = static address, 0x0A = raw, else = parameter-modified, mixing a 32-bit runtime
 ; parameter into the template coefficient).  The source file's own comment block above this
 ; label documents all six handlers and was cross-checked against the offset table here.
-DSP_Bytecode_Programs:
+; ★ Renamed 2026-09-25 from DSP_Bytecode_Programs: that name covered the whole 1613-byte run of six
+; handlers; this label is handler 0's entry (OFFSETS_14739 index 0), named like its siblings
+; DSP_Bytecode_Op01_Groups5_Addr12 .. _Op05_Groups5_Masked.
+DSP_Bytecode_Op00_Groups5_ParamMix:
 	; Converted from a 570-byte `.byte` run. Framing: unidasm; every
 	; instruction re-encoded and the whole run compared byte for byte.
 	; 200 instructions, of which 2 needed a spelling search because

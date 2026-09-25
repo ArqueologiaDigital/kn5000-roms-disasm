@@ -329,12 +329,12 @@ Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 ; symbols: AUDIO_PLAYNOTE_VARIANT_1 (0x01FB76), _VARIANT_2 (0x01FB7E), _VARIANT_3 (0x01FB82),
 ; LABEL_01FB86, LABEL_01FB8E, LABEL_01FB97. That six-way landing is what proves the decoding.
 OFFSETS_F460:
-	.short 0x0	; Audio_PlayNote_Variant_1
-	.short 0x8	; Audio_PlayNote_Variant_2
-	.short 0xC	; Audio_PlayNote_Variant_3
-	.short 0x10	; AudioTick_Variant_4
-	.short 0x18	; AudioTick_Variant_5
-	.short 0x21	; AudioTick_Variant_6
+	.short Audio_PlayNote_Variant_1 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_1
+	.short Audio_PlayNote_Variant_2 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_2
+	.short Audio_PlayNote_Variant_3 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_3
+	.short AudioTick_Variant_4 - Audio_PlayNote_Variant_1	; AudioTick_Variant_4
+	.short AudioTick_Variant_5 - Audio_PlayNote_Variant_1	; AudioTick_Variant_5
+	.short AudioTick_Variant_6 - Audio_PlayNote_Variant_1	; AudioTick_Variant_6
 
 
 ; ----------------------------------------------------------------------------
@@ -913,37 +913,91 @@ DSP_VOICEPARAM_DEFAULT_TABLE:
 ; --- 0x00F965-0x00F972  VOICEPARAM_TONE_OPTION_JUMPTABLE -- 7 u16 jump offsets, base 0x02E89B
 ; Computed jump in VoiceParam_Set_Tone_Option (option index 0..6): `jp T, 0x02E89B + table[index*2]`.
 VOICEPARAM_TONE_OPTION_JUMPTABLE:
-	.short 0x0000, 0x000b, 0x002e, 0x0043, 0x007d, 0x0058, 0x0063
+	.short VoiceParam_Set_Tone_Option_Case0 - VoiceParam_Set_Tone_Option_Case0	; index 0
+	.short VoiceParam_Set_Tone_Option_Case1 - VoiceParam_Set_Tone_Option_Case0	; index 1
+	.short VoiceParam_Set_Tone_Option_Case2 - VoiceParam_Set_Tone_Option_Case0	; index 2
+	.short VoiceParam_Set_Tone_Option_Case3 - VoiceParam_Set_Tone_Option_Case0	; index 3
+	.short VoiceParam_Set_Tone_Option_Epilogue - VoiceParam_Set_Tone_Option_Case0	; index 4
+	.short VoiceParam_Set_Tone_Option_Case5 - VoiceParam_Set_Tone_Option_Case0	; index 5
+	.short VoiceParam_Set_Tone_Option_Case6 - VoiceParam_Set_Tone_Option_Case0	; index 6
 
 ; --- 0x00F973-0x00F99A  AUDIO_CMD_TONEEDIT_JUMPTABLE -- 20 u16 jump offsets, base 0x02EDB9
 ; Computed jump in Audio_Cmd_ToneEdit_TableJump (opcodes 0x00..0x13): `jp T, 0x02EDB9 + table[index*2]`.
 AUDIO_CMD_TONEEDIT_JUMPTABLE:
-	.short 0x0000, 0x0255, 0x0255, 0x0255, 0x0016, 0x0035, 0x0054, 0x0073
-	.short 0x0092, 0x00b1, 0x00e4, 0x0117, 0x0182, 0x016d, 0x01b8, 0x01c8
-	.short 0x01f1, 0x0221, 0x0251, 0x0255
+	.short Audio_Cmd_ToneEdit_Op00 - Audio_Cmd_ToneEdit_Op00	; index 0
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 1
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 2
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 3
+	.short Audio_Cmd_ToneEdit_Op04 - Audio_Cmd_ToneEdit_Op00	; index 4
+	.short Audio_Cmd_ToneEdit_Op05 - Audio_Cmd_ToneEdit_Op00	; index 5
+	.short Audio_Cmd_ToneEdit_Op06 - Audio_Cmd_ToneEdit_Op00	; index 6
+	.short Audio_Cmd_ToneEdit_Op07 - Audio_Cmd_ToneEdit_Op00	; index 7
+	.short Audio_Cmd_ToneEdit_Op08 - Audio_Cmd_ToneEdit_Op00	; index 8
+	.short Audio_Cmd_ToneEdit_Op09 - Audio_Cmd_ToneEdit_Op00	; index 9
+	.short Audio_Cmd_ToneEdit_Op0A - Audio_Cmd_ToneEdit_Op00	; index 10
+	.short Audio_Cmd_ToneEdit_Op0B - Audio_Cmd_ToneEdit_Op00	; index 11
+	.short Audio_Cmd_ToneEdit_Op0C - Audio_Cmd_ToneEdit_Op00	; index 12
+	.short Audio_Cmd_ToneEdit_Op0D_SelectPart - Audio_Cmd_ToneEdit_Op00	; index 13
+	.short Audio_Cmd_ToneEdit_Op13 - Audio_Cmd_ToneEdit_Op00	; index 14
+	.short Audio_Cmd_ToneEdit_Op14 - Audio_Cmd_ToneEdit_Op00	; index 15
+	.short Audio_Cmd_ToneEdit_Op15 - Audio_Cmd_ToneEdit_Op00	; index 16
+	.short Audio_Cmd_ToneEdit_Op16 - Audio_Cmd_ToneEdit_Op00	; index 17
+	.short Audio_Cmd_ToneEdit_Op17 - Audio_Cmd_ToneEdit_Op00	; index 18
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 19
 
 ; --- 0x00F99B-0x00F9B2  DSP_EFFPARAM_APPLY_JUMPTABLE -- 12 u16 jump offsets, base 0x02F2D9
 ; Computed jump in DSP_EffParam_Apply_By_AlgoType (algorithm type 0..11): `jp T, 0x02F2D9 + table[index*2]`.
 DSP_EFFPARAM_APPLY_JUMPTABLE:
-	.short 0x0000, 0x0007, 0x000e, 0x0015, 0x001c, 0x0023, 0x002a, 0x0031
-	.short 0x0038, 0x0040, 0x0048, 0x0050
+	.short DSP_EffParam_Apply_T0 - DSP_EffParam_Apply_T0	; index 0
+	.short DSP_EffParam_Apply_T1 - DSP_EffParam_Apply_T0	; index 1
+	.short DSP_EffParam_Apply_T2 - DSP_EffParam_Apply_T0	; index 2
+	.short DSP_EffParam_Apply_T3 - DSP_EffParam_Apply_T0	; index 3
+	.short DSP_EffParam_Apply_T4 - DSP_EffParam_Apply_T0	; index 4
+	.short DSP_EffParam_Apply_T5 - DSP_EffParam_Apply_T0	; index 5
+	.short DSP_EffParam_Apply_T6 - DSP_EffParam_Apply_T0	; index 6
+	.short DSP_EffParam_Apply_T7 - DSP_EffParam_Apply_T0	; index 7
+	.short DSP_EffParam_Apply_T8 - DSP_EffParam_Apply_T0	; index 8
+	.short DSP_EffParam_Apply_T9 - DSP_EffParam_Apply_T0	; index 9
+	.short DSP_EffParam_Apply_TA - DSP_EffParam_Apply_T0	; index 10
+	.short DSP_EffParam_Apply_TB - DSP_EffParam_Apply_T0	; index 11
 
 ; --- 0x00F9B3-0x00F9C2  VOICE_DSPOUT_A_JUMPTABLE -- 8 u16 jump offsets, base 0x02F36E
 ; Computed jump in Voice_DSPOut_Apply_A ((patch+0x5D) & 0x0F, types 0..7): `jp T, 0x02F36E + table[index*2]`.
 ; Byte-identical to VOICE_DSPOUT_B_JUMPTABLE below (twin dispatchers, different
 ; arm bases).
 VOICE_DSPOUT_A_JUMPTABLE:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0016, 0x0016, 0x0022, 0x002c
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 0
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 1
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 2
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 3
+	.short Voice_DSPOut_A_Type4To5 - Voice_DSPOut_A_Type0To3	; index 4
+	.short Voice_DSPOut_A_Type4To5 - Voice_DSPOut_A_Type0To3	; index 5
+	.short Voice_DSPOut_A_Type6 - Voice_DSPOut_A_Type0To3	; index 6
+	.short Voice_DSPOut_A_Type7 - Voice_DSPOut_A_Type0To3	; index 7
 
 ; --- 0x00F9C3-0x00F9D2  VOICE_DSPOUT_B_JUMPTABLE -- 8 u16 jump offsets, base 0x02F3FA
 ; Computed jump in Voice_DSPOut_Apply_B (types 0..7): `jp T, 0x02F3FA + table[index*2]`.
 VOICE_DSPOUT_B_JUMPTABLE:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0016, 0x0016, 0x0022, 0x002c
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 0
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 1
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 2
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 3
+	.short Voice_DSPOut_B_Type4To5 - Voice_DSPOut_B_Type0To3	; index 4
+	.short Voice_DSPOut_B_Type4To5 - Voice_DSPOut_B_Type0To3	; index 5
+	.short Voice_DSPOut_B_Type6 - Voice_DSPOut_B_Type0To3	; index 6
+	.short Voice_DSPOut_B_Type7 - Voice_DSPOut_B_Type0To3	; index 7
 
 ; --- 0x00F9D3-0x00F9E2  VOICE_DSPOUT_SECOND_A_JUMPTABLE -- 8 u16 jump offsets, base 0x02F48C
 ; Computed jump in Voice_DSPOut_Second_A (algorithm types 4..0x0B mapped to index 0..7): `jp T, 0x02F48C + table[index*2]`.
 VOICE_DSPOUT_SECOND_A_JUMPTABLE:
-	.short 0x0000, 0x0000, 0x0008, 0x000e, 0x0035, 0x0035, 0x002d, 0x002d
+	.short Voice_DSPOut_Second_A_Slot1 - Voice_DSPOut_Second_A_Slot1	; index 0
+	.short Voice_DSPOut_Second_A_Slot1 - Voice_DSPOut_Second_A_Slot1	; index 1
+	.short Voice_DSPOut_Second_A_Simple - Voice_DSPOut_Second_A_Slot1	; index 2
+	.short Voice_DSPOut_Second_A_Gated - Voice_DSPOut_Second_A_Slot1	; index 3
+	.short Voice_DSPOut_Second_A_None - Voice_DSPOut_Second_A_Slot1	; index 4
+	.short Voice_DSPOut_Second_A_None - Voice_DSPOut_Second_A_Slot1	; index 5
+	.short Voice_DSPOut_Second_A_Slot0 - Voice_DSPOut_Second_A_Slot1	; index 6
+	.short Voice_DSPOut_Second_A_Slot0 - Voice_DSPOut_Second_A_Slot1	; index 7
 
 ; --- 0x00F9E3-0x00FA37  AUDIO_CMD_EFFPARAM_CASEMAP -- 85 bytes, opcode -> case
 ; Audio_Cmd_EffParam_TableJump maps opcode-0x11 (0..84) through this byte table
@@ -965,17 +1019,60 @@ AUDIO_CMD_EFFPARAM_CASEMAP:
 ; --- 0x00FA38-0x00FA75  AUDIO_CMD_EFFPARAM_JUMPTABLE -- 31 u16 jump offsets, base 0x02F9FA
 ; Computed jump in Audio_Cmd_EffParam_TableJump (case number 0x00..0x1E from the casemap above): `jp T, 0x02F9FA + table[index*2]`.
 AUDIO_CMD_EFFPARAM_JUMPTABLE:
-	.short 0x0003, 0x001e, 0x0385, 0x002d, 0x0059, 0x0085, 0x00b1, 0x00dd
-	.short 0x0109, 0x0135, 0x0161, 0x0171, 0x0181, 0x0191, 0x01a1, 0x01b1
-	.short 0x01c1, 0x01d1, 0x01e1, 0x01f1, 0x0201, 0x0211, 0x0221, 0x02e0
-	.short 0x02ee, 0x0307, 0x0320, 0x0339, 0x0347, 0x0355, 0x0363
+	.short Audio_Cmd_EffParam_Op11 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 0
+	.short Audio_Cmd_EffParam_Op12 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 1
+	.short Audio_Cmd_EffParam_Return - Audio_Cmd_EffParam_TableJump_CaseBase	; index 2
+	.short Audio_Cmd_EffParam_Op14 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 3
+	.short Audio_Cmd_EffParam_Op17 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 4
+	.short Audio_Cmd_EffParam_Op1A - Audio_Cmd_EffParam_TableJump_CaseBase	; index 5
+	.short Audio_Cmd_EffParam_Op1D - Audio_Cmd_EffParam_TableJump_CaseBase	; index 6
+	.short Audio_Cmd_EffParam_Op20 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 7
+	.short Audio_Cmd_EffParam_Op23 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 8
+	.short Audio_Cmd_EffParam_Op26 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 9
+	.short Audio_Cmd_EffParam_Grp0_Slot0 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 10
+	.short Audio_Cmd_EffParam_Grp0_Slot1 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 11
+	.short Audio_Cmd_EffParam_Grp0_Slot2 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 12
+	.short Audio_Cmd_EffParam_Grp0_Slot3 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 13
+	.short Audio_Cmd_EffParam_Grp1_Slot0 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 14
+	.short Audio_Cmd_EffParam_Grp1_Slot1 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 15
+	.short Audio_Cmd_EffParam_Grp1_Slot2 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 16
+	.short Audio_Cmd_EffParam_Grp1_Slot3 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 17
+	.short Audio_Cmd_EffParam_Grp2_Slot0 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 18
+	.short Audio_Cmd_EffParam_Grp2_Slot1 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 19
+	.short Audio_Cmd_EffParam_Grp2_Slot2 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 20
+	.short Audio_Cmd_EffParam_Grp2_Slot3 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 21
+	.short Audio_Cmd_EffParam_Op5D_FullRebuild - Audio_Cmd_EffParam_TableJump_CaseBase	; index 22
+	.short Audio_Cmd_EffParam_Op5E - Audio_Cmd_EffParam_TableJump_CaseBase	; index 23
+	.short Audio_Cmd_EffParam_Op5F - Audio_Cmd_EffParam_TableJump_CaseBase	; index 24
+	.short Audio_Cmd_EffParam_Op60 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 25
+	.short Audio_Cmd_EffParam_Op61 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 26
+	.short Audio_Cmd_EffParam_Op62 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 27
+	.short Audio_Cmd_EffParam_Op63 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 28
+	.short Audio_Cmd_EffParam_Op64 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 29
+	.short Audio_Cmd_EffParam_Op65 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 30
 
 ; --- 0x00FA76-0x00FA9B  AUDIO_CMD_EFFECTPARAM_JUMPTABLE -- 19 u16 jump offsets, base 0x02F86F
 ; Computed jump in Audio_Cmd_EffectParam_Dispatch (opcodes 0x15..0x27 mapped to index 0..18): `jp T, 0x02F86F + table[index*2]`.
 AUDIO_CMD_EFFECTPARAM_JUMPTABLE:
-	.short 0x0000, 0x012a, 0x012a, 0x0028, 0x012a, 0x012a, 0x0054, 0x012a
-	.short 0x012a, 0x0080, 0x012a, 0x012a, 0x00ab, 0x012a, 0x012a, 0x00d6
-	.short 0x012a, 0x012a, 0x0101
+	.short Audio_Cmd_EffParam_Grp0 - Audio_Cmd_EffParam_Grp0	; index 0
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 1
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 2
+	.short Audio_Cmd_EffParam_Grp1 - Audio_Cmd_EffParam_Grp0	; index 3
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 4
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 5
+	.short Audio_Cmd_EffParam_Grp2 - Audio_Cmd_EffParam_Grp0	; index 6
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 7
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 8
+	.short Audio_Cmd_EffParam_Grp3 - Audio_Cmd_EffParam_Grp0	; index 9
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 10
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 11
+	.short Audio_Cmd_EffParam_Grp4 - Audio_Cmd_EffParam_Grp0	; index 12
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 13
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 14
+	.short Audio_Cmd_EffParam_Grp5 - Audio_Cmd_EffParam_Grp0	; index 15
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 16
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 17
+	.short Audio_Cmd_EffParam_Grp6 - Audio_Cmd_EffParam_Grp0	; index 18
 
 ; --- 0x00FA9C-0x00FAB5  AUDIO_CMD_DSPUNIT_CASEMAP -- 26 bytes, opcode -> case
 ; Audio_Cmd_DSPUnit_TableJump maps opcode-0x1F (only 7..25 reachable) through
@@ -990,8 +1087,15 @@ AUDIO_CMD_DSPUNIT_CASEMAP:
 ; --- 0x00FAB6-0x00FAC7  AUDIO_CMD_DSPUNIT_JUMPTABLE -- 9 u16 jump offsets, base 0x02FFF9
 ; Computed jump in Audio_Cmd_DSPUnit_TableJump (case number 0..8 from the casemap above): `jp T, 0x02FFF9 + table[index*2]`.
 AUDIO_CMD_DSPUNIT_JUMPTABLE:
-	.short 0x00dc, 0x01e6, 0x013a, 0x0151, 0x0173, 0x0000, 0x000f, 0x0054
-	.short 0x0069
+	.short Audio_Cmd_DSPUnit_Op26 - Audio_Cmd_DSPUnit_Op01	; index 0
+	.short Audio_Cmd_DSPUnit_Return - Audio_Cmd_DSPUnit_Op01	; index 1
+	.short Audio_Cmd_DSPUnit_Op2D - Audio_Cmd_DSPUnit_Op01	; index 2
+	.short Audio_Cmd_DSPUnit_Op36 - Audio_Cmd_DSPUnit_Op01	; index 3
+	.short Audio_Cmd_DSPUnit_Op38 - Audio_Cmd_DSPUnit_Op01	; index 4
+	.short Audio_Cmd_DSPUnit_Op01 - Audio_Cmd_DSPUnit_Op01	; index 5
+	.short Audio_Cmd_DSPUnit_Op02 - Audio_Cmd_DSPUnit_Op01	; index 6
+	.short Audio_Cmd_DSPUnit_Op05 - Audio_Cmd_DSPUnit_Op01	; index 7
+	.short Audio_Cmd_DSPUnit_Op06 - Audio_Cmd_DSPUnit_Op01	; index 8
 
 ; --- 0x00FAC8-0x00FADF  AUDIO_CMD_TONEEDIT_REPLY_CASEMAP -- 24 bytes, opcode -> case
 ; Audio_Cmd_ToneEdit_Reply_TableJump folds opcodes 0x19..0x24 and 0x2B..0x36 into
@@ -1005,25 +1109,66 @@ AUDIO_CMD_TONEEDIT_REPLY_CASEMAP:
 ; --- 0x00FAE0-0x00FAED  AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE -- 7 u16 jump offsets, base 0x0304B6
 ; Computed jump in Audio_Cmd_ToneEdit_Reply_TableJump (case number 0..6 from the casemap above): `jp T, 0x0304B6 + table[index*2]`.
 AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE:
-	.short 0x0000, 0x0052, 0x0011, 0x0031, 0x0048, 0x0024, 0x003e
+	.short Audio_Cmd_ToneEdit_Reply_Case_Pan - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 0
+	.short Audio_Cmd_ToneEdit_Reply_Send - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 1
+	.short Audio_Cmd_ToneEdit_Reply_Case_Sustain - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 2
+	.short Audio_Cmd_ToneEdit_Reply_Case_Slot1 - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 3
+	.short Audio_Cmd_ToneEdit_Reply_Case_ReadBack1 - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 4
+	.short Audio_Cmd_ToneEdit_Reply_Case_Slot0 - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 5
+	.short Audio_Cmd_ToneEdit_Reply_Case_ReadBack - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 6
 
 ; --- 0x00FAEE-0x00FB1D  DSP_SETCOEFF_MASTERCONFIG_JUMPTABLE -- 24 u16 jump offsets, base 0x0317CF
 ; Computed jump in DSP_SetCoeff_MasterConfig (selector 0..23): `jp T, 0x0317CF + table[index*2]`.
 ; Offset 0x0282 (entries 2, 3, 20, 21, 22) is the shared "no-op/return" arm.
 DSP_SETCOEFF_MASTERCONFIG_JUMPTABLE:
-	.short 0x0000, 0x001b, 0x0282, 0x0282, 0x005b, 0x0080, 0x009e, 0x00bc
-	.short 0x00db, 0x00fa, 0x0118, 0x0136, 0x0146, 0x017a, 0x019f, 0x01c4
-	.short 0x01e3, 0x0201, 0x021f, 0x024a, 0x0282, 0x0282, 0x0282, 0x0275
+	.short DSP_SetCoeff_MasterConfig_CaseBase - DSP_SetCoeff_MasterConfig_CaseBase	; index 0
+	.short DSP_SetCoeff_MasterConfig_Case1 - DSP_SetCoeff_MasterConfig_CaseBase	; index 1
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 2
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 3
+	.short DSP_SetCoeff_MasterConfig_Case4 - DSP_SetCoeff_MasterConfig_CaseBase	; index 4
+	.short DSP_SetCoeff_MasterConfig_Case5 - DSP_SetCoeff_MasterConfig_CaseBase	; index 5
+	.short DSP_SetCoeff_MasterConfig_Case6 - DSP_SetCoeff_MasterConfig_CaseBase	; index 6
+	.short DSP_SetCoeff_MasterConfig_Case7 - DSP_SetCoeff_MasterConfig_CaseBase	; index 7
+	.short DSP_SetCoeff_MasterConfig_Case8 - DSP_SetCoeff_MasterConfig_CaseBase	; index 8
+	.short DSP_SetCoeff_MasterConfig_Case9 - DSP_SetCoeff_MasterConfig_CaseBase	; index 9
+	.short DSP_SetCoeff_MasterConfig_Case10 - DSP_SetCoeff_MasterConfig_CaseBase	; index 10
+	.short DSP_SetCoeff_MasterConfig_Case11 - DSP_SetCoeff_MasterConfig_CaseBase	; index 11
+	.short DSP_SetCoeff_MasterConfig_Case12 - DSP_SetCoeff_MasterConfig_CaseBase	; index 12
+	.short DSP_SetCoeff_MasterConfig_Case13 - DSP_SetCoeff_MasterConfig_CaseBase	; index 13
+	.short DSP_SetCoeff_MasterConfig_Case14 - DSP_SetCoeff_MasterConfig_CaseBase	; index 14
+	.short DSP_SetCoeff_MasterConfig_Case15 - DSP_SetCoeff_MasterConfig_CaseBase	; index 15
+	.short DSP_SetCoeff_MasterConfig_Case16 - DSP_SetCoeff_MasterConfig_CaseBase	; index 16
+	.short DSP_SetCoeff_MasterConfig_Case17 - DSP_SetCoeff_MasterConfig_CaseBase	; index 17
+	.short DSP_SetCoeff_MasterConfig_Case18 - DSP_SetCoeff_MasterConfig_CaseBase	; index 18
+	.short DSP_SetCoeff_MasterConfig_Case19 - DSP_SetCoeff_MasterConfig_CaseBase	; index 19
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 20
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 21
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 22
+	.short DSP_SetCoeff_MasterConfig_Case23 - DSP_SetCoeff_MasterConfig_CaseBase	; index 23
 
 ; --- 0x00FB1E-0x00FB2D  VOICEPARAM_FINALIZE_QUERY_JUMPTABLE -- 8 u16 jump offsets, base 0x031B5B
 ; Computed jump in VoiceParamFinalize_SecondaryDispatch (status bit 3 CLEAR -> "queries"): `jp T, 0x031B5B + table[index*2]`.
 VOICEPARAM_FINALIZE_QUERY_JUMPTABLE:
-	.short 0x0000, 0x0008, 0x006d, 0x00cb, 0x0129, 0x01bb, 0x01f2, 0x0246
+	.short VoiceParamFinalize_SecondaryBody - VoiceParamFinalize_SecondaryBody	; index 0
+	.short VoiceParam_Query_Case1_PatchRec - VoiceParamFinalize_SecondaryBody	; index 1
+	.short VoiceParam_Query_Case2_Partial01 - VoiceParamFinalize_SecondaryBody	; index 2
+	.short VoiceParam_Query_Case3_Partial23 - VoiceParamFinalize_SecondaryBody	; index 3
+	.short VoiceParam_Query_Case4_PartialAny - VoiceParamFinalize_SecondaryBody	; index 4
+	.short VoiceParam_Query_Case5_PatchRec2 - VoiceParamFinalize_SecondaryBody	; index 5
+	.short VoiceParam_Query_Case6_SubTone - VoiceParamFinalize_SecondaryBody	; index 6
+	.short VoiceParam_Query_Case7_PartialSlot - VoiceParamFinalize_SecondaryBody	; index 7
 
 ; --- 0x00FB2E-0x00FB3D  VOICEPARAM_FINALIZE_ACTION_JUMPTABLE -- 8 u16 jump offsets, base 0x031AA1
 ; Computed jump in Voice_ParamFinalize (status bit 3 SET -> "actions"): `jp T, 0x031AA1 + table[index*2]`.
 VOICEPARAM_FINALIZE_ACTION_JUMPTABLE:
-	.short 0x0000, 0x0008, 0x0018, 0x0044, 0x0070, 0x0080, 0x0088, 0x0090
+	.short ToneCmd_DispatchTable_Body - ToneCmd_DispatchTable_Body	; index 0
+	.short VoiceParam_Action_Case1 - ToneCmd_DispatchTable_Body	; index 1
+	.short VoiceParam_Action_Case2 - ToneCmd_DispatchTable_Body	; index 2
+	.short VoiceParam_Action_Case3 - ToneCmd_DispatchTable_Body	; index 3
+	.short VoiceParam_Action_Case4 - ToneCmd_DispatchTable_Body	; index 4
+	.short VoiceParam_Action_Case5 - ToneCmd_DispatchTable_Body	; index 5
+	.short VoiceParam_Action_Case6 - ToneCmd_DispatchTable_Body	; index 6
+	.short VoiceParam_Action_Case7 - ToneCmd_DispatchTable_Body	; index 7
 
 ; --- 0x00FB3E-0x00FB4D  VoiceParamFinalize_HandlerParams -- 16 bytes, UNREFERENCED
 ; No direct code reference located. Sits between the two VoiceParamFinalize
@@ -1054,38 +1199,89 @@ SlotEnableMaskB:
 ; --- 0x00FB66-0x00FB7D  AlgoJumpTable1 -- 12 u16 jump offsets, base 0x033812
 ; Computed jump in DSP_AlgoType_Dispatch1 (algorithm type 0..0x0B): `jp T, 0x033812 + table[index*2]`.
 AlgoJumpTable1:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0052, 0x0052, 0x016c, 0x0052
-	.short 0x016c, 0x016c, 0x00e1, 0x00e1
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 0
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 1
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 2
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 3
+	.short DSP_AlgoType_D1_Arm_Type457 - DSP_AlgoType_Dispatch1_Arms	; index 4
+	.short DSP_AlgoType_D1_Arm_Type457 - DSP_AlgoType_Dispatch1_Arms	; index 5
+	.short DSP_AlgoType_Dispatch1_Store - DSP_AlgoType_Dispatch1_Arms	; index 6
+	.short DSP_AlgoType_D1_Arm_Type457 - DSP_AlgoType_Dispatch1_Arms	; index 7
+	.short DSP_AlgoType_Dispatch1_Store - DSP_AlgoType_Dispatch1_Arms	; index 8
+	.short DSP_AlgoType_Dispatch1_Store - DSP_AlgoType_Dispatch1_Arms	; index 9
+	.short DSP_AlgoType_D1_Arm_TypeAB - DSP_AlgoType_Dispatch1_Arms	; index 10
+	.short DSP_AlgoType_D1_Arm_TypeAB - DSP_AlgoType_Dispatch1_Arms	; index 11
 
 ; --- 0x00FB7E-0x00FB95  AlgoJumpTable2 -- 12 u16 jump offsets, base 0x0339DE
 ; Computed jump in DSP_AlgoType_Dispatch2 (algorithm type 0..0x0B): `jp T, 0x0339DE + table[index*2]`.
 AlgoJumpTable2:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0055, 0x0055, 0x014b, 0x0055
-	.short 0x014b, 0x014b, 0x00e6, 0x00e6
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 0
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 1
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 2
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 3
+	.short DSP_AlgoType_D2_Arm_Type457 - DSP_AlgoType_Dispatch2_Arms	; index 4
+	.short DSP_AlgoType_D2_Arm_Type457 - DSP_AlgoType_Dispatch2_Arms	; index 5
+	.short DSP_AlgoType_Dispatch2_Store - DSP_AlgoType_Dispatch2_Arms	; index 6
+	.short DSP_AlgoType_D2_Arm_Type457 - DSP_AlgoType_Dispatch2_Arms	; index 7
+	.short DSP_AlgoType_Dispatch2_Store - DSP_AlgoType_Dispatch2_Arms	; index 8
+	.short DSP_AlgoType_Dispatch2_Store - DSP_AlgoType_Dispatch2_Arms	; index 9
+	.short DSP_AlgoType_D2_Arm_TypeAB - DSP_AlgoType_Dispatch2_Arms	; index 10
+	.short DSP_AlgoType_D2_Arm_TypeAB - DSP_AlgoType_Dispatch2_Arms	; index 11
 
 ; --- 0x00FB96-0x00FBAD  AlgoJumpTable3 -- 12 u16 jump offsets, base 0x033E44
 ; Computed jump in DSP_AlgoType_Dispatch3 (algorithm type 0..0x0B; types 6, 8, 9 land on the bare ret): `jp T, 0x033E44 + table[index*2]`.
 AlgoJumpTable3:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x012f, 0x0000
-	.short 0x012f, 0x012f, 0x00e7, 0x00e7
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 0
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 1
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 2
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 3
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 4
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 5
+	.short DSP_AlgoType_D3_Return - DSP_AlgoType_D3_Arm_Types0to5_7	; index 6
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 7
+	.short DSP_AlgoType_D3_Return - DSP_AlgoType_D3_Arm_Types0to5_7	; index 8
+	.short DSP_AlgoType_D3_Return - DSP_AlgoType_D3_Arm_Types0to5_7	; index 9
+	.short DSP_AlgoType_D3_Arm_TypeAB - DSP_AlgoType_D3_Arm_Types0to5_7	; index 10
+	.short DSP_AlgoType_D3_Arm_TypeAB - DSP_AlgoType_D3_Arm_Types0to5_7	; index 11
 
 ; --- 0x00FBAE-0x00FBBF  AlgoJumpTable4 -- 9 u16 jump offsets, base 0x0340CC
 ; Computed jump in Algo_SubTable_DispatchB (algorithm type 0..8): `jp T, 0x0340CC + table[index*2]`.
 AlgoJumpTable4:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x001d, 0x001d, 0x0055, 0x0055
-	.short 0x003a
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 0
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 1
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 2
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 3
+	.short Algo_SubTable_DispatchB_Arm_Type45 - Algo_SubTable_JumpTable1	; index 4
+	.short Algo_SubTable_DispatchB_Arm_Type45 - Algo_SubTable_JumpTable1	; index 5
+	.short Algo_SubTable_DispatchB_Return - Algo_SubTable_JumpTable1	; index 6
+	.short Algo_SubTable_DispatchB_Return - Algo_SubTable_JumpTable1	; index 7
+	.short Algo_SubTable_DispatchB_Arm_Type8 - Algo_SubTable_JumpTable1	; index 8
 
 ; --- 0x00FBC0-0x00FBD1  AlgoJumpTable5 -- 9 u16 jump offsets, base 0x0341BE
 ; Computed jump in Algo_SubTable_DispatchC (algorithm type 0..8): `jp T, 0x0341BE + table[index*2]`.
 AlgoJumpTable5:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0030, 0x0030, 0x003c, 0x0059
-	.short 0x003c
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 0
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 1
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 2
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 3
+	.short Algo_SubTable_DispatchC_Arm_Type45 - Algo_SubTable_JumpTable2	; index 4
+	.short Algo_SubTable_DispatchC_Arm_Type45 - Algo_SubTable_JumpTable2	; index 5
+	.short Algo_SubTable_DispatchC_Arm_Type68 - Algo_SubTable_JumpTable2	; index 6
+	.short Algo_SubTable_Epilogue - Algo_SubTable_JumpTable2	; index 7
+	.short Algo_SubTable_DispatchC_Arm_Type68 - Algo_SubTable_JumpTable2	; index 8
 
 ; --- 0x00FBD2-0x00FBE3  AlgoJumpTable6 -- 9 u16 jump offsets, base 0x03429D
 ; Computed jump in Algo_SubTable_Bit15Dispatch (algorithm type 0..8): `jp T, 0x03429D + table[index*2]`.
 AlgoJumpTable6:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0025, 0x0025, 0x0071, 0x0071
-	.short 0x004a
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 0
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 1
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 2
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 3
+	.short Algo_SubTable_Bit15_Arm_Type45 - Algo_SubTable_JumpTable3	; index 4
+	.short Algo_SubTable_Bit15_Arm_Type45 - Algo_SubTable_JumpTable3	; index 5
+	.short Algo_SubTable_Bit15Dispatch_Return - Algo_SubTable_JumpTable3	; index 6
+	.short Algo_SubTable_Bit15Dispatch_Return - Algo_SubTable_JumpTable3	; index 7
+	.short Algo_SubTable_Bit15_Arm_Type8 - Algo_SubTable_JumpTable3	; index 8
 
 ; --- 0x00FBE4-0x00FCE3  Voice_Reg080_NoteField_Table -- 128 u16 words
 ; RENAMED 2026-08-21 (was Voice_PanPosition_Table). It has nothing to do with pan: pan is
@@ -4560,6 +4756,8 @@ EFF_ParamMeta_ByteTableB:
 ; ldw_sri WA / lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613
 ; bytes of hand TLCS-900 code implementing handlers 0..5, kept as raw bytes because of
 ; unsupported addressing.
+; ★ 2026-09-25: no longer raw bytes -- the six handlers are instructions, and every entry
+; below is `.short Handler - Base`; handler 0's label is DSP_Bytecode_Op00_Groups5_ParamMix.
 ; ★ CORRECTED: this used to attribute the dispatch to DSP_BytecodeInterpreter_Init
 ; (0x03C259). _Init performs no dispatch at all -- it copies the descriptor's four words and
 ; one long into the stack frame and then `jrl DSP_BytecodeInterpreter_CheckEnd`. The quoted
@@ -4572,12 +4770,12 @@ EFF_ParamMeta_ByteTableB:
 ; op3 +0x3DA -> 0x03C708, op4 +0x473 -> 0x03C7A1, op5 +0x48D -> 0x03C7BB.
 ; Consumed by the computed `jp (XIX+DE)` at the tail of DSP_BytecodeInterpreter_Loop.
 OFFSETS_14739:
-	.short 0x0
-	.short 0x23A
-	.short 0x333
-	.short 0x3DA
-	.short 0x473
-	.short 0x48D
+	.short DSP_Bytecode_Op00_Groups5_ParamMix - DSP_Bytecode_Op00_Groups5_ParamMix	; index 0
+	.short DSP_Bytecode_Op01_Groups5_Addr12 - DSP_Bytecode_Op00_Groups5_ParamMix	; index 1
+	.short DSP_Bytecode_Op02_Groups3_Raw - DSP_Bytecode_Op00_Groups5_ParamMix	; index 2
+	.short DSP_Bytecode_Op03_Addr16_RawTail - DSP_Bytecode_Op00_Groups5_ParamMix	; index 3
+	.short DSP_Bytecode_Op04_CommandOnly - DSP_Bytecode_Op00_Groups5_ParamMix	; index 4
+	.short DSP_Bytecode_Op05_Groups5_Masked - DSP_Bytecode_Op00_Groups5_ParamMix	; index 5
 
 ; --- 0x014745-0x014776  OFFSETS_14745 -- 25 x u16 jump offsets, base 0x03CB8E
 ; The DSP bytecode interpreter's SECONDARY dispatch, for opcodes 0x61..0x79: `sub wa,0x61 /
@@ -4597,31 +4795,31 @@ OFFSETS_14739:
 ; Consumed by the computed `jp (XIX+DE)` at 0x03CB89.  Opcodes 0x21, 0x24 and 0x40 are
 ; special-cased BEFORE this table; anything else aborts via DSP_Op_Unknown_Error.
 OFFSETS_14745:
-	.short 0x0
-	.short 0x50
-	.short 0x6C
-	.short 0xA5
-	.short 0xC2
-	.short 0xDF
-	.short 0xFC
-	.short 0x11D
-	.short 0x13A
-	.short 0x157
-	.short 0x174
-	.short 0x191
-	.short 0x1B1
-	.short 0x1CE
-	.short 0x1EB
-	.short 0x208
-	.short 0x22B
-	.short 0x248
-	.short 0x265
-	.short 0x282
-	.short 0x297
-	.short 0x2B4
-	.short 0x2D7
-	.short 0x2F4
-	.short 0x88
+	.short DSP_Op_0x61_LinearEval - DSP_Op_0x61_LinearEval	; index 0
+	.short DSP_Op_0x62_ParamFetchSingle - DSP_Op_0x61_LinearEval	; index 1
+	.short DSP_Op_0x63_ParamFetchAlgoType - DSP_Op_0x61_LinearEval	; index 2
+	.short DSP_Op_0x64_PitchParamScale - DSP_Op_0x61_LinearEval	; index 3
+	.short DSP_Op_0x65_VolumeParamScale - DSP_Op_0x61_LinearEval	; index 4
+	.short DSP_Op_0x66_Interp2Point - DSP_Op_0x61_LinearEval	; index 5
+	.short DSP_Op_0x67_InterpFPScale - DSP_Op_0x61_LinearEval	; index 6
+	.short DSP_Op_0x68_InterpDiv0xB4 - DSP_Op_0x61_LinearEval	; index 7
+	.short DSP_Op_0x69_VolumeCurve - DSP_Op_0x61_LinearEval	; index 8
+	.short DSP_Op_0x6A_FreqCurve - DSP_Op_0x61_LinearEval	; index 9
+	.short DSP_Op_0x6B_FreqInterp2Point - DSP_Op_0x61_LinearEval	; index 10
+	.short DSP_Op_0x6C_Interp3Point - DSP_Op_0x61_LinearEval	; index 11
+	.short DSP_Op_0x6D_ReverbCurve - DSP_Op_0x61_LinearEval	; index 12
+	.short DSP_Op_0x6E_InterpFPComplex - DSP_Op_0x61_LinearEval	; index 13
+	.short DSP_Op_0x6F_PanCurve - DSP_Op_0x61_LinearEval	; index 14
+	.short DSP_Op_0x70_BiquadCoeff - DSP_Op_0x61_LinearEval	; index 15
+	.short DSP_Op_0x71_DetuneCurve - DSP_Op_0x61_LinearEval	; index 16
+	.short DSP_Op_0x72_BiquadWarp - DSP_Op_0x61_LinearEval	; index 17
+	.short DSP_Op_0x73_InterpDiv0xC6 - DSP_Op_0x61_LinearEval	; index 18
+	.short DSP_Op_0x74_LUTParamSet - DSP_Op_0x61_LinearEval	; index 19
+	.short DSP_Op_0x75_ParamEQCurve - DSP_Op_0x61_LinearEval	; index 20
+	.short DSP_Op_0x76_SOSCoeff - DSP_Op_0x61_LinearEval	; index 21
+	.short DSP_Op_0x77_Interp2PointB - DSP_Op_0x61_LinearEval	; index 22
+	.short DSP_Op_0x78_VolScaleB - DSP_Op_0x61_LinearEval	; index 23
+	.short DSP_Op_0x79_AlgoParamDecode - DSP_Op_0x61_LinearEval	; index 24
 
 ; NOTE: this address ALREADY carries the ELF name ToneGen_WorkArea -- no rename proposed, this
 ; entry documents it. It is DSP program+parameter data, not a tone-generator work area.
