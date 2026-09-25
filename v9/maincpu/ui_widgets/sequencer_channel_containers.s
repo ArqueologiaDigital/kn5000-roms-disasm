@@ -9,18 +9,24 @@
 ; [nakarest] 0x3df10, 0x108`).
 NakaData_SeqChannels:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x6A0
-; [nakarest] Naka_DrawbarOrgan_Screens  +0x6a0..+0x7a8 (0xeee718, 264 B)
-; [nakarest] purpose not established: layout of 264 B at 0xeee718 not derived; readers below
+; [nakarest] Naka_DrawbarOrgan_Screens  +0x6a0..+0x79a (0xeee718, 250 B)
+; [nakarest] purpose not established: layout of 250 B at 0xeee718 not derived; readers below
+; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
+; [nakarest] 0x3e374..0x3e46e (its ld xde/xhl/xbc + ldir blocks), where they are read by
+; [nakarest] FDC_ClearDiskChangeStatus (sequencer/smf_event_processor.s: `ld (0x3e3e2:24), a`),
+; [nakarest] FileOpen_DeviceFound (sequencer/smf_event_processor.s: `cp wa, (0x3e3de:24)`),
+; [nakarest] FileOpen_DeviceSearchLoop (sequencer/smf_event_processor.s: `cp wa, (0x3e3de:24)`),
+; [nakarest] FileOpen_MatchDevice (sequencer/smf_event_processor.s: `cp wa, (0x3e3de:24)`), 1
+; [nakarest] more.
+Naka_DrawbarOrgan_Screens:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0xFA
+; [nakarest] naka_sequencer_channels+0x79a  +0x79a..+0x7a8 (0xeee812, 14 B)
+; [nakarest] purpose not established: layout of 14 B at 0xeee812 not derived; readers below
 ; [nakarest] Readers: source references AudioCtrl_DataBlock_Join4 (ui/drawbar_panel_ui.s: `.long
 ; [nakarest] Pad_AfterNaka_DrawbarOrgan_Screens`); work-RAM image: Boot_InitWorkRAM copies these
-; [nakarest] bytes to RAM 0x3e374..0x3e47c (its ld xde/xhl/xbc + ldir blocks), where they are
-; [nakarest] read by FDC_ClearDiskChangeStatus (sequencer/smf_event_processor.s: `ld
-; [nakarest] (0x3e3e2:24), a`), FileOpen_DeviceFound (sequencer/smf_event_processor.s: `cp wa,
-; [nakarest] (0x3e3de:24)`), FileOpen_DeviceSearchLoop (sequencer/smf_event_processor.s: `cp wa,
-; [nakarest] (0x3e3de:24)`), FileOpen_MatchDevice (sequencer/smf_event_processor.s: `cp wa,
-; [nakarest] (0x3e3de:24)`), 1 more.
-Naka_DrawbarOrgan_Screens:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0x108
+; [nakarest] bytes to RAM 0x3e46e..0x3e47c (its ld xde/xhl/xbc + ldir blocks); no literal RAM
+; [nakarest] reference into that copy was found.
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x79A, 0xE
 ; [nakarest] SeqCh_FeatureDemoCallbackData  +0x7a8..+0x888 (0xeee820, 224 B)
 ; [nakarest] purpose not established: layout of 224 B at 0xeee820 not derived; readers below
 ; [nakarest] Readers: source references FDemoText_ByteData_DisplayRefresh_Loop
@@ -302,22 +308,26 @@ Naka_DrawbarReg_Table:
 	.long 0x00ED0212
 	.long 0x00ED0212
 	.long NoteNameStr_Table_1
-; [nakarest] naka_sequencer_channels+0x1600  +0x1600..+0x1a78 (0xeef678, 1144 B)
-; [nakarest] purpose not established: layout of 1144 B at 0xeef678 not derived; readers below
+; [nakarest] naka_sequencer_channels+0x1600  +0x1600..+0x19ee (0xeef678, 1006 B)
+; [nakarest] purpose not established: layout of 1006 B at 0xeef678 not derived; readers below
+; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
+; [nakarest] 0x3f2d4..0x3f6c2 (its ld xde/xhl/xbc + ldir blocks); no literal RAM reference into
+; [nakarest] that copy was found.
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x3EE
+; [nakarest] naka_sequencer_channels+0x19ee  +0x19ee..+0x1a78 (0xeefa66, 138 B)
+; [nakarest] purpose not established: layout of 138 B at 0xeefa66 not derived; readers below
 ; [nakarest] Readers: source references Boot_InitWorkRAM_ROMCopy2_Start (boot/system_handlers.s:
 ; [nakarest] `ld xhl, Naka_DrawbarReg_Table_0x4DE`); 1 data word in
 ; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start (at 0xef0bd8), which is read by
 ; [nakarest] Boot_InitWorkRAM_ROMCopy1_Start (boot/system_handlers.s: `jr z,
 ; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start`); work-RAM image: Boot_InitWorkRAM copies these
-; [nakarest] bytes to RAM 0x3f2d4..0x3f6c2 (its ld xde/xhl/xbc + ldir blocks); no literal RAM
-; [nakarest] reference into that copy was found; work-RAM image: Boot_InitWorkRAM copies these
 ; [nakarest] bytes to RAM 0x0e35e..0x0e3e8 (its ld xde/xhl/xbc + ldir blocks), where they are
 ; [nakarest] read by AccBankData_FinalizeCheck (sequencer/accompaniment_engine.s: `lda xde,
 ; [nakarest] (0xe3ba:16)`), AccDraw_Secondary_Return2 (sequencer/accompaniment_engine.s: `ld
 ; [nakarest] (0xe3dc:16), 181`), AccPlayback_CheckStateFlags (sequencer/accompaniment_engine.s:
 ; [nakarest] `or (0xe3e0:16), 16`), AccPlayback_ProcessTempoAdvance
 ; [nakarest] (sequencer/accompaniment_engine.s: `ld (0xe3e0:16), 16`), 83 more.
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x478
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x19EE, 0x8A
 ; [nakarest] Palette_8bit_RGBA_2_Data  +0x1a78..+0x1f00 (0xeefaf0, 1160 B)
 ; [nakarest] purpose not established: layout of 1160 B at 0xeefaf0 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM

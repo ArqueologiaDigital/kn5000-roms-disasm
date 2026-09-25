@@ -910,10 +910,21 @@ NakaData_WidgetNames:
 ; [nakarest] propdata strings (the +16 field signature) of class 0 of Class slot 0x160 (table
 ; [nakarest] 0xeac9ee, 109 entries, InitializeRoot): Object "".
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x618, 0x2
-; [nakarest] naka_widget_names_charmap+0x61a  +0x61a..+0x628 (0xeada8a, 14 B)
+; [nakarest] naka_widget_names_charmap+0x61a  +0x61a..+0x622 (0xeada8a, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 0 of Class slot 0x160 (table 0xeac9ee,
 ; [nakarest] 109 entries, InitializeRoot): Object.
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x61A, 0xE
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x61A, 0x8
+; [nakarest] naka_widget_names_charmap+0x622  +0x622..+0x624 (0xeada92, 2 B)
+; [nakarest] Text (2 B at 0xeada92), first string "m"; no registered NAKA table points into it;
+; [nakarest] reached through source references InitializeRoot (display/graphics_text_vga.s:
+; [nakarest] `RegObjTable 0x1600004, 0xfa44e2, 0xeada92, 0xeac9ee, 0x160`).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x622, 0x2
+; [nakarest] naka_widget_names_charmap+0x624  +0x624..+0x628 (0xeada94, 4 B)
+; [nakarest] purpose not established: layout of 4 B at 0xeada94 not derived; readers below
+; [nakarest] Readers: source references SliderH_Setup (ui/ui_widget_defs.s: `ld hl,
+; [nakarest] (NakaData_WidgetNames_0x624:24)`); 1 data word in Naka_DrawbarDisplay_Table1 (at
+; [nakarest] 0xeef378).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x624, 0x4
 ; [nakarest] NakaInst_CHARA5W  +0x628..+0x630 (0xeada98, 8 B)
 ; [nakarest] Text (8 B at 0xeada98), first string "CHARA5W"; no registered NAKA table points
 ; [nakarest] into it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef374).
@@ -997,20 +1008,30 @@ NakaInst_ara6_fnt:
 ; [nakarest] the table itself: ResEvent slot 0x1c0 (table 0xeae7b6, 60 entries, InitializeRoot),
 ; [nakarest] 60 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1346, 0xF4
-; [nakarest] naka_widget_names_charmap+0x143a  +0x143a..+0x1742 (0xeae8aa, 776 B)
+; [nakarest] naka_widget_names_charmap+0x143a  +0x143a..+0x1740 (0xeae8aa, 774 B)
 ; [nakarest] name strings, entries 0-59 of ResEvent slot 0x1c0 (table 0xeae7b6, 60 entries,
 ; [nakarest] InitializeRoot): "EV_SWIN_MODE", "EV_OLD_TITLE", "EV_NEW_TITLE", "EV_ASSSWB",
 ; [nakarest] "EV_DELIVERYEVENT", "EV_UPDATESCREEN", ....
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x143A, 0x308
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x143A, 0x306
+; [nakarest] naka_widget_names_charmap+0x1740  +0x1740..+0x1742 (0xeaebb0, 2 B)
+; [nakarest] Text (2 B at 0xeaebb0), first string "<"; no registered NAKA table points into it;
+; [nakarest] reached through source references InitializeRoot (display/graphics_text_vga.s:
+; [nakarest] `RegObjTable 0x160000c, 0xfa58fb, 0xeaebb0, 0xeae7b6, 0x1c0`).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1740, 0x2
 ; [nakarest] naka_widget_names_charmap+0x1742  +0x1742..+0x1a36 (0xeaebb2, 756 B)
 ; [nakarest] the table itself: ResMethod slot 0x1e0 (table 0xeaebb2, 188 entries,
 ; [nakarest] InitializeRoot), 188 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1742, 0x2F4
-; [nakarest] naka_widget_names_charmap+0x1a36  +0x1a36..+0x25fe (0xeaeea6, 3016 B)
+; [nakarest] naka_widget_names_charmap+0x1a36  +0x1a36..+0x25fc (0xeaeea6, 3014 B)
 ; [nakarest] name strings, entries 0-187 of ResMethod slot 0x1e0 (table 0xeaebb2, 188 entries,
 ; [nakarest] InitializeRoot): "MT_MainLoopCount", "MT_SetTitleFlag", "MT_GetInitData",
 ; [nakarest] "MT_CheckInitData", "MT_EasySetGo", "MT_InterruptOff", ....
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1A36, 0xBC8
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1A36, 0xBC6
+; [nakarest] naka_widget_names_charmap+0x25fc  +0x25fc..+0x25fe (0xeafa6c, 2 B)
+; [nakarest] purpose not established: layout of 2 B at 0xeafa6c not derived; readers below
+; [nakarest] Readers: source references InitializeRoot (display/graphics_text_vga.s:
+; [nakarest] `RegObjTable 0x160000d, 0xfa5948, 0xeafa6c, 0xeaebb2, 0x1e0`).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x25FC, 0x2
 ; [nakarest] naka_widget_names_charmap+0x25fe  +0x25fe..+0x2b82 (0xeafa6e, 1412 B)
 ; [nakarest] the table itself: Function slot 0x100 (table 0xeafa6e, 352 entries,
 ; [nakarest] InitializeRoot), 352 entry pointers x 4 bytes.
@@ -2909,11 +2930,23 @@ Str_InitializeToshi:
 ; [nakarest] InitializeRoot) (names for Function slot 0x100): "InitializeMurai".
 Str_InitializeMurai:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44AA, 0x10
-; [nakarest] Str_InitializeRoot  +0x44ba..+0x44d0 (0xeb192a, 22 B)
+; [nakarest] Str_InitializeRoot  +0x44ba..+0x44ca (0xeb192a, 16 B)
 ; [nakarest] name string, entry 0 of Function slot 0x400 (table 0xeafff2, 352 entries,
 ; [nakarest] InitializeRoot) (names for Function slot 0x100): "InitializeRoot".
 Str_InitializeRoot:
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44BA, 0x16
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44BA, 0x10
+; [nakarest] naka_widget_names_charmap+0x44ca  +0x44ca..+0x44cc (0xeb193a, 2 B)
+; [nakarest] purpose not established: layout of 2 B at 0xeb193a not derived; readers below
+; [nakarest] Readers: source references SliderV_Setup (ui/ui_widget_defs.s: `ld hl,
+; [nakarest] (Str_InitializeRoot_0x10:24)`).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CA, 0x2
+; [nakarest] naka_widget_names_charmap+0x44cc  +0x44cc..+0x44d0 (0xeb193c, 4 B)
+; [nakarest] purpose not established: layout of 4 B at 0xeb193c not derived; readers below
+; [nakarest] Readers: source references IconIDProc (ui/ui_widget_defs.s: `ld xbc,
+; [nakarest] Str_InitializeRoot_0x12`), SliderV_CalcRange (ui/ui_widget_defs.s: `ld xbc,
+; [nakarest] Str_InitializeRoot_0x12`), SliderV_ReturnAlt (ui/ui_widget_defs.s: `ld xwa,
+; [nakarest] Str_InitializeRoot_0x12`).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CC, 0x4
 ; [nakarest] IconNamePtrTable  +0x44d0..+0x4500 (0xeb1940, 48 B)
 ; [nakarest] purpose not established: 48 B at 0xeb1940 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 IconNamePtrTable:
@@ -5079,13 +5112,19 @@ IconBitmapName_i99:
 ; [nakarest] IconBitmapNamePtrTable (at 0xeb2228).
 IconBitmapName_i98:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5316, 0x8
-; [nakarest] IconBitmapName_i97  +0x531e..+0x5330 (0xeb278e, 18 B)
-; [nakarest] Text (18 B at 0xeb278e), first string "i97.bmp"; no registered NAKA table points
+; [nakarest] IconBitmapName_i97  +0x531e..+0x5326 (0xeb278e, 8 B)
+; [nakarest] Text (8 B at 0xeb278e), first string "i97.bmp"; no registered NAKA table points
 ; [nakarest] into it; reached through source references IconBitmapNamePtrTable
-; [nakarest] (ui_widgets/widget_names_charmap.s: `.long IconBitmapName_i97`); 2 data words in
-; [nakarest] IconBitmapNamePtrTable (at 0xeb2224, 0xeb2220).
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long IconBitmapName_i97`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2224).
 IconBitmapName_i97:
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x531E, 0x12
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x531E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5326  +0x5326..+0x5330 (0xeb2796, 10 B)
+; [nakarest] Text (10 B at 0xeb2796), first string "i96o.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2796`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2220).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5326, 0xA
 ; [nakarest] IconBitmapName_i95  +0x5330..+0x5338 (0xeb27a0, 8 B)
 ; [nakarest] Text (8 B at 0xeb27a0), first string "i95.bmp"; no registered NAKA table points
 ; [nakarest] into it; reached through source references IconBitmapNamePtrTable
@@ -5261,13 +5300,439 @@ NakaInst_i72_bmp:
 ; [nakarest] IconBitmapNamePtrTable (at 0xeb21bc).
 NakaInst_i71_bmp:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53FE, 0x8
-; [nakarest] NakaInst_0_bmp  +0x5406..+0x5648 (0xeb2876, 578 B)
-; [nakarest] Text (578 B at 0xeb2876), first string "i70.bmp"; no registered NAKA table points
+; [nakarest] NakaInst_0_bmp  +0x5406..+0x540e (0xeb2876, 8 B)
+; [nakarest] Text (8 B at 0xeb2876), first string "i70.bmp"; no registered NAKA table points
 ; [nakarest] into it; reached through source references IconBitmapNamePtrTable
-; [nakarest] (ui_widgets/widget_names_charmap.s: `.long NakaInst_0_bmp`); 72 data words in
-; [nakarest] IconBitmapNamePtrTable (at 0xeb21b8, 0xeb21b4, 0xeb21b0).
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long NakaInst_0_bmp`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb21b8).
 NakaInst_0_bmp:
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5406, 0x242
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5406, 0x8
+; [nakarest] naka_widget_names_charmap+0x540e  +0x540e..+0x5416 (0xeb287e, 8 B)
+; [nakarest] Text (8 B at 0xeb287e), first string "i69.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb287e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb21b4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x540E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5416  +0x5416..+0x541e (0xeb2886, 8 B)
+; [nakarest] Text (8 B at 0xeb2886), first string "i68.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2886`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb21b0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5416, 0x8
+; [nakarest] naka_widget_names_charmap+0x541e  +0x541e..+0x5426 (0xeb288e, 8 B)
+; [nakarest] Text (8 B at 0xeb288e), first string "i67.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb288e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb21ac).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x541E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5426  +0x5426..+0x542e (0xeb2896, 8 B)
+; [nakarest] Text (8 B at 0xeb2896), first string "i66.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2896`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb21a8).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5426, 0x8
+; [nakarest] naka_widget_names_charmap+0x542e  +0x542e..+0x5436 (0xeb289e, 8 B)
+; [nakarest] Text (8 B at 0xeb289e), first string "i65.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb289e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb21a4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x542E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5436  +0x5436..+0x543e (0xeb28a6, 8 B)
+; [nakarest] Text (8 B at 0xeb28a6), first string "i64.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28a6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb21a0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5436, 0x8
+; [nakarest] naka_widget_names_charmap+0x543e  +0x543e..+0x5446 (0xeb28ae, 8 B)
+; [nakarest] Text (8 B at 0xeb28ae), first string "i63.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28ae`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb219c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x543E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5446  +0x5446..+0x544e (0xeb28b6, 8 B)
+; [nakarest] Text (8 B at 0xeb28b6), first string "i62.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28b6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2198).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5446, 0x8
+; [nakarest] naka_widget_names_charmap+0x544e  +0x544e..+0x5456 (0xeb28be, 8 B)
+; [nakarest] Text (8 B at 0xeb28be), first string "i61.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28be`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2194).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x544E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5456  +0x5456..+0x545e (0xeb28c6, 8 B)
+; [nakarest] Text (8 B at 0xeb28c6), first string "i60.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28c6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2190).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5456, 0x8
+; [nakarest] naka_widget_names_charmap+0x545e  +0x545e..+0x5466 (0xeb28ce, 8 B)
+; [nakarest] Text (8 B at 0xeb28ce), first string "i59.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28ce`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb218c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x545E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5466  +0x5466..+0x546e (0xeb28d6, 8 B)
+; [nakarest] Text (8 B at 0xeb28d6), first string "i58.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28d6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2188).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5466, 0x8
+; [nakarest] naka_widget_names_charmap+0x546e  +0x546e..+0x5476 (0xeb28de, 8 B)
+; [nakarest] Text (8 B at 0xeb28de), first string "i57.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28de`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2184).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x546E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5476  +0x5476..+0x547e (0xeb28e6, 8 B)
+; [nakarest] Text (8 B at 0xeb28e6), first string "i56.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28e6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2180).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5476, 0x8
+; [nakarest] naka_widget_names_charmap+0x547e  +0x547e..+0x5486 (0xeb28ee, 8 B)
+; [nakarest] Text (8 B at 0xeb28ee), first string "i55.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28ee`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb217c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x547E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5486  +0x5486..+0x548e (0xeb28f6, 8 B)
+; [nakarest] Text (8 B at 0xeb28f6), first string "i54.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28f6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2178).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5486, 0x8
+; [nakarest] naka_widget_names_charmap+0x548e  +0x548e..+0x5496 (0xeb28fe, 8 B)
+; [nakarest] Text (8 B at 0xeb28fe), first string "i53.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb28fe`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2174).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x548E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5496  +0x5496..+0x549e (0xeb2906, 8 B)
+; [nakarest] Text (8 B at 0xeb2906), first string "i52.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2906`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2170).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5496, 0x8
+; [nakarest] naka_widget_names_charmap+0x549e  +0x549e..+0x54a6 (0xeb290e, 8 B)
+; [nakarest] Text (8 B at 0xeb290e), first string "i51.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb290e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb216c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x549E, 0x8
+; [nakarest] naka_widget_names_charmap+0x54a6  +0x54a6..+0x54ae (0xeb2916, 8 B)
+; [nakarest] Text (8 B at 0xeb2916), first string "i50.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2916`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2168).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54A6, 0x8
+; [nakarest] naka_widget_names_charmap+0x54ae  +0x54ae..+0x54b6 (0xeb291e, 8 B)
+; [nakarest] Text (8 B at 0xeb291e), first string "i49.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb291e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2164).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54AE, 0x8
+; [nakarest] naka_widget_names_charmap+0x54b6  +0x54b6..+0x54be (0xeb2926, 8 B)
+; [nakarest] Text (8 B at 0xeb2926), first string "i48.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2926`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2160).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54B6, 0x8
+; [nakarest] naka_widget_names_charmap+0x54be  +0x54be..+0x54c6 (0xeb292e, 8 B)
+; [nakarest] Text (8 B at 0xeb292e), first string "i47.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb292e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb215c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54BE, 0x8
+; [nakarest] naka_widget_names_charmap+0x54c6  +0x54c6..+0x54ce (0xeb2936, 8 B)
+; [nakarest] Text (8 B at 0xeb2936), first string "i46.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2936`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2158).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54C6, 0x8
+; [nakarest] naka_widget_names_charmap+0x54ce  +0x54ce..+0x54d6 (0xeb293e, 8 B)
+; [nakarest] Text (8 B at 0xeb293e), first string "i45.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb293e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2154).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54CE, 0x8
+; [nakarest] naka_widget_names_charmap+0x54d6  +0x54d6..+0x54de (0xeb2946, 8 B)
+; [nakarest] Text (8 B at 0xeb2946), first string "i44.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2946`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2150).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54D6, 0x8
+; [nakarest] naka_widget_names_charmap+0x54de  +0x54de..+0x54e6 (0xeb294e, 8 B)
+; [nakarest] Text (8 B at 0xeb294e), first string "i43.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb294e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb214c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54DE, 0x8
+; [nakarest] naka_widget_names_charmap+0x54e6  +0x54e6..+0x54ee (0xeb2956, 8 B)
+; [nakarest] Text (8 B at 0xeb2956), first string "i42.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2956`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2148).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54E6, 0x8
+; [nakarest] naka_widget_names_charmap+0x54ee  +0x54ee..+0x54f6 (0xeb295e, 8 B)
+; [nakarest] Text (8 B at 0xeb295e), first string "i41.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb295e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2144).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54EE, 0x8
+; [nakarest] naka_widget_names_charmap+0x54f6  +0x54f6..+0x54fe (0xeb2966, 8 B)
+; [nakarest] Text (8 B at 0xeb2966), first string "i40.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2966`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2140).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54F6, 0x8
+; [nakarest] naka_widget_names_charmap+0x54fe  +0x54fe..+0x5506 (0xeb296e, 8 B)
+; [nakarest] Text (8 B at 0xeb296e), first string "i39.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb296e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb213c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x54FE, 0x8
+; [nakarest] naka_widget_names_charmap+0x5506  +0x5506..+0x550e (0xeb2976, 8 B)
+; [nakarest] Text (8 B at 0xeb2976), first string "i38.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2976`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2138).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5506, 0x8
+; [nakarest] naka_widget_names_charmap+0x550e  +0x550e..+0x5516 (0xeb297e, 8 B)
+; [nakarest] Text (8 B at 0xeb297e), first string "i37.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb297e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2134).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x550E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5516  +0x5516..+0x551e (0xeb2986, 8 B)
+; [nakarest] Text (8 B at 0xeb2986), first string "i36.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2986`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2130).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5516, 0x8
+; [nakarest] naka_widget_names_charmap+0x551e  +0x551e..+0x5526 (0xeb298e, 8 B)
+; [nakarest] Text (8 B at 0xeb298e), first string "i35.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb298e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb212c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x551E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5526  +0x5526..+0x552e (0xeb2996, 8 B)
+; [nakarest] Text (8 B at 0xeb2996), first string "i34.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2996`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2128).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5526, 0x8
+; [nakarest] naka_widget_names_charmap+0x552e  +0x552e..+0x5536 (0xeb299e, 8 B)
+; [nakarest] Text (8 B at 0xeb299e), first string "i33.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb299e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2124).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x552E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5536  +0x5536..+0x553e (0xeb29a6, 8 B)
+; [nakarest] Text (8 B at 0xeb29a6), first string "i32.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29a6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2120).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5536, 0x8
+; [nakarest] naka_widget_names_charmap+0x553e  +0x553e..+0x5546 (0xeb29ae, 8 B)
+; [nakarest] Text (8 B at 0xeb29ae), first string "i31.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29ae`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb211c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x553E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5546  +0x5546..+0x554e (0xeb29b6, 8 B)
+; [nakarest] Text (8 B at 0xeb29b6), first string "i30.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29b6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2118).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5546, 0x8
+; [nakarest] naka_widget_names_charmap+0x554e  +0x554e..+0x5556 (0xeb29be, 8 B)
+; [nakarest] Text (8 B at 0xeb29be), first string "i29.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29be`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2114).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x554E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5556  +0x5556..+0x555e (0xeb29c6, 8 B)
+; [nakarest] Text (8 B at 0xeb29c6), first string "i28.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29c6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2110).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5556, 0x8
+; [nakarest] naka_widget_names_charmap+0x555e  +0x555e..+0x5566 (0xeb29ce, 8 B)
+; [nakarest] Text (8 B at 0xeb29ce), first string "i27.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29ce`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb210c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x555E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5566  +0x5566..+0x556e (0xeb29d6, 8 B)
+; [nakarest] Text (8 B at 0xeb29d6), first string "i26.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29d6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2108).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5566, 0x8
+; [nakarest] naka_widget_names_charmap+0x556e  +0x556e..+0x5576 (0xeb29de, 8 B)
+; [nakarest] Text (8 B at 0xeb29de), first string "i25.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29de`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2104).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x556E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5576  +0x5576..+0x557e (0xeb29e6, 8 B)
+; [nakarest] Text (8 B at 0xeb29e6), first string "i24.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29e6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb2100).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5576, 0x8
+; [nakarest] naka_widget_names_charmap+0x557e  +0x557e..+0x5586 (0xeb29ee, 8 B)
+; [nakarest] Text (8 B at 0xeb29ee), first string "i23.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29ee`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20fc).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x557E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5586  +0x5586..+0x558e (0xeb29f6, 8 B)
+; [nakarest] Text (8 B at 0xeb29f6), first string "i22.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29f6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20f8).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5586, 0x8
+; [nakarest] naka_widget_names_charmap+0x558e  +0x558e..+0x5596 (0xeb29fe, 8 B)
+; [nakarest] Text (8 B at 0xeb29fe), first string "i21.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb29fe`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20f4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x558E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5596  +0x5596..+0x559e (0xeb2a06, 8 B)
+; [nakarest] Text (8 B at 0xeb2a06), first string "i20.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a06`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20f0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5596, 0x8
+; [nakarest] naka_widget_names_charmap+0x559e  +0x559e..+0x55a6 (0xeb2a0e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a0e), first string "i19.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a0e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20ec).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x559E, 0x8
+; [nakarest] naka_widget_names_charmap+0x55a6  +0x55a6..+0x55ae (0xeb2a16, 8 B)
+; [nakarest] Text (8 B at 0xeb2a16), first string "i18.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a16`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20e8).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55A6, 0x8
+; [nakarest] naka_widget_names_charmap+0x55ae  +0x55ae..+0x55b6 (0xeb2a1e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a1e), first string "i17.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a1e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20e4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55AE, 0x8
+; [nakarest] naka_widget_names_charmap+0x55b6  +0x55b6..+0x55be (0xeb2a26, 8 B)
+; [nakarest] Text (8 B at 0xeb2a26), first string "i16.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a26`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20e0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55B6, 0x8
+; [nakarest] naka_widget_names_charmap+0x55be  +0x55be..+0x55c6 (0xeb2a2e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a2e), first string "i15.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a2e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20dc).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55BE, 0x8
+; [nakarest] naka_widget_names_charmap+0x55c6  +0x55c6..+0x55ce (0xeb2a36, 8 B)
+; [nakarest] Text (8 B at 0xeb2a36), first string "i14.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a36`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20d8).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55C6, 0x8
+; [nakarest] naka_widget_names_charmap+0x55ce  +0x55ce..+0x55d6 (0xeb2a3e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a3e), first string "i13.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a3e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20d4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55CE, 0x8
+; [nakarest] naka_widget_names_charmap+0x55d6  +0x55d6..+0x55de (0xeb2a46, 8 B)
+; [nakarest] Text (8 B at 0xeb2a46), first string "i12.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a46`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20d0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55D6, 0x8
+; [nakarest] naka_widget_names_charmap+0x55de  +0x55de..+0x55e6 (0xeb2a4e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a4e), first string "i11.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a4e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20cc).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55DE, 0x8
+; [nakarest] naka_widget_names_charmap+0x55e6  +0x55e6..+0x55ee (0xeb2a56, 8 B)
+; [nakarest] Text (8 B at 0xeb2a56), first string "i10.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a56`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20c8).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55E6, 0x8
+; [nakarest] naka_widget_names_charmap+0x55ee  +0x55ee..+0x55f6 (0xeb2a5e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a5e), first string "i9.bmp"; no registered NAKA table points into
+; [nakarest] it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a5e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20c4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55EE, 0x8
+; [nakarest] naka_widget_names_charmap+0x55f6  +0x55f6..+0x55fe (0xeb2a66, 8 B)
+; [nakarest] Text (8 B at 0xeb2a66), first string "i8.bmp"; no registered NAKA table points into
+; [nakarest] it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a66`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20c0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55F6, 0x8
+; [nakarest] naka_widget_names_charmap+0x55fe  +0x55fe..+0x5606 (0xeb2a6e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a6e), first string "i7.bmp"; no registered NAKA table points into
+; [nakarest] it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a6e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20bc).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x55FE, 0x8
+; [nakarest] naka_widget_names_charmap+0x5606  +0x5606..+0x560e (0xeb2a76, 8 B)
+; [nakarest] Text (8 B at 0xeb2a76), first string "i6o.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a76`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20b8).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5606, 0x8
+; [nakarest] naka_widget_names_charmap+0x560e  +0x560e..+0x5616 (0xeb2a7e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a7e), first string "i5.bmp"; no registered NAKA table points into
+; [nakarest] it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a7e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20b4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x560E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5616  +0x5616..+0x561e (0xeb2a86, 8 B)
+; [nakarest] Text (8 B at 0xeb2a86), first string "i4o.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a86`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20b0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5616, 0x8
+; [nakarest] naka_widget_names_charmap+0x561e  +0x561e..+0x5626 (0xeb2a8e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a8e), first string "i3o.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a8e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20ac).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x561E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5626  +0x5626..+0x562e (0xeb2a96, 8 B)
+; [nakarest] Text (8 B at 0xeb2a96), first string "i2.bmp"; no registered NAKA table points into
+; [nakarest] it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a96`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20a8).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5626, 0x8
+; [nakarest] naka_widget_names_charmap+0x562e  +0x562e..+0x5636 (0xeb2a9e, 8 B)
+; [nakarest] Text (8 B at 0xeb2a9e), first string "i1.bmp"; no registered NAKA table points into
+; [nakarest] it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2a9e`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20a4).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x562E, 0x8
+; [nakarest] naka_widget_names_charmap+0x5636  +0x5636..+0x563e (0xeb2aa6, 8 B)
+; [nakarest] Text (8 B at 0xeb2aa6), first string "i0.bmp"; no registered NAKA table points into
+; [nakarest] it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2aa6`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb20a0).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5636, 0x8
+; [nakarest] naka_widget_names_charmap+0x563e  +0x563e..+0x5648 (0xeb2aae, 10 B)
+; [nakarest] Text (10 B at 0xeb2aae), first string "trash.bmp"; no registered NAKA table points
+; [nakarest] into it; reached through source references IconBitmapNamePtrTable
+; [nakarest] (ui_widgets/widget_names_charmap.s: `.long 0x00eb2aae`); 1 data word in
+; [nakarest] IconBitmapNamePtrTable (at 0xeb209c).
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x563E, 0xA
 ; [nakarest] NakaInst_trash_bmp  +0x5648..+0x5652 (0xeb2ab8, 10 B)
 ; [nakarest] Text (10 B at 0xeb2ab8), first string "trash.bmp"; no registered NAKA table points
 ; [nakarest] into it; reached through source references IconBitmapNamePtrTable

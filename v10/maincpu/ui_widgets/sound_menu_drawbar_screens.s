@@ -365,10 +365,15 @@ NakaData_SoundMenuDrawbar:
 ; [nakarest] propdata strings (the +16 field signature) of class 0 of Class slot 0x161 (table
 ; [nakarest] 0xe80cf6, 37 entries, InitializeMurai): IvSdpart "".
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x2F4, 0x2
-; [nakarest] naka_sound_menu_drawbar+0x2f6  +0x2f6..+0x302 (0xe812d8, 12 B)
+; [nakarest] naka_sound_menu_drawbar+0x2f6  +0x2f6..+0x300 (0xe812d8, 10 B)
 ; [nakarest] class-name strings (the +12 name) of classes 0 of Class slot 0x161 (table 0xe80cf6,
 ; [nakarest] 37 entries, InitializeMurai): IvSdpart.
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x2F6, 0xC
+	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x2F6, 0xA
+; [nakarest] naka_sound_menu_drawbar+0x300  +0x300..+0x302 (0xe812e2, 2 B)
+; [nakarest] Text (2 B at 0xe812e2), first string "%"; no registered NAKA table points into it;
+; [nakarest] reached through source references InitializeMurai (ui/drawbar_panel_ui.s:
+; [nakarest] `RegObjTable 0x1600004, 0xfa44e2, 0xe812e2, 0xe80cf6, 0x161`).
+	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x300, 0x2
 ; [nakarest] naka_sound_menu_drawbar+0x302  +0x302..+0x306 (0xe812e4, 4 B)
 ; [nakarest] the table itself: ResEvent slot 0x1c1 (table 0xe812e4, 10 entries,
 ; [nakarest] InitializeMurai), 10 entry pointers x 4 bytes.
@@ -380,21 +385,31 @@ NakaData_SoundMenuDrawbar:
 ; [nakarest] are here or later).
 Naka_EventDispatch_Table:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x306, 0x28
-; [nakarest] naka_sound_menu_drawbar+0x32e  +0x32e..+0x3c4 (0xe81310, 150 B)
+; [nakarest] naka_sound_menu_drawbar+0x32e  +0x32e..+0x3c2 (0xe81310, 148 B)
 ; [nakarest] name strings, entries 0-9 of ResEvent slot 0x1c1 (table 0xe812e4, 10 entries,
 ; [nakarest] InitializeMurai): "EV_MPVERSION", "EV_TONEMODE", "EV_EXECPRESENTATION",
 ; [nakarest] "EV_ENDSONG", "EV_STARTSONG", "EV_ALLINITIAL", ....
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x32E, 0x96
+	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x32E, 0x94
+; [nakarest] naka_sound_menu_drawbar+0x3c2  +0x3c2..+0x3c4 (0xe813a4, 2 B)
+; [nakarest] purpose not established: layout of 2 B at 0xe813a4 not derived; readers below
+; [nakarest] Readers: source references InitializeMurai (ui/drawbar_panel_ui.s: `RegObjTable
+; [nakarest] 0x160000c, 0xfa58fb, 0xe813a4, 0xe812e4, 0x1c1`).
+	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x3C2, 0x2
 ; [nakarest] Naka_Event_Table3  +0x3c4..+0x404 (0xe813a6, 64 B)
 ; [nakarest] the table itself: ResMethod slot 0x1e1 (table 0xe813a6, 15 entries,
 ; [nakarest] InitializeMurai), 15 entry pointers x 4 bytes.
 Naka_Event_Table3:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x3C4, 0x40
-; [nakarest] naka_sound_menu_drawbar+0x404  +0x404..+0x512 (0xe813e6, 270 B)
+; [nakarest] naka_sound_menu_drawbar+0x404  +0x404..+0x510 (0xe813e6, 268 B)
 ; [nakarest] name strings, entries 0-14 of ResMethod slot 0x1e1 (table 0xe813a6, 15 entries,
 ; [nakarest] InitializeMurai): "MT_GetToneMode", "MT_ExitPresentation", "MT_InitPresentation",
 ; [nakarest] "MT_ExistPresentation", "MT_SetMemoryDrawbar", "MT_RequestMemoryDrawbar", ....
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x404, 0x10E
+	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x404, 0x10C
+; [nakarest] naka_sound_menu_drawbar+0x510  +0x510..+0x512 (0xe814f2, 2 B)
+; [nakarest] purpose not established: layout of 2 B at 0xe814f2 not derived; readers below
+; [nakarest] Readers: source references InitializeMurai (ui/drawbar_panel_ui.s: `RegObjTable
+; [nakarest] 0x160000d, 0xfa5948, 0xe814f2, 0xe813a6, 0x1e1`).
+	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x510, 0x2
 ; [nakarest] naka_sound_menu_drawbar+0x512  +0x512..+0x5aa (0xe814f4, 152 B)
 ; [nakarest] the table itself: Function slot 0x101 (table 0xe814f4, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes.

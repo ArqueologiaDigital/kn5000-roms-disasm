@@ -1886,11 +1886,33 @@ EmbeddedPtrTable_v7_naka_effects_seq_008600:
 ; [nakarest] (ui_widgets/effects_sequencer_screens.s: `.long 0x00e30684`); 1 data word in
 ; [nakarest] EmbeddedPtrTable_v7_naka_effects_seq_008600 (at 0xe30680).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x2
-; [nakarest] naka_effects_seq+0x86e2  +0x86e2..+0x8ebc (0xe30686, 2010 B)
+; [nakarest] naka_effects_seq+0x86e2  +0x86e2..+0x899a (0xe30686, 696 B)
 ; [nakarest] name strings, entries 0-43 of MainFunction slot 0x448 (table 0xe305d0, 44 entries,
 ; [nakarest] InitializeKubo) (names for MainFunction slot 0x148): "MainPanic",
 ; [nakarest] "EtmenuTitleFunc", "HelpFlashFunc", "HelpLangChkMain", "HelpTitleFunc",
 ; [nakarest] "HelpModeFunc", ....
-	.incbin "includes/generated/naka_effects_seq.bin", 0x86E2, 0x7DA
+	.incbin "includes/generated/naka_effects_seq.bin", 0x86E2, 0x2B8
+; [nakarest] naka_effects_seq+0x899a  +0x899a..+0x89a2 (0xe3093e, 8 B)
+; [nakarest] purpose not established: layout of 8 B at 0xe3093e not derived; readers below
+; [nakarest] Readers: source references EntertainerGridCheck (sequencer/sequencer_ui.s: `ld xiy,
+; [nakarest] Naka_Help_569_E30113_0x82B`).
+	.incbin "includes/generated/naka_effects_seq.bin", 0x899A, 0x8
+; [nakarest] naka_effects_seq+0x89a2  +0x89a2..+0x8e22 (0xe30946, 1152 B)
+; [nakarest] Text (1152 B at 0xe30946), first string
+; [nakarest] "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46"; no registered NAKA table points
+; [nakarest] into it; reached through source references
+; [nakarest] EffectBoxProc_CopyNameAndSetup_Code_Join14 (sequencer/sequencer_ui.s: `lda xde,
+; [nakarest] (Naka_Help_569_E30113_0x833:24)`).
+	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x480
+; [nakarest] naka_effects_seq+0x8e22  +0x8e22..+0x8e5a (0xe30dc6, 56 B)
+; [nakarest] purpose not established: layout of 56 B at 0xe30dc6 not derived; readers below
+; [nakarest] Readers: source references Equalizer_DispatchA (sequencer/sequencer_ui.s: `lda xde,
+; [nakarest] (Naka_Help_569_E30113_0xCB3:24)`).
+	.incbin "includes/generated/naka_effects_seq.bin", 0x8E22, 0x38
+; [nakarest] naka_effects_seq+0x8e5a  +0x8e5a..+0x8ebc (0xe30dfe, 98 B)
+; [nakarest] Text (98 B at 0xe30dfe), first string "q"; no registered NAKA table points into it;
+; [nakarest] reached through source references Equalizer_DispatchA (sequencer/sequencer_ui.s:
+; [nakarest] `lda xbc, (Naka_Help_569_E30113_0xCEB:24)`).
+	.incbin "includes/generated/naka_effects_seq.bin", 0x8E5A, 0x62
 
 ; External label offsets within the binary blob above.

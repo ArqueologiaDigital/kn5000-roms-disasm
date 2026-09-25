@@ -133,12 +133,17 @@ NakaDbg_LowerCaseChars2:
 ; [nakarest] the table itself: MainFunction slot 0x440 (table 0xeb36d0, 13 entries,
 ; [nakarest] InitializeRoot), 13 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_debug_naming.bin", 0xBD2, 0x3A
-; [nakarest] naka_debug_naming+0xc0c  +0xc0c..+0x10e0 (0xeb370a, 1236 B)
+; [nakarest] naka_debug_naming+0xc0c  +0xc0c..+0xce0 (0xeb370a, 212 B)
 ; [nakarest] name strings, entries 0-12 of MainFunction slot 0x440 (table 0xeb36d0, 13 entries,
 ; [nakarest] InitializeRoot) (names for MainFunction slot 0x140): "MainTaskControl",
 ; [nakarest] "DirmdTitleFunc", "MainTrSwControl", "CheckTitleFunc", "MainRamControl",
 ; [nakarest] "MainBitControl", ....
-	.incbin "includes/generated/naka_debug_naming.bin", 0xC0C, 0x4D4
+	.incbin "includes/generated/naka_debug_naming.bin", 0xC0C, 0xD4
+; [nakarest] naka_debug_naming+0xce0  +0xce0..+0x10e0 (0xeb37de, 1024 B)
+; [nakarest] purpose not established: layout of 1024 B at 0xeb37de not derived; readers below
+; [nakarest] Readers: source references InitPaletteRGB (display/graphics_text_vga.s: `lda xwa,
+; [nakarest] (0xeb37de:24)`).
+	.incbin "includes/generated/naka_debug_naming.bin", 0xCE0, 0x400
 ; [nakarest] NakaColor_Palette1  +0x10e0..+0x14e0 (0xeb3bde, 1024 B)
 ; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
 ; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 1 of the

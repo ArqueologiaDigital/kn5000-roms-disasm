@@ -1379,6 +1379,25 @@ def _uses_text(uses, limit=4):
     return ', '.join(out)
 
 
+def text_shape(m, lo, hi):
+    """'Text ..., first string "..."', or, when the bytes open with a run of
+    ROM pointers, 'a table of N pointers (all into this piece) then text'."""
+    ptrs = []
+    a = lo
+    while a + 4 <= hi:
+        v_ = m.u32(a)
+        if not (0xE00000 <= v_ < 0x1000000):
+            break
+        ptrs.append(v_)
+        a += 4
+    if len(ptrs) >= 2:
+        inside = all(lo <= p < hi for p in ptrs)
+        t = first_string(m, ptrs[0]) if m.inrom(ptrs[0]) else ''
+        return ('A table of %d pointers%s (%d B at 0x%06X), then text; entry 0 points at '
+                '"%s"' % (len(ptrs), ' into this piece' if inside else '', hi - lo, lo, t))
+    return 'Text (%d B at 0x%06X), first string "%s"' % (hi - lo, lo, first_string(m, lo))
+
+
 def reader_chain(v, lo, hi):
     """(text, is_text): the symbolic/numeric source references into [lo, hi),
     and the data words below 0xF00000 pointing into it with, one hop back,
@@ -1463,6 +1482,21 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
         if key != prev:
             cuts.add(off)
         prev = key
+    # inside stretches no registered object covers, cut where code refers
+    # (a label or positional .set name, or a literal): each reader then
+    # heads the bytes it actually reads
+    covered = []
+    for off, end, kind, r, k in objs:
+        covered.append((off, max(end, off + 1)))
+    covered.sort()
+    R = refs(m.v)
+    for u in R.in_range(base + S0, base + S1):
+        c = u[0] - base
+        if c & 1 or c in cuts:
+            continue
+        if any(a <= c < b for a, b in covered):
+            continue
+        cuts.add(c)
     cuts = sorted(c for c in cuts if S0 <= c < S1)
     pieces = []
     for i, c in enumerate(cuts):
@@ -1502,9 +1536,8 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
             chain, is_text = reader_chain(m.v, base + covered, base + first)
             n = first - covered
             if chain and is_text:
-                paras.append('Text (%d B at 0x%06X), first string "%s"; no registered NAKA '
-                             'table points into it; reached through %s.'
-                             % (n, base + covered, first_string(m, base + covered), chain))
+                paras.append('%s; no registered NAKA table points into it; reached through %s.'
+                             % (text_shape(m, base + covered, base + first), chain))
             elif chain:
                 # kept on ONE line: the census looks for the phrase, and a
                 # wrap between its words would hide the admission

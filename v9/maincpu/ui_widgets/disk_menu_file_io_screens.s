@@ -752,11 +752,50 @@ NakaInst_WaitWinCtlSmf:
 ; [nakarest] the table itself: MainFunction slot 0x445 (table 0xea80b6, 57 entries,
 ; [nakarest] InitializeCheap), 57 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6CEA, 0xEA
-; [nakarest] naka_disk_menu_file_io+0x6dd4  +0x6dd4..+0x78e0 (0xea81a0, 2828 B)
+; [nakarest] naka_disk_menu_file_io+0x6dd4  +0x6dd4..+0x71fc (0xea81a0, 1064 B)
 ; [nakarest] name strings, entries 0-56 of MainFunction slot 0x445 (table 0xea80b6, 57 entries,
 ; [nakarest] InitializeCheap) (names for MainFunction slot 0x145): "FmmPasswordFunc",
 ; [nakarest] "FmmWallpaperLoadFunc", "FmmCmpSingleLoadFunc", "CmpSingleLoadDstFunc",
 ; [nakarest] "CmpSingleLoadSrcFunc", "CmpSingleLoadFileFunc", ....
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6DD4, 0xB0C
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6DD4, 0x428
+; [nakarest] naka_disk_menu_file_io+0x71fc  +0x71fc..+0x72c2 (0xea85c8, 198 B)
+; [nakarest] A table of 6 pointers into this piece (198 B at 0xea85c8), then text; entry 0
+; [nakarest] points at "Please enter the password."; no registered NAKA table points into it;
+; [nakarest] reached through source references PasswordText (file_io/medley.s: `lda xhl,
+; [nakarest] (NakaInst_WaitWinCtlSmf_0x7C8:24)`).
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x71FC, 0xC6
+; [nakarest] naka_disk_menu_file_io+0x72c2  +0x72c2..+0x7466 (0xea868e, 420 B)
+; [nakarest] A table of 6 pointers into this piece (420 B at 0xea868e), then text; entry 0
+; [nakarest] points at "The data is already copy protected. Please enter"; no registered NAKA
+; [nakarest] table points into it; reached through source references CheckPwd_Type0
+; [nakarest] (file_io/medley.s: `ld xhl, NakaInst_WaitWinCtlSmf_0x88E`).
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x72C2, 0x1A4
+; [nakarest] naka_disk_menu_file_io+0x7466  +0x7466..+0x7640 (0xea8832, 474 B)
+; [nakarest] A table of 6 pointers into this piece (474 B at 0xea8832), then text; entry 0
+; [nakarest] points at "The songs in the Sequencer are copy protected. P"; no registered NAKA
+; [nakarest] table points into it; reached through source references CheckPasswordText
+; [nakarest] (file_io/medley.s: `ld xhl, NakaInst_WaitWinCtlSmf_0xA32`).
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7466, 0x1DA
+; [nakarest] naka_disk_menu_file_io+0x7640  +0x7640..+0x7824 (0xea8a0c, 484 B)
+; [nakarest] A table of 6 pointers into this piece (484 B at 0xea8a0c), then text; entry 0
+; [nakarest] points at "The patterns in the Composer are copy protected."; no registered NAKA
+; [nakarest] table points into it; reached through source references CheckPwd_Type2
+; [nakarest] (file_io/medley.s: `ld xhl, NakaInst_WaitWinCtlSmf_0xC0C`).
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7640, 0x1E4
+; [nakarest] naka_disk_menu_file_io+0x7824  +0x7824..+0x7832 (0xea8bf0, 14 B)
+; [nakarest] Text (14 B at 0xea8bf0), first string "CcEv"; no registered NAKA table points into
+; [nakarest] it; reached through source references WakeUp_HandleDirect (file_io/medley.s: `ld
+; [nakarest] xde, NakaInst_WaitWinCtlSmf_0xDF0`).
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7824, 0xE
+; [nakarest] naka_disk_menu_file_io+0x7832  +0x7832..+0x7890 (0xea8bfe, 94 B)
+; [nakarest] purpose not established: layout of 94 B at 0xea8bfe not derived; readers below
+; [nakarest] Readers: source references DiskAttention (file_io/medley.s: `lda xhl,
+; [nakarest] (NakaInst_WaitWinCtlSmf_0xDFE:24)`).
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7832, 0x5E
+; [nakarest] naka_disk_menu_file_io+0x7890  +0x7890..+0x78e0 (0xea8c5c, 80 B)
+; [nakarest] purpose not established: layout of 80 B at 0xea8c5c not derived; readers below
+; [nakarest] Readers: source references DiskSure (file_io/medley.s: `lda xhl,
+; [nakarest] (NakaInst_WaitWinCtlSmf_0xE5C:24)`).
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7890, 0x50
 
 ; External label offsets within the binary blob above.

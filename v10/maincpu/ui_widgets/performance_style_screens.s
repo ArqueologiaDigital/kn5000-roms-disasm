@@ -82,9 +82,124 @@ NAKA_UIObjectTable:
 ; [nakarest] the table itself: MainFunction slot 0x14b (table 0xe14824, 0 entries,
 ; [nakarest] InitializeNaka), 0 entry pointers x 4 bytes.
 	.incbin "includes/generated/naka_perf_style.bin", 0x5EB0, 0x4
-; [nakarest] naka_perf_style+0x5eb4  +0x5eb4..+0x71ec (0xe14828, 4920 B)
+; [nakarest] naka_perf_style+0x5eb4  +0x5eb4..+0x5eba (0xe14828, 6 B)
 ; [nakarest] the table itself: MainFunction slot 0x44b (table 0xe14828, 0 entries,
 ; [nakarest] InitializeNaka), 0 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_perf_style.bin", 0x5EB4, 0x1338
+	.incbin "includes/generated/naka_perf_style.bin", 0x5EB4, 0x6
+; [nakarest] naka_perf_style+0x5eba  +0x5eba..+0x5f2c (0xe1482e, 114 B)
+; [nakarest] A table of 6 pointers into this piece (114 B at 0xe1482e), then text; entry 0
+; [nakarest] points at "Bass Port Speaker"; no registered NAKA table points into it; reached
+; [nakarest] through source references NAKA_InitDataBlock (storage/flash_floppy_handlers.s: `lda
+; [nakarest] xhl, (NAKA_UIObjectTable_0x13E0:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x5EBA, 0x72
+; [nakarest] naka_perf_style+0x5f2c  +0x5f2c..+0x5f6c (0xe148a0, 64 B)
+; [nakarest] purpose not established: layout of 64 B at 0xe148a0 not derived; readers below
+; [nakarest] Readers: source references InitializeNaka_Skip (storage/flash_floppy_handlers.s:
+; [nakarest] `lda xhl, (NAKA_UIObjectTable_0x1452:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x5F2C, 0x40
+; [nakarest] naka_perf_style+0x5f6c  +0x5f6c..+0x615e (0xe148e0, 498 B)
+; [nakarest] A table of 6 pointers into this piece (498 B at 0xe148e0), then text; entry 0
+; [nakarest] points at "The KN5000's Special Woofer & Bass Port produce "; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip2
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x1492:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x5F6C, 0x1F2
+; [nakarest] naka_perf_style+0x615e  +0x615e..+0x61d6 (0xe14ad2, 120 B)
+; [nakarest] A table of 6 pointers into this piece (120 B at 0xe14ad2), then text; entry 0
+; [nakarest] points at "Huge Styles"; no registered NAKA table points into it; reached through
+; [nakarest] source references InitializeNaka_Skip3 (storage/flash_floppy_handlers.s: `lda xhl,
+; [nakarest] (NAKA_UIObjectTable_0x1684:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x615E, 0x78
+; [nakarest] naka_perf_style+0x61d6  +0x61d6..+0x6346 (0xe14b4a, 368 B)
+; [nakarest] A table of 6 pointers into this piece (368 B at 0xe14b4a), then text; entry 0
+; [nakarest] points at "Explore 1000 Musical Styles with the Music Styli"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip4
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x16FC:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x61D6, 0x170
+; [nakarest] naka_perf_style+0x6346  +0x6346..+0x64d8 (0xe14cba, 402 B)
+; [nakarest] A table of 6 pointers into this piece (402 B at 0xe14cba), then text; entry 0
+; [nakarest] points at "Add to your enjoyment with a wide range of Techn"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip5
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x186C:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6346, 0x192
+; [nakarest] naka_perf_style+0x64d8  +0x64d8..+0x6664 (0xe14e4c, 396 B)
+; [nakarest] A table of 6 pointers into this piece (396 B at 0xe14e4c), then text; entry 0
+; [nakarest] points at "And convert software from almost any other manuf"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip6
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x19FE:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x64D8, 0x18C
+; [nakarest] naka_perf_style+0x6664  +0x6664..+0x6848 (0xe14fd8, 484 B)
+; [nakarest] A table of 6 pointers into this piece (484 B at 0xe14fd8), then text; entry 0
+; [nakarest] points at "Store your favorite software patterns in the Cus"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip7
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x1B8A:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6664, 0x1E4
+; [nakarest] naka_perf_style+0x6848  +0x6848..+0x68cc (0xe151bc, 132 B)
+; [nakarest] A table of 6 pointers into this piece (132 B at 0xe151bc), then text; entry 0
+; [nakarest] points at "Accordion Register"; no registered NAKA table points into it; reached
+; [nakarest] through source references InitializeNaka_Skip8 (storage/flash_floppy_handlers.s:
+; [nakarest] `lda xhl, (NAKA_UIObjectTable_0x1D6E:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6848, 0x84
+; [nakarest] naka_perf_style+0x68cc  +0x68cc..+0x6a6e (0xe15240, 418 B)
+; [nakarest] A table of 6 pointers into this piece (418 B at 0xe15240), then text; entry 0
+; [nakarest] points at "A World of Accordion Sounds at your fingertips w"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip9
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x1DF2:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x68CC, 0x1A2
+; [nakarest] naka_perf_style+0x6a6e  +0x6a6e..+0x6ade (0xe153e2, 112 B)
+; [nakarest] A table of 6 pointers into this piece (112 B at 0xe153e2), then text; entry 0
+; [nakarest] points at "Digital Drawbar"; no registered NAKA table points into it; reached
+; [nakarest] through source references InitializeNaka_Skip10 (storage/flash_floppy_handlers.s:
+; [nakarest] `lda xhl, (NAKA_UIObjectTable_0x1F94:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6A6E, 0x70
+; [nakarest] naka_perf_style+0x6ade  +0x6ade..+0x6c40 (0xe15452, 354 B)
+; [nakarest] A table of 6 pointers into this piece (354 B at 0xe15452), then text; entry 0
+; [nakarest] points at "Classic Organ Sounds with Jazz and Rock Drawbars"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip11
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x2004:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6ADE, 0x162
+; [nakarest] naka_perf_style+0x6c40  +0x6c40..+0x6cba (0xe155b4, 122 B)
+; [nakarest] A table of 6 pointers into this piece (122 B at 0xe155b4), then text; entry 0
+; [nakarest] points at "Acoustic Illusion"; no registered NAKA table points into it; reached
+; [nakarest] through source references InitializeNaka_Skip12 (storage/flash_floppy_handlers.s:
+; [nakarest] `lda xhl, (NAKA_UIObjectTable_0x2166:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6C40, 0x7A
+; [nakarest] naka_perf_style+0x6cba  +0x6cba..+0x6e1c (0xe1562e, 354 B)
+; [nakarest] A table of 6 pointers into this piece (354 B at 0xe1562e), then text; entry 0
+; [nakarest] points at "Acoustic Illusion broadens your music to 3-Dimen"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip13
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x21E0:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6CBA, 0x162
+; [nakarest] naka_perf_style+0x6e1c  +0x6e1c..+0x6f8c (0xe15790, 368 B)
+; [nakarest] A table of 6 pointers into this piece (368 B at 0xe15790), then text; entry 0
+; [nakarest] points at "A host of features to suit any style of performa"; no registered NAKA
+; [nakarest] table points into it; reached through source references InitializeNaka_Skip14
+; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_UIObjectTable_0x2342:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6E1C, 0x170
+; [nakarest] naka_perf_style+0x6f8c  +0x6f8c..+0x6fec (0xe15900, 96 B)
+; [nakarest] A table of 6 pointers into this piece (96 B at 0xe15900), then text; entry 0 points
+; [nakarest] at "Huge Styles"; no registered NAKA table points into it; reached through source
+; [nakarest] references InitializeNaka_Skip15 (storage/flash_floppy_handlers.s: `lda xhl,
+; [nakarest] (NAKA_UIObjectTable_0x24B2:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6F8C, 0x60
+; [nakarest] naka_perf_style+0x6fec  +0x6fec..+0x704c (0xe15960, 96 B)
+; [nakarest] purpose not established: layout of 96 B at 0xe15960 not derived; readers below
+; [nakarest] Readers: source references InitializeNaka_Skip16 (storage/flash_floppy_handlers.s:
+; [nakarest] `lda xhl, (NAKA_UIObjectTable_0x2512:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x6FEC, 0x60
+; [nakarest] naka_perf_style+0x704c  +0x704c..+0x70ac (0xe159c0, 96 B)
+; [nakarest] purpose not established: layout of 96 B at 0xe159c0 not derived; readers below
+; [nakarest] Readers: source references InitializeNaka_Skip17 (storage/flash_floppy_handlers.s:
+; [nakarest] `lda xhl, (NAKA_UIObjectTable_0x2572:24)`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x704C, 0x60
+; [nakarest] naka_perf_style+0x70ac  +0x70ac..+0x71ac (0xe15a20, 256 B)
+; [nakarest] purpose not established: layout of 256 B at 0xe15a20 not derived; readers below
+; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
+; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NAKA_UIObjectTable_0x25D2`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x70AC, 0x100
+; [nakarest] naka_perf_style+0x71ac  +0x71ac..+0x71ec (0xe15b20, 64 B)
+; [nakarest] purpose not established: layout of 64 B at 0xe15b20 not derived; readers below
+; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
+; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NAKA_UIObjectTable_0x26D2`).
+	.incbin "includes/generated/naka_perf_style.bin", 0x71AC, 0x40
 ; NAKA_UIObjectTable is at offset 0x4ada within the binary blob above.
 ; Referenced from flash_floppy_handlers.s (RegisterObjectTable call).
