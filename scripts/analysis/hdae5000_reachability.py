@@ -13,8 +13,10 @@ HOW (conservative: every approximation errs towards "reachable")
 1. Build the line<->address map with scripts/analysis/hdae5000_line_map.py (its
    mirror is asserted byte-identical to original_ROMs/hd-ae5000_v2_06i.ic4).
 2. Every instruction or data directive is a node.  An instruction falls
-   through to the next node unless it is `ret`/`reti`/`retd`, or an
-   UNCONDITIONAL `jp`/`jr`/`jrl` (condition `t` counts as unconditional).  A
+   through to the next node unless it is a bare `ret`, `reti`/`retd`, or an
+   UNCONDITIONAL `jp`/`jr`/`jrl` (condition `t` counts as unconditional); a
+   conditional `ret cc` falls through.  (Until 2026-09-25 `ret cc` was taken
+   as terminal, which marked the code after it dead: 437 B in 19 ranges too many.)  A
    data row continues only into the next row of the same directive that does
    not start a new labelled object (so reaching one table does not reach the
    next one) -- except inside the code range, where the PPORT command table is
@@ -97,7 +99,11 @@ def build():
 def is_terminal(body):
     parts = body.split(None, 1)
     mn = parts[0].lower()
-    if mn in ("ret", "reti", "retd"):
+    if mn == "ret":
+        # `ret cc` (e.g. `ret ge`, `ret ule`) returns only when cc holds and
+        # otherwise falls through; only a bare `ret` (or `ret t`) ends the path
+        return len(parts) == 1 or parts[1].strip().lower() == "t"
+    if mn in ("reti", "retd"):
         return True
     if mn in ("jp", "jr", "jrl"):
         ops = parts[1].split(",") if len(parts) > 1 else []
