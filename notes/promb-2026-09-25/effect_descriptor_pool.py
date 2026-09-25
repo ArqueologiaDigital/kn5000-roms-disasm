@@ -88,6 +88,19 @@ DRAW_NAME_BLOCK = """;                    the address.
 sub_F0FF3F:"""
 
 
+BYTE3_NOTE_ANCHOR = ("; --------------------------------------------------------------------------\n"
+                     "EffectParamDescriptors_F12F24:")
+BYTE3_NOTE = """; ⚠ CORRECTED AGAIN 2026-09-25 (lane promb): "byte 3  0x00-0x07 or 0xFF" above
+;    is wrong -- the probe it came from read only the first EIGHT groups of each
+;    descriptor.  Over every live group byte 3 is the group's OWN INDEX or 0xFF
+;    (235 and 200 of 435), up to 18 in PARAMETRIC EQ's VOLUME; the stored byte
+;    it is compared with is therefore a parameter index.  The records
+;    themselves, their full layout and the word W that ends each one are typed
+;    and explained at EffectDesc_* above (notes/promb-2026-09-25/
+;    effect_descriptor_pool.py).
+"""
+
+
 def check(msg, cond):
     print("  %-4s %s" % ("ok" if cond else "FAIL", msg))
     if not cond:
@@ -327,9 +340,9 @@ POOL_HEADER = r"""; ------------------------------------------------------------
 ;   Data_F124A6 (72 B), RamPtrTable_F124EE, Data_F1250A, RamPtrTable_F12522,
 ;   Data_F12532, RamPtrTable_F1254A, Data_F1255A, RamPtrTable_F12572,
 ;   Data_F12582 (452 B), RamPtrTable_F12746, Data_F12766 (200 B),
-;   RamPtrTable_F1282E and Data_F1284A (1,754 B).  Their headers said
-;   "Unknown: everything about it except its bytes"; the "RAM addresses"
-;   were runs of the padding group 00 00 FF FF read as 32-bit words.
+;   RamPtrTable_F1282E and Data_F1284A (1,754 B).  Their headers admitted
+;   knowing nothing but the bytes; the "RAM addresses" were runs of the
+;   padding group 00 00 FF FF read as 32-bit words.
 ; --------------------------------------------------------------------------"""
 
 
@@ -351,8 +364,16 @@ def emit(d):
     out.append(POOL_HEADER)
     for r in d["records"]:
         live = [g for g in r["groups"] if g[2] != 0xFF]
-        out.append("; %s -- %s: %d parameter%s, W = %d" % (
-            r["label"], r["what"], len(live), "" if len(live) == 1 else "s", r["w"]))
+        ks = r["users"]
+        via = ("entries %s ... of EffectParamDescriptors_F12F24" % ", ".join(str(k) for k in ks[:4])
+               if len(ks) > 1 else "entry %d of EffectParamDescriptors_F12F24" % ks[0])
+        import textwrap
+        out += textwrap.wrap("%s -- parameter descriptor of %s: %d parameter%s, W = %d; read through "
+                             "%s by the editor routines above (record layout above)"
+                             % (r["label"], r["what"], len(live), "" if len(live) == 1 else "s",
+                                r["w"], via), width=96, initial_indent="; ",
+                             subsequent_indent=";   ", break_long_words=False,
+                             break_on_hyphens=False)
         out.append(r["label"] + ":")
         a = r["start"]
         for i, g in enumerate(r["groups"]):
@@ -409,6 +430,9 @@ def apply(d):
         i += 1
     txt = "\n".join(L2)
     txt = re.sub(r'\b%s\b' % OLD_TEMPLATE_LABEL, TEMPLATE_LABEL, txt)
+    if BYTE3_NOTE_ANCHOR in txt and "CORRECTED AGAIN 2026-09-25" not in txt:
+        txt = txt.replace(BYTE3_NOTE_ANCHOR,
+                          BYTE3_NOTE.encode("utf-8").decode("latin-1") + BYTE3_NOTE_ANCHOR, 1)
     # the routine that runs the template: name it and say why
     if OLD_DRAW + ":" in txt:
         assert OLD_DRAW_UNKNOWN in txt

@@ -35001,11 +35001,13 @@ EqGraph_DisplayListTemplate:
 ;   EqGraph_DisplayListTemplate (72 B), RamPtrTable_F124EE, Data_F1250A, RamPtrTable_F12522,
 ;   Data_F12532, RamPtrTable_F1254A, Data_F1255A, RamPtrTable_F12572,
 ;   Data_F12582 (452 B), RamPtrTable_F12746, Data_F12766 (200 B),
-;   RamPtrTable_F1282E and Data_F1284A (1,754 B).  Their headers said
-;   "Unknown: everything about it except its bytes"; the "RAM addresses"
-;   were runs of the padding group 00 00 FF FF read as 32-bit words.
+;   RamPtrTable_F1282E and Data_F1284A (1,754 B).  Their headers admitted
+;   knowing nothing but the bytes; the "RAM addresses" were runs of the
+;   padding group 00 00 FF FF read as 32-bit words.
 ; --------------------------------------------------------------------------
-; EffectDesc_Unused -- the 72 algorithm numbers whose EffectNames_F147AC entry is the `----------` placeholder: 0 parameters, W = 1
+; EffectDesc_Unused -- parameter descriptor of the 72 algorithm numbers whose EffectNames_F147AC
+;   entry is the `----------` placeholder: 0 parameters, W = 1; read through entries 7, 12, 13,
+;   14 ... of EffectParamDescriptors_F12F24 by the editor routines above (record layout above)
 EffectDesc_Unused:
 	.byte	0, 0x00, 0xff, 0xff	; F124EC  [0] padding (blank line)
 	.byte	0, 0x00, 0xff, 0xff	; F124F0  [1] padding (blank line)
@@ -35017,7 +35019,9 @@ EffectDesc_Unused:
 	.byte	0, 0x00, 0xff, 0xff	; F12508  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F1250C  end of groups
 	.short	0xffff, 1	; F12510  0xFFFF, W
-; EffectDesc_Distortion -- algorithm 32, `DISTORTION`: 4 parameters, W = 5
+; EffectDesc_Distortion -- parameter descriptor of algorithm 32, `DISTORTION`: 4 parameters, W =
+;   5; read through entry 32 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_Distortion:
 	.byte	1, 0x01, 1, 0	; F12514  [0] WET               type 0x01
 	.byte	2, 0x01, 2, 1	; F12518  [1] DRIVE             type 0x01
@@ -35029,7 +35033,9 @@ EffectDesc_Distortion:
 	.byte	0, 0x00, 0xff, 0xff	; F12530  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12534  end of groups
 	.short	0xffff, 5	; F12538  0xFFFF, W
-; EffectDesc_Overdrive -- algorithm 33, `OVERDRIVE`: 4 parameters, W = 5
+; EffectDesc_Overdrive -- parameter descriptor of algorithm 33, `OVERDRIVE`: 4 parameters, W =
+;   5; read through entry 33 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_Overdrive:
 	.byte	1, 0x01, 1, 0	; F1253C  [0] WET               type 0x01
 	.byte	2, 0x01, 2, 1	; F12540  [1] DRIVE             type 0x01
@@ -35041,7 +35047,9 @@ EffectDesc_Overdrive:
 	.byte	0, 0x00, 0xff, 0xff	; F12558  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F1255C  end of groups
 	.short	0xffff, 5	; F12560  0xFFFF, W
-; EffectDesc_Fuzz -- algorithm 34, `FUZZ`: 4 parameters, W = 5
+; EffectDesc_Fuzz -- parameter descriptor of algorithm 34, `FUZZ`: 4 parameters, W = 5; read
+;   through entry 34 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_Fuzz:
 	.byte	1, 0x01, 1, 0	; F12564  [0] WET               type 0x01
 	.byte	2, 0x01, 2, 1	; F12568  [1] DRIVE             type 0x01
@@ -35053,7 +35061,9 @@ EffectDesc_Fuzz:
 	.byte	0, 0x00, 0xff, 0xff	; F12580  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12584  end of groups
 	.short	0xffff, 5	; F12588  0xFFFF, W
-; EffectDesc_Exciter -- algorithm 35, `EXCITER`: 6 parameters, W = 8
+; EffectDesc_Exciter -- parameter descriptor of algorithm 35, `EXCITER`: 6 parameters, W = 8;
+;   read through entry 35 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_Exciter:
 	.byte	1, 0x01, 1, 0	; F1258C  [0] WET               type 0x01
 	.byte	2, 0x01, 2, 1	; F12590  [1] DRIVE             type 0x01
@@ -35065,7 +35075,9 @@ EffectDesc_Exciter:
 	.byte	0, 0x00, 0xff, 0xff	; F125A8  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F125AC  end of groups
 	.short	0xffff, 8	; F125B0  0xFFFF, W
-; EffectDesc_ParametricEq -- algorithm 39, `PARAMETRIC EQ`: 19 parameters, W = 14
+; EffectDesc_ParametricEq -- parameter descriptor of algorithm 39, `PARAMETRIC EQ`: 19
+;   parameters, W = 14; read through entry 39 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_ParametricEq:
 	.byte	7, 0x03, 1, 0xff	; F125B4  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F125B8  [1] (1)      Q        type 0x04
@@ -35088,7 +35100,9 @@ EffectDesc_ParametricEq:
 	.byte	4, 0x01, 13, 18	; F125FC  [18] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12600  end of groups
 	.short	0xffff, 14	; F12604  0xFFFF, W
-; EffectDesc_Chorus -- algorithm 1, `CHORUS`: 5 parameters, W = 6
+; EffectDesc_Chorus -- parameter descriptor of algorithm 1, `CHORUS`: 5 parameters, W = 6; read
+;   through entry 1 of EffectParamDescriptors_F12F24 by the editor routines above (record layout
+;   above)
 EffectDesc_Chorus:
 	.byte	1, 0x01, 1, 0	; F12608  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 1	; F1260C  [1] DEPTH             type 0x01
@@ -35100,7 +35114,9 @@ EffectDesc_Chorus:
 	.byte	0, 0x00, 0xff, 0xff	; F12624  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12628  end of groups
 	.short	0xffff, 6	; F1262C  0xFFFF, W
-; EffectDesc_ModulatedChorus -- algorithm 2, `MODULATED CHORUS`: 7 parameters, W = 8
+; EffectDesc_ModulatedChorus -- parameter descriptor of algorithm 2, `MODULATED CHORUS`: 7
+;   parameters, W = 8; read through entry 2 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_ModulatedChorus:
 	.byte	1, 0x01, 1, 0	; F12630  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 1	; F12634  [1] DEPTH             type 0x01
@@ -35112,7 +35128,9 @@ EffectDesc_ModulatedChorus:
 	.byte	0, 0x00, 0xff, 0xff	; F1264C  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12650  end of groups
 	.short	0xffff, 8	; F12654  0xFFFF, W
-; EffectDesc_Enhancer -- algorithm 3, `ENHANCER`: 7 parameters, W = 10
+; EffectDesc_Enhancer -- parameter descriptor of algorithm 3, `ENHANCER`: 7 parameters, W = 10;
+;   read through entry 3 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_Enhancer:
 	.byte	1, 0x01, 1, 0	; F12658  [0] WET               type 0x01
 	.byte	31, 0x01, 2, 1	; F1265C  [1] MANUAL            type 0x01
@@ -35124,7 +35142,9 @@ EffectDesc_Enhancer:
 	.byte	0, 0x00, 0xff, 0xff	; F12674  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12678  end of groups
 	.short	0xffff, 10	; F1267C  0xFFFF, W
-; EffectDesc_Flanger -- algorithm 4, `FLANGER`: 8 parameters, W = 9
+; EffectDesc_Flanger -- parameter descriptor of algorithm 4, `FLANGER`: 8 parameters, W = 9;
+;   read through entry 4 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_Flanger:
 	.byte	1, 0x01, 1, 0	; F12680  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 1	; F12684  [1] DEPTH             type 0x01
@@ -35136,7 +35156,9 @@ EffectDesc_Flanger:
 	.byte	4, 0x01, 8, 7	; F1269C  [7] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F126A0  end of groups
 	.short	0xffff, 9	; F126A4  0xFFFF, W
-; EffectDesc_Phaser -- algorithm 5, `PHASER`: 8 parameters, W = 9
+; EffectDesc_Phaser -- parameter descriptor of algorithm 5, `PHASER`: 8 parameters, W = 9; read
+;   through entry 5 of EffectParamDescriptors_F12F24 by the editor routines above (record layout
+;   above)
 EffectDesc_Phaser:
 	.byte	1, 0x01, 1, 0	; F126A8  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 1	; F126AC  [1] DEPTH             type 0x01
@@ -35148,7 +35170,9 @@ EffectDesc_Phaser:
 	.byte	4, 0x01, 8, 7	; F126C4  [7] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F126C8  end of groups
 	.short	0xffff, 9	; F126CC  0xFFFF, W
-; EffectDesc_AutoPan -- algorithm 48, `AUTO PAN`: 6 parameters, W = 7
+; EffectDesc_AutoPan -- parameter descriptor of algorithm 48, `AUTO PAN`: 6 parameters, W = 7;
+;   read through entry 48 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_AutoPan:
 	.byte	1, 0x01, 1, 0	; F126D0  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 1	; F126D4  [1] DEPTH             type 0x01
@@ -35160,7 +35184,9 @@ EffectDesc_AutoPan:
 	.byte	0, 0x00, 0xff, 0xff	; F126EC  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F126F0  end of groups
 	.short	0xffff, 7	; F126F4  0xFFFF, W
-; EffectDesc_PitchShifter -- algorithm 49, `PITCH SHIFTER`: 6 parameters, W = 7
+; EffectDesc_PitchShifter -- parameter descriptor of algorithm 49, `PITCH SHIFTER`: 6
+;   parameters, W = 7; read through entry 49 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PitchShifter:
 	.byte	1, 0x01, 1, 0	; F126F8  [0] WET               type 0x01
 	.byte	38, 0x0c, 2, 1	; F126FC  [1] PITCH L           type 0x0C
@@ -35172,7 +35198,9 @@ EffectDesc_PitchShifter:
 	.byte	0, 0x00, 0xff, 0xff	; F12714  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12718  end of groups
 	.short	0xffff, 7	; F1271C  0xFFFF, W
-; EffectDesc_Vibrato -- algorithm 50, `VIBRATO`: 6 parameters, W = 7
+; EffectDesc_Vibrato -- parameter descriptor of algorithm 50, `VIBRATO`: 6 parameters, W = 7;
+;   read through entry 50 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_Vibrato:
 	.byte	1, 0x01, 1, 0	; F12720  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 1	; F12724  [1] DEPTH             type 0x01
@@ -35184,7 +35212,9 @@ EffectDesc_Vibrato:
 	.byte	0, 0x00, 0xff, 0xff	; F1273C  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12740  end of groups
 	.short	0xffff, 7	; F12744  0xFFFF, W
-; EffectDesc_NoOperation -- algorithm 0, `NO OPERATION`: 0 parameters, W = 1
+; EffectDesc_NoOperation -- parameter descriptor of algorithm 0, `NO OPERATION`: 0 parameters, W
+;   = 1; read through entry 0 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_NoOperation:
 	.byte	0, 0x00, 0xff, 0xff	; F12748  [0] padding (blank line)
 	.byte	0, 0x00, 0xff, 0xff	; F1274C  [1] padding (blank line)
@@ -35196,7 +35226,9 @@ EffectDesc_NoOperation:
 	.byte	0, 0x00, 0xff, 0xff	; F12764  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12768  end of groups
 	.short	0xffff, 1	; F1276C  0xFFFF, W
-; EffectDesc_PedalWah -- algorithm 51, `PEDAL WAH`: 6 parameters, W = 7
+; EffectDesc_PedalWah -- parameter descriptor of algorithm 51, `PEDAL WAH`: 6 parameters, W = 7;
+;   read through entry 51 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_PedalWah:
 	.byte	1, 0x01, 1, 0	; F12770  [0] WET               type 0x01
 	.byte	36, 0x12, 2, 0xff	; F12774  [1] RESONANCE         type 0x12
@@ -35208,7 +35240,9 @@ EffectDesc_PedalWah:
 	.byte	0, 0x00, 0xff, 0xff	; F1278C  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12790  end of groups
 	.short	0xffff, 7	; F12794  0xFFFF, W
-; EffectDesc_AutoWah -- algorithm 52, `AUTO WAH`: 5 parameters, W = 6
+; EffectDesc_AutoWah -- parameter descriptor of algorithm 52, `AUTO WAH`: 5 parameters, W = 6;
+;   read through entry 52 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_AutoWah:
 	.byte	1, 0x01, 1, 0	; F12798  [0] WET               type 0x01
 	.byte	36, 0x12, 2, 0xff	; F1279C  [1] RESONANCE         type 0x12
@@ -35220,7 +35254,9 @@ EffectDesc_AutoWah:
 	.byte	0, 0x00, 0xff, 0xff	; F127B4  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F127B8  end of groups
 	.short	0xffff, 6	; F127BC  0xFFFF, W
-; EffectDesc_RotarySpeaker -- algorithm 53, `ROTARY SPEAKER`: 15 parameters, W = 16
+; EffectDesc_RotarySpeaker -- parameter descriptor of algorithm 53, `ROTARY SPEAKER`: 15
+;   parameters, W = 16; read through entry 53 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_RotarySpeaker:
 	.byte	1, 0x01, 1, 0	; F127C0  [0] WET               type 0x01
 	.byte	2, 0x01, 2, 1	; F127C4  [1] DRIVE             type 0x01
@@ -35239,7 +35275,9 @@ EffectDesc_RotarySpeaker:
 	.byte	87, 0x0b, 15, 14	; F127F8  [14] SLOW/FAST         type 0x0B
 	.byte	0xff, 0xff, 0xff, 0xff	; F127FC  end of groups
 	.short	0xffff, 16	; F12800  0xFFFF, W
-; EffectDesc_RingModulator -- algorithm 54, `RING MODULATOR`: 5 parameters, W = 6
+; EffectDesc_RingModulator -- parameter descriptor of algorithm 54, `RING MODULATOR`: 5
+;   parameters, W = 6; read through entry 54 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_RingModulator:
 	.byte	1, 0x01, 1, 0	; F12804  [0] WET               type 0x01
 	.byte	50, 0x08, 2, 1	; F12808  [1] OSC SPEED         type 0x08 Hz
@@ -35251,7 +35289,9 @@ EffectDesc_RingModulator:
 	.byte	0, 0x00, 0xff, 0xff	; F12820  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12824  end of groups
 	.short	0xffff, 6	; F12828  0xFFFF, W
-; EffectDesc_NoiseGenerator -- algorithm 38, `NOISE GENERATOR`: 1 parameter, W = 2
+; EffectDesc_NoiseGenerator -- parameter descriptor of algorithm 38, `NOISE GENERATOR`: 1
+;   parameter, W = 2; read through entry 38 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_NoiseGenerator:
 	.byte	4, 0x01, 1, 0	; F1282C  [0] VOLUME            type 0x01
 	.byte	0, 0x00, 0xff, 0xff	; F12830  [1] padding (blank line)
@@ -35263,7 +35303,9 @@ EffectDesc_NoiseGenerator:
 	.byte	0, 0x00, 0xff, 0xff	; F12848  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F1284C  end of groups
 	.short	0xffff, 2	; F12850  0xFFFF, W
-; EffectDesc_SlowAttacker -- algorithm 37, `SLOW ATTACKER`: 5 parameters, W = 6
+; EffectDesc_SlowAttacker -- parameter descriptor of algorithm 37, `SLOW ATTACKER`: 5
+;   parameters, W = 6; read through entry 37 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_SlowAttacker:
 	.byte	1, 0x01, 1, 0	; F12854  [0] WET               type 0x01
 	.byte	52, 0x01, 2, 1	; F12858  [1] THRESHOLD         type 0x01
@@ -35275,7 +35317,9 @@ EffectDesc_SlowAttacker:
 	.byte	0, 0x00, 0xff, 0xff	; F12870  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12874  end of groups
 	.short	0xffff, 6	; F12878  0xFFFF, W
-; EffectDesc_GatedReverb -- algorithm 8, `GATED REVERB`: 6 parameters, W = 7
+; EffectDesc_GatedReverb -- parameter descriptor of algorithm 8, `GATED REVERB`: 6 parameters, W
+;   = 7; read through entry 8 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_GatedReverb:
 	.byte	1, 0x01, 1, 0	; F1287C  [0] WET               type 0x01
 	.byte	55, 0x10, 2, 1	; F12880  [1] GATE TIME         type 0x10 ms
@@ -35287,7 +35331,9 @@ EffectDesc_GatedReverb:
 	.byte	0, 0x00, 0xff, 0xff	; F12898  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F1289C  end of groups
 	.short	0xffff, 7	; F128A0  0xFFFF, W
-; EffectDesc_HaasEffect -- algorithm 55, `HAAS EFFECT`: 6 parameters, W = 9
+; EffectDesc_HaasEffect -- parameter descriptor of algorithm 55, `HAAS EFFECT`: 6 parameters, W
+;   = 9; read through entry 55 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_HaasEffect:
 	.byte	1, 0x01, 1, 0	; F128A4  [0] WET               type 0x01
 	.byte	34, 0x15, 2, 1	; F128A8  [1] DELAY TIME L      type 0x15 ms
@@ -35299,7 +35345,9 @@ EffectDesc_HaasEffect:
 	.byte	0, 0x00, 0xff, 0xff	; F128C0  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F128C4  end of groups
 	.short	0xffff, 9	; F128C8  0xFFFF, W
-; EffectDesc_Ensemble -- algorithm 6, `ENSEMBLE`: 5 parameters, W = 6
+; EffectDesc_Ensemble -- parameter descriptor of algorithm 6, `ENSEMBLE`: 5 parameters, W = 6;
+;   read through entry 6 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_Ensemble:
 	.byte	1, 0x01, 1, 0	; F128CC  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 0xff	; F128D0  [1] DEPTH             type 0x01
@@ -35311,7 +35359,9 @@ EffectDesc_Ensemble:
 	.byte	0, 0x00, 0xff, 0xff	; F128E8  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F128EC  end of groups
 	.short	0xffff, 6	; F128F0  0xFFFF, W
-; EffectDesc_Compressor -- algorithm 36, `COMPRESSOR`: 6 parameters, W = 7
+; EffectDesc_Compressor -- parameter descriptor of algorithm 36, `COMPRESSOR`: 6 parameters, W =
+;   7; read through entry 36 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_Compressor:
 	.byte	1, 0x01, 1, 0	; F128F4  [0] WET               type 0x01
 	.byte	52, 0x01, 2, 0xff	; F128F8  [1] THRESHOLD         type 0x01
@@ -35323,7 +35373,9 @@ EffectDesc_Compressor:
 	.byte	0, 0x00, 0xff, 0xff	; F12910  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12914  end of groups
 	.short	0xffff, 7	; F12918  0xFFFF, W
-; EffectDesc_MixUp -- algorithm 56, `MIX UP`: 8 parameters, W = 9
+; EffectDesc_MixUp -- parameter descriptor of algorithm 56, `MIX UP`: 8 parameters, W = 9; read
+;   through entry 56 of EffectParamDescriptors_F12F24 by the editor routines above (record
+;   layout above)
 EffectDesc_MixUp:
 	.byte	1, 0x01, 1, 0	; F1291C  [0] WET               type 0x01
 	.byte	25, 0x01, 2, 1	; F12920  [1] DEPTH             type 0x01
@@ -35335,7 +35387,9 @@ EffectDesc_MixUp:
 	.byte	4, 0x01, 8, 7	; F12938  [7] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F1293C  end of groups
 	.short	0xffff, 9	; F12940  0xFFFF, W
-; EffectDesc_SingleDelay -- algorithm 9, `SINGLE DELAY`: 7 parameters, W = 10
+; EffectDesc_SingleDelay -- parameter descriptor of algorithm 9, `SINGLE DELAY`: 7 parameters, W
+;   = 10; read through entry 9 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_SingleDelay:
 	.byte	1, 0x01, 1, 0	; F12944  [0] WET               type 0x01
 	.byte	65, 0x18, 2, 0xff	; F12948  [1] DELAY L           type 0x18 ms
@@ -35347,7 +35401,9 @@ EffectDesc_SingleDelay:
 	.byte	0, 0x00, 0xff, 0xff	; F12960  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12964  end of groups
 	.short	0xffff, 10	; F12968  0xFFFF, W
-; EffectDesc_MultiTapDelay -- algorithm 10, `MULTI TAP DELAY`: 12 parameters, W = 17
+; EffectDesc_MultiTapDelay -- parameter descriptor of algorithm 10, `MULTI TAP DELAY`: 12
+;   parameters, W = 17; read through entry 10 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_MultiTapDelay:
 	.byte	1, 0x01, 1, 0	; F1296C  [0] WET               type 0x01
 	.byte	69, 0x1a, 2, 0xff	; F12970  [1] DELAY 1           type 0x1A ms
@@ -35363,7 +35419,9 @@ EffectDesc_MultiTapDelay:
 	.byte	4, 0x01, 16, 11	; F12998  [11] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F1299C  end of groups
 	.short	0xffff, 17	; F129A0  0xFFFF, W
-; EffectDesc_ManualDelay -- algorithm 11, `MANUAL DELAY`: 8 parameters, W = 11
+; EffectDesc_ManualDelay -- parameter descriptor of algorithm 11, `MANUAL DELAY`: 8 parameters,
+;   W = 11; read through entry 11 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_ManualDelay:
 	.byte	1, 0x01, 1, 0	; F129A4  [0] WET               type 0x01
 	.byte	98, 0x01, 2, 1	; F129A8  [1] MODULATION DEPTH  type 0x01
@@ -35375,7 +35433,9 @@ EffectDesc_ManualDelay:
 	.byte	4, 0x01, 10, 7	; F129C0  [7] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F129C4  end of groups
 	.short	0xffff, 11	; F129C8  0xFFFF, W
-; EffectDesc_RoomReverb1 -- algorithm 16, `ROOM REVERB 1`: 5 parameters, W = 6
+; EffectDesc_RoomReverb1 -- parameter descriptor of algorithm 16, `ROOM REVERB 1`: 5 parameters,
+;   W = 6; read through entry 16 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_RoomReverb1:
 	.byte	77, 0x1d, 1, 0	; F129CC  [0] REVERB TIME       type 0x1D s
 	.byte	40, 0x17, 2, 0xff	; F129D0  [1] PRE DELAY         type 0x17 ms
@@ -35387,7 +35447,9 @@ EffectDesc_RoomReverb1:
 	.byte	0, 0x00, 0xff, 0xff	; F129E8  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F129EC  end of groups
 	.short	0xffff, 6	; F129F0  0xFFFF, W
-; EffectDesc_RoomReverb2 -- algorithm 17, `ROOM REVERB 2`: 5 parameters, W = 6
+; EffectDesc_RoomReverb2 -- parameter descriptor of algorithm 17, `ROOM REVERB 2`: 5 parameters,
+;   W = 6; read through entry 17 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_RoomReverb2:
 	.byte	77, 0x1d, 1, 0	; F129F4  [0] REVERB TIME       type 0x1D s
 	.byte	40, 0x17, 2, 0xff	; F129F8  [1] PRE DELAY         type 0x17 ms
@@ -35399,7 +35461,9 @@ EffectDesc_RoomReverb2:
 	.byte	0, 0x00, 0xff, 0xff	; F12A10  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12A14  end of groups
 	.short	0xffff, 6	; F12A18  0xFFFF, W
-; EffectDesc_PlateReverb1 -- algorithm 18, `PLATE REVERB 1`: 5 parameters, W = 6
+; EffectDesc_PlateReverb1 -- parameter descriptor of algorithm 18, `PLATE REVERB 1`: 5
+;   parameters, W = 6; read through entry 18 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PlateReverb1:
 	.byte	77, 0x1d, 1, 0	; F12A1C  [0] REVERB TIME       type 0x1D s
 	.byte	40, 0x17, 2, 0xff	; F12A20  [1] PRE DELAY         type 0x17 ms
@@ -35411,7 +35475,9 @@ EffectDesc_PlateReverb1:
 	.byte	0, 0x00, 0xff, 0xff	; F12A38  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12A3C  end of groups
 	.short	0xffff, 6	; F12A40  0xFFFF, W
-; EffectDesc_PlateReverb2 -- algorithm 19, `PLATE REVERB 2`: 5 parameters, W = 6
+; EffectDesc_PlateReverb2 -- parameter descriptor of algorithm 19, `PLATE REVERB 2`: 5
+;   parameters, W = 6; read through entry 19 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PlateReverb2:
 	.byte	77, 0x1d, 1, 0	; F12A44  [0] REVERB TIME       type 0x1D s
 	.byte	40, 0x17, 2, 0xff	; F12A48  [1] PRE DELAY         type 0x17 ms
@@ -35423,7 +35489,9 @@ EffectDesc_PlateReverb2:
 	.byte	0, 0x00, 0xff, 0xff	; F12A60  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12A64  end of groups
 	.short	0xffff, 6	; F12A68  0xFFFF, W
-; EffectDesc_ConcertReverb1 -- algorithm 20, `CONCERT REVERB 1`: 5 parameters, W = 6
+; EffectDesc_ConcertReverb1 -- parameter descriptor of algorithm 20, `CONCERT REVERB 1`: 5
+;   parameters, W = 6; read through entry 20 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_ConcertReverb1:
 	.byte	77, 0x1e, 1, 0	; F12A6C  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12A70  [1] PRE DELAY         type 0x17 ms
@@ -35435,7 +35503,9 @@ EffectDesc_ConcertReverb1:
 	.byte	0, 0x00, 0xff, 0xff	; F12A88  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12A8C  end of groups
 	.short	0xffff, 6	; F12A90  0xFFFF, W
-; EffectDesc_ConcertReverb2 -- algorithm 21, `CONCERT REVERB 2`: 5 parameters, W = 6
+; EffectDesc_ConcertReverb2 -- parameter descriptor of algorithm 21, `CONCERT REVERB 2`: 5
+;   parameters, W = 6; read through entry 21 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_ConcertReverb2:
 	.byte	77, 0x1e, 1, 0	; F12A94  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12A98  [1] PRE DELAY         type 0x17 ms
@@ -35447,7 +35517,9 @@ EffectDesc_ConcertReverb2:
 	.byte	0, 0x00, 0xff, 0xff	; F12AB0  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12AB4  end of groups
 	.short	0xffff, 6	; F12AB8  0xFFFF, W
-; EffectDesc_DarkReverb1 -- algorithm 22, `DARK REVERB 1`: 5 parameters, W = 6
+; EffectDesc_DarkReverb1 -- parameter descriptor of algorithm 22, `DARK REVERB 1`: 5 parameters,
+;   W = 6; read through entry 22 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_DarkReverb1:
 	.byte	77, 0x1e, 1, 0	; F12ABC  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12AC0  [1] PRE DELAY         type 0x17 ms
@@ -35459,7 +35531,9 @@ EffectDesc_DarkReverb1:
 	.byte	0, 0x00, 0xff, 0xff	; F12AD8  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12ADC  end of groups
 	.short	0xffff, 6	; F12AE0  0xFFFF, W
-; EffectDesc_DarkReverb2 -- algorithm 23, `DARK REVERB 2`: 5 parameters, W = 6
+; EffectDesc_DarkReverb2 -- parameter descriptor of algorithm 23, `DARK REVERB 2`: 5 parameters,
+;   W = 6; read through entry 23 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_DarkReverb2:
 	.byte	77, 0x1e, 1, 0	; F12AE4  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12AE8  [1] PRE DELAY         type 0x17 ms
@@ -35471,7 +35545,9 @@ EffectDesc_DarkReverb2:
 	.byte	0, 0x00, 0xff, 0xff	; F12B00  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12B04  end of groups
 	.short	0xffff, 6	; F12B08  0xFFFF, W
-; EffectDesc_BrightReverb1 -- algorithm 24, `BRIGHT REVERB 1`: 5 parameters, W = 6
+; EffectDesc_BrightReverb1 -- parameter descriptor of algorithm 24, `BRIGHT REVERB 1`: 5
+;   parameters, W = 6; read through entry 24 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_BrightReverb1:
 	.byte	77, 0x1e, 1, 0	; F12B0C  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12B10  [1] PRE DELAY         type 0x17 ms
@@ -35483,7 +35559,9 @@ EffectDesc_BrightReverb1:
 	.byte	0, 0x00, 0xff, 0xff	; F12B28  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12B2C  end of groups
 	.short	0xffff, 6	; F12B30  0xFFFF, W
-; EffectDesc_BrightReverb2 -- algorithm 25, `BRIGHT REVERB 2`: 5 parameters, W = 6
+; EffectDesc_BrightReverb2 -- parameter descriptor of algorithm 25, `BRIGHT REVERB 2`: 5
+;   parameters, W = 6; read through entry 25 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_BrightReverb2:
 	.byte	77, 0x1e, 1, 0	; F12B34  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12B38  [1] PRE DELAY         type 0x17 ms
@@ -35495,7 +35573,9 @@ EffectDesc_BrightReverb2:
 	.byte	0, 0x00, 0xff, 0xff	; F12B50  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12B54  end of groups
 	.short	0xffff, 6	; F12B58  0xFFFF, W
-; EffectDesc_WaveReverb1 -- algorithm 26, `WAVE REVERB 1`: 5 parameters, W = 6
+; EffectDesc_WaveReverb1 -- parameter descriptor of algorithm 26, `WAVE REVERB 1`: 5 parameters,
+;   W = 6; read through entry 26 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_WaveReverb1:
 	.byte	77, 0x1e, 1, 0	; F12B5C  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12B60  [1] PRE DELAY         type 0x17 ms
@@ -35507,7 +35587,9 @@ EffectDesc_WaveReverb1:
 	.byte	0, 0x00, 0xff, 0xff	; F12B78  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12B7C  end of groups
 	.short	0xffff, 6	; F12B80  0xFFFF, W
-; EffectDesc_WaveReverb2 -- algorithm 27, `WAVE REVERB 2`: 5 parameters, W = 6
+; EffectDesc_WaveReverb2 -- parameter descriptor of algorithm 27, `WAVE REVERB 2`: 5 parameters,
+;   W = 6; read through entry 27 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_WaveReverb2:
 	.byte	77, 0x1e, 1, 0	; F12B84  [0] REVERB TIME       type 0x1E s
 	.byte	40, 0x17, 2, 0xff	; F12B88  [1] PRE DELAY         type 0x17 ms
@@ -35519,7 +35601,9 @@ EffectDesc_WaveReverb2:
 	.byte	0, 0x00, 0xff, 0xff	; F12BA0  [7] padding (blank line)
 	.byte	0xff, 0xff, 0xff, 0xff	; F12BA4  end of groups
 	.short	0xffff, 6	; F12BA8  0xFFFF, W
-; EffectDesc_SDelayChorus -- algorithm 64, `S.DELAY+CHORUS`: 10 parameters, W = 13
+; EffectDesc_SDelayChorus -- parameter descriptor of algorithm 64, `S.DELAY+CHORUS`: 10
+;   parameters, W = 13; read through entry 64 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_SDelayChorus:
 	.byte	97, 0x01, 1, 0	; F12BAC  [0] DELAY WET         type 0x01
 	.byte	65, 0x1b, 2, 0xff	; F12BB0  [1] DELAY L           type 0x1B ms
@@ -35533,7 +35617,9 @@ EffectDesc_SDelayChorus:
 	.byte	4, 0x01, 12, 9	; F12BD0  [9] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12BD4  end of groups
 	.short	0xffff, 13	; F12BD8  0xFFFF, W
-; EffectDesc_SDelaySDelay -- algorithm 65, `S.DELAY+S.DELAY`: 11 parameters, W = 16
+; EffectDesc_SDelaySDelay -- parameter descriptor of algorithm 65, `S.DELAY+S.DELAY`: 11
+;   parameters, W = 16; read through entry 65 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_SDelaySDelay:
 	.byte	81, 0x01, 1, 0	; F12BDC  [0] DELAY1 WET        type 0x01
 	.byte	65, 0x1c, 2, 0xff	; F12BE0  [1] DELAY L           type 0x1C ms
@@ -35548,7 +35634,9 @@ EffectDesc_SDelaySDelay:
 	.byte	4, 0x01, 15, 10	; F12C04  [10] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12C08  end of groups
 	.short	0xffff, 16	; F12C0C  0xFFFF, W
-; EffectDesc_SDelayFlanger -- algorithm 66, `S.DELAY+FLANGER`: 13 parameters, W = 16
+; EffectDesc_SDelayFlanger -- parameter descriptor of algorithm 66, `S.DELAY+FLANGER`: 13
+;   parameters, W = 16; read through entry 66 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_SDelayFlanger:
 	.byte	97, 0x01, 1, 0	; F12C10  [0] DELAY WET         type 0x01
 	.byte	65, 0x1b, 2, 0xff	; F12C14  [1] DELAY L           type 0x1B ms
@@ -35565,7 +35653,9 @@ EffectDesc_SDelayFlanger:
 	.byte	4, 0x01, 15, 12	; F12C40  [12] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12C44  end of groups
 	.short	0xffff, 16	; F12C48  0xFFFF, W
-; EffectDesc_SDelayVibrato -- algorithm 67, `S.DELAY+VIBRATO`: 11 parameters, W = 14
+; EffectDesc_SDelayVibrato -- parameter descriptor of algorithm 67, `S.DELAY+VIBRATO`: 11
+;   parameters, W = 14; read through entry 67 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_SDelayVibrato:
 	.byte	97, 0x01, 1, 0	; F12C4C  [0] DELAY WET         type 0x01
 	.byte	65, 0x1b, 2, 0xff	; F12C50  [1] DELAY L           type 0x1B ms
@@ -35580,7 +35670,9 @@ EffectDesc_SDelayVibrato:
 	.byte	4, 0x01, 13, 10	; F12C74  [10] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12C78  end of groups
 	.short	0xffff, 14	; F12C7C  0xFFFF, W
-; EffectDesc_SDelayPhaser -- algorithm 68, `S.DELAY+PHASER`: 13 parameters, W = 16
+; EffectDesc_SDelayPhaser -- parameter descriptor of algorithm 68, `S.DELAY+PHASER`: 13
+;   parameters, W = 16; read through entry 68 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_SDelayPhaser:
 	.byte	97, 0x01, 1, 0	; F12C80  [0] DELAY WET         type 0x01
 	.byte	65, 0x1b, 2, 0xff	; F12C84  [1] DELAY L           type 0x1B ms
@@ -35597,7 +35689,9 @@ EffectDesc_SDelayPhaser:
 	.byte	4, 0x01, 15, 12	; F12CB0  [12] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12CB4  end of groups
 	.short	0xffff, 16	; F12CB8  0xFFFF, W
-; EffectDesc_PedalWahDelay -- algorithm 69, `PEDAL WAH+DELAY`: 11 parameters, W = 14
+; EffectDesc_PedalWahDelay -- parameter descriptor of algorithm 69, `PEDAL WAH+DELAY`: 11
+;   parameters, W = 14; read through entry 69 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PedalWahDelay:
 	.byte	86, 0x01, 1, 0	; F12CBC  [0] WAH WET           type 0x01
 	.byte	36, 0x12, 2, 0xff	; F12CC0  [1] RESONANCE         type 0x12
@@ -35612,7 +35706,9 @@ EffectDesc_PedalWahDelay:
 	.byte	4, 0x01, 13, 10	; F12CE4  [10] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12CE8  end of groups
 	.short	0xffff, 14	; F12CEC  0xFFFF, W
-; EffectDesc_AutoWahSDelay -- algorithm 70, `AUTO WAH+S.DELAY`: 10 parameters, W = 13
+; EffectDesc_AutoWahSDelay -- parameter descriptor of algorithm 70, `AUTO WAH+S.DELAY`: 10
+;   parameters, W = 13; read through entry 70 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_AutoWahSDelay:
 	.byte	86, 0x01, 1, 0	; F12CF0  [0] WAH WET           type 0x01
 	.byte	36, 0x12, 2, 0xff	; F12CF4  [1] RESONANCE         type 0x12
@@ -35626,7 +35722,9 @@ EffectDesc_AutoWahSDelay:
 	.byte	4, 0x01, 12, 9	; F12D14  [9] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12D18  end of groups
 	.short	0xffff, 13	; F12D1C  0xFFFF, W
-; EffectDesc_PeqChorus -- algorithm 71, `PEQ+CHORUS`: 11 parameters, W = 10
+; EffectDesc_PeqChorus -- parameter descriptor of algorithm 71, `PEQ+CHORUS`: 11 parameters, W =
+;   10; read through entry 71 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_PeqChorus:
 	.byte	7, 0x03, 1, 0xff	; F12D20  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12D24  [1] (1)      Q        type 0x04
@@ -35641,7 +35739,9 @@ EffectDesc_PeqChorus:
 	.byte	4, 0x01, 9, 10	; F12D48  [10] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12D4C  end of groups
 	.short	0xffff, 10	; F12D50  0xFFFF, W
-; EffectDesc_PeqSDelay -- algorithm 72, `PEQ+S.DELAY`: 12 parameters, W = 13
+; EffectDesc_PeqSDelay -- parameter descriptor of algorithm 72, `PEQ+S.DELAY`: 12 parameters, W
+;   = 13; read through entry 72 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_PeqSDelay:
 	.byte	7, 0x03, 1, 0xff	; F12D54  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12D58  [1] (1)      Q        type 0x04
@@ -35657,7 +35757,9 @@ EffectDesc_PeqSDelay:
 	.byte	4, 0x01, 12, 11	; F12D80  [11] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12D84  end of groups
 	.short	0xffff, 13	; F12D88  0xFFFF, W
-; EffectDesc_PeqFlanger -- algorithm 73, `PEQ+FLANGER`: 14 parameters, W = 13
+; EffectDesc_PeqFlanger -- parameter descriptor of algorithm 73, `PEQ+FLANGER`: 14 parameters, W
+;   = 13; read through entry 73 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_PeqFlanger:
 	.byte	7, 0x03, 1, 0xff	; F12D8C  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12D90  [1] (1)      Q        type 0x04
@@ -35675,7 +35777,9 @@ EffectDesc_PeqFlanger:
 	.byte	4, 0x01, 12, 13	; F12DC0  [13] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12DC4  end of groups
 	.short	0xffff, 13	; F12DC8  0xFFFF, W
-; EffectDesc_PeqVibrato -- algorithm 74, `PEQ+VIBRATO`: 12 parameters, W = 11
+; EffectDesc_PeqVibrato -- parameter descriptor of algorithm 74, `PEQ+VIBRATO`: 12 parameters, W
+;   = 11; read through entry 74 of EffectParamDescriptors_F12F24 by the editor routines above
+;   (record layout above)
 EffectDesc_PeqVibrato:
 	.byte	7, 0x03, 1, 0xff	; F12DCC  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12DD0  [1] (1)      Q        type 0x04
@@ -35691,7 +35795,9 @@ EffectDesc_PeqVibrato:
 	.byte	4, 0x01, 10, 11	; F12DF8  [11] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12DFC  end of groups
 	.short	0xffff, 11	; F12E00  0xFFFF, W
-; EffectDesc_PeqCompressor -- algorithm 75, `PEQ+COMPRESSOR`: 11 parameters, W = 10
+; EffectDesc_PeqCompressor -- parameter descriptor of algorithm 75, `PEQ+COMPRESSOR`: 11
+;   parameters, W = 10; read through entry 75 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PeqCompressor:
 	.byte	7, 0x03, 1, 0xff	; F12E04  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12E08  [1] (1)      Q        type 0x04
@@ -35706,7 +35812,9 @@ EffectDesc_PeqCompressor:
 	.byte	4, 0x01, 9, 10	; F12E2C  [10] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12E30  end of groups
 	.short	0xffff, 10	; F12E34  0xFFFF, W
-; EffectDesc_PeqComprDist -- algorithm 96, `PEQ+COMPR+DIST`: 13 parameters, W = 12
+; EffectDesc_PeqComprDist -- parameter descriptor of algorithm 96, `PEQ+COMPR+DIST`: 13
+;   parameters, W = 12; read through entry 96 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PeqComprDist:
 	.byte	7, 0x03, 1, 0xff	; F12E38  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12E3C  [1] (1)      Q        type 0x04
@@ -35723,7 +35831,9 @@ EffectDesc_PeqComprDist:
 	.byte	4, 0x01, 11, 12	; F12E68  [12] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12E6C  end of groups
 	.short	0xffff, 12	; F12E70  0xFFFF, W
-; EffectDesc_PeqComprOverdr -- algorithm 97, `PEQ+COMPR+OVERDR`: 10 parameters, W = 10
+; EffectDesc_PeqComprOverdr -- parameter descriptor of algorithm 97, `PEQ+COMPR+OVERDR`: 10
+;   parameters, W = 10; read through entry 97 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PeqComprOverdr:
 	.byte	89, 0x03, 1, 0xff	; F12E74  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	90, 0x04, 1, 0xff	; F12E78  [1] BAND EMPHASIS Q   type 0x04
@@ -35737,7 +35847,9 @@ EffectDesc_PeqComprOverdr:
 	.byte	4, 0x01, 9, 9	; F12E98  [9] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12E9C  end of groups
 	.short	0xffff, 10	; F12EA0  0xFFFF, W
-; EffectDesc_PeqDistDelay -- algorithm 98, `PEQ+DIST+DELAY`: 14 parameters, W = 15
+; EffectDesc_PeqDistDelay -- parameter descriptor of algorithm 98, `PEQ+DIST+DELAY`: 14
+;   parameters, W = 15; read through entry 98 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PeqDistDelay:
 	.byte	7, 0x03, 1, 0xff	; F12EA4  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12EA8  [1] (1)      Q        type 0x04
@@ -35755,7 +35867,9 @@ EffectDesc_PeqDistDelay:
 	.byte	4, 0x01, 14, 13	; F12ED8  [13] VOLUME            type 0x01
 	.byte	0xff, 0xff, 0xff, 0xff	; F12EDC  end of groups
 	.short	0xffff, 15	; F12EE0  0xFFFF, W
-; EffectDesc_PeqOverdrDelay -- algorithm 99, `PEQ+OVERDR+DELAY`: 14 parameters, W = 15
+; EffectDesc_PeqOverdrDelay -- parameter descriptor of algorithm 99, `PEQ+OVERDR+DELAY`: 14
+;   parameters, W = 15; read through entry 99 of EffectParamDescriptors_F12F24 by the editor
+;   routines above (record layout above)
 EffectDesc_PeqOverdrDelay:
 	.byte	7, 0x03, 1, 0xff	; F12EE4  [0] BAND EMPHASIS Fc  type 0x03 Hz
 	.byte	8, 0x04, 1, 0xff	; F12EE8  [1] (1)      Q        type 0x04
@@ -35998,8 +36112,8 @@ EffectParamDescriptors_F12F24:
 ; Types 0x00 and 0x1F are all-zero and used by no descriptor group.  Each
 ;   record's comment lists the parameter names whose groups carry that type.
 ; Re-derived by python3 notes/promb-2026-09-25/dsp_effect_tables.py.
-; ⚠ REPLACES `EffectValueRanges`, whose header said "Unknown: everything about it
-;   except its bytes".
+; ⚠ REPLACES `Data_F13124`, whose header admitted knowing nothing but
+;   the bytes.
 ;--------------------------------------------------------------------------
 EffectValueRanges:
 	.short	0, 0, 0	; F13124  type 0x00  (no group)
@@ -36232,14 +36346,19 @@ ScreenTable_F13364:
 ; Checked by python3 notes/promb-2026-09-25/dsp_effect_tables.py: each pair
 ;   is mutually inverse, every offered algorithm has a real name, the lists
 ;   end in 0xFF and the three pairs tile the span with nothing between.
-; ⚠ REPLACES EffectAlgoToPos_Block97, Data_F13448, EffectPosToAlgo_Block97, Data_F13490,
-;   EffectAlgoToPos_Block98, Data_F134F5, EffectPosToAlgo_Block98, Data_F1353D, ByteMap_F1354E,
+; ⚠ REPLACES ByteMap_F133E4, Data_F13448, ByteMap_F13464, Data_F13490,
+;   ByteMap_F13491, Data_F134F5, ByteMap_F13511, Data_F1353D, ByteMap_F1354E,
 ;   Data_F135A2, IndexMap_F135BF, ByteMap_F135CB and Data_F135F6.  The two
-;   ByteMap headers said "Unknown: what the two index spaces ARE" -- they are
-;   algorithm numbers and list positions -- and the block-99 pair was split
-;   across five objects because its map starts one byte after an 0xFF.
+;   ByteMap headers asked what the two index spaces ARE -- they are algorithm
+;   numbers and list positions -- and the block-99 pair was split across five
+;   objects because its map starts one byte after an 0xFF.  IndexMap_F135BF,
+;   "an index map that returns its own index", is positions 1-12 of block
+;   99's list: the twelve reverbs, algorithms 16-27.
 ;--------------------------------------------------------------------------
 ; block 97: 44 algorithms offered, fall-back 1 `CHORUS`
+; EffectAlgoToPos_Block97 -- algorithm -> list position for block 97, one entry per algorithm
+;   number; read by DspEffect_StepAlgorithm (0xF104A7); DspEffect_SetAlgorithm (0xF113A0);
+;   sub_F114DA (0xF1150E); sub_F1156B (0xF11598); DspParam_WriteByNumber (0xF11D7E)
 EffectAlgoToPos_Block97:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x07, 0x08, 0x09, 0x0a, 0xff, 0xff, 0xff, 0xff	; F133E4  algorithms 0..15
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F133F4  algorithms 16..31
@@ -36249,6 +36368,8 @@ EffectAlgoToPos_Block97:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13434  algorithms 80..95
 	.byte	0x28, 0x29, 0x2a, 0x2b, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13444  algorithms 96..111
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13454  algorithms 112..127
+; EffectPosToAlgo_Block97 -- list position -> algorithm for block 97, 44 entries and the 0xFF
+;   that ends the list; read by DspEffect_StepAlgorithm (0xF104CF, 0xF104E4)
 EffectPosToAlgo_Block97:
 	.byte	0	; F13464  [0] NO OPERATION
 	.byte	1	; F13465  [1] CHORUS
@@ -36296,6 +36417,9 @@ EffectPosToAlgo_Block97:
 	.byte	99	; F1348F  [43] PEQ+OVERDR+DELAY
 	.byte	0xff	; F13490  end of list
 ; block 98: 44 algorithms offered, fall-back 35 `EXCITER`
+; EffectAlgoToPos_Block98 -- algorithm -> list position for block 98, one entry per algorithm
+;   number; read by DspEffect_StepAlgorithm (0xF104FC); DspEffect_SetAlgorithm (0xF113B7);
+;   sub_F114DA (0xF1151E); sub_F1156B (0xF115A8); DspParam_WriteByNumber (0xF11D8F)
 EffectAlgoToPos_Block98:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x07, 0x08, 0x09, 0x0a, 0xff, 0xff, 0xff, 0xff	; F13491  algorithms 0..15
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134A1  algorithms 16..31
@@ -36305,6 +36429,8 @@ EffectAlgoToPos_Block98:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134E1  algorithms 80..95
 	.byte	0x28, 0x29, 0x2a, 0x2b, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134F1  algorithms 96..111
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F13501  algorithms 112..127
+; EffectPosToAlgo_Block98 -- list position -> algorithm for block 98, 44 entries and the 0xFF
+;   that ends the list; read by DspEffect_StepAlgorithm (0xF10524, 0xF10539)
 EffectPosToAlgo_Block98:
 	.byte	0	; F13511  [0] NO OPERATION
 	.byte	1	; F13512  [1] CHORUS
@@ -36352,6 +36478,9 @@ EffectPosToAlgo_Block98:
 	.byte	99	; F1353C  [43] PEQ+OVERDR+DELAY
 	.byte	0xff	; F1353D  end of list
 ; block 99: 56 algorithms offered, fall-back 20 `CONCERT REVERB 1`
+; EffectAlgoToPos_Block99 -- algorithm -> list position for block 99, one entry per algorithm
+;   number; read by DspEffect_StepAlgorithm (0xF1054F); DspEffect_SetAlgorithm (0xF113CE);
+;   sub_F114DA (0xF1152E); sub_F1156B (0xF115B8); DspParam_WriteByNumber (0xF11DA0)
 EffectAlgoToPos_Block99:
 	.byte	0x00, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0xff, 0x13, 0x14, 0x15, 0x16, 0xff, 0xff, 0xff, 0xff	; F1353E  algorithms 0..15
 	.byte	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0xff, 0xff, 0xff, 0xff	; F1354E  algorithms 16..31
@@ -36361,6 +36490,8 @@ EffectAlgoToPos_Block99:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F1358E  algorithms 80..95
 	.byte	0x34, 0x35, 0x36, 0x37, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F1359E  algorithms 96..111
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F135AE  algorithms 112..127
+; EffectPosToAlgo_Block99 -- list position -> algorithm for block 99, 56 entries and the 0xFF
+;   that ends the list; read by DspEffect_StepAlgorithm (0xF10577, 0xF1058C)
 EffectPosToAlgo_Block99:
 	.byte	0	; F135BE  [0] NO OPERATION
 	.byte	16	; F135BF  [1] ROOM REVERB 1
@@ -36504,13 +36635,20 @@ DispatchTable_F135FD:
 ;   and the high nibble of that entry's byte 5, each 1..4.
 ; What byte 21 and entry 121's byte 5 MEAN is not decoded here; the names
 ;   say where the bytes are, which the readers establish.
+; ⚠ REPLACES `Data_F13659`, whose header admitted knowing nothing but the bytes.
 ;--------------------------------------------------------------------------
+; AdjustDesc_EffectBlockByte21 -- the descriptor sub_F101C8 for blocks 97/98 passes to
+;   IndexedParam_AdjustField; read by sub_F101C8 (0xF101CF)
 AdjustDesc_EffectBlockByte21:
 	.byte	21, 0xff, 0, 99, 0, 1, 5, 0x00	; F13659  offset, mask, shift, upper, lower, step, step, xor
 	.byte	0x00	; F13661  not read
+; AdjustDesc_Entry121Byte5Low -- the descriptor sub_F101E7 for block index 0 passes to
+;   IndexedParam_AdjustField; read by sub_F101E7 (0xF101FB)
 AdjustDesc_Entry121Byte5Low:
 	.byte	5, 0x0f, 0, 4, 1, 1, 1, 0x00	; F13662  offset, mask, shift, upper, lower, step, step, xor
 	.byte	0x00	; F1366A  not read
+; AdjustDesc_Entry121Byte5High -- the descriptor sub_F101E7 for block index 1 passes to
+;   IndexedParam_AdjustField; read by sub_F101E7 (0xF10212)
 AdjustDesc_Entry121Byte5High:
 	.byte	5, 0xf0, 4, 4, 1, 1, 1, 0x00	; F1366B  offset, mask, shift, upper, lower, step, step, xor
 	.byte	0x00	; F13673  not read
@@ -36538,8 +36676,8 @@ AdjustDesc_Entry121Byte5High:
 ;           notes/prom_b_f0ea9f_layout.py --null-ptr`), and the STRIDED rule
 ;           fires zero times over the 33 proven dispatch tables of this
 ;           image (`--null-stride`).
-; ⚠ ANSWERED 2026-09-25 (lane promb).  This header used to end `Unknown: what
-;    indexes it, and what the entries mean.`  DspEffect_SetAlgorithm (0xF11365)
+; ⚠ ANSWERED 2026-09-25 (lane promb).  This header used to end by asking what
+;    indexes this table and what its entries mean.  DspEffect_SetAlgorithm (0xF11365)
 ;    indexes it with 4 * the ALGORITHM number (`mul BC,E` / `add XBC,this` at
 ;    0xF113F6-0xF113FC; sub_F1162E does the same at 0xF11646), and an entry
 ;    points at that algorithm's DEFAULT PARAMETER record, EffectDefaults_* --
@@ -36698,7 +36836,7 @@ EffectDefaultParams:
 ;   skips block 99); n = 69 entry 121 byte 5; n = 70 absent in the table --
 ;   the reader special-cases it from entries 6 and 32; n = 71/72 entry 0
 ;   bytes 5 and 7, masked 0x7F.
-; ⚠ REPLACES `EffectParamNumberMap` ("Unknown: everything about it except its bytes").
+; ⚠ REPLACES `Data_F13874`, whose header admitted knowing nothing but the bytes.
 ;--------------------------------------------------------------------------
 EffectParamNumberMap:
 	.byte	96, 0, 0x01	; F13874  n=0  entry 96 byte 0, mask 0x01
@@ -36859,13 +36997,14 @@ DispatchTable_F1394F:
 ;   records carry values past the descriptor's last slot (DISTORTION /
 ;   OVERDRIVE / FUZZ end 00 / 01 / 02) -- bytes no editor page shows.
 ; Re-derived by python3 notes/promb-2026-09-25/dsp_effect_tables.py.
-; ⚠ REPLACES the defaults part of `Data_F139AB`, whose header said "Unknown:
-;   everything about it except its bytes".
+; ⚠ REPLACES the defaults part of `Data_F139AB`, whose header admitted knowing
+;   nothing but the bytes.
 ; --------------------------------------------------------------------------
 EffectDefaults_Unused:
 	.byte	0xff, 0xff, 0xff	; F139AB  the 72 placeholder algorithms -- never read: the
 				;         block maps replace an unoffered algorithm first
-; EffectDefaults_Distortion -- algorithm 32 `DISTORTION`: 5 value bytes (W-1 = 4)
+; EffectDefaults_Distortion -- default values of algorithm 32 `DISTORTION`: 5 value bytes (W-1 = 4)
+;   entry 32 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Distortion:
 	.byte	1	; F139AE  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F139AF  -> block bytes 17..20
@@ -36875,7 +37014,8 @@ EffectDefaults_Distortion:
 	.byte	84	; F139B6  slot 4  VOLUME
 	.byte	0	; F139B7  slot 5  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F139B8  end
-; EffectDefaults_Overdrive -- algorithm 33 `OVERDRIVE`: 5 value bytes (W-1 = 4)
+; EffectDefaults_Overdrive -- default values of algorithm 33 `OVERDRIVE`: 5 value bytes (W-1 = 4)
+;   entry 33 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Overdrive:
 	.byte	1	; F139BA  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F139BB  -> block bytes 17..20
@@ -36885,7 +37025,8 @@ EffectDefaults_Overdrive:
 	.byte	84	; F139C2  slot 4  VOLUME
 	.byte	1	; F139C3  slot 5  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F139C4  end
-; EffectDefaults_Fuzz -- algorithm 34 `FUZZ`: 5 value bytes (W-1 = 4)
+; EffectDefaults_Fuzz -- default values of algorithm 34 `FUZZ`: 5 value bytes (W-1 = 4)
+;   entry 34 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Fuzz:
 	.byte	1	; F139C6  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F139C7  -> block bytes 17..20
@@ -36895,7 +37036,8 @@ EffectDefaults_Fuzz:
 	.byte	84	; F139CE  slot 4  VOLUME
 	.byte	2	; F139CF  slot 5  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F139D0  end
-; EffectDefaults_Exciter -- algorithm 35 `EXCITER`: 8 value bytes (W-1 = 7)
+; EffectDefaults_Exciter -- default values of algorithm 35 `EXCITER`: 8 value bytes (W-1 = 7)
+;   entry 35 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Exciter:
 	.byte	1	; F139D2  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F139D3  -> block bytes 17..20
@@ -36908,7 +37050,8 @@ EffectDefaults_Exciter:
 	.byte	84	; F139DD  slot 7  VOLUME
 	.byte	0	; F139DE  slot 8  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F139DF  end
-; EffectDefaults_ParametricEq -- algorithm 39 `PARAMETRIC EQ`: 13 value bytes (W-1 = 13)
+; EffectDefaults_ParametricEq -- default values of algorithm 39 `PARAMETRIC EQ`: 13 value bytes (W-1 = 13)
+;   entry 39 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_ParametricEq:
 	.byte	18	; F139E1  selected parameter = group 18
 	.short	0x02d8, 0x0458	; F139E2  -> block bytes 17..20
@@ -36926,7 +37069,8 @@ EffectDefaults_ParametricEq:
 	.byte	93	; F139F1  slot 12  (second byte of slot 11's word)
 	.byte	84	; F139F2  slot 13  VOLUME
 	.byte	0xff, 0xff	; F139F3  end
-; EffectDefaults_Chorus -- algorithm 1 `CHORUS`: 5 value bytes (W-1 = 5)
+; EffectDefaults_Chorus -- default values of algorithm 1 `CHORUS`: 5 value bytes (W-1 = 5)
+;   entry 1 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Chorus:
 	.byte	2	; F139F5  selected parameter = group 2
 	.short	0x02d8, 0x0458	; F139F6  -> block bytes 17..20
@@ -36936,7 +37080,8 @@ EffectDefaults_Chorus:
 	.byte	0	; F139FD  slot 4  LFO WAVEFORM
 	.byte	84	; F139FE  slot 5  VOLUME
 	.byte	0xff, 0xff	; F139FF  end
-; EffectDefaults_ModulatedChorus -- algorithm 2 `MODULATED CHORUS`: 7 value bytes (W-1 = 7)
+; EffectDefaults_ModulatedChorus -- default values of algorithm 2 `MODULATED CHORUS`: 7 value bytes (W-1 = 7)
+;   entry 2 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_ModulatedChorus:
 	.byte	2	; F13A01  selected parameter = group 2
 	.short	0x02d8, 0x0458	; F13A02  -> block bytes 17..20
@@ -36948,7 +37093,8 @@ EffectDefaults_ModulatedChorus:
 	.byte	0	; F13A0B  slot 6  LFO WAVEFORM
 	.byte	84	; F13A0C  slot 7  VOLUME
 	.byte	0xff, 0xff	; F13A0D  end
-; EffectDefaults_Enhancer -- algorithm 3 `ENHANCER`: 9 value bytes (W-1 = 9)
+; EffectDefaults_Enhancer -- default values of algorithm 3 `ENHANCER`: 9 value bytes (W-1 = 9)
+;   entry 3 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Enhancer:
 	.byte	1	; F13A0F  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F13A10  -> block bytes 17..20
@@ -36962,7 +37108,8 @@ EffectDefaults_Enhancer:
 	.byte	0	; F13A1B  slot 8  (second byte of slot 7's word)
 	.byte	84	; F13A1C  slot 9  VOLUME
 	.byte	0xff, 0xff	; F13A1D  end
-; EffectDefaults_Flanger -- algorithm 4 `FLANGER`: 8 value bytes (W-1 = 8)
+; EffectDefaults_Flanger -- default values of algorithm 4 `FLANGER`: 8 value bytes (W-1 = 8)
+;   entry 4 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Flanger:
 	.byte	3	; F13A1F  selected parameter = group 3
 	.short	0x02d8, 0x0458	; F13A20  -> block bytes 17..20
@@ -36975,7 +37122,8 @@ EffectDefaults_Flanger:
 	.byte	0	; F13A2A  slot 7  LFO WAVEFORM
 	.byte	84	; F13A2B  slot 8  VOLUME
 	.byte	0xff, 0xff	; F13A2C  end
-; EffectDefaults_Phaser -- algorithm 5 `PHASER`: 8 value bytes (W-1 = 8)
+; EffectDefaults_Phaser -- default values of algorithm 5 `PHASER`: 8 value bytes (W-1 = 8)
+;   entry 5 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Phaser:
 	.byte	4	; F13A2E  selected parameter = group 4
 	.short	0x02d8, 0x0458	; F13A2F  -> block bytes 17..20
@@ -36988,7 +37136,8 @@ EffectDefaults_Phaser:
 	.byte	0	; F13A39  slot 7  LFO WAVEFORM
 	.byte	84	; F13A3A  slot 8  VOLUME
 	.byte	0xff, 0xff	; F13A3B  end
-; EffectDefaults_AutoPan -- algorithm 48 `AUTO PAN`: 6 value bytes (W-1 = 6)
+; EffectDefaults_AutoPan -- default values of algorithm 48 `AUTO PAN`: 6 value bytes (W-1 = 6)
+;   entry 48 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_AutoPan:
 	.byte	2	; F13A3D  selected parameter = group 2
 	.short	0x02d8, 0x0458	; F13A3E  -> block bytes 17..20
@@ -36999,7 +37148,8 @@ EffectDefaults_AutoPan:
 	.byte	0	; F13A46  slot 5  LFO WAVEFORM
 	.byte	84	; F13A47  slot 6  VOLUME
 	.byte	0xff, 0xff	; F13A48  end
-; EffectDefaults_PitchShifter -- algorithm 49 `PITCH SHIFTER`: 7 value bytes (W-1 = 6)
+; EffectDefaults_PitchShifter -- default values of algorithm 49 `PITCH SHIFTER`: 7 value bytes (W-1 = 6)
+;   entry 49 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PitchShifter:
 	.byte	4	; F13A4A  selected parameter = group 4
 	.short	0x02d8, 0x0458	; F13A4B  -> block bytes 17..20
@@ -37011,7 +37161,8 @@ EffectDefaults_PitchShifter:
 	.byte	84	; F13A54  slot 6  VOLUME
 	.byte	2	; F13A55  slot 7  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F13A56  end
-; EffectDefaults_Vibrato -- algorithm 50 `VIBRATO`: 6 value bytes (W-1 = 6)
+; EffectDefaults_Vibrato -- default values of algorithm 50 `VIBRATO`: 6 value bytes (W-1 = 6)
+;   entry 50 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Vibrato:
 	.byte	2	; F13A58  selected parameter = group 2
 	.short	0x02d8, 0x0458	; F13A59  -> block bytes 17..20
@@ -37022,13 +37173,15 @@ EffectDefaults_Vibrato:
 	.byte	0	; F13A61  slot 5  LFO WAVEFORM
 	.byte	84	; F13A62  slot 6  VOLUME
 	.byte	0xff, 0xff	; F13A63  end
-; EffectDefaults_NoOperation -- algorithm 0 `NO OPERATION`: 1 value bytes (W-1 = 0)
+; EffectDefaults_NoOperation -- default values of algorithm 0 `NO OPERATION`: 1 value bytes (W-1 = 0)
+;   entry 0 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_NoOperation:
 	.byte	0xff	; F13A65  selected parameter
 	.short	0x02d8, 0x0458	; F13A66  -> block bytes 17..20
 	.byte	84	; F13A6A  slot 1  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F13A6B  end
-; EffectDefaults_PedalWah -- algorithm 51 `PEDAL WAH`: 6 value bytes (W-1 = 6)
+; EffectDefaults_PedalWah -- default values of algorithm 51 `PEDAL WAH`: 6 value bytes (W-1 = 6)
+;   entry 51 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PedalWah:
 	.byte	4	; F13A6D  selected parameter = group 4
 	.short	0x02d8, 0x0458	; F13A6E  -> block bytes 17..20
@@ -37039,7 +37192,8 @@ EffectDefaults_PedalWah:
 	.byte	30	; F13A76  slot 5  WAH CENTER Fc
 	.byte	99	; F13A77  slot 6  VOLUME
 	.byte	0xff, 0xff	; F13A78  end
-; EffectDefaults_AutoWah -- algorithm 52 `AUTO WAH`: 5 value bytes (W-1 = 5)
+; EffectDefaults_AutoWah -- default values of algorithm 52 `AUTO WAH`: 5 value bytes (W-1 = 5)
+;   entry 52 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_AutoWah:
 	.byte	0	; F13A7A  selected parameter = group 0
 	.short	0x02d8, 0x0458	; F13A7B  -> block bytes 17..20
@@ -37049,7 +37203,8 @@ EffectDefaults_AutoWah:
 	.byte	99	; F13A82  slot 4  SWEEP RANGE
 	.byte	99	; F13A83  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13A84  end
-; EffectDefaults_RotarySpeaker -- algorithm 53 `ROTARY SPEAKER`: 16 value bytes (W-1 = 15)
+; EffectDefaults_RotarySpeaker -- default values of algorithm 53 `ROTARY SPEAKER`: 16 value bytes (W-1 = 15)
+;   entry 53 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_RotarySpeaker:
 	.byte	14	; F13A86  selected parameter = group 14
 	.short	0x02d8, 0x0458	; F13A87  -> block bytes 17..20
@@ -37070,7 +37225,8 @@ EffectDefaults_RotarySpeaker:
 	.byte	1	; F13A99  slot 15  SLOW/FAST
 	.byte	0	; F13A9A  slot 16  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F13A9B  end
-; EffectDefaults_RingModulator -- algorithm 54 `RING MODULATOR`: 5 value bytes (W-1 = 5)
+; EffectDefaults_RingModulator -- default values of algorithm 54 `RING MODULATOR`: 5 value bytes (W-1 = 5)
+;   entry 54 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_RingModulator:
 	.byte	1	; F13A9D  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F13A9E  -> block bytes 17..20
@@ -37080,13 +37236,15 @@ EffectDefaults_RingModulator:
 	.byte	0	; F13AA5  slot 4  OSC WAVEFORM
 	.byte	84	; F13AA6  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13AA7  end
-; EffectDefaults_NoiseGenerator -- algorithm 38 `NOISE GENERATOR`: 1 value bytes (W-1 = 1)
+; EffectDefaults_NoiseGenerator -- default values of algorithm 38 `NOISE GENERATOR`: 1 value bytes (W-1 = 1)
+;   entry 38 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_NoiseGenerator:
 	.byte	0	; F13AA9  selected parameter = group 0
 	.short	0x02d8, 0x0458	; F13AAA  -> block bytes 17..20
 	.byte	0	; F13AAE  slot 1  VOLUME
 	.byte	0xff, 0xff	; F13AAF  end
-; EffectDefaults_SlowAttacker -- algorithm 37 `SLOW ATTACKER`: 5 value bytes (W-1 = 5)
+; EffectDefaults_SlowAttacker -- default values of algorithm 37 `SLOW ATTACKER`: 5 value bytes (W-1 = 5)
+;   entry 37 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_SlowAttacker:
 	.byte	2	; F13AB1  selected parameter = group 2
 	.short	0x02d8, 0x0458	; F13AB2  -> block bytes 17..20
@@ -37096,7 +37254,8 @@ EffectDefaults_SlowAttacker:
 	.byte	39	; F13AB9  slot 4  RELEASE RATE
 	.byte	84	; F13ABA  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13ABB  end
-; EffectDefaults_GatedReverb -- algorithm 8 `GATED REVERB`: 6 value bytes (W-1 = 6)
+; EffectDefaults_GatedReverb -- default values of algorithm 8 `GATED REVERB`: 6 value bytes (W-1 = 6)
+;   entry 8 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_GatedReverb:
 	.byte	1	; F13ABD  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F13ABE  -> block bytes 17..20
@@ -37107,7 +37266,8 @@ EffectDefaults_GatedReverb:
 	.byte	5	; F13AC6  slot 5  MASK TIME
 	.byte	50	; F13AC7  slot 6  VOLUME
 	.byte	0xff, 0xff	; F13AC8  end
-; EffectDefaults_HaasEffect -- algorithm 55 `HAAS EFFECT`: 8 value bytes (W-1 = 8)
+; EffectDefaults_HaasEffect -- default values of algorithm 55 `HAAS EFFECT`: 8 value bytes (W-1 = 8)
+;   entry 55 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_HaasEffect:
 	.byte	1	; F13ACA  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F13ACB  -> block bytes 17..20
@@ -37120,7 +37280,8 @@ EffectDefaults_HaasEffect:
 	.byte	99	; F13AD5  slot 7  BALANCE R
 	.byte	84	; F13AD6  slot 8  VOLUME
 	.byte	0xff, 0xff	; F13AD7  end
-; EffectDefaults_Ensemble -- algorithm 6 `ENSEMBLE`: 5 value bytes (W-1 = 5)
+; EffectDefaults_Ensemble -- default values of algorithm 6 `ENSEMBLE`: 5 value bytes (W-1 = 5)
+;   entry 6 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Ensemble:
 	.byte	2	; F13AD9  selected parameter = group 2
 	.short	0x02d8, 0x0458	; F13ADA  -> block bytes 17..20
@@ -37130,7 +37291,8 @@ EffectDefaults_Ensemble:
 	.byte	0	; F13AE1  slot 4  LFO WAVEFORM
 	.byte	84	; F13AE2  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13AE3  end
-; EffectDefaults_Compressor -- algorithm 36 `COMPRESSOR`: 6 value bytes (W-1 = 6)
+; EffectDefaults_Compressor -- default values of algorithm 36 `COMPRESSOR`: 6 value bytes (W-1 = 6)
+;   entry 36 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_Compressor:
 	.byte	3	; F13AE5  selected parameter = group 3
 	.short	0x02d8, 0x0458	; F13AE6  -> block bytes 17..20
@@ -37141,7 +37303,8 @@ EffectDefaults_Compressor:
 	.byte	19	; F13AEE  slot 5  RELEASE SENS.
 	.byte	84	; F13AEF  slot 6  VOLUME
 	.byte	0xff, 0xff	; F13AF0  end
-; EffectDefaults_MixUp -- algorithm 56 `MIX UP`: 8 value bytes (W-1 = 8)
+; EffectDefaults_MixUp -- default values of algorithm 56 `MIX UP`: 8 value bytes (W-1 = 8)
+;   entry 56 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_MixUp:
 	.byte	2	; F13AF2  selected parameter = group 2
 	.short	0x02d8, 0x0458	; F13AF3  -> block bytes 17..20
@@ -37154,7 +37317,8 @@ EffectDefaults_MixUp:
 	.byte	0	; F13AFD  slot 7  LFO WAVEFORM
 	.byte	84	; F13AFE  slot 8  VOLUME
 	.byte	0xff, 0xff	; F13AFF  end
-; EffectDefaults_SingleDelay -- algorithm 9 `SINGLE DELAY`: 9 value bytes (W-1 = 9)
+; EffectDefaults_SingleDelay -- default values of algorithm 9 `SINGLE DELAY`: 9 value bytes (W-1 = 9)
+;   entry 9 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_SingleDelay:
 	.byte	6	; F13B01  selected parameter = group 6
 	.short	0x02d8, 0x0458	; F13B02  -> block bytes 17..20
@@ -37168,7 +37332,8 @@ EffectDefaults_SingleDelay:
 	.byte	18	; F13B0D  slot 8  HIGH DAMP GAIN
 	.byte	84	; F13B0E  slot 9  VOLUME
 	.byte	0xff, 0xff	; F13B0F  end
-; EffectDefaults_MultiTapDelay -- algorithm 10 `MULTI TAP DELAY`: 16 value bytes (W-1 = 16)
+; EffectDefaults_MultiTapDelay -- default values of algorithm 10 `MULTI TAP DELAY`: 16 value bytes (W-1 = 16)
+;   entry 10 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_MultiTapDelay:
 	.byte	9	; F13B11  selected parameter = group 9
 	.short	0x02d8, 0x0458	; F13B12  -> block bytes 17..20
@@ -37189,7 +37354,8 @@ EffectDefaults_MultiTapDelay:
 	.byte	18	; F13B24  slot 15  HIGH DAMP GAIN
 	.byte	84	; F13B25  slot 16  VOLUME
 	.byte	0xff, 0xff	; F13B26  end
-; EffectDefaults_ManualDelay -- algorithm 11 `MANUAL DELAY`: 10 value bytes (W-1 = 10)
+; EffectDefaults_ManualDelay -- default values of algorithm 11 `MANUAL DELAY`: 10 value bytes (W-1 = 10)
+;   entry 11 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_ManualDelay:
 	.byte	1	; F13B28  selected parameter = group 1
 	.short	0x02d8, 0x0458	; F13B29  -> block bytes 17..20
@@ -37204,7 +37370,8 @@ EffectDefaults_ManualDelay:
 	.byte	18	; F13B35  slot 9  HIGH DAMP GAIN
 	.byte	84	; F13B36  slot 10  VOLUME
 	.byte	0xff, 0xff	; F13B37  end
-; EffectDefaults_RoomReverb1 -- algorithm 16 `ROOM REVERB 1`: 5 value bytes (W-1 = 5)
+; EffectDefaults_RoomReverb1 -- default values of algorithm 16 `ROOM REVERB 1`: 5 value bytes (W-1 = 5)
+;   entry 16 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_RoomReverb1:
 	.byte	0	; F13B39  selected parameter = group 0
 	.short	0x02dc, 0x0458	; F13B3A  -> block bytes 17..20
@@ -37214,7 +37381,8 @@ EffectDefaults_RoomReverb1:
 	.byte	50	; F13B41  slot 4  EARLY REFL LEVEL
 	.byte	94	; F13B42  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B43  end
-; EffectDefaults_RoomReverb2 -- algorithm 17 `ROOM REVERB 2`: 5 value bytes (W-1 = 5)
+; EffectDefaults_RoomReverb2 -- default values of algorithm 17 `ROOM REVERB 2`: 5 value bytes (W-1 = 5)
+;   entry 17 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_RoomReverb2:
 	.byte	0	; F13B45  selected parameter = group 0
 	.short	0x02de, 0x0458	; F13B46  -> block bytes 17..20
@@ -37224,7 +37392,8 @@ EffectDefaults_RoomReverb2:
 	.byte	50	; F13B4D  slot 4  EARLY REFL LEVEL
 	.byte	90	; F13B4E  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B4F  end
-; EffectDefaults_PlateReverb1 -- algorithm 18 `PLATE REVERB 1`: 5 value bytes (W-1 = 5)
+; EffectDefaults_PlateReverb1 -- default values of algorithm 18 `PLATE REVERB 1`: 5 value bytes (W-1 = 5)
+;   entry 18 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PlateReverb1:
 	.byte	0	; F13B51  selected parameter = group 0
 	.short	0x02da, 0x0458	; F13B52  -> block bytes 17..20
@@ -37234,7 +37403,8 @@ EffectDefaults_PlateReverb1:
 	.byte	50	; F13B59  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13B5A  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B5B  end
-; EffectDefaults_PlateReverb2 -- algorithm 19 `PLATE REVERB 2`: 5 value bytes (W-1 = 5)
+; EffectDefaults_PlateReverb2 -- default values of algorithm 19 `PLATE REVERB 2`: 5 value bytes (W-1 = 5)
+;   entry 19 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PlateReverb2:
 	.byte	0	; F13B5D  selected parameter = group 0
 	.short	0x02dc, 0x0458	; F13B5E  -> block bytes 17..20
@@ -37244,7 +37414,8 @@ EffectDefaults_PlateReverb2:
 	.byte	50	; F13B65  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13B66  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B67  end
-; EffectDefaults_ConcertReverb1 -- algorithm 20 `CONCERT REVERB 1`: 5 value bytes (W-1 = 5)
+; EffectDefaults_ConcertReverb1 -- default values of algorithm 20 `CONCERT REVERB 1`: 5 value bytes (W-1 = 5)
+;   entry 20 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_ConcertReverb1:
 	.byte	0	; F13B69  selected parameter = group 0
 	.short	0x02de, 0x0458	; F13B6A  -> block bytes 17..20
@@ -37254,7 +37425,8 @@ EffectDefaults_ConcertReverb1:
 	.byte	50	; F13B71  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13B72  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B73  end
-; EffectDefaults_ConcertReverb2 -- algorithm 21 `CONCERT REVERB 2`: 5 value bytes (W-1 = 5)
+; EffectDefaults_ConcertReverb2 -- default values of algorithm 21 `CONCERT REVERB 2`: 5 value bytes (W-1 = 5)
+;   entry 21 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_ConcertReverb2:
 	.byte	0	; F13B75  selected parameter = group 0
 	.short	0x02da, 0x0458	; F13B76  -> block bytes 17..20
@@ -37264,7 +37436,8 @@ EffectDefaults_ConcertReverb2:
 	.byte	80	; F13B7D  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13B7E  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B7F  end
-; EffectDefaults_DarkReverb1 -- algorithm 22 `DARK REVERB 1`: 5 value bytes (W-1 = 5)
+; EffectDefaults_DarkReverb1 -- default values of algorithm 22 `DARK REVERB 1`: 5 value bytes (W-1 = 5)
+;   entry 22 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_DarkReverb1:
 	.byte	0	; F13B81  selected parameter = group 0
 	.short	0x02e0, 0x0388	; F13B82  -> block bytes 17..20
@@ -37274,7 +37447,8 @@ EffectDefaults_DarkReverb1:
 	.byte	50	; F13B89  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13B8A  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B8B  end
-; EffectDefaults_DarkReverb2 -- algorithm 23 `DARK REVERB 2`: 5 value bytes (W-1 = 5)
+; EffectDefaults_DarkReverb2 -- default values of algorithm 23 `DARK REVERB 2`: 5 value bytes (W-1 = 5)
+;   entry 23 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_DarkReverb2:
 	.byte	0	; F13B8D  selected parameter = group 0
 	.short	0x02da, 0x0382	; F13B8E  -> block bytes 17..20
@@ -37284,7 +37458,8 @@ EffectDefaults_DarkReverb2:
 	.byte	50	; F13B95  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13B96  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13B97  end
-; EffectDefaults_BrightReverb1 -- algorithm 24 `BRIGHT REVERB 1`: 5 value bytes (W-1 = 5)
+; EffectDefaults_BrightReverb1 -- default values of algorithm 24 `BRIGHT REVERB 1`: 5 value bytes (W-1 = 5)
+;   entry 24 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_BrightReverb1:
 	.byte	0	; F13B99  selected parameter = group 0
 	.short	0x02d8, 0x0460	; F13B9A  -> block bytes 17..20
@@ -37294,7 +37469,8 @@ EffectDefaults_BrightReverb1:
 	.byte	50	; F13BA1  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13BA2  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13BA3  end
-; EffectDefaults_BrightReverb2 -- algorithm 25 `BRIGHT REVERB 2`: 5 value bytes (W-1 = 5)
+; EffectDefaults_BrightReverb2 -- default values of algorithm 25 `BRIGHT REVERB 2`: 5 value bytes (W-1 = 5)
+;   entry 25 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_BrightReverb2:
 	.byte	0	; F13BA5  selected parameter = group 0
 	.short	0x02d8, 0x0460	; F13BA6  -> block bytes 17..20
@@ -37304,7 +37480,8 @@ EffectDefaults_BrightReverb2:
 	.byte	50	; F13BAD  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13BAE  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13BAF  end
-; EffectDefaults_WaveReverb1 -- algorithm 26 `WAVE REVERB 1`: 5 value bytes (W-1 = 5)
+; EffectDefaults_WaveReverb1 -- default values of algorithm 26 `WAVE REVERB 1`: 5 value bytes (W-1 = 5)
+;   entry 26 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_WaveReverb1:
 	.byte	0	; F13BB1  selected parameter = group 0
 	.short	0x02de, 0x0458	; F13BB2  -> block bytes 17..20
@@ -37314,7 +37491,8 @@ EffectDefaults_WaveReverb1:
 	.byte	50	; F13BB9  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13BBA  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13BBB  end
-; EffectDefaults_WaveReverb2 -- algorithm 27 `WAVE REVERB 2`: 5 value bytes (W-1 = 5)
+; EffectDefaults_WaveReverb2 -- default values of algorithm 27 `WAVE REVERB 2`: 5 value bytes (W-1 = 5)
+;   entry 27 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_WaveReverb2:
 	.byte	0	; F13BBD  selected parameter = group 0
 	.short	0x02da, 0x0454	; F13BBE  -> block bytes 17..20
@@ -37324,7 +37502,8 @@ EffectDefaults_WaveReverb2:
 	.byte	50	; F13BC5  slot 4  EARLY REFL LEVEL
 	.byte	70	; F13BC6  slot 5  VOLUME
 	.byte	0xff, 0xff	; F13BC7  end
-; EffectDefaults_SDelayChorus -- algorithm 64 `S.DELAY+CHORUS`: 12 value bytes (W-1 = 12)
+; EffectDefaults_SDelayChorus -- default values of algorithm 64 `S.DELAY+CHORUS`: 12 value bytes (W-1 = 12)
+;   entry 64 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_SDelayChorus:
 	.byte	7	; F13BC9  selected parameter = group 7
 	.short	0x02d8, 0x0458	; F13BCA  -> block bytes 17..20
@@ -37341,7 +37520,8 @@ EffectDefaults_SDelayChorus:
 	.byte	0	; F13BD8  slot 11  LFO WAVEFORM
 	.byte	84	; F13BD9  slot 12  VOLUME
 	.byte	0xff, 0xff	; F13BDA  end
-; EffectDefaults_SDelaySDelay -- algorithm 65 `S.DELAY+S.DELAY`: 15 value bytes (W-1 = 15)
+; EffectDefaults_SDelaySDelay -- default values of algorithm 65 `S.DELAY+S.DELAY`: 15 value bytes (W-1 = 15)
+;   entry 65 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_SDelaySDelay:
 	.byte	5	; F13BDC  selected parameter = group 5
 	.short	0x02d8, 0x0458	; F13BDD  -> block bytes 17..20
@@ -37361,7 +37541,8 @@ EffectDefaults_SDelaySDelay:
 	.byte	176	; F13BEE  slot 14  FEEDBACK R
 	.byte	84	; F13BEF  slot 15  VOLUME
 	.byte	0xff, 0xff	; F13BF0  end
-; EffectDefaults_SDelayFlanger -- algorithm 66 `S.DELAY+FLANGER`: 15 value bytes (W-1 = 15)
+; EffectDefaults_SDelayFlanger -- default values of algorithm 66 `S.DELAY+FLANGER`: 15 value bytes (W-1 = 15)
+;   entry 66 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_SDelayFlanger:
 	.byte	8	; F13BF2  selected parameter = group 8
 	.short	0x02d8, 0x0458	; F13BF3  -> block bytes 17..20
@@ -37381,7 +37562,8 @@ EffectDefaults_SDelayFlanger:
 	.byte	0	; F13C04  slot 14  LFO WAVEFORM
 	.byte	84	; F13C05  slot 15  VOLUME
 	.byte	0xff, 0xff	; F13C06  end
-; EffectDefaults_SDelayVibrato -- algorithm 67 `S.DELAY+VIBRATO`: 13 value bytes (W-1 = 13)
+; EffectDefaults_SDelayVibrato -- default values of algorithm 67 `S.DELAY+VIBRATO`: 13 value bytes (W-1 = 13)
+;   entry 67 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_SDelayVibrato:
 	.byte	7	; F13C08  selected parameter = group 7
 	.short	0x02d8, 0x0458	; F13C09  -> block bytes 17..20
@@ -37399,7 +37581,8 @@ EffectDefaults_SDelayVibrato:
 	.byte	0	; F13C18  slot 12  LFO WAVEFORM
 	.byte	84	; F13C19  slot 13  VOLUME
 	.byte	0xff, 0xff	; F13C1A  end
-; EffectDefaults_SDelayPhaser -- algorithm 68 `S.DELAY+PHASER`: 15 value bytes (W-1 = 15)
+; EffectDefaults_SDelayPhaser -- default values of algorithm 68 `S.DELAY+PHASER`: 15 value bytes (W-1 = 15)
+;   entry 68 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_SDelayPhaser:
 	.byte	9	; F13C1C  selected parameter = group 9
 	.short	0x02d8, 0x0458	; F13C1D  -> block bytes 17..20
@@ -37419,7 +37602,8 @@ EffectDefaults_SDelayPhaser:
 	.byte	0	; F13C2E  slot 14  LFO WAVEFORM
 	.byte	84	; F13C2F  slot 15  VOLUME
 	.byte	0xff, 0xff	; F13C30  end
-; EffectDefaults_PedalWahDelay -- algorithm 69 `PEDAL WAH+DELAY`: 13 value bytes (W-1 = 13)
+; EffectDefaults_PedalWahDelay -- default values of algorithm 69 `PEDAL WAH+DELAY`: 13 value bytes (W-1 = 13)
+;   entry 69 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PedalWahDelay:
 	.byte	4	; F13C32  selected parameter = group 4
 	.short	0x02d8, 0x0458	; F13C33  -> block bytes 17..20
@@ -37437,7 +37621,8 @@ EffectDefaults_PedalWahDelay:
 	.byte	216	; F13C42  slot 12  FEEDBACK R
 	.byte	99	; F13C43  slot 13  VOLUME
 	.byte	0xff, 0xff	; F13C44  end
-; EffectDefaults_AutoWahSDelay -- algorithm 70 `AUTO WAH+S.DELAY`: 12 value bytes (W-1 = 12)
+; EffectDefaults_AutoWahSDelay -- default values of algorithm 70 `AUTO WAH+S.DELAY`: 12 value bytes (W-1 = 12)
+;   entry 70 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_AutoWahSDelay:
 	.byte	4	; F13C46  selected parameter = group 4
 	.short	0x02d8, 0x0458	; F13C47  -> block bytes 17..20
@@ -37454,7 +37639,8 @@ EffectDefaults_AutoWahSDelay:
 	.byte	216	; F13C55  slot 11  FEEDBACK R
 	.byte	99	; F13C56  slot 12  VOLUME
 	.byte	0xff, 0xff	; F13C57  end
-; EffectDefaults_PeqChorus -- algorithm 71 `PEQ+CHORUS`: 9 value bytes (W-1 = 9)
+; EffectDefaults_PeqChorus -- default values of algorithm 71 `PEQ+CHORUS`: 9 value bytes (W-1 = 9)
+;   entry 71 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqChorus:
 	.byte	8	; F13C59  selected parameter = group 8
 	.short	0x02d8, 0x0458	; F13C5A  -> block bytes 17..20
@@ -37468,7 +37654,8 @@ EffectDefaults_PeqChorus:
 	.byte	0	; F13C65  slot 8  LFO WAVEFORM
 	.byte	84	; F13C66  slot 9  VOLUME
 	.byte	0xff, 0xff	; F13C67  end
-; EffectDefaults_PeqSDelay -- algorithm 72 `PEQ+S.DELAY`: 12 value bytes (W-1 = 12)
+; EffectDefaults_PeqSDelay -- default values of algorithm 72 `PEQ+S.DELAY`: 12 value bytes (W-1 = 12)
+;   entry 72 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqSDelay:
 	.byte	6	; F13C69  selected parameter = group 6
 	.short	0x02d8, 0x0458	; F13C6A  -> block bytes 17..20
@@ -37485,7 +37672,8 @@ EffectDefaults_PeqSDelay:
 	.byte	216	; F13C78  slot 11  FEEDBACK R
 	.byte	84	; F13C79  slot 12  VOLUME
 	.byte	0xff, 0xff	; F13C7A  end
-; EffectDefaults_PeqFlanger -- algorithm 73 `PEQ+FLANGER`: 12 value bytes (W-1 = 12)
+; EffectDefaults_PeqFlanger -- default values of algorithm 73 `PEQ+FLANGER`: 12 value bytes (W-1 = 12)
+;   entry 73 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqFlanger:
 	.byte	9	; F13C7C  selected parameter = group 9
 	.short	0x02d8, 0x0458	; F13C7D  -> block bytes 17..20
@@ -37502,7 +37690,8 @@ EffectDefaults_PeqFlanger:
 	.byte	0	; F13C8B  slot 11  LFO WAVEFORM
 	.byte	84	; F13C8C  slot 12  VOLUME
 	.byte	0xff, 0xff	; F13C8D  end
-; EffectDefaults_PeqVibrato -- algorithm 74 `PEQ+VIBRATO`: 10 value bytes (W-1 = 10)
+; EffectDefaults_PeqVibrato -- default values of algorithm 74 `PEQ+VIBRATO`: 10 value bytes (W-1 = 10)
+;   entry 74 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqVibrato:
 	.byte	8	; F13C8F  selected parameter = group 8
 	.short	0x02d8, 0x0458	; F13C90  -> block bytes 17..20
@@ -37517,7 +37706,8 @@ EffectDefaults_PeqVibrato:
 	.byte	0	; F13C9C  slot 9  LFO WAVEFORM
 	.byte	84	; F13C9D  slot 10  VOLUME
 	.byte	0xff, 0xff	; F13C9E  end
-; EffectDefaults_PeqCompressor -- algorithm 75 `PEQ+COMPRESSOR`: 9 value bytes (W-1 = 9)
+; EffectDefaults_PeqCompressor -- default values of algorithm 75 `PEQ+COMPRESSOR`: 9 value bytes (W-1 = 9)
+;   entry 75 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqCompressor:
 	.byte	8	; F13CA0  selected parameter = group 8
 	.short	0x02d8, 0x0458	; F13CA1  -> block bytes 17..20
@@ -37531,7 +37721,8 @@ EffectDefaults_PeqCompressor:
 	.byte	19	; F13CAC  slot 8  RELEASE SENS.
 	.byte	84	; F13CAD  slot 9  VOLUME
 	.byte	0xff, 0xff	; F13CAE  end
-; EffectDefaults_PeqComprDist -- algorithm 96 `PEQ+COMPR+DIST`: 12 value bytes (W-1 = 11)
+; EffectDefaults_PeqComprDist -- default values of algorithm 96 `PEQ+COMPR+DIST`: 12 value bytes (W-1 = 11)
+;   entry 96 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqComprDist:
 	.byte	8	; F13CB0  selected parameter = group 8
 	.short	0x02d8, 0x0458	; F13CB1  -> block bytes 17..20
@@ -37548,7 +37739,8 @@ EffectDefaults_PeqComprDist:
 	.byte	84	; F13CBF  slot 11  VOLUME
 	.byte	0	; F13CC0  slot 12  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F13CC1  end
-; EffectDefaults_PeqComprOverdr -- algorithm 97 `PEQ+COMPR+OVERDR`: 10 value bytes (W-1 = 9)
+; EffectDefaults_PeqComprOverdr -- default values of algorithm 97 `PEQ+COMPR+OVERDR`: 10 value bytes (W-1 = 9)
+;   entry 97 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqComprOverdr:
 	.byte	5	; F13CC3  selected parameter = group 5
 	.short	0x02d8, 0x0458	; F13CC4  -> block bytes 17..20
@@ -37563,7 +37755,8 @@ EffectDefaults_PeqComprOverdr:
 	.byte	84	; F13CD0  slot 9  VOLUME
 	.byte	1	; F13CD1  slot 10  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F13CD2  end
-; EffectDefaults_PeqDistDelay -- algorithm 98 `PEQ+DIST+DELAY`: 15 value bytes (W-1 = 14)
+; EffectDefaults_PeqDistDelay -- default values of algorithm 98 `PEQ+DIST+DELAY`: 15 value bytes (W-1 = 14)
+;   entry 98 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqDistDelay:
 	.byte	8	; F13CD4  selected parameter = group 8
 	.short	0x02d8, 0x0458	; F13CD5  -> block bytes 17..20
@@ -37583,7 +37776,8 @@ EffectDefaults_PeqDistDelay:
 	.byte	84	; F13CE6  slot 14  VOLUME
 	.byte	0	; F13CE7  slot 15  (no descriptor group names this slot)
 	.byte	0xff, 0xff	; F13CE8  end
-; EffectDefaults_PeqOverdrDelay -- algorithm 99 `PEQ+OVERDR+DELAY`: 15 value bytes (W-1 = 14)
+; EffectDefaults_PeqOverdrDelay -- default values of algorithm 99 `PEQ+OVERDR+DELAY`: 15 value bytes (W-1 = 14)
+;   entry 99 of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record layout above)
 EffectDefaults_PeqOverdrDelay:
 	.byte	8	; F13CEA  selected parameter = group 8
 	.short	0x02d8, 0x0458	; F13CEB  -> block bytes 17..20

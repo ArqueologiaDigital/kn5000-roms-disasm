@@ -66,6 +66,61 @@ PAGEMAP = 0xF135F7
 FAIL = []
 
 
+STRUCT = re.compile(r'_(Skip|Join|Loop|Sub|Return|Epilogue|Entry|Helper|Resume)\d*$')
+
+
+def routine_starts():
+    """[(address, label)] of every non-structural label in the source, renamed as --apply renames."""
+    L = open(SRC, "rb").read().decode("latin-1").split("\n")
+    out, pend = [], None
+    for t in L:
+        m = re.match(r'^([A-Za-z_]\w*):', t)
+        if m and not STRUCT.search(m.group(1)):
+            pend = m.group(1)
+        m = re.search(r'; ([0-9A-F]{6})  ', t)
+        if m and pend:
+            out.append((int(m.group(1), 16), pend))
+            pend = None
+    ren = {k: v[0] for k, v in RENAMES.items()}
+    return sorted((a, ren.get(n, n)) for a, n in out)
+
+
+def operand_sites(rom, addr):
+    """prom_b sites whose `add XRR,imm32` (e8..ef c8 imm32) or `lda XRR,imm24` (f2 imm24) is addr."""
+    out = []
+    b = rom.b
+    s4 = addr.to_bytes(4, "little")
+    i = b.find(s4)
+    while i >= 0:
+        if i >= 2 and 0xE8 <= b[i - 2] <= 0xEF and b[i - 1] == 0xC8:
+            out.append(BASE + i - 2)
+        i = b.find(s4, i + 1)
+    s3 = addr.to_bytes(3, "little")
+    i = b.find(s3)
+    while i >= 0:
+        if i >= 1 and b[i - 1] == 0xF2:
+            out.append(BASE + i - 1)
+        i = b.find(s3, i + 1)
+    return sorted(out)
+
+
+def readers_text(rom, addr, starts):
+    import bisect
+    keys = [a for a, _ in starts]
+    by = {}
+    for site in operand_sites(rom, addr):
+        k = bisect.bisect_right(keys, site) - 1
+        by.setdefault(starts[k][1], []).append("0x%06X" % site)
+    return "; ".join("%s (%s)" % (n, ", ".join(v)) for n, v in by.items())
+
+
+def wrapc(text, first="; ", cont=";   ", width=96):
+    """Wrap one comment paragraph into `;` lines no wider than width."""
+    import textwrap
+    return textwrap.wrap(text, width=width, initial_indent=first, subsequent_indent=cont,
+                         break_long_words=False, break_on_hyphens=False)
+
+
 def check(msg, cond):
     print("  %-4s %s" % ("ok" if cond else "FAIL", msg))
     if not cond:
@@ -229,6 +284,11 @@ def derive(rom):
           rom.at(0xF11C37, 5).hex()[-4:] == "4800" and
           rom.at(0xF11C3F, 14).hex() == "3103009e0841e98cecc87438f100")
     d["pnum"] = pn
+    starts = routine_starts()
+    d["rd"] = {a: readers_text(rom, a, starts) for a in
+               [x for blk in BLOCKS for x in blk[1:]] + [ADJ, ADJ + 9, ADJ + 18]}
+    for a in sorted(d["rd"]):
+        check("0x%06X has operand readers: %s" % (a, d["rd"][a]), bool(d["rd"][a]))
     return d
 
 
@@ -259,8 +319,8 @@ def emit_ranges(d):
 ; Types 0x00 and 0x1F are all-zero and used by no descriptor group.  Each
 ;   record's comment lists the parameter names whose groups carry that type.
 ; Re-derived by python3 notes/promb-2026-09-25/dsp_effect_tables.py.
-; ⚠ REPLACES `Data_F13124`, whose header said "Unknown: everything about it
-;   except its bytes".
+; ⚠ REPLACES `OLD<<Data@F13124>>`, whose header admitted knowing nothing but
+;   the bytes.
 ;--------------------------------------------------------------------------
 EffectValueRanges:"""]
     for k, (lo, hi, st) in enumerate(d["ranges"]):
@@ -290,22 +350,29 @@ def emit_maps(d):
 ; Checked by python3 notes/promb-2026-09-25/dsp_effect_tables.py: each pair
 ;   is mutually inverse, every offered algorithm has a real name, the lists
 ;   end in 0xFF and the three pairs tile the span with nothing between.
-; ⚠ REPLACES ByteMap_F133E4, Data_F13448, ByteMap_F13464, Data_F13490,
-;   ByteMap_F13491, Data_F134F5, ByteMap_F13511, Data_F1353D, ByteMap_F1354E,
+; ⚠ REPLACES OLD<<ByteMap@F133E4>>, Data_F13448, OLD<<ByteMap@F13464>>, Data_F13490,
+;   OLD<<ByteMap@F13491>>, Data_F134F5, OLD<<ByteMap@F13511>>, Data_F1353D, ByteMap_F1354E,
 ;   Data_F135A2, IndexMap_F135BF, ByteMap_F135CB and Data_F135F6.  The two
-;   ByteMap headers said "Unknown: what the two index spaces ARE" -- they are
-;   algorithm numbers and list positions -- and the block-99 pair was split
-;   across five objects because its map starts one byte after an 0xFF.
+;   ByteMap headers asked what the two index spaces ARE -- they are algorithm
+;   numbers and list positions -- and the block-99 pair was split across five
+;   objects because its map starts one byte after an 0xFF.  IndexMap_F135BF,
+;   "an index map that returns its own index", is positions 1-12 of block
+;   99's list: the twelve reverbs, algorithms 16-27.
 ;--------------------------------------------------------------------------"""]
     for b in d["blocks"]:
         out.append("; block %d: %d algorithms offered, fall-back %d `%s`" % (
             b["ent"], len(b["offered"]), d["fallback"][b["ent"] - 97],
             d["names"][d["fallback"][b["ent"] - 97]]))
+        out += wrapc("EffectAlgoToPos_Block%d -- algorithm -> list position for block %d, one entry "
+                     "per algorithm number; read by %s" % (b["ent"], b["ent"], d["rd"][b["fwd"]]))
         out.append("EffectAlgoToPos_Block%d:" % b["ent"])
         f = b["f"]
         for r in range(0, 128, 16):
             out.append("\t.byte\t%s\t; %06X  algorithms %d..%d" % (
                 ", ".join(hx(x) for x in f[r:r + 16]), b["fwd"] + r, r, r + 15))
+        out += wrapc("EffectPosToAlgo_Block%d -- list position -> algorithm for block %d, %d entries "
+                     "and the 0xFF that ends the list; read by %s"
+                     % (b["ent"], b["ent"], len(b["offered"]), d["rd"][b["inv"]]))
         out.append("EffectPosToAlgo_Block%d:" % b["ent"])
         for i, a in enumerate(b["iv"][:-1]):
             out.append("\t.byte\t%d\t; %06X  [%d] %s" % (a, b["inv"] + i, i, d["names"][a]))
@@ -343,8 +410,13 @@ def emit_adj(d):
 ;   and the high nibble of that entry's byte 5, each 1..4.
 ; What byte 21 and entry 121's byte 5 MEAN is not decoded here; the names
 ;   say where the bytes are, which the readers establish.
+; ⚠ REPLACES `OLD<<Data@F13659>>`, whose header admitted knowing nothing but the bytes.
 ;--------------------------------------------------------------------------"""]
+    who = ["sub_F101C8 for blocks 97/98", "sub_F101E7 for block index 0",
+           "sub_F101E7 for block index 1"]
     for k, a in enumerate(d["adj"]):
+        out += wrapc("%s -- the descriptor %s passes to IndexedParam_AdjustField; read by %s"
+                     % (ADJ_NAMES[k], who[k], d["rd"][ADJ + 9 * k]))
         out.append("%s:" % ADJ_NAMES[k])
         out.append("\t.byte\t%d, 0x%02x, %d, %d, %d, %d, %d, 0x%02x\t; %06X  offset, mask, shift, "
                    "upper, lower, step, step, xor" % (a[0], a[1], a[2], a[3], a[4], a[5], a[6],
@@ -374,7 +446,7 @@ def emit_pnum(d):
 ;   skips block 99); n = 69 entry 121 byte 5; n = 70 absent in the table --
 ;   the reader special-cases it from entries 6 and 32; n = 71/72 entry 0
 ;   bytes 5 and 7, masked 0x7F.
-; ⚠ REPLACES `Data_F13874` ("Unknown: everything about it except its bytes").
+; ⚠ REPLACES `OLD<<Data@F13874>>`, whose header admitted knowing nothing but the bytes.
 ;--------------------------------------------------------------------------
 EffectParamNumberMap:"""]
     for k, (e, o, m) in enumerate(d["pnum"]):
@@ -417,8 +489,8 @@ def emit_defs(d):
 ;   records carry values past the descriptor's last slot (DISTORTION /
 ;   OVERDRIVE / FUZZ end 00 / 01 / 02) -- bytes no editor page shows.
 ; Re-derived by python3 notes/promb-2026-09-25/dsp_effect_tables.py.
-; ⚠ REPLACES the defaults part of `Data_F139AB`, whose header said "Unknown:
-;   everything about it except its bytes".
+; ⚠ REPLACES the defaults part of `Data_F139AB`, whose header admitted knowing
+;   nothing but the bytes.
 ; --------------------------------------------------------------------------
 EffectDefaults_Unused:
 	.byte	0xff, 0xff, 0xff	; F139AB  the 72 placeholder algorithms -- never read: the
@@ -429,8 +501,10 @@ EffectDefaults_Unused:
         for g in dr["groups"]:
             if g[2] != 0xFF:
                 slots.setdefault(g[2], pool["pn"][g[0]])
-        out.append("; %s -- algorithm %d `%s`: %d value bytes (W-1 = %d)" % (
+        out.append("; %s -- default values of algorithm %d `%s`: %d value bytes (W-1 = %d)" % (
             r["label"], r["alg"], d["names"][r["alg"]], len(r["vals"]), dr["w"] - 1))
+        out.append(";   entry %d of EffectDefaultParams, copied by DspEffect_SetAlgorithm (record "
+                   "layout above)" % r["alg"])
         out.append("%s:" % r["label"])
         p = r["start"]
         out.append("\t.byte\t%s\t; %06X  selected parameter%s" % (
@@ -582,8 +656,8 @@ def apply(d):
     while not L[k].startswith(hdr_unknown):
         k -= 1
         assert k > t - 40
-    ans = """; ⚠ ANSWERED 2026-09-25 (lane promb).  This header used to end `Unknown: what
-;    indexes it, and what the entries mean.`  DspEffect_SetAlgorithm (0xF11365)
+    ans = """; ⚠ ANSWERED 2026-09-25 (lane promb).  This header used to end by asking what
+;    indexes this table and what its entries mean.  DspEffect_SetAlgorithm (0xF11365)
 ;    indexes it with 4 * the ALGORITHM number (`mul BC,E` / `add XBC,this` at
 ;    0xF113F6-0xF113FC; sub_F1162E does the same at 0xF11646), and an entry
 ;    points at that algorithm's DEFAULT PARAMETER record, EffectDefaults_* --
@@ -613,6 +687,7 @@ def apply(d):
     txt = re.sub(r'\bData_F13659 \+ 0x9\b', ADJ_NAMES[1], txt)
     txt = re.sub(r'\bData_F13659 \+ 0x12\b', ADJ_NAMES[2], txt)
     txt = re.sub(r'\bData_F13659\b', ADJ_NAMES[0], txt)
+    txt = re.sub(r'OLD<<(\w+)@(\w+)>>', r'\1_\2', txt)   # old names, kept out of the renames
     # routines
     for old, (new, block) in RENAMES.items():
         anchor = UNKNOWN1 + UNKNOWN2 + old + ":"
