@@ -841,7 +841,7 @@ SoundEvt_LongPacketHandler_Loop:
 	call	VoiceSlot_TableSetup
 	call	Timer_ModeHandler_0_0x107
 	ret
-	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler (0xEF609D): `ld xhl, ScoopDisp_HandlerData2`
+	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl_Target1 (0xEF60E2): `ld xhl, ScoopDisp_HandlerData2`
 	; indexed with stride 4 (`sla wa, 2`), index from `ld a, (3420:16)`
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 ScoopDisp_HandlerData2:
@@ -889,7 +889,7 @@ ScoopDisp_HandlerData2_Code_Skip3:
 	ordi8	(0x0dd3), 1
 	call	VoiceSlot_TableSetup
 	ret
-	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler (0xEF609D): `ld xhl, SoundEvt_LongPacketHandler_DispatchTbl2`
+	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl_Target2 (0xEF6169): `ld xhl, SoundEvt_LongPacketHandler_DispatchTbl2`
 	; indexed with stride 4 (`sla wa, 2`), index from `ld a, (3420:16)`
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 SoundEvt_LongPacketHandler_DispatchTbl2:
@@ -1116,7 +1116,7 @@ DefaultHandler_Ret_DispatchTbl_Target3:
 	pop	xhl
 	call	(xiy)
 	ret
-	; Handler dispatch table, 76 B.  Read by ToneParam_Evt0F_BytecodeHandler (0xEF6327): `ld xhl, PerfMode_JumpTable_Extended`
+	; Handler dispatch table, 76 B.  Read by DefaultHandler_Ret_DispatchTbl_Target3 (0xEF6409): `ld xhl, PerfMode_JumpTable_Extended`
 	; indexed with stride 4 (`sla de, 2`)
 	; 19 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 PerfMode_JumpTable_Extended:
@@ -1678,7 +1678,7 @@ PerfMode_VolumeParam_Process_Return:
 	ldw	bc, 27
 	lda_dpi xbc, 240
 	djnz16 bc, -6
-	ld xiy, 15690446
+	ld xiy, Str_VolumeEq2
 	ld	xix, 3797
 	ldw	bc, 9
 	ldir85
@@ -1692,9 +1692,8 @@ PerfMode_VolumeParam_Process_Return:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
-	; Lcd text, 9 B.  No reader found: no label, positional or absolute .set
-	; name at this address is loaded anywhere in the image (searched by
-	; scripts/analysis/scoop_data_headers.py); purpose not established.
+	; Lcd text, 9 B.  Read by PerfMode_VolumeParam_Process (0xEF6A25): `ld xiy, Str_VolumeEq2`
+	; copies 9 byte(s) per use (`ld bc, 9` + ldir) into the LCD text buffer
 Str_VolumeEq2:
 	.ascii "VOLUME = "
 PerfMode_ParamHandler_9:
@@ -2778,7 +2777,7 @@ PerfMode_Handler_EvtB_Skip2:
 	xor	w, w
 	ld	iy, wa
 	push	xde
-	ld	xde, 0xef7769
+	ld	xde, PerfMode_Handler_EvtB_Data
 	ld_rrb	a, xde, iy
 	pop	xde
 	and	a, 3
@@ -2801,14 +2800,17 @@ PerfMode_Handler_EvtB_Return3:
 	ret
 
 
-	; Handler dispatch table, 32 B.  Read by PerfMode_Handler_EvtB (0xEF7580): `ld xhl, ScoopDisp_DispatchTable_Extended`
+	; Handler dispatch table, 16 B.  Read by PerfMode_Handler_EvtB (0xEF7580): `ld xhl, ScoopDisp_DispatchTable_Extended`
 	; indexed with stride 4 (`sla wa, 2`)
-	; 8 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 ScoopDisp_DispatchTable_Extended:
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 	.long	VoiceCtrl_CheckAndReset
+	; Loaded by PerfMode_Handler_EvtB (0xEF7580):
+	; `ld xde, PerfMode_Handler_EvtB_Data` -- a bare number until lane scoop gave this address a label.
+PerfMode_Handler_EvtB_Data:
 	.long	0x03030300
 	.long	0x03030100
 	.long	0x03020300
@@ -4121,6 +4123,9 @@ ToneParam_HandlerTable_BC_Code_Skip19:
 	pop	xhl
 	pop	xwa
 	ret
+	; Called by SerialPort_ModeHandler_0 (0xEF9E03):
+	; `call SerialPort_ModeHandler_0_Helper` -- a bare number until lane scoop gave this address a label.
+SerialPort_ModeHandler_0_Helper:
 	ld	a, (3822:16)
 	ld	(3654:16), a
 	xor	wa, wa
@@ -4338,7 +4343,7 @@ Display_ModeHandler:
 	; Handler dispatch table, 16 B.  Read by Display_ModeHandler (0xEF87A3): `ld xix, DisplayMode_DispatchTable`
 	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
-	; also read at scoop_display.s:11920
+	; also read by SubCPU_ToneClearRegion
 DisplayMode_DispatchTable:
 	.long	DefaultHandler_Ret
 	.long	DisplayMode_Handler_1
@@ -5022,7 +5027,7 @@ DisplayMode_Handler_3_Return12:
 	ret
 
 
-	; Handler dispatch table, 16 B.  Read by DisplayMode_Handler_3 (0xEF87FB): `ld xix, DMA_ChannelSelect_Table`
+	; Handler dispatch table, 16 B.  Read by PerfMode_EventTable_0_Target2 (0xEF8DFB): `ld xix, DMA_ChannelSelect_Table`
 	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 DMA_ChannelSelect_Table:
@@ -6528,7 +6533,7 @@ SerialPort_ModeHandler_0_Skip8:
 ScoopParam_ValueTable:
 	.byte	0x00, 0x00, 0x08, 0x00, 0x0c, 0x00, 0x10, 0x00, 0x18, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00
 	.byte	0x60, 0x00, 0xc0, 0x00, 0x80, 0x01, 0x00, 0x03, 0x80, 0x04, 0x00, 0x06
-	call	15704035
+	call	ScoopParam_ValueTable_Code_Helper
 	ld	(3415:16), w
 	ld	(3533:16), a
 	ret
@@ -6611,7 +6616,7 @@ ScoopParam_ValueTable_Skip:
 	ld	a, c
 	cp	a, 15
 	jrl	ugt, ScoopParam_ValueTable_Skip2
-	ld	xhl, 15704335
+	ld	xhl, SerialPort_ModeHandler_0_Tbl
 	ld_rr8b	a, xhl, a
 	ld	w, 3:opc
 	jp	ScoopParam_ValueTable_Join2
@@ -6628,9 +6633,9 @@ ScoopParam_ValueTable_Skip3:
 	ld	l, a
 	xor	h, h
 	push	xix
-	ld	xix, 15704351
+	ld	xix, SerialPort_ModeHandler_0_Data
 	ld_rrb	a, xix, hl
-	ld	xix, 15704362
+	ld	xix, SerialPort_ModeHandler_0_Data2
 	ld_rrb	w, xix, hl
 	pop	xix
 	cp	a, 255
@@ -6660,12 +6665,18 @@ ScoopParam_ValueTable_Join2:
 	jp	ScoopParam_ValueTable_Join
 ScoopParam_ValueTable_Return2:
 	ret
-	; Byte data, 36 B.  No reader found: no label, positional or absolute .set
-	; name at this address is loaded anywhere in the image (searched by
-	; scripts/analysis/scoop_data_headers.py); purpose not established.
-Unref_EFA10F_Tbl:
+	; Byte data, 16 B.  Read by SerialPort_ModeHandler_0 (0xEF9E03): `ld xhl, SerialPort_ModeHandler_0_Tbl`
+	; index bounded to 0..15 (`cp a, 15` / `jrl ugt` skips larger values)
+SerialPort_ModeHandler_0_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
-	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x70, 0x98, 0xff, 0xff, 0x03, 0x03, 0x03, 0x03, 0x03
+	; Loaded by SerialPort_ModeHandler_0 (0xEF9E03):
+	; `ld xix, SerialPort_ModeHandler_0_Data` -- a bare number until lane scoop gave this address a label.
+SerialPort_ModeHandler_0_Data:
+	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 'p', 0x98, 0xff, 0xff
+	; Loaded by SerialPort_ModeHandler_0 (0xEF9E03):
+	; `ld xix, SerialPort_ModeHandler_0_Data2` -- a bare number until lane scoop gave this address a label.
+SerialPort_ModeHandler_0_Data2:
+	.byte	0x03, 0x03, 0x03, 0x03, 0x03
 	.byte	0x03, 0x03, 0x03, 0x04
 	ld	(4346:16), 0
 	ld	a, (36150:16)
@@ -6797,18 +6808,18 @@ ScoopParam_ValueTable_Entry3:
 	ld	(14120:16), 0
 	cp	(4346:16), 0
 	jrl	nz, 4
-	call	15705324
-	call	15697281
-	jp	15704861
+	call	PortConfig_SetupBytecode_0x34
+	call	SerialPort_ModeHandler_0_Helper
+	jp	ScoopParam_ValueTable_Return3
 ScoopParam_ValueTable_Entry3_Code_Skip:
-	call	15706023
-	call	15706052
+	call	PortConfig_DataTable_B_Return
+	call	ScoopParam_ValueTable_Helper6
 	bitda	3, (0x0d53)
 	jrl	z, 12
-	call	15705324
+	call	PortConfig_SetupBytecode_0x34
 	cp	(3429:16), 0
 	jrl	nz, 0
-	jp	15704861
+	jp	ScoopParam_ValueTable_Return3
 ScoopParam_ValueTable_Return3:
 	ret
 
@@ -8789,7 +8800,7 @@ SystemInit_StepHandler_0:
 	ld	w, 0:opc
 	ret
 	; Byte data, 16 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl4`
-	; also read at scoop_display.s:8534
+	; also read by SysInit_SendAllNotesAndReset
 VoiceCtrl_ParamSetupBytecode_Tbl4:
 	.byte	0x00, 0x00, 0x05, 0x06, 0x07, 0x0b, 0x03, 0x04, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00
 	cpdi8	(0x0d65), 0
@@ -8848,7 +8859,6 @@ SystemInit_StepHandler_0_Return:
 	ret
 	; Byte data, 24 B.  Read by SystemInit_StepHandler_0 (0xEFB875): `ld xix, SystemInit_StepHandler_0_Tbl`
 	; indexed with stride 4 (`sla hl, 2`)
-	; also read at scoop_display.s:8679
 SystemInit_StepHandler_0_Tbl:
 	.byte	0x00, 0x04, 0x60, 0x04, 0x00, 0x03, 0x60, 0x03, 0x00, 0x02, 0x60, 0x02, 0x30, 0x01, 0x90, 0x01
 	.byte	0x00, 0x01, 0x60, 0x01, 0x30, 0x00, 0x30, 0x01
@@ -11998,7 +12008,7 @@ SubCPU_ToneParamDisplay_Epilogue2:
 	ldw	bc, 27
 	lda_dpi xbc, 240
 	djnz16 bc, -6
-	ld xiy, 15719192
+	ld xiy, Str_PanKeyShiftTuning
 	ld	a, (4380:16)
 	ld	w, a
 	sla	a, 3
@@ -12035,9 +12045,7 @@ SubCPU_ToneParamDisplay_Join:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
-	; Lcd text, 40 B.  No reader found: no label, positional or absolute .set
-	; name at this address is loaded anywhere in the image (searched by
-	; scripts/analysis/scoop_data_headers.py); purpose not established.
+	; Lcd text, 40 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xiy, Str_PanKeyShiftTuning`
 Str_PanKeyShiftTuning:
 	.byte 0x50, 0x41
 	.ascii "N      :KEY SHIFT:TUNING   :BEND SENS:"
@@ -12057,7 +12065,6 @@ SubCPU_ToneDispatch:
 	.long 0x0000fb3c, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0x0000faee, 0x0000fb08, 0x0000fb22
 	; Byte data, 4 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xiy, SubCPU_ToneParamDisplay_Tbl`
-	; also read at scoop_display.s:11768
 SubCPU_ToneParamDisplay_Tbl:
 	.byte	0x08, 0x09, 0x0a, 0x0b
 	; Entry 1 of SubCPU_ToneParamRet (a code pointer the table holds).
@@ -13589,7 +13596,6 @@ DisplayStr_BytecodeBlock_A_Return2:
 	ret
 	; Byte data, 12 B.  Read by DisplayStr_BytecodeBlock_A (0xEFEB06): `ld xde, DisplayStr_BytecodeBlock_A_Tbl`
 	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3782:16)`
-	; also read at scoop_display.s:13328
 DisplayStr_BytecodeBlock_A_Tbl:
 	.byte	0x4c, 0x0e, 0x00, 0x00, 0x4e, 0x0e, 0x00, 0x00, 0x50, 0x0e, 0x00, 0x00
 	pushdi_w	(0x28bf)
@@ -13667,7 +13673,6 @@ DisplayStr_BytecodeBlock_B:
 	ret
 	; Lcd text, 7 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, Str_Control`
 	; copies 7 byte(s) per use (`ld bc, 7` + ldir) into the LCD text buffer
-	; also read at scoop_display.s:13422
 Str_Control:
 	.ascii	"CONTROL"
 	ld	h, (0x3723:16)
@@ -13692,7 +13697,7 @@ Str_Control:
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 1 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, DisplayStr_RhythmLabel`
-	; also read at scoop_display.s:13512
+	; also read by DisplayStr_BytecodeBlock_C
 DisplayStr_RhythmLabel:
 	.byte 0x20
 	; Lcd text, 9 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, Str_Rhythm`
@@ -13936,9 +13941,9 @@ DisplayStr_BytecodeBlock_E:
 	call	Display_UpdateRegion3
 	ret
 	; Byte data, 105 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, DisplayStr_StyleSectionNames`
-	; indexed with stride 8 (`sla xwa, 3`), index from `ld a, (4483:16)`
+	; indexed with stride 8 (`sla xwa, 3`)
 	; copies 4 byte(s) per use (`ld bc, 4` + ldir) into the LCD text buffer
-	; also read at scoop_display.s:13638, scoop_display.s:13664
+	; also read by DisplayStr_BytecodeBlock_E, DisplayStr_StyleSectionInit
 DisplayStr_StyleSectionNames:
 	.ascii	"        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INENDING1 END     REPEAT  CLEAR   ENDING2 INTRO2  "
 	.byte	0x0e
@@ -14417,7 +14422,7 @@ Disp_ShowNoteValueFields:
 	ld	l, (0x3716:16)
 	and	l, 3
 	sla	hl, 2
-	ld	xiy, 0xeff827
+	ld	xiy, Tbl_ArticulationNames
 	lda_rr	xiy, xiy, hl
 	ld	wa, (xiy+256)
 	ld	(xix+256), wa
@@ -16053,7 +16058,7 @@ Scoop_DisplayData_ButtonLayout:
 	call	UIRender_TwoTableGeneral
 	ret
 	; Uirender display list, 10 B.  Read by Scoop_CallDisplayHelper (0xF00A94): `ld xiy, Scoop_CallDisplayHelper_DisplayList`
-	; handed in XIY to UIRender_SingleTable
+	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_CallDisplayHelper_DisplayList:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x32, 0x00, 0x10, 0x01, 0x42, 0x00
 	ld	xiy, 0xe0b42a

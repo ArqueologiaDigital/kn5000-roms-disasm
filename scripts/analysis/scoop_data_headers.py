@@ -262,9 +262,9 @@ def main():
                                    % ((pe - ps) // 4))
                 if sx.get("bound"):
                     lines_c.append("index bounded to 0..%s" % sx["bound"])
-                others = sorted({"%s:%d" % (x["file"].split("/")[-1], x["lineno"]) for x in sites[1:]})
+                others = sorted({x["routine"] for x in sites[1:] if x.get("routine")} - {sx.get("routine")})
                 if others:
-                    lines_c.append("also read at %s" % ", ".join(others[:8]))
+                    lines_c.append("also read by %s" % ", ".join(others[:8]))
             else:
                 lines_c.append("%s, %d B.  No reader found by name (label, positional or absolute .set)."
                                % (kind.capitalize(), pe - ps))

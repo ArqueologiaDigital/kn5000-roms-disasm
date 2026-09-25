@@ -4513,13 +4513,13 @@ WallMenuEdit_EventDispatch:
 	jr	z, WallMenuEditCheck_Skip
 	or	xwa, xwa
 	jr	nz, WallMenuEditCheck_Skip2
-	ld	xwa, 15538394
+	ld	xwa, TransposeNoteStr_C_0x1C6
 	jr	WallMenuEditCheck_Join
 WallMenuEditCheck_Skip:
-	ld	xwa, 15538402
+	ld	xwa, TransposeNoteStr_C_0x1CE
 	jr	WallMenuEditCheck_Join
 WallMenuEditCheck_Skip2:
-	ld	xwa, 15538410
+	ld	xwa, TransposeNoteStr_C_0x1D6
 WallMenuEditCheck_Join:
 	push	xwa
 	push	xbc
@@ -4564,13 +4564,13 @@ WallOthEdit_EventDispatch:
 	jr	z, WallOthEditCheck_Skip
 	or	xwa, xwa
 	jr	nz, WallOthEditCheck_Skip2
-	ld	xwa, 15538438
+	ld	xwa, TransposeNoteStr_C_0x1F2
 	jr	WallOthEditCheck_Join
 WallOthEditCheck_Skip:
-	ld	xwa, 15538446
+	ld	xwa, TransposeNoteStr_C_0x1FA
 	jr	WallOthEditCheck_Join
 WallOthEditCheck_Skip2:
-	ld	xwa, 15538454
+	ld	xwa, TransposeNoteStr_C_0x202
 WallOthEditCheck_Join:
 	push	xwa
 	push	xbc
@@ -4748,7 +4748,7 @@ MainVariSet:
 	extz	bc
 	ld	e, (xiz+3)
 	extz	de
-	call	16553262
+	call	MIDI_DistributeParamToChannels
 	ld	a, (xiz)
 	extz	wa
 	ld	e, (xiz+2)
@@ -4759,7 +4759,7 @@ MainVariSet:
 	ld	bc, 0:i3
 	call	16624260
 	ld	wa, 1:i3
-	call	16465545
+	call	BitMapOut_StorePresetValue
 MainVariSet_Done:
 	ld xhl, 0:i3
 	pop xiz
