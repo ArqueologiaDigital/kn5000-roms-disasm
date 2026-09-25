@@ -67904,8 +67904,8 @@ sub_FA7075:   ; entry: MidiIn_AfterRebuildTable[1]
 	ld XIY,XIX                                    ; FA70BC  ec 8d
 	inc 1,XIY                                     ; FA70BE  ed 61
 .LFA70C0:
-	.byte 0xc4, 0xf0, 0x21                        ; FA70C0  c4 f0 21   ld A,(-XIX)
-	.byte 0xf4, 0xf4, 0x41                        ; FA70C3  f4 f4 41   ld (-XIY),A
+	ld A,(-XIX)                                   ; FA70C0  c4 f0 21   ld A,(-XIX)
+	ld (-XIY),A                                   ; FA70C3  f4 f4 41   ld (-XIY),A
 	cp XIX,XIZ                                    ; FA70C6  ee f4
 	jr nz, .LFA70C0                               ; FA70C8  6e f6   jr NZ,0xfa70c0
 	ld (XIX),0xff                                 ; FA70CA  b4 00 ff
@@ -67926,7 +67926,7 @@ MidiIn_ResetChannelRouteTable:   ; entry: MidiIn_AfterRebuildTable[2]
 	xor A,A                                       ; FA70D3  c9 d1
 	.byte 0x23, 0x20                              ; FA70D5  23 20   ld C,0x20
 .LFA70D7:
-	.byte 0xf5, 0xf0, 0x41                        ; FA70D7  f5 f0 41   ld (XIX+),A
+	ld (XIX+),A                                   ; FA70D7  f5 f0 41   ld (XIX+),A
 	inc 3,A                                       ; FA70DA  c9 63
 	djnz8 c, .LFA70D7                             ; FA70DC  cb 1c f8   djnz C,0xfa70d7
 	ld XIX,0x00001820                             ; FA70DF  44 20 18 00 00
@@ -67934,8 +67934,8 @@ MidiIn_ResetChannelRouteTable:   ; entry: MidiIn_AfterRebuildTable[2]
 	.byte 0x25, 0x00                              ; FA70E7  25 00   ld E,0x00
 	.byte 0x23, 0x20                              ; FA70E9  23 20   ld C,0x20
 .LFA70EB:
-	.byte 0xf5, 0xf1, 0x50                        ; FA70EB  f5 f1 50   ld (XIX+),WA
-	.byte 0xf5, 0xf0, 0x45                        ; FA70EE  f5 f0 45   ld (XIX+),E
+	ld (XIX+),WA                                  ; FA70EB  f5 f1 50   ld (XIX+),WA
+	ld (XIX+),E                                   ; FA70EE  f5 f0 45   ld (XIX+),E
 	djnz8 c, .LFA70EB                             ; FA70F1  cb 1c f7   djnz C,0xfa70eb
 	ret                                           ; FA70F4  0e
 

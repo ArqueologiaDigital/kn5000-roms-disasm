@@ -1,0 +1,32 @@
+# summary of a gate-all transcript (warnings elided)
+/home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap -triple=tlcs900 -filetype=obj -I v10/maincpu -o rebuilt_ROMs/kn5000_v10_program.llvm.o v10/maincpu/kn5000_v10_program.s
+/home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap -triple=tlcs900 -filetype=obj -I v9/maincpu -o rebuilt_ROMs/kn5000_v9_program.llvm.o v9/maincpu/kn5000_v9_program.s
+  v10/maincpu/kn5000_v10_program.s           clean
+  v9/maincpu/kn5000_v9_program.s             clean
+  v7/maincpu/kn5000_v7_program.s             clean
+  v142/subcpu/kn5000_subprogram_v142.s       clean
+  subcpu/boot/kn5000_subcpu_boot.s           clean
+  hdae5000/hd-ae5000_v2_06i.s                clean
+  table_data/kn5000_table_data.s             clean
+  custom_data/kn5000_custom_data.s           clean
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+  KN5000     8/8 images rebuild when the assembler changes   ok
+  SX-WSA1R   4/4 images rebuild when the assembler changes   ok
+PASS: a toolchain change rebuilds every image in both trees.
+real	0m15.921s
+EXIT=0

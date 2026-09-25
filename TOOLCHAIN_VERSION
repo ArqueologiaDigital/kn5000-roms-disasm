@@ -891,7 +891,7 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #            their own d16 and never read 256 as the sentinel.  Gate 13/13;
 #            FOIL: hdae5000 `ld (xsp + 0:8), xwa` -> `(xsp + 0)` -> image 2
 #            bytes short.
-#   direct   189 lines, 30 files: the direct-address pseudos whose source
+#   direct   189 lines, 32 files: the direct-address pseudos whose source
 #            named a register of the WRONG SIZE -- `cpda8 xbc, (8990)` for
 #            cp A,(0x231e), `addda16 xwa` for add WA ... (index-preserving
 #            rule, measured per site) -- are the real instruction:
@@ -904,6 +904,20 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #            differ).  The 4,600 correctly-named direct pseudos are NOT
 #            respelled here (a spelling convergence, not a false text; the
 #            tool converts them with --all, left to wave 3b).
+#   .byte    23 lines, 3 files: `.byte` lines that were ONE post-increment /
+#            pre-decrement instruction, kept as bytes for want of syntax
+#            (`.byte 0xf5, 0xe0, 0x31 ; lda xbc,xwa+` -> `lda xbc, (xwa+:1)`;
+#            wsa1 prom_a `ld A,(-XIX)` / `ld (-XIY),A` / `ld (XIX+),A` ...),
+#            by scripts/converters/wave3a_byte_autoinc.py: both decoders read
+#            the line as exactly one instruction and agree, llvm re-encodes it,
+#            AND its own comment already named that instruction.  ⚠ The first
+#            version also accepted "both neighbours are instructions" as
+#            evidence and would have converted v10/v9/v7 note_voice_mapping.s
+#            `.byte 0xe4, 0xe0, 0xc2` -- the tail of a misframed 5-byte
+#            register-indexed instruction (`.byte 0xd3 / reti / .byte ...`).
+#            50 more candidates are listed with the reason they stay bytes
+#            (out/byte_autoinc_decisions_8e188b215251.txt): data tables (unidasm
+#            `db`), register bytes naming no register, multi-instruction lines.
 #
 # Two-decoder SYNTHETIC SWEEP (notes/wave3a-toolchain-probes/two_decoder_sweep.py:
 # 9,984 probes, every addressing prefix x every sub-opcode + the primary map;

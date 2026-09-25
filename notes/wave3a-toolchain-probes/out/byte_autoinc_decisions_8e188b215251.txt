@@ -1,0 +1,78 @@
+toolchain: llvm-project HEAD 8e188b215251, llvm-mc sha256 a67c563269fc
+keep    table_data/ui_bitmaps.s:73  c5 a7 3c 00            llvm: <unknown>                    mame: and (rA7L+),0x00         llvm refuses
+keep    v10/maincpu/audio/note_voice_mapping.s:20366  e4 e0 c2               llvm: and xde, (-xwa:1)            mame: and XDE,(-XWA)           no evidence it is code (its comment does not name the instruction)
+keep    v10/maincpu/sequencer/accompaniment_engine.s:8435  f5 00 0e 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v10/maincpu/sequencer/accompaniment_engine.s:33800  e4 a5 f6               llvm: <unknown>                    mame: cp XIZ,(-rA5L)           llvm refuses
+keep    v10/maincpu/sequencer/accompaniment_engine.s:33827  d5 a6 f6               llvm: <unknown>                    mame: cp IZ,(rA6L+)            llvm refuses
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4639  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4645  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4651  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4657  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4663  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4669  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4675  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4681  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v10/maincpu/sequencer/smf_event_processor.s:4688  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+keep    v10/maincpu/ui_widgets/widget_dispatch.s:8019  f4 0c 05 0c f6 fb      llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:837  e5 ff e5 ff e0 ff      llvm: <unknown>                    mame: or XIY,(rFFL+)           llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2468  c4 00 00 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2470  c4 00 00 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2483  c4 00 08 64 01         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2485  c4 00 00 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2497  c4 00 02 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2499  c4 00 00 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2510  e4 00 00 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:2512  e4 00 00 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v142/subcpu/subcpu_data_tables.s:7442  e5 76 2c 20 00 00      llvm: <unknown>                    mame: db                       llvm refuses
+keep    v7/maincpu/audio/audio_control_engine.s:6106  e4 90 c1               llvm: <unknown>                    mame: and XBC,(-r90L)          llvm refuses
+keep    v7/maincpu/audio/audio_control_engine.s:6184  e4 90 c1               llvm: <unknown>                    mame: and XBC,(-r90L)          llvm refuses
+keep    v7/maincpu/audio/note_voice_mapping.s:19121  e4 e0 c2               llvm: and xde, (-xwa:1)            mame: and XDE,(-XWA)           no evidence it is code (its comment does not name the instruction)
+keep    v7/maincpu/factory_test/fd_test_data.s:98  c4 dc 03 00            llvm: <unknown>                    mame: db                       llvm refuses
+keep    v7/maincpu/sequencer/accompaniment_engine.s:8054  f5 00 0e 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v7/maincpu/sequencer/accompaniment_engine.s:32509  d4 a2 f6               llvm: <unknown>                    mame: cp IZ,(-rA2L)            llvm refuses
+keep    v7/maincpu/ui_widgets/naka_direct_play_property_tables.s:118  d4 08 e2               llvm: or de, (-xde0:1)             mame: or DE,(-XDE0)            no evidence it is code (its comment does not name the instruction)
+keep    v7/maincpu/ui_widgets/widget_dispatch.s:8079  f4 0c 05 0c f6 fb      llvm: <unknown>                    mame: db                       llvm refuses
+keep    v9/maincpu/audio/note_voice_mapping.s:20368  e4 e0 c2               llvm: and xde, (-xwa:1)            mame: and XDE,(-XWA)           no evidence it is code (its comment does not name the instruction)
+keep    v9/maincpu/sequencer/accompaniment_engine.s:8435  f5 00 0e 00 00         llvm: <unknown>                    mame: db                       llvm refuses
+keep    v9/maincpu/sequencer/accompaniment_engine.s:33800  e4 a5 f6               llvm: <unknown>                    mame: cp XIZ,(-rA5L)           llvm refuses
+keep    v9/maincpu/sequencer/accompaniment_engine.s:33827  d5 a6 f6               llvm: <unknown>                    mame: cp IZ,(rA6L+)            llvm refuses
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4639  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4645  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4651  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4657  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4663  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4669  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4675  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4681  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+CONVERT v9/maincpu/sequencer/smf_event_processor.s:4688  f5 e0 31               llvm: lda xbc, (xwa+:1)            mame: lda XBC,XWA+             
+keep    v9/maincpu/ui_widgets/naka_direct_play_property_tables.s:118  d4 08 e2               llvm: or de, (-xde0:1)             mame: or DE,(-XDE0)            no evidence it is code (its comment does not name the instruction)
+keep    v9/maincpu/ui_widgets/widget_dispatch.s:8080  f4 0c 05 0c f6 fb      llvm: <unknown>                    mame: db                       llvm refuses
+CONVERT wsa1/prom_a/wsa1_prom_a.s:67907  c4 f0 21               llvm: ld a, (-xix)                 mame: ld A,(-XIX)              
+CONVERT wsa1/prom_a/wsa1_prom_a.s:67908  f4 f4 41               llvm: ld (-xiy), a                 mame: ld (-XIY),A              
+CONVERT wsa1/prom_a/wsa1_prom_a.s:67929  f5 f0 41               llvm: ld (xix+), a                 mame: ld (XIX+),A              
+CONVERT wsa1/prom_a/wsa1_prom_a.s:67937  f5 f1 50               llvm: ld (xix+), wa                mame: ld (XIX+),WA             
+CONVERT wsa1/prom_a/wsa1_prom_a.s:67938  f5 f0 45               llvm: ld (xix+), e                 mame: ld (XIX+),E              
+keep    wsa1/prom_a/wsa1_prom_a.s:111177  f4 21 8d               llvm: <unknown>                    mame: orcf 5,(-XWA2)           llvm refuses
+keep    wsa1/prom_a/wsa1_prom_a.s:112102  d5 00 d1 00            llvm: xor bc, (xwa0+:1)            mame: xor BC,(XWA0+)           not one instruction (llvm 3, unidasm 3 bytes)
+keep    wsa1/prom_a/wsa1_prom_a.s:179263  f4 11 8e               llvm: <unknown>                    mame: orcf 6,(-XWA1)           llvm refuses
+keep    wsa1/prom_a/wsa1_prom_a.s:179415  f4 11 8e               llvm: <unknown>                    mame: orcf 6,(-XWA1)           llvm refuses
+keep    wsa1/prom_b/wsa1_prom_b.s:129908  f5 27 3f               llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_c/p7/p7_stream_pool.s:886  c4 02 0c 49 7a         llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_c/p7/p7_stream_pool.s:991  c4 02 0c 49 7a         llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_c/p7/p7_stream_pool.s:2690  e4 15 06 04 14 f0 00   llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_c/p7/p7_stream_pool.s:4767  f5 3f 5c 28            llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_c/p7/p7_stream_pool.s:7787  c4 02 0c 49 7a         llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_c/p7/p7_stream_pool.s:7896  c4 02 0c 49 7a         llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_d/tone_database_aux.s:11247  e4 20 80 db 00 00      llvm: add xwa, (-xwa2:1)           mame: add XWA,(-XWA2)          not one instruction (llvm 3, unidasm 3 bytes)
+keep    wsa1/prom_d/tone_database_aux.s:35372  f4 20 00 e6 00 00      llvm: ld (-xwa2), 230              mame: ld (-XWA2),0xe6          not one instruction (llvm 4, unidasm 4 bytes)
+keep    wsa1/prom_d/tone_database_aux.s:35383  f5 20 00 e6 00 00      llvm: ld (xwa2+), 230              mame: ld (XWA2+),0xe6          not one instruction (llvm 4, unidasm 4 bytes)
+keep    wsa1/prom_d/tone_database_aux.s:36362  c5 30 00 e8 00 00      llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_d/tone_database_aux.s:36769  c4 30 00 e8 00 00      llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_d/tone_database_aux.s:36791  e5 20 00 e8 00 00      llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_d/tone_database_aux.s:36835  e4 30 00 e5 00 00      llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_d/tone_database_aux.s:36846  e5 30 00 e4 00 00      llvm: <unknown>                    mame: db                       llvm refuses
+keep    wsa1/prom_d/tone_database_aux.s:37088  e4 20 00 e8 00 00      llvm: <unknown>                    mame: db                       llvm refuses
+convert 23 lines in 3 files
+  M v10/maincpu/sequencer/smf_event_processor.s
+  M v9/maincpu/sequencer/smf_event_processor.s
+  M wsa1/prom_a/wsa1_prom_a.s

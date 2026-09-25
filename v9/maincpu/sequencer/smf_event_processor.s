@@ -4636,56 +4636,56 @@ SeqStep_FileSectorReturn:
 	ld	xwa, 22
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	srl	xwa, 8
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	srl	xwa, 0
