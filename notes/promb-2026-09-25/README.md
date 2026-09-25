@@ -14,6 +14,7 @@ source; none writes a `.s` unless it says `--apply`.
 | `smf_param_sysex_probe.py` | the 74 x 19 SMF SysEx templates at 0xF74FCF: reader shape, constant fields, extent, the parallel RAM pointer table, and the stale `calr`s that land inside records | `python3 notes/promb-2026-09-25/smf_param_sysex_probe.py` |
 | `sysex_decode_tree_probe.py` | `LinkTable_F4FF61` as the SysEx decode tree prom_a sub_FB63D1 walks: reader shape and per-level failure codes, list/leaf census, terminator codes, and that all 74 exported SysEx bodies are complete paths | `python3 notes/promb-2026-09-25/sysex_decode_tree_probe.py` |
 | `annotate_kanji_cells.py` | do the kanji cell lines carry the transcription's characters, and are the ROM's defined cells exactly the transcribed codes? (`--apply` writes the annotations) | `python3 notes/promb-2026-09-25/annotate_kanji_cells.py` |
+| `effect_descriptor_pool.py` | what 0xF124A6-0xF12F23 is: the 70-byte EQ-graph display-list template EqGraph_Draw (0xF0FF3F) copies and patches (with the captions, box, 0 dB line and BYPASS branch that make it an EQ), and the 57 DSP-effect parameter descriptors that tile 0xF124EC-0xF12F23 exactly -- group layout, padding, terminator, W = highest slot + 1 (`--emit` prints the asm, `--apply` writes it) | `python3 notes/promb-2026-09-25/effect_descriptor_pool.py` |
 | `reparent_code_labels.map` | the 811 `old=new` renames of `scripts/renaming/reparent_code_labels_prom_b.py` (input for `assert_comments_preserved.py --rename-map`) | — |
 
 Converters this lane added (under `scripts/`, not here):
