@@ -1016,6 +1016,8 @@ AccStyle_ReadParamOffset_Return:
 ; further on); +0xAC and +0xBC are the same two banks at stride 2.  Sizes:
 ; the reader offsets pin +0x5C at 40 entries and +0xAC at 8; +0xBC is the 16
 ; bytes up to AccVoice_ComputeParamAddr.
+; readers in v9/v10 (address from the linked ELF): AccStyle_ReadParamOffset 0xF5659B,
+;     AccPart_LookupBoundVoiceParam 0xF5657E
 ; +0x5C  40 x LE16: 0..19, then 0x400..0x413
 	.short 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009
 	.short 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f, 0x0010, 0x0011, 0x0012, 0x0013
@@ -1087,6 +1089,7 @@ AccTuning_ValueTable:
 ; to the six bytes 0x32a3..0x32a8) and two more `call AccTuning_FetchValue`.
 ; 40 entries: the table ends where AccVoice_ProcessAllSixParts begins (its
 ; first byte, 0x1E, is a `calr`), and the step-of-5 pattern is complete at 40.
+; readers in v9/v10 (address from the linked ELF): AccTuning_FetchValue 0xF5671E
 ; -- comments that sat inside this range before the re-type, in order:
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5672F-0xF56747 (24 B), unreached CODE-territory, was disassembled as 16 plausible-but-dead instruction lines; per=64% dist=5 near AccTuning_ValueTable+6
 	.byte 0, 0, 0, 0, 0, 5, 5, 5, 5, 5
@@ -10169,6 +10172,8 @@ AccTiming_SlotOffsetTables:
 ; the per-slot stride the two free-slot scans add (`add iz, (0x337c:16)`).
 ; Size: the +0x20 reader pins the first table at 8 entries; the second is
 ; the 32 bytes up to AccDir_Entry.
+; readers in v9/v10 (address from the linked ELF): AccKbdTiming_SlotOverflow 0xF5B6D1,
+;     AccAccTiming_SlotOverflow 0xF5BABA
 ; -- comments that sat inside this range before the re-type, in order:
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5BD66-0xF5BD76 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=75% dist=5 near AccTiming_SlotOffsetTables_0x20+16
 ; +0x00  8 x LE32 = 0, 6, 12 ... 42 (stride 6) -- keyboard-timing slots
@@ -10792,68 +10797,47 @@ AccVoice_CopyFromROM_Skip:
 AccVoice_CopyFromROM_Skip2:
 	ld	xiy, 0:i3
 	ret
-	nop
-	nop
-	pop	sr
-	push	sr
-	nop
-	max
-	pop	sr
-	nop
-	max
-	max
-	nop
-	halt
-	push	sr
-	nop
-	ei	4
-	nop
-	ei	6
-	normal
-	pushw	3
-	pushw	4
-	decf
-	push	sr
-	nop
-	decf
-	reti
-	normal
-	ret
-	normal
-	nop
-	swi	7
-	swi	7
-	nop
-	swi	7
-	swi	7
-	nop
-	pop	sr
-	push	sr
-	nop
-	max
-	push	sr
-	nop
-	max
-	ei	0
-	halt
-	push	sr
-	nop
-	pushw	2
-	pushw	261
-	decf
-	push	sr
-	nop
-	ret
-	reti
-	nop
-	ret
-	push	1
-	ret
-	ldw	(1:8), 0xffff:io
-	nop
-	swi	7
-	swi	7
-	nop
+; AccVoice_CopyFromROM_DataBlock +0x46.. -- two key/value tables searched by
+; the routine above (AccVoice_CopyFromROM_DataBlock):
+;     ld xiy, AccVoice_CopyFromROM_DataBlock_0x46  (or _0x6D, chosen by carry)
+;  l: ld wa,(xiy) / ld c,(xiy+2) / cp wa,0xffff / jr z,<none> / cp wa,hl /
+;     jr z,<found> / add iy,3 / jr l
+; so each record is {LE16 key, u8 value}, the key compared with HL and the
+; value (C) tested for zero on a match; a key of 0xFFFF ends a table.
+; ** RE-TYPED 2026-09-25 (lane accomp): was nop/`pop sr`/max/`push sr`
+; mnemonics (data-as-code).  Each table ends with two key-0xFFFF records
+; (the reader stops at the first); the second table then starts at +0x6D,
+; exactly the reader's other base.
+; readers in v9/v10 (address from the linked ELF): AccVoice_CopyFromROM_DataBlock 0xF5C4C7
+; +0x44  2 B between the routine's `ret` and the first table
+	.byte 0x00, 0x00
+; +0x46  table 0: 13 records {LE16 key, u8 value} ending in key-0xFFFF records
+	.byte 0x03, 0x02, 0x00	; key 0x0203 -> 0
+	.byte 0x04, 0x03, 0x00	; key 0x0304 -> 0
+	.byte 0x04, 0x04, 0x00	; key 0x0404 -> 0
+	.byte 0x05, 0x02, 0x00	; key 0x0205 -> 0
+	.byte 0x06, 0x04, 0x00	; key 0x0406 -> 0
+	.byte 0x06, 0x06, 0x01	; key 0x0606 -> 1
+	.byte 0x0b, 0x03, 0x00	; key 0x030b -> 0
+	.byte 0x0b, 0x04, 0x00	; key 0x040b -> 0
+	.byte 0x0d, 0x02, 0x00	; key 0x020d -> 0
+	.byte 0x0d, 0x07, 0x01	; key 0x070d -> 1
+	.byte 0x0e, 0x01, 0x00	; key 0x010e -> 0
+	.byte 0xff, 0xff, 0x00	; key 0xffff -> 0
+	.byte 0xff, 0xff, 0x00	; key 0xffff -> 0
+; +0x6d  table 1: 12 records {LE16 key, u8 value} ending in key-0xFFFF records
+	.byte 0x03, 0x02, 0x00	; key 0x0203 -> 0
+	.byte 0x04, 0x02, 0x00	; key 0x0204 -> 0
+	.byte 0x04, 0x06, 0x00	; key 0x0604 -> 0
+	.byte 0x05, 0x02, 0x00	; key 0x0205 -> 0
+	.byte 0x0b, 0x02, 0x00	; key 0x020b -> 0
+	.byte 0x0b, 0x05, 0x01	; key 0x050b -> 1
+	.byte 0x0d, 0x02, 0x00	; key 0x020d -> 0
+	.byte 0x0e, 0x07, 0x00	; key 0x070e -> 0
+	.byte 0x0e, 0x09, 0x01	; key 0x090e -> 1
+	.byte 0x0e, 0x0a, 0x01	; key 0x0a0e -> 1
+	.byte 0xff, 0xff, 0x00	; key 0xffff -> 0
+	.byte 0xff, 0xff, 0x00	; key 0xffff -> 0
 
 AccStyle_Entry:
 	jp AccStyle_Process
@@ -10954,7 +10938,7 @@ AccStyle_IndexedLookup:
 	ld	l, (0x338e:16)
 	and l, 0x1f
 	extz hl
-	ld xwa, 0x00f5c8b4
+	ld xwa, AccStyle_InlinedBlock_0x1E0
 	ld_rrb	a, xwa, hl
 	cp	(0x8d3a:16), a
 	jr z, AccStyle_IndexedLookup_Ret
@@ -11140,63 +11124,31 @@ AccStyle_InlinedBlock_Skip:
 	or	(0x33d3:16), 2
 AccStyle_InlinedBlock_Return:
 	ret
-	nop
-	nop
-	.byte 0x01
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	nop
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	push	sr
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 24
-	nop
-	push_a
-	zcf
-	nop
-	rcf
-	nop
-	nop
-	nop
-	scf
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	ccf
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
+; AccStyle_InlinedBlock +0x1A0..+0x1FF -- two u8 tables after the routine above.
+; ** RE-TYPED 2026-09-25 (lane accomp): was nop/rcf/`ld (0:8),0:io`/push_a
+; mnemonics (data-as-code).  The +0x1E0 table is read twice:
+;   AccStyle_IndexedLookup ("Routine 2" above): l = (0x338e) & 0x1f /
+;       ld xwa, AccStyle_InlinedBlock_0x1E0 / ld_rrb a, xwa, hl /
+;       cp (0x8d3a), a
+;   AccVoiceState_DispatchChange: ld xwa, AccStyle_InlinedBlock_0x1E0 /
+;       ldb_sri E, 0x03, 0xe0, 0xec (c3 03 e0 ec 25 = ld e,(xwa+l)); E goes
+;       to (0x90f7) before PartCtrl_WriteProgramChange
+; so it maps the one-hot selector (0x338e) to the same 0x10..0x14 part codes
+; AccPatch_PartNumberTable produces into (0x8d3a) -- in a different order.
+; 32 entries: the `and l, 0x1f` of the first reader, ending at
+; AccVoiceReg_WritePart3.
+; readers in v9/v10 (address from the linked ELF): AccVoiceState_DispatchChange 0xF5CAF6
+; +0x1A0  64 x u8 -- nonzero only at indices 2, 4, 8, 16, 32 (-> 1, 0x10, 8, 4, 2).
+;          No reader found: no instruction holds this address (3-byte search
+;          over the ROM), and no positional label names it.
+	.byte 0x00, 0x00, 0x01, 0x00, 0x10, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+; +0x1E0  32 x u8 -- AccStyle_InlinedBlock_0x1E0: one-hot index -> part code;
+;          1 -> 0x14, 2 -> 0x13, 4 -> 0x10, 8 -> 0x11, 16 -> 0x12, else 0
+	.byte 0x00, 0x14, 0x13, 0x00, 0x10, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 AccVoiceReg_WritePart3:
 	cp (0x8d34:16), 17
@@ -11821,6 +11773,10 @@ Demo_StyleRhythmData:
 ; 30 section names: AccDemo_LoadVariation's loop bound is `cp a, 0x1e`, and the
 ; order (A/B/C variation 1-4, then intro/fill-in/ending 1-2 per variation) is the
 ; order of the 30 seven-byte section-name cells in AccScreen_UIDataBlock.
+; readers in v9/v10 (address from the linked ELF): AccDemo_LoadRhythm 0xF5CE7A,
+;     AccDemo_LoadVariation 0xF5CE90, AccDemo_LoadVariation_DataBlock 0xF5CEF3,
+;     AccDemo_LoadFillIn 0xF5CF68, Demo_LoadVariationData 0xF5CF8B,
+;     Demo_LoadVariationC_Data 0xF5CFAE
 ; -- comments that sat inside this range before the re-type, in order:
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5D20D-0xF5D230 (35 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=63% dist=10 near Demo_StyleRhythmData_0x240+1
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5D2E1-0xF5D300 (31 B), unreached CODE-territory, was disassembled as 23 plausible-but-dead instruction lines; per=100% dist=2 near Demo_StyleRhythmData_0x274+161
@@ -15232,6 +15188,7 @@ AccPatch_PartNumberTable:
 ; 8->0x13, 16->0x14, i.e. it turns the selected bit into 0x10+bit.  32
 ; entries: pinned by `and a, 0x1f`, and the table ends exactly where
 ; AccPatch_UpdateAllChains begins.
+; readers in v9/v10 (address from the linked ELF): AccPatch_PartChanges_MapLookup 0xF5F4DF
 	.byte 0x00, 0x10, 0x11, 0x00, 0x12, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
@@ -17462,6 +17419,8 @@ AccPatch_TransposeNoteTable:
 ; exactly at AccPatch_ReadTransposeAmount; the flag table is the 12 bytes
 ; between the two reader offsets.  Only index 3 of the flag table and
 ; records 3, 4 and 11 are non-zero.
+; readers in v9/v10 (address from the linked ELF): AccPatch_Transpose_LookupTable 0xF60874,
+;     AccPatch_StoreDrumParams 0xF608D8
 ; +0x00  2 B, not addressed by either reader
 	.byte 0x00, 0x00
 ; +0x02  12 x u8, flag byte per index (bit 0 tested)
@@ -17862,6 +17821,7 @@ AccPatch_AdvPlayPos_DataBlock:
 ; siblings then read and update through (xix)/(xiy).  17 entries each: the
 ; +0x4B reader offset minus +0x07 is 68 = 17*4, and 17*4 more bytes end
 ; exactly at AccPatch_AdvanceAllSteps.
+; readers in v9/v10 (address from the linked ELF): AccPatch_LoadTablePointers 0xF604BD
 ; +0x00  7 zero bytes, not addressed by the reader
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 ; +0x07  17 x LE32 -> XIY (RAM addresses)
@@ -20153,6 +20113,8 @@ __pad_F62002:
 ; Sizes as in AccPatch_TransposeNoteTable: 12 flag bytes between the two
 ; reader offsets, then 12 three-byte records ending at
 ; AccPlayback_ProcessOngoingEvents.
+; readers in v9/v10 (address from the linked ELF): AccPlayback_TrackPosition 0xF61F6E,
+;     ToneGen_LoadRhythmPatternParams 0xF61FDB
 ; +0x00  2 B, not addressed by either reader
 	.byte 0x00, 0x00
 ; +0x02  12 x u8, flag byte per index (bit 0 tested)
@@ -20409,6 +20371,7 @@ __pad_F62230:
 ; v10 bytes).
 ; 17 entries each: 0x46 - 0x02 = 68 = 17*4, and 17*4 more bytes end exactly
 ; at ToneGen_SearchVoiceBuffer.
+; readers in v9/v10 (address from the linked ELF): ToneGen_InitPlaybackState 0xF6249A
 ; +0x00  2 B, not addressed by the reader
 	.byte 0x00, 0x00
 ; +0x02  17 x LE32 -> (0x3548)
@@ -24188,118 +24151,75 @@ DrumParam_Lookup:
 	ret
 
 DrumParam_PointerTableAndData:
-	nop
-	nop
-	.byte 0x9b
-	ld	xsp, 0x49db00f6
-	.byte 0xf6
-	nop
-	.byte 0xbb
-	popw	wa
-	.byte 0xf6
-	nop
-	jrl	ugt, -2487
-	nop
-	pop	xhl
-	popw	wa
-	.byte 0xf6
-	nop
-	jp	0xf649
-	swi	3
-	ld	xsp, 0x479b00f6
-	.byte 0xf6
-	nop
-	.byte 0xf4, 0xf4, 0xf4, 0xf4, 0xf4, 0xf4
-	.fill 8, 1, 0xf4
-	.byte 0xf4, 0xf4
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 40
-	nop
-	nop
-	jrl	nc, 32639
-	jrl	nc, 32639
-	.fill 8, 1, 0x7f
-	.fill 8, 1, 0x7f
-	.fill 8, 1, 0x7f
-	.fill 8, 1, 0x7f
-	.fill 8, 1, 0x7f
-	jrl	nc, 127
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 18
-	.ascii "000000000000000000000000000000000000000000000000"
-	jrl	nc, 32639
-	jrl	nc, 32639
-	.fill 8, 1, 0x7f
-	.fill 8, 1, 0x7f
+; DrumParam_PointerTableAndData -- eight per-parameter byte arrays and the
+; table of their addresses.  ** RE-TYPED 2026-09-25 (lane accomp): was
+; `ld xsp, 0x49db00f6` / `jrl nc, 32639` / swi ... (data-as-code) plus .fill
+; runs.  Read by DrumParam_Lookup:
+;     and w,7 / sll w,2 / ld l,w / add xhl, DrumParam_PointerTableAndData_0x2 /
+;     ld xhl,(xhl) / ... / add xhl,xwa (xwa = A zero-extended) / ld a,(xhl)
+; i.e. array W&7, element A.  Every pointer lands inside this block, so the
+; eight addresses below are written relative to the label and the arrays are
+; emitted at the offsets they point to.  Array lengths are the distances
+; between consecutive targets (the last runs to the block's end); the
+; element meaning per array is not established here.
+; readers in v9/v10 (address from the linked ELF): DrumParam_Lookup 0xF6474C
+; -- comments that sat inside this range before the re-type, in order:
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF64859-0xF64869 (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=71% dist=3 near DrumParam_PointerTableAndData_0x2+238
-	.byte 0x7f, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x18, 0x18
-	.fill 8, 1, 0x18
-	.fill 8, 1, 0x18
-	push_f
-	push_f
-	push_f
-	push_f
-	push_f
-	push_f
-	.byte 0x30, 0x30
-	.ascii "0000000000000000000000HHHHHHHHHHHHHHHHHHHHHHHH"
-	.byte 0x7f, 0x7f
-	.fill 8, 1, 0x7f
-	jrl	nc, 127
-	nop
-	nop
-	nop
-	nop
-	nop
-	.fill 8, 1, 0x0c
-	incf
-	incf
-	incf
-	incf
-	push_f
-	push_f
-	push_f
-	push_f
-	.fill 8, 1, 0x18
-	.ascii "$$$$$$$$$$$$000000000000<<<<<<<<<<<<IIIIIIIIIIIITTTTTTTTTTTT"
-	jrl	nc, 32639
-	jrl	nc, 32639
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 10
-	.ascii "                                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-	jrl	nc, 32639
-	jrl	nc, 32639
-	.fill 8, 1, 0x7f
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF64979-0xF64989 (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=71% dist=3 near DrumParam_PointerTableAndData_0x2+526
-	.byte 0x7f, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x10
-	.byte 0x10, 0x10, 0x10, 0x10
-	.fill 8, 1, 0x10
-	rcf
-	rcf
-	.ascii "                0000000000000000@@@@@@@@@@@@@@@@PPPPPPPPPPPPPPPP"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF649D3-0xF649F9 (38 B), unreached CODE-territory, was disassembled as 25 plausible-but-dead instruction lines; per=72% dist=6 near DrumParam_PointerTableAndData_0x2+616
-	.byte 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x00, 0x00, 0x00, 0x00
-	.byte 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x10, 0x10, 0x10, 0x10
-	.byte 0x10, 0x10, 0x10, 0x10, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18
-	.byte 0x20, 0x20
-	.ascii "      ((((((((0000000088888888@@@@@@@@HHHHHHHHPPPPPPPPXXXXXXXX"
-	jrl	nc, 32639
-	.byte 0x7f
+; +0x00  2 B, not addressed by the reader
+	.byte 0x00, 0x00
+; +0x02  8 x LE32 -- the address of array k, k = W & 7
+	.long DrumParam_PointerTableAndData + 0x32	; array 0
+	.long DrumParam_PointerTableAndData + 0x272	; array 1
+	.long DrumParam_PointerTableAndData + 0x152	; array 2
+	.long DrumParam_PointerTableAndData + 0x212	; array 3
+	.long DrumParam_PointerTableAndData + 0xf2	; array 4
+	.long DrumParam_PointerTableAndData + 0x1b2	; array 5
+	.long DrumParam_PointerTableAndData + 0x92	; array 6
+	.long DrumParam_PointerTableAndData + 0x32	; array 7
+; +0x022  16 B -- not pointed at by the table
+	.fill 16, 1, 0xf4
+; +0x032  96 B -- array 0, 7
+	.zero 48
+	.fill 48, 1, 0x7f
+; +0x092  96 B -- array 6
+	.zero 24
+	.fill 48, 1, 0x30
+	.fill 24, 1, 0x7f
+; +0x0f2  96 B -- array 4
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.fill 24, 1, 0x18
+	.fill 24, 1, 0x30
+	.fill 24, 1, 0x48
+	.byte 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f
+; +0x152  96 B -- array 2
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c
+	.byte 0x0c, 0x0c, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24
+	.byte 0x24, 0x24, 0x24, 0x24, 0x24, 0x24, 0x24, 0x24, 0x24, 0x24, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30
+	.byte 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c, 0x3c
+	.byte 0x3c, 0x3c, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x49, 0x54, 0x54
+	.byte 0x54, 0x54, 0x54, 0x54, 0x54, 0x54, 0x54, 0x54, 0x54, 0x54, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f
+; +0x1b2  96 B -- array 5
+	.zero 16
+	.fill 32, 1, 0x20
+	.fill 32, 1, 0x40
+	.fill 16, 1, 0x7f
+; +0x212  96 B -- array 3
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.fill 16, 1, 0x10
+	.fill 16, 1, 0x20
+	.fill 16, 1, 0x30
+	.fill 16, 1, 0x40
+	.fill 16, 1, 0x50
+	.byte 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f
+; +0x272  96 B -- array 1
+	.byte 0x00, 0x00, 0x00, 0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x10, 0x10, 0x10, 0x10
+	.byte 0x10, 0x10, 0x10, 0x10, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x20, 0x20, 0x20, 0x20
+	.byte 0x20, 0x20, 0x20, 0x20, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x30, 0x30, 0x30, 0x30
+	.byte 0x30, 0x30, 0x30, 0x30, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x40, 0x40, 0x40, 0x40
+	.byte 0x40, 0x40, 0x40, 0x40, 0x48, 0x48, 0x48, 0x48, 0x48, 0x48, 0x48, 0x48, 0x50, 0x50, 0x50, 0x50
+	.byte 0x50, 0x50, 0x50, 0x50, 0x58, 0x58, 0x58, 0x58, 0x58, 0x58, 0x58, 0x58, 0x7f, 0x7f, 0x7f, 0x7f
 
 DrumKitInit_Wrapper:
 	push xiz
@@ -25920,58 +25840,60 @@ DrumVoice_NotifyEE:
 	pop xwa
 	ret
 
-TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
-	push	sr
+TimeSig_DisplayStrings:
+; TimeSig_DisplayStrings +0x00..+0xC7 -- 20 time-signature records of 10 bytes:
+; a 9-character display name "(n/d)+0 " and one byte that is the bar length in
+; quarter notes (2/2 -> 4, 3/4 -> 3, 6/8 -> 3, 14/8 -> 7, 16/8 -> 8 ...).
+; ** RE-TYPED 2026-09-25 (lane accomp): the names were .ascii already but the
+; length bytes and "(4/2)" "(8/4)" "(8/8)" "(16/8)" names were spelled as
+; push sr / max / reti / `pushw wa`.. (data-as-code).  The 10-byte stride and
+; the 20-record count are read off the bytes: 20 records end exactly where
+; the code at +0xC8 (call ...) begins.  READER NOT ESTABLISHED for this
+; stride: the only direct readers found (`ld xbc, TimeSig_DisplayStrings /
+; add xbc,7` after `sll hl,3`, in the code that follows DrumVoice_Handler7)
+; index it with stride 8 at +7, which does not fit 10-byte records; the
+; positional labels TimeSig_DisplayStrings_0x21B.. point far past this table
+; into the code and data that follow.
+	.ascii "(1/2)+0  "
+	.byte 2
 	.ascii "(2/2)+0  "
-	max
+	.byte 4
 	.ascii "(3/2)+0  "
-	.byte 0x06
-	pushw	wa
-	.byte 0x34
-	.ascii "/2)+0  "
-	.byte 0x08
+	.byte 6
+	.ascii "(4/2)+0  "
+	.byte 8
 	.ascii "(1/4)+0  "
-	.byte 0x01
+	.byte 1
 	.ascii "(2/4)+0  "
-	push	sr
+	.byte 2
 	.ascii "(3/4)+0  "
-	pop	sr
-	pushw	wa
-	.byte 0x34
-	.ascii "/4)+0  "
-	.byte 0x04
+	.byte 3
+	.ascii "(4/4)+0  "
+	.byte 4
 	.ascii "(5/4)+0  "
-	halt
+	.byte 5
 	.ascii "(6/4)+0  "
-	.byte 0x06
+	.byte 6
 	.ascii "(7/4)+0  "
-	reti
-	pushw	wa
-	push	xwa
-	.ascii "/4)+0  "
-	.byte 0x08
+	.byte 7
+	.ascii "(8/4)+0  "
+	.byte 8
 	.ascii "(2/8)+0  "
-	.byte 0x01
+	.byte 1
 	.ascii "(4/8)+0  "
-	push	sr
+	.byte 2
 	.ascii "(6/8)+0  "
-	pop	sr
-	pushw	wa
-	push	xwa
-	.ascii "/8)+0  "
-	max
+	.byte 3
+	.ascii "(8/8)+0  "
+	.byte 4
 	.ascii "(10/8)+0 "
-	halt
+	.byte 5
 	.ascii "(12/8)+0 "
-	.byte 0x06
+	.byte 6
 	.ascii "(14/8)+0 "
-	reti
-	pushw	wa
-	ldw	bc, 12086
-	push	xwa
-	pushw	bc
-	pushw	hl
-	ldw	wa, 2080
+	.byte 7
+	.ascii "(16/8)+0 "
+	.byte 8
 	call	16069349
 TimeSig_DisplayStrings_Code_Sub2:
 	ld	(0xfc5a:16), l
@@ -28641,6 +28563,7 @@ MultiVoice_Setup_Done:
 ; so the index is (0x37c9) >> 1.  Only indices 1, 2, 4, 8, 16 and 32 are
 ; non-zero and they hold 1..6 (bit position + 1); every other byte is 0.
 ; 33 entries (0..32): the table ends where DrumParam_ReadVoiceCount begins.
+; readers in v9/v10 (address from the linked ELF): Rhythm_MapChannelToDrumIndex 0xF670BF
 	.byte 0x00, 0x01, 0x02, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06
