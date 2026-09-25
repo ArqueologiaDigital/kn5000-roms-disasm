@@ -178119,16 +178119,16 @@ sub_FF0407:
 	ld XIY,KitCategoryLegends                            ; FF041E  45 7f 04 ff 00
 	ret                                                  ; FF0423  0e
 .LFF0424:
-	ld XIY,KitCategoryLegends+0x6                        ; FF0424  45 85 04 ff 00
+	ld XIY,KitCategoryLegends_ByProgram                        ; FF0424  45 85 04 ff 00
 	ret                                                  ; FF0429  0e
 .LFF042A:
-	ld XIY,KitCategoryLegends+0x31E                      ; FF042A  45 9d 07 ff 00
+	ld XIY,KitCategoryLegend_User1                      ; FF042A  45 9d 07 ff 00
 	ret                                                  ; FF042F  0e
 .LFF0430:
-	ld XIY,KitCategoryLegends+0x32C                      ; FF0430  45 ab 07 ff 00
+	ld XIY,KitCategoryLegend_User2                      ; FF0430  45 ab 07 ff 00
 	ret                                                  ; FF0435  0e
 .LFF0436:
-	ld XIY,KitCategoryLegends+0x33A                      ; FF0436  45 b9 07 ff 00
+	ld XIY,KitCategoryLegend_Ext                      ; FF0436  45 b9 07 ff 00
 	ret                                                  ; FF043B  0e
 ; ---------------------------------------------------------------------
 ; KitCategoryLegend_Index -- HL := the index into that legend table
@@ -178241,59 +178241,167 @@ KitCategoryLegend_Index:
 ; ---------------------------------------------------------------------
 
 KitCategoryLegends:
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x53, 0x54, 0x41, 0x4e, 0x44, 0x52, 0x20, 0x20, 0x20, 0x20  ; FF047F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF048F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF049F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52, 0x4f, 0x4f, 0x4d, 0x20, 0x20, 0x4c, 0x49, 0x47, 0x48  ; FF04AF
-	.byte 0x54, 0x20, 0x46, 0x55, 0x4e, 0x4b, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF04BF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF04CF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x50, 0x4f, 0x57, 0x45, 0x52, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF04DF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF04EF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF04FF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x45, 0x4c, 0x45, 0x43, 0x20, 0x20, 0x53, 0x4f, 0x55, 0x4c  ; FF050F
-	.byte 0x20, 0x20, 0x44, 0x41, 0x4e, 0x43, 0x45, 0x20, 0x48, 0x4f, 0x55, 0x53, 0x45, 0x20, 0x20, 0x20  ; FF051F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x53, 0x59, 0x4e, 0x54, 0x48, 0x20, 0x4d, 0x4f, 0x44, 0x45, 0x4c, 0x20  ; FF052F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x4a, 0x41, 0x5a, 0x5a, 0x20, 0x20, 0x54, 0x52, 0x41, 0x44  ; FF053F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF054F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF055F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x42, 0x52, 0x55, 0x53, 0x48, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF056F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF057F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF058F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x47, 0x4d, 0x4f, 0x72, 0x63, 0x68, 0x20, 0x20, 0x20, 0x20  ; FF059F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF05AF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF05BF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF05CF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF05DF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF05EF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF05FF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF060F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF061F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF062F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF063F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF064F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF065F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF066F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF067F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF068F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF069F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF06AF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF06BF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF06CF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF06DF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF06EF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF06FF
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF070F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x4f, 0x52, 0x43, 0x48, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF071F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF072F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF073F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x53, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF074F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF075F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF076F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FF077F
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x75, 0x73  ; FF078F
-	.byte 0x65, 0x72, 0x31, 0x20, 0x20, 0x75, 0x73, 0x65, 0x72, 0x31, 0x20, 0x20, 0x75, 0x73, 0x65, 0x72  ; FF079F
-	.byte 0x32, 0x20, 0x20, 0x75, 0x73, 0x65, 0x72, 0x32, 0x20, 0x20, 0x65, 0x78, 0x74, 0x20, 0x20, 0x20  ; FF07AF
-	.byte 0x65, 0x78, 0x74, 0x20, 0x20, 0x20                                  ; FF07BF
+	.ascii "      "                                ; FF047F  default (any other type)
+; ---------------------------------------------------------------------
+; KitCategoryLegends_ByProgram -- 132 six-character legends, index = the drum
+;          program (the record's +0x00 byte, KitCategoryLegend_Index).
+; Read by: KitCategoryLegend_SelectBase's type-0x20 arm, `ld XIY,<this>` at
+;          0xFF0424; drawn 6 characters wide (BC = 6, see the header above
+;          KitCategoryLegends).  COUNT 132 by abutment: KitCategoryLegend_User1
+;          follows; entries 121-131 are blank, 120 ("SE") is the last legend.
+;          (notes/proma-2026-09-25/ascii_kit_legends.py)
+; ---------------------------------------------------------------------
+KitCategoryLegends_ByProgram:
+	.ascii "STANDR"                                ; FF0485  [  0]
+	.ascii "      "                                ; FF048B  [  1]
+	.ascii "      "                                ; FF0491  [  2]
+	.ascii "      "                                ; FF0497  [  3]
+	.ascii "      "                                ; FF049D  [  4]
+	.ascii "      "                                ; FF04A3  [  5]
+	.ascii "      "                                ; FF04A9  [  6]
+	.ascii "      "                                ; FF04AF  [  7]
+	.ascii "ROOM  "                                ; FF04B5  [  8]
+	.ascii "LIGHT "                                ; FF04BB  [  9]
+	.ascii "FUNK  "                                ; FF04C1  [ 10]
+	.ascii "      "                                ; FF04C7  [ 11]
+	.ascii "      "                                ; FF04CD  [ 12]
+	.ascii "      "                                ; FF04D3  [ 13]
+	.ascii "      "                                ; FF04D9  [ 14]
+	.ascii "      "                                ; FF04DF  [ 15]
+	.ascii "POWER "                                ; FF04E5  [ 16]
+	.ascii "      "                                ; FF04EB  [ 17]
+	.ascii "      "                                ; FF04F1  [ 18]
+	.ascii "      "                                ; FF04F7  [ 19]
+	.ascii "      "                                ; FF04FD  [ 20]
+	.ascii "      "                                ; FF0503  [ 21]
+	.ascii "      "                                ; FF0509  [ 22]
+	.ascii "      "                                ; FF050F  [ 23]
+	.ascii "ELEC  "                                ; FF0515  [ 24]
+	.ascii "SOUL  "                                ; FF051B  [ 25]
+	.ascii "DANCE "                                ; FF0521  [ 26]
+	.ascii "HOUSE "                                ; FF0527  [ 27]
+	.ascii "      "                                ; FF052D  [ 28]
+	.ascii "SYNTH "                                ; FF0533  [ 29]
+	.ascii "MODEL "                                ; FF0539  [ 30]
+	.ascii "      "                                ; FF053F  [ 31]
+	.ascii "JAZZ  "                                ; FF0545  [ 32]
+	.ascii "TRAD  "                                ; FF054B  [ 33]
+	.ascii "      "                                ; FF0551  [ 34]
+	.ascii "      "                                ; FF0557  [ 35]
+	.ascii "      "                                ; FF055D  [ 36]
+	.ascii "      "                                ; FF0563  [ 37]
+	.ascii "      "                                ; FF0569  [ 38]
+	.ascii "      "                                ; FF056F  [ 39]
+	.ascii "BRUSH "                                ; FF0575  [ 40]
+	.ascii "      "                                ; FF057B  [ 41]
+	.ascii "      "                                ; FF0581  [ 42]
+	.ascii "      "                                ; FF0587  [ 43]
+	.ascii "      "                                ; FF058D  [ 44]
+	.ascii "      "                                ; FF0593  [ 45]
+	.ascii "      "                                ; FF0599  [ 46]
+	.ascii "      "                                ; FF059F  [ 47]
+	.ascii "GMOrch"                                ; FF05A5  [ 48]
+	.ascii "      "                                ; FF05AB  [ 49]
+	.ascii "      "                                ; FF05B1  [ 50]
+	.ascii "      "                                ; FF05B7  [ 51]
+	.ascii "      "                                ; FF05BD  [ 52]
+	.ascii "      "                                ; FF05C3  [ 53]
+	.ascii "      "                                ; FF05C9  [ 54]
+	.ascii "      "                                ; FF05CF  [ 55]
+	.ascii "      "                                ; FF05D5  [ 56]
+	.ascii "      "                                ; FF05DB  [ 57]
+	.ascii "      "                                ; FF05E1  [ 58]
+	.ascii "      "                                ; FF05E7  [ 59]
+	.ascii "      "                                ; FF05ED  [ 60]
+	.ascii "      "                                ; FF05F3  [ 61]
+	.ascii "      "                                ; FF05F9  [ 62]
+	.ascii "      "                                ; FF05FF  [ 63]
+	.ascii "      "                                ; FF0605  [ 64]
+	.ascii "      "                                ; FF060B  [ 65]
+	.ascii "      "                                ; FF0611  [ 66]
+	.ascii "      "                                ; FF0617  [ 67]
+	.ascii "      "                                ; FF061D  [ 68]
+	.ascii "      "                                ; FF0623  [ 69]
+	.ascii "      "                                ; FF0629  [ 70]
+	.ascii "      "                                ; FF062F  [ 71]
+	.ascii "      "                                ; FF0635  [ 72]
+	.ascii "      "                                ; FF063B  [ 73]
+	.ascii "      "                                ; FF0641  [ 74]
+	.ascii "      "                                ; FF0647  [ 75]
+	.ascii "      "                                ; FF064D  [ 76]
+	.ascii "      "                                ; FF0653  [ 77]
+	.ascii "      "                                ; FF0659  [ 78]
+	.ascii "      "                                ; FF065F  [ 79]
+	.ascii "      "                                ; FF0665  [ 80]
+	.ascii "      "                                ; FF066B  [ 81]
+	.ascii "      "                                ; FF0671  [ 82]
+	.ascii "      "                                ; FF0677  [ 83]
+	.ascii "      "                                ; FF067D  [ 84]
+	.ascii "      "                                ; FF0683  [ 85]
+	.ascii "      "                                ; FF0689  [ 86]
+	.ascii "      "                                ; FF068F  [ 87]
+	.ascii "      "                                ; FF0695  [ 88]
+	.ascii "      "                                ; FF069B  [ 89]
+	.ascii "      "                                ; FF06A1  [ 90]
+	.ascii "      "                                ; FF06A7  [ 91]
+	.ascii "      "                                ; FF06AD  [ 92]
+	.ascii "      "                                ; FF06B3  [ 93]
+	.ascii "      "                                ; FF06B9  [ 94]
+	.ascii "      "                                ; FF06BF  [ 95]
+	.ascii "      "                                ; FF06C5  [ 96]
+	.ascii "      "                                ; FF06CB  [ 97]
+	.ascii "      "                                ; FF06D1  [ 98]
+	.ascii "      "                                ; FF06D7  [ 99]
+	.ascii "      "                                ; FF06DD  [100]
+	.ascii "      "                                ; FF06E3  [101]
+	.ascii "      "                                ; FF06E9  [102]
+	.ascii "      "                                ; FF06EF  [103]
+	.ascii "      "                                ; FF06F5  [104]
+	.ascii "      "                                ; FF06FB  [105]
+	.ascii "      "                                ; FF0701  [106]
+	.ascii "      "                                ; FF0707  [107]
+	.ascii "      "                                ; FF070D  [108]
+	.ascii "      "                                ; FF0713  [109]
+	.ascii "      "                                ; FF0719  [110]
+	.ascii "      "                                ; FF071F  [111]
+	.ascii "ORCH  "                                ; FF0725  [112]
+	.ascii "      "                                ; FF072B  [113]
+	.ascii "      "                                ; FF0731  [114]
+	.ascii "      "                                ; FF0737  [115]
+	.ascii "      "                                ; FF073D  [116]
+	.ascii "      "                                ; FF0743  [117]
+	.ascii "      "                                ; FF0749  [118]
+	.ascii "      "                                ; FF074F  [119]
+	.ascii "SE    "                                ; FF0755  [120]
+	.ascii "      "                                ; FF075B  [121]
+	.ascii "      "                                ; FF0761  [122]
+	.ascii "      "                                ; FF0767  [123]
+	.ascii "      "                                ; FF076D  [124]
+	.ascii "      "                                ; FF0773  [125]
+	.ascii "      "                                ; FF0779  [126]
+	.ascii "      "                                ; FF077F  [127]
+	.ascii "      "                                ; FF0785  [128]
+	.ascii "      "                                ; FF078B  [129]
+	.ascii "      "                                ; FF0791  [130]
+	.ascii "      "                                ; FF0797  [131]
+; KitCategoryLegend_User1 -- the legend for record type 0x28: `ld XIY,<this>` at 0xFF042A;
+;          KitCategoryLegend_Index returns 0 for this type, so the first six
+;          characters are what is drawn.  14 bytes: the legend twice (see the
+;          header above KitCategoryLegends).
+KitCategoryLegend_User1:
+	.ascii "user1  user1  "                        ; FF079D
+; KitCategoryLegend_User2 -- the legend for record type 0x29: `ld XIY,<this>` at 0xFF0430;
+;          KitCategoryLegend_Index returns 0 for this type, so the first six
+;          characters are what is drawn.  14 bytes: the legend twice (see the
+;          header above KitCategoryLegends).
+KitCategoryLegend_User2:
+	.ascii "user2  user2  "                        ; FF07AB
+; KitCategoryLegend_Ext -- the legend for record type 0x30: `ld XIY,<this>` at 0xFF0436;
+;          KitCategoryLegend_Index returns 0 for this type, so the first six
+;          characters are what is drawn.  12 bytes: the legend twice (see the
+;          header above KitCategoryLegends).
+KitCategoryLegend_Ext:
+	.ascii "ext   ext   "                        ; FF07B9
 sub_FF07C5:
 	ld (0x2540:16), 0x02                                 ; FF07C5  f1 40 25 00 02
 	ld XIX,0x00601f60                                    ; FF07CA  44 60 1f 60 00
