@@ -1,0 +1,33 @@
+[
+ {"file": "midi/midi_dispatch_handlers.s", "start": "0xFCFCB8", "end": "0xFCFCBC", "kind": "data",
+  "segments": [
+   {"len": 1, "type": "byte", "per_line": 1, "comment": ["0xFF filler after the `ret`; nothing reads it (the table below starts at +1)."]},
+   {"len": 3, "type": "byte", "per_line": 3, "label": "MidiCC_CC83_ValueMap", "comment": [
+    "MidiCC_CC83_ValueMap (0xFCFCB9, 3 x u8): controller value 0..2 -> E.  Reader",
+    "MidiCC_Handler_BitManipulation (0xFCFC74), CC function 18 <- CC83",
+    "(MidiCC_ChannelMappingData): only for part 25, with `bit 2, (0xfd51)` set;",
+    "`ld a, (0x9636) / cp a, 2 / jr ugt` (E stays 0 above 2) / `ld e, (xix+a)`,",
+    "then BC = 0x0B98, D = 0xC0 -> VoiceMode_ParamConfigTables_0xB68.",
+    "Previously spelled `.byte 0x80, 0x40` behind a `nop`."]}]},
+ {"file": "midi/midi_dispatch_handlers.s", "start": "0xFCFD76", "end": "0xFCFD7B", "kind": "data",
+  "segments": [
+   {"len": 1, "type": "byte", "per_line": 1, "comment": ["0xFF filler after the `ret`; nothing reads it (the table below starts at +1)."]},
+   {"len": 4, "type": "byte", "per_line": 4, "label": "MidiCC_CC80_ValueMap", "comment": [
+    "MidiCC_CC80_ValueMap (0xFCFD77, 4 x u8): controller value 0..3 -> E.  Reader",
+    "MidiCC_Handler_RangeCheck (0xFCFD38), CC function 16 <- CC80: only for part 16;",
+    "`ld a, (0x9636) / cp a, 3 / jr ugt` (E stays 0 above 3) / `ld e, (xix+a)`,",
+    "then BC = 0x0348, D = 7 -> MidiStream_ApplyPendingParams.  Previously",
+    "spelled `nop / push sr / normal / pop sr`."]}]},
+ {"file": "midi/midi_dispatch_handlers.s", "start": "0xFCFDDB", "end": "0xFCFE0B", "kind": "data",
+  "segments": [
+   {"len": 48, "type": "byte", "per_line": 4, "label": "MidiCC_CC82_Records", "comment": [
+    "MidiCC_CC82_Records (0xFCFDDB, 12 records x 4 bytes, one per line = controller",
+    "value 0..11).  Reader MidiCC_Handler_ChannelMapping (0xFCFD7B), CC function",
+    "17 <- CC82: only for part 20; `ld a, (0x9636) / cp a, 11 / jr ugt` (above 11",
+    "it keeps B = 5, DE = 0xFC00) / `sll wa, 2 / ld bc, (xix+wa) / inc 2, wa /",
+    "ld de, (xix+wa)`.  Fields as used: +1 B -> (0x3489), +2 E -> (0x347C),",
+    "+3 D -> (0x347D), then `call AccWrap_ReplaySavedExpr`; when E == 0 it calls",
+    "again with B+1 and D = 4.  +0 (C, always 0x48 here) is loaded but not used",
+    "by this reader.  12 entries = the `cp a, 11` bound; the table ends where",
+    "MidiCC_VoiceParam_0 begins."]}]}
+]

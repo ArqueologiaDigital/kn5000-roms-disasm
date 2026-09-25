@@ -230,7 +230,9 @@ def main():
         if cur:
             runs.append(cur)
         for r in runs:
-            names = [n for _, n in r if n in any_label and inr(any_label[n])]
+            # DISTINCT targets: a 16-entry table holding one misframed default
+            # handler 14 times must not outvote its two code-framed entries
+            names = sorted({n for _, n in r if n in any_label and inr(any_label[n])})
             codeish = sum(1 for n in names if n in code_label_addr)
             if len(r) >= 3 and names and codeish >= 0.5 * len(names):
                 for i, n in r:

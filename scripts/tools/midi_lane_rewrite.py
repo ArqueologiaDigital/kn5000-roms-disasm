@@ -68,6 +68,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -103,6 +104,7 @@ def line_addresses(key, rels):
     if open(raw, "rb").read() != rom:
         sys.exit("REFUSED: marked mirror of %s does not rebuild the dump" % key)
     addrs = drc.marker_addresses(elf)
+    shutil.rmtree(tmp, ignore_errors=True)   # /tmp is a shared tmpfs; ~50 MB each
     out = {}
     for rel in rels:
         n = len(open(os.path.join(ROOT, img["mirror"], rel), encoding="latin-1").read().split("\n"))
@@ -356,7 +358,7 @@ def render_data(rom, a, b, segs, syms):
         d = rom[off - BASE:off - BASE + n]
         if sg.get("comment"):
             for c in sg["comment"]:
-                out.append((off, ("\t; " + c) if c else ""))
+                out.append((off, ("; " + c) if c else ";"))
         if sg.get("label"):
             out.append((off, sg["label"] + ":"))
         t = sg["type"]
@@ -462,16 +464,19 @@ def verify(key):
                        capture_output=True, text=True)
     if r.returncode:
         print("\n".join(l for l in r.stderr.split("\n") if "error" in l)[:3000])
+        shutil.rmtree(td, ignore_errors=True)
         return False
     r = subprocess.run([os.path.join(LLVM, "ld.lld"), "-e", "0", "-T", os.path.join(inc, img["ld"]),
                         "-o", os.path.join(td, "o.elf"), os.path.join(td, "o.o")],
                        capture_output=True, text=True)
     if r.returncode:
         print(r.stderr[:3000])
+        shutil.rmtree(td, ignore_errors=True)
         return False
     subprocess.run([os.path.join(LLVM, "llvm-objcopy"), "-O", "binary",
                     os.path.join(td, "o.elf"), os.path.join(td, "o.bin")], check=True)
     got = open(os.path.join(td, "o.bin"), "rb").read()
+    shutil.rmtree(td, ignore_errors=True)
     rom = open(os.path.join(ROOT, img["rom"]), "rb").read()
     if got != rom:
         d = [i for i in range(min(len(got), len(rom))) if got[i] != rom[i]]
@@ -558,7 +563,7 @@ def main():
         for s in group:
             st, en = int(s["start"], 16), int(s["end"], 16)
             for k, v in s.get("labels", {}).items():
-                syms[int(k, 16)] = v
+                syms[int(k, 16)] = v["name"] if isinstance(v, dict) else v
             if s["kind"] == "code":
                 bnd = [int(k, 16) for k in s.get("labels", {})]
                 for i, ad in enumerate(L):
@@ -571,6 +576,10 @@ def main():
             # new labels
             ins = []
             for k, v in sorted(s.get("labels", {}).items(), key=lambda kv: int(kv[0], 16)):
+                if isinstance(v, dict):
+                    for c in v.get("comment", []):
+                        ins.append((int(k, 16), ("; " + c) if c else ";"))
+                    v = v["name"]
                 ins.append((int(k, 16), v + ":"))
             merged = []
             for ad, tx in new:
@@ -580,8 +589,20 @@ def main():
                 merged.append((ad, tx))
             if ins:
                 raise SystemExit("REFUSED: new labels not on item boundaries: %s" % ins)
-            hdr = [(st, ("\t; " + c) if c else "") for c in s.get("comment", [])]
-            lines, L, dropped = splice(lines, L, st, en, hdr + merged, s)
+            hdr = [(st, ("; " + c) if c else ";") for c in s.get("comment", [])]
+            if s.get("header_above_label"):
+                # the header goes ABOVE the label(s) that already sit at `st`
+                # (house style, and where the census looks for an object's banner)
+                lines, L, dropped = splice(lines, L, st, en, merged, s)
+                k = next(i for i, ad in enumerate(L) if ad == st and
+                         drc.classify_line(lines[i], {})[0] in ("code", "data", "fill"))
+                j = k
+                while j > 0 and L[j - 1] == st and LABEL_RE.match(lines[j - 1].strip()):
+                    j -= 1
+                lines = lines[:j] + [t for _, t in hdr] + lines[j:]
+                L = L[:j] + [st] * len(hdr) + L[j:]
+            else:
+                lines, L, dropped = splice(lines, L, st, en, hdr + merged, s)
             print("%s %s 0x%s..0x%s kind=%s -> %d lines%s" % (a.image, rel, s["start"][2:], s["end"][2:],
                   s["kind"], len(new), (", dropped %d comment(s)" % len(dropped)) if dropped else ""))
             for d in dropped:

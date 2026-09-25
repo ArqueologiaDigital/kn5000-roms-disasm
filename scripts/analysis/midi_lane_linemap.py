@@ -33,6 +33,8 @@ def build(key):
     img = [i for i in drc.IMAGES if i["key"] == key][0]
     tmp = tempfile.mkdtemp(prefix="midilm-")
     c = drc.census_image(img, tmp, verbose=False)
+    import shutil
+    shutil.rmtree(tmp, ignore_errors=True)   # /tmp is a shared tmpfs
     if not c["inert"]:
         sys.exit("REFUSED: the marked mirror of %s does not rebuild the dump" % key)
     return c
