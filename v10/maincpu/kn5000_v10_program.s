@@ -61,307 +61,476 @@
 	.include "ui_widgets/style_ui_params.s"
 
 GUI_FormatStrings:		.include "includes/gui_format_strings.s"
+; -----------------------------------------------------------------------------
+; GUI_DisplayStructData .. the end of ToneGen_ParamTable: the data of the Scoop
+; and sound-editor objects, cut at every address the code loads or names
+; (scripts/lanes/sys/gui_tables.py: object parameter blocks passed to
+; RegisterObjectTable, 18-entry code-pointer tables the Scoop_SoundEditorData /
+; SeMenu_* dispatchers call through, and tables other code reads).  The bytes come
+; from includes/gui_display_struct_data.c and audio/tonegen_param_table.c; the
+; section names in those files' comments predate this and were not derived from
+; these readers (ToneGen_ParamTable is not tone-generator data:
+; scripts/analysis/v7_tonegen_paramtable_is_a_jumptable.py).
+; -----------------------------------------------------------------------------
+; purpose not established.
+; tried: `lda`/`ld` of a 24- or 32-bit immediate, and any little-endian 24-bit copy of an address from 0x120 B before this slice to its end, anywhere in the ROM: none found
 GUI_DisplayStructData:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x0, 0xB00
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x0, 0x226
+; 32 parameter blocks of 8 B, one per object 0x20..0x3f (class 0x01600010, proc ViewableProc),
+; registered by InitializeScoop+0x16F: the block address is the +10 data field of the 14-byte
+; descriptor {+0 class, +4 proc, +8 u16, +10 data} RegisterObjectTable copies to 0x27ED2 + 14*index
+GUI_DisplayStructData_0x226:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x226, 0x100
+; 32 parameter blocks of 18-20 B (address differences), one per object 0x320..0x33f (class 0x0160000F, proc ResNameProc),
+; registered by InitializeScoop+0x194: the block address is the +10 data field of the 14-byte
+; descriptor {+0 class, +4 proc, +8 u16, +10 data} RegisterObjectTable copies to 0x27ED2 + 14*index
+GUI_DisplayStructData_0x326:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x326, 0x276
+; purpose not established.
+; tried: `lda`/`ld` of a 24- or 32-bit immediate, and any little-endian 24-bit copy of an address from 0x120 B before this slice to its end, anywhere in the ROM: none found
+GUI_DisplayStructData_0x59C:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x59C, 0x1B4
+; parameter block of object 0x146 (class 0x01600003, proc MainFunctionProc), registered by InitializeScoop+0x125
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 136 B; the proc's read length was not measured
+GUI_DisplayStructData_0x750:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x750, 0x88
+; parameter block of object 0x446 (class 0x01600003, proc MainFunctionProc), registered by InitializeScoop+0x14A
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 768 B; the proc's read length was not measured
+GUI_DisplayStructData_0x7D8:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x7D8, 0x300
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:60 `ld xiy, GUI_DisplayStructData_0xAD8`
+GUI_DisplayStructData_0xAD8:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0xAD8, 0x10
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:81 `ld xiy, GUI_DisplayStructData_0xAE8`
+GUI_DisplayStructData_0xAE8:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0xAE8, 0x10
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:102 `ld xiy, GUI_DisplayStructData_0xAF8`
+GUI_DisplayStructData_0xAF8:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0xAF8, 0x8
+; purpose not established.
+; tried: `lda`/`ld` of a 24- or 32-bit immediate, and any little-endian 24-bit copy of an address from 0x120 B before this slice to its end, anywhere in the ROM: none found
 EmbeddedPtrTable_v10_gui_display_struct_data_000B00:
-	.long 0x00F037C1
-	.long 0x00F037CB
+	.long SeTonTon1TitleFunc_DisplayData+0x8
+	.long SeTonTon1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:123 `ld xiy, GUI_DisplayStructData_0xB08`
+GUI_DisplayStructData_0xB08:
 	.long SeTonTon2TitleFunc_DisplayData
-	.long 0x00F037F0
-	.long 0x00F037F4
-	.long 0x00F037FE
+	.long SeTonTon2TitleFunc_DisplayData+0x4
+	.long SeTonTon2TitleFunc_DisplayData+0x8
+	.long SeTonTon2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:144 `ld xiy, GUI_DisplayStructData_0xB18`
+GUI_DisplayStructData_0xB18:
 	.long SeTonRan1TitleFunc_DisplayData
-	.long 0x00F03823
-	.long 0x00F03827
-	.long 0x00F03831
+	.long SeTonRan1TitleFunc_DisplayData+0x4
+	.long SeTonRan1TitleFunc_DisplayData+0x8
+	.long SeTonRan1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:165 `ld xiy, GUI_DisplayStructData_0xB28`
+GUI_DisplayStructData_0xB28:
 	.long SeTonRan2TitleFunc_DisplayData
-	.long 0x00F03856
-	.long 0x00F0385A
-	.long 0x00F03864
+	.long SeTonRan2TitleFunc_DisplayData+0x4
+	.long SeTonRan2TitleFunc_DisplayData+0x8
+	.long SeTonRan2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:186 `ld xiy, GUI_DisplayStructData_0xB38`
+GUI_DisplayStructData_0xB38:
 	.long SeTonHyb1TitleFunc_DisplayData
-	.long 0x00F03889
-	.long 0x00F0388D
-	.long 0x00F03897
+	.long SeTonHyb1TitleFunc_DisplayData+0x4
+	.long SeTonHyb1TitleFunc_DisplayData+0x8
+	.long SeTonHyb1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:207 `ld xiy, GUI_DisplayStructData_0xB48`
+GUI_DisplayStructData_0xB48:
 	.long SePitPit1TitleFunc_DisplayData
-	.long 0x00F038BC
-	.long 0x00F038C0
-	.long 0x00F038CA
+	.long SePitPit1TitleFunc_DisplayData+0x4
+	.long SePitPit1TitleFunc_DisplayData+0x8
+	.long SePitPit1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:228 `ld xiy, GUI_DisplayStructData_0xB58`
+GUI_DisplayStructData_0xB58:
 	.long SePitEnv1TitleFunc_DisplayData
-	.long 0x00F038EF
-	.long 0x00F038F3
-	.long 0x00F038FD
+	.long SePitEnv1TitleFunc_DisplayData+0x4
+	.long SePitEnv1TitleFunc_DisplayData+0x8
+	.long SePitEnv1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:249 `ld xiy, GUI_DisplayStructData_0xB68`
+GUI_DisplayStructData_0xB68:
 	.long SePitEnv2TitleFunc_DisplayData
-	.long 0x00F03922
-	.long 0x00F03926
-	.long 0x00F03930
+	.long SePitEnv2TitleFunc_DisplayData+0x4
+	.long SePitEnv2TitleFunc_DisplayData+0x8
+	.long SePitEnv2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:270 `ld xiy, GUI_DisplayStructData_0xB78`
+GUI_DisplayStructData_0xB78:
 	.long SePitLfo1TitleFunc_DisplayData
-	.long 0x00F03955
-	.long 0x00F03959
-	.long 0x00F03963
+	.long SePitLfo1TitleFunc_DisplayData+0x4
+	.long SePitLfo1TitleFunc_DisplayData+0x8
+	.long SePitLfo1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:291 `ld xiy, GUI_DisplayStructData_0xB88`
+GUI_DisplayStructData_0xB88:
 	.long SeAmpAmp1TitleFunc_DisplayData
-	.long 0x00F03988
-	.long 0x00F0398C
-	.long 0x00F03996
+	.long SeAmpAmp1TitleFunc_DisplayData+0x4
+	.long SeAmpAmp1TitleFunc_DisplayData+0x8
+	.long SeAmpAmp1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:312 `ld xiy, GUI_DisplayStructData_0xB98`
+GUI_DisplayStructData_0xB98:
 	.long SeAmpAmp2TitleFunc_DisplayData
-	.long 0x00F039BB
-	.long 0x00F039BF
-	.long 0x00F039C9
+	.long SeAmpAmp2TitleFunc_DisplayData+0x4
+	.long SeAmpAmp2TitleFunc_DisplayData+0x8
+	.long SeAmpAmp2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:333 `ld xiy, GUI_DisplayStructData_0xBA8`
+GUI_DisplayStructData_0xBA8:
 	.long SeAmpEnv1TitleFunc_DisplayData
-	.long 0x00F039EE
-	.long 0x00F039F2
-	.long 0x00F039FC
+	.long SeAmpEnv1TitleFunc_DisplayData+0x4
+	.long SeAmpEnv1TitleFunc_DisplayData+0x8
+	.long SeAmpEnv1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:354 `ld xiy, GUI_DisplayStructData_0xBB8`
+GUI_DisplayStructData_0xBB8:
 	.long SeAmpEnv2TitleFunc_DisplayData
-	.long 0x00F03A21
-	.long 0x00F03A25
-	.long 0x00F03A2F
+	.long SeAmpEnv2TitleFunc_DisplayData+0x4
+	.long SeAmpEnv2TitleFunc_DisplayData+0x8
+	.long SeAmpEnv2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:375 `ld xiy, GUI_DisplayStructData_0xBC8`
+GUI_DisplayStructData_0xBC8:
 	.long SeAmpLfo1TitleFunc_DisplayData
-	.long 0x00F03A54
-	.long 0x00F03A58
-	.long 0x00F03A62
+	.long SeAmpLfo1TitleFunc_DisplayData+0x4
+	.long SeAmpLfo1TitleFunc_DisplayData+0x8
+	.long SeAmpLfo1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:396 `ld xiy, GUI_DisplayStructData_0xBD8`
+GUI_DisplayStructData_0xBD8:
 	.long SeFilLpq1TitleFunc_DisplayData
-	.long 0x00F03A87
-	.long 0x00F03A8B
-	.long 0x00F03A95
+	.long SeFilLpq1TitleFunc_DisplayData+0x4
+	.long SeFilLpq1TitleFunc_DisplayData+0x8
+	.long SeFilLpq1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:417 `ld xiy, GUI_DisplayStructData_0xBE8`
+GUI_DisplayStructData_0xBE8:
 	.long SeFilHpq1TitleFunc_DisplayData
-	.long 0x00F03ABA
-	.long 0x00F03ABE
-	.long 0x00F03AC8
+	.long SeFilHpq1TitleFunc_DisplayData+0x4
+	.long SeFilHpq1TitleFunc_DisplayData+0x8
+	.long SeFilHpq1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:438 `ld xiy, GUI_DisplayStructData_0xBF8`
+GUI_DisplayStructData_0xBF8:
 	.long SeFilL241TitleFunc_DisplayData
-	.long 0x00F03AED
-	.long 0x00F03AF1
-	.long 0x00F03AFB
+	.long SeFilL241TitleFunc_DisplayData+0x4
+	.long SeFilL241TitleFunc_DisplayData+0x8
+	.long SeFilL241TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:459 `ld xiy, GUI_DisplayStructData_0xC08`
+GUI_DisplayStructData_0xC08:
 	.long SeFilH241TitleFunc_DisplayData
-	.long 0x00F03B20
-	.long 0x00F03B24
-	.long 0x00F03B2E
+	.long SeFilH241TitleFunc_DisplayData+0x4
+	.long SeFilH241TitleFunc_DisplayData+0x8
+	.long SeFilH241TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:480 `ld xiy, GUI_DisplayStructData_0xC18`
+GUI_DisplayStructData_0xC18:
 	.long SeFilBpf1TitleFunc_DisplayData
-	.long 0x00F03B53
-	.long 0x00F03B57
-	.long 0x00F03B61
+	.long SeFilBpf1TitleFunc_DisplayData+0x4
+	.long SeFilBpf1TitleFunc_DisplayData+0x8
+	.long SeFilBpf1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:501 `ld xiy, GUI_DisplayStructData_0xC28`
+GUI_DisplayStructData_0xC28:
 	.long SeFilBcf1TitleFunc_DisplayData
-	.long 0x00F03B86
-	.long 0x00F03B8A
-	.long 0x00F03B94
+	.long SeFilBcf1TitleFunc_DisplayData+0x4
+	.long SeFilBcf1TitleFunc_DisplayData+0x8
+	.long SeFilBcf1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:522 `ld xiy, GUI_DisplayStructData_0xC38`
+GUI_DisplayStructData_0xC38:
 	.long SeFilFil2TitleFunc_DisplayData
-	.long 0x00F03BB9
-	.long 0x00F03BBD
-	.long 0x00F03BC7
+	.long SeFilFil2TitleFunc_DisplayData+0x4
+	.long SeFilFil2TitleFunc_DisplayData+0x8
+	.long SeFilFil2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:543 `ld xiy, GUI_DisplayStructData_0xC48`
+GUI_DisplayStructData_0xC48:
 	.long SeFilEnv1TitleFunc_DisplayData
-	.long 0x00F03BEC
-	.long 0x00F03BF0
-	.long 0x00F03BFA
+	.long SeFilEnv1TitleFunc_DisplayData+0x4
+	.long SeFilEnv1TitleFunc_DisplayData+0x8
+	.long SeFilEnv1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:564 `ld xiy, GUI_DisplayStructData_0xC58`
+GUI_DisplayStructData_0xC58:
 	.long SeFilEnv2TitleFunc_DisplayData
-	.long 0x00F03C1F
-	.long 0x00F03C23
-	.long 0x00F03C2D
+	.long SeFilEnv2TitleFunc_DisplayData+0x4
+	.long SeFilEnv2TitleFunc_DisplayData+0x8
+	.long SeFilEnv2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:585 `ld xiy, GUI_DisplayStructData_0xC68`
+GUI_DisplayStructData_0xC68:
 	.long SeFilLfo1TitleFunc_DisplayData
-	.long 0x00F03C52
-	.long 0x00F03C56
-	.long 0x00F03C60
+	.long SeFilLfo1TitleFunc_DisplayData+0x4
+	.long SeFilLfo1TitleFunc_DisplayData+0x8
+	.long SeFilLfo1TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:606 `ld xiy, GUI_DisplayStructData_0xC78`
+GUI_DisplayStructData_0xC78:
 	.long SeDigEffTitleFunc_DisplayData
-	.long 0x00F03C85
-	.long 0x00F03C89
-	.long 0x00F03C93
+	.long SeDigEffTitleFunc_DisplayData+0x4
+	.long SeDigEffTitleFunc_DisplayData+0x8
+	.long SeDigEffTitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:627 `ld xiy, GUI_DisplayStructData_0xC88`
+GUI_DisplayStructData_0xC88:
 	.long SeCtr2TitleFunc_DisplayData
-	.long 0x00F03CB8
-	.long 0x00F03CBC
-	.long 0x00F03CC6
+	.long SeCtr2TitleFunc_DisplayData+0x4
+	.long SeCtr2TitleFunc_DisplayData+0x8
+	.long SeCtr2TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:648 `ld xiy, GUI_DisplayStructData_0xC98`
+GUI_DisplayStructData_0xC98:
 	.long SeCtr3TitleFunc_DisplayData
-	.long 0x00F03CEB
-	.long 0x00F03CEF
-	.long 0x00F03CF9
+	.long SeCtr3TitleFunc_DisplayData+0x4
+	.long SeCtr3TitleFunc_DisplayData+0x8
+	.long SeCtr3TitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:669 `ld xiy, GUI_DisplayStructData_0xCA8`
+GUI_DisplayStructData_0xCA8:
 	.long SeCopyTitleFunc_DisplayData
-	.long 0x00F03D1E
-	.long 0x00F03D22
-	.long 0x00F03D2C
+	.long SeCopyTitleFunc_DisplayData+0x4
+	.long SeCopyTitleFunc_DisplayData+0x8
+	.long SeCopyTitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:690 `ld xiy, GUI_DisplayStructData_0xCB8`
+GUI_DisplayStructData_0xCB8:
 	.long SeWrtMemTitleFunc_DisplayData
-	.long 0x00F03D51
-	.long 0x00F03D55
-	.long 0x00F03D5F
+	.long SeWrtMemTitleFunc_DisplayData+0x4
+	.long SeWrtMemTitleFunc_DisplayData+0x8
+	.long SeWrtMemTitleFunc_DisplayData+0x12
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/sound_editor_routines.s:711 `ld xiy, GUI_DisplayStructData_0xCC8`
+GUI_DisplayStructData_0xCC8:
 	.long Scoop_SoundEditorData
-	.long 0x00F03D84
-	.long 0x00F03D88
-	.long 0x00F03DAF
+	.long Scoop_SoundEditorData+0x4
+	.long Scoop_SoundEditorData+0x8
+	.long Scoop_SoundEditorData_Skip+0xB
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x33+0x1E (0xF03DD1) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xCD8:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F03E99
-	.long 0x00F03F47
-	.long 0x00F03FFA
+	.long Scoop_SoundEditorData_Epilogue5+0x3
+	.long Scoop_SoundEditorData_Skip3+0xA
+	.long Scoop_SoundEditorData_Join4+0x25
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F0406C
-	.long 0x00F0407C
-	.long 0x00F0408C
-	.long 0x00F040BB
-	.long 0x00F040DF
+	.long Scoop_SoundEditorData_Join4+0x97
+	.long Scoop_SoundEditorData_Join4+0xA7
+	.long Scoop_SoundEditorData_Join4+0xB7
+	.long Scoop_SoundEditorData_Join4+0xE6
+	.long Scoop_SoundEditorData_Join4+0x10A
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04125
-	.long 0x00F04103
+	.long Scoop_SoundEditorData_Join4+0x150
+	.long Scoop_SoundEditorData_Join4+0x12E
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x61+0x1E (0xF03DFF) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xD20:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04154
-	.long 0x00F041C7
-	.long 0x00F0422B
-	.long 0x00F0429F
+	.long Scoop_SoundEditorData_Epilogue6+0x3
+	.long Scoop_SoundEditorData_Skip6+0xA
+	.long Scoop_SoundEditorData_Skip7+0x9
+	.long Scoop_SoundEditorData_Skip8+0xA
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04303
-	.long 0x00F04313
-	.long 0x00F0432B
-	.long 0x00F0434A
-	.long 0x00F04362
+	.long Scoop_SoundEditorData_Skip9+0x9
+	.long Scoop_SoundEditorData_Skip9+0x19
+	.long Scoop_SoundEditorData_Skip9+0x31
+	.long Scoop_SoundEditorData_Join6+0x5
+	.long Scoop_SoundEditorData_Join6+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04388
-	.long 0x00F0437A
+	.long Scoop_SoundEditorData_Join6+0x43
+	.long Scoop_SoundEditorData_Join6+0x35
 	.long 0x00000000
-	.long 0x00F0439C
-	.long 0x00F0442D
-	.long 0x00F044CD
-	.long 0x00F0456D
-	.long 0x00F0460D
-	.long 0x00F046C4
-	.long 0x00F0477B
-	.long 0x00F047DE
-	.long 0x00F0484E
-	.long 0x00F04857
-	.long 0x00F04876
-	.long 0x00F048A9
-	.long 0x00F048D5
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x8F+0x1E (0xF03E2D) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xD68:
+	.long Scoop_SoundEditorData_Join6+0x57
+	.long Scoop_SoundEditorData_Join7+0x29
+	.long Scoop_SoundEditorData_Join8+0x29
+	.long Scoop_SoundEditorData_Join9+0x29
+	.long Scoop_SoundEditorData_Join10+0x29
+	.long Scoop_SoundEditorData_Join12+0x29
+	.long Scoop_SoundEditorData_Join14+0x29
+	.long Scoop_SoundEditorData_Join14+0x8C
+	.long Scoop_SoundEditorData_Join14+0xFC
+	.long Scoop_SoundEditorData_Join14+0x105
+	.long Scoop_SoundEditorData_Join15+0x5
+	.long Scoop_SoundEditorData_Epilogue7+0x3
+	.long Scoop_SoundEditorData_Epilogue7+0x2F
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04961
-	.long 0x00F0493F
+	.long Scoop_SoundEditorData_Epilogue8+0x25
+	.long Scoop_SoundEditorData_Epilogue8+0x3
 	.long 0x00000000
-	.long 0x00F04990
-	.long 0x00F04A24
-	.long 0x00F04AB8
-	.long 0x00F04B4C
-	.long 0x00F04BB0
-	.long 0x00F04C24
-	.long 0x00F04C88
-	.long 0x00F04CDA
-	.long 0x00F04D2D
-	.long 0x00F04D36
-	.long 0x00F04D55
-	.long 0x00F04D74
-	.long 0x00F04D8C
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0xBD+0x1E (0xF03E5B) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xDB0:
+	.long Scoop_SoundEditorData_Epilogue9+0x3
+	.long Scoop_SoundEditorData_Epilogue9+0x97
+	.long Scoop_SoundEditorData_Epilogue9+0x12B
+	.long Scoop_SoundEditorData_Epilogue9+0x1BF
+	.long Scoop_SoundEditorData_Skip21+0x9
+	.long Scoop_SoundEditorData_Skip22+0xA
+	.long Scoop_SoundEditorData_Skip23+0x9
+	.long Scoop_SoundEditorData_Skip23+0x5B
+	.long Scoop_SoundEditorData_Skip23+0xAE
+	.long Scoop_SoundEditorData_Skip23+0xB7
+	.long Scoop_SoundEditorData_Join19+0x5
+	.long Scoop_SoundEditorData_Join20+0x5
+	.long Scoop_SoundEditorData_Join20+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04DB2
-	.long 0x00F04DA4
+	.long Scoop_SoundEditorData_Join20+0x43
+	.long Scoop_SoundEditorData_Join20+0x35
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0xEB+0x1E (0xF03E89) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xDF8:
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04DC6
-	.long 0x00F04DCE
-	.long 0x00F04DD6
-	.long 0x00F04DDE
-	.long 0x00F04DE6
-	.long 0x00F04DEE
-	.long 0x00F04DF6
-	.long 0x00F04DFE
-	.long 0x00F04E0E
-	.long 0x00F04E23
-	.long 0x00F04E30
-	.long 0x00F04E3D
+	.long Scoop_SoundEditorData_Join20+0x57
+	.long Scoop_SoundEditorData_Join20+0x5F
+	.long Scoop_SoundEditorData_Join20+0x67
+	.long Scoop_SoundEditorData_Join20+0x6F
+	.long Scoop_SoundEditorData_Join20+0x77
+	.long Scoop_SoundEditorData_Join20+0x7F
+	.long Scoop_SoundEditorData_Join20+0x87
+	.long Scoop_SoundEditorData_Join20+0x8F
+	.long Scoop_SoundEditorData_Join20+0x9F
+	.long Scoop_SoundEditorData_Skip26+0x8
+	.long Scoop_SoundEditorData_Skip26+0x15
+	.long Scoop_SoundEditorData_Skip26+0x22
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F04E4A
+	.long Scoop_SoundEditorData_Skip26+0x2F
 	.long SeMenu_BitShift_Stub
 	.long 0x00000000
-	.long 0x00F0502A
-	.long 0x00F050C3
-	.long 0x00F0515C
-	.long 0x00F051EC
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x10DE+0x1E (0xF04E7C) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xE40:
+	.long Scoop_SoundEditorData_Epilogue19+0x3
+	.long Scoop_SoundEditorData_Helper+0x87
+	.long Scoop_SoundEditorData_Helper2+0x87
+	.long Scoop_SoundEditorData_Join21+0x87
 	.long SeMenu_BitShift_Stub
-	.long 0x00F0527C
-	.long 0x00F05303
-	.long 0x00F05384
-	.long 0x00F05406
-	.long 0x00F0542E
-	.long 0x00F05446
-	.long 0x00F05479
-	.long 0x00F054C5
+	.long Scoop_SoundEditorData_Join23
+	.long Scoop_SoundEditorData_Join24
+	.long Scoop_SoundEditorData_Join25
+	.long Scoop_SoundEditorData_Join26
+	.long Scoop_SoundEditorData_Join27
+	.long Scoop_SoundEditorData_Join28
+	.long Scoop_SoundEditorData_Epilogue21+0x3
+	.long Scoop_SoundEditorData_Join30
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05513
-	.long 0x00F054F1
+	.long Scoop_SoundEditorData_Join30+0x4E
+	.long Scoop_SoundEditorData_Join30+0x2C
 	.long 0x00000000
-	.long 0x00F05542
-	.long 0x00F05554
-	.long 0x00F05566
-	.long 0x00F05570
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x110C+0x1E (0xF04EAA) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xE88:
+	.long Scoop_SoundEditorData_Epilogue22+0x3
+	.long Scoop_SoundEditorData_Epilogue22+0x15
+	.long Scoop_SoundEditorData_Epilogue22+0x27
+	.long Scoop_SoundEditorData_Epilogue22+0x31
 	.long SeMenu_BitShift_Stub
-	.long 0x00F0557A
-	.long 0x00F0557F
-	.long 0x00F05584
-	.long 0x00F05589
-	.long 0x00F0558E
-	.long 0x00F05593
-	.long 0x00F05598
-	.long 0x00F055E5
+	.long Scoop_SoundEditorData_Epilogue22+0x3B
+	.long Scoop_SoundEditorData_Epilogue22+0x40
+	.long Scoop_SoundEditorData_Epilogue22+0x45
+	.long Scoop_SoundEditorData_Epilogue22+0x4A
+	.long Scoop_SoundEditorData_Epilogue22+0x4F
+	.long Scoop_SoundEditorData_Epilogue22+0x54
+	.long Scoop_SoundEditorData_Epilogue22+0x59
+	.long Scoop_SoundEditorData_Epilogue23+0x3
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F0560C
-	.long 0x00F055EA
+	.long Scoop_SoundEditorData_Epilogue24+0x3
+	.long Scoop_SoundEditorData_Epilogue23+0x8
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x113A+0x1E (0xF04ED8) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xED0:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F0563B
-	.long 0x00F0564D
-	.long 0x00F0565F
-	.long 0x00F05669
+	.long Scoop_SoundEditorData_Epilogue25+0x3
+	.long Scoop_SoundEditorData_Epilogue25+0x15
+	.long Scoop_SoundEditorData_Epilogue25+0x27
+	.long Scoop_SoundEditorData_Epilogue25+0x31
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05673
-	.long 0x00F0569B
-	.long 0x00F056B3
-	.long 0x00F056E6
-	.long 0x00F05732
+	.long Scoop_SoundEditorData_Join33
+	.long Scoop_SoundEditorData_Join34
+	.long Scoop_SoundEditorData_Join35
+	.long Scoop_SoundEditorData_Epilogue27+0x3
+	.long Scoop_SoundEditorData_Epilogue27+0x4F
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05780
-	.long 0x00F0575E
+	.long Scoop_SoundEditorData_Epilogue27+0x9D
+	.long Scoop_SoundEditorData_Epilogue27+0x7B
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x1168+0x1E (0xF04F06) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xF18:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F057AF
-	.long 0x00F057C1
-	.long 0x00F057D3
-	.long 0x00F057DD
+	.long Scoop_SoundEditorData_Epilogue28+0x3
+	.long Scoop_SoundEditorData_Epilogue28+0x15
+	.long Scoop_SoundEditorData_Epilogue28+0x27
+	.long Scoop_SoundEditorData_Epilogue28+0x31
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F057E7
-	.long 0x00F057EC
-	.long 0x00F057F1
-	.long 0x00F057F6
-	.long 0x00F05843
+	.long Scoop_SoundEditorData_Epilogue28+0x3B
+	.long Scoop_SoundEditorData_Epilogue28+0x40
+	.long Scoop_SoundEditorData_Epilogue28+0x45
+	.long Scoop_SoundEditorData_Epilogue28+0x4A
+	.long Scoop_SoundEditorData_Epilogue28+0x97
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F0586A
-	.long 0x00F05848
+	.long Scoop_SoundEditorData_Epilogue28+0xBE
+	.long Scoop_SoundEditorData_Epilogue28+0x9C
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x1196+0x1E (0xF04F34) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xF60:
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05899
-	.long 0x00F05924
-	.long 0x00F05932
-	.long 0x00F059C1
-	.long 0x00F05A43
-	.long 0x00F05A4D
+	.long Scoop_SoundEditorData_Epilogue29+0x3
+	.long Scoop_SoundEditorData_Epilogue29+0x8E
+	.long Scoop_SoundEditorData_Epilogue29+0x9C
+	.long Scoop_SoundEditorData_Epilogue29+0x12B
+	.long Scoop_SoundEditorData_Epilogue29+0x1AD
+	.long Scoop_SoundEditorData_Epilogue29+0x1B7
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05A57
-	.long 0x00F05A7F
-	.long 0x00F05A97
-	.long 0x00F05ACA
-	.long 0x00F05B13
+	.long Scoop_SoundEditorData_Epilogue29+0x1C1
+	.long Scoop_SoundEditorData_Epilogue30+0x3
+	.long Scoop_SoundEditorData_Epilogue30+0x1B
+	.long Scoop_SoundEditorData_Epilogue31+0x3
+	.long Scoop_SoundEditorData_Epilogue31+0x4C
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05B61
-	.long 0x00F05B3F
+	.long Scoop_SoundEditorData_Epilogue31+0x9A
+	.long Scoop_SoundEditorData_Epilogue31+0x78
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x11C4+0x1E (0xF04F62) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xFA8:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
@@ -370,87 +539,250 @@ EmbeddedPtrTable_v10_gui_display_struct_data_000B00:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05B90
-	.long 0x00F05BB8
-	.long 0x00F05BD0
-	.long 0x00F05C03
-	.long 0x00F05C4F
+	.long Scoop_SoundEditorData_Epilogue32+0x3
+	.long Scoop_SoundEditorData_Epilogue33+0x3
+	.long Scoop_SoundEditorData_Epilogue33+0x1B
+	.long Scoop_SoundEditorData_Epilogue34+0x3
+	.long Scoop_SoundEditorData_Epilogue34+0x4F
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05C9D
-	.long 0x00F05C7B
+	.long Scoop_SoundEditorData_Epilogue34+0x9D
+	.long Scoop_SoundEditorData_Epilogue34+0x7B
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x11F2+0x1E (0xF04F90) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0xFF0:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05CCC
-	.long 0x00F05D3F
-	.long 0x00F05DA3
-	.long 0x00F05E17
+	.long Scoop_SoundEditorData_Epilogue35+0x3
+	.long Scoop_SoundEditorData_Skip41+0xA
+	.long Scoop_SoundEditorData_Skip42+0x9
+	.long Scoop_SoundEditorData_Skip43+0xA
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05E7B
-	.long 0x00F05E8B
-	.long 0x00F05EA3
-	.long 0x00F05EC2
-	.long 0x00F05EDA
+	.long Scoop_SoundEditorData_Skip44+0x9
+	.long Scoop_SoundEditorData_Skip44+0x19
+	.long Scoop_SoundEditorData_Skip44+0x31
+	.long Scoop_SoundEditorData_Join43+0x5
+	.long Scoop_SoundEditorData_Join43+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05F00
-	.long 0x00F05EF2
+	.long Scoop_SoundEditorData_Join43+0x43
+	.long Scoop_SoundEditorData_Join43+0x35
 	.long 0x00000000
-	.long 0x00F05F14
-	.long 0x00F05F1F
-	.long 0x00F05F2A
-	.long 0x00F05F36
-	.long 0x00F05F41
-	.long 0x00F05F4D
-	.long 0x00F05F58
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x1220+0x1E (0xF04FBE) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x1038:
+	.long Scoop_SoundEditorData_Join43+0x57
+	.long Scoop_SoundEditorData_Join43+0x62
+	.long Scoop_SoundEditorData_Join43+0x6D
+	.long Scoop_SoundEditorData_Join43+0x79
+	.long Scoop_SoundEditorData_Join43+0x84
+	.long Scoop_SoundEditorData_Join43+0x90
+	.long Scoop_SoundEditorData_Join43+0x9B
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05F64
-	.long 0x00F05F6D
-	.long 0x00F05F8C
-	.long 0x00F05FAB
-	.long 0x00F05FC9
+	.long Scoop_SoundEditorData_Join43+0xA7
+	.long Scoop_SoundEditorData_Join43+0xB0
+	.long Scoop_SoundEditorData_Join44+0x5
+	.long Scoop_SoundEditorData_Join45+0x5
+	.long Scoop_SoundEditorData_Skip48+0x14
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F05FF5
-	.long 0x00F05FE7
+	.long Scoop_SoundEditorData_Skip49+0x22
+	.long Scoop_SoundEditorData_Skip49+0x14
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x124E+0x1E (0xF04FEC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x1080:
 	.long SeMenu_BitShift_Stub
-	.long 0x00F06009
-	.long 0x00F06012
-	.long 0x00F0601B
-	.long 0x00F06024
+	.long Scoop_SoundEditorData_Skip49+0x36
+	.long Scoop_SoundEditorData_Skip49+0x3F
+	.long Scoop_SoundEditorData_Skip49+0x48
+	.long Scoop_SoundEditorData_Skip49+0x51
 	.long SeMenu_BitShift_Stub
-	.long 0x00F0602D
-	.long 0x00F06036
-	.long 0x00F0603F
-	.long 0x00F06048
-	.long 0x00F06067
-	.long 0x00F06086
-	.long 0x00F0609E
+	.long Scoop_SoundEditorData_Skip49+0x5A
+	.long Scoop_SoundEditorData_Skip49+0x63
+	.long Scoop_SoundEditorData_Skip49+0x6C
+	.long Scoop_SoundEditorData_Skip49+0x75
+	.long Scoop_SoundEditorData_Join46+0x5
+	.long Scoop_SoundEditorData_Join47+0x5
+	.long Scoop_SoundEditorData_Join47+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long 0x00F060C4
-	.long 0x00F060B6
+	.long Scoop_SoundEditorData_Join47+0x43
+	.long Scoop_SoundEditorData_Join47+0x35
 	.long 0x00000000
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: Scoop_SoundEditorData_0x127C+0x1E (0xF0501A) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x10C8:
 	.long SeMenu_BitShift_Stub
-	.long 0x00F060D8
-	.long 0x00F060E0
-	.long 0x00F060E8
-	.long 0x00F060F0
-	.long 0x00F060F8
-	.long 0x00F06100
-	.long 0x00F06108
-	.long 0x00F06110
-	.long 0x00F06120
-	.long 0x00F06135
-	.long 0x00F06142
-	.long 0x00F0614F
+	.long Scoop_SoundEditorData_Join47+0x57
+	.long Scoop_SoundEditorData_Join47+0x5F
+	.long Scoop_SoundEditorData_Join47+0x67
+	.long Scoop_SoundEditorData_Join47+0x6F
+	.long Scoop_SoundEditorData_Join47+0x77
+	.long Scoop_SoundEditorData_Join47+0x7F
+	.long Scoop_SoundEditorData_Join47+0x87
+	.long Scoop_SoundEditorData_Join47+0x8F
+	.long Scoop_SoundEditorData_Join47+0x9F
+	.long Scoop_SoundEditorData_Skip52+0x8
+	.long Scoop_SoundEditorData_Skip52+0x15
+	.long Scoop_SoundEditorData_Skip52+0x22
 	.long SeMenu_BitShift_Stub
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x1100, 0x329
+; the rest of the code-pointer table at GUI_DisplayStructData_0x10C8, from entry 14 on;
+; the table runs across this boundary (file slice)
+GUI_DisplayStructData_0x1100:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x1100, 0x10
+; data read by SeMenu_ApplyPartEdit_Join17+0x13 (0xF08A33)
+; evidence: `lda xde, (this)` then `ld E,(XDE+WA) / mul L,0x1c`
+GUI_DisplayStructData_0x1110:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x1110, 0xD
+; data read by SeMenu_ApplyPartEdit_Data2_0x162C+0x20 (0xF08CB8)
+; evidence: `lda xbc, (this)` then `ld WA,(XBC+WA) / ld (XSP),WA`
+GUI_DisplayStructData_0x111D:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x111D, 0xC
+; data read by SeMenu_SetupPartDisplay_End_Skip9+0x2 (0xF074E3)
+; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
+GUI_DisplayStructData_0x1129:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x1129, 0x61
+; data read by SeMenu_SetupPartDisplay_End_0x24D+0xC (0xF074FC)
+; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
+GUI_DisplayStructData_0x118A:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x118A, 0x82
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/semenu_routines.s:6593 `ld xiy, GUI_DisplayStructData_0x120C`
+GUI_DisplayStructData_0x120C:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x120C, 0x3
+; object named by 1 line(s) of code outside this file; what that code does with it:
+; evidence: audio/semenu_routines.s:6598 `ld xiy, GUI_DisplayStructData_0x120F`
+GUI_DisplayStructData_0x120F:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x120F, 0x13
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_RefreshPartDisplay_Data_0xD+0x1E (0xF09AEE) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x1222:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x1222, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_RefreshPartDisplay_Data_0x3B+0x1E (0xF09B1C) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x126A:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x126A, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_RefreshPartDisplay_Data_0x69+0x1E (0xF09B4A) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x12B2:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x12B2, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_RefreshPartDisplay_Data_0x97+0x1E (0xF09B78) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x12FA:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x12FA, 0x48
+; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x171 (0xF09CF6)
+; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
+GUI_DisplayStructData_0x1342:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x1342, 0x20
+; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x1A9 (0xF09D2E)
+; evidence: `lda xbc, (this)` then `ld C,(XBC+WA) / ld (XSP+0x0e),C`
+GUI_DisplayStructData_0x1362:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x1362, 0xD
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0x36B+0x1E (0xF0BD4D) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x136F:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x136F, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0x399+0x1E (0xF0BD7B) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x13B7:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x13B7, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Skip5+0x16 (0xF0BFAC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+GUI_DisplayStructData_0x13FF:
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x13FF, 0x2A
+; the rest of the code-pointer table at GUI_DisplayStructData_0x13FF, from entry 10 byte 2 on;
+; the table runs across this boundary (label of the next source)
 ToneGen_ParamTable:
-	.incbin "includes/generated/tonegen_param_table.bin"
+	.incbin "includes/generated/tonegen_param_table.bin", 0x0, 0x1E
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0xD15+0x1E (0xF0C6F7) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x1E:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x1E, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0xD43+0x1E (0xF0C725) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x66:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x66, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0xD71+0x1E (0xF0C753) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0xAE:
+	.incbin "includes/generated/tonegen_param_table.bin", 0xAE, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0xD9F+0x1E (0xF0C781) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0xF6:
+	.incbin "includes/generated/tonegen_param_table.bin", 0xF6, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0xDCD+0x1E (0xF0C7AF) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x13E:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x13E, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0x1D4C+0x1E (0xF0D72E) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x186:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x186, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0x1DA8+0x1E (0xF0D78A) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x1CE:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x1CE, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0x1DD6+0x1E (0xF0D7B8) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x216:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x216, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0x1E04+0x38 (0xF0D800) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x25E:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x25E, 0x48
+; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
+; evidence: SeMenu_CopyWriteUpdate_Data_0x1D7A+0x1E (0xF0D75C) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+ToneGen_ParamTable_0x2A6:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x2A6, 0x48
+; data read by SeMenu_CopyWriteUpdate_Epilogue34+0x46 (0xF0DC77)
+; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dc8b`
+ToneGen_ParamTable_0x2EE:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x2EE, 0x18
+; data read by SeMenu_CopyWriteUpdate_Epilogue35+0x46 (0xF0DD22)
+; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dd36`
+ToneGen_ParamTable_0x306:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x306, 0x14
+; data read by SeMenu_CopyWriteUpdate_Epilogue36+0x44 (0xF0DDB3)
+; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0ddc7`
+ToneGen_ParamTable_0x31A:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x31A, 0xC
+; data read by SeMenu_PopupDialog_Close_Data+0x1D (0xF0EA0E)
+; evidence: `lda xbc, (this)` then `ld XHL,(XBC+WA) / call T,XHL`
+; data read by SeMenu_ListSelector_HandleInput+0x1A (0xF0EB4E)
+; evidence: `lda xbc, (this)` then `ld XHL,(XBC+WA) / call T,XHL`
+ToneGen_ParamTable_0x326:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x326, 0x81
+; parameter block of object 0x12b (class 0x01600002, proc ApFunctionProc), registered by InitializeNaka+0x91
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 76 B; the proc's read length was not measured
+ToneGen_ParamTable_0x3A7:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x3A7, 0x4C
+; parameter block of object 0x42b (class 0x01600002, proc ApFunctionProc), registered by InitializeNaka+0xB6
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 330 B; the proc's read length was not measured
+ToneGen_ParamTable_0x3F3:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x3F3, 0x14A
+; parameter block of object 0x16b (class 0x01600004, proc ClassProc), registered by InitializeNaka+0x1C
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 26 B; the proc's read length was not measured
+ToneGen_ParamTable_0x53D:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x53D, 0x1A
+; parameter block of object 0x1cb (class 0x0160000C, proc ResEventProc), registered by InitializeNaka+0x44
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
+ToneGen_ParamTable_0x557:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x557, 0x6
+; parameter block of object 0x1eb (class 0x0160000D, proc ResMethodProc), registered by InitializeNaka+0x6C
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
+ToneGen_ParamTable_0x55D:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x55D, 0x6
+; parameter block of object 0x10b (class 0x01600001, proc FunctionProc), registered by InitializeNaka+0xDB
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 4 B; the proc's read length was not measured
+ToneGen_ParamTable_0x563:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x563, 0x4
+; parameter block of object 0x40b (class 0x01600001, proc FunctionProc), registered by InitializeNaka+0x100
+; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
+ToneGen_ParamTable_0x567:
+	.incbin "includes/generated/tonegen_param_table.bin", 0x567, 0x6
 
 ; =============================================================================
 ; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)
@@ -1443,8 +1775,10 @@ Voice_InitBankData:
 	ret
 
 Voice_BankLookupCode:
-	.byte 0x45, 0x00, 0x88, 0x1e, 0x00, 0xb5, 0x00, 0x48
-	.byte 0xbd, 0x01, 0x00, 0x00, 0xbd, 0x02, 0x00, 0x4b
+	ld	xiy, 0x1e8800
+	ld	(xiy), 72
+	ld	(xiy+0x1), 0
+	ld	(xiy+0x2), 75
 	ret
 
 Voice_RefreshBankData:
@@ -3486,26 +3820,26 @@ ROM_PaddingFF:
 	.set SeMenu_DataBlock_14, 0xf10689
 	.set FlashRead_BlockData_Field8, 0xf15891
 	.set FlashRead_BlockData_Field7, 0xf1589c
-	.set DrumDetailEdit_Entry_01, 0xf16006
-	.set DrumDetailEdit_Entry_02, 0xf16028
-	.set DrumDetailEdit_Entry_03, 0xf1604a
-	.set DrumDetailEdit_Entry_04, 0xf16056
-	.set DrumDetailEdit_Entry_05, 0xf16063
-	.set DrumDetailEdit_Entry_06, 0xf16070
-	.set DrumDetailEdit_Entry_07, 0xf16092
-	.set DrumDetailEdit_Entry_08, 0xf1609e
-	.set DrumDetailEdit_Entry_09, 0xf160ab
-	.set Data_Dispatch_Entry, 0xf160b8
-	.set Data_Dispatch_Entry_0x39, 0xf160f1
-	.set Data_Dispatch_Entry_0x45, 0xf160fd
-	.set EffectParamEdit_Entry_01, 0xf1649b
-	.set EffectParamEdit_Entry_02, 0xf164a6
-	.set EffectParamEdit_Entry_03, 0xf164b5
-	.set EffectParamEdit_Entry_04, 0xf164c0
-	.set EffectParamEdit_Entry_05, 0xf164cb
-	.set EffectParamEdit_Entry_06, 0xf164d6
-	.set EffectParamEdit_Entry_07, 0xf164e1
-	.set EffectParamEdit_Entry_08, 0xf164ec
+	.set DrumDetailEdit_Entry_01, SeScreenData_0x5400
+	.set DrumDetailEdit_Entry_02, SeScreenData_0x5422
+	.set DrumDetailEdit_Entry_03, SeScreenData_0x5444
+	.set DrumDetailEdit_Entry_04, SeScreenData_0x5450
+	.set DrumDetailEdit_Entry_05, SeScreenData_0x545D
+	.set DrumDetailEdit_Entry_06, SeScreenData_0x546A
+	.set DrumDetailEdit_Entry_07, SeScreenData_0x548C
+	.set DrumDetailEdit_Entry_08, SeScreenData_0x5498
+	.set DrumDetailEdit_Entry_09, SeScreenData_0x54A5
+	.set Data_Dispatch_Entry, SeScreenData_0x54B2
+	.set Data_Dispatch_Entry_0x39, SeScreenData_0x54EB
+	.set Data_Dispatch_Entry_0x45, SeScreenData_0x54F7
+	.set EffectParamEdit_Entry_01, SeScreenData_0x5895
+	.set EffectParamEdit_Entry_02, SeScreenData_0x58A0
+	.set EffectParamEdit_Entry_03, SeScreenData_0x58AF
+	.set EffectParamEdit_Entry_04, SeScreenData_0x58BA
+	.set EffectParamEdit_Entry_05, SeScreenData_0x58C5
+	.set EffectParamEdit_Entry_06, SeScreenData_0x58D0
+	.set EffectParamEdit_Entry_07, SeScreenData_0x58DB
+	.set EffectParamEdit_Entry_08, SeScreenData_0x58E6
 	.set SeqVoice_ValidateAndProcessState_0x13, 0xf400ec
 	.set NakaData_PerfStyleCode, 0xf5001f
 	.set NakaData_PerfStyleCode_0x10, 0xf5002f

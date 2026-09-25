@@ -157,8 +157,11 @@
 	.set Bitmap_MIDIConnections_2_0x3BDC, Bitmap_MIDIConnections_2 + 15324
 	.set Bitmap_MIDIConnections_2_0x3BDD, Bitmap_MIDIConnections_2 + 15325
 	.set Bitmap_SplitPoint_Gb_0x2B, Bitmap_SplitPoint_Gb + 43
-	.set CDlikeSwTtl_DispatchData_0x4A, CDlikeSwTtl_DispatchData + 74
-	.set CDlikeSwTtl_DispatchData_0x6, CDlikeSwTtl_DispatchData + 6
+	; CDlikeSwTtl_DispatchData_0x4A / _0x6 are real routines now (demo/
+	; demo_seq_bridge.s); these two aliases remain only for ui/setwall_routines.s,
+	; which should call CDlikeSwTtl_SendStartEvtArg1 / CDlikeSwTtl_SendEvt4.
+	.set CDlikeSwTtl_DispatchData_0x4A, CDlikeSwTtl_SendStartEvtArg1
+	.set CDlikeSwTtl_DispatchData_0x6, CDlikeSwTtl_SendEvt4
 	.set CharEncoding_PrintableHi_0x4, CharEncoding_PrintableHi + 4
 	.set CharEncoding_PrintableHi_0x7, CharEncoding_PrintableHi + 7
 	.set CharEncoding_PrintableHi_0xA, CharEncoding_PrintableHi + 10
@@ -558,15 +561,15 @@
 	.set DrawText_LayoutAndRender_Variant1_0x6CA, DrawText_LayoutAndRender_Variant1 + 1738
 	.set DrawText_PopAndReturn_0x7, DrawText_PopAndReturn + 7
 	.set DrawWall_Deferred_0x11, DrawWall_Deferred + 17
-	.set DrumDetailEdit_Menu_Table_0x1A4, DrumDetailEdit_Menu_Table + 420
-	.set DrumDetailEdit_Menu_Table_0x27B, DrumDetailEdit_Menu_Table + 635
-	.set DrumDetailEdit_Menu_Table_0x2B2, DrumDetailEdit_Menu_Table + 690
-	.set DrumDetailEdit_Menu_Table_0x2C6, DrumDetailEdit_Menu_Table + 710
-	.set DrumDetailEdit_Menu_Table_0x2D0, DrumDetailEdit_Menu_Table + 720
-	.set DrumDetailEdit_Menu_Table_0x2E8, DrumDetailEdit_Menu_Table + 744
-	.set DrumDetailEdit_Menu_Table_0x32A, DrumDetailEdit_Menu_Table + 810
-	.set DrumDetailEdit_Menu_Table_0x35E, DrumDetailEdit_Menu_Table + 862
-	.set DrumDetailEdit_Menu_Table_0x3C8, DrumDetailEdit_Menu_Table + 968
+	.set DrumDetailEdit_Menu_Table_0x1A4, SeScreenData_0x56CD
+	.set DrumDetailEdit_Menu_Table_0x27B, SeScreenData_0x57A4
+	.set DrumDetailEdit_Menu_Table_0x2B2, SeScreenData_0x57DB
+	.set DrumDetailEdit_Menu_Table_0x2C6, SeScreenData_0x57EF
+	.set DrumDetailEdit_Menu_Table_0x2D0, SeScreenData_0x57F9
+	.set DrumDetailEdit_Menu_Table_0x2E8, SeScreenData_0x5811
+	.set DrumDetailEdit_Menu_Table_0x32A, SeScreenData_0x5853
+	.set DrumDetailEdit_Menu_Table_0x35E, SeScreenData_0x5887
+	.set DrumDetailEdit_Menu_Table_0x3C8, SeScreenData_0x58F1
 	.set DrumKitExit_DataPad_0x1, DrumKitExit_DataPad + 1
 	.set DrumKit_GroupAssignTable_0x1E, DrumKit_GroupAssignTable + 30
 	.set DrumKit_GroupAssignTable_0x3C, DrumKit_GroupAssignTable + 60
@@ -843,15 +846,15 @@
 	.set Filename_TemplateArea_0x70, Filename_TemplateArea + 112
 	.set Filename_TemplateArea_0x76, Filename_TemplateArea + 118
 	.set Filename_TemplateArea_0xA, Filename_TemplateArea + 10
-	.set FlashWrite_BlockRef_Type6_0x10, FlashWrite_BlockRef_Type6 + 16
-	.set FlashWrite_BlockRef_Type6_0x118, FlashWrite_BlockRef_Type6 + 280
-	.set FlashWrite_BlockRef_Type6_0x295, FlashWrite_BlockRef_Type6 + 661
-	.set FlashWrite_BlockRef_Type6_0x40, FlashWrite_BlockRef_Type6 + 64
-	.set FlashWrite_BlockRef_Type6_0x561, FlashWrite_BlockRef_Type6 + 1377
-	.set FlashWrite_BlockRef_Type6_0x633, FlashWrite_BlockRef_Type6 + 1587
-	.set FlashWrite_BlockRef_Type6_0x655, FlashWrite_BlockRef_Type6 + 1621
-	.set FlashWrite_BlockRef_Type6_0x690, FlashWrite_BlockRef_Type6 + 1680
-	.set FlashWrite_BlockRef_Type6_0x69A, FlashWrite_BlockRef_Type6 + 1690
+	.set FlashWrite_BlockRef_Type6_0x10, SeScreenData_0x4E9B
+	.set FlashWrite_BlockRef_Type6_0x118, SeScreenData_0x4FA3
+	.set FlashWrite_BlockRef_Type6_0x295, SeScreenData_0x5120
+	.set FlashWrite_BlockRef_Type6_0x40, SeScreenData_0x4ECB
+	.set FlashWrite_BlockRef_Type6_0x561, SeScreenData_0x53EC
+	.set FlashWrite_BlockRef_Type6_0x633, SeScreenData_0x54BE
+	.set FlashWrite_BlockRef_Type6_0x655, SeScreenData_0x54E0
+	.set FlashWrite_BlockRef_Type6_0x690, SeScreenData_0x551B
+	.set FlashWrite_BlockRef_Type6_0x69A, SeScreenData_0x5525
 	.set Flash_InitBytecodeBlock_0x2BF, Flash_InitBytecodeBlock + 703
 	.set Flash_SlotUpdateOpsBlock_0x336, Flash_SlotUpdateOpsBlock + 822
 	.set Flash_SlotUpdateOpsBlock_0x480, Flash_SlotUpdateOpsBlock + 1152
@@ -861,68 +864,6 @@
 	.set GMMode_Attention_English2_0x47C, GMMode_Attention_English2 + 1148
 	.set GMMode_Attention_English2_0x494, GMMode_Attention_English2 + 1172
 	.set GMMode_Attention_English2_0x514, GMMode_Attention_English2 + 1300
-	.set GUI_DisplayStructData_0x1038, GUI_DisplayStructData + 4152
-	.set GUI_DisplayStructData_0x1080, GUI_DisplayStructData + 4224
-	.set GUI_DisplayStructData_0x10C8, GUI_DisplayStructData + 4296
-	.set GUI_DisplayStructData_0x1110, GUI_DisplayStructData + 4368
-	.set GUI_DisplayStructData_0x111D, GUI_DisplayStructData + 4381
-	.set GUI_DisplayStructData_0x1129, GUI_DisplayStructData + 4393
-	.set GUI_DisplayStructData_0x118A, GUI_DisplayStructData + 4490
-	.set GUI_DisplayStructData_0x120C, GUI_DisplayStructData + 4620
-	.set GUI_DisplayStructData_0x120F, GUI_DisplayStructData + 4623
-	.set GUI_DisplayStructData_0x1222, GUI_DisplayStructData + 4642
-	.set GUI_DisplayStructData_0x126A, GUI_DisplayStructData + 4714
-	.set GUI_DisplayStructData_0x12B2, GUI_DisplayStructData + 4786
-	.set GUI_DisplayStructData_0x12FA, GUI_DisplayStructData + 4858
-	.set GUI_DisplayStructData_0x1342, GUI_DisplayStructData + 4930
-	.set GUI_DisplayStructData_0x1362, GUI_DisplayStructData + 4962
-	.set GUI_DisplayStructData_0x136F, GUI_DisplayStructData + 4975
-	.set GUI_DisplayStructData_0x13B7, GUI_DisplayStructData + 5047
-	.set GUI_DisplayStructData_0x13FF, GUI_DisplayStructData + 5119
-	.set GUI_DisplayStructData_0xAD8, GUI_DisplayStructData + 2776
-	.set GUI_DisplayStructData_0xAE8, GUI_DisplayStructData + 2792
-	.set GUI_DisplayStructData_0xAF8, GUI_DisplayStructData + 2808
-	.set GUI_DisplayStructData_0xB08, GUI_DisplayStructData + 2824
-	.set GUI_DisplayStructData_0xB18, GUI_DisplayStructData + 2840
-	.set GUI_DisplayStructData_0xB28, GUI_DisplayStructData + 2856
-	.set GUI_DisplayStructData_0xB38, GUI_DisplayStructData + 2872
-	.set GUI_DisplayStructData_0xB48, GUI_DisplayStructData + 2888
-	.set GUI_DisplayStructData_0xB58, GUI_DisplayStructData + 2904
-	.set GUI_DisplayStructData_0xB68, GUI_DisplayStructData + 2920
-	.set GUI_DisplayStructData_0xB78, GUI_DisplayStructData + 2936
-	.set GUI_DisplayStructData_0xB88, GUI_DisplayStructData + 2952
-	.set GUI_DisplayStructData_0xB98, GUI_DisplayStructData + 2968
-	.set GUI_DisplayStructData_0xBA8, GUI_DisplayStructData + 2984
-	.set GUI_DisplayStructData_0xBB8, GUI_DisplayStructData + 3000
-	.set GUI_DisplayStructData_0xBC8, GUI_DisplayStructData + 3016
-	.set GUI_DisplayStructData_0xBD8, GUI_DisplayStructData + 3032
-	.set GUI_DisplayStructData_0xBE8, GUI_DisplayStructData + 3048
-	.set GUI_DisplayStructData_0xBF8, GUI_DisplayStructData + 3064
-	.set GUI_DisplayStructData_0xC08, GUI_DisplayStructData + 3080
-	.set GUI_DisplayStructData_0xC18, GUI_DisplayStructData + 3096
-	.set GUI_DisplayStructData_0xC28, GUI_DisplayStructData + 3112
-	.set GUI_DisplayStructData_0xC38, GUI_DisplayStructData + 3128
-	.set GUI_DisplayStructData_0xC48, GUI_DisplayStructData + 3144
-	.set GUI_DisplayStructData_0xC58, GUI_DisplayStructData + 3160
-	.set GUI_DisplayStructData_0xC68, GUI_DisplayStructData + 3176
-	.set GUI_DisplayStructData_0xC78, GUI_DisplayStructData + 3192
-	.set GUI_DisplayStructData_0xC88, GUI_DisplayStructData + 3208
-	.set GUI_DisplayStructData_0xC98, GUI_DisplayStructData + 3224
-	.set GUI_DisplayStructData_0xCA8, GUI_DisplayStructData + 3240
-	.set GUI_DisplayStructData_0xCB8, GUI_DisplayStructData + 3256
-	.set GUI_DisplayStructData_0xCC8, GUI_DisplayStructData + 3272
-	.set GUI_DisplayStructData_0xCD8, GUI_DisplayStructData + 3288
-	.set GUI_DisplayStructData_0xD20, GUI_DisplayStructData + 3360
-	.set GUI_DisplayStructData_0xD68, GUI_DisplayStructData + 3432
-	.set GUI_DisplayStructData_0xDB0, GUI_DisplayStructData + 3504
-	.set GUI_DisplayStructData_0xDF8, GUI_DisplayStructData + 3576
-	.set GUI_DisplayStructData_0xE40, GUI_DisplayStructData + 3648
-	.set GUI_DisplayStructData_0xE88, GUI_DisplayStructData + 3720
-	.set GUI_DisplayStructData_0xED0, GUI_DisplayStructData + 3792
-	.set GUI_DisplayStructData_0xF18, GUI_DisplayStructData + 3864
-	.set GUI_DisplayStructData_0xF60, GUI_DisplayStructData + 3936
-	.set GUI_DisplayStructData_0xFA8, GUI_DisplayStructData + 4008
-	.set GUI_DisplayStructData_0xFF0, GUI_DisplayStructData + 4080
 	.set GUI_FormatStrings_0x20, GUI_FormatStrings + 32
 	.set GUI_FormatStrings_0x34, GUI_FormatStrings + 52
 	.set GUI_FormatStrings_0x3C, GUI_FormatStrings + 60
@@ -2746,20 +2687,6 @@
 	.set ToneGen_CalcTempo_DataTable_0x2, ToneGen_CalcTempo_DataTable + 2
 	.set ToneGen_DSPCfg_Initialize_0x6, ToneGen_DSPCfg_Initialize + 6
 	.set ToneGen_MapNoteToOctaveBitmask_0x20, ToneGen_MapNoteToOctaveBitmask + 32
-	.set ToneGen_ParamTable_0x13E, ToneGen_ParamTable + 318
-	.set ToneGen_ParamTable_0x186, ToneGen_ParamTable + 390
-	.set ToneGen_ParamTable_0x1CE, ToneGen_ParamTable + 462
-	.set ToneGen_ParamTable_0x1E, ToneGen_ParamTable + 30
-	.set ToneGen_ParamTable_0x216, ToneGen_ParamTable + 534
-	.set ToneGen_ParamTable_0x25E, ToneGen_ParamTable + 606
-	.set ToneGen_ParamTable_0x2A6, ToneGen_ParamTable + 678
-	.set ToneGen_ParamTable_0x2EE, ToneGen_ParamTable + 750
-	.set ToneGen_ParamTable_0x306, ToneGen_ParamTable + 774
-	.set ToneGen_ParamTable_0x31A, ToneGen_ParamTable + 794
-	.set ToneGen_ParamTable_0x326, ToneGen_ParamTable + 806
-	.set ToneGen_ParamTable_0x66, ToneGen_ParamTable + 102
-	.set ToneGen_ParamTable_0xAE, ToneGen_ParamTable + 174
-	.set ToneGen_ParamTable_0xF6, ToneGen_ParamTable + 246
 	.set ToneGen_VoiceSlotLookupTable_0x2, ToneGen_VoiceSlotLookupTable + 2
 	.set ToneKit_FrequencyTable_0x35A, ToneKit_FrequencyTable + 858
 	.set ToneKit_FrequencyTable_0x372, ToneKit_FrequencyTable + 882
@@ -3262,3 +3189,10 @@
 	.set __pad_F63F8F_0x1A8, __pad_F63F8F + 424
 	.set __pad_F63F8F_0x33, __pad_F63F8F + 51
 	.set __pad_F67D15_0x7, __pad_F67D15 + 7
+
+	; FlashWrite_BlockRef_Type6_Skip (0xF1606C) is NOT a code entry: it is byte 9
+	; of the DrumDetailEdit_Entry_05 record (storage/flash_floppy_handlers.s, typed
+	; data since 2026-09-25).  Its only use is a `jrl ugt` in v9
+	; audio/sound_editor_ui.s that decodes data as code (ASCII "URV" next to it).
+	; Kept only so that file still assembles; delete it once that region is data.
+	.set FlashWrite_BlockRef_Type6_Skip, DrumDetailEdit_Entry_05 + 9

@@ -95,7 +95,7 @@ FmmUtilityTitleFunc:
 	ld	xbc, 31784965
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
-	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xc0, 0x7e
+	ldmm8	0x7ec0, 0x8c9b
 	cpw	(33892:16), 0
 	jr	ge, FmmUtility_DispatchState
 	call	GetDiskSizeInfo
@@ -220,7 +220,7 @@ FmmSmfUtilityTitleFunc:
 	ld	xbc, 31784965
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
-	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xc2, 0x7e
+	ldmm8	0x7ec2, 0x8c9b
 	cpw	(33892:16), 0
 	jr	ge, FmmSmfUtility_DispatchState
 	call	GetDiskSizeInfo

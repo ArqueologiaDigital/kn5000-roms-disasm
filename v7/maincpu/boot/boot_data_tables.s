@@ -65,17 +65,50 @@ FILETYPE_SIG_HDAE_PRG:		aligned_string "Technics KN5000 HD-AEPRG DATA FILE    "
 
 HANDLE_UPDATE_OFFSETS:
 	; Precomputed relative offsets (identical in v7 and v9)
-	.byte 0x00, 0x00, 0xa6, 0x00, 0x20, 0x00, 0xa6, 0x00
-	.byte 0x43, 0x00, 0x5b, 0x00, 0x76, 0x00, 0x9a, 0x00
+	.short	0xef4784 - 0xef4784	; [v10] "Technics KN5000 Program DATA FILE 1/2"
+	.short	0xef482a - 0xef4784	; [v10] "Technics KN5000 Program DATA FILE 2/2"
+	.short	0xef47a4 - 0xef4784	; [v10] "Technics KN5000 Table DATA FILE 1/2"
+	.short	0xef482a - 0xef4784	; [v10] "Technics KN5000 Table DATA FILE 2/2"
+	.short	0xef47c7 - 0xef4784	; [v10] "Technics KN5000 CMPCUSTOMDATA FILE"
+	.short	0xef47df - 0xef4784	; [v10] "Technics KN5000 HD-AEPRG DATA FILE"
+	.short	0xef47fa - 0xef4784	; [v10] "Technics KN5000 Program DATA FILE PCK"
+	.short	0xef481e - 0xef4784	; [v10] "Technics KN5000 Table DATA FILE PCK"
 
 SLIDE_STRING_2:
 	aligned_string "SLIDE"
 
+; -----------------------------------------------------------------------------
+; Firmware-update banners: eight 224x22 monochrome bitmaps, 1 bpp
+; -----------------------------------------------------------------------------
+; Format, from the reader Draw_FlashMemUpdate_message_bitmap (0xEF5016,
+; boot/system_handlers.s): 616 bytes each = 22 rows x 28 bytes, row-major,
+; MSB = leftmost pixel.  The reader walks IZ = 0..0x267 (`cp iz, 0x268`),
+; starts a new row every `div wa, 0x1c` (28 bytes = 224 pixels), tests each
+; bit through a mask table and writes one 8-bpp pixel per bit into the
+; 320-wide offscreen buffer at 0x43C00 (foreground / background palette
+; index are its two stacked word arguments), then blits that buffer to VRAM
+; 0x1A0000.  Every caller passes XWA = banner, BC = x = 48 (0x30), DE = y.
+; In v9/v10 each .bin is built from the PNG beside it by
+; scripts/build/mono_images.py (exact round trip, `mono_images.py verify`).
+; v7's eight .bin files under v7/maincpu/images/ are byte-identical to v10's
+; (cmp of all eight pairs, 2026-09-25), but unlike v9/v10 they are committed
+; blobs: mono_images.py does not regenerate v7's copies.  They are NOT
+; included from ../../v10/maincpu/images/ because address_line_map.py (and
+; the converters built on it) assembles its mirror of v7/maincpu with only
+; the mirror as -I, where that path does not resolve.
+; drawn by FLASH_MEM_UPDATE (0xEF4F45) and Flash_CheckAndValidate (0xEF4FBA), at y=80
 Bitmap_1bit_Flash_Memory_Update:	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
+; drawn by Erase_and_Burn____when_disk_is_valid (0xEF471B), at y=160
 Bitmap_1bit_Now_Erasing:		.incbin "images/Bitmap_1bit_Now_Erasing.bin"
+; drawn by SHOW_FD_TO_FLASH_MEMORY_MESSAGE (0xEF4664), at y=160
 Bitmap_1bit_FD_to_Flash_Memory:		.incbin "images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+; drawn by FLASH_MEM_UPDATE (0xEF4F45) and Flash_CheckAndValidate (0xEF4FBA), at y=160
 Bitmap_1bit_Completed:			.incbin "images/Bitmap_1bit_Completed.bin"
+; drawn by We_seem_to_be_running_boot_ROM_code (0xEF050C), at y=80
 Bitmap_1bit_Please_Wait:		.incbin "images/Bitmap_1bit_Please_Wait.bin"
+; drawn by SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE (0xEF467E), at y=160
 Bitmap_1bit_Change_FD_2_of_2:		.incbin "images/Bitmap_1bit_Change_FD_2_of_2.bin"
+; drawn by SHOW_ILLEGAL_DISK_MESSAGE (0xEF4800), at y=160
 Bitmap_1bit_Illegal_Disk:		.incbin "images/Bitmap_1bit_Illegal_Disk.bin"
+; drawn by FLASH_MEM_UPDATE (0xEF4F45) and Flash_CheckAndValidate (0xEF4FBA), at y=200
 Bitmap_1bit_Turn_On_AGAIN:		.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"

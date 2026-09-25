@@ -127,11 +127,15 @@ FCopy_HandleCopyContext:
 	call FileIO_GetRecordFlags
 	cp hl, 0:i3
 	jr z, FCopy_CopyConfirm_Execute
-	.byte 0xc2, 0xea, 0x40, 0x03, 0x3f, 0x00, 0x66, 0x23
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x00, 0x00
-	.byte 0xc5, 0x01, 0xea, 0xa9, 0x1d, 0x4b, 0x99, 0xfa
-	.byte 0x40, 0x37, 0x00, 0x60, 0x00, 0x41, 0x01, 0x00
-	.byte 0xc0, 0x01, 0xea, 0xa8
+	cp	(0x0340ea:24), 0x00
+	jr	z, FCopy_CopyConfirm_Execute
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1c50000
+	ld	xde, 1:i3
+	call	ApPostEvent
+	ld	xwa, 0x600037
+	ld	xbc, 0x1c00001
+	ld	xde, 0:i3
 FCopy_DispatchFA9D58:
 	call ApPostEvent
 	jrl FCopy_Return
@@ -422,7 +426,7 @@ FmmFormatFunc:
 	jrl	nz, FmmFmt_Return
 	ld	wa, 1:i3
 	calr	InitializeOperationState
-	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xce, 0x7e
+	ldmm8	0x7ece, 0x8c9b
 	cpw	(33892:16), 0
 	jr	ge, FmmFmt_InitPhase_CheckDrive
 	call	GetDiskSizeInfo
@@ -587,14 +591,14 @@ FmmLoadTitleFunc:
 	cp	xde, 2
 	jrl	nz, FmmLoadTtl_Return
 	ld	(33890:16), 0
-	.byte 0xd1, 0x64, 0x84, 0x19, 0xd4, 0x7e
+	ldmm16	0x7ed4, 0x8464
 	ld	wa, 1:i3
 	calr	InitializeOperationState
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
 	call	ApPostEvent
-	.byte 0xc1, 0x9b, 0x8c, 0x19, 0xd2, 0x7e
+	ldmm8	0x7ed2, 0x8c9b
 	cpw	(33892:16), 0
 	jr	ge, FmmLoadTtl_StateDispatch
 	call	GetDiskSizeInfo
@@ -625,13 +629,14 @@ FmmLoadTtl_CheckFileHandle:
 	ld	(33896:16), hl
 	calr	SignalProgressUpdate
 FmmLoadTtl_CheckSmfHandle:
-	.byte 0xd1, 0x68, 0x84, 0x3f, 0x00, 0x00	; cpdi16 0x8504, 0 (v7 patched)
-
-	.byte 0x72, 0xc4, 0x00	; jrl le, FmmLoadTtl_LoadSlots (v7 displacement)
-
-	.byte 0xc1, 0xd2, 0x7e, 0x3f, 0x64	; cpdi8 (0x7f6e), 100 (v7 patched)
-
-	.byte 0x76, 0xbc, 0x00	; jrl z, FmmLoadTtl_LoadSlots (v7 displacement)
+; cpdi16 0x8504, 0 (v7 patched)
+	cpw	(0x8468:16), 0
+; jrl le, FmmLoadTtl_LoadSlots (v7 displacement)
+	jrl	le, FmmLoadTtl_LoadSlots
+; cpdi8 (0x7f6e), 100 (v7 patched)
+	cp	(0x7ed2:16), 100
+; jrl z, FmmLoadTtl_LoadSlots (v7 displacement)
+	jrl	z, FmmLoadTtl_LoadSlots
 
 	ld xwa, 0x600026
 
@@ -724,11 +729,18 @@ FmmLoadTtl_SlotLoop:
 	ld	(35164:16), 4
 	jr	FmmLoadTtl_Return	; -> 0xF8C043
 FmmLoadTtl_HandleScrollNav:
-	.byte 0xd1, 0xd4, 0x7e, 0x3f, 0x00, 0x00, 0x61, 0x4a
-	.byte 0x1d, 0xe2, 0x91, 0xf8, 0xdb, 0x8e, 0xde, 0xd8
-	.byte 0x61, 0x40, 0xde, 0xcf, 0x13, 0x00, 0x69, 0x3a
-	.byte 0xde, 0x88, 0xd8, 0x61, 0x1d, 0xf8, 0x91, 0xf8
-	.byte 0x68, 0x30
+	cpw	(0x7ed4:16), 0
+	jr	lt, FmmLoadTtl_Return
+	call	GetCurrentFileIndex
+	ld	iz, hl
+	cp	iz, 0:i3
+	jr	lt, FmmLoadTtl_Return
+	cp	iz, 0x13
+	jr	ge, FmmLoadTtl_Return
+	ld	wa, iz
+	inc	1, wa
+	call	NotifyUIOfSelectionChange
+	jr	FmmLoadTtl_Return
 FmmLoadTtl_HandleCancelOp:
 	calr CancelOperationCleanup
 	ld xwa, 0x610001
@@ -796,7 +808,7 @@ FmmSaveTtl_SlotLoop:
 	call	FileIO_SetModeFlag_Reading
 	ld	xiy, 15337066
 	ld	xix, 35184
-	.byte 0x95, 0x10
+	ldiw
 FmmSaveTtl_CommitSave:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -958,12 +970,19 @@ DiskInfo_ZeroCapacity:
 	ld (xsp + 4), xwa
 
 DiskInfo_ComputePercent:
-	.byte 0xaf, 0x0c, 0x20, 0xe8, 0xcf, 0x00, 0x00, 0x00
-	.byte 0x00, 0x62, 0x1f, 0xaf, 0x0c, 0x20, 0xaf, 0x04
-	.byte 0xa0, 0x41, 0x64, 0x00, 0x00, 0x00, 0x1d, 0x7f
-	.byte 0x02, 0xff, 0xeb, 0x8e, 0xaf, 0x0c, 0x21, 0xee
-	.byte 0x88, 0x1d, 0x31, 0x04, 0xff, 0xbf, 0x08, 0x63
-	.byte 0x68, 0x05
+	ld	xwa, (xsp + 12)
+	cp	xwa, 0x0
+	jr	le, DiskInfo_ZeroPercent
+	ld	xwa, (xsp + 12)
+	sub	xwa, (xsp + 4)
+	ld	xbc, 0x64
+	call	InitializeKubo_Helper
+	ld	xiz, xhl
+	ld	xbc, (xsp + 12)
+	ld	xwa, xiz
+	call	0xff0431
+	ld	(xsp + 8), xhl
+	jr	DiskInfo_RenderStrings
 DiskInfo_ZeroPercent:
 	ld xwa, 0:i3
 	ld (xsp + 8), xwa

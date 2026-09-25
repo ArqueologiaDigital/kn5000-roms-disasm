@@ -65,11 +65,15 @@ SingleLoadDstMemFunc:
 	ld	(33058:16), xde
 	jr	SLDstMem_Return
 SLDstMem_HandleShow:
-	.byte 0xe1, 0x22, 0x81, 0x20, 0xf2, 0x24, 0x06, 0xea
-	.byte 0x32, 0xc1, 0x5e, 0x89, 0x3f, 0x00, 0x66, 0x11
-	.byte 0xc1, 0x5c, 0x89, 0x3f, 0x01, 0x66, 0x0a, 0xaa
-	.byte 0x10, 0x22, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x68
-	.byte 0x13
+	ld	xwa, (0x8122:16)
+	lda	xde, (BankStr_Bank3_0x6:24)
+	cp	(0x895e:16), 0
+	jr	z, SLDstMem_ShowFromBank
+	cp	(0x895c:16), 1
+	jr	z, SLDstMem_ShowFromBank
+	ld	xde, (xde + 16)
+	ld	xbc, 0x1c0000f
+	jr	SLDstMem_DispatchShow
 SLDstMem_ShowFromBank:
 	ld c, (35164:16)
 
@@ -173,7 +177,7 @@ SLSrcBankList_FuncBody:
 	lda	xiz, (34995:16)
 	ld	a, (35168:16)
 	extz	wa
-	.byte 0x8f, 0x04, 0x51
+	div	a, (xsp+0x4)
 	inc	1, a
 	extz	wa
 	ld	bc, 0:i3
@@ -239,7 +243,7 @@ SLSrcBankList_FuncBody_Helper9:
 	lda	xiz, (35037:16)
 	ld	a, (35168:16)
 	extz	wa
-	.byte 0x8f, 0x04, 0x51
+	div	a, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -375,7 +379,7 @@ SLSrcBankList_FuncBody_Join:
 	ld	(33074:16), 1
 SLSrcBankList_FuncBody_Skip5:
 	ld	xwa, (33070:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join4
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -433,7 +437,7 @@ SLSrcBankList_FuncBody_Join2:
 	ld	(33074:16), 1
 SLSrcBankList_FuncBody_Skip8:
 	ld	xwa, (33070:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join4
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -451,7 +455,7 @@ SLSrcBankList_FuncBody_Skip9:
 	jr	nz, SLSrcBankList_FuncBody_Skip11
 SLSrcBankList_FuncBody_Skip10:
 	ld	xwa, (33070:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jr	z, SLSrcBankList_FuncBody_Join4
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -574,7 +578,7 @@ SLSrcBankList_FuncBody_Helper11:
 	lda	xwa, (35015:16)
 	ld	c, (35170:16)
 	extz	bc
-	.byte 0x8f, 0x04, 0x53
+	div	c, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
@@ -596,7 +600,7 @@ SLSrcBankList_FuncBody_Helper12:
 	ld	(xsp+8), xwa
 	ld	a, (35170:16)
 	extz	wa
-	.byte 0x8f, 0x06, 0x51
+	div	a, (xsp+0x6)
 	ld	a, w
 	extz	wa
 	ld	(xsp+4), wa
@@ -642,11 +646,11 @@ SLSrcBankList_FuncBody_Skip14:
 	ld	xbc, 29360143
 	jr	SLSrcBankList_FuncBody_Join5
 SLSrcBankList_FuncBody_Entry:
-	.byte 0x9f, 0x04, 0x3f, 0x04, 0x00
+	cpw	(xsp+0x4), 4
 	jr	c, SLSrcBankList_FuncBody_Epilogue3
 	ld	c, (35170:16)
 	extz	bc
-	.byte 0x8f, 0x06, 0x53
+	div	c, (xsp+0x6)
 	extz	bc
 	pushw 3
 	ld	de, (xsp+6)
@@ -760,7 +764,7 @@ SLSrcBankList_FuncBody_Join6:
 	ld	(33082:16), 1
 SLSrcBankList_FuncBody_Skip17:
 	ld	xwa, (33078:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join10
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -818,7 +822,7 @@ SLSrcBankList_FuncBody_Join7:
 	ld	(33082:16), 1
 SLSrcBankList_FuncBody_Skip20:
 	ld	xwa, (33078:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jr	z, SLSrcBankList_FuncBody_Join10
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -836,7 +840,7 @@ SLSrcBankList_FuncBody_Skip21:
 	jr	nz, SLSrcBankList_FuncBody_Skip23
 SLSrcBankList_FuncBody_Skip22:
 	ld	xwa, (33078:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jr	z, SLSrcBankList_FuncBody_Join10
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -928,13 +932,13 @@ SLSrcBankList_FuncBody_Helper15:
 	ld	xde, 34994
 	call	ApPostEvent
 	ld	a, (xsp)
-	.byte 0x87, 0x81
+	add	a, (xsp)
 	ld	c, (35172:16)
 	cp	c, a
 	jr	nc, SLSrcBankList_FuncBody_Epilogue5
 	lda	xwa, (35015:16)
 	extz	bc
-	.byte 0x87, 0x53
+	div	c, (xsp)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName3
@@ -992,7 +996,7 @@ SLSrcBankList_FuncBody_Helper17:
 	cp	(35166:16), 0
 	jr	nz, SLSrcBankList_FuncBody_Skip29
 	ld	e, (xsp+4)
-	.byte 0x8f, 0x04, 0x85
+	add	e, (xsp+0x4)
 	ld	c, (35172:16)
 	lda	xwa, (35037:16)
 	cp	c, e
@@ -1010,7 +1014,7 @@ SLSrcBankList_FuncBody_Helper17:
 SLSrcBankList_FuncBody_Skip28:
 	ld	xiz, xwa
 	extz	bc
-	.byte 0x8f, 0x04, 0x53
+	div	c, (xsp+0x4)
 	ld	a, b
 	inc	1, a
 	extz	wa
@@ -1177,7 +1181,7 @@ SLSrcBankList_FuncBody_Join15:
 	ld	(33088:16), 1
 SLSrcBankList_FuncBody_Skip35:
 	ld	xwa, (33084:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join18
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -1281,7 +1285,7 @@ SLSrcBankList_FuncBody_Join16:
 	ld	(33088:16), 1
 SLSrcBankList_FuncBody_Skip40:
 	ld	xwa, (33084:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join18
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -1299,7 +1303,7 @@ SLSrcBankList_FuncBody_Skip41:
 	jr	nz, SLSrcBankList_FuncBody_Skip43
 SLSrcBankList_FuncBody_Skip42:
 	ld	xwa, (33084:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jr	z, SLSrcBankList_FuncBody_Join18
 	lda	xde, (35015:16)
 	ld	xwa, xiz
@@ -1544,7 +1548,7 @@ SLDstBankList_FuncBody:
 	lda	xiz, (35079:16)
 	ld	a, (35174:16)
 	extz	wa
-	.byte 0x8f, 0x04, 0x51
+	div	a, (xsp+0x4)
 	inc	1, a
 	extz	wa
 	ld	bc, 0:i3
@@ -1558,7 +1562,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35099:16)
 	ld	c, (35174:16)
 	extz	bc
-	.byte 0x8f, 0x04, 0x53
+	div	c, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetConfigName
@@ -1613,7 +1617,7 @@ SLDstBankList_FuncBody_Skip:
 	lda	xiz, (35121:16)
 	ld	a, (35174:16)
 	extz	wa
-	.byte 0x8f, 0x04, 0x51
+	div	a, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -1702,7 +1706,7 @@ SLDstBankList_FuncBody_Join2:
 	calr	SLDstBankList_FuncBody_Helper6
 SLDstBankList_FuncBody_Skip4:
 	ld	xwa, (33096:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jr	z, SLDstBankList_FuncBody_Loop
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -1765,7 +1769,7 @@ SLDstBankList_FuncBody_Join4:
 	calr	SLDstBankList_FuncBody_Helper6
 SLDstBankList_FuncBody_Skip7:
 	ld	xwa, (33096:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLDstBankList_FuncBody_Loop
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -1783,7 +1787,7 @@ SLDstBankList_FuncBody_Skip8:
 	jr	nz, SLDstBankList_FuncBody_Skip10
 SLDstBankList_FuncBody_Skip9:
 	ld	xwa, (33096:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLDstBankList_FuncBody_Loop
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -1980,7 +1984,7 @@ SLDstBankList_FuncBody_Helper8:
 	lda	xwa, (35099:16)
 	ld	c, (35178:16)
 	extz	bc
-	.byte 0x8f, 0x04, 0x53
+	div	c, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
@@ -2018,7 +2022,7 @@ SLDstBankList_FuncBody_Helper9:
 	lda	xiz, (35121:16)
 	ld	a, (35178:16)
 	extz	wa
-	.byte 0x8f, 0x04, 0x51
+	div	a, (xsp+0x4)
 	ld	a, w
 	extz	wa
 	calr	WP_GetPresetPtr
@@ -2042,10 +2046,10 @@ SLDstBankList_FuncBody_Skip18:
 	ld	e, (35178:16)
 	ld	c, e
 	extz	bc
-	.byte 0x8f, 0x04, 0x53
+	div	c, (xsp+0x4)
 	extz	bc
 	extz	de
-	.byte 0x8f, 0x04, 0x55
+	div	e, (xsp+0x4)
 	ld	e, d
 	extz	de
 	pushw 3
@@ -2122,7 +2126,7 @@ SLDstBankList_FuncBody_Join8:
 	calr	SLDstBankList_FuncBody_Helper9
 SLDstBankList_FuncBody_Skip21:
 	ld	xwa, (33100:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jr	z, SLDstBankList_FuncBody_Loop3
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -2185,7 +2189,7 @@ SLDstBankList_FuncBody_Join10:
 	calr	SLDstBankList_FuncBody_Helper9
 SLDstBankList_FuncBody_Skip24:
 	ld	xwa, (33100:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLDstBankList_FuncBody_Loop3
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -2203,7 +2207,7 @@ SLDstBankList_FuncBody_Skip25:
 	jr	nz, SLDstBankList_FuncBody_Skip27
 SLDstBankList_FuncBody_Skip26:
 	ld	xwa, (33100:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLDstBankList_FuncBody_Loop3
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -2263,13 +2267,13 @@ SLDstBankList_FuncBody_Helper10:
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
 	ld	e, (xsp)
-	.byte 0x87, 0x85
+	add	e, (xsp)
 	ld	c, (35180:16)
 	lda	xwa, (35099:16)
 	cp	c, e
 	jr	nc, SLDstBankList_FuncBody_Skip29
 	extz	bc
-	.byte 0x87, 0x53
+	div	c, (xsp)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName3
@@ -2319,7 +2323,7 @@ SLDstBankList_FuncBody_Helper11:
 	jrl	SLDstBankList_FuncBody_Join13
 SLDstBankList_FuncBody_Skip30:
 	ld	l, (xsp+4)
-	.byte 0x8f, 0x04, 0x87
+	add	l, (xsp+0x4)
 	lda	xbc, (35078:16)
 	lda	xwa, (xbc+43)
 	ld	(xbc+42), 2
@@ -2336,7 +2340,7 @@ SLDstBankList_FuncBody_Skip30:
 	call	FileIO_BuildFilePath
 	lda	xiz, (35121:16)
 	ld	c, (xsp+4)
-	.byte 0x8f, 0x04, 0x83
+	add	c, (xsp+0x4)
 	ld	a, (35180:16)
 	sub	a, c
 	inc	1, a
@@ -2351,7 +2355,7 @@ SLDstBankList_FuncBody_Skip30:
 	calr	TrimAndPadSmfFilename
 	lda	xwa, (35141:16)
 	ld	e, (xsp+4)
-	.byte 0x8f, 0x04, 0x85
+	add	e, (xsp+0x4)
 	ld	c, (35180:16)
 	sub	c, e
 	extz	bc
@@ -2371,7 +2375,7 @@ SLDstBankList_FuncBody_Skip31:
 	lda	xiz, (35121:16)
 	ld	a, (35180:16)
 	extz	wa
-	.byte 0x8f, 0x04, 0x51
+	div	a, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -2488,7 +2492,7 @@ SLDstBankList_FuncBody_Join16:
 	calr	SLSrcBankList_FuncBody_Helper14
 SLDstBankList_FuncBody_Skip36:
 	ld	xwa, (33104:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jr	z, SLDstBankList_FuncBody_Loop4
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -2597,7 +2601,7 @@ SLDstBankList_FuncBody_Join18:
 	calr	SLSrcBankList_FuncBody_Helper14
 SLDstBankList_FuncBody_Skip41:
 	ld	xwa, (33104:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLDstBankList_FuncBody_Loop4
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -2615,7 +2619,7 @@ SLDstBankList_FuncBody_Skip42:
 	jr	nz, SLDstBankList_FuncBody_Skip44
 SLDstBankList_FuncBody_Skip43:
 	ld	xwa, (33104:16)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+0x4)
 	jrl	z, SLDstBankList_FuncBody_Loop4
 	lda	xde, (35099:16)
 	ld	xwa, xiz
@@ -3130,15 +3134,26 @@ CmpSrc_HandleScroll:
 	call	(xhl)
 	jrl	CmpSrc_Return	; -> 0xF9105C
 CmpSrc_ScrollMode6:
-	.byte 0xaf, 0x04, 0x20, 0xe8, 0xcf, 0x06, 0x00, 0x00
-	.byte 0x00, 0x6e, 0x6e, 0xc1, 0x5e, 0x89, 0x3f, 0x00
-	.byte 0x6e, 0x32, 0xe1, 0x58, 0x81, 0x20, 0x41, 0x02
-	.byte 0x00, 0xe5, 0x01, 0xea, 0xab, 0x1d, 0x4b, 0x99
-	.byte 0xfa, 0xe1, 0x58, 0x81, 0x20, 0xc1, 0x5c, 0x89
-	.byte 0x23, 0xd9, 0x12, 0xd9, 0xec, 0x02, 0xf2, 0x2a
-	.byte 0x0a, 0xea, 0x32, 0xf3, 0x07, 0xe8, 0xe4, 0x33
-	.byte 0xee, 0x89, 0xaf, 0x04, 0x22, 0xa3, 0x23, 0xb3
-	.byte 0xe8, 0x78, 0xdd, 0x00
+	ld	xwa, (xsp + 4)
+	cp	xwa, 0x6
+	jr	nz, CmpSrc_ScrollMode7
+	cp	(0x895e:16), 0
+	jr	nz, CmpSrc_ScrollMode6_NoStep
+	ld	xwa, (0x8158:16)
+	ld	xbc, 0x1e50002
+	ld	xde, 3:i3
+	call	ApPostEvent
+	ld	xwa, (0x8158:16)
+	ld	c, (0x895c:16)
+	extz	bc
+	sla	bc, 2
+	lda	xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda_dri	XHL, 0x07, 0xe8, 0xe4
+	ld	xbc, xiz
+	ld	xde, (xsp + 4)
+	ld	xhl, (xhl)
+	call	(xhl)
+	jrl	CmpSrc_Return
 CmpSrc_ScrollMode6_NoStep:
 	ld	xwa, (33112:16)
 	ld	xbc, 31784962
@@ -3175,15 +3190,25 @@ CmpSrc_ScrollMode7:
 	call	(xhl)
 	jr	CmpSrc_Return	; -> 0xF9105C
 CmpSrc_ScrollMode8:
-	.byte 0xaf, 0x04, 0x21, 0xe9, 0xcf, 0x08, 0x00, 0x00
-	.byte 0x00, 0x6e, 0x37, 0xc1, 0x5e, 0x89, 0x3f, 0x00
-	.byte 0x6e, 0x30, 0x41, 0x02, 0x00, 0xe5, 0x01, 0x42
-	.byte 0xff, 0xff, 0xff, 0xff, 0x1d, 0x4b, 0x99, 0xfa
-	.byte 0xe1, 0x58, 0x81, 0x20, 0xc1, 0x5c, 0x89, 0x23
-	.byte 0xd9, 0x12, 0xd9, 0xec, 0x02, 0xf2, 0x2a, 0x0a
-	.byte 0xea, 0x32, 0xf3, 0x07, 0xe8, 0xe4, 0x33, 0xee
-	.byte 0x89, 0xaf, 0x04, 0x22, 0xa3, 0x23, 0xb3, 0xe8
-	.byte 0x68, 0x27
+	ld	xbc, (xsp + 4)
+	cp	xbc, 0x8
+	jr	nz, CmpSrc_ScrollMode40
+	cp	(0x895e:16), 0
+	jr	nz, CmpSrc_ScrollMode40
+	ld	xbc, 0x1e50002
+	ld	xde, 0xffffffff
+	call	ApPostEvent
+	ld	xwa, (0x8158:16)
+	ld	c, (0x895c:16)
+	extz	bc
+	sla	bc, 2
+	lda	xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda_dri	XHL, 0x07, 0xe8, 0xe4
+	ld	xbc, xiz
+	ld	xde, (xsp + 4)
+	ld	xhl, (xhl)
+	call	(xhl)
+	jr	CmpSrc_Return
 CmpSrc_ScrollMode40:
 	ld	xbc, (xsp+4)
 	cp	xbc, 40
@@ -3676,12 +3701,21 @@ BuildSlotLabel:
 	extz XWA
 	sll XWA, 0x0b
 	add XBC,XWA
-	.byte 0xf3, 0xe5, 0x00, 0x01, 0x31, 0x9f, 0x04, 0x20
-	.byte 0xd8, 0x08, 0x15, 0x00, 0xf1, 0x66, 0x81, 0x34
-	.byte 0xd8, 0x8e, 0xee, 0x12, 0xec, 0x86, 0xf5, 0xf8
-	.byte 0x47, 0xcd, 0xd8, 0x66, 0x22, 0x9f, 0x04, 0x3f
-	.byte 0x09, 0x00, 0x6e, 0x09, 0xf5, 0xf8, 0x00, 0x31
-	.byte 0xb6, 0x00, 0x30, 0x68, 0x0c
+	lda_dri	XBC, 0xe5, 0x00, 0x01
+	ld	wa, (xsp + 4)
+	mul	wa, 0x15
+	lda	xix, (0x8166:16)
+	ld	iz, wa
+	extz	xiz
+	add	xiz, xix
+	lda_dpi	XSP, 0xf8
+	cp	e, 0:i3
+	jr	z, BuildSlotLabel_WriteContent
+	cpw	(xsp + 4), 0x9
+	jr	nz, BuildSlotLabel_WriteLetter
+	stib_dsp	0xf8, 0x31
+	ld	(xiz), 0x30
+	jr	BuildSlotLabel_WriteColon
 BuildSlotLabel_WriteLetter:
 	stib_dsp 0xf8, 0x20
 	ld wa, (xsp + 4)

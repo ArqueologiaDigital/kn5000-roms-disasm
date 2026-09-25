@@ -11,53 +11,41 @@ FDemo_DisplayResourceData:
 	push	xiz
 	ld	xiz, xwa
 	ldw (xsp+6), 0
-	.byte 0xf3
-	swi	5
-	ld	(1:8), 49:io
+	lda	xbc, (xsp+0x108)
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
+FDemo_DisplayResourceData_Loop:
 	stib_dsp 224, 32
 	cp xwa, xbc
-	jr	c, -8
+	jr	c, FDemo_DisplayResourceData_Loop
 	push	xiz
 	call	Strlen
 	pushw	hl
 	push	xiz
-	.byte 0xf3
-	swi	5
-	ccf
-	.byte 0x01
-	ldw	wa, 7480
-	.byte 0xf3
-	incf
-	swi	7
-	lda	xwa, (xsp+278)
-	.byte 0xb8, 0x08
-	nop
-	.long Data_DiskFuncPtrTbl_EA0B00
+	lda	xwa, (xsp+0x112)
+	push	xwa
+	call	Strncpy
+	lda	xwa, (xsp+0x116)
+	ld	(xwa+0x8), 0
+	pushw	234
 	pushw	112
 	push	xwa
 	call	Strcat
 	lda	xsp, (xsp+22)
-	.byte 0xf3
-	swi	5
-	ld	(1:8), 48:io
+	lda	xwa, (xsp+0x108)
 	ld	xbc, Presentation_TagStrTable_0x6E
 	call	FileIO_OpenWithMode
 	ld	(xsp+4), hl
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jrl	lt, 187
-	calr	194
+	cpw	(xsp+0x4), 0
+	jrl	lt, FDemo_DisplayResourceData_Skip6
+	calr	FDemo_DisplayResourceData_Helper
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
 	call	FileIO_ReadBlock
 	or	xhl, xhl
-	jr	z, 31
+	jr	z, FDemo_DisplayResourceData_Skip4
 	ld	xwa, 256
-	calr	181
+	calr	Seq_LoadNamedResource_Helper
 	lda	xbc, (xsp+8)
 	ld	a, (xbc+4)
 	extz	wa
@@ -67,14 +55,16 @@ FDemo_DisplayResourceData:
 	push	xhl
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
+FDemo_DisplayResourceData_Skip4:
 	ld	iz, 1:i3
+FDemo_DisplayResourceData_Loop2:
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
 	call	FileIO_ReadBlock
 	or	xhl, xhl
 	jr	z, FDemo_DisplayResourceData_Skip
 	ld	xwa, 256
-	calr	132
+	calr	Seq_LoadNamedResource_Helper
 	pushw	256
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -84,24 +74,24 @@ FDemo_DisplayResourceData:
 FDemo_DisplayResourceData_Skip:
 	inc	1, iz
 	cp	iz, 8
-	jr	lt, -47
-	.byte 0x9f, 0x06
-	push	xsp
-	normal
-	nop
-	jr	nz, 22
+	jr	lt, FDemo_DisplayResourceData_Loop2
+	cpw	(xsp+0x6), 1
+	jr	nz, FDemo_DisplayResourceData_Skip5
 	ld	iz, 0:i3
+FDemo_DisplayResourceData_Loop3:
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
 	call	FileIO_ReadBlock
 	inc	1, iz
 	cp	iz, 72
-	jr	lt, -20
+	jr	lt, FDemo_DisplayResourceData_Loop3
+FDemo_DisplayResourceData_Skip5:
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
 	call	FileIO_ReadBlock
 	or	xhl, xhl
 	jr	z, FDemo_DisplayResourceData_Skip2
+FDemo_DisplayResourceData_Loop4:
 	ld	xwa, 256
 	calr	Seq_LoadNamedResource_Helper
 	pushw	256
@@ -114,16 +104,15 @@ FDemo_DisplayResourceData_Skip:
 	ld	xbc, 256
 	call	FileIO_ReadBlock
 	or	xhl, xhl
-	jr	nz, -39
+	jr	nz, FDemo_DisplayResourceData_Loop4
 FDemo_DisplayResourceData_Skip2:
 	call	FileIO_CloseHandle
+FDemo_DisplayResourceData_Skip6:
 	ld	hl, (xsp+4)
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	ld	d, 1:opc
-	.byte 0x37
+	lda	xsp, (xsp+0x124)
 	ret
+FDemo_DisplayResourceData_Helper:
 	lda	xwa, (0xab000:24)
 	ld	(0x25b7e:24), xwa
 	ret
@@ -685,13 +674,13 @@ Demo_SelectEntry_ByteTable:
 Demo_SelectEntry_ByteTable_Skip:
 	res	3, (0x28ad:16)
 	cp	(0x8d38:16), 228
-	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
+	call_24	nz, (0xf229f1)
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	ldw	(0x25b84:24), 1
 	ld	(0x8f4e:16), 4
 	cp	(0x8d38:16), 228
-	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
+	call_24	nz, (0xf22a4d)
 	ld	a, (0x28a4:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
@@ -3158,10 +3147,9 @@ FileIO_ByteBlock_DemoProc1_Skip2:
 	extz	wa
 	call	BitMapOut_UpdateWidget_Done_0x8A
 	lda	xwa, (0x1ed350:24)
-	.byte 0xaf, 0x04
-	sub	(xwa), l
-	ld	(33:8), 29:io
-	jrl	ov, -1907
+	add	xwa, (xsp+0x4)
+	ld	xbc, (xsp+0x8)
+	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, (xsp+36)
@@ -3260,10 +3248,9 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	ld	bc, 0:i3
 	call	FileIO_SeekAndReadBlock
 	lda	xwa, (0x1ed350:24)
-	.byte 0xaf, 0x04
-	sub	(xwa), l
-	ld	(33:8), 29:io
-	jrl	ov, -1907
+	add	xwa, (xsp+0x4)
+	ld	xbc, (xsp+0x8)
+	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, (xsp+36)
@@ -3523,7 +3510,7 @@ FileIO_ByteBlock_DemoProc1_Join5:
 	extz	bc
 	call	TmFlashWrite_Block1
 	lda	xwa, (0x1e0000:24)
-	.byte 0xaf, 0x06, 0x80
+	add	xwa, (xsp+0x6)
 	ld	bc, (xsp+10)
 	extz	xbc
 	call	FileIO_ReadBlock
@@ -3549,8 +3536,8 @@ FileIO_ByteBlock_DemoProc1_Epilogue5:
 	call	GetCurrentFileIndex
 	cp	hl, 0:i3
 	jr	ge, FileIO_ByteBlock_DemoProc1_Skip20
-	.byte 0x33, 0x98
-	.long Pad_AfterBitmap_MIDIConnections_1
+	ldw	hl, 0xff98
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue6
 FileIO_ByteBlock_DemoProc1_Skip20:
 	ld	a, l
 	ldb_erp a, 248
@@ -3617,7 +3604,7 @@ FileIO_ByteBlock_DemoProc1_Join6:
 	extz	wa
 	call	TmFlashWrite_Block1_Return
 	lda	xwa, (0x1e0000:24)
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+0x4)
 	ld	bc, (xsp+8)
 	extz	xbc
 	call	FileIO_ReadBlock
@@ -6769,10 +6756,9 @@ GetFileEntryByIndex_Skip5:
 	call	FileIO_ReadByte
 	sll	hl, 8
 	or	iz, hl
-	.byte 0x9f, 0x1c
-	ld	xiz, 0xc8e888ee
-	ld	(xde), 0
-	nop
+	mul	iz, (xsp+0x1c)
+	ld	xwa, xiz
+	add	xwa, 178
 	ld	bc, 0:i3
 	call	FileIO_SeekAndReadBlock
 	ld	xwa, 0x25be8
@@ -6860,9 +6846,8 @@ GetFileEntryByIndex_Skip8:
 GetFileEntryByIndex_Skip9:
 	ld	wa, (xsp+28)
 	sll	wa, 2
-	.byte 0x9f, 0x1a
-	xor	(xwa), w
-	ld	(96:8), 0:io
+	add	wa, (xsp+0x1a)
+	mul	wa, 96
 	add	wa, 160
 	extz	xwa
 	ld	bc, 0:i3
@@ -8790,24 +8775,19 @@ FileIO_ErrorCodeByteBlock:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	ld	xbc, 0x7ff1feb0
-	.byte 0xc0
-	sbc	w, w
-	.byte 0xf6
+	cp	(0xc07d:16), 65
+	ret	nz
+	bitda	0, (0xc07f)
+	ret	z
 	ld	c, (0x8d36:16)
 	cp	c, 16
 	jr	c, FileIO_ErrorCodeByteBlock_Entry
 	cp	c, 22
 	ret	ule
 FileIO_ErrorCodeByteBlock_Entry:
-	.byte 0xf1
-	jrl	nz, -14144
+	bitda	0, (0xc07e)
 	jr	z, FileIO_ErrorCodeByteBlock_Skip4
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	.byte 0x06
+	cp	(0x8d34:16), 6
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip
 	cp	c, 96
 	jr	z, FileIO_ErrorCodeByteBlock_Loop
@@ -8826,30 +8806,26 @@ FileIO_ErrorCodeByteBlock_Skip2:
 	jr	FileIO_ErrorCodeByteBlock_Join
 FileIO_ErrorCodeByteBlock_Skip3:
 	cp	c, 98
-	jr	nz, 5
+	jr	nz, FileIO_ErrorCodeByteBlock_Skip11
 	ldw	wa, 176
-	jr	8
+	jr	FileIO_ErrorCodeByteBlock_Join
+FileIO_ErrorCodeByteBlock_Skip11:
 	cp	c, 99
-	jr	nz, 7
+	jr	nz, FileIO_ErrorCodeByteBlock_Loop
 	ldw	wa, 72
 FileIO_ErrorCodeByteBlock_Join:
 	call	UI_PostModeChangeEvent
 FileIO_ErrorCodeByteBlock_Loop:
-	calr	64612
+	calr	ResetProgressIndication
 	ret
 FileIO_ErrorCodeByteBlock_Skip4:
 	ld	a, (0x340f2:24)
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	normal
-	jr	nz, 75
-	.byte 0xf1
-	ld	w, 4:opc
-	sbc	w, b
-	swi	6
-	.byte 0xf1, 0x1f, 0x04
-	sbc	w, b
-	swi	6
+	cp	(0x8d34:16), 1
+	jr	nz, FileIO_ErrorCodeByteBlock_Skip12
+	bitda	2, (0x420)
+	ret	nz
+	bitda	2, (0x41f)
+	ret	nz
 	ld	c, a
 	cp	a, 0:i3
 	ret	z
@@ -8864,15 +8840,18 @@ FileIO_ErrorCodeByteBlock_Skip4:
 	cp a, 119
 	jr	z, FileIO_ErrorCodeByteBlock_Skip5
 	cp	a, 108
-	jr	z, 13
+	jr	z, FileIO_ErrorCodeByteBlock_Loop2
 	cp	a, 97
 	ret	nz
 	ldw	wa, 97
 	ldw	bc, 0x0064
-	.ascii "h>xLþ"
+	jr	FileIO_ErrorCodeByteBlock_Join3
+FileIO_ErrorCodeByteBlock_Loop2:
+	jrl	FileIO_DetectFileTypeAndPost
 FileIO_ErrorCodeByteBlock_Skip5:
 	extz	wa
 	jr	FileIO_ErrorCodeByteBlock_Join2
+FileIO_ErrorCodeByteBlock_Skip12:
 	cp	c, 96
 	jr	z, FileIO_ErrorCodeByteBlock_Skip6
 	cp	c, 126
@@ -8890,11 +8869,12 @@ FileIO_ErrorCodeByteBlock_Skip6:
 	cp a, 119
 	jr	z, FileIO_ErrorCodeByteBlock_Skip7
 	cp	a, 108
-	jr	z, -51
+	jr	z, FileIO_ErrorCodeByteBlock_Loop2
 	cp	a, 97
 	ret	nz
 	ldw	wa, 97
 	ldw	bc, 100
+FileIO_ErrorCodeByteBlock_Join3:
 	jrl	FileIO_DiskEventDispatch
 FileIO_ErrorCodeByteBlock_Skip7:
 	extz	wa
@@ -8904,10 +8884,7 @@ FileIO_ErrorCodeByteBlock_Skip8:
 	call	FDemo_MultiGuardCheck
 	cp	hl, 0:i3
 	ret	z
-	.byte 0xd1
-	nop
-	cp	(xiy), 0
-	nop
+	cpw	(0x8500:16), 0
 	jr	ge, FileIO_ErrorCodeByteBlock_Skip9
 	call	GetDiskSizeInfo
 	extz	hl

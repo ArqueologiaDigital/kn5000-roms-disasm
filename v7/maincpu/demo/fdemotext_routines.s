@@ -52,7 +52,15 @@ FDemoText_ByteData_VoiceProbeA_Skip2:
 	or	(149490:24), a
 	ret
 FDemoText_ByteData_VoiceProbeB:
-	.incbin "includes/romslices/v7_transplant_FDemoText_ByteData_VoiceProbeB.bin"
+; (was .incbin "includes/romslices/v7_transplant_FDemoText_ByteData_VoiceProbeB.bin")
+	cp	(0xbfe1:16), 1
+	ret	nz
+	ld	a, (0xbfe3:16)
+	res	7, a
+	cp	a, 0:i3
+	ret	z
+	setda_24	6, (0x247ee)
+	ret
 FDemoText_ByteData_VoiceProbeC:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 31 of 44 slots byte-identical
 	ld	e, (49124:16)
@@ -66,44 +74,41 @@ FDemoText_ByteData_VoiceProbeC:
 	ret	gt
 	add	wa, wa
 	lda	xix, (DemoDiskPrompt_English1_0x96:24)
-	.byte 0xd3	; v10 does not spell this byte either
-	reti
-	.byte 0xf0	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 242:opc
-	.byte 0x97, 0x43, 0xf8	; differs from v10 here and llvm-objdump cannot read it
-	ldw	ix, 2035
-	.byte 0xf0	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	cp	de, wa
-	.byte 0xec	; v10 does not spell this byte either
-	ld	xsp, 1074707970
-	.byte 0xcc	; v10 does not spell this byte either
-	swi	4
-	.byte 0xe9	; v10 does not spell this byte either
-	nop
-	jr	42
+	ld_rrw	wa, xix, wa
+	lda_24	xix, (0xf84397)
+	jp_rr	8, xix, wa
+	setda_24	6, (0x247ec)
+	ret
+	ld	xwa, DemoDiskPrompt_English1_0x8E
+; differs from v10 here and llvm-objdump cannot read it
+	jr	FDemoText_ByteData_VoiceProbeC_Join
 	ld	a, (49123:16)
 	and	a, 15
-	jr	z, 19
+	jr	z, FDemoText_ByteData_VoiceProbeC_Skip
 	ld	a, e
 	extz	wa
 	lda	xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ld_rrb	a, xbc, wa
 	or	(149484:24), a
+FDemoText_ByteData_VoiceProbeC_Skip:
 	ld	a, (49123:16)
 	and	a, 48
 	ret	z
 	ld	xwa, DemoDiskPrompt_English1_0x92
+FDemoText_ByteData_VoiceProbeC_Join:
 	extz	de
 	ld_rrb	a, xwa, de
 	or	(149484:24), a
 	ret
 FDemoText_ProcessVoiceFlags:
-	.byte 0xd7, 0xfa, 0x04, 0xc1, 0xaa, 0x8c, 0x21, 0xc9
-	.byte 0x33, 0x06, 0x66, 0x10, 0xf2, 0xee, 0x47, 0x02
-	.byte 0xbe, 0xc1, 0xaa, 0x8c, 0x21, 0xc9, 0x30, 0x06
-	.byte 0xf1, 0xaa, 0x8c, 0x41
+	pushw_erp	0xfa
+	ld	a, (0x8caa:16)
+	bit	6, a
+	jr	z, FDemoText_ProcessVoiceFlags_ReadState
+	set	6, (0x0247ee:24)
+	ld	a, (0x8caa:16)
+	res	6, a
+	ld	(0x8caa:16), a
 FDemoText_ProcessVoiceFlags_ReadState:
 	call	15665005
 	cp	hl, 0:i3
@@ -297,15 +302,33 @@ FDemoText_DeactivateVoice_RetOnly:
 	ret
 
 FDemoText_UpdateVoiceDisplay:
-	.byte 0xef, 0x6a, 0x3e, 0xbf, 0x04, 0x41, 0x8f, 0x04
-	.byte 0x21, 0xd8, 0x12, 0x1e, 0x1d, 0xfd, 0xeb, 0x8e
-	.byte 0xee, 0x65, 0x86, 0x3f, 0x00, 0x66, 0x2f, 0xb6
-	.byte 0x00, 0x00, 0x8f, 0x04, 0x21, 0xd8, 0x12, 0x0b
-	.byte 0x7f, 0x00, 0xd9, 0xad, 0xda, 0xa8, 0x1d, 0x53
-	.byte 0xaa, 0xfd, 0xbe, 0x02, 0x30, 0x80, 0x3f, 0x00
-	.byte 0x6e, 0x14, 0xb0, 0x00, 0x5a, 0x8f, 0x04, 0x21
-	.byte 0xd8, 0x12, 0x0b, 0x7f, 0x00, 0xd9, 0xaf, 0x32
-	.byte 0x5a, 0x00, 0x1d, 0x53, 0xaa, 0xfd
+	dec	2, xsp
+	push	xiz
+	ld	(xsp + 4), a
+	ld	a, (xsp + 4)
+	extz	wa
+	calr	FDemoText_LookupTableEntry
+	ld	xiz, xhl
+	inc	5, xiz
+	cp	(xiz), 0x0
+	jr	z, FDemoText_UpdateVoiceDisplay_CheckSend
+	ld	(xiz), 0x0
+	ld	a, (xsp + 4)
+	extz	wa
+	pushw	0x7f
+	ld	bc, 5:i3
+	ld	de, 0:i3
+	call	0xfdaa53
+	lda	xwa, (xiz + 2)
+	cp	(xwa), 0x0
+	jr	nz, FDemoText_UpdateVoiceDisplay_CheckSend
+	ld	(xwa), 0x5a
+	ld	a, (xsp + 4)
+	extz	wa
+	pushw	0x7f
+	ld	bc, 7:i3
+	ldw	de, 0x5a
+	call	0xfdaa53
 FDemoText_UpdateVoiceDisplay_CheckSend:
 	ld a, (0x0247ee:24)
 	and a, 0x38
@@ -411,12 +434,22 @@ FDemoText_UpdateChannelVoice:
 	jr FDemoText_UpdateChannel_SendCmd
 
 FDemoText_UpdateChannel_Active:
-	.byte 0x86, 0x3f, 0x00, 0x6e, 0x2a, 0xb6, 0x00, 0x50
-	.byte 0x0b, 0x7f, 0x00, 0xd9, 0xad, 0x32, 0x50, 0x00
-	.byte 0x1d, 0x53, 0xaa, 0xfd, 0xbe, 0x02, 0x30, 0x80
-	.byte 0x3f, 0x00, 0x66, 0x13, 0xb0, 0x00, 0x00, 0x8f
-	.byte 0x04, 0x21, 0xd8, 0x12, 0x0b, 0x7f, 0x00, 0xd9
-	.byte 0xaf, 0xda, 0xa8
+	cp	(xiz), 0x0
+	jr	nz, FDemoText_UpdateChannel_Done
+	ld	(xiz), 0x50
+	pushw	0x7f
+	ld	bc, 5:i3
+	ldw	de, 0x50
+	call	0xfdaa53
+	lda	xwa, (xiz + 2)
+	cp	(xwa), 0x0
+	jr	z, FDemoText_UpdateChannel_Done
+	ld	(xwa), 0x0
+	ld	a, (xsp + 4)
+	extz	wa
+	pushw	0x7f
+	ld	bc, 7:i3
+	ld	de, 0:i3
 FDemoText_UpdateChannel_SendCmd:
 	call	16624211
 FDemoText_UpdateChannel_Done:
@@ -1173,11 +1206,12 @@ FDemoText_RefreshFullDisplay:
 
 	push xiz
 
-	.byte 0x1d, 0xc9, 0x14, 0xef	; call SwbtWr_ReinitOutputBank (v7 addr)
-
-	.byte 0x1d, 0xb2, 0xaa, 0xfd	; call SwbtWr_CallProcessAll (v7 addr)
-
-	.byte 0x1d, 0xc9, 0x14, 0xef	; call SwbtWr_ReinitOutputBank (v7 addr)
+; call SwbtWr_ReinitOutputBank (v7 addr)
+	call	SwbtWr_ReinitOutputBank
+; call SwbtWr_CallProcessAll (v7 addr)
+	.byte	0x1d, 0xb2, 0xaa, 0xfd
+; call SwbtWr_ReinitOutputBank (v7 addr)
+	call	SwbtWr_ReinitOutputBank
 
 	pop xiz
 
@@ -1200,7 +1234,7 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xbc, 31457301
 	ld	xde, 0:i3
 	call	SendEvent
-	.byte 0x83, 0x3f, 0x00
+	cp	(xhl), 0
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip2
 	ld	xwa, xiz
 	srl	xwa, 0
@@ -1232,6 +1266,7 @@ FDemoText_ByteData_DisplayRefresh_Join:
 FDemoText_ByteData_DisplayRefresh_Epilogue:
 	pop	xiz
 	ret
+FDemoText_TextDispatch_Helper:
 	lda	xsp, (xsp-136)
 	push	xiz
 	push	xwa
@@ -1282,7 +1317,7 @@ FDemoText_ByteData_DisplayRefresh_Loop2:
 FDemoText_ByteData_DisplayRefresh_Skip3:
 	inc	1, xiz
 	ld	xwa, xiz
-	.byte 0xaf, 0x08, 0xf0
+	cp	xwa, (xsp+0x8)
 	jr	c, FDemoText_ByteData_DisplayRefresh_Loop2
 FDemoText_ByteData_DisplayRefresh_Skip4:
 	ld	xwa, 1:i3
@@ -1434,15 +1469,29 @@ FDemoText_ProcessMarkup_LookupTag:
 	push XWA
 	call LyricsTrack_ReadAndParse_Helper2
 	ld (XSP+0x12),HL
-	.byte 0x9f, 0x12, 0x04, 0xaf, 0x5c, 0x20, 0xe8, 0x61
-	.byte 0x38, 0x9f, 0x1a, 0x21, 0xd9, 0xec, 0x03, 0xf2
-	.byte 0xf2, 0xfc, 0xe9, 0x30, 0xe3, 0x07, 0xe0, 0xe4
-	.byte 0x20, 0x38, 0x1d, 0xe4, 0x04, 0xff, 0xef, 0xc8
-	.byte 0x0e, 0x00, 0x00, 0x00, 0xdb, 0xd8, 0x7e, 0x17
-	.byte 0x01, 0x9f, 0x10, 0x21, 0xd9, 0xec, 0x03, 0xf2
-	.byte 0xf6, 0xfc, 0xe9, 0x30, 0xe3, 0x07, 0xe0, 0xe4
-	.byte 0x20, 0xbf, 0x04, 0x60, 0xe8, 0xe0, 0x76, 0xcc
-	.byte 0x00, 0xee, 0xa8, 0xaf, 0x56, 0x21, 0x68, 0x04
+	pushm	(xsp + 18)
+	ld	xwa, (xsp + 92)
+	inc	1, xwa
+	push	xwa
+	ld	bc, (xsp + 26)
+	sla	bc, 3
+	lda	xwa, (DemoDiskPrompt_English1_0xB4:24)
+	ld_sril3	XWA, 0x07, 0xe0, 0xe4
+	push	xwa
+	call	SLIDE_Parse_Header_Helper
+	add	xsp, 0xe
+	cp	hl, 0:i3
+	jrl	nz, FDemoText_ProcessMarkup_NextTag
+	ld	bc, (xsp + 16)
+	sla	bc, 3
+	lda	xwa, (DemoDiskPrompt_English1_0xB8:24)
+	ld_sril3	XWA, 0x07, 0xe0, 0xe4
+	ld	(xsp + 4), xwa
+	or	xwa, xwa
+	jrl	z, FDemoText_ProcessMarkup_SkipToEnd
+	ld	xiz, 0:i3
+	ld	xbc, (xsp + 86)
+	jr	FDemoText_ProcessMarkup_ScanLoop
 FDemoText_ProcessMarkup_ScanTagEnd:
 	inc 1, xiz
 	inc 1, xbc
@@ -1680,8 +1729,8 @@ FDemoText_ByteData_TextRenderer:
 	ld	wa, iz
 	exts	xwa
 	sll	xwa, 2
-	.byte 0xaf	; v10 does not spell this byte either
-	ldw	(128:8), 8352:io
+	add	xwa, (xsp+0xa)
+	ld	xwa, (xwa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	1, hl
@@ -1710,18 +1759,14 @@ FDemoText_ByteData_TextRenderer:
 	ld	xwa, (xsp+18)
 	ld	(xwa), 0
 	ld	xwa, (xsp+2)
-	.byte 0x80	; v10 does not spell this byte either
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	z, FDemoText_ProcessTextMarkup_Skip2
+FDemoText_ByteData_TextRenderer_Loop:
 	ld	xde, (xsp+2)
 	lda_rr	xwa, xde, iz
 	ld	xbc, xwa
-	.byte 0x80	; v10 does not spell this byte either
-	.byte 0x3f	; v10 does not spell this byte either
-	.byte 0x3d	; v10 does not spell this byte either
-	.byte 0x6e	; v10 does not spell this byte either
-	.byte 0x55	; v10 does not spell this byte either
+	cp	(xwa), 61
+	jr	nz, FDemoText_ByteData_TextRenderer_Skip
 	ld	(xbc), 0
 	push	xde
 	ld	xwa, (xsp+10)
@@ -1749,27 +1794,24 @@ FDemoText_ByteData_TextRenderer:
 	extz	xhl
 	add	xhl, (xsp+18)
 	ld	(xhl), 0
-	jr	26
+	jr	FDemoText_ProcessTextMarkup_Skip2
 FDemoText_ProcessTextMarkup_Skip:
 	push	xbc
 	ld	xwa, (xsp+22)
 	push	xwa
 	call	Free_Compare2
 	inc	8, xsp
-	jr	13
+	jr	FDemoText_ProcessTextMarkup_Skip2
+FDemoText_ByteData_TextRenderer_Skip:
 	inc	1, iz
 	ld	xwa, (xsp+2)
-	.byte 0xc3	; v10 does not spell this byte either
-	reti
-	.byte 0xe0	; v10 does not spell this byte either
-	swi	0
-	push	xsp
-	nop
-	jr	nz, -113
+; v10 does not spell this byte either
+	.byte	0xc3, 0x07, 0xe0, 0xf8, 0x3f, 0x00	; cp (XWA+IZ),0x00
+	jr	nz, FDemoText_ByteData_TextRenderer_Loop
 FDemoText_ProcessTextMarkup_Skip2:
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	popw	iz
 	lda	xsp, (xsp+12)
@@ -1785,7 +1827,642 @@ FDemoText_TextDispatch_Return:
 	ret
 
 FDemoText_ByteData_LayoutEngine:
-	.incbin "includes/romslices/v7_transplant_FDemoText_ByteData_LayoutEngine.bin"
+; (was .incbin "includes/romslices/v7_transplant_FDemoText_ByteData_LayoutEngine.bin")
+	lda	xsp, (xsp-222)
+	push	xiz
+	ld	(xsp+218), de
+	ld	(xsp+220), xbc
+	ld	(xsp+224), wa
+	ld	xiy, FileTypeName_Song_0x6
+	lda	xix, (xsp+20)
+	ldw	bc, 32
+	ldirw
+	ldi85
+	ld	xiy, FileTypeName_Song_0x48
+	lda	xix, (xsp+6)
+	ld	bc, 6:i3
+	ldirw
+	ldi85
+	ld	iz, 0:i3
+	cpw	(xsp+224), 0
+	jr	lt, FDemoText_TextDispatch_Skip3
+FDemoText_TextDispatch_Loop4:
+	lda	xde, (xsp+152)
+	lda	xwa, (xsp+86)
+	push	xwa
+	ld	wa, iz
+	ld	xbc, (xsp+224)
+	calr	FDemoText_ByteData_TextRenderer
+	ld	qiz, 0
+	jr	FDemoText_TextDispatch_Join2
+FDemoText_TextDispatch_Loop5:
+	lda	xwa, (xsp+152)
+	push	xwa
+	push	xbc
+	call	0xff0758
+	inc	8, xsp
+	cp	hl, 0:i3
+	jr	nz, FDemoText_TextDispatch_Join
+	ld	wa, qiz
+	lda	xbc, (xsp+86)
+	cp	qiz, 2
+	jr	z, FDemoText_TextDispatch_Skip2
+	cp	wa, 1:i3
+	jr	z, FDemoText_TextDispatch_Skip
+	cp	wa, 0:i3
+	jr	nz, FDemoText_TextDispatch_Join
+	push	xbc
+	call	Boot_CheckConfigFlag7_Helper
+	inc	4, xsp
+	ld	(xsp+4), hl
+	jr	FDemoText_TextDispatch_Join
+FDemoText_TextDispatch_Skip:
+	push	xbc
+	lda	xwa, (xsp+10)
+	push	xwa
+	jr	FDemoText_TextDispatch_Join6
+FDemoText_TextDispatch_Skip2:
+	push	xbc
+	lda	xwa, (xsp+24)
+	push	xwa
+FDemoText_TextDispatch_Join6:
+	call	Free_Compare2
+	inc	8, xsp
+FDemoText_TextDispatch_Join:
+	inc	1, qiz
+FDemoText_TextDispatch_Join2:
+	ld	bc, qiz
+	sla	bc, 2
+	lda	xwa, (FileType_NameTable:24)
+	ld_rrl	xbc, xwa, bc
+	cp	(xbc), 0
+	jr	nz, FDemoText_TextDispatch_Loop5
+	inc	1, iz
+	cp	iz, (xsp+224)
+	jr	le, FDemoText_TextDispatch_Loop4
+FDemoText_TextDispatch_Skip3:
+	cpw	(xsp+218), 1
+	jrl	z, FDemoText_TextDispatch_Skip4
+	cpw	(xsp+218), 0
+	jrl	nz, FDemoText_TextDispatch_Skip4
+	lda	xbc, (xsp+6)
+	cp	(xbc), 0
+	jrl	z, FDemoText_TextDispatch_Skip4
+	ld	wa, (xsp+4)
+	dec	1, wa
+	ld	(0x024876:24), wa
+	push	xbc
+	pushw	233
+	pushw	0xfe66
+	pushw	2
+	pushw	0x4878
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xwa, (xsp+18)
+	push	xwa
+	pushw	2
+	pushw	0x4878
+	call	Free_Compare2
+	lda	xwa, (xsp+40)
+	push	xwa
+	pushw	2
+	pushw	0x4882
+	call	Free_Compare2
+	lda	xsp, (xsp+28)
+	.byte	0x40
+	.long	Pad_AfterNakaData_ExternalBase
+	ld	xbc, 0x01c00002
+	ld	xde, 5:i3
+	call	SendEvent
+	.byte	0x40
+	.long	Pad_NakaExternal_Block1
+	ld	xbc, 0x01c00002
+	ld	xde, 5:i3
+	call	SendEvent
+	.byte	0x40
+	.long	Pad_NakaExternal_Block1
+	ld	xbc, 0x01c00001
+	ld	xde, 5:i3
+	call	SendEvent
+	.byte	0x40
+	.long	Pad_NakaExternal_Block1
+	ld	xbc, 0x01c10005
+	ld	xde, 19
+	call	SendEvent
+	ld	xwa, NakaInst_Param_Field02_0x4
+	ld	xbc, 0x01c00001
+	ld	xde, 0:i3
+	call	SendEvent
+	pushw	2
+	pushw	0x4878
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	1, hl
+	pushw	hl
+	call	SLIDE_Decompress_4K_Init_Helper2
+	ld	xiz, xhl
+	pushw	2
+	pushw	0x4878
+	push	xiz
+	call	Free_Compare2
+	lda	xsp, (xsp+14)
+	ld	xwa, 0x01410000
+	ld	xbc, 0x01e10005
+	ld	xde, xiz
+	call	MainFuncCall
+	ld	xwa, 0x01400003
+	ld	xbc, 0x01e00023
+	ld	xde, xiz
+	call	MainFuncCall
+FDemoText_TextDispatch_Skip4:
+	ld	hl, 0:i3
+	pop	xiz
+	lda	xsp, (xsp+222)
+	ret
+	lda	xsp, (xsp-142)
+	push	xiz
+	ld	(xsp+138), de
+	ld	(xsp+0x8c), xbc
+	ld	(xsp+0x90), wa
+	ldw	(xsp+0x4), 0
+	cpw	(xsp+144), 0
+	jrl	lt, FDemoText_TextDispatch_Skip13
+FDemoText_TextDispatch_Loop6:
+	lda	xde, (xsp+72)
+	lda	xwa, (xsp+6)
+	push	xwa
+	ld	wa, (xsp+8)
+	ld	xbc, (xsp+144)
+	calr	FDemoText_ByteData_TextRenderer
+	ld	qiz, 0
+	jr	FDemoText_TextDispatch_Join7
+FDemoText_TextDispatch_Loop7:
+	lda	xbc, (xsp+72)
+	push	xbc
+	push	xwa
+	call	0xff0758
+	inc	8, xsp
+	cp	hl, 0:i3
+	jr	nz, FDemoText_TextDispatch_Join3
+	ld	bc, qiz
+	lda	xwa, (xsp+6)
+	cp	qiz, 1
+	jr	z, FDemoText_TextDispatch_Skip5
+	cp	bc, 0:i3
+	jr	nz, FDemoText_TextDispatch_Join3
+	push	xwa
+	call	Boot_CheckConfigFlag7_Helper
+	inc	4, xsp
+	ld	iz, hl
+	jr	FDemoText_TextDispatch_Join3
+FDemoText_TextDispatch_Skip5:
+	ldb_spi	c, 224
+	cp	c, 82
+	jr	z, FDemoText_TextDispatch_Skip7
+	cp	c, 67
+	jr	z, FDemoText_TextDispatch_Skip6
+	cp	c, 76
+	jr	nz, FDemoText_TextDispatch_Join3
+	push	xwa
+	call	Boot_CheckConfigFlag7_Helper
+	inc	4, xsp
+	ldw	iz, 64
+	sub	iz, hl
+	jr	FDemoText_TextDispatch_Join3
+FDemoText_TextDispatch_Skip6:
+	ldw	iz, 64
+	jr	FDemoText_TextDispatch_Join3
+FDemoText_TextDispatch_Skip7:
+	push	xwa
+	call	Boot_CheckConfigFlag7_Helper
+	inc	4, xsp
+	ld	iz, hl
+	add	iz, 64
+FDemoText_TextDispatch_Join3:
+	inc	1, qiz
+FDemoText_TextDispatch_Join7:
+	ld	bc, qiz
+	sla	bc, 2
+	lda	xwa, (FileTypeName_Song_0x5A:24)
+	ld_rrl	xwa, xwa, bc
+	cp	(xwa), 0
+	jr	nz, FDemoText_TextDispatch_Loop7
+	incw	1, (xsp+4)
+	ld	wa, (xsp+4)
+	cp	wa, (xsp+144)
+	jrl	le, FDemoText_TextDispatch_Loop6
+FDemoText_TextDispatch_Skip13:
+	cpw	(xsp+138), 2
+	jr	z, FDemoText_TextDispatch_Skip14
+	cpw	(xsp+138), 1
+	jr	z, FDemoText_TextDispatch_Skip14
+	cpw	(xsp+138), 0
+	jr	nz, FDemoText_TextDispatch_Join4
+	calr	FDemoText_TextDispatch_Helper2
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x01e0009e
+	ld	xde, 1:i3
+	call	SendEvent
+	ld	xwa, Bitmap_Dredt0d_0x9A9
+	ld	xbc, 0x01c00001
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xwa, Bitmap_Dredt0d_0x9AA
+	ld	xbc, 0x01c00001
+	ld	xde, 5:i3
+	call	SendEvent
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x01e0009e
+	ld	xde, 0:i3
+	call	SendEvent
+	call	DrawWall
+	jr	FDemoText_TextDispatch_Join4
+FDemoText_TextDispatch_Skip14:
+	cp	iz, 0:i3
+	jr	lt, FDemoText_TextDispatch_Join4
+	cp	iz, 127
+	jr	gt, FDemoText_TextDispatch_Join4
+	ld	bc, iz
+	sla	bc, 2
+	lda	xde, (0x024fd8:24)
+	ld	xwa, (0x0249d4:24)
+	st_rrl	xwa, xde, bc
+FDemoText_TextDispatch_Join4:
+	ld	hl, 0:i3
+	pop	xiz
+	lda	xsp, (xsp+142)
+	ret
+	cp	de, 1:i3
+	jr	z, FDemoText_TextDispatch_Skip15
+	cp	de, 0:i3
+	scc16	z, hl
+	ret
+FDemoText_TextDispatch_Skip15:
+	ld	hl, 0:i3
+	ret
+	cp	de, 1:i3
+	jr	z, FDemoText_TextDispatch_Skip16
+	cp	de, 0:i3
+	call_24	z, (0xf85ac6)
+FDemoText_TextDispatch_Skip16:
+	ld	hl, 0:i3
+	ret
+	cp	de, 1:i3
+	jr	z, FDemoText_TextDispatch_Skip17
+	cp	de, 0:i3
+	jr	nz, FDemoText_TextDispatch_Skip17
+	calr	FDemoText_UpdateCursorPosition
+	ld	wa, (0x025b72:24)
+	inc	1, wa
+	ld	(0x025b72:24), wa
+	cp	wa, 8
+	jr	ge, FDemoText_TextDispatch_Skip17
+	lda	xbc, (0x025b74:24)
+	.byte	0xf3
+	.long	ToneGen_ParamTable
+	nop
+FDemoText_TextDispatch_Skip17:
+	ld	hl, 0:i3
+	ret
+	cp	de, 1:i3
+	jr	z, FDemoText_TextDispatch_Skip19
+	cp	de, 0:i3
+	jr	nz, FDemoText_TextDispatch_Skip19
+	calr	FDemoText_UpdateCursorPosition
+	ld	wa, (0x025b72:24)
+	dec	1, wa
+	ld	(0x025b72:24), wa
+	cp	wa, 0:i3
+	jr	ge, FDemoText_TextDispatch_Skip18
+	ldw	(0x025b72:24), 0
+FDemoText_TextDispatch_Skip18:
+	lda	xbc, (0x025b74:24)
+	ld	wa, (0x025b72:24)
+	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x01
+FDemoText_TextDispatch_Skip19:
+	ld	hl, 0:i3
+	ret
+	lda	xsp, (xsp-146)
+	push	xiz
+	ld	(xsp+142), de
+	ld	(xsp+144), xbc
+	ld	(xsp+148), wa
+	ld	wa, (0x025b3e:24)
+	sla	wa, 2
+	lda	xbc, (0x025b40:24)
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+0x4), xwa
+	ldw_da	wa, (0x25b60)
+	sla	wa, 1
+	lda_24	xbc, (0x25b62)
+	ld_rrw	wa, xbc, wa
+	ld	(xsp+0x8), wa
+	ld	iz, 0:i3
+	cpw	(xsp+0x94), 0
+	jrl	lt, FDemoText_TextDispatch_Skip21
+FDemoText_TextDispatch_Loop8:
+	lda	xde, (xsp+76)
+	lda	xwa, (xsp+10)
+	push	xwa
+	ld	wa, iz
+	ld	xbc, (xsp+148)
+	calr	FDemoText_ByteData_TextRenderer
+	ld	qiz, 0
+	jr	FDemoText_TextDispatch_Join8
+FDemoText_TextDispatch_Loop9:
+	lda	xbc, (xsp+76)
+	push	xbc
+	push	xwa
+	call	0xff0758
+	inc	8, xsp
+	cp	hl, 0:i3
+	jr	nz, FDemoText_TextDispatch_Skip8
+	ld	bc, qiz
+	lda	xwa, (xsp+10)
+	cp	qiz, 1
+	jr	z, FDemoText_TextDispatch_Skip20
+	cp	bc, 0:i3
+	jr	nz, FDemoText_TextDispatch_Skip8
+	push	xwa
+	call	Boot_CheckConfigFlag7_Helper
+	inc	4, xsp
+	cp	hl, 0:i3
+	jr	lt, FDemoText_TextDispatch_Skip8
+	cp	hl, 9
+	jr	gt, FDemoText_TextDispatch_Skip8
+	sla	hl, 2
+	lda	xwa, (ImgAttr_Size_0x6:24)
+	ld_rrl	xwa, xwa, hl
+	ld	(xsp+0x4), xwa
+	jr	FDemoText_TextDispatch_Skip8
+FDemoText_TextDispatch_Skip20:
+	push	xwa
+	call	Boot_CheckConfigFlag7_Helper
+	inc	4, xsp
+	cp	hl, 0:i3
+	jr	lt, FDemoText_TextDispatch_Skip8
+	cp	hl, 255
+	jr	gt, FDemoText_TextDispatch_Skip8
+	ld	(xsp+8), hl
+FDemoText_TextDispatch_Skip8:
+	inc	1, qiz
+FDemoText_TextDispatch_Join8:
+	ld	bc, qiz
+	sla	bc, 2
+	lda	xwa, (UIStr_No_0x4:24)
+	ld_rrl	xwa, xwa, bc
+	cp	(xwa), 0
+	jr	nz, FDemoText_TextDispatch_Loop9
+	inc	1, iz
+	cp	iz, (xsp+0x94)
+	jrl	le, FDemoText_TextDispatch_Loop8
+FDemoText_TextDispatch_Skip21:
+	cpw	(xsp+142), 1
+	jr	z, FDemoText_TextDispatch_Skip22
+	cpw	(xsp+142), 0
+	jr	nz, FDemoText_TextDispatch_Skip22
+	ld	bc, (0x025b3e:24)
+	inc	1, bc
+	ld	(0x025b3e:24), bc
+	ld	wa, (0x025b60:24)
+	inc	1, wa
+	ld	(0x025b60:24), wa
+	cp	bc, 8
+	jr	ge, FDemoText_TextDispatch_Skip22
+	sla	bc, 2
+	lda	xde, (0x025b40:24)
+	ld	xwa, (xsp+4)
+	st_rrl	xwa, xde, bc
+	ldw_da	bc, (0x25b60)
+	sla	bc, 1
+	lda	xde, (0x025b62:24)
+	ld	wa, (xsp+8)
+	st_rrw	wa, xde, bc
+FDemoText_TextDispatch_Skip22:
+	ld	hl, 0:i3
+	pop	xiz
+	lda	xsp, (xsp+146)
+	ret
+	cp	de, 1:i3
+	jr	z, FDemoText_TextDispatch_Skip9
+	cp	de, 0:i3
+	jr	nz, FDemoText_TextDispatch_Skip9
+	ld	wa, (0x025b3e:24)
+	dec	1, wa
+	ld	(0x025b3e:24), wa
+	decw	1, (0x025b60:24)
+	cp	wa, 0:i3
+	jr	ge, FDemoText_TextDispatch_Skip23
+	ldw	(0x025b3e:24), 0
+	ldw	(0x025b60:24), 0
+FDemoText_TextDispatch_Skip23:
+	ld	bc, (0x025b3e:24)
+	sla	bc, 2
+	lda	xde, (0x025b40:24)
+	ld	xwa, 5:i3
+	st_rrl	xwa, xde, bc
+	ldw_da	wa, (0x25b60)
+	sla	wa, 1
+	lda_24	xbc, (0x25b62)
+	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x02, 0xff, 0x00
+FDemoText_TextDispatch_Skip9:
+	ld	hl, 0:i3
+	ret
+	lda	xsp, (xsp-272)
+	push	xiz
+	ld	(xsp+0x10c), de
+	ld	(xsp+0x10e), xbc
+	ld	(xsp+0x112), wa
+	ld	xiy, ImgAttrName_Src_0x4
+	lda	xix, (xsp+0x46)
+	ldw	bc, 32
+	ldirw
+	ldi85
+	ld	xiy, ImgAttrName_Src_0x46
+	lda	xix, (xsp+4)
+	ldw	bc, 32
+	ldirw
+	ldi85
+	ld	iz, 0:i3
+	cpw	(xsp+274), 0
+	jr	lt, FDemoText_TextDispatch_Skip25
+FDemoText_TextDispatch_Loop12:
+	lda	xde, (xsp+0xca)
+	lda	xwa, (xsp+0x88)
+	push	xwa
+	ld	wa, iz
+	ld	xbc, (xsp+0x112)
+	calr	FDemoText_ByteData_TextRenderer
+	ld	qiz, 0
+	jr	FDemoText_TextDispatch_Join9
+FDemoText_TextDispatch_Loop13:
+	lda	xwa, (xsp+202)
+	push	xwa
+	push	xbc
+	call	0xff0758
+	inc	8, xsp
+	cp	hl, 0:i3
+	jr	nz, FDemoText_TextDispatch_Skip24
+	ld	wa, qiz
+	cpw	qiz, 8
+	jr	gt, FDemoText_TextDispatch_Skip24
+	cp	wa, 2:i3
+	jr	ge, FDemoText_TextDispatch_Skip24
+	lda	xbc, (xsp+136)
+	cp	wa, 0:i3
+	jr	z, FDemoText_TextDispatch_Skip26
+	cp	wa, 1:i3
+	jr	z, FDemoText_TextDispatch_Skip27
+	jr	FDemoText_TextDispatch_Skip24
+FDemoText_TextDispatch_Skip26:
+	push	xbc
+	lda	xwa, (xsp+0x4a)
+	push	xwa
+	jr	FDemoText_TextDispatch_Join11
+FDemoText_TextDispatch_Skip27:
+	push	xbc
+	lda	xwa, (xsp+8)
+	push	xwa
+FDemoText_TextDispatch_Join11:
+	call	Free_Compare2
+	inc	8, xsp
+FDemoText_TextDispatch_Skip24:
+	inc	1, qiz
+FDemoText_TextDispatch_Join9:
+	ld	bc, qiz
+	sla	bc, 2
+	lda	xwa, (ImgAttr_NameTable:24)
+	ld_rrl	xbc, xwa, bc
+	cp	(xbc), 0
+	jr	nz, FDemoText_TextDispatch_Loop13
+	inc	1, iz
+	cp	iz, (xsp+274)
+	jr	le, FDemoText_TextDispatch_Loop12
+FDemoText_TextDispatch_Skip25:
+	lda	xbc, (xsp+70)
+	cpw	(xsp+268), 1
+	jr	z, FDemoText_TextDispatch_Skip28
+	cpw	(xsp+268), 0
+	jr	nz, FDemoText_TextDispatch_Join10
+	ld	xwa, xbc
+	cp	(xbc), 0
+	jr	z, FDemoText_TextDispatch_Join10
+	calr	FDemoText_ByteData_LayoutB
+	jr	FDemoText_TextDispatch_Join10
+FDemoText_TextDispatch_Skip28:
+	ld	xwa, xbc
+	cp	(xbc), 0
+	call_24	nz, (0xf864f9)
+FDemoText_TextDispatch_Join10:
+	ld	hl, 0:i3
+	pop	xiz
+	lda	xsp, (xsp+0x110)
+	ret
+	lda	xsp, (xsp-206)
+	push	xiz
+	ld	(xsp+202), de
+	ld	(xsp+204), xbc
+	ld	(xsp+208), wa
+	ld	xiy, ObjAttr_Obj_0x4
+	lda	xix, (xsp+4)
+	ldw	bc, 32
+	ldirw
+	ldi85
+	ld	iz, 0:i3
+	cpw	(xsp+208), 0
+	jr	lt, FDemoText_TextDispatch_Skip11
+FDemoText_TextDispatch_Loop10:
+	lda	xde, (xsp+136)
+	lda	xwa, (xsp+70)
+	push	xwa
+	ld	wa, iz
+	ld	xbc, (xsp+208)
+	calr	FDemoText_ByteData_TextRenderer
+	ld	qiz, 0
+	jr	FDemoText_TextDispatch_Join5
+FDemoText_TextDispatch_Loop11:
+	lda	xwa, (xsp+136)
+	push	xwa
+	push	xbc
+	call	0xff0758
+	inc	8, xsp
+	cp	hl, 0:i3
+	jr	nz, FDemoText_TextDispatch_Skip10
+	cp	qiz, 0
+	jr	nz, FDemoText_TextDispatch_Skip10
+	lda	xwa, (xsp+70)
+	push	xwa
+	lda	xwa, (xsp+8)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+FDemoText_TextDispatch_Skip10:
+	inc	1, qiz
+FDemoText_TextDispatch_Join5:
+	ld	bc, qiz
+	sla	bc, 2
+	lda	xwa, (ImgAttrName_Src_0x88:24)
+	ld_rrl	xbc, xwa, bc
+	cp	(xbc), 0
+	jr	nz, FDemoText_TextDispatch_Loop11
+	inc	1, iz
+	cp	iz, (xsp+208)
+	jr	le, FDemoText_TextDispatch_Loop10
+FDemoText_TextDispatch_Skip11:
+	cpw	(xsp+202), 1
+	jr	z, FDemoText_TextDispatch_Skip12
+	cpw	(xsp+202), 0
+	jr	nz, FDemoText_TextDispatch_Skip12
+	lda	xwa, (xsp+4)
+	cp	(xwa), 0
+	jr	z, FDemoText_TextDispatch_Skip12
+	calr	FDemoText_TextDispatch_Helper
+	ld	xwa, xhl
+	cp	xwa, 0xffffffff
+	jr	z, FDemoText_TextDispatch_Skip12
+	ld	xbc, 0x01c00001
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xwa, Bitmap_Dredt0d_0x9AA
+	ld	xbc, 0x01c00001
+	ld	xde, 5:i3
+	call	SendEvent
+FDemoText_TextDispatch_Skip12:
+	ld	hl, 0:i3
+	pop	xiz
+	lda	xsp, (xsp+206)
+	ret
+FDemoText_TextDispatch_Helper2:
+	lda	xbc, (0x0251da:24)
+	ld	xwa, xbc
+	lda	xbc, (xbc+2400)
+FDemoText_TextDispatch_Loop:
+	ld	xde, xwa
+	lda	xhl, (xwa+40)
+FDemoText_TextDispatch_Loop2:
+	stib_dsp	232, 84
+	cp	xde, xhl
+	jr	c, FDemoText_TextDispatch_Loop2
+	lda	xwa, (xwa+40)
+	cp	xwa, xbc
+	jr	c, FDemoText_TextDispatch_Loop
+	lda	xwa, (0x025b3a:24)
+	ldw	(xwa), 0
+	ldw	(xwa+2), 0
+	ldw	(0x025b3e:24), 0
+	ldw	(0x025b60:24), 0
+	ldw	(0x025b72:24), 0
+	lda	xhl, (0x025b40:24)
+	lda	xde, (0x025b62:24)
+	lda	xwa, (0x025b74:24)
+	ld	xbc, xwa
+	lda	xix, (xwa+8)
+FDemoText_TextDispatch_Loop3:
+	ld	xwa, 5:i3
+	stl_dpi	xwa, 238
+	stiw_dsp	233, 255, 0
+	stib_dsp	228, 1
+	cp	xbc, xix
+	jr	c, FDemoText_TextDispatch_Loop3
+	ret
 FDemoText_ScaleDownCoords:
 	ld de, (xwa)
 	exts xde
@@ -1963,7 +2640,8 @@ FDemoText_RenderTextLine:
 FDemoText_Layout_Setup:
 	ld	xiy, 154426
 	lda	xix, (xsp+20)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	sub	(xsp+22), iz
 	ld	xwa, (xsp+32)
 	push	xwa
@@ -2128,7 +2806,8 @@ FDemoText_RenderTextLine_Skip2:
 FDemoText_RenderTextLine_Join:
 	ld	xiy, 154426
 	lda	xix, (xsp+8)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+8)
 	sub	(xwa+2), iz
 	calr	FDemoText_CalcTextExtent
@@ -2144,7 +2823,7 @@ FDemoText_RenderTextLine_Join:
 	jr	nz, FDemoText_RenderTextLine_Join2
 	exts	xhl
 	divs	hl, 2
-	.byte 0x91, 0x83
+	add	hl, (xbc)
 	ld	wa, (xsp+2)
 	exts	xwa
 	divs	wa, 2
@@ -2154,7 +2833,7 @@ FDemoText_RenderTextLine_Join:
 FDemoText_RenderTextLine_Skip3:
 	ld	wa, (xbc)
 	add	wa, hl
-	.byte 0x9f, 0x02, 0xa0
+	sub	wa, (xsp+0x2)
 	ld	(xbc), wa
 FDemoText_RenderTextLine_Join2:
 	ld	xbc, (xsp+4)
@@ -2170,7 +2849,7 @@ FDemoText_RenderTextLine_Skip4:
 	call	DrawBitmap
 FDemoText_RenderTextLine_Join3:
 	ld	wa, (xsp+8)
-	.byte 0x9f, 0x02, 0x80
+	add	wa, (xsp+0x2)
 	ld	(154426:24), wa
 	popw	iz
 	lda	xsp, (xsp+14)
@@ -2185,7 +2864,8 @@ Seq_InitVoiceStructures:
 	ld (0x0249c8:24), xwa
 	ldiw_erp 0xfa, 0
 Seq_InitVoiceLoop:
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x04, 0x00
+	pushw	0xea
+	pushw	0x4
 	ld	bc, qiz
 	muls	bc, 24
 	lda	xwa, (149976:24)

@@ -3,87 +3,157 @@
 ; debug page function names, RTOS command strings, and test list widgets
 
 Hama_ModeInit_Table:
-	.long NakaInst_Select_the_sound_for_each_part
-	.long NakaInst_Select_the_sound_for_each_part
-	.long NakaInst_SelectSoundForPart_A
-	.long NakaInst_SelectSoundForPart_B
-	.long NakaInst_SelectSoundForPart_C
-	.long NakaInst_SelectSoundForPart_D
-	.byte 0xf8, 0xe7, 0xf1, 0x00, 0xce, 0xe8
-	.byte 0xf1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6c, 0xf0
-	.byte 0xe1, 0x00
-	.long HamaStr_hamadeb
-	.long HamaStr_Empty
-HamaStr_Empty:	aligned_string ""
-HamaStr_hamadeb:	aligned_string "hamadeb"
-HamaStr_HamaPage1Func:	aligned_string "HamaPage1Func"
+; table of 6 pointers to NakaInst_* instruction texts ("Select the sound for each part" and
+; its A-D variants); evidence: SndArrLangCheck (audio/sound_editor_ui.s) returns this address in
+; XHL when XBC = 0x01E0009F.  Not HAMA mode data; the name is kept because that file uses it.
+	.long	NakaInst_Select_the_sound_for_each_part
+	.long	NakaInst_Select_the_sound_for_each_part
+	.long	NakaInst_SelectSoundForPart_A
+	.long	NakaInst_SelectSoundForPart_B
+	.long	NakaInst_SelectSoundForPart_C
+	.long	NakaInst_SelectSoundForPart_D
+; table of 3 code pointers, ending in 0 (object 0x429 holds their names)
+; evidence: InitializeHama `RegObjTablHama 0x1600002, ApFunctionProc, 0x2, <this>, 0x129` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
+HamaObj_129_Data:
+	.long	FDTestDialogProc
+	.long	HamaEvtDisp_Entry
+	.long	0
+; table of 3 pointers to the NAME strings of the functions in object 0x129's table
+; evidence: InitializeHama `RegObjTablHama 0x1600002, ApFunctionProc, 0x2, <this>, 0x429` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
+HamaObj_429_Data:
+	.long	HamaStr_HamaPage1Func
+	.long	HamaStr_hamadeb
+	.long	HamaStr_Empty
+HamaStr_Empty:
+	aligned_string ""
+HamaStr_hamadeb:
+	aligned_string "hamadeb"
+HamaStr_HamaPage1Func:
+	aligned_string "HamaPage1Func"
 HamaList_Entry:
-	.long HamaList_EntryStr_Empty
-HamaList_EntryStr_Empty:	aligned_string ""
-	.byte 0x70, 0xe8, 0xf1, 0x00
-
-
-	.byte 0x55, 0x00, 0x60, 0x01
-	.byte 0x30, 0x00, 0x00, 0x00, 0xb2, 0xf0, 0xe1, 0x00
-	.long HamaList_HeaderStr_Empty
-	.long HamaList_Entry
+	.long	HamaList_EntryStr_Empty
+HamaList_EntryStr_Empty:
+	aligned_string ""
+; parameter block of object 0x169 (class 0x01600004, proc ClassProc); its descriptor's +8 word is read from HamaStr_HamaList + 0xa
+; evidence: InitializeHama `RegObjTableHama 0x1600004, ClassProc, HamaStr_HamaList + 0xa, <this>, 0x169` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
+HamaObj_169_Data:
+	.long	HamaListProc
+	.byte	0x55, 0x00, 0x60, 0x01, 0x30, 0x00, 0x00, 0x00
+	.long	HamaStr_HamaList
+	.long	HamaList_HeaderStr_Empty
+	.long	HamaList_Entry
 	.zero 24
-HamaList_HeaderStr_Empty:	aligned_string ""
+HamaList_HeaderStr_Empty:
+	aligned_string ""
+HamaStr_HamaList:
 	aligned_string "HamaList"
-	.byte 0x01, 0x00, 0xc6, 0xf0
-	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte	0x01, 0x00
+; parameter block of object 0x1C9 (class 0x0160000C, proc ResEventProc); its descriptor's +8 word is read from HamaStr_EV_INDEX_PUTS + 0xe
+; evidence: InitializeHama `RegObjTableHama 0x160000c, ResEventProc, HamaStr_EV_INDEX_PUTS + 0xe, <this>, 0x1c9` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
+HamaObj_1C9_Data:
+	.long	HamaStr_EV_INDEX_PUTS
+	.byte	0x00, 0x00, 0x00, 0x00
+HamaStr_EV_INDEX_PUTS:
 	aligned_string "EV_INDEX_PUTS"
-	.byte 0x01, 0x00, 0xde, 0xf0
-	.byte 0xe1, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte	0x01, 0x00
+; parameter block of object 0x1E9 (class 0x0160000D, proc ResMethodProc); its descriptor's +8 word is read from HamaStr_MT_CONTINUE + 0xc
+; evidence: InitializeHama `RegObjTableHama 0x160000d, ResMethodProc, HamaStr_MT_CONTINUE + 0xc, <this>, 0x1e9` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
+HamaObj_1E9_Data:
+	.long	HamaStr_MT_CONTINUE
+	.byte	0x00, 0x00, 0x00, 0x00
+HamaStr_MT_CONTINUE:
 	aligned_string "MT_CONTINUE"
-	.byte 0x01, 0x00, 0x70, 0xe8, 0xf1, 0x00
-	.byte 0xda, 0xe5, 0xf1, 0x00, 0xec, 0x25, 0xf5, 0x00
-	.byte 0x34, 0xb4, 0xfd, 0x00, 0x3b, 0xb4, 0xfd, 0x00
-	.byte 0x8e, 0xb4, 0xfd, 0x00, 0x8f, 0xb4, 0xfd, 0x00
-	.byte 0x90, 0xb4, 0xfd, 0x00, 0x91, 0xb4, 0xfd, 0x00
-	.byte 0x9e, 0xb4, 0xfd, 0x00, 0x9f, 0xb4, 0xfd, 0x00
-	.byte 0x50, 0x78, 0xf4, 0x00, 0x58, 0x78, 0xf4, 0x00
-	.byte 0x23, 0x79, 0xf4, 0x00, 0x43, 0x79, 0xf4, 0x00
-	.byte 0x24, 0xbc, 0xf6, 0x00, 0x2f, 0xbc, 0xf6, 0x00
-	.byte 0x48, 0xbc, 0xf6, 0x00, 0x5a, 0xbc, 0xf6, 0x00
-	.long PreTmLoad
-	.long PostTmLoad
-	.long PreTmSave
-	.long PostTmSave
-	.byte 0x66, 0xbc, 0xf6, 0x00, 0x71, 0xbc, 0xf6, 0x00
-	.byte 0x82, 0xbc, 0xf6, 0x00, 0x99, 0xbc, 0xf6, 0x00
-	.byte 0xa0, 0xb4, 0xfd, 0x00, 0xa1, 0xb4, 0xfd, 0x00
-	.byte 0xa2, 0xb4, 0xfd, 0x00, 0xa3, 0xb4, 0xfd, 0x00
-	.long FlashWrite
-	.long GetResouceInfo
-	.byte 0x30, 0xeb, 0xf1, 0x00, 0x4f, 0x1e, 0xf5, 0x00
-	.byte 0x51, 0x27, 0xf5, 0x00, 0xce, 0x27, 0xf5, 0x00
-	.byte 0x8a, 0x29, 0xf5, 0x00, 0xe8, 0x2a, 0xf5, 0x00
-	.byte 0xaa, 0x2a, 0xf5, 0x00, 0x24, 0xed, 0xf1, 0x00
-	.byte 0x28, 0xed, 0xf1, 0x00, 0x2c, 0xed, 0xf1, 0x00
-	.byte 0x30, 0xed, 0xf1, 0x00, 0x28, 0xeb, 0xf1, 0x00
-	.byte 0x2c, 0xeb, 0xf1, 0x00, 0x38, 0xed, 0xf1, 0x00
-	.byte 0x3c, 0xed, 0xf1, 0x00, 0x40, 0xed, 0xf1, 0x00
-	.byte 0x44, 0xed, 0xf1, 0x00, 0x48, 0xed, 0xf1, 0x00
-	.byte 0x4c, 0xed, 0xf1, 0x00, 0x50, 0xed, 0xf1, 0x00
-	.byte 0x54, 0xed, 0xf1, 0x00, 0x58, 0xed, 0xf1, 0x00
-	.byte 0x5c, 0xed, 0xf1, 0x00, 0x60, 0xed, 0xf1, 0x00
-	.byte 0x64, 0xed, 0xf1, 0x00, 0x68, 0xed, 0xf1, 0x00
-	.byte 0xa8, 0xed, 0xf1, 0x00, 0xbe, 0xed, 0xf1, 0x00
-	.byte 0xca, 0xed, 0xf1, 0x00, 0xd4, 0xed, 0xf1, 0x00
-	.byte 0xde, 0xed, 0xf1, 0x00, 0xe2, 0xed, 0xf1, 0x00
-	.byte 0xe7, 0xed, 0xf1, 0x00, 0xec, 0xed, 0xf1, 0x00
-	.byte 0xf1, 0xed, 0xf1, 0x00, 0x05, 0x80, 0xf8, 0x00
-	.long sendCOMM
-	.long AssswbWr
-	.byte 0x24, 0xb2, 0xfd, 0x00, 0x55, 0xb2, 0xfd, 0x00
-	.long SwbtWr_ReinitBothBanks
-	.long SwbtWr_ReinitOutputBank
-	.byte 0xf6, 0xed, 0xf1, 0x00, 0xfb, 0xed, 0xf1, 0x00
-	.byte 0x03, 0xee, 0xf1, 0x00, 0xc7, 0xf2, 0xfa, 0x00
-	.byte 0x0b, 0xf2, 0xfa, 0x00, 0x67, 0x3f, 0xfb, 0x00
-	.byte 0xa9, 0x30, 0xfb, 0x00, 0x0b, 0xee, 0xf1, 0x00
-	.byte 0x34, 0xed, 0xf1, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte	0x01, 0x00
+; table of 85 code pointers, ending in 0 (object 0x409 holds their names)
+; evidence: InitializeHama `RegObjTablHama 0x1600001, FunctionProc, 0x4b, <this>, 0x109` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
+HamaObj_109_Data:
+	.long	HamaListProc
+	.long	FDLoadSaveTest
+	.long	GetMediaType
+	.long	PreLswLoad
+	.long	PostLswLoad
+	.long	PreLswSave
+	.long	PostLswSave
+	.long	PrePmLoad
+	.long	PostPmLoad
+	.long	PrePmSave
+	.long	PostPmSave
+	.long	SeqLoadPre
+	.long	SeqLoadPost
+	.long	SeqSavePre
+	.long	SeqSavePost
+	.long	cmp_ld_mae
+	.long	cmp_ld_ato
+	.long	cmp_sv_mae
+	.long	cmp_sv_ato
+	.long	PreTmLoad
+	.long	PostTmLoad
+	.long	PreTmSave
+	.long	PostTmSave
+	.long	msp_ld_mae
+	.long	msp_ld_ato
+	.long	msp_sv_mae
+	.long	msp_sv_ato
+	.long	PreMidiLoad
+	.long	PostMidiLoad
+	.long	PreMidiSave
+	.long	PostMidiSave
+	.long	FlashWrite
+	.long	VoiceSynth_CmdCase1
+	.long	SetSepaOutMode
+	.long	format_FD
+	.long	GetDiskFreeSpace
+	.long	GetVolumeLabel
+	.long	_findfirst
+	.long	_findnext
+	.long	_findclose
+	.long	fopen_ext
+	.long	fwrite_ext
+	.long	fread_ext
+	.long	fclose_ext
+	.long	rcm_ld_XAPR_j
+	.long	rcm_sv_XAPR_j
+	.long	rot_rdq_X
+	.long	set_flg_X
+	.long	wai_flg_X
+	.long	sig_sem_X
+	.long	preq_sem_X
+	.long	wai_sem_X
+	.long	ref_sem_X
+	.long	snd_msg_X
+	.long	rcv_msg_X
+	.long	prcv_msg_X
+	.long	get_tid_X
+	.long	pdly_tim_X
+	.long	PlayHalt
+	.long	PlayStandBy
+	.long	EditSwRefresh
+	.long	putc_mtx_bf_X
+	.long	putc_mrx_bf_X
+	.long	midi_out_en_X
+	.long	GetAdr_sqbtof
+	.long	GetAdr_sq_beadt
+	.long	GetAdr_sqsrtc
+	.long	GetAdr_rtmcfg
+	.long	LoadFileSMF
+	.long	sendCOMM
+	.long	AssswbWr
+	.long	AddswbWr
+	.long	SwbtWr
+	.long	SwbtWr_ReinitBothBanks
+	.long	SwbtWr_ReinitOutputBank
+	.long	SetGlobalError
+	.long	malloc_X
+	.long	free_X
+	.long	ChangePalette
+	.long	ChangeWall
+	.long	BitMapOut
+	.long	AllBOut
+	.long	SetWall_X
+	.long	ferror_ext
+	.long	0
+; table of 85 pointers to the NAME strings of the functions in object 0x109's table
+; evidence: InitializeHama `RegObjTablHama 0x1600001, FunctionProc, 0x4b, <this>, 0x409` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
 Hama_ModeParam_Table:
 	.long HamaStr_HamaListProc
 	.long HamaStr_FDLoadSaveTest

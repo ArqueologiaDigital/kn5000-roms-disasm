@@ -7,1308 +7,929 @@
 ; file I/O subsystem.
 ; =============================================================================
 
+; list-boundary table, 12 x {u32 start, u32 end} of bound record lists; the code reads XIY = (T+8i), XIX = (T+8i+4)
+; evidence: SeMenu_NameEdit_DataBlock1_Join2+0x19 (0xF100CB)
+; (name FlashWrite_BlockHandler_Table kept: other files use it; the object is ScreenData, see above)
 FlashWrite_BlockHandler_Table:
-	.long FlashWrite_BlockData_Type0
-	.long FlashWrite_BlockData_Type1
-	.long FlashWrite_BlockData_Type0
-	.long FlashWrite_BlockData_Type1
-	.long FlashWrite_BlockData_Type0
-	.long FlashWrite_BlockData_Type1
-	.long FlashWrite_BlockData_Type0
-	.long FlashWrite_BlockData_Type1
-	.long FlashWrite_BlockData_Type2
-	.long FlashRead_BlockHandler_Table
-	.long FlashWrite_BlockData_Type2
-	.long FlashRead_BlockHandler_Table
-	.long FlashWrite_BlockData_Type3
-	.long FlashWrite_BlockRef_Type3
-	.long FlashWrite_BlockData_Type4
-	.long FlashWrite_BlockRef_Type4
-	.long FlashWrite_BlockData_Type5
-	.long FlashWrite_BlockRef_Type5
-	.long FlashWrite_BlockData_Type4
-	.long FlashWrite_BlockRef_Type4
-	.long FlashWrite_BlockData_Type6
-	.long FlashWrite_BlockRef_Type6
-	.long FlashWrite_BlockData_Type6
-	.long FlashWrite_BlockRef_Type6
-FlashWrite_BlockData_Type0:
-	nop
-	ldw	(97:8), 0xff06:io
-	nop
-	ld	w, 12:opc
-	pushw	2
-	ldw	(98:8), 0xff06:io
-	nop
-	ld	w, 100:opc
-	decf
-	push	sr
-	halt
-	pushw	1635
-	swi	7
-	nop
-	ld	w, 187:opc
-	retd	2
-	nop
-	ldw	(100:8), 0xff06:io
-	nop
-	ld	w, 20:opc
-	ccf
-	push	sr
-	nop
-	ldw	(101:8), 0xff06:io
-	nop
-	ld	w, 107:opc
-	push_a
-	pop	sr
-FlashWrite_BlockData_Type1:
-	reti
-	pop	xbc
-	.byte 0xf1
-	nop
-	reti
-	pop	xbc
-	.byte 0xf1
-	nop
-	scf
-	pop	xbc
-	.byte 0xf1
-	nop
-	jp	0xf159
-	ld	h, 89:opc
-	.byte 0xf1
-	nop
-	ldw	wa, 0xf159
-	nop
-FlashWrite_BlockData_Type2:
-	nop
-	ldw	(97:8), 0xff06:io
-	nop
-	ld	w, 12:opc
-	.byte 0x0b
-	push	sr
-FlashRead_BlockData_Field2:
-	nop
-	ldw	(98:8), 0xff06:io
-	nop
-	ld	w, 100:opc
-	decf
-	push	sr
-FlashRead_BlockData_Field3:
-	nop
-	ldw	(99:8), 0xff06:io
-	nop
-	ld	w, 188:opc
-	.byte 0x0f
-	push	sr
-FlashRead_BlockData_Field4:
-	nop
-	ldw	(100:8), 0xff06:io
-	nop
-	ld	w, 20:opc
-	ccf
-	push	sr
-FlashRead_BlockData_Field5:
-	halt
-	pushw	1637
-	swi	7
-	nop
-	ld	w, 107:opc
-	push_a
-	push	sr
-	nop
-FlashRead_BlockData_Field6:
-	nop
-	ldw (102:8), 65286:io
-	nop
-	ld	w, 196:opc
-	ex_ff
-	push	sr
+	.long	SeScreenData_0x4D01
+	.long	SeScreenData_0x4D34
+	.long	SeScreenData_0x4D01
+	.long	SeScreenData_0x4D34
+	.long	SeScreenData_0x4D01
+	.long	SeScreenData_0x4D34
+	.long	SeScreenData_0x4D01
+	.long	SeScreenData_0x4D34
+	.long	SeScreenData_0x4D4C
+	.long	FlashRead_BlockHandler_Table
+	.long	SeScreenData_0x4D4C
+	.long	FlashRead_BlockHandler_Table
+	.long	SeScreenData_0x4DAD
+	.long	SeScreenData_0x4DDA
+	.long	SeScreenData_0x4DEE
+	.long	SeScreenData_0x4E16
+	.long	SeScreenData_0x4E2A
+	.long	SeScreenData_0x4E54
+	.long	SeScreenData_0x4DEE
+	.long	SeScreenData_0x4E16
+	.long	SeScreenData_0x4E68
+	.long	FlashWrite_BlockRef_Type6
+	.long	SeScreenData_0x4E68
+	.long	FlashWrite_BlockRef_Type6
+; bound record list (5 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF1593A
+; evidence: pairs table 0xF158A7
+SeScreenData_0x4D01:
+; F15907 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x20, 0x0c, 0x0b, 0x02
+; F15911 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
+; F1591B flags=0x05 len=11
+	.byte	0x05, 0x0b, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb, 0x0f, 0x02, 0x00
+; F15926 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x14, 0x12, 0x02
+; F15930 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x65, 0x06, 0xff, 0x00, 0x20, 0x6b, 0x14, 0x03
+; table of 6 pointers to the records of the list at 0xF15907 (entry 0 repeated); entry 0 of the per-variant table at 0xF15AA1, drawn one record at a time by SeMenu_EqEdit_DrawInit_0x15 (XIY = (XIY + 4*WA))
+; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
+SeScreenData_0x4D34:
+; F1593A..F15952  6 x u32 pointer
+	.long	SeScreenData_0x4D01
+	.long	SeScreenData_0x4D01
+	.long	SeScreenData_0x4D01 + 0xa
+	.long	SeScreenData_0x4D01 + 0x14
+	.long	SeScreenData_0x4D01 + 0x1f
+	.long	SeScreenData_0x4D01 + 0x29
+; bound record list (6 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF1598F
+; evidence: pairs table 0xF158A7
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1598F
+SeScreenData_0x4D4C:
+; F15952..F1598F  [flags:u8][len:u8][payload] records
+; F15952 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x20, 0x0c, 0x0b, 0x02
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1598F
+SeScreenData_0x4D56:
+; F1595C flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1598F
+SeScreenData_0x4D60:
+; F15966 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbc, 0x0f, 0x02
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1598F
+SeScreenData_0x4D6A:
+; F15970 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x14, 0x12, 0x02
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1598F
+SeScreenData_0x4D74:
+; F1597A flags=0x05 len=11
+	.byte	0x05, 0x0b, 0x65, 0x06, 0xff, 0x00, 0x20, 0x6b, 0x14, 0x02, 0x00
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1598F
+SeScreenData_0x4D7F:
+; F15985 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x66, 0x06, 0xff, 0x00, 0x20, 0xc4, 0x16, 0x02
+; table of 7 pointers to bound records; the code loads it into XIY and SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA))
+; evidence: SeMenu_PatchEdit_DataBlock_Join+0x6 (0xF1017E)
+; (name FlashRead_BlockHandler_Table kept: other files use it; the object is ScreenData, see above)
 FlashRead_BlockHandler_Table:
-	.long FlashWrite_BlockData_Type2
-	.long FlashWrite_BlockData_Type2
-	.long FlashRead_BlockData_Field2
-	.long FlashRead_BlockData_Field3
-	.long FlashRead_BlockData_Field4
-	.long FlashRead_BlockData_Field5
-	.long FlashRead_BlockData_Field6
-	.long FlashRead_BlockData_Field7
-	.long FlashRead_BlockData_Field8
-FlashWrite_BlockData_Type3:
-	nop
-	ldw	(97:8), 0xff06:io
-	nop
-	ld	w, 12:opc
-	pushw 2
-	ldw (98:8), 65286:io
-	nop
-	ld	w, 100:opc
-	decf
-	push	sr
-	push	sr
-	retd	1635
-	retd	8192
-	ldw	iz, 0xf135
-	nop
-	pop	sr
-	nop
-	ld	(xhl+15), 10
-	jr	ov, 6
-	swi	7
-	nop
-	ld	w, 19:opc
-	ccf
-	pop	sr
-FlashWrite_BlockRef_Type3:
-	.byte 0xb3
-	pop	xbc
-	.byte 0xf1
-	nop
-	.byte 0xb3
-	pop	xbc
-	.byte 0xf1
-	nop
-	.byte 0xbd
-	pop	xbc
-	.byte 0xf1
-	nop
-	cpb_erp a, 89
-	nop
-	.byte 0xd6
-	pop	xbc
-	.byte 0xf1
-	nop
-FlashWrite_BlockData_Type4:
-	nop
-	ldw	(97:8), 0xff06:io
-	nop
-	ld	w, 12:opc
-	pushw	2
-	ldw	(98:8), 0xff06:io
-	nop
-	ld	w, 100:opc
-	decf
-	push	sr
-	nop
-	ldw	(99:8), 0xff06:io
-	nop
-	ld	w, 188:opc
-	retd	2
-	ldw	(100:8), 0xff06:io
-	nop
-	ld	w, 20:opc
-	ccf
-	push	sr
-FlashWrite_BlockRef_Type4:
-	.byte 0xf4
-	pop	xbc
-	.byte 0xf1
-	nop
-	.byte 0xf4
-	pop	xbc
-	.byte 0xf1
-	nop
-	swi	6
-	pop	xbc
-	.byte 0xf1
-	nop
-	ld	(90:8), 241:io
-	nop
-	ccf
-	pop	xde
-	.byte 0xf1
-	nop
-FlashWrite_BlockData_Type5:
-	nop
-	ldw	(97:8), 0xff06:io
-	nop
-	ld	w, 12:opc
-	pushw	1282
-	pushw	1634
-	swi	7
-	nop
-	ld	w, 99:opc
-	decf
-	push	sr
-	nop
-	halt
-	pushw	1635
-	swi	7
-	nop
-	ld	w, 187:opc
-	retd	2
-	nop
-	ldw	(100:8), 0xff06:io
-	nop
-	ld	w, 19:opc
-	ccf
-	pop	sr
-FlashWrite_BlockRef_Type5:
-	ldw	wa, 0xf15a
-	nop
-	ldw	wa, 0xf15a
-	nop
-	push	xde
-	pop	xde
-	.byte 0xf1
-	nop
-	ld	xiy, 0x5000f15a
-	pop	xde
-	.byte 0xf1
-	nop
-FlashWrite_BlockData_Type6:
-	push	sr
-	retd	1633
-	normal
-	nop
-	ld	w, 209:opc
-	push_a
-	ld	(768:16), 11
-	pushw	2560
-	jr	le, 6
-	swi	7
-	nop
-	ld	w, 100:opc
-	decf
-	push	sr
-	nop
-	ldw	(99:8), 0xff06:io
-	nop
-	ld	w, 187:opc
-	.byte 0x0f
-	pop	sr
+	.long	SeScreenData_0x4D4C
+	.long	SeScreenData_0x4D4C
+	.long	SeScreenData_0x4D56
+	.long	SeScreenData_0x4D60
+	.long	SeScreenData_0x4D6A
+	.long	SeScreenData_0x4D74
+	.long	SeScreenData_0x4D7F
+	.long	FlashRead_BlockData_Field7
+	.long	FlashRead_BlockData_Field8
+; bound record list (4 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF159E0
+; evidence: pairs table 0xF158A7
+SeScreenData_0x4DAD:
+; F159B3..F159E0  [flags:u8][len:u8][payload] records
+; F159B3 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x20, 0x0c, 0x0b, 0x02
+; F159BD flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
+; F159C7 flags=0x02 len=15
+	.byte	0x02, 0x0f, 0x63, 0x06, 0x0f, 0x00, 0x20
+	.long	TuningSystem_Handler_Table_0xDF + 0x10
+	.byte	0x03, 0x00, 0xbb, 0x0f
+; F159D6 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x13, 0x12, 0x03
+; table of 5 pointers to the records of the list at 0xF159B3 (entry 0 repeated); entry 6 of the per-variant table at 0xF15AA1, drawn one record at a time by SeMenu_EqEdit_DrawInit_0x15 (XIY = (XIY + 4*WA))
+; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
+SeScreenData_0x4DDA:
+; F159E0..F159F4  5 x u32 pointer
+	.long	SeScreenData_0x4DAD
+	.long	SeScreenData_0x4DAD
+	.long	SeScreenData_0x4DAD + 0xa
+	.long	SeScreenData_0x4DAD + 0x14
+	.long	SeScreenData_0x4DAD + 0x23
+; bound record list (4 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF15A1C
+; evidence: pairs table 0xF158A7
+SeScreenData_0x4DEE:
+; F159F4..F15A1C  [flags:u8][len:u8][payload] records
+; F159F4 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x20, 0x0c, 0x0b, 0x02
+; F159FE flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
+; F15A08 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbc, 0x0f, 0x02
+; F15A12 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x14, 0x12, 0x02
+; table of 5 pointers to the records of the list at 0xF159F4 (entry 0 repeated); entry 7 of the per-variant table at 0xF15AA1, drawn one record at a time by SeMenu_EqEdit_DrawInit_0x15 (XIY = (XIY + 4*WA))
+; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
+SeScreenData_0x4E16:
+; F15A1C..F15A30  5 x u32 pointer
+	.long	SeScreenData_0x4DEE
+	.long	SeScreenData_0x4DEE
+	.long	SeScreenData_0x4DEE + 0xa
+	.long	SeScreenData_0x4DEE + 0x14
+	.long	SeScreenData_0x4DEE + 0x1e
+; bound record list (4 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF15A5A
+; evidence: pairs table 0xF158A7
+SeScreenData_0x4E2A:
+; F15A30..F15A5A  [flags:u8][len:u8][payload] records
+; F15A30 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x20, 0x0c, 0x0b, 0x02
+; F15A3A flags=0x05 len=11
+	.byte	0x05, 0x0b, 0x62, 0x06, 0xff, 0x00, 0x20, 0x63, 0x0d, 0x02, 0x00
+; F15A45 flags=0x05 len=11
+	.byte	0x05, 0x0b, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb, 0x0f, 0x02, 0x00
+; F15A50 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x13, 0x12, 0x03
+; table of 5 pointers to the records of the list at 0xF15A30 (entry 0 repeated); entry 8 of the per-variant table at 0xF15AA1, drawn one record at a time by SeMenu_EqEdit_DrawInit_0x15 (XIY = (XIY + 4*WA))
+; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
+SeScreenData_0x4E54:
+; F15A5A..F15A6E  5 x u32 pointer
+	.long	SeScreenData_0x4E2A
+	.long	SeScreenData_0x4E2A
+	.long	SeScreenData_0x4E2A + 0xa
+	.long	SeScreenData_0x4E2A + 0x15
+	.long	SeScreenData_0x4E2A + 0x20
+; bound record list (3 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF15A91
+; evidence: pairs table 0xF158A7
+SeScreenData_0x4E68:
+; F15A6E..F15A91  [flags:u8][len:u8][payload] records
+; F15A6E flags=0x02 len=15
+	.byte	0x02, 0x0f, 0x61, 0x06, 0x01, 0x00, 0x20
+	.long	SeBitmap_EnvCurve5_0x4B0 + 0x53
+	.byte	0x03, 0x00, 0x0b, 0x0b
+; F15A7D flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
+; F15A87 flags=0x00 len=10
+	.byte	0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb, 0x0f, 0x03
+; table of 4 pointers to the records of the list at 0xF15A6E (entry 0 repeated); entry 10 of the per-variant table at 0xF15AA1, drawn one record at a time by SeMenu_EqEdit_DrawInit_0x15 (XIY = (XIY + 4*WA))
+; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
+; (name FlashWrite_BlockRef_Type6 kept: other files use it; the object is ScreenData, see above)
 FlashWrite_BlockRef_Type6:
-	jr	nz, 90
-	.byte 0xf1
-	nop
-	jr	nz, 90
-	.byte 0xf1
-	nop
-	jrl	pl, -3750
-	nop
-	.byte 0x87
-	pop	xde
-	.byte 0xf1
-	nop
-	push	xde
-	pop	xbc
-	.byte 0xf1
-	nop
-	push	xde
-	pop	xbc
-	.byte 0xf1
-	nop
-	push	xde
-	pop	xbc
-	.byte 0xf1
-	nop
-	push	xde
-	pop	xbc
-	.byte 0xf1
-	nop
-	.byte 0x8f
-	pop	xbc
-	.byte 0xf1
-	nop
-	.byte 0x8f
-	pop	xbc
-	.byte 0xf1
-	nop
-	.byte 0xe0
-	pop	xbc
-	.byte 0xf1
-	nop
-	.byte 0x1c
-	pop	xde
-	.byte 0xf1
-	nop
-	pop	xde
-	pop	xde
-	.byte 0xf1
-	nop
-	.byte 0x1c
-	pop	xde
-	.byte 0xf1
-	nop
-	.byte 0x91
-	pop	xde
-	.byte 0xf1
-	nop
-	.byte 0x91
-	pop	xde
-	ld	(0x6800:16), hl
-	ld	(0x6800:16), hl
-	ld	(0x6800:16), hl
-	ld	(0x6800:16), hl
-	ld	(0x8600:16), hl
-	ld	(0x8600:16), hl
-	ld	(0x4a00:16), hl
-	ld	(0x4a00:16), hl
-	ld	(0x4a00:16), hl
-	ld	(0x4a00:16), hl
-	ld	(0x2c00:16), hl
-	ld	(0x2c00:16), hl
-	.byte 0xf1
-	nop
-	.ascii "CELESTE 1    CELESTE 2    CHORUS 1     CHORUS 2     ENSEMBLE 1   ENSEMBLE 2   TREMOLO      ORGAN TREMOLOSINGLE DELAY REPEAT DELAY SOLO EFFECT 1SOLO EFFECT 2MONO  STEREO#"
-	halt
-	jr	le, -124
-	nop
-	.byte 0x1c
-	retd	123
-	halt
-	nop
-	.byte 0x45, 0x41, 0x53
-	.ascii "Y EDIT"
-	.byte 0x17
-	rcf
-	ei	0
-	reti
-	nop
-	.ascii "SOUND EDIT"
-	reti
-	halt
-	.byte 0x50
-	halt
-	rcf
-	.byte 0x06
-	push	162
-	halt
-	.byte 0x57, 0x52
-	popw	bc
-	.byte 0x54
-	ld	xiy, 0xa8e1107
-	.ascii "0CTAVE SHIFT:"
-	reti
-	ccf
-	.byte 0xa2, 0x0a
-	.ascii "BRILLIANCE   :"
-	reti
-	halt
-	jr	11
-	rcf
-	reti
-	halt
-	.byte 0x8f
-	pushw	1809
-	scf
-	.byte 0xa6
-	rcf
-	.byte 0x41, 0x54, 0x54
-	.ascii "ACK TIME :"
-	reti
-	ccf
-	ld	(xde+16), iz
-	popw	bc
-	.ascii "BRAT0 DEPTH:"
-	reti
-	halt
-	ldir
-	rcf
-	reti
-	halt
-	.byte 0xa7
-	scf
-	scf
-	reti
-	scf
-	ret
-	.byte 0x17
-	.ascii "RELEASE TIME:"
-	reti
-	ccf
-	ld	b, 23:opc
-	.ascii "VIBRAT0 SPEED:"
-	reti
-	halt
-	.byte 0x98, 0x17
-	rcf
-	reti
-	halt
-	.byte 0xbf, 0x17
-	scf
-	reti
-	zcf
-	ldw	iz, 0x441c
-	.ascii "IGITAL EFFECT:"
-	reti
-	ccf
-	jr	le, 0x1d
-	.ascii "VIBRAT0 DELAY:"
-	reti
-	halt
-	.byte 0xb0
-	call	0x50710
-	.byte 0xd7
-	call	0x50711
-	.byte 0xd1
-	ld	a, 141:opc
-	.byte 0x06
-	push	20
-	.ascii "#VALUE"
-	reti
-	halt
-	jr	lt, 35
-	.byte 0x8e
-	push	10
-	.byte 0x04
-	nop
-	.byte 0x04
-	nop
-	ld	xix, 0x9001000
-	ldw	(11:8), 7680:io
-	nop
-	push	xiy
-	nop
-	ldw	hl, 2304
-	ldw	(13:8), 8192:io
-	nop
-	push	xhl
-	nop
-	ldw	bc, 2304
-	ldw	(163:8), 0x3900:io
-	nop
-	ldw	ix, 0x5901
-	nop
-	push	10
-	pushw	0x3a00
-	nop
-	.byte 0x9c
-	nop
-	pop	xbc
-	nop
-	push	10
-	pushw	0x6100
-	nop
-	.byte 0x9c
-	nop
-	.byte 0x80
-	nop
-	push	10
-	.byte 0xa3
-	nop
-	jr	lt, 0
-	ldw	ix, 0x8001
-	nop
-	push	10
-	pushw	0x8900
-	nop
-	.byte 0x9c
-	nop
-	.byte 0xa8
-	nop
-	push	10
-	.byte 0xa3
-	nop
-	.byte 0x89
-	nop
-	ldw	ix, 0xa801
-	nop
-	push	10
-	pushw	0xb200
-	nop
-	.byte 0x9c
-	nop
-	.byte 0xd1
-	nop
-	push	10
-	.byte 0xa3
-	nop
-	ld	(xde), 52
-	.byte 0x01, 0xd1
-	nop
-	ld	b, 10:opc
-	jrl	pl, -9728
-	nop
-	.byte 0x9a
-	nop
-	.byte 0xec
-	nop
-	.byte 0x01
-	ldw	(125:8), 0xe300:io
-	nop
-	.byte 0x9a
-	nop
-	.byte 0xe3
-	nop
-	.byte 0x1c
-	ret
-	jrl	f, 2304
-	nop
-	.byte 0x55, 0x53, 0x45
-	.ascii "R KIT"
-	.byte 0x17
-	rcf
-	ei	0
-	reti
-	nop
-	.ascii "SOUND EDIT"
-	.byte 0x17
-	reti
-	ldw	iz, 7937
-	nop
-	.byte 0x91
-	reti
-	halt
-	popw	ix
-	halt
-	.byte 0x8d
-	reti
-	halt
-	sub	(xsp+5), bc
-	.byte 0x1c
-	reti
-	pop	xiz
-	nop
-	ldw	iy, 0x3a00
-	.byte 0x17
-	pushw	277
-	push	xwa
-	nop
-	.byte 0x53
-	popw	sp
-	.byte 0x55
-	popw	iz
-	ld	xix, 0x1360717
-	ld	xiz, 0x5079100
-	add	(xix+11), h
-	reti
-	halt
-	.byte 0xb7
-	pushw	6057
-	scf
-	ld	xsp, 0x54006400
-	.ascii "ONE SELECT"
-	.byte 0x17
-	pushw	162
-	jr	ov, 0
-	popw	ix
-	ld	xiy, 0x174c4556
-	push	199
-	nop
-	jr	ov, 0
-	popw	hl
-	ld	xiy, 0xe10a1759
-	nop
-	jr	ov, 0
-	.byte 0x54, 0x55
-	popw	iz
-	ld	xiy, 0x1020917
-	jr	ov, 0
-	.byte 0x50
-	ld	xbc, 0x1d09174e
-	.byte 0x01
-	jr	ov, 0
-	.byte 0x52
-	ld	xiy, 0xd0050656
-	scf
-	rcf
-	.byte 0x17
-	reti
-	ld	xix, 0x2e007600
-	.byte 0x17
-	reti
-	ld	xhl, 0x91007b00
-	.byte 0x17
-	reti
-	ld	xix, 0x2e009400
-	ei	5
-	.byte 0xe8, 0x17
-	rcf
-	.byte 0x17
-	reti
-	ld	xhl, 0x91009900
-	.byte 0x06
-	retd	7482
-	.ascii "NOTE SELECT"
-	.byte 0x06
-	retd	7507
-	.ascii "DETAIL EDIT"
-	ei	5
-	.byte 0xb0
-	call	0x50610
-	.byte 0xd7
-	call	0xc1711
-	nop
-	nop
-	.byte 0xd1
-	nop
-	popw	sp
-	popw	iz
-	pushw	sp
-	popw	sp
-	ld	xiz, 0x2d0b1746
-	nop
-	.byte 0xd1
-	nop
-	ld	xsp, 0x50554f52
-	.byte 0x17
-	ldw	(88:8), 0xd100:io
-	nop
-	.byte 0x54
-	popw	sp
-	popw	iz
-	ld	xiy, 0x7d0b17
-	.byte 0xd1
-	nop
-	popw	ix
-	ld	xiy, 0x174c4556
-	push	170
-	nop
-	.byte 0xd1
-	nop
-	popw	hl
-	ld	xiy, 0xcf0a1759
-	nop
-	.byte 0xd1
-	nop
-	.byte 0x54, 0x55
-	popw	iz
-	ld	xiy, VwMenuBox_Confirm_RenderBottom_0x2E
-	.byte 0xd1
-	nop
-	.byte 0x50
-	ld	xbc, 0x2309174e
-	.byte 0x01, 0xd1
-	nop
-	.byte 0x52
-	ld	xiy, 0x12050656
-	ld	b, 141:opc
-	ei	5
-	.byte 0x17
-	ld	b, 141:opc
-	ei	5
-	.byte 0x1c
-	ld	b, 141:opc
-	ei	5
-	ld	a, 34:opc
-	.byte 0x8d
-	ei	5
-	ld	h, 34:opc
-	.byte 0x8d
-	ei	5
-	pushw	hl
-	ld	b, 141:opc
-	ei	5
-	ldw	wa, 0x8d22
-	ei	5
-	ldw	iy, 0x8d22
-	ei	5
-	ld	xhl, (xde)
-	.byte 0x8e
-	ei	5
-	ld	xhl, (xsp)
-	.byte 0x8e
-	ei	5
-	add	(xix+35), xiz
-	ei	5
-	.byte 0xb1
-	ld	c, 142:opc
-	ei	5
-	.byte 0xb6
-	ld	c, 142:opc
-	ei	5
-	.byte 0xbb
-	ld	c, 142:opc
-	ei	5
-	.byte 0xc0
-	ld	c, 142:opc
-	ei	5
-	.byte 0xc5
-	ld	c, 142:opc
-	push	10
-	.byte 0x04
-	nop
-	.byte 0x04
-	nop
-	ld	xix, 0x9001000
-	ldw	(18:8), 7681:io
-	nop
-	ldw	iy, 0x3101
-	nop
-	push	10
-	push_a
-	.byte 0x01
-	ld	w, 0:opc
-	ldw	hl, 0x2f01
-	nop
-	push	10
-	.byte 0x37
-	nop
-	pushw	iz
-	nop
-	swi	5
-	nop
-	popw	bc
-	nop
-	push	10
-	push	xbc
-	nop
-	ldw	wa, 0xfb00
-	nop
-	ld	xsp, 0x120a0900
-	.byte 0x01
-	ld	xiy, 0x58013500
-	nop
-	push	10
-	push_a
-	.byte 0x01
-	ld	xsp, 0x56013300
-	nop
-	ld	b, 10:opc
-	pushw	0x5e00
-	nop
-	ldw	iy, 0xaa01
-	nop
-	push	10
-	ldw	(0:8), 181:io
-	jr	nz, 0
-	.byte 0xca
-	nop
-	push	10
-	incf
-	nop
-	ld	(xsp), 108
-	nop
-	.byte 0xc8
-	nop
-	push	10
-	.byte 0xd2
-	nop
-	ld	(xiy), 53
-	.byte 0x01, 0xca
-	nop
-	push	10
-	.byte 0xd4
-	nop
-	ld	(xsp), 51
-	.byte 0x01, 0xc8
-	nop
-	ld	b, 10:opc
-	push	0
-	.byte 0xda
-	nop
-	calr	60928
-	nop
-	ld	b, 10:opc
-	ldw	bc, 0xda00
-	nop
-	ld	xiz, 0x2200ee00
-	ldw	(89:8), 0xda00:io
-	nop
-	jr	nz, 0
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	.byte 0x81
-	nop
-	.byte 0xda
-	nop
-	.byte 0x96
-	nop
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	.byte 0xa9
-	nop
-	.byte 0xda
-	nop
-	.byte 0xbe
-	nop
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	.byte 0xd1
-	nop
-	.byte 0xda
-	nop
-	.byte 0xe6
-	nop
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	swi	1
-	nop
-	.byte 0xda
-	nop
-	ret
-	.byte 0x01, 0xee
-	nop
-	ld	b, 10:opc
-	ld	a, 1:opc
-	.byte 0xda
-	nop
-	ldw	iz, 0xee01
-	nop
-	.byte 0x01
-	ldw	(11:8), 0x6f00:io
-	nop
-	ldw	iy, 0x6f01
-	nop
-	.byte 0x01
-	ldw	(11:8), 0x8c00:io
-	nop
-	pop_f
-	.byte 0x01, 0x8c
-	nop
-	.byte 0x01
-	ldw	(9:8), 0xe400:io
-	nop
-	calr	58368
-	nop
-	.byte 0x01
-	ldw	(49:8), 0xe400:io
-	nop
-	ld	xiz, 0x100e400
-	ldw	(89:8), 0xe400:io
-	nop
-	jr	nz, 0
-	.byte 0xe4
-	nop
-	.byte 0x01
-	ldw	(129:8), 0xe400:io
-	nop
-	.byte 0x96
-	nop
-	.byte 0xe4
-	nop
-	.byte 0x01
-	ldw	(169:8), 0xe400:io
-	nop
-	.byte 0xbe
-	nop
-	.byte 0xe4
-	nop
-	.byte 0x01
-	ldw	(209:8), 0xe400:io
-	nop
-	.byte 0xe6
-	nop
-	.byte 0xe4
-	nop
-	.byte 0x01
-	ldw	(249:8), 0xe400:io
-	nop
-	ret
-	.byte 0x01, 0xe4
-	nop
-	.byte 0x01
-	ldw	(33:8), 0xe401:io
-	nop
-	ldw	iz, 0xe401
-	nop
-	push	sr
-	ldw	(56:8), 0x5e00:io
-	nop
-	push	xwa
-	nop
-	.byte 0xaa
-	nop
-	push	sr
-	ldw	(157:8), 0x5e00:io
-	nop
-	.byte 0x9d
-	nop
-	.byte 0xaa
-	nop
-	push	sr
-	ldw	(25:8), 0x5e01:io
-	nop
-	pop_f
-	.byte 0x01, 0xaa
-	nop
-	jp	0x1190a
-	jrl	lt, 0x3300
-	.byte 0x01, 0xa8
-	nop
-	halt
-	ldw	(25:8), 0x7101:io
-	nop
-	ldw	hl, 0xa801
-	nop
-	reti
-	scf
-	jr	lt, 6
-	jrl	nc, 7168
-	jrl	le, -3781
-	nop
-	pop	sr
-	nop
-	push	xiy
-	nop
-	ldw	iy, 1792
-	scf
-	nop
-	nop
-	nop
-	nop
-	.byte 0x1c, 0xf3
-	pushw	2
-	decf
-	nop
-	jr	ge, 0
-	ldw	iy, 1792
-	scf
-	jr	nc, 6
-	.byte 0x1f
-	nop
-	.byte 0x17, 0xcf
-	pushw	ix
-	ld	(512:16), 61
-	nop
-	jrl	gt, 1792
-	scf
-	nop
-	nop
-	nop
-	nop
-	.byte 0x17
-	pop	sr
-	incf
-	push	sr
-	nop
-	decf
-	nop
-	popw	bc
-	nop
-	jrl	gt, 2304
-	incf
-	jr	ule, 6
-	jrl	nc, 5888
-	.byte 0xa5
-	nop
-	jrl	gt, 768
-	pushw	0x650d
-	.byte 0x06
-	swi	7
-	nop
-	.byte 0x17, 0xc3
-	nop
-	jrl	gt, 512
-	nop
-	pushw	0x670d
-	.byte 0x06
-	swi	7
-	nop
-	.byte 0x17, 0xe1
-	nop
-FlashWrite_BlockRef_Type6_Skip:
-	jrl	gt, 512
-	nop
-	reti
-	scf
-	jrl	f, 7942
-	nop
-	.byte 0x17, 0xcf
-	pushw	ix
-	ld	(512:16), 61
-	nop
-	.byte 0x98
-	nop
-	reti
-	scf
-	nop
-	nop
-	nop
-	nop
-	.byte 0x17
-	zcf
-	incf
-	push	sr
-	nop
-	decf
-	nop
-	popw	bc
-	nop
-	.byte 0x98
-	nop
-	push	12
-	jr	ov, 6
-	jrl	nc, 5888
-	.byte 0xa5
-	nop
-	.byte 0x98
-	nop
-	pop	sr
-	pushw	0x660d
-	.byte 0x06
-	swi	7
-	nop
-	.byte 0x17, 0xc3
-	nop
-	.byte 0x98
-	nop
-	push	sr
-	nop
-	pushw	0x680d
-	.byte 0x06
-	swi	7
-	nop
-	.byte 0x17, 0xe1
-	nop
-	.byte 0x98
-	nop
-	push	sr
-	nop
-	push	12
-	jr	ugt, 6
-	jrl	nc, 5888
-	.byte 0x1c, 0x01, 0x89
-	nop
-	pop	sr
-	reti
-	scf
-	jr	nov, 6
-	pop	sr
-	nop
-	.byte 0x17
-	pop	xwa
-	ld	xiz, 0x300f1
-	pop	sr
-	.byte 0x01
-	jrl	gt, 1792
-	scf
-	jr	nov, 6
-	incf
-	push	sr
-	.byte 0x17
-	pop	xwa
-	ld	xiz, 0x300f1
-	pop	sr
-	.byte 0x01, 0x98
-	nop
-	pop	sr
-	pushw	1632
-	pop	sr
-	nop
-	halt
-	push	97
-	.byte 0xf1
-	nop
-	push	12
-	jr	pl, 6
-	jrl	nc, 5888
-	push	1
-	jrl	gt, 512
-	push	12
-	jr	nz, 6
-	jrl	nc, 5888
-	push	1
-	.byte 0x98
-	nop
-	push	sr
-	decf
-	nop
-	jrl	lt, 6144
-	.byte 0x01, 0x8a
-	nop
-	decf
-	nop
-	jrl	lt, 6144
-	.byte 0x01, 0x8a
-	nop
-	decf
-	nop
-	.byte 0x8d
-	nop
-	push_f
-	.byte 0x01, 0xa8
-	nop
-	jp	3338
-	jrl	lt, 6144
-	.byte 0x01, 0xa8
-	nop
-	.byte 0xe6
-	jr	f, -15
-	nop
+; F15A91..F15B01  28 x u32 pointer
+	.long	SeScreenData_0x4E68
+	.long	SeScreenData_0x4E68
+	.long	SeScreenData_0x4E68 + 0xf
+	.long	SeScreenData_0x4E68 + 0x19
+; 12 pointers to record-pointer tables, one per screen variant = the byte at RAM 0x670; entry -> SeMenu_EqEdit_DrawInit_0x15
+; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
+SeScreenData_0x4E9B:
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15ACE-0xF15AFF (49 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=91% dist=8 near FlashWrite_BlockRef_Type6_0x10+45
+	.long	SeScreenData_0x4D34
+	.long	SeScreenData_0x4D34
+	.long	SeScreenData_0x4D34
+	.long	SeScreenData_0x4D34
+	.long	FlashRead_BlockHandler_Table
+	.long	FlashRead_BlockHandler_Table
+	.long	SeScreenData_0x4DDA
+	.long	SeScreenData_0x4E16
+	.long	SeScreenData_0x4E54
+	.long	SeScreenData_0x4E16
+	.long	FlashWrite_BlockRef_Type6
+	.long	FlashWrite_BlockRef_Type6
+; 12 list END pointers, one per screen variant = the byte at RAM 0x670, for the static list the code starts with `ld xiy, <start>`
+; evidence: SeMenu_NameEdit_DataBlock1 (0xF10020)
+SeScreenData_0x4ECB:
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x96
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x96
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x96
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x96
+	.long	TuningSystem_Handler_Table_0x1F3F
+	.long	TuningSystem_Handler_Table_0x1F3F
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x78
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x78
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x78
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x78
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x5a
+	.long	TuningSystem_Handler_Table_0x1E8B + 0x5a
+; fixed-width string table, 13 chars per entry, 168 B: the text choices of a bound op02/op07 record (its +7 pointer; +11 = chars per entry)
+; evidence: bound op02 record 0xF164F7
+SeScreenData_0x4EFB:
+; F15B01..F15BA9  effect name table, 12 x 13 chars then 2 x 6
+	.ascii	"CELESTE 1    "
+	.ascii	"CELESTE 2    "
+	.ascii	"CHORUS 1     "
+	.ascii	"CHORUS 2     "
+	.ascii	"ENSEMBLE 1   "
+	.ascii	"ENSEMBLE 2   "
+	.ascii	"TREMOLO      "
+	.ascii	"ORGAN TREMOLO"
+	.ascii	"SINGLE DELAY "
+	.ascii	"REPEAT DELAY "
+	.ascii	"SOLO EFFECT 1"
+	.ascii	"SOLO EFFECT 2"
+	.ascii	"MONO  STEREO"
+; static record list (37 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15D26
+; evidence: SeMenu_NameEdit_DataBlock2+0xA (0xF100DA)
+SeScreenData_0x4FA3:
+; F15BA9..F16109  [flags:u8][len:u8][payload] records
+; F15BA9 flags=0x23 len=5
+	.byte	0x23, 0x05, 0x62, 0x84, 0x00
+; F15BAE flags=0x1c len=15
+	.byte	0x1c, 0x0f, 0x7b, 0x00, 0x05, 0x00
+	.ascii	"EASY EDIT"
+; F15BBD flags=0x17 len=16
+	.byte	0x17, 0x10, 0x06, 0x00, 0x07, 0x00
+	.ascii	"SOUND EDIT"
+; F15BCD flags=0x07 len=5
+	.byte	0x07, 0x05, 0x50, 0x05, 0x10
+; F15BD2 flags=0x06 len=9
+	.byte	0x06, 0x09, 0xa2, 0x05
+	.ascii	"WRITE"
+; F15BDB flags=0x07 len=17
+	.byte	0x07, 0x11, 0x8e, 0x0a
+	.ascii	"0CTAVE SHIFT:"
+; F15BEC flags=0x07 len=18
+	.byte	0x07, 0x12, 0xa2, 0x0a
+	.ascii	"BRILLIANCE   :"
+; F15BFE flags=0x07 len=5
+	.byte	0x07, 0x05, 0x68, 0x0b, 0x10
+; F15C03 flags=0x07 len=5
+	.byte	0x07, 0x05, 0x8f, 0x0b, 0x11
+; F15C08 flags=0x07 len=17
+	.byte	0x07, 0x11, 0xa6, 0x10
+	.ascii	"ATTACK TIME :"
+; F15C19 flags=0x07 len=18
+	.byte	0x07, 0x12, 0xba, 0x10
+	.ascii	"VIBRAT0 DEPTH:"
+; F15C2B flags=0x07 len=5
+	.byte	0x07, 0x05, 0x80, 0x11, 0x10
+; F15C30 flags=0x07 len=5
+	.byte	0x07, 0x05, 0xa7, 0x11, 0x11
+; F15C35 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x0e, 0x17
+	.ascii	"RELEASE TIME:"
+; F15C46 flags=0x07 len=18
+	.byte	0x07, 0x12, 0x22, 0x17
+	.ascii	"VIBRAT0 SPEED:"
+; F15C58 flags=0x07 len=5
+	.byte	0x07, 0x05, 0x98, 0x17, 0x10
+; F15C5D flags=0x07 len=5
+	.byte	0x07, 0x05, 0xbf, 0x17, 0x11
+; F15C62 flags=0x07 len=19
+	.byte	0x07, 0x13, 0x36, 0x1c
+	.ascii	"DIGITAL EFFECT:"
+; F15C75 flags=0x07 len=18
+	.byte	0x07, 0x12, 0x62, 0x1d
+	.ascii	"VIBRAT0 DELAY:"
+; F15C87 flags=0x07 len=5
+	.byte	0x07, 0x05, 0xb0, 0x1d, 0x10
+; F15C8C flags=0x07 len=5
+	.byte	0x07, 0x05, 0xd7, 0x1d, 0x11
+; F15C91 flags=0x07 len=5
+	.byte	0x07, 0x05, 0xd1, 0x21, 0x8d
+; F15C96 flags=0x06 len=9
+	.byte	0x06, 0x09, 0x14
+	.ascii	"#VALUE"
+; F15C9F flags=0x07 len=5
+	.byte	0x07, 0x05, 0x61, 0x23, 0x8e
+; F15CA4 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10, 0x00
+; F15CAE flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x3d, 0x00, 0x33, 0x00
+; F15CB8 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00, 0x3b, 0x00, 0x31, 0x00
+; F15CC2 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0xa3, 0x00, 0x39, 0x00, 0x34, 0x01, 0x59, 0x00
+; F15CCC flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0b, 0x00, 0x3a, 0x00, 0x9c, 0x00, 0x59, 0x00
+; F15CD6 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0b, 0x00, 0x61, 0x00, 0x9c, 0x00, 0x80, 0x00
+; F15CE0 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0xa3, 0x00, 0x61, 0x00, 0x34, 0x01, 0x80, 0x00
+; F15CEA flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0b, 0x00, 0x89, 0x00, 0x9c, 0x00, 0xa8, 0x00
+; F15CF4 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0xa3, 0x00, 0x89, 0x00, 0x34, 0x01, 0xa8, 0x00
+; F15CFE flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0b, 0x00, 0xb2, 0x00, 0x9c, 0x00, 0xd1, 0x00
+; F15D08 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0xa3, 0x00, 0xb2, 0x00, 0x34, 0x01, 0xd1, 0x00
+; F15D12 flags=0x22 len=10
+	.byte	0x22, 0x0a, 0x7d, 0x00, 0xda, 0x00, 0x9a, 0x00, 0xec, 0x00
+; F15D1C flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x7d, 0x00, 0xe3, 0x00, 0x9a, 0x00, 0xe3, 0x00
+; static record list (83 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15FF2
+; evidence: SeMenu_WaveformSelect_Data_Skip+0x2B (0xF0F56E)
+SeScreenData_0x5120:
+; F15D26 flags=0x1c len=14
+	.byte	0x1c, 0x0e, 0x70, 0x00, 0x09, 0x00
+	.ascii	"USER KIT"
+; F15D34 flags=0x17 len=16
+	.byte	0x17, 0x10, 0x06, 0x00, 0x07, 0x00
+	.ascii	"SOUND EDIT"
+; F15D44 flags=0x17 len=7
+	.byte	0x17, 0x07, 0x36, 0x01, 0x1f, 0x00, 0x91
+; F15D4B flags=0x07 len=5
+	.byte	0x07, 0x05, 0x4c, 0x05, 0x8d
+; F15D50 flags=0x07 len=5
+	.byte	0x07, 0x05, 0x9f, 0x05, 0xa9
+; F15D55 flags=0x1c len=7
+	.byte	0x1c, 0x07, 0x5e, 0x00, 0x35, 0x00, 0x3a
+; F15D5C flags=0x17 len=11
+	.byte	0x17, 0x0b, 0x15, 0x01, 0x38, 0x00
+	.ascii	"SOUND"
+; F15D67 flags=0x17 len=7
+	.byte	0x17, 0x07, 0x36, 0x01, 0x46, 0x00, 0x91
+; F15D6E flags=0x07 len=5
+	.byte	0x07, 0x05, 0x8c, 0x0b, 0x8e
+; F15D73 flags=0x07 len=5
+	.byte	0x07, 0x05, 0xb7, 0x0b, 0xa9
+; F15D78 flags=0x17 len=17
+	.byte	0x17, 0x11, 0x47, 0x00, 0x64, 0x00
+	.ascii	"TONE SELECT"
+; F15D89 flags=0x17 len=11
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15D8A-0xF15DA3 (25 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=60% dist=14 near FlashWrite_BlockRef_Type6_0x295+100
+	.byte	0x17, 0x0b, 0xa2, 0x00, 0x64, 0x00
+	.ascii	"LEVEL"
+; F15D94 flags=0x17 len=9
+	.byte	0x17, 0x09, 0xc7, 0x00, 0x64, 0x00, 0x4b, 0x45, 0x59
+; F15D9D flags=0x17 len=10
+	.byte	0x17, 0x0a, 0xe1, 0x00, 0x64, 0x00
+	.ascii	"TUNE"
+; F15DA7 flags=0x17 len=9
+	.byte	0x17, 0x09, 0x02, 0x01, 0x64, 0x00, 0x50, 0x41, 0x4e
+; F15DB0 flags=0x17 len=9
+	.byte	0x17, 0x09, 0x1d, 0x01, 0x64, 0x00, 0x52, 0x45, 0x56
+; F15DB9 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xd0, 0x11, 0x10
+; F15DBE flags=0x17 len=7
+	.byte	0x17, 0x07, 0x44, 0x00, 0x76, 0x00, 0x2e
+; F15DC5 flags=0x17 len=7
+	.byte	0x17, 0x07, 0x43, 0x00, 0x7b, 0x00, 0x91
+; F15DCC flags=0x17 len=7
+	.byte	0x17, 0x07, 0x44, 0x00, 0x94, 0x00, 0x2e
+; F15DD3 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xe8, 0x17, 0x10
+; F15DD8 flags=0x17 len=7
+	.byte	0x17, 0x07, 0x43, 0x00, 0x99, 0x00, 0x91
+; F15DDF flags=0x06 len=15
+	.byte	0x06, 0x0f, 0x3a, 0x1d
+	.ascii	"NOTE SELECT"
+; F15DEE flags=0x06 len=15
+	.byte	0x06, 0x0f, 0x53, 0x1d
+	.ascii	"DETAIL EDIT"
+; F15DFD flags=0x06 len=5
+	.byte	0x06, 0x05, 0xb0, 0x1d, 0x10
+; F15E02 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xd7, 0x1d, 0x11
+; F15E07 flags=0x17 len=12
+	.byte	0x17, 0x0c, 0x00, 0x00, 0xd1, 0x00
+	.ascii	"ON/OFF"
+; F15E13 flags=0x17 len=11
+	.byte	0x17, 0x0b, 0x2d, 0x00, 0xd1, 0x00
+	.ascii	"GROUP"
+; F15E1E flags=0x17 len=10
+	.byte	0x17, 0x0a, 0x58, 0x00, 0xd1, 0x00
+	.ascii	"TONE"
+; F15E28 flags=0x17 len=11
+	.byte	0x17, 0x0b, 0x7d, 0x00, 0xd1, 0x00
+	.ascii	"LEVEL"
+; F15E33 flags=0x17 len=9
+	.byte	0x17, 0x09, 0xaa, 0x00, 0xd1, 0x00, 0x4b, 0x45, 0x59
+; F15E3C flags=0x17 len=10
+	.byte	0x17, 0x0a, 0xcf, 0x00, 0xd1, 0x00
+	.ascii	"TUNE"
+; F15E46 flags=0x17 len=9
+	.byte	0x17, 0x09, 0xfa, 0x00, 0xd1, 0x00, 0x50, 0x41, 0x4e
+; F15E4F flags=0x17 len=9
+	.byte	0x17, 0x09, 0x23, 0x01, 0xd1, 0x00, 0x52, 0x45, 0x56
+; F15E58 flags=0x06 len=5
+	.byte	0x06, 0x05, 0x12, 0x22, 0x8d
+; F15E5D flags=0x06 len=5
+	.byte	0x06, 0x05, 0x17, 0x22, 0x8d
+; F15E62 flags=0x06 len=5
+	.byte	0x06, 0x05, 0x1c, 0x22, 0x8d
+; F15E67 flags=0x06 len=5
+	.byte	0x06, 0x05, 0x21, 0x22, 0x8d
+; F15E6C flags=0x06 len=5
+	.byte	0x06, 0x05, 0x26, 0x22, 0x8d
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15E71-0xF15E84 (19 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=71% dist=9 near FlashWrite_BlockRef_Type6_0x295+331
+; F15E71 flags=0x06 len=5
+	.byte	0x06, 0x05, 0x2b, 0x22, 0x8d
+; F15E76 flags=0x06 len=5
+	.byte	0x06, 0x05, 0x30, 0x22, 0x8d
+; F15E7B flags=0x06 len=5
+	.byte	0x06, 0x05, 0x35, 0x22, 0x8d
+; F15E80 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xa2, 0x23, 0x8e
+; F15E85 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xa7, 0x23, 0x8e
+; F15E8A flags=0x06 len=5
+	.byte	0x06, 0x05, 0xac, 0x23, 0x8e
+; F15E8F flags=0x06 len=5
+	.byte	0x06, 0x05, 0xb1, 0x23, 0x8e
+; F15E94 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xb6, 0x23, 0x8e
+; F15E99 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xbb, 0x23, 0x8e
+; F15E9E flags=0x06 len=5
+	.byte	0x06, 0x05, 0xc0, 0x23, 0x8e
+; F15EA3 flags=0x06 len=5
+	.byte	0x06, 0x05, 0xc5, 0x23, 0x8e
+; F15EA8 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10, 0x00
+; F15EB2 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x12, 0x01, 0x1e, 0x00, 0x35, 0x01, 0x31, 0x00
+; F15EBC flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x14, 0x01, 0x20, 0x00, 0x33, 0x01, 0x2f, 0x00
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15EC9-0xF15EDD (20 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=60% dist=11 near FlashWrite_BlockRef_Type6_0x295+419
+; F15EC6 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x37, 0x00, 0x2e, 0x00, 0xfd, 0x00, 0x49, 0x00
+; F15ED0 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x39, 0x00, 0x30, 0x00, 0xfb, 0x00, 0x47, 0x00
+; F15EDA flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x12, 0x01, 0x45, 0x00, 0x35, 0x01, 0x58, 0x00
+; F15EE4 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x14, 0x01, 0x47, 0x00, 0x33, 0x01, 0x56, 0x00
+; F15EEE flags=0x22 len=10
+	.byte	0x22, 0x0a, 0x0b, 0x00, 0x5e, 0x00, 0x35, 0x01, 0xaa, 0x00
+; F15EF8 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0a, 0x00, 0xb5, 0x00, 0x6e, 0x00, 0xca, 0x00
+; F15F02 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0x0c, 0x00, 0xb7, 0x00, 0x6c, 0x00, 0xc8, 0x00
+; F15F0C flags=0x09 len=10
+	.byte	0x09, 0x0a, 0xd2, 0x00, 0xb5, 0x00, 0x35, 0x01, 0xca, 0x00
+; F15F16 flags=0x09 len=10
+	.byte	0x09, 0x0a, 0xd4, 0x00, 0xb7, 0x00, 0x33, 0x01, 0xc8, 0x00
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F25-0xF15F3C (23 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=10 near FlashWrite_BlockRef_Type6_0x295+511
+; F15F20 flags=0x22 len=10
+	.byte	0x22, 0x0a, 0x09, 0x00, 0xda, 0x00, 0x1e, 0x00, 0xee, 0x00
+; F15F2A flags=0x22 len=10
+	.byte	0x22, 0x0a, 0x31, 0x00, 0xda, 0x00, 0x46, 0x00, 0xee, 0x00
+; F15F34 flags=0x22 len=10
+	.byte	0x22, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00, 0xee, 0x00
+; F15F3E flags=0x22 len=10
+	.byte	0x22, 0x0a, 0x81, 0x00, 0xda, 0x00, 0x96, 0x00, 0xee, 0x00
+; F15F48 flags=0x22 len=10
+	.byte	0x22, 0x0a, 0xa9, 0x00, 0xda, 0x00, 0xbe, 0x00, 0xee, 0x00
+; F15F52 flags=0x22 len=10
+	.byte	0x22, 0x0a, 0xd1, 0x00, 0xda, 0x00, 0xe6, 0x00, 0xee, 0x00
+; F15F5C flags=0x22 len=10
+	.byte	0x22, 0x0a, 0xf9, 0x00, 0xda, 0x00, 0x0e, 0x01, 0xee, 0x00
+; F15F66 flags=0x22 len=10
+	.byte	0x22, 0x0a, 0x21, 0x01, 0xda, 0x00, 0x36, 0x01, 0xee, 0x00
+; F15F70 flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x0b, 0x00, 0x6f, 0x00, 0x35, 0x01, 0x6f, 0x00
+; F15F7A flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x0b, 0x00, 0x8c, 0x00, 0x19, 0x01, 0x8c, 0x00
+; F15F84 flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x09, 0x00, 0xe4, 0x00, 0x1e, 0x00, 0xe4, 0x00
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F8F-0xF15FA0 (17 B), unreached CODE-territory, was disassembled as 6 plausible-but-dead instruction lines; per=71% dist=8 near FlashWrite_BlockRef_Type6_0x295+617
+; F15F8E flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x31, 0x00, 0xe4, 0x00, 0x46, 0x00, 0xe4, 0x00
+; F15F98 flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x59, 0x00, 0xe4, 0x00, 0x6e, 0x00, 0xe4, 0x00
+; F15FA2 flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x81, 0x00, 0xe4, 0x00, 0x96, 0x00, 0xe4, 0x00
+; F15FAC flags=0x01 len=10
+	.byte	0x01, 0x0a, 0xa9, 0x00, 0xe4, 0x00, 0xbe, 0x00, 0xe4, 0x00
+; F15FB6 flags=0x01 len=10
+	.byte	0x01, 0x0a, 0xd1, 0x00, 0xe4, 0x00, 0xe6, 0x00, 0xe4, 0x00
+; F15FC0 flags=0x01 len=10
+	.byte	0x01, 0x0a, 0xf9, 0x00, 0xe4, 0x00, 0x0e, 0x01, 0xe4, 0x00
+; F15FCA flags=0x01 len=10
+	.byte	0x01, 0x0a, 0x21, 0x01, 0xe4, 0x00, 0x36, 0x01, 0xe4, 0x00
+; F15FD4 flags=0x02 len=10
+	.byte	0x02, 0x0a, 0x38, 0x00, 0x5e, 0x00, 0x38, 0x00, 0xaa, 0x00
+; F15FDE flags=0x02 len=10
+	.byte	0x02, 0x0a, 0x9d, 0x00, 0x5e, 0x00, 0x9d, 0x00, 0xaa, 0x00
+; F15FE8 flags=0x02 len=10
+	.byte	0x02, 0x0a, 0x19, 0x01, 0x5e, 0x00, 0x19, 0x01, 0xaa, 0x00
+; static record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF16006
+; evidence: SeMenu_WaveformSelect_Data_Skip+0x55 (0xF0F598), SeMenu_PresetManager_Init+0x75 (0xF0F67D)
+SeScreenData_0x53EC:
+; F15FF2 flags=0x1b len=10
+	.byte	0x1b, 0x0a, 0x19, 0x01, 0x71, 0x00, 0x33, 0x01, 0xa8, 0x00
+; F15FFC flags=0x05 len=10
+	.byte	0x05, 0x0a, 0x19, 0x01, 0x71, 0x00, 0x33, 0x01, 0xa8, 0x00
+; bound record list (16 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF160F1
+; evidence: SeMenu_WaveformSelect_Data_Skip+0x3D (0xF0F580), SeMenu_PresetManager_Init+0x85 (0xF0F68D)
+; single bound record (op 0x07, 17 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x5400:
+; F16006 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x61, 0x06, 0x7f, 0x00, 0x1c
+	.long	TuningSystem_Handler_Table_0x71F + 0xc
+	.byte	0x03, 0x00, 0x3d, 0x00, 0x35, 0x00
+; F16017 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x1c
+	.long	0x00020bf3
+	.byte	0x0d, 0x00, 0x69, 0x00, 0x35, 0x00
+; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF1604A
+; evidence: SeMenu_PresetManager_Init+0xA5 (0xF0F6AD)
+; single bound record (op 0x07, 17 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x5422:
+; F16028 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x6f, 0x06, 0x1f, 0x00, 0x17
+	.long	SeBitmap_EnvCurve5_0x1BB8 + 0x149
+	.byte	0x02, 0x00, 0x3d, 0x00, 0x7a, 0x00
+; F16039 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17
+	.long	0x00020c03
+	.byte	0x0d, 0x00, 0x49, 0x00, 0x7a, 0x00
+; single bound record (op 0x09, 12 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x5444:
+; F1604A flags=0x09 len=12
+	.byte	0x09, 0x0c, 0x63, 0x06, 0x7f, 0x00, 0x17, 0xa5, 0x00, 0x7a, 0x00, 0x03
+; single bound record (op 0x0B, 13 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x5450:
+; F16056 flags=0x0b len=13
+	.byte	0x0b, 0x0d, 0x65, 0x06, 0xff, 0x00, 0x17, 0xc3, 0x00, 0x7a, 0x00, 0x02, 0x00
+; single bound record (op 0x0B, 13 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x545D:
+; F16063 flags=0x0b len=13
+	.byte	0x0b, 0x0d, 0x67, 0x06, 0xff, 0x00, 0x17, 0xe1, 0x00, 0x7a, 0x00, 0x02, 0x00
+; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF16092
+; evidence: SeMenu_PresetManager_Init_Code_Skip+0x10 (0xF0F6C3)
+; single bound record (op 0x07, 17 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x546A:
+; F16070 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x70, 0x06, 0x1f, 0x00, 0x17
+	.long	SeBitmap_EnvCurve5_0x1BB8 + 0x149
+	.byte	0x02, 0x00, 0x3d, 0x00, 0x98, 0x00
+; F16081 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17
+	.long	0x00020c13
+	.byte	0x0d, 0x00, 0x49, 0x00, 0x98, 0x00
+; single bound record (op 0x09, 12 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x548C:
+; F16092 flags=0x09 len=12
+	.byte	0x09, 0x0c, 0x64, 0x06, 0x7f, 0x00, 0x17, 0xa5, 0x00, 0x98, 0x00, 0x03
+; single bound record (op 0x0B, 13 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x5498:
+; F1609E flags=0x0b len=13
+	.byte	0x0b, 0x0d, 0x66, 0x06, 0xff, 0x00, 0x17, 0xc3, 0x00, 0x98, 0x00, 0x02, 0x00
+; single bound record (op 0x0B, 13 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x54A5:
+; F160AB flags=0x0b len=13
+	.byte	0x0b, 0x0d, 0x68, 0x06, 0xff, 0x00, 0x17, 0xe1, 0x00, 0x98, 0x00, 0x02, 0x00
+; single bound record (op 0x09, 12 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x54B2:
+; F160B8 flags=0x09 len=12
+	.byte	0x09, 0x0c, 0x6b, 0x06, 0x7f, 0x00, 0x17, 0x1c, 0x01, 0x89, 0x00, 0x03
+; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF160E6
+; evidence: SeMenu_PresetManager_Init+0x3B (0xF0F643)
+SeScreenData_0x54BE:
+; F160C4 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x6c, 0x06, 0x03, 0x00, 0x17
+	.long	TuningSystem_Handler_Table_0x117D + 0x94
+	.byte	0x03, 0x00, 0x03, 0x01, 0x7a, 0x00
+; F160D5 flags=0x07 len=17
+	.byte	0x07, 0x11, 0x6c, 0x06, 0x0c, 0x02, 0x17
+	.long	TuningSystem_Handler_Table_0x117D + 0x94
+	.byte	0x03, 0x00, 0x03, 0x01, 0x98, 0x00
+; single bound record (op 0x03, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x54E0:
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF160F0-0xF16106 (22 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=80% dist=11 near FlashWrite_BlockRef_Type6_0x655+10
+; F160E6 flags=0x03 len=11
+	.byte	0x03, 0x0b, 0x60, 0x06, 0x03, 0x00, 0x05
+	.long	SeScreenData_0x5503
+; single bound record (op 0x09, 12 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x54EB:
+; F160F1 flags=0x09 len=12
+	.byte	0x09, 0x0c, 0x6d, 0x06, 0x7f, 0x00, 0x17, 0x09, 0x01, 0x7a, 0x00, 0x02
+; single bound record (op 0x09, 12 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1612B
+SeScreenData_0x54F7:
+; F160FD flags=0x09 len=12
+	.byte	0x09, 0x0c, 0x6e, 0x06, 0x7f, 0x00, 0x17, 0x09, 0x01, 0x98, 0x00, 0x02
+; table of 3 boxes {u16 x1, y1, x2, y2}, indexed by the masked value of a bound op03/04/08 record (its +7 pointer)
+; evidence: bound op03 record 0xF160E6
+SeScreenData_0x5503:
+; F16109..F1612F  the length byte at F16109 is 0, so the [flags][len] framing above does NOT continue here.
+; HYPOTHESIS ONLY (it closes exactly on the u32 below, but is not otherwise corroborated):
+; three 8-byte entries, then one len-10 record. Left as untyped .byte rather than guessed at.
+; F16109
+; F16111
+; F16119
+	.short	13, 113, 280, 138
+	.short	13, 113, 280, 138
+	.short	13, 141, 280, 168
+; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF1612B
+; evidence: SeMenu_PresetManager_Init+0x56 (0xF0F65E)
+SeScreenData_0x551B:
+; F16121
+	.byte	0x1b, 0x0a, 0x0d, 0x00, 0x71, 0x00, 0x18, 0x01, 0xa8, 0x00
+; table of 17 pointers to bound records; the code loads it into XIY and SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA))
+; evidence: SeMenu_WaveformSelect_Data_0xAF+0x1E (0xF0F603), SeMenu_PresetManager_Init+0x61 (0xF0F669), SeMenu_PresetManager_Init_Code_Skip2+0xB (0xF0F6D4)
+SeScreenData_0x5525:
+; F1612B -- a u32 pointer to the record at F160E6; DrumDetailEdit_Menu_Table's label may be one entry late
+	.byte	0xe6, 0x60, 0xf1, 0x00
 DrumDetailEdit_Menu_Table:
-	.long DrumDetailEdit_Entry_01
-	.long DrumDetailEdit_Entry_01
-	.long DrumDetailEdit_Entry_03
-	.long DrumDetailEdit_Entry_07
-	.long DrumDetailEdit_Entry_04
-	.long DrumDetailEdit_Entry_08
-	.long DrumDetailEdit_Entry_05
-	.long DrumDetailEdit_Entry_09
-	.long Data_Dispatch_Entry
-	.long Data_Dispatch_Entry
-	.long Data_Dispatch_Entry
-	.long Data_Dispatch_Entry_0x39
-	.long Data_Dispatch_Entry_0x39
-	.long Data_Dispatch_Entry_0x45
-	.long DrumDetailEdit_Entry_02
-	.long DrumDetailEdit_Entry_06
-	.byte 0x23, 0x05, 0x10, 0x7f, 0x00, 0x23, 0x05, 0x63
-	.byte 0xa3, 0x0a, 0x23, 0x05, 0x61, 0xc2, 0x0a, 0x23
-	.byte 0x05, 0x21, 0xbb, 0x10, 0x23, 0x05, 0x5f, 0xda
-	.byte 0x10, 0x1c, 0x16, 0x58, 0x00, 0x08, 0x00, 0x44
-	.ascii "RUM DETAIL EDIT"
-	.byte 0x06
-	.byte 0x08, 0x7c, 0x0b
-	.byte 0x54, 0x30, 0x4e, 0x45
-	.byte 0x06
-	.byte 0x0c, 0x81, 0x0b
-	ld	xix, 0x4d414e59
-	.byte 0x49, 0x43, 0x53, 0x06, 0x0d, 0x97, 0x0b, 0x41
-	.ascii "MPLITUDE"
-	.byte 0x06, 0x05, 0xb8, 0x0b, 0x10, 0x06, 0x05, 0xdf
-	.byte 0x0b, 0x11, 0x17, 0x19, 0x8e, 0x00, 0x65, 0x00
-	.ascii "TOTAL KIT PARAMETER"
-	.byte 0x06, 0x05, 0xa8, 0x11, 0x10
-	.byte 0x06, 0x05, 0xcf, 0x11, 0x11, 0x06, 0x0e, 0xbe
-	.byte 0x11
-	.ascii "C0NTR0LLER"
-	.byte 0x06, 0x0a, 0xd7, 0x11, 0x46
-	.byte 0x49, 0x4c, 0x54, 0x45, 0x52
-	.byte 0x06, 0x17, 0x15
-	.byte 0x1e
-	.ascii "DRUM S0UND NAMING "
-	.byte 0x11, 0x09, 0x0a, 0x0f, 0x00
-	.byte 0x37, 0x00, 0x31, 0x01, 0x8f, 0x00, 0x09, 0x0a
-	.byte 0xa3, 0x00, 0xba, 0x00, 0x35, 0x01, 0xcf, 0x00
-	.byte 0x09, 0x0a, 0xa5, 0x00, 0xbc, 0x00, 0x33, 0x01
-	.byte 0xcd, 0x00, 0x17, 0x0b, 0x3b, 0x00, 0x3e, 0x00
-	.byte 0x54, 0x4f, 0x55, 0x43, 0x48
-	.byte 0x17, 0x0b, 0x6b
-	.byte 0x00, 0x3e, 0x00
-	ld	xhl, 0x45565255
-	.byte 0x17, 0x0b, 0x54, 0x00, 0xd1, 0x00, 0x54, 0x4f
-	.byte 0x55, 0x43, 0x48, 0x17, 0x0b, 0x7d, 0x00, 0xd1
-	.byte 0x00
-	ld	xhl, 0x45565255
-	.byte 0x06, 0x05
-	.byte 0x1c, 0x22, 0x8d, 0x06, 0x05, 0x21, 0x22, 0x8d
-	.byte 0x06, 0x05, 0xac, 0x23, 0x8e, 0x06, 0x05, 0xb1
-	.byte 0x23, 0x8e, 0x22, 0x0a, 0x0b, 0x00, 0x38, 0x00
-	.byte 0x9c, 0x00, 0x8a, 0x00, 0x22, 0x0a, 0x59, 0x00
-	.byte 0xda, 0x00, 0x6e, 0x00, 0xee, 0x00, 0x22, 0x0a
-	.byte 0x81, 0x00, 0xda, 0x00, 0x96, 0x00, 0xee, 0x00
-	.byte 0x01, 0x0a, 0x0b, 0x00, 0x4a, 0x00, 0x9c, 0x00
-	.byte 0x4a, 0x00, 0x01, 0x0a, 0x0b, 0x00, 0x6a, 0x00
-	.byte 0x9c, 0x00, 0x6a, 0x00, 0x01, 0x0a, 0x59, 0x00
-	.byte 0xe4, 0x00, 0x6e, 0x00, 0xe4, 0x00, 0x01, 0x0a
-	.long Pad_NakaExternal_Block4
-	.long NakaData_ExternalPadBlock_A
-	.byte 0x02, 0x0a, 0x2e, 0x00, 0x38, 0x00, 0x2e, 0x00
-	.byte 0x8a, 0x00, 0x05, 0x0a, 0x16, 0x01, 0x43, 0x00
-	.byte 0x32, 0x01, 0x5c, 0x00, 0x06, 0x13, 0x60, 0x1d
-	.byte 0x10
-	.ascii "KEY OFF MODE :"
-	.byte 0x17
-	.byte 0x0b, 0x18, 0x01, 0xc2, 0x00, 0x54, 0x4f, 0x55
-	.byte 0x43, 0x48, 0x17, 0x09, 0x09, 0x00, 0xcf, 0x00
-	.byte 0x41, 0x54, 0x4b, 0x17, 0x0c, 0x27, 0x00, 0xcf
-	.byte 0x00
-	.ascii "DECAY1"
-	.byte 0x17
-	.byte 0x0b, 0x51, 0x00, 0xcf, 0x00, 0x53, 0x55, 0x53
-	.byte 0x54, 0x31, 0x17, 0x0c, 0x7b, 0x00, 0xcf, 0x00
-	.ascii "DECAY2"
-	.byte 0x17, 0x0b
-	.byte 0xa5, 0x00, 0xcf, 0x00
-	.byte 0x53, 0x55, 0x53, 0x54
-	.byte 0x32, 0x17, 0x0d, 0xcf, 0x00, 0xcf, 0x00, 0x52
-	.ascii "ELEASE"
-	.byte 0x17, 0x0c
-	.byte 0x18, 0x01, 0xcf, 0x00
-	.byte 0x41, 0x54, 0x54, 0x41
-	.byte 0x43, 0x4b, 0x07, 0x05, 0x1a, 0x24, 0x12, 0x07
-	.byte 0x05, 0x1f, 0x24, 0x12, 0x07, 0x05, 0x24, 0x24
-	.byte 0x12, 0x07, 0x05, 0x29, 0x24, 0x12, 0x07, 0x05
-	.byte 0x2e, 0x24, 0x12, 0x07, 0x05, 0x34, 0x24, 0x12
-	.byte 0x07, 0x05, 0x3e, 0x24, 0x12, 0x09, 0x0a, 0x03
-	.byte 0x00, 0xcb, 0x00, 0xfd, 0x00, 0xe8, 0x00, 0x09
-	.byte 0x0a, 0x14, 0x01, 0xcb, 0x00, 0x3f, 0x01, 0xe8
-	.byte 0x00, 0x01, 0x0a, 0x03, 0x00, 0xd9, 0x00, 0xfd
-	.byte 0x00, 0xd9, 0x00, 0x01, 0x0a, 0x14, 0x01, 0xd9
-	.byte 0x00, 0x3f, 0x01, 0xd9, 0x00, 0x05, 0x0a, 0x16
-	.byte 0x01, 0x27, 0x00, 0x32, 0x01, 0x34, 0x00, 0x05
-	.byte 0x0a, 0x04, 0x00, 0xda, 0x00, 0xfc, 0x00, 0xe7
-	.byte 0x00, 0x05, 0x0a, 0x15, 0x01, 0xda, 0x00, 0x3e
-	.byte 0x01, 0xe7, 0x00
+	.long	SeScreenData_0x5400
+	.long	SeScreenData_0x5400
+	.long	SeScreenData_0x5444
+	.long	SeScreenData_0x548C
+	.long	SeScreenData_0x5450
+	.long	SeScreenData_0x5498
+	.long	SeScreenData_0x545D
+	.long	SeScreenData_0x54A5
+	.long	SeScreenData_0x54B2
+	.long	SeScreenData_0x54B2
+	.long	SeScreenData_0x54B2
+	.long	SeScreenData_0x54EB
+	.long	SeScreenData_0x54EB
+	.long	SeScreenData_0x54F7
+	.long	SeScreenData_0x5422
+	.long	SeScreenData_0x546A
+; static record list (20 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF16239
+; evidence: SeMenu_PresetManager_Load+0x17 (0xF0F6F0)
+SeScreenData_0x5569:
+; se_setup_editor_full: 266 B at 0xF1616F, compiled from audio/sound_editor_screens/se_setup_editor_full.c
+	.incbin "includes/generated/se_setup_editor_full.bin"
+; static record list (17 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF162D3
+; evidence: SeMenu_CompareAndApply_Check+0xA (0xF0FB77)
+	.set	SeScreenData_0x5633, SeScreenData_0x5569 + 0xca
+; F16279 -- remainder of the source line the descriptor ends inside
+	.byte	0x22, 0x0a, 0x0b, 0x00, 0x38, 0x00, 0x9c, 0x00, 0x8a, 0x00
+	.byte	0x22, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00, 0xee, 0x00
+	.byte	0x22, 0x0a, 0x81, 0x00, 0xda, 0x00, 0x96, 0x00, 0xee, 0x00
+	.byte	0x01, 0x0a, 0x0b, 0x00, 0x4a, 0x00, 0x9c, 0x00, 0x4a, 0x00
+	.byte	0x01, 0x0a, 0x0b, 0x00, 0x6a, 0x00, 0x9c, 0x00, 0x6a, 0x00
+	.byte	0x01, 0x0a, 0x59, 0x00, 0xe4, 0x00, 0x6e, 0x00, 0xe4, 0x00
+	.byte	0x01, 0x0a, 0x81, 0x00, 0xe4, 0x00, 0x96, 0x00, 0xe4, 0x00
+	.byte	0x02, 0x0a, 0x2e, 0x00, 0x38, 0x00, 0x2e, 0x00, 0x8a, 0x00
+	.byte	0x05, 0x0a, 0x16, 0x01, 0x43, 0x00, 0x32, 0x01, 0x5c, 0x00
+; static record list (23 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF163AA
+; evidence: SeMenu_Utility_CopyBlock+0x4B (0xF0FCA1)
+SeScreenData_0x56CD:
+	.byte	0x06, 0x13, 0x60, 0x1d, 0x10
+	.ascii	"KEY OFF MODE :"
+	.byte	0x17, 0x0b, 0x18, 0x01, 0xc2, 0x00
+	.ascii	"TOUCH"
+	.byte	0x17, 0x09, 0x09, 0x00, 0xcf, 0x00, 0x41, 0x54, 0x4b
+	.byte	0x17, 0x0c, 0x27, 0x00, 0xcf, 0x00
+	.ascii	"DECAY1"
+	.byte	0x17, 0x0b, 0x51, 0x00, 0xcf, 0x00
+	.ascii	"SUST1"
+	.byte	0x17, 0x0c, 0x7b, 0x00, 0xcf, 0x00
+	.ascii	"DECAY2"
+	.byte	0x17, 0x0b, 0xa5, 0x00, 0xcf, 0x00
+	.ascii	"SUST2"
+	.byte	0x17, 0x0d, 0xcf, 0x00, 0xcf, 0x00
+	.ascii	"RELEASE"
+	.byte	0x17, 0x0c, 0x18, 0x01, 0xcf, 0x00
+	.ascii	"ATTACK"
+	.byte	0x07, 0x05, 0x1a, 0x24, 0x12
+	.byte	0x07, 0x05, 0x1f, 0x24, 0x12
+	.byte	0x07, 0x05, 0x24, 0x24, 0x12
+	.byte	0x07, 0x05, 0x29, 0x24, 0x12
+	.byte	0x07, 0x05, 0x2e, 0x24, 0x12
+	.byte	0x07, 0x05, 0x34, 0x24, 0x12
+	.byte	0x07, 0x05, 0x3e, 0x24, 0x12
+	.byte	0x09, 0x0a, 0x03, 0x00, 0xcb, 0x00, 0xfd, 0x00, 0xe8, 0x00
+	.byte	0x09, 0x0a, 0x14, 0x01, 0xcb, 0x00, 0x3f, 0x01, 0xe8, 0x00
+	.byte	0x01, 0x0a, 0x03, 0x00, 0xd9, 0x00, 0xfd, 0x00, 0xd9, 0x00
+	.byte	0x01, 0x0a, 0x14, 0x01, 0xd9, 0x00, 0x3f, 0x01, 0xd9, 0x00
+	.byte	0x05, 0x0a, 0x16, 0x01, 0x27, 0x00, 0x32, 0x01, 0x34, 0x00
+	.byte	0x05, 0x0a, 0x04, 0x00, 0xda, 0x00, 0xfc, 0x00, 0xe7, 0x00
+	.byte	0x05, 0x0a, 0x15, 0x01, 0xda, 0x00, 0x3e, 0x01, 0xe7, 0x00
+; bound record list (5 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF163E1
+; evidence: SeMenu_CompareAndApply_Apply+0x10 (0xF0FBB4)
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF163E1
+SeScreenData_0x57A4:
 ; se_apply_confirm: 55 bytes (5 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_apply_confirm.c)
 	.incbin "includes/generated/se_apply_confirm.bin"
-	.byte 0xd6, 0x63, 0xf1, 0x00, 0xaa, 0x63
-	.byte 0xf1, 0x00, 0xb5, 0x63, 0xf1, 0x00, 0xc0, 0x63
-	.byte 0xf1, 0x00, 0xcb, 0x63, 0xf1, 0x00, 0x1b, 0x0a
-	.byte 0x0d, 0x00, 0x4c, 0x00, 0x9a, 0x00, 0x88, 0x00
-	.byte 0x0d, 0x00, 0x4c, 0x00, 0x9a, 0x00, 0x68, 0x00
-	.byte 0x0d, 0x00, 0x4c, 0x00, 0x9a, 0x00, 0x68, 0x00
-	.byte 0x0d, 0x00, 0x6c, 0x00, 0x9a, 0x00, 0x88, 0x00
-	.byte 0x02, 0x0f, 0x60, 0x06, 0x20, 0x05, 0x20, 0xd1
-	.byte 0x14, 0xf1, 0x00, 0x03, 0x00, 0x70, 0x1d, 0x00
-	.byte 0x0a, 0x61, 0x06, 0x7f, 0x00, 0x20, 0x61, 0x22
-	.byte 0x03, 0x00, 0x0a, 0x62, 0x06, 0x7f, 0x00, 0x20
-	.byte 0x65, 0x22, 0x03, 0x00, 0x0a, 0x63, 0x06, 0x7f
-	.byte 0x00, 0x20, 0x6a, 0x22, 0x03, 0x00, 0x0a, 0x64
-	.byte 0x06, 0x7f, 0x00, 0x20, 0x6f, 0x22, 0x03, 0x05
-	.byte 0x0b, 0x67, 0x06, 0xff, 0x00, 0x20, 0x84, 0x22
-	.byte 0x02, 0x00, 0x17, 0x64, 0xf1, 0x00, 0x26, 0x64
-	.byte 0xf1, 0x00, 0x30, 0x64, 0xf1, 0x00, 0x3a, 0x64
-	.byte 0xf1, 0x00, 0x44, 0x64, 0xf1, 0x00, 0x79, 0x64
-	.byte 0xf1, 0x00, 0x83, 0x64, 0xf1, 0x00, 0x4e, 0x64
-	.byte 0xf1, 0x00, 0x00, 0x0a, 0x65, 0x06, 0x7f, 0x00
-	.byte 0x20, 0x74, 0x22, 0x03, 0x00, 0x0a, 0x66, 0x06
-	.byte 0x7f, 0x00, 0x20, 0x7a, 0x22, 0x03, 0x20, 0x07
-	.ascii "t\" -- "
-	.byte 0x07, 0x7a
-	.ascii "\" --"
-	.byte 0x05, 0x0b, 0x61, 0x06
-	.byte 0xff, 0x00, 0x20, 0xb0, 0x0a, 0x02, 0x00, 0x02
-	.byte 0x0f, 0x62, 0x06, 0x1f, 0x00, 0x20, 0xa9, 0x65
-	.byte 0xf1, 0x00, 0x03, 0x00, 0xc8, 0x10, 0x05, 0x0b
-	.byte 0x63, 0x06, 0xff, 0x00, 0x20, 0x30, 0x17, 0x02
-	.byte 0x00, 0x05, 0x0b, 0x64, 0x06, 0xff, 0x00, 0x20
-	.byte 0x70, 0x1d, 0x02, 0x00, 0x05, 0x0b, 0x69, 0x06
-	.byte 0x0f, 0x00, 0x20, 0x9b, 0x0a, 0x02, 0x08, 0x05
-	.byte 0x0b, 0x66, 0x06, 0xff, 0x00, 0x20, 0xb3, 0x10
-	.byte 0x02, 0x00, 0x05, 0x0b, 0x67, 0x06, 0xff, 0x00
-	.byte 0x20, 0x1b, 0x17, 0x02, 0x00, 0x03, 0x0b, 0x60
-	.byte 0x06, 0x0f, 0x00, 0x05, 0x57, 0x65, 0xf1, 0x00
-	.byte 0x02, 0x0f, 0x6a, 0x06, 0x0f, 0x00, 0x20, 0x01
-	.byte 0x5b, 0xf1, 0x00, 0x0d, 0x00, 0x8e, 0x1e, 0x02
-	.byte 0x0f, 0x6a, 0x06, 0x80, 0x07, 0x20, 0x15, 0x65
-	.byte 0xf1, 0x00, 0x0d, 0x00, 0x8e, 0x1e, 0x4f, 0x46
-	.ascii "F          OFF          "
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF163E1
+	.set	SeScreenData_0x57AF, SeScreenData_0x57A4 + 0xb
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF163E1
+	.set	SeScreenData_0x57BA, SeScreenData_0x57A4 + 0x16
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF163E1
+	.set	SeScreenData_0x57C5, SeScreenData_0x57A4 + 0x21
+; single bound record (op 0x03, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF163E1
+	.set	SeScreenData_0x57D0, SeScreenData_0x57A4 + 0x2c
+; table of 5 pointers to bound records; the code loads it into XIY and SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA))
+; evidence: SeMenu_DataBlock_01+0x6A (0xF10408)
+SeScreenData_0x57DB:
+	.long	SeScreenData_0x57D0
+	.long	SeScreenData_0x57A4
+	.long	SeScreenData_0x57AF
+	.long	SeScreenData_0x57BA
+	.long	SeScreenData_0x57C5
+; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF163FF
+; evidence: SeMenu_DataBlock_01+0x4B (0xF103E9)
+SeScreenData_0x57EF:
+	.byte	0x1b, 0x0a, 0x0d, 0x00, 0x4c, 0x00, 0x9a, 0x00, 0x88, 0x00
+; table of 3 boxes {u16 x1, y1, x2, y2}, indexed by the masked value of a bound op03/04/08 record (its +7 pointer)
+; evidence: bound op03 record 0xF163D6
+SeScreenData_0x57F9:
+	.short	13, 76, 154, 104
+	.short	13, 76, 154, 104
+	.short	13, 108, 154, 136
+; bound record list (6 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF16459
+; evidence: SeMenu_Utility_CopyBlock+0x7E (0xF0FCD4)
+; single bound record (op 0x02, 15 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x5811:
+	.byte	0x02, 0x0f, 0x60, 0x06, 0x20, 0x05, 0x20
+	.long	SeBitmap_EnvCurve5_0x4B0 + 0x53
+	.byte	0x03, 0x00, 0x70, 0x1d
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x5820:
+	.byte	0x00, 0x0a, 0x61, 0x06, 0x7f, 0x00, 0x20, 0x61, 0x22, 0x03
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x582A:
+	.byte	0x00, 0x0a, 0x62, 0x06, 0x7f, 0x00, 0x20, 0x65, 0x22, 0x03
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x5834:
+	.byte	0x00, 0x0a, 0x63, 0x06, 0x7f, 0x00, 0x20, 0x6a, 0x22, 0x03
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x583E:
+	.byte	0x00, 0x0a, 0x64, 0x06, 0x7f, 0x00, 0x20, 0x6f, 0x22, 0x03
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x5848:
+	.byte	0x05, 0x0b, 0x67, 0x06, 0xff, 0x00, 0x20, 0x84, 0x22, 0x02, 0x00
+; table of 8 pointers to bound records; the code loads it into XIY and SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA))
+; evidence: SeMenu_DataBlock_03+0x1D (0xF1043A), SeMenu_DataBlock_03+0x32 (0xF1044F)
+SeScreenData_0x5853:
+	.long	SeScreenData_0x5811
+	.long	SeScreenData_0x5820
+	.long	SeScreenData_0x582A
+	.long	SeScreenData_0x5834
+	.long	SeScreenData_0x583E
+	.long	SeScreenData_0x5873
+	.long	SeScreenData_0x587D
+	.long	SeScreenData_0x5848
+; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF1648D
+; evidence: SeMenu_Utility_CopyBlock_0x8B+0x19 (0xF0FCFA)
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x5873:
+	.byte	0x00, 0x0a, 0x65, 0x06, 0x7f, 0x00, 0x20, 0x74, 0x22, 0x03
+; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF16459
+SeScreenData_0x587D:
+	.byte	0x00, 0x0a, 0x66, 0x06, 0x7f, 0x00, 0x20, 0x7a, 0x22, 0x03
+; static record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF1649B
+; evidence: SeMenu_Utility_CopyBlock_0x8B+0x3D (0xF0FD1E)
+SeScreenData_0x5887:
+	.byte	0x20, 0x07, 0x74, 0x22, 0x20, 0x2d, 0x2d
+	.byte	0x20, 0x07, 0x7a, 0x22, 0x20, 0x2d, 0x2d
+; bound record list (8 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF164F7
+; evidence: SeMenu_NameEdit_DataBlock2+0x18 (0xF100E8)
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x5895:
+	.byte	0x05, 0x0b, 0x61, 0x06, 0xff, 0x00, 0x20, 0xb0, 0x0a, 0x02, 0x00
+; single bound record (op 0x02, 15 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x58A0:
+	.byte	0x02, 0x0f, 0x62, 0x06, 0x1f, 0x00, 0x20
+	.long	SeScreenData_0x59A3
+	.byte	0x03, 0x00, 0xc8, 0x10
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x58AF:
+	.byte	0x05, 0x0b, 0x63, 0x06, 0xff, 0x00, 0x20, 0x30, 0x17, 0x02, 0x00
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x58BA:
+	.byte	0x05, 0x0b, 0x64, 0x06, 0xff, 0x00, 0x20, 0x70, 0x1d, 0x02, 0x00
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x58C5:
+	.byte	0x05, 0x0b, 0x69, 0x06, 0x0f, 0x00, 0x20, 0x9b, 0x0a, 0x02, 0x08
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x58D0:
+	.byte	0x05, 0x0b, 0x66, 0x06, 0xff, 0x00, 0x20, 0xb3, 0x10, 0x02, 0x00
+; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x58DB:
+	.byte	0x05, 0x0b, 0x67, 0x06, 0xff, 0x00, 0x20, 0x1b, 0x17, 0x02, 0x00
+; single bound record (op 0x03, 11 B), read by GraphicsRender_Start
+; evidence: recptrs table 0xF1652F
+SeScreenData_0x58E6:
+	.byte	0x03, 0x0b, 0x60, 0x06, 0x0f, 0x00, 0x05
+	.long	SeScreenData_0x5951
+; single bound record (op 0x02, 15 B), read by GraphicsRender_Start
+; evidence: SeMenu_NameEdit_HandleInput (0xF10141)
+SeScreenData_0x58F1:
+	.byte	0x02, 0x0f, 0x6a, 0x06, 0x0f, 0x00, 0x20
+	.long	SeScreenData_0x4EFB
+	.byte	0x0d, 0x00, 0x8e, 0x1e
+; single bound record (op 0x02, 15 B), read by GraphicsRender_Start
+; evidence: SeMenu_NameEdit_HandleInput (0xF10141)
+SeScreenData_0x5900:
+	.byte	0x02, 0x0f, 0x6a, 0x06, 0x80, 0x07, 0x20
+	.long	SeScreenData_0x590F
+	.byte	0x0d, 0x00, 0x8e, 0x1e
+; fixed-width string table, 13 chars per entry, 26 B: the text choices of a bound op02/op07 record (its +7 pointer; +11 = chars per entry)
+; evidence: bound op02 record 0xF16506
+SeScreenData_0x590F:
+	.ascii	"OFF          "
+	.ascii	"OFF          "
+; table of 10 pointers to bound records; the code loads it into XIY and SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA))
+; evidence: SeMenu_NameEdit_DefaultPath+0xB (0xF10121)
+; (name EffectParam_Edit_Table kept: other files use it; the object is ScreenData, see above)
 EffectParam_Edit_Table:
-	.long EffectParamEdit_Entry_08
-	.long EffectParamEdit_Entry_01
-	.long EffectParamEdit_Entry_02
-	.long EffectParamEdit_Entry_03
-	.long EffectParamEdit_Entry_04
-	.long EffectParamEdit_Entry_04
-	.long EffectParamEdit_Entry_06
-	.long EffectParamEdit_Entry_07
-	.long EffectParamEdit_Entry_07
-	.long EffectParamEdit_Entry_05
-	.byte 0x0c, 0x00, 0x3b, 0x00, 0x9b, 0x00, 0x58, 0x00
-	.byte 0x0c, 0x00, 0x3b, 0x00, 0x9b, 0x00, 0x58, 0x00
-	.byte 0x0c, 0x00, 0x62, 0x00, 0x9b, 0x00, 0x7f, 0x00
-	.byte 0x0c, 0x00, 0x8a, 0x00, 0x9b, 0x00, 0xa7, 0x00
-	.byte 0x0c, 0x00, 0xb3, 0x00, 0x9b, 0x00, 0xd0, 0x00
-	.byte 0xa4, 0x00, 0x3a, 0x00, 0x33, 0x01, 0x58, 0x00
-	.byte 0xa4, 0x00, 0x62, 0x00, 0x33, 0x01, 0x7f, 0x00
-	.byte 0xa4, 0x00, 0x8a, 0x00, 0x33, 0x01, 0xa7, 0x00
-	.byte 0xa4, 0x00, 0xb3, 0x00, 0x33, 0x01, 0xd0, 0x00
-	.byte 0x1b, 0x0a, 0x0c, 0x00, 0x3b, 0x00, 0x33, 0x01
-	.byte 0xd0, 0x00
-	.ascii "OFF-10- 9- 8- 7- 6- 5- 4- 3- 2- 1  0+ 1+ 2+ 3+ 4+ 5+ 6+ 7+ 8+ 9+10"
-
+	.long	SeScreenData_0x58E6
+	.long	SeScreenData_0x5895
+	.long	SeScreenData_0x58A0
+	.long	SeScreenData_0x58AF
+	.long	SeScreenData_0x58BA
+	.long	SeScreenData_0x58BA
+	.long	SeScreenData_0x58D0
+	.long	SeScreenData_0x58DB
+	.long	SeScreenData_0x58DB
+	.long	SeScreenData_0x58C5
+; table of 9 boxes {u16 x1, y1, x2, y2}, indexed by the masked value of a bound op03/04/08 record (its +7 pointer)
+; evidence: bound op03 record 0xF164EC
+SeScreenData_0x5951:
+	.short	12, 59, 155, 88
+	.short	12, 59, 155, 88
+	.short	12, 98, 155, 127
+	.short	12, 138, 155, 167
+	.short	12, 179, 155, 208
+	.short	164, 58, 307, 88
+	.short	164, 98, 307, 127
+	.short	164, 138, 307, 167
+	.short	164, 179, 307, 208
+; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF165A9
+; evidence: SeMenu_NameEdit_SetupPath+0x10 (0xF10110)
+SeScreenData_0x5999:
+	.byte	0x1b, 0x0a, 0x0c, 0x00, 0x3b, 0x00, 0x33, 0x01, 0xd0, 0x00
+; fixed-width string table, 3 chars per entry, 66 B: the text choices of a bound op02/op07 record (its +7 pointer; +11 = chars per entry)
+; evidence: bound op02 record 0xF164A6
+SeScreenData_0x59A3:
+	.ascii	"OFF"
+	.ascii	"-10"
+	.ascii	"- 9"
+	.ascii	"- 8"
+	.ascii	"- 7"
+	.ascii	"- 6"
+	.ascii	"- 5"
+	.ascii	"- 4"
+	.ascii	"- 3"
+	.ascii	"- 2"
+	.ascii	"- 1"
+	.ascii	"  0"
+	.ascii	"+ 1"
+	.ascii	"+ 2"
+	.ascii	"+ 3"
+	.ascii	"+ 4"
+	.ascii	"+ 5"
+	.ascii	"+ 6"
+	.ascii	"+ 7"
+	.ascii	"+ 8"
+	.ascii	"+ 9"
+	.ascii	"+10"
 InitializeNaka:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, 0xfa44e2, 0xe0e95c, 0xe0e944, 0x16b
-	RegObjTable 0x160000c, 0xfa58fb, 0xe0e962, 0xe0e95e, 0x1cb
-	RegObjTable 0x160000d, 0xfa5948, 0xe0e968, 0xe0e964, 0x1eb
-	RegObjTabl 0x1600002, 0xfa496c, 0x12, 0xe0e7ae, 0x12b
-	RegObjTabl 0x1600002, 0xfa496c, 0x12, 0xe0e7fa, 0x42b
-	RegObjTabl 0x1600001, 0xfa48a9, 0x0, 0xe0e96a, 0x10b
-	RegObjTabl 0x1600001, 0xfa48a9, 0x0, 0xe0e96e, 0x40b
-	RegObjTabl 0x1600003, 0xfa4a18, 0x0, 0xe14824, 0x14b
-	RegObjTabl 0x1600003, 0xfa4a18, 0x0, 0xe14828, 0x44b
-	RegObjTabl 0x1600010, 0xfa5995, 0x1de, NAKA_UIObjectTable, 0xfd
-	RegObjTabl 0x160000f, 0xfa62cb, 0x1de, 0xe13bca, 0x3fd
+	RegObjTable 0x1600004, ClassProc, 0xe0e95c, 0xe0e944, 0x16b
+	RegObjTable 0x160000c, ResEventProc, 0xe0e962, 0xe0e95e, 0x1cb
+	RegObjTable 0x160000d, ResMethodProc, 0xe0e968, 0xe0e964, 0x1eb
+	RegObjTabl 0x1600002, ApFunctionProc, 0x12, 0xe0e7ae, 0x12b
+	RegObjTabl 0x1600002, ApFunctionProc, 0x12, 0xe0e7fa, 0x42b
+	RegObjTabl 0x1600001, FunctionProc, 0x0, 0xe0e96a, 0x10b
+	RegObjTabl 0x1600001, FunctionProc, 0x0, 0xe0e96e, 0x40b
+	RegObjTabl 0x1600003, MainFunctionProc, 0x0, 0xe14824, 0x14b
+	RegObjTabl 0x1600003, MainFunctionProc, 0x0, 0xe14828, 0x44b
+	RegObjTabl 0x1600010, ViewableProc, 0x1de, NAKA_UIObjectTable, 0xfd
+	RegObjTabl 0x160000f, ResNameProc, 0x1de, 0xe13bca, 0x3fd
 
 	RegTitle 0xb, 0xe1, 0x481a, 0xfd, 0x1200000, 0xfd0000
 	lda xsp, (xsp + 14)
@@ -1614,27 +1235,23 @@ Flash_InitExtMemAddrs:
 
 Flash_InitBytecodeBlock:
 	lda	xsp, (xsp-12)
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	ld	(xsp+10), c
 	ld	(xsp+12), a
 	ld	(xsp+2), 0
 	ld	(xsp+8), 0
-	calr	65397
+	calr	Flash_InitExtMemAddrs
 	ld	a, (xsp+12)
 	extz	wa
-	.byte 0x8f
-	incf
-	push	xsp
-	ldw	(127:8), 349:io
-	calr	5349
+	cp	(xsp+0xc), 10
+	jrl	nc, Flash_InitBytecodeBlock_Skip7
+	calr	DualVoice_ScanAllColumns
 	ld	a, (xsp+10)
 	extz	wa
-	calr	5538
+	calr	DualVoice_ScanAllColumnsAlt
 	ld	a, (xsp+10)
 	extz	wa
-	calr	1567
+	calr	NoteEvent_Store
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
@@ -1648,6 +1265,7 @@ Flash_InitBytecodeBlock:
 	ld xwa, (3186:16)
 	ld	(0x39ae:16), xwa
 	ldib_erp 251, 0
+Flash_InitBytecodeBlock_Loop:
 	ld	c, (xsp+6)
 	extz	bc
 	stb_erp a, 251
@@ -1656,25 +1274,18 @@ Flash_InitBytecodeBlock:
 	ld	de, wa
 	add	de, bc
 	lda	xwa, (MSP_Default_ChannelMap:24)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe8
-	pop_f
-	.byte 0xac
-	push	xbc
+	ld	(0x39ac), (xwa+de)
 	call	AccPatch_InitFromSlotIndex
 	inc1b_erp 251
 	cp_erpb 251, 10
-	jr c, -43
+	jr c, Flash_InitBytecodeBlock_Loop
 	ld	xwa, (3182:16)
 	ld	(0x39ae:16), xwa
 	ld	xwa, (3186:16)
 	ld	(0x39b2:16), xwa
-	.byte 0xf1
-	lda	xiy, (xwa)
-	.byte 0xb0, 0xc7
-	swi	3
-	.byte 0xa8
+	resda	0, (0x35b0)
+	ldib_erp	251, 0
+Flash_InitBytecodeBlock_Loop2:
 	ld	e, (xsp+12)
 	extz	de
 	stb_erp a, 251
@@ -1683,73 +1294,52 @@ Flash_InitBytecodeBlock:
 	ld	bc, wa
 	add	wa, de
 	lda	xde, (MSP_Default_ChannelMap:24)
-	.byte 0xc3
-	reti
-	or	xwa, xwa
-	pop_f
-	add	(xix+57), xsp
-	.byte 0x06
-	ld	a, 216:opc
-	ccf
+	ld	(0x39ac), (xde+wa)
+	ld	a, (xsp+0x6)
+	extz	wa
 	add	bc, wa
-	.byte 0xc3
-	reti
-	or	xix, xwa
-	pop_f
-	.byte 0xad
-	push	xbc
+	ld	(0x39ad), (xde+bc)
 	call	DualVoice_ParamLoadDone
 	ld	a, (0x35b0:16)
 	extz	wa
 	bit	0, wa
-	jr	z, 6
+	jr	z, Flash_InitBytecodeBlock_Skip3
 	ld	(xsp+8), 1
-	jr	9
+	jr	Flash_InitBytecodeBlock_Join4
+Flash_InitBytecodeBlock_Skip3:
 	inc1b_erp 251
 	cp_erpb 251, 10
-	jr c, -74
+	jr c, Flash_InitBytecodeBlock_Loop2
+Flash_InitBytecodeBlock_Join4:
 	call	AccPatch_CountSlots_Wrapper
-	.byte 0x8f
-	ld	(63:8), 0:io
-	jrl	nz, 128
-	lda	xwa, (1748:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 42
-	.byte 0x98
-	push	sr
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 35
-	calr	1748
+	cp	(xsp+0x8), 0
+	jrl	nz, Flash_InitBytecodeBlock_Loop3
+	lda_d16	xwa, (0x6d4)
+	cpw	(xwa), 0xffff
+	jr	nz, Flash_InitBytecodeBlock_Skip5
+	cpw	(xwa+0x2), 0xffff
+	jr	nz, Flash_InitBytecodeBlock_Skip5
+	calr	Flash_StoreBaseAndInitAccPatch
 	ld	a, (xsp+4)
 	extz	wa
-	calr	1449
+	calr	NoteEventBuffer_Store
 	lda	xwa, (1850:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 8
-	.byte 0x98
-	push	sr
-	push	xsp
-	swi	7
-	swi	7
-	jrl	z, 341
-	calr	5909
-	jrl	335
+	cpw	(xwa), 0xffff
+	jr	nz, Flash_InitBytecodeBlock_Skip4
+	cpw	(xwa+0x2), 0xffff
+	jrl	z, Flash_InitBytecodeBlock_Entry
+Flash_InitBytecodeBlock_Skip4:
+	calr	Flash_WriteBackSlotTable
+	jrl	Flash_InitBytecodeBlock_Entry
+Flash_InitBytecodeBlock_Skip5:
 	ld	a, (xsp+10)
 	extz	wa
-	calr	6003
+	calr	Flash_SlotUpdateOpsBlock
 	ld	wa, hl
 	ld	c, (xsp+10)
 	extz	bc
 	cp	wa, 0:i3
-	jr	nz, 42
+	jr	nz, Flash_InitBytecodeBlock_Skip6
 	ld	wa, bc
 	calr	Flash_InitBytecodeBlock_Helper
 	ld	a, (xsp+6)
@@ -1765,13 +1355,16 @@ Flash_InitBytecodeBlock:
 	calr	Flash_InitBytecodeBlock_Helper3
 	call	TmFlash_CopyToExtMem
 	jrl	Flash_InitBytecodeBlock_Entry
+Flash_InitBytecodeBlock_Skip6:
 	calr	Flash_InitBytecodeBlock_Helper4
 	calr	Flash_InitBytecodeBlock_Helper5
 	calr	Flash_InitBytecodeBlock_Helper6
 	calr	Flash_InitBytecodeBlock_Helper7
 	jrl	Flash_InitBytecodeBlock_Join2
+Flash_InitBytecodeBlock_Loop3:
 	ld	(xsp+2), 1
 	jrl	Flash_InitBytecodeBlock_Join
+Flash_InitBytecodeBlock_Skip7:
 	calr	DualVoice_ScanAllColumns
 	ld	a, (xsp+10)
 	extz	wa
@@ -1779,8 +1372,7 @@ Flash_InitBytecodeBlock:
 	ld	xix, (3186:16)
 	ld	xiy, (3182:16)
 	ldw	bc, 0xb400
-	.byte 0x95
-	scf
+	ldirw
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (MSP_Default_GroupIndexPad:24)
@@ -1789,6 +1381,7 @@ Flash_InitBytecodeBlock:
 	ld xwa, (3186:16)
 	ld	(0x39ae:16), xwa
 	ldib_erp 251, 0
+Flash_InitBytecodeBlock_Loop4:
 	ld	c, (xsp+10)
 	extz	bc
 	stb_erp a, 251
@@ -1797,27 +1390,20 @@ Flash_InitBytecodeBlock:
 	ld	de, wa
 	add	de, bc
 	lda	xwa, (MSP_Default_ChannelMap:24)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe8
-	pop_f
-	.byte 0xac
-	push	xbc
+	ld	(0x39ac), (xwa+de)
 	call	AccPatch_InitFromSlotIndex
 	inc1b_erp 251
 	cp_erpb 251, 10
-	jr c, -43
+	jr c, Flash_InitBytecodeBlock_Loop4
 	ld	a, (xsp+12)
 	extz	wa
-	calr	320
+	calr	PartGrid_ColumnDispatch
 	ld	(0x39ae:16), xhl
 	ld	xwa, (3186:16)
 	ld	(0x39b2:16), xwa
-	.byte 0xf1
-	lda	xiy, (xwa)
-	.byte 0xb0, 0xc7
-	swi	3
-	.byte 0xa8
+	resda	0, (0x35b0)
+	ldib_erp	251, 0
+Flash_InitBytecodeBlock_Loop5:
 	ld	e, (xsp+6)
 	extz	de
 	stb_erp a, 251
@@ -1826,109 +1412,70 @@ Flash_InitBytecodeBlock:
 	ld	bc, wa
 	add	wa, de
 	lda	xde, (MSP_Default_ChannelMap:24)
-	.byte 0xc3
-	reti
-	or	xwa, xwa
-	pop_f
-	add	(xix+57), xsp
-	ldw	(33:8), 4824:io
+	ld	(0x39ac), (xde+wa)
+	ld	a, (xsp+0xa)
+	extz	wa
 	add	bc, wa
-	.byte 0xc3
-	reti
-	or	xix, xwa
-	pop_f
-	.byte 0xad
-	push	xbc
+	ld	(0x39ad), (xde+bc)
 	call	DualVoice_ParamLoadDone
 	ld	a, (0x35b0:16)
 	extz	wa
 	bit	0, wa
-	jr	z, 24
+	jr	z, Flash_InitBytecodeBlock_Skip8
 	ld	(xsp+8), 1
 	ld	xwa, (0x39b2:16)
 	ld	(0x39ae:16), xwa
-	.byte 0xc1, 0xad
-	push	xbc
-	pop_f
-	.byte 0xac
-	push	xbc
+	ldmm8	0x39ac, 0x39ad
 	call	AccPatch_InitFromSlotIndex
-	jr	9
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	div	l, 103
-	add	(xix), xsp
-	ld	(63:8), 0:io
-	jrl	nz, -229
-	lda	xwa, (1748:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 55
-	.byte 0x98
-	push	sr
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 48
+	jr	Flash_InitBytecodeBlock_Join5
+Flash_InitBytecodeBlock_Skip8:
+	inc1b_erp	251
+	cp_erpb	251, 10
+	jr	c, Flash_InitBytecodeBlock_Loop5
+Flash_InitBytecodeBlock_Join5:
+	cp	(xsp+0x8), 0
+	jrl	nz, Flash_InitBytecodeBlock_Loop3
+	lda_d16	xwa, (0x6d4)
+	cpw	(xwa), 0xffff
+	jr	nz, Flash_InitBytecodeBlock_Skip9
+	cpw	(xwa+0x2), 0xffff
+	jr	nz, Flash_InitBytecodeBlock_Skip9
 	ld	xix, (3182:16)
 	ld	xiy, (3186:16)
 	ldw	bc, 0xb400
-	.byte 0x95
-	scf
+	ldirw
 Flash_InitBytecodeBlock_Entry:
-	.byte 0x8f
-	push	sr
-	push	xsp
-	push	sr
-	jr	nz, 15
-	.byte 0x8f
-	incf
-	pop_f
-	jr	12
-	.byte 0x8f
-	ldw	(25:8), 3178:io
-	.byte 0x8f, 0x06
-	pop_f
-	jr	nov, 12
+	cp	(xsp+0x2), 2
+	jr	nz, Flash_InitBytecodeBlock_Join
+	ld	(0xc68), (xsp+0xc)
+	ld	(0xc6a), (xsp+0xa)
+	ld	(0xc6c), (xsp+0x6)
 Flash_InitBytecodeBlock_Join:
 	call	AccPatch_CountSlots_Wrapper
 	ld	l, (xsp+2)
 	pop qiz
 	lda	xsp, (xsp+12)
 	ret
+Flash_InitBytecodeBlock_Skip9:
 	ld	a, (xsp+10)
 	extz	wa
-	calr	1754
-	calr	4032
+	calr	Flash_InitBytecodeBlock_Helper10
+	calr	Flash_InitBytecodeBlock_Helper11
 Flash_InitBytecodeBlock_Join2:
 	ld	(xsp+2), 2
-	.byte 0x8f
-	incf
-	pop_f
-	jr	12
-	.byte 0x8f
-	ldw	(25:8), 3178:io
-	.byte 0x8f, 0x06
-	pop_f
-	jr	nov, 12
-	jr	-67
+	ld	(0xc68), (xsp+0xc)
+	ld	(0xc6a), (xsp+0xa)
+	ld	(0xc6c), (xsp+0x6)
+	jr	Flash_InitBytecodeBlock_Entry
 	dec	2, xsp
 	ld	(xsp), a
-	calr	64710
+	calr	Flash_InitExtMemAddrs
 	ld	l, (3176:16)
 	ld	c, (3178:16)
 	ld	e, (3180:16)
-	.byte 0x87
-	push	xsp
-	push	sr
+	cp	(xsp), 2
 	jr	z, Flash_InitBytecodeBlock_Join3
-	.byte 0x87
-	push	xsp
-	nop
+	cp	(xsp), 0
 	jr	nz, Flash_InitBytecodeBlock_Join3
 	ld	a, l
 	extz	wa
@@ -1950,13 +1497,9 @@ Flash_InitBytecodeBlock_Join3:
 	ld	a, (3176:16)
 	ld	c, (3178:16)
 	ld	e, (3180:16)
-	.byte 0x87
-	push	xsp
-	push	sr
+	cp	(xsp), 2
 	jr	z, Flash_InitBytecodeBlock_Skip2
-	.byte 0x87
-	push	xsp
-	nop
+	cp	(xsp), 0
 	jr	nz, Flash_InitBytecodeBlock_Skip2
 	extz	wa
 	extz	bc
@@ -2112,23 +1655,21 @@ PartGrid_OperationsBlock:
 	ld	(xsp+12), a
 	ld	a, (xsp+12)
 	extz	wa
-	calr	65203
+	calr	PartGrid_ColumnDispatch
 	ld	(xsp+4), xhl
 	cp	(xsp+12), 30
-	jr	c, 6
-	.byte 0x8f
-	incf
-	push	xde
-	calr 5480
-	cp	(xsp+12), 10
-	jr	c, 15
-	.byte 0x8f
-	incf
-	push	xde
-	ldw (143:8), 8460:io
+	jr	c, PartGrid_OperationsBlock_Skip
+	submi8	(xsp+0xc), 30
+	jr	PartGrid_OperationsBlock_Join
+PartGrid_OperationsBlock_Skip:
+	cp	(xsp+0xc), 10
+	jr	c, PartGrid_OperationsBlock_Join
+	submi8	(xsp+0xc), 10
+	ld	a, (xsp+0xc)
 	extz	wa
 	div	a, 3
 	ld	(xsp+12), w
+PartGrid_OperationsBlock_Join:
 	ld	c, (xsp+12)
 	extz	bc
 	ld	a, (xsp+10)
@@ -2556,62 +2097,58 @@ Flash_InitBytecodeBlock_Helper:
 	dec 2, xsp
 	pushw iz
 	ld	(xsp+2), a
-	calr	3601
+	calr	SlotTable_ExtendedOpsBlock
 	lda	xix, (1748:16)
-	.byte 0x94
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 53
+	cpw	(xix), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper_Join
 	ld	l, 0:opc
 	ld	xbc, (3218:16)
+Flash_InitBytecodeBlock_Helper_Loop:
 	ld	a, l
 	extz	wa
 	add	wa, 80
 	ld_rrb a, xbc, wa
 	cp a, 0:i3
-	jr z, 5
-	.byte 0x8f
-	push	sr
-	.byte 0xf1
-	jr	nz, 19
+	jr z, Flash_InitBytecodeBlock_Helper_Skip
+	cp	a, (xsp+0x2)
+	jr	nz, Flash_InitBytecodeBlock_Helper_Skip2
+Flash_InitBytecodeBlock_Helper_Skip:
 	lda	xbc, (1952:16)
 	ld	wa, (xix)
 	ld	(xbc), wa
 	extz	hl
 	or	hl, 1280
 	ld	(xbc+2), hl
-	jr	6
+	jr	Flash_InitBytecodeBlock_Helper_Join
+Flash_InitBytecodeBlock_Helper_Skip2:
 	inc	1, l
 	cp	l, 4:i3
-	jr	c, -47
+	jr	c, Flash_InitBytecodeBlock_Helper_Loop
+Flash_InitBytecodeBlock_Helper_Join:
 	ld	h, 0:opc
 	ld	l, 0:opc
 	ldib_erp 234, 0
+Flash_InitBytecodeBlock_Helper_Loop2:
 	stb_erp a, 234
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xe0
-	ldw	bc, 0x3f91
-	swi	7
-	swi	7
-	jr	z, 93
+	lda_rr	xbc, xix, wa
+	cpw	(xbc), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper_Epilogue
 	cp	l, 40
-	jr	nc, 79
+	jr	nc, Flash_StoreBaseAndInitAccPatch_Join
+Flash_InitBytecodeBlock_Helper_Loop3:
 	ld	e, l
 	extz	de
 	add	de, 16
 	ld	xwa, (3218:16)
 	ld_rrb a, xwa, de
 	cp a, 0:i3
-	jr z, 5
-	.byte 0x8f
-	push	sr
-	.byte 0xf1
-	jr	nz, 46
+	jr z, Flash_InitBytecodeBlock_Helper_Skip3
+	cp	a, (xsp+0x2)
+	jr	nz, Flash_InitBytecodeBlock_Helper_Skip4
+Flash_InitBytecodeBlock_Helper_Skip3:
 	ld	e, h
 	extz	de
 	sla	de, 2
@@ -2629,34 +2166,36 @@ Flash_InitBytecodeBlock_Helper:
 	inc	1, h
 	inc	1, l
 	jr	Flash_StoreBaseAndInitAccPatch_Join
+Flash_InitBytecodeBlock_Helper_Skip4:
 	inc	1, l
 	cp	l, 40
-	jr	c, -79
+	jr	c, Flash_InitBytecodeBlock_Helper_Loop3
 Flash_StoreBaseAndInitAccPatch_Join:
 	inc1b_erp 234
 	cp_erpb 234, 50
-	jr c, -113
+	jr c, Flash_InitBytecodeBlock_Helper_Loop2
+Flash_InitBytecodeBlock_Helper_Epilogue:
 	popw iz
 	inc	2, xsp
 	ret
+Flash_InitBytecodeBlock_Helper10:
 	dec	6, xsp
 	ld	(xsp+4), a
-	calr	3406
+	calr	SlotTable_ExtendedOpsBlock
 	lda	xwa, (1748:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 13
+	cpw	(xwa), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper_Skip5
 	lda	xbc, (1952:16)
 	ld	wa, (xwa)
 	ld	(xbc), wa
 	ldw (xbc+2), 1536
+Flash_InitBytecodeBlock_Helper_Skip5:
 	ld	a, (xsp+4)
 	extz	wa
-	calr	3950
+	calr	Flash_InitBytecodeBlock_Helper_Helper
 	ld	(xsp+2), 0
 	ld	(xsp), 0
+Flash_InitBytecodeBlock_Helper_Loop4:
 	ld	a, (xsp)
 	extz	wa
 	add	wa, wa
@@ -2664,7 +2203,7 @@ Flash_StoreBaseAndInitAccPatch_Join:
 	lda	xbc, (1748:16)
 	ld_rrw bc, xbc, wa
 	cp bc, 65535
-	jrl	z, 173
+	jrl	z, Flash_InitBytecodeBlock_Helper_Epilogue2
 	ld	l, 0:opc
 Flash_StoreBaseAndInitAccPatch_Loop3:
 	ld	h, 39:opc
@@ -2700,6 +2239,7 @@ Flash_StoreBaseAndInitAccPatch_Skip3:
 	jr	c, Flash_StoreBaseAndInitAccPatch_Loop3
 	ld	l, 0:opc
 	ld	iy, wa
+Flash_InitBytecodeBlock_Helper_Loop5:
 	ld	h, 39:opc
 	sub	h, l
 	ld	a, h
@@ -2726,26 +2266,26 @@ Flash_StoreBaseAndInitAccPatch_Skip3:
 	ldw (xde), 2
 Flash_StoreBaseAndInitAccPatch_Join2:
 	incm8	1, (xsp+2)
-	jr	7
+	jr	Flash_InitBytecodeBlock_Helper_Join2
 Flash_StoreBaseAndInitAccPatch_Skip4:
 	inc	1, l
 	cp	l, 40
-	jr	c, -77
-	.byte 0x87
-	jr	lt, 0x87
-	.ascii "?2w;ÿï"
-	jr	z, 14
+	jr	c, Flash_InitBytecodeBlock_Helper_Loop5
+Flash_InitBytecodeBlock_Helper_Join2:
+	incm8	1, (xsp)
+	cp	(xsp), 50
+	jrl	c, Flash_InitBytecodeBlock_Helper_Loop4
+Flash_InitBytecodeBlock_Helper_Epilogue2:
+	inc	6, xsp
+	ret
 Flash_StoreBaseAndInitAccPatch_Sub:
 	dec	2, xsp
 	push	xiz
 	ld	(xsp+4), a
-	.byte 0xd1, 0xa0
-	reti
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 69
+	cpw	(0x7a0:16), 0xffff
+	jr	z, Flash_StoreBaseAndInitAccPatch_Sub_Skip
 	ldib_erp 249, 0
+Flash_StoreBaseAndInitAccPatch_Sub_Loop:
 	ld	a, (xsp+4)
 	add	a, 30
 	ldb_erp a, 250
@@ -2758,7 +2298,7 @@ Flash_StoreBaseAndInitAccPatch_Sub:
 	ld	de, 0:i3
 	calr	Util_FrameSetup10
 	lda	xwa, (1952:16)
-	.byte 0x90, 0xf3
+	cp	hl, (xwa)
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip5
 	ld	hl, (xwa+2)
 	stb_erp a, 250
@@ -2767,24 +2307,20 @@ Flash_StoreBaseAndInitAccPatch_Sub:
 	extz	bc
 	pushw	hl
 	ld	de, 0:i3
-	calr	63904
+	calr	PartGrid_OperationsBlock
 Flash_StoreBaseAndInitAccPatch_Skip5:
 	inc1b_erp 249
 	cp_erpb 249, 10
-	jr c, -66
+	jr c, Flash_StoreBaseAndInitAccPatch_Sub_Loop
+Flash_StoreBaseAndInitAccPatch_Sub_Skip:
 	ldib_erp 248, 0
 Flash_StoreBaseAndInitAccPatch_Loop4:
 	stb_erp c, 248
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (1956:16)
-	.byte 0xd3
-	reti
-	.byte 0xe0, 0xe4
-	push	xsp
-	swi	7
-	swi	7
-	jrl	z, 282
+	.byte	0xd3, 0x07, 0xe0, 0xe4, 0x3f, 0xff, 0xff	; cp (XWA+BC),0xffff
+	jrl	z, Flash_StoreBaseAndInitAccPatch_Sub_Epilogue
 	ldib_erp 249, 0
 Flash_StoreBaseAndInitAccPatch_Loop5:
 	ld	a, (xsp+4)
@@ -2797,18 +2333,15 @@ Flash_StoreBaseAndInitAccPatch_Loop5:
 	stb_erp c, 251
 	extz	bc
 	ld	de, 1:i3
-	calr	63627
+	calr	Util_FrameSetup10
 	stb_erp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
 	lda	xbc, (1952:16)
-	.byte 0xd3
-	reti
-	.byte 0xe4
-	cp	xhl, xwa
-	jr	nz, 23
+	.byte	0xd3, 0x07, 0xe4, 0xe8, 0xf3	; cp HL,(XBC+DE)
+	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip2
 	inc	6, wa
 	ld_rrw hl, xbc, wa
 	stb_erp a, 250
@@ -2817,24 +2350,22 @@ Flash_StoreBaseAndInitAccPatch_Loop5:
 	extz	bc
 	pushw	hl
 	ld	de, 1:i3
-	calr	63791
+	calr	PartGrid_OperationsBlock
+Flash_StoreBaseAndInitAccPatch_Sub_Skip2:
 	stb_erp a, 250
 	extz	wa
 	stb_erp c, 251
 	extz	bc
 	ld	de, 2:i3
-	calr	63566
+	calr	Util_FrameSetup10
 	stb_erp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
 	lda	xbc, (1952:16)
-	.byte 0xd3
-	reti
-	.byte 0xe4
-	cp	xhl, xwa
-	jr	nz, 23
+	.byte	0xd3, 0x07, 0xe4, 0xe8, 0xf3	; cp HL,(XBC+DE)
+	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip3
 	inc	6, wa
 	ld_rrw hl, xbc, wa
 	stb_erp a, 250
@@ -2843,24 +2374,22 @@ Flash_StoreBaseAndInitAccPatch_Loop5:
 	extz	bc
 	pushw	hl
 	ld	de, 2:i3
-	calr	63730
+	calr	PartGrid_OperationsBlock
+Flash_StoreBaseAndInitAccPatch_Sub_Skip3:
 	stb_erp a, 250
 	extz	wa
 	stb_erp c, 251
 	extz	bc
 	ld	de, 3:i3
-	calr	63505
+	calr	Util_FrameSetup10
 	stb_erp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
 	lda	xbc, (1952:16)
-	.byte 0xd3
-	reti
-	.byte 0xe4
-	cp	xhl, xwa
-	jr	nz, 23
+	.byte	0xd3, 0x07, 0xe4, 0xe8, 0xf3	; cp HL,(XBC+DE)
+	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip4
 	inc	6, wa
 	ld_rrw hl, xbc, wa
 	stb_erp a, 250
@@ -2869,24 +2398,22 @@ Flash_StoreBaseAndInitAccPatch_Loop5:
 	extz	bc
 	pushw	hl
 	ld	de, 3:i3
-	calr	63669
+	calr	PartGrid_OperationsBlock
+Flash_StoreBaseAndInitAccPatch_Sub_Skip4:
 	stb_erp a, 250
 	extz	wa
 	stb_erp c, 251
 	extz	bc
 	ld	de, 4:i3
-	calr	63444
+	calr	Util_FrameSetup10
 	stb_erp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
 	inc	4, de
 	lda	xbc, (1952:16)
-	.byte 0xd3
-	reti
-	.byte 0xe4
-	cp	xhl, xwa
-	jr	nz, 23
+	.byte	0xd3, 0x07, 0xe4, 0xe8, 0xf3	; cp HL,(XBC+DE)
+	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip5
 	inc	6, wa
 	ld_rrw hl, xbc, wa
 	stb_erp a, 250
@@ -2895,13 +2422,15 @@ Flash_StoreBaseAndInitAccPatch_Loop5:
 	extz	bc
 	pushw	hl
 	ld	de, 4:i3
-	calr	63608
+	calr	PartGrid_OperationsBlock
+Flash_StoreBaseAndInitAccPatch_Sub_Skip5:
 	inc1b_erp 249
 	cp_erpb 249, 10
 	jrl c, Flash_StoreBaseAndInitAccPatch_Loop5
 	inc1b_erp 248
 	cp_erpb 248, 50
 	jrl c, Flash_StoreBaseAndInitAccPatch_Loop4
+Flash_StoreBaseAndInitAccPatch_Sub_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -2909,8 +2438,7 @@ Flash_InitBytecodeBlock_Helper2:
 	ld	xix, (3222:16)
 	ld	xiy, (3218:16)
 	ldw	bc, 0x8000
-	.byte 0x95
-	scf
+	ldirw
 	lda	xhl, (1952:16)
 	ld	bc, (xhl+2)
 	cp	bc, 0xffff
@@ -3012,14 +2540,10 @@ Flash_InitBytecodeBlock_Helper3:
 	ld	xix, (3222:16)
 	ld	xiy, (3218:16)
 	ldw	bc, 0x8000
-	.byte 0x95
-	scf
-	lda	xwa, (1952:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 105
+	ldirw
+	lda_d16	xwa, (0x7a0)
+	cpw	(xwa), 0xffff
+	jr	z, Flash_StoreBaseAndInitAccPatch_Skip12
 	ld	hl, (xwa)
 	ld	h, 0:opc
 	ld	wa, (xwa+2)
@@ -3049,11 +2573,10 @@ Flash_InitBytecodeBlock_Helper3:
 	cp	hl, 0:i3
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip12
 	ld	hl, 0:i3
-	.byte 0x9f
-	ld	(63:8), 0:io
-	nop
+	cpw	(xsp+0x8), 0
 	jr	ule, Flash_StoreBaseAndInitAccPatch_Skip12
 	ld	xbc, 0:i3
+Flash_InitBytecodeBlock_Helper3_Loop:
 	ld	xde, xbc
 	add	xde, xix
 	ld	xwa, xbc
@@ -3062,11 +2585,11 @@ Flash_InitBytecodeBlock_Helper3:
 	ld	(xde), a
 	inc	1, hl
 	inc	1, xbc
-	.byte 0x9f
-	ld	(243:8), 103:io
-	.byte 0xeb
+	cp	hl, (xsp+0x8)
+	jr	c, Flash_InitBytecodeBlock_Helper3_Loop
 Flash_StoreBaseAndInitAccPatch_Skip12:
 	ld	(xsp+6), 0
+Flash_InitBytecodeBlock_Helper3_Loop2:
 	ld	c, (xsp+6)
 	extz	bc
 	sla	bc, 2
@@ -3083,7 +2606,7 @@ Flash_StoreBaseAndInitAccPatch_Skip12:
 	ld w, 0:opc
 	ld	(xsp+4), a
 	res	7, l
-	.byte 0xbf, 0x04, 0xb7
+	resm	7, (xsp+0x4)
 	ld	c, l
 	extz	bc
 	lda	xde, (xsp+12)
@@ -3095,7 +2618,7 @@ Flash_StoreBaseAndInitAccPatch_Skip12:
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
 	cp	hl, 0:i3
-	jr	nz, 63
+	jr	nz, Flash_InitBytecodeBlock_Helper3_Skip
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp+12)
@@ -3106,13 +2629,12 @@ Flash_StoreBaseAndInitAccPatch_Skip12:
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
-	jr	nz, 32
+	jr	nz, Flash_InitBytecodeBlock_Helper3_Skip
 	ld	hl, 0:i3
-	.byte 0x9f
-	ld	(63:8), 0:io
-	nop
-	jr	ule, 23
+	cpw	(xsp+0x8), 0
+	jr	ule, Flash_InitBytecodeBlock_Helper3_Skip
 	ld	xbc, 0:i3
+Flash_InitBytecodeBlock_Helper3_Loop3:
 	ld	xde, xbc
 	add	xde, xix
 	ld	xwa, xbc
@@ -3121,15 +2643,12 @@ Flash_StoreBaseAndInitAccPatch_Skip12:
 	ld	(xde), a
 	inc	1, hl
 	inc	1, xbc
-	.byte 0x9f
-	ld	(243:8), 103:io
-	ld	xsp, xhl
-	.byte 0x06
-	jr	lt, -113
-	.byte 0x06
-	push	xsp
-	ldw	de, 0x6877
-	swi	7
+	cp	hl, (xsp+0x8)
+	jr	c, Flash_InitBytecodeBlock_Helper3_Loop3
+Flash_InitBytecodeBlock_Helper3_Skip:
+	incm8	1, (xsp+0x6)
+	cp	(xsp+0x6), 50
+	jrl	c, Flash_InitBytecodeBlock_Helper3_Loop2
 Flash_StoreBaseAndInitAccPatch_Skip13:
 	ld	xbc, (3222:16)
 	ld	xde, (3218:16)
@@ -3138,14 +2657,12 @@ Flash_StoreBaseAndInitAccPatch_Skip13:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
+Flash_InitBytecodeBlock_Helper9_Helper:
 	lda	xsp, (xsp-12)
 	push	xiz
 	lda	xwa, (1952:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 99
+	cpw	(xwa), 0xffff
+	jr	z, Flash_StoreBaseAndInitAccPatch_Skip14
 	ld	hl, (xwa)
 	ld	h, 0:opc
 	ld	wa, (xwa+2)
@@ -3174,11 +2691,10 @@ Flash_StoreBaseAndInitAccPatch_Skip13:
 	cp	hl, 0:i3
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip14
 	ld	hl, 0:i3
-	.byte 0x9f
-	ld	(63:8), 0:io
-	nop
+	cpw	(xsp+0x8), 0
 	jr	ule, Flash_StoreBaseAndInitAccPatch_Skip14
 	ld	xbc, 0:i3
+Flash_InitBytecodeBlock_Helper3_Loop4:
 	ld	xde, xbc
 	add	xde, xix
 	ld	xwa, xbc
@@ -3187,11 +2703,11 @@ Flash_StoreBaseAndInitAccPatch_Skip13:
 	ld	(xde), a
 	inc	1, hl
 	inc	1, xbc
-	.byte 0x9f
-	ld	(243:8), 103:io
-	.byte 0xeb
+	cp	hl, (xsp+0x8)
+	jr	c, Flash_InitBytecodeBlock_Helper3_Loop4
 Flash_StoreBaseAndInitAccPatch_Skip14:
 	ld	(xsp+6), 0
+Flash_InitBytecodeBlock_Helper3_Loop5:
 	ld	c, (xsp+6)
 	extz	bc
 	sla	bc, 2
@@ -3200,7 +2716,7 @@ Flash_StoreBaseAndInitAccPatch_Skip14:
 	lda	xde, (1952:16)
 	ld_rrw wa, xde, wa
 	cp wa, 65535
-	jr	z, 119
+	jr	z, Flash_InitBytecodeBlock_Helper3_Epilogue
 	ld	w, 0:opc
 	ld	l, a
 	inc	6, bc
@@ -3208,7 +2724,7 @@ Flash_StoreBaseAndInitAccPatch_Skip14:
 	ld w, 0:opc
 	ld	(xsp+4), a
 	res	7, l
-	.byte 0xbf, 0x04, 0xb7
+	resm	7, (xsp+0x4)
 	ld	c, l
 	extz	bc
 	lda	xde, (xsp+12)
@@ -3220,7 +2736,7 @@ Flash_StoreBaseAndInitAccPatch_Skip14:
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
 	cp	hl, 0:i3
-	jr	nz, 57
+	jr	nz, Flash_InitBytecodeBlock_Helper3_Skip2
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp+12)
@@ -3230,13 +2746,12 @@ Flash_StoreBaseAndInitAccPatch_Skip14:
 	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	cp	hl, 0:i3
-	jr	nz, 32
+	jr	nz, Flash_InitBytecodeBlock_Helper3_Skip2
 	ld	hl, 0:i3
-	.byte 0x9f
-	ld	(63:8), 0:io
-	nop
-	jr	ule, 23
+	cpw	(xsp+0x8), 0
+	jr	ule, Flash_InitBytecodeBlock_Helper3_Skip2
 	ld	xbc, 0:i3
+Flash_InitBytecodeBlock_Helper3_Loop6:
 	ld	xde, xbc
 	add	xde, xix
 	ld	xwa, xbc
@@ -3245,27 +2760,27 @@ Flash_StoreBaseAndInitAccPatch_Skip14:
 	ld	(xde), a
 	inc	1, hl
 	inc	1, xbc
-	.byte 0x9f
-	ld	(243:8), 103:io
-	ld	xsp, xhl
-	.byte 0x06
-	jr	lt, -113
-	.byte 0x06
-	.ascii "?2wnÿ^¿"
-	incf
-	.byte 0x37
+	cp	hl, (xsp+0x8)
+	jr	c, Flash_InitBytecodeBlock_Helper3_Loop6
+Flash_InitBytecodeBlock_Helper3_Skip2:
+	incm8	1, (xsp+0x6)
+	cp	(xsp+0x6), 50
+	jrl	c, Flash_InitBytecodeBlock_Helper3_Loop5
+Flash_InitBytecodeBlock_Helper3_Epilogue:
+	pop	xiz
+	lda	xsp, (xsp+0xc)
 	ret
 Flash_InitBytecodeBlock_Helper4:
 	dec	8, xsp
 	push	xiz
 	ld	(xsp+10), c
 	ld	iz, wa
-	calr	1940
-	calr	1977
-	calr	2169
+	calr	SlotTable_ExtendedOpsBlock
+	calr	Flash_InitBytecodeBlock_Helper4_Helper
+	calr	Flash_InitBytecodeBlock_Helper4_Helper2
 	ld	wa, iz
 	and	wa, 0xff00
-	jr	z, 73
+	jr	z, Flash_InitBytecodeBlock_Helper4_Skip
 	ld	d, 0:opc
 	ld	b, 0:opc
 	ld	c, 0:opc
@@ -3296,31 +2811,28 @@ Flash_StoreBaseAndInitAccPatch_Skip15:
 	ld	c, b
 	extz	bc
 	ld	(xde+2), bc
+Flash_InitBytecodeBlock_Helper4_Skip:
 	ld	wa, iz
 	and	wa, 255
-	jrl	z, 318
+	jrl	z, Flash_InitBytecodeBlock_Helper4_Epilogue
 	ld	e, 0:opc
 	ld	c, 0:opc
 	ld	(xsp+6), 0
 	ld	(xsp+8), 0
 	ld	(xsp+4), 0
+Flash_InitBytecodeBlock_Helper4_Loop:
 	ld	a, (xsp+4)
 	extz	wa
 	add	wa, wa
 	inc	2, wa
 	lda	xhl, (1748:16)
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 0x3f93
-	swi	7
-	swi	7
-	jrl	z, 277
-	.byte 0x8f
-	ld	(63:8), 0:io
-	jr	nz, 100
+	lda_rr	xhl, xhl, wa
+	cpw	(xhl), 0xffff
+	jrl	z, Flash_InitBytecodeBlock_Helper4_Epilogue
+	cp	(xsp+0x8), 0
+	jr	nz, Flash_InitBytecodeBlock_Helper4_Skip3
 	cp	c, 40
-	jr	nc, 82
+	jr	nc, Flash_StoreBaseAndInitAccPatch_Join4
 Flash_StoreBaseAndInitAccPatch_Loop11:
 	ld	a, c
 	extz	wa
@@ -3330,8 +2842,8 @@ Flash_StoreBaseAndInitAccPatch_Loop11:
 	ld_rrb w, xwa, ix
 	cp w, 0:i3
 	jr z, Flash_StoreBaseAndInitAccPatch_Skip16
-	.byte 0x8f
-	ldw	(240:8), 0x2f6e:io
+	cp	w, (xsp+0xa)
+	jr	nz, Flash_InitBytecodeBlock_Helper4_Skip2
 Flash_StoreBaseAndInitAccPatch_Skip16:
 	ldb_erp	e, 240
 	extz	ix
@@ -3350,54 +2862,50 @@ Flash_StoreBaseAndInitAccPatch_Skip16:
 	inc	1, e
 	inc	1, c
 	jr	Flash_StoreBaseAndInitAccPatch_Join4
+Flash_InitBytecodeBlock_Helper4_Skip2:
 	inc	1, c
 	cp	c, 40
 	jr	c, Flash_StoreBaseAndInitAccPatch_Loop11
 Flash_StoreBaseAndInitAccPatch_Join4:
 	cp	c, 40
-	jrl	nz, 168
+	jrl	nz, Flash_InitBytecodeBlock_Helper4_Join
 	ld	(xsp+8), 1
-	jrl	161
+	jrl	Flash_InitBytecodeBlock_Helper4_Join
+Flash_InitBytecodeBlock_Helper4_Skip3:
 	ld	d, 0:opc
 	ld	b, 0:opc
 	ld	c, 0:opc
+Flash_InitBytecodeBlock_Helper4_Loop2:
 	ld	a, c
 	extz	wa
 	ld	iy, wa
 	add	iy, iy
 	inc	2, iy
 	lda	xix, (2972:16)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	push	xsp
-	normal
-	nop
-	jr	z, 28
+	.byte	0xd3, 0x07, 0xf0, 0xf4, 0x3f, 0x01, 0x00	; cp (XIX+IY),0x0001
+	jr	z, Flash_InitBytecodeBlock_Helper4_Skip4
 	ld	iy, wa
 	add	iy, 16
 	ld	xwa, (3218:16)
 	ld_rrb w, xwa, iy
 	cp w, b
-	jr	ule, 9
-	.byte 0x8f
-	ldw	(240:8), 1126:io
+	jr	ule, Flash_InitBytecodeBlock_Helper4_Skip4
+	cp	w, (xsp+0xa)
+	jr	z, Flash_InitBytecodeBlock_Helper4_Skip4
 	ld	b, w
 	ld	d, c
+Flash_InitBytecodeBlock_Helper4_Skip4:
 	inc	1, c
 	ldb_erp	e, 244
 	extz	iy
 	cp	c, 40
-	jr	c, -63
+	jr	c, Flash_InitBytecodeBlock_Helper4_Loop2
 	sla	iy, 2
 	ld qwa, iy
 	inc 4, qwa
 	lda xiz, (1952:16)
 	ld wa, (xhl)
-	.byte 0xf3
-	reti
-	swi	0
-	.byte 0xe2, 0x50
+	ld	(xiz+qwa), wa
 	inc	6, iy
 	ld	l, d
 	set	7, l
@@ -3420,19 +2928,14 @@ Flash_StoreBaseAndInitAccPatch_Join4:
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xe0
-	push	sr
-	.byte 0x01
-	nop
+	.byte	0xf3, 0x07, 0xf0, 0xe0, 0x02, 0x01, 0x00	; ld (XIX+WA),0x0001
 	incm8	1, (xsp+6)
 	inc	1, e
+Flash_InitBytecodeBlock_Helper4_Join:
 	incm8	1, (xsp+4)
-	.byte 0x8f, 0x04
-	push	xsp
-	ldw	de, 0xd277
-	swi	6
+	cp	(xsp+0x4), 50
+	jrl	c, Flash_InitBytecodeBlock_Helper4_Loop
+Flash_InitBytecodeBlock_Helper4_Epilogue:
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -3441,25 +2944,23 @@ Flash_InitBytecodeBlock_Helper5:
 	lda	xbc, (0x3a4f:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+29)
+Flash_InitBytecodeBlock_Helper5_Loop:
 	stib_dsp 224, 32
 	cp xwa, xbc
-	jr	c, -8
+	jr	c, Flash_InitBytecodeBlock_Helper5_Loop
 	ldib_erp 251, 0
 	lda	xwa, (2156:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 63
+	cpw	(xwa), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper5_Skip
 	ld	wa, (xwa)
 	ld	w, 0:opc
 	ldb_erp a, 249
 	extz	wa
-	calr	256
+	calr	Flash_StoreBaseAndInitAccPatch_Helper
 	ldb_erp l, 248
 	stb_erp a, 249
 	extz	wa
-	calr	298
+	calr	Flash_StoreBaseAndInitAccPatch_Helper2
 	lda	xbc, (0x3a4f:16)
 	ld	(xbc), 35
 	ld	(xbc+1), l
@@ -3471,6 +2972,7 @@ Flash_InitBytecodeBlock_Helper5:
 	ld	(xbc+6), 109
 	ld	(xbc+7), 41
 	ldi_erpb 251, 9
+Flash_InitBytecodeBlock_Helper5_Skip:
 	ldib_erp 250, 0
 Flash_StoreBaseAndInitAccPatch_Loop12:
 	stb_erp a, 250
@@ -3479,23 +2981,19 @@ Flash_StoreBaseAndInitAccPatch_Loop12:
 	ld	de, wa
 	inc	4, de
 	lda	xbc, (2156:16)
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe8
-	push	xsp
-	swi	7
-	swi	7
-	jrl	z, 174
+	.byte	0xd3, 0x07, 0xe4, 0xe8, 0x3f, 0xff, 0xff	; cp (XBC+DE),0xffff
+	jrl	z, Flash_StoreBaseAndInitAccPatch_Epilogue2
 	inc	6, wa
 	ld_rrw wa, xbc, wa
 	ldb_erp a, 249
 	ld bc, 0:i3
 	cpib_erp 250, 0
-	jr z, 9
+	jr z, Flash_InitBytecodeBlock_Helper5_Skip2
 	stb_erp a, 249
 	cp	a, l
-	jr	z, 2
+	jr	z, Flash_InitBytecodeBlock_Helper5_Skip2
 	ld	bc, 1:i3
+Flash_InitBytecodeBlock_Helper5_Skip2:
 	cpib_erp 250, 0
 	scc z, wa
 	or wa, bc
@@ -3610,21 +3108,18 @@ Flash_StoreBaseAndInitAccPatch_Skip24:
 	ld	l, 51:opc
 Flash_StoreBaseAndInitAccPatch_Return2:
 	ret
+Flash_InitBytecodeBlock_Helper11:
 	push	xiz
 	lda	xde, (0x3a4f:16)
 	ld	xwa, xde
 	lda	xbc, (xde+29)
+Flash_StoreBaseAndInitAccPatch_Helper2_Loop:
 	stib_dsp 224, 32
 	cp xwa, xbc
-	jr	c, -8
-	.byte 0xc7
-	swi	0
-	.byte 0xa8, 0xd1, 0xa2
-	reti
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 35
+	jr	c, Flash_StoreBaseAndInitAccPatch_Helper2_Loop
+	ldib_erp	248, 0
+	cpw	(0x7a2:16), 0xffff
+	jr	z, Flash_StoreBaseAndInitAccPatch_Helper2_Skip
 	ld	(xde), 85
 	ld	(xde+1), 115
 	ld	(xde+2), 101
@@ -3634,7 +3129,9 @@ Flash_StoreBaseAndInitAccPatch_Return2:
 	ld	(xde+6), 117
 	ld	(xde+7), 109
 	ldi_erpb 248, 9
+Flash_StoreBaseAndInitAccPatch_Helper2_Skip:
 	ldib_erp 249, 0
+Flash_StoreBaseAndInitAccPatch_Helper2_Loop2:
 	stb_erp a, 249
 	extz	wa
 	sla	wa, 2
@@ -3704,45 +3201,37 @@ Flash_StoreBaseAndInitAccPatch_Skip25:
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 46
-	jr	13
+	jr	Flash_StoreBaseAndInitAccPatch_Epilogue3
 Flash_StoreBaseAndInitAccPatch_Skip26:
 	stb_erp e, 250
 	inc1b_erp 249
 	cp_erpb 249, 50
-	jrl c, -188
+	jrl c, Flash_StoreBaseAndInitAccPatch_Helper2_Loop2
 Flash_StoreBaseAndInitAccPatch_Epilogue3:
 	pop	xiz
 	ret
 Flash_InitBytecodeBlock_Helper6:
-	calr	953
+	calr	Flash_InitBytecodeBlock_Helper6_Helper
 	lda	xhl, (2156:16)
-	.byte 0x93
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 19
+	cpw	(xhl), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper6_Skip
 	lda	xbc, (2360:16)
 	ld	wa, (xhl+2)
 	ld	(xbc), wa
 	ld	wa, (xhl)
 	ld	(xbc+2), wa
-	.byte 0xb9, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xbc+0x4), 0
+Flash_InitBytecodeBlock_Helper6_Skip:
 	ldib_erp 234, 0
 	ldib_erp 226, 0
+Flash_InitBytecodeBlock_Helper6_Loop:
 	stb_erp e, 226
 	extz	de
 	sla	de, 2
 	ld	wa, de
 	inc	4, wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	bc, 0x3f91
-	swi	7
-	swi	7
+	lda_rr	xbc, xhl, wa
+	cpw	(xbc), 0xffff
 	ret	z
 	stb_erp a, 234
 	extz	wa
@@ -3761,41 +3250,32 @@ Flash_InitBytecodeBlock_Helper6:
 	add	bc, 106
 	st_rrw de, xix, bc
 	add	wa, 108
-	.byte 0xf3
-	reti
-	stiw_d8 224, 0, 0
+	.byte	0xf3, 0x07, 0xf0, 0xe0, 0x02, 0x00, 0x00	; ld (XIX+WA),0x0000
 	inc1b_erp 234
 	inc1b_erp 226
 	cp_erpb 226, 50
-	jr c, -94
+	jr c, Flash_InitBytecodeBlock_Helper6_Loop
 	ret
 Flash_InitBytecodeBlock_Helper7:
-	calr	881
+	calr	Flash_InitBytecodeBlock_Helper7_Helper
 	lda	xbc, (1748:16)
-	.byte 0x91
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 14
+	cpw	(xbc), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper7_Skip
 	lda	xde, (2666:16)
 	ld	wa, (xbc)
 	ld	(xde+2), wa
-	.byte 0xba, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xde+0x4), 0
+Flash_InitBytecodeBlock_Helper7_Skip:
 	ld	h, 0:opc
 	ld	l, 0:opc
+Flash_InitBytecodeBlock_Helper7_Loop:
 	ld	a, l
 	extz	wa
 	add	wa, wa
 	inc	2, wa
 	exts	xwa
 	add	xwa, xbc
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
+	cpw	(xwa), 0xffff
 	ret	z
 	ld	iy, (xwa)
 	ld	a, h
@@ -3806,82 +3286,76 @@ Flash_InitBytecodeBlock_Helper7:
 	lda	xde, (2666:16)
 	st_rrw iy, xde, ix
 	add	wa, 108
-	.byte 0xf3
-	reti
-	or	xwa, xwa
-	push	sr
-	nop
-	nop
+	.byte	0xf3, 0x07, 0xe8, 0xe0, 0x02, 0x00, 0x00	; ld (XDE+WA),0x0000
 	inc	1, h
 	inc	1, l
 	cp	l, 50
-	jr	c, -62
+	jr	c, Flash_InitBytecodeBlock_Helper7_Loop
 	ret
 Flash_StoreBaseAndInitAccPatch_Join5:
 	ld	xix, (3222:16)
 	ld	xiy, (3218:16)
 	ldw	bc, 0x8000
-	.byte 0x95
-	scf
+	ldirw
 	ld	xix, (3222:16)
 	ld	xiy, MSP_Default_Sequencer
 	ldw	bc, 8
-	.byte 0x95
-	scf
+	ldirw
 	ld	xwa, (3222:16)
 	ld	xiy, MSP_Default_SeqReserved
 	lda	xix, (xwa+16)
 	ldw	bc, 32
-	.byte 0x95
-	scf
+	ldirw
 	ld	xwa, (3222:16)
 	ld	xiy, MSP_Default_SeqReserved_0x40
 	lda	xix, (xwa+80)
 	ldw	bc, 8
-	.byte 0x95
-	scf
+	ldirw
 	ld	xbc, (3222:16)
 	ld	xde, (3218:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
+Flash_SlotUpdateOpsBlock_Helper:
 	ld	l, 0:opc
 	ld	xde, (3218:16)
 	ld	b, 0:opc
 	cp	a, 0:i3
-	jr	nz, 34
+	jr	nz, Flash_InitBytecodeBlock_Helper7_Skip4
 	ld	wa, 0:i3
+Flash_InitBytecodeBlock_Helper7_Loop2:
 	ld	ix, wa
 	add	ix, 16
-	.byte 0xc3
-	reti
-	cp	xwa, xwa
-	ld	h, 206:opc
-	inc	6, wa
-	.byte 0x04
+	ld_rrb	h, xde, ix
+	cp	h, 0:i3
+	jr	z, Flash_InitBytecodeBlock_Helper7_Skip2
 	cp	h, c
-	jr	nz, 2
+	jr	nz, Flash_InitBytecodeBlock_Helper7_Skip3
+Flash_InitBytecodeBlock_Helper7_Skip2:
 	inc	1, l
+Flash_InitBytecodeBlock_Helper7_Skip3:
 	inc	1, b
 	inc	1, wa
 	cp	b, 40
-	jr	c, -30
-	jr	31
+	jr	c, Flash_InitBytecodeBlock_Helper7_Loop2
+	jr	Flash_InitBytecodeBlock_Helper7_Return
+Flash_InitBytecodeBlock_Helper7_Skip4:
 	ld	wa, 0:i3
+Flash_InitBytecodeBlock_Helper7_Loop3:
 	ld	ix, wa
 	add	ix, 80
-	.byte 0xc3
-	reti
-	cp	xwa, xwa
-	ld	h, 206:opc
-	inc	6, wa
-	.byte 0x04
+	ld_rrb	h, xde, ix
+	cp	h, 0:i3
+	jr	z, Flash_InitBytecodeBlock_Helper7_Skip5
 	cp	h, c
-	jr	nz, 2
+	jr	nz, Flash_InitBytecodeBlock_Helper7_Skip6
+Flash_InitBytecodeBlock_Helper7_Skip5:
 	inc	1, l
+Flash_InitBytecodeBlock_Helper7_Skip6:
 	inc	1, b
 	inc	1, wa
 	cp	b, 4:i3
-	jr	c, -29
+	jr	c, Flash_InitBytecodeBlock_Helper7_Loop3
+Flash_InitBytecodeBlock_Helper7_Return:
 	ret
 
 VoiceParam_ComputeOffset:
@@ -4102,6 +3576,7 @@ SlotTable_ExtendedOpsBlock_Loop:
 	cp	xwa, xbc
 	jr	c, SlotTable_ExtendedOpsBlock_Loop
 	ret
+Flash_InitBytecodeBlock_Helper4_Helper:
 	lda	xde, (2156:16)
 	ldw (xde), 65535
 	ldw (xde+2), 65535
@@ -4109,90 +3584,79 @@ SlotTable_ExtendedOpsBlock_Loop:
 	ld	xwa, xbc
 	inc	4, xde
 	lda xbc, (xbc+200)
+SlotTable_ExtendedOpsBlock_Loop2:
 	stiw_dsp 234, 255, 255
 	stiw_dsp 226, 255, 255
 	cp	xwa, xbc
-	jr	c, -14
+	jr	c, SlotTable_ExtendedOpsBlock_Loop2
 	ret
+Flash_InitBytecodeBlock_Helper6_Helper:
 	lda	xix, (2360:16)
 	ldw (xix), 65535
 	ldw (xix+2), 65535
-	.byte 0xbc, 0x04
-	push	sr
-	swi	7
-	swi	7
+	ldw	(xix+0x4), 0xffff
 	lda	xbc, (xix+108)
 	ld	xwa, xbc
 	lda	xde, (xix+106)
 	ld	hl, 0:i3
 	lda xbc, (xbc+200)
+SlotTable_ExtendedOpsBlock_Loop3:
 	ld iy, hl
 	inc	6, iy
-	.byte 0xf3
-	reti
-	stiw_d8 244, 255, 255
+	.byte	0xf3, 0x07, 0xf0, 0xf4, 0x02, 0xff, 0xff	; ld (XIX+IY),0xffff
 	stiw_dsp 234, 255, 255
 	stiw_dsp 226, 255, 255
 	inc	2, hl
 	cp	xwa, xbc
-	jr	c, -27
+	jr	c, SlotTable_ExtendedOpsBlock_Loop3
 	ret
+Flash_InitBytecodeBlock_Helper7_Helper:
 	lda	xix, (2666:16)
 	ldw (xix), 65535
 	ldw (xix+2), 65535
-	.byte 0xbc, 0x04
-	push	sr
-	swi	7
-	swi	7
+	ldw	(xix+0x4), 0xffff
 	lda	xbc, (xix+108)
 	ld	xwa, xbc
 	lda	xde, (xix+106)
 	ld	hl, 0:i3
 	lda	xbc, (xbc+200)
+SlotTable_ExtendedOpsBlock_Loop4:
 	ld	iy, hl
 	inc	6, iy
-	.byte 0xf3
-	reti
-	stiw_d8 244, 255, 255
+	.byte	0xf3, 0x07, 0xf0, 0xf4, 0x02, 0xff, 0xff	; ld (XIX+IY),0xffff
 	stiw_dsp 234, 255, 255
 	stiw_dsp 226, 255, 255
 	inc	2, hl
 	cp	xwa, xbc
-	jr	c, -27
+	jr	c, SlotTable_ExtendedOpsBlock_Loop4
 	ret
+Flash_SlotUpdateOpsBlock_Helper2:
 	lda	xbc, (3074:16)
 	ldw (xbc), 65535
 	ld	l, 0:opc
 	ld	wa, 0:i3
+SlotTable_ExtendedOpsBlock_Loop5:
 	ld	de, wa
 	inc	2, de
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe8
-	push	sr
-	swi	7
-	swi	7
+	.byte	0xf3, 0x07, 0xe4, 0xe8, 0x02, 0xff, 0xff	; ld (XBC+DE),0xffff
 	inc	1, l
 	inc	2, wa
 	cp	l, 50
-	jr	c, -20
+	jr	c, SlotTable_ExtendedOpsBlock_Loop5
 	ret
+Flash_InitBytecodeBlock_Helper4_Helper2:
 	lda	xbc, (2972:16)
 	ldw (xbc), 65535
 	ld	l, 0:opc
 	ld	wa, 0:i3
+SlotTable_ExtendedOpsBlock_Loop6:
 	ld	de, wa
 	inc	2, de
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe8
-	push	sr
-	swi	7
-	swi	7
+	.byte	0xf3, 0x07, 0xe4, 0xe8, 0x02, 0xff, 0xff	; ld (XBC+DE),0xffff
 	inc	1, l
 	inc	2, wa
 	cp	l, 50
-	jr	c, -20
+	jr	c, SlotTable_ExtendedOpsBlock_Loop6
 	ret
 
 SlotTable_Insert1748:
@@ -4292,122 +3756,105 @@ Flash_SlotUpdateOpsBlock:
 	ld	(xsp+4), a
 	ldw	(xsp), 0
 	ldw	(xsp+2), 0
-	.byte 0xd1, 0xd4, 0x06
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 18
+	cpw	(0x6d4:16), 0xffff
+	jr	z, Flash_SlotUpdateOpsBlock_Skip
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
-	calr	64465
+	calr	Flash_SlotUpdateOpsBlock_Helper
 	cp	l, 0:i3
-	jr	nz, 4
-	.byte 0xb7
-	push	sr
-	.byte 0x01
-	nop
-	.byte 0xd1, 0xd6, 0x06
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 51
+	jr	nz, Flash_SlotUpdateOpsBlock_Skip
+	ldw	(xsp), 1
+Flash_SlotUpdateOpsBlock_Skip:
+	cpw	(0x6d6:16), 0xffff
+	jr	z, Flash_SlotUpdateOpsBlock_Skip3
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 0:i3
-	calr	64439
+	calr	Flash_SlotUpdateOpsBlock_Helper
 	ld	e, 0:opc
 	lda	xbc, (1748:16)
+Flash_SlotUpdateOpsBlock_Loop:
 	ld	a, e
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe0
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 7
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3f, 0xff, 0xff	; cp (XBC+WA),0xffff
+	jr	z, Flash_SlotUpdateOpsBlock_Skip2
 	inc	1, e
 	cp	e, 50
-	jr	c, -24
+	jr	c, Flash_SlotUpdateOpsBlock_Loop
+Flash_SlotUpdateOpsBlock_Skip2:
 	cp	l, e
-	jr	nc, 7
+	jr	nc, Flash_SlotUpdateOpsBlock_Skip3
 	sub	l, e
 	extz	hl
 	ld	(xsp+2), hl
+Flash_SlotUpdateOpsBlock_Skip3:
 	ld	hl, (xsp)
 	sll	hl, 8
-	.byte 0x9f
-	push	sr
-	or	(xhl), l
-	jr	z, 14
+	add	hl, (xsp+0x2)
+	inc	6, xsp
+	ret
+Flash_InitBytecodeBlock_Helper_Helper:
 	dec	4, xsp
 	ld	(xsp+2), a
-	calr	65155
+	calr	Flash_SlotUpdateOpsBlock_Helper2
 	ld	a, 30:opc
 	ld	(xsp), 31
-	.byte 0x8f
-	push	sr
-	push	xsp
-	nop
-	jr	nz, 2
+	cp	(xsp+0x2), 0
+	jr	nz, Flash_SlotUpdateOpsBlock_Skip4
 	ld	a, 32:opc
-	.byte 0x8f
-	push	sr
-	push	xsp
-	normal
-	jr	nz, 3
+Flash_SlotUpdateOpsBlock_Skip4:
+	cp	(xsp+0x2), 1
+	jr	nz, Flash_SlotUpdateOpsBlock_Skip5
 	ld	(xsp), 32
+Flash_SlotUpdateOpsBlock_Skip5:
 	extz	wa
-	calr	10
+	calr	Flash_SlotUpdateOpsBlock_Helper3
 	ld	a, (xsp)
 	extz	wa
-	calr	3
+	calr	Flash_SlotUpdateOpsBlock_Helper3
 	inc	4, xsp
 	ret
+Flash_SlotUpdateOpsBlock_Helper3:
 	dec	2, xsp
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	ld	(xsp+2), a
 	ldib_erp 251, 0
+Flash_SlotUpdateOpsBlock_Loop2:
 	ld	a, (xsp+2)
 	extz	wa
 	stb_erp c, 251
 	extz	bc
 	ld	de, 0:i3
-	calr	59954
+	calr	Util_FrameSetup10
 	ldib_erp 250, 1
+Flash_SlotUpdateOpsBlock_Loop3:
 	ld	a, (xsp+2)
 	extz	wa
 	stb_erp c, 251
 	extz	bc
 	stb_erp e, 250
 	extz	de
-	calr	59933
+	calr	Util_FrameSetup10
 	ld	h, 0:opc
 	ld	a, l
 	res	7, a
 	cp	l, 128
-	jr	c, 17
+	jr	c, Flash_SlotUpdateOpsBlock_Skip6
 	extz	wa
 	add	wa, wa
 	inc	2, wa
 	lda	xbc, (3074:16)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe0
-	push	sr
-	normal
-	nop
+	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x02, 0x01, 0x00	; ld (XBC+WA),0x0001
+Flash_SlotUpdateOpsBlock_Skip6:
 	inc1b_erp 250
 	cpib_erp 250, 4
-	jr ule, -55
+	jr ule, Flash_SlotUpdateOpsBlock_Loop3
 	inc1b_erp 251
 	cp_erpb 251, 10
-	jr c, -82
+	jr c, Flash_SlotUpdateOpsBlock_Loop2
 	pop qiz
 	inc	2, xsp
 	ret
@@ -4424,28 +3871,24 @@ Flash_InitBytecodeBlock_Helper8:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	60662
+	calr	NoteEventBuffer_Store
 	ld	a, (xsp+6)
 	extz	wa
-	calr	62001
-	calr	62246
+	calr	Flash_InitBytecodeBlock_Helper2
+	calr	Flash_InitBytecodeBlock_Helper3
 	call	TmFlash_CopyToExtMem
 	lda	xwa, (2360:16)
-	.byte 0x98
-	push	sr
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 67
+	cpw	(xwa+0x2), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper8_Skip
 	ld	wa, (xwa)
 	ld	(xsp), a
 	extz	wa
-	calr	60522
+	calr	NoteEvent_Store
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	60524
-	calr	64734
+	calr	NoteEventBuffer_CopyToSlot
+	calr	SlotTable_ExtendedOpsBlock
 	lda	xbc, (1952:16)
 	ld	wa, (2362:16)
 	ld	(xbc), wa
@@ -4456,68 +3899,56 @@ Flash_InitBytecodeBlock_Helper8:
 	ld_rrb e, xbc, wa
 	extz de
 	ld	wa, de
-	calr	61530
+	calr	Flash_StoreBaseAndInitAccPatch_Sub
 	ld	a, (xsp+4)
 	extz	wa
-	calr	60569
-	.byte 0xd1, 0xa2
-	push	63
-	swi	7
-	swi	7
-	jrl	z, 128
+	calr	NoteEventBuffer_Store
+Flash_InitBytecodeBlock_Helper8_Skip:
+	cpw	(0x9a2:16), 0xffff
+	jrl	z, Flash_InitBytecodeBlock_Helper8_Epilogue
 	ld	(xsp+2), 0
+Flash_InitBytecodeBlock_Helper8_Loop:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	de, wa
 	sla	de, 2
 	add	de, 106
 	lda	xbc, (2360:16)
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe8
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 97
+	.byte	0xd3, 0x07, 0xe4, 0xe8, 0x3f, 0xff, 0xff	; cp (XBC+DE),0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper8_Epilogue
 	add	wa, wa
 	inc	6, wa
 	ld_rrw wa, xbc, wa
 	ld (xsp), a
 	extz wa
-	calr 60408
+	calr NoteEvent_Store
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	60410
-	calr	64620
+	calr	NoteEventBuffer_CopyToSlot
+	calr	SlotTable_ExtendedOpsBlock
 	lda	xbc, (1952:16)
 	ld	e, (xsp+2)
 	extz	de
 	sla	de, 2
 	lda	xwa, (2466:16)
-	.byte 0xd3
-	reti
-	.byte 0xe0, 0xe8
-	ld	w, 185:opc
-	.byte 0x04, 0x50, 0xb9
-	ei	2
-	nop
-	nop
+	ld_rrw	wa, xwa, de
+	ld	(xbc+0x4), wa
+	ldw	(xbc+0x6), 0
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb e, xbc, wa
 	extz de
 	ld	wa, de
-	calr	61402
+	calr	Flash_StoreBaseAndInitAccPatch_Sub
 	ld	a, (xsp+4)
 	extz	wa
-	calr	60441
+	calr	NoteEventBuffer_Store
 	incm8	1, (xsp+2)
-	.byte 0x8f
-	push	sr
-	push	xsp
-	ldw	de, 0x8467
+	cp	(xsp+0x2), 50
+	jr	c, Flash_InitBytecodeBlock_Helper8_Loop
+Flash_InitBytecodeBlock_Helper8_Epilogue:
 	inc	8, xsp
 	ret
 	dec	4, xsp
@@ -4558,39 +3989,33 @@ Flash_WriteBackSlotTable_Loop:
 Flash_WriteBackSlotTable_Skip2:
 	ld	a, (xsp)
 	extz	wa
-	calr	61272
-	calr	60607
+	calr	Flash_StoreBaseAndInitAccPatch_Sub
+	calr	Flash_StoreBaseAndInitAccPatch
 	ld	a, (xsp+2)
 	extz	wa
-	calr	60203
+	calr	NoteEvent_Store
 	extz	hl
 	ld	wa, hl
-	calr	60301
+	calr	NoteEventBuffer_Store
 	lda	xwa, (1850:16)
-	.byte 0x90
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 7
-	.byte 0x98
-	push	sr
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 3
-	calr	64762
+	cpw	(xwa), 0xffff
+	jr	nz, Flash_InitBytecodeBlock_Helper8_Skip2
+	cpw	(xwa+0x2), 0xffff
+	jr	z, Flash_InitBytecodeBlock_Helper8_Epilogue2
+Flash_InitBytecodeBlock_Helper8_Skip2:
+	calr	Flash_WriteBackSlotTable
+Flash_InitBytecodeBlock_Helper8_Epilogue2:
 	inc	4, xsp
 	ret
 Flash_InitBytecodeBlock_Helper9:
 	extz	de
 	ld	wa, de
-	calr	61224
+	calr	Flash_StoreBaseAndInitAccPatch_Sub
 	ld	xix, (3182:16)
 	ld	xiy, (3186:16)
 	ldw	bc, 0xb400
-	.byte 0x95
-	scf
-	calr	62157
+	ldirw
+	calr	Flash_InitBytecodeBlock_Helper9_Helper
 	jp	TmFlash_BulkTransferToSubCPU
 	dec	2, xsp
 	ld	(xsp), e
@@ -4633,8 +4058,7 @@ Flash_WriteBackSlotTable_Skip4:
 	ld	xix, (3182:16)
 	ld	xiy, (3186:16)
 	ldw	bc, 0xb400
-	.byte 0x95
-	scf
+	ldirw
 	inc	2, xsp
 	ret
 	lda xsp, (xsp-1024)
@@ -4648,18 +4072,11 @@ Flash_WriteBackSlotTable_Skip4:
 	cp	iz, 0:i3
 	jrl	lt, Flash_WriteBackSlotTable_Skip5
 	lda	xwa, (xsp+2)
-	.byte 0x80
-	push	xsp
-	popw	wa
+	cp	(xwa), 72
 	jrl	nz, Flash_WriteBackSlotTable_Skip6
-	.byte 0x88, 0x01
-	push	xsp
-	nop
+	cp	(xwa+0x1), 0
 	jrl	nz, Flash_WriteBackSlotTable_Skip6
-	.byte 0x88
-	push	sr
-	push	xsp
-	popw	hl
+	cp	(xwa+0x2), 75
 	jrl	nz, Flash_WriteBackSlotTable_Skip6
 	calr	NoteEvent_LoadSoundGenParams
 	ld	xwa, (3186:16)
@@ -4734,15 +4151,14 @@ Flash_WriteBackSlotTable_Skip4:
 	ld	xix, (3222:16)
 	ld	xiy, (3218:16)
 	ldw	bc, 0x8000
-	.byte 0x95
-	scf
+	ldirw
 	ld	xwa, (3222:16)
 	ld	xbc, 0xf400
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	lt, 18
+	jr	lt, Flash_WriteBackSlotTable_Skip5
 	ld	xbc, (3222:16)
 	ld	xde, (3218:16)
 	ld	wa, 1:i3
@@ -4750,23 +4166,20 @@ Flash_WriteBackSlotTable_Skip4:
 	call	TmFlash_CopyToExtMem
 Flash_WriteBackSlotTable_Skip5:
 	ld	hl, iz
-	jr	3
+	jr	Flash_InitBytecodeBlock_Helper9_Epilogue
 Flash_WriteBackSlotTable_Skip6:
 	ldw	hl, 0xff9a
+Flash_InitBytecodeBlock_Helper9_Epilogue:
 	popw	iz
-	.byte 0xf3
-	swi	5
-	nop
-	.byte 0x04, 0x37
+	lda	xsp, (xsp+0x400)
 	ret
 	lda xsp, (xsp-1036)
 	push	xiz
-	calr	57947
+	calr	Flash_InitExtMemAddrs
 	ld	xiy, MSP_Default_Accompaniment
 	lda	xix, (xsp+16)
 	ldw	bc, 512
-	.byte 0x95
-	scf
+	ldirw
 	ld	xbc, (3190:16)
 	ld	xhl, 0:i3
 	ld	l, (xbc+46)
@@ -4853,8 +4266,8 @@ Flash_WriteBackSlotTable_Skip6:
 	ld	(xbc+92), xhl
 	ld	xwa, (xsp+12)
 	ld	xix, (xwa)
-	.byte 0xa9
-	ld	xwa, 0x2008af84
+	add	xix, (xbc+0x40)
+	ld	xwa, (xsp+0x8)
 	ld	xwa, (xwa)
 	add	xwa, xix
 	ld	xix, (xsp+4)
@@ -4983,7 +4396,7 @@ Flash_WriteBackSlotTable_Skip7:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jr	lt, 13
+	jr	lt, Flash_WriteBackSlotTable_Skip8
 	ld	xwa, (3218:16)
 	ld	xbc, 0xf400
 	call	FileIO_WriteByte_Impl
@@ -4991,10 +4404,7 @@ Flash_WriteBackSlotTable_Skip8:
 	call	FileIO_ReturnError
 Flash_WriteBackSlotTable_Join:
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x04, 0x37
+	lda	xsp, (xsp+0x40c)
 	ret
 
 ; Floppy disk load and store note events via dispatch
@@ -5447,10 +4857,7 @@ ToneParam_ExtendedOpsBlock_Skip4:
 	ld	(xde), 72
 	ld	(xwa), 0
 	ld	(xbc), 75
-	.byte 0x8a
-	rcf
-	push	xsp
-	nop
+	cp	(xde+0x10), 0
 	jr	nz, ToneParam_ExtendedOpsBlock_Skip11
 	ld	wa, 0:i3
 	jr	ToneParam_ExtendedOpsBlock_Join
@@ -5486,30 +4893,24 @@ ToneParam_ExtendedOpsBlock_Skip9:
 	calr	ToneParam_ExtendedOpsBlock_Helper2
 	ld	iz, hl
 	ld	xwa, (3186:16)
-	.byte 0x88
-	rcf
-	push	xsp
-	nop
+	cp	(xwa+0x10), 0
 	jr	nz, ToneParam_ExtendedOpsBlock_Skip11
 	ld	wa, iz
 ToneParam_ExtendedOpsBlock_Join:
-	calr	624
+	calr	ToneParam_ExtendedOpsBlock_Helper_Helper2
 	ld	iz, hl
-	jr	7
+	jr	ToneParam_ExtendedOpsBlock_Skip11
 ToneParam_ExtendedOpsBlock_Skip10:
 	call	AccDemo_InitDone
 	ldw	iz, 0xff9a
 ToneParam_ExtendedOpsBlock_Skip11:
-	calr	534
+	calr	ToneParam_ExtendedOpsBlock_Helper_Helper
 	ld	hl, iz
 	popw	iz
 	ret
 ToneParam_ExtendedOpsBlock_Helper2:
 	dec	6, xsp
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+0x4), 0
 	ld	xhl, (3182:16)
 	ld	xde, (3186:16)
 	ld	a, (xhl+16)
@@ -5517,18 +4918,13 @@ ToneParam_ExtendedOpsBlock_Helper2:
 	lda	xiy, (xhl+96)
 	lda	xix, (xde+96)
 	ldw	bc, 975
-	.byte 0x95
-	scf
-	.byte 0x85
-	rcf
-	lda	xiy, (xhl+2048)
-	.byte 0xf3, 0xe9
-	nop
-	push_a
-	ldw	ix, 0xff31
-	jrl	c, 4501
-	.byte 0x85
-	rcf
+	ldirw
+	ldi85
+	lda	xiy, (xhl+0x800)
+	lda	xix, (xde+0x1400)
+	ldw	bc, 0x77ff
+	ldirw
+	ldi85
 	call	cmp_ld_mae
 	ld	xwa, (3186:16)
 	ld	(0x39ae:16), xwa
@@ -5682,9 +5078,7 @@ ToneParam_ExtendedOpsBlock_Skip30:
 ToneParam_ExtendedOpsBlock_Helper3:
 	pushw	iz
 	ld	iz, 0:i3
-	.byte 0xf1
-	lda	xiy, (xwa)
-	.byte 0xb0
+	resda	0, (0x35b0)
 	call	DualVoice_ParamLoadDone
 	ld	a, (0x35b0:16)
 	extz	wa
@@ -5692,11 +5086,7 @@ ToneParam_ExtendedOpsBlock_Helper3:
 	jr	z, ToneParam_ExtendedOpsBlock_Epilogue
 	ld	xwa, (0x39b2:16)
 	ld	(0x39ae:16), xwa
-	.byte 0xc1, 0xad
-	push	xbc
-	pop_f
-	.byte 0xac
-	push	xbc
+	ldmm8	0x39ac, 0x39ad
 	call	AccPatch_InitFromSlotIndex
 	ld	xwa, (3186:16)
 	ld	(0x39ae:16), xwa
@@ -5705,8 +5095,10 @@ ToneParam_ExtendedOpsBlock_Epilogue:
 	ld	hl, iz
 	popw	iz
 	ret
+ToneParam_ExtendedOpsBlock_Helper_Helper:
 	ld	l, 0:opc
 	ld	de, 0:i3
+ToneParam_ExtendedOpsBlock_Helper3_Loop:
 	ld	wa, de
 	add	wa, 96
 	ld	xbc, (3182:16)
@@ -5725,8 +5117,9 @@ ToneParam_ExtendedOpsBlock_Epilogue:
 	inc 1, l
 	add de, 96
 	cp	l, 30
-	jr	c, -71
+	jr	c, ToneParam_ExtendedOpsBlock_Helper3_Loop
 	ret
+ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	push	xiz
 	ld	hl, wa
 	ld	c, (0x34ed:16)
@@ -5734,25 +5127,19 @@ ToneParam_ExtendedOpsBlock_Epilogue:
 	ld c, (13550:16)
 	ldb_erp c, 250
 	ld	c, (0x34ef:16)
-	.byte 0xc7
-	swi	1
-	decm	6, (xhl-31)
-	incf
-	ld	a, 137:opc
-	jrl	f, -4839
-	ldw	ix, 0x6ee1
-	incf
-	ld	a, 137:opc
-	jrl	lt, -4583
-	ldw	ix, 0xeff1
-	ldw	ix, 1024
+	ldb_erp	c, 249
+	ldda32	xbc, (0xc6e)
+	ld	(0x34ed), (xbc+0x70)
+	ldda32	xbc, (0xc6e)
+	ld	(0x34ee), (xbc+0x71)
+	stdi8	(0x34ef), 4
 	ld	(0x34d6:16), 12
 	ld	wa, hl
-	calr	322
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 5
 	ld	(0x34d6:16), 13
 	ld	wa, hl
-	calr	307
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 6
 	ld	(0x34d6:16), 16
 	ld	wa, hl
@@ -5760,34 +5147,27 @@ ToneParam_ExtendedOpsBlock_Epilogue:
 	ld	(0x34ef:16), 7
 	ld	(0x34d6:16), 17
 	ld	wa, hl
-	calr	277
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 10
 	ld	(0x34d6:16), 14
 	ld	wa, hl
-	calr	262
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 11
 	ld	(0x34d6:16), 15
 	ld	wa, hl
-	calr	247
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	xbc, (3182:16)
-	.byte 0xc3, 0xe5, 0xf0, 0x01
-	pop_f
-	.byte 0xed
-	ldw	ix, 0x6ee1
-	incf
-	ld	a, 195:opc
-	.byte 0xe5, 0xf1, 0x01
-	pop_f
-	.byte 0xee
-	ldw	ix, 0xeff1
-	ldw	ix, 1024
+	ld	(0x34ed), (xbc+0x1f0)
+	ldda32	xbc, (0xc6e)
+	ld	(0x34ee), (xbc+0x1f1)
+	stdi8	(0x34ef), 4
 	ld	(0x34d6:16), 18
 	ld	wa, hl
-	calr	210
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 5
 	ld	(0x34d6:16), 19
 	ld	wa, hl
-	calr	195
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 6
 	ld	(0x34d6:16), 22
 	ld	wa, hl
@@ -5795,34 +5175,27 @@ ToneParam_ExtendedOpsBlock_Epilogue:
 	ld	(0x34ef:16), 7
 	ld	(0x34d6:16), 23
 	ld	wa, hl
-	calr	165
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 10
 	ld	(0x34d6:16), 20
 	ld	wa, hl
-	calr	150
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 11
 	ld	(0x34d6:16), 21
 	ld	wa, hl
-	calr	135
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	xbc, (3182:16)
-	.byte 0xc3, 0xe5
-	jrl	f, 6403
-	.byte 0xed
-	ldw	ix, 0x6ee1
-	incf
-	ld	a, 195:opc
-	.byte 0xe5
-	jrl	lt, 6403
-	.byte 0xee
-	ldw	ix, 0xeff1
-	ldw	ix, 1024
+	ld	(0x34ed), (xbc+0x370)
+	ldda32	xbc, (0xc6e)
+	ld	(0x34ee), (xbc+0x371)
+	stdi8	(0x34ef), 4
 	ld	(0x34d6:16), 24
 	ld	wa, hl
-	calr	98
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 5
 	ld	(0x34d6:16), 25
 	ld	wa, hl
-	calr	83
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 6
 	ld	(0x34d6:16), 28
 	ld	wa, hl
@@ -5850,13 +5223,10 @@ ToneParam_ExtendedOpsBlock_Epilogue:
 ToneParam_ExtendedOpsBlock_Helper4:
 	pushw	iz
 	ld	iz, wa
-	.byte 0xf1, 0xd1
-	ldw	ix, 7608
-	popw	bc
-	ldw	bc, 0xc1f6
-	lda	xiy, (xwa)
-	ld	a, 216:opc
-	ccf
+	setda	0, (0x34d1)
+	call	0xf63149
+	ldb_d8	a, (0x35b0)
+	extz	wa
 	bit	0, wa
 	jr	z, ToneParam_ExtendedOpsBlock_Epilogue2
 	ldw	iz, 0xff95
@@ -6130,71 +5500,71 @@ ToneData_AdvanceRegion:
 InitializeSuna:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, 0xfa44e2, 0xe17322, 0xe16c86, 0x164
-	RegObjTable 0x160000c, 0xfa58fb, 0xe17328, 0xe17324, 0x1c4
-	RegObjTable 0x160000d, 0xfa5948, 0xe176d2, 0xe1732a, 0x1e4
-	RegObjTabl 0x1600002, 0xfa496c, 0x49, 0xe16284, 0x124
-	RegObjTabl 0x1600002, 0xfa496c, 0x49, 0xe163ac, 0x424
-	RegObjTabl 0x1600001, 0xfa48a9, 0x1, 0xe176d4, 0x104
-	RegObjTabl 0x1600001, 0xfa48a9, 0x1, 0xe176dc, 0x404
-	RegObjTabl 0x1600003, 0xfa4a18, 0x24, 0xe1ca6e, 0x144
-	RegObjTabl 0x1600003, 0xfa4a18, 0x24, 0xe1cb02, 0x444
-	RegObjTabl 0x1600010, 0xfa5995, 0x3, 0xe1b4e2, 0x10
-	RegObjTabl 0x160000f, 0xfa62cb, 0x3, 0xe1bafa, 0x310
-	RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe1b4f2, 0x11
-	RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1bb22, 0x311
-	RegObjTabl 0x1600010, 0xfa5995, 0x7, 0xe1b516, 0x12
-	RegObjTabl 0x160000f, 0xfa62cb, 0x7, 0xe1bb80, 0x312
-	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1b536, 0x13
-	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1bbce, 0x313
-	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1b54a, 0x14
-	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1bbfc, 0x314
-	RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe1b55e, 0x15
-	RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1bc2a, 0x315
-	RegObjTabl 0x1600010, 0xfa5995, 0x7, 0xe1b582, 0x16
-	RegObjTabl 0x160000f, 0xfa62cb, 0x7, 0xe1bc7c, 0x316
-	RegObjTabl 0x1600010, 0xfa5995, 0x12, 0xe1b5a2, 0xb0
-	RegObjTabl 0x160000f, 0xfa62cb, 0x12, 0xe1bcbc, 0x3b0
-	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe1b5ee, 0xb1
-	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe1bd3a, 0x3b1
-	RegObjTabl 0x1600010, 0xfa5995, 0x16, 0xe1b622, 0xb2
-	RegObjTabl 0x160000f, 0xfa62cb, 0x16, 0xe1bd94, 0x3b2
-	RegObjTabl 0x1600010, 0xfa5995, 0x5, 0xe1b67e, 0xb3
-	RegObjTabl 0x160000f, 0xfa62cb, 0x5, 0xe1be54, 0x3b3
-	RegObjTabl 0x1600010, 0xfa5995, 0x12, 0xe1b696, 0xb4
-	RegObjTabl 0x160000f, 0xfa62cb, 0x12, 0xe1be9a, 0x3b4
-	RegObjTabl 0x1600010, 0xfa5995, 0x1f, 0xe1b6e2, 0xb5
-	RegObjTabl 0x160000f, 0xfa62cb, 0x1f, 0xe1bf7a, 0x3b5
-	RegObjTabl 0x1600010, 0xfa5995, 0x1, 0xe1b762, 0xb6
-	RegObjTabl 0x160000f, 0xfa62cb, 0x1, 0xe1c076, 0x3b6
-	RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe1b76a, 0xb7
-	RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c082, 0x3b7
-	RegObjTabl 0x1600010, 0xfa5995, 0x21, 0xe1b786, 0xb8
-	RegObjTabl 0x160000f, 0xfa62cb, 0x21, 0xe1c0e0, 0x3b8
-	RegObjTabl 0x1600010, 0xfa5995, 0x25, 0xe1b80e, 0xb9
-	RegObjTabl 0x160000f, 0xfa62cb, 0x25, 0xe1c1fa, 0x3b9
-	RegObjTabl 0x1600010, 0xfa5995, 0xe, 0xe1b8a6, 0xba
-	RegObjTabl 0x160000f, 0xfa62cb, 0xe, 0xe1c318, 0x3ba
-	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1b8e2, 0xbb
-	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1c392, 0x3bb
-	RegObjTabl 0x1600010, 0xfa5995, 0xb, 0xe1b8f6, 0xbd
-	RegObjTabl 0x160000f, 0xfa62cb, 0xb, 0xe1c3bc, 0x3bd
-	RegObjTabl 0x1600010, 0xfa5995, 0x21, 0xe1b926, 0xbe
-	RegObjTabl 0x160000f, 0xfa62cb, 0x21, 0xe1c410, 0x3be
-	RegObjTabl 0x1600010, 0xfa5995, 0x1b, 0xe1b9ae, 0xc8
-	RegObjTabl 0x160000f, 0xfa62cb, 0x1b, 0xe1c560, 0x3c8
-	RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe1ba1e, 0xc9
-	RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe1c6dc, 0x3c9
-	RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe1ba62, 0xca
-	RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c798, 0x3ca
-	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1ba7e, 0xcb
-	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1c7ce, 0x3cb
-	RegObjTabl 0x1600010, 0xfa5995, 0x9, 0xe1ba92, 0xcc
-	RegObjTabl 0x160000f, 0xfa62cb, 0x9, 0xe1c7fa, 0x3cc
-	RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe1baba, 0xdc
-	RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1c85e, 0x3dc
-	RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe1bade, 0xed
-	RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c8b6, 0x3ed
+	RegObjTable 0x1600004, ClassProc, 0xe17322, 0xe16c86, 0x164
+	RegObjTable 0x160000c, ResEventProc, 0xe17328, 0xe17324, 0x1c4
+	RegObjTable 0x160000d, ResMethodProc, 0xe176d2, NakaMethodTable_PtrsStart, 0x1e4
+	RegObjTabl 0x1600002, ApFunctionProc, 0x49, 0xe16284, 0x124
+	RegObjTabl 0x1600002, ApFunctionProc, 0x49, Composer_CallbackNameTable, 0x424
+	RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe176d4, 0x104
+	RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe176dc, 0x404
+	RegObjTabl 0x1600003, MainFunctionProc, 0x24, 0xe1ca6e, 0x144
+	RegObjTabl 0x1600003, MainFunctionProc, 0x24, PtrTbl_FuncNameStrs, 0x444
+	RegObjTabl 0x1600010, ViewableProc, 0x3, 0xe1b4e2, 0x10
+	RegObjTabl 0x160000f, ResNameProc, 0x3, Naka_Accomp14_Screens, 0x310
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe1b4f2, 0x11
+	RegObjTabl 0x160000f, ResNameProc, 0x8, Naka_StylCnvWait_Screens, 0x311
+	RegObjTabl 0x1600010, ViewableProc, 0x7, 0xe1b516, 0x12
+	RegObjTabl 0x160000f, ResNameProc, 0x7, Naka_StylCnvVer_Screens, 0x312
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe1b536, 0x13
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe1bbce, 0x313
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe1b54a, 0x14
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe1bbfc, 0x314
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe1b55e, 0x15
+	RegObjTabl 0x160000f, ResNameProc, 0x8, Naka_StylCnvTxt_Screens, 0x315
+	RegObjTabl 0x1600010, ViewableProc, 0x7, 0xe1b582, 0x16
+	RegObjTabl 0x160000f, ResNameProc, 0x7, 0xe1bc7c, 0x316
+	RegObjTabl 0x1600010, ViewableProc, 0x12, 0xe1b5a2, 0xb0
+	RegObjTabl 0x160000f, ResNameProc, 0x12, 0xe1bcbc, 0x3b0
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe1b5ee, 0xb1
+	RegObjTabl 0x160000f, ResNameProc, 0xc, Naka_CmpMenu_Screens, 0x3b1
+	RegObjTabl 0x1600010, ViewableProc, 0x16, 0xe1b622, 0xb2
+	RegObjTabl 0x160000f, ResNameProc, 0x16, 0xe1bd94, 0x3b2
+	RegObjTabl 0x1600010, ViewableProc, 0x5, 0xe1b67e, 0xb3
+	RegObjTabl 0x160000f, ResNameProc, 0x5, 0xe1be54, 0x3b3
+	RegObjTabl 0x1600010, ViewableProc, 0x12, 0xe1b696, 0xb4
+	RegObjTabl 0x160000f, ResNameProc, 0x12, Naka_NamingMem_Screens, 0x3b4
+	RegObjTabl 0x1600010, ViewableProc, 0x1f, 0xe1b6e2, 0xb5
+	RegObjTabl 0x160000f, ResNameProc, 0x1f, Naka_CmSetP1Grid_Screens, 0x3b5
+	RegObjTabl 0x1600010, ViewableProc, 0x1, 0xe1b762, 0xb6
+	RegObjTabl 0x160000f, ResNameProc, 0x1, 0xe1c076, 0x3b6
+	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe1b76a, 0xb7
+	RegObjTabl 0x160000f, ResNameProc, 0x6, Naka_CmpMem_Screens, 0x3b7
+	RegObjTabl 0x1600010, ViewableProc, 0x21, 0xe1b786, 0xb8
+	RegObjTabl 0x160000f, ResNameProc, 0x21, PtrTbl_CmpNcpScreenStrs, 0x3b8
+	RegObjTabl 0x1600010, ViewableProc, 0x25, Naka_SeqToComposer_Screens, 0xb9
+	RegObjTabl 0x160000f, ResNameProc, 0x25, PtrTbl_S2cScreenStrs, 0x3b9
+	RegObjTabl 0x1600010, ViewableProc, 0xe, Naka_EasyComposer_Screens, 0xba
+	RegObjTabl 0x160000f, ResNameProc, 0xe, PtrTbl_EasyCompScreenStrs, 0x3ba
+	RegObjTabl 0x1600010, ViewableProc, 0x4, Naka_EasyComposer2_Screens, 0xbb
+	RegObjTabl 0x160000f, ResNameProc, 0x4, PtrTbl_BendScreenStrs, 0x3bb
+	RegObjTabl 0x1600010, ViewableProc, 0xb, Naka_ModeSelect_Screens, 0xbd
+	RegObjTabl 0x160000f, ResNameProc, 0xb, 0xe1c3bc, 0x3bd
+	RegObjTabl 0x1600010, ViewableProc, 0x21, Naka_ExpandMode_Screens, 0xbe
+	RegObjTabl 0x160000f, ResNameProc, 0x21, PtrTbl_CstmCpScreenStrs, 0x3be
+	RegObjTabl 0x1600010, ViewableProc, 0x1b, Naka_Accomp7_Screens, 0xc8
+	RegObjTabl 0x160000f, ResNameProc, 0x1b, PtrTbl_MspBkslScreenStrs, 0x3c8
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe1ba1e, 0xc9
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe1c6dc, 0x3c9
+	RegObjTabl 0x1600010, ViewableProc, 0x6, Naka_Accomp9_Screens, 0xca
+	RegObjTabl 0x160000f, ResNameProc, 0x6, PtrTbl_MspMenuScreenStrs, 0x3ca
+	RegObjTabl 0x1600010, ViewableProc, 0x4, Naka_Accomp10_Screens, 0xcb
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe1c7ce, 0x3cb
+	RegObjTabl 0x1600010, ViewableProc, 0x9, Naka_Accomp11_Screens, 0xcc
+	RegObjTabl 0x160000f, ResNameProc, 0x9, PtrTbl_MspReGrpScreenStrs, 0x3cc
+	RegObjTabl 0x1600010, ViewableProc, 0x8, Naka_Accomp12_Screens, 0xdc
+	RegObjTabl 0x160000f, ResNameProc, 0x8, PtrTbl_SndArgrScreenStrs, 0x3dc
+	RegObjTabl 0x1600010, ViewableProc, 0x6, Naka_Accomp13_Screens, 0xed
+	RegObjTabl 0x160000f, ResNameProc, 0x6, PtrTbl_ApcSelScreenStrs, 0x3ed
 
 	RegMode 0x4, 0xe1, 0xc8fa, 0xe, 0x1440000, 0x1a000b0
 	RegMode 0x4, 0xe1, 0xc902, 0xf, 0x1200000, 0x1a000ca

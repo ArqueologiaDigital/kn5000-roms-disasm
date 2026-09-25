@@ -84,7 +84,10 @@ DemoStyleTtlFunc:
 	lda xix, (DemoStyle_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoStyle_DispatchTable:
-	.ascii ":;<>"
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 DemoStyle_DispatchTable_Code:
 	call	FDemo_IndicatorSetup
 	pop	xiz
@@ -162,7 +165,10 @@ DemoSoundTtlFunc:
 	lda xix, (DemoSound_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoSound_DispatchTable:
-	.ascii ":;<>"
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 DemoSound_DispatchTable_Code:
 	call	FDemo_IndicatorSetup
 	pop	xiz
@@ -240,7 +246,10 @@ DemoRhyTtlFunc:
 	lda xix, (DemoRhythm_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoRhythm_DispatchTable:
-	.ascii ":;<>"
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 DemoRhythm_DispatchTable_Code:
 	call	FDemo_IndicatorSetup
 	pop	xiz

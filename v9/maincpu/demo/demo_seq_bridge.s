@@ -24,8 +24,11 @@ MiddleFuncCall:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
-	.byte 0xf1, 0xa4
-	.ascii "(E:;<>"
+	stb_d8	(0x28a4), e
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	Demo_SelectEntry_ProcessSongList
 	pop	xiz
 	pop	xix
@@ -42,22 +45,65 @@ MiddleFuncCall_DispatchData:
 	push	xix
 	push	xiz
 	call	SetWall_MiscDataAndCode_0x2
-	.ascii "^\\[Zhi:;<>"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	SqTrSel_CaseC
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call MiddleFuncCall_DispatchData_Code_Helper
 	pop xiz
 	pop xix
-	.ascii "[Zh[:;<>"
+	pop	xhl
+	pop	xde
+	jr	91
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call MiddleFuncCall_DispatchData_Code_Helper2
-	.ascii "^\\[ZhM:;<>"
-	.byte 0x1d, 0x6a
-	.byte 0xf0, 0xf1
-	.ascii "^\\[Zh?:;<>"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	77
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	SetWall_InitCallSequences
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	63
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call MiddleFuncCall_DispatchData_Code_Helper3
-	.ascii "^\\[Zh1:;<>"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	SqTrSel_CaseC
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call SetWall_InlineCodeBlock_Sub
 	pop xiz
 	pop xix
-	.ascii "[Zh#:;<>"
+	pop	xhl
+	pop	xde
+	jr	SqTrSel_CaseC
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	SetWall_InlineCodeBlock_0xC8
 	pop	xiz
 	pop	xix
@@ -378,19 +424,55 @@ SongBank_EventHandler_Return:
 	popw iz
 	ret
 
-CDlikeSwTtl_DispatchData:
-	.byte 0xeb, 0xa8, 0x0e, 0xeb, 0xa8, 0x0e, 0xf1, 0xe0
-	.byte 0x0c, 0xc8, 0x6e, 0x1e, 0xc1, 0xdf, 0x0c, 0x21
-	.byte 0xc9, 0x62, 0xd8, 0x12, 0xd8, 0x8a, 0xea, 0x12
-	.byte 0xea, 0xc8, 0x00, 0x00, 0x01, 0x00, 0x40, 0x04
-	.byte 0x00, 0x8b, 0x00, 0x41, 0x8d, 0x00, 0xe0, 0x01
-	.byte 0x68, 0x1c, 0xc1, 0xdf, 0x0c, 0x21, 0xc9, 0x6e
-	.byte 0xd8, 0x12, 0xd8, 0x8a, 0xea, 0x12, 0xea, 0xc8
-	.byte 0x00, 0x00, 0x01, 0x00, 0x40, 0x04, 0x00, 0x8b
-	.byte 0x00, 0x41, 0x8d, 0x00, 0xe0, 0x01, 0x1b, 0x58
-	.byte 0x9d, 0xfa, 0x40, 0x03, 0x00, 0x8b, 0x00, 0x41
-	.byte 0x9c, 0x00, 0xe0, 0x01, 0xea, 0xa9, 0x1b, 0x58
-	.byte 0x9d, 0xfa
+; -----------------------------------------------------------------------------
+; Until 2026-09-25 the 90 bytes from here to CDlikeSwTtl_SendStartEvt were one
+; `.byte` block named CDlikeSwTtl_DispatchData.  They are four routines
+; (scripts/lanes/sys/convert_code_runs.py; both `jp ApPostEvent` land on
+; ApPostEvent, every instruction re-assembles to the ROM bytes).  The two
+; entries other files call were reached through positional names
+; (CDlikeSwTtl_DispatchData_0x6 / _0x4A, shared/positional_labels.s), now
+; aliases of the labels below.
+; -----------------------------------------------------------------------------
+; Two `return 0` stubs; no call, jump or 24-bit pointer to either was found.
+CDlikeSwTtl_ReturnZeroStub:
+	ld	xhl, 0:i3
+	ret
+CDlikeSwTtl_ReturnZeroStub2:
+	ld	xhl, 0:i3
+	ret
+; Post event 0x8B0004 (XBC = 0x01E0008D) with XDE = 0x10000 + n, where
+; n = (0xCDF) + 2 when bit 0 of (0xCE0) is clear, (0xCDF) - 6 when it is set.
+; Called twice from ui/setwall_routines.s.
+CDlikeSwTtl_SendEvt4:
+	bitda	0, (0xce0)
+	jr	nz, CDlikeSwTtl_SendEvt4_Bit0Set
+	ldb_d8	a, (0xcdf)
+	inc	2, a
+	extz	wa
+	ld	de, wa
+	extz	xde
+	add	xde, 0x10000
+	ld	xwa, 0x8b0004
+	ld	xbc, 0x1e0008d
+	jr	CDlikeSwTtl_SendEvt4_Post
+CDlikeSwTtl_SendEvt4_Bit0Set:
+	ldb_d8	a, (0xcdf)
+	dec	6, a
+	extz	wa
+	ld	de, wa
+	extz	xde
+	add	xde, 0x10000
+	ld	xwa, 0x8b0004
+	ld	xbc, 0x1e0008d
+CDlikeSwTtl_SendEvt4_Post:
+	jp	ApPostEvent
+; Same event as CDlikeSwTtl_SendStartEvt (0x8B0003) but with XDE = 1.
+; Called from ui/setwall_routines.s.
+CDlikeSwTtl_SendStartEvtArg1:
+	ld	xwa, 0x8b0003
+	ld	xbc, 0x1e0009c
+	ld	xde, 1:i3
+	jp	ApPostEvent
 
 CDlikeSwTtl_SendStartEvt:
 	ld xwa, 0x8b0003
