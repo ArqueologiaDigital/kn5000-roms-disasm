@@ -1,225 +1,208 @@
 ; Extension Device Data Tables & NAKA Widget Descriptors
 ; Extension subsystem (codename "TOSHI"): chord type tables, MSP configuration,
 ; accompaniment parameters, and UI widget descriptors for expansion devices
+;
+; ---------------------------------------------------------------------------
+; THE 18-BYTE SOUND-PARAMETER DESCRIPTOR (0xEDBA44-0xEE0154, 974 records)
+; ---------------------------------------------------------------------------
+; CORRECTED 2026-09-02.  This header used to say "0xEDCAD6-0xEE0010, 956
+; records" and to describe the fields only as statistical CLASSES (VARY / FLAG
+; / CONST).  Both were wrong or incomplete:
+;
+;   * the pointer table is at 0xEE0198 and holds 974 record pointers, not 956;
+;     the first two (0xEE0198, 0xEE019C) name two SHORT auxiliary tables of
+;     8 and 12 bytes, and SndParam_RegisterAllWidgets iterates the other 972
+;     from 0xEE01A0 with `cp xiz, 0x3cc`;
+;   * the block starts at 0xEDBA44, 0x1092 bytes lower than stated, and ends at
+;     0xEE0154 -- which is 0x144 bytes INSIDE ui_widgets/widget_dispatch.s,
+;     because this file ends at 0xEE0010;
+;   * every field except +0x11 has a reader.  See
+;     audio/sndparam_records/sndparam_types.h for the C struct and, per field,
+;     the instruction in audio/sndparam_routines.s that reads it: the u32 hash
+;     key at +0x00, the RAM-bank index and byte offset at +0x04/+0x05, the
+;     mask / clamp-min / clamp-max / shift / xor at +0x06..+0x0A, the auxiliary
+;     record index at +0x0B, and the four bounds-checked accessor indices plus
+;     the codec selector at +0x0C..+0x10.  +0x11 has NO reader anywhere in the
+;     0xFCD200-0xFCF000 accessor region.
+;
+; 951 of the 974 records are now C structs, compiled byte-exact by
+; `clang -target tlcs900` and .incbin'd in nine runs below and one in
+; ui_widgets/widget_dispatch.s (see scripts/generators/gen_sndparam_records_c.py).
+; The 23 that are not are in runs of 1-7 records whose last record ends in the
+; middle of a source line that continues into an unrelated auxiliary table; the
+; generator refuses those rather than guessing where to cut.
+;
+; !! THIS IS THE v7 COPY.  This file spans 0xED0008-0xEE0010 in the v7 dump too,
+; with the same layout as v10: every v7/v10 difference in the range is a VALUE
+; inside a line of the same size -- code pointers into the 0xFA-0xFC code that
+; moved between versions, plus a few table values.  The text is v10's with
+; those lines rewritten from the v7 dump (pointers resolved to the v7 symbol at
+; the v7 address), and with each C-compiled record written as one
+; `sndparam_descriptor` macro line (defined above the first run below), because
+; the Makefile compiles the C for v10 only.  The records' field values were
+; decoded from the v7 dump.  Produced by
+; scripts/tools/port_extension_data_from_v10.py.
+;
+; SURVIVING FROM THE OLD HEADER, still true and still worth keeping:
+;
+; !! BYTE FIELDS, NOT u16 (except the +0x00 key).  Reading the record as nine
+; little-endian u16s fails: the high halves at +0x01, +0x05, +0x0B, +0x0D and
+; +0x11 are set in 93-100% of records.  Do not "improve" these rows to `.hword`.
+;
+; !! WHY THIS BLOCK LOOKS LIKE CODE TO A STATISTIC.  Before this file was
+; re-typed, 1,590 of its 1,721 `.byte` runs beginning with an undecodable byte
+; started INSIDE one of these records, clustered at a few field offsets --
+; +0x0C alone 48.0%, +0x08 17.5%, +0x00 9.2%, +0x05 7.2% -- and 0x01/0x04 were
+; 97.9% of them.  That is the value 1 in a low-valued parameter field, not an
+; opcode.  Nothing calls or jumps to any address in this file: 0 of the 59,849
+; absolute call/jp/jr targets named anywhere in v10/maincpu land inside it.
+;
+; !! THE RECORD LABELS ARE NOT EVIDENCE.  ExtPartParam_*, SeqMixParam_*,
+; PartParam_*, MidiChParam_*, VoiceParamEx_* and VoiceCtrlR1_* were assigned by
+; ADDRESS-RANGE BUCKETING in commits feda55d9 and 16f0917a, not by any reader.
+; Nothing distinguishes the six kinds structurally and no code references any
+; of the labels -- they exist only so the pointer table can name them.
+; ---------------------------------------------------------------------------
 
+; ---------------------------------------------------------------------------
+; CHORD-TYPE NAMES: the tail of the chord-type pointer table, then the names
+; ---------------------------------------------------------------------------
+; Reader: MainChordPre (kn5000_v10_program.s, 0xFC304E) builds the chord
+; display string with Strcat: the root-note name (RAM byte 0x8D40 x4 into
+; Naka_MemoryC_Screens), then the CHORD-TYPE name -- RAM byte 0x8D42, `sla
+; wa, 2`, `lda xbc, (0xecff6a:24)`, `ld_sril3` -- then "on" or "  "
+; (ChordStr_On / ChordStr_Blank, loaded as the immediates 0xED1C96 and
+; 0xED1C9A).  The pointer table it indexes is 64 entries, 0xECFF6A-0xED0069:
+; entries 0-39 lie in MemScreen_Blank's blob in ui_widgets/style_bitmaps.s
+; (naka_style_bitmaps.c), so this file BEGINS with the high half of entry 39
+; (0x00ED00FA) and holds entries 40-63.  Entry k points at the name of chord
+; type k; the 64 names follow in REVERSE order of k, NUL-terminated and
+; 0xFF-padded to even addresses (`scripts/analysis/ext_lane_checks.py chord`
+; re-checks all of it on the v10, v9 and v7 dumps).
+;
+; Glyph escapes: "~9e" is SHARP and "~a0" is FLAT in these strings (the
+; note-name tables below settle it: NoteNameStr_Table_0 spells C#, D#, F#, G#,
+; A# with ~9e, SplitNoteStr_* spells Db, Eb, Ab, Bb with ~a0 and F# with ~9e;
+; `ext_lane_checks.py sharp`).  The older
+; ChordTypeStr_* labels below read the two the other way round in several
+; places (ChordTypeStr_7_Flat9 is "7 (#9)", ChordTypeStr_M7_Sharp5 is
+; "M7(b5)"); they are kept because ui_widgets/naka_style_bitmaps.c cites them
+; by name, and the entry index in each new ChordTypeStr_TypeNN label is the
+; reliable identity.  ExtData_ChordTypeTable_Top keeps its old name because
+; naka_perf_style_link.ld and naka_extension_device_link.ld name the address.
+; ---------------------------------------------------------------------------
 ExtData_ChordTypeTable_Top:
-	.incbin "includes/romslices/v7_transplant_ExtData_ChordTypeTable_Top.bin"
-ExtData_ChordTypeTable_Mid:
-	.byte 0xed
-	nop
-	.byte 0xac
-	nop
-	.byte 0xed
-	nop
-	.byte 0xa6
-	nop
-	.byte 0xed
-	nop
-	.byte 0xa0
-	nop
-	.byte 0xed
-	nop
-	.byte 0x9a
-	nop
-	.byte 0xed
-	nop
-	.byte 0x94
-	nop
-	.byte 0xed
-	nop
-	.byte 0x8e
-	nop
-	.byte 0xed
-	nop
-	.byte 0x88
-	nop
-	.byte 0xed
-	nop
-	.byte 0x82
-	nop
-	.byte 0xed
-	nop
-	jrl	nov, -4864
-	nop
-	jrl	z, -4864
-	nop
-	jrl	f, -4864
-	nop
-	jr	gt, 0
-	.byte 0xed
-ExtData_ChordType_NullByte:
-	nop
-ChordTypeStr_Blank_0:	aligned_string "     "
-ChordTypeStr_Blank_1:	aligned_string "     "
-ChordTypeStr_Blank_2:	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	jr	pl, 0x61
-	jr	ov, 100
-	push	xbc
-	nop
-	aligned_string " add9"
-	aligned_string "+7~9e11"
-	aligned_string "m7 11"
-	aligned_string "7 ~9e11"
-	aligned_string "  ~a013"
-	aligned_string "   13"
-	aligned_string "~9e9~a013"
+	.short 0x00ed	; high half of entry 39, begun in style_bitmaps.s
+	.long ChordTypeStr_Type40
+	.long ChordTypeStr_Type41
+	.long ChordTypeStr_Type42
+	.long ChordTypeStr_Type43
+	.long ChordTypeStr_Type44
+	.long ChordTypeStr_Type45
+	.long ChordTypeStr_Type46
+	.long ChordTypeStr_Type47
+	.long ChordTypeStr_Type48
+	.long ChordTypeStr_Type49
+	.long ChordTypeStr_Type50
+	.long ChordTypeStr_Type51
+	.long ChordTypeStr_Type52
+	.long ChordTypeStr_Type53
+	.long ChordTypeStr_Type54
+	.long ChordTypeStr_Type55
+	.long ChordTypeStr_Type56
+	.long ChordTypeStr_Type57
+	.long ChordTypeStr_Type58
+	.long ChordTypeStr_Type59
+	.long ChordTypeStr_Type60
+	.long ChordTypeStr_Blank_2
+	.long ChordTypeStr_Blank_1
+	.long ChordTypeStr_Blank_0
+ChordTypeStr_Blank_0:		aligned_string "     "
+ChordTypeStr_Blank_1:		aligned_string "     "
+ChordTypeStr_Blank_2:		aligned_string "     "
+ChordTypeStr_Type60:		aligned_string "     "
+ChordTypeStr_Type59:		aligned_string "     "
+ChordTypeStr_Type58:		aligned_string "     "
+ChordTypeStr_Type57:		aligned_string "     "
+ChordTypeStr_Type56:		aligned_string "     "
+ChordTypeStr_Type55:		aligned_string "     "
+ChordTypeStr_Type54:		aligned_string "     "
+ChordTypeStr_Type53:		aligned_string "     "
+ChordTypeStr_Type52:		aligned_string "     "
+ChordTypeStr_Type51:		aligned_string "     "
+ChordTypeStr_Type50:		aligned_string "     "
+ChordTypeStr_Type49:		aligned_string "     "
+ChordTypeStr_Type48:		aligned_string "     "
+ChordTypeStr_Type47:		aligned_string "     "
+ChordTypeStr_Type46:		aligned_string "     "
+ChordTypeStr_Type45:		aligned_string "     "
+ChordTypeStr_Type44:		aligned_string "     "
+ChordTypeStr_Type43:		aligned_string "     "
+ChordTypeStr_Type42:		aligned_string "     "
+ChordTypeStr_Type41:		aligned_string "madd9"
+ChordTypeStr_Type40:		aligned_string " add9"
+ChordTypeStr_Type39:		aligned_string "+7~9e11"
+ChordTypeStr_Type38:		aligned_string "m7 11"
+ChordTypeStr_Type37:		aligned_string "7 ~9e11"
+ChordTypeStr_Type36:		aligned_string "  ~a013"
+ChordTypeStr_Type35:		aligned_string "   13"
+ChordTypeStr_Type34:		aligned_string "~9e9~a013"
 ChordTypeStr_Flat9_Flat13:	aligned_string "~a09~a013"
 ChordTypeStr_Sharp9_Flat13:	aligned_string "  ~a013"
 ChordTypeStr_Flat13_Only:	aligned_string "~9e9 13"
-ChordTypeStr_Sharp9_13:	aligned_string "~a09 13"
-ChordTypeStr_9_Flat5:	aligned_string "9~9e5  "
-ChordTypeStr_13_Only:	aligned_string "   13"
+ChordTypeStr_Sharp9_13:		aligned_string "~a09 13"
+ChordTypeStr_9_Flat5:		aligned_string "9~9e5  "
+ChordTypeStr_13_Only:		aligned_string "   13"
 ChordTypeStr_mM7_Sharp5:	aligned_string "mM7~a05"
-ChordTypeStr_M7_Flat5:	aligned_string "M7~9e5 "
-ChordTypeStr_M7_Sharp5:	aligned_string "M7~a05 "
-ChordTypeStr_7_Flat9:	aligned_string "7 ~9e9 "
-ChordTypeStr_sus4:	aligned_string "sus4 "
-ChordTypeStr_69:	jr	pl, 0x36
-	push	xbc
-	ld	w, 32:opc
-	nop
-	aligned_string "m79  "
-	aligned_string "m ~a05 "
-	aligned_string "m6   "
-	aligned_string "69   "
-	popw	iy
-	.byte 0x37
-ChordTypeStr_M7_9:	.byte 0x39, 0x20, 0x20, 0x00
-	aligned_string "7 ~a09 "
-	aligned_string "79   "
-	aligned_string "7 ~a05 "
-	aligned_string "  ~a05 "
-	aligned_string "aug7 "
-	aligned_string "6    "
-	.byte 0x37, 0x73
-ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
-	aligned_string "mM7  "
-	aligned_string "m7~a05 "
-	aligned_string "dim  "
-	aligned_string "min7 "
-	jr	pl, 0x69
-	jr	nz, 32
-	ld	w, 0:opc
-	aligned_string "aug  "
-	aligned_string "Maj7 "
-	aligned_string "7    "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	or	(xwa+2), iy
-	nop
-	.byte 0x94
-	push	sr
-	.byte 0xed
-	nop
-	or	(xiz+2), e
-	nop
-	or	(xde+2), e
-	nop
-	.byte 0x84
-	push	sr
-	.byte 0xed
-	nop
-	.byte 0x80
-	push	sr
-	.byte 0xed
-	nop
-	jrl	nov, -4862
-	nop
-	jrl	z, -4862
-	nop
-	jrl	le, -4862
-	nop
-	jr	nov, 2
-	.byte 0xed
-	nop
-	jr	2
-	.byte 0xed
-	nop
-	jr	le, 2
-	.byte 0xed
-	nop
-	pop	xiz
-	push	sr
-	.byte 0xed
-	nop
-	pop	xde
-	push	sr
-	.byte 0xed
-	nop
-	.byte 0x56
-	push	sr
-	.byte 0xed
-	nop
-	.byte 0x52
-	push	sr
-	.byte 0xed
-	nop
-	ld	w, 32:opc
-	nop
-	swi	7
-	ld	w, 32:opc
-	nop
-	swi	7
-	ld	w, 32:opc
-	nop
-	swi	7
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+ChordTypeStr_M7_Flat5:		aligned_string "M7~9e5 "
+ChordTypeStr_M7_Sharp5:		aligned_string "M7~a05 "
+ChordTypeStr_7_Flat9:		aligned_string "7 ~9e9 "
+ChordTypeStr_sus4:		aligned_string "sus4 "
+ChordTypeStr_69:		aligned_string "m69  "
+ChordTypeStr_Type21:		aligned_string "m79  "
+ChordTypeStr_Type20:		aligned_string "m ~a05 "
+ChordTypeStr_Type19:		aligned_string "m6   "
+ChordTypeStr_Type18:		aligned_string "69   "
+ChordTypeStr_M7_9:		aligned_string "M79  "
+ChordTypeStr_Type16:		aligned_string "7 ~a09 "
+ChordTypeStr_Type15:		aligned_string "79   "
+ChordTypeStr_Type14:		aligned_string "7 ~a05 "
+ChordTypeStr_Type13:		aligned_string "  ~a05 "
+ChordTypeStr_Type12:		aligned_string "aug7 "
+ChordTypeStr_Type11:		aligned_string "6    "
+ChordTypeStr_7sus4:		aligned_string "7sus4"
+ChordTypeStr_Type09:		aligned_string "mM7  "
+ChordTypeStr_Type08:		aligned_string "m7~a05 "
+ChordTypeStr_Type07:		aligned_string "dim  "
+ChordTypeStr_Type06:		aligned_string "min7 "
+ChordTypeStr_Type05:		aligned_string "min  "
+ChordTypeStr_Type04:		aligned_string "aug  "
+ChordTypeStr_Type03:		aligned_string "Maj7 "
+ChordTypeStr_Type02:		aligned_string "7    "
+ChordTypeStr_Type01:		aligned_string "     "
+ChordTypeStr_Type00:		aligned_string "     "
+	.byte 0x98, 0x02, 0xed, 0x00, 0x94, 0x02, 0xed, 0x00, 0x8e, 0x02, 0xed, 0x00, 0x8a, 0x02, 0xed, 0x00
+	.byte 0x84, 0x02, 0xed, 0x00, 0x80, 0x02, 0xed, 0x00, 0x7c, 0x02, 0xed, 0x00, 0x76, 0x02, 0xed, 0x00
+	.byte 0x72, 0x02, 0xed, 0x00, 0x6c, 0x02, 0xed, 0x00, 0x68, 0x02, 0xed, 0x00, 0x62, 0x02, 0xed, 0x00
+	.byte 0x5e, 0x02, 0xed, 0x00, 0x5a, 0x02, 0xed, 0x00, 0x56, 0x02, 0xed, 0x00, 0x52, 0x02, 0xed, 0x00
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x42, 0x20, 0x00, 0xff
 	aligned_string "B~a0"
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 	aligned_string "A~a0"
-	ld	xsp, 0x47ff0020
-	jrl	nz, 12385
-	nop
-	swi	7
-	ld	xiz, 0x45ff0020
-	ld	w, 0:opc
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED0272-0xED0284 (18 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=75% dist=9 near ChordTypeStr_7sus4+162
+	aligned_string "G "
+	aligned_string "G~a0"
+	aligned_string "F "
+	aligned_string "E "
 	aligned_string "E~a0"
-	ld	xix, 0x44ff0020
-	jrl	nz, 12385
-	nop
-	swi	7
-	ld	xhl, 0x20ff0020
-	ld	w, 0:opc
-	swi	7
-	ld	b, 3:opc
-	.byte 0xed
-	nop
+	.byte 0x44, 0x20, 0x00, 0xff
+	.byte 0x44, 0x7e, 0x61, 0x30, 0x00, 0xff
+	.byte 0x43, 0x20, 0x00, 0xff
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x22, 0x03, 0xed, 0x00
 NoteNameStr_Table_0:
 	.long NoteStr0_C
 	.long NoteStr0_CSharp
@@ -237,51 +220,31 @@ NoteNameStr_Table_0:
 	.long NoteStr0_Blank_1
 	.long NoteStr0_Blank_0
 NoteStr0_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr0_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr0_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr0_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr0_ASharp:	aligned_string "A~9e"
 NoteStr0_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 NoteStr0_GSharp:	aligned_string "G~9e"
 NoteStr0_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 NoteStr0_FSharp:	aligned_string "F~9e"
 NoteStr0_F:	aligned_string "F "
 NoteStr0_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 NoteStr0_DSharp:	aligned_string "D~9e"
 NoteStr0_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 NoteStr0_CSharp:	aligned_string "C~9e"
 NoteStr0_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 NoteStr0_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 
 
 NoteNameStr_Table_1:
@@ -302,50 +265,31 @@ NoteNameStr_Table_1:
 	.long NoteStr1_Blank_1
 	.long NoteStr1_Blank_0
 NoteStr1_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr1_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr1_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr1_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr1_AFlat:
-	ld	xbc, 0x65397e
-	swi	7
+	aligned_string "A~9e"
 NoteStr1_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 NoteStr1_ASharp:	aligned_string "A~a0"
 NoteStr1_G:	aligned_string "G "
 NoteStr1_FSharp:	aligned_string "F~9e"
 NoteStr1_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 NoteStr1_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 NoteStr1_DSharp:	aligned_string "D~9e"
 NoteStr1_D:	aligned_string "D "
 NoteStr1_CSharp:	aligned_string "C~9e"
 NoteStr1_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 NoteStr1_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 
 
 NoteNameStr_Table_2:
@@ -366,48 +310,30 @@ NoteNameStr_Table_2:
 	.long NoteStr2_Blank_1
 	.long NoteStr2_Blank_0
 NoteStr2_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr2_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr2_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr2_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr2_BFlat:	aligned_string "B~a0"
 NoteStr2_A:	aligned_string "A "
 NoteStr2_GSharp:	aligned_string "G~9e"
 NoteStr2_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 NoteStr2_FSharp:	aligned_string "F~9e"
 NoteStr2_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 NoteStr2_E:	aligned_string "E "
 NoteStr2_DSharp:	aligned_string "D~9e"
 NoteStr2_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 NoteStr2_CSharp:	aligned_string "C~9e"
 NoteStr2_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 NoteStr2_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 
 
 NoteNameStr_Table_3:
@@ -428,58 +354,32 @@ NoteNameStr_Table_3:
 	.long NoteStr3_Blank_1
 	.long NoteStr3_Blank_0
 NoteStr3_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr3_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr3_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr3_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr3_AFlat:	aligned_string "A~9e"
 NoteStr3_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 NoteStr3_GSharp:	aligned_string "G~9e"
 NoteStr3_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 NoteStr3_FSharp:	aligned_string "F~9e"
 NoteStr3_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 NoteStr3_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 NoteStr3_EFlat:	aligned_string "E~a0"
 NoteStr3_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 NoteStr3_CSharp:	aligned_string "C~9e"
 NoteStr3_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 NoteStr3_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
-	ccf
-	halt
-	.byte 0xed
-	nop
+	.byte 0x20, 0x20, 0x00, 0xff, 0x12, 0x05, 0xed, 0x00
 Str_Attention_Multilingual:
 	.long Str_Attention_DE
 	.long Str_Attention_FR
@@ -492,21 +392,8 @@ Str_Attention_ES:	aligned_string "ATTENCI0N!"
 Str_Attention_FR:	aligned_string "ATTENTION!"
 Str_Attention_DE:	aligned_string "ACHTUNG!"
 Str_Attention_EN:	aligned_string "ATTENTION!"
-	.byte 0xe6, 0x06, 0xed
-	nop
-	jrl	nz, -4858
-	nop
-	push_f
-	.byte 0x06, 0xed
-	nop
-	or	(xix+5), xiy
-	nop
-	.byte 0xa4
-	halt
-	.byte 0xed
-	nop
-	ldw	iz, 0xed05
-	nop
+	.byte 0xe6, 0x06, 0xed, 0x00, 0x7e, 0x06, 0xed, 0x00, 0x18, 0x06, 0xed, 0x00, 0xac, 0x05, 0xed, 0x00
+	.byte 0xa4, 0x05, 0xed, 0x00, 0x36, 0x05, 0xed, 0x00
 Str_InitSettingWarn_ID:	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
 Str_InitSettingWarn_IT:	aligned_string "Italian"
 	aligned_string "El uso del ajuste inicial hará que se reemplacen los datos actuales por los ajustes originales de fá brica!"
@@ -514,40 +401,18 @@ Str_InitSettingWarn_IT:	aligned_string "Italian"
 	.byte 0x44, 0x75
 	aligned_string "rch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zurückversetzt."
 	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
-	or	(xwa+7), xiy
-	nop
-	.byte 0x96
-	reti
-	.byte 0xed
-	nop
-	.byte 0x86
-	reti
-	.byte 0xed
-	nop
-	jrl	-4857
-	nop
-	jrl	f, -4857
-	nop
-	.byte 0x56
-	reti
-	.byte 0xed
-	nop
+	.byte 0xa8, 0x07, 0xed, 0x00, 0x96, 0x07, 0xed, 0x00, 0x86, 0x07, 0xed, 0x00, 0x78, 0x07, 0xed, 0x00
+	.byte 0x70, 0x07, 0xed, 0x00, 0x56, 0x07, 0xed, 0x00
 Str_AreYouSure_ID:	aligned_string "Apakah Anda sudah yakin ?"
 Str_AreYouSure_IT:	aligned_string "Italian"
-	.byte 0xbf, 0x45
-	jrl	ule, -7820
+	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
 	aligned_string " seguro?"
 	.byte 0x45, 0x74
 	.ascii "es vous s"
-	swi	3
-	jrl	le, 63
-	swi	7
+	.byte 0xfb, 0x72, 0x3f, 0x00, 0xff
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
-	max
-	ldw	(237:8), 0x8e00:io
-	push	237
-	nop
+	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e, 0x09, 0xed, 0x00
 Str_FactoryResetDesc_Multilingual:
 	.long Str_FactoryResetDesc_EN3
 	.long Str_FactoryResetDesc_EN2
@@ -559,12 +424,9 @@ Str_FactoryResetDesc_EN2:	aligned_string "                               Resets 
 Str_FactoryResetDesc_EN3:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x53, 0x65
 	.ascii "tzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurüc"
-	jr	ugt, 46
-	nop
-	swi	7
+	.byte 0x6b, 0x2e, 0x00, 0xff
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-	.byte 0x56
-	pushw	237
+	.byte 0x56, 0x0b, 0xed, 0x00
 Str_StoreSoundBalance_Multilingual:
 	.long Str_StoreSoundBalance_DE
 	.long Str_StoreSoundBalance_EN3
@@ -577,10 +439,7 @@ Str_StoreSoundBalance_EN2:	aligned_string "Stores sound & balance settings only.
 Str_StoreSoundBalance_EN3:	aligned_string "Stores sound & balance settings only."
 Str_StoreSoundBalance_DE:	.asciz "Speichert nur Klang- und Lautstärkeeinstellungen."
 	aligned_string "Stores sound & balance settings only."
-	.byte 0xda
-	incf
-	.byte 0xed
-	nop
+	.byte 0xda, 0x0c, 0xed, 0x00
 Str_StoreTotalSetting_Multilingual:
 	.long Str_StoreTotalSetting_DE
 	.long Str_StoreTotalSetting_EN3
@@ -591,7 +450,71 @@ Str_StoreTotalSetting_EN0:	aligned_string "Stores to total setting including Rhy
 Str_StoreTotalSetting_EN1:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 Str_StoreTotalSetting_EN2:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 Str_StoreTotalSetting_EN3:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_DE:	.incbin "includes/romslices/v7_data_str_storetotalsetting_de.bin"
+Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus, Transpose & Tempo."
+	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+	aligned_string "%c:%d/%d  "
+	.byte 0xe5, 0x02, 0x13, 0x05, 0xe5, 0x02, 0x13, 0x05, 0x1d, 0x08, 0xf3, 0x07, 0xf3, 0x07, 0x20, 0x00
+	aligned_string "                                "
+	ld w, 0:opc
+	.zero 8
+	.byte 0xf1, 0x01, 0xf1, 0x01, 0xf1, 0x01, 0x59, 0x00, 0x65, 0x01, 0x59, 0x00, 0x65, 0x01, 0x10, 0x03
+	.byte 0xf8, 0x02, 0xf8, 0x02, 0x20, 0x00
+	aligned_string "                "
+	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6a, 0x01, 0x00, 0x00, 0x00, 0x00
+	aligned_string "%d/%d"
+	.byte 0xcc, 0x01, 0xfa, 0x02, 0xcc, 0x01, 0xfa, 0x02, 0x29, 0x05, 0x11, 0x05, 0x11, 0x05, 0x20, 0x00
+	aligned_string "                "
+	ld w, 0:opc
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	pop xiz
+	normal
+	nop
+	nop
+	nop
+	nop
+	ld e, 115:opc
+	push xde
+	nop
+	aligned_string "                 "
+	ld w, 32:opc
+	ld w, 32:opc
+	ld w, 0:opc
+	ld e, 115:opc
+	push xde
+	nop
+	aligned_string "TEMPO"
+	ld e, 115:opc
+	push xde
+	nop
+	aligned_string "TEMPO"
+	.byte 0x25, 0x73, 0x00, 0xff, 0x5a, 0x05, 0x6a, 0x07, 0x5a, 0x05, 0x6a, 0x07, 0xae, 0x0b, 0x96, 0x0b
+	.byte 0x96, 0x0b, 0x20, 0x00
+	aligned_string "                                "
+	ld w, 0:opc
+	aligned_string "                                "
+	ld w, 0:opc
+	aligned_string "                                "
+	ld w, 0:opc
+	aligned_string "                                "
+	aligned_string "                                "
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xdb, 0x02, 0xdb, 0x02, 0xdb, 0x02, 0x6a, 0x00
+	.byte 0x27, 0x01, 0x6a, 0x00, 0x27, 0x01, 0x34, 0x02, 0x0c, 0x02, 0x0c, 0x02, 0x25, 0x33, 0x64, 0x00
+	.byte 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00, 0x25, 0x33, 0x64, 0x00, 0x25, 0x33, 0x64, 0x00
+	.byte 0x25, 0x33, 0x64, 0x00, 0x4f, 0x46, 0x46, 0x00, 0x4f, 0x4e, 0x20, 0x00, 0x25, 0x33, 0x64, 0x00
+	.byte 0x25, 0x33, 0x64, 0x00, 0x00, 0x00, 0x7c, 0x00, 0x00, 0x00, 0x7c, 0x00, 0xf8, 0x02, 0xfe, 0x00
+	.byte 0xfe, 0x00, 0x6a, 0x00, 0x0e, 0x01, 0x6a, 0x00, 0x0e, 0x01, 0x02, 0x02, 0xda, 0x01, 0xda, 0x01
+	.byte 0x00, 0x90, 0x91, 0xb3, 0xb4, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xb2, 0x88, 0x92
+	.byte 0x93, 0x94, 0x95, 0x40, 0x96, 0x99, 0x97, 0x98, 0xad, 0xb0, 0xb1, 0xb8, 0xb9, 0xb6, 0xb7, 0xff
+	.byte 0xdc, 0x11, 0xed, 0x00
+
+
 NoteNameStr_Table_4:
 	.long CtrlAssignStr_PMemIncrement
 	.long CtrlAssignStr_PMemDecrement
@@ -654,67 +577,13 @@ CtrlAssignStr_PMemBankInc:	aligned_string "P.MEM BANK INC. "
 CtrlAssignStr_PMemDecrement:	aligned_string "P.MEM DECREMENT "
 CtrlAssignStr_PMemIncrement:	aligned_string "P.MEM INCREMENT "
 CtrlAssignStr_Off:	aligned_string "      OFF       "
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	nop
-	nop
-	pushw	sp
-	push	sr
-	nop
-	nop
-	pushw	sp
-	push	sr
-	.byte 0xea
-	ld	(91:8), 4:io
-	pop	xhl
-	.byte 0x04
-	ei	0
-	nop
-	nop
-	ei	0
-	ei	0
-	ei	0
-	ei	0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED11EE-0xED1226 (56 B), unreached CODE-territory, was disassembled as 42 plausible-but-dead instruction lines; per=100% dist=4 near CtrlAssignStr_Off+18
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x00, 0x00, 0x2f, 0x02, 0x00, 0x00, 0x2f, 0x02
+	.byte 0xea, 0x08, 0x5b, 0x04, 0x5b, 0x04, 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x06, 0x00, 0x06, 0x00
+	.byte 0x06, 0x00
 ParamStr_Table_01:
 	.long ParamStr01_RhythmSelection
 	.long ParamStr01_Tempo
@@ -754,126 +623,22 @@ ParamStr02_Reverb:	aligned_string "      REVERB       "
 ParamStr02_Midi:	aligned_string "       MIDI        "
 ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	aligned_string "FILTER TYPE"
-	popw	sp
-	popw	iz
-	pushw	sp
-	popw	sp
-	ld	xiz, 0x25ff0046
-	jrl	ule, -256
+	.byte 0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 	aligned_string "PAGE 2/3"
-	ld	e, 115:opc
-	nop
-	swi	7
+	.byte 0x25, 0x73, 0x00, 0xff
 	aligned_string "PAGE 3/3"
-	.byte 0xbe
-	push	sr
-	.byte 0xa7
-	pop	sr
-	.byte 0xbe
-	push	sr
-	.byte 0xa7
-	pop	sr
-	popw	iz
-	halt
-	push	w
-	push	w
-	nop
-	pushw	bc
-	nop
-	nop
-	.byte 0x01
-	pushw	bc
-	nop
-	nop
-	.byte 0x04
-	pushw	bc
-	nop
-	nop
-	push	sr
-	pushw	bc
-	nop
-	nop
-	pop	sr
-	pushw	bc
-	nop
-	nop
-	ldw	(41:8), 0:io
-	pushw	41
-	nop
-	incf
-	pushw	bc
-	nop
-	nop
-	decf
-	pushw	bc
-	nop
-	nop
-	ret
-	pushw	bc
-	nop
-	nop
-	halt
-	pushw	bc
-	nop
-	nop
-	reti
-	pushw	bc
-	nop
-	nop
-	ld	(41:8), 0:io
-	nop
-	retd	41
-	nop
-	rcf
-	pushw	bc
-	nop
-	nop
-	push	41
-	nop
-	nop
-	.byte 0x06
-	pushw	bc
-	nop
-	nop
-	scf
-	pushw	bc
-	nop
-	nop
-	popw	sp
-	ld	xiz, 0x4e4f0046
-	ld	w, 0:opc
-	popw	sp
-	ld	xiz, 0x4e4f0046
-	ld	w, 0:opc
-	popw	sp
-	popw	iz
-	ld	w, 0:opc
-	popw	sp
-	ld	xiz, 0x4e4f0046
-	ld	w, 0:opc
-	popw	sp
-	ld	xiz, 0x20200046
-	ld	w, 0:opc
-	nop
-	nop
-	jrl	nov, 0
-	nop
-	jrl	nov, -26880
-	push	sr
-	swi	2
-	nop
-	swi	2
-	nop
-	.byte 0xd5
-	nop
-	jrl	ge, -11007
-	nop
-	jrl	ge, 27905
-	push	sr
-	.byte 0x45
-	push	sr
-	.byte 0x45
-	push	sr
+	.byte 0xbe, 0x02, 0xa7, 0x03, 0xbe, 0x02, 0xa7, 0x03, 0x4e, 0x05, 0xc8, 0x04, 0xc8, 0x04, 0x00, 0x29
+	.byte 0x00, 0x00, 0x01, 0x29, 0x00, 0x00, 0x04, 0x29, 0x00, 0x00, 0x02, 0x29, 0x00, 0x00, 0x03, 0x29
+	.byte 0x00, 0x00, 0x0a, 0x29, 0x00, 0x00, 0x0b, 0x29, 0x00, 0x00, 0x0c, 0x29, 0x00, 0x00, 0x0d, 0x29
+	.byte 0x00, 0x00, 0x0e, 0x29, 0x00, 0x00, 0x05, 0x29, 0x00, 0x00, 0x07, 0x29, 0x00, 0x00, 0x08, 0x29
+	.byte 0x00, 0x00, 0x0f, 0x29, 0x00, 0x00, 0x10, 0x29, 0x00, 0x00, 0x09, 0x29, 0x00, 0x00, 0x06, 0x29
+	.byte 0x00, 0x00, 0x11, 0x29, 0x00, 0x00, 0x4f, 0x46, 0x46, 0x00, 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46
+	.byte 0x46, 0x00, 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x4e, 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00, 0x4f, 0x4e
+	.byte 0x20, 0x00, 0x4f, 0x46, 0x46, 0x00, 0x20, 0x20, 0x20, 0x00, 0x00, 0x00, 0x7c, 0x00, 0x00, 0x00
+	.byte 0x7c, 0x00, 0x97, 0x02, 0xfa, 0x00, 0xfa, 0x00, 0xd5, 0x00, 0x79, 0x01, 0xd5, 0x00, 0x79, 0x01
+	.byte 0x6d, 0x02, 0x45, 0x02, 0x45, 0x02
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x52+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x76+1
 ParamStr_Table_03:
 	.long FadeTimeStr_Off
 	.long FadeTimeStr_Default
@@ -901,198 +666,65 @@ FadeTimeStr_1sec:	aligned_string " 1 sec "
 FadeTimeStr_Hold:	aligned_string " HOLD  "
 FadeTimeStr_Default:	aligned_string "DEFAULT"
 FadeTimeStr_Off:	aligned_string "  OFF  "
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	nop
-	nop
-	ldw	iz, 1
-	nop
-	ldw	iz, 0xbc01
-	halt
-	.byte 0x83
-	push	sr
-	.byte 0x83
-	push	sr
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1552-0xED1582 (48 B), unreached CODE-territory, was disassembled as 36 plausible-but-dead instruction lines; per=100% dist=4 near FadeTimeStr_Off+8
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x00, 0x00, 0x36, 0x01, 0x00, 0x00, 0x36, 0x01, 0xbc, 0x05, 0x83, 0x02, 0x83, 0x02
 	aligned_string "PAGE"
 	aligned_string "Memory data "
-	ld	w, 32:opc
-	nop
-	swi	7
-	ld	w, 32:opc
-	nop
-	swi	7
-	.byte 0xa4
-	nop
-	.byte 0xa4
-	nop
-	.byte 0xb9
-	nop
-	.byte 0xb9
-	nop
-	.byte 0xb9
-	nop
-	.byte 0xa8
-	nop
-	.byte 0xa4
-	nop
-	.byte 0xaf
-	nop
-	ld	(xiy), 0
-	nop
+	.byte 0x20, 0x20, 0x00, 0xff, 0x20, 0x20, 0x00, 0xff, 0xa4, 0x00, 0xa4, 0x00, 0xb9, 0x00, 0xb9, 0x00
+	.byte 0xb9, 0x00, 0xa8, 0x00, 0xa4, 0x00, 0xaf, 0x00, 0xb5, 0x00, 0x00, 0x00
 	aligned_string "        "
 	aligned_string "%d-%d:"
-	ld	e, 100:opc
-	push	xde
-	nop
+	.byte 0x25, 0x64, 0x3a, 0x00
 	aligned_string "PAGE 1/3"
 	aligned_string "BANK%2d:"
-	ld	e, 100:opc
-	push	xde
-	nop
-	.byte 0x01
-	nop
-	.byte 0x01
-	nop
-	ldw	(0:8), 10:io
-	ldw	(0:8), 4:io
-	ldw	(0:8), 13:io
-	.byte 0x01
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	.byte 0x53
-	popw	sp
-	.byte 0x55
-	popw	iz
-	ld	xix, 0x3a642500
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
+	.byte 0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xff, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 	aligned_string "PAGE %d/%d"
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 ParamStr_Table_04:
 	.long VariationStr_V1
 	.long VariationStr_V2
 	.long VariationStr_V3
 	.long VariationStr_V4
 VariationStr_V4:
-	.byte 0x56
-	ldw	ix, 0xff00
+	.byte 0x56, 0x34, 0x00, 0xff
 VariationStr_V3:
-	.byte 0x56
-	ldw	hl, 0xff00
+	.byte 0x56, 0x33, 0x00, 0xff
 VariationStr_V2:
-	.byte 0x56
-	ldw	de, 0xff00
+	.byte 0x56, 0x32, 0x00, 0xff
 VariationStr_V1:
-	.byte 0x56
-	ldw	bc, 0xff00
+	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
-	ld	e, 115:opc
-	push	xde
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
+	ld e, 115:opc
+	push xde
 	nop
-	ld	e, 115:opc
-	push	xde
+	ld e, 115:opc
+	push xde
 	nop
-	ld	e, 100:opc
-	push	xde
+	ld e, 100:opc
+	push xde
 	nop
-	ld	e, 100:opc
-	push	xde
+	ld e, 100:opc
+	push xde
 	nop
-	ld	e, 115:opc
-	push	xde
+	ld e, 115:opc
+	push xde
 	nop
 	aligned_string "PAGE %d/%d"
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 115:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
-	push	sr
-	nop
-	push	xiz
-	nop
-	pushw	iz
-	normal
-	pop	xiy
-	nop
-	push	sr
-	nop
-	jr	le, 0
-	push	xix
-	.byte 0x01, 0x81
-	nop
-	push	sr
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+40
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+	.byte 0x02, 0x00, 0x3e, 0x00, 0x2e, 0x01, 0x5d, 0x00, 0x02, 0x00, 0x62, 0x00, 0x3c, 0x01, 0x81, 0x00
+	.byte 0x02, 0x00
 	.long NakaInst_Param_EmptyStr
-	.byte 0x99
-	nop
-	push	sr
-	nop
+	.byte 0x99, 0x00, 0x02, 0x00
 	.long NakaData_DescriptorPad_ZeroA
-	.byte 0xad
-	nop
-	push	sr
-	nop
-	.byte 0xae
-	nop
-	ei	1
-	.byte 0xc1
-	nop
-	push	sr
-	nop
-	xor	e, (0x011600:24)
-	nop
+	.byte 0xad, 0x00, 0x02, 0x00, 0xae, 0x00, 0x06, 0x01, 0xc1, 0x00, 0x02, 0x00, 0xc2, 0x00, 0x16, 0x01
+	.byte 0xd5, 0x00
 ParamStr_Table_05:
 	.long TransposeNoteStr_C
 	.long TransposeNoteStr_DFlat
@@ -1107,43 +739,25 @@ ParamStr_Table_05:
 	.long TransposeNoteStr_BFlat
 	.long TransposeNoteStr_B
 TransposeNoteStr_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 TransposeNoteStr_BFlat:	aligned_string "B~a0"
 TransposeNoteStr_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 TransposeNoteStr_AFlat:	aligned_string "A~a0"
 TransposeNoteStr_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 TransposeNoteStr_FSharp:	aligned_string "F~9e"
 TransposeNoteStr_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 TransposeNoteStr_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 TransposeNoteStr_EFlat:	aligned_string "E~a0"
 TransposeNoteStr_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 TransposeNoteStr_DFlat:	aligned_string "D~a0"
 TransposeNoteStr_C:
-	ld xhl, 687800352
-	ld e, 115:opc
-	ld e, 50:opc
-	jr ov, 44
-	ld w, 37:opc
-	ldw hl, 10596
-	nop
-	swi 7
+	aligned_string "C "
+	aligned_string "(%s%2d, %3d)"
 	aligned_string "CHECK BY SINE WAVE"
 	aligned_string "Select the mode by sound button of highest line."
 	aligned_string "CHECK MODE:"
@@ -1156,111 +770,41 @@ TransposeNoteStr_C:
 	aligned_string "(4)LOW SOUND check(-2octave)"
 	aligned_string "(5)NORMAL SOUND check with TOUCH"
 	aligned_string "(6)SINE WAVE & ROM check 16dB DOWN"
-	nop
-	nop
-	.byte 0x56
-	nop
-	xor (xiz+256), xiy
-	nop
-	pushw	0x3901
-	normal
-	aligned_string "DEFAULT"
-	ld	w, 0x55:opc
-	aligned_string "SER  "
-	ld	w, 0x45:opc
-	aligned_string "RROR "
-	.byte 0x9c
-	nop
-	incw 8, (xix+256)
-	nop
-	jr	f, 0
-	jr	f, 0
-	incw 8, (xix+256)
-	nop
-	.byte 0xa0
-	nop
-	.byte 0xa7
-	nop
-	jr	ov, 0x00
+	.byte 0x00, 0x00, 0x56, 0x00, 0xae, 0x00, 0xdd, 0x00, 0x0b, 0x01, 0x39, 0x01
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
-	ldw	bc, 0x3100
+	.byte 0x9c, 0x00, 0x9c, 0x00, 0x60, 0x00, 0x60, 0x00, 0x60, 0x00, 0x9c, 0x00, 0x60, 0x00, 0xa0, 0x00
+	.byte 0xa7, 0x00, 0x64, 0x00
+	aligned_string "DEFAULT"
+	aligned_string " USER  "
+	aligned_string " ERROR "
+	ldw bc, 12544
 	nop
-	ld	xwa, 0x40004000
+	ld xwa, 1073758208
 	nop
-	ldw	bc, 0x4000
+	ldw bc, 16384
 	nop
-	ldw	iy, 0x3c00
+	ldw iy, 15360
 	nop
 	nop
 	nop
 	aligned_string "DEFAULT"
-	ld	w, 0x55:opc
-	aligned_string "SER  "
-	ld	w, 0x45:opc
-	aligned_string "RROR "
-	ldw	bc, 0x3100
-	nop
-	ld	xwa, 0x40004000
-	nop
-	ldw	bc, 0x4000
-	nop
-	ldw	iy, 0x3c00
-	nop
-	nop
-	nop
-	.byte 0xca, 0x1a, 0xed
-	nop
-	jrl	gt, -4838
-	nop
-	ldw	iz, 0xed1a
-	nop
-	.byte 0xd8
-	pop_f
-	.byte 0xed
-	nop
-	.byte 0xd0
-	pop_f
-	.byte 0xed
-	nop
-	popw	de
-	pop_f
-	.byte 0xed
-	nop
+	aligned_string " USER  "
+	aligned_string " ERROR "
+	.byte 0x31, 0x00, 0x31, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x31, 0x00, 0x40, 0x00, 0x35, 0x00
+	.byte 0x3c, 0x00, 0x00, 0x00, 0xca, 0x1a, 0xed, 0x00, 0x7a, 0x1a, 0xed, 0x00, 0x36, 0x1a, 0xed, 0x00
+	.byte 0xd8, 0x19, 0xed, 0x00, 0xd0, 0x19, 0xed, 0x00, 0x4a, 0x19, 0xed, 0x00
 	aligned_string "USER INITIAL akan menggantikan penggunaan kertas tempel (stiker) yang sekarang dengan sticker/kertas tempel yg hitam-licin dan rata!"
 	aligned_string "Italian"
 	.byte 0xa1
 	.ascii "El USER INITIAL cambiará el patrÓn de fondo actual por un \"Plain Black\" (negro sin dise"
-	.byte 0xf1
-	jr	nc, 41
-	ld	a, 0:opc
-	swi	7
-	.byte 0x55, 0x53
+	.byte 0xf1, 0x6f, 0x29, 0x21, 0x00, 0xff, 0x55, 0x53
 	aligned_string "ER INITIAL va remplacer votre fond de l'écran par un fond noir !"
 	aligned_string "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fläche !"
 	.asciz "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
-	swi	7
-	nop
-	nop
-	ld	h, 0:opc
-	pushw	ix
-	nop
-	ldw	de, 6656
-	nop
-	ld	(0:8), 14:io
-	nop
-	ld	w, 0:opc
-	push_a
-	nop
-	nop
-	nop
-	ld	(0:8), 8:io
-	nop
-	ld	(0:8), 8:io
-	nop
-	.byte 0x08
-	nop
+	.byte 0xff, 0x00, 0x00, 0x26, 0x00, 0x2c, 0x00, 0x32, 0x00, 0x1a, 0x00, 0x08, 0x00, 0x0e, 0x00, 0x20
+	.byte 0x00, 0x14, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00
 
 
 ParamStr_Table_06:
@@ -1277,76 +821,70 @@ ParamStr_Table_06:
 	.long SplitNoteStr_BFlat
 	.long SplitNoteStr_B
 SplitNoteStr_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 SplitNoteStr_BFlat:	aligned_string "B~a0"
 SplitNoteStr_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 SplitNoteStr_AFlat:	aligned_string "A~a0"
 SplitNoteStr_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 SplitNoteStr_FSharp:	aligned_string "F~9e"
 SplitNoteStr_F:	aligned_string "F "
 SplitNoteStr_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 SplitNoteStr_EFlat:	aligned_string "E~a0"
 SplitNoteStr_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 SplitNoteStr_DFlat:	aligned_string "D~a0"
-SplitNoteStr_C:
-	ld	xhl, 0xeaff0020
-	jp	NakaData_PartConfig
-	jp	Bitmap_SplitPoint_Gb_0x2B
-	jp	Bitmap_Dredt0d_0xA8D
-	jp	SepaOut_FormatData_Tail
-	jp	FILETYPE_SIG_TABLE_2_0x15
-	jp	0xde00ed
-	jp	0xdc00ed
-	jp	0xda00ed
-	jp	0xd800ed
-	jp	0xd600ed
-	.byte 0x1b, 0xed
-	nop
-OctaveDigitStr_8:
-	push	xwa
-	nop
-	.byte 0x37
-	nop
-OctaveDigitStr_6:
-	.byte 0x36
-	nop
-OctaveDigitStr_5:
-	.byte 0x35
-	nop
-OctaveDigitStr_4:
-	ldw	ix, 0x3300
-	nop
-OctaveDigitStr_2:
-	.byte 0x32
-	nop
-OctaveDigitStr_1:
-	.byte 0x31
-	nop
-OctaveDigitStr_0A:
-	ldw	wa, 0x3000
-	nop
-OctaveDigitStr_0B:
-	ldw wa, 8192
-	ld w, 32:opc
-	ld w, 32:opc
-	ld w, 32:opc
-	ld w, 32:opc
-	ld w, 0:opc
-	swi 7
+; -----------------------------------------------------------------------------
+; ** RE-FRAMED 2026-08-30 (lane B4): this was CODE territory and it is DATA.
+; The tree read the pointer table below ONE BYTE LATE, from 0xED1BAB, which
+; turned each 4-byte pointer into a `jp` whose high byte was the LOW byte of
+; the NEXT entry -- so the phantom entry points marched downward in steps of
+; exactly 0x020000. An arithmetic progression of entry points 128 KiB apart is
+; not a jump table.
+;
+; It is a table because:
+;   * all 11 entries land on the 2-byte NUL-terminated digit cells right below
+;     it, and the last entry (0x00ED1BD6) is exactly the first byte past the
+;     table's own end (0xED1BAA + 11*4);
+;   * display/graphics_text_vga.s indexes THIS address -- `divs hl, 0xc` then
+;     `sla hl, 2` then `lda_24 xbc, (SplitNoteStr_C_0x4)` at 0xFC2DE2 and
+;     0xFC2E67. Note number / 12, scaled by 4 = the pointer width.
+; The five phantom `jp` operands (NakaData_PartConfig,
+; Bitmap_SplitPoint_Gb_0x2B, Bitmap_Dredt0d_0xA8D, SepaOut_FormatData_Tail,
+; FILETYPE_SIG_TABLE_2_0x15) were REFERENCES to labels defined elsewhere, not
+; definitions here; nothing lost a name.
+; -----------------------------------------------------------------------------
+SplitNoteStr_C:	aligned_string "C "
+	; 0xED1BAA = SplitNoteStr_C_0x4: octave-digit pointers, index = note / 12
+	.long OctaveDigitStr_0B
+	.long OctaveDigitStr_0C
+	.long OctaveDigitStr_0A
+	.long OctaveDigitStr_1
+	.long OctaveDigitStr_2
+	.long OctaveDigitStr_3
+	.long OctaveDigitStr_4
+	.long OctaveDigitStr_5
+	.long OctaveDigitStr_6
+	.long OctaveDigitStr_7
+	.long OctaveDigitStr_8
+	; the cells themselves, 2 bytes each, in DESCENDING digit order
+OctaveDigitStr_8:	.asciz "8"
+OctaveDigitStr_7:	.asciz "7"
+OctaveDigitStr_6:	.asciz "6"
+OctaveDigitStr_5:	.asciz "5"
+OctaveDigitStr_4:	.asciz "4"
+OctaveDigitStr_3:	.asciz "3"
+OctaveDigitStr_2:	.asciz "2"
+OctaveDigitStr_1:	.asciz "1"
+OctaveDigitStr_0A:	.asciz "0"
+; ** 0xED1BE8 only became visible when the table above stopped being framed as
+; code, so it could not be called _0B: that name (0xED1BEA) is already in use
+; and is aliased by positional_labels.s. Hence A, C, B in address order.
+OctaveDigitStr_0C:	.asciz "0"
+OctaveDigitStr_0B:	.asciz "0"
+	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
@@ -1365,30 +903,41 @@ ParamStr_Table_07:
 	.long KeyScaleNoteStr_FSharp
 KeyScaleNoteStr_FSharp:	aligned_string "F~9e"
 KeyScaleNoteStr_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 KeyScaleNoteStr_E:	aligned_string "E "
 KeyScaleNoteStr_EFlat:	aligned_string "E~a0"
 KeyScaleNoteStr_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 KeyScaleNoteStr_DFlat:	aligned_string "D~a0"
 KeyScaleNoteStr_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 KeyScaleNoteStr_B:	aligned_string "B "
 KeyScaleNoteStr_BFlat:	aligned_string "B~a0"
 KeyScaleNoteStr_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
-KeyScaleNoteStr_G:
-	.incbin "includes/romslices/v7_data_keyscalenotestr_g_head.bin"
-KeyScaleNoteStr_G_PtrTable:
+KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20, 0x20, 0x20, 0x00, 0xff
+	aligned_string "<%s>"
+	aligned_string "%s"
+ChordStr_On:	aligned_string "on"	; MainChordPre appends it when byte 0x8D44 != 0 and bit 1 of 0xCEDE is set
+ChordStr_Blank:	aligned_string "  "
+; ---------------------------------------------------------------------------
+; Toshi_ApFunction_Table -- TOSHI object table: 42 "application function"
+; code pointers + NULL (0xED1C9E-0xED1D49)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (extensions/extension_init.s, 0xFC311A):
+;   RegObjTabl 0x1600002, ApFunctionProc, 42, Toshi_ApFunction_Table, 0x122
+; which has RegisterObjectTable (ui/ui_widget_defs.s, 0xFA42FB) copy the
+; 14-byte descriptor {class +0, proc +4, u16 count +8, table +10} into slot
+; 0x122 of the object registry at RAM 0x27ED2 (14 bytes a slot).  An object
+; id is (slot << 16) | element; CheckViewObject (0xFA42C4) reads the table
+; pointer at +10 and indexes it with `extz xwa` / `sll xwa, 2` / `ld xwa, (xwa)`
+; -- one 4-byte pointer per element, 0 = no object.  Slot 0x422 (= 0x122 +
+; 0x300, the pairing RegisterObject 0xFA431A uses for an object's name) is
+; Toshi_ApFunctionName_Table below: entry k there is the NAME of entry k here,
+; and scripts/tools/ext_retype_toshi_object_tables.py --check verifies that
+; every pointer lands on the routine of exactly that name (v10 and v7).
+Toshi_ApFunction_Table:
 	.long PmBkNameFunc
 	.long PmBankNamingCheck
 	.long PmNamingCheck
@@ -1431,8 +980,13 @@ KeyScaleNoteStr_G_PtrTable:
 	.long CtlIniLngCheck
 	.long PmemNormLngCheck
 	.long PmemExpLngCheck
-	.long 0x00000000
-NoteNameStr_Table_5:
+	.long 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1D1B-0xED1D3A (31 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=70% dist=12 near KeyScaleNoteStr_G_0x18+129
+; Toshi_ApFunctionName_Table -- object-registry slot 0x422 (InitializeToshi:
+; RegObjTabl 0x1600002, ApFunctionProc, 42, Toshi_ApFunctionName_Table, 0x422):
+; the name of each Toshi_ApFunction_Table entry, same index, then "" as the
+; terminator.  The strings follow in REVERSE order.
+Toshi_ApFunctionName_Table:
 	.long FuncNameStr_PmBkNameFunc
 	.long FuncNameStr_PmBankNamingCheck
 	.long FuncNameStr_PmNamingCheck
@@ -1477,8 +1031,7 @@ NoteNameStr_Table_5:
 	.long FuncNameStr_PmemExpLngCheck
 	.long FuncNameStr_NullTerm
 FuncNameStr_NullTerm:
-	nop
-	swi	7
+	aligned_string ""
 FuncNameStr_PmemExpLngCheck:	aligned_string "PmemExpLngCheck"
 FuncNameStr_PmemNormLngCheck:	aligned_string "PmemNormLngCheck"
 FuncNameStr_CtlIniLngCheck:	aligned_string "CtlIniLngCheck"
@@ -1525,8 +1078,7 @@ NakaParam_VariScreen:
 	.long NakaParam_VariScreen_Empty
 NakaParam_VariScreen_Empty:	aligned_string ""
 NakaParam_RVariScreen:
-	ldw	de, 0xed21
-	nop
+	.byte 0x32, 0x21, 0xed, 0x00
 ParamStr_Table_08:
 	.long ParamStr08_func
 	.long ParamStr08_font
@@ -1541,11 +1093,9 @@ ParamStr08_Empty:	aligned_string ""
 ParamStr08_oldvari:	aligned_string "oldvari"
 ParamStr08_nowvari:	aligned_string "nowvari"
 ParamStr08_nowswno:
-	jr	nz, 0x6f
-	aligned_string "wswno"
+	aligned_string "nowswno"
 	aligned_string "varisu"
-	jrl	f, 29281
-	jrl	ov, -256
+	aligned_string "part"
 	aligned_string "page"
 	aligned_string "fontcolor"
 	aligned_string "font"
@@ -1696,48 +1246,20 @@ ParamStr17_func:	aligned_string "func"
 ParamStr17_fixedrow:	aligned_string "fixedrow"
 ParamStr17_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstStyleAlpGridBox:
-	pushw	iz
-	ld	d, 237:opc
-	nop
-	ld	d, 36:opc
-	.byte 0xed
-	nop
-	calr	60708
-	nop
-	ex_ff
-	ld	d, 237:opc
-	nop
-	ldw	(36:8), 237:io
-	swi	6
-	ld	c, 237:opc
-	nop
-	.byte 0xee
-	ld	c, 237:opc
-	nop
-	.byte 0xe2
-	ld	c, 237:opc
-	nop
-	and	ix, (0xed23:24)
-	ld	c, 237:opc
-	nop
-	.byte 0xc2
-	ld	c, 237:opc
-	nop
+	.byte 0x2e, 0x24, 0xed, 0x00, 0x24, 0x24, 0xed, 0x00, 0x1e, 0x24, 0xed, 0x00, 0x16, 0x24, 0xed, 0x00
+	.byte 0x0a, 0x24, 0xed, 0x00, 0xfe, 0x23, 0xed, 0x00, 0xee, 0x23, 0xed, 0x00, 0xe2, 0x23, 0xed, 0x00
+	.byte 0xd2, 0x23, 0xed, 0x00, 0xc4, 0x23, 0xed, 0x00, 0xc2, 0x23, 0xed, 0x00
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED239D-0xED23AE (17 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near NakaParam_AcMstStyleAlpGridBox+7
 MstStyleAlpGrid_Empty:
-	nop
-	swi	7
+	aligned_string ""
 MstStyleAlpGrid_nowttlselsong:	aligned_string "nowttlselsong"
 MstStyleAlpGrid_nowalphselsong:	aligned_string "nowalphselsong"
 MstStyleAlpGrid_nowalphpage:	aligned_string "nowalphpage"
-MstStyleAlpGrid_nowalphmaxpage:	jr	nz, 0x6f
-	aligned_string "walphmaxpage"
+MstStyleAlpGrid_nowalphmaxpage:	aligned_string "nowalphmaxpage"
 	aligned_string "nowalphdtno"
 	aligned_string "nowalphtop"
 	aligned_string "nowalph"
-	jr	z, 0x75
-	jr	nz, 99
-	nop
-	swi	7
+	aligned_string "func"
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
 
@@ -1762,9 +1284,7 @@ ParamStr18_func:	aligned_string "func"
 ParamStr18_fixedrow:	aligned_string "fixedrow"
 ParamStr18_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstStyle1SubGridBox:
-	ex_ff
-	ld	e, 237:opc
-	nop
+	.byte 0x16, 0x25, 0xed, 0x00
 ParamStr_Table_19:
 	.long ParamStr19_fixedcol
 	.long ParamStr19_func
@@ -1777,10 +1297,10 @@ ParamStr19_nowstylectgpage:	aligned_string "nowstylectgpage"
 ParamStr19_nowstylectgmaxpage:	aligned_string "nowstylectgmaxpage"
 ParamStr19_nowstylectgdtno:	aligned_string "nowstylectgdtno"
 ParamStr19_func:
-	jr	z, 0x75
-	jr	nz, 99
+	jr z, 117
+	jr nz, 99
 	nop
-	swi	7
+	swi 7
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
 
@@ -1826,30 +1346,13 @@ ParamStr21_func:	aligned_string "func"
 ParamStr21_fixedrow:	aligned_string "fixedrow"
 ParamStr21_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstSong2GridBox:
-	.byte 0xbe
-	ld	h, 237:opc
-	nop
-	.byte 0xb4
-	ld	h, 237:opc
-	nop
-	or	(xiz+38), xiy
-	nop
-	or	(xiz+38), iy
-	nop
-	or	(xix+38), e
-	nop
-	jrl	nov, -4826
-	nop
-	jrl	gt, -4826
-	nop
-MstSong2Grid_Empty:
-	nop
-	swi	7
+	.byte 0xbe, 0x26, 0xed, 0x00, 0xb4, 0x26, 0xed, 0x00, 0xae, 0x26, 0xed, 0x00, 0x9e, 0x26, 0xed, 0x00
+	.byte 0x8c, 0x26, 0xed, 0x00, 0x7c, 0x26, 0xed, 0x00, 0x7a, 0x26, 0xed, 0x00, 0x00, 0xff
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2663-0xED267C (25 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=71% dist=9 near NakaParam_AcMstSong2GridBox+5
 MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
 MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
-MstSong2Grid_nowsongctgdtno:	jr	nz, 0x6f
-	aligned_string "wsongctgdtno"
-	jr	z, 117
+MstSong2Grid_nowsongctgdtno:	aligned_string "nowsongctgdtno"
+	jr z, 117
 MstSong2Grid_func:	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
@@ -1874,13 +1377,9 @@ ParamStr22_nowsong:	aligned_string "nowsong"
 ParamStr22_nowsongsubctg:	aligned_string "nowsongsubctg"
 ParamStr22_nowsongsubctgpage:	aligned_string "nowsongsubctgpage"
 ParamStr22_nowsongsubctgmaxpage:
-	jr	nz, 0x6f
-	aligned_string "wsongsubctgmaxpage"
+	aligned_string "nowsongsubctgmaxpage"
 	aligned_string "nowsongsubctgdtno"
-	jr	z, 0x75
-	jr	nz, 99
-	nop
-	swi	7
+	aligned_string "func"
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
 
@@ -1906,44 +1405,66 @@ ParamStr24_Empty:	aligned_string ""
 ParamStr24_window:	aligned_string "window"
 ParamStr24_page:	aligned_string "page"
 
-ExtData_NormScreenProc_Ptr:
-	.incbin "includes/romslices/v7_fix_extdata_normscreenproc_ptr.bin"
+; ---------------------------------------------------------------------------
+; Toshi_Class_Table -- TOSHI object-registry slot 0x162: 28 class records of
+; 24 bytes (0xED27E4-0xED2A83), registered by InitializeToshi with
+;   RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+; (count word Toshi_Class_Count = 28, after the class-name strings).  Record
+; shape, read off the bytes -- all 28 records agree:
+;   +0x00 class procedure (record 0: NormScreenProc; every one is a *Proc
+;         routine in 0xFB-0xFC code)
+;   +0x04 u16 (0x12..0x54)      +0x06 u16, always 0x0160
+;   +0x08 u16, +0x0A u16 -- +0x0A is 0 for a class with no variables and
+;         rises by exactly 4 per extra 'n' variable (instance-variable
+;         storage size, by inference; not traced to a reader)
+;   +0x0C class-name string ("NormScreen", "VariScreen", ...)
+;   +0x10 type-signature string, ONE character per instance variable
+;         ("kc^nnnnnn" for VariScreen's 9 variables)
+;   +0x14 the class's instance-variable NAME table ("func", "font", ...,
+;         "" terminated); its length equals the signature's in all 28.
+; Only record 0's +0x00 is in this file: the table's other 668 bytes, and
+; the name/signature strings after it, are the start of
+; NakaData_MasterStyleGrid (ui_widgets/master_style_grid_screens.s,
+; naka_master_style.c), included right below.
+; ---------------------------------------------------------------------------
+Toshi_Class_Table:
+	.long NormScreenProc
 .include "ui_widgets/master_style_grid_screens.s"
-	jr	gt, 0x00
+	.byte 0x6a, 0x00
 	aligned_string "AcDispTimeSetGridBox"
 NakaDesc_AcDispTimeSetGridBox:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0
+	pop xwa
+	pop xwa
+	jr gt, 0
 NakaInst_AcDispTimeSetGridBox:	aligned_string "AcPmExpFilterGridBox"
 NakaDesc_AcPmExpFilterGridBox:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0
+	pop xwa
+	pop xwa
+	jr gt, 0
 NakaInst_AcPmExpFilterGridBox:	aligned_string "AcFSWAssGridBox"
 NakaDesc_AcFSWAssGridBox:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 	aligned_string "AcTchSensGridBox"
-	jr	nz, 0
+	jr nz, 0
 	aligned_string "IvMstStyleWindowPgCtl"
-	jr	nz, 0
+	.byte 0x6e, 0x00
 	aligned_string "IvPmemWindowPageCtl"
-	jr	nz, 0x00
+	.byte 0x6e, 0x00
 	aligned_string "IvWindowPageControl"
 NakaDesc_IvWindowPageControl:	aligned_string "kc^nn"
 NakaInst_IvWindowPageControl:	aligned_string "PmemModeBox"
 NakaDesc_PmemModeBox:	aligned_string "kc^nn"
 NakaInst_PmemModeBox:	aligned_string "MsaModeScreen"
 NakaDesc_MsaModeScreen:
-	jr	gt, 0x72
+	jr gt, 114
 	nop
-	swi	7
+	swi 7
 	aligned_string "AcPmBkEditBox"
 NakaDesc_AcPmBkEditBox:	aligned_string "kc^nnn"
 NakaInst_AcPmBkEditBox:	.asciz "PmBankScreen"
-	swi	7
+	swi 7
 NakaDesc_PmBankScreen:	aligned_string ""
 NakaInst_PmBankScreen:	aligned_string "PmBkNoBox"
 NakaDesc_AcPmBkNoBox:	aligned_string ""
@@ -1960,10 +1481,19 @@ NakaDesc_RVariScreen:	aligned_string "kc^nnnnnn"
 NakaInst_RVariScreen:	aligned_string "VariScreen"
 NakaDesc_VariScreen:	aligned_string ""
 NakaInst_VariScreen:	aligned_string "NormScreen"
-	call16 33792
-	pushw	iy
-	.byte 0xed
-	nop
+; Toshi class count: 28 -- read by InitializeToshi's first registration,
+;   RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+; whose count argument is loaded FROM this address (`ldw_da`), not immediate.
+Toshi_Class_Count:	.short 28
+; ---------------------------------------------------------------------------
+; Toshi_ResEvent_Table -- object-registry slot 0x1C2: 8 event-name string
+; pointers + NULL, registered by InitializeToshi with
+;   RegObjTable 0x160000c, ResEventProc, Toshi_ResEvent_Count, Toshi_ResEvent_Table, 0x1c2
+; (the count word follows the strings).  The strings are the EV_* event
+; names; they follow in reverse order.
+; ---------------------------------------------------------------------------
+Toshi_ResEvent_Table:
+	.long EventNameStr_EV_CHORDSHOW
 ParamStr_Table_25:
 	.long EventNameStr_EV_CHORDDSP
 	.long EventNameStr_EV_PMBKNAME
@@ -1972,10 +1502,7 @@ ParamStr_Table_25:
 	.long EventNameStr_EV_SUBCTSHOW
 	.long EventNameStr_EV_PAGESET
 	.long EventNameStr_EV_TVARIPAINT
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x00, 0x00
 EventNameStr_EV_TVARIPAINT:	aligned_string "EV_TVARIPAINT"
 EventNameStr_EV_PAGESET:	aligned_string "EV_PAGESET"
 EventNameStr_EV_SUBCTSHOW:	aligned_string "EV_SUBCTSHOW"
@@ -1983,11 +1510,17 @@ EventNameStr_EV_FRTPAGECHANGE:	aligned_string "EV_FRTPAGECHANGE"
 EventNameStr_EV_PMNAME:	aligned_string "EV_PMNAME"
 EventNameStr_EV_PMBKNAME:	aligned_string "EV_PMBKNAME"
 EventNameStr_EV_CHORDDSP:	aligned_string "EV_CHORDDSP"
-	aligned_string "EV_CHORDSHOW"
-	ld	(0:8), 86:io
-	pushw	sp
-	.byte 0xed
-	nop
+EventNameStr_EV_CHORDSHOW:	aligned_string "EV_CHORDSHOW"
+Toshi_ResEvent_Count:	.short 8
+; ---------------------------------------------------------------------------
+; Toshi_ResMethod_Table -- object-registry slot 0x1E2: 26 method-name string
+; pointers + NULL, registered by InitializeToshi with
+;   RegObjTable 0x160000d, ResMethodProc, Toshi_ResMethod_Count, Toshi_ResMethod_Table, 0x1e2
+; (the count word follows the strings).  The strings are the MT_* method
+; names; they follow in reverse order.
+; ---------------------------------------------------------------------------
+Toshi_ResMethod_Table:
+	.long MethodNameStr_MT_VariWrite
 NoteNameStr_Table_6:
 	.long MethodNameStr_MT_SvariIni
 	.long MethodNameStr_MT_SvariSet
@@ -2014,10 +1547,7 @@ NoteNameStr_Table_6:
 	.long MethodNameStr_MT_KEYINFO
 	.long MethodNameStr_MT_OTPCNTSET
 	.long MethodNameStr_MT_OTPCNTRESET
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x00, 0x00
 MethodNameStr_MT_OTPCNTRESET:	aligned_string "MT_OTPCNTRESET"
 MethodNameStr_MT_OTPCNTSET:	aligned_string "MT_OTPCNTSET"
 MethodNameStr_MT_KEYINFO:	aligned_string "MT_KEYINFO"
@@ -2042,14 +1572,26 @@ MethodNameStr_MT_SOUNDNAME:	aligned_string "MT_SOUNDNAME"
 MethodNameStr_MT_GetSndGrpName:	aligned_string "MT_GetSndGrpName"
 MethodNameStr_MT_GetSndName:	aligned_string "MT_GetSndName"
 MethodNameStr_MT_SvariSet:	aligned_string "MT_SvariSet"
-MethodNameStr_MT_SvariIni:
-	.incbin "includes/romslices/v7_data_methodnamestr_mt_svariini_head.bin"
-MethodNameStr_MT_SvariIni_PtrTable:
+MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
+MethodNameStr_MT_VariWrite:	aligned_string "MT_VariWrite"
+Toshi_ResMethod_Count:	.short 26
+; ---------------------------------------------------------------------------
+; Toshi_Function_Table -- TOSHI object table: 28 screen/box procedure
+; pointers + NULL (0xED2F66-0xED2FD9)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (0xFC311A) with
+;   RegObjTabl 0x1600001, FunctionProc, 28, Toshi_Function_Table, 0x102
+; into object-registry slot 0x102 (layout and indexing: see
+; Toshi_ApFunction_Table).  Its names are Toshi_FunctionName_Table (slot
+; 0x402); entry k there names entry k here -- verified for all 28 in v10 by
+; scripts/tools/ext_retype_toshi_object_tables.py --check (in v7 for 27: v7
+; labels entry 19's routine only AcMstStyleAlp_Boundary).
+Toshi_Function_Table:
 	.long NormScreenProc
 	.long VariScreenProc
 	.long RVariScreenProc
 	.long AcTransposeBoxProc
-	.long MainMssSetUp_End
+	.long AcFreeSplitBoxProc
 	.long AcChordBoxProc
 	.long PmBankScreenProc
 	.long AcPmBkEditBoxProc
@@ -2057,24 +1599,30 @@ MethodNameStr_MT_SvariIni_PtrTable:
 	.long PmemModeBoxProc
 	.long AcBkNoBoxProc
 	.long AcPmBkNoBoxProc
-	.long NormScreen_Boundary
-	.long IvPmemWindow_Boundary
+	.long IvWindowPageControlProc
+	.long IvPmemWindowPageCtlProc
 	.long AcTchSensGridBoxProc
 	.long AcFSWAssGridBoxProc
-	.long PmemPageCtl_Boundary
+	.long AcPmExpFilterGridBoxProc
 	.long AcDispTimeSetGridBoxProc
-	.long PmemExpLng_Boundary
+	.long AcMstSugAlpGridBoxProc
 	.long AcMstStyleAlp_Boundary
-	.long MstSong2Grid_Boundary
+	.long IvMstStyleWindowPgCtlProc
 	.long AcMstStyle1GridBoxProc
 	.long AcMstStyle1SubGridBoxProc
 	.long AcMstStyle2GridBoxProc
-	.long MstGrid2_Boundary
+	.long AcMstSong1GridBoxProc
 	.long AcMstSong2GridBoxProc
-	.long PmBank_Boundary
+	.long SineWaveScreenProc
 	.long IvPageOverWrProc
-	.long 0x00000000
-NoteNameStr_Table_7:
+	.long 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2F90-0xED2FAB (27 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=67% dist=14 near MethodNameStr_MT_SvariIni+70
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2FAC-0xED2FC6 (26 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=13 near MethodNameStr_MT_SvariIni+98
+; Toshi_FunctionName_Table -- object-registry slot 0x402 (InitializeToshi:
+; RegObjTabl 0x1600001, FunctionProc, 28, Toshi_FunctionName_Table, 0x402):
+; the name of each Toshi_Function_Table entry, same index; strings follow in
+; reverse order.
+Toshi_FunctionName_Table:
 	.long ProcNameStr_NormScreenProc
 	.long ProcNameStr_VariScreenProc
 	.long ProcNameStr_RVariScreenProc
@@ -2105,8 +1653,7 @@ NoteNameStr_Table_7:
 	.long ProcNameStr_IvPageOverWrProc
 	.long ProcNameStr_NullTerm
 ProcNameStr_NullTerm:
-	nop
-	swi	7
+	aligned_string ""
 ProcNameStr_IvPageOverWrProc:	aligned_string "IvPageOverWrProc"
 ProcNameStr_SineWaveScreenProc:	aligned_string "SineWaveScreenProc"
 ProcNameStr_AcMstSong2GridBoxProc:	aligned_string "AcMstSong2GridBoxProc"
@@ -2134,9 +1681,19 @@ ProcNameStr_AcFreeSplitBoxProc:	aligned_string "AcFreeSplitBoxProc"
 ProcNameStr_AcTransposeBoxProc:	aligned_string "AcTransposeBoxProc"
 ProcNameStr_RVariScreenProc:	aligned_string "RVariScreenProc"
 ProcNameStr_VariScreenProc:	aligned_string "VariScreenProc"
-ProcNameStr_NormScreenProc:
-	.incbin "includes/romslices/v7_data_procnamestr_normscreenproc_head.bin"
-ProcNameStr_NormScreenProc_PtrTable:
+ProcNameStr_NormScreenProc:	aligned_string "NormScreenProc"
+; ---------------------------------------------------------------------------
+; Toshi_MainFunction_Table -- TOSHI object table: 20 "main function" code
+; pointers + NULL (0xED3292-0xED32E5)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (0xFC311A) with
+;   RegObjTabl 0x1600003, MainFunctionProc, 20, Toshi_MainFunction_Table, 0x142
+; into object-registry slot 0x142 (layout and indexing: see
+; Toshi_ApFunction_Table).  Its names are Toshi_MainFunctionName_Table (slot
+; 0x442), whose strings sit in ui_widgets/normal_mode_layout.s; entry k there
+; names entry k here -- verified for all 20, in v10 and v7, by
+; scripts/tools/ext_retype_toshi_object_tables.py --check.
+Toshi_MainFunction_Table:
 	.long MainVariSet
 	.long MainSvariIni
 	.long MainGetSndName
@@ -2157,8 +1714,14 @@ ProcNameStr_NormScreenProc_PtrTable:
 	.long TEST3FUNC
 	.long TEST4FUNC
 	.long TEST6FUNC
-	.long 0x00000000
-NoteNameStr_Table_8:
+	.long 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED32CC-0xED32DE (18 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=100% dist=9 near ProcNameStr_NormScreenProc+74
+; Toshi_MainFunctionName_Table -- object-registry slot 0x442 (InitializeToshi:
+; RegObjTabl 0x1600003, MainFunctionProc, 20, Toshi_MainFunctionName_Table,
+; 0x442): the name of each Toshi_MainFunction_Table entry, same index, then ""
+; as the terminator.  The 20 name strings are the NakaInst_* cells of
+; ui_widgets/normal_mode_layout.s (naka_normal_mode.c), included just below.
+Toshi_MainFunctionName_Table:
 	.long NakaInst_MainVariSet
 	.long NakaInst_MainSvariIni
 	.long NakaInst_MainGetSndName
@@ -2180,924 +1743,189 @@ NoteNameStr_Table_8:
 	.long NakaInst_TEST4FUNC
 	.long NakaInst_TEST6FUNC
 	.long NakaInstTable8_NullTerm
-NakaInstTable8_NullTerm:
-	nop
-	swi	7
+NakaInstTable8_NullTerm:	aligned_string ""
 .include "ui_widgets/normal_mode_layout.s"
-	stib_dsp 0x00, 0x00
-	nop
-	nop
-	max
-	stib_dpd 3, 8
-	stib_dpd 3, 60
+	.byte 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0xf4, 0x03, 0x00, 0x08, 0xf4, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1a, 0x00, 0xff, 0xff, 0x08, 0x00, 0x15, 0x01
+	.byte 0x80, 0x00, 0x3b, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x07, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1b, 0x00, 0x19, 0x00, 0x08, 0x00, 0xee, 0x00
+	.byte 0x80, 0x00, 0x14, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x01, 0x00, 0x06, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1c, 0x00, 0x1a, 0x00, 0x08, 0x00, 0xc7, 0x00
+	.byte 0x80, 0x00, 0xed, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x02, 0x00, 0x05, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1d, 0x00, 0x1b, 0x00, 0x08, 0x00, 0xa0, 0x00
+	.byte 0x80, 0x00, 0xc6, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x13, 0x00, 0x04, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1e, 0x00, 0x1c, 0x00, 0x08, 0x00, 0x79, 0x00
+	.byte 0x80, 0x00, 0x9f, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x10, 0x00, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1f, 0x00, 0x1d, 0x00, 0x08, 0x00, 0x52, 0x00
+	.byte 0x80, 0x00, 0x78, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x11, 0x00, 0x02, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x20, 0x00, 0x1e, 0x00, 0x08, 0x00, 0x2b, 0x00
+	.byte 0x80, 0x00, 0x51, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x12, 0x00, 0x01, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0xff, 0xff, 0x1f, 0x00, 0x08, 0x00, 0x04, 0x00
+	.byte 0x80, 0x00, 0x2a, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x14, 0x00, 0x00, 0x00
+	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x22, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
+	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, 0xf4, 0x03, 0x00
+	.byte 0x10, 0xf4, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x23, 0x00, 0xff, 0xff, 0x08, 0x00, 0xa0, 0x00
+	.byte 0x80, 0x00
 
 
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	jp16 65280
-	swi	7
-	ld	(0:8), 21:io
-	.byte 0x01, 0x80
-	nop
-	push	xhl
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	nop
-	nop
-	reti
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED37EF-0xED380A (27 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=12 near NakaInst_MainVariSet+935
 
 
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	jp	6400
-	ld	(0:8), 238:io
-	nop
-	.byte 0x80
-	nop
-	push_a
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	normal
-	nop
-	ei	0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED382F-0xED384A (27 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=14 near NakaInst_MainVariSet+999
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3859-0xED386A (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1041
 
 
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	call16 6656
-	nop
-	ld	(0:8), 199:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xed
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	push	sr
-	nop
-	halt
-	nop
 
 
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	call	6912
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xc6
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	zcf
-	nop
-	max
-	nop
 
 
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	calr	7168
-	nop
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
-	or (xsp+256), hl
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	rcf
-	nop
-	pop	sr
-	nop
 
 
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	.byte 0x1f
-	nop
-	call	2048
-	.byte 0x52
-	nop
-	.byte 0x80
-	nop
-	jrl	-5376
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	scf
-	nop
-	push	sr
-	nop
 
 
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	ld	w, 0:opc
-	calr	2048
-	nop
-	pushw	hl
-	nop
-	.byte 0x80
-	nop
-	.byte 0x51
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	ccf
-	nop
-	normal
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x1f
-	nop
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
-	pushw	de
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	push_a
-	nop
-	nop
-	nop
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	ld	b, 0:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 0:io
-	nop
-	jrl	nc, 16128
-	.byte 0x01, 0xef
-	nop
-	stib_dsp 0, 0
-	nop
-	nop
-	incf
-	stib_dpd 3, 16
-	stib_dpd 3, 60
-
-
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	c, 0:opc
-	swi	7
-	swi	7
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_I2
-	reti
-	nop
-	cp	(0xff00:16), l
-	pop_a
-	nop
-	max
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	d, 0:opc
-	ld	b, 0:opc
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x15, 0x00, 0x04, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x24, 0x00, 0x22, 0x00, 0x08, 0x00, 0x79, 0x00
+	.byte 0x80, 0x00
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED391D-0xED392E (17 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1237
 	.long WidgetName_PtrBlock_F2
-	reti
-	nop
-	cp	(0xff00:16), l
-	ex_ff
-	nop
-	pop	sr
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x16, 0x00, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x25, 0x00, 0x23, 0x00, 0x08, 0x00, 0x52, 0x00
+	.byte 0x80, 0x00
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	e, 0:opc
-	ld	c, 0:opc
-	ld	(0:8), 82:io
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_E
-	reti
-	nop
-	cp	(0xff00:16), l
-	ldf 0
-	push	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	h, 0:opc
-	ld	d, 0:opc
-	ld	(0:8), 43:io
-	nop
-	.byte 0x80
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x17, 0x00, 0x02, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x26, 0x00, 0x24, 0x00, 0x08, 0x00, 0x2b, 0x00
+	.byte 0x80, 0x00
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED395B-0xED396E (19 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+1299
 	.long WidgetName_PtrBlock_D
-	reti
-	nop
-	cp	(0xff00:16), l
-	.byte 0x1a
-	nop
-	.byte 0x01
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	e, 0:opc
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x1a, 0x00, 0x01, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0xff, 0xff, 0x25, 0x00, 0x08, 0x00, 0x04, 0x00
+	.byte 0x80, 0x00
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED397D-0xED398E (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=9 near NakaInst_MainVariSet+1333
 	.long WidgetName_PtrBlock_C
-	reti
-	nop
-	cp	(0xff00:16), l
-	jp	0
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x1b, 0x00, 0x00, 0x00
+	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x28, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
+	.byte 0x7f, 0x00
 
 
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	pushw	wa
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 0:io
-	nop
-	.byte 0x7f
-	nop
-	.long 0x00EF013F	; Naka_PresentationRootState (v7 address, v9=0x00EF0115)
-	stib_dsp 0x00, 0x00
-	nop
-	nop
-	push_a
-	stib_dpd 3, 24
-	stib_dpd 3, 60
+	.short 319, 239	; right/bottom edge of the 320x240 screen, NOT a pointer (was `.long Naka_PresentationRootState`: v7 moved that routine, not this value)
+	.byte 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0xf4, 0x03, 0x00, 0x18, 0xf4, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x29, 0x00, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
+	.byte 0x80, 0x00, 0x2a, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2a, 0x00, 0x28, 0x00, 0x08, 0x00, 0x2b, 0x00
+	.byte 0x80, 0x00, 0x51, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x01, 0x00, 0x01, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2b, 0x00, 0x29, 0x00, 0x08, 0x00, 0x52, 0x00
+	.byte 0x80, 0x00, 0x78, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x02, 0x00, 0x02, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2c, 0x00, 0x2a, 0x00, 0x08, 0x00, 0x79, 0x00
+	.byte 0x80, 0x00, 0x9f, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x03, 0x00, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2d, 0x00, 0x2b, 0x00, 0x08, 0x00, 0xa0, 0x00
+	.byte 0x80, 0x00, 0xc6, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x04, 0x00, 0x04, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2e, 0x00, 0x2c, 0x00, 0x08, 0x00, 0xc7, 0x00
+	.byte 0x80, 0x00, 0xed, 0x00, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x05, 0x00, 0x05, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0x2f, 0x00, 0x2d, 0x00, 0x08, 0x00, 0xee, 0x00
+	.byte 0x80, 0x00, 0x14, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x06, 0x00, 0x06, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x27, 0x00, 0xff, 0xff, 0xff, 0xff, 0x2e, 0x00, 0x08, 0x00, 0x15, 0x01
+	.byte 0x80, 0x00, 0x3b, 0x01, 0xeb, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x07, 0x00, 0x07, 0x00
+	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x31, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
+	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1c, 0xf4, 0x03, 0x00
+	.byte 0x20, 0xf4, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x32, 0x00, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
+	.byte 0x80, 0x00
 
 
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	bc
-	nop
-	swi	7
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
-	pushw	de
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED39D7-0xED39F2 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=12 near NakaInst_MainVariSet+1423
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A01-0xED3A12 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1465
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A13-0xED3A32 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=100% dist=15 near NakaInst_MainVariSet+1483
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A37-0xED3A52 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=13 near NakaInst_MainVariSet+1519
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A61-0xED3A72 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1561
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A77-0xED3A92 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=13 near NakaInst_MainVariSet+1583
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	de
-	nop
-	pushw	wa
-	nop
-	ld	(0:8), 43:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0x51
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	normal
-	nop
-	normal
-	nop
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	hl
-	nop
-	pushw	bc
-	nop
-	ld	(0:8), 82:io
-	nop
-	.byte 0x80
-	nop
-	jrl	-5376
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	push	sr
-	nop
-	push	sr
-	nop
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	ix
-	nop
-	pushw	de
-	nop
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
-	or (xsp+256), hl
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	pop	sr
-	nop
-	pop	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	iy
-	nop
-	pushw	hl
-	nop
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xc6
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	max
-	nop
-	max
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	iz
-	nop
-	pushw	ix
-	nop
-	ld	(0:8), 199:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xed
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	halt
-	nop
-	halt
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	sp
-	nop
-	pushw	iy
-	nop
-	ld	(0:8), 238:io
-	nop
-	.byte 0x80
-	nop
-	push_a
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	ei	0
-	ei	0
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pushw	iz
-	nop
-	ld	(0:8), 21:io
-	.byte 0x01, 0x80
-	nop
-	push	xhl
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	reti
-	nop
-	reti
-	nop
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	ldw	bc, 0xff00
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 0:io
-	nop
-	jrl	nc, 16128
-	.byte 0x01, 0xef
-	nop
-	stib_dsp 0, 0
-	nop
-	nop
-	call16 1012
-	nop
-	ld	w, 244:opc
-	pop	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	de, 0xff00
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_C
-	reti
-	nop
-	cp	(0xff00:16), l
-	ld	(0:8), 0:io
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x33, 0x00, 0x31, 0x00, 0x08, 0x00, 0x2b, 0x00
+	.byte 0x80, 0x00
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	hl, 0x3100
-	nop
-	ld	(0:8), 43:io
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_D
-	reti
-	nop
-	cp	(0xff00:16), l
-	push	0
-	normal
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	ix, 0x3200
-	nop
-	ld	(0:8), 82:io
-	nop
-	.byte 0x80
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x09, 0x00, 0x01, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x34, 0x00, 0x32, 0x00, 0x08, 0x00, 0x52, 0x00
+	.byte 0x80, 0x00
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3B25-0xED3B36 (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1757
 	.long WidgetName_PtrBlock_E
-	reti
-	nop
-	cp	(0xff00:16), l
-	ldw	(0:8), 2:io
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0a, 0x00, 0x02, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x35, 0x00, 0x33, 0x00, 0x08, 0x00, 0x79, 0x00
+	.byte 0x80, 0x00
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	iy, 0x3300
-	nop
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_F2
-	reti
-	nop
-	cp	(0xff00:16), l
-	pushw	768
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0b, 0x00, 0x03, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x36, 0x00, 0x34, 0x00, 0x08, 0x00, 0xa0, 0x00
+	.byte 0x80, 0x00
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	iz, 0x3400
-	nop
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_I2
-	reti
-	nop
-	cp	(0xff00:16), l
-	incf
-	nop
-	max
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0c, 0x00, 0x04, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x37, 0x00, 0x35, 0x00, 0x08, 0x00, 0xc7, 0x00
+	.byte 0x80, 0x00
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw sp, 13568
-	nop
-	ld (0:8), 199:io
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_L
-	reti
-	nop
-	cp	(0xff00:16), l
-	decf
-	nop
-	halt
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0d, 0x00, 0x05, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x38, 0x00, 0x36, 0x00, 0x08, 0x00, 0xee, 0x00
+	.byte 0x80, 0x00
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	push	xwa
-	nop
-	ldw	iz, 2048
-	nop
-	.byte 0xee
-	nop
-	.byte 0x80
-	nop
 	.long WidgetName_PtrBlock_M2
-	reti
-	nop
-	cp	(0xff00:16), l
-	ret
-	nop
-	ei	0
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0e, 0x00, 0x06, 0x00
+	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0xff, 0xff, 0x37, 0x00, 0x08, 0x00, 0x15, 0x01
+	.byte 0x80, 0x00
 
 
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	swi	7
-	swi	7
-	ldw sp, 2048
-	nop
-	pop_a
-	.byte 0x01, 0x80
-	nop
 	.long WidgetName_PtrBlock_N1
-	reti
-	nop
-	cp	(0xff00:16), l
-	retd	1792
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff, 0x0f, 0x00, 0x07, 0x00
+	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x3a, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
+	.byte 0xbe, 0x00
 
 
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	push	xde
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0xbe
-	nop
 	.long SoundName_ToTheBone
-	reti
-	nop
-	.byte 0xc1
-	nop
-	nop
-	nop
-	ld	d, 244:opc
-	pop	sr
-	nop
-	pushw	wa
-	stib_dpd 3, 105
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0x00, 0x00, 0x24, 0xf4, 0x03, 0x00, 0x28, 0xf4, 0x03, 0x00
+	.byte 0x69, 0x00, 0x60, 0x01, 0x39, 0x00, 0xff, 0xff, 0x3b, 0x00, 0xff, 0xff, 0x08, 0x00, 0x98, 0x00
+	.byte 0xc8, 0x00, 0x07, 0x01, 0xe0, 0x00, 0x16, 0x00, 0x22, 0x01
+	.byte 0x69, 0x00, 0x60, 0x01, 0x39, 0x00, 0xff, 0xff, 0xff, 0xff, 0x3a, 0x00, 0x08, 0x00, 0x38, 0x00
+	.byte 0xcc, 0x00, 0x87, 0x00, 0xdd, 0x00, 0x17, 0x00, 0x22, 0x01
+	.byte 0x35, 0x00, 0x60, 0x01, 0xff, 0xff, 0x3d, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x04, 0x00
+	.byte 0xbe, 0x00
 
 
-	jr	f, 1
-	push	xbc
-	nop
-	swi	7
-	swi	7
-	push	xhl
-	nop
-	swi	7
-	swi	7
-	ld	(0:8), 152:io
-	nop
-	.byte 0xc8
-	nop
-	reti
-	.byte 0x01, 0xe0
-	nop
-	ex_ff
-	nop
-	ld	b, 1:opc
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C1F-0xED3C34 (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2007
 
 
-	jr	ge, 0
-	jr	f, 1
-	push	xbc
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	push	xde
-	nop
-	ld	(0:8), 56:io
-	nop
-	.byte 0xcc
-	nop
-	.byte 0x87
-	nop
-	.byte 0xdd
-	nop
-	ldf 0
-	ld	b, 1:opc
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	push	xiy
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0xbe
-	nop
 	.long SoundName_ToTheBone
-	reti
-	nop
-	.byte 0xc1
-	nop
-	nop
-	nop
-	pushw	ix
-	stib_dpd 3, 48
-	stib_dpd 3, 105
-	nop
+	.byte 0x07, 0x00, 0xc1, 0x00, 0x00, 0x00, 0x2c, 0xf4, 0x03, 0x00, 0x30, 0xf4, 0x03, 0x00
+	.byte 0x69, 0x00, 0x60, 0x01, 0x3c, 0x00, 0xff, 0xff, 0x3e, 0x00, 0xff, 0xff, 0x08, 0x00, 0x28, 0x00
+	.byte 0xcc, 0x00, 0x93, 0x00, 0xdf, 0x00, 0x19, 0x00, 0x22, 0x01
+	.byte 0x69, 0x00, 0x60, 0x01, 0x3c, 0x00, 0xff, 0xff, 0xff, 0xff, 0x3d, 0x00, 0x08, 0x00, 0xa0, 0x00
+	.byte 0xc8, 0x00, 0x10, 0x01, 0xe0, 0x00, 0x18, 0x00, 0x22, 0x01
 
 
-	jr	f, 1
-	push	xix
-	nop
-	swi	7
-	swi	7
-	push	xiz
-	nop
-	swi	7
-	swi	7
-	ld	(0:8), 40:io
-	nop
-	.byte 0xcc
-	nop
-	.byte 0x93
-	nop
-	.byte 0xdf
-	nop
-	pop_f
-	nop
-	ld	b, 1:opc
-
-
-	jr	ge, 0
-	jr	f, 1
-	push	xix
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	push	xiy
-	nop
-	ld	(0:8), 160:io
-	nop
-	.byte 0xc8
-	nop
-	rcf
-	.byte 0x01, 0xe0
-	nop
-	push_f
-	nop
-	ld	b, 1:opc
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C77-0xED3C8C (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2095
 .include "ui_widgets/control_menu_screens.s"
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	push	0
-	swi	7
-	swi	7
-	ld	(0:8), 78:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xe1
-	nop
-	.byte 0x92
-	nop
+	.byte 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x09, 0x00, 0xff, 0xff, 0x08, 0x00, 0x4e, 0x00, 0x80, 0x00
+	.byte 0xe1, 0x00, 0x92, 0x00
 	.long Str_ErrorDialog_Caution
-	push	sr
+	push sr
 	nop
 	nop
 	nop
-	swi	1
+	swi 1
 	nop
 Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 
@@ -3108,29 +1936,8 @@ Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 ; Screen group 7, index 10 - Main error message
 ; ---------------------------------------------------------------------------
 ErrorDialog_CPUTransmissionError:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	ldw	(0:8), 8:io
-	ld	(0:8), 14:io
-	nop
-	.byte 0x96
-	nop
-	ldw	bc, 0xa801
-	nop
-	.byte 0xe4
-	jr	z, -19
-	nop
-	nop
-	nop
-	nop
-	nop
-	push	sr
-	nop
+	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00, 0x08, 0x00, 0x0e, 0x00
+	.byte 0x96, 0x00, 0x31, 0x01, 0xa8, 0x00, 0xe4, 0x66, 0xed, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 	aligned_string "** ERROR in CPU data transmission **"
 
 
@@ -3140,24 +1947,10 @@ ErrorDialog_CPUTransmissionError:
 ; Screen group 7, index 11
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine1:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	pushw	2304
-	nop
-	ld	(0:8), 46:io
-	nop
-	.byte 0xae
-	nop
-	push	1
-	.byte 0xb8
-	nop
+	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0b, 0x00, 0x09, 0x00, 0x08, 0x00, 0x2e, 0x00
+	.byte 0xae, 0x00, 0x09, 0x01, 0xb8, 0x00
 	.long Str_ErrorDialog_TryTurningOff
-	pop	sr
+	pop sr
 	nop
 	nop
 	nop
@@ -3172,29 +1965,9 @@ Str_ErrorDialog_TryTurningOff:	aligned_string "Please try turning off and on aga
 ; Screen group 7, index 12
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine2:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	incf
-	nop
-	ldw	(0:8), 8:io
-	pushw	iz
-	nop
+	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0c, 0x00, 0x0a, 0x00, 0x08, 0x00, 0x2e, 0x00
 	.long TechnichordParam_Block3
-	.byte 0xc8
-	nop
-	jrl	f, -4761
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0xc8, 0x00, 0x70, 0x67, 0xed, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	aligned_string "If this message appears again,"
 
 
@@ -3204,37 +1977,82 @@ ErrorDialog_RecoveryLine2:
 ; Screen group 7, final widget
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine3:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pushw	2048
-	nop
-	pushw	iz
-	nop
-	.byte 0xce
-	nop
-	.byte 0xcd
-	nop
-	.byte 0xd8
-	nop
-	ld	(xwa), xsp
-	.byte 0xed
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0xff, 0xff, 0x0b, 0x00, 0x08, 0x00, 0x2e, 0x00
+	.byte 0xce, 0x00, 0xcd, 0x00, 0xd8, 0x00, 0xb0, 0x67, 0xed, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	aligned_string "this unit needs repairing."
 .include "ui_widgets/extension_device_screens.s"
-	.incbin "includes/romslices/v7_data_encoder_region.bin"
+	.ascii "!\"#$%%&'()*+,,-./01234456789:;;<=>?@ABCCDEFGHIJKKLMNOPQRRSTUVWXYZZ[\\]^_`abbcdefghiijklmqtx{"
+	.byte 0x7f, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x06, 0x07, 0x07, 0x08
+	.byte 0x08, 0x09, 0x09, 0x0a, 0x0a, 0x0b, 0x0b, 0x0c, 0x0c, 0x0d, 0x0e, 0x0e, 0x0f, 0x0f, 0x10, 0x10
+	.byte 0x11, 0x11, 0x12, 0x12, 0x13, 0x14, 0x14, 0x15, 0x15, 0x16, 0x16, 0x17, 0x17, 0x18, 0x18, 0x19
+	.byte 0x19, 0x1a, 0x1b, 0x1b, 0x1c, 0x1c, 0x1d, 0x1d, 0x1e, 0x1e, 0x1f, 0x1f, 0x20
+	.ascii "!!\"\"##$$%%&''(())**++,,-..//0011223445566778899::;;<<==>>??@@AABBCCDDEEFFGGHHIIJJKKLLMNNOPQQRSTTUVWWXYZZ[\\\\]^__`abbcdeefghijklmmnopqrstuvwxyzz{|}~"
+	.byte 0x7f, 0x80, 0x82, 0x83, 0x85, 0x87, 0x88, 0x8a, 0x8c, 0x8d, 0x8f, 0x91, 0x92, 0x94, 0x96, 0x97
+	.byte 0x99, 0x9b, 0x9d, 0x9f, 0xa1, 0xa3, 0xa5, 0xa7, 0xa9, 0xab, 0xad, 0xaf, 0xb1, 0xb3, 0xb7, 0xba
+	.byte 0xbe, 0xc1, 0xc5, 0xc8, 0xcc, 0xd1, 0xd6, 0xdc, 0xe1, 0xe6, 0xe9, 0xec, 0xef, 0xf3, 0xf6, 0xf9
+	.byte 0xfc, 0xff, 0x00, 0x00, 0x06, 0x00, 0x08, 0x00, 0x0a, 0x00, 0x0d, 0x00, 0x10, 0x00, 0x13, 0x00
+	.byte 0x16, 0x00, 0x19, 0x00, 0x1e, 0x00, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x04, 0x06, 0x08
+	.byte 0x0a, 0x0c, 0x0e, 0x10, 0x12, 0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e, 0x20, 0x22, 0x24
+	.ascii "&(*,.0234568:<>?@BDEFHJKLMNPQRTUVXYZ[\\]^_`abcdefghijjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}}~~~"
+	.byte 0x7f, 0x7f, 0x7f, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
+	.fill 8, 1, 0x80
+	.byte 0x80, 0x80, 0x80, 0x80, 0x81, 0x81, 0x81, 0x81, 0x82, 0x82, 0x82, 0x82, 0x83, 0x83, 0x83, 0x84
+	.byte 0x84, 0x85, 0x85, 0x86, 0x86, 0x87, 0x87, 0x88, 0x88, 0x89, 0x89, 0x8a, 0x8a, 0x8b, 0x8b, 0x8c
+	.byte 0x8c, 0x8d, 0x8d, 0x8e, 0x8e, 0x8f, 0x8f, 0x90, 0x90, 0x91, 0x91, 0x92, 0x92, 0x93, 0x94, 0x95
+	.byte 0x96, 0x96, 0x97, 0x98, 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f, 0xa0, 0xa1, 0xa2, 0xa4, 0xa5
+	.byte 0xa6, 0xa7, 0xa8, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6, 0xb7, 0xb8
+	.byte 0xba, 0xbc, 0xbe, 0xbf, 0xc0, 0xc2, 0xc3, 0xc4, 0xc6, 0xc8, 0xca, 0xcc, 0xcd, 0xce, 0xd0, 0xd2
+	.byte 0xd4, 0xd6, 0xd8, 0xda, 0xdc, 0xdd, 0xde, 0xe0, 0xe2, 0xe4, 0xe6, 0xe8, 0xea, 0xec, 0xee, 0xf0
+	.byte 0xf2, 0xf5, 0xf7, 0xf9, 0xfb, 0xfd, 0xff, 0xff, 0xff, 0xff, 0x15, 0x00, 0x2b, 0x00, 0x40, 0x00
+	.byte 0x55, 0x00, 0x6b, 0x00, 0x80, 0x00, 0x95, 0x00, 0xab, 0x00, 0xc0, 0x00, 0xd5, 0x00, 0xeb, 0x00
+	.byte 0x00, 0x01, 0x55, 0x05, 0xab, 0x0a, 0x00, 0x10, 0x55, 0x15, 0xab, 0x1a, 0x00, 0x20, 0x55, 0x25
+	.byte 0xab, 0x2a, 0x00, 0x30, 0x55, 0x35, 0xab, 0x3a, 0x00, 0x40, 0x00, 0x00, 0x01, 0x02, 0x03, 0x04
+	.byte 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14
+	.byte 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
+	.ascii " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{}"
+	.byte 0x7f, 0x7f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
+	.byte 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d
+	.byte 0x1e, 0x1f
+	.ascii " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+	.byte 0x7f, 0x01, 0x00, 0x18, 0x6e, 0xfc, 0x00, 0x02, 0x00, 0x39, 0x6f, 0xfc, 0x00, 0x04, 0x00
+	.long SndParam_TableLookup_Via4100
+	.byte 0x08, 0x00, 0x52, 0x6b, 0xfc, 0x00, 0x10, 0x00, 0xf1, 0x6a, 0xfc, 0x00, 0x20, 0x00, 0xae, 0x6b
+	.byte 0xfc, 0x00, 0x40, 0x00
+	.long SndParam_SetResBit2_ViaPartCC5D
+	.byte 0x80, 0x00, 0x0e, 0x6b, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0xbb, 0x6e
+	.byte 0xfc, 0x00, 0x02, 0x00
+	.long SndParam_VoiceEntryLookup_ViaReg8000
+	.byte 0x04
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA545-0xEDA558 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=10 near ENCODER_LUT_MODWHEEL_0x3FC+13
+	.byte 0x00, 0xd3, 0x6b, 0xfc, 0x00, 0x08, 0x00, 0x0e, 0x6c, 0xfc, 0x00, 0x10
+	.byte 0x00, 0x9f, 0x6a, 0xfc, 0x00, 0x20, 0x00
+	.long SndParam_SetResBit3_ViaRegs0101_0102
+	.byte 0x40, 0x00, 0x59, 0x6a, 0xfc, 0x00, 0x80, 0x00, 0x76, 0x6a, 0xfc, 0x00, 0x00, 0x01, 0x2b, 0x6c
+	.byte 0xfc, 0x00, 0x00, 0x02
+	.long SndParam_VoiceEntryLookup_ViaReg8000
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0xd4, 0x6c, 0xfc, 0x00, 0x04, 0x00, 0x19, 0x6d
+	.byte 0xfc, 0x00, 0x08, 0x00
+	.long SndParam_SetResBit4_Via0400
+	.byte 0x10, 0x00, 0xa3, 0x6c, 0xfc, 0x00, 0x20, 0x00, 0xc0, 0x6c, 0xfc, 0x00, 0x40, 0x00, 0x36, 0x6d
+	.byte 0xfc, 0x00, 0x00, 0x01
+	.long ExtData_VoiceParam_DispatchBytecode
+	.byte 0x00, 0x04, 0xdb, 0x6d, 0xfc, 0x00, 0x00, 0x10, 0xec, 0x6d, 0xfc, 0x00, 0x00, 0x20, 0x76, 0x6f
+	.byte 0xfc, 0x00, 0x00, 0x40
+	.long CtrlPanel_SetResBit6_ViaLookup
+	.byte 0x00, 0x80, 0xaa, 0x6f, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0xf4, 0x6f
+	.byte 0xfc, 0x00, 0x02, 0x00
+	.long CtrlPanel_SetBit3_OnStyleD0D3
+	.byte 0xff, 0xff, 0xff, 0xff
+	.fill 8, 1, 0xff
+	.byte 0x40, 0x00, 0x25, 0x70, 0xfc, 0x00, 0x08, 0x00
+	.long CtrlPanel_SetResBit0_ViaLookup4C
+	.byte 0x04, 0x00, 0xad, 0x70, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x04, 0x00, 0x1b, 0x71
+	.byte 0xfc, 0x00, 0x00, 0x20
+	.long CtrlPanel_SetResBit5_ViaLookup4C
+	.byte 0x00, 0x40, 0x55, 0x71, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.fill 6, 1, 0xff
+
+
 Protocol_values_for_LED_rows:
 	; LED row lookup table: maps internal index (0-14) to protocol row value
 	; Used by Set_LEDs (FC71B2) to translate row index to serial protocol value
@@ -3257,659 +2075,142 @@ Protocol_values_for_LED_rows:
 	;  12: 0x0a = MEMORY A, MEMORY B
 	;  13: 0x0b = SYNCHRO&BREAK, R1/R2 OCTAVE -/+, BANK VIEW
 	;  14: 0x0c = START/STOP BEAT 1-4
-	.byte 0xc0
-	and	d, (0xc3c2:16)
-	.byte 0xc8
-	nop
-	.byte 0x01
-	push	sr
-	pop	sr
-	.byte 0x04
-	ld	(10:8), 11:io
-	incf
+	.byte 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc8, 0x00, 0x01, 0x02, 0x03, 0x04, 0x08, 0x0a, 0x0b, 0x0c, 0xff
+	.byte 0x04, 0x02, 0x06, 0x07, 0x05, 0x03, 0x23, 0x00, 0x23, 0x00, 0x2b, 0x00, 0x27, 0x00, 0x2f, 0x00
+	.byte 0x33, 0x00, 0x0c, 0x00, 0x1f, 0x00, 0x3c, 0x00, 0x10, 0x00, 0x0c, 0x00, 0x0c, 0x00, 0x04, 0x00
+	.byte 0x00, 0x00, 0x3c, 0x00, 0x08, 0x00, 0x37, 0x00, 0x01, 0x02, 0x04, 0x01, 0x02, 0x04, 0x01, 0x02
+	.byte 0x04, 0x08, 0x01, 0x02, 0x04, 0x08, 0x00, 0x00, 0x34, 0x00, 0x34, 0x00, 0x0e, 0x00, 0x27, 0x00
+	.byte 0x07, 0x00, 0x07, 0x00, 0x2e, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04, 0x00
+	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x40, 0x00
+	.byte 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04
+	.byte 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x40
+	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
+	.byte 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
+	.byte 0x40, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00
+	.byte 0x00, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
+	.byte 0x00, 0x40, 0x00, 0x00, 0x00, 0x80
+	.byte 0x11, 0x32, 0x00, 0x0c, 0x14, 0x32, 0x5d, 0x00, 0x00, 0x00, 0x00, 0x00
 
-	swi	7
-	.byte 0x04
-	push	sr
-	ei	7
-	halt
-	pop	sr
-	ld	c, 0:opc
-	ld	c, 0:opc
-	pushw	hl
-	nop
-	ld	l, 0:opc
-	pushw	sp
-	nop
-	ldw	hl, 3072
-	nop
-	.byte 0x1f
-	nop
-	push	xix
-	nop
-	rcf
-	nop
-	incf
-	nop
-	incf
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	push	xix
-	nop
-	ld	(0:8), 55:io
-	nop
-	.byte 0x01
-	push	sr
-	.byte 0x04, 0x01
-	push	sr
-	.byte 0x04, 0x01
-	push	sr
-	.byte 0x04
-	ld	(1:8), 2:io
-	.byte 0x04
-	ld	(0:8), 0:io
-	ldw	ix, 0x3400
-	nop
-	ret
-	nop
-	ld	l, 0:opc
-	reti
-	nop
-	reti
-	nop
-	pushw	iz
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	scf
-	ldw	de, 3072
-	push_a
-	ldw	de, 93
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA65B-0xEDA66C (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=60% dist=7 near Protocol_values_for_LED_rows_0x3E+7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA675-0xEDA68D (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA696-0xEDA6AE (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+42
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6B7-0xEDA6CF (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+75
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6D8-0xEDA6F8 (32 B), unreached CODE-territory, was disassembled as 21 plausible-but-dead instruction lines; per=100% dist=11 near Protocol_values_for_LED_rows_0x56+108
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	push_f
-	nop
-	jr	lt, 24
-	jr	ule, 94
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA700-0xEDA710 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+148
+	.byte 0x00, 0x00, 0x63, 0x00, 0x10, 0x18, 0x00, 0x61, 0x18, 0x63, 0x5e, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ccf
-	push	sr
-	nop
-	pushw	iy
-	incf
-	ldw	de, 80
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA718-0xEDA728 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+172
+	.byte 0x00, 0x00, 0x63, 0x00, 0x12, 0x02, 0x00, 0x2d, 0x0c, 0x32, 0x50, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_a
-	pushw	iz
-	nop
-	call	0x503a14
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA730-0xEDA740 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+196
+	.byte 0x00, 0x00, 0x63, 0x00, 0x14, 0x2e, 0x00, 0x1d, 0x14, 0x3a, 0x50, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	pop_a
-	ld	w, 0:opc
-	push	xix
-	push_f
-	.byte 0x50
-	popw	iz
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x15, 0x20, 0x00, 0x3c, 0x18, 0x50, 0x4e, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ex_ff
-	push_a
-	nop
-	pop_a
-	push_f
-	ldw	ix, 73
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA760-0xEDA770 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+244
+	.byte 0x00, 0x00, 0x63, 0x00, 0x16, 0x14, 0x00, 0x15, 0x18, 0x34, 0x49, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_f
-	ld	a, 0:opc
-	push	sr
-	nop
-	jr	f, 79
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA778-0xEDA788 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+268
+	.byte 0x00, 0x00, 0x63, 0x00, 0x18, 0x21, 0x00, 0x02, 0x00, 0x60, 0x4f, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	pop_f
-	pushw	hl
-	nop
-	.byte 0x1a
-	nop
-	halt
-	push	xde
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x19, 0x2b, 0x00, 0x1a, 0x00, 0x05, 0x3a, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	.byte 0x1a
-	retd	4352
-	pop_a
-	.byte 0x17
-	popw	sp
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x1a, 0x0f, 0x00, 0x11, 0x15, 0x17, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	jp	0x1a003c
-	ccf
-	ldw	de, 4694
-	.byte 0x54
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x1b, 0x3c, 0x00, 0x1a, 0x12, 0x32, 0x56, 0x12, 0x54, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	.byte 0x1c
-	pop	sr
-	.byte 0x97, 0x04, 0xd5
-	halt
-	.byte 0xa2, 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x02, 0x1c, 0x03, 0x97, 0x04, 0xd5, 0x05, 0xa2, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0xd8
-	push	sr
-	.byte 0x84, 0x04, 0xc4, 0x06
-	pop	xwa
-	.byte 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0xd8, 0x02, 0x84, 0x04, 0xc4, 0x06, 0x58, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	ld	xhl, 0x29042a03
-	.byte 0x04, 0xc0, 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x02, 0x43, 0x03, 0x2a, 0x04, 0x29, 0x04, 0xc0, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	nop
-	ld	h, 152
-	halt
-	push_f
-	halt
-	jr	84
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA820-0xEDA830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near Protocol_values_for_LED_rows_0x56+436
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x00, 0xce, 0x03, 0x98, 0x05, 0x18, 0x05
+	.byte 0x68, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	nop
-	.byte 0x1c
-	push	sr
-	.byte 0x54
-	pop	sr
-	push_a
-	.byte 0x04
-	push	sr
-	.byte 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x00, 0x1c, 0x02, 0x54, 0x03, 0x14, 0x04, 0x02, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	ld	wa, 1432
-	push	sr
-	halt
-	div	xix, xwa
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0xd8, 0x03, 0x98, 0x05, 0x02, 0x05, 0xd8, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	nop
-	ccf
-	.byte 0x01, 0xa8
-	halt
-	push_f
-	halt
-	div	xix, xwa
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x00, 0x12, 0x01, 0xa8, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0xc0
-	pop	sr
-	.byte 0x98
-	halt
-	push_f
-	.byte 0x06, 0x54, 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0xc0, 0x03, 0x98, 0x05, 0x18, 0x06, 0x54, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	call	0x05ea04
-	.byte 0xf0, 0x06
-	ld	(xwa), ix
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0x1d, 0x04, 0xea, 0x05, 0xf0, 0x06, 0xb0, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_a
-	ldw	iz, 2816
-	push_a
-	ldw	de, 74
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8B0-0xEDA8C0 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+580
+	.byte 0x00, 0x00, 0x63, 0x00, 0x14, 0x36, 0x00, 0x0b, 0x14, 0x32, 0x4a, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	jp	0x038e02
-	pop	xwa
-	.byte 0x04
-	retd	84
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x01, 0x1b, 0x02, 0x8e, 0x03, 0x58, 0x04, 0x0f, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	push	sr
-	nop
-	ldw	iy, 0x5400
-	jr	ov, 0
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8E0-0xEDA8F0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+628
+	.byte 0x00, 0x00, 0x63, 0x00, 0x10, 0x02, 0x00, 0x35, 0x00, 0x54, 0x64, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	scf
-	push	sr
-	.byte 0x83
-	pop	sr
-	popw	ix
-	halt
-	.byte 0xe8, 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x01, 0x11, 0x02, 0x83, 0x03, 0x4c, 0x05, 0xe8, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	.byte 0x1c
-	nop
-	.byte 0x56
-	nop
-	.byte 0x52
-	jr	ov, 0
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00
+	.byte 0x10, 0x1c, 0x00, 0x56, 0x00, 0x52, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	pop	xwa
-	pop	sr
-	push_f
-	pop	sr
-	.byte 0xe8
-	halt
-	incf
-	.byte 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x02, 0x58, 0x03, 0x18, 0x03, 0xe8, 0x05, 0x0c, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ccf
-	ld	c, 0:opc
-	ldw	bc, 0x320c
-	popw	iz
-	nop
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA940-0xEDA950 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+724
+	.byte 0x00, 0x00, 0x63, 0x00, 0x12, 0x23, 0x00, 0x31, 0x0c, 0x32, 0x4e, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0x98
-	push	sr
-	popw	hl
-	pop	sr
-	pop	b
-	rcf
-	.byte 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x01, 0x98, 0x02, 0x4b, 0x03, 0xca, 0x05, 0x10, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ex_ff
-	pushw	iy
-	nop
-	push	xde
-	incf
-	ldw	de, 82
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA970-0xEDA980 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+772
+	.byte 0x00, 0x00, 0x63, 0x00, 0x16, 0x2d, 0x00, 0x3a, 0x0c, 0x32, 0x52, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0x98
-	push	sr
-	pop	xwa
-	.byte 0x04
-	ld	a, 5:opc
-	ld	b, 84:opc
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x01, 0x98, 0x02, 0x58, 0x04, 0x21, 0x05, 0x22, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_f
-	pushw	bc
-	nop
-	pop_f
-	push_a
-	ldw	de, 74
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9A0-0xEDA9B0 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+820
+	.byte 0x00, 0x00, 0x63, 0x00, 0x18, 0x29, 0x00, 0x19, 0x14, 0x32, 0x4a, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	ld	wa, 1176
-	push_f
-	.byte 0x04, 0x8e, 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x01, 0xd8, 0x03, 0x98, 0x04, 0x18, 0x04, 0x8e, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	pop_f
-	zcf
-	nop
-	ccf
-	ldw	(87:8), 63:io
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9D0-0xEDA9E0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+868
+	.byte 0x00, 0x00, 0x63, 0x00, 0x19, 0x13, 0x00, 0x12, 0x0a, 0x57, 0x3f, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	ld	wa, 1163
-	pop	xiz
-	halt
-	div	xix, xwa
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x01, 0xd8, 0x03, 0x8b, 0x04, 0x5e, 0x05, 0xd8, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	jp	0x590034
-	ccf
-	ldw	de, 79
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA00-0xEDAA10 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+916
+	.byte 0x00, 0x00, 0x63, 0x00, 0x1b, 0x34, 0x00, 0x59, 0x12, 0x32, 0x4f, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	.byte 0x8b
-	pop	sr
-	.byte 0x92
-	halt
-	ld	b, 5:opc
-	.byte 0xd1, 0x54
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x02, 0x8b, 0x03, 0x92, 0x05, 0x22, 0x05, 0xd1, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	scf
-	ld	c, 0:opc
-	ld	xsp, 0x693214
-	nop
-	nop
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA30-0xEDAA40 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+964
+	.byte 0x00, 0x00, 0x63, 0x00, 0x11, 0x23, 0x00, 0x47, 0x14, 0x32, 0x69, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	.byte 0x53
-	push	sr
-	.byte 0x83
-	halt
-	push_f
-	halt
-	div	xix, xwa
-	nop
-	nop
+	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x02, 0x53, 0x02, 0x83, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
 	.zero 8
-	nop
-	nop
-	jr	ule, 0
+	.byte 0x00, 0x00, 0x63, 0x00
 SoundProgram_DispatchTable:
 	.long ExtData_ToneParam_DispatchHandler
 	.long ExtData_ToneParam_DispatchHandler
@@ -4331,15103 +2632,1275 @@ SoundProgram_DispatchTable:
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0x19
 	.byte 0x14, 0x0c, 0x0d, 0x0e, 0xec, 0xa6, 0xed, 0x00
-Naka_ToshiParam_Table:	.incbin "includes/romslices/v7_data_naka_toshiparam_table.bin"
-VoiceCtrlR1_Entry_001:
-	pop	sr
-	nop
-	nop
-	nop
-	jrl	f, -254
-	nop
-	pushw	0
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_002:
-	max
-	nop
-	nop
-	nop
-	popw	wa
-	ld	(255:8), 40:io
-	swi	7
-	nop
-	nop
-	nop
-	.byte 0x06
-	ld	(6:8), 2:io
-	nop
-	swi	7
-VoiceCtrlR1_Entry_003:
-	halt
-	nop
-	nop
-	nop
-	popw	wa
-	push	1
-	nop
-	normal
-	nop
-	nop
-	nop
-	.byte 0x06
-	ld	(6:8), 2:io
-	nop
-	swi	7
-VoiceCtrlR1_Entry_004:
-	.byte 0xc0
-	nop
-	nop
-	nop
-	.byte 0x91
-	pop	sr
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_005:
-	.byte 0xc1
-	nop
-	nop
-	nop
-	.byte 0x91
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_006:
-	nop
-	normal
-	nop
-	nop
-	.byte 0x93
-	nop
-	retd	2304
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_007:
-	push	sr
-	normal
-	nop
-	nop
-	.byte 0x93
-	halt
-	swi	7
-	normal
-	ldw	(0:8), 0xff00:io
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_008:
-	pop	sr
-	normal
-	nop
-	nop
-	.byte 0x93, 0x06
-	jrl	nc, 32513
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_009:
-	max
-	normal
-	nop
-	nop
-	.byte 0x93, 0x06, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_010:
-	nop
-	pop	sr
-	nop
-	nop
-	.byte 0x98, 0x01
-	jrl	nc, 20480
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_011:
-	normal
-	pop	sr
-	nop
-	nop
-	.byte 0x98, 0x01, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_012:
-	push	sr
-	pop	sr
-	nop
-	nop
-	.byte 0x98
-	nop
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_013:
-	nop
-	max
-	nop
-	nop
-	.byte 0x98
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_014:
-	normal
-	max
-	nop
-	nop
-	.byte 0x98
-	pop	sr
-	jrl	f, 769
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_015:
-	nop
-	ld	a, 0:opc
-	nop
-	.byte 0x80
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_016:
-	normal
-	ld	a, 0:opc
-	nop
-	.byte 0x80
-	pop	sr
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_017:
-	ld	a, (xbc)
-	nop
-	nop
-	.byte 0x80
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_018:
-	ld	a, (xde)
-	nop
-	nop
-	.byte 0x80
-	nop
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_019:
-	ld	a, (xhl)
-	nop
-	nop
-	.byte 0x80
-	pop	sr
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_020:
-	ld	a, (xix)
-	nop
-	nop
-	.byte 0x80
-	nop
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_021:
-	nop
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_022:
-	normal
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	pop	sr
-	nop
-	pop	sr
-	nop
-	nop
-	normal
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
+Naka_ToshiParam_Table:
+	.long ToshiParam_Entry_01
+	.long ToshiParam_Entry_02
+	.long ToshiParam_Entry_03
+	.long ToshiParam_Entry_04
+	.long ToshiParam_Entry_05
+	.long ToshiParam_Entry_06
+	.long ToshiParam_Entry_07
+	.long ToshiParam_Entry_08
+	.long ToshiParam_Entry_09
+	.long ToshiParam_Entry_10
+	.long ToshiParam_Entry_11
+	.long ToshiParam_Entry_12
+	.long ToshiParam_Entry_13
+	.long ToshiParam_Entry_14
+	.long ToshiParam_Entry_15
+	.long ToshiParam_Entry_16
+	.long ToshiParam_Entry_17
+	.long ToshiParam_Entry_18
+	.long ToshiParam_Entry_19
+	.long ToshiParam_Entry_20
+	.long ToshiParam_Entry_21
+	.long ToshiParam_Entry_22
+	.long ToshiParam_Entry_23
+	.long ToshiParam_Entry_24
+	.long ToshiParam_Entry_25
+	.long ToshiParam_Entry_26
+	.long ToshiParam_Entry_27
+	.byte 0x5a, 0x5a, 0x00, 0x00
+	.byte 0x48, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 16
+	.byte 0x00, 0x00, 0x00, 0x00, 0x78, 0x12, 0x20, 0x20
+	.asciz "              "
+	.byte 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x38
+	.byte 0x00, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x01, 0x00, 0x01, 0x18, 0x38, 0x00, 0x00
+	.byte 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x50, 0x40, 0x80, 0x02, 0x38, 0x01, 0x80, 0x00, 0x00, 0x80, 0x80
+	.byte 0x80, 0x80, 0x00, 0x01, 0x00, 0x02, 0x18, 0x06, 0x00, 0x00, 0x71, 0x45, 0x00, 0x00, 0x5a, 0x30
+	.byte 0x40, 0x80, 0x02, 0x00, 0x02, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x03
+	.byte 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x03, 0x80
+	.byte 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x04, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35
+	.byte 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x04, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80
+	.byte 0x00, 0x00, 0x00, 0x05, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80
+	.byte 0x02, 0x20, 0x05, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x06, 0x18, 0x00
+	.byte 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x06, 0x80, 0x00, 0x00
+	.byte 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x07, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00
+	.byte 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x07, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00
+	.byte 0x00, 0x08, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20
+	.byte 0x08, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x09, 0x18, 0x00, 0x00, 0x00
+	.byte 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x09, 0x80, 0x00, 0x00, 0x80, 0x80
+	.byte 0x80, 0x80, 0x00, 0x00, 0x00, 0x0a, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40
+	.byte 0x40, 0x80, 0x02, 0x20, 0x0a, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0b
+	.byte 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0b, 0x80
+	.byte 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0c, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35
+	.byte 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0c, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80
+	.byte 0x00, 0x00, 0x00, 0x0d, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80
+	.byte 0x02, 0x20, 0x0d, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0e, 0x18, 0x00
+	.byte 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0e, 0x80, 0x00, 0x00
+	.byte 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0f, 0x18, 0xf0, 0x00, 0x00, 0x64, 0x25, 0x00, 0x00
+	.byte 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0x0f, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00
+	.byte 0x00, 0x10, 0x18, 0x06, 0x00, 0x00, 0x71, 0x55, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00
+	.byte 0xc4, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x11, 0x18, 0x1a, 0x00, 0x00
+	.byte 0x71, 0x55, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc8, 0x80, 0x00, 0x00, 0x80, 0x80
+	.byte 0x80, 0x80, 0x00, 0x00, 0x00, 0x12, 0x18, 0x64, 0x00, 0x00, 0x71, 0x15, 0x00, 0x00, 0x5a, 0x40
+	.byte 0x40, 0x80, 0x02, 0x00, 0xc9, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x13
+	.byte 0x18, 0x28, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc2, 0x80
+	.byte 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x14, 0x18, 0xf0, 0x00, 0x00, 0x76, 0x05
+	.byte 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xce, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80
+	.byte 0x00, 0x00, 0x00, 0x15, 0x18, 0x06, 0x00, 0x00, 0x71, 0x45, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80
+	.byte 0x02, 0x00, 0xc4, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x16, 0x18, 0x28
+	.byte 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc0, 0x80, 0x00, 0x00
+	.byte 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x19, 0x18, 0x00, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00
+	.byte 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xcf, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00
+	.byte 0x00, 0x44, 0x0a, 0x00, 0x00, 0x00, 0x88, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x45, 0x0a, 0x00
+	.byte 0x00, 0x00, 0x88, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x46, 0x0a, 0x00, 0x00, 0x00, 0x88, 0x80
+	.byte 0x80, 0x00, 0x00, 0x00, 0x00, 0x47, 0x08, 0xff, 0x00, 0x00, 0x00, 0xc0, 0x00, 0xff, 0xff, 0x43
+	.byte 0x04, 0x80, 0x3c, 0x00, 0x00, 0x48, 0x0a, 0x60, 0x02, 0x00, 0xe8, 0x00, 0x00, 0x00, 0x00, 0x78
+	.byte 0x00, 0x90, 0x06, 0x01, 0x00, 0x67, 0x00, 0x40, 0x00, 0x60, 0x04, 0x00, 0x80, 0x00, 0x00, 0x61
+	.byte 0x18, 0x01, 0x1e, 0x06, 0x00, 0x54, 0x4b, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x63, 0x18, 0x14, 0x23, 0x00, 0x0b, 0x14, 0x32
+	.byte 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x63, 0x00, 0x64, 0x18, 0x4f, 0x01, 0xd8, 0x03
+	.byte 0x98, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x63, 0x00, 0x65, 0x18, 0x39, 0x32
+	.byte 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x66, 0x18
+	.byte 0x58, 0x23, 0x03, 0x9c, 0x54, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x68, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x70, 0x08, 0x06, 0x3c
+	.byte 0x05, 0xff, 0x07, 0x02, 0x04, 0x07, 0x72, 0x0e
+	.byte 0x00, 0x00, 0x00, 0x76, 0x00, 0x00, 0x00, 0x5a
+	.byte 0x1d, 0x45, 0x1d, 0x33, 0x00, 0x00, 0x92, 0x0e
+	.byte 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
+	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x71, 0x02
+	.byte 0x00, 0x00, 0x99, 0x1e, 0x00, 0x00, 0xb6, 0x00
+	.byte 0x40, 0x96, 0x88, 0x90, 0x91, 0xb3, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x82, 0x01, 0x02, 0x81
+	.byte 0x00, 0x10, 0x11, 0x12, 0x13, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x80, 0x0e, 0x00, 0x0c, 0x04, 0x45
+	.byte 0x00, 0x20, 0xfa, 0xdf, 0xbf, 0x01, 0x00, 0x00
+	.byte 0x50, 0x00, 0xff, 0xff, 0x17, 0x18, 0x00, 0x00
+	.byte 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40
+	.byte 0x80, 0x02, 0x00, 0xc0, 0x80, 0x00, 0x00, 0x80
+	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x18, 0x18
+	.byte 0x00, 0x00, 0x00, 0x76, 0x05, 0x00, 0x00, 0x5a
+	.byte 0x40, 0x40, 0x80, 0x02, 0x00, 0xc1, 0x80, 0x00
+	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
+	.byte 0x98, 0x12, 0x40, 0x00, 0x00, 0x20, 0x76, 0x00
+	.byte 0x00, 0x20, 0x5c, 0x01, 0x5a, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x91, 0x0a, 0x00, 0x00
+	.zero 8
+	.byte 0x93, 0x22, 0x06, 0x06, 0x7f, 0x7f, 0x02, 0x05
+	.byte 0x94, 0x00, 0xff
+	.ascii "                ??ÿÿÿ"
+	.byte 0xff, 0x00, 0x00, 0x00, 0xc0, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xc1, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xc2, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xc3, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xc4, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xc5, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xc6, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xc7, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xc8, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xc9, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xca, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xcb, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xcc, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xcd, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xce, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xcf, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xd0, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xd1, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xd2, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xd3, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0x12, 0x00, 0x00
+	.zero 16
+	.byte 0xd7, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0x49, 0x10, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9a, 0x1a
+	.zero 24
+	.byte 0x00, 0x00, 0xff, 0xff, 0x48, 0x4b, 0x20, 0x00
+	.zero 8
+	.byte 0x00, 0xc0, 0x03, 0x50, 0x00, 0x00, 0x00, 0x00
+	.zero 8
+	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00
+	.zero 8
+	.byte 0x91, 0x00, 0xff, 0x00, 0xff, 0x00, 0x00, 0x00, 0x01, 0x07, 0x05, 0x00, 0x00, 0xff, 0xc0, 0xc1
+	.byte 0xc3, 0xc4, 0xc6, 0xc8, 0xca, 0xcb, 0xcd, 0xcf, 0xd0, 0xd2, 0xd4, 0xd6, 0xd7, 0xd9, 0xdb, 0xdc
+	.byte 0xde, 0xe0, 0xe2, 0xe3, 0xe5, 0xe7, 0xe8, 0xea, 0xec, 0xed, 0xef, 0xf1, 0xf3, 0xf4, 0xf6, 0xf8
+	.byte 0xf9, 0xfb, 0xfd, 0xfe, 0x00, 0x02, 0x03, 0x05, 0x07, 0x08, 0x0a, 0x0c, 0x0d, 0x0f, 0x11, 0x12
+	.byte 0x14, 0x16, 0x17, 0x19, 0x1b, 0x1c, 0x1e, 0x20
+	.ascii "!#%&(*+-/023578:<=>?V"
+	.byte 0xba, 0xed, 0x00
+	.byte 0x4e, 0x00, 0x00, 0x26, 0x00, 0xff, 0x01, 0x00
+	.byte 0x00, 0x00, 0x48, 0x05, 0x01, 0x00, 0x01, 0x00
+	.byte 0x00, 0xff, 0x01, 0x01, 0x01, 0x00, 0x00, 0xff
+; ---------------------------------------------------------------------------
+; sndparam_descriptor -- ONE 18-byte sound-parameter descriptor
+; ---------------------------------------------------------------------------
+; v10 compiles these records from C (v10/maincpu/audio/sndparam_records/
+; run_*.c, struct sndparam_descriptor_t in sndparam_types.h); the Makefile does
+; that for v10 only, so this copy writes each record as one macro line with
+; the SAME fields in the SAME order.  sndparam_types.h cites, per field, the
+; SndParam_* accessor instruction that reads it -- in v10's
+; audio/sndparam_routines.s; the record layout is the same in this version
+; because the records are byte-for-byte the v10 ones (see the file header).
+;
+;   +0x00 key (u32, byte +3 always 0)   +0x04 bank_index   +0x05 bank_offset
+;   +0x06 mask   +0x07 clamp_min   +0x08 clamp_max   +0x09 shift (low nibble)
+;   +0x0A xor_value   +0x0B aux_index (0xff = none)   +0x0C read_accessor
+;   +0x0D register_accessor   +0x0E lookup2_accessor   +0x0F codec
+;   +0x10 write_accessor   +0x11 unknown_0x11 (no reader found in v10)
+.macro sndparam_descriptor key, bank_index, bank_offset, mask, clamp_min, clamp_max, shift, xor_value, aux_index, read_acc, register_acc, lookup2_acc, codec, write_acc, unknown_0x11
+	.long \key
+	.byte \bank_index, \bank_offset, \mask, \clamp_min, \clamp_max, \shift, \xor_value, \aux_index
+	.byte \read_acc, \register_acc, \lookup2_acc, \codec, \write_acc, \unknown_0x11
+.endm
+;  22 x 18-byte sound-parameter descriptors, 0xEDBAC0-0xEDBC4C, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edbac0.c.
+SndParamRun_EDBAC0:
+VoiceCtrlR1_Entry_001:	sndparam_descriptor 0x000003, 112, 2, 0xff, 0, 11, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+VoiceCtrlR1_Entry_002:	sndparam_descriptor 0x000004, 72, 8, 0xff, 40, 255, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
+VoiceCtrlR1_Entry_003:	sndparam_descriptor 0x000005, 72, 9, 0x01, 0, 1, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
+VoiceCtrlR1_Entry_004:	sndparam_descriptor 0x0000c0, 145, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_005:	sndparam_descriptor 0x0000c1, 145, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_006:	sndparam_descriptor 0x000100, 147, 0, 0x0f, 0, 9, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_007:	sndparam_descriptor 0x000102, 147, 5, 0xff, 1, 10, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_008:	sndparam_descriptor 0x000103, 147, 6, 0x7f, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_009:	sndparam_descriptor 0x000104, 147, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_010:	sndparam_descriptor 0x000300, 152, 1, 0x7f, 0, 80, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_011:	sndparam_descriptor 0x000301, 152, 1, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_012:	sndparam_descriptor 0x000302, 152, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_013:	sndparam_descriptor 0x000400, 152, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_014:	sndparam_descriptor 0x000401, 152, 3, 0x70, 1, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_015:	sndparam_descriptor 0x002100, 128, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_016:	sndparam_descriptor 0x002101, 128, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_017:	sndparam_descriptor 0x002181, 128, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_018:	sndparam_descriptor 0x002182, 128, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_019:	sndparam_descriptor 0x002183, 128, 3, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_020:	sndparam_descriptor 0x002184, 128, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_021:	sndparam_descriptor 0x002200, 128, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_022:	sndparam_descriptor 0x002201, 128, 0, 0x03, 0, 3, 0, 0x00, 0x01, 1, 7, 5, 0, 0, 0xff
 VoiceCtrlR1_Entry_023:
-	nop
-	normal
-	pop	sr
-	swi	7
+	.byte 0x00, 0x01, 0x03, 0xff
 WidgetParam_MidiCC_Program:
 	.long VoiceCtrlR1_Entry_023
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	swi	7
+	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0xff
 VoiceCtrlR1_Entry_024:
-	push	sr
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x02, 0x22, 0x00, 0x00, 0x80, 0x00, 0x08, 0x00, 0x01, 0x03, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 VoiceCtrlR1_Entry_025:
-	pop	sr
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x03, 0x22, 0x00, 0x00, 0x80, 0x00, 0x10, 0x00, 0x01, 0x04, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 VoiceCtrlR1_Entry_026:
-	halt
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	push	sr
-	push_f
-	nop
-	pop	sr
-	pop	sr
-	nop
-	pop	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	pop	sr
-	swi	7
+	.byte 0x05, 0x22, 0x00, 0x00, 0x80, 0x02, 0x18, 0x00, 0x03, 0x03, 0x00, 0x03, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0x00, 0x01, 0x03, 0xff
 WidgetParam_MidiCC_BankSelect:
-	.byte 0x90
-	ld	(xix-19), 3
-	nop
-	nop
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_027:
-	ld	b, (xwa)
-	nop
-	nop
-	.byte 0x80, 0x01
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_028:
-	ld	b, (xbc)
-	nop
-	nop
-	.byte 0x80
-	push	sr
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_029:
-	ld	b, (xde)
-	nop
-	nop
-	.byte 0x80, 0x06
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_030:
-	.byte 0x8a
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_031:
-	.byte 0x8b
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_032:
-	.byte 0x8c
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_033:
-	.byte 0x8d
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	ld	(128:8), 0:io
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_034:
-	.byte 0x8e
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	ld	(4:8), 0:io
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_035:
-	.byte 0x8f
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	ld	(8:8), 0:io
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_036:
-	ld	de, (xwa)
-	nop
-	nop
-	.byte 0x80
-	ld	(16:8), 0:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_037:
-	ld	de, (xbc)
-	nop
-	nop
-	.byte 0x80
-	ld	(1:8), 0:io
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_038:
-	ld	de, (xix)
-	nop
-	nop
-	.byte 0x80
-	ld	(32:8), 0:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_039:
-	ld	de, (xiy)
-	nop
-	nop
-	.byte 0x80
-	ld	(2:8), 0:io
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_040:
-	ld	de, (xiz)
-	nop
-	nop
-	.byte 0x80
-	reti
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_041:
-	.byte 0x98
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_042:
-	.byte 0x99
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	push	1
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_043:
-	.byte 0x9a
-	ld	b, 0:opc
-	nop
-	.byte 0x80, 0x01, 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_044:
-	.byte 0x80
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	push	sr
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_045:
-	.byte 0x82
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_046:
-	.byte 0x81
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	pop	sr
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_047:
-	.byte 0x86
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x04
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_048:
-	.byte 0x87
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_049:
-	.byte 0x88
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	halt
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_050:
-	.byte 0x89
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_051:
-	.byte 0x8a
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x06
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_052:
-	.byte 0x8b
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	.byte 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_053:
-	.byte 0x8c
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	reti
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_054:
-	.byte 0x8d
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_055:
-	.byte 0x8e
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	ld	(255:8), 0:io
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_056:
-	.byte 0x8f
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_057:
-	.byte 0x90
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	push	255
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_058:
-	.byte 0x91
-	pushw	wa
-	nop
-	nop
-	ld wa, (xbc+256)
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_059:
-	.byte 0x92
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	ldw	(255:8), 0xc700:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_060:
-	.byte 0x93
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_061:
-	.byte 0x94
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	pushw	255
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_062:
-	.byte 0x95
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_063:
-	.byte 0x96
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	incf
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_064:
-	.byte 0x97
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01, 0x01
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_065:
-	.byte 0x98
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	decf
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_066:
-	.byte 0x99
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_067:
-	.byte 0x9a
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	ret
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_068:
-	.byte 0x9b
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01, 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_069:
-	.byte 0x9c
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	retd	255
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_070:
-	.byte 0x9d
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01
-	ld	(0:8), 1:io
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_071:
-	nop
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_072:
-	normal
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_073:
-	push	sr
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	.byte 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_074:
-	pop	sr
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_075:
-	max
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_001:
-	halt
-	pushw	bc
-	nop
-	nop
-	ld	wa, (xwa+7)
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_002:
-	ei	41
-	nop
-	nop
-	.byte 0x98
-	reti
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_003:
-	reti
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_004:
-	ld	(41:8), 0:io
-	nop
-	.byte 0x98
-	ld	(1:8), 0:io
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_005:
-	push	41
-	nop
-	nop
-	.byte 0x98
-	ld	(2:8), 0:io
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_006:
-	ldw	(41:8), 0:io
-	.byte 0x98
-	ld	(4:8), 0:io
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_007:
-	pushw	41
-	nop
-	.byte 0x98
-	ld	(8:8), 0:io
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_008:
-	incf
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	ld	(16:8), 0:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_009:
-	decf
-	pushw	bc
-	nop
-	nop
-	ld	wa, (xwa+8)
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_010:
-	ret
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	ld	(64:8), 0:io
-	normal
-	ei	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_011:
-	retd	41
-	nop
-	.byte 0x98
-	ld	(128:8), 0:io
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_012:
-	rcf
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	push	1
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_013:
-	scf
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	push	2
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_014:
-	nop
-	pushw	de
-	nop
-	nop
-	jrl	f, -251
-	normal
-	rcf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_015:
-	normal
-	pushw	de
-	nop
-	nop
-	jrl	f, -250
-	normal
-	rcf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_016:
-	rcf
-	pushw	de
-	nop
-	nop
-	jrl	f, 263
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_017:
-	scf
-	pushw	de
-	nop
-	nop
-	jrl	f, 519
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_018:
-	ccf
-	pushw	de
-	nop
-	nop
-	jrl	f, 1031
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_019:
-	nop
-	pushw	ix
-	nop
-	nop
-	.byte 0x98
-	ret
-	pop	sr
-	nop
-	push	sr
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_020:
-	nop
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x11001f01
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_021:
-	normal
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000100
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_022:
-	push	sr
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x63007f02
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_023:
-	pop	sr
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000200
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_024:
-	max
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x07000703
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_025:
-	halt
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000400
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_026:
-	ei	45
-	nop
-	nop
-	ld	xsp, 0x0b00f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_027:
-	reti
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000800
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_028:
-	ld	(45:8), 0:io
-	nop
-	ld	xsp, 0x0300c004
-	ei	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_029:
-	push	45
-	nop
-	nop
-	ld	xsp, 0x01001000
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x90, 0xbc, 0xed, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0xff
+;  78 x 18-byte sound-parameter descriptors, 0xEDBC9E-0xEDC21A, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edbc9e.c.
+SndParamRun_EDBC9E:
+VoiceCtrlR1_Entry_027:	sndparam_descriptor 0x002280, 128, 1, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_028:	sndparam_descriptor 0x002281, 128, 2, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_029:	sndparam_descriptor 0x002282, 128, 6, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_030:	sndparam_descriptor 0x00228a, 128, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_031:	sndparam_descriptor 0x00228b, 128, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_032:	sndparam_descriptor 0x00228c, 128, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_033:	sndparam_descriptor 0x00228d, 128, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_034:	sndparam_descriptor 0x00228e, 128, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_035:	sndparam_descriptor 0x00228f, 128, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_036:	sndparam_descriptor 0x002290, 128, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_037:	sndparam_descriptor 0x002291, 128, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_038:	sndparam_descriptor 0x002294, 128, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_039:	sndparam_descriptor 0x002295, 128, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_040:	sndparam_descriptor 0x002296, 128, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_041:	sndparam_descriptor 0x002298, 128, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_042:	sndparam_descriptor 0x002299, 128, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_043:	sndparam_descriptor 0x00229a, 128, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_044:	sndparam_descriptor 0x002880, 153, 2, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_045:	sndparam_descriptor 0x002882, 153, 1, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_046:	sndparam_descriptor 0x002881, 153, 3, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_047:	sndparam_descriptor 0x002886, 153, 4, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_048:	sndparam_descriptor 0x002887, 153, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_049:	sndparam_descriptor 0x002888, 153, 5, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_050:	sndparam_descriptor 0x002889, 153, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_051:	sndparam_descriptor 0x00288a, 153, 6, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_052:	sndparam_descriptor 0x00288b, 153, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_053:	sndparam_descriptor 0x00288c, 153, 7, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_054:	sndparam_descriptor 0x00288d, 153, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_055:	sndparam_descriptor 0x00288e, 153, 8, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_056:	sndparam_descriptor 0x00288f, 153, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_057:	sndparam_descriptor 0x002890, 153, 9, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_058:	sndparam_descriptor 0x002891, 153, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_059:	sndparam_descriptor 0x002892, 153, 10, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_060:	sndparam_descriptor 0x002893, 153, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_061:	sndparam_descriptor 0x002894, 153, 11, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_062:	sndparam_descriptor 0x002895, 153, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_063:	sndparam_descriptor 0x002896, 153, 12, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_064:	sndparam_descriptor 0x002897, 153, 1, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_065:	sndparam_descriptor 0x002898, 153, 13, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_066:	sndparam_descriptor 0x002899, 153, 1, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_067:	sndparam_descriptor 0x00289a, 153, 14, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_068:	sndparam_descriptor 0x00289b, 153, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_069:	sndparam_descriptor 0x00289c, 153, 15, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_070:	sndparam_descriptor 0x00289d, 153, 1, 0x08, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_071:	sndparam_descriptor 0x002900, 152, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_072:	sndparam_descriptor 0x002901, 152, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_073:	sndparam_descriptor 0x002902, 152, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_074:	sndparam_descriptor 0x002903, 152, 7, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceCtrlR1_Entry_075:	sndparam_descriptor 0x002904, 152, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_001:	sndparam_descriptor 0x002905, 152, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_002:	sndparam_descriptor 0x002906, 152, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_003:	sndparam_descriptor 0x002907, 152, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_004:	sndparam_descriptor 0x002908, 152, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_005:	sndparam_descriptor 0x002909, 152, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_006:	sndparam_descriptor 0x00290a, 152, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_007:	sndparam_descriptor 0x00290b, 152, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_008:	sndparam_descriptor 0x00290c, 152, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_009:	sndparam_descriptor 0x00290d, 152, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_010:	sndparam_descriptor 0x00290e, 152, 8, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_011:	sndparam_descriptor 0x00290f, 152, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_012:	sndparam_descriptor 0x002910, 152, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_013:	sndparam_descriptor 0x002911, 152, 9, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_014:	sndparam_descriptor 0x002a00, 112, 5, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_015:	sndparam_descriptor 0x002a01, 112, 6, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_016:	sndparam_descriptor 0x002a10, 112, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_017:	sndparam_descriptor 0x002a11, 112, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_018:	sndparam_descriptor 0x002a12, 112, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_019:	sndparam_descriptor 0x002c00, 152, 14, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_020:	sndparam_descriptor 0x002d00, 71, 1, 0x1f, 0, 17, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_021:	sndparam_descriptor 0x002d01, 71, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_022:	sndparam_descriptor 0x002d02, 71, 2, 0x7f, 0, 99, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_023:	sndparam_descriptor 0x002d03, 71, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_024:	sndparam_descriptor 0x002d04, 71, 3, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_025:	sndparam_descriptor 0x002d05, 71, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_026:	sndparam_descriptor 0x002d06, 71, 3, 0xf0, 0, 11, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_027:	sndparam_descriptor 0x002d07, 71, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_028:	sndparam_descriptor 0x002d08, 71, 4, 0xc0, 0, 3, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_029:	sndparam_descriptor 0x002d09, 71, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_030:
-	ldw	(45:8), 0:io
-	ld	xsp, 0x79007f05
-	nop
-	nop
-	ldw	(1:8), 1287:io
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	retd	7709
-	.byte 0x1f, 0x20
+	.byte 0x0a, 0x2d, 0x00, 0x00, 0x47, 0x05, 0x7f, 0x00, 0x79, 0x00, 0x00, 0x0a, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
+	.byte 0x0e, 0x0f, 0x1d, 0x1e, 0x1f, 0x20
 	.ascii "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyÿ"
 WidgetParam_MidiCC_NameEdit:
-	pushw	ix
-	.byte 0xc2, 0xed
-	nop
-	jr	pl, 0
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_031:
-	pushw	45
-	nop
-	ld	xsp, 0x01002000
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_032:
-	incf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0xff00ff06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_033:
-	decf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x7f007f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_034:
-	ret
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01008006
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_035:
-	retd	45
-	nop
-	ld	xsp, 0x01004000
-	ei	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_036:
-	rcf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0xff00ff07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_037:
-	scf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x7f007f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_038:
-	ccf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01008007
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_039:
-	zcf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01008000
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_040:
-	nop
-	ld	xwa, 0xb00000
-	jrl	nc, 32512
-	nop
-	nop
-	normal
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_041:
-	normal
-	ld	xwa, 0x01b00000
-	jrl	nc, 32512
-	nop
-	nop
-	nop
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_042:
-	push	sr
-	.byte 0x40
-
-
-	nop
-	nop
-	jr	f, 1
-	.byte 0x80
-	nop
-	jrl	nc, 7
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-MidiChParam_Entry_043:
-	pop	sr
-	ld	xwa, 0x700000
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_044:
-	.byte 0x04, 0x40
-
-
-	nop
-	nop
-	jr	f, 1
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_045:
-	halt
-	ld	xwa, 0x03b00000
-	jrl	nc, 32512
-	nop
-	nop
-	nop
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_046:
-	.byte 0x06, 0x40
-
-
-	nop
-	nop
-	jr	f, 1
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_047:
-	.byte 0x80
-	ld	xwa, 0x02980000
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	push	sr
-	push	sr
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_048:
-	.byte 0x81
-	ld	xwa, 0x02980000
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	push	sr
-	push	sr
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_049:
-	.byte 0xc0
-	ld	xwa, 0x0b980000
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_050:
-	.byte 0xc1
-	ld	xwa, 0x0b980000
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_051:
-	.byte 0xe0
-	ld	xwa, 0x04900000
-	swi	7
-	pushw	wa
-	pop	xwa
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_052:
-	nop
-	ld	xbc, 0x900000
-	.byte 0x1f
-	nop
-	halt
-	nop
-	nop
-	nop
-	max
-	halt
-	max
-	nop
-	nop
-	swi	7
+	.byte 0x2c, 0xc2, 0xed, 0x00, 0x6d, 0x00, 0x00, 0x00, 0x00, 0xff
+;  22 x 18-byte sound-parameter descriptors, 0xEDC2A4-0xEDC430, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc2a4.c.
+SndParamRun_EDC2A4:
+MidiChParam_Entry_031:	sndparam_descriptor 0x002d0b, 71, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_032:	sndparam_descriptor 0x002d0c, 71, 6, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_033:	sndparam_descriptor 0x002d0d, 71, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_034:	sndparam_descriptor 0x002d0e, 71, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_035:	sndparam_descriptor 0x002d0f, 71, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_036:	sndparam_descriptor 0x002d10, 71, 7, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_037:	sndparam_descriptor 0x002d11, 71, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_038:	sndparam_descriptor 0x002d12, 71, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_039:	sndparam_descriptor 0x002d13, 71, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_040:	sndparam_descriptor 0x004000, 176, 0, 0x7f, 0, 127, 0, 0x00, 0x01, 2, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_041:	sndparam_descriptor 0x004001, 176, 1, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_042:	sndparam_descriptor 0x004002, 96, 1, 0x80, 0, 127, 7, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+MidiChParam_Entry_043:	sndparam_descriptor 0x004003, 112, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_044:	sndparam_descriptor 0x004004, 96, 1, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_045:	sndparam_descriptor 0x004005, 176, 3, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_046:	sndparam_descriptor 0x004006, 96, 1, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_047:	sndparam_descriptor 0x004080, 152, 2, 0x80, 0, 1, 7, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
+MidiChParam_Entry_048:	sndparam_descriptor 0x004081, 152, 2, 0x40, 0, 1, 6, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
+MidiChParam_Entry_049:	sndparam_descriptor 0x0040c0, 152, 11, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_050:	sndparam_descriptor 0x0040c1, 152, 11, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_051:	sndparam_descriptor 0x0040e0, 144, 4, 0xff, 40, 88, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+MidiChParam_Entry_052:	sndparam_descriptor 0x004100, 144, 0, 0x1f, 0, 5, 0, 0x00, 0x00, 4, 5, 4, 0, 0, 0xff
 WidgetParam_MidiCC_SysExcl:
-	normal
-	nop
-	push	sr
-	nop
-	pop	sr
-	nop
-	pop	sr
-	push	sr
-	normal
-	push	sr
-	push	sr
-	push	sr
+	.byte 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x03, 0x02, 0x01, 0x02, 0x02, 0x02
 MidiChParam_Entry_053:
-	ld	xwa, 0x43000041
-	nop
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x40, 0x41, 0x00, 0x00, 0x43, 0x00, 0x80, 0x00, 0x01, 0x07, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_054:
-	ld	xbc, 0x43000041
-	normal
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x41, 0x41, 0x00, 0x00, 0x43, 0x01, 0x7f, 0x00, 0x7f, 0x00, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_055:
-	ld	xde, 0x43000041
-	.byte 0x01, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x42, 0x41, 0x00, 0x00, 0x43, 0x01, 0x80, 0x00, 0x01, 0x07, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_056:
-	.byte 0x80
-	ld	xbc, 0x700000
-	pop	sr
-	nop
-	pop	sr
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x80, 0x41, 0x00, 0x00, 0x70, 0x00, 0x03, 0x00, 0x03, 0x00, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_057:
-	.byte 0x81
-	ld	xbc, 0x01700000
-	jrl	nc, 27669
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x81, 0x41, 0x00, 0x00, 0x70, 0x01, 0x7f, 0x15, 0x6c, 0x00, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_058:
-	nop
-	ld	xde, 0x04480000
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x00, 0x42, 0x00, 0x00, 0x48, 0x04, 0x40, 0x00, 0x01, 0x06, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_059:
-	normal
-	ld	xde, 0x03700000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	ei	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	swi	7
-	nop
-	normal
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	swi	7
+	.byte 0x01, 0x42, 0x00, 0x00, 0x70, 0x03, 0xff, 0x00, 0xff, 0x00, 0x00, 0x06, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0xff, 0x00, 0x01, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
+	.byte 0x0e, 0xff
 WidgetParam_MidiCC_Volume:
-	.byte 0xba, 0xc4, 0xed
-	nop
-	retd	0xff00
-	nop
-	nop
-	swi	7
+	.byte 0xba, 0xc4, 0xed, 0x00, 0x0f, 0x00, 0xff, 0x00, 0x00, 0xff
 MidiChParam_Entry_060:
-	push	sr
-	ld	xde, 0x04700000
-	retd	3328
-	nop
-	nop
-	ld	(1:8), 7:io
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	push	sr
-	decf
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	.byte 0x0b
-	incf
+	.byte 0x02, 0x42, 0x00, 0x00, 0x70, 0x04, 0x0f, 0x00, 0x0d, 0x00, 0x00, 0x08, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0x00, 0x01, 0x02, 0x0d, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
 WidgetParam_MidiCC_Pan:
-	.byte 0xe6, 0xc4, 0xed
-	nop
-	ret
-	nop
-	reti
-	ld	(0:8), 255:io
+	.byte 0xe6, 0xc4, 0xed, 0x00, 0x0e, 0x00, 0x07, 0x08, 0x00, 0xff
 MidiChParam_Entry_061:
-	.byte 0x80
-	ld	xde, 0x01920000
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x80, 0x42, 0x00, 0x00, 0x92, 0x01, 0x80, 0x00, 0x01, 0x07, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_062:
-	.byte 0x81
-	ld	xde, 0x920000
-	swi	7
-	nop
-	.byte 0x80
-	nop
-	nop
-	max
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	ld	xwa, 0x04034241
-	halt
-	rcf
-	scf
-	ccf
-	zcf
-	push_a
-	pop_a
-	ex_ff
-	cp	(xwa), l
+	.byte 0x81, 0x42, 0x00, 0x00, 0x92, 0x00, 0xff, 0x00, 0x80, 0x00, 0x00, 0x04, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0x00, 0x40, 0x41, 0x42, 0x03, 0x04, 0x05, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
+	.byte 0x80, 0xff
 WidgetParam_MidiCC_Expression:
-	ld	b, 197:opc
-	.byte 0xed
-	nop
-	retd	0
-	nop
-	nop
-	swi	7
+	.byte 0x22, 0xc5, 0xed, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x00, 0xff
 MidiChParam_Entry_063:
-	.byte 0x82
-	ld	xde, 0x01920000
-	retd	2816
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x82, 0x42, 0x00, 0x00, 0x92, 0x01, 0x0f, 0x00, 0x0b, 0x00, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00
+	.byte 0x00, 0xff
 MidiChParam_Entry_064:
-	.byte 0x83
-	ld	xde, 0x02920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	pop	sr
-	max
-	halt
-	reti
-	ld	(9:8), 10:io
-	incf
-	decf
-	ret
-	retd	4625
-	zcf
-	pop_a
-	ex_ff
-	ldf 24
-	.byte 0x1a
-	jp	0x1f1d1c
+	.byte 0x83, 0x42, 0x00, 0x00, 0x92, 0x02, 0xff, 0x00, 0xff, 0x00, 0x00, 0x05, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0x00, 0x01, 0x03, 0x04, 0x05, 0x07, 0x08, 0x09, 0x0a, 0x0c, 0x0d, 0x0e, 0x0f, 0x11
+	.byte 0x12, 0x13, 0x15, 0x16, 0x17, 0x18, 0x1a, 0x1b, 0x1c, 0x1d, 0x1f
 	.ascii " !#$%&()*+-./12346789;<=?@ABDEFGIJKMNOPRSTUWXY[\\]^`abcefgijklnopqstuwxyz|}~€‚ƒ…†‡ˆŠ‹ŒŽ‘“”•–˜™šœžŸ¡¢"
-	.byte 0xa3, 0xa4, 0xa6
-	sub	(xsp), xwa
-	sub	(xde-85), xix
-	.byte 0xad, 0xaf, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6
-	.byte 0xb8, 0xb9, 0xba, 0xbb, 0xbd, 0xbe, 0xbf, 0xc0
-	and	l, (0xc6c4c3:24)
-	adc	w, 203
-	xor	d, 206
-	.byte 0xd0, 0xd1, 0xd2, 0xd4, 0xd5, 0xd6, 0xd7
-	cp	bc, 2:i3
-	cp	hl, 4:i3
-	cp	iz, 7:i3
-	.byte 0xe0, 0xe2, 0xe3, 0xe4, 0xe5, 0xe7, 0xe8, 0xe9
-	sla	xde, 237
-	cp	xwa, xiz
-	.byte 0xf1, 0xf2, 0xf3, 0xf5, 0xf6
-	ldx
-	swi	0
-	swi	2
-	swi	3
-	swi	4
-	swi	6
-	swi	7
-	swi	7
+	.byte 0xa3, 0xa4, 0xa6, 0xa7, 0xa8, 0xaa, 0xab, 0xac, 0xad, 0xaf, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6
+	.byte 0xb8, 0xb9, 0xba, 0xbb, 0xbd, 0xbe, 0xbf, 0xc0, 0xc2, 0xc3, 0xc4, 0xc6, 0xc7, 0xc8, 0xc9, 0xcb
+	.byte 0xcc, 0xcd, 0xce, 0xd0, 0xd1, 0xd2, 0xd4, 0xd5, 0xd6, 0xd7, 0xd9, 0xda, 0xdb, 0xdc, 0xde, 0xdf
+	.byte 0xe0, 0xe2, 0xe3, 0xe4, 0xe5, 0xe7, 0xe8, 0xe9, 0xea, 0xec, 0xed, 0xee, 0xf0, 0xf1, 0xf2, 0xf3
+	.byte 0xf5, 0xf6, 0xf7, 0xf8, 0xfa, 0xfb, 0xfc, 0xfe, 0xff, 0xff
 WidgetParam_MidiCC_Sustain:
-	jr	f, -59
-	.byte 0xed
-	nop
-	.byte 0xc9
-	nop
-	incm8	4, (xwa)
-	nop
-	swi	7
-MidiChParam_Entry_065:
-	.byte 0x84
-	ld	xde, 0x03920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_066:
-	.byte 0x85
-	ld	xde, 0x04920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_067:
-	.byte 0x86
-	ld	xde, 0x05920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_068:
-	.byte 0x87
-	ld	xde, 0x06920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_069:
-	.byte 0x88
-	ld	xde, 0x07920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_070:
-	.byte 0x89
-	ld	xde, 0x08920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_071:
-	.byte 0x8a
-	ld	xde, 0x09920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_072:
-	.byte 0x8b
-	ld	xde, 0x0a920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_073:
-	.byte 0x8c
-	ld	xde, 0x0b920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_074:
-	.byte 0x8d
-	ld	xde, 0x0c920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_075:
-	.byte 0x8e
-	ld	xde, 0x0d920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_076:
-	nop
-	popw	bc
-	nop
-	nop
-	jr	lt, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_077:
-	nop
-	popw	de
-	nop
-	nop
-	jr	le, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_078:
-	nop
-	popw	hl
-	nop
-	nop
-	jr	ule, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_079:
-	nop
-	popw	ix
-	nop
-	nop
-	jr	ov, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_080:
-	nop
-	popw	iy
-	nop
-	nop
-	jr	mi, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_081:
-	nop
-	popw	iz
-	nop
-	nop
-	jr	z, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_082:
-	nop
-	.byte 0x50
-	nop
-	nop
-	.byte 0x80
-	ldw	(3:8), 512:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_083:
-	.byte 0x01, 0x50
-	nop
-	nop
-	.byte 0x80
-	pushw	255
-	swi	7
-	nop
-	nop
-	reti
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
+	.byte 0x60, 0xc5, 0xed, 0x00, 0xc9, 0x00, 0x80, 0x64, 0x00, 0xff
+;  19 x 18-byte sound-parameter descriptors, 0xEDC634-0xEDC78A, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc634.c.
+SndParamRun_EDC634:
+MidiChParam_Entry_065:	sndparam_descriptor 0x004284, 146, 3, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_066:	sndparam_descriptor 0x004285, 146, 4, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_067:	sndparam_descriptor 0x004286, 146, 5, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_068:	sndparam_descriptor 0x004287, 146, 6, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_069:	sndparam_descriptor 0x004288, 146, 7, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_070:	sndparam_descriptor 0x004289, 146, 8, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_071:	sndparam_descriptor 0x00428a, 146, 9, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_072:	sndparam_descriptor 0x00428b, 146, 10, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_073:	sndparam_descriptor 0x00428c, 146, 11, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_074:	sndparam_descriptor 0x00428d, 146, 12, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_075:	sndparam_descriptor 0x00428e, 146, 13, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_076:	sndparam_descriptor 0x004900, 97, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_077:	sndparam_descriptor 0x004a00, 98, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_078:	sndparam_descriptor 0x004b00, 99, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_079:	sndparam_descriptor 0x004c00, 100, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_080:	sndparam_descriptor 0x004d00, 101, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_081:	sndparam_descriptor 0x004e00, 102, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_082:	sndparam_descriptor 0x005000, 128, 10, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_083:	sndparam_descriptor 0x005001, 128, 11, 0xff, 0, 255, 0, 0x00, 0x07, 1, 7, 5, 0, 0, 0xff
 MidiChParam_Entry_084:
-	cp	h, 208
-	.byte 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7
-	cp	wa, 1:i3
-	cp	de, 3:i3
-	cp	ix, 5:i3
-	cp	iz, 7:i3
-	.byte 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7
-	.byte 0xe8, 0xe9, 0xea
-	sla	xhl, 237
-	srl	xiz, 240
-	.byte 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6
-	ldx
-	swi	0
-	swi	1
-	swi	2
-	swi	3
-	swi	4
-	swi	5
-	swi	6
-	swi	7
-	nop
-	normal
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	retd	4368
-	ccf
-	zcf
-	push_a
-	pop_a
-	ex_ff
-	ldf 24
-	pop_f
-	.byte 0x1a
-	jp	0x1e1d1c
-	.byte 0x1f
+	.byte 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7, 0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd
+	.byte 0xde, 0xdf, 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed
+	.byte 0xee, 0xef, 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd
+	.byte 0xfe, 0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
+	.byte 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d
+	.byte 0x1e, 0x1f
 	.ascii " !\"#$%&'()*+,-./012ÿ"
 WidgetParam_MidiCC_Reverb:
 	.long MidiChParam_Entry_084
-	jr	mi, 0
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_085:
-	push	sr
-	.byte 0x50
-	nop
-	nop
-	.byte 0x80
-	incf
-	swi	7
-	normal
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_086:
-	nop
-	.byte 0x80
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_087:
-	.byte 0x01, 0x80
-	nop
-	nop
-	ld	(xde), 127
-	nop
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_088:
-	reti
-	.byte 0x80
-	nop
-	nop
-	nop
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_089:
-	ld	(128:8), 0:io
-	nop
-	nop
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_090:
-	ldw	(128:8), 0:io
-	nop
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_091:
-	pushw	128
-	nop
-	ld	(xhl), 127
-	nop
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_092:
-	ld	w, 128:opc
-	nop
-	nop
-	nop
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_093:
-	ld	xwa, 128
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
+	.byte 0x65, 0x00, 0x00, 0x00, 0x00, 0xff
+;  9 x 18-byte sound-parameter descriptors, 0xEDC7FA-0xEDC89C, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc7fa.c.
+SndParamRun_EDC7FA:
+MidiChParam_Entry_085:	sndparam_descriptor 0x005002, 128, 12, 0xff, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_086:	sndparam_descriptor 0x008000, 0, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_087:	sndparam_descriptor 0x008001, 178, 0, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_088:	sndparam_descriptor 0x008007, 0, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_089:	sndparam_descriptor 0x008008, 0, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_090:	sndparam_descriptor 0x00800a, 0, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_091:	sndparam_descriptor 0x00800b, 179, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_092:	sndparam_descriptor 0x008020, 0, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_093:	sndparam_descriptor 0x008040, 0, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
 WidgetParam_MidiCC_Chorus:
-	ld	xwa, 0x7f000100
-	nop
-	normal
-	swi	7
-MidiChParam_Entry_094:
-	pop	xhl
-	.byte 0x80
-	nop
-	nop
-	nop
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_095:
-	pop	xiy
-	.byte 0x80
-	nop
-	nop
-	nop
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_096:
-	pop	xiz
-	.byte 0x80
-	nop
-	nop
-	nop
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-MidiChParam_Entry_097:
-	jrl	128
-	nop
-	.byte 0xae
-	nop
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_098:
-	.byte 0x80, 0x80
-	nop
-	nop
-	nop
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_099:
-	.byte 0x81, 0x80
-	nop
-	nop
-	nop
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_100:
-	.byte 0x82, 0x80
-	nop
-	nop
-	nop
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_101:
-	.byte 0xb0, 0x81
-	nop
-	nop
-	ld	(xbc), 127
-	nop
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_102:
-	.byte 0xb2, 0x81
-	nop
-	nop
-	ld	(xix), 127
-	nop
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_103:
-	ld	a, 130:opc
-	nop
-	nop
-	ld	xix, 0x01000f08
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x40, 0x00, 0x01, 0x00, 0x7f, 0x00, 0x01, 0xff
+;  10 x 18-byte sound-parameter descriptors, 0xEDC8A4-0xEDC958, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc8a4.c.
+SndParamRun_EDC8A4:
+MidiChParam_Entry_094:	sndparam_descriptor 0x00805b, 0, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_095:	sndparam_descriptor 0x00805d, 0, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_096:	sndparam_descriptor 0x00805e, 0, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+MidiChParam_Entry_097:	sndparam_descriptor 0x008078, 174, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_098:	sndparam_descriptor 0x008080, 0, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_099:	sndparam_descriptor 0x008081, 0, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_100:	sndparam_descriptor 0x008082, 0, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_101:	sndparam_descriptor 0x0081b0, 177, 0, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_102:	sndparam_descriptor 0x0081b2, 180, 0, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+MidiChParam_Entry_103:	sndparam_descriptor 0x008221, 68, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_104:
-	add	b, d
-	nop
-	nop
-	ld	xix, 0x0f000f01
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	pushw	3340
-	ret
-	retd	256
-	push	sr
-	pop	sr
-	max
-	halt
-	swi	7
+	.byte 0xcc, 0x82, 0x00, 0x00, 0x44, 0x01, 0x0f, 0x00, 0x0f, 0x00, 0x00, 0x09, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0xff
 WidgetParam_MidiCC_DspEffect:
-	jr	gt, -55
-	.byte 0xed
-	nop
-	pushw	0
-	halt
-	nop
-	swi	7
-MidiChParam_Entry_105:
-	add	b, c
-	nop
-	nop
-	ld	xix, 0x0f00f001
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_106:
-	.byte 0x93, 0x82
-	nop
-	nop
-	ld	xix, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_107:
-	.byte 0x94, 0x82
-	nop
-	nop
-	ld	xix, 0x0f00f002
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_108:
-	.byte 0x80, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f03
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_109:
-	.byte 0x81, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_110:
-	.byte 0x82, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f04
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_111:
-	.byte 0x83, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f004
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_112:
-	.byte 0x84, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f05
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_001:
-	.byte 0x85, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f005
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_002:
-	.byte 0x86, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_003:
-	.byte 0x87, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f006
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_004:
-	.byte 0x88, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_005:
-	.byte 0xc0, 0x82
-	nop
-	nop
-	ld	xix, 0x01001007
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_006:
-	.byte 0xc1, 0x82
-	nop
-	nop
-	ld	xix, 0x01002007
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_007:
-	nop
-	.byte 0x84
-	nop
-	nop
-	normal
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_008:
-	.byte 0x01, 0x84
-	nop
-	nop
-	.byte 0xb2, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_009:
-	reti
-	.byte 0x84
-	nop
-	nop
-	normal
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_010:
-	ld	(132:8), 0:io
-	nop
-	normal
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_011:
-	ldw	(132:8), 0:io
-	normal
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_012:
-	pushw	132
-	nop
-	.byte 0xb3, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_013:
-	ld	w, 132:opc
-	nop
-	nop
-	normal
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_014:
-	ld	xwa, 0x01000084
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_015:
-	pop	xhl
-	.byte 0x84
-	nop
-	nop
-	normal
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_016:
-	pop	xiy
-	.byte 0x84
-	nop
-	nop
-	normal
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_017:
-	pop	xiz
-	.byte 0x84
-	nop
-	nop
-	normal
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_018:
-	jrl	132
-	nop
-	.byte 0xae, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_019:
-	.byte 0x80, 0x84
-	nop
-	nop
-	normal
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_020:
-	.byte 0x81, 0x84
-	nop
-	nop
-	normal
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_021:
-	.byte 0x82, 0x84
-	nop
-	nop
-	normal
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_022:
-	.byte 0xb0, 0x85
-	nop
-	nop
-	.byte 0xb1, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_023:
-	.byte 0xb2, 0x85
-	nop
-	nop
-	.byte 0xb4, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_024:
-	ld	a, 134:opc
-	nop
-	nop
-	ld	xiy, 0x01000f08
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_025:
-	add	h, d
-	nop
-	nop
-	ld	xiy, 0x0f000f01
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_026:
-	add	h, c
-	nop
-	nop
-	ld	xiy, 0x0f00f001
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_027:
-	.byte 0x93, 0x86
-	nop
-	nop
-	ld	xiy, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_028:
-	.byte 0x94, 0x86
-	nop
-	nop
-	ld	xiy, 0x0f00f002
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_029:
-	.byte 0x80, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f03
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_030:
-	.byte 0x81, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_031:
-	.byte 0x82, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f04
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_032:
-	.byte 0x83, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f004
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_033:
-	.byte 0x84, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f05
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_034:
-	.byte 0x85, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f005
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_035:
-	.byte 0x86, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_036:
-	.byte 0x87, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f006
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_037:
-	.byte 0x88, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_038:
-	.byte 0xc0, 0x86
-	nop
-	nop
-	ld	xiy, 0x01001007
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_039:
-	.byte 0xc1, 0x86
-	nop
-	nop
-	ld	xiy, 0x01002007
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_040:
-	nop
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_041:
-	.byte 0x01, 0x88
-	nop
-	nop
-	ldw (xde), 127
-	jrl nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_042:
-	reti
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_043:
-	ld	(136:8), 0:io
-	nop
-	push	sr
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_044:
-	ldw	(136:8), 0:io
-	push	sr
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_045:
-	pushw	136
-	nop
-	ldw (xhl), 127
-	jrl nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_046:
-	ld	w, 136:opc
-	nop
-	nop
-	push	sr
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_047:
-	ld	xwa, 0x02000088
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_048:
-	pop	xhl
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_049:
-	pop	xiy
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_050:
-	pop	xiz
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_051:
-	jrl	136
-	nop
-	.byte 0xae
-	push	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_052:
-	add	(xwa), w
-	nop
-	nop
-	push	sr
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_053:
-	add	(xbc), w
-	nop
-	nop
-	push	sr
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_054:
-	add	(xde), w
-	nop
-	nop
-	push	sr
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_055:
-	.byte 0xb0, 0x89
-	nop
-	nop
-	ldw (xbc), 127
-	jrl nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_056:
-	.byte 0xb2, 0x89
-	nop
-	nop
-	ldw (xix), 127
-	jrl nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_057:
-	ld	a, 138:opc
-	nop
-	nop
-	ld	xiz, 0x01000f08
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_058:
-	ld	b, d
-	nop
-	nop
-	ld	xiz, 0x0f000f01
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_059:
-	ld	b, c
-	nop
-	nop
-	ld	xiz, 0x0f00f001
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_060:
-	add	(xhl), de
-	nop
-	nop
-	ld	xiz, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_061:
-	add	(xix), de
-	nop
-	nop
-	ld	xiz, 0x0f00f002
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_062:
-	add	(xwa), b
-	nop
-	nop
-	ld	xiz, 0x08000f03
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_063:
-	add	(xbc), b
-	nop
-	nop
-	ld	xiz, 0x0800f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_064:
-	add	(xde), b
-	nop
-	nop
-	ld	xiz, 0x08000f04
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_065:
-	add	(xhl), b
-	nop
-	nop
-	ld	xiz, 0x0800f004
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_066:
-	add	(xix), b
-	nop
-	nop
-	ld	xiz, 0x08000f05
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_067:
-	add	(xiy), b
-	nop
-	nop
-	ld	xiz, 0x0800f005
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_068:
-	add	(xiz), b
-	nop
-	nop
-	ld	xiz, 0x08000f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_069:
-	add	(xsp), b
-	nop
-	nop
-	ld	xiz, 0x0800f006
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_070:
-	.byte 0x88, 0x8a
-	nop
-	nop
-	ld	xiz, 0x08000f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_071:
-	.byte 0xc0, 0x8a
-	nop
-	nop
-	ld	xiz, 0x01001007
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_072:
-	.byte 0xc1, 0x8a
-	nop
-	nop
-	ld	xiz, 0x01002007
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_073:
-	nop
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_074:
-	.byte 0x01, 0x8c
-	nop
-	nop
-	.byte 0xb2
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_075:
-	reti
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_076:
-	ld	(140:8), 0:io
-	nop
-	pop	sr
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_077:
-	ldw	(140:8), 0:io
-	pop	sr
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_078:
-	pushw	140
-	nop
-	.byte 0xb3
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_079:
-	ld	w, 140:opc
-	nop
-	nop
-	pop	sr
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_080:
-	ld	xwa, 0x0300008c
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_081:
-	pop	xhl
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_082:
-	pop	xiy
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_083:
-	pop	xiz
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_084:
-	jrl	140
-	nop
-	.byte 0xae
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_085:
-	add	(xwa), d
-	nop
-	nop
-	pop	sr
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_001:
-	add	(xbc), d
-	nop
-	nop
-	pop	sr
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_002:
-	add	(xde), d
-	nop
-	nop
-	pop	sr
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_003:
-	.byte 0xb0, 0x8d
-	nop
-	nop
-	.byte 0xb1
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_004:
-	.byte 0xb2, 0x8d
-	nop
-	nop
-	.byte 0xb4
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_005:
-	nop
-	.byte 0x90
-	nop
-	nop
-	max
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_006:
-	.byte 0x01, 0x90
-	nop
-	nop
-	.byte 0xb2, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_007:
-	reti
-	.byte 0x90
-	nop
-	nop
-	max
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_008:
-	ld	(144:8), 0:io
-	nop
-	max
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_009:
-	ldw	(144:8), 0:io
-	max
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_010:
-	pushw	144
-	nop
-	.byte 0xb3, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_011:
-	ld	w, 144:opc
-	nop
-	nop
-	max
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_012:
-	ld	xwa, 0x04000090
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_013:
-	pop	xhl
-	.byte 0x90
-	nop
-	nop
-	max
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_014:
-	pop	xiy
-	.byte 0x90
-	nop
-	nop
-	max
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_015:
-	pop	xiz
-	.byte 0x90
-	nop
-	nop
-	max
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_016:
-	jrl	144
-	nop
-	.byte 0xae, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_017:
-	.byte 0x80, 0x90
-	nop
-	nop
-	max
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_018:
-	.byte 0x81, 0x90
-	nop
-	nop
-	max
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_019:
-	.byte 0x82, 0x90
-	nop
-	nop
-	max
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_020:
-	.byte 0xb0, 0x91
-	nop
-	nop
-	.byte 0xb1, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_021:
-	.byte 0xb2, 0x91
-	nop
-	nop
-	.byte 0xb4, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_022:
-	nop
-	.byte 0x94
-	nop
-	nop
-	halt
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_023:
-	.byte 0x01, 0x94
-	nop
-	nop
-	.byte 0xb2
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_024:
-	reti
-	.byte 0x94
-	nop
-	nop
-	halt
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_025:
-	ld	(148:8), 0:io
-	nop
-	halt
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_026:
-	ldw	(148:8), 0:io
-	halt
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_027:
-	pushw	148
-	nop
-	.byte 0xb3
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_028:
-	ld	w, 148:opc
-	nop
-	nop
-	halt
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_029:
-	ld	xwa, 0x05000094
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_030:
-	pop	xhl
-	.byte 0x94
-	nop
-	nop
-	halt
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_031:
-	pop	xiy
-	.byte 0x94
-	nop
-	nop
-	halt
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_032:
-	pop	xiz
-	.byte 0x94
-	nop
-	nop
-	halt
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_033:
-	jrl	148
-	nop
-	.byte 0xae
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_034:
-	.byte 0x80, 0x94
-	nop
-	nop
-	halt
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_035:
-	.byte 0x81, 0x94
-	nop
-	nop
-	halt
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_036:
-	.byte 0x82, 0x94
-	nop
-	nop
-	halt
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_037:
-	.byte 0xb0, 0x95
-	nop
-	nop
-	.byte 0xb1
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_038:
-	.byte 0xb2, 0x95
-	nop
-	nop
-	.byte 0xb4
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_039:
-	nop
-	.byte 0x98
-	nop
-	nop
-	ei	0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_040:
-	.byte 0x01, 0x98
-	nop
-	nop
-	.byte 0xb2, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_041:
-	reti
-	.byte 0x98
-	nop
-	nop
-	ei	3
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_042:
-	ld	(152:8), 0:io
-	nop
-	ei	3
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_043:
-	ldw	(152:8), 0:io
-	.byte 0x06
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_044:
-	pushw	152
-	nop
-	.byte 0xb3, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_045:
-	ld	w, 152:opc
-	nop
-	nop
-	ei	1
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_046:
-	ld	xwa, 0x06000098
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_047:
-	pop	xhl
-	.byte 0x98
-	nop
-	nop
-	ei	7
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_048:
-	pop	xiy
-	.byte 0x98
-	nop
-	nop
-	ei	5
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_049:
-	pop	xiz
-	.byte 0x98
-	nop
-	nop
-	ei	4
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_050:
-	jrl	152
-	nop
-	.byte 0xae, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_051:
-	.byte 0x80, 0x98
-	nop
-	nop
-	.byte 0x06
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_052:
-	.byte 0x81, 0x98
-	nop
-	nop
-	.byte 0x06
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_053:
-	.byte 0x82, 0x98
-	nop
-	nop
-	.byte 0x06
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_054:
-	.byte 0xb0, 0x99
-	nop
-	nop
-	.byte 0xb1, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_055:
-	.byte 0xb2, 0x99
-	nop
-	nop
-	.byte 0xb4, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_056:
-	nop
-	.byte 0x9c
-	nop
-	nop
-	reti
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_057:
-	.byte 0x01, 0x9c
-	nop
-	nop
-	.byte 0xb2
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_058:
-	reti
-	.byte 0x9c
-	nop
-	nop
-	reti
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_059:
-	ld	(156:8), 0:io
-	nop
-	reti
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_060:
-	ldw	(156:8), 0:io
-	reti
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_061:
-	pushw	156
-	nop
-	.byte 0xb3
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_062:
-	ld	w, 156:opc
-	nop
-	nop
-	reti
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_063:
-	ld	xwa, 0x0700009c
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_064:
-	pop	xhl
-	.byte 0x9c
-	nop
-	nop
-	reti
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_065:
-	pop	xiy
-	.byte 0x9c
-	nop
-	nop
-	reti
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_066:
-	pop	xiz
-	.byte 0x9c
-	nop
-	nop
-	reti
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_067:
-	jrl	156
-	nop
-	.byte 0xae
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_068:
-	.byte 0x80, 0x9c
-	nop
-	nop
-	reti
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_069:
-	.byte 0x81, 0x9c
-	nop
-	nop
-	reti
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_070:
-	.byte 0x82, 0x9c
-	nop
-	nop
-	reti
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_071:
-	.byte 0xb0, 0x9d
-	nop
-	nop
-	.byte 0xb1
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_072:
-	.byte 0xb2, 0x9d
-	nop
-	nop
-	.byte 0xb4
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_073:
-	nop
-	.byte 0xa0
-	nop
-	nop
-	ld	(0:8), 255:io
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_074:
-	.byte 0x01, 0xa0
-	nop
-	nop
-	.byte 0xb2
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_075:
-	reti
-	.byte 0xa0
-	nop
-	nop
-	ld	(3:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_076:
-	ld	(160:8), 0:io
-	nop
-	ld	(3:8), 128:io
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_077:
-	ldw	(160:8), 0:io
-	ld	(8:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_078:
-	pushw	160
-	nop
-	.byte 0xb3
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_079:
-	ld	w, 160:opc
-	nop
-	nop
-	ld	(1:8), 127:io
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_080:
-	ld	xwa, 0x080000a0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_081:
-	pop	xhl
-	.byte 0xa0
-	nop
-	nop
-	ld	(7:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_082:
-	pop	xiy
-	.byte 0xa0
-	nop
-	nop
-	ld	(5:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_083:
-	pop	xiz
-	.byte 0xa0
-	nop
-	nop
-	ld	(4:8), 64:io
-	nop
-	jrl	nc, 6
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_084:
-	jrl	160
-	nop
-	.byte 0xae
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_085:
-	.byte 0x80, 0xa0
-	nop
-	nop
-	ld	(11:8), 127:io
-	nop
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_086:
-	.byte 0x81, 0xa0
-	nop
-	nop
-	ld	(10:8), 255:io
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_087:
-	.byte 0x82, 0xa0
-	nop
-	nop
-	ld	(9:8), 127:io
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_088:
-	.byte 0xb0, 0xa1
-	nop
-	nop
-	.byte 0xb1
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_089:
-	.byte 0xb2, 0xa1
-	nop
-	nop
-	.byte 0xb4
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	.byte 0x04
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_090:
-	nop
-	.byte 0xa4
-	nop
-	nop
-	push	0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_091:
-	.byte 0x01, 0xa4
-	nop
-	nop
-	.byte 0xb2
-	push	127
-	nop
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_092:
-	reti
-	.byte 0xa4
-	nop
-	nop
-	push	3
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_093:
-	ld	(164:8), 0:io
-	nop
-	push	3
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_094:
-	ldw	(164:8), 0:io
-	push	8
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_095:
-	pushw	164
-	nop
-	.byte 0xb3
-	push	127
-	nop
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_096:
-	ld	w, 164:opc
-	nop
-	nop
-	push	1
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_097:
-	ld	xwa, 0x090000a4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_098:
-	pop	xhl
-	.byte 0xa4
-	nop
-	nop
-	push	7
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_099:
-	pop	xiy
-	.byte 0xa4
-	nop
-	nop
-	push	5
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_100:
-	pop	xiz
-	.byte 0xa4
-	nop
-	nop
-	push	4
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_101:
-	jrl	164
-	nop
-	.byte 0xae
-	push	127
-	nop
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_102:
-	.byte 0x80, 0xa4
-	nop
-	nop
-	push	11
-	jrl	nc, 3072
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_103:
-	.byte 0x81, 0xa4
-	nop
-	nop
-	push	10
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_104:
-	.byte 0x82, 0xa4
-	nop
-	nop
-	push	9
-	jrl	nc, 19508
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_105:
-	.byte 0xb0, 0xa5
-	nop
-	nop
-	.byte 0xb1
-	push	127
-	nop
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_106:
-	.byte 0xb2, 0xa5
-	nop
-	nop
-	.byte 0xb4
-	push	127
-	nop
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_107:
-	nop
-	.byte 0xa8
-	nop
-	nop
-	ldw	(0:8), 255:io
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_108:
-	.byte 0x01, 0xa8
-	nop
-	nop
-	.byte 0xb2
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_109:
-	reti
-	.byte 0xa8
-	nop
-	nop
-	ldw	(3:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_110:
-	ld	(168:8), 0:io
-	nop
-	ldw	(3:8), 128:io
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_111:
-	ldw	(168:8), 0:io
-	ldw	(8:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_112:
-	pushw	168
-	nop
-	.byte 0xb3
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_113:
-	ld	w, 168:opc
-	nop
-	nop
-	ldw	(1:8), 127:io
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_114:
-	ld	xwa, 0x0a0000a8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_115:
-	pop	xhl
-	.byte 0xa8
-	nop
-	nop
-	ldw	(7:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_116:
-	pop	xiy
-	.byte 0xa8
-	nop
-	nop
-	ldw	(5:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_117:
-	pop	xiz
-	.byte 0xa8
-	nop
-	nop
-	ldw	(4:8), 64:io
-	jrl	nc, 6
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_118:
-	jrl	168
-	nop
-	.byte 0xae
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_119:
-	sub	(xwa), w
-	nop
-	nop
-	ldw	(11:8), 127:io
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_120:
-	sub	(xbc), w
-	nop
-	nop
-	ldw	(10:8), 255:io
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_121:
-	sub	(xde), w
-	nop
-	nop
-	ldw	(9:8), 0x347f:io
-	popw	ix
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_122:
-	.byte 0xb0, 0xa9
-	nop
-	nop
-	.byte 0xb1
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_123:
-	.byte 0xb2, 0xa9
-	nop
-	nop
-	.byte 0xb4
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_124:
-	nop
-	.byte 0xac
-	nop
-	nop
-	pushw	0xff00
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_125:
-	.byte 0x01, 0xac
-	nop
-	nop
-	.byte 0xb2
-	pushw	127
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_126:
-	reti
-	.byte 0xac
-	nop
-	nop
-	pushw	0x7f03
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_127:
-	ld	(172:8), 0:io
-	nop
-	pushw	0x8003
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_128:
-	ldw	(172:8), 0:io
-	pushw	0x7f08
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_129:
-	pushw	172
-	nop
-	.byte 0xb3
-	pushw	127
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_130:
-	ld	w, 172:opc
-	nop
-	nop
-	pushw	0x7f01
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_131:
-	ld	xwa, 0x0b0000ac
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_132:
-	pop	xhl
-	.byte 0xac
-	nop
-	nop
-	pushw	0x7f07
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_133:
-	pop	xiy
-	.byte 0xac
-	nop
-	nop
-	pushw	0x7f05
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_134:
-	pop	xiz
-	.byte 0xac
-	nop
-	nop
-	pushw	0x4004
-	nop
-	jrl	nc, 6
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_135:
-	jrl	172
-	nop
-	.byte 0xae
-	pushw	127
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_136:
-	sub	(xwa), d
-	nop
-	nop
-	pushw	0x7f0b
-	nop
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_137:
-	sub	(xbc), d
-	nop
-	nop
-	pushw	0xff0a
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_138:
-	sub	(xde), d
-	nop
-	nop
-	pushw	0x7f09
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_139:
-	.byte 0xb0, 0xad
-	nop
-	nop
-	.byte 0xb1
-	pushw	127
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_140:
-	.byte 0xb2, 0xad
-	nop
-	nop
-	.byte 0xb4
-	pushw	127
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_141:
-	nop
-	ld	(xwa), 0
-	incf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_142:
-	normal
-	ld	(xwa), 0
-	.byte 0xb2
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_143:
-	reti
-	ld	(xwa), 0
-	incf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_144:
-	ld	(176:8), 0:io
-	nop
-	incf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_145:
-	ldw	(176:8), 0:io
-	incf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_146:
-	pushw	176
-	nop
-	.byte 0xb3
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_147:
-	ld	w, 176:opc
-	nop
-	nop
-	incf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_148:
-	ld	xwa, 0x0c0000b0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_149:
-	pop	xhl
-	ld	(xwa), 0
-	incf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_150:
-	pop	xiy
-	ld	(xwa), 0
-	incf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_151:
-	pop	xiz
-	ld	(xwa), 0
-	incf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_152:
-	jrl	176
-	nop
-	.byte 0xae
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_153:
-	.byte 0x80
-	ld	(xwa), 0
-	incf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_154:
-	.byte 0x81
-	ld	(xwa), 0
-	incf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_155:
-	.byte 0x82
-	ld	(xwa), 0
-	incf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_156:
-	.byte 0xb0
-	ld	(xbc), 0
-	.byte 0xb1
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_157:
-	.byte 0xb2
-	ld	(xbc), 0
-	.byte 0xb4
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_158:
-	nop
-	ld	(xix), 0
-	decf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_159:
-	normal
-	ld	(xix), 0
-	.byte 0xb2
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_160:
-	reti
-	ld	(xix), 0
-	decf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_161:
-	ld	(180:8), 0:io
-	nop
-	decf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_162:
-	ldw	(180:8), 0:io
-	decf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_163:
-	pushw	180
-	nop
-	.byte 0xb3
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_164:
-	ld	w, 180:opc
-	nop
-	nop
-	decf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_165:
-	ld	xwa, 0x0d0000b4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_166:
-	pop	xhl
-	ld	(xix), 0
-	decf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_167:
-	pop	xiy
-	ld	(xix), 0
-	decf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_168:
-	pop	xiz
-	ld	(xix), 0
-	decf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_169:
-	jrl	180
-	nop
-	.byte 0xae
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_170:
-	.byte 0x80
-	ld	(xix), 0
-	decf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_171:
-	.byte 0x81
-	ld	(xix), 0
-	decf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_172:
-	.byte 0x82
-	ld	(xix), 0
-	decf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_173:
-	.byte 0xb0
-	ld	(xiy), 0
-	.byte 0xb1
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_174:
-	.byte 0xb2
-	ld	(xiy), 0
-	.byte 0xb4
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_175:
-	nop
-	ld (xwa+256), 14
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_176:
-	normal
-	ld (xwa+256), 178
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_177:
-	reti
-	ld (xwa+256), 14
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_178:
-	ld	(184:8), 0:io
-	nop
-	ret
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_179:
-	ldw	(184:8), 0:io
-	ret
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_180:
-	pushw	184
-	nop
-	.byte 0xb3
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_181:
-	ld	w, 184:opc
-	nop
-	nop
-	ret
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_182:
-	ld	xwa, 0x0e0000b8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_183:
-	pop	xhl
-	ld (xwa+256), 14
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_184:
-	pop	xiy
-	ld (xwa+256), 14
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_185:
-	pop	xiz
-	ld (xwa+256), 14
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_186:
-	jrl	184
-	nop
-	.byte 0xae
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_187:
-	.byte 0x80, 0xb8
-	nop
-	nop
-	ret
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_188:
-	.byte 0x81, 0xb8
-	nop
-	nop
-	ret
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_189:
-	.byte 0x82, 0xb8
-	nop
-	nop
-	ret
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_190:
-	.byte 0xb0, 0xb9
-	nop
-	nop
-	.byte 0xb1
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_191:
-	.byte 0xb2, 0xb9
-	nop
-	nop
-	.byte 0xb4
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_192:
-	nop
-	ld (xix+256), 15
-	nop
-	swi 7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_193:
-	normal
-	ld (xix+256), 178
-	retd	127
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_194:
-	reti
-	ld (xix+256), 15
-	pop sr
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_195:
-	ld	(188:8), 0:io
-	nop
-	retd	0x8003
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_196:
-	ldw	(188:8), 0:io
-	retd	0x7f08
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_197:
-	pushw	188
-	nop
-	.byte 0xb3
-	retd	127
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_198:
-	ld	w, 188:opc
-	nop
-	nop
-	retd	0x7f01
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_199:
-	ld	xwa, 0x0f0000bc
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_200:
-	pop	xhl
-	ld (xix+256), 15
-	reti
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_201:
-	pop	xiy
-	ld (xix+256), 15
-	halt
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_202:
-	pop	xiz
-	ld (xix+256), 15
-	max
-	ld xwa, 425728
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_203:
-	jrl	188
-	nop
-	.byte 0xae
-	retd	127
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_204:
-	.byte 0x80, 0xbc
-	nop
-	nop
-	retd	0x7f0b
-	nop
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_205:
-	.byte 0x81, 0xbc
-	nop
-	nop
-	retd	0xff0a
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_206:
-	.byte 0x82, 0xbc
-	nop
-	nop
-	retd	0x7f09
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_207:
-	.byte 0xb0, 0xbd
-	nop
-	nop
-	.byte 0xb1
-	retd	127
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_208:
-	.byte 0xb2, 0xbd
-	nop
-	nop
-	.byte 0xb4
-	retd	127
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_209:
-	nop
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-PartParam_Entry_210:
-	.byte 0x01, 0xc0
-	nop
-	nop
-	.byte 0xb2
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-PartParam_Entry_211:
-	reti
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_212:
-	ld	(192:8), 0:io
-	nop
-	rcf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_213:
-	ldw	(192:8), 0:io
-	rcf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-PartParam_Entry_214:
-	pushw	192
-	nop
-	.byte 0xb3
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-PartParam_Entry_215:
-	ld	w, 192:opc
-	nop
-	nop
-	rcf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-PartParam_Entry_216:
-	ld	xwa, 0x100000c0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-PartParam_Entry_217:
-	pop	xhl
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_218:
-	pop	xiy
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_219:
-	pop	xiz
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-PartParam_Entry_220:
-	jrl	192
-	nop
-	.byte 0xae
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_221:
-	.byte 0x80, 0xc0
-	nop
-	nop
-	rcf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_222:
-	.byte 0x81, 0xc0
-	nop
-	nop
-	rcf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_223:
-	.byte 0x82, 0xc0
-	nop
-	nop
-	rcf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_224:
-	.byte 0xb0, 0xc1
-	nop
-	nop
-	.byte 0xb1
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-PartParam_Entry_225:
-	.byte 0xb2, 0xc1
-	nop
-	nop
-	.byte 0xb4
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_226:
-	nop
-	.byte 0xc4
-	nop
-	nop
-	scf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-PartParam_Entry_227:
-	.byte 0x01, 0xc4
-	nop
-	nop
-	.byte 0xb2
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_228:
-	reti
-	.byte 0xc4
-	nop
-	nop
-	scf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_229:
-	ld	(196:8), 0:io
-	nop
-	scf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_230:
-	ldw	(196:8), 0:io
-	scf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_231:
-	pushw	196
-	nop
-	.byte 0xb3
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_232:
-	ld	w, 196:opc
-	nop
-	nop
-	scf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_233:
-	ld	xwa, 0x110000c4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_234:
-	pop	xhl
-	.byte 0xc4
-	nop
-	nop
-	scf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_235:
-	pop	xiy
-	.byte 0xc4
-	nop
-	nop
-	scf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_236:
-	pop	xiz
-	.byte 0xc4
-	nop
-	nop
-	scf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_237:
-	jrl	196
-	nop
-	.byte 0xae
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_238:
-	.byte 0x80, 0xc4
-	nop
-	nop
-	scf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_239:
-	.byte 0x81, 0xc4
-	nop
-	nop
-	scf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_240:
-	.byte 0x82, 0xc4
-	nop
-	nop
-	scf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_241:
-	.byte 0xb0, 0xc5
-	nop
-	nop
-	.byte 0xb1
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_242:
-	.byte 0xb2, 0xc5
-	nop
-	nop
-	.byte 0xb4
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_243:
-	nop
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_244:
-	.byte 0x01, 0xc8
-	nop
-	nop
-	.byte 0xb2
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_245:
-	reti
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_246:
-	ld	(200:8), 0:io
-	nop
-	ccf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_247:
-	ldw	(200:8), 0:io
-	ccf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_248:
-	pushw	200
-	nop
-	.byte 0xb3
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_249:
-	ld	w, 200:opc
-	nop
-	nop
-	ccf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_250:
-	ld	xwa, 0x120000c8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_251:
-	pop	xhl
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_252:
-	pop	xiy
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_253:
-	pop	xiz
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_254:
-	jrl	200
-	nop
-	.byte 0xae
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_255:
-	and	(xwa), w
-	nop
-	nop
-	ccf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_256:
-	and	(xbc), w
-	nop
-	nop
-	ccf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_257:
-	and	(xde), w
-	nop
-	nop
-	ccf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_258:
-	.byte 0xb0, 0xc9
-	nop
-	nop
-	.byte 0xb1
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_259:
-	.byte 0xb2, 0xc9
-	nop
-	nop
-	.byte 0xb4
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_260:
-	nop
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_261:
-	.byte 0x01, 0xcc
-	nop
-	nop
-	.byte 0xb2
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_262:
-	reti
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_263:
-	ld	(204:8), 0:io
-	nop
-	zcf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_264:
-	ldw	(204:8), 0:io
-	zcf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_265:
-	pushw	204
-	nop
-	.byte 0xb3
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_266:
-	ld	w, 204:opc
-	nop
-	nop
-	zcf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_267:
-	ld	xwa, 0x130000cc
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_268:
-	pop	xhl
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_269:
-	pop	xiy
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_270:
-	pop	xiz
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_271:
-	jrl	204
-	nop
-	.byte 0xae
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_272:
-	and	(xwa), d
-	nop
-	nop
-	zcf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_273:
-	and	(xbc), d
-	nop
-	nop
-	zcf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_274:
-	and	(xde), d
-	nop
-	nop
-	zcf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_275:
-	.byte 0xb0, 0xcd
-	nop
-	nop
-	.byte 0xb1
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_276:
-	.byte 0xb2, 0xcd
-	nop
-	nop
-	.byte 0xb4
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_277:
-	nop
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_278:
-	.byte 0x01, 0xd0
-	nop
-	nop
-	.byte 0xb2
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_279:
-	reti
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_280:
-	ld	(208:8), 0:io
-	nop
-	push_a
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_281:
-	ldw	(208:8), 0:io
-	push_a
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_282:
-	pushw	208
-	nop
-	.byte 0xb3
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_283:
-	ld	w, 208:opc
-	nop
-	nop
-	push_a
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_284:
-	ld	xwa, 0x140000d0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_285:
-	pop	xhl
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_286:
-	pop	xiy
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_287:
-	pop	xiz
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_288:
-	jrl	208
-	nop
-	.byte 0xae
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_289:
-	.byte 0x80, 0xd0
-	nop
-	nop
-	push_a
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_290:
-	.byte 0x81, 0xd0
-	nop
-	nop
-	push_a
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_291:
-	.byte 0x82, 0xd0
-	nop
-	nop
-	push_a
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_292:
-	.byte 0xb0, 0xd1
-	nop
-	nop
-	.byte 0xb1
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_293:
-	.byte 0xb2, 0xd1
-	nop
-	nop
-	.byte 0xb4
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_294:
-	nop
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_295:
-	.byte 0x01, 0xd4
-	nop
-	nop
-	.byte 0xb2
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_296:
-	reti
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_297:
-	ld	(212:8), 0:io
-	nop
-	pop_a
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_298:
-	ldw	(212:8), 0:io
-	pop_a
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_299:
-	pushw	212
-	nop
-	.byte 0xb3
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_300:
-	ld	w, 212:opc
-	nop
-	nop
-	pop_a
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_301:
-	ld	xwa, 0x150000d4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_302:
-	pop	xhl
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_303:
-	pop	xiy
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_304:
-	pop	xiz
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_305:
-	jrl	212
-	nop
-	.byte 0xae
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_306:
-	.byte 0x80, 0xd4
-	nop
-	nop
-	pop_a
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_307:
-	.byte 0x81, 0xd4
-	nop
-	nop
-	pop_a
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_308:
-	.byte 0x82, 0xd4
-	nop
-	nop
-	pop_a
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_309:
-	.byte 0xb0, 0xd5
-	nop
-	nop
-	.byte 0xb1
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_310:
-	.byte 0xb2, 0xd5
-	nop
-	nop
-	.byte 0xb4
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_311:
-	nop
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_312:
-	.byte 0x01, 0xd8
-	nop
-	nop
-	.byte 0xb2
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_313:
-	reti
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_314:
-	ld	(216:8), 0:io
-	nop
-	ex_ff
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_315:
-	ldw	(216:8), 0:io
-	ex_ff
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_316:
-	pushw	216
-	nop
-	.byte 0xb3
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_317:
-	ld	w, 216:opc
-	nop
-	nop
-	ex_ff
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_318:
-	ld	xwa, 0x160000d8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_319:
-	pop	xhl
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_320:
-	pop	xiy
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_321:
-	pop	xiz
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_322:
-	jrl	216
-	nop
-	.byte 0xae
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_323:
-	xor	(xwa), w
-	nop
-	nop
-	ex_ff
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_324:
-	xor	(xbc), w
-	nop
-	nop
-	ex_ff
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_325:
-	xor	(xde), w
-	nop
-	nop
-	ex_ff
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_326:
-	.byte 0xb0, 0xd9
-	nop
-	nop
-	.byte 0xb1
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_327:
-	.byte 0xb2, 0xd9
-	nop
-	nop
-	.byte 0xb4
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_328:
-	nop
-	.byte 0xdc
-	nop
-	nop
-	ldf	0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_329:
-	.byte 0x01, 0xdc
-	nop
-	nop
-	.byte 0xb2, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_330:
-	reti
-	.byte 0xdc
-	nop
-	nop
-	ldf	3
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_331:
-	ld	(220:8), 0:io
-	nop
-	ldf 3
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_332:
-	ldw	(220:8), 0:io
-	ldf 8
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_333:
-	pushw	220
-	nop
-	.byte 0xb3, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_334:
-	ld	w, 220:opc
-	nop
-	nop
-	.byte 0x17, 0x01
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_335:
-	ld	xwa, 0x170000dc
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_336:
-	pop	xhl
-	.byte 0xdc
-	nop
-	nop
-	ldf	7
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_337:
-	pop	xiy
-	.byte 0xdc
-	nop
-	nop
-	ldf	5
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_338:
-	pop	xiz
-	.byte 0xdc
-	nop
-	nop
-	.byte 0x17, 0x04
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_339:
-	jrl	220
-	nop
-	.byte 0xae, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_340:
-	xor	(xwa), d
-	nop
-	nop
-	ldf 11
-	jrl nc, 3072
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_341:
-	xor	(xbc), d
-	nop
-	nop
-	ldf 10
-	swi 7
-	nop
-	swi 7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_342:
-	xor	(xde), d
-	nop
-	nop
-	ldf 9
-	jrl nc, 19508
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_343:
-	.byte 0xb0, 0xdd
-	nop
-	nop
-	.byte 0xb1, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_344:
-	.byte 0xb2, 0xdd
-	nop
-	nop
-	.byte 0xb4, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_345:
-	nop
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_346:
-	.byte 0x01, 0xe0
-	nop
-	nop
-	.byte 0xb2
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_347:
-	reti
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_348:
-	ld	(224:8), 0:io
-	nop
-	push_f
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_349:
-	ldw	(224:8), 0:io
-	push_f
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_350:
-	pushw	224
-	nop
-	.byte 0xb3
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_351:
-	ld	w, 224:opc
-	nop
-	nop
-	push_f
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_352:
-	ld	xwa, 0x180000e0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_353:
-	pop	xhl
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_354:
-	pop	xiy
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_355:
-	pop	xiz
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_356:
-	jrl	224
-	nop
-	.byte 0xae
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_357:
-	.byte 0x80, 0xe0
-	nop
-	nop
-	push_f
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_358:
-	.byte 0x81, 0xe0
-	nop
-	nop
-	push_f
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_359:
-	.byte 0x82, 0xe0
-	nop
-	nop
-	push_f
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_360:
-	.byte 0xb0, 0xe1
-	nop
-	nop
-	.byte 0xb1
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_361:
-	.byte 0xb2, 0xe1
-	nop
-	nop
-	.byte 0xb4
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_362:
-	reti
-	.byte 0xe8
-	nop
-	nop
-	.byte 0x98, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_363:
-	ld	(232:8), 0:io
-	nop
-	.byte 0x98, 0x04, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_364:
-	nop
-	.byte 0x80, 0x01
-	nop
-	nop
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_365:
-	.byte 0x01, 0x80, 0x01
-	nop
-	nop
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_366:
-	push	sr
-	.byte 0x80, 0x01
-	nop
-	nop
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_367:
-	pop	sr
-	.byte 0x80, 0x01
-	nop
-	nop
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x6a, 0xc9, 0xed, 0x00, 0x0b, 0x00, 0x00, 0x05, 0x00, 0xff
+;  460 x 18-byte sound-parameter descriptors, 0xEDC980-0xEDE9D8, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc980.c.
+SndParamRun_EDC980:
+MidiChParam_Entry_105:	sndparam_descriptor 0x0082cb, 68, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_106:	sndparam_descriptor 0x008293, 68, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_107:	sndparam_descriptor 0x008294, 68, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+MidiChParam_Entry_108:	sndparam_descriptor 0x008280, 68, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_109:	sndparam_descriptor 0x008281, 68, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_110:	sndparam_descriptor 0x008282, 68, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_111:	sndparam_descriptor 0x008283, 68, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+MidiChParam_Entry_112:	sndparam_descriptor 0x008284, 68, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_001:	sndparam_descriptor 0x008285, 68, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_002:	sndparam_descriptor 0x008286, 68, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_003:	sndparam_descriptor 0x008287, 68, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_004:	sndparam_descriptor 0x008288, 68, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_005:	sndparam_descriptor 0x0082c0, 68, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_006:	sndparam_descriptor 0x0082c1, 68, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_007:	sndparam_descriptor 0x008400, 1, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_008:	sndparam_descriptor 0x008401, 178, 1, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_009:	sndparam_descriptor 0x008407, 1, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_010:	sndparam_descriptor 0x008408, 1, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_011:	sndparam_descriptor 0x00840a, 1, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_012:	sndparam_descriptor 0x00840b, 179, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_013:	sndparam_descriptor 0x008420, 1, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_014:	sndparam_descriptor 0x008440, 1, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+VoiceParamEx_Entry_015:	sndparam_descriptor 0x00845b, 1, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_016:	sndparam_descriptor 0x00845d, 1, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_017:	sndparam_descriptor 0x00845e, 1, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+VoiceParamEx_Entry_018:	sndparam_descriptor 0x008478, 174, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_019:	sndparam_descriptor 0x008480, 1, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_020:	sndparam_descriptor 0x008481, 1, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_021:	sndparam_descriptor 0x008482, 1, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_022:	sndparam_descriptor 0x0085b0, 177, 1, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_023:	sndparam_descriptor 0x0085b2, 180, 1, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_024:	sndparam_descriptor 0x008621, 69, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_025:	sndparam_descriptor 0x0086cc, 69, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_026:	sndparam_descriptor 0x0086cb, 69, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_027:	sndparam_descriptor 0x008693, 69, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_028:	sndparam_descriptor 0x008694, 69, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_029:	sndparam_descriptor 0x008680, 69, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_030:	sndparam_descriptor 0x008681, 69, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_031:	sndparam_descriptor 0x008682, 69, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_032:	sndparam_descriptor 0x008683, 69, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_033:	sndparam_descriptor 0x008684, 69, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_034:	sndparam_descriptor 0x008685, 69, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_035:	sndparam_descriptor 0x008686, 69, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_036:	sndparam_descriptor 0x008687, 69, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_037:	sndparam_descriptor 0x008688, 69, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_038:	sndparam_descriptor 0x0086c0, 69, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_039:	sndparam_descriptor 0x0086c1, 69, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_040:	sndparam_descriptor 0x008800, 2, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_041:	sndparam_descriptor 0x008801, 178, 2, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_042:	sndparam_descriptor 0x008807, 2, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_043:	sndparam_descriptor 0x008808, 2, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_044:	sndparam_descriptor 0x00880a, 2, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_045:	sndparam_descriptor 0x00880b, 179, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_046:	sndparam_descriptor 0x008820, 2, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_047:	sndparam_descriptor 0x008840, 2, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+VoiceParamEx_Entry_048:	sndparam_descriptor 0x00885b, 2, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_049:	sndparam_descriptor 0x00885d, 2, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_050:	sndparam_descriptor 0x00885e, 2, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+VoiceParamEx_Entry_051:	sndparam_descriptor 0x008878, 174, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_052:	sndparam_descriptor 0x008880, 2, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_053:	sndparam_descriptor 0x008881, 2, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_054:	sndparam_descriptor 0x008882, 2, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_055:	sndparam_descriptor 0x0089b0, 177, 2, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_056:	sndparam_descriptor 0x0089b2, 180, 2, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_057:	sndparam_descriptor 0x008a21, 70, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_058:	sndparam_descriptor 0x008acc, 70, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_059:	sndparam_descriptor 0x008acb, 70, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_060:	sndparam_descriptor 0x008a93, 70, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_061:	sndparam_descriptor 0x008a94, 70, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+VoiceParamEx_Entry_062:	sndparam_descriptor 0x008a80, 70, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_063:	sndparam_descriptor 0x008a81, 70, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_064:	sndparam_descriptor 0x008a82, 70, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_065:	sndparam_descriptor 0x008a83, 70, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_066:	sndparam_descriptor 0x008a84, 70, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_067:	sndparam_descriptor 0x008a85, 70, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_068:	sndparam_descriptor 0x008a86, 70, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_069:	sndparam_descriptor 0x008a87, 70, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_070:	sndparam_descriptor 0x008a88, 70, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_071:	sndparam_descriptor 0x008ac0, 70, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_072:	sndparam_descriptor 0x008ac1, 70, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_073:	sndparam_descriptor 0x008c00, 3, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_074:	sndparam_descriptor 0x008c01, 178, 3, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_075:	sndparam_descriptor 0x008c07, 3, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_076:	sndparam_descriptor 0x008c08, 3, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_077:	sndparam_descriptor 0x008c0a, 3, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_078:	sndparam_descriptor 0x008c0b, 179, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_079:	sndparam_descriptor 0x008c20, 3, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_080:	sndparam_descriptor 0x008c40, 3, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+VoiceParamEx_Entry_081:	sndparam_descriptor 0x008c5b, 3, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_082:	sndparam_descriptor 0x008c5d, 3, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+VoiceParamEx_Entry_083:	sndparam_descriptor 0x008c5e, 3, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+VoiceParamEx_Entry_084:	sndparam_descriptor 0x008c78, 174, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+VoiceParamEx_Entry_085:	sndparam_descriptor 0x008c80, 3, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_001:	sndparam_descriptor 0x008c81, 3, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_002:	sndparam_descriptor 0x008c82, 3, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_003:	sndparam_descriptor 0x008db0, 177, 3, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_004:	sndparam_descriptor 0x008db2, 180, 3, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_005:	sndparam_descriptor 0x009000, 4, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_006:	sndparam_descriptor 0x009001, 178, 4, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_007:	sndparam_descriptor 0x009007, 4, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_008:	sndparam_descriptor 0x009008, 4, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_009:	sndparam_descriptor 0x00900a, 4, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_010:	sndparam_descriptor 0x00900b, 179, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_011:	sndparam_descriptor 0x009020, 4, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_012:	sndparam_descriptor 0x009040, 4, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_013:	sndparam_descriptor 0x00905b, 4, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_014:	sndparam_descriptor 0x00905d, 4, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_015:	sndparam_descriptor 0x00905e, 4, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_016:	sndparam_descriptor 0x009078, 174, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_017:	sndparam_descriptor 0x009080, 4, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_018:	sndparam_descriptor 0x009081, 4, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_019:	sndparam_descriptor 0x009082, 4, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_020:	sndparam_descriptor 0x0091b0, 177, 4, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_021:	sndparam_descriptor 0x0091b2, 180, 4, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_022:	sndparam_descriptor 0x009400, 5, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_023:	sndparam_descriptor 0x009401, 178, 5, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_024:	sndparam_descriptor 0x009407, 5, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_025:	sndparam_descriptor 0x009408, 5, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_026:	sndparam_descriptor 0x00940a, 5, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_027:	sndparam_descriptor 0x00940b, 179, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_028:	sndparam_descriptor 0x009420, 5, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_029:	sndparam_descriptor 0x009440, 5, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_030:	sndparam_descriptor 0x00945b, 5, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_031:	sndparam_descriptor 0x00945d, 5, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_032:	sndparam_descriptor 0x00945e, 5, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_033:	sndparam_descriptor 0x009478, 174, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_034:	sndparam_descriptor 0x009480, 5, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_035:	sndparam_descriptor 0x009481, 5, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_036:	sndparam_descriptor 0x009482, 5, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_037:	sndparam_descriptor 0x0095b0, 177, 5, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_038:	sndparam_descriptor 0x0095b2, 180, 5, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_039:	sndparam_descriptor 0x009800, 6, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_040:	sndparam_descriptor 0x009801, 178, 6, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_041:	sndparam_descriptor 0x009807, 6, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_042:	sndparam_descriptor 0x009808, 6, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_043:	sndparam_descriptor 0x00980a, 6, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_044:	sndparam_descriptor 0x00980b, 179, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_045:	sndparam_descriptor 0x009820, 6, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_046:	sndparam_descriptor 0x009840, 6, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_047:	sndparam_descriptor 0x00985b, 6, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_048:	sndparam_descriptor 0x00985d, 6, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_049:	sndparam_descriptor 0x00985e, 6, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_050:	sndparam_descriptor 0x009878, 174, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_051:	sndparam_descriptor 0x009880, 6, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_052:	sndparam_descriptor 0x009881, 6, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_053:	sndparam_descriptor 0x009882, 6, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_054:	sndparam_descriptor 0x0099b0, 177, 6, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_055:	sndparam_descriptor 0x0099b2, 180, 6, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_056:	sndparam_descriptor 0x009c00, 7, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_057:	sndparam_descriptor 0x009c01, 178, 7, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_058:	sndparam_descriptor 0x009c07, 7, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_059:	sndparam_descriptor 0x009c08, 7, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_060:	sndparam_descriptor 0x009c0a, 7, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_061:	sndparam_descriptor 0x009c0b, 179, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_062:	sndparam_descriptor 0x009c20, 7, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_063:	sndparam_descriptor 0x009c40, 7, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_064:	sndparam_descriptor 0x009c5b, 7, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_065:	sndparam_descriptor 0x009c5d, 7, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_066:	sndparam_descriptor 0x009c5e, 7, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_067:	sndparam_descriptor 0x009c78, 174, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_068:	sndparam_descriptor 0x009c80, 7, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_069:	sndparam_descriptor 0x009c81, 7, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_070:	sndparam_descriptor 0x009c82, 7, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_071:	sndparam_descriptor 0x009db0, 177, 7, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_072:	sndparam_descriptor 0x009db2, 180, 7, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_073:	sndparam_descriptor 0x00a000, 8, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_074:	sndparam_descriptor 0x00a001, 178, 8, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_075:	sndparam_descriptor 0x00a007, 8, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_076:	sndparam_descriptor 0x00a008, 8, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_077:	sndparam_descriptor 0x00a00a, 8, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_078:	sndparam_descriptor 0x00a00b, 179, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_079:	sndparam_descriptor 0x00a020, 8, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_080:	sndparam_descriptor 0x00a040, 8, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_081:	sndparam_descriptor 0x00a05b, 8, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_082:	sndparam_descriptor 0x00a05d, 8, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_083:	sndparam_descriptor 0x00a05e, 8, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_084:	sndparam_descriptor 0x00a078, 174, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_085:	sndparam_descriptor 0x00a080, 8, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_086:	sndparam_descriptor 0x00a081, 8, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_087:	sndparam_descriptor 0x00a082, 8, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_088:	sndparam_descriptor 0x00a1b0, 177, 8, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_089:	sndparam_descriptor 0x00a1b2, 180, 8, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_090:	sndparam_descriptor 0x00a400, 9, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_091:	sndparam_descriptor 0x00a401, 178, 9, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_092:	sndparam_descriptor 0x00a407, 9, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_093:	sndparam_descriptor 0x00a408, 9, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_094:	sndparam_descriptor 0x00a40a, 9, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_095:	sndparam_descriptor 0x00a40b, 179, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_096:	sndparam_descriptor 0x00a420, 9, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_097:	sndparam_descriptor 0x00a440, 9, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_098:	sndparam_descriptor 0x00a45b, 9, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_099:	sndparam_descriptor 0x00a45d, 9, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_100:	sndparam_descriptor 0x00a45e, 9, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_101:	sndparam_descriptor 0x00a478, 174, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_102:	sndparam_descriptor 0x00a480, 9, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_103:	sndparam_descriptor 0x00a481, 9, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_104:	sndparam_descriptor 0x00a482, 9, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_105:	sndparam_descriptor 0x00a5b0, 177, 9, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_106:	sndparam_descriptor 0x00a5b2, 180, 9, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_107:	sndparam_descriptor 0x00a800, 10, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_108:	sndparam_descriptor 0x00a801, 178, 10, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_109:	sndparam_descriptor 0x00a807, 10, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_110:	sndparam_descriptor 0x00a808, 10, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_111:	sndparam_descriptor 0x00a80a, 10, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_112:	sndparam_descriptor 0x00a80b, 179, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_113:	sndparam_descriptor 0x00a820, 10, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_114:	sndparam_descriptor 0x00a840, 10, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_115:	sndparam_descriptor 0x00a85b, 10, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_116:	sndparam_descriptor 0x00a85d, 10, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_117:	sndparam_descriptor 0x00a85e, 10, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_118:	sndparam_descriptor 0x00a878, 174, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_119:	sndparam_descriptor 0x00a880, 10, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_120:	sndparam_descriptor 0x00a881, 10, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_121:	sndparam_descriptor 0x00a882, 10, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_122:	sndparam_descriptor 0x00a9b0, 177, 10, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_123:	sndparam_descriptor 0x00a9b2, 180, 10, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_124:	sndparam_descriptor 0x00ac00, 11, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_125:	sndparam_descriptor 0x00ac01, 178, 11, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_126:	sndparam_descriptor 0x00ac07, 11, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_127:	sndparam_descriptor 0x00ac08, 11, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_128:	sndparam_descriptor 0x00ac0a, 11, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_129:	sndparam_descriptor 0x00ac0b, 179, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_130:	sndparam_descriptor 0x00ac20, 11, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_131:	sndparam_descriptor 0x00ac40, 11, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_132:	sndparam_descriptor 0x00ac5b, 11, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_133:	sndparam_descriptor 0x00ac5d, 11, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_134:	sndparam_descriptor 0x00ac5e, 11, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_135:	sndparam_descriptor 0x00ac78, 174, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_136:	sndparam_descriptor 0x00ac80, 11, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_137:	sndparam_descriptor 0x00ac81, 11, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_138:	sndparam_descriptor 0x00ac82, 11, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_139:	sndparam_descriptor 0x00adb0, 177, 11, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_140:	sndparam_descriptor 0x00adb2, 180, 11, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_141:	sndparam_descriptor 0x00b000, 12, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_142:	sndparam_descriptor 0x00b001, 178, 12, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_143:	sndparam_descriptor 0x00b007, 12, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_144:	sndparam_descriptor 0x00b008, 12, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_145:	sndparam_descriptor 0x00b00a, 12, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_146:	sndparam_descriptor 0x00b00b, 179, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_147:	sndparam_descriptor 0x00b020, 12, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_148:	sndparam_descriptor 0x00b040, 12, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_149:	sndparam_descriptor 0x00b05b, 12, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_150:	sndparam_descriptor 0x00b05d, 12, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_151:	sndparam_descriptor 0x00b05e, 12, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_152:	sndparam_descriptor 0x00b078, 174, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_153:	sndparam_descriptor 0x00b080, 12, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_154:	sndparam_descriptor 0x00b081, 12, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_155:	sndparam_descriptor 0x00b082, 12, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_156:	sndparam_descriptor 0x00b1b0, 177, 12, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_157:	sndparam_descriptor 0x00b1b2, 180, 12, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_158:	sndparam_descriptor 0x00b400, 13, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_159:	sndparam_descriptor 0x00b401, 178, 13, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_160:	sndparam_descriptor 0x00b407, 13, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_161:	sndparam_descriptor 0x00b408, 13, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_162:	sndparam_descriptor 0x00b40a, 13, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_163:	sndparam_descriptor 0x00b40b, 179, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_164:	sndparam_descriptor 0x00b420, 13, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_165:	sndparam_descriptor 0x00b440, 13, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_166:	sndparam_descriptor 0x00b45b, 13, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_167:	sndparam_descriptor 0x00b45d, 13, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_168:	sndparam_descriptor 0x00b45e, 13, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_169:	sndparam_descriptor 0x00b478, 174, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_170:	sndparam_descriptor 0x00b480, 13, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_171:	sndparam_descriptor 0x00b481, 13, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_172:	sndparam_descriptor 0x00b482, 13, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_173:	sndparam_descriptor 0x00b5b0, 177, 13, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_174:	sndparam_descriptor 0x00b5b2, 180, 13, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_175:	sndparam_descriptor 0x00b800, 14, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_176:	sndparam_descriptor 0x00b801, 178, 14, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_177:	sndparam_descriptor 0x00b807, 14, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_178:	sndparam_descriptor 0x00b808, 14, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_179:	sndparam_descriptor 0x00b80a, 14, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_180:	sndparam_descriptor 0x00b80b, 179, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_181:	sndparam_descriptor 0x00b820, 14, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_182:	sndparam_descriptor 0x00b840, 14, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_183:	sndparam_descriptor 0x00b85b, 14, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_184:	sndparam_descriptor 0x00b85d, 14, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_185:	sndparam_descriptor 0x00b85e, 14, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_186:	sndparam_descriptor 0x00b878, 174, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_187:	sndparam_descriptor 0x00b880, 14, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_188:	sndparam_descriptor 0x00b881, 14, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_189:	sndparam_descriptor 0x00b882, 14, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_190:	sndparam_descriptor 0x00b9b0, 177, 14, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_191:	sndparam_descriptor 0x00b9b2, 180, 14, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_192:	sndparam_descriptor 0x00bc00, 15, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_193:	sndparam_descriptor 0x00bc01, 178, 15, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_194:	sndparam_descriptor 0x00bc07, 15, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_195:	sndparam_descriptor 0x00bc08, 15, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_196:	sndparam_descriptor 0x00bc0a, 15, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_197:	sndparam_descriptor 0x00bc0b, 179, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_198:	sndparam_descriptor 0x00bc20, 15, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_199:	sndparam_descriptor 0x00bc40, 15, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_200:	sndparam_descriptor 0x00bc5b, 15, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_201:	sndparam_descriptor 0x00bc5d, 15, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_202:	sndparam_descriptor 0x00bc5e, 15, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+PartParam_Entry_203:	sndparam_descriptor 0x00bc78, 174, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_204:	sndparam_descriptor 0x00bc80, 15, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_205:	sndparam_descriptor 0x00bc81, 15, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_206:	sndparam_descriptor 0x00bc82, 15, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_207:	sndparam_descriptor 0x00bdb0, 177, 15, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_208:	sndparam_descriptor 0x00bdb2, 180, 15, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_209:	sndparam_descriptor 0x00c000, 16, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+PartParam_Entry_210:	sndparam_descriptor 0x00c001, 178, 16, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+PartParam_Entry_211:	sndparam_descriptor 0x00c007, 16, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_212:	sndparam_descriptor 0x00c008, 16, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_213:	sndparam_descriptor 0x00c00a, 16, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+PartParam_Entry_214:	sndparam_descriptor 0x00c00b, 179, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+PartParam_Entry_215:	sndparam_descriptor 0x00c020, 16, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+PartParam_Entry_216:	sndparam_descriptor 0x00c040, 16, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+PartParam_Entry_217:	sndparam_descriptor 0x00c05b, 16, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_218:	sndparam_descriptor 0x00c05d, 16, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_219:	sndparam_descriptor 0x00c05e, 16, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+PartParam_Entry_220:	sndparam_descriptor 0x00c078, 174, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+PartParam_Entry_221:	sndparam_descriptor 0x00c080, 16, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_222:	sndparam_descriptor 0x00c081, 16, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_223:	sndparam_descriptor 0x00c082, 16, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+PartParam_Entry_224:	sndparam_descriptor 0x00c1b0, 177, 16, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+PartParam_Entry_225:	sndparam_descriptor 0x00c1b2, 180, 16, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+PartParam_Entry_226:	sndparam_descriptor 0x00c400, 17, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+PartParam_Entry_227:	sndparam_descriptor 0x00c401, 178, 17, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+ExtPartParam_Entry_228:	sndparam_descriptor 0x00c407, 17, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_229:	sndparam_descriptor 0x00c408, 17, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_230:	sndparam_descriptor 0x00c40a, 17, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_231:	sndparam_descriptor 0x00c40b, 179, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_232:	sndparam_descriptor 0x00c420, 17, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+ExtPartParam_Entry_233:	sndparam_descriptor 0x00c440, 17, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_234:	sndparam_descriptor 0x00c45b, 17, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_235:	sndparam_descriptor 0x00c45d, 17, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_236:	sndparam_descriptor 0x00c45e, 17, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_237:	sndparam_descriptor 0x00c478, 174, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_238:	sndparam_descriptor 0x00c480, 17, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_239:	sndparam_descriptor 0x00c481, 17, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_240:	sndparam_descriptor 0x00c482, 17, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_241:	sndparam_descriptor 0x00c5b0, 177, 17, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+ExtPartParam_Entry_242:	sndparam_descriptor 0x00c5b2, 180, 17, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_243:	sndparam_descriptor 0x00c800, 18, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+ExtPartParam_Entry_244:	sndparam_descriptor 0x00c801, 178, 18, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+ExtPartParam_Entry_245:	sndparam_descriptor 0x00c807, 18, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_246:	sndparam_descriptor 0x00c808, 18, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_247:	sndparam_descriptor 0x00c80a, 18, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_248:	sndparam_descriptor 0x00c80b, 179, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_249:	sndparam_descriptor 0x00c820, 18, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+ExtPartParam_Entry_250:	sndparam_descriptor 0x00c840, 18, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_251:	sndparam_descriptor 0x00c85b, 18, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_252:	sndparam_descriptor 0x00c85d, 18, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_253:	sndparam_descriptor 0x00c85e, 18, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_254:	sndparam_descriptor 0x00c878, 174, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_255:	sndparam_descriptor 0x00c880, 18, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_256:	sndparam_descriptor 0x00c881, 18, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_257:	sndparam_descriptor 0x00c882, 18, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_258:	sndparam_descriptor 0x00c9b0, 177, 18, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+ExtPartParam_Entry_259:	sndparam_descriptor 0x00c9b2, 180, 18, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_260:	sndparam_descriptor 0x00cc00, 19, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+ExtPartParam_Entry_261:	sndparam_descriptor 0x00cc01, 178, 19, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+ExtPartParam_Entry_262:	sndparam_descriptor 0x00cc07, 19, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_263:	sndparam_descriptor 0x00cc08, 19, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_264:	sndparam_descriptor 0x00cc0a, 19, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_265:	sndparam_descriptor 0x00cc0b, 179, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_266:	sndparam_descriptor 0x00cc20, 19, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+ExtPartParam_Entry_267:	sndparam_descriptor 0x00cc40, 19, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_268:	sndparam_descriptor 0x00cc5b, 19, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_269:	sndparam_descriptor 0x00cc5d, 19, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_270:	sndparam_descriptor 0x00cc5e, 19, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_271:	sndparam_descriptor 0x00cc78, 174, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_272:	sndparam_descriptor 0x00cc80, 19, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_273:	sndparam_descriptor 0x00cc81, 19, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_274:	sndparam_descriptor 0x00cc82, 19, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_275:	sndparam_descriptor 0x00cdb0, 177, 19, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+ExtPartParam_Entry_276:	sndparam_descriptor 0x00cdb2, 180, 19, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_277:	sndparam_descriptor 0x00d000, 20, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_278:	sndparam_descriptor 0x00d001, 178, 20, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+ExtPartParam_Entry_279:	sndparam_descriptor 0x00d007, 20, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_280:	sndparam_descriptor 0x00d008, 20, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_281:	sndparam_descriptor 0x00d00a, 20, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_282:	sndparam_descriptor 0x00d00b, 179, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_283:	sndparam_descriptor 0x00d020, 20, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_284:	sndparam_descriptor 0x00d040, 20, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_285:	sndparam_descriptor 0x00d05b, 20, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_286:	sndparam_descriptor 0x00d05d, 20, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_287:	sndparam_descriptor 0x00d05e, 20, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_288:	sndparam_descriptor 0x00d078, 174, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_289:	sndparam_descriptor 0x00d080, 20, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_290:	sndparam_descriptor 0x00d081, 20, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_291:	sndparam_descriptor 0x00d082, 20, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_292:	sndparam_descriptor 0x00d1b0, 177, 20, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+ExtPartParam_Entry_293:	sndparam_descriptor 0x00d1b2, 180, 20, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_294:	sndparam_descriptor 0x00d400, 21, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_295:	sndparam_descriptor 0x00d401, 178, 21, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_296:	sndparam_descriptor 0x00d407, 21, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_297:	sndparam_descriptor 0x00d408, 21, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_298:	sndparam_descriptor 0x00d40a, 21, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_299:	sndparam_descriptor 0x00d40b, 179, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_300:	sndparam_descriptor 0x00d420, 21, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_301:	sndparam_descriptor 0x00d440, 21, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+ExtPartParam_Entry_302:	sndparam_descriptor 0x00d45b, 21, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_303:	sndparam_descriptor 0x00d45d, 21, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_304:	sndparam_descriptor 0x00d45e, 21, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+ExtPartParam_Entry_305:	sndparam_descriptor 0x00d478, 174, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_306:	sndparam_descriptor 0x00d480, 21, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_307:	sndparam_descriptor 0x00d481, 21, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_308:	sndparam_descriptor 0x00d482, 21, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_309:	sndparam_descriptor 0x00d5b0, 177, 21, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_310:	sndparam_descriptor 0x00d5b2, 180, 21, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_311:	sndparam_descriptor 0x00d800, 22, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_312:	sndparam_descriptor 0x00d801, 178, 22, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_313:	sndparam_descriptor 0x00d807, 22, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_314:	sndparam_descriptor 0x00d808, 22, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_315:	sndparam_descriptor 0x00d80a, 22, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_316:	sndparam_descriptor 0x00d80b, 179, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_317:	sndparam_descriptor 0x00d820, 22, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_318:	sndparam_descriptor 0x00d840, 22, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+ExtPartParam_Entry_319:	sndparam_descriptor 0x00d85b, 22, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_320:	sndparam_descriptor 0x00d85d, 22, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_321:	sndparam_descriptor 0x00d85e, 22, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+ExtPartParam_Entry_322:	sndparam_descriptor 0x00d878, 174, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_323:	sndparam_descriptor 0x00d880, 22, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_324:	sndparam_descriptor 0x00d881, 22, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_325:	sndparam_descriptor 0x00d882, 22, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_326:	sndparam_descriptor 0x00d9b0, 177, 22, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_327:	sndparam_descriptor 0x00d9b2, 180, 22, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_328:	sndparam_descriptor 0x00dc00, 23, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+ExtPartParam_Entry_329:	sndparam_descriptor 0x00dc01, 178, 23, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+ExtPartParam_Entry_330:	sndparam_descriptor 0x00dc07, 23, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_331:	sndparam_descriptor 0x00dc08, 23, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_332:	sndparam_descriptor 0x00dc0a, 23, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_333:	sndparam_descriptor 0x00dc0b, 179, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_334:	sndparam_descriptor 0x00dc20, 23, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+ExtPartParam_Entry_335:	sndparam_descriptor 0x00dc40, 23, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_336:	sndparam_descriptor 0x00dc5b, 23, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_337:	sndparam_descriptor 0x00dc5d, 23, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_338:	sndparam_descriptor 0x00dc5e, 23, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_339:	sndparam_descriptor 0x00dc78, 174, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_340:	sndparam_descriptor 0x00dc80, 23, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_341:	sndparam_descriptor 0x00dc81, 23, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_342:	sndparam_descriptor 0x00dc82, 23, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_343:	sndparam_descriptor 0x00ddb0, 177, 23, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+ExtPartParam_Entry_344:	sndparam_descriptor 0x00ddb2, 180, 23, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_345:	sndparam_descriptor 0x00e000, 24, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+ExtPartParam_Entry_346:	sndparam_descriptor 0x00e001, 178, 24, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+ExtPartParam_Entry_347:	sndparam_descriptor 0x00e007, 24, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_348:	sndparam_descriptor 0x00e008, 24, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_349:	sndparam_descriptor 0x00e00a, 24, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_350:	sndparam_descriptor 0x00e00b, 179, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+ExtPartParam_Entry_351:	sndparam_descriptor 0x00e020, 24, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+ExtPartParam_Entry_352:	sndparam_descriptor 0x00e040, 24, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_353:	sndparam_descriptor 0x00e05b, 24, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_354:	sndparam_descriptor 0x00e05d, 24, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_355:	sndparam_descriptor 0x00e05e, 24, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+ExtPartParam_Entry_356:	sndparam_descriptor 0x00e078, 174, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_357:	sndparam_descriptor 0x00e080, 24, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_358:	sndparam_descriptor 0x00e081, 24, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_359:	sndparam_descriptor 0x00e082, 24, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_360:	sndparam_descriptor 0x00e1b0, 177, 24, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+ExtPartParam_Entry_361:	sndparam_descriptor 0x00e1b2, 180, 24, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+ExtPartParam_Entry_362:	sndparam_descriptor 0x00e807, 152, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_363:	sndparam_descriptor 0x00e808, 152, 4, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_364:	sndparam_descriptor 0x018000, 0, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_365:	sndparam_descriptor 0x018001, 0, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_366:	sndparam_descriptor 0x018002, 0, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_367:	sndparam_descriptor 0x018003, 0, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
 ExtPartParam_Entry_368:
-	.byte 0x04, 0x80, 0x01
-	nop
-	nop
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	halt
-	ei	7
-	nop
-	normal
-	push	sr
-	pop	sr
-	swi	7
+	.byte 0x04, 0x80, 0x01, 0x00, 0x00, 0x0c, 0x07, 0x00, 0x7f, 0x00, 0x00, 0x02, 0x01, 0x07, 0x05, 0x00
+	.byte 0x00, 0xff, 0x05, 0x06, 0x07, 0x00, 0x01, 0x02, 0x03, 0xff
 WidgetParam_MidiCC_PitchBend:
-	.byte 0xea
-	sra	xbc, 0
-	reti
-	nop
-	nop
-	pop	sr
-	nop
-	swi	7
-ExtPartParam_Entry_369:
-	nop
-	.byte 0x82, 0x01
-	nop
-	nop
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_370:
-	.byte 0x01, 0x82, 0x01
-	nop
-	nop
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_371:
-	push	sr
-	.byte 0x82, 0x01
-	nop
-	nop
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_372:
-	pop	sr
-	.byte 0x82, 0x01
-	nop
-	nop
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_373:
-	.byte 0x04, 0x82, 0x01
-	nop
-	nop
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_374:
-	halt
-	.byte 0x82, 0x01
-	nop
-	nop
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_375:
-	.byte 0x06, 0x82, 0x01
-	nop
-	nop
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_376:
-	nop
-	.byte 0x84, 0x01
-	nop
-	normal
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_377:
-	.byte 0x01, 0x84, 0x01
-	nop
-	normal
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_378:
-	push	sr
-	.byte 0x84, 0x01
-	nop
-	normal
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_379:
-	pop	sr
-	.byte 0x84, 0x01
-	nop
-	normal
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_380:
-	.byte 0x04, 0x84, 0x01
-	nop
-	normal
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_381:
-	nop
-	.byte 0x86, 0x01
-	nop
-	normal
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_382:
-	.byte 0x01, 0x86, 0x01
-	nop
-	normal
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_383:
-	push	sr
-	.byte 0x86, 0x01
-	nop
-	normal
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_384:
-	pop	sr
-	.byte 0x86, 0x01
-	nop
-	normal
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_385:
-	.byte 0x04, 0x86, 0x01
-	nop
-	normal
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_386:
-	halt
-	.byte 0x86, 0x01
-	nop
-	normal
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_387:
-	.byte 0x06, 0x86, 0x01
-	nop
-	normal
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_388:
-	nop
-	.byte 0x88, 0x01
-	nop
-	push	sr
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_389:
-	.byte 0x01, 0x88, 0x01
-	nop
-	push	sr
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_390:
-	push	sr
-	.byte 0x88, 0x01
-	nop
-	push	sr
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_391:
-	pop	sr
-	.byte 0x88, 0x01
-	nop
-	push	sr
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_392:
-	.byte 0x04, 0x88, 0x01
-	nop
-	push	sr
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_393:
-	nop
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_394:
-	.byte 0x01, 0x8a, 0x01
-	nop
-	push	sr
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_395:
-	push	sr
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_396:
-	pop	sr
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_397:
-	.byte 0x04, 0x8a, 0x01
-	nop
-	push	sr
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_398:
-	halt
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_399:
-	.byte 0x06, 0x8a, 0x01
-	nop
-	push	sr
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_400:
-	nop
-	.byte 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_401:
-	.byte 0x01, 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_402:
-	push	sr
-	.byte 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_403:
-	pop	sr
-	.byte 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_404:
-	.byte 0x04, 0x8c, 0x01
-	nop
-	pop	sr
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_405:
-	nop
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_406:
-	.byte 0x01, 0x8e, 0x01
-	nop
-	pop	sr
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_407:
-	push	sr
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_408:
-	pop	sr
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_409:
-	.byte 0x04, 0x8e, 0x01
-	nop
-	pop	sr
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_410:
-	halt
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_411:
-	.byte 0x06, 0x8e, 0x01
-	nop
-	pop	sr
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_412:
-	nop
-	.byte 0x90, 0x01
-	nop
-	max
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_413:
-	.byte 0x01, 0x90, 0x01
-	nop
-	max
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_414:
-	push	sr
-	.byte 0x90, 0x01
-	nop
-	max
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_415:
-	pop	sr
-	.byte 0x90, 0x01
-	nop
-	max
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_416:
-	.byte 0x04, 0x90, 0x01
-	nop
-	max
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_417:
-	nop
-	.byte 0x92, 0x01
-	nop
-	max
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_418:
-	.byte 0x01, 0x92, 0x01
-	nop
-	max
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_419:
-	push	sr
-	.byte 0x92, 0x01
-	nop
-	max
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_420:
-	pop	sr
-	.byte 0x92, 0x01
-	nop
-	max
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_421:
-	.byte 0x04, 0x92, 0x01
-	nop
-	max
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_422:
-	halt
-	.byte 0x92, 0x01
-	nop
-	max
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_423:
-	.byte 0x06, 0x92, 0x01
-	nop
-	max
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_424:
-	nop
-	.byte 0x94, 0x01
-	nop
-	halt
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_425:
-	.byte 0x01, 0x94, 0x01
-	nop
-	halt
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_426:
-	push	sr
-	.byte 0x94, 0x01
-	nop
-	halt
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_427:
-	pop	sr
-	.byte 0x94, 0x01
-	nop
-	halt
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_428:
-	.byte 0x04, 0x94, 0x01
-	nop
-	halt
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_429:
-	nop
-	.byte 0x96, 0x01
-	nop
-	halt
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_430:
-	.byte 0x01, 0x96, 0x01
-	nop
-	halt
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_431:
-	push	sr
-	.byte 0x96, 0x01
-	nop
-	halt
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_432:
-	pop	sr
-	.byte 0x96, 0x01
-	nop
-	halt
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_433:
-	.byte 0x04, 0x96, 0x01
-	nop
-	halt
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_434:
-	halt
-	.byte 0x96, 0x01
-	nop
-	halt
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_435:
-	.byte 0x06, 0x96, 0x01
-	nop
-	halt
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_436:
-	nop
-	.byte 0x98, 0x01
-	nop
-	ei	13
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_437:
-	.byte 0x01, 0x98, 0x01
-	nop
-	ei	13
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_438:
-	push	sr
-	.byte 0x98, 0x01
-	nop
-	ei	13
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_439:
-	pop	sr
-	.byte 0x98, 0x01
-	nop
-	ei	13
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_440:
-	.byte 0x04, 0x98, 0x01
-	nop
-	ei	12
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_441:
-	nop
-	.byte 0x9a, 0x01
-	nop
-	ei	4
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_442:
-	.byte 0x01, 0x9a, 0x01
-	nop
-	ei	4
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_443:
-	push	sr
-	.byte 0x9a, 0x01
-	nop
-	ei	12
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_444:
-	pop	sr
-	.byte 0x9a, 0x01
-	nop
-	ei	12
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_445:
-	.byte 0x04, 0x9a, 0x01
-	nop
-	ei	4
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_446:
-	halt
-	.byte 0x9a, 0x01
-	nop
-	ei	22
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_447:
-	.byte 0x06, 0x9a, 0x01
-	nop
-	ei	12
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_448:
-	nop
-	.byte 0x9c, 0x01
-	nop
-	reti
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_449:
-	.byte 0x01, 0x9c, 0x01
-	nop
-	reti
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_450:
-	push	sr
-	.byte 0x9c, 0x01
-	nop
-	reti
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_451:
-	pop	sr
-	.byte 0x9c, 0x01
-	nop
-	reti
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_452:
-	.byte 0x04, 0x9c, 0x01
-	nop
-	reti
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_453:
-	nop
-	.byte 0x9e, 0x01
-	nop
-	reti
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_454:
-	.byte 0x01, 0x9e, 0x01
-	nop
-	reti
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_001:
-	push	sr
-	.byte 0x9e, 0x01
-	nop
-	reti
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_002:
-	pop	sr
-	.byte 0x9e, 0x01
-	nop
-	reti
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_003:
-	.byte 0x04, 0x9e, 0x01
-	nop
-	reti
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_004:
-	halt
-	.byte 0x9e, 0x01
-	nop
-	reti
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_005:
-	.byte 0x06, 0x9e, 0x01
-	nop
-	reti
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_006:
-	nop
-	.byte 0xa0, 0x01
-	nop
-	ld	(13:8), 32:io
-	nop
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_007:
-	.byte 0x01, 0xa0, 0x01
-	nop
-	ld	(13:8), 15:io
-	nop
-	retd	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_008:
-	push	sr
-	.byte 0xa0, 0x01
-	nop
-	ld	(13:8), 64:io
-	nop
-	.byte 0x01, 0x06
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_009:
-	pop	sr
-	.byte 0xa0, 0x01
-	nop
-	ld	(13:8), 128:io
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_010:
-	.byte 0x04, 0xa0, 0x01
-	nop
-	ld	(12:8), 7:io
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_011:
-	nop
-	.byte 0xa2, 0x01
-	nop
-	ld	(4:8), 7:io
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_012:
-	.byte 0x01, 0xa2, 0x01
-	nop
-	ld	(4:8), 16:io
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_013:
-	push	sr
-	.byte 0xa2, 0x01
-	nop
-	ld	(12:8), 8:io
-	nop
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_014:
-	pop	sr
-	.byte 0xa2, 0x01
-	nop
-	ld	(12:8), 32:io
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_015:
-	.byte 0x04, 0xa2, 0x01
-	nop
-	ld	(4:8), 32:io
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_016:
-	halt
-	.byte 0xa2, 0x01
-	nop
-	ld	(22:8), 1:io
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_017:
-	.byte 0x06, 0xa2, 0x01
-	nop
-	ld	(12:8), 16:io
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_018:
-	nop
-	.byte 0xa4, 0x01
-	nop
-	push	13
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_019:
-	.byte 0x01, 0xa4, 0x01
-	nop
-	push	13
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_020:
-	push	sr
-	.byte 0xa4, 0x01
-	nop
-	push	13
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_021:
-	pop	sr
-	.byte 0xa4, 0x01
-	nop
-	push	13
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_022:
-	.byte 0x04, 0xa4, 0x01
-	nop
-	push	12
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_023:
-	nop
-	.byte 0xa6, 0x01
-	nop
-	push	4
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_024:
-	.byte 0x01, 0xa6, 0x01
-	nop
-	push	4
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_025:
-	push	sr
-	.byte 0xa6, 0x01
-	nop
-	push	12
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_026:
-	pop	sr
-	.byte 0xa6, 0x01
-	nop
-	push	12
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_027:
-	.byte 0x04, 0xa6, 0x01
-	nop
-	push	4
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_028:
-	halt
-	.byte 0xa6, 0x01
-	nop
-	push	22
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_029:
-	.byte 0x06, 0xa6, 0x01
-	nop
-	push	12
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_030:
-	nop
-	.byte 0xa8, 0x01
-	nop
-	ldw	(13:8), 32:io
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_031:
-	.byte 0x01, 0xa8, 0x01
-	nop
-	ldw	(13:8), 15:io
-	retd	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_032:
-	push	sr
-	.byte 0xa8, 0x01
-	nop
-	ldw	(13:8), 64:io
-	.byte 0x01, 0x06
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_033:
-	pop	sr
-	.byte 0xa8, 0x01
-	nop
-	ldw	(13:8), 128:io
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_034:
-	.byte 0x04, 0xa8, 0x01
-	nop
-	ldw	(12:8), 7:io
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_035:
-	nop
-	.byte 0xaa, 0x01
-	nop
-	ldw	(4:8), 7:io
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_036:
-	.byte 0x01, 0xaa, 0x01
-	nop
-	ldw	(4:8), 16:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_037:
-	push	sr
-	.byte 0xaa, 0x01
-	nop
-	ldw	(12:8), 8:io
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_038:
-	pop	sr
-	.byte 0xaa, 0x01
-	nop
-	ldw	(12:8), 32:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_039:
-	.byte 0x04, 0xaa, 0x01
-	nop
-	ldw	(4:8), 32:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_040:
-	halt
-	.byte 0xaa, 0x01
-	nop
-	ldw	(22:8), 1:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_041:
-	.byte 0x06, 0xaa, 0x01
-	nop
-	ldw	(12:8), 16:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_042:
-	nop
-	.byte 0xac, 0x01
-	nop
-	pushw	8205
-	nop
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_043:
-	.byte 0x01, 0xac, 0x01
-	nop
-	pushw	3853
-	nop
-	retd	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_044:
-	push	sr
-	.byte 0xac, 0x01
-	nop
-	pushw	0x400d
-	nop
-	.byte 0x01, 0x06
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_045:
-	pop	sr
-	.byte 0xac, 0x01
-	nop
-	pushw	0x800d
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_046:
-	.byte 0x04, 0xac, 0x01
-	nop
-	pushw	1804
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_047:
-	nop
-	.byte 0xae, 0x01
-	nop
-	pushw	1796
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_048:
-	.byte 0x01, 0xae, 0x01
-	nop
-	pushw	4100
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_049:
-	push	sr
-	.byte 0xae, 0x01
-	nop
-	pushw	2060
-	nop
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_050:
-	pop	sr
-	.byte 0xae, 0x01
-	nop
-	pushw	8204
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_051:
-	.byte 0x04, 0xae, 0x01
-	nop
-	pushw	8196
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_052:
-	halt
-	.byte 0xae, 0x01
-	nop
-	pushw	278
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_053:
-	.byte 0x06, 0xae, 0x01
-	nop
-	pushw	4108
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_054:
-	nop
-	.byte 0xb0, 0x01
-	nop
-	incf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_055:
-	.byte 0x01, 0xb0, 0x01
-	nop
-	incf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_056:
-	push	sr
-	.byte 0xb0, 0x01
-	nop
-	incf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_057:
-	pop	sr
-	.byte 0xb0, 0x01
-	nop
-	incf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_058:
-	.byte 0x04, 0xb0, 0x01
-	nop
-	incf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_059:
-	nop
-	.byte 0xb2, 0x01
-	nop
-	incf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_060:
-	.byte 0x01, 0xb2, 0x01
-	nop
-	incf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_061:
-	push	sr
-	.byte 0xb2, 0x01
-	nop
-	incf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_062:
-	pop	sr
-	.byte 0xb2, 0x01
-	nop
-	incf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_063:
-	.byte 0x04, 0xb2, 0x01
-	nop
-	incf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_064:
-	halt
-	.byte 0xb2, 0x01
-	nop
-	incf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_065:
-	.byte 0x06, 0xb2, 0x01
-	nop
-	incf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_066:
-	nop
-	.byte 0xb4, 0x01
-	nop
-	decf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_067:
-	.byte 0x01, 0xb4, 0x01
-	nop
-	decf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_068:
-	push	sr
-	.byte 0xb4, 0x01
-	nop
-	decf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_069:
-	pop	sr
-	.byte 0xb4, 0x01
-	nop
-	decf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_070:
-	.byte 0x04, 0xb4, 0x01
-	nop
-	decf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_071:
-	nop
-	.byte 0xb6, 0x01
-	nop
-	decf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_072:
-	.byte 0x01, 0xb6, 0x01
-	nop
-	decf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_073:
-	push	sr
-	.byte 0xb6, 0x01
-	nop
-	decf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_074:
-	pop	sr
-	.byte 0xb6, 0x01
-	nop
-	decf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_075:
-	.byte 0x04, 0xb6, 0x01
-	nop
-	decf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_076:
-	halt
-	.byte 0xb6, 0x01
-	nop
-	decf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_077:
-	.byte 0x06, 0xb6, 0x01
-	nop
-	decf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_078:
-	nop
-	ld	(xwa+1), 14
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_079:
-	normal
-	ld	(xwa+1), 14
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_080:
-	push	sr
-	ld	(xwa+1), 14
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_081:
-	pop	sr
-	ld	(xwa+1), 14
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_082:
-	max
-	ld	(xwa+1), 14
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_083:
-	nop
-	ld	(xde+1), 14
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_084:
-	normal
-	ld	(xde+1), 14
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_085:
-	push	sr
-	ld	(xde+1), 14
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_086:
-	pop	sr
-	ld	(xde+1), 14
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_087:
-	max
-	ld	(xde+1), 14
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_088:
-	halt
-	ld	(xde+1), 14
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_089:
-	.byte 0x06
-	ld	(xde+1), 14
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_090:
-	nop
-	ld	(xix+1), 15
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_091:
-	normal
-	ld	(xix+1), 15
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_092:
-	push	sr
-	ld	(xix+1), 15
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_093:
-	pop	sr
-	ld	(xix+1), 15
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_094:
-	max
-	ld	(xix+1), 15
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_095:
-	nop
-	ld	(xiz+1), 15
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_096:
-	normal
-	ld	(xiz+1), 15
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_097:
-	push	sr
-	ld	(xiz+1), 15
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_098:
-	pop	sr
-	ld	(xiz+1), 15
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_099:
-	max
-	ld	(xiz+1), 15
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_100:
-	halt
-	ld	(xiz+1), 15
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_101:
-	.byte 0x06
-	ld	(xiz+1), 15
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_102:
-	nop
-	.byte 0xc0, 0x01
-	nop
-	rcf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_103:
-	.byte 0x01, 0xc0, 0x01
-	nop
-	rcf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_104:
-	push	sr
-	.byte 0xc0, 0x01
-	nop
-	rcf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_105:
-	pop	sr
-	.byte 0xc0, 0x01
-	nop
-	rcf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_106:
-	.byte 0x04, 0xc0, 0x01
-	nop
-	rcf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_107:
-	nop
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_108:
-	.byte 0x01, 0xc2, 0x01
-	nop
-	rcf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_109:
-	push	sr
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_110:
-	pop	sr
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_111:
-	.byte 0x04, 0xc2, 0x01
-	nop
-	rcf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_112:
-	halt
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_113:
-	.byte 0x06, 0xc2, 0x01
-	nop
-	rcf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_114:
-	nop
-	.byte 0xc4, 0x01
-	nop
-	scf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_115:
-	.byte 0x01, 0xc4, 0x01
-	nop
-	scf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_116:
-	push	sr
-	.byte 0xc4, 0x01
-	nop
-	scf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_117:
-	pop	sr
-	.byte 0xc4, 0x01
-	nop
-	scf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_118:
-	.byte 0x04, 0xc4, 0x01
-	nop
-	scf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_119:
-	nop
-	.byte 0xc6, 0x01
-	nop
-	scf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_120:
-	.byte 0x01, 0xc6, 0x01
-	nop
-	scf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_121:
-	push	sr
-	.byte 0xc6, 0x01
-	nop
-	scf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_122:
-	pop	sr
-	.byte 0xc6, 0x01
-	nop
-	scf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_123:
-	.byte 0x04, 0xc6, 0x01
-	nop
-	scf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_124:
-	halt
-	.byte 0xc6, 0x01
-	nop
-	scf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_125:
-	.byte 0x06, 0xc6, 0x01
-	nop
-	scf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_126:
-	nop
-	.byte 0xc8, 0x01
-	nop
-	ccf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_127:
-	.byte 0x01, 0xc8, 0x01
-	nop
-	ccf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_128:
-	push	sr
-	.byte 0xc8, 0x01
-	nop
-	ccf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_129:
-	pop	sr
-	.byte 0xc8, 0x01
-	nop
-	ccf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_130:
-	.byte 0x04, 0xc8, 0x01
-	nop
-	ccf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_131:
-	nop
-	.byte 0xca, 0x01
-	nop
-	ccf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_132:
-	.byte 0x01, 0xca, 0x01
-	nop
-	ccf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_133:
-	push	sr
-	.byte 0xca, 0x01
-	nop
-	ccf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_134:
-	pop	sr
-	.byte 0xca, 0x01
-	nop
-	ccf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_135:
-	.byte 0x04, 0xca, 0x01
-	nop
-	ccf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_136:
-	halt
-	.byte 0xca, 0x01
-	nop
-	ccf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_137:
-	.byte 0x06, 0xca, 0x01
-	nop
-	ccf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_138:
-	nop
-	.byte 0xcc, 0x01
-	nop
-	zcf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_139:
-	.byte 0x01, 0xcc, 0x01
-	nop
-	zcf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_140:
-	push	sr
-	.byte 0xcc, 0x01
-	nop
-	zcf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_141:
-	pop	sr
-	.byte 0xcc, 0x01
-	nop
-	zcf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_142:
-	.byte 0x04, 0xcc, 0x01
-	nop
-	zcf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_143:
-	nop
-	.byte 0xce, 0x01
-	nop
-	zcf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_144:
-	.byte 0x01, 0xce, 0x01
-	nop
-	zcf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_145:
-	push	sr
-	.byte 0xce, 0x01
-	nop
-	zcf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_146:
-	pop	sr
-	.byte 0xce, 0x01
-	nop
-	zcf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_147:
-	.byte 0x04, 0xce, 0x01
-	nop
-	zcf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_148:
-	halt
-	.byte 0xce, 0x01
-	nop
-	zcf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_149:
-	.byte 0x06, 0xce, 0x01
-	nop
-	zcf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_150:
-	nop
-	.byte 0xd0, 0x01
-	nop
-	push_a
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_151:
-	.byte 0x01, 0xd0, 0x01
-	nop
-	push_a
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_152:
-	push	sr
-	.byte 0xd0, 0x01
-	nop
-	push_a
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_153:
-	pop	sr
-	.byte 0xd0, 0x01
-	nop
-	push_a
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_154:
-	.byte 0x04, 0xd0, 0x01
-	nop
-	push_a
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_155:
-	nop
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_156:
-	.byte 0x01, 0xd2, 0x01
-	nop
-	push_a
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_157:
-	push	sr
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_158:
-	pop	sr
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_159:
-	.byte 0x04, 0xd2, 0x01
-	nop
-	push_a
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_160:
-	halt
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_161:
-	.byte 0x06, 0xd2, 0x01
-	nop
-	push_a
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_162:
-	nop
-	.byte 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_163:
-	.byte 0x01, 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_164:
-	push	sr
-	.byte 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_165:
-	pop	sr
-	.byte 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_166:
-	.byte 0x04, 0xd4, 0x01
-	nop
-	pop_a
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_167:
-	nop
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_168:
-	.byte 0x01, 0xd6, 0x01
-	nop
-	pop_a
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_169:
-	push	sr
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_170:
-	pop	sr
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_171:
-	.byte 0x04, 0xd6, 0x01
-	nop
-	pop_a
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_172:
-	halt
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_173:
-	.byte 0x06, 0xd6, 0x01
-	nop
-	pop_a
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_174:
-	nop
-	.byte 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_175:
-	.byte 0x01, 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_176:
-	push	sr
-	.byte 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_177:
-	pop	sr
-	.byte 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_178:
-	.byte 0x04, 0xd8, 0x01
-	nop
-	ex_ff
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_179:
-	nop
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_180:
-	.byte 0x01, 0xda, 0x01
-	nop
-	ex_ff
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_181:
-	push	sr
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_182:
-	pop	sr
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_183:
-	.byte 0x04, 0xda, 0x01
-	nop
-	ex_ff
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_184:
-	halt
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_185:
-	.byte 0x06, 0xda, 0x01
-	nop
-	ex_ff
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_186:
-	nop
-	.byte 0xdc, 0x01
-	nop
-	ldf	13
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_187:
-	.byte 0x01, 0xdc, 0x01
-	nop
-	ldf	13
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_188:
-	push	sr
-	.byte 0xdc, 0x01
-	nop
-	ldf	13
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_189:
-	pop	sr
-	.byte 0xdc, 0x01
-	nop
-	ldf	13
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_190:
-	.byte 0x04, 0xdc, 0x01
-	nop
-	ldf	12
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_191:
-	nop
-	.byte 0xde, 0x01
-	nop
-	.byte 0x17, 0x04
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_192:
-	.byte 0x01, 0xde, 0x01
-	nop
-	.byte 0x17, 0x04
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_193:
-	push	sr
-	.byte 0xde, 0x01
-	nop
-	ldf	12
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_194:
-	pop	sr
-	.byte 0xde, 0x01
-	nop
-	ldf	12
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_195:
-	.byte 0x04, 0xde, 0x01
-	nop
-	.byte 0x17, 0x04
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_196:
-	halt
-	.byte 0xde, 0x01
-	nop
-	ldf	22
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_197:
-	.byte 0x06, 0xde, 0x01
-	nop
-	ldf	12
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_198:
-	nop
-	.byte 0xe0, 0x01
-	nop
-	push_f
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_199:
-	.byte 0x01, 0xe0, 0x01
-	nop
-	push_f
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_200:
-	push	sr
-	.byte 0xe0, 0x01
-	nop
-	push_f
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_201:
-	pop	sr
-	.byte 0xe0, 0x01
-	nop
-	push_f
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_202:
-	.byte 0x04, 0xe0, 0x01
-	nop
-	push_f
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_203:
-	nop
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_204:
-	.byte 0x01, 0xe2, 0x01
-	nop
-	push_f
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_205:
-	push	sr
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_206:
-	pop	sr
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_207:
-	.byte 0x04, 0xe2, 0x01
-	nop
-	push_f
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_208:
-	halt
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_209:
-	.byte 0x06, 0xe2, 0x01
-	nop
-	push_f
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_210:
-	nop
-	.byte 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_211:
-	.byte 0x01, 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_212:
-	push	sr
-	.byte 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_213:
-	pop	sr
-	.byte 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_214:
-	.byte 0x04, 0xe4, 0x01
-	nop
-	pop_f
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_215:
-	nop
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_216:
-	.byte 0x01, 0xe6, 0x01
-	nop
-	pop_f
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_217:
-	push	sr
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_218:
-	pop	sr
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_219:
-	.byte 0x04, 0xe6, 0x01
-	nop
-	pop_f
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_220:
-	halt
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_221:
-	.byte 0x06, 0xe6, 0x01
-	nop
-	pop_f
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_222:
-	nop
-	.byte 0x80
-	push	sr
-	nop
-	popw	wa
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_223:
-	.byte 0x01, 0x80
-	push	sr
-	nop
-	popw	wa
-	normal
-	jrl	nc, 1792
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_224:
-	push	sr
-	.byte 0x80
-	push	sr
-	nop
-	popw	wa
-	reti
-	ldw	wa, 768
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_225:
-	.byte 0x80, 0x80
-	push	sr
-	nop
-	popw	wa
-	pop	sr
-	reti
-	nop
-	pop	sr
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_226:
-	.byte 0x81, 0x80
-	push	sr
-	nop
-	popw	wa
-	pop	sr
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_227:
-	.byte 0x82, 0x80
-	push	sr
-	nop
-	.byte 0x90
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_228:
-	.byte 0x83, 0x80
-	push	sr
-	nop
-	.byte 0x90
-	pop	sr
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0xea, 0xe9, 0xed, 0x00, 0x07, 0x00, 0x00, 0x03, 0x00, 0xff
+;  314 x 18-byte sound-parameter descriptors, 0xEDE9FC-0xEE0010, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_ede9fc.c.
+SndParamRun_EDE9FC:
+ExtPartParam_Entry_369:	sndparam_descriptor 0x018200, 0, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+ExtPartParam_Entry_370:	sndparam_descriptor 0x018201, 0, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_371:	sndparam_descriptor 0x018202, 0, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_372:	sndparam_descriptor 0x018203, 0, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_373:	sndparam_descriptor 0x018204, 0, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_374:	sndparam_descriptor 0x018205, 0, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_375:	sndparam_descriptor 0x018206, 0, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_376:	sndparam_descriptor 0x018400, 1, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_377:	sndparam_descriptor 0x018401, 1, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_378:	sndparam_descriptor 0x018402, 1, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_379:	sndparam_descriptor 0x018403, 1, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_380:	sndparam_descriptor 0x018404, 1, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+ExtPartParam_Entry_381:	sndparam_descriptor 0x018600, 1, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_382:	sndparam_descriptor 0x018601, 1, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_383:	sndparam_descriptor 0x018602, 1, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_384:	sndparam_descriptor 0x018603, 1, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_385:	sndparam_descriptor 0x018604, 1, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_386:	sndparam_descriptor 0x018605, 1, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_387:	sndparam_descriptor 0x018606, 1, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_388:	sndparam_descriptor 0x018800, 2, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_389:	sndparam_descriptor 0x018801, 2, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_390:	sndparam_descriptor 0x018802, 2, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_391:	sndparam_descriptor 0x018803, 2, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_392:	sndparam_descriptor 0x018804, 2, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+ExtPartParam_Entry_393:	sndparam_descriptor 0x018a00, 2, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_394:	sndparam_descriptor 0x018a01, 2, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_395:	sndparam_descriptor 0x018a02, 2, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_396:	sndparam_descriptor 0x018a03, 2, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_397:	sndparam_descriptor 0x018a04, 2, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_398:	sndparam_descriptor 0x018a05, 2, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_399:	sndparam_descriptor 0x018a06, 2, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_400:	sndparam_descriptor 0x018c00, 3, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_401:	sndparam_descriptor 0x018c01, 3, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_402:	sndparam_descriptor 0x018c02, 3, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_403:	sndparam_descriptor 0x018c03, 3, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_404:	sndparam_descriptor 0x018c04, 3, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+ExtPartParam_Entry_405:	sndparam_descriptor 0x018e00, 3, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_406:	sndparam_descriptor 0x018e01, 3, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_407:	sndparam_descriptor 0x018e02, 3, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_408:	sndparam_descriptor 0x018e03, 3, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_409:	sndparam_descriptor 0x018e04, 3, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_410:	sndparam_descriptor 0x018e05, 3, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_411:	sndparam_descriptor 0x018e06, 3, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_412:	sndparam_descriptor 0x019000, 4, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_413:	sndparam_descriptor 0x019001, 4, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_414:	sndparam_descriptor 0x019002, 4, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_415:	sndparam_descriptor 0x019003, 4, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_416:	sndparam_descriptor 0x019004, 4, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+ExtPartParam_Entry_417:	sndparam_descriptor 0x019200, 4, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_418:	sndparam_descriptor 0x019201, 4, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_419:	sndparam_descriptor 0x019202, 4, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_420:	sndparam_descriptor 0x019203, 4, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_421:	sndparam_descriptor 0x019204, 4, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_422:	sndparam_descriptor 0x019205, 4, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_423:	sndparam_descriptor 0x019206, 4, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_424:	sndparam_descriptor 0x019400, 5, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_425:	sndparam_descriptor 0x019401, 5, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_426:	sndparam_descriptor 0x019402, 5, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_427:	sndparam_descriptor 0x019403, 5, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_428:	sndparam_descriptor 0x019404, 5, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+ExtPartParam_Entry_429:	sndparam_descriptor 0x019600, 5, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_430:	sndparam_descriptor 0x019601, 5, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_431:	sndparam_descriptor 0x019602, 5, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_432:	sndparam_descriptor 0x019603, 5, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_433:	sndparam_descriptor 0x019604, 5, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_434:	sndparam_descriptor 0x019605, 5, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_435:	sndparam_descriptor 0x019606, 5, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_436:	sndparam_descriptor 0x019800, 6, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_437:	sndparam_descriptor 0x019801, 6, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_438:	sndparam_descriptor 0x019802, 6, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_439:	sndparam_descriptor 0x019803, 6, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_440:	sndparam_descriptor 0x019804, 6, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+ExtPartParam_Entry_441:	sndparam_descriptor 0x019a00, 6, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_442:	sndparam_descriptor 0x019a01, 6, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_443:	sndparam_descriptor 0x019a02, 6, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_444:	sndparam_descriptor 0x019a03, 6, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_445:	sndparam_descriptor 0x019a04, 6, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_446:	sndparam_descriptor 0x019a05, 6, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_447:	sndparam_descriptor 0x019a06, 6, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_448:	sndparam_descriptor 0x019c00, 7, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_449:	sndparam_descriptor 0x019c01, 7, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_450:	sndparam_descriptor 0x019c02, 7, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_451:	sndparam_descriptor 0x019c03, 7, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_452:	sndparam_descriptor 0x019c04, 7, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+ExtPartParam_Entry_453:	sndparam_descriptor 0x019e00, 7, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+ExtPartParam_Entry_454:	sndparam_descriptor 0x019e01, 7, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_001:	sndparam_descriptor 0x019e02, 7, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_002:	sndparam_descriptor 0x019e03, 7, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_003:	sndparam_descriptor 0x019e04, 7, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_004:	sndparam_descriptor 0x019e05, 7, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_005:	sndparam_descriptor 0x019e06, 7, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_006:	sndparam_descriptor 0x01a000, 8, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_007:	sndparam_descriptor 0x01a001, 8, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_008:	sndparam_descriptor 0x01a002, 8, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_009:	sndparam_descriptor 0x01a003, 8, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_010:	sndparam_descriptor 0x01a004, 8, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_011:	sndparam_descriptor 0x01a200, 8, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_012:	sndparam_descriptor 0x01a201, 8, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_013:	sndparam_descriptor 0x01a202, 8, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_014:	sndparam_descriptor 0x01a203, 8, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_015:	sndparam_descriptor 0x01a204, 8, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_016:	sndparam_descriptor 0x01a205, 8, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_017:	sndparam_descriptor 0x01a206, 8, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_018:	sndparam_descriptor 0x01a400, 9, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_019:	sndparam_descriptor 0x01a401, 9, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_020:	sndparam_descriptor 0x01a402, 9, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_021:	sndparam_descriptor 0x01a403, 9, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_022:	sndparam_descriptor 0x01a404, 9, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_023:	sndparam_descriptor 0x01a600, 9, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_024:	sndparam_descriptor 0x01a601, 9, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_025:	sndparam_descriptor 0x01a602, 9, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_026:	sndparam_descriptor 0x01a603, 9, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_027:	sndparam_descriptor 0x01a604, 9, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_028:	sndparam_descriptor 0x01a605, 9, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_029:	sndparam_descriptor 0x01a606, 9, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_030:	sndparam_descriptor 0x01a800, 10, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_031:	sndparam_descriptor 0x01a801, 10, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_032:	sndparam_descriptor 0x01a802, 10, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_033:	sndparam_descriptor 0x01a803, 10, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_034:	sndparam_descriptor 0x01a804, 10, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_035:	sndparam_descriptor 0x01aa00, 10, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_036:	sndparam_descriptor 0x01aa01, 10, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_037:	sndparam_descriptor 0x01aa02, 10, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_038:	sndparam_descriptor 0x01aa03, 10, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_039:	sndparam_descriptor 0x01aa04, 10, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_040:	sndparam_descriptor 0x01aa05, 10, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_041:	sndparam_descriptor 0x01aa06, 10, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_042:	sndparam_descriptor 0x01ac00, 11, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_043:	sndparam_descriptor 0x01ac01, 11, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_044:	sndparam_descriptor 0x01ac02, 11, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_045:	sndparam_descriptor 0x01ac03, 11, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_046:	sndparam_descriptor 0x01ac04, 11, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_047:	sndparam_descriptor 0x01ae00, 11, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_048:	sndparam_descriptor 0x01ae01, 11, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_049:	sndparam_descriptor 0x01ae02, 11, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_050:	sndparam_descriptor 0x01ae03, 11, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_051:	sndparam_descriptor 0x01ae04, 11, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_052:	sndparam_descriptor 0x01ae05, 11, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_053:	sndparam_descriptor 0x01ae06, 11, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_054:	sndparam_descriptor 0x01b000, 12, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_055:	sndparam_descriptor 0x01b001, 12, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_056:	sndparam_descriptor 0x01b002, 12, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_057:	sndparam_descriptor 0x01b003, 12, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_058:	sndparam_descriptor 0x01b004, 12, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_059:	sndparam_descriptor 0x01b200, 12, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_060:	sndparam_descriptor 0x01b201, 12, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_061:	sndparam_descriptor 0x01b202, 12, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_062:	sndparam_descriptor 0x01b203, 12, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_063:	sndparam_descriptor 0x01b204, 12, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_064:	sndparam_descriptor 0x01b205, 12, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_065:	sndparam_descriptor 0x01b206, 12, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_066:	sndparam_descriptor 0x01b400, 13, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_067:	sndparam_descriptor 0x01b401, 13, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_068:	sndparam_descriptor 0x01b402, 13, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_069:	sndparam_descriptor 0x01b403, 13, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_070:	sndparam_descriptor 0x01b404, 13, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_071:	sndparam_descriptor 0x01b600, 13, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_072:	sndparam_descriptor 0x01b601, 13, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_073:	sndparam_descriptor 0x01b602, 13, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_074:	sndparam_descriptor 0x01b603, 13, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_075:	sndparam_descriptor 0x01b604, 13, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_076:	sndparam_descriptor 0x01b605, 13, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_077:	sndparam_descriptor 0x01b606, 13, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_078:	sndparam_descriptor 0x01b800, 14, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_079:	sndparam_descriptor 0x01b801, 14, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_080:	sndparam_descriptor 0x01b802, 14, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_081:	sndparam_descriptor 0x01b803, 14, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_082:	sndparam_descriptor 0x01b804, 14, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_083:	sndparam_descriptor 0x01ba00, 14, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_084:	sndparam_descriptor 0x01ba01, 14, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_085:	sndparam_descriptor 0x01ba02, 14, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_086:	sndparam_descriptor 0x01ba03, 14, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_087:	sndparam_descriptor 0x01ba04, 14, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_088:	sndparam_descriptor 0x01ba05, 14, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_089:	sndparam_descriptor 0x01ba06, 14, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_090:	sndparam_descriptor 0x01bc00, 15, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_091:	sndparam_descriptor 0x01bc01, 15, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_092:	sndparam_descriptor 0x01bc02, 15, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_093:	sndparam_descriptor 0x01bc03, 15, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_094:	sndparam_descriptor 0x01bc04, 15, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_095:	sndparam_descriptor 0x01be00, 15, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+SeqMixParam_Entry_096:	sndparam_descriptor 0x01be01, 15, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_097:	sndparam_descriptor 0x01be02, 15, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_098:	sndparam_descriptor 0x01be03, 15, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_099:	sndparam_descriptor 0x01be04, 15, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_100:	sndparam_descriptor 0x01be05, 15, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_101:	sndparam_descriptor 0x01be06, 15, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_102:	sndparam_descriptor 0x01c000, 16, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_103:	sndparam_descriptor 0x01c001, 16, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_104:	sndparam_descriptor 0x01c002, 16, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_105:	sndparam_descriptor 0x01c003, 16, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_106:	sndparam_descriptor 0x01c004, 16, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_107:	sndparam_descriptor 0x01c200, 16, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+SeqMixParam_Entry_108:	sndparam_descriptor 0x01c201, 16, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_109:	sndparam_descriptor 0x01c202, 16, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_110:	sndparam_descriptor 0x01c203, 16, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_111:	sndparam_descriptor 0x01c204, 16, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_112:	sndparam_descriptor 0x01c205, 16, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_113:	sndparam_descriptor 0x01c206, 16, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_114:	sndparam_descriptor 0x01c400, 17, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_115:	sndparam_descriptor 0x01c401, 17, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_116:	sndparam_descriptor 0x01c402, 17, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_117:	sndparam_descriptor 0x01c403, 17, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_118:	sndparam_descriptor 0x01c404, 17, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_119:	sndparam_descriptor 0x01c600, 17, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_120:	sndparam_descriptor 0x01c601, 17, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_121:	sndparam_descriptor 0x01c602, 17, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_122:	sndparam_descriptor 0x01c603, 17, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_123:	sndparam_descriptor 0x01c604, 17, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_124:	sndparam_descriptor 0x01c605, 17, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_125:	sndparam_descriptor 0x01c606, 17, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_126:	sndparam_descriptor 0x01c800, 18, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_127:	sndparam_descriptor 0x01c801, 18, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_128:	sndparam_descriptor 0x01c802, 18, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_129:	sndparam_descriptor 0x01c803, 18, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_130:	sndparam_descriptor 0x01c804, 18, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_131:	sndparam_descriptor 0x01ca00, 18, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_132:	sndparam_descriptor 0x01ca01, 18, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_133:	sndparam_descriptor 0x01ca02, 18, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_134:	sndparam_descriptor 0x01ca03, 18, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_135:	sndparam_descriptor 0x01ca04, 18, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_136:	sndparam_descriptor 0x01ca05, 18, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_137:	sndparam_descriptor 0x01ca06, 18, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_138:	sndparam_descriptor 0x01cc00, 19, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_139:	sndparam_descriptor 0x01cc01, 19, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_140:	sndparam_descriptor 0x01cc02, 19, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_141:	sndparam_descriptor 0x01cc03, 19, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_142:	sndparam_descriptor 0x01cc04, 19, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_143:	sndparam_descriptor 0x01ce00, 19, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_144:	sndparam_descriptor 0x01ce01, 19, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_145:	sndparam_descriptor 0x01ce02, 19, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_146:	sndparam_descriptor 0x01ce03, 19, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_147:	sndparam_descriptor 0x01ce04, 19, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_148:	sndparam_descriptor 0x01ce05, 19, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_149:	sndparam_descriptor 0x01ce06, 19, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_150:	sndparam_descriptor 0x01d000, 20, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_151:	sndparam_descriptor 0x01d001, 20, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_152:	sndparam_descriptor 0x01d002, 20, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_153:	sndparam_descriptor 0x01d003, 20, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_154:	sndparam_descriptor 0x01d004, 20, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_155:	sndparam_descriptor 0x01d200, 20, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_156:	sndparam_descriptor 0x01d201, 20, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_157:	sndparam_descriptor 0x01d202, 20, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_158:	sndparam_descriptor 0x01d203, 20, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_159:	sndparam_descriptor 0x01d204, 20, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_160:	sndparam_descriptor 0x01d205, 20, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_161:	sndparam_descriptor 0x01d206, 20, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_162:	sndparam_descriptor 0x01d400, 21, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_163:	sndparam_descriptor 0x01d401, 21, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_164:	sndparam_descriptor 0x01d402, 21, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_165:	sndparam_descriptor 0x01d403, 21, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_166:	sndparam_descriptor 0x01d404, 21, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_167:	sndparam_descriptor 0x01d600, 21, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_168:	sndparam_descriptor 0x01d601, 21, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_169:	sndparam_descriptor 0x01d602, 21, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_170:	sndparam_descriptor 0x01d603, 21, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_171:	sndparam_descriptor 0x01d604, 21, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_172:	sndparam_descriptor 0x01d605, 21, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_173:	sndparam_descriptor 0x01d606, 21, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_174:	sndparam_descriptor 0x01d800, 22, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_175:	sndparam_descriptor 0x01d801, 22, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_176:	sndparam_descriptor 0x01d802, 22, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_177:	sndparam_descriptor 0x01d803, 22, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_178:	sndparam_descriptor 0x01d804, 22, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_179:	sndparam_descriptor 0x01da00, 22, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_180:	sndparam_descriptor 0x01da01, 22, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_181:	sndparam_descriptor 0x01da02, 22, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_182:	sndparam_descriptor 0x01da03, 22, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_183:	sndparam_descriptor 0x01da04, 22, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_184:	sndparam_descriptor 0x01da05, 22, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_185:	sndparam_descriptor 0x01da06, 22, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_186:	sndparam_descriptor 0x01dc00, 23, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_187:	sndparam_descriptor 0x01dc01, 23, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_188:	sndparam_descriptor 0x01dc02, 23, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_189:	sndparam_descriptor 0x01dc03, 23, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_190:	sndparam_descriptor 0x01dc04, 23, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_191:	sndparam_descriptor 0x01de00, 23, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_192:	sndparam_descriptor 0x01de01, 23, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_193:	sndparam_descriptor 0x01de02, 23, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_194:	sndparam_descriptor 0x01de03, 23, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_195:	sndparam_descriptor 0x01de04, 23, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_196:	sndparam_descriptor 0x01de05, 23, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_197:	sndparam_descriptor 0x01de06, 23, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_198:	sndparam_descriptor 0x01e000, 24, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_199:	sndparam_descriptor 0x01e001, 24, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_200:	sndparam_descriptor 0x01e002, 24, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_201:	sndparam_descriptor 0x01e003, 24, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_202:	sndparam_descriptor 0x01e004, 24, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_203:	sndparam_descriptor 0x01e200, 24, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_204:	sndparam_descriptor 0x01e201, 24, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_205:	sndparam_descriptor 0x01e202, 24, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_206:	sndparam_descriptor 0x01e203, 24, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_207:	sndparam_descriptor 0x01e204, 24, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_208:	sndparam_descriptor 0x01e205, 24, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_209:	sndparam_descriptor 0x01e206, 24, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_210:	sndparam_descriptor 0x01e400, 25, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_211:	sndparam_descriptor 0x01e401, 25, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_212:	sndparam_descriptor 0x01e402, 25, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_213:	sndparam_descriptor 0x01e403, 25, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_214:	sndparam_descriptor 0x01e404, 25, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+SeqMixParam_Entry_215:	sndparam_descriptor 0x01e600, 25, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_216:	sndparam_descriptor 0x01e601, 25, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_217:	sndparam_descriptor 0x01e602, 25, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_218:	sndparam_descriptor 0x01e603, 25, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_219:	sndparam_descriptor 0x01e604, 25, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_220:	sndparam_descriptor 0x01e605, 25, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_221:	sndparam_descriptor 0x01e606, 25, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_222:	sndparam_descriptor 0x028000, 72, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_223:	sndparam_descriptor 0x028001, 72, 1, 0x7f, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_224:	sndparam_descriptor 0x028002, 72, 7, 0x30, 0, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_225:	sndparam_descriptor 0x028080, 72, 3, 0x07, 0, 3, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_226:	sndparam_descriptor 0x028081, 72, 3, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_227:	sndparam_descriptor 0x028082, 144, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+SeqMixParam_Entry_228:	sndparam_descriptor 0x028083, 144, 3, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
