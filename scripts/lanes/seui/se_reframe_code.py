@@ -470,13 +470,13 @@ class Reframer:
             dec = self.lockstep(a, b)
             T = dec[-1][0] + dec[-1][1]
             ext = 0
-            while not (T in self.at and self.lines_between(a, T)) and ext < 8:
+            while not ((T in self.at or T in self.ends) and self.lines_between(a, T)) and ext < 8:
                 more = self.lockstep(T, T + 1)
                 dec += more[:1]
                 T = dec[-1][0] + dec[-1][1]
                 ext += 1
             why = None
-            if not (T in self.at and self.lines_between(a, T)):
+            if not ((T in self.at or T in self.ends) and self.lines_between(a, T)):
                 why = "no line boundary to end on"
             else:
                 ag, cp = self.witness(w, a, dec)

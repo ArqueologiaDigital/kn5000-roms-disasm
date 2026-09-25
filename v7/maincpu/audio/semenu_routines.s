@@ -4683,9 +4683,15 @@ SeMenu_ApplyPartEdit_Entry12:
 	pushw 97
 	pushw 48
 	call	SeMenu_ApplyPartEdit_Helper15
-	.byte 0x0b, 0x79, 0x00, 0x9f, 0x18, 0x04, 0x0b, 0x61, 0x00, 0x9f, 0x1c, 0x04
+	pushw	121
+	pushm	(xsp+24)
+	pushw	97
+	pushm	(xsp+28)
 	call	SeMenu_ApplyPartEdit_Helper16
-	.byte 0x0b, 0x79, 0x00, 0x9f, 0x16, 0x04, 0x0b, 0x61, 0x00, 0x9f, 0x1a, 0x04
+	pushw	121
+	pushm	(xsp+22)
+	pushw	97
+	pushm	(xsp+26)
 	call	SeMenu_ApplyPartEdit_Helper16
 	lda	xsp, (xsp+24)
 	pushw	121
@@ -6707,4 +6713,334 @@ SeMenu_RefreshPartDisplay_Data:
 	pop QIZ
 	lda xsp, (xsp + 0x12)
 	ret
-	.incbin "includes/romslices/v7_fix_semenu_refreshpartdisplay_data_tail.bin"
+	cp	a, 0:i3
+	jp_24	nz, (SeMenu_CopyWriteUpdate_Helper3)
+	ldw	wa, 40
+	ld	bc, 0:i3
+	jp	SeMenu_SendEvent
+	cp	a, 0:i3
+	ret	z
+	ldw	wa, 39
+	ld	bc, 1:i3
+	ld	de, 1:i3
+	call	SeMenu_CopyWriteUpdate_Helper8
+	ret
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip
+	ldw	wa, 42
+	ld	bc, 0:i3
+	jp	SeMenu_SendEvent
+SeMenu_RefreshPartDisplay_Skip:
+	ldw	wa, 39
+	ld	bc, 2:i3
+	ld	de, 1:i3
+	jp	SeMenu_CopyWriteUpdate_Helper8
+	dec	2, xsp
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip2
+	lda	xbc, (xsp)
+	ldw	wa, 13
+	call	SeMenu_LoadPartParam
+	cp	(xsp), 1
+	jr	ule, SeMenu_RefreshPartDisplay_Epilogue
+	decm8	1, (xsp)
+	ld	c, (xsp)
+	extz	bc
+	ldw	wa, 13
+	call	SeMenu_StorePartParam
+	pushw	13
+	pushw	39
+	call	SeMenu_ShowConfirmDialog
+	inc	4, xsp
+	jr	SeMenu_RefreshPartDisplay_Epilogue
+SeMenu_RefreshPartDisplay_Skip2:
+	ldw	wa, 39
+	ld	bc, 3:i3
+	ld	de, 1:i3
+	call	SeMenu_CopyWriteUpdate_Helper8
+SeMenu_RefreshPartDisplay_Epilogue:
+	inc	2, xsp
+	ret
+	dec	2, xsp
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip3
+	lda	xbc, (xsp)
+	ldw	wa, 13
+	call	SeMenu_LoadPartParam
+	cp	(xsp), 4
+	jr	nc, SeMenu_RefreshPartDisplay_Epilogue2
+	incm8	1, (xsp)
+	ld	c, (xsp)
+	extz	bc
+	ldw	wa, 13
+	call	SeMenu_StorePartParam
+	pushw	13
+	pushw	39
+	call	SeMenu_ShowConfirmDialog
+	inc	4, xsp
+	jr	SeMenu_RefreshPartDisplay_Epilogue2
+SeMenu_RefreshPartDisplay_Skip3:
+	ldw	wa, 39
+	ld	bc, 4:i3
+	ld	de, 1:i3
+	call	SeMenu_CopyWriteUpdate_Helper8
+SeMenu_RefreshPartDisplay_Epilogue2:
+	inc	2, xsp
+	ret
+	cp	a, 0:i3
+	ret	nz
+	ld	wa, 0:i3
+	call	SeMenu_SetupMenuDisplay
+	ldw	wa, 32
+	ld	bc, 0:i3
+	call	SeMenu_SendEvent
+	ret
+	extz	wa
+	ldw	bc, 9
+	ld	de, 0:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x332
+	extz	wa
+	ldw	bc, 10
+	ld	de, 0:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x396
+	extz	wa
+	ldw	bc, 8
+	ldw	de, 11
+	jp	SeMenu_ApplyPartEdit_Data2_0x3FA
+	extz	wa
+	ldw	bc, 12
+	ld	de, 0:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x498
+	extz	wa
+	ldw	bc, 16
+	ldw	de, 13
+	jp	SeMenu_ApplyPartEdit_Data2_0x4FC
+	extz	wa
+	ldw	bc, 14
+	ld	de, 0:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x59C
+	extz	wa
+	ld	bc, 7:i3
+	ldw	de, 15
+	jp	SeMenu_ApplyPartEdit_Data2_0x602
+	cp	a, 0:i3
+	ret	z
+	call	SeMenu_CopyWriteUpdate_Helper3
+	ret
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip4
+	ldw	wa, 39
+	ld	bc, 0:i3
+	jr	SeMenu_RefreshPartDisplay_Join
+SeMenu_RefreshPartDisplay_Skip4:
+	ld	wa, 1:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 40
+	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join:
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip5
+	ldw	wa, 42
+	ld	bc, 0:i3
+	jr	SeMenu_RefreshPartDisplay_Join2
+SeMenu_RefreshPartDisplay_Skip5:
+	ld	wa, 2:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 40
+	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join2:
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip6
+	ld	wa, 0:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+SeMenu_RefreshPartDisplay_Skip6:
+	ld	wa, 3:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 40
+	ld	bc, 1:i3
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip7
+	ld	wa, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+SeMenu_RefreshPartDisplay_Skip7:
+	ld	wa, 4:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 40
+	ld	bc, 1:i3
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	ret	nz
+	ldw	wa, 41
+	ld	bc, 0:i3
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	ret	nz
+	ld	wa, 0:i3
+	call	SeMenu_SetupMenuDisplay
+	ldw	wa, 32
+	ld	bc, 0:i3
+	call	SeMenu_SendEvent
+	ret
+	extz	wa
+	ldw	bc, 20
+	jp	SeMenu_ApplyPartEdit_Data2_0x6A2
+	extz	wa
+	ldw	bc, 21
+	jp	SeMenu_ApplyPartEdit_Data2_0x732
+	extz	wa
+	ldw	bc, 22
+	jp	SeMenu_ApplyPartEdit_Data2_0x7C2
+	extz	wa
+	ldw	bc, 19
+	jp	SeMenu_ApplyPartEdit_Data2_0x852
+	extz	wa
+	ldw	bc, 17
+	jp	SeMenu_ApplyPartEdit_Data2_0x8A1
+	extz	wa
+	ldw	bc, 18
+	jp	SeMenu_ApplyPartEdit_Data2_0x8F4
+	cp	a, 0:i3
+	ret	z
+	call	SeMenu_CopyWriteUpdate_Helper3
+	ret
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip8
+	ldw	wa, 39
+	ld	bc, 0:i3
+	jr	SeMenu_RefreshPartDisplay_Join3
+SeMenu_RefreshPartDisplay_Skip8:
+	ld	wa, 1:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 41
+	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join3:
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip9
+	ldw	wa, 42
+	ld	bc, 0:i3
+	jr	SeMenu_RefreshPartDisplay_Join4
+SeMenu_RefreshPartDisplay_Skip9:
+	ld	wa, 2:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 41
+	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join4:
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	ret	z
+	ld	wa, 3:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 41
+	ld	bc, 1:i3
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	ret	z
+	ld	wa, 4:i3
+	call	SeMenu_CopyWriteUpdate_Helper5
+	cp	l, 0:i3
+	ret	z
+	ldw	wa, 41
+	ld	bc, 1:i3
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	ret	z
+	ldw	wa, 40
+	ld	bc, 0:i3
+	call	SeMenu_SendEvent
+	ret
+	cp	a, 0:i3
+	ret	nz
+	ld	wa, 0:i3
+	call	SeMenu_SetupMenuDisplay
+	ldw	wa, 32
+	ld	bc, 0:i3
+	call	SeMenu_SendEvent
+	ret
+	extz	wa
+	ld	bc, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2
+	extz	wa
+	ld	bc, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x39
+	extz	wa
+	ld	bc, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0xB6
+	extz	wa
+	ld	bc, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x133
+	extz	wa
+	ld	bc, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x1B0
+	extz	wa
+	ld	bc, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x22B
+	extz	wa
+	ld	bc, 1:i3
+	jp	SeMenu_ApplyPartEdit_Data2_0x292
+	cp	a, 0:i3
+	jp_24	nz, (SeMenu_CopyWriteUpdate_Helper3)
+	ldw	wa, 40
+	ld	bc, 0:i3
+	jp	SeMenu_SendEvent
+	cp	a, 0:i3
+	jr	nz, SeMenu_RefreshPartDisplay_Skip10
+	ldw	wa, 39
+	ld	bc, 0:i3
+	jp	SeMenu_SendEvent
+SeMenu_RefreshPartDisplay_Skip10:
+	ld	wa, 1:i3
+	ld	bc, 1:i3
+	jp	SeMenu_TransferPartValues_EndData_0x20E
+	cp	a, 0:i3
+	ret	z
+	ld	wa, 1:i3
+	ld	bc, 2:i3
+	call	SeMenu_TransferPartValues_EndData_0x20E
+	ret
+	cp	a, 0:i3
+	ret	z
+	ld	wa, 1:i3
+	ld	bc, 3:i3
+	call	SeMenu_TransferPartValues_EndData_0x20E
+	ret
+	cp	a, 0:i3
+	ret	z
+	ld	wa, 1:i3
+	ld	bc, 4:i3
+	call	SeMenu_TransferPartValues_EndData_0x20E
+	ret
+	cp	a, 0:i3
+	ret	nz
+	ld	wa, 0:i3
+	call	SeMenu_SetupMenuDisplay
+	ldw	wa, 32
+	ld	bc, 0:i3
+	call	SeMenu_SendEvent
+	ret
