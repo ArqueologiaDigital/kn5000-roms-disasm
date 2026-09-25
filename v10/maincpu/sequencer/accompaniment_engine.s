@@ -12257,8 +12257,8 @@ AccTone_InlineBytecodeData_Code_Helper:
 	ret
 	.byte 0xf1, 0x1f, 0x34, 0xc8
 	ret	z
-	call	AccTone_InlineBytecodeData_Code_Helper7
-	call	AccTone_InlineBytecodeData_Code_Helper8
+	call	Rhythm_SendChanPressure_Wrap
+	call	AccBuf_ResetAll4_Wrap
 	ld	a, (13345:16)
 	extz	wa
 	sla	wa, 2
@@ -12267,7 +12267,7 @@ AccTone_InlineBytecodeData_Code_Helper:
 	add_sril_rm	XBC, 0x07, 0xe8, 0xe0
 	ld	(13350:16), xbc
 	ld	xwa, xbc
-	call	AccTone_InlineBytecodeData_Code_Helper6
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
 	or	(0x332c:16), 63
 	set	7, (0x332c:16)
 	calr	AccTone_InlineBytecodeData_Code_Helper2
@@ -12284,10 +12284,10 @@ AccTone_InlineBytecodeData_Code_Helper2:
 	and	(0x32ae:16), 240
 	and	(0x32af:16), 240
 	and	(0x32b0:16), 240
-	call	AccTone_InlineBytecodeData_Code_Helper9
+	call	AccSeq_DualPartScan_Wrap
 	bit	6, (0x32f4:16)
 	ret	nz
-	call	AccTone_InlineBytecodeData_Code_Helper10
+	call	AccSeq_FourChannelScan_Wrap
 	ret
 AccVoice_BarCounterBytecodeData_Helper:
 	extz	de
@@ -12369,7 +12369,7 @@ AccTone_InlineBytecodeData_Code_Skip:
 	extz	bc
 	call	AccTone_LookupByProgram_Dispatch
 	ld	xwa, xhl
-	call	AccTone_InlineBytecodeData_Code_Helper4
+	call	Rhythm_UpdateTuningConfig_Wrap
 	ld	a, (xiz+12)
 	extz	wa
 	lda	xbc, (14969738:24)
@@ -12383,7 +12383,7 @@ AccTone_InlineBytecodeData_Code_Skip:
 	add	a, 128
 	ld	(13356:16), a
 	extz	wa
-	call	AccTone_InlineBytecodeData_Code_Helper5
+	call	AccPatch_SetByChordIndex_Wrap
 	calr	AccTone_InlineBytecodeData_Code_Helper
 	ld	a, (13354:16)
 	ld	(13345:16), a
@@ -12396,7 +12396,7 @@ AccTone_InlineBytecodeData_Code_Skip:
 	add_sril_rm	XBC, 0x07, 0xe8, 0xe0
 	ld	(13350:16), xbc
 	ld	xwa, xbc
-	call	AccTone_InlineBytecodeData_Code_Helper6
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
 	or	(0x332c:16), 63
 	pop	xiz
 	inc	2, xsp
@@ -12456,7 +12456,7 @@ AccTone_InlineBytecodeData_Code_Skip2:
 	extz	bc
 	call	AccTone_LookupByProgram_Dispatch
 	ld	xwa, xhl
-	call	AccTone_InlineBytecodeData_Code_Helper4
+	call	Rhythm_UpdateTuningConfig_Wrap
 	ld	a, (xiz+12)
 	extz	wa
 	lda	xbc, (14969738:24)
@@ -12470,7 +12470,7 @@ AccTone_InlineBytecodeData_Code_Skip2:
 	add	a, 128
 	ld	(13356:16), a
 	extz	wa
-	call	AccTone_InlineBytecodeData_Code_Helper5
+	call	AccPatch_SetByChordIndex_Wrap
 	calr	AccTone_InlineBytecodeData_Code_Helper
 	ldmm8	13345, 13354
 	ldmm8	13344, 13355
@@ -12527,9 +12527,9 @@ AccTone_InlineBytecodeData_Code_Helper3_Skip4:
 	jr	AccTone_InlineBytecodeData_Code_Entry
 AccTone_InlineBytecodeData_Code_Helper3_Join:
 	ld	xwa, (0x3426:16)
-	call	AccTone_InlineBytecodeData_Code_Helper3_Helper4
+	call	AccPart_InitPositionsAndBase_Wrap
 	ld	xwa, (0x3426:16)
-	call	AccTone_InlineBytecodeData_Code_Helper6
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
 	or	(0x332c:16), 63
 	and	(0x3316:16), 192
 	and	(0x3317:16), 192
@@ -12579,9 +12579,9 @@ AccTone_InlineBytecodeData_Code_Helper3_Skip7:
 	call	AccTone_LookupByProgram_Dispatch
 	ld	xwa, xhl
 	ld	bc, iz
-	call	AccTone_InlineBytecodeData_Code_Helper3_Helper5
+	call	AccStyle_SetupPartAddressesByHL_Wrap
 	ld	xwa, (0x33f2:16)
-	call	AccTone_InlineBytecodeData_Code_Helper6
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
 	or	(0x332c:16), 63
 	ld	a, (0x32ff:16)
 	cp	a, 4:i3
@@ -12846,13 +12846,13 @@ AccVoice_BarCounterBytecodeData_Skip5:
 	ld	xiz, 608352
 	add_sril_rm	XIZ, 0x07, 0xe4, 0xe0
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, xiz
 	jrl	AccVoice_BarCounterBytecodeData_Join2
 AccVoice_BarCounterBytecodeData_Skip6:
 	calr	AccVoice_BarCounterBytecodeData_Helper9
 	ld	xwa, (13350:16)
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, (13350:16)
 	jrl	AccVoice_BarCounterBytecodeData_Join2
 AccVoice_BarCounterBytecodeData_Skip7:
@@ -12865,13 +12865,13 @@ AccVoice_BarCounterBytecodeData_Skip7:
 	ld	xiz, 608352
 	add_sril_rm	XIZ, 0x07, 0xe4, 0xe0
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, xiz
 	jr	AccVoice_BarCounterBytecodeData_Join2
 AccVoice_BarCounterBytecodeData_Skip8:
 	calr	AccVoice_BarCounterBytecodeData_Helper8
 	ld	xwa, (13350:16)
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, (13350:16)
 	jr	AccVoice_BarCounterBytecodeData_Join2
 AccVoice_BarCounterBytecodeData_Skip9:
@@ -12912,10 +12912,10 @@ AccVoice_BarCounterBytecodeData_Skip10:
 AccVoice_BarCounterBytecodeData_Skip11:
 	ldw	bc, 36
 AccVoice_BarCounterBytecodeData_Join:
-	call	AccVoice_BarCounterBytecodeData_Helper7
+	call	AccVoice_LoadAllParts_Wrap
 	ld	xwa, (13298:16)
 AccVoice_BarCounterBytecodeData_Join2:
-	call	AccTone_InlineBytecodeData_Code_Helper6
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
 	or	(0x332c:16), 63
 	pop	xiz
 	inc	2, xsp
@@ -12939,13 +12939,13 @@ AccVoice_BarCounterBytecodeData_Join2:
 	ld	xiz, 608352
 	add_sril_rm	XIZ, 0x07, 0xe4, 0xe0
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, xiz
 	jrl	AccVoice_BarCounterBytecodeData_Join3
 AccVoice_BarCounterBytecodeData_Skip12:
 	calr	AccVoice_BarCounterBytecodeData_Helper10
 	ld	xwa, (13350:16)
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, (13350:16)
 	jrl	AccVoice_BarCounterBytecodeData_Join3
 AccVoice_BarCounterBytecodeData_Skip13:
@@ -12958,13 +12958,13 @@ AccVoice_BarCounterBytecodeData_Skip13:
 	ld	xiz, 608352
 	add_sril_rm	XIZ, 0x07, 0xe4, 0xe0
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, xiz
 	jr	AccVoice_BarCounterBytecodeData_Join3
 AccVoice_BarCounterBytecodeData_Skip14:
 	calr	AccVoice_BarCounterBytecodeData_Helper3
 	ld	xwa, (13350:16)
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, (13350:16)
 	jr	AccVoice_BarCounterBytecodeData_Join3
 AccVoice_BarCounterBytecodeData_Skip15:
@@ -12997,13 +12997,13 @@ AccVoice_BarCounterBytecodeData_Skip16:
 	ld	xiz, xhl
 	ld	a, (12963:16)
 	extz	wa
-	call	AccVoice_BarCounterBytecodeData_Helper5
+	call	AccVoice_ComputeParamAddr_Wrap
 	ld	bc, hl
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper7
+	call	AccVoice_LoadAllParts_Wrap
 	ld	xwa, (13298:16)
 AccVoice_BarCounterBytecodeData_Join3:
-	call	AccTone_InlineBytecodeData_Code_Helper6
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
 	or	(0x332c:16), 63
 	pop	xiz
 	inc	2, xsp
@@ -13034,13 +13034,13 @@ AccVoice_BarCounterBytecodeData_Join3:
 	ld	xiz, 608352
 	add_sril_rm	XIZ, 0x07, 0xf4, 0xe0
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, xiz
 	jrl	AccVoice_BarCounterBytecodeData_Join5
 AccVoice_BarCounterBytecodeData_Skip17:
 	calr	AccTone_InlineBytecodeData_Code_Helper3_Helper3
 	ld	xwa, (13350:16)
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, (13350:16)
 	jrl	AccVoice_BarCounterBytecodeData_Join5
 AccVoice_BarCounterBytecodeData_Skip18:
@@ -13051,7 +13051,7 @@ AccVoice_BarCounterBytecodeData_Skip18:
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip19
 	calr	AccTone_InlineBytecodeData_Code_Helper3_Helper
 	ld	xwa, (13350:16)
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, (13350:16)
 	jrl	AccVoice_BarCounterBytecodeData_Join5
 AccVoice_BarCounterBytecodeData_Skip19:
@@ -13082,10 +13082,10 @@ AccVoice_BarCounterBytecodeData_Skip20:
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ldw	bc, 34
-	call	AccVoice_BarCounterBytecodeData_Helper7
+	call	AccVoice_LoadAllParts_Wrap
 	ld	xwa, xiz
 	ld	xbc, 294
-	call	AccVoice_BarCounterBytecodeData_Helper4
+	call	AccVoice_LoadTuningBlock_Wrap
 	jrl	AccVoice_BarCounterBytecodeData_Entry
 AccVoice_BarCounterBytecodeData_Skip21:
 	ld	a, (1075:16)
@@ -13097,13 +13097,13 @@ AccVoice_BarCounterBytecodeData_Skip21:
 	ld	xiz, 608352
 	add_sril_rm	XIZ, 0x07, 0xf4, 0xe0
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, xiz
 	jr	AccVoice_BarCounterBytecodeData_Join5
 AccVoice_BarCounterBytecodeData_Skip22:
 	calr	AccTone_InlineBytecodeData_Code_Helper3_Helper2
 	ld	xwa, (13350:16)
-	call	AccVoice_BarCounterBytecodeData_Helper6
+	call	AccInit_AllPartPositions_Wrap
 	ld	xwa, (13350:16)
 	jr	AccVoice_BarCounterBytecodeData_Join5
 AccVoice_BarCounterBytecodeData_Skip23:
@@ -13148,10 +13148,10 @@ AccVoice_BarCounterBytecodeData_Skip26:
 	ldw	bc, 32
 AccVoice_BarCounterBytecodeData_Join4:
 	ld	xwa, xiz
-	call	AccVoice_BarCounterBytecodeData_Helper7
+	call	AccVoice_LoadAllParts_Wrap
 	ld	xwa, (13298:16)
 AccVoice_BarCounterBytecodeData_Join5:
-	call	AccTone_InlineBytecodeData_Code_Helper6
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
 AccVoice_BarCounterBytecodeData_Entry:
 	or	(0x332c:16), 63
 	pop	xiz
@@ -13229,7 +13229,7 @@ AccTuning_ComplexBytecodeData_Code_Skip:
 	extz	bc
 	call	AccTone_LookupByProgram_Dispatch
 	ld	xiz, xhl
-	call	AccTuning_ComplexBytecodeData_Code_Helper2
+	call	AccPedal_DirectionA_Wrap
 	ld	xwa, xiz
 	ld	bc, hl
 	call	AccTuning_ComplexBytecodeData_Code_Helper3
@@ -13436,25 +13436,25 @@ AccTone_LookupByProgram_Dispatch:
 	ld	xhl, xiy
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper4:
+Rhythm_UpdateTuningConfig_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	call	Rhythm_UpdateTuningConfig
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper5:
+AccPatch_SetByChordIndex_Wrap:
 	push	xiz
 	ld	w, a
 	call	AccPatch_SetByChordIndex
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper6:
+AccTuning_CopyAllPartsFromStyle_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	call	AccTuning_CopyAllPartsFromStyle
 	pop	xiz
 	ret
-AccVoice_BarCounterBytecodeData_Helper4:
+AccVoice_LoadTuningBlock_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	ld	xhl, xbc
@@ -13462,20 +13462,20 @@ AccVoice_BarCounterBytecodeData_Helper4:
 	call	AccVoice_LoadTuningBlock
 	pop	xiz
 	ret
-AccVoice_BarCounterBytecodeData_Helper5:
+AccVoice_ComputeParamAddr_Wrap:
 	push	xiz
 	and	xwa, 255
 	call	AccVoice_ComputeParamAddr
 	and	xhl, 0xffff
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper3_Helper4:
+AccPart_InitPositionsAndBase_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	call	AccPart_InitPositionsAndBase
 	pop	xiz
 	ret
-AccVoice_BarCounterBytecodeData_Helper6:
+AccInit_AllPartPositions_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	call	AccInit_AllPartPositions
@@ -13485,7 +13485,7 @@ AccVoice_BarCounterBytecodeData_Helper6:
 	call	AccPedal_ProcessAllChanges
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper3_Helper5:
+AccStyle_SetupPartAddressesByHL_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	ld	xhl, xbc
@@ -13493,7 +13493,7 @@ AccTone_InlineBytecodeData_Code_Helper3_Helper5:
 	call	AccStyle_SetupPartAddressesByHL
 	pop	xiz
 	ret
-AccVoice_BarCounterBytecodeData_Helper7:
+AccVoice_LoadAllParts_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	ld	xhl, xbc
@@ -13517,27 +13517,27 @@ AccVoice_BarCounterBytecodeData_Helper7:
 	call	AccBuf_WriteAllNotesOff
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper7:
+Rhythm_SendChanPressure_Wrap:
 	push	xiz
 	call	Rhythm_SendChanPressure
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper8:
+AccBuf_ResetAll4_Wrap:
 	push	xiz
 	call	AccBuf_ResetAll4
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper9:
+AccSeq_DualPartScan_Wrap:
 	push	xiz
 	call	AccSeq_DualPartScan
 	pop	xiz
 	ret
-AccTone_InlineBytecodeData_Code_Helper10:
+AccSeq_FourChannelScan_Wrap:
 	push	xiz
 	call	AccSeq_FourChannelScan
 	pop	xiz
 	ret
-AccTuning_ComplexBytecodeData_Code_Helper2:
+AccPedal_DirectionA_Wrap:
 	push	xiz
 	call	AccPedal_DirectionA
 	and	xhl, 0xffff
@@ -33842,7 +33842,7 @@ AccDraw_Secondary_Helper2_Skip2:
 	calr	AccDraw_Secondary_Helper
 	calr	AccDraw_Secondary_Helper11
 	ld	(0x03efa8:24), 0
-	calr	AccDraw_Secondary_Helper14
+	calr	AccScreen_SelectorToWidgetIndex
 	ldmm8	14779, 13526
 	ldmm8	14780, 14146
 	ldmm8	14781, 14147
@@ -33859,7 +33859,7 @@ AccDraw_Secondary_Helper2_Skip2:
 	calr	AccDraw_Secondary_Helper9
 	calr	AccDraw_Secondary_Helper12
 	calr	AccDraw_Secondary_Helper10
-	calr	AccDraw_Secondary_Helper13
+	calr	AccScreen_RefreshScreen
 	ret
 	push	xiz
 	calr	AccDraw_Secondary_Helper3
@@ -34467,7 +34467,8 @@ AccScreen_UIDataBlock:
 ; the three .incbin records below use.
 ; ** CORRECTED 2026-09-25 (lane accomp): bytes +0x00..+0x32 of this block are
 ; NOT data.  They are three routines (51 B) and AccDraw_Secondary CALLS the
-; second and third (calr AccDraw_Secondary_Helper13 / _Helper14), so the
+; second and third (calr AccScreen_RefreshScreen / AccScreen_SelectorToWidgetIndex,
+; which the symboliser had named AccScreen_RefreshScreen / _Helper14), so the
 ; "never a branch target" reading above holds for the 23 positional labels
 ; only.  The records begin at +0x33 = AccScreen_UIDataBlock_0x33, the first
 ; positional label.  Evidence: clean llvm-mc/unidasm decode ending on `ret` at
@@ -34489,24 +34490,24 @@ AccScreen_DrawMeasureDetail_Sub:
 	ld	a, 16:opc
 	call	Display_DeferOrDrawWall
 	ret
-AccDraw_Secondary_Helper13:
+AccScreen_RefreshScreen:
 	ld	c, 7:opc
 	ld	a, 12:opc
 	call	Display_DeferOrUpdateScreen
 	ret
 ; W = index of the lowest set bit of ((0x379b) & 31), 0 when none is set;
 ; stored to (0x39b8).
-AccDraw_Secondary_Helper14:
+AccScreen_SelectorToWidgetIndex:
 	xor	wa, wa
 	ld	a, (0x379b:16)
 	and	a, 31
-	jr	z, AccDraw_Secondary_Helper14_Skip
-AccDraw_Secondary_Helper14_Join:
+	jr	z, AccScreen_SelectorToWidgetIndex_Store
+AccScreen_SelectorToWidgetIndex_Loop:
 	srl	a, 1
-	jr	c, AccDraw_Secondary_Helper14_Skip
+	jr	c, AccScreen_SelectorToWidgetIndex_Store
 	inc	1, w
-	jr	AccDraw_Secondary_Helper14_Join
-AccDraw_Secondary_Helper14_Skip:
+	jr	AccScreen_SelectorToWidgetIndex_Loop
+AccScreen_SelectorToWidgetIndex_Store:
 	ld	(0x39b8:16), w
 	ret
 ; +0x33: the records
