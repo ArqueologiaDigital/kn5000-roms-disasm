@@ -45068,7 +45068,7 @@ ScreenLeave_SysexBulkDump_Entry:
 ; Was `sub_F99835`.
 ; ---------------------------------------------------------------------
 ScreenButton_SysexBulkDump_Entry:
-	ld XIX,DisplayListPtrs_F99870                        ; F99835  44 70 98 f9 00
+	ld XIX,ScreenButtonRow_SysexBulkDump                        ; F99835  44 70 98 f9 00
 	ld e, (0x2740:16)                                   ; F9983A  c1 40 27 25
 	call T_F41B0C                                        ; F9983E  1d 0c 1b f4
 	ret                                                  ; F99842  0e
@@ -45135,7 +45135,7 @@ ScreenLeave_GeneralMidiMode_Entry:
 ; Was `sub_F9984C`.
 ; ---------------------------------------------------------------------
 ScreenButton_GeneralMidiMode_Entry:
-	ld XIX,DisplayListPtrs_F99870+0x80                   ; F9984C  44 f0 98 f9 00
+	ld XIX,ScreenButtonRow_GeneralMidi_Page0                   ; F9984C  44 f0 98 f9 00
 	ld e, (0x2740:16)                                   ; F99851  c1 40 27 25
 	call T_F41B0C                                        ; F99855  1d 0c 1b f4
 	ret                                                  ; F99859  0e
@@ -45180,7 +45180,9 @@ sub_F99864:
 .LF9986F:
 	ret                                                  ; F9986F  0e
 ; ---------------------------------------------------------------------
-; DisplayListPtrs_F99870 -- 96 LE32 pointers = THREE 32-entry tables end to end
+; ScreenButtonRow_SysexBulkDump -- 96 LE32 handler pointers = THREE 32-entry ROWS
+;          end to end; this was ScreenButtonRow_SysexBulkDump (they are routines,
+;          not display lists: every entry is an instruction start, check W5).
 ;
 ; Read by: TWO located sites, both the same three instructions --
 ;          0xF99835 `ld XIX,0x00F99870 / ld E,(0x2740) / call T_F41B0C` and
@@ -45195,9 +45197,19 @@ sub_F99864:
 ;          pointer-shaped, and it is where the decode resumes.
 ; Evidence: the two readers, the callee's own bound, and the shape run; the
 ;          three agree.  notes/prom_a_uiblock_checks.py.
-; Unknown:  what (0x2740) selects, and what the third block is for.
+; ★ CORRECTED 2026-09-25 (lane proma).  This line said "Unknown: what
+;          (0x2740) selects, and what the third block is for."  sub_F8BDF8
+;          adds E * 128 to the base before indexing by the button code
+;          (`xor XDE,XDE / pop E / sla 7,DE / add XIX,XDE`), so (0x2740) picks
+;          a ROW -- the screen's PAGE -- and each reader's base is its page 0:
+;            0xF99870  SysexBulkDump page 0 (its paint writes (0x2740) = 0 and
+;                      that screen writes nothing else);
+;            0xF998F0  GeneralMidiMode page 0 -- ScreenButtonRow_GeneralMidi_Page0;
+;            0xF99970  GeneralMidiMode page 1, the YES/NO page --
+;                      ScreenButtonRow_GeneralMidi_YesNo.
+;          (notes/proma-2026-09-25/gen_button_rows.py, checks W1-W5)
 ; ---------------------------------------------------------------------
-DisplayListPtrs_F99870:
+ScreenButtonRow_SysexBulkDump:
 	.long sub_F99A5E                                 ; F99870  [  0]
 	.long sub_F99A5F                                 ; F99874  [  1]
 	.long sub_F99A60                                 ; F99878  [  2]
@@ -45230,6 +45242,16 @@ DisplayListPtrs_F99870:
 	.long sub_F99B7F                                 ; F998E4  [ 29]
 	.long sub_F99B80                                 ; F998E8  [ 30]
 	.long sub_F99B81                                 ; F998EC  [ 31]
+; ---------------------------------------------------------------------
+; ScreenButtonRow_GeneralMidi_Page0 -- 32 handlers, GeneralMidiMode's main
+;          page: ScreenButton_GeneralMidiMode_Entry's base, row (0x2740) = 0,
+;          drawn by Paint_GeneralMidiMode as DL_GeneralMidiMidiGeneralMidiMode.
+;          Its sub_F99DDD sets (0x2740) = 1 at 0xF99DE8 (check W3).
+;          Also row 1 of the SysexBulkDump base, which that screen never
+;          selects (its only (0x2740) write is 0).
+; (notes/proma-2026-09-25/gen_button_rows.py)
+; ---------------------------------------------------------------------
+ScreenButtonRow_GeneralMidi_Page0:
 	.long sub_F99DD5                                 ; F998F0  [ 32]
 	.long sub_F99DD6                                 ; F998F4  [ 33]
 	.long sub_F99DD7                                 ; F998F8  [ 34]
@@ -45262,6 +45284,14 @@ DisplayListPtrs_F99870:
 	.long sub_F99E78                                 ; F99964  [ 61]
 	.long sub_F99E79                                 ; F99968  [ 62]
 	.long sub_F99E7A                                 ; F9996C  [ 63]
+; ---------------------------------------------------------------------
+; ScreenButtonRow_GeneralMidi_YesNo -- 32 handlers, GeneralMidiMode's YES/NO
+;          page: row (0x2740) = 1 of ScreenButton_GeneralMidiMode_Entry, drawn
+;          as DL_GeneralMidiMidiYesNo; sub_F99E85, sub_F99ED1 and sub_F99EE4
+;          in this row set (0x2740) back to 0 (check W3).
+; (notes/proma-2026-09-25/gen_button_rows.py)
+; ---------------------------------------------------------------------
+ScreenButtonRow_GeneralMidi_YesNo:
 	.long sub_F99E7B                                 ; F99970  [ 64]
 	.long sub_F99E7C                                 ; F99974  [ 65]
 	.long sub_F99E7D                                 ; F99978  [ 66]
