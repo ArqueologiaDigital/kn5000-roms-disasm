@@ -4740,7 +4740,7 @@ MainVariSet_ReturnZero:
 MainVariSet:
 	push	xiz
 	cp	xbc, 31588352
-	jr	nz, 47
+	jr	nz, MainVariSet_Done
 	ld	xiz, xde
 	ld	a, (xiz)
 	extz	wa
@@ -5150,7 +5150,7 @@ MainSysControl:
 MainSysCtrl_DispatchTable:
 	ld	wa, 2:i3
 	call	16634741
-	jr	46
+	jr	MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry1_AccDemo:
 	call AccDemo_InitDone
 	jr t, MainSysControl_PostDispatchFinalize

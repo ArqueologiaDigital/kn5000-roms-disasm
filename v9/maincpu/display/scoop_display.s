@@ -4395,35 +4395,42 @@ DisplayMode_Handler_3_Skip15:
 	ld	a, w
 DisplayMode_Handler_3_Skip16:
 	ld	(3537:16), a
+DisplayMode_Handler_3_Loop4:
 	call	VoiceState_DataBlock2_0x1CB
 	ld	e, a
 	and	e, 240
 	cpdi8	(0x0d55), 255
-	jrl	z, 63
+	jrl	z, DisplayMode_Handler_3_Skip33
 	cp	(3413:16), a
-	jrl	z, 68
+	jrl	z, DisplayMode_Handler_3_Skip34
 	cpdi8	(0x0d55), 210
-	jrl	z, 38
+	jrl	z, DisplayMode_Handler_3_Skip35
+DisplayMode_Handler_3_Loop5:
 	call	VoiceState_DataBlock2_0x1A6
 	call	VoiceState_DataBlock2_0x1D8
 	cp	w, 255
-	jrl	nz, -46
+	jrl	nz, DisplayMode_Handler_3_Loop4
 	bitda	4, (0x0d53)
-	jrl	nz, 0
+	jrl	nz, DisplayMode_Handler_3_Next
+DisplayMode_Handler_3_Next:
 	anddi8	(0x0d53), 239
 	cpdi8	(0x0d55), 255
-	jrl	nz, 0
+	jrl	nz, DisplayMode_Handler_3_Next2
+DisplayMode_Handler_3_Next2:
 	jp	DisplayMode_Handler_3_0x168
+DisplayMode_Handler_3_Skip35:
 	cp	a, 209
-	jrl	z, 16
+	jrl	z, DisplayMode_Handler_3_Skip34
 	jp	DisplayMode_Handler_3_0x99
+DisplayMode_Handler_3_Skip33:
 	cp a, (3536:16)
-	jrl	z, -55
+	jrl	z, DisplayMode_Handler_3_Loop5
 	ld	(3536:16), 255
+DisplayMode_Handler_3_Skip34:
 	cp	a, 209
-	jrl	z, 107
+	jrl	z, DisplayMode_Handler_3_Skip36
 	cp	a, 210
-	jrl	z, 118
+	jrl	z, DisplayMode_Handler_3_Skip37
 	cp	a, 128
 	jrl	z, DisplayMode_Handler_3_Skip5
 	cp	a, 133
@@ -4460,11 +4467,13 @@ DisplayMode_Handler_3_Skip6:
 DisplayMode_Handler_3_Skip7:
 	call	VoiceCtrl_ParamSetupBytecode_0x560
 	jp	DisplayMode_Handler_3_0x9D
+DisplayMode_Handler_3_Skip36:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
 	call	SerialPort_ModeHandler_0_0x5
 	jp	DisplayMode_Handler_3_0x9D
+DisplayMode_Handler_3_Skip37:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
@@ -6806,18 +6815,20 @@ ScoopParam_ValueTable_Entry3:
 	setda	0, (0x0dd3)
 	ld	(14120:16), 0
 	cp	(4346:16), 0
-	jrl	nz, 4
+	jrl	nz, SerialPort_ModeHandler_0_Skip9
 	call	PortConfig_SetupBytecode_0x34
+SerialPort_ModeHandler_0_Skip9:
 	call	SerialPort_ModeHandler_0_Helper
 	jp	ScoopParam_ValueTable_Return3
 ScoopParam_ValueTable_Entry3_Code_Skip:
 	call	PortConfig_DataTable_B_Return
 	call	ScoopParam_ValueTable_Helper6
 	bitda	3, (0x0d53)
-	jrl	z, 12
+	jrl	z, SerialPort_ModeHandler_0_Skip10
 	call	PortConfig_SetupBytecode_0x34
 	cp	(3429:16), 0
-	jrl	nz, 0
+	jrl	nz, SerialPort_ModeHandler_0_Skip10
+SerialPort_ModeHandler_0_Skip10:
 	jp	ScoopParam_ValueTable_Return3
 ScoopParam_ValueTable_Return3:
 	ret
@@ -8053,6 +8064,7 @@ MemConfig_Handler_1_Code_Loop2:
 	decm8	1, (xiy)
 	cp	(xiy), 0
 	jrl	nz, MemConfig_Handler_1_Code_Loop2
+MemConfig_Handler_1_Loop4:
 	ld	a, 6:opc
 	call	VoiceSlot_SaveState
 	call	VoiceSlot_CompareAndBranch_0x7
@@ -8060,7 +8072,7 @@ MemConfig_Handler_1_Code_Loop2:
 	jrl	z, MemConfig_Handler_1_Code_Return
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	nz, -26
+	jrl	nz, MemConfig_Handler_1_Loop4
 	ld	a, 6:opc
 	call	VoiceSlot_RestoreState
 MemConfig_Handler_1_Code_Return:
@@ -8072,7 +8084,8 @@ MemConfig_Handler_3:
 	call	SndDispatch_ProcessCommand_0x278
 	call	SndDispatch_ProcessCommand_0x28B
 	cpdi8	(0x0d6a), 0
-	jrl	z, 0
+	jrl	z, MemConfig_Handler_3_Next
+MemConfig_Handler_3_Next:
 	ld	w, 0:opc
 	ret
 	pushw	wa
@@ -14584,9 +14597,10 @@ Tbl_OctaveNames:
 	; value (0x10f3) in decimal.
 ParamPopup_PartVolume:
 	cpdi8	(0x0def), 10
-	jrl	z, 9
+	jrl	z, ParamPopup_PartVolume_Skip
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
+ParamPopup_PartVolume_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14624,9 +14638,10 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	; value (0x10f3) in decimal.
 ParamPopup_PartPanpot:
 	cpdi8	(0x0def), 10
-	jrl	z, 9
+	jrl	z, ParamPopup_PartPanpot_Skip
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
+ParamPopup_PartPanpot_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14702,9 +14717,10 @@ Str_KeyShiftEq:
 	; byte at 0x1180 and three digits from 0x1181.
 ParamPopup_PartTuning:
 	cpdi8	(0x0def), 10
-	jrl	z, 9
+	jrl	z, ParamPopup_PartTuning_Skip
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
+ParamPopup_PartTuning_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -14742,9 +14758,10 @@ Str_TuningEq:
 	; value (0x10f3), two digits (copied from 0x1182).
 ParamPopup_PartBendSense:
 	cpdi8	(0x0def), 10
-	jrl	z, 9
+	jrl	z, ParamPopup_PartBendSense_Skip
 	ld	(3567:16), 10
 	call	Display_UpdateRegion0
+ParamPopup_PartBendSense_Skip:
 	call	DisplayStr_ClearRegion
 	ld	l, (4337:16)
 	xor	h, h
@@ -15019,11 +15036,13 @@ StringData_EffectLabel_Code_Skip4:
 	ldw	bc, 8
 	ldir85
 	cp	a, 0:i3
-	jr	z, 13
+	jr	z, ParamPopup_FadeIn_Skip
 	cp	a, 1:i3
-	jr	z, 0
+	jr	z, ParamPopup_FadeIn_Next
+ParamPopup_FadeIn_Next:
 	ld	xiy, Str_On
 	jp	StringData_EffectLabel_0x176
+ParamPopup_FadeIn_Skip:
 	ld	xiy, Str_Off
 	ld	bc, 3:i3
 	ldir85
@@ -15046,11 +15065,12 @@ Str_Off:
 	; A on entry (0 / 1).
 ParamPopup_FadeOut:
 	cpdi8	(0x0def), 1
-	jrl	z, 11
+	jrl	z, ParamPopup_FadeOut_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
+ParamPopup_FadeOut_Skip:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
@@ -15059,11 +15079,13 @@ ParamPopup_FadeOut:
 	ldw	bc, 9
 	ldir85
 	cp	a, 0:i3
-	jr	z, 13
+	jr	z, ParamPopup_FadeOut_Skip2
 	cp	a, 1:i3
-	jr	z, 0
+	jr	z, ParamPopup_FadeOut_Next
+ParamPopup_FadeOut_Next:
 	ld	xiy, Str_On
 	jp	StringData_EffectLabel_0x1CB
+ParamPopup_FadeOut_Skip2:
 	ld	xiy, Str_Off
 	ld	bc, 3:i3
 	ldir85
@@ -15077,11 +15099,12 @@ Str_FadeOut:
 	; Pop-up id 1.  16 chars of StringData_APCModeNames[(W and A) * 16] at 0x0ECF.
 ParamPopup_ApcMode:
 	cpdi8	(0x0def), 1
-	jrl	z, 11
+	jrl	z, ParamPopup_ApcMode_Skip
 	ld	(3567:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
 	popw	wa
+ParamPopup_ApcMode_Skip:
 	and	w, a
 	pushw	wa
 	call	DisplayStr_ClearRegion
