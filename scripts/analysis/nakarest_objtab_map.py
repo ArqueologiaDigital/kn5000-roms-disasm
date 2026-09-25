@@ -503,6 +503,21 @@ def main():
         unres = sum(1 for x in recs if m.record_class(x) is None)
         short = sum(1 for i, x in enumerate(recs[:-1])
                     if m.record_class(x) and recs[i + 1] - x < m.record_class(x)['allsize'])
+        # records followed by bytes that no indexed object (record, text,
+        # name, table ...) starts at -- the figure FORMAT_NOTE in
+        # nakarest_retype.py quotes
+        starts = sorted(m.addr)
+        gap_after = 0
+        for x in recs:
+            c = m.record_class(x)
+            e = x + c['allsize']
+            i = bisect.bisect_left(starts, e)
+            if i < len(starts) and starts[i] > e:
+                gap_after += 1
+        exact = sum(1 for i, x in enumerate(recs[:-1])
+                    if m.record_class(x) and recs[i + 1] - x == m.record_class(x)['allsize'])
+        print('%s: widget records followed by bytes nothing indexed starts at: %d of %d; '
+              'next record exactly allsize away: %d' % (a.version, gap_after, len(recs), exact))
         print('%s: %d classes in %d Class tables; propdata sizes / propname blocks '
               'inconsistent: %d; allsize == parent.allsize (0 for Object) + selfsize: %d of %d with a '
               'resolvable parent; widget records: %d in ROM, %d with an unresolvable '
