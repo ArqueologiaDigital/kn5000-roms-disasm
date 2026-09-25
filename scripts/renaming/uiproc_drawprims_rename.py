@@ -111,7 +111,7 @@ HEADERS = {
 ;   2  bit 6 likewise                                       (_Impl_Mode2)
 ;   other  nothing is drawn
 ; and always finishes with SetChangeRect(rect).
-; Derived from the ROM code below (v10 0xFAFB48); caller:
+; Derived from the ROM code below ({img} 0x{a0:06X}); caller:
 ; display/graphics_text_vga.s (the character-cell renderer that divides a cell
 ; index by 40 and multiplies by 8 to build the rectangle).
 ; =============================================================================
@@ -141,7 +141,7 @@ HEADERS = {
 ; It ends with SetChangeRect over the rectangle spanned by the two points
 ; (_Impl_Done).  DrawLine's wrapper (ui/drawing_primitives.s) does not latch the
 ; draw mode byte; this one does.
-; Derived from the ROM code below (v10 0xFAFECD).  Callers:
+; Derived from the ROM code below ({img} 0x{a1:06X}).  Callers:
 ; display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper) and,
 ; directly into _Impl, the image's root .s (as
 ; Voice_FactoryPresetData_Code_Helper).
@@ -158,8 +158,8 @@ HEADERS = {
 ; incrementing -- two pixels on, three off.  The draw-mode test is made per
 ; pixel inside the loop.
 ; The routine continues past the end of this file into the image's root .s
-; (kn5000_v10_program.s), which branches back into it.
-; Derived from the ROM code below (v10 0xFB06B6).  Caller:
+; (kn5000_{img}_program.s), which branches back into it.
+; Derived from the ROM code below ({img} 0x{a2:06X}).  Caller:
 ; display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper2).
 ; =============================================================================
 """,
@@ -243,10 +243,14 @@ def main():
         if k in amap and not re.match(r'^[A-Za-z_][\w]*:', lines[i]):
             addr_line.setdefault(amap[k] - base, i - start)
     inserts = {}
-    for off in (0x065, 0x3F0, 0xBD9):
+    missing = []
+    for off in sorted(FIXED):
         if FIXED[off] in [new[n] for o, n, i in labs]:
             continue
+        # no label at this boundary yet (v7: nothing in this file branches to
+        # the B/C wrappers, their callers use numeric calr): insert one
         inserts.setdefault(addr_line[off], []).append(FIXED[off] + ":")
+        missing.append((off, FIXED[off]))
     # headers + kept old names before each routine entry, and old names kept
     # for other files before interior labels
     for off, n, i in labs:
@@ -255,7 +259,24 @@ def main():
         nn = new[n]
         if nn in HEADERS:
             pre.append("")
-            pre += HEADERS[nn].rstrip("\n").split("\n")
+            hdr = HEADERS[nn].replace("{img}", a.image)
+            for k, o in (("{a0:06X}", 0x000), ("{a1:06X}", 0x385), ("{a2:06X}", 0xB6E)):
+                hdr = hdr.replace(k, "%06X" % (base + o))
+            if a.image == "v7":
+                # v7's other files call these wrappers by NUMERIC calr (the
+                # block was a verbatim romslice until 2026-09-25), and the old
+                # helper names belong to other routines there
+                hdr = hdr.replace(
+                    "display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper) and,\n"
+                    "; directly into _Impl, the image's root .s (as\n"
+                    "; Voice_FactoryPresetData_Code_Helper).",
+                    "display/graphics_text_vga.s and, directly into _Impl, the image's root .s\n"
+                    "; (both by numeric `calr` in v7: their files are another lane's).")
+                hdr = hdr.replace("_program.s), which branches back into it.", "_program.s).")
+                hdr = hdr.replace(
+                    "display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper2).",
+                    "display/graphics_text_vga.s (by numeric `calr` in v7).")
+            pre += hdr.rstrip("\n").split("\n")
         if n in ext and n != nn:
             pre.append("; %s: previous name of this label, kept only because it is "
                        "still referenced by %s (owned by another lane)"
@@ -264,6 +285,24 @@ def main():
         if pre:
             inserts.setdefault(li, [])
             inserts[li] = pre + inserts[li]
+    for off, nn in missing:
+        if nn in HEADERS:
+            hdr = HEADERS[nn].replace("{img}", a.image)
+            for k, o in (("{a0:06X}", 0x000), ("{a1:06X}", 0x385), ("{a2:06X}", 0xB6E)):
+                hdr = hdr.replace(k, "%06X" % (base + o))
+            if a.image == "v7":
+                hdr = hdr.replace("_program.s), which branches back into it.", "_program.s).")
+                hdr = hdr.replace(
+                    "display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper) and,\n"
+                    "; directly into _Impl, the image's root .s (as\n"
+                    "; Voice_FactoryPresetData_Code_Helper).",
+                    "display/graphics_text_vga.s and, directly into _Impl, the image's root .s\n"
+                    "; (both by numeric `calr` in v7: their files are another lane's).")
+                hdr = hdr.replace(
+                    "display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper2).",
+                    "display/graphics_text_vga.s (by numeric `calr` in v7).")
+            li = addr_line[off]
+            inserts[li] = [""] + hdr.rstrip("\n").split("\n") + inserts[li]
     res = []
     for li, l in enumerate(out):
         res += inserts.get(li, [])
