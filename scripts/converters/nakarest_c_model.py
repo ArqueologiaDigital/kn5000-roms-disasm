@@ -47,6 +47,8 @@ CHANGES (lane nakarest)
   * the blob struct is found as the struct that `} naka_*_t;` closes,
     searching BACKWARD for its `typedef struct ... {` -- so a local typedef
     inserted above it (welcome_step_t) is not parsed as blob members.
+  * NewMember.designator drops trailing [0] subscripts (SELF(T[3]) rather
+    than SELF(T[3][0]) -- the same address).
 """
 import re
 
@@ -464,7 +466,10 @@ class NewMember:
         for d in reversed(dims):
             idx.append(k % d)
             k //= d
-        return self.name + ''.join('[%d]' % i for i in reversed(idx))
+        idx.reverse()
+        while len(idx) > 1 and idx[-1] == 0:     # Titles[3][0] -> Titles[3]
+            idx.pop()
+        return self.name + ''.join('[%d]' % i for i in idx)
 
 
 def comment_block(text, width=76):

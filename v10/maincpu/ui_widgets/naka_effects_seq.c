@@ -35,7 +35,6 @@ extern const char NakaInst_Param_EndFF;
 extern const char NakaInst_Param_PadEnd;
 extern const char NakaInst_Param_Repeat;
 extern const char NakaInst_Param_Val00_01;
-extern const char NakaInst_o_s_Guitar_110;
 extern const char NakaState_ZeroBlock_4;
 extern const char NakaState_ZeroBlock_5;
 extern const char Naka_PresentationRootState;
@@ -10810,7 +10809,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_04   = 0x0000,
         .field_06   = 0x0003,
         .name_ptr   = 0x00010004,
-        .inst_ptr   = NAKA_ADDR(NakaInst_o_s_Guitar_110),
+        .inst_ptr   = 0x00EC0008,  /* 16-bit pair 0x0008, 0x00EC (8, 236); the generator had made it a pointer to 0xEC0008, 4 bytes into StyleSong_Titles[512] -- not a pointer */
         .link_ptr   = 0x01370076,
         .proc_addr  = 0x00070087,
     },
@@ -22351,7 +22350,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_600c = 0x000C,
 
-    .ptr_600e = NAKA_ADDR(NakaInst_o_s_Guitar_110),
+    .ptr_600e = 0x00EC0008,  /* 16-bit pair 0x0008, 0x00EC (8, 236); the generator had made it a pointer to 0xEC0008, 4 bytes into StyleSong_Titles[512] -- not a pointer */
 
     .field_6012 = 0x00DF,
 

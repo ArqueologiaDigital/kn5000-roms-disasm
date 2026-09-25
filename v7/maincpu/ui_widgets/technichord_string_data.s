@@ -342,9 +342,9 @@ Bitmap_SomeArrows:
 ; which is how the 22 x 222 shape is pinned. None of the three handler
 ; entry points (0xf7b4f1, 0xf7b51e, 0xf7b54b in v10) occurs as a 32-bit
 ; or 24-bit little-endian value anywhere in the v10 program, table data,
-; custom data or HD-AE5000 images (searched 2026-09-25), so how -- or
-; whether -- they are reached is not established. The three bitmaps are
-; also pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; custom data or HD-AE5000 images (searched 2026-09-25): what reaches
+; them, if anything, was not found. The bitmaps themselves are also
+; pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
 ; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
 ; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
 ; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
@@ -383,9 +383,9 @@ Bitmap_DrawbarNumberedSlider_1:
 ; which is how the 22 x 222 shape is pinned. None of the three handler
 ; entry points (0xf7b4f1, 0xf7b51e, 0xf7b54b in v10) occurs as a 32-bit
 ; or 24-bit little-endian value anywhere in the v10 program, table data,
-; custom data or HD-AE5000 images (searched 2026-09-25), so how -- or
-; whether -- they are reached is not established. The three bitmaps are
-; also pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; custom data or HD-AE5000 images (searched 2026-09-25): what reaches
+; them, if anything, was not found. The bitmaps themselves are also
+; pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
 ; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
 ; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
 ; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
@@ -424,9 +424,9 @@ Bitmap_DrawbarNumberedSlider_2:
 ; which is how the 22 x 222 shape is pinned. None of the three handler
 ; entry points (0xf7b4f1, 0xf7b51e, 0xf7b54b in v10) occurs as a 32-bit
 ; or 24-bit little-endian value anywhere in the v10 program, table data,
-; custom data or HD-AE5000 images (searched 2026-09-25), so how -- or
-; whether -- they are reached is not established. The three bitmaps are
-; also pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; custom data or HD-AE5000 images (searched 2026-09-25): what reaches
+; them, if anything, was not found. The bitmaps themselves are also
+; pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
 ; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
 ; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
 ; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'

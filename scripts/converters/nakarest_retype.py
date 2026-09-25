@@ -70,6 +70,17 @@ typedef struct __attribute__((packed)) {
 } welcome_step_t;
 '''),
 }
+LOCAL_TYPES['mst_title_ref_t'] = (6, '''/* One entry of StyleSong_MasterTable (6 bytes): a title and its id.
+ * Readers (ui/ui_mode_handlers.s): the MasterSetup dial handlers index the
+ * table with 6*k (muls wa, 0x6), load +0 and Strcpy the title into the view;
+ * the cell-select paths of MasterSetup and MstStyleAlp load the u16 at +4
+ * (StyleSong_MasterTable_0x4 = table + 4, same 6*k index) and pass it as xde
+ * to MainFuncCall(0x142000D, 0x1E20018). */
+typedef struct __attribute__((packed)) {
+    uint32_t title;  /* +0 pointer to a 34-byte entry of StyleSong_Titles */
+    uint16_t id;     /* +4 0..999, each exactly once */
+} mst_title_ref_t;
+''')
 for _t, (_n, _txt) in LOCAL_TYPES.items():
     M.TYPE_SIZES[_t] = _n
 
@@ -77,6 +88,7 @@ VERSIONS = ('v10', 'v9', 'v7')
 LLVM = os.path.expanduser('~/compartilhado/llvm-project/build/bin')
 S_FOR = {
     'naka_technichord_strings': 'technichord_string_data.s',
+    'naka_style_bitmaps': 'style_bitmaps.s',
 }
 
 # ------------------------------------------------------------------ addresses
@@ -146,6 +158,12 @@ APFUNC = (
     "0x2C, 0xE8070A, slot 0x121 (naka_widget_tables_2.c member ptrs_341); "
     "its name string \"%s\" sits in the parallel name table at 0xE807BE, "
     "slot 0x421.")
+APFUNC_TOSHI = (
+    "  The routine is entry %d of the 42-entry ApFunction table that "
+    "{InitializeToshi} registers with RegObjTabl 0x1600002, ApFunctionProc, "
+    "0x2A, 0xED1C9E, slot 0x122 (extensions/extension_data.s, still raw "
+    "bytes there); its name string \"%s\" is entry %d of the parallel name "
+    "table NoteNameStr_Table_5, slot 0x422.")
 
 
 def userbitmap(proc, w, h, extra=''):
@@ -169,8 +187,8 @@ DRAWBAR_SLIDER = (
     "(height), which is how the 22 x 222 shape is pinned.  None of the three "
     "handler entry points (0xF7B4F1, 0xF7B51E, 0xF7B54B in v10) occurs as a "
     "32-bit or 24-bit little-endian value anywhere in the v10 program, table "
-    "data, custom data or HD-AE5000 images (searched 2026-09-25), so how -- or "
-    "whether -- they are reached is not established.  The three bitmaps are "
+    "data, custom data or HD-AE5000 images (searched 2026-09-25): what reaches "
+    "them, if anything, was not found.  The bitmaps themselves are "
     "also pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources "
     "(naka_sequencer_channels.c member ptrs_5, 0xEEEFCC) in the order "
     "1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars "
@@ -216,6 +234,18 @@ OBJECTS = [
            userbitmap('BitmapKn5000', 199, 36,
                       APFUNC % 'BitmapKn5000'),
            "'KN-5000' in black italic sans-serif on green."),
+    bitmap('Bitmap_FadeInPicture', 112, 25, 'naka_style_bitmaps',
+           userbitmap('BitmapFinpic', 112, 25, APFUNC_TOSHI % (22, 'BitmapFinpic', 22)),
+           "A horizontal wedge that widens from a point at the left to full height at the right (a crescendo shape), dark grey with a black outline on the mid-grey background."),
+    bitmap('Bitmap_FadeInText', 80, 18, 'naka_style_bitmaps',
+           userbitmap('BitmapFinst', 80, 18, APFUNC_TOSHI % (23, 'BitmapFinst', 23)),
+           "'FADE IN' in dark red italic capitals on grey."),
+    bitmap('Bitmap_FadeOutPicture', 113, 25, 'naka_style_bitmaps',
+           userbitmap('BitmapFoutpic', 113, 25, APFUNC_TOSHI % (24, 'BitmapFoutpic', 24)),
+           "The mirror image of Bitmap_FadeInPicture: the wedge is full height at the left and narrows to a point at the right."),
+    bitmap('Bitmap_FadeOutText', 108, 20, 'naka_style_bitmaps',
+           userbitmap('BitmapFoutst', 108, 20, APFUNC_TOSHI % (25, 'BitmapFoutst', 25)),
+           "'FADE OUT' in teal italic capitals on grey."),
 ]
 
 
@@ -568,6 +598,91 @@ def welcome_region(cb, data, sl):
     return tot, END, pieces, fps
 
 
+def mst_titles_region(cb, data, sl):
+    """StyleSong_MasterTable (1000 x 6 B) and the 1000 title strings it points
+    at (34 B each), blob +0x32D6..+0xCF26 of naka_style_bitmaps."""
+    import struct
+    base = cb.base()
+    T = sl['StyleSong_MasterTable'][0]
+    N = 1000
+    S0 = T + 6 * N
+    S1 = S0 + 34 * N
+    recs = [struct.unpack('<IH', data[T + 6 * i:T + 6 * i + 6]) for i in range(N)]
+    starts = [S0 + 34 * k for k in range(N)]
+    assert sorted(p - base for p, _ in recs) == starts
+    assert sorted(h for _, h in recs) == list(range(N))
+    titles = [data[o:o + 34] for o in starts]
+    for t in titles:
+        assert len(t.split(b'\0')[0]) == 32 and t[32:] == b'\0\xff', t
+    names = [t[:32].decode('latin-1') for t in titles]
+    # alphabetical in table order, reverse alphabetical in memory order
+    order = [(p - base - S0) // 34 for p, _ in recs]
+    assert order == list(range(N - 1, -1, -1)), order[:5]
+    assert all(n[29:].strip().isdigit() for n in names)
+    hdr = ('StyleSong_MasterTable  --  %d mst_title_ref_t records x 6 bytes = %d bytes\n\n'
+           % (N, 6 * N) + wrap(fmt(
+               "An alphabetical list of 1000 titles, each with an id.  Readers "
+               "(ui/ui_mode_handlers.s): the MasterSetup dial handlers "
+               "(MasterSetup_HandleDialTurn, MasterSetup_DialTurn_ScrollUp, "
+               "MasterSetup_DialDown_*) index it with 6*k (`muls wa, 0x6`), load "
+               "+0 and Strcpy the title into the view, and search it with "
+               "String_Compare; their bounds are 0x3E8 (1000) -- an index of 1000 "
+               "wraps to 0 and an underflow reads entry 999 through "
+               "StyleSong_MasterTable_0x176A (= +999*6, .set in "
+               "shared/positional_labels.s), which is how the count is pinned.  "
+               "The cell-select paths of MasterSetup and MstStyleAlp_EventDispatch "
+               "load the u16 at +4 of entry 9*(page-1) + scroll + row "
+               "(StyleSong_MasterTable_0x4, 9 rows per page) and hand it to "
+               "MainFuncCall with 0x142000D / 0x1E20018.  Checked here: the 1000 "
+               "title pointers are exactly the 1000 entries of StyleSong_Titles "
+               "(entry k of this table -> title 999-k), and the ids are 0..999, "
+               "each once.  What the id selects on the 0x142000D side was not "
+               "traced.")))
+    body = '\n'.join('        /* %3d */ { SELF(StyleSong_Titles[%d]), %d },' % (i, order[i], recs[i][1])
+                     for i in range(N))
+    tab = M.NewMember('mst_title_ref_t', 'StyleSong_MasterTable', '[%d]' % N, 6 * N,
+                      '{\n' + body + '\n    }')
+    hdr2 = ('StyleSong_Titles  --  %d title strings x 34 bytes = %d bytes\n\n' % (N, 34 * N)
+            + wrap("Each entry is 32 characters -- a 29-column name, then a "
+                   "right-aligned 3-digit number (e.g. \"Zorba's Band ... 120\"; "
+                   "no code that reads the number separately was traced; it reads "
+                   "like a tempo) -- then NUL and a 0xFF pad byte, the ALIGNED_STRING "
+                   "layout.  Only reached through StyleSong_MasterTable's +0 "
+                   "pointers (above); stored in REVERSE alphabetical order, so the "
+                   "table's entry k points at title 999-k.  The old .s sliced this "
+                   "run into 130 NakaInst_<title> labels that cut across the "
+                   "34-byte entries; none of them was referenced except three "
+                   "that naka_direct_play.c, naka_perf_style.c and "
+                   "naka_effects_seq.c used as false pointers (16-bit value pairs "
+                   "that happened to fall inside a title), which are numbers again "
+                   "in those files."))
+    tbody = '\n'.join('        /* %3d */ ALIGNED_STRING(%s),' % (k, M.c_string(titles[k][:32]))
+                      for k in range(N))
+    strs = M.NewMember('char', 'StyleSong_Titles', '[%d][34]' % N, 34 * N,
+                       '{\n' + tbody + '\n    }')
+    pieces = [Piece('StyleSong_MasterTable', T, 6 * N, hdr, tab, ['StyleSong_MasterTable'],
+                    typed='Typed in naka_style_bitmaps.c as mst_title_ref_t '
+                          'StyleSong_MasterTable[1000] (a local typedef).'),
+              Piece('StyleSong_Titles', S0, 34 * N, hdr2, strs, ['StyleSong_Titles'],
+                    typed='Typed as char StyleSong_Titles[1000][34], one '
+                          'ALIGNED_STRING per entry.')]
+    fps = []
+    for mb in cb.members:
+        if T <= mb.offset < S1:
+            e = cb.entries[cb.by_name[mb.name]].expr
+            if M.SYMBOLIC_RE.search(e):
+                # the table's SELF(str_*) pointers are re-expressed as
+                # SELF(StyleSong_Titles[k]) (asserted above: every record
+                # points at a title start); the recompile check proves the
+                # values are unchanged
+                fps.append(mb.name)
+    return T, S1, pieces, fps
+
+
+REGIONS.append(dict(blob='naka_style_bitmaps', name='mst_titles', builder=mst_titles_region,
+                    typedefs=('mst_title_ref_t',)))
+
+
 REGIONS.append(dict(blob='naka_technichord_strings', name='welcome', builder=welcome_region,
                     typedefs=('welcome_step_t',)))
 
@@ -595,9 +710,11 @@ def build_regions_c(v, blob, cb, data, sl):
         for t in R.get('typedefs', ()):
             ensure_typedef(cb, t)
         dropped, remap = cb.retype(c0, c1, [p.member for p in cp], data, false_pointers=fps)
-        print('%s %-26s region %-28s +0x%05X..+0x%05X %d members; false pointers '
-              'retired: %s; SELF remaps %s'
-              % (v, blob, R['name'], c0, c1, len(cp), dropped or '-', remap or '-'))
+        print('%s %-26s region %-28s +0x%05X..+0x%05X %d members; %d symbolic '
+              'initializers replaced (%s); SELF remaps %s'
+              % (v, blob, R['name'], c0, c1, len(cp), len(dropped),
+                 ', '.join(dropped[:3]) + (' ...' if len(dropped) > 3 else ''),
+                 remap or '-'))
 
 
 def object_header(o):
@@ -617,6 +734,61 @@ def refresh_header(mb, o):
             mb.pre = pre[:i] + M.comment_block(object_header(o)) + pre[j + 1:]
             return
     raise SystemExit('%s: no header block to refresh' % o['label'])
+
+
+# Values the generator spelled NAKA_ADDR(<label>) that are NOT pointers.
+# (file, exact old text, count, replacement, why).  Applied as a text edit;
+# the recompile check proves the bytes are unchanged.
+FALSE_POINTER_FIXES = [
+    ('naka_direct_play', '.ptr_0534 = NAKA_ADDR(NakaInst_176),', 1,
+     '.ptr_0534 = 0x00EC0098,  /* 16-bit pair 0x0098, 0x00EC (152, 236); the generator had '
+     'made it a pointer to 0xEC0098, 12 bytes into StyleSong_Titles[516] -- '
+     'not a pointer */'),
+    ('naka_direct_play', '.ptr_057c = NAKA_ADDR(NakaInst_176_EC00C0),', 1,
+     '.ptr_057c = 0x00EC00C0,  /* 16-bit pair 0x00C0, 0x00EC (192, 236); the generator had '
+     'made it a pointer to 0xEC00C0, 18 bytes into StyleSong_Titles[517] -- '
+     'not a pointer */'),
+    ('naka_perf_style', '.ptr_1834 = NAKA_ADDR(NakaInst_176_EC00C0),', 1,
+     '.ptr_1834 = 0x00EC00C0,  /* 16-bit pair 0x00C0, 0x00EC (192, 236); the generator had '
+     'made it a pointer to 0xEC00C0, 18 bytes into StyleSong_Titles[517] -- '
+     'not a pointer */'),
+    ('naka_perf_style', '.ptr_1874 = NAKA_ADDR(NakaInst_176),', 1,
+     '.ptr_1874 = 0x00EC0098,  /* 16-bit pair 0x0098, 0x00EC (152, 236); the generator had '
+     'made it a pointer to 0xEC0098, 12 bytes into StyleSong_Titles[516] -- '
+     'not a pointer */'),
+    ('naka_effects_seq', '.inst_ptr   = NAKA_ADDR(NakaInst_o_s_Guitar_110),', 1,
+     '.inst_ptr   = 0x00EC0008,  /* 16-bit pair 0x0008, 0x00EC (8, 236); the generator had '
+     'made it a pointer to 0xEC0008, 4 bytes into StyleSong_Titles[512] -- not '
+     'a pointer */'),
+    ('naka_effects_seq', '.ptr_600e = NAKA_ADDR(NakaInst_o_s_Guitar_110),', 1,
+     '.ptr_600e = 0x00EC0008,  /* 16-bit pair 0x0008, 0x00EC (8, 236); the generator had '
+     'made it a pointer to 0xEC0008, 4 bytes into StyleSong_Titles[512] -- not '
+     'a pointer */'),
+]
+
+
+def fix_false_pointers(v, apply):
+    by = {}
+    for f in FALSE_POINTER_FIXES:
+        by.setdefault(f[0], []).append(f)
+    for blob, fixes in by.items():
+        cpath = os.path.join(ui(v), blob + '.c')
+        txt = open(cpath, encoding='latin-1').read()
+        if all(f[3] in txt for f in fixes):
+            continue
+        data = compile_blob(v, blob)
+        before = txt
+        for _, old, n, new, in ((f[0], f[1], f[2], f[3]) for f in fixes):
+            if txt.count(old) != n:
+                raise SystemExit('%s: %r occurs %d times, expected %d' % (cpath, old, txt.count(old), n))
+            txt = txt.replace(old, new)
+        print('%s %s: %d false pointers made numeric' % (v, blob, len(fixes)))
+        if apply:
+            open(cpath, 'w', encoding='latin-1', newline='').write(txt)
+            gone = prune_externs(cpath, before)
+            if compile_blob(v, blob) != data:
+                raise SystemExit('%s %s: false-pointer fix changed the bytes' % (v, blob))
+            print('   %s %s: recompiled, byte-identical; externs retired: %s' % (v, blob, gone))
 
 
 def build_c(v, apply, render_dir):
@@ -763,6 +935,19 @@ def piece_lines(p, blob):
     return out
 
 
+_REFS = {}
+
+
+def label_unreferenced(label, spath):
+    """True when `label` occurs (as a word) in no tracked or working-tree file
+    under v10/, v9/ or v7/ other than the .s files named like `spath`."""
+    if label not in _REFS:
+        r = subprocess.run(['git', 'grep', '-a', '-l', '-w', '-F', label, '--', 'v10', 'v9', 'v7'],
+                           cwd=ROOT, capture_output=True, text=True)
+        _REFS[label] = [f for f in r.stdout.split() if not f.endswith('/' + os.path.basename(spath))]
+    return not _REFS[label]
+
+
 def rewrite_s_span(path, lines, blob, pieces):
     """Replace the .s lines that emit [pieces[0].off, pieces[-1].end) of
     `blob` -- their labels, their .incbin lines and this driver's own header
@@ -805,8 +990,13 @@ def rewrite_s_span(path, lines, blob, pieces):
     old_labels = {l[:-1] for l in old if re.match(r'^[A-Za-z_][A-Za-z0-9_]*:$', l)}
     new_labels = {l for p in pieces for l in p.labels}
     lost = old_labels - new_labels
+    bad = sorted(l for l in lost if not label_unreferenced(l, path))
+    if bad:
+        raise SystemExit('%s: the rewrite would drop referenced labels %s' % (path, bad))
     if lost:
-        raise SystemExit('%s: the rewrite would drop labels %s' % (path, sorted(lost)))
+        print('   %d labels retired (no reference anywhere in v10/v9/v7 outside this '
+              'file): %s%s' % (len(lost), ', '.join(sorted(lost)[:6]),
+                               ' ...' if len(lost) > 6 else ''))
     new = []
     for p in pieces:
         new += piece_lines(p, blob)
@@ -838,6 +1028,9 @@ def main():
     ap.add_argument('--render', metavar='DIR')
     ap.add_argument('--only-s', action='store_true', help='write only the .s headers')
     args = ap.parse_args()
+    if not args.only_s:
+        for v in VERSIONS:          # all versions first: the .s label check
+            fix_false_pointers(v, args.apply)   # greps v10, v9 and v7 at once
     for v in VERSIONS:
         if not args.only_s:
             build_c(v, args.apply, args.render)

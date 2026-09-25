@@ -16,8 +16,6 @@ extern const char NakaStr_DataFile1of2;
 extern const char NakaStr_DataFilePck;
 extern const char NakaStr_Rhythm;
 extern const char NakaData_TechnichordBitmap1;
-extern const char NakaInst_176;
-extern const char NakaInst_176_EC00C0;
 extern const char NakaInst_NEXT;
 extern const char NakaInst_Param_EndFF;
 extern const char NakaInst_Param_Val00_01;
@@ -4312,7 +4310,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_0532 = 0x00DB,
 
-    .ptr_0534 = NAKA_ADDR(NakaInst_176),
+    .ptr_0534 = 0x00EC0098,  /* 16-bit pair 0x0098, 0x00EC (152, 236); the generator had made it a pointer to 0xEC0098, 12 bytes into StyleSong_Titles[516] -- not a pointer */
 
     .field_0538 = 0x0009,
 
@@ -4360,7 +4358,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_057a = 0x00DB,
 
-    .ptr_057c = NAKA_ADDR(NakaInst_176_EC00C0),
+    .ptr_057c = 0x00EC00C0,  /* 16-bit pair 0x00C0, 0x00EC (192, 236); the generator had made it a pointer to 0xEC00C0, 18 bytes into StyleSong_Titles[517] -- not a pointer */
 
     .field_0580 = 0x0006,
 

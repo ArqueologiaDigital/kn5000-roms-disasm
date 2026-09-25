@@ -91,276 +91,203 @@ NakaInst_WindowID_Cont:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x741, 0x33
 WidgetStyleDataTable:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x774, 0x740
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_FadeInPicture
+; Bitmap_FadeInPicture  --  112 x 25 bitmap, 8 bpp, row stride 112, 2800 bytes
+;
+; What it shows (render): A horizontal wedge that widens from a point at
+; the left to full height at the right (a crescendo shape), dark grey
+; with a black outline on the mid-grey background.
+;
+; Reader: BitmapFinpic (v10/v9 0xfb7e4a, v7 0xfb7689) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x70 (width 112) and 0x1e000a3 with
+; 0x19 (height 25). The routine is entry 22 of the 42-entry ApFunction
+; table that InitializeToshi (v10/v9 0xfc311a, v7 0xfc294f) registers
+; with RegObjTabl 0x1600002, ApFunctionProc, 0x2a, 0xed1c9e, slot 0x122
+; (extensions/extension_data.s, still raw bytes there); its name string
+; "BitmapFinpic" is entry 22 of the parallel name table
+; NoteNameStr_Table_5, slot 0x422. Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function (+22 of the instance) with 0x1e000a1
+; (address), 0x1e000a2 (width) and 0x1e000a3 (height) through ApFuncCall
+; and hands the three to DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_style_bitmaps.c as uint8_t Bitmap_FadeInPicture[25][112]
+; (rows of 112 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_FadeInPicture:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEB4, 0xAF0
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_FadeInText
+; Bitmap_FadeInText  --  80 x 18 bitmap, 8 bpp, row stride 80, 1440 bytes
+;
+; What it shows (render): 'FADE IN' in dark red italic capitals on grey.
+;
+; Reader: BitmapFinst (v10/v9 0xfb7e77, v7 0xfb76b6) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x50 (width 80) and 0x1e000a3 with
+; 0x12 (height 18). The routine is entry 23 of the 42-entry ApFunction
+; table that InitializeToshi (v10/v9 0xfc311a, v7 0xfc294f) registers
+; with RegObjTabl 0x1600002, ApFunctionProc, 0x2a, 0xed1c9e, slot 0x122
+; (extensions/extension_data.s, still raw bytes there); its name string
+; "BitmapFinst" is entry 23 of the parallel name table
+; NoteNameStr_Table_5, slot 0x422. Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function (+22 of the instance) with 0x1e000a1
+; (address), 0x1e000a2 (width) and 0x1e000a3 (height) through ApFuncCall
+; and hands the three to DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_style_bitmaps.c as uint8_t Bitmap_FadeInText[18][80]
+; (rows of 80 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_FadeInText:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x19A4, 0x5A0
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_FadeOutPicture
+; Bitmap_FadeOutPicture  --  113 x 25 bitmap, 8 bpp, row stride 114, 2850 bytes
+;
+; What it shows (render): The mirror image of Bitmap_FadeInPicture: the
+; wedge is full height at the left and narrows to a point at the right.
+;
+; Reader: BitmapFoutpic (v10/v9 0xfb7ea4, v7 0xfb76e3) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x71 (width 113) and 0x1e000a3 with
+; 0x19 (height 25). The routine is entry 24 of the 42-entry ApFunction
+; table that InitializeToshi (v10/v9 0xfc311a, v7 0xfc294f) registers
+; with RegObjTabl 0x1600002, ApFunctionProc, 0x2a, 0xed1c9e, slot 0x122
+; (extensions/extension_data.s, still raw bytes there); its name string
+; "BitmapFoutpic" is entry 24 of the parallel name table
+; NoteNameStr_Table_5, slot 0x422. Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function (+22 of the instance) with 0x1e000a1
+; (address), 0x1e000a2 (width) and 0x1e000a3 (height) through ApFuncCall
+; and hands the three to DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_style_bitmaps.c as uint8_t
+; Bitmap_FadeOutPicture[25][114] (rows of 114 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_FadeOutPicture:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1F44, 0xB22
+; -----------------------------------------------------------------------------
+; [nakarest_retype] Bitmap_FadeOutText
+; Bitmap_FadeOutText  --  108 x 20 bitmap, 8 bpp, row stride 108, 2160 bytes
+;
+; What it shows (render): 'FADE OUT' in teal italic capitals on grey.
+;
+; Reader: BitmapFoutst (v10/v9 0xfb7ed1, v7 0xfb7710) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x6c (width 108) and 0x1e000a3 with
+; 0x14 (height 20). The routine is entry 25 of the 42-entry ApFunction
+; table that InitializeToshi (v10/v9 0xfc311a, v7 0xfc294f) registers
+; with RegObjTabl 0x1600002, ApFunctionProc, 0x2a, 0xed1c9e, slot 0x122
+; (extensions/extension_data.s, still raw bytes there); its name string
+; "BitmapFoutst" is entry 25 of the parallel name table
+; NoteNameStr_Table_5, slot 0x422. Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function (+22 of the instance) with 0x1e000a1
+; (address), 0x1e000a2 (width) and 0x1e000a3 (height) through ApFuncCall
+; and hands the three to DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/nakarest_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_style_bitmaps.c as uint8_t Bitmap_FadeOutText[20][108]
+; (rows of 108 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_FadeOutText:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x2A66, 0x870
+; -----------------------------------------------------------------------------
+; [nakarest_retype] StyleSong_MasterTable
+; StyleSong_MasterTable  --  1000 mst_title_ref_t records x 6 bytes = 6000 bytes
+;
+; An alphabetical list of 1000 titles, each with an id. Readers
+; (ui/ui_mode_handlers.s): the MasterSetup dial handlers
+; (MasterSetup_HandleDialTurn, MasterSetup_DialTurn_ScrollUp,
+; MasterSetup_DialDown_*) index it with 6*k (`muls wa, 0x6`), load +0
+; and Strcpy the title into the view, and search it with String_Compare;
+; their bounds are 0x3e8 (1000) -- an index of 1000 wraps to 0 and an
+; underflow reads entry 999 through StyleSong_MasterTable_0x176a (=
+; +999*6, .set in shared/positional_labels.s), which is how the count is
+; pinned. The cell-select paths of MasterSetup and
+; MstStyleAlp_EventDispatch load the u16 at +4 of entry 9*(page-1) +
+; scroll + row (StyleSong_MasterTable_0x4, 9 rows per page) and hand it
+; to MainFuncCall with 0x142000d / 0x1e20018. Checked here: the 1000
+; title pointers are exactly the 1000 entries of StyleSong_Titles (entry
+; k of this table -> title 999-k), and the ids are 0..999, each once.
+; What the id selects on the 0x142000d side was not traced.
+;
+; Typed in naka_style_bitmaps.c as mst_title_ref_t
+; StyleSong_MasterTable[1000] (a local typedef).
+; -----------------------------------------------------------------------------
 StyleSong_MasterTable:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x32D6, 0x5B74
-NakaInst_o_s_Guitar_110:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8E4A, 0x1E
-NakaInst_Joplin_Rag_130:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8E68, 0x22
-NakaInst_Jobim_Strings_66:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8E8A, 0x28
-NakaInst_Rio_Disco_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8EB2, 0x28
-NakaInst_176:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8EDA, 0x16
-NakaInst_Jive_Ivories_176:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8EF0, 0x12
-NakaInst_176_EC00C0:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F02, 0x28
-NakaInst_160:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F2A, 0x4E
-NakaInst_Jazz_To_The_Bone_180:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F78, 0x88
-NakaInst_Jazz_Blocks_146:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9000, 0x88
-NakaInst_Jamaican_Voices_83:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9088, 0x88
-NakaInst_Jailhouse_Brass_158:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9110, 0x88
-NakaInst_Island_Strings_101:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9198, 0x88
-NakaInst_Island_Delight_101:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9220, 0x88
-NakaInst_In_Sax_Country_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x92A8, 0x88
-NakaInst_I_Got_The_Blues_83:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9330, 0x88
-NakaInst_Hugo_s_Revival_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x93B8, 0x88
-NakaInst_House_Garden_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9440, 0x88
-NakaInst_Honky_Tonk_Band_196:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x94C8, 0x88
-NakaInst_Hoedown_Strings_123:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9550, 0x88
-NakaInst_Hip_Keys_108:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x95D8, 0x88
-NakaInst_Heavy_Harmonica_74:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9660, 0x88
-NakaInst_Harry_J_Co_86:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x96E8, 0x88
-NakaInst_Hard_Sax_Blues_124:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9770, 0x88
-NakaInst_Hard_Analogue_148:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x97F8, 0x88
-NakaInst_Ham_Rock_155:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9880, 0x88
-NakaInst_Gypsy_Jazz_Frets_210:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9908, 0x88
-NakaInst_Groovin_Horns_97:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9990, 0x88
-NakaInst_Greasepaint_Time_132:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9A18, 0x88
-NakaInst_Grand_Finale_132:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9AA0, 0x88
-NakaInst_Gospel_Organ_66:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9B28, 0x88
-NakaInst_Golden_Movie_Era_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9BB0, 0x88
-NakaInst_Girls_On_Stage_118:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9C38, 0x88
-NakaInst_German_Party_Hit_111:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9CC0, 0x88
-NakaInst_Georgia_Brass_64:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9D48, 0x88
-NakaInst_Gentle_Ballad_75:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9DD0, 0x88
-NakaInst_Galombang_98:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9E58, 0x44
-NakaInst_Fusion_Tines_98:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9E9C, 0x44
-NakaInst_Funky_Talk_110:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9EE0, 0x88
-NakaInst_Full_Tilt_Swing_127:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9F68, 0x88
-NakaInst_Full_Brass_Band_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x9FF0, 0x88
-NakaInst_Foxy_Squeezebox_154:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA078, 0x88
-NakaInst_Foxtrot_Sparkle_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA100, 0x88
-NakaInst_Folklore_Brass_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA188, 0x88
-NakaInst_Fogerty_s_Stomp_206:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA210, 0x88
-NakaInst_Flugel_Ballad_63:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA298, 0x88
-NakaInst_Finale_Salute_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA320, 0x88
-NakaInst_Fiddle_For_Jazz_210:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA3A8, 0x88
-NakaInst_Festival_Amigos_116:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA430, 0x88
-NakaInst_Fantasy_Rhumba_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA4B8, 0x88
-NakaInst_Fair_Sea_Organ_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA540, 0x88
-NakaInst_Euro_Squeezebox_147:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA5C8, 0x88
-NakaInst_Ernst_Friends_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA650, 0x88
-NakaInst_Emerson_Keys_145:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA6D8, 0x88
-NakaInst_Electric_Gospel_88:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA760, 0x88
-NakaInst_Easy_Threesy_110:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA7E8, 0x88
-NakaInst_Easy_Bacharach_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA870, 0x88
-NakaInst_E_P_Does_It_82:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA8F8, 0x88
-NakaInst_Dreamy_Orchestra_67:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA980, 0x88
-NakaInst_Drawbar_Funk_85:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAA08, 0x88
-NakaInst_Doo_You_Dance_200:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAA90, 0x88
-NakaInst_Dolly_s_Strings_128:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAB18, 0x88
-NakaInst_Django_s_Solo_190:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xABA0, 0x88
-NakaInst_Disco_Techni_118:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAC28, 0x88
-NakaInst_Disco_Metal_124:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xACB0, 0x88
-NakaInst_Dire_Strats_138:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAD38, 0x88
-NakaInst_Deuringer_Swing_190:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xADC0, 0x88
-NakaInst_Dancing_Flutes_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAE48, 0x88
-NakaInst_Dance_Surround_124:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAED0, 0x88
-NakaInst_Dance_Island_104:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAF58, 0x88
-NakaInst_Dance_Band_Jive_176:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAFE0, 0x88
-NakaInst_Cuckoo_Clock_3_4_183:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB068, 0x88
-NakaInst_Crazy_Horse_Show_118:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB0F0, 0x88
-NakaInst_Country_Tenor_88:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB178, 0x88
-NakaInst_Country_Licks_235:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB200, 0x88
-NakaInst_Country_Harp_88:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB288, 0x88
-NakaInst_Count_On_It_90:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB310, 0x88
-NakaInst_Cool_Soul_Frets_66:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB398, 0x88
-NakaInst_Cool_Jazz_B3_145:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB420, 0x88
-NakaInst_Convoy_Bluegrass_206:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB4A8, 0x88
-NakaInst_Come_On_Baby_168:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB530, 0x88
-NakaInst_Coconut_Frets_152:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB5B8, 0x88
-NakaInst_Clean_Metal_148:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB640, 0x88
-NakaInst_Classical_Tango_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB6C8, 0x88
-NakaInst_Chuck_s_Late_Gig_72:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB750, 0x88
-NakaInst_Chiff_Funk_97:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB7D8, 0x88
-NakaInst_Chapel_Brass_124:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB860, 0x88
-NakaInst_Carol_Singers_75:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB8E8, 0x88
-NakaInst_Caribbean_Synth_90:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB970, 0x88
-NakaInst_Calypso_Steel_152:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xB9F8, 0x88
-NakaInst_Caber_Dance_172:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBA80, 0x88
-NakaInst_Bright_Keys_16_74:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBB08, 0x88
-NakaInst_Breathy_Moments_83:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBB90, 0x88
-NakaInst_Brassy_Dance_108:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBC18, 0x88
-NakaInst_Boxing_Jazzy_147:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBCA0, 0x88
-NakaInst_Bourbon_Street_196:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBD28, 0x88
-NakaInst_Boogie_Dance_160:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBDB0, 0x88
-NakaInst_Bolero_Orchestra_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBE38, 0x88
-NakaInst_Blues_Rock_Keys_124:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBEC0, 0x88
-NakaInst_Blues_Alley_124:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBF48, 0x88
-NakaInst_Blue_Suede_Rock_158:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xBFD0, 0x88
-NakaInst_Bigband_Shout_170:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC058, 0x88
-NakaInst_Besame_Strings_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC0E0, 0x88
-NakaInst_Bellow_Shake_Hit_135:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC168, 0x88
-NakaInst_Beach_Party_Song_152:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC1F0, 0x88
-NakaInst_Bavaria_To_Tyrol_195:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC278, 0x88
-NakaInst_Barber_Shop_Jazz_196:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC300, 0x88
-NakaInst_Banjo_Dance_138:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC388, 0x88
-NakaInst_Baltic_Reeds_141:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC410, 0x88
-NakaInst_Ballad_Romance_67:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC498, 0x88
-NakaInst_Ballad_Guitar_67:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC520, 0x88
-NakaInst_Ballad_Acoustics_84:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC5A8, 0x88
-NakaInst_Bad_B3_Blues_78:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC630, 0x88
-NakaInst_Austria_Symphony_169:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC6B8, 0x88
-NakaInst_At_The_Eger_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC740, 0x88
-NakaInst_Art_Meets_Lionel_190:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC7C8, 0x88
-NakaInst_Amor_Reed_117:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC850, 0x88
-NakaInst_Alto_Samba_116:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC8D8, 0x88
-NakaInst_Alpine_Combo_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC960, 0x88
-NakaInst_All_Out_Combo_180:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC9E8, 0x88
-NakaInst_Ady_s_PartyOrgan_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCA70, 0x88
-NakaInst_Acoustic_Beat_108:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCAF8, 0x88
-NakaInst_Accordion_Dream_64:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCB80, 0x88
-NakaInst_A_Case_Of_Soul_114:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCC08, 0x88
-NakaInst_88_Note_8_Beat_90:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCC90, 0x88
-NakaInst_80_s_Pop_Sax_118:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCD18, 0x88
-NakaInst_70_s_Glamour_129:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCDA0, 0x88
-NakaInst_3_4_Romance_130:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCE28, 0x88
-NakaInst_16_On_Stage_82:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCEB0, 0x44
-NakaInst_12_Boogie_Bars_160:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCEF4, 0x22
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x32D6, 0x1770
+; -----------------------------------------------------------------------------
+; [nakarest_retype] StyleSong_Titles
+; StyleSong_Titles  --  1000 title strings x 34 bytes = 34000 bytes
+;
+; Each entry is 32 characters -- a 29-column name, then a right-aligned
+; 3-digit number (e.g. "Zorba's Band ... 120"; no code that reads the
+; number separately was traced; it reads like a tempo) -- then NUL and a
+; 0xff pad byte, the ALIGNED_STRING layout. Only reached through
+; StyleSong_MasterTable's +0 pointers (above); stored in REVERSE
+; alphabetical order, so the table's entry k points at title 999-k. The
+; old .s sliced this run into 130 NakaInst_<title> labels that cut
+; across the 34-byte entries; none of them was referenced except three
+; that naka_direct_play.c, naka_perf_style.c and naka_effects_seq.c used
+; as false pointers (16-bit value pairs that happened to fall inside a
+; title), which are numbers again in those files.
+;
+; Typed as char StyleSong_Titles[1000][34], one ALIGNED_STRING per
+; entry.
+; -----------------------------------------------------------------------------
+StyleSong_Titles:
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A46, 0x84D0
 StyleVar_GermanSchlager:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCF16, 0x40
 NakaInst_Orchestral_Eight_108:

@@ -12,8 +12,6 @@
 
 extern const char ExtData_ChordTypeTable_Top;
 extern const char NakaData_EffectsStringPtrs;
-extern const char NakaInst_176;
-extern const char NakaInst_176_EC00C0;
 extern const char NakaInst_NEXT;
 extern const char NakaInst_Param_EndFF;
 extern const char NakaInst_Param_Repeat;
@@ -7637,7 +7635,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_1832 = 0x00DB,
 
-    .ptr_1834 = NAKA_ADDR(NakaInst_176_EC00C0),
+    .ptr_1834 = 0x00EC00C0,  /* 16-bit pair 0x00C0, 0x00EC (192, 236); the generator had made it a pointer to 0xEC00C0, 18 bytes into StyleSong_Titles[517] -- not a pointer */
 
     .field_1838 = 0x0006,
 
@@ -7691,7 +7689,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_1872 = 0x00DB,
 
-    .ptr_1874 = NAKA_ADDR(NakaInst_176),
+    .ptr_1874 = 0x00EC0098,  /* 16-bit pair 0x0098, 0x00EC (152, 236); the generator had made it a pointer to 0xEC0098, 12 bytes into StyleSong_Titles[516] -- not a pointer */
 
     .field_1878 = 0x0009,
 
