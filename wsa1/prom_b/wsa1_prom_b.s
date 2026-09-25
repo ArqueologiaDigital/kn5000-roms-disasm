@@ -162391,7 +162391,7 @@ sub_F6EA15_Join:
 	ret	; F6EA56  ret
 
 ; --------------------------------------------------------------------------
-; Data_F6EA57 -- 474 bytes this block could not split.  No content rule
+; 0xF6EA57 -- 474 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -162410,39 +162410,216 @@ sub_F6EA15_Join:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; ⚠ ANSWERED 2026-09-25 (the "nothing but its bytes" verdict that stood here):
+;   code, not data -- see the block below; `Data_F6EA57` is retired.
 ; --------------------------------------------------------------------------
-Data_F6EA57:
-	.byte	0xF1, 0x10, 0x10, 0x00, 0x00, 0xC1, 0xD3, 0x0F, 0x23, 0xCB, 0xEC, 0x01, 0xDB, 0xD3, 0xC1, 0xDA	; F6EA57  [0..15]
-	.byte	0x0F, 0x27, 0xDB, 0xEC, 0x02, 0xD8, 0xD0, 0xE1, 0xDC, 0x0F, 0x25, 0xC3, 0x07, 0xF4, 0xEC, 0x21	; F6EA67  [16..31]
-	.byte	0xC9, 0xCC, 0x60, 0xC9, 0xD8, 0x6E, 0x07, 0x21, 0x20, 0xF3, 0x07, 0xF4, 0xEC, 0x41, 0xD8, 0xD0	; F6EA77  [32..47]
-	.byte	0xE7, 0x38, 0x9D, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0xBD, 0x01, 0x00, 0x03, 0xE7, 0x38, 0x8D, 0xE7	; F6EA87  [48..63]
-	.byte	0x38, 0x9D, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0xBD, 0x02, 0x50, 0xE7, 0x38, 0x8D, 0x1E, 0x01, 0x00	; F6EA97  [64..79]
-	.byte	0x0E, 0xF1, 0x10, 0x10, 0x00, 0x00, 0xD1, 0xDA, 0x0F, 0x38, 0x02, 0x00, 0xC1, 0xD3, 0x0F, 0x23	; F6EAA7  [80..95]
-	.byte	0xCB, 0xEC, 0x01, 0xC1, 0xDA, 0x0F, 0xFB, 0x67, 0x5A, 0xC1, 0xE0, 0x0F, 0x27, 0xCF, 0xDA, 0x66	; F6EAB7  [96..111]
-	.byte	0x19, 0xCF, 0x61, 0xCE, 0xD6, 0xDB, 0xEC, 0x02, 0x3A, 0x42, 0xDD, 0xEB, 0xF6, 0x00, 0xE3, 0x07	; F6EAC7  [112..127]
-	.byte	0xE8, 0xEC, 0x23, 0x5A, 0x93, 0x20, 0xD8, 0xD8, 0x6E, 0x07, 0xF1, 0x10, 0x10, 0x00, 0x01, 0x68	; F6EAD7  [128..143]
-	.byte	0xBF, 0xC1, 0xE0, 0x0F, 0x27, 0xCF, 0xDA, 0x66, 0xF1, 0xCF, 0x61, 0x40, 0x87, 0x0F, 0x00, 0x00	; F6EAE7  [144..159]
-	.byte	0xC1, 0x65, 0x0F, 0x25, 0xCF, 0xD9, 0x66, 0x09, 0x40, 0xA7, 0x0F, 0x00, 0x00, 0xC1, 0x66, 0x0F	; F6EAF7  [160..175]
-	.byte	0x25, 0xF1, 0xD3, 0x0F, 0x45, 0xF1, 0xDC, 0x0F, 0x60, 0xF1, 0xE0, 0x0F, 0x47, 0xCA, 0xD2, 0xD1	; F6EB07  [176..191]
-	.byte	0xDA, 0x0F, 0xA9, 0x0E, 0xF1, 0x10, 0x10, 0x00, 0x00, 0xC1, 0xD3, 0x0F, 0x23, 0xCB, 0xEC, 0x01	; F6EB17  [192..207]
-	.byte	0xDB, 0xD3, 0xC1, 0xDA, 0x0F, 0x27, 0xDB, 0xEC, 0x02, 0xD8, 0xD0, 0xE1, 0xDC, 0x0F, 0x25, 0xC3	; F6EB27  [208..223]
-	.byte	0x07, 0xF4, 0xEC, 0x21, 0xC9, 0xCC, 0x60, 0xC9, 0xD8, 0x6E, 0x07, 0x21, 0x20, 0xF3, 0x07, 0xF4	; F6EB37  [224..239]
-	.byte	0xEC, 0x41, 0xD8, 0xD0, 0xE7, 0x38, 0x9D, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0xBD, 0x01, 0x00, 0x04	; F6EB47  [240..255]
-	.byte	0xE7, 0x38, 0x8D, 0xE7, 0x38, 0x9D, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0xBD, 0x02, 0x50, 0xE7, 0x38	; F6EB57  [256..271]
-	.byte	0x8D, 0x1E, 0x01, 0x00, 0x0E, 0xF1, 0x10, 0x10, 0x00, 0x00, 0xD1, 0xDA, 0x0F, 0x61, 0xC1, 0xD3	; F6EB67  [272..287]
-	.byte	0x0F, 0x23, 0xCB, 0xEC, 0x01, 0xC1, 0xDA, 0x0F, 0xFB, 0x67, 0x5A, 0xC1, 0xE0, 0x0F, 0x27, 0xCF	; F6EB77  [288..303]
-	.byte	0xDA, 0x66, 0x19, 0xCF, 0x61, 0xCE, 0xD6, 0xDB, 0xEC, 0x02, 0x3A, 0x42, 0xDD, 0xEB, 0xF6, 0x00	; F6EB87  [304..319]
-	.byte	0xE3, 0x07, 0xE8, 0xEC, 0x23, 0x5A, 0x93, 0x20, 0xD8, 0xD8, 0x6E, 0x07, 0xF1, 0x10, 0x10, 0x00	; F6EB97  [320..335]
-	.byte	0x01, 0x68, 0xC1, 0xC1, 0xE0, 0x0F, 0x27, 0xCF, 0xDA, 0x66, 0xF1, 0xCF, 0x61, 0x40, 0x87, 0x0F	; F6EBA7  [336..351]
-	.byte	0x00, 0x00, 0xC1, 0x65, 0x0F, 0x25, 0xCF, 0xD9, 0x66, 0x09, 0x40, 0xA7, 0x0F, 0x00, 0x00, 0xC1	; F6EBB7  [352..367]
-	.byte	0x66, 0x0F, 0x25, 0xF1, 0xD3, 0x0F, 0x45, 0xF1, 0xDC, 0x0F, 0x60, 0xF1, 0xE0, 0x0F, 0x47, 0xCA	; F6EBC7  [368..383]
-	.byte	0xD2, 0xD1, 0xDA, 0x0F, 0xA9, 0x0E, 0x5E, 0x0F, 0x00, 0x00, 0x60, 0x0F, 0x00, 0x00, 0x62, 0x0F	; F6EBD7  [384..399]
-	.byte	0x00, 0x00, 0xD1, 0xD4, 0x0F, 0x04, 0xD1, 0xD6, 0x0F, 0x04, 0x3B, 0x3D, 0x3C, 0x44, 0xCD, 0x0F	; F6EBE7  [400..415]
-	.byte	0x00, 0x00, 0x1E, 0xEA, 0xFD, 0xB4, 0x41, 0xC9, 0xCF, 0x81, 0x66, 0x22, 0xC9, 0xCF, 0x82, 0x66	; F6EBF7  [416..431]
-	.byte	0x1D, 0xEC, 0x61, 0x3C, 0x1E, 0x07, 0xFE, 0x1E, 0xD5, 0xFD, 0x5C, 0xC9, 0x33, 0x07, 0x66, 0xE5	; F6EC07  [432..447]
-	.byte	0xC1, 0xCE, 0x0F, 0x21, 0xC9, 0xCF, 0x2F, 0x66, 0xD4, 0xC9, 0xCF, 0x5F, 0x66, 0xCF, 0x5C, 0x5D	; F6EC17  [448..463]
-	.byte	0x5B, 0xF1, 0xD6, 0x0F, 0x06, 0xF1, 0xD4, 0x0F, 0x06, 0x0E	; F6EC27  [464..473]
+; --------------------------------------------------------------------------
+; 0xF6EA57-0xF6EC30 -- UNREACHED CODE: five routines and a 3-word table
+;   Decoded (llvm-mc round trip, line by line) from what was `Data_F6EA57`.
+;   Every routine ends in `ret`; they share RAM 0x0FD3-0x0FE0 and 0x1010, and
+;   sub_F6EBE9 calls the live sub_F6E9E6 / sub_F6EA15 above and fills from
+;   0x0FCD up.  Nothing in prom_a or prom_b branches to, calls or spells any
+;   address in the span (notes/promb-2026-09-25/unreached_code_f6ea57.py
+;   searches every branch displacement and every 24-bit spelling): it is
+;   recorded as code because it decodes as such and fits its neighbours, not
+;   because anything is shown to run it.
+; --------------------------------------------------------------------------
+; sub_F6EA57 -- UNREACHED: clears (0x1010); with HL = 4 * (0x0FDA) and XIY =
+;   (0x0FDC), sets byte 0 of the 4-byte entry at XIY+HL to 0x20 when its bits
+;   5-6 are clear, byte 1 to 3 and word 2 to 0; then falls into sub_F6EAA8 by
+;   `calr`.
+sub_F6EA57:
+	ld	(4112:16), 0	; F6EA57  ld (0x1010),0x00
+	ld	c, (4051:16)	; F6EA5C  ld C,(0x0fd3)
+	sla	c, 1	; F6EA60  sla 0x01,C
+	xor	hl, hl	; F6EA63  xor HL,HL
+	ld	l, (4058:16)	; F6EA65  ld L,(0x0fda)
+	sla	hl, 2	; F6EA69  sla 0x02,HL
+	xor	wa, wa	; F6EA6C  xor WA,WA
+	ldda32	xiy, (4060)	; F6EA6E  ld XIY,(0x0fdc)
+	ld_rrb	a, xiy, hl	; F6EA72  ld A,(XIY+HL)
+	and	a, 96	; F6EA77  and A,0x60
+	cp	a, 0:i3	; F6EA7A  cp A,0
+	jr	nz, sub_F6EA57_Skip	; F6EA7C  jr NZ,0xf6ea85
+	ld	a, 32:opc	; F6EA7E  ld A,0x20
+	st_rrb	a, xiy, hl	; F6EA80  ld (XIY+HL),A
+sub_F6EA57_Skip:
+	xor	wa, wa	; F6EA85  xor WA,WA
+	ldfr_lerp	xiy, 56	; F6EA87  ld XDE3,XIY
+	lda_rr	xiy, xiy, hl	; F6EA8A  lda XIY,XIY+HL
+	ld	(xiy+1), 3	; F6EA8F  ld (XIY+0x01),0x03
+	ldto_lerp	xiy, 56	; F6EA93  ld XIY,XDE3
+	ldfr_lerp	xiy, 56	; F6EA96  ld XDE3,XIY
+	lda_rr	xiy, xiy, hl	; F6EA99  lda XIY,XIY+HL
+	ld	(xiy+2), wa	; F6EA9E  ld (XIY+0x02),WA
+	ldto_lerp	xiy, 56	; F6EAA1  ld XIY,XDE3
+	calr	sub_F6EAA8	; F6EAA4  calr 0xf6eaa8
+sub_F6EA57_Return:
+	ret	; F6EAA7  ret
+; sub_F6EAA8 -- UNREACHED: clears (0x1010); advances (0x0FDA) by 2 and, once
+;   it reaches 2 * (0x0FD3), moves on through RamPtrTable_F6EBDD to the next
+;   of (0x0FE0) = 1, 2: (0x0FD3) = (0x0F65) or (0x0F66), (0x0FDC) = 0x0F87 or
+;   0x0FA7; sets (0x1010) = 1 when there is none.
+sub_F6EAA8:
+	ld	(4112:16), 0	; F6EAA8  ld (0x1010),0x00
+	adddi16	(4058), 2	; F6EAAD  add (0x0fda),0x0002
+	ld	c, (4051:16)	; F6EAB3  ld C,(0x0fd3)
+	sla	c, 1	; F6EAB7  sla 0x01,C
+	cpdm8	(4058), xhl	; F6EABA  cp (0x0fda),C
+	jr	c, sub_F6EAA8_Return	; F6EABE  jr C,0xf6eb1a
+	ld	l, (4064:16)	; F6EAC0  ld L,(0x0fe0)
+	cp	l, 2:i3	; F6EAC4  cp L,2
+	jr	z, sub_F6EAA8_Loop	; F6EAC6  jr Z,0xf6eae1
+	inc	1, l	; F6EAC8  inc 1,L
+	xor	h, h	; F6EACA  xor H,H
+	sla	hl, 2	; F6EACC  sla 0x02,HL
+	push	xde	; F6EACF  push XDE
+	ld	xde, 16182237	; F6EAD0  ld XDE,0x00f6ebdd
+	ld_rrl	xhl, xde, hl	; F6EAD5  ld XHL,(XDE+HL)
+	pop	xde	; F6EADA  pop XDE
+	ld	wa, (xhl)	; F6EADB  ld WA,(XHL)
+	cp	wa, 0:i3	; F6EADD  cp WA,0
+	jr	nz, sub_F6EAA8_Skip	; F6EADF  jr NZ,0xf6eae8
+sub_F6EAA8_Loop:
+	ld	(4112:16), 1	; F6EAE1  ld (0x1010),0x01
+	jr	sub_F6EA57_Return	; F6EAE6  jr T,0xf6eaa7
+sub_F6EAA8_Skip:
+	ld	l, (4064:16)	; F6EAE8  ld L,(0x0fe0)
+	cp	l, 2:i3	; F6EAEC  cp L,2
+	jr	z, sub_F6EAA8_Loop	; F6EAEE  jr Z,0xf6eae1
+	inc	1, l	; F6EAF0  inc 1,L
+	ld	xwa, 3975	; F6EAF2  ld XWA,0x00000f87
+	ld	e, (3941:16)	; F6EAF7  ld E,(0x0f65)
+	cp	l, 1:i3	; F6EAFB  cp L,1
+	jr	z, sub_F6EAA8_Skip2	; F6EAFD  jr Z,0xf6eb08
+	ld	xwa, 4007	; F6EAFF  ld XWA,0x00000fa7
+	ld	e, (3942:16)	; F6EB04  ld E,(0x0f66)
+sub_F6EAA8_Skip2:
+	ld	(4051:16), e	; F6EB08  ld (0x0fd3),E
+	stda32	(4060), xwa	; F6EB0C  ld (0x0fdc),XWA
+	ld	(4064:16), l	; F6EB10  ld (0x0fe0),L
+	xor	b, b	; F6EB14  xor B,B
+	subdm16	(4058), xbc	; F6EB16  sub (0x0fda),BC
+sub_F6EAA8_Return:
+	ret	; F6EB1A  ret
+; sub_F6EB1B -- UNREACHED: sub_F6EA57's shape, writing 4 where it writes 3.
+sub_F6EB1B:
+	ld	(4112:16), 0	; F6EB1B  ld (0x1010),0x00
+	ld	c, (4051:16)	; F6EB20  ld C,(0x0fd3)
+	sla	c, 1	; F6EB24  sla 0x01,C
+	xor	hl, hl	; F6EB27  xor HL,HL
+	ld	l, (4058:16)	; F6EB29  ld L,(0x0fda)
+	sla	hl, 2	; F6EB2D  sla 0x02,HL
+	xor	wa, wa	; F6EB30  xor WA,WA
+	ldda32	xiy, (4060)	; F6EB32  ld XIY,(0x0fdc)
+	ld_rrb	a, xiy, hl	; F6EB36  ld A,(XIY+HL)
+	and	a, 96	; F6EB3B  and A,0x60
+	cp	a, 0:i3	; F6EB3E  cp A,0
+	jr	nz, sub_F6EB1B_Skip	; F6EB40  jr NZ,0xf6eb49
+	ld	a, 32:opc	; F6EB42  ld A,0x20
+	st_rrb	a, xiy, hl	; F6EB44  ld (XIY+HL),A
+sub_F6EB1B_Skip:
+	xor	wa, wa	; F6EB49  xor WA,WA
+	ldfr_lerp	xiy, 56	; F6EB4B  ld XDE3,XIY
+	lda_rr	xiy, xiy, hl	; F6EB4E  lda XIY,XIY+HL
+	ld	(xiy+1), 4	; F6EB53  ld (XIY+0x01),0x04
+	ldto_lerp	xiy, 56	; F6EB57  ld XIY,XDE3
+	ldfr_lerp	xiy, 56	; F6EB5A  ld XDE3,XIY
+	lda_rr	xiy, xiy, hl	; F6EB5D  lda XIY,XIY+HL
+	ld	(xiy+2), wa	; F6EB62  ld (XIY+0x02),WA
+	ldto_lerp	xiy, 56	; F6EB65  ld XIY,XDE3
+	calr	sub_F6EB6C	; F6EB68  calr 0xf6eb6c
+sub_F6EB1B_Return:
+	ret	; F6EB6B  ret
+; sub_F6EB6C -- UNREACHED: sub_F6EAA8's shape, advancing (0x0FDA) by 1.
+sub_F6EB6C:
+	ld	(4112:16), 0	; F6EB6C  ld (0x1010),0x00
+	incdi16	1, (4058)	; F6EB71  incw 1,(0x0fda)
+	ld	c, (4051:16)	; F6EB75  ld C,(0x0fd3)
+	sla	c, 1	; F6EB79  sla 0x01,C
+	cpdm8	(4058), xhl	; F6EB7C  cp (0x0fda),C
+	jr	c, sub_F6EB6C_Return	; F6EB80  jr C,0xf6ebdc
+	ld	l, (4064:16)	; F6EB82  ld L,(0x0fe0)
+	cp	l, 2:i3	; F6EB86  cp L,2
+	jr	z, sub_F6EB6C_Loop	; F6EB88  jr Z,0xf6eba3
+	inc	1, l	; F6EB8A  inc 1,L
+	xor	h, h	; F6EB8C  xor H,H
+	sla	hl, 2	; F6EB8E  sla 0x02,HL
+	push	xde	; F6EB91  push XDE
+	ld	xde, 16182237	; F6EB92  ld XDE,0x00f6ebdd
+	ld_rrl	xhl, xde, hl	; F6EB97  ld XHL,(XDE+HL)
+	pop	xde	; F6EB9C  pop XDE
+	ld	wa, (xhl)	; F6EB9D  ld WA,(XHL)
+	cp	wa, 0:i3	; F6EB9F  cp WA,0
+	jr	nz, sub_F6EB6C_Skip	; F6EBA1  jr NZ,0xf6ebaa
+sub_F6EB6C_Loop:
+	ld	(4112:16), 1	; F6EBA3  ld (0x1010),0x01
+	jr	sub_F6EB1B_Return	; F6EBA8  jr T,0xf6eb6b
+sub_F6EB6C_Skip:
+	ld	l, (4064:16)	; F6EBAA  ld L,(0x0fe0)
+	cp	l, 2:i3	; F6EBAE  cp L,2
+	jr	z, sub_F6EB6C_Loop	; F6EBB0  jr Z,0xf6eba3
+	inc	1, l	; F6EBB2  inc 1,L
+	ld	xwa, 3975	; F6EBB4  ld XWA,0x00000f87
+	ld	e, (3941:16)	; F6EBB9  ld E,(0x0f65)
+	cp	l, 1:i3	; F6EBBD  cp L,1
+	jr	z, sub_F6EB6C_Skip2	; F6EBBF  jr Z,0xf6ebca
+	ld	xwa, 4007	; F6EBC1  ld XWA,0x00000fa7
+	ld	e, (3942:16)	; F6EBC6  ld E,(0x0f66)
+sub_F6EB6C_Skip2:
+	ld	(4051:16), e	; F6EBCA  ld (0x0fd3),E
+	stda32	(4060), xwa	; F6EBCE  ld (0x0fdc),XWA
+	ld	(4064:16), l	; F6EBD2  ld (0x0fe0),L
+	xor	b, b	; F6EBD6  xor B,B
+	subdm16	(4058), xbc	; F6EBD8  sub (0x0fda),BC
+sub_F6EB6C_Return:
+	ret	; F6EBDC  ret
+; RamPtrTable_F6EBDD -- 3 LE32 RAM addresses 0x0F5E, 0x0F60, 0x0F62.  Read by
+;   sub_F6EAA8 / sub_F6EB6C: `ld XDE,this / ld XHL,(XDE+HL)` at 0xF6EAD0 and
+;   0xF6EB92 with HL = 4 * (L + 1), L = (0x0FE0) < 2 -- entries 1 and 2;
+;   nothing reads entry 0.  The word read through the entry, `ld WA,(XHL)`, is
+;   tested for 0.
+RamPtrTable_F6EBDD:
+	.long	0x00000F5E	; F6EBDD  [0]
+	.long	0x00000F60	; F6EBE1  [1]
+	.long	0x00000F62	; F6EBE5  [2]
+; sub_F6EBE9 -- UNREACHED: saves (0x0FD4)/(0x0FD6); stores the bytes
+;   sub_F6E9E6 returns from 0x0FCD up, stopping at 0x81 or 0x82 or at a byte
+;   with bit 7 set, and restarts while (0x0FCE) is 0x2F or 0x5F.
+sub_F6EBE9:
+	pushdi_w	(4052)	; F6EBE9  pushw (0x0fd4)
+	pushdi_w	(4054)	; F6EBED  pushw (0x0fd6)
+	push	xhl	; F6EBF1  push XHL
+	push	xiy	; F6EBF2  push XIY
+	push	xix	; F6EBF3  push XIX
+sub_F6EBE9_Loop:
+	ld	xix, 4045	; F6EBF4  ld XIX,0x00000fcd
+	calr	sub_F6E9E6	; F6EBF9  calr 0xf6e9e6
+sub_F6EBE9_Loop2:
+	ld	(xix), a	; F6EBFC  ld (XIX),A
+	cp	a, 129	; F6EBFE  cp A,0x81
+	jr	z, sub_F6EBE9_Skip	; F6EC01  jr Z,0xf6ec25
+	cp	a, 130	; F6EC03  cp A,0x82
+	jr	z, sub_F6EBE9_Skip	; F6EC06  jr Z,0xf6ec25
+	inc	1, xix	; F6EC08  inc 1,XIX
+	push	xix	; F6EC0A  push XIX
+	calr	sub_F6EA15	; F6EC0B  calr 0xf6ea15
+	calr	sub_F6E9E6	; F6EC0E  calr 0xf6e9e6
+	pop	xix	; F6EC11  pop XIX
+	bit	7, a	; F6EC12  bit 0x07,A
+	jr	z, sub_F6EBE9_Loop2	; F6EC15  jr Z,0xf6ebfc
+	ld	a, (4046:16)	; F6EC17  ld A,(0x0fce)
+	cp	a, 47	; F6EC1B  cp A,0x2f
+	jr	z, sub_F6EBE9_Loop	; F6EC1E  jr Z,0xf6ebf4
+	cp	a, 95	; F6EC20  cp A,0x5f
+	jr	z, sub_F6EBE9_Loop	; F6EC23  jr Z,0xf6ebf4
+sub_F6EBE9_Skip:
+	pop	xix	; F6EC25  pop XIX
+	pop	xiy	; F6EC26  pop XIY
+	pop	xhl	; F6EC27  pop XHL
+	.byte	0xF1, 0xD6, 0x0F, 0x06	; F6EC28  popw (0x0fd6)   [llvm-mc cannot encode this]
+	.byte	0xF1, 0xD4, 0x0F, 0x06	; F6EC2C  popw (0x0fd4)   [llvm-mc cannot encode this]
+	ret	; F6EC30  ret
 
 
 ; --------------------------------------------------------------------------
@@ -163046,7 +163223,7 @@ OldCopy_sub_F7ADF5:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6F400:		; <- T_F43380
-	jp	16184328	; F6F400  jp 0xf6f408
+	jp	sub_F6F408	; F6F400  jp 0xf6f408
 
 ; --------------------------------------------------------------------------
 ; sub_F6F404
