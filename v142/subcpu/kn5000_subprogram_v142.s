@@ -19190,7 +19190,9 @@ Voice_SetRhythmMode_BranchD:
 	ret
 
 ; A -> byte 0x04134B.  SysEx dispatch entry 0 (sub-command 0x91).
-Voice_SetParam_04134B:
+; That byte is read only by the Voice_Env_ApplyVelocity_* velocity-switch dispatchers (bits 0,
+; 1, 3 and 4 select their predicates).  Renamed 2026-09-25 from Voice_SetParam_04134B.
+Voice_SetVelSwitchConfig:
 	ld (0x04134b:24), a
 	ret
 
@@ -22478,11 +22480,11 @@ Voice_SystemMsg_Sub87:
 	extz wa
 	jrl Voice_SetRhythmMode
 
-; Sub-command 0x91 -> Voice_SetParam_04134B.
+; Sub-command 0x91 -> Voice_SetVelSwitchConfig.
 Voice_SystemMsg_DispatchEntry0:
 	ld a, (xwa + 3)
 	extz wa
-	jrl Voice_SetParam_04134B
+	jrl Voice_SetVelSwitchConfig
 
 ; Sub-command 0x92 -> Voice_AllVoices_PortamentoUpdate (no argument).
 Voice_SystemMsg_DispatchEntry1:
@@ -22593,7 +22595,7 @@ Voice_SystemMsg_Sub84:
 ; delay enable 0, delay feedback 0.
 ; Then globally: Voice_SetPolyphonyMode(2), the two ret-stubs with 0x7F,
 ; Voice_SetMasterTuneAndApply(0x40), Voice_SetPitchBendRange(0), Voice_SetKeyShiftEnable(0),
-; ScaleTune_Set_Global_Mode(0), Voice_SetRhythmMode(0), Voice_SetParam_04134B(0),
+; ScaleTune_Set_Global_Mode(0), Voice_SetRhythmMode(0), Voice_SetVelSwitchConfig(0),
 ; Voice_AllVoices_PortamentoUpdate, Voice_SetCCMaxFlag(0), Voice_AllVoices_PortamentoReset,
 ; ScaleTune_Set_User_Offset(index 0..0x0B, value 0), Voice_AllVoices_UpdateVelocity(1),
 ; ScaleTune_Set_Global_Enabled(0).
@@ -22707,7 +22709,7 @@ Voice_ResetAllControllers_PostLoop:
 	ld wa, 0:i3
 	calr Voice_SetRhythmMode
 	ld wa, 0:i3
-	calr Voice_SetParam_04134B
+	calr Voice_SetVelSwitchConfig
 	calr Voice_AllVoices_PortamentoUpdate
 	ld wa, 0:i3
 	calr Voice_SetCCMaxFlag
@@ -43355,7 +43357,7 @@ Voice_Poly_NoteOn_SlotFound:
 	stb_erp L, 0xFB
 	extz hl
 	sla hl, 2
-	lda xix, (CALL_TABLE_12159:24)
+	lda xix, (Voice_PolyNoteOn_Setup_PtrTable:24)
 	exts xhl
 	add xhl, xix
 	ld xhl, (xhl)

@@ -2620,7 +2620,7 @@ DSP_FlushHandler_Pointers:
 ; OR/overwrite the pitch (0x3B2A), volume (0x3B20), effect routing (0x3B22) and level (0x3B1E)
 ; fields before pushing it out through ToneGen_WriteVoiceParams / ToneGen_WriteSingleReg.
 ; First words: 0xF000, 0x0000, 0x8000, 0x0000, 0x017C, 0x7F7C, 0x0040, 0x0080 ...
-; Extent 0x012115-0x012158, immediately followed by CALL_TABLE_12159.
+; Extent 0x012115-0x012158, immediately followed by Voice_PolyNoteOn_Setup_PtrTable.
 ToneGen_Voice_Param_Template:
 	.byte 0x00, 0xf0, 0x00
 	.byte 0x00, 0x00, 0x80, 0x00, 0x00, 0x7c, 0x01, 0x7c
@@ -2633,12 +2633,14 @@ ToneGen_Voice_Param_Template:
 	.zero 8
 	.byte 0x00
 
-; --- 0x012159-0x012170  CALL_TABLE_12159 -- 6 x u32 note-on handler pointers
+; --- 0x012159-0x012170  Voice_PolyNoteOn_Setup_PtrTable -- 6 x u32 note-on handler pointers
 ; `sla hl,2 / lda_24 xix,0x012159 / add xhl,xix / ld xhl,(xhl) / call (xhl)` in the poly note-on
 ; path (Voice_Poly_NoteOn_SlotFound, 0x035749). Entries: 0x0355AD, 0x035656, then 0x0355AD
 ; four more times.
 ; So only two distinct handlers; index 1 is the special case.
-CALL_TABLE_12159:
+; The index is the byte at DRAM 0x3B13, loaded just before the call.  Renamed 2026-09-25 from
+; CALL_TABLE_12159 (its address).
+Voice_PolyNoteOn_Setup_PtrTable:
 	.long ToneGen_SetupPolyVoice
 	.long ToneGen_SetupPercussionVoice
 	.long ToneGen_SetupPolyVoice
@@ -2681,7 +2683,7 @@ ToneGen_Octave_Pitch_Table:
 	.short 0x0c00, 0x0e00, 0x0e00, 0x0e00, 0x0e00, 0x0e00
 
 ; --- 0x0121ad  4 x u32 code pointers, entry 0 special -- same one-special-entry shape as
-; CALL_TABLE_12159 above and DSP_ResetTask_PtrTable below.  No literal reference to this
+; Voice_PolyNoteOn_Setup_PtrTable above and DSP_ResetTask_PtrTable below.  No literal reference to this
 ; table exists anywhere in the payload image (checked for both 3- and 4-byte little-endian
 ; pointers); the consumer either computes the address or the table is dead.
 DSP2_InitTask_PtrTable:
