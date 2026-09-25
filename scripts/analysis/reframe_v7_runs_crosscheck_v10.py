@@ -129,6 +129,35 @@ def sweep_checked(rom, a, b):
 base.sweep = sweep_checked
 base.BLIND = set()        # replaced by the v10 cross-check above
 
+# The base tool writes an absolute operand that equals a label address as the
+# label, then assembles each text IN ISOLATION to compare with the ROM bytes --
+# where the label is undefined, so every span with such an operand failed the
+# round trip.  Encode the numeric form instead (the label stands for exactly
+# that value at link time); the emitted text keeps the label.
+_encode_map = base.encode_map
+_NAME2ADDR = {}
+for _a, _ns in S7.items():
+    for _n in _ns:
+        _NAME2ADDR.setdefault(_n, _a)
+_TOK = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\b")
+
+
+def encode_map_numeric(texts):
+    num = {t: _TOK.sub(lambda m: str(_NAME2ADDR[m.group(1)]) if m.group(1) in _NAME2ADDR
+                       and not re.fullmatch(r"x?[a-z]{1,3}", m.group(1)) else m.group(1), t)
+           for t in texts}
+    emap, bad = _encode_map(sorted(set(num.values())))
+    out, badt = {}, set()
+    for t, n in num.items():
+        if n in bad or n not in emap:
+            badt.add(t)
+        else:
+            out[t] = emap[n]
+    return out, badt
+
+
+base.encode_map = encode_map_numeric
+
 if __name__ == "__main__":
     try:
         base.main()

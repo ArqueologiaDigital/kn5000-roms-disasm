@@ -683,9 +683,9 @@ SetWall_CrossTypeChange:
 
 	ld (3301:16), a
 
-	.byte 0x1d, 0x31, 0xf4, 0xf1	; call SetWall_CrossType_Validate (v7 addr)
+	call SetWall_CrossType_Validate	; call SetWall_CrossType_Validate (v7 addr)
 
-	.byte 0x1d, 0x9e, 0xd6, 0xfd	; call Audio_CheckSubsystemReady (v7 addr)
+	call 16635550	; call Audio_CheckSubsystemReady (v7 addr)
 
 	ret
 
@@ -2182,7 +2182,7 @@ SetWall_Sync_FinalUpdate:
 
 	and (0x28a7:16), 247
 
-	.byte 0x1d, 0xc8, 0xc8, 0xf3	; call SeqPlay_CheckStartConditions (v7 addr)
+	call SeqPlay_CheckStartConditions	; call SeqPlay_CheckStartConditions (v7 addr)
 
 	and (0x28b1:16), 254
 
