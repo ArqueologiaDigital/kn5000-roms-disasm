@@ -8,9 +8,17 @@ Feature Presentation) sits apart at `0x8E0000`.
 
 ```
 +0x00  8 bytes   "SLIDE4K\0" magic
-+0x08  3 bytes   uncompressed size, 24-bit little-endian
++0x08  3 bytes   uncompressed size, 24-bit BIG-endian (see below)
 +0x0B  ...       LZSS payload
 ```
+
+CORRECTED 2026-09-25: this line said "24-bit little-endian".  The firmware's
+decoder settles it: `SLIDE_Decompress_4K_Init` (v10 0xEF3FAB,
+`v10/maincpu/boot/system_handlers.s`) is entered with XWA = block + 7 and builds
+the size as `(xwa+1) << 16 | (xwa+2) << 8 | (xwa+3)` -- `sll xix, 0` is a shift
+by 16 on the TLCS-900.  That is big-endian, as `table_data/kn5000_table_data.s`
+and the Makefile already said.  The ROM's own blocks cannot show the difference:
+all 19 size fields are palindromes (`00 69 00` ...).
 
 LZSS is the classic Okumura variant: 4 KB ring buffer prefilled with zeros,
 initial write position `0xFEE`, flag byte LSB-first (1 = literal, 0 = match),
