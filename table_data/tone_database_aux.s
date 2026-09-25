@@ -10527,7 +10527,21 @@ DrumKit_25_SoundEffectKit:
 ;          envelope, Voice_Calc_LevelPair_FixedAtk)
 ;   +0x0D  the fixed level used when rec[+0x0D] bit 5 is set
 ;          (Voice_WriteVolume_OrPan)
-; +0x00, +0x03, +0x04 (0 in all 610) and +0x0F..+0x14 have no reader found.
+;   +0x03  signed coarse tune, semitones, and +0x04 a signed fine step (x2;
+;          0 in all 610): Voice_Pitch_CopyBase (0x023809), called from
+;          Voice_Allocate_Typed and Voice_Allocate_Type2, adds them to the
+;          SET's base pitch
+;   +0x0F..+0x14  FILTER, the drum-voice counterpart of a partial block's
+;          +0x36/+0x37 and +0x4D..+0x50: +0x0F bits 2:0 pick the builder
+;          (TVF_BuildEmit_Short_Dispatch 0x024300, on the Voice_Init_Type1/2
+;          path) and the offset-register emitter (Voice_PanReg_WriteDispatchB
+;          0x024554); +0x0F bits 7:5 and +0x10 are the key-follow curve and
+;          depth (TVF_Calc_Cutoff_NoKeyFollow 0x022C99); +0x11 cutoff, +0x12
+;          slope, +0x13/+0x14 bias/depth (TVF_Build_Short 0x02413E and the
+;          Voice_PitchPack_Route* builders)
+; +0x00 has no reader found on this path.  (Corrected 2026-09-25, same day: an
+; earlier version of this header said +0x03, +0x04 and +0x0F..+0x14 had none --
+; notes/tonedb-2026-09-25/partial_block_reads.py --chains finds them.)
 ; Each record's header says which kit notes play it.
 ; PercInst 000 "Silent": drum-instrument record, mask 0x01 = layer 0 only;
 ; played by 560 kit note(s): Standard Kit n0, Standard Kit n1, Standard Kit n2 +557 more.  Layout and readers: section header.
