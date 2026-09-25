@@ -122,9 +122,7 @@ SeqAcc_HandlePlaybackTick_ClearBit2:
 	ret
 
 SeqAcc_HandlePlaybackTick_Data:
-	.byte 0xf1, 0xc5
-	pushw	wa
-	.byte 0xbb
+	setda	3, (10437)
 	ret
 
 SeqAcc_StartPlaybackFromPosition:
@@ -392,18 +390,16 @@ SeqPlay_InitTempoAndActivateParts_Code_Skip3:
 	calr	SeqPlay_InitTempoAndActivateParts_Code_Helper2
 	jrl	SeqAcc_SetupRepeatCount
 SeqPlay_InitTempoAndActivateParts_Code_Helper:
-	.byte 0xf1, 0xb2
-	pushw	wa
-	inc	6, w
-	ldw	iz, 0x38d1
-	.byte 0xf2
-	ld	w, 216:opc
-	dec	6, de
-	zcf
+	bitda	0, (10418)
+	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip2
+	ldw_d16	wa, (62008)
+	cp	wa, 2:i3
+	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip
 	ldw	(9832:16), 0x8002
 	ldw	(9964:16), 0x8002
 	ldw	(0xf23f:16), 3
 	ret
+SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip:
 	cp	wa, 3:i3
 	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Skip4
 	ldw	(9832:16), 1
@@ -413,6 +409,7 @@ SeqPlay_InitTempoAndActivateParts_Code_Helper:
 SeqPlay_InitTempoAndActivateParts_Code_Skip4:
 	cp	wa, 3:i3
 	ret	c
+SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip2:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -423,18 +420,16 @@ SeqPlay_InitTempoAndActivateParts_Code_Skip4:
 	ld	(9964:16), wa
 	ret
 SeqPlay_InitTempoAndActivateParts_Code_Helper2:
-	.byte 0xf1, 0xb2
-	pushw	wa
-	inc	6, w
-	ldw	iz, 0x38d1
-	.byte 0xf2
-	ld	w, 216:opc
-	dec	6, bc
-	zcf
+	bitda	0, (10418)
+	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip2
+	ldw_d16	wa, (62008)
+	cp	wa, 1:i3
+	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip
 	ldw	(9832:16), 0x8002
 	ldw	(9964:16), 0x8002
 	ldw	(0xf23f:16), 2
 	ret
+SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip:
 	cp	wa, 2:i3
 	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Skip5
 	ldw	(9832:16), 2
@@ -444,6 +439,7 @@ SeqPlay_InitTempoAndActivateParts_Code_Helper2:
 SeqPlay_InitTempoAndActivateParts_Code_Skip5:
 	cp	wa, 3:i3
 	ret	c
+SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip2:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -489,15 +485,11 @@ SeqPlay_InitTempoAndActivateParts_Code_Join2:
 	calr	SeqPlay_InitTempoAndActivateParts_Code_Helper2
 	calr	SeqAcc_SetupRepeatCount
 	ret
-	.byte 0xf1, 0xb2
-	pushw	wa
-	inc	6, w
-	ld	(209:8), 56:io
-	.byte 0xf2
-	push	xsp
-	push	sr
-	nop
+	bitda	0, (10418)
+	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip3
+	cpdi16	(62008), 2
 	ret	ule
+SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip3:
 	ld	wa, (0xf23f:16)
 	cp	wa, 997
 	jr	c, SeqPlay_InitTempoAndActivateParts_Code_Skip8
@@ -516,15 +508,11 @@ SeqPlay_InitTempoAndActivateParts_Code_Join3:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	jrl	SeqAcc_SetupRepeatCount
-	.byte 0xf1, 0xb2
-	pushw	wa
-	inc	6, w
-	ld	(209:8), 56:io
-	.byte 0xf2
-	push	xsp
-	push	sr
-	nop
+	bitda	0, (10418)
+	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip4
+	cpdi16	(62008), 2
 	ret	ule
+SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip4:
 	ld	wa, (0xf23f:16)
 	cp	wa, 0:i3
 	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Skip9
@@ -4949,8 +4937,7 @@ SeqNotePos_DataBlock_A:
 	ld	a, 0:opc
 SeqNote_UpdatePlayPosition_A_Skip:
 	ld	(1071:16), a
-	.byte 0xf1
-	ldw	bc, 0xb804
+	setda	0, (1073)
 	ei	0
 	ret
 
@@ -5003,8 +4990,7 @@ SeqNotePosB_DataBlock:
 	ld	a, 0:opc
 SeqNote_UpdatePlayPosition_B_Skip:
 	ld	(1072:16), a
-	.byte 0xf1
-	ldw	bc, 0xbb04
+	setda	3, (1073)
 	ei	0
 	ret
 
@@ -10600,9 +10586,7 @@ SeqVoiceSingle_LookupAndApply:
 	.byte 0x00, 0x30, 0x90, 0x00, 0x31, 0x10, 0x00, 0x1d
 	.byte 0x53, 0xaa, 0xfd, 0x0e
 SeqNotify_DataBlock:
-	.byte 0xf1, 0xb3
-	pushw	wa
-	.byte 0xb8
+	setda	0, (10419)
 	ret
 
 SeqNotify_CheckAndClearStart:
@@ -11738,19 +11722,12 @@ SeqValRange_CheckBounds:
 	ret
 
 SeqValRange_ReturnOK:
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	ld	a, (0x2878:16)
-	.byte 0xc7
-	swi	3
-	.byte 0x99, 0xc1
-	pushw	de
-	ld	l, 25:opc
-	jrl	7720
-	pushw	0xc700
-	swi	3
-	.byte 0x89
+	ldb_erp	a, 251
+	ldmm8	10360, 10026
+	calr	SeqVoice_InitAllChannelParams
+	stb_erp	a, 251
 	ld	(0x2878:16), a
 	pop qiz
 	ret
@@ -13062,41 +13039,30 @@ SeqPart_CalcStoreResult:
 	ret
 
 SeqPart_PositionUpdateBlock:
-	.byte 0xd7
-	swi	2
-	.byte 0x04, 0xd1
-	ldw	bc, 6642
-	.byte 0xcc
-	ld	h, 241:opc
-	jrl	gt, 40
-	nop
-	.byte 0xc7
-	swi	3
-	.byte 0xa9, 0xc1, 0xa1
-	pushw	wa
-	push	xsp
-	normal
-	jrl	c, 186
+	push	qiz
+	ldmm16	9932, 62001
+	stdi8	(10362), 0
+	ldib_erp	251, 1
+	cpdi8	(10401), 1
+	jrl	c, SeqPart_PositionUpdateBlock_Code_Epilogue
 SeqPart_PositionUpdateBlock_Code_Loop:
 	stb_erp a, 251
 	ld	(9780:16), a
 	stb_erp a, 251
 	extz	wa
-	calr	63542
+	calr	Part_ValidateVoiceAndSetupSeq
 	ld	a, (0x287a:16)
 	cp	a, 0:i3
-	jr	z, 12
+	jr	z, SeqPart_PositionUpdateBlock_Skip
 	cp	a, 8
-	jr	z, 49
+	jr	z, SeqPart_PositionUpdateBlock_Code_Loop2
 	cp	a, 1:i3
 	jr	z, SeqPart_PositionUpdateBlock_Code_Loop2
 	jrl	SeqPart_PositionUpdateBlock_Code_Epilogue
+SeqPart_PositionUpdateBlock_Skip:
 	calr	SeqVoice_FindDrumPartIndex
-	.byte 0xd1
-	ld	h, (xiz)
-	pop_f
-	jrl	nc, -16088
-	ldw	ix, 8486
+	ldmm16	10367, 9862
+	ldb_d8	a, (9780)
 	ldb_erp a, 251
 	extz	wa
 	extz	hl
@@ -13113,10 +13079,8 @@ SeqPart_PositionUpdateBlock_Code_Loop2:
 	ld	(0x287a:16), 0
 	jr	SeqPart_PositionUpdateBlock_Code_Join
 SeqPart_PositionUpdateBlock_Code_Entry:
-	.byte 0xd1
-	ldw	de, 6438
-	jrl	nc, -16088
-	ld	l, (xiy+40)
+	ldmm16	10367, 9778
+	ldb_d8	l, (10381)
 	ld	a, (9780:16)
 	ldb_erp a, 251
 	extz	wa
@@ -13699,14 +13663,12 @@ SeqDataCopy_RestoreStack:
 	ret
 
 SeqData_VoiceSetupBlock:
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	calr	141
-	calr	63053
+	push	qiz
+	calr	SeqBuf_ClearRange
+	calr	SeqVoice_FindDrumPartIndex
 	ldb_erp l, 251
 	cpib_erp 251, 0
-	jr z, 123
+	jr z, SeqData_VoiceSetupBlock_Code_Skip
 	stb_erp a, 251
 	ld	(0x2740:16), a
 	stb_erp a, 251
@@ -13715,31 +13677,17 @@ SeqData_VoiceSetupBlock:
 	stb_erp a, 251
 	extz	wa
 	calr	Part_ValidateVoiceAndSetupSeq
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
-	jr	nz, 92
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	pop	xiz
-	ld	h, 209:opc
-	.byte 0xaf
-	pushw	wa
-	pop_f
-	pop	xix
-	ld	h, 209:opc
-	ldw	de, 6438
-	jrl	nc, -14552
-	swi	3
-	.byte 0x8b
+	cpdi8	(10362), 0
+	jr	nz, SeqData_VoiceSetupBlock_Code_Skip
+	ldmm16	9822, 9830
+	ldmm16	9820, 10415
+	ldmm16	10367, 9778
+	stb_erp	c, 251
 	extz	bc
 	ld	wa, bc
-	calr	62383
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
-	jr	nz, 57
+	calr	SeqVoice_SeekToBar
+	cpdi8	(10362), 0
+	jr	nz, SeqData_VoiceSetupBlock_Code_Skip
 	ld	wa, (9778:16)
 	add wa, (9694:16)
 	ld	(0x287f:16), wa
@@ -13747,22 +13695,14 @@ SeqData_VoiceSetupBlock:
 	extz	bc
 	ld	wa, bc
 	calr	SeqVoice_SeekToBar
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
+	cpdi8	(10362), 0
 	jr	nz, SeqData_VoiceSetupBlock_Code_Skip
 	calr	SeqData_ReadNextByte
 	cp	l, 130
 	jr	z, SeqData_VoiceSetupBlock_Code_Skip
-	.byte 0xd1
-	ldw	de, 6438
-	.byte 0xda
-	ld	h, 209:opc
-	.byte 0xde
-	ld	e, 25:opc
-	.byte 0xdc
-	.asciz "&@,'"
-	nop
+	ldmm16	9946, 9778
+	ldmm16	9948, 9694
+	ld	xwa, 10028
 	calr	SeqVoice_SeekAndScanTracks
 SeqData_VoiceSetupBlock_Code_Skip:
 	calr	SeqPlay_WriteErrorToVoiceTable
@@ -15079,9 +15019,10 @@ PartSubBlk48_WriteAndCheck:
 	jp	16635550
 Part_VoiceSearchBlock:
 	cp	a, 0:i3
-	jr	nz, 6
+	jr	nz, Part_WriteSubBlock48_Skip
 	lda	xde, (0xf1b0:16)
-	jr	19
+	jr	Part_WriteSubBlock48_Join
+Part_WriteSubBlock48_Skip:
 	dec	1, a
 	ld	w, 0:opc
 	extz	xwa
@@ -15089,12 +15030,11 @@ Part_VoiceSearchBlock:
 	lda	xwa, (xwa+48)
 	lda	xde, (0x0ab000:24)
 	add	xde, xwa
+Part_WriteSubBlock48_Join:
 	extz	bc
-	.byte 0xf3
-	reti
-	or	xix, xwa
-	ldw	wa, 0xff88
-	ld	l, 14:opc
+	lda_rr	xwa, xde, bc
+	ld	l, (xwa-1)
+	ret
 
 Part_FindVoiceByByte:
 	dec 4, xsp
@@ -16336,10 +16276,7 @@ SeqPos_AdvanceWithWrap_Join:
 	jr	c, SeqPos_AdvanceWithWrap_Loop
 SeqPos_AdvanceWithWrap_Skip3:
 	ld	xde, (xsp+4)
-	.byte 0xb2
-	ex_ff
-	.byte 0xaf
-	pushw	wa
+	ldw	(xde), (10415)
 	ld	wa, (9830:16)
 	ld	c, a
 	extz	bc
@@ -16866,43 +16803,37 @@ PartCtrl_SwapAndRelinkBlock:
 	push	xiz
 	ld	iz, wa
 	ld	(xsp+8), bc
-	.byte 0xbf
-	ldw	(22:8), 0xf22f:io
+	ldw	(xsp+10), (61999)
 	ld	(0xf22f:16), iz
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	ld	wa, iz
-	calr	62994
+	calr	PartCtrl_ReadWord_Off1
 	ld	(xsp+6), hl
 	ld	wa, iz
 	ld	bc, 0:i3
-	calr	63003
+	calr	PartCtrl_WriteWord_Off1
 Part_CheckAndReallocVoices_Join:
 	ld	wa, iz
-	calr	63017
+	calr	PartCtrl_ReadWord
 	ld qiz, hl
 	cpw qiz, 65535
-	jr	nz, 70
+	jr	nz, Part_CheckAndReallocVoices_Skip2
 	ld	(xsp+8), iz
 	incw	1, (xsp+4)
 Part_CheckAndReallocVoices_Entry:
-	.byte 0x9f, 0x06
-	push	xsp
-	nop
-	nop
-	jr	z, 9
+	cpw	(xsp+6), 0
+	jr	z, Part_CheckAndReallocVoices_Skip
 	ld	wa, (xsp+6)
 	ld	bc, qiz
-	calr	63004
+	calr	PartCtrl_WriteWord
+Part_CheckAndReallocVoices_Skip:
 	ld	wa, (xsp+8)
 	ld	bc, 0:i3
-	calr	63035
+	calr	PartCtrl_SetClearBit7
 	ld	wa, (xsp+8)
 	ld	bc, 5:i3
 	ldw	de, 130
-	calr	63072
+	calr	PartCtrl_WriteByteToBuf
 	ld	wa, (xsp+8)
 	ld	bc, (xsp+10)
 	calr	PartCtrl_WriteWord
@@ -16914,6 +16845,7 @@ Part_CheckAndReallocVoices_Entry:
 	pop	xiz
 	inc	8, xsp
 	ret
+Part_CheckAndReallocVoices_Skip2:
 	ld	wa, iz
 	ld	bc, 0:i3
 	calr	PartCtrl_SetClearBit7
@@ -16923,9 +16855,8 @@ Part_CheckAndReallocVoices_Entry:
 	calr	PartCtrl_WriteByteToBuf
 	incw	1, (xsp+4)
 	ld	wa, (xsp+4)
-	.byte 0x9f
-	ld	(240:8), 110:io
-	ex_ff
+	cp	wa, (xsp+8)
+	jr	nz, Part_CheckAndReallocVoices_Skip3
 	ld	(xsp+8), iz
 	ld	wa, iz
 	calr	PartCtrl_ReadWord
@@ -16934,6 +16865,7 @@ Part_CheckAndReallocVoices_Entry:
 	ld	bc, (xsp+6)
 	calr	PartCtrl_WriteWord_Off1
 	jr	Part_CheckAndReallocVoices_Entry
+Part_CheckAndReallocVoices_Skip3:
 	ld iz, qiz
 	jrl	Part_CheckAndReallocVoices_Join
 
@@ -17679,27 +17611,29 @@ SeqEvt_ProcessBlock_Skip:
 	lda	xwa, (xsp+4)
 	ld	(xwa), hl
 	ldw (xwa+2), 5
+SeqEvt_ProcessBlock_Loop:
 	lda	xwa, (xsp+4)
-	calr	65034
+	calr	SeqEvent_ProcessRhythm4Ch
 	cp	l, 132
-	jr	z, 28
+	jr	z, SeqEvt_ProcessBlock_Skip5
 	cp	l, 130
-	jr	z, 19
+	jr	z, SeqEvt_ProcessBlock_Skip4
 	cp	l, 129
-	jr	nz, 2
+	jr	nz, SeqEvt_ProcessBlock_Skip3
 	incw	1, (xsp)
-	.byte 0x8f
-	push	sr
-	push	xsp
-	normal
-	jr	z, -29
+SeqEvt_ProcessBlock_Skip3:
+	cp	(xsp+2), 1
+	jr	z, SeqEvt_ProcessBlock_Loop
+SeqEvt_ProcessBlock_Join:
 	ld	hl, (xsp)
 SeqEvt_ProcessBlock_Epilogue:
 	lda	xsp, (xsp+10)
 	ret
+SeqEvt_ProcessBlock_Skip4:
 	ldw (xsp), 0
+SeqEvt_ProcessBlock_Skip5:
 	ld	(xsp+2), 0
-	jr	-16
+	jr	SeqEvt_ProcessBlock_Join
 Rhythm_ComputeNoteAllocation_Helper:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
@@ -17707,10 +17641,8 @@ Rhythm_ComputeNoteAllocation_Helper:
 	ld	(xsp+2), 1
 	ld	xiy, WidgetData_DrawbarPositionTable_0x1BA
 	lda	xix, (xsp+4)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	ld	c, (xsp+8)
 	extz	bc
 	ld	wa, 0:i3
@@ -17727,32 +17659,33 @@ SeqEvt_ProcessBlock_Skip2:
 	lda	xwa, (xsp+4)
 	ld	(xwa), hl
 	ldw (xwa+2), 5
+Rhythm_ComputeNoteAllocation_Helper_Loop:
 	lda	xwa, (xsp+4)
 	calr	SeqEvt_ProcessBlock_Helper
 	cp	l, 177
-	jr	z, 32
+	jr	z, Rhythm_ComputeNoteAllocation_Helper_Skip
 	cp	l, 176
-	jr	z, 27
+	jr	z, Rhythm_ComputeNoteAllocation_Helper_Skip
 	cp	l, 132
-	jr	z, 30
+	jr	z, Rhythm_ComputeNoteAllocation_Helper_Skip2
 	cp	l, 130
-	jr	z, 25
+	jr	z, Rhythm_ComputeNoteAllocation_Helper_Skip2
 	cp	l, 129
-	jr	z, 20
-	.byte 0x8f
-	push	sr
-	push	xsp
-	normal
-	jr	z, -37
+	jr	z, Rhythm_ComputeNoteAllocation_Helper_Skip2
+	cp	(xsp+2), 1
+	jr	z, Rhythm_ComputeNoteAllocation_Helper_Loop
+Rhythm_ComputeNoteAllocation_Helper_Join:
 	ld	hl, (xsp)
 SeqEvt_ProcessBlock_Epilogue2:
 	lda	xsp, (xsp+10)
 	ret
+Rhythm_ComputeNoteAllocation_Helper_Skip:
 	ld	a, (8972:16)
 	extz	wa
 	ld	(xsp), wa
+Rhythm_ComputeNoteAllocation_Helper_Skip2:
 	ld	(xsp+2), 0
-	jr	-20
+	jr	Rhythm_ComputeNoteAllocation_Helper_Join
 
 SeqInit_ReturnStub:
 	ret
@@ -21271,7 +21204,7 @@ EffEdit_DirectWriteD6:
 	jr Voice_OffsetAndDispatch
 
 EffEdit_CallWriteParam:
-	call	16630547
+	call	EffEdit_ValidateRangeDelta_Helper
 AppEvent_ReturnZeroEpilogue4:
 	ld xhl, 0:i3
 	popw iz
@@ -21351,9 +21284,7 @@ EffEdit_DSPConfigBlock:
 	.byte 0x28, 0xc0, 0xfd, 0xf1, 0x78, 0x29, 0x53, 0xe1
 	.byte 0x72, 0x29, 0x20, 0x41, 0x0f, 0x00, 0xe8, 0x01
 	.byte 0xea, 0xa8, 0x78, 0x99, 0x00, 0xaf, 0x02, 0x20
-	.byte 0xe8, 0xcf, 0x00, 0x4e
-	nop
-	nop
+	cp	xwa, 19968
 	jr nz, .Lc_f45776
 	calr EffEdit_ValidateAndReadParams
 	cp hl, 0:i3
@@ -21793,12 +21724,9 @@ SeqAccomp_EventDispatch:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
-	.byte 0xc1
-	ldw	hl, 6404
-	ldw de, 57635
-	.ascii "r) A"
-	retd	0xc000
-	.byte 0x01
+	ldmm8	9010, 1075
+	ldda32	xwa, (10610)
+	ld	xbc, 29360143
 	ld	xde, 1:i3
 	call	ApDeliveryEvent
 	ld	a, (0x28b1:16)
@@ -22920,33 +22848,19 @@ NoteEditSy_SendWidgetCmdC:
 	jp ApDeliveryEvent
 NoteEditSy_DisplayUpdateData:
 	dec	4, xsp
-	.byte 0xd1
-	jr	gt, 39
-	pop_f
-	swi	6
-	ld	l, 193:opc
-	jr	nov, 39
-	ld	a, 216:opc
-	ccf
+	ldmm16	10238, 10090
+	ldb_d8	a, (10092)
+	extz	wa
 	ld	(0x2800:16), wa
-	.byte 0xd1
-	jr	nz, 39
-	pop_f
-	push	sr
-	pushw	wa
+	ldmm16	10242, 10094
 	ld	a, (0x2770:16)
 	extz	wa
 	ld	(0x2804:16), wa
 	lda	xwa, (xsp+2)
 	lda	xbc, (xsp)
 	call	BmDrEdit_SetupScrollRegion
-	.byte 0x8f
-	push	sr
-	pop_f
-	ld	b, 40:opc
-	.byte 0x87
-	pop_f
-	ld	d, 40:opc
+	ld	(10274), (xsp+2)
+	ld	(10276), (xsp)
 	ld	xwa, (0x2972:16)
 	ld	xbc, 0x01c80004
 	ld	xde, 10
@@ -24932,26 +24846,13 @@ SeqBar_ReturnDone:
 	ret
 
 SeqBar_DataBlock:
-	.byte 0xd1
-	pushw	sp
-	.byte 0xf2
-	pop_f
-	.byte 0xca
-	pushw	bc
-	.byte 0xd1
-	ldw	bc, 6642
-	.byte 0xcc
-	pushw	bc
+	ldmm16	10698, 61999
+	ldmm16	10700, 62001
 	ret
 SeqLoad_ProcessDataBlock_Helper:
-	.byte 0xd1, 0xca
-	pushw	bc
-	pop_f
-	pushw	sp
-	.byte 0xf2, 0xd1, 0xcc
-	pushw	bc
-	pop_f
-	ldw	bc, 3826
+	ldmm16	61999, 10698
+	ldmm16	62001, 10700
+	ret
 SeqBar_DataBlock_Code_Sub:
 	ld	hl, 0:i3
 	ld	wa, (0xf22f:16)
@@ -24975,11 +24876,9 @@ SeqBar_DataBlock_Code_Sub:
 SeqBar_DataBlock_Code_Skip:
 	jr	SeqBar_DataBlock_Code_Epilogue
 SeqBar_DataBlock_Code_Entry:
-	.byte 0x97
-	add	(xde), l
-	push	sr
-	ld	c, 217:opc
-	ccf
+	add	de, (xsp)
+	ld	c, (xsp+2)
+	extz	bc
 	ld	wa, 0:i3
 	call	Part_WriteVoiceWord
 SeqBar_DataBlock_Code_Epilogue:
@@ -25174,15 +25073,11 @@ SeqLoad_ReadPartDataBlock:
 	extz	wa
 	add	wa, wa
 	lda	xde, (0x29ce:16)
-	.byte 0xd3
-	reti
-	or	xwa, xwa
-	push	xsp
-	nop
-	nop
-	jr	nz, 5
+	.byte 0xd3, 0x07, 0xe8, 0xe0, 0x3f, 0x00, 0x00	; cp (xde+wa),0x0000
+	jr	nz, FileIO_SeekAndRead16BitValue_Skip2
 	ld	xhl, 0:i3
-	jrl	198
+	jrl	FileIO_SeekAndRead16BitValue_Epilogue
+FileIO_SeekAndRead16BitValue_Skip2:
 	ld	xwa, 2048
 	ld	(xsp+4), xwa
 	ldw (xsp+10), 0
@@ -25190,7 +25085,7 @@ SeqLoad_ReadPartDataBlock:
 	ld	c, (xsp+12)
 	extz	bc
 	cp	bc, 0:i3
-	jr	ule, 32
+	jr	ule, FileIO_SeekAndRead16BitValue_Skip3
 FileIO_SeekAndRead16BitValue_Loop:
 	ld	wa, (xsp+8)
 	add	wa, wa
@@ -25205,32 +25100,32 @@ FileIO_SeekAndRead16BitValue_Loop:
 	incw	1, (xsp+8)
 	cp	(xsp+8), bc
 	jr	c, FileIO_SeekAndRead16BitValue_Loop
+FileIO_SeekAndRead16BitValue_Skip3:
 	ld	xwa, 1:i3
 	add	(xsp+4), xwa
-	.byte 0xbf
-	ld	(2:8), 1:io
-	nop
+	ldw	(xsp+8), 1
 	jr	FileIO_SeekAndRead16BitValue_Join
+FileIO_SeekAndRead16BitValue_Loop2:
 	ld	xwa, (xsp+4)
-	calr	65381
+	calr	FileIO_SeekAndRead16BitValue
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, 5
+	jr	z, FileIO_SeekAndRead16BitValue_Skip4
 	ldw	wa, 200
-	jr	104
+	jr	FileIO_SeekAndRead16BitValue_Join2
+FileIO_SeekAndRead16BitValue_Skip4:
 	ld	xwa, (xsp+4)
 	inc	2, xwa
 	ld	bc, (xsp+10)
-	.byte 0x9f
-	ld	(129:8), 217:io
-	jr	lt, 30
-	popw	de
-	swi	7
+	add	bc, (xsp+8)
+	inc	1, bc
+	calr	FileIO_SeekAndRead16BitValue
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, 5
+	jr	z, FileIO_SeekAndRead16BitValue_Skip5
 	ldw	wa, 201
-	jr	77
+	jr	FileIO_SeekAndRead16BitValue_Join2
+FileIO_SeekAndRead16BitValue_Skip5:
 	ld	xwa, 256
 	add	(xsp+4), xwa
 	incw	1, (xsp+8)
@@ -25240,20 +25135,19 @@ FileIO_SeekAndRead16BitValue_Join:
 	add	hl, hl
 	lda	xde, (0x29ce:16)
 	ld	bc, (xsp+10)
-	.byte 0x9f
-	ld	(129:8), 217:io
-	jr	ge, -97
-	ld	(32:8), 211:io
-	reti
-	sla	xwa, 240
-	jr	c, -84
+	add	bc, (xsp+8)
+	dec	1, bc
+	ld	wa, (xsp+8)
+	.byte 0xd3, 0x07, 0xe8, 0xec, 0xf0	; cp wa,(xde+hl)
+	jr	c, FileIO_SeekAndRead16BitValue_Loop2
 	ld	xwa, (xsp+4)
-	calr	65297
+	calr	FileIO_SeekAndRead16BitValue
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, 5
+	jr	z, FileIO_SeekAndRead16BitValue_Skip6
 	ldw	wa, 202
-	jr	20
+	jr	FileIO_SeekAndRead16BitValue_Join2
+FileIO_SeekAndRead16BitValue_Skip6:
 	ld	xwa, (xsp+4)
 	inc	2, xwa
 	ldw	bc, 0xffff
@@ -25262,9 +25156,11 @@ FileIO_SeekAndRead16BitValue_Join:
 	or	xiz, xiz
 	jr	z, FileIO_SeekAndRead16BitValue_Skip
 	ldw	wa, 203
+FileIO_SeekAndRead16BitValue_Join2:
 	call	SeqData_SetErrorCode
 FileIO_SeekAndRead16BitValue_Skip:
 	ld	xhl, xiz
+FileIO_SeekAndRead16BitValue_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -28776,25 +28672,22 @@ SeqPart_FullLoadErrorExit:
 	ret
 
 SeqPart_ByteBlockA95A:
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	ld	a, (0x2879:16)
 	res	0, a
 	res	1, a
 	ld	(0x2879:16), a
-	.byte 0xf1, 0x9d
-	pushw	wa
-	ret	lt
-	sbc	de, (xiy+40)
+	resda	0, (10397)
+	resda	2, (10397)
 	call	SeqVoice_SetDefaultParams
 	call	Seq_ValidateAllParams_DataBlock
 	cp	hl, 0:i3
-	jr	z, 14
+	jr	z, SeqPart_ByteBlockA95A_Skip
 	ld	(0x287a:16), 3
 	calr	SeqPart_ByteBlockA95A_Code_Helper
 	ldw	wa, 61
 	jrl	SeqPart_ByteBlockA95A_Code_Join2
+SeqPart_ByteBlockA95A_Skip:
 	ld	(0x287a:16), 0
 	ld	l, (0x287b:16)
 	res	6, l
@@ -28825,12 +28718,10 @@ SeqPart_ByteBlockA95A_Code_Skip:
 SeqPart_ByteBlockA95A_Code_Skip2:
 	cp	e, 12
 	jr	nz, SeqPart_ByteBlockA95A_Code_Entry
-	.byte 0xf1
-	jrl	ge, -18136
+	setda	1, (10361)
 	jr	SeqPart_ByteBlockA95A_Code_Join
 SeqPart_ByteBlockA95A_Code_Entry:
-	.byte 0xf1
-	jrl	ge, -20184
+	resda	1, (10361)
 SeqPart_ByteBlockA95A_Code_Join:
 	ld	a, (9858:16)
 	dec	1, a
@@ -28852,23 +28743,15 @@ SeqPart_ByteBlockA95A_Code_Skip3:
 SeqPart_ByteBlockA95A_Code_Skip4:
 	cp	e, 12
 	jr	nz, SeqPart_ByteBlockA95A_Code_Entry2
-	.byte 0xf1
-	jrl	ge, -18392
+	setda	0, (10361)
 	jr	SeqPart_ByteBlockA95A_Code_Entry3
 SeqPart_ByteBlockA95A_Code_Entry2:
-	.byte 0xf1
-	jrl	ge, -20440
+	resda	0, (10361)
 SeqPart_ByteBlockA95A_Code_Entry3:
-	.byte 0xc1
-	jrl	c, 6440
-	ldw	ix, 0xc126
-	ld	h, (xde)
-	pop_f
-	.byte 0x52
-	ld	h, 30:opc
-	.byte 0x9f, 0x01, 0xc1
-	jrl	gt, 16168
-	nop
+	ldmm8	9780, 10359
+	ldmm8	9810, 9858
+	calr	SeqPart_DualCopySetup_Loop
+	cpdi8	(10362), 0
 	jr	z, SeqPart_ByteBlockA95A_Code_Skip5
 	calr	SeqPart_ByteBlockA95A_Code_Helper
 	ldw	wa, 64
@@ -28890,50 +28773,40 @@ SeqPart_ByteBlockA95A_Code_Skip5:
 	add	xwa, xbc
 	ld	a, (xwa)
 	cp	e, a
-	jrl	z, 323
+	jrl	z, SeqPart_ByteBlockA95A_Join
 	ld	(3386:16), a
 	extz	wa
 	lda	xde, (FontPalette_Gradient7_0x32:24)
-	.byte 0xc3
-	reti
-	or	xwa, xwa
-	pop_f
-	jrl	nov, -16088
-	jrl	c, 8488
+	ld	(10364), (xde+wa)
+	ldb_d8	a, (10359)
 	dec	1, a
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
-	.byte 0x80
-	pop_f
-	ldw	de, 7693
-	push	xiz
-	normal
-	jrl	283
+	ld	(3378), (xwa)
+	calr	SeqPart_DualCopySetup
+	jrl	SeqPart_ByteBlockA95A_Join
 SeqPart_ByteBlockA95A_Code_Skip6:
 	ld	e, (xwa)
 	cp	e, 13
-	jr	z, 5
+	jr	z, SeqPart_ByteBlockA95A_Skip2
 	cp	e, 16
-	jr	nz, 30
+	jr	nz, SeqPart_ByteBlockA95A_Skip4
+SeqPart_ByteBlockA95A_Skip2:
 	cp	e, 16
-	jr	nz, 7
+	jr	nz, SeqPart_ByteBlockA95A_Skip3
 	set	6, l
 	ld	(0x287b:16), l
+SeqPart_ByteBlockA95A_Skip3:
 	ld	a, (0x2877:16)
 	extz	wa
 	call	Part_ValidateAndSetupVoiceChannel
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
-	jrl	nz, 241
-	.byte 0xc1
-	jrl	c, 6440
-	ldw	ix, 0xc126
-	jrl	c, 6440
-	.byte 0x52
-	ld	h, 241:opc
-	jrl	ugt, -12760
+	cpdi8	(10362), 0
+	jrl	nz, SeqPart_ByteBlockA95A_Join
+SeqPart_ByteBlockA95A_Skip4:
+	ldmm8	9780, 10359
+	ldmm8	9810, 10359
+	bitda	6, (10363)
 	jr	z, SeqPart_ByteBlockA95A_Code_Skip7
 	ld	c, (0x2877:16)
 	dec	1, c
@@ -28941,18 +28814,14 @@ SeqPart_ByteBlockA95A_Code_Skip6:
 	lda	xwa, (0xf1a0:16)
 	extz	xbc
 	add	xbc, xwa
-	.byte 0x81
-	push	xsp
-	rcf
+	cp	(xbc), 16
 	jr	nz, SeqPart_ByteBlockA95A_Code_Skip7
 	calr	SeqPart_ByteBlockB0DE
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
-	jrl	nz, 191
+	cpdi8	(10362), 0
+	jrl	nz, SeqPart_ByteBlockA95A_Join
 SeqPart_ByteBlockA95A_Code_Skip7:
 	calr	SeqPart_ByteBlockAD92
-	jrl	185
+	jrl	SeqPart_ByteBlockA95A_Join
 SeqPart_ByteBlockA95A_Code_Skip8:
 	ldib_erp 251, 1
 SeqPart_ByteBlockA95A_Code_Loop:
@@ -28970,33 +28839,28 @@ SeqPart_ByteBlockA95A_Code_Loop:
 SeqPart_ByteBlockA95A_Code_Skip9:
 	cp	e, 16
 	jr	nz, SeqPart_ByteBlockA95A_Code_Skip10
-	.byte 0xf1
-	jrl	ugt, -16856
+	setda	6, (10363)
 SeqPart_ByteBlockA95A_Code_Skip10:
 	stb_erp a, 251
 	extz	wa
 	call	Part_ValidateAndSetupVoiceChannel
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
-	jrl	nz, 129
+	cpdi8	(10362), 0
+	jrl	nz, SeqPart_ByteBlockA95A_Join
 SeqPart_ByteBlockA95A_Code_Skip11:
 	inc1b_erp 251
 	cp_erpb 251, 16
 	jr	ule, SeqPart_ByteBlockA95A_Code_Loop
 	call	SeqPart_PositionUpdateBlock
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
-	jr	nz, 109
+	cpdi8	(10362), 0
+	jr	nz, SeqPart_ByteBlockA95A_Join
 	ld	(9782:16), 0
 	ldib_erp 251, 1
+SeqPart_ByteBlockA95A_Loop:
 	stb_erp a, 251
 	ld	(9780:16), a
 	stb_erp a, 251
 	ld	(9810:16), a
-	.byte 0xf1
-	jrl	ugt, -12760
+	bitda	6, (10363)
 	jr	z, SeqPart_ByteBlockA95A_Code_Skip12
 	stb_erp c, 251
 	dec 1, c
@@ -29004,15 +28868,11 @@ SeqPart_ByteBlockA95A_Code_Skip11:
 	lda	xwa, (0xf1a0:16)
 	extz	xbc
 	add	xbc, xwa
-	.byte 0x81
-	push	xsp
-	rcf
+	cp	(xbc), 16
 	jr	nz, SeqPart_ByteBlockA95A_Code_Skip12
 	ld	(0x287a:16), 0
 	calr	SeqPart_ByteBlockB0DE
-	.byte 0xc1
-	jrl	gt, 16168
-	nop
+	cpdi8	(10362), 0
 	jr	nz, SeqPart_ByteBlockA95A_Code_Skip13
 SeqPart_ByteBlockA95A_Code_Skip12:
 	calr	SeqPart_ByteBlockAD92
@@ -29021,39 +28881,29 @@ SeqPart_ByteBlockA95A_Code_Skip13:
 	cp	a, 0:i3
 	jr	z, SeqPart_ByteBlockA95A_Code_Skip14
 	cp	a, 1:i3
-	jr	z, 16
+	jr	z, SeqPart_ByteBlockA95A_Code_Skip14
 	cp	a, 8
-	jr	z, 11
-	.byte 0xc1
-	ldw	iz, 0x3f26
-	nop
-	jr	nz, 4
+	jr	z, SeqPart_ByteBlockA95A_Code_Skip14
+	cpdi8	(9782), 0
+	jr	nz, SeqPart_ByteBlockA95A_Code_Skip14
 	ld	(9782:16), a
 SeqPart_ByteBlockA95A_Code_Skip14:
 	inc1b_erp 251
 	cp_erpb 251, 16
-	jr	ule, -95
-	.byte 0xc1
-	ldw	iz, 6438
-	jrl	gt, 7720
-	max
-	nop
+	jr	ule, SeqPart_ByteBlockA95A_Loop
+	ldmm8	10362, 9782
+SeqPart_ByteBlockA95A_Join:
+	calr	SeqPart_ByteBlockA95A_Code_Helper
 SeqPart_ByteBlockA95A_Code_Epilogue:
 	pop qiz
 	ret
 SeqPart_ByteBlockA95A_Code_Helper:
 	call	AppEvent_ExtendedHandler_0x7
 	call	SeqVoice_InitReturnZero
-	.byte 0xf1
-	jrl	ge, -20440
-	.byte 0xf1
-	jrl	ge, -20184
-	.byte 0xf1, 0x9d
-	pushw	wa
-	ret	lt
-	.byte 0x9d
-	pushw	wa
-	.byte 0xb2
+	resda	0, (10361)
+	resda	1, (10361)
+	resda	0, (10397)
+	resda	2, (10397)
 	ret
 
 SeqPart_DualCopySetup:
@@ -29218,58 +29068,30 @@ SeqPart_ByteBlockAD92:
 	call	Part_ValidateVoiceAndSetupSeq
 	cp	(0x287a:16), 0
 	ret	nz
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	pop	xiz
-	ld	h, 209:opc
-	.byte 0xaf
-	pushw	wa
-	pop_f
-	pop	xix
-	.byte 0x26
+	ldmm16	9822, 9830
+	ldmm16	9820, 10415
 	call	SeqVoice_FindDrumPartIndex
 	ld	a, (9810:16)
-	.byte 0xd1
-	ld	h, (xiz)
-	pop_f
-	jrl nc, -10200
-	ccf
+	ldmm16	10367, 9862
+	extz	wa
 	extz	hl
 	ld	bc, hl
 	call	SeqVoice_SeekToBar
 	cp	(0x287a:16), 0
 	ret	nz
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	.byte 0x85
-	pushw	wa
-	.byte 0xd1, 0xaf
-	pushw	wa
-	pop_f
-	.byte 0x87
-	pushw	wa
+	ldmm16	10373, 9830
+	ldmm16	10375, 10415
 	ld	l, (0x288d:16)
 	ld	a, (9780:16)
-	.byte 0xd1
-	ldw	de, 6438
-	jrl nc, -10200
-	ccf
+	ldmm16	10367, 9778
+	extz	wa
 	extz	hl
 	ld	bc, hl
 	call	SeqVoice_SeekToBar
 	cp	(0x287a:16), 0
 	ret	nz
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	.byte 0xb2
-	ld	h, 209:opc
-	.byte 0xaf
-	pushw	wa
-	pop_f
-	.byte 0xb0, 0x26
+	ldmm16	9906, 9830
+	ldmm16	9904, 10415
 	call	SeqData_ScanAllTracks
 	ld	a, (0x287a:16)
 	cp	a, 0:i3
@@ -29279,29 +29101,14 @@ SeqPart_ByteBlockAD92:
 	set	3, (0x287b:16)
 	ld	(0x287a:16), 0
 SeqPart_ByteBlockAD92_Entry:
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	.byte 0xaa
-	ld	h, 209:opc
-	.byte 0xaf
-	pushw	wa
-	pop_f
-	.byte 0xa8
-	ld	h, 209:opc
-	pop	xix
-	ld	h, 25:opc
-	.byte 0x9c
-	ld	h, 209:opc
-	pop	xiz
-	ld	h, 25:opc
-	ld	xiz, (xde)
+	ldmm16	9898, 9830
+	ldmm16	9896, 10415
+	ldmm16	9884, 9820
+	ldmm16	9890, 9822
 	call	SeqBuf_ComputePageLayout
 	cp	(0x287a:16), 0
 	ret	nz
-	.byte 0xd1, 0xb8
-	ld	h, 25:opc
-	.byte 0xac, 0x26
+	ldmm16	9900, 9912
 	ld	xwa, (9914:16)
 	ld	(9902:16), wa
 	ld	c, a
@@ -29309,32 +29116,14 @@ SeqPart_ByteBlockAD92_Entry:
 	ld	wa, (9900:16)
 	call	Part_WriteWordAndByte
 	lda	xwa, (0x282c:16)
-	.byte 0xb0
-	ex_ff
-	pop	xix
-	ld	h, 184:opc
-	push	sr
-	ex_ff
-	pop	xiz
-	ld h, 241:opc
-	ldw wa, 12328
-	.byte 0xb0
-	ex_ff
-	.byte 0xac
-	ld	h, 184:opc
-	push	sr
-	ex_ff
-	.byte 0xae, 0x26
+	ldw	(xwa), (9820)
+	ldw	(xwa+2), (9822)
+	lda_d16	xwa, (10288)
+	ldw	(xwa), (9900)
+	ldw	(xwa+2), (9902)
 	lda	xwa, (0x2834:16)
-	.byte 0xb0
-	ex_ff
-	.byte 0x87
-	pushw	wa
-	.byte 0xb8
-	push	sr
-	ex_ff
-	.byte 0x85
-	pushw	wa
+	ldw	(xwa), (10375)
+	ldw	(xwa+2), (10373)
 	call	SeqPart_CopyDataSecondary
 	cp	(0x287a:16), 0
 	ret	nz
@@ -29349,31 +29138,14 @@ SeqPart_ByteBlockAD92_Entry:
 	cp	(0x287a:16), 0
 	ret	nz
 	lda	xwa, (0x282c:16)
-	.byte 0xb0
-	ex_ff
-	.byte 0xb0
-	ld	h, 184:opc
-	push	sr
-	ex_ff
-	.byte 0xb2, 0x26
+	ldw	(xwa), (9904)
+	ldw	(xwa+2), (9906)
 	lda	xwa, (0x2830:16)
-	.byte 0xb0
-	ex_ff
-	.byte 0x87
-	pushw	wa
-	.byte 0xb8
-	push	sr
-	ex_ff
-	.byte 0x85
-	pushw	wa
+	ldw	(xwa), (10375)
+	ldw	(xwa+2), (10373)
 	lda	xwa, (0x2834:16)
-	.byte 0xb0
-	ex_ff
-	.byte 0xa8
-	ld	h, 184:opc
-	push	sr
-	ex_ff
-	.byte 0xaa, 0x26
+	ldw	(xwa), (9896)
+	ldw	(xwa+2), (9898)
 	call	SeqPart_CopyDataPrimary
 	cp	(0x287a:16), 0
 	ret	nz
@@ -29589,20 +29361,11 @@ SeqPart_ByteBlockB0DE:
 	call	Part_ValidateVoiceAndSetupSeq
 	cp	(0x287a:16), 0
 	jrl	nz, SeqPart_ByteBlockB0DE_Skip
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	pop	xiz
-	ld	h, 209:opc
-	.byte 0xaf
-	pushw	wa
-	pop_f
-	pop	xix
-	ld h, 193:opc
-	ld xwa, 852567847
-	ld h, 25:opc
-	jrl nc, -9432
-	ccf
+	ldmm16	9822, 9830
+	ldmm16	9820, 10415
+	ldb_d8	l, (10048)
+	ldmm16	10367, 9778
+	extz	hl
 	ld	wa, hl
 	ld	bc, hl
 	call	SeqVoice_SeekToBar
@@ -29611,15 +29374,8 @@ SeqPart_ByteBlockB0DE:
 	call	SeqData_ReadNextByte
 	cp	l, 130
 	jrl	z, SeqPart_ByteBlockB0DE_Skip
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	.byte 0xd2
-	ld	h, 209:opc
-	.byte 0xaf
-	pushw	wa
-	pop_f
-	.byte 0xd4, 0x26
+	ldmm16	9938, 9830
+	ldmm16	9940, 10415
 	ldw	(9946:16), 1
 	ld	wa, (9778:16)
 	dec	1, wa
@@ -29642,15 +29398,8 @@ SeqPart_ByteBlockB0DE:
 	call	SeqData_ReadNextByte
 	cp	l, 130
 	jr	z, SeqPart_ByteBlockB0DE_Entry
-	.byte 0xd1
-	jr	z, 38
-	pop_f
-	.byte 0xd6
-	ld	h, 209:opc
-	.byte 0xaf
-	pushw	wa
-	pop_f
-	.byte 0xd8, 0x26
+	ldmm16	9942, 9830
+	ldmm16	9944, 10415
 	ldw	(9946:16), 1
 	ld	wa, (9862:16)
 	dec	1, wa
@@ -29660,13 +29409,8 @@ SeqPart_ByteBlockB0DE:
 	cp	(0x287a:16), 0
 	jr	nz, SeqPart_ByteBlockB0DE_Skip
 SeqPart_ByteBlockB0DE_Entry:
-	.byte 0xd1
-	ldw	de, 6438
-	.byte 0xde
-	ld	h, 209:opc
-	ld	h, (xiz)
-	pop_f
-	.byte 0xe0, 0x26
+	ldmm16	9950, 9778
+	ldmm16	9952, 9862
 	call	SeqBufInit_MainSetup
 SeqPart_ByteBlockB0DE_Skip:
 	jp	SeqPlay_WriteErrorToVoiceTable
@@ -31290,72 +31034,64 @@ SeqPart_VelocityCurveCalc:
 SeqPart_VelCurveData:
 	ld	(9792:16), 48
 	ld	(9794:16), 48
-	jrl	494
+	jrl	SeqPart_VelocityCurveCalc_Join5
 	ld	a, c
 	ld	e, 0:opc
 	cp	c, 24
-	jr	c, 7
+	jr	c, SeqPart_VelocityCurveCalc_Skip6
 	cp	a, 72
-	jr	nc, 2
+	jr	nc, SeqPart_VelocityCurveCalc_Skip6
 	ld	e, 1:opc
+SeqPart_VelocityCurveCalc_Skip6:
 	extz	de
 	lda	xbc, (Display_FontPalette_Table_0x1E:24)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	.byte 0x40, 0x26
+	ld	(9792), (xbc+de)
 	ld	xbc, Display_FontPalette_Table_0x44
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	.byte 0x42, 0x26
-	jrl	449
+	ld	(9794), (xbc+de)
+	jrl	SeqPart_VelocityCurveCalc_Join5
 	ld	a, c
 	cp	c, 12
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip7
 	ld	e, 0:opc
-	jr	27
+	jr	SeqPart_VelocityCurveCalc_Join3
+SeqPart_VelocityCurveCalc_Skip7:
 	cp	a, 36
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip8
 	ld	e, 1:opc
-	jr	18
+	jr	SeqPart_VelocityCurveCalc_Join3
+SeqPart_VelocityCurveCalc_Skip8:
 	cp	a, 60
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip9
 	ld	e, 2:opc
-	jr	9
+	jr	SeqPart_VelocityCurveCalc_Join3
+SeqPart_VelocityCurveCalc_Skip9:
 	ld	e, 0:opc
 	cp	a, 84
-	jr	nc, 2
+	jr	nc, SeqPart_VelocityCurveCalc_Join3
 	ld	e, 3:opc
+SeqPart_VelocityCurveCalc_Join3:
 	extz	de
 	lda	xbc, (Display_FontPalette_Table_0x20:24)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	.byte 0x40, 0x26
+	ld	(9792), (xbc+de)
 	ld	xbc, Display_FontPalette_Table_0x46
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	.ascii "B&x~"
-	.byte 0x01
+	ld	(9794), (xbc+de)
+	jrl	SeqPart_VelocityCurveCalc_Join5
 	ld	a, c
 	cp	c, 6:i3
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip10
 	ld	e, 0:opc
-	jr	63
+	jr	SeqPart_VelocityCurveCalc_Join
+SeqPart_VelocityCurveCalc_Skip10:
 	cp	a, 18
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip11
 	ld	e, 1:opc
-	jr	54
+	jr	SeqPart_VelocityCurveCalc_Join
+SeqPart_VelocityCurveCalc_Skip11:
 	cp	a, 30
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip12
 	ld	e, 2:opc
 	jr	SeqPart_VelocityCurveCalc_Join
+SeqPart_VelocityCurveCalc_Skip12:
 	cp	a, 42
 	jr	nc, SeqPart_VelocityCurveCalc_Skip
 	ld	e, 3:opc
@@ -31369,67 +31105,57 @@ SeqPart_VelocityCurveCalc_Skip2:
 	cp	a, 66
 	jr	nc, SeqPart_VelocityCurveCalc_Skip3
 	ld	e, 5:opc
-	jr	18
+	jr	SeqPart_VelocityCurveCalc_Join
 SeqPart_VelocityCurveCalc_Skip3:
 	cp	a, 78
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip13
 	ld	e, 6:opc
-	jr	9
+	jr	SeqPart_VelocityCurveCalc_Join
+SeqPart_VelocityCurveCalc_Skip13:
 	ld	e, 0:opc
 	cp	a, 90
-	jr	nc, 2
+	jr	nc, SeqPart_VelocityCurveCalc_Join
 	ld	e, 7:opc
 SeqPart_VelocityCurveCalc_Join:
 	extz	de
 	lda	xbc, (Display_FontPalette_Table_0x24:24)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	ld	xwa, 0x4ea24126
-	.byte 0xe4
-	nop
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	ld	xde, 0x01187826
+	ld	(9792), (xbc+de)
+	ld	xbc, 14962338
+	ld	(9794), (xbc+de)
+	jrl	SeqPart_VelocityCurveCalc_Join5
 	ld	a, c
 	cp	c, 16
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip14
 	ld	e, 0:opc
-	jr	18
+	jr	SeqPart_VelocityCurveCalc_Join4
+SeqPart_VelocityCurveCalc_Skip14:
 	cp	a, 48
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip15
 	ld	e, 1:opc
-	jr	9
+	jr	SeqPart_VelocityCurveCalc_Join4
+SeqPart_VelocityCurveCalc_Skip15:
 	ld	e, 0:opc
 	cp	a, 80
-	jr	nc, 2
+	jr	nc, SeqPart_VelocityCurveCalc_Join4
 	ld	e, 2:opc
+SeqPart_VelocityCurveCalc_Join4:
 	extz	de
 	lda	xbc, (Display_FontPalette_Table_0x2C:24)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	ld	xwa, 0x4eaa4126
-	.byte 0xe4
-	nop
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	ld	xde, 0xde7826
+	ld	(9792), (xbc+de)
+	ld	xbc, 14962346
+	ld	(9794), (xbc+de)
+	jrl	SeqPart_VelocityCurveCalc_Join5
 	ld	a, c
 	cp	c, 8
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip16
 	ld	e, 0:opc
-	jr	45
+	jr	SeqPart_VelocityCurveCalc_Join2
+SeqPart_VelocityCurveCalc_Skip16:
 	cp	a, 24
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip17
 	ld	e, 1:opc
-	jr	36
+	jr	SeqPart_VelocityCurveCalc_Join2
+SeqPart_VelocityCurveCalc_Skip17:
 	cp	a, 40
 	jr	nc, SeqPart_VelocityCurveCalc_Skip4
 	ld	e, 2:opc
@@ -31438,31 +31164,24 @@ SeqPart_VelocityCurveCalc_Skip4:
 	cp	a, 56
 	jr	nc, SeqPart_VelocityCurveCalc_Skip5
 	ld	e, 3:opc
-	jr	18
+	jr	SeqPart_VelocityCurveCalc_Join2
 SeqPart_VelocityCurveCalc_Skip5:
 	cp	a, 72
-	jr	nc, 4
+	jr	nc, SeqPart_VelocityCurveCalc_Skip18
 	ld	e, 4:opc
-	jr	9
+	jr	SeqPart_VelocityCurveCalc_Join2
+SeqPart_VelocityCurveCalc_Skip18:
 	ld	e, 0:opc
 	cp	a, 88
-	jr	nc, 2
+	jr	nc, SeqPart_VelocityCurveCalc_Join2
 	ld	e, 5:opc
 SeqPart_VelocityCurveCalc_Join2:
 	extz	de
 	lda	xbc, (Display_FontPalette_Table_0x30:24)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	ld	xwa, 0x4eae4126
-	.byte 0xe4
-	nop
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe8
-	pop_f
-	ld	xde, 0x897826
+	ld	(9792), (xbc+de)
+	ld	xbc, 14962350
+	ld	(9794), (xbc+de)
+	jrl	SeqPart_VelocityCurveCalc_Join5
 
 SeqPart_VelRangeToZone:
 	ld a, (9784:16)
@@ -31543,6 +31262,7 @@ SeqPart_VelZoneLookup:
 	ldmm_srib 0x07, 0xe4, 0xe8, 0x40, 0x26
 	ld xbc, Display_FontPalette_Table_0x5C
 	ldmm_srib 0x07, 0xe4, 0xe8, 0x42, 0x26
+SeqPart_VelocityCurveCalc_Join5:
 	ld l, (9792:16)
 	ld c, (9786:16)
 	ld e, c
