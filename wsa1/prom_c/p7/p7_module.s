@@ -326,7 +326,7 @@
 ;   sub_F9F9FA, sub_F9FBA9, sub_F9FD0E, sub_F9FEA5   the four siblings around
 ;       P7Stream_StageAndSend, each opening a 0x01/0x03 record and reading globals
 ;       0x00863A/3E/42.  What those three globals are is not established here.
-;   sub_FA237C, sub_FA26CB, sub_FA2784, sub_FA294F, sub_FA2A19, sub_FA3A3C,
+;   sub_FA237C, sub_FA26CB, P7Unit_SendModulatedField, P7Field_ModulateClamped, sub_FA2A19, sub_FA3A3C,
 ;   sub_FA4A0D, sub_FA4C5E, sub_FA4CE5, sub_FA4E23, sub_FA4E97   the unit
 ;       state-machine's helpers.  Several are one switch away from a name; none was
 ;       taken on the strength of position or of a plausible-looking caller.
@@ -14214,7 +14214,7 @@ Rec8644_Store3Bytes_AndFlagChanged:
 ;          0xFA5511 0xFA552B
 ; Inputs:  frame `link XIZ,-14`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA2784 = sub_FA2784
+; Calls:   0xFA2784 = P7Unit_SendModulatedField
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA26CB-0xFA2783
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -14283,7 +14283,7 @@ sub_FA26CB__FA2756:
 	pushw	wa                                   ; FA2766  push WA
 	ld	a, (xiz-2)                              ; FA2767  ld A,(XIZ+0xfe)
 	pushw	wa                                   ; FA276A  push WA
-	calr sub_FA2784                 ; FA276B  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA276B  calr 0xfa2784
 	ld	xix, (xiz-10)                           ; FA276E  ld XIX,(XIZ+0xf6)
 	ld	xiy, (xiz-6)                            ; FA2771  ld XIY,(XIZ+0xfa)
 	ldw	bc, 3                                  ; FA2774  ld BC,0x0003
@@ -14345,12 +14345,15 @@ sub_FA26CB__FA277F:
 ;   * what a PROGRAM 0..127 sounds like.  The word means the selector at block +0
 ;     and nothing more; 128 programs map onto 56 directory records, with record 53
 ;     as the catch-all for 73 of them.
-;   * what the descriptor type letters {b, w, v, s, h, c, B} mean, or the flag at
-;     descriptor +5 (four values in the whole table: 0x62, 0x20, 0x42, 0x77).
+;   * (CORRECTED 2026-09-25, lane promcd: the descriptor type letters and the +5 byte
+;     are decoded from their readers -- see P7Unit_EmitChangedParams and
+;     P7Unit_SendModulatedField.  What remains is what 'v' and 's' select beyond a
+;     one-byte width: the generic walker reads both as one byte, and 's' occurs only in
+;     records 12 and 13, which take hand-coded paths.)
 ;   * what any P7Stream object CONTAINS.  297 of them keep an address for a name.
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; sub_FA2784 -- 0xFA2784..0xFA294E (459 bytes)
+; P7Unit_SendModulatedField -- 0xFA2784..0xFA294E (459 bytes)
 ;
 ; Called from: no site outside this module.
 ;          11 site(s) inside this module:
@@ -14358,17 +14361,31 @@ sub_FA26CB__FA277F:
 ;          0xFA41BC 0xFA424A 0xFA42DB 0xFA45CF 0xFA47B8
 ; Inputs:  frame `link XIZ,-36`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA294F = sub_FA294F, 0xFA2D11 = P7Unit_SendParamValue
+; Calls:   0xFA294F = P7Field_ModulateClamped, 0xFA2D11 = P7Unit_SendParamValue
 ;          0xFA3CD7 = P7Unit_EmitChangedParams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2784-0xFA294E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd; notes/lanes/promcd-2026-09-25/p7_descriptor_letters.py).
+; Name:    sends ONE field of a unit -- the one its block names at +22 -- offset by a
+;          caller's amount: (unit, amount, flag, depth, mode).
+; Evidence: block +22 is a descriptor index (`add XBC,0x00000016` 0xFA27A8; 0xFF = none,
+;          return at 0xFA27B9) into the field descriptors of the record at block +24
+;          (0xFA2790).  The field is read at block +1+desc[+4] (0xFA2895-0xFA28A4) by
+;          the desc[+5] letter (switch 0xFA28F3: ' ' returns, 'B' exts, 'W'/'w' 16-bit,
+;          'b' extz), handed with desc[+0] min and desc[+2] max (0xFA286F, 0xFA2860)
+;          and amount/flag/depth to P7Field_ModulateClamped (0xFA292C), and the result is sent as
+;          parameter desc[+6] (0xFA2880) by P7Unit_SendParamValue (0xFA2946), the
+;          fifth argument as its mode.  Record 14 (ROTARY SPEAKER) with descriptor 14
+;          is special-cased at 0xFA27C1-0xFA2805: block +15 and its twin at RAM
+;          0x7E7E + 26*unit + 15 become 1 when the amount is >= 0x40, else 0, and
+;          P7Unit_EmitChangedParams runs.  The calls at 0xFA2BEC and 0xFA2C04 pass
+;          amount 64 and depth 0 -- an offset of zero, i.e. the field as it stands.
+;          (Corrected: this header said nothing here read the meaning of a field.)
 ; --------------------------------------------------------------------------
-sub_FA2784:
+P7Unit_SendModulatedField:
 	link32 0xEE, 0x0C, 0xDC, 0xFF              ; FA2784  link XIZ,0xffdc
 	push	xix                                   ; FA2788  push XIX
 	ld	c, 26:opc                                  ; FA2789  ld C,0x1a
@@ -14386,15 +14403,15 @@ sub_FA2784:
 	ld	b, (xbc)                                ; FA27B4  ld B,(XBC)
 	ld	(xiz-2), b                              ; FA27B6  ld (XIZ+0xfe),B
 	cp	b, 0xFF                                 ; FA27B9  cp B,0xff
-	jr nz, sub_FA2784__FA27C1                  ; FA27BC  jr NZ,0xfa27c1
-	jrl sub_FA2784__FA294B                     ; FA27BE  jrl T,0xfa294b
-sub_FA2784__FA27C1:
+	jr nz, P7Unit_SendModulatedField__FA27C1                  ; FA27BC  jr NZ,0xfa27c1
+	jrl P7Unit_SendModulatedField__FA294B                     ; FA27BE  jrl T,0xfa294b
+P7Unit_SendModulatedField__FA27C1:
 	cp (xiz-1), 0x0E                           ; FA27C1  cp (XIZ+0xff),0x0e
-	jrl nz, sub_FA2784__FA2843                 ; FA27C5  jrl NZ,0xfa2843
+	jrl nz, P7Unit_SendModulatedField__FA2843                 ; FA27C5  jrl NZ,0xfa2843
 	cp (xiz-2), 0x0E                           ; FA27C8  cp (XIZ+0xfe),0x0e
-	jrl nz, sub_FA2784__FA2843                 ; FA27CC  jrl NZ,0xfa2843
+	jrl nz, P7Unit_SendModulatedField__FA2843                 ; FA27CC  jrl NZ,0xfa2843
 	cp (xiz+10), 0x40                          ; FA27CF  cp (XIZ+0x0a),0x40
-	jr c, sub_FA2784__FA2807                   ; FA27D3  jr C,0xfa2807
+	jr c, P7Unit_SendModulatedField__FA2807                   ; FA27D3  jr C,0xfa2807
 	ei	6                                       ; FA27D5  ei 0x06
 	ld	c, 26:opc                                  ; FA27D7  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA27D9  mul BC,(XIZ+0x08)
@@ -14409,8 +14426,8 @@ sub_FA2784__FA27C1:
 	add	xbc, 0x7E7E                            ; FA27FA  add XBC,0x00007e7e
 	ld	(xbc), 1                                ; FA2800  ld (XBC),0x01
 	ei	0                                       ; FA2803  ei 0x00
-	jr sub_FA2784__FA2837                      ; FA2805  jr T,0xfa2837
-sub_FA2784__FA2807:
+	jr P7Unit_SendModulatedField__FA2837                      ; FA2805  jr T,0xfa2837
+P7Unit_SendModulatedField__FA2807:
 	ei	6                                       ; FA2807  ei 0x06
 	ld	c, 26:opc                                  ; FA2809  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA280B  mul BC,(XIZ+0x08)
@@ -14425,13 +14442,13 @@ sub_FA2784__FA2807:
 	add	xbc, 0x7E7E                            ; FA282C  add XBC,0x00007e7e
 	ld	(xbc), 0                                ; FA2832  ld (XBC),0x00
 	ei	0                                       ; FA2835  ei 0x00
-sub_FA2784__FA2837:
+P7Unit_SendModulatedField__FA2837:
 	push	0                                     ; FA2837  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2839  push (XIZ+0x08)
 	calr P7Unit_EmitChangedParams                 ; FA283C  calr 0xfa3cd7
 	popw	bc                                    ; FA283F  pop BC
-	jrl sub_FA2784__FA294B                     ; FA2840  jrl T,0xfa294b
-sub_FA2784__FA2843:
+	jrl P7Unit_SendModulatedField__FA294B                     ; FA2840  jrl T,0xfa294b
+P7Unit_SendModulatedField__FA2843:
 	ld	c, 4:opc                                   ; FA2843  ld C,0x04
 	extpfx3 0x8E, 0xFF, 0x43                   ; FA2845  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA2848  extz XBC
@@ -14482,45 +14499,45 @@ sub_FA2784__FA2843:
 	ld	c, (xwa)                                ; FA28B9  ld C,(XWA)
 	extz	bc                                    ; FA28BB  extz BC
 	ld	(xiz-36), bc                            ; FA28BD  ld (XIZ+0xdc),BC
-	jr sub_FA2784__FA28F3                      ; FA28C0  jr T,0xfa28f3
-sub_FA2784__FA28C2:
+	jr P7Unit_SendModulatedField__FA28F3                      ; FA28C0  jr T,0xfa28f3
+P7Unit_SendModulatedField__FA28C2:
 	ld	xbc, (xiz-30)                           ; FA28C2  ld XBC,(XIZ+0xe2)
 	ld	a, (xbc)                                ; FA28C5  ld A,(XBC)
 	extz	wa                                    ; FA28C7  extz WA
 	ld	(xiz-12), wa                            ; FA28C9  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28CC  jr T,0xfa2914
-sub_FA2784__FA28CE:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28CC  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28CE:
 	ld	xbc, (xiz-30)                           ; FA28CE  ld XBC,(XIZ+0xe2)
 	ld	wa, (xbc)                               ; FA28D1  ld WA,(XBC)
 	ld	(xiz-12), wa                            ; FA28D3  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28D6  jr T,0xfa2914
-sub_FA2784__FA28D8:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28D6  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28D8:
 	ld	xbc, (xiz-30)                           ; FA28D8  ld XBC,(XIZ+0xe2)
 	ld	a, (xbc)                                ; FA28DB  ld A,(XBC)
 	exts	wa                                    ; FA28DD  exts WA
 	ld	(xiz-12), wa                            ; FA28DF  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28E2  jr T,0xfa2914
-sub_FA2784__FA28E4:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28E2  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28E4:
 	ld	xbc, (xiz-30)                           ; FA28E4  ld XBC,(XIZ+0xe2)
 	ld	wa, (xbc)                               ; FA28E7  ld WA,(XBC)
 	ld	(xiz-12), wa                            ; FA28E9  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28EC  jr T,0xfa2914
-sub_FA2784__FA28EE:
-	jrl sub_FA2784__FA294B                     ; FA28EE  jrl T,0xfa294b
-	jr sub_FA2784__FA2914                      ; FA28F1  jr T,0xfa2914
-sub_FA2784__FA28F3:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28EC  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28EE:
+	jrl P7Unit_SendModulatedField__FA294B                     ; FA28EE  jrl T,0xfa294b
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28F1  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28F3:
 	ld	bc, (xiz-36)                            ; FA28F3  ld BC,(XIZ+0xdc)
 	cp	bc, 32                                  ; FA28F6  cp BC,0x0020
-	jr z, sub_FA2784__FA28EE                   ; FA28FA  jr Z,0xfa28ee
+	jr z, P7Unit_SendModulatedField__FA28EE                   ; FA28FA  jr Z,0xfa28ee
 	cp	bc, 66                                  ; FA28FC  cp BC,0x0042
-	jr z, sub_FA2784__FA28D8                   ; FA2900  jr Z,0xfa28d8
+	jr z, P7Unit_SendModulatedField__FA28D8                   ; FA2900  jr Z,0xfa28d8
 	cp	bc, 87                                  ; FA2902  cp BC,0x0057
-	jr z, sub_FA2784__FA28E4                   ; FA2906  jr Z,0xfa28e4
+	jr z, P7Unit_SendModulatedField__FA28E4                   ; FA2906  jr Z,0xfa28e4
 	cp	bc, 98                                  ; FA2908  cp BC,0x0062
-	jr z, sub_FA2784__FA28C2                   ; FA290C  jr Z,0xfa28c2
+	jr z, P7Unit_SendModulatedField__FA28C2                   ; FA290C  jr Z,0xfa28c2
 	cp	bc, 0x77                                ; FA290E  cp BC,0x0077
-	jr z, sub_FA2784__FA28CE                   ; FA2912  jr Z,0xfa28ce
-sub_FA2784__FA2914:
+	jr z, P7Unit_SendModulatedField__FA28CE                   ; FA2912  jr Z,0xfa28ce
+P7Unit_SendModulatedField__FA2914:
 	push	0                                     ; FA2914  push 0x00
 	extpfx3 0x8E, 0x0E, 0x04                   ; FA2916  push (XIZ+0x0e)
 	push	0                                     ; FA2919  push 0x00
@@ -14530,7 +14547,7 @@ sub_FA2784__FA2914:
 	extpfx3 0x9E, 0xF6, 0x04                   ; FA2923  pushw (XIZ+0xf6)
 	extpfx3 0x9E, 0xF8, 0x04                   ; FA2926  pushw (XIZ+0xf8)
 	extpfx3 0x9E, 0xF4, 0x04                   ; FA2929  pushw (XIZ+0xf4)
-	calr sub_FA294F                 ; FA292C  calr 0xfa294f
+	calr P7Field_ModulateClamped                 ; FA292C  calr 0xfa294f
 	ld	(xiz-6), wa                             ; FA292F  ld (XIZ+0xfa),WA
 	inc	8, xsp                                 ; FA2932  inc 0,XSP
 	inc	4, xsp                                 ; FA2934  inc 4,XSP
@@ -14543,12 +14560,12 @@ sub_FA2784__FA2914:
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2943  push (XIZ+0x08)
 	calr P7Unit_SendParamValue                 ; FA2946  calr 0xfa2d11
 	inc	8, xsp                                 ; FA2949  inc 0,XSP
-sub_FA2784__FA294B:
+P7Unit_SendModulatedField__FA294B:
 	pop	xix                                    ; FA294B  pop XIX
 	unlk32 xiz                                 ; FA294C  unlk XIZ
 	ret                                        ; FA294E  ret
 ; --------------------------------------------------------------------------
-; sub_FA294F -- 0xFA294F..0xFA2A18 (202 bytes)
+; P7Field_ModulateClamped -- 0xFA294F..0xFA2A18 (202 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -14561,15 +14578,25 @@ sub_FA2784__FA294B:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd; notes/lanes/promcd-2026-09-25/p7_descriptor_letters.py).
+; Name:    (value, max, min, amount, flag, depth) ->
+;              clamp(value + (max - min) * (amount - 64) * depth / 16256, min, max)
+; Evidence: `sub XWA,0x00000040` 0xFA29BD (amount - 64), `sub XBC,XIY` 0xFA29D3
+;          (max - min), Multiply32_Signed at 0xFA29D7 and 0xFA29E2, Divide32_Signed by
+;          0x00003F80 = 16256 = 127*128 (0xFA29E6-0xFA29ED), `add XIY,XIX` 0xFA29F1
+;          (+ value), then the clamp to max (0xFA29F9) and to min (0xFA2A07).  The only
+;          caller, 0xFA292C, passes the field descriptor's min and max.  The flag
+;          argument cannot choose the other arm (the same sum without the -64):
+;          `ld C,(XIZ+0x10) / and C,0x00` at 0xFA2954-0xFA2957 is always zero, so
+;          `jr Z` at 0xFA295A always takes the -64 arm.
+;          (Corrected: this header said nothing here read the meaning of a field.)
 ; --------------------------------------------------------------------------
-sub_FA294F:
+P7Field_ModulateClamped:
 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FA294F  link XIZ,0xfff2
 	push	xix                                   ; FA2953  push XIX
 	ld	c, (xiz+16)                             ; FA2954  ld C,(XIZ+0x10)
 	and	c, 0                                   ; FA2957  and C,0x00
-	jr z, sub_FA294F__FA29A7                   ; FA295A  jr Z,0xfa29a7
+	jr z, P7Field_ModulateClamped__FA29A7                   ; FA295A  jr Z,0xfa29a7
 	ld	ix, (xiz+8)                             ; FA295C  ld IX,(XIZ+0x08)
 	exts	xix                                   ; FA295F  exts XIX
 	ld	bc, (xiz+18)                            ; FA2961  ld BC,(XIZ+0x12)
@@ -14599,8 +14626,8 @@ sub_FA294F:
 	call	Divide32_Signed                              ; FA299C  call 0xfcb141
 	add	xiy, xix                               ; FA29A0  add XIY,XIX
 	ld	(xiz-2), iy                             ; FA29A2  ld (XIZ+0xfe),IY
-	jr sub_FA294F__FA29F6                      ; FA29A5  jr T,0xfa29f6
-sub_FA294F__FA29A7:
+	jr P7Field_ModulateClamped__FA29F6                      ; FA29A5  jr T,0xfa29f6
+P7Field_ModulateClamped__FA29A7:
 	ld	ix, (xiz+8)                             ; FA29A7  ld IX,(XIZ+0x08)
 	exts	xix                                   ; FA29AA  exts XIX
 	ld	bc, (xiz+18)                            ; FA29AC  ld BC,(XIZ+0x12)
@@ -14631,19 +14658,19 @@ sub_FA294F__FA29A7:
 	call	Divide32_Signed                              ; FA29ED  call 0xfcb141
 	add	xiy, xix                               ; FA29F1  add XIY,XIX
 	ld	(xiz-2), iy                             ; FA29F3  ld (XIZ+0xfe),IY
-sub_FA294F__FA29F6:
+P7Field_ModulateClamped__FA29F6:
 	ld	bc, (xiz-2)                             ; FA29F6  ld BC,(XIZ+0xfe)
 	extpfx3 0x9E, 0x0A, 0xF1                   ; FA29F9  cp BC,(XIZ+0x0a)
-	jr le, sub_FA294F__FA2A04                  ; FA29FC  jr LE,0xfa2a04
+	jr le, P7Field_ModulateClamped__FA2A04                  ; FA29FC  jr LE,0xfa2a04
 	ld	wa, (xiz+10)                            ; FA29FE  ld WA,(XIZ+0x0a)
 	ld	(xiz-2), wa                             ; FA2A01  ld (XIZ+0xfe),WA
-sub_FA294F__FA2A04:
+P7Field_ModulateClamped__FA2A04:
 	ld	bc, (xiz-2)                             ; FA2A04  ld BC,(XIZ+0xfe)
 	extpfx3 0x9E, 0x0C, 0xF1                   ; FA2A07  cp BC,(XIZ+0x0c)
-	jr ge, sub_FA294F__FA2A12                  ; FA2A0A  jr GE,0xfa2a12
+	jr ge, P7Field_ModulateClamped__FA2A12                  ; FA2A0A  jr GE,0xfa2a12
 	ld	wa, (xiz+12)                            ; FA2A0C  ld WA,(XIZ+0x0c)
 	ld	(xiz-2), wa                             ; FA2A0F  ld (XIZ+0xfe),WA
-sub_FA294F__FA2A12:
+P7Field_ModulateClamped__FA2A12:
 	ld	wa, (xiz-2)                             ; FA2A12  ld WA,(XIZ+0xfe)
 	pop	xix                                    ; FA2A15  pop XIX
 	unlk32 xiz                                 ; FA2A16  unlk XIZ
@@ -14776,7 +14803,7 @@ sub_FA2A19__FA2A9D:
 ; Inputs:  frame `link XIZ,-13`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00F35D
-; Calls:   0xF9F8E1 = P7Stream_StageAndSend, 0xFA2784 = sub_FA2784
+; Calls:   0xF9F8E1 = P7Stream_StageAndSend, 0xFA2784 = P7Unit_SendModulatedField
 ;          0xFA2A19 = sub_FA2A19, 0xFA2C5E = P7Unit_LoadProgramStreams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2B09-0xFA2C5D
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -14792,7 +14819,7 @@ sub_FA2A19__FA2A9D:
 ;          That byte becomes P7Stream_StageAndSend's +0x10 slot; the value slot
 ;          +0x12 is `sub XIY,XIY / push XIY` at 0xFA2C40.
 ; Unknown:  why zero, and what the two MixerGain_ProductOfCurves-shaped calls to
-;          sub_FA2784 with 0x0076 and 0x0064 (0xFA2BDB, 0xFA2BF3) contribute.
+;          P7Unit_SendModulatedField with 0x0076 and 0x0064 (0xFA2BDB, 0xFA2BF3) contribute.
 ; --------------------------------------------------------------------------
 P7Unit_SendFieldParamZero:
 	link32 0xEE, 0x0C, 0xF3, 0xFF              ; FA2B09  link XIZ,0xfff3
@@ -14872,7 +14899,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	pushw	64                                   ; FA2BE4  push 0x0040
 	push	0                                     ; FA2BE7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2BE9  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA2BEC  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA2BEC  calr 0xfa2784
 	inc	8, xsp                                 ; FA2BEF  inc 0,XSP
 	inc	2, xsp                                 ; FA2BF1  inc 2,XSP
 	pushw	0x64                                 ; FA2BF3  push 0x0064
@@ -14881,7 +14908,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	pushw	64                                   ; FA2BFC  push 0x0040
 	push	0                                     ; FA2BFF  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2C01  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA2C04  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA2C04  calr 0xfa2784
 	inc	8, xsp                                 ; FA2C07  inc 0,XSP
 	inc	2, xsp                                 ; FA2C09  inc 2,XSP
 	push	0                                     ; FA2C0B  push 0x00
@@ -16859,7 +16886,7 @@ Base36DigitToValue__FA3CD4:
 ;          0xFA283C 0xFA3C48 0xFA49CC 0xFA57B5 0xFA585E 0xFA58D9
 ; Inputs:  frame `link XIZ,-54`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xF9ADB5 = P7Block_Run, 0xFA2784 = sub_FA2784
+; Calls:   0xF9ADB5 = P7Block_Run, 0xFA2784 = P7Unit_SendModulatedField
 ;          0xFA3CA6 = Base36DigitToValue, 0xFA4819 = P7Unit_SelectStreamsForRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA3CD7-0xFA4818
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -16877,8 +16904,22 @@ Base36DigitToValue__FA3CD4:
 ;          instructions, indexes PoolDir_FieldRec_PtrTable at ten sites
 ;          (0xFA3DCD, 0xFA3FFE, 0xFA40F0, 0xFA419B, 0xFA4229, 0xFA42BA, 0xFA4591,
 ;          0xFA4793 ...), and calls Base36DigitToValue at 0xFA4764.
-; Unknown:  what the descriptor TYPE LETTERS mean.  The comparison and the emission
-;          are traced; the alphabet {b,w,v,s,h,c,B} is not decoded.
+; ★ TYPE LETTERS (lane promcd, 2026-09-25; notes/lanes/promcd-2026-09-25/p7_descriptor_letters.py).
+;          Records 12, 13, 14, 43 and 55 take hand-coded paths (switch at 0xFA47EB);
+;          for every other record the GENERIC walker steps the type string (+16,
+;          cursor XIZ-22) and the digit string (+20, XIZ-26) in lockstep, one character
+;          each (0xFA460F-0xFA4616), stops at the NUL (0xFA4608), and reads each field
+;          of the live block (XIZ-14) and of the shadow (XIZ-18) by its letter:
+;            'B'   one byte, sign-extended           0xFA46ED  exts WA / exts BC
+;            'c'   two bytes, BIG-endian (b0<<8|b1)  0xFA469E  sll 0x08,XIX / add XWA,XIX
+;            'h'   one byte, plus 0x500              0xFA4628  add XWA,0x00000500
+;            'w'   two bytes, little-endian          0xFA4659  mul WA,0x0100
+;            else  one byte ('b', 'v'; 's' is never seen here)  0xFA4711
+;          and where they differ the digit is the field index (Base36DigitToValue,
+;          0xFA4764).  The widths agree with the descriptors' +4 offsets in all 51
+;          records this walker handles (390/390).  Still open: what 'v' (once in every
+;          record) and 's' select beyond width.  (Corrected: this said the alphabet was
+;          not decoded.)
 ; --------------------------------------------------------------------------
 P7Unit_EmitChangedParams:
 	link32 0xEE, 0x0C, 0xCA, 0xFF              ; FA3CD7  link XIZ,0xffca
@@ -16980,7 +17021,7 @@ P7Unit_EmitChangedParams__FA3D7F:
 	pushw	0                                    ; FA3DE6  push 0x0000
 	push	0                                     ; FA3DE9  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA3DEB  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA3DEE  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA3DEE  calr 0xfa2784
 	inc	8, xsp                                 ; FA3DF1  inc 0,XSP
 	inc	2, xsp                                 ; FA3DF3  inc 2,XSP
 P7Unit_EmitChangedParams__FA3DF5:
@@ -17207,7 +17248,7 @@ P7Unit_EmitChangedParams__FA3FCE:
 	pushw	0                                    ; FA401A  push 0x0000
 	push	0                                     ; FA401D  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA401F  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA4022  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA4022  calr 0xfa2784
 	inc	8, xsp                                 ; FA4025  inc 0,XSP
 	inc	2, xsp                                 ; FA4027  inc 2,XSP
 P7Unit_EmitChangedParams__FA4029:
@@ -17304,7 +17345,7 @@ P7Unit_EmitChangedParams__FA40C0:
 	pushw	0                                    ; FA410C  push 0x0000
 	push	0                                     ; FA410F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA4111  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA4114  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA4114  calr 0xfa2784
 	inc	8, xsp                                 ; FA4117  inc 0,XSP
 	inc	2, xsp                                 ; FA4119  inc 2,XSP
 P7Unit_EmitChangedParams__FA411B:
@@ -17372,7 +17413,7 @@ P7Unit_EmitChangedParams__FA4148:
 	pushw	0                                    ; FA41B4  push 0x0000
 	push	0                                     ; FA41B7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA41B9  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA41BC  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA41BC  calr 0xfa2784
 	inc	8, xsp                                 ; FA41BF  inc 0,XSP
 	inc	2, xsp                                 ; FA41C1  inc 2,XSP
 P7Unit_EmitChangedParams__FA41C3:
@@ -17428,7 +17469,7 @@ P7Unit_EmitChangedParams__FA41EA:
 	pushw	0                                    ; FA4242  push 0x0000
 	push	0                                     ; FA4245  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA4247  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA424A  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA424A  calr 0xfa2784
 	inc	8, xsp                                 ; FA424D  inc 0,XSP
 	inc	2, xsp                                 ; FA424F  inc 2,XSP
 P7Unit_EmitChangedParams__FA4251:
@@ -17486,7 +17527,7 @@ P7Unit_EmitChangedParams__FA427B:
 	pushw	0                                    ; FA42D3  push 0x0000
 	push	0                                     ; FA42D6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA42D8  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA42DB  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA42DB  calr 0xfa2784
 	inc	8, xsp                                 ; FA42DE  inc 0,XSP
 	inc	2, xsp                                 ; FA42E0  inc 2,XSP
 P7Unit_EmitChangedParams__FA42E2:
@@ -17766,7 +17807,7 @@ P7Unit_EmitChangedParams__FA4561:
 	pushw	0                                    ; FA45C7  push 0x0000
 	push	0                                     ; FA45CA  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA45CC  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA45CF  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA45CF  calr 0xfa2784
 	inc	8, xsp                                 ; FA45D2  inc 0,XSP
 	inc	2, xsp                                 ; FA45D4  inc 2,XSP
 P7Unit_EmitChangedParams__FA45D6:
@@ -17968,7 +18009,7 @@ P7Unit_EmitChangedParams__FA4755:
 	pushw	0                                    ; FA47B0  push 0x0000
 	push	0                                     ; FA47B3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA47B5  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA47B8  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA47B8  calr 0xfa2784
 	inc	8, xsp                                 ; FA47BB  inc 0,XSP
 	inc	2, xsp                                 ; FA47BD  inc 2,XSP
 P7Unit_EmitChangedParams__FA47BF:

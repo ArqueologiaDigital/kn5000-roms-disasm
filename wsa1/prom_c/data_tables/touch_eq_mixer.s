@@ -345,6 +345,9 @@ ToneGen_Velocity_Output_Curve:
 ; ★ 44100 IS IN HERE, cited from eighteen sites, with 1/44100, 1/220500 and 1/441000.
 ; The pool's heaviest user is sub_F9BE3A (8,573 bytes), which cites 64 of the 154 slots.
 ; ⚠ What any constant is FOR is NOT established; the comments give values only.
+; (2026-09-25, lane promcd: each element's header now also gives its loading sites and
+; the double-library call it is pushed for -- pool_element_readers.py,
+; pool_element_consumers.py.  What the constants are FOR is still the open question.)
 ; ★ The KN5000 has a pool of the same kind (v142/subcpu/subcpu_data_tables.s:2695);
 ; its contents do NOT match, so the sibling could not have supplied the boundaries
 ; either -- prom_c's own load instructions did.
@@ -1031,8 +1034,20 @@ DSP_MixerGain_Curve_A:
 ; record layout showing through.
 ; [INFERENCE, stated as such] this is a field-layout descriptor: one letter per
 ; field giving its width or kind, and the digit string giving each field an index.
-; What the letters mean individually is NOT ESTABLISHED -- 'b'/'w' as byte/word
-; is the obvious reading but nothing here proves it.
+; ★ THE LETTERS ARE DECODED FROM THEIR READER (2026-09-25, lane promcd; notes/lanes/promcd-2026-09-25/p7_descriptor_letters.py).
+; P7Unit_EmitChangedParams walks a record's type string and digit string in lockstep
+; and reads each field of the unit block by its letter (switch at 0xFA4735):
+;     'b'  one byte                          'B'  one byte, sign-extended
+;     'w'  two bytes, little-endian          'c'  two bytes, BIG-endian
+;     'h'  one byte, plus 0x500              any other letter ('v', 's')  one byte
+; and the digit, through Base36DigitToValue (0xFA4764), is the field index.  Every digit
+; string is '0123...' of its type string's length (56/56), and in the 51 records that
+; walker handles every field descriptor's +4 byte offset lies inside the span the letters
+; give its index (390/390) -- the widths are confirmed by a second table.  'v' occurs
+; exactly once in every record (56/56); 's' only in records 12 and 13 (PEDAL WAH, AUTO
+; WAH), which the walker hands to hand-coded paths, so what 'v' and 's' select beyond a
+; one-byte width is still open.  (Corrected: the two lines that stood here said the
+; letters' individual meaning was unproven and byte/word only the obvious reading.)
 ; ----------------------------------------------------------------------------
 DescriptorStrings:
 	.asciz	"bbbvb"	; [ 0] 0xFCCF71

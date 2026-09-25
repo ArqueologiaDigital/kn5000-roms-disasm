@@ -151,6 +151,8 @@
 ;       int16_t  max;               /* +2                                          */
 ;       uint8_t  block_offset;      /* +4 into the unit block, live byte = +1+off  */
 ;       uint8_t  flag;              /* +5                                          */
+;       /* +5 is a VALUE-TYPE letter -- 'b' u8, 'B' s8, 'w' u16, ' ' not sent --  */
+;       /* read by P7Unit_SendModulatedField's switch at 0xFA28F3              */
 ;       uint8_t  field_index;       /* +6                                          */
 ;   };
 ;
@@ -8821,9 +8823,15 @@ PoolDir_RecordForUnitProgram:
 ;                     438/438 are < 26, and the widest seen is 15.  The mapping is
 ;                     offset f -> block byte +1+f: P7Unit_FlushDirtyParams does
 ;                     `inc 1,XIX` (0xFA49B0) then `lda XWA,0x00856e` (0xFA49B2).
-;       +5      u8    a flag.  ⚠ NOT DECODED.  It takes only four values in the whole
-;                     table -- 0x62 x204, 0x20 x196, 0x42 x34, 0x77 x4 -- and nothing
-;                     here reads them.
+;       +5      u8    VALUE TYPE, an ASCII letter: 0x62 'b' x204, 0x20 ' ' x196,
+;                     0x42 'B' x34, 0x77 'w' x4.  P7Unit_SendModulatedField reads it
+;                     (`inc 5,XWA` 0xFA28B4) and switches on it (0xFA28F3): 'b' one
+;                     byte zero-extended, 'B' one byte sign-extended, 'w' (and 'W',
+;                     which no descriptor holds) a 16-bit load, ' ' sends nothing.
+;                     Every 'B' has a negative minimum (34/34), every 'w' a maximum
+;                     above 255 (4/4), every 'b' a maximum of at most 255 (204/204).
+;                     (Corrected 2026-09-25, lane promcd, p7_descriptor_letters.py:
+;                     these lines called it an undecoded flag that nothing read.)
 ;       +6      u8    FIELD INDEX, non-decreasing from 0 in all 56 arrays.  A parameter
 ;                     wider than one byte owns several consecutive records with the same
 ;                     index (record 4's six two-byte fields have three records each).
@@ -8840,14 +8848,20 @@ PoolDir_RecordForUnitProgram:
 ; ★ AND EVERY ONE OF THE 56 LENGTHS IS A MULTIPLE OF SEVEN (7 to 133), so the records are
 ; arrays of a 7-byte entry.  That is a property of the data, checked over all 56, not a
 ; stride chosen to make the arithmetic work.
-; ⚠ What a 7-byte entry MEANS is not established.
+; ★ WHAT A 7-BYTE ENTRY IS (2026-09-25, lane promcd): the descriptor of one field -- or of
+; one byte of a two-byte field -- of an effect's parameter block: its range (+0/+2, the
+; bounds P7Field_ModulateClamped clamps to), its place (+4), its value type (+5) and its
+; index (+6, the position of its letter in the record's type string).  In the 51 records
+; P7Unit_EmitChangedParams' generic walker handles, every +4 lies inside the byte span the
+; type-string letters give that index (390/390; p7_descriptor_letters.py).
+; (Corrected: this line said what an entry means was open.)
 ; Evidence: the 438-record sweep in notes/prom_c_understanding_round5.py --fields, plus
 ;          `inc 1,XIX` at 0xFA49B0 and `lda XWA,0x00856e` at 0xFA49B2.
 ; ------------------------------------------------------------------------------
 PoolDir_FieldRecords:
 
 ; 0xFDC5D1  28 bytes = 4 x 7   (table slot(s) [0])
-; field descriptors of effect record 0 'DISTORTION' (program 32): PoolDir_FieldRec_PtrTable[0] (0xFDD1CB + 4*0), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 0 'DISTORTION' (program 32): PoolDir_FieldRec_PtrTable[0] (0xFDD1CB + 4*0), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC5D1:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC5D1
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC5D8
@@ -8855,7 +8869,7 @@ PoolDir_FieldRec_FDC5D1:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x03, 0x62, 0x03   ; 0xFDC5E6
 
 ; 0xFDC5ED  28 bytes = 4 x 7   (table slot(s) [1])
-; field descriptors of effect record 1 'OVERDRIVE' (program 33): PoolDir_FieldRec_PtrTable[1] (0xFDD1CB + 4*1), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 1 'OVERDRIVE' (program 33): PoolDir_FieldRec_PtrTable[1] (0xFDD1CB + 4*1), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC5ED:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC5ED
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC5F4
@@ -8863,7 +8877,7 @@ PoolDir_FieldRec_FDC5ED:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x03, 0x62, 0x03   ; 0xFDC602
 
 ; 0xFDC609  28 bytes = 4 x 7   (table slot(s) [2])
-; field descriptors of effect record 2 'FUZZ' (program 34): PoolDir_FieldRec_PtrTable[2] (0xFDD1CB + 4*2), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 2 'FUZZ' (program 34): PoolDir_FieldRec_PtrTable[2] (0xFDD1CB + 4*2), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC609:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC609
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC610
@@ -8871,7 +8885,7 @@ PoolDir_FieldRec_FDC609:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x03, 0x62, 0x03   ; 0xFDC61E
 
 ; 0xFDC625  42 bytes = 6 x 7   (table slot(s) [3])
-; field descriptors of effect record 3 'EXCITER' (program 35): PoolDir_FieldRec_PtrTable[3] (0xFDD1CB + 4*3), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 3 'EXCITER' (program 35): PoolDir_FieldRec_PtrTable[3] (0xFDD1CB + 4*3), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC625:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC625
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC62C
@@ -8881,7 +8895,7 @@ PoolDir_FieldRec_FDC625:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x06, 0x62, 0x05   ; 0xFDC648
 
 ; 0xFDC64F  133 bytes = 19 x 7   (table slot(s) [4])
-; field descriptors of effect record 4 'PARAMETRIC EQ' (program 39): PoolDir_FieldRec_PtrTable[4] (0xFDD1CB + 4*4), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 4 'PARAMETRIC EQ' (program 39): PoolDir_FieldRec_PtrTable[4] (0xFDD1CB + 4*4), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC64F:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDC64F
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDC656
@@ -8904,7 +8918,7 @@ PoolDir_FieldRec_FDC64F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0c, 0x62, 0x06   ; 0xFDC6CD
 
 ; 0xFDC6D4  35 bytes = 5 x 7   (table slot(s) [5])
-; field descriptors of effect record 5 'CHORUS' (program 1): PoolDir_FieldRec_PtrTable[5] (0xFDD1CB + 4*5), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 5 'CHORUS' (program 1): PoolDir_FieldRec_PtrTable[5] (0xFDD1CB + 4*5), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC6D4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC6D4
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC6DB
@@ -8913,7 +8927,7 @@ PoolDir_FieldRec_FDC6D4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC6F0
 
 ; 0xFDC6F7  49 bytes = 7 x 7   (table slot(s) [6])
-; field descriptors of effect record 6 'MODULATED CHORUS' (program 2): PoolDir_FieldRec_PtrTable[6] (0xFDD1CB + 4*6), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 6 'MODULATED CHORUS' (program 2): PoolDir_FieldRec_PtrTable[6] (0xFDD1CB + 4*6), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC6F7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC6F7
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC6FE
@@ -8924,7 +8938,7 @@ PoolDir_FieldRec_FDC6F7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x06, 0x62, 0x06   ; 0xFDC721
 
 ; 0xFDC728  49 bytes = 7 x 7   (table slot(s) [7])
-; field descriptors of effect record 7 'ENHANCER' (program 3): PoolDir_FieldRec_PtrTable[7] (0xFDD1CB + 4*7), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 7 'ENHANCER' (program 3): PoolDir_FieldRec_PtrTable[7] (0xFDD1CB + 4*7), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC728:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC728
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC72F
@@ -8935,7 +8949,7 @@ PoolDir_FieldRec_FDC728:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDC752
 
 ; 0xFDC759  56 bytes = 8 x 7   (table slot(s) [8])
-; field descriptors of effect record 8 'FLANGER' (program 4): PoolDir_FieldRec_PtrTable[8] (0xFDD1CB + 4*8), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 8 'FLANGER' (program 4): PoolDir_FieldRec_PtrTable[8] (0xFDD1CB + 4*8), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC759:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC759
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC760
@@ -8947,7 +8961,7 @@ PoolDir_FieldRec_FDC759:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x07   ; 0xFDC78A
 
 ; 0xFDC791  56 bytes = 8 x 7   (table slot(s) [9])
-; field descriptors of effect record 9 'PHASER' (program 5): PoolDir_FieldRec_PtrTable[9] (0xFDD1CB + 4*9), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 9 'PHASER' (program 5): PoolDir_FieldRec_PtrTable[9] (0xFDD1CB + 4*9), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC791:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC791
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC798
@@ -8959,7 +8973,7 @@ PoolDir_FieldRec_FDC791:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x07   ; 0xFDC7C2
 
 ; 0xFDC7C9  42 bytes = 6 x 7   (table slot(s) [10])
-; field descriptors of effect record 10 'AUTO PAN' (program 48): PoolDir_FieldRec_PtrTable[10] (0xFDD1CB + 4*10), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 10 'AUTO PAN' (program 48): PoolDir_FieldRec_PtrTable[10] (0xFDD1CB + 4*10), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC7C9:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC7C9
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC7D0
@@ -8969,7 +8983,7 @@ PoolDir_FieldRec_FDC7C9:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC7EC
 
 ; 0xFDC7F3  49 bytes = 7 x 7   (table slot(s) [54])
-; field descriptors of effect record 54 'PITCH SHIFTER' (program 49): PoolDir_FieldRec_PtrTable[54] (0xFDD1CB + 4*54), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 54 'PITCH SHIFTER' (program 49): PoolDir_FieldRec_PtrTable[54] (0xFDD1CB + 4*54), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC7F3:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC7F3
 	.byte	0xdc, 0xff, 0x24, 0x00, 0x01, 0x42, 0x01   ; 0xFDC7FA
@@ -8980,7 +8994,7 @@ PoolDir_FieldRec_FDC7F3:
 	.byte	0x02, 0x00, 0x02, 0x00, 0x06, 0x20, 0x06   ; 0xFDC81D
 
 ; 0xFDC824  42 bytes = 6 x 7   (table slot(s) [11])
-; field descriptors of effect record 11 'VIBRATO' (program 50): PoolDir_FieldRec_PtrTable[11] (0xFDD1CB + 4*11), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 11 'VIBRATO' (program 50): PoolDir_FieldRec_PtrTable[11] (0xFDD1CB + 4*11), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC824:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC824
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC82B
@@ -8990,12 +9004,12 @@ PoolDir_FieldRec_FDC824:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC847
 
 ; 0xFDC84E  7 bytes = 1 x 7   (table slot(s) [53])
-; field descriptors of effect record 53 'NO OPERATION' (program 0): PoolDir_FieldRec_PtrTable[53] (0xFDD1CB + 4*53), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 53 'NO OPERATION' (program 0): PoolDir_FieldRec_PtrTable[53] (0xFDD1CB + 4*53), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC84E:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDC84E
 
 ; 0xFDC855  42 bytes = 6 x 7   (table slot(s) [12])
-; field descriptors of effect record 12 'PEDAL WAH' (program 51): PoolDir_FieldRec_PtrTable[12] (0xFDD1CB + 4*12), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 12 'PEDAL WAH' (program 51): PoolDir_FieldRec_PtrTable[12] (0xFDD1CB + 4*12), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC855:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC855
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDC85C
@@ -9005,7 +9019,7 @@ PoolDir_FieldRec_FDC855:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC878
 
 ; 0xFDC87F  35 bytes = 5 x 7   (table slot(s) [13])
-; field descriptors of effect record 13 'AUTO WAH' (program 52): PoolDir_FieldRec_PtrTable[13] (0xFDD1CB + 4*13), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 13 'AUTO WAH' (program 52): PoolDir_FieldRec_PtrTable[13] (0xFDD1CB + 4*13), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC87F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC87F
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDC886
@@ -9014,7 +9028,7 @@ PoolDir_FieldRec_FDC87F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC89B
 
 ; 0xFDC8A2  112 bytes = 16 x 7   (table slot(s) [14])
-; field descriptors of effect record 14 'ROTARY SPEAKER' (program 53): PoolDir_FieldRec_PtrTable[14] (0xFDD1CB + 4*14), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 14 'ROTARY SPEAKER' (program 53): PoolDir_FieldRec_PtrTable[14] (0xFDD1CB + 4*14), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC8A2:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC8A2
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC8A9
@@ -9034,7 +9048,7 @@ PoolDir_FieldRec_FDC8A2:
 	.byte	0x01, 0x00, 0x01, 0x00, 0x0f, 0x20, 0x0b   ; 0xFDC90B
 
 ; 0xFDC912  35 bytes = 5 x 7   (table slot(s) [15])
-; field descriptors of effect record 15 'RING MODULATOR' (program 54): PoolDir_FieldRec_PtrTable[15] (0xFDD1CB + 4*15), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 15 'RING MODULATOR' (program 54): PoolDir_FieldRec_PtrTable[15] (0xFDD1CB + 4*15), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC912:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC912
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC919
@@ -9043,12 +9057,12 @@ PoolDir_FieldRec_FDC912:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC92E
 
 ; 0xFDC935  7 bytes = 1 x 7   (table slot(s) [16])
-; field descriptors of effect record 16 'NOISE GENERATOR' (program 38): PoolDir_FieldRec_PtrTable[16] (0xFDD1CB + 4*16), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 16 'NOISE GENERATOR' (program 38): PoolDir_FieldRec_PtrTable[16] (0xFDD1CB + 4*16), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC935:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC935
 
 ; 0xFDC93C  35 bytes = 5 x 7   (table slot(s) [17])
-; field descriptors of effect record 17 'SLOW ATTACKER' (program 37): PoolDir_FieldRec_PtrTable[17] (0xFDD1CB + 4*17), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 17 'SLOW ATTACKER' (program 37): PoolDir_FieldRec_PtrTable[17] (0xFDD1CB + 4*17), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC93C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC93C
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC943
@@ -9057,7 +9071,7 @@ PoolDir_FieldRec_FDC93C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC958
 
 ; 0xFDC95F  42 bytes = 6 x 7   (table slot(s) [18])
-; field descriptors of effect record 18 'GATED REVERB' (program 8): PoolDir_FieldRec_PtrTable[18] (0xFDD1CB + 4*18), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 18 'GATED REVERB' (program 8): PoolDir_FieldRec_PtrTable[18] (0xFDD1CB + 4*18), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC95F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC95F
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC966
@@ -9067,7 +9081,7 @@ PoolDir_FieldRec_FDC95F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC982
 
 ; 0xFDC989  42 bytes = 6 x 7   (table slot(s) [19])
-; field descriptors of effect record 19 'HAAS EFFECT' (program 55): PoolDir_FieldRec_PtrTable[19] (0xFDD1CB + 4*19), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 19 'HAAS EFFECT' (program 55): PoolDir_FieldRec_PtrTable[19] (0xFDD1CB + 4*19), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC989:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC989
 	.byte	0x00, 0x00, 0x5e, 0x01, 0x01, 0x77, 0x01   ; 0xFDC990
@@ -9077,7 +9091,7 @@ PoolDir_FieldRec_FDC989:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x05   ; 0xFDC9AC
 
 ; 0xFDC9B3  35 bytes = 5 x 7   (table slot(s) [20])
-; field descriptors of effect record 20 'ENSEMBLE' (program 6): PoolDir_FieldRec_PtrTable[20] (0xFDD1CB + 4*20), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 20 'ENSEMBLE' (program 6): PoolDir_FieldRec_PtrTable[20] (0xFDD1CB + 4*20), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC9B3:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC9B3
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x20, 0x01   ; 0xFDC9BA
@@ -9086,7 +9100,7 @@ PoolDir_FieldRec_FDC9B3:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC9CF
 
 ; 0xFDC9D6  42 bytes = 6 x 7   (table slot(s) [21])
-; field descriptors of effect record 21 'COMPRESSOR' (program 36): PoolDir_FieldRec_PtrTable[21] (0xFDD1CB + 4*21), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 21 'COMPRESSOR' (program 36): PoolDir_FieldRec_PtrTable[21] (0xFDD1CB + 4*21), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC9D6:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC9D6
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x20, 0x01   ; 0xFDC9DD
@@ -9096,7 +9110,7 @@ PoolDir_FieldRec_FDC9D6:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x04   ; 0xFDC9F9
 
 ; 0xFDCA00  56 bytes = 8 x 7   (table slot(s) [22])
-; field descriptors of effect record 22 'MIX UP' (program 56): PoolDir_FieldRec_PtrTable[22] (0xFDD1CB + 4*22), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 22 'MIX UP' (program 56): PoolDir_FieldRec_PtrTable[22] (0xFDD1CB + 4*22), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCA00:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCA00
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDCA07
@@ -9108,7 +9122,7 @@ PoolDir_FieldRec_FDCA00:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x07   ; 0xFDCA31
 
 ; 0xFDCA38  49 bytes = 7 x 7   (table slot(s) [23])
-; field descriptors of effect record 23 'SINGLE DELAY' (program 9): PoolDir_FieldRec_PtrTable[23] (0xFDD1CB + 4*23), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 23 'SINGLE DELAY' (program 9): PoolDir_FieldRec_PtrTable[23] (0xFDD1CB + 4*23), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCA38:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCA38
 	.byte	0x00, 0x00, 0x5e, 0x01, 0x01, 0x20, 0x01   ; 0xFDCA3F
@@ -9119,7 +9133,7 @@ PoolDir_FieldRec_FDCA38:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDCA62
 
 ; 0xFDCA69  84 bytes = 12 x 7   (table slot(s) [24])
-; field descriptors of effect record 24 'MULTI TAP DELAY' (program 10): PoolDir_FieldRec_PtrTable[24] (0xFDD1CB + 4*24), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 24 'MULTI TAP DELAY' (program 10): PoolDir_FieldRec_PtrTable[24] (0xFDD1CB + 4*24), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCA69:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCA69
 	.byte	0x00, 0x00, 0xbc, 0x02, 0x01, 0x20, 0x01   ; 0xFDCA70
@@ -9135,7 +9149,7 @@ PoolDir_FieldRec_FDCA69:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0f, 0x62, 0x0b   ; 0xFDCAB6
 
 ; 0xFDCABD  56 bytes = 8 x 7   (table slot(s) [25])
-; field descriptors of effect record 25 'MANUAL DELAY' (program 11): PoolDir_FieldRec_PtrTable[25] (0xFDD1CB + 4*25), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 25 'MANUAL DELAY' (program 11): PoolDir_FieldRec_PtrTable[25] (0xFDD1CB + 4*25), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCABD:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCABD
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDCAC4
@@ -9147,7 +9161,7 @@ PoolDir_FieldRec_FDCABD:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x09, 0x62, 0x07   ; 0xFDCAEE
 
 ; 0xFDCAF5  35 bytes = 5 x 7   (table slot(s) [26])
-; field descriptors of effect record 26 'ROOM REVERB 1' (program 16): PoolDir_FieldRec_PtrTable[26] (0xFDD1CB + 4*26), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 26 'ROOM REVERB 1' (program 16): PoolDir_FieldRec_PtrTable[26] (0xFDD1CB + 4*26), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCAF5:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCAF5
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCAFC
@@ -9156,7 +9170,7 @@ PoolDir_FieldRec_FDCAF5:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB11
 
 ; 0xFDCB18  35 bytes = 5 x 7   (table slot(s) [27])
-; field descriptors of effect record 27 'ROOM REVERB 2' (program 17): PoolDir_FieldRec_PtrTable[27] (0xFDD1CB + 4*27), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 27 'ROOM REVERB 2' (program 17): PoolDir_FieldRec_PtrTable[27] (0xFDD1CB + 4*27), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB18:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB18
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB1F
@@ -9165,7 +9179,7 @@ PoolDir_FieldRec_FDCB18:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB34
 
 ; 0xFDCB3B  35 bytes = 5 x 7   (table slot(s) [28])
-; field descriptors of effect record 28 'PLATE REVERB 1' (program 18): PoolDir_FieldRec_PtrTable[28] (0xFDD1CB + 4*28), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 28 'PLATE REVERB 1' (program 18): PoolDir_FieldRec_PtrTable[28] (0xFDD1CB + 4*28), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB3B:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB3B
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB42
@@ -9174,7 +9188,7 @@ PoolDir_FieldRec_FDCB3B:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB57
 
 ; 0xFDCB5E  35 bytes = 5 x 7   (table slot(s) [29])
-; field descriptors of effect record 29 'PLATE REVERB 2' (program 19): PoolDir_FieldRec_PtrTable[29] (0xFDD1CB + 4*29), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 29 'PLATE REVERB 2' (program 19): PoolDir_FieldRec_PtrTable[29] (0xFDD1CB + 4*29), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB5E:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB5E
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB65
@@ -9183,7 +9197,7 @@ PoolDir_FieldRec_FDCB5E:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB7A
 
 ; 0xFDCB81  35 bytes = 5 x 7   (table slot(s) [30])
-; field descriptors of effect record 30 'CONCERT REVERB 1' (program 20): PoolDir_FieldRec_PtrTable[30] (0xFDD1CB + 4*30), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 30 'CONCERT REVERB 1' (program 20): PoolDir_FieldRec_PtrTable[30] (0xFDD1CB + 4*30), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB81:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB81
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB88
@@ -9192,7 +9206,7 @@ PoolDir_FieldRec_FDCB81:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB9D
 
 ; 0xFDCBA4  35 bytes = 5 x 7   (table slot(s) [31])
-; field descriptors of effect record 31 'CONCERT REVERB 2' (program 21): PoolDir_FieldRec_PtrTable[31] (0xFDD1CB + 4*31), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 31 'CONCERT REVERB 2' (program 21): PoolDir_FieldRec_PtrTable[31] (0xFDD1CB + 4*31), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCBA4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCBA4
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCBAB
@@ -9201,7 +9215,7 @@ PoolDir_FieldRec_FDCBA4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCBC0
 
 ; 0xFDCBC7  35 bytes = 5 x 7   (table slot(s) [32])
-; field descriptors of effect record 32 'DARK REVERB 1' (program 22): PoolDir_FieldRec_PtrTable[32] (0xFDD1CB + 4*32), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 32 'DARK REVERB 1' (program 22): PoolDir_FieldRec_PtrTable[32] (0xFDD1CB + 4*32), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCBC7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCBC7
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCBCE
@@ -9210,7 +9224,7 @@ PoolDir_FieldRec_FDCBC7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCBE3
 
 ; 0xFDCBEA  35 bytes = 5 x 7   (table slot(s) [33])
-; field descriptors of effect record 33 'DARK REVERB 2' (program 23): PoolDir_FieldRec_PtrTable[33] (0xFDD1CB + 4*33), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 33 'DARK REVERB 2' (program 23): PoolDir_FieldRec_PtrTable[33] (0xFDD1CB + 4*33), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCBEA:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCBEA
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCBF1
@@ -9219,7 +9233,7 @@ PoolDir_FieldRec_FDCBEA:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC06
 
 ; 0xFDCC0D  35 bytes = 5 x 7   (table slot(s) [34])
-; field descriptors of effect record 34 'BRIGHT REVERB 1' (program 24): PoolDir_FieldRec_PtrTable[34] (0xFDD1CB + 4*34), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 34 'BRIGHT REVERB 1' (program 24): PoolDir_FieldRec_PtrTable[34] (0xFDD1CB + 4*34), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC0D:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC0D
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC14
@@ -9228,7 +9242,7 @@ PoolDir_FieldRec_FDCC0D:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC29
 
 ; 0xFDCC30  35 bytes = 5 x 7   (table slot(s) [35])
-; field descriptors of effect record 35 'BRIGHT REVERB 2' (program 25): PoolDir_FieldRec_PtrTable[35] (0xFDD1CB + 4*35), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 35 'BRIGHT REVERB 2' (program 25): PoolDir_FieldRec_PtrTable[35] (0xFDD1CB + 4*35), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC30:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC30
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC37
@@ -9237,7 +9251,7 @@ PoolDir_FieldRec_FDCC30:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC4C
 
 ; 0xFDCC53  35 bytes = 5 x 7   (table slot(s) [36])
-; field descriptors of effect record 36 'WAVE REVERB 1' (program 26): PoolDir_FieldRec_PtrTable[36] (0xFDD1CB + 4*36), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 36 'WAVE REVERB 1' (program 26): PoolDir_FieldRec_PtrTable[36] (0xFDD1CB + 4*36), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC53:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC53
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC5A
@@ -9246,7 +9260,7 @@ PoolDir_FieldRec_FDCC53:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC6F
 
 ; 0xFDCC76  35 bytes = 5 x 7   (table slot(s) [37])
-; field descriptors of effect record 37 'WAVE REVERB 2' (program 27): PoolDir_FieldRec_PtrTable[37] (0xFDD1CB + 4*37), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 37 'WAVE REVERB 2' (program 27): PoolDir_FieldRec_PtrTable[37] (0xFDD1CB + 4*37), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC76:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC76
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC7D
@@ -9255,7 +9269,7 @@ PoolDir_FieldRec_FDCC76:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC92
 
 ; 0xFDCC99  70 bytes = 10 x 7   (table slot(s) [38])
-; field descriptors of effect record 38 'S.DELAY+CHORUS' (program 64): PoolDir_FieldRec_PtrTable[38] (0xFDD1CB + 4*38), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 38 'S.DELAY+CHORUS' (program 64): PoolDir_FieldRec_PtrTable[38] (0xFDD1CB + 4*38), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC99:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC99
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCCA0
@@ -9269,7 +9283,7 @@ PoolDir_FieldRec_FDCC99:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x09   ; 0xFDCCD8
 
 ; 0xFDCCDF  77 bytes = 11 x 7   (table slot(s) [39])
-; field descriptors of effect record 39 'S.DELAY+S.DELAY' (program 65): PoolDir_FieldRec_PtrTable[39] (0xFDD1CB + 4*39), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 39 'S.DELAY+S.DELAY' (program 65): PoolDir_FieldRec_PtrTable[39] (0xFDD1CB + 4*39), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCCDF:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCCDF
 	.byte	0x00, 0x00, 0xb4, 0x00, 0x01, 0x20, 0x01   ; 0xFDCCE6
@@ -9284,7 +9298,7 @@ PoolDir_FieldRec_FDCCDF:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0e, 0x62, 0x0a   ; 0xFDCD25
 
 ; 0xFDCD2C  91 bytes = 13 x 7   (table slot(s) [40])
-; field descriptors of effect record 40 'S.DELAY+FLANGER' (program 66): PoolDir_FieldRec_PtrTable[40] (0xFDD1CB + 4*40), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 40 'S.DELAY+FLANGER' (program 66): PoolDir_FieldRec_PtrTable[40] (0xFDD1CB + 4*40), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCD2C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCD2C
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCD33
@@ -9301,7 +9315,7 @@ PoolDir_FieldRec_FDCD2C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0e, 0x62, 0x0c   ; 0xFDCD80
 
 ; 0xFDCD87  77 bytes = 11 x 7   (table slot(s) [41])
-; field descriptors of effect record 41 'S.DELAY+VIBRATO' (program 67): PoolDir_FieldRec_PtrTable[41] (0xFDD1CB + 4*41), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 41 'S.DELAY+VIBRATO' (program 67): PoolDir_FieldRec_PtrTable[41] (0xFDD1CB + 4*41), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCD87:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCD87
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCD8E
@@ -9316,7 +9330,7 @@ PoolDir_FieldRec_FDCD87:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0c, 0x62, 0x0a   ; 0xFDCDCD
 
 ; 0xFDCDD4  91 bytes = 13 x 7   (table slot(s) [42])
-; field descriptors of effect record 42 'S.DELAY+PHASER' (program 68): PoolDir_FieldRec_PtrTable[42] (0xFDD1CB + 4*42), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 42 'S.DELAY+PHASER' (program 68): PoolDir_FieldRec_PtrTable[42] (0xFDD1CB + 4*42), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCDD4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCDD4
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCDDB
@@ -9333,7 +9347,7 @@ PoolDir_FieldRec_FDCDD4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0e, 0x62, 0x0c   ; 0xFDCE28
 
 ; 0xFDCE2F  77 bytes = 11 x 7   (table slot(s) [55])
-; field descriptors of effect record 55 'PEDAL WAH+DELAY' (program 69): PoolDir_FieldRec_PtrTable[55] (0xFDD1CB + 4*55), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 55 'PEDAL WAH+DELAY' (program 69): PoolDir_FieldRec_PtrTable[55] (0xFDD1CB + 4*55), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCE2F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCE2F
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDCE36
@@ -9348,7 +9362,7 @@ PoolDir_FieldRec_FDCE2F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0c, 0x62, 0x0a   ; 0xFDCE75
 
 ; 0xFDCE7C  70 bytes = 10 x 7   (table slot(s) [43])
-; field descriptors of effect record 43 'AUTO WAH+S.DELAY' (program 70): PoolDir_FieldRec_PtrTable[43] (0xFDD1CB + 4*43), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 43 'AUTO WAH+S.DELAY' (program 70): PoolDir_FieldRec_PtrTable[43] (0xFDD1CB + 4*43), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCE7C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCE7C
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDCE83
@@ -9362,7 +9376,7 @@ PoolDir_FieldRec_FDCE7C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x09   ; 0xFDCEBB
 
 ; 0xFDCEC2  77 bytes = 11 x 7   (table slot(s) [44])
-; field descriptors of effect record 44 'PEQ+CHORUS' (program 71): PoolDir_FieldRec_PtrTable[44] (0xFDD1CB + 4*44), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 44 'PEQ+CHORUS' (program 71): PoolDir_FieldRec_PtrTable[44] (0xFDD1CB + 4*44), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCEC2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCEC2
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCEC9
@@ -9377,7 +9391,7 @@ PoolDir_FieldRec_FDCEC2:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDCF08
 
 ; 0xFDCF0F  84 bytes = 12 x 7   (table slot(s) [45])
-; field descriptors of effect record 45 'PEQ+S.DELAY' (program 72): PoolDir_FieldRec_PtrTable[45] (0xFDD1CB + 4*45), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 45 'PEQ+S.DELAY' (program 72): PoolDir_FieldRec_PtrTable[45] (0xFDD1CB + 4*45), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCF0F:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF0F
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF16
@@ -9393,7 +9407,7 @@ PoolDir_FieldRec_FDCF0F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x07   ; 0xFDCF5C
 
 ; 0xFDCF63  98 bytes = 14 x 7   (table slot(s) [46])
-; field descriptors of effect record 46 'PEQ+FLANGER' (program 73): PoolDir_FieldRec_PtrTable[46] (0xFDD1CB + 4*46), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 46 'PEQ+FLANGER' (program 73): PoolDir_FieldRec_PtrTable[46] (0xFDD1CB + 4*46), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCF63:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF63
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF6A
@@ -9411,7 +9425,7 @@ PoolDir_FieldRec_FDCF63:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x09   ; 0xFDCFBE
 
 ; 0xFDCFC5  84 bytes = 12 x 7   (table slot(s) [47])
-; field descriptors of effect record 47 'PEQ+VIBRATO' (program 74): PoolDir_FieldRec_PtrTable[47] (0xFDD1CB + 4*47), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 47 'PEQ+VIBRATO' (program 74): PoolDir_FieldRec_PtrTable[47] (0xFDD1CB + 4*47), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCFC5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCFC5
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCFCC
@@ -9427,7 +9441,7 @@ PoolDir_FieldRec_FDCFC5:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x09, 0x62, 0x07   ; 0xFDD012
 
 ; 0xFDD019  77 bytes = 11 x 7   (table slot(s) [48])
-; field descriptors of effect record 48 'PEQ+COMPRESSOR' (program 75): PoolDir_FieldRec_PtrTable[48] (0xFDD1CB + 4*48), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 48 'PEQ+COMPRESSOR' (program 75): PoolDir_FieldRec_PtrTable[48] (0xFDD1CB + 4*48), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD019:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD019
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD020
@@ -9442,7 +9456,7 @@ PoolDir_FieldRec_FDD019:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x05   ; 0xFDD05F
 
 ; 0xFDD066  91 bytes = 13 x 7   (table slot(s) [49])
-; field descriptors of effect record 49 'PEQ+COMPR+DIST' (program 96): PoolDir_FieldRec_PtrTable[49] (0xFDD1CB + 4*49), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 49 'PEQ+COMPR+DIST' (program 96): PoolDir_FieldRec_PtrTable[49] (0xFDD1CB + 4*49), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD066:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD066
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD06D
@@ -9459,7 +9473,7 @@ PoolDir_FieldRec_FDD066:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0a, 0x62, 0x07   ; 0xFDD0BA
 
 ; 0xFDD0C1  70 bytes = 10 x 7   (table slot(s) [50])
-; field descriptors of effect record 50 'PEQ+COMPR+OVERDR' (program 97): PoolDir_FieldRec_PtrTable[50] (0xFDD1CB + 4*50), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 50 'PEQ+COMPR+OVERDR' (program 97): PoolDir_FieldRec_PtrTable[50] (0xFDD1CB + 4*50), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD0C1:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD0C1
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD0C8
@@ -9473,7 +9487,7 @@ PoolDir_FieldRec_FDD0C1:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDD100
 
 ; 0xFDD107  98 bytes = 14 x 7   (table slot(s) [51])
-; field descriptors of effect record 51 'PEQ+DIST+DELAY' (program 98): PoolDir_FieldRec_PtrTable[51] (0xFDD1CB + 4*51), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 51 'PEQ+DIST+DELAY' (program 98): PoolDir_FieldRec_PtrTable[51] (0xFDD1CB + 4*51), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD107:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD107
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD10E
@@ -9491,7 +9505,7 @@ PoolDir_FieldRec_FDD107:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0d, 0x62, 0x09   ; 0xFDD162
 
 ; 0xFDD169  98 bytes = 14 x 7   (table slot(s) [52])
-; field descriptors of effect record 52 'PEQ+OVERDR+DELAY' (program 99): PoolDir_FieldRec_PtrTable[52] (0xFDD1CB + 4*52), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, sub_FA2784
+; field descriptors of effect record 52 'PEQ+OVERDR+DELAY' (program 99): PoolDir_FieldRec_PtrTable[52] (0xFDD1CB + 4*52), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD169:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD169
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD170
