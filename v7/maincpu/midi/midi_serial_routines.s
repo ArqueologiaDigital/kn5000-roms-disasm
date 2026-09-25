@@ -429,22 +429,13 @@ READ_COM_SELECT_SWITCH:
 ;       is treated as MIDI selection.
 ;
 MidiSerial_OffsetTable:
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	nop
-	push sr
-	pop sr
-	nop
+; 16 x u8, indexed by bits 7..4 of the port byte at 0x68: READ_COM_SELECT_SWITCH
+; does `ld a, (0x68) / srl a, 4 / ld a, (xix+a)` and stores the result in
+; (0xB7E0).  Checked against the table above: index 7 (bit 7 low) -> 0 MIDI,
+; 11 (bit 6 low) -> 1 MAC, 13 (bit 5 low) -> 2 PC1, 14 (bit 4 low) -> 3 PC2,
+; every other pattern -> 0.  Previously spelled as 11 x `nop` / `normal` /
+; `nop` / `push sr` / `pop sr` / `nop`.
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x03, 0x00
 SC0Init_ClearContextSlots:
 	ld (1080:16), 0
 	ld (1084:16), 0
