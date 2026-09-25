@@ -63,8 +63,8 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 ;                                at 0x280645, byte-identical address)
 ;   +0x04  .short Field_04       varies per record (0x11-0x6a); UNDECODED
 ;   +0x06  .short Field_06       0x0160 in all 13 records; UNDECODED.  [INFERENCE]
-;                                matches the high half of port 0x01600004, the PPI
-;                                port this whole table is registered under in
+;                                matches the high half of 0x01600004, the class id
+;                                (ClassProc) this whole table is registered under in
 ;                                HDAE5000_Handler_Registration -- not traced further
 ;   +0x08  .short Field_08       varies per record (0x1a-0x3c); UNDECODED
 ;   +0x0A  .short Field_0A       varies per record (0x00-0x20); UNDECODED
@@ -9558,9 +9558,9 @@ HdaeUiObj_788:
 ; =============================================================================
 ; 789 pointers to UI object descriptors plus a NULL end-of-table marker: 790
 ; .long entries, no code.  Registered at boot by HDAE5000_Handler_Registration
-; (hd-ae5000_v2_06i.s, "Handler 10"): object-set ID 0x007F, PPI port 0x01600010,
-; entry count 0x315 = 789, table pointer 0x2A5D2C, handler function from
-; workspace[0x0E0A][0x0280], handed to RegisterObjectTable = workspace[0x0E0A][0x00E4].
+; (hd-ae5000_v2_06i.s) as object table 0x7F: class id 0x01600010, proc
+; RootFn_ViewableProc, entry count 0x315 = 789, table pointer 0x2A5D2C, handed
+; to RootFn_RegisterObjectTable.
 ;
 ; This block used to be disassembled as instructions under the label
 ; HDAE5000_GFX_DATA_1 ("graphics data block 1").  It is not code and it is not
@@ -10396,30 +10396,6 @@ HDAE5000_UiObject_PtrTable:	; 0x2A5D2C
 	.long	0x00000000        ; [789] end-of-table marker
 
 
-; =============================================================================
-; HD-AE5000 UI OBJECT NAME TABLE (0x2A6984 - 0x2A75DB)
-; =============================================================================
-; 790 .long pointers into HDAE5000_UiObjectName_Pool below - the symbolic name
-; of every UI object in HDAE5000_UiObject_PtrTable, same index.  Registered by
-; HDAE5000_Handler_Registration (hd-ae5000_v2_06i.s, "Handler 11"): object-set
-; ID 0x037F, PPI port 0x0160000F, entry count 0x315 = 789, table pointer
-; 0x2A6984, handler function from workspace[0x0E0A][0x0148].
-;
-; 178 of the 789 objects carry a name; the remaining 611 point at an empty
-; string, as does the 790th slot that pairs with the NULL table terminator.
-; The names are the developer's resource identifiers, not user-visible text:
-; screens (HDDMENU, HARD_DISK_OPT, SETUPS_TOOLS, PC_DATA_LINK, HARD_TEST),
-; dialogs (ERR_*, ATTEN_*, WAIT_*, AGAIN_*, *_CATCH, *_EXIT), widgets
-; (FLS_EDIT_NAME_BOX, LBN_DIRNO_BOX, HddNamingCursorBox, bottom01..bottom08)
-; and the Technics-Lyrics objects (SongTitle, Conductor, Tech_lyrics,
-; TempoinLyric, ChordinLyric).  They are the only surviving trace of the
-; original HD-AE5000 UI sources.
-;
-; Was disassembled as instructions under HDAE5000_GFX_DATA_2 ("graphics data
-; block 2"); the pool behind it produced the runs of "nop" (its 0x00 padding)
-; and operands such as "ld xiy,0x5443454c" (ASCII "LECT").
-; =============================================================================
-
 ;
 ; UI object ids: the main CPU knows each HD-AE5000 UI object as 0x007F0000 + n,
 ; n = its index in HDAE5000_UiObject_PtrTable.  One constant per object that
@@ -10604,6 +10580,30 @@ HDAE5000_UiObject_PtrTable:	; 0x2A5D2C
 	.equ HDAE5000_OBJ_FD_PLEASE, 0x007f0309
 	.equ HDAE5000_OBJ_LyrSettings, 0x007f030c
 	.equ HDAE5000_OBJ_WriteIn, 0x007f0314
+
+; =============================================================================
+; HD-AE5000 UI OBJECT NAME TABLE (0x2A6984 - 0x2A75DB)
+; =============================================================================
+; 790 .long pointers into HDAE5000_UiObjectName_Pool below - the symbolic name
+; of every UI object in HDAE5000_UiObject_PtrTable, same index.  Registered by
+; HDAE5000_Handler_Registration (hd-ae5000_v2_06i.s) as object table 0x37F,
+; class id 0x0160000F, proc RootFn_ResNameProc, entry count 0x315 = 789,
+; table pointer 0x2A6984.
+;
+; 178 of the 789 objects carry a name; the remaining 611 point at an empty
+; string, as does the 790th slot that pairs with the NULL table terminator.
+; The names are the developer's resource identifiers, not user-visible text:
+; screens (HDDMENU, HARD_DISK_OPT, SETUPS_TOOLS, PC_DATA_LINK, HARD_TEST),
+; dialogs (ERR_*, ATTEN_*, WAIT_*, AGAIN_*, *_CATCH, *_EXIT), widgets
+; (FLS_EDIT_NAME_BOX, LBN_DIRNO_BOX, HddNamingCursorBox, bottom01..bottom08)
+; and the Technics-Lyrics objects (SongTitle, Conductor, Tech_lyrics,
+; TempoinLyric, ChordinLyric).  They are the only surviving trace of the
+; original HD-AE5000 UI sources.
+;
+; Was disassembled as instructions under HDAE5000_GFX_DATA_2 ("graphics data
+; block 2"); the pool behind it produced the runs of "nop" (its 0x00 padding)
+; and operands such as "ld xiy,0x5443454c" (ASCII "LECT").
+; =============================================================================
 
 HDAE5000_UiObjectName_PtrTable:	; 0x2A6984
 	.long	HdaeUiName_000                    ; [  0] "HDDMENU"

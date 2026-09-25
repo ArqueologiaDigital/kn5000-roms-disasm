@@ -92,6 +92,20 @@ RAM = {
                               " (HDAE5000_Lyrics_ClearBuffer, _ParseEvent)"),
     0x23A0AA: ("LyricLines", "six 40-byte text lines of the lyric window (HDAE5000_Lyrics_FillLines)"),
     0x23A19C: ("LyricLoaded", "1 once a lyric file passed its checks (HDAE5000_Lyrics_CheckFile)"),
+    # third run: the frame handler's view of the main CPU's sequencer
+    0x230ECC: ("SqSrtcPtr", "address of the main CPU's sqsrtc byte (HamaFn_GetAdr_sqsrtc = 0x0421,"
+                            " HDAE5000_Boot_Init); HDAE5000_Frame_Handler watches its bit 2"),
+    0x230ED2: ("SqBtofPtr", "address of the main CPU's sqbtof word (HamaFn_GetAdr_sqbtof = 0x041C,"
+                            " HDAE5000_Boot_Init)"),
+    0x230ED6: ("SqBeadtPtr", "address of the main CPU's sq_beadt byte (HamaFn_GetAdr_sq_beadt = 0x041B,"
+                             " HDAE5000_Boot_Init)"),
+    0x230ED0: ("SqSrtcBit2Prev", "bit 2 of sqsrtc at the previous frame (HDAE5000_Frame_Handler_Status)"),
+    0x230EDA: ("HdPresent", "HDAE5000_Check_HD_Present's result (HDAE5000_Boot_Init; HDAE5000_Get_Init_Flag)"),
+    0x230EC2: ("LyricPosEvt", "parameter block of event 0x01CA0004 to the lyric box: +0 sqbtof word,"
+                              " +2 LyricPosStep, +4 LyricPosition (HDAE5000_Frame_Handler)"),
+    0x230EC4: ("LyricPosStep", "(sq_beadt >> 3) + 1 at the last post; a change triggers the next one"),
+    0x230EC6: ("LyricPosition", "sqbtof * 12 + (sq_beadt >> 3) + 2: the position"
+                                " HDAE5000_Lyrics_PlayToPosition scales by division / 12"),
     0x23A19E: ("LyricBoxObj", "the open lyric box's object id, 0xFFFFFFFF when closed"
                               " (HDAE5000_LyricBoxProc); redraw events go to it"),
 }

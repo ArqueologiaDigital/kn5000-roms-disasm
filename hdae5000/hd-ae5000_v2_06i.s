@@ -58,6 +58,14 @@
 	.equ HDAE5000_RAM_LyricLines, 0x23a0aa	; six 40-byte text lines of the lyric window (HDAE5000_Lyrics_FillLines)
 	.equ HDAE5000_RAM_LyricLoaded, 0x23a19c	; 1 once a lyric file passed its checks (HDAE5000_Lyrics_CheckFile)
 	.equ HDAE5000_RAM_LyricBoxObj, 0x23a19e	; the open lyric box's object id, 0xFFFFFFFF when closed (HDAE5000_LyricBoxProc); redraw events go to it
+	.equ HDAE5000_RAM_LyricPosEvt, 0x230ec2	; parameter block of event 0x01CA0004 to the lyric box: +0 sqbtof word, +2 LyricPosStep, +4 LyricPosition (HDAE5000_Frame_Handler)
+	.equ HDAE5000_RAM_LyricPosStep, 0x230ec4	; (sq_beadt >> 3) + 1 at the last post; a change triggers the next one
+	.equ HDAE5000_RAM_LyricPosition, 0x230ec6	; sqbtof * 12 + (sq_beadt >> 3) + 2: the position HDAE5000_Lyrics_PlayToPosition scales by division / 12
+	.equ HDAE5000_RAM_SqSrtcPtr, 0x230ecc	; address of the main CPU's sqsrtc byte (HamaFn_GetAdr_sqsrtc = 0x0421, HDAE5000_Boot_Init); HDAE5000_Frame_Handler watches its bit 2
+	.equ HDAE5000_RAM_SqSrtcBit2Prev, 0x230ed0	; bit 2 of sqsrtc at the previous frame (HDAE5000_Frame_Handler_Status)
+	.equ HDAE5000_RAM_SqBtofPtr, 0x230ed2	; address of the main CPU's sqbtof word (HamaFn_GetAdr_sqbtof = 0x041C, HDAE5000_Boot_Init)
+	.equ HDAE5000_RAM_SqBeadtPtr, 0x230ed6	; address of the main CPU's sq_beadt byte (HamaFn_GetAdr_sq_beadt = 0x041B, HDAE5000_Boot_Init)
+	.equ HDAE5000_RAM_HdPresent, 0x230eda	; HDAE5000_Check_HD_Present's result (HDAE5000_Boot_Init; HDAE5000_Get_Init_Flag)
 
 ; ----------------------------------------------------------------------------
 ; The main CPU's function tables, as the HD-AE5000 reaches them: workspace
@@ -643,7 +651,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	call (xhl)
 
 	; === table 0x7F: ViewableProc, the UI object descriptor table (class id 0x01600010) ===
-	ld xwa, 0x1600010	; PPI port address
+	ld xwa, 0x1600010	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)

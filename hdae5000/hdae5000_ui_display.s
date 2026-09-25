@@ -7157,7 +7157,7 @@ HDAE5000_Alloc_Memory__type_A3:
 HDAE5000_Get_Init_Flag:	; 28F570h
 	; Returns HD presence flag in L
 	; Output: L = value from HDAE5000_INIT_FLAG (0x230EDA)
-	ld l, (0x230eda:24)
+	ld l, (HDAE5000_RAM_HdPresent:24)
 	ret
 
 ; ============================================================================
@@ -7282,11 +7282,12 @@ HDAE5000_Boot_Init:	; 28F576h
 	lda xsp, (xsp + 20)	; Clean stack (5 pushes × 4 bytes = 20)
 
 	; === Create DISK MENU slot ===
-	; Call workspace[0x0E0A][0x02C4] to register a DISK MENU entry.
-	; Returns XHL = pointer to menu slot structure.
+	; RootFn_GetViewInstance(0x00600002) returns XHL = that object's instance
+	; record, which the code below fills (id 0x016A0005 at +0, name at +0x2A);
+	; technics-docs (hdae5000-homebrew.md) reads it as the DISK MENU slot.
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)             ; Handler table A
-	ld XIX, (xwa + RootFn_GetViewInstance)             ; DISK MENU slot registration function
+	ld XIX, (xwa + RootFn_GetViewInstance)
 	ld xwa, 0x600002	; Menu group ID
 	call (xix)	; Returns XHL = slot pointer
 	;
@@ -7304,35 +7305,36 @@ HDAE5000_Boot_Init:	; 28F576h
 	; NOTE: slot+0x32 (icon ID) is NOT set here.
 	; The firmware uses a default icon for HDAE5000.
 
-	; === Initialize callback pointers via Handler Table B ===
-	; Table B is at workspace[+0x0E88].
-	; Each call returns a callback pointer stored in local RAM.
-	; These pointers are used by Frame_Handler to monitor state changes.
+	; === Addresses of three main-CPU sequencer variables ===
+	; WS_HamaFnTable (workspace + 0x0E88) functions GetAdr_sqsrtc / _sqbtof /
+	; _sq_beadt each return the address of one main-CPU RAM variable (the v10
+	; code: lda xhl,(0x0421) / (0x041C) / (0x041B); ret).  HDAE5000_Frame_Handler
+	; reads them every frame: sqsrtc bit 2, and the song position.
 	;
-	; Handler 1: status monitor (used to check bit 2 for display init)
+	; &sqsrtc -> HDAE5000_RAM_SqSrtcPtr
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_HamaFnTable)             ; Handler table B
 	ld XHL, (xwa + HamaFn_GetAdr_sqsrtc)             ; Get callback via table B offset +0x0108
 	call (xhl)
-	ld (0x230ecc:24), xhl; Store at 0x230ECC
+	ld (HDAE5000_RAM_SqSrtcPtr:24), xhl; Store at 0x230ECC
 
-	; Handler 2: display offset calculator (state value read for display offset)
+	; &sqbtof -> HDAE5000_RAM_SqBtofPtr
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_HamaFnTable)
 	ld_sril XHL, (xwa + HamaFn_GetAdr_sqbtof)             ; Table B offset +0x0100
 	call (xhl)
-	ld (0x230ed2:24), xhl; Store at 0x230ED2
+	ld (HDAE5000_RAM_SqBtofPtr:24), xhl; Store at 0x230ED2
 
-	; Handler 3: display state reader (state byte shifted for offset calc)
+	; &sq_beadt -> HDAE5000_RAM_SqBeadtPtr
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_HamaFnTable)
 	ld XHL, (xwa + HamaFn_GetAdr_sq_beadt)             ; Table B offset +0x0104
 	call (xhl)
-	ld (0x230ed6:24), xhl; Store at 0x230ED6
+	ld (HDAE5000_RAM_SqBeadtPtr:24), xhl; Store at 0x230ED6
 
 	; Check for hard disk presence
 	call HDAE5000_Check_HD_Present
-	ld (0x230eda:24), l; Store result
+	ld (HDAE5000_RAM_HdPresent:24), l; Store result
 
 	cp l, 0:i3
 	jr z, HDAE5000_Boot_Init__skip_hd_init	; Skip if no HD
@@ -7371,23 +7373,29 @@ HDAE5000_Boot_Init__skip_hd_init:
 
 HDAE5000_Frame_Handler:	; 28F662h
 	; Frame handler main entry - called periodically from main loop
-	; 1. Check workspace pointer at 0x23A19E (skip if -1)
-	; 2. Read handler states from 0x230ED2, 0x230ED6
-	; 3. Calculate display offset = (WA * 3) << 2, store at 0x230EC6
-	; 4. Call registered callback via workspace[0x0E0A][0x0124]
+	; 1. While a lyric box is open (HDAE5000_RAM_LyricBoxObj != -1): read the
+	;    main CPU's sequencer position through the pointers HDAE5000_Boot_Init
+	;    fetched (HamaFn_GetAdr_sqbtof / _sq_beadt), LyricPosition = sqbtof * 12
+	;    + (sq_beadt >> 3) + 2, and when (sq_beadt >> 3) + 1 changed, post
+	;    RootFn_ApPostEvent(lyric box, 0x01CA0004, &HDAE5000_RAM_LyricPosEvt) --
+	;    the event on which HDAE5000_LyricBoxProc runs
+	;    HDAE5000_Lyrics_PlayToPosition.
+	; 2. (_Status) When bit 2 of the main CPU's sqsrtc byte falls to 0 and
+	;    HDAE5000_Get_Status_Byte is 1: on the HD title (GetTitleNow ==
+	;    0x01A0007F) post the file-load events, else HDAE5000_RequestTitle15(0x7F).
 	;
-	ld xwa, (HDAE5000_RAM_LyricBoxObj:24); Load secondary workspace pointer
-	cp xwa, 0xFFFFFFFF	; Check if uninitialized (-1)
-	jr z, HDAE5000_Frame_Handler_Status	; Skip to status check if no workspace
+	ld xwa, (HDAE5000_RAM_LyricBoxObj:24); the open lyric box, or -1
+	cp xwa, 0xFFFFFFFF	; no lyric box open?
+	jr z, HDAE5000_Frame_Handler_Status	; then nothing to advance
 	;
-	; Calculate display offset from handler states
-	ld xwa, (0x230ed6:24); Load handler 3 pointer
+	; song position from the main CPU's sequencer variables
+	ld xwa, (HDAE5000_RAM_SqBeadtPtr:24); &sq_beadt
 	ld a, (xwa)	; Read state byte
 	srl a, 3	; srl 3, A  ; divide by 8
 	ld e, a	; Save in E
 	;
-	ld xwa, (0x230ed2:24); Load handler 2 pointer
-	ld wa, (xwa)	; Read state word
+	ld xwa, (HDAE5000_RAM_SqBtofPtr:24); &sqbtof
+	ld wa, (xwa)	; sqbtof
 	extz xwa	; Zero-extend to 32-bit
 	ld xbc, xwa	; XBC = state value
 	add xbc, xbc	; XBC *= 2
@@ -7397,44 +7405,44 @@ HDAE5000_Frame_Handler:	; 28F662h
 	ld a, e	; Restore shifted value
 	inc 2, xwa	; inc 2, XWA  ; Add 2 (?) to low word
 	add xwa, xbc	; Combine offsets
-	ld (0x230ec6:24), xwa; Store calculated display offset
+	ld (HDAE5000_RAM_LyricPosition:24), xwa; LyricPosition = sqbtof * 12 + (sq_beadt >> 3) + 2
 	;
 	; Check if state changed
 	inc 1, e	; inc 1, E
 	ld a, e
 	extz wa
-	cp wa, (2297540:24); Compare with previous state
+	cp wa, (HDAE5000_RAM_LyricPosStep:24); same step as at the last post?
 	jr z, HDAE5000_Frame_Handler_Status	; Skip if unchanged
 	;
-	; State changed - update and call callback
+	; new step: post event 0x01CA0004 to the lyric box
 	ld a, e
 	extz wa
-	ld (0x230ec4:24), wa; Update state variable
-	ld xwa, (0x230ed2:24); Load handler 2 pointer
-	ld wa, (xwa)	; Read state
-	ld (0x230ec2:24), wa; Store in temp
-	lda xwa, (0x230ec2:24); Load address of temp
-	ld xbc, xwa	; XBC = temp address
-	ld xwa, (HDAE5000_RAM_LyricBoxObj:24); Secondary workspace pointer
-	ld xde, xbc	; XDE = temp address
+	ld (HDAE5000_RAM_LyricPosStep:24), wa; LyricPosStep = (sq_beadt >> 3) + 1
+	ld xwa, (HDAE5000_RAM_SqBtofPtr:24); &sqbtof
+	ld wa, (xwa)	; sqbtof
+	ld (HDAE5000_RAM_LyricPosEvt:24), wa; LyricPosEvt +0 = sqbtof
+	lda xwa, (HDAE5000_RAM_LyricPosEvt:24); the parameter block
+	ld xbc, xwa
+	ld xwa, (HDAE5000_RAM_LyricBoxObj:24); the lyric box
+	ld xde, xbc	; XDE = &LyricPosEvt
 	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24); Main workspace pointer
 	ld XBC, (xbc + WS_RootFnTable)             ; Handler table A
-	ld XHL, (xbc + RootFn_ApPostEvent)             ; Get callback function
-	ld xbc, 0x1CA0004	; Display state update callback
-	call (xhl)	; Call callback if valid
+	ld XHL, (xbc + RootFn_ApPostEvent)
+	ld xbc, 0x1CA0004	; event 0x01CA0004: advance the lyrics
+	call (xhl)	; RootFn_ApPostEvent
 
 HDAE5000_Frame_Handler_Status:	; 28F6E0h
 	; Frame handler status check section
-	; Monitors handler 1 status bit 2, triggers display init when it transitions to 0
+	; Watches bit 2 of the main CPU's sqsrtc byte; acts when it falls to 0
 	;
-	ld xwa, (0x230ecc:24); Load handler 1 pointer
+	ld xwa, (HDAE5000_RAM_SqSrtcPtr:24); &sqsrtc
 	ld a, (xwa)	; Read status byte
 	and a, 0x4	; Isolate bit 2
-	cp a, (2297552:24); Compare with previous state
+	cp a, (HDAE5000_RAM_SqSrtcBit2Prev:24); Compare with previous state
 	jrl z, HDAE5000_Frame_Handler_Exit	; jrl Z, Frame_Handler_Exit  ; Skip if unchanged
 	;
 	; Status changed - update previous state
-	ld (0x230ed0:24), a; Store new state
+	ld (HDAE5000_RAM_SqSrtcBit2Prev:24), a; Store new state
 	cp a, 0:i3	; Check if bit 2 now clear
 	jrl nz, HDAE5000_Frame_Handler_Exit	; jrl NZ, Frame_Handler_Exit  ; Skip if bit still set
 	;

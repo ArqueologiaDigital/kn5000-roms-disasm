@@ -4,7 +4,7 @@
 ; HDAE5000_Clear_Work_Buffer copies this block verbatim to RAM 0x23952a, then
 ; HDAE5000_Handler_Registration publishes six of the tables below to the main
 ; CPU through workspace[0x0e0a][0x00e4] ("RegisterObjectTable").  Each
-; registration passes {port, handler fn, entry count, data pointer}; the counts
+; registration passes {class id, proc, entry count, data pointer}; the counts
 ; quoted there (0x45, 0x0d, 0x0e) are exactly the entry counts of these tables,
 ; which is how each table boundary below was established.
 ;
@@ -158,7 +158,7 @@ HDAE5000_Init_Data:
 ; ----------------------------------------------------------------------------
 ; HDAE5000_ObjHandler_Table / HDAE5000_ObjName_Table
 ;   69 named objects published to the main-CPU UI framework (registration IDs
-;   0x012a and 0x042a, both on PPI port 0x01600002).  Index i of one table
+;   0x012a and 0x042a, both class id 0x01600002, ApFunctionProc).  Index i of one table
 ;   matches index i of the other; the name is what the framework looks up.
 ;   Names ending in "Check" are validation callbacks, "Catch" are event sinks,
 ;   "Page"/"PAGE" are page constructors and "Bitmap*" are image providers.
@@ -364,7 +364,7 @@ HDAE5000_ParamNames_FDFileSelect:
 	.long HDAE5000_ParamStr_FDFileSelect_End	; terminator
 
 ; ----------------------------------------------------------------------------
-; EV_* event names (registration ID 0x01ca, PPI port 0x0160000c)
+; EV_* event names (registration ID 0x01ca, class id 0x0160000c, ResEventProc)
 ;   Registered with a run-time count read from HDAE5000_EventName_Count, which
 ;   is part of this same image (RAM 0x239822) rather than an immediate.
 ; ----------------------------------------------------------------------------
@@ -387,7 +387,7 @@ HDAE5000_EventName_Count:
 	.short 13
 
 ; ----------------------------------------------------------------------------
-; MT_* message names (registration ID 0x01ea, PPI port 0x0160000d)
+; MT_* message names (registration ID 0x01ea, class id 0x0160000d, ResMethodProc)
 ;   Lyrics/file-select message vocabulary shared with the main CPU; count in
 ;   HDAE5000_MessageName_Count (RAM 0x239870).
 ; ----------------------------------------------------------------------------
