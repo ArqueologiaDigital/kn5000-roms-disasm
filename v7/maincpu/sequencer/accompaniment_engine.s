@@ -984,34 +984,38 @@ AccStyle_ReadParamOff_Part16_Code_Entry2:
 	; v10 does not spell this byte either
 	cp	(0x3338:16), 4
 	; v10 does not spell this byte either
-	jr	nz, 5
+	jr	nz, AccStyle_ReadParamOffset_Skip
 	; v10 does not spell this byte either
 	ld	a, (xhl+60)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	jr	38
+	jr	AccStyle_ReadParamOff_Part16_Code_Return
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
+AccStyle_ReadParamOffset_Skip:
 	cp	(0x3338:16), 8
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	jr	nz, 5
+	jr	nz, AccStyle_ReadParamOffset_Skip2
 	ld	a, (xhl+100)
-	jr	26
-	.byte 0xc1	; v10 does not spell this byte either
-	.byte 0x38	; v10 does not spell this byte either
-	ldw	hl, 4159
-	jr	nz, 7
+	jr	AccStyle_ReadParamOff_Part16_Code_Return
+	; v10 does not spell this byte either
+AccStyle_ReadParamOffset_Skip2:
+	cp	(0x3338:16), 16
+	; v10 does not spell this byte either
+	jr	nz, AccStyle_ReadParamOffset_Skip3
 	ld	a, (xhl+140)
-	jr	12
-	.byte 0xc1	; v10 does not spell this byte either
-	.byte 0x38	; v10 does not spell this byte either
-	.byte 0x33	; v10 does not spell this byte either
-	.byte 0x3f	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x6e	; v10 does not spell this byte either
-	halt
+	jr	AccStyle_ReadParamOff_Part16_Code_Return
+	; v10 does not spell this byte either
+AccStyle_ReadParamOffset_Skip3:
+	cp	(0x3338:16), 32
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	jr	nz, AccStyle_ReadParamOff_Part16_Code_Return
 	ld	a, (xhl+180)
 AccStyle_ReadParamOff_Part16_Code_Return:
 	ret
@@ -1081,7 +1085,7 @@ AccVoice_ReturnExtHL:
 	ret
 
 AccTuning_SetAllFromLookup:
-	calr	25
+	calr	AccTuning_FetchValue
 	ld	(12807:16), a
 	ld	(12808:16), a
 	ld	(12809:16), a
@@ -9684,13 +9688,13 @@ AccAccTiming_TableScan_Decrement:
 AccAccTiming_TableScan_StoreTiming:
 	st_rrw	wa, xbc, ix
 	cp	wa, (0x32d8:16)
-	jr	nc, 4
+	jr	nc, AccAccTiming_TableScan_NextSlot
 	ld	(0x32d8:16), wa
 AccAccTiming_TableScan_NextSlot:
 	; addda16 xiz, 0x337c (v7 patched)
 	add	iz, (0x32e0:16)
 	; jrl AccAccTiming_TableScan_Loop (v7 displacement)
-	jrl	-129
+	jrl	AccAccTiming_TableScan_Loop
 AccAccTiming_TableScan_Done:
 	ret
 
@@ -11666,7 +11670,96 @@ AccTone_LookupDone:
 	ret
 
 AccTone_InlineBytecodeData:
-	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head_head.bin"
+	res	0, (0x3383:16)
+	cp	(0x327b:16), 0
+	scc	z, bc
+	cp	(0x327a:16), 0
+	scc	z, de
+	and	de, bc
+	cp	(0x327c:16), 0
+	scc	z, bc
+	and	bc, de
+	cp	(0x3276:16), 0
+	scc	z, de
+	and	de, bc
+	cp	(0x3277:16), 0
+	scc	z, bc
+	and	bc, de
+	cp	(0x3278:16), 0
+	scc	z, de
+	and	de, bc
+	cp	(0x3279:16), 0
+	scc	z, wa
+	and	wa, de
+	ret	z
+	cp	(0x3249:16), 240
+	ret	c
+	ld	a, (0x31e4:16)
+	cp	a, (0x3389:16)
+	jr	z, AccTone_ExtendAndDispatch_Skip
+	res	0, (0x3382:16)
+AccTone_ExtendAndDispatch_Skip:
+	bit	0, (0x3382:16)
+	ret	nz
+	calr	AccTone_ExtendAndDispatch_Helper
+	ld	a, (0x3385:16)
+	cp	a, (0x338e:16)
+	jr	z, AccTone_ExtendAndDispatch_Skip2
+	set	0, (0x3383:16)
+	set	0, (0x3382:16)
+AccTone_ExtendAndDispatch_Skip2:
+	ldmm8	13189, 13198
+	ldmm8	13188, 13199
+	ret
+AccTone_ExtendAndDispatch_Helper:
+	ld	a, (0x323c:16)
+	extz	wa
+	lda	xbc, (0xe49fc8:24)
+	ld_rrb	a, xbc, wa
+	ld	(0x338f:16), a
+	ld	xbc, (0x3232:16)
+	extz	wa
+	ld_rrb	a, xbc, wa
+	ld	(0x338e:16), a
+	cp	a, 255
+	ret	nz
+	ld	(13198), (xbc)
+	ld	(0x338f:16), 0
+	ret
+	bit	0, (0x3383:16)
+	ret	z
+	call	AccTone_ExtendAndDispatch_Helper3
+	call	AccTone_ExtendAndDispatch_Helper4
+	ld	a, (0x3385:16)
+	extz	wa
+	sla	wa, 2
+	lda	xde, (0xe46312:24)
+	ld	xbc, 608352
+	add_sril_rm	XBC, 0x07, 0xe8, 0xe0
+	ld	(0x338a:16), xbc
+	ld	xwa, xbc
+	call	AccTuning_CopyAllPartsFromStyle_Wrap
+	or	(0x3290:16), 63
+	set	7, (0x3290:16)
+	calr	AccTone_ExtendAndDispatch_Helper2
+	ldmm8	12867, 12860
+	ldmm8	12868, 12861
+	ldmm8	12869, 12862
+	res	0, (0x3383:16)
+	ret
+AccTone_ExtendAndDispatch_Helper2:
+	calr	AccVoice_BarCounterBytecodeData
+	and	(0x320f:16), 240
+	and	(0x3210:16), 240
+	and	(0x3211:16), 240
+	and	(0x3212:16), 240
+	and	(0x3213:16), 240
+	and	(0x3214:16), 240
+	call	AccTone_ExtendAndDispatch_Helper5
+	bit	6, (0x3258:16)
+	ret	nz
+	call	AccTone_ExtendAndDispatch_Helper6
+	ret
 AccVoice_BarCounterBytecodeData_Helper:
 	extz DE
 	sla de, 2
@@ -12637,18 +12730,22 @@ AccVoice_LoadAllParts_Wrap:
 	call	AccBuf_WriteAllNotesOff
 	pop	xiz
 	ret
+AccTone_ExtendAndDispatch_Helper3:
 	push	xiz
 	call	Rhythm_SendChanPressure
 	pop	xiz
 	ret
+AccTone_ExtendAndDispatch_Helper4:
 	push	xiz
 	call	AccBuf_ResetAll4
 	pop	xiz
 	ret
+AccTone_ExtendAndDispatch_Helper5:
 	push	xiz
 	call	AccSeq_DualPartScan
 	pop	xiz
 	ret
+AccTone_ExtendAndDispatch_Helper6:
 	push	xiz
 	call	AccSeq_FourChannelScan
 	pop	xiz
@@ -16348,7 +16445,7 @@ AccPatch_StoreDrumParams:
 	ld	(13909:16), a
 AccPatch_StoreDrumParams_CheckSplit:
 	bit	0, (0x3395:16)
-	jr	z, 5
+	jr	z, AccPatch_StoreDrumParams_Return
 	ld	(0x364e:16), 145
 AccPatch_StoreDrumParams_Return:
 	ret
@@ -16397,11 +16494,11 @@ AccPatch_ReadTransposeAmount:
 	push	xix
 	push	xiy
 	push	xiz
-	call	16116102
+	call	AccPatch_GetCurrentSlotAddr
 	ld	a, (14079:16)
 	ld	xix, 37
 	bit	3, a
-	jr	nz, 25
+	jr	nz, AccPatch_SelectTranspose
 	ld	xix, 45
 	bit	0, a
 	jr	nz, AccPatch_SelectTranspose
@@ -19104,7 +19201,7 @@ __pad_F62002:
 	.byte 0x01, 0x11, 0x11
 AccPlayback_ProcessOngoingEvents:
 	and	(xiy+15), 127
-	calr	85
+	calr	ToneGen_ProcessVoiceSlots
 	ld	wa, (13263:16)
 	ld	(13670:16), wa
 	xor	w, w
@@ -21360,7 +21457,7 @@ __pad_F634D1:
 	jr	z, 9
 	inc	1, de
 	jr	-19
-	.byte 0xc1, 0x14, 0x35, 0x3e, 0x01
+	or	(0x3514:16), 1
 	or	de, 32768
 	ret
 RhythmROM_PatternDispatcher:
@@ -23995,20 +24092,78 @@ DrumVoice_DispatchTable:
 DrumVoice_NullHandler:
 	ret
 DrumVoice_Handler0:
-	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler0.bin"
+	bit	7, (0x3432:16)
+	jr	z, DrumVoice_Handler0_Skip2
+	bit	7, w
+	jr	nz, DrumVoice_Handler0_Skip
+	inc	1, (0x343b:16)
+	cp	(0x343b:16), 7
+	jr	ule, DrumVoice_Handler0_Join
+	ld	(0x343b:16), 7
+	jr	DrumVoice_Handler0_Join
+DrumVoice_Handler0_Skip:
+	dec	1, (0x343b:16)
+	cp	(0x343b:16), 0
+	jr	ge, DrumVoice_Handler0_Join
+	ld	(0x343b:16), 0
+DrumVoice_Handler0_Join:
+	or	(0x3432:16), 1
+	jr	DrumVoice_Handler0_Return
+DrumVoice_Handler0_Skip2:
+	ld	(0x7ea6:16), 19
+	calr	DrumVoice_NotifyEE
+DrumVoice_Handler0_Return:
+	ret
 DrumVoice_Handler1:
-	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler1.bin"
+	bit	7, (0x3432:16)
+	jr	z, DrumVoice_Handler1_Skip2
+	bit	7, w
+	jr	nz, DrumVoice_Handler1_Skip
+	inc	1, (0x343c:16)
+	cp	(0x343c:16), 11
+	jr	ule, DrumVoice_Handler1_Join
+	ld	(0x343c:16), 11
+	jr	DrumVoice_Handler1_Join
+DrumVoice_Handler1_Skip:
+	dec	1, (0x343c:16)
+	cp	(0x343c:16), 4
+	jr	ge, DrumVoice_Handler1_Join
+	ld	(0x343c:16), 4
+DrumVoice_Handler1_Join:
+	or	(0x3432:16), 2
+	jr	DrumVoice_Handler1_Return
+DrumVoice_Handler1_Skip2:
+	ld	(0x7ea6:16), 19
+	calr	DrumVoice_NotifyEE
+DrumVoice_Handler1_Return:
+	ret
 DrumVoice_Handler2:
-	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler2.bin"
+	or	(0xe31c:16), 8
+	bit	7, w
+	jr	nz, DrumVoice_Handler2_Skip
+	inc	1, (0x344d:16)
+	cp	(0x344d:16), 11
+	jr	ule, DrumVoice_Handler2_Join
+	ld	(0x344d:16), 11
+	jr	DrumVoice_Handler2_Join
+DrumVoice_Handler2_Skip:
+	dec	1, (0x344d:16)
+	cp	(0x344d:16), 0
+	jr	ge, DrumVoice_Handler2_Join
+	ld	(0x344d:16), 0
+DrumVoice_Handler2_Join:
+	or	(0x3436:16), 1
+	ret
 DrumVoice_Handler3:
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc8, 0x33, 0x07
-	.byte 0x6e, 0x07, 0xc1, 0x4e, 0x34, 0x3e, 0x10, 0x68
-	.byte 0x05, 0xc1, 0x4e, 0x34
-DrumVoice_Handler3_Code:
-	push	xix
-	and	xbc, xsp
-	ldw	iz, 15924
-	push	sr	
+	or	(0xe31c:16), 8
+	bit	7, w
+	jr	nz, DrumVoice_Handler3_Skip
+	or	(0x344e:16), 16
+	jr	DrumVoice_Handler3_Join
+DrumVoice_Handler3_Skip:
+	and	(0x344e:16), 239
+DrumVoice_Handler3_Join:
+	or	(0x3436:16), 2
 	ret	
 DrumVoice_Handler5:
 	and	(0xe31c:16), 247
@@ -24575,21 +24730,22 @@ DrumVoice_NotifyEE_Join6:
 	ld	(13370:16), 32
 	ld	(13395:16), 26
 	jr	81
-	.byte 0xf1, 0x31, 0x34, 0xcc
+	bit	4, (0x3431:16)
 	jr	z, 2
 	jr	73
-	.byte 0xc1, 0x31, 0x34, 0x3c, 0xcf, 0xc1, 0x31, 0x34, 0x3e, 0x20
+	and	(0x3431:16), 207
+	or	(0x3431:16), 32
 	ld	(13370:16), 31
 	ld	(13395:16), 26
 	jr	DrumVoice_NotifyEE_Return4
-	.byte 0xf1, 0x31, 0x34, 0xcd
+	bit	5, (0x3431:16)
 	jr	z, AccPatch_CallParamLookup_Helper7_Entry
 	and	(0x3431:16), 207
 	ld	(13370:16), 30
 	ld	(13395:16), 26
 	jr	DrumVoice_NotifyEE_Return4
 AccPatch_CallParamLookup_Helper7_Entry:
-	.byte 0xf1, 0x31, 0x34, 0xcc
+	bit	4, (0x3431:16)
 	jr	z, DrumVoice_NotifyEE_Return4
 	and	(0x3431:16), 207
 	or	(0x3431:16), 32
@@ -24949,7 +25105,8 @@ DrumVoice_NotifyEE_Join13:
 	calr	DrumVoice_NotifyEE_Helper10
 	inc	1, (14446:16)
 	jr	DrumVoice_NotifyEE_Join13
-	.byte 0xf1, 0x6f, 0x38, 0x04, 0xf1, 0x6e, 0x38, 0x04
+	pop	(0x386f:16)
+	pop	(0x386e:16)
 	ld	(14449:16), 0
 	ret
 DrumVoice_NotifyEE_Helper10:
@@ -26780,7 +26937,7 @@ Rhythm_MapChannelToDrumIndex:
 	add	xbc, 16149721
 	ld	c, (xbc)
 	cp	c, 6:i3
-	jr	le, 2
+	jr	le, MultiVoice_Setup_NextChan
 	ld	c, 0:opc
 MultiVoice_Setup_NextChan:
 	push c
@@ -26811,7 +26968,7 @@ DrumParam_ReadVoiceCount:
 	ld	a, (xix)
 	ret
 RhythmDrum_LoadVoiceParams:
-	calr	65457
+	calr	Rhythm_MapChannelToDrumIndex
 	ld	xix, 14095
 	add	xix, xbc
 	ld	xwa, 0:i3
@@ -28175,15 +28332,16 @@ AccVoice_SetupSlots_DataBlock_Join8:
 	inc	1, l
 	jr	AccVoice_SetupSlots_DataBlock_Join9
 AccVoice_SetupSlots_DataBlock_Helper17_Entry:
-	.byte 0xc3	; v10 does not spell this byte either
-	pop	sr
-	.byte 0xf0	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 200:opc
-	ldw	hl, 26119
-	.byte 0x04	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rr8b	w, xix, a
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	bit	7, w
+	jr	z, AccVoice_SetupSlots_DataBlock_Helper17_Skip
+	; v10 does not spell this byte either
 	inc	1, a
 	jr	AccVoice_SetupSlots_DataBlock_Join9
+AccVoice_SetupSlots_DataBlock_Helper17_Skip:
 	cp	h, w
 	jr	gt, AccVoice_SetupSlots_DataBlock_Skip18
 	inc	1, a
@@ -32294,7 +32452,7 @@ AccDraw_Secondary_Skip2:
 	call	DrawFunc_StackEntry
 	inc	4, xsp
 	ret
-	calr	1530
+	calr	AccScreen_DrawWall
 	ld	(257960:24), 2
 	ld	xiy, 16164358
 	ld	xix, 16164653
@@ -32309,7 +32467,7 @@ AccDraw_Secondary_Skip2:
 	calr	AccDraw_Secondary_Helper6
 	calr	AccDraw_Secondary_Helper17
 	ld	(257960:24), 0
-	calr	1492
+	calr	AccScreen_SelectorToWidgetIndex
 	ldmm8	14623, 13370
 	ldmm8	14624, 13990
 	ldmm8	14625, 13991
@@ -32326,7 +32484,7 @@ AccDraw_Secondary_Skip2:
 	calr	AccDraw_Secondary_Helper14
 	calr	AccDraw_Secondary_Helper18
 	calr	AccDraw_Secondary_Helper16
-	calr	1402
+	calr	AccScreen_RefreshScreen
 	ret
 	push	xiz
 	calr	AccDraw_Secondary_Helper8
@@ -32510,7 +32668,7 @@ AccDraw_Secondary_Helper9:
 	jr	nz, 7
 	or	(0x3677:16), 64
 	jr	5
-	.byte 0xc1, 0x77, 0x36, 0x3e, 0x80
+	or	(0x3677:16), 128
 	ret
 	cp	(13942:16), 4
 	jr	nz, 22
@@ -32519,7 +32677,7 @@ AccDraw_Secondary_Helper9:
 	jr	nz, 7
 	or	(0x3691:16), 4
 	jr	AccDraw_Secondary_Helper9_Return
-	.byte 0xc1, 0x91, 0x36, 0x3e, 0x08
+	or	(0x3691:16), 8
 AccDraw_Secondary_Helper9_Return:
 	ret
 	cp	(13942:16), 4
@@ -32868,14 +33026,14 @@ AccScreen_BeatDisplay_Draw:
 	ret
 
 AccScreen_BeatDataBlock:
-	.byte 0xc1, 0x76, 0x36, 0x3f, 0x04, 0x6e, 0x19, 0xc1
-	.byte 0x78, 0x36, 0x19, 0x1f, 0x39, 0xc1
-AccScreen_BeatDataBlock_Code:
-	jrl	ge, 6454
-	ld	w, 57:opc
+	cp	(0x3676:16), 4
+	jr	nz, AccScreen_BeatDataBlock_Return
+	ldmm8	14623, 13944
+	ldmm8	14624, 13945
 	ld	xiy, 16165229
 	ld	xix, 16165259
-	calr	64014
+	calr	AccGraphics_RenderStart
+AccScreen_BeatDataBlock_Return:
 	ret	
 AccScreen_DrawInit_StackWrap:
 	ld xwa, AccScreen_DrawInit_Body
@@ -32983,12 +33141,12 @@ AccScreen_DrawWall:
 	ld	c, 0:opc
 	ld	a, 12:opc
 	ld	a, 16:opc
-	call	16453929
+	call	Display_DeferOrDrawWall
 	ret
 AccScreen_RefreshScreen:
 	ld	c, 7:opc
 	ld	a, 12:opc
-	call	16453970
+	call	Display_DeferOrUpdateScreen
 	ret
 ; W = index of the lowest set bit of ((0x379b) & 31), 0 when none is set;
 ; stored to (0x39b8).
@@ -32996,12 +33154,12 @@ AccScreen_SelectorToWidgetIndex:
 	xor	wa, wa
 	ld	a, (0x36ff:16)
 	and	a, 31
-	jr	z, 9
+	jr	z, AccScreen_SelectorToWidgetIndex_Store
 AccScreen_SelectorToWidgetIndex_Loop:
 	srl	a, 1
-	jr	c, 4
+	jr	c, AccScreen_SelectorToWidgetIndex_Store
 	inc	1, w
-	jr	-9
+	jr	AccScreen_SelectorToWidgetIndex_Loop
 AccScreen_SelectorToWidgetIndex_Store:
 	ld	(0x391c:16), w
 	ret
@@ -33515,7 +33673,7 @@ AccPatch_VoiceAssignDataBlock_Helper2:
 	jr	AccPatch_VoiceAssignDataBlock_Join2
 AccPatch_VoiceAssignDataBlock_Skip10:
 	calr	AccPatch_VoiceAssignDataBlock_Helper3
-	call	16166359
+	call	AccScreen_GetByte_0x353E
 	calr	AccPatch_VoiceAssignDataBlock_Helper5
 	calr	AccPatch_VoiceAssignDataBlock_Helper6
 	bit	7, (0x38b4:16)
@@ -33528,7 +33686,7 @@ AccPatch_VoiceAssignDataBlock_Skip10:
 	jr	nz, AccPatch_VoiceAssignDataBlock_Join2
 	jr	AccPatch_VoiceAssignDataBlock_Join3
 AccPatch_VoiceAssignDataBlock_Join2:
-	call	16166359
+	call	AccScreen_GetByte_0x353E
 	calr	AccPatch_VoiceAssignDataBlock_Helper5
 AccPatch_VoiceAssignDataBlock_Join3:
 	calr	AccPatch_VoiceAssignDataBlock_Helper31
@@ -33590,14 +33748,14 @@ AccPatch_VoiceAssignDataBlock_Helper5:
 AccPatch_VoiceAssignDataBlock_Helper6:
 	xor	xhl, xhl
 	xor	xwa, xwa
-	call	16166396
+	call	AccScreen_GetByte_0x353C
 	ld	l, a
 	ld	a, 96:opc
 	mul8rr	a, l
 	add	wa, 96
 	ld	(14558:16), wa
 	xor	xwa, xwa
-	call	16166359
+	call	AccScreen_GetByte_0x353E
 	ld	l, a
 	ld	a, 96:opc
 	mul8rr	a, l

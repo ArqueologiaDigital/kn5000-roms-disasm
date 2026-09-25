@@ -1506,30 +1506,31 @@ AccompSeq_WriteMidiToBuffer:
 AccompSeq_WriteMidi_CodeBlock:
 	inc	1, iy
 	cp	iy, bc
-	jr	ule, 3
+	jr	ule, AccompSeq_WriteMidiToBuffer_Return
 	ld iy, (xhl+256)
+AccompSeq_WriteMidiToBuffer_Return:
 	ret
 AccompSeq_ProcessAfterNote_Helper:
 	ld	a, (0xc07e:16)
 	bit	7, a
-	jr	nz, 7
+	jr	nz, AccompSeq_ProcessAfterNote_Helper_Skip2
 	and	(0x7e7a:16), 254
-	jr	60
-	.byte 0xc1
-	jrl	gt, 15998
-	normal
+	jr	AccompSeq_ProcessAfterNote_Helper_Return
+AccompSeq_ProcessAfterNote_Helper_Skip2:
+	or	(0x7e7a:16), 1
 	ld	a, (0x7f0b:16)
 	cp	a, 0:i3
-	jr	z, 8
+	jr	z, AccompSeq_ProcessAfterNote_Helper_Skip3
 	ld	a, 0:opc
 	ld	(0x7f0b:16), a
-	jr	39
+	jr	AccompSeq_ProcessAfterNote_Helper_Return
+AccompSeq_ProcessAfterNote_Helper_Skip3:
 	ld	a, (0x7e24:16)
 	and	a, 3
 	cp	a, 0:i3
-	jr	z, 28
+	jr	z, AccompSeq_ProcessAfterNote_Helper_Return
 	bit	2, (0x7e27:16)
-	jr	z, 19
+	jr	z, AccompSeq_ProcessAfterNote_Helper_Skip
 	bit	7, (0x7e24:16)
 	jr	nz, AccompSeq_ProcessAfterNote_Helper_Skip
 	ldw	(0x7e70:16), 2048

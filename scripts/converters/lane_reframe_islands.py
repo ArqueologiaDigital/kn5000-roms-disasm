@@ -530,9 +530,7 @@ def _analyse_island(isl):
     if not next_code and not twin_in:
         res["verdict"] = "refused: not followed by code and no code twin"
         return res, None
-    if not prevok and not tgt_in and not ptr_in and not twin_in and not num_in:
-        res["verdict"] = "refused: unreached (no fall-through, no control-transfer label)"
-        return res, None
+    need_shape = not prevok and not tgt_in and not ptr_in and not twin_in and not num_in
     # ---- decode from S
     dec, bad = robust_decode(rom_path, rom, S, X - S + 64)
     # walk to convergence
@@ -680,6 +678,24 @@ def _analyse_island(isl):
     if bt:
         res["verdict"] = "refused: " + bt
         return res, None
+    if need_shape:
+        # CODE-SHAPE evidence for an island nothing is known to reach (the
+        # brief's standard): >= 1 absolute call/jp to an independently known
+        # label, and the same bytes do NOT decode to the same end from S+1.
+        known = 0
+        for (ad, n, t) in used:
+            m_ = re.match(r'^(call|jp)\s+(?:[a-z]+\s*,\s*)?(\d+)$', t.strip())
+            if m_ and int(m_.group(2)) in symaddr:
+                known += 1
+        dec1, bad1 = robust_decode(rom_path, rom, S + 1, E - S - 1)
+        ends1 = set(ad + n for (ad, n, _) in dec1)
+        clean1 = bad1 is None and E in ends1
+        if known < 1 or clean1:
+            res["verdict"] = ("refused: unreached (no fall-through, no control-transfer label) "
+                              "and no code-shape evidence (known calls %d, S+1 decodes %s)"
+                              % (known, "cleanly" if clean1 else "badly"))
+            return res, None
+        res["shape"] = "known calls %d, S+1 does not re-converge" % known
     sp, nres = respell([t for (_, _, t) in used])
     if assemble(sp) != rom[S - BASE:E - BASE]:
         sp, nres = [t for (_, _, t) in used], 0
@@ -690,6 +706,7 @@ def _analyse_island(isl):
     res["replaced_lines"] = [isl["firstdata"], Eline - 1]
     res["reached"] = ("fall-through" if prevok else "target:" + ",".join(tgt_in) if tgt_in
                       else "numeric-branch" if num_in
+                      else "code-shape" if need_shape
                       else "ptr:" + ",".join(ptr_in) if ptr_in else "twin:" + ",".join(twin_in))
     res["twin"] = twin_in
     return res, (isl["firstdata"], Eline, used, S, E, set(badlab))
@@ -754,7 +771,7 @@ def main():
         if it["kind"] != "code" or not it["size"]:
             continue
         t = re.sub(r'\s+', ' ', it["body"].strip().lower())
-        t = re.sub(r'^(\w+) ', lambda m: m.group(1) + "\t", t, 1)
+        t = re.sub(r"^(\w+) ", lambda m: m.group(1) + "\t", t, count=1)
         t = t.replace(", ", ", ")
         m = re.match(r'^(jr|jrl|calr|call|jp|djnz\w*)\t(.*)$', t)
         if not m:
@@ -802,6 +819,8 @@ def main():
                             after=order[j] if j < len(order) else None,
                             prev=prev, nxt=nxt))
         i = j
+    symaddr = set(v for k, v in mp.get("symbols", {}).items() if not k.startswith("__llm_"))
+    globals().update(dict(symaddr=symaddr))
     globals().update(dict(info=info, order=order, pos_of=pos_of, boundaries=boundaries,
                           line_starts=line_starts, tg=tg, ptg=ptg, twin_code=twin_code,
                           refd=refd, numtg=numtg, rom=rom, rom_path=rom_path, a=a))

@@ -261,15 +261,16 @@ AccompSeq_AdvanceDone:
 	ret
 
 AccompSeq_VRAMHelperData:
-	.byte 0xc1, 0x89
-AccompSeq_VRAMHelperData_Code:
-	jrl	pl, -32705
-	jr	c, 5
-	calr	9
-	jr	6
+	cp	(0x7d89:16), 128
+	jr	c, AccompSeq_VRAMHelperData_Skip
+	calr	AccompSeq_VRAMHelperData_Helper
+	jr	AccompSeq_VRAMHelperData_Return
+AccompSeq_VRAMHelperData_Skip:
 	ld	wa, (32166:16)
 	ld	iy, wa
+AccompSeq_VRAMHelperData_Return:
 	ret	
+AccompSeq_VRAMHelperData_Helper:
 	ld wa, (0x7da6:16)
 	and XWA,0x00000fff
 	sla xwa, 8
