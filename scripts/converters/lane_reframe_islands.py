@@ -126,6 +126,10 @@ def kind_of(text):
         return "label", labels, c
     if c.startswith("."):
         d = c.split()[0].lower()
+        if d == ".byte" and text.rstrip().endswith("(unidasm; no llvm-mc spelling)"):
+            # an instruction this tool already kept as bytes: it is code, not an
+            # island to decode again
+            return "code", labels, c
         return ("data" if d in DATA_DIRS else "dir"), labels, c
     return "code", labels, c
 

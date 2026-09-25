@@ -10778,6 +10778,7 @@ AccVoice_CopyFromROM_DataBlock:
 	ld	xiy, AccVoice_CopyFromROM_DataBlock_0x46
 	jr	c, 5
 	ld	xiy, AccVoice_CopyFromROM_DataBlock_0x6D
+AccVoice_CopyFromROM_Join:
 	ld	wa, (xiy)
 	ld	c, (xiy+2)
 	cp	wa, 0xffff
@@ -10785,13 +10786,14 @@ AccVoice_CopyFromROM_DataBlock:
 	cp	wa, hl
 	jr	z, AccVoice_CopyFromROM_Skip
 	add	iy, 3
-	jr	-21
+	jr	AccVoice_CopyFromROM_Join
 AccVoice_CopyFromROM_Skip:
 	cp	c, 0:i3
-	jr	nz, 8
+	jr	nz, AccVoice_CopyFromROM_Skip3
 	ld	(0:8), 0:io
 	ld	(1:8), 1:io
-	jr	6
+	jr	AccVoice_CopyFromROM_Skip2
+AccVoice_CopyFromROM_Skip3:
 	ld	(11:8), 0:io
 	ld	(12:8), 1:io
 AccVoice_CopyFromROM_Skip2:
@@ -11112,15 +11114,16 @@ AccStyle_InlinedBlock_Skip3:
 	xor	wa, wa
 	ld	a, 1:opc
 	call	UI_PostPartChangeEvent
-	jr	30
+	jr	AccStyle_InlinedBlock_Return
 AccStyle_InlinedBlock_Skip:
 	ld	a, (0x338e:16)
 	and	a, 31
-	jr	z, 16
+	jr	z, AccStyle_InlinedBlock_Helper_Skip
 	and	(0x33d3:16), 253
 	or	(0x3391:16), 1
 	call	AccTuning_LEDOn
-	jr	5
+	jr	AccStyle_InlinedBlock_Return
+AccStyle_InlinedBlock_Helper_Skip:
 	or	(0x33d3:16), 2
 AccStyle_InlinedBlock_Return:
 	ret

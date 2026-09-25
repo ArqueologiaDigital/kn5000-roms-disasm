@@ -10399,6 +10399,7 @@ AccVoice_CopyFromROM_DataBlock:
 	ld	xiy, AccVoice_CopyFromROM_DataBlock_0x46
 	jr	c, 5
 	ld	xiy, AccVoice_CopyFromROM_DataBlock_0x6D
+AccVoice_CopyFromROM_Join:
 	ld	wa, (xiy)
 	ld	c, (xiy+2)
 	cp	wa, 0xffff
@@ -10406,13 +10407,14 @@ AccVoice_CopyFromROM_DataBlock:
 	cp	wa, hl
 	jr	z, AccVoice_CopyFromROM_Skip
 	add	iy, 3
-	jr	-21
+	jr	AccVoice_CopyFromROM_Join
 AccVoice_CopyFromROM_Skip:
 	cp	c, 0:i3
-	jr	nz, 8
+	jr	nz, AccVoice_CopyFromROM_Skip3
 	ld	(0:8), 0:io
 	ld	(1:8), 1:io
-	jr	6
+	jr	AccVoice_CopyFromROM_Skip2
+AccVoice_CopyFromROM_Skip3:
 	ld	(11:8), 0:io
 	ld	(12:8), 1:io
 AccVoice_CopyFromROM_Skip2:
@@ -21570,25 +21572,32 @@ __pad_F6358B:
 	nop
 
 RhythmROM_LoadPattern:
-	.byte 0xd1, 0xbe, 0x34, 0x20, 0xc9, 0x88, 0x1e, 0x4e
-	.byte 0x01, 0xed, 0xd5, 0xd1, 0xc0, 0x34, 0x25, 0xec
-	.byte 0x85, 0xe1, 0xc8, 0x34, 0x24, 0x31, 0x00, 0x04
-	.byte 0x95, 0x11, 0xc1, 0x53, 0x34, 0x27, 0xcf, 0xcc
-	.byte 0x0f, 0xce, 0xd6, 0xdb, 0xec, 0x01, 0x44, 0xbd
-	.byte 0x31, 0xf6, 0x00, 0xe8, 0xd0, 0xd3, 0x07, 0xf0
-	.byte 0xec, 0x20, 0x68, 0x20, 0xd2, 0x03, 0xd8, 0x03
-	.byte 0xd2, 0x07
-RhythmROM_PatternDisp_InitLoop:
-	neg	wa
-	.byte	0xd3, 0x03, 0xd3, 0x07, 0xd3	; data: part of the 16 x LE16 table at RhythmROM_LoadPattern+0x34 (typed in v9/v10)
-	pop	sr
-	.byte	0xd3, 0x07, 0xd2, 0x03, 0xd2	; data: part of the 16 x LE16 table at RhythmROM_LoadPattern+0x34 (typed in v9/v10)
-	pop	sr
-	ld	wa, 984
-	xor	(0x07d207:24), wa
-	reti
-	neg	wa
-
+	ld	wa, (0x34be:16)
+	ld	w, a
+	calr	334
+	xor	xiy, xiy
+	ld	iy, (0x34c0:16)
+	add	xiy, xix
+	ld	xix, (0x34c8:16)
+	ldw	bc, 1024
+	ldirw
+	ld	l, (0x3453:16)
+	and	l, 15
+	xor	h, h
+	sla	hl, 1
+	ld	xix, RhythmROM_LoadPattern_0x34
+	xor	xwa, xwa
+	ld_rrw	wa, xix, hl
+	jr	RhythmROM_PatternDisp_ReadByte
+; RhythmROM_LoadPattern +0x34 -- 16 x LE16 byte offsets into the rhythm pattern
+; buffer, read by the routine above: ld l,(<var>) / and l,0xf / sla hl,1 /
+; ld xix, RhythmROM_LoadPattern_0x34 / ld_rrw wa,(xix+hl), then
+; RhythmROM_PatternDisp_ReadByte adds WA to the pattern pointer.  Typed as in
+; v9/v10 (lane accomp 2026-09-25, scripts/converters/lane_accomp_v7_rhythmrom.py);
+; before, the routine and this table were one .byte run with phantom
+; instructions (neg wa / pop sr / reti) in the table.
+	.short 0x03d2, 0x03d8, 0x07d2, 0x07d8, 0x03d3, 0x07d3, 0x03d3, 0x07d3
+	.short 0x03d2, 0x03d2, 0x03d8, 0x03d8, 0x07d2, 0x07d2, 0x07d8, 0x07d8
 RhythmROM_PatternDisp_ReadByte:
 	ld	xiy, (13512:16)
 	add	xiy, xwa
