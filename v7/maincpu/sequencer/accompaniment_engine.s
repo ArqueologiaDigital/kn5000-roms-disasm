@@ -15466,7 +15466,7 @@ AccPatch_InitSeq_ClearLoop:
 AccPatch_InitSeq_LoadTempo:
 	ld	a, (0x435:16)
 	ld	c, (0x416:16)
-	di
+	ei	0
 	and	(0x35ae:16), 254
 	ld	b, (0x343d:16)
 	mul8rr	a, b
@@ -15500,7 +15500,7 @@ AccPatch_ResetSeqCounters_Loop:
 	ei	6
 	ld	a, (0x435:16)
 	ld	c, (0x416:16)
-	di
+	ei	0
 	and	(0x35ae:16), 254
 	ld	b, (0x343d:16)
 	mul8rr	a, b

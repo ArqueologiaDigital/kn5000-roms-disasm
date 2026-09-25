@@ -2098,7 +2098,7 @@ Periodic_TimestampHelper_Data:
 	pushw	wa
 	ei	6
 	call	SeqBuf_MidiOut_WriteByte
-	di
+	ei	0
 	inc	2, xsp
 	ret
 

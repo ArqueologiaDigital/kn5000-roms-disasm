@@ -1726,7 +1726,7 @@ AccompSeq_SetupChannels:
 	ld	(0x46a:16), c
 	ld	(0x472:16), c
 	ld	(0x468:16), wa
-	di
+	ei	0
 	bit	0, (0x7d88:16)
 	jr	z, AccompSeq_SetupCh2
 	ld	(0x7db6:16), 0

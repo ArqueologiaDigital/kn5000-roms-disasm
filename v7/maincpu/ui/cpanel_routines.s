@@ -158,7 +158,7 @@ CPanel_SendInitSequence:
 	stdi16 (36097), 0
 	stdi16 (36099), 0
 	ordi8 (36086), 1
-	di
+	ei	0
 	ret
 CPanel_InitLEDBuffer:
 	stda16 (36197), wa
@@ -391,7 +391,7 @@ CPanel_ReadAllButtons:
 	ldw_d16 wa, (36097)
 	stda16 (36099), wa
 	ordi8 (36086), 1
-	di
+	ei	0
 	call CPanel_WaitTXReady
 	ld a, 37:opc
 	ld w, 1:opc
@@ -470,7 +470,7 @@ CPanel_EncoderCheck:
 	stdi16 (36097), 0
 	stdi16 (36099), 0
 	ordi8 (36086), 1
-	di
+	ei	0
 	ret
 CPanel_InitButtonState:
 	ld xhl, CPANEL_RX_EVENT_QUEUE
@@ -481,7 +481,7 @@ CPanel_InitButtonState:
 	stdi8 (36097), 0
 	stdi8 (36099), 0
 	ordi8 (36086), 1
-	di
+	ei	0
 	calr CPanel_WaitTXReady
 	ld a, 43:opc
 	ld w, 0:opc
@@ -530,7 +530,7 @@ CPanel_WaitTXReady_Timeout:
 	decdi8 1, (36091)
 	cpdi8 (36091), 0
 	jr z, WaitTX_ConfigAndReturn
-	di
+	ei	0
 	calr DELAY_1500_LOOPS
 	jr CPanel_WaitTXReady_Poll
 CPanel_WaitTXReady_BufferCheck:
@@ -583,7 +583,7 @@ CPanel_SendCommand:
 	ld (235:8), 223:io
 	ld (248:8), 34:io
 	st_dd8b a, 212
-	di
+	ei	0
 	nop
 	ret
 INTA_HANDLER:
@@ -999,7 +999,7 @@ PollLoop_TXCheckThreshold:
 	calr	CPanel_IncLEDPtr
 	ld	(36195:16), iy
 PollLoop_DispatchWork:
-	di
+	ei	0
 	ldb_d8 a, (36080)
 	and a, 192
 	cp a, 0:i3
