@@ -993,6 +993,9 @@ HelpDB_TrailingResidue:
 ; RAM 0x94800 by the v10 maincpu routine at 0xF6413A (LABEL_F6413A):
 ;   ld XIY,0x9b4000 / ld XIX,0x94800 / ld BC,0x8000 / ldirw
 ; (0x8000 words = 64KB; v7/v9 carry the same routine at shifted addresses).
+; [2026-09-25: LABEL_F6413A no longer exists; in v10 the routine at 0xF6413A
+; is labelled AccWidget_DispatchTable (sequencer/accompaniment_engine.s),
+; a name that does not describe this copy.]
 ;
 ; Observed layout (image offsets):
 ;   +0x0000  header (memory-config words, part lists 01 02 03 04, "ZZZ" tag)

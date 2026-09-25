@@ -1031,6 +1031,7 @@ AudioMix_WriteChannelGroup__loop:
 ; the originals again.
 ; Callers: NONE FOUND in table_data (subcpu twin WRITE_TONE_REG_MULTI_CHANNEL
 ;          is live there; maincpu twin is LABEL_EF185A)
+; [2026-09-25: v10 now labels 0xEF185A AudioMix_BytecodeData.]
 ; -----------------------------------------------------------------------------
 AudioMix_WriteAllChannelPairs:
 	push	xbc
