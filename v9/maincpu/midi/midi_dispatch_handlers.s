@@ -2093,14 +2093,14 @@ FileData_DispatchHandler:
 	ret
 
 Periodic_TimestampHelper_Data:
-	ld	(1060:16), a
+	ld	(0x424:16), a
 	extz	wa
 	pushw	wa
-	ei	0x06
+	ei	6
 	call	SeqBuf_MidiOut_WriteByte
-	ei	0x00
-	.byte 0xef
-	jr	le, 0x0e
+	di
+	inc	2, xsp
+	ret
 
 Periodic_TimestampCheck:
 	calr Periodic_TimestampCompare
@@ -6242,277 +6242,221 @@ VoiceParam_CopyBitfields_LargeBlock:
 	ld	a, (xhl)
 	and	a, 3
 	and	a, 3
-	.byte 0x84
-	push	xix
-	swi	4
+	andmi8	(xix), 252
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e, 0xb4, 0xa6, 0xba
-	pop	sr
-	.byte 0x9b, 0xb9
-	pop	sr
-	.byte 0xa3
+	ldcfm	6, (xhl)
+	stcfm	6, (xix)
+	ldcfm	3, (xde+3)
+	stcfm	3, (xbc+3)
 	lda	xix, (xbc+4)
 	lda	xhl, (xde+4)
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
 	ld	a, (xhl)
 	and	a, 24
-	.byte 0x84
-	push	xix
-	.byte 0xe7
+	andmi8	(xix), 231
 	or	(xix), a
 	lda	xix, (xbc+5)
 	lda	xhl, (xde+5)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9e
-	scc8	c, a
+	ldcfm	6, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 6
-	.byte 0x84
-	push	xix
-	.byte 0xbf
+	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+7)
 	lda	xhl, (xde+7)
 	ld	a, (xhl)
 	and	a, 15
 	and	a, 15
-	.byte 0x84
-	push	xix
-	.byte 0xf0
+	andmi8	(xix), 240
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d, 0xb4, 0xa5
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	stcfm	5, (xix)
 	lda	xix, (xbc+8)
 	lda	xhl, (xde+8)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
-	scc8	c, a
+	ldcfm	1, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 1
-	.byte 0x84
-	push	xix
-	swi	5
+	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e
-	scc8	c, a
+	ldcfm	6, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 6
-	.byte 0x84
-	push	xix
-	.byte 0xbf
+	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+9)
 	lda	xhl, (xde+9)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
-	scc8	c, a
+	ldcfm	1, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 1
-	.byte 0x84
-	push	xix
-	swi	5
+	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e
-	scc8	c, a
+	ldcfm	6, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 6
-	.byte 0x84
-	push	xix
-	.byte 0xbf
+	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+10)
 	lda	xhl, (xde+10)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
-	scc8	c, a
+	ldcfm	1, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 1
-	.byte 0x84
-	push	xix
-	swi	5
+	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xbc, (xbc+11)
 	lda	xwa, (xde+11)
-	.byte 0xb0, 0x98, 0xb1, 0xa0, 0xb0, 0x9d, 0xb1, 0xa5
-	.byte 0xb0, 0x9e, 0xb1, 0xa6
+	ldcfm	0, (xwa)
+	stcfm	0, (xbc)
+	ldcfm	5, (xwa)
+	stcfm	5, (xbc)
+	ldcfm	6, (xwa)
+	stcfm	6, (xbc)
 	ret
 
 DSPCfg_ConfigureVoiceSlotA:
@@ -9922,8 +9866,9 @@ SeqVoice_ReadEntryFields_Data:
 	ld	a, (xde+2)
 	lda_dpi	xbc, 228
 	ld	a, (xde+3)
-	.byte 0xf5, 0xe4
-	ld	xbc, 0x0eff00b1
+	lda_dpi	xbc, 228
+	ld	(xbc), 255
+	ret
 
 SeqVoice_StoreEntry:
 	dec 4, xsp
@@ -10042,35 +9987,32 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	xiz, xwa
 	lda	xwa, (0xf980:16)
 	ld	(xiz), xwa
-	calr	763
+	calr	SeqVoice_DispatchProcess_Data_Helper2
 	ld	(xsp+4), xhl
-	calr	779
+	calr	SeqVoice_DispatchProcess_Data_Helper3
 	lda	xwa, (0xffbe:16)
 	sub	xwa, 0xf980
 	add	xwa, 0x12cb2
 	add	xwa, xhl
-	.byte 0xaf, 0x04
-	or	(xwa), w
-	.byte 0xc8
-	nop
-	pop	xwa
-	nop
-	nop
+	add	xwa, (xsp+4)
+	add	xwa, 0x5800
 	add	(xiz+8), xwa
 	ld	wa, 1:i3
-	calr	61196
+	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, 8
+	jr	z, SeqVoice_DispatchProcess_Data_Skip3
 	ld	xwa, 0x72aa
 	add	(xiz+8), xwa
+SeqVoice_DispatchProcess_Data_Skip3:
 	ld	wa, 3:i3
-	calr	61177
+	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, 6
-	calr	671
+	jr	z, SeqVoice_DispatchProcess_Data_Skip4
+	calr	SeqVoice_DispatchProcess_Data_Helper
 	add	(xiz+8), xhl
+SeqVoice_DispatchProcess_Data_Skip4:
 	ld	xwa, (xiz+8)
-	.byte 0xa6, 0x80
+	add	xwa, (xiz)
 	ld	(xiz+4), xwa
 	pop	xiz
 	inc	4, xsp
@@ -10932,15 +10874,11 @@ MidiSeq_PartConfigure_Data:
 	ret
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
-	.byte 0xf1
-	push_f
-	ld	(xiy-69), w
-	ld	(xix-68), 0
+	set	3, (0xbd18:16)
+	ld	xwa, 0xbcbc
 	call	SeqVoice_DispatchProcess_Data_0xDC
 	calr	MidiPkt_ArpConfigChain_Data
-	.byte 0xf1
-	push_f
-	.byte 0xbd, 0xb3
+	res	3, (0xbd18:16)
 	ret
 	ld	xwa, 0xbcbc
 	call	SeqVoice_DispatchProcess_Data_0x1E3
@@ -13246,20 +13184,15 @@ MidiBuf_FillLoop:
 	ret
 
 MidiCtrl_ModeSwitch_Data:
-	.byte 0xf1
-	sbc	xsp, xiz
-	sbc	w, w
-	swi	6
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	pop	sr
+	bit	0, (0xb7ee:16)
 	ret	nz
-	.byte 0xf1
-	jrl	nc, -13632
+	cp	(0xc07d:16), 3
+	ret	nz
+	bit	2, (0xc07f:16)
 	ret	z
 	ld	a, (0xc07e:16)
 	extz	wa
-	calr	1
+	calr	MidiCtrl_Bit2ToChannel
 	ret
 
 MidiCtrl_Bit2ToChannel:
@@ -13651,218 +13584,213 @@ SeqData_FormatOutput_Data_Helper:
 	ld	hl, (xix+hl)
 	lda xix, (16617342:24)
 	jp_rr 8, xix, hl
-	jr	18
-	jr	110
-	jrl	200
-	jrl	291
-	jrl	289
-	jrl	379
-	calr	469
+	jr	SeqData_FormatOutput_Data_Helper_Join
+	jr	SeqData_FormatOutput_Data_Helper_Join2
+	jrl	SeqData_FormatOutput_Data_Helper_Join3
+	jrl	SeqData_FormatOutput_Data_Helper_Return
+	jrl	SeqData_FormatOutput_Data_Helper_Join4
+	jrl	SeqData_FormatOutput_Data_Helper_Join5
+	calr	SeqData_FormatOutput_Data_Helper_Helper
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 11
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cp_erpb	251, 11
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xE:24)
+	lda	xwa, (0xee4e2a:24)
 	ld	xwa, (xwa+bc)
-	calr 6074
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xE:24)
+	lda	xbc, (0xee4e2a:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join2:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue2
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x66:24)
+	lda	xwa, (0xee4e82:24)
 	ld	xwa, (xwa+bc)
-	calr 5981
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue2
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x66:24)
+	lda	xbc, (0xee4e82:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue2:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join3:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 12
-	jr	nc, 68
-	stb_erp c, 251
+	ldb_erp	l, 251
+	cp_erpb	251, 12
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue3
+	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x6E:24)
+	lda	xwa, (0xee4e8a:24)
 	ld	xwa, (xwa+bc)
-	calr 5887
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue3
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x6E:24)
+	lda	xbc, (0xee4e8a:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue3:
-	pop qiz
+	pop	qiz
 	ret
+SeqData_FormatOutput_Data_Helper_Return:
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join4:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue4
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xCE:24)
+	lda	xwa, (0xee4eea:24)
 	ld	xwa, (xwa+bc)
-	calr 5793
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue4
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xCE:24)
+	lda	xbc, (0xee4eea:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue4:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join5:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue5
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xD6:24)
+	lda	xwa, (0xee4ef2:24)
 	ld	xwa, (xwa+bc)
-	calr 5700
-	cp hl, 65535
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue5
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xD6:24)
+	lda	xbc, (0xee4ef2:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue5:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Helper:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 14
-	jr	nc, 68
-	stb_erp c, 251
+	ldb_erp	l, 251
+	cp_erpb	251, 14
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue6
+	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xDE:24)
+	lda	xwa, (0xee4efa:24)
 	ld	xwa, (xwa+bc)
-	calr 5606
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue6
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xDE:24)
+	lda	xbc, (0xee4efa:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue6:
-	pop qiz
+	pop	qiz
 	ret
 
 SeqAlt_NibbleSearch_Ret:
@@ -14052,12 +13980,12 @@ SeqAlt_DescriptorBlock_Data:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
-	jr	ugt, 59
-	.byte 0x8e
-	ldw	(247:8), 0x366b:io
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue4
+	cp	l, (xiz+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue4
 	extz	hl
 	lda	xbc, (xsp+4)
 	ld	a, (xiz+6)
@@ -14067,61 +13995,62 @@ SeqAlt_DescriptorBlock_Data:
 	lda	xde, (xiz+11)
 	ld	a, (xde)
 	and	a, 15
-	jr	z, 2
-	.byte 0xdb
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip4
+	.byte 0xdb, 0xfe	; sll a,hl -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip4:
 	ld	(xbc+2), hl
 	ld	l, (xiz+8)
 	extz	hl
 	ld	a, (xde)
 	and	a, 15
-	jr	z, 2
-	.byte 0xdb
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip5
+	.byte 0xdb, 0xfe	; sll a,hl -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip5:
 	ld	(xbc+4), hl
 	ld	xwa, xbc
 	call	AssSwb_ProcessLoop_Data
+SeqAlt_NibbleSearch_Epilogue4:
 	pop	xiz
 	inc	6, xsp
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
-	jr	ugt, 47
-	.byte 0x8e
-	ldw	(247:8), 0x2a6b:io
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue5
+	cp	l, (xiz+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue5
 	ld	a, (xiz+14)
 	cp	a, 1:i3
-	jr	nc, 35
+	jr	nc, SeqAlt_NibbleSearch_Epilogue5
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (ToneKit_FrequencyTable_0x408:24)
+	lda	xbc, (0xee4e18:24)
 	ld	xbc, (xbc+wa)
-	ld a, (xiz+8)
-	cpl a
+	ld	a, (xiz+8)
+	cpl	a
 	and	(xbc), a
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcf
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip6
+	.byte 0xcf, 0xfe	; sll a,l -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip6:
 	or	(xbc), l
+SeqAlt_NibbleSearch_Epilogue5:
 	pop	xiz
 	ret
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	lda	xbc, (xsp+4)
 	ld	(xbc+2), l
 	cp	(xiz+9), l
-	jrl	ugt, 169
-	.byte 0x8e
-	ldw	(247:8), 0xa37b:io
-	nop
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue
+	cp	l, (xiz+10)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue
 	ld	a, (xiz+14)
 	cp	a, 255
 	jr	z, SeqAlt_NibbleSearch_Skip
@@ -14129,7 +14058,7 @@ SeqAlt_DescriptorBlock_Data:
 	jrl	nc, SeqAlt_NibbleSearch_Epilogue
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (ToneKit_FrequencyTable_0x406:24)
+	lda	xbc, (0xee4e16:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	de, (xwa)
@@ -14141,7 +14070,7 @@ SeqAlt_DescriptorBlock_Data:
 	jr	z, SeqAlt_NibbleSearch_Epilogue
 	ld	a, (xiz+6)
 	ld	(xsp+4), a
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14153,18 +14082,18 @@ SeqAlt_DescriptorBlock_Data:
 	ld	e, (xhl)
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip7
+	.byte 0xcd, 0xfe	; sll a,e -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip7:
 	ld	(xhl), e
 	ld	a, (xiz+8)
 	ld	(xbc+3), a
 	ld	xwa, xbc
-	jr	55
+	jr	SeqAlt_NibbleSearch_Join3
 SeqAlt_NibbleSearch_Skip:
 	ld	a, (xiz+6)
 	ld	(xbc), a
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14176,13 +14105,14 @@ SeqAlt_NibbleSearch_Skip:
 	ld	e, (xhl)
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip8
+	.byte 0xcd, 0xfe	; sll a,e -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip8:
 	ld	(xhl), e
 	ld	a, (xiz+8)
 	ld	(xbc+3), a
 	ld	xwa, xbc
+SeqAlt_NibbleSearch_Join3:
 	call	AssSwb_ApplyBitDescriptor
 SeqAlt_NibbleSearch_Epilogue:
 	pop	xiz
@@ -14191,22 +14121,22 @@ SeqAlt_NibbleSearch_Epilogue:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	(xsp+10), xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	ld	(xsp+4), l
 	ld	xde, (xsp+10)
 	ld	a, (xde+9)
-	.byte 0x8f, 0x04
-	ld	(0x857b:16), 143
-	max
-	ld	c, 138:opc
-	ldw	(243:8), 0x7d6b:io
-	ld	xwa, (0xbc54:16)
+	cp	a, (xsp+4)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue2
+	ld	c, (xsp+4)
+	cp	c, (xde+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue2
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
-	ldb_erp l, 248
+	ldb_erp	l, 248
 	extz	iz
 	sll	iz, 8
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	extz	hl
 	or	iz, hl
@@ -14214,24 +14144,24 @@ SeqAlt_NibbleSearch_Epilogue:
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue2
 	srl	iz, 4
 	and	iz, 63
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
 	ld	xwa, (xsp+10)
 	ld	a, (xwa+6)
 	or	a, l
-	ldb_erp a, 251
+	ldb_erp	a, 251
 	lda	xwa, (xsp+6)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	ld	(xwa+1), 1
-	stb_erp c, 248
+	stb_erp	c, 248
 	ld	(xwa+2), c
 	ld	(xwa+3), 127
 	call	AssSwb_ApplyBitDescriptor
 	lda	xwa, (xsp+6)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	ld	xde, (xsp+10)
 	ld	c, (xde+7)
@@ -14248,31 +14178,24 @@ SeqAlt_NibbleSearch_Epilogue2:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	ld	(xsp+8), l
 	ld	a, (xiz+9)
-	.byte 0x8f
-	ld	(241:8), 123:io
-	.byte 0xb8
-	nop
+	cp	a, (xsp+8)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue6
 	ld	a, (xsp+8)
-	.byte 0x8e
-	ldw	(241:8), 0xaf7b:io
-	nop
+	cp	a, (xiz+10)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue6
 	ld	a, (xiz+14)
 	cp	a, 1:i3
-	jrl	nc, 167
+	jrl	nc, SeqAlt_NibbleSearch_Epilogue6
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x4:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x04
-	jr	f, -31
-	ld	xwa, (xix-68)
+	lda	xbc, (0xee4e20:24)
+	ld	xwa, (xbc+wa)
+	ld	(xsp+4), xwa
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14285,8 +14208,7 @@ SeqAlt_NibbleSearch_Epilogue2:
 	lda	xde, (xwa+1)
 	lda	xhl, (xwa+2)
 	lda	xix, (xwa+3)
-	.byte 0x8f
-	ld	(63:8), 129:io
+	cp	(xsp+8), 129
 	jr	z, SeqAlt_NibbleSearch_Skip2
 	ld	c, (xsp+10)
 	ld	(xwa), c
@@ -14328,6 +14250,7 @@ SeqAlt_NibbleSearch_Skip2:
 	ld	(xwa+3), c
 SeqAlt_NibbleSearch_Join:
 	call	AssSwb_ApplyBitDescriptor
+SeqAlt_NibbleSearch_Epilogue6:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
@@ -14335,12 +14258,12 @@ SeqAlt_NibbleSearch_Join:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue3
-	.byte 0x8e
-	ldw	(247:8), 0x696b:io
+	cp	l, (xiz+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue3
 	ld	a, (xiz+14)
 	cp	a, 255
 	jr	z, SeqAlt_NibbleSearch_Epilogue3
@@ -14348,10 +14271,10 @@ SeqAlt_NibbleSearch_Join:
 	jr	nc, SeqAlt_NibbleSearch_Epilogue3
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xA:24)
+	lda	xbc, (0xee4e26:24)
 	ld	xwa, (xbc+wa)
-	lda xbc, (xsp+6)
-	cp l, 0:i3
+	lda	xbc, (xsp+6)
+	cp	l, 0:i3
 	jr	nz, SeqAlt_NibbleSearch_Skip3
 	ld	a, (xwa)
 	ld	(xbc), a
@@ -14362,7 +14285,7 @@ SeqAlt_NibbleSearch_Skip3:
 SeqAlt_NibbleSearch_Join2:
 	ld	a, (xiz+6)
 	ld	(xsp+4), a
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14374,9 +14297,9 @@ SeqAlt_NibbleSearch_Join2:
 	ld	e, (xhl)
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip9
+	.byte 0xcd, 0xfe	; sll a,e -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip9:
 	ld	(xhl), e
 	ld	a, (xiz+8)
 	ld	(xbc+3), a
@@ -14387,7 +14310,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	inc	4, xsp
 	ret
 	ret
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	lda	xwa, (xwa+14)
 	call	Param_SignExtendRetu_Data_0x4C3
 	cp	hl, 0:i3
@@ -14395,7 +14318,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	ld	xwa, MidiPkt_EventType_Table_0x560
 	ld	bc, 5:i3
 	call	ArpQueue_Enqueue
-	ld	xwa, (0xbc5c:16)
+	ldda32	xwa, (0xbc5c)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
 	ret
@@ -14799,218 +14722,213 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ld	hl, (xix+hl)
 	lda xix, (16620094:24)
 	jp_rr 8, xix, hl
-	jr	18
-	jr	110
-	jrl	200
-	jrl	291
-	jrl	289
-	jrl	379
-	calr	469
+	jr	VoiceParam_AssSwb_MultiBlock_Data_Join
+	jr	VoiceParam_AssSwb_MultiBlock_Data_Join2
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join3
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Return
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join4
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join5
+	calr	VoiceParam_AssSwb_MultiBlock_Data_Helper
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 11
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cp_erpb	251, 11
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x3A:24)
+	lda	xwa, (0xee4e56:24)
 	ld	xwa, (xwa+bc)
-	calr 3322
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x3A:24)
+	lda	xbc, (0xee4e56:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join2:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x6A:24)
+	lda	xwa, (0xee4e86:24)
 	ld	xwa, (xwa+bc)
-	calr 3229
-	cp hl, 65535
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x6A:24)
+	lda	xbc, (0xee4e86:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join3:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 12
-	jr	nc, 68
-	stb_erp c, 251
+	ldb_erp	l, 251
+	cp_erpb	251, 12
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3
+	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x9E:24)
+	lda	xwa, (0xee4eba:24)
 	ld	xwa, (xwa+bc)
-	calr 3135
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x9E:24)
+	lda	xbc, (0xee4eba:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3:
-	pop qiz
+	pop	qiz
 	ret
+VoiceParam_AssSwb_MultiBlock_Data_Return:
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join4:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xD2:24)
+	lda	xwa, (0xee4eee:24)
 	ld	xwa, (xwa+bc)
-	calr 3041
-	cp hl, 65535
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xD2:24)
+	lda	xbc, (0xee4eee:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join5:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xDA:24)
+	lda	xwa, (0xee4ef6:24)
 	ld	xwa, (xwa+bc)
-	calr 2948
-	cp hl, 65535
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xDA:24)
+	lda	xbc, (0xee4ef6:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Helper:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 8
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cp_erpb	251, 8
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x116:24)
+	lda	xwa, (0xee4f32:24)
 	ld	xwa, (xwa+bc)
-	calr 2854
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x116:24)
+	lda	xbc, (0xee4f32:24)
 	ld	xbc, (xbc+wa)
-	ld xwa, xbc
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6:
-	pop qiz
+	pop	qiz
 	ret
 
 VoiceParam_MultiBlock_Ret:
@@ -15020,26 +14938,26 @@ VoiceParam_MultiBlock_Epilogue_Data:
 	lda	xsp, (xsp-12)
 	ld	c, (xwa+14)
 	cp	c, 1:i3
-	jr	nc, 53
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Epilogue
 	extz	bc
 	muls	bc, 6
-	lda	xde, (ToneKit_FrequencyTable_0x408:24)
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ld	c, 191:opc
-	ld	(50:8), 136:io
-	.byte 0x06
-	ld	c, 178:opc
-	ld	xhl, 0xba230788
-	.byte 0x01
-	ld	xhl, 0x2ba2383
-	ld	xhl, 0xba230888
-	pop	sr
-	ld	xhl, 0x62b131b7
+	lda	xde, (0xee4e18:24)
+	ld	xhl, (xde+bc)
+	lda	xde, (xsp+8)
+	ld	c, (xwa+6)
+	ld	(xde), c
+	ld	c, (xwa+7)
+	ld	(xde+1), c
+	ld	c, (xhl)
+	ld	(xde+2), c
+	ld	c, (xwa+8)
+	ld	(xde+3), c
+	lda	xbc, (xsp)
+	ld	(xbc), xde
 	ld	(xbc+4), xwa
 	ld	xwa, xbc
-	calr	1460
+	calr	MidiPkt_EnqueueControl_3354
+VoiceParam_AssSwb_MultiBlock_Data_Epilogue:
 	lda	xsp, (xsp+12)
 	ret
 

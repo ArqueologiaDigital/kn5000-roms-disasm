@@ -171,6 +171,9 @@ def main():
     ap.add_argument("--seed", action="append", default=[])
     ap.add_argument("--json")
     ap.add_argument("--show", type=int, default=40)
+    ap.add_argument("--resync", help="write a kind=code spec re-decoding UNREACHED runs that hold "
+                    "`.byte` islands, when a clean linear decode lands on the run end and calls a "
+                    "known label (evidence rules in the code)")
     ap.add_argument("--emit-spec", help="write a midi_lane_rewrite.py kind=code spec that "
                     "re-frames every MISFRAME / CODE-AS-DATA run, widened to the nearest "
                     "OK line boundaries on both sides")
@@ -341,7 +344,12 @@ def main():
                 else:
                     v = "MISFRAME"
             else:
-                v = "CODE-AS-DATA" if reached else None
+                if reached:
+                    v = "CODE-AS-DATA"
+                elif re.match(r"^\s*(?:[\w.$]+:\s*)?\.byte\b", t):
+                    v = "BYTES-UNREACHED"      # only used by --resync
+                else:
+                    v = None
             if v:
                 counts[v] += 1
                 counts[v + "_B"] += e - s
@@ -349,10 +357,78 @@ def main():
     tc = subprocess.run(["git", "log", "-1", "--format=%h"], cwd=os.path.join(LL, "..", ".."),
                         capture_output=True, text=True).stdout.strip()
     print("toolchain llvm-project@%s  seeds %d  reached insns %d  flags %d" % (tc, len(seeds), len(insn), len(flags)))
-    for k in ("OK", "MISFRAME", "CODE-AS-DATA", "UNREACHED"):
+    for k in ("OK", "MISFRAME", "CODE-AS-DATA", "UNREACHED", "BYTES-UNREACHED"):
         print("  %-13s %6d lines %7d B" % (k, counts[k], counts[k + "_B"]))
     for ad in sorted(flags)[:a.show]:
         print("  FLAG %06X %s" % (ad, flags[ad]))
+    if a.resync:
+        # UNREACHED runs that the old sweep misframed: a clean linear decode from
+        # the run's first line that lands exactly on the run's end, with no
+        # data-signature instruction and at least one call/jump to a KNOWN label
+        ABSM = re.compile(r"^(halt|incf|decf|ldf|normal|max|min|swi)\b|^(jr|jrl) [a-z]+, 0$|^(jr|jrl) f,")
+        addr_set = set(syms.values())
+        specs = []
+        for rel in a.file:
+            rows = [r for r in res if r["rel"] == rel]
+            L = files[rel]
+            k = 0
+            while k < len(rows):
+                if rows[k]["verdict"] not in ("UNREACHED", "BYTES-UNREACHED"):
+                    k += 1
+                    continue
+                e = k
+                while e + 1 < len(rows) and rows[e + 1]["verdict"] in ("UNREACHED", "BYTES-UNREACHED") and \
+                        rows[e + 1]["start"] == rows[e]["end"]:
+                    e += 1
+                run = rows[k:e + 1]
+                k = e + 1
+                if not any(r["verdict"] == "BYTES-UNREACHED" for r in run) or \
+                        all(r["verdict"] == "BYTES-UNREACHED" for r in run):
+                    continue            # nothing misframed, or a pure data run
+                st, en = run[0]["start"], run[-1]["end"]
+                ok, ad, why, calls = True, st, "", 0
+                prev, last = None, None
+                while ok and ad < en:
+                    segs = rw.objdump(rom[ad - rw.BASE:en - rw.BASE])
+                    restart = False
+                    for raw, text in segs:
+                        if text is None:
+                            n, ut = rw.unidasm_insn(rom, ad)
+                            if ut is None or ut.split()[0] in ("swi", "halt", "db"):
+                                ok, why = False, "undecodable at 0x%X" % ad
+                                break
+                            ad += n          # a backend gap unidasm can read
+                            restart = True
+                            break
+                        if ABSM.match(text) or (text == "nop" and prev == "nop"):
+                            ok, why = False, "`%s` at 0x%X" % (text, ad)
+                            break
+                        tg, ft, fl = flow(ad, len(raw), text)
+                        for t in tg:
+                            if t in addr_set:
+                                calls += 1
+                        prev, last = text, (ad, text)
+                        ad += len(raw)
+                    if not restart:
+                        break
+                if ok and ad != en:
+                    ok, why = False, "decode overruns the run end"
+                if ok and calls == 0:
+                    # no independently known target: accept only a run that ENDS
+                    # in an unconditional return/jump (a routine tail), and say so
+                    if last and re.match(r"^(ret|retd|reti)$|^ret t$|^(jr|jrl|jp) [^,]+$", last[1]):
+                        why = "no known target; ends in `%s`" % last[1]
+                    else:
+                        ok, why = False, "no call/jump to a known label"
+                # labels inside the run must be instruction boundaries
+                for r in run:
+                    pass
+                print("  RESYNC %s %s 0x%X-0x%X (%d B, %d lines): %s" % (
+                    "ok  " if ok else "skip", rel, st, en, en - st, len(run), why or ("%d known targets" % calls)))
+                if ok:
+                    specs.append(dict(file=rel, start="0x%X" % st, end="0x%X" % en, kind="code"))
+        json.dump(specs, open(a.resync, "w"), indent=1)
+        print("  wrote %d resync spans (%d B) to %s" % (len(specs), sum(int(x["end"], 16) - int(x["start"], 16) for x in specs), a.resync))
     if a.emit_spec:
         specs = []
         for rel in a.file:

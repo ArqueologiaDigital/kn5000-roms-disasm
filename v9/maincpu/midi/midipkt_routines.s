@@ -10,41 +10,40 @@
 MidiPkt_ExtractAndPack:
 	; --- Stack-frame: XIZ struct field extraction + packed lookup (96 bytes) ---
 	lda	xsp, (xsp-16)
-	push xiz
-	ld xiz, xwa
-	ld a, (xiz+6)
-	ld c, (xiz+7)
-	call Part_LookupTableEntry
-	extz hl
-	ld (xsp+4), hl
-	ld a, (xiz+6)
-	ld c, (xiz+7)
-	inc 1, c
-	call Part_LookupTableEntry
-	extz hl
+	push	xiz
+	ld	xiz, xwa
+	ld	a, (xiz+6)
+	ld	c, (xiz+7)
+	call	Part_LookupTableEntry
+	extz	hl
+	ld	(xsp+4), hl
+	ld	a, (xiz+6)
+	ld	c, (xiz+7)
+	inc	1, c
+	call	Part_LookupTableEntry
+	extz	hl
 	sll	hl, 8
-	or (xsp+4), hl
+	or	(xsp+4), hl
 	lda	xbc, (xsp+14)
-	ld a, (xiz+6)
-	ld (xbc), a
-	ld a, (xiz+7)
-	ld (xbc+1), a
-	ld wa, (xsp+4)
-	ld (xbc+2), wa
-	ld e, (xiz+8)
-	extz de
-	ld a, (xiz+0x0b)
-	and a, 0x0f
-	jr z, MidiPkt_ExtractAndPack_StoreShifted
-	.byte 0xda
-	swi	6
+	ld	a, (xiz+6)
+	ld	(xbc), a
+	ld	a, (xiz+7)
+	ld	(xbc+1), a
+	ld	wa, (xsp+4)
+	ld	(xbc+2), wa
+	ld	e, (xiz+8)
+	extz	de
+	ld	a, (xiz+11)
+	and	a, 15
+	jr	z, MidiPkt_ExtractAndPack_StoreShifted
+	.byte 0xda, 0xfe	; sll a,de -- the backend cannot spell this form
 MidiPkt_ExtractAndPack_StoreShifted:
-	ld (xbc+4), de
+	ld	(xbc+4), de
 	lda	xwa, (xsp+6)
-	ld (xwa), xbc
-	ld (xwa+4), xiz
-	calr MidiPkt_EnqueueExtended_Data
-	pop xiz
+	ld	(xwa), xbc
+	ld	(xwa+4), xiz
+	calr	MidiPkt_EnqueueExtended_Data
+	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
 MidiPkt_ExtractAndPack_Ret:
@@ -674,22 +673,18 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xiz, xwa
 	ld	xiy, MidiPkt_EventType_Table_0x304
 	lda	xix, (xsp+4)
-	.byte 0x85
-	rcf
+	ldi85
 	ldiw
 	ld	xwa, (xiz+4)
-	calr	1118
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
-	jr	z, 102
-	lda	xwa, (WidgetParam_Entry_018_0xCE:24)
-	.byte 0xae, 0x04, 0xf0
-	jr	z, 92
+	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
+	lda	xwa, (0xee49e8:24)
+	cp	xwa, (xiz+4)
+	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
 	ld	xwa, (xiz)
-	.byte 0x98, 0x04
-	push	xsp
-	nop
-	nop
-	jr	z, 83
+	cpw	(xwa+4), 0
+	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
 	ld	xwa, MidiPkt_EventType_Table_0x590
 	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
@@ -699,14 +694,13 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xwa, (xiz)
 	ld	xbc, xwa
 	ld	bc, (xbc+4)
-	.byte 0x98
-	push	sr
-	ld	w, (1198:16)
+	and	bc, (xwa+2)
+	ld	xwa, (xiz+4)
 	ld	a, (xwa+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xd9
-	swi	7
+	jr	z, MidiPkt_EnqueueExtended_Data_Skip
+	.byte 0xd9, 0xff	; srl a,bc -- the backend cannot spell this form
+MidiPkt_EnqueueExtended_Data_Skip:
 	lda	xwa, (xsp+4)
 	ld	(xwa), c
 	and	c, 15
@@ -717,9 +711,10 @@ MidiPkt_EnqueueExtended_Data:
 	ld	bc, 3:i3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
-	ld	xwa, (0xbc5c:16)
+	ldda32	xwa, (0xbc5c)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
+MidiPkt_EnqueueExtended_Data_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -1070,14 +1065,13 @@ MidiPkt_BuildControl_Helper:
 	ld	xiz, xwa
 	ld	xiy, MidiPkt_EventType_Table_0x320
 	lda	xix, (xsp+4)
-	.byte 0x85
-	rcf
+	ldi85
 	ldiw
 	ld	xwa, (xiz+4)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jrl	z, MidiPkt_EnqueueControl_3364_Epilogue
-	lda	xbc, (WidgetParam_Entry_018_0xCE:24)
+	lda	xbc, (0xee49e8:24)
 	ld	xwa, (xiz+4)
 	cp	xbc, xwa
 	jr	z, MidiPkt_EnqueueControl_3364_Epilogue
@@ -1105,14 +1099,13 @@ MidiPkt_BuildControl_Helper:
 	ld	xbc, (xiz)
 	ld	xde, (xiz+4)
 	ld	a, (xde+8)
-	.byte 0x89
-	push	sr
-	add	(0x8bc9:16), b
-	pushw	0xc921
-	.byte 0xcc
-	retd	614
-	.byte 0xcb
-	swi	7
+	and	a, (xbc+2)
+	ld	c, a
+	ld	a, (xde+11)
+	and	a, 15
+	jr	z, MidiPkt_BuildControl_Helper_Skip
+	.byte 0xcb, 0xff	; srl a,c -- the backend cannot spell this form
+MidiPkt_BuildControl_Helper_Skip:
 	lda	xwa, (xsp+4)
 	ld	(xwa), c
 	and	c, 15
@@ -1123,7 +1116,7 @@ MidiPkt_BuildControl_Helper:
 	ld	bc, 3:i3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
-	ld	xwa, (0xbc5c:16)
+	ldda32	xwa, (0xbc5c)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
 MidiPkt_EnqueueControl_3364_Epilogue:
@@ -1353,11 +1346,11 @@ MidiPkt_SysExBulkTransfer_Data_Helper:
 	ld	c, (xwa+2)
 	ld	(xde+2), c
 	ld	a, (xwa+3)
-	ld (xde+3), a
-	push xde
-	push xhl
-	push xix
-	push xiz
+	ld	(xde+3), a
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	MidiStream_ExtendedDispatch_0x298
 	pop	xiz
 	pop	xix
@@ -1373,11 +1366,11 @@ MidiPkt_SysExBulkTransfer_Data_Helper2:
 	ld	c, (xwa+2)
 	ld	(xde+2), c
 	ld	a, (xwa+3)
-	ld (xde+3), a
-	push xde
-	push xhl
-	push xix
-	push xiz
+	ld	(xde+3), a
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	MidiStream_ExtendedDispatch_0x1
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
@@ -1387,43 +1380,35 @@ MidiPkt_SysExBulkTransfer_Data_Helper2:
 	ret
 MidiPkt_SysExBulkTransfer_Data_Join:
 	lda	xsp, (xsp-12)
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 9
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	sub_erpb 251, 16
-	cp_erpb 251, 16
-	jrl	nc, 244
-	stb_erp a, 251
+	ldb_erp	l, 251
+	sub_erpb	251, 16
+	cp_erpb	251, 16
+	jrl	nc, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
+	stb_erp	a, 251
 	extz	wa
-	lda	xbc, (MidiPkt_EventType_Table_0x330:24)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ld	a, 199:opc
-	swi	3
-	sub	(xbc-31), ix
-	lda	xbc, (xix+32)
-	pushw	7424
-	.byte 0xb6
-	pop	xiz
-	swi	5
+	lda	xbc, (0xee337c:24)
+	ld	a, (xbc+wa)
+	ldb_erp	a, 251
+	ldda32	xwa, (0xbcac)
+	ldw	bc, 11
+	call	SeqData_ReadFieldByIndex
 	cp	l, 2:i3
-	jrl	ugt, 210
-	cp_erpb 251, 15
-	jrl z, 203
-	stb_erp a, 251
+	jrl	ugt, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
+	cp_erpb	251, 15
+	jrl	z, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
+	stb_erp	a, 251
 	extz	wa
 	cp	l, 0:i3
-	jr	z, 97
+	jr	z, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip
 	pushw	0
 	ld	bc, 0:i3
 	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
@@ -1431,39 +1416,34 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	call	SndParam_NotifyAndReturn
 	ld	xiy, MidiPkt_EventType_Table_0x340
 	lda	xix, (xsp+10)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+10)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x344
 	lda	xix, (xsp+6)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+6)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x348
 	lda	xix, (xsp+2)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+2)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	jr	MidiPkt_SysExBulkTransfer_Data_Join2
+MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
 	pushw	0
 	ld	bc, 0:i3
 	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
@@ -1471,36 +1451,31 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	call	SndParam_NotifyAndReturn
 	ld	xiy, MidiPkt_EventType_Table_0x34C
 	lda	xix, (xsp+10)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+10)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x350
 	lda	xix, (xsp+6)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+6)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x354
 	lda	xix, (xsp+2)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+2)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 MidiPkt_SysExBulkTransfer_Data_Join2:
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper2
-	pop qiz
+MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue:
+	pop	qiz
 	lda	xsp, (xsp+12)
 	ret
 MidiPkt_SysExBulkTransfer_Data_Join3:
@@ -1508,7 +1483,7 @@ MidiPkt_SysExBulkTransfer_Data_Join3:
 MidiPkt_SysExBulkTransfer_Data_Join4:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -1523,16 +1498,16 @@ MidiPkt_SysExBulkTransfer_Data_Join4:
 	jr	lt, MidiPkt_SysExBulkTransfer_Data_Epilogue
 	ld	xwa, 0x4b04
 	call	DSPCfg_ReadParam_Map0
-	ld qiz, hl
-	cp qiz, 0
-	jr lt, MidiPkt_SysExBulkTransfer_Data_Epilogue
+	ld	qiz, hl
+	cp	qiz, 0
+	jr	lt, MidiPkt_SysExBulkTransfer_Data_Epilogue
 	ld	iz, 0:i3
-	cp qiz, 0
-	jr le, MidiPkt_SysExBulkTransfer_Data_Skip2
+	cp	qiz, 0
+	jr	le, MidiPkt_SysExBulkTransfer_Data_Skip2
 MidiPkt_SysExBulkTransfer_Data_Loop:
 	ld	a, (xsp+4)
 	extz	wa
-	stb_erp c, 248
+	stb_erp	c, 248
 	extz	bc
 	calr	SysEx_DispatchByChannel_49
 	ld	bc, hl
@@ -1544,7 +1519,7 @@ MidiPkt_SysExBulkTransfer_Data_Loop:
 	call	DSPCfg_WriteParamFull
 MidiPkt_SysExBulkTransfer_Data_Skip:
 	inc	1, iz
-	cp iz, qiz
+	cp	iz, qiz
 	jr	lt, MidiPkt_SysExBulkTransfer_Data_Loop
 MidiPkt_SysExBulkTransfer_Data_Skip2:
 	push	xiz
