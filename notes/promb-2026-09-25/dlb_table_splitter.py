@@ -59,8 +59,9 @@ RUN
          comments, their `Data_X -- N bytes, EMITTED AS DATA` first lines (now the
          address range) and the corrected extent sentence (the checker's rename of
          `Data_F05AB4` inside the kept history sentence shows as one more).
-    On commit a57ab5d9 the first three commands reproduce commit "dlb_table_splitter"
-    byte for byte.
+    On commit a57ab5d9 the first three commands reproduce the source as of the
+    commit after 5ad3922c ("range and count", which changed two header lines by hand
+    and this rule to match) byte for byte.
     With no LABEL it takes every `Data_*` object of prom_b that the census files as
     a research target and a B record reads.
 """
@@ -460,9 +461,15 @@ def main():
             h -= 1
         head = "\n".join(L[h:i])
         head = head.replace(OLD_EXTENT_L1, NEW_EXTENT)
+        # the retired label becomes the address range -- or, where a later
+        # SUPERSEDED note explains that the stated count was the walk's and too
+        # long (0xF05AB4, 0xF28522), just the start address, so range and count
+        # cannot contradict each other
         head = re.sub(r'^; %s -- (\d+) bytes, EMITTED AS DATA' % pl["label"],
-                      lambda m: "; 0x%06X-0x%06X -- %s bytes, EMITTED AS DATA" % (
-                          pl["lo"], pl["hi"] - 1, m.group(1)), head, count=1, flags=re.M)
+                      lambda m: ("; 0x%06X-0x%06X -- %s bytes, EMITTED AS DATA" % (
+                          pl["lo"], pl["hi"] - 1, m.group(1)) if int(m.group(1)) == pl["hi"] - pl["lo"]
+                          else "; 0x%06X -- %s bytes, EMITTED AS DATA" % (pl["lo"], m.group(1))),
+                      head, count=1, flags=re.M)
         head = head.replace(pl["label"], "OLD<<%s>>" % pl["label"].replace("_", "@"))
         new = head.split("\n")
         prev = None

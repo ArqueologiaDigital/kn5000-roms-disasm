@@ -13798,7 +13798,7 @@ DL_F05AAA:
 ;   the extents below come from the code that RUNS these records.
 
 ; --------------------------------------------------------------------------
-; 0xF05AB4-0xF05CDF -- 568 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF05AB4 -- 568 bytes, EMITTED AS DATA (not promoted to code).
 ; ⚠ SUPERSEDED 2026-09-02 (lane res05x): 568 was the reachability walk's
 ;   extent and it is 12 bytes TOO LONG.  Its last 12 bytes are the first
 ;   byte-column of the 2x12 bitmap at 0xF05CE0, whose size three op-03
@@ -53841,7 +53841,7 @@ DLTable_F284A2:
 	.ascii "2-16"	; [31]
 
 ; --------------------------------------------------------------------------
-; 0xF28522-0xF286A1 -- 426 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF28522 -- 426 bytes, EMITTED AS DATA (not promoted to code).
 ; ⚠ SUPERSEDED 2026-09-02 (lane res3xx): 426 was the reachability walk's
 ;   extent, and it is 42 bytes TOO LONG.  The record at 0xF28468 that
 ;   names 0x00F28522 declares 3 bytes per entry and mask 0x7F, i.e. 128
