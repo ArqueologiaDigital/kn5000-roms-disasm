@@ -48,7 +48,8 @@
 ;
 ; SOUND-PARAMETER BANKS (0x3D3000; see CustomData_SndParamBanks below):
 ;   +0x000: "HK " + 13 bytes      +0x010 / +0x110 / +0x210: banks 0-2, 234 bytes
-;   each = 39 entries of {u32 main-CPU RAM address, u16 value}; +0x400: 0x50 bytes
+;   each = 36 entries {u32 main-CPU RAM address, u16 value} + 18 bytes;
+;   +0x400: 0x50 bytes
 ; =============================================================================
 
 	.org 0x300000 - 0x300000, 0xFF
@@ -1658,9 +1659,10 @@ CustomData_SndParamBanks:
 	; "Bank 0/1/2 at +0x10/+0x110/+0x210, 234 bytes each" and that no writer
 	; was traced.  Both claims are PROVEN FALSE: the readers/writers above use
 	; exactly those three addresses and 0xEA = 234 bytes, and the bytes agree
-	; -- each bank is 39 six-byte entries {u32 RAM address, u16 value} (the
-	; addresses 0xF9C2, 0xF9DC, ... step by 0x1A, then 0xFD50, 0xFD51, ...),
-	; padded with 0xFF to the next 0x100.  This dump's header + bank 0 differ
+	; -- each bank is 36 six-byte entries {u32 RAM address, u16 value} (the
+	; addresses 0xF9C2, 0xF9DC, ... step by 0x1A, then 0xFD50-0xFD5C) and 18
+	; more bytes whose layout is not established, padded with 0xFF to the
+	; next 0x100.  This dump's header + bank 0 differ
 	; from the ROM default at 0xED933A in 14 of 0xFA bytes (values only):
 	; user-edited.
 	.byte 0x48, 0x4b, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03	; +0x0000  HK .............
