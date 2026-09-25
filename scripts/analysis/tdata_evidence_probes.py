@@ -359,6 +359,14 @@ def check_sections():
         kinds |= {(x, y) for x, y in zip(base, img[n]) if x != y}
     print("  split-point pictures 13-24 differ from 12 only as %s" % sorted(kinds))
     ok &= kinds <= {(0xFF, 0xFE), (0x00, 0xFC)}
+    counts = [(sum(1 for x, y in zip(base, img[n]) if (x, y) == (0xFF, 0xFE)),
+               sum(1 for x, y in zip(base, img[n]) if (x, y) == (0x00, 0xFC))) for n in range(13, 25)]
+    print("  recoloured (white, black) pixels per picture 13-24: %s" % counts)
+
+    def ndiff(a, b):
+        return sum(x != y for x, y in zip(img[a], img[b]))
+    print("  differing bytes: 3/4 %d, 3/5 %d, 4/5 %d; 25/26 %d, 25/27 %d"
+          % (ndiff(3, 4), ndiff(3, 5), ndiff(4, 5), ndiff(25, 26), ndiff(25, 27)))
     roms = {k: (rom(f), b) for k, (f, b) in OTHER_ROMS.items()}
     hits = []
     for n in range(33):
