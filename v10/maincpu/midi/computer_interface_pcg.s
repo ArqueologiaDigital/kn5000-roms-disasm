@@ -308,7 +308,7 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, PcgOutGridCheckComplete
 	ld	xde, (xsp+44)
 	cp	bc, 3:i3
@@ -322,7 +322,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda	xbc, (149354:24)
 	ld	(xwa), xbc
@@ -338,7 +338,7 @@ PcgOutGridCheckJumpTable_Skip2:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda	xbc, (149356:24)
 	ld	(xwa), xbc
@@ -351,12 +351,12 @@ PcgOutGridCheckJumpTable_Skip2:
 PcgOutGridCheckJumpTable_Skip3:
 	jrl	PcgOutGridCheckJumpTable_Join4
 PcgOutGridCheckJumpTable_Entry:
-	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff
+	cp	(0x24770:24), 255
 	jrl	z, PcgOutGridCheckComplete
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda	xbc, (149358:24)
 	ld	(xwa), xbc
@@ -372,7 +372,7 @@ PcgOutGridCheckJumpTable_Skip5:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda	xbc, (149360:24)
 	ld	(xwa), xbc
