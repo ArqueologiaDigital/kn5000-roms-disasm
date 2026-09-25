@@ -16,12 +16,14 @@ Files owned: `wsa1/prom_c/*`, `wsa1/prom_d/*`, `wsa1/kernel/*`, `wsa1/dsp/*`
 | `prom_c_curve_fe13d6.py` | the reader clamp that pins Curve_FE13D6 at 101 entries | same pattern |
 | `label_constant_pools.py` | labels every element of the three prom_c literal pools by its own value/text (re-decoded from the ROM) | same pattern |
 | `pool_element_readers.py` | each pool element's readers, from the symbolic operands | same pattern |
+| `pool_element_consumers.py` | which double-library call (Double_Add/Subtract/Multiply/Divide/Compare/Pow/ToFloat32) each pool double is pushed for, and at what stack depth; asserts the depth is 8 or 16 bytes at every credited call | `python3 notes/lanes/promcd-2026-09-25/pool_element_consumers.py [--apply]; make gate-wsa1` |
 | `p7_effect_names.py` | effect name of every P7 directory record / field array / stream; the 24 unreferenced streams | same pattern |
 | `p7_value_tables.py` | the P7 value tables' layout from P7Unit_SendValueTable | same pattern |
 | `keybend_index_trace.py` | whether Voice_KeyBend_Curve_0's wrapped top rows are reached (yes, notes >= 115) | same pattern |
 | `symbolize_shared_targets.py` | converts prom_c's numeric branches into existing labels of the shared kernel/dsp files | needs a `symbolize_numeric_branches.py --report` JSON |
 | `symbolize_refused_branches.py` | converts the ten R3/R6-refused prom_c branches after review | `... [--apply]; make gate-wsa1` |
 | `rename_param_appliers.py` + `param_appliers.rename-map` | evidence for five routine names; the rename is `scripts/renaming/rename_promcd_param_appliers.sed` | `... [--apply]` |
+| `mathlib_names.py` + `mathlib.rename-map` | names eight prom_c math routines (Double_Sin/Cos/Tan/Exp/Log/Pow/Abs/MakeInfinity) from the Float64 pool's coefficient sets: asserts all 29 Cody & Waite coefficients within 1 ulp and the 9 instruction encodings that load them; the rename is `scripts/renaming/rename_promcd_mathlib.sed` | `python3 notes/lanes/promcd-2026-09-25/mathlib_names.py [--apply]; make gate-wsa1` |
 | `symbolize_rom_operands_prom_c.json` | the per-site record of the `scripts/converters/symbolize_rom_operands.py` run on prom_c (2,668 operands) | data, not a script |
 
 Each `--apply` produced its script's committed edit when run on the file as it stood
