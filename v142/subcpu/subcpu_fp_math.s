@@ -109,19 +109,19 @@ FP_DP_CmpZero64:
 	ld xiy, (xwa)
 	cp xiy, xde
 	jr nz, FP_DP_CmpZero64_Greater
-	lda xde, (0x03d978:24)
+	lda xde, (FP_CmpResult_Equal:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x < 0: return LessRow[BC].
 FP_DP_CmpZero64_Less:
-	lda xde, (0x03d97e:24)
+	lda xde, (FP_CmpResult_Less:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x > 0 (and the "high words differ" shortcut): return GreaterRow[BC].
 FP_DP_CmpZero64_Greater:
-	lda xde, (0x03d984:24)
+	lda xde, (FP_CmpResult_Greater:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
@@ -134,19 +134,19 @@ FP_SP_CmpZero32:
 	cp xde, 0x0
 	jr lt, FP_SP_CmpZero32_Less
 	jr gt, FP_SP_CmpZero32_Greater
-	lda xde, (0x03d978:24)
+	lda xde, (FP_CmpResult_Equal:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x < 0 arm.
 FP_SP_CmpZero32_Less:
-	lda xde, (0x03d97e:24)
+	lda xde, (FP_CmpResult_Less:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
 ; x > 0 arm.
 FP_SP_CmpZero32_Greater:
-	lda xde, (0x03d984:24)
+	lda xde, (FP_CmpResult_Greater:24)
 	ldb_sri L, 0x07, 0xE8, 0xE4
 	ret
 
@@ -230,13 +230,13 @@ FP_pow:
 	lda xwa, (xsp + 74)
 	lda xbc, (FPConst_Int32_Min_As_Double:24)
 	ld de, 1:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_pow_Invalid
 	lda xwa, (xsp + 74)
 	lda xbc, (FPConst_Int32_Max_As_Double:24)
 	ld de, 3:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_pow_Invalid
 	lda xbc, (xsp + 74)
@@ -262,7 +262,7 @@ FP_pow_AfterRange:
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
 	ld de, 4:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_pow_AltPath
 	ldw (0x040c22:24), 0x0021
@@ -298,7 +298,7 @@ FP_pow_AltPath2:
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
 	ld de, 5:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jrl nz, FP_pow_ExpLog
 	ld xwa, (xsp + 54)
@@ -766,13 +766,19 @@ FP_SP_Sub_Done:
 ; 0x03D97E: Less-than result table (6 bytes)
 ; 0x03D984: Greater-than result table (6 bytes)
 ; ----------------------------------------------------------------------------
-ToneGen_Compare_Tables:	; 03D977h
+; ★ Renamed 2026-09-25 from ToneGen_Compare_Tables (FP library compare; see the headers).
+FP_CmpResult_Pad:	; 03D977h
 	.byte 0xff	; Padding
+; The three rows are indexed by the comparison-kind code 0..5 (DE in FP_dcmp / FP_fcmp,
+; BC in FP_DP_CmpZero64 / FP_SP_CmpZero32), `ldb_sri` / `xor_srib_rm` = row[kind].
 	; Equal table (0x03D978)
+FP_CmpResult_Equal:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	; Less-than table (0x03D97E)
+FP_CmpResult_Less:
 	.byte 0x01, 0x01, 0x00, 0x00, 0x00, 0x01
 	; Greater-than table (0x03D984)
+FP_CmpResult_Greater:
 	.byte 0x00, 0x00, 0x01, 0x01, 0x00, 0x01
 
 ; The shared sin/cos kernel. C signature f(double *result, double x, double a, int neg),
@@ -817,7 +823,7 @@ FP_SinCos_Kernel:
 FP_SinCos_Kernel_InRange:
 	lda xwa, (xsp + 116)
 	push xwa
-	lda xde, (0x00f396:24)
+	lda xde, (FPConst_InvPi:24)
 	lda_dri XBC, 0xFD, 0x98, 0x00
 	lda xwa, (xsp + 72)
 	call FP_dmul
@@ -833,7 +839,7 @@ FP_SinCos_Kernel_InRange:
 	lda xwa, (xsp + 100)
 	lda xbc, (FPConst_SinCos_Kernel_InRange_Half:24)
 	ld de, 1:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_SinCos_Kernel_Phase2
 	lda xwa, (xsp + 116)
@@ -867,7 +873,7 @@ FP_SinCos_Kernel_Phase3:
 	lda xwa, (xsp + 92)
 	lda_dri XBC, 0xFD, 0x94, 0x00
 	ld de, 4:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_SinCos_Kernel_Phase4
 	lda xwa, (xsp + 116)
@@ -897,7 +903,7 @@ FP_SinCos_Kernel_Phase4:
 	lda xwa, (xsp + 120)
 	push xwa
 	call FP_modf
-	lda xde, (0x00f39e:24)
+	lda xde, (FPConst_PiHi_CodyWaite:24)
 	lda_dri XBC, 0xFD, 0x84, 0x00
 	lda xwa, (xsp + 84)
 	call FP_dmul
@@ -909,7 +915,7 @@ FP_SinCos_Kernel_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 124)
 	call FP_dadd
-	lda xbc, (0x00f38e:24)
+	lda xbc, (FPConst_PiLo_CodyWaite:24)
 	lda xwa, (xsp + 72)
 	call FP_DP_CopyOrNegate8
 	lda xwa, (xsp + 72)
@@ -929,17 +935,17 @@ FP_SinCos_Kernel_Phase4:
 	push xwa
 	call FP_fabs
 	lda xsp, (xsp + 28)
-	lda xbc, (0x00f3a6:24)
+	lda xbc, (FPConst_SinCos_Epsilon:24)
 	lda xwa, (xsp + 76)
 	ld de, 0:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jrl nz, FP_SinCos_Kernel_FinalCheck
 	lda xde, (xsp + 124)
 	ld xbc, xde
 	lda xwa, (xsp + 108)
 	call FP_dmul
-	lda xwa, (0x00f34e:24)
+	lda xwa, (FPConst_InvFact3:24)
 	lda xiz, (xwa + 48)
 	lda xbc, (xwa + 56)
 	lda xde, (xsp + 108)
@@ -953,7 +959,7 @@ FP_SinCos_Kernel_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_dmul
-	lda xbc, (0x00f376:24)
+	lda xbc, (FPConst_InvFact13:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call FP_dadd
@@ -961,7 +967,7 @@ FP_SinCos_Kernel_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_dmul
-	lda xde, (0x00f36e:24)
+	lda xde, (FPConst_InvFact11:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
@@ -969,7 +975,7 @@ FP_SinCos_Kernel_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_dmul
-	lda xbc, (0x00f366:24)
+	lda xbc, (FPConst_InvFact9:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call FP_dadd
@@ -977,7 +983,7 @@ FP_SinCos_Kernel_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_dmul
-	lda xde, (0x00f35e:24)
+	lda xde, (FPConst_InvFact7:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
@@ -985,7 +991,7 @@ FP_SinCos_Kernel_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_dmul
-	lda xbc, (0x00f356:24)
+	lda xbc, (FPConst_InvFact5:24)
 	lda xwa, (xsp + 56)
 	ld xde, xwa
 	call FP_dadd
@@ -993,7 +999,7 @@ FP_SinCos_Kernel_Phase4:
 	ld xbc, xwa
 	lda xde, (xsp + 108)
 	call FP_dmul
-	lda xde, (0x00f34e:24)
+	lda xde, (FPConst_InvFact3:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	call FP_DP_Sub
@@ -2750,7 +2756,7 @@ FP_exp_NonZero:
 	lda xwa, (xsp + 58)
 	lda xbc, (FPConst_Exp_Overflow_Limit:24)
 	ld de, 0:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_exp_LessPath
 	ldw (0x040c22:24), 0x0022
@@ -2764,7 +2770,7 @@ FP_exp_LessPath:
 	lda xwa, (xsp + 58)
 	lda xbc, (FPConst_Exp_Underflow_Limit:24)
 	ld de, 2:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_exp_StartIter
 	ld xwa, (xsp + 54)
@@ -2803,7 +2809,7 @@ FP_exp_IterLoop:
 	lda xwa, (xsp + 26)
 	lda xbc, (xsp + 34)
 	ld de, 5:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr z, FP_exp_Done
 	inc 1, iz
@@ -2859,7 +2865,7 @@ FP_log:
 FP_log_InRange:
 	lda xwa, (xsp + 104)
 	push xwa
-	lda xde, (FPConst_Ln2:24)
+	lda xde, (FPConst_Sqrt2:24)
 	lda xbc, (xsp + 118)
 	lda xwa, (xsp + 52)
 	call FP_ddiv
@@ -2934,10 +2940,10 @@ FP_log_IterLoop:
 	lda xwa, (xsp + 80)
 	lda xbc, (xsp + 88)
 	ld de, 5:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, FP_log_IterLoop
-	lda xiz, (0x00f3d2:24)
+	lda xiz, (FPConst_Ln2:24)
 	ld wa, (xsp + 104)
 	exts xwa
 	ld (xsp + 44), xwa

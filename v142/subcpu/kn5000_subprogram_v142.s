@@ -180,13 +180,13 @@ AudioLoop_CheckPeriodicReinit:
 	res 1, (4158:16)
 	call Cmd_Check_E2_Pending
 	call Audio_Process_Init
-	ld wa, (61458:16)
+	ld wa, (AudioLoop_ReinitCounter:16)
 	ld bc, wa
 	inc 1, wa
-	ld (61458:16), wa
+	ld (AudioLoop_ReinitCounter:16), wa
 	cp bc, 0xA
 	jr lt, AudioLoop_DecrementDelay
-	ldw (61458:16), 0
+	ldw (AudioLoop_ReinitCounter:16), 0
 
 AudioLoop_DecrementDelay:
 	cp iz, 0:i3
@@ -207,10 +207,10 @@ Timer_AudioTick_Handler:
 	push xix
 	ld xwa, 1:i3
 	add (4160:16), xwa
-	ld a, (61460:16)
+	ld a, (AudioTick_Phase:16)
 	ld c, a
 	inc 1, a
-	ld (61460:16), a
+	ld (AudioTick_Phase:16), a
 	extz bc
 	cp bc, 0:i3
 	jr mi, AudioTick_Done
@@ -251,14 +251,14 @@ AudioTick_StoreTick:
 
 AudioTick_Variant_6:
 	set 2, (4158:16)
-	ld (61460:16), 0
-	ld a, (61462:16)
+	ld (AudioTick_Phase:16), 0
+	ld a, (AudioTick_Phase6Count:16)
 	inc 1, a
-	ld (61462:16), a
+	ld (AudioTick_Phase6Count:16), a
 	cp a, 0x8
 	jr c, AudioTick_Done
 	set 5, (4158:16)
-	ld (61462:16), 0
+	ld (AudioTick_Phase6Count:16), 0
 
 AudioTick_Done:
 	pop xix
@@ -3264,31 +3264,31 @@ Cmd_Check_DMA_Timeout:	; 020FD9h
 	bit_dd8 1, 0x34	; SSTAT1 - test own status: if set, no DMA transfer in progress
 	jr nz, Cmd_DMA_Idle
 	ldc_16_cr wa, 0x40	; Get current DMA byte count
-	cp (61468:16), wa	; Compare with previous
+	cp (InterCPU_DmaLast_Count:16), wa	; Compare with previous
 	jr nz, Cmd_DMA_Reset_Counter
-	incw 1, (61466:16)	; Increment stuck counter
+	incw 1, (InterCPU_DmaStuck_Count:16)	; Increment stuck counter
 	jr Cmd_DMA_Save_Count
 
 Cmd_DMA_Reset_Counter:	; 020FEFh
-	ldw (61466:16), 0	; Reset stuck counter
+	ldw (InterCPU_DmaStuck_Count:16), 0	; Reset stuck counter
 
 Cmd_DMA_Save_Count:	; 020FF5h
-	ld (61468:16), wa	; Save current count
+	ld (InterCPU_DmaLast_Count:16), wa	; Save current count
 	jr Cmd_DMA_Check_Stuck
 
 Cmd_DMA_Idle:	; 020FFBh
-	ldw (61466:16), 0
+	ldw (InterCPU_DmaStuck_Count:16), 0
 
 Cmd_DMA_Check_Stuck:	; 021001h
-	ld wa, (61466:16)
+	ld wa, (InterCPU_DmaStuck_Count:16)
 	cp wa, 0xA	; Stuck for 10 iterations?
 	ret ule
 	; Timeout recovery - abort stuck DMA
-	ldw (61466:16), 0
+	ldw (InterCPU_DmaStuck_Count:16), 0
 	ld (256:16), 0	; Stop DMA
 	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
-	inc 1, (61464:16)	; Increment error counter
+	inc 1, (InterCPU_DmaAbort_Count:16)	; Increment error counter
 	ret
 
 ; ===========================================================================
@@ -7038,7 +7038,7 @@ TVF_Lookup_Depth_Amount:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	lda xwa, (0x011a26:24)
+	lda xwa, (TVF_DepthRecords_B+1:24)
 	add xwa, xbc
 	ld a, (xwa)
 	ld l, a
@@ -7059,7 +7059,7 @@ TVF_Lookup_Depth_Amount:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	lda xwa, (0x011a27:24)
+	lda xwa, (TVF_DepthRecords_B+2:24)
 	add xwa, xbc
 	ld a, (xwa)
 	exts wa
@@ -7073,7 +7073,7 @@ TVF_Lookup_Depth_Amount_SetA:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	lda xwa, (0x0119fc:24)
+	lda xwa, (TVF_DepthRecords_A+1:24)
 	add xwa, xbc
 	ld a, (xwa)
 	ld l, a
@@ -7094,7 +7094,7 @@ TVF_Lookup_Depth_Amount_SetA:
 	ld xbc, xwa
 	add xbc, xbc
 	add xbc, xwa
-	lda xwa, (0x0119fd:24)
+	lda xwa, (TVF_DepthRecords_A+2:24)
 	add xwa, xbc
 	ld a, (xwa)
 	exts wa
@@ -44678,7 +44678,7 @@ DSP_Reset:
 	ld bc, (17844:16)
 	ld de, (17846:16)
 	call DSP_MixerCoeff_Compute
-	ld xiy, 0xF01E
+	ld xiy, DSP_DefaultEffectConfig_Image
 	ld xix, 0x448E
 	ldw bc, 0x91
 	ldirw
@@ -44686,7 +44686,7 @@ DSP_Reset:
 	call DSP_State_LoadAndApplyAll
 	ldw (17554:16), 0
 	call DSP_State_DmaLoadPresets
-	ld iz, (61478:16)
+	ld iz, (DSP_DefaultEffectConfig_Image+8:16)
 	ld wa, iz
 	calr DSP_WriteAlgoInitPreset
 	ld wa, iz
@@ -53507,7 +53507,7 @@ DSP_ParamInterp_Div0xC6:
 ;       XBC <= 75 (0x4B)  range 4, constants 0x012EBB..0x012EDF  (bias 56)
 ;       else              range 5, constants 0x012EE7..0x012EFB  (bias 67)
 ; The biases 16/24/56/67 are subtracted from XBC by the FP_SP_Sub at the head of each range, so
-; each range restarts its curve from zero.  Range 1 additionally calls ToneGen_Compare_Voice
+; each range restarts its curve from zero.  Range 1 additionally calls FP_dcmp
 ; (0x03D2AC -- an FP COMPARISON helper, not a voice routine; see [UNCERTAIN]) against the
 ; constant at 0x012E2F and takes a separate arm when the coefficient is non-zero.
 ; Every range converges on DSP_ParamEQ_Finalize.  Frame 0x64 bytes.
@@ -53581,7 +53581,7 @@ DSP_ParamEQ_Curve_FP:
 	lda xwa, (xsp + 64)
 	lda xbc, (FPConst_DSP_ParamEQ_Curve_FP_Neg7:24)
 	ld de, 1:i3
-	call ToneGen_Compare_Voice
+	call FP_dcmp
 	cp hl, 0:i3
 	jr nz, DSP_ParamEQ_Range1_NonzeroCoeff
 	lda xbc, (xsp + 72)
@@ -54930,7 +54930,7 @@ DSP_BiquadCoeff_Algo0_NegBranch:
 
 ; Algo0: assembles the five raw taps from K and A before normalisation.  Ends with a guard at
 ; 0x03AD0C: it compares the computed a0 against the float 1.0 at 0x012F9B (via
-; ToneGen_Compare_Voice_32 with kind DE=0, "equal") and, on a match, forces the normalisation
+; FP_fcmp with kind DE=0, "equal") and, on a match, forces the normalisation
 ; factor to the literal 0x3F800000 -- IEEE-754 single 1.0 -- before falling into the Fixup
 ; block.  That literal is independent confirmation that this code is plain IEEE-754.
 DSP_BiquadCoeff_Algo0_Assembly:
@@ -54957,7 +54957,7 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	lda_dri XWA, 0xFD, 0x9E, 0x00
 	lda xbc, (FPConst_DSP_BiquadCoeff_Algo0_Assembly_1_2:24)
 	ld de, 0:i3
-	call ToneGen_Compare_Voice_32
+	call FP_fcmp
 	cp hl, 0:i3
 	jr nz, DSP_BiquadCoeff_Algo0_Fixup
 	ld xwa, 0x3F800000
@@ -56495,7 +56495,7 @@ DSP_MixerCoeff_Compute:
 	srl xde, 15
 	ld wa, (xsp + 22)
 	sll wa, 2
-	lda xbc, (61760:16)
+	lda xbc, (DSP2_MixerGain_Curve:16)
 	extz xwa
 	add xwa, xbc
 	ld xwa, (xwa)
@@ -56505,7 +56505,7 @@ DSP_MixerCoeff_Compute:
 	srl xhl, 0
 	ld wa, (xsp + 20)
 	sll wa, 2
-	lda xbc, (61760:16)
+	lda xbc, (DSP2_MixerGain_Curve:16)
 	extz xwa
 	add xwa, xbc
 	ld xwa, (xwa)
@@ -56515,7 +56515,7 @@ DSP_MixerCoeff_Compute:
 	ld (xsp + 8), xhl
 	ld wa, (xsp + 22)
 	sll wa, 2
-	lda xbc, (61760:16)
+	lda xbc, (DSP2_MixerGain_Curve:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xbc
@@ -58630,7 +58630,7 @@ Keybed_Decode_Event:	; 03D11Fh
 	ld c, (19016:16)
 	extz bc
 	muls bc, 0x3
-	lda xde, (0x01f420:24)
+	lda xde, (ToneGen_VelCurve_ModeParams:24)
 	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	muls xbc, xhl
@@ -58641,7 +58641,7 @@ Keybed_Decode_Event:	; 03D11Fh
 	ld c, (19016:16)
 	extz bc
 	muls bc, 0x3
-	lda xde, (0x01f421:24)
+	lda xde, (ToneGen_VelCurve_ModeParams+1:24)
 	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	add bc, hl
@@ -58667,7 +58667,7 @@ Keybed_Vel_BlackKey_Trim:	; 03D1AAh - apply mode-specific pitch offset
 	ld c, (19016:16)	; Get tone gen mode
 	extz bc
 	muls bc, 0x3	; mode * 3 for table index
-	lda xhl, (0x01f422:24)                  ; Pitch offset table
+	lda xhl, (ToneGen_VelCurve_ModeParams+2:24)                  ; Pitch offset table
 	ldb_sri C, 0x07, 0xEC, 0xE4
 	extz bc
 	extz xbc
@@ -58824,9 +58824,10 @@ ToneGen_Poll_Next:	; 03D2A1h
 	jrl c, ToneGen_Poll_Channel
 	ret
 
-; --- 0x03D2AB-0x03D2AB  ToneGen_Voice_Padding -- one alignment byte 0xFF
+; --- 0x03D2AB-0x03D2AB  FP_dcmp_AlignPad -- one alignment byte 0xFF
 ; Already named.  Not executed.
-ToneGen_Voice_Padding:	; 03D2ABh
+; ★ Renamed 2026-09-25 from ToneGen_Voice_Padding (FP library compare; see the headers).
+FP_dcmp_AlignPad:	; 03D2ABh
 	.byte 0xff
 
 ; ----------------------------------------------------------------------------
@@ -58846,24 +58847,27 @@ ToneGen_Voice_Padding:	; 03D2ABh
 ;   Otherwise it compares the high longs, then the low longs, taking sign into account, and
 ;   returns byte table 0x03D97E[kind] for "less" or 0x03D984[kind] for "greater" (each XORed
 ;   into L, which is how a single table serves <, <=, >, >=, ==, !=).
-ToneGen_Compare_Voice:	; 03D2ACh
+; ★ Renamed 2026-09-25 from ToneGen_Compare_Voice (FP library compare; see the headers).
+FP_dcmp:	; 03D2ACh
 	ld xix, (xwa + 4)	; Compare high 4 bytes
 	cp xix, (xbc + 4)
-	jr nz, ToneGen_Compare_Diff
+	jr nz, FP_dcmp_HighDiffer
 	ld xiy, (xwa)	; Compare low 4 bytes
 	cp xiy, (xbc)
-	jr nz, ToneGen_Compare_Result
-	lda xix, (0x03d978:24)                  ; Exact match - lookup result
+	jr nz, FP_dcmp_NotEqual
+	lda xix, (FP_CmpResult_Equal:24)                  ; Exact match - lookup result
 	ldb_sri L, 0x07, 0xF0, 0xE8
 	ld h, 0x0:opc
 	ret
 
 ; Already named.  High halves differ; reload the low half and fall through.
-ToneGen_Compare_Diff:	; 03D2C7h
+; ★ Renamed 2026-09-25 from ToneGen_Compare_Diff (FP library compare; see the headers).
+FP_dcmp_HighDiffer:	; 03D2C7h
 	ld xiy, (xwa)
 
 ; Already named.  The kind-4 / kind-5 early answers.
-ToneGen_Compare_Result:	; 03D2C9h
+; ★ Renamed 2026-09-25 from ToneGen_Compare_Result (FP library compare; see the headers).
+FP_dcmp_NotEqual:	; 03D2C9h
 	ld hl, 0:i3
 	cp de, 4:i3
 	ret z
@@ -58873,27 +58877,30 @@ ToneGen_Compare_Result:	; 03D2C9h
 	ld xwa, (xbc + 4)
 	ld hl, 0:i3
 	ldcf_erpw 0xF2, 0x0F
-	jr nc, ToneGen_Compare_Sign
+	jr nc, FP_dcmp_Sign
 	xorcf_erpw 0xE2, 0x0F
 	scc16 nc, hl
 
 ; Already named.  Signed magnitude comparison of the two operands.
-ToneGen_Compare_Sign:	; 03D2E6h
+; ★ Renamed 2026-09-25 from ToneGen_Compare_Sign (FP library compare; see the headers).
+FP_dcmp_Sign:	; 03D2E6h
 	cp xix, xwa
-	jr gt, ToneGen_Cmp_Greater
-	jr lt, ToneGen_Cmp_Less
+	jr gt, FP_dcmp_Greater
+	jr lt, FP_dcmp_Less
 	cp xiy, (xbc)
-	jr ugt, ToneGen_Cmp_Greater
+	jr ugt, FP_dcmp_Greater
 
 ; Already named.  Result from the 0x03D97E table.
-ToneGen_Cmp_Less:	; 03D2F0h - voice 1 < voice 2
-	lda xix, (0x03d97e:24)                  ; Less-than lookup table
+; ★ Renamed 2026-09-25 from ToneGen_Cmp_Less (FP library compare; see the headers).
+FP_dcmp_Less:	; 03D2F0h - voice 1 < voice 2
+	lda xix, (FP_CmpResult_Less:24)                  ; Less-than lookup table
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
 ; Already named.  Result from the 0x03D984 table.
-ToneGen_Cmp_Greater:	; 03D2FBh - voice 1 > voice 2
-	lda xix, (0x03d984:24)                  ; Greater-than lookup table
+; ★ Renamed 2026-09-25 from ToneGen_Cmp_Greater (FP library compare; see the headers).
+FP_dcmp_Greater:	; 03D2FBh - voice 1 > voice 2
+	lda xix, (FP_CmpResult_Greater:24)                  ; Greater-than lookup table
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
@@ -58906,18 +58913,20 @@ ToneGen_Cmp_Greater:	; 03D2FBh - voice 1 > voice 2
 ; Already named (reference: TONEGEN_COMPARE_VOICE_32).  The 32-bit (single-precision) form of
 ; the same predicate; same three result tables at 0x03D978 / 0x03D97E / 0x03D984.
 ; Exactly one call site, at 0x03AD0C inside DSP_BiquadCoeff_Algo0_Assembly, testing a0 == 1.0.
-ToneGen_Compare_Voice_32:	; 03D306h
+; ★ Renamed 2026-09-25 from ToneGen_Compare_Voice_32 (FP library compare; see the headers).
+FP_fcmp:	; 03D306h
 	ld hl, 0:i3
 	ld xwa, (xwa)	; Load 32-bit value from voice 1
 	ld xbc, (xbc)	; Load 32-bit value from voice 2
 	cp xwa, xbc
-	jr nz, ToneGen_Cmp32_NotEqual
-	lda xix, (0x03d978:24)                  ; Equal - lookup result
+	jr nz, FP_fcmp_NotEqual
+	lda xix, (FP_CmpResult_Equal:24)                  ; Equal - lookup result
 	ldb_sri L, 0x07, 0xF0, 0xE8
 	ret
 
 ; Already named.  kind-4 / kind-5 early answers for the 32-bit form.
-ToneGen_Cmp32_NotEqual:	; 03D31Bh
+; ★ Renamed 2026-09-25 from ToneGen_Cmp32_NotEqual (FP library compare; see the headers).
+FP_fcmp_NotEqual:	; 03D31Bh
 	cp de, 4:i3
 	ret z
 	ld hl, 1:i3
@@ -58925,21 +58934,23 @@ ToneGen_Cmp32_NotEqual:	; 03D31Bh
 	ret z
 	ld hl, 0:i3
 	ldcf_erpw 0xE2, 0x0F	; Load carry from sign bit
-	jr nc, ToneGen_Cmp32_Sign
+	jr nc, FP_fcmp_Sign
 	xorcf_erpw 0xE6, 0x0F
 	scc16 nc, hl
 
 ; Already named.
-ToneGen_Cmp32_Sign:	; 03D333h
+; ★ Renamed 2026-09-25 from ToneGen_Cmp32_Sign (FP library compare; see the headers).
+FP_fcmp_Sign:	; 03D333h
 	cp xwa, xbc
-	jr gt, ToneGen_Cmp32_Greater
-	lda xix, (0x03d97e:24)
+	jr gt, FP_fcmp_Greater
+	lda xix, (FP_CmpResult_Less:24)
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
 ; Already named.
-ToneGen_Cmp32_Greater:	; 03D342h
-	lda xix, (0x03d984:24)
+; ★ Renamed 2026-09-25 from ToneGen_Cmp32_Greater (FP library compare; see the headers).
+FP_fcmp_Greater:	; 03D342h
+	lda xix, (FP_CmpResult_Greater:24)
 	xor_srib_rm L, 0x07, 0xF0, 0xE8
 	ret
 
@@ -58966,7 +58977,7 @@ FP_cos:
 	push xwa
 	call FP_fabs
 	lda xsp, (xsp + 12)
-	lda xbc, (0x00f3ca:24)
+	lda xbc, (FPConst_HalfPi:24)
 	lda xde, (xsp + 26)
 	lda xwa, (xsp + 34)
 	call FP_dadd
