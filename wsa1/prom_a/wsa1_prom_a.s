@@ -19741,6 +19741,7 @@ BitMask32ByIndex:
 	jp sub_F8A90B                                        ; F8AA1C  1b 0b a9 f8
 .LF8AA20:
 	jp sub_F8A90F                                        ; F8AA20  1b 0f a9 f8
+sub_F8AA24:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8AA24  cd d8
 	jr z, .LF8AA53                                           ; F8AA26  66 2b
 	calr LowestSetBitIndex1Based                                          ; F8AA28  1e e8 fe
@@ -19760,6 +19761,7 @@ BitMask32ByIndex:
 	jp sub_F8A90B                                        ; F8AA4F  1b 0b a9 f8
 .LF8AA53:
 	jp sub_F8A90F                                        ; F8AA53  1b 0f a9 f8
+sub_F8AA57:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8AA57  cd d8
 	jr z, .LF8AAA8                                           ; F8AA59  66 4d
 	ld a, 0x80:opc                                          ; F8AA5B  21 80
@@ -19770,7 +19772,7 @@ BitMask32ByIndex:
 .LF8AA6B:
 	push XIX                                             ; F8AA6B  3c
 	ld XIX,0x00007f27                                    ; F8AA6C  44 27 7f 00 00
-	calr sub_F8AAAC                                            ; F8AA71  1e 38 00
+	calr PanelCtrl_AssignToParamNumber                                            ; F8AA71  1e 38 00
 	pop XIX                                              ; F8AA74  5c
 	ld (xix-2), a                                        ; F8AA75  bc fe 41
 	ldw de, 0x7f40                                       ; F8AA78  32 40 7f
@@ -19784,7 +19786,7 @@ BitMask32ByIndex:
 .LF8AA90:
 	push XIX                                             ; F8AA90  3c
 	ld XIX,0x00007f28                                    ; F8AA91  44 28 7f 00 00
-	calr sub_F8AAAC                                            ; F8AA96  1e 13 00
+	calr PanelCtrl_AssignToParamNumber                                            ; F8AA96  1e 13 00
 	pop XIX                                              ; F8AA99  5c
 	lda_dpi xbc, 0xf0                                    ; F8AA9A  f5 f0 41
 	stib_dsp 0xf0, 0x00                                  ; F8AA9D  f5 f0 00 00
@@ -19792,7 +19794,24 @@ BitMask32ByIndex:
 	jp sub_F8A90B                                        ; F8AAA4  1b 0b a9 f8
 .LF8AAA8:
 	jp sub_F8A90F                                        ; F8AAA8  1b 0f a9 f8
-sub_F8AAAC:
+; ---------------------------------------------------------------------
+; PanelCtrl_AssignToParamNumber -- A = the parameter number for the controller
+;          assignment byte at (XIX); 0xFE when the byte is none of the ten.
+; Called from: sub_F8AA57 with XIX = 0x7F27 and 0x7F28, i.e. 0x7F12 + 0x15
+;          and + 0x16, two of the slots PanelGroupToRam7F12Slot maps groups to.
+; Body:    a `cp A,v / jr nz / ld A,n` chain:
+;          0x01->B2, 0x02->BC, 0x04->BD, 0x0B->B3, 0x10->B8,
+;          0x11->B9, 0x12->BA, 0x13->BB, 0x40->B5, 0x81->B4.
+;          PanelAction_AssignableController (0xF8AFD0) carries the same ten
+;          pairs inline (check A1).
+; ★ The assignment byte IS A MIDI CONTROLLER NUMBER: for every v < 0x80 the
+;          MIDI-in table of controller v (MidiIn_CC01_ParamTable, ..._CC40_)
+;          holds exactly n as its parameter number, and 0x81 -> 0xB4 is
+;          MidiIn_ChannelPressure_ParamTable's number -- so 0x81 is how an
+;          assignment spells channel pressure (aftertouch).
+; (check A1: notes/proma-2026-09-25/gen_panel_actions.py)
+; ---------------------------------------------------------------------
+PanelCtrl_AssignToParamNumber:
 	ld A,(XIX)                                           ; F8AAAC  84 21
 	cp A,0x10                                            ; F8AAAE  c9 cf 10
 	jr nz, .LF8AAB7                                          ; F8AAB1  6e 04
@@ -19847,6 +19866,14 @@ sub_F8AAAC:
 	ld a, 0xfe:opc                                          ; F8AB05  21 fe
 .LF8AB07:
 	ret                                                  ; F8AB07  0e
+; ---------------------------------------------------------------------
+; PanelAction_OrdinalToEventValue_A -- action handler of 10 pool records (v1
+;          group 0x07 masks 01..20, v2 group 0x06 masks 01..08): turn the one
+;          set bit into the event value PanelOrdinalToEventValue_A gives it.
+;          The body is described in that table's header.
+; (notes/proma-2026-09-25/gen_panel_actions.py)
+; ---------------------------------------------------------------------
+PanelAction_OrdinalToEventValue_A:   ; entry: PanelGroupActionListPool
 	m_cp_mi8 MB16, 0x2806, 0x00                          ; F8AB08  c1 06 28 3f 00
 	jr nz, .LF8AB35                                          ; F8AB0D  6e 26
 	calr LowestSetBitIndex1Based                                          ; F8AB0F  1e 01 fe
@@ -19886,6 +19913,13 @@ sub_F8AAAC:
 ; ---------------------------------------------------------------------
 PanelOrdinalToEventValue_A:
 	.byte 0x00, 0x09, 0x0a, 0x12, 0x15, 0x08, 0x03, 0x00, 0x00  ; F8AB39  [0]
+; ---------------------------------------------------------------------
+; PanelAction_OrdinalToEventValue_B -- action handler of 8 pool records (v1
+;          and v2 group 0x00 masks 01..08); the body is described in
+;          PanelOrdinalToEventValue_B's header.
+; (notes/proma-2026-09-25/gen_panel_actions.py)
+; ---------------------------------------------------------------------
+PanelAction_OrdinalToEventValue_B:   ; entry: PanelGroupActionListPool
 	m_cp_mi8 MB16, 0x2806, 0x00                          ; F8AB42  c1 06 28 3f 00
 	jr nz, .LF8AB63                                          ; F8AB47  6e 1a
 	calr LowestSetBitIndex1Based                                          ; F8AB49  1e c7 fd
@@ -19914,6 +19948,7 @@ PanelOrdinalToEventValue_A:
 ; ---------------------------------------------------------------------
 PanelOrdinalToEventValue_B:
 	.byte 0x00, 0x01, 0x02, 0x17, 0x16, 0x00, 0x00, 0x00, 0x00  ; F8AB67  [0]
+sub_F8AB70:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8AB70  cd d8
 	jrl z, .LF8ABF9                                          ; F8AB72  76 84 00
 	ld d, 0x3f:opc                                          ; F8AB75  24 3f
@@ -19973,6 +20008,7 @@ PanelOrdinalToEventValue_B:
 	jp sub_F8A90B                                        ; F8ABF5  1b 0b a9 f8
 .LF8ABF9:
 	jp sub_F8A90F                                        ; F8ABF9  1b 0f a9 f8
+sub_F8ABFD:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8ABFD  cd d8
 	jrl z, .LF8ACE4                                          ; F8ABFF  76 e2 00
 	calr LowestSetBitIndex1Based                                          ; F8AC02  1e 0e fd
@@ -20075,6 +20111,18 @@ PanelOrdinalToEventValue_B:
 	jp sub_F8A90B                                        ; F8ACE0  1b 0b a9 f8
 .LF8ACE4:
 	jp sub_F8A90F                                        ; F8ACE4  1b 0f a9 f8
+; ---------------------------------------------------------------------
+; PanelAction_SoundSelectOrKeypad_V1 -- action handler of v1 groups 0x01 and
+;          0x02, mask FF: sixteen switches with two uses.
+;   bit 1 of (0x2075) set: the numeric-keypad path at 0xF8AD54, see
+;          PanelKeypad_OrdinalToKey_V1.
+;   otherwise: E = the set bit's index (+8 for group 2), D = 0x0F; the index
+;          is checked with T_SoundGroup_MaxMemberIndex_Get (or its ToneCopy
+;          twin, chosen by (0x2076) and (0x7F02)) and, if accepted, stored
+;          at (0x2169) and committed; 0xFF from the check drops the event.
+; (notes/proma-2026-09-25/gen_panel_actions.py)
+; ---------------------------------------------------------------------
+PanelAction_SoundSelectOrKeypad_V1:   ; entry: PanelGroupActionListPool
 	m_bit 1, MD16, 0x2075                                ; F8ACE8  f1 75 20 c9
 	jr nz, .LF8AD54                                          ; F8ACEC  6e 66
 	cp e, 0x00:i3                                          ; F8ACEE  cd d8
@@ -20198,6 +20246,13 @@ sub_F8ACFE:
 PanelKeypad_OrdinalToKey_V1:
 	.byte 0xff, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00, 0x80, 0x0f, 0xff, 0xff, 0xff  ; F8ADCD  [0]
 	.byte 0xff  ; F8ADDD  [16]
+; ---------------------------------------------------------------------
+; PanelAction_Keypad_V2 -- action handler of v2 group 0x01 mask FF and group
+;          0x02 mask 0F: the V1 keypad path instruction for instruction, with
+;          PanelKeypad_OrdinalToKey_V2 (see that table's header).
+; (notes/proma-2026-09-25/gen_panel_actions.py)
+; ---------------------------------------------------------------------
+PanelAction_Keypad_V2:   ; entry: PanelGroupActionListPool
 	m_ld_mi16 MDD+r4, 0xfe, 0x1ba9                       ; F8ADDE  bc fe 02 a9 1b
 	cp e, 0x00:i3                                          ; F8ADE3  cd d8
 	jr nz, .LF8ADEC                                          ; F8ADE5  6e 05
@@ -20265,6 +20320,7 @@ PanelKeypad_OrdinalToKey_V1:
 PanelKeypad_OrdinalToKey_V2:
 	.byte 0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x80, 0x0f, 0xff, 0xff, 0xff  ; F8AE57  [0]
 	.byte 0xff  ; F8AE67  [16]
+sub_F8AE68:   ; entry: PanelGroupActionListPool
 	ld BC,DE                                             ; F8AE68  da 89
 	ld e, (xix-1)                                        ; F8AE6A  8c ff 25
 	inc 1,E                                              ; F8AE6D  cd 61
@@ -20309,6 +20365,7 @@ PanelKeypad_OrdinalToKey_V2:
 	ldw de, 0x0100                                       ; F8AED4  32 00 01
 .LF8AED7:
 	jp sub_F8A90B                                        ; F8AED7  1b 0b a9 f8
+sub_F8AEDB:   ; entry: PanelGroupActionListPool
 	ld BC,DE                                             ; F8AEDB  da 89
 	ld e, (xix-1)                                        ; F8AEDD  8c ff 25
 	inc 1,E                                              ; F8AEE0  cd 61
@@ -20353,6 +20410,7 @@ PanelKeypad_OrdinalToKey_V2:
 	ldw de, 0x0200                                       ; F8AF47  32 00 02
 .LF8AF4A:
 	jp sub_F8A90B                                        ; F8AF4A  1b 0b a9 f8
+sub_F8AF4E:   ; entry: PanelGroupActionListPool
 	ld BC,DE                                             ; F8AF4E  da 89
 	ld e, (xix-1)                                        ; F8AF50  8c ff 25
 	inc 1,E                                              ; F8AF53  cd 61
@@ -20373,6 +20431,7 @@ PanelKeypad_OrdinalToKey_V2:
 	ldw de, 0x0100                                       ; F8AF7A  32 00 01
 .LF8AF7D:
 	jp sub_F8A90B                                        ; F8AF7D  1b 0b a9 f8
+sub_F8AF81:   ; entry: PanelGroupActionListPool
 	ld BC,DE                                             ; F8AF81  da 89
 	ld e, (xix-1)                                        ; F8AF83  8c ff 25
 	inc 1,E                                              ; F8AF86  cd 61
@@ -20393,6 +20452,7 @@ PanelKeypad_OrdinalToKey_V2:
 	ldw de, 0x0200                                       ; F8AFAD  32 00 02
 .LF8AFB0:
 	jp sub_F8A90B                                        ; F8AFB0  1b 0b a9 f8
+sub_F8AFB4:   ; entry: PanelGroupActionListPool
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8AFB4  c0 c4 3f 02
 	jrl z, sub_F8A90F                                         ; F8AFB8  76 54 f9
 	xor D,D                                              ; F8AFBB  cc d4
@@ -20403,6 +20463,18 @@ PanelKeypad_OrdinalToKey_V2:
 	ldw de, 0x7f7f                                       ; F8AFC9  32 7f 7f
 .LF8AFCC:
 	jp sub_F8A90B                                        ; F8AFCC  1b 0b a9 f8
+; ---------------------------------------------------------------------
+; PanelAction_AssignableController -- action handler of the 7-bit (mask 7F)
+;          groups v1 0x0B 0x0D 0x10 0x11 0x13 0x14 0x15 and v2 0x14 0x15:
+;          slot = PanelGroupToRam7F12Slot[group - 0x0B]; the assignment byte
+;          at 0x7F12 + slot is a MIDI controller number, and the chain
+;          0xF8AFF2-0xF8B07D rewrites the event's parameter number at
+;          (XIX-2) from it -- the ten pairs of PanelCtrl_AssignToParamNumber
+;          (check A1) -- or drops the event for any other value.  With
+;          (0xC4) = 2 only slots 0x15 / 0x16 get through.
+; (notes/proma-2026-09-25/gen_panel_actions.py)
+; ---------------------------------------------------------------------
+PanelAction_AssignableController:   ; entry: PanelGroupActionListPool
 	sub A,0x0b                                           ; F8AFD0  c9 ca 0b
 	extz WA                                              ; F8AFD3  d8 12
 	extz XWA                                             ; F8AFD5  e8 12
@@ -20483,7 +20555,12 @@ PanelKeypad_OrdinalToKey_V2:
 ;          0x40->B5, 0x81->B4, anything else drops the event); with
 ;          (0xC4) = 2 it lets only slots 0x15/0x16 through.  0xF8B08B
 ;          branches on it (0x40, 0x88, 0x89, ...).
-; So the RAM bytes at 0x7F12 + slot hold an ASSIGNMENT per controller.
+; So the RAM bytes at 0x7F12 + slot hold an ASSIGNMENT per controller, and
+;          the assignment is a MIDI controller number (0x81 = channel
+;          pressure): the byte -> CLASS map above is the MIDI-in
+;          controller -> parameter-number map (the CLASS of the panel event
+;          lists is byte 0, the parameter number) -- see
+;          PanelCtrl_AssignToParamNumber, check A1 of gen_panel_actions.py.
 ; COUNT 13 = groups 0x0B..0x17; the unused slots (groups 0x0C 0x0E 0x0F
 ;          0x12, which the pool never sends here) are 0.
 ; ⚠ Which physical controllers the groups are is not established here.
@@ -20492,6 +20569,19 @@ PanelKeypad_OrdinalToKey_V2:
 ; ---------------------------------------------------------------------
 PanelGroupToRam7F12Slot:
 	.byte 0x11, 0x00, 0x12, 0x00, 0x00, 0x17, 0x18, 0x00, 0x02, 0x15, 0x16, 0x04, 0x05  ; F8B07E  [0]
+; ---------------------------------------------------------------------
+; PanelAction_AssignableSwitch -- action handler of v1 groups 0x16 and 0x17,
+;          mask 01 (switches): dropped when (0xC4) = 2; otherwise the slot
+;          byte (PanelGroupToRam7F12Slot, slots 0x04 / 0x05) selects:
+;   0x40 -> sub_F8B298: event word 0x00B5, value 0x7F on / 0x00 off -- a
+;          Hold (controller 0x40, parameter number 0xB5) switch (check A4);
+;   0x88 -> sub_F8B0D2, 0x89 -> sub_F8B1C1, 0x90 -> sub_F8B2B5 (which writes
+;          event word 0x11A8); anything else drops the event.
+; ⚠ 0x88, 0x89 and 0x90 are not controller numbers; what they assign is
+;          not established here.
+; (notes/proma-2026-09-25/gen_panel_actions.py)
+; ---------------------------------------------------------------------
+PanelAction_AssignableSwitch:   ; entry: PanelGroupActionListPool
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8B08B  c0 c4 3f 02
 	jrl z, sub_F8A90F                                         ; F8B08F  76 7d f8
 	sub A,0x0b                                           ; F8B092  c9 ca 0b
@@ -21414,6 +21504,10 @@ PanelGroupActionTable_Variant2:
 ; The key compared is the 16-bit (mask:group) pair: `cp WA,BC` at
 ; 0xF8A8F6 with BC loaded from the record and WA holding (mask, group).
 ;
+; ★ 2026-09-25 (lane proma): the LE32 handler of every record is written
+;          `.long <label>` (a `.byte group, mask` line, then the pointer), so
+;          the byte gate checks each target; the 15 distinct handlers carry
+;          labels (notes/proma-2026-09-25/gen_panel_actions.py, check A3).
 ; Evidence: the pool runs from the lowest list head (0xF8B812) to the last
 ;          byte of the block (0xF8BBB3), and the 50 list walks tile it
 ;          with no byte left over.
@@ -21421,194 +21515,312 @@ PanelGroupActionTable_Variant2:
 
 PanelGroupActionListPool:
 	; -- v1 g00
-	.byte 0x00, 0x01, 0x42, 0xab, 0xf8, 0x00                   ; F8B812  group 00 mask 01 -> 0xF8AB42
-	.byte 0x00, 0x02, 0x42, 0xab, 0xf8, 0x00                   ; F8B818  group 00 mask 02 -> 0xF8AB42
-	.byte 0x00, 0x04, 0x42, 0xab, 0xf8, 0x00                   ; F8B81E  group 00 mask 04 -> 0xF8AB42
-	.byte 0x00, 0x08, 0x42, 0xab, 0xf8, 0x00                   ; F8B824  group 00 mask 08 -> 0xF8AB42
-	.byte 0x00, 0x70, 0xfd, 0xab, 0xf8, 0x00                   ; F8B82A  group 00 mask 70 -> 0xF8ABFD
-	.byte 0x00, 0x80, 0x70, 0xab, 0xf8, 0x00                   ; F8B830  group 00 mask 80 -> 0xF8AB70
+	.byte 0x00, 0x01                                           ; F8B812  group 00 mask 01 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8B814
+	.byte 0x00, 0x02                                           ; F8B818  group 00 mask 02 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8B81A
+	.byte 0x00, 0x04                                           ; F8B81E  group 00 mask 04 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8B820
+	.byte 0x00, 0x08                                           ; F8B824  group 00 mask 08 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8B826
+	.byte 0x00, 0x70                                           ; F8B82A  group 00 mask 70 -> 0xF8ABFD
+	.long sub_F8ABFD                                         ; F8B82C
+	.byte 0x00, 0x80                                           ; F8B830  group 00 mask 80 -> 0xF8AB70
+	.long sub_F8AB70                                         ; F8B832
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B836  end of list
 	; -- v1 g01
-	.byte 0x01, 0xff, 0xe8, 0xac, 0xf8, 0x00                   ; F8B83C  group 01 mask FF -> 0xF8ACE8
+	.byte 0x01, 0xff                                           ; F8B83C  group 01 mask FF -> 0xF8ACE8
+	.long PanelAction_SoundSelectOrKeypad_V1                 ; F8B83E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B842  end of list
 	; -- v1 g02
-	.byte 0x02, 0xff, 0xe8, 0xac, 0xf8, 0x00                   ; F8B848  group 02 mask FF -> 0xF8ACE8
+	.byte 0x02, 0xff                                           ; F8B848  group 02 mask FF -> 0xF8ACE8
+	.long PanelAction_SoundSelectOrKeypad_V1                 ; F8B84A
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B84E  end of list
 	; -- v1 g03
-	.byte 0x03, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B854  group 03 mask 01 -> 0xF8AE68
-	.byte 0x03, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B85A  group 03 mask 02 -> 0xF8AEDB
-	.byte 0x03, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B860  group 03 mask 04 -> 0xF8AE68
-	.byte 0x03, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B866  group 03 mask 08 -> 0xF8AEDB
-	.byte 0x03, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B86C  group 03 mask 10 -> 0xF8AE68
-	.byte 0x03, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B872  group 03 mask 20 -> 0xF8AEDB
-	.byte 0x03, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B878  group 03 mask 40 -> 0xF8AE68
-	.byte 0x03, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B87E  group 03 mask 80 -> 0xF8AEDB
+	.byte 0x03, 0x01                                           ; F8B854  group 03 mask 01 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B856
+	.byte 0x03, 0x02                                           ; F8B85A  group 03 mask 02 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B85C
+	.byte 0x03, 0x04                                           ; F8B860  group 03 mask 04 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B862
+	.byte 0x03, 0x08                                           ; F8B866  group 03 mask 08 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B868
+	.byte 0x03, 0x10                                           ; F8B86C  group 03 mask 10 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B86E
+	.byte 0x03, 0x20                                           ; F8B872  group 03 mask 20 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B874
+	.byte 0x03, 0x40                                           ; F8B878  group 03 mask 40 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B87A
+	.byte 0x03, 0x80                                           ; F8B87E  group 03 mask 80 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B880
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B884  end of list
 	; -- v1 g04
-	.byte 0x04, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B88A  group 04 mask 01 -> 0xF8AE68
-	.byte 0x04, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B890  group 04 mask 02 -> 0xF8AEDB
-	.byte 0x04, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B896  group 04 mask 04 -> 0xF8AE68
-	.byte 0x04, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B89C  group 04 mask 08 -> 0xF8AEDB
-	.byte 0x04, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B8A2  group 04 mask 10 -> 0xF8AE68
-	.byte 0x04, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8A8  group 04 mask 20 -> 0xF8AEDB
-	.byte 0x04, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B8AE  group 04 mask 40 -> 0xF8AE68
-	.byte 0x04, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8B4  group 04 mask 80 -> 0xF8AEDB
+	.byte 0x04, 0x01                                           ; F8B88A  group 04 mask 01 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B88C
+	.byte 0x04, 0x02                                           ; F8B890  group 04 mask 02 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B892
+	.byte 0x04, 0x04                                           ; F8B896  group 04 mask 04 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B898
+	.byte 0x04, 0x08                                           ; F8B89C  group 04 mask 08 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B89E
+	.byte 0x04, 0x10                                           ; F8B8A2  group 04 mask 10 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B8A4
+	.byte 0x04, 0x20                                           ; F8B8A8  group 04 mask 20 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B8AA
+	.byte 0x04, 0x40                                           ; F8B8AE  group 04 mask 40 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B8B0
+	.byte 0x04, 0x80                                           ; F8B8B4  group 04 mask 80 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B8B6
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B8BA  end of list
 	; -- v1 g05
-	.byte 0x05, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B8C0  group 05 mask 01 -> 0xF8AE68
-	.byte 0x05, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8C6  group 05 mask 02 -> 0xF8AEDB
-	.byte 0x05, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B8CC  group 05 mask 04 -> 0xF8AE68
-	.byte 0x05, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8D2  group 05 mask 08 -> 0xF8AEDB
-	.byte 0x05, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B8D8  group 05 mask 10 -> 0xF8AE68
-	.byte 0x05, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8DE  group 05 mask 20 -> 0xF8AEDB
-	.byte 0x05, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B8E4  group 05 mask 40 -> 0xF8AE68
-	.byte 0x05, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8EA  group 05 mask 80 -> 0xF8AEDB
+	.byte 0x05, 0x01                                           ; F8B8C0  group 05 mask 01 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B8C2
+	.byte 0x05, 0x02                                           ; F8B8C6  group 05 mask 02 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B8C8
+	.byte 0x05, 0x04                                           ; F8B8CC  group 05 mask 04 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B8CE
+	.byte 0x05, 0x08                                           ; F8B8D2  group 05 mask 08 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B8D4
+	.byte 0x05, 0x10                                           ; F8B8D8  group 05 mask 10 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B8DA
+	.byte 0x05, 0x20                                           ; F8B8DE  group 05 mask 20 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B8E0
+	.byte 0x05, 0x40                                           ; F8B8E4  group 05 mask 40 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B8E6
+	.byte 0x05, 0x80                                           ; F8B8EA  group 05 mask 80 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B8EC
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B8F0  end of list
 	; -- v1 g06
-	.byte 0x06, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B8F6  group 06 mask 01 -> 0xF8AE68
-	.byte 0x06, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8FC  group 06 mask 02 -> 0xF8AEDB
-	.byte 0x06, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B902  group 06 mask 04 -> 0xF8AE68
-	.byte 0x06, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B908  group 06 mask 08 -> 0xF8AEDB
-	.byte 0x06, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B90E  group 06 mask 10 -> 0xF8AE68
-	.byte 0x06, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B914  group 06 mask 20 -> 0xF8AEDB
-	.byte 0x06, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B91A  group 06 mask 40 -> 0xF8AE68
-	.byte 0x06, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B920  group 06 mask 80 -> 0xF8AEDB
+	.byte 0x06, 0x01                                           ; F8B8F6  group 06 mask 01 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B8F8
+	.byte 0x06, 0x02                                           ; F8B8FC  group 06 mask 02 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B8FE
+	.byte 0x06, 0x04                                           ; F8B902  group 06 mask 04 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B904
+	.byte 0x06, 0x08                                           ; F8B908  group 06 mask 08 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B90A
+	.byte 0x06, 0x10                                           ; F8B90E  group 06 mask 10 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B910
+	.byte 0x06, 0x20                                           ; F8B914  group 06 mask 20 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B916
+	.byte 0x06, 0x40                                           ; F8B91A  group 06 mask 40 -> 0xF8AE68
+	.long sub_F8AE68                                         ; F8B91C
+	.byte 0x06, 0x80                                           ; F8B920  group 06 mask 80 -> 0xF8AEDB
+	.long sub_F8AEDB                                         ; F8B922
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B926  end of list
 	; -- v1 g07
-	.byte 0x07, 0x01, 0x08, 0xab, 0xf8, 0x00                   ; F8B92C  group 07 mask 01 -> 0xF8AB08
-	.byte 0x07, 0x02, 0x08, 0xab, 0xf8, 0x00                   ; F8B932  group 07 mask 02 -> 0xF8AB08
-	.byte 0x07, 0x04, 0x08, 0xab, 0xf8, 0x00                   ; F8B938  group 07 mask 04 -> 0xF8AB08
-	.byte 0x07, 0x08, 0x08, 0xab, 0xf8, 0x00                   ; F8B93E  group 07 mask 08 -> 0xF8AB08
-	.byte 0x07, 0x10, 0x08, 0xab, 0xf8, 0x00                   ; F8B944  group 07 mask 10 -> 0xF8AB08
-	.byte 0x07, 0x20, 0x08, 0xab, 0xf8, 0x00                   ; F8B94A  group 07 mask 20 -> 0xF8AB08
+	.byte 0x07, 0x01                                           ; F8B92C  group 07 mask 01 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8B92E
+	.byte 0x07, 0x02                                           ; F8B932  group 07 mask 02 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8B934
+	.byte 0x07, 0x04                                           ; F8B938  group 07 mask 04 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8B93A
+	.byte 0x07, 0x08                                           ; F8B93E  group 07 mask 08 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8B940
+	.byte 0x07, 0x10                                           ; F8B944  group 07 mask 10 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8B946
+	.byte 0x07, 0x20                                           ; F8B94A  group 07 mask 20 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8B94C
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B950  end of list
 	; -- v1 g08
-	.byte 0x08, 0x40, 0x57, 0xaa, 0xf8, 0x00                   ; F8B956  group 08 mask 40 -> 0xF8AA57
-	.byte 0x08, 0x3f, 0x24, 0xaa, 0xf8, 0x00                   ; F8B95C  group 08 mask 3F -> 0xF8AA24
+	.byte 0x08, 0x40                                           ; F8B956  group 08 mask 40 -> 0xF8AA57
+	.long sub_F8AA57                                         ; F8B958
+	.byte 0x08, 0x3f                                           ; F8B95C  group 08 mask 3F -> 0xF8AA24
+	.long sub_F8AA24                                         ; F8B95E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B962  end of list
 	; -- v1 g09
-	.byte 0x09, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B968  group 09 mask 01 -> 0xF8AF4E
-	.byte 0x09, 0x02, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B96E  group 09 mask 02 -> 0xF8AF4E
-	.byte 0x09, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B974  group 09 mask 04 -> 0xF8AF4E
-	.byte 0x09, 0x08, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B97A  group 09 mask 08 -> 0xF8AF4E
-	.byte 0x09, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B980  group 09 mask 10 -> 0xF8AF4E
-	.byte 0x09, 0x40, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B986  group 09 mask 40 -> 0xF8AF4E
-	.byte 0x09, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8B98C  group 09 mask 80 -> 0xF8AF81
+	.byte 0x09, 0x01                                           ; F8B968  group 09 mask 01 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8B96A
+	.byte 0x09, 0x02                                           ; F8B96E  group 09 mask 02 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8B970
+	.byte 0x09, 0x04                                           ; F8B974  group 09 mask 04 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8B976
+	.byte 0x09, 0x08                                           ; F8B97A  group 09 mask 08 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8B97C
+	.byte 0x09, 0x10                                           ; F8B980  group 09 mask 10 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8B982
+	.byte 0x09, 0x40                                           ; F8B986  group 09 mask 40 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8B988
+	.byte 0x09, 0x80                                           ; F8B98C  group 09 mask 80 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B98E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B992  end of list
 	; -- v1 g0A
-	.byte 0x0a, 0x01, 0x81, 0xaf, 0xf8, 0x00                   ; F8B998  group 0A mask 01 -> 0xF8AF81
-	.byte 0x0a, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8B99E  group 0A mask 02 -> 0xF8AF81
-	.byte 0x0a, 0x04, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9A4  group 0A mask 04 -> 0xF8AF81
-	.byte 0x0a, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9AA  group 0A mask 08 -> 0xF8AF81
-	.byte 0x0a, 0x10, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9B0  group 0A mask 10 -> 0xF8AF81
-	.byte 0x0a, 0x20, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B9B6  group 0A mask 20 -> 0xF8AF4E
-	.byte 0x0a, 0x40, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9BC  group 0A mask 40 -> 0xF8AF81
-	.byte 0x0a, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9C2  group 0A mask 80 -> 0xF8AF81
+	.byte 0x0a, 0x01                                           ; F8B998  group 0A mask 01 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B99A
+	.byte 0x0a, 0x02                                           ; F8B99E  group 0A mask 02 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B9A0
+	.byte 0x0a, 0x04                                           ; F8B9A4  group 0A mask 04 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B9A6
+	.byte 0x0a, 0x08                                           ; F8B9AA  group 0A mask 08 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B9AC
+	.byte 0x0a, 0x10                                           ; F8B9B0  group 0A mask 10 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B9B2
+	.byte 0x0a, 0x20                                           ; F8B9B6  group 0A mask 20 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8B9B8
+	.byte 0x0a, 0x40                                           ; F8B9BC  group 0A mask 40 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B9BE
+	.byte 0x0a, 0x80                                           ; F8B9C2  group 0A mask 80 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8B9C4
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9C8  end of list
 	; -- v1 g0B
-	.byte 0x0b, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8B9CE  group 0B mask 7F -> 0xF8AFD0
+	.byte 0x0b, 0x7f                                           ; F8B9CE  group 0B mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8B9D0
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9D4  end of list
 	; -- v1 g0C
-	.byte 0x0c, 0xff, 0xb4, 0xaf, 0xf8, 0x00                   ; F8B9DA  group 0C mask FF -> 0xF8AFB4
+	.byte 0x0c, 0xff                                           ; F8B9DA  group 0C mask FF -> 0xF8AFB4
+	.long sub_F8AFB4                                         ; F8B9DC
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9E0  end of list
 	; -- v1 g0D
-	.byte 0x0d, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8B9E6  group 0D mask 7F -> 0xF8AFD0
+	.byte 0x0d, 0x7f                                           ; F8B9E6  group 0D mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8B9E8
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9EC  end of list
 	; -- v1 g0E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9F2  end of list
 	; -- v1 g0F
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9F8  end of list
 	; -- v1 g10
-	.byte 0x10, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8B9FE  group 10 mask 7F -> 0xF8AFD0
+	.byte 0x10, 0x7f                                           ; F8B9FE  group 10 mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8BA00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA04  end of list
 	; -- v1 g11
-	.byte 0x11, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA0A  group 11 mask 7F -> 0xF8AFD0
+	.byte 0x11, 0x7f                                           ; F8BA0A  group 11 mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8BA0C
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA10  end of list
 	; -- v1 g12
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA16  end of list
 	; -- v1 g13
-	.byte 0x13, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA1C  group 13 mask 7F -> 0xF8AFD0
+	.byte 0x13, 0x7f                                           ; F8BA1C  group 13 mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8BA1E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA22  end of list
 	; -- v1 g14
-	.byte 0x14, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA28  group 14 mask 7F -> 0xF8AFD0
+	.byte 0x14, 0x7f                                           ; F8BA28  group 14 mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8BA2A
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA2E  end of list
 	; -- v1 g15
-	.byte 0x15, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA34  group 15 mask 7F -> 0xF8AFD0
+	.byte 0x15, 0x7f                                           ; F8BA34  group 15 mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8BA36
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA3A  end of list
 	; -- v1 g16
-	.byte 0x16, 0x01, 0x8b, 0xb0, 0xf8, 0x00                   ; F8BA40  group 16 mask 01 -> 0xF8B08B
+	.byte 0x16, 0x01                                           ; F8BA40  group 16 mask 01 -> 0xF8B08B
+	.long PanelAction_AssignableSwitch                       ; F8BA42
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA46  end of list
 	; -- v1 g17
-	.byte 0x17, 0x01, 0x8b, 0xb0, 0xf8, 0x00                   ; F8BA4C  group 17 mask 01 -> 0xF8B08B
+	.byte 0x17, 0x01                                           ; F8BA4C  group 17 mask 01 -> 0xF8B08B
+	.long PanelAction_AssignableSwitch                       ; F8BA4E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA52  end of list
 	; -- v1 g18
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA58  end of list
 	; -- v2 g00
-	.byte 0x00, 0x01, 0x42, 0xab, 0xf8, 0x00                   ; F8BA5E  group 00 mask 01 -> 0xF8AB42
-	.byte 0x00, 0x02, 0x42, 0xab, 0xf8, 0x00                   ; F8BA64  group 00 mask 02 -> 0xF8AB42
-	.byte 0x00, 0x04, 0x42, 0xab, 0xf8, 0x00                   ; F8BA6A  group 00 mask 04 -> 0xF8AB42
-	.byte 0x00, 0x08, 0x42, 0xab, 0xf8, 0x00                   ; F8BA70  group 00 mask 08 -> 0xF8AB42
-	.byte 0x00, 0x70, 0xfd, 0xab, 0xf8, 0x00                   ; F8BA76  group 00 mask 70 -> 0xF8ABFD
-	.byte 0x00, 0x80, 0x70, 0xab, 0xf8, 0x00                   ; F8BA7C  group 00 mask 80 -> 0xF8AB70
+	.byte 0x00, 0x01                                           ; F8BA5E  group 00 mask 01 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8BA60
+	.byte 0x00, 0x02                                           ; F8BA64  group 00 mask 02 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8BA66
+	.byte 0x00, 0x04                                           ; F8BA6A  group 00 mask 04 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8BA6C
+	.byte 0x00, 0x08                                           ; F8BA70  group 00 mask 08 -> 0xF8AB42
+	.long PanelAction_OrdinalToEventValue_B                  ; F8BA72
+	.byte 0x00, 0x70                                           ; F8BA76  group 00 mask 70 -> 0xF8ABFD
+	.long sub_F8ABFD                                         ; F8BA78
+	.byte 0x00, 0x80                                           ; F8BA7C  group 00 mask 80 -> 0xF8AB70
+	.long sub_F8AB70                                         ; F8BA7E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA82  end of list
 	; -- v2 g01
-	.byte 0x01, 0xff, 0xde, 0xad, 0xf8, 0x00                   ; F8BA88  group 01 mask FF -> 0xF8ADDE
+	.byte 0x01, 0xff                                           ; F8BA88  group 01 mask FF -> 0xF8ADDE
+	.long PanelAction_Keypad_V2                              ; F8BA8A
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA8E  end of list
 	; -- v2 g02
-	.byte 0x02, 0x0f, 0xde, 0xad, 0xf8, 0x00                   ; F8BA94  group 02 mask 0F -> 0xF8ADDE
-	.byte 0x02, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BA9A  group 02 mask 10 -> 0xF8AF4E
-	.byte 0x02, 0x20, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAA0  group 02 mask 20 -> 0xF8AF81
+	.byte 0x02, 0x0f                                           ; F8BA94  group 02 mask 0F -> 0xF8ADDE
+	.long PanelAction_Keypad_V2                              ; F8BA96
+	.byte 0x02, 0x10                                           ; F8BA9A  group 02 mask 10 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BA9C
+	.byte 0x02, 0x20                                           ; F8BAA0  group 02 mask 20 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAA2
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BAA6  end of list
 	; -- v2 g03
-	.byte 0x03, 0x01, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAAC  group 03 mask 01 -> 0xF8AF81
-	.byte 0x03, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAB2  group 03 mask 02 -> 0xF8AF81
-	.byte 0x03, 0x04, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAB8  group 03 mask 04 -> 0xF8AF81
-	.byte 0x03, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8BABE  group 03 mask 08 -> 0xF8AF81
-	.byte 0x03, 0x10, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAC4  group 03 mask 10 -> 0xF8AF81
-	.byte 0x03, 0x20, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BACA  group 03 mask 20 -> 0xF8AF4E
-	.byte 0x03, 0x40, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAD0  group 03 mask 40 -> 0xF8AF81
+	.byte 0x03, 0x01                                           ; F8BAAC  group 03 mask 01 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAAE
+	.byte 0x03, 0x02                                           ; F8BAB2  group 03 mask 02 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAB4
+	.byte 0x03, 0x04                                           ; F8BAB8  group 03 mask 04 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BABA
+	.byte 0x03, 0x08                                           ; F8BABE  group 03 mask 08 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAC0
+	.byte 0x03, 0x10                                           ; F8BAC4  group 03 mask 10 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAC6
+	.byte 0x03, 0x20                                           ; F8BACA  group 03 mask 20 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BACC
+	.byte 0x03, 0x40                                           ; F8BAD0  group 03 mask 40 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAD2
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BAD6  end of list
 	; -- v2 g04
-	.byte 0x04, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BADC  group 04 mask 01 -> 0xF8AF4E
-	.byte 0x04, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAE2  group 04 mask 02 -> 0xF8AF81
-	.byte 0x04, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BAE8  group 04 mask 04 -> 0xF8AF4E
-	.byte 0x04, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAEE  group 04 mask 08 -> 0xF8AF81
-	.byte 0x04, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BAF4  group 04 mask 10 -> 0xF8AF4E
-	.byte 0x04, 0x20, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAFA  group 04 mask 20 -> 0xF8AF81
-	.byte 0x04, 0x40, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB00  group 04 mask 40 -> 0xF8AF4E
-	.byte 0x04, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB06  group 04 mask 80 -> 0xF8AF81
+	.byte 0x04, 0x01                                           ; F8BADC  group 04 mask 01 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BADE
+	.byte 0x04, 0x02                                           ; F8BAE2  group 04 mask 02 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAE4
+	.byte 0x04, 0x04                                           ; F8BAE8  group 04 mask 04 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BAEA
+	.byte 0x04, 0x08                                           ; F8BAEE  group 04 mask 08 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAF0
+	.byte 0x04, 0x10                                           ; F8BAF4  group 04 mask 10 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BAF6
+	.byte 0x04, 0x20                                           ; F8BAFA  group 04 mask 20 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BAFC
+	.byte 0x04, 0x40                                           ; F8BB00  group 04 mask 40 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB02
+	.byte 0x04, 0x80                                           ; F8BB06  group 04 mask 80 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BB08
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB0C  end of list
 	; -- v2 g05
-	.byte 0x05, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB12  group 05 mask 01 -> 0xF8AF4E
-	.byte 0x05, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB18  group 05 mask 02 -> 0xF8AF81
-	.byte 0x05, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB1E  group 05 mask 04 -> 0xF8AF4E
-	.byte 0x05, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB24  group 05 mask 08 -> 0xF8AF81
-	.byte 0x05, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB2A  group 05 mask 10 -> 0xF8AF4E
-	.byte 0x05, 0x20, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB30  group 05 mask 20 -> 0xF8AF81
-	.byte 0x05, 0x40, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB36  group 05 mask 40 -> 0xF8AF4E
-	.byte 0x05, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB3C  group 05 mask 80 -> 0xF8AF81
+	.byte 0x05, 0x01                                           ; F8BB12  group 05 mask 01 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB14
+	.byte 0x05, 0x02                                           ; F8BB18  group 05 mask 02 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BB1A
+	.byte 0x05, 0x04                                           ; F8BB1E  group 05 mask 04 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB20
+	.byte 0x05, 0x08                                           ; F8BB24  group 05 mask 08 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BB26
+	.byte 0x05, 0x10                                           ; F8BB2A  group 05 mask 10 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB2C
+	.byte 0x05, 0x20                                           ; F8BB30  group 05 mask 20 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BB32
+	.byte 0x05, 0x40                                           ; F8BB36  group 05 mask 40 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB38
+	.byte 0x05, 0x80                                           ; F8BB3C  group 05 mask 80 -> 0xF8AF81
+	.long sub_F8AF81                                         ; F8BB3E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB42  end of list
 	; -- v2 g06
-	.byte 0x06, 0x01, 0x08, 0xab, 0xf8, 0x00                   ; F8BB48  group 06 mask 01 -> 0xF8AB08
-	.byte 0x06, 0x02, 0x08, 0xab, 0xf8, 0x00                   ; F8BB4E  group 06 mask 02 -> 0xF8AB08
-	.byte 0x06, 0x04, 0x08, 0xab, 0xf8, 0x00                   ; F8BB54  group 06 mask 04 -> 0xF8AB08
-	.byte 0x06, 0x08, 0x08, 0xab, 0xf8, 0x00                   ; F8BB5A  group 06 mask 08 -> 0xF8AB08
+	.byte 0x06, 0x01                                           ; F8BB48  group 06 mask 01 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8BB4A
+	.byte 0x06, 0x02                                           ; F8BB4E  group 06 mask 02 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8BB50
+	.byte 0x06, 0x04                                           ; F8BB54  group 06 mask 04 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8BB56
+	.byte 0x06, 0x08                                           ; F8BB5A  group 06 mask 08 -> 0xF8AB08
+	.long PanelAction_OrdinalToEventValue_A                  ; F8BB5C
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB60  end of list
 	; -- v2 g07
-	.byte 0x07, 0x02, 0x57, 0xaa, 0xf8, 0x00                   ; F8BB66  group 07 mask 02 -> 0xF8AA57
+	.byte 0x07, 0x02                                           ; F8BB66  group 07 mask 02 -> 0xF8AA57
+	.long sub_F8AA57                                         ; F8BB68
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB6C  end of list
 	; -- v2 g08
-	.byte 0x08, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB72  group 08 mask 01 -> 0xF8AF4E
-	.byte 0x08, 0x02, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB78  group 08 mask 02 -> 0xF8AF4E
-	.byte 0x08, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB7E  group 08 mask 04 -> 0xF8AF4E
-	.byte 0x08, 0x08, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB84  group 08 mask 08 -> 0xF8AF4E
-	.byte 0x08, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB8A  group 08 mask 10 -> 0xF8AF4E
+	.byte 0x08, 0x01                                           ; F8BB72  group 08 mask 01 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB74
+	.byte 0x08, 0x02                                           ; F8BB78  group 08 mask 02 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB7A
+	.byte 0x08, 0x04                                           ; F8BB7E  group 08 mask 04 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB80
+	.byte 0x08, 0x08                                           ; F8BB84  group 08 mask 08 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB86
+	.byte 0x08, 0x10                                           ; F8BB8A  group 08 mask 10 -> 0xF8AF4E
+	.long sub_F8AF4E                                         ; F8BB8C
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB90  end of list
 	; -- v2 g14
-	.byte 0x14, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BB96  group 14 mask 7F -> 0xF8AFD0
+	.byte 0x14, 0x7f                                           ; F8BB96  group 14 mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8BB98
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB9C  end of list
 	; -- v2 g15
-	.byte 0x15, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BBA2  group 15 mask 7F -> 0xF8AFD0
+	.byte 0x15, 0x7f                                           ; F8BBA2  group 15 mask 7F -> 0xF8AFD0
+	.long PanelAction_AssignableController                   ; F8BBA4
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BBA8  end of list
 	; -- v2 g09, v2 g0A, v2 g0B, v2 g0C, v2 g0D, v2 g0E, v2 g0F, v2 g10, v2 g11, v2 g12, v2 g13, v2 g16, v2 g17, v2 g18
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BBAE  end of list
