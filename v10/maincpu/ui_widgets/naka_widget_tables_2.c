@@ -1916,9 +1916,9 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     char PmemOutLGridCheck_Strings[24];
     /* ---------------------------------------------------------------------
-     * NakaData_PartFlags -- 15 bytes after PtrTarget that no registration or
-     * code reference reaches (searched: RegObjTabl tables, slice and
-     * positional labels). Contents not established.
+     * NakaData_PartFlags -- 15 bytes after the string block before it that
+     * no registration or code reference reaches (searched: RegObjTabl
+     * tables, slice and positional labels). Contents not established.
      * --------------------------------------------------------------------- */
     uint8_t NakaData_PartFlags[15];
     /* ---------------------------------------------------------------------

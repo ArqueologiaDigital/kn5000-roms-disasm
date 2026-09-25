@@ -578,6 +578,8 @@ CUSTOM_AT = [
     ('naka_widget_tables_1', 0x0, span_builder('t1')),
     ('naka_widget_tables_2', 0x0, span_builder('t2a')),
     ('naka_widget_tables_2', 0x24954, span_builder('t2b')),
+    ('naka_widget_descriptors', 0x271A, span_builder('d_ui')),
+    ('naka_widget_descriptors', 0x24906, span_builder('d_cls')),
 ]
 
 

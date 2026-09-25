@@ -296,67 +296,2299 @@ NakaInst_MODULATED_CHORUS:
 NakaInst_CHORUS:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x26F6, 0x12
 NakaInst_NO_OPERATION:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2708, 0x2D0
-NakaInst_ACHTUNG:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x29D8, 0xA
-NakaInst_ATTENTION:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x29E2, 0xC
-NakaInst_ATENCI_N:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x29EE, 0xC
-NakaInst_Perhatian:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x29FA, 0x1A
-NakaInst_Sind_Sie_sicher:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A14, 0x12
-NakaInst_Etes_vous_sur_FR:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A26, 0x10
-NakaInst_Est_seguro:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A36, 0x72
-NakaInst_Features_for_editing_a_song:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2AA8, 0x1E
-NakaInst_Funktionen_zur_Bearbeitung_eines_Songs:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2AC6, 0x28
-NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2AEE, 0x82
-NakaInst_EASY_RECORD_aktiviert_DE:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2B70, 0x92
-NakaInst_Press_OK_to_proceed:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2C02, 0x16
-NakaInst_Bestaetigen_Sie_mit_OK_DE:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2C18, 0x18
-NakaInst_PANEL_WRITE_replaces_the_sounds_and_settings_at:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2C30, 0xC2
-NakaInst_PANEL_WRITE_ersetzt_alle_Kl_nge_und_Einstellungen:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2CF2, 0xDE
-NakaInst_Press_the_up_down_buttons_under_the_screen:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2DD0, 0x60
-NakaInst_Druecken_Sie_Doppeltasten_DE:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2E30, 0x68
-NakaInst_Press_OK_to_complete_TRACK_CLEAR:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2E98, 0x22
-NakaInst_Druecken_OK_TRACK_CLEAR_DE:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2EBA, 0x2C
-NakaInst_Press_the_up_down_button_under_the_screen:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2EE6, 0x5C
-NakaInst_Dr_cken_Sie_eine_der_Doppeltasten_unter_dem:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2F42, 0x68
-NakaInst_Using_SONG_CLEAR_will_erase_any_existing:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2FAA, 0x46
-NakaInst_SONG_CLEAR_loescht_DE:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2FF0, 0x3C
-NakaInst_Al_anular_la_canci_n_se_borra_la_grabaci_n_del:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x302C, 0xE4
-NakaInst_Using_TRACK_CLEAR_will_erase_any_existing:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3110, 0x4E
-NakaInst_TRACK_CLEAR_l_scht_alle_Daten_in_den_ausgew_hlten:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x315E, 0x3C
-NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x319A, 0x4DE
-ExtDevice_ModeDispatch_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3678, 0x6B0
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2708, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffectBox_HandleInitEvent_Table
+; EffectBox_HandleInitEvent_Table -- read by EffectBox_HandleInitEvent
+; (v10/v9 0xf3354a, v7 0xf33520) (`ld xbc, NakaInst_NO_OPERATION_0x12`).
+; 8 bytes to the next object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EffectBox_HandleInitEvent_Table[8].
+; -----------------------------------------------------------------------------
+EffectBox_HandleInitEvent_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x271A, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffectBox_PostFillSetup_Table
+; EffectBox_PostFillSetup_Table -- read by EffectBox_PostFillSetup
+; (v10/v9 0xf33752, v7 0xf33728) (`ld xhl, NakaInst_NO_OPERATION_0x1a`),
+; EffectBox_PostFill3Setup (v10/v9 0xf337f8, v7 0xf337ce) (`ld xhl,
+; NakaInst_NO_OPERATION_0x1a`), EffectBox_HandleSelectEvent (v10/v9
+; 0xf339bf, v7 0xf33995) (`ld xwa, NakaInst_NO_OPERATION_0x1a`). 8 bytes
+; to the next object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EffectBox_PostFillSetup_Table[8].
+; -----------------------------------------------------------------------------
+EffectBox_PostFillSetup_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2722, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyVal_HandleScrollEvent_Table
+; SqplyVal_HandleScrollEvent_Table -- read by SqplyVal_HandleScrollEvent
+; (v10/v9 0xf30b75, v7 0xf30b4b) (`ld xde, NakaInst_NO_OPERATION_0x22`).
+; 96 bytes to the next object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqplyVal_HandleScrollEvent_Table[96].
+; -----------------------------------------------------------------------------
+SqplyVal_HandleScrollEvent_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x272A, 0x60
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtVal_HandleScrollEvent_Table
+; SqedtVal_HandleScrollEvent_Table -- read by SqedtVal_HandleScrollEvent
+; (v10/v9 0xf31125, v7 0xf310fb) (`ld xde, NakaInst_NO_OPERATION_0x82`),
+; SqedtVal3_HandleScrollEvent (v10/v9 0xf31f13, v7 0xf31ee9) (`lda xde,
+; (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop1 (v10/v9
+; 0xf31fb4, v7 0xf31f8a) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+; SqedtVal3_FillBufferLoop2 (v10/v9 0xf3205d, v7 0xf32033) (`lda xde,
+; (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop3 (v10/v9
+; 0xf32106, v7 0xf320dc) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+; SqedtVal2_HandleScrollEvent (v10/v9 0xf32380, v7 0xf32356) (`ld xde,
+; NakaInst_NO_OPERATION_0x82`). 280 bytes to the next object; the layout
+; beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtVal_HandleScrollEvent_Table[280].
+; -----------------------------------------------------------------------------
+SqedtVal_HandleScrollEvent_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x278A, 0x118
+; -----------------------------------------------------------------------------
+; [naka_s_headers] BmDrEdit_RenderHorizontal_Table
+; BmDrEdit_RenderHorizontal_Table -- read by BmDrEdit_RenderHorizontal
+; (v10/v9 0xf361c1, v7 0xf36197) (`lda xbc,
+; (NakaInst_NO_OPERATION_0x19a:24)`), BmDrEdit_RenderSecondaryHoriz
+; (v10/v9 0xf36282, v7 0xf36258) (`lda xbc,
+; (NakaInst_NO_OPERATION_0x19a:24)`). 58 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; BmDrEdit_RenderHorizontal_Table[58].
+; -----------------------------------------------------------------------------
+BmDrEdit_RenderHorizontal_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x28A2, 0x3A
+; -----------------------------------------------------------------------------
+; [naka_s_headers] BmDrEdit_RenderVertical_Table
+; BmDrEdit_RenderVertical_Table -- read by BmDrEdit_RenderVertical
+; (v10/v9 0xf361fe, v7 0xf361d4) (`lda xbc,
+; (NakaInst_NO_OPERATION_0x1d4:24)`), BmDrEdit_RenderSecondaryVert
+; (v10/v9 0xf362c1, v7 0xf36297) (`lda xbc,
+; (NakaInst_NO_OPERATION_0x1d4:24)`). 28 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; BmDrEdit_RenderVertical_Table[28].
+; -----------------------------------------------------------------------------
+BmDrEdit_RenderVertical_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x28DC, 0x1C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_HandleFocusLost_Table
+; NoteEditBox_HandleFocusLost_Table -- read by
+; NoteEditBox_HandleFocusLost (v10/v9 0xf2f0f9, v7 0xf2f0cf) (`ld xwa,
+; NakaInst_NO_OPERATION_0x1f0`). 12 bytes to the next object; the layout
+; beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; NoteEditBox_HandleFocusLost_Table[12].
+; -----------------------------------------------------------------------------
+NoteEditBox_HandleFocusLost_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x28F8, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_HandleFocusLost_Table_2
+; NoteEditBox_HandleFocusLost_Table_2 -- read by
+; NoteEditBox_HandleFocusLost (v10/v9 0xf2f0f9, v7 0xf2f0cf) (`ld xwa,
+; NakaInst_NO_OPERATION_0x1fc`). 12 bytes to the next object; the layout
+; beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; NoteEditBox_HandleFocusLost_Table_2[12].
+; -----------------------------------------------------------------------------
+NoteEditBox_HandleFocusLost_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2904, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_EventDispatch2_Table
+; NoteEditBox_EventDispatch2_Table -- read by NoteEditBox_EventDispatch2
+; (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xde,
+; (NakaInst_NO_OPERATION_0x208:24)`), NoteEditBox_EventDispatch2 (v10/v9
+; 0xf2f2a0, v7 0xf2f276) (`lda xbc, (NakaInst_NO_OPERATION_0x208:24)`),
+; NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xix,
+; (NakaInst_NO_OPERATION_0x208:24)`), NoteEditGrid_LoadCoordinates
+; (v10/v9 0xf2f97f, v7 0xf2f955) (`lda xde,
+; (NakaInst_NO_OPERATION_0x208:24)`). 72 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; NoteEditBox_EventDispatch2_Table[72].
+; -----------------------------------------------------------------------------
+NoteEditBox_EventDispatch2_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2910, 0x48
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_EventDispatch2_Table_2
+; NoteEditBox_EventDispatch2_Table_2 -- read by
+; NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xbc,
+; (NakaInst_NO_OPERATION_0x250:24)`). 24 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; NoteEditBox_EventDispatch2_Table_2[24].
+; -----------------------------------------------------------------------------
+NoteEditBox_EventDispatch2_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2958, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_EventDispatch2_Table_3
+; NoteEditBox_EventDispatch2_Table_3 -- read by
+; NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xbc,
+; (NakaInst_NO_OPERATION_0x268:24)`). 18 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; NoteEditBox_EventDispatch2_Table_3[18].
+; -----------------------------------------------------------------------------
+NoteEditBox_EventDispatch2_Table_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2970, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditFunc_Table
+; NoteEditFunc_Table -- read by NoteEditFunc (v10/v9 0xf2fa5a, v7
+; 0xf2fa30) (`lda xhl, (NakaInst_NO_OPERATION_0x27a:24)`). 66 bytes to
+; the next object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t NoteEditFunc_Table[66].
+; -----------------------------------------------------------------------------
+NoteEditFunc_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2982, 0x42
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AttAreYouSureCheck_Strings
+; AttAreYouSureCheck_Strings -- the 6 strings
+; AttAreYouSureCheck_PtrTable points at (NUL-terminated, 0xff pad to
+; even length), 158 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; AttAreYouSureCheck_Strings[158].
+; -----------------------------------------------------------------------------
+AttAreYouSureCheck_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x29C4, 0x9E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsSeqMenu1Check_Strings
+; StsSeqMenu1Check_Strings -- the 2 strings StsSeqMenu1Check_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 70 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsSeqMenu1Check_Strings[70].
+; -----------------------------------------------------------------------------
+StsSeqMenu1Check_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A62, 0x46
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsSeqMenu2Check_Strings
+; StsSeqMenu2Check_Strings -- the 2 strings StsSeqMenu2Check_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 70 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsSeqMenu2Check_Strings[70].
+; -----------------------------------------------------------------------------
+StsSeqMenu2Check_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2AA8, 0x46
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsEasyRec1Check_Strings
+; StsEasyRec1Check_Strings -- the 2 strings StsEasyRec1Check_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 276 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsEasyRec1Check_Strings[276].
+; -----------------------------------------------------------------------------
+StsEasyRec1Check_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2AEE, 0x114
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsEasyRec2Check_Strings
+; StsEasyRec2Check_Strings -- the 2 strings StsEasyRec2Check_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 46 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsEasyRec2Check_Strings[46].
+; -----------------------------------------------------------------------------
+StsEasyRec2Check_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2C02, 0x2E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsPnlWrtCheck_Strings
+; StsPnlWrtCheck_Strings -- the 2 strings StsPnlWrtCheck_PtrTable points
+; at (NUL-terminated, 0xff pad to even length), 416 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsPnlWrtCheck_Strings[416].
+; -----------------------------------------------------------------------------
+StsPnlWrtCheck_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2C30, 0x1A0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsTrkClr1Check_Strings
+; StsTrkClr1Check_Strings -- the 2 strings StsTrkClr1Check_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 200 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsTrkClr1Check_Strings[200].
+; -----------------------------------------------------------------------------
+StsTrkClr1Check_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2DD0, 0xC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsTrkClr2Check_Strings
+; StsTrkClr2Check_Strings -- the 2 strings StsTrkClr2Check_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 78 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsTrkClr2Check_Strings[78].
+; -----------------------------------------------------------------------------
+StsTrkClr2Check_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2E98, 0x4E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsNtDrEditCheck_Strings
+; StsNtDrEditCheck_Strings -- the 2 strings StsNtDrEditCheck_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 196 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsNtDrEditCheck_Strings[196].
+; -----------------------------------------------------------------------------
+StsNtDrEditCheck_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2EE6, 0xC4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AttSongClrCheck_Strings
+; AttSongClrCheck_Strings -- the 5 strings AttSongClrCheck_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 358 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; AttSongClrCheck_Strings[358].
+; -----------------------------------------------------------------------------
+AttSongClrCheck_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2FAA, 0x166
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AttTrkClrCheck_Strings
+; AttTrkClrCheck_Strings -- the 5 strings AttTrkClrCheck_PtrTable points
+; at (NUL-terminated, 0xff pad to even length), 404 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; AttTrkClrCheck_Strings[404].
+; -----------------------------------------------------------------------------
+AttTrkClrCheck_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3110, 0x194
+	.set NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las, AttTrkClrCheck_Strings + 138	; historical label, used by other files
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsAtPunchCheck_Strings
+; StsAtPunchCheck_Strings -- the 2 strings StsAtPunchCheck_PtrTable
+; points at (NUL-terminated, 0xff pad to even length), 102 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsAtPunchCheck_Strings[102].
+; -----------------------------------------------------------------------------
+StsAtPunchCheck_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x32A4, 0x66
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaDesc_Str0330A
+; NakaDesc_Str0330A -- 6 bytes of NUL-terminated strings after the
+; string block before it; no registration or code reference reaches them
+; (searched: RegObjTabl tables, slice and positional labels). Which code
+; uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char NakaDesc_Str0330A[6].
+; -----------------------------------------------------------------------------
+NakaDesc_Str0330A:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x330A, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] HelpTtlFunc_LookupSlide_Strings
+; HelpTtlFunc_LookupSlide_Strings -- the 50 strings
+; HelpTtlFunc_LookupSlide_PtrTable points at (NUL-terminated, 0xff pad
+; to even length), 638 bytes.
+;
+; Typed in naka_widget_descriptors.c as char
+; HelpTtlFunc_LookupSlide_Strings[638].
+; -----------------------------------------------------------------------------
+HelpTtlFunc_LookupSlide_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3310, 0x27E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] HelpTtlFunc_LookupSlide_PtrTable
+; HelpTtlFunc_LookupSlide_PtrTable -- 50 u32 addresses, read by
+; HelpTtlFunc_LookupSlide (v10/v9 0xf2e962, v7 0xf2e938) (`lda xix,
+; (NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x3f4:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; HelpTtlFunc_LookupSlide_PtrTable[50].
+; -----------------------------------------------------------------------------
+HelpTtlFunc_LookupSlide_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x358E, 0xC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] HelpTtlFunc_LookupSlide_PtrTable_Strings
+; HelpTtlFunc_LookupSlide_PtrTable_Strings -- 30 bytes of NUL-terminated
+; strings after HelpTtlFunc_LookupSlide_PtrTable; no registration or
+; code reference reaches them (searched: RegObjTabl tables, slice and
+; positional labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; HelpTtlFunc_LookupSlide_PtrTable_Strings[30].
+; -----------------------------------------------------------------------------
+HelpTtlFunc_LookupSlide_PtrTable_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3656, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AttAreYouSureCheck_PtrTable
+; AttAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
+; AttAreYouSureCheck (v10/v9 0xf2ef1d, v7 0xf2eef3) (`lda xhl,
+; (NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x4da:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; AttAreYouSureCheck_PtrTable[6].
+; -----------------------------------------------------------------------------
+AttAreYouSureCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3674, 0x18
+	.set ExtDevice_ModeDispatch_Table, AttAreYouSureCheck_PtrTable + 4	; historical label, used by other files
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AttAttentionCheck_PtrTable
+; AttAttentionCheck_PtrTable -- 6 u32 addresses, read by
+; AttAttentionCheck (v10/v9 0xf2ef2e, v7 0xf2ef04) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x14:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; AttAttentionCheck_PtrTable[6].
+; -----------------------------------------------------------------------------
+AttAttentionCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x368C, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsSeqMenu1Check_PtrTable
+; StsSeqMenu1Check_PtrTable -- 6 u32 addresses, read by StsSeqMenu1Check
+; (v10/v9 0xf2ef3f, v7 0xf2ef15) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x2c:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsSeqMenu1Check_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsSeqMenu1Check_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x36A4, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsSeqMenu2Check_PtrTable
+; StsSeqMenu2Check_PtrTable -- 6 u32 addresses, read by StsSeqMenu2Check
+; (v10/v9 0xf2ef50, v7 0xf2ef26) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x44:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsSeqMenu2Check_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsSeqMenu2Check_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x36BC, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsEasyRec1Check_PtrTable
+; StsEasyRec1Check_PtrTable -- 6 u32 addresses, read by StsEasyRec1Check
+; (v10/v9 0xf2ef61, v7 0xf2ef37) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x5c:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsEasyRec1Check_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsEasyRec1Check_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x36D4, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsEasyRec2Check_PtrTable
+; StsEasyRec2Check_PtrTable -- 6 u32 addresses, read by StsEasyRec2Check
+; (v10/v9 0xf2ef72, v7 0xf2ef48) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x74:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsEasyRec2Check_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsEasyRec2Check_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x36EC, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsPnlWrtCheck_PtrTable
+; StsPnlWrtCheck_PtrTable -- 6 u32 addresses, read by StsPnlWrtCheck
+; (v10/v9 0xf2ef83, v7 0xf2ef59) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x8c:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsPnlWrtCheck_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsPnlWrtCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3704, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsTrkClr1Check_PtrTable
+; StsTrkClr1Check_PtrTable -- 6 u32 addresses, read by StsTrkClr1Check
+; (v10/v9 0xf2ef94, v7 0xf2ef6a) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0xa4:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsTrkClr1Check_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsTrkClr1Check_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x371C, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsTrkClr2Check_PtrTable
+; StsTrkClr2Check_PtrTable -- 6 u32 addresses, read by StsTrkClr2Check
+; (v10/v9 0xf2efa5, v7 0xf2ef7b) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0xbc:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsTrkClr2Check_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsTrkClr2Check_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3734, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsNtDrEditCheck_PtrTable
+; StsNtDrEditCheck_PtrTable -- 6 u32 addresses, read by StsNtDrEditCheck
+; (v10/v9 0xf2efb6, v7 0xf2ef8c) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0xd4:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsNtDrEditCheck_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsNtDrEditCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x374C, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AttTrkClrCheck_PtrTable
+; AttTrkClrCheck_PtrTable -- 6 u32 addresses, read by AttTrkClrCheck
+; (v10/v9 0xf2efc7, v7 0xf2ef9d) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0xec:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; AttTrkClrCheck_PtrTable[6].
+; -----------------------------------------------------------------------------
+AttTrkClrCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3764, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AttSongClrCheck_PtrTable
+; AttSongClrCheck_PtrTable -- 6 u32 addresses, read by AttSongClrCheck
+; (v10/v9 0xf2efd8, v7 0xf2efae) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x104:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; AttSongClrCheck_PtrTable[6].
+; -----------------------------------------------------------------------------
+AttSongClrCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x377C, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsAtPunchCheck_PtrTable
+; StsAtPunchCheck_PtrTable -- 6 u32 addresses, read by StsAtPunchCheck
+; (v10/v9 0xf2efe9, v7 0xf2efbf) (`lda xhl,
+; (ExtDevice_ModeDispatch_Table_0x11c:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; StsAtPunchCheck_PtrTable[6].
+; -----------------------------------------------------------------------------
+StsAtPunchCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3794, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsAtPunchCheck_PtrTable_Strings
+; StsAtPunchCheck_PtrTable_Strings -- 12 bytes of NUL-terminated strings
+; after StsAtPunchCheck_PtrTable; no registration or code reference
+; reaches them (searched: RegObjTabl tables, slice and positional
+; labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; StsAtPunchCheck_PtrTable_Strings[12].
+; -----------------------------------------------------------------------------
+StsAtPunchCheck_PtrTable_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37AC, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_EventDispatch2_Str
+; NoteEditBox_EventDispatch2_Str -- NUL-terminated string(s), 8 bytes,
+; used by NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x140`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEditBox_EventDispatch2_Str[8].
+; -----------------------------------------------------------------------------
+NoteEditBox_EventDispatch2_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B8, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_EventDispatch2_Str_2
+; NoteEditBox_EventDispatch2_Str_2 -- NUL-terminated string(s), 4 bytes,
+; used by NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x148`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEditBox_EventDispatch2_Str_2[4].
+; -----------------------------------------------------------------------------
+NoteEditBox_EventDispatch2_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37C0, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_EventDispatch2_Str_3
+; NoteEditBox_EventDispatch2_Str_3 -- NUL-terminated string(s), 8 bytes,
+; used by NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x14c`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEditBox_EventDispatch2_Str_3[8].
+; -----------------------------------------------------------------------------
+NoteEditBox_EventDispatch2_Str_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37C4, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatEntry_Table
+; NoteEdit_FormatEntry_Table -- read by NoteEdit_FormatEntry (v10/v9
+; 0xf2fa09, v7 0xf2f9df) (`add xwa,
+; ExtDevice_ModeDispatch_Table_0x154`). 12 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; NoteEdit_FormatEntry_Table[12].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatEntry_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37CC, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatEntry_CaseTable
+; NoteEdit_FormatEntry_CaseTable -- jump table of a compiled `switch` in
+; NoteEdit_FormatEntry (v10/v9 0xf2fa09, v7 0xf2f9df) (`ld xix,
+; ExtDevice_ModeDispatch_Table_0x160`): 2 u16 case offsets from
+; NoteEditBox_GridDispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEdit_FormatEntry_CaseTable[2].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatEntry_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37D8, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_GridDispatch2_CaseTable
+; NoteEditBox_GridDispatch2_CaseTable -- jump table of a compiled
+; `switch` in NoteEditBox_GridDispatch2 (v10/v9 0xf2f251, v7 0xf2f227)
+; (`add xwa, ExtDevice_ModeDispatch_Table_0x164`): 12 u16 case offsets
+; from NoteEditBox_EventDispatch2.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEditBox_GridDispatch2_CaseTable[12].
+; -----------------------------------------------------------------------------
+NoteEditBox_GridDispatch2_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37DC, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_SetupGrid_CaseTable
+; NoteEditBox_SetupGrid_CaseTable -- jump table of a compiled `switch`
+; in NoteEditBox_SetupGrid (v10/v9 0xf2f1a2, v7 0xf2f178) (`add xhl,
+; ExtDevice_ModeDispatch_Table_0x17c`): 10 u16 case offsets from
+; NoteEditBox_EventDispatch1.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEditBox_SetupGrid_CaseTable[10].
+; -----------------------------------------------------------------------------
+NoteEditBox_SetupGrid_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37F4, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditBox_SetupGrid_CaseTable_Strings
+; NoteEditBox_SetupGrid_CaseTable_Strings -- 12 bytes of NUL-terminated
+; strings after NoteEditBox_SetupGrid_CaseTable; no registration or code
+; reference reaches them (searched: RegObjTabl tables, slice and
+; positional labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEditBox_SetupGrid_CaseTable_Strings[12].
+; -----------------------------------------------------------------------------
+NoteEditBox_SetupGrid_CaseTable_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3808, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatTempoString_Str
+; NoteEdit_FormatTempoString_Str -- NUL-terminated string(s), 6 bytes,
+; used by NoteEdit_FormatTempoString (v10/v9 0xf2faf2, v7 0xf2fac8) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x19c`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatTempoString_Str[6].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatTempoString_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3814, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatTempoString_Str_2
+; NoteEdit_FormatTempoString_Str_2 -- NUL-terminated string(s), 6 bytes,
+; used by NoteEdit_FormatTempoString (v10/v9 0xf2faf2, v7 0xf2fac8) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x1a2`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatTempoString_Str_2[6].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatTempoString_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x381A, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatNoteOther_Str
+; NoteEdit_FormatNoteOther_Str -- NUL-terminated string(s), 4 bytes,
+; used by NoteEdit_FormatNoteOther (v10/v9 0xf2fb54, v7 0xf2fb2a) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x1a8`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatNoteOther_Str[4].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatNoteOther_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3820, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatNoteOther_Str_2
+; NoteEdit_FormatNoteOther_Str_2 -- NUL-terminated string(s), 6 bytes,
+; used by NoteEdit_FormatNoteOther (v10/v9 0xf2fb54, v7 0xf2fb2a) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x1ac`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatNoteOther_Str_2[6].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatNoteOther_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3824, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatNoteOther_Str_3
+; NoteEdit_FormatNoteOther_Str_3 -- NUL-terminated string(s), 6 bytes,
+; used by NoteEdit_FormatNoteOther (v10/v9 0xf2fb54, v7 0xf2fb2a) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x1b2`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatNoteOther_Str_3[6].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatNoteOther_Str_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x382A, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatNoteOther_Str_4
+; NoteEdit_FormatNoteOther_Str_4 -- NUL-terminated string(s), 4 bytes,
+; used by NoteEdit_FormatNoteOther (v10/v9 0xf2fb54, v7 0xf2fb2a) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x1b8`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatNoteOther_Str_4[4].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatNoteOther_Str_4:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3830, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatNoteOther_Str_5
+; NoteEdit_FormatNoteOther_Str_5 -- NUL-terminated string(s), 12 bytes,
+; used by NoteEdit_FormatNoteOther (v10/v9 0xf2fb54, v7 0xf2fb2a) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x1bc`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatNoteOther_Str_5[12].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatNoteOther_Str_5:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3834, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_GateTime0C_Str
+; NoteEdit_GateTime0C_Str -- NUL-terminated string(s), 8 bytes, used by
+; NoteEdit_GateTime0C (v10/v9 0xf2fbd9, v7 0xf2fbaf) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x1c8`).
+;
+; Typed in naka_widget_descriptors.c as char NoteEdit_GateTime0C_Str[8].
+; -----------------------------------------------------------------------------
+NoteEdit_GateTime0C_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3840, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_GateTime10_Str
+; NoteEdit_GateTime10_Str -- NUL-terminated string(s), 8 bytes, used by
+; NoteEdit_GateTime10 (v10/v9 0xf2fbe0, v7 0xf2fbb6) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x1d0`).
+;
+; Typed in naka_widget_descriptors.c as char NoteEdit_GateTime10_Str[8].
+; -----------------------------------------------------------------------------
+NoteEdit_GateTime10_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3848, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_GateTime18_Str
+; NoteEdit_GateTime18_Str -- NUL-terminated string(s), 8 bytes, used by
+; NoteEdit_GateTime18 (v10/v9 0xf2fbeb, v7 0xf2fbc1) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x1d8`).
+;
+; Typed in naka_widget_descriptors.c as char NoteEdit_GateTime18_Str[8].
+; -----------------------------------------------------------------------------
+NoteEdit_GateTime18_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3850, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_GateTime20_Str
+; NoteEdit_GateTime20_Str -- NUL-terminated string(s), 8 bytes, used by
+; NoteEdit_GateTime20 (v10/v9 0xf2fbf2, v7 0xf2fbc8) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x1e0`).
+;
+; Typed in naka_widget_descriptors.c as char NoteEdit_GateTime20_Str[8].
+; -----------------------------------------------------------------------------
+NoteEdit_GateTime20_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3858, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_GateTime30_Str
+; NoteEdit_GateTime30_Str -- NUL-terminated string(s), 8 bytes, used by
+; NoteEdit_GateTime30 (v10/v9 0xf2fbf9, v7 0xf2fbcf) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x1e8`).
+;
+; Typed in naka_widget_descriptors.c as char NoteEdit_GateTime30_Str[8].
+; -----------------------------------------------------------------------------
+NoteEdit_GateTime30_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3860, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_GateTime60_Str
+; NoteEdit_GateTime60_Str -- NUL-terminated string(s), 12 bytes, used by
+; NoteEdit_GateTime60 (v10/v9 0xf2fc00, v7 0xf2fbd6) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x1f0`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_GateTime60_Str[12].
+; -----------------------------------------------------------------------------
+NoteEdit_GateTime60_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3868, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_FormatChordType_Str
+; NoteEdit_FormatChordType_Str -- NUL-terminated string(s), 4 bytes,
+; used by NoteEdit_FormatChordType (v10/v9 0xf2fc1d, v7 0xf2fbf3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x1fc`).
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEdit_FormatChordType_Str[4].
+; -----------------------------------------------------------------------------
+NoteEdit_FormatChordType_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3874, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEdit_GetParamValue_CaseTable
+; NoteEdit_GetParamValue_CaseTable -- jump table of a compiled `switch`
+; in NoteEdit_GetParamValue (v10/v9 0xf2fc64, v7 0xf2fc3a) (`add xde,
+; ExtDevice_ModeDispatch_Table_0x200`): 14 u16 case offsets from
+; NoteEdit_ParamJumpTable.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEdit_GetParamValue_CaseTable[14].
+; -----------------------------------------------------------------------------
+NoteEdit_GetParamValue_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3878, 0x1C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditFunc_CaseTable
+; NoteEditFunc_CaseTable -- jump table of a compiled `switch` in
+; NoteEditFunc (v10/v9 0xf2fa5a, v7 0xf2fa30) (`add xwa,
+; ExtDevice_ModeDispatch_Table_0x21c`): 16 u16 case offsets from
+; NoteEdit_FormatTempo.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; NoteEditFunc_CaseTable[16].
+; -----------------------------------------------------------------------------
+NoteEditFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3894, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NoteEditFunc_CaseTable_Strings
+; NoteEditFunc_CaseTable_Strings -- 10 bytes of NUL-terminated strings
+; after NoteEditFunc_CaseTable; no registration or code reference
+; reaches them (searched: RegObjTabl tables, slice and positional
+; labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; NoteEditFunc_CaseTable_Strings[10].
+; -----------------------------------------------------------------------------
+NoteEditFunc_CaseTable_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38B4, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntGrid_PostMainEvent_Table
+; EntGrid_PostMainEvent_Table -- read by EntGrid_PostMainEvent (v10/v9
+; 0xf300ec, v7 0xf300c2) (`lda xbc,
+; (ExtDevice_ModeDispatch_Table_0x246:24)`). 18 bytes to the next
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EntGrid_PostMainEvent_Table[18].
+; -----------------------------------------------------------------------------
+EntGrid_PostMainEvent_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38BE, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntGrid_PostMainEvent_Table_2
+; EntGrid_PostMainEvent_Table_2 -- read by EntGrid_PostMainEvent (v10/v9
+; 0xf300ec, v7 0xf300c2) (`lda xbc,
+; (ExtDevice_ModeDispatch_Table_0x258:24)`). 18 bytes to the next
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EntGrid_PostMainEvent_Table_2[18].
+; -----------------------------------------------------------------------------
+EntGrid_PostMainEvent_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38D0, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AcEntertainerGridBoxProc_CaseTable
+; AcEntertainerGridBoxProc_CaseTable -- jump table of a compiled
+; `switch` in AcEntertainerGridBoxProc (v10/v9 0xf30048, v7 0xf3001e)
+; (`add xbc, ExtDevice_ModeDispatch_Table_0x26a`): 7 u16 case offsets
+; from AcEntertainer_EventDispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; AcEntertainerGridBoxProc_CaseTable[7].
+; -----------------------------------------------------------------------------
+AcEntertainerGridBoxProc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38E2, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndParam_Dispatch_Table
+; SndParam_Dispatch_Table -- read by SndParam_Dispatch (v10/v9 0xf303d6,
+; v7 0xf303ac) (`lda xbc, (ExtDevice_ModeDispatch_Table_0x278:24)`),
+; SndParam_Dispatch (v10/v9 0xf303d6, v7 0xf303ac) (`lda xwa,
+; (ExtDevice_ModeDispatch_Table_0x278:24)`), SndParam_Dispatch (v10/v9
+; 0xf303d6, v7 0xf303ac) (`lda xix,
+; (ExtDevice_ModeDispatch_Table_0x278:24)`), EntGridCheck_Handler
+; (v10/v9 0xf305c9, v7 0xf3059f) (`lda xbc,
+; (ExtDevice_ModeDispatch_Table_0x278:24)`). 36 bytes to the next
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SndParam_Dispatch_Table[36].
+; -----------------------------------------------------------------------------
+SndParam_Dispatch_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38F0, 0x24
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntertainerGridCheck_LocalInit
+; EntertainerGridCheck_LocalInit -- initializer of a local array:
+; EntertainerGridCheck (v10/v9 0xf30326, v7 0xf302fc) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x29c`) copies 10 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; EntertainerGridCheck_LocalInit[5].
+; -----------------------------------------------------------------------------
+EntertainerGridCheck_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3914, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntertainerGridCheck_LocalInit_Strings
+; EntertainerGridCheck_LocalInit_Strings -- 10 bytes of NUL-terminated
+; strings after EntertainerGridCheck_LocalInit; no registration or code
+; reference reaches them (searched: RegObjTabl tables, slice and
+; positional labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; EntertainerGridCheck_LocalInit_Strings[10].
+; -----------------------------------------------------------------------------
+EntertainerGridCheck_LocalInit_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x391E, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndParam_Dispatch_Str
+; SndParam_Dispatch_Str -- NUL-terminated string(s), 10 bytes, used by
+; SndParam_Dispatch (v10/v9 0xf303d6, v7 0xf303ac) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x2b0`).
+;
+; Typed in naka_widget_descriptors.c as char SndParam_Dispatch_Str[10].
+; -----------------------------------------------------------------------------
+SndParam_Dispatch_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3928, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndParam_Dispatch_Str_2
+; SndParam_Dispatch_Str_2 -- NUL-terminated string(s), 20 bytes, used by
+; SndParam_Dispatch (v10/v9 0xf303d6, v7 0xf303ac) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x2ba`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SndParam_Dispatch_Str_2[20].
+; -----------------------------------------------------------------------------
+SndParam_Dispatch_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3932, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntGridCheck_Handle4140_Str
+; EntGridCheck_Handle4140_Str -- NUL-terminated string(s), 10 bytes,
+; used by EntGridCheck_Handle4140 (v10/v9 0xf30678, v7 0xf3064e) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x2ce`).
+;
+; Typed in naka_widget_descriptors.c as char
+; EntGridCheck_Handle4140_Str[10].
+; -----------------------------------------------------------------------------
+EntGridCheck_Handle4140_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3946, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntGridCheck_Handle4140_Str_2
+; EntGridCheck_Handle4140_Str_2 -- NUL-terminated string(s), 30 bytes,
+; used by EntGridCheck_Handle4140 (v10/v9 0xf30678, v7 0xf3064e) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x2d8`).
+;
+; Typed in naka_widget_descriptors.c as char
+; EntGridCheck_Handle4140_Str_2[30].
+; -----------------------------------------------------------------------------
+EntGridCheck_Handle4140_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3950, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndParam_Dispatch_PtrTable
+; SndParam_Dispatch_PtrTable -- 2 u32 ROM addresses (or 0), read by
+; SndParam_Dispatch (v10/v9 0xf303d6, v7 0xf303ac) (`lda xix,
+; (ExtDevice_ModeDispatch_Table_0x2f6:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; SndParam_Dispatch_PtrTable[2].
+; -----------------------------------------------------------------------------
+SndParam_Dispatch_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x396E, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndParam_Dispatch_PtrTable_Strings
+; SndParam_Dispatch_PtrTable_Strings -- 10 bytes of NUL-terminated
+; strings after SndParam_Dispatch_PtrTable; no registration or code
+; reference reaches them (searched: RegObjTabl tables, slice and
+; positional labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; SndParam_Dispatch_PtrTable_Strings[10].
+; -----------------------------------------------------------------------------
+SndParam_Dispatch_PtrTable_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3976, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndParam_Dispatch_PtrTable_2
+; SndParam_Dispatch_PtrTable_2 -- 2 u32 ROM addresses (or 0), read by
+; SndParam_Dispatch (v10/v9 0xf303d6, v7 0xf303ac) (`lda xix,
+; (ExtDevice_ModeDispatch_Table_0x308:24)`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; SndParam_Dispatch_PtrTable_2[2].
+; -----------------------------------------------------------------------------
+SndParam_Dispatch_PtrTable_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3980, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndParam_Dispatch_PtrTable_2_Strings
+; SndParam_Dispatch_PtrTable_2_Strings -- 10 bytes of NUL-terminated
+; strings after SndParam_Dispatch_PtrTable_2; no registration or code
+; reference reaches them (searched: RegObjTabl tables, slice and
+; positional labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; SndParam_Dispatch_PtrTable_2_Strings[10].
+; -----------------------------------------------------------------------------
+SndParam_Dispatch_PtrTable_2_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3988, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntertainerGridCheck_CaseTable
+; EntertainerGridCheck_CaseTable -- jump table of a compiled `switch` in
+; EntertainerGridCheck (v10/v9 0xf30326, v7 0xf302fc) (`add xwa,
+; ExtDevice_ModeDispatch_Table_0x31a`): 7 u16 case offsets from
+; SndParam_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; EntertainerGridCheck_CaseTable[7].
+; -----------------------------------------------------------------------------
+EntertainerGridCheck_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3992, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EntertainerGridCheck_CaseTable_Strings
+; EntertainerGridCheck_CaseTable_Strings -- 12 bytes of NUL-terminated
+; strings after EntertainerGridCheck_CaseTable; no registration or code
+; reference reaches them (searched: RegObjTabl tables, slice and
+; positional labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; EntertainerGridCheck_CaseTable_Strings[12].
+; -----------------------------------------------------------------------------
+EntertainerGridCheck_CaseTable_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39A0, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyVal_HandleExtraParams_CaseTable
+; SqplyVal_HandleExtraParams_CaseTable -- jump table of a compiled
+; `switch` in SqplyVal_HandleExtraParams (v10/v9 0xf30cbf, v7 0xf30c95)
+; (`add xhl, ExtDevice_ModeDispatch_Table_0x334`): 8 u16 case offsets
+; from SqplyVal_ExtraParamsData.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqplyVal_HandleExtraParams_CaseTable[8].
+; -----------------------------------------------------------------------------
+SqplyVal_HandleExtraParams_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39AC, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtVal_ClearDrawBuffer_CaseTable
+; SqedtVal_ClearDrawBuffer_CaseTable -- jump table of a compiled
+; `switch` in SqedtVal_ClearDrawBuffer (v10/v9 0xf311c6, v7 0xf3119c)
+; (`add xwa, ExtDevice_ModeDispatch_Table_0x344`): 15 u16 case offsets
+; from SqedtVal_DrawParamsData.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtVal_ClearDrawBuffer_CaseTable[15].
+; -----------------------------------------------------------------------------
+SqedtVal_ClearDrawBuffer_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39BC, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtVal2_UpScrollDefault_Table
+; SqedtVal2_UpScrollDefault_Table -- read by SqedtVal2_UpScrollDefault
+; (v10/v9 0xf326ae, v7 0xf32684) (`lda xiy,
+; (ExtDevice_ModeDispatch_Table_0x362:24)`). 24 bytes to the next
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtVal2_UpScrollDefault_Table[24].
+; -----------------------------------------------------------------------------
+SqedtVal2_UpScrollDefault_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39DA, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtVal2_UpScrollModeA2_Table
+; SqedtVal2_UpScrollModeA2_Table -- read by SqedtVal2_UpScrollModeA2
+; (v10/v9 0xf32688, v7 0xf3265e) (`lda xiy,
+; (ExtDevice_ModeDispatch_Table_0x37a:24)`). 16 bytes to the next
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtVal2_UpScrollModeA2_Table[16].
+; -----------------------------------------------------------------------------
+SqedtVal2_UpScrollModeA2_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39F2, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtVal2_DownScrollDefault_Table
+; SqedtVal2_DownScrollDefault_Table -- read by
+; SqedtVal2_DownScrollDefault (v10/v9 0xf32716, v7 0xf326ec) (`lda xbc,
+; (ExtDevice_ModeDispatch_Table_0x38a:24)`). 24 bytes to the next
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtVal2_DownScrollDefault_Table[24].
+; -----------------------------------------------------------------------------
+SqedtVal2_DownScrollDefault_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A02, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtVal2_DownScrollModeA2_Table
+; SqedtVal2_DownScrollModeA2_Table -- read by SqedtVal2_DownScrollModeA2
+; (v10/v9 0xf326ef, v7 0xf326c5) (`lda xbc,
+; (ExtDevice_ModeDispatch_Table_0x3a2:24)`). 16 bytes to the next
+; object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtVal2_DownScrollModeA2_Table[16].
+; -----------------------------------------------------------------------------
+SqedtVal2_DownScrollModeA2_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A1A, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit
+; SqedtFixProc_LocalInit -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3b2`) copies 5 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit[5].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A2A, 0x5
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_Tail
+; SqedtFixProc_LocalInit_Tail -- 1 bytes after SqedtFixProc_LocalInit
+; that no registration or code reference reaches (searched: RegObjTabl
+; tables, slice and positional labels). Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_Tail[1].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A2F, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_2
+; SqedtFixProc_LocalInit_2 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3b8`) copies 3 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_2[3].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A30, 0x3
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_2_Tail
+; SqedtFixProc_LocalInit_2_Tail -- 1 bytes after
+; SqedtFixProc_LocalInit_2 that no registration or code reference
+; reaches (searched: RegObjTabl tables, slice and positional labels).
+; Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_2_Tail[1].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_2_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A33, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_3
+; SqedtFixProc_LocalInit_3 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3bc`) copies 5 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_3[5].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A34, 0x5
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_3_Tail
+; SqedtFixProc_LocalInit_3_Tail -- 1 bytes after
+; SqedtFixProc_LocalInit_3 that no registration or code reference
+; reaches (searched: RegObjTabl tables, slice and positional labels).
+; Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_3_Tail[1].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_3_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A39, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_4
+; SqedtFixProc_LocalInit_4 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3c2`) copies 6 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtFixProc_LocalInit_4[3].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_4:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A3A, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_5
+; SqedtFixProc_LocalInit_5 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3c8`) copies 6 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtFixProc_LocalInit_5[3].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_5:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A40, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_6
+; SqedtFixProc_LocalInit_6 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3ce`) copies 2 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_6[2].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_6:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A46, 0x2
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_7
+; SqedtFixProc_LocalInit_7 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3d0`) copies 14 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtFixProc_LocalInit_7[7].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_7:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A48, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_8
+; SqedtFixProc_LocalInit_8 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3de`) copies 13 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_8[13].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_8:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A56, 0xD
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_8_Tail
+; SqedtFixProc_LocalInit_8_Tail -- 1 bytes after
+; SqedtFixProc_LocalInit_8 that no registration or code reference
+; reaches (searched: RegObjTabl tables, slice and positional labels).
+; Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_8_Tail[1].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_8_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A63, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_9
+; SqedtFixProc_LocalInit_9 -- initializer of a local array: SqedtFixProc
+; (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3ec`) copies 14 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtFixProc_LocalInit_9[7].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_9:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A64, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_10
+; SqedtFixProc_LocalInit_10 -- initializer of a local array:
+; SqedtFixProc (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x3fa`) copies 7 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_10[7].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_10:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A72, 0x7
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_10_Tail
+; SqedtFixProc_LocalInit_10_Tail -- 1 bytes after
+; SqedtFixProc_LocalInit_10 that no registration or code reference
+; reaches (searched: RegObjTabl tables, slice and positional labels).
+; Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_10_Tail[1].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_10_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A79, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_11
+; SqedtFixProc_LocalInit_11 -- initializer of a local array:
+; SqedtFixProc (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x402`) copies 5 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_11[5].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_11:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A7A, 0x5
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFixProc_LocalInit_11_Tail
+; SqedtFixProc_LocalInit_11_Tail -- 1 bytes after
+; SqedtFixProc_LocalInit_11 that no registration or code reference
+; reaches (searched: RegObjTabl tables, slice and positional labels).
+; Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; SqedtFixProc_LocalInit_11_Tail[1].
+; -----------------------------------------------------------------------------
+SqedtFixProc_LocalInit_11_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A7F, 0x1
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyVal_ExtraParams_CaseTable
+; SqplyVal_ExtraParams_CaseTable -- jump table of a compiled `switch` in
+; SqplyVal_ExtraParams (v10/v9 0xf3240a, v7 0xf323e0) (`add xhl,
+; ExtDevice_ModeDispatch_Table_0x408`): 16 u16 case offsets from
+; AccIll_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqplyVal_ExtraParams_CaseTable[16].
+; -----------------------------------------------------------------------------
+SqplyVal_ExtraParams_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3A80, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffectBoxProc_LocalInit
+; EffectBoxProc_LocalInit -- initializer of a local array: EffectBoxProc
+; (v10/v9 0xf3344e, v7 0xf33424) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x428`) copies 4 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; EffectBoxProc_LocalInit[2].
+; -----------------------------------------------------------------------------
+EffectBoxProc_LocalInit:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AA0, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffectBoxProc_LocalInit_2
+; EffectBoxProc_LocalInit_2 -- initializer of a local array:
+; EffectBoxProc (v10/v9 0xf3344e, v7 0xf33424) (`ld xiy,
+; ExtDevice_ModeDispatch_Table_0x42c`) copies 4 bytes into its stack
+; frame.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; EffectBoxProc_LocalInit_2[2].
+; -----------------------------------------------------------------------------
+EffectBoxProc_LocalInit_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AA4, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffectBox_NameSetup_CaseTable
+; EffectBox_NameSetup_CaseTable -- jump table of a compiled `switch` in
+; EffectBox_NameSetup (v10/v9 0xf33a51, v7 0xf33a27) (`add xhl,
+; ExtDevice_ModeDispatch_Table_0x430`): 7 u16 case offsets from
+; EffectBox_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; EffectBox_NameSetup_CaseTable[7].
+; -----------------------------------------------------------------------------
+EffectBox_NameSetup_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AA8, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_HandleSelectEvent_Table
+; Equalizer_HandleSelectEvent_Table -- read by
+; Equalizer_HandleSelectEvent (v10/v9 0xf34061, v7 0xf34037) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x43e`). 16 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Equalizer_HandleSelectEvent_Table[16].
+; -----------------------------------------------------------------------------
+Equalizer_HandleSelectEvent_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AB6, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_HandleSelectEvent_Table_2
+; Equalizer_HandleSelectEvent_Table_2 -- read by
+; Equalizer_HandleSelectEvent (v10/v9 0xf34061, v7 0xf34037) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x44e`). 16 bytes to the next object; the
+; layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Equalizer_HandleSelectEvent_Table_2[16].
+; -----------------------------------------------------------------------------
+Equalizer_HandleSelectEvent_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AC6, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffectBox_StateDispatch_CaseTable
+; EffectBox_StateDispatch_CaseTable -- jump table of a compiled `switch`
+; in EffectBox_StateDispatch (v10/v9 0xf340f2, v7 0xf340c8) (`add xbc,
+; ExtDevice_ModeDispatch_Table_0x45e`): 7 u16 case offsets from
+; SeqAccomp_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; EffectBox_StateDispatch_CaseTable[7].
+; -----------------------------------------------------------------------------
+EffectBox_StateDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AD6, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EffectBox_StateDispatch_CaseTable_Tail
+; EffectBox_StateDispatch_CaseTable_Tail -- 90 bytes after
+; EffectBox_StateDispatch_CaseTable that no registration or code
+; reference reaches (searched: RegObjTabl tables, slice and positional
+; labels). Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; EffectBox_StateDispatch_CaseTable_Tail[90].
+; -----------------------------------------------------------------------------
+EffectBox_StateDispatch_CaseTable_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AE4, 0x5A
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Table
+; Sqedt_ParamDispatch_Table -- read by Sqedt_ParamDispatch (v10/v9
+; 0xf34a5c, v7 0xf34a32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x4c6`).
+; 54 bytes to the next object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Sqedt_ParamDispatch_Table[54].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3B3E, 0x36
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Table_2
+; Sqedt_ParamDispatch_Table_2 -- read by Sqedt_ParamDispatch (v10/v9
+; 0xf34a5c, v7 0xf34a32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x4fc`).
+; 66 bytes to the next object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Sqedt_ParamDispatch_Table_2[66].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Table_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3B74, 0x42
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Table_3
+; Sqedt_ParamDispatch_Table_3 -- read by Sqedt_ParamDispatch (v10/v9
+; 0xf34a5c, v7 0xf34a32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x53e`).
+; 28 bytes to the next object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Sqedt_ParamDispatch_Table_3[28].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Table_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3BB6, 0x1C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Table_4
+; Sqedt_ParamDispatch_Table_4 -- read by Sqedt_ParamDispatch (v10/v9
+; 0xf34a5c, v7 0xf34a32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x55a`).
+; 106 bytes to the next object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Sqedt_ParamDispatch_Table_4[106].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Table_4:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3BD2, 0x6A
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str
+; SqplyFunc_ParamFormatData_Str -- NUL-terminated string(s), 4 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5c4`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str[4].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C3C, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_2
+; SqplyFunc_ParamFormatData_Str_2 -- NUL-terminated string(s), 4 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5c8`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_2[4].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C40, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_3
+; SqplyFunc_ParamFormatData_Str_3 -- NUL-terminated string(s), 4 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5cc`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_3[4].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C44, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_4
+; SqplyFunc_ParamFormatData_Str_4 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5d0`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_4[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_4:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C48, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_5
+; SqplyFunc_ParamFormatData_Str_5 -- NUL-terminated string(s), 4 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5d6`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_5[4].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_5:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C4E, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_6
+; SqplyFunc_ParamFormatData_Str_6 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5da`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_6[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_6:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C52, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_7
+; SqplyFunc_ParamFormatData_Str_7 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5e0`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_7[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_7:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C58, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_8
+; SqplyFunc_ParamFormatData_Str_8 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5e6`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_8[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_8:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C5E, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_9
+; SqplyFunc_ParamFormatData_Str_9 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5ec`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_9[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_9:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C64, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_10
+; SqplyFunc_ParamFormatData_Str_10 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5f2`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_10[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_10:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C6A, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_11
+; SqplyFunc_ParamFormatData_Str_11 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5f8`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_11[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_11:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C70, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_12
+; SqplyFunc_ParamFormatData_Str_12 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x5fe`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_12[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_12:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C76, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_13
+; SqplyFunc_ParamFormatData_Str_13 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x604`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_13[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_13:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C7C, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_14
+; SqplyFunc_ParamFormatData_Str_14 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x60a`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_14[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_14:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C82, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_ParamFormatData_Str_15
+; SqplyFunc_ParamFormatData_Str_15 -- NUL-terminated string(s), 6 bytes,
+; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; xwa, ExtDevice_ModeDispatch_Table_0x610`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_ParamFormatData_Str_15[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_ParamFormatData_Str_15:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C88, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_FormatRhythmPattern_Str
+; SqplyFunc_FormatRhythmPattern_Str -- NUL-terminated string(s), 6
+; bytes, used by SqplyFunc_FormatRhythmPattern (v10/v9 0xf34801, v7
+; 0xf347d7) (`ld xwa, ExtDevice_ModeDispatch_Table_0x616`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_FormatRhythmPattern_Str[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_FormatRhythmPattern_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C8E, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_FormatRhythmPattern_Str_2
+; SqplyFunc_FormatRhythmPattern_Str_2 -- NUL-terminated string(s), 12
+; bytes, used by SqplyFunc_FormatRhythmPattern (v10/v9 0xf34801, v7
+; 0xf347d7) (`ld xwa, ExtDevice_ModeDispatch_Table_0x61c`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_FormatRhythmPattern_Str_2[12].
+; -----------------------------------------------------------------------------
+SqplyFunc_FormatRhythmPattern_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C94, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_FormatIntro_Str
+; SqplyFunc_FormatIntro_Str -- NUL-terminated string(s), 6 bytes, used
+; by SqplyFunc_FormatIntro (v10/v9 0xf3483a, v7 0xf34810) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x628`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_FormatIntro_Str[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_FormatIntro_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CA0, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_FormatEnding_Str
+; SqplyFunc_FormatEnding_Str -- NUL-terminated string(s), 6 bytes, used
+; by SqplyFunc_FormatEnding (v10/v9 0xf3484a, v7 0xf34820) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x62e`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_FormatEnding_Str[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_FormatEnding_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CA6, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_FormatFillIn_Str
+; SqplyFunc_FormatFillIn_Str -- NUL-terminated string(s), 6 bytes, used
+; by SqplyFunc_FormatFillIn (v10/v9 0xf34864, v7 0xf3483a) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x634`).
+;
+; Typed in naka_widget_descriptors.c as char
+; SqplyFunc_FormatFillIn_Str[6].
+; -----------------------------------------------------------------------------
+SqplyFunc_FormatFillIn_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CAC, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_HandlePartQuery_CaseTable
+; SqplyFunc_HandlePartQuery_CaseTable -- jump table of a compiled
+; `switch` in SqplyFunc_HandlePartQuery (v10/v9 0xf3498e, v7 0xf34964)
+; (`lda xix, (ExtDevice_ModeDispatch_Table_0x63a:24)`): 8 u16 case
+; offsets from SqplyFunc_PartQueryDispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqplyFunc_HandlePartQuery_CaseTable[8].
+; -----------------------------------------------------------------------------
+SqplyFunc_HandlePartQuery_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CB2, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_HandleGetValue_CaseTable
+; SqplyFunc_HandleGetValue_CaseTable -- jump table of a compiled
+; `switch` in SqplyFunc_HandleGetValue (v10/v9 0xf34887, v7 0xf3485d)
+; (`add xwa, ExtDevice_ModeDispatch_Table_0x64a`): 11 u16 case offsets
+; from SqplyFunc_GetValueDispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqplyFunc_HandleGetValue_CaseTable[11].
+; -----------------------------------------------------------------------------
+SqplyFunc_HandleGetValue_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CC2, 0x16
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqplyFunc_CaseTable
+; SqplyFunc_CaseTable -- jump table of a compiled `switch` in SqplyFunc
+; (v10/v9 0xf34655, v7 0xf3462b) (`add xhl,
+; ExtDevice_ModeDispatch_Table_0x660`): 10 u16 case offsets from
+; SqplyFunc_ParamFormatData.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqplyFunc_CaseTable[10].
+; -----------------------------------------------------------------------------
+SqplyFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CD8, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str
+; Sqedt_ParamDispatch_Str -- NUL-terminated string(s), 6 bytes, used by
+; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x674`).
+;
+; Typed in naka_widget_descriptors.c as char Sqedt_ParamDispatch_Str[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CEC, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_2
+; Sqedt_ParamDispatch_Str_2 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x67a`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_2[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CF2, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_3
+; Sqedt_ParamDispatch_Str_3 -- NUL-terminated string(s), 18 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x680`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_3[18].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CF8, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_4
+; Sqedt_ParamDispatch_Str_4 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x692`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_4[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_4:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D0A, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_5
+; Sqedt_ParamDispatch_Str_5 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x698`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_5[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_5:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D10, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_6
+; Sqedt_ParamDispatch_Str_6 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x69e`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_6[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_6:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D16, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_7
+; Sqedt_ParamDispatch_Str_7 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x6a4`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_7[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_7:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D1C, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_8
+; Sqedt_ParamDispatch_Str_8 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; ExtDevice_ModeDispatch_Table_0x6aa`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_8[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_8:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D22, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_3d
+; NakaInst_3d -- NUL-terminated string(s), 6 bytes, used by
+; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`.long
+; NakaInst_3d`).
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_3d[6].
+; -----------------------------------------------------------------------------
 NakaInst_3d:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D28, 0xC8
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D28, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_9
+; Sqedt_ParamDispatch_Str_9 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x6`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_9[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_9:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D2E, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_10
+; Sqedt_ParamDispatch_Str_10 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0xc`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_10[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_10:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D34, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_11
+; Sqedt_ParamDispatch_Str_11 -- NUL-terminated string(s), 44 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x12`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_11[44].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_11:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D3A, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_12
+; Sqedt_ParamDispatch_Str_12 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x3e`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_12[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_12:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D66, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_13
+; Sqedt_ParamDispatch_Str_13 -- NUL-terminated string(s), 8 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x44`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_13[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_13:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D6C, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_14
+; Sqedt_ParamDispatch_Str_14 -- NUL-terminated string(s), 8 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x4c`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_14[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_14:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D74, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_15
+; Sqedt_ParamDispatch_Str_15 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x54`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_15[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_15:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D7C, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_16
+; Sqedt_ParamDispatch_Str_16 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x5a`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_16[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_16:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D82, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_17
+; Sqedt_ParamDispatch_Str_17 -- NUL-terminated string(s), 8 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x60`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_17[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_17:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D88, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_18
+; Sqedt_ParamDispatch_Str_18 -- NUL-terminated string(s), 8 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x68`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_18[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_18:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D90, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_19
+; Sqedt_ParamDispatch_Str_19 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x70`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_19[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_19:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D98, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_20
+; Sqedt_ParamDispatch_Str_20 -- NUL-terminated string(s), 8 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x76`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_20[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_20:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D9E, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_21
+; Sqedt_ParamDispatch_Str_21 -- NUL-terminated string(s), 8 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x7e`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_21[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_21:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DA6, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_22
+; Sqedt_ParamDispatch_Str_22 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x86`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_22[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_22:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DAE, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_23
+; Sqedt_ParamDispatch_Str_23 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x8c`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_23[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_23:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DB4, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_24
+; Sqedt_ParamDispatch_Str_24 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x92`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_24[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_24:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DBA, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_25
+; Sqedt_ParamDispatch_Str_25 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x98`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_25[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_25:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DC0, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_26
+; Sqedt_ParamDispatch_Str_26 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0x9e`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_26[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_26:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DC6, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_27
+; Sqedt_ParamDispatch_Str_27 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0xa4`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_27[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_27:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DCC, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_28
+; Sqedt_ParamDispatch_Str_28 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0xaa`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_28[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_28:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DD2, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_29
+; Sqedt_ParamDispatch_Str_29 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0xb0`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_29[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_29:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DD8, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_30
+; Sqedt_ParamDispatch_Str_30 -- NUL-terminated string(s), 12 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0xb6`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_30[12].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_30:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DDE, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_31
+; Sqedt_ParamDispatch_Str_31 -- NUL-terminated string(s), 6 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_3d_0xc2`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_31[6].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_31:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DEA, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_2d
+; NakaInst_2d -- NUL-terminated string(s), 6 bytes, used by
+; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`.long
+; NakaInst_2d`).
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_2d[6].
+; -----------------------------------------------------------------------------
 NakaInst_2d:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DF0, 0x228
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DF0, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_32
+; Sqedt_ParamDispatch_Str_32 -- NUL-terminated string(s), 12 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_2d_0x6`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_32[12].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_32:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DF6, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_33
+; Sqedt_ParamDispatch_Str_33 -- NUL-terminated string(s), 10 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_2d_0x12`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_33[10].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_33:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E02, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_Str_34
+; Sqedt_ParamDispatch_Str_34 -- NUL-terminated string(s), 4 bytes, used
+; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; NakaInst_2d_0x1c`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Sqedt_ParamDispatch_Str_34[4].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_Str_34:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E0C, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqFormat_DispatchA_CaseTable
+; SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
+; SeqFormat_DispatchA (v10/v9 0xf3513d, v7 0xf35113) (`lda xix,
+; (NakaInst_2d_0x20:24)`): 16 u16 case offsets from
+; SeqFormat_DispatchA_0x70.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqFormat_DispatchA_CaseTable[16].
+; -----------------------------------------------------------------------------
+SeqFormat_DispatchA_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E10, 0x20
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFunc_SignExtend_CaseTable
+; SqedtFunc_SignExtend_CaseTable -- jump table of a compiled `switch` in
+; SqedtFunc_SignExtend (v10/v9 0xf35115, v7 0xf350eb) (`lda xix,
+; (NakaInst_2d_0x40:24)`): 15 u16 case offsets from SeqFormat_DispatchA.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtFunc_SignExtend_CaseTable[15].
+; -----------------------------------------------------------------------------
+SqedtFunc_SignExtend_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E30, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ValueDispatch_CaseTable
+; Sqedt_ValueDispatch_CaseTable -- jump table of a compiled `switch` in
+; Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
+; (NakaInst_2d_0x5e:24)`): 9 u16 case offsets from
+; Sqedt_ValueDispatch_0x82.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Sqedt_ValueDispatch_CaseTable[9].
+; -----------------------------------------------------------------------------
+Sqedt_ValueDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E4E, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_2
+; Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
+; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
+; (NakaInst_2d_0x70:24)`): 8 u16 case offsets from
+; Sqedt_ValueDispatch_0x58.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Sqedt_ValueDispatch_CaseTable_2[8].
+; -----------------------------------------------------------------------------
+Sqedt_ValueDispatch_CaseTable_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E60, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_3
+; Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
+; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
+; (NakaInst_2d_0x80:24)`): 9 u16 case offsets from
+; Sqedt_ValueDispatch_0x28.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Sqedt_ValueDispatch_CaseTable_3[9].
+; -----------------------------------------------------------------------------
+Sqedt_ValueDispatch_CaseTable_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E70, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SeqFunc_ReturnZeroJmp_CaseTable
+; SeqFunc_ReturnZeroJmp_CaseTable -- jump table of a compiled `switch`
+; in SeqFunc_ReturnZeroJmp (v10/v9 0xf35005, v7 0xf34fdb) (`lda xix,
+; (NakaInst_2d_0x92:24)`): 7 u16 case offsets from Sqedt_ValueDispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SeqFunc_ReturnZeroJmp_CaseTable[7].
+; -----------------------------------------------------------------------------
+SeqFunc_ReturnZeroJmp_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E82, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_CaseTable
+; Sqedt_ParamDispatch_CaseTable -- jump table of a compiled `switch` in
+; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
+; (NakaInst_2d_0xa0:24)`): 8 u16 case offsets from 15944534.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Sqedt_ParamDispatch_CaseTable[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E90, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_CaseTable_2
+; Sqedt_ParamDispatch_CaseTable_2 -- jump table of a compiled `switch`
+; in Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
+; (NakaInst_2d_0xb0:24)`): 8 u16 case offsets from 15944414.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Sqedt_ParamDispatch_CaseTable_2[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_CaseTable_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3EA0, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Sqedt_ParamDispatch_CaseTable_3
+; Sqedt_ParamDispatch_CaseTable_3 -- jump table of a compiled `switch`
+; in Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
+; (NakaInst_2d_0xc0:24)`): 8 u16 case offsets from 15944329.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Sqedt_ParamDispatch_CaseTable_3[8].
+; -----------------------------------------------------------------------------
+Sqedt_ParamDispatch_CaseTable_3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3EB0, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFunc_CaseTable
+; SqedtFunc_CaseTable -- jump table of a compiled `switch` in SqedtFunc
+; (v10/v9 0xf349d3, v7 0xf349a9) (`add xde, NakaInst_2d_0xd0`): 40 u16
+; case offsets from Sqedt_ParamDispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtFunc_CaseTable[40].
+; -----------------------------------------------------------------------------
+SqedtFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3EC0, 0x50
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFunc_StateChainB_CaseTable
+; SqedtFunc_StateChainB_CaseTable -- jump table of a compiled `switch`
+; in SqedtFunc_StateChainB (v10/v9 0xf3523e, v7 0xf35214) (`lda xix,
+; (NakaInst_2d_0x120:24)`): 14 u16 case offsets from
+; SeqFormat_DispatchB.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SqedtFunc_StateChainB_CaseTable[14].
+; -----------------------------------------------------------------------------
+SqedtFunc_StateChainB_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F10, 0x1C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SqedtFunc_StateChainB_CaseTable_Strings
+; SqedtFunc_StateChainB_CaseTable_Strings -- 6 bytes of NUL-terminated
+; strings after SqedtFunc_StateChainB_CaseTable; no registration or code
+; reference reaches them (searched: RegObjTabl tables, slice and
+; positional labels). Which code uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; SqedtFunc_StateChainB_CaseTable_Strings[6].
+; -----------------------------------------------------------------------------
+SqedtFunc_StateChainB_CaseTable_Strings:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F2C, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] DspItem0_TypeChangeHandler_CaseTable
+; DspItem0_TypeChangeHandler_CaseTable -- jump table of a compiled
+; `switch` in DspItem0_TypeChangeHandler (v10/v9 0xf3572b, v7 0xf35701)
+; (`add xde, NakaInst_2d_0x142`): 9 u16 case offsets from
+; DspItem0_TypeDispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; DspItem0_TypeChangeHandler_CaseTable[9].
+; -----------------------------------------------------------------------------
+DspItem0_TypeChangeHandler_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F32, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] DspItem0CngFunc_CaseTable
+; DspItem0CngFunc_CaseTable -- jump table of a compiled `switch` in
+; DspItem0CngFunc (v10/v9 0xf35527, v7 0xf354fd) (`add xiy,
+; NakaInst_2d_0x154`): 17 u16 case offsets from
+; DspItem0_DisplayEffectName.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; DspItem0CngFunc_CaseTable[17].
+; -----------------------------------------------------------------------------
+DspItem0CngFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F44, 0x22
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_ParamByIndex_Table
+; Equalizer_ParamByIndex_Table -- read by Equalizer_ParamByIndex (v10/v9
+; 0xf35914, v7 0xf358ea) (`add xde, NakaInst_2d_0x176`). 8 bytes to the
+; next object; the layout beyond that access is not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Equalizer_ParamByIndex_Table[8].
+; -----------------------------------------------------------------------------
+Equalizer_ParamByIndex_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F66, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_DispatchA_CaseTable
+; Equalizer_DispatchA_CaseTable -- jump table of a compiled `switch` in
+; Equalizer_DispatchA (v10/v9 0xf35858, v7 0xf3582e) (`add xwa,
+; NakaInst_2d_0x17e`): 7 u16 case offsets from Equalizer_DispatchB.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Equalizer_DispatchA_CaseTable[7].
+; -----------------------------------------------------------------------------
+Equalizer_DispatchA_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F6E, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EqualizerCngFunc_CaseTable
+; EqualizerCngFunc_CaseTable -- jump table of a compiled `switch` in
+; EqualizerCngFunc (v10/v9 0xf3580d, v7 0xf357e3) (`add xwa,
+; NakaInst_2d_0x18c`): 9 u16 case offsets from Equalizer_DispatchA.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; EqualizerCngFunc_CaseTable[9].
+; -----------------------------------------------------------------------------
+EqualizerCngFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F7C, 0x12
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_CmdDispatch_CaseTable
+; Equalizer_CmdDispatch_CaseTable -- jump table of a compiled `switch`
+; in Equalizer_CmdDispatch (v10/v9 0xf359fc, v7 0xf359d2) (`add xwa,
+; NakaInst_2d_0x19e`): 15 u16 case offsets from Equalizer_CmdCase0.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Equalizer_CmdDispatch_CaseTable[15].
+; -----------------------------------------------------------------------------
+Equalizer_CmdDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3F8E, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_FormatDefault_Str
+; Equalizer_FormatDefault_Str -- NUL-terminated string(s), 6 bytes, used
+; by Equalizer_FormatDefault (v10/v9 0xf35bc7, v7 0xf35b9d) (`ld xwa,
+; NakaInst_2d_0x1bc`).
+;
+; Typed in naka_widget_descriptors.c as char
+; Equalizer_FormatDefault_Str[6].
+; -----------------------------------------------------------------------------
+Equalizer_FormatDefault_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FAC, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EqFormat_NegativeValue_Str
+; EqFormat_NegativeValue_Str -- NUL-terminated string(s), 6 bytes, used
+; by EqFormat_NegativeValue (v10/v9 0xf35c2d, v7 0xf35c03) (`ld xwa,
+; NakaInst_2d_0x1c2`).
+;
+; Typed in naka_widget_descriptors.c as char
+; EqFormat_NegativeValue_Str[6].
+; -----------------------------------------------------------------------------
+EqFormat_NegativeValue_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FB2, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] EqFormat_PositiveValue_Str
+; EqFormat_PositiveValue_Str -- NUL-terminated string(s), 12 bytes, used
+; by EqFormat_PositiveValue (v10/v9 0xf35c39, v7 0xf35c0f) (`ld xwa,
+; NakaInst_2d_0x1c8`).
+;
+; Typed in naka_widget_descriptors.c as char
+; EqFormat_PositiveValue_Str[12].
+; -----------------------------------------------------------------------------
+EqFormat_PositiveValue_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FB8, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] PrepareAudioParam_Str
+; PrepareAudioParam_Str -- NUL-terminated string(s), 4 bytes, used by
+; PrepareAudioParam (v10/v9 0xf35c7e, v7 0xf35c54) (`ld xwa,
+; NakaInst_2d_0x1d4`).
+;
+; Typed in naka_widget_descriptors.c as char PrepareAudioParam_Str[4].
+; -----------------------------------------------------------------------------
+PrepareAudioParam_Str:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FC4, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_FormatDispatch_Table
+; Equalizer_FormatDispatch_Table -- read by Equalizer_FormatDispatch
+; (v10/v9 0xf35b62, v7 0xf35b38) (`lda xix, (NakaInst_2d_0x1d8:24)`). 44
+; bytes to the next object; the layout beyond that access is not
+; established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; Equalizer_FormatDispatch_Table[44].
+; -----------------------------------------------------------------------------
+Equalizer_FormatDispatch_Table:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FC8, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Equalizer_FormatDispatch_CaseTable
+; Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
+; `switch` in Equalizer_FormatDispatch (v10/v9 0xf35b62, v7 0xf35b38)
+; (`ld xix, NakaInst_2d_0x204`): 18 u16 case offsets from
+; EqFormat_DispatchTable.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; Equalizer_FormatDispatch_CaseTable[18].
+; -----------------------------------------------------------------------------
+Equalizer_FormatDispatch_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FF4, 0x24
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_Ntedt0k
 ; Bitmap_Ntedt0k  --  16 x 127 bitmap, 8 bpp, row stride 16, 2032 bytes
@@ -3134,142 +5366,232 @@ NakaInst_TtMdRealMsg:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248E6, 0xC
 NakaInst_TtMdmenu:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248F2, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaDesc_PageWindow_Sentinel
+; NakaDesc_PageWindow_Sentinel -- 2 bytes of NUL-terminated strings at
+; the start of the blob; no registration or code reference reaches them
+; (searched: RegObjTabl tables, slice and positional labels). Which code
+; uses them is not established.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaDesc_PageWindow_Sentinel[2].
+; -----------------------------------------------------------------------------
 NakaDesc_PageWindow_Sentinel:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24906, 0x2
-NakaDesc_PageWindow_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24908, 0x10
-NakaDesc_PageWindow_NullStr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24918, 0x2
-NakaDesc_PageWindow_Window1:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2491A, 0x8
-NakaDesc_PageWindow_Window0:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24922, 0x8
-NakaDesc_PageWindow_Page:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2492A, 0x6
-NakaDesc_OnOffStyle_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24930, 0x14
-NakaDesc_OnOffStyle_NullStr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24944, 0x2
-NakaDesc_OnOffStyle_Onoff:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24946, 0x6
-NakaDesc_OnOffStyle_Str:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2494C, 0x4
-NakaDesc_OnOffStyle_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24950, 0x6
-NakaDesc_OnOffStyle_Style:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24956, 0xA
-NakaDesc_PmanOnOff_NullTerm:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24960, 0x2
-NakaDesc_PmanOnOff1_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24962, 0x18
-NakaDesc_PmanOnOff1_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2497A, 0x2
-NakaDesc_PmanOnOff1_PmanOut:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2497C, 0xA
-NakaDesc_PmanOnOff1_PmanAdr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24986, 0xA
-NakaDesc_PmanOnOff1_OffStr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24990, 0x8
-NakaDesc_PmanOnOff1_OnStr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24998, 0x8
-NakaDesc_PmanOnOff1_Data:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249A0, 0x6
-NakaDesc_PmanOnOff2_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249A6, 0x18
-NakaDesc_PmanOnOff2_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249BE, 0x2
-NakaDesc_PmanOnOff2_PmanOut:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249C0, 0xA
-NakaDesc_PmanOnOff2_PmanAdr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249CA, 0xA
-NakaDesc_PmanOnOff2_OffStr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249D4, 0x8
-NakaDesc_PmanOnOff2_OnStr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249DC, 0x8
-NakaDesc_PmanOnOff2_Data:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249E4, 0x16
-NakaDesc_GridBox1_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249FA, 0x2
-NakaDesc_GridBox1_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249FC, 0x6
-NakaDesc_GridBox1_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A02, 0xA
-NakaDesc_GridBox1_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A0C, 0x1A
-NakaDesc_GridBox2_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A26, 0x2
-NakaDesc_GridBox2_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A28, 0x6
-NakaDesc_GridBox2_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A2E, 0xA
-NakaDesc_GridBox2_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A38, 0x1A
-NakaDesc_GridBox3_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A52, 0x2
-NakaDesc_GridBox3_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A54, 0x6
-NakaDesc_GridBox3_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A5A, 0xA
-NakaDesc_GridBox3_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A64, 0x1A
-NakaDesc_GridBox4_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A7E, 0x2
-NakaDesc_GridBox4_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A80, 0x6
-NakaDesc_GridBox4_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A86, 0xA
-NakaDesc_GridBox4_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A90, 0x1A
-NakaDesc_GridBox5_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AAA, 0x2
-NakaDesc_GridBox5_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AAC, 0x6
-NakaDesc_GridBox5_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AB2, 0xA
-NakaDesc_GridBox5_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24ABC, 0x1A
-NakaDesc_GridBox6_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AD6, 0x2
-NakaDesc_GridBox6_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AD8, 0x6
-NakaDesc_GridBox6_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24ADE, 0xA
-NakaDesc_GridBox6_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AE8, 0x1A
-NakaDesc_GridBox7_NullEntry:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B02, 0x2
-NakaDesc_GridBox7_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B04, 0x6
-NakaDesc_GridBox7_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B0A, 0xA
-NakaDesc_GridBox7_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B14, 0xA
-NakaDesc_PageGridBox1_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B1E, 0x14
-NakaDesc_PageGridBox1_Null:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B32, 0x2
-NakaDesc_PageGridBox1_Page:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B34, 0x6
-NakaDesc_PageGridBox1_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B3A, 0x6
-NakaDesc_PageGridBox1_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B40, 0xA
-NakaDesc_PageGridBox1_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B4A, 0xE
-NakaDesc_PageGridBox2_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B58, 0x10
-NakaDesc_PageGridBox2_NullStr:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B68, 0x2
-NakaDesc_PageGridBox2_Page:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B6A, 0x6
-NakaDesc_PageGridBox2_Func:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B70, 0x6
-NakaDesc_PageGridBox2_FixedRow:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B76, 0xA
-NakaDesc_PageGridBox2_FixedCol:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B80, 0x56
-NakaData_Block007:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24BD6, 0x192
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_IvMpstPageControl
+; ClassProps_IvMpstPageControl -- property names of class
+; IvMpstPageControl (descriptor 2 of East_ClassTable_163, whose +0x14
+; points here): 3 pointers, one per letter of its signature "Att" --
+; "page", "window0", "window1" -- then a pointer to "", then the names
+; themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_IvMpstPageControl[4] and char
+; ClassProps_IvMpstPageControl_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_IvMpstPageControl:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24908, 0x28
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcSendEditSw
+; ClassProps_AcSendEditSw -- property names of class AcSendEditSw
+; (descriptor 3 of East_ClassTable_163, whose +0x14 points here): 4
+; pointers, one per letter of its signature "fjXn" -- "style", "func",
+; "str", "onoff" -- then a pointer to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcSendEditSw[5] and char ClassProps_AcSendEditSw_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcSendEditSw:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24930, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcGMOnOffBox
+; ClassProps_AcGMOnOffBox -- property names of class AcGMOnOffBox
+; (descriptor 4 of East_ClassTable_163, whose +0x14 points here): 0
+; pointers, one per letter of its signature "" -- none -- then a pointer
+; to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcGMOnOffBox[1] and char ClassProps_AcGMOnOffBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcGMOnOffBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2495C, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcLswFuncEditBox
+; ClassProps_AcLswFuncEditBox -- property names of class
+; AcLswFuncEditBox (descriptor 5 of East_ClassTable_163, whose +0x14
+; points here): 5 pointers, one per letter of its signature "nXXFB" --
+; "data", "on_str", "off_str", "pman_adr", "pman_out" -- then a pointer
+; to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcLswFuncEditBox[6] and char
+; ClassProps_AcLswFuncEditBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcLswFuncEditBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24962, 0x44
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcLswFuncBox
+; ClassProps_AcLswFuncBox -- property names of class AcLswFuncBox
+; (descriptor 6 of East_ClassTable_163, whose +0x14 points here): 5
+; pointers, one per letter of its signature "nXXFB" -- "data", "on_str",
+; "off_str", "pman_adr", "pman_out" -- then a pointer to "", then the
+; names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcLswFuncBox[6] and char ClassProps_AcLswFuncBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcLswFuncBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249A6, 0x44
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcFadeSetGridBox
+; ClassProps_AcFadeSetGridBox -- property names of class
+; AcFadeSetGridBox (descriptor 7 of East_ClassTable_163, whose +0x14
+; points here): 3 pointers, one per letter of its signature "XXj" --
+; "fixedcol", "fixedrow", "func" -- then a pointer to "", then the names
+; themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcFadeSetGridBox[4] and char
+; ClassProps_AcFadeSetGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcFadeSetGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x249EA, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcVocalGridBox
+; ClassProps_AcVocalGridBox -- property names of class AcVocalGridBox
+; (descriptor 8 of East_ClassTable_163, whose +0x14 points here): 3
+; pointers, one per letter of its signature "XXj" -- "fixedcol",
+; "fixedrow", "func" -- then a pointer to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcVocalGridBox[4] and char
+; ClassProps_AcVocalGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcVocalGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A16, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcInOutGridBox
+; ClassProps_AcInOutGridBox -- property names of class AcInOutGridBox
+; (descriptor 9 of East_ClassTable_163, whose +0x14 points here): 3
+; pointers, one per letter of its signature "XXj" -- "fixedcol",
+; "fixedrow", "func" -- then a pointer to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcInOutGridBox[4] and char
+; ClassProps_AcInOutGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcInOutGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A42, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcParaLoadOptGridBox
+; ClassProps_AcParaLoadOptGridBox -- property names of class
+; AcParaLoadOptGridBox (descriptor 10 of East_ClassTable_163, whose
+; +0x14 points here): 3 pointers, one per letter of its signature "XXj"
+; -- "fixedcol", "fixedrow", "func" -- then a pointer to "", then the
+; names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcParaLoadOptGridBox[4] and char
+; ClassProps_AcParaLoadOptGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcParaLoadOptGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A6E, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcPcgOutGridBox
+; ClassProps_AcPcgOutGridBox -- property names of class AcPcgOutGridBox
+; (descriptor 11 of East_ClassTable_163, whose +0x14 points here): 3
+; pointers, one per letter of its signature "XXj" -- "fixedcol",
+; "fixedrow", "func" -- then a pointer to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcPcgOutGridBox[4] and char
+; ClassProps_AcPcgOutGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcPcgOutGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A9A, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcPmemOutLGridBox
+; ClassProps_AcPmemOutLGridBox -- property names of class
+; AcPmemOutLGridBox (descriptor 12 of East_ClassTable_163, whose +0x14
+; points here): 3 pointers, one per letter of its signature "XXj" --
+; "fixedcol", "fixedrow", "func" -- then a pointer to "", then the names
+; themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcPmemOutLGridBox[4] and char
+; ClassProps_AcPmemOutLGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcPmemOutLGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AC6, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcPmemOutRGridBox
+; ClassProps_AcPmemOutRGridBox -- property names of class
+; AcPmemOutRGridBox (descriptor 13 of East_ClassTable_163, whose +0x14
+; points here): 3 pointers, one per letter of its signature "XXj" --
+; "fixedcol", "fixedrow", "func" -- then a pointer to "", then the names
+; themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcPmemOutRGridBox[4] and char
+; ClassProps_AcPmemOutRGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcPmemOutRGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24AF2, 0x2C
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcCtlMsgGridBox
+; ClassProps_AcCtlMsgGridBox -- property names of class AcCtlMsgGridBox
+; (descriptor 14 of East_ClassTable_163, whose +0x14 points here): 4
+; pointers, one per letter of its signature "XXjn" -- "fixedcol",
+; "fixedrow", "func", "page" -- then a pointer to "", then the names
+; themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcCtlMsgGridBox[5] and char
+; ClassProps_AcCtlMsgGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcCtlMsgGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B1E, 0x36
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcMidiPartGridBox
+; ClassProps_AcMidiPartGridBox -- property names of class
+; AcMidiPartGridBox (descriptor 15 of East_ClassTable_163, whose +0x14
+; points here): 4 pointers, one per letter of its signature "XXjn" --
+; "fixedcol", "fixedrow", "func", "page" -- then a pointer to "", then
+; the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcMidiPartGridBox[5] and char
+; ClassProps_AcMidiPartGridBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcMidiPartGridBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B54, 0x36
+; -----------------------------------------------------------------------------
+; [naka_s_headers] East_ClassTable_163
+; East_ClassTable_163 -- class table: InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) (sequencer/seq_event_playback.s:2621) registers it with
+; `RegObjTable 0x1600004, 0xfa44e2, (count at 0xe55cd4 = 16), 0xe559ea,
+; 0x163` -- 16 naka_class_t descriptors (naka_types.h: proc, base class,
+; two u16, name, field-type letters, property data), 16 of them inside
+; this blob.
+;
+; Typed in naka_widget_descriptors.c as naka_class_t
+; East_ClassTable_163[16].
+; -----------------------------------------------------------------------------
+East_ClassTable_163:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B8A, 0x180
+	.set NakaData_Block007, East_ClassTable_163 + 76	; historical label, used by other files
+; -----------------------------------------------------------------------------
+; [naka_s_headers] East_ClassTable_163_Tail
+; East_ClassTable_163_Tail -- 94 bytes after East_ClassTable_163 that no
+; registration or code reference reaches (searched: RegObjTabl tables,
+; slice and positional labels). Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; East_ClassTable_163_Tail[94].
+; -----------------------------------------------------------------------------
+East_ClassTable_163_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D0A, 0x5E
 
 ; External label offsets within the binary blob above.
 ; The NakaInst_<EFFECT> run starting at +0x01e1a IS DspEffectName_Strings:

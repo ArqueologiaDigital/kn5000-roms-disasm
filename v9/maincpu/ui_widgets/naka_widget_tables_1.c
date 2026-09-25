@@ -1036,12 +1036,12 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     char TrAsSureLangCheck_Strings_2[138];
     /* ---------------------------------------------------------------------
-     * PtrTarget_Strings -- 208 bytes of NUL-terminated strings after
-     * PtrTarget; no registration or code reference reaches them (searched:
-     * RegObjTabl tables, slice and positional labels). Which code uses them
-     * is not established.
+     * NakaT1_Str021A4 -- 208 bytes of NUL-terminated strings after the
+     * string block before it; no registration or code reference reaches them
+     * (searched: RegObjTabl tables, slice and positional labels). Which code
+     * uses them is not established.
      * --------------------------------------------------------------------- */
-    char PtrTarget_Strings[208];
+    char NakaT1_Str021A4[208];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 addresses, read by
      * TrAsGridChk_Part1_SendAudio (v10/v9 0xF2C798, v7 0xF2C76E) (`ld xbc,
@@ -3020,7 +3020,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         "LEFT\0\xFF"
         "RIGHT1\0\xFF",
 
-    .PtrTarget_Strings = "Lyrc\0\xFF"
+    .NakaT1_Str021A4 = "Lyrc\0\xFF"
         "MEASURE = %3d\0"
         "                         \0"
         "                         \0"

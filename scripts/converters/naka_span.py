@@ -65,6 +65,13 @@ SPANS = {
     # naka_widget_tables_2 around the bitmaps typed by naka_c_retype.OBJECTS
     't2a': dict(blob='naka_widget_tables_2', sfile='naka_widget_tables_2.s',
                 base=0xE5A39E, lo=0x0, hi=0xAAC, manual={}),
+    # naka_widget_descriptors: the UI-string zone after the effect names
+    # (the effect-name block itself stays hand-carved) and the class data
+    # after the MIDI-menu ApFunction names
+    'd_ui': dict(blob='naka_widget_descriptors', sfile='widget_descriptors.s',
+                 base=0xE30E60, lo=0x271A, hi=0x4018, manual={}),
+    'd_cls': dict(blob='naka_widget_descriptors', sfile='widget_descriptors.s',
+                  base=0xE30E60, lo=0x24906, hi=0x24D68, manual={}),
     't2b': dict(blob='naka_widget_tables_2', sfile='naka_widget_tables_2.s',
                 base=0xE5A39E, lo=0x24954, hi=0x26C44, manual={
         0x25444: (52, 'SplitPoint_BitmapTable', 'uint32_t', '[13]',
@@ -325,6 +332,20 @@ def build(span, cb, data, fmt, srcs=None):
             recs = [r['table'] + 24 * k for k in range(n)]
             props = sorted(set(ru32(x + 20) - base for x in recs))
             inside = [q for q in props if lo <= q < hi]
+            # the class-name and signature strings the descriptors point at
+            nt = sorted(set(t for x in recs for t in (ru32(x + 12) - base, ru32(x + 16) - base)
+                            if lo <= t < hi))
+            if nt:
+                s0, last = nt[0], nt[-1]
+                ln_last = string_run_one(data, last, hi, True)
+                ln = (last + ln_last) - s0 if ln_last else 0
+                if ln and string_run(data, s0, s0 + ln, True) == ln:
+                    objs[s0] = dict(size=ln, name=name + '_Names', ctype='char',
+                                    dims='[%d]' % ln, kind='strings',
+                                    text=('%s_Names -- the class names and field-type '
+                                          'signature strings that the descriptors of %s point '
+                                          'at (+0x0C name, +0x10 sig): %d strings, %d bytes.'
+                                          % (name, name, len(nt), ln)))
             for q in inside:
                 rec = next(x for x in recs if ru32(x + 20) - base == q)
                 k = (rec - r['table']) // 24
@@ -446,6 +467,11 @@ def build(span, cb, data, fmt, srcs=None):
                                                          o + 4 * nsym not in objs)):
             nsym += 1
         if nsym:
+            # ... and on over plain ROM addresses the generator left numeric
+            while o + 4 * (nsym + 1) <= hi and o + 4 * nsym not in refs and \
+                    o + 4 * nsym not in objs and \
+                    0xE00000 <= u32(o + 4 * nsym) < 0x1000000:
+                nsym += 1
             # the generator (or a previous pass) already resolved these words to
             # symbols: a pointer table, whatever the reader's shape suggests
             objs[o] = dict(size=4 * nsym, kind='ref:ptrs', info=info, refs=refs[o])
@@ -494,26 +520,30 @@ def build(span, cb, data, fmt, srcs=None):
         if ob is None:
             # untouched bytes: a string block if they are exactly strings, else a tail
             ln = string_run(data, cur, nxt)
-            prev = out[-1][2] if out else None
-            if isinstance(prev, tuple):
-                prev = 'PtrTarget'
             lab = lab_at.get(cur)
-            if ln == ext_len:
-                name = uniq(lab or '%s_Strings' % re.sub(r'_(Tail|Strings)(_\d+)?$', '', prev or sp['blob']))
-                out.append((cur, ext_len, name, 'char', '[%d]' % ext_len,
-                            '%s -- %d bytes of NUL-terminated strings after %s; no '
-                            'registration or code reference reaches them (%s).  '
-                            'Which code uses them is not established.'
-                            % (name, ext_len, prev or 'the start of the blob', 'searched: RegObjTabl tables, '
-                               'slice and positional labels'), 'strings'))
+            prev = out[-1][2] if out else None
+            prefix = {'naka_widget_tables_1': 'NakaT1', 'naka_widget_tables_2': 'NakaT2',
+                      'naka_widget_descriptors': 'NakaDesc'}[sp['blob']]
+            if isinstance(prev, tuple):
+                stem, where = '%s_Str%05X' % (prefix, cur), 'after the string block before it'
+            elif prev:
+                stem, where = re.sub(r'_(Tail|Strings)(_\d+)?$', '', prev), 'after ' + prev
             else:
-                name = uniq(lab or '%s_Tail' % re.sub(r'_(Tail|Strings)(_\d+)?$', '', prev or sp['blob']))
+                stem, where = prefix, 'at the start of the blob'
+            if ln == ext_len:
+                name = uniq(lab or (stem if stem.startswith(prefix + '_Str') else stem + '_Strings'))
+                out.append((cur, ext_len, name, 'char', '[%d]' % ext_len,
+                            '%s -- %d bytes of NUL-terminated strings %s; no registration '
+                            'or code reference reaches them (searched: RegObjTabl tables, '
+                            'slice and positional labels).  Which code uses them is not '
+                            'established.' % (name, ext_len, where), 'strings'))
+            else:
+                name = uniq(lab or stem + '_Tail')
                 out.append((cur, ext_len, name, 'uint8_t', '[%d]' % ext_len,
-                            '%s -- %d bytes %s that no registration or code '
-                            'reference reaches (searched: RegObjTabl tables, slice and '
-                            'positional labels).  Contents not established.'
-                            % (name, ext_len, ('after ' + prev) if prev else
-                               'at the start of the blob'), 'tail'))
+                            '%s -- %d bytes %s that no registration or code reference '
+                            'reaches (searched: RegObjTabl tables, slice and positional '
+                            'labels).  Contents not established.' % (name, ext_len, where),
+                            'tail'))
             cur = nxt
             continue
         k = ob['kind']
@@ -612,19 +642,6 @@ def build(span, cb, data, fmt, srcs=None):
     out = fixed
     assert sum(o[1] for o in out) == hi - lo, (sum(o[1] for o in out), hi - lo)
     return out
-
-
-if __name__ == '__main__':
-    import naka_c_retype as NR
-    import naka_c_model as M
-    span = sys.argv[1]
-    sp = SPANS[span]
-    data = open(os.path.join(ROOT, 'v10/maincpu/includes/generated/%s.bin' % sp['blob']), 'rb').read()
-    cb = M.CBlob(os.path.join(ROOT, 'v10/maincpu/ui_widgets/%s.c' % sp['blob']))
-    for o in build(span, cb, data, NR.fmt):
-        print('+0x%05X %5d %-8s %-8s %-7s %s' % (o[0], o[1], o[3], o[4], o[6], o[2]))
-        if '-v' in sys.argv:
-            print('        ' + o[5][:400])
 
 
 # ---------------------------------------------------------------------------
@@ -747,6 +764,17 @@ def s_restructure(span, lines, objs, blob, longs=None):
     lo, hi = sp['lo'], sp['hi']
     inc = re.compile(r'^\t\.incbin "includes/generated/%s\.bin", (0x[0-9A-Fa-f]+|\d+), '
                      r'(0x[0-9A-Fa-f]+|\d+)\s*$' % re.escape(blob))
+    # a span edge inside a slice splits that slice first
+    for edge in (lo, hi):
+        for i, ln in enumerate(lines):
+            m = inc.match(ln)
+            if m:
+                o, n = int(m.group(1), 0), int(m.group(2), 0)
+                if o < edge < o + n:
+                    lines[i:i + 1] = ['\t.incbin "includes/generated/%s.bin", 0x%X, 0x%X' % (blob, o, edge - o),
+                                      '__naka_span_edge_%X:' % edge,
+                                      '\t.incbin "includes/generated/%s.bin", 0x%X, 0x%X' % (blob, edge, o + n - edge)]
+                    break
     first = last = None
     for i, ln in enumerate(lines):
         m = inc.match(ln)
@@ -778,3 +806,16 @@ def s_restructure(span, lines, objs, blob, longs=None):
                            % (lab, name, lo_ - off))
     lines[first:last + 1] = kept_comments + new
     return len(objs)
+
+
+if __name__ == '__main__':
+    import naka_c_retype as NR
+    import naka_c_model as M
+    span = sys.argv[1]
+    sp = SPANS[span]
+    data = open(os.path.join(ROOT, 'v10/maincpu/includes/generated/%s.bin' % sp['blob']), 'rb').read()
+    cb = M.CBlob(os.path.join(ROOT, 'v10/maincpu/ui_widgets/%s.c' % sp['blob']))
+    for o in build(span, cb, data, NR.fmt):
+        print('+0x%05X %5d %-8s %-8s %-7s %s' % (o[0], o[1], o[3], o[4], o[6], o[2]))
+        if '-v' in sys.argv:
+            print('        ' + o[5][:400])

@@ -2861,9 +2861,9 @@ PmemOutLGridCheck_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D58, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaData_PartFlags
-; NakaData_PartFlags -- 15 bytes after PtrTarget that no registration or
-; code reference reaches (searched: RegObjTabl tables, slice and
-; positional labels). Contents not established.
+; NakaData_PartFlags -- 15 bytes after the string block before it that
+; no registration or code reference reaches (searched: RegObjTabl
+; tables, slice and positional labels). Contents not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t NakaData_PartFlags[15].
 ; -----------------------------------------------------------------------------

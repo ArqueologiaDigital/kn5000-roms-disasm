@@ -1064,15 +1064,15 @@ TrAsSureLangCheck_PtrTable_2:
 TrAsSureLangCheck_Strings_2:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x211A, 0x8A
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] PtrTarget_Strings
-; PtrTarget_Strings -- 208 bytes of NUL-terminated strings after
-; PtrTarget; no registration or code reference reaches them (searched:
-; RegObjTabl tables, slice and positional labels). Which code uses them
-; is not established.
+; [naka_s_headers] NakaT1_Str021A4
+; NakaT1_Str021A4 -- 208 bytes of NUL-terminated strings after the
+; string block before it; no registration or code reference reaches them
+; (searched: RegObjTabl tables, slice and positional labels). Which code
+; uses them is not established.
 ;
-; Typed in naka_widget_tables_1.c as char PtrTarget_Strings[208].
+; Typed in naka_widget_tables_1.c as char NakaT1_Str021A4[208].
 ; -----------------------------------------------------------------------------
-PtrTarget_Strings:
+NakaT1_Str021A4:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x21A4, 0xD0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part1_SendAudio_PtrTable

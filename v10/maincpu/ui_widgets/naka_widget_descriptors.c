@@ -34,7 +34,6 @@ extern const char AcPmemOutRGridBoxProc;
 extern const char AcSendEditSwProc;
 extern const char AcVocalGridBoxProc;
 extern const char AcVocalistListBoxProc;
-extern const char AudioCtrl_HandleEventF;
 extern const char BitmapBmphk;
 extern const char ComSetGridCheck;
 extern const char CtlMsgGridCheck;
@@ -62,9 +61,6 @@ extern const char MdPresetWithFunc;
 extern const char MdPresetWithoutFunc;
 extern const char MdSetupLoadFunc;
 extern const char MidiPartGridCheck;
-extern const char NakaData_ModeConfig2;
-extern const char NakaInst_Param_Field02;
-extern const char Naka_Help_565_E300CC;
 extern const char ParaLoadOptGridCheck;
 extern const char ParaLoadOptOKFunc;
 extern const char PcgOutGridCheck;
@@ -3074,1624 +3070,1304 @@ typedef struct __attribute__((packed)) {
     char EffectName_Eff002_MODULATED_CHORUS[18];
     char EffectName_Eff001_CHORUS[18];
     char EffectName_Eff000_NO_OPERATION[18];
-    uint16_t field_271a;
-    uint16_t field_271c;
-    uint16_t field_271e;
-    uint16_t field_2720;
-    uint16_t field_2722;
-    uint16_t field_2724;
-    uint16_t field_2726;
-    uint16_t field_2728;
-    uint16_t field_272a;
-    char str_128[2];
-    char str_129[2];
-    uint16_t field_2730;
-    uint16_t field_2732;
-    char str_130[2];
-    char str_131[2];
-    uint16_t field_2738;
-    uint16_t field_273a;
-    char str_132[2];
-    char str_133[2];
-    uint16_t field_2740;
-    uint16_t field_2742;
-    char str_134[2];
-    char str_135[2];
-    uint16_t field_2748;
-    char str_136[2];
-    char str_137[2];
-    char str_138[2];
-    uint16_t field_2750;
-    uint16_t field_2752;
-    char str_139[2];
-    char str_140[2];
-    uint16_t field_2758;
-    uint16_t field_275a;
-    uint16_t field_275c;
-    char str_141[2];
-    uint16_t field_2760;
-    uint16_t field_2762;
-    char str_142[2];
-    char str_143[2];
-    uint16_t field_2768;
-    uint16_t field_276a;
-    char str_144[2];
-    char str_145[2];
-    uint16_t field_2770;
-    uint16_t field_2772;
-    char str_146[2];
-    char str_147[2];
-    uint16_t field_2778;
-    uint16_t field_277a;
-    uint16_t field_277c;
-    char str_148[2];
-    uint16_t field_2780;
-    char str_149[2];
-    char str_150[2];
-    char str_151[2];
-    uint16_t field_2788;
-    char str_152[2];
-    char str_153[2];
-    char str_154[2];
-    uint16_t field_2790;
-    char str_155[2];
-    char str_156[2];
-    char str_157[2];
-    uint16_t field_2798;
-    char str_158[2];
-    char str_159[2];
-    char str_160[2];
-    uint16_t field_27a0;
-    char str_161[2];
-    uint16_t field_27a4;
-    char str_162[2];
-    uint16_t field_27a8;
-    char str_163[2];
-    uint16_t field_27ac;
-    char str_164[2];
-    uint16_t field_27b0;
-    char str_165[2];
-    uint16_t field_27b4;
-    char str_166[2];
-    uint16_t field_27b8;
-    char str_167[2];
-    uint16_t field_27bc;
-    char str_168[2];
-    uint16_t field_27c0;
-    char str_169[2];
-    uint16_t field_27c4;
-    char str_170[2];
-    uint32_t ptr_27c8;
-    char str_171[2];
-    char str_172[2];
-    uint32_t ptr_27d0;
-    char str_173[2];
-    char str_174[2];
-    uint32_t ptr_27d8;
-    char str_175[2];
-    char str_176[2];
-    uint32_t ptr_27e0;
-    char str_177[2];
-    char str_178[2];
-    uint16_t field_27e8;
-    char str_179[2];
-    char str_180[2];
-    char str_181[2];
-    uint16_t field_27f0;
-    char str_182[2];
-    char str_183[2];
-    char str_184[2];
-    uint16_t field_27f8;
-    uint16_t field_27fa;
-    char str_185[2];
-    char str_186[2];
-    uint16_t field_2800;
-    uint16_t field_2802;
-    char str_187[2];
-    char str_188[2];
-    uint16_t field_2808;
-    uint16_t field_280a;
-    char str_189[2];
-    char str_190[2];
-    uint16_t field_2810;
-    uint16_t field_2812;
-    uint16_t field_2814;
-    char str_191[2];
-    uint16_t field_2818;
-    uint16_t field_281a;
-    char str_192[2];
-    char str_193[2];
-    uint16_t field_2820;
-    uint16_t field_2822;
-    char str_194[2];
-    char str_195[2];
-    uint16_t field_2828;
-    uint16_t field_282a;
-    uint16_t field_282c;
-    char str_196[2];
-    uint16_t field_2830;
-    uint16_t field_2832;
-    char str_197[2];
-    char str_198[2];
-    uint16_t field_2838;
-    uint16_t field_283a;
-    char str_199[2];
-    char str_200[2];
-    uint16_t field_2840;
-    uint16_t field_2842;
-    uint16_t field_2844;
-    char str_201[2];
-    uint16_t field_2848;
-    uint16_t field_284a;
-    char str_202[2];
-    char str_203[2];
-    uint16_t field_2850;
-    uint16_t field_2852;
-    char str_204[2];
-    char str_205[2];
-    uint16_t field_2858;
-    uint16_t field_285a;
-    uint16_t field_285c;
-    char str_206[2];
-    uint16_t field_2860;
-    uint16_t field_2862;
-    char str_207[2];
-    char str_208[2];
-    uint16_t field_2868;
-    uint16_t field_286a;
-    uint16_t field_286c;
-    char str_209[2];
-    uint16_t field_2870;
-    uint16_t field_2872;
-    char str_210[2];
-    char str_211[2];
-    uint16_t field_2878;
-    uint16_t field_287a;
-    uint16_t field_287c;
-    char str_212[2];
-    uint16_t field_2880;
-    char str_213[2];
-    char str_214[2];
-    char str_215[2];
-    uint16_t field_2888;
-    char str_216[2];
-    char str_217[2];
-    uint16_t field_288e;
-    uint32_t ptr_2890;
-    char str_218[2];
-    char str_219[2];
-    uint32_t ptr_2898;
-    char str_220[2];
-    char str_221[2];
-    uint16_t field_28a0;
-    uint16_t field_28a2;
-    uint16_t field_28a4;
-    uint16_t field_28a6;
-    uint16_t field_28a8;
-    uint16_t field_28aa;
-    uint16_t field_28ac;
-    uint16_t field_28ae;
-    uint16_t field_28b0;
-    uint16_t field_28b2;
-    uint16_t field_28b4;
-    char str_222[2];
-    char str_223[2];
-    char str_224[2];
-    char str_225[2];
-    char str_226[2];
-    char str_227[2];
-    char str_228[2];
-    char str_229[2];
-    char str_230[2];
-    char str_231[2];
-    char str_232[2];
-    char str_233[2];
-    char str_234[2];
-    char str_235[2];
-    char str_236[2];
-    char str_237[2];
-    char str_238[2];
-    uint8_t pad_0[4];  /* zero padding */
-    uint16_t field_28dc;
-    uint16_t field_28de;
-    uint16_t field_28e0;
-    uint16_t field_28e2;
-    uint16_t field_28e4;
-    char str_239[2];
-    char str_240[2];
-    char str_241[2];
-    char str_242[2];
-    char str_243[2];
-    char str_244[2];
-    char str_245[2];
-    uint8_t pad_1[4];  /* zero padding */
-    uint16_t field_28f8;
-    uint16_t field_28fa;
-    uint16_t field_28fc;
-    uint16_t field_28fe;
-    uint16_t field_2900;
-    uint16_t field_2902;
-    uint16_t field_2904;
-    uint16_t field_2906;
-    uint16_t field_2908;
-    uint16_t field_290a;
-    uint16_t field_290c;
-    uint16_t field_290e;
-    uint16_t field_2910;
-    uint32_t ptr_2912;
-    uint16_t field_2916;
-    uint16_t field_2918;
-    uint16_t field_291a;
-    uint16_t field_291c;
-    uint16_t field_291e;
-    uint16_t field_2920;
-    char str_246[2];
-    uint16_t field_2924;
-    uint16_t field_2926;
-    uint16_t field_2928;
-    char str_247[2];
-    uint16_t field_292c;
-    uint16_t field_292e;
-    uint16_t field_2930;
-    char str_248[2];
-    uint16_t field_2934;
-    uint16_t field_2936;
-    uint16_t field_2938;
-    char str_249[2];
-    uint16_t field_293c;
-    uint16_t field_293e;
-    uint16_t field_2940;
-    char str_250[2];
-    uint16_t field_2944;
-    uint16_t field_2946;
-    uint16_t field_2948;
-    char str_251[2];
-    uint16_t field_294c;
-    uint16_t field_294e;
-    uint16_t field_2950;
-    char str_252[2];
-    uint16_t field_2954;
-    char str_253[2];
-    uint16_t field_2958;
-    char str_254[2];
-    char str_255[2];
-    char str_256[2];
-    char str_257[2];
-    uint16_t field_2962;
-    uint16_t field_2964;
-    uint16_t field_2966;
-    uint32_t ptr_2968;
-    uint32_t ptr_296c;
-    char str_258[2];
-    char str_259[2];
-    uint16_t field_2974;
-    uint16_t field_2976;
-    uint16_t field_2978;
-    uint32_t ptr_297a;
-    uint32_t ptr_297e;
-    char str_260[74];
-    char str_261[12];
-    char str_262[10];
-    char str_263[12];
-    uint16_t field_29ee;
-    uint16_t field_29f0;
-    uint16_t field_29f2;
-    uint16_t field_29f4;
-    char str_264[4];
-    char str_265[12];
-    char str_266[14];
-    char str_267[18];
-    uint16_t field_2a26;
-    uint16_t field_2a28;
-    uint16_t field_2a2a;
-    uint16_t field_2a2c;
-    uint16_t field_2a2e;
-    uint16_t field_2a30;
-    uint16_t field_2a32;
-    char str_268[2];
-    uint16_t field_2a36;
-    uint16_t field_2a38;
-    uint16_t field_2a3a;
-    char str_269[10];
-    char str_270[28];
-    char str_271[32];
-    char str_272[38];
-    char str_273[30];
-    char str_274[40];
-    char str_275[130];
-    uint16_t field_2b70;
-    uint16_t field_2b72;
-    uint16_t field_2b74;
-    uint16_t field_2b76;
-    uint16_t field_2b78;
-    uint16_t field_2b7a;
-    uint16_t field_2b7c;
-    uint16_t field_2b7e;
-    uint16_t field_2b80;
-    uint16_t field_2b82;
-    uint16_t field_2b84;
-    uint16_t field_2b86;
-    uint16_t field_2b88;
-    uint16_t field_2b8a;
-    uint16_t field_2b8c;
-    uint16_t field_2b8e;
-    uint16_t field_2b90;
-    uint16_t field_2b92;
-    uint16_t field_2b94;
-    uint16_t field_2b96;
-    uint16_t field_2b98;
-    uint16_t field_2b9a;
-    uint16_t field_2b9c;
-    uint16_t field_2b9e;
-    uint16_t field_2ba0;
-    uint16_t field_2ba2;
-    uint16_t field_2ba4;
-    uint16_t field_2ba6;
-    uint16_t field_2ba8;
-    uint16_t field_2baa;
-    uint16_t field_2bac;
-    uint16_t field_2bae;
-    uint16_t field_2bb0;
-    uint16_t field_2bb2;
-    uint16_t field_2bb4;
-    uint16_t field_2bb6;
-    uint16_t field_2bb8;
-    uint16_t field_2bba;
-    uint16_t field_2bbc;
-    uint16_t field_2bbe;
-    uint16_t field_2bc0;
-    uint16_t field_2bc2;
-    uint16_t field_2bc4;
-    uint16_t field_2bc6;
-    uint16_t field_2bc8;
-    uint16_t field_2bca;
-    uint16_t field_2bcc;
-    uint16_t field_2bce;
-    uint16_t field_2bd0;
-    uint16_t field_2bd2;
-    uint16_t field_2bd4;
-    uint16_t field_2bd6;
-    uint16_t field_2bd8;
-    uint16_t field_2bda;
-    uint16_t field_2bdc;
-    uint16_t field_2bde;
-    uint16_t field_2be0;
-    uint16_t field_2be2;
-    uint16_t field_2be4;
-    uint16_t field_2be6;
-    uint16_t field_2be8;
-    uint16_t field_2bea;
-    uint16_t field_2bec;
-    uint16_t field_2bee;
-    uint16_t field_2bf0;
-    uint16_t field_2bf2;
-    uint16_t field_2bf4;
-    uint16_t field_2bf6;
-    uint16_t field_2bf8;
-    uint16_t field_2bfa;
-    char str_276[6];
-    char str_277[22];
-    uint16_t field_2c18;
-    uint16_t field_2c1a;
-    uint16_t field_2c1c;
-    char str_278[18];
-    char str_279[194];
-    uint16_t field_2cf2;
-    uint16_t field_2cf4;
-    uint16_t field_2cf6;
-    uint16_t field_2cf8;
-    uint16_t field_2cfa;
-    uint16_t field_2cfc;
-    uint16_t field_2cfe;
-    uint16_t field_2d00;
-    uint16_t field_2d02;
-    uint16_t field_2d04;
-    uint16_t field_2d06;
-    uint16_t field_2d08;
-    uint16_t field_2d0a;
-    uint16_t field_2d0c;
-    uint16_t field_2d0e;
-    uint16_t field_2d10;
-    uint16_t field_2d12;
-    uint16_t field_2d14;
-    uint16_t field_2d16;
-    uint16_t field_2d18;
-    uint16_t field_2d1a;
-    uint16_t field_2d1c;
-    uint16_t field_2d1e;
-    uint16_t field_2d20;
-    uint16_t field_2d22;
-    uint16_t field_2d24;
-    uint16_t field_2d26;
-    uint16_t field_2d28;
-    uint16_t field_2d2a;
-    uint16_t field_2d2c;
-    uint16_t field_2d2e;
-    uint16_t field_2d30;
-    uint16_t field_2d32;
-    uint16_t field_2d34;
-    uint16_t field_2d36;
-    uint16_t field_2d38;
-    uint16_t field_2d3a;
-    uint16_t field_2d3c;
-    uint16_t field_2d3e;
-    uint16_t field_2d40;
-    uint16_t field_2d42;
-    uint16_t field_2d44;
-    uint16_t field_2d46;
-    uint16_t field_2d48;
-    uint16_t field_2d4a;
-    uint16_t field_2d4c;
-    uint16_t field_2d4e;
-    uint16_t field_2d50;
-    uint16_t field_2d52;
-    uint16_t field_2d54;
-    uint16_t field_2d56;
-    uint16_t field_2d58;
-    uint16_t field_2d5a;
-    uint16_t field_2d5c;
-    uint16_t field_2d5e;
-    uint16_t field_2d60;
-    uint16_t field_2d62;
-    uint16_t field_2d64;
-    uint16_t field_2d66;
-    uint16_t field_2d68;
-    uint16_t field_2d6a;
-    uint16_t field_2d6c;
-    uint16_t field_2d6e;
-    uint16_t field_2d70;
-    uint16_t field_2d72;
-    uint16_t field_2d74;
-    uint16_t field_2d76;
-    uint16_t field_2d78;
-    uint16_t field_2d7a;
-    uint16_t field_2d7c;
-    uint16_t field_2d7e;
-    uint16_t field_2d80;
-    uint16_t field_2d82;
-    uint16_t field_2d84;
-    uint16_t field_2d86;
-    uint16_t field_2d88;
-    uint16_t field_2d8a;
-    uint16_t field_2d8c;
-    uint16_t field_2d8e;
-    uint16_t field_2d90;
-    uint16_t field_2d92;
-    uint16_t field_2d94;
-    uint16_t field_2d96;
-    uint16_t field_2d98;
-    uint16_t field_2d9a;
-    uint16_t field_2d9c;
-    uint16_t field_2d9e;
-    uint16_t field_2da0;
-    uint16_t field_2da2;
-    uint16_t field_2da4;
-    uint16_t field_2da6;
-    uint16_t field_2da8;
-    char str_280[38];
-    char str_281[96];
-    uint16_t field_2e30;
-    uint16_t field_2e32;
-    uint16_t field_2e34;
-    uint16_t field_2e36;
-    uint16_t field_2e38;
-    uint16_t field_2e3a;
-    uint16_t field_2e3c;
-    uint16_t field_2e3e;
-    uint16_t field_2e40;
-    uint16_t field_2e42;
-    uint16_t field_2e44;
-    uint16_t field_2e46;
-    uint16_t field_2e48;
-    uint16_t field_2e4a;
-    uint16_t field_2e4c;
-    uint16_t field_2e4e;
-    uint16_t field_2e50;
-    uint16_t field_2e52;
-    uint16_t field_2e54;
-    uint16_t field_2e56;
-    uint16_t field_2e58;
-    uint16_t field_2e5a;
-    uint16_t field_2e5c;
-    uint16_t field_2e5e;
-    uint16_t field_2e60;
-    uint16_t field_2e62;
-    uint16_t field_2e64;
-    uint16_t field_2e66;
-    uint16_t field_2e68;
-    uint16_t field_2e6a;
-    uint16_t field_2e6c;
-    uint16_t field_2e6e;
-    uint16_t field_2e70;
-    uint16_t field_2e72;
-    uint16_t field_2e74;
-    uint16_t field_2e76;
-    uint16_t field_2e78;
-    uint16_t field_2e7a;
-    uint16_t field_2e7c;
-    uint16_t field_2e7e;
-    uint16_t field_2e80;
-    uint16_t field_2e82;
-    uint16_t field_2e84;
-    uint16_t field_2e86;
-    uint16_t field_2e88;
-    uint16_t field_2e8a;
-    uint16_t field_2e8c;
-    uint16_t field_2e8e;
-    uint16_t field_2e90;
-    char str_282[6];
-    char str_283[34];
-    uint16_t field_2eba;
-    uint16_t field_2ebc;
-    uint16_t field_2ebe;
-    uint16_t field_2ec0;
-    uint16_t field_2ec2;
-    uint16_t field_2ec4;
-    uint16_t field_2ec6;
-    uint16_t field_2ec8;
-    uint16_t field_2eca;
-    uint16_t field_2ecc;
-    uint16_t field_2ece;
-    uint16_t field_2ed0;
-    uint16_t field_2ed2;
-    uint16_t field_2ed4;
-    uint16_t field_2ed6;
-    uint16_t field_2ed8;
-    uint16_t field_2eda;
-    uint16_t field_2edc;
-    uint16_t field_2ede;
-    char str_284[6];
-    char str_285[92];
-    uint16_t field_2f42;
-    uint16_t field_2f44;
-    uint16_t field_2f46;
-    uint16_t field_2f48;
-    uint16_t field_2f4a;
-    uint16_t field_2f4c;
-    uint16_t field_2f4e;
-    uint16_t field_2f50;
-    uint16_t field_2f52;
-    uint16_t field_2f54;
-    uint16_t field_2f56;
-    uint16_t field_2f58;
-    uint16_t field_2f5a;
-    uint16_t field_2f5c;
-    uint16_t field_2f5e;
-    uint16_t field_2f60;
-    uint16_t field_2f62;
-    uint16_t field_2f64;
-    uint16_t field_2f66;
-    uint16_t field_2f68;
-    uint16_t field_2f6a;
-    uint16_t field_2f6c;
-    uint16_t field_2f6e;
-    uint16_t field_2f70;
-    uint16_t field_2f72;
-    uint16_t field_2f74;
-    uint16_t field_2f76;
-    uint16_t field_2f78;
-    uint16_t field_2f7a;
-    uint16_t field_2f7c;
-    uint16_t field_2f7e;
-    uint16_t field_2f80;
-    uint16_t field_2f82;
-    uint16_t field_2f84;
-    uint16_t field_2f86;
-    uint16_t field_2f88;
-    uint16_t field_2f8a;
-    uint16_t field_2f8c;
-    uint16_t field_2f8e;
-    uint16_t field_2f90;
-    uint16_t field_2f92;
-    uint16_t field_2f94;
-    uint16_t field_2f96;
-    uint16_t field_2f98;
-    uint16_t field_2f9a;
-    uint16_t field_2f9c;
-    uint16_t field_2f9e;
-    uint16_t field_2fa0;
-    char str_286[8];
-    char str_287[70];
-    uint16_t field_2ff0;
-    uint16_t field_2ff2;
-    uint16_t field_2ff4;
-    uint16_t field_2ff6;
-    uint16_t field_2ff8;
-    uint16_t field_2ffa;
-    uint16_t field_2ffc;
-    char str_288[46];
-    uint16_t field_302c;
-    uint16_t field_302e;
-    uint16_t field_3030;
-    uint16_t field_3032;
-    uint16_t field_3034;
-    uint16_t field_3036;
-    uint16_t field_3038;
-    uint16_t field_303a;
-    uint16_t field_303c;
-    uint16_t field_303e;
-    uint16_t field_3040;
-    uint16_t field_3042;
-    uint16_t field_3044;
-    uint16_t field_3046;
-    uint16_t field_3048;
-    uint16_t field_304a;
-    uint16_t field_304c;
-    uint16_t field_304e;
-    uint16_t field_3050;
-    uint16_t field_3052;
-    uint16_t field_3054;
-    uint16_t field_3056;
-    uint16_t field_3058;
-    uint16_t field_305a;
-    uint16_t field_305c;
-    uint16_t field_305e;
-    uint16_t field_3060;
-    uint16_t field_3062;
-    uint16_t field_3064;
-    uint16_t field_3066;
-    uint16_t field_3068;
-    uint16_t field_306a;
-    uint16_t field_306c;
-    uint16_t field_306e;
-    uint16_t field_3070;
-    uint16_t field_3072;
-    uint16_t field_3074;
-    uint16_t field_3076;
-    uint16_t field_3078;
-    char str_289[10];
-    uint16_t field_3084;
-    uint16_t field_3086;
-    uint16_t field_3088;
-    uint16_t field_308a;
-    uint16_t field_308c;
-    uint16_t field_308e;
-    uint16_t field_3090;
-    uint16_t field_3092;
-    uint16_t field_3094;
-    uint16_t field_3096;
-    uint16_t field_3098;
-    uint16_t field_309a;
-    uint16_t field_309c;
-    uint16_t field_309e;
-    uint16_t field_30a0;
-    uint16_t field_30a2;
-    uint16_t field_30a4;
-    uint16_t field_30a6;
-    uint16_t field_30a8;
-    uint16_t field_30aa;
-    uint16_t field_30ac;
-    char str_290[20];
-    char str_291[78];
-    char str_292[78];
-    uint16_t field_315e;
-    uint16_t field_3160;
-    uint16_t field_3162;
-    uint16_t field_3164;
-    uint16_t field_3166;
-    uint16_t field_3168;
-    uint16_t field_316a;
-    uint16_t field_316c;
-    uint16_t field_316e;
-    uint16_t field_3170;
-    uint16_t field_3172;
-    uint16_t field_3174;
-    uint16_t field_3176;
-    uint16_t field_3178;
-    uint16_t field_317a;
-    uint16_t field_317c;
-    uint16_t field_317e;
-    uint16_t field_3180;
-    uint16_t field_3182;
-    uint16_t field_3184;
-    uint16_t field_3186;
-    uint16_t field_3188;
-    char str_293[16];
-    uint16_t field_319a;
-    uint16_t field_319c;
-    uint16_t field_319e;
-    uint16_t field_31a0;
-    uint16_t field_31a2;
-    uint16_t field_31a4;
-    uint16_t field_31a6;
-    uint16_t field_31a8;
-    uint16_t field_31aa;
-    uint16_t field_31ac;
-    uint16_t field_31ae;
-    uint16_t field_31b0;
-    uint16_t field_31b2;
-    uint16_t field_31b4;
-    uint16_t field_31b6;
-    uint16_t field_31b8;
-    uint16_t field_31ba;
-    uint16_t field_31bc;
-    uint16_t field_31be;
-    uint16_t field_31c0;
-    uint16_t field_31c2;
-    uint16_t field_31c4;
-    uint16_t field_31c6;
-    uint16_t field_31c8;
-    uint16_t field_31ca;
-    uint16_t field_31cc;
-    uint16_t field_31ce;
-    uint16_t field_31d0;
-    uint16_t field_31d2;
-    uint16_t field_31d4;
-    uint16_t field_31d6;
-    uint16_t field_31d8;
-    uint16_t field_31da;
-    uint16_t field_31dc;
-    uint16_t field_31de;
-    uint16_t field_31e0;
-    uint16_t field_31e2;
-    uint16_t field_31e4;
-    uint16_t field_31e6;
-    uint16_t field_31e8;
-    uint16_t field_31ea;
-    uint16_t field_31ec;
-    uint16_t field_31ee;
-    uint16_t field_31f0;
-    uint16_t field_31f2;
-    uint16_t field_31f4;
-    uint16_t field_31f6;
-    uint16_t field_31f8;
-    char str_294[4];
-    uint16_t field_31fe;
-    uint16_t field_3200;
-    uint16_t field_3202;
-    uint16_t field_3204;
-    uint16_t field_3206;
-    uint16_t field_3208;
-    uint16_t field_320a;
-    uint16_t field_320c;
-    uint16_t field_320e;
-    uint16_t field_3210;
-    uint16_t field_3212;
-    uint16_t field_3214;
-    uint16_t field_3216;
-    uint16_t field_3218;
-    uint16_t field_321a;
-    uint16_t field_321c;
-    uint16_t field_321e;
-    uint16_t field_3220;
-    uint16_t field_3222;
-    uint16_t field_3224;
-    char str_295[32];
-    char str_296[94];
-    char str_297[38];
-    uint16_t field_32ca;
-    uint16_t field_32cc;
-    char str_298[60];
-    char str_299[6];
-    char str_300[16];
-    char str_301[22];
-    char str_302[20];
-    char str_303[14];
-    char str_304[16];
-    char str_305[14];
-    char str_306[10];
-    char str_307[14];
-    char str_308[16];
-    char str_309[10];
-    char str_310[16];
-    char str_311[10];
-    char str_312[12];
-    char str_313[20];
-    char str_314[22];
-    char str_315[16];
-    char str_316[14];
-    char str_317[20];
-    char str_318[16];
-    char str_319[12];
-    char str_320[10];
-    char str_321[14];
-    char str_322[14];
-    char str_323[4];
-    char str_324[10];
-    char str_325[10];
-    char str_326[16];
-    char str_327[10];
-    char str_328[16];
-    char str_329[6];
-    char str_330[8];
-    char str_331[6];
-    char str_332[6];
-    char str_333[16];
-    char str_334[12];
-    char str_335[8];
-    char str_336[16];
-    char str_337[12];
-    char str_338[12];
-    char str_339[10];
-    char str_340[14];
-    char str_341[8];
-    char str_342[6];
-    char str_343[14];
-    char str_344[6];
-    char str_345[16];
-    char str_346[18];
-    char str_347[12];
-    char str_348[12];
-    char str_349[6];
-    uint32_t ptrs_1[50];  /* 50 pointers */
-    char w0_code[4];
-    char w0_name[4];
-    char w1_code[4];
-    char w1_name[6];
-    char w2_code[6];
-    char w2_name[6];
-    uint32_t ptrs_2[78];  /* 78 pointers */
-    char str_350[4];
-    char str_351[4];
-    char str_352[4];
-    char str_353[4];
-    char str_354[4];
-    char str_355[4];
-    char str_356[4];
-    char str_357[4];
-    uint16_t field_37cc;
-    uint8_t pad_2[6];  /* zero padding */
-    uint16_t field_37d4;
-    uint16_t field_37d6;
-    uint8_t pad_3[2];  /* zero padding */
-    uint16_t field_37da;
-    uint16_t field_37dc;
-    uint16_t field_37de;
-    uint8_t pad_4[2];  /* zero padding */
-    uint16_t field_37e2;
-    uint16_t field_37e4;
-    uint16_t field_37e6;
-    uint16_t field_37e8;
-    uint16_t field_37ea;
-    uint16_t field_37ec;
-    uint16_t field_37ee;
-    uint16_t field_37f0;
-    uint16_t field_37f2;
-    uint8_t pad_5[2];  /* zero padding */
-    uint16_t field_37f6;
-    uint16_t field_37f8;
-    uint16_t field_37fa;
-    char str_358[2];
-    char str_359[2];
-    char str_360[2];
-    char str_361[2];
-    char str_362[2];
-    char str_363[2];
-    char str_364[6];
-    char str_365[6];
-    char str_366[6];
-    char str_367[6];
-    char str_368[4];
-    char str_369[6];
-    char str_370[6];
-    char str_371[4];
-    char str_372[4];
-    char str_373[8];
-    char str_374[8];
-    char str_375[8];
-    char str_376[8];
-    char str_377[8];
-    char str_378[8];
-    char str_379[8];
-    char str_380[4];
-    char str_381[4];
-    uint8_t pad_6[2];  /* zero padding */
-    uint16_t field_387a;
-    uint16_t field_387c;
-    char str_382[2];
-    char str_383[2];
-    uint16_t field_3882;
-    char str_384[2];
-    char str_385[2];
-    uint16_t field_3888;
-    char str_386[2];
-    char str_387[2];
-    char str_388[2];
-    char str_389[2];
-    char str_390[2];
-    uint16_t field_3894;
-    uint16_t field_3896;
-    uint16_t field_3898;
-    char str_391[2];
-    char str_392[2];
-    uint16_t field_389e;
-    char str_393[2];
-    uint16_t field_38a2;
-    uint16_t field_38a4;
-    uint16_t field_38a6;
-    uint16_t field_38a8;
-    uint16_t field_38aa;
-    uint16_t field_38ac;
-    uint16_t field_38ae;
-    uint16_t field_38b0;
-    uint16_t field_38b2;
-    char str_394[6];
-    char str_395[4];
-    uint16_t field_38be;
-    uint16_t field_38c0;
-    uint16_t field_38c2;
-    uint16_t field_38c4;
-    uint16_t field_38c6;
-    uint16_t field_38c8;
-    uint16_t field_38ca;
-    uint16_t field_38cc;
-    uint16_t field_38ce;
-    uint16_t field_38d0;
-    uint16_t field_38d2;
-    uint16_t field_38d4;
-    uint16_t field_38d6;
-    uint16_t field_38d8;
-    uint16_t field_38da;
-    uint16_t field_38dc;
-    uint16_t field_38de;
-    uint16_t field_38e0;
-    uint16_t field_38e2;
-    uint16_t field_38e4;
-    uint16_t field_38e6;
-    uint16_t field_38e8;
-    uint16_t field_38ea;
-    uint16_t field_38ec;
-    uint16_t field_38ee;
-    char str_396[3];
-    char str_397[2];
-    uint16_t field_38f5;
-    uint16_t field_38f7;
-    uint16_t field_38f9;
-    uint16_t field_38fb;
-    char str_398[2];
-    uint8_t pad_7[2];  /* zero padding */
-    char str_399[2];
-    uint16_t field_3903;
-    char str_400[2];
-    uint16_t field_3907;
-    char str_401[2];
-    uint16_t field_390b;
-    char str_402[2];
-    uint16_t field_390f;
-    char str_403[2];
-    uint8_t pad_8[11];  /* zero padding */
-    char str_404[10];
-    char str_405[10];
-    char str_406[10];
-    char str_407[10];
-    char str_408[10];
-    char str_409[10];
-    char str_410[10];
-    char str_411[10];
-    uint8_t pad_9[8];  /* zero padding */
-    char str_412[2];
-    char str_413[2];
-    char str_414[2];
-    char str_415[2];
-    char str_416[2];
-    uint8_t pad_10[8];  /* zero padding */
-    char str_417[2];
-    char str_418[2];
-    char str_419[2];
-    char str_420[2];
-    char str_421[2];
-    uint8_t pad_11[2];  /* zero padding */
-    uint16_t field_3994;
-    uint8_t pad_12[2];  /* zero padding */
-    uint16_t field_3998;
-    uint16_t field_399a;
-    uint16_t field_399c;
-    uint16_t field_399e;
-    char w3_code[6];
-    char w3_name[6];
-    uint8_t pad_13[2];  /* zero padding */
-    char str_422[2];
-    char str_423[2];
-    uint16_t field_39b2;
-    char str_424[2];
-    char str_425[2];
-    char str_426[2];
-    char str_427[2];
-    uint8_t pad_14[2];  /* zero padding */
-    char str_428[2];
-    char str_429[2];
-    char str_430[2];
-    char str_431[2];
-    char str_432[2];
-    char str_433[2];
-    uint16_t field_39ca;
-    uint16_t field_39cc;
-    uint16_t field_39ce;
-    uint16_t field_39d0;
-    uint16_t field_39d2;
-    uint16_t field_39d4;
-    uint32_t ptr_39d6;
-    uint16_t field_39da;
-    char str_434[2];
-    uint16_t field_39de;
-    char str_435[2];
-    uint16_t field_39e2;
-    char str_436[2];
-    uint16_t field_39e6;
-    char str_437[2];
-    uint16_t field_39ea;
-    char str_438[2];
-    uint16_t field_39ee;
-    char str_439[2];
-    uint16_t field_39f2;
-    char str_440[2];
-    uint16_t field_39f6;
-    char str_441[2];
-    uint16_t field_39fa;
-    char str_442[2];
-    uint16_t field_39fe;
-    char str_443[2];
-    uint16_t field_3a02;
-    char str_444[2];
-    uint16_t field_3a06;
-    char str_445[2];
-    uint16_t field_3a0a;
-    char str_446[2];
-    uint16_t field_3a0e;
-    char str_447[2];
-    uint16_t field_3a12;
-    char str_448[2];
-    uint16_t field_3a16;
-    char str_449[2];
-    uint16_t field_3a1a;
-    char str_450[2];
-    uint16_t field_3a1e;
-    char str_451[2];
-    uint16_t field_3a22;
-    char str_452[2];
-    uint16_t field_3a26;
-    char str_453[2];
-    char str_454[6];
-    char str_455[4];
-    char str_456[6];
-    char str_457[6];
-    char str_458[6];
-    char str_459[2];
-    char str_460[14];
-    char str_461[14];
-    char str_462[14];
-    char str_463[8];
-    char str_464[6];
-    uint8_t pad_15[2];  /* zero padding */
-    char str_465[2];
-    char str_466[2];
-    char str_467[2];
-    char str_468[2];
-    char str_469[2];
-    char str_470[2];
-    char str_471[2];
-    char str_472[2];
-    uint16_t field_3a92;
-    uint16_t field_3a94;
-    uint16_t field_3a96;
-    uint16_t field_3a98;
-    uint16_t field_3a9a;
-    uint16_t field_3a9c;
-    uint16_t field_3a9e;
-    char str_473[4];
-    char str_474[4];
-    uint8_t pad_16[2];  /* zero padding */
-    uint16_t field_3aaa;
-    uint16_t field_3aac;
-    uint16_t field_3aae;
-    char str_475[2];
-    char str_476[2];
-    char str_477[2];
-    uint16_t field_3ab6;
-    uint16_t field_3ab8;
-    uint16_t field_3aba;
-    uint16_t field_3abc;
-    uint16_t field_3abe;
-    uint16_t field_3ac0;
-    uint16_t field_3ac2;
-    uint16_t field_3ac4;
-    char str_478[2];
-    char str_479[2];
-    uint16_t field_3aca;
-    uint16_t field_3acc;
-    uint16_t field_3ace;
-    uint16_t field_3ad0;
-    uint16_t field_3ad2;
-    uint16_t field_3ad4;
-    uint8_t pad_17[2];  /* zero padding */
-    uint16_t field_3ad8;
-    uint16_t field_3ada;
-    uint16_t field_3adc;
-    uint16_t field_3ade;
-    char str_480[2];
-    char str_481[2];
-    uint16_t field_3ae4;
-    uint16_t field_3ae6;
-    uint16_t field_3ae8;
-    uint16_t field_3aea;
-    uint16_t field_3aec;
-    uint16_t field_3aee;
-    uint16_t field_3af0;
-    uint16_t field_3af2;
-    uint16_t field_3af4;
-    uint16_t field_3af6;
-    uint16_t field_3af8;
-    uint16_t field_3afa;
-    uint16_t field_3afc;
-    uint16_t field_3afe;
-    uint16_t field_3b00;
-    uint16_t field_3b02;
-    uint16_t field_3b04;
-    uint16_t field_3b06;
-    uint16_t field_3b08;
-    uint16_t field_3b0a;
-    uint16_t field_3b0c;
-    uint16_t field_3b0e;
-    uint16_t field_3b10;
-    uint16_t field_3b12;
-    uint16_t field_3b14;
-    uint16_t field_3b16;
-    uint16_t field_3b18;
-    uint16_t field_3b1a;
-    uint16_t field_3b1c;
-    uint16_t field_3b1e;
-    uint16_t field_3b20;
-    uint16_t field_3b22;
-    uint16_t field_3b24;
-    uint16_t field_3b26;
-    uint16_t field_3b28;
-    uint16_t field_3b2a;
-    uint16_t field_3b2c;
-    uint16_t field_3b2e;
-    uint16_t field_3b30;
-    uint16_t field_3b32;
-    uint16_t field_3b34;
-    uint16_t field_3b36;
-    uint16_t field_3b38;
-    uint16_t field_3b3a;
-    uint16_t field_3b3c;
-    uint16_t field_3b3e;
-    uint16_t field_3b40;
-    uint16_t field_3b42;
-    uint16_t field_3b44;
-    uint16_t field_3b46;
-    uint16_t field_3b48;
-    uint16_t field_3b4a;
-    uint16_t field_3b4c;
-    uint16_t field_3b4e;
-    uint16_t field_3b50;
-    uint16_t field_3b52;
-    uint16_t field_3b54;
-    uint16_t field_3b56;
-    uint16_t field_3b58;
-    uint16_t field_3b5a;
-    uint16_t field_3b5c;
-    uint16_t field_3b5e;
-    uint16_t field_3b60;
-    uint16_t field_3b62;
-    uint16_t field_3b64;
-    uint16_t field_3b66;
-    uint16_t field_3b68;
-    uint16_t field_3b6a;
-    uint16_t field_3b6c;
-    uint16_t field_3b6e;
-    uint16_t field_3b70;
-    uint16_t field_3b72;
-    uint16_t field_3b74;
-    uint16_t field_3b76;
-    uint16_t field_3b78;
-    uint16_t field_3b7a;
-    uint16_t field_3b7c;
-    uint16_t field_3b7e;
-    uint16_t field_3b80;
-    uint16_t field_3b82;
-    uint16_t field_3b84;
-    uint16_t field_3b86;
-    uint16_t field_3b88;
-    uint16_t field_3b8a;
-    uint16_t field_3b8c;
-    uint16_t field_3b8e;
-    uint16_t field_3b90;
-    uint16_t field_3b92;
-    uint16_t field_3b94;
-    uint16_t field_3b96;
-    uint16_t field_3b98;
-    uint16_t field_3b9a;
-    uint16_t field_3b9c;
-    uint16_t field_3b9e;
-    uint16_t field_3ba0;
-    uint16_t field_3ba2;
-    uint16_t field_3ba4;
-    uint16_t field_3ba6;
-    uint16_t field_3ba8;
-    uint16_t field_3baa;
-    uint16_t field_3bac;
-    uint16_t field_3bae;
-    uint16_t field_3bb0;
-    uint16_t field_3bb2;
-    uint16_t field_3bb4;
-    uint16_t field_3bb6;
-    uint16_t field_3bb8;
-    uint16_t field_3bba;
-    uint16_t field_3bbc;
-    uint16_t field_3bbe;
-    uint16_t field_3bc0;
-    uint16_t field_3bc2;
-    uint16_t field_3bc4;
-    uint16_t field_3bc6;
-    uint16_t field_3bc8;
-    uint16_t field_3bca;
-    uint16_t field_3bcc;
-    uint16_t field_3bce;
-    uint16_t field_3bd0;
-    uint16_t field_3bd2;
-    uint16_t field_3bd4;
-    uint16_t field_3bd6;
-    uint16_t field_3bd8;
-    uint16_t field_3bda;
-    uint16_t field_3bdc;
-    uint16_t field_3bde;
-    uint16_t field_3be0;
-    uint16_t field_3be2;
-    uint16_t field_3be4;
-    uint16_t field_3be6;
-    uint16_t field_3be8;
-    uint16_t field_3bea;
-    uint16_t field_3bec;
-    uint16_t field_3bee;
-    uint16_t field_3bf0;
-    uint16_t field_3bf2;
-    uint16_t field_3bf4;
-    uint16_t field_3bf6;
-    uint16_t field_3bf8;
-    uint16_t field_3bfa;
-    uint16_t field_3bfc;
-    uint16_t field_3bfe;
-    uint16_t field_3c00;
-    uint16_t field_3c02;
-    uint16_t field_3c04;
-    uint16_t field_3c06;
-    uint16_t field_3c08;
-    uint16_t field_3c0a;
-    uint16_t field_3c0c;
-    uint16_t field_3c0e;
-    uint16_t field_3c10;
-    uint16_t field_3c12;
-    uint16_t field_3c14;
-    uint16_t field_3c16;
-    uint16_t field_3c18;
-    uint16_t field_3c1a;
-    uint16_t field_3c1c;
-    uint16_t field_3c1e;
-    uint16_t field_3c20;
-    uint16_t field_3c22;
-    uint16_t field_3c24;
-    uint16_t field_3c26;
-    uint16_t field_3c28;
-    uint16_t field_3c2a;
-    uint16_t field_3c2c;
-    uint16_t field_3c2e;
-    uint16_t field_3c30;
-    uint16_t field_3c32;
-    uint16_t field_3c34;
-    uint16_t field_3c36;
-    uint16_t field_3c38;
-    uint16_t field_3c3a;
-    char str_482[4];
-    char str_483[4];
-    char str_484[4];
-    char str_485[6];
-    char str_486[4];
-    char str_487[6];
-    char str_488[6];
-    char str_489[6];
-    char str_490[6];
-    char str_491[6];
-    char str_492[6];
-    char str_493[6];
-    char str_494[6];
-    char str_495[6];
-    char str_496[6];
-    char str_497[6];
-    char str_498[6];
-    char str_499[6];
-    char str_500[6];
-    char str_501[6];
-    char str_502[6];
-    uint8_t pad_18[2];  /* zero padding */
-    uint16_t field_3cb4;
-    uint16_t field_3cb6;
-    uint16_t field_3cb8;
-    uint8_t pad_19[2];  /* zero padding */
-    uint16_t field_3cbc;
-    uint16_t field_3cbe;
-    uint8_t pad_20[6];  /* zero padding */
-    uint16_t field_3cc6;
-    uint16_t field_3cc8;
-    uint16_t field_3cca;
-    char str_503[2];
-    char str_504[2];
-    char str_505[2];
-    char str_506[2];
-    char str_507[2];
-    char str_508[2];
-    uint8_t pad_21[2];  /* zero padding */
-    char str_509[2];
-    char str_510[2];
-    char str_511[2];
-    uint32_t ptr_3ce0;
-    uint16_t field_3ce4;
-    uint16_t field_3ce6;
-    uint16_t field_3ce8;
-    uint16_t field_3cea;
-    char str_512[6];
-    char str_513[6];
-    char str_514[6];
-    char str_515[6];
-    char str_516[6];
-    char str_517[6];
-    char str_518[6];
-    char str_519[6];
-    char str_520[6];
-    char str_521[6];
-    char str_522[6];
-    char str_523[6];
-    char str_524[6];
-    char str_525[6];
-    char str_526[8];
-    char str_527[8];
-    char str_528[6];
-    char str_529[8];
-    char str_530[8];
-    char str_531[6];
-    char str_532[8];
-    char str_533[8];
-    char str_534[6];
-    char str_535[6];
-    char str_536[8];
-    char str_537[8];
-    char str_538[6];
-    char str_539[8];
-    char str_540[8];
-    char str_541[6];
-    char str_542[6];
-    char str_543[6];
-    char str_544[6];
-    char str_545[6];
-    char str_546[6];
-    char str_547[6];
-    char str_548[6];
-    char str_549[6];
-    char str_550[6];
-    char str_551[6];
-    char str_552[6];
-    char str_553[6];
-    char str_554[6];
-    char str_555[6];
-    char str_556[4];
-    char str_557[4];
-    uint8_t pad_22[6];  /* zero padding */
-    uint16_t field_3e16;
-    uint16_t field_3e18;
-    uint16_t field_3e1a;
-    char str_558[2];
-    char str_559[2];
-    char str_560[2];
-    char str_561[2];
-    char str_562[2];
-    char str_563[2];
-    char str_564[2];
-    char str_565[2];
-    char str_566[2];
-    char str_567[2];
-    uint8_t pad_23[2];  /* zero padding */
-    uint16_t field_3e32;
-    uint16_t field_3e34;
-    uint16_t field_3e36;
-    uint16_t field_3e38;
-    uint16_t field_3e3a;
-    uint16_t field_3e3c;
-    uint16_t field_3e3e;
-    uint16_t field_3e40;
-    char str_568[2];
-    uint16_t field_3e44;
-    char str_569[2];
-    uint8_t pad_24[2];  /* zero padding */
-    uint16_t field_3e4a;
-    char str_570[2];
-    uint16_t field_3e4e;
-    uint8_t pad_25[12];  /* zero padding */
-    char str_571[2];
-    uint8_t pad_26[14];  /* zero padding */
-    char str_572[2];
-    uint8_t pad_27[2];  /* zero padding */
-    uint16_t field_3e70;
-    uint8_t pad_28[12];  /* zero padding */
-    uint16_t field_3e7e;
-    uint8_t pad_29[4];  /* zero padding */
-    char str_573[2];
-    char str_574[2];
-    uint16_t field_3e88;
-    uint16_t field_3e8a;
-    uint16_t field_3e8c;
-    uint16_t field_3e8e;
-    char str_575[2];
-    uint16_t field_3e92;
-    char str_576[2];
-    uint8_t pad_30[2];  /* zero padding */
-    char str_577[2];
-    char str_578[2];
-    char str_579[2];
-    uint16_t field_3e9e;
-    char str_580[2];
-    uint16_t field_3ea2;
-    char str_581[2];
-    uint8_t pad_31[2];  /* zero padding */
-    char str_582[2];
-    char str_583[2];
-    char str_584[2];
-    uint16_t field_3eae;
-    uint16_t field_3eb0;
-    uint16_t field_3eb2;
-    uint16_t field_3eb4;
-    uint8_t pad_32[2];  /* zero padding */
-    char str_585[2];
-    uint16_t field_3eba;
-    char str_586[2];
-    uint16_t field_3ebe;
-    uint8_t pad_33[2];  /* zero padding */
-    char str_587[2];
-    uint16_t field_3ec4;
-    uint16_t field_3ec6;
-    uint16_t field_3ec8;
-    uint16_t field_3eca;
-    uint16_t field_3ecc;
-    uint16_t field_3ece;
-    uint16_t field_3ed0;
-    uint16_t field_3ed2;
-    uint16_t field_3ed4;
-    uint16_t field_3ed6;
-    uint16_t field_3ed8;
-    uint16_t field_3eda;
-    uint16_t field_3edc;
-    uint16_t field_3ede;
-    uint16_t field_3ee0;
-    uint16_t field_3ee2;
-    uint16_t field_3ee4;
-    uint16_t field_3ee6;
-    uint16_t field_3ee8;
-    uint16_t field_3eea;
-    uint16_t field_3eec;
-    uint16_t field_3eee;
-    uint16_t field_3ef0;
-    uint16_t field_3ef2;
-    uint16_t field_3ef4;
-    uint16_t field_3ef6;
-    uint16_t field_3ef8;
-    uint16_t field_3efa;
-    uint16_t field_3efc;
-    uint16_t field_3efe;
-    uint16_t field_3f00;
-    uint16_t field_3f02;
-    uint16_t field_3f04;
-    uint16_t field_3f06;
-    uint16_t field_3f08;
-    uint16_t field_3f0a;
-    uint16_t field_3f0c;
-    uint16_t field_3f0e;
-    uint16_t field_3f10;
-    uint16_t field_3f12;
-    char str_588[2];
-    uint16_t field_3f16;
-    char str_589[2];
-    uint16_t field_3f1a;
-    uint16_t field_3f1c;
-    uint16_t field_3f1e;
-    uint16_t field_3f20;
-    uint16_t field_3f22;
-    uint16_t field_3f24;
-    uint16_t field_3f26;
-    uint16_t field_3f28;
-    uint16_t field_3f2a;
-    char str_590[6];
-    uint8_t pad_34[2];  /* zero padding */
-    uint16_t field_3f34;
-    uint16_t field_3f36;
-    char str_591[2];
-    char str_592[2];
-    char str_593[2];
-    char str_594[2];
-    char str_595[2];
-    char str_596[2];
-    char str_597[2];
-    uint16_t field_3f46;
-    uint16_t field_3f48;
-    uint32_t ptr_3f4a;
-    uint32_t ptr_3f4e;
-    uint16_t field_3f52;
-    uint16_t field_3f54;
-    uint16_t field_3f56;
-    uint16_t field_3f58;
-    uint16_t field_3f5a;
-    uint16_t field_3f5c;
-    uint16_t field_3f5e;
-    uint16_t field_3f60;
-    uint16_t field_3f62;
-    uint16_t field_3f64;
-    uint16_t field_3f66;
-    uint16_t field_3f68;
-    uint16_t field_3f6a;
-    uint16_t field_3f6c;
-    uint8_t pad_35[2];  /* zero padding */
-    uint16_t field_3f70;
-    char str_598[2];
-    char str_599[2];
-    char str_600[2];
-    char str_601[2];
-    char str_602[2];
-    uint32_t ptr_3f7c;
-    uint16_t field_3f80;
-    uint16_t field_3f82;
-    uint16_t field_3f84;
-    uint16_t field_3f86;
-    uint16_t field_3f88;
-    uint16_t field_3f8a;
-    uint16_t field_3f8c;
-    uint16_t field_3f8e;
-    char str_603[2];
-    char str_604[2];
-    char str_605[2];
-    char str_606[2];
-    char str_607[2];
-    char str_608[2];
-    uint16_t field_3f9c;
-    uint16_t field_3f9e;
-    uint16_t field_3fa0;
-    uint16_t field_3fa2;
-    uint16_t field_3fa4;
-    uint16_t field_3fa6;
-    uint16_t field_3fa8;
-    uint16_t field_3faa;
-    char str_609[6];
-    char str_610[6];
-    char str_611[6];
-    char str_612[6];
-    char str_613[4];
-    uint16_t field_3fc8;
-    uint16_t field_3fca;
-    uint16_t field_3fcc;
-    uint16_t field_3fce;
-    uint16_t field_3fd0;
-    uint16_t field_3fd2;
-    uint16_t field_3fd4;
-    uint16_t field_3fd6;
-    uint16_t field_3fd8;
-    uint16_t field_3fda;
-    uint16_t field_3fdc;
-    uint16_t field_3fde;
-    uint16_t field_3fe0;
-    uint16_t field_3fe2;
-    uint16_t field_3fe4;
-    uint16_t field_3fe6;
-    uint16_t field_3fe8;
-    uint16_t field_3fea;
-    uint16_t field_3fec;
-    uint16_t field_3fee;
-    uint16_t field_3ff0;
-    uint16_t field_3ff2;
-    uint8_t pad_36[2];  /* zero padding */
-    uint16_t field_3ff6;
-    uint16_t field_3ff8;
-    uint16_t field_3ffa;
-    char str_614[2];
-    char str_615[2];
-    char str_616[2];
-    uint16_t field_4002;
-    uint16_t field_4004;
-    char str_617[2];
-    uint16_t field_4008;
-    uint16_t field_400a;
-    uint16_t field_400c;
-    char str_618[2];
-    char str_619[2];
-    char str_620[2];
-    char str_621[2];
-    char str_622[2];
+    /* ---------------------------------------------------------------------
+     * [typed] by span_d_ui
+     * EffectBox_HandleInitEvent_Table -- read by EffectBox_HandleInitEvent
+     * (v10/v9 0xF3354A, v7 0xF33520) (`ld xbc, NakaInst_NO_OPERATION_0x12`).
+     * 8 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t EffectBox_HandleInitEvent_Table[8];
+    /* ---------------------------------------------------------------------
+     * EffectBox_PostFillSetup_Table -- read by EffectBox_PostFillSetup
+     * (v10/v9 0xF33752, v7 0xF33728) (`ld xhl, NakaInst_NO_OPERATION_0x1A`),
+     * EffectBox_PostFill3Setup (v10/v9 0xF337F8, v7 0xF337CE) (`ld xhl,
+     * NakaInst_NO_OPERATION_0x1A`), EffectBox_HandleSelectEvent (v10/v9
+     * 0xF339BF, v7 0xF33995) (`ld xwa, NakaInst_NO_OPERATION_0x1A`). 8 bytes
+     * to the next object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t EffectBox_PostFillSetup_Table[8];
+    /* ---------------------------------------------------------------------
+     * SqplyVal_HandleScrollEvent_Table -- read by SqplyVal_HandleScrollEvent
+     * (v10/v9 0xF30B75, v7 0xF30B4B) (`ld xde, NakaInst_NO_OPERATION_0x22`).
+     * 96 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqplyVal_HandleScrollEvent_Table[96];
+    /* ---------------------------------------------------------------------
+     * SqedtVal_HandleScrollEvent_Table -- read by SqedtVal_HandleScrollEvent
+     * (v10/v9 0xF31125, v7 0xF310FB) (`ld xde, NakaInst_NO_OPERATION_0x82`),
+     * SqedtVal3_HandleScrollEvent (v10/v9 0xF31F13, v7 0xF31EE9) (`lda xde,
+     * (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop1 (v10/v9
+     * 0xF31FB4, v7 0xF31F8A) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+     * SqedtVal3_FillBufferLoop2 (v10/v9 0xF3205D, v7 0xF32033) (`lda xde,
+     * (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop3 (v10/v9
+     * 0xF32106, v7 0xF320DC) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+     * SqedtVal2_HandleScrollEvent (v10/v9 0xF32380, v7 0xF32356) (`ld xde,
+     * NakaInst_NO_OPERATION_0x82`). 280 bytes to the next object; the layout
+     * beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtVal_HandleScrollEvent_Table[280];
+    /* ---------------------------------------------------------------------
+     * BmDrEdit_RenderHorizontal_Table -- read by BmDrEdit_RenderHorizontal
+     * (v10/v9 0xF361C1, v7 0xF36197) (`lda xbc,
+     * (NakaInst_NO_OPERATION_0x19A:24)`), BmDrEdit_RenderSecondaryHoriz
+     * (v10/v9 0xF36282, v7 0xF36258) (`lda xbc,
+     * (NakaInst_NO_OPERATION_0x19A:24)`). 58 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t BmDrEdit_RenderHorizontal_Table[58];
+    /* ---------------------------------------------------------------------
+     * BmDrEdit_RenderVertical_Table -- read by BmDrEdit_RenderVertical
+     * (v10/v9 0xF361FE, v7 0xF361D4) (`lda xbc,
+     * (NakaInst_NO_OPERATION_0x1D4:24)`), BmDrEdit_RenderSecondaryVert
+     * (v10/v9 0xF362C1, v7 0xF36297) (`lda xbc,
+     * (NakaInst_NO_OPERATION_0x1D4:24)`). 28 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t BmDrEdit_RenderVertical_Table[28];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_HandleFocusLost_Table -- read by
+     * NoteEditBox_HandleFocusLost (v10/v9 0xF2F0F9, v7 0xF2F0CF) (`ld xwa,
+     * NakaInst_NO_OPERATION_0x1F0`). 12 bytes to the next object; the layout
+     * beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NoteEditBox_HandleFocusLost_Table[12];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_HandleFocusLost_Table_2 -- read by
+     * NoteEditBox_HandleFocusLost (v10/v9 0xF2F0F9, v7 0xF2F0CF) (`ld xwa,
+     * NakaInst_NO_OPERATION_0x1FC`). 12 bytes to the next object; the layout
+     * beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NoteEditBox_HandleFocusLost_Table_2[12];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_EventDispatch2_Table -- read by NoteEditBox_EventDispatch2
+     * (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xde,
+     * (NakaInst_NO_OPERATION_0x208:24)`), NoteEditBox_EventDispatch2 (v10/v9
+     * 0xF2F2A0, v7 0xF2F276) (`lda xbc, (NakaInst_NO_OPERATION_0x208:24)`),
+     * NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xix,
+     * (NakaInst_NO_OPERATION_0x208:24)`), NoteEditGrid_LoadCoordinates
+     * (v10/v9 0xF2F97F, v7 0xF2F955) (`lda xde,
+     * (NakaInst_NO_OPERATION_0x208:24)`). 72 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NoteEditBox_EventDispatch2_Table[72];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_EventDispatch2_Table_2 -- read by
+     * NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xbc,
+     * (NakaInst_NO_OPERATION_0x250:24)`). 24 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NoteEditBox_EventDispatch2_Table_2[24];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_EventDispatch2_Table_3 -- read by
+     * NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xbc,
+     * (NakaInst_NO_OPERATION_0x268:24)`). 18 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NoteEditBox_EventDispatch2_Table_3[18];
+    /* ---------------------------------------------------------------------
+     * NoteEditFunc_Table -- read by NoteEditFunc (v10/v9 0xF2FA5A, v7
+     * 0xF2FA30) (`lda xhl, (NakaInst_NO_OPERATION_0x27A:24)`). 66 bytes to
+     * the next object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NoteEditFunc_Table[66];
+    /* ---------------------------------------------------------------------
+     * AttAreYouSureCheck_Strings -- the 6 strings
+     * AttAreYouSureCheck_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 158 bytes.
+     * --------------------------------------------------------------------- */
+    char AttAreYouSureCheck_Strings[158];
+    /* ---------------------------------------------------------------------
+     * StsSeqMenu1Check_Strings -- the 2 strings StsSeqMenu1Check_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 70 bytes.
+     * --------------------------------------------------------------------- */
+    char StsSeqMenu1Check_Strings[70];
+    /* ---------------------------------------------------------------------
+     * StsSeqMenu2Check_Strings -- the 2 strings StsSeqMenu2Check_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 70 bytes.
+     * --------------------------------------------------------------------- */
+    char StsSeqMenu2Check_Strings[70];
+    /* ---------------------------------------------------------------------
+     * StsEasyRec1Check_Strings -- the 2 strings StsEasyRec1Check_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 276 bytes.
+     * --------------------------------------------------------------------- */
+    char StsEasyRec1Check_Strings[276];
+    /* ---------------------------------------------------------------------
+     * StsEasyRec2Check_Strings -- the 2 strings StsEasyRec2Check_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 46 bytes.
+     * --------------------------------------------------------------------- */
+    char StsEasyRec2Check_Strings[46];
+    /* ---------------------------------------------------------------------
+     * StsPnlWrtCheck_Strings -- the 2 strings StsPnlWrtCheck_PtrTable points
+     * at (NUL-terminated, 0xFF pad to even length), 416 bytes.
+     * --------------------------------------------------------------------- */
+    char StsPnlWrtCheck_Strings[416];
+    /* ---------------------------------------------------------------------
+     * StsTrkClr1Check_Strings -- the 2 strings StsTrkClr1Check_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 200 bytes.
+     * --------------------------------------------------------------------- */
+    char StsTrkClr1Check_Strings[200];
+    /* ---------------------------------------------------------------------
+     * StsTrkClr2Check_Strings -- the 2 strings StsTrkClr2Check_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 78 bytes.
+     * --------------------------------------------------------------------- */
+    char StsTrkClr2Check_Strings[78];
+    /* ---------------------------------------------------------------------
+     * StsNtDrEditCheck_Strings -- the 2 strings StsNtDrEditCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 196 bytes.
+     * --------------------------------------------------------------------- */
+    char StsNtDrEditCheck_Strings[196];
+    /* ---------------------------------------------------------------------
+     * AttSongClrCheck_Strings -- the 5 strings AttSongClrCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 358 bytes.
+     * --------------------------------------------------------------------- */
+    char AttSongClrCheck_Strings[358];
+    /* ---------------------------------------------------------------------
+     * AttTrkClrCheck_Strings -- the 5 strings AttTrkClrCheck_PtrTable points
+     * at (NUL-terminated, 0xFF pad to even length), 404 bytes.
+     * --------------------------------------------------------------------- */
+    char AttTrkClrCheck_Strings[404];
+    /* ---------------------------------------------------------------------
+     * StsAtPunchCheck_Strings -- the 2 strings StsAtPunchCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 102 bytes.
+     * --------------------------------------------------------------------- */
+    char StsAtPunchCheck_Strings[102];
+    /* ---------------------------------------------------------------------
+     * NakaDesc_Str0330A -- 6 bytes of NUL-terminated strings after the
+     * string block before it; no registration or code reference reaches them
+     * (searched: RegObjTabl tables, slice and positional labels). Which code
+     * uses them is not established.
+     * --------------------------------------------------------------------- */
+    char NakaDesc_Str0330A[6];
+    /* ---------------------------------------------------------------------
+     * HelpTtlFunc_LookupSlide_Strings -- the 50 strings
+     * HelpTtlFunc_LookupSlide_PtrTable points at (NUL-terminated, 0xFF pad
+     * to even length), 638 bytes.
+     * --------------------------------------------------------------------- */
+    char HelpTtlFunc_LookupSlide_Strings[638];
+    /* ---------------------------------------------------------------------
+     * HelpTtlFunc_LookupSlide_PtrTable -- 50 u32 addresses, read by
+     * HelpTtlFunc_LookupSlide (v10/v9 0xF2E962, v7 0xF2E938) (`lda xix,
+     * (NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x3F4:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t HelpTtlFunc_LookupSlide_PtrTable[50];
+    /* ---------------------------------------------------------------------
+     * HelpTtlFunc_LookupSlide_PtrTable_Strings -- 30 bytes of NUL-terminated
+     * strings after HelpTtlFunc_LookupSlide_PtrTable; no registration or
+     * code reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char HelpTtlFunc_LookupSlide_PtrTable_Strings[30];
+    /* ---------------------------------------------------------------------
+     * AttAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
+     * AttAreYouSureCheck (v10/v9 0xF2EF1D, v7 0xF2EEF3) (`lda xhl,
+     * (NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x4DA:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AttAreYouSureCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * AttAttentionCheck_PtrTable -- 6 u32 addresses, read by
+     * AttAttentionCheck (v10/v9 0xF2EF2E, v7 0xF2EF04) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x14:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AttAttentionCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsSeqMenu1Check_PtrTable -- 6 u32 addresses, read by StsSeqMenu1Check
+     * (v10/v9 0xF2EF3F, v7 0xF2EF15) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x2C:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsSeqMenu1Check_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsSeqMenu2Check_PtrTable -- 6 u32 addresses, read by StsSeqMenu2Check
+     * (v10/v9 0xF2EF50, v7 0xF2EF26) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x44:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsSeqMenu2Check_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsEasyRec1Check_PtrTable -- 6 u32 addresses, read by StsEasyRec1Check
+     * (v10/v9 0xF2EF61, v7 0xF2EF37) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x5C:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsEasyRec1Check_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsEasyRec2Check_PtrTable -- 6 u32 addresses, read by StsEasyRec2Check
+     * (v10/v9 0xF2EF72, v7 0xF2EF48) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x74:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsEasyRec2Check_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsPnlWrtCheck_PtrTable -- 6 u32 addresses, read by StsPnlWrtCheck
+     * (v10/v9 0xF2EF83, v7 0xF2EF59) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x8C:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsPnlWrtCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsTrkClr1Check_PtrTable -- 6 u32 addresses, read by StsTrkClr1Check
+     * (v10/v9 0xF2EF94, v7 0xF2EF6A) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0xA4:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsTrkClr1Check_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsTrkClr2Check_PtrTable -- 6 u32 addresses, read by StsTrkClr2Check
+     * (v10/v9 0xF2EFA5, v7 0xF2EF7B) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0xBC:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsTrkClr2Check_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsNtDrEditCheck_PtrTable -- 6 u32 addresses, read by StsNtDrEditCheck
+     * (v10/v9 0xF2EFB6, v7 0xF2EF8C) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0xD4:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsNtDrEditCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * AttTrkClrCheck_PtrTable -- 6 u32 addresses, read by AttTrkClrCheck
+     * (v10/v9 0xF2EFC7, v7 0xF2EF9D) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0xEC:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AttTrkClrCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * AttSongClrCheck_PtrTable -- 6 u32 addresses, read by AttSongClrCheck
+     * (v10/v9 0xF2EFD8, v7 0xF2EFAE) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x104:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AttSongClrCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsAtPunchCheck_PtrTable -- 6 u32 addresses, read by StsAtPunchCheck
+     * (v10/v9 0xF2EFE9, v7 0xF2EFBF) (`lda xhl,
+     * (ExtDevice_ModeDispatch_Table_0x11C:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsAtPunchCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsAtPunchCheck_PtrTable_Strings -- 12 bytes of NUL-terminated strings
+     * after StsAtPunchCheck_PtrTable; no registration or code reference
+     * reaches them (searched: RegObjTabl tables, slice and positional
+     * labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char StsAtPunchCheck_PtrTable_Strings[12];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_EventDispatch2_Str -- NUL-terminated string(s), 8 bytes,
+     * used by NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x140`).
+     * --------------------------------------------------------------------- */
+    char NoteEditBox_EventDispatch2_Str[8];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_EventDispatch2_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x148`).
+     * --------------------------------------------------------------------- */
+    char NoteEditBox_EventDispatch2_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_EventDispatch2_Str_3 -- NUL-terminated string(s), 8 bytes,
+     * used by NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x14C`).
+     * --------------------------------------------------------------------- */
+    char NoteEditBox_EventDispatch2_Str_3[8];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatEntry_Table -- read by NoteEdit_FormatEntry (v10/v9
+     * 0xF2FA09, v7 0xF2F9DF) (`add xwa,
+     * ExtDevice_ModeDispatch_Table_0x154`). 12 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NoteEdit_FormatEntry_Table[12];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatEntry_CaseTable -- jump table of a compiled `switch` in
+     * NoteEdit_FormatEntry (v10/v9 0xF2FA09, v7 0xF2F9DF) (`ld xix,
+     * ExtDevice_ModeDispatch_Table_0x160`): 2 u16 case offsets from
+     * NoteEditBox_GridDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t NoteEdit_FormatEntry_CaseTable[2];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_GridDispatch2_CaseTable -- jump table of a compiled
+     * `switch` in NoteEditBox_GridDispatch2 (v10/v9 0xF2F251, v7 0xF2F227)
+     * (`add xwa, ExtDevice_ModeDispatch_Table_0x164`): 12 u16 case offsets
+     * from NoteEditBox_EventDispatch2.
+     * --------------------------------------------------------------------- */
+    uint16_t NoteEditBox_GridDispatch2_CaseTable[12];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_SetupGrid_CaseTable -- jump table of a compiled `switch`
+     * in NoteEditBox_SetupGrid (v10/v9 0xF2F1A2, v7 0xF2F178) (`add xhl,
+     * ExtDevice_ModeDispatch_Table_0x17C`): 10 u16 case offsets from
+     * NoteEditBox_EventDispatch1.
+     * --------------------------------------------------------------------- */
+    uint16_t NoteEditBox_SetupGrid_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * NoteEditBox_SetupGrid_CaseTable_Strings -- 12 bytes of NUL-terminated
+     * strings after NoteEditBox_SetupGrid_CaseTable; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char NoteEditBox_SetupGrid_CaseTable_Strings[12];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatTempoString_Str -- NUL-terminated string(s), 6 bytes,
+     * used by NoteEdit_FormatTempoString (v10/v9 0xF2FAF2, v7 0xF2FAC8) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x19C`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatTempoString_Str[6];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatTempoString_Str_2 -- NUL-terminated string(s), 6 bytes,
+     * used by NoteEdit_FormatTempoString (v10/v9 0xF2FAF2, v7 0xF2FAC8) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x1A2`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatTempoString_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatNoteOther_Str -- NUL-terminated string(s), 4 bytes,
+     * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x1A8`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatNoteOther_Str[4];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatNoteOther_Str_2 -- NUL-terminated string(s), 6 bytes,
+     * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x1AC`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatNoteOther_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatNoteOther_Str_3 -- NUL-terminated string(s), 6 bytes,
+     * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x1B2`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatNoteOther_Str_3[6];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatNoteOther_Str_4 -- NUL-terminated string(s), 4 bytes,
+     * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x1B8`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatNoteOther_Str_4[4];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatNoteOther_Str_5 -- NUL-terminated string(s), 12 bytes,
+     * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x1BC`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatNoteOther_Str_5[12];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_GateTime0C_Str -- NUL-terminated string(s), 8 bytes, used by
+     * NoteEdit_GateTime0C (v10/v9 0xF2FBD9, v7 0xF2FBAF) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x1C8`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_GateTime0C_Str[8];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_GateTime10_Str -- NUL-terminated string(s), 8 bytes, used by
+     * NoteEdit_GateTime10 (v10/v9 0xF2FBE0, v7 0xF2FBB6) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x1D0`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_GateTime10_Str[8];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_GateTime18_Str -- NUL-terminated string(s), 8 bytes, used by
+     * NoteEdit_GateTime18 (v10/v9 0xF2FBEB, v7 0xF2FBC1) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x1D8`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_GateTime18_Str[8];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_GateTime20_Str -- NUL-terminated string(s), 8 bytes, used by
+     * NoteEdit_GateTime20 (v10/v9 0xF2FBF2, v7 0xF2FBC8) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x1E0`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_GateTime20_Str[8];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_GateTime30_Str -- NUL-terminated string(s), 8 bytes, used by
+     * NoteEdit_GateTime30 (v10/v9 0xF2FBF9, v7 0xF2FBCF) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x1E8`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_GateTime30_Str[8];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_GateTime60_Str -- NUL-terminated string(s), 12 bytes, used by
+     * NoteEdit_GateTime60 (v10/v9 0xF2FC00, v7 0xF2FBD6) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x1F0`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_GateTime60_Str[12];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_FormatChordType_Str -- NUL-terminated string(s), 4 bytes,
+     * used by NoteEdit_FormatChordType (v10/v9 0xF2FC1D, v7 0xF2FBF3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x1FC`).
+     * --------------------------------------------------------------------- */
+    char NoteEdit_FormatChordType_Str[4];
+    /* ---------------------------------------------------------------------
+     * NoteEdit_GetParamValue_CaseTable -- jump table of a compiled `switch`
+     * in NoteEdit_GetParamValue (v10/v9 0xF2FC64, v7 0xF2FC3A) (`add xde,
+     * ExtDevice_ModeDispatch_Table_0x200`): 14 u16 case offsets from
+     * NoteEdit_ParamJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t NoteEdit_GetParamValue_CaseTable[14];
+    /* ---------------------------------------------------------------------
+     * NoteEditFunc_CaseTable -- jump table of a compiled `switch` in
+     * NoteEditFunc (v10/v9 0xF2FA5A, v7 0xF2FA30) (`add xwa,
+     * ExtDevice_ModeDispatch_Table_0x21C`): 16 u16 case offsets from
+     * NoteEdit_FormatTempo.
+     * --------------------------------------------------------------------- */
+    uint16_t NoteEditFunc_CaseTable[16];
+    /* ---------------------------------------------------------------------
+     * NoteEditFunc_CaseTable_Strings -- 10 bytes of NUL-terminated strings
+     * after NoteEditFunc_CaseTable; no registration or code reference
+     * reaches them (searched: RegObjTabl tables, slice and positional
+     * labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char NoteEditFunc_CaseTable_Strings[10];
+    /* ---------------------------------------------------------------------
+     * EntGrid_PostMainEvent_Table -- read by EntGrid_PostMainEvent (v10/v9
+     * 0xF300EC, v7 0xF300C2) (`lda xbc,
+     * (ExtDevice_ModeDispatch_Table_0x246:24)`). 18 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t EntGrid_PostMainEvent_Table[18];
+    /* ---------------------------------------------------------------------
+     * EntGrid_PostMainEvent_Table_2 -- read by EntGrid_PostMainEvent (v10/v9
+     * 0xF300EC, v7 0xF300C2) (`lda xbc,
+     * (ExtDevice_ModeDispatch_Table_0x258:24)`). 18 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t EntGrid_PostMainEvent_Table_2[18];
+    /* ---------------------------------------------------------------------
+     * AcEntertainerGridBoxProc_CaseTable -- jump table of a compiled
+     * `switch` in AcEntertainerGridBoxProc (v10/v9 0xF30048, v7 0xF3001E)
+     * (`add xbc, ExtDevice_ModeDispatch_Table_0x26A`): 7 u16 case offsets
+     * from AcEntertainer_EventDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t AcEntertainerGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * SndParam_Dispatch_Table -- read by SndParam_Dispatch (v10/v9 0xF303D6,
+     * v7 0xF303AC) (`lda xbc, (ExtDevice_ModeDispatch_Table_0x278:24)`),
+     * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`lda xwa,
+     * (ExtDevice_ModeDispatch_Table_0x278:24)`), SndParam_Dispatch (v10/v9
+     * 0xF303D6, v7 0xF303AC) (`lda xix,
+     * (ExtDevice_ModeDispatch_Table_0x278:24)`), EntGridCheck_Handler
+     * (v10/v9 0xF305C9, v7 0xF3059F) (`lda xbc,
+     * (ExtDevice_ModeDispatch_Table_0x278:24)`). 36 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SndParam_Dispatch_Table[36];
+    /* ---------------------------------------------------------------------
+     * EntertainerGridCheck_LocalInit -- initializer of a local array:
+     * EntertainerGridCheck (v10/v9 0xF30326, v7 0xF302FC) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x29C`) copies 10 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t EntertainerGridCheck_LocalInit[5];
+    /* ---------------------------------------------------------------------
+     * EntertainerGridCheck_LocalInit_Strings -- 10 bytes of NUL-terminated
+     * strings after EntertainerGridCheck_LocalInit; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char EntertainerGridCheck_LocalInit_Strings[10];
+    /* ---------------------------------------------------------------------
+     * SndParam_Dispatch_Str -- NUL-terminated string(s), 10 bytes, used by
+     * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x2B0`).
+     * --------------------------------------------------------------------- */
+    char SndParam_Dispatch_Str[10];
+    /* ---------------------------------------------------------------------
+     * SndParam_Dispatch_Str_2 -- NUL-terminated string(s), 20 bytes, used by
+     * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x2BA`).
+     * --------------------------------------------------------------------- */
+    char SndParam_Dispatch_Str_2[20];
+    /* ---------------------------------------------------------------------
+     * EntGridCheck_Handle4140_Str -- NUL-terminated string(s), 10 bytes,
+     * used by EntGridCheck_Handle4140 (v10/v9 0xF30678, v7 0xF3064E) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x2CE`).
+     * --------------------------------------------------------------------- */
+    char EntGridCheck_Handle4140_Str[10];
+    /* ---------------------------------------------------------------------
+     * EntGridCheck_Handle4140_Str_2 -- NUL-terminated string(s), 30 bytes,
+     * used by EntGridCheck_Handle4140 (v10/v9 0xF30678, v7 0xF3064E) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x2D8`).
+     * --------------------------------------------------------------------- */
+    char EntGridCheck_Handle4140_Str_2[30];
+    /* ---------------------------------------------------------------------
+     * SndParam_Dispatch_PtrTable -- 2 u32 ROM addresses (or 0), read by
+     * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`lda xix,
+     * (ExtDevice_ModeDispatch_Table_0x2F6:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t SndParam_Dispatch_PtrTable[2];
+    /* ---------------------------------------------------------------------
+     * SndParam_Dispatch_PtrTable_Strings -- 10 bytes of NUL-terminated
+     * strings after SndParam_Dispatch_PtrTable; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char SndParam_Dispatch_PtrTable_Strings[10];
+    /* ---------------------------------------------------------------------
+     * SndParam_Dispatch_PtrTable_2 -- 2 u32 ROM addresses (or 0), read by
+     * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`lda xix,
+     * (ExtDevice_ModeDispatch_Table_0x308:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t SndParam_Dispatch_PtrTable_2[2];
+    /* ---------------------------------------------------------------------
+     * SndParam_Dispatch_PtrTable_2_Strings -- 10 bytes of NUL-terminated
+     * strings after SndParam_Dispatch_PtrTable_2; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char SndParam_Dispatch_PtrTable_2_Strings[10];
+    /* ---------------------------------------------------------------------
+     * EntertainerGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * EntertainerGridCheck (v10/v9 0xF30326, v7 0xF302FC) (`add xwa,
+     * ExtDevice_ModeDispatch_Table_0x31A`): 7 u16 case offsets from
+     * SndParam_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t EntertainerGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * EntertainerGridCheck_CaseTable_Strings -- 12 bytes of NUL-terminated
+     * strings after EntertainerGridCheck_CaseTable; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char EntertainerGridCheck_CaseTable_Strings[12];
+    /* ---------------------------------------------------------------------
+     * SqplyVal_HandleExtraParams_CaseTable -- jump table of a compiled
+     * `switch` in SqplyVal_HandleExtraParams (v10/v9 0xF30CBF, v7 0xF30C95)
+     * (`add xhl, ExtDevice_ModeDispatch_Table_0x334`): 8 u16 case offsets
+     * from SqplyVal_ExtraParamsData.
+     * --------------------------------------------------------------------- */
+    uint16_t SqplyVal_HandleExtraParams_CaseTable[8];
+    /* ---------------------------------------------------------------------
+     * SqedtVal_ClearDrawBuffer_CaseTable -- jump table of a compiled
+     * `switch` in SqedtVal_ClearDrawBuffer (v10/v9 0xF311C6, v7 0xF3119C)
+     * (`add xwa, ExtDevice_ModeDispatch_Table_0x344`): 15 u16 case offsets
+     * from SqedtVal_DrawParamsData.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtVal_ClearDrawBuffer_CaseTable[15];
+    /* ---------------------------------------------------------------------
+     * SqedtVal2_UpScrollDefault_Table -- read by SqedtVal2_UpScrollDefault
+     * (v10/v9 0xF326AE, v7 0xF32684) (`lda xiy,
+     * (ExtDevice_ModeDispatch_Table_0x362:24)`). 24 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtVal2_UpScrollDefault_Table[24];
+    /* ---------------------------------------------------------------------
+     * SqedtVal2_UpScrollModeA2_Table -- read by SqedtVal2_UpScrollModeA2
+     * (v10/v9 0xF32688, v7 0xF3265E) (`lda xiy,
+     * (ExtDevice_ModeDispatch_Table_0x37A:24)`). 16 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtVal2_UpScrollModeA2_Table[16];
+    /* ---------------------------------------------------------------------
+     * SqedtVal2_DownScrollDefault_Table -- read by
+     * SqedtVal2_DownScrollDefault (v10/v9 0xF32716, v7 0xF326EC) (`lda xbc,
+     * (ExtDevice_ModeDispatch_Table_0x38A:24)`). 24 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtVal2_DownScrollDefault_Table[24];
+    /* ---------------------------------------------------------------------
+     * SqedtVal2_DownScrollModeA2_Table -- read by SqedtVal2_DownScrollModeA2
+     * (v10/v9 0xF326EF, v7 0xF326C5) (`lda xbc,
+     * (ExtDevice_ModeDispatch_Table_0x3A2:24)`). 16 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtVal2_DownScrollModeA2_Table[16];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3B2`) copies 5 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit[5];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_Tail -- 1 bytes after SqedtFixProc_LocalInit
+     * that no registration or code reference reaches (searched: RegObjTabl
+     * tables, slice and positional labels). Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_Tail[1];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_2 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3B8`) copies 3 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_2[3];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_2_Tail -- 1 bytes after
+     * SqedtFixProc_LocalInit_2 that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_2_Tail[1];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_3 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3BC`) copies 5 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_3[5];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_3_Tail -- 1 bytes after
+     * SqedtFixProc_LocalInit_3 that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_3_Tail[1];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_4 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3C2`) copies 6 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtFixProc_LocalInit_4[3];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_5 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3C8`) copies 6 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtFixProc_LocalInit_5[3];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_6 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3CE`) copies 2 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_6[2];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_7 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3D0`) copies 14 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtFixProc_LocalInit_7[7];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_8 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3DE`) copies 13 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_8[13];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_8_Tail -- 1 bytes after
+     * SqedtFixProc_LocalInit_8 that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_8_Tail[1];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_9 -- initializer of a local array: SqedtFixProc
+     * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3EC`) copies 14 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtFixProc_LocalInit_9[7];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_10 -- initializer of a local array:
+     * SqedtFixProc (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x3FA`) copies 7 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_10[7];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_10_Tail -- 1 bytes after
+     * SqedtFixProc_LocalInit_10 that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_10_Tail[1];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_11 -- initializer of a local array:
+     * SqedtFixProc (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x402`) copies 5 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_11[5];
+    /* ---------------------------------------------------------------------
+     * SqedtFixProc_LocalInit_11_Tail -- 1 bytes after
+     * SqedtFixProc_LocalInit_11 that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t SqedtFixProc_LocalInit_11_Tail[1];
+    /* ---------------------------------------------------------------------
+     * SqplyVal_ExtraParams_CaseTable -- jump table of a compiled `switch` in
+     * SqplyVal_ExtraParams (v10/v9 0xF3240A, v7 0xF323E0) (`add xhl,
+     * ExtDevice_ModeDispatch_Table_0x408`): 16 u16 case offsets from
+     * AccIll_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SqplyVal_ExtraParams_CaseTable[16];
+    /* ---------------------------------------------------------------------
+     * EffectBoxProc_LocalInit -- initializer of a local array: EffectBoxProc
+     * (v10/v9 0xF3344E, v7 0xF33424) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x428`) copies 4 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t EffectBoxProc_LocalInit[2];
+    /* ---------------------------------------------------------------------
+     * EffectBoxProc_LocalInit_2 -- initializer of a local array:
+     * EffectBoxProc (v10/v9 0xF3344E, v7 0xF33424) (`ld xiy,
+     * ExtDevice_ModeDispatch_Table_0x42C`) copies 4 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t EffectBoxProc_LocalInit_2[2];
+    /* ---------------------------------------------------------------------
+     * EffectBox_NameSetup_CaseTable -- jump table of a compiled `switch` in
+     * EffectBox_NameSetup (v10/v9 0xF33A51, v7 0xF33A27) (`add xhl,
+     * ExtDevice_ModeDispatch_Table_0x430`): 7 u16 case offsets from
+     * EffectBox_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t EffectBox_NameSetup_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * Equalizer_HandleSelectEvent_Table -- read by
+     * Equalizer_HandleSelectEvent (v10/v9 0xF34061, v7 0xF34037) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x43E`). 16 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t Equalizer_HandleSelectEvent_Table[16];
+    /* ---------------------------------------------------------------------
+     * Equalizer_HandleSelectEvent_Table_2 -- read by
+     * Equalizer_HandleSelectEvent (v10/v9 0xF34061, v7 0xF34037) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x44E`). 16 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t Equalizer_HandleSelectEvent_Table_2[16];
+    /* ---------------------------------------------------------------------
+     * EffectBox_StateDispatch_CaseTable -- jump table of a compiled `switch`
+     * in EffectBox_StateDispatch (v10/v9 0xF340F2, v7 0xF340C8) (`add xbc,
+     * ExtDevice_ModeDispatch_Table_0x45E`): 7 u16 case offsets from
+     * SeqAccomp_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t EffectBox_StateDispatch_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * EffectBox_StateDispatch_CaseTable_Tail -- 90 bytes after
+     * EffectBox_StateDispatch_CaseTable that no registration or code
+     * reference reaches (searched: RegObjTabl tables, slice and positional
+     * labels). Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t EffectBox_StateDispatch_CaseTable_Tail[90];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Table -- read by Sqedt_ParamDispatch (v10/v9
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x4C6`).
+     * 54 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t Sqedt_ParamDispatch_Table[54];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Table_2 -- read by Sqedt_ParamDispatch (v10/v9
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x4FC`).
+     * 66 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t Sqedt_ParamDispatch_Table_2[66];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Table_3 -- read by Sqedt_ParamDispatch (v10/v9
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x53E`).
+     * 28 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t Sqedt_ParamDispatch_Table_3[28];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Table_4 -- read by Sqedt_ParamDispatch (v10/v9
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x55A`).
+     * 106 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t Sqedt_ParamDispatch_Table_4[106];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str -- NUL-terminated string(s), 4 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5C4`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str[4];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_2 -- NUL-terminated string(s), 4 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5C8`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_2[4];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_3 -- NUL-terminated string(s), 4 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5CC`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_3[4];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_4 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5D0`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_4[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_5 -- NUL-terminated string(s), 4 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5D6`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_5[4];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_6 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5DA`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_6[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_7 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5E0`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_7[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_8 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5E6`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_8[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_9 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5EC`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_9[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_10 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5F2`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_10[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_11 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5F8`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_11[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_12 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x5FE`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_12[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_13 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x604`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_13[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_14 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x60A`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_14[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_ParamFormatData_Str_15 -- NUL-terminated string(s), 6 bytes,
+     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * xwa, ExtDevice_ModeDispatch_Table_0x610`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_ParamFormatData_Str_15[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_FormatRhythmPattern_Str -- NUL-terminated string(s), 6
+     * bytes, used by SqplyFunc_FormatRhythmPattern (v10/v9 0xF34801, v7
+     * 0xF347D7) (`ld xwa, ExtDevice_ModeDispatch_Table_0x616`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_FormatRhythmPattern_Str[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_FormatRhythmPattern_Str_2 -- NUL-terminated string(s), 12
+     * bytes, used by SqplyFunc_FormatRhythmPattern (v10/v9 0xF34801, v7
+     * 0xF347D7) (`ld xwa, ExtDevice_ModeDispatch_Table_0x61C`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_FormatRhythmPattern_Str_2[12];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_FormatIntro_Str -- NUL-terminated string(s), 6 bytes, used
+     * by SqplyFunc_FormatIntro (v10/v9 0xF3483A, v7 0xF34810) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x628`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_FormatIntro_Str[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_FormatEnding_Str -- NUL-terminated string(s), 6 bytes, used
+     * by SqplyFunc_FormatEnding (v10/v9 0xF3484A, v7 0xF34820) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x62E`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_FormatEnding_Str[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_FormatFillIn_Str -- NUL-terminated string(s), 6 bytes, used
+     * by SqplyFunc_FormatFillIn (v10/v9 0xF34864, v7 0xF3483A) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x634`).
+     * --------------------------------------------------------------------- */
+    char SqplyFunc_FormatFillIn_Str[6];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_HandlePartQuery_CaseTable -- jump table of a compiled
+     * `switch` in SqplyFunc_HandlePartQuery (v10/v9 0xF3498E, v7 0xF34964)
+     * (`lda xix, (ExtDevice_ModeDispatch_Table_0x63A:24)`): 8 u16 case
+     * offsets from SqplyFunc_PartQueryDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SqplyFunc_HandlePartQuery_CaseTable[8];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_HandleGetValue_CaseTable -- jump table of a compiled
+     * `switch` in SqplyFunc_HandleGetValue (v10/v9 0xF34887, v7 0xF3485D)
+     * (`add xwa, ExtDevice_ModeDispatch_Table_0x64A`): 11 u16 case offsets
+     * from SqplyFunc_GetValueDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SqplyFunc_HandleGetValue_CaseTable[11];
+    /* ---------------------------------------------------------------------
+     * SqplyFunc_CaseTable -- jump table of a compiled `switch` in SqplyFunc
+     * (v10/v9 0xF34655, v7 0xF3462B) (`add xhl,
+     * ExtDevice_ModeDispatch_Table_0x660`): 10 u16 case offsets from
+     * SqplyFunc_ParamFormatData.
+     * --------------------------------------------------------------------- */
+    uint16_t SqplyFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str -- NUL-terminated string(s), 6 bytes, used by
+     * Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x674`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_2 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x67A`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_3 -- NUL-terminated string(s), 18 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x680`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_3[18];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_4 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x692`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_4[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_5 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x698`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_5[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_6 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x69E`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_6[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_7 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x6A4`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_7[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_8 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * ExtDevice_ModeDispatch_Table_0x6AA`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_8[6];
+    /* ---------------------------------------------------------------------
+     * NakaInst_3d -- NUL-terminated string(s), 6 bytes, used by
+     * Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`.long
+     * NakaInst_3d`).
+     * --------------------------------------------------------------------- */
+    char NakaInst_3d[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_9 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x6`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_9[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_10 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0xC`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_10[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_11 -- NUL-terminated string(s), 44 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x12`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_11[44];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_12 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x3E`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_12[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_13 -- NUL-terminated string(s), 8 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x44`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_13[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_14 -- NUL-terminated string(s), 8 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x4C`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_14[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_15 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x54`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_15[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_16 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x5A`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_16[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_17 -- NUL-terminated string(s), 8 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x60`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_17[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_18 -- NUL-terminated string(s), 8 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x68`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_18[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_19 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x70`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_19[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_20 -- NUL-terminated string(s), 8 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x76`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_20[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_21 -- NUL-terminated string(s), 8 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x7E`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_21[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_22 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x86`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_22[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_23 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x8C`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_23[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_24 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x92`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_24[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_25 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x98`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_25[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_26 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0x9E`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_26[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_27 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0xA4`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_27[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_28 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0xAA`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_28[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_29 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0xB0`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_29[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_30 -- NUL-terminated string(s), 12 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0xB6`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_30[12];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_31 -- NUL-terminated string(s), 6 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_3d_0xC2`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_31[6];
+    /* ---------------------------------------------------------------------
+     * NakaInst_2d -- NUL-terminated string(s), 6 bytes, used by
+     * Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`.long
+     * NakaInst_2d`).
+     * --------------------------------------------------------------------- */
+    char NakaInst_2d[6];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_32 -- NUL-terminated string(s), 12 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_2d_0x6`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_32[12];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_33 -- NUL-terminated string(s), 10 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_2d_0x12`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_33[10];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_Str_34 -- NUL-terminated string(s), 4 bytes, used
+     * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
+     * NakaInst_2d_0x1C`).
+     * --------------------------------------------------------------------- */
+    char Sqedt_ParamDispatch_Str_34[4];
+    /* ---------------------------------------------------------------------
+     * SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
+     * SeqFormat_DispatchA (v10/v9 0xF3513D, v7 0xF35113) (`lda xix,
+     * (NakaInst_2d_0x20:24)`): 16 u16 case offsets from
+     * SeqFormat_DispatchA_0x70.
+     * --------------------------------------------------------------------- */
+    uint16_t SeqFormat_DispatchA_CaseTable[16];
+    /* ---------------------------------------------------------------------
+     * SqedtFunc_SignExtend_CaseTable -- jump table of a compiled `switch` in
+     * SqedtFunc_SignExtend (v10/v9 0xF35115, v7 0xF350EB) (`lda xix,
+     * (NakaInst_2d_0x40:24)`): 15 u16 case offsets from SeqFormat_DispatchA.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtFunc_SignExtend_CaseTable[15];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ValueDispatch_CaseTable -- jump table of a compiled `switch` in
+     * Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
+     * (NakaInst_2d_0x5E:24)`): 9 u16 case offsets from
+     * Sqedt_ValueDispatch_0x82.
+     * --------------------------------------------------------------------- */
+    uint16_t Sqedt_ValueDispatch_CaseTable[9];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
+     * in Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
+     * (NakaInst_2d_0x70:24)`): 8 u16 case offsets from
+     * Sqedt_ValueDispatch_0x58.
+     * --------------------------------------------------------------------- */
+    uint16_t Sqedt_ValueDispatch_CaseTable_2[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
+     * in Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
+     * (NakaInst_2d_0x80:24)`): 9 u16 case offsets from
+     * Sqedt_ValueDispatch_0x28.
+     * --------------------------------------------------------------------- */
+    uint16_t Sqedt_ValueDispatch_CaseTable_3[9];
+    /* ---------------------------------------------------------------------
+     * SeqFunc_ReturnZeroJmp_CaseTable -- jump table of a compiled `switch`
+     * in SeqFunc_ReturnZeroJmp (v10/v9 0xF35005, v7 0xF34FDB) (`lda xix,
+     * (NakaInst_2d_0x92:24)`): 7 u16 case offsets from Sqedt_ValueDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SeqFunc_ReturnZeroJmp_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_CaseTable -- jump table of a compiled `switch` in
+     * Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`lda xix,
+     * (NakaInst_2d_0xA0:24)`): 8 u16 case offsets from 15944534.
+     * --------------------------------------------------------------------- */
+    uint16_t Sqedt_ParamDispatch_CaseTable[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_CaseTable_2 -- jump table of a compiled `switch`
+     * in Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`lda xix,
+     * (NakaInst_2d_0xB0:24)`): 8 u16 case offsets from 15944414.
+     * --------------------------------------------------------------------- */
+    uint16_t Sqedt_ParamDispatch_CaseTable_2[8];
+    /* ---------------------------------------------------------------------
+     * Sqedt_ParamDispatch_CaseTable_3 -- jump table of a compiled `switch`
+     * in Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`lda xix,
+     * (NakaInst_2d_0xC0:24)`): 8 u16 case offsets from 15944329.
+     * --------------------------------------------------------------------- */
+    uint16_t Sqedt_ParamDispatch_CaseTable_3[8];
+    /* ---------------------------------------------------------------------
+     * SqedtFunc_CaseTable -- jump table of a compiled `switch` in SqedtFunc
+     * (v10/v9 0xF349D3, v7 0xF349A9) (`add xde, NakaInst_2d_0xD0`): 40 u16
+     * case offsets from Sqedt_ParamDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtFunc_CaseTable[40];
+    /* ---------------------------------------------------------------------
+     * SqedtFunc_StateChainB_CaseTable -- jump table of a compiled `switch`
+     * in SqedtFunc_StateChainB (v10/v9 0xF3523E, v7 0xF35214) (`lda xix,
+     * (NakaInst_2d_0x120:24)`): 14 u16 case offsets from
+     * SeqFormat_DispatchB.
+     * --------------------------------------------------------------------- */
+    uint16_t SqedtFunc_StateChainB_CaseTable[14];
+    /* ---------------------------------------------------------------------
+     * SqedtFunc_StateChainB_CaseTable_Strings -- 6 bytes of NUL-terminated
+     * strings after SqedtFunc_StateChainB_CaseTable; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char SqedtFunc_StateChainB_CaseTable_Strings[6];
+    /* ---------------------------------------------------------------------
+     * DspItem0_TypeChangeHandler_CaseTable -- jump table of a compiled
+     * `switch` in DspItem0_TypeChangeHandler (v10/v9 0xF3572B, v7 0xF35701)
+     * (`add xde, NakaInst_2d_0x142`): 9 u16 case offsets from
+     * DspItem0_TypeDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t DspItem0_TypeChangeHandler_CaseTable[9];
+    /* ---------------------------------------------------------------------
+     * DspItem0CngFunc_CaseTable -- jump table of a compiled `switch` in
+     * DspItem0CngFunc (v10/v9 0xF35527, v7 0xF354FD) (`add xiy,
+     * NakaInst_2d_0x154`): 17 u16 case offsets from
+     * DspItem0_DisplayEffectName.
+     * --------------------------------------------------------------------- */
+    uint16_t DspItem0CngFunc_CaseTable[17];
+    /* ---------------------------------------------------------------------
+     * Equalizer_ParamByIndex_Table -- read by Equalizer_ParamByIndex (v10/v9
+     * 0xF35914, v7 0xF358EA) (`add xde, NakaInst_2d_0x176`). 8 bytes to the
+     * next object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t Equalizer_ParamByIndex_Table[8];
+    /* ---------------------------------------------------------------------
+     * Equalizer_DispatchA_CaseTable -- jump table of a compiled `switch` in
+     * Equalizer_DispatchA (v10/v9 0xF35858, v7 0xF3582E) (`add xwa,
+     * NakaInst_2d_0x17E`): 7 u16 case offsets from Equalizer_DispatchB.
+     * --------------------------------------------------------------------- */
+    uint16_t Equalizer_DispatchA_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * EqualizerCngFunc_CaseTable -- jump table of a compiled `switch` in
+     * EqualizerCngFunc (v10/v9 0xF3580D, v7 0xF357E3) (`add xwa,
+     * NakaInst_2d_0x18C`): 9 u16 case offsets from Equalizer_DispatchA.
+     * --------------------------------------------------------------------- */
+    uint16_t EqualizerCngFunc_CaseTable[9];
+    /* ---------------------------------------------------------------------
+     * Equalizer_CmdDispatch_CaseTable -- jump table of a compiled `switch`
+     * in Equalizer_CmdDispatch (v10/v9 0xF359FC, v7 0xF359D2) (`add xwa,
+     * NakaInst_2d_0x19E`): 15 u16 case offsets from Equalizer_CmdCase0.
+     * --------------------------------------------------------------------- */
+    uint16_t Equalizer_CmdDispatch_CaseTable[15];
+    /* ---------------------------------------------------------------------
+     * Equalizer_FormatDefault_Str -- NUL-terminated string(s), 6 bytes, used
+     * by Equalizer_FormatDefault (v10/v9 0xF35BC7, v7 0xF35B9D) (`ld xwa,
+     * NakaInst_2d_0x1BC`).
+     * --------------------------------------------------------------------- */
+    char Equalizer_FormatDefault_Str[6];
+    /* ---------------------------------------------------------------------
+     * EqFormat_NegativeValue_Str -- NUL-terminated string(s), 6 bytes, used
+     * by EqFormat_NegativeValue (v10/v9 0xF35C2D, v7 0xF35C03) (`ld xwa,
+     * NakaInst_2d_0x1C2`).
+     * --------------------------------------------------------------------- */
+    char EqFormat_NegativeValue_Str[6];
+    /* ---------------------------------------------------------------------
+     * EqFormat_PositiveValue_Str -- NUL-terminated string(s), 12 bytes, used
+     * by EqFormat_PositiveValue (v10/v9 0xF35C39, v7 0xF35C0F) (`ld xwa,
+     * NakaInst_2d_0x1C8`).
+     * --------------------------------------------------------------------- */
+    char EqFormat_PositiveValue_Str[12];
+    /* ---------------------------------------------------------------------
+     * PrepareAudioParam_Str -- NUL-terminated string(s), 4 bytes, used by
+     * PrepareAudioParam (v10/v9 0xF35C7E, v7 0xF35C54) (`ld xwa,
+     * NakaInst_2d_0x1D4`).
+     * --------------------------------------------------------------------- */
+    char PrepareAudioParam_Str[4];
+    /* ---------------------------------------------------------------------
+     * Equalizer_FormatDispatch_Table -- read by Equalizer_FormatDispatch
+     * (v10/v9 0xF35B62, v7 0xF35B38) (`lda xix, (NakaInst_2d_0x1D8:24)`). 44
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t Equalizer_FormatDispatch_Table[44];
+    /* ---------------------------------------------------------------------
+     * Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
+     * `switch` in Equalizer_FormatDispatch (v10/v9 0xF35B62, v7 0xF35B38)
+     * (`ld xix, NakaInst_2d_0x204`): 18 u16 case offsets from
+     * EqFormat_DispatchTable.
+     * --------------------------------------------------------------------- */
+    uint16_t Equalizer_FormatDispatch_CaseTable[18];
     /* ---------------------------------------------------------------------
      * Bitmap_Ntedt0k  --  16 x 127 bitmap, 8 bpp, row stride 16, 2032 bytes
      *
@@ -6540,106 +6216,150 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_248fc;
     char str_3408[2];
     uint32_t ptr_24902;
-    char str_3409[2];
-    uint32_t ptrs_38[4];  /* 4 pointers */
-    char str_3410[2];
-    char str_3411[8];
-    char str_3412[8];
-    char str_3413[6];
-    uint32_t ptrs_39[5];  /* 5 pointers */
-    char str_3414[2];
-    char str_3415[6];
-    char str_3416[4];
-    char str_3417[6];
-    char str_3418[6];
-    uint32_t ptr_2495c;
-    char str_3419[2];
-    uint32_t ptrs_40[6];  /* 6 pointers */
-    char str_3420[2];
-    char str_3421[10];
-    char str_3422[10];
-    char str_3423[8];
-    char str_3424[8];
-    char str_3425[6];
-    uint32_t ptrs_41[6];  /* 6 pointers */
-    char str_3426[2];
-    char str_3427[10];
-    char str_3428[10];
-    char str_3429[8];
-    char str_3430[8];
-    char str_3431[6];
-    uint32_t ptrs_42[4];  /* 4 pointers */
-    char str_3432[2];
-    char str_3433[6];
-    char str_3434[10];
-    char str_3435[10];
-    uint32_t ptrs_43[4];  /* 4 pointers */
-    char str_3436[2];
-    char str_3437[6];
-    char str_3438[10];
-    char str_3439[10];
-    uint32_t ptrs_44[4];  /* 4 pointers */
-    char str_3440[2];
-    char str_3441[6];
-    char str_3442[10];
-    char str_3443[10];
-    uint32_t ptrs_45[4];  /* 4 pointers */
-    char str_3444[2];
-    char str_3445[6];
-    char str_3446[10];
-    char str_3447[10];
-    uint32_t ptrs_46[4];  /* 4 pointers */
-    char str_3448[2];
-    char str_3449[6];
-    char str_3450[10];
-    char str_3451[10];
-    uint32_t ptrs_47[4];  /* 4 pointers */
-    char str_3452[2];
-    char str_3453[6];
-    char str_3454[10];
-    char str_3455[10];
-    uint32_t ptrs_48[4];  /* 4 pointers */
-    char str_3456[2];
-    char str_3457[6];
-    char str_3458[10];
-    char str_3459[10];
-    uint32_t ptrs_49[5];  /* 5 pointers */
-    char str_3460[2];
-    char str_3461[6];
-    char str_3462[6];
-    char str_3463[10];
-    char str_3464[10];
-    uint32_t ptrs_50[5];  /* 5 pointers */
-    char str_3465[2];
-    char str_3466[6];
-    char str_3467[6];
-    char str_3468[10];
-    char str_3469[10];
-    uint32_t ptr_24b8a;
-    naka_dispatch_t w17;  /* 0x44 */
-    naka_dispatch_t w18;  /* 0x55 */
-    naka_dispatch_t w19;  /* 0x27 */
-    naka_dispatch_t w20;  /* NAKA_TYPE_PANEL */
-    naka_dispatch_t w21;  /* 0x18 */
-    naka_dispatch_t w22;  /* 0x15 */
-    naka_dispatch_t w23;  /* 0x12 */
-    naka_dispatch_t w24;  /* 0x54 */
-    naka_dispatch_t w25;  /* 0x54 */
-    naka_dispatch_t w26;  /* 0x54 */
-    naka_dispatch_t w27;  /* 0x54 */
-    naka_dispatch_t w28;  /* 0x54 */
-    naka_dispatch_t w29;  /* 0x54 */
-    naka_dispatch_t w30;  /* 0x54 */
-    naka_dispatch_t w31;  /* 0x54 */
-    naka_dispatch_t w32;  /* 0x54 */
-    uint8_t pad_1682[20];  /* zero padding */
-    char AcMidiPartGridBox_code[6];
-    char AcMidiPartGridBox_name[18];
-    char AcCtlMsgGridBox_code[6];
-    char AcCtlMsgGridBox_name[16];
-    char AcPmemOutRGridBox_code[4];
-    char AcPmemOutRGridBox_name[18];
-    uint16_t field_24d66;
+    /* ---------------------------------------------------------------------
+     * [typed] by span_d_cls
+     * NakaDesc_PageWindow_Sentinel -- 2 bytes of NUL-terminated strings at
+     * the start of the blob; no registration or code reference reaches them
+     * (searched: RegObjTabl tables, slice and positional labels). Which code
+     * uses them is not established.
+     * --------------------------------------------------------------------- */
+    char NakaDesc_PageWindow_Sentinel[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvMpstPageControl -- property names of class
+     * IvMpstPageControl (descriptor 2 of East_ClassTable_163, whose +0x14
+     * points here): 3 pointers, one per letter of its signature "Att" --
+     * "page", "window0", "window1" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvMpstPageControl[4];
+    char ClassProps_IvMpstPageControl_Names[24];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcSendEditSw -- property names of class AcSendEditSw
+     * (descriptor 3 of East_ClassTable_163, whose +0x14 points here): 4
+     * pointers, one per letter of its signature "fjXn" -- "style", "func",
+     * "str", "onoff" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcSendEditSw[5];
+    char ClassProps_AcSendEditSw_Names[24];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcGMOnOffBox -- property names of class AcGMOnOffBox
+     * (descriptor 4 of East_ClassTable_163, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcGMOnOffBox[1];
+    char ClassProps_AcGMOnOffBox_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcLswFuncEditBox -- property names of class
+     * AcLswFuncEditBox (descriptor 5 of East_ClassTable_163, whose +0x14
+     * points here): 5 pointers, one per letter of its signature "nXXFB" --
+     * "data", "on_str", "off_str", "pman_adr", "pman_out" -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcLswFuncEditBox[6];
+    char ClassProps_AcLswFuncEditBox_Names[44];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcLswFuncBox -- property names of class AcLswFuncBox
+     * (descriptor 6 of East_ClassTable_163, whose +0x14 points here): 5
+     * pointers, one per letter of its signature "nXXFB" -- "data", "on_str",
+     * "off_str", "pman_adr", "pman_out" -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcLswFuncBox[6];
+    char ClassProps_AcLswFuncBox_Names[44];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcFadeSetGridBox -- property names of class
+     * AcFadeSetGridBox (descriptor 7 of East_ClassTable_163, whose +0x14
+     * points here): 3 pointers, one per letter of its signature "XXj" --
+     * "fixedcol", "fixedrow", "func" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcFadeSetGridBox[4];
+    char ClassProps_AcFadeSetGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcVocalGridBox -- property names of class AcVocalGridBox
+     * (descriptor 8 of East_ClassTable_163, whose +0x14 points here): 3
+     * pointers, one per letter of its signature "XXj" -- "fixedcol",
+     * "fixedrow", "func" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcVocalGridBox[4];
+    char ClassProps_AcVocalGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcInOutGridBox -- property names of class AcInOutGridBox
+     * (descriptor 9 of East_ClassTable_163, whose +0x14 points here): 3
+     * pointers, one per letter of its signature "XXj" -- "fixedcol",
+     * "fixedrow", "func" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcInOutGridBox[4];
+    char ClassProps_AcInOutGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcParaLoadOptGridBox -- property names of class
+     * AcParaLoadOptGridBox (descriptor 10 of East_ClassTable_163, whose
+     * +0x14 points here): 3 pointers, one per letter of its signature "XXj"
+     * -- "fixedcol", "fixedrow", "func" -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcParaLoadOptGridBox[4];
+    char ClassProps_AcParaLoadOptGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPcgOutGridBox -- property names of class AcPcgOutGridBox
+     * (descriptor 11 of East_ClassTable_163, whose +0x14 points here): 3
+     * pointers, one per letter of its signature "XXj" -- "fixedcol",
+     * "fixedrow", "func" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPcgOutGridBox[4];
+    char ClassProps_AcPcgOutGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPmemOutLGridBox -- property names of class
+     * AcPmemOutLGridBox (descriptor 12 of East_ClassTable_163, whose +0x14
+     * points here): 3 pointers, one per letter of its signature "XXj" --
+     * "fixedcol", "fixedrow", "func" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPmemOutLGridBox[4];
+    char ClassProps_AcPmemOutLGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPmemOutRGridBox -- property names of class
+     * AcPmemOutRGridBox (descriptor 13 of East_ClassTable_163, whose +0x14
+     * points here): 3 pointers, one per letter of its signature "XXj" --
+     * "fixedcol", "fixedrow", "func" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPmemOutRGridBox[4];
+    char ClassProps_AcPmemOutRGridBox_Names[28];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcCtlMsgGridBox -- property names of class AcCtlMsgGridBox
+     * (descriptor 14 of East_ClassTable_163, whose +0x14 points here): 4
+     * pointers, one per letter of its signature "XXjn" -- "fixedcol",
+     * "fixedrow", "func", "page" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcCtlMsgGridBox[5];
+    char ClassProps_AcCtlMsgGridBox_Names[34];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcMidiPartGridBox -- property names of class
+     * AcMidiPartGridBox (descriptor 15 of East_ClassTable_163, whose +0x14
+     * points here): 4 pointers, one per letter of its signature "XXjn" --
+     * "fixedcol", "fixedrow", "func", "page" -- then a pointer to "", then
+     * the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcMidiPartGridBox[5];
+    char ClassProps_AcMidiPartGridBox_Names[34];
+    /* ---------------------------------------------------------------------
+     * East_ClassTable_163 -- class table: InitializeEast (v10/v9 0xF72BAC,
+     * v7 0xF727A8) (sequencer/seq_event_playback.s:2621) registers it with
+     * `RegObjTable 0x1600004, 0xfa44e2, (count at 0xe55cd4 = 16), 0xE559EA,
+     * 0x163` -- 16 naka_class_t descriptors (naka_types.h: proc, base class,
+     * two u16, name, field-type letters, property data), 16 of them inside
+     * this blob.
+     * --------------------------------------------------------------------- */
+    naka_class_t East_ClassTable_163[16];
+    /* ---------------------------------------------------------------------
+     * East_ClassTable_163_Tail -- 94 bytes after East_ClassTable_163 that no
+     * registration or code reference reaches (searched: RegObjTabl tables,
+     * slice and positional labels). Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t East_ClassTable_163_Tail[94];
 } naka_widget_descriptors_t;
 
 #define SELF(field) \
@@ -12904,3371 +12624,825 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     /* effect   0 -- DSP_Eff00_{Algo_Bytecode,Coef_Bytecode,Param_Descriptors} */
     .EffectName_Eff000_NO_OPERATION = ALIGNED_STRING("  NO OPERATION  "),
 
-    .field_271a = 0x5545,
-
-    .field_271c = 0x7565,
-
-    .field_271e = 0x9585,
-
-    .field_2720 = 0xB5A5,
-
-    .field_2722 = 0x5747,
-
-    .field_2724 = 0x7767,
-
-    .field_2726 = 0x9787,
-
-    .field_2728 = 0xB7A7,
-
-    .field_272a = 0x00C0,
-
-    .str_128 = ":",
-
-    .str_129 = "$",
-
-    .field_2730 = 0x000E,
-
-    .field_2732 = 0x00C0,
-
-    .str_130 = "I",
-
-    .str_131 = "$",
-
-    .field_2738 = 0x000E,
-
-    .field_273a = 0x00C0,
-
-    .str_132 = "X",
-
-    .str_133 = "$",
-
-    .field_2740 = 0x000E,
-
-    .field_2742 = 0x00BE,
-
-    .str_134 = "*",
-
-    .str_135 = "-",
-
-    .field_2748 = 0x000E,
-
-    .str_136 = "F",
-
-    .str_137 = "N",
-
-    .str_138 = "-",
-
-    .field_2750 = 0x000E,
-
-    .field_2752 = 0x00B6,
-
-    .str_139 = "x",
-
-    .str_140 = "-",
-
-    .field_2758 = 0x000E,
-
-    .field_275a = 0x00B6,
-
-    .field_275c = 0x00A2,
-
-    .str_141 = "-",
-
-    .field_2760 = 0x000E,
-
-    .field_2762 = 0x00B2,
-
-    .str_142 = "*",
-
-    .str_143 = "-",
-
-    .field_2768 = 0x000E,
-
-    .field_276a = 0x00AA,
-
-    .str_144 = "M",
-
-    .str_145 = "-",
-
-    .field_2770 = 0x000E,
-
-    .field_2772 = 0x00AA,
-
-    .str_146 = "w",
-
-    .str_147 = "-",
-
-    .field_2778 = 0x000E,
-
-    .field_277a = 0x00AA,
-
-    .field_277c = 0x00A1,
-
-    .str_148 = "-",
-
-    .field_2780 = 0x000E,
-
-    .str_149 = "F",
-
-    .str_150 = "N",
-
-    .str_151 = "-",
-
-    .field_2788 = 0x000E,
-
-    .str_152 = "}",
-
-    .str_153 = "$",
-
-    .str_154 = "-",
-
-    .field_2790 = 0x000E,
-
-    .str_155 = "}",
-
-    .str_156 = "N",
-
-    .str_157 = "-",
-
-    .field_2798 = 0x000E,
-
-    .str_158 = "}",
-
-    .str_159 = "x",
-
-    .str_160 = "-",
-
-    .field_27a0 = 0x000E,
-
-    .str_161 = "}",
-
-    .field_27a4 = 0x00A2,
-
-    .str_162 = "4",
-
-    .field_27a8 = 0x000E,
-
-    .str_163 = "u",
-
-    .field_27ac = 0x00A2,
-
-    .str_164 = "4",
-
-    .field_27b0 = 0x000E,
-
-    .str_165 = "u",
-
-    .field_27b4 = 0x00A2,
-
-    .str_166 = "4",
-
-    .field_27b8 = 0x000E,
-
-    .str_167 = "}",
-
-    .field_27bc = 0x00A2,
-
-    .str_168 = "L",
-
-    .field_27c0 = 0x000E,
-
-    .str_169 = "}",
-
-    .field_27c4 = 0x00A2,
-
-    .str_170 = "-",
-
-    .ptr_27c8 = 0x00FE000E,
-
-    .str_171 = "$",
-
-    .str_172 = "-",
-
-    .ptr_27d0 = 0x00F6000E,
-
-    .str_173 = "N",
-
-    .str_174 = "4",
-
-    .ptr_27d8 = 0x00E1000E,
-
-    .str_175 = "3",
-
-    .str_176 = "T",
-
-    .ptr_27e0 = 0x00E1000E,
-
-    .str_177 = "]",
-
-    .str_178 = "T",
-
-    .field_27e8 = 0x000E,
-
-    .str_179 = "N",
-
-    .str_180 = "$",
-
-    .str_181 = "$",
-
-    .field_27f0 = 0x000E,
-
-    .str_182 = "N",
-
-    .str_183 = "x",
-
-    .str_184 = "$",
-
-    .field_27f8 = 0x000E,
-
-    .field_27fa = 0x0108,
-
-    .str_185 = "N",
-
-    .str_186 = "$",
-
-    .field_2800 = 0x000E,
-
-    .field_2802 = 0x0012,
-
-    .str_187 = "H",
-
-    .str_188 = "-",
-
-    .field_2808 = 0x000E,
-
-    .field_280a = 0x0012,
-
-    .str_189 = "j",
-
-    .str_190 = "-",
-
-    .field_2810 = 0x000E,
-
-    .field_2812 = 0x0012,
-
-    .field_2814 = 0x008C,
-
-    .str_191 = "-",
-
-    .field_2818 = 0x000E,
-
-    .field_281a = 0x00B2,
-
-    .str_192 = "H",
-
-    .str_193 = "-",
-
-    .field_2820 = 0x000E,
-
-    .field_2822 = 0x00B2,
-
-    .str_194 = "j",
-
-    .str_195 = "-",
-
-    .field_2828 = 0x000E,
-
-    .field_282a = 0x00B2,
-
-    .field_282c = 0x008C,
-
-    .str_196 = "-",
-
-    .field_2830 = 0x000E,
-
-    .field_2832 = 0x0012,
-
-    .str_197 = "H",
-
-    .str_198 = "-",
-
-    .field_2838 = 0x000E,
-
-    .field_283a = 0x0012,
-
-    .str_199 = "j",
-
-    .str_200 = "-",
-
-    .field_2840 = 0x000E,
-
-    .field_2842 = 0x0012,
-
-    .field_2844 = 0x008C,
-
-    .str_201 = "-",
-
-    .field_2848 = 0x000E,
-
-    .field_284a = 0x00B2,
-
-    .str_202 = "H",
-
-    .str_203 = "-",
-
-    .field_2850 = 0x000E,
-
-    .field_2852 = 0x00B2,
-
-    .str_204 = "j",
-
-    .str_205 = "-",
-
-    .field_2858 = 0x000E,
-
-    .field_285a = 0x00B2,
-
-    .field_285c = 0x008C,
-
-    .str_206 = "-",
-
-    .field_2860 = 0x000E,
-
-    .field_2862 = 0x000E,
-
-    .str_207 = "N",
-
-    .str_208 = "-",
-
-    .field_2868 = 0x000E,
-
-    .field_286a = 0x000E,
-
-    .field_286c = 0x0083,
-
-    .str_209 = "-",
-
-    .field_2870 = 0x000E,
-
-    .field_2872 = 0x00AE,
-
-    .str_210 = "N",
-
-    .str_211 = "-",
-
-    .field_2878 = 0x000E,
-
-    .field_287a = 0x00AE,
-
-    .field_287c = 0x0083,
-
-    .str_212 = "-",
-
-    .field_2880 = 0x000E,
-
-    .str_213 = "&",
-
-    .str_214 = "J",
-
-    .str_215 = "F",
-
-    .field_2888 = 0x0012,
-
-    .str_216 = "&",
-
-    .str_217 = "^",
-
-    .field_288e = 0x00B4,
-
-    .ptr_2890 = NAKA_ADDR(NakaInst_Param_Field02),
-
-    .str_218 = "L",
-
-    .str_219 = ",",
-
-    .ptr_2898 = NAKA_ADDR(NakaData_ModeConfig2),
-
-    .str_220 = "^",
-
-    .str_221 = "(",
-
-    .field_28a0 = 0x0013,
-
-    .field_28a2 = 0x00AD,
-
-    .field_28a4 = 0x00A9,
-
-    .field_28a6 = 0x00A5,
-
-    .field_28a8 = 0x009D,
-
-    .field_28aa = 0x0099,
-
-    .field_28ac = 0x0095,
-
-    .field_28ae = 0x0091,
-
-    .field_28b0 = 0x008D,
-
-    .field_28b2 = 0x0085,
-
-    .field_28b4 = 0x0081,
-
-    .str_222 = "}",
-
-    .str_223 = "y",
-
-    .str_224 = "u",
-
-    .str_225 = "q",
-
-    .str_226 = "m",
-
-    .str_227 = "e",
-
-    .str_228 = "a",
-
-    .str_229 = "]",
-
-    .str_230 = "Y",
-
-    .str_231 = "U",
-
-    .str_232 = "M",
-
-    .str_233 = "I",
-
-    .str_234 = "E",
-
-    .str_235 = "A",
-
-    .str_236 = "=",
-
-    .str_237 = "9",
-
-    .str_238 = "5",
-
-    .pad_0 = { 0 },
-
-    .field_28dc = 0x00AA,
-
-    .field_28de = 0x00A0,
-
-    .field_28e0 = 0x0096,
-
-    .field_28e2 = 0x008C,
-
-    .field_28e4 = 0x0082,
-
-    .str_239 = "x",
-
-    .str_240 = "n",
-
-    .str_241 = "d",
-
-    .str_242 = "Z",
-
-    .str_243 = "P",
-
-    .str_244 = "F",
-
-    .str_245 = "<",
-
-    .pad_1 = { 0 },
-
-    .field_28f8 = 0x2305,
-
-    .field_28fa = 0x563C,
-
-    .field_28fc = 0x9874,
-
-    .field_28fe = 0x2AD1,
-
-    .field_2900 = 0xAC98,
-
-    .field_2902 = 0x2A74,
-
-    .field_2904 = 0x2424,
-
-    .field_2906 = 0x2424,
-
-    .field_2908 = 0x3228,
-
-    .field_290a = 0x2424,
-
-    .field_290c = 0x2432,
-
-    .field_290e = 0xFF28,
-
-    .field_2910 = 0x0005,
-
-    .ptr_2912 = 0x00E600B9,
-
-    .field_2916 = 0x0010,
-
-    .field_2918 = 0x0005,
-
-    .field_291a = 0x00B9,
-
-    .field_291c = 0x00BE,
-
-    .field_291e = 0x0010,
-
-    .field_2920 = 0x000E,
-
-    .str_246 = "+",
-
-    .field_2924 = 0x00FB,
-
-    .field_2926 = 0x0007,
-
-    .field_2928 = 0x000E,
-
-    .str_247 = "0",
-
-    .field_292c = 0x00F8,
-
-    .field_292e = 0x0007,
-
-    .field_2930 = 0x0006,
-
-    .str_248 = " ",
-
-    .field_2934 = 0x0100,
-
-    .field_2936 = 0x000B,
-
-    .field_2938 = 0x0006,
-
-    .str_249 = "&",
-
-    .field_293c = 0x0100,
-
-    .field_293e = 0x000B,
-
-    .field_2940 = 0x000E,
-
-    .str_250 = "+",
-
-    .field_2944 = 0x0018,
-
-    .field_2946 = 0x0007,
-
-    .field_2948 = 0x000E,
-
-    .str_251 = "0",
-
-    .field_294c = 0x0018,
-
-    .field_294e = 0x0007,
-
-    .field_2950 = 0x0016,
-
-    .str_252 = "3",
-
-    .field_2954 = 0x0001,
-
-    .str_253 = "~",
-
-    .field_2958 = 0x000A,
-
-    .str_254 = "\"",
-
-    .str_255 = ";",
-
-    .str_256 = "S",
-
-    .str_257 = "j",
-
-    .field_2962 = 0x0083,
-
-    .field_2964 = 0x009C,
-
-    .field_2966 = 0x00B4,
-
-    .ptr_2968 = NAKA_ADDR(Naka_Help_565_E300CC),
-
-    .ptr_296c = NAKA_ADDR(AudioCtrl_HandleEventF),
-
-    .str_258 = "P",
-
-    .str_259 = "j",
-
-    .field_2974 = 0x0082,
-
-    .field_2976 = 0x0099,
-
-    .field_2978 = 0x00B2,
-
-    .ptr_297a = 0x00E000C9,
-
-    .ptr_297e = 0x00F900F9,
-
-    .str_260 = "~43~bc~43~bb~43~30~43~31~43~32~43~33~43~34~43~35~43~36~43~37~43~38ITALIAN",
-
-    .str_261 = ALIGNED_STRING("ATTENTION!"),
-
-    .str_262 = "ACHTUNG !",
-
-    .str_263 = ALIGNED_STRING("ATTENTION!"),
-
-    .field_29ee = 0x41A1,
-
-    .field_29f0 = 0x4554,
-
-    .field_29f2 = 0x434E,
-
-    .field_29f4 = 0xD349,
-
-    .str_264 = ALIGNED_STRING("N!"),
-
-    .str_265 = "Perhatian !",
-
-    .str_266 = "Are You Sure?",
-
-    .str_267 = "Sind Sie sicher ?",
-
-    .field_2a26 = 0x7445,
-
-    .field_2a28 = 0x7365,
-
-    .field_2a2a = 0x762D,
-
-    .field_2a2c = 0x756F,
-
-    .field_2a2e = 0x2073,
-
-    .field_2a30 = 0x9573,
-
-    .field_2a32 = 0x3FD3,
-
-    .str_268 = " ",
-
-    .field_2a36 = 0x45BF,
-
-    .field_2a38 = 0x7473,
-
-    .field_2a3a = 0x20E1,
-
-    .str_269 = ALIGNED_STRING("seguro? "),
-
-    .str_270 = "Apakah yakin akan dihapus ?",
-
-    .str_271 = ALIGNED_STRING("Features for creating a song. "),
-
-    .str_272 = "Funktionen zur Erstellung eines Songs",
-
-    .str_273 = ALIGNED_STRING("Features for editing a song."),
-
-    .str_274 = "Funktionen zur Bearbeitung eines Songs.",
-
-    .str_275 = "EASY RECORD sets the Sequencer to record your complete performance including Auto Play Chord. The selected song will be cleared. ",
-
-    .field_2b70 = 0x4145,
-
-    .field_2b72 = 0x5953,
-
-    .field_2b74 = 0x5220,
-
-    .field_2b76 = 0x4345,
-
-    .field_2b78 = 0x524F,
-
-    .field_2b7a = 0x2044,
-
-    .field_2b7c = 0x6B61,
-
-    .field_2b7e = 0x6974,
-
-    .field_2b80 = 0x6976,
-
-    .field_2b82 = 0x7265,
-
-    .field_2b84 = 0x2074,
-
-    .field_2b86 = 0x6964,
-
-    .field_2b88 = 0x2065,
-
-    .field_2b8a = 0x6977,
-
-    .field_2b8c = 0x6863,
-
-    .field_2b8e = 0x6974,
-
-    .field_2b90 = 0x7367,
-
-    .field_2b92 = 0x6574,
-
-    .field_2b94 = 0x206E,
-
-    .field_2b96 = 0x7053,
-
-    .field_2b98 = 0x7275,
-
-    .field_2b9a = 0x6E65,
-
-    .field_2b9c = 0x202C,
-
-    .field_2b9e = 0x6D75,
-
-    .field_2ba0 = 0x6520,
-
-    .field_2ba2 = 0x6E69,
-
-    .field_2ba4 = 0x6B20,
-
-    .field_2ba6 = 0x6D6F,
-
-    .field_2ba8 = 0x6C70,
-
-    .field_2baa = 0x7465,
-
-    .field_2bac = 0x6574,
-
-    .field_2bae = 0x2073,
-
-    .field_2bb0 = 0x7453,
-
-    .field_2bb2 = 0x63FC,
-
-    .field_2bb4 = 0x206B,
-
-    .field_2bb6 = 0x696D,
-
-    .field_2bb8 = 0x2074,
-
-    .field_2bba = 0x6542,
-
-    .field_2bbc = 0x6C67,
-
-    .field_2bbe = 0x6965,
-
-    .field_2bc0 = 0x6174,
-
-    .field_2bc2 = 0x7475,
-
-    .field_2bc4 = 0x6D6F,
-
-    .field_2bc6 = 0x7461,
-
-    .field_2bc8 = 0x6B69,
-
-    .field_2bca = 0x6120,
-
-    .field_2bcc = 0x6675,
-
-    .field_2bce = 0x757A,
-
-    .field_2bd0 = 0x656E,
-
-    .field_2bd2 = 0x6D68,
-
-    .field_2bd4 = 0x6E65,
-
-    .field_2bd6 = 0x202E,
-
-    .field_2bd8 = 0x6544,
-
-    .field_2bda = 0x2072,
-
-    .field_2bdc = 0x6B61,
-
-    .field_2bde = 0x7574,
-
-    .field_2be0 = 0x6C65,
-
-    .field_2be2 = 0x656C,
-
-    .field_2be4 = 0x5320,
-
-    .field_2be6 = 0x6E6F,
-
-    .field_2be8 = 0x2067,
-
-    .field_2bea = 0x6977,
-
-    .field_2bec = 0x6472,
-
-    .field_2bee = 0x6420,
-
-    .field_2bf0 = 0x6461,
-
-    .field_2bf2 = 0x7275,
-
-    .field_2bf4 = 0x6863,
-
-    .field_2bf6 = 0x6720,
-
-    .field_2bf8 = 0x6C65,
-
-    .field_2bfa = 0x73F6,
-
-    .str_276 = "cht. ",
-
-    .str_277 = ALIGNED_STRING("Press OK to proceed."),
-
-    .field_2c18 = 0x6542,
-
-    .field_2c1a = 0x7473,
-
-    .field_2c1c = 0x74E4,
-
-    .str_278 = "igen Sie mit OK. ",
-
-    .str_279 = ALIGNED_STRING("PANEL WRITE replaces the sounds and settings at the beginning of your song, which are selected when you press SEQUENCER RESET. Make the desired changes and press OK to store your new settings."),
-
-    .field_2cf2 = 0x4150,
-
-    .field_2cf4 = 0x454E,
-
-    .field_2cf6 = 0x204C,
-
-    .field_2cf8 = 0x5257,
-
-    .field_2cfa = 0x5449,
-
-    .field_2cfc = 0x2045,
-
-    .field_2cfe = 0x7265,
-
-    .field_2d00 = 0x6573,
-
-    .field_2d02 = 0x7A74,
-
-    .field_2d04 = 0x2074,
-
-    .field_2d06 = 0x6C61,
-
-    .field_2d08 = 0x656C,
-
-    .field_2d0a = 0x4B20,
-
-    .field_2d0c = 0xE46C,
-
-    .field_2d0e = 0x676E,
-
-    .field_2d10 = 0x2065,
-
-    .field_2d12 = 0x6E75,
-
-    .field_2d14 = 0x2064,
-
-    .field_2d16 = 0x6945,
-
-    .field_2d18 = 0x736E,
-
-    .field_2d1a = 0x6574,
-
-    .field_2d1c = 0x6C6C,
-
-    .field_2d1e = 0x6E75,
-
-    .field_2d20 = 0x6567,
-
-    .field_2d22 = 0x206E,
-
-    .field_2d24 = 0x6D61,
-
-    .field_2d26 = 0x4120,
-
-    .field_2d28 = 0x666E,
-
-    .field_2d2a = 0x6E61,
-
-    .field_2d2c = 0x2067,
-
-    .field_2d2e = 0x6849,
-
-    .field_2d30 = 0x6572,
-
-    .field_2d32 = 0x2073,
-
-    .field_2d34 = 0x6F53,
-
-    .field_2d36 = 0x676E,
-
-    .field_2d38 = 0x2C73,
-
-    .field_2d3a = 0x6420,
-
-    .field_2d3c = 0x6569,
-
-    .field_2d3e = 0x6520,
-
-    .field_2d40 = 0x6E69,
-
-    .field_2d42 = 0x6567,
-
-    .field_2d44 = 0x7473,
-
-    .field_2d46 = 0x6C65,
-
-    .field_2d48 = 0x746C,
-
-    .field_2d4a = 0x7720,
-
-    .field_2d4c = 0x7265,
-
-    .field_2d4e = 0x6564,
-
-    .field_2d50 = 0x2C6E,
-
-    .field_2d52 = 0x7720,
-
-    .field_2d54 = 0x6E65,
-
-    .field_2d56 = 0x206E,
-
-    .field_2d58 = 0x4553,
-
-    .field_2d5a = 0x5551,
-
-    .field_2d5c = 0x4E45,
-
-    .field_2d5e = 0x4543,
-
-    .field_2d60 = 0x2052,
-
-    .field_2d62 = 0x4552,
-
-    .field_2d64 = 0x4553,
-
-    .field_2d66 = 0x2054,
-
-    .field_2d68 = 0x6567,
-
-    .field_2d6a = 0xE477,
-
-    .field_2d6c = 0x6C68,
-
-    .field_2d6e = 0x2074,
-
-    .field_2d70 = 0x6977,
-
-    .field_2d72 = 0x6472,
-
-    .field_2d74 = 0x202E,
-
-    .field_2d76 = 0x654E,
-
-    .field_2d78 = 0x6D68,
-
-    .field_2d7a = 0x6E65,
-
-    .field_2d7c = 0x5320,
-
-    .field_2d7e = 0x6569,
-
-    .field_2d80 = 0x6120,
-
-    .field_2d82 = 0x6C6C,
-
-    .field_2d84 = 0x2065,
-
-    .field_2d86 = 0x6567,
-
-    .field_2d88 = 0xFC77,
-
-    .field_2d8a = 0x736E,
-
-    .field_2d8c = 0x6863,
-
-    .field_2d8e = 0x6574,
-
-    .field_2d90 = 0x206E,
-
-    .field_2d92 = 0x6EC4,
-
-    .field_2d94 = 0x6564,
-
-    .field_2d96 = 0x7572,
-
-    .field_2d98 = 0x676E,
-
-    .field_2d9a = 0x6E65,
-
-    .field_2d9c = 0x7620,
-
-    .field_2d9e = 0x726F,
-
-    .field_2da0 = 0x7520,
-
-    .field_2da2 = 0x646E,
-
-    .field_2da4 = 0x6220,
-
-    .field_2da6 = 0x7365,
-
-    .field_2da8 = 0xE474,
-
-    .str_280 = ALIGNED_STRING("tigen mit OK um diese zu speichern. "),
-
-    .str_281 = "Press the up/down buttons under the screen corresponding to the tracks that you want to clear. ",
-
-    .field_2e30 = 0x7244,
-
-    .field_2e32 = 0x63FC,
-
-    .field_2e34 = 0x656B,
-
-    .field_2e36 = 0x206E,
-
-    .field_2e38 = 0x6953,
-
-    .field_2e3a = 0x2065,
-
-    .field_2e3c = 0x6965,
-
-    .field_2e3e = 0x656E,
-
-    .field_2e40 = 0x2072,
-
-    .field_2e42 = 0x6564,
-
-    .field_2e44 = 0x2072,
-
-    .field_2e46 = 0x6F44,
-
-    .field_2e48 = 0x7070,
-
-    .field_2e4a = 0x6C65,
-
-    .field_2e4c = 0x6174,
-
-    .field_2e4e = 0x7473,
-
-    .field_2e50 = 0x6E65,
-
-    .field_2e52 = 0x7520,
-
-    .field_2e54 = 0x746E,
-
-    .field_2e56 = 0x7265,
-
-    .field_2e58 = 0x6420,
-
-    .field_2e5a = 0x6D65,
-
-    .field_2e5c = 0x4420,
-
-    .field_2e5e = 0x7369,
-
-    .field_2e60 = 0x6C70,
-
-    .field_2e62 = 0x7961,
-
-    .field_2e64 = 0x202C,
-
-    .field_2e66 = 0x6E65,
-
-    .field_2e68 = 0x7374,
-
-    .field_2e6a = 0x7270,
-
-    .field_2e6c = 0x6365,
-
-    .field_2e6e = 0x6568,
-
-    .field_2e70 = 0x646E,
-
-    .field_2e72 = 0x6420,
-
-    .field_2e74 = 0x7265,
-
-    .field_2e76 = 0x5320,
-
-    .field_2e78 = 0x7570,
-
-    .field_2e7a = 0x6572,
-
-    .field_2e7c = 0x2C6E,
-
-    .field_2e7e = 0x6420,
-
-    .field_2e80 = 0x6569,
-
-    .field_2e82 = 0x5320,
-
-    .field_2e84 = 0x6569,
-
-    .field_2e86 = 0x6C20,
-
-    .field_2e88 = 0x73F6,
-
-    .field_2e8a = 0x6863,
-
-    .field_2e8c = 0x6E65,
-
-    .field_2e8e = 0x6D20,
-
-    .field_2e90 = 0x63F6,
-
-    .str_282 = "hten ",
-
-    .str_283 = "Press OK to complete TRACK CLEAR.",
-
-    .field_2eba = 0x7244,
-
-    .field_2ebc = 0x63FC,
-
-    .field_2ebe = 0x656B,
-
-    .field_2ec0 = 0x206E,
-
-    .field_2ec2 = 0x6953,
-
-    .field_2ec4 = 0x2065,
-
-    .field_2ec6 = 0x4B4F,
-
-    .field_2ec8 = 0x7520,
-
-    .field_2eca = 0x206D,
-
-    .field_2ecc = 0x5254,
-
-    .field_2ece = 0x4341,
-
-    .field_2ed0 = 0x204B,
-
-    .field_2ed2 = 0x4C43,
-
-    .field_2ed4 = 0x4145,
-
-    .field_2ed6 = 0x2052,
-
-    .field_2ed8 = 0x7561,
-
-    .field_2eda = 0x7A73,
-
-    .field_2edc = 0x6675,
-
-    .field_2ede = 0x68FC,
-
-    .str_284 = "ren. ",
-
-    .str_285 = "Press the up/down button under the screen corresponding to the track that you want to edit.",
-
-    .field_2f42 = 0x7244,
-
-    .field_2f44 = 0x63FC,
-
-    .field_2f46 = 0x656B,
-
-    .field_2f48 = 0x206E,
-
-    .field_2f4a = 0x6953,
-
-    .field_2f4c = 0x2065,
-
-    .field_2f4e = 0x6965,
-
-    .field_2f50 = 0x656E,
-
-    .field_2f52 = 0x6420,
-
-    .field_2f54 = 0x7265,
-
-    .field_2f56 = 0x4420,
-
-    .field_2f58 = 0x706F,
-
-    .field_2f5a = 0x6570,
-
-    .field_2f5c = 0x746C,
-
-    .field_2f5e = 0x7361,
-
-    .field_2f60 = 0x6574,
-
-    .field_2f62 = 0x206E,
-
-    .field_2f64 = 0x6E75,
-
-    .field_2f66 = 0x6574,
-
-    .field_2f68 = 0x2072,
-
-    .field_2f6a = 0x6564,
-
-    .field_2f6c = 0x206D,
-
-    .field_2f6e = 0x6944,
-
-    .field_2f70 = 0x7073,
-
-    .field_2f72 = 0x616C,
-
-    .field_2f74 = 0x2C79,
-
-    .field_2f76 = 0x6520,
-
-    .field_2f78 = 0x746E,
-
-    .field_2f7a = 0x7073,
-
-    .field_2f7c = 0x6572,
-
-    .field_2f7e = 0x6863,
-
-    .field_2f80 = 0x6E65,
-
-    .field_2f82 = 0x2064,
-
-    .field_2f84 = 0x6564,
-
-    .field_2f86 = 0x2072,
-
-    .field_2f88 = 0x7053,
-
-    .field_2f8a = 0x7275,
-
-    .field_2f8c = 0x202C,
-
-    .field_2f8e = 0x6964,
-
-    .field_2f90 = 0x2065,
-
-    .field_2f92 = 0x6953,
-
-    .field_2f94 = 0x2065,
-
-    .field_2f96 = 0x6465,
-
-    .field_2f98 = 0x7469,
-
-    .field_2f9a = 0x6569,
-
-    .field_2f9c = 0x6572,
-
-    .field_2f9e = 0x206E,
-
-    .field_2fa0 = 0xF66D,
-
-    .str_286 = ALIGNED_STRING("chten "),
-
-    .str_287 = ALIGNED_STRING("Using SONG CLEAR will erase any existing recording in the Sequencer."),
-
-    .field_2ff0 = 0x4F53,
-
-    .field_2ff2 = 0x474E,
-
-    .field_2ff4 = 0x4320,
-
-    .field_2ff6 = 0x454C,
-
-    .field_2ff8 = 0x5241,
-
-    .field_2ffa = 0x6C20,
-
-    .field_2ffc = 0x73F6,
-
-    .str_288 = "cht alle aufgenommenen Daten in diesem Song. ",
-
-    .field_302c = 0x274C,
-
-    .field_302e = 0x7475,
-
-    .field_3030 = 0x6C69,
-
-    .field_3032 = 0x7369,
-
-    .field_3034 = 0x7461,
-
-    .field_3036 = 0x6F69,
-
-    .field_3038 = 0x206E,
-
-    .field_303a = 0x6564,
-
-    .field_303c = 0x5320,
-
-    .field_303e = 0x4E4F,
-
-    .field_3040 = 0x2047,
-
-    .field_3042 = 0x4C43,
-
-    .field_3044 = 0x4145,
-
-    .field_3046 = 0x2052,
-
-    .field_3048 = 0x6665,
-
-    .field_304a = 0x6166,
-
-    .field_304c = 0x6563,
-
-    .field_304e = 0x6172,
-
-    .field_3050 = 0x7420,
-
-    .field_3052 = 0x756F,
-
-    .field_3054 = 0x2074,
-
-    .field_3056 = 0x6E65,
-
-    .field_3058 = 0x6572,
-
-    .field_305a = 0x6967,
-
-    .field_305c = 0x7473,
-
-    .field_305e = 0x6572,
-
-    .field_3060 = 0x656D,
-
-    .field_3062 = 0x746E,
-
-    .field_3064 = 0x7020,
-
-    .field_3066 = 0xE972,
-
-    .field_3068 = 0xE963,
-
-    .field_306a = 0x6564,
-
-    .field_306c = 0x746E,
-
-    .field_306e = 0x6420,
-
-    .field_3070 = 0x6E61,
-
-    .field_3072 = 0x2073,
-
-    .field_3074 = 0x656C,
-
-    .field_3076 = 0x7320,
-
-    .field_3078 = 0x71E9,
-
-    .str_289 = "uenceur. ",
-
-    .field_3084 = 0x6C41,
-
-    .field_3086 = 0x6120,
-
-    .field_3088 = 0x756E,
-
-    .field_308a = 0x616C,
-
-    .field_308c = 0x2072,
-
-    .field_308e = 0x616C,
-
-    .field_3090 = 0x6320,
-
-    .field_3092 = 0x6E61,
-
-    .field_3094 = 0x6963,
-
-    .field_3096 = 0x6EF3,
-
-    .field_3098 = 0x7320,
-
-    .field_309a = 0x2065,
-
-    .field_309c = 0x6F62,
-
-    .field_309e = 0x7272,
-
-    .field_30a0 = 0x2061,
-
-    .field_30a2 = 0x616C,
-
-    .field_30a4 = 0x6720,
-
-    .field_30a6 = 0x6172,
-
-    .field_30a8 = 0x6162,
-
-    .field_30aa = 0x6963,
-
-    .field_30ac = 0x6EF3,
-
-    .str_290 = " del secuenciador. ",
-
-    .str_291 = ALIGNED_STRING("Gunakan SONG CLEAR untuk menghapus suatu rekaman yang ada didalam Sequencer."),
-
-    .str_292 = ALIGNED_STRING("Using TRACK CLEAR will erase any existing recordings in the selected Tracks."),
-
-    .field_315e = 0x5254,
-
-    .field_3160 = 0x4341,
-
-    .field_3162 = 0x204B,
-
-    .field_3164 = 0x4C43,
-
-    .field_3166 = 0x4145,
-
-    .field_3168 = 0x2052,
-
-    .field_316a = 0xF66C,
-
-    .field_316c = 0x6373,
-
-    .field_316e = 0x7468,
-
-    .field_3170 = 0x6120,
-
-    .field_3172 = 0x6C6C,
-
-    .field_3174 = 0x2065,
-
-    .field_3176 = 0x6144,
-
-    .field_3178 = 0x6574,
-
-    .field_317a = 0x206E,
-
-    .field_317c = 0x6E69,
-
-    .field_317e = 0x6420,
-
-    .field_3180 = 0x6E65,
-
-    .field_3182 = 0x6120,
-
-    .field_3184 = 0x7375,
-
-    .field_3186 = 0x6567,
-
-    .field_3188 = 0xE477,
-
-    .str_293 = ALIGNED_STRING("hlten Spuren. "),
-
-    .field_319a = 0x274C,
-
-    .field_319c = 0x7475,
-
-    .field_319e = 0x6C69,
-
-    .field_31a0 = 0x7369,
-
-    .field_31a2 = 0x7461,
-
-    .field_31a4 = 0x6F69,
-
-    .field_31a6 = 0x206E,
-
-    .field_31a8 = 0x6564,
-
-    .field_31aa = 0x5420,
-
-    .field_31ac = 0x4152,
-
-    .field_31ae = 0x4B43,
-
-    .field_31b0 = 0x4320,
-
-    .field_31b2 = 0x454C,
-
-    .field_31b4 = 0x5241,
-
-    .field_31b6 = 0x6520,
-
-    .field_31b8 = 0x6666,
-
-    .field_31ba = 0x6361,
-
-    .field_31bc = 0x7265,
-
-    .field_31be = 0x2061,
-
-    .field_31c0 = 0x6F74,
-
-    .field_31c2 = 0x7475,
-
-    .field_31c4 = 0x6520,
-
-    .field_31c6 = 0x726E,
-
-    .field_31c8 = 0x6765,
-
-    .field_31ca = 0x7369,
-
-    .field_31cc = 0x7274,
-
-    .field_31ce = 0x6D65,
-
-    .field_31d0 = 0x6E65,
-
-    .field_31d2 = 0x2074,
-
-    .field_31d4 = 0x7270,
-
-    .field_31d6 = 0x63E9,
-
-    .field_31d8 = 0x64E9,
-
-    .field_31da = 0x6E65,
-
-    .field_31dc = 0x2074,
-
-    .field_31de = 0x6164,
-
-    .field_31e0 = 0x736E,
-
-    .field_31e2 = 0x6C20,
-
-    .field_31e4 = 0x7365,
-
-    .field_31e6 = 0x7020,
-
-    .field_31e8 = 0x7369,
-
-    .field_31ea = 0x6574,
-
-    .field_31ec = 0x2073,
-
-    .field_31ee = 0xE973,
-
-    .field_31f0 = 0x656C,
-
-    .field_31f2 = 0x7463,
-
-    .field_31f4 = 0x6F69,
-
-    .field_31f6 = 0x6E6E,
-
-    .field_31f8 = 0x65E9,
-
-    .str_294 = "s. ",
-
-    .field_31fe = 0x6C41,
-
-    .field_3200 = 0x6120,
-
-    .field_3202 = 0x756E,
-
-    .field_3204 = 0x616C,
-
-    .field_3206 = 0x2072,
-
-    .field_3208 = 0x616C,
-
-    .field_320a = 0x7020,
-
-    .field_320c = 0x7369,
-
-    .field_320e = 0x6174,
-
-    .field_3210 = 0x7320,
-
-    .field_3212 = 0x2065,
-
-    .field_3214 = 0x6F62,
-
-    .field_3216 = 0x7272,
-
-    .field_3218 = 0x2061,
-
-    .field_321a = 0x616C,
-
-    .field_321c = 0x6720,
-
-    .field_321e = 0x6172,
-
-    .field_3220 = 0x6162,
-
-    .field_3222 = 0x6963,
-
-    .field_3224 = 0x6EF3,
-
-    .str_295 = ALIGNED_STRING(" de las pistas seleccionadas. "),
-
-    .str_296 = "Gunakan TRACK CLEAR bila akan menghapus suatu rekaman yang ada didalam Track yang terseleksi.",
-
-    .str_297 = "Press the START/STOP button to begin.",
-
-    .field_32ca = 0x6542,
-
-    .field_32cc = 0xE474,
-
-    .str_298 = ALIGNED_STRING("tigen Sie die START/STOP-Taste um den Vorgang zu beginnen."),
-
-    .str_299 = ALIGNED_STRING("ExRe"),
-
-    .str_300 = "AUTO PLAY CHORD",
-
-    .str_301 = "SOUND ARRANGER ON/OFF",
-
-    .str_302 = ALIGNED_STRING("SOUND ARRANGER SET"),
-
-    .str_303 = ALIGNED_STRING("RHYTHM GROUP"),
-
-    .str_304 = "COMPOSER MEMORY",
-
-    .str_305 = "COMPOSER MENU",
-
-    .str_306 = "TRANSPOSE",
-
-    .str_307 = "TEMPO/PROGRAM",
-
-    .str_308 = ALIGNED_STRING("MANUAL SEQ PAD"),
-
-    .str_309 = ALIGNED_STRING("MSP BANK"),
-
-    .str_310 = "MSP STOP/RECORD",
-
-    .str_311 = ALIGNED_STRING("MSP MENU"),
-
-    .str_312 = "SPLIT POINT",
-
-    .str_313 = "OTP / MUSIC STYLIST",
-
-    .str_314 = ALIGNED_STRING("MUSIC STYLE ARRANGER"),
-
-    .str_315 = "VARIATION & MSA",
-
-    .str_316 = ALIGNED_STRING("FILL IN 1, 2"),
-
-    .str_317 = "INTRO & ENDING 1, 2",
-
-    .str_318 = "SYNCHRO & BREAK",
-
-    .str_319 = ALIGNED_STRING("START/STOP"),
-
-    .str_320 = "TAP TEMPO",
-
-    .str_321 = ALIGNED_STRING("TECHNI-CHORD"),
-
-    .str_322 = ALIGNED_STRING("PANEL MEMORY"),
-
-    .str_323 = "SET",
-
-    .str_324 = "NEXT BANK",
-
-    .str_325 = "BANK VIEW",
-
-    .str_326 = ALIGNED_STRING("SEQUENCER PLAY"),
-
-    .str_327 = ALIGNED_STRING("EASY REC"),
-
-    .str_328 = ALIGNED_STRING("SEQUENCER MENU"),
-
-    .str_329 = ALIGNED_STRING("MIDI"),
-
-    .str_330 = "CONTROL",
-
-    .str_331 = "SOUND",
-
-    .str_332 = ALIGNED_STRING("DISK"),
-
-    .str_333 = ALIGNED_STRING("DIGITAL EFFECT"),
-
-    .str_334 = ALIGNED_STRING("DSP EFFECT"),
-
-    .str_335 = "SUSTAIN",
-
-    .str_336 = ALIGNED_STRING("DIGITAL REVERB"),
-
-    .str_337 = "SOUND GROUP",
-
-    .str_338 = "PART SELECT",
-
-    .str_339 = "CONDUCTOR",
-
-    .str_340 = ALIGNED_STRING("DISPLAY HOLD"),
-
-    .str_341 = "BALANCE",
-
-    .str_342 = ALIGNED_STRING("PAGE"),
-
-    .str_343 = ALIGNED_STRING("R1/R2 OCTAVE"),
-
-    .str_344 = ALIGNED_STRING("EXIT"),
-
-    .str_345 = ALIGNED_STRING("OTHER PARTS/TR"),
-
-    .str_346 = "ACOUSTIC ILLUSION",
-
-    .str_347 = "FADE IN/OUT",
-
-    .str_348 = "ENTERTAINER",
-
-    .str_349 = ALIGNED_STRING("DEMO"),
-
-    .ptrs_1 = {
-        SELF(str_300),
-        SELF(str_301),
-        SELF(str_302),
-        SELF(str_303),
-        SELF(str_304),
-        SELF(str_305),
-        SELF(str_306),
-        SELF(str_307),
-        SELF(str_308),
-        SELF(str_309),
-        SELF(str_310),
-        SELF(str_311),
-        SELF(str_312),
-        SELF(str_313),
-        SELF(str_314),
-        SELF(str_315),
-        SELF(str_316),
-        SELF(str_317),
-        SELF(str_318),
-        SELF(str_319),
-        SELF(str_320),
-        SELF(str_321),
-        SELF(str_322),
-        SELF(str_323),
-        SELF(str_324),
-        SELF(str_325),
-        SELF(str_326),
-        SELF(str_327),
-        SELF(str_328),
-        SELF(str_329),
-        SELF(str_330),
-        SELF(str_331),
-        SELF(str_332),
-        SELF(str_333),
-        SELF(str_334),
-        SELF(str_335),
-        SELF(str_336),
-        SELF(str_337),
-        SELF(str_338),
-        SELF(str_339),
-        SELF(str_340),
-        SELF(str_341),
-        SELF(str_342),
-        SELF(str_343),
-        SELF(str_344),
-        SELF(str_345),
-        SELF(str_346),
-        SELF(str_347),
-        SELF(str_348),
-        SELF(str_349),
+    .EffectBox_HandleInitEvent_Table = { 0x45, 0x55, 0x65, 0x75, 0x85, 0x95, 0xA5, 0xB5 },
+
+    .EffectBox_PostFillSetup_Table = { 0x47, 0x57, 0x67, 0x77, 0x87, 0x97, 0xA7, 0xB7 },
+
+    .SqplyVal_HandleScrollEvent_Table = {
+        0xC0, 0x00, 0x3A, 0x00, 0x24, 0x00, 0x0E, 0x00, 0xC0, 0x00, 0x49, 0x00, 0x24, 0x00, 0x0E, 0x00,
+        0xC0, 0x00, 0x58, 0x00, 0x24, 0x00, 0x0E, 0x00, 0xBE, 0x00, 0x2A, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0x46, 0x00, 0x4E, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0xB6, 0x00, 0x78, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xB6, 0x00, 0xA2, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0xB2, 0x00, 0x2A, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xAA, 0x00, 0x4D, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0xAA, 0x00, 0x77, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xAA, 0x00, 0xA1, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x46, 0x00, 0x4E, 0x00, 0x2D, 0x00, 0x0E, 0x00,
     },
 
-    .w0_code = "Rev",
-
-    .w0_name = "Dsp",
-
-    .w1_code = "Acc",
-
-    .w1_name = ALIGNED_STRING("ExMD"),
-
-    .w2_code = ALIGNED_STRING("ExPR"),
-
-    .w2_name = ALIGNED_STRING("ExAP"),
-
-    .ptrs_2 = {
-        SELF(str_266),
-        SELF(str_267),
-        SELF(field_2a26),
-        SELF(field_2a36),
-        0x00E33824,
-        SELF(str_270),
-        SELF(str_261),
-        SELF(str_262),
-        SELF(str_263),
-        SELF(field_29ee),
-        0x00E33824,
-        SELF(str_265),
-        SELF(str_271),
-        SELF(str_272),
-        SELF(str_271),
-        SELF(str_271),
-        0x00E33824,
-        SELF(str_271),
-        SELF(str_273),
-        SELF(str_274),
-        SELF(str_273),
-        SELF(str_273),
-        0x00E33824,
-        SELF(str_273),
-        SELF(str_275),
-        SELF(field_2b70),
-        SELF(str_275),
-        SELF(str_275),
-        0x00E33824,
-        SELF(str_275),
-        SELF(str_277),
-        SELF(field_2c18),
-        SELF(str_277),
-        SELF(str_277),
-        0x00E33824,
-        SELF(str_277),
-        SELF(str_279),
-        SELF(field_2cf2),
-        SELF(str_279),
-        SELF(str_279),
-        0x00E33824,
-        SELF(str_279),
-        SELF(str_281),
-        SELF(field_2e30),
-        SELF(str_281),
-        SELF(str_281),
-        0x00E33824,
-        SELF(str_281),
-        SELF(str_283),
-        SELF(field_2eba),
-        SELF(str_283),
-        SELF(str_283),
-        0x00E33824,
-        SELF(str_283),
-        SELF(str_285),
-        SELF(field_2f42),
-        SELF(str_285),
-        SELF(str_285),
-        0x00E33824,
-        SELF(str_285),
-        SELF(str_292),
-        SELF(field_315e),
-        SELF(field_319a),
-        SELF(field_31fe),
-        0x00E33824,
-        SELF(str_296),
-        SELF(str_287),
-        SELF(field_2ff0),
-        SELF(field_302c),
-        SELF(field_3084),
-        0x00E33824,
-        SELF(str_291),
-        SELF(str_297),
-        SELF(field_32ca),
-        SELF(str_297),
-        SELF(str_297),
-        0x00E33824,
-        SELF(str_297),
+    .SqedtVal_HandleScrollEvent_Table = {
+        0x7D, 0x00, 0x24, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x7D, 0x00, 0x4E, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0x7D, 0x00, 0x78, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x7D, 0x00, 0xA2, 0x00, 0x34, 0x00, 0x0E, 0x00,
+        0x75, 0x00, 0xA2, 0x00, 0x34, 0x00, 0x0E, 0x00, 0x75, 0x00, 0xA2, 0x00, 0x34, 0x00, 0x0E, 0x00,
+        0x7D, 0x00, 0xA2, 0x00, 0x4C, 0x00, 0x0E, 0x00, 0x7D, 0x00, 0xA2, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xFE, 0x00, 0x24, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0xF6, 0x00, 0x4E, 0x00, 0x34, 0x00, 0x0E, 0x00,
+        0xE1, 0x00, 0x33, 0x00, 0x54, 0x00, 0x0E, 0x00, 0xE1, 0x00, 0x5D, 0x00, 0x54, 0x00, 0x0E, 0x00,
+        0x4E, 0x00, 0x24, 0x00, 0x24, 0x00, 0x0E, 0x00, 0x4E, 0x00, 0x78, 0x00, 0x24, 0x00, 0x0E, 0x00,
+        0x08, 0x01, 0x4E, 0x00, 0x24, 0x00, 0x0E, 0x00, 0x12, 0x00, 0x48, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0x12, 0x00, 0x6A, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x12, 0x00, 0x8C, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xB2, 0x00, 0x48, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0xB2, 0x00, 0x6A, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xB2, 0x00, 0x8C, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x12, 0x00, 0x48, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0x12, 0x00, 0x6A, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x12, 0x00, 0x8C, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xB2, 0x00, 0x48, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0xB2, 0x00, 0x6A, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xB2, 0x00, 0x8C, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x0E, 0x00, 0x4E, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0x0E, 0x00, 0x83, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0xAE, 0x00, 0x4E, 0x00, 0x2D, 0x00, 0x0E, 0x00,
+        0xAE, 0x00, 0x83, 0x00, 0x2D, 0x00, 0x0E, 0x00, 0x26, 0x00, 0x4A, 0x00, 0x46, 0x00, 0x12, 0x00,
+        0x26, 0x00, 0x5E, 0x00, 0xB4, 0x00, 0x12, 0x00, 0xEE, 0x00, 0x4C, 0x00, 0x2C, 0x00, 0x0E, 0x00,
+        0xE8, 0x00, 0x5E, 0x00, 0x28, 0x00, 0x13, 0x00,
     },
 
-    .str_350 = "~af",
+    .BmDrEdit_RenderHorizontal_Table = {
+        0xAD, 0x00, 0xA9, 0x00, 0xA5, 0x00, 0x9D, 0x00, 0x99, 0x00, 0x95, 0x00, 0x91, 0x00, 0x8D, 0x00,
+        0x85, 0x00, 0x81, 0x00, 0x7D, 0x00, 0x79, 0x00, 0x75, 0x00, 0x71, 0x00, 0x6D, 0x00, 0x65, 0x00,
+        0x61, 0x00, 0x5D, 0x00, 0x59, 0x00, 0x55, 0x00, 0x4D, 0x00, 0x49, 0x00, 0x45, 0x00, 0x41, 0x00,
+        0x3D, 0x00, 0x39, 0x00, 0x35, 0x00, 0x00, 0x00, 0x00, 0x00,
+    },
+
+    .BmDrEdit_RenderVertical_Table = {
+        0xAA, 0x00, 0xA0, 0x00, 0x96, 0x00, 0x8C, 0x00, 0x82, 0x00, 0x78, 0x00, 0x6E, 0x00, 0x64, 0x00,
+        0x5A, 0x00, 0x50, 0x00, 0x46, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x00, 0x00,
+    },
+
+    .NoteEditBox_HandleFocusLost_Table = { 0x05, 0x23, 0x3C, 0x56, 0x74, 0x98, 0xD1, 0x2A, 0x98, 0xAC, 0x74, 0x2A },
+
+    .NoteEditBox_HandleFocusLost_Table_2 = { 0x24, 0x24, 0x24, 0x24, 0x28, 0x32, 0x24, 0x24, 0x32, 0x24, 0x28, 0xFF },
+
+    .NoteEditBox_EventDispatch2_Table = {
+        0x05, 0x00, 0xB9, 0x00, 0xE6, 0x00, 0x10, 0x00, 0x05, 0x00, 0xB9, 0x00, 0xBE, 0x00, 0x10, 0x00,
+        0x0E, 0x00, 0x2B, 0x00, 0xFB, 0x00, 0x07, 0x00, 0x0E, 0x00, 0x30, 0x00, 0xF8, 0x00, 0x07, 0x00,
+        0x06, 0x00, 0x20, 0x00, 0x00, 0x01, 0x0B, 0x00, 0x06, 0x00, 0x26, 0x00, 0x00, 0x01, 0x0B, 0x00,
+        0x0E, 0x00, 0x2B, 0x00, 0x18, 0x00, 0x07, 0x00, 0x0E, 0x00, 0x30, 0x00, 0x18, 0x00, 0x07, 0x00,
+        0x16, 0x00, 0x33, 0x00, 0x01, 0x00, 0x7E, 0x00,
+    },
+
+    .NoteEditBox_EventDispatch2_Table_2 = {
+        0x0A, 0x00, 0x22, 0x00, 0x3B, 0x00, 0x53, 0x00, 0x6A, 0x00, 0x83, 0x00, 0x9C, 0x00, 0xB4, 0x00,
+        0xCC, 0x00, 0xE3, 0x00, 0xF8, 0x00, 0xF8, 0x00,
+    },
+
+    .NoteEditBox_EventDispatch2_Table_3 = {
+        0x50, 0x00, 0x6A, 0x00, 0x82, 0x00, 0x99, 0x00, 0xB2, 0x00, 0xC9, 0x00, 0xE0, 0x00, 0xF9, 0x00,
+        0xF9, 0x00,
+    },
+
+    .NoteEditFunc_Table = {
+        0x7E, 0x34, 0x33, 0x7E, 0x62, 0x63, 0x7E, 0x34, 0x33, 0x7E, 0x62, 0x62, 0x7E, 0x34, 0x33, 0x7E,
+        0x33, 0x30, 0x7E, 0x34, 0x33, 0x7E, 0x33, 0x31, 0x7E, 0x34, 0x33, 0x7E, 0x33, 0x32, 0x7E, 0x34,
+        0x33, 0x7E, 0x33, 0x33, 0x7E, 0x34, 0x33, 0x7E, 0x33, 0x34, 0x7E, 0x34, 0x33, 0x7E, 0x33, 0x35,
+        0x7E, 0x34, 0x33, 0x7E, 0x33, 0x36, 0x7E, 0x34, 0x33, 0x7E, 0x33, 0x37, 0x7E, 0x34, 0x33, 0x7E,
+        0x33, 0x38,
+    },
+
+    .AttAreYouSureCheck_Strings = "ITALIAN\0"
+        "ATTENTION!\0\xFF"
+        "ACHTUNG !\0"
+        "ATTENTION!\0\xFF"
+        "\xA1" "ATENCI\xD3N!\0\xFF"
+        "Perhatian !\0"
+        "Are You Sure?\0"
+        "Sind Sie sicher ?\0"
+        "Etes-vous s\x95\xD3? \0"
+        "\xBF" "Est\xE1 seguro? \0\xFF"
+        "Apakah yakin akan dihapus ?",
+
+    .StsSeqMenu1Check_Strings = "Features for creating a song. \0\xFF"
+        "Funktionen zur Erstellung eines Songs",
+
+    .StsSeqMenu2Check_Strings = "Features for editing a song.\0\xFF"
+        "Funktionen zur Bearbeitung eines Songs.",
+
+    .StsEasyRec1Check_Strings = "EASY RECORD sets the Sequencer to record your complete performance including Auto Play Chord. The selected song will be cleared. \0"
+        "EASY RECORD aktiviert die wichtigsten Spuren, um ein komplettes St\xFC" "ck mit Begleitautomatik aufzunehmen. Der aktuelle Song wird dadurch gel\xF6scht. ",
+
+    .StsEasyRec2Check_Strings = "Press OK to proceed.\0\xFF"
+        "Best\xE4tigen Sie mit OK. ",
+
+    .StsPnlWrtCheck_Strings = "PANEL WRITE replaces the sounds and settings at the beginning of your song, which are selected when you press SEQUENCER RESET. Make the desired changes and press OK to store your new settings.\0\xFF"
+        "PANEL WRITE ersetzt alle Kl\xE4nge und Einstellungen am Anfang Ihres Songs, die eingestellt werden, wenn SEQUENCER RESET gew\xE4hlt wird. Nehmen Sie alle gew\xFCnschten \xC4nderungen vor und best\xE4tigen mit OK um diese zu speichern. \0\xFF",
+
+    .StsTrkClr1Check_Strings = "Press the up/down buttons under the screen corresponding to the tracks that you want to clear. \0"
+        "Dr\xFC" "cken Sie einer der Doppeltasten unter dem Display, entsprechend der Spuren, die Sie l\xF6schen m\xF6" "chten ",
+
+    .StsTrkClr2Check_Strings = "Press OK to complete TRACK CLEAR.\0"
+        "Dr\xFC" "cken Sie OK um TRACK CLEAR auszuf\xFChren. ",
+
+    .StsNtDrEditCheck_Strings = "Press the up/down button under the screen corresponding to the track that you want to edit.\0"
+        "Dr\xFC" "cken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie editieren m\xF6" "chten \0\xFF",
+
+    .AttSongClrCheck_Strings = "Using SONG CLEAR will erase any existing recording in the Sequencer.\0\xFF"
+        "SONG CLEAR l\xF6scht alle aufgenommenen Daten in diesem Song. \0"
+        "L'utilisation de SONG CLEAR effacera tout enregistrement pr\xE9" "c\xE9" "dent dans le s\xE9quenceur. \0"
+        "Al anular la canci\xF3n se borra la grabaci\xF3n del secuenciador. \0"
+        "Gunakan SONG CLEAR untuk menghapus suatu rekaman yang ada didalam Sequencer.\0\xFF",
+
+    .AttTrkClrCheck_Strings = "Using TRACK CLEAR will erase any existing recordings in the selected Tracks.\0\xFF"
+        "TRACK CLEAR l\xF6scht alle Daten in den ausgew\xE4hlten Spuren. \0\xFF"
+        "L'utilisation de TRACK CLEAR effacera tout enregistrement pr\xE9" "c\xE9" "dent dans les pistes s\xE9lectionn\xE9" "es. \0"
+        "Al anular la pista se borra la grabaci\xF3n de las pistas seleccionadas. \0\xFF"
+        "Gunakan TRACK CLEAR bila akan menghapus suatu rekaman yang ada didalam Track yang terseleksi.",
+
+    .StsAtPunchCheck_Strings = "Press the START/STOP button to begin.\0"
+        "Bet\xE4tigen Sie die START/STOP-Taste um den Vorgang zu beginnen.\0\xFF",
+
+    .NakaDesc_Str0330A = "ExRe\0\xFF",
+
+    .HelpTtlFunc_LookupSlide_Strings = "AUTO PLAY CHORD\0"
+        "SOUND ARRANGER ON/OFF\0"
+        "SOUND ARRANGER SET\0\xFF"
+        "RHYTHM GROUP\0\xFF"
+        "COMPOSER MEMORY\0"
+        "COMPOSER MENU\0"
+        "TRANSPOSE\0"
+        "TEMPO/PROGRAM\0"
+        "MANUAL SEQ PAD\0\xFF"
+        "MSP BANK\0\xFF"
+        "MSP STOP/RECORD\0"
+        "MSP MENU\0\xFF"
+        "SPLIT POINT\0"
+        "OTP / MUSIC STYLIST\0"
+        "MUSIC STYLE ARRANGER\0\xFF"
+        "VARIATION & MSA\0"
+        "FILL IN 1, 2\0\xFF"
+        "INTRO & ENDING 1, 2\0"
+        "SYNCHRO & BREAK\0"
+        "START/STOP\0\xFF"
+        "TAP TEMPO\0"
+        "TECHNI-CHORD\0\xFF"
+        "PANEL MEMORY\0\xFF"
+        "SET\0"
+        "NEXT BANK\0"
+        "BANK VIEW\0"
+        "SEQUENCER PLAY\0\xFF"
+        "EASY REC\0\xFF"
+        "SEQUENCER MENU\0\xFF"
+        "MIDI\0\xFF"
+        "CONTROL\0"
+        "SOUND\0"
+        "DISK\0\xFF"
+        "DIGITAL EFFECT\0\xFF"
+        "DSP EFFECT\0\xFF"
+        "SUSTAIN\0"
+        "DIGITAL REVERB\0\xFF"
+        "SOUND GROUP\0"
+        "PART SELECT\0"
+        "CONDUCTOR\0"
+        "DISPLAY HOLD\0\xFF"
+        "BALANCE\0"
+        "PAGE\0\xFF"
+        "R1/R2 OCTAVE\0\xFF"
+        "EXIT\0\xFF"
+        "OTHER PARTS/TR\0\xFF"
+        "ACOUSTIC ILLUSION\0"
+        "FADE IN/OUT\0"
+        "ENTERTAINER\0"
+        "DEMO\0\xFF",
+
+    .HelpTtlFunc_LookupSlide_PtrTable = {
+        SELF(HelpTtlFunc_LookupSlide_Strings),
+        SELF(HelpTtlFunc_LookupSlide_Strings[16]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[38]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[58]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[72]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[88]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[102]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[112]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[126]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[142]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[152]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[168]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[178]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[190]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[210]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[232]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[248]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[262]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[282]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[298]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[310]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[320]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[334]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[348]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[352]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[362]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[372]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[388]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[398]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[414]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[420]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[428]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[434]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[440]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[456]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[468]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[476]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[492]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[504]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[516]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[526]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[540]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[548]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[554]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[568]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[574]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[590]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[608]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[620]),
+        SELF(HelpTtlFunc_LookupSlide_Strings[632]),
+    },
+
+    .HelpTtlFunc_LookupSlide_PtrTable_Strings = "Rev\0"
+        "Dsp\0"
+        "Acc\0"
+        "ExMD\0\xFF"
+        "ExPR\0\xFF"
+        "ExAP\0\xFF",
+
+    .AttAreYouSureCheck_PtrTable = {
+        SELF(AttAreYouSureCheck_Strings[66]),
+        SELF(AttAreYouSureCheck_Strings[80]),
+        SELF(AttAreYouSureCheck_Strings[98]),
+        SELF(AttAreYouSureCheck_Strings[114]),
+        0x00E33824,
+        SELF(AttAreYouSureCheck_Strings[130]),
+    },
+
+    .AttAttentionCheck_PtrTable = {
+        SELF(AttAreYouSureCheck_Strings[8]),
+        SELF(AttAreYouSureCheck_Strings[20]),
+        SELF(AttAreYouSureCheck_Strings[30]),
+        SELF(AttAreYouSureCheck_Strings[42]),
+        0x00E33824,
+        SELF(AttAreYouSureCheck_Strings[54]),
+    },
+
+    .StsSeqMenu1Check_PtrTable = {
+        SELF(StsSeqMenu1Check_Strings),
+        SELF(StsSeqMenu1Check_Strings[32]),
+        SELF(StsSeqMenu1Check_Strings),
+        SELF(StsSeqMenu1Check_Strings),
+        0x00E33824,
+        SELF(StsSeqMenu1Check_Strings),
+    },
+
+    .StsSeqMenu2Check_PtrTable = {
+        SELF(StsSeqMenu2Check_Strings),
+        SELF(StsSeqMenu2Check_Strings[30]),
+        SELF(StsSeqMenu2Check_Strings),
+        SELF(StsSeqMenu2Check_Strings),
+        0x00E33824,
+        SELF(StsSeqMenu2Check_Strings),
+    },
+
+    .StsEasyRec1Check_PtrTable = {
+        SELF(StsEasyRec1Check_Strings),
+        SELF(StsEasyRec1Check_Strings[130]),
+        SELF(StsEasyRec1Check_Strings),
+        SELF(StsEasyRec1Check_Strings),
+        0x00E33824,
+        SELF(StsEasyRec1Check_Strings),
+    },
+
+    .StsEasyRec2Check_PtrTable = {
+        SELF(StsEasyRec2Check_Strings),
+        SELF(StsEasyRec2Check_Strings[22]),
+        SELF(StsEasyRec2Check_Strings),
+        SELF(StsEasyRec2Check_Strings),
+        0x00E33824,
+        SELF(StsEasyRec2Check_Strings),
+    },
+
+    .StsPnlWrtCheck_PtrTable = {
+        SELF(StsPnlWrtCheck_Strings),
+        SELF(StsPnlWrtCheck_Strings[194]),
+        SELF(StsPnlWrtCheck_Strings),
+        SELF(StsPnlWrtCheck_Strings),
+        0x00E33824,
+        SELF(StsPnlWrtCheck_Strings),
+    },
+
+    .StsTrkClr1Check_PtrTable = {
+        SELF(StsTrkClr1Check_Strings),
+        SELF(StsTrkClr1Check_Strings[96]),
+        SELF(StsTrkClr1Check_Strings),
+        SELF(StsTrkClr1Check_Strings),
+        0x00E33824,
+        SELF(StsTrkClr1Check_Strings),
+    },
+
+    .StsTrkClr2Check_PtrTable = {
+        SELF(StsTrkClr2Check_Strings),
+        SELF(StsTrkClr2Check_Strings[34]),
+        SELF(StsTrkClr2Check_Strings),
+        SELF(StsTrkClr2Check_Strings),
+        0x00E33824,
+        SELF(StsTrkClr2Check_Strings),
+    },
+
+    .StsNtDrEditCheck_PtrTable = {
+        SELF(StsNtDrEditCheck_Strings),
+        SELF(StsNtDrEditCheck_Strings[92]),
+        SELF(StsNtDrEditCheck_Strings),
+        SELF(StsNtDrEditCheck_Strings),
+        0x00E33824,
+        SELF(StsNtDrEditCheck_Strings),
+    },
+
+    .AttTrkClrCheck_PtrTable = {
+        SELF(AttTrkClrCheck_Strings),
+        SELF(AttTrkClrCheck_Strings[78]),
+        SELF(AttTrkClrCheck_Strings[138]),
+        SELF(AttTrkClrCheck_Strings[238]),
+        0x00E33824,
+        SELF(AttTrkClrCheck_Strings[310]),
+    },
+
+    .AttSongClrCheck_PtrTable = {
+        SELF(AttSongClrCheck_Strings),
+        SELF(AttSongClrCheck_Strings[70]),
+        SELF(AttSongClrCheck_Strings[130]),
+        SELF(AttSongClrCheck_Strings[218]),
+        0x00E33824,
+        SELF(AttSongClrCheck_Strings[280]),
+    },
+
+    .StsAtPunchCheck_PtrTable = {
+        SELF(StsAtPunchCheck_Strings),
+        SELF(StsAtPunchCheck_Strings[38]),
+        SELF(StsAtPunchCheck_Strings),
+        SELF(StsAtPunchCheck_Strings),
+        0x00E33824,
+        SELF(StsAtPunchCheck_Strings),
+    },
+
+    .StsAtPunchCheck_PtrTable_Strings = "~af\0"
+        "~81\0"
+        "%3d",
+
+    .NoteEditBox_EventDispatch2_Str = "%2d\0"
+        "%2d",
+
+    .NoteEditBox_EventDispatch2_Str_2 = "%3d",
+
+    .NoteEditBox_EventDispatch2_Str_3 = "%2d\0"
+        "%2d",
+
+    .NoteEdit_FormatEntry_Table = { 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00 },
+
+    .NoteEdit_FormatEntry_CaseTable = { 0x0000, 0x001E },
+
+    .NoteEditBox_GridDispatch2_CaseTable = {
+        0x01C2, 0x01D1, 0x0000, 0x0688, 0x0185, 0x01E5, 0x03F7, 0x0406,
+        0x0429, 0x0415, 0x02F0, 0x0539,
+    },
+
+    .NoteEditBox_SetupGrid_CaseTable = {
+        0x0000, 0x0009, 0x0012, 0x001B, 0x0024, 0x002D, 0x003A, 0x003A,
+        0x002D, 0x0047,
+    },
+
+    .NoteEditBox_SetupGrid_CaseTable_Strings = "%3d.\0\xFF"
+        "***.\0\xFF",
+
+    .NoteEdit_FormatTempoString_Str = "%2d.\0\xFF",
+
+    .NoteEdit_FormatTempoString_Str_2 = "%2d.\0\xFF",
+
+    .NoteEdit_FormatNoteOther_Str = "%3d",
+
+    .NoteEdit_FormatNoteOther_Str_2 = "v%3d\0\xFF",
+
+    .NoteEdit_FormatNoteOther_Str_3 = "v%3d\0\xFF",
+
+    .NoteEdit_FormatNoteOther_Str_4 = "%5d",
+
+    .NoteEdit_FormatNoteOther_Str_5 = "%5d\0"
+        "~ad~b8\0\xFF",
+
+    .NoteEdit_GateTime0C_Str = "~ad~20\0\xFF",
+
+    .NoteEdit_GateTime10_Str = "~ac~b8\0\xFF",
+
+    .NoteEdit_GateTime18_Str = "~ac~20\0\xFF",
+
+    .NoteEdit_GateTime20_Str = "~ab~b8\0\xFF",
+
+    .NoteEdit_GateTime30_Str = "~ab~20\0\xFF",
+
+    .NoteEdit_GateTime60_Str = "~aa~20\0\xFF"
+        "%2d",
+
+    .NoteEdit_FormatChordType_Str = "%3d",
+
+    .NoteEdit_GetParamValue_CaseTable = {
+        0x0000, 0x0009, 0x0012, 0x0036, 0x0036, 0x001B, 0x0036, 0x0036,
+        0x001B, 0x0036, 0x0024, 0x0036, 0x0036, 0x002D,
+    },
+
+    .NoteEditFunc_CaseTable = {
+        0x01F7, 0x01FF, 0x0207, 0x0034, 0x0045, 0x00CA, 0x0053, 0x008C,
+        0x009D, 0x00AE, 0x00BC, 0x020F, 0x0217, 0x0227, 0x022C, 0x0231,
+    },
+
+    .NoteEditFunc_CaseTable_Strings = "SONG\0\xFF"
+        "%2d",
+
+    .EntGrid_PostMainEvent_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
+    },
+
+    .EntGrid_PostMainEvent_Table_2 = {
+        0x03, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
+    },
+
+    .AcEntertainerGridBoxProc_CaseTable = { 0x0084, 0x0136, 0x0084, 0x0136, 0x025A, 0x0210, 0x0210 },
+
+    .SndParam_Dispatch_Table = {
+        0x41, 0x41, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x40, 0x41, 0x00, 0x00,
+        0x00, 0x4E, 0x00, 0x00, 0x10, 0x4E, 0x00, 0x00, 0x11, 0x4E, 0x00, 0x00, 0x12, 0x4E, 0x00, 0x00,
+        0x13, 0x4E, 0x00, 0x00,
+    },
+
+    .EntertainerGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .EntertainerGridCheck_LocalInit_Strings = "     %3d ",
+
+    .SndParam_Dispatch_Str = "      ON ",
+
+    .SndParam_Dispatch_Str_2 = "     OFF \0"
+        "     %3d ",
+
+    .EntGridCheck_Handle4140_Str = "      ON ",
+
+    .EntGridCheck_Handle4140_Str_2 = "     OFF \0"
+        "     %3d \0"
+        "     %3d ",
+
+    .SndParam_Dispatch_PtrTable = { 0x00000000, 0x00000000 },
+
+    .SndParam_Dispatch_PtrTable_Strings = "+\0"
+        "<\0"
+        "<\0"
+        "<\0"
+        "<",
+
+    .SndParam_Dispatch_PtrTable_2 = { 0x00000000, 0x00000000 },
+
+    .SndParam_Dispatch_PtrTable_2_Strings = "3\0"
+        "B\0"
+        "B\0"
+        "B\0"
+        "B",
+
+    .EntertainerGridCheck_CaseTable = { 0x0000, 0x00AC, 0x0000, 0x00AC, 0x0562, 0x0158, 0x0158 },
+
+    .EntertainerGridCheck_CaseTable_Strings = "ExMD\0\xFF"
+        "ExMD\0\xFF",
+
+    .SqplyVal_HandleExtraParams_CaseTable = { 0x0000, 0x0035, 0x003E, 0x037A, 0x0047, 0x0050, 0x0059, 0x0062 },
+
+    .SqedtVal_ClearDrawBuffer_CaseTable = {
+        0x0000, 0x003B, 0x0048, 0x0055, 0x0062, 0x006F, 0x007C, 0x0089,
+        0x0097, 0x00A5, 0x00B3, 0x00C1, 0x00CF, 0x00DD, 0x00EB,
+    },
+
+    .SqedtVal2_UpScrollDefault_Table = {
+        0x07, 0x00, 0x39, 0x00, 0x8E, 0x00, 0x20, 0x00, 0x07, 0x00, 0x5B, 0x00, 0x8E, 0x00, 0x20, 0x00,
+        0x07, 0x00, 0x7D, 0x00, 0x8E, 0x00, 0x20, 0x00,
+    },
+
+    .SqedtVal2_UpScrollModeA2_Table = { 0x07, 0x00, 0x3C, 0x00, 0x8E, 0x00, 0x34, 0x00, 0x07, 0x00, 0x71, 0x00, 0x8E, 0x00, 0x24, 0x00 },
+
+    .SqedtVal2_DownScrollDefault_Table = {
+        0xA7, 0x00, 0x39, 0x00, 0x8E, 0x00, 0x20, 0x00, 0xA7, 0x00, 0x5B, 0x00, 0x8E, 0x00, 0x20, 0x00,
+        0xA7, 0x00, 0x7D, 0x00, 0x8E, 0x00, 0x20, 0x00,
+    },
+
+    .SqedtVal2_DownScrollModeA2_Table = { 0xA7, 0x00, 0x3C, 0x00, 0x8E, 0x00, 0x34, 0x00, 0xA7, 0x00, 0x71, 0x00, 0x8E, 0x00, 0x24, 0x00 },
+
+    .SqedtFixProc_LocalInit = { 0x46, 0x52, 0x4F, 0x4D, 0x00 },
+
+    .SqedtFixProc_LocalInit_Tail = { 0xFF },
+
+    .SqedtFixProc_LocalInit_2 = { 0x54, 0x4F, 0x00 },
+
+    .SqedtFixProc_LocalInit_2_Tail = { 0xFF },
+
+    .SqedtFixProc_LocalInit_3 = { 0x49, 0x54, 0x45, 0x4D, 0x00 },
+
+    .SqedtFixProc_LocalInit_3_Tail = { 0xFF },
+
+    .SqedtFixProc_LocalInit_4 = { 0x4156, 0x554C, 0x0045 },
+
+    .SqedtFixProc_LocalInit_5 = { 0x5254, 0x4341, 0x004B },
+
+    .SqedtFixProc_LocalInit_6 = { 0x3A, 0x00 },
+
+    .SqedtFixProc_LocalInit_7 = { 0x4946, 0x5352, 0x2054, 0x454D, 0x5341, 0x5255, 0x0045 },
+
+    .SqedtFixProc_LocalInit_8 = { 0x4C, 0x41, 0x53, 0x54, 0x20, 0x4D, 0x45, 0x41, 0x53, 0x55, 0x52, 0x45, 0x00 },
+
+    .SqedtFixProc_LocalInit_8_Tail = { 0xFF },
+
+    .SqedtFixProc_LocalInit_9 = { 0x5453, 0x5241, 0x2054, 0x454D, 0x5341, 0x5255, 0x0045 },
+
+    .SqedtFixProc_LocalInit_10 = { 0x52, 0x45, 0x50, 0x45, 0x41, 0x54, 0x00 },
+
+    .SqedtFixProc_LocalInit_10_Tail = { 0xFF },
+
+    .SqedtFixProc_LocalInit_11 = { 0x53, 0x4F, 0x4E, 0x47, 0x00 },
+
+    .SqedtFixProc_LocalInit_11_Tail = { 0xFF },
+
+    .SqplyVal_ExtraParams_CaseTable = {
+        0x0000, 0x0037, 0x0040, 0x0049, 0x0052, 0x005B, 0x0064, 0x006D,
+        0x0076, 0x007F, 0x0089, 0x0093, 0x009D, 0x00A7, 0x00B1, 0x00BB,
+    },
+
+    .EffectBoxProc_LocalInit = { 0x397E, 0x0037 },
+
+    .EffectBoxProc_LocalInit_2 = { 0x397E, 0x0036 },
+
+    .EffectBox_NameSetup_CaseTable = { 0x0000, 0x0009, 0x0012, 0x001B, 0x0024, 0x002D, 0x0036 },
+
+    .Equalizer_HandleSelectEvent_Table = { 0x9C, 0x00, 0xAC, 0x00, 0x9C, 0x00, 0xAC, 0x00, 0x9C, 0x00, 0xAC, 0x00, 0x9C, 0x00, 0xAC, 0x00 },
+
+    .Equalizer_HandleSelectEvent_Table_2 = { 0x50, 0x00, 0x50, 0x00, 0x8C, 0x00, 0x8C, 0x00, 0xC8, 0x00, 0xC8, 0x00, 0x04, 0x01, 0x04, 0x01 },
+
+    .EffectBox_StateDispatch_CaseTable = { 0x0000, 0x0007, 0x000E, 0x0015, 0x001C, 0x0023, 0x002A },
+
+    .EffectBox_StateDispatch_CaseTable_Tail = {
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x32, 0x20, 0x20,
+        0x20, 0x20, 0x33, 0x20, 0x20, 0x20, 0x20, 0x34, 0x20, 0x20, 0x20, 0x20, 0x35, 0x20, 0x20, 0x20,
+        0x20, 0x36, 0x20, 0x20, 0x20, 0x20, 0x37, 0x20, 0x20, 0x20, 0x20, 0x38, 0x20, 0x20, 0x20, 0x20,
+        0x39, 0x20, 0x20, 0x20, 0x31, 0x30, 0x20, 0x20, 0x20, 0x31, 0x31, 0x20, 0x20, 0x20, 0x31, 0x32,
+        0x20, 0x20, 0x20, 0x31, 0x33, 0x20, 0x20, 0x20, 0x31, 0x34, 0x20, 0x20, 0x20, 0x31, 0x35, 0x20,
+        0x20, 0x20, 0x31, 0x36, 0x20, 0x20, 0x41, 0x4C, 0x4C, 0x20,
+    },
+
+    .Sqedt_ParamDispatch_Table = {
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x31, 0x20, 0x20, 0x32, 0x20, 0x20, 0x33, 0x20, 0x20, 0x34, 0x20,
+        0x20, 0x35, 0x20, 0x20, 0x36, 0x20, 0x20, 0x37, 0x20, 0x20, 0x38, 0x20, 0x20, 0x39, 0x20, 0x31,
+        0x30, 0x20, 0x31, 0x31, 0x20, 0x31, 0x32, 0x20, 0x31, 0x33, 0x20, 0x31, 0x34, 0x20, 0x31, 0x35,
+        0x20, 0x31, 0x36, 0x41, 0x4C, 0x4C,
+    },
+
+    .Sqedt_ParamDispatch_Table_2 = {
+        0x53, 0x4F, 0x4E, 0x47, 0x20, 0x31, 0x53, 0x4F, 0x4E, 0x47, 0x20, 0x32, 0x53, 0x4F, 0x4E, 0x47,
+        0x20, 0x33, 0x53, 0x4F, 0x4E, 0x47, 0x20, 0x34, 0x53, 0x4F, 0x4E, 0x47, 0x20, 0x35, 0x53, 0x4F,
+        0x4E, 0x47, 0x20, 0x36, 0x53, 0x4F, 0x4E, 0x47, 0x20, 0x37, 0x53, 0x4F, 0x4E, 0x47, 0x20, 0x38,
+        0x53, 0x4F, 0x4E, 0x47, 0x20, 0x39, 0x53, 0x4F, 0x4E, 0x47, 0x31, 0x30, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20,
+    },
+
+    .Sqedt_ParamDispatch_Table_3 = {
+        0x20, 0x20, 0x20, 0x41, 0x4C, 0x4C, 0x20, 0x20, 0x20, 0x20, 0x20, 0x4E, 0x4F, 0x54, 0x45, 0x20,
+        0x20, 0x20, 0x20, 0x43, 0x4F, 0x4E, 0x54, 0x52, 0x4F, 0x4C, 0x20, 0xFF,
+    },
+
+    .Sqedt_ParamDispatch_Table_4 = {
+        0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E, 0x41, 0x44, 0x7E, 0x42, 0x38, 0x7E, 0x32, 0x30, 0x7E,
+        0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E, 0x41, 0x44, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E, 0x32,
+        0x30, 0x7E, 0x32, 0x30, 0x7E, 0x41, 0x43, 0x7E, 0x42, 0x38, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30,
+        0x7E, 0x32, 0x30, 0x7E, 0x41, 0x43, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E,
+        0x32, 0x30, 0x7E, 0x41, 0x42, 0x7E, 0x42, 0x38, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E, 0x32,
+        0x30, 0x7E, 0x41, 0x42, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30,
+        0x7E, 0x41, 0x41, 0x7E, 0x32, 0x30, 0x7E, 0x32, 0x30, 0xFF,
+    },
+
+    .SqplyFunc_ParamFormatData_Str = " -2",
+
+    .SqplyFunc_ParamFormatData_Str_2 = " -1",
+
+    .SqplyFunc_ParamFormatData_Str_3 = "%3d",
+
+    .SqplyFunc_ParamFormatData_Str_4 = "%d/4\0\xFF",
+
+    .SqplyFunc_ParamFormatData_Str_5 = "%2d",
+
+    .SqplyFunc_ParamFormatData_Str_6 = " ON  ",
+
+    .SqplyFunc_ParamFormatData_Str_7 = " OFF ",
+
+    .SqplyFunc_ParamFormatData_Str_8 = " ON  ",
+
+    .SqplyFunc_ParamFormatData_Str_9 = " OFF ",
+
+    .SqplyFunc_ParamFormatData_Str_10 = " ON  ",
 
-    .str_351 = "~81",
+    .SqplyFunc_ParamFormatData_Str_11 = " OFF ",
 
-    .str_352 = "%3d",
+    .SqplyFunc_ParamFormatData_Str_12 = " %3d ",
 
-    .str_353 = "%2d",
+    .SqplyFunc_ParamFormatData_Str_13 = " %3d ",
 
-    .str_354 = "%2d",
+    .SqplyFunc_ParamFormatData_Str_14 = " %3d ",
 
-    .str_355 = "%3d",
+    .SqplyFunc_ParamFormatData_Str_15 = " %3d ",
 
-    .str_356 = "%2d",
+    .SqplyFunc_FormatRhythmPattern_Str = "  -2 ",
 
-    .str_357 = "%2d",
+    .SqplyFunc_FormatRhythmPattern_Str_2 = "  -1 \0"
+        " %3d ",
 
-    .field_37cc = 0x0100,
+    .SqplyFunc_FormatIntro_Str = " %3d ",
 
-    .pad_2 = { 0 },
+    .SqplyFunc_FormatEnding_Str = " %3d ",
 
-    .field_37d4 = 0x0001,
+    .SqplyFunc_FormatFillIn_Str = " %3d ",
 
-    .field_37d6 = 0x0001,
+    .SqplyFunc_HandlePartQuery_CaseTable = { 0x0000, 0x000F, 0x0013, 0xFF6B, 0x0000, 0x000F, 0x0013, 0x0000 },
 
-    .pad_3 = { 0 },
+    .SqplyFunc_HandleGetValue_CaseTable = {
+        0x0000, 0x0000, 0x000A, 0x0010, 0x0016, 0x002B, 0x0040, 0x0046,
+        0x004C, 0x0052, 0x0058,
+    },
 
-    .field_37da = 0x001E,
+    .SqplyFunc_CaseTable = {
+        0x0000, 0x0039, 0x004D, 0x0061, 0x00CB, 0x00F0, 0x022E, 0x022E,
+        0x022E, 0x00A4,
+    },
 
-    .field_37dc = 0x01C2,
+    .Sqedt_ParamDispatch_Str = " %3d ",
 
-    .field_37de = 0x01D1,
+    .Sqedt_ParamDispatch_Str_2 = " %3d ",
 
-    .pad_4 = { 0 },
+    .Sqedt_ParamDispatch_Str_3 = " %3d \0"
+        " %3d \0"
+        " %3d ",
 
-    .field_37e2 = 0x0688,
+    .Sqedt_ParamDispatch_Str_4 = " %3d ",
 
-    .field_37e4 = 0x0185,
+    .Sqedt_ParamDispatch_Str_5 = " %3d ",
 
-    .field_37e6 = 0x01E5,
+    .Sqedt_ParamDispatch_Str_6 = " %3d ",
 
-    .field_37e8 = 0x03F7,
+    .Sqedt_ParamDispatch_Str_7 = " %3d ",
 
-    .field_37ea = 0x0406,
+    .Sqedt_ParamDispatch_Str_8 = " %3d ",
 
-    .field_37ec = 0x0429,
+    .NakaInst_3d = " %3d ",
 
-    .field_37ee = 0x0415,
+    .Sqedt_ParamDispatch_Str_9 = " %3d ",
 
-    .field_37f0 = 0x02F0,
+    .Sqedt_ParamDispatch_Str_10 = " %3d ",
 
-    .field_37f2 = 0x0539,
+    .Sqedt_ParamDispatch_Str_11 = " %3d \0"
+        " +%2d \0\xFF"
+        " -%2d \0\xFF"
+        " %3d \0"
+        " +%3d \0\xFF"
+        " -%3d \0\xFF",
 
-    .pad_5 = { 0 },
+    .Sqedt_ParamDispatch_Str_12 = " %4d ",
 
-    .field_37f6 = 0x0009,
+    .Sqedt_ParamDispatch_Str_13 = " +%3d \0\xFF",
 
-    .field_37f8 = 0x0012,
+    .Sqedt_ParamDispatch_Str_14 = " -%3d \0\xFF",
 
-    .field_37fa = 0x001B,
+    .Sqedt_ParamDispatch_Str_15 = " %4d ",
 
-    .str_358 = "$",
+    .Sqedt_ParamDispatch_Str_16 = " %3d ",
 
-    .str_359 = "-",
+    .Sqedt_ParamDispatch_Str_17 = " +%3d \0\xFF",
 
-    .str_360 = ":",
+    .Sqedt_ParamDispatch_Str_18 = " -%3d \0\xFF",
 
-    .str_361 = ":",
+    .Sqedt_ParamDispatch_Str_19 = " %3d ",
 
-    .str_362 = "-",
+    .Sqedt_ParamDispatch_Str_20 = "(%3d) \0\xFF",
 
-    .str_363 = "G",
+    .Sqedt_ParamDispatch_Str_21 = "(%3d) \0\xFF",
 
-    .str_364 = ALIGNED_STRING("%3d."),
+    .Sqedt_ParamDispatch_Str_22 = " %2d ",
 
-    .str_365 = ALIGNED_STRING("***."),
+    .Sqedt_ParamDispatch_Str_23 = " %2d ",
 
-    .str_366 = ALIGNED_STRING("%2d."),
+    .Sqedt_ParamDispatch_Str_24 = " %2d ",
 
-    .str_367 = ALIGNED_STRING("%2d."),
+    .Sqedt_ParamDispatch_Str_25 = " %3d ",
 
-    .str_368 = "%3d",
+    .Sqedt_ParamDispatch_Str_26 = " %3d ",
 
-    .str_369 = ALIGNED_STRING("v%3d"),
+    .Sqedt_ParamDispatch_Str_27 = " %3d ",
 
-    .str_370 = ALIGNED_STRING("v%3d"),
+    .Sqedt_ParamDispatch_Str_28 = " %3d ",
 
-    .str_371 = "%5d",
+    .Sqedt_ParamDispatch_Str_29 = " %3d ",
 
-    .str_372 = "%5d",
+    .Sqedt_ParamDispatch_Str_30 = " %3d \0"
+        " %3d ",
 
-    .str_373 = ALIGNED_STRING("~ad~b8"),
+    .Sqedt_ParamDispatch_Str_31 = " %3d ",
 
-    .str_374 = ALIGNED_STRING("~ad~20"),
+    .NakaInst_2d = " %2d ",
 
-    .str_375 = ALIGNED_STRING("~ac~b8"),
+    .Sqedt_ParamDispatch_Str_32 = " %2d \0"
+        "     ",
 
-    .str_376 = ALIGNED_STRING("~ac~20"),
+    .Sqedt_ParamDispatch_Str_33 = "%3dKB\0"
+        "100",
 
-    .str_377 = ALIGNED_STRING("~ab~b8"),
+    .Sqedt_ParamDispatch_Str_34 = "%3d",
 
-    .str_378 = ALIGNED_STRING("~ab~20"),
+    .SeqFormat_DispatchA_CaseTable = {
+        0x0000, 0x0000, 0x0000, 0x0010, 0x0010, 0x0010, 0x0020, 0x0020,
+        0x0020, 0x0030, 0x0030, 0x0030, 0x0040, 0x0040, 0x0062, 0x0062,
+    },
 
-    .str_379 = ALIGNED_STRING("~aa~20"),
+    .SqedtFunc_SignExtend_CaseTable = {
+        0x0000, 0x0010, 0x0014, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018,
+        0x001C, 0x0020, 0x001C, 0x0020, 0x0000, 0x0014, 0x0020,
+    },
 
-    .str_380 = "%2d",
+    .Sqedt_ValueDispatch_CaseTable = {
+        0x0004, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0047,
+        0x0000,
+    },
 
-    .str_381 = "%3d",
+    .Sqedt_ValueDispatch_CaseTable_2 = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0071, 0x0000 },
 
-    .pad_6 = { 0 },
+    .Sqedt_ValueDispatch_CaseTable_3 = {
+        0x0005, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x00A1,
+        0x0000,
+    },
 
-    .field_387a = 0x0009,
+    .SeqFunc_ReturnZeroJmp_CaseTable = { 0x0000, 0x0032, 0x005C, 0x008A, 0x00C9, 0x00B7, 0x00D2 },
 
-    .field_387c = 0x0012,
+    .Sqedt_ParamDispatch_CaseTable = { 0x002C, 0x000B, 0x0037, 0x0000, 0x0042, 0x0021, 0x0042, 0x0016 },
 
-    .str_382 = "6",
+    .Sqedt_ParamDispatch_CaseTable_2 = { 0x002C, 0x000B, 0x0037, 0x0000, 0x0042, 0x0021, 0x0042, 0x0016 },
 
-    .str_383 = "6",
+    .Sqedt_ParamDispatch_CaseTable_3 = { 0x0018, 0x0006, 0x001E, 0x0000, 0x0024, 0x0012, 0x0024, 0x000C },
 
-    .field_3882 = 0x001B,
+    .SqedtFunc_CaseTable = {
+        0x0000, 0x0058, 0x00D0, 0x0148, 0x018E, 0x01C1, 0x01FB, 0x021B,
+        0x023B, 0x0250, 0x028A, 0x02C9, 0x0314, 0x0329, 0x0345, 0x035A,
+        0x036A, 0x0383, 0x0395, 0x03A4, 0x03BD, 0x03D2, 0x03E1, 0x03FA,
+        0x040C, 0x042C, 0x0445, 0x045A, 0x0476, 0x0485, 0x049A, 0x05A4,
+        0x059A, 0x05AE, 0x06BD, 0x0729, 0x0705, 0x070F, 0x0717, 0x0721,
+    },
 
-    .str_384 = "6",
+    .SqedtFunc_StateChainB_CaseTable = {
+        0x018A, 0x0104, 0x0077, 0x0156, 0x0034, 0x027D, 0x00D0, 0x01AF,
+        0x00AB, 0x0201, 0x027D, 0x027D, 0x027D, 0x024D,
+    },
 
-    .str_385 = "6",
+    .SqedtFunc_StateChainB_CaseTable_Strings = " %3d ",
 
-    .field_3888 = 0x001B,
+    .DspItem0_TypeChangeHandler_CaseTable = {
+        0x0000, 0x0007, 0x0015, 0x0025, 0x0036, 0x0045, 0x0054, 0x0063,
+        0x0072,
+    },
 
-    .str_386 = "6",
+    .DspItem0CngFunc_CaseTable = {
+        0x0025, 0x00C6, 0x00D1, 0x00D8, 0x00E2, 0x00EC, 0x00F6, 0x0100,
+        0x010A, 0x01D9, 0x01E7, 0x01F0, 0x01F9, 0x0200, 0x01EC, 0x01EC,
+        0x0206,
+    },
 
-    .str_387 = "$",
+    .Equalizer_ParamByIndex_Table = { 0x02, 0x04, 0x06, 0x08, 0x0A, 0x0C, 0x0E, 0xFF },
 
-    .str_388 = "6",
+    .Equalizer_DispatchA_CaseTable = { 0x0000, 0x0011, 0x0022, 0x0033, 0x0044, 0x0055, 0x0066 },
 
-    .str_389 = "6",
+    .EqualizerCngFunc_CaseTable = {
+        0x00EB, 0x00F2, 0x00FB, 0x0104, 0x010D, 0x0116, 0x0120, 0x013D,
+        0x0165,
+    },
 
-    .str_390 = "-",
+    .Equalizer_CmdDispatch_CaseTable = {
+        0x001E, 0x002D, 0x003B, 0x0049, 0x0057, 0x0065, 0x0073, 0x00AB,
+        0x0081, 0x008F, 0x009D, 0x00BB, 0x00BB, 0x00BB, 0x000F,
+    },
 
-    .field_3894 = 0x01F7,
+    .Equalizer_FormatDefault_Str = " -%3d",
 
-    .field_3896 = 0x01FF,
+    .EqFormat_NegativeValue_Str = " +%3d",
 
-    .field_3898 = 0x0207,
+    .EqFormat_PositiveValue_Str = "  %3d\0"
+        "     ",
 
-    .str_391 = "4",
+    .PrepareAudioParam_Str = "%5d",
 
-    .str_392 = "E",
+    .Equalizer_FormatDispatch_Table = {
+        0x0D, 0x0D, 0x01, 0x0C, 0x01, 0x0E, 0x0F, 0x0F, 0x10, 0x10, 0x0F, 0x0F, 0x01, 0x11, 0x01, 0x01,
+        0x0C, 0x0C, 0x00, 0x01, 0x02, 0x01, 0x03, 0x01, 0x04, 0x04, 0x01, 0x01, 0x05, 0x05, 0x06, 0x07,
+        0x08, 0x08, 0x01, 0x09, 0x09, 0x00, 0x0A, 0x0B, 0x01, 0x01, 0x01, 0x0C,
+    },
 
-    .field_389e = 0x00CA,
-
-    .str_393 = "S",
-
-    .field_38a2 = 0x008C,
-
-    .field_38a4 = 0x009D,
-
-    .field_38a6 = 0x00AE,
-
-    .field_38a8 = 0x00BC,
-
-    .field_38aa = 0x020F,
-
-    .field_38ac = 0x0217,
-
-    .field_38ae = 0x0227,
-
-    .field_38b0 = 0x022C,
-
-    .field_38b2 = 0x0231,
-
-    .str_394 = ALIGNED_STRING("SONG"),
-
-    .str_395 = "%2d",
-
-    .field_38be = 0x0001,
-
-    .field_38c0 = 0x0001,
-
-    .field_38c2 = 0x0002,
-
-    .field_38c4 = 0x0003,
-
-    .field_38c6 = 0x0001,
-
-    .field_38c8 = 0x0001,
-
-    .field_38ca = 0x0001,
-
-    .field_38cc = 0x0001,
-
-    .field_38ce = 0x0001,
-
-    .field_38d0 = 0x0003,
-
-    .field_38d2 = 0x0002,
-
-    .field_38d4 = 0x0001,
-
-    .field_38d6 = 0x0001,
-
-    .field_38d8 = 0x0001,
-
-    .field_38da = 0x0001,
-
-    .field_38dc = 0x0001,
-
-    .field_38de = 0x0001,
-
-    .field_38e0 = 0x0001,
-
-    .field_38e2 = 0x0084,
-
-    .field_38e4 = 0x0136,
-
-    .field_38e6 = 0x0084,
-
-    .field_38e8 = 0x0136,
-
-    .field_38ea = 0x025A,
-
-    .field_38ec = 0x0210,
-
-    .field_38ee = 0x0210,
-
-    .str_396 = ALIGNED_STRING("AA"),
-
-    .str_397 = ALIGNED_STRING(""),
-
-    .field_38f5 = NAKA_NONE,
-
-    .field_38f7 = NAKA_NONE,
-
-    .field_38f9 = NAKA_NONE,
-
-    .field_38fb = 0x40FF,
-
-    .str_398 = "A",
-
-    .pad_7 = { 0 },
-
-    .str_399 = "N",
-
-    .field_3903 = 0x1000,
-
-    .str_400 = "N",
-
-    .field_3907 = 0x1100,
-
-    .str_401 = "N",
-
-    .field_390b = 0x1200,
-
-    .str_402 = "N",
-
-    .field_390f = 0x1300,
-
-    .str_403 = "N",
-
-    .pad_8 = { 0 },
-
-    .str_404 = "     %3d ",
-
-    .str_405 = "      ON ",
-
-    .str_406 = "     OFF ",
-
-    .str_407 = "     %3d ",
-
-    .str_408 = "      ON ",
-
-    .str_409 = "     OFF ",
-
-    .str_410 = "     %3d ",
-
-    .str_411 = "     %3d ",
-
-    .pad_9 = { 0 },
-
-    .str_412 = "+",
-
-    .str_413 = "<",
-
-    .str_414 = "<",
-
-    .str_415 = "<",
-
-    .str_416 = "<",
-
-    .pad_10 = { 0 },
-
-    .str_417 = "3",
-
-    .str_418 = "B",
-
-    .str_419 = "B",
-
-    .str_420 = "B",
-
-    .str_421 = "B",
-
-    .pad_11 = { 0 },
-
-    .field_3994 = 0x00AC,
-
-    .pad_12 = { 0 },
-
-    .field_3998 = 0x00AC,
-
-    .field_399a = 0x0562,
-
-    .field_399c = 0x0158,
-
-    .field_399e = 0x0158,
-
-    .w3_code = ALIGNED_STRING("ExMD"),
-
-    .w3_name = ALIGNED_STRING("ExMD"),
-
-    .pad_13 = { 0 },
-
-    .str_422 = "5",
-
-    .str_423 = ">",
-
-    .field_39b2 = 0x037A,
-
-    .str_424 = "G",
-
-    .str_425 = "P",
-
-    .str_426 = "Y",
-
-    .str_427 = "b",
-
-    .pad_14 = { 0 },
-
-    .str_428 = ";",
-
-    .str_429 = "H",
-
-    .str_430 = "U",
-
-    .str_431 = "b",
-
-    .str_432 = "o",
-
-    .str_433 = "|",
-
-    .field_39ca = 0x0089,
-
-    .field_39cc = 0x0097,
-
-    .field_39ce = 0x00A5,
-
-    .field_39d0 = 0x00B3,
-
-    .field_39d2 = 0x00C1,
-
-    .field_39d4 = 0x00CF,
-
-    .ptr_39d6 = 0x00EB00DD,
-
-    .field_39da = 0x0007,
-
-    .str_434 = "9",
-
-    .field_39de = 0x008E,
-
-    .str_435 = " ",
-
-    .field_39e2 = 0x0007,
-
-    .str_436 = "[",
-
-    .field_39e6 = 0x008E,
-
-    .str_437 = " ",
-
-    .field_39ea = 0x0007,
-
-    .str_438 = "}",
-
-    .field_39ee = 0x008E,
-
-    .str_439 = " ",
-
-    .field_39f2 = 0x0007,
-
-    .str_440 = "<",
-
-    .field_39f6 = 0x008E,
-
-    .str_441 = "4",
-
-    .field_39fa = 0x0007,
-
-    .str_442 = "q",
-
-    .field_39fe = 0x008E,
-
-    .str_443 = "$",
-
-    .field_3a02 = 0x00A7,
-
-    .str_444 = "9",
-
-    .field_3a06 = 0x008E,
-
-    .str_445 = " ",
-
-    .field_3a0a = 0x00A7,
-
-    .str_446 = "[",
-
-    .field_3a0e = 0x008E,
-
-    .str_447 = " ",
-
-    .field_3a12 = 0x00A7,
-
-    .str_448 = "}",
-
-    .field_3a16 = 0x008E,
-
-    .str_449 = " ",
-
-    .field_3a1a = 0x00A7,
-
-    .str_450 = "<",
-
-    .field_3a1e = 0x008E,
-
-    .str_451 = "4",
-
-    .field_3a22 = 0x00A7,
-
-    .str_452 = "q",
-
-    .field_3a26 = 0x008E,
-
-    .str_453 = "$",
-
-    .str_454 = ALIGNED_STRING("FROM"),
-
-    .str_455 = ALIGNED_STRING("TO"),
-
-    .str_456 = ALIGNED_STRING("ITEM"),
-
-    .str_457 = "VALUE",
-
-    .str_458 = "TRACK",
-
-    .str_459 = ":",
-
-    .str_460 = "FIRST MEASURE",
-
-    .str_461 = ALIGNED_STRING("LAST MEASURE"),
-
-    .str_462 = "START MEASURE",
-
-    .str_463 = ALIGNED_STRING("REPEAT"),
-
-    .str_464 = ALIGNED_STRING("SONG"),
-
-    .pad_15 = { 0 },
-
-    .str_465 = "7",
-
-    .str_466 = "@",
-
-    .str_467 = "I",
-
-    .str_468 = "R",
-
-    .str_469 = "[",
-
-    .str_470 = "d",
-
-    .str_471 = "m",
-
-    .str_472 = "v",
-
-    .field_3a92 = 0x007F,
-
-    .field_3a94 = 0x0089,
-
-    .field_3a96 = 0x0093,
-
-    .field_3a98 = 0x009D,
-
-    .field_3a9a = 0x00A7,
-
-    .field_3a9c = 0x00B1,
-
-    .field_3a9e = 0x00BB,
-
-    .str_473 = "~97",
-
-    .str_474 = "~96",
-
-    .pad_16 = { 0 },
-
-    .field_3aaa = 0x0009,
-
-    .field_3aac = 0x0012,
-
-    .field_3aae = 0x001B,
-
-    .str_475 = "$",
-
-    .str_476 = "-",
-
-    .str_477 = "6",
-
-    .field_3ab6 = 0x009C,
-
-    .field_3ab8 = 0x00AC,
-
-    .field_3aba = 0x009C,
-
-    .field_3abc = 0x00AC,
-
-    .field_3abe = 0x009C,
-
-    .field_3ac0 = 0x00AC,
-
-    .field_3ac2 = 0x009C,
-
-    .field_3ac4 = 0x00AC,
-
-    .str_478 = "P",
-
-    .str_479 = "P",
-
-    .field_3aca = 0x008C,
-
-    .field_3acc = 0x008C,
-
-    .field_3ace = 0x00C8,
-
-    .field_3ad0 = 0x00C8,
-
-    .field_3ad2 = 0x0104,
-
-    .field_3ad4 = 0x0104,
-
-    .pad_17 = { 0 },
-
-    .field_3ad8 = 0x0007,
-
-    .field_3ada = 0x000E,
-
-    .field_3adc = 0x0015,
-
-    .field_3ade = 0x001C,
-
-    .str_480 = "#",
-
-    .str_481 = "*",
-
-    .field_3ae4 = 0x2020,
-
-    .field_3ae6 = 0x2020,
-
-    .field_3ae8 = 0x2020,
-
-    .field_3aea = 0x2020,
-
-    .field_3aec = 0x2031,
-
-    .field_3aee = 0x2020,
-
-    .field_3af0 = 0x3220,
-
-    .field_3af2 = 0x2020,
-
-    .field_3af4 = 0x2020,
-
-    .field_3af6 = 0x2033,
-
-    .field_3af8 = 0x2020,
-
-    .field_3afa = 0x3420,
-
-    .field_3afc = 0x2020,
-
-    .field_3afe = 0x2020,
-
-    .field_3b00 = 0x2035,
-
-    .field_3b02 = 0x2020,
-
-    .field_3b04 = 0x3620,
-
-    .field_3b06 = 0x2020,
-
-    .field_3b08 = 0x2020,
-
-    .field_3b0a = 0x2037,
-
-    .field_3b0c = 0x2020,
-
-    .field_3b0e = 0x3820,
-
-    .field_3b10 = 0x2020,
-
-    .field_3b12 = 0x2020,
-
-    .field_3b14 = 0x2039,
-
-    .field_3b16 = 0x2020,
-
-    .field_3b18 = 0x3031,
-
-    .field_3b1a = 0x2020,
-
-    .field_3b1c = 0x3120,
-
-    .field_3b1e = 0x2031,
-
-    .field_3b20 = 0x2020,
-
-    .field_3b22 = 0x3231,
-
-    .field_3b24 = 0x2020,
-
-    .field_3b26 = 0x3120,
-
-    .field_3b28 = 0x2033,
-
-    .field_3b2a = 0x2020,
-
-    .field_3b2c = 0x3431,
-
-    .field_3b2e = 0x2020,
-
-    .field_3b30 = 0x3120,
-
-    .field_3b32 = 0x2035,
-
-    .field_3b34 = 0x2020,
-
-    .field_3b36 = 0x3631,
-
-    .field_3b38 = 0x2020,
-
-    .field_3b3a = 0x4C41,
-
-    .field_3b3c = 0x204C,
-
-    .field_3b3e = 0x2020,
-
-    .field_3b40 = 0x2020,
-
-    .field_3b42 = 0x3120,
-
-    .field_3b44 = 0x2020,
-
-    .field_3b46 = 0x2032,
-
-    .field_3b48 = 0x3320,
-
-    .field_3b4a = 0x2020,
-
-    .field_3b4c = 0x2034,
-
-    .field_3b4e = 0x3520,
-
-    .field_3b50 = 0x2020,
-
-    .field_3b52 = 0x2036,
-
-    .field_3b54 = 0x3720,
-
-    .field_3b56 = 0x2020,
-
-    .field_3b58 = 0x2038,
-
-    .field_3b5a = 0x3920,
-
-    .field_3b5c = 0x3120,
-
-    .field_3b5e = 0x2030,
-
-    .field_3b60 = 0x3131,
-
-    .field_3b62 = 0x3120,
-
-    .field_3b64 = 0x2032,
-
-    .field_3b66 = 0x3331,
-
-    .field_3b68 = 0x3120,
-
-    .field_3b6a = 0x2034,
-
-    .field_3b6c = 0x3531,
-
-    .field_3b6e = 0x3120,
-
-    .field_3b70 = 0x4136,
-
-    .field_3b72 = 0x4C4C,
-
-    .field_3b74 = 0x4F53,
-
-    .field_3b76 = 0x474E,
-
-    .field_3b78 = 0x3120,
-
-    .field_3b7a = 0x4F53,
-
-    .field_3b7c = 0x474E,
-
-    .field_3b7e = 0x3220,
-
-    .field_3b80 = 0x4F53,
-
-    .field_3b82 = 0x474E,
-
-    .field_3b84 = 0x3320,
-
-    .field_3b86 = 0x4F53,
-
-    .field_3b88 = 0x474E,
-
-    .field_3b8a = 0x3420,
-
-    .field_3b8c = 0x4F53,
-
-    .field_3b8e = 0x474E,
-
-    .field_3b90 = 0x3520,
-
-    .field_3b92 = 0x4F53,
-
-    .field_3b94 = 0x474E,
-
-    .field_3b96 = 0x3620,
-
-    .field_3b98 = 0x4F53,
-
-    .field_3b9a = 0x474E,
-
-    .field_3b9c = 0x3720,
-
-    .field_3b9e = 0x4F53,
-
-    .field_3ba0 = 0x474E,
-
-    .field_3ba2 = 0x3820,
-
-    .field_3ba4 = 0x4F53,
-
-    .field_3ba6 = 0x474E,
-
-    .field_3ba8 = 0x3920,
-
-    .field_3baa = 0x4F53,
-
-    .field_3bac = 0x474E,
-
-    .field_3bae = 0x3031,
-
-    .field_3bb0 = 0x2020,
-
-    .field_3bb2 = 0x2020,
-
-    .field_3bb4 = 0x2020,
-
-    .field_3bb6 = 0x2020,
-
-    .field_3bb8 = 0x4120,
-
-    .field_3bba = 0x4C4C,
-
-    .field_3bbc = 0x2020,
-
-    .field_3bbe = 0x2020,
-
-    .field_3bc0 = 0x4E20,
-
-    .field_3bc2 = 0x544F,
-
-    .field_3bc4 = 0x2045,
-
-    .field_3bc6 = 0x2020,
-
-    .field_3bc8 = 0x4320,
-
-    .field_3bca = 0x4E4F,
-
-    .field_3bcc = 0x5254,
-
-    .field_3bce = 0x4C4F,
-
-    .field_3bd0 = 0xFF20,
-
-    .field_3bd2 = 0x327E,
-
-    .field_3bd4 = 0x7E30,
-
-    .field_3bd6 = 0x3032,
-
-    .field_3bd8 = 0x417E,
-
-    .field_3bda = 0x7E44,
-
-    .field_3bdc = 0x3842,
-
-    .field_3bde = 0x327E,
-
-    .field_3be0 = 0x7E30,
-
-    .field_3be2 = 0x3032,
-
-    .field_3be4 = 0x327E,
-
-    .field_3be6 = 0x7E30,
-
-    .field_3be8 = 0x4441,
-
-    .field_3bea = 0x327E,
-
-    .field_3bec = 0x7E30,
-
-    .field_3bee = 0x3032,
-
-    .field_3bf0 = 0x327E,
-
-    .field_3bf2 = 0x7E30,
-
-    .field_3bf4 = 0x3032,
-
-    .field_3bf6 = 0x417E,
-
-    .field_3bf8 = 0x7E43,
-
-    .field_3bfa = 0x3842,
-
-    .field_3bfc = 0x327E,
-
-    .field_3bfe = 0x7E30,
-
-    .field_3c00 = 0x3032,
-
-    .field_3c02 = 0x327E,
-
-    .field_3c04 = 0x7E30,
-
-    .field_3c06 = 0x4341,
-
-    .field_3c08 = 0x327E,
-
-    .field_3c0a = 0x7E30,
-
-    .field_3c0c = 0x3032,
-
-    .field_3c0e = 0x327E,
-
-    .field_3c10 = 0x7E30,
-
-    .field_3c12 = 0x3032,
-
-    .field_3c14 = 0x417E,
-
-    .field_3c16 = 0x7E42,
-
-    .field_3c18 = 0x3842,
-
-    .field_3c1a = 0x327E,
-
-    .field_3c1c = 0x7E30,
-
-    .field_3c1e = 0x3032,
-
-    .field_3c20 = 0x327E,
-
-    .field_3c22 = 0x7E30,
-
-    .field_3c24 = 0x4241,
-
-    .field_3c26 = 0x327E,
-
-    .field_3c28 = 0x7E30,
-
-    .field_3c2a = 0x3032,
-
-    .field_3c2c = 0x327E,
-
-    .field_3c2e = 0x7E30,
-
-    .field_3c30 = 0x3032,
-
-    .field_3c32 = 0x417E,
-
-    .field_3c34 = 0x7E41,
-
-    .field_3c36 = 0x3032,
-
-    .field_3c38 = 0x327E,
-
-    .field_3c3a = 0xFF30,
-
-    .str_482 = " -2",
-
-    .str_483 = " -1",
-
-    .str_484 = "%3d",
-
-    .str_485 = ALIGNED_STRING("%d/4"),
-
-    .str_486 = "%2d",
-
-    .str_487 = " ON  ",
-
-    .str_488 = " OFF ",
-
-    .str_489 = " ON  ",
-
-    .str_490 = " OFF ",
-
-    .str_491 = " ON  ",
-
-    .str_492 = " OFF ",
-
-    .str_493 = " %3d ",
-
-    .str_494 = " %3d ",
-
-    .str_495 = " %3d ",
-
-    .str_496 = " %3d ",
-
-    .str_497 = "  -2 ",
-
-    .str_498 = "  -1 ",
-
-    .str_499 = " %3d ",
-
-    .str_500 = " %3d ",
-
-    .str_501 = " %3d ",
-
-    .str_502 = " %3d ",
-
-    .pad_18 = { 0 },
-
-    .field_3cb4 = 0x000F,
-
-    .field_3cb6 = 0x0013,
-
-    .field_3cb8 = 0xFF6B,
-
-    .pad_19 = { 0 },
-
-    .field_3cbc = 0x000F,
-
-    .field_3cbe = 0x0013,
-
-    .pad_20 = { 0 },
-
-    .field_3cc6 = 0x000A,
-
-    .field_3cc8 = 0x0010,
-
-    .field_3cca = 0x0016,
-
-    .str_503 = "+",
-
-    .str_504 = "@",
-
-    .str_505 = "F",
-
-    .str_506 = "L",
-
-    .str_507 = "R",
-
-    .str_508 = "X",
-
-    .pad_21 = { 0 },
-
-    .str_509 = "9",
-
-    .str_510 = "M",
-
-    .str_511 = "a",
-
-    .ptr_3ce0 = 0x00F000CB,
-
-    .field_3ce4 = 0x022E,
-
-    .field_3ce6 = 0x022E,
-
-    .field_3ce8 = 0x022E,
-
-    .field_3cea = 0x00A4,
-
-    .str_512 = " %3d ",
-
-    .str_513 = " %3d ",
-
-    .str_514 = " %3d ",
-
-    .str_515 = " %3d ",
-
-    .str_516 = " %3d ",
-
-    .str_517 = " %3d ",
-
-    .str_518 = " %3d ",
-
-    .str_519 = " %3d ",
-
-    .str_520 = " %3d ",
-
-    .str_521 = " %3d ",
-
-    .str_522 = " %3d ",
-
-    .str_523 = " %3d ",
-
-    .str_524 = " %3d ",
-
-    .str_525 = " %3d ",
-
-    .str_526 = ALIGNED_STRING(" +%2d "),
-
-    .str_527 = ALIGNED_STRING(" -%2d "),
-
-    .str_528 = " %3d ",
-
-    .str_529 = ALIGNED_STRING(" +%3d "),
-
-    .str_530 = ALIGNED_STRING(" -%3d "),
-
-    .str_531 = " %4d ",
-
-    .str_532 = ALIGNED_STRING(" +%3d "),
-
-    .str_533 = ALIGNED_STRING(" -%3d "),
-
-    .str_534 = " %4d ",
-
-    .str_535 = " %3d ",
-
-    .str_536 = ALIGNED_STRING(" +%3d "),
-
-    .str_537 = ALIGNED_STRING(" -%3d "),
-
-    .str_538 = " %3d ",
-
-    .str_539 = ALIGNED_STRING("(%3d) "),
-
-    .str_540 = ALIGNED_STRING("(%3d) "),
-
-    .str_541 = " %2d ",
-
-    .str_542 = " %2d ",
-
-    .str_543 = " %2d ",
-
-    .str_544 = " %3d ",
-
-    .str_545 = " %3d ",
-
-    .str_546 = " %3d ",
-
-    .str_547 = " %3d ",
-
-    .str_548 = " %3d ",
-
-    .str_549 = " %3d ",
-
-    .str_550 = " %3d ",
-
-    .str_551 = " %3d ",
-
-    .str_552 = " %2d ",
-
-    .str_553 = " %2d ",
-
-    .str_554 = "     ",
-
-    .str_555 = "%3dKB",
-
-    .str_556 = "100",
-
-    .str_557 = "%3d",
-
-    .pad_22 = { 0 },
-
-    .field_3e16 = 0x0010,
-
-    .field_3e18 = 0x0010,
-
-    .field_3e1a = 0x0010,
-
-    .str_558 = " ",
-
-    .str_559 = " ",
-
-    .str_560 = " ",
-
-    .str_561 = "0",
-
-    .str_562 = "0",
-
-    .str_563 = "0",
-
-    .str_564 = "@",
-
-    .str_565 = "@",
-
-    .str_566 = "b",
-
-    .str_567 = "b",
-
-    .pad_23 = { 0 },
-
-    .field_3e32 = 0x0010,
-
-    .field_3e34 = 0x0014,
-
-    .field_3e36 = 0x0018,
-
-    .field_3e38 = 0x0018,
-
-    .field_3e3a = 0x0018,
-
-    .field_3e3c = 0x0018,
-
-    .field_3e3e = 0x0018,
-
-    .field_3e40 = 0x001C,
-
-    .str_568 = " ",
-
-    .field_3e44 = 0x001C,
-
-    .str_569 = " ",
-
-    .pad_24 = { 0 },
-
-    .field_3e4a = 0x0014,
-
-    .str_570 = " ",
-
-    .field_3e4e = 0x0004,
-
-    .pad_25 = { 0 },
-
-    .str_571 = "G",
-
-    .pad_26 = { 0 },
-
-    .str_572 = "q",
-
-    .pad_27 = { 0 },
-
-    .field_3e70 = 0x0005,
-
-    .pad_28 = { 0 },
-
-    .field_3e7e = 0x00A1,
-
-    .pad_29 = { 0 },
-
-    .str_573 = "2",
-
-    .str_574 = "\\",
-
-    .field_3e88 = 0x008A,
-
-    .field_3e8a = 0x00C9,
-
-    .field_3e8c = 0x00B7,
-
-    .field_3e8e = 0x00D2,
-
-    .str_575 = ",",
-
-    .field_3e92 = 0x000B,
-
-    .str_576 = "7",
-
-    .pad_30 = { 0 },
-
-    .str_577 = "B",
-
-    .str_578 = "!",
-
-    .str_579 = "B",
-
-    .field_3e9e = 0x0016,
-
-    .str_580 = ",",
-
-    .field_3ea2 = 0x000B,
-
-    .str_581 = "7",
-
-    .pad_31 = { 0 },
-
-    .str_582 = "B",
-
-    .str_583 = "!",
-
-    .str_584 = "B",
-
-    .field_3eae = 0x0016,
-
-    .field_3eb0 = 0x0018,
-
-    .field_3eb2 = 0x0006,
-
-    .field_3eb4 = 0x001E,
-
-    .pad_32 = { 0 },
-
-    .str_585 = "$",
-
-    .field_3eba = 0x0012,
-
-    .str_586 = "$",
-
-    .field_3ebe = 0x000C,
-
-    .pad_33 = { 0 },
-
-    .str_587 = "X",
-
-    .field_3ec4 = 0x00D0,
-
-    .field_3ec6 = 0x0148,
-
-    .field_3ec8 = 0x018E,
-
-    .field_3eca = 0x01C1,
-
-    .field_3ecc = 0x01FB,
-
-    .field_3ece = 0x021B,
-
-    .field_3ed0 = 0x023B,
-
-    .field_3ed2 = 0x0250,
-
-    .field_3ed4 = 0x028A,
-
-    .field_3ed6 = 0x02C9,
-
-    .field_3ed8 = 0x0314,
-
-    .field_3eda = 0x0329,
-
-    .field_3edc = 0x0345,
-
-    .field_3ede = 0x035A,
-
-    .field_3ee0 = 0x036A,
-
-    .field_3ee2 = 0x0383,
-
-    .field_3ee4 = 0x0395,
-
-    .field_3ee6 = 0x03A4,
-
-    .field_3ee8 = 0x03BD,
-
-    .field_3eea = 0x03D2,
-
-    .field_3eec = 0x03E1,
-
-    .field_3eee = 0x03FA,
-
-    .field_3ef0 = 0x040C,
-
-    .field_3ef2 = 0x042C,
-
-    .field_3ef4 = 0x0445,
-
-    .field_3ef6 = 0x045A,
-
-    .field_3ef8 = 0x0476,
-
-    .field_3efa = 0x0485,
-
-    .field_3efc = 0x049A,
-
-    .field_3efe = 0x05A4,
-
-    .field_3f00 = 0x059A,
-
-    .field_3f02 = 0x05AE,
-
-    .field_3f04 = 0x06BD,
-
-    .field_3f06 = 0x0729,
-
-    .field_3f08 = 0x0705,
-
-    .field_3f0a = 0x070F,
-
-    .field_3f0c = 0x0717,
-
-    .field_3f0e = 0x0721,
-
-    .field_3f10 = 0x018A,
-
-    .field_3f12 = 0x0104,
-
-    .str_588 = "w",
-
-    .field_3f16 = 0x0156,
-
-    .str_589 = "4",
-
-    .field_3f1a = 0x027D,
-
-    .field_3f1c = 0x00D0,
-
-    .field_3f1e = 0x01AF,
-
-    .field_3f20 = 0x00AB,
-
-    .field_3f22 = 0x0201,
-
-    .field_3f24 = 0x027D,
-
-    .field_3f26 = 0x027D,
-
-    .field_3f28 = 0x027D,
-
-    .field_3f2a = 0x024D,
-
-    .str_590 = " %3d ",
-
-    .pad_34 = { 0 },
-
-    .field_3f34 = 0x0007,
-
-    .field_3f36 = 0x0015,
-
-    .str_591 = "%",
-
-    .str_592 = "6",
-
-    .str_593 = "E",
-
-    .str_594 = "T",
-
-    .str_595 = "c",
-
-    .str_596 = "r",
-
-    .str_597 = "%",
-
-    .field_3f46 = 0x00C6,
-
-    .field_3f48 = 0x00D1,
-
-    .ptr_3f4a = 0x00E200D8,
-
-    .ptr_3f4e = 0x00F600EC,
-
-    .field_3f52 = 0x0100,
-
-    .field_3f54 = 0x010A,
-
-    .field_3f56 = 0x01D9,
-
-    .field_3f58 = 0x01E7,
-
-    .field_3f5a = 0x01F0,
-
-    .field_3f5c = 0x01F9,
-
-    .field_3f5e = 0x0200,
-
-    .field_3f60 = 0x01EC,
-
-    .field_3f62 = 0x01EC,
-
-    .field_3f64 = 0x0206,
-
-    .field_3f66 = 0x0402,
-
-    .field_3f68 = 0x0806,
-
-    .field_3f6a = 0x0C0A,
-
-    .field_3f6c = 0xFF0E,
-
-    .pad_35 = { 0 },
-
-    .field_3f70 = 0x0011,
-
-    .str_598 = "\"",
-
-    .str_599 = "3",
-
-    .str_600 = "D",
-
-    .str_601 = "U",
-
-    .str_602 = "f",
-
-    .ptr_3f7c = 0x00F200EB,
-
-    .field_3f80 = 0x00FB,
-
-    .field_3f82 = 0x0104,
-
-    .field_3f84 = 0x010D,
-
-    .field_3f86 = 0x0116,
-
-    .field_3f88 = 0x0120,
-
-    .field_3f8a = 0x013D,
-
-    .field_3f8c = 0x0165,
-
-    .field_3f8e = 0x001E,
-
-    .str_603 = "-",
-
-    .str_604 = ";",
-
-    .str_605 = "I",
-
-    .str_606 = "W",
-
-    .str_607 = "e",
-
-    .str_608 = "s",
-
-    .field_3f9c = 0x00AB,
-
-    .field_3f9e = 0x0081,
-
-    .field_3fa0 = 0x008F,
-
-    .field_3fa2 = 0x009D,
-
-    .field_3fa4 = 0x00BB,
-
-    .field_3fa6 = 0x00BB,
-
-    .field_3fa8 = 0x00BB,
-
-    .field_3faa = 0x000F,
-
-    .str_609 = " -%3d",
-
-    .str_610 = " +%3d",
-
-    .str_611 = "  %3d",
-
-    .str_612 = "     ",
-
-    .str_613 = "%5d",
-
-    .field_3fc8 = 0x0D0D,
-
-    .field_3fca = 0x0C01,
-
-    .field_3fcc = 0x0E01,
-
-    .field_3fce = 0x0F0F,
-
-    .field_3fd0 = 0x1010,
-
-    .field_3fd2 = 0x0F0F,
-
-    .field_3fd4 = 0x1101,
-
-    .field_3fd6 = 0x0101,
-
-    .field_3fd8 = 0x0C0C,
-
-    .field_3fda = 0x0100,
-
-    .field_3fdc = 0x0102,
-
-    .field_3fde = 0x0103,
-
-    .field_3fe0 = 0x0404,
-
-    .field_3fe2 = 0x0101,
-
-    .field_3fe4 = 0x0505,
-
-    .field_3fe6 = 0x0706,
-
-    .field_3fe8 = 0x0808,
-
-    .field_3fea = 0x0901,
-
-    .field_3fec = 0x0009,
-
-    .field_3fee = 0x0B0A,
-
-    .field_3ff0 = 0x0101,
-
-    .field_3ff2 = 0x0C01,
-
-    .pad_36 = { 0 },
-
-    .field_3ff6 = 0x00F9,
-
-    .field_3ff8 = 0x00C5,
-
-    .field_3ffa = 0x00BB,
-
-    .str_614 = "a",
-
-    .str_615 = "k",
-
-    .str_616 = "u",
-
-    .field_4002 = 0x007F,
-
-    .field_4004 = 0x0089,
-
-    .str_617 = ",",
-
-    .field_4008 = 0x000B,
-
-    .field_400a = 0x0016,
-
-    .field_400c = 0x0093,
-
-    .str_618 = "!",
-
-    .str_619 = "W",
-
-    .str_620 = "B",
-
-    .str_621 = "M",
-
-    .str_622 = "7",
+    .Equalizer_FormatDispatch_CaseTable = {
+        0x0000, 0x00F9, 0x00C5, 0x00BB, 0x0061, 0x006B, 0x0075, 0x007F,
+        0x0089, 0x002C, 0x000B, 0x0016, 0x0093, 0x0021, 0x0057, 0x0042,
+        0x004D, 0x0037,
+    },
 
     .Bitmap_Ntedt0k = {
         /*   0 */ { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00 },
@@ -25475,407 +22649,213 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .str_3408 = ALIGNED_STRING(""),
 
-    .ptr_24902 = SELF(str_3409),
+    .ptr_24902 = SELF(NakaDesc_PageWindow_Sentinel),
 
-    .str_3409 = ALIGNED_STRING(""),
+    .NakaDesc_PageWindow_Sentinel = "\0\xFF",
 
-    .ptrs_38 = {
-        SELF(str_3413),
-        SELF(str_3412),
-        SELF(str_3411),
-        SELF(str_3410),
+    .ClassProps_IvMpstPageControl = {
+        SELF(ClassProps_IvMpstPageControl_Names[18]),
+        SELF(ClassProps_IvMpstPageControl_Names[10]),
+        SELF(ClassProps_IvMpstPageControl_Names[2]),
+        SELF(ClassProps_IvMpstPageControl_Names),
     },
 
-    .str_3410 = ALIGNED_STRING(""),
+    .ClassProps_IvMpstPageControl_Names = "\0\xFF"
+        "window1\0"
+        "window0\0"
+        "page\0\xFF",
 
-    .str_3411 = "window1",
-
-    .str_3412 = "window0",
-
-    .str_3413 = ALIGNED_STRING("page"),
-
-    .ptrs_39 = {
-        SELF(str_3418),
-        SELF(str_3417),
-        SELF(str_3416),
-        SELF(str_3415),
-        SELF(str_3414),
+    .ClassProps_AcSendEditSw = {
+        SELF(ClassProps_AcSendEditSw_Names[18]),
+        SELF(ClassProps_AcSendEditSw_Names[12]),
+        SELF(ClassProps_AcSendEditSw_Names[8]),
+        SELF(ClassProps_AcSendEditSw_Names[2]),
+        SELF(ClassProps_AcSendEditSw_Names),
     },
 
-    .str_3414 = ALIGNED_STRING(""),
+    .ClassProps_AcSendEditSw_Names = "\0\xFF"
+        "onoff\0"
+        "str\0"
+        "func\0\xFF"
+        "style",
 
-    .str_3415 = "onoff",
-
-    .str_3416 = "str",
-
-    .str_3417 = ALIGNED_STRING("func"),
-
-    .str_3418 = "style",
-
-    .ptr_2495c = SELF(str_3419),
-
-    .str_3419 = ALIGNED_STRING(""),
-
-    .ptrs_40 = {
-        SELF(str_3425),
-        SELF(str_3424),
-        SELF(str_3423),
-        SELF(str_3422),
-        SELF(str_3421),
-        SELF(str_3420),
+    .ClassProps_AcGMOnOffBox = {
+        SELF(ClassProps_AcGMOnOffBox_Names),
     },
 
-    .str_3420 = ALIGNED_STRING(""),
+    .ClassProps_AcGMOnOffBox_Names = "\0\xFF",
 
-    .str_3421 = ALIGNED_STRING("pman_out"),
-
-    .str_3422 = ALIGNED_STRING("pman_adr"),
-
-    .str_3423 = "off_str",
-
-    .str_3424 = ALIGNED_STRING("on_str"),
-
-    .str_3425 = ALIGNED_STRING("data"),
-
-    .ptrs_41 = {
-        SELF(str_3431),
-        SELF(str_3430),
-        SELF(str_3429),
-        SELF(str_3428),
-        SELF(str_3427),
-        SELF(str_3426),
+    .ClassProps_AcLswFuncEditBox = {
+        SELF(ClassProps_AcLswFuncEditBox_Names[38]),
+        SELF(ClassProps_AcLswFuncEditBox_Names[30]),
+        SELF(ClassProps_AcLswFuncEditBox_Names[22]),
+        SELF(ClassProps_AcLswFuncEditBox_Names[12]),
+        SELF(ClassProps_AcLswFuncEditBox_Names[2]),
+        SELF(ClassProps_AcLswFuncEditBox_Names),
     },
 
-    .str_3426 = ALIGNED_STRING(""),
+    .ClassProps_AcLswFuncEditBox_Names = "\0\xFF"
+        "pman_out\0\xFF"
+        "pman_adr\0\xFF"
+        "off_str\0"
+        "on_str\0\xFF"
+        "data\0\xFF",
 
-    .str_3427 = ALIGNED_STRING("pman_out"),
-
-    .str_3428 = ALIGNED_STRING("pman_adr"),
-
-    .str_3429 = "off_str",
-
-    .str_3430 = ALIGNED_STRING("on_str"),
-
-    .str_3431 = ALIGNED_STRING("data"),
-
-    .ptrs_42 = {
-        SELF(str_3435),
-        SELF(str_3434),
-        SELF(str_3433),
-        SELF(str_3432),
+    .ClassProps_AcLswFuncBox = {
+        SELF(ClassProps_AcLswFuncBox_Names[38]),
+        SELF(ClassProps_AcLswFuncBox_Names[30]),
+        SELF(ClassProps_AcLswFuncBox_Names[22]),
+        SELF(ClassProps_AcLswFuncBox_Names[12]),
+        SELF(ClassProps_AcLswFuncBox_Names[2]),
+        SELF(ClassProps_AcLswFuncBox_Names),
     },
 
-    .str_3432 = ALIGNED_STRING(""),
+    .ClassProps_AcLswFuncBox_Names = "\0\xFF"
+        "pman_out\0\xFF"
+        "pman_adr\0\xFF"
+        "off_str\0"
+        "on_str\0\xFF"
+        "data\0\xFF",
 
-    .str_3433 = ALIGNED_STRING("func"),
-
-    .str_3434 = ALIGNED_STRING("fixedrow"),
-
-    .str_3435 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_43 = {
-        SELF(str_3439),
-        SELF(str_3438),
-        SELF(str_3437),
-        SELF(str_3436),
+    .ClassProps_AcFadeSetGridBox = {
+        SELF(ClassProps_AcFadeSetGridBox_Names[18]),
+        SELF(ClassProps_AcFadeSetGridBox_Names[8]),
+        SELF(ClassProps_AcFadeSetGridBox_Names[2]),
+        SELF(ClassProps_AcFadeSetGridBox_Names),
     },
 
-    .str_3436 = ALIGNED_STRING(""),
+    .ClassProps_AcFadeSetGridBox_Names = "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3437 = ALIGNED_STRING("func"),
-
-    .str_3438 = ALIGNED_STRING("fixedrow"),
-
-    .str_3439 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_44 = {
-        SELF(str_3443),
-        SELF(str_3442),
-        SELF(str_3441),
-        SELF(str_3440),
+    .ClassProps_AcVocalGridBox = {
+        SELF(ClassProps_AcVocalGridBox_Names[18]),
+        SELF(ClassProps_AcVocalGridBox_Names[8]),
+        SELF(ClassProps_AcVocalGridBox_Names[2]),
+        SELF(ClassProps_AcVocalGridBox_Names),
     },
 
-    .str_3440 = ALIGNED_STRING(""),
+    .ClassProps_AcVocalGridBox_Names = "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3441 = ALIGNED_STRING("func"),
-
-    .str_3442 = ALIGNED_STRING("fixedrow"),
-
-    .str_3443 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_45 = {
-        SELF(str_3447),
-        SELF(str_3446),
-        SELF(str_3445),
-        SELF(str_3444),
+    .ClassProps_AcInOutGridBox = {
+        SELF(ClassProps_AcInOutGridBox_Names[18]),
+        SELF(ClassProps_AcInOutGridBox_Names[8]),
+        SELF(ClassProps_AcInOutGridBox_Names[2]),
+        SELF(ClassProps_AcInOutGridBox_Names),
     },
 
-    .str_3444 = ALIGNED_STRING(""),
+    .ClassProps_AcInOutGridBox_Names = "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3445 = ALIGNED_STRING("func"),
-
-    .str_3446 = ALIGNED_STRING("fixedrow"),
-
-    .str_3447 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_46 = {
-        SELF(str_3451),
-        SELF(str_3450),
-        SELF(str_3449),
-        SELF(str_3448),
+    .ClassProps_AcParaLoadOptGridBox = {
+        SELF(ClassProps_AcParaLoadOptGridBox_Names[18]),
+        SELF(ClassProps_AcParaLoadOptGridBox_Names[8]),
+        SELF(ClassProps_AcParaLoadOptGridBox_Names[2]),
+        SELF(ClassProps_AcParaLoadOptGridBox_Names),
     },
 
-    .str_3448 = ALIGNED_STRING(""),
+    .ClassProps_AcParaLoadOptGridBox_Names = "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3449 = ALIGNED_STRING("func"),
-
-    .str_3450 = ALIGNED_STRING("fixedrow"),
-
-    .str_3451 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_47 = {
-        SELF(str_3455),
-        SELF(str_3454),
-        SELF(str_3453),
-        SELF(str_3452),
+    .ClassProps_AcPcgOutGridBox = {
+        SELF(ClassProps_AcPcgOutGridBox_Names[18]),
+        SELF(ClassProps_AcPcgOutGridBox_Names[8]),
+        SELF(ClassProps_AcPcgOutGridBox_Names[2]),
+        SELF(ClassProps_AcPcgOutGridBox_Names),
     },
 
-    .str_3452 = ALIGNED_STRING(""),
+    .ClassProps_AcPcgOutGridBox_Names = "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3453 = ALIGNED_STRING("func"),
-
-    .str_3454 = ALIGNED_STRING("fixedrow"),
-
-    .str_3455 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_48 = {
-        SELF(str_3459),
-        SELF(str_3458),
-        SELF(str_3457),
-        SELF(str_3456),
+    .ClassProps_AcPmemOutLGridBox = {
+        SELF(ClassProps_AcPmemOutLGridBox_Names[18]),
+        SELF(ClassProps_AcPmemOutLGridBox_Names[8]),
+        SELF(ClassProps_AcPmemOutLGridBox_Names[2]),
+        SELF(ClassProps_AcPmemOutLGridBox_Names),
     },
 
-    .str_3456 = ALIGNED_STRING(""),
+    .ClassProps_AcPmemOutLGridBox_Names = "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3457 = ALIGNED_STRING("func"),
-
-    .str_3458 = ALIGNED_STRING("fixedrow"),
-
-    .str_3459 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_49 = {
-        SELF(str_3464),
-        SELF(str_3463),
-        SELF(str_3462),
-        SELF(str_3461),
-        SELF(str_3460),
+    .ClassProps_AcPmemOutRGridBox = {
+        SELF(ClassProps_AcPmemOutRGridBox_Names[18]),
+        SELF(ClassProps_AcPmemOutRGridBox_Names[8]),
+        SELF(ClassProps_AcPmemOutRGridBox_Names[2]),
+        SELF(ClassProps_AcPmemOutRGridBox_Names),
     },
 
-    .str_3460 = ALIGNED_STRING(""),
+    .ClassProps_AcPmemOutRGridBox_Names = "\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3461 = ALIGNED_STRING("page"),
-
-    .str_3462 = ALIGNED_STRING("func"),
-
-    .str_3463 = ALIGNED_STRING("fixedrow"),
-
-    .str_3464 = ALIGNED_STRING("fixedcol"),
-
-    .ptrs_50 = {
-        SELF(str_3469),
-        SELF(str_3468),
-        SELF(str_3467),
-        SELF(str_3466),
-        SELF(str_3465),
+    .ClassProps_AcCtlMsgGridBox = {
+        SELF(ClassProps_AcCtlMsgGridBox_Names[24]),
+        SELF(ClassProps_AcCtlMsgGridBox_Names[14]),
+        SELF(ClassProps_AcCtlMsgGridBox_Names[8]),
+        SELF(ClassProps_AcCtlMsgGridBox_Names[2]),
+        SELF(ClassProps_AcCtlMsgGridBox_Names),
     },
 
-    .str_3465 = ALIGNED_STRING(""),
+    .ClassProps_AcCtlMsgGridBox_Names = "\0\xFF"
+        "page\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
 
-    .str_3466 = ALIGNED_STRING("page"),
-
-    .str_3467 = ALIGNED_STRING("func"),
-
-    .str_3468 = ALIGNED_STRING("fixedrow"),
-
-    .str_3469 = ALIGNED_STRING("fixedcol"),
-
-    .ptr_24b8a = NAKA_ADDR(PsHarmOnOffBoxProc),
-
-    .w17 = {
-        .header    = NAKA_HDR(0x44),
-        .field_04   = 0x002C,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E55CC4,
-        .inst_ptr   = 0x00E55CC2,
-        .link_ptr   = SELF(ptr_248fc),
-        .proc_addr  = NAKA_ADDR(AcVocalistListBoxProc),
+    .ClassProps_AcMidiPartGridBox = {
+        SELF(ClassProps_AcMidiPartGridBox_Names[24]),
+        SELF(ClassProps_AcMidiPartGridBox_Names[14]),
+        SELF(ClassProps_AcMidiPartGridBox_Names[8]),
+        SELF(ClassProps_AcMidiPartGridBox_Names[2]),
+        SELF(ClassProps_AcMidiPartGridBox_Names),
     },
 
-    .w18 = {
-        .header    = NAKA_HDR(0x55),
-        .field_04   = 0x0030,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E55CB0,
-        .inst_ptr   = 0x00E55CAE,
-        .link_ptr   = SELF(ptr_24902),
-        .proc_addr  = NAKA_ADDR(IvMpstPageControlProc),
+    .ClassProps_AcMidiPartGridBox_Names = "\0\xFF"
+        "page\0\xFF"
+        "func\0\xFF"
+        "fixedrow\0\xFF"
+        "fixedcol\0\xFF",
+
+    .East_ClassTable_163 = {
+        { NAKA_ADDR(PsHarmOnOffBoxProc), 0x01600044, 44, 0, 0x00E55CC4, 0x00E55CC2, SELF(ptr_248fc) },
+        { NAKA_ADDR(AcVocalistListBoxProc), 0x01600055, 48, 0, 0x00E55CB0, 0x00E55CAE, SELF(ptr_24902) },
+        { NAKA_ADDR(IvMpstPageControlProc), 0x01600027, 32, 10, 0x00E55C9C, 0x00E55C98, SELF(ClassProps_IvMpstPageControl) },
+        { NAKA_ADDR(AcSendEditSwProc), 0x0160001E, 52, 14, 0x00E55C8A, 0x00E55C84, SELF(ClassProps_AcSendEditSw) },
+        { NAKA_ADDR(AcGMOnOffBoxProc), 0x01600018, 54, 0, 0x00E55C76, 0x00E55C74, SELF(ClassProps_AcGMOnOffBox) },
+        { NAKA_ADDR(AcLswFuncEditBoxProc), 0x01600015, 68, 18, 0x00E55C62, 0x00E55C5C, SELF(ClassProps_AcLswFuncEditBox) },
+        { NAKA_ADDR(AcLswFuncBoxProc), 0x01600012, 54, 18, 0x00E55C4E, 0x00E55C48, SELF(ClassProps_AcLswFuncBox) },
+        { NAKA_ADDR(AcFadeSetGridBoxProc), 0x01600054, 74, 12, 0x00E55C36, 0x00E55C32, SELF(ClassProps_AcFadeSetGridBox) },
+        { NAKA_ADDR(AcVocalGridBoxProc), 0x01600054, 74, 12, 0x00E55C22, 0x00E55C1E, SELF(ClassProps_AcVocalGridBox) },
+        { NAKA_ADDR(AcInOutGridBoxProc), 0x01600054, 74, 12, 0x00E55C0E, 0x00E55C0A, SELF(ClassProps_AcInOutGridBox) },
+        { NAKA_ADDR(AcParaLoadOptGridBoxProc), 0x01600054, 74, 12, 0x00E55BF4, 0x00E55BF0, SELF(ClassProps_AcParaLoadOptGridBox) },
+        { NAKA_ADDR(AcPcgOutGridBoxProc), 0x01600054, 74, 12, 0x00E55BE0, 0x00E55BDC, SELF(ClassProps_AcPcgOutGridBox) },
+        { NAKA_ADDR(AcPmemOutLGridBoxProc), 0x01600054, 74, 12, 0x00E55BCA, SELF(East_ClassTable_163_Tail[92]), SELF(ClassProps_AcPmemOutLGridBox) },
+        { NAKA_ADDR(AcPmemOutRGridBoxProc), 0x01600054, 74, 12, SELF(East_ClassTable_163_Tail[74]), SELF(East_ClassTable_163_Tail[70]), SELF(ClassProps_AcPmemOutRGridBox) },
+        { NAKA_ADDR(AcCtlMsgGridBoxProc), 0x01600054, 78, 16, SELF(East_ClassTable_163_Tail[54]), SELF(East_ClassTable_163_Tail[48]), SELF(ClassProps_AcCtlMsgGridBox) },
+        { NAKA_ADDR(AcMidiPartGridBoxProc), 0x01600054, 78, 16, SELF(East_ClassTable_163_Tail[30]), SELF(East_ClassTable_163_Tail[24]), SELF(ClassProps_AcMidiPartGridBox) },
     },
 
-    .w19 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0020,
-        .field_06   = 0x000A,
-        .name_ptr   = 0x00E55C9C,
-        .inst_ptr   = 0x00E55C98,
-        .link_ptr   = SELF(ptrs_38),
-        .proc_addr  = NAKA_ADDR(AcSendEditSwProc),
+    .East_ClassTable_163_Tail = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58, 0x58, 0x6A, 0x6E, 0x00, 0xFF, 0x41, 0x63,
+        0x4D, 0x69, 0x64, 0x69, 0x50, 0x61, 0x72, 0x74, 0x47, 0x72, 0x69, 0x64, 0x42, 0x6F, 0x78, 0x00,
+        0x58, 0x58, 0x6A, 0x6E, 0x00, 0xFF, 0x41, 0x63, 0x43, 0x74, 0x6C, 0x4D, 0x73, 0x67, 0x47, 0x72,
+        0x69, 0x64, 0x42, 0x6F, 0x78, 0x00, 0x58, 0x58, 0x6A, 0x00, 0x41, 0x63, 0x50, 0x6D, 0x65, 0x6D,
+        0x4F, 0x75, 0x74, 0x52, 0x47, 0x72, 0x69, 0x64, 0x42, 0x6F, 0x78, 0x00, 0x58, 0x58,
     },
-
-    .w20 = {
-        .header    = NAKA_HDR(NAKA_TYPE_PANEL),
-        .field_04   = 0x0034,
-        .field_06   = 0x000E,
-        .name_ptr   = 0x00E55C8A,
-        .inst_ptr   = 0x00E55C84,
-        .link_ptr   = SELF(ptrs_39),
-        .proc_addr  = NAKA_ADDR(AcGMOnOffBoxProc),
-    },
-
-    .w21 = {
-        .header    = NAKA_HDR(0x18),
-        .field_04   = 0x0036,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E55C76,
-        .inst_ptr   = 0x00E55C74,
-        .link_ptr   = SELF(ptr_2495c),
-        .proc_addr  = NAKA_ADDR(AcLswFuncEditBoxProc),
-    },
-
-    .w22 = {
-        .header    = NAKA_HDR(0x15),
-        .field_04   = 0x0044,
-        .field_06   = 0x0012,
-        .name_ptr   = 0x00E55C62,
-        .inst_ptr   = 0x00E55C5C,
-        .link_ptr   = SELF(ptrs_40),
-        .proc_addr  = NAKA_ADDR(AcLswFuncBoxProc),
-    },
-
-    .w23 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x0036,
-        .field_06   = 0x0012,
-        .name_ptr   = 0x00E55C4E,
-        .inst_ptr   = 0x00E55C48,
-        .link_ptr   = SELF(ptrs_41),
-        .proc_addr  = NAKA_ADDR(AcFadeSetGridBoxProc),
-    },
-
-    .w24 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55C36,
-        .inst_ptr   = 0x00E55C32,
-        .link_ptr   = SELF(ptrs_42),
-        .proc_addr  = NAKA_ADDR(AcVocalGridBoxProc),
-    },
-
-    .w25 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55C22,
-        .inst_ptr   = 0x00E55C1E,
-        .link_ptr   = SELF(ptrs_43),
-        .proc_addr  = NAKA_ADDR(AcInOutGridBoxProc),
-    },
-
-    .w26 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55C0E,
-        .inst_ptr   = 0x00E55C0A,
-        .link_ptr   = SELF(ptrs_44),
-        .proc_addr  = NAKA_ADDR(AcParaLoadOptGridBoxProc),
-    },
-
-    .w27 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55BF4,
-        .inst_ptr   = 0x00E55BF0,
-        .link_ptr   = SELF(ptrs_45),
-        .proc_addr  = NAKA_ADDR(AcPcgOutGridBoxProc),
-    },
-
-    .w28 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55BE0,
-        .inst_ptr   = 0x00E55BDC,
-        .link_ptr   = SELF(ptrs_46),
-        .proc_addr  = NAKA_ADDR(AcPmemOutLGridBoxProc),
-    },
-
-    .w29 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55BCA,
-        .inst_ptr   = SELF(field_24d66),
-        .link_ptr   = SELF(ptrs_47),
-        .proc_addr  = NAKA_ADDR(AcPmemOutRGridBoxProc),
-    },
-
-    .w30 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = SELF(AcPmemOutRGridBox_name),
-        .inst_ptr   = SELF(AcPmemOutRGridBox_code),
-        .link_ptr   = SELF(ptrs_48),
-        .proc_addr  = NAKA_ADDR(AcCtlMsgGridBoxProc),
-    },
-
-    .w31 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004E,
-        .field_06   = 0x0010,
-        .name_ptr   = SELF(AcCtlMsgGridBox_name),
-        .inst_ptr   = SELF(AcCtlMsgGridBox_code),
-        .link_ptr   = SELF(ptrs_49),
-        .proc_addr  = NAKA_ADDR(AcMidiPartGridBoxProc),
-    },
-
-    .w32 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004E,
-        .field_06   = 0x0010,
-        .name_ptr   = SELF(AcMidiPartGridBox_name),
-        .inst_ptr   = SELF(AcMidiPartGridBox_code),
-        .link_ptr   = SELF(ptrs_50),
-        .proc_addr  = 0x00000000,
-    },
-
-    .pad_1682 = { 0 },
-
-    .AcMidiPartGridBox_code = ALIGNED_STRING("XXjn"),
-
-    .AcMidiPartGridBox_name = "AcMidiPartGridBox",
-
-    .AcCtlMsgGridBox_code = ALIGNED_STRING("XXjn"),
-
-    .AcCtlMsgGridBox_name = "AcCtlMsgGridBox",
-
-    .AcPmemOutRGridBox_code = "XXj",
-
-    .AcPmemOutRGridBox_name = "AcPmemOutRGridBox",
-
-    .field_24d66 = 0x5858,
 
 };
 
