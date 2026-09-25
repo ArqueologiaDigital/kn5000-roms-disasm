@@ -5191,7 +5191,7 @@ HDAE5000_SetupPage_BuildDriveInfo:	; 0x2862AC (818 bytes)
 	call HDAE5000_MemFill
 	lda xsp, (xsp + 0x12)
 	lda xwa, (xsp + 0x18)
-	calr HDAE5000_Display_Clear
+	calr HDAE5000_CopyVersionString
 	lda xwa, (xsp + 0x18)
 	push xwa
 	call HDAE5000_StrLen
