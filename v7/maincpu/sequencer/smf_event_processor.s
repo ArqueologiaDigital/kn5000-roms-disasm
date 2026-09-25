@@ -5201,10 +5201,24 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper_Helper2:
+; FatPath_Next83Component(dst, pp)  -- named 2026-09-25 (lane seqeng); it was
+; SeqByteBlock_StyleBitmapRef_Code_Helper_Helper2, and its inner labels were named after
+; unrelated routines (EffectsSeqData, TechnichordCfgA, ...).
+; Converts the next component of the path *pp into an 8.3 directory-entry
+; name at dst (C calling convention of this module: dst at XSP+8, pp at
+; XSP+12 on entry after `push xiz`; XIZ = pp):
+;   Memset(dst, ' ', 11); dst[11] = 0; skip one leading '/' or '\';
+;   copy characters to dst[0..10] until NUL, '/' or '\'; a '.' is stored
+;   when it starts the name ("." and "..") and otherwise moves the write index
+;   to 8, the extension field; *pp is advanced past what was consumed.
+; Returns HL = 1 if a '/' or '\' follows (more components), 0 at the end of
+; the path, 0xFFFF when characters remain that do not fit the 8.3 fields.
+; A "." component (dst = ". ...") is skipped by starting over.  The code is
+; read off this routine; it has five callers in this file.
+FatPath_Next83Component:
 	push	xiz
 	ld	xiz, (xsp+12)
-SeqByteBlock_StyleBitmapRef_Code_Helper_Loop6:
+FatPath_Next83Component_Restart:
 	pushw	11
 	pushw	32
 	ld	xwa, (xsp+12)
@@ -5216,83 +5230,81 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop6:
 	ld	hl, 0:i3
 	ld	xwa, (xiz)
 	cp	(xwa), 47
-	jr	z, SeqStep_FileSectorError_Entry
-SeqByteBlock_EffectsSeqData:
+	jr	z, FatPath_Next83Component_SkipLeadSep
 	ld	xwa, (xiz)
 	cp	(xwa), 92
-	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Code_Skip
-SeqStep_FileSectorError_Entry:
+	jr	nz, FatPath_Next83Component_Start
+FatPath_Next83Component_SkipLeadSep:
 	ld	xwa, 1:i3
 	add	(xiz), xwa
-SeqByteBlock_StyleBitmapRef_Code_Helper_Code_Skip:
+FatPath_Next83Component_Start:
 	ld	de, 0:i3
 	cp	de, 11
-	jr	ge, SeqByteBlock_StyleBitmapRef_Code_Helper_Join6
-SeqByteBlock_StyleBitmapRef_Code_Helper_Loop7:
+	jr	ge, FatPath_Next83Component_Terminator
+FatPath_Next83Component_CharLoop:
 	ld	xwa, (xiz)
 	cp	(xwa), 0
-	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Join6
+	jr	z, FatPath_Next83Component_Terminator
 	ld	xwa, (xiz)
 	cp	(xwa), 47
-	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip14
+	jr	z, FatPath_Next83Component_AtSeparator
 	ld	xwa, (xiz)
 	cp	(xwa), 92
-	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip15
-SeqByteBlock_StyleBitmapRef_Code_Helper_Skip14:
+	jr	nz, FatPath_Next83Component_CheckDot
+FatPath_Next83Component_AtSeparator:
 	ld	hl, 1:i3
-SeqByteBlock_EffectsSeqDotExt:
-	jr	SeqByteBlock_StyleBitmapRef_Code_Helper_Join6
-SeqByteBlock_StyleBitmapRef_Code_Helper_Skip15:
+	jr	FatPath_Next83Component_Terminator
+FatPath_Next83Component_CheckDot:
 	ld	xwa, (xiz)
 	cp	(xwa), 46
-	jr	nz, SeqByteBlock_TechnichordCfgA
+	jr	nz, FatPath_Next83Component_StoreChar
 	cp	de, 1:i3
-	jr	gt, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip16
+	jr	gt, FatPath_Next83Component_ToExtension
 	cp	de, 1:i3
-	jr	nz, SeqByteBlock_TechnichordCfgA
+	jr	nz, FatPath_Next83Component_StoreChar
 	ld	xwa, (xsp+8)
 	cp	(xwa), 46
-	jr	z, SeqByteBlock_TechnichordCfgA
-SeqByteBlock_StyleBitmapRef_Code_Helper_Skip16:
+	jr	z, FatPath_Next83Component_StoreChar
+FatPath_Next83Component_ToExtension:
 	ld	de, 7:i3
 	ld	xwa, 1:i3
 	add	(xiz), xwa
-	jr	SeqByteBlock_StyleBitmapRef_Code_Helper_Join5
-SeqByteBlock_TechnichordCfgA:
+	jr	FatPath_Next83Component_NextChar
+FatPath_Next83Component_StoreChar:
 	ld	xbc, (xiz)
 	ld	xwa, (xsp+8)
 	ld	c, (xbc)
 	st_rrb	c, xwa, de
 	ld	xwa, 1:i3
 	add	(xiz), xwa
-SeqByteBlock_StyleBitmapRef_Code_Helper_Join5:
+FatPath_Next83Component_NextChar:
 	inc	1, de
 	cp	de, 11
 SeqByteBlock_StyleBitmapRef:
-	jr	lt, SeqByteBlock_StyleBitmapRef_Code_Helper_Loop7
-SeqByteBlock_StyleBitmapRef_Code_Helper_Join6:
+	jr	lt, FatPath_Next83Component_CharLoop
+FatPath_Next83Component_Terminator:
 	ld	xwa, (xiz)
 	cp	(xwa), 47
-	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip17
+	jr	z, FatPath_Next83Component_MoreFollows
 	ld	xwa, (xiz)
 	cp	(xwa), 92
-	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip18
-SeqByteBlock_StyleBitmapRef_Code_Helper_Skip17:
+	jr	nz, FatPath_Next83Component_CheckEnd
+FatPath_Next83Component_MoreFollows:
 	ld	hl, 1:i3
-	jr	SeqByteBlock_StyleBitmapRef_Code_Helper_Join7
-SeqByteBlock_StyleBitmapRef_Code_Helper_Skip18:
+	jr	FatPath_Next83Component_CheckDotEntry
+FatPath_Next83Component_CheckEnd:
 	ld	xwa, (xiz)
 	cp	(xwa), 0
-	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Join7
+	jr	z, FatPath_Next83Component_CheckDotEntry
 	ldw	hl, 65535
-SeqByteBlock_StyleBitmapRef_Code_Helper_Join7:
+FatPath_Next83Component_CheckDotEntry:
 	ld	xwa, (xsp+8)
 	cp	(xwa), 46
-	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue3
+	jr	nz, FatPath_Next83Component_Return
 	ld	xwa, (xsp+8)
 	cp	(xwa+1), 32
-	jrl	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Loop6
-SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue3:
+	jrl	z, FatPath_Next83Component_Restart
+FatPath_Next83Component_Return:
 	pop	xiz
 	ret
 SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper:
@@ -5348,7 +5360,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Skip22:
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper2
+	calr	FatPath_Next83Component
 	inc	8, xsp
 	ld	(xsp+20), hl
 	cpw	(xsp+20), 65535
@@ -5437,7 +5449,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop11:
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper2
+	calr	FatPath_Next83Component
 	inc	8, xsp
 	ld	(xsp+20), hl
 	cpw	(xsp+20), 65535
@@ -5707,7 +5719,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper2:
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper2
+	calr	FatPath_Next83Component
 	inc	8, xsp
 	cp	hl, 0:i3
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip52
@@ -5825,7 +5837,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Skip52:
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper2
+	calr	FatPath_Next83Component
 	inc	8, xsp
 	cp	hl, 0:i3
 	jrl	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Join13
@@ -5834,7 +5846,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop20:
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper2
+	calr	FatPath_Next83Component
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Loop20

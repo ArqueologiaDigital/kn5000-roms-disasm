@@ -1,0 +1,19 @@
+# lane seqeng 2026-09-25: the 8.3 path-component parser (v7 label set; same
+# positions as rename_seqeng_fatpath_v10v9.sed, label for label)
+/^SeqByteBlock_EffectsSeqData:$/d
+/^SeqByteBlock_EffectsSeqDotExt:$/d
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Helper2\b/FatPath_Next83Component/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Loop6\b/FatPath_Next83Component_Restart/g
+s/\bSeqStep_FileSectorError_Entry\b/FatPath_Next83Component_SkipLeadSep/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Code_Skip\b/FatPath_Next83Component_Start/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Loop7\b/FatPath_Next83Component_CharLoop/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip14\b/FatPath_Next83Component_AtSeparator/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip15\b/FatPath_Next83Component_CheckDot/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip16\b/FatPath_Next83Component_ToExtension/g
+s/\bSeqByteBlock_TechnichordCfgA\b/FatPath_Next83Component_StoreChar/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Join5\b/FatPath_Next83Component_NextChar/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Join6\b/FatPath_Next83Component_Terminator/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip17\b/FatPath_Next83Component_MoreFollows/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip18\b/FatPath_Next83Component_CheckEnd/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Join7\b/FatPath_Next83Component_CheckDotEntry/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue3\b/FatPath_Next83Component_Return/g

@@ -1,0 +1,18 @@
+# lane seqeng 2026-09-25: the 8.3 path-component parser (v10/v9 label set)
+/^SeqByteBlock_EffectsSeqData:$/d
+/^SeqByteBlock_EffectsSeqDotExt:$/d
+s/\bSeqByteBlock_PathNormalize_Helper3\b/FatPath_Next83Component/g
+s/\bSeqByteBlock_PathNormalize_Helper3_Loop\b/FatPath_Next83Component_Restart/g
+s/\bSeqStep_FileSectorPopReturn_Entry3\b/FatPath_Next83Component_SkipLeadSep/g
+s/\bSeqByteBlock_PathNormalize_Helper3_Skip\b/FatPath_Next83Component_Start/g
+s/\bSeqByteBlock_PathNormalize_Helper3_Loop2\b/FatPath_Next83Component_CharLoop/g
+s/\bSeqStep_FileSectorPopReturn_Skip9\b/FatPath_Next83Component_AtSeparator/g
+s/\bSeqStep_FileSectorPopReturn_Skip10\b/FatPath_Next83Component_CheckDot/g
+s/\bSeqStep_FileSectorPopReturn_Skip11\b/FatPath_Next83Component_ToExtension/g
+s/\bSeqByteBlock_TechnichordCfgA\b/FatPath_Next83Component_StoreChar/g
+s/\bSeqByteBlock_PathNormalize_Helper3_Join\b/FatPath_Next83Component_NextChar/g
+s/\bSeqByteBlock_PathNormalize_Join\b/FatPath_Next83Component_Terminator/g
+s/\bSeqByteBlock_PathNormalize_Helper3_Skip2\b/FatPath_Next83Component_MoreFollows/g
+s/\bSeqByteBlock_PathNormalize_Helper3_Skip3\b/FatPath_Next83Component_CheckEnd/g
+s/\bSeqByteBlock_PathNormalize_Skip\b/FatPath_Next83Component_CheckDotEntry/g
+s/\bSeqByteBlock_PathNormalize_Epilogue13\b/FatPath_Next83Component_Return/g
