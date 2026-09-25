@@ -3181,18 +3181,18 @@ HDAE5000_LyricBoxProc:
 	cp	xwa, 0x01c0000b
 	jr z, .LUIH_cda9                       ; [66 6e] jr Z,0x28cda9
 	cp	xwa, 0x01c0000d
-	jr z, .LUIH_cd6f                       ; [66 2c] jr Z,0x28cd6f
+	jr z, HDAE5000_LyricBoxProc_Ev01C0000D                       ; [66 2c] jr Z,0x28cd6f
 	sub	xwa, 0x01ca0003
 	cp	xwa, 0x00000000
-	jrl lt, .LUIH_d311                     ; [71 bf 05] jrl LT,0x28d311
+	jrl lt, HDAE5000_LyricBoxProc_Default1                     ; [71 bf 05] jrl LT,0x28d311
 	cp	xwa, 0x00000006
-	jrl gt, .LUIH_d311                     ; [7a b6 05] jrl GT,0x28d311
+	jrl gt, HDAE5000_LyricBoxProc_Default1                     ; [7a b6 05] jrl GT,0x28d311
 	add	xwa, xwa
-	add	xwa, 0x002e5bd2
+	add	xwa, HDAE5000_LyricBoxProc_CaseTable1
 	ld	wa, (xwa)
-	lda xix, (0x28cd6f:24)
+	lda xix, (HDAE5000_LyricBoxProc_Ev01C0000D:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
-.LUIH_cd6f:
+HDAE5000_LyricBoxProc_Ev01C0000D:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld xbc, (xsp + 0x0a)                    ; ld XBC,(XSP+0x0a)
 	ld xde, (xsp + 0x06)                    ; ld XDE,(XSP+0x06)
@@ -3240,6 +3240,7 @@ HDAE5000_LyricBoxProc:
 	call	(xhl)
 	ld	xhl, 0:i3
 	jrl t, .LUIH_d600                      ; [78 e7 07] jrl T,0x28d600
+HDAE5000_LyricBoxProc_Ev01CA0003:
 	cp	(0x23A19A:24), 0
 	jrl nz, .LUIH_cf93                     ; [7e 71 01] jrl NZ,0x28cf93
 	ld	(0x23A19A:24), 1
@@ -3350,6 +3351,7 @@ HDAE5000_LyricBoxProc:
 .LUIH_cf93:
 	ld	xhl, 0:i3
 	jrl t, .LUIH_d600                      ; [78 68 06] jrl T,0x28d600
+HDAE5000_LyricBoxProc_Ev01CA0007:
 	ld xwa, (xsp + 0x06)                    ; ld XWA,(XSP+0x06)
 	cp	xwa, 0x00000001
 	jr z, .LUIH_d005                       ; [66 62] jr Z,0x28d005
@@ -3395,6 +3397,7 @@ HDAE5000_LyricBoxProc:
 	call	(xhl)
 	ld	xhl, 0:i3
 	jrl t, .LUIH_d600                      ; [78 cc 05] jrl T,0x28d600
+HDAE5000_LyricBoxProc_Ev01CA0008:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld	xbc, (0x23a1a2)
 	ld	xbc, (xbc + 0x0e0a)
@@ -3582,6 +3585,7 @@ HDAE5000_LyricBoxProc:
 .LUIH_d2a5:
 	ld	xhl, 0:i3
 	jrl t, .LUIH_d600                      ; [78 56 03] jrl T,0x28d600
+HDAE5000_LyricBoxProc_Ev01CA0009:
 	ld xwa, (xsp + 0x06)                    ; ld XWA,(XSP+0x06)
 	cp	xwa, 0x00000004
 	jrl z, .LUIH_d3e5                      ; [76 2f 01] jrl Z,0x28d3e5
@@ -3592,7 +3596,7 @@ HDAE5000_LyricBoxProc:
 	cp	xwa, 0x00000001
 	jr z, .LUIH_d32e                       ; [66 5e] jr Z,0x28d32e
 	or xwa, xwa                             ; or XWA,XWA
-	jr nz, .LUIH_d311                      ; [6e 3d] jr NZ,0x28d311
+	jr nz, HDAE5000_LyricBoxProc_Default1                      ; [6e 3d] jr NZ,0x28d311
 	lda xhl, (0x22a08c:24)
 	lda xbc, (0x23087a:24)
 	lda xwa, (0x23051e:24)
@@ -3610,7 +3614,7 @@ HDAE5000_LyricBoxProc:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
-.LUIH_d311:
+HDAE5000_LyricBoxProc_Default1:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld xbc, (xsp + 0x0a)                    ; ld XBC,(XSP+0x0a)
 	ld xde, (xsp + 0x06)                    ; ld XDE,(XSP+0x06)
@@ -3637,7 +3641,7 @@ HDAE5000_LyricBoxProc:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
-	jr t, .LUIH_d311                       ; [68 a4] jr T,0x28d311
+	jr t, HDAE5000_LyricBoxProc_Default1                       ; [68 a4] jr T,0x28d311
 .LUIH_d36d:
 	lda xhl, (0x22a08c:24)
 	lda xbc, (0x22a09c:24)
@@ -3654,7 +3658,7 @@ HDAE5000_LyricBoxProc:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
-	jrl t, .LUIH_d311                      ; [78 66 ff] jrl T,0x28d311
+	jrl t, HDAE5000_LyricBoxProc_Default1                      ; [78 66 ff] jrl T,0x28d311
 .LUIH_d3ab:
 	lda xwa, (0x22a0a0:24)
 	ld	xhl, xwa
@@ -3672,7 +3676,7 @@ HDAE5000_LyricBoxProc:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
-	jrl t, .LUIH_d311                      ; [78 2c ff] jrl T,0x28d311
+	jrl t, HDAE5000_LyricBoxProc_Default1                      ; [78 2c ff] jrl T,0x28d311
 .LUIH_d3e5:
 	lda xwa, (0x22a0ac:24)
 	ld	xhl, xwa
@@ -3690,9 +3694,10 @@ HDAE5000_LyricBoxProc:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
-	jrl t, .LUIH_d311                      ; [78 f2 fe] jrl T,0x28d311
+	jrl t, HDAE5000_LyricBoxProc_Default1                      ; [78 f2 fe] jrl T,0x28d311
+HDAE5000_LyricBoxProc_Ev01CA0004:
 	cpw	(0x2307B4:24), 0
-	jrl nz, .LUIH_d311                     ; [7e e8 fe] jrl NZ,0x28d311
+	jrl nz, HDAE5000_LyricBoxProc_Default1                     ; [7e e8 fe] jrl NZ,0x28d311
 	ld xwa, (xsp + 0x06)                    ; ld XWA,(XSP+0x06)
 	ld	bc, 1:i3
 	calr	HDAE5000_File_Operation
@@ -3714,7 +3719,8 @@ HDAE5000_LyricBoxProc:
 	incw	1, (0x230874:24)
 	ld	xwa, 1:i3
 	add	(0x230876:24), xwa
-	jrl t, .LUIH_d311                      ; [78 92 fe] jrl T,0x28d311
+	jrl t, HDAE5000_LyricBoxProc_Default1                      ; [78 92 fe] jrl T,0x28d311
+HDAE5000_LyricBoxProc_Ev01CA0005:
 	incw	1, (0x2307AC:24)
 	ld	a, (0x2307A6:24)
 	extz wa                                 ; extz WA
@@ -3742,7 +3748,7 @@ HDAE5000_LyricBoxProc:
 	ld	xbc, 0x01ca0009
 	ld	xde, 3:i3
 	call	(xhl)
-	jrl t, .LUIH_d311                      ; [78 2c fe] jrl T,0x28d311
+	jrl t, HDAE5000_LyricBoxProc_Default1                      ; [78 2c fe] jrl T,0x28d311
 .LUIH_d4e5:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld	xbc, (0x23a1a2)
@@ -3755,7 +3761,7 @@ HDAE5000_LyricBoxProc:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld	(0x23a19e), xwa
 	ldw	(0x2307B2:24), 1
-	jrl t, .LUIH_d311                      ; [78 fa fd] jrl T,0x28d311
+	jrl t, HDAE5000_LyricBoxProc_Default1                      ; [78 fa fd] jrl T,0x28d311
 .LUIH_d517:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld	xbc, (0x23a1a2)
@@ -3767,7 +3773,7 @@ HDAE5000_LyricBoxProc:
 	ldw	(xwa), 0x0000
 	ld	xwa, 0xffffffff
 	ld	(0x23a19e), xwa
-	jrl t, .LUIH_d311                      ; [78 cd fd] jrl T,0x28d311
+	jrl t, HDAE5000_LyricBoxProc_Default1                      ; [78 cd fd] jrl T,0x28d311
 .LUIH_d544:
 	ld xde, (xsp + 0x06)                    ; ld XDE,(XSP+0x06)
 	ld	xwa, (0x23a1a2)
@@ -3778,12 +3784,13 @@ HDAE5000_LyricBoxProc:
 	call	(xix)
 	ld	xwa, xhl
 	cp	xwa, 0x00000007
-	jrl ugt, .LUIH_d5fe                    ; [7b 91 00] jrl UGT,0x28d5fe
+	jrl ugt, HDAE5000_LyricBoxProc_Default2                    ; [7b 91 00] jrl UGT,0x28d5fe
 	add	xwa, xwa
-	add	xwa, 0x002e5bc2
+	add	xwa, HDAE5000_LyricBoxProc_CaseTable2
 	ld	wa, (xwa)
-	lda xix, (0x28d581:24)
+	lda xix, (HDAE5000_LyricBoxProc_Case0_2:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+HDAE5000_LyricBoxProc_Case0_2:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld	xbc, (0x23a1a2)
 	ld	xbc, (xbc + 0x0e0a)
@@ -3802,7 +3809,8 @@ HDAE5000_LyricBoxProc:
 	ld	xbc, 0x01c0000d
 	ld	xde, 0:i3
 	call	(xhl)
-	jr t, .LUIH_d5fe                       ; [68 39] jr T,0x28d5fe
+	jr t, HDAE5000_LyricBoxProc_Default2                       ; [68 39] jr T,0x28d5fe
+HDAE5000_LyricBoxProc_Case7_2:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld	xbc, (0x23a1a2)
 	ld	xbc, (xbc + 0x0e0a)
@@ -3817,7 +3825,7 @@ HDAE5000_LyricBoxProc:
 	ld	xbc, 0x01c00001
 	ld	xde, 0:i3
 	call	(xhl)
-.LUIH_d5fe:
+HDAE5000_LyricBoxProc_Default2:
 	ld	xhl, 0:i3
 .LUIH_d600:
 	popw iz                                 ; pop IZ

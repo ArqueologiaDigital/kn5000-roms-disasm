@@ -12716,15 +12716,23 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.asciz "!."
 	.asciz "_"
 	.asciz " "
-	.zero 2
-	.asciz "L"
-	.byte 0x9d  ; ""
-	.byte 0x00
-	.byte 0x5b
-	.byte 0x01
-	.byte 0xb7, 0x03, 0xb5, 0x04, 0x44, 0x05, 0xd3, 0x05
-	.byte 0x5b
-	.byte 0x07
+;
+; HDAE5000_AcHddNamingWindowProc_CaseTable (0x2E21C6, 9 x u16): the switch of HDAE5000_AcHddNamingWindowProc
+; (dispatch at 0x2819FA, hd-ae5000_v2_06i.s:2472: `dec 1,xwa`, bound `cp xwa,8`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_AcHddNamingWindowProc_Case1)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_AcHddNamingWindowProc_Case1 of the case for value 1+i; 9 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_AcHddNamingWindowProc_CaseTable:
+	.short	HDAE5000_AcHddNamingWindowProc_Case1 - HDAE5000_AcHddNamingWindowProc_Case1	; 1
+	.short	HDAE5000_AcHddNamingWindowProc_Case2 - HDAE5000_AcHddNamingWindowProc_Case1	; 2
+	.short	HDAE5000_AcHddNamingWindowProc_Case3 - HDAE5000_AcHddNamingWindowProc_Case1	; 3
+	.short	HDAE5000_AcHddNamingWindowProc_Case4 - HDAE5000_AcHddNamingWindowProc_Case1	; 4
+	.short	HDAE5000_AcHddNamingWindowProc_Case5 - HDAE5000_AcHddNamingWindowProc_Case1	; 5
+	.short	HDAE5000_AcHddNamingWindowProc_Case6 - HDAE5000_AcHddNamingWindowProc_Case1	; 6
+	.short	HDAE5000_AcHddNamingWindowProc_Case7 - HDAE5000_AcHddNamingWindowProc_Case1	; 7
+	.short	HDAE5000_AcHddNamingWindowProc_Case8 - HDAE5000_AcHddNamingWindowProc_Case1	; 8
+	.short	HDAE5000_AcHddNamingWindowProc_Case9 - HDAE5000_AcHddNamingWindowProc_Case1	; 9
 
 HDAE5000_Test_Strings:	; 0x2E21D8
 	; PPORT test and debug strings
@@ -12801,21 +12809,23 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "u"
 	.byte 0x02, 0x7f
-	.zero 3
-	.byte 0xc0  ; "À"
-	.byte 0x01
-	.byte 0xc0  ; "À"
-	.byte 0x01
-	.byte 0xc0  ; "À"
-	.byte 0x01
-	.byte 0xa6  ; "¦"
-	.byte 0x01
-	.byte 0xc0  ; "À"
-	.byte 0x01
-	.byte 0x37
-	.byte 0x01
-	.byte 0xfe  ; "þ"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+	.zero 1				; 0x2E23AB (split off by the table below/above)
+;
+; HDAE5000_HDAETitleFunc_CaseTable (0x2E23AC, 8 x u16): the switch of HDAE5000_HDAETitleFunc
+; (dispatch at 0x283546, hdae5000_hd_driver.s:629: `dec 2,xwa`, bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(.Lri_jt_base)`, `jp T,XIX+WA`).  Entry i is the offset from
+; .Lri_jt_base of the case for value 2+i; 8 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_HDAETitleFunc_CaseTable:
+	.short	.Lri_jt_base - .Lri_jt_base	; 2
+	.short	.Lri_done - .Lri_jt_base	; 3 (default)
+	.short	.Lri_done - .Lri_jt_base	; 4 (default)
+	.short	.Lri_done - .Lri_jt_base	; 5 (default)
+	.short	.Lri_case6 - .Lri_jt_base	; 6
+	.short	.Lri_done - .Lri_jt_base	; 7 (default)
+	.short	.Lri_case8 - .Lri_jt_base	; 8
+	.short	.Lri_case9 - .Lri_jt_base	; 9
 	.ascii "   :                "
 	.byte 0x09
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -12889,32 +12899,28 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x09
 	.zero 2
 	.asciz "%2.2d"
-	.byte 0x15, 0x01
-	.byte 0xd7  ; "×"
-	.byte 0x00
-	.byte 0x51
-	.byte 0x01
-	.byte 0x99  ; ""
-	.byte 0x01
-	.byte 0x99  ; ""
-	.byte 0x01
-	.byte 0x99  ; ""
-	.byte 0x01
-	.byte 0x99  ; ""
-	.byte 0x01
-	.byte 0x99  ; ""
-	.byte 0x01
-	.asciz " "
-	.byte 0x99  ; ""
-	.byte 0x01
-	.byte 0x99  ; ""
-	.byte 0x01
-	.byte 0x99  ; ""
-	.byte 0x01
-	.byte 0xb7  ; "·"
-	.byte 0x00
-	.byte 0x83  ; ""
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+;
+; HDAE5000_FILE_LOAD_Screen_CaseTable (0x2E253A, 14 x u16): the switch of HDAE5000_FILE_LOAD_Screen
+; (dispatch at 0x283DDD, hdae5000_hd_driver.s:1447: `sub xwa,0x01ea0000`, bound `cp xwa,13`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_FILE_LOAD_Screen_Ev01C00001)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_FILE_LOAD_Screen_Ev01C00001 of the case for event 0x01EA0000+i; 14 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_FILE_LOAD_Screen_CaseTable:
+	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA0000 - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0000
+	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA0001 - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0001
+	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA0002 - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0002
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0003 (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0004 (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0005 (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0006 (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0007 (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA0008 - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0008
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA0009 (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA000A (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA000B (default)
+	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA000C - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA000C
+	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA000D - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA000D
 	.asciz "DELD"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DELF"
@@ -12983,16 +12989,24 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "      OFF      "
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "i"
-	.asciz "i"
-	.asciz "i"
-	.asciz "-"
-	.asciz "1"
-	.asciz "5"
-	.asciz "<"
-	.zero 2
+;
+; HDAE5000_SeparateOutputModeCheck_CaseTable (0x2E278A, 10 x u16): the switch of HDAE5000_SeparateOutputModeCheck
+; (dispatch at 0x285120, hdae5000_hd_driver.s:3139: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(.LHD_SC__h1_case9)`, `jp T,XIX+WA`).  Entry i is the offset from
+; .LHD_SC__h1_case9 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SeparateOutputModeCheck_CaseTable:
+	.short	.LHD_SC__h1_case0 - .LHD_SC__h1_case9	; 0x01E0003E
+	.short	.LHD_SC__h1_case1 - .LHD_SC__h1_case9	; 0x01E0003F
+	.short	.LHD_SC__h1_default - .LHD_SC__h1_case9	; 0x01E00040 (default)
+	.short	.LHD_SC__h1_default - .LHD_SC__h1_case9	; 0x01E00041 (default)
+	.short	.LHD_SC__h1_default - .LHD_SC__h1_case9	; 0x01E00042 (default)
+	.short	.LHD_SC__h1_case5 - .LHD_SC__h1_case9	; 0x01E00043
+	.short	.LHD_SC__h1_case6 - .LHD_SC__h1_case9	; 0x01E00044
+	.short	.LHD_SC__h1_case7 - .LHD_SC__h1_case9	; 0x01E00045
+	.short	.LHD_SC__h1_case8 - .LHD_SC__h1_case9	; 0x01E00046
+	.short	.LHD_SC__h1_case9 - .LHD_SC__h1_case9	; 0x01E00047
 	.asciz "B(."
 	.asciz "<(."
 	.asciz "6(."
@@ -13057,16 +13071,24 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "l"
-	.asciz "l"
-	.asciz "l"
-	.asciz "-"
-	.asciz "4"
-	.asciz "8"
-	.asciz "?"
-	.zero 2
+;
+; HDAE5000_SeparateDrumPartCheck_CaseTable (0x2E284C, 10 x u16): the switch of HDAE5000_SeparateDrumPartCheck
+; (dispatch at 0x2851C6, hdae5000_hd_driver.s:3208: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(.LHD_SC__h2_case9)`, `jp T,XIX+WA`).  Entry i is the offset from
+; .LHD_SC__h2_case9 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SeparateDrumPartCheck_CaseTable:
+	.short	.LHD_SC__h2_case0 - .LHD_SC__h2_case9	; 0x01E0003E
+	.short	.LHD_SC__h2_case1 - .LHD_SC__h2_case9	; 0x01E0003F
+	.short	.LHD_SC__h2_default - .LHD_SC__h2_case9	; 0x01E00040 (default)
+	.short	.LHD_SC__h2_default - .LHD_SC__h2_case9	; 0x01E00041 (default)
+	.short	.LHD_SC__h2_default - .LHD_SC__h2_case9	; 0x01E00042 (default)
+	.short	.LHD_SC__h2_case5 - .LHD_SC__h2_case9	; 0x01E00043
+	.short	.LHD_SC__h2_case6 - .LHD_SC__h2_case9	; 0x01E00044
+	.short	.LHD_SC__h2_case7 - .LHD_SC__h2_case9	; 0x01E00045
+	.short	.LHD_SC__h2_case8 - .LHD_SC__h2_case9	; 0x01E00046
+	.short	.LHD_SC__h2_case9 - .LHD_SC__h2_case9	; 0x01E00047
 	.byte 0x04
 	.asciz ")."
 	.byte 0xfe  ; "þ"
@@ -13137,16 +13159,24 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "l"
-	.asciz "l"
-	.asciz "l"
-	.asciz "-"
-	.asciz "4"
-	.asciz "8"
-	.asciz "?"
-	.zero 2
+;
+; HDAE5000_SeparateBassPartCheck_CaseTable (0x2E290E, 10 x u16): the switch of HDAE5000_SeparateBassPartCheck
+; (dispatch at 0x28526F, hdae5000_hd_driver.s:3277: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(.LHD_SC__h3_case9)`, `jp T,XIX+WA`).  Entry i is the offset from
+; .LHD_SC__h3_case9 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SeparateBassPartCheck_CaseTable:
+	.short	.LHD_SC__h3_case0 - .LHD_SC__h3_case9	; 0x01E0003E
+	.short	.LHD_SC__h3_case1 - .LHD_SC__h3_case9	; 0x01E0003F
+	.short	.LHD_SC__h3_default - .LHD_SC__h3_case9	; 0x01E00040 (default)
+	.short	.LHD_SC__h3_default - .LHD_SC__h3_case9	; 0x01E00041 (default)
+	.short	.LHD_SC__h3_default - .LHD_SC__h3_case9	; 0x01E00042 (default)
+	.short	.LHD_SC__h3_case5 - .LHD_SC__h3_case9	; 0x01E00043
+	.short	.LHD_SC__h3_case6 - .LHD_SC__h3_case9	; 0x01E00044
+	.short	.LHD_SC__h3_case7 - .LHD_SC__h3_case9	; 0x01E00045
+	.short	.LHD_SC__h3_case8 - .LHD_SC__h3_case9	; 0x01E00046
+	.short	.LHD_SC__h3_case9 - .LHD_SC__h3_case9	; 0x01E00047
 	.asciz "6)."
 	.asciz "2)."
 	.asciz ".)."
@@ -13155,169 +13185,265 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "---"
 	.asciz "%s"
 	.byte 0x00
-	.byte 0x1b
-	.byte 0x00
-	.byte 0x1f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "B"
-	.asciz "B"
-	.asciz "B"
-	.asciz "#"
-	.asciz "'"
-	.asciz "+"
-	.asciz "2"
-	.zero 2
+;
+; HDAE5000_SaveOptNameCheck_CaseTable (0x2E293E, 10 x u16): the switch of HDAE5000_SaveOptNameCheck
+; (dispatch at 0x2853D1, hdae5000_hd_driver.s:3440: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(.Lhbi_case0)`, `jp T,XIX+WA`).  Entry i is the offset from
+; .Lhbi_case0 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SaveOptNameCheck_CaseTable:
+	.short	.Lhbi_case1 - .Lhbi_case0	; 0x01E0003E
+	.short	.Lhbi_case2 - .Lhbi_case0	; 0x01E0003F
+	.short	.Lhbi_default - .Lhbi_case0	; 0x01E00040 (default)
+	.short	.Lhbi_default - .Lhbi_case0	; 0x01E00041 (default)
+	.short	.Lhbi_default - .Lhbi_case0	; 0x01E00042 (default)
+	.short	.Lhbi_case3 - .Lhbi_case0	; 0x01E00043
+	.short	.Lhbi_case4 - .Lhbi_case0	; 0x01E00044
+	.short	.Lhbi_case5 - .Lhbi_case0	; 0x01E00045
+	.short	.Lhbi_case6 - .Lhbi_case0	; 0x01E00046
+	.short	.Lhbi_case0 - .Lhbi_case0	; 0x01E00047
 	.asciz "SVOP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "'"
-	.asciz "+"
-	.asciz "F"
-	.asciz "F"
-	.asciz "F"
-	.asciz "/"
-	.asciz "3"
-	.asciz "7"
-	.asciz ">"
-	.zero 2
+;
+; HDAE5000_FileOptNameCheck_CaseTable (0x2E295C, 10 x u16): the switch of HDAE5000_FileOptNameCheck
+; (dispatch at 0x2857B1, hdae5000_hd_driver.s:3742: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_FileOptNameCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_FileOptNameCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_FileOptNameCheck_CaseTable:
+	.short	HDAE5000_FileOptNameCheck_Ev01E0003E - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_FileOptNameCheck_Ev01E0003F - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_FileOptNameCheck_Default - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_FileOptNameCheck_Default - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_FileOptNameCheck_Default - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_FileOptNameCheck_Ev01E00043 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_FileOptNameCheck_Ev01E00044 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_FileOptNameCheck_Ev01E00045 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_FileOptNameCheck_Ev01E00046 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_FileOptNameCheck_Ev01E00047 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxLswBitCheck_CaseTable (0x2E2974, 10 x u16): the switch of HDAE5000_SfxLswBitCheck
+; (dispatch at 0x285837, hdae5000_hd_driver.s:3794: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxLswBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxLswBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxLswBitCheck_CaseTable:
+	.short	HDAE5000_SfxLswBitCheck_Ev01E0003E - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxLswBitCheck_Ev01E0003F - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxLswBitCheck_Default - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxLswBitCheck_Default - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxLswBitCheck_Default - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxLswBitCheck_Ev01E00043 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxLswBitCheck_Ev01E00044 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxLswBitCheck_Ev01E00045 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxLswBitCheck_Ev01E00046 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxLswBitCheck_Ev01E00047 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxPmtBitCheck_CaseTable (0x2E298C, 10 x u16): the switch of HDAE5000_SfxPmtBitCheck
+; (dispatch at 0x2858ED, hdae5000_hd_driver.s:3862: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxPmtBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxPmtBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxPmtBitCheck_CaseTable:
+	.short	HDAE5000_SfxPmtBitCheck_Ev01E0003E - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxPmtBitCheck_Ev01E0003F - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxPmtBitCheck_Default - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxPmtBitCheck_Default - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxPmtBitCheck_Default - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxPmtBitCheck_Ev01E00043 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxPmtBitCheck_Ev01E00044 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxPmtBitCheck_Ev01E00045 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxPmtBitCheck_Ev01E00046 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxPmtBitCheck_Ev01E00047 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxSqtBitCheck_CaseTable (0x2E29A4, 10 x u16): the switch of HDAE5000_SfxSqtBitCheck
+; (dispatch at 0x2859A3, hdae5000_hd_driver.s:3930: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxSqtBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxSqtBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxSqtBitCheck_CaseTable:
+	.short	HDAE5000_SfxSqtBitCheck_Ev01E0003E - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxSqtBitCheck_Ev01E0003F - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxSqtBitCheck_Default - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxSqtBitCheck_Default - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxSqtBitCheck_Default - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxSqtBitCheck_Ev01E00043 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxSqtBitCheck_Ev01E00044 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxSqtBitCheck_Ev01E00045 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxSqtBitCheck_Ev01E00046 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxSqtBitCheck_Ev01E00047 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxCmpBitCheck_CaseTable (0x2E29BC, 10 x u16): the switch of HDAE5000_SfxCmpBitCheck
+; (dispatch at 0x285A59, hdae5000_hd_driver.s:3998: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxCmpBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxCmpBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxCmpBitCheck_CaseTable:
+	.short	HDAE5000_SfxCmpBitCheck_Ev01E0003E - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxCmpBitCheck_Ev01E0003F - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxCmpBitCheck_Default - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxCmpBitCheck_Default - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxCmpBitCheck_Default - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxCmpBitCheck_Ev01E00043 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxCmpBitCheck_Ev01E00044 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxCmpBitCheck_Ev01E00045 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxCmpBitCheck_Ev01E00046 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxCmpBitCheck_Ev01E00047 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxTmBitCheck_CaseTable (0x2E29D4, 10 x u16): the switch of HDAE5000_SfxTmBitCheck
+; (dispatch at 0x285B0F, hdae5000_hd_driver.s:4066: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxTmBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxTmBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxTmBitCheck_CaseTable:
+	.short	HDAE5000_SfxTmBitCheck_Ev01E0003E - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxTmBitCheck_Ev01E0003F - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxTmBitCheck_Default - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxTmBitCheck_Default - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxTmBitCheck_Default - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxTmBitCheck_Ev01E00043 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxTmBitCheck_Ev01E00044 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxTmBitCheck_Ev01E00045 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxTmBitCheck_Ev01E00046 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxTmBitCheck_Ev01E00047 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxMspBitCheck_CaseTable (0x2E29EC, 10 x u16): the switch of HDAE5000_SfxMspBitCheck
+; (dispatch at 0x285BC5, hdae5000_hd_driver.s:4134: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxMspBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxMspBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxMspBitCheck_CaseTable:
+	.short	HDAE5000_SfxMspBitCheck_Ev01E0003E - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxMspBitCheck_Ev01E0003F - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxMspBitCheck_Default - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxMspBitCheck_Default - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxMspBitCheck_Default - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxMspBitCheck_Ev01E00043 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxMspBitCheck_Ev01E00044 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxMspBitCheck_Ev01E00045 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxMspBitCheck_Ev01E00046 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxMspBitCheck_Ev01E00047 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxRcmBitCheck_CaseTable (0x2E2A04, 10 x u16): the switch of HDAE5000_SfxRcmBitCheck
+; (dispatch at 0x285C7B, hdae5000_hd_driver.s:4202: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxRcmBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxRcmBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxRcmBitCheck_CaseTable:
+	.short	HDAE5000_SfxRcmBitCheck_Ev01E0003E - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxRcmBitCheck_Ev01E0003F - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxRcmBitCheck_Default - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxRcmBitCheck_Default - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxRcmBitCheck_Default - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxRcmBitCheck_Ev01E00043 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxRcmBitCheck_Ev01E00044 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxRcmBitCheck_Ev01E00045 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxRcmBitCheck_Ev01E00046 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxRcmBitCheck_Ev01E00047 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "x"
-	.asciz "x"
-	.asciz "x"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_SfxMdBitCheck_CaseTable (0x2E2A1C, 10 x u16): the switch of HDAE5000_SfxMdBitCheck
+; (dispatch at 0x285D31, hdae5000_hd_driver.s:4270: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxMdBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxMdBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxMdBitCheck_CaseTable:
+	.short	HDAE5000_SfxMdBitCheck_Ev01E0003E - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxMdBitCheck_Ev01E0003F - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxMdBitCheck_Default - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxMdBitCheck_Default - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxMdBitCheck_Default - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxMdBitCheck_Ev01E00043 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxMdBitCheck_Ev01E00044 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxMdBitCheck_Ev01E00045 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxMdBitCheck_Ev01E00046 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxMdBitCheck_Ev01E00047 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "0"
-	.asciz "4"
-	.byte 0xa2  ; "¢"
-	.byte 0x00
-	.byte 0xa2  ; "¢"
-	.byte 0x00
-	.byte 0xa2  ; "¢"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "8"
-	.asciz "F"
-	.asciz "s"
-	.asciz "z"
-	.zero 2
+;
+; HDAE5000_SfxTlxBitCheck_CaseTable (0x2E2A34, 10 x u16): the switch of HDAE5000_SfxTlxBitCheck
+; (dispatch at 0x285DEA, hdae5000_hd_driver.s:4339: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_SfxTlxBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_SfxTlxBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_SfxTlxBitCheck_CaseTable:
+	.short	HDAE5000_SfxTlxBitCheck_Ev01E0003E - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_SfxTlxBitCheck_Ev01E0003F - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_SfxTlxBitCheck_Default - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_SfxTlxBitCheck_Default - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_SfxTlxBitCheck_Default - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_SfxTlxBitCheck_Ev01E00043 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_SfxTlxBitCheck_Ev01E00044 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_SfxTlxBitCheck_Ev01E00045 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_SfxTlxBitCheck_Ev01E00046 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_SfxTlxBitCheck_Ev01E00047 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz "%"
-	.asciz "J"
-	.asciz "J"
-	.asciz "J"
-	.asciz ")"
-	.asciz "-"
-	.asciz "1"
-	.asciz "8"
-	.zero 2
+;
+; HDAE5000_WriteProtectEditCheck_CaseTable (0x2E2A4C, 10 x u16): the switch of HDAE5000_WriteProtectEditCheck
+; (dispatch at 0x285EC9, hdae5000_hd_driver.s:4422: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_WriteProtectEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_WriteProtectEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_WriteProtectEditCheck_CaseTable:
+	.short	HDAE5000_WriteProtectEditCheck_Ev01E0003E - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_WriteProtectEditCheck_Ev01E0003E - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_WriteProtectEditCheck_Default - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_WriteProtectEditCheck_Default - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_WriteProtectEditCheck_Default - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_WriteProtectEditCheck_Ev01E00043 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_WriteProtectEditCheck_Ev01E00044 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_WriteProtectEditCheck_Ev01E00045 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_WriteProtectEditCheck_Ev01E00046 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_WriteProtectEditCheck_Ev01E00047 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%1d"
-	.byte 0x19
-	.byte 0x00
-	.byte 0x19
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "4"
-	.asciz "4"
-	.asciz "4"
-	.byte 0x1d
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "!"
-	.asciz "%"
-	.asciz ","
-	.zero 2
+;
+; HDAE5000_LyricJumpEditCheck_CaseTable (0x2E2A64, 10 x u16): the switch of HDAE5000_LyricJumpEditCheck
+; (dispatch at 0x285F4E, hdae5000_hd_driver.s:4475: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LyricJumpEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LyricJumpEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LyricJumpEditCheck_CaseTable:
+	.short	HDAE5000_LyricJumpEditCheck_Ev01E0003E - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LyricJumpEditCheck_Ev01E0003E - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LyricJumpEditCheck_Default - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LyricJumpEditCheck_Default - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LyricJumpEditCheck_Default - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LyricJumpEditCheck_Ev01E00043 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LyricJumpEditCheck_Ev01E00044 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LyricJumpEditCheck_Ev01E00045 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LyricJumpEditCheck_Ev01E00046 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LyricJumpEditCheck_Ev01E00047 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%1d"
 	.byte 0xb0  ; "°"
 	.asciz "*."
@@ -13336,16 +13462,24 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz " RED   "
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "D"
-	.asciz "D"
-	.asciz "D"
-	.asciz "-"
-	.asciz "1"
-	.asciz "5"
-	.asciz "<"
-	.zero 2
+;
+; HDAE5000_LyricForeColorCheck_CaseTable (0x2E2ABC, 10 x u16): the switch of HDAE5000_LyricForeColorCheck
+; (dispatch at 0x286018, hdae5000_hd_driver.s:4557: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LyricForeColorCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LyricForeColorCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LyricForeColorCheck_CaseTable:
+	.short	HDAE5000_LyricForeColorCheck_Ev01E0003E - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LyricForeColorCheck_Ev01E0003F - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LyricForeColorCheck_Default - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LyricForeColorCheck_Default - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LyricForeColorCheck_Default - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LyricForeColorCheck_Ev01E00043 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LyricForeColorCheck_Ev01E00044 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LyricForeColorCheck_Ev01E00045 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LyricForeColorCheck_Ev01E00046 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LyricForeColorCheck_Ev01E00047 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00047
 	.byte 0x04
 	.asciz "+."
 	.byte 0xfc  ; "ü"
@@ -13363,70 +13497,101 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz " RED   "
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "D"
-	.asciz "D"
-	.asciz "D"
-	.asciz "-"
-	.asciz "1"
-	.asciz "5"
-	.asciz "<"
-	.zero 2
+;
+; HDAE5000_LyricBackColorCheck_CaseTable (0x2E2B10, 10 x u16): the switch of HDAE5000_LyricBackColorCheck
+; (dispatch at 0x286097, hdae5000_hd_driver.s:4609: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LyricBackColorCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LyricBackColorCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LyricBackColorCheck_CaseTable:
+	.short	HDAE5000_LyricBackColorCheck_Ev01E0003E - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LyricBackColorCheck_Ev01E0003F - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LyricBackColorCheck_Default - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LyricBackColorCheck_Default - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LyricBackColorCheck_Default - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LyricBackColorCheck_Ev01E00043 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LyricBackColorCheck_Ev01E00044 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LyricBackColorCheck_Ev01E00045 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LyricBackColorCheck_Ev01E00046 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LyricBackColorCheck_Ev01E00047 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz "%"
-	.asciz "@"
-	.asciz "@"
-	.asciz "@"
-	.asciz ")"
-	.asciz "-"
-	.asciz "1"
-	.asciz "8"
-	.zero 2
+;
+; HDAE5000_WriteConfirmEditCheck_CaseTable (0x2E2B28, 10 x u16): the switch of HDAE5000_WriteConfirmEditCheck
+; (dispatch at 0x286116, hdae5000_hd_driver.s:4661: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_WriteConfirmEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_WriteConfirmEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_WriteConfirmEditCheck_CaseTable:
+	.short	HDAE5000_WriteConfirmEditCheck_Ev01E0003E - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_WriteConfirmEditCheck_Ev01E0003E - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_WriteConfirmEditCheck_Default - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_WriteConfirmEditCheck_Default - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_WriteConfirmEditCheck_Default - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00043 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00044 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00045 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00046 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00047 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%1d"
-	.byte 0x19
-	.byte 0x00
-	.byte 0x19
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "4"
-	.asciz "4"
-	.asciz "4"
-	.byte 0x1d
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "!"
-	.asciz "%"
-	.asciz ","
-	.zero 2
+;
+; HDAE5000_QuickLoadModeEditCheck_CaseTable (0x2E2B40, 10 x u16): the switch of HDAE5000_QuickLoadModeEditCheck
+; (dispatch at 0x286191, hdae5000_hd_driver.s:4711: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_QuickLoadModeEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_QuickLoadModeEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_QuickLoadModeEditCheck_CaseTable:
+	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E0003E - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E0003E - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_QuickLoadModeEditCheck_Default - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_QuickLoadModeEditCheck_Default - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_QuickLoadModeEditCheck_Default - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00043 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00044 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00045 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00046 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00047 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%1d"
-	.byte 0x19
-	.byte 0x00
-	.byte 0x19
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "4"
-	.asciz "4"
-	.asciz "4"
-	.byte 0x1d
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "!"
-	.asciz "%"
-	.asciz ","
-	.zero 2
+;
+; HDAE5000_LoadByNumberModeEditCheck_CaseTable (0x2E2B58, 10 x u16): the switch of HDAE5000_LoadByNumberModeEditCheck
+; (dispatch at 0x286200, hdae5000_hd_driver.s:4757: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LoadByNumberModeEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LoadByNumberModeEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LoadByNumberModeEditCheck_CaseTable:
+	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E0003E - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E0003E - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LoadByNumberModeEditCheck_Default - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LoadByNumberModeEditCheck_Default - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LoadByNumberModeEditCheck_Default - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00043 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00044 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00045 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00046 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00047 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%1d"
-	.byte 0x19
-	.byte 0x00
-	.byte 0x19
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "4"
-	.asciz "4"
-	.asciz "4"
-	.byte 0x1d
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "!"
-	.asciz "%"
-	.asciz ","
-	.zero 2
+;
+; HDAE5000_JumpAfterLoadModeEditCheck_CaseTable (0x2E2B70, 10 x u16): the switch of HDAE5000_JumpAfterLoadModeEditCheck
+; (dispatch at 0x28626F, hdae5000_hd_driver.s:4803: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_JumpAfterLoadModeEditCheck_CaseTable:
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E0003E - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E0003E - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Default - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Default - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Default - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00043 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00044 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00045 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00046 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00047
 	.ascii "HD-TYPE             :                 "
 	.byte 0x09
 	.ascii "TRACKS              :                 "
@@ -13456,48 +13621,60 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.byte 0xc8  ; "È"
 	.asciz "BFMT!"
-	.zero 3
-	.byte 0x13
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "&"
-	.asciz "9"
-	.asciz "L"
-	.byte 0x90  ; ""
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "a"
-	.asciz "a"
-	.zero 2
-	.byte 0x03
-	.byte 0x00
-	.byte 0x1e
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "9"
-	.asciz "N"
-	.asciz "i"
+	.zero 1				; 0x2E2CE1 (split off by the table below/above)
+;
+; HDAE5000_AttenHDFormatSwCatch_CaseTable (0x2E2CE2, 8 x u16): the switch of HDAE5000_AttenHDFormatSwCatch
+; (dispatch at 0x286728, hdae5000_hd_driver.s:5233: bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_AttenHDFormatSwCatch_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_AttenHDFormatSwCatch_Case0 of the case for value 0+i; 8 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_AttenHDFormatSwCatch_CaseTable:
+	.short	HDAE5000_AttenHDFormatSwCatch_Case0 - HDAE5000_AttenHDFormatSwCatch_Case0	; 0
+	.short	HDAE5000_AttenHDFormatSwCatch_Case1 - HDAE5000_AttenHDFormatSwCatch_Case0	; 1
+	.short	HDAE5000_AttenHDFormatSwCatch_Case2 - HDAE5000_AttenHDFormatSwCatch_Case0	; 2
+	.short	HDAE5000_AttenHDFormatSwCatch_Case3 - HDAE5000_AttenHDFormatSwCatch_Case0	; 3
+	.short	HDAE5000_AttenHDFormatSwCatch_Case4 - HDAE5000_AttenHDFormatSwCatch_Case0	; 4
+	.short	.LCHSC__post_switch - HDAE5000_AttenHDFormatSwCatch_Case0	; 5 (default)
+	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 6
+	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 7
+;
+; HDAE5000_HD_Sector_Read_CaseTable (0x2E2CF2, 6 x u16): the switch of HDAE5000_HD_Sector_Read
+; (dispatch at 0x286A49, hdae5000_hd_driver.s:5493: bound `cp xwa,5`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_HD_Sector_Read_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_HD_Sector_Read_Case0 of the case for value 0+i; 6 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_HD_Sector_Read_CaseTable:
+	.short	HDAE5000_HD_Sector_Read_Case0 - HDAE5000_HD_Sector_Read_Case0	; 0
+	.short	HDAE5000_HD_Sector_Read_Case1 - HDAE5000_HD_Sector_Read_Case0	; 1
+	.short	HDAE5000_HD_Sector_Read_Case2 - HDAE5000_HD_Sector_Read_Case0	; 2
+	.short	HDAE5000_HD_Sector_Read_Case3 - HDAE5000_HD_Sector_Read_Case0	; 3
+	.short	HDAE5000_HD_Sector_Read_Case4 - HDAE5000_HD_Sector_Read_Case0	; 4
+	.short	HDAE5000_HD_Sector_Read_Case5 - HDAE5000_HD_Sector_Read_Case0	; 5
 	.asciz "LBNS"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "4"
-	.asciz "N"
-	.asciz "h"
-	.byte 0x82  ; ""
-	.byte 0x00
-	.byte 0x9c  ; ""
-	.byte 0x00
-	.byte 0x0f
-	.byte 0x00
-	.byte 0x0f
-	.byte 0x00
-	.byte 0x0f
-	.byte 0x00
-	.byte 0xb6  ; "¶"
-	.byte 0x00
-	.byte 0xb6  ; "¶"
-	.byte 0x00
-	.byte 0xb6  ; "¶"
-	.byte 0x00
-	.byte 0xb6  ; "¶"
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNPage1SwCatch_CaseTable (0x2E2D04, 13 x u16): the switch of HDAE5000_LBNPage1SwCatch
+; (dispatch at 0x286C15, hdae5000_hd_driver.s:5660: bound `cp xwa,12`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNPage1SwCatch_Case12)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNPage1SwCatch_Case12 of the case for value 0+i; 13 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNPage1SwCatch_CaseTable:
+	.short	HDAE5000_LBNPage1SwCatch_Case0 - HDAE5000_LBNPage1SwCatch_Case12	; 0
+	.short	HDAE5000_LBNPage1SwCatch_Case1 - HDAE5000_LBNPage1SwCatch_Case12	; 1
+	.short	HDAE5000_LBNPage1SwCatch_Case2 - HDAE5000_LBNPage1SwCatch_Case12	; 2
+	.short	HDAE5000_LBNPage1SwCatch_Case3 - HDAE5000_LBNPage1SwCatch_Case12	; 3
+	.short	HDAE5000_LBNPage1SwCatch_Case4 - HDAE5000_LBNPage1SwCatch_Case12	; 4
+	.short	HDAE5000_LBNPage1SwCatch_Case5 - HDAE5000_LBNPage1SwCatch_Case12	; 5
+	.short	HDAE5000_LBNPage1SwCatch_Case5 - HDAE5000_LBNPage1SwCatch_Case12	; 6
+	.short	HDAE5000_LBNPage1SwCatch_Case5 - HDAE5000_LBNPage1SwCatch_Case12	; 7
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 8 (default)
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 9 (default)
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 10 (default)
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 11 (default)
+	.short	HDAE5000_LBNPage1SwCatch_Case12 - HDAE5000_LBNPage1SwCatch_Case12	; 12
 	.asciz "LBN!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%1.1d"
@@ -13506,182 +13683,224 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz " %1.1d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " %2.2d"
-	.zero 3
-	.asciz "U"
-	.byte 0x89, 0x00, 0xbd
-	.byte 0x00
-	.byte 0x14
-	.byte 0x01
-	.byte 0x49
-	.byte 0x01
-	.byte 0xbb, 0x01
+	.zero 1				; 0x2E2D45 (split off by the table below/above)
+;
+; HDAE5000_FS_Init_CaseTable (0x2E2D46, 7 x u16): the switch of HDAE5000_FS_Init
+; (dispatch at 0x2870FC, hdae5000_filesystem.s:17: bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_FS_Init_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_FS_Init_Case0 of the case for value 0+i; 7 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_FS_Init_CaseTable:
+	.short	HDAE5000_FS_Init_Case0 - HDAE5000_FS_Init_Case0	; 0
+	.short	HDAE5000_FS_Init_Case1 - HDAE5000_FS_Init_Case0	; 1
+	.short	HDAE5000_FS_Init_Case2 - HDAE5000_FS_Init_Case0	; 2
+	.short	HDAE5000_FS_Init_Case3 - HDAE5000_FS_Init_Case0	; 3
+	.short	HDAE5000_FS_Init_Case4 - HDAE5000_FS_Init_Case0	; 4
+	.short	HDAE5000_FS_Init_Case5 - HDAE5000_FS_Init_Case0	; 5
+	.short	HDAE5000_FS_Init_Case6 - HDAE5000_FS_Init_Case0	; 6
 	.asciz "                          "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "B"
-	.asciz "F"
-	.asciz "a"
-	.asciz "a"
-	.asciz "a"
-	.asciz "J"
-	.asciz "N"
-	.asciz "R"
-	.asciz "Y"
-	.zero 2
+;
+; HDAE5000_FileLBNNameCheck_CaseTable (0x2E2D74, 10 x u16): the switch of HDAE5000_FileLBNNameCheck
+; (dispatch at 0x28758F, hdae5000_filesystem.s:362: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_FileLBNNameCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_FileLBNNameCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_FileLBNNameCheck_CaseTable:
+	.short	HDAE5000_FileLBNNameCheck_Ev01E0003E - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_FileLBNNameCheck_Ev01E0003F - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_FileLBNNameCheck_Default - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_FileLBNNameCheck_Default - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_FileLBNNameCheck_Default - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_FileLBNNameCheck_Ev01E00043 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_FileLBNNameCheck_Ev01E00044 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_FileLBNNameCheck_Ev01E00045 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_FileLBNNameCheck_Ev01E00046 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_FileLBNNameCheck_Ev01E00047 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNLswBitCheck_CaseTable (0x2E2D8C, 10 x u16): the switch of HDAE5000_LBNLswBitCheck
+; (dispatch at 0x287630, hdae5000_filesystem.s:425: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNLswBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNLswBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNLswBitCheck_CaseTable:
+	.short	HDAE5000_LBNLswBitCheck_Ev01E0003E - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNLswBitCheck_Ev01E0003F - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNLswBitCheck_Default - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNLswBitCheck_Default - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNLswBitCheck_Default - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNLswBitCheck_Ev01E00043 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNLswBitCheck_Ev01E00044 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNLswBitCheck_Ev01E00045 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNLswBitCheck_Ev01E00046 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNLswBitCheck_Ev01E00047 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNPmtBitCheck_CaseTable (0x2E2DA4, 10 x u16): the switch of HDAE5000_LBNPmtBitCheck
+; (dispatch at 0x28773A, hdae5000_filesystem.s:524: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNPmtBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNPmtBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNPmtBitCheck_CaseTable:
+	.short	HDAE5000_LBNPmtBitCheck_Ev01E0003E - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNPmtBitCheck_Ev01E0003F - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNPmtBitCheck_Default - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNPmtBitCheck_Default - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNPmtBitCheck_Default - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNPmtBitCheck_Ev01E00043 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNPmtBitCheck_Ev01E00044 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNPmtBitCheck_Ev01E00045 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNPmtBitCheck_Ev01E00046 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNPmtBitCheck_Ev01E00047 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNSqtBitCheck_CaseTable (0x2E2DBC, 10 x u16): the switch of HDAE5000_LBNSqtBitCheck
+; (dispatch at 0x287844, hdae5000_filesystem.s:623: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNSqtBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNSqtBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNSqtBitCheck_CaseTable:
+	.short	HDAE5000_LBNSqtBitCheck_Ev01E0003E - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNSqtBitCheck_Ev01E0003F - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNSqtBitCheck_Default - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNSqtBitCheck_Default - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNSqtBitCheck_Default - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNSqtBitCheck_Ev01E00043 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNSqtBitCheck_Ev01E00044 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNSqtBitCheck_Ev01E00045 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNSqtBitCheck_Ev01E00046 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNSqtBitCheck_Ev01E00047 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNCmpBitCheck_CaseTable (0x2E2DD4, 10 x u16): the switch of HDAE5000_LBNCmpBitCheck
+; (dispatch at 0x28794E, hdae5000_filesystem.s:722: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNCmpBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNCmpBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNCmpBitCheck_CaseTable:
+	.short	HDAE5000_LBNCmpBitCheck_Ev01E0003E - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNCmpBitCheck_Ev01E0003F - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNCmpBitCheck_Default - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNCmpBitCheck_Default - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNCmpBitCheck_Default - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNCmpBitCheck_Ev01E00043 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNCmpBitCheck_Ev01E00044 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNCmpBitCheck_Ev01E00045 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNCmpBitCheck_Ev01E00046 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNCmpBitCheck_Ev01E00047 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNTmBitCheck_CaseTable (0x2E2DEC, 10 x u16): the switch of HDAE5000_LBNTmBitCheck
+; (dispatch at 0x287A58, hdae5000_filesystem.s:821: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNTmBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNTmBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNTmBitCheck_CaseTable:
+	.short	HDAE5000_LBNTmBitCheck_Ev01E0003E - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNTmBitCheck_Ev01E0003F - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNTmBitCheck_Default - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNTmBitCheck_Default - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNTmBitCheck_Default - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNTmBitCheck_Ev01E00043 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNTmBitCheck_Ev01E00044 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNTmBitCheck_Ev01E00045 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNTmBitCheck_Ev01E00046 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNTmBitCheck_Ev01E00047 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNMspBitCheck_CaseTable (0x2E2E04, 10 x u16): the switch of HDAE5000_LBNMspBitCheck
+; (dispatch at 0x287B62, hdae5000_filesystem.s:920: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNMspBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNMspBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNMspBitCheck_CaseTable:
+	.short	HDAE5000_LBNMspBitCheck_Ev01E0003E - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNMspBitCheck_Ev01E0003F - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNMspBitCheck_Default - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNMspBitCheck_Default - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNMspBitCheck_Default - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNMspBitCheck_Ev01E00043 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNMspBitCheck_Ev01E00044 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNMspBitCheck_Ev01E00045 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNMspBitCheck_Ev01E00046 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNMspBitCheck_Ev01E00047 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNRcmBitCheck_CaseTable (0x2E2E1C, 10 x u16): the switch of HDAE5000_LBNRcmBitCheck
+; (dispatch at 0x287C6C, hdae5000_filesystem.s:1019: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNRcmBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNRcmBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNRcmBitCheck_CaseTable:
+	.short	HDAE5000_LBNRcmBitCheck_Ev01E0003E - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNRcmBitCheck_Ev01E0003F - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNRcmBitCheck_Default - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNRcmBitCheck_Default - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNRcmBitCheck_Default - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNRcmBitCheck_Ev01E00043 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNRcmBitCheck_Ev01E00044 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNRcmBitCheck_Ev01E00045 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNRcmBitCheck_Ev01E00046 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNRcmBitCheck_Ev01E00047 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNMdBitCheck_CaseTable (0x2E2E34, 10 x u16): the switch of HDAE5000_LBNMdBitCheck
+; (dispatch at 0x287D76, hdae5000_filesystem.s:1118: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNMdBitCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNMdBitCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNMdBitCheck_CaseTable:
+	.short	HDAE5000_LBNMdBitCheck_Ev01E0003E - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNMdBitCheck_Ev01E0003F - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNMdBitCheck_Default - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNMdBitCheck_Default - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNMdBitCheck_Default - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNMdBitCheck_Ev01E00043 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNMdBitCheck_Ev01E00044 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNMdBitCheck_Ev01E00045 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNMdBitCheck_Ev01E00046 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNMdBitCheck_Ev01E00047 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "A"
-	.asciz "F"
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.byte 0x00
-	.byte 0xcc  ; "Ì"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "K"
-	.asciz "f"
-	.byte 0x81  ; ""
-	.byte 0x00
-	.byte 0x88  ; ""
-	.byte 0x00
-	.zero 2
+;
+; HDAE5000_LBNTlxBitCheck_Unregistered_CaseTable (0x2E2E4C, 10 x u16): the switch of HDAE5000_LBNTlxBitCheck_Unregistered
+; (dispatch at 0x287E80, hdae5000_filesystem.s:1222: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LBNTlxBitCheck_Unregistered_CaseTable:
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E0003E - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E0003F - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E0003F
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Default - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00040 (default)
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Default - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00041 (default)
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Default - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00043 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00044 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00045 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00046 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00047
 	.ascii "   :                "
 	.byte 0x09
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -13771,124 +13990,204 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "'"
-	.asciz "+"
-	.asciz "F"
-	.asciz "F"
-	.asciz "F"
-	.asciz "/"
-	.asciz "3"
-	.asciz "7"
-	.asciz ">"
-	.zero 2
+;
+; HDAE5000_DelOptNameCheck_CaseTable (0x2E2F6C, 10 x u16): the switch of HDAE5000_DelOptNameCheck
+; (dispatch at 0x28A64C, hdae5000_filesystem.s:4440: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelOptNameCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelOptNameCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelOptNameCheck_CaseTable:
+	.short	HDAE5000_DelOptNameCheck_Ev01E0003E - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelOptNameCheck_Ev01E0003F - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hA_default - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hA_default - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hA_default - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelOptNameCheck_Ev01E00043 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelOptNameCheck_Ev01E00044 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelOptNameCheck_Ev01E00045 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelOptNameCheck_Ev01E00046 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelOptNameCheck_Ev01E00047 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelLswEditCheck_CaseTable (0x2E2F84, 10 x u16): the switch of HDAE5000_DelLswEditCheck
+; (dispatch at 0x28A6CF, hdae5000_filesystem.s:4500: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelLswEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelLswEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelLswEditCheck_CaseTable:
+	.short	HDAE5000_DelLswEditCheck_Ev01E0003E - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelLswEditCheck_Ev01E0003F - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hB_default - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hB_default - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hB_default - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelLswEditCheck_Ev01E00043 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelLswEditCheck_Ev01E00044 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelLswEditCheck_Ev01E00045 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelLswEditCheck_Ev01E00046 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelLswEditCheck_Ev01E00047 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelPmtEditCheck_CaseTable (0x2E2F9C, 10 x u16): the switch of HDAE5000_DelPmtEditCheck
+; (dispatch at 0x28A76A, hdae5000_filesystem.s:4570: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelPmtEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelPmtEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelPmtEditCheck_CaseTable:
+	.short	HDAE5000_DelPmtEditCheck_Ev01E0003E - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelPmtEditCheck_Ev01E0003F - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hC_default - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hC_default - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hC_default - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelPmtEditCheck_Ev01E00043 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelPmtEditCheck_Ev01E00044 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelPmtEditCheck_Ev01E00045 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelPmtEditCheck_Ev01E00046 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelPmtEditCheck_Ev01E00047 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelSqtEditCheck_CaseTable (0x2E2FB4, 10 x u16): the switch of HDAE5000_DelSqtEditCheck
+; (dispatch at 0x28A805, hdae5000_filesystem.s:4640: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelSqtEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelSqtEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelSqtEditCheck_CaseTable:
+	.short	HDAE5000_DelSqtEditCheck_Ev01E0003E - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelSqtEditCheck_Ev01E0003F - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hD_default - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hD_default - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hD_default - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelSqtEditCheck_Ev01E00043 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelSqtEditCheck_Ev01E00044 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelSqtEditCheck_Ev01E00045 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelSqtEditCheck_Ev01E00046 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelSqtEditCheck_Ev01E00047 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelCmpEditCheck_CaseTable (0x2E2FCC, 10 x u16): the switch of HDAE5000_DelCmpEditCheck
+; (dispatch at 0x28A8A0, hdae5000_filesystem.s:4710: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelCmpEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelCmpEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelCmpEditCheck_CaseTable:
+	.short	HDAE5000_DelCmpEditCheck_Ev01E0003E - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelCmpEditCheck_Ev01E0003F - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hE_default - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hE_default - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hE_default - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelCmpEditCheck_Ev01E00043 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelCmpEditCheck_Ev01E00044 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelCmpEditCheck_Ev01E00045 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelCmpEditCheck_Ev01E00046 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelCmpEditCheck_Ev01E00047 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelTmEditCheck_CaseTable (0x2E2FE4, 10 x u16): the switch of HDAE5000_DelTmEditCheck
+; (dispatch at 0x28A93B, hdae5000_filesystem.s:4780: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelTmEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelTmEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelTmEditCheck_CaseTable:
+	.short	HDAE5000_DelTmEditCheck_Ev01E0003E - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelTmEditCheck_Ev01E0003F - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hF_default - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hF_default - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hF_default - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelTmEditCheck_Ev01E00043 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelTmEditCheck_Ev01E00044 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelTmEditCheck_Ev01E00045 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelTmEditCheck_Ev01E00046 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelTmEditCheck_Ev01E00047 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelMspEditCheck_CaseTable (0x2E2FFC, 10 x u16): the switch of HDAE5000_DelMspEditCheck
+; (dispatch at 0x28A9D6, hdae5000_filesystem.s:4850: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelMspEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelMspEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelMspEditCheck_CaseTable:
+	.short	HDAE5000_DelMspEditCheck_Ev01E0003E - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelMspEditCheck_Ev01E0003F - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hG_default - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hG_default - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hG_default - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelMspEditCheck_Ev01E00043 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelMspEditCheck_Ev01E00044 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelMspEditCheck_Ev01E00045 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelMspEditCheck_Ev01E00046 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelMspEditCheck_Ev01E00047 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelRcmEditCheck_CaseTable (0x2E3014, 10 x u16): the switch of HDAE5000_DelRcmEditCheck
+; (dispatch at 0x28AA71, hdae5000_filesystem.s:4920: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelRcmEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelRcmEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelRcmEditCheck_CaseTable:
+	.short	HDAE5000_DelRcmEditCheck_Ev01E0003E - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelRcmEditCheck_Ev01E0003F - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hH_default - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hH_default - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hH_default - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelRcmEditCheck_Ev01E00043 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelRcmEditCheck_Ev01E00044 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelRcmEditCheck_Ev01E00045 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelRcmEditCheck_Ev01E00046 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelRcmEditCheck_Ev01E00047 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "`"
-	.asciz "`"
-	.asciz "`"
-	.asciz "-"
-	.asciz ";"
-	.asciz "I"
-	.asciz "P"
-	.zero 2
+;
+; HDAE5000_DelMdEditCheck_CaseTable (0x2E302C, 10 x u16): the switch of HDAE5000_DelMdEditCheck
+; (dispatch at 0x28AB0C, hdae5000_filesystem.s:4990: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelMdEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelMdEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelMdEditCheck_CaseTable:
+	.short	HDAE5000_DelMdEditCheck_Ev01E0003E - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelMdEditCheck_Ev01E0003F - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hI_default - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hI_default - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hI_default - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelMdEditCheck_Ev01E00043 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelMdEditCheck_Ev01E00044 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelMdEditCheck_Ev01E00045 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelMdEditCheck_Ev01E00046 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelMdEditCheck_Ev01E00047 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "%"
-	.asciz ")"
-	.asciz "l"
-	.asciz "l"
-	.asciz "l"
-	.asciz "-"
-	.asciz ";"
-	.asciz "U"
-	.asciz "\\"
-	.zero 2
+;
+; HDAE5000_DelTlxEditCheck_CaseTable (0x2E3044, 10 x u16): the switch of HDAE5000_DelTlxEditCheck
+; (dispatch at 0x28ABAA, hdae5000_filesystem.s:5060: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_DelTlxEditCheck_Ev01E00047)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_DelTlxEditCheck_Ev01E00047 of the case for event 0x01E0003E+i; 10 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_DelTlxEditCheck_CaseTable:
+	.short	HDAE5000_DelTlxEditCheck_Ev01E0003E - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E0003E
+	.short	HDAE5000_DelTlxEditCheck_Ev01E0003F - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E0003F
+	.short	.LDUO__hJ_default - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00040 (default)
+	.short	.LDUO__hJ_default - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00041 (default)
+	.short	.LDUO__hJ_default - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00042 (default)
+	.short	HDAE5000_DelTlxEditCheck_Ev01E00043 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00043
+	.short	HDAE5000_DelTlxEditCheck_Ev01E00044 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00044
+	.short	HDAE5000_DelTlxEditCheck_Ev01E00045 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00045
+	.short	HDAE5000_DelTlxEditCheck_Ev01E00046 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00046
+	.short	HDAE5000_DelTlxEditCheck_Ev01E00047 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00047
 	.asciz "TimB"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TLBN"
@@ -15535,14 +15834,23 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	.asciz "Load"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%03i - %i "
-	.zero 3
-	.asciz "}"
-	.asciz "}"
-	.asciz "}"
-	.asciz "}"
-	.asciz "}"
-	.asciz "}"
-	.asciz "D"
+	.zero 1				; 0x2E5BC1 (split off by the table below/above)
+;
+; HDAE5000_LyricBoxProc_CaseTable2 (0x2E5BC2, 8 x u16): the switch of HDAE5000_LyricBoxProc
+; (dispatch at 0x28D57C, hdae5000_ui_display.s:3786: bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LyricBoxProc_Case0_2)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LyricBoxProc_Case0_2 of the case for value 0+i; 8 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LyricBoxProc_CaseTable2:
+	.short	HDAE5000_LyricBoxProc_Case0_2 - HDAE5000_LyricBoxProc_Case0_2	; 0
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 1 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 2 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 3 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 4 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 5 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 6 (default)
+	.short	HDAE5000_LyricBoxProc_Case7_2 - HDAE5000_LyricBoxProc_Case0_2	; 7
 	; 0x2E5BD2-0x2E5BDF (14 B): CONFIRMED DATA, not code -- was disassembled as
 	; "ei 16 / reti / pushw bc / push sr" chained by no label and reached by no
 	; call or jump anywhere in the tree (checked across every .s file).  It sits
@@ -15552,7 +15860,21 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	; addresses immediately either side of this span, with nothing pointing
 	; inside it.  Left as an undecoded numeric field; a plain .byte run rather
 	; than fake mnemonics is the honest way to spell "unknown data".
-	.byte 0xaa, 0x00, 0xb0, 0x06, 0x10, 0x07, 0xa2, 0x05, 0x29, 0x02, 0xc5, 0x02, 0x3b, 0x05
+;
+; HDAE5000_LyricBoxProc_CaseTable1 (0x2E5BD2, 7 x u16): the switch of HDAE5000_LyricBoxProc
+; (dispatch at 0x28CD6A, hdae5000_ui_display.s:3194: `sub xwa,0x01ca0003`, bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
+; `lda xix,(HDAE5000_LyricBoxProc_Ev01C0000D)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LyricBoxProc_Ev01C0000D of the case for event 0x01CA0003+i; 7 entries, pinned by the bound
+; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
+;
+HDAE5000_LyricBoxProc_CaseTable1:
+	.short	HDAE5000_LyricBoxProc_Ev01CA0003 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0003
+	.short	HDAE5000_LyricBoxProc_Ev01CA0004 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0004
+	.short	HDAE5000_LyricBoxProc_Ev01CA0005 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0005
+	.short	HDAE5000_LyricBoxProc_Default1 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0006 (default)
+	.short	HDAE5000_LyricBoxProc_Ev01CA0007 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0007
+	.short	HDAE5000_LyricBoxProc_Ev01CA0008 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0008
+	.short	HDAE5000_LyricBoxProc_Ev01CA0009 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0009
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TESTTEST.TLX"
