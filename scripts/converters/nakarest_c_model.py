@@ -49,6 +49,9 @@ CHANGES (lane nakarest)
     inserted above it (welcome_step_t) is not parsed as blob members.
   * NewMember.designator drops trailing [0] subscripts (SELF(T[3]) rather
     than SELF(T[3][0]) -- the same address).
+  * register_local_types(): the sizes of a file's own packed typedefs
+    (naka_cls_*_t, welcome_step_t...) are learned from the file itself; the
+    blob struct is the one the _Static_assert names.
 """
 import re
 
@@ -80,6 +83,28 @@ def _eval_dim(d):
         n = int(m.group(1))
         return (n + 2) & ~1
     return int(d, 0)
+
+
+_SCALAR = {'uint8_t': 1, 'int8_t': 1, 'char': 1, 'uint16_t': 2, 'int16_t': 2,
+           'uint32_t': 4, 'int32_t': 4}
+
+
+def register_local_types(txt):
+    """Record the size of every local packed typedef in a C file (e.g. the
+    per-class naka_cls_*_t, welcome_step_t) whose fields are scalars or
+    arrays of scalars, so members of those types can be parsed."""
+    for m in re.finditer(r'typedef struct __attribute__\(\(packed\)\) \{([^{}]*)\} (\w+);', txt):
+        n = 0
+        for ln in m.group(1).split('\n'):
+            mm = re.match(r'\s*(u?int(?:8|16|32)_t|char)\s+\w+((?:\[\d+\])*)\s*;', ln)
+            if not mm:
+                continue
+            k = _SCALAR[mm.group(1)]
+            for d in re.findall(r'\[(\d+)\]', mm.group(2)):
+                k *= int(d)
+            n += k
+        if n and m.group(2) not in TYPE_SIZES:
+            TYPE_SIZES[m.group(2)] = n
 
 
 class Member:
@@ -149,9 +174,15 @@ class CBlob:
         with open(path, encoding='latin-1') as f:
             self.lines = f.read().split('\n')
         L = self.lines
+        register_local_types('\n'.join(L))
         # the blob struct is the one STRUCT_END_RE closes; a local typedef
         # above it (also `typedef struct __attribute__((packed)) {`) is not it
-        self.s1 = next(i for i in range(len(L)) if STRUCT_END_RE.match(L[i]))
+        # (the blob struct is the one named in the _Static_assert: local
+        # typedefs such as naka_cls_Label_t match STRUCT_END_RE too)
+        am = SIZE_ASSERT_RE.search('\n'.join(L))
+        want = am.group(1) if am else None
+        self.s1 = next(i for i in range(len(L)) if STRUCT_END_RE.match(L[i]) and
+                       (want is None or STRUCT_END_RE.match(L[i]).group(1) == want))
         self.s0 = next(i for i in range(self.s1, -1, -1) if STRUCT_START_RE.match(L[i]))
         self.tname = STRUCT_END_RE.match(L[self.s1]).group(1)
         # members

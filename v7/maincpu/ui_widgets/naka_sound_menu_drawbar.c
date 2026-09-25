@@ -51,6 +51,26 @@ extern const char VwUserBitmapSpProc;
 
 #define BASE  0x00E80FE2u
 
+/* NAKA class TtlScreen -- class id 0x01600034 (Class table slot 0x160, entry 52),
+ * parent Screen; allsize 42.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint16_t color;             /* +22 ^ */
+    uint16_t border;            /* +24 _ */
+    uint32_t exit;              /* +26 a */
+    uint32_t window;            /* +30 r */
+    uint32_t title;             /* +34 X */
+    uint32_t icon;              /* +38 b */
+} naka_cls_TtlScreen_t;
+
 typedef struct __attribute__((packed)) {
     naka_dispatch_t w0;  /* NAKA_TYPE_CONTAINER */
     naka_dispatch_t w1;  /* 0x40 */
@@ -202,7 +222,8 @@ typedef struct __attribute__((packed)) {
     char str_60[22];
     char str_61[22];
     char str_62[14];
-    naka_container_t w43;  /* NAKA_TYPE_CONTAINER */
+    /* element 0 of Viewable slot 0x2 "Sdmenu": TtlScreen (class id 0x01600034) */
+    naka_cls_TtlScreen_t v2_e0;
     char w43_text[12];
     char str_63[2];
     uint16_t field_0906;
@@ -672,24 +693,20 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .str_62 = ALIGNED_STRING("IvSdpartProc"),
 
-    .w43 = {
-        .header       = NAKA_HDR(NAKA_TYPE_CONTAINER),
-        .parent_idx     = NAKA_NONE,
-        .self_idx       = 0x0001,
-        .next_sibling   = NAKA_NONE,
-        .prev_sibling   = NAKA_NONE,
-        .child_count    = 0x000A,
-        .field_0e       = 0x0000,
-        .field_10       = 0x0000,
-        .handler        = NAKA_ADDR(Naka_PresentationRootState),
-        .style          = 0x00F8,
-        .field_18       = 0x0002,
-        .field_1a       = 0x0000,
-        .screen_id      = 0x01A0,
-        .handler_table  = 0x0003E660,
-        .string_ptr     = SELF(w43_text),
-        .string_id      = 0x0015,
-        .reserved       = 0x0000,
+    .v2_e0 = {
+        .class_ = 0x01600034,
+        .super = NAKA_NONE,
+        .sub = 1,
+        .next = NAKA_NONE,
+        .prev = NAKA_NONE,
+        .flag = 0x000A,
+        .rect = { 0, 0, 319, 239 },
+        .color = 0x00F8,
+        .border = 0x0002,
+        .exit = 0x01A00000,
+        .window = 0x0003E660,
+        .title = SELF(w43_text),
+        .icon = 0x00000015,
     },
 
     .w43_text = ALIGNED_STRING("SOUND MENU"),
