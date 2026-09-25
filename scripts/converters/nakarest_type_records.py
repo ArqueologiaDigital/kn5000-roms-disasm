@@ -524,11 +524,150 @@ def self_pointers(cb):
     return n
 
 
+SB_TYPES = {
+    'mst_style_ref_t': (8, """/* One style of an MstStyle browser group (8 bytes): its name and its
+ * variation table.  Group tables are arrays of these ending in an all-zero
+ * entry; MstStyle*_CountEntries (ui/ui_mode_handlers.s) walk them 8 bytes
+ * at a time until +0 is 0, the grid routines Strcpy +0 (padded to 16 with
+ * Strncat) and +4 goes to 0x0340D6. */
+typedef struct __attribute__((packed)) {
+    uint32_t name;        /* +0 style name, 16 characters */
+    uint32_t variations;  /* +4 mst_title_ref_t[], zero-terminated */
+} mst_style_ref_t;
+"""),
+    'mst_group_ref_t': (8, """/* One group of the MstStyle browser root (8 bytes).  MstStyle1_EventDispatch
+ * & co. load (index*8)+4 -- the group table -- through a label 4 bytes into
+ * the root and store it at 0x0340D2; MstStyle1Grid_CellSelect loads +0. */
+typedef struct __attribute__((packed)) {
+    uint32_t name;        /* +0 group name, 16 characters */
+    uint32_t styles;      /* +4 mst_style_ref_t[], zero-terminated */
+} mst_group_ref_t;
+"""),
+}
+
+
+def type_style_browser(v, apply):
+    m = RT.objmap(v)
+    blob = 'naka_style_bitmaps'
+    cpath = os.path.join(RT.ui(v), blob + '.c')
+    cb = M.CBlob(cpath)
+    if 'StyleBrowser_Groups' in cb.by_name:
+        print('%s %s: style browser already typed' % (v, blob))
+        return
+    data = RT.compile_blob(v, blob)
+    base = cb.base()
+    u32 = lambda a: int.from_bytes(data[a - base:a - base + 4], 'little')
+    u16 = lambda a: int.from_bytes(data[a - base:a - base + 2], 'little')
+
+    def slen(a):
+        n = 0
+        while data[a - base + n]:
+            n += 1
+        n += 1
+        return n + (n & 1)
+
+    root = m.sb['table']
+    objs = {}          # address -> (name, NewMember builder)
+    names = {}
+    for g in range(10):
+        gn, gp = u32(root + 8 * g), u32(root + 8 * g + 4)
+        names[gn] = 'StyleGroup%d_Name' % g
+        names[gp] = 'StyleGroup%d_Styles' % g
+        k = 0
+        while u32(gp + 8 * k):
+            sn, vt = u32(gp + 8 * k), u32(gp + 8 * k + 4)
+            names[sn] = 'Style_g%d_s%d_Name' % (g, k)
+            names[vt] = 'Style_g%d_s%d_Vars' % (g, k)
+            j = 0
+            while u32(vt + 6 * j):
+                names[u32(vt + 6 * j)] = 'Style_g%d_s%d_Title%d' % (g, k, j)
+                j += 1
+            k += 1
+    names[root] = 'StyleBrowser_Groups'
+    start, end = min(names), max(a for a in names)
+    # the member list, in address order
+    new = []
+
+    def astr(nm, a, pre=()):
+        n = slen(a)
+        b = data[a - base:a - base + n]
+        t = b.split(b'\0')[0]
+        assert b == t + b'\0' + (b'\xff' if len(t) % 2 == 0 else b''), (nm, b)
+        ex = ('ALIGNED_STRING(%s)' % M.c_string(t)) if len(t) % 2 == 0 else M.c_string(t)
+        return M.NewMember('char', nm, '[%d]' % n, n, ex, list(pre))
+
+    for a in sorted(names):
+        nm = names[a]
+        if nm.endswith('_Name') or '_Title' in nm:
+            mbr = astr(nm, a)
+        elif nm.endswith('_Vars'):
+            j, rows = 0, []
+            while u32(a + 6 * j):
+                t = u32(a + 6 * j)
+                rows.append('        { SELF(%s), %d },' % (names[t], u16(a + 6 * j + 4)))
+                j += 1
+            assert data[a + 6 * j - base:a + 6 * j + 6 - base] == bytes(6)
+            rows.append('        { 0, 0 },')
+            g, k = nm.split('_')[1][1:], nm.split('_')[2][1:]
+            sn = [x for x, y in names.items() if y == 'Style_g%s_s%s_Name' % (g, k)][0]
+            pre = ['    /* style %s.%s "%s": %d variations */' % (
+                g, k, RT.ascii_only(data[sn - base:sn - base + 16].decode('latin-1').strip()), j)]
+            mbr = M.NewMember('mst_title_ref_t', nm, '[%d]' % (j + 1), 6 * (j + 1),
+                              '{\n' + '\n'.join(rows) + '\n    }', pre)
+        elif nm.endswith('_Styles'):
+            k, rows = 0, []
+            while u32(a + 8 * k):
+                rows.append('        { SELF(%s), SELF(%s) },' % (names[u32(a + 8 * k)],
+                                                               names[u32(a + 8 * k + 4)]))
+                k += 1
+            assert data[a + 8 * k - base:a + 8 * k + 8 - base] == bytes(8)
+            rows.append('        { 0, 0 },')
+            mbr = M.NewMember('mst_style_ref_t', nm, '[%d]' % (k + 1), 8 * (k + 1),
+                              '{\n' + '\n'.join(rows) + '\n    }')
+        else:
+            rows = ['        { SELF(%s), SELF(%s) },' % (names[u32(a + 8 * g)], names[u32(a + 8 * g + 4)])
+                    for g in range(10)]
+            mbr = M.NewMember('mst_group_ref_t', nm, '[10]', 80, '{\n' + '\n'.join(rows) + '\n    }',
+                              ['    /* the MstStyle browser root: 10 groups (see mst_group_ref_t) */'])
+        new.append((a, mbr))
+    # contiguity
+    for (a, mb), (b, _) in zip(new, new[1:]):
+        assert a + mb.size == b, (hex(a), mb.name, hex(b))
+    end = new[-1][0] + new[-1][1].size
+    lo, hi = start - base, end - base
+    for t, (n, _) in SB_TYPES.items():
+        M.TYPE_SIZES[t] = n
+    try:
+        cb.split_word(lo, data)
+        cb.split_word(hi, data)
+    except SystemExit as e:
+        print('%s style browser: boundary refused: %s' % (v, e))
+        return
+    k0, k1 = cb.index_at(lo), cb.index_at(hi - 1)
+    keeps = [cb.members[kk].name for kk in range(k0, k1 + 1)
+             if M.SYMBOLIC_RE.search(cb.entries[kk].expr)]
+    for t, (n, text) in SB_TYPES.items():
+        ensure_typedef(cb, t, text)
+    cb.retype(lo, hi, [mb for _, mb in new], data, false_pointers=keeps)
+    print('%s %s: style browser typed -- %d objects, 0x%06X..0x%06X (%d B), %d symbolic '
+          'initializers re-expressed' % (v, blob, len(new), start, end, end - start, len(keeps)))
+    if apply:
+        cb.write()
+        if RT.compile_blob(v, blob) != data:
+            raise SystemExit('%s %s: typed C compiles to different bytes' % (v, blob))
+        print('     %s %s: recompiled, byte-identical' % (v, blob))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--blob', action='append')
+    ap.add_argument('--style-browser', action='store_true')
     a = ap.parse_args()
+    if a.style_browser:
+        for v in RT.VERSIONS:
+            type_style_browser(v, a.apply)
+        return
     for v in RT.VERSIONS:
         layouts = naka_layouts(os.path.join(RT.ui(v), 'naka_types.h'))
         for blob in a.blob or BLOBS:

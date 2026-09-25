@@ -116,6 +116,24 @@ typedef struct __attribute__((packed)) {
     uint16_t id;     /* +4 0..999, each exactly once */
 } mst_title_ref_t;
 
+/* One style of an MstStyle browser group (8 bytes): its name and its
+ * variation table.  Group tables are arrays of these ending in an all-zero
+ * entry; MstStyle*_CountEntries (ui/ui_mode_handlers.s) walk them 8 bytes
+ * at a time until +0 is 0, the grid routines Strcpy +0 (padded to 16 with
+ * Strncat) and +4 goes to 0x0340D6. */
+typedef struct __attribute__((packed)) {
+    uint32_t name;        /* +0 style name, 16 characters */
+    uint32_t variations;  /* +4 mst_title_ref_t[], zero-terminated */
+} mst_style_ref_t;
+
+/* One group of the MstStyle browser root (8 bytes).  MstStyle1_EventDispatch
+ * & co. load (index*8)+4 -- the group table -- through a label 4 bytes into
+ * the root and store it at 0x0340D2; MstStyle1Grid_CellSelect loads +0. */
+typedef struct __attribute__((packed)) {
+    uint32_t name;        /* +0 group name, 16 characters */
+    uint32_t styles;      /* +4 mst_style_ref_t[], zero-terminated */
+} mst_group_ref_t;
+
 typedef struct __attribute__((packed)) {
     char str_0[10];
     char str_1[10];
@@ -1661,3527 +1679,1778 @@ typedef struct __attribute__((packed)) {
      * title), which are numbers again in those files.
      * --------------------------------------------------------------------- */
     char StyleSong_Titles[1000][34];
-    uint32_t ptr_cf16;
-    uint8_t pad_254[2];  /* zero padding */
-    uint32_t ptr_cf1c;
-    uint16_t field_cf20;
-    uint32_t ptr_cf22;
-    uint16_t field_cf26;
-    uint32_t ptr_cf28;
-    uint16_t field_cf2c;
-    uint8_t pad_255[6];  /* zero padding */
-    char str_1168[34];
-    char str_1169[34];
-    char str_1170[34];
-    char str_1171[34];
-    uint32_t ptr_cfbc;
-    uint16_t field_cfc0;
-    uint32_t ptr_cfc2;
-    uint16_t field_cfc6;
-    uint32_t ptr_cfc8;
-    uint16_t field_cfcc;
-    uint32_t ptr_cfce;
-    uint16_t field_cfd2;
-    uint8_t pad_256[6];  /* zero padding */
-    char str_1172[34];
-    char str_1173[34];
-    char str_1174[34];
-    char str_1175[34];
-    uint32_t ptr_d062;
-    uint16_t field_d066;
-    uint32_t ptr_d068;
-    uint16_t field_d06c;
-    uint32_t ptr_d06e;
-    uint16_t field_d072;
-    uint32_t ptr_d074;
-    uint16_t field_d078;
-    uint8_t pad_257[6];  /* zero padding */
-    char str_1176[34];
-    char str_1177[34];
-    char str_1178[34];
-    char str_1179[34];
-    uint32_t ptr_d108;
-    uint16_t field_d10c;
-    uint32_t ptr_d10e;
-    uint16_t field_d112;
-    uint32_t ptr_d114;
-    uint16_t field_d118;
-    uint32_t ptr_d11a;
-    uint16_t field_d11e;
-    uint8_t pad_258[6];  /* zero padding */
-    char str_1180[34];
-    char str_1181[34];
-    char str_1182[34];
-    char str_1183[34];
-    uint32_t ptr_d1ae;
-    uint16_t field_d1b2;
-    uint32_t ptr_d1b4;
-    uint16_t field_d1b8;
-    uint32_t ptr_d1ba;
-    uint16_t field_d1be;
-    uint32_t ptr_d1c0;
-    uint16_t field_d1c4;
-    uint8_t pad_259[6];  /* zero padding */
-    char str_1184[34];
-    char str_1185[34];
-    char str_1186[34];
-    char str_1187[34];
-    uint32_t ptr_d254;
-    uint16_t field_d258;
-    uint32_t ptr_d25a;
-    uint16_t field_d25e;
-    uint32_t ptr_d260;
-    uint16_t field_d264;
-    uint32_t ptr_d266;
-    uint16_t field_d26a;
-    uint8_t pad_260[6];  /* zero padding */
-    char str_1188[34];
-    char str_1189[34];
-    char str_1190[34];
-    char str_1191[34];
-    uint32_t ptr_d2fa;
-    uint16_t field_d2fe;
-    uint32_t ptr_d300;
-    uint16_t field_d304;
-    uint32_t ptr_d306;
-    uint16_t field_d30a;
-    uint32_t ptr_d30c;
-    uint16_t field_d310;
-    uint8_t pad_261[6];  /* zero padding */
-    char str_1192[34];
-    char str_1193[34];
-    char str_1194[34];
-    char str_1195[34];
-    uint32_t ptr_d3a0;
-    uint16_t field_d3a4;
-    uint32_t ptr_d3a6;
-    uint16_t field_d3aa;
-    uint32_t ptr_d3ac;
-    uint16_t field_d3b0;
-    uint32_t ptr_d3b2;
-    uint16_t field_d3b6;
-    uint8_t pad_262[6];  /* zero padding */
-    char str_1196[34];
-    char str_1197[34];
-    char str_1198[34];
-    char str_1199[34];
-    uint32_t ptr_d446;
-    char str_1200[2];
-    uint32_t ptr_d44c;
-    char str_1201[2];
-    uint32_t ptr_d452;
-    char str_1202[2];
-    uint32_t ptr_d458;
-    char str_1203[2];
-    uint8_t pad_263[6];  /* zero padding */
-    char str_1204[34];
-    char str_1205[34];
-    char str_1206[34];
-    char str_1207[34];
-    uint32_t ptr_d4ec;
-    char str_1208[2];
-    uint32_t ptr_d4f2;
-    char str_1209[2];
-    uint32_t ptr_d4f8;
-    char str_1210[2];
-    uint32_t ptr_d4fe;
-    char str_1211[2];
-    uint8_t pad_264[6];  /* zero padding */
-    char str_1212[34];
-    char str_1213[34];
-    char str_1214[34];
-    char str_1215[34];
-    uint32_t ptr_d592;
-    char str_1216[2];
-    uint32_t ptr_d598;
-    char str_1217[2];
-    uint32_t ptr_d59e;
-    char str_1218[2];
-    uint32_t ptr_d5a4;
-    char str_1219[2];
-    uint8_t pad_265[6];  /* zero padding */
-    char str_1220[34];
-    char str_1221[34];
-    char str_1222[34];
-    char str_1223[34];
-    uint32_t ptr_d638;
-    char str_1224[2];
-    uint32_t ptr_d63e;
-    char str_1225[2];
-    uint32_t ptr_d644;
-    char str_1226[2];
-    uint32_t ptr_d64a;
-    char str_1227[2];
-    uint8_t pad_266[6];  /* zero padding */
-    char str_1228[34];
-    char str_1229[34];
-    char str_1230[34];
-    char str_1231[34];
-    uint32_t ptr_d6de;
-    char str_1232[2];
-    uint32_t ptr_d6e4;
-    char str_1233[2];
-    uint32_t ptr_d6ea;
-    char str_1234[2];
-    uint32_t ptr_d6f0;
-    char str_1235[2];
-    uint8_t pad_267[6];  /* zero padding */
-    char str_1236[34];
-    char str_1237[34];
-    char str_1238[34];
-    char str_1239[34];
-    uint32_t ptr_d784;
-    char str_1240[2];
-    uint32_t ptr_d78a;
-    char str_1241[2];
-    uint32_t ptr_d790;
-    char str_1242[2];
-    uint32_t ptr_d796;
-    char str_1243[2];
-    uint8_t pad_268[6];  /* zero padding */
-    char str_1244[34];
-    char str_1245[34];
-    char str_1246[34];
-    char str_1247[34];
-    uint32_t ptr_d82a;
-    char str_1248[2];
-    uint32_t ptr_d830;
-    char str_1249[2];
-    uint32_t ptr_d836;
-    char str_1250[2];
-    uint32_t ptr_d83c;
-    char str_1251[2];
-    uint8_t pad_269[6];  /* zero padding */
-    char str_1252[34];
-    char str_1253[34];
-    char str_1254[34];
-    char str_1255[34];
-    uint32_t ptr_d8d0;
-    char str_1256[2];
-    uint32_t ptr_d8d6;
-    char str_1257[2];
-    uint32_t ptr_d8dc;
-    char str_1258[2];
-    uint32_t ptr_d8e2;
-    char str_1259[2];
-    uint8_t pad_270[6];  /* zero padding */
-    char str_1260[34];
-    char str_1261[34];
-    char str_1262[34];
-    char str_1263[34];
-    uint32_t ptr_d976;
-    char str_1264[2];
-    uint32_t ptr_d97c;
-    char str_1265[2];
-    uint32_t ptr_d982;
-    char str_1266[2];
-    uint32_t ptr_d988;
-    char str_1267[2];
-    uint8_t pad_271[6];  /* zero padding */
-    char str_1268[34];
-    char str_1269[34];
-    char str_1270[34];
-    char str_1271[34];
-    uint32_t ptr_da1c;
-    char str_1272[2];
-    uint32_t ptr_da22;
-    char str_1273[2];
-    uint32_t ptr_da28;
-    char str_1274[2];
-    uint32_t ptr_da2e;
-    char str_1275[2];
-    uint8_t pad_272[6];  /* zero padding */
-    char str_1276[34];
-    char str_1277[34];
-    char str_1278[34];
-    char str_1279[34];
-    uint32_t ptr_dac2;
-    char str_1280[2];
-    uint32_t ptr_dac8;
-    char str_1281[2];
-    uint32_t ptr_dace;
-    char str_1282[2];
-    uint32_t ptr_dad4;
-    char str_1283[2];
-    uint8_t pad_273[6];  /* zero padding */
-    char str_1284[34];
-    char str_1285[34];
-    char str_1286[34];
-    char str_1287[34];
-    uint32_t ptr_db68;
-    char str_1288[2];
-    uint32_t ptr_db6e;
-    char str_1289[2];
-    uint32_t ptr_db74;
-    char str_1290[2];
-    uint32_t ptr_db7a;
-    char str_1291[2];
-    uint8_t pad_274[6];  /* zero padding */
-    char str_1292[34];
-    char str_1293[34];
-    char str_1294[34];
-    char str_1295[34];
-    uint32_t ptr_dc0e;
-    char str_1296[2];
-    uint32_t ptr_dc14;
-    char str_1297[2];
-    uint32_t ptr_dc1a;
-    char str_1298[2];
-    uint32_t ptr_dc20;
-    char str_1299[2];
-    uint8_t pad_275[6];  /* zero padding */
-    char str_1300[34];
-    char str_1301[34];
-    char str_1302[34];
-    char str_1303[34];
-    uint32_t ptr_dcb4;
-    char str_1304[2];
-    uint32_t ptr_dcba;
-    char str_1305[2];
-    uint32_t ptr_dcc0;
-    char str_1306[2];
-    uint32_t ptr_dcc6;
-    char str_1307[2];
-    uint8_t pad_276[6];  /* zero padding */
-    char str_1308[34];
-    char str_1309[34];
-    char str_1310[34];
-    char str_1311[34];
-    uint32_t ptr_dd5a;
-    char str_1312[2];
-    uint32_t ptr_dd60;
-    char str_1313[2];
-    uint32_t ptr_dd66;
-    char str_1314[2];
-    uint32_t ptr_dd6c;
-    char str_1315[2];
-    uint8_t pad_277[6];  /* zero padding */
-    char str_1316[34];
-    char str_1317[34];
-    char str_1318[34];
-    char str_1319[34];
-    uint32_t ptr_de00;
-    char str_1320[2];
-    uint32_t ptr_de06;
-    char str_1321[2];
-    uint32_t ptr_de0c;
-    char str_1322[2];
-    uint32_t ptr_de12;
-    char str_1323[2];
-    uint8_t pad_278[6];  /* zero padding */
-    char str_1324[34];
-    char str_1325[34];
-    char str_1326[34];
-    char str_1327[34];
-    uint32_t ptr_dea6;
-    char str_1328[2];
-    uint32_t ptr_deac;
-    char str_1329[2];
-    uint32_t ptr_deb2;
-    char str_1330[2];
-    uint32_t ptr_deb8;
-    char str_1331[2];
-    uint8_t pad_279[6];  /* zero padding */
-    char str_1332[34];
-    char str_1333[34];
-    char str_1334[34];
-    char str_1335[34];
-    uint32_t ptr_df4c;
-    char str_1336[2];
-    uint32_t ptr_df52;
-    char str_1337[2];
-    uint32_t ptr_df58;
-    char str_1338[2];
-    uint32_t ptr_df5e;
-    char str_1339[2];
-    uint8_t pad_280[6];  /* zero padding */
-    char str_1340[34];
-    char str_1341[34];
-    char str_1342[34];
-    char str_1343[34];
-    uint32_t ptr_dff2;
-    char str_1344[2];
-    uint32_t ptr_dff8;
-    char str_1345[2];
-    uint32_t ptr_dffe;
-    char str_1346[2];
-    uint32_t ptr_e004;
-    char str_1347[2];
-    uint8_t pad_281[6];  /* zero padding */
-    char str_1348[34];
-    char str_1349[34];
-    char str_1350[34];
-    char str_1351[34];
-    uint32_t ptr_e098;
-    char str_1352[2];
-    uint32_t ptr_e09e;
-    char str_1353[2];
-    uint32_t ptr_e0a4;
-    char str_1354[2];
-    uint32_t ptr_e0aa;
-    char str_1355[2];
-    uint8_t pad_282[6];  /* zero padding */
-    char str_1356[34];
-    char str_1357[34];
-    char str_1358[34];
-    char str_1359[34];
-    uint32_t ptr_e13e;
-    char str_1360[2];
-    uint32_t ptr_e144;
-    char str_1361[2];
-    uint32_t ptr_e14a;
-    char str_1362[2];
-    uint32_t ptr_e150;
-    char str_1363[2];
-    uint8_t pad_283[6];  /* zero padding */
-    char str_1364[34];
-    char str_1365[34];
-    char str_1366[34];
-    char str_1367[34];
-    uint32_t ptr_e1e4;
-    char str_1368[2];
-    uint32_t ptr_e1ea;
-    char str_1369[2];
-    uint32_t ptr_e1f0;
-    char str_1370[2];
-    uint32_t ptr_e1f6;
-    char str_1371[2];
-    uint8_t pad_284[6];  /* zero padding */
-    char str_1372[34];
-    char str_1373[34];
-    char str_1374[34];
-    char str_1375[34];
-    uint32_t ptr_e28a;
-    char str_1376[2];
-    uint32_t ptr_e290;
-    char str_1377[2];
-    uint32_t ptr_e296;
-    char str_1378[2];
-    uint32_t ptr_e29c;
-    char str_1379[2];
-    uint8_t pad_285[6];  /* zero padding */
-    char str_1380[34];
-    char str_1381[34];
-    char str_1382[34];
-    char str_1383[34];
-    uint32_t ptr_e330;
-    char str_1384[2];
-    uint32_t ptr_e336;
-    char str_1385[2];
-    uint32_t ptr_e33c;
-    char str_1386[2];
-    uint32_t ptr_e342;
-    uint16_t field_e346;
-    uint8_t pad_286[6];  /* zero padding */
-    char str_1387[34];
-    char str_1388[34];
-    char str_1389[34];
-    char str_1390[34];
-    uint32_t ptr_e3d6;
-    uint16_t field_e3da;
-    uint32_t ptr_e3dc;
-    uint16_t field_e3e0;
-    uint32_t ptr_e3e2;
-    uint16_t field_e3e6;
-    uint32_t ptr_e3e8;
-    uint16_t field_e3ec;
-    uint8_t pad_287[6];  /* zero padding */
-    char str_1391[34];
-    char str_1392[34];
-    char str_1393[34];
-    char str_1394[34];
-    uint32_t ptr_e47c;
-    uint16_t field_e480;
-    uint32_t ptr_e482;
-    uint16_t field_e486;
-    uint32_t ptr_e488;
-    uint16_t field_e48c;
-    uint32_t ptr_e48e;
-    uint16_t field_e492;
-    uint8_t pad_288[6];  /* zero padding */
-    char str_1395[34];
-    char str_1396[34];
-    char str_1397[34];
-    char str_1398[34];
-    uint32_t ptr_e522;
-    uint16_t field_e526;
-    uint32_t ptr_e528;
-    uint16_t field_e52c;
-    uint32_t ptr_e52e;
-    uint16_t field_e532;
-    uint32_t ptr_e534;
-    uint16_t field_e538;
-    uint8_t pad_289[6];  /* zero padding */
-    char str_1399[34];
-    char str_1400[34];
-    char str_1401[34];
-    char str_1402[34];
-    uint32_t ptr_e5c8;
-    uint16_t field_e5cc;
-    uint32_t ptr_e5ce;
-    uint16_t field_e5d2;
-    uint32_t ptr_e5d4;
-    uint16_t field_e5d8;
-    uint32_t ptr_e5da;
-    uint16_t field_e5de;
-    uint8_t pad_290[6];  /* zero padding */
-    char str_1403[34];
-    char str_1404[34];
-    char str_1405[34];
-    char str_1406[34];
-    uint32_t ptr_e66e;
-    uint16_t field_e672;
-    uint32_t ptr_e674;
-    uint16_t field_e678;
-    uint32_t ptr_e67a;
-    uint16_t field_e67e;
-    uint32_t ptr_e680;
-    uint16_t field_e684;
-    uint8_t pad_291[6];  /* zero padding */
-    char str_1407[34];
-    char str_1408[34];
-    char str_1409[34];
-    char str_1410[34];
-    uint32_t ptr_e714;
-    uint16_t field_e718;
-    uint32_t ptr_e71a;
-    uint16_t field_e71e;
-    uint32_t ptr_e720;
-    uint16_t field_e724;
-    uint32_t ptr_e726;
-    uint16_t field_e72a;
-    uint8_t pad_292[6];  /* zero padding */
-    char str_1411[34];
-    char str_1412[34];
-    char str_1413[34];
-    char str_1414[34];
-    uint32_t ptr_e7ba;
-    uint16_t field_e7be;
-    uint32_t ptr_e7c0;
-    uint16_t field_e7c4;
-    uint32_t ptr_e7c6;
-    uint16_t field_e7ca;
-    uint32_t ptr_e7cc;
-    uint16_t field_e7d0;
-    uint8_t pad_293[6];  /* zero padding */
-    char str_1415[34];
-    char str_1416[34];
-    char str_1417[34];
-    char str_1418[34];
-    uint32_t ptr_e860;
-    uint16_t field_e864;
-    uint32_t ptr_e866;
-    uint16_t field_e86a;
-    uint32_t ptr_e86c;
-    uint16_t field_e870;
-    uint32_t ptr_e872;
-    uint16_t field_e876;
-    uint8_t pad_294[6];  /* zero padding */
-    char str_1419[34];
-    char str_1420[34];
-    char str_1421[34];
-    char str_1422[34];
-    uint32_t ptr_e906;
-    uint16_t field_e90a;
-    uint32_t ptr_e90c;
-    uint16_t field_e910;
-    uint32_t ptr_e912;
-    uint16_t field_e916;
-    uint32_t ptr_e918;
-    uint16_t field_e91c;
-    uint8_t pad_295[6];  /* zero padding */
-    char str_1423[34];
-    char str_1424[34];
-    char str_1425[34];
-    char str_1426[34];
-    uint32_t ptr_e9ac;
-    uint16_t field_e9b0;
-    uint32_t ptr_e9b2;
-    uint16_t field_e9b6;
-    uint32_t ptr_e9b8;
-    uint16_t field_e9bc;
-    uint32_t ptr_e9be;
-    uint16_t field_e9c2;
-    uint8_t pad_296[6];  /* zero padding */
-    char str_1427[34];
-    char str_1428[34];
-    char str_1429[34];
-    char str_1430[34];
-    uint32_t ptr_ea52;
-    uint16_t field_ea56;
-    uint32_t ptr_ea58;
-    uint16_t field_ea5c;
-    uint32_t ptr_ea5e;
-    uint16_t field_ea62;
-    uint32_t ptr_ea64;
-    uint16_t field_ea68;
-    uint8_t pad_297[6];  /* zero padding */
-    char str_1431[34];
-    char str_1432[34];
-    char str_1433[34];
-    char str_1434[34];
-    uint32_t ptr_eaf8;
-    uint16_t field_eafc;
-    uint32_t ptr_eafe;
-    uint16_t field_eb02;
-    uint32_t ptr_eb04;
-    uint16_t field_eb08;
-    uint32_t ptr_eb0a;
-    uint16_t field_eb0e;
-    uint8_t pad_298[6];  /* zero padding */
-    char str_1435[34];
-    char str_1436[34];
-    char str_1437[34];
-    char str_1438[34];
-    uint32_t ptr_eb9e;
-    uint16_t field_eba2;
-    uint32_t ptr_eba4;
-    uint16_t field_eba8;
-    uint32_t ptr_ebaa;
-    uint16_t field_ebae;
-    uint32_t ptr_ebb0;
-    uint16_t field_ebb4;
-    uint8_t pad_299[6];  /* zero padding */
-    char str_1439[34];
-    char str_1440[34];
-    char str_1441[34];
-    char str_1442[34];
-    uint32_t ptr_ec44;
-    uint16_t field_ec48;
-    uint32_t ptr_ec4a;
-    uint16_t field_ec4e;
-    uint32_t ptr_ec50;
-    uint16_t field_ec54;
-    uint32_t ptr_ec56;
-    uint16_t field_ec5a;
-    uint8_t pad_300[6];  /* zero padding */
-    char str_1443[34];
-    char str_1444[34];
-    char str_1445[34];
-    char str_1446[34];
-    uint32_t ptr_ecea;
-    uint16_t field_ecee;
-    uint32_t ptr_ecf0;
-    uint16_t field_ecf4;
-    uint32_t ptr_ecf6;
-    uint16_t field_ecfa;
-    uint32_t ptr_ecfc;
-    uint16_t field_ed00;
-    uint8_t pad_301[6];  /* zero padding */
-    char str_1447[34];
-    char str_1448[34];
-    char str_1449[34];
-    char str_1450[34];
-    uint32_t ptr_ed90;
-    uint16_t field_ed94;
-    uint32_t ptr_ed96;
-    uint16_t field_ed9a;
-    uint32_t ptr_ed9c;
-    uint16_t field_eda0;
-    uint32_t ptr_eda2;
-    uint16_t field_eda6;
-    uint8_t pad_302[6];  /* zero padding */
-    char str_1451[34];
-    char str_1452[34];
-    char str_1453[34];
-    char str_1454[34];
-    uint32_t ptr_ee36;
-    uint16_t field_ee3a;
-    uint32_t ptr_ee3c;
-    uint16_t field_ee40;
-    uint32_t ptr_ee42;
-    uint16_t field_ee46;
-    uint32_t ptr_ee48;
-    uint16_t field_ee4c;
-    uint8_t pad_303[6];  /* zero padding */
-    char str_1455[34];
-    char str_1456[34];
-    char str_1457[34];
-    char str_1458[34];
-    uint32_t ptr_eedc;
-    uint16_t field_eee0;
-    uint32_t ptr_eee2;
-    uint16_t field_eee6;
-    uint32_t ptr_eee8;
-    uint16_t field_eeec;
-    uint32_t ptr_eeee;
-    uint16_t field_eef2;
-    uint8_t pad_304[6];  /* zero padding */
-    char str_1459[34];
-    char str_1460[34];
-    char str_1461[34];
-    char str_1462[34];
-    uint32_t ptr_ef82;
-    uint16_t field_ef86;
-    uint32_t ptr_ef88;
-    uint16_t field_ef8c;
-    uint32_t ptr_ef8e;
-    uint16_t field_ef92;
-    uint32_t ptr_ef94;
-    uint16_t field_ef98;
-    uint8_t pad_305[6];  /* zero padding */
-    char str_1463[34];
-    char str_1464[34];
-    char str_1465[34];
-    char str_1466[34];
-    uint32_t ptr_f028;
-    uint16_t field_f02c;
-    uint32_t ptr_f02e;
-    uint16_t field_f032;
-    uint32_t ptr_f034;
-    uint16_t field_f038;
-    uint32_t ptr_f03a;
-    uint16_t field_f03e;
-    uint8_t pad_306[6];  /* zero padding */
-    char str_1467[34];
-    char str_1468[34];
-    char str_1469[34];
-    char str_1470[34];
-    uint32_t ptr_f0ce;
-    uint16_t field_f0d2;
-    uint32_t ptr_f0d4;
-    uint16_t field_f0d8;
-    uint32_t ptr_f0da;
-    uint16_t field_f0de;
-    uint32_t ptr_f0e0;
-    uint16_t field_f0e4;
-    uint8_t pad_307[6];  /* zero padding */
-    char str_1471[34];
-    char str_1472[34];
-    char str_1473[34];
-    char str_1474[34];
-    uint32_t ptr_f174;
-    uint16_t field_f178;
-    uint32_t ptr_f17a;
-    uint16_t field_f17e;
-    uint32_t ptr_f180;
-    uint16_t field_f184;
-    uint32_t ptr_f186;
-    uint16_t field_f18a;
-    uint8_t pad_308[6];  /* zero padding */
-    char str_1475[34];
-    char str_1476[34];
-    char str_1477[34];
-    char str_1478[34];
-    uint32_t ptr_f21a;
-    uint16_t field_f21e;
-    uint32_t ptr_f220;
-    uint16_t field_f224;
-    uint32_t ptr_f226;
-    uint16_t field_f22a;
-    uint32_t ptr_f22c;
-    uint16_t field_f230;
-    uint8_t pad_309[6];  /* zero padding */
-    char str_1479[34];
-    char str_1480[34];
-    char str_1481[34];
-    char str_1482[34];
-    uint32_t ptr_f2c0;
-    uint16_t field_f2c4;
-    uint32_t ptr_f2c6;
-    uint16_t field_f2ca;
-    uint32_t ptr_f2cc;
-    uint16_t field_f2d0;
-    uint32_t ptr_f2d2;
-    uint16_t field_f2d6;
-    uint8_t pad_310[6];  /* zero padding */
-    char str_1483[34];
-    char str_1484[34];
-    char str_1485[34];
-    char str_1486[34];
-    uint32_t ptr_f366;
-    uint16_t field_f36a;
-    uint32_t ptr_f36c;
-    uint16_t field_f370;
-    uint32_t ptr_f372;
-    uint16_t field_f376;
-    uint32_t ptr_f378;
-    uint16_t field_f37c;
-    uint8_t pad_311[6];  /* zero padding */
-    char str_1487[34];
-    char str_1488[34];
-    char str_1489[34];
-    char str_1490[34];
-    uint32_t ptr_f40c;
-    uint16_t field_f410;
-    uint32_t ptr_f412;
-    uint16_t field_f416;
-    uint32_t ptr_f418;
-    uint16_t field_f41c;
-    uint32_t ptr_f41e;
-    uint16_t field_f422;
-    uint8_t pad_312[6];  /* zero padding */
-    char str_1491[34];
-    char str_1492[34];
-    char str_1493[34];
-    char str_1494[34];
-    uint32_t ptr_f4b2;
-    uint16_t field_f4b6;
-    uint32_t ptr_f4b8;
-    uint16_t field_f4bc;
-    uint32_t ptr_f4be;
-    uint16_t field_f4c2;
-    uint32_t ptr_f4c4;
-    uint16_t field_f4c8;
-    uint8_t pad_313[6];  /* zero padding */
-    char str_1495[34];
-    char str_1496[34];
-    char str_1497[34];
-    char str_1498[34];
-    uint32_t ptr_f558;
-    uint16_t field_f55c;
-    uint32_t ptr_f55e;
-    uint16_t field_f562;
-    uint32_t ptr_f564;
-    uint16_t field_f568;
-    uint32_t ptr_f56a;
-    uint16_t field_f56e;
-    uint8_t pad_314[6];  /* zero padding */
-    char str_1499[34];
-    char str_1500[34];
-    char str_1501[34];
-    char str_1502[34];
-    uint32_t ptr_f5fe;
-    uint16_t field_f602;
-    uint32_t ptr_f604;
-    uint16_t field_f608;
-    uint32_t ptr_f60a;
-    uint16_t field_f60e;
-    uint32_t ptr_f610;
-    uint16_t field_f614;
-    uint8_t pad_315[6];  /* zero padding */
-    char str_1503[34];
-    char str_1504[34];
-    char str_1505[34];
-    char str_1506[34];
-    uint32_t ptr_f6a4;
-    uint16_t field_f6a8;
-    uint32_t ptr_f6aa;
-    uint16_t field_f6ae;
-    uint32_t ptr_f6b0;
-    uint16_t field_f6b4;
-    uint32_t ptr_f6b6;
-    uint16_t field_f6ba;
-    uint8_t pad_316[6];  /* zero padding */
-    char str_1507[34];
-    char str_1508[34];
-    char str_1509[34];
-    char str_1510[34];
-    uint32_t ptr_f74a;
-    uint16_t field_f74e;
-    uint32_t ptr_f750;
-    uint16_t field_f754;
-    uint32_t ptr_f756;
-    uint16_t field_f75a;
-    uint32_t ptr_f75c;
-    uint16_t field_f760;
-    uint8_t pad_317[6];  /* zero padding */
-    char str_1511[34];
-    char str_1512[34];
-    char str_1513[34];
-    char str_1514[34];
-    uint32_t ptr_f7f0;
-    uint16_t field_f7f4;
-    uint32_t ptr_f7f6;
-    uint16_t field_f7fa;
-    uint32_t ptr_f7fc;
-    uint16_t field_f800;
-    uint32_t ptr_f802;
-    uint16_t field_f806;
-    uint8_t pad_318[6];  /* zero padding */
-    char str_1515[34];
-    char str_1516[34];
-    char str_1517[34];
-    char str_1518[34];
-    uint32_t ptr_f896;
-    uint16_t field_f89a;
-    uint32_t ptr_f89c;
-    uint16_t field_f8a0;
-    uint32_t ptr_f8a2;
-    uint16_t field_f8a6;
-    uint32_t ptr_f8a8;
-    uint16_t field_f8ac;
-    uint8_t pad_319[6];  /* zero padding */
-    char str_1519[34];
-    char str_1520[34];
-    char str_1521[34];
-    char str_1522[34];
-    uint32_t ptr_f93c;
-    uint16_t field_f940;
-    uint32_t ptr_f942;
-    uint16_t field_f946;
-    uint32_t ptr_f948;
-    uint16_t field_f94c;
-    uint32_t ptr_f94e;
-    uint16_t field_f952;
-    uint8_t pad_320[6];  /* zero padding */
-    char str_1523[34];
-    char str_1524[34];
-    char str_1525[34];
-    char str_1526[34];
-    uint32_t ptr_f9e2;
-    uint16_t field_f9e6;
-    uint32_t ptr_f9e8;
-    uint16_t field_f9ec;
-    uint32_t ptr_f9ee;
-    uint16_t field_f9f2;
-    uint32_t ptr_f9f4;
-    uint16_t field_f9f8;
-    uint8_t pad_321[6];  /* zero padding */
-    char str_1527[34];
-    char str_1528[34];
-    char str_1529[34];
-    char str_1530[34];
-    uint32_t ptr_fa88;
-    uint16_t field_fa8c;
-    uint32_t ptr_fa8e;
-    uint16_t field_fa92;
-    uint32_t ptr_fa94;
-    uint16_t field_fa98;
-    uint32_t ptr_fa9a;
-    uint16_t field_fa9e;
-    uint8_t pad_322[6];  /* zero padding */
-    char str_1531[34];
-    char str_1532[34];
-    char str_1533[34];
-    char str_1534[34];
-    uint32_t ptr_fb2e;
-    uint16_t field_fb32;
-    uint32_t ptr_fb34;
-    uint16_t field_fb38;
-    uint32_t ptr_fb3a;
-    uint16_t field_fb3e;
-    uint32_t ptr_fb40;
-    uint16_t field_fb44;
-    uint8_t pad_323[6];  /* zero padding */
-    char str_1535[34];
-    char str_1536[34];
-    char str_1537[34];
-    char str_1538[34];
-    uint32_t ptr_fbd4;
-    uint16_t field_fbd8;
-    uint32_t ptr_fbda;
-    uint16_t field_fbde;
-    uint32_t ptr_fbe0;
-    uint16_t field_fbe4;
-    uint32_t ptr_fbe6;
-    uint16_t field_fbea;
-    uint8_t pad_324[6];  /* zero padding */
-    char str_1539[34];
-    char str_1540[34];
-    char str_1541[34];
-    char str_1542[34];
-    uint32_t ptr_fc7a;
-    uint16_t field_fc7e;
-    uint32_t ptr_fc80;
-    uint16_t field_fc84;
-    uint32_t ptr_fc86;
-    uint16_t field_fc8a;
-    uint32_t ptr_fc8c;
-    uint16_t field_fc90;
-    uint8_t pad_325[6];  /* zero padding */
-    char str_1543[34];
-    char str_1544[34];
-    char str_1545[34];
-    char str_1546[34];
-    uint32_t ptr_fd20;
-    uint16_t field_fd24;
-    uint32_t ptr_fd26;
-    uint16_t field_fd2a;
-    uint32_t ptr_fd2c;
-    uint16_t field_fd30;
-    uint32_t ptr_fd32;
-    uint16_t field_fd36;
-    uint8_t pad_326[6];  /* zero padding */
-    char str_1547[34];
-    char str_1548[34];
-    char str_1549[34];
-    char str_1550[34];
-    uint32_t ptr_fdc6;
-    uint16_t field_fdca;
-    uint32_t ptr_fdcc;
-    uint16_t field_fdd0;
-    uint32_t ptr_fdd2;
-    uint16_t field_fdd6;
-    uint32_t ptr_fdd8;
-    uint16_t field_fddc;
-    uint8_t pad_327[6];  /* zero padding */
-    char str_1551[34];
-    char str_1552[34];
-    char str_1553[34];
-    char str_1554[34];
-    uint32_t ptr_fe6c;
-    uint16_t field_fe70;
-    uint32_t ptr_fe72;
-    uint16_t field_fe76;
-    uint32_t ptr_fe78;
-    uint16_t field_fe7c;
-    uint32_t ptr_fe7e;
-    uint16_t field_fe82;
-    uint8_t pad_328[6];  /* zero padding */
-    char str_1555[34];
-    char str_1556[34];
-    char str_1557[34];
-    char str_1558[34];
-    uint32_t ptr_ff12;
-    uint16_t field_ff16;
-    uint32_t ptr_ff18;
-    uint16_t field_ff1c;
-    uint32_t ptr_ff1e;
-    uint16_t field_ff22;
-    uint32_t ptr_ff24;
-    uint16_t field_ff28;
-    uint8_t pad_329[6];  /* zero padding */
-    char str_1559[34];
-    char str_1560[34];
-    char str_1561[34];
-    char str_1562[34];
-    uint32_t ptr_ffb8;
-    uint16_t field_ffbc;
-    uint32_t ptr_ffbe;
-    uint16_t field_ffc2;
-    uint32_t ptr_ffc4;
-    uint16_t field_ffc8;
-    uint32_t ptr_ffca;
-    uint16_t field_ffce;
-    uint8_t pad_330[6];  /* zero padding */
-    char str_1563[34];
-    char str_1564[34];
-    char str_1565[34];
-    char str_1566[34];
-    uint32_t ptr_1005e;
-    uint16_t field_10062;
-    uint32_t ptr_10064;
-    uint16_t field_10068;
-    uint32_t ptr_1006a;
-    uint16_t field_1006e;
-    uint32_t ptr_10070;
-    uint16_t field_10074;
-    uint8_t pad_331[6];  /* zero padding */
-    char str_1567[34];
-    char str_1568[34];
-    char str_1569[34];
-    char str_1570[34];
-    uint32_t ptr_10104;
-    uint16_t field_10108;
-    uint32_t ptr_1010a;
-    uint16_t field_1010e;
-    uint32_t ptr_10110;
-    uint16_t field_10114;
-    uint32_t ptr_10116;
-    uint16_t field_1011a;
-    uint8_t pad_332[6];  /* zero padding */
-    char str_1571[34];
-    char str_1572[34];
-    char str_1573[34];
-    char str_1574[34];
-    uint32_t ptr_101aa;
-    uint16_t field_101ae;
-    uint32_t ptr_101b0;
-    uint16_t field_101b4;
-    uint32_t ptr_101b6;
-    uint16_t field_101ba;
-    uint32_t ptr_101bc;
-    uint16_t field_101c0;
-    uint8_t pad_333[6];  /* zero padding */
-    char str_1575[34];
-    char str_1576[34];
-    char str_1577[34];
-    char str_1578[34];
-    uint32_t ptr_10250;
-    uint16_t field_10254;
-    uint32_t ptr_10256;
-    uint16_t field_1025a;
-    uint32_t ptr_1025c;
-    uint16_t field_10260;
-    uint32_t ptr_10262;
-    uint16_t field_10266;
-    uint8_t pad_334[6];  /* zero padding */
-    char str_1579[34];
-    char str_1580[34];
-    char str_1581[34];
-    char str_1582[34];
-    uint32_t ptr_102f6;
-    uint16_t field_102fa;
-    uint32_t ptr_102fc;
-    uint16_t field_10300;
-    uint32_t ptr_10302;
-    uint16_t field_10306;
-    uint32_t ptr_10308;
-    uint16_t field_1030c;
-    uint8_t pad_335[6];  /* zero padding */
-    char str_1583[34];
-    char str_1584[34];
-    char str_1585[34];
-    char str_1586[34];
-    uint32_t ptr_1039c;
-    uint16_t field_103a0;
-    uint32_t ptr_103a2;
-    uint16_t field_103a6;
-    uint32_t ptr_103a8;
-    uint16_t field_103ac;
-    uint32_t ptr_103ae;
-    uint16_t field_103b2;
-    uint8_t pad_336[6];  /* zero padding */
-    char str_1587[34];
-    char str_1588[34];
-    char str_1589[34];
-    char str_1590[34];
-    uint32_t ptr_10442;
-    uint16_t field_10446;
-    uint32_t ptr_10448;
-    uint16_t field_1044c;
-    uint32_t ptr_1044e;
-    uint16_t field_10452;
-    uint32_t ptr_10454;
-    uint16_t field_10458;
-    uint8_t pad_337[6];  /* zero padding */
-    char str_1591[34];
-    char str_1592[34];
-    char str_1593[34];
-    char str_1594[34];
-    uint32_t ptr_104e8;
-    uint16_t field_104ec;
-    uint32_t ptr_104ee;
-    uint16_t field_104f2;
-    uint32_t ptr_104f4;
-    uint16_t field_104f8;
-    uint32_t ptr_104fa;
-    uint16_t field_104fe;
-    uint8_t pad_338[6];  /* zero padding */
-    char str_1595[34];
-    char str_1596[34];
-    char str_1597[34];
-    char str_1598[34];
-    uint32_t ptr_1058e;
-    uint16_t field_10592;
-    uint32_t ptr_10594;
-    uint16_t field_10598;
-    uint32_t ptr_1059a;
-    uint16_t field_1059e;
-    uint32_t ptr_105a0;
-    uint16_t field_105a4;
-    uint8_t pad_339[6];  /* zero padding */
-    char str_1599[34];
-    char str_1600[34];
-    char str_1601[34];
-    char str_1602[34];
-    uint32_t ptr_10634;
-    uint16_t field_10638;
-    uint32_t ptr_1063a;
-    uint16_t field_1063e;
-    uint32_t ptr_10640;
-    uint16_t field_10644;
-    uint32_t ptr_10646;
-    uint16_t field_1064a;
-    uint8_t pad_340[6];  /* zero padding */
-    char str_1603[34];
-    char str_1604[34];
-    char str_1605[34];
-    char str_1606[34];
-    uint32_t ptr_106da;
-    uint16_t field_106de;
-    uint32_t ptr_106e0;
-    uint16_t field_106e4;
-    uint32_t ptr_106e6;
-    uint16_t field_106ea;
-    uint32_t ptr_106ec;
-    uint16_t field_106f0;
-    uint8_t pad_341[6];  /* zero padding */
-    char str_1607[34];
-    char str_1608[34];
-    char str_1609[34];
-    char str_1610[34];
-    uint32_t ptr_10780;
-    uint16_t field_10784;
-    uint32_t ptr_10786;
-    uint16_t field_1078a;
-    uint32_t ptr_1078c;
-    uint16_t field_10790;
-    uint32_t ptr_10792;
-    uint16_t field_10796;
-    uint8_t pad_342[6];  /* zero padding */
-    char str_1611[34];
-    char str_1612[34];
-    char str_1613[34];
-    char str_1614[34];
-    uint32_t ptr_10826;
-    uint16_t field_1082a;
-    uint32_t ptr_1082c;
-    uint16_t field_10830;
-    uint32_t ptr_10832;
-    uint16_t field_10836;
-    uint32_t ptr_10838;
-    uint16_t field_1083c;
-    uint8_t pad_343[6];  /* zero padding */
-    char str_1615[34];
-    char str_1616[34];
-    char str_1617[34];
-    char str_1618[34];
-    uint32_t ptr_108cc;
-    uint16_t field_108d0;
-    uint32_t ptr_108d2;
-    uint16_t field_108d6;
-    uint32_t ptr_108d8;
-    uint16_t field_108dc;
-    uint32_t ptr_108de;
-    uint16_t field_108e2;
-    uint8_t pad_344[6];  /* zero padding */
-    char str_1619[34];
-    char str_1620[34];
-    char str_1621[34];
-    char str_1622[34];
-    uint32_t ptr_10972;
-    uint16_t field_10976;
-    uint32_t ptr_10978;
-    uint16_t field_1097c;
-    uint32_t ptr_1097e;
-    uint16_t field_10982;
-    uint32_t ptr_10984;
-    uint16_t field_10988;
-    uint8_t pad_345[6];  /* zero padding */
-    char str_1623[34];
-    char str_1624[34];
-    char str_1625[34];
-    char str_1626[34];
-    uint32_t ptr_10a18;
-    uint16_t field_10a1c;
-    uint32_t ptr_10a1e;
-    uint16_t field_10a22;
-    uint32_t ptr_10a24;
-    uint16_t field_10a28;
-    uint32_t ptr_10a2a;
-    uint16_t field_10a2e;
-    uint8_t pad_346[6];  /* zero padding */
-    char str_1627[34];
-    char str_1628[34];
-    char str_1629[34];
-    char str_1630[34];
-    uint32_t ptr_10abe;
-    uint16_t field_10ac2;
-    uint32_t ptr_10ac4;
-    uint16_t field_10ac8;
-    uint32_t ptr_10aca;
-    uint16_t field_10ace;
-    uint32_t ptr_10ad0;
-    uint16_t field_10ad4;
-    uint8_t pad_347[6];  /* zero padding */
-    char str_1631[34];
-    char str_1632[34];
-    char str_1633[34];
-    char str_1634[34];
-    uint32_t ptr_10b64;
-    uint16_t field_10b68;
-    uint32_t ptr_10b6a;
-    uint16_t field_10b6e;
-    uint32_t ptr_10b70;
-    uint16_t field_10b74;
-    uint32_t ptr_10b76;
-    uint16_t field_10b7a;
-    uint8_t pad_348[6];  /* zero padding */
-    char str_1635[34];
-    char str_1636[34];
-    char str_1637[34];
-    char str_1638[34];
-    uint32_t ptr_10c0a;
-    uint16_t field_10c0e;
-    uint32_t ptr_10c10;
-    uint16_t field_10c14;
-    uint32_t ptr_10c16;
-    uint16_t field_10c1a;
-    uint32_t ptr_10c1c;
-    uint16_t field_10c20;
-    uint8_t pad_349[6];  /* zero padding */
-    char str_1639[34];
-    char str_1640[34];
-    char str_1641[34];
-    char str_1642[34];
-    uint32_t ptr_10cb0;
-    uint16_t field_10cb4;
-    uint32_t ptr_10cb6;
-    uint16_t field_10cba;
-    uint32_t ptr_10cbc;
-    uint16_t field_10cc0;
-    uint32_t ptr_10cc2;
-    uint16_t field_10cc6;
-    uint8_t pad_350[6];  /* zero padding */
-    char str_1643[34];
-    char str_1644[34];
-    char str_1645[34];
-    char str_1646[34];
-    uint32_t ptr_10d56;
-    uint16_t field_10d5a;
-    uint32_t ptr_10d5c;
-    uint16_t field_10d60;
-    uint32_t ptr_10d62;
-    uint16_t field_10d66;
-    uint32_t ptr_10d68;
-    uint16_t field_10d6c;
-    uint8_t pad_351[6];  /* zero padding */
-    char str_1647[34];
-    char str_1648[34];
-    char str_1649[34];
-    char str_1650[34];
-    uint32_t ptr_10dfc;
-    uint16_t field_10e00;
-    uint32_t ptr_10e02;
-    uint16_t field_10e06;
-    uint32_t ptr_10e08;
-    uint16_t field_10e0c;
-    uint32_t ptr_10e0e;
-    uint16_t field_10e12;
-    uint8_t pad_352[6];  /* zero padding */
-    char str_1651[34];
-    char str_1652[34];
-    char str_1653[34];
-    char str_1654[34];
-    uint32_t ptr_10ea2;
-    uint16_t field_10ea6;
-    uint32_t ptr_10ea8;
-    uint16_t field_10eac;
-    uint32_t ptr_10eae;
-    uint16_t field_10eb2;
-    uint32_t ptr_10eb4;
-    uint16_t field_10eb8;
-    uint8_t pad_353[6];  /* zero padding */
-    char str_1655[34];
-    char str_1656[34];
-    char str_1657[34];
-    char str_1658[34];
-    uint32_t ptr_10f48;
-    uint16_t field_10f4c;
-    uint32_t ptr_10f4e;
-    uint16_t field_10f52;
-    uint32_t ptr_10f54;
-    uint16_t field_10f58;
-    uint32_t ptr_10f5a;
-    uint16_t field_10f5e;
-    uint8_t pad_354[6];  /* zero padding */
-    char str_1659[34];
-    char str_1660[34];
-    char str_1661[34];
-    char str_1662[34];
-    uint32_t ptr_10fee;
-    uint16_t field_10ff2;
-    uint32_t ptr_10ff4;
-    uint16_t field_10ff8;
-    uint32_t ptr_10ffa;
-    uint16_t field_10ffe;
-    uint32_t ptr_11000;
-    uint16_t field_11004;
-    uint8_t pad_355[6];  /* zero padding */
-    char str_1663[34];
-    char str_1664[34];
-    char str_1665[34];
-    char str_1666[34];
-    uint32_t ptr_11094;
-    uint16_t field_11098;
-    uint32_t ptr_1109a;
-    uint16_t field_1109e;
-    uint32_t ptr_110a0;
-    uint16_t field_110a4;
-    uint32_t ptr_110a6;
-    uint16_t field_110aa;
-    uint8_t pad_356[6];  /* zero padding */
-    char str_1667[34];
-    char str_1668[34];
-    char str_1669[34];
-    char str_1670[34];
-    uint32_t ptr_1113a;
-    uint16_t field_1113e;
-    uint32_t ptr_11140;
-    uint16_t field_11144;
-    uint32_t ptr_11146;
-    uint16_t field_1114a;
-    uint32_t ptr_1114c;
-    uint16_t field_11150;
-    uint8_t pad_357[6];  /* zero padding */
-    char str_1671[34];
-    char str_1672[34];
-    char str_1673[34];
-    char str_1674[34];
-    uint32_t ptr_111e0;
-    uint16_t field_111e4;
-    uint32_t ptr_111e6;
-    uint16_t field_111ea;
-    uint32_t ptr_111ec;
-    uint16_t field_111f0;
-    uint32_t ptr_111f2;
-    uint16_t field_111f6;
-    uint8_t pad_358[6];  /* zero padding */
-    char str_1675[34];
-    char str_1676[34];
-    char str_1677[34];
-    char str_1678[34];
-    uint32_t ptr_11286;
-    uint16_t field_1128a;
-    uint32_t ptr_1128c;
-    uint16_t field_11290;
-    uint32_t ptr_11292;
-    uint16_t field_11296;
-    uint32_t ptr_11298;
-    uint16_t field_1129c;
-    uint8_t pad_359[6];  /* zero padding */
-    char str_1679[34];
-    char str_1680[34];
-    char str_1681[34];
-    char str_1682[34];
-    uint32_t ptr_1132c;
-    uint16_t field_11330;
-    uint32_t ptr_11332;
-    uint16_t field_11336;
-    uint32_t ptr_11338;
-    uint16_t field_1133c;
-    uint32_t ptr_1133e;
-    uint16_t field_11342;
-    uint8_t pad_360[6];  /* zero padding */
-    char str_1683[34];
-    char str_1684[34];
-    char str_1685[34];
-    char str_1686[34];
-    uint32_t ptr_113d2;
-    uint16_t field_113d6;
-    uint32_t ptr_113d8;
-    uint16_t field_113dc;
-    uint32_t ptr_113de;
-    uint16_t field_113e2;
-    uint32_t ptr_113e4;
-    uint16_t field_113e8;
-    uint8_t pad_361[6];  /* zero padding */
-    char str_1687[34];
-    char str_1688[34];
-    char str_1689[34];
-    char str_1690[34];
-    uint32_t ptr_11478;
-    uint16_t field_1147c;
-    uint32_t ptr_1147e;
-    uint16_t field_11482;
-    uint32_t ptr_11484;
-    uint16_t field_11488;
-    uint32_t ptr_1148a;
-    uint16_t field_1148e;
-    uint8_t pad_362[6];  /* zero padding */
-    char str_1691[34];
-    char str_1692[34];
-    char str_1693[34];
-    char str_1694[34];
-    uint32_t ptr_1151e;
-    uint16_t field_11522;
-    uint32_t ptr_11524;
-    uint16_t field_11528;
-    uint32_t ptr_1152a;
-    uint16_t field_1152e;
-    uint32_t ptr_11530;
-    uint16_t field_11534;
-    uint8_t pad_363[6];  /* zero padding */
-    char str_1695[34];
-    char str_1696[34];
-    char str_1697[34];
-    char str_1698[34];
-    uint32_t ptr_115c4;
-    uint16_t field_115c8;
-    uint32_t ptr_115ca;
-    uint16_t field_115ce;
-    uint32_t ptr_115d0;
-    uint16_t field_115d4;
-    uint32_t ptr_115d6;
-    uint16_t field_115da;
-    uint8_t pad_364[6];  /* zero padding */
-    char str_1699[34];
-    char str_1700[34];
-    char str_1701[34];
-    char str_1702[34];
-    uint32_t ptr_1166a;
-    uint16_t field_1166e;
-    uint32_t ptr_11670;
-    uint16_t field_11674;
-    uint32_t ptr_11676;
-    uint16_t field_1167a;
-    uint32_t ptr_1167c;
-    uint16_t field_11680;
-    uint8_t pad_365[6];  /* zero padding */
-    char str_1703[34];
-    char str_1704[34];
-    char str_1705[34];
-    char str_1706[34];
-    uint32_t ptr_11710;
-    uint16_t field_11714;
-    uint32_t ptr_11716;
-    uint16_t field_1171a;
-    uint32_t ptr_1171c;
-    uint16_t field_11720;
-    uint32_t ptr_11722;
-    uint16_t field_11726;
-    uint8_t pad_366[6];  /* zero padding */
-    char str_1707[34];
-    char str_1708[34];
-    char str_1709[34];
-    char str_1710[34];
-    uint32_t ptr_117b6;
-    uint16_t field_117ba;
-    uint32_t ptr_117bc;
-    uint16_t field_117c0;
-    uint32_t ptr_117c2;
-    uint16_t field_117c6;
-    uint32_t ptr_117c8;
-    uint16_t field_117cc;
-    uint8_t pad_367[6];  /* zero padding */
-    char str_1711[34];
-    char str_1712[34];
-    char str_1713[34];
-    char str_1714[34];
-    uint32_t ptr_1185c;
-    uint16_t field_11860;
-    uint32_t ptr_11862;
-    uint16_t field_11866;
-    uint32_t ptr_11868;
-    uint16_t field_1186c;
-    uint32_t ptr_1186e;
-    uint16_t field_11872;
-    uint8_t pad_368[6];  /* zero padding */
-    char str_1715[34];
-    char str_1716[34];
-    char str_1717[34];
-    char str_1718[34];
-    uint32_t ptr_11902;
-    uint16_t field_11906;
-    uint32_t ptr_11908;
-    uint16_t field_1190c;
-    uint32_t ptr_1190e;
-    uint16_t field_11912;
-    uint32_t ptr_11914;
-    uint16_t field_11918;
-    uint8_t pad_369[6];  /* zero padding */
-    char str_1719[34];
-    char str_1720[34];
-    char str_1721[34];
-    char str_1722[34];
-    uint32_t ptr_119a8;
-    uint16_t field_119ac;
-    uint32_t ptr_119ae;
-    uint16_t field_119b2;
-    uint32_t ptr_119b4;
-    uint16_t field_119b8;
-    uint32_t ptr_119ba;
-    uint16_t field_119be;
-    uint8_t pad_370[6];  /* zero padding */
-    char str_1723[34];
-    char str_1724[34];
-    char str_1725[34];
-    char str_1726[34];
-    uint32_t ptr_11a4e;
-    uint16_t field_11a52;
-    uint32_t ptr_11a54;
-    uint16_t field_11a58;
-    uint32_t ptr_11a5a;
-    uint16_t field_11a5e;
-    uint32_t ptr_11a60;
-    uint16_t field_11a64;
-    uint8_t pad_371[6];  /* zero padding */
-    char str_1727[34];
-    char str_1728[34];
-    char str_1729[34];
-    char str_1730[34];
-    uint32_t ptr_11af4;
-    uint16_t field_11af8;
-    uint32_t ptr_11afa;
-    uint16_t field_11afe;
-    uint32_t ptr_11b00;
-    uint16_t field_11b04;
-    uint32_t ptr_11b06;
-    uint16_t field_11b0a;
-    uint8_t pad_372[6];  /* zero padding */
-    char str_1731[34];
-    char str_1732[34];
-    char str_1733[34];
-    char str_1734[34];
-    uint32_t ptr_11b9a;
-    uint16_t field_11b9e;
-    uint32_t ptr_11ba0;
-    uint16_t field_11ba4;
-    uint32_t ptr_11ba6;
-    uint16_t field_11baa;
-    uint32_t ptr_11bac;
-    uint16_t field_11bb0;
-    uint8_t pad_373[6];  /* zero padding */
-    char str_1735[34];
-    char str_1736[34];
-    char str_1737[34];
-    char str_1738[34];
-    uint32_t ptr_11c40;
-    uint16_t field_11c44;
-    uint32_t ptr_11c46;
-    uint16_t field_11c4a;
-    uint32_t ptr_11c4c;
-    uint16_t field_11c50;
-    uint32_t ptr_11c52;
-    uint16_t field_11c56;
-    uint8_t pad_374[6];  /* zero padding */
-    char str_1739[34];
-    char str_1740[34];
-    char str_1741[34];
-    char str_1742[34];
-    uint32_t ptr_11ce6;
-    uint16_t field_11cea;
-    uint32_t ptr_11cec;
-    uint16_t field_11cf0;
-    uint32_t ptr_11cf2;
-    uint16_t field_11cf6;
-    uint32_t ptr_11cf8;
-    uint16_t field_11cfc;
-    uint8_t pad_375[6];  /* zero padding */
-    char str_1743[34];
-    char str_1744[34];
-    char str_1745[34];
-    char str_1746[34];
-    uint32_t ptr_11d8c;
-    uint16_t field_11d90;
-    uint32_t ptr_11d92;
-    uint16_t field_11d96;
-    uint32_t ptr_11d98;
-    uint16_t field_11d9c;
-    uint32_t ptr_11d9e;
-    uint16_t field_11da2;
-    uint8_t pad_376[6];  /* zero padding */
-    char str_1747[34];
-    char str_1748[34];
-    char str_1749[34];
-    char str_1750[34];
-    uint32_t ptr_11e32;
-    uint16_t field_11e36;
-    uint32_t ptr_11e38;
-    uint16_t field_11e3c;
-    uint32_t ptr_11e3e;
-    uint16_t field_11e42;
-    uint32_t ptr_11e44;
-    uint16_t field_11e48;
-    uint8_t pad_377[6];  /* zero padding */
-    char str_1751[34];
-    char str_1752[34];
-    char str_1753[34];
-    char str_1754[34];
-    uint32_t ptr_11ed8;
-    uint16_t field_11edc;
-    uint32_t ptr_11ede;
-    uint16_t field_11ee2;
-    uint32_t ptr_11ee4;
-    uint16_t field_11ee8;
-    uint32_t ptr_11eea;
-    uint16_t field_11eee;
-    uint8_t pad_378[6];  /* zero padding */
-    char str_1755[34];
-    char str_1756[34];
-    char str_1757[34];
-    char str_1758[34];
-    uint32_t ptr_11f7e;
-    uint16_t field_11f82;
-    uint32_t ptr_11f84;
-    uint16_t field_11f88;
-    uint32_t ptr_11f8a;
-    uint16_t field_11f8e;
-    uint32_t ptr_11f90;
-    uint16_t field_11f94;
-    uint8_t pad_379[6];  /* zero padding */
-    char str_1759[34];
-    char str_1760[34];
-    char str_1761[34];
-    char str_1762[34];
-    uint32_t ptr_12024;
-    uint16_t field_12028;
-    uint32_t ptr_1202a;
-    uint16_t field_1202e;
-    uint32_t ptr_12030;
-    uint16_t field_12034;
-    uint32_t ptr_12036;
-    uint16_t field_1203a;
-    uint8_t pad_380[6];  /* zero padding */
-    char str_1763[34];
-    char str_1764[34];
-    char str_1765[34];
-    char str_1766[34];
-    uint32_t ptr_120ca;
-    uint16_t field_120ce;
-    uint32_t ptr_120d0;
-    uint16_t field_120d4;
-    uint32_t ptr_120d6;
-    uint16_t field_120da;
-    uint32_t ptr_120dc;
-    uint16_t field_120e0;
-    uint8_t pad_381[6];  /* zero padding */
-    char str_1767[34];
-    char str_1768[34];
-    char str_1769[34];
-    char str_1770[34];
-    uint32_t ptr_12170;
-    uint16_t field_12174;
-    uint32_t ptr_12176;
-    uint16_t field_1217a;
-    uint32_t ptr_1217c;
-    uint16_t field_12180;
-    uint32_t ptr_12182;
-    uint16_t field_12186;
-    uint8_t pad_382[6];  /* zero padding */
-    char str_1771[34];
-    char str_1772[34];
-    char str_1773[34];
-    char str_1774[34];
-    uint32_t ptr_12216;
-    uint16_t field_1221a;
-    uint32_t ptr_1221c;
-    uint16_t field_12220;
-    uint32_t ptr_12222;
-    uint16_t field_12226;
-    uint32_t ptr_12228;
-    uint16_t field_1222c;
-    uint8_t pad_383[6];  /* zero padding */
-    char str_1775[34];
-    char str_1776[34];
-    char str_1777[34];
-    char str_1778[34];
-    uint32_t ptr_122bc;
-    uint16_t field_122c0;
-    uint32_t ptr_122c2;
-    uint16_t field_122c6;
-    uint32_t ptr_122c8;
-    uint16_t field_122cc;
-    uint32_t ptr_122ce;
-    uint16_t field_122d2;
-    uint8_t pad_384[6];  /* zero padding */
-    char str_1779[34];
-    char str_1780[34];
-    char str_1781[34];
-    char str_1782[34];
-    uint32_t ptr_12362;
-    uint16_t field_12366;
-    uint32_t ptr_12368;
-    uint16_t field_1236c;
-    uint32_t ptr_1236e;
-    uint16_t field_12372;
-    uint32_t ptr_12374;
-    uint16_t field_12378;
-    uint8_t pad_385[6];  /* zero padding */
-    char str_1783[34];
-    char str_1784[34];
-    char str_1785[34];
-    char str_1786[34];
-    uint32_t ptr_12408;
-    uint16_t field_1240c;
-    uint32_t ptr_1240e;
-    uint16_t field_12412;
-    uint32_t ptr_12414;
-    uint16_t field_12418;
-    uint32_t ptr_1241a;
-    uint16_t field_1241e;
-    uint8_t pad_386[6];  /* zero padding */
-    char str_1787[34];
-    char str_1788[34];
-    char str_1789[34];
-    char str_1790[34];
-    uint32_t ptr_124ae;
-    uint16_t field_124b2;
-    uint32_t ptr_124b4;
-    uint16_t field_124b8;
-    uint32_t ptr_124ba;
-    uint16_t field_124be;
-    uint32_t ptr_124c0;
-    uint16_t field_124c4;
-    uint8_t pad_387[6];  /* zero padding */
-    char str_1791[34];
-    char str_1792[34];
-    char str_1793[34];
-    char str_1794[34];
-    uint32_t ptr_12554;
-    uint16_t field_12558;
-    uint32_t ptr_1255a;
-    uint16_t field_1255e;
-    uint32_t ptr_12560;
-    uint16_t field_12564;
-    uint32_t ptr_12566;
-    uint16_t field_1256a;
-    uint8_t pad_388[6];  /* zero padding */
-    char str_1795[34];
-    char str_1796[34];
-    char str_1797[34];
-    char str_1798[34];
-    uint32_t ptr_125fa;
-    uint16_t field_125fe;
-    uint32_t ptr_12600;
-    uint16_t field_12604;
-    uint32_t ptr_12606;
-    uint16_t field_1260a;
-    uint32_t ptr_1260c;
-    uint16_t field_12610;
-    uint8_t pad_389[6];  /* zero padding */
-    char str_1799[34];
-    char str_1800[34];
-    char str_1801[34];
-    char str_1802[34];
-    uint32_t ptr_126a0;
-    uint16_t field_126a4;
-    uint32_t ptr_126a6;
-    uint16_t field_126aa;
-    uint32_t ptr_126ac;
-    uint16_t field_126b0;
-    uint32_t ptr_126b2;
-    uint16_t field_126b6;
-    uint8_t pad_390[6];  /* zero padding */
-    char str_1803[34];
-    char str_1804[34];
-    char str_1805[34];
-    char str_1806[34];
-    uint32_t ptr_12746;
-    uint16_t field_1274a;
-    uint32_t ptr_1274c;
-    uint16_t field_12750;
-    uint32_t ptr_12752;
-    uint16_t field_12756;
-    uint32_t ptr_12758;
-    uint16_t field_1275c;
-    uint8_t pad_391[6];  /* zero padding */
-    char str_1807[34];
-    char str_1808[34];
-    char str_1809[34];
-    char str_1810[34];
-    uint32_t ptr_127ec;
-    uint16_t field_127f0;
-    uint32_t ptr_127f2;
-    uint16_t field_127f6;
-    uint32_t ptr_127f8;
-    uint16_t field_127fc;
-    uint32_t ptr_127fe;
-    uint16_t field_12802;
-    uint8_t pad_392[6];  /* zero padding */
-    char str_1811[34];
-    char str_1812[34];
-    char str_1813[34];
-    char str_1814[34];
-    uint32_t ptr_12892;
-    uint16_t field_12896;
-    uint32_t ptr_12898;
-    uint16_t field_1289c;
-    uint32_t ptr_1289e;
-    uint16_t field_128a2;
-    uint32_t ptr_128a4;
-    uint16_t field_128a8;
-    uint8_t pad_393[6];  /* zero padding */
-    char str_1815[34];
-    char str_1816[34];
-    char str_1817[34];
-    char str_1818[34];
-    uint32_t ptr_12938;
-    uint16_t field_1293c;
-    uint32_t ptr_1293e;
-    uint16_t field_12942;
-    uint32_t ptr_12944;
-    uint16_t field_12948;
-    uint32_t ptr_1294a;
-    uint16_t field_1294e;
-    uint8_t pad_394[6];  /* zero padding */
-    char str_1819[34];
-    char str_1820[34];
-    char str_1821[34];
-    char str_1822[34];
-    uint32_t ptr_129de;
-    uint16_t field_129e2;
-    uint32_t ptr_129e4;
-    uint16_t field_129e8;
-    uint32_t ptr_129ea;
-    uint16_t field_129ee;
-    uint32_t ptr_129f0;
-    uint16_t field_129f4;
-    uint8_t pad_395[6];  /* zero padding */
-    char str_1823[34];
-    char str_1824[34];
-    char str_1825[34];
-    char str_1826[34];
-    uint32_t ptr_12a84;
-    uint16_t field_12a88;
-    uint32_t ptr_12a8a;
-    uint16_t field_12a8e;
-    uint32_t ptr_12a90;
-    uint16_t field_12a94;
-    uint32_t ptr_12a96;
-    uint16_t field_12a9a;
-    uint8_t pad_396[6];  /* zero padding */
-    char str_1827[34];
-    char str_1828[34];
-    char str_1829[34];
-    char str_1830[34];
-    uint32_t ptr_12b2a;
-    uint16_t field_12b2e;
-    uint32_t ptr_12b30;
-    uint16_t field_12b34;
-    uint32_t ptr_12b36;
-    uint16_t field_12b3a;
-    uint32_t ptr_12b3c;
-    uint16_t field_12b40;
-    uint8_t pad_397[6];  /* zero padding */
-    char str_1831[34];
-    char str_1832[34];
-    char str_1833[34];
-    char str_1834[34];
-    uint32_t ptr_12bd0;
-    uint16_t field_12bd4;
-    uint32_t ptr_12bd6;
-    uint16_t field_12bda;
-    uint32_t ptr_12bdc;
-    uint16_t field_12be0;
-    uint32_t ptr_12be2;
-    uint16_t field_12be6;
-    uint8_t pad_398[6];  /* zero padding */
-    char str_1835[34];
-    char str_1836[34];
-    char str_1837[34];
-    char str_1838[34];
-    uint32_t ptr_12c76;
-    uint16_t field_12c7a;
-    uint32_t ptr_12c7c;
-    uint16_t field_12c80;
-    uint32_t ptr_12c82;
-    uint16_t field_12c86;
-    uint32_t ptr_12c88;
-    uint16_t field_12c8c;
-    uint8_t pad_399[6];  /* zero padding */
-    char str_1839[34];
-    char str_1840[34];
-    char str_1841[34];
-    char str_1842[34];
-    uint32_t ptr_12d1c;
-    uint16_t field_12d20;
-    uint32_t ptr_12d22;
-    uint16_t field_12d26;
-    uint32_t ptr_12d28;
-    uint16_t field_12d2c;
-    uint32_t ptr_12d2e;
-    uint16_t field_12d32;
-    uint8_t pad_400[6];  /* zero padding */
-    char str_1843[34];
-    char str_1844[34];
-    char str_1845[34];
-    char str_1846[34];
-    uint32_t ptr_12dc2;
-    uint16_t field_12dc6;
-    uint32_t ptr_12dc8;
-    uint16_t field_12dcc;
-    uint32_t ptr_12dce;
-    uint16_t field_12dd2;
-    uint32_t ptr_12dd4;
-    uint16_t field_12dd8;
-    uint8_t pad_401[6];  /* zero padding */
-    char str_1847[34];
-    char str_1848[34];
-    char str_1849[34];
-    char str_1850[34];
-    uint32_t ptr_12e68;
-    uint16_t field_12e6c;
-    uint32_t ptr_12e6e;
-    uint16_t field_12e72;
-    uint32_t ptr_12e74;
-    uint16_t field_12e78;
-    uint32_t ptr_12e7a;
-    uint16_t field_12e7e;
-    uint8_t pad_402[6];  /* zero padding */
-    char str_1851[34];
-    char str_1852[34];
-    char str_1853[34];
-    char str_1854[34];
-    uint32_t ptr_12f0e;
-    uint16_t field_12f12;
-    uint32_t ptr_12f14;
-    uint16_t field_12f18;
-    uint32_t ptr_12f1a;
-    uint16_t field_12f1e;
-    uint32_t ptr_12f20;
-    uint16_t field_12f24;
-    uint8_t pad_403[6];  /* zero padding */
-    char str_1855[34];
-    char str_1856[34];
-    char str_1857[34];
-    char str_1858[34];
-    uint32_t ptr_12fb4;
-    uint16_t field_12fb8;
-    uint32_t ptr_12fba;
-    uint16_t field_12fbe;
-    uint32_t ptr_12fc0;
-    uint16_t field_12fc4;
-    uint32_t ptr_12fc6;
-    uint16_t field_12fca;
-    uint8_t pad_404[6];  /* zero padding */
-    char str_1859[34];
-    char str_1860[34];
-    char str_1861[34];
-    char str_1862[34];
-    uint32_t ptr_1305a;
-    uint16_t field_1305e;
-    uint32_t ptr_13060;
-    uint16_t field_13064;
-    uint32_t ptr_13066;
-    uint16_t field_1306a;
-    uint32_t ptr_1306c;
-    uint16_t field_13070;
-    uint8_t pad_405[6];  /* zero padding */
-    char str_1863[34];
-    char str_1864[34];
-    char str_1865[34];
-    char str_1866[34];
-    uint32_t ptr_13100;
-    uint16_t field_13104;
-    uint32_t ptr_13106;
-    uint16_t field_1310a;
-    uint32_t ptr_1310c;
-    uint16_t field_13110;
-    uint32_t ptr_13112;
-    uint16_t field_13116;
-    uint8_t pad_406[6];  /* zero padding */
-    char str_1867[34];
-    char str_1868[34];
-    char str_1869[34];
-    char str_1870[34];
-    uint32_t ptr_131a6;
-    uint16_t field_131aa;
-    uint32_t ptr_131ac;
-    uint16_t field_131b0;
-    uint32_t ptr_131b2;
-    uint16_t field_131b6;
-    uint32_t ptr_131b8;
-    uint16_t field_131bc;
-    uint8_t pad_407[6];  /* zero padding */
-    char str_1871[34];
-    char str_1872[34];
-    char str_1873[34];
-    char str_1874[34];
-    uint32_t ptr_1324c;
-    uint16_t field_13250;
-    uint32_t ptr_13252;
-    uint16_t field_13256;
-    uint32_t ptr_13258;
-    uint16_t field_1325c;
-    uint32_t ptr_1325e;
-    uint16_t field_13262;
-    uint8_t pad_408[6];  /* zero padding */
-    char str_1875[34];
-    char str_1876[34];
-    char str_1877[34];
-    char str_1878[34];
-    uint32_t ptr_132f2;
-    uint16_t field_132f6;
-    uint32_t ptr_132f8;
-    uint16_t field_132fc;
-    uint32_t ptr_132fe;
-    uint16_t field_13302;
-    uint32_t ptr_13304;
-    uint16_t field_13308;
-    uint8_t pad_409[6];  /* zero padding */
-    char str_1879[34];
-    char str_1880[34];
-    char str_1881[34];
-    char str_1882[34];
-    uint32_t ptr_13398;
-    uint16_t field_1339c;
-    uint32_t ptr_1339e;
-    uint16_t field_133a2;
-    uint32_t ptr_133a4;
-    uint16_t field_133a8;
-    uint32_t ptr_133aa;
-    uint16_t field_133ae;
-    uint8_t pad_410[6];  /* zero padding */
-    char str_1883[34];
-    char str_1884[34];
-    char str_1885[34];
-    char str_1886[34];
-    uint32_t ptr_1343e;
-    uint16_t field_13442;
-    uint32_t ptr_13444;
-    uint16_t field_13448;
-    uint32_t ptr_1344a;
-    uint16_t field_1344e;
-    uint32_t ptr_13450;
-    uint16_t field_13454;
-    uint8_t pad_411[6];  /* zero padding */
-    char str_1887[34];
-    char str_1888[34];
-    char str_1889[34];
-    char str_1890[34];
-    uint32_t ptr_134e4;
-    uint16_t field_134e8;
-    uint32_t ptr_134ea;
-    uint16_t field_134ee;
-    uint32_t ptr_134f0;
-    uint16_t field_134f4;
-    uint32_t ptr_134f6;
-    uint16_t field_134fa;
-    uint8_t pad_412[6];  /* zero padding */
-    char str_1891[34];
-    char str_1892[34];
-    char str_1893[34];
-    char str_1894[34];
-    uint32_t ptr_1358a;
-    uint16_t field_1358e;
-    uint32_t ptr_13590;
-    uint16_t field_13594;
-    uint32_t ptr_13596;
-    uint16_t field_1359a;
-    uint32_t ptr_1359c;
-    uint16_t field_135a0;
-    uint8_t pad_413[6];  /* zero padding */
-    char str_1895[34];
-    char str_1896[34];
-    char str_1897[34];
-    char str_1898[34];
-    uint32_t ptr_13630;
-    uint16_t field_13634;
-    uint32_t ptr_13636;
-    uint16_t field_1363a;
-    uint32_t ptr_1363c;
-    uint16_t field_13640;
-    uint32_t ptr_13642;
-    uint16_t field_13646;
-    uint8_t pad_414[6];  /* zero padding */
-    char str_1899[34];
-    char str_1900[34];
-    char str_1901[34];
-    char str_1902[34];
-    uint32_t ptr_136d6;
-    uint16_t field_136da;
-    uint32_t ptr_136dc;
-    uint16_t field_136e0;
-    uint32_t ptr_136e2;
-    uint16_t field_136e6;
-    uint32_t ptr_136e8;
-    uint16_t field_136ec;
-    uint8_t pad_415[6];  /* zero padding */
-    char str_1903[34];
-    char str_1904[34];
-    char str_1905[34];
-    char str_1906[34];
-    uint32_t ptr_1377c;
-    uint16_t field_13780;
-    uint32_t ptr_13782;
-    uint16_t field_13786;
-    uint32_t ptr_13788;
-    uint16_t field_1378c;
-    uint32_t ptr_1378e;
-    uint16_t field_13792;
-    uint8_t pad_416[6];  /* zero padding */
-    char str_1907[34];
-    char str_1908[34];
-    char str_1909[34];
-    char str_1910[34];
-    uint32_t ptr_13822;
-    uint16_t field_13826;
-    uint32_t ptr_13828;
-    uint16_t field_1382c;
-    uint32_t ptr_1382e;
-    uint16_t field_13832;
-    uint32_t ptr_13834;
-    uint16_t field_13838;
-    uint8_t pad_417[6];  /* zero padding */
-    char str_1911[34];
-    char str_1912[34];
-    char str_1913[34];
-    char str_1914[34];
-    uint32_t ptr_138c8;
-    uint16_t field_138cc;
-    uint32_t ptr_138ce;
-    uint16_t field_138d2;
-    uint32_t ptr_138d4;
-    uint16_t field_138d8;
-    uint32_t ptr_138da;
-    uint16_t field_138de;
-    uint8_t pad_418[6];  /* zero padding */
-    char str_1915[34];
-    char str_1916[34];
-    char str_1917[34];
-    char str_1918[34];
-    uint32_t ptr_1396e;
-    uint16_t field_13972;
-    uint32_t ptr_13974;
-    uint16_t field_13978;
-    uint32_t ptr_1397a;
-    uint16_t field_1397e;
-    uint32_t ptr_13980;
-    uint16_t field_13984;
-    uint8_t pad_419[6];  /* zero padding */
-    char str_1919[34];
-    char str_1920[34];
-    char str_1921[34];
-    char str_1922[34];
-    uint32_t ptr_13a14;
-    uint16_t field_13a18;
-    uint32_t ptr_13a1a;
-    uint16_t field_13a1e;
-    uint32_t ptr_13a20;
-    uint16_t field_13a24;
-    uint32_t ptr_13a26;
-    uint16_t field_13a2a;
-    uint8_t pad_420[6];  /* zero padding */
-    char str_1923[34];
-    char str_1924[34];
-    char str_1925[34];
-    char str_1926[34];
-    uint32_t ptr_13aba;
-    uint16_t field_13abe;
-    uint32_t ptr_13ac0;
-    uint16_t field_13ac4;
-    uint32_t ptr_13ac6;
-    uint16_t field_13aca;
-    uint32_t ptr_13acc;
-    uint16_t field_13ad0;
-    uint8_t pad_421[6];  /* zero padding */
-    char str_1927[34];
-    char str_1928[34];
-    char str_1929[34];
-    char str_1930[34];
-    uint32_t ptr_13b60;
-    uint16_t field_13b64;
-    uint32_t ptr_13b66;
-    uint16_t field_13b6a;
-    uint32_t ptr_13b6c;
-    uint16_t field_13b70;
-    uint32_t ptr_13b72;
-    uint16_t field_13b76;
-    uint8_t pad_422[6];  /* zero padding */
-    char str_1931[34];
-    char str_1932[34];
-    char str_1933[34];
-    char str_1934[34];
-    uint32_t ptr_13c06;
-    uint16_t field_13c0a;
-    uint32_t ptr_13c0c;
-    uint16_t field_13c10;
-    uint32_t ptr_13c12;
-    uint16_t field_13c16;
-    uint32_t ptr_13c18;
-    uint16_t field_13c1c;
-    uint8_t pad_423[6];  /* zero padding */
-    char str_1935[34];
-    char str_1936[34];
-    char str_1937[34];
-    char str_1938[34];
-    uint32_t ptr_13cac;
-    uint16_t field_13cb0;
-    uint32_t ptr_13cb2;
-    uint16_t field_13cb6;
-    uint32_t ptr_13cb8;
-    uint16_t field_13cbc;
-    uint32_t ptr_13cbe;
-    uint16_t field_13cc2;
-    uint8_t pad_424[6];  /* zero padding */
-    char str_1939[34];
-    char str_1940[34];
-    char str_1941[34];
-    char str_1942[34];
-    uint32_t ptr_13d52;
-    uint16_t field_13d56;
-    uint32_t ptr_13d58;
-    uint16_t field_13d5c;
-    uint32_t ptr_13d5e;
-    uint16_t field_13d62;
-    uint32_t ptr_13d64;
-    uint16_t field_13d68;
-    uint8_t pad_425[6];  /* zero padding */
-    char str_1943[34];
-    char str_1944[34];
-    char str_1945[34];
-    char str_1946[34];
-    uint32_t ptr_13df8;
-    uint16_t field_13dfc;
-    uint32_t ptr_13dfe;
-    uint16_t field_13e02;
-    uint32_t ptr_13e04;
-    uint16_t field_13e08;
-    uint32_t ptr_13e0a;
-    uint16_t field_13e0e;
-    uint8_t pad_426[6];  /* zero padding */
-    char str_1947[34];
-    char str_1948[34];
-    char str_1949[34];
-    char str_1950[34];
-    uint32_t ptr_13e9e;
-    uint16_t field_13ea2;
-    uint32_t ptr_13ea4;
-    uint16_t field_13ea8;
-    uint32_t ptr_13eaa;
-    uint16_t field_13eae;
-    uint32_t ptr_13eb0;
-    uint16_t field_13eb4;
-    uint8_t pad_427[6];  /* zero padding */
-    char str_1951[34];
-    char str_1952[34];
-    char str_1953[34];
-    char str_1954[34];
-    uint32_t ptr_13f44;
-    uint16_t field_13f48;
-    uint32_t ptr_13f4a;
-    uint16_t field_13f4e;
-    uint32_t ptr_13f50;
-    uint16_t field_13f54;
-    uint32_t ptr_13f56;
-    uint16_t field_13f5a;
-    uint8_t pad_428[6];  /* zero padding */
-    char str_1955[34];
-    char str_1956[34];
-    char str_1957[34];
-    char str_1958[34];
-    uint32_t ptr_13fea;
-    uint16_t field_13fee;
-    uint32_t ptr_13ff0;
-    uint16_t field_13ff4;
-    uint32_t ptr_13ff6;
-    uint16_t field_13ffa;
-    uint32_t ptr_13ffc;
-    uint16_t field_14000;
-    uint8_t pad_429[6];  /* zero padding */
-    char str_1959[34];
-    char str_1960[34];
-    char str_1961[34];
-    char str_1962[34];
-    uint32_t ptr_14090;
-    uint16_t field_14094;
-    uint32_t ptr_14096;
-    uint16_t field_1409a;
-    uint32_t ptr_1409c;
-    uint16_t field_140a0;
-    uint32_t ptr_140a2;
-    uint16_t field_140a6;
-    uint8_t pad_430[6];  /* zero padding */
-    char str_1963[34];
-    char str_1964[34];
-    char str_1965[34];
-    char str_1966[34];
-    uint32_t ptr_14136;
-    uint16_t field_1413a;
-    uint32_t ptr_1413c;
-    uint16_t field_14140;
-    uint32_t ptr_14142;
-    uint16_t field_14146;
-    uint32_t ptr_14148;
-    uint16_t field_1414c;
-    uint8_t pad_431[6];  /* zero padding */
-    char str_1967[34];
-    char str_1968[34];
-    char str_1969[34];
-    char str_1970[34];
-    uint32_t ptr_141dc;
-    uint16_t field_141e0;
-    uint32_t ptr_141e2;
-    uint16_t field_141e6;
-    uint32_t ptr_141e8;
-    uint16_t field_141ec;
-    uint32_t ptr_141ee;
-    uint16_t field_141f2;
-    uint8_t pad_432[6];  /* zero padding */
-    char str_1971[34];
-    char str_1972[34];
-    char str_1973[34];
-    char str_1974[34];
-    uint32_t ptr_14282;
-    uint16_t field_14286;
-    uint32_t ptr_14288;
-    uint16_t field_1428c;
-    uint32_t ptr_1428e;
-    uint16_t field_14292;
-    uint32_t ptr_14294;
-    uint16_t field_14298;
-    uint8_t pad_433[6];  /* zero padding */
-    char str_1975[34];
-    char str_1976[34];
-    char str_1977[34];
-    char str_1978[34];
-    uint32_t ptr_14328;
-    uint16_t field_1432c;
-    uint32_t ptr_1432e;
-    uint16_t field_14332;
-    uint32_t ptr_14334;
-    uint16_t field_14338;
-    uint32_t ptr_1433a;
-    uint16_t field_1433e;
-    uint8_t pad_434[6];  /* zero padding */
-    char str_1979[34];
-    char str_1980[34];
-    char str_1981[34];
-    char str_1982[34];
-    uint32_t ptr_143ce;
-    uint16_t field_143d2;
-    uint32_t ptr_143d4;
-    uint16_t field_143d8;
-    uint32_t ptr_143da;
-    uint16_t field_143de;
-    uint32_t ptr_143e0;
-    uint16_t field_143e4;
-    uint8_t pad_435[6];  /* zero padding */
-    char str_1983[34];
-    char str_1984[34];
-    char str_1985[34];
-    char str_1986[34];
-    uint32_t ptr_14474;
-    uint16_t field_14478;
-    uint32_t ptr_1447a;
-    uint16_t field_1447e;
-    uint32_t ptr_14480;
-    uint16_t field_14484;
-    uint32_t ptr_14486;
-    uint16_t field_1448a;
-    uint8_t pad_436[6];  /* zero padding */
-    char str_1987[34];
-    char str_1988[34];
-    char str_1989[34];
-    char str_1990[34];
-    uint32_t ptr_1451a;
-    uint16_t field_1451e;
-    uint32_t ptr_14520;
-    uint16_t field_14524;
-    uint32_t ptr_14526;
-    uint16_t field_1452a;
-    uint32_t ptr_1452c;
-    uint16_t field_14530;
-    uint8_t pad_437[6];  /* zero padding */
-    char str_1991[34];
-    char str_1992[34];
-    char str_1993[34];
-    char str_1994[34];
-    uint32_t ptr_145c0;
-    uint16_t field_145c4;
-    uint32_t ptr_145c6;
-    uint16_t field_145ca;
-    uint32_t ptr_145cc;
-    uint16_t field_145d0;
-    uint32_t ptr_145d2;
-    uint16_t field_145d6;
-    uint8_t pad_438[6];  /* zero padding */
-    char str_1995[34];
-    char str_1996[34];
-    char str_1997[34];
-    char str_1998[34];
-    uint32_t ptr_14666;
-    uint16_t field_1466a;
-    uint32_t ptr_1466c;
-    uint16_t field_14670;
-    uint32_t ptr_14672;
-    uint16_t field_14676;
-    uint32_t ptr_14678;
-    uint16_t field_1467c;
-    uint8_t pad_439[6];  /* zero padding */
-    char str_1999[34];
-    char str_2000[34];
-    char str_2001[34];
-    char str_2002[34];
-    uint32_t ptr_1470c;
-    uint16_t field_14710;
-    uint32_t ptr_14712;
-    uint16_t field_14716;
-    uint32_t ptr_14718;
-    uint16_t field_1471c;
-    uint32_t ptr_1471e;
-    uint16_t field_14722;
-    uint8_t pad_440[6];  /* zero padding */
-    char str_2003[34];
-    char str_2004[34];
-    char str_2005[34];
-    char str_2006[34];
-    uint32_t ptr_147b2;
-    uint16_t field_147b6;
-    uint32_t ptr_147b8;
-    uint16_t field_147bc;
-    uint32_t ptr_147be;
-    uint16_t field_147c2;
-    uint32_t ptr_147c4;
-    uint16_t field_147c8;
-    uint8_t pad_441[6];  /* zero padding */
-    char str_2007[34];
-    char str_2008[34];
-    char str_2009[34];
-    char str_2010[34];
-    uint32_t ptr_14858;
-    uint16_t field_1485c;
-    uint32_t ptr_1485e;
-    uint16_t field_14862;
-    uint32_t ptr_14864;
-    uint16_t field_14868;
-    uint32_t ptr_1486a;
-    uint16_t field_1486e;
-    uint8_t pad_442[6];  /* zero padding */
-    char str_2011[34];
-    char str_2012[34];
-    char str_2013[34];
-    char str_2014[34];
-    uint32_t ptr_148fe;
-    uint16_t field_14902;
-    uint32_t ptr_14904;
-    uint16_t field_14908;
-    uint32_t ptr_1490a;
-    uint16_t field_1490e;
-    uint32_t ptr_14910;
-    uint16_t field_14914;
-    uint8_t pad_443[6];  /* zero padding */
-    char str_2015[34];
-    char str_2016[34];
-    char str_2017[34];
-    char str_2018[34];
-    uint32_t ptr_149a4;
-    uint16_t field_149a8;
-    uint32_t ptr_149aa;
-    uint16_t field_149ae;
-    uint32_t ptr_149b0;
-    uint16_t field_149b4;
-    uint32_t ptr_149b6;
-    uint16_t field_149ba;
-    uint8_t pad_444[6];  /* zero padding */
-    char str_2019[34];
-    char str_2020[34];
-    char str_2021[34];
-    char str_2022[34];
-    uint32_t ptr_14a4a;
-    uint16_t field_14a4e;
-    uint32_t ptr_14a50;
-    uint16_t field_14a54;
-    uint32_t ptr_14a56;
-    uint16_t field_14a5a;
-    uint32_t ptr_14a5c;
-    uint16_t field_14a60;
-    uint8_t pad_445[6];  /* zero padding */
-    char str_2023[34];
-    char str_2024[34];
-    char str_2025[34];
-    char str_2026[34];
-    uint32_t ptr_14af0;
-    uint16_t field_14af4;
-    uint32_t ptr_14af6;
-    uint16_t field_14afa;
-    uint32_t ptr_14afc;
-    uint16_t field_14b00;
-    uint32_t ptr_14b02;
-    uint16_t field_14b06;
-    uint8_t pad_446[6];  /* zero padding */
-    char str_2027[34];
-    char str_2028[34];
-    char str_2029[34];
-    char str_2030[34];
-    uint32_t ptr_14b96;
-    uint16_t field_14b9a;
-    uint32_t ptr_14b9c;
-    uint16_t field_14ba0;
-    uint32_t ptr_14ba2;
-    uint16_t field_14ba6;
-    uint32_t ptr_14ba8;
-    uint16_t field_14bac;
-    uint8_t pad_447[6];  /* zero padding */
-    char str_2031[34];
-    char str_2032[34];
-    char str_2033[34];
-    char str_2034[34];
-    uint32_t ptr_14c3c;
-    uint16_t field_14c40;
-    uint32_t ptr_14c42;
-    uint16_t field_14c46;
-    uint32_t ptr_14c48;
-    uint16_t field_14c4c;
-    uint32_t ptr_14c4e;
-    uint16_t field_14c52;
-    uint8_t pad_448[6];  /* zero padding */
-    char str_2035[34];
-    char str_2036[34];
-    char str_2037[34];
-    char str_2038[34];
-    uint32_t ptr_14ce2;
-    uint16_t field_14ce6;
-    uint32_t ptr_14ce8;
-    uint16_t field_14cec;
-    uint32_t ptr_14cee;
-    uint16_t field_14cf2;
-    uint32_t ptr_14cf4;
-    uint16_t field_14cf8;
-    uint8_t pad_449[6];  /* zero padding */
-    char str_2039[34];
-    char str_2040[34];
-    char str_2041[34];
-    char str_2042[34];
-    uint32_t ptr_14d88;
-    uint16_t field_14d8c;
-    uint32_t ptr_14d8e;
-    uint16_t field_14d92;
-    uint32_t ptr_14d94;
-    uint16_t field_14d98;
-    uint32_t ptr_14d9a;
-    uint16_t field_14d9e;
-    uint8_t pad_450[6];  /* zero padding */
-    char str_2043[34];
-    char str_2044[34];
-    char str_2045[34];
-    char str_2046[34];
-    uint32_t ptr_14e2e;
-    uint16_t field_14e32;
-    uint32_t ptr_14e34;
-    uint16_t field_14e38;
-    uint32_t ptr_14e3a;
-    uint16_t field_14e3e;
-    uint32_t ptr_14e40;
-    uint16_t field_14e44;
-    uint8_t pad_451[6];  /* zero padding */
-    char str_2047[34];
-    char str_2048[34];
-    char str_2049[34];
-    char str_2050[34];
-    uint32_t ptr_14ed4;
-    uint16_t field_14ed8;
-    uint32_t ptr_14eda;
-    uint16_t field_14ede;
-    uint32_t ptr_14ee0;
-    uint16_t field_14ee4;
-    uint32_t ptr_14ee6;
-    uint16_t field_14eea;
-    uint8_t pad_452[6];  /* zero padding */
-    char str_2051[34];
-    char str_2052[34];
-    char str_2053[34];
-    char str_2054[34];
-    uint32_t ptr_14f7a;
-    uint16_t field_14f7e;
-    uint32_t ptr_14f80;
-    uint16_t field_14f84;
-    uint32_t ptr_14f86;
-    uint16_t field_14f8a;
-    uint32_t ptr_14f8c;
-    uint16_t field_14f90;
-    uint8_t pad_453[6];  /* zero padding */
-    char str_2055[34];
-    char str_2056[34];
-    char str_2057[34];
-    char str_2058[34];
-    uint32_t ptr_15020;
-    uint16_t field_15024;
-    uint32_t ptr_15026;
-    uint16_t field_1502a;
-    uint32_t ptr_1502c;
-    uint16_t field_15030;
-    uint32_t ptr_15032;
-    uint16_t field_15036;
-    uint8_t pad_454[6];  /* zero padding */
-    char str_2059[34];
-    char str_2060[34];
-    char str_2061[34];
-    char str_2062[34];
-    uint32_t ptr_150c6;
-    uint16_t field_150ca;
-    uint32_t ptr_150cc;
-    uint16_t field_150d0;
-    uint32_t ptr_150d2;
-    uint16_t field_150d6;
-    uint32_t ptr_150d8;
-    uint16_t field_150dc;
-    uint8_t pad_455[6];  /* zero padding */
-    char str_2063[34];
-    char str_2064[34];
-    char str_2065[34];
-    char str_2066[34];
-    uint32_t ptr_1516c;
-    uint16_t field_15170;
-    uint32_t ptr_15172;
-    uint16_t field_15176;
-    uint32_t ptr_15178;
-    uint16_t field_1517c;
-    uint32_t ptr_1517e;
-    uint16_t field_15182;
-    uint8_t pad_456[6];  /* zero padding */
-    char str_2067[34];
-    char str_2068[34];
-    char str_2069[34];
-    char str_2070[34];
-    uint32_t ptr_15212;
-    uint16_t field_15216;
-    uint32_t ptr_15218;
-    uint16_t field_1521c;
-    uint32_t ptr_1521e;
-    uint16_t field_15222;
-    uint32_t ptr_15224;
-    uint16_t field_15228;
-    uint8_t pad_457[6];  /* zero padding */
-    char str_2071[34];
-    char str_2072[34];
-    char str_2073[34];
-    char str_2074[34];
-    uint32_t ptr_152b8;
-    uint16_t field_152bc;
-    uint32_t ptr_152be;
-    uint16_t field_152c2;
-    uint32_t ptr_152c4;
-    uint16_t field_152c8;
-    uint32_t ptr_152ca;
-    uint16_t field_152ce;
-    uint8_t pad_458[6];  /* zero padding */
-    char str_2075[34];
-    char str_2076[34];
-    char str_2077[34];
-    char str_2078[34];
-    uint32_t ptr_1535e;
-    uint16_t field_15362;
-    uint32_t ptr_15364;
-    uint16_t field_15368;
-    uint32_t ptr_1536a;
-    uint16_t field_1536e;
-    uint32_t ptr_15370;
-    uint16_t field_15374;
-    uint8_t pad_459[6];  /* zero padding */
-    char str_2079[34];
-    char str_2080[34];
-    char str_2081[34];
-    char str_2082[34];
-    uint32_t ptr_15404;
-    uint16_t field_15408;
-    uint32_t ptr_1540a;
-    uint16_t field_1540e;
-    uint32_t ptr_15410;
-    uint16_t field_15414;
-    uint32_t ptr_15416;
-    uint16_t field_1541a;
-    uint8_t pad_460[6];  /* zero padding */
-    char str_2083[34];
-    char str_2084[34];
-    char str_2085[34];
-    char str_2086[34];
-    uint32_t ptr_154aa;
-    uint16_t field_154ae;
-    uint32_t ptr_154b0;
-    uint16_t field_154b4;
-    uint32_t ptr_154b6;
-    uint16_t field_154ba;
-    uint32_t ptr_154bc;
-    uint16_t field_154c0;
-    uint8_t pad_461[6];  /* zero padding */
-    char str_2087[34];
-    char str_2088[34];
-    char str_2089[34];
-    char str_2090[34];
-    uint32_t ptr_15550;
-    uint16_t field_15554;
-    uint32_t ptr_15556;
-    uint16_t field_1555a;
-    uint32_t ptr_1555c;
-    uint16_t field_15560;
-    uint32_t ptr_15562;
-    uint16_t field_15566;
-    uint8_t pad_462[6];  /* zero padding */
-    char str_2091[34];
-    char str_2092[34];
-    char str_2093[34];
-    char str_2094[34];
-    uint32_t ptr_155f6;
-    uint16_t field_155fa;
-    uint32_t ptr_155fc;
-    uint16_t field_15600;
-    uint32_t ptr_15602;
-    uint16_t field_15606;
-    uint32_t ptr_15608;
-    uint16_t field_1560c;
-    uint8_t pad_463[6];  /* zero padding */
-    char str_2095[34];
-    char str_2096[34];
-    char str_2097[34];
-    char str_2098[34];
-    uint32_t ptr_1569c;
-    uint16_t field_156a0;
-    uint32_t ptr_156a2;
-    uint16_t field_156a6;
-    uint32_t ptr_156a8;
-    uint16_t field_156ac;
-    uint32_t ptr_156ae;
-    uint16_t field_156b2;
-    uint8_t pad_464[6];  /* zero padding */
-    char str_2099[34];
-    char str_2100[34];
-    char str_2101[34];
-    char str_2102[34];
-    uint32_t ptr_15742;
-    uint16_t field_15746;
-    uint32_t ptr_15748;
-    uint16_t field_1574c;
-    uint32_t ptr_1574e;
-    uint16_t field_15752;
-    uint32_t ptr_15754;
-    uint16_t field_15758;
-    uint8_t pad_465[6];  /* zero padding */
-    char str_2103[34];
-    char str_2104[34];
-    char str_2105[34];
-    char str_2106[34];
-    uint32_t ptr_157e8;
-    uint16_t field_157ec;
-    uint32_t ptr_157ee;
-    uint16_t field_157f2;
-    uint32_t ptr_157f4;
-    uint16_t field_157f8;
-    uint32_t ptr_157fa;
-    uint16_t field_157fe;
-    uint8_t pad_466[6];  /* zero padding */
-    char str_2107[34];
-    char str_2108[34];
-    char str_2109[34];
-    char str_2110[34];
-    uint32_t ptr_1588e;
-    uint16_t field_15892;
-    uint32_t ptr_15894;
-    uint16_t field_15898;
-    uint32_t ptr_1589a;
-    uint16_t field_1589e;
-    uint32_t ptr_158a0;
-    uint16_t field_158a4;
-    uint8_t pad_467[6];  /* zero padding */
-    char str_2111[34];
-    char str_2112[34];
-    char str_2113[34];
-    char str_2114[34];
-    uint32_t ptr_15934;
-    uint16_t field_15938;
-    uint32_t ptr_1593a;
-    uint16_t field_1593e;
-    uint32_t ptr_15940;
-    uint16_t field_15944;
-    uint32_t ptr_15946;
-    uint16_t field_1594a;
-    uint8_t pad_468[6];  /* zero padding */
-    char str_2115[34];
-    char str_2116[34];
-    char str_2117[34];
-    char str_2118[34];
-    uint32_t ptr_159da;
-    uint16_t field_159de;
-    uint32_t ptr_159e0;
-    uint16_t field_159e4;
-    uint32_t ptr_159e6;
-    uint16_t field_159ea;
-    uint32_t ptr_159ec;
-    uint16_t field_159f0;
-    uint8_t pad_469[6];  /* zero padding */
-    char str_2119[34];
-    char str_2120[34];
-    char str_2121[34];
-    char str_2122[34];
-    uint32_t ptr_15a80;
-    uint16_t field_15a84;
-    uint32_t ptr_15a86;
-    uint16_t field_15a8a;
-    uint32_t ptr_15a8c;
-    uint16_t field_15a90;
-    uint32_t ptr_15a92;
-    uint16_t field_15a96;
-    uint8_t pad_470[6];  /* zero padding */
-    char str_2123[34];
-    char str_2124[34];
-    char str_2125[34];
-    char str_2126[34];
-    uint32_t ptr_15b26;
-    uint16_t field_15b2a;
-    uint32_t ptr_15b2c;
-    uint16_t field_15b30;
-    uint32_t ptr_15b32;
-    uint16_t field_15b36;
-    uint32_t ptr_15b38;
-    uint16_t field_15b3c;
-    uint8_t pad_471[6];  /* zero padding */
-    char str_2127[34];
-    char str_2128[34];
-    char str_2129[34];
-    char str_2130[34];
-    uint32_t ptr_15bcc;
-    uint16_t field_15bd0;
-    uint32_t ptr_15bd2;
-    uint16_t field_15bd6;
-    uint32_t ptr_15bd8;
-    uint16_t field_15bdc;
-    uint32_t ptr_15bde;
-    uint16_t field_15be2;
-    uint8_t pad_472[6];  /* zero padding */
-    char str_2131[34];
-    char str_2132[34];
-    char str_2133[34];
-    char str_2134[34];
-    uint32_t ptr_15c72;
-    uint16_t field_15c76;
-    uint32_t ptr_15c78;
-    uint16_t field_15c7c;
-    uint32_t ptr_15c7e;
-    uint16_t field_15c82;
-    uint32_t ptr_15c84;
-    uint16_t field_15c88;
-    uint8_t pad_473[6];  /* zero padding */
-    char str_2135[34];
-    char str_2136[34];
-    char str_2137[34];
-    char str_2138[34];
-    uint32_t ptr_15d18;
-    uint16_t field_15d1c;
-    uint32_t ptr_15d1e;
-    uint16_t field_15d22;
-    uint32_t ptr_15d24;
-    uint16_t field_15d28;
-    uint32_t ptr_15d2a;
-    uint16_t field_15d2e;
-    uint8_t pad_474[6];  /* zero padding */
-    char str_2139[34];
-    char str_2140[34];
-    char str_2141[34];
-    char str_2142[34];
-    uint32_t ptr_15dbe;
-    uint16_t field_15dc2;
-    uint32_t ptr_15dc4;
-    uint16_t field_15dc8;
-    uint32_t ptr_15dca;
-    uint16_t field_15dce;
-    uint32_t ptr_15dd0;
-    uint16_t field_15dd4;
-    uint8_t pad_475[6];  /* zero padding */
-    char str_2143[34];
-    char str_2144[34];
-    char str_2145[34];
-    char str_2146[34];
-    uint32_t ptr_15e64;
-    uint16_t field_15e68;
-    uint32_t ptr_15e6a;
-    uint16_t field_15e6e;
-    uint32_t ptr_15e70;
-    uint16_t field_15e74;
-    uint32_t ptr_15e76;
-    uint16_t field_15e7a;
-    uint8_t pad_476[6];  /* zero padding */
-    char str_2147[34];
-    char str_2148[34];
-    char str_2149[34];
-    char str_2150[34];
-    uint32_t ptr_15f0a;
-    uint16_t field_15f0e;
-    uint32_t ptr_15f10;
-    uint16_t field_15f14;
-    uint32_t ptr_15f16;
-    uint16_t field_15f1a;
-    uint32_t ptr_15f1c;
-    uint16_t field_15f20;
-    uint8_t pad_477[6];  /* zero padding */
-    char str_2151[34];
-    char str_2152[34];
-    char str_2153[34];
-    char str_2154[34];
-    uint32_t ptr_15fb0;
-    uint16_t field_15fb4;
-    uint32_t ptr_15fb6;
-    uint16_t field_15fba;
-    uint32_t ptr_15fbc;
-    uint16_t field_15fc0;
-    uint32_t ptr_15fc2;
-    uint16_t field_15fc6;
-    uint8_t pad_478[6];  /* zero padding */
-    char str_2155[34];
-    char str_2156[34];
-    char str_2157[34];
-    char str_2158[34];
-    uint32_t ptr_16056;
-    uint16_t field_1605a;
-    uint32_t ptr_1605c;
-    uint16_t field_16060;
-    uint32_t ptr_16062;
-    uint16_t field_16066;
-    uint32_t ptr_16068;
-    uint16_t field_1606c;
-    uint8_t pad_479[6];  /* zero padding */
-    char str_2159[34];
-    char str_2160[34];
-    char str_2161[34];
-    char str_2162[34];
-    uint32_t ptr_160fc;
-    uint16_t field_16100;
-    uint32_t ptr_16102;
-    uint16_t field_16106;
-    uint32_t ptr_16108;
-    uint16_t field_1610c;
-    uint32_t ptr_1610e;
-    uint16_t field_16112;
-    uint8_t pad_480[6];  /* zero padding */
-    char str_2163[34];
-    char str_2164[34];
-    char str_2165[34];
-    char str_2166[34];
-    uint32_t ptr_161a2;
-    uint16_t field_161a6;
-    uint32_t ptr_161a8;
-    uint16_t field_161ac;
-    uint32_t ptr_161ae;
-    uint16_t field_161b2;
-    uint32_t ptr_161b4;
-    uint16_t field_161b8;
-    uint8_t pad_481[6];  /* zero padding */
-    char str_2167[34];
-    char str_2168[34];
-    char str_2169[34];
-    char str_2170[34];
-    uint32_t ptr_16248;
-    uint16_t field_1624c;
-    uint32_t ptr_1624e;
-    uint16_t field_16252;
-    uint32_t ptr_16254;
-    uint16_t field_16258;
-    uint32_t ptr_1625a;
-    uint16_t field_1625e;
-    uint8_t pad_482[6];  /* zero padding */
-    char str_2171[34];
-    char str_2172[34];
-    char str_2173[34];
-    char str_2174[34];
-    uint32_t ptr_162ee;
-    uint16_t field_162f2;
-    uint32_t ptr_162f4;
-    uint16_t field_162f8;
-    uint32_t ptr_162fa;
-    uint16_t field_162fe;
-    uint32_t ptr_16300;
-    uint16_t field_16304;
-    uint8_t pad_483[6];  /* zero padding */
-    char str_2175[34];
-    char str_2176[34];
-    char str_2177[34];
-    char str_2178[34];
-    uint32_t ptr_16394;
-    uint16_t field_16398;
-    uint32_t ptr_1639a;
-    uint16_t field_1639e;
-    uint32_t ptr_163a0;
-    uint16_t field_163a4;
-    uint32_t ptr_163a6;
-    uint16_t field_163aa;
-    uint8_t pad_484[6];  /* zero padding */
-    char str_2179[34];
-    char str_2180[34];
-    char str_2181[34];
-    char str_2182[34];
-    uint32_t ptr_1643a;
-    uint16_t field_1643e;
-    uint32_t ptr_16440;
-    uint16_t field_16444;
-    uint32_t ptr_16446;
-    uint16_t field_1644a;
-    uint32_t ptr_1644c;
-    uint16_t field_16450;
-    uint8_t pad_485[6];  /* zero padding */
-    char str_2183[34];
-    char str_2184[34];
-    char str_2185[34];
-    char str_2186[34];
-    uint32_t ptr_164e0;
-    uint16_t field_164e4;
-    uint32_t ptr_164e6;
-    uint16_t field_164ea;
-    uint32_t ptr_164ec;
-    uint16_t field_164f0;
-    uint32_t ptr_164f2;
-    uint16_t field_164f6;
-    uint8_t pad_486[6];  /* zero padding */
-    char str_2187[34];
-    char str_2188[34];
-    char str_2189[34];
-    char str_2190[34];
-    uint32_t ptr_16586;
-    uint16_t field_1658a;
-    uint32_t ptr_1658c;
-    uint16_t field_16590;
-    uint32_t ptr_16592;
-    uint16_t field_16596;
-    uint32_t ptr_16598;
-    uint16_t field_1659c;
-    uint8_t pad_487[6];  /* zero padding */
-    char str_2191[34];
-    char str_2192[34];
-    char str_2193[34];
-    char str_2194[34];
-    uint32_t ptr_1662c;
-    uint16_t field_16630;
-    uint32_t ptr_16632;
-    uint16_t field_16636;
-    uint32_t ptr_16638;
-    uint16_t field_1663c;
-    uint32_t ptr_1663e;
-    uint16_t field_16642;
-    uint8_t pad_488[6];  /* zero padding */
-    char str_2195[34];
-    char str_2196[34];
-    char str_2197[34];
-    char str_2198[34];
-    uint32_t ptr_166d2;
-    uint16_t field_166d6;
-    uint32_t ptr_166d8;
-    uint16_t field_166dc;
-    uint32_t ptr_166de;
-    uint16_t field_166e2;
-    uint32_t ptr_166e4;
-    uint16_t field_166e8;
-    uint8_t pad_489[6];  /* zero padding */
-    char str_2199[34];
-    char str_2200[34];
-    char str_2201[34];
-    char str_2202[34];
-    uint32_t ptr_16778;
-    uint16_t field_1677c;
-    uint32_t ptr_1677e;
-    uint16_t field_16782;
-    uint32_t ptr_16784;
-    uint16_t field_16788;
-    uint32_t ptr_1678a;
-    uint16_t field_1678e;
-    uint8_t pad_490[6];  /* zero padding */
-    char str_2203[34];
-    char str_2204[34];
-    char str_2205[34];
-    char str_2206[34];
-    uint32_t ptr_1681e;
-    uint16_t field_16822;
-    uint32_t ptr_16824;
-    uint16_t field_16828;
-    uint32_t ptr_1682a;
-    uint16_t field_1682e;
-    uint32_t ptr_16830;
-    uint16_t field_16834;
-    uint8_t pad_491[6];  /* zero padding */
-    char str_2207[34];
-    char str_2208[34];
-    char str_2209[34];
-    char str_2210[34];
-    uint32_t ptr_168c4;
-    uint16_t field_168c8;
-    uint32_t ptr_168ca;
-    uint16_t field_168ce;
-    uint32_t ptr_168d0;
-    uint16_t field_168d4;
-    uint32_t ptr_168d6;
-    uint16_t field_168da;
-    uint8_t pad_492[6];  /* zero padding */
-    char str_2211[34];
-    char str_2212[34];
-    char str_2213[34];
-    char str_2214[34];
-    uint32_t ptr_1696a;
-    uint16_t field_1696e;
-    uint32_t ptr_16970;
-    uint16_t field_16974;
-    uint32_t ptr_16976;
-    uint16_t field_1697a;
-    uint32_t ptr_1697c;
-    uint16_t field_16980;
-    uint8_t pad_493[6];  /* zero padding */
-    char str_2215[34];
-    char str_2216[34];
-    char str_2217[34];
-    char str_2218[34];
-    uint32_t ptr_16a10;
-    uint16_t field_16a14;
-    uint32_t ptr_16a16;
-    uint16_t field_16a1a;
-    uint32_t ptr_16a1c;
-    uint16_t field_16a20;
-    uint32_t ptr_16a22;
-    uint16_t field_16a26;
-    uint8_t pad_494[6];  /* zero padding */
-    char str_2219[34];
-    char str_2220[34];
-    char str_2221[34];
-    char str_2222[34];
-    uint32_t ptr_16ab6;
-    uint16_t field_16aba;
-    uint32_t ptr_16abc;
-    uint16_t field_16ac0;
-    uint32_t ptr_16ac2;
-    uint16_t field_16ac6;
-    uint32_t ptr_16ac8;
-    uint16_t field_16acc;
-    uint8_t pad_495[6];  /* zero padding */
-    char str_2223[34];
-    char str_2224[34];
-    char str_2225[34];
-    char str_2226[34];
-    uint32_t ptr_16b5c;
-    uint16_t field_16b60;
-    uint32_t ptr_16b62;
-    uint16_t field_16b66;
-    uint32_t ptr_16b68;
-    uint16_t field_16b6c;
-    uint32_t ptr_16b6e;
-    uint16_t field_16b72;
-    uint8_t pad_496[6];  /* zero padding */
-    char str_2227[34];
-    char str_2228[34];
-    char str_2229[34];
-    char str_2230[34];
-    uint32_t ptr_16c02;
-    uint16_t field_16c06;
-    uint32_t ptr_16c08;
-    uint16_t field_16c0c;
-    uint32_t ptr_16c0e;
-    uint16_t field_16c12;
-    uint32_t ptr_16c14;
-    uint16_t field_16c18;
-    uint8_t pad_497[6];  /* zero padding */
-    char str_2231[34];
-    char str_2232[34];
-    char str_2233[34];
-    char str_2234[34];
-    uint32_t ptr_16ca8;
-    uint16_t field_16cac;
-    uint32_t ptr_16cae;
-    uint16_t field_16cb2;
-    uint32_t ptr_16cb4;
-    uint16_t field_16cb8;
-    uint32_t ptr_16cba;
-    uint16_t field_16cbe;
-    uint8_t pad_498[6];  /* zero padding */
-    char str_2235[34];
-    char str_2236[34];
-    char str_2237[34];
-    char str_2238[34];
-    uint32_t ptr_16d4e;
-    uint16_t field_16d52;
-    uint32_t ptr_16d54;
-    uint16_t field_16d58;
-    uint32_t ptr_16d5a;
-    uint16_t field_16d5e;
-    uint32_t ptr_16d60;
-    uint16_t field_16d64;
-    uint8_t pad_499[6];  /* zero padding */
-    char str_2239[34];
-    char str_2240[34];
-    char str_2241[34];
-    char str_2242[34];
-    uint32_t ptr_16df4;
-    uint16_t field_16df8;
-    uint32_t ptr_16dfa;
-    uint16_t field_16dfe;
-    uint32_t ptr_16e00;
-    uint16_t field_16e04;
-    uint32_t ptr_16e06;
-    uint16_t field_16e0a;
-    uint8_t pad_500[6];  /* zero padding */
-    char str_2243[34];
-    char str_2244[34];
-    char str_2245[34];
-    char str_2246[34];
-    uint32_t ptr_16e9a;
-    uint16_t field_16e9e;
-    uint32_t ptr_16ea0;
-    uint16_t field_16ea4;
-    uint32_t ptr_16ea6;
-    uint16_t field_16eaa;
-    uint32_t ptr_16eac;
-    uint16_t field_16eb0;
-    uint8_t pad_501[6];  /* zero padding */
-    char str_2247[34];
-    char str_2248[34];
-    char str_2249[34];
-    char str_2250[34];
-    uint32_t ptr_16f40;
-    uint16_t field_16f44;
-    uint32_t ptr_16f46;
-    uint16_t field_16f4a;
-    uint32_t ptr_16f4c;
-    uint16_t field_16f50;
-    uint32_t ptr_16f52;
-    uint16_t field_16f56;
-    uint8_t pad_502[6];  /* zero padding */
-    char str_2251[34];
-    char str_2252[34];
-    char str_2253[34];
-    char str_2254[34];
-    uint32_t ptr_16fe6;
-    uint16_t field_16fea;
-    uint32_t ptr_16fec;
-    uint16_t field_16ff0;
-    uint32_t ptr_16ff2;
-    uint16_t field_16ff6;
-    uint32_t ptr_16ff8;
-    uint16_t field_16ffc;
-    uint8_t pad_503[6];  /* zero padding */
-    char str_2255[34];
-    char str_2256[34];
-    char str_2257[34];
-    char str_2258[34];
-    uint32_t ptr_1708c;
-    uint16_t field_17090;
-    uint32_t ptr_17092;
-    uint16_t field_17096;
-    uint32_t ptr_17098;
-    uint16_t field_1709c;
-    uint32_t ptr_1709e;
-    uint16_t field_170a2;
-    uint8_t pad_504[6];  /* zero padding */
-    char str_2259[34];
-    char str_2260[34];
-    char str_2261[34];
-    char str_2262[34];
-    uint32_t ptrs_22[64];  /* 64 pointers */
-    char str_2263[18];
-    char str_2264[18];
-    char str_2265[18];
-    char str_2266[18];
-    char str_2267[18];
-    char str_2268[18];
-    char str_2269[18];
-    char str_2270[18];
-    char str_2271[18];
-    char str_2272[18];
-    char str_2273[18];
-    char str_2274[18];
-    char str_2275[18];
-    char str_2276[18];
-    char str_2277[18];
-    char str_2278[18];
-    char str_2279[18];
-    char str_2280[18];
-    char str_2281[18];
-    char str_2282[18];
-    char str_2283[18];
-    char str_2284[18];
-    char str_2285[18];
-    char str_2286[18];
-    char str_2287[18];
-    char str_2288[18];
-    char str_2289[18];
-    char str_2290[18];
-    char str_2291[18];
-    char str_2292[18];
-    char str_2293[18];
-    uint32_t ptrs_23[68];  /* 68 pointers */
-    char str_2294[18];
-    char str_2295[18];
-    char str_2296[18];
-    char str_2297[18];
-    char str_2298[18];
-    char str_2299[18];
-    char str_2300[18];
-    char str_2301[18];
-    char str_2302[18];
-    char str_2303[18];
-    char str_2304[18];
-    char str_2305[18];
-    char str_2306[18];
-    char str_2307[18];
-    char str_2308[18];
-    char str_2309[18];
-    char str_2310[18];
-    char str_2311[18];
-    char str_2312[18];
-    char str_2313[18];
-    char str_2314[18];
-    char str_2315[18];
-    char str_2316[18];
-    char str_2317[18];
-    char str_2318[18];
-    char str_2319[18];
-    char str_2320[18];
-    char str_2321[18];
-    char str_2322[18];
-    char str_2323[18];
-    char str_2324[18];
-    char str_2325[18];
-    char str_2326[18];
-    uint32_t ptrs_24[36];  /* 36 pointers */
-    char str_2327[18];
-    char str_2328[18];
-    char str_2329[18];
-    char str_2330[18];
-    char str_2331[18];
-    char str_2332[18];
-    char str_2333[18];
-    char str_2334[18];
-    char str_2335[18];
-    char str_2336[18];
-    char str_2337[18];
-    char str_2338[18];
-    char str_2339[18];
-    char str_2340[18];
-    char str_2341[18];
-    char str_2342[18];
-    char str_2343[18];
-    uint32_t ptrs_25[40];  /* 40 pointers */
-    char str_2344[18];
-    char str_2345[18];
-    char str_2346[18];
-    char str_2347[18];
-    char str_2348[18];
-    char str_2349[18];
-    char str_2350[18];
-    char str_2351[18];
-    char str_2352[18];
-    char str_2353[18];
-    char str_2354[18];
-    char str_2355[18];
-    char str_2356[18];
-    char str_2357[18];
-    char str_2358[18];
-    char str_2359[18];
-    char str_2360[18];
-    char str_2361[18];
-    char str_2362[18];
-    uint32_t ptrs_26[38];  /* 38 pointers */
-    char str_2363[18];
-    char str_2364[18];
-    char str_2365[18];
-    char str_2366[18];
-    char str_2367[18];
-    char str_2368[18];
-    char str_2369[18];
-    char str_2370[18];
-    char str_2371[18];
-    char str_2372[18];
-    char str_2373[18];
-    char str_2374[18];
-    char str_2375[18];
-    char str_2376[18];
-    char str_2377[18];
-    char str_2378[18];
-    char str_2379[18];
-    char str_2380[18];
-    uint32_t ptrs_27[62];  /* 62 pointers */
-    char str_2381[18];
-    char str_2382[18];
-    char str_2383[18];
-    char str_2384[18];
-    char str_2385[18];
-    char str_2386[18];
-    char str_2387[18];
-    char str_2388[18];
-    char str_2389[18];
-    char str_2390[18];
-    char str_2391[18];
-    char str_2392[18];
-    char str_2393[18];
-    char str_2394[18];
-    char str_2395[18];
-    char str_2396[18];
-    char str_2397[18];
-    char str_2398[18];
-    char str_2399[18];
-    char str_2400[18];
-    char str_2401[18];
-    char str_2402[18];
-    char str_2403[18];
-    char str_2404[18];
-    char str_2405[18];
-    char str_2406[18];
-    char str_2407[18];
-    char str_2408[18];
-    char str_2409[18];
-    char str_2410[18];
-    uint32_t ptrs_28[64];  /* 64 pointers */
-    char str_2411[18];
-    char str_2412[18];
-    char str_2413[18];
-    char str_2414[18];
-    char str_2415[18];
-    char str_2416[18];
-    char str_2417[18];
-    char str_2418[18];
-    char str_2419[18];
-    char str_2420[18];
-    char str_2421[18];
-    char str_2422[18];
-    char str_2423[18];
-    char str_2424[18];
-    char str_2425[18];
-    char str_2426[18];
-    char str_2427[18];
-    char str_2428[18];
-    char str_2429[18];
-    char str_2430[18];
-    char str_2431[18];
-    char str_2432[18];
-    char str_2433[18];
-    char str_2434[18];
-    char str_2435[18];
-    char str_2436[18];
-    char str_2437[18];
-    char str_2438[18];
-    char str_2439[18];
-    char str_2440[18];
-    char str_2441[18];
-    uint32_t ptrs_29[52];  /* 52 pointers */
-    char str_2442[18];
-    char str_2443[18];
-    char str_2444[18];
-    char str_2445[18];
-    char str_2446[18];
-    char str_2447[18];
-    char str_2448[18];
-    char str_2449[18];
-    char str_2450[18];
-    char str_2451[18];
-    char str_2452[18];
-    char str_2453[18];
-    char str_2454[18];
-    char str_2455[18];
-    char str_2456[18];
-    char str_2457[18];
-    char str_2458[18];
-    char str_2459[18];
-    char str_2460[18];
-    char str_2461[18];
-    char str_2462[18];
-    char str_2463[18];
-    char str_2464[18];
-    char str_2465[18];
-    char str_2466[18];
-    uint32_t ptrs_30[36];  /* 36 pointers */
-    char str_2467[18];
-    char str_2468[18];
-    char str_2469[18];
-    char str_2470[18];
-    char str_2471[18];
-    char str_2472[18];
-    char str_2473[18];
-    char str_2474[18];
-    char str_2475[18];
-    char str_2476[18];
-    char str_2477[18];
-    char str_2478[18];
-    char str_2479[18];
-    char str_2480[18];
-    char str_2481[18];
-    char str_2482[18];
-    char str_2483[18];
-    uint32_t ptrs_31[60];  /* 60 pointers */
-    char str_2484[18];
-    char str_2485[18];
-    char str_2486[18];
-    char str_2487[18];
-    char str_2488[18];
-    char str_2489[18];
-    char str_2490[18];
-    char str_2491[18];
-    char str_2492[18];
-    char str_2493[18];
-    char str_2494[18];
-    char str_2495[18];
-    char str_2496[18];
-    char str_2497[18];
-    char str_2498[18];
-    char str_2499[18];
-    char str_2500[18];
-    char str_2501[18];
-    char str_2502[18];
-    char str_2503[18];
-    char str_2504[18];
-    char str_2505[18];
-    char str_2506[18];
-    char str_2507[18];
-    char str_2508[18];
-    char str_2509[18];
-    char str_2510[18];
-    char str_2511[18];
-    char str_2512[18];
-    uint32_t ptrs_32[20];  /* 20 pointers */
-    char str_2513[18];
-    char str_2514[18];
-    char str_2515[18];
-    char str_2516[18];
-    char str_2517[18];
-    char str_2518[18];
-    char str_2519[18];
-    char str_2520[18];
-    char str_2521[18];
-    char str_2522[18];
+    /* style 0.0 "German Schlager": 4 variations */
+    mst_title_ref_t Style_g0_s0_Vars[5];
+    char Style_g0_s0_Title3[34];
+    char Style_g0_s0_Title2[34];
+    char Style_g0_s0_Title1[34];
+    char Style_g0_s0_Title0[34];
+    /* style 0.1 "Easy Play 8 Beat": 4 variations */
+    mst_title_ref_t Style_g0_s1_Vars[5];
+    char Style_g0_s1_Title3[34];
+    char Style_g0_s1_Title2[34];
+    char Style_g0_s1_Title1[34];
+    char Style_g0_s1_Title0[34];
+    /* style 0.2 "Rock After Eight": 4 variations */
+    mst_title_ref_t Style_g0_s2_Vars[5];
+    char Style_g0_s2_Title3[34];
+    char Style_g0_s2_Title2[34];
+    char Style_g0_s2_Title1[34];
+    char Style_g0_s2_Title0[34];
+    /* style 0.3 "Orchestral Beat": 4 variations */
+    mst_title_ref_t Style_g0_s3_Vars[5];
+    char Style_g0_s3_Title3[34];
+    char Style_g0_s3_Title2[34];
+    char Style_g0_s3_Title1[34];
+    char Style_g0_s3_Title0[34];
+    /* style 0.4 "Smooth Rock": 4 variations */
+    mst_title_ref_t Style_g0_s4_Vars[5];
+    char Style_g0_s4_Title3[34];
+    char Style_g0_s4_Title2[34];
+    char Style_g0_s4_Title1[34];
+    char Style_g0_s4_Title0[34];
+    /* style 0.5 "Greatest Hits": 4 variations */
+    mst_title_ref_t Style_g0_s5_Vars[5];
+    char Style_g0_s5_Title3[34];
+    char Style_g0_s5_Title2[34];
+    char Style_g0_s5_Title1[34];
+    char Style_g0_s5_Title0[34];
+    /* style 0.6 "Studio 8 Beat": 4 variations */
+    mst_title_ref_t Style_g0_s6_Vars[5];
+    char Style_g0_s6_Title3[34];
+    char Style_g0_s6_Title2[34];
+    char Style_g0_s6_Title1[34];
+    char Style_g0_s6_Title0[34];
+    /* style 0.7 "Ballad Producer": 4 variations */
+    mst_title_ref_t Style_g0_s7_Vars[5];
+    char Style_g0_s7_Title3[34];
+    char Style_g0_s7_Title2[34];
+    char Style_g0_s7_Title1[34];
+    char Style_g0_s7_Title0[34];
+    /* style 0.8 "Love Songs": 4 variations */
+    mst_title_ref_t Style_g0_s8_Vars[5];
+    char Style_g0_s8_Title3[34];
+    char Style_g0_s8_Title2[34];
+    char Style_g0_s8_Title1[34];
+    char Style_g0_s8_Title0[34];
+    /* style 0.9 "16 Beat Groove": 4 variations */
+    mst_title_ref_t Style_g0_s9_Vars[5];
+    char Style_g0_s9_Title3[34];
+    char Style_g0_s9_Title2[34];
+    char Style_g0_s9_Title1[34];
+    char Style_g0_s9_Title0[34];
+    /* style 0.10 "Easy Play 16Beat": 4 variations */
+    mst_title_ref_t Style_g0_s10_Vars[5];
+    char Style_g0_s10_Title3[34];
+    char Style_g0_s10_Title2[34];
+    char Style_g0_s10_Title1[34];
+    char Style_g0_s10_Title0[34];
+    /* style 0.11 "E.P. Moments": 4 variations */
+    mst_title_ref_t Style_g0_s11_Vars[5];
+    char Style_g0_s11_Title3[34];
+    char Style_g0_s11_Title2[34];
+    char Style_g0_s11_Title1[34];
+    char Style_g0_s11_Title0[34];
+    /* style 0.12 "Gentle 16 Beat": 4 variations */
+    mst_title_ref_t Style_g0_s12_Vars[5];
+    char Style_g0_s12_Title3[34];
+    char Style_g0_s12_Title2[34];
+    char Style_g0_s12_Title1[34];
+    char Style_g0_s12_Title0[34];
+    /* style 0.13 "Atmospheric 16": 4 variations */
+    mst_title_ref_t Style_g0_s13_Vars[5];
+    char Style_g0_s13_Title3[34];
+    char Style_g0_s13_Title2[34];
+    char Style_g0_s13_Title1[34];
+    char Style_g0_s13_Title0[34];
+    /* style 0.14 "Synth Ballad": 4 variations */
+    mst_title_ref_t Style_g0_s14_Vars[5];
+    char Style_g0_s14_Title3[34];
+    char Style_g0_s14_Title2[34];
+    char Style_g0_s14_Title1[34];
+    char Style_g0_s14_Title0[34];
+    /* style 0.15 "Grands on Stage": 4 variations */
+    mst_title_ref_t Style_g0_s15_Vars[5];
+    char Style_g0_s15_Title3[34];
+    char Style_g0_s15_Title2[34];
+    char Style_g0_s15_Title1[34];
+    char Style_g0_s15_Title0[34];
+    /* style 0.16 "Modern Ballads": 4 variations */
+    mst_title_ref_t Style_g0_s16_Vars[5];
+    char Style_g0_s16_Title3[34];
+    char Style_g0_s16_Title2[34];
+    char Style_g0_s16_Title1[34];
+    char Style_g0_s16_Title0[34];
+    /* style 0.17 "Night Club Dance": 4 variations */
+    mst_title_ref_t Style_g0_s17_Vars[5];
+    char Style_g0_s17_Title3[34];
+    char Style_g0_s17_Title2[34];
+    char Style_g0_s17_Title1[34];
+    char Style_g0_s17_Title0[34];
+    /* style 0.18 "50's Love Songs": 4 variations */
+    mst_title_ref_t Style_g0_s18_Vars[5];
+    char Style_g0_s18_Title3[34];
+    char Style_g0_s18_Title2[34];
+    char Style_g0_s18_Title1[34];
+    char Style_g0_s18_Title0[34];
+    /* style 0.19 "Oldie Ballads": 4 variations */
+    mst_title_ref_t Style_g0_s19_Vars[5];
+    char Style_g0_s19_Title3[34];
+    char Style_g0_s19_Title2[34];
+    char Style_g0_s19_Title1[34];
+    char Style_g0_s19_Title0[34];
+    /* style 0.20 "Soft Schlager": 4 variations */
+    mst_title_ref_t Style_g0_s20_Vars[5];
+    char Style_g0_s20_Title3[34];
+    char Style_g0_s20_Title2[34];
+    char Style_g0_s20_Title1[34];
+    char Style_g0_s20_Title0[34];
+    /* style 0.21 "Oldie Drawbars": 4 variations */
+    mst_title_ref_t Style_g0_s21_Vars[5];
+    char Style_g0_s21_Title3[34];
+    char Style_g0_s21_Title2[34];
+    char Style_g0_s21_Title1[34];
+    char Style_g0_s21_Title0[34];
+    /* style 0.22 "Euro Ballads": 4 variations */
+    mst_title_ref_t Style_g0_s22_Vars[5];
+    char Style_g0_s22_Title3[34];
+    char Style_g0_s22_Title2[34];
+    char Style_g0_s22_Title1[34];
+    char Style_g0_s22_Title0[34];
+    /* style 0.23 "Romantic Band": 4 variations */
+    mst_title_ref_t Style_g0_s23_Vars[5];
+    char Style_g0_s23_Title3[34];
+    char Style_g0_s23_Title2[34];
+    char Style_g0_s23_Title1[34];
+    char Style_g0_s23_Title0[34];
+    /* style 0.24 "Jazz Serenade": 4 variations */
+    mst_title_ref_t Style_g0_s24_Vars[5];
+    char Style_g0_s24_Title3[34];
+    char Style_g0_s24_Title2[34];
+    char Style_g0_s24_Title1[34];
+    char Style_g0_s24_Title0[34];
+    /* style 0.25 "Nat's Ballads": 4 variations */
+    mst_title_ref_t Style_g0_s25_Vars[5];
+    char Style_g0_s25_Title3[34];
+    char Style_g0_s25_Title2[34];
+    char Style_g0_s25_Title1[34];
+    char Style_g0_s25_Title0[34];
+    /* style 0.26 "Drawbar Combo": 4 variations */
+    mst_title_ref_t Style_g0_s26_Vars[5];
+    char Style_g0_s26_Title3[34];
+    char Style_g0_s26_Title2[34];
+    char Style_g0_s26_Title1[34];
+    char Style_g0_s26_Title0[34];
+    /* style 0.27 "Paris Romance": 4 variations */
+    mst_title_ref_t Style_g0_s27_Vars[5];
+    char Style_g0_s27_Title3[34];
+    char Style_g0_s27_Title2[34];
+    char Style_g0_s27_Title1[34];
+    char Style_g0_s27_Title0[34];
+    /* style 0.28 "Easy Play Waltz": 4 variations */
+    mst_title_ref_t Style_g0_s28_Vars[5];
+    char Style_g0_s28_Title3[34];
+    char Style_g0_s28_Title2[34];
+    char Style_g0_s28_Title1[34];
+    char Style_g0_s28_Title0[34];
+    /* style 0.29 "Parisian Nights": 4 variations */
+    mst_title_ref_t Style_g0_s29_Vars[5];
+    char Style_g0_s29_Title3[34];
+    char Style_g0_s29_Title2[34];
+    char Style_g0_s29_Title1[34];
+    char Style_g0_s29_Title0[34];
+    /* style 0.30 "Easy Jazz Waltz": 4 variations */
+    mst_title_ref_t Style_g0_s30_Vars[5];
+    char Style_g0_s30_Title3[34];
+    char Style_g0_s30_Title2[34];
+    char Style_g0_s30_Title1[34];
+    char Style_g0_s30_Title0[34];
+    /* style 1.0 "Fifties Rock": 4 variations */
+    mst_title_ref_t Style_g1_s0_Vars[5];
+    char Style_g1_s0_Title3[34];
+    char Style_g1_s0_Title2[34];
+    char Style_g1_s0_Title1[34];
+    char Style_g1_s0_Title0[34];
+    /* style 1.1 "Piano R&Roll": 4 variations */
+    mst_title_ref_t Style_g1_s1_Vars[5];
+    char Style_g1_s1_Title3[34];
+    char Style_g1_s1_Title2[34];
+    char Style_g1_s1_Title1[34];
+    char Style_g1_s1_Title0[34];
+    /* style 1.2 "It's Boogie Time": 4 variations */
+    mst_title_ref_t Style_g1_s2_Vars[5];
+    char Style_g1_s2_Title3[34];
+    char Style_g1_s2_Title2[34];
+    char Style_g1_s2_Title1[34];
+    char Style_g1_s2_Title0[34];
+    /* style 1.3 "Rockabilly Band": 4 variations */
+    mst_title_ref_t Style_g1_s3_Vars[5];
+    char Style_g1_s3_Title3[34];
+    char Style_g1_s3_Title2[34];
+    char Style_g1_s3_Title1[34];
+    char Style_g1_s3_Title0[34];
+    /* style 1.4 "Boogie Time": 4 variations */
+    mst_title_ref_t Style_g1_s4_Vars[5];
+    char Style_g1_s4_Title3[34];
+    char Style_g1_s4_Title2[34];
+    char Style_g1_s4_Title1[34];
+    char Style_g1_s4_Title0[34];
+    /* style 1.5 "Slow Dance": 4 variations */
+    mst_title_ref_t Style_g1_s5_Vars[5];
+    char Style_g1_s5_Title3[34];
+    char Style_g1_s5_Title2[34];
+    char Style_g1_s5_Title1[34];
+    char Style_g1_s5_Title0[34];
+    /* style 1.6 "Swinging Sixties": 4 variations */
+    mst_title_ref_t Style_g1_s6_Vars[5];
+    char Style_g1_s6_Title3[34];
+    char Style_g1_s6_Title2[34];
+    char Style_g1_s6_Title1[34];
+    char Style_g1_s6_Title0[34];
+    /* style 1.7 "Liverpool Beat": 4 variations */
+    mst_title_ref_t Style_g1_s7_Vars[5];
+    char Style_g1_s7_Title3[34];
+    char Style_g1_s7_Title2[34];
+    char Style_g1_s7_Title1[34];
+    char Style_g1_s7_Title0[34];
+    /* style 1.8 "60's Rock": 4 variations */
+    mst_title_ref_t Style_g1_s8_Vars[5];
+    char Style_g1_s8_Title3[34];
+    char Style_g1_s8_Title2[34];
+    char Style_g1_s8_Title1[34];
+    char Style_g1_s8_Title0[34];
+    /* style 1.9 "California Pop": 4 variations */
+    mst_title_ref_t Style_g1_s9_Vars[5];
+    char Style_g1_s9_Title3[34];
+    char Style_g1_s9_Title2[34];
+    char Style_g1_s9_Title1[34];
+    char Style_g1_s9_Title0[34];
+    /* style 1.10 "70's Fox Dance": 4 variations */
+    mst_title_ref_t Style_g1_s10_Vars[5];
+    char Style_g1_s10_Title3[34];
+    char Style_g1_s10_Title2[34];
+    char Style_g1_s10_Title1[34];
+    char Style_g1_s10_Title0[34];
+    /* style 1.11 "Glamrock Piano": 4 variations */
+    mst_title_ref_t Style_g1_s11_Vars[5];
+    char Style_g1_s11_Title3[34];
+    char Style_g1_s11_Title2[34];
+    char Style_g1_s11_Title1[34];
+    char Style_g1_s11_Title0[34];
+    /* style 1.12 "70's Hits": 4 variations */
+    mst_title_ref_t Style_g1_s12_Vars[5];
+    char Style_g1_s12_Title3[34];
+    char Style_g1_s12_Title2[34];
+    char Style_g1_s12_Title1[34];
+    char Style_g1_s12_Title0[34];
+    /* style 1.13 "70's Power Rock": 4 variations */
+    mst_title_ref_t Style_g1_s13_Vars[5];
+    char Style_g1_s13_Title3[34];
+    char Style_g1_s13_Title2[34];
+    char Style_g1_s13_Title1[34];
+    char Style_g1_s13_Title0[34];
+    /* style 1.14 "Euro Pop Shuffle": 4 variations */
+    mst_title_ref_t Style_g1_s14_Vars[5];
+    char Style_g1_s14_Title3[34];
+    char Style_g1_s14_Title2[34];
+    char Style_g1_s14_Title1[34];
+    char Style_g1_s14_Title0[34];
+    /* style 1.15 "80's Love Songs": 4 variations */
+    mst_title_ref_t Style_g1_s15_Vars[5];
+    char Style_g1_s15_Title3[34];
+    char Style_g1_s15_Title2[34];
+    char Style_g1_s15_Title1[34];
+    char Style_g1_s15_Title0[34];
+    /* style 1.16 "In The Eighties": 4 variations */
+    mst_title_ref_t Style_g1_s16_Vars[5];
+    char Style_g1_s16_Title3[34];
+    char Style_g1_s16_Title2[34];
+    char Style_g1_s16_Title1[34];
+    char Style_g1_s16_Title0[34];
+    /* style 1.17 "Pop Beat": 4 variations */
+    mst_title_ref_t Style_g1_s17_Vars[5];
+    char Style_g1_s17_Title3[34];
+    char Style_g1_s17_Title2[34];
+    char Style_g1_s17_Title1[34];
+    char Style_g1_s17_Title0[34];
+    /* style 1.18 "8 Beat Groove": 4 variations */
+    mst_title_ref_t Style_g1_s18_Vars[5];
+    char Style_g1_s18_Title3[34];
+    char Style_g1_s18_Title2[34];
+    char Style_g1_s18_Title1[34];
+    char Style_g1_s18_Title0[34];
+    /* style 1.19 "80's Pop Ballads": 4 variations */
+    mst_title_ref_t Style_g1_s19_Vars[5];
+    char Style_g1_s19_Title3[34];
+    char Style_g1_s19_Title2[34];
+    char Style_g1_s19_Title1[34];
+    char Style_g1_s19_Title0[34];
+    /* style 1.20 "Rock Gig": 4 variations */
+    mst_title_ref_t Style_g1_s20_Vars[5];
+    char Style_g1_s20_Title3[34];
+    char Style_g1_s20_Title2[34];
+    char Style_g1_s20_Title1[34];
+    char Style_g1_s20_Title0[34];
+    /* style 1.21 "Heavy Metal": 4 variations */
+    mst_title_ref_t Style_g1_s21_Vars[5];
+    char Style_g1_s21_Title3[34];
+    char Style_g1_s21_Title2[34];
+    char Style_g1_s21_Title1[34];
+    char Style_g1_s21_Title0[34];
+    /* style 1.22 "Heavy Shuffle": 4 variations */
+    mst_title_ref_t Style_g1_s22_Vars[5];
+    char Style_g1_s22_Title3[34];
+    char Style_g1_s22_Title2[34];
+    char Style_g1_s22_Title1[34];
+    char Style_g1_s22_Title0[34];
+    /* style 1.23 "Power Ballad": 4 variations */
+    mst_title_ref_t Style_g1_s23_Vars[5];
+    char Style_g1_s23_Title3[34];
+    char Style_g1_s23_Title2[34];
+    char Style_g1_s23_Title1[34];
+    char Style_g1_s23_Title0[34];
+    /* style 1.24 "L.A. Pop": 4 variations */
+    mst_title_ref_t Style_g1_s24_Vars[5];
+    char Style_g1_s24_Title3[34];
+    char Style_g1_s24_Title2[34];
+    char Style_g1_s24_Title1[34];
+    char Style_g1_s24_Title0[34];
+    /* style 1.25 "Gentle SwingRock": 4 variations */
+    mst_title_ref_t Style_g1_s25_Vars[5];
+    char Style_g1_s25_Title3[34];
+    char Style_g1_s25_Title2[34];
+    char Style_g1_s25_Title1[34];
+    char Style_g1_s25_Title0[34];
+    /* style 1.26 "Cool Fusion": 4 variations */
+    mst_title_ref_t Style_g1_s26_Vars[5];
+    char Style_g1_s26_Title3[34];
+    char Style_g1_s26_Title2[34];
+    char Style_g1_s26_Title1[34];
+    char Style_g1_s26_Title0[34];
+    /* style 1.27 "Jazz Pop": 4 variations */
+    mst_title_ref_t Style_g1_s27_Vars[5];
+    char Style_g1_s27_Title3[34];
+    char Style_g1_s27_Title2[34];
+    char Style_g1_s27_Title1[34];
+    char Style_g1_s27_Title0[34];
+    /* style 1.28 "Pop Fusion": 4 variations */
+    mst_title_ref_t Style_g1_s28_Vars[5];
+    char Style_g1_s28_Title3[34];
+    char Style_g1_s28_Title2[34];
+    char Style_g1_s28_Title1[34];
+    char Style_g1_s28_Title0[34];
+    /* style 1.29 "Easy Groovin'": 4 variations */
+    mst_title_ref_t Style_g1_s29_Vars[5];
+    char Style_g1_s29_Title3[34];
+    char Style_g1_s29_Title2[34];
+    char Style_g1_s29_Title1[34];
+    char Style_g1_s29_Title0[34];
+    /* style 1.30 "Chart Fusion": 4 variations */
+    mst_title_ref_t Style_g1_s30_Vars[5];
+    char Style_g1_s30_Title3[34];
+    char Style_g1_s30_Title2[34];
+    char Style_g1_s30_Title1[34];
+    char Style_g1_s30_Title0[34];
+    /* style 1.31 "Cool Funk": 4 variations */
+    mst_title_ref_t Style_g1_s31_Vars[5];
+    char Style_g1_s31_Title3[34];
+    char Style_g1_s31_Title2[34];
+    char Style_g1_s31_Title1[34];
+    char Style_g1_s31_Title0[34];
+    /* style 1.32 "Straight Funk": 4 variations */
+    mst_title_ref_t Style_g1_s32_Vars[5];
+    char Style_g1_s32_Title3[34];
+    char Style_g1_s32_Title2[34];
+    char Style_g1_s32_Title1[34];
+    char Style_g1_s32_Title0[34];
+    /* style 2.0 "British DancePop": 4 variations */
+    mst_title_ref_t Style_g2_s0_Vars[5];
+    char Style_g2_s0_Title3[34];
+    char Style_g2_s0_Title2[34];
+    char Style_g2_s0_Title1[34];
+    char Style_g2_s0_Title0[34];
+    /* style 2.1 "Straight Dance": 4 variations */
+    mst_title_ref_t Style_g2_s1_Vars[5];
+    char Style_g2_s1_Title3[34];
+    char Style_g2_s1_Title2[34];
+    char Style_g2_s1_Title1[34];
+    char Style_g2_s1_Title0[34];
+    /* style 2.2 "House Party": 4 variations */
+    mst_title_ref_t Style_g2_s2_Vars[5];
+    char Style_g2_s2_Title3[34];
+    char Style_g2_s2_Title2[34];
+    char Style_g2_s2_Title1[34];
+    char Style_g2_s2_Title0[34];
+    /* style 2.3 "Techno World": 4 variations */
+    mst_title_ref_t Style_g2_s3_Vars[5];
+    char Style_g2_s3_Title3[34];
+    char Style_g2_s3_Title2[34];
+    char Style_g2_s3_Title1[34];
+    char Style_g2_s3_Title0[34];
+    /* style 2.4 "Glory Disco": 4 variations */
+    mst_title_ref_t Style_g2_s4_Vars[5];
+    char Style_g2_s4_Title3[34];
+    char Style_g2_s4_Title2[34];
+    char Style_g2_s4_Title1[34];
+    char Style_g2_s4_Title0[34];
+    /* style 2.5 "80's Disco": 4 variations */
+    mst_title_ref_t Style_g2_s5_Vars[5];
+    char Style_g2_s5_Title3[34];
+    char Style_g2_s5_Title2[34];
+    char Style_g2_s5_Title1[34];
+    char Style_g2_s5_Title0[34];
+    /* style 2.6 "Dance Floor": 4 variations */
+    mst_title_ref_t Style_g2_s6_Vars[5];
+    char Style_g2_s6_Title3[34];
+    char Style_g2_s6_Title2[34];
+    char Style_g2_s6_Title1[34];
+    char Style_g2_s6_Title0[34];
+    /* style 2.7 "70's Dance Craze": 4 variations */
+    mst_title_ref_t Style_g2_s7_Vars[5];
+    char Style_g2_s7_Title3[34];
+    char Style_g2_s7_Title2[34];
+    char Style_g2_s7_Title1[34];
+    char Style_g2_s7_Title0[34];
+    /* style 2.8 "Hip Hop": 4 variations */
+    mst_title_ref_t Style_g2_s8_Vars[5];
+    char Style_g2_s8_Title3[34];
+    char Style_g2_s8_Title2[34];
+    char Style_g2_s8_Title1[34];
+    char Style_g2_s8_Title0[34];
+    /* style 2.9 "80's & 90's": 4 variations */
+    mst_title_ref_t Style_g2_s9_Vars[5];
+    char Style_g2_s9_Title3[34];
+    char Style_g2_s9_Title2[34];
+    char Style_g2_s9_Title1[34];
+    char Style_g2_s9_Title0[34];
+    /* style 2.10 "N.Y. Rap": 4 variations */
+    mst_title_ref_t Style_g2_s10_Vars[5];
+    char Style_g2_s10_Title3[34];
+    char Style_g2_s10_Title2[34];
+    char Style_g2_s10_Title1[34];
+    char Style_g2_s10_Title0[34];
+    /* style 2.11 "The Big Hit": 4 variations */
+    mst_title_ref_t Style_g2_s11_Vars[5];
+    char Style_g2_s11_Title3[34];
+    char Style_g2_s11_Title2[34];
+    char Style_g2_s11_Title1[34];
+    char Style_g2_s11_Title0[34];
+    /* style 2.12 "Reggae Hit": 4 variations */
+    mst_title_ref_t Style_g2_s12_Vars[5];
+    char Style_g2_s12_Title3[34];
+    char Style_g2_s12_Title2[34];
+    char Style_g2_s12_Title1[34];
+    char Style_g2_s12_Title0[34];
+    /* style 2.13 "Rio Goes Disco": 4 variations */
+    mst_title_ref_t Style_g2_s13_Vars[5];
+    char Style_g2_s13_Title3[34];
+    char Style_g2_s13_Title2[34];
+    char Style_g2_s13_Title1[34];
+    char Style_g2_s13_Title0[34];
+    /* style 2.14 "Jambo Dance": 4 variations */
+    mst_title_ref_t Style_g2_s14_Vars[5];
+    char Style_g2_s14_Title3[34];
+    char Style_g2_s14_Title2[34];
+    char Style_g2_s14_Title1[34];
+    char Style_g2_s14_Title0[34];
+    /* style 2.15 "Samba Party": 4 variations */
+    mst_title_ref_t Style_g2_s15_Vars[5];
+    char Style_g2_s15_Title3[34];
+    char Style_g2_s15_Title2[34];
+    char Style_g2_s15_Title1[34];
+    char Style_g2_s15_Title0[34];
+    /* style 2.16 "Western Techno": 4 variations */
+    mst_title_ref_t Style_g2_s16_Vars[5];
+    char Style_g2_s16_Title3[34];
+    char Style_g2_s16_Title2[34];
+    char Style_g2_s16_Title1[34];
+    char Style_g2_s16_Title0[34];
+    /* style 3.0 "J.Last Hitparade": 4 variations */
+    mst_title_ref_t Style_g3_s0_Vars[5];
+    char Style_g3_s0_Title3[34];
+    char Style_g3_s0_Title2[34];
+    char Style_g3_s0_Title1[34];
+    char Style_g3_s0_Title0[34];
+    /* style 3.1 "Last Arrangement": 4 variations */
+    mst_title_ref_t Style_g3_s1_Vars[5];
+    char Style_g3_s1_Title3[34];
+    char Style_g3_s1_Title2[34];
+    char Style_g3_s1_Title1[34];
+    char Style_g3_s1_Title0[34];
+    /* style 3.2 "German Schlager": 4 variations */
+    mst_title_ref_t Style_g3_s2_Vars[5];
+    char Style_g3_s2_Title3[34];
+    char Style_g3_s2_Title2[34];
+    char Style_g3_s2_Title1[34];
+    char Style_g3_s2_Title0[34];
+    /* style 3.3 "All Night Party": 4 variations */
+    mst_title_ref_t Style_g3_s3_Vars[5];
+    char Style_g3_s3_Title3[34];
+    char Style_g3_s3_Title2[34];
+    char Style_g3_s3_Title1[34];
+    char Style_g3_s3_Title0[34];
+    /* style 3.4 "Pop Organ March": 4 variations */
+    mst_title_ref_t Style_g3_s4_Vars[5];
+    char Style_g3_s4_Title3[34];
+    char Style_g3_s4_Title2[34];
+    char Style_g3_s4_Title1[34];
+    char Style_g3_s4_Title0[34];
+    /* style 3.5 "Eurovision Hits": 4 variations */
+    mst_title_ref_t Style_g3_s5_Vars[5];
+    char Style_g3_s5_Title3[34];
+    char Style_g3_s5_Title2[34];
+    char Style_g3_s5_Title1[34];
+    char Style_g3_s5_Title0[34];
+    /* style 3.6 "Euro Party Pop": 4 variations */
+    mst_title_ref_t Style_g3_s6_Vars[5];
+    char Style_g3_s6_Title3[34];
+    char Style_g3_s6_Title2[34];
+    char Style_g3_s6_Title1[34];
+    char Style_g3_s6_Title0[34];
+    /* style 3.7 "German Oldies": 4 variations */
+    mst_title_ref_t Style_g3_s7_Vars[5];
+    char Style_g3_s7_Title3[34];
+    char Style_g3_s7_Title2[34];
+    char Style_g3_s7_Title1[34];
+    char Style_g3_s7_Title0[34];
+    /* style 3.8 "Golden Oldies": 4 variations */
+    mst_title_ref_t Style_g3_s8_Vars[5];
+    char Style_g3_s8_Title3[34];
+    char Style_g3_s8_Title2[34];
+    char Style_g3_s8_Title1[34];
+    char Style_g3_s8_Title0[34];
+    /* style 3.9 "BeerBarrel Polka": 4 variations */
+    mst_title_ref_t Style_g3_s9_Vars[5];
+    char Style_g3_s9_Title3[34];
+    char Style_g3_s9_Title2[34];
+    char Style_g3_s9_Title1[34];
+    char Style_g3_s9_Title0[34];
+    /* style 3.10 "Do The Hokie....": 4 variations */
+    mst_title_ref_t Style_g3_s10_Vars[5];
+    char Style_g3_s10_Title3[34];
+    char Style_g3_s10_Title2[34];
+    char Style_g3_s10_Title1[34];
+    char Style_g3_s10_Title0[34];
+    /* style 3.11 "Dancing Birdies": 4 variations */
+    mst_title_ref_t Style_g3_s11_Vars[5];
+    char Style_g3_s11_Title3[34];
+    char Style_g3_s11_Title2[34];
+    char Style_g3_s11_Title1[34];
+    char Style_g3_s11_Title0[34];
+    /* style 3.12 "Pub Singalong": 4 variations */
+    mst_title_ref_t Style_g3_s12_Vars[5];
+    char Style_g3_s12_Title3[34];
+    char Style_g3_s12_Title2[34];
+    char Style_g3_s12_Title1[34];
+    char Style_g3_s12_Title0[34];
+    /* style 3.13 "Line Dance Craze": 4 variations */
+    mst_title_ref_t Style_g3_s13_Vars[5];
+    char Style_g3_s13_Title3[34];
+    char Style_g3_s13_Title2[34];
+    char Style_g3_s13_Title1[34];
+    char Style_g3_s13_Title0[34];
+    /* style 3.14 "Barn Dance": 4 variations */
+    mst_title_ref_t Style_g3_s14_Vars[5];
+    char Style_g3_s14_Title3[34];
+    char Style_g3_s14_Title2[34];
+    char Style_g3_s14_Title1[34];
+    char Style_g3_s14_Title0[34];
+    /* style 3.15 "Hillbilly Joe": 4 variations */
+    mst_title_ref_t Style_g3_s15_Vars[5];
+    char Style_g3_s15_Title3[34];
+    char Style_g3_s15_Title2[34];
+    char Style_g3_s15_Title1[34];
+    char Style_g3_s15_Title0[34];
+    /* style 3.16 "Bavarian Party": 4 variations */
+    mst_title_ref_t Style_g3_s16_Vars[5];
+    char Style_g3_s16_Title3[34];
+    char Style_g3_s16_Title2[34];
+    char Style_g3_s16_Title1[34];
+    char Style_g3_s16_Title0[34];
+    /* style 3.17 "Munich Festival": 4 variations */
+    mst_title_ref_t Style_g3_s17_Vars[5];
+    char Style_g3_s17_Title3[34];
+    char Style_g3_s17_Title2[34];
+    char Style_g3_s17_Title1[34];
+    char Style_g3_s17_Title0[34];
+    /* style 3.18 "Merry Christmas!": 4 variations */
+    mst_title_ref_t Style_g3_s18_Vars[5];
+    char Style_g3_s18_Title3[34];
+    char Style_g3_s18_Title2[34];
+    char Style_g3_s18_Title1[34];
+    char Style_g3_s18_Title0[34];
+    /* style 4.0 "King Of Soul": 4 variations */
+    mst_title_ref_t Style_g4_s0_Vars[5];
+    char Style_g4_s0_Title3[34];
+    char Style_g4_s0_Title2[34];
+    char Style_g4_s0_Title1[34];
+    char Style_g4_s0_Title0[34];
+    /* style 4.1 "Detroit Pop": 4 variations */
+    mst_title_ref_t Style_g4_s1_Vars[5];
+    char Style_g4_s1_Title3[34];
+    char Style_g4_s1_Title2[34];
+    char Style_g4_s1_Title1[34];
+    char Style_g4_s1_Title0[34];
+    /* style 4.2 "Soft Soul": 4 variations */
+    mst_title_ref_t Style_g4_s2_Vars[5];
+    char Style_g4_s2_Title3[34];
+    char Style_g4_s2_Title2[34];
+    char Style_g4_s2_Title1[34];
+    char Style_g4_s2_Title0[34];
+    /* style 4.3 "New Soul Ballad": 4 variations */
+    mst_title_ref_t Style_g4_s3_Vars[5];
+    char Style_g4_s3_Title3[34];
+    char Style_g4_s3_Title2[34];
+    char Style_g4_s3_Title1[34];
+    char Style_g4_s3_Title0[34];
+    /* style 4.4 "Soul To Sun": 4 variations */
+    mst_title_ref_t Style_g4_s4_Vars[5];
+    char Style_g4_s4_Title3[34];
+    char Style_g4_s4_Title2[34];
+    char Style_g4_s4_Title1[34];
+    char Style_g4_s4_Title0[34];
+    /* style 4.5 "Mellow Soul": 4 variations */
+    mst_title_ref_t Style_g4_s5_Vars[5];
+    char Style_g4_s5_Title3[34];
+    char Style_g4_s5_Title2[34];
+    char Style_g4_s5_Title1[34];
+    char Style_g4_s5_Title0[34];
+    /* style 4.6 "Slow Soul Mood": 4 variations */
+    mst_title_ref_t Style_g4_s6_Vars[5];
+    char Style_g4_s6_Title3[34];
+    char Style_g4_s6_Title2[34];
+    char Style_g4_s6_Title1[34];
+    char Style_g4_s6_Title0[34];
+    /* style 4.7 "R&B Groove": 4 variations */
+    mst_title_ref_t Style_g4_s7_Vars[5];
+    char Style_g4_s7_Title3[34];
+    char Style_g4_s7_Title2[34];
+    char Style_g4_s7_Title1[34];
+    char Style_g4_s7_Title0[34];
+    /* style 4.8 "Down&Dirty Blues": 4 variations */
+    mst_title_ref_t Style_g4_s8_Vars[5];
+    char Style_g4_s8_Title3[34];
+    char Style_g4_s8_Title2[34];
+    char Style_g4_s8_Title1[34];
+    char Style_g4_s8_Title0[34];
+    /* style 4.9 "Rock Blues": 4 variations */
+    mst_title_ref_t Style_g4_s9_Vars[5];
+    char Style_g4_s9_Title3[34];
+    char Style_g4_s9_Title2[34];
+    char Style_g4_s9_Title1[34];
+    char Style_g4_s9_Title0[34];
+    /* style 4.10 "Blues Alley": 4 variations */
+    mst_title_ref_t Style_g4_s10_Vars[5];
+    char Style_g4_s10_Title3[34];
+    char Style_g4_s10_Title2[34];
+    char Style_g4_s10_Title1[34];
+    char Style_g4_s10_Title0[34];
+    /* style 4.11 "Play The Blues": 4 variations */
+    mst_title_ref_t Style_g4_s11_Vars[5];
+    char Style_g4_s11_Title3[34];
+    char Style_g4_s11_Title2[34];
+    char Style_g4_s11_Title1[34];
+    char Style_g4_s11_Title0[34];
+    /* style 4.12 "Sunday Service": 4 variations */
+    mst_title_ref_t Style_g4_s12_Vars[5];
+    char Style_g4_s12_Title3[34];
+    char Style_g4_s12_Title2[34];
+    char Style_g4_s12_Title1[34];
+    char Style_g4_s12_Title0[34];
+    /* style 4.13 "Lift Your Soul": 4 variations */
+    mst_title_ref_t Style_g4_s13_Vars[5];
+    char Style_g4_s13_Title3[34];
+    char Style_g4_s13_Title2[34];
+    char Style_g4_s13_Title1[34];
+    char Style_g4_s13_Title0[34];
+    /* style 4.14 "Day Of Rest": 4 variations */
+    mst_title_ref_t Style_g4_s14_Vars[5];
+    char Style_g4_s14_Title3[34];
+    char Style_g4_s14_Title2[34];
+    char Style_g4_s14_Title1[34];
+    char Style_g4_s14_Title0[34];
+    /* style 4.15 "Power Gospel": 4 variations */
+    mst_title_ref_t Style_g4_s15_Vars[5];
+    char Style_g4_s15_Title3[34];
+    char Style_g4_s15_Title2[34];
+    char Style_g4_s15_Title1[34];
+    char Style_g4_s15_Title0[34];
+    /* style 4.16 "Gospel Blues": 4 variations */
+    mst_title_ref_t Style_g4_s16_Vars[5];
+    char Style_g4_s16_Title3[34];
+    char Style_g4_s16_Title2[34];
+    char Style_g4_s16_Title1[34];
+    char Style_g4_s16_Title0[34];
+    /* style 4.17 "Gospel In Threes": 4 variations */
+    mst_title_ref_t Style_g4_s17_Vars[5];
+    char Style_g4_s17_Title3[34];
+    char Style_g4_s17_Title2[34];
+    char Style_g4_s17_Title1[34];
+    char Style_g4_s17_Title0[34];
+    /* style 5.0 "Up Tempo Bigband": 4 variations */
+    mst_title_ref_t Style_g5_s0_Vars[5];
+    char Style_g5_s0_Title3[34];
+    char Style_g5_s0_Title2[34];
+    char Style_g5_s0_Title1[34];
+    char Style_g5_s0_Title0[34];
+    /* style 5.1 "Steady Swingband": 4 variations */
+    mst_title_ref_t Style_g5_s1_Vars[5];
+    char Style_g5_s1_Title3[34];
+    char Style_g5_s1_Title2[34];
+    char Style_g5_s1_Title1[34];
+    char Style_g5_s1_Title0[34];
+    /* style 5.2 "All Aboard!": 4 variations */
+    mst_title_ref_t Style_g5_s2_Vars[5];
+    char Style_g5_s2_Title3[34];
+    char Style_g5_s2_Title2[34];
+    char Style_g5_s2_Title1[34];
+    char Style_g5_s2_Title0[34];
+    /* style 5.3 "40's Dance Band": 4 variations */
+    mst_title_ref_t Style_g5_s3_Vars[5];
+    char Style_g5_s3_Title3[34];
+    char Style_g5_s3_Title2[34];
+    char Style_g5_s3_Title1[34];
+    char Style_g5_s3_Title0[34];
+    /* style 5.4 "Sentimental Band": 4 variations */
+    mst_title_ref_t Style_g5_s4_Vars[5];
+    char Style_g5_s4_Title3[34];
+    char Style_g5_s4_Title2[34];
+    char Style_g5_s4_Title1[34];
+    char Style_g5_s4_Title0[34];
+    /* style 5.5 "Moonlight Dance": 4 variations */
+    mst_title_ref_t Style_g5_s5_Vars[5];
+    char Style_g5_s5_Title3[34];
+    char Style_g5_s5_Title2[34];
+    char Style_g5_s5_Title1[34];
+    char Style_g5_s5_Title0[34];
+    /* style 5.6 "40's Love Songs": 4 variations */
+    mst_title_ref_t Style_g5_s6_Vars[5];
+    char Style_g5_s6_Title3[34];
+    char Style_g5_s6_Title2[34];
+    char Style_g5_s6_Title1[34];
+    char Style_g5_s6_Title0[34];
+    /* style 5.7 "Mid Swingband": 4 variations */
+    mst_title_ref_t Style_g5_s7_Vars[5];
+    char Style_g5_s7_Title3[34];
+    char Style_g5_s7_Title2[34];
+    char Style_g5_s7_Title1[34];
+    char Style_g5_s7_Title0[34];
+    /* style 5.8 "Swing Orchestra": 4 variations */
+    mst_title_ref_t Style_g5_s8_Vars[5];
+    char Style_g5_s8_Title3[34];
+    char Style_g5_s8_Title2[34];
+    char Style_g5_s8_Title1[34];
+    char Style_g5_s8_Title0[34];
+    /* style 5.9 "Night Club Combo": 4 variations */
+    mst_title_ref_t Style_g5_s9_Vars[5];
+    char Style_g5_s9_Title3[34];
+    char Style_g5_s9_Title2[34];
+    char Style_g5_s9_Title1[34];
+    char Style_g5_s9_Title0[34];
+    /* style 5.10 "Easy Play Swing": 4 variations */
+    mst_title_ref_t Style_g5_s10_Vars[5];
+    char Style_g5_s10_Title3[34];
+    char Style_g5_s10_Title2[34];
+    char Style_g5_s10_Title1[34];
+    char Style_g5_s10_Title0[34];
+    /* style 5.11 "Jazz Club": 4 variations */
+    mst_title_ref_t Style_g5_s11_Vars[5];
+    char Style_g5_s11_Title3[34];
+    char Style_g5_s11_Title2[34];
+    char Style_g5_s11_Title1[34];
+    char Style_g5_s11_Title0[34];
+    /* style 5.12 "Up Tempo Combo": 4 variations */
+    mst_title_ref_t Style_g5_s12_Vars[5];
+    char Style_g5_s12_Title3[34];
+    char Style_g5_s12_Title2[34];
+    char Style_g5_s12_Title1[34];
+    char Style_g5_s12_Title0[34];
+    /* style 5.13 "Simple Jazz": 4 variations */
+    mst_title_ref_t Style_g5_s13_Vars[5];
+    char Style_g5_s13_Title3[34];
+    char Style_g5_s13_Title2[34];
+    char Style_g5_s13_Title1[34];
+    char Style_g5_s13_Title0[34];
+    /* style 5.14 "40's Boogie": 4 variations */
+    mst_title_ref_t Style_g5_s14_Vars[5];
+    char Style_g5_s14_Title3[34];
+    char Style_g5_s14_Title2[34];
+    char Style_g5_s14_Title1[34];
+    char Style_g5_s14_Title0[34];
+    /* style 5.15 "Jazz Standards": 4 variations */
+    mst_title_ref_t Style_g5_s15_Vars[5];
+    char Style_g5_s15_Title3[34];
+    char Style_g5_s15_Title2[34];
+    char Style_g5_s15_Title1[34];
+    char Style_g5_s15_Title0[34];
+    /* style 5.16 "Combo Drawbars": 4 variations */
+    mst_title_ref_t Style_g5_s16_Vars[5];
+    char Style_g5_s16_Title3[34];
+    char Style_g5_s16_Title2[34];
+    char Style_g5_s16_Title1[34];
+    char Style_g5_s16_Title0[34];
+    /* style 5.17 "Gentle Jazz": 4 variations */
+    mst_title_ref_t Style_g5_s17_Vars[5];
+    char Style_g5_s17_Title3[34];
+    char Style_g5_s17_Title2[34];
+    char Style_g5_s17_Title1[34];
+    char Style_g5_s17_Title0[34];
+    /* style 5.18 "Gypsy Jazzers": 4 variations */
+    mst_title_ref_t Style_g5_s18_Vars[5];
+    char Style_g5_s18_Title3[34];
+    char Style_g5_s18_Title2[34];
+    char Style_g5_s18_Title1[34];
+    char Style_g5_s18_Title0[34];
+    /* style 5.19 "Jazz Accordion": 4 variations */
+    mst_title_ref_t Style_g5_s19_Vars[5];
+    char Style_g5_s19_Title3[34];
+    char Style_g5_s19_Title2[34];
+    char Style_g5_s19_Title1[34];
+    char Style_g5_s19_Title0[34];
+    /* style 5.20 "Speakeasy Jazz": 4 variations */
+    mst_title_ref_t Style_g5_s20_Vars[5];
+    char Style_g5_s20_Title3[34];
+    char Style_g5_s20_Title2[34];
+    char Style_g5_s20_Title1[34];
+    char Style_g5_s20_Title0[34];
+    /* style 5.21 "Jazz Francais": 4 variations */
+    mst_title_ref_t Style_g5_s21_Vars[5];
+    char Style_g5_s21_Title3[34];
+    char Style_g5_s21_Title2[34];
+    char Style_g5_s21_Title1[34];
+    char Style_g5_s21_Title0[34];
+    /* style 5.22 "Van Damme Jazz": 4 variations */
+    mst_title_ref_t Style_g5_s22_Vars[5];
+    char Style_g5_s22_Title3[34];
+    char Style_g5_s22_Title2[34];
+    char Style_g5_s22_Title1[34];
+    char Style_g5_s22_Title0[34];
+    /* style 5.23 "Euro Jazz": 4 variations */
+    mst_title_ref_t Style_g5_s23_Vars[5];
+    char Style_g5_s23_Title3[34];
+    char Style_g5_s23_Title2[34];
+    char Style_g5_s23_Title1[34];
+    char Style_g5_s23_Title0[34];
+    /* style 5.24 "Smokey Jazz Club": 4 variations */
+    mst_title_ref_t Style_g5_s24_Vars[5];
+    char Style_g5_s24_Title3[34];
+    char Style_g5_s24_Title2[34];
+    char Style_g5_s24_Title1[34];
+    char Style_g5_s24_Title0[34];
+    /* style 5.25 "Jazz At 3:00am": 4 variations */
+    mst_title_ref_t Style_g5_s25_Vars[5];
+    char Style_g5_s25_Title3[34];
+    char Style_g5_s25_Title2[34];
+    char Style_g5_s25_Title1[34];
+    char Style_g5_s25_Title0[34];
+    /* style 5.26 "Steady Jazz 3/4": 4 variations */
+    mst_title_ref_t Style_g5_s26_Vars[5];
+    char Style_g5_s26_Title3[34];
+    char Style_g5_s26_Title2[34];
+    char Style_g5_s26_Title1[34];
+    char Style_g5_s26_Title0[34];
+    /* style 5.27 "Slow Jazz 3/4": 4 variations */
+    mst_title_ref_t Style_g5_s27_Vars[5];
+    char Style_g5_s27_Title3[34];
+    char Style_g5_s27_Title2[34];
+    char Style_g5_s27_Title1[34];
+    char Style_g5_s27_Title0[34];
+    /* style 5.28 "The Groove": 4 variations */
+    mst_title_ref_t Style_g5_s28_Vars[5];
+    char Style_g5_s28_Title3[34];
+    char Style_g5_s28_Title2[34];
+    char Style_g5_s28_Title1[34];
+    char Style_g5_s28_Title0[34];
+    /* style 5.29 "L.A. Fusion": 4 variations */
+    mst_title_ref_t Style_g5_s29_Vars[5];
+    char Style_g5_s29_Title3[34];
+    char Style_g5_s29_Title2[34];
+    char Style_g5_s29_Title1[34];
+    char Style_g5_s29_Title0[34];
+    /* style 6.0 "Musical Overture": 4 variations */
+    mst_title_ref_t Style_g6_s0_Vars[5];
+    char Style_g6_s0_Title3[34];
+    char Style_g6_s0_Title2[34];
+    char Style_g6_s0_Title1[34];
+    char Style_g6_s0_Title0[34];
+    /* style 6.1 "Tinseltown": 4 variations */
+    mst_title_ref_t Style_g6_s1_Vars[5];
+    char Style_g6_s1_Title3[34];
+    char Style_g6_s1_Title2[34];
+    char Style_g6_s1_Title1[34];
+    char Style_g6_s1_Title0[34];
+    /* style 6.2 "Showband": 4 variations */
+    mst_title_ref_t Style_g6_s2_Vars[5];
+    char Style_g6_s2_Title3[34];
+    char Style_g6_s2_Title2[34];
+    char Style_g6_s2_Title1[34];
+    char Style_g6_s2_Title0[34];
+    /* style 6.3 "Theatre Stride": 4 variations */
+    mst_title_ref_t Style_g6_s3_Vars[5];
+    char Style_g6_s3_Title3[34];
+    char Style_g6_s3_Title2[34];
+    char Style_g6_s3_Title1[34];
+    char Style_g6_s3_Title0[34];
+    /* style 6.4 "Vaudeville Act": 4 variations */
+    mst_title_ref_t Style_g6_s4_Vars[5];
+    char Style_g6_s4_Title3[34];
+    char Style_g6_s4_Title2[34];
+    char Style_g6_s4_Title1[34];
+    char Style_g6_s4_Title0[34];
+    /* style 6.5 "Tap Dancer": 4 variations */
+    mst_title_ref_t Style_g6_s5_Vars[5];
+    char Style_g6_s5_Title3[34];
+    char Style_g6_s5_Title2[34];
+    char Style_g6_s5_Title1[34];
+    char Style_g6_s5_Title0[34];
+    /* style 6.6 "Paris Club": 4 variations */
+    mst_title_ref_t Style_g6_s6_Vars[5];
+    char Style_g6_s6_Title3[34];
+    char Style_g6_s6_Title2[34];
+    char Style_g6_s6_Title1[34];
+    char Style_g6_s6_Title0[34];
+    /* style 6.7 "Cabaret Band": 4 variations */
+    mst_title_ref_t Style_g6_s7_Vars[5];
+    char Style_g6_s7_Title3[34];
+    char Style_g6_s7_Title2[34];
+    char Style_g6_s7_Title1[34];
+    char Style_g6_s7_Title0[34];
+    /* style 6.8 "Viva Las Vegas": 4 variations */
+    mst_title_ref_t Style_g6_s8_Vars[5];
+    char Style_g6_s8_Title3[34];
+    char Style_g6_s8_Title2[34];
+    char Style_g6_s8_Title1[34];
+    char Style_g6_s8_Title0[34];
+    /* style 6.9 "Magic Ballroom": 4 variations */
+    mst_title_ref_t Style_g6_s9_Vars[5];
+    char Style_g6_s9_Title3[34];
+    char Style_g6_s9_Title2[34];
+    char Style_g6_s9_Title1[34];
+    char Style_g6_s9_Title0[34];
+    /* style 6.10 "Gentle Foxtrot": 4 variations */
+    mst_title_ref_t Style_g6_s10_Vars[5];
+    char Style_g6_s10_Title3[34];
+    char Style_g6_s10_Title2[34];
+    char Style_g6_s10_Title1[34];
+    char Style_g6_s10_Title0[34];
+    /* style 6.11 "Organist's Dance": 4 variations */
+    mst_title_ref_t Style_g6_s11_Vars[5];
+    char Style_g6_s11_Title3[34];
+    char Style_g6_s11_Title2[34];
+    char Style_g6_s11_Title1[34];
+    char Style_g6_s11_Title0[34];
+    /* style 6.12 "Up Tempo Foxtrot": 4 variations */
+    mst_title_ref_t Style_g6_s12_Vars[5];
+    char Style_g6_s12_Title3[34];
+    char Style_g6_s12_Title2[34];
+    char Style_g6_s12_Title1[34];
+    char Style_g6_s12_Title0[34];
+    /* style 6.13 "Strictly Foxtrot": 4 variations */
+    mst_title_ref_t Style_g6_s13_Vars[5];
+    char Style_g6_s13_Title3[34];
+    char Style_g6_s13_Title2[34];
+    char Style_g6_s13_Title1[34];
+    char Style_g6_s13_Title0[34];
+    /* style 6.14 "Radio Foxtrot": 4 variations */
+    mst_title_ref_t Style_g6_s14_Vars[5];
+    char Style_g6_s14_Title3[34];
+    char Style_g6_s14_Title2[34];
+    char Style_g6_s14_Title1[34];
+    char Style_g6_s14_Title0[34];
+    /* style 6.15 "Strictly Quick!": 4 variations */
+    mst_title_ref_t Style_g6_s15_Vars[5];
+    char Style_g6_s15_Title3[34];
+    char Style_g6_s15_Title2[34];
+    char Style_g6_s15_Title1[34];
+    char Style_g6_s15_Title0[34];
+    /* style 6.16 "Let's Twist": 4 variations */
+    mst_title_ref_t Style_g6_s16_Vars[5];
+    char Style_g6_s16_Title3[34];
+    char Style_g6_s16_Title2[34];
+    char Style_g6_s16_Title1[34];
+    char Style_g6_s16_Title0[34];
+    /* style 6.17 "Jive Dance": 4 variations */
+    mst_title_ref_t Style_g6_s17_Vars[5];
+    char Style_g6_s17_Title3[34];
+    char Style_g6_s17_Title2[34];
+    char Style_g6_s17_Title1[34];
+    char Style_g6_s17_Title0[34];
+    /* style 6.18 "Do The Twist!": 4 variations */
+    mst_title_ref_t Style_g6_s18_Vars[5];
+    char Style_g6_s18_Title3[34];
+    char Style_g6_s18_Title2[34];
+    char Style_g6_s18_Title1[34];
+    char Style_g6_s18_Title0[34];
+    /* style 6.19 "1,2,Cha Cha Cha": 4 variations */
+    mst_title_ref_t Style_g6_s19_Vars[5];
+    char Style_g6_s19_Title3[34];
+    char Style_g6_s19_Title2[34];
+    char Style_g6_s19_Title1[34];
+    char Style_g6_s19_Title0[34];
+    /* style 6.20 "Let's Beguine!": 4 variations */
+    mst_title_ref_t Style_g6_s20_Vars[5];
+    char Style_g6_s20_Title3[34];
+    char Style_g6_s20_Title2[34];
+    char Style_g6_s20_Title1[34];
+    char Style_g6_s20_Title0[34];
+    /* style 6.21 "Samba Felicidade": 4 variations */
+    mst_title_ref_t Style_g6_s21_Vars[5];
+    char Style_g6_s21_Title3[34];
+    char Style_g6_s21_Title2[34];
+    char Style_g6_s21_Title1[34];
+    char Style_g6_s21_Title0[34];
+    /* style 6.22 "Viva Pasodoble!": 4 variations */
+    mst_title_ref_t Style_g6_s22_Vars[5];
+    char Style_g6_s22_Title3[34];
+    char Style_g6_s22_Title2[34];
+    char Style_g6_s22_Title1[34];
+    char Style_g6_s22_Title0[34];
+    /* style 6.23 "Strict Tango": 4 variations */
+    mst_title_ref_t Style_g6_s23_Vars[5];
+    char Style_g6_s23_Title3[34];
+    char Style_g6_s23_Title2[34];
+    char Style_g6_s23_Title1[34];
+    char Style_g6_s23_Title0[34];
+    /* style 6.24 "Tango D'Amour": 4 variations */
+    mst_title_ref_t Style_g6_s24_Vars[5];
+    char Style_g6_s24_Title3[34];
+    char Style_g6_s24_Title2[34];
+    char Style_g6_s24_Title1[34];
+    char Style_g6_s24_Title0[34];
+    /* style 6.25 "Tango Pianist": 4 variations */
+    mst_title_ref_t Style_g6_s25_Vars[5];
+    char Style_g6_s25_Title3[34];
+    char Style_g6_s25_Title2[34];
+    char Style_g6_s25_Title1[34];
+    char Style_g6_s25_Title0[34];
+    /* style 6.26 "Last Dance Waltz": 4 variations */
+    mst_title_ref_t Style_g6_s26_Vars[5];
+    char Style_g6_s26_Title3[34];
+    char Style_g6_s26_Title2[34];
+    char Style_g6_s26_Title1[34];
+    char Style_g6_s26_Title0[34];
+    /* style 6.27 "Quick Waltz": 4 variations */
+    mst_title_ref_t Style_g6_s27_Vars[5];
+    char Style_g6_s27_Title3[34];
+    char Style_g6_s27_Title2[34];
+    char Style_g6_s27_Title1[34];
+    char Style_g6_s27_Title0[34];
+    /* style 6.28 "Austrian Waltz": 4 variations */
+    mst_title_ref_t Style_g6_s28_Vars[5];
+    char Style_g6_s28_Title3[34];
+    char Style_g6_s28_Title2[34];
+    char Style_g6_s28_Title1[34];
+    char Style_g6_s28_Title0[34];
+    /* style 6.29 "Walzer-Time": 4 variations */
+    mst_title_ref_t Style_g6_s29_Vars[5];
+    char Style_g6_s29_Title3[34];
+    char Style_g6_s29_Title2[34];
+    char Style_g6_s29_Title1[34];
+    char Style_g6_s29_Title0[34];
+    /* style 6.30 "Party Vienna": 4 variations */
+    mst_title_ref_t Style_g6_s30_Vars[5];
+    char Style_g6_s30_Title3[34];
+    char Style_g6_s30_Title2[34];
+    char Style_g6_s30_Title1[34];
+    char Style_g6_s30_Title0[34];
+    /* style 7.0 "Stadium Events": 4 variations */
+    mst_title_ref_t Style_g7_s0_Vars[5];
+    char Style_g7_s0_Title3[34];
+    char Style_g7_s0_Title2[34];
+    char Style_g7_s0_Title1[34];
+    char Style_g7_s0_Title0[34];
+    /* style 7.1 "Sousa Marches": 4 variations */
+    mst_title_ref_t Style_g7_s1_Vars[5];
+    char Style_g7_s1_Title3[34];
+    char Style_g7_s1_Title2[34];
+    char Style_g7_s1_Title1[34];
+    char Style_g7_s1_Title0[34];
+    /* style 7.2 "German Tradition": 4 variations */
+    mst_title_ref_t Style_g7_s2_Vars[5];
+    char Style_g7_s2_Title3[34];
+    char Style_g7_s2_Title2[34];
+    char Style_g7_s2_Title1[34];
+    char Style_g7_s2_Title0[34];
+    /* style 7.3 "Musikantenstadl": 4 variations */
+    mst_title_ref_t Style_g7_s3_Vars[5];
+    char Style_g7_s3_Title3[34];
+    char Style_g7_s3_Title2[34];
+    char Style_g7_s3_Title1[34];
+    char Style_g7_s3_Title0[34];
+    /* style 7.4 "Standard Polka": 4 variations */
+    mst_title_ref_t Style_g7_s4_Vars[5];
+    char Style_g7_s4_Title3[34];
+    char Style_g7_s4_Title2[34];
+    char Style_g7_s4_Title1[34];
+    char Style_g7_s4_Title0[34];
+    /* style 7.5 "Modern Polka": 4 variations */
+    mst_title_ref_t Style_g7_s5_Vars[5];
+    char Style_g7_s5_Title3[34];
+    char Style_g7_s5_Title2[34];
+    char Style_g7_s5_Title1[34];
+    char Style_g7_s5_Title0[34];
+    /* style 7.6 "German Polka": 4 variations */
+    mst_title_ref_t Style_g7_s6_Vars[5];
+    char Style_g7_s6_Title3[34];
+    char Style_g7_s6_Title2[34];
+    char Style_g7_s6_Title1[34];
+    char Style_g7_s6_Title0[34];
+    /* style 7.7 "Ceilidh Band": 4 variations */
+    mst_title_ref_t Style_g7_s7_Vars[5];
+    char Style_g7_s7_Title3[34];
+    char Style_g7_s7_Title2[34];
+    char Style_g7_s7_Title1[34];
+    char Style_g7_s7_Title0[34];
+    /* style 7.8 "Highland Dance": 4 variations */
+    mst_title_ref_t Style_g7_s8_Vars[5];
+    char Style_g7_s8_Title3[34];
+    char Style_g7_s8_Title2[34];
+    char Style_g7_s8_Title1[34];
+    char Style_g7_s8_Title0[34];
+    /* style 7.9 "3/4 Concert Time": 4 variations */
+    mst_title_ref_t Style_g7_s9_Vars[5];
+    char Style_g7_s9_Title3[34];
+    char Style_g7_s9_Title2[34];
+    char Style_g7_s9_Title1[34];
+    char Style_g7_s9_Title0[34];
+    /* style 7.10 "Munich Waltz": 4 variations */
+    mst_title_ref_t Style_g7_s10_Vars[5];
+    char Style_g7_s10_Title3[34];
+    char Style_g7_s10_Title2[34];
+    char Style_g7_s10_Title1[34];
+    char Style_g7_s10_Title0[34];
+    /* style 7.11 "East Euro Waltz": 4 variations */
+    mst_title_ref_t Style_g7_s11_Vars[5];
+    char Style_g7_s11_Title3[34];
+    char Style_g7_s11_Title2[34];
+    char Style_g7_s11_Title1[34];
+    char Style_g7_s11_Title0[34];
+    /* style 7.12 "German Waltz": 4 variations */
+    mst_title_ref_t Style_g7_s12_Vars[5];
+    char Style_g7_s12_Title3[34];
+    char Style_g7_s12_Title2[34];
+    char Style_g7_s12_Title1[34];
+    char Style_g7_s12_Title0[34];
+    /* style 7.13 "Island Romance": 4 variations */
+    mst_title_ref_t Style_g7_s13_Vars[5];
+    char Style_g7_s13_Title3[34];
+    char Style_g7_s13_Title2[34];
+    char Style_g7_s13_Title1[34];
+    char Style_g7_s13_Title0[34];
+    /* style 7.14 "Hawaiian Dance": 4 variations */
+    mst_title_ref_t Style_g7_s14_Vars[5];
+    char Style_g7_s14_Title3[34];
+    char Style_g7_s14_Title2[34];
+    char Style_g7_s14_Title1[34];
+    char Style_g7_s14_Title0[34];
+    /* style 7.15 "Old Ragtime": 4 variations */
+    mst_title_ref_t Style_g7_s15_Vars[5];
+    char Style_g7_s15_Title3[34];
+    char Style_g7_s15_Title2[34];
+    char Style_g7_s15_Title1[34];
+    char Style_g7_s15_Title0[34];
+    /* style 7.16 "Ragtime Band": 4 variations */
+    mst_title_ref_t Style_g7_s16_Vars[5];
+    char Style_g7_s16_Title3[34];
+    char Style_g7_s16_Title2[34];
+    char Style_g7_s16_Title1[34];
+    char Style_g7_s16_Title0[34];
+    /* style 7.17 "New Orleans Jazz": 4 variations */
+    mst_title_ref_t Style_g7_s17_Vars[5];
+    char Style_g7_s17_Title3[34];
+    char Style_g7_s17_Title2[34];
+    char Style_g7_s17_Title1[34];
+    char Style_g7_s17_Title0[34];
+    /* style 7.18 "Sounds of Dixie": 4 variations */
+    mst_title_ref_t Style_g7_s18_Vars[5];
+    char Style_g7_s18_Title3[34];
+    char Style_g7_s18_Title2[34];
+    char Style_g7_s18_Title1[34];
+    char Style_g7_s18_Title0[34];
+    /* style 7.19 "Greek Dance": 4 variations */
+    mst_title_ref_t Style_g7_s19_Vars[5];
+    char Style_g7_s19_Title3[34];
+    char Style_g7_s19_Title2[34];
+    char Style_g7_s19_Title1[34];
+    char Style_g7_s19_Title0[34];
+    /* style 7.20 "Moscow At Night": 4 variations */
+    mst_title_ref_t Style_g7_s20_Vars[5];
+    char Style_g7_s20_Title3[34];
+    char Style_g7_s20_Title2[34];
+    char Style_g7_s20_Title1[34];
+    char Style_g7_s20_Title0[34];
+    /* style 7.21 "Kings of Gypsy": 4 variations */
+    mst_title_ref_t Style_g7_s21_Vars[5];
+    char Style_g7_s21_Title3[34];
+    char Style_g7_s21_Title2[34];
+    char Style_g7_s21_Title1[34];
+    char Style_g7_s21_Title0[34];
+    /* style 7.22 "Spanish Folklore": 4 variations */
+    mst_title_ref_t Style_g7_s22_Vars[5];
+    char Style_g7_s22_Title3[34];
+    char Style_g7_s22_Title2[34];
+    char Style_g7_s22_Title1[34];
+    char Style_g7_s22_Title0[34];
+    /* style 7.23 "Mariachi band": 4 variations */
+    mst_title_ref_t Style_g7_s23_Vars[5];
+    char Style_g7_s23_Title3[34];
+    char Style_g7_s23_Title2[34];
+    char Style_g7_s23_Title1[34];
+    char Style_g7_s23_Title0[34];
+    /* style 7.24 "70's Folk Music": 4 variations */
+    mst_title_ref_t Style_g7_s24_Vars[5];
+    char Style_g7_s24_Title3[34];
+    char Style_g7_s24_Title2[34];
+    char Style_g7_s24_Title1[34];
+    char Style_g7_s24_Title0[34];
+    /* style 8.0 "Bluegrass Time": 4 variations */
+    mst_title_ref_t Style_g8_s0_Vars[5];
+    char Style_g8_s0_Title3[34];
+    char Style_g8_s0_Title2[34];
+    char Style_g8_s0_Title1[34];
+    char Style_g8_s0_Title0[34];
+    /* style 8.1 "Modern Hoedown": 4 variations */
+    mst_title_ref_t Style_g8_s1_Vars[5];
+    char Style_g8_s1_Title3[34];
+    char Style_g8_s1_Title2[34];
+    char Style_g8_s1_Title1[34];
+    char Style_g8_s1_Title0[34];
+    /* style 8.2 "Kentucky Blue": 4 variations */
+    mst_title_ref_t Style_g8_s2_Vars[5];
+    char Style_g8_s2_Title3[34];
+    char Style_g8_s2_Title2[34];
+    char Style_g8_s2_Title1[34];
+    char Style_g8_s2_Title0[34];
+    /* style 8.3 "Trucker Country": 4 variations */
+    mst_title_ref_t Style_g8_s3_Vars[5];
+    char Style_g8_s3_Title3[34];
+    char Style_g8_s3_Title2[34];
+    char Style_g8_s3_Title1[34];
+    char Style_g8_s3_Title0[34];
+    /* style 8.4 "Country Dance": 4 variations */
+    mst_title_ref_t Style_g8_s4_Vars[5];
+    char Style_g8_s4_Title3[34];
+    char Style_g8_s4_Title2[34];
+    char Style_g8_s4_Title1[34];
+    char Style_g8_s4_Title0[34];
+    /* style 8.5 "Hillbilly Blues": 4 variations */
+    mst_title_ref_t Style_g8_s5_Vars[5];
+    char Style_g8_s5_Title3[34];
+    char Style_g8_s5_Title2[34];
+    char Style_g8_s5_Title1[34];
+    char Style_g8_s5_Title0[34];
+    /* style 8.6 "70's Country Pop": 4 variations */
+    mst_title_ref_t Style_g8_s6_Vars[5];
+    char Style_g8_s6_Title3[34];
+    char Style_g8_s6_Title2[34];
+    char Style_g8_s6_Title1[34];
+    char Style_g8_s6_Title0[34];
+    /* style 8.7 "Country Romance": 4 variations */
+    mst_title_ref_t Style_g8_s7_Vars[5];
+    char Style_g8_s7_Title3[34];
+    char Style_g8_s7_Title2[34];
+    char Style_g8_s7_Title1[34];
+    char Style_g8_s7_Title0[34];
+    /* style 8.8 "Western Ballads": 4 variations */
+    mst_title_ref_t Style_g8_s8_Vars[5];
+    char Style_g8_s8_Title3[34];
+    char Style_g8_s8_Title2[34];
+    char Style_g8_s8_Title1[34];
+    char Style_g8_s8_Title0[34];
+    /* style 8.9 "Country Folks": 4 variations */
+    mst_title_ref_t Style_g8_s9_Vars[5];
+    char Style_g8_s9_Title3[34];
+    char Style_g8_s9_Title2[34];
+    char Style_g8_s9_Title1[34];
+    char Style_g8_s9_Title0[34];
+    /* style 8.10 "Country 88": 4 variations */
+    mst_title_ref_t Style_g8_s10_Vars[5];
+    char Style_g8_s10_Title3[34];
+    char Style_g8_s10_Title2[34];
+    char Style_g8_s10_Title1[34];
+    char Style_g8_s10_Title0[34];
+    /* style 8.11 "Country Love": 4 variations */
+    mst_title_ref_t Style_g8_s11_Vars[5];
+    char Style_g8_s11_Title3[34];
+    char Style_g8_s11_Title2[34];
+    char Style_g8_s11_Title1[34];
+    char Style_g8_s11_Title0[34];
+    /* style 8.12 "Modern Country": 4 variations */
+    mst_title_ref_t Style_g8_s12_Vars[5];
+    char Style_g8_s12_Title3[34];
+    char Style_g8_s12_Title2[34];
+    char Style_g8_s12_Title1[34];
+    char Style_g8_s12_Title0[34];
+    /* style 8.13 "EZ Country Rock": 4 variations */
+    mst_title_ref_t Style_g8_s13_Vars[5];
+    char Style_g8_s13_Title3[34];
+    char Style_g8_s13_Title2[34];
+    char Style_g8_s13_Title1[34];
+    char Style_g8_s13_Title0[34];
+    /* style 8.14 "Old Country Hits": 4 variations */
+    mst_title_ref_t Style_g8_s14_Vars[5];
+    char Style_g8_s14_Title3[34];
+    char Style_g8_s14_Title2[34];
+    char Style_g8_s14_Title1[34];
+    char Style_g8_s14_Title0[34];
+    /* style 8.15 "New Country Rock": 4 variations */
+    mst_title_ref_t Style_g8_s15_Vars[5];
+    char Style_g8_s15_Title3[34];
+    char Style_g8_s15_Title2[34];
+    char Style_g8_s15_Title1[34];
+    char Style_g8_s15_Title0[34];
+    /* style 8.16 "Country Hits": 4 variations */
+    mst_title_ref_t Style_g8_s16_Vars[5];
+    char Style_g8_s16_Title3[34];
+    char Style_g8_s16_Title2[34];
+    char Style_g8_s16_Title1[34];
+    char Style_g8_s16_Title0[34];
+    /* style 9.0 "Romantic Bossa": 4 variations */
+    mst_title_ref_t Style_g9_s0_Vars[5];
+    char Style_g9_s0_Title3[34];
+    char Style_g9_s0_Title2[34];
+    char Style_g9_s0_Title1[34];
+    char Style_g9_s0_Title0[34];
+    /* style 9.1 "Bossa Pianist": 4 variations */
+    mst_title_ref_t Style_g9_s1_Vars[5];
+    char Style_g9_s1_Title3[34];
+    char Style_g9_s1_Title2[34];
+    char Style_g9_s1_Title1[34];
+    char Style_g9_s1_Title0[34];
+    /* style 9.2 "Mellow Bossa": 4 variations */
+    mst_title_ref_t Style_g9_s2_Vars[5];
+    char Style_g9_s2_Title3[34];
+    char Style_g9_s2_Title2[34];
+    char Style_g9_s2_Title1[34];
+    char Style_g9_s2_Title0[34];
+    /* style 9.3 "Rhumba Espana": 4 variations */
+    mst_title_ref_t Style_g9_s3_Vars[5];
+    char Style_g9_s3_Title3[34];
+    char Style_g9_s3_Title2[34];
+    char Style_g9_s3_Title1[34];
+    char Style_g9_s3_Title0[34];
+    /* style 9.4 "Cocktail Pianist": 4 variations */
+    mst_title_ref_t Style_g9_s4_Vars[5];
+    char Style_g9_s4_Title3[34];
+    char Style_g9_s4_Title2[34];
+    char Style_g9_s4_Title1[34];
+    char Style_g9_s4_Title0[34];
+    /* style 9.5 "Romantic Beguine": 4 variations */
+    mst_title_ref_t Style_g9_s5_Vars[5];
+    char Style_g9_s5_Title3[34];
+    char Style_g9_s5_Title2[34];
+    char Style_g9_s5_Title1[34];
+    char Style_g9_s5_Title0[34];
+    /* style 9.6 "Romantic Dance": 4 variations */
+    mst_title_ref_t Style_g9_s6_Vars[5];
+    char Style_g9_s6_Title3[34];
+    char Style_g9_s6_Title2[34];
+    char Style_g9_s6_Title1[34];
+    char Style_g9_s6_Title0[34];
+    /* style 9.7 "Latin Lounge Bar": 4 variations */
+    mst_title_ref_t Style_g9_s7_Vars[5];
+    char Style_g9_s7_Title3[34];
+    char Style_g9_s7_Title2[34];
+    char Style_g9_s7_Title1[34];
+    char Style_g9_s7_Title0[34];
+    /* style 9.8 "Tito's Cha Cha": 4 variations */
+    mst_title_ref_t Style_g9_s8_Vars[5];
+    char Style_g9_s8_Title3[34];
+    char Style_g9_s8_Title2[34];
+    char Style_g9_s8_Title1[34];
+    char Style_g9_s8_Title0[34];
+    /* style 9.9 "Mambo Band": 4 variations */
+    mst_title_ref_t Style_g9_s9_Vars[5];
+    char Style_g9_s9_Title3[34];
+    char Style_g9_s9_Title2[34];
+    char Style_g9_s9_Title1[34];
+    char Style_g9_s9_Title0[34];
+    /* style 9.10 "New Mambo Mood": 4 variations */
+    mst_title_ref_t Style_g9_s10_Vars[5];
+    char Style_g9_s10_Title3[34];
+    char Style_g9_s10_Title2[34];
+    char Style_g9_s10_Title1[34];
+    char Style_g9_s10_Title0[34];
+    /* style 9.11 "It's Mambo Time!": 4 variations */
+    mst_title_ref_t Style_g9_s11_Vars[5];
+    char Style_g9_s11_Title3[34];
+    char Style_g9_s11_Title2[34];
+    char Style_g9_s11_Title1[34];
+    char Style_g9_s11_Title0[34];
+    /* style 9.12 "Cumbia Band": 4 variations */
+    mst_title_ref_t Style_g9_s12_Vars[5];
+    char Style_g9_s12_Title3[34];
+    char Style_g9_s12_Title2[34];
+    char Style_g9_s12_Title1[34];
+    char Style_g9_s12_Title0[34];
+    /* style 9.13 "Holiday Mood": 4 variations */
+    mst_title_ref_t Style_g9_s13_Vars[5];
+    char Style_g9_s13_Title3[34];
+    char Style_g9_s13_Title2[34];
+    char Style_g9_s13_Title1[34];
+    char Style_g9_s13_Title0[34];
+    /* style 9.14 "Samba Parade": 4 variations */
+    mst_title_ref_t Style_g9_s14_Vars[5];
+    char Style_g9_s14_Title3[34];
+    char Style_g9_s14_Title2[34];
+    char Style_g9_s14_Title1[34];
+    char Style_g9_s14_Title0[34];
+    /* style 9.15 "Latin Festival": 4 variations */
+    mst_title_ref_t Style_g9_s15_Vars[5];
+    char Style_g9_s15_Title3[34];
+    char Style_g9_s15_Title2[34];
+    char Style_g9_s15_Title1[34];
+    char Style_g9_s15_Title0[34];
+    /* style 9.16 "Modern Rio": 4 variations */
+    mst_title_ref_t Style_g9_s16_Vars[5];
+    char Style_g9_s16_Title3[34];
+    char Style_g9_s16_Title2[34];
+    char Style_g9_s16_Title1[34];
+    char Style_g9_s16_Title0[34];
+    /* style 9.17 "Castanet Dance": 4 variations */
+    mst_title_ref_t Style_g9_s17_Vars[5];
+    char Style_g9_s17_Title3[34];
+    char Style_g9_s17_Title2[34];
+    char Style_g9_s17_Title1[34];
+    char Style_g9_s17_Title0[34];
+    /* style 9.18 "Caribbean Nights": 4 variations */
+    mst_title_ref_t Style_g9_s18_Vars[5];
+    char Style_g9_s18_Title3[34];
+    char Style_g9_s18_Title2[34];
+    char Style_g9_s18_Title1[34];
+    char Style_g9_s18_Title0[34];
+    /* style 9.19 "Salsa Picante": 4 variations */
+    mst_title_ref_t Style_g9_s19_Vars[5];
+    char Style_g9_s19_Title3[34];
+    char Style_g9_s19_Title2[34];
+    char Style_g9_s19_Title1[34];
+    char Style_g9_s19_Title0[34];
+    /* style 9.20 "Samba Amor": 4 variations */
+    mst_title_ref_t Style_g9_s20_Vars[5];
+    char Style_g9_s20_Title3[34];
+    char Style_g9_s20_Title2[34];
+    char Style_g9_s20_Title1[34];
+    char Style_g9_s20_Title0[34];
+    /* style 9.21 "Modern Caribbean": 4 variations */
+    mst_title_ref_t Style_g9_s21_Vars[5];
+    char Style_g9_s21_Title3[34];
+    char Style_g9_s21_Title2[34];
+    char Style_g9_s21_Title1[34];
+    char Style_g9_s21_Title0[34];
+    /* style 9.22 "Modern Samba": 4 variations */
+    mst_title_ref_t Style_g9_s22_Vars[5];
+    char Style_g9_s22_Title3[34];
+    char Style_g9_s22_Title2[34];
+    char Style_g9_s22_Title1[34];
+    char Style_g9_s22_Title0[34];
+    /* style 9.23 "Samba Fusion": 4 variations */
+    mst_title_ref_t Style_g9_s23_Vars[5];
+    char Style_g9_s23_Title3[34];
+    char Style_g9_s23_Title2[34];
+    char Style_g9_s23_Title1[34];
+    char Style_g9_s23_Title0[34];
+    /* style 9.24 "Indonesian Folk": 4 variations */
+    mst_title_ref_t Style_g9_s24_Vars[5];
+    char Style_g9_s24_Title3[34];
+    char Style_g9_s24_Title2[34];
+    char Style_g9_s24_Title1[34];
+    char Style_g9_s24_Title0[34];
+    /* style 9.25 "Dangdut": 4 variations */
+    mst_title_ref_t Style_g9_s25_Vars[5];
+    char Style_g9_s25_Title3[34];
+    char Style_g9_s25_Title2[34];
+    char Style_g9_s25_Title1[34];
+    char Style_g9_s25_Title0[34];
+    /* style 9.26 "Talempong": 4 variations */
+    mst_title_ref_t Style_g9_s26_Vars[5];
+    char Style_g9_s26_Title3[34];
+    char Style_g9_s26_Title2[34];
+    char Style_g9_s26_Title1[34];
+    char Style_g9_s26_Title0[34];
+    /* style 9.27 "Synth Reggae": 4 variations */
+    mst_title_ref_t Style_g9_s27_Vars[5];
+    char Style_g9_s27_Title3[34];
+    char Style_g9_s27_Title2[34];
+    char Style_g9_s27_Title1[34];
+    char Style_g9_s27_Title0[34];
+    /* style 9.28 "Jamaican Swing": 4 variations */
+    mst_title_ref_t Style_g9_s28_Vars[5];
+    char Style_g9_s28_Title3[34];
+    char Style_g9_s28_Title2[34];
+    char Style_g9_s28_Title1[34];
+    char Style_g9_s28_Title0[34];
+    mst_style_ref_t StyleGroup0_Styles[32];
+    char Style_g0_s30_Name[18];
+    char Style_g0_s29_Name[18];
+    char Style_g0_s28_Name[18];
+    char Style_g0_s27_Name[18];
+    char Style_g0_s26_Name[18];
+    char Style_g0_s25_Name[18];
+    char Style_g0_s24_Name[18];
+    char Style_g0_s23_Name[18];
+    char Style_g0_s22_Name[18];
+    char Style_g0_s21_Name[18];
+    char Style_g0_s20_Name[18];
+    char Style_g0_s19_Name[18];
+    char Style_g0_s18_Name[18];
+    char Style_g0_s17_Name[18];
+    char Style_g0_s16_Name[18];
+    char Style_g0_s15_Name[18];
+    char Style_g0_s14_Name[18];
+    char Style_g0_s13_Name[18];
+    char Style_g0_s12_Name[18];
+    char Style_g0_s11_Name[18];
+    char Style_g0_s10_Name[18];
+    char Style_g0_s9_Name[18];
+    char Style_g0_s8_Name[18];
+    char Style_g0_s7_Name[18];
+    char Style_g0_s6_Name[18];
+    char Style_g0_s5_Name[18];
+    char Style_g0_s4_Name[18];
+    char Style_g0_s3_Name[18];
+    char Style_g0_s2_Name[18];
+    char Style_g0_s1_Name[18];
+    char Style_g0_s0_Name[18];
+    mst_style_ref_t StyleGroup1_Styles[34];
+    char Style_g1_s32_Name[18];
+    char Style_g1_s31_Name[18];
+    char Style_g1_s30_Name[18];
+    char Style_g1_s29_Name[18];
+    char Style_g1_s28_Name[18];
+    char Style_g1_s27_Name[18];
+    char Style_g1_s26_Name[18];
+    char Style_g1_s25_Name[18];
+    char Style_g1_s24_Name[18];
+    char Style_g1_s23_Name[18];
+    char Style_g1_s22_Name[18];
+    char Style_g1_s21_Name[18];
+    char Style_g1_s20_Name[18];
+    char Style_g1_s19_Name[18];
+    char Style_g1_s18_Name[18];
+    char Style_g1_s17_Name[18];
+    char Style_g1_s16_Name[18];
+    char Style_g1_s15_Name[18];
+    char Style_g1_s14_Name[18];
+    char Style_g1_s13_Name[18];
+    char Style_g1_s12_Name[18];
+    char Style_g1_s11_Name[18];
+    char Style_g1_s10_Name[18];
+    char Style_g1_s9_Name[18];
+    char Style_g1_s8_Name[18];
+    char Style_g1_s7_Name[18];
+    char Style_g1_s6_Name[18];
+    char Style_g1_s5_Name[18];
+    char Style_g1_s4_Name[18];
+    char Style_g1_s3_Name[18];
+    char Style_g1_s2_Name[18];
+    char Style_g1_s1_Name[18];
+    char Style_g1_s0_Name[18];
+    mst_style_ref_t StyleGroup2_Styles[18];
+    char Style_g2_s16_Name[18];
+    char Style_g2_s15_Name[18];
+    char Style_g2_s14_Name[18];
+    char Style_g2_s13_Name[18];
+    char Style_g2_s12_Name[18];
+    char Style_g2_s11_Name[18];
+    char Style_g2_s10_Name[18];
+    char Style_g2_s9_Name[18];
+    char Style_g2_s8_Name[18];
+    char Style_g2_s7_Name[18];
+    char Style_g2_s6_Name[18];
+    char Style_g2_s5_Name[18];
+    char Style_g2_s4_Name[18];
+    char Style_g2_s3_Name[18];
+    char Style_g2_s2_Name[18];
+    char Style_g2_s1_Name[18];
+    char Style_g2_s0_Name[18];
+    mst_style_ref_t StyleGroup3_Styles[20];
+    char Style_g3_s18_Name[18];
+    char Style_g3_s17_Name[18];
+    char Style_g3_s16_Name[18];
+    char Style_g3_s15_Name[18];
+    char Style_g3_s14_Name[18];
+    char Style_g3_s13_Name[18];
+    char Style_g3_s12_Name[18];
+    char Style_g3_s11_Name[18];
+    char Style_g3_s10_Name[18];
+    char Style_g3_s9_Name[18];
+    char Style_g3_s8_Name[18];
+    char Style_g3_s7_Name[18];
+    char Style_g3_s6_Name[18];
+    char Style_g3_s5_Name[18];
+    char Style_g3_s4_Name[18];
+    char Style_g3_s3_Name[18];
+    char Style_g3_s2_Name[18];
+    char Style_g3_s1_Name[18];
+    char Style_g3_s0_Name[18];
+    mst_style_ref_t StyleGroup4_Styles[19];
+    char Style_g4_s17_Name[18];
+    char Style_g4_s16_Name[18];
+    char Style_g4_s15_Name[18];
+    char Style_g4_s14_Name[18];
+    char Style_g4_s13_Name[18];
+    char Style_g4_s12_Name[18];
+    char Style_g4_s11_Name[18];
+    char Style_g4_s10_Name[18];
+    char Style_g4_s9_Name[18];
+    char Style_g4_s8_Name[18];
+    char Style_g4_s7_Name[18];
+    char Style_g4_s6_Name[18];
+    char Style_g4_s5_Name[18];
+    char Style_g4_s4_Name[18];
+    char Style_g4_s3_Name[18];
+    char Style_g4_s2_Name[18];
+    char Style_g4_s1_Name[18];
+    char Style_g4_s0_Name[18];
+    mst_style_ref_t StyleGroup5_Styles[31];
+    char Style_g5_s29_Name[18];
+    char Style_g5_s28_Name[18];
+    char Style_g5_s27_Name[18];
+    char Style_g5_s26_Name[18];
+    char Style_g5_s25_Name[18];
+    char Style_g5_s24_Name[18];
+    char Style_g5_s23_Name[18];
+    char Style_g5_s22_Name[18];
+    char Style_g5_s21_Name[18];
+    char Style_g5_s20_Name[18];
+    char Style_g5_s19_Name[18];
+    char Style_g5_s18_Name[18];
+    char Style_g5_s17_Name[18];
+    char Style_g5_s16_Name[18];
+    char Style_g5_s15_Name[18];
+    char Style_g5_s14_Name[18];
+    char Style_g5_s13_Name[18];
+    char Style_g5_s12_Name[18];
+    char Style_g5_s11_Name[18];
+    char Style_g5_s10_Name[18];
+    char Style_g5_s9_Name[18];
+    char Style_g5_s8_Name[18];
+    char Style_g5_s7_Name[18];
+    char Style_g5_s6_Name[18];
+    char Style_g5_s5_Name[18];
+    char Style_g5_s4_Name[18];
+    char Style_g5_s3_Name[18];
+    char Style_g5_s2_Name[18];
+    char Style_g5_s1_Name[18];
+    char Style_g5_s0_Name[18];
+    mst_style_ref_t StyleGroup6_Styles[32];
+    char Style_g6_s30_Name[18];
+    char Style_g6_s29_Name[18];
+    char Style_g6_s28_Name[18];
+    char Style_g6_s27_Name[18];
+    char Style_g6_s26_Name[18];
+    char Style_g6_s25_Name[18];
+    char Style_g6_s24_Name[18];
+    char Style_g6_s23_Name[18];
+    char Style_g6_s22_Name[18];
+    char Style_g6_s21_Name[18];
+    char Style_g6_s20_Name[18];
+    char Style_g6_s19_Name[18];
+    char Style_g6_s18_Name[18];
+    char Style_g6_s17_Name[18];
+    char Style_g6_s16_Name[18];
+    char Style_g6_s15_Name[18];
+    char Style_g6_s14_Name[18];
+    char Style_g6_s13_Name[18];
+    char Style_g6_s12_Name[18];
+    char Style_g6_s11_Name[18];
+    char Style_g6_s10_Name[18];
+    char Style_g6_s9_Name[18];
+    char Style_g6_s8_Name[18];
+    char Style_g6_s7_Name[18];
+    char Style_g6_s6_Name[18];
+    char Style_g6_s5_Name[18];
+    char Style_g6_s4_Name[18];
+    char Style_g6_s3_Name[18];
+    char Style_g6_s2_Name[18];
+    char Style_g6_s1_Name[18];
+    char Style_g6_s0_Name[18];
+    mst_style_ref_t StyleGroup7_Styles[26];
+    char Style_g7_s24_Name[18];
+    char Style_g7_s23_Name[18];
+    char Style_g7_s22_Name[18];
+    char Style_g7_s21_Name[18];
+    char Style_g7_s20_Name[18];
+    char Style_g7_s19_Name[18];
+    char Style_g7_s18_Name[18];
+    char Style_g7_s17_Name[18];
+    char Style_g7_s16_Name[18];
+    char Style_g7_s15_Name[18];
+    char Style_g7_s14_Name[18];
+    char Style_g7_s13_Name[18];
+    char Style_g7_s12_Name[18];
+    char Style_g7_s11_Name[18];
+    char Style_g7_s10_Name[18];
+    char Style_g7_s9_Name[18];
+    char Style_g7_s8_Name[18];
+    char Style_g7_s7_Name[18];
+    char Style_g7_s6_Name[18];
+    char Style_g7_s5_Name[18];
+    char Style_g7_s4_Name[18];
+    char Style_g7_s3_Name[18];
+    char Style_g7_s2_Name[18];
+    char Style_g7_s1_Name[18];
+    char Style_g7_s0_Name[18];
+    mst_style_ref_t StyleGroup8_Styles[18];
+    char Style_g8_s16_Name[18];
+    char Style_g8_s15_Name[18];
+    char Style_g8_s14_Name[18];
+    char Style_g8_s13_Name[18];
+    char Style_g8_s12_Name[18];
+    char Style_g8_s11_Name[18];
+    char Style_g8_s10_Name[18];
+    char Style_g8_s9_Name[18];
+    char Style_g8_s8_Name[18];
+    char Style_g8_s7_Name[18];
+    char Style_g8_s6_Name[18];
+    char Style_g8_s5_Name[18];
+    char Style_g8_s4_Name[18];
+    char Style_g8_s3_Name[18];
+    char Style_g8_s2_Name[18];
+    char Style_g8_s1_Name[18];
+    char Style_g8_s0_Name[18];
+    mst_style_ref_t StyleGroup9_Styles[30];
+    char Style_g9_s28_Name[18];
+    char Style_g9_s27_Name[18];
+    char Style_g9_s26_Name[18];
+    char Style_g9_s25_Name[18];
+    char Style_g9_s24_Name[18];
+    char Style_g9_s23_Name[18];
+    char Style_g9_s22_Name[18];
+    char Style_g9_s21_Name[18];
+    char Style_g9_s20_Name[18];
+    char Style_g9_s19_Name[18];
+    char Style_g9_s18_Name[18];
+    char Style_g9_s17_Name[18];
+    char Style_g9_s16_Name[18];
+    char Style_g9_s15_Name[18];
+    char Style_g9_s14_Name[18];
+    char Style_g9_s13_Name[18];
+    char Style_g9_s12_Name[18];
+    char Style_g9_s11_Name[18];
+    char Style_g9_s10_Name[18];
+    char Style_g9_s9_Name[18];
+    char Style_g9_s8_Name[18];
+    char Style_g9_s7_Name[18];
+    char Style_g9_s6_Name[18];
+    char Style_g9_s5_Name[18];
+    char Style_g9_s4_Name[18];
+    char Style_g9_s3_Name[18];
+    char Style_g9_s2_Name[18];
+    char Style_g9_s1_Name[18];
+    char Style_g9_s0_Name[18];
+    /* the MstStyle browser root: 10 groups (see mst_group_ref_t) */
+    mst_group_ref_t StyleBrowser_Groups[10];
+    char StyleGroup9_Name[18];
+    char StyleGroup8_Name[18];
+    char StyleGroup7_Name[18];
+    char StyleGroup6_Name[18];
+    char StyleGroup5_Name[18];
+    char StyleGroup4_Name[18];
+    char StyleGroup3_Name[18];
+    char StyleGroup2_Name[18];
+    char StyleGroup1_Name[18];
+    char StyleGroup0_Name[18];
     uint16_t field_18bea;
     uint16_t field_18bec;
     uint16_t field_18bee;
@@ -10632,7598 +8901,4828 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         /* 999 */ ALIGNED_STRING("12 Boogie Bars               160"),
     },
 
-    .ptr_cf16 = SELF(str_1171),
-
-    .pad_254 = { 0 },
-
-    .ptr_cf1c = SELF(str_1170),
-
-    .field_cf20 = 0x0001,
-
-    .ptr_cf22 = SELF(str_1169),
-
-    .field_cf26 = 0x0002,
-
-    .ptr_cf28 = SELF(str_1168),
-
-    .field_cf2c = 0x0003,
-
-    .pad_255 = { 0 },
-
-    .str_1168 = ALIGNED_STRING("New Unison Eight             108"),
-
-    .str_1169 = ALIGNED_STRING("Orchestral Eight             108"),
-
-    .str_1170 = ALIGNED_STRING("Flugel Pop                   108"),
-
-    .str_1171 = ALIGNED_STRING("Acoustic Beat                108"),
-
-    .ptr_cfbc = SELF(str_1175),
-
-    .field_cfc0 = 0x0004,
-
-    .ptr_cfc2 = SELF(str_1174),
-
-    .field_cfc6 = 0x0005,
-
-    .ptr_cfc8 = SELF(str_1173),
-
-    .field_cfcc = 0x0006,
-
-    .ptr_cfce = SELF(str_1172),
-
-    .field_cfd2 = 0x0007,
-
-    .pad_256 = { 0 },
-
-    .str_1172 = ALIGNED_STRING("Gentle Sax Eight              90"),
-
-    .str_1173 = ALIGNED_STRING("Reson-Eight                   90"),
-
-    .str_1174 = ALIGNED_STRING("Easy EP!                      90"),
-
-    .str_1175 = ALIGNED_STRING("88 Note 8 Beat                90"),
-
-    .ptr_d062 = SELF(str_1179),
-
-    .field_d066 = 0x0008,
-
-    .ptr_d068 = SELF(str_1178),
-
-    .field_d06c = 0x0009,
-
-    .ptr_d06e = SELF(str_1177),
-
-    .field_d072 = 0x000a,
-
-    .ptr_d074 = SELF(str_1176),
-
-    .field_d078 = 0x000b,
-
-    .pad_257 = { 0 },
-
-    .str_1176 = ALIGNED_STRING("Symphonic Rock               108"),
-
-    .str_1177 = ALIGNED_STRING("Soft Rock                    108"),
-
-    .str_1178 = ALIGNED_STRING("Upright Rock                 108"),
-
-    .str_1179 = ALIGNED_STRING("Vocal Beats                  108"),
-
-    .ptr_d108 = SELF(str_1183),
-
-    .field_d10c = 0x000c,
-
-    .ptr_d10e = SELF(str_1182),
-
-    .field_d112 = 0x000d,
-
-    .ptr_d114 = SELF(str_1181),
-
-    .field_d118 = 0x000e,
-
-    .ptr_d11a = SELF(str_1180),
-
-    .field_d11e = 0x000f,
-
-    .pad_258 = { 0 },
-
-    .str_1180 = ALIGNED_STRING("Cool Rock                    106"),
-
-    .str_1181 = ALIGNED_STRING("Rock Symphony                106"),
-
-    .str_1182 = ALIGNED_STRING("Society Rock                 106"),
-
-    .str_1183 = ALIGNED_STRING("Romantic Rock                106"),
-
-    .ptr_d1ae = SELF(str_1187),
-
-    .field_d1b2 = 0x0010,
-
-    .ptr_d1b4 = SELF(str_1186),
-
-    .field_d1b8 = 0x0011,
-
-    .ptr_d1ba = SELF(str_1185),
-
-    .field_d1be = 0x0012,
-
-    .ptr_d1c0 = SELF(str_1184),
-
-    .field_d1c4 = 0x0013,
-
-    .pad_259 = { 0 },
-
-    .str_1184 = ALIGNED_STRING("Tender Rock Sax              114"),
-
-    .str_1185 = ALIGNED_STRING("Dream Beat                   114"),
-
-    .str_1186 = ALIGNED_STRING("Warm Guitars                 114"),
-
-    .str_1187 = ALIGNED_STRING("Gentle 8 Piano               114"),
-
-    .ptr_d254 = SELF(str_1191),
-
-    .field_d258 = 0x0014,
-
-    .ptr_d25a = SELF(str_1190),
-
-    .field_d25e = 0x0015,
-
-    .ptr_d260 = SELF(str_1189),
-
-    .field_d264 = 0x0016,
-
-    .ptr_d266 = SELF(str_1188),
-
-    .field_d26a = 0x0017,
-
-    .pad_260 = { 0 },
-
-    .str_1188 = ALIGNED_STRING("Sweet Distortion              90"),
-
-    .str_1189 = ALIGNED_STRING("Fantasia Eight                90"),
-
-    .str_1190 = ALIGNED_STRING("Paradise Keys                 90"),
-
-    .str_1191 = ALIGNED_STRING("Wonder Harmonica              90"),
-
-    .ptr_d2fa = SELF(str_1195),
-
-    .field_d2fe = 0x0018,
-
-    .ptr_d300 = SELF(str_1194),
-
-    .field_d304 = 0x0019,
-
-    .ptr_d306 = SELF(str_1193),
-
-    .field_d30a = 0x001a,
-
-    .ptr_d30c = SELF(str_1192),
-
-    .field_d310 = 0x001b,
-
-    .pad_261 = { 0 },
-
-    .str_1192 = ALIGNED_STRING("Stevie's Solo                 86"),
-
-    .str_1193 = ALIGNED_STRING("Atmospheric 8                 86"),
-
-    .str_1194 = ALIGNED_STRING("Breathless Sax                86"),
-
-    .str_1195 = ALIGNED_STRING("Acoustic Effects              86"),
-
-    .ptr_d3a0 = SELF(str_1199),
-
-    .field_d3a4 = 0x001c,
-
-    .ptr_d3a6 = SELF(str_1198),
-
-    .field_d3aa = 0x001d,
-
-    .ptr_d3ac = SELF(str_1197),
-
-    .field_d3b0 = 0x001e,
-
-    .ptr_d3b2 = SELF(str_1196),
-
-    .field_d3b6 = 0x001f,
-
-    .pad_262 = { 0 },
-
-    .str_1196 = ALIGNED_STRING("Sax For Whitney               84"),
-
-    .str_1197 = ALIGNED_STRING("Movie Ballad                  84"),
-
-    .str_1198 = ALIGNED_STRING("Southern Nights               84"),
-
-    .str_1199 = ALIGNED_STRING("Cosmic Ballad                 84"),
-
-    .ptr_d446 = SELF(str_1207),
-
-    .str_1200 = " ",
-
-    .ptr_d44c = SELF(str_1206),
-
-    .str_1201 = "!",
-
-    .ptr_d452 = SELF(str_1205),
-
-    .str_1202 = "\"",
-
-    .ptr_d458 = SELF(str_1204),
-
-    .str_1203 = "#",
-
-    .pad_263 = { 0 },
-
-    .str_1204 = ALIGNED_STRING("Romantic Voices               72"),
-
-    .str_1205 = ALIGNED_STRING("Warm Horn Duet                72"),
-
-    .str_1206 = ALIGNED_STRING("Orchestral Keys               72"),
-
-    .str_1207 = ALIGNED_STRING("Oboe Ballad                   72"),
-
-    .ptr_d4ec = SELF(str_1215),
-
-    .str_1208 = "$",
-
-    .ptr_d4f2 = SELF(str_1214),
-
-    .str_1209 = "%",
-
-    .ptr_d4f8 = SELF(str_1213),
-
-    .str_1210 = "&",
-
-    .ptr_d4fe = SELF(str_1212),
-
-    .str_1211 = "'",
-
-    .pad_264 = { 0 },
-
-    .str_1212 = ALIGNED_STRING("Fantasy Beat                  82"),
-
-    .str_1213 = ALIGNED_STRING("Digital Sixteen               82"),
-
-    .str_1214 = ALIGNED_STRING("New Muzak                     82"),
-
-    .str_1215 = ALIGNED_STRING("16 Wheels                     82"),
-
-    .ptr_d592 = SELF(str_1223),
-
-    .str_1216 = "(",
-
-    .ptr_d598 = SELF(str_1222),
-
-    .str_1217 = ")",
-
-    .ptr_d59e = SELF(str_1221),
-
-    .str_1218 = "*",
-
-    .ptr_d5a4 = SELF(str_1220),
-
-    .str_1219 = "+",
-
-    .pad_265 = { 0 },
-
-    .str_1220 = ALIGNED_STRING("Easy Reeding                  74"),
-
-    .str_1221 = ALIGNED_STRING("Benson Frets                  74"),
-
-    .str_1222 = ALIGNED_STRING("Bright Keys 16                74"),
-
-    .str_1223 = ALIGNED_STRING("Solid Sixteen                 74"),
-
-    .ptr_d638 = SELF(str_1231),
-
-    .str_1224 = ",",
-
-    .ptr_d63e = SELF(str_1230),
-
-    .str_1225 = "-",
-
-    .ptr_d644 = SELF(str_1229),
-
-    .str_1226 = ".",
-
-    .ptr_d64a = SELF(str_1228),
-
-    .str_1227 = "/",
-
-    .pad_266 = { 0 },
-
-    .str_1228 = ALIGNED_STRING("The Way It Is                 70"),
-
-    .str_1229 = ALIGNED_STRING("Symphony Ballad               70"),
-
-    .str_1230 = ALIGNED_STRING("E.P. Romance                  70"),
-
-    .str_1231 = ALIGNED_STRING("Just The Flute                70"),
-
-    .ptr_d6de = SELF(str_1239),
-
-    .str_1232 = "0",
-
-    .ptr_d6e4 = SELF(str_1238),
-
-    .str_1233 = "1",
-
-    .ptr_d6ea = SELF(str_1237),
-
-    .str_1234 = "2",
-
-    .ptr_d6f0 = SELF(str_1236),
-
-    .str_1235 = "3",
-
-    .pad_267 = { 0 },
-
-    .str_1236 = ALIGNED_STRING("16 On Stage                   82"),
-
-    .str_1237 = ALIGNED_STRING("Orchestral 16                 82"),
-
-    .str_1238 = ALIGNED_STRING("Mangione Mood                 82"),
-
-    .str_1239 = ALIGNED_STRING("E.P. Does It!                 82"),
-
-    .ptr_d784 = SELF(str_1247),
-
-    .str_1240 = "4",
-
-    .ptr_d78a = SELF(str_1246),
-
-    .str_1241 = "5",
-
-    .ptr_d790 = SELF(str_1245),
-
-    .str_1242 = "6",
-
-    .ptr_d796 = SELF(str_1244),
-
-    .str_1243 = "7",
-
-    .pad_268 = { 0 },
-
-    .str_1244 = ALIGNED_STRING("Dreamy Orchestra              67"),
-
-    .str_1245 = ALIGNED_STRING("Slow Ballad B3                67"),
-
-    .str_1246 = ALIGNED_STRING("Ballad Romance                67"),
-
-    .str_1247 = ALIGNED_STRING("Ballad Frets                  67"),
-
-    .ptr_d82a = SELF(str_1255),
-
-    .str_1248 = "8",
-
-    .ptr_d830 = SELF(str_1254),
-
-    .str_1249 = "9",
-
-    .ptr_d836 = SELF(str_1253),
-
-    .str_1250 = ":",
-
-    .ptr_d83c = SELF(str_1252),
-
-    .str_1251 = ";",
-
-    .pad_269 = { 0 },
-
-    .str_1252 = ALIGNED_STRING("Ballad Bridge                 75"),
-
-    .str_1253 = ALIGNED_STRING("80's Production               75"),
-
-    .str_1254 = ALIGNED_STRING("Sounds Of Quincy              75"),
-
-    .str_1255 = ALIGNED_STRING("Gentle Ballad                 75"),
-
-    .ptr_d8d0 = SELF(str_1263),
-
-    .str_1256 = "<",
-
-    .ptr_d8d6 = SELF(str_1262),
-
-    .str_1257 = "=",
-
-    .ptr_d8dc = SELF(str_1261),
-
-    .str_1258 = ">",
-
-    .ptr_d8e2 = SELF(str_1260),
-
-    .str_1259 = "?",
-
-    .pad_270 = { 0 },
-
-    .str_1260 = ALIGNED_STRING("Clavier Francais              80"),
-
-    .str_1261 = ALIGNED_STRING("Symphonic Pop                 80"),
-
-    .str_1262 = ALIGNED_STRING("Pop Concerto                  80"),
-
-    .str_1263 = ALIGNED_STRING("Clayder Piano                 80"),
-
-    .ptr_d976 = SELF(str_1271),
-
-    .str_1264 = "@",
-
-    .ptr_d97c = SELF(str_1270),
-
-    .str_1265 = "A",
-
-    .ptr_d982 = SELF(str_1269),
-
-    .str_1266 = "B",
-
-    .ptr_d988 = SELF(str_1268),
-
-    .str_1267 = "C",
-
-    .pad_271 = { 0 },
-
-    .str_1268 = ALIGNED_STRING("Ballad Orchestra              84"),
-
-    .str_1269 = ALIGNED_STRING("Synth Love Song               84"),
-
-    .str_1270 = ALIGNED_STRING("Smooth & Saxy                 84"),
-
-    .str_1271 = ALIGNED_STRING("Ballad Acoustics              84"),
-
-    .ptr_da1c = SELF(str_1279),
-
-    .str_1272 = "D",
-
-    .ptr_da22 = SELF(str_1278),
-
-    .str_1273 = "E",
-
-    .ptr_da28 = SELF(str_1277),
-
-    .str_1274 = "F",
-
-    .ptr_da2e = SELF(str_1276),
-
-    .str_1275 = "G",
-
-    .pad_272 = { 0 },
-
-    .str_1276 = ALIGNED_STRING("Bows & Brass                  72"),
-
-    .str_1277 = ALIGNED_STRING("Breathtaking                  72"),
-
-    .str_1278 = ALIGNED_STRING("String Romance                72"),
-
-    .str_1279 = ALIGNED_STRING("Twilight Piano                72"),
-
-    .ptr_dac2 = SELF(str_1287),
-
-    .str_1280 = "H",
-
-    .ptr_dac8 = SELF(str_1286),
-
-    .str_1281 = "I",
-
-    .ptr_dace = SELF(str_1285),
-
-    .str_1282 = "J",
-
-    .ptr_dad4 = SELF(str_1284),
-
-    .str_1283 = "K",
-
-    .pad_273 = { 0 },
-
-    .str_1284 = ALIGNED_STRING("Old & New Ballad             100"),
-
-    .str_1285 = ALIGNED_STRING("Ensemble Ballad              100"),
-
-    .str_1286 = ALIGNED_STRING("Mellow Shuffle               100"),
-
-    .str_1287 = ALIGNED_STRING("Shuffle Chanson              100"),
-
-    .ptr_db68 = SELF(str_1295),
-
-    .str_1288 = "L",
-
-    .ptr_db6e = SELF(str_1294),
-
-    .str_1289 = "M",
-
-    .ptr_db74 = SELF(str_1293),
-
-    .str_1290 = "N",
-
-    .ptr_db7a = SELF(str_1292),
-
-    .str_1291 = "O",
-
-    .pad_274 = { 0 },
-
-    .str_1292 = ALIGNED_STRING("Flute Nocturne                63"),
-
-    .str_1293 = ALIGNED_STRING("Like A Dream                  63"),
-
-    .str_1294 = ALIGNED_STRING("Ballad Piano                  63"),
-
-    .str_1295 = ALIGNED_STRING("Flugel Ballad                 63"),
-
-    .ptr_dc0e = SELF(str_1303),
-
-    .str_1296 = "P",
-
-    .ptr_dc14 = SELF(str_1302),
-
-    .str_1297 = "Q",
-
-    .ptr_dc1a = SELF(str_1301),
-
-    .str_1298 = "R",
-
-    .ptr_dc20 = SELF(str_1300),
-
-    .str_1299 = "S",
-
-    .pad_275 = { 0 },
-
-    .str_1300 = ALIGNED_STRING("Accordion Dream               64"),
-
-    .str_1301 = ALIGNED_STRING("Spacy Ballad                  64"),
-
-    .str_1302 = ALIGNED_STRING("Guitar Ballad                 64"),
-
-    .str_1303 = ALIGNED_STRING("Pan Muzak                     64"),
-
-    .ptr_dcb4 = SELF(str_1311),
-
-    .str_1304 = "T",
-
-    .ptr_dcba = SELF(str_1310),
-
-    .str_1305 = "U",
-
-    .ptr_dcc0 = SELF(str_1309),
-
-    .str_1306 = "V",
-
-    .ptr_dcc6 = SELF(str_1308),
-
-    .str_1307 = "W",
-
-    .pad_276 = { 0 },
-
-    .str_1308 = ALIGNED_STRING("German Oldies                125"),
-
-    .str_1309 = ALIGNED_STRING("Oldie's Jazz                 125"),
-
-    .str_1310 = ALIGNED_STRING("Oldie's Parade               125"),
-
-    .str_1311 = ALIGNED_STRING("Echoing Organ                125"),
-
-    .ptr_dd5a = SELF(str_1319),
-
-    .str_1312 = "X",
-
-    .ptr_dd60 = SELF(str_1318),
-
-    .str_1313 = "Y",
-
-    .ptr_dd66 = SELF(str_1317),
-
-    .str_1314 = "Z",
-
-    .ptr_dd6c = SELF(str_1316),
-
-    .str_1315 = "[",
-
-    .pad_277 = { 0 },
-
-    .str_1316 = ALIGNED_STRING("Starlight Ballad              68"),
-
-    .str_1317 = ALIGNED_STRING("Ballad Glitter                68"),
-
-    .str_1318 = ALIGNED_STRING("Ricky's Ballad                68"),
-
-    .str_1319 = ALIGNED_STRING("Dreamy Harmonica              68"),
-
-    .ptr_de00 = SELF(str_1327),
-
-    .str_1320 = "\\",
-
-    .ptr_de06 = SELF(str_1326),
-
-    .str_1321 = "]",
-
-    .ptr_de0c = SELF(str_1325),
-
-    .str_1322 = "^",
-
-    .ptr_de12 = SELF(str_1324),
-
-    .str_1323 = "_",
-
-    .pad_278 = { 0 },
-
-    .str_1324 = ALIGNED_STRING("Late Night Tenor             117"),
-
-    .str_1325 = ALIGNED_STRING("Swing Serenade               117"),
-
-    .str_1326 = ALIGNED_STRING("Romantic Duet                117"),
-
-    .str_1327 = ALIGNED_STRING("Swing Flautist               117"),
-
-    .ptr_dea6 = SELF(str_1335),
-
-    .str_1328 = "`",
-
-    .ptr_deac = SELF(str_1334),
-
-    .str_1329 = "a",
-
-    .ptr_deb2 = SELF(str_1333),
-
-    .str_1330 = "b",
-
-    .ptr_deb8 = SELF(str_1332),
-
-    .str_1331 = "c",
-
-    .pad_279 = { 0 },
-
-    .str_1332 = ALIGNED_STRING("Smooth Lips                   83"),
-
-    .str_1333 = ALIGNED_STRING("Mellow Mood                   83"),
-
-    .str_1334 = ALIGNED_STRING("Breathy Moments               83"),
-
-    .str_1335 = ALIGNED_STRING("Soprano Soloist               83"),
-
-    .ptr_df4c = SELF(str_1343),
-
-    .str_1336 = "d",
-
-    .ptr_df52 = SELF(str_1342),
-
-    .str_1337 = "e",
-
-    .ptr_df58 = SELF(str_1341),
-
-    .str_1338 = "f",
-
-    .ptr_df5e = SELF(str_1340),
-
-    .str_1339 = "g",
-
-    .pad_280 = { 0 },
-
-    .str_1340 = ALIGNED_STRING("Simply Romantic               90"),
-
-    .str_1341 = ALIGNED_STRING("Riddle Me This!               90"),
-
-    .str_1342 = ALIGNED_STRING("Sweet Swing                   90"),
-
-    .str_1343 = ALIGNED_STRING("Midnight Tunes                90"),
-
-    .ptr_dff2 = SELF(str_1351),
-
-    .str_1344 = "h",
-
-    .ptr_dff8 = SELF(str_1350),
-
-    .str_1345 = "i",
-
-    .ptr_dffe = SELF(str_1349),
-
-    .str_1346 = "j",
-
-    .ptr_e004 = SELF(str_1348),
-
-    .str_1347 = "k",
-
-    .pad_281 = { 0 },
-
-    .str_1348 = ALIGNED_STRING("All Out Combo                180"),
-
-    .str_1349 = ALIGNED_STRING("Sine Of The Time             180"),
-
-    .str_1350 = ALIGNED_STRING("Relax With Klaus             180"),
-
-    .str_1351 = ALIGNED_STRING("Wunderlich Combo             180"),
-
-    .ptr_e098 = SELF(str_1359),
-
-    .str_1352 = "l",
-
-    .ptr_e09e = SELF(str_1358),
-
-    .str_1353 = "m",
-
-    .ptr_e0a4 = SELF(str_1357),
-
-    .str_1354 = "n",
-
-    .ptr_e0aa = SELF(str_1356),
-
-    .str_1355 = "o",
-
-    .pad_282 = { 0 },
-
-    .str_1356 = ALIGNED_STRING("French Clavier                92"),
-
-    .str_1357 = ALIGNED_STRING("Paris Singers                 92"),
-
-    .str_1358 = ALIGNED_STRING("Musette Ballad                92"),
-
-    .str_1359 = ALIGNED_STRING("Cafe Serenade                 92"),
-
-    .ptr_e13e = SELF(str_1367),
-
-    .str_1360 = "p",
-
-    .ptr_e144 = SELF(str_1366),
-
-    .str_1361 = "q",
-
-    .ptr_e14a = SELF(str_1365),
-
-    .str_1362 = "r",
-
-    .ptr_e150 = SELF(str_1364),
-
-    .str_1363 = "s",
-
-    .pad_283 = { 0 },
-
-    .str_1364 = ALIGNED_STRING("Waltzing Wheels              110"),
-
-    .str_1365 = ALIGNED_STRING("Three Four Vibes             110"),
-
-    .str_1366 = ALIGNED_STRING("One,Two,Three                110"),
-
-    .str_1367 = ALIGNED_STRING("Easy Threesy                 110"),
-
-    .ptr_e1e4 = SELF(str_1375),
-
-    .str_1368 = "t",
-
-    .ptr_e1ea = SELF(str_1374),
-
-    .str_1369 = "u",
-
-    .ptr_e1f0 = SELF(str_1373),
-
-    .str_1370 = "v",
-
-    .ptr_e1f6 = SELF(str_1372),
-
-    .str_1371 = "w",
-
-    .pad_284 = { 0 },
-
-    .str_1372 = ALIGNED_STRING("Musette Symphony             175"),
-
-    .str_1373 = ALIGNED_STRING("Vive La France!              175"),
-
-    .str_1374 = ALIGNED_STRING("Cafe Atmosphere              175"),
-
-    .str_1375 = ALIGNED_STRING("Simple Band                  175"),
-
-    .ptr_e28a = SELF(str_1383),
-
-    .str_1376 = "x",
-
-    .ptr_e290 = SELF(str_1382),
-
-    .str_1377 = "y",
-
-    .ptr_e296 = SELF(str_1381),
-
-    .str_1378 = "z",
-
-    .ptr_e29c = SELF(str_1380),
-
-    .str_1379 = "{",
-
-    .pad_285 = { 0 },
-
-    .str_1380 = ALIGNED_STRING("Toots' Way                   150"),
-
-    .str_1381 = ALIGNED_STRING("Mellow Jazz 3/4              150"),
-
-    .str_1382 = ALIGNED_STRING("Swing B3 Threes              150"),
-
-    .str_1383 = ALIGNED_STRING("Suited To Jazz!              150"),
-
-    .ptr_e330 = SELF(str_1390),
-
-    .str_1384 = "|",
-
-    .ptr_e336 = SELF(str_1389),
-
-    .str_1385 = "}",
-
-    .ptr_e33c = SELF(str_1388),
-
-    .str_1386 = "~",
-
-    .ptr_e342 = SELF(str_1387),
-
-    .field_e346 = 0x007f,
-
-    .pad_286 = { 0 },
-
-    .str_1387 = ALIGNED_STRING("Rock & Fall!                 155"),
-
-    .str_1388 = ALIGNED_STRING("Teddy Boy Brass              155"),
-
-    .str_1389 = ALIGNED_STRING("Skiffle Keys                 155"),
-
-    .str_1390 = ALIGNED_STRING("Ham & Rock                   155"),
-
-    .ptr_e3d6 = SELF(str_1394),
-
-    .field_e3da = 0x0080,
-
-    .ptr_e3dc = SELF(str_1393),
-
-    .field_e3e0 = 0x0081,
-
-    .ptr_e3e2 = SELF(str_1392),
-
-    .field_e3e6 = 0x0082,
-
-    .ptr_e3e8 = SELF(str_1391),
-
-    .field_e3ec = 0x0083,
-
-    .pad_287 = { 0 },
-
-    .str_1391 = ALIGNED_STRING("Skiffle Horns                150"),
-
-    .str_1392 = ALIGNED_STRING("Hard Blown R&R               150"),
-
-    .str_1393 = ALIGNED_STRING("Jerry Lee's Keys             150"),
-
-    .str_1394 = ALIGNED_STRING("Slap Back Rock               150"),
-
-    .ptr_e47c = SELF(str_1398),
-
-    .field_e480 = 0x0084,
-
-    .ptr_e482 = SELF(str_1397),
-
-    .field_e486 = 0x0085,
-
-    .ptr_e488 = SELF(str_1396),
-
-    .field_e48c = 0x0086,
-
-    .ptr_e48e = SELF(str_1395),
-
-    .field_e492 = 0x0087,
-
-    .pad_288 = { 0 },
-
-    .str_1395 = ALIGNED_STRING("Modern Boogie                154"),
-
-    .str_1396 = ALIGNED_STRING("Euro Boogie                  154"),
-
-    .str_1397 = ALIGNED_STRING("Boogie Band                  154"),
-
-    .str_1398 = ALIGNED_STRING("Oh Boy Vocals                154"),
-
-    .ptr_e522 = SELF(str_1402),
-
-    .field_e526 = 0x0088,
-
-    .ptr_e528 = SELF(str_1401),
-
-    .field_e52c = 0x0089,
-
-    .ptr_e52e = SELF(str_1400),
-
-    .field_e532 = 0x008a,
-
-    .ptr_e534 = SELF(str_1399),
-
-    .field_e538 = 0x008b,
-
-    .pad_289 = { 0 },
-
-    .str_1399 = ALIGNED_STRING("Jailhouse Brass              158"),
-
-    .str_1400 = ALIGNED_STRING("Blue Suede Rock              158"),
-
-    .str_1401 = ALIGNED_STRING("Rock Around It!              158"),
-
-    .str_1402 = ALIGNED_STRING("Don't Do It!                 158"),
-
-    .ptr_e5c8 = SELF(str_1406),
-
-    .field_e5cc = 0x008c,
-
-    .ptr_e5ce = SELF(str_1405),
-
-    .field_e5d2 = 0x008d,
-
-    .ptr_e5d4 = SELF(str_1404),
-
-    .field_e5d8 = 0x008e,
-
-    .ptr_e5da = SELF(str_1403),
-
-    .field_e5de = 0x008f,
-
-    .pad_290 = { 0 },
-
-    .str_1403 = ALIGNED_STRING("Barry's Boogie               150"),
-
-    .str_1404 = ALIGNED_STRING("Shuffle Horns                150"),
-
-    .str_1405 = ALIGNED_STRING("Accordion Rock               150"),
-
-    .str_1406 = ALIGNED_STRING("Alto Sax Shuffle             150"),
-
-    .ptr_e66e = SELF(str_1410),
-
-    .field_e672 = 0x0090,
-
-    .ptr_e674 = SELF(str_1409),
-
-    .field_e678 = 0x0091,
-
-    .ptr_e67a = SELF(str_1408),
-
-    .field_e67e = 0x0092,
-
-    .ptr_e680 = SELF(str_1407),
-
-    .field_e684 = 0x0093,
-
-    .pad_291 = { 0 },
-
-    .str_1407 = ALIGNED_STRING("Smoochy Vocals                67"),
-
-    .str_1408 = ALIGNED_STRING("Twin E.P.Ballad               67"),
-
-    .str_1409 = ALIGNED_STRING("Sweet Soprano                 67"),
-
-    .str_1410 = ALIGNED_STRING("Ballad Guitar                 67"),
-
-    .ptr_e714 = SELF(str_1414),
-
-    .field_e718 = 0x0094,
-
-    .ptr_e71a = SELF(str_1413),
-
-    .field_e71e = 0x0095,
-
-    .ptr_e720 = SELF(str_1412),
-
-    .field_e724 = 0x0096,
-
-    .ptr_e726 = SELF(str_1411),
-
-    .field_e72a = 0x0097,
-
-    .pad_292 = { 0 },
-
-    .str_1411 = ALIGNED_STRING("Runaway Organ                144"),
-
-    .str_1412 = ALIGNED_STRING("Sixties Strings              144"),
-
-    .str_1413 = ALIGNED_STRING("Solid Surfin'                144"),
-
-    .str_1414 = ALIGNED_STRING("Ocean Vocals                 144"),
-
-    .ptr_e7ba = SELF(str_1418),
-
-    .field_e7be = 0x0098,
-
-    .ptr_e7c0 = SELF(str_1417),
-
-    .field_e7c4 = 0x0099,
-
-    .ptr_e7c6 = SELF(str_1416),
-
-    .field_e7ca = 0x009a,
-
-    .ptr_e7cc = SELF(str_1415),
-
-    .field_e7d0 = 0x009b,
-
-    .pad_293 = { 0 },
-
-    .str_1415 = ALIGNED_STRING("Liverpool Roads              154"),
-
-    .str_1416 = ALIGNED_STRING("Mersey Beat                  154"),
-
-    .str_1417 = ALIGNED_STRING("Shadows' Frets               154"),
-
-    .str_1418 = ALIGNED_STRING("Monkeying About              154"),
-
-    .ptr_e860 = SELF(str_1422),
-
-    .field_e864 = 0x009c,
-
-    .ptr_e866 = SELF(str_1421),
-
-    .field_e86a = 0x009d,
-
-    .ptr_e86c = SELF(str_1420),
-
-    .field_e870 = 0x009e,
-
-    .ptr_e872 = SELF(str_1419),
-
-    .field_e876 = 0x009f,
-
-    .pad_294 = { 0 },
-
-    .str_1419 = ALIGNED_STRING("I Want To B3                 150"),
-
-    .str_1420 = ALIGNED_STRING("Sax,Drums+R&Roll             150"),
-
-    .str_1421 = ALIGNED_STRING("Sixties Strat                150"),
-
-    .str_1422 = ALIGNED_STRING("Memphis Keys                 150"),
-
-    .ptr_e906 = SELF(str_1426),
-
-    .field_e90a = 0x00a0,
-
-    .ptr_e90c = SELF(str_1425),
-
-    .field_e910 = 0x00a1,
-
-    .ptr_e912 = SELF(str_1424),
-
-    .field_e916 = 0x00a2,
-
-    .ptr_e918 = SELF(str_1423),
-
-    .field_e91c = 0x00a3,
-
-    .pad_295 = { 0 },
-
-    .str_1423 = ALIGNED_STRING("Life's A Beach!              150"),
-
-    .str_1424 = ALIGNED_STRING("Santa Monica Way             150"),
-
-    .str_1425 = ALIGNED_STRING("Easy Bacharach!              150"),
-
-    .str_1426 = ALIGNED_STRING("San Jose Route               150"),
-
-    .ptr_e9ac = SELF(str_1430),
-
-    .field_e9b0 = 0x00a4,
-
-    .ptr_e9b2 = SELF(str_1429),
-
-    .field_e9b6 = 0x00a5,
-
-    .ptr_e9b8 = SELF(str_1428),
-
-    .field_e9bc = 0x00a6,
-
-    .ptr_e9be = SELF(str_1427),
-
-    .field_e9c2 = 0x00a7,
-
-    .pad_296 = { 0 },
-
-    .str_1427 = ALIGNED_STRING("70's Glamour                 129"),
-
-    .str_1428 = ALIGNED_STRING("Glitter Bars                 129"),
-
-    .str_1429 = ALIGNED_STRING("Handbag Dance!               129"),
-
-    .str_1430 = ALIGNED_STRING("Wunder Pops                  129"),
-
-    .ptr_ea52 = SELF(str_1434),
-
-    .field_ea56 = 0x00a8,
-
-    .ptr_ea58 = SELF(str_1433),
-
-    .field_ea5c = 0x00a9,
-
-    .ptr_ea5e = SELF(str_1432),
-
-    .field_ea62 = 0x00aa,
-
-    .ptr_ea64 = SELF(str_1431),
-
-    .field_ea68 = 0x00ab,
-
-    .pad_297 = { 0 },
-
-    .str_1431 = ALIGNED_STRING("70's Synth Rock              136"),
-
-    .str_1432 = ALIGNED_STRING("Platform Wheels              136"),
-
-    .str_1433 = ALIGNED_STRING("Crocodile Sax                136"),
-
-    .str_1434 = ALIGNED_STRING("Elton's Piano                136"),
-
-    .ptr_eaf8 = SELF(str_1438),
-
-    .field_eafc = 0x00ac,
-
-    .ptr_eafe = SELF(str_1437),
-
-    .field_eb02 = 0x00ad,
-
-    .ptr_eb04 = SELF(str_1436),
-
-    .field_eb08 = 0x00ae,
-
-    .ptr_eb0a = SELF(str_1435),
-
-    .field_eb0e = 0x00af,
-
-    .pad_298 = { 0 },
-
-    .str_1435 = ALIGNED_STRING("Dire Strats                  138"),
-
-    .str_1436 = ALIGNED_STRING("Knopfler Tribute             138"),
-
-    .str_1437 = ALIGNED_STRING("Ricky's Strat                138"),
-
-    .str_1438 = ALIGNED_STRING("70's Fantasy                 138"),
-
-    .ptr_eb9e = SELF(str_1442),
-
-    .field_eba2 = 0x00b0,
-
-    .ptr_eba4 = SELF(str_1441),
-
-    .field_eba8 = 0x00b1,
-
-    .ptr_ebaa = SELF(str_1440),
-
-    .field_ebae = 0x00b2,
-
-    .ptr_ebb0 = SELF(str_1439),
-
-    .field_ebb4 = 0x00b3,
-
-    .pad_299 = { 0 },
-
-    .str_1439 = ALIGNED_STRING("Full Organ Rock              145"),
-
-    .str_1440 = ALIGNED_STRING("C.P. On Stage                145"),
-
-    .str_1441 = ALIGNED_STRING("Emerson Keys                 145"),
-
-    .str_1442 = ALIGNED_STRING("Mellow & Shuffle             145"),
-
-    .ptr_ec44 = SELF(str_1446),
-
-    .field_ec48 = 0x00b4,
-
-    .ptr_ec4a = SELF(str_1445),
-
-    .field_ec4e = 0x00b5,
-
-    .ptr_ec50 = SELF(str_1444),
-
-    .field_ec54 = 0x00b6,
-
-    .ptr_ec56 = SELF(str_1443),
-
-    .field_ec5a = 0x00b7,
-
-    .pad_300 = { 0 },
-
-    .str_1443 = ALIGNED_STRING("Shuffle Organ                144"),
-
-    .str_1444 = ALIGNED_STRING("Jump Brass                   144"),
-
-    .str_1445 = ALIGNED_STRING("Pop Leader                   144"),
-
-    .str_1446 = ALIGNED_STRING("Shuffle Synth                144"),
-
-    .ptr_ecea = SELF(str_1450),
-
-    .field_ecee = 0x00b8,
-
-    .ptr_ecf0 = SELF(str_1449),
-
-    .field_ecf4 = 0x00b9,
-
-    .ptr_ecf6 = SELF(str_1448),
-
-    .field_ecfa = 0x00ba,
-
-    .ptr_ecfc = SELF(str_1447),
-
-    .field_ed00 = 0x00bb,
-
-    .pad_301 = { 0 },
-
-    .str_1447 = ALIGNED_STRING("Sax Production               106"),
-
-    .str_1448 = ALIGNED_STRING("EP Of The 80's               106"),
-
-    .str_1449 = ALIGNED_STRING("Don't Fret!                  106"),
-
-    .str_1450 = ALIGNED_STRING("Analogue Ballad              106"),
-
-    .ptr_ed90 = SELF(str_1454),
-
-    .field_ed94 = 0x00bc,
-
-    .ptr_ed96 = SELF(str_1453),
-
-    .field_ed9a = 0x00bd,
-
-    .ptr_ed9c = SELF(str_1452),
-
-    .field_eda0 = 0x00be,
-
-    .ptr_eda2 = SELF(str_1451),
-
-    .field_eda6 = 0x00bf,
-
-    .pad_302 = { 0 },
-
-    .str_1451 = ALIGNED_STRING("Italy Pop Organ              118"),
-
-    .str_1452 = ALIGNED_STRING("Pop Angel                    118"),
-
-    .str_1453 = ALIGNED_STRING("80's Pop Sax                 118"),
-
-    .str_1454 = ALIGNED_STRING("Fade Guitar Pop              118"),
-
-    .ptr_ee36 = SELF(str_1458),
-
-    .field_ee3a = 0x00c0,
-
-    .ptr_ee3c = SELF(str_1457),
-
-    .field_ee40 = 0x00c1,
-
-    .ptr_ee42 = SELF(str_1456),
-
-    .field_ee46 = 0x00c2,
-
-    .ptr_ee48 = SELF(str_1455),
-
-    .field_ee4c = 0x00c3,
-
-    .pad_303 = { 0 },
-
-    .str_1455 = ALIGNED_STRING("Pop Bridge                   111"),
-
-    .str_1456 = ALIGNED_STRING("Pop Horns                    111"),
-
-    .str_1457 = ALIGNED_STRING("Driving Pop                  111"),
-
-    .str_1458 = ALIGNED_STRING("Pop Guitar FX                111"),
-
-    .ptr_eedc = SELF(str_1462),
-
-    .field_eee0 = 0x00c4,
-
-    .ptr_eee2 = SELF(str_1461),
-
-    .field_eee6 = 0x00c5,
-
-    .ptr_eee8 = SELF(str_1460),
-
-    .field_eeec = 0x00c6,
-
-    .ptr_eeee = SELF(str_1459),
-
-    .field_eef2 = 0x00c7,
-
-    .pad_304 = { 0 },
-
-    .str_1459 = ALIGNED_STRING("Beat Brass                   116"),
-
-    .str_1460 = ALIGNED_STRING("Rockin' Synth                116"),
-
-    .str_1461 = ALIGNED_STRING("Sax Rock                     116"),
-
-    .str_1462 = ALIGNED_STRING("Groovy Keys                  116"),
-
-    .ptr_ef82 = SELF(str_1466),
-
-    .field_ef86 = 0x00c8,
-
-    .ptr_ef88 = SELF(str_1465),
-
-    .field_ef8c = 0x00c9,
-
-    .ptr_ef8e = SELF(str_1464),
-
-    .field_ef92 = 0x00ca,
-
-    .ptr_ef94 = SELF(str_1463),
-
-    .field_ef98 = 0x00cb,
-
-    .pad_305 = { 0 },
-
-    .str_1463 = ALIGNED_STRING("Pop Orchestra                 78"),
-
-    .str_1464 = ALIGNED_STRING("Pop Starts                    78"),
-
-    .str_1465 = ALIGNED_STRING("Pop Atmosphere                78"),
-
-    .str_1466 = ALIGNED_STRING("Ballad Warmth                 78"),
-
-    .ptr_f028 = SELF(str_1470),
-
-    .field_f02c = 0x00cc,
-
-    .ptr_f02e = SELF(str_1469),
-
-    .field_f032 = 0x00cd,
-
-    .ptr_f034 = SELF(str_1468),
-
-    .field_f038 = 0x00ce,
-
-    .ptr_f03a = SELF(str_1467),
-
-    .field_f03e = 0x00cf,
-
-    .pad_306 = { 0 },
-
-    .str_1467 = ALIGNED_STRING("Everybody Rock!              131"),
-
-    .str_1468 = ALIGNED_STRING("Rolling Wheels               131"),
-
-    .str_1469 = ALIGNED_STRING("88 Rock Keys                 131"),
-
-    .str_1470 = ALIGNED_STRING("Stage Rock Band              131"),
-
-    .ptr_f0ce = SELF(str_1474),
-
-    .field_f0d2 = 0x00d0,
-
-    .ptr_f0d4 = SELF(str_1473),
-
-    .field_f0d8 = 0x00d1,
-
-    .ptr_f0da = SELF(str_1472),
-
-    .field_f0de = 0x00d2,
-
-    .ptr_f0e0 = SELF(str_1471),
-
-    .field_f0e4 = 0x00d3,
-
-    .pad_307 = { 0 },
-
-    .str_1471 = ALIGNED_STRING("Over The Top Wah             142"),
-
-    .str_1472 = ALIGNED_STRING("Deep Hammond                 142"),
-
-    .str_1473 = ALIGNED_STRING("Distort It!                  142"),
-
-    .str_1474 = ALIGNED_STRING("Solid Feedback               142"),
-
-    .ptr_f174 = SELF(str_1478),
-
-    .field_f178 = 0x00d4,
-
-    .ptr_f17a = SELF(str_1477),
-
-    .field_f17e = 0x00d5,
-
-    .ptr_f180 = SELF(str_1476),
-
-    .field_f184 = 0x00d6,
-
-    .ptr_f186 = SELF(str_1475),
-
-    .field_f18a = 0x00d7,
-
-    .pad_308 = { 0 },
-
-    .str_1475 = ALIGNED_STRING("Rock Fanfare                 148"),
-
-    .str_1476 = ALIGNED_STRING("Roaring Tubes                148"),
-
-    .str_1477 = ALIGNED_STRING("Hard Analogue                148"),
-
-    .str_1478 = ALIGNED_STRING("Clean Metal                  148"),
-
-    .ptr_f21a = SELF(str_1482),
-
-    .field_f21e = 0x00d8,
-
-    .ptr_f220 = SELF(str_1481),
-
-    .field_f224 = 0x00d9,
-
-    .ptr_f226 = SELF(str_1480),
-
-    .field_f22a = 0x00da,
-
-    .ptr_f22c = SELF(str_1479),
-
-    .field_f230 = 0x00db,
-
-    .pad_309 = { 0 },
-
-    .str_1479 = ALIGNED_STRING("Ballad Overdrive              74"),
-
-    .str_1480 = ALIGNED_STRING("Synth For Rock                74"),
-
-    .str_1481 = ALIGNED_STRING("Rock B3 Ballad                74"),
-
-    .str_1482 = ALIGNED_STRING("Heavy Harmonica               74"),
-
-    .ptr_f2c0 = SELF(str_1486),
-
-    .field_f2c4 = 0x00dc,
-
-    .ptr_f2c6 = SELF(str_1485),
-
-    .field_f2ca = 0x00dd,
-
-    .ptr_f2cc = SELF(str_1484),
-
-    .field_f2d0 = 0x00de,
-
-    .ptr_f2d2 = SELF(str_1483),
-
-    .field_f2d6 = 0x00df,
-
-    .pad_310 = { 0 },
-
-    .str_1483 = ALIGNED_STRING("Digital Swing                 92"),
-
-    .str_1484 = ALIGNED_STRING("Cool Midi Grand               92"),
-
-    .str_1485 = ALIGNED_STRING("L.A. Warmth                   92"),
-
-    .str_1486 = ALIGNED_STRING("Acoustic Groove               92"),
-
-    .ptr_f366 = SELF(str_1490),
-
-    .field_f36a = 0x00e0,
-
-    .ptr_f36c = SELF(str_1489),
-
-    .field_f370 = 0x00e1,
-
-    .ptr_f372 = SELF(str_1488),
-
-    .field_f376 = 0x00e2,
-
-    .ptr_f378 = SELF(str_1487),
-
-    .field_f37c = 0x00e3,
-
-    .pad_311 = { 0 },
-
-    .str_1487 = ALIGNED_STRING("Take It Easy!                 62"),
-
-    .str_1488 = ALIGNED_STRING("Blues Harp Swing              62"),
-
-    .str_1489 = ALIGNED_STRING("Like Sunday?                  62"),
-
-    .str_1490 = ALIGNED_STRING("Mellow Groove                 62"),
-
-    .ptr_f40c = SELF(str_1494),
-
-    .field_f410 = 0x00e4,
-
-    .ptr_f412 = SELF(str_1493),
-
-    .field_f416 = 0x00e5,
-
-    .ptr_f418 = SELF(str_1492),
-
-    .field_f41c = 0x00e6,
-
-    .ptr_f41e = SELF(str_1491),
-
-    .field_f422 = 0x00e7,
-
-    .pad_312 = { 0 },
-
-    .str_1491 = ALIGNED_STRING("L.A. Strings                  92"),
-
-    .str_1492 = ALIGNED_STRING("Fusion Talk                   92"),
-
-    .str_1493 = ALIGNED_STRING("Synth Guitar Pop              92"),
-
-    .str_1494 = ALIGNED_STRING("Al's Lead                     92"),
-
-    .ptr_f4b2 = SELF(str_1498),
-
-    .field_f4b6 = 0x00e8,
-
-    .ptr_f4b8 = SELF(str_1497),
-
-    .field_f4bc = 0x00e9,
-
-    .ptr_f4be = SELF(str_1496),
-
-    .field_f4c2 = 0x00ea,
-
-    .ptr_f4c4 = SELF(str_1495),
-
-    .field_f4c8 = 0x00eb,
-
-    .pad_313 = { 0 },
-
-    .str_1495 = ALIGNED_STRING("Uptown Horns                 100"),
-
-    .str_1496 = ALIGNED_STRING("Wide Hornsection             100"),
-
-    .str_1497 = ALIGNED_STRING("Cool Guitar Duet             100"),
-
-    .str_1498 = ALIGNED_STRING("Mad Tabs                     100"),
-
-    .ptr_f558 = SELF(str_1502),
-
-    .field_f55c = 0x00ec,
-
-    .ptr_f55e = SELF(str_1501),
-
-    .field_f562 = 0x00ed,
-
-    .ptr_f564 = SELF(str_1500),
-
-    .field_f568 = 0x00ee,
-
-    .ptr_f56a = SELF(str_1499),
-
-    .field_f56e = 0x00ef,
-
-    .pad_314 = { 0 },
-
-    .str_1499 = ALIGNED_STRING("Key Grooves                  102"),
-
-    .str_1500 = ALIGNED_STRING("Cool Pop Guitar              102"),
-
-    .str_1501 = ALIGNED_STRING("George B Unison              102"),
-
-    .str_1502 = ALIGNED_STRING("Groove Harp                  102"),
-
-    .ptr_f5fe = SELF(str_1506),
-
-    .field_f602 = 0x00f0,
-
-    .ptr_f604 = SELF(str_1505),
-
-    .field_f608 = 0x00f1,
-
-    .ptr_f60a = SELF(str_1504),
-
-    .field_f60e = 0x00f2,
-
-    .ptr_f610 = SELF(str_1503),
-
-    .field_f614 = 0x00f3,
-
-    .pad_315 = { 0 },
-
-    .str_1503 = ALIGNED_STRING("Drawbar Funk                  85"),
-
-    .str_1504 = ALIGNED_STRING("L.A. Synth                    85"),
-
-    .str_1505 = ALIGNED_STRING("West Coast Sax                85"),
-
-    .str_1506 = ALIGNED_STRING("Benson Groove                 85"),
-
-    .ptr_f6a4 = SELF(str_1510),
-
-    .field_f6a8 = 0x00f4,
-
-    .ptr_f6aa = SELF(str_1509),
-
-    .field_f6ae = 0x00f5,
-
-    .ptr_f6b0 = SELF(str_1508),
-
-    .field_f6b4 = 0x00f6,
-
-    .ptr_f6b6 = SELF(str_1507),
-
-    .field_f6ba = 0x00f7,
-
-    .pad_316 = { 0 },
-
-    .str_1507 = ALIGNED_STRING("Old & New Funk                96"),
-
-    .str_1508 = ALIGNED_STRING("New Scat Funk                 96"),
-
-    .str_1509 = ALIGNED_STRING("Funk Keys                     96"),
-
-    .str_1510 = ALIGNED_STRING("Al J's Synth                  96"),
-
-    .ptr_f74a = SELF(str_1514),
-
-    .field_f74e = 0x00f8,
-
-    .ptr_f750 = SELF(str_1513),
-
-    .field_f754 = 0x00f9,
-
-    .ptr_f756 = SELF(str_1512),
-
-    .field_f75a = 0x00fa,
-
-    .ptr_f75c = SELF(str_1511),
-
-    .field_f760 = 0x00fb,
-
-    .pad_317 = { 0 },
-
-    .str_1511 = ALIGNED_STRING("Groovin' Horns                97"),
-
-    .str_1512 = ALIGNED_STRING("80's Synth Funk               97"),
-
-    .str_1513 = ALIGNED_STRING("Chiff-Funk                    97"),
-
-    .str_1514 = ALIGNED_STRING("Yuppie Keys                   97"),
-
-    .ptr_f7f0 = SELF(str_1518),
-
-    .field_f7f4 = 0x00fc,
-
-    .ptr_f7f6 = SELF(str_1517),
-
-    .field_f7fa = 0x00fd,
-
-    .ptr_f7fc = SELF(str_1516),
-
-    .field_f800 = 0x00fe,
-
-    .ptr_f802 = SELF(str_1515),
-
-    .field_f806 = 0x00ff,
-
-    .pad_318 = { 0 },
-
-    .str_1515 = ALIGNED_STRING("Sweeping Bridge              110"),
-
-    .str_1516 = ALIGNED_STRING("Olympic Groove               110"),
-
-    .str_1517 = ALIGNED_STRING("Synth Funk                   110"),
-
-    .str_1518 = ALIGNED_STRING("Funky Talk                   110"),
-
-    .ptr_f896 = SELF(str_1522),
-
-    .field_f89a = 0x0100,
-
-    .ptr_f89c = SELF(str_1521),
-
-    .field_f8a0 = 0x0101,
-
-    .ptr_f8a2 = SELF(str_1520),
-
-    .field_f8a6 = 0x0102,
-
-    .ptr_f8a8 = SELF(str_1519),
-
-    .field_f8ac = 0x0103,
-
-    .pad_319 = { 0 },
-
-    .str_1519 = ALIGNED_STRING("Space Dance                  127"),
-
-    .str_1520 = ALIGNED_STRING("Retro Groove                 127"),
-
-    .str_1521 = ALIGNED_STRING("Dance Floor                  127"),
-
-    .str_1522 = ALIGNED_STRING("London Scene                 127"),
-
-    .ptr_f93c = SELF(str_1526),
-
-    .field_f940 = 0x0104,
-
-    .ptr_f942 = SELF(str_1525),
-
-    .field_f946 = 0x0105,
-
-    .ptr_f948 = SELF(str_1524),
-
-    .field_f94c = 0x0106,
-
-    .ptr_f94e = SELF(str_1523),
-
-    .field_f952 = 0x0107,
-
-    .pad_320 = { 0 },
-
-    .str_1523 = ALIGNED_STRING("Retro Dance                  121"),
-
-    .str_1524 = ALIGNED_STRING("90's Synth Dance             121"),
-
-    .str_1525 = ALIGNED_STRING("Metalic Dance                121"),
-
-    .str_1526 = ALIGNED_STRING("Old Dance Hit                121"),
-
-    .ptr_f9e2 = SELF(str_1530),
-
-    .field_f9e6 = 0x0108,
-
-    .ptr_f9e8 = SELF(str_1529),
-
-    .field_f9ec = 0x0109,
-
-    .ptr_f9ee = SELF(str_1528),
-
-    .field_f9f2 = 0x010a,
-
-    .ptr_f9f4 = SELF(str_1527),
-
-    .field_f9f8 = 0x010b,
-
-    .pad_321 = { 0 },
-
-    .str_1527 = ALIGNED_STRING("House Keys                   125"),
-
-    .str_1528 = ALIGNED_STRING("House & Garden               125"),
-
-    .str_1529 = ALIGNED_STRING("Poly Dance                   125"),
-
-    .str_1530 = ALIGNED_STRING("House Piano                  125"),
-
-    .ptr_fa88 = SELF(str_1534),
-
-    .field_fa8c = 0x010c,
-
-    .ptr_fa8e = SELF(str_1533),
-
-    .field_fa92 = 0x010d,
-
-    .ptr_fa94 = SELF(str_1532),
-
-    .field_fa98 = 0x010e,
-
-    .ptr_fa9a = SELF(str_1531),
-
-    .field_fa9e = 0x010f,
-
-    .pad_322 = { 0 },
-
-    .str_1531 = ALIGNED_STRING("Techno Angle                 146"),
-
-    .str_1532 = ALIGNED_STRING("Rave Pad                     146"),
-
-    .str_1533 = ALIGNED_STRING("Atmo Boom Boom               146"),
-
-    .str_1534 = ALIGNED_STRING("Dance Squares                146"),
-
-    .ptr_fb2e = SELF(str_1538),
-
-    .field_fb32 = 0x0110,
-
-    .ptr_fb34 = SELF(str_1537),
-
-    .field_fb38 = 0x0111,
-
-    .ptr_fb3a = SELF(str_1536),
-
-    .field_fb3e = 0x0112,
-
-    .ptr_fb40 = SELF(str_1535),
-
-    .field_fb44 = 0x0113,
-
-    .pad_323 = { 0 },
-
-    .str_1535 = ALIGNED_STRING("Mirrorball Dance             118"),
-
-    .str_1536 = ALIGNED_STRING("Disco-Techni                 118"),
-
-    .str_1537 = ALIGNED_STRING("Disco Pads                   118"),
-
-    .str_1538 = ALIGNED_STRING("80's Piano Disco             118"),
-
-    .ptr_fbd4 = SELF(str_1542),
-
-    .field_fbd8 = 0x0114,
-
-    .ptr_fbda = SELF(str_1541),
-
-    .field_fbde = 0x0115,
-
-    .ptr_fbe0 = SELF(str_1540),
-
-    .field_fbe4 = 0x0116,
-
-    .ptr_fbe6 = SELF(str_1539),
-
-    .field_fbea = 0x0117,
-
-    .pad_324 = { 0 },
-
-    .str_1539 = ALIGNED_STRING("80's Dancefloor              115"),
-
-    .str_1540 = ALIGNED_STRING("Travolta Dance               115"),
-
-    .str_1541 = ALIGNED_STRING("New York Disco               115"),
-
-    .str_1542 = ALIGNED_STRING("Saturday Night               115"),
-
-    .ptr_fc7a = SELF(str_1546),
-
-    .field_fc7e = 0x0118,
-
-    .ptr_fc80 = SELF(str_1545),
-
-    .field_fc84 = 0x0119,
-
-    .ptr_fc86 = SELF(str_1544),
-
-    .field_fc8a = 0x011a,
-
-    .ptr_fc8c = SELF(str_1543),
-
-    .field_fc90 = 0x011b,
-
-    .pad_325 = { 0 },
-
-    .str_1543 = ALIGNED_STRING("Disco Fever                  121"),
-
-    .str_1544 = ALIGNED_STRING("Cool Disco Night             121"),
-
-    .str_1545 = ALIGNED_STRING("English Hits                 121"),
-
-    .str_1546 = ALIGNED_STRING("Disco Agogo                  121"),
-
-    .ptr_fd20 = SELF(str_1550),
-
-    .field_fd24 = 0x011c,
-
-    .ptr_fd26 = SELF(str_1549),
-
-    .field_fd2a = 0x011d,
-
-    .ptr_fd2c = SELF(str_1548),
-
-    .field_fd30 = 0x011e,
-
-    .ptr_fd32 = SELF(str_1547),
-
-    .field_fd36 = 0x011f,
-
-    .pad_326 = { 0 },
-
-    .str_1547 = ALIGNED_STRING("Disco Metal                  124"),
-
-    .str_1548 = ALIGNED_STRING("Disco Synths                 124"),
-
-    .str_1549 = ALIGNED_STRING("A Case For Dance             124"),
-
-    .str_1550 = ALIGNED_STRING("Funky Stuff                  124"),
-
-    .ptr_fdc6 = SELF(str_1554),
-
-    .field_fdca = 0x0120,
-
-    .ptr_fdcc = SELF(str_1553),
-
-    .field_fdd0 = 0x0121,
-
-    .ptr_fdd2 = SELF(str_1552),
-
-    .field_fdd6 = 0x0122,
-
-    .ptr_fdd8 = SELF(str_1551),
-
-    .field_fddc = 0x0123,
-
-    .pad_327 = { 0 },
-
-    .str_1551 = ALIGNED_STRING("Voco-Dance                   108"),
-
-    .str_1552 = ALIGNED_STRING("Hip-Hop-Echoes               108"),
-
-    .str_1553 = ALIGNED_STRING("Hip - Pad                    108"),
-
-    .str_1554 = ALIGNED_STRING("Hip Keys                     108"),
-
-    .ptr_fe6c = SELF(str_1558),
-
-    .field_fe70 = 0x0124,
-
-    .ptr_fe72 = SELF(str_1557),
-
-    .field_fe76 = 0x0125,
-
-    .ptr_fe78 = SELF(str_1556),
-
-    .field_fe7c = 0x0126,
-
-    .ptr_fe7e = SELF(str_1555),
-
-    .field_fe82 = 0x0127,
-
-    .pad_328 = { 0 },
-
-    .str_1555 = ALIGNED_STRING("Disco Horns                  108"),
-
-    .str_1556 = ALIGNED_STRING("Digi Dancefloor              108"),
-
-    .str_1557 = ALIGNED_STRING("Synth of The 90s             108"),
-
-    .str_1558 = ALIGNED_STRING("Brassy Dance                 108"),
-
-    .ptr_ff12 = SELF(str_1562),
-
-    .field_ff16 = 0x0128,
-
-    .ptr_ff18 = SELF(str_1561),
-
-    .field_ff1c = 0x0129,
-
-    .ptr_ff1e = SELF(str_1560),
-
-    .field_ff22 = 0x012a,
-
-    .ptr_ff24 = SELF(str_1559),
-
-    .field_ff28 = 0x012b,
-
-    .pad_329 = { 0 },
-
-    .str_1559 = ALIGNED_STRING("Synth Rapper                  96"),
-
-    .str_1560 = ALIGNED_STRING("Hit The Groove                96"),
-
-    .str_1561 = ALIGNED_STRING("Street Talk                   96"),
-
-    .str_1562 = ALIGNED_STRING("Pump The Bass                 96"),
-
-    .ptr_ffb8 = SELF(str_1566),
-
-    .field_ffbc = 0x012c,
-
-    .ptr_ffbe = SELF(str_1565),
-
-    .field_ffc2 = 0x012d,
-
-    .ptr_ffc4 = SELF(str_1564),
-
-    .field_ffc8 = 0x012e,
-
-    .ptr_ffca = SELF(str_1563),
-
-    .field_ffce = 0x012f,
-
-    .pad_330 = { 0 },
-
-    .str_1563 = ALIGNED_STRING("Dance Island                 104"),
-
-    .str_1564 = ALIGNED_STRING("Caribbean Drive              104"),
-
-    .str_1565 = ALIGNED_STRING("Macadancer                   104"),
-
-    .str_1566 = ALIGNED_STRING("Line Up Dance                104"),
-
-    .ptr_1005e = SELF(str_1570),
-
-    .field_10062 = 0x0130,
-
-    .ptr_10064 = SELF(str_1569),
-
-    .field_10068 = 0x0131,
-
-    .ptr_1006a = SELF(str_1568),
-
-    .field_1006e = 0x0132,
-
-    .ptr_10070 = SELF(str_1567),
-
-    .field_10074 = 0x0133,
-
-    .pad_331 = { 0 },
-
-    .str_1567 = ALIGNED_STRING("Olympic Dance                101"),
-
-    .str_1568 = ALIGNED_STRING("Rasta Jambo                  101"),
-
-    .str_1569 = ALIGNED_STRING("Daa Daa Dance                101"),
-
-    .str_1570 = ALIGNED_STRING("Coco Dance                   101"),
-
-    .ptr_10104 = SELF(str_1574),
-
-    .field_10108 = 0x0134,
-
-    .ptr_1010a = SELF(str_1573),
-
-    .field_1010e = 0x0135,
-
-    .ptr_10110 = SELF(str_1572),
-
-    .field_10114 = 0x0136,
-
-    .ptr_10116 = SELF(str_1571),
-
-    .field_1011a = 0x0137,
-
-    .pad_332 = { 0 },
-
-    .str_1571 = ALIGNED_STRING("Aye Aye Caramba              125"),
-
-    .str_1572 = ALIGNED_STRING("Joao's Rio-Disco             125"),
-
-    .str_1573 = ALIGNED_STRING("Dancing Flutes               125"),
-
-    .str_1574 = ALIGNED_STRING("Disco Strings                125"),
-
-    .ptr_101aa = SELF(str_1578),
-
-    .field_101ae = 0x0138,
-
-    .ptr_101b0 = SELF(str_1577),
-
-    .field_101b4 = 0x0139,
-
-    .ptr_101b6 = SELF(str_1576),
-
-    .field_101ba = 0x013a,
-
-    .ptr_101bc = SELF(str_1575),
-
-    .field_101c0 = 0x013b,
-
-    .pad_333 = { 0 },
-
-    .str_1575 = ALIGNED_STRING("Dance Steel                  101"),
-
-    .str_1576 = ALIGNED_STRING("Dance Vocals                 101"),
-
-    .str_1577 = ALIGNED_STRING("Reggae Talk                  101"),
-
-    .str_1578 = ALIGNED_STRING("Reggae Dance Hit             101"),
-
-    .ptr_10250 = SELF(str_1582),
-
-    .field_10254 = 0x013c,
-
-    .ptr_10256 = SELF(str_1581),
-
-    .field_1025a = 0x013d,
-
-    .ptr_1025c = SELF(str_1580),
-
-    .field_10260 = 0x013e,
-
-    .ptr_10262 = SELF(str_1579),
-
-    .field_10266 = 0x013f,
-
-    .pad_334 = { 0 },
-
-    .str_1579 = ALIGNED_STRING("Festival Amigos              116"),
-
-    .str_1580 = ALIGNED_STRING("Piano Cabana                 116"),
-
-    .str_1581 = ALIGNED_STRING("Party In Rio                 116"),
-
-    .str_1582 = ALIGNED_STRING("Alto Samba                   116"),
-
-    .ptr_102f6 = SELF(str_1586),
-
-    .field_102fa = 0x0140,
-
-    .ptr_102fc = SELF(str_1585),
-
-    .field_10300 = 0x0141,
-
-    .ptr_10302 = SELF(str_1584),
-
-    .field_10306 = 0x0142,
-
-    .ptr_10308 = SELF(str_1583),
-
-    .field_1030c = 0x0143,
-
-    .pad_335 = { 0 },
-
-    .str_1583 = ALIGNED_STRING("Techno Fiddle                124"),
-
-    .str_1584 = ALIGNED_STRING("Dance Surround               124"),
-
-    .str_1585 = ALIGNED_STRING("New Square Dance             124"),
-
-    .str_1586 = ALIGNED_STRING("Dance Leader                 124"),
-
-    .ptr_1039c = SELF(str_1590),
-
-    .field_103a0 = 0x0144,
-
-    .ptr_103a2 = SELF(str_1589),
-
-    .field_103a6 = 0x0145,
-
-    .ptr_103a8 = SELF(str_1588),
-
-    .field_103ac = 0x0146,
-
-    .ptr_103ae = SELF(str_1587),
-
-    .field_103b2 = 0x0147,
-
-    .pad_336 = { 0 },
-
-    .str_1587 = ALIGNED_STRING("James At Last                120"),
-
-    .str_1588 = ALIGNED_STRING("Nonstop Dancing              120"),
-
-    .str_1589 = ALIGNED_STRING("Last Starparade!             120"),
-
-    .str_1590 = ALIGNED_STRING("Last At First                120"),
-
-    .ptr_10442 = SELF(str_1594),
-
-    .field_10446 = 0x0148,
-
-    .ptr_10448 = SELF(str_1593),
-
-    .field_1044c = 0x0149,
-
-    .ptr_1044e = SELF(str_1592),
-
-    .field_10452 = 0x014a,
-
-    .ptr_10454 = SELF(str_1591),
-
-    .field_10458 = 0x014b,
-
-    .pad_337 = { 0 },
-
-    .str_1591 = ALIGNED_STRING("The Party Band               111"),
-
-    .str_1592 = ALIGNED_STRING("James' Orchestra             111"),
-
-    .str_1593 = ALIGNED_STRING("The Last Brass               111"),
-
-    .str_1594 = ALIGNED_STRING("Party Flautist               111"),
-
-    .ptr_104e8 = SELF(str_1598),
-
-    .field_104ec = 0x014c,
-
-    .ptr_104ee = SELF(str_1597),
-
-    .field_104f2 = 0x014d,
-
-    .ptr_104f4 = SELF(str_1596),
-
-    .field_104f8 = 0x014e,
-
-    .ptr_104fa = SELF(str_1595),
-
-    .field_104fe = 0x014f,
-
-    .pad_338 = { 0 },
-
-    .str_1595 = ALIGNED_STRING("German-HitParade             120"),
-
-    .str_1596 = ALIGNED_STRING("Flippers-Guitars             120"),
-
-    .str_1597 = ALIGNED_STRING("Ricky K.Pop                  120"),
-
-    .str_1598 = ALIGNED_STRING("Ibo To Ibiza!                120"),
-
-    .ptr_1058e = SELF(str_1602),
-
-    .field_10592 = 0x0150,
-
-    .ptr_10594 = SELF(str_1601),
-
-    .field_10598 = 0x0151,
-
-    .ptr_1059a = SELF(str_1600),
-
-    .field_1059e = 0x0152,
-
-    .ptr_105a0 = SELF(str_1599),
-
-    .field_105a4 = 0x0153,
-
-    .pad_339 = { 0 },
-
-    .str_1599 = ALIGNED_STRING("KirmesMusikanten             125"),
-
-    .str_1600 = ALIGNED_STRING("Ady's PartyOrgan             125"),
-
-    .str_1601 = ALIGNED_STRING("German FolkParty             125"),
-
-    .str_1602 = ALIGNED_STRING("Happy Woodpecker             125"),
-
-    .ptr_10634 = SELF(str_1606),
-
-    .field_10638 = 0x0154,
-
-    .ptr_1063a = SELF(str_1605),
-
-    .field_1063e = 0x0155,
-
-    .ptr_10640 = SELF(str_1604),
-
-    .field_10644 = 0x0156,
-
-    .ptr_10646 = SELF(str_1603),
-
-    .field_1064a = 0x0157,
-
-    .pad_340 = { 0 },
-
-    .str_1603 = ALIGNED_STRING("Fair Sea Organ               125"),
-
-    .str_1604 = ALIGNED_STRING("Franz L's Organ              125"),
-
-    .str_1605 = ALIGNED_STRING("Pop Of The Bells             125"),
-
-    .str_1606 = ALIGNED_STRING("Piccolo Pop                  125"),
-
-    .ptr_106da = SELF(str_1610),
-
-    .field_106de = 0x0158,
-
-    .ptr_106e0 = SELF(str_1609),
-
-    .field_106e4 = 0x0159,
-
-    .ptr_106e6 = SELF(str_1608),
-
-    .field_106ea = 0x015a,
-
-    .ptr_106ec = SELF(str_1607),
-
-    .field_106f0 = 0x015b,
-
-    .pad_341 = { 0 },
-
-    .str_1607 = ALIGNED_STRING("Bridge Party                 116"),
-
-    .str_1608 = ALIGNED_STRING("No Lyrics Needed             116"),
-
-    .str_1609 = ALIGNED_STRING("Song Contest Hit             116"),
-
-    .str_1610 = ALIGNED_STRING("Puppet March                 116"),
-
-    .ptr_10780 = SELF(str_1614),
-
-    .field_10784 = 0x015c,
-
-    .ptr_10786 = SELF(str_1613),
-
-    .field_1078a = 0x015d,
-
-    .ptr_1078c = SELF(str_1612),
-
-    .field_10790 = 0x015e,
-
-    .ptr_10792 = SELF(str_1611),
-
-    .field_10796 = 0x015f,
-
-    .pad_342 = { 0 },
-
-    .str_1611 = ALIGNED_STRING("Party Space                  120"),
-
-    .str_1612 = ALIGNED_STRING("String Pops                  120"),
-
-    .str_1613 = ALIGNED_STRING("Party Accordion              120"),
-
-    .str_1614 = ALIGNED_STRING("Pop Accordion                120"),
-
-    .ptr_10826 = SELF(str_1618),
-
-    .field_1082a = 0x0160,
-
-    .ptr_1082c = SELF(str_1617),
-
-    .field_10830 = 0x0161,
-
-    .ptr_10832 = SELF(str_1616),
-
-    .field_10836 = 0x0162,
-
-    .ptr_10838 = SELF(str_1615),
-
-    .field_1083c = 0x0163,
-
-    .pad_343 = { 0 },
-
-    .str_1615 = ALIGNED_STRING("German Party Hit             111"),
-
-    .str_1616 = ALIGNED_STRING("Orgel Pops                   111"),
-
-    .str_1617 = ALIGNED_STRING("Party Pop Stack              111"),
-
-    .str_1618 = ALIGNED_STRING("Synth Party                  111"),
-
-    .ptr_108cc = SELF(str_1622),
-
-    .field_108d0 = 0x0164,
-
-    .ptr_108d2 = SELF(str_1621),
-
-    .field_108d6 = 0x0165,
-
-    .ptr_108d8 = SELF(str_1620),
-
-    .field_108dc = 0x0166,
-
-    .ptr_108de = SELF(str_1619),
-
-    .field_108e2 = 0x0167,
-
-    .pad_344 = { 0 },
-
-    .str_1619 = ALIGNED_STRING("50's Section                 133"),
-
-    .str_1620 = ALIGNED_STRING("Solid Gold Oldie             133"),
-
-    .str_1621 = ALIGNED_STRING("Anka Rock                    133"),
-
-    .str_1622 = ALIGNED_STRING("The Old Bars                 133"),
-
-    .ptr_10972 = SELF(str_1626),
-
-    .field_10976 = 0x0168,
-
-    .ptr_10978 = SELF(str_1625),
-
-    .field_1097c = 0x0169,
-
-    .ptr_1097e = SELF(str_1624),
-
-    .field_10982 = 0x016a,
-
-    .ptr_10984 = SELF(str_1623),
-
-    .field_10988 = 0x016b,
-
-    .pad_345 = { 0 },
-
-    .str_1623 = ALIGNED_STRING("Party Partners               115"),
-
-    .str_1624 = ALIGNED_STRING("Alto Duet Party              115"),
-
-    .str_1625 = ALIGNED_STRING("Accordion Fun                115"),
-
-    .str_1626 = ALIGNED_STRING("Party Register               115"),
-
-    .ptr_10a18 = SELF(str_1630),
-
-    .field_10a1c = 0x016c,
-
-    .ptr_10a1e = SELF(str_1629),
-
-    .field_10a22 = 0x016d,
-
-    .ptr_10a24 = SELF(str_1628),
-
-    .field_10a28 = 0x016e,
-
-    .ptr_10a2a = SELF(str_1627),
-
-    .field_10a2e = 0x016f,
-
-    .pad_346 = { 0 },
-
-    .str_1627 = ALIGNED_STRING("Shake It All....             162"),
-
-    .str_1628 = ALIGNED_STRING("Dancing Bellows              162"),
-
-    .str_1629 = ALIGNED_STRING("Old Party Dance              162"),
-
-    .str_1630 = ALIGNED_STRING("Turn                         162"),
-
-    .ptr_10abe = SELF(str_1634),
-
-    .field_10ac2 = 0x0170,
-
-    .ptr_10ac4 = SELF(str_1633),
-
-    .field_10ac8 = 0x0171,
-
-    .ptr_10aca = SELF(str_1632),
-
-    .field_10ace = 0x0172,
-
-    .ptr_10ad0 = SELF(str_1631),
-
-    .field_10ad4 = 0x0173,
-
-    .pad_347 = { 0 },
-
-    .str_1631 = ALIGNED_STRING("Accordiolas!!                100"),
-
-    .str_1632 = ALIGNED_STRING("Chords & Birds               100"),
-
-    .str_1633 = ALIGNED_STRING("Bird-Voices                  100"),
-
-    .str_1634 = ALIGNED_STRING("Birdy-Accordion              100"),
-
-    .ptr_10b64 = SELF(str_1638),
-
-    .field_10b68 = 0x0174,
-
-    .ptr_10b6a = SELF(str_1637),
-
-    .field_10b6e = 0x0175,
-
-    .ptr_10b70 = SELF(str_1636),
-
-    .field_10b74 = 0x0176,
-
-    .ptr_10b76 = SELF(str_1635),
-
-    .field_10b7a = 0x0177,
-
-    .pad_348 = { 0 },
-
-    .str_1635 = ALIGNED_STRING("London's Bigbone             134"),
-
-    .str_1636 = ALIGNED_STRING("Pub Piano                    134"),
-
-    .str_1637 = ALIGNED_STRING("Banjo Sing Song              134"),
-
-    .str_1638 = ALIGNED_STRING("Cockney Clarinet             134"),
-
-    .ptr_10c0a = SELF(str_1642),
-
-    .field_10c0e = 0x0178,
-
-    .ptr_10c10 = SELF(str_1641),
-
-    .field_10c14 = 0x0179,
-
-    .ptr_10c16 = SELF(str_1640),
-
-    .field_10c1a = 0x017a,
-
-    .ptr_10c1c = SELF(str_1639),
-
-    .field_10c20 = 0x017b,
-
-    .pad_349 = { 0 },
-
-    .str_1639 = ALIGNED_STRING("Dance Craze Sax              132"),
-
-    .str_1640 = ALIGNED_STRING("88 In Line!                  132"),
-
-    .str_1641 = ALIGNED_STRING("Country Line                 132"),
-
-    .str_1642 = ALIGNED_STRING("Fiddle Dance                 132"),
-
-    .ptr_10cb0 = SELF(str_1646),
-
-    .field_10cb4 = 0x017c,
-
-    .ptr_10cb6 = SELF(str_1645),
-
-    .field_10cba = 0x017d,
-
-    .ptr_10cbc = SELF(str_1644),
-
-    .field_10cc0 = 0x017e,
-
-    .ptr_10cc2 = SELF(str_1643),
-
-    .field_10cc6 = 0x017f,
-
-    .pad_350 = { 0 },
-
-    .str_1643 = ALIGNED_STRING("Symphony Hoedown             206"),
-
-    .str_1644 = ALIGNED_STRING("Hoedown Frets                206"),
-
-    .str_1645 = ALIGNED_STRING("Oklahoma Dance               206"),
-
-    .str_1646 = ALIGNED_STRING("Country Dance                206"),
-
-    .ptr_10d56 = SELF(str_1650),
-
-    .field_10d5a = 0x0180,
-
-    .ptr_10d5c = SELF(str_1649),
-
-    .field_10d60 = 0x0181,
-
-    .ptr_10d62 = SELF(str_1648),
-
-    .field_10d66 = 0x0182,
-
-    .ptr_10d68 = SELF(str_1647),
-
-    .field_10d6c = 0x0183,
-
-    .pad_351 = { 0 },
-
-    .str_1647 = ALIGNED_STRING("Speedy Fiddle                138"),
-
-    .str_1648 = ALIGNED_STRING("Techno Ranger                138"),
-
-    .str_1649 = ALIGNED_STRING("Dance Cowboy                 138"),
-
-    .str_1650 = ALIGNED_STRING("Banjo Dance                  138"),
-
-    .ptr_10dfc = SELF(str_1654),
-
-    .field_10e00 = 0x0184,
-
-    .ptr_10e02 = SELF(str_1653),
-
-    .field_10e06 = 0x0185,
-
-    .ptr_10e08 = SELF(str_1652),
-
-    .field_10e0c = 0x0186,
-
-    .ptr_10e0e = SELF(str_1651),
-
-    .field_10e12 = 0x0187,
-
-    .pad_352 = { 0 },
-
-    .str_1651 = ALIGNED_STRING("Oktober Party                150"),
-
-    .str_1652 = ALIGNED_STRING("Schurzenjager                150"),
-
-    .str_1653 = ALIGNED_STRING("The Zillertaler              150"),
-
-    .str_1654 = ALIGNED_STRING("Auf Gehts!                   150"),
-
-    .ptr_10ea2 = SELF(str_1658),
-
-    .field_10ea6 = 0x0188,
-
-    .ptr_10ea8 = SELF(str_1657),
-
-    .field_10eac = 0x0189,
-
-    .ptr_10eae = SELF(str_1656),
-
-    .field_10eb2 = 0x018a,
-
-    .ptr_10eb4 = SELF(str_1655),
-
-    .field_10eb8 = 0x018b,
-
-    .pad_353 = { 0 },
-
-    .str_1655 = ALIGNED_STRING("Bavaria To Tyrol             195"),
-
-    .str_1656 = ALIGNED_STRING("Munich Brass                 195"),
-
-    .str_1657 = ALIGNED_STRING("Bavarian Zither              195"),
-
-    .str_1658 = ALIGNED_STRING("Sepp's Clarinet              195"),
-
-    .ptr_10f48 = SELF(str_1662),
-
-    .field_10f4c = 0x018c,
-
-    .ptr_10f4e = SELF(str_1661),
-
-    .field_10f52 = 0x018d,
-
-    .ptr_10f54 = SELF(str_1660),
-
-    .field_10f58 = 0x018e,
-
-    .ptr_10f5a = SELF(str_1659),
-
-    .field_10f5e = 0x018f,
-
-    .pad_354 = { 0 },
-
-    .str_1659 = ALIGNED_STRING("Miseltoe Melody               75"),
-
-    .str_1660 = ALIGNED_STRING("Carol Singers                 75"),
-
-    .str_1661 = ALIGNED_STRING("Yuletide Strings              75"),
-
-    .str_1662 = ALIGNED_STRING("Santa's Helpers               75"),
-
-    .ptr_10fee = SELF(str_1666),
-
-    .field_10ff2 = 0x0190,
-
-    .ptr_10ff4 = SELF(str_1665),
-
-    .field_10ff8 = 0x0191,
-
-    .ptr_10ffa = SELF(str_1664),
-
-    .field_10ffe = 0x0192,
-
-    .ptr_11000 = SELF(str_1663),
-
-    .field_11004 = 0x0193,
-
-    .pad_355 = { 0 },
-
-    .str_1663 = ALIGNED_STRING("Soulful Wha Wha              140"),
-
-    .str_1664 = ALIGNED_STRING("Bad Soul Bars                140"),
-
-    .str_1665 = ALIGNED_STRING("Saxy Soul                    140"),
-
-    .str_1666 = ALIGNED_STRING("Feelin' Good                 140"),
-
-    .ptr_11094 = SELF(str_1670),
-
-    .field_11098 = 0x0194,
-
-    .ptr_1109a = SELF(str_1669),
-
-    .field_1109e = 0x0195,
-
-    .ptr_110a0 = SELF(str_1668),
-
-    .field_110a4 = 0x0196,
-
-    .ptr_110a6 = SELF(str_1667),
-
-    .field_110aa = 0x0197,
-
-    .pad_356 = { 0 },
-
-    .str_1667 = ALIGNED_STRING("Motor Town Brass             142"),
-
-    .str_1668 = ALIGNED_STRING("Detroit Strings              142"),
-
-    .str_1669 = ALIGNED_STRING("Ross Vocals                  142"),
-
-    .str_1670 = ALIGNED_STRING("Supreme Tenor                142"),
-
-    .ptr_1113a = SELF(str_1674),
-
-    .field_1113e = 0x0198,
-
-    .ptr_11140 = SELF(str_1673),
-
-    .field_11144 = 0x0199,
-
-    .ptr_11146 = SELF(str_1672),
-
-    .field_1114a = 0x019a,
-
-    .ptr_1114c = SELF(str_1671),
-
-    .field_11150 = 0x019b,
-
-    .pad_357 = { 0 },
-
-    .str_1671 = ALIGNED_STRING("Synth Soul Horns             114"),
-
-    .str_1672 = ALIGNED_STRING("Soul Solo                    114"),
-
-    .str_1673 = ALIGNED_STRING("A Few Soulbars               114"),
-
-    .str_1674 = ALIGNED_STRING("A Case Of Soul               114"),
-
-    .ptr_111e0 = SELF(str_1678),
-
-    .field_111e4 = 0x019c,
-
-    .ptr_111e6 = SELF(str_1677),
-
-    .field_111ea = 0x019d,
-
-    .ptr_111ec = SELF(str_1676),
-
-    .field_111f0 = 0x019e,
-
-    .ptr_111f2 = SELF(str_1675),
-
-    .field_111f6 = 0x019f,
-
-    .pad_358 = { 0 },
-
-    .str_1675 = ALIGNED_STRING("Soul Suitcase                 70"),
-
-    .str_1676 = ALIGNED_STRING("Soul Drawbars                 70"),
-
-    .str_1677 = ALIGNED_STRING("Soulful Sax                   70"),
-
-    .str_1678 = ALIGNED_STRING("Synth For Soul                70"),
-
-    .ptr_11286 = SELF(str_1682),
-
-    .field_1128a = 0x01a0,
-
-    .ptr_1128c = SELF(str_1681),
-
-    .field_11290 = 0x01a1,
-
-    .ptr_11292 = SELF(str_1680),
-
-    .field_11296 = 0x01a2,
-
-    .ptr_11298 = SELF(str_1679),
-
-    .field_1129c = 0x01a3,
-
-    .pad_359 = { 0 },
-
-    .str_1679 = ALIGNED_STRING("Soulful Groove                88"),
-
-    .str_1680 = ALIGNED_STRING("Keys To Soul                  88"),
-
-    .str_1681 = ALIGNED_STRING("Soul Horn                     88"),
-
-    .str_1682 = ALIGNED_STRING("Sweet Soul                    88"),
-
-    .ptr_1132c = SELF(str_1686),
-
-    .field_11330 = 0x01a4,
-
-    .ptr_11332 = SELF(str_1685),
-
-    .field_11336 = 0x01a5,
-
-    .ptr_11338 = SELF(str_1684),
-
-    .field_1133c = 0x01a6,
-
-    .ptr_1133e = SELF(str_1683),
-
-    .field_11342 = 0x01a7,
-
-    .pad_360 = { 0 },
-
-    .str_1683 = ALIGNED_STRING("Soul Vocal Duo                66"),
-
-    .str_1684 = ALIGNED_STRING("Cool Soul Frets               66"),
-
-    .str_1685 = ALIGNED_STRING("Sweet 16 Sax                  66"),
-
-    .str_1686 = ALIGNED_STRING("Soulful Flute                 66"),
-
-    .ptr_113d2 = SELF(str_1690),
-
-    .field_113d6 = 0x01a8,
-
-    .ptr_113d8 = SELF(str_1689),
-
-    .field_113dc = 0x01a9,
-
-    .ptr_113de = SELF(str_1688),
-
-    .field_113e2 = 0x01aa,
-
-    .ptr_113e4 = SELF(str_1687),
-
-    .field_113e8 = 0x01ab,
-
-    .pad_361 = { 0 },
-
-    .str_1687 = ALIGNED_STRING("Georgia Brass                 64"),
-
-    .str_1688 = ALIGNED_STRING("Moody Drawbars                64"),
-
-    .str_1689 = ALIGNED_STRING("Ray's Ballad                  64"),
-
-    .str_1690 = ALIGNED_STRING("Soul On My Mind               64"),
-
-    .ptr_11478 = SELF(str_1694),
-
-    .field_1147c = 0x01ac,
-
-    .ptr_1147e = SELF(str_1693),
-
-    .field_11482 = 0x01ad,
-
-    .ptr_11484 = SELF(str_1692),
-
-    .field_11488 = 0x01ae,
-
-    .ptr_1148a = SELF(str_1691),
-
-    .field_1148e = 0x01af,
-
-    .pad_362 = { 0 },
-
-    .str_1691 = ALIGNED_STRING("Blues Horns                  112"),
-
-    .str_1692 = ALIGNED_STRING("Analogue Blues               112"),
-
-    .str_1693 = ALIGNED_STRING("Vintage R&B                  112"),
-
-    .str_1694 = ALIGNED_STRING("Solid R&B                    112"),
-
-    .ptr_1151e = SELF(str_1698),
-
-    .field_11522 = 0x01b0,
-
-    .ptr_11524 = SELF(str_1697),
-
-    .field_11528 = 0x01b1,
-
-    .ptr_1152a = SELF(str_1696),
-
-    .field_1152e = 0x01b2,
-
-    .ptr_11530 = SELF(str_1695),
-
-    .field_11534 = 0x01b3,
-
-    .pad_363 = { 0 },
-
-    .str_1695 = ALIGNED_STRING("Big Band Blues                78"),
-
-    .str_1696 = ALIGNED_STRING("Solid Blues                   78"),
-
-    .str_1697 = ALIGNED_STRING("Bad B3 Blues                  78"),
-
-    .str_1698 = ALIGNED_STRING("Satchmo's Blues               78"),
-
-    .ptr_115c4 = SELF(str_1702),
-
-    .field_115c8 = 0x01b4,
-
-    .ptr_115ca = SELF(str_1701),
-
-    .field_115ce = 0x01b5,
-
-    .ptr_115d0 = SELF(str_1700),
-
-    .field_115d4 = 0x01b6,
-
-    .ptr_115d6 = SELF(str_1699),
-
-    .field_115da = 0x01b7,
-
-    .pad_364 = { 0 },
-
-    .str_1699 = ALIGNED_STRING("Down & Dirty                 124"),
-
-    .str_1700 = ALIGNED_STRING("Blues Alley                  124"),
-
-    .str_1701 = ALIGNED_STRING("Hard Sax Blues               124"),
-
-    .str_1702 = ALIGNED_STRING("Blues Rock Keys              124"),
-
-    .ptr_1166a = SELF(str_1706),
-
-    .field_1166e = 0x01b8,
-
-    .ptr_11670 = SELF(str_1705),
-
-    .field_11674 = 0x01b9,
-
-    .ptr_11676 = SELF(str_1704),
-
-    .field_1167a = 0x01ba,
-
-    .ptr_1167c = SELF(str_1703),
-
-    .field_11680 = 0x01bb,
-
-    .pad_365 = { 0 },
-
-    .str_1703 = ALIGNED_STRING("Wah Wah Blues                 83"),
-
-    .str_1704 = ALIGNED_STRING("Blues Bars                    83"),
-
-    .str_1705 = ALIGNED_STRING("Blues Steel                   83"),
-
-    .str_1706 = ALIGNED_STRING("I Got The Blues               83"),
-
-    .ptr_11710 = SELF(str_1710),
-
-    .field_11714 = 0x01bc,
-
-    .ptr_11716 = SELF(str_1709),
-
-    .field_1171a = 0x01bd,
-
-    .ptr_1171c = SELF(str_1708),
-
-    .field_11720 = 0x01be,
-
-    .ptr_11722 = SELF(str_1707),
-
-    .field_11726 = 0x01bf,
-
-    .pad_366 = { 0 },
-
-    .str_1707 = ALIGNED_STRING("Mournful Tenor               120"),
-
-    .str_1708 = ALIGNED_STRING("Bad Blues Brass              120"),
-
-    .str_1709 = ALIGNED_STRING("Ham & Blues                  120"),
-
-    .str_1710 = ALIGNED_STRING("Bluesy Alto                  120"),
-
-    .ptr_117b6 = SELF(str_1714),
-
-    .field_117ba = 0x01c0,
-
-    .ptr_117bc = SELF(str_1713),
-
-    .field_117c0 = 0x01c1,
-
-    .ptr_117c2 = SELF(str_1712),
-
-    .field_117c6 = 0x01c2,
-
-    .ptr_117c8 = SELF(str_1711),
-
-    .field_117cc = 0x01c3,
-
-    .pad_367 = { 0 },
-
-    .str_1711 = ALIGNED_STRING("Wheels of Life                88"),
-
-    .str_1712 = ALIGNED_STRING("Hymn Band                     88"),
-
-    .str_1713 = ALIGNED_STRING("Gospel Choir                  88"),
-
-    .str_1714 = ALIGNED_STRING("Electric Gospel               88"),
-
-    .ptr_1185c = SELF(str_1718),
-
-    .field_11860 = 0x01c4,
-
-    .ptr_11862 = SELF(str_1717),
-
-    .field_11866 = 0x01c5,
-
-    .ptr_11868 = SELF(str_1716),
-
-    .field_1186c = 0x01c6,
-
-    .ptr_1186e = SELF(str_1715),
-
-    .field_11872 = 0x01c7,
-
-    .pad_368 = { 0 },
-
-    .str_1715 = ALIGNED_STRING("Praise The Lord              128"),
-
-    .str_1716 = ALIGNED_STRING("Inspirational!               128"),
-
-    .str_1717 = ALIGNED_STRING("Preach The Word              128"),
-
-    .str_1718 = ALIGNED_STRING("Gospel Sax                   128"),
-
-    .ptr_11902 = SELF(str_1722),
-
-    .field_11906 = 0x01c8,
-
-    .ptr_11908 = SELF(str_1721),
-
-    .field_1190c = 0x01c9,
-
-    .ptr_1190e = SELF(str_1720),
-
-    .field_11912 = 0x01ca,
-
-    .ptr_11914 = SELF(str_1719),
-
-    .field_11918 = 0x01cb,
-
-    .pad_369 = { 0 },
-
-    .str_1719 = ALIGNED_STRING("Reed The Word                124"),
-
-    .str_1720 = ALIGNED_STRING("Chapel Brass                 124"),
-
-    .str_1721 = ALIGNED_STRING("Sing Hallelujah              124"),
-
-    .str_1722 = ALIGNED_STRING("Gospel Standard              124"),
-
-    .ptr_119a8 = SELF(str_1726),
-
-    .field_119ac = 0x01cc,
-
-    .ptr_119ae = SELF(str_1725),
-
-    .field_119b2 = 0x01cd,
-
-    .ptr_119b4 = SELF(str_1724),
-
-    .field_119b8 = 0x01ce,
-
-    .ptr_119ba = SELF(str_1723),
-
-    .field_119be = 0x01cf,
-
-    .pad_370 = { 0 },
-
-    .str_1723 = ALIGNED_STRING("Congregation!                151"),
-
-    .str_1724 = ALIGNED_STRING("Worship Groove               151"),
-
-    .str_1725 = ALIGNED_STRING("Gospel Drawbars              151"),
-
-    .str_1726 = ALIGNED_STRING("Soprano Prayer               151"),
-
-    .ptr_11a4e = SELF(str_1730),
-
-    .field_11a52 = 0x01d0,
-
-    .ptr_11a54 = SELF(str_1729),
-
-    .field_11a58 = 0x01d1,
-
-    .ptr_11a5a = SELF(str_1728),
-
-    .field_11a5e = 0x01d2,
-
-    .ptr_11a60 = SELF(str_1727),
-
-    .field_11a64 = 0x01d3,
-
-    .pad_371 = { 0 },
-
-    .str_1727 = ALIGNED_STRING("Gospel Lead                   66"),
-
-    .str_1728 = ALIGNED_STRING("Drawbar Service               66"),
-
-    .str_1729 = ALIGNED_STRING("Church Grand                  66"),
-
-    .str_1730 = ALIGNED_STRING("Gospel Organ                  66"),
-
-    .ptr_11af4 = SELF(str_1734),
-
-    .field_11af8 = 0x01d4,
-
-    .ptr_11afa = SELF(str_1733),
-
-    .field_11afe = 0x01d5,
-
-    .ptr_11b00 = SELF(str_1732),
-
-    .field_11b04 = 0x01d6,
-
-    .ptr_11b06 = SELF(str_1731),
-
-    .field_11b0a = 0x01d7,
-
-    .pad_372 = { 0 },
-
-    .str_1731 = ALIGNED_STRING("Sing Praises                  92"),
-
-    .str_1732 = ALIGNED_STRING("Modern Gospel                 92"),
-
-    .str_1733 = ALIGNED_STRING("Sing It, Play It              92"),
-
-    .str_1734 = ALIGNED_STRING("Amazing Waltz!                92"),
-
-    .ptr_11b9a = SELF(str_1738),
-
-    .field_11b9e = 0x01d8,
-
-    .ptr_11ba0 = SELF(str_1737),
-
-    .field_11ba4 = 0x01d9,
-
-    .ptr_11ba6 = SELF(str_1736),
-
-    .field_11baa = 0x01da,
-
-    .ptr_11bac = SELF(str_1735),
-
-    .field_11bb0 = 0x01db,
-
-    .pad_373 = { 0 },
-
-    .str_1735 = ALIGNED_STRING("Bigband Shout                170"),
-
-    .str_1736 = ALIGNED_STRING("Fast Reeds                   170"),
-
-    .str_1737 = ALIGNED_STRING("Swing Alto Solo              170"),
-
-    .str_1738 = ALIGNED_STRING("The Duke's Piano             170"),
-
-    .ptr_11c40 = SELF(str_1742),
-
-    .field_11c44 = 0x01dc,
-
-    .ptr_11c46 = SELF(str_1741),
-
-    .field_11c4a = 0x01dd,
-
-    .ptr_11c4c = SELF(str_1740),
-
-    .field_11c50 = 0x01de,
-
-    .ptr_11c52 = SELF(str_1739),
-
-    .field_11c56 = 0x01df,
-
-    .pad_374 = { 0 },
-
-    .str_1739 = ALIGNED_STRING("Reeds in Unison              110"),
-
-    .str_1740 = ALIGNED_STRING("Full Mute Brass              110"),
-
-    .str_1741 = ALIGNED_STRING("Dorsey Band                  110"),
-
-    .str_1742 = ALIGNED_STRING("Father Time Solo             110"),
-
-    .ptr_11ce6 = SELF(str_1746),
-
-    .field_11cea = 0x01e0,
-
-    .ptr_11cec = SELF(str_1745),
-
-    .field_11cf0 = 0x01e1,
-
-    .ptr_11cf2 = SELF(str_1744),
-
-    .field_11cf6 = 0x01e2,
-
-    .ptr_11cf8 = SELF(str_1743),
-
-    .field_11cfc = 0x01e3,
-
-    .pad_375 = { 0 },
-
-    .str_1743 = ALIGNED_STRING("Miller Station               150"),
-
-    .str_1744 = ALIGNED_STRING("Main Line Brass              150"),
-
-    .str_1745 = ALIGNED_STRING("Sax Tracks                   150"),
-
-    .str_1746 = ALIGNED_STRING("Getting Up Steam             150"),
-
-    .ptr_11d8c = SELF(str_1750),
-
-    .field_11d90 = 0x01e4,
-
-    .ptr_11d92 = SELF(str_1749),
-
-    .field_11d96 = 0x01e5,
-
-    .ptr_11d98 = SELF(str_1748),
-
-    .field_11d9c = 0x01e6,
-
-    .ptr_11d9e = SELF(str_1747),
-
-    .field_11da2 = 0x01e7,
-
-    .pad_376 = { 0 },
-
-    .str_1747 = ALIGNED_STRING("Harry J.& Co.                 86"),
-
-    .str_1748 = ALIGNED_STRING("Mellow Section                86"),
-
-    .str_1749 = ALIGNED_STRING("Miller Reeds                  86"),
-
-    .str_1750 = ALIGNED_STRING("Sentimental Solo              86"),
-
-    .ptr_11e32 = SELF(str_1754),
-
-    .field_11e36 = 0x01e8,
-
-    .ptr_11e38 = SELF(str_1753),
-
-    .field_11e3c = 0x01e9,
-
-    .ptr_11e3e = SELF(str_1752),
-
-    .field_11e42 = 0x01ea,
-
-    .ptr_11e44 = SELF(str_1751),
-
-    .field_11e48 = 0x01eb,
-
-    .pad_377 = { 0 },
-
-    .str_1751 = ALIGNED_STRING("The Whole Band!               90"),
-
-    .str_1752 = ALIGNED_STRING("Count On It!                  90"),
-
-    .str_1753 = ALIGNED_STRING("Mute Soloist                  90"),
-
-    .str_1754 = ALIGNED_STRING("Acker's Solo                  90"),
-
-    .ptr_11ed8 = SELF(str_1758),
-
-    .field_11edc = 0x01ec,
-
-    .ptr_11ede = SELF(str_1757),
-
-    .field_11ee2 = 0x01ed,
-
-    .ptr_11ee4 = SELF(str_1756),
-
-    .field_11ee8 = 0x01ee,
-
-    .ptr_11eea = SELF(str_1755),
-
-    .field_11eee = 0x01ef,
-
-    .pad_378 = { 0 },
-
-    .str_1755 = ALIGNED_STRING("Glenn's Big Band              90"),
-
-    .str_1756 = ALIGNED_STRING("Band Leader Solo              90"),
-
-    .str_1757 = ALIGNED_STRING("Full Dance Band               90"),
-
-    .str_1758 = ALIGNED_STRING("Swing Orchestra               90"),
-
-    .ptr_11f7e = SELF(str_1762),
-
-    .field_11f82 = 0x01f0,
-
-    .ptr_11f84 = SELF(str_1761),
-
-    .field_11f88 = 0x01f1,
-
-    .ptr_11f8a = SELF(str_1760),
-
-    .field_11f8e = 0x01f2,
-
-    .ptr_11f90 = SELF(str_1759),
-
-    .field_11f94 = 0x01f3,
-
-    .pad_379 = { 0 },
-
-    .str_1759 = ALIGNED_STRING("Harry's Solo                  92"),
-
-    .str_1760 = ALIGNED_STRING("Big Band Sound                92"),
-
-    .str_1761 = ALIGNED_STRING("Gentle Reeds                  92"),
-
-    .str_1762 = ALIGNED_STRING("Muted Big Band                92"),
-
-    .ptr_12024 = SELF(str_1766),
-
-    .field_12028 = 0x01f4,
-
-    .ptr_1202a = SELF(str_1765),
-
-    .field_1202e = 0x01f5,
-
-    .ptr_12030 = SELF(str_1764),
-
-    .field_12034 = 0x01f6,
-
-    .ptr_12036 = SELF(str_1763),
-
-    .field_1203a = 0x01f7,
-
-    .pad_380 = { 0 },
-
-    .str_1763 = ALIGNED_STRING("Full Tilt Swing!             127"),
-
-    .str_1764 = ALIGNED_STRING("Power Sax Swing              127"),
-
-    .str_1765 = ALIGNED_STRING("Reed It, Mute It             127"),
-
-    .str_1766 = ALIGNED_STRING("Swing Reedle                 127"),
-
-    .ptr_120ca = SELF(str_1770),
-
-    .field_120ce = 0x01f8,
-
-    .ptr_120d0 = SELF(str_1769),
-
-    .field_120d4 = 0x01f9,
-
-    .ptr_120d6 = SELF(str_1768),
-
-    .field_120da = 0x01fa,
-
-    .ptr_120dc = SELF(str_1767),
-
-    .field_120e0 = 0x01fb,
-
-    .pad_381 = { 0 },
-
-    .str_1767 = ALIGNED_STRING("Lush Swing                   142"),
-
-    .str_1768 = ALIGNED_STRING("Riddle Orchestra             142"),
-
-    .str_1769 = ALIGNED_STRING("Sinatra Strings              142"),
-
-    .str_1770 = ALIGNED_STRING("Swingin' Frets               142"),
-
-    .ptr_12170 = SELF(str_1774),
-
-    .field_12174 = 0x01fc,
-
-    .ptr_12176 = SELF(str_1773),
-
-    .field_1217a = 0x01fd,
-
-    .ptr_1217c = SELF(str_1772),
-
-    .field_12180 = 0x01fe,
-
-    .ptr_12182 = SELF(str_1771),
-
-    .field_12186 = 0x01ff,
-
-    .pad_382 = { 0 },
-
-    .str_1771 = ALIGNED_STRING("Swing Unison                 158"),
-
-    .str_1772 = ALIGNED_STRING("The Band Leader              158"),
-
-    .str_1773 = ALIGNED_STRING("Grand Swing!                 158"),
-
-    .str_1774 = ALIGNED_STRING("Laid Back Jazz               158"),
-
-    .ptr_12216 = SELF(str_1778),
-
-    .field_1221a = 0x0200,
-
-    .ptr_1221c = SELF(str_1777),
-
-    .field_12220 = 0x0201,
-
-    .ptr_12222 = SELF(str_1776),
-
-    .field_12226 = 0x0202,
-
-    .ptr_12228 = SELF(str_1775),
-
-    .field_1222c = 0x0203,
-
-    .pad_383 = { 0 },
-
-    .str_1775 = ALIGNED_STRING("Reed It & Swing!             140"),
-
-    .str_1776 = ALIGNED_STRING("Swing Sparkle                140"),
-
-    .str_1777 = ALIGNED_STRING("Organist's Swing             140"),
-
-    .str_1778 = ALIGNED_STRING("Swinging Keys                140"),
-
-    .ptr_122bc = SELF(str_1782),
-
-    .field_122c0 = 0x0204,
-
-    .ptr_122c2 = SELF(str_1781),
-
-    .field_122c6 = 0x0205,
-
-    .ptr_122c8 = SELF(str_1780),
-
-    .field_122cc = 0x0206,
-
-    .ptr_122ce = SELF(str_1779),
-
-    .field_122d2 = 0x0207,
-
-    .pad_384 = { 0 },
-
-    .str_1779 = ALIGNED_STRING("Jazz Bars                    146"),
-
-    .str_1780 = ALIGNED_STRING("Combo Romance                146"),
-
-    .str_1781 = ALIGNED_STRING("Club Duet                    146"),
-
-    .str_1782 = ALIGNED_STRING("Jazz Blocks                  146"),
-
-    .ptr_12362 = SELF(str_1786),
-
-    .field_12366 = 0x0208,
-
-    .ptr_12368 = SELF(str_1785),
-
-    .field_1236c = 0x0209,
-
-    .ptr_1236e = SELF(str_1784),
-
-    .field_12372 = 0x020a,
-
-    .ptr_12374 = SELF(str_1783),
-
-    .field_12378 = 0x020b,
-
-    .pad_385 = { 0 },
-
-    .str_1783 = ALIGNED_STRING("Lionel Meets Wes             174"),
-
-    .str_1784 = ALIGNED_STRING("Jazz From Wes                174"),
-
-    .str_1785 = ALIGNED_STRING("Oscar's Gig                  174"),
-
-    .str_1786 = ALIGNED_STRING("Acoustic Jazz                174"),
-
-    .ptr_12408 = SELF(str_1790),
-
-    .field_1240c = 0x020c,
-
-    .ptr_1240e = SELF(str_1789),
-
-    .field_12412 = 0x020d,
-
-    .ptr_12414 = SELF(str_1788),
-
-    .field_12418 = 0x020e,
-
-    .ptr_1241a = SELF(str_1787),
-
-    .field_1241e = 0x020f,
-
-    .pad_386 = { 0 },
-
-    .str_1787 = ALIGNED_STRING("Wild Side Organ              200"),
-
-    .str_1788 = ALIGNED_STRING("Simple Jimmy                 200"),
-
-    .str_1789 = ALIGNED_STRING("Helmut & Strings             200"),
-
-    .str_1790 = ALIGNED_STRING("Zacharias Swing              200"),
-
-    .ptr_124ae = SELF(str_1794),
-
-    .field_124b2 = 0x0210,
-
-    .ptr_124b4 = SELF(str_1793),
-
-    .field_124b8 = 0x0211,
-
-    .ptr_124ba = SELF(str_1792),
-
-    .field_124be = 0x0212,
-
-    .ptr_124c0 = SELF(str_1791),
-
-    .field_124c4 = 0x0213,
-
-    .pad_387 = { 0 },
-
-    .str_1791 = ALIGNED_STRING("Boogie Bugles                160"),
-
-    .str_1792 = ALIGNED_STRING("Boogie Dance                 160"),
-
-    .str_1793 = ALIGNED_STRING("12 Boogie Bars               160"),
-
-    .str_1794 = ALIGNED_STRING("Jitterbug Vocals             160"),
-
-    .ptr_12554 = SELF(str_1798),
-
-    .field_12558 = 0x0214,
-
-    .ptr_1255a = SELF(str_1797),
-
-    .field_1255e = 0x0215,
-
-    .ptr_12560 = SELF(str_1796),
-
-    .field_12564 = 0x0216,
-
-    .ptr_12566 = SELF(str_1795),
-
-    .field_1256a = 0x0217,
-
-    .pad_388 = { 0 },
-
-    .str_1795 = ALIGNED_STRING("Partners in Jazz             145"),
-
-    .str_1796 = ALIGNED_STRING("Cool Jazz B3                 145"),
-
-    .str_1797 = ALIGNED_STRING("Saxy Jazz                    145"),
-
-    .str_1798 = ALIGNED_STRING("Lionel's Jazz                145"),
-
-    .ptr_125fa = SELF(str_1802),
-
-    .field_125fe = 0x0218,
-
-    .ptr_12600 = SELF(str_1801),
-
-    .field_12604 = 0x0219,
-
-    .ptr_12606 = SELF(str_1800),
-
-    .field_1260a = 0x021a,
-
-    .ptr_1260c = SELF(str_1799),
-
-    .field_12610 = 0x021b,
-
-    .pad_389 = { 0 },
-
-    .str_1799 = ALIGNED_STRING("All Out Jazz                 170"),
-
-    .str_1800 = ALIGNED_STRING("Slow Spin Groove             170"),
-
-    .str_1801 = ALIGNED_STRING("Classic Groove               170"),
-
-    .str_1802 = ALIGNED_STRING("Even Jazz                    170"),
-
-    .ptr_126a0 = SELF(str_1806),
-
-    .field_126a4 = 0x021c,
-
-    .ptr_126a6 = SELF(str_1805),
-
-    .field_126aa = 0x021d,
-
-    .ptr_126ac = SELF(str_1804),
-
-    .field_126b0 = 0x021e,
-
-    .ptr_126b2 = SELF(str_1803),
-
-    .field_126b6 = 0x021f,
-
-    .pad_390 = { 0 },
-
-    .str_1803 = ALIGNED_STRING("Combo Soloists               126"),
-
-    .str_1804 = ALIGNED_STRING("Late Night Sax               126"),
-
-    .str_1805 = ALIGNED_STRING("Shearing Combo               126"),
-
-    .str_1806 = ALIGNED_STRING("Nat's Piano                  126"),
-
-    .ptr_12746 = SELF(str_1810),
-
-    .field_1274a = 0x0220,
-
-    .ptr_1274c = SELF(str_1809),
-
-    .field_12750 = 0x0221,
-
-    .ptr_12752 = SELF(str_1808),
-
-    .field_12756 = 0x0222,
-
-    .ptr_12758 = SELF(str_1807),
-
-    .field_1275c = 0x0223,
-
-    .pad_391 = { 0 },
-
-    .str_1807 = ALIGNED_STRING("Reinhardt's Solo             210"),
-
-    .str_1808 = ALIGNED_STRING("Stephane&Django              210"),
-
-    .str_1809 = ALIGNED_STRING("Fiddle For Jazz              210"),
-
-    .str_1810 = ALIGNED_STRING("Gypsy Jazz Frets             210"),
-
-    .ptr_127ec = SELF(str_1814),
-
-    .field_127f0 = 0x0224,
-
-    .ptr_127f2 = SELF(str_1813),
-
-    .field_127f6 = 0x0225,
-
-    .ptr_127f8 = SELF(str_1812),
-
-    .field_127fc = 0x0226,
-
-    .ptr_127fe = SELF(str_1811),
-
-    .field_12802 = 0x0227,
-
-    .pad_392 = { 0 },
-
-    .str_1811 = ALIGNED_STRING("Bellows & Blocks             158"),
-
-    .str_1812 = ALIGNED_STRING("Accordion & Co!              158"),
-
-    .str_1813 = ALIGNED_STRING("Let It Register!             158"),
-
-    .str_1814 = ALIGNED_STRING("Soft Squeeze                 158"),
-
-    .ptr_12892 = SELF(str_1818),
-
-    .field_12896 = 0x0228,
-
-    .ptr_12898 = SELF(str_1817),
-
-    .field_1289c = 0x0229,
-
-    .ptr_1289e = SELF(str_1816),
-
-    .field_128a2 = 0x022a,
-
-    .ptr_128a4 = SELF(str_1815),
-
-    .field_128a8 = 0x022b,
-
-    .pad_393 = { 0 },
-
-    .str_1815 = ALIGNED_STRING("Moonshine Combo              184"),
-
-    .str_1816 = ALIGNED_STRING("Wall St. Jazz                184"),
-
-    .str_1817 = ALIGNED_STRING("Roaring Trumpet              184"),
-
-    .str_1818 = ALIGNED_STRING("Chicago Piano                184"),
-
-    .ptr_12938 = SELF(str_1822),
-
-    .field_1293c = 0x022c,
-
-    .ptr_1293e = SELF(str_1821),
-
-    .field_12942 = 0x022d,
-
-    .ptr_12944 = SELF(str_1820),
-
-    .field_12948 = 0x022e,
-
-    .ptr_1294a = SELF(str_1819),
-
-    .field_1294e = 0x022f,
-
-    .pad_394 = { 0 },
-
-    .str_1819 = ALIGNED_STRING("Squeeze Box Jazz             190"),
-
-    .str_1820 = ALIGNED_STRING("Paris Jazz Duet              190"),
-
-    .str_1821 = ALIGNED_STRING("Grapelli Jazz                190"),
-
-    .str_1822 = ALIGNED_STRING("Django's Solo                190"),
-
-    .ptr_129de = SELF(str_1826),
-
-    .field_129e2 = 0x0230,
-
-    .ptr_129e4 = SELF(str_1825),
-
-    .field_129e8 = 0x0231,
-
-    .ptr_129ea = SELF(str_1824),
-
-    .field_129ee = 0x0232,
-
-    .ptr_129f0 = SELF(str_1823),
-
-    .field_129f4 = 0x0233,
-
-    .pad_395 = { 0 },
-
-    .str_1823 = ALIGNED_STRING("Hubert & Klaus               190"),
-
-    .str_1824 = ALIGNED_STRING("Deuringer Swing              190"),
-
-    .str_1825 = ALIGNED_STRING("Art Meets Lionel             190"),
-
-    .str_1826 = ALIGNED_STRING("Art's Swing Box              190"),
-
-    .ptr_12a84 = SELF(str_1830),
-
-    .field_12a88 = 0x0234,
-
-    .ptr_12a8a = SELF(str_1829),
-
-    .field_12a8e = 0x0235,
-
-    .ptr_12a90 = SELF(str_1828),
-
-    .field_12a94 = 0x0236,
-
-    .ptr_12a96 = SELF(str_1827),
-
-    .field_12a9a = 0x0237,
-
-    .pad_396 = { 0 },
-
-    .str_1827 = ALIGNED_STRING("Mellow Jazz Tabs             147"),
-
-    .str_1828 = ALIGNED_STRING("Euro Squeezebox              147"),
-
-    .str_1829 = ALIGNED_STRING("Duelling Reeds               147"),
-
-    .str_1830 = ALIGNED_STRING("Boxing Jazzy                 147"),
-
-    .ptr_12b2a = SELF(str_1834),
-
-    .field_12b2e = 0x0238,
-
-    .ptr_12b30 = SELF(str_1833),
-
-    .field_12b34 = 0x0239,
-
-    .ptr_12b36 = SELF(str_1832),
-
-    .field_12b3a = 0x023a,
-
-    .ptr_12b3c = SELF(str_1831),
-
-    .field_12b40 = 0x023b,
-
-    .pad_397 = { 0 },
-
-    .str_1831 = ALIGNED_STRING("New Jazz Ballad               70"),
-
-    .str_1832 = ALIGNED_STRING("B3 Blocks                     70"),
-
-    .str_1833 = ALIGNED_STRING("Breathy Vibes                 70"),
-
-    .str_1834 = ALIGNED_STRING("Slide Scale Jazz              70"),
-
-    .ptr_12bd0 = SELF(str_1838),
-
-    .field_12bd4 = 0x023c,
-
-    .ptr_12bd6 = SELF(str_1837),
-
-    .field_12bda = 0x023d,
-
-    .ptr_12bdc = SELF(str_1836),
-
-    .field_12be0 = 0x023e,
-
-    .ptr_12be2 = SELF(str_1835),
-
-    .field_12be6 = 0x023f,
-
-    .pad_398 = { 0 },
-
-    .str_1835 = ALIGNED_STRING("Unwind To This                72"),
-
-    .str_1836 = ALIGNED_STRING("Chuck's Late Gig              72"),
-
-    .str_1837 = ALIGNED_STRING("Too Late For Sax              72"),
-
-    .str_1838 = ALIGNED_STRING("Late Night Frets              72"),
-
-    .ptr_12c76 = SELF(str_1842),
-
-    .field_12c7a = 0x0240,
-
-    .ptr_12c7c = SELF(str_1841),
-
-    .field_12c80 = 0x0241,
-
-    .ptr_12c82 = SELF(str_1840),
-
-    .field_12c86 = 0x0242,
-
-    .ptr_12c88 = SELF(str_1839),
-
-    .field_12c8c = 0x0243,
-
-    .pad_399 = { 0 },
-
-    .str_1839 = ALIGNED_STRING("3/4 Sax Vibes                158"),
-
-    .str_1840 = ALIGNED_STRING("Do You Reed It?              158"),
-
-    .str_1841 = ALIGNED_STRING("3 Quarter Duo                158"),
-
-    .str_1842 = ALIGNED_STRING("Jazz Partners                158"),
-
-    .ptr_12d1c = SELF(str_1846),
-
-    .field_12d20 = 0x0244,
-
-    .ptr_12d22 = SELF(str_1845),
-
-    .field_12d26 = 0x0245,
-
-    .ptr_12d28 = SELF(str_1844),
-
-    .field_12d2c = 0x0246,
-
-    .ptr_12d2e = SELF(str_1843),
-
-    .field_12d32 = 0x0247,
-
-    .pad_400 = { 0 },
-
-    .str_1843 = ALIGNED_STRING("Waltz Groove                 150"),
-
-    .str_1844 = ALIGNED_STRING("3/4 Played by 4              150"),
-
-    .str_1845 = ALIGNED_STRING("Toots' Trick!                150"),
-
-    .str_1846 = ALIGNED_STRING("Flautist's Jazz              150"),
-
-    .ptr_12dc2 = SELF(str_1850),
-
-    .field_12dc6 = 0x0248,
-
-    .ptr_12dc8 = SELF(str_1849),
-
-    .field_12dcc = 0x0249,
-
-    .ptr_12dce = SELF(str_1848),
-
-    .field_12dd2 = 0x024a,
-
-    .ptr_12dd4 = SELF(str_1847),
-
-    .field_12dd8 = 0x024b,
-
-    .pad_401 = { 0 },
-
-    .str_1847 = ALIGNED_STRING("Smokin' B-3 Jazz             180"),
-
-    .str_1848 = ALIGNED_STRING("Jazz To The Bone             180"),
-
-    .str_1849 = ALIGNED_STRING("Modern Vibes                 180"),
-
-    .str_1850 = ALIGNED_STRING("Soprano Groove               180"),
-
-    .ptr_12e68 = SELF(str_1854),
-
-    .field_12e6c = 0x024c,
-
-    .ptr_12e6e = SELF(str_1853),
-
-    .field_12e72 = 0x024d,
-
-    .ptr_12e74 = SELF(str_1852),
-
-    .field_12e78 = 0x024e,
-
-    .ptr_12e7a = SELF(str_1851),
-
-    .field_12e7e = 0x024f,
-
-    .pad_402 = { 0 },
-
-    .str_1851 = ALIGNED_STRING("Fusion Tines                  98"),
-
-    .str_1852 = ALIGNED_STRING("Cool Groove Sax               98"),
-
-    .str_1853 = ALIGNED_STRING("Sample Piano                  98"),
-
-    .str_1854 = ALIGNED_STRING("West Coast Flute              98"),
-
-    .ptr_12f0e = SELF(str_1858),
-
-    .field_12f12 = 0x0250,
-
-    .ptr_12f14 = SELF(str_1857),
-
-    .field_12f18 = 0x0251,
-
-    .ptr_12f1a = SELF(str_1856),
-
-    .field_12f1e = 0x0252,
-
-    .ptr_12f20 = SELF(str_1855),
-
-    .field_12f24 = 0x0253,
-
-    .pad_403 = { 0 },
-
-    .str_1855 = ALIGNED_STRING("Grand Finale                 132"),
-
-    .str_1856 = ALIGNED_STRING("In The Limelight             132"),
-
-    .str_1857 = ALIGNED_STRING("Show Stopper                 132"),
-
-    .str_1858 = ALIGNED_STRING("Greasepaint Time             132"),
-
-    .ptr_12fb4 = SELF(str_1862),
-
-    .field_12fb8 = 0x0254,
-
-    .ptr_12fba = SELF(str_1861),
-
-    .field_12fbe = 0x0255,
-
-    .ptr_12fc0 = SELF(str_1860),
-
-    .field_12fc4 = 0x0256,
-
-    .ptr_12fc6 = SELF(str_1859),
-
-    .field_12fca = 0x0257,
-
-    .pad_404 = { 0 },
-
-    .str_1859 = ALIGNED_STRING("Golden Movie Era             120"),
-
-    .str_1860 = ALIGNED_STRING("Cinema Magic                 120"),
-
-    .str_1861 = ALIGNED_STRING("Fred & Ginger                120"),
-
-    .str_1862 = ALIGNED_STRING("Gene's Dance                 120"),
-
-    .ptr_1305a = SELF(str_1866),
-
-    .field_1305e = 0x0258,
-
-    .ptr_13060 = SELF(str_1865),
-
-    .field_13064 = 0x0259,
-
-    .ptr_13066 = SELF(str_1864),
-
-    .field_1306a = 0x025a,
-
-    .ptr_1306c = SELF(str_1863),
-
-    .field_13070 = 0x025b,
-
-    .pad_405 = { 0 },
-
-    .str_1863 = ALIGNED_STRING("Theatre Band                 135"),
-
-    .str_1864 = ALIGNED_STRING("Variety Reeds                135"),
-
-    .str_1865 = ALIGNED_STRING("Curtain Up!                  135"),
-
-    .str_1866 = ALIGNED_STRING("Mallets On Stage             135"),
-
-    .ptr_13100 = SELF(str_1870),
-
-    .field_13104 = 0x025c,
-
-    .ptr_13106 = SELF(str_1869),
-
-    .field_1310a = 0x025d,
-
-    .ptr_1310c = SELF(str_1868),
-
-    .field_13110 = 0x025e,
-
-    .ptr_13112 = SELF(str_1867),
-
-    .field_13116 = 0x025f,
-
-    .pad_406 = { 0 },
-
-    .str_1867 = ALIGNED_STRING("Vaudeville Bones             124"),
-
-    .str_1868 = ALIGNED_STRING("Tap Dance Mutes              124"),
-
-    .str_1869 = ALIGNED_STRING("Old Time Saloon              124"),
-
-    .str_1870 = ALIGNED_STRING("Simple Stride                124"),
-
-    .ptr_131a6 = SELF(str_1874),
-
-    .field_131aa = 0x0260,
-
-    .ptr_131ac = SELF(str_1873),
-
-    .field_131b0 = 0x0261,
-
-    .ptr_131b2 = SELF(str_1872),
-
-    .field_131b6 = 0x0262,
-
-    .ptr_131b8 = SELF(str_1871),
-
-    .field_131bc = 0x0263,
-
-    .pad_407 = { 0 },
-
-    .str_1871 = ALIGNED_STRING("Novelty Number               165"),
-
-    .str_1872 = ALIGNED_STRING("Skeleton Dance               165"),
-
-    .str_1873 = ALIGNED_STRING("Variety Showband             165"),
-
-    .str_1874 = ALIGNED_STRING("Music Hall Piano             165"),
-
-    .ptr_1324c = SELF(str_1878),
-
-    .field_13250 = 0x0264,
-
-    .ptr_13252 = SELF(str_1877),
-
-    .field_13256 = 0x0265,
-
-    .ptr_13258 = SELF(str_1876),
-
-    .field_1325c = 0x0266,
-
-    .ptr_1325e = SELF(str_1875),
-
-    .field_13262 = 0x0267,
-
-    .pad_408 = { 0 },
-
-    .str_1875 = ALIGNED_STRING("Slapstick Show               182"),
-
-    .str_1876 = ALIGNED_STRING("Soft Da-Dance                182"),
-
-    .str_1877 = ALIGNED_STRING("Yankee Doodle It             182"),
-
-    .str_1878 = ALIGNED_STRING("Sweet Georgia                182"),
-
-    .ptr_132f2 = SELF(str_1882),
-
-    .field_132f6 = 0x0268,
-
-    .ptr_132f8 = SELF(str_1881),
-
-    .field_132fc = 0x0269,
-
-    .ptr_132fe = SELF(str_1880),
-
-    .field_13302 = 0x026a,
-
-    .ptr_13304 = SELF(str_1879),
-
-    .field_13308 = 0x026b,
-
-    .pad_409 = { 0 },
-
-    .str_1879 = ALIGNED_STRING("Crazy Horse Show             118"),
-
-    .str_1880 = ALIGNED_STRING("Girls On Stage!              118"),
-
-    .str_1881 = ALIGNED_STRING("Musette Rouge                118"),
-
-    .str_1882 = ALIGNED_STRING("Take Your Seat!              118"),
-
-    .ptr_13398 = SELF(str_1886),
-
-    .field_1339c = 0x026c,
-
-    .ptr_1339e = SELF(str_1885),
-
-    .field_133a2 = 0x026d,
-
-    .ptr_133a4 = SELF(str_1884),
-
-    .field_133a8 = 0x026e,
-
-    .ptr_133aa = SELF(str_1883),
-
-    .field_133ae = 0x026f,
-
-    .pad_410 = { 0 },
-
-    .str_1883 = ALIGNED_STRING("Midnight Soloist             162"),
-
-    .str_1884 = ALIGNED_STRING("Cabaret Organ                162"),
-
-    .str_1885 = ALIGNED_STRING("Warm Up Act                  162"),
-
-    .str_1886 = ALIGNED_STRING("Guitar Cocktail              162"),
-
-    .ptr_1343e = SELF(str_1890),
-
-    .field_13442 = 0x0270,
-
-    .ptr_13444 = SELF(str_1889),
-
-    .field_13448 = 0x0271,
-
-    .ptr_1344a = SELF(str_1888),
-
-    .field_1344e = 0x0272,
-
-    .ptr_13450 = SELF(str_1887),
-
-    .field_13454 = 0x0273,
-
-    .pad_411 = { 0 },
-
-    .str_1887 = ALIGNED_STRING("Lee's Finale                  75"),
-
-    .str_1888 = ALIGNED_STRING("Vegas Showman                 75"),
-
-    .str_1889 = ALIGNED_STRING("Casino Sax                    75"),
-
-    .str_1890 = ALIGNED_STRING("Candlelight Reed              75"),
-
-    .ptr_134e4 = SELF(str_1894),
-
-    .field_134e8 = 0x0274,
-
-    .ptr_134ea = SELF(str_1893),
-
-    .field_134ee = 0x0275,
-
-    .ptr_134f0 = SELF(str_1892),
-
-    .field_134f4 = 0x0276,
-
-    .ptr_134f6 = SELF(str_1891),
-
-    .field_134fa = 0x0277,
-
-    .pad_412 = { 0 },
-
-    .str_1891 = ALIGNED_STRING("Max's Orchestra              120"),
-
-    .str_1892 = ALIGNED_STRING("Greger Saxes                 120"),
-
-    .str_1893 = ALIGNED_STRING("Strasser & More              120"),
-
-    .str_1894 = ALIGNED_STRING("Hugo's Revival               120"),
-
-    .ptr_1358a = SELF(str_1898),
-
-    .field_1358e = 0x0278,
-
-    .ptr_13590 = SELF(str_1897),
-
-    .field_13594 = 0x0279,
-
-    .ptr_13596 = SELF(str_1896),
-
-    .field_1359a = 0x027a,
-
-    .ptr_1359c = SELF(str_1895),
-
-    .field_135a0 = 0x027b,
-
-    .pad_413 = { 0 },
-
-    .str_1895 = ALIGNED_STRING("Foxtrot Serenade             154"),
-
-    .str_1896 = ALIGNED_STRING("Foxy Reeds                   154"),
-
-    .str_1897 = ALIGNED_STRING("Euro Ballroom                154"),
-
-    .str_1898 = ALIGNED_STRING("Foxy Squeezebox              154"),
-
-    .ptr_13630 = SELF(str_1902),
-
-    .field_13634 = 0x027c,
-
-    .ptr_13636 = SELF(str_1901),
-
-    .field_1363a = 0x027d,
-
-    .ptr_1363c = SELF(str_1900),
-
-    .field_13640 = 0x027e,
-
-    .ptr_13642 = SELF(str_1899),
-
-    .field_13646 = 0x027f,
-
-    .pad_414 = { 0 },
-
-    .str_1899 = ALIGNED_STRING("Old Wheels Dance             190"),
-
-    .str_1900 = ALIGNED_STRING("Mr.Wunderbar                 190"),
-
-    .str_1901 = ALIGNED_STRING("Ham & T Dance                190"),
-
-    .str_1902 = ALIGNED_STRING("Harmonic Foxtrot             190"),
-
-    .ptr_136d6 = SELF(str_1906),
-
-    .field_136da = 0x0280,
-
-    .ptr_136dc = SELF(str_1905),
-
-    .field_136e0 = 0x0281,
-
-    .ptr_136e2 = SELF(str_1904),
-
-    .field_136e6 = 0x0282,
-
-    .ptr_136e8 = SELF(str_1903),
-
-    .field_136ec = 0x0283,
-
-    .pad_415 = { 0 },
-
-    .str_1903 = ALIGNED_STRING("Unison Fox Band              170"),
-
-    .str_1904 = ALIGNED_STRING("Foxy & Brassy                170"),
-
-    .str_1905 = ALIGNED_STRING("Fox Accordingly              170"),
-
-    .str_1906 = ALIGNED_STRING("Quick Fox Keys               170"),
-
-    .ptr_1377c = SELF(str_1910),
-
-    .field_13780 = 0x0284,
-
-    .ptr_13782 = SELF(str_1909),
-
-    .field_13786 = 0x0285,
-
-    .ptr_13788 = SELF(str_1908),
-
-    .field_1378c = 0x0286,
-
-    .ptr_1378e = SELF(str_1907),
-
-    .field_13792 = 0x0287,
-
-    .pad_416 = { 0 },
-
-    .str_1907 = ALIGNED_STRING("Ballroom Bars                120"),
-
-    .str_1908 = ALIGNED_STRING("Foxtrot Sparkle              120"),
-
-    .str_1909 = ALIGNED_STRING("Come Dancing!                120"),
-
-    .str_1910 = ALIGNED_STRING("Foxy Combo                   120"),
-
-    .ptr_13822 = SELF(str_1914),
-
-    .field_13826 = 0x0288,
-
-    .ptr_13828 = SELF(str_1913),
-
-    .field_1382c = 0x0289,
-
-    .ptr_1382e = SELF(str_1912),
-
-    .field_13832 = 0x028a,
-
-    .ptr_13834 = SELF(str_1911),
-
-    .field_13838 = 0x028b,
-
-    .pad_417 = { 0 },
-
-    .str_1911 = ALIGNED_STRING("Radio Orchestra              168"),
-
-    .str_1912 = ALIGNED_STRING("Box Standards                168"),
-
-    .str_1913 = ALIGNED_STRING("Foxtrot Partners             168"),
-
-    .str_1914 = ALIGNED_STRING("Wunder-Fox                   168"),
-
-    .ptr_138c8 = SELF(str_1918),
-
-    .field_138cc = 0x028c,
-
-    .ptr_138ce = SELF(str_1917),
-
-    .field_138d2 = 0x028d,
-
-    .ptr_138d4 = SELF(str_1916),
-
-    .field_138d8 = 0x028e,
-
-    .ptr_138da = SELF(str_1915),
-
-    .field_138de = 0x028f,
-
-    .pad_418 = { 0 },
-
-    .str_1915 = ALIGNED_STRING("Organ Quickstep              200"),
-
-    .str_1916 = ALIGNED_STRING("Holiday Dance                200"),
-
-    .str_1917 = ALIGNED_STRING("No Twirling!                 200"),
-
-    .str_1918 = ALIGNED_STRING("Doo You Dance?               200"),
-
-    .ptr_1396e = SELF(str_1922),
-
-    .field_13972 = 0x0290,
-
-    .ptr_13974 = SELF(str_1921),
-
-    .field_13978 = 0x0291,
-
-    .ptr_1397a = SELF(str_1920),
-
-    .field_1397e = 0x0292,
-
-    .ptr_13980 = SELF(str_1919),
-
-    .field_13984 = 0x0293,
-
-    .pad_419 = { 0 },
-
-    .str_1919 = ALIGNED_STRING("Chubby's Best                168"),
-
-    .str_1920 = ALIGNED_STRING("Solid Twist                  168"),
-
-    .str_1921 = ALIGNED_STRING("Come On,Baby                 168"),
-
-    .str_1922 = ALIGNED_STRING("Do The Twist                 168"),
-
-    .ptr_13a14 = SELF(str_1926),
-
-    .field_13a18 = 0x0294,
-
-    .ptr_13a1a = SELF(str_1925),
-
-    .field_13a1e = 0x0295,
-
-    .ptr_13a20 = SELF(str_1924),
-
-    .field_13a24 = 0x0296,
-
-    .ptr_13a26 = SELF(str_1923),
-
-    .field_13a2a = 0x0297,
-
-    .pad_420 = { 0 },
-
-    .str_1923 = ALIGNED_STRING("Top Brass Jive               176"),
-
-    .str_1924 = ALIGNED_STRING("Jive Reeds                   176"),
-
-    .str_1925 = ALIGNED_STRING("Dance Band Jive              176"),
-
-    .str_1926 = ALIGNED_STRING("Jive Ivories                 176"),
-
-    .ptr_13aba = SELF(str_1930),
-
-    .field_13abe = 0x0298,
-
-    .ptr_13ac0 = SELF(str_1929),
-
-    .field_13ac4 = 0x0299,
-
-    .ptr_13ac6 = SELF(str_1928),
-
-    .field_13aca = 0x029a,
-
-    .ptr_13acc = SELF(str_1927),
-
-    .field_13ad0 = 0x029b,
-
-    .pad_421 = { 0 },
-
-    .str_1927 = ALIGNED_STRING("Twisting Guitars             155"),
-
-    .str_1928 = ALIGNED_STRING("Shakin' Saxes                155"),
-
-    .str_1929 = ALIGNED_STRING("Chubby's Octaves             155"),
-
-    .str_1930 = ALIGNED_STRING("Bari-Twist                   155"),
-
-    .ptr_13b60 = SELF(str_1934),
-
-    .field_13b64 = 0x029c,
-
-    .ptr_13b66 = SELF(str_1933),
-
-    .field_13b6a = 0x029d,
-
-    .ptr_13b6c = SELF(str_1932),
-
-    .field_13b70 = 0x029e,
-
-    .ptr_13b72 = SELF(str_1931),
-
-    .field_13b76 = 0x029f,
-
-    .pad_422 = { 0 },
-
-    .str_1931 = ALIGNED_STRING("Sequin Dance                 128"),
-
-    .str_1932 = ALIGNED_STRING("Brass For Two                128"),
-
-    .str_1933 = ALIGNED_STRING("Cha Cha Band                 128"),
-
-    .str_1934 = ALIGNED_STRING("Latin Ballroom               128"),
-
-    .ptr_13c06 = SELF(str_1938),
-
-    .field_13c0a = 0x02a0,
-
-    .ptr_13c0c = SELF(str_1937),
-
-    .field_13c10 = 0x02a1,
-
-    .ptr_13c12 = SELF(str_1936),
-
-    .field_13c16 = 0x02a2,
-
-    .ptr_13c18 = SELF(str_1935),
-
-    .field_13c1c = 0x02a3,
-
-    .pad_423 = { 0 },
-
-    .str_1935 = ALIGNED_STRING("Latin Elegance               118"),
-
-    .str_1936 = ALIGNED_STRING("Beguine Romance              118"),
-
-    .str_1937 = ALIGNED_STRING("When They Begin?             118"),
-
-    .str_1938 = ALIGNED_STRING("Siesta Beguine               118"),
-
-    .ptr_13cac = SELF(str_1942),
-
-    .field_13cb0 = 0x02a4,
-
-    .ptr_13cb2 = SELF(str_1941),
-
-    .field_13cb6 = 0x02a5,
-
-    .ptr_13cb8 = SELF(str_1940),
-
-    .field_13cbc = 0x02a6,
-
-    .ptr_13cbe = SELF(str_1939),
-
-    .field_13cc2 = 0x02a7,
-
-    .pad_424 = { 0 },
-
-    .str_1939 = ALIGNED_STRING("Ogerman-Unisono              115"),
-
-    .str_1940 = ALIGNED_STRING("Wanderley Samba              115"),
-
-    .str_1941 = ALIGNED_STRING("Samba Testamento             115"),
-
-    .str_1942 = ALIGNED_STRING("Organ De Janeiro             115"),
-
-    .ptr_13d52 = SELF(str_1946),
-
-    .field_13d56 = 0x02a8,
-
-    .ptr_13d58 = SELF(str_1945),
-
-    .field_13d5c = 0x02a9,
-
-    .ptr_13d5e = SELF(str_1944),
-
-    .field_13d62 = 0x02aa,
-
-    .ptr_13d64 = SELF(str_1943),
-
-    .field_13d68 = 0x02ab,
-
-    .pad_425 = { 0 },
-
-    .str_1943 = ALIGNED_STRING("Brassodoble                  118"),
-
-    .str_1944 = ALIGNED_STRING("Sunny Spain Mood             118"),
-
-    .str_1945 = ALIGNED_STRING("Flamenco Dancers             118"),
-
-    .str_1946 = ALIGNED_STRING("Espana Two Step              118"),
-
-    .ptr_13df8 = SELF(str_1950),
-
-    .field_13dfc = 0x02ac,
-
-    .ptr_13dfe = SELF(str_1949),
-
-    .field_13e02 = 0x02ad,
-
-    .ptr_13e04 = SELF(str_1948),
-
-    .field_13e08 = 0x02ae,
-
-    .ptr_13e0a = SELF(str_1947),
-
-    .field_13e0e = 0x02af,
-
-    .pad_426 = { 0 },
-
-    .str_1947 = ALIGNED_STRING("Tango Marcato                120"),
-
-    .str_1948 = ALIGNED_STRING("Spanish Moments              120"),
-
-    .str_1949 = ALIGNED_STRING("Octave Tango                 120"),
-
-    .str_1950 = ALIGNED_STRING("Grand Tango                  120"),
-
-    .ptr_13e9e = SELF(str_1954),
-
-    .field_13ea2 = 0x02b0,
-
-    .ptr_13ea4 = SELF(str_1953),
-
-    .field_13ea8 = 0x02b1,
-
-    .ptr_13eaa = SELF(str_1952),
-
-    .field_13eae = 0x02b2,
-
-    .ptr_13eb0 = SELF(str_1951),
-
-    .field_13eb4 = 0x02b3,
-
-    .pad_427 = { 0 },
-
-    .str_1951 = ALIGNED_STRING("Tango Orchestra              130"),
-
-    .str_1952 = ALIGNED_STRING("Lush Tango                   130"),
-
-    .str_1953 = ALIGNED_STRING("Holiday Tango                130"),
-
-    .str_1954 = ALIGNED_STRING("Italian Tango                130"),
-
-    .ptr_13f44 = SELF(str_1958),
-
-    .field_13f48 = 0x02b4,
-
-    .ptr_13f4a = SELF(str_1957),
-
-    .field_13f4e = 0x02b5,
-
-    .ptr_13f50 = SELF(str_1956),
-
-    .field_13f54 = 0x02b6,
-
-    .ptr_13f56 = SELF(str_1955),
-
-    .field_13f5a = 0x02b7,
-
-    .pad_428 = { 0 },
-
-    .str_1955 = ALIGNED_STRING("Tango Grandioso!             120"),
-
-    .str_1956 = ALIGNED_STRING("Latin Passion                120"),
-
-    .str_1957 = ALIGNED_STRING("Astor's Tango                120"),
-
-    .str_1958 = ALIGNED_STRING("Classical Tango              120"),
-
-    .ptr_13fea = SELF(str_1962),
-
-    .field_13fee = 0x02b8,
-
-    .ptr_13ff0 = SELF(str_1961),
-
-    .field_13ff4 = 0x02b9,
-
-    .ptr_13ff6 = SELF(str_1960),
-
-    .field_13ffa = 0x02ba,
-
-    .ptr_13ffc = SELF(str_1959),
-
-    .field_14000 = 0x02bb,
-
-    .pad_429 = { 0 },
-
-    .str_1959 = ALIGNED_STRING("Come Waltzing                 96"),
-
-    .str_1960 = ALIGNED_STRING("Organist's Waltz              96"),
-
-    .str_1961 = ALIGNED_STRING("Orchestra Waltz               96"),
-
-    .str_1962 = ALIGNED_STRING("Concertina Waltz              96"),
-
-    .ptr_14090 = SELF(str_1966),
-
-    .field_14094 = 0x02bc,
-
-    .ptr_14096 = SELF(str_1965),
-
-    .field_1409a = 0x02bd,
-
-    .ptr_1409c = SELF(str_1964),
-
-    .field_140a0 = 0x02be,
-
-    .ptr_140a2 = SELF(str_1963),
-
-    .field_140a6 = 0x02bf,
-
-    .pad_430 = { 0 },
-
-    .str_1963 = ALIGNED_STRING("Symphonic Waltz              130"),
-
-    .str_1964 = ALIGNED_STRING("Jazz Flute Gtr               130"),
-
-    .str_1965 = ALIGNED_STRING("Waltzing Flugel              130"),
-
-    .str_1966 = ALIGNED_STRING("3/4 Romance                  130"),
-
-    .ptr_14136 = SELF(str_1970),
-
-    .field_1413a = 0x02c0,
-
-    .ptr_1413c = SELF(str_1969),
-
-    .field_14140 = 0x02c1,
-
-    .ptr_14142 = SELF(str_1968),
-
-    .field_14146 = 0x02c2,
-
-    .ptr_14148 = SELF(str_1967),
-
-    .field_1414c = 0x02c3,
-
-    .pad_431 = { 0 },
-
-    .str_1967 = ALIGNED_STRING("The New Danube!              180"),
-
-    .str_1968 = ALIGNED_STRING("Not Strauss!                 180"),
-
-    .str_1969 = ALIGNED_STRING("Vienna Waves                 180"),
-
-    .str_1970 = ALIGNED_STRING("New Vienna                   180"),
-
-    .ptr_141dc = SELF(str_1974),
-
-    .field_141e0 = 0x02c4,
-
-    .ptr_141e2 = SELF(str_1973),
-
-    .field_141e6 = 0x02c5,
-
-    .ptr_141e8 = SELF(str_1972),
-
-    .field_141ec = 0x02c6,
-
-    .ptr_141ee = SELF(str_1971),
-
-    .field_141f2 = 0x02c7,
-
-    .pad_432 = { 0 },
-
-    .str_1971 = ALIGNED_STRING("Cuckoo Clock 3/4             183"),
-
-    .str_1972 = ALIGNED_STRING("Seppel-Dance                 183"),
-
-    .str_1973 = ALIGNED_STRING("Bavarian Flutes              183"),
-
-    .str_1974 = ALIGNED_STRING("Cottage 3/4                  183"),
-
-    .ptr_14282 = SELF(str_1978),
-
-    .field_14286 = 0x02c8,
-
-    .ptr_14288 = SELF(str_1977),
-
-    .field_1428c = 0x02c9,
-
-    .ptr_1428e = SELF(str_1976),
-
-    .field_14292 = 0x02ca,
-
-    .ptr_14294 = SELF(str_1975),
-
-    .field_14298 = 0x02cb,
-
-    .pad_433 = { 0 },
-
-    .str_1975 = ALIGNED_STRING("Vienna Finale                171"),
-
-    .str_1976 = ALIGNED_STRING("Vienna Strings               171"),
-
-    .str_1977 = ALIGNED_STRING("Ballroom Keys                171"),
-
-    .str_1978 = ALIGNED_STRING("Ball Gown Waltz              171"),
-
-    .ptr_14328 = SELF(str_1982),
-
-    .field_1432c = 0x02cc,
-
-    .ptr_1432e = SELF(str_1981),
-
-    .field_14332 = 0x02cd,
-
-    .ptr_14334 = SELF(str_1980),
-
-    .field_14338 = 0x02ce,
-
-    .ptr_1433a = SELF(str_1979),
-
-    .field_1433e = 0x02cf,
-
-    .pad_434 = { 0 },
-
-    .str_1979 = ALIGNED_STRING("Full Brass Band              115"),
-
-    .str_1980 = ALIGNED_STRING("Marching Sax                 115"),
-
-    .str_1981 = ALIGNED_STRING("Highschool Band              115"),
-
-    .str_1982 = ALIGNED_STRING("Fife & Drums                 115"),
-
-    .ptr_143ce = SELF(str_1986),
-
-    .field_143d2 = 0x02d0,
-
-    .ptr_143d4 = SELF(str_1985),
-
-    .field_143d8 = 0x02d1,
-
-    .ptr_143da = SELF(str_1984),
-
-    .field_143de = 0x02d2,
-
-    .ptr_143e0 = SELF(str_1983),
-
-    .field_143e4 = 0x02d3,
-
-    .pad_435 = { 0 },
-
-    .str_1983 = ALIGNED_STRING("Finale Salute                115"),
-
-    .str_1984 = ALIGNED_STRING("Alto Marchpast               115"),
-
-    .str_1985 = ALIGNED_STRING("By The Left                  115"),
-
-    .str_1986 = ALIGNED_STRING("Liberty March                115"),
-
-    .ptr_14474 = SELF(str_1990),
-
-    .field_14478 = 0x02d4,
-
-    .ptr_1447a = SELF(str_1989),
-
-    .field_1447e = 0x02d5,
-
-    .ptr_14480 = SELF(str_1988),
-
-    .field_14484 = 0x02d6,
-
-    .ptr_14486 = SELF(str_1987),
-
-    .field_1448a = 0x02d7,
-
-    .pad_436 = { 0 },
-
-    .str_1987 = ALIGNED_STRING("Festive March                109"),
-
-    .str_1988 = ALIGNED_STRING("Bavarian March               109"),
-
-    .str_1989 = ALIGNED_STRING("OktoberFest                  109"),
-
-    .str_1990 = ALIGNED_STRING("Munich Horns                 109"),
-
-    .ptr_1451a = SELF(str_1994),
-
-    .field_1451e = 0x02d8,
-
-    .ptr_14520 = SELF(str_1993),
-
-    .field_14524 = 0x02d9,
-
-    .ptr_14526 = SELF(str_1992),
-
-    .field_1452a = 0x02da,
-
-    .ptr_1452c = SELF(str_1991),
-
-    .field_14530 = 0x02db,
-
-    .pad_437 = { 0 },
-
-    .str_1991 = ALIGNED_STRING("Moik's Marchshow             120"),
-
-    .str_1992 = ALIGNED_STRING("Ernst & Friends              120"),
-
-    .str_1993 = ALIGNED_STRING("Mosch's Military             120"),
-
-    .str_1994 = ALIGNED_STRING("At The Eger                  120"),
-
-    .ptr_145c0 = SELF(str_1998),
-
-    .field_145c4 = 0x02dc,
-
-    .ptr_145c6 = SELF(str_1997),
-
-    .field_145ca = 0x02dd,
-
-    .ptr_145cc = SELF(str_1996),
-
-    .field_145d0 = 0x02de,
-
-    .ptr_145d2 = SELF(str_1995),
-
-    .field_145d6 = 0x02df,
-
-    .pad_438 = { 0 },
-
-    .str_1995 = ALIGNED_STRING("Marching Polka               124"),
-
-    .str_1996 = ALIGNED_STRING("Lederhosen Dance             124"),
-
-    .str_1997 = ALIGNED_STRING("Folk Polka                   124"),
-
-    .str_1998 = ALIGNED_STRING("Polka Partners               124"),
-
-    .ptr_14666 = SELF(str_2002),
-
-    .field_1466a = 0x02e0,
-
-    .ptr_1466c = SELF(str_2001),
-
-    .field_14670 = 0x02e1,
-
-    .ptr_14672 = SELF(str_2000),
-
-    .field_14676 = 0x02e2,
-
-    .ptr_14678 = SELF(str_1999),
-
-    .field_1467c = 0x02e3,
-
-    .pad_439 = { 0 },
-
-    .str_1999 = ALIGNED_STRING("Austrian Dance               135"),
-
-    .str_2000 = ALIGNED_STRING("Wedding Party                135"),
-
-    .str_2001 = ALIGNED_STRING("Bellow Shake Hit             135"),
-
-    .str_2002 = ALIGNED_STRING("Alpine Accordion             135"),
-
-    .ptr_1470c = SELF(str_2006),
-
-    .field_14710 = 0x02e4,
-
-    .ptr_14712 = SELF(str_2005),
-
-    .field_14716 = 0x02e5,
-
-    .ptr_14718 = SELF(str_2004),
-
-    .field_1471c = 0x02e6,
-
-    .ptr_1471e = SELF(str_2003),
-
-    .field_14722 = 0x02e7,
-
-    .pad_440 = { 0 },
-
-    .str_2003 = ALIGNED_STRING("Harmonic Tirol               125"),
-
-    .str_2004 = ALIGNED_STRING("Steirish Keys                125"),
-
-    .str_2005 = ALIGNED_STRING("Alpine Combo                 125"),
-
-    .str_2006 = ALIGNED_STRING("German Clarinet              125"),
-
-    .ptr_147b2 = SELF(str_2010),
-
-    .field_147b6 = 0x02e8,
-
-    .ptr_147b8 = SELF(str_2009),
-
-    .field_147bc = 0x02e9,
-
-    .ptr_147be = SELF(str_2008),
-
-    .field_147c2 = 0x02ea,
-
-    .ptr_147c4 = SELF(str_2007),
-
-    .field_147c8 = 0x02eb,
-
-    .pad_441 = { 0 },
-
-    .str_2007 = ALIGNED_STRING("Eire Squeezebox              120"),
-
-    .str_2008 = ALIGNED_STRING("Chieftain's Jig              120"),
-
-    .str_2009 = ALIGNED_STRING("Gaelic Dance                 120"),
-
-    .str_2010 = ALIGNED_STRING("Emerald Flute                120"),
-
-    .ptr_14858 = SELF(str_2014),
-
-    .field_1485c = 0x02ec,
-
-    .ptr_1485e = SELF(str_2013),
-
-    .field_14862 = 0x02ed,
-
-    .ptr_14864 = SELF(str_2012),
-
-    .field_14868 = 0x02ee,
-
-    .ptr_1486a = SELF(str_2011),
-
-    .field_1486e = 0x02ef,
-
-    .pad_442 = { 0 },
-
-    .str_2011 = ALIGNED_STRING("Scottish Band                172"),
-
-    .str_2012 = ALIGNED_STRING("Bonnie Whistles              172"),
-
-    .str_2013 = ALIGNED_STRING("Caber Dance!                 172"),
-
-    .str_2014 = ALIGNED_STRING("Jimmy's Reel                 172"),
-
-    .ptr_148fe = SELF(str_2018),
-
-    .field_14902 = 0x02f0,
-
-    .ptr_14904 = SELF(str_2017),
-
-    .field_14908 = 0x02f1,
-
-    .ptr_1490a = SELF(str_2016),
-
-    .field_1490e = 0x02f2,
-
-    .ptr_14910 = SELF(str_2015),
-
-    .field_14914 = 0x02f3,
-
-    .pad_443 = { 0 },
-
-    .str_2015 = ALIGNED_STRING("Austria Symphony             169"),
-
-    .str_2016 = ALIGNED_STRING("Waltzing Concert             169"),
-
-    .str_2017 = ALIGNED_STRING("Strauss & Co                 169"),
-
-    .str_2018 = ALIGNED_STRING("Vienna Woods                 169"),
-
-    .ptr_149a4 = SELF(str_2022),
-
-    .field_149a8 = 0x02f4,
-
-    .ptr_149aa = SELF(str_2021),
-
-    .field_149ae = 0x02f5,
-
-    .ptr_149b0 = SELF(str_2020),
-
-    .field_149b4 = 0x02f6,
-
-    .ptr_149b6 = SELF(str_2019),
-
-    .field_149ba = 0x02f7,
-
-    .pad_444 = { 0 },
-
-    .str_2019 = ALIGNED_STRING("Ski Lodge Waltz              197"),
-
-    .str_2020 = ALIGNED_STRING("Alphorn Movement             197"),
-
-    .str_2021 = ALIGNED_STRING("Matterhorn Waltz             197"),
-
-    .str_2022 = ALIGNED_STRING("Alpine Guitar                197"),
-
-    .ptr_14a4a = SELF(str_2026),
-
-    .field_14a4e = 0x02f8,
-
-    .ptr_14a50 = SELF(str_2025),
-
-    .field_14a54 = 0x02f9,
-
-    .ptr_14a56 = SELF(str_2024),
-
-    .field_14a5a = 0x02fa,
-
-    .ptr_14a5c = SELF(str_2023),
-
-    .field_14a60 = 0x02fb,
-
-    .pad_445 = { 0 },
-
-    .str_2023 = ALIGNED_STRING("Dance The Mazurka            150"),
-
-    .str_2024 = ALIGNED_STRING("Folk Waltz                   150"),
-
-    .str_2025 = ALIGNED_STRING("Old Time Dance               150"),
-
-    .str_2026 = ALIGNED_STRING("Mazurka Clarinet             150"),
-
-    .ptr_14af0 = SELF(str_2030),
-
-    .field_14af4 = 0x02fc,
-
-    .ptr_14af6 = SELF(str_2029),
-
-    .field_14afa = 0x02fd,
-
-    .ptr_14afc = SELF(str_2028),
-
-    .field_14b00 = 0x02fe,
-
-    .ptr_14b02 = SELF(str_2027),
-
-    .field_14b06 = 0x02ff,
-
-    .pad_446 = { 0 },
-
-    .str_2027 = ALIGNED_STRING("Tiroler Harp                 190"),
-
-    .str_2028 = ALIGNED_STRING("Bandoneon Waltz              190"),
-
-    .str_2029 = ALIGNED_STRING("Waltzer Band                 190"),
-
-    .str_2030 = ALIGNED_STRING("Klarinette Waltz             190"),
-
-    .ptr_14b96 = SELF(str_2034),
-
-    .field_14b9a = 0x0300,
-
-    .ptr_14b9c = SELF(str_2033),
-
-    .field_14ba0 = 0x0301,
-
-    .ptr_14ba2 = SELF(str_2032),
-
-    .field_14ba6 = 0x0302,
-
-    .ptr_14ba8 = SELF(str_2031),
-
-    .field_14bac = 0x0303,
-
-    .pad_447 = { 0 },
-
-    .str_2031 = ALIGNED_STRING("Island Strings               101"),
-
-    .str_2032 = ALIGNED_STRING("Waikiki Voices               101"),
-
-    .str_2033 = ALIGNED_STRING("Island Delight               101"),
-
-    .str_2034 = ALIGNED_STRING("Island Flute                 101"),
-
-    .ptr_14c3c = SELF(str_2038),
-
-    .field_14c40 = 0x0304,
-
-    .ptr_14c42 = SELF(str_2037),
-
-    .field_14c46 = 0x0305,
-
-    .ptr_14c48 = SELF(str_2036),
-
-    .field_14c4c = 0x0306,
-
-    .ptr_14c4e = SELF(str_2035),
-
-    .field_14c52 = 0x0307,
-
-    .pad_448 = { 0 },
-
-    .str_2035 = ALIGNED_STRING("Honolulu Strings             130"),
-
-    .str_2036 = ALIGNED_STRING("Island Duo                   130"),
-
-    .str_2037 = ALIGNED_STRING("Hula Dance                   130"),
-
-    .str_2038 = ALIGNED_STRING("Island Whistle               130"),
-
-    .ptr_14ce2 = SELF(str_2042),
-
-    .field_14ce6 = 0x0308,
-
-    .ptr_14ce8 = SELF(str_2041),
-
-    .field_14cec = 0x0309,
-
-    .ptr_14cee = SELF(str_2040),
-
-    .field_14cf2 = 0x030a,
-
-    .ptr_14cf4 = SELF(str_2039),
-
-    .field_14cf8 = 0x030b,
-
-    .pad_449 = { 0 },
-
-    .str_2039 = ALIGNED_STRING("Entertaining Rag             130"),
-
-    .str_2040 = ALIGNED_STRING("Play The Sting!              130"),
-
-    .str_2041 = ALIGNED_STRING("Joplin Rag                   130"),
-
-    .str_2042 = ALIGNED_STRING("Syncopated Wood              130"),
-
-    .ptr_14d88 = SELF(str_2046),
-
-    .field_14d8c = 0x030c,
-
-    .ptr_14d8e = SELF(str_2045),
-
-    .field_14d92 = 0x030d,
-
-    .ptr_14d94 = SELF(str_2044),
-
-    .field_14d98 = 0x030e,
-
-    .ptr_14d9a = SELF(str_2043),
-
-    .field_14d9e = 0x030f,
-
-    .pad_450 = { 0 },
-
-    .str_2043 = ALIGNED_STRING("Maple Leaf Piano             180"),
-
-    .str_2044 = ALIGNED_STRING("Ragtime Duet                 180"),
-
-    .str_2045 = ALIGNED_STRING("Ragedy Sax                   180"),
-
-    .str_2046 = ALIGNED_STRING("Banjo Ragtime                180"),
-
-    .ptr_14e2e = SELF(str_2050),
-
-    .field_14e32 = 0x0310,
-
-    .ptr_14e34 = SELF(str_2049),
-
-    .field_14e38 = 0x0311,
-
-    .ptr_14e3a = SELF(str_2048),
-
-    .field_14e3e = 0x0312,
-
-    .ptr_14e40 = SELF(str_2047),
-
-    .field_14e44 = 0x0313,
-
-    .pad_451 = { 0 },
-
-    .str_2047 = ALIGNED_STRING("Honky-Tonk Band              196"),
-
-    .str_2048 = ALIGNED_STRING("Barber Shop Jazz             196"),
-
-    .str_2049 = ALIGNED_STRING("Bourbon Street               196"),
-
-    .str_2050 = ALIGNED_STRING("Trad Jazz Band               196"),
-
-    .ptr_14ed4 = SELF(str_2054),
-
-    .field_14ed8 = 0x0314,
-
-    .ptr_14eda = SELF(str_2053),
-
-    .field_14ede = 0x0315,
-
-    .ptr_14ee0 = SELF(str_2052),
-
-    .field_14ee4 = 0x0316,
-
-    .ptr_14ee6 = SELF(str_2051),
-
-    .field_14eea = 0x0317,
-
-    .pad_452 = { 0 },
-
-    .str_2051 = ALIGNED_STRING("Alexander's Band             185"),
-
-    .str_2052 = ALIGNED_STRING("Dixie Partners               185"),
-
-    .str_2053 = ALIGNED_STRING("Liquorice Dixie              185"),
-
-    .str_2054 = ALIGNED_STRING("Dixie Bone                   185"),
-
-    .ptr_14f7a = SELF(str_2058),
-
-    .field_14f7e = 0x0318,
-
-    .ptr_14f80 = SELF(str_2057),
-
-    .field_14f84 = 0x0319,
-
-    .ptr_14f86 = SELF(str_2056),
-
-    .field_14f8a = 0x031a,
-
-    .ptr_14f8c = SELF(str_2055),
-
-    .field_14f90 = 0x031b,
-
-    .pad_453 = { 0 },
-
-    .str_2055 = ALIGNED_STRING("Bouzouki Masters             120"),
-
-    .str_2056 = ALIGNED_STRING("Zorba's Band                 120"),
-
-    .str_2057 = ALIGNED_STRING("Plate Dance                  120"),
-
-    .str_2058 = ALIGNED_STRING("Never On A?                  120"),
-
-    .ptr_15020 = SELF(str_2062),
-
-    .field_15024 = 0x031c,
-
-    .ptr_15026 = SELF(str_2061),
-
-    .field_1502a = 0x031d,
-
-    .ptr_1502c = SELF(str_2060),
-
-    .field_15030 = 0x031e,
-
-    .ptr_15032 = SELF(str_2059),
-
-    .field_15036 = 0x031f,
-
-    .pad_454 = { 0 },
-
-    .str_2059 = ALIGNED_STRING("Cossack Strings              141"),
-
-    .str_2060 = ALIGNED_STRING("Baltic Reeds                 141"),
-
-    .str_2061 = ALIGNED_STRING("Moscow Mandolins             141"),
-
-    .str_2062 = ALIGNED_STRING("Vladivar Strings             141"),
-
-    .ptr_150c6 = SELF(str_2066),
-
-    .field_150ca = 0x0320,
-
-    .ptr_150cc = SELF(str_2065),
-
-    .field_150d0 = 0x0321,
-
-    .ptr_150d2 = SELF(str_2064),
-
-    .field_150d6 = 0x0322,
-
-    .ptr_150d8 = SELF(str_2063),
-
-    .field_150dc = 0x0323,
-
-    .pad_455 = { 0 },
-
-    .str_2063 = ALIGNED_STRING("Folklore Brass               115"),
-
-    .str_2064 = ALIGNED_STRING("Hungarian Duet               115"),
-
-    .str_2065 = ALIGNED_STRING("Gypsy Melody                 115"),
-
-    .str_2066 = ALIGNED_STRING("Goulash Dance                115"),
-
-    .ptr_1516c = SELF(str_2070),
-
-    .field_15170 = 0x0324,
-
-    .ptr_15172 = SELF(str_2069),
-
-    .field_15176 = 0x0325,
-
-    .ptr_15178 = SELF(str_2068),
-
-    .field_1517c = 0x0326,
-
-    .ptr_1517e = SELF(str_2067),
-
-    .field_15182 = 0x0327,
-
-    .pad_456 = { 0 },
-
-    .str_2067 = ALIGNED_STRING("Great Accordions             128"),
-
-    .str_2068 = ALIGNED_STRING("Sing Along!                  128"),
-
-    .str_2069 = ALIGNED_STRING("Spider Dance                 128"),
-
-    .str_2070 = ALIGNED_STRING("Ole Guitar                   128"),
-
-    .ptr_15212 = SELF(str_2074),
-
-    .field_15216 = 0x0328,
-
-    .ptr_15218 = SELF(str_2073),
-
-    .field_1521c = 0x0329,
-
-    .ptr_1521e = SELF(str_2072),
-
-    .field_15222 = 0x032a,
-
-    .ptr_15224 = SELF(str_2071),
-
-    .field_15228 = 0x032b,
-
-    .pad_457 = { 0 },
-
-    .str_2071 = ALIGNED_STRING("Tex Mex Mix                  112"),
-
-    .str_2072 = ALIGNED_STRING("Cucaracha Duo                112"),
-
-    .str_2073 = ALIGNED_STRING("Hat Dance Frets              112"),
-
-    .str_2074 = ALIGNED_STRING("Jalapeno Bellows             112"),
-
-    .ptr_152b8 = SELF(str_2078),
-
-    .field_152bc = 0x032c,
-
-    .ptr_152be = SELF(str_2077),
-
-    .field_152c2 = 0x032d,
-
-    .ptr_152c4 = SELF(str_2076),
-
-    .field_152c8 = 0x032e,
-
-    .ptr_152ca = SELF(str_2075),
-
-    .field_152ce = 0x032f,
-
-    .pad_458 = { 0 },
-
-    .str_2075 = ALIGNED_STRING("Solid Distortion             122"),
-
-    .str_2076 = ALIGNED_STRING("Penny Folk Song              122"),
-
-    .str_2077 = ALIGNED_STRING("Steeleye Guitar              122"),
-
-    .str_2078 = ALIGNED_STRING("Folk Fiddles                 122"),
-
-    .ptr_1535e = SELF(str_2082),
-
-    .field_15362 = 0x0330,
-
-    .ptr_15364 = SELF(str_2081),
-
-    .field_15368 = 0x0331,
-
-    .ptr_1536a = SELF(str_2080),
-
-    .field_1536e = 0x0332,
-
-    .ptr_15370 = SELF(str_2079),
-
-    .field_15374 = 0x0333,
-
-    .pad_459 = { 0 },
-
-    .str_2079 = ALIGNED_STRING("Don't Fiddle It!             124"),
-
-    .str_2080 = ALIGNED_STRING("Cajun Hoedown                124"),
-
-    .str_2081 = ALIGNED_STRING("Pedal Steel Duel             124"),
-
-    .str_2082 = ALIGNED_STRING("Bluegrass Harp               124"),
-
-    .ptr_15404 = SELF(str_2086),
-
-    .field_15408 = 0x0334,
-
-    .ptr_1540a = SELF(str_2085),
-
-    .field_1540e = 0x0335,
-
-    .ptr_15410 = SELF(str_2084),
-
-    .field_15414 = 0x0336,
-
-    .ptr_15416 = SELF(str_2083),
-
-    .field_1541a = 0x0337,
-
-    .pad_460 = { 0 },
-
-    .str_2083 = ALIGNED_STRING("Yee Ha Fiddles               235"),
-
-    .str_2084 = ALIGNED_STRING("Hard Country Sax             235"),
-
-    .str_2085 = ALIGNED_STRING("Country Licks                235"),
-
-    .str_2086 = ALIGNED_STRING("Bluegrass Piano              235"),
-
-    .ptr_154aa = SELF(str_2090),
-
-    .field_154ae = 0x0338,
-
-    .ptr_154b0 = SELF(str_2089),
-
-    .field_154b4 = 0x0339,
-
-    .ptr_154b6 = SELF(str_2088),
-
-    .field_154ba = 0x033a,
-
-    .ptr_154bc = SELF(str_2087),
-
-    .field_154c0 = 0x033b,
-
-    .pad_461 = { 0 },
-
-    .str_2087 = ALIGNED_STRING("Hoedown Strings              123"),
-
-    .str_2088 = ALIGNED_STRING("Solid Bluegrass              123"),
-
-    .str_2089 = ALIGNED_STRING("Banjo Contest                123"),
-
-    .str_2090 = ALIGNED_STRING("Country Fiddle               123"),
-
-    .ptr_15550 = SELF(str_2094),
-
-    .field_15554 = 0x033c,
-
-    .ptr_15556 = SELF(str_2093),
-
-    .field_1555a = 0x033d,
-
-    .ptr_1555c = SELF(str_2092),
-
-    .field_15560 = 0x033e,
-
-    .ptr_15562 = SELF(str_2091),
-
-    .field_15566 = 0x033f,
-
-    .pad_462 = { 0 },
-
-    .str_2091 = ALIGNED_STRING("Fogerty's Stomp              206"),
-
-    .str_2092 = ALIGNED_STRING("On The Highway               206"),
-
-    .str_2093 = ALIGNED_STRING("Convoy Bluegrass             206"),
-
-    .str_2094 = ALIGNED_STRING("Trucker's Stop               206"),
-
-    .ptr_155f6 = SELF(str_2098),
-
-    .field_155fa = 0x0340,
-
-    .ptr_155fc = SELF(str_2097),
-
-    .field_15600 = 0x0341,
-
-    .ptr_15602 = SELF(str_2096),
-
-    .field_15606 = 0x0342,
-
-    .ptr_15608 = SELF(str_2095),
-
-    .field_1560c = 0x0343,
-
-    .pad_463 = { 0 },
-
-    .str_2095 = ALIGNED_STRING("Barn Dance Band              147"),
-
-    .str_2096 = ALIGNED_STRING("Nashville Dance              147"),
-
-    .str_2097 = ALIGNED_STRING("Two Step Duo                 147"),
-
-    .str_2098 = ALIGNED_STRING("Yee Ha Geetar                147"),
-
-    .ptr_1569c = SELF(str_2102),
-
-    .field_156a0 = 0x0344,
-
-    .ptr_156a2 = SELF(str_2101),
-
-    .field_156a6 = 0x0345,
-
-    .ptr_156a8 = SELF(str_2100),
-
-    .field_156ac = 0x0346,
-
-    .ptr_156ae = SELF(str_2099),
-
-    .field_156b2 = 0x0347,
-
-    .pad_464 = { 0 },
-
-    .str_2099 = ALIGNED_STRING("Southern Unison              128"),
-
-    .str_2100 = ALIGNED_STRING("Country Ivories              128"),
-
-    .str_2101 = ALIGNED_STRING("Steel City Blues             128"),
-
-    .str_2102 = ALIGNED_STRING("Blue Harmonies               128"),
-
-    .ptr_15742 = SELF(str_2106),
-
-    .field_15746 = 0x0348,
-
-    .ptr_15748 = SELF(str_2105),
-
-    .field_1574c = 0x0349,
-
-    .ptr_1574e = SELF(str_2104),
-
-    .field_15752 = 0x034a,
-
-    .ptr_15754 = SELF(str_2103),
-
-    .field_15758 = 0x034b,
-
-    .pad_465 = { 0 },
-
-    .str_2103 = ALIGNED_STRING("Roads to Country             173"),
-
-    .str_2104 = ALIGNED_STRING("EZ Steel Country             173"),
-
-    .str_2105 = ALIGNED_STRING("Carpenkeys                   173"),
-
-    .str_2106 = ALIGNED_STRING("Karen's Country              173"),
-
-    .ptr_157e8 = SELF(str_2110),
-
-    .field_157ec = 0x034c,
-
-    .ptr_157ee = SELF(str_2109),
-
-    .field_157f2 = 0x034d,
-
-    .ptr_157f4 = SELF(str_2108),
-
-    .field_157f8 = 0x034e,
-
-    .ptr_157fa = SELF(str_2107),
-
-    .field_157fe = 0x034f,
-
-    .pad_466 = { 0 },
-
-    .str_2107 = ALIGNED_STRING("Kentucky Vocals               88"),
-
-    .str_2108 = ALIGNED_STRING("Nashville Ballad              88"),
-
-    .str_2109 = ALIGNED_STRING("Country Harp                  88"),
-
-    .str_2110 = ALIGNED_STRING("Country Tenor                 88"),
-
-    .ptr_1588e = SELF(str_2114),
-
-    .field_15892 = 0x0350,
-
-    .ptr_15894 = SELF(str_2113),
-
-    .field_15898 = 0x0351,
-
-    .ptr_1589a = SELF(str_2112),
-
-    .field_1589e = 0x0352,
-
-    .ptr_158a0 = SELF(str_2111),
-
-    .field_158a4 = 0x0353,
-
-    .pad_467 = { 0 },
-
-    .str_2111 = ALIGNED_STRING("Chet's Country                85"),
-
-    .str_2112 = ALIGNED_STRING("Cowboy Saxes                  85"),
-
-    .str_2113 = ALIGNED_STRING("Blueberry Saxes               85"),
-
-    .str_2114 = ALIGNED_STRING("Kramer Country                85"),
-
-    .ptr_15934 = SELF(str_2118),
-
-    .field_15938 = 0x0354,
-
-    .ptr_1593a = SELF(str_2117),
-
-    .field_1593e = 0x0355,
-
-    .ptr_15940 = SELF(str_2116),
-
-    .field_15944 = 0x0356,
-
-    .ptr_15946 = SELF(str_2115),
-
-    .field_1594a = 0x0357,
-
-    .pad_468 = { 0 },
-
-    .str_2115 = ALIGNED_STRING("In Daa Country               170"),
-
-    .str_2116 = ALIGNED_STRING("Country Radio                170"),
-
-    .str_2117 = ALIGNED_STRING("South Concertina             170"),
-
-    .str_2118 = ALIGNED_STRING("Southern Style               170"),
-
-    .ptr_159da = SELF(str_2122),
-
-    .field_159de = 0x0358,
-
-    .ptr_159e0 = SELF(str_2121),
-
-    .field_159e4 = 0x0359,
-
-    .ptr_159e6 = SELF(str_2120),
-
-    .field_159ea = 0x035a,
-
-    .ptr_159ec = SELF(str_2119),
-
-    .field_159f0 = 0x035b,
-
-    .pad_469 = { 0 },
-
-    .str_2119 = ALIGNED_STRING("Rodeo Organ                   75"),
-
-    .str_2120 = ALIGNED_STRING("Horseback Duo                 75"),
-
-    .str_2121 = ALIGNED_STRING("Country Blues                 75"),
-
-    .str_2122 = ALIGNED_STRING("Wandrin' Keys                 75"),
-
-    .ptr_15a80 = SELF(str_2126),
-
-    .field_15a84 = 0x035c,
-
-    .ptr_15a86 = SELF(str_2125),
-
-    .field_15a8a = 0x035d,
-
-    .ptr_15a8c = SELF(str_2124),
-
-    .field_15a90 = 0x035e,
-
-    .ptr_15a92 = SELF(str_2123),
-
-    .field_15a96 = 0x035f,
-
-    .pad_470 = { 0 },
-
-    .str_2123 = ALIGNED_STRING("Tennessee Guitar              88"),
-
-    .str_2124 = ALIGNED_STRING("Mellow Country                88"),
-
-    .str_2125 = ALIGNED_STRING("Country Keys                  88"),
-
-    .str_2126 = ALIGNED_STRING("Harmonica Waltz               88"),
-
-    .ptr_15b26 = SELF(str_2130),
-
-    .field_15b2a = 0x0360,
-
-    .ptr_15b2c = SELF(str_2129),
-
-    .field_15b30 = 0x0361,
-
-    .ptr_15b32 = SELF(str_2128),
-
-    .field_15b36 = 0x0362,
-
-    .ptr_15b38 = SELF(str_2127),
-
-    .field_15b3c = 0x0363,
-
-    .pad_471 = { 0 },
-
-    .str_2127 = ALIGNED_STRING("Country Rock                 116"),
-
-    .str_2128 = ALIGNED_STRING("Nashville Steel              116"),
-
-    .str_2129 = ALIGNED_STRING("Duelling Guitars             116"),
-
-    .str_2130 = ALIGNED_STRING("Fiddle Rock                  116"),
-
-    .ptr_15bcc = SELF(str_2134),
-
-    .field_15bd0 = 0x0364,
-
-    .ptr_15bd2 = SELF(str_2133),
-
-    .field_15bd6 = 0x0365,
-
-    .ptr_15bd8 = SELF(str_2132),
-
-    .field_15bdc = 0x0366,
-
-    .ptr_15bde = SELF(str_2131),
-
-    .field_15be2 = 0x0367,
-
-    .pad_472 = { 0 },
-
-    .str_2131 = ALIGNED_STRING("Ranch Rock                   128"),
-
-    .str_2132 = ALIGNED_STRING("Dolly's Strings              128"),
-
-    .str_2133 = ALIGNED_STRING("Ricky's Guitar               128"),
-
-    .str_2134 = ALIGNED_STRING("Cowboy Suite                 128"),
-
-    .ptr_15c72 = SELF(str_2138),
-
-    .field_15c76 = 0x0368,
-
-    .ptr_15c78 = SELF(str_2137),
-
-    .field_15c7c = 0x0369,
-
-    .ptr_15c7e = SELF(str_2136),
-
-    .field_15c82 = 0x036a,
-
-    .ptr_15c84 = SELF(str_2135),
-
-    .field_15c88 = 0x036b,
-
-    .pad_473 = { 0 },
-
-    .str_2135 = ALIGNED_STRING("Steel & Strings              113"),
-
-    .str_2136 = ALIGNED_STRING("Country Warmth               113"),
-
-    .str_2137 = ALIGNED_STRING("Let It Shine!                113"),
-
-    .str_2138 = ALIGNED_STRING("Geetar Man                   113"),
-
-    .ptr_15d18 = SELF(str_2142),
-
-    .field_15d1c = 0x036c,
-
-    .ptr_15d1e = SELF(str_2141),
-
-    .field_15d22 = 0x036d,
-
-    .ptr_15d24 = SELF(str_2140),
-
-    .field_15d28 = 0x036e,
-
-    .ptr_15d2a = SELF(str_2139),
-
-    .field_15d2e = 0x036f,
-
-    .pad_474 = { 0 },
-
-    .str_2139 = ALIGNED_STRING("Country Horns                115"),
-
-    .str_2140 = ALIGNED_STRING("In Sax Country               115"),
-
-    .str_2141 = ALIGNED_STRING("Rockin' Country              115"),
-
-    .str_2142 = ALIGNED_STRING("Tennessee Rock               115"),
-
-    .ptr_15dbe = SELF(str_2146),
-
-    .field_15dc2 = 0x0370,
-
-    .ptr_15dc4 = SELF(str_2145),
-
-    .field_15dc8 = 0x0371,
-
-    .ptr_15dca = SELF(str_2144),
-
-    .field_15dce = 0x0372,
-
-    .ptr_15dd0 = SELF(str_2143),
-
-    .field_15dd4 = 0x0373,
-
-    .pad_475 = { 0 },
-
-    .str_2143 = ALIGNED_STRING("Muted Country                160"),
-
-    .str_2144 = ALIGNED_STRING("Hard Country                 160"),
-
-    .str_2145 = ALIGNED_STRING("Clean Country                160"),
-
-    .str_2146 = ALIGNED_STRING("Western Keys                 160"),
-
-    .ptr_15e64 = SELF(str_2150),
-
-    .field_15e68 = 0x0374,
-
-    .ptr_15e6a = SELF(str_2149),
-
-    .field_15e6e = 0x0375,
-
-    .ptr_15e70 = SELF(str_2148),
-
-    .field_15e74 = 0x0376,
-
-    .ptr_15e76 = SELF(str_2147),
-
-    .field_15e7a = 0x0377,
-
-    .pad_476 = { 0 },
-
-    .str_2147 = ALIGNED_STRING("Jobim Strings                 66"),
-
-    .str_2148 = ALIGNED_STRING("Brasilian Flute               66"),
-
-    .str_2149 = ALIGNED_STRING("Ham & Bossa                   66"),
-
-    .str_2150 = ALIGNED_STRING("Siesta Guitars                66"),
-
-    .ptr_15f0a = SELF(str_2154),
-
-    .field_15f0e = 0x0378,
-
-    .ptr_15f10 = SELF(str_2153),
-
-    .field_15f14 = 0x0379,
-
-    .ptr_15f16 = SELF(str_2152),
-
-    .field_15f1a = 0x037a,
-
-    .ptr_15f1c = SELF(str_2151),
-
-    .field_15f20 = 0x037b,
-
-    .pad_477 = { 0 },
-
-    .str_2151 = ALIGNED_STRING("Bossa Society                 68"),
-
-    .str_2152 = ALIGNED_STRING("Getz Bossa                    68"),
-
-    .str_2153 = ALIGNED_STRING("Bossa Cocktail                68"),
-
-    .str_2154 = ALIGNED_STRING("Latin Tines                   68"),
-
-    .ptr_15fb0 = SELF(str_2158),
-
-    .field_15fb4 = 0x037c,
-
-    .ptr_15fb6 = SELF(str_2157),
-
-    .field_15fba = 0x037d,
-
-    .ptr_15fbc = SELF(str_2156),
-
-    .field_15fc0 = 0x037e,
-
-    .ptr_15fc2 = SELF(str_2155),
-
-    .field_15fc6 = 0x037f,
-
-    .pad_478 = { 0 },
-
-    .str_2155 = ALIGNED_STRING("Modern Bossa                  74"),
-
-    .str_2156 = ALIGNED_STRING("Bossa Duet                    74"),
-
-    .str_2157 = ALIGNED_STRING("Meditating Sax                74"),
-
-    .str_2158 = ALIGNED_STRING("Ipenema Flute                 74"),
-
-    .ptr_16056 = SELF(str_2162),
-
-    .field_1605a = 0x0380,
-
-    .ptr_1605c = SELF(str_2161),
-
-    .field_16060 = 0x0381,
-
-    .ptr_16062 = SELF(str_2160),
-
-    .field_16066 = 0x0382,
-
-    .ptr_16068 = SELF(str_2159),
-
-    .field_1606c = 0x0383,
-
-    .pad_479 = { 0 },
-
-    .str_2159 = ALIGNED_STRING("El Toro's Rhumba             119"),
-
-    .str_2160 = ALIGNED_STRING("Julio's Romance              119"),
-
-    .str_2161 = ALIGNED_STRING("Carmen's Octaves             119"),
-
-    .str_2162 = ALIGNED_STRING("Mellow Rhumba                119"),
-
-    .ptr_160fc = SELF(str_2166),
-
-    .field_16100 = 0x0384,
-
-    .ptr_16102 = SELF(str_2165),
-
-    .field_16106 = 0x0385,
-
-    .ptr_16108 = SELF(str_2164),
-
-    .field_1610c = 0x0386,
-
-    .ptr_1610e = SELF(str_2163),
-
-    .field_16112 = 0x0387,
-
-    .pad_480 = { 0 },
-
-    .str_2163 = ALIGNED_STRING("Elegant Keys                 120"),
-
-    .str_2164 = ALIGNED_STRING("Latin Symphony               120"),
-
-    .str_2165 = ALIGNED_STRING("Besame Strings               120"),
-
-    .str_2166 = ALIGNED_STRING("Mediterranean!               120"),
-
-    .ptr_161a2 = SELF(str_2170),
-
-    .field_161a6 = 0x0388,
-
-    .ptr_161a8 = SELF(str_2169),
-
-    .field_161ac = 0x0389,
-
-    .ptr_161ae = SELF(str_2168),
-
-    .field_161b2 = 0x038a,
-
-    .ptr_161b4 = SELF(str_2167),
-
-    .field_161b8 = 0x038b,
-
-    .pad_481 = { 0 },
-
-    .str_2167 = ALIGNED_STRING("Beguine Register             117"),
-
-    .str_2168 = ALIGNED_STRING("Besame Unison                117"),
-
-    .str_2169 = ALIGNED_STRING("Society Beguine              117"),
-
-    .str_2170 = ALIGNED_STRING("Amor Reed                    117"),
-
-    .ptr_16248 = SELF(str_2174),
-
-    .field_1624c = 0x038c,
-
-    .ptr_1624e = SELF(str_2173),
-
-    .field_16252 = 0x038d,
-
-    .ptr_16254 = SELF(str_2172),
-
-    .field_16258 = 0x038e,
-
-    .ptr_1625a = SELF(str_2171),
-
-    .field_1625e = 0x038f,
-
-    .pad_482 = { 0 },
-
-    .str_2171 = ALIGNED_STRING("Bolero Orchestra             120"),
-
-    .str_2172 = ALIGNED_STRING("Latin Love Song              120"),
-
-    .str_2173 = ALIGNED_STRING("Bolero Keys                  120"),
-
-    .str_2174 = ALIGNED_STRING("Not Ravel's.....             120"),
-
-    .ptr_162ee = SELF(str_2178),
-
-    .field_162f2 = 0x0390,
-
-    .ptr_162f4 = SELF(str_2177),
-
-    .field_162f8 = 0x0391,
-
-    .ptr_162fa = SELF(str_2176),
-
-    .field_162fe = 0x0392,
-
-    .ptr_16300 = SELF(str_2175),
-
-    .field_16304 = 0x0393,
-
-    .pad_483 = { 0 },
-
-    .str_2175 = ALIGNED_STRING("Latin Relaxation             115"),
-
-    .str_2176 = ALIGNED_STRING("Holiday Rhumba               115"),
-
-    .str_2177 = ALIGNED_STRING("Fantasy Rhumba               115"),
-
-    .str_2178 = ALIGNED_STRING("Spanish Romance              115"),
-
-    .ptr_16394 = SELF(str_2182),
-
-    .field_16398 = 0x0394,
-
-    .ptr_1639a = SELF(str_2181),
-
-    .field_1639e = 0x0395,
-
-    .ptr_163a0 = SELF(str_2180),
-
-    .field_163a4 = 0x0396,
-
-    .ptr_163a6 = SELF(str_2179),
-
-    .field_163aa = 0x0397,
-
-    .pad_484 = { 0 },
-
-    .str_2179 = ALIGNED_STRING("Puente's Bigband             130"),
-
-    .str_2180 = ALIGNED_STRING("Saxes Of Tito                130"),
-
-    .str_2181 = ALIGNED_STRING("Pepito For Pepe              130"),
-
-    .str_2182 = ALIGNED_STRING("Two Cups Of Cha!             130"),
-
-    .ptr_1643a = SELF(str_2186),
-
-    .field_1643e = 0x0398,
-
-    .ptr_16440 = SELF(str_2185),
-
-    .field_16444 = 0x0399,
-
-    .ptr_16446 = SELF(str_2184),
-
-    .field_1644a = 0x039a,
-
-    .ptr_1644c = SELF(str_2183),
-
-    .field_16450 = 0x039b,
-
-    .pad_485 = { 0 },
-
-    .str_2183 = ALIGNED_STRING("Last Latin Brass             129"),
-
-    .str_2184 = ALIGNED_STRING("Ambros Saxes                 129"),
-
-    .str_2185 = ALIGNED_STRING("Mellow Mambo                 129"),
-
-    .str_2186 = ALIGNED_STRING("Mambo Bravisimo              129"),
-
-    .ptr_164e0 = SELF(str_2190),
-
-    .field_164e4 = 0x039c,
-
-    .ptr_164e6 = SELF(str_2189),
-
-    .field_164ea = 0x039d,
-
-    .ptr_164ec = SELF(str_2188),
-
-    .field_164f0 = 0x039e,
-
-    .ptr_164f2 = SELF(str_2187),
-
-    .field_164f6 = 0x039f,
-
-    .pad_486 = { 0 },
-
-    .str_2187 = ALIGNED_STRING("Modern Ballroom              134"),
-
-    .str_2188 = ALIGNED_STRING("Mambo Mania!                 134"),
-
-    .str_2189 = ALIGNED_STRING("Do The Mambo!                134"),
-
-    .str_2190 = ALIGNED_STRING("Sax Mamboist                 134"),
-
-    .ptr_16586 = SELF(str_2194),
-
-    .field_1658a = 0x03a0,
-
-    .ptr_1658c = SELF(str_2193),
-
-    .field_16590 = 0x03a1,
-
-    .ptr_16592 = SELF(str_2192),
-
-    .field_16596 = 0x03a2,
-
-    .ptr_16598 = SELF(str_2191),
-
-    .field_1659c = 0x03a3,
-
-    .pad_487 = { 0 },
-
-    .str_2191 = ALIGNED_STRING("Fiesta Grande                132"),
-
-    .str_2192 = ALIGNED_STRING("Saxy Mambo                   132"),
-
-    .str_2193 = ALIGNED_STRING("Mambo Jambo!                 132"),
-
-    .str_2194 = ALIGNED_STRING("Seville Octaves              132"),
-
-    .ptr_1662c = SELF(str_2198),
-
-    .field_16630 = 0x03a4,
-
-    .ptr_16632 = SELF(str_2197),
-
-    .field_16636 = 0x03a5,
-
-    .ptr_16638 = SELF(str_2196),
-
-    .field_1663c = 0x03a6,
-
-    .ptr_1663e = SELF(str_2195),
-
-    .field_16642 = 0x03a7,
-
-    .pad_488 = { 0 },
-
-    .str_2195 = ALIGNED_STRING("Fall For Cumbia               90"),
-
-    .str_2196 = ALIGNED_STRING("Down Mexico Way               90"),
-
-    .str_2197 = ALIGNED_STRING("Cumbia Sol                    90"),
-
-    .str_2198 = ALIGNED_STRING("Sunshine Alto                 90"),
-
-    .ptr_166d2 = SELF(str_2202),
-
-    .field_166d6 = 0x03a8,
-
-    .ptr_166d8 = SELF(str_2201),
-
-    .field_166dc = 0x03a9,
-
-    .ptr_166de = SELF(str_2200),
-
-    .field_166e2 = 0x03aa,
-
-    .ptr_166e4 = SELF(str_2199),
-
-    .field_166e8 = 0x03ab,
-
-    .pad_489 = { 0 },
-
-    .str_2199 = ALIGNED_STRING("Jamaican Voices               83"),
-
-    .str_2200 = ALIGNED_STRING("Island Duet                   83"),
-
-    .str_2201 = ALIGNED_STRING("Barbados Beat                 83"),
-
-    .str_2202 = ALIGNED_STRING("Caribbean Flute               83"),
-
-    .ptr_16778 = SELF(str_2206),
-
-    .field_1677c = 0x03ac,
-
-    .ptr_1677e = SELF(str_2205),
-
-    .field_16782 = 0x03ad,
-
-    .ptr_16784 = SELF(str_2204),
-
-    .field_16788 = 0x03ae,
-
-    .ptr_1678a = SELF(str_2203),
-
-    .field_1678e = 0x03af,
-
-    .pad_490 = { 0 },
-
-    .str_2203 = ALIGNED_STRING("Brazil Fanfare               114"),
-
-    .str_2204 = ALIGNED_STRING("Samba Soloist                114"),
-
-    .str_2205 = ALIGNED_STRING("Festival Horns               114"),
-
-    .str_2206 = ALIGNED_STRING("Rio De Samba                 114"),
-
-    .ptr_1681e = SELF(str_2210),
-
-    .field_16822 = 0x03b0,
-
-    .ptr_16824 = SELF(str_2209),
-
-    .field_16828 = 0x03b1,
-
-    .ptr_1682a = SELF(str_2208),
-
-    .field_1682e = 0x03b2,
-
-    .ptr_16830 = SELF(str_2207),
-
-    .field_16834 = 0x03b3,
-
-    .pad_491 = { 0 },
-
-    .str_2207 = ALIGNED_STRING("Merengue Amigos              120"),
-
-    .str_2208 = ALIGNED_STRING("Sunshine Sax                 120"),
-
-    .str_2209 = ALIGNED_STRING("Merengue Party               120"),
-
-    .str_2210 = ALIGNED_STRING("Time To Merengue             120"),
-
-    .ptr_168c4 = SELF(str_2214),
-
-    .field_168c8 = 0x03b4,
-
-    .ptr_168ca = SELF(str_2213),
-
-    .field_168ce = 0x03b5,
-
-    .ptr_168d0 = SELF(str_2212),
-
-    .field_168d4 = 0x03b6,
-
-    .ptr_168d6 = SELF(str_2211),
-
-    .field_168da = 0x03b7,
-
-    .pad_492 = { 0 },
-
-    .str_2211 = ALIGNED_STRING("Tropical Bridge              108"),
-
-    .str_2212 = ALIGNED_STRING("Rio Horns                    108"),
-
-    .str_2213 = ALIGNED_STRING("12 String Samba              108"),
-
-    .str_2214 = ALIGNED_STRING("Deep in Brazil               108"),
-
-    .ptr_1696a = SELF(str_2218),
-
-    .field_1696e = 0x03b8,
-
-    .ptr_16970 = SELF(str_2217),
-
-    .field_16974 = 0x03b9,
-
-    .ptr_16976 = SELF(str_2216),
-
-    .field_1697a = 0x03ba,
-
-    .ptr_1697c = SELF(str_2215),
-
-    .field_16980 = 0x03bb,
-
-    .pad_493 = { 0 },
-
-    .str_2215 = ALIGNED_STRING("Toreador Band                125"),
-
-    .str_2216 = ALIGNED_STRING("Gitarero-Ole!!               125"),
-
-    .str_2217 = ALIGNED_STRING("Saxadoble!                   125"),
-
-    .str_2218 = ALIGNED_STRING("Torero's Trumpet             125"),
-
-    .ptr_16a10 = SELF(str_2222),
-
-    .field_16a14 = 0x03bc,
-
-    .ptr_16a16 = SELF(str_2221),
-
-    .field_16a1a = 0x03bd,
-
-    .ptr_16a1c = SELF(str_2220),
-
-    .field_16a20 = 0x03be,
-
-    .ptr_16a22 = SELF(str_2219),
-
-    .field_16a26 = 0x03bf,
-
-    .pad_494 = { 0 },
-
-    .str_2219 = ALIGNED_STRING("Beach Party Song             152"),
-
-    .str_2220 = ALIGNED_STRING("Coconut Frets                152"),
-
-    .str_2221 = ALIGNED_STRING("Calypso Steel                152"),
-
-    .str_2222 = ALIGNED_STRING("Limbo Flautist               152"),
-
-    .ptr_16ab6 = SELF(str_2226),
-
-    .field_16aba = 0x03c0,
-
-    .ptr_16abc = SELF(str_2225),
-
-    .field_16ac0 = 0x03c1,
-
-    .ptr_16ac2 = SELF(str_2224),
-
-    .field_16ac6 = 0x03c2,
-
-    .ptr_16ac8 = SELF(str_2223),
-
-    .field_16acc = 0x03c3,
-
-    .pad_495 = { 0 },
-
-    .str_2223 = ALIGNED_STRING("Havana Section               110"),
-
-    .str_2224 = ALIGNED_STRING("Cuban Reeds                  110"),
-
-    .str_2225 = ALIGNED_STRING("Wide Salsa                   110"),
-
-    .str_2226 = ALIGNED_STRING("Salsa Keys                   110"),
-
-    .ptr_16b5c = SELF(str_2230),
-
-    .field_16b60 = 0x03c4,
-
-    .ptr_16b62 = SELF(str_2229),
-
-    .field_16b66 = 0x03c5,
-
-    .ptr_16b68 = SELF(str_2228),
-
-    .field_16b6c = 0x03c6,
-
-    .ptr_16b6e = SELF(str_2227),
-
-    .field_16b72 = 0x03c7,
-
-    .pad_496 = { 0 },
-
-    .str_2227 = ALIGNED_STRING("Carnival Horns               110"),
-
-    .str_2228 = ALIGNED_STRING("Samba Accordion              110"),
-
-    .str_2229 = ALIGNED_STRING("Latino Piccolo               110"),
-
-    .str_2230 = ALIGNED_STRING("Flugel Samba                 110"),
-
-    .ptr_16c02 = SELF(str_2234),
-
-    .field_16c06 = 0x03c8,
-
-    .ptr_16c08 = SELF(str_2233),
-
-    .field_16c0c = 0x03c9,
-
-    .ptr_16c0e = SELF(str_2232),
-
-    .field_16c12 = 0x03ca,
-
-    .ptr_16c14 = SELF(str_2231),
-
-    .field_16c18 = 0x03cb,
-
-    .pad_497 = { 0 },
-
-    .str_2231 = ALIGNED_STRING("Windies Mallets              102"),
-
-    .str_2232 = ALIGNED_STRING("Latin Fusion                 102"),
-
-    .str_2233 = ALIGNED_STRING("Spyra Steel                  102"),
-
-    .str_2234 = ALIGNED_STRING("Jamaican Bars                102"),
-
-    .ptr_16ca8 = SELF(str_2238),
-
-    .field_16cac = 0x03cc,
-
-    .ptr_16cae = SELF(str_2237),
-
-    .field_16cb2 = 0x03cd,
-
-    .ptr_16cb4 = SELF(str_2236),
-
-    .field_16cb8 = 0x03ce,
-
-    .ptr_16cba = SELF(str_2235),
-
-    .field_16cbe = 0x03cf,
-
-    .pad_498 = { 0 },
-
-    .str_2235 = ALIGNED_STRING("Samba Union                  110"),
-
-    .str_2236 = ALIGNED_STRING("Julio's Guitar               110"),
-
-    .str_2237 = ALIGNED_STRING("Tico Tabs                    110"),
-
-    .str_2238 = ALIGNED_STRING("Miranda Mallets              110"),
-
-    .ptr_16d4e = SELF(str_2242),
-
-    .field_16d52 = 0x03d0,
-
-    .ptr_16d54 = SELF(str_2241),
-
-    .field_16d58 = 0x03d1,
-
-    .ptr_16d5a = SELF(str_2240),
-
-    .field_16d5e = 0x03d2,
-
-    .ptr_16d60 = SELF(str_2239),
-
-    .field_16d64 = 0x03d3,
-
-    .pad_499 = { 0 },
-
-    .str_2239 = ALIGNED_STRING("Samba Party                  110"),
-
-    .str_2240 = ALIGNED_STRING("New Organ Samba              110"),
-
-    .str_2241 = ALIGNED_STRING("Carnival Reed                110"),
-
-    .str_2242 = ALIGNED_STRING("Samba Strategy               110"),
-
-    .ptr_16df4 = SELF(str_2246),
-
-    .field_16df8 = 0x03d4,
-
-    .ptr_16dfa = SELF(str_2245),
-
-    .field_16dfe = 0x03d5,
-
-    .ptr_16e00 = SELF(str_2244),
-
-    .field_16e04 = 0x03d6,
-
-    .ptr_16e06 = SELF(str_2243),
-
-    .field_16e0a = 0x03d7,
-
-    .pad_500 = { 0 },
-
-    .str_2243 = ALIGNED_STRING("Asian Gold                    67"),
-
-    .str_2244 = ALIGNED_STRING("Pacific Strings               67"),
-
-    .str_2245 = ALIGNED_STRING("Nice Keroncong                67"),
-
-    .str_2246 = ALIGNED_STRING("Keroncong Flute               67"),
-
-    .ptr_16e9a = SELF(str_2250),
-
-    .field_16e9e = 0x03d8,
-
-    .ptr_16ea0 = SELF(str_2249),
-
-    .field_16ea4 = 0x03d9,
-
-    .ptr_16ea6 = SELF(str_2248),
-
-    .field_16eaa = 0x03da,
-
-    .ptr_16eac = SELF(str_2247),
-
-    .field_16eb0 = 0x03db,
-
-    .pad_501 = { 0 },
-
-    .str_2247 = ALIGNED_STRING("Bright Dangdut               150"),
-
-    .str_2248 = ALIGNED_STRING("Orch.Dangdut                 150"),
-
-    .str_2249 = ALIGNED_STRING("Hot Dangdut                  150"),
-
-    .str_2250 = ALIGNED_STRING("Easy Dangdut                 150"),
-
-    .ptr_16f40 = SELF(str_2254),
-
-    .field_16f44 = 0x03dc,
-
-    .ptr_16f46 = SELF(str_2253),
-
-    .field_16f4a = 0x03dd,
-
-    .ptr_16f4c = SELF(str_2252),
-
-    .field_16f50 = 0x03de,
-
-    .ptr_16f52 = SELF(str_2251),
-
-    .field_16f56 = 0x03df,
-
-    .pad_502 = { 0 },
-
-    .str_2251 = ALIGNED_STRING("Padang Beat                   98"),
-
-    .str_2252 = ALIGNED_STRING("Minangkabau                   98"),
-
-    .str_2253 = ALIGNED_STRING("Galombang                     98"),
-
-    .str_2254 = ALIGNED_STRING("Talempong                     98"),
-
-    .ptr_16fe6 = SELF(str_2258),
-
-    .field_16fea = 0x03e0,
-
-    .ptr_16fec = SELF(str_2257),
-
-    .field_16ff0 = 0x03e1,
-
-    .ptr_16ff2 = SELF(str_2256),
-
-    .field_16ff6 = 0x03e2,
-
-    .ptr_16ff8 = SELF(str_2255),
-
-    .field_16ffc = 0x03e3,
-
-    .pad_503 = { 0 },
-
-    .str_2255 = ALIGNED_STRING("Jamaica Synth                 89"),
-
-    .str_2256 = ALIGNED_STRING("Rasta Voice                   89"),
-
-    .str_2257 = ALIGNED_STRING("Reggae Saw                    89"),
-
-    .str_2258 = ALIGNED_STRING("Funky Reggae                  89"),
-
-    .ptr_1708c = SELF(str_2262),
-
-    .field_17090 = 0x03e4,
-
-    .ptr_17092 = SELF(str_2261),
-
-    .field_17096 = 0x03e5,
-
-    .ptr_17098 = SELF(str_2260),
-
-    .field_1709c = 0x03e6,
-
-    .ptr_1709e = SELF(str_2259),
-
-    .field_170a2 = 0x03e7,
-
-    .pad_504 = { 0 },
-
-    .str_2259 = ALIGNED_STRING("Caribbean Synth               90"),
-
-    .str_2260 = ALIGNED_STRING("Reggae Horns                  90"),
-
-    .str_2261 = ALIGNED_STRING("Marley's Drums                90"),
-
-    .str_2262 = ALIGNED_STRING("Wailers' Guitar               90"),
-
-    .ptrs_22 = {
-        SELF(str_2293),
-        SELF(ptr_cf16),
-        SELF(str_2292),
-        SELF(ptr_cfbc),
-        SELF(str_2291),
-        SELF(ptr_d062),
-        SELF(str_2290),
-        SELF(ptr_d108),
-        SELF(str_2289),
-        SELF(ptr_d1ae),
-        SELF(str_2288),
-        SELF(ptr_d254),
-        SELF(str_2287),
-        SELF(ptr_d2fa),
-        SELF(str_2286),
-        SELF(ptr_d3a0),
-        SELF(str_2285),
-        SELF(ptr_d446),
-        SELF(str_2284),
-        SELF(ptr_d4ec),
-        SELF(str_2283),
-        SELF(ptr_d592),
-        SELF(str_2282),
-        SELF(ptr_d638),
-        SELF(str_2281),
-        SELF(ptr_d6de),
-        SELF(str_2280),
-        SELF(ptr_d784),
-        SELF(str_2279),
-        SELF(ptr_d82a),
-        SELF(str_2278),
-        SELF(ptr_d8d0),
-        SELF(str_2277),
-        SELF(ptr_d976),
-        SELF(str_2276),
-        SELF(ptr_da1c),
-        SELF(str_2275),
-        SELF(ptr_dac2),
-        SELF(str_2274),
-        SELF(ptr_db68),
-        SELF(str_2273),
-        SELF(ptr_dc0e),
-        SELF(str_2272),
-        SELF(ptr_dcb4),
-        SELF(str_2271),
-        SELF(ptr_dd5a),
-        SELF(str_2270),
-        SELF(ptr_de00),
-        SELF(str_2269),
-        SELF(ptr_dea6),
-        SELF(str_2268),
-        SELF(ptr_df4c),
-        SELF(str_2267),
-        SELF(ptr_dff2),
-        SELF(str_2266),
-        SELF(ptr_e098),
-        SELF(str_2265),
-        SELF(ptr_e13e),
-        SELF(str_2264),
-        SELF(ptr_e1e4),
-        SELF(str_2263),
-        SELF(ptr_e28a),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s0_Vars = {
+        { SELF(Style_g0_s0_Title0), 0 },
+        { SELF(Style_g0_s0_Title1), 1 },
+        { SELF(Style_g0_s0_Title2), 2 },
+        { SELF(Style_g0_s0_Title3), 3 },
+        { 0, 0 },
     },
 
-    .str_2263 = ALIGNED_STRING("Easy Jazz Waltz "),
+    .Style_g0_s0_Title3 = ALIGNED_STRING("New Unison Eight             108"),
 
-    .str_2264 = ALIGNED_STRING("Parisian Nights "),
+    .Style_g0_s0_Title2 = ALIGNED_STRING("Orchestral Eight             108"),
 
-    .str_2265 = ALIGNED_STRING("Easy Play Waltz "),
+    .Style_g0_s0_Title1 = ALIGNED_STRING("Flugel Pop                   108"),
 
-    .str_2266 = ALIGNED_STRING("Paris Romance   "),
+    .Style_g0_s0_Title0 = ALIGNED_STRING("Acoustic Beat                108"),
 
-    .str_2267 = ALIGNED_STRING("Drawbar Combo   "),
-
-    .str_2268 = ALIGNED_STRING("Nat's Ballads   "),
-
-    .str_2269 = ALIGNED_STRING("Jazz Serenade   "),
-
-    .str_2270 = ALIGNED_STRING("Romantic Band   "),
-
-    .str_2271 = ALIGNED_STRING("Euro Ballads    "),
-
-    .str_2272 = ALIGNED_STRING("Oldie Drawbars  "),
-
-    .str_2273 = ALIGNED_STRING("Soft Schlager   "),
-
-    .str_2274 = ALIGNED_STRING("Oldie Ballads   "),
-
-    .str_2275 = ALIGNED_STRING("50's Love Songs "),
-
-    .str_2276 = ALIGNED_STRING("Night Club Dance"),
-
-    .str_2277 = ALIGNED_STRING("Modern Ballads  "),
-
-    .str_2278 = ALIGNED_STRING("Grands on Stage "),
-
-    .str_2279 = ALIGNED_STRING("Synth Ballad    "),
-
-    .str_2280 = ALIGNED_STRING("Atmospheric 16  "),
-
-    .str_2281 = ALIGNED_STRING("Gentle 16 Beat  "),
-
-    .str_2282 = ALIGNED_STRING("E.P. Moments    "),
-
-    .str_2283 = ALIGNED_STRING("Easy Play 16Beat"),
-
-    .str_2284 = ALIGNED_STRING("16 Beat Groove  "),
-
-    .str_2285 = ALIGNED_STRING("Love Songs      "),
-
-    .str_2286 = ALIGNED_STRING("Ballad Producer "),
-
-    .str_2287 = ALIGNED_STRING("Studio 8 Beat   "),
-
-    .str_2288 = ALIGNED_STRING("Greatest Hits   "),
-
-    .str_2289 = ALIGNED_STRING("Smooth Rock     "),
-
-    .str_2290 = ALIGNED_STRING("Orchestral Beat "),
-
-    .str_2291 = ALIGNED_STRING("Rock After Eight"),
-
-    .str_2292 = ALIGNED_STRING("Easy Play 8 Beat"),
-
-    .str_2293 = ALIGNED_STRING("German Schlager "),
-
-    .ptrs_23 = {
-        SELF(str_2326),
-        SELF(ptr_e330),
-        SELF(str_2325),
-        SELF(ptr_e3d6),
-        SELF(str_2324),
-        SELF(ptr_e47c),
-        SELF(str_2323),
-        SELF(ptr_e522),
-        SELF(str_2322),
-        SELF(ptr_e5c8),
-        SELF(str_2321),
-        SELF(ptr_e66e),
-        SELF(str_2320),
-        SELF(ptr_e714),
-        SELF(str_2319),
-        SELF(ptr_e7ba),
-        SELF(str_2318),
-        SELF(ptr_e860),
-        SELF(str_2317),
-        SELF(ptr_e906),
-        SELF(str_2316),
-        SELF(ptr_e9ac),
-        SELF(str_2315),
-        SELF(ptr_ea52),
-        SELF(str_2314),
-        SELF(ptr_eaf8),
-        SELF(str_2313),
-        SELF(ptr_eb9e),
-        SELF(str_2312),
-        SELF(ptr_ec44),
-        SELF(str_2311),
-        SELF(ptr_ecea),
-        SELF(str_2310),
-        SELF(ptr_ed90),
-        SELF(str_2309),
-        SELF(ptr_ee36),
-        SELF(str_2308),
-        SELF(ptr_eedc),
-        SELF(str_2307),
-        SELF(ptr_ef82),
-        SELF(str_2306),
-        SELF(ptr_f028),
-        SELF(str_2305),
-        SELF(ptr_f0ce),
-        SELF(str_2304),
-        SELF(ptr_f174),
-        SELF(str_2303),
-        SELF(ptr_f21a),
-        SELF(str_2302),
-        SELF(ptr_f2c0),
-        SELF(str_2301),
-        SELF(ptr_f366),
-        SELF(str_2300),
-        SELF(ptr_f40c),
-        SELF(str_2299),
-        SELF(ptr_f4b2),
-        SELF(str_2298),
-        SELF(ptr_f558),
-        SELF(str_2297),
-        SELF(ptr_f5fe),
-        SELF(str_2296),
-        SELF(ptr_f6a4),
-        SELF(str_2295),
-        SELF(ptr_f74a),
-        SELF(str_2294),
-        SELF(ptr_f7f0),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s1_Vars = {
+        { SELF(Style_g0_s1_Title0), 4 },
+        { SELF(Style_g0_s1_Title1), 5 },
+        { SELF(Style_g0_s1_Title2), 6 },
+        { SELF(Style_g0_s1_Title3), 7 },
+        { 0, 0 },
     },
 
-    .str_2294 = ALIGNED_STRING("Straight Funk   "),
+    .Style_g0_s1_Title3 = ALIGNED_STRING("Gentle Sax Eight              90"),
 
-    .str_2295 = ALIGNED_STRING("Cool Funk       "),
+    .Style_g0_s1_Title2 = ALIGNED_STRING("Reson-Eight                   90"),
 
-    .str_2296 = ALIGNED_STRING("Chart Fusion    "),
+    .Style_g0_s1_Title1 = ALIGNED_STRING("Easy EP!                      90"),
 
-    .str_2297 = ALIGNED_STRING("Easy Groovin'   "),
+    .Style_g0_s1_Title0 = ALIGNED_STRING("88 Note 8 Beat                90"),
 
-    .str_2298 = ALIGNED_STRING("Pop Fusion      "),
-
-    .str_2299 = ALIGNED_STRING("Jazz Pop        "),
-
-    .str_2300 = ALIGNED_STRING("Cool Fusion     "),
-
-    .str_2301 = ALIGNED_STRING("Gentle SwingRock"),
-
-    .str_2302 = ALIGNED_STRING("L.A. Pop        "),
-
-    .str_2303 = ALIGNED_STRING("Power Ballad    "),
-
-    .str_2304 = ALIGNED_STRING("Heavy Shuffle   "),
-
-    .str_2305 = ALIGNED_STRING("Heavy Metal     "),
-
-    .str_2306 = ALIGNED_STRING("Rock Gig        "),
-
-    .str_2307 = ALIGNED_STRING("80's Pop Ballads"),
-
-    .str_2308 = ALIGNED_STRING("8 Beat Groove   "),
-
-    .str_2309 = ALIGNED_STRING("Pop Beat        "),
-
-    .str_2310 = ALIGNED_STRING("In The Eighties "),
-
-    .str_2311 = ALIGNED_STRING("80's Love Songs "),
-
-    .str_2312 = ALIGNED_STRING("Euro Pop Shuffle"),
-
-    .str_2313 = ALIGNED_STRING("70's Power Rock "),
-
-    .str_2314 = ALIGNED_STRING("70's Hits       "),
-
-    .str_2315 = ALIGNED_STRING("Glamrock Piano  "),
-
-    .str_2316 = ALIGNED_STRING("70's Fox Dance  "),
-
-    .str_2317 = ALIGNED_STRING("California Pop  "),
-
-    .str_2318 = ALIGNED_STRING("60's Rock       "),
-
-    .str_2319 = ALIGNED_STRING("Liverpool Beat  "),
-
-    .str_2320 = ALIGNED_STRING("Swinging Sixties"),
-
-    .str_2321 = ALIGNED_STRING("Slow Dance      "),
-
-    .str_2322 = ALIGNED_STRING("Boogie Time     "),
-
-    .str_2323 = ALIGNED_STRING("Rockabilly Band "),
-
-    .str_2324 = ALIGNED_STRING("It's Boogie Time"),
-
-    .str_2325 = ALIGNED_STRING("Piano R&Roll    "),
-
-    .str_2326 = ALIGNED_STRING("Fifties Rock    "),
-
-    .ptrs_24 = {
-        SELF(str_2343),
-        SELF(ptr_f896),
-        SELF(str_2342),
-        SELF(ptr_f93c),
-        SELF(str_2341),
-        SELF(ptr_f9e2),
-        SELF(str_2340),
-        SELF(ptr_fa88),
-        SELF(str_2339),
-        SELF(ptr_fb2e),
-        SELF(str_2338),
-        SELF(ptr_fbd4),
-        SELF(str_2337),
-        SELF(ptr_fc7a),
-        SELF(str_2336),
-        SELF(ptr_fd20),
-        SELF(str_2335),
-        SELF(ptr_fdc6),
-        SELF(str_2334),
-        SELF(ptr_fe6c),
-        SELF(str_2333),
-        SELF(ptr_ff12),
-        SELF(str_2332),
-        SELF(ptr_ffb8),
-        SELF(str_2331),
-        SELF(ptr_1005e),
-        SELF(str_2330),
-        SELF(ptr_10104),
-        SELF(str_2329),
-        SELF(ptr_101aa),
-        SELF(str_2328),
-        SELF(ptr_10250),
-        SELF(str_2327),
-        SELF(ptr_102f6),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s2_Vars = {
+        { SELF(Style_g0_s2_Title0), 8 },
+        { SELF(Style_g0_s2_Title1), 9 },
+        { SELF(Style_g0_s2_Title2), 10 },
+        { SELF(Style_g0_s2_Title3), 11 },
+        { 0, 0 },
     },
 
-    .str_2327 = ALIGNED_STRING("Western Techno  "),
+    .Style_g0_s2_Title3 = ALIGNED_STRING("Symphonic Rock               108"),
 
-    .str_2328 = ALIGNED_STRING("Samba Party     "),
+    .Style_g0_s2_Title2 = ALIGNED_STRING("Soft Rock                    108"),
 
-    .str_2329 = ALIGNED_STRING("Jambo Dance     "),
+    .Style_g0_s2_Title1 = ALIGNED_STRING("Upright Rock                 108"),
 
-    .str_2330 = ALIGNED_STRING("Rio Goes Disco  "),
+    .Style_g0_s2_Title0 = ALIGNED_STRING("Vocal Beats                  108"),
 
-    .str_2331 = ALIGNED_STRING("Reggae Hit      "),
-
-    .str_2332 = ALIGNED_STRING("The Big Hit     "),
-
-    .str_2333 = ALIGNED_STRING("N.Y. Rap        "),
-
-    .str_2334 = ALIGNED_STRING("80's & 90's     "),
-
-    .str_2335 = ALIGNED_STRING("Hip Hop         "),
-
-    .str_2336 = ALIGNED_STRING("70's Dance Craze"),
-
-    .str_2337 = ALIGNED_STRING("Dance Floor     "),
-
-    .str_2338 = ALIGNED_STRING("80's Disco      "),
-
-    .str_2339 = ALIGNED_STRING("Glory Disco     "),
-
-    .str_2340 = ALIGNED_STRING("Techno World    "),
-
-    .str_2341 = ALIGNED_STRING("House Party     "),
-
-    .str_2342 = ALIGNED_STRING("Straight Dance  "),
-
-    .str_2343 = ALIGNED_STRING("British DancePop"),
-
-    .ptrs_25 = {
-        SELF(str_2362),
-        SELF(ptr_1039c),
-        SELF(str_2361),
-        SELF(ptr_10442),
-        SELF(str_2360),
-        SELF(ptr_104e8),
-        SELF(str_2359),
-        SELF(ptr_1058e),
-        SELF(str_2358),
-        SELF(ptr_10634),
-        SELF(str_2357),
-        SELF(ptr_106da),
-        SELF(str_2356),
-        SELF(ptr_10780),
-        SELF(str_2355),
-        SELF(ptr_10826),
-        SELF(str_2354),
-        SELF(ptr_108cc),
-        SELF(str_2353),
-        SELF(ptr_10972),
-        SELF(str_2352),
-        SELF(ptr_10a18),
-        SELF(str_2351),
-        SELF(ptr_10abe),
-        SELF(str_2350),
-        SELF(ptr_10b64),
-        SELF(str_2349),
-        SELF(ptr_10c0a),
-        SELF(str_2348),
-        SELF(ptr_10cb0),
-        SELF(str_2347),
-        SELF(ptr_10d56),
-        SELF(str_2346),
-        SELF(ptr_10dfc),
-        SELF(str_2345),
-        SELF(ptr_10ea2),
-        SELF(str_2344),
-        SELF(ptr_10f48),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s3_Vars = {
+        { SELF(Style_g0_s3_Title0), 12 },
+        { SELF(Style_g0_s3_Title1), 13 },
+        { SELF(Style_g0_s3_Title2), 14 },
+        { SELF(Style_g0_s3_Title3), 15 },
+        { 0, 0 },
     },
 
-    .str_2344 = ALIGNED_STRING("Merry Christmas!"),
+    .Style_g0_s3_Title3 = ALIGNED_STRING("Cool Rock                    106"),
 
-    .str_2345 = ALIGNED_STRING("Munich Festival "),
+    .Style_g0_s3_Title2 = ALIGNED_STRING("Rock Symphony                106"),
 
-    .str_2346 = ALIGNED_STRING("Bavarian Party  "),
+    .Style_g0_s3_Title1 = ALIGNED_STRING("Society Rock                 106"),
 
-    .str_2347 = ALIGNED_STRING("Hillbilly Joe   "),
+    .Style_g0_s3_Title0 = ALIGNED_STRING("Romantic Rock                106"),
 
-    .str_2348 = ALIGNED_STRING("Barn Dance      "),
-
-    .str_2349 = ALIGNED_STRING("Line Dance Craze"),
-
-    .str_2350 = ALIGNED_STRING("Pub Singalong   "),
-
-    .str_2351 = ALIGNED_STRING("Dancing Birdies "),
-
-    .str_2352 = ALIGNED_STRING("Do The Hokie...."),
-
-    .str_2353 = ALIGNED_STRING("BeerBarrel Polka"),
-
-    .str_2354 = ALIGNED_STRING("Golden Oldies   "),
-
-    .str_2355 = ALIGNED_STRING("German Oldies   "),
-
-    .str_2356 = ALIGNED_STRING("Euro Party Pop  "),
-
-    .str_2357 = ALIGNED_STRING("Eurovision Hits "),
-
-    .str_2358 = ALIGNED_STRING("Pop Organ March "),
-
-    .str_2359 = ALIGNED_STRING("All Night Party "),
-
-    .str_2360 = ALIGNED_STRING("German Schlager "),
-
-    .str_2361 = ALIGNED_STRING("Last Arrangement"),
-
-    .str_2362 = ALIGNED_STRING("J.Last Hitparade"),
-
-    .ptrs_26 = {
-        SELF(str_2380),
-        SELF(ptr_10fee),
-        SELF(str_2379),
-        SELF(ptr_11094),
-        SELF(str_2378),
-        SELF(ptr_1113a),
-        SELF(str_2377),
-        SELF(ptr_111e0),
-        SELF(str_2376),
-        SELF(ptr_11286),
-        SELF(str_2375),
-        SELF(ptr_1132c),
-        SELF(str_2374),
-        SELF(ptr_113d2),
-        SELF(str_2373),
-        SELF(ptr_11478),
-        SELF(str_2372),
-        SELF(ptr_1151e),
-        SELF(str_2371),
-        SELF(ptr_115c4),
-        SELF(str_2370),
-        SELF(ptr_1166a),
-        SELF(str_2369),
-        SELF(ptr_11710),
-        SELF(str_2368),
-        SELF(ptr_117b6),
-        SELF(str_2367),
-        SELF(ptr_1185c),
-        SELF(str_2366),
-        SELF(ptr_11902),
-        SELF(str_2365),
-        SELF(ptr_119a8),
-        SELF(str_2364),
-        SELF(ptr_11a4e),
-        SELF(str_2363),
-        SELF(ptr_11af4),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s4_Vars = {
+        { SELF(Style_g0_s4_Title0), 16 },
+        { SELF(Style_g0_s4_Title1), 17 },
+        { SELF(Style_g0_s4_Title2), 18 },
+        { SELF(Style_g0_s4_Title3), 19 },
+        { 0, 0 },
     },
 
-    .str_2363 = ALIGNED_STRING("Gospel In Threes"),
+    .Style_g0_s4_Title3 = ALIGNED_STRING("Tender Rock Sax              114"),
 
-    .str_2364 = ALIGNED_STRING("Gospel Blues    "),
+    .Style_g0_s4_Title2 = ALIGNED_STRING("Dream Beat                   114"),
 
-    .str_2365 = ALIGNED_STRING("Power Gospel    "),
+    .Style_g0_s4_Title1 = ALIGNED_STRING("Warm Guitars                 114"),
 
-    .str_2366 = ALIGNED_STRING("Day Of Rest     "),
+    .Style_g0_s4_Title0 = ALIGNED_STRING("Gentle 8 Piano               114"),
 
-    .str_2367 = ALIGNED_STRING("Lift Your Soul  "),
-
-    .str_2368 = ALIGNED_STRING("Sunday Service  "),
-
-    .str_2369 = ALIGNED_STRING("Play The Blues  "),
-
-    .str_2370 = ALIGNED_STRING("Blues Alley     "),
-
-    .str_2371 = ALIGNED_STRING("Rock Blues      "),
-
-    .str_2372 = ALIGNED_STRING("Down&Dirty Blues"),
-
-    .str_2373 = ALIGNED_STRING("R&B Groove      "),
-
-    .str_2374 = ALIGNED_STRING("Slow Soul Mood  "),
-
-    .str_2375 = ALIGNED_STRING("Mellow Soul     "),
-
-    .str_2376 = ALIGNED_STRING("Soul To Sun     "),
-
-    .str_2377 = ALIGNED_STRING("New Soul Ballad "),
-
-    .str_2378 = ALIGNED_STRING("Soft Soul       "),
-
-    .str_2379 = ALIGNED_STRING("Detroit Pop     "),
-
-    .str_2380 = ALIGNED_STRING("King Of Soul    "),
-
-    .ptrs_27 = {
-        SELF(str_2410),
-        SELF(ptr_11b9a),
-        SELF(str_2409),
-        SELF(ptr_11c40),
-        SELF(str_2408),
-        SELF(ptr_11ce6),
-        SELF(str_2407),
-        SELF(ptr_11d8c),
-        SELF(str_2406),
-        SELF(ptr_11e32),
-        SELF(str_2405),
-        SELF(ptr_11ed8),
-        SELF(str_2404),
-        SELF(ptr_11f7e),
-        SELF(str_2403),
-        SELF(ptr_12024),
-        SELF(str_2402),
-        SELF(ptr_120ca),
-        SELF(str_2401),
-        SELF(ptr_12170),
-        SELF(str_2400),
-        SELF(ptr_12216),
-        SELF(str_2399),
-        SELF(ptr_122bc),
-        SELF(str_2398),
-        SELF(ptr_12362),
-        SELF(str_2397),
-        SELF(ptr_12408),
-        SELF(str_2396),
-        SELF(ptr_124ae),
-        SELF(str_2395),
-        SELF(ptr_12554),
-        SELF(str_2394),
-        SELF(ptr_125fa),
-        SELF(str_2393),
-        SELF(ptr_126a0),
-        SELF(str_2392),
-        SELF(ptr_12746),
-        SELF(str_2391),
-        SELF(ptr_127ec),
-        SELF(str_2390),
-        SELF(ptr_12892),
-        SELF(str_2389),
-        SELF(ptr_12938),
-        SELF(str_2388),
-        SELF(ptr_129de),
-        SELF(str_2387),
-        SELF(ptr_12a84),
-        SELF(str_2386),
-        SELF(ptr_12b2a),
-        SELF(str_2385),
-        SELF(ptr_12bd0),
-        SELF(str_2384),
-        SELF(ptr_12c76),
-        SELF(str_2383),
-        SELF(ptr_12d1c),
-        SELF(str_2382),
-        SELF(ptr_12dc2),
-        SELF(str_2381),
-        SELF(ptr_12e68),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s5_Vars = {
+        { SELF(Style_g0_s5_Title0), 20 },
+        { SELF(Style_g0_s5_Title1), 21 },
+        { SELF(Style_g0_s5_Title2), 22 },
+        { SELF(Style_g0_s5_Title3), 23 },
+        { 0, 0 },
     },
 
-    .str_2381 = ALIGNED_STRING("L.A. Fusion     "),
+    .Style_g0_s5_Title3 = ALIGNED_STRING("Sweet Distortion              90"),
 
-    .str_2382 = ALIGNED_STRING("The Groove      "),
+    .Style_g0_s5_Title2 = ALIGNED_STRING("Fantasia Eight                90"),
 
-    .str_2383 = ALIGNED_STRING("Slow Jazz 3/4   "),
+    .Style_g0_s5_Title1 = ALIGNED_STRING("Paradise Keys                 90"),
 
-    .str_2384 = ALIGNED_STRING("Steady Jazz 3/4 "),
+    .Style_g0_s5_Title0 = ALIGNED_STRING("Wonder Harmonica              90"),
 
-    .str_2385 = ALIGNED_STRING("Jazz At 3:00am  "),
-
-    .str_2386 = ALIGNED_STRING("Smokey Jazz Club"),
-
-    .str_2387 = ALIGNED_STRING("Euro Jazz       "),
-
-    .str_2388 = ALIGNED_STRING("Van Damme Jazz  "),
-
-    .str_2389 = ALIGNED_STRING("Jazz Francais   "),
-
-    .str_2390 = ALIGNED_STRING("Speakeasy Jazz  "),
-
-    .str_2391 = ALIGNED_STRING("Jazz Accordion  "),
-
-    .str_2392 = ALIGNED_STRING("Gypsy Jazzers   "),
-
-    .str_2393 = ALIGNED_STRING("Gentle Jazz     "),
-
-    .str_2394 = ALIGNED_STRING("Combo Drawbars  "),
-
-    .str_2395 = ALIGNED_STRING("Jazz Standards  "),
-
-    .str_2396 = ALIGNED_STRING("40's Boogie     "),
-
-    .str_2397 = ALIGNED_STRING("Simple Jazz     "),
-
-    .str_2398 = ALIGNED_STRING("Up Tempo Combo  "),
-
-    .str_2399 = ALIGNED_STRING("Jazz Club       "),
-
-    .str_2400 = ALIGNED_STRING("Easy Play Swing "),
-
-    .str_2401 = ALIGNED_STRING("Night Club Combo"),
-
-    .str_2402 = ALIGNED_STRING("Swing Orchestra "),
-
-    .str_2403 = ALIGNED_STRING("Mid Swingband   "),
-
-    .str_2404 = ALIGNED_STRING("40's Love Songs "),
-
-    .str_2405 = ALIGNED_STRING("Moonlight Dance "),
-
-    .str_2406 = ALIGNED_STRING("Sentimental Band"),
-
-    .str_2407 = ALIGNED_STRING("40's Dance Band "),
-
-    .str_2408 = ALIGNED_STRING("All Aboard!     "),
-
-    .str_2409 = ALIGNED_STRING("Steady Swingband"),
-
-    .str_2410 = ALIGNED_STRING("Up Tempo Bigband"),
-
-    .ptrs_28 = {
-        SELF(str_2441),
-        SELF(ptr_12f0e),
-        SELF(str_2440),
-        SELF(ptr_12fb4),
-        SELF(str_2439),
-        SELF(ptr_1305a),
-        SELF(str_2438),
-        SELF(ptr_13100),
-        SELF(str_2437),
-        SELF(ptr_131a6),
-        SELF(str_2436),
-        SELF(ptr_1324c),
-        SELF(str_2435),
-        SELF(ptr_132f2),
-        SELF(str_2434),
-        SELF(ptr_13398),
-        SELF(str_2433),
-        SELF(ptr_1343e),
-        SELF(str_2432),
-        SELF(ptr_134e4),
-        SELF(str_2431),
-        SELF(ptr_1358a),
-        SELF(str_2430),
-        SELF(ptr_13630),
-        SELF(str_2429),
-        SELF(ptr_136d6),
-        SELF(str_2428),
-        SELF(ptr_1377c),
-        SELF(str_2427),
-        SELF(ptr_13822),
-        SELF(str_2426),
-        SELF(ptr_138c8),
-        SELF(str_2425),
-        SELF(ptr_1396e),
-        SELF(str_2424),
-        SELF(ptr_13a14),
-        SELF(str_2423),
-        SELF(ptr_13aba),
-        SELF(str_2422),
-        SELF(ptr_13b60),
-        SELF(str_2421),
-        SELF(ptr_13c06),
-        SELF(str_2420),
-        SELF(ptr_13cac),
-        SELF(str_2419),
-        SELF(ptr_13d52),
-        SELF(str_2418),
-        SELF(ptr_13df8),
-        SELF(str_2417),
-        SELF(ptr_13e9e),
-        SELF(str_2416),
-        SELF(ptr_13f44),
-        SELF(str_2415),
-        SELF(ptr_13fea),
-        SELF(str_2414),
-        SELF(ptr_14090),
-        SELF(str_2413),
-        SELF(ptr_14136),
-        SELF(str_2412),
-        SELF(ptr_141dc),
-        SELF(str_2411),
-        SELF(ptr_14282),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s6_Vars = {
+        { SELF(Style_g0_s6_Title0), 24 },
+        { SELF(Style_g0_s6_Title1), 25 },
+        { SELF(Style_g0_s6_Title2), 26 },
+        { SELF(Style_g0_s6_Title3), 27 },
+        { 0, 0 },
     },
 
-    .str_2411 = ALIGNED_STRING("Party Vienna    "),
+    .Style_g0_s6_Title3 = ALIGNED_STRING("Stevie's Solo                 86"),
 
-    .str_2412 = ALIGNED_STRING("Walzer-Time     "),
+    .Style_g0_s6_Title2 = ALIGNED_STRING("Atmospheric 8                 86"),
 
-    .str_2413 = ALIGNED_STRING("Austrian Waltz  "),
+    .Style_g0_s6_Title1 = ALIGNED_STRING("Breathless Sax                86"),
 
-    .str_2414 = ALIGNED_STRING("Quick Waltz     "),
+    .Style_g0_s6_Title0 = ALIGNED_STRING("Acoustic Effects              86"),
 
-    .str_2415 = ALIGNED_STRING("Last Dance Waltz"),
-
-    .str_2416 = ALIGNED_STRING("Tango Pianist   "),
-
-    .str_2417 = ALIGNED_STRING("Tango D'Amour   "),
-
-    .str_2418 = ALIGNED_STRING("Strict Tango    "),
-
-    .str_2419 = ALIGNED_STRING("Viva Pasodoble! "),
-
-    .str_2420 = ALIGNED_STRING("Samba Felicidade"),
-
-    .str_2421 = ALIGNED_STRING("Let's Beguine!  "),
-
-    .str_2422 = ALIGNED_STRING("1,2,Cha Cha Cha "),
-
-    .str_2423 = ALIGNED_STRING("Do The Twist!   "),
-
-    .str_2424 = ALIGNED_STRING("Jive Dance      "),
-
-    .str_2425 = ALIGNED_STRING("Let's Twist     "),
-
-    .str_2426 = ALIGNED_STRING("Strictly Quick! "),
-
-    .str_2427 = ALIGNED_STRING("Radio Foxtrot   "),
-
-    .str_2428 = ALIGNED_STRING("Strictly Foxtrot"),
-
-    .str_2429 = ALIGNED_STRING("Up Tempo Foxtrot"),
-
-    .str_2430 = ALIGNED_STRING("Organist's Dance"),
-
-    .str_2431 = ALIGNED_STRING("Gentle Foxtrot  "),
-
-    .str_2432 = ALIGNED_STRING("Magic Ballroom  "),
-
-    .str_2433 = ALIGNED_STRING("Viva Las Vegas  "),
-
-    .str_2434 = ALIGNED_STRING("Cabaret Band    "),
-
-    .str_2435 = ALIGNED_STRING("Paris Club      "),
-
-    .str_2436 = ALIGNED_STRING("Tap Dancer      "),
-
-    .str_2437 = ALIGNED_STRING("Vaudeville Act  "),
-
-    .str_2438 = ALIGNED_STRING("Theatre Stride  "),
-
-    .str_2439 = ALIGNED_STRING("Showband        "),
-
-    .str_2440 = ALIGNED_STRING("Tinseltown      "),
-
-    .str_2441 = ALIGNED_STRING("Musical Overture"),
-
-    .ptrs_29 = {
-        SELF(str_2466),
-        SELF(ptr_14328),
-        SELF(str_2465),
-        SELF(ptr_143ce),
-        SELF(str_2464),
-        SELF(ptr_14474),
-        SELF(str_2463),
-        SELF(ptr_1451a),
-        SELF(str_2462),
-        SELF(ptr_145c0),
-        SELF(str_2461),
-        SELF(ptr_14666),
-        SELF(str_2460),
-        SELF(ptr_1470c),
-        SELF(str_2459),
-        SELF(ptr_147b2),
-        SELF(str_2458),
-        SELF(ptr_14858),
-        SELF(str_2457),
-        SELF(ptr_148fe),
-        SELF(str_2456),
-        SELF(ptr_149a4),
-        SELF(str_2455),
-        SELF(ptr_14a4a),
-        SELF(str_2454),
-        SELF(ptr_14af0),
-        SELF(str_2453),
-        SELF(ptr_14b96),
-        SELF(str_2452),
-        SELF(ptr_14c3c),
-        SELF(str_2451),
-        SELF(ptr_14ce2),
-        SELF(str_2450),
-        SELF(ptr_14d88),
-        SELF(str_2449),
-        SELF(ptr_14e2e),
-        SELF(str_2448),
-        SELF(ptr_14ed4),
-        SELF(str_2447),
-        SELF(ptr_14f7a),
-        SELF(str_2446),
-        SELF(ptr_15020),
-        SELF(str_2445),
-        SELF(ptr_150c6),
-        SELF(str_2444),
-        SELF(ptr_1516c),
-        SELF(str_2443),
-        SELF(ptr_15212),
-        SELF(str_2442),
-        SELF(ptr_152b8),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s7_Vars = {
+        { SELF(Style_g0_s7_Title0), 28 },
+        { SELF(Style_g0_s7_Title1), 29 },
+        { SELF(Style_g0_s7_Title2), 30 },
+        { SELF(Style_g0_s7_Title3), 31 },
+        { 0, 0 },
     },
 
-    .str_2442 = ALIGNED_STRING("70's Folk Music "),
+    .Style_g0_s7_Title3 = ALIGNED_STRING("Sax For Whitney               84"),
 
-    .str_2443 = ALIGNED_STRING("Mariachi band   "),
+    .Style_g0_s7_Title2 = ALIGNED_STRING("Movie Ballad                  84"),
 
-    .str_2444 = ALIGNED_STRING("Spanish Folklore"),
+    .Style_g0_s7_Title1 = ALIGNED_STRING("Southern Nights               84"),
 
-    .str_2445 = ALIGNED_STRING("Kings of Gypsy  "),
+    .Style_g0_s7_Title0 = ALIGNED_STRING("Cosmic Ballad                 84"),
 
-    .str_2446 = ALIGNED_STRING("Moscow At Night "),
-
-    .str_2447 = ALIGNED_STRING("Greek Dance     "),
-
-    .str_2448 = ALIGNED_STRING("Sounds of Dixie "),
-
-    .str_2449 = ALIGNED_STRING("New Orleans Jazz"),
-
-    .str_2450 = ALIGNED_STRING("Ragtime Band    "),
-
-    .str_2451 = ALIGNED_STRING("Old Ragtime     "),
-
-    .str_2452 = ALIGNED_STRING("Hawaiian Dance  "),
-
-    .str_2453 = ALIGNED_STRING("Island Romance  "),
-
-    .str_2454 = ALIGNED_STRING("German Waltz    "),
-
-    .str_2455 = ALIGNED_STRING("East Euro Waltz "),
-
-    .str_2456 = ALIGNED_STRING("Munich Waltz    "),
-
-    .str_2457 = ALIGNED_STRING("3/4 Concert Time"),
-
-    .str_2458 = ALIGNED_STRING("Highland Dance  "),
-
-    .str_2459 = ALIGNED_STRING("Ceilidh Band    "),
-
-    .str_2460 = ALIGNED_STRING("German Polka    "),
-
-    .str_2461 = ALIGNED_STRING("Modern Polka    "),
-
-    .str_2462 = ALIGNED_STRING("Standard Polka  "),
-
-    .str_2463 = ALIGNED_STRING("Musikantenstadl "),
-
-    .str_2464 = ALIGNED_STRING("German Tradition"),
-
-    .str_2465 = ALIGNED_STRING("Sousa Marches   "),
-
-    .str_2466 = ALIGNED_STRING("Stadium Events  "),
-
-    .ptrs_30 = {
-        SELF(str_2483),
-        SELF(ptr_1535e),
-        SELF(str_2482),
-        SELF(ptr_15404),
-        SELF(str_2481),
-        SELF(ptr_154aa),
-        SELF(str_2480),
-        SELF(ptr_15550),
-        SELF(str_2479),
-        SELF(ptr_155f6),
-        SELF(str_2478),
-        SELF(ptr_1569c),
-        SELF(str_2477),
-        SELF(ptr_15742),
-        SELF(str_2476),
-        SELF(ptr_157e8),
-        SELF(str_2475),
-        SELF(ptr_1588e),
-        SELF(str_2474),
-        SELF(ptr_15934),
-        SELF(str_2473),
-        SELF(ptr_159da),
-        SELF(str_2472),
-        SELF(ptr_15a80),
-        SELF(str_2471),
-        SELF(ptr_15b26),
-        SELF(str_2470),
-        SELF(ptr_15bcc),
-        SELF(str_2469),
-        SELF(ptr_15c72),
-        SELF(str_2468),
-        SELF(ptr_15d18),
-        SELF(str_2467),
-        SELF(ptr_15dbe),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s8_Vars = {
+        { SELF(Style_g0_s8_Title0), 32 },
+        { SELF(Style_g0_s8_Title1), 33 },
+        { SELF(Style_g0_s8_Title2), 34 },
+        { SELF(Style_g0_s8_Title3), 35 },
+        { 0, 0 },
     },
 
-    .str_2467 = ALIGNED_STRING("Country Hits    "),
+    .Style_g0_s8_Title3 = ALIGNED_STRING("Romantic Voices               72"),
 
-    .str_2468 = ALIGNED_STRING("New Country Rock"),
+    .Style_g0_s8_Title2 = ALIGNED_STRING("Warm Horn Duet                72"),
 
-    .str_2469 = ALIGNED_STRING("Old Country Hits"),
+    .Style_g0_s8_Title1 = ALIGNED_STRING("Orchestral Keys               72"),
 
-    .str_2470 = ALIGNED_STRING("EZ Country Rock "),
+    .Style_g0_s8_Title0 = ALIGNED_STRING("Oboe Ballad                   72"),
 
-    .str_2471 = ALIGNED_STRING("Modern Country  "),
-
-    .str_2472 = ALIGNED_STRING("Country Love    "),
-
-    .str_2473 = ALIGNED_STRING("Country 88      "),
-
-    .str_2474 = ALIGNED_STRING("Country Folks   "),
-
-    .str_2475 = ALIGNED_STRING("Western Ballads "),
-
-    .str_2476 = ALIGNED_STRING("Country Romance "),
-
-    .str_2477 = ALIGNED_STRING("70's Country Pop"),
-
-    .str_2478 = ALIGNED_STRING("Hillbilly Blues "),
-
-    .str_2479 = ALIGNED_STRING("Country Dance   "),
-
-    .str_2480 = ALIGNED_STRING("Trucker Country "),
-
-    .str_2481 = ALIGNED_STRING("Kentucky Blue   "),
-
-    .str_2482 = ALIGNED_STRING("Modern Hoedown  "),
-
-    .str_2483 = ALIGNED_STRING("Bluegrass Time  "),
-
-    .ptrs_31 = {
-        SELF(str_2512),
-        SELF(ptr_15e64),
-        SELF(str_2511),
-        SELF(ptr_15f0a),
-        SELF(str_2510),
-        SELF(ptr_15fb0),
-        SELF(str_2509),
-        SELF(ptr_16056),
-        SELF(str_2508),
-        SELF(ptr_160fc),
-        SELF(str_2507),
-        SELF(ptr_161a2),
-        SELF(str_2506),
-        SELF(ptr_16248),
-        SELF(str_2505),
-        SELF(ptr_162ee),
-        SELF(str_2504),
-        SELF(ptr_16394),
-        SELF(str_2503),
-        SELF(ptr_1643a),
-        SELF(str_2502),
-        SELF(ptr_164e0),
-        SELF(str_2501),
-        SELF(ptr_16586),
-        SELF(str_2500),
-        SELF(ptr_1662c),
-        SELF(str_2499),
-        SELF(ptr_166d2),
-        SELF(str_2498),
-        SELF(ptr_16778),
-        SELF(str_2497),
-        SELF(ptr_1681e),
-        SELF(str_2496),
-        SELF(ptr_168c4),
-        SELF(str_2495),
-        SELF(ptr_1696a),
-        SELF(str_2494),
-        SELF(ptr_16a10),
-        SELF(str_2493),
-        SELF(ptr_16ab6),
-        SELF(str_2492),
-        SELF(ptr_16b5c),
-        SELF(str_2491),
-        SELF(ptr_16c02),
-        SELF(str_2490),
-        SELF(ptr_16ca8),
-        SELF(str_2489),
-        SELF(ptr_16d4e),
-        SELF(str_2488),
-        SELF(ptr_16df4),
-        SELF(str_2487),
-        SELF(ptr_16e9a),
-        SELF(str_2486),
-        SELF(ptr_16f40),
-        SELF(str_2485),
-        SELF(ptr_16fe6),
-        SELF(str_2484),
-        SELF(ptr_1708c),
-        0x00000000,
-        0x00000000,
+    .Style_g0_s9_Vars = {
+        { SELF(Style_g0_s9_Title0), 36 },
+        { SELF(Style_g0_s9_Title1), 37 },
+        { SELF(Style_g0_s9_Title2), 38 },
+        { SELF(Style_g0_s9_Title3), 39 },
+        { 0, 0 },
     },
 
-    .str_2484 = ALIGNED_STRING("Jamaican Swing  "),
+    .Style_g0_s9_Title3 = ALIGNED_STRING("Fantasy Beat                  82"),
 
-    .str_2485 = ALIGNED_STRING("Synth Reggae    "),
+    .Style_g0_s9_Title2 = ALIGNED_STRING("Digital Sixteen               82"),
 
-    .str_2486 = ALIGNED_STRING("Talempong       "),
+    .Style_g0_s9_Title1 = ALIGNED_STRING("New Muzak                     82"),
 
-    .str_2487 = ALIGNED_STRING("Dangdut         "),
+    .Style_g0_s9_Title0 = ALIGNED_STRING("16 Wheels                     82"),
 
-    .str_2488 = ALIGNED_STRING("Indonesian Folk "),
-
-    .str_2489 = ALIGNED_STRING("Samba Fusion    "),
-
-    .str_2490 = ALIGNED_STRING("Modern Samba    "),
-
-    .str_2491 = ALIGNED_STRING("Modern Caribbean"),
-
-    .str_2492 = ALIGNED_STRING("Samba Amor      "),
-
-    .str_2493 = ALIGNED_STRING("Salsa Picante   "),
-
-    .str_2494 = ALIGNED_STRING("Caribbean Nights"),
-
-    .str_2495 = ALIGNED_STRING("Castanet Dance  "),
-
-    .str_2496 = ALIGNED_STRING("Modern Rio      "),
-
-    .str_2497 = ALIGNED_STRING("Latin Festival  "),
-
-    .str_2498 = ALIGNED_STRING("Samba Parade    "),
-
-    .str_2499 = ALIGNED_STRING("Holiday Mood    "),
-
-    .str_2500 = ALIGNED_STRING("Cumbia Band     "),
-
-    .str_2501 = ALIGNED_STRING("It's Mambo Time!"),
-
-    .str_2502 = ALIGNED_STRING("New Mambo Mood  "),
-
-    .str_2503 = ALIGNED_STRING("Mambo Band      "),
-
-    .str_2504 = ALIGNED_STRING("Tito's Cha Cha  "),
-
-    .str_2505 = ALIGNED_STRING("Latin Lounge Bar"),
-
-    .str_2506 = ALIGNED_STRING("Romantic Dance  "),
-
-    .str_2507 = ALIGNED_STRING("Romantic Beguine"),
-
-    .str_2508 = ALIGNED_STRING("Cocktail Pianist"),
-
-    .str_2509 = ALIGNED_STRING("Rhumba Espana   "),
-
-    .str_2510 = ALIGNED_STRING("Mellow Bossa    "),
-
-    .str_2511 = ALIGNED_STRING("Bossa Pianist   "),
-
-    .str_2512 = ALIGNED_STRING("Romantic Bossa  "),
-
-    .ptrs_32 = {
-        SELF(str_2522),
-        SELF(ptrs_22),
-        SELF(str_2521),
-        SELF(ptrs_23),
-        SELF(str_2520),
-        SELF(ptrs_24),
-        SELF(str_2519),
-        SELF(ptrs_25),
-        SELF(str_2518),
-        SELF(ptrs_26),
-        SELF(str_2517),
-        SELF(ptrs_27),
-        SELF(str_2516),
-        SELF(ptrs_28),
-        SELF(str_2515),
-        SELF(ptrs_29),
-        SELF(str_2514),
-        SELF(ptrs_30),
-        SELF(str_2513),
-        SELF(ptrs_31),
+    .Style_g0_s10_Vars = {
+        { SELF(Style_g0_s10_Title0), 40 },
+        { SELF(Style_g0_s10_Title1), 41 },
+        { SELF(Style_g0_s10_Title2), 42 },
+        { SELF(Style_g0_s10_Title3), 43 },
+        { 0, 0 },
     },
 
-    .str_2513 = ALIGNED_STRING("Latin / World   "),
+    .Style_g0_s10_Title3 = ALIGNED_STRING("Easy Reeding                  74"),
 
-    .str_2514 = ALIGNED_STRING("Country         "),
+    .Style_g0_s10_Title2 = ALIGNED_STRING("Benson Frets                  74"),
 
-    .str_2515 = ALIGNED_STRING("Trad & Folk     "),
+    .Style_g0_s10_Title1 = ALIGNED_STRING("Bright Keys 16                74"),
 
-    .str_2516 = ALIGNED_STRING("Show/Trad Dance "),
+    .Style_g0_s10_Title0 = ALIGNED_STRING("Solid Sixteen                 74"),
 
-    .str_2517 = ALIGNED_STRING("Jazz & Swing    "),
+    .Style_g0_s11_Vars = {
+        { SELF(Style_g0_s11_Title0), 44 },
+        { SELF(Style_g0_s11_Title1), 45 },
+        { SELF(Style_g0_s11_Title2), 46 },
+        { SELF(Style_g0_s11_Title3), 47 },
+        { 0, 0 },
+    },
 
-    .str_2518 = ALIGNED_STRING("Gospel/Blues/R&B"),
+    .Style_g0_s11_Title3 = ALIGNED_STRING("The Way It Is                 70"),
 
-    .str_2519 = ALIGNED_STRING("Party Music     "),
+    .Style_g0_s11_Title2 = ALIGNED_STRING("Symphony Ballad               70"),
 
-    .str_2520 = ALIGNED_STRING("Dance Pop       "),
+    .Style_g0_s11_Title1 = ALIGNED_STRING("E.P. Romance                  70"),
 
-    .str_2521 = ALIGNED_STRING("Rock & Pop      "),
+    .Style_g0_s11_Title0 = ALIGNED_STRING("Just The Flute                70"),
 
-    .str_2522 = ALIGNED_STRING("Easy Listening  "),
+    .Style_g0_s12_Vars = {
+        { SELF(Style_g0_s12_Title0), 48 },
+        { SELF(Style_g0_s12_Title1), 49 },
+        { SELF(Style_g0_s12_Title2), 50 },
+        { SELF(Style_g0_s12_Title3), 51 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s12_Title3 = ALIGNED_STRING("16 On Stage                   82"),
+
+    .Style_g0_s12_Title2 = ALIGNED_STRING("Orchestral 16                 82"),
+
+    .Style_g0_s12_Title1 = ALIGNED_STRING("Mangione Mood                 82"),
+
+    .Style_g0_s12_Title0 = ALIGNED_STRING("E.P. Does It!                 82"),
+
+    .Style_g0_s13_Vars = {
+        { SELF(Style_g0_s13_Title0), 52 },
+        { SELF(Style_g0_s13_Title1), 53 },
+        { SELF(Style_g0_s13_Title2), 54 },
+        { SELF(Style_g0_s13_Title3), 55 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s13_Title3 = ALIGNED_STRING("Dreamy Orchestra              67"),
+
+    .Style_g0_s13_Title2 = ALIGNED_STRING("Slow Ballad B3                67"),
+
+    .Style_g0_s13_Title1 = ALIGNED_STRING("Ballad Romance                67"),
+
+    .Style_g0_s13_Title0 = ALIGNED_STRING("Ballad Frets                  67"),
+
+    .Style_g0_s14_Vars = {
+        { SELF(Style_g0_s14_Title0), 56 },
+        { SELF(Style_g0_s14_Title1), 57 },
+        { SELF(Style_g0_s14_Title2), 58 },
+        { SELF(Style_g0_s14_Title3), 59 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s14_Title3 = ALIGNED_STRING("Ballad Bridge                 75"),
+
+    .Style_g0_s14_Title2 = ALIGNED_STRING("80's Production               75"),
+
+    .Style_g0_s14_Title1 = ALIGNED_STRING("Sounds Of Quincy              75"),
+
+    .Style_g0_s14_Title0 = ALIGNED_STRING("Gentle Ballad                 75"),
+
+    .Style_g0_s15_Vars = {
+        { SELF(Style_g0_s15_Title0), 60 },
+        { SELF(Style_g0_s15_Title1), 61 },
+        { SELF(Style_g0_s15_Title2), 62 },
+        { SELF(Style_g0_s15_Title3), 63 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s15_Title3 = ALIGNED_STRING("Clavier Francais              80"),
+
+    .Style_g0_s15_Title2 = ALIGNED_STRING("Symphonic Pop                 80"),
+
+    .Style_g0_s15_Title1 = ALIGNED_STRING("Pop Concerto                  80"),
+
+    .Style_g0_s15_Title0 = ALIGNED_STRING("Clayder Piano                 80"),
+
+    .Style_g0_s16_Vars = {
+        { SELF(Style_g0_s16_Title0), 64 },
+        { SELF(Style_g0_s16_Title1), 65 },
+        { SELF(Style_g0_s16_Title2), 66 },
+        { SELF(Style_g0_s16_Title3), 67 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s16_Title3 = ALIGNED_STRING("Ballad Orchestra              84"),
+
+    .Style_g0_s16_Title2 = ALIGNED_STRING("Synth Love Song               84"),
+
+    .Style_g0_s16_Title1 = ALIGNED_STRING("Smooth & Saxy                 84"),
+
+    .Style_g0_s16_Title0 = ALIGNED_STRING("Ballad Acoustics              84"),
+
+    .Style_g0_s17_Vars = {
+        { SELF(Style_g0_s17_Title0), 68 },
+        { SELF(Style_g0_s17_Title1), 69 },
+        { SELF(Style_g0_s17_Title2), 70 },
+        { SELF(Style_g0_s17_Title3), 71 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s17_Title3 = ALIGNED_STRING("Bows & Brass                  72"),
+
+    .Style_g0_s17_Title2 = ALIGNED_STRING("Breathtaking                  72"),
+
+    .Style_g0_s17_Title1 = ALIGNED_STRING("String Romance                72"),
+
+    .Style_g0_s17_Title0 = ALIGNED_STRING("Twilight Piano                72"),
+
+    .Style_g0_s18_Vars = {
+        { SELF(Style_g0_s18_Title0), 72 },
+        { SELF(Style_g0_s18_Title1), 73 },
+        { SELF(Style_g0_s18_Title2), 74 },
+        { SELF(Style_g0_s18_Title3), 75 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s18_Title3 = ALIGNED_STRING("Old & New Ballad             100"),
+
+    .Style_g0_s18_Title2 = ALIGNED_STRING("Ensemble Ballad              100"),
+
+    .Style_g0_s18_Title1 = ALIGNED_STRING("Mellow Shuffle               100"),
+
+    .Style_g0_s18_Title0 = ALIGNED_STRING("Shuffle Chanson              100"),
+
+    .Style_g0_s19_Vars = {
+        { SELF(Style_g0_s19_Title0), 76 },
+        { SELF(Style_g0_s19_Title1), 77 },
+        { SELF(Style_g0_s19_Title2), 78 },
+        { SELF(Style_g0_s19_Title3), 79 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s19_Title3 = ALIGNED_STRING("Flute Nocturne                63"),
+
+    .Style_g0_s19_Title2 = ALIGNED_STRING("Like A Dream                  63"),
+
+    .Style_g0_s19_Title1 = ALIGNED_STRING("Ballad Piano                  63"),
+
+    .Style_g0_s19_Title0 = ALIGNED_STRING("Flugel Ballad                 63"),
+
+    .Style_g0_s20_Vars = {
+        { SELF(Style_g0_s20_Title0), 80 },
+        { SELF(Style_g0_s20_Title1), 81 },
+        { SELF(Style_g0_s20_Title2), 82 },
+        { SELF(Style_g0_s20_Title3), 83 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s20_Title3 = ALIGNED_STRING("Accordion Dream               64"),
+
+    .Style_g0_s20_Title2 = ALIGNED_STRING("Spacy Ballad                  64"),
+
+    .Style_g0_s20_Title1 = ALIGNED_STRING("Guitar Ballad                 64"),
+
+    .Style_g0_s20_Title0 = ALIGNED_STRING("Pan Muzak                     64"),
+
+    .Style_g0_s21_Vars = {
+        { SELF(Style_g0_s21_Title0), 84 },
+        { SELF(Style_g0_s21_Title1), 85 },
+        { SELF(Style_g0_s21_Title2), 86 },
+        { SELF(Style_g0_s21_Title3), 87 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s21_Title3 = ALIGNED_STRING("German Oldies                125"),
+
+    .Style_g0_s21_Title2 = ALIGNED_STRING("Oldie's Jazz                 125"),
+
+    .Style_g0_s21_Title1 = ALIGNED_STRING("Oldie's Parade               125"),
+
+    .Style_g0_s21_Title0 = ALIGNED_STRING("Echoing Organ                125"),
+
+    .Style_g0_s22_Vars = {
+        { SELF(Style_g0_s22_Title0), 88 },
+        { SELF(Style_g0_s22_Title1), 89 },
+        { SELF(Style_g0_s22_Title2), 90 },
+        { SELF(Style_g0_s22_Title3), 91 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s22_Title3 = ALIGNED_STRING("Starlight Ballad              68"),
+
+    .Style_g0_s22_Title2 = ALIGNED_STRING("Ballad Glitter                68"),
+
+    .Style_g0_s22_Title1 = ALIGNED_STRING("Ricky's Ballad                68"),
+
+    .Style_g0_s22_Title0 = ALIGNED_STRING("Dreamy Harmonica              68"),
+
+    .Style_g0_s23_Vars = {
+        { SELF(Style_g0_s23_Title0), 92 },
+        { SELF(Style_g0_s23_Title1), 93 },
+        { SELF(Style_g0_s23_Title2), 94 },
+        { SELF(Style_g0_s23_Title3), 95 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s23_Title3 = ALIGNED_STRING("Late Night Tenor             117"),
+
+    .Style_g0_s23_Title2 = ALIGNED_STRING("Swing Serenade               117"),
+
+    .Style_g0_s23_Title1 = ALIGNED_STRING("Romantic Duet                117"),
+
+    .Style_g0_s23_Title0 = ALIGNED_STRING("Swing Flautist               117"),
+
+    .Style_g0_s24_Vars = {
+        { SELF(Style_g0_s24_Title0), 96 },
+        { SELF(Style_g0_s24_Title1), 97 },
+        { SELF(Style_g0_s24_Title2), 98 },
+        { SELF(Style_g0_s24_Title3), 99 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s24_Title3 = ALIGNED_STRING("Smooth Lips                   83"),
+
+    .Style_g0_s24_Title2 = ALIGNED_STRING("Mellow Mood                   83"),
+
+    .Style_g0_s24_Title1 = ALIGNED_STRING("Breathy Moments               83"),
+
+    .Style_g0_s24_Title0 = ALIGNED_STRING("Soprano Soloist               83"),
+
+    .Style_g0_s25_Vars = {
+        { SELF(Style_g0_s25_Title0), 100 },
+        { SELF(Style_g0_s25_Title1), 101 },
+        { SELF(Style_g0_s25_Title2), 102 },
+        { SELF(Style_g0_s25_Title3), 103 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s25_Title3 = ALIGNED_STRING("Simply Romantic               90"),
+
+    .Style_g0_s25_Title2 = ALIGNED_STRING("Riddle Me This!               90"),
+
+    .Style_g0_s25_Title1 = ALIGNED_STRING("Sweet Swing                   90"),
+
+    .Style_g0_s25_Title0 = ALIGNED_STRING("Midnight Tunes                90"),
+
+    .Style_g0_s26_Vars = {
+        { SELF(Style_g0_s26_Title0), 104 },
+        { SELF(Style_g0_s26_Title1), 105 },
+        { SELF(Style_g0_s26_Title2), 106 },
+        { SELF(Style_g0_s26_Title3), 107 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s26_Title3 = ALIGNED_STRING("All Out Combo                180"),
+
+    .Style_g0_s26_Title2 = ALIGNED_STRING("Sine Of The Time             180"),
+
+    .Style_g0_s26_Title1 = ALIGNED_STRING("Relax With Klaus             180"),
+
+    .Style_g0_s26_Title0 = ALIGNED_STRING("Wunderlich Combo             180"),
+
+    .Style_g0_s27_Vars = {
+        { SELF(Style_g0_s27_Title0), 108 },
+        { SELF(Style_g0_s27_Title1), 109 },
+        { SELF(Style_g0_s27_Title2), 110 },
+        { SELF(Style_g0_s27_Title3), 111 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s27_Title3 = ALIGNED_STRING("French Clavier                92"),
+
+    .Style_g0_s27_Title2 = ALIGNED_STRING("Paris Singers                 92"),
+
+    .Style_g0_s27_Title1 = ALIGNED_STRING("Musette Ballad                92"),
+
+    .Style_g0_s27_Title0 = ALIGNED_STRING("Cafe Serenade                 92"),
+
+    .Style_g0_s28_Vars = {
+        { SELF(Style_g0_s28_Title0), 112 },
+        { SELF(Style_g0_s28_Title1), 113 },
+        { SELF(Style_g0_s28_Title2), 114 },
+        { SELF(Style_g0_s28_Title3), 115 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s28_Title3 = ALIGNED_STRING("Waltzing Wheels              110"),
+
+    .Style_g0_s28_Title2 = ALIGNED_STRING("Three Four Vibes             110"),
+
+    .Style_g0_s28_Title1 = ALIGNED_STRING("One,Two,Three                110"),
+
+    .Style_g0_s28_Title0 = ALIGNED_STRING("Easy Threesy                 110"),
+
+    .Style_g0_s29_Vars = {
+        { SELF(Style_g0_s29_Title0), 116 },
+        { SELF(Style_g0_s29_Title1), 117 },
+        { SELF(Style_g0_s29_Title2), 118 },
+        { SELF(Style_g0_s29_Title3), 119 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s29_Title3 = ALIGNED_STRING("Musette Symphony             175"),
+
+    .Style_g0_s29_Title2 = ALIGNED_STRING("Vive La France!              175"),
+
+    .Style_g0_s29_Title1 = ALIGNED_STRING("Cafe Atmosphere              175"),
+
+    .Style_g0_s29_Title0 = ALIGNED_STRING("Simple Band                  175"),
+
+    .Style_g0_s30_Vars = {
+        { SELF(Style_g0_s30_Title0), 120 },
+        { SELF(Style_g0_s30_Title1), 121 },
+        { SELF(Style_g0_s30_Title2), 122 },
+        { SELF(Style_g0_s30_Title3), 123 },
+        { 0, 0 },
+    },
+
+    .Style_g0_s30_Title3 = ALIGNED_STRING("Toots' Way                   150"),
+
+    .Style_g0_s30_Title2 = ALIGNED_STRING("Mellow Jazz 3/4              150"),
+
+    .Style_g0_s30_Title1 = ALIGNED_STRING("Swing B3 Threes              150"),
+
+    .Style_g0_s30_Title0 = ALIGNED_STRING("Suited To Jazz!              150"),
+
+    .Style_g1_s0_Vars = {
+        { SELF(Style_g1_s0_Title0), 124 },
+        { SELF(Style_g1_s0_Title1), 125 },
+        { SELF(Style_g1_s0_Title2), 126 },
+        { SELF(Style_g1_s0_Title3), 127 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s0_Title3 = ALIGNED_STRING("Rock & Fall!                 155"),
+
+    .Style_g1_s0_Title2 = ALIGNED_STRING("Teddy Boy Brass              155"),
+
+    .Style_g1_s0_Title1 = ALIGNED_STRING("Skiffle Keys                 155"),
+
+    .Style_g1_s0_Title0 = ALIGNED_STRING("Ham & Rock                   155"),
+
+    .Style_g1_s1_Vars = {
+        { SELF(Style_g1_s1_Title0), 128 },
+        { SELF(Style_g1_s1_Title1), 129 },
+        { SELF(Style_g1_s1_Title2), 130 },
+        { SELF(Style_g1_s1_Title3), 131 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s1_Title3 = ALIGNED_STRING("Skiffle Horns                150"),
+
+    .Style_g1_s1_Title2 = ALIGNED_STRING("Hard Blown R&R               150"),
+
+    .Style_g1_s1_Title1 = ALIGNED_STRING("Jerry Lee's Keys             150"),
+
+    .Style_g1_s1_Title0 = ALIGNED_STRING("Slap Back Rock               150"),
+
+    .Style_g1_s2_Vars = {
+        { SELF(Style_g1_s2_Title0), 132 },
+        { SELF(Style_g1_s2_Title1), 133 },
+        { SELF(Style_g1_s2_Title2), 134 },
+        { SELF(Style_g1_s2_Title3), 135 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s2_Title3 = ALIGNED_STRING("Modern Boogie                154"),
+
+    .Style_g1_s2_Title2 = ALIGNED_STRING("Euro Boogie                  154"),
+
+    .Style_g1_s2_Title1 = ALIGNED_STRING("Boogie Band                  154"),
+
+    .Style_g1_s2_Title0 = ALIGNED_STRING("Oh Boy Vocals                154"),
+
+    .Style_g1_s3_Vars = {
+        { SELF(Style_g1_s3_Title0), 136 },
+        { SELF(Style_g1_s3_Title1), 137 },
+        { SELF(Style_g1_s3_Title2), 138 },
+        { SELF(Style_g1_s3_Title3), 139 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s3_Title3 = ALIGNED_STRING("Jailhouse Brass              158"),
+
+    .Style_g1_s3_Title2 = ALIGNED_STRING("Blue Suede Rock              158"),
+
+    .Style_g1_s3_Title1 = ALIGNED_STRING("Rock Around It!              158"),
+
+    .Style_g1_s3_Title0 = ALIGNED_STRING("Don't Do It!                 158"),
+
+    .Style_g1_s4_Vars = {
+        { SELF(Style_g1_s4_Title0), 140 },
+        { SELF(Style_g1_s4_Title1), 141 },
+        { SELF(Style_g1_s4_Title2), 142 },
+        { SELF(Style_g1_s4_Title3), 143 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s4_Title3 = ALIGNED_STRING("Barry's Boogie               150"),
+
+    .Style_g1_s4_Title2 = ALIGNED_STRING("Shuffle Horns                150"),
+
+    .Style_g1_s4_Title1 = ALIGNED_STRING("Accordion Rock               150"),
+
+    .Style_g1_s4_Title0 = ALIGNED_STRING("Alto Sax Shuffle             150"),
+
+    .Style_g1_s5_Vars = {
+        { SELF(Style_g1_s5_Title0), 144 },
+        { SELF(Style_g1_s5_Title1), 145 },
+        { SELF(Style_g1_s5_Title2), 146 },
+        { SELF(Style_g1_s5_Title3), 147 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s5_Title3 = ALIGNED_STRING("Smoochy Vocals                67"),
+
+    .Style_g1_s5_Title2 = ALIGNED_STRING("Twin E.P.Ballad               67"),
+
+    .Style_g1_s5_Title1 = ALIGNED_STRING("Sweet Soprano                 67"),
+
+    .Style_g1_s5_Title0 = ALIGNED_STRING("Ballad Guitar                 67"),
+
+    .Style_g1_s6_Vars = {
+        { SELF(Style_g1_s6_Title0), 148 },
+        { SELF(Style_g1_s6_Title1), 149 },
+        { SELF(Style_g1_s6_Title2), 150 },
+        { SELF(Style_g1_s6_Title3), 151 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s6_Title3 = ALIGNED_STRING("Runaway Organ                144"),
+
+    .Style_g1_s6_Title2 = ALIGNED_STRING("Sixties Strings              144"),
+
+    .Style_g1_s6_Title1 = ALIGNED_STRING("Solid Surfin'                144"),
+
+    .Style_g1_s6_Title0 = ALIGNED_STRING("Ocean Vocals                 144"),
+
+    .Style_g1_s7_Vars = {
+        { SELF(Style_g1_s7_Title0), 152 },
+        { SELF(Style_g1_s7_Title1), 153 },
+        { SELF(Style_g1_s7_Title2), 154 },
+        { SELF(Style_g1_s7_Title3), 155 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s7_Title3 = ALIGNED_STRING("Liverpool Roads              154"),
+
+    .Style_g1_s7_Title2 = ALIGNED_STRING("Mersey Beat                  154"),
+
+    .Style_g1_s7_Title1 = ALIGNED_STRING("Shadows' Frets               154"),
+
+    .Style_g1_s7_Title0 = ALIGNED_STRING("Monkeying About              154"),
+
+    .Style_g1_s8_Vars = {
+        { SELF(Style_g1_s8_Title0), 156 },
+        { SELF(Style_g1_s8_Title1), 157 },
+        { SELF(Style_g1_s8_Title2), 158 },
+        { SELF(Style_g1_s8_Title3), 159 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s8_Title3 = ALIGNED_STRING("I Want To B3                 150"),
+
+    .Style_g1_s8_Title2 = ALIGNED_STRING("Sax,Drums+R&Roll             150"),
+
+    .Style_g1_s8_Title1 = ALIGNED_STRING("Sixties Strat                150"),
+
+    .Style_g1_s8_Title0 = ALIGNED_STRING("Memphis Keys                 150"),
+
+    .Style_g1_s9_Vars = {
+        { SELF(Style_g1_s9_Title0), 160 },
+        { SELF(Style_g1_s9_Title1), 161 },
+        { SELF(Style_g1_s9_Title2), 162 },
+        { SELF(Style_g1_s9_Title3), 163 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s9_Title3 = ALIGNED_STRING("Life's A Beach!              150"),
+
+    .Style_g1_s9_Title2 = ALIGNED_STRING("Santa Monica Way             150"),
+
+    .Style_g1_s9_Title1 = ALIGNED_STRING("Easy Bacharach!              150"),
+
+    .Style_g1_s9_Title0 = ALIGNED_STRING("San Jose Route               150"),
+
+    .Style_g1_s10_Vars = {
+        { SELF(Style_g1_s10_Title0), 164 },
+        { SELF(Style_g1_s10_Title1), 165 },
+        { SELF(Style_g1_s10_Title2), 166 },
+        { SELF(Style_g1_s10_Title3), 167 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s10_Title3 = ALIGNED_STRING("70's Glamour                 129"),
+
+    .Style_g1_s10_Title2 = ALIGNED_STRING("Glitter Bars                 129"),
+
+    .Style_g1_s10_Title1 = ALIGNED_STRING("Handbag Dance!               129"),
+
+    .Style_g1_s10_Title0 = ALIGNED_STRING("Wunder Pops                  129"),
+
+    .Style_g1_s11_Vars = {
+        { SELF(Style_g1_s11_Title0), 168 },
+        { SELF(Style_g1_s11_Title1), 169 },
+        { SELF(Style_g1_s11_Title2), 170 },
+        { SELF(Style_g1_s11_Title3), 171 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s11_Title3 = ALIGNED_STRING("70's Synth Rock              136"),
+
+    .Style_g1_s11_Title2 = ALIGNED_STRING("Platform Wheels              136"),
+
+    .Style_g1_s11_Title1 = ALIGNED_STRING("Crocodile Sax                136"),
+
+    .Style_g1_s11_Title0 = ALIGNED_STRING("Elton's Piano                136"),
+
+    .Style_g1_s12_Vars = {
+        { SELF(Style_g1_s12_Title0), 172 },
+        { SELF(Style_g1_s12_Title1), 173 },
+        { SELF(Style_g1_s12_Title2), 174 },
+        { SELF(Style_g1_s12_Title3), 175 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s12_Title3 = ALIGNED_STRING("Dire Strats                  138"),
+
+    .Style_g1_s12_Title2 = ALIGNED_STRING("Knopfler Tribute             138"),
+
+    .Style_g1_s12_Title1 = ALIGNED_STRING("Ricky's Strat                138"),
+
+    .Style_g1_s12_Title0 = ALIGNED_STRING("70's Fantasy                 138"),
+
+    .Style_g1_s13_Vars = {
+        { SELF(Style_g1_s13_Title0), 176 },
+        { SELF(Style_g1_s13_Title1), 177 },
+        { SELF(Style_g1_s13_Title2), 178 },
+        { SELF(Style_g1_s13_Title3), 179 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s13_Title3 = ALIGNED_STRING("Full Organ Rock              145"),
+
+    .Style_g1_s13_Title2 = ALIGNED_STRING("C.P. On Stage                145"),
+
+    .Style_g1_s13_Title1 = ALIGNED_STRING("Emerson Keys                 145"),
+
+    .Style_g1_s13_Title0 = ALIGNED_STRING("Mellow & Shuffle             145"),
+
+    .Style_g1_s14_Vars = {
+        { SELF(Style_g1_s14_Title0), 180 },
+        { SELF(Style_g1_s14_Title1), 181 },
+        { SELF(Style_g1_s14_Title2), 182 },
+        { SELF(Style_g1_s14_Title3), 183 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s14_Title3 = ALIGNED_STRING("Shuffle Organ                144"),
+
+    .Style_g1_s14_Title2 = ALIGNED_STRING("Jump Brass                   144"),
+
+    .Style_g1_s14_Title1 = ALIGNED_STRING("Pop Leader                   144"),
+
+    .Style_g1_s14_Title0 = ALIGNED_STRING("Shuffle Synth                144"),
+
+    .Style_g1_s15_Vars = {
+        { SELF(Style_g1_s15_Title0), 184 },
+        { SELF(Style_g1_s15_Title1), 185 },
+        { SELF(Style_g1_s15_Title2), 186 },
+        { SELF(Style_g1_s15_Title3), 187 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s15_Title3 = ALIGNED_STRING("Sax Production               106"),
+
+    .Style_g1_s15_Title2 = ALIGNED_STRING("EP Of The 80's               106"),
+
+    .Style_g1_s15_Title1 = ALIGNED_STRING("Don't Fret!                  106"),
+
+    .Style_g1_s15_Title0 = ALIGNED_STRING("Analogue Ballad              106"),
+
+    .Style_g1_s16_Vars = {
+        { SELF(Style_g1_s16_Title0), 188 },
+        { SELF(Style_g1_s16_Title1), 189 },
+        { SELF(Style_g1_s16_Title2), 190 },
+        { SELF(Style_g1_s16_Title3), 191 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s16_Title3 = ALIGNED_STRING("Italy Pop Organ              118"),
+
+    .Style_g1_s16_Title2 = ALIGNED_STRING("Pop Angel                    118"),
+
+    .Style_g1_s16_Title1 = ALIGNED_STRING("80's Pop Sax                 118"),
+
+    .Style_g1_s16_Title0 = ALIGNED_STRING("Fade Guitar Pop              118"),
+
+    .Style_g1_s17_Vars = {
+        { SELF(Style_g1_s17_Title0), 192 },
+        { SELF(Style_g1_s17_Title1), 193 },
+        { SELF(Style_g1_s17_Title2), 194 },
+        { SELF(Style_g1_s17_Title3), 195 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s17_Title3 = ALIGNED_STRING("Pop Bridge                   111"),
+
+    .Style_g1_s17_Title2 = ALIGNED_STRING("Pop Horns                    111"),
+
+    .Style_g1_s17_Title1 = ALIGNED_STRING("Driving Pop                  111"),
+
+    .Style_g1_s17_Title0 = ALIGNED_STRING("Pop Guitar FX                111"),
+
+    .Style_g1_s18_Vars = {
+        { SELF(Style_g1_s18_Title0), 196 },
+        { SELF(Style_g1_s18_Title1), 197 },
+        { SELF(Style_g1_s18_Title2), 198 },
+        { SELF(Style_g1_s18_Title3), 199 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s18_Title3 = ALIGNED_STRING("Beat Brass                   116"),
+
+    .Style_g1_s18_Title2 = ALIGNED_STRING("Rockin' Synth                116"),
+
+    .Style_g1_s18_Title1 = ALIGNED_STRING("Sax Rock                     116"),
+
+    .Style_g1_s18_Title0 = ALIGNED_STRING("Groovy Keys                  116"),
+
+    .Style_g1_s19_Vars = {
+        { SELF(Style_g1_s19_Title0), 200 },
+        { SELF(Style_g1_s19_Title1), 201 },
+        { SELF(Style_g1_s19_Title2), 202 },
+        { SELF(Style_g1_s19_Title3), 203 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s19_Title3 = ALIGNED_STRING("Pop Orchestra                 78"),
+
+    .Style_g1_s19_Title2 = ALIGNED_STRING("Pop Starts                    78"),
+
+    .Style_g1_s19_Title1 = ALIGNED_STRING("Pop Atmosphere                78"),
+
+    .Style_g1_s19_Title0 = ALIGNED_STRING("Ballad Warmth                 78"),
+
+    .Style_g1_s20_Vars = {
+        { SELF(Style_g1_s20_Title0), 204 },
+        { SELF(Style_g1_s20_Title1), 205 },
+        { SELF(Style_g1_s20_Title2), 206 },
+        { SELF(Style_g1_s20_Title3), 207 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s20_Title3 = ALIGNED_STRING("Everybody Rock!              131"),
+
+    .Style_g1_s20_Title2 = ALIGNED_STRING("Rolling Wheels               131"),
+
+    .Style_g1_s20_Title1 = ALIGNED_STRING("88 Rock Keys                 131"),
+
+    .Style_g1_s20_Title0 = ALIGNED_STRING("Stage Rock Band              131"),
+
+    .Style_g1_s21_Vars = {
+        { SELF(Style_g1_s21_Title0), 208 },
+        { SELF(Style_g1_s21_Title1), 209 },
+        { SELF(Style_g1_s21_Title2), 210 },
+        { SELF(Style_g1_s21_Title3), 211 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s21_Title3 = ALIGNED_STRING("Over The Top Wah             142"),
+
+    .Style_g1_s21_Title2 = ALIGNED_STRING("Deep Hammond                 142"),
+
+    .Style_g1_s21_Title1 = ALIGNED_STRING("Distort It!                  142"),
+
+    .Style_g1_s21_Title0 = ALIGNED_STRING("Solid Feedback               142"),
+
+    .Style_g1_s22_Vars = {
+        { SELF(Style_g1_s22_Title0), 212 },
+        { SELF(Style_g1_s22_Title1), 213 },
+        { SELF(Style_g1_s22_Title2), 214 },
+        { SELF(Style_g1_s22_Title3), 215 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s22_Title3 = ALIGNED_STRING("Rock Fanfare                 148"),
+
+    .Style_g1_s22_Title2 = ALIGNED_STRING("Roaring Tubes                148"),
+
+    .Style_g1_s22_Title1 = ALIGNED_STRING("Hard Analogue                148"),
+
+    .Style_g1_s22_Title0 = ALIGNED_STRING("Clean Metal                  148"),
+
+    .Style_g1_s23_Vars = {
+        { SELF(Style_g1_s23_Title0), 216 },
+        { SELF(Style_g1_s23_Title1), 217 },
+        { SELF(Style_g1_s23_Title2), 218 },
+        { SELF(Style_g1_s23_Title3), 219 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s23_Title3 = ALIGNED_STRING("Ballad Overdrive              74"),
+
+    .Style_g1_s23_Title2 = ALIGNED_STRING("Synth For Rock                74"),
+
+    .Style_g1_s23_Title1 = ALIGNED_STRING("Rock B3 Ballad                74"),
+
+    .Style_g1_s23_Title0 = ALIGNED_STRING("Heavy Harmonica               74"),
+
+    .Style_g1_s24_Vars = {
+        { SELF(Style_g1_s24_Title0), 220 },
+        { SELF(Style_g1_s24_Title1), 221 },
+        { SELF(Style_g1_s24_Title2), 222 },
+        { SELF(Style_g1_s24_Title3), 223 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s24_Title3 = ALIGNED_STRING("Digital Swing                 92"),
+
+    .Style_g1_s24_Title2 = ALIGNED_STRING("Cool Midi Grand               92"),
+
+    .Style_g1_s24_Title1 = ALIGNED_STRING("L.A. Warmth                   92"),
+
+    .Style_g1_s24_Title0 = ALIGNED_STRING("Acoustic Groove               92"),
+
+    .Style_g1_s25_Vars = {
+        { SELF(Style_g1_s25_Title0), 224 },
+        { SELF(Style_g1_s25_Title1), 225 },
+        { SELF(Style_g1_s25_Title2), 226 },
+        { SELF(Style_g1_s25_Title3), 227 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s25_Title3 = ALIGNED_STRING("Take It Easy!                 62"),
+
+    .Style_g1_s25_Title2 = ALIGNED_STRING("Blues Harp Swing              62"),
+
+    .Style_g1_s25_Title1 = ALIGNED_STRING("Like Sunday?                  62"),
+
+    .Style_g1_s25_Title0 = ALIGNED_STRING("Mellow Groove                 62"),
+
+    .Style_g1_s26_Vars = {
+        { SELF(Style_g1_s26_Title0), 228 },
+        { SELF(Style_g1_s26_Title1), 229 },
+        { SELF(Style_g1_s26_Title2), 230 },
+        { SELF(Style_g1_s26_Title3), 231 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s26_Title3 = ALIGNED_STRING("L.A. Strings                  92"),
+
+    .Style_g1_s26_Title2 = ALIGNED_STRING("Fusion Talk                   92"),
+
+    .Style_g1_s26_Title1 = ALIGNED_STRING("Synth Guitar Pop              92"),
+
+    .Style_g1_s26_Title0 = ALIGNED_STRING("Al's Lead                     92"),
+
+    .Style_g1_s27_Vars = {
+        { SELF(Style_g1_s27_Title0), 232 },
+        { SELF(Style_g1_s27_Title1), 233 },
+        { SELF(Style_g1_s27_Title2), 234 },
+        { SELF(Style_g1_s27_Title3), 235 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s27_Title3 = ALIGNED_STRING("Uptown Horns                 100"),
+
+    .Style_g1_s27_Title2 = ALIGNED_STRING("Wide Hornsection             100"),
+
+    .Style_g1_s27_Title1 = ALIGNED_STRING("Cool Guitar Duet             100"),
+
+    .Style_g1_s27_Title0 = ALIGNED_STRING("Mad Tabs                     100"),
+
+    .Style_g1_s28_Vars = {
+        { SELF(Style_g1_s28_Title0), 236 },
+        { SELF(Style_g1_s28_Title1), 237 },
+        { SELF(Style_g1_s28_Title2), 238 },
+        { SELF(Style_g1_s28_Title3), 239 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s28_Title3 = ALIGNED_STRING("Key Grooves                  102"),
+
+    .Style_g1_s28_Title2 = ALIGNED_STRING("Cool Pop Guitar              102"),
+
+    .Style_g1_s28_Title1 = ALIGNED_STRING("George B Unison              102"),
+
+    .Style_g1_s28_Title0 = ALIGNED_STRING("Groove Harp                  102"),
+
+    .Style_g1_s29_Vars = {
+        { SELF(Style_g1_s29_Title0), 240 },
+        { SELF(Style_g1_s29_Title1), 241 },
+        { SELF(Style_g1_s29_Title2), 242 },
+        { SELF(Style_g1_s29_Title3), 243 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s29_Title3 = ALIGNED_STRING("Drawbar Funk                  85"),
+
+    .Style_g1_s29_Title2 = ALIGNED_STRING("L.A. Synth                    85"),
+
+    .Style_g1_s29_Title1 = ALIGNED_STRING("West Coast Sax                85"),
+
+    .Style_g1_s29_Title0 = ALIGNED_STRING("Benson Groove                 85"),
+
+    .Style_g1_s30_Vars = {
+        { SELF(Style_g1_s30_Title0), 244 },
+        { SELF(Style_g1_s30_Title1), 245 },
+        { SELF(Style_g1_s30_Title2), 246 },
+        { SELF(Style_g1_s30_Title3), 247 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s30_Title3 = ALIGNED_STRING("Old & New Funk                96"),
+
+    .Style_g1_s30_Title2 = ALIGNED_STRING("New Scat Funk                 96"),
+
+    .Style_g1_s30_Title1 = ALIGNED_STRING("Funk Keys                     96"),
+
+    .Style_g1_s30_Title0 = ALIGNED_STRING("Al J's Synth                  96"),
+
+    .Style_g1_s31_Vars = {
+        { SELF(Style_g1_s31_Title0), 248 },
+        { SELF(Style_g1_s31_Title1), 249 },
+        { SELF(Style_g1_s31_Title2), 250 },
+        { SELF(Style_g1_s31_Title3), 251 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s31_Title3 = ALIGNED_STRING("Groovin' Horns                97"),
+
+    .Style_g1_s31_Title2 = ALIGNED_STRING("80's Synth Funk               97"),
+
+    .Style_g1_s31_Title1 = ALIGNED_STRING("Chiff-Funk                    97"),
+
+    .Style_g1_s31_Title0 = ALIGNED_STRING("Yuppie Keys                   97"),
+
+    .Style_g1_s32_Vars = {
+        { SELF(Style_g1_s32_Title0), 252 },
+        { SELF(Style_g1_s32_Title1), 253 },
+        { SELF(Style_g1_s32_Title2), 254 },
+        { SELF(Style_g1_s32_Title3), 255 },
+        { 0, 0 },
+    },
+
+    .Style_g1_s32_Title3 = ALIGNED_STRING("Sweeping Bridge              110"),
+
+    .Style_g1_s32_Title2 = ALIGNED_STRING("Olympic Groove               110"),
+
+    .Style_g1_s32_Title1 = ALIGNED_STRING("Synth Funk                   110"),
+
+    .Style_g1_s32_Title0 = ALIGNED_STRING("Funky Talk                   110"),
+
+    .Style_g2_s0_Vars = {
+        { SELF(Style_g2_s0_Title0), 256 },
+        { SELF(Style_g2_s0_Title1), 257 },
+        { SELF(Style_g2_s0_Title2), 258 },
+        { SELF(Style_g2_s0_Title3), 259 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s0_Title3 = ALIGNED_STRING("Space Dance                  127"),
+
+    .Style_g2_s0_Title2 = ALIGNED_STRING("Retro Groove                 127"),
+
+    .Style_g2_s0_Title1 = ALIGNED_STRING("Dance Floor                  127"),
+
+    .Style_g2_s0_Title0 = ALIGNED_STRING("London Scene                 127"),
+
+    .Style_g2_s1_Vars = {
+        { SELF(Style_g2_s1_Title0), 260 },
+        { SELF(Style_g2_s1_Title1), 261 },
+        { SELF(Style_g2_s1_Title2), 262 },
+        { SELF(Style_g2_s1_Title3), 263 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s1_Title3 = ALIGNED_STRING("Retro Dance                  121"),
+
+    .Style_g2_s1_Title2 = ALIGNED_STRING("90's Synth Dance             121"),
+
+    .Style_g2_s1_Title1 = ALIGNED_STRING("Metalic Dance                121"),
+
+    .Style_g2_s1_Title0 = ALIGNED_STRING("Old Dance Hit                121"),
+
+    .Style_g2_s2_Vars = {
+        { SELF(Style_g2_s2_Title0), 264 },
+        { SELF(Style_g2_s2_Title1), 265 },
+        { SELF(Style_g2_s2_Title2), 266 },
+        { SELF(Style_g2_s2_Title3), 267 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s2_Title3 = ALIGNED_STRING("House Keys                   125"),
+
+    .Style_g2_s2_Title2 = ALIGNED_STRING("House & Garden               125"),
+
+    .Style_g2_s2_Title1 = ALIGNED_STRING("Poly Dance                   125"),
+
+    .Style_g2_s2_Title0 = ALIGNED_STRING("House Piano                  125"),
+
+    .Style_g2_s3_Vars = {
+        { SELF(Style_g2_s3_Title0), 268 },
+        { SELF(Style_g2_s3_Title1), 269 },
+        { SELF(Style_g2_s3_Title2), 270 },
+        { SELF(Style_g2_s3_Title3), 271 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s3_Title3 = ALIGNED_STRING("Techno Angle                 146"),
+
+    .Style_g2_s3_Title2 = ALIGNED_STRING("Rave Pad                     146"),
+
+    .Style_g2_s3_Title1 = ALIGNED_STRING("Atmo Boom Boom               146"),
+
+    .Style_g2_s3_Title0 = ALIGNED_STRING("Dance Squares                146"),
+
+    .Style_g2_s4_Vars = {
+        { SELF(Style_g2_s4_Title0), 272 },
+        { SELF(Style_g2_s4_Title1), 273 },
+        { SELF(Style_g2_s4_Title2), 274 },
+        { SELF(Style_g2_s4_Title3), 275 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s4_Title3 = ALIGNED_STRING("Mirrorball Dance             118"),
+
+    .Style_g2_s4_Title2 = ALIGNED_STRING("Disco-Techni                 118"),
+
+    .Style_g2_s4_Title1 = ALIGNED_STRING("Disco Pads                   118"),
+
+    .Style_g2_s4_Title0 = ALIGNED_STRING("80's Piano Disco             118"),
+
+    .Style_g2_s5_Vars = {
+        { SELF(Style_g2_s5_Title0), 276 },
+        { SELF(Style_g2_s5_Title1), 277 },
+        { SELF(Style_g2_s5_Title2), 278 },
+        { SELF(Style_g2_s5_Title3), 279 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s5_Title3 = ALIGNED_STRING("80's Dancefloor              115"),
+
+    .Style_g2_s5_Title2 = ALIGNED_STRING("Travolta Dance               115"),
+
+    .Style_g2_s5_Title1 = ALIGNED_STRING("New York Disco               115"),
+
+    .Style_g2_s5_Title0 = ALIGNED_STRING("Saturday Night               115"),
+
+    .Style_g2_s6_Vars = {
+        { SELF(Style_g2_s6_Title0), 280 },
+        { SELF(Style_g2_s6_Title1), 281 },
+        { SELF(Style_g2_s6_Title2), 282 },
+        { SELF(Style_g2_s6_Title3), 283 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s6_Title3 = ALIGNED_STRING("Disco Fever                  121"),
+
+    .Style_g2_s6_Title2 = ALIGNED_STRING("Cool Disco Night             121"),
+
+    .Style_g2_s6_Title1 = ALIGNED_STRING("English Hits                 121"),
+
+    .Style_g2_s6_Title0 = ALIGNED_STRING("Disco Agogo                  121"),
+
+    .Style_g2_s7_Vars = {
+        { SELF(Style_g2_s7_Title0), 284 },
+        { SELF(Style_g2_s7_Title1), 285 },
+        { SELF(Style_g2_s7_Title2), 286 },
+        { SELF(Style_g2_s7_Title3), 287 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s7_Title3 = ALIGNED_STRING("Disco Metal                  124"),
+
+    .Style_g2_s7_Title2 = ALIGNED_STRING("Disco Synths                 124"),
+
+    .Style_g2_s7_Title1 = ALIGNED_STRING("A Case For Dance             124"),
+
+    .Style_g2_s7_Title0 = ALIGNED_STRING("Funky Stuff                  124"),
+
+    .Style_g2_s8_Vars = {
+        { SELF(Style_g2_s8_Title0), 288 },
+        { SELF(Style_g2_s8_Title1), 289 },
+        { SELF(Style_g2_s8_Title2), 290 },
+        { SELF(Style_g2_s8_Title3), 291 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s8_Title3 = ALIGNED_STRING("Voco-Dance                   108"),
+
+    .Style_g2_s8_Title2 = ALIGNED_STRING("Hip-Hop-Echoes               108"),
+
+    .Style_g2_s8_Title1 = ALIGNED_STRING("Hip - Pad                    108"),
+
+    .Style_g2_s8_Title0 = ALIGNED_STRING("Hip Keys                     108"),
+
+    .Style_g2_s9_Vars = {
+        { SELF(Style_g2_s9_Title0), 292 },
+        { SELF(Style_g2_s9_Title1), 293 },
+        { SELF(Style_g2_s9_Title2), 294 },
+        { SELF(Style_g2_s9_Title3), 295 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s9_Title3 = ALIGNED_STRING("Disco Horns                  108"),
+
+    .Style_g2_s9_Title2 = ALIGNED_STRING("Digi Dancefloor              108"),
+
+    .Style_g2_s9_Title1 = ALIGNED_STRING("Synth of The 90s             108"),
+
+    .Style_g2_s9_Title0 = ALIGNED_STRING("Brassy Dance                 108"),
+
+    .Style_g2_s10_Vars = {
+        { SELF(Style_g2_s10_Title0), 296 },
+        { SELF(Style_g2_s10_Title1), 297 },
+        { SELF(Style_g2_s10_Title2), 298 },
+        { SELF(Style_g2_s10_Title3), 299 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s10_Title3 = ALIGNED_STRING("Synth Rapper                  96"),
+
+    .Style_g2_s10_Title2 = ALIGNED_STRING("Hit The Groove                96"),
+
+    .Style_g2_s10_Title1 = ALIGNED_STRING("Street Talk                   96"),
+
+    .Style_g2_s10_Title0 = ALIGNED_STRING("Pump The Bass                 96"),
+
+    .Style_g2_s11_Vars = {
+        { SELF(Style_g2_s11_Title0), 300 },
+        { SELF(Style_g2_s11_Title1), 301 },
+        { SELF(Style_g2_s11_Title2), 302 },
+        { SELF(Style_g2_s11_Title3), 303 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s11_Title3 = ALIGNED_STRING("Dance Island                 104"),
+
+    .Style_g2_s11_Title2 = ALIGNED_STRING("Caribbean Drive              104"),
+
+    .Style_g2_s11_Title1 = ALIGNED_STRING("Macadancer                   104"),
+
+    .Style_g2_s11_Title0 = ALIGNED_STRING("Line Up Dance                104"),
+
+    .Style_g2_s12_Vars = {
+        { SELF(Style_g2_s12_Title0), 304 },
+        { SELF(Style_g2_s12_Title1), 305 },
+        { SELF(Style_g2_s12_Title2), 306 },
+        { SELF(Style_g2_s12_Title3), 307 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s12_Title3 = ALIGNED_STRING("Olympic Dance                101"),
+
+    .Style_g2_s12_Title2 = ALIGNED_STRING("Rasta Jambo                  101"),
+
+    .Style_g2_s12_Title1 = ALIGNED_STRING("Daa Daa Dance                101"),
+
+    .Style_g2_s12_Title0 = ALIGNED_STRING("Coco Dance                   101"),
+
+    .Style_g2_s13_Vars = {
+        { SELF(Style_g2_s13_Title0), 308 },
+        { SELF(Style_g2_s13_Title1), 309 },
+        { SELF(Style_g2_s13_Title2), 310 },
+        { SELF(Style_g2_s13_Title3), 311 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s13_Title3 = ALIGNED_STRING("Aye Aye Caramba              125"),
+
+    .Style_g2_s13_Title2 = ALIGNED_STRING("Joao's Rio-Disco             125"),
+
+    .Style_g2_s13_Title1 = ALIGNED_STRING("Dancing Flutes               125"),
+
+    .Style_g2_s13_Title0 = ALIGNED_STRING("Disco Strings                125"),
+
+    .Style_g2_s14_Vars = {
+        { SELF(Style_g2_s14_Title0), 312 },
+        { SELF(Style_g2_s14_Title1), 313 },
+        { SELF(Style_g2_s14_Title2), 314 },
+        { SELF(Style_g2_s14_Title3), 315 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s14_Title3 = ALIGNED_STRING("Dance Steel                  101"),
+
+    .Style_g2_s14_Title2 = ALIGNED_STRING("Dance Vocals                 101"),
+
+    .Style_g2_s14_Title1 = ALIGNED_STRING("Reggae Talk                  101"),
+
+    .Style_g2_s14_Title0 = ALIGNED_STRING("Reggae Dance Hit             101"),
+
+    .Style_g2_s15_Vars = {
+        { SELF(Style_g2_s15_Title0), 316 },
+        { SELF(Style_g2_s15_Title1), 317 },
+        { SELF(Style_g2_s15_Title2), 318 },
+        { SELF(Style_g2_s15_Title3), 319 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s15_Title3 = ALIGNED_STRING("Festival Amigos              116"),
+
+    .Style_g2_s15_Title2 = ALIGNED_STRING("Piano Cabana                 116"),
+
+    .Style_g2_s15_Title1 = ALIGNED_STRING("Party In Rio                 116"),
+
+    .Style_g2_s15_Title0 = ALIGNED_STRING("Alto Samba                   116"),
+
+    .Style_g2_s16_Vars = {
+        { SELF(Style_g2_s16_Title0), 320 },
+        { SELF(Style_g2_s16_Title1), 321 },
+        { SELF(Style_g2_s16_Title2), 322 },
+        { SELF(Style_g2_s16_Title3), 323 },
+        { 0, 0 },
+    },
+
+    .Style_g2_s16_Title3 = ALIGNED_STRING("Techno Fiddle                124"),
+
+    .Style_g2_s16_Title2 = ALIGNED_STRING("Dance Surround               124"),
+
+    .Style_g2_s16_Title1 = ALIGNED_STRING("New Square Dance             124"),
+
+    .Style_g2_s16_Title0 = ALIGNED_STRING("Dance Leader                 124"),
+
+    .Style_g3_s0_Vars = {
+        { SELF(Style_g3_s0_Title0), 324 },
+        { SELF(Style_g3_s0_Title1), 325 },
+        { SELF(Style_g3_s0_Title2), 326 },
+        { SELF(Style_g3_s0_Title3), 327 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s0_Title3 = ALIGNED_STRING("James At Last                120"),
+
+    .Style_g3_s0_Title2 = ALIGNED_STRING("Nonstop Dancing              120"),
+
+    .Style_g3_s0_Title1 = ALIGNED_STRING("Last Starparade!             120"),
+
+    .Style_g3_s0_Title0 = ALIGNED_STRING("Last At First                120"),
+
+    .Style_g3_s1_Vars = {
+        { SELF(Style_g3_s1_Title0), 328 },
+        { SELF(Style_g3_s1_Title1), 329 },
+        { SELF(Style_g3_s1_Title2), 330 },
+        { SELF(Style_g3_s1_Title3), 331 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s1_Title3 = ALIGNED_STRING("The Party Band               111"),
+
+    .Style_g3_s1_Title2 = ALIGNED_STRING("James' Orchestra             111"),
+
+    .Style_g3_s1_Title1 = ALIGNED_STRING("The Last Brass               111"),
+
+    .Style_g3_s1_Title0 = ALIGNED_STRING("Party Flautist               111"),
+
+    .Style_g3_s2_Vars = {
+        { SELF(Style_g3_s2_Title0), 332 },
+        { SELF(Style_g3_s2_Title1), 333 },
+        { SELF(Style_g3_s2_Title2), 334 },
+        { SELF(Style_g3_s2_Title3), 335 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s2_Title3 = ALIGNED_STRING("German-HitParade             120"),
+
+    .Style_g3_s2_Title2 = ALIGNED_STRING("Flippers-Guitars             120"),
+
+    .Style_g3_s2_Title1 = ALIGNED_STRING("Ricky K.Pop                  120"),
+
+    .Style_g3_s2_Title0 = ALIGNED_STRING("Ibo To Ibiza!                120"),
+
+    .Style_g3_s3_Vars = {
+        { SELF(Style_g3_s3_Title0), 336 },
+        { SELF(Style_g3_s3_Title1), 337 },
+        { SELF(Style_g3_s3_Title2), 338 },
+        { SELF(Style_g3_s3_Title3), 339 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s3_Title3 = ALIGNED_STRING("KirmesMusikanten             125"),
+
+    .Style_g3_s3_Title2 = ALIGNED_STRING("Ady's PartyOrgan             125"),
+
+    .Style_g3_s3_Title1 = ALIGNED_STRING("German FolkParty             125"),
+
+    .Style_g3_s3_Title0 = ALIGNED_STRING("Happy Woodpecker             125"),
+
+    .Style_g3_s4_Vars = {
+        { SELF(Style_g3_s4_Title0), 340 },
+        { SELF(Style_g3_s4_Title1), 341 },
+        { SELF(Style_g3_s4_Title2), 342 },
+        { SELF(Style_g3_s4_Title3), 343 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s4_Title3 = ALIGNED_STRING("Fair Sea Organ               125"),
+
+    .Style_g3_s4_Title2 = ALIGNED_STRING("Franz L's Organ              125"),
+
+    .Style_g3_s4_Title1 = ALIGNED_STRING("Pop Of The Bells             125"),
+
+    .Style_g3_s4_Title0 = ALIGNED_STRING("Piccolo Pop                  125"),
+
+    .Style_g3_s5_Vars = {
+        { SELF(Style_g3_s5_Title0), 344 },
+        { SELF(Style_g3_s5_Title1), 345 },
+        { SELF(Style_g3_s5_Title2), 346 },
+        { SELF(Style_g3_s5_Title3), 347 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s5_Title3 = ALIGNED_STRING("Bridge Party                 116"),
+
+    .Style_g3_s5_Title2 = ALIGNED_STRING("No Lyrics Needed             116"),
+
+    .Style_g3_s5_Title1 = ALIGNED_STRING("Song Contest Hit             116"),
+
+    .Style_g3_s5_Title0 = ALIGNED_STRING("Puppet March                 116"),
+
+    .Style_g3_s6_Vars = {
+        { SELF(Style_g3_s6_Title0), 348 },
+        { SELF(Style_g3_s6_Title1), 349 },
+        { SELF(Style_g3_s6_Title2), 350 },
+        { SELF(Style_g3_s6_Title3), 351 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s6_Title3 = ALIGNED_STRING("Party Space                  120"),
+
+    .Style_g3_s6_Title2 = ALIGNED_STRING("String Pops                  120"),
+
+    .Style_g3_s6_Title1 = ALIGNED_STRING("Party Accordion              120"),
+
+    .Style_g3_s6_Title0 = ALIGNED_STRING("Pop Accordion                120"),
+
+    .Style_g3_s7_Vars = {
+        { SELF(Style_g3_s7_Title0), 352 },
+        { SELF(Style_g3_s7_Title1), 353 },
+        { SELF(Style_g3_s7_Title2), 354 },
+        { SELF(Style_g3_s7_Title3), 355 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s7_Title3 = ALIGNED_STRING("German Party Hit             111"),
+
+    .Style_g3_s7_Title2 = ALIGNED_STRING("Orgel Pops                   111"),
+
+    .Style_g3_s7_Title1 = ALIGNED_STRING("Party Pop Stack              111"),
+
+    .Style_g3_s7_Title0 = ALIGNED_STRING("Synth Party                  111"),
+
+    .Style_g3_s8_Vars = {
+        { SELF(Style_g3_s8_Title0), 356 },
+        { SELF(Style_g3_s8_Title1), 357 },
+        { SELF(Style_g3_s8_Title2), 358 },
+        { SELF(Style_g3_s8_Title3), 359 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s8_Title3 = ALIGNED_STRING("50's Section                 133"),
+
+    .Style_g3_s8_Title2 = ALIGNED_STRING("Solid Gold Oldie             133"),
+
+    .Style_g3_s8_Title1 = ALIGNED_STRING("Anka Rock                    133"),
+
+    .Style_g3_s8_Title0 = ALIGNED_STRING("The Old Bars                 133"),
+
+    .Style_g3_s9_Vars = {
+        { SELF(Style_g3_s9_Title0), 360 },
+        { SELF(Style_g3_s9_Title1), 361 },
+        { SELF(Style_g3_s9_Title2), 362 },
+        { SELF(Style_g3_s9_Title3), 363 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s9_Title3 = ALIGNED_STRING("Party Partners               115"),
+
+    .Style_g3_s9_Title2 = ALIGNED_STRING("Alto Duet Party              115"),
+
+    .Style_g3_s9_Title1 = ALIGNED_STRING("Accordion Fun                115"),
+
+    .Style_g3_s9_Title0 = ALIGNED_STRING("Party Register               115"),
+
+    .Style_g3_s10_Vars = {
+        { SELF(Style_g3_s10_Title0), 364 },
+        { SELF(Style_g3_s10_Title1), 365 },
+        { SELF(Style_g3_s10_Title2), 366 },
+        { SELF(Style_g3_s10_Title3), 367 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s10_Title3 = ALIGNED_STRING("Shake It All....             162"),
+
+    .Style_g3_s10_Title2 = ALIGNED_STRING("Dancing Bellows              162"),
+
+    .Style_g3_s10_Title1 = ALIGNED_STRING("Old Party Dance              162"),
+
+    .Style_g3_s10_Title0 = ALIGNED_STRING("Turn                         162"),
+
+    .Style_g3_s11_Vars = {
+        { SELF(Style_g3_s11_Title0), 368 },
+        { SELF(Style_g3_s11_Title1), 369 },
+        { SELF(Style_g3_s11_Title2), 370 },
+        { SELF(Style_g3_s11_Title3), 371 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s11_Title3 = ALIGNED_STRING("Accordiolas!!                100"),
+
+    .Style_g3_s11_Title2 = ALIGNED_STRING("Chords & Birds               100"),
+
+    .Style_g3_s11_Title1 = ALIGNED_STRING("Bird-Voices                  100"),
+
+    .Style_g3_s11_Title0 = ALIGNED_STRING("Birdy-Accordion              100"),
+
+    .Style_g3_s12_Vars = {
+        { SELF(Style_g3_s12_Title0), 372 },
+        { SELF(Style_g3_s12_Title1), 373 },
+        { SELF(Style_g3_s12_Title2), 374 },
+        { SELF(Style_g3_s12_Title3), 375 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s12_Title3 = ALIGNED_STRING("London's Bigbone             134"),
+
+    .Style_g3_s12_Title2 = ALIGNED_STRING("Pub Piano                    134"),
+
+    .Style_g3_s12_Title1 = ALIGNED_STRING("Banjo Sing Song              134"),
+
+    .Style_g3_s12_Title0 = ALIGNED_STRING("Cockney Clarinet             134"),
+
+    .Style_g3_s13_Vars = {
+        { SELF(Style_g3_s13_Title0), 376 },
+        { SELF(Style_g3_s13_Title1), 377 },
+        { SELF(Style_g3_s13_Title2), 378 },
+        { SELF(Style_g3_s13_Title3), 379 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s13_Title3 = ALIGNED_STRING("Dance Craze Sax              132"),
+
+    .Style_g3_s13_Title2 = ALIGNED_STRING("88 In Line!                  132"),
+
+    .Style_g3_s13_Title1 = ALIGNED_STRING("Country Line                 132"),
+
+    .Style_g3_s13_Title0 = ALIGNED_STRING("Fiddle Dance                 132"),
+
+    .Style_g3_s14_Vars = {
+        { SELF(Style_g3_s14_Title0), 380 },
+        { SELF(Style_g3_s14_Title1), 381 },
+        { SELF(Style_g3_s14_Title2), 382 },
+        { SELF(Style_g3_s14_Title3), 383 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s14_Title3 = ALIGNED_STRING("Symphony Hoedown             206"),
+
+    .Style_g3_s14_Title2 = ALIGNED_STRING("Hoedown Frets                206"),
+
+    .Style_g3_s14_Title1 = ALIGNED_STRING("Oklahoma Dance               206"),
+
+    .Style_g3_s14_Title0 = ALIGNED_STRING("Country Dance                206"),
+
+    .Style_g3_s15_Vars = {
+        { SELF(Style_g3_s15_Title0), 384 },
+        { SELF(Style_g3_s15_Title1), 385 },
+        { SELF(Style_g3_s15_Title2), 386 },
+        { SELF(Style_g3_s15_Title3), 387 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s15_Title3 = ALIGNED_STRING("Speedy Fiddle                138"),
+
+    .Style_g3_s15_Title2 = ALIGNED_STRING("Techno Ranger                138"),
+
+    .Style_g3_s15_Title1 = ALIGNED_STRING("Dance Cowboy                 138"),
+
+    .Style_g3_s15_Title0 = ALIGNED_STRING("Banjo Dance                  138"),
+
+    .Style_g3_s16_Vars = {
+        { SELF(Style_g3_s16_Title0), 388 },
+        { SELF(Style_g3_s16_Title1), 389 },
+        { SELF(Style_g3_s16_Title2), 390 },
+        { SELF(Style_g3_s16_Title3), 391 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s16_Title3 = ALIGNED_STRING("Oktober Party                150"),
+
+    .Style_g3_s16_Title2 = ALIGNED_STRING("Schurzenjager                150"),
+
+    .Style_g3_s16_Title1 = ALIGNED_STRING("The Zillertaler              150"),
+
+    .Style_g3_s16_Title0 = ALIGNED_STRING("Auf Gehts!                   150"),
+
+    .Style_g3_s17_Vars = {
+        { SELF(Style_g3_s17_Title0), 392 },
+        { SELF(Style_g3_s17_Title1), 393 },
+        { SELF(Style_g3_s17_Title2), 394 },
+        { SELF(Style_g3_s17_Title3), 395 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s17_Title3 = ALIGNED_STRING("Bavaria To Tyrol             195"),
+
+    .Style_g3_s17_Title2 = ALIGNED_STRING("Munich Brass                 195"),
+
+    .Style_g3_s17_Title1 = ALIGNED_STRING("Bavarian Zither              195"),
+
+    .Style_g3_s17_Title0 = ALIGNED_STRING("Sepp's Clarinet              195"),
+
+    .Style_g3_s18_Vars = {
+        { SELF(Style_g3_s18_Title0), 396 },
+        { SELF(Style_g3_s18_Title1), 397 },
+        { SELF(Style_g3_s18_Title2), 398 },
+        { SELF(Style_g3_s18_Title3), 399 },
+        { 0, 0 },
+    },
+
+    .Style_g3_s18_Title3 = ALIGNED_STRING("Miseltoe Melody               75"),
+
+    .Style_g3_s18_Title2 = ALIGNED_STRING("Carol Singers                 75"),
+
+    .Style_g3_s18_Title1 = ALIGNED_STRING("Yuletide Strings              75"),
+
+    .Style_g3_s18_Title0 = ALIGNED_STRING("Santa's Helpers               75"),
+
+    .Style_g4_s0_Vars = {
+        { SELF(Style_g4_s0_Title0), 400 },
+        { SELF(Style_g4_s0_Title1), 401 },
+        { SELF(Style_g4_s0_Title2), 402 },
+        { SELF(Style_g4_s0_Title3), 403 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s0_Title3 = ALIGNED_STRING("Soulful Wha Wha              140"),
+
+    .Style_g4_s0_Title2 = ALIGNED_STRING("Bad Soul Bars                140"),
+
+    .Style_g4_s0_Title1 = ALIGNED_STRING("Saxy Soul                    140"),
+
+    .Style_g4_s0_Title0 = ALIGNED_STRING("Feelin' Good                 140"),
+
+    .Style_g4_s1_Vars = {
+        { SELF(Style_g4_s1_Title0), 404 },
+        { SELF(Style_g4_s1_Title1), 405 },
+        { SELF(Style_g4_s1_Title2), 406 },
+        { SELF(Style_g4_s1_Title3), 407 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s1_Title3 = ALIGNED_STRING("Motor Town Brass             142"),
+
+    .Style_g4_s1_Title2 = ALIGNED_STRING("Detroit Strings              142"),
+
+    .Style_g4_s1_Title1 = ALIGNED_STRING("Ross Vocals                  142"),
+
+    .Style_g4_s1_Title0 = ALIGNED_STRING("Supreme Tenor                142"),
+
+    .Style_g4_s2_Vars = {
+        { SELF(Style_g4_s2_Title0), 408 },
+        { SELF(Style_g4_s2_Title1), 409 },
+        { SELF(Style_g4_s2_Title2), 410 },
+        { SELF(Style_g4_s2_Title3), 411 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s2_Title3 = ALIGNED_STRING("Synth Soul Horns             114"),
+
+    .Style_g4_s2_Title2 = ALIGNED_STRING("Soul Solo                    114"),
+
+    .Style_g4_s2_Title1 = ALIGNED_STRING("A Few Soulbars               114"),
+
+    .Style_g4_s2_Title0 = ALIGNED_STRING("A Case Of Soul               114"),
+
+    .Style_g4_s3_Vars = {
+        { SELF(Style_g4_s3_Title0), 412 },
+        { SELF(Style_g4_s3_Title1), 413 },
+        { SELF(Style_g4_s3_Title2), 414 },
+        { SELF(Style_g4_s3_Title3), 415 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s3_Title3 = ALIGNED_STRING("Soul Suitcase                 70"),
+
+    .Style_g4_s3_Title2 = ALIGNED_STRING("Soul Drawbars                 70"),
+
+    .Style_g4_s3_Title1 = ALIGNED_STRING("Soulful Sax                   70"),
+
+    .Style_g4_s3_Title0 = ALIGNED_STRING("Synth For Soul                70"),
+
+    .Style_g4_s4_Vars = {
+        { SELF(Style_g4_s4_Title0), 416 },
+        { SELF(Style_g4_s4_Title1), 417 },
+        { SELF(Style_g4_s4_Title2), 418 },
+        { SELF(Style_g4_s4_Title3), 419 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s4_Title3 = ALIGNED_STRING("Soulful Groove                88"),
+
+    .Style_g4_s4_Title2 = ALIGNED_STRING("Keys To Soul                  88"),
+
+    .Style_g4_s4_Title1 = ALIGNED_STRING("Soul Horn                     88"),
+
+    .Style_g4_s4_Title0 = ALIGNED_STRING("Sweet Soul                    88"),
+
+    .Style_g4_s5_Vars = {
+        { SELF(Style_g4_s5_Title0), 420 },
+        { SELF(Style_g4_s5_Title1), 421 },
+        { SELF(Style_g4_s5_Title2), 422 },
+        { SELF(Style_g4_s5_Title3), 423 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s5_Title3 = ALIGNED_STRING("Soul Vocal Duo                66"),
+
+    .Style_g4_s5_Title2 = ALIGNED_STRING("Cool Soul Frets               66"),
+
+    .Style_g4_s5_Title1 = ALIGNED_STRING("Sweet 16 Sax                  66"),
+
+    .Style_g4_s5_Title0 = ALIGNED_STRING("Soulful Flute                 66"),
+
+    .Style_g4_s6_Vars = {
+        { SELF(Style_g4_s6_Title0), 424 },
+        { SELF(Style_g4_s6_Title1), 425 },
+        { SELF(Style_g4_s6_Title2), 426 },
+        { SELF(Style_g4_s6_Title3), 427 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s6_Title3 = ALIGNED_STRING("Georgia Brass                 64"),
+
+    .Style_g4_s6_Title2 = ALIGNED_STRING("Moody Drawbars                64"),
+
+    .Style_g4_s6_Title1 = ALIGNED_STRING("Ray's Ballad                  64"),
+
+    .Style_g4_s6_Title0 = ALIGNED_STRING("Soul On My Mind               64"),
+
+    .Style_g4_s7_Vars = {
+        { SELF(Style_g4_s7_Title0), 428 },
+        { SELF(Style_g4_s7_Title1), 429 },
+        { SELF(Style_g4_s7_Title2), 430 },
+        { SELF(Style_g4_s7_Title3), 431 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s7_Title3 = ALIGNED_STRING("Blues Horns                  112"),
+
+    .Style_g4_s7_Title2 = ALIGNED_STRING("Analogue Blues               112"),
+
+    .Style_g4_s7_Title1 = ALIGNED_STRING("Vintage R&B                  112"),
+
+    .Style_g4_s7_Title0 = ALIGNED_STRING("Solid R&B                    112"),
+
+    .Style_g4_s8_Vars = {
+        { SELF(Style_g4_s8_Title0), 432 },
+        { SELF(Style_g4_s8_Title1), 433 },
+        { SELF(Style_g4_s8_Title2), 434 },
+        { SELF(Style_g4_s8_Title3), 435 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s8_Title3 = ALIGNED_STRING("Big Band Blues                78"),
+
+    .Style_g4_s8_Title2 = ALIGNED_STRING("Solid Blues                   78"),
+
+    .Style_g4_s8_Title1 = ALIGNED_STRING("Bad B3 Blues                  78"),
+
+    .Style_g4_s8_Title0 = ALIGNED_STRING("Satchmo's Blues               78"),
+
+    .Style_g4_s9_Vars = {
+        { SELF(Style_g4_s9_Title0), 436 },
+        { SELF(Style_g4_s9_Title1), 437 },
+        { SELF(Style_g4_s9_Title2), 438 },
+        { SELF(Style_g4_s9_Title3), 439 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s9_Title3 = ALIGNED_STRING("Down & Dirty                 124"),
+
+    .Style_g4_s9_Title2 = ALIGNED_STRING("Blues Alley                  124"),
+
+    .Style_g4_s9_Title1 = ALIGNED_STRING("Hard Sax Blues               124"),
+
+    .Style_g4_s9_Title0 = ALIGNED_STRING("Blues Rock Keys              124"),
+
+    .Style_g4_s10_Vars = {
+        { SELF(Style_g4_s10_Title0), 440 },
+        { SELF(Style_g4_s10_Title1), 441 },
+        { SELF(Style_g4_s10_Title2), 442 },
+        { SELF(Style_g4_s10_Title3), 443 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s10_Title3 = ALIGNED_STRING("Wah Wah Blues                 83"),
+
+    .Style_g4_s10_Title2 = ALIGNED_STRING("Blues Bars                    83"),
+
+    .Style_g4_s10_Title1 = ALIGNED_STRING("Blues Steel                   83"),
+
+    .Style_g4_s10_Title0 = ALIGNED_STRING("I Got The Blues               83"),
+
+    .Style_g4_s11_Vars = {
+        { SELF(Style_g4_s11_Title0), 444 },
+        { SELF(Style_g4_s11_Title1), 445 },
+        { SELF(Style_g4_s11_Title2), 446 },
+        { SELF(Style_g4_s11_Title3), 447 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s11_Title3 = ALIGNED_STRING("Mournful Tenor               120"),
+
+    .Style_g4_s11_Title2 = ALIGNED_STRING("Bad Blues Brass              120"),
+
+    .Style_g4_s11_Title1 = ALIGNED_STRING("Ham & Blues                  120"),
+
+    .Style_g4_s11_Title0 = ALIGNED_STRING("Bluesy Alto                  120"),
+
+    .Style_g4_s12_Vars = {
+        { SELF(Style_g4_s12_Title0), 448 },
+        { SELF(Style_g4_s12_Title1), 449 },
+        { SELF(Style_g4_s12_Title2), 450 },
+        { SELF(Style_g4_s12_Title3), 451 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s12_Title3 = ALIGNED_STRING("Wheels of Life                88"),
+
+    .Style_g4_s12_Title2 = ALIGNED_STRING("Hymn Band                     88"),
+
+    .Style_g4_s12_Title1 = ALIGNED_STRING("Gospel Choir                  88"),
+
+    .Style_g4_s12_Title0 = ALIGNED_STRING("Electric Gospel               88"),
+
+    .Style_g4_s13_Vars = {
+        { SELF(Style_g4_s13_Title0), 452 },
+        { SELF(Style_g4_s13_Title1), 453 },
+        { SELF(Style_g4_s13_Title2), 454 },
+        { SELF(Style_g4_s13_Title3), 455 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s13_Title3 = ALIGNED_STRING("Praise The Lord              128"),
+
+    .Style_g4_s13_Title2 = ALIGNED_STRING("Inspirational!               128"),
+
+    .Style_g4_s13_Title1 = ALIGNED_STRING("Preach The Word              128"),
+
+    .Style_g4_s13_Title0 = ALIGNED_STRING("Gospel Sax                   128"),
+
+    .Style_g4_s14_Vars = {
+        { SELF(Style_g4_s14_Title0), 456 },
+        { SELF(Style_g4_s14_Title1), 457 },
+        { SELF(Style_g4_s14_Title2), 458 },
+        { SELF(Style_g4_s14_Title3), 459 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s14_Title3 = ALIGNED_STRING("Reed The Word                124"),
+
+    .Style_g4_s14_Title2 = ALIGNED_STRING("Chapel Brass                 124"),
+
+    .Style_g4_s14_Title1 = ALIGNED_STRING("Sing Hallelujah              124"),
+
+    .Style_g4_s14_Title0 = ALIGNED_STRING("Gospel Standard              124"),
+
+    .Style_g4_s15_Vars = {
+        { SELF(Style_g4_s15_Title0), 460 },
+        { SELF(Style_g4_s15_Title1), 461 },
+        { SELF(Style_g4_s15_Title2), 462 },
+        { SELF(Style_g4_s15_Title3), 463 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s15_Title3 = ALIGNED_STRING("Congregation!                151"),
+
+    .Style_g4_s15_Title2 = ALIGNED_STRING("Worship Groove               151"),
+
+    .Style_g4_s15_Title1 = ALIGNED_STRING("Gospel Drawbars              151"),
+
+    .Style_g4_s15_Title0 = ALIGNED_STRING("Soprano Prayer               151"),
+
+    .Style_g4_s16_Vars = {
+        { SELF(Style_g4_s16_Title0), 464 },
+        { SELF(Style_g4_s16_Title1), 465 },
+        { SELF(Style_g4_s16_Title2), 466 },
+        { SELF(Style_g4_s16_Title3), 467 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s16_Title3 = ALIGNED_STRING("Gospel Lead                   66"),
+
+    .Style_g4_s16_Title2 = ALIGNED_STRING("Drawbar Service               66"),
+
+    .Style_g4_s16_Title1 = ALIGNED_STRING("Church Grand                  66"),
+
+    .Style_g4_s16_Title0 = ALIGNED_STRING("Gospel Organ                  66"),
+
+    .Style_g4_s17_Vars = {
+        { SELF(Style_g4_s17_Title0), 468 },
+        { SELF(Style_g4_s17_Title1), 469 },
+        { SELF(Style_g4_s17_Title2), 470 },
+        { SELF(Style_g4_s17_Title3), 471 },
+        { 0, 0 },
+    },
+
+    .Style_g4_s17_Title3 = ALIGNED_STRING("Sing Praises                  92"),
+
+    .Style_g4_s17_Title2 = ALIGNED_STRING("Modern Gospel                 92"),
+
+    .Style_g4_s17_Title1 = ALIGNED_STRING("Sing It, Play It              92"),
+
+    .Style_g4_s17_Title0 = ALIGNED_STRING("Amazing Waltz!                92"),
+
+    .Style_g5_s0_Vars = {
+        { SELF(Style_g5_s0_Title0), 472 },
+        { SELF(Style_g5_s0_Title1), 473 },
+        { SELF(Style_g5_s0_Title2), 474 },
+        { SELF(Style_g5_s0_Title3), 475 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s0_Title3 = ALIGNED_STRING("Bigband Shout                170"),
+
+    .Style_g5_s0_Title2 = ALIGNED_STRING("Fast Reeds                   170"),
+
+    .Style_g5_s0_Title1 = ALIGNED_STRING("Swing Alto Solo              170"),
+
+    .Style_g5_s0_Title0 = ALIGNED_STRING("The Duke's Piano             170"),
+
+    .Style_g5_s1_Vars = {
+        { SELF(Style_g5_s1_Title0), 476 },
+        { SELF(Style_g5_s1_Title1), 477 },
+        { SELF(Style_g5_s1_Title2), 478 },
+        { SELF(Style_g5_s1_Title3), 479 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s1_Title3 = ALIGNED_STRING("Reeds in Unison              110"),
+
+    .Style_g5_s1_Title2 = ALIGNED_STRING("Full Mute Brass              110"),
+
+    .Style_g5_s1_Title1 = ALIGNED_STRING("Dorsey Band                  110"),
+
+    .Style_g5_s1_Title0 = ALIGNED_STRING("Father Time Solo             110"),
+
+    .Style_g5_s2_Vars = {
+        { SELF(Style_g5_s2_Title0), 480 },
+        { SELF(Style_g5_s2_Title1), 481 },
+        { SELF(Style_g5_s2_Title2), 482 },
+        { SELF(Style_g5_s2_Title3), 483 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s2_Title3 = ALIGNED_STRING("Miller Station               150"),
+
+    .Style_g5_s2_Title2 = ALIGNED_STRING("Main Line Brass              150"),
+
+    .Style_g5_s2_Title1 = ALIGNED_STRING("Sax Tracks                   150"),
+
+    .Style_g5_s2_Title0 = ALIGNED_STRING("Getting Up Steam             150"),
+
+    .Style_g5_s3_Vars = {
+        { SELF(Style_g5_s3_Title0), 484 },
+        { SELF(Style_g5_s3_Title1), 485 },
+        { SELF(Style_g5_s3_Title2), 486 },
+        { SELF(Style_g5_s3_Title3), 487 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s3_Title3 = ALIGNED_STRING("Harry J.& Co.                 86"),
+
+    .Style_g5_s3_Title2 = ALIGNED_STRING("Mellow Section                86"),
+
+    .Style_g5_s3_Title1 = ALIGNED_STRING("Miller Reeds                  86"),
+
+    .Style_g5_s3_Title0 = ALIGNED_STRING("Sentimental Solo              86"),
+
+    .Style_g5_s4_Vars = {
+        { SELF(Style_g5_s4_Title0), 488 },
+        { SELF(Style_g5_s4_Title1), 489 },
+        { SELF(Style_g5_s4_Title2), 490 },
+        { SELF(Style_g5_s4_Title3), 491 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s4_Title3 = ALIGNED_STRING("The Whole Band!               90"),
+
+    .Style_g5_s4_Title2 = ALIGNED_STRING("Count On It!                  90"),
+
+    .Style_g5_s4_Title1 = ALIGNED_STRING("Mute Soloist                  90"),
+
+    .Style_g5_s4_Title0 = ALIGNED_STRING("Acker's Solo                  90"),
+
+    .Style_g5_s5_Vars = {
+        { SELF(Style_g5_s5_Title0), 492 },
+        { SELF(Style_g5_s5_Title1), 493 },
+        { SELF(Style_g5_s5_Title2), 494 },
+        { SELF(Style_g5_s5_Title3), 495 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s5_Title3 = ALIGNED_STRING("Glenn's Big Band              90"),
+
+    .Style_g5_s5_Title2 = ALIGNED_STRING("Band Leader Solo              90"),
+
+    .Style_g5_s5_Title1 = ALIGNED_STRING("Full Dance Band               90"),
+
+    .Style_g5_s5_Title0 = ALIGNED_STRING("Swing Orchestra               90"),
+
+    .Style_g5_s6_Vars = {
+        { SELF(Style_g5_s6_Title0), 496 },
+        { SELF(Style_g5_s6_Title1), 497 },
+        { SELF(Style_g5_s6_Title2), 498 },
+        { SELF(Style_g5_s6_Title3), 499 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s6_Title3 = ALIGNED_STRING("Harry's Solo                  92"),
+
+    .Style_g5_s6_Title2 = ALIGNED_STRING("Big Band Sound                92"),
+
+    .Style_g5_s6_Title1 = ALIGNED_STRING("Gentle Reeds                  92"),
+
+    .Style_g5_s6_Title0 = ALIGNED_STRING("Muted Big Band                92"),
+
+    .Style_g5_s7_Vars = {
+        { SELF(Style_g5_s7_Title0), 500 },
+        { SELF(Style_g5_s7_Title1), 501 },
+        { SELF(Style_g5_s7_Title2), 502 },
+        { SELF(Style_g5_s7_Title3), 503 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s7_Title3 = ALIGNED_STRING("Full Tilt Swing!             127"),
+
+    .Style_g5_s7_Title2 = ALIGNED_STRING("Power Sax Swing              127"),
+
+    .Style_g5_s7_Title1 = ALIGNED_STRING("Reed It, Mute It             127"),
+
+    .Style_g5_s7_Title0 = ALIGNED_STRING("Swing Reedle                 127"),
+
+    .Style_g5_s8_Vars = {
+        { SELF(Style_g5_s8_Title0), 504 },
+        { SELF(Style_g5_s8_Title1), 505 },
+        { SELF(Style_g5_s8_Title2), 506 },
+        { SELF(Style_g5_s8_Title3), 507 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s8_Title3 = ALIGNED_STRING("Lush Swing                   142"),
+
+    .Style_g5_s8_Title2 = ALIGNED_STRING("Riddle Orchestra             142"),
+
+    .Style_g5_s8_Title1 = ALIGNED_STRING("Sinatra Strings              142"),
+
+    .Style_g5_s8_Title0 = ALIGNED_STRING("Swingin' Frets               142"),
+
+    .Style_g5_s9_Vars = {
+        { SELF(Style_g5_s9_Title0), 508 },
+        { SELF(Style_g5_s9_Title1), 509 },
+        { SELF(Style_g5_s9_Title2), 510 },
+        { SELF(Style_g5_s9_Title3), 511 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s9_Title3 = ALIGNED_STRING("Swing Unison                 158"),
+
+    .Style_g5_s9_Title2 = ALIGNED_STRING("The Band Leader              158"),
+
+    .Style_g5_s9_Title1 = ALIGNED_STRING("Grand Swing!                 158"),
+
+    .Style_g5_s9_Title0 = ALIGNED_STRING("Laid Back Jazz               158"),
+
+    .Style_g5_s10_Vars = {
+        { SELF(Style_g5_s10_Title0), 512 },
+        { SELF(Style_g5_s10_Title1), 513 },
+        { SELF(Style_g5_s10_Title2), 514 },
+        { SELF(Style_g5_s10_Title3), 515 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s10_Title3 = ALIGNED_STRING("Reed It & Swing!             140"),
+
+    .Style_g5_s10_Title2 = ALIGNED_STRING("Swing Sparkle                140"),
+
+    .Style_g5_s10_Title1 = ALIGNED_STRING("Organist's Swing             140"),
+
+    .Style_g5_s10_Title0 = ALIGNED_STRING("Swinging Keys                140"),
+
+    .Style_g5_s11_Vars = {
+        { SELF(Style_g5_s11_Title0), 516 },
+        { SELF(Style_g5_s11_Title1), 517 },
+        { SELF(Style_g5_s11_Title2), 518 },
+        { SELF(Style_g5_s11_Title3), 519 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s11_Title3 = ALIGNED_STRING("Jazz Bars                    146"),
+
+    .Style_g5_s11_Title2 = ALIGNED_STRING("Combo Romance                146"),
+
+    .Style_g5_s11_Title1 = ALIGNED_STRING("Club Duet                    146"),
+
+    .Style_g5_s11_Title0 = ALIGNED_STRING("Jazz Blocks                  146"),
+
+    .Style_g5_s12_Vars = {
+        { SELF(Style_g5_s12_Title0), 520 },
+        { SELF(Style_g5_s12_Title1), 521 },
+        { SELF(Style_g5_s12_Title2), 522 },
+        { SELF(Style_g5_s12_Title3), 523 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s12_Title3 = ALIGNED_STRING("Lionel Meets Wes             174"),
+
+    .Style_g5_s12_Title2 = ALIGNED_STRING("Jazz From Wes                174"),
+
+    .Style_g5_s12_Title1 = ALIGNED_STRING("Oscar's Gig                  174"),
+
+    .Style_g5_s12_Title0 = ALIGNED_STRING("Acoustic Jazz                174"),
+
+    .Style_g5_s13_Vars = {
+        { SELF(Style_g5_s13_Title0), 524 },
+        { SELF(Style_g5_s13_Title1), 525 },
+        { SELF(Style_g5_s13_Title2), 526 },
+        { SELF(Style_g5_s13_Title3), 527 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s13_Title3 = ALIGNED_STRING("Wild Side Organ              200"),
+
+    .Style_g5_s13_Title2 = ALIGNED_STRING("Simple Jimmy                 200"),
+
+    .Style_g5_s13_Title1 = ALIGNED_STRING("Helmut & Strings             200"),
+
+    .Style_g5_s13_Title0 = ALIGNED_STRING("Zacharias Swing              200"),
+
+    .Style_g5_s14_Vars = {
+        { SELF(Style_g5_s14_Title0), 528 },
+        { SELF(Style_g5_s14_Title1), 529 },
+        { SELF(Style_g5_s14_Title2), 530 },
+        { SELF(Style_g5_s14_Title3), 531 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s14_Title3 = ALIGNED_STRING("Boogie Bugles                160"),
+
+    .Style_g5_s14_Title2 = ALIGNED_STRING("Boogie Dance                 160"),
+
+    .Style_g5_s14_Title1 = ALIGNED_STRING("12 Boogie Bars               160"),
+
+    .Style_g5_s14_Title0 = ALIGNED_STRING("Jitterbug Vocals             160"),
+
+    .Style_g5_s15_Vars = {
+        { SELF(Style_g5_s15_Title0), 532 },
+        { SELF(Style_g5_s15_Title1), 533 },
+        { SELF(Style_g5_s15_Title2), 534 },
+        { SELF(Style_g5_s15_Title3), 535 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s15_Title3 = ALIGNED_STRING("Partners in Jazz             145"),
+
+    .Style_g5_s15_Title2 = ALIGNED_STRING("Cool Jazz B3                 145"),
+
+    .Style_g5_s15_Title1 = ALIGNED_STRING("Saxy Jazz                    145"),
+
+    .Style_g5_s15_Title0 = ALIGNED_STRING("Lionel's Jazz                145"),
+
+    .Style_g5_s16_Vars = {
+        { SELF(Style_g5_s16_Title0), 536 },
+        { SELF(Style_g5_s16_Title1), 537 },
+        { SELF(Style_g5_s16_Title2), 538 },
+        { SELF(Style_g5_s16_Title3), 539 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s16_Title3 = ALIGNED_STRING("All Out Jazz                 170"),
+
+    .Style_g5_s16_Title2 = ALIGNED_STRING("Slow Spin Groove             170"),
+
+    .Style_g5_s16_Title1 = ALIGNED_STRING("Classic Groove               170"),
+
+    .Style_g5_s16_Title0 = ALIGNED_STRING("Even Jazz                    170"),
+
+    .Style_g5_s17_Vars = {
+        { SELF(Style_g5_s17_Title0), 540 },
+        { SELF(Style_g5_s17_Title1), 541 },
+        { SELF(Style_g5_s17_Title2), 542 },
+        { SELF(Style_g5_s17_Title3), 543 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s17_Title3 = ALIGNED_STRING("Combo Soloists               126"),
+
+    .Style_g5_s17_Title2 = ALIGNED_STRING("Late Night Sax               126"),
+
+    .Style_g5_s17_Title1 = ALIGNED_STRING("Shearing Combo               126"),
+
+    .Style_g5_s17_Title0 = ALIGNED_STRING("Nat's Piano                  126"),
+
+    .Style_g5_s18_Vars = {
+        { SELF(Style_g5_s18_Title0), 544 },
+        { SELF(Style_g5_s18_Title1), 545 },
+        { SELF(Style_g5_s18_Title2), 546 },
+        { SELF(Style_g5_s18_Title3), 547 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s18_Title3 = ALIGNED_STRING("Reinhardt's Solo             210"),
+
+    .Style_g5_s18_Title2 = ALIGNED_STRING("Stephane&Django              210"),
+
+    .Style_g5_s18_Title1 = ALIGNED_STRING("Fiddle For Jazz              210"),
+
+    .Style_g5_s18_Title0 = ALIGNED_STRING("Gypsy Jazz Frets             210"),
+
+    .Style_g5_s19_Vars = {
+        { SELF(Style_g5_s19_Title0), 548 },
+        { SELF(Style_g5_s19_Title1), 549 },
+        { SELF(Style_g5_s19_Title2), 550 },
+        { SELF(Style_g5_s19_Title3), 551 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s19_Title3 = ALIGNED_STRING("Bellows & Blocks             158"),
+
+    .Style_g5_s19_Title2 = ALIGNED_STRING("Accordion & Co!              158"),
+
+    .Style_g5_s19_Title1 = ALIGNED_STRING("Let It Register!             158"),
+
+    .Style_g5_s19_Title0 = ALIGNED_STRING("Soft Squeeze                 158"),
+
+    .Style_g5_s20_Vars = {
+        { SELF(Style_g5_s20_Title0), 552 },
+        { SELF(Style_g5_s20_Title1), 553 },
+        { SELF(Style_g5_s20_Title2), 554 },
+        { SELF(Style_g5_s20_Title3), 555 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s20_Title3 = ALIGNED_STRING("Moonshine Combo              184"),
+
+    .Style_g5_s20_Title2 = ALIGNED_STRING("Wall St. Jazz                184"),
+
+    .Style_g5_s20_Title1 = ALIGNED_STRING("Roaring Trumpet              184"),
+
+    .Style_g5_s20_Title0 = ALIGNED_STRING("Chicago Piano                184"),
+
+    .Style_g5_s21_Vars = {
+        { SELF(Style_g5_s21_Title0), 556 },
+        { SELF(Style_g5_s21_Title1), 557 },
+        { SELF(Style_g5_s21_Title2), 558 },
+        { SELF(Style_g5_s21_Title3), 559 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s21_Title3 = ALIGNED_STRING("Squeeze Box Jazz             190"),
+
+    .Style_g5_s21_Title2 = ALIGNED_STRING("Paris Jazz Duet              190"),
+
+    .Style_g5_s21_Title1 = ALIGNED_STRING("Grapelli Jazz                190"),
+
+    .Style_g5_s21_Title0 = ALIGNED_STRING("Django's Solo                190"),
+
+    .Style_g5_s22_Vars = {
+        { SELF(Style_g5_s22_Title0), 560 },
+        { SELF(Style_g5_s22_Title1), 561 },
+        { SELF(Style_g5_s22_Title2), 562 },
+        { SELF(Style_g5_s22_Title3), 563 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s22_Title3 = ALIGNED_STRING("Hubert & Klaus               190"),
+
+    .Style_g5_s22_Title2 = ALIGNED_STRING("Deuringer Swing              190"),
+
+    .Style_g5_s22_Title1 = ALIGNED_STRING("Art Meets Lionel             190"),
+
+    .Style_g5_s22_Title0 = ALIGNED_STRING("Art's Swing Box              190"),
+
+    .Style_g5_s23_Vars = {
+        { SELF(Style_g5_s23_Title0), 564 },
+        { SELF(Style_g5_s23_Title1), 565 },
+        { SELF(Style_g5_s23_Title2), 566 },
+        { SELF(Style_g5_s23_Title3), 567 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s23_Title3 = ALIGNED_STRING("Mellow Jazz Tabs             147"),
+
+    .Style_g5_s23_Title2 = ALIGNED_STRING("Euro Squeezebox              147"),
+
+    .Style_g5_s23_Title1 = ALIGNED_STRING("Duelling Reeds               147"),
+
+    .Style_g5_s23_Title0 = ALIGNED_STRING("Boxing Jazzy                 147"),
+
+    .Style_g5_s24_Vars = {
+        { SELF(Style_g5_s24_Title0), 568 },
+        { SELF(Style_g5_s24_Title1), 569 },
+        { SELF(Style_g5_s24_Title2), 570 },
+        { SELF(Style_g5_s24_Title3), 571 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s24_Title3 = ALIGNED_STRING("New Jazz Ballad               70"),
+
+    .Style_g5_s24_Title2 = ALIGNED_STRING("B3 Blocks                     70"),
+
+    .Style_g5_s24_Title1 = ALIGNED_STRING("Breathy Vibes                 70"),
+
+    .Style_g5_s24_Title0 = ALIGNED_STRING("Slide Scale Jazz              70"),
+
+    .Style_g5_s25_Vars = {
+        { SELF(Style_g5_s25_Title0), 572 },
+        { SELF(Style_g5_s25_Title1), 573 },
+        { SELF(Style_g5_s25_Title2), 574 },
+        { SELF(Style_g5_s25_Title3), 575 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s25_Title3 = ALIGNED_STRING("Unwind To This                72"),
+
+    .Style_g5_s25_Title2 = ALIGNED_STRING("Chuck's Late Gig              72"),
+
+    .Style_g5_s25_Title1 = ALIGNED_STRING("Too Late For Sax              72"),
+
+    .Style_g5_s25_Title0 = ALIGNED_STRING("Late Night Frets              72"),
+
+    .Style_g5_s26_Vars = {
+        { SELF(Style_g5_s26_Title0), 576 },
+        { SELF(Style_g5_s26_Title1), 577 },
+        { SELF(Style_g5_s26_Title2), 578 },
+        { SELF(Style_g5_s26_Title3), 579 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s26_Title3 = ALIGNED_STRING("3/4 Sax Vibes                158"),
+
+    .Style_g5_s26_Title2 = ALIGNED_STRING("Do You Reed It?              158"),
+
+    .Style_g5_s26_Title1 = ALIGNED_STRING("3 Quarter Duo                158"),
+
+    .Style_g5_s26_Title0 = ALIGNED_STRING("Jazz Partners                158"),
+
+    .Style_g5_s27_Vars = {
+        { SELF(Style_g5_s27_Title0), 580 },
+        { SELF(Style_g5_s27_Title1), 581 },
+        { SELF(Style_g5_s27_Title2), 582 },
+        { SELF(Style_g5_s27_Title3), 583 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s27_Title3 = ALIGNED_STRING("Waltz Groove                 150"),
+
+    .Style_g5_s27_Title2 = ALIGNED_STRING("3/4 Played by 4              150"),
+
+    .Style_g5_s27_Title1 = ALIGNED_STRING("Toots' Trick!                150"),
+
+    .Style_g5_s27_Title0 = ALIGNED_STRING("Flautist's Jazz              150"),
+
+    .Style_g5_s28_Vars = {
+        { SELF(Style_g5_s28_Title0), 584 },
+        { SELF(Style_g5_s28_Title1), 585 },
+        { SELF(Style_g5_s28_Title2), 586 },
+        { SELF(Style_g5_s28_Title3), 587 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s28_Title3 = ALIGNED_STRING("Smokin' B-3 Jazz             180"),
+
+    .Style_g5_s28_Title2 = ALIGNED_STRING("Jazz To The Bone             180"),
+
+    .Style_g5_s28_Title1 = ALIGNED_STRING("Modern Vibes                 180"),
+
+    .Style_g5_s28_Title0 = ALIGNED_STRING("Soprano Groove               180"),
+
+    .Style_g5_s29_Vars = {
+        { SELF(Style_g5_s29_Title0), 588 },
+        { SELF(Style_g5_s29_Title1), 589 },
+        { SELF(Style_g5_s29_Title2), 590 },
+        { SELF(Style_g5_s29_Title3), 591 },
+        { 0, 0 },
+    },
+
+    .Style_g5_s29_Title3 = ALIGNED_STRING("Fusion Tines                  98"),
+
+    .Style_g5_s29_Title2 = ALIGNED_STRING("Cool Groove Sax               98"),
+
+    .Style_g5_s29_Title1 = ALIGNED_STRING("Sample Piano                  98"),
+
+    .Style_g5_s29_Title0 = ALIGNED_STRING("West Coast Flute              98"),
+
+    .Style_g6_s0_Vars = {
+        { SELF(Style_g6_s0_Title0), 592 },
+        { SELF(Style_g6_s0_Title1), 593 },
+        { SELF(Style_g6_s0_Title2), 594 },
+        { SELF(Style_g6_s0_Title3), 595 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s0_Title3 = ALIGNED_STRING("Grand Finale                 132"),
+
+    .Style_g6_s0_Title2 = ALIGNED_STRING("In The Limelight             132"),
+
+    .Style_g6_s0_Title1 = ALIGNED_STRING("Show Stopper                 132"),
+
+    .Style_g6_s0_Title0 = ALIGNED_STRING("Greasepaint Time             132"),
+
+    .Style_g6_s1_Vars = {
+        { SELF(Style_g6_s1_Title0), 596 },
+        { SELF(Style_g6_s1_Title1), 597 },
+        { SELF(Style_g6_s1_Title2), 598 },
+        { SELF(Style_g6_s1_Title3), 599 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s1_Title3 = ALIGNED_STRING("Golden Movie Era             120"),
+
+    .Style_g6_s1_Title2 = ALIGNED_STRING("Cinema Magic                 120"),
+
+    .Style_g6_s1_Title1 = ALIGNED_STRING("Fred & Ginger                120"),
+
+    .Style_g6_s1_Title0 = ALIGNED_STRING("Gene's Dance                 120"),
+
+    .Style_g6_s2_Vars = {
+        { SELF(Style_g6_s2_Title0), 600 },
+        { SELF(Style_g6_s2_Title1), 601 },
+        { SELF(Style_g6_s2_Title2), 602 },
+        { SELF(Style_g6_s2_Title3), 603 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s2_Title3 = ALIGNED_STRING("Theatre Band                 135"),
+
+    .Style_g6_s2_Title2 = ALIGNED_STRING("Variety Reeds                135"),
+
+    .Style_g6_s2_Title1 = ALIGNED_STRING("Curtain Up!                  135"),
+
+    .Style_g6_s2_Title0 = ALIGNED_STRING("Mallets On Stage             135"),
+
+    .Style_g6_s3_Vars = {
+        { SELF(Style_g6_s3_Title0), 604 },
+        { SELF(Style_g6_s3_Title1), 605 },
+        { SELF(Style_g6_s3_Title2), 606 },
+        { SELF(Style_g6_s3_Title3), 607 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s3_Title3 = ALIGNED_STRING("Vaudeville Bones             124"),
+
+    .Style_g6_s3_Title2 = ALIGNED_STRING("Tap Dance Mutes              124"),
+
+    .Style_g6_s3_Title1 = ALIGNED_STRING("Old Time Saloon              124"),
+
+    .Style_g6_s3_Title0 = ALIGNED_STRING("Simple Stride                124"),
+
+    .Style_g6_s4_Vars = {
+        { SELF(Style_g6_s4_Title0), 608 },
+        { SELF(Style_g6_s4_Title1), 609 },
+        { SELF(Style_g6_s4_Title2), 610 },
+        { SELF(Style_g6_s4_Title3), 611 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s4_Title3 = ALIGNED_STRING("Novelty Number               165"),
+
+    .Style_g6_s4_Title2 = ALIGNED_STRING("Skeleton Dance               165"),
+
+    .Style_g6_s4_Title1 = ALIGNED_STRING("Variety Showband             165"),
+
+    .Style_g6_s4_Title0 = ALIGNED_STRING("Music Hall Piano             165"),
+
+    .Style_g6_s5_Vars = {
+        { SELF(Style_g6_s5_Title0), 612 },
+        { SELF(Style_g6_s5_Title1), 613 },
+        { SELF(Style_g6_s5_Title2), 614 },
+        { SELF(Style_g6_s5_Title3), 615 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s5_Title3 = ALIGNED_STRING("Slapstick Show               182"),
+
+    .Style_g6_s5_Title2 = ALIGNED_STRING("Soft Da-Dance                182"),
+
+    .Style_g6_s5_Title1 = ALIGNED_STRING("Yankee Doodle It             182"),
+
+    .Style_g6_s5_Title0 = ALIGNED_STRING("Sweet Georgia                182"),
+
+    .Style_g6_s6_Vars = {
+        { SELF(Style_g6_s6_Title0), 616 },
+        { SELF(Style_g6_s6_Title1), 617 },
+        { SELF(Style_g6_s6_Title2), 618 },
+        { SELF(Style_g6_s6_Title3), 619 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s6_Title3 = ALIGNED_STRING("Crazy Horse Show             118"),
+
+    .Style_g6_s6_Title2 = ALIGNED_STRING("Girls On Stage!              118"),
+
+    .Style_g6_s6_Title1 = ALIGNED_STRING("Musette Rouge                118"),
+
+    .Style_g6_s6_Title0 = ALIGNED_STRING("Take Your Seat!              118"),
+
+    .Style_g6_s7_Vars = {
+        { SELF(Style_g6_s7_Title0), 620 },
+        { SELF(Style_g6_s7_Title1), 621 },
+        { SELF(Style_g6_s7_Title2), 622 },
+        { SELF(Style_g6_s7_Title3), 623 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s7_Title3 = ALIGNED_STRING("Midnight Soloist             162"),
+
+    .Style_g6_s7_Title2 = ALIGNED_STRING("Cabaret Organ                162"),
+
+    .Style_g6_s7_Title1 = ALIGNED_STRING("Warm Up Act                  162"),
+
+    .Style_g6_s7_Title0 = ALIGNED_STRING("Guitar Cocktail              162"),
+
+    .Style_g6_s8_Vars = {
+        { SELF(Style_g6_s8_Title0), 624 },
+        { SELF(Style_g6_s8_Title1), 625 },
+        { SELF(Style_g6_s8_Title2), 626 },
+        { SELF(Style_g6_s8_Title3), 627 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s8_Title3 = ALIGNED_STRING("Lee's Finale                  75"),
+
+    .Style_g6_s8_Title2 = ALIGNED_STRING("Vegas Showman                 75"),
+
+    .Style_g6_s8_Title1 = ALIGNED_STRING("Casino Sax                    75"),
+
+    .Style_g6_s8_Title0 = ALIGNED_STRING("Candlelight Reed              75"),
+
+    .Style_g6_s9_Vars = {
+        { SELF(Style_g6_s9_Title0), 628 },
+        { SELF(Style_g6_s9_Title1), 629 },
+        { SELF(Style_g6_s9_Title2), 630 },
+        { SELF(Style_g6_s9_Title3), 631 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s9_Title3 = ALIGNED_STRING("Max's Orchestra              120"),
+
+    .Style_g6_s9_Title2 = ALIGNED_STRING("Greger Saxes                 120"),
+
+    .Style_g6_s9_Title1 = ALIGNED_STRING("Strasser & More              120"),
+
+    .Style_g6_s9_Title0 = ALIGNED_STRING("Hugo's Revival               120"),
+
+    .Style_g6_s10_Vars = {
+        { SELF(Style_g6_s10_Title0), 632 },
+        { SELF(Style_g6_s10_Title1), 633 },
+        { SELF(Style_g6_s10_Title2), 634 },
+        { SELF(Style_g6_s10_Title3), 635 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s10_Title3 = ALIGNED_STRING("Foxtrot Serenade             154"),
+
+    .Style_g6_s10_Title2 = ALIGNED_STRING("Foxy Reeds                   154"),
+
+    .Style_g6_s10_Title1 = ALIGNED_STRING("Euro Ballroom                154"),
+
+    .Style_g6_s10_Title0 = ALIGNED_STRING("Foxy Squeezebox              154"),
+
+    .Style_g6_s11_Vars = {
+        { SELF(Style_g6_s11_Title0), 636 },
+        { SELF(Style_g6_s11_Title1), 637 },
+        { SELF(Style_g6_s11_Title2), 638 },
+        { SELF(Style_g6_s11_Title3), 639 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s11_Title3 = ALIGNED_STRING("Old Wheels Dance             190"),
+
+    .Style_g6_s11_Title2 = ALIGNED_STRING("Mr.Wunderbar                 190"),
+
+    .Style_g6_s11_Title1 = ALIGNED_STRING("Ham & T Dance                190"),
+
+    .Style_g6_s11_Title0 = ALIGNED_STRING("Harmonic Foxtrot             190"),
+
+    .Style_g6_s12_Vars = {
+        { SELF(Style_g6_s12_Title0), 640 },
+        { SELF(Style_g6_s12_Title1), 641 },
+        { SELF(Style_g6_s12_Title2), 642 },
+        { SELF(Style_g6_s12_Title3), 643 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s12_Title3 = ALIGNED_STRING("Unison Fox Band              170"),
+
+    .Style_g6_s12_Title2 = ALIGNED_STRING("Foxy & Brassy                170"),
+
+    .Style_g6_s12_Title1 = ALIGNED_STRING("Fox Accordingly              170"),
+
+    .Style_g6_s12_Title0 = ALIGNED_STRING("Quick Fox Keys               170"),
+
+    .Style_g6_s13_Vars = {
+        { SELF(Style_g6_s13_Title0), 644 },
+        { SELF(Style_g6_s13_Title1), 645 },
+        { SELF(Style_g6_s13_Title2), 646 },
+        { SELF(Style_g6_s13_Title3), 647 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s13_Title3 = ALIGNED_STRING("Ballroom Bars                120"),
+
+    .Style_g6_s13_Title2 = ALIGNED_STRING("Foxtrot Sparkle              120"),
+
+    .Style_g6_s13_Title1 = ALIGNED_STRING("Come Dancing!                120"),
+
+    .Style_g6_s13_Title0 = ALIGNED_STRING("Foxy Combo                   120"),
+
+    .Style_g6_s14_Vars = {
+        { SELF(Style_g6_s14_Title0), 648 },
+        { SELF(Style_g6_s14_Title1), 649 },
+        { SELF(Style_g6_s14_Title2), 650 },
+        { SELF(Style_g6_s14_Title3), 651 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s14_Title3 = ALIGNED_STRING("Radio Orchestra              168"),
+
+    .Style_g6_s14_Title2 = ALIGNED_STRING("Box Standards                168"),
+
+    .Style_g6_s14_Title1 = ALIGNED_STRING("Foxtrot Partners             168"),
+
+    .Style_g6_s14_Title0 = ALIGNED_STRING("Wunder-Fox                   168"),
+
+    .Style_g6_s15_Vars = {
+        { SELF(Style_g6_s15_Title0), 652 },
+        { SELF(Style_g6_s15_Title1), 653 },
+        { SELF(Style_g6_s15_Title2), 654 },
+        { SELF(Style_g6_s15_Title3), 655 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s15_Title3 = ALIGNED_STRING("Organ Quickstep              200"),
+
+    .Style_g6_s15_Title2 = ALIGNED_STRING("Holiday Dance                200"),
+
+    .Style_g6_s15_Title1 = ALIGNED_STRING("No Twirling!                 200"),
+
+    .Style_g6_s15_Title0 = ALIGNED_STRING("Doo You Dance?               200"),
+
+    .Style_g6_s16_Vars = {
+        { SELF(Style_g6_s16_Title0), 656 },
+        { SELF(Style_g6_s16_Title1), 657 },
+        { SELF(Style_g6_s16_Title2), 658 },
+        { SELF(Style_g6_s16_Title3), 659 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s16_Title3 = ALIGNED_STRING("Chubby's Best                168"),
+
+    .Style_g6_s16_Title2 = ALIGNED_STRING("Solid Twist                  168"),
+
+    .Style_g6_s16_Title1 = ALIGNED_STRING("Come On,Baby                 168"),
+
+    .Style_g6_s16_Title0 = ALIGNED_STRING("Do The Twist                 168"),
+
+    .Style_g6_s17_Vars = {
+        { SELF(Style_g6_s17_Title0), 660 },
+        { SELF(Style_g6_s17_Title1), 661 },
+        { SELF(Style_g6_s17_Title2), 662 },
+        { SELF(Style_g6_s17_Title3), 663 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s17_Title3 = ALIGNED_STRING("Top Brass Jive               176"),
+
+    .Style_g6_s17_Title2 = ALIGNED_STRING("Jive Reeds                   176"),
+
+    .Style_g6_s17_Title1 = ALIGNED_STRING("Dance Band Jive              176"),
+
+    .Style_g6_s17_Title0 = ALIGNED_STRING("Jive Ivories                 176"),
+
+    .Style_g6_s18_Vars = {
+        { SELF(Style_g6_s18_Title0), 664 },
+        { SELF(Style_g6_s18_Title1), 665 },
+        { SELF(Style_g6_s18_Title2), 666 },
+        { SELF(Style_g6_s18_Title3), 667 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s18_Title3 = ALIGNED_STRING("Twisting Guitars             155"),
+
+    .Style_g6_s18_Title2 = ALIGNED_STRING("Shakin' Saxes                155"),
+
+    .Style_g6_s18_Title1 = ALIGNED_STRING("Chubby's Octaves             155"),
+
+    .Style_g6_s18_Title0 = ALIGNED_STRING("Bari-Twist                   155"),
+
+    .Style_g6_s19_Vars = {
+        { SELF(Style_g6_s19_Title0), 668 },
+        { SELF(Style_g6_s19_Title1), 669 },
+        { SELF(Style_g6_s19_Title2), 670 },
+        { SELF(Style_g6_s19_Title3), 671 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s19_Title3 = ALIGNED_STRING("Sequin Dance                 128"),
+
+    .Style_g6_s19_Title2 = ALIGNED_STRING("Brass For Two                128"),
+
+    .Style_g6_s19_Title1 = ALIGNED_STRING("Cha Cha Band                 128"),
+
+    .Style_g6_s19_Title0 = ALIGNED_STRING("Latin Ballroom               128"),
+
+    .Style_g6_s20_Vars = {
+        { SELF(Style_g6_s20_Title0), 672 },
+        { SELF(Style_g6_s20_Title1), 673 },
+        { SELF(Style_g6_s20_Title2), 674 },
+        { SELF(Style_g6_s20_Title3), 675 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s20_Title3 = ALIGNED_STRING("Latin Elegance               118"),
+
+    .Style_g6_s20_Title2 = ALIGNED_STRING("Beguine Romance              118"),
+
+    .Style_g6_s20_Title1 = ALIGNED_STRING("When They Begin?             118"),
+
+    .Style_g6_s20_Title0 = ALIGNED_STRING("Siesta Beguine               118"),
+
+    .Style_g6_s21_Vars = {
+        { SELF(Style_g6_s21_Title0), 676 },
+        { SELF(Style_g6_s21_Title1), 677 },
+        { SELF(Style_g6_s21_Title2), 678 },
+        { SELF(Style_g6_s21_Title3), 679 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s21_Title3 = ALIGNED_STRING("Ogerman-Unisono              115"),
+
+    .Style_g6_s21_Title2 = ALIGNED_STRING("Wanderley Samba              115"),
+
+    .Style_g6_s21_Title1 = ALIGNED_STRING("Samba Testamento             115"),
+
+    .Style_g6_s21_Title0 = ALIGNED_STRING("Organ De Janeiro             115"),
+
+    .Style_g6_s22_Vars = {
+        { SELF(Style_g6_s22_Title0), 680 },
+        { SELF(Style_g6_s22_Title1), 681 },
+        { SELF(Style_g6_s22_Title2), 682 },
+        { SELF(Style_g6_s22_Title3), 683 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s22_Title3 = ALIGNED_STRING("Brassodoble                  118"),
+
+    .Style_g6_s22_Title2 = ALIGNED_STRING("Sunny Spain Mood             118"),
+
+    .Style_g6_s22_Title1 = ALIGNED_STRING("Flamenco Dancers             118"),
+
+    .Style_g6_s22_Title0 = ALIGNED_STRING("Espana Two Step              118"),
+
+    .Style_g6_s23_Vars = {
+        { SELF(Style_g6_s23_Title0), 684 },
+        { SELF(Style_g6_s23_Title1), 685 },
+        { SELF(Style_g6_s23_Title2), 686 },
+        { SELF(Style_g6_s23_Title3), 687 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s23_Title3 = ALIGNED_STRING("Tango Marcato                120"),
+
+    .Style_g6_s23_Title2 = ALIGNED_STRING("Spanish Moments              120"),
+
+    .Style_g6_s23_Title1 = ALIGNED_STRING("Octave Tango                 120"),
+
+    .Style_g6_s23_Title0 = ALIGNED_STRING("Grand Tango                  120"),
+
+    .Style_g6_s24_Vars = {
+        { SELF(Style_g6_s24_Title0), 688 },
+        { SELF(Style_g6_s24_Title1), 689 },
+        { SELF(Style_g6_s24_Title2), 690 },
+        { SELF(Style_g6_s24_Title3), 691 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s24_Title3 = ALIGNED_STRING("Tango Orchestra              130"),
+
+    .Style_g6_s24_Title2 = ALIGNED_STRING("Lush Tango                   130"),
+
+    .Style_g6_s24_Title1 = ALIGNED_STRING("Holiday Tango                130"),
+
+    .Style_g6_s24_Title0 = ALIGNED_STRING("Italian Tango                130"),
+
+    .Style_g6_s25_Vars = {
+        { SELF(Style_g6_s25_Title0), 692 },
+        { SELF(Style_g6_s25_Title1), 693 },
+        { SELF(Style_g6_s25_Title2), 694 },
+        { SELF(Style_g6_s25_Title3), 695 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s25_Title3 = ALIGNED_STRING("Tango Grandioso!             120"),
+
+    .Style_g6_s25_Title2 = ALIGNED_STRING("Latin Passion                120"),
+
+    .Style_g6_s25_Title1 = ALIGNED_STRING("Astor's Tango                120"),
+
+    .Style_g6_s25_Title0 = ALIGNED_STRING("Classical Tango              120"),
+
+    .Style_g6_s26_Vars = {
+        { SELF(Style_g6_s26_Title0), 696 },
+        { SELF(Style_g6_s26_Title1), 697 },
+        { SELF(Style_g6_s26_Title2), 698 },
+        { SELF(Style_g6_s26_Title3), 699 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s26_Title3 = ALIGNED_STRING("Come Waltzing                 96"),
+
+    .Style_g6_s26_Title2 = ALIGNED_STRING("Organist's Waltz              96"),
+
+    .Style_g6_s26_Title1 = ALIGNED_STRING("Orchestra Waltz               96"),
+
+    .Style_g6_s26_Title0 = ALIGNED_STRING("Concertina Waltz              96"),
+
+    .Style_g6_s27_Vars = {
+        { SELF(Style_g6_s27_Title0), 700 },
+        { SELF(Style_g6_s27_Title1), 701 },
+        { SELF(Style_g6_s27_Title2), 702 },
+        { SELF(Style_g6_s27_Title3), 703 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s27_Title3 = ALIGNED_STRING("Symphonic Waltz              130"),
+
+    .Style_g6_s27_Title2 = ALIGNED_STRING("Jazz Flute Gtr               130"),
+
+    .Style_g6_s27_Title1 = ALIGNED_STRING("Waltzing Flugel              130"),
+
+    .Style_g6_s27_Title0 = ALIGNED_STRING("3/4 Romance                  130"),
+
+    .Style_g6_s28_Vars = {
+        { SELF(Style_g6_s28_Title0), 704 },
+        { SELF(Style_g6_s28_Title1), 705 },
+        { SELF(Style_g6_s28_Title2), 706 },
+        { SELF(Style_g6_s28_Title3), 707 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s28_Title3 = ALIGNED_STRING("The New Danube!              180"),
+
+    .Style_g6_s28_Title2 = ALIGNED_STRING("Not Strauss!                 180"),
+
+    .Style_g6_s28_Title1 = ALIGNED_STRING("Vienna Waves                 180"),
+
+    .Style_g6_s28_Title0 = ALIGNED_STRING("New Vienna                   180"),
+
+    .Style_g6_s29_Vars = {
+        { SELF(Style_g6_s29_Title0), 708 },
+        { SELF(Style_g6_s29_Title1), 709 },
+        { SELF(Style_g6_s29_Title2), 710 },
+        { SELF(Style_g6_s29_Title3), 711 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s29_Title3 = ALIGNED_STRING("Cuckoo Clock 3/4             183"),
+
+    .Style_g6_s29_Title2 = ALIGNED_STRING("Seppel-Dance                 183"),
+
+    .Style_g6_s29_Title1 = ALIGNED_STRING("Bavarian Flutes              183"),
+
+    .Style_g6_s29_Title0 = ALIGNED_STRING("Cottage 3/4                  183"),
+
+    .Style_g6_s30_Vars = {
+        { SELF(Style_g6_s30_Title0), 712 },
+        { SELF(Style_g6_s30_Title1), 713 },
+        { SELF(Style_g6_s30_Title2), 714 },
+        { SELF(Style_g6_s30_Title3), 715 },
+        { 0, 0 },
+    },
+
+    .Style_g6_s30_Title3 = ALIGNED_STRING("Vienna Finale                171"),
+
+    .Style_g6_s30_Title2 = ALIGNED_STRING("Vienna Strings               171"),
+
+    .Style_g6_s30_Title1 = ALIGNED_STRING("Ballroom Keys                171"),
+
+    .Style_g6_s30_Title0 = ALIGNED_STRING("Ball Gown Waltz              171"),
+
+    .Style_g7_s0_Vars = {
+        { SELF(Style_g7_s0_Title0), 716 },
+        { SELF(Style_g7_s0_Title1), 717 },
+        { SELF(Style_g7_s0_Title2), 718 },
+        { SELF(Style_g7_s0_Title3), 719 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s0_Title3 = ALIGNED_STRING("Full Brass Band              115"),
+
+    .Style_g7_s0_Title2 = ALIGNED_STRING("Marching Sax                 115"),
+
+    .Style_g7_s0_Title1 = ALIGNED_STRING("Highschool Band              115"),
+
+    .Style_g7_s0_Title0 = ALIGNED_STRING("Fife & Drums                 115"),
+
+    .Style_g7_s1_Vars = {
+        { SELF(Style_g7_s1_Title0), 720 },
+        { SELF(Style_g7_s1_Title1), 721 },
+        { SELF(Style_g7_s1_Title2), 722 },
+        { SELF(Style_g7_s1_Title3), 723 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s1_Title3 = ALIGNED_STRING("Finale Salute                115"),
+
+    .Style_g7_s1_Title2 = ALIGNED_STRING("Alto Marchpast               115"),
+
+    .Style_g7_s1_Title1 = ALIGNED_STRING("By The Left                  115"),
+
+    .Style_g7_s1_Title0 = ALIGNED_STRING("Liberty March                115"),
+
+    .Style_g7_s2_Vars = {
+        { SELF(Style_g7_s2_Title0), 724 },
+        { SELF(Style_g7_s2_Title1), 725 },
+        { SELF(Style_g7_s2_Title2), 726 },
+        { SELF(Style_g7_s2_Title3), 727 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s2_Title3 = ALIGNED_STRING("Festive March                109"),
+
+    .Style_g7_s2_Title2 = ALIGNED_STRING("Bavarian March               109"),
+
+    .Style_g7_s2_Title1 = ALIGNED_STRING("OktoberFest                  109"),
+
+    .Style_g7_s2_Title0 = ALIGNED_STRING("Munich Horns                 109"),
+
+    .Style_g7_s3_Vars = {
+        { SELF(Style_g7_s3_Title0), 728 },
+        { SELF(Style_g7_s3_Title1), 729 },
+        { SELF(Style_g7_s3_Title2), 730 },
+        { SELF(Style_g7_s3_Title3), 731 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s3_Title3 = ALIGNED_STRING("Moik's Marchshow             120"),
+
+    .Style_g7_s3_Title2 = ALIGNED_STRING("Ernst & Friends              120"),
+
+    .Style_g7_s3_Title1 = ALIGNED_STRING("Mosch's Military             120"),
+
+    .Style_g7_s3_Title0 = ALIGNED_STRING("At The Eger                  120"),
+
+    .Style_g7_s4_Vars = {
+        { SELF(Style_g7_s4_Title0), 732 },
+        { SELF(Style_g7_s4_Title1), 733 },
+        { SELF(Style_g7_s4_Title2), 734 },
+        { SELF(Style_g7_s4_Title3), 735 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s4_Title3 = ALIGNED_STRING("Marching Polka               124"),
+
+    .Style_g7_s4_Title2 = ALIGNED_STRING("Lederhosen Dance             124"),
+
+    .Style_g7_s4_Title1 = ALIGNED_STRING("Folk Polka                   124"),
+
+    .Style_g7_s4_Title0 = ALIGNED_STRING("Polka Partners               124"),
+
+    .Style_g7_s5_Vars = {
+        { SELF(Style_g7_s5_Title0), 736 },
+        { SELF(Style_g7_s5_Title1), 737 },
+        { SELF(Style_g7_s5_Title2), 738 },
+        { SELF(Style_g7_s5_Title3), 739 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s5_Title3 = ALIGNED_STRING("Austrian Dance               135"),
+
+    .Style_g7_s5_Title2 = ALIGNED_STRING("Wedding Party                135"),
+
+    .Style_g7_s5_Title1 = ALIGNED_STRING("Bellow Shake Hit             135"),
+
+    .Style_g7_s5_Title0 = ALIGNED_STRING("Alpine Accordion             135"),
+
+    .Style_g7_s6_Vars = {
+        { SELF(Style_g7_s6_Title0), 740 },
+        { SELF(Style_g7_s6_Title1), 741 },
+        { SELF(Style_g7_s6_Title2), 742 },
+        { SELF(Style_g7_s6_Title3), 743 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s6_Title3 = ALIGNED_STRING("Harmonic Tirol               125"),
+
+    .Style_g7_s6_Title2 = ALIGNED_STRING("Steirish Keys                125"),
+
+    .Style_g7_s6_Title1 = ALIGNED_STRING("Alpine Combo                 125"),
+
+    .Style_g7_s6_Title0 = ALIGNED_STRING("German Clarinet              125"),
+
+    .Style_g7_s7_Vars = {
+        { SELF(Style_g7_s7_Title0), 744 },
+        { SELF(Style_g7_s7_Title1), 745 },
+        { SELF(Style_g7_s7_Title2), 746 },
+        { SELF(Style_g7_s7_Title3), 747 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s7_Title3 = ALIGNED_STRING("Eire Squeezebox              120"),
+
+    .Style_g7_s7_Title2 = ALIGNED_STRING("Chieftain's Jig              120"),
+
+    .Style_g7_s7_Title1 = ALIGNED_STRING("Gaelic Dance                 120"),
+
+    .Style_g7_s7_Title0 = ALIGNED_STRING("Emerald Flute                120"),
+
+    .Style_g7_s8_Vars = {
+        { SELF(Style_g7_s8_Title0), 748 },
+        { SELF(Style_g7_s8_Title1), 749 },
+        { SELF(Style_g7_s8_Title2), 750 },
+        { SELF(Style_g7_s8_Title3), 751 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s8_Title3 = ALIGNED_STRING("Scottish Band                172"),
+
+    .Style_g7_s8_Title2 = ALIGNED_STRING("Bonnie Whistles              172"),
+
+    .Style_g7_s8_Title1 = ALIGNED_STRING("Caber Dance!                 172"),
+
+    .Style_g7_s8_Title0 = ALIGNED_STRING("Jimmy's Reel                 172"),
+
+    .Style_g7_s9_Vars = {
+        { SELF(Style_g7_s9_Title0), 752 },
+        { SELF(Style_g7_s9_Title1), 753 },
+        { SELF(Style_g7_s9_Title2), 754 },
+        { SELF(Style_g7_s9_Title3), 755 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s9_Title3 = ALIGNED_STRING("Austria Symphony             169"),
+
+    .Style_g7_s9_Title2 = ALIGNED_STRING("Waltzing Concert             169"),
+
+    .Style_g7_s9_Title1 = ALIGNED_STRING("Strauss & Co                 169"),
+
+    .Style_g7_s9_Title0 = ALIGNED_STRING("Vienna Woods                 169"),
+
+    .Style_g7_s10_Vars = {
+        { SELF(Style_g7_s10_Title0), 756 },
+        { SELF(Style_g7_s10_Title1), 757 },
+        { SELF(Style_g7_s10_Title2), 758 },
+        { SELF(Style_g7_s10_Title3), 759 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s10_Title3 = ALIGNED_STRING("Ski Lodge Waltz              197"),
+
+    .Style_g7_s10_Title2 = ALIGNED_STRING("Alphorn Movement             197"),
+
+    .Style_g7_s10_Title1 = ALIGNED_STRING("Matterhorn Waltz             197"),
+
+    .Style_g7_s10_Title0 = ALIGNED_STRING("Alpine Guitar                197"),
+
+    .Style_g7_s11_Vars = {
+        { SELF(Style_g7_s11_Title0), 760 },
+        { SELF(Style_g7_s11_Title1), 761 },
+        { SELF(Style_g7_s11_Title2), 762 },
+        { SELF(Style_g7_s11_Title3), 763 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s11_Title3 = ALIGNED_STRING("Dance The Mazurka            150"),
+
+    .Style_g7_s11_Title2 = ALIGNED_STRING("Folk Waltz                   150"),
+
+    .Style_g7_s11_Title1 = ALIGNED_STRING("Old Time Dance               150"),
+
+    .Style_g7_s11_Title0 = ALIGNED_STRING("Mazurka Clarinet             150"),
+
+    .Style_g7_s12_Vars = {
+        { SELF(Style_g7_s12_Title0), 764 },
+        { SELF(Style_g7_s12_Title1), 765 },
+        { SELF(Style_g7_s12_Title2), 766 },
+        { SELF(Style_g7_s12_Title3), 767 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s12_Title3 = ALIGNED_STRING("Tiroler Harp                 190"),
+
+    .Style_g7_s12_Title2 = ALIGNED_STRING("Bandoneon Waltz              190"),
+
+    .Style_g7_s12_Title1 = ALIGNED_STRING("Waltzer Band                 190"),
+
+    .Style_g7_s12_Title0 = ALIGNED_STRING("Klarinette Waltz             190"),
+
+    .Style_g7_s13_Vars = {
+        { SELF(Style_g7_s13_Title0), 768 },
+        { SELF(Style_g7_s13_Title1), 769 },
+        { SELF(Style_g7_s13_Title2), 770 },
+        { SELF(Style_g7_s13_Title3), 771 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s13_Title3 = ALIGNED_STRING("Island Strings               101"),
+
+    .Style_g7_s13_Title2 = ALIGNED_STRING("Waikiki Voices               101"),
+
+    .Style_g7_s13_Title1 = ALIGNED_STRING("Island Delight               101"),
+
+    .Style_g7_s13_Title0 = ALIGNED_STRING("Island Flute                 101"),
+
+    .Style_g7_s14_Vars = {
+        { SELF(Style_g7_s14_Title0), 772 },
+        { SELF(Style_g7_s14_Title1), 773 },
+        { SELF(Style_g7_s14_Title2), 774 },
+        { SELF(Style_g7_s14_Title3), 775 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s14_Title3 = ALIGNED_STRING("Honolulu Strings             130"),
+
+    .Style_g7_s14_Title2 = ALIGNED_STRING("Island Duo                   130"),
+
+    .Style_g7_s14_Title1 = ALIGNED_STRING("Hula Dance                   130"),
+
+    .Style_g7_s14_Title0 = ALIGNED_STRING("Island Whistle               130"),
+
+    .Style_g7_s15_Vars = {
+        { SELF(Style_g7_s15_Title0), 776 },
+        { SELF(Style_g7_s15_Title1), 777 },
+        { SELF(Style_g7_s15_Title2), 778 },
+        { SELF(Style_g7_s15_Title3), 779 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s15_Title3 = ALIGNED_STRING("Entertaining Rag             130"),
+
+    .Style_g7_s15_Title2 = ALIGNED_STRING("Play The Sting!              130"),
+
+    .Style_g7_s15_Title1 = ALIGNED_STRING("Joplin Rag                   130"),
+
+    .Style_g7_s15_Title0 = ALIGNED_STRING("Syncopated Wood              130"),
+
+    .Style_g7_s16_Vars = {
+        { SELF(Style_g7_s16_Title0), 780 },
+        { SELF(Style_g7_s16_Title1), 781 },
+        { SELF(Style_g7_s16_Title2), 782 },
+        { SELF(Style_g7_s16_Title3), 783 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s16_Title3 = ALIGNED_STRING("Maple Leaf Piano             180"),
+
+    .Style_g7_s16_Title2 = ALIGNED_STRING("Ragtime Duet                 180"),
+
+    .Style_g7_s16_Title1 = ALIGNED_STRING("Ragedy Sax                   180"),
+
+    .Style_g7_s16_Title0 = ALIGNED_STRING("Banjo Ragtime                180"),
+
+    .Style_g7_s17_Vars = {
+        { SELF(Style_g7_s17_Title0), 784 },
+        { SELF(Style_g7_s17_Title1), 785 },
+        { SELF(Style_g7_s17_Title2), 786 },
+        { SELF(Style_g7_s17_Title3), 787 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s17_Title3 = ALIGNED_STRING("Honky-Tonk Band              196"),
+
+    .Style_g7_s17_Title2 = ALIGNED_STRING("Barber Shop Jazz             196"),
+
+    .Style_g7_s17_Title1 = ALIGNED_STRING("Bourbon Street               196"),
+
+    .Style_g7_s17_Title0 = ALIGNED_STRING("Trad Jazz Band               196"),
+
+    .Style_g7_s18_Vars = {
+        { SELF(Style_g7_s18_Title0), 788 },
+        { SELF(Style_g7_s18_Title1), 789 },
+        { SELF(Style_g7_s18_Title2), 790 },
+        { SELF(Style_g7_s18_Title3), 791 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s18_Title3 = ALIGNED_STRING("Alexander's Band             185"),
+
+    .Style_g7_s18_Title2 = ALIGNED_STRING("Dixie Partners               185"),
+
+    .Style_g7_s18_Title1 = ALIGNED_STRING("Liquorice Dixie              185"),
+
+    .Style_g7_s18_Title0 = ALIGNED_STRING("Dixie Bone                   185"),
+
+    .Style_g7_s19_Vars = {
+        { SELF(Style_g7_s19_Title0), 792 },
+        { SELF(Style_g7_s19_Title1), 793 },
+        { SELF(Style_g7_s19_Title2), 794 },
+        { SELF(Style_g7_s19_Title3), 795 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s19_Title3 = ALIGNED_STRING("Bouzouki Masters             120"),
+
+    .Style_g7_s19_Title2 = ALIGNED_STRING("Zorba's Band                 120"),
+
+    .Style_g7_s19_Title1 = ALIGNED_STRING("Plate Dance                  120"),
+
+    .Style_g7_s19_Title0 = ALIGNED_STRING("Never On A?                  120"),
+
+    .Style_g7_s20_Vars = {
+        { SELF(Style_g7_s20_Title0), 796 },
+        { SELF(Style_g7_s20_Title1), 797 },
+        { SELF(Style_g7_s20_Title2), 798 },
+        { SELF(Style_g7_s20_Title3), 799 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s20_Title3 = ALIGNED_STRING("Cossack Strings              141"),
+
+    .Style_g7_s20_Title2 = ALIGNED_STRING("Baltic Reeds                 141"),
+
+    .Style_g7_s20_Title1 = ALIGNED_STRING("Moscow Mandolins             141"),
+
+    .Style_g7_s20_Title0 = ALIGNED_STRING("Vladivar Strings             141"),
+
+    .Style_g7_s21_Vars = {
+        { SELF(Style_g7_s21_Title0), 800 },
+        { SELF(Style_g7_s21_Title1), 801 },
+        { SELF(Style_g7_s21_Title2), 802 },
+        { SELF(Style_g7_s21_Title3), 803 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s21_Title3 = ALIGNED_STRING("Folklore Brass               115"),
+
+    .Style_g7_s21_Title2 = ALIGNED_STRING("Hungarian Duet               115"),
+
+    .Style_g7_s21_Title1 = ALIGNED_STRING("Gypsy Melody                 115"),
+
+    .Style_g7_s21_Title0 = ALIGNED_STRING("Goulash Dance                115"),
+
+    .Style_g7_s22_Vars = {
+        { SELF(Style_g7_s22_Title0), 804 },
+        { SELF(Style_g7_s22_Title1), 805 },
+        { SELF(Style_g7_s22_Title2), 806 },
+        { SELF(Style_g7_s22_Title3), 807 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s22_Title3 = ALIGNED_STRING("Great Accordions             128"),
+
+    .Style_g7_s22_Title2 = ALIGNED_STRING("Sing Along!                  128"),
+
+    .Style_g7_s22_Title1 = ALIGNED_STRING("Spider Dance                 128"),
+
+    .Style_g7_s22_Title0 = ALIGNED_STRING("Ole Guitar                   128"),
+
+    .Style_g7_s23_Vars = {
+        { SELF(Style_g7_s23_Title0), 808 },
+        { SELF(Style_g7_s23_Title1), 809 },
+        { SELF(Style_g7_s23_Title2), 810 },
+        { SELF(Style_g7_s23_Title3), 811 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s23_Title3 = ALIGNED_STRING("Tex Mex Mix                  112"),
+
+    .Style_g7_s23_Title2 = ALIGNED_STRING("Cucaracha Duo                112"),
+
+    .Style_g7_s23_Title1 = ALIGNED_STRING("Hat Dance Frets              112"),
+
+    .Style_g7_s23_Title0 = ALIGNED_STRING("Jalapeno Bellows             112"),
+
+    .Style_g7_s24_Vars = {
+        { SELF(Style_g7_s24_Title0), 812 },
+        { SELF(Style_g7_s24_Title1), 813 },
+        { SELF(Style_g7_s24_Title2), 814 },
+        { SELF(Style_g7_s24_Title3), 815 },
+        { 0, 0 },
+    },
+
+    .Style_g7_s24_Title3 = ALIGNED_STRING("Solid Distortion             122"),
+
+    .Style_g7_s24_Title2 = ALIGNED_STRING("Penny Folk Song              122"),
+
+    .Style_g7_s24_Title1 = ALIGNED_STRING("Steeleye Guitar              122"),
+
+    .Style_g7_s24_Title0 = ALIGNED_STRING("Folk Fiddles                 122"),
+
+    .Style_g8_s0_Vars = {
+        { SELF(Style_g8_s0_Title0), 816 },
+        { SELF(Style_g8_s0_Title1), 817 },
+        { SELF(Style_g8_s0_Title2), 818 },
+        { SELF(Style_g8_s0_Title3), 819 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s0_Title3 = ALIGNED_STRING("Don't Fiddle It!             124"),
+
+    .Style_g8_s0_Title2 = ALIGNED_STRING("Cajun Hoedown                124"),
+
+    .Style_g8_s0_Title1 = ALIGNED_STRING("Pedal Steel Duel             124"),
+
+    .Style_g8_s0_Title0 = ALIGNED_STRING("Bluegrass Harp               124"),
+
+    .Style_g8_s1_Vars = {
+        { SELF(Style_g8_s1_Title0), 820 },
+        { SELF(Style_g8_s1_Title1), 821 },
+        { SELF(Style_g8_s1_Title2), 822 },
+        { SELF(Style_g8_s1_Title3), 823 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s1_Title3 = ALIGNED_STRING("Yee Ha Fiddles               235"),
+
+    .Style_g8_s1_Title2 = ALIGNED_STRING("Hard Country Sax             235"),
+
+    .Style_g8_s1_Title1 = ALIGNED_STRING("Country Licks                235"),
+
+    .Style_g8_s1_Title0 = ALIGNED_STRING("Bluegrass Piano              235"),
+
+    .Style_g8_s2_Vars = {
+        { SELF(Style_g8_s2_Title0), 824 },
+        { SELF(Style_g8_s2_Title1), 825 },
+        { SELF(Style_g8_s2_Title2), 826 },
+        { SELF(Style_g8_s2_Title3), 827 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s2_Title3 = ALIGNED_STRING("Hoedown Strings              123"),
+
+    .Style_g8_s2_Title2 = ALIGNED_STRING("Solid Bluegrass              123"),
+
+    .Style_g8_s2_Title1 = ALIGNED_STRING("Banjo Contest                123"),
+
+    .Style_g8_s2_Title0 = ALIGNED_STRING("Country Fiddle               123"),
+
+    .Style_g8_s3_Vars = {
+        { SELF(Style_g8_s3_Title0), 828 },
+        { SELF(Style_g8_s3_Title1), 829 },
+        { SELF(Style_g8_s3_Title2), 830 },
+        { SELF(Style_g8_s3_Title3), 831 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s3_Title3 = ALIGNED_STRING("Fogerty's Stomp              206"),
+
+    .Style_g8_s3_Title2 = ALIGNED_STRING("On The Highway               206"),
+
+    .Style_g8_s3_Title1 = ALIGNED_STRING("Convoy Bluegrass             206"),
+
+    .Style_g8_s3_Title0 = ALIGNED_STRING("Trucker's Stop               206"),
+
+    .Style_g8_s4_Vars = {
+        { SELF(Style_g8_s4_Title0), 832 },
+        { SELF(Style_g8_s4_Title1), 833 },
+        { SELF(Style_g8_s4_Title2), 834 },
+        { SELF(Style_g8_s4_Title3), 835 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s4_Title3 = ALIGNED_STRING("Barn Dance Band              147"),
+
+    .Style_g8_s4_Title2 = ALIGNED_STRING("Nashville Dance              147"),
+
+    .Style_g8_s4_Title1 = ALIGNED_STRING("Two Step Duo                 147"),
+
+    .Style_g8_s4_Title0 = ALIGNED_STRING("Yee Ha Geetar                147"),
+
+    .Style_g8_s5_Vars = {
+        { SELF(Style_g8_s5_Title0), 836 },
+        { SELF(Style_g8_s5_Title1), 837 },
+        { SELF(Style_g8_s5_Title2), 838 },
+        { SELF(Style_g8_s5_Title3), 839 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s5_Title3 = ALIGNED_STRING("Southern Unison              128"),
+
+    .Style_g8_s5_Title2 = ALIGNED_STRING("Country Ivories              128"),
+
+    .Style_g8_s5_Title1 = ALIGNED_STRING("Steel City Blues             128"),
+
+    .Style_g8_s5_Title0 = ALIGNED_STRING("Blue Harmonies               128"),
+
+    .Style_g8_s6_Vars = {
+        { SELF(Style_g8_s6_Title0), 840 },
+        { SELF(Style_g8_s6_Title1), 841 },
+        { SELF(Style_g8_s6_Title2), 842 },
+        { SELF(Style_g8_s6_Title3), 843 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s6_Title3 = ALIGNED_STRING("Roads to Country             173"),
+
+    .Style_g8_s6_Title2 = ALIGNED_STRING("EZ Steel Country             173"),
+
+    .Style_g8_s6_Title1 = ALIGNED_STRING("Carpenkeys                   173"),
+
+    .Style_g8_s6_Title0 = ALIGNED_STRING("Karen's Country              173"),
+
+    .Style_g8_s7_Vars = {
+        { SELF(Style_g8_s7_Title0), 844 },
+        { SELF(Style_g8_s7_Title1), 845 },
+        { SELF(Style_g8_s7_Title2), 846 },
+        { SELF(Style_g8_s7_Title3), 847 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s7_Title3 = ALIGNED_STRING("Kentucky Vocals               88"),
+
+    .Style_g8_s7_Title2 = ALIGNED_STRING("Nashville Ballad              88"),
+
+    .Style_g8_s7_Title1 = ALIGNED_STRING("Country Harp                  88"),
+
+    .Style_g8_s7_Title0 = ALIGNED_STRING("Country Tenor                 88"),
+
+    .Style_g8_s8_Vars = {
+        { SELF(Style_g8_s8_Title0), 848 },
+        { SELF(Style_g8_s8_Title1), 849 },
+        { SELF(Style_g8_s8_Title2), 850 },
+        { SELF(Style_g8_s8_Title3), 851 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s8_Title3 = ALIGNED_STRING("Chet's Country                85"),
+
+    .Style_g8_s8_Title2 = ALIGNED_STRING("Cowboy Saxes                  85"),
+
+    .Style_g8_s8_Title1 = ALIGNED_STRING("Blueberry Saxes               85"),
+
+    .Style_g8_s8_Title0 = ALIGNED_STRING("Kramer Country                85"),
+
+    .Style_g8_s9_Vars = {
+        { SELF(Style_g8_s9_Title0), 852 },
+        { SELF(Style_g8_s9_Title1), 853 },
+        { SELF(Style_g8_s9_Title2), 854 },
+        { SELF(Style_g8_s9_Title3), 855 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s9_Title3 = ALIGNED_STRING("In Daa Country               170"),
+
+    .Style_g8_s9_Title2 = ALIGNED_STRING("Country Radio                170"),
+
+    .Style_g8_s9_Title1 = ALIGNED_STRING("South Concertina             170"),
+
+    .Style_g8_s9_Title0 = ALIGNED_STRING("Southern Style               170"),
+
+    .Style_g8_s10_Vars = {
+        { SELF(Style_g8_s10_Title0), 856 },
+        { SELF(Style_g8_s10_Title1), 857 },
+        { SELF(Style_g8_s10_Title2), 858 },
+        { SELF(Style_g8_s10_Title3), 859 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s10_Title3 = ALIGNED_STRING("Rodeo Organ                   75"),
+
+    .Style_g8_s10_Title2 = ALIGNED_STRING("Horseback Duo                 75"),
+
+    .Style_g8_s10_Title1 = ALIGNED_STRING("Country Blues                 75"),
+
+    .Style_g8_s10_Title0 = ALIGNED_STRING("Wandrin' Keys                 75"),
+
+    .Style_g8_s11_Vars = {
+        { SELF(Style_g8_s11_Title0), 860 },
+        { SELF(Style_g8_s11_Title1), 861 },
+        { SELF(Style_g8_s11_Title2), 862 },
+        { SELF(Style_g8_s11_Title3), 863 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s11_Title3 = ALIGNED_STRING("Tennessee Guitar              88"),
+
+    .Style_g8_s11_Title2 = ALIGNED_STRING("Mellow Country                88"),
+
+    .Style_g8_s11_Title1 = ALIGNED_STRING("Country Keys                  88"),
+
+    .Style_g8_s11_Title0 = ALIGNED_STRING("Harmonica Waltz               88"),
+
+    .Style_g8_s12_Vars = {
+        { SELF(Style_g8_s12_Title0), 864 },
+        { SELF(Style_g8_s12_Title1), 865 },
+        { SELF(Style_g8_s12_Title2), 866 },
+        { SELF(Style_g8_s12_Title3), 867 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s12_Title3 = ALIGNED_STRING("Country Rock                 116"),
+
+    .Style_g8_s12_Title2 = ALIGNED_STRING("Nashville Steel              116"),
+
+    .Style_g8_s12_Title1 = ALIGNED_STRING("Duelling Guitars             116"),
+
+    .Style_g8_s12_Title0 = ALIGNED_STRING("Fiddle Rock                  116"),
+
+    .Style_g8_s13_Vars = {
+        { SELF(Style_g8_s13_Title0), 868 },
+        { SELF(Style_g8_s13_Title1), 869 },
+        { SELF(Style_g8_s13_Title2), 870 },
+        { SELF(Style_g8_s13_Title3), 871 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s13_Title3 = ALIGNED_STRING("Ranch Rock                   128"),
+
+    .Style_g8_s13_Title2 = ALIGNED_STRING("Dolly's Strings              128"),
+
+    .Style_g8_s13_Title1 = ALIGNED_STRING("Ricky's Guitar               128"),
+
+    .Style_g8_s13_Title0 = ALIGNED_STRING("Cowboy Suite                 128"),
+
+    .Style_g8_s14_Vars = {
+        { SELF(Style_g8_s14_Title0), 872 },
+        { SELF(Style_g8_s14_Title1), 873 },
+        { SELF(Style_g8_s14_Title2), 874 },
+        { SELF(Style_g8_s14_Title3), 875 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s14_Title3 = ALIGNED_STRING("Steel & Strings              113"),
+
+    .Style_g8_s14_Title2 = ALIGNED_STRING("Country Warmth               113"),
+
+    .Style_g8_s14_Title1 = ALIGNED_STRING("Let It Shine!                113"),
+
+    .Style_g8_s14_Title0 = ALIGNED_STRING("Geetar Man                   113"),
+
+    .Style_g8_s15_Vars = {
+        { SELF(Style_g8_s15_Title0), 876 },
+        { SELF(Style_g8_s15_Title1), 877 },
+        { SELF(Style_g8_s15_Title2), 878 },
+        { SELF(Style_g8_s15_Title3), 879 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s15_Title3 = ALIGNED_STRING("Country Horns                115"),
+
+    .Style_g8_s15_Title2 = ALIGNED_STRING("In Sax Country               115"),
+
+    .Style_g8_s15_Title1 = ALIGNED_STRING("Rockin' Country              115"),
+
+    .Style_g8_s15_Title0 = ALIGNED_STRING("Tennessee Rock               115"),
+
+    .Style_g8_s16_Vars = {
+        { SELF(Style_g8_s16_Title0), 880 },
+        { SELF(Style_g8_s16_Title1), 881 },
+        { SELF(Style_g8_s16_Title2), 882 },
+        { SELF(Style_g8_s16_Title3), 883 },
+        { 0, 0 },
+    },
+
+    .Style_g8_s16_Title3 = ALIGNED_STRING("Muted Country                160"),
+
+    .Style_g8_s16_Title2 = ALIGNED_STRING("Hard Country                 160"),
+
+    .Style_g8_s16_Title1 = ALIGNED_STRING("Clean Country                160"),
+
+    .Style_g8_s16_Title0 = ALIGNED_STRING("Western Keys                 160"),
+
+    .Style_g9_s0_Vars = {
+        { SELF(Style_g9_s0_Title0), 884 },
+        { SELF(Style_g9_s0_Title1), 885 },
+        { SELF(Style_g9_s0_Title2), 886 },
+        { SELF(Style_g9_s0_Title3), 887 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s0_Title3 = ALIGNED_STRING("Jobim Strings                 66"),
+
+    .Style_g9_s0_Title2 = ALIGNED_STRING("Brasilian Flute               66"),
+
+    .Style_g9_s0_Title1 = ALIGNED_STRING("Ham & Bossa                   66"),
+
+    .Style_g9_s0_Title0 = ALIGNED_STRING("Siesta Guitars                66"),
+
+    .Style_g9_s1_Vars = {
+        { SELF(Style_g9_s1_Title0), 888 },
+        { SELF(Style_g9_s1_Title1), 889 },
+        { SELF(Style_g9_s1_Title2), 890 },
+        { SELF(Style_g9_s1_Title3), 891 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s1_Title3 = ALIGNED_STRING("Bossa Society                 68"),
+
+    .Style_g9_s1_Title2 = ALIGNED_STRING("Getz Bossa                    68"),
+
+    .Style_g9_s1_Title1 = ALIGNED_STRING("Bossa Cocktail                68"),
+
+    .Style_g9_s1_Title0 = ALIGNED_STRING("Latin Tines                   68"),
+
+    .Style_g9_s2_Vars = {
+        { SELF(Style_g9_s2_Title0), 892 },
+        { SELF(Style_g9_s2_Title1), 893 },
+        { SELF(Style_g9_s2_Title2), 894 },
+        { SELF(Style_g9_s2_Title3), 895 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s2_Title3 = ALIGNED_STRING("Modern Bossa                  74"),
+
+    .Style_g9_s2_Title2 = ALIGNED_STRING("Bossa Duet                    74"),
+
+    .Style_g9_s2_Title1 = ALIGNED_STRING("Meditating Sax                74"),
+
+    .Style_g9_s2_Title0 = ALIGNED_STRING("Ipenema Flute                 74"),
+
+    .Style_g9_s3_Vars = {
+        { SELF(Style_g9_s3_Title0), 896 },
+        { SELF(Style_g9_s3_Title1), 897 },
+        { SELF(Style_g9_s3_Title2), 898 },
+        { SELF(Style_g9_s3_Title3), 899 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s3_Title3 = ALIGNED_STRING("El Toro's Rhumba             119"),
+
+    .Style_g9_s3_Title2 = ALIGNED_STRING("Julio's Romance              119"),
+
+    .Style_g9_s3_Title1 = ALIGNED_STRING("Carmen's Octaves             119"),
+
+    .Style_g9_s3_Title0 = ALIGNED_STRING("Mellow Rhumba                119"),
+
+    .Style_g9_s4_Vars = {
+        { SELF(Style_g9_s4_Title0), 900 },
+        { SELF(Style_g9_s4_Title1), 901 },
+        { SELF(Style_g9_s4_Title2), 902 },
+        { SELF(Style_g9_s4_Title3), 903 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s4_Title3 = ALIGNED_STRING("Elegant Keys                 120"),
+
+    .Style_g9_s4_Title2 = ALIGNED_STRING("Latin Symphony               120"),
+
+    .Style_g9_s4_Title1 = ALIGNED_STRING("Besame Strings               120"),
+
+    .Style_g9_s4_Title0 = ALIGNED_STRING("Mediterranean!               120"),
+
+    .Style_g9_s5_Vars = {
+        { SELF(Style_g9_s5_Title0), 904 },
+        { SELF(Style_g9_s5_Title1), 905 },
+        { SELF(Style_g9_s5_Title2), 906 },
+        { SELF(Style_g9_s5_Title3), 907 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s5_Title3 = ALIGNED_STRING("Beguine Register             117"),
+
+    .Style_g9_s5_Title2 = ALIGNED_STRING("Besame Unison                117"),
+
+    .Style_g9_s5_Title1 = ALIGNED_STRING("Society Beguine              117"),
+
+    .Style_g9_s5_Title0 = ALIGNED_STRING("Amor Reed                    117"),
+
+    .Style_g9_s6_Vars = {
+        { SELF(Style_g9_s6_Title0), 908 },
+        { SELF(Style_g9_s6_Title1), 909 },
+        { SELF(Style_g9_s6_Title2), 910 },
+        { SELF(Style_g9_s6_Title3), 911 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s6_Title3 = ALIGNED_STRING("Bolero Orchestra             120"),
+
+    .Style_g9_s6_Title2 = ALIGNED_STRING("Latin Love Song              120"),
+
+    .Style_g9_s6_Title1 = ALIGNED_STRING("Bolero Keys                  120"),
+
+    .Style_g9_s6_Title0 = ALIGNED_STRING("Not Ravel's.....             120"),
+
+    .Style_g9_s7_Vars = {
+        { SELF(Style_g9_s7_Title0), 912 },
+        { SELF(Style_g9_s7_Title1), 913 },
+        { SELF(Style_g9_s7_Title2), 914 },
+        { SELF(Style_g9_s7_Title3), 915 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s7_Title3 = ALIGNED_STRING("Latin Relaxation             115"),
+
+    .Style_g9_s7_Title2 = ALIGNED_STRING("Holiday Rhumba               115"),
+
+    .Style_g9_s7_Title1 = ALIGNED_STRING("Fantasy Rhumba               115"),
+
+    .Style_g9_s7_Title0 = ALIGNED_STRING("Spanish Romance              115"),
+
+    .Style_g9_s8_Vars = {
+        { SELF(Style_g9_s8_Title0), 916 },
+        { SELF(Style_g9_s8_Title1), 917 },
+        { SELF(Style_g9_s8_Title2), 918 },
+        { SELF(Style_g9_s8_Title3), 919 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s8_Title3 = ALIGNED_STRING("Puente's Bigband             130"),
+
+    .Style_g9_s8_Title2 = ALIGNED_STRING("Saxes Of Tito                130"),
+
+    .Style_g9_s8_Title1 = ALIGNED_STRING("Pepito For Pepe              130"),
+
+    .Style_g9_s8_Title0 = ALIGNED_STRING("Two Cups Of Cha!             130"),
+
+    .Style_g9_s9_Vars = {
+        { SELF(Style_g9_s9_Title0), 920 },
+        { SELF(Style_g9_s9_Title1), 921 },
+        { SELF(Style_g9_s9_Title2), 922 },
+        { SELF(Style_g9_s9_Title3), 923 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s9_Title3 = ALIGNED_STRING("Last Latin Brass             129"),
+
+    .Style_g9_s9_Title2 = ALIGNED_STRING("Ambros Saxes                 129"),
+
+    .Style_g9_s9_Title1 = ALIGNED_STRING("Mellow Mambo                 129"),
+
+    .Style_g9_s9_Title0 = ALIGNED_STRING("Mambo Bravisimo              129"),
+
+    .Style_g9_s10_Vars = {
+        { SELF(Style_g9_s10_Title0), 924 },
+        { SELF(Style_g9_s10_Title1), 925 },
+        { SELF(Style_g9_s10_Title2), 926 },
+        { SELF(Style_g9_s10_Title3), 927 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s10_Title3 = ALIGNED_STRING("Modern Ballroom              134"),
+
+    .Style_g9_s10_Title2 = ALIGNED_STRING("Mambo Mania!                 134"),
+
+    .Style_g9_s10_Title1 = ALIGNED_STRING("Do The Mambo!                134"),
+
+    .Style_g9_s10_Title0 = ALIGNED_STRING("Sax Mamboist                 134"),
+
+    .Style_g9_s11_Vars = {
+        { SELF(Style_g9_s11_Title0), 928 },
+        { SELF(Style_g9_s11_Title1), 929 },
+        { SELF(Style_g9_s11_Title2), 930 },
+        { SELF(Style_g9_s11_Title3), 931 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s11_Title3 = ALIGNED_STRING("Fiesta Grande                132"),
+
+    .Style_g9_s11_Title2 = ALIGNED_STRING("Saxy Mambo                   132"),
+
+    .Style_g9_s11_Title1 = ALIGNED_STRING("Mambo Jambo!                 132"),
+
+    .Style_g9_s11_Title0 = ALIGNED_STRING("Seville Octaves              132"),
+
+    .Style_g9_s12_Vars = {
+        { SELF(Style_g9_s12_Title0), 932 },
+        { SELF(Style_g9_s12_Title1), 933 },
+        { SELF(Style_g9_s12_Title2), 934 },
+        { SELF(Style_g9_s12_Title3), 935 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s12_Title3 = ALIGNED_STRING("Fall For Cumbia               90"),
+
+    .Style_g9_s12_Title2 = ALIGNED_STRING("Down Mexico Way               90"),
+
+    .Style_g9_s12_Title1 = ALIGNED_STRING("Cumbia Sol                    90"),
+
+    .Style_g9_s12_Title0 = ALIGNED_STRING("Sunshine Alto                 90"),
+
+    .Style_g9_s13_Vars = {
+        { SELF(Style_g9_s13_Title0), 936 },
+        { SELF(Style_g9_s13_Title1), 937 },
+        { SELF(Style_g9_s13_Title2), 938 },
+        { SELF(Style_g9_s13_Title3), 939 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s13_Title3 = ALIGNED_STRING("Jamaican Voices               83"),
+
+    .Style_g9_s13_Title2 = ALIGNED_STRING("Island Duet                   83"),
+
+    .Style_g9_s13_Title1 = ALIGNED_STRING("Barbados Beat                 83"),
+
+    .Style_g9_s13_Title0 = ALIGNED_STRING("Caribbean Flute               83"),
+
+    .Style_g9_s14_Vars = {
+        { SELF(Style_g9_s14_Title0), 940 },
+        { SELF(Style_g9_s14_Title1), 941 },
+        { SELF(Style_g9_s14_Title2), 942 },
+        { SELF(Style_g9_s14_Title3), 943 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s14_Title3 = ALIGNED_STRING("Brazil Fanfare               114"),
+
+    .Style_g9_s14_Title2 = ALIGNED_STRING("Samba Soloist                114"),
+
+    .Style_g9_s14_Title1 = ALIGNED_STRING("Festival Horns               114"),
+
+    .Style_g9_s14_Title0 = ALIGNED_STRING("Rio De Samba                 114"),
+
+    .Style_g9_s15_Vars = {
+        { SELF(Style_g9_s15_Title0), 944 },
+        { SELF(Style_g9_s15_Title1), 945 },
+        { SELF(Style_g9_s15_Title2), 946 },
+        { SELF(Style_g9_s15_Title3), 947 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s15_Title3 = ALIGNED_STRING("Merengue Amigos              120"),
+
+    .Style_g9_s15_Title2 = ALIGNED_STRING("Sunshine Sax                 120"),
+
+    .Style_g9_s15_Title1 = ALIGNED_STRING("Merengue Party               120"),
+
+    .Style_g9_s15_Title0 = ALIGNED_STRING("Time To Merengue             120"),
+
+    .Style_g9_s16_Vars = {
+        { SELF(Style_g9_s16_Title0), 948 },
+        { SELF(Style_g9_s16_Title1), 949 },
+        { SELF(Style_g9_s16_Title2), 950 },
+        { SELF(Style_g9_s16_Title3), 951 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s16_Title3 = ALIGNED_STRING("Tropical Bridge              108"),
+
+    .Style_g9_s16_Title2 = ALIGNED_STRING("Rio Horns                    108"),
+
+    .Style_g9_s16_Title1 = ALIGNED_STRING("12 String Samba              108"),
+
+    .Style_g9_s16_Title0 = ALIGNED_STRING("Deep in Brazil               108"),
+
+    .Style_g9_s17_Vars = {
+        { SELF(Style_g9_s17_Title0), 952 },
+        { SELF(Style_g9_s17_Title1), 953 },
+        { SELF(Style_g9_s17_Title2), 954 },
+        { SELF(Style_g9_s17_Title3), 955 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s17_Title3 = ALIGNED_STRING("Toreador Band                125"),
+
+    .Style_g9_s17_Title2 = ALIGNED_STRING("Gitarero-Ole!!               125"),
+
+    .Style_g9_s17_Title1 = ALIGNED_STRING("Saxadoble!                   125"),
+
+    .Style_g9_s17_Title0 = ALIGNED_STRING("Torero's Trumpet             125"),
+
+    .Style_g9_s18_Vars = {
+        { SELF(Style_g9_s18_Title0), 956 },
+        { SELF(Style_g9_s18_Title1), 957 },
+        { SELF(Style_g9_s18_Title2), 958 },
+        { SELF(Style_g9_s18_Title3), 959 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s18_Title3 = ALIGNED_STRING("Beach Party Song             152"),
+
+    .Style_g9_s18_Title2 = ALIGNED_STRING("Coconut Frets                152"),
+
+    .Style_g9_s18_Title1 = ALIGNED_STRING("Calypso Steel                152"),
+
+    .Style_g9_s18_Title0 = ALIGNED_STRING("Limbo Flautist               152"),
+
+    .Style_g9_s19_Vars = {
+        { SELF(Style_g9_s19_Title0), 960 },
+        { SELF(Style_g9_s19_Title1), 961 },
+        { SELF(Style_g9_s19_Title2), 962 },
+        { SELF(Style_g9_s19_Title3), 963 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s19_Title3 = ALIGNED_STRING("Havana Section               110"),
+
+    .Style_g9_s19_Title2 = ALIGNED_STRING("Cuban Reeds                  110"),
+
+    .Style_g9_s19_Title1 = ALIGNED_STRING("Wide Salsa                   110"),
+
+    .Style_g9_s19_Title0 = ALIGNED_STRING("Salsa Keys                   110"),
+
+    .Style_g9_s20_Vars = {
+        { SELF(Style_g9_s20_Title0), 964 },
+        { SELF(Style_g9_s20_Title1), 965 },
+        { SELF(Style_g9_s20_Title2), 966 },
+        { SELF(Style_g9_s20_Title3), 967 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s20_Title3 = ALIGNED_STRING("Carnival Horns               110"),
+
+    .Style_g9_s20_Title2 = ALIGNED_STRING("Samba Accordion              110"),
+
+    .Style_g9_s20_Title1 = ALIGNED_STRING("Latino Piccolo               110"),
+
+    .Style_g9_s20_Title0 = ALIGNED_STRING("Flugel Samba                 110"),
+
+    .Style_g9_s21_Vars = {
+        { SELF(Style_g9_s21_Title0), 968 },
+        { SELF(Style_g9_s21_Title1), 969 },
+        { SELF(Style_g9_s21_Title2), 970 },
+        { SELF(Style_g9_s21_Title3), 971 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s21_Title3 = ALIGNED_STRING("Windies Mallets              102"),
+
+    .Style_g9_s21_Title2 = ALIGNED_STRING("Latin Fusion                 102"),
+
+    .Style_g9_s21_Title1 = ALIGNED_STRING("Spyra Steel                  102"),
+
+    .Style_g9_s21_Title0 = ALIGNED_STRING("Jamaican Bars                102"),
+
+    .Style_g9_s22_Vars = {
+        { SELF(Style_g9_s22_Title0), 972 },
+        { SELF(Style_g9_s22_Title1), 973 },
+        { SELF(Style_g9_s22_Title2), 974 },
+        { SELF(Style_g9_s22_Title3), 975 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s22_Title3 = ALIGNED_STRING("Samba Union                  110"),
+
+    .Style_g9_s22_Title2 = ALIGNED_STRING("Julio's Guitar               110"),
+
+    .Style_g9_s22_Title1 = ALIGNED_STRING("Tico Tabs                    110"),
+
+    .Style_g9_s22_Title0 = ALIGNED_STRING("Miranda Mallets              110"),
+
+    .Style_g9_s23_Vars = {
+        { SELF(Style_g9_s23_Title0), 976 },
+        { SELF(Style_g9_s23_Title1), 977 },
+        { SELF(Style_g9_s23_Title2), 978 },
+        { SELF(Style_g9_s23_Title3), 979 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s23_Title3 = ALIGNED_STRING("Samba Party                  110"),
+
+    .Style_g9_s23_Title2 = ALIGNED_STRING("New Organ Samba              110"),
+
+    .Style_g9_s23_Title1 = ALIGNED_STRING("Carnival Reed                110"),
+
+    .Style_g9_s23_Title0 = ALIGNED_STRING("Samba Strategy               110"),
+
+    .Style_g9_s24_Vars = {
+        { SELF(Style_g9_s24_Title0), 980 },
+        { SELF(Style_g9_s24_Title1), 981 },
+        { SELF(Style_g9_s24_Title2), 982 },
+        { SELF(Style_g9_s24_Title3), 983 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s24_Title3 = ALIGNED_STRING("Asian Gold                    67"),
+
+    .Style_g9_s24_Title2 = ALIGNED_STRING("Pacific Strings               67"),
+
+    .Style_g9_s24_Title1 = ALIGNED_STRING("Nice Keroncong                67"),
+
+    .Style_g9_s24_Title0 = ALIGNED_STRING("Keroncong Flute               67"),
+
+    .Style_g9_s25_Vars = {
+        { SELF(Style_g9_s25_Title0), 984 },
+        { SELF(Style_g9_s25_Title1), 985 },
+        { SELF(Style_g9_s25_Title2), 986 },
+        { SELF(Style_g9_s25_Title3), 987 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s25_Title3 = ALIGNED_STRING("Bright Dangdut               150"),
+
+    .Style_g9_s25_Title2 = ALIGNED_STRING("Orch.Dangdut                 150"),
+
+    .Style_g9_s25_Title1 = ALIGNED_STRING("Hot Dangdut                  150"),
+
+    .Style_g9_s25_Title0 = ALIGNED_STRING("Easy Dangdut                 150"),
+
+    .Style_g9_s26_Vars = {
+        { SELF(Style_g9_s26_Title0), 988 },
+        { SELF(Style_g9_s26_Title1), 989 },
+        { SELF(Style_g9_s26_Title2), 990 },
+        { SELF(Style_g9_s26_Title3), 991 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s26_Title3 = ALIGNED_STRING("Padang Beat                   98"),
+
+    .Style_g9_s26_Title2 = ALIGNED_STRING("Minangkabau                   98"),
+
+    .Style_g9_s26_Title1 = ALIGNED_STRING("Galombang                     98"),
+
+    .Style_g9_s26_Title0 = ALIGNED_STRING("Talempong                     98"),
+
+    .Style_g9_s27_Vars = {
+        { SELF(Style_g9_s27_Title0), 992 },
+        { SELF(Style_g9_s27_Title1), 993 },
+        { SELF(Style_g9_s27_Title2), 994 },
+        { SELF(Style_g9_s27_Title3), 995 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s27_Title3 = ALIGNED_STRING("Jamaica Synth                 89"),
+
+    .Style_g9_s27_Title2 = ALIGNED_STRING("Rasta Voice                   89"),
+
+    .Style_g9_s27_Title1 = ALIGNED_STRING("Reggae Saw                    89"),
+
+    .Style_g9_s27_Title0 = ALIGNED_STRING("Funky Reggae                  89"),
+
+    .Style_g9_s28_Vars = {
+        { SELF(Style_g9_s28_Title0), 996 },
+        { SELF(Style_g9_s28_Title1), 997 },
+        { SELF(Style_g9_s28_Title2), 998 },
+        { SELF(Style_g9_s28_Title3), 999 },
+        { 0, 0 },
+    },
+
+    .Style_g9_s28_Title3 = ALIGNED_STRING("Caribbean Synth               90"),
+
+    .Style_g9_s28_Title2 = ALIGNED_STRING("Reggae Horns                  90"),
+
+    .Style_g9_s28_Title1 = ALIGNED_STRING("Marley's Drums                90"),
+
+    .Style_g9_s28_Title0 = ALIGNED_STRING("Wailers' Guitar               90"),
+
+    .StyleGroup0_Styles = {
+        { SELF(Style_g0_s0_Name), SELF(Style_g0_s0_Vars) },
+        { SELF(Style_g0_s1_Name), SELF(Style_g0_s1_Vars) },
+        { SELF(Style_g0_s2_Name), SELF(Style_g0_s2_Vars) },
+        { SELF(Style_g0_s3_Name), SELF(Style_g0_s3_Vars) },
+        { SELF(Style_g0_s4_Name), SELF(Style_g0_s4_Vars) },
+        { SELF(Style_g0_s5_Name), SELF(Style_g0_s5_Vars) },
+        { SELF(Style_g0_s6_Name), SELF(Style_g0_s6_Vars) },
+        { SELF(Style_g0_s7_Name), SELF(Style_g0_s7_Vars) },
+        { SELF(Style_g0_s8_Name), SELF(Style_g0_s8_Vars) },
+        { SELF(Style_g0_s9_Name), SELF(Style_g0_s9_Vars) },
+        { SELF(Style_g0_s10_Name), SELF(Style_g0_s10_Vars) },
+        { SELF(Style_g0_s11_Name), SELF(Style_g0_s11_Vars) },
+        { SELF(Style_g0_s12_Name), SELF(Style_g0_s12_Vars) },
+        { SELF(Style_g0_s13_Name), SELF(Style_g0_s13_Vars) },
+        { SELF(Style_g0_s14_Name), SELF(Style_g0_s14_Vars) },
+        { SELF(Style_g0_s15_Name), SELF(Style_g0_s15_Vars) },
+        { SELF(Style_g0_s16_Name), SELF(Style_g0_s16_Vars) },
+        { SELF(Style_g0_s17_Name), SELF(Style_g0_s17_Vars) },
+        { SELF(Style_g0_s18_Name), SELF(Style_g0_s18_Vars) },
+        { SELF(Style_g0_s19_Name), SELF(Style_g0_s19_Vars) },
+        { SELF(Style_g0_s20_Name), SELF(Style_g0_s20_Vars) },
+        { SELF(Style_g0_s21_Name), SELF(Style_g0_s21_Vars) },
+        { SELF(Style_g0_s22_Name), SELF(Style_g0_s22_Vars) },
+        { SELF(Style_g0_s23_Name), SELF(Style_g0_s23_Vars) },
+        { SELF(Style_g0_s24_Name), SELF(Style_g0_s24_Vars) },
+        { SELF(Style_g0_s25_Name), SELF(Style_g0_s25_Vars) },
+        { SELF(Style_g0_s26_Name), SELF(Style_g0_s26_Vars) },
+        { SELF(Style_g0_s27_Name), SELF(Style_g0_s27_Vars) },
+        { SELF(Style_g0_s28_Name), SELF(Style_g0_s28_Vars) },
+        { SELF(Style_g0_s29_Name), SELF(Style_g0_s29_Vars) },
+        { SELF(Style_g0_s30_Name), SELF(Style_g0_s30_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g0_s30_Name = ALIGNED_STRING("Easy Jazz Waltz "),
+
+    .Style_g0_s29_Name = ALIGNED_STRING("Parisian Nights "),
+
+    .Style_g0_s28_Name = ALIGNED_STRING("Easy Play Waltz "),
+
+    .Style_g0_s27_Name = ALIGNED_STRING("Paris Romance   "),
+
+    .Style_g0_s26_Name = ALIGNED_STRING("Drawbar Combo   "),
+
+    .Style_g0_s25_Name = ALIGNED_STRING("Nat's Ballads   "),
+
+    .Style_g0_s24_Name = ALIGNED_STRING("Jazz Serenade   "),
+
+    .Style_g0_s23_Name = ALIGNED_STRING("Romantic Band   "),
+
+    .Style_g0_s22_Name = ALIGNED_STRING("Euro Ballads    "),
+
+    .Style_g0_s21_Name = ALIGNED_STRING("Oldie Drawbars  "),
+
+    .Style_g0_s20_Name = ALIGNED_STRING("Soft Schlager   "),
+
+    .Style_g0_s19_Name = ALIGNED_STRING("Oldie Ballads   "),
+
+    .Style_g0_s18_Name = ALIGNED_STRING("50's Love Songs "),
+
+    .Style_g0_s17_Name = ALIGNED_STRING("Night Club Dance"),
+
+    .Style_g0_s16_Name = ALIGNED_STRING("Modern Ballads  "),
+
+    .Style_g0_s15_Name = ALIGNED_STRING("Grands on Stage "),
+
+    .Style_g0_s14_Name = ALIGNED_STRING("Synth Ballad    "),
+
+    .Style_g0_s13_Name = ALIGNED_STRING("Atmospheric 16  "),
+
+    .Style_g0_s12_Name = ALIGNED_STRING("Gentle 16 Beat  "),
+
+    .Style_g0_s11_Name = ALIGNED_STRING("E.P. Moments    "),
+
+    .Style_g0_s10_Name = ALIGNED_STRING("Easy Play 16Beat"),
+
+    .Style_g0_s9_Name = ALIGNED_STRING("16 Beat Groove  "),
+
+    .Style_g0_s8_Name = ALIGNED_STRING("Love Songs      "),
+
+    .Style_g0_s7_Name = ALIGNED_STRING("Ballad Producer "),
+
+    .Style_g0_s6_Name = ALIGNED_STRING("Studio 8 Beat   "),
+
+    .Style_g0_s5_Name = ALIGNED_STRING("Greatest Hits   "),
+
+    .Style_g0_s4_Name = ALIGNED_STRING("Smooth Rock     "),
+
+    .Style_g0_s3_Name = ALIGNED_STRING("Orchestral Beat "),
+
+    .Style_g0_s2_Name = ALIGNED_STRING("Rock After Eight"),
+
+    .Style_g0_s1_Name = ALIGNED_STRING("Easy Play 8 Beat"),
+
+    .Style_g0_s0_Name = ALIGNED_STRING("German Schlager "),
+
+    .StyleGroup1_Styles = {
+        { SELF(Style_g1_s0_Name), SELF(Style_g1_s0_Vars) },
+        { SELF(Style_g1_s1_Name), SELF(Style_g1_s1_Vars) },
+        { SELF(Style_g1_s2_Name), SELF(Style_g1_s2_Vars) },
+        { SELF(Style_g1_s3_Name), SELF(Style_g1_s3_Vars) },
+        { SELF(Style_g1_s4_Name), SELF(Style_g1_s4_Vars) },
+        { SELF(Style_g1_s5_Name), SELF(Style_g1_s5_Vars) },
+        { SELF(Style_g1_s6_Name), SELF(Style_g1_s6_Vars) },
+        { SELF(Style_g1_s7_Name), SELF(Style_g1_s7_Vars) },
+        { SELF(Style_g1_s8_Name), SELF(Style_g1_s8_Vars) },
+        { SELF(Style_g1_s9_Name), SELF(Style_g1_s9_Vars) },
+        { SELF(Style_g1_s10_Name), SELF(Style_g1_s10_Vars) },
+        { SELF(Style_g1_s11_Name), SELF(Style_g1_s11_Vars) },
+        { SELF(Style_g1_s12_Name), SELF(Style_g1_s12_Vars) },
+        { SELF(Style_g1_s13_Name), SELF(Style_g1_s13_Vars) },
+        { SELF(Style_g1_s14_Name), SELF(Style_g1_s14_Vars) },
+        { SELF(Style_g1_s15_Name), SELF(Style_g1_s15_Vars) },
+        { SELF(Style_g1_s16_Name), SELF(Style_g1_s16_Vars) },
+        { SELF(Style_g1_s17_Name), SELF(Style_g1_s17_Vars) },
+        { SELF(Style_g1_s18_Name), SELF(Style_g1_s18_Vars) },
+        { SELF(Style_g1_s19_Name), SELF(Style_g1_s19_Vars) },
+        { SELF(Style_g1_s20_Name), SELF(Style_g1_s20_Vars) },
+        { SELF(Style_g1_s21_Name), SELF(Style_g1_s21_Vars) },
+        { SELF(Style_g1_s22_Name), SELF(Style_g1_s22_Vars) },
+        { SELF(Style_g1_s23_Name), SELF(Style_g1_s23_Vars) },
+        { SELF(Style_g1_s24_Name), SELF(Style_g1_s24_Vars) },
+        { SELF(Style_g1_s25_Name), SELF(Style_g1_s25_Vars) },
+        { SELF(Style_g1_s26_Name), SELF(Style_g1_s26_Vars) },
+        { SELF(Style_g1_s27_Name), SELF(Style_g1_s27_Vars) },
+        { SELF(Style_g1_s28_Name), SELF(Style_g1_s28_Vars) },
+        { SELF(Style_g1_s29_Name), SELF(Style_g1_s29_Vars) },
+        { SELF(Style_g1_s30_Name), SELF(Style_g1_s30_Vars) },
+        { SELF(Style_g1_s31_Name), SELF(Style_g1_s31_Vars) },
+        { SELF(Style_g1_s32_Name), SELF(Style_g1_s32_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g1_s32_Name = ALIGNED_STRING("Straight Funk   "),
+
+    .Style_g1_s31_Name = ALIGNED_STRING("Cool Funk       "),
+
+    .Style_g1_s30_Name = ALIGNED_STRING("Chart Fusion    "),
+
+    .Style_g1_s29_Name = ALIGNED_STRING("Easy Groovin'   "),
+
+    .Style_g1_s28_Name = ALIGNED_STRING("Pop Fusion      "),
+
+    .Style_g1_s27_Name = ALIGNED_STRING("Jazz Pop        "),
+
+    .Style_g1_s26_Name = ALIGNED_STRING("Cool Fusion     "),
+
+    .Style_g1_s25_Name = ALIGNED_STRING("Gentle SwingRock"),
+
+    .Style_g1_s24_Name = ALIGNED_STRING("L.A. Pop        "),
+
+    .Style_g1_s23_Name = ALIGNED_STRING("Power Ballad    "),
+
+    .Style_g1_s22_Name = ALIGNED_STRING("Heavy Shuffle   "),
+
+    .Style_g1_s21_Name = ALIGNED_STRING("Heavy Metal     "),
+
+    .Style_g1_s20_Name = ALIGNED_STRING("Rock Gig        "),
+
+    .Style_g1_s19_Name = ALIGNED_STRING("80's Pop Ballads"),
+
+    .Style_g1_s18_Name = ALIGNED_STRING("8 Beat Groove   "),
+
+    .Style_g1_s17_Name = ALIGNED_STRING("Pop Beat        "),
+
+    .Style_g1_s16_Name = ALIGNED_STRING("In The Eighties "),
+
+    .Style_g1_s15_Name = ALIGNED_STRING("80's Love Songs "),
+
+    .Style_g1_s14_Name = ALIGNED_STRING("Euro Pop Shuffle"),
+
+    .Style_g1_s13_Name = ALIGNED_STRING("70's Power Rock "),
+
+    .Style_g1_s12_Name = ALIGNED_STRING("70's Hits       "),
+
+    .Style_g1_s11_Name = ALIGNED_STRING("Glamrock Piano  "),
+
+    .Style_g1_s10_Name = ALIGNED_STRING("70's Fox Dance  "),
+
+    .Style_g1_s9_Name = ALIGNED_STRING("California Pop  "),
+
+    .Style_g1_s8_Name = ALIGNED_STRING("60's Rock       "),
+
+    .Style_g1_s7_Name = ALIGNED_STRING("Liverpool Beat  "),
+
+    .Style_g1_s6_Name = ALIGNED_STRING("Swinging Sixties"),
+
+    .Style_g1_s5_Name = ALIGNED_STRING("Slow Dance      "),
+
+    .Style_g1_s4_Name = ALIGNED_STRING("Boogie Time     "),
+
+    .Style_g1_s3_Name = ALIGNED_STRING("Rockabilly Band "),
+
+    .Style_g1_s2_Name = ALIGNED_STRING("It's Boogie Time"),
+
+    .Style_g1_s1_Name = ALIGNED_STRING("Piano R&Roll    "),
+
+    .Style_g1_s0_Name = ALIGNED_STRING("Fifties Rock    "),
+
+    .StyleGroup2_Styles = {
+        { SELF(Style_g2_s0_Name), SELF(Style_g2_s0_Vars) },
+        { SELF(Style_g2_s1_Name), SELF(Style_g2_s1_Vars) },
+        { SELF(Style_g2_s2_Name), SELF(Style_g2_s2_Vars) },
+        { SELF(Style_g2_s3_Name), SELF(Style_g2_s3_Vars) },
+        { SELF(Style_g2_s4_Name), SELF(Style_g2_s4_Vars) },
+        { SELF(Style_g2_s5_Name), SELF(Style_g2_s5_Vars) },
+        { SELF(Style_g2_s6_Name), SELF(Style_g2_s6_Vars) },
+        { SELF(Style_g2_s7_Name), SELF(Style_g2_s7_Vars) },
+        { SELF(Style_g2_s8_Name), SELF(Style_g2_s8_Vars) },
+        { SELF(Style_g2_s9_Name), SELF(Style_g2_s9_Vars) },
+        { SELF(Style_g2_s10_Name), SELF(Style_g2_s10_Vars) },
+        { SELF(Style_g2_s11_Name), SELF(Style_g2_s11_Vars) },
+        { SELF(Style_g2_s12_Name), SELF(Style_g2_s12_Vars) },
+        { SELF(Style_g2_s13_Name), SELF(Style_g2_s13_Vars) },
+        { SELF(Style_g2_s14_Name), SELF(Style_g2_s14_Vars) },
+        { SELF(Style_g2_s15_Name), SELF(Style_g2_s15_Vars) },
+        { SELF(Style_g2_s16_Name), SELF(Style_g2_s16_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g2_s16_Name = ALIGNED_STRING("Western Techno  "),
+
+    .Style_g2_s15_Name = ALIGNED_STRING("Samba Party     "),
+
+    .Style_g2_s14_Name = ALIGNED_STRING("Jambo Dance     "),
+
+    .Style_g2_s13_Name = ALIGNED_STRING("Rio Goes Disco  "),
+
+    .Style_g2_s12_Name = ALIGNED_STRING("Reggae Hit      "),
+
+    .Style_g2_s11_Name = ALIGNED_STRING("The Big Hit     "),
+
+    .Style_g2_s10_Name = ALIGNED_STRING("N.Y. Rap        "),
+
+    .Style_g2_s9_Name = ALIGNED_STRING("80's & 90's     "),
+
+    .Style_g2_s8_Name = ALIGNED_STRING("Hip Hop         "),
+
+    .Style_g2_s7_Name = ALIGNED_STRING("70's Dance Craze"),
+
+    .Style_g2_s6_Name = ALIGNED_STRING("Dance Floor     "),
+
+    .Style_g2_s5_Name = ALIGNED_STRING("80's Disco      "),
+
+    .Style_g2_s4_Name = ALIGNED_STRING("Glory Disco     "),
+
+    .Style_g2_s3_Name = ALIGNED_STRING("Techno World    "),
+
+    .Style_g2_s2_Name = ALIGNED_STRING("House Party     "),
+
+    .Style_g2_s1_Name = ALIGNED_STRING("Straight Dance  "),
+
+    .Style_g2_s0_Name = ALIGNED_STRING("British DancePop"),
+
+    .StyleGroup3_Styles = {
+        { SELF(Style_g3_s0_Name), SELF(Style_g3_s0_Vars) },
+        { SELF(Style_g3_s1_Name), SELF(Style_g3_s1_Vars) },
+        { SELF(Style_g3_s2_Name), SELF(Style_g3_s2_Vars) },
+        { SELF(Style_g3_s3_Name), SELF(Style_g3_s3_Vars) },
+        { SELF(Style_g3_s4_Name), SELF(Style_g3_s4_Vars) },
+        { SELF(Style_g3_s5_Name), SELF(Style_g3_s5_Vars) },
+        { SELF(Style_g3_s6_Name), SELF(Style_g3_s6_Vars) },
+        { SELF(Style_g3_s7_Name), SELF(Style_g3_s7_Vars) },
+        { SELF(Style_g3_s8_Name), SELF(Style_g3_s8_Vars) },
+        { SELF(Style_g3_s9_Name), SELF(Style_g3_s9_Vars) },
+        { SELF(Style_g3_s10_Name), SELF(Style_g3_s10_Vars) },
+        { SELF(Style_g3_s11_Name), SELF(Style_g3_s11_Vars) },
+        { SELF(Style_g3_s12_Name), SELF(Style_g3_s12_Vars) },
+        { SELF(Style_g3_s13_Name), SELF(Style_g3_s13_Vars) },
+        { SELF(Style_g3_s14_Name), SELF(Style_g3_s14_Vars) },
+        { SELF(Style_g3_s15_Name), SELF(Style_g3_s15_Vars) },
+        { SELF(Style_g3_s16_Name), SELF(Style_g3_s16_Vars) },
+        { SELF(Style_g3_s17_Name), SELF(Style_g3_s17_Vars) },
+        { SELF(Style_g3_s18_Name), SELF(Style_g3_s18_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g3_s18_Name = ALIGNED_STRING("Merry Christmas!"),
+
+    .Style_g3_s17_Name = ALIGNED_STRING("Munich Festival "),
+
+    .Style_g3_s16_Name = ALIGNED_STRING("Bavarian Party  "),
+
+    .Style_g3_s15_Name = ALIGNED_STRING("Hillbilly Joe   "),
+
+    .Style_g3_s14_Name = ALIGNED_STRING("Barn Dance      "),
+
+    .Style_g3_s13_Name = ALIGNED_STRING("Line Dance Craze"),
+
+    .Style_g3_s12_Name = ALIGNED_STRING("Pub Singalong   "),
+
+    .Style_g3_s11_Name = ALIGNED_STRING("Dancing Birdies "),
+
+    .Style_g3_s10_Name = ALIGNED_STRING("Do The Hokie...."),
+
+    .Style_g3_s9_Name = ALIGNED_STRING("BeerBarrel Polka"),
+
+    .Style_g3_s8_Name = ALIGNED_STRING("Golden Oldies   "),
+
+    .Style_g3_s7_Name = ALIGNED_STRING("German Oldies   "),
+
+    .Style_g3_s6_Name = ALIGNED_STRING("Euro Party Pop  "),
+
+    .Style_g3_s5_Name = ALIGNED_STRING("Eurovision Hits "),
+
+    .Style_g3_s4_Name = ALIGNED_STRING("Pop Organ March "),
+
+    .Style_g3_s3_Name = ALIGNED_STRING("All Night Party "),
+
+    .Style_g3_s2_Name = ALIGNED_STRING("German Schlager "),
+
+    .Style_g3_s1_Name = ALIGNED_STRING("Last Arrangement"),
+
+    .Style_g3_s0_Name = ALIGNED_STRING("J.Last Hitparade"),
+
+    .StyleGroup4_Styles = {
+        { SELF(Style_g4_s0_Name), SELF(Style_g4_s0_Vars) },
+        { SELF(Style_g4_s1_Name), SELF(Style_g4_s1_Vars) },
+        { SELF(Style_g4_s2_Name), SELF(Style_g4_s2_Vars) },
+        { SELF(Style_g4_s3_Name), SELF(Style_g4_s3_Vars) },
+        { SELF(Style_g4_s4_Name), SELF(Style_g4_s4_Vars) },
+        { SELF(Style_g4_s5_Name), SELF(Style_g4_s5_Vars) },
+        { SELF(Style_g4_s6_Name), SELF(Style_g4_s6_Vars) },
+        { SELF(Style_g4_s7_Name), SELF(Style_g4_s7_Vars) },
+        { SELF(Style_g4_s8_Name), SELF(Style_g4_s8_Vars) },
+        { SELF(Style_g4_s9_Name), SELF(Style_g4_s9_Vars) },
+        { SELF(Style_g4_s10_Name), SELF(Style_g4_s10_Vars) },
+        { SELF(Style_g4_s11_Name), SELF(Style_g4_s11_Vars) },
+        { SELF(Style_g4_s12_Name), SELF(Style_g4_s12_Vars) },
+        { SELF(Style_g4_s13_Name), SELF(Style_g4_s13_Vars) },
+        { SELF(Style_g4_s14_Name), SELF(Style_g4_s14_Vars) },
+        { SELF(Style_g4_s15_Name), SELF(Style_g4_s15_Vars) },
+        { SELF(Style_g4_s16_Name), SELF(Style_g4_s16_Vars) },
+        { SELF(Style_g4_s17_Name), SELF(Style_g4_s17_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g4_s17_Name = ALIGNED_STRING("Gospel In Threes"),
+
+    .Style_g4_s16_Name = ALIGNED_STRING("Gospel Blues    "),
+
+    .Style_g4_s15_Name = ALIGNED_STRING("Power Gospel    "),
+
+    .Style_g4_s14_Name = ALIGNED_STRING("Day Of Rest     "),
+
+    .Style_g4_s13_Name = ALIGNED_STRING("Lift Your Soul  "),
+
+    .Style_g4_s12_Name = ALIGNED_STRING("Sunday Service  "),
+
+    .Style_g4_s11_Name = ALIGNED_STRING("Play The Blues  "),
+
+    .Style_g4_s10_Name = ALIGNED_STRING("Blues Alley     "),
+
+    .Style_g4_s9_Name = ALIGNED_STRING("Rock Blues      "),
+
+    .Style_g4_s8_Name = ALIGNED_STRING("Down&Dirty Blues"),
+
+    .Style_g4_s7_Name = ALIGNED_STRING("R&B Groove      "),
+
+    .Style_g4_s6_Name = ALIGNED_STRING("Slow Soul Mood  "),
+
+    .Style_g4_s5_Name = ALIGNED_STRING("Mellow Soul     "),
+
+    .Style_g4_s4_Name = ALIGNED_STRING("Soul To Sun     "),
+
+    .Style_g4_s3_Name = ALIGNED_STRING("New Soul Ballad "),
+
+    .Style_g4_s2_Name = ALIGNED_STRING("Soft Soul       "),
+
+    .Style_g4_s1_Name = ALIGNED_STRING("Detroit Pop     "),
+
+    .Style_g4_s0_Name = ALIGNED_STRING("King Of Soul    "),
+
+    .StyleGroup5_Styles = {
+        { SELF(Style_g5_s0_Name), SELF(Style_g5_s0_Vars) },
+        { SELF(Style_g5_s1_Name), SELF(Style_g5_s1_Vars) },
+        { SELF(Style_g5_s2_Name), SELF(Style_g5_s2_Vars) },
+        { SELF(Style_g5_s3_Name), SELF(Style_g5_s3_Vars) },
+        { SELF(Style_g5_s4_Name), SELF(Style_g5_s4_Vars) },
+        { SELF(Style_g5_s5_Name), SELF(Style_g5_s5_Vars) },
+        { SELF(Style_g5_s6_Name), SELF(Style_g5_s6_Vars) },
+        { SELF(Style_g5_s7_Name), SELF(Style_g5_s7_Vars) },
+        { SELF(Style_g5_s8_Name), SELF(Style_g5_s8_Vars) },
+        { SELF(Style_g5_s9_Name), SELF(Style_g5_s9_Vars) },
+        { SELF(Style_g5_s10_Name), SELF(Style_g5_s10_Vars) },
+        { SELF(Style_g5_s11_Name), SELF(Style_g5_s11_Vars) },
+        { SELF(Style_g5_s12_Name), SELF(Style_g5_s12_Vars) },
+        { SELF(Style_g5_s13_Name), SELF(Style_g5_s13_Vars) },
+        { SELF(Style_g5_s14_Name), SELF(Style_g5_s14_Vars) },
+        { SELF(Style_g5_s15_Name), SELF(Style_g5_s15_Vars) },
+        { SELF(Style_g5_s16_Name), SELF(Style_g5_s16_Vars) },
+        { SELF(Style_g5_s17_Name), SELF(Style_g5_s17_Vars) },
+        { SELF(Style_g5_s18_Name), SELF(Style_g5_s18_Vars) },
+        { SELF(Style_g5_s19_Name), SELF(Style_g5_s19_Vars) },
+        { SELF(Style_g5_s20_Name), SELF(Style_g5_s20_Vars) },
+        { SELF(Style_g5_s21_Name), SELF(Style_g5_s21_Vars) },
+        { SELF(Style_g5_s22_Name), SELF(Style_g5_s22_Vars) },
+        { SELF(Style_g5_s23_Name), SELF(Style_g5_s23_Vars) },
+        { SELF(Style_g5_s24_Name), SELF(Style_g5_s24_Vars) },
+        { SELF(Style_g5_s25_Name), SELF(Style_g5_s25_Vars) },
+        { SELF(Style_g5_s26_Name), SELF(Style_g5_s26_Vars) },
+        { SELF(Style_g5_s27_Name), SELF(Style_g5_s27_Vars) },
+        { SELF(Style_g5_s28_Name), SELF(Style_g5_s28_Vars) },
+        { SELF(Style_g5_s29_Name), SELF(Style_g5_s29_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g5_s29_Name = ALIGNED_STRING("L.A. Fusion     "),
+
+    .Style_g5_s28_Name = ALIGNED_STRING("The Groove      "),
+
+    .Style_g5_s27_Name = ALIGNED_STRING("Slow Jazz 3/4   "),
+
+    .Style_g5_s26_Name = ALIGNED_STRING("Steady Jazz 3/4 "),
+
+    .Style_g5_s25_Name = ALIGNED_STRING("Jazz At 3:00am  "),
+
+    .Style_g5_s24_Name = ALIGNED_STRING("Smokey Jazz Club"),
+
+    .Style_g5_s23_Name = ALIGNED_STRING("Euro Jazz       "),
+
+    .Style_g5_s22_Name = ALIGNED_STRING("Van Damme Jazz  "),
+
+    .Style_g5_s21_Name = ALIGNED_STRING("Jazz Francais   "),
+
+    .Style_g5_s20_Name = ALIGNED_STRING("Speakeasy Jazz  "),
+
+    .Style_g5_s19_Name = ALIGNED_STRING("Jazz Accordion  "),
+
+    .Style_g5_s18_Name = ALIGNED_STRING("Gypsy Jazzers   "),
+
+    .Style_g5_s17_Name = ALIGNED_STRING("Gentle Jazz     "),
+
+    .Style_g5_s16_Name = ALIGNED_STRING("Combo Drawbars  "),
+
+    .Style_g5_s15_Name = ALIGNED_STRING("Jazz Standards  "),
+
+    .Style_g5_s14_Name = ALIGNED_STRING("40's Boogie     "),
+
+    .Style_g5_s13_Name = ALIGNED_STRING("Simple Jazz     "),
+
+    .Style_g5_s12_Name = ALIGNED_STRING("Up Tempo Combo  "),
+
+    .Style_g5_s11_Name = ALIGNED_STRING("Jazz Club       "),
+
+    .Style_g5_s10_Name = ALIGNED_STRING("Easy Play Swing "),
+
+    .Style_g5_s9_Name = ALIGNED_STRING("Night Club Combo"),
+
+    .Style_g5_s8_Name = ALIGNED_STRING("Swing Orchestra "),
+
+    .Style_g5_s7_Name = ALIGNED_STRING("Mid Swingband   "),
+
+    .Style_g5_s6_Name = ALIGNED_STRING("40's Love Songs "),
+
+    .Style_g5_s5_Name = ALIGNED_STRING("Moonlight Dance "),
+
+    .Style_g5_s4_Name = ALIGNED_STRING("Sentimental Band"),
+
+    .Style_g5_s3_Name = ALIGNED_STRING("40's Dance Band "),
+
+    .Style_g5_s2_Name = ALIGNED_STRING("All Aboard!     "),
+
+    .Style_g5_s1_Name = ALIGNED_STRING("Steady Swingband"),
+
+    .Style_g5_s0_Name = ALIGNED_STRING("Up Tempo Bigband"),
+
+    .StyleGroup6_Styles = {
+        { SELF(Style_g6_s0_Name), SELF(Style_g6_s0_Vars) },
+        { SELF(Style_g6_s1_Name), SELF(Style_g6_s1_Vars) },
+        { SELF(Style_g6_s2_Name), SELF(Style_g6_s2_Vars) },
+        { SELF(Style_g6_s3_Name), SELF(Style_g6_s3_Vars) },
+        { SELF(Style_g6_s4_Name), SELF(Style_g6_s4_Vars) },
+        { SELF(Style_g6_s5_Name), SELF(Style_g6_s5_Vars) },
+        { SELF(Style_g6_s6_Name), SELF(Style_g6_s6_Vars) },
+        { SELF(Style_g6_s7_Name), SELF(Style_g6_s7_Vars) },
+        { SELF(Style_g6_s8_Name), SELF(Style_g6_s8_Vars) },
+        { SELF(Style_g6_s9_Name), SELF(Style_g6_s9_Vars) },
+        { SELF(Style_g6_s10_Name), SELF(Style_g6_s10_Vars) },
+        { SELF(Style_g6_s11_Name), SELF(Style_g6_s11_Vars) },
+        { SELF(Style_g6_s12_Name), SELF(Style_g6_s12_Vars) },
+        { SELF(Style_g6_s13_Name), SELF(Style_g6_s13_Vars) },
+        { SELF(Style_g6_s14_Name), SELF(Style_g6_s14_Vars) },
+        { SELF(Style_g6_s15_Name), SELF(Style_g6_s15_Vars) },
+        { SELF(Style_g6_s16_Name), SELF(Style_g6_s16_Vars) },
+        { SELF(Style_g6_s17_Name), SELF(Style_g6_s17_Vars) },
+        { SELF(Style_g6_s18_Name), SELF(Style_g6_s18_Vars) },
+        { SELF(Style_g6_s19_Name), SELF(Style_g6_s19_Vars) },
+        { SELF(Style_g6_s20_Name), SELF(Style_g6_s20_Vars) },
+        { SELF(Style_g6_s21_Name), SELF(Style_g6_s21_Vars) },
+        { SELF(Style_g6_s22_Name), SELF(Style_g6_s22_Vars) },
+        { SELF(Style_g6_s23_Name), SELF(Style_g6_s23_Vars) },
+        { SELF(Style_g6_s24_Name), SELF(Style_g6_s24_Vars) },
+        { SELF(Style_g6_s25_Name), SELF(Style_g6_s25_Vars) },
+        { SELF(Style_g6_s26_Name), SELF(Style_g6_s26_Vars) },
+        { SELF(Style_g6_s27_Name), SELF(Style_g6_s27_Vars) },
+        { SELF(Style_g6_s28_Name), SELF(Style_g6_s28_Vars) },
+        { SELF(Style_g6_s29_Name), SELF(Style_g6_s29_Vars) },
+        { SELF(Style_g6_s30_Name), SELF(Style_g6_s30_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g6_s30_Name = ALIGNED_STRING("Party Vienna    "),
+
+    .Style_g6_s29_Name = ALIGNED_STRING("Walzer-Time     "),
+
+    .Style_g6_s28_Name = ALIGNED_STRING("Austrian Waltz  "),
+
+    .Style_g6_s27_Name = ALIGNED_STRING("Quick Waltz     "),
+
+    .Style_g6_s26_Name = ALIGNED_STRING("Last Dance Waltz"),
+
+    .Style_g6_s25_Name = ALIGNED_STRING("Tango Pianist   "),
+
+    .Style_g6_s24_Name = ALIGNED_STRING("Tango D'Amour   "),
+
+    .Style_g6_s23_Name = ALIGNED_STRING("Strict Tango    "),
+
+    .Style_g6_s22_Name = ALIGNED_STRING("Viva Pasodoble! "),
+
+    .Style_g6_s21_Name = ALIGNED_STRING("Samba Felicidade"),
+
+    .Style_g6_s20_Name = ALIGNED_STRING("Let's Beguine!  "),
+
+    .Style_g6_s19_Name = ALIGNED_STRING("1,2,Cha Cha Cha "),
+
+    .Style_g6_s18_Name = ALIGNED_STRING("Do The Twist!   "),
+
+    .Style_g6_s17_Name = ALIGNED_STRING("Jive Dance      "),
+
+    .Style_g6_s16_Name = ALIGNED_STRING("Let's Twist     "),
+
+    .Style_g6_s15_Name = ALIGNED_STRING("Strictly Quick! "),
+
+    .Style_g6_s14_Name = ALIGNED_STRING("Radio Foxtrot   "),
+
+    .Style_g6_s13_Name = ALIGNED_STRING("Strictly Foxtrot"),
+
+    .Style_g6_s12_Name = ALIGNED_STRING("Up Tempo Foxtrot"),
+
+    .Style_g6_s11_Name = ALIGNED_STRING("Organist's Dance"),
+
+    .Style_g6_s10_Name = ALIGNED_STRING("Gentle Foxtrot  "),
+
+    .Style_g6_s9_Name = ALIGNED_STRING("Magic Ballroom  "),
+
+    .Style_g6_s8_Name = ALIGNED_STRING("Viva Las Vegas  "),
+
+    .Style_g6_s7_Name = ALIGNED_STRING("Cabaret Band    "),
+
+    .Style_g6_s6_Name = ALIGNED_STRING("Paris Club      "),
+
+    .Style_g6_s5_Name = ALIGNED_STRING("Tap Dancer      "),
+
+    .Style_g6_s4_Name = ALIGNED_STRING("Vaudeville Act  "),
+
+    .Style_g6_s3_Name = ALIGNED_STRING("Theatre Stride  "),
+
+    .Style_g6_s2_Name = ALIGNED_STRING("Showband        "),
+
+    .Style_g6_s1_Name = ALIGNED_STRING("Tinseltown      "),
+
+    .Style_g6_s0_Name = ALIGNED_STRING("Musical Overture"),
+
+    .StyleGroup7_Styles = {
+        { SELF(Style_g7_s0_Name), SELF(Style_g7_s0_Vars) },
+        { SELF(Style_g7_s1_Name), SELF(Style_g7_s1_Vars) },
+        { SELF(Style_g7_s2_Name), SELF(Style_g7_s2_Vars) },
+        { SELF(Style_g7_s3_Name), SELF(Style_g7_s3_Vars) },
+        { SELF(Style_g7_s4_Name), SELF(Style_g7_s4_Vars) },
+        { SELF(Style_g7_s5_Name), SELF(Style_g7_s5_Vars) },
+        { SELF(Style_g7_s6_Name), SELF(Style_g7_s6_Vars) },
+        { SELF(Style_g7_s7_Name), SELF(Style_g7_s7_Vars) },
+        { SELF(Style_g7_s8_Name), SELF(Style_g7_s8_Vars) },
+        { SELF(Style_g7_s9_Name), SELF(Style_g7_s9_Vars) },
+        { SELF(Style_g7_s10_Name), SELF(Style_g7_s10_Vars) },
+        { SELF(Style_g7_s11_Name), SELF(Style_g7_s11_Vars) },
+        { SELF(Style_g7_s12_Name), SELF(Style_g7_s12_Vars) },
+        { SELF(Style_g7_s13_Name), SELF(Style_g7_s13_Vars) },
+        { SELF(Style_g7_s14_Name), SELF(Style_g7_s14_Vars) },
+        { SELF(Style_g7_s15_Name), SELF(Style_g7_s15_Vars) },
+        { SELF(Style_g7_s16_Name), SELF(Style_g7_s16_Vars) },
+        { SELF(Style_g7_s17_Name), SELF(Style_g7_s17_Vars) },
+        { SELF(Style_g7_s18_Name), SELF(Style_g7_s18_Vars) },
+        { SELF(Style_g7_s19_Name), SELF(Style_g7_s19_Vars) },
+        { SELF(Style_g7_s20_Name), SELF(Style_g7_s20_Vars) },
+        { SELF(Style_g7_s21_Name), SELF(Style_g7_s21_Vars) },
+        { SELF(Style_g7_s22_Name), SELF(Style_g7_s22_Vars) },
+        { SELF(Style_g7_s23_Name), SELF(Style_g7_s23_Vars) },
+        { SELF(Style_g7_s24_Name), SELF(Style_g7_s24_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g7_s24_Name = ALIGNED_STRING("70's Folk Music "),
+
+    .Style_g7_s23_Name = ALIGNED_STRING("Mariachi band   "),
+
+    .Style_g7_s22_Name = ALIGNED_STRING("Spanish Folklore"),
+
+    .Style_g7_s21_Name = ALIGNED_STRING("Kings of Gypsy  "),
+
+    .Style_g7_s20_Name = ALIGNED_STRING("Moscow At Night "),
+
+    .Style_g7_s19_Name = ALIGNED_STRING("Greek Dance     "),
+
+    .Style_g7_s18_Name = ALIGNED_STRING("Sounds of Dixie "),
+
+    .Style_g7_s17_Name = ALIGNED_STRING("New Orleans Jazz"),
+
+    .Style_g7_s16_Name = ALIGNED_STRING("Ragtime Band    "),
+
+    .Style_g7_s15_Name = ALIGNED_STRING("Old Ragtime     "),
+
+    .Style_g7_s14_Name = ALIGNED_STRING("Hawaiian Dance  "),
+
+    .Style_g7_s13_Name = ALIGNED_STRING("Island Romance  "),
+
+    .Style_g7_s12_Name = ALIGNED_STRING("German Waltz    "),
+
+    .Style_g7_s11_Name = ALIGNED_STRING("East Euro Waltz "),
+
+    .Style_g7_s10_Name = ALIGNED_STRING("Munich Waltz    "),
+
+    .Style_g7_s9_Name = ALIGNED_STRING("3/4 Concert Time"),
+
+    .Style_g7_s8_Name = ALIGNED_STRING("Highland Dance  "),
+
+    .Style_g7_s7_Name = ALIGNED_STRING("Ceilidh Band    "),
+
+    .Style_g7_s6_Name = ALIGNED_STRING("German Polka    "),
+
+    .Style_g7_s5_Name = ALIGNED_STRING("Modern Polka    "),
+
+    .Style_g7_s4_Name = ALIGNED_STRING("Standard Polka  "),
+
+    .Style_g7_s3_Name = ALIGNED_STRING("Musikantenstadl "),
+
+    .Style_g7_s2_Name = ALIGNED_STRING("German Tradition"),
+
+    .Style_g7_s1_Name = ALIGNED_STRING("Sousa Marches   "),
+
+    .Style_g7_s0_Name = ALIGNED_STRING("Stadium Events  "),
+
+    .StyleGroup8_Styles = {
+        { SELF(Style_g8_s0_Name), SELF(Style_g8_s0_Vars) },
+        { SELF(Style_g8_s1_Name), SELF(Style_g8_s1_Vars) },
+        { SELF(Style_g8_s2_Name), SELF(Style_g8_s2_Vars) },
+        { SELF(Style_g8_s3_Name), SELF(Style_g8_s3_Vars) },
+        { SELF(Style_g8_s4_Name), SELF(Style_g8_s4_Vars) },
+        { SELF(Style_g8_s5_Name), SELF(Style_g8_s5_Vars) },
+        { SELF(Style_g8_s6_Name), SELF(Style_g8_s6_Vars) },
+        { SELF(Style_g8_s7_Name), SELF(Style_g8_s7_Vars) },
+        { SELF(Style_g8_s8_Name), SELF(Style_g8_s8_Vars) },
+        { SELF(Style_g8_s9_Name), SELF(Style_g8_s9_Vars) },
+        { SELF(Style_g8_s10_Name), SELF(Style_g8_s10_Vars) },
+        { SELF(Style_g8_s11_Name), SELF(Style_g8_s11_Vars) },
+        { SELF(Style_g8_s12_Name), SELF(Style_g8_s12_Vars) },
+        { SELF(Style_g8_s13_Name), SELF(Style_g8_s13_Vars) },
+        { SELF(Style_g8_s14_Name), SELF(Style_g8_s14_Vars) },
+        { SELF(Style_g8_s15_Name), SELF(Style_g8_s15_Vars) },
+        { SELF(Style_g8_s16_Name), SELF(Style_g8_s16_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g8_s16_Name = ALIGNED_STRING("Country Hits    "),
+
+    .Style_g8_s15_Name = ALIGNED_STRING("New Country Rock"),
+
+    .Style_g8_s14_Name = ALIGNED_STRING("Old Country Hits"),
+
+    .Style_g8_s13_Name = ALIGNED_STRING("EZ Country Rock "),
+
+    .Style_g8_s12_Name = ALIGNED_STRING("Modern Country  "),
+
+    .Style_g8_s11_Name = ALIGNED_STRING("Country Love    "),
+
+    .Style_g8_s10_Name = ALIGNED_STRING("Country 88      "),
+
+    .Style_g8_s9_Name = ALIGNED_STRING("Country Folks   "),
+
+    .Style_g8_s8_Name = ALIGNED_STRING("Western Ballads "),
+
+    .Style_g8_s7_Name = ALIGNED_STRING("Country Romance "),
+
+    .Style_g8_s6_Name = ALIGNED_STRING("70's Country Pop"),
+
+    .Style_g8_s5_Name = ALIGNED_STRING("Hillbilly Blues "),
+
+    .Style_g8_s4_Name = ALIGNED_STRING("Country Dance   "),
+
+    .Style_g8_s3_Name = ALIGNED_STRING("Trucker Country "),
+
+    .Style_g8_s2_Name = ALIGNED_STRING("Kentucky Blue   "),
+
+    .Style_g8_s1_Name = ALIGNED_STRING("Modern Hoedown  "),
+
+    .Style_g8_s0_Name = ALIGNED_STRING("Bluegrass Time  "),
+
+    .StyleGroup9_Styles = {
+        { SELF(Style_g9_s0_Name), SELF(Style_g9_s0_Vars) },
+        { SELF(Style_g9_s1_Name), SELF(Style_g9_s1_Vars) },
+        { SELF(Style_g9_s2_Name), SELF(Style_g9_s2_Vars) },
+        { SELF(Style_g9_s3_Name), SELF(Style_g9_s3_Vars) },
+        { SELF(Style_g9_s4_Name), SELF(Style_g9_s4_Vars) },
+        { SELF(Style_g9_s5_Name), SELF(Style_g9_s5_Vars) },
+        { SELF(Style_g9_s6_Name), SELF(Style_g9_s6_Vars) },
+        { SELF(Style_g9_s7_Name), SELF(Style_g9_s7_Vars) },
+        { SELF(Style_g9_s8_Name), SELF(Style_g9_s8_Vars) },
+        { SELF(Style_g9_s9_Name), SELF(Style_g9_s9_Vars) },
+        { SELF(Style_g9_s10_Name), SELF(Style_g9_s10_Vars) },
+        { SELF(Style_g9_s11_Name), SELF(Style_g9_s11_Vars) },
+        { SELF(Style_g9_s12_Name), SELF(Style_g9_s12_Vars) },
+        { SELF(Style_g9_s13_Name), SELF(Style_g9_s13_Vars) },
+        { SELF(Style_g9_s14_Name), SELF(Style_g9_s14_Vars) },
+        { SELF(Style_g9_s15_Name), SELF(Style_g9_s15_Vars) },
+        { SELF(Style_g9_s16_Name), SELF(Style_g9_s16_Vars) },
+        { SELF(Style_g9_s17_Name), SELF(Style_g9_s17_Vars) },
+        { SELF(Style_g9_s18_Name), SELF(Style_g9_s18_Vars) },
+        { SELF(Style_g9_s19_Name), SELF(Style_g9_s19_Vars) },
+        { SELF(Style_g9_s20_Name), SELF(Style_g9_s20_Vars) },
+        { SELF(Style_g9_s21_Name), SELF(Style_g9_s21_Vars) },
+        { SELF(Style_g9_s22_Name), SELF(Style_g9_s22_Vars) },
+        { SELF(Style_g9_s23_Name), SELF(Style_g9_s23_Vars) },
+        { SELF(Style_g9_s24_Name), SELF(Style_g9_s24_Vars) },
+        { SELF(Style_g9_s25_Name), SELF(Style_g9_s25_Vars) },
+        { SELF(Style_g9_s26_Name), SELF(Style_g9_s26_Vars) },
+        { SELF(Style_g9_s27_Name), SELF(Style_g9_s27_Vars) },
+        { SELF(Style_g9_s28_Name), SELF(Style_g9_s28_Vars) },
+        { 0, 0 },
+    },
+
+    .Style_g9_s28_Name = ALIGNED_STRING("Jamaican Swing  "),
+
+    .Style_g9_s27_Name = ALIGNED_STRING("Synth Reggae    "),
+
+    .Style_g9_s26_Name = ALIGNED_STRING("Talempong       "),
+
+    .Style_g9_s25_Name = ALIGNED_STRING("Dangdut         "),
+
+    .Style_g9_s24_Name = ALIGNED_STRING("Indonesian Folk "),
+
+    .Style_g9_s23_Name = ALIGNED_STRING("Samba Fusion    "),
+
+    .Style_g9_s22_Name = ALIGNED_STRING("Modern Samba    "),
+
+    .Style_g9_s21_Name = ALIGNED_STRING("Modern Caribbean"),
+
+    .Style_g9_s20_Name = ALIGNED_STRING("Samba Amor      "),
+
+    .Style_g9_s19_Name = ALIGNED_STRING("Salsa Picante   "),
+
+    .Style_g9_s18_Name = ALIGNED_STRING("Caribbean Nights"),
+
+    .Style_g9_s17_Name = ALIGNED_STRING("Castanet Dance  "),
+
+    .Style_g9_s16_Name = ALIGNED_STRING("Modern Rio      "),
+
+    .Style_g9_s15_Name = ALIGNED_STRING("Latin Festival  "),
+
+    .Style_g9_s14_Name = ALIGNED_STRING("Samba Parade    "),
+
+    .Style_g9_s13_Name = ALIGNED_STRING("Holiday Mood    "),
+
+    .Style_g9_s12_Name = ALIGNED_STRING("Cumbia Band     "),
+
+    .Style_g9_s11_Name = ALIGNED_STRING("It's Mambo Time!"),
+
+    .Style_g9_s10_Name = ALIGNED_STRING("New Mambo Mood  "),
+
+    .Style_g9_s9_Name = ALIGNED_STRING("Mambo Band      "),
+
+    .Style_g9_s8_Name = ALIGNED_STRING("Tito's Cha Cha  "),
+
+    .Style_g9_s7_Name = ALIGNED_STRING("Latin Lounge Bar"),
+
+    .Style_g9_s6_Name = ALIGNED_STRING("Romantic Dance  "),
+
+    .Style_g9_s5_Name = ALIGNED_STRING("Romantic Beguine"),
+
+    .Style_g9_s4_Name = ALIGNED_STRING("Cocktail Pianist"),
+
+    .Style_g9_s3_Name = ALIGNED_STRING("Rhumba Espana   "),
+
+    .Style_g9_s2_Name = ALIGNED_STRING("Mellow Bossa    "),
+
+    .Style_g9_s1_Name = ALIGNED_STRING("Bossa Pianist   "),
+
+    .Style_g9_s0_Name = ALIGNED_STRING("Romantic Bossa  "),
+
+    .StyleBrowser_Groups = {
+        { SELF(StyleGroup0_Name), SELF(StyleGroup0_Styles) },
+        { SELF(StyleGroup1_Name), SELF(StyleGroup1_Styles) },
+        { SELF(StyleGroup2_Name), SELF(StyleGroup2_Styles) },
+        { SELF(StyleGroup3_Name), SELF(StyleGroup3_Styles) },
+        { SELF(StyleGroup4_Name), SELF(StyleGroup4_Styles) },
+        { SELF(StyleGroup5_Name), SELF(StyleGroup5_Styles) },
+        { SELF(StyleGroup6_Name), SELF(StyleGroup6_Styles) },
+        { SELF(StyleGroup7_Name), SELF(StyleGroup7_Styles) },
+        { SELF(StyleGroup8_Name), SELF(StyleGroup8_Styles) },
+        { SELF(StyleGroup9_Name), SELF(StyleGroup9_Styles) },
+    },
+
+    .StyleGroup9_Name = ALIGNED_STRING("Latin / World   "),
+
+    .StyleGroup8_Name = ALIGNED_STRING("Country         "),
+
+    .StyleGroup7_Name = ALIGNED_STRING("Trad & Folk     "),
+
+    .StyleGroup6_Name = ALIGNED_STRING("Show/Trad Dance "),
+
+    .StyleGroup5_Name = ALIGNED_STRING("Jazz & Swing    "),
+
+    .StyleGroup4_Name = ALIGNED_STRING("Gospel/Blues/R&B"),
+
+    .StyleGroup3_Name = ALIGNED_STRING("Party Music     "),
+
+    .StyleGroup2_Name = ALIGNED_STRING("Dance Pop       "),
+
+    .StyleGroup1_Name = ALIGNED_STRING("Rock & Pop      "),
+
+    .StyleGroup0_Name = ALIGNED_STRING("Easy Listening  "),
 
     .field_18bea = 0x0a09,
 

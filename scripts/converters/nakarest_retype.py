@@ -1246,6 +1246,39 @@ def _group_text(m, kind, r, ks, starts):
                 % ('s' if len(ks) > 1 else '', 'ies' if len(ks) > 1 else 'y', _ranges(ks),
                    _reg_short(r), ' (names for %s slot 0x%X)' % (CLS_NAME[par['cls']], par['slot'])
                    if par else '', shown))
+    if kind in ('sbroot', 'sbgname', 'sbgroup', 'sbsname', 'sbvar', 'sbtitle'):
+        R0 = r['table']
+        if kind == 'sbroot':
+            return ('the root of the MstStyle browser tree (0x%06X): 10 x {u32 group name, '
+                    'u32 group table}.  MstStyle1_EventDispatch, MstStyle1Sub_HandleSubSelect '
+                    'and MstStyle1Page_EventDispatch load (index*8)+4 -- the group table -- '
+                    'through the label 4 bytes into it (StyleGroup_LatinDance_Table) and store '
+                    'it at 0x0340D2; MstStyle1Grid_CellSelect and MstStyle2_NameB_Render load '
+                    '+0, the name, through StyleGroup_LatinWorld_PairTable_0x2FA (= this '
+                    'address).' % R0)
+        if kind == 'sbgname':
+            return ('group name string%s (16 characters): %s.' % (
+                's' if len(starts) > 1 else '', ', '.join('"%s"' % m.string_at(a).strip() for a in starts)))
+        if kind == 'sbgroup':
+            return ('group table%s of the MstStyle browser, group%s %s: {u32 style name, u32 '
+                    'variation table} x n + an all-zero entry; MstStyle*_CountEntries walk it 8 '
+                    'bytes at a time until +0 is 0, the grid routines Strcpy +0 and pad it to '
+                    '16 with Strncat, and +4 goes to 0x0340D6.' % (
+                        's' if len(ks) > 1 else '', 's' if len(ks) > 1 else '', _ranges(ks)))
+        if kind == 'sbsname':
+            return ('style name string%s (16 characters): %s.' % (
+                's' if len(starts) > 1 else '',
+                ', '.join('"%s"' % m.string_at(a).strip() for a in starts[:6]) +
+                (', ...' if len(starts) > 6 else '')))
+        if kind == 'sbvar':
+            return ('variation table%s of %d style%s: {u32 title, u16 id} x n + an all-zero '
+                    'entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a '
+                    'time from 0x0340D6 by the MstStyle2_* count loops.' % (
+                        's' if len(starts) > 1 else '', len(starts), 's' if len(starts) > 1 else ''))
+        return ('variation title%s (32 characters + NUL + 0xFF, the StyleSong_Titles '
+                'layout): %s.' % ('s' if len(starts) > 1 else '',
+                                  '; '.join('"%s"' % ' '.join(m.string_at(a, 34).split())
+                                            for a in starts[:4]) + ('; ...' if len(starts) > 4 else '')))
     if kind == 'msgcat':
         return ('the IvMesage message catalog itself (0x%06X): %d records x 14 bytes '
                 '{u16 kind, u32 code 0x00NNFFFF (NN = the error number shown; 0xFFFFFFFF '
@@ -1367,7 +1400,8 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
         # a record's texts belong to its run (records and the strings they
         # point at alternate); so do a class table's definitions
         key = ({'text': 'record', 'msglang': 'msg', 'msgstr': 'msg', 'msgcat': 'msgc',
-                'msgwin': 'msgc'}.get(kind, kind), r['slot'])
+                'msgwin': 'msgc', 'sbvar': 'sbv', 'sbtitle': 'sbv', 'sbsname': 'sbg',
+                'sbgroup': 'sbg', 'sbroot': 'sbr', 'sbgname': 'sbr'}.get(kind, kind), r['slot'])
         if key != prev:
             cuts.add(off)
         prev = key

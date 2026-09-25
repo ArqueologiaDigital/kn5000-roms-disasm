@@ -123,6 +123,7 @@ class Map:
         self._index()
         self.index_texts()
         self.index_message_catalog()
+        self.index_style_browser()
 
     # ---------------------------------------------------------------- source
     def _val(self, tok):
@@ -284,8 +285,15 @@ class Map:
         if kind == 'record':
             c = self.record_class(a)
             return c['allsize'] if c else 0
-        if kind in ('name', 'classname', 'classsig', 'text', 'msgstr'):
+        if kind in ('name', 'classname', 'classsig', 'text', 'msgstr', 'sbgname', 'sbsname',
+                    'sbtitle'):
             return self.strlen_even(a)
+        if kind == 'sbroot':
+            return 80
+        if kind == 'sbgroup':
+            return 8 * (self.sb_info[a] + 1)
+        if kind == 'sbvar':
+            return 6 * (self.sb_info[a] + 1)
         if kind == 'msgcat':
             return 14 * (r['count'] + 1)
         if kind == 'msgwin':
@@ -365,6 +373,42 @@ class Map:
                 sa = self.u32(t + 4 * i)
                 if self.inrom(sa):
                     self.addr.setdefault(sa, []).append(('msgstr', r, (t, i)))
+
+    def index_style_browser(self):
+        """The MstStyle browser tree (not registered; found from its readers
+        in ui/ui_mode_handlers.s): a root of 10 x {u32 group name, u32 group
+        table} -- MstStyle1_EventDispatch & co. load (index*8)+4 through the
+        label 4 bytes into it, MstStyle1Grid_CellSelect / MstStyle2_NameB_Render
+        load +0 through the positional name ..._0x2FA; each group table is
+        {u32 style name, u32 variation table} x n + an all-zero entry
+        (MstStyle*_CountEntries walk it 8 bytes at a time until +0 is 0); each
+        variation table is {u32 title, u16 id} x n + an all-zero entry (the
+        MstStyle2 count loops walk 6 bytes at a time into 0x0340D6)."""
+        a = self.sym.get('StyleGroup_LatinDance_Table')
+        if a is None:
+            return
+        root = a - 4
+        r = dict(cls='sb', slot=0xF0001, table=root, count=10, init='MstStyle1_EventDispatch',
+                 file='', desc='the MstStyle browser tree (root 0x%06X, 10 groups)' % root)
+        self.sb = r
+        self.sb_info = {}
+        self.addr.setdefault(root, []).append(('sbroot', r, None))
+        for g in range(10):
+            nm, gp = self.u32(root + 8 * g), self.u32(root + 8 * g + 4)
+            self.addr.setdefault(nm, []).append(('sbgname', r, g))
+            self.addr.setdefault(gp, []).append(('sbgroup', r, g))
+            k = 0
+            while self.u32(gp + 8 * k):
+                sn, vt = self.u32(gp + 8 * k), self.u32(gp + 8 * k + 4)
+                self.addr.setdefault(sn, []).append(('sbsname', r, (g, k)))
+                self.addr.setdefault(vt, []).append(('sbvar', r, (g, k)))
+                j = 0
+                while self.u32(vt + 6 * j):
+                    self.addr.setdefault(self.u32(vt + 6 * j), []).append(('sbtitle', r, (g, k, j)))
+                    j += 1
+                self.sb_info[vt] = j
+                k += 1
+            self.sb_info[gp] = k
 
     def klass(self, cid):
         """The class definition for a class id 0x016S_KKKK: table of Class
