@@ -1,6 +1,11 @@
 ; =============================================================================
 ; Character Map Mode Dispatch Table
 ; 42 entries mapping mode indices to CharMap handler routines
+; Correction (2026-09-25): the entries are the 128-byte byte maps in
+; ui_widgets/widget_dispatch.s (CharMap_DefaultIdentity .. CharMap_Mode22),
+; not routines.  Nothing in the v10, sub-CPU, table-data, custom-data or
+; HD-AE5000 images points at this table (32-bit word scan) and no instruction
+; operand in 0xEF0200-0xEF03FF names it, so its reader is not established.
 ; Extracted from kn5000_v10_program.s
 ; =============================================================================
 CharMap_ModeDispatchTable:
