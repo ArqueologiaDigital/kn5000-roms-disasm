@@ -696,7 +696,7 @@ sub_FAD4FE__FAD54E:
 	unlk32 xiz                                 ; FAD55E  unlk XIZ
 	ret                                        ; FAD560  ret
 ; --------------------------------------------------------------------------
-; sub_FAD561 -- 0xFAD561..0xFAD5C1 (97 bytes)
+; Scale7Bit_ByDepth_UniOrBipolar_x25 -- 0xFAD561..0xFAD5C1 (97 bytes)
 ;
 ; Called from: 6 site(s) outside this module:
 ;          0xFBEBC2 in sub_FBDCD3__FBEBB9, 0xFBEC1C in sub_FBDCD3__FBEC13
@@ -713,14 +713,19 @@ sub_FAD4FE__FAD54E:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Scale7Bit_ByDepth_UniOrBipolar_x25.
+; Scale7Bit_ByDepth_UniOrBipolar's arithmetic with x25 in place of x32: bit 7 of
+; record +1 picks the arm (0xFAD56C); bipolar (v*25 - 0x640) / 63 or / 64
+; (0xFAD576-0xFAD594), unipolar v*25 / 127 (0xFAD5A1, 0xFAD5A9); then * record +2
+; >> 6 (0xFAD5B2, 0xFAD5BB).  So 0..25, or about -25..+25, scaled by the depth byte.
 ; --------------------------------------------------------------------------
-sub_FAD561:
+Scale7Bit_ByDepth_UniOrBipolar_x25:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD561  link XIZ,0x0000
 	pushw	hl                                   ; FAD565  push HL
 	ld	xbc, (xiz+10)                           ; FAD566  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+1)                              ; FAD569  ld A,(XBC+0x01)
 	and	a, 0x80                                ; FAD56C  and A,0x80
-	jr z, sub_FAD561__FAD59C                   ; FAD56F  jr Z,0xfad59c
+	jr z, Scale7Bit_ByDepth_UniOrBipolar_x25__FAD59C                   ; FAD56F  jr Z,0xfad59c
 	ld	wa, (xiz+8)                             ; FAD571  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAD574  extz WA
 	muls	wa, 25                                ; FAD576  muls WA,0x0019
@@ -728,18 +733,18 @@ sub_FAD561:
 	sub	wa, 0x640                              ; FAD57C  sub WA,0x0640
 	ld	hl, wa                                  ; FAD580  ld HL,WA
 	cp	wa, 0:i3                                  ; FAD582  cp WA,0
-	jr le, sub_FAD561__FAD590                  ; FAD584  jr LE,0xfad590
+	jr le, Scale7Bit_ByDepth_UniOrBipolar_x25__FAD590                  ; FAD584  jr LE,0xfad590
 	exts	xwa                                   ; FAD586  exts XWA
 	divs	wa, 63                                ; FAD588  divs WA,0x003f
 	ld	hl, wa                                  ; FAD58C  ld HL,WA
-	jr sub_FAD561__FAD5AF                      ; FAD58E  jr T,0xfad5af
-sub_FAD561__FAD590:
+	jr Scale7Bit_ByDepth_UniOrBipolar_x25__FAD5AF                      ; FAD58E  jr T,0xfad5af
+Scale7Bit_ByDepth_UniOrBipolar_x25__FAD590:
 	ld	bc, hl                                  ; FAD590  ld BC,HL
 	exts	xbc                                   ; FAD592  exts XBC
 	divs	bc, 64                                ; FAD594  divs BC,0x0040
 	ld	hl, bc                                  ; FAD598  ld HL,BC
-	jr sub_FAD561__FAD5AF                      ; FAD59A  jr T,0xfad5af
-sub_FAD561__FAD59C:
+	jr Scale7Bit_ByDepth_UniOrBipolar_x25__FAD5AF                      ; FAD59A  jr T,0xfad5af
+Scale7Bit_ByDepth_UniOrBipolar_x25__FAD59C:
 	ld	bc, (xiz+8)                             ; FAD59C  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD59F  extz BC
 	muls	bc, 25                                ; FAD5A1  muls BC,0x0019
@@ -747,7 +752,7 @@ sub_FAD561__FAD59C:
 	exts	xbc                                   ; FAD5A7  exts XBC
 	divs	bc, 0x7F                              ; FAD5A9  divs BC,0x007f
 	ld	hl, bc                                  ; FAD5AD  ld HL,BC
-sub_FAD561__FAD5AF:
+Scale7Bit_ByDepth_UniOrBipolar_x25__FAD5AF:
 	ld	xbc, (xiz+10)                           ; FAD5AF  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+2)                              ; FAD5B2  ld A,(XBC+0x02)
 	extz	wa                                    ; FAD5B5  extz WA
@@ -4630,7 +4635,7 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8:
 	unlk32 xiz                                 ; FAEACB  unlk XIZ
 	ret                                        ; FAEACD  ret
 ; --------------------------------------------------------------------------
-; sub_FAEACE -- 0xFAEACE..0xFAEAF8 (43 bytes)
+; PartRec_ApplyParam_0001 -- 0xFAEACE..0xFAEAF8 (43 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -4645,8 +4650,13 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): PartRec_ApplyParam_0001 -- scales its value with
+; Scale7Bit_ByDepth_UniOrBipolar (0xFAEADC) and stores it with
+; PartRec_SetFittingOffset_0001 (0xFAEAED).  Reached from entry 27 of
+; Voice_ApplyParamChange_Dispatch's table (arm 0xFAF238).  Framed by the offset,
+; as PartRec_ApplyParam_0023 and its siblings are.
 ; --------------------------------------------------------------------------
-sub_FAEACE:
+PartRec_ApplyParam_0001:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEACE  link XIZ,0x0000
 	pushw	hl                                   ; FAEAD2  push HL
 	ld	xbc, (xiz+12)                           ; FAEAD3  ld XBC,(XIZ+0x0c)
@@ -4817,7 +4827,7 @@ sub_FAEB65__FAEBCC:
 ;          0xFAF26A
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD561 = sub_FAD561, 0xFB3CE0 = VoiceQuery_Tag00_Part
+; Calls:   0xFAD561 = Scale7Bit_ByDepth_UniOrBipolar_x25, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ;          0xFC5EFB = PartRec_SetMovementDepth_0007, 0xFC6027 = Pack104_RefreshMovementDepth_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEBD1-0xFAEC20
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -4835,7 +4845,7 @@ sub_FAEBD1:
 	push	xbc                                   ; FAEBDA  push XBC
 	push	0                                     ; FAEBDB  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FAEBDD  push (XIZ+0x0a)
-	calr sub_FAD561                 ; FAEBE0  calr 0xfad561
+	calr Scale7Bit_ByDepth_UniOrBipolar_x25                 ; FAEBE0  calr 0xfad561
 	ld	hl, wa                                  ; FAEBE3  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEBE5  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FAEBE8  ld A,(XBC)
@@ -4868,14 +4878,14 @@ sub_FAEBD1__FAEC1C:
 	unlk32 xiz                                 ; FAEC1E  unlk XIZ
 	ret                                        ; FAEC20  ret
 ; --------------------------------------------------------------------------
-; sub_FAEC21 -- 0xFAEC21..0xFAEC70 (80 bytes)
+; PartRec_ApplyParam_0009 -- 0xFAEC21..0xFAEC70 (80 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF278
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD561 = sub_FAD561, 0xFB3CE0 = VoiceQuery_Tag00_Part
+; Calls:   0xFAD561 = Scale7Bit_ByDepth_UniOrBipolar_x25, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ;          0xFC6175 = PartRec_SetMovementRate_0009, 0xFC629B = Pack104_RefreshMovementRate_ForVoice
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEC21-0xFAEC70
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -4884,8 +4894,12 @@ sub_FAEBD1__FAEC1C:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): PartRec_ApplyParam_0009 -- scales with
+; Scale7Bit_ByDepth_UniOrBipolar_x25 (0xFAEC30), stores with
+; PartRec_SetMovementRate_0009 (0xFAEC41), then for each voice of the part calls
+; Pack104_RefreshMovementRate_ForVoice (0xFAEC63).  Entry 32 (arm 0xFAF270).
 ; --------------------------------------------------------------------------
-sub_FAEC21:
+PartRec_ApplyParam_0009:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEC21  link XIZ,0x0000
 	pushw	hl                                   ; FAEC25  push HL
 	push	xix                                   ; FAEC26  push XIX
@@ -4893,7 +4907,7 @@ sub_FAEC21:
 	push	xbc                                   ; FAEC2A  push XBC
 	push	0                                     ; FAEC2B  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FAEC2D  push (XIZ+0x0a)
-	calr sub_FAD561                 ; FAEC30  calr 0xfad561
+	calr Scale7Bit_ByDepth_UniOrBipolar_x25                 ; FAEC30  calr 0xfad561
 	ld	hl, wa                                  ; FAEC33  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEC35  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FAEC38  ld A,(XBC)
@@ -4910,23 +4924,23 @@ sub_FAEC21:
 	ld	xix, xiy                                ; FAEC52  ld XIX,XIY
 	inc	8, xsp                                 ; FAEC54  inc 0,XSP
 	inc	6, xsp                                 ; FAEC56  inc 6,XSP
-sub_FAEC21__FAEC58:
+PartRec_ApplyParam_0009__FAEC58:
 	ld	h, (xix)                                ; FAEC58  ld H,(XIX)
 	cp	h, 64                                   ; FAEC5A  cp H,0x40
-	jr nc, sub_FAEC21__FAEC6C                  ; FAEC5D  jr NC,0xfaec6c
+	jr nc, PartRec_ApplyParam_0009__FAEC6C                  ; FAEC5D  jr NC,0xfaec6c
 	push	0                                     ; FAEC5F  push 0x00
 	push	h                                     ; FAEC61  push H
 	call	Pack104_RefreshMovementRate_ForVoice                              ; FAEC63  call 0xfc629b
 	inc	1, xix                                 ; FAEC67  inc 1,XIX
 	popw	bc                                    ; FAEC69  pop BC
-	jr sub_FAEC21__FAEC58                      ; FAEC6A  jr T,0xfaec58
-sub_FAEC21__FAEC6C:
+	jr PartRec_ApplyParam_0009__FAEC58                      ; FAEC6A  jr T,0xfaec58
+PartRec_ApplyParam_0009__FAEC6C:
 	pop	xix                                    ; FAEC6C  pop XIX
 	popw	hl                                    ; FAEC6D  pop HL
 	unlk32 xiz                                 ; FAEC6E  unlk XIZ
 	ret                                        ; FAEC70  ret
 ; --------------------------------------------------------------------------
-; sub_FAEC71 -- 0xFAEC71..0xFAEC9B (43 bytes)
+; PartRec_ApplyParam_000B -- 0xFAEC71..0xFAEC9B (43 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -4941,8 +4955,11 @@ sub_FAEC21__FAEC6C:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): PartRec_ApplyParam_000B -- scales with
+; Scale7Bit_ByDepth_UniOrBipolar (0xFAEC7F) and stores with
+; PartRec_SetMutingOffset_000B.  Entry 34 (arm 0xFAF27E).
 ; --------------------------------------------------------------------------
-sub_FAEC71:
+PartRec_ApplyParam_000B:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEC71  link XIZ,0x0000
 	pushw	hl                                   ; FAEC75  push HL
 	ld	xbc, (xiz+12)                           ; FAEC76  ld XBC,(XIZ+0x0c)
@@ -4964,7 +4981,7 @@ sub_FAEC71:
 	unlk32 xiz                                 ; FAEC99  unlk XIZ
 	ret                                        ; FAEC9B  ret
 ; --------------------------------------------------------------------------
-; sub_FAEC9C -- 0xFAEC9C..0xFAECC6 (43 bytes)
+; PartRec_ApplyParam_000D -- 0xFAEC9C..0xFAECC6 (43 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -4979,8 +4996,11 @@ sub_FAEC71:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): PartRec_ApplyParam_000D -- scales with
+; Scale7Bit_ByDepth_UniOrBipolar (0xFAECAA) and stores with
+; PartRec_SetTuningOffset_000D (0xFAECBB).  Entry 35 (arm 0xFAF28C).
 ; --------------------------------------------------------------------------
-sub_FAEC9C:
+PartRec_ApplyParam_000D:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEC9C  link XIZ,0x0000
 	pushw	hl                                   ; FAECA0  push HL
 	ld	xbc, (xiz+12)                           ; FAECA1  ld XBC,(XIZ+0x0c)
@@ -5080,7 +5100,7 @@ sub_FAECC7__FAED2E:
 ;          0xFAF2B0
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD561 = sub_FAD561
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD561 = Scale7Bit_ByDepth_UniOrBipolar_x25
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAED33-0xFAED75
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -5110,7 +5130,7 @@ PartRec_ApplyParam_0023:
 	push	xbc                                   ; FAED3B  push XBC
 	push	0                                     ; FAED3C  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FAED3E  push (XIZ+0x0a)
-	calr sub_FAD561                 ; FAED41  calr 0xfad561
+	calr Scale7Bit_ByDepth_UniOrBipolar_x25                 ; FAED41  calr 0xfad561
 	ld	hl, wa                                  ; FAED44  ld HL,WA
 	ld	bc, (xiz+8)                             ; FAED46  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAED49  extz BC
@@ -5771,10 +5791,10 @@ sub_FAF00C:
 ;          0xFAE1B2 = PartRec_ApplyParam_001F, 0xFAE34A = Voice_Restage_Reg0440_BaseCurve_ForPart
 ;          0xFAE484 = Voice_Restage_Reg0440_ValueCurve_ForPart, 0xFAE5C7 = Voice_Restage_Reg0180_BaseCurve_ForPart
 ;          0xFAE703 = Voice_Restage_Reg0180_ValueCurve_ForPart, 0xFAE848 = Voice_Restage_Reg04C0_BaseCurve_ForPart
-;          0xFAE986 = Voice_Restage_Reg04C0_ValueCurve_ForPart, 0xFAEACE = sub_FAEACE
+;          0xFAE986 = Voice_Restage_Reg04C0_ValueCurve_ForPart, 0xFAEACE = PartRec_ApplyParam_0001
 ;          0xFAEAF9 = sub_FAEAF9, 0xFAEB65 = sub_FAEB65
-;          0xFAEBD1 = sub_FAEBD1, 0xFAEC21 = sub_FAEC21
-;          0xFAEC71 = sub_FAEC71, 0xFAEC9C = sub_FAEC9C
+;          0xFAEBD1 = sub_FAEBD1, 0xFAEC21 = PartRec_ApplyParam_0009
+;          0xFAEC71 = PartRec_ApplyParam_000B, 0xFAEC9C = PartRec_ApplyParam_000D
 ;          0xFAECC7 = sub_FAECC7, 0xFAED33 = PartRec_ApplyParam_0023
 ;          0xFAED76 = PartRec_ApplyParam_0025, 0xFAEDC4 = PartRec_ApplyParam_0027
 ;          0xFAEE07 = PartRec_ApplyParam_0029, 0xFAEE4A = PartRec_ApplyParam_002B
@@ -6055,7 +6075,7 @@ Voice_ApplyParamChange_Dispatch__FAF238:
 	pushw	bc                                   ; FAF23B  push BC
 	push	0                                     ; FAF23C  push 0x00
 	push	h                                     ; FAF23E  push H
-	calr sub_FAEACE                 ; FAF240  calr 0xfaeace
+	calr PartRec_ApplyParam_0001                 ; FAF240  calr 0xfaeace
 	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF243  jrl T,0xfaf31b
 Voice_ApplyParamChange_Dispatch__FAF246:
 	push	xix                                   ; FAF246  push XIX
@@ -6087,7 +6107,7 @@ Voice_ApplyParamChange_Dispatch__FAF270:
 	pushw	bc                                   ; FAF273  push BC
 	push	0                                     ; FAF274  push 0x00
 	push	h                                     ; FAF276  push H
-	calr sub_FAEC21                 ; FAF278  calr 0xfaec21
+	calr PartRec_ApplyParam_0009                 ; FAF278  calr 0xfaec21
 	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF27B  jrl T,0xfaf31b
 Voice_ApplyParamChange_Dispatch__FAF27E:
 	push	xix                                   ; FAF27E  push XIX
@@ -6095,7 +6115,7 @@ Voice_ApplyParamChange_Dispatch__FAF27E:
 	pushw	bc                                   ; FAF281  push BC
 	push	0                                     ; FAF282  push 0x00
 	push	h                                     ; FAF284  push H
-	calr sub_FAEC71                 ; FAF286  calr 0xfaec71
+	calr PartRec_ApplyParam_000B                 ; FAF286  calr 0xfaec71
 	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF289  jrl T,0xfaf31b
 Voice_ApplyParamChange_Dispatch__FAF28C:
 	push	xix                                   ; FAF28C  push XIX
@@ -6103,7 +6123,7 @@ Voice_ApplyParamChange_Dispatch__FAF28C:
 	pushw	bc                                   ; FAF28F  push BC
 	push	0                                     ; FAF290  push 0x00
 	push	h                                     ; FAF292  push H
-	calr sub_FAEC9C                 ; FAF294  calr 0xfaec9c
+	calr PartRec_ApplyParam_000D                 ; FAF294  calr 0xfaec9c
 	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF297  jrl T,0xfaf31b
 Voice_ApplyParamChange_Dispatch__FAF29A:
 	push	xix                                   ; FAF29A  push XIX

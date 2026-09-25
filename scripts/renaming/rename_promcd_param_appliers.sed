@@ -1,0 +1,5 @@
+s/sub_FAD561/Scale7Bit_ByDepth_UniOrBipolar_x25/g
+s/sub_FAEACE/PartRec_ApplyParam_0001/g
+s/sub_FAEC21/PartRec_ApplyParam_0009/g
+s/sub_FAEC71/PartRec_ApplyParam_000B/g
+s/sub_FAEC9C/PartRec_ApplyParam_000D/g

@@ -5586,7 +5586,7 @@ sub_FC578C__FC589A:
 ; PartRec_SetFittingOffset_0001 -- 0xFC589E..0xFC59EE (337 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEAED in sub_FAEACE, 0xFB659F in PartRec_ResetToDefaults
+;          0xFAEAED in PartRec_ApplyParam_0001, 0xFB659F in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC589E-0xFC59EE
@@ -6698,7 +6698,7 @@ Pack104_RefreshMovementDepth_ForVoice__FC616F:
 ; PartRec_SetMovementRate_0009 -- 0xFC6175..0xFC629A (294 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEC41 in sub_FAEC21, 0xFB65C9 in PartRec_ResetToDefaults
+;          0xFAEC41 in PartRec_ApplyParam_0009, 0xFB65C9 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC6175-0xFC629A
@@ -6856,7 +6856,7 @@ PartRec_SetMovementRate_0009__FC6280:
 ; Pack104_RefreshMovementRate_ForVoice -- 0xFC629B..0xFC63EB (337 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFAEC63 in sub_FAEC21__FAEC58
+;          0xFAEC63 in PartRec_ApplyParam_0009__FAEC58
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00E084, 0x00E086
 ;          reads 0x00E082
@@ -7022,7 +7022,7 @@ Pack104_RefreshMovementRate_ForVoice__FC63E6:
 ; PartRec_SetMutingOffset_000B -- 0xFC63EC..0xFC654E (355 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAEC90 in sub_FAEC71, 0xFB65D7 in PartRec_ResetToDefaults
+;          0xFAEC90 in PartRec_ApplyParam_000B, 0xFB65D7 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082, 0x00E084
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC63EC-0xFC654E
@@ -7195,7 +7195,7 @@ PartRec_SetMutingOffset_000B__FC6534:
 ; PartRec_SetTuningOffset_000D -- 0xFC654F..0xFC65EB (157 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAECBB in sub_FAEC9C, 0xFB65E5 in PartRec_ResetToDefaults
+;          0xFAECBB in PartRec_ApplyParam_000D, 0xFB65E5 in PartRec_ResetToDefaults
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x00E082
 ; Calls:   0xFC46A8 = Pack104_ComputeTuningWords_0040_0080

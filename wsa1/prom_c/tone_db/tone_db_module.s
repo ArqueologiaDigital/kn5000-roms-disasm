@@ -11296,7 +11296,7 @@ BitPair_TestAndEncode_Bits4to7__FBDCCF:
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x008829, 0x00882A, 0x00882D, 0x00882E, 0x008831, 0x008832, 0x008835, 0x008836, 0x008839, 0x00883A, 0x00883D, 0x00883E, 0x008841, 0x008842, 0x008845, 0x008846, 0x008849, 0x00884A, 0x00884D, 0x00884E, 0x008851, 0x008852, 0x008855, 0x008856
 ; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = Scale7Bit_ByDepth_UniOrBipolar_Shl2
-;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+;          0xFAD561 = Scale7Bit_ByDepth_UniOrBipolar_x25, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFBDA2C = sub_FBDA2C
@@ -12833,7 +12833,7 @@ sub_FBDCD3__FBEBB9:
 	push	xbc                                   ; FBEBBC  push XBC
 	push	0                                     ; FBEBBD  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEBBF  push (XIZ+0x0a)
-	call	sub_FAD561                              ; FBEBC2  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBEBC2  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEBC6  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEBC9  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEBCE  inc 6,XSP
@@ -12868,7 +12868,7 @@ sub_FBDCD3__FBEC13:
 	push	xbc                                   ; FBEC16  push XBC
 	push	0                                     ; FBEC17  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEC19  push (XIZ+0x0a)
-	call	sub_FAD561                              ; FBEC1C  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBEC1C  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEC20  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEC23  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEC28  inc 6,XSP
@@ -13038,7 +13038,7 @@ sub_FBDCD3__FBEDDD:
 	push	xbc                                   ; FBEDE0  push XBC
 	push	0                                     ; FBEDE1  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEDE3  push (XIZ+0x0a)
-	call	sub_FAD561                              ; FBEDE6  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBEDE6  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEDEA  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEDED  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEDF2  inc 6,XSP
@@ -13486,7 +13486,7 @@ sub_FBDCD3__FBF27B:
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = Scale7Bit_ByDepth_UniOrBipolar_Shl2
-;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+;          0xFAD561 = Scale7Bit_ByDepth_UniOrBipolar_x25, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFC7AB4 = sub_FC7AB4
@@ -14127,7 +14127,7 @@ sub_FBF280_Loop7:
 	push	xbc                                   ; FBF8AC  push XBC
 	push	0                                     ; FBF8AD  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF8AF  push (XIZ+0x0c)
-	call	sub_FAD561                              ; FBF8B2  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBF8B2  call 0xfad561
 	ld	(xiz-12), wa                            ; FBF8B6  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF8B9  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF8BE  inc 6,XSP
@@ -14167,7 +14167,7 @@ sub_FBF280_Loop8:
 	push	xbc                                   ; FBF911  push XBC
 	push	0                                     ; FBF912  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF914  push (XIZ+0x0c)
-	call	sub_FAD561                              ; FBF917  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBF917  call 0xfad561
 	ld	(xiz-12), wa                            ; FBF91B  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF91E  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF923  inc 6,XSP
@@ -14367,7 +14367,7 @@ sub_FBF280_Loop12:
 	push	xbc                                   ; FBFB1D  push XBC
 	push	0                                     ; FBFB1E  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFB20  push (XIZ+0x0c)
-	call	sub_FAD561                              ; FBFB23  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBFB23  call 0xfad561
 	ld	(xiz-12), wa                            ; FBFB27  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFB2A  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFB2F  inc 6,XSP
