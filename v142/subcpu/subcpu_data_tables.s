@@ -3969,7 +3969,7 @@ Eff79_Geq_ParamDefaults:
 ; --- 0x0143ad  editable-parameter count per effect number 0-99 (10 per row, so row = tens
 ; digit).  For effects with a dedicated range array the count equals the number of range
 ; records; effects on the shared EffDefault_ParamRanges still carry their nominal count 5.
-; Reader: none found in any dumped image -- forms searched are listed in the RE-CHECKED note
+; Reader: none found -- no reader in any dumped image; forms searched are listed in the RE-CHECKED note
 ; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
 ; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamCount_Table:
@@ -3985,7 +3985,7 @@ EFF_ParamCount_Table:
 	.byte 5, 5, 5, 5, 5, 5, 12, 12, 13, 13
 
 ; --- 0x014411  100 x u32, effect number -> parameter-ranges record.
-; Reader: none found in any dumped image -- forms searched are listed in the RE-CHECKED note
+; Reader: none found -- no reader in any dumped image; forms searched are listed in the RE-CHECKED note
 ; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
 ; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamRanges_PtrTable:
@@ -4091,7 +4091,7 @@ EFF_ParamRanges_PtrTable:
 	.long Eff99_PeqOverdrDelay_ParamRanges	; effect 99
 
 ; --- 0x0145a1  100 x u32, effect number -> parameter-defaults record.
-; Reader: none found in any dumped image -- forms searched are listed in the RE-CHECKED note
+; Reader: none found -- no reader in any dumped image; forms searched are listed in the RE-CHECKED note
 ; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
 ; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamDefaults_PtrTable:
