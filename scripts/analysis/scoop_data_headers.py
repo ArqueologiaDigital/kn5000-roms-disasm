@@ -40,6 +40,8 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "converters"))
 import scoop_reframe as R  # noqa: E402
 
+R_DATA = {".byte", ".short", ".word", ".hword", ".2byte", ".long", ".4byte", ".int",
+          ".ascii", ".asciz", ".string", ".incbin"}
 STRUCT = re.compile(r'_(Skip|Join|Loop|Entry|Epilogue|Return|Helper|Sub|Code)\d*$|_0x[0-9A-Fa-f]+$')
 
 
@@ -158,7 +160,8 @@ def main():
         c = code.strip()
         while R.LABEL_RE.match(c):
             c = c[R.LABEL_RE.match(c).end():].strip()
-        isdata = c.startswith(".") and not c.startswith(".set") and not (
+        isdata = c.split()[0].lower() in R_DATA if c else False
+        isdata = isdata and not (
             c.startswith(".byte") and re.match(r';\s*[a-z]', com.strip() or "x") and "\t; " in ln)
         if isdata and lo <= ad < hi:
             if cur and cur[1] == ad:

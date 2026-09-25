@@ -59,11 +59,37 @@ def spell(rec):
     return "\t.byte\t" + ", ".join(lit(c) for c in rec)
 
 
+def split_data_line(a, lines, addrs, ext, rb):
+    """Cut the .ascii/.byte line that contains address a into two lines."""
+    for i in range(len(lines)):
+        ad, n = addrs[i], ext[i]
+        if ad is not None and n and ad < a < ad + n:
+            code, com = R.strip_comment(lines[i])
+            c = code.strip()
+            pre = ""
+            m = R.LABEL_RE.match(c)
+            if m:
+                pre = m.group(1) + ":"
+                c = c[m.end():].strip()
+            if not re.match(r'^\.(ascii|byte)\b', c):
+                raise SystemExit("0x%06X is inside a non-data line %d" % (a, i + 1))
+            blob = rb[ad - R.BASE:ad + n - R.BASE]
+            k = a - ad
+            new = ([pre] if pre else []) + [spell(blob[:k]) + (("\t" + com) if com.strip() else ""),
+                                              spell(blob[k:])]
+            lines[i:i + 1] = new
+            ins = len(new) - 1
+            addrs[i:i + 1] = ([ad] if pre else []) + [ad, a]
+            ext[i:i + 1] = ([0] if pre else []) + [k, n - k]
+            return i + (1 if pre else 0) + 1
+    raise SystemExit("0x%06X: no source line contains it" % a)
+
+
 def apply_one(e, lines, addrs, ext, rb):
     a = int(e["addr"], 16)
     idx = next((i for i, x in enumerate(addrs[:len(lines)]) if x == a and ext[i] > 0), None)
     if idx is None:
-        raise SystemExit("0x%06X: no source line starts there" % a)
+        idx = split_data_line(a, lines, addrs, ext, rb)
     # an existing `Label:` prefix on that line, or label-only lines just above
     # at the same address, stay where they are; the header goes above them
     top = idx

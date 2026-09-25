@@ -1816,7 +1816,7 @@ VoiceParam_MultiDispatch:
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
-	call StringData_PartNames_0xB3
+	call ParamPopup_PartKeyShift
 	jp VoiceParam_CommonTail
 VoiceParam_Case03:
 	; --- Case 0x03: H=0x7f, L=0x00 ---
@@ -1827,7 +1827,7 @@ VoiceParam_Case03:
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
-	call StringData_KeyNames_0x341
+	call ParamPopup_PartVolume
 	jp VoiceParam_CommonTail
 VoiceParam_Case08:
 	; --- Case 0x08: H=0x7f, L=0x00 ---
@@ -1838,7 +1838,7 @@ VoiceParam_Case08:
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
-	call StringData_PartNames_0x54
+	call ParamPopup_PartPanpot
 	jp VoiceParam_CommonTail
 VoiceParam_Case0A:
 	; --- Case 0x0a: H=0xff, L=0x00 ---
@@ -1849,7 +1849,7 @@ VoiceParam_Case0A:
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceParam_BitManipHelper
-	call StringData_PartNames_0x120
+	call ParamPopup_PartTuning
 	jp VoiceParam_CommonTail
 VoiceParam_Case0B:
 	; --- Case 0x0b: H=0x0c, L=0x00 ---
@@ -1860,7 +1860,7 @@ VoiceParam_Case0B:
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
-	call StringData_PartNames_0x1C9
+	call ParamPopup_PartBendSense
 VoiceParam_CommonTail:
 	; call Display_UpdateRegion3 (v7 addr)
 	call	Display_UpdateRegion3
@@ -10384,19 +10384,19 @@ VoiceSlot_StatusRet_Skip18:
 	and	a, 7
 	stb_erp	a, 60
 	jrl	z, VoiceSlot_StatusRet_Skip19
-	call	StringData_EffectLabel_0x1DD
+	call	ParamPopup_ApcMode
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip19:
 	bit	3, a
 	jrl	z, VoiceSlot_StatusRet_Skip20
-	call	StringData_APCModeNames_0x90
+	call	ParamPopup_ApcMemory
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip20:
 	ldb_erp	a, 60
 	and	a, 224
 	stb_erp	a, 60
 	jrl	z, VoiceSlot_StatusRet_Skip21
-	call	StringData_APCModeNames_0xE7
+	call	ParamPopup_AccompPart
 VoiceSlot_StatusRet_Skip21:
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip22:
@@ -10416,12 +10416,12 @@ VoiceSlot_StatusRet_Skip22:
 	stb_d8	(0x10f5), a
 	bit	4, a
 	jrl	z, VoiceSlot_StatusRet_Skip23
-	call	StringData_APCModeNames_0x178
+	call	ParamPopup_DynamicAccomp
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip23:
 	bit	6, a
 	jrl	z, VoiceSlot_StatusRet_Skip24
-	call	StringData_APCModeNames_0x1CA
+	call	ParamPopup_TechniChord
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip24:
 	jp	VoiceSlot_StatusRet_0x1C5
@@ -10575,7 +10575,7 @@ VoiceSlot_StatusRet_Skip38:
 	call	StringData_APCModeNames_0x3F8
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip39:
-	call	StringData_APCModeNames_0x21B
+	call	ParamPopup_KeyNameBracketed
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip40:
 	bitda	2, (0x10f5)
@@ -10584,7 +10584,7 @@ VoiceSlot_StatusRet_Skip40:
 	jp	VoiceSlot_StatusRet_0x8A0
 	bitda	7, (0x10f5)
 	jrl	z, VoiceSlot_StatusRet_0x1C5
-	call	StringData_APCModeNames_0x414
+	call	ParamPopup_TotalReverb
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip41:
 	cpdi8	(0x10f1), 152
@@ -10601,11 +10601,11 @@ VoiceSlot_StatusRet_Skip41:
 	and	a, 1
 	stb_erp	a, 60
 	jrl	z, VoiceSlot_StatusRet_Skip52
-	call	StringData_APCModeNames_0x4D8
+	call	ParamPopup_Msa
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip42:
 	and	a, 127
-	call	StringData_EffectLabel_0xC2
+	call	ParamPopup_PanelMemory
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip43:
 	ldb_d8	a, (0x0dc8)
@@ -10619,7 +10619,7 @@ VoiceSlot_StatusRet_Skip43:
 VoiceSlot_StatusRet_Skip44:
 	ldb_d8	a, (0x0dc8)
 	and	a, 1
-	call	StringData_EffectLabel_0x138
+	call	ParamPopup_FadeIn
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip45:
 	ldb_d8	a, (0x10f3)
@@ -10628,7 +10628,7 @@ VoiceSlot_StatusRet_Skip45:
 	jr	z, VoiceSlot_StatusRet_Skip46
 	ld	a, 1:opc
 VoiceSlot_StatusRet_Skip46:
-	call	StringData_EffectLabel_0x18D
+	call	ParamPopup_FadeOut
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip47:
 	cpdi8	(0x10f1), 19
@@ -10669,7 +10669,7 @@ VoiceSlot_StatusRet_Skip52:
 	jp	VoiceSlot_StatusRet_0x1C5
 VoiceSlot_StatusRet_Skip53:
 	xor	hl, hl
-	call	StringData_APCModeNames_0x2AC
+	call	ParamPopup_AccompVolume
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip54:
 	ldb_d8	a, (0x10f1)
@@ -10710,7 +10710,7 @@ VoiceSlot_StatusRet_Skip56:
 	cp	a, 7:i3
 	jrl	z, VoiceSlot_StatusRet_Skip61
 	jp	VoiceSlot_StatusRet_0x1C5
-	call	StringData_KeyNames_0x341
+	call	ParamPopup_PartVolume
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip57:
 	ldb_d8	a, (0x10f5)
@@ -10720,18 +10720,18 @@ VoiceSlot_StatusRet_Skip57:
 	jrl	nz, VoiceSlot_StatusRet_Skip59
 	jp	VoiceSlot_StatusRet_0x1C5
 VoiceSlot_StatusRet_Skip58:
-	call	StringData_PartNames_0x22C
+	call	ParamPopup_PartSustain
 	jp	VoiceSlot_StatusRet_0x8A0
-	call	StringData_PartNames_0x297
+	call	ParamPopup_PartDspEffectOff
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip59:
-	call	StringData_PartNames_0x2F6
+	call	ParamPopup_PartEffect
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip60:
-	call	StringData_EffectLabel_0x7
+	call	ParamPopup_PartDspEffectLevel
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip61:
-	call	StringData_EffectLabel_0x67
+	call	ParamPopup_PartReverb
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip62:
 	ldb_erp	a, 60
@@ -10739,19 +10739,19 @@ VoiceSlot_StatusRet_Skip62:
 	and	a, 192
 	stb_erp	a, 60
 	jrl	z, VoiceSlot_StatusRet_0x1C5
-	call	StringData_APCModeNames_0x464
+	call	ParamPopup_PartTimbre
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip63:
-	call	StringData_PartNames_0x54
+	call	ParamPopup_PartPanpot
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip64:
-	call	StringData_PartNames_0xB3
+	call	ParamPopup_PartKeyShift
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip65:
-	call	StringData_PartNames_0x120
+	call	ParamPopup_PartTuning
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip66:
-	call	StringData_PartNames_0x1C9
+	call	ParamPopup_PartBendSense
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip67:
 	jp	VoiceSlot_StatusRet_0x1C5
@@ -10768,13 +10768,13 @@ VoiceSlot_StatusRet_Skip67:
 	jrl	nz, VoiceSlot_StatusRet_Skip70
 	jp	VoiceSlot_StatusRet_0x1C5
 VoiceSlot_StatusRet_Skip68:
-	call	StringData_PartNames_0x22C
+	call	ParamPopup_PartSustain
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip69:
 	call	StringData_APCModeNames_0x394
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip70:
-	call	StringData_APCModeNames_0x395
+	call	ParamPopup_PartTremolo
 	jp	VoiceSlot_StatusRet_0x8A0
 	call	StringData_APCModeNames_0x3F9
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -13873,8 +13873,8 @@ Display_BytecodeBlock_F:
 	ld XIX,0x00000eca
 	ldw (XIX+0x09), 0x5620
 	call Display_UpdateRegion5
-	call StringData_KeyNames_0x29E
-	call StringData_KeyNames_0x180
+	call Disp_ShowNoteNameAndVelocity
+	call Disp_ShowNoteValueFields
 	call Display_UpdateRegion3
 	call Display_UpdateRegion4
 	ret
@@ -14164,7 +14164,7 @@ SNS_LoadKeyAndChord:
 	muls8rr a, l
 	ld hl, wa
 	extz xhl
-	ld xiy, StringData_KeyNames_0x20
+	ld xiy, Tbl_ChordTypeNames
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld wa, (xiy)
 	ld (xix + 2), wa
@@ -14182,7 +14182,7 @@ SNS_LoadDurationData:
 	ld xix, 0xedd
 	ld l, (3425:16)
 	sla hl, 2
-	ld xiy, StringData_KeyNames_0x160
+	ld xiy, Tbl_NoteValueGlyphs
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ld wa, (xiy)
 	ld (xix), wa
@@ -14190,11 +14190,20 @@ SNS_LoadDurationData:
 	ld (xix + 2), wa
 	ret
 
+	; StringData_KeyNames: key-root names, 16 x 2 chars, read by SNS_LoadKeyAndChord (0xEFF4FC):
+	; `ld l, (0x0d6d) / and l, 15 / sla hl, 1` then 2 bytes to (xix).  Entry 0
+	; and 13-15 blank; 1-12 the chromatic scale C, D-flat, D, E-flat, E, F,
+	; F-sharp, G, A-flat, A, B-flat, B with LCD glyph 0x88 = flat and
+	; 0x8C = sharp (the same spellings as Tbl_KeyNamesBracketed's "Db"/"F#").
 StringData_KeyNames:
 	.byte 0x20, 0x20, 0x43, 0x20, 0x44, 0x88, 0x44, 0x20
 	.byte 0x45, 0x88, 0x45, 0x20, 0x46, 0x20, 0x46, 0x8c
 	.byte 0x47, 0x20, 0x41, 0x88, 0x41, 0x20, 0x42, 0x88
 	.byte 0x42, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+	; 64 x 5 chars, read by SNS_LoadKeyAndChord (0xEFF4FC): `ld l, (0x0d6e) /
+	; and l, 0x3f / ld a, 5 / muls a, l` then 5 bytes to (xix+2).  Chord-type
+	; names ("7", "Maj7", "aug", "min", "m7b5" ...); 0x88 = flat, 0x8C = sharp.
+Tbl_ChordTypeNames:
 	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 	.byte 0x20, 0x20, 0x37, 0x20, 0x20, 0x20, 0x20, 0x4d
 	.byte 0x61, 0x6a, 0x37, 0x20, 0x61, 0x75, 0x67, 0x20
@@ -14235,17 +14244,29 @@ StringData_KeyNames:
 	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+	; 8 x 4 chars, read by SNS_LoadDurationData (0xEFF543): `ld l, (0x0d61) /
+	; sla hl, 2` then 4 bytes to 0x0EDD.  LCD note glyphs 0x13-0x16, '.' after
+	; a glyph for the dotted value, "XX" in the last entry.
+Tbl_NoteValueGlyphs:
 	.byte 0x20, 0x20, 0x20, 0x20, 0x13, 0x20, 0x20, 0x20
 	.byte 0x14, 0x2e, 0x20, 0x20, 0x14, 0x20, 0x20, 0x20
 	.byte 0x15, 0x20, 0x20, 0x20, 0x15, 0x2e, 0x20, 0x20
 	.byte 0x16, 0x20, 0x20, 0x20, 0x58, 0x58, 0x20, 0x20
+	; Disp_ShowNoteValueFields
+	; Fills three fields of the LCD text line from three small tables:
+	; 0x0ED9 <- 3 chars of Tbl_NoteValueNames[((0x3678) & 15) * 4],
+	; 0x0EDD <- 5 chars of Tbl_NoteValuePlusNames[((0x3679) & 15) * 5],
+	; 0x0EE3 <- 4 chars of Tbl_ArticulationNames[((0x367a) & 3) * 4]
+	; ("TENU"/"NORM"/"STAC"/"CUTT").  Called after (0x3678..0x367a) change
+	; (PerfMode_Evt03_ClampAndUpdate clamps (0x367a) to 0..3 then calls this).
+Disp_ShowNoteValueFields:
 PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	ld XIX,0x00000ed9
 	xor HL,HL
 	ld l, (0x3678:16)
 	and L,0x0f
 	sla HL, 0x02
-	ld XIY,StringData_KeyNames_0x1FE
+	ld XIY,Tbl_NoteValueNames
 	lda_rr	xiy, xiy, hl
 	ld	wa, (xiy)
 	ld	(xix+256), wa
@@ -14278,6 +14299,10 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	ld	wa, (xiy+2)
 	ld	(xix+2), wa
 	ret
+	; 16 x 4 chars, read by Disp_ShowNoteValueFields (0xEFF6EF): `ld l,
+	; (0x3678) / and l, 15 / sla hl, 2`, 3 bytes copied to 0x0ED9.  Note glyphs
+	; 0x13-0x18 with 0x1F / 0x8B markers after some (tuplet-style values).
+Tbl_NoteValueNames:
 	.ascii	"     "
 	.byte	0x18, 0x1f
 	.ascii	"  "
@@ -14304,7 +14329,12 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	.byte	0x13, 0x8b
 	.ascii	"3 "
 	.byte	0x13, 0x8b
-	.ascii	"4              + "
+	.ascii	"4         "
+	; 16 x 5 chars, read by Disp_ShowNoteValueFields (0xEFF6EF): `ld l,
+	; (0x3679) / and l, 15 / ld a, 5 / muls a, l`, 5 bytes to 0x0EDD.  The
+	; Tbl_NoteValueNames values with a "+" in front.
+Tbl_NoteValuePlusNames:
+	.ascii	"     + "
 	.byte	0x18, 0x1f
 	.ascii	" + "
 	.byte	0x18
@@ -14330,7 +14360,17 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	.byte	0x13, 0x8b
 	.ascii	"3+ "
 	.byte	0x13, 0x8b
-	.ascii	"4          TENUNORMSTACCUTT"
+	.ascii	"4          "
+	; 4 x 4 chars "TENU" "NORM" "STAC" "CUTT", read by Disp_ShowNoteValueFields
+	; (0xEFF6EF): `ld l, (0x367a) / and l, 3 / sla hl, 2`, 4 bytes to 0x0EE3.
+Tbl_ArticulationNames:
+	.ascii	"TENUNORMSTACCUTT"
+	; Disp_ShowNoteNameAndVelocity
+	; 9 chars at 0x0ECF: blank when (0x367b) = 0xFF, else note name
+	; Tbl_NoteNamesSharp[((0x367c) mod 12)*2] (2 chars, `divs a, 12` remainder),
+	; octave Tbl_OctaveNames[((0x367c) div 12)*2] ("-2".."8"), 'V' at +5 and
+	; (0x367b) in decimal at +6 -- a MIDI note number and its velocity.
+Disp_ShowNoteNameAndVelocity:
 DisplayMode_Handler_3_Helper20:
 	ld	xix, 3791
 	cp	(13947:16), 255
@@ -14371,6 +14411,10 @@ StringData_KeyNames_Code_Skip:
 	ld	(xix+5), 86
 StringData_KeyNames_Code_Return:
 	ret
+	; 12 x 2 chars " C" "C#" " D" ... " B" (0x8C = sharp), read by
+	; Disp_ShowNoteNameAndVelocity (0xEFF80D): index = (0x367c) mod 12,
+	; `sla bc, 1`, 2 bytes to 0x0ECF.
+Tbl_NoteNamesSharp:
 	.ascii	" CC"
 	.byte	0x8c
 	.ascii	" DD"
@@ -14381,7 +14425,15 @@ StringData_KeyNames_Code_Return:
 	.byte	0x8c
 	.ascii	" AA"
 	.byte	0x8c
-	.ascii	" B-2-10 1 2 3 4 5 6 7 8 "
+	.ascii	" B"
+	; 11 x 2 chars "-2" "-1" "0 " .. "8 ", read by Disp_ShowNoteNameAndVelocity
+	; (0xEFF80D): index = (0x367c) div 12, `sla bc, 1`, 2 bytes to 0x0ED1.
+Tbl_OctaveNames:
+	.ascii	"-2-10 1 2 3 4 5 6 7 8 "
+	; ParamPopup_PartVolume -- LCD parameter pop-up.
+	; Pop-up id 10.  "<part> VOLUME=nnn": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_VolumeEq,
+	; value (0x10f3) in decimal.
+ParamPopup_PartVolume:
 	cp (0x0def:16), 0x0a
 	jrl z, .Lc_eff8c1
 	ld (0x0def:16), 0x0a
@@ -14396,7 +14448,7 @@ StringData_KeyNames_Code_Return:
 	ld	xix, 0x0ed1
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_KeyNames_0x399
+	ld	xiy, Str_VolumeEq
 	inc	1, xix
 	ld	bc, 7:i3
 	ldir85
@@ -14411,8 +14463,17 @@ StringData_KeyNames_Code_Return:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "VOLUME=", 7 chars copied by ParamPopup_PartVolume (0xEFF8B0).
+Str_VolumeEq:
 	.ascii	"VOLUME="
+	; StringData_PartNames: 21 x 4 chars (RT1 RT2 LFT P 4 .. P15 KBP AC1 AC2 AC3 XXXX
+	; DRUM), read by every ParamPopup_Part* routine: `ld l, (0x10f1) / sla hl,
+	; 2 / ld xiy, StringData_PartNames / lda_rr xiy, xiy, hl / ld bc, 4 / ldir`.
 StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P15 KBP AC1 AC2 AC3 XXXXDRUM"
+	; ParamPopup_PartPanpot -- LCD parameter pop-up.
+	; Pop-up id 10.  "<part> PANPOT=nnn": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_PanpotEq,
+	; value (0x10f3) in decimal.
+ParamPopup_PartPanpot:
 	cpdi8	(0x0def), 10
 	jrl	z, 9
 	ld	(3567:16), 10
@@ -14426,7 +14487,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ld xix, 3793
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_PartNames_0xAC
+	ld	xiy, Str_PanpotEq
 	inc	1, xix
 	ld	bc, 7:i3
 	ldir85
@@ -14441,7 +14502,14 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "PANPOT=", 7 chars copied by ParamPopup_PartPanpot (0xEFF963).
+Str_PanpotEq:
 	.ascii	"PANPOT="
+	; ParamPopup_PartKeyShift -- LCD parameter pop-up.
+	; Pop-up id 10.  "<part> KEY SHIFT=snn": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_KeyShiftEq,
+	; value (0x10f3) formatted by ParamDigit_CalrData with DE = 64, then the
+	; byte at 0x1180 and three digits from 0x1181.
+ParamPopup_PartKeyShift:
 	cpdi8	(0x0def), 10
 	jrl	z, StringData_PartNames_Code_Skip
 	ld	(3567:16), 10
@@ -14456,7 +14524,7 @@ StringData_PartNames_Code_Skip:
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_PartNames_0x116
+	ld	xiy, Str_KeyShiftEq
 	inc	1, xix
 	ldw	bc, 10
 	ldir85
@@ -14474,7 +14542,14 @@ StringData_PartNames_Code_Skip:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "KEY SHIFT=", 10 chars copied by ParamPopup_PartKeyShift (0xEFF9C2).
+Str_KeyShiftEq:
 	.ascii	"KEY SHIFT="
+	; ParamPopup_PartTuning -- LCD parameter pop-up.
+	; Pop-up id 10.  "<part> TUNING=snn": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_TuningEq,
+	; value (0x10f3) formatted by ParamDigit_CalrData with DE = 128, then the
+	; byte at 0x1180 and three digits from 0x1181.
+ParamPopup_PartTuning:
 	cpdi8	(0x0def), 10
 	jrl	z, 9
 	ld	(3567:16), 10
@@ -14488,7 +14563,7 @@ StringData_PartNames_Code_Skip:
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_PartNames_0x182
+	ld	xiy, Str_TuningEq
 	inc	1, xix
 	ld	bc, 7:i3
 	ldir85
@@ -14506,7 +14581,15 @@ StringData_PartNames_Code_Skip:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "TUNING=", 7 chars copied by ParamPopup_PartTuning (0xEFFA2F).  The 64
+	; bytes after it (US1 US2 US3 BAS P 8 ..) are 4-char part names of a
+	; second naming scheme with no reader found by name or 32-bit value.
+Str_TuningEq:
 	.ascii "TUNING=US1 US2 US3 BAS P 8 P 9 P10 LS1 LS2 LS3 P11 P12 P13 P14 P15 KBP "
+	; ParamPopup_PartBendSense -- LCD parameter pop-up.
+	; Pop-up id 10.  "<part> BEND SENS=nn": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_BendSensEq,
+	; value (0x10f3), two digits (copied from 0x1182).
+ParamPopup_PartBendSense:
 	cpdi8	(0x0def), 10
 	jrl	z, 9
 	ld	(3567:16), 10
@@ -14520,7 +14603,7 @@ StringData_PartNames_Code_Skip:
 	ld	xix, 0x0ecf
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_PartNames_0x222
+	ld	xiy, Str_BendSensEq
 	inc	1, xix
 	ldw	bc, 10
 	ldir85
@@ -14535,7 +14618,13 @@ StringData_PartNames_Code_Skip:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "BEND SENS=", 10 chars copied by ParamPopup_PartBendSense (0xEFFAD8).
+Str_BendSensEq:
 	.ascii "BEND SENS="
+	; ParamPopup_PartSustain -- LCD parameter pop-up.
+	; Pop-up id 1.  "<part> SUSTAIN ON /OFF ": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_Sustain,
+	; then Str_OnOffPair + 0 when bit 3 of (0x10f3) is set, + 4 when clear.
+ParamPopup_PartSustain:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_PartNames_Code_Skip2
 	ld	(3567:16), 1
@@ -14550,7 +14639,7 @@ StringData_PartNames_Code_Skip2:
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_PartNames_0x287
+	ld	xiy, Str_Sustain
 	inc	1, xix
 	ldw	bc, 8
 	ldir85
@@ -14559,14 +14648,24 @@ StringData_PartNames_Code_Skip2:
 	jrl	nz, StringData_PartNames_Code_Skip3
 	ld	l, 4:opc
 StringData_PartNames_Code_Skip3:
-	ld	xiy, StringData_PartNames_0x28F
+	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "SUSTAIN ", 8 chars copied by ParamPopup_PartSustain (0xEFFB3B).
+Str_Sustain:
 	.ascii	"SUSTAIN "
+	; 2 x 4 chars "ON  " / "OFF ": +0 or +4 selected by a flag bit and 3 or 4
+	; bytes copied, by ParamPopup_PartSustain/Effect/Tremolo/TotalReverb,
+	; ParamPopup_PartDspEffectOff and Display_BytecodeBlock_F (0xEFF11A).
+Str_OnOffPair:
 	.ascii	"ON  OFF "
+	; ParamPopup_PartDspEffectOff -- LCD parameter pop-up.
+	; Pop-up id 1.  "<part> DSP EFFECT OFF ": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_DspEffect,
+	; then Str_OnOffPair + 4 unconditionally (`ld l, 4`).
+ParamPopup_PartDspEffectOff:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_PartNames_Code_Skip4
 	ld	(3567:16), 1
@@ -14581,19 +14680,25 @@ StringData_PartNames_Code_Skip4:
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_PartNames_0x2EB
+	ld	xiy, Str_DspEffect
 	inc	1, xix
 	ldw	bc, 11
 	ldir85
 	xor	hl, hl
 	ld	l, 4:opc
-	ld	xiy, StringData_PartNames_0x28F
+	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "DSP EFFECT ", 11 chars copied by ParamPopup_PartDspEffectOff (0xEFFBA6).
+Str_DspEffect:
 	.ascii	"DSP EFFECT "
+	; ParamPopup_PartEffect -- LCD parameter pop-up.
+	; Pop-up id 1.  "<part> EFFECT ON /OFF ": part name = StringData_PartNames[(0x10f1)*4], 4 chars, StringData_EffectLabel,
+	; then Str_OnOffPair + 0 when bit 6 of (0x10f3) is set, + 4 when clear.
+ParamPopup_PartEffect:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_PartNames_Code_Skip5
 	ld	(3567:16), 1
@@ -14617,13 +14722,19 @@ StringData_PartNames_Code_Skip5:
 	jrl	nz, StringData_PartNames_Code_Skip6
 	ld	l, 4:opc
 StringData_PartNames_Code_Skip6:
-	ld	xiy, StringData_PartNames_0x28F
+	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; StringData_EffectLabel: "EFFECT ", 7 chars copied by
+	; ParamPopup_PartEffect (0xEFFC05).
 StringData_EffectLabel:	.ascii "EFFECT "
+	; ParamPopup_PartDspEffectLevel -- LCD parameter pop-up.
+	; Pop-up id 1.  "<part> DSP EFFECT=nnn": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_DspEffectEq,
+	; value (0x10f3) in decimal.
+ParamPopup_PartDspEffectLevel:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_EffectLabel_Code_Skip
 	ld	(3567:16), 1
@@ -14638,7 +14749,7 @@ StringData_EffectLabel_Code_Skip:
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_EffectLabel_0x5C
+	ld	xiy, Str_DspEffectEq
 	inc	1, xix
 	ldw	bc, 11
 	ldir85
@@ -14650,7 +14761,13 @@ StringData_EffectLabel_Code_Skip:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "DSP EFFECT=", 11 chars copied by ParamPopup_PartDspEffectLevel (0xEFFC66).
+Str_DspEffectEq:
 	.ascii	"DSP EFFECT="
+	; ParamPopup_PartReverb -- LCD parameter pop-up.
+	; Pop-up id 1.  "<part> REVERB=nnn": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_ReverbEq,
+	; value (0x10f3) in decimal.
+ParamPopup_PartReverb:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_EffectLabel_Code_Skip2
 	ld	(3567:16), 1
@@ -14665,7 +14782,7 @@ StringData_EffectLabel_Code_Skip2:
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_EffectLabel_0xBB
+	ld	xiy, Str_ReverbEq
 	inc	1, xix
 	ld	bc, 7:i3
 	ldir85
@@ -14677,7 +14794,14 @@ StringData_EffectLabel_Code_Skip2:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "REVERB=", 7 chars copied by ParamPopup_PartReverb (0xEFFCC6).
+Str_ReverbEq:
 	.ascii	"REVERB="
+	; ParamPopup_PanelMemory -- LCD parameter pop-up.
+	; Pop-up id 1.  "PANEL MEMORY=b-n" from A on entry: A-1 divided by 8
+	; gives bank = quotient+1 -> (0x11f2) and number = remainder+1 -> (0x11f3),
+	; each printed in decimal with '-' (45) between them.
+ParamPopup_PanelMemory:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_EffectLabel_Code_Skip3
 	ld	(3567:16), 1
@@ -14688,7 +14812,7 @@ StringData_EffectLabel_Code_Skip3:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
-	ld	xiy, StringData_EffectLabel_0x12B
+	ld	xiy, Str_PanelMemoryEq
 	ld	xix, 3791
 	ldw	bc, 13
 	ldir85
@@ -14716,7 +14840,13 @@ StringData_EffectLabel_Code_Skip3:
 	ld	(xix+3), a
 	call	Display_UpdateRegion3
 	ret
+	; "PANEL MEMORY=", 13 chars copied by ParamPopup_PanelMemory (0xEFFD21).
+Str_PanelMemoryEq:
 	.ascii "PANEL MEMORY="
+	; ParamPopup_FadeIn -- LCD parameter pop-up.
+	; Pop-up id 1.  Str_FadeIn then Str_On or Str_Off (3 chars) chosen from
+	; A on entry (0 / 1).
+ParamPopup_FadeIn:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_EffectLabel_Code_Skip4
 	ld	(3567:16), 1
@@ -14727,7 +14857,7 @@ StringData_EffectLabel_Code_Skip4:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
-	ld	xiy, StringData_EffectLabel_0x17F
+	ld	xiy, Str_FadeIn
 	ld	xix, 3791
 	ldw	bc, 8
 	ldir85
@@ -14735,16 +14865,26 @@ StringData_EffectLabel_Code_Skip4:
 	jr	z, 13
 	cp	a, 1:i3
 	jr	z, 0
-	ld	xiy, StringData_EffectLabel_0x187
+	ld	xiy, Str_On
 	jp	StringData_EffectLabel_0x176
-	ld	xiy, StringData_EffectLabel_0x18A
+	ld	xiy, Str_Off
 	ld	bc, 3:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "FADE-IN ", 8 chars copied by ParamPopup_FadeIn (0xEFFD97).
+Str_FadeIn:
 	.ascii	"FADE-IN "
+	; "ON ", 3 chars copied by ParamPopup_FadeIn and ParamPopup_FadeOut.
+Str_On:
 	.ascii	"ON "
+	; "OFF", 3 chars copied by ParamPopup_FadeIn and ParamPopup_FadeOut.
+Str_Off:
 	.ascii	"OFF"
+	; ParamPopup_FadeOut -- LCD parameter pop-up.
+	; Pop-up id 1.  Str_FadeOut then Str_On or Str_Off (3 chars) chosen from
+	; A on entry (0 / 1).
+ParamPopup_FadeOut:
 	cpdi8	(0x0def), 1
 	jrl	z, 11
 	ld	(3567:16), 1
@@ -14754,7 +14894,7 @@ StringData_EffectLabel_Code_Skip4:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
-	ld	xiy, StringData_EffectLabel_0x1D4
+	ld	xiy, Str_FadeOut
 	ld	xix, 3791
 	ldw	bc, 9
 	ldir85
@@ -14762,14 +14902,19 @@ StringData_EffectLabel_Code_Skip4:
 	jr	z, 13
 	cp	a, 1:i3
 	jr	z, 0
-	ld	xiy, StringData_EffectLabel_0x187
+	ld	xiy, Str_On
 	jp	StringData_EffectLabel_0x1CB
-	ld	xiy, StringData_EffectLabel_0x18A
+	ld	xiy, Str_Off
 	ld	bc, 3:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "FADE-OUT ", 9 chars copied by ParamPopup_FadeOut (0xEFFDEC).
+Str_FadeOut:
 	.ascii "FADE-OUT "
+	; ParamPopup_ApcMode -- LCD parameter pop-up.
+	; Pop-up id 1.  16 chars of StringData_APCModeNames[(W and A) * 16] at 0x0ECF.
+ParamPopup_ApcMode:
 	cpdi8	(0x0def), 1
 	jrl	z, 11
 	ld	(3567:16), 1
@@ -14790,8 +14935,15 @@ StringData_EffectLabel_Code_Skip4:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; StringData_APCModeNames: APC mode names, 9 x 16 chars (APC OFF,
+	; BASIC, ADVANCED 1, PIANIST, PIANO MODE, ADVANCED 2, -, -, SPLIT), read
+	; by ParamPopup_ApcMode (0xEFFE3C): `sla hl, 4 / lda_rr / ld bc, 16 / ldir`.
 StringData_APCModeNames:
 	.ascii	"APC OFF         BASIC           ADVANCED 1      PIANIST         PIANO MODE      ADVANCED 2                                      SPLIT           "
+	; ParamPopup_ApcMemory -- LCD parameter pop-up.
+	; Pop-up id 1.  Str_ApcMemoryOn (14 chars at 0x0ECF); Str_OffAccomp
+	; ("OFF") over the "ON " at 0x0EDA when (A and W) = 0.
+ParamPopup_ApcMemory:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip
 	stdi8	(0x0def), 1
@@ -14806,20 +14958,27 @@ StringData_APCModeNames_Code_Skip:
 	ld	l, w
 	xor	h, h
 	sla	hl, 4
-	ld	xiy, StringData_APCModeNames_0xD9
+	ld	xiy, Str_ApcMemoryOn
 	ld	xix, 0x0ecf
 	ldw	bc, 14
 	ldir85
 	and	a, w
 	jrl	nz, StringData_APCModeNames_Code_Skip2
-	ld	xiy, StringData_APCModeNames_0x175
+	ld	xiy, Str_OffAccomp
 	ld	xix, 0x0eda
 	ld	bc, 3:i3
 	ldir85
 StringData_APCModeNames_Code_Skip2:
 	call	Display_UpdateRegion3
 	ret
+	; "APC MEMORY ON ", 14 chars copied by ParamPopup_ApcMemory (0xEFFF07).
+Str_ApcMemoryOn:
 	.ascii	"APC MEMORY ON "
+	; ParamPopup_AccompPart -- LCD parameter pop-up.
+	; Pop-up id 1.  A and W are reduced to their bits 7-5 (`and 224 / srl 5`);
+	; 16 bytes of Tbl_AccompPartNames + A*16 go to 0x0ECF, and "OFF" to
+	; 0x0EDC when (A and W) = 0.
+ParamPopup_AccompPart:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip3
 	stdi8	(0x0def), 1
@@ -14837,7 +14996,7 @@ StringData_APCModeNames_Code_Skip3:
 	ld	l, a
 	xor	h, h
 	sla	hl, 4
-	ld	xiy, StringData_APCModeNames_0x141
+	ld	xiy, Tbl_AccompPartNames
 	lda_rr	xiy, xiy, hl
 	ld	xix, 0x0ecf
 	ldw	bc, 16
@@ -14845,17 +15004,35 @@ StringData_APCModeNames_Code_Skip3:
 	inc	1, xix
 	and	a, w
 	jrl	nz, StringData_APCModeNames_Code_Skip4
-	ld	xiy, StringData_APCModeNames_0x175
+	ld	xiy, Str_OffAccomp
 	ld	xix, 0x0edc
 	ld	bc, 3:i3
 	ldir85
 StringData_APCModeNames_Code_Skip4:
 	call	Display_UpdateRegion3
 	ret
+	; 52 bytes read by ParamPopup_AccompPart (0xEFFF5E): 16 bytes at +k*16,
+	; k = bits 7-5 of A (`sla hl, 4 / lda_rr / ld bc, 16 / ldir` to 0x0ECF).
+	; Content: 0x09 0x09 "ACCOMP PART1 ON ", "ACCOMP PART2 ON ", 0x09 0x09
+	; "ACCOMP PART3 ON " -- the visible strings do NOT fall on the reader's
+	; 16-byte boundaries, and the role of the 0x09 bytes is not established.
+	; The values 0xEFFFD7-0xEFFFDA (inside this text) are also loaded as
+	; StringData_APCModeNames_0x160..0x163 by ui/drawbar_panel_ui.s's Softver
+	; screen and handed to SendEvent -- more likely numeric event arguments
+	; than pointers here (not verified).
+Tbl_AccompPartNames:
 	.byte	0x09, 0x09
 	.ascii	"ACCOMP PART1 ON ACCOMP PART2 ON "
 	.byte	0x09, 0x09
-	.ascii	"ACCOMP PART3 ON OFF"
+	.ascii	"ACCOMP PART3 ON "
+	; "OFF", 3 chars copied over the "ON " of the ACCOMP/APC MEMORY/DYNAMIC
+	; ACCOMP/TECHNI-CHORD pop-ups when their flag is clear.
+Str_OffAccomp:
+	.ascii	"OFF"
+	; ParamPopup_DynamicAccomp -- LCD parameter pop-up.
+	; Pop-up id 1.  Str_DynamicAccompOn (17 chars); "OFF" at 0x0EDE when
+	; (W and A) = 0.
+ParamPopup_DynamicAccomp:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip5
 	stdi8	(0x0def), 1
@@ -14866,20 +15043,26 @@ StringData_APCModeNames_Code_Skip5:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
-	ld	xiy, StringData_APCModeNames_0x1B8
+	ld	xiy, Str_DynamicAccompOn
 	ld	xix, 0x0ecf
 	ldw	bc, 17
 	ldir85
 	and	w, a
 	jrl	nz, StringData_APCModeNames_Code_Skip6
-	ld	xiy, StringData_APCModeNames_0x175
+	ld	xiy, Str_OffAccomp
 	ld	xix, 0x0ede
 	ld	bc, 3:i3
 	ldir85
 StringData_APCModeNames_Code_Skip6:
 	call	Display_UpdateRegion3
 	ret
+	; "DYNAMIC ACCOMP ON ", 17 chars copied by ParamPopup_DynamicAccomp (0xEFFFEF).
+Str_DynamicAccompOn:
 	.ascii	"DYNAMIC ACCOMP ON "
+	; ParamPopup_TechniChord -- LCD parameter pop-up.
+	; Pop-up id 1.  Str_TechniChordOn (16 chars); "OFF" at 0x0EDC when
+	; (W and A) = 0.
+ParamPopup_TechniChord:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip7
 	stdi8	(0x0def), 1
@@ -14890,21 +15073,27 @@ StringData_APCModeNames_Code_Skip7:
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
-	ld	xiy, StringData_APCModeNames_0x20A
+	ld	xiy, Str_TechniChordOn
 	ld	xix, 0x0ecf
 	ldw	bc, 16
 	ldir85
 	and	w, a
 	jrl	nz, StringData_APCModeNames_Code_Skip8
-	ld	xiy, StringData_APCModeNames_0x175
+	ld	xiy, Str_OffAccomp
 	ld	xix, 0x0edc
 	ld	bc, 3:i3
 	ldir85
 StringData_APCModeNames_Code_Skip8:
 	call	Display_UpdateRegion3
 	ret
+	; "TECHNI-CHORD ON ", 16 chars copied by ParamPopup_TechniChord (0xF00041).
+Str_TechniChordOn:
 	.ascii	"TECHNI-CHORD ON "
 	ret
+	; ParamPopup_KeyNameBracketed -- LCD parameter pop-up.
+	; Pop-up id 1.  ' ' at 0x0ECE, then 4 chars of Tbl_KeyNamesBracketed
+	; [((0x10f3) & 15) * 4] ("<G >", "<Ab>" ...), read as two words.
+ParamPopup_KeyNameBracketed:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip9
 	stdi8	(0x0def), 1
@@ -14921,7 +15110,7 @@ StringData_APCModeNames_Code_Skip9:
 	and	l, 15
 	xor	h, h
 	sla	hl, 2
-	ld	xiy, StringData_APCModeNames_0x26C
+	ld	xiy, Tbl_KeyNamesBracketed
 	ld_rrw	wa, xiy, hl
 	ld	(xix), wa
 	add	hl, 2
@@ -14930,7 +15119,17 @@ StringData_APCModeNames_Code_Skip9:
 	ld	(xix), wa
 	call	Display_UpdateRegion3
 	ret
+	; 16 x 4 chars "<G >" "<Ab>" .. "<F#>" then 4 blank entries, read by
+	; ParamPopup_KeyNameBracketed (0xF00092): `ld l, (0x10f3) / and l, 15 /
+	; sla hl, 2 / ld_rrw wa, xiy, hl` twice.
+Tbl_KeyNamesBracketed:
 	.ascii	"<G ><Ab><A ><Bb><B ><C ><Db><D ><Eb><E ><F ><F#>                "
+	; ParamPopup_AccompVolume -- LCD parameter pop-up.
+	; Pop-up id 1.  16 chars of Tbl_AccompVolumeLabels[HL * 16] (HL on entry
+	; selects ACC. TOTAL / BASS / DRUMS / ACCMP1..3); then, when bit 7 of
+	; (0x10f5) is set, 8 chars of Tbl_MuteOnOff (+0 "MUTE ON ", +8 when bit 7
+	; of (0x10f3) is clear), else A (on entry) in decimal at 0x0EDF.
+ParamPopup_AccompVolume:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip10
 	stdi8	(0x0def), 1
@@ -14948,7 +15147,7 @@ StringData_APCModeNames_Code_Skip10:
 	pushw	wa
 	ld	bc, hl
 	sla	hl, 4
-	ld	xiy, StringData_APCModeNames_0x324
+	ld	xiy, Tbl_AccompVolumeLabels
 	lda_rr	xiy, xiy, hl
 	ld	xix, 0x0ecf
 	ldw	bc, 16
@@ -14956,7 +15155,7 @@ StringData_APCModeNames_Code_Skip10:
 	popw	wa
 	bitda	7, (0x10f5)
 	jrl	z, StringData_APCModeNames_Code_Skip12
-	ld	xiy, StringData_APCModeNames_0x384
+	ld	xiy, Tbl_MuteOnOff
 	bitda	7, (0x10f3)
 	jrl	nz, StringData_APCModeNames_Code_Skip11
 	add	xiy, 8
@@ -14974,8 +15173,20 @@ StringData_APCModeNames_Code_Skip12:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
-	.ascii	"ACC. TOTAL VOL.=   BASS VOLUME =  DRUMS VOLUME = ACCMP1 VOLUME = ACCMP2 VOLUME = ACCMP3 VOLUME =MUTE ON MUTE OFF"
+	; 6 x 16 chars (ACC. TOTAL VOL.= / BASS / DRUMS / ACCMP1 / ACCMP2 / ACCMP3
+	; VOLUME =), read by ParamPopup_AccompVolume (0xF00123): `sla hl, 4 /
+	; lda_rr / ld bc, 16 / ldir`.
+Tbl_AccompVolumeLabels:
+	.ascii	"ACC. TOTAL VOL.=   BASS VOLUME =  DRUMS VOLUME = ACCMP1 VOLUME = ACCMP2 VOLUME = ACCMP3 VOLUME ="
+	; 2 x 8 chars "MUTE ON " / "MUTE OFF", read by ParamPopup_AccompVolume
+	; (0xF00123): +8 when bit 7 of (0x10f3) is clear, 8 bytes copied.
+Tbl_MuteOnOff:
+	.ascii	"MUTE ON MUTE OFF"
 	ret
+	; ParamPopup_PartTremolo -- LCD parameter pop-up.
+	; Pop-up id 1.  "<part> TREMOLO ON/OFF": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_Tremolo,
+	; then 3 chars of Str_OnOffPair + 0 (bit 7 of (0x10f3) set) or + 4.
+ParamPopup_PartTremolo:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip13
 	stdi8	(0x0def), 1
@@ -14990,7 +15201,7 @@ StringData_APCModeNames_Code_Skip13:
 	ld	xix, 0x0ecf
 	ld	bc, 4:i3
 	ldir85
-	ld	xiy, StringData_APCModeNames_0x3F0
+	ld	xiy, Str_Tremolo
 	inc	1, xix
 	ldw	bc, 8
 	ldir85
@@ -14999,19 +15210,29 @@ StringData_APCModeNames_Code_Skip13:
 	jrl	nz, StringData_APCModeNames_Code_Skip14
 	ld	l, 4:opc
 StringData_APCModeNames_Code_Skip14:
-	ld	xiy, StringData_PartNames_0x28F
+	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 3:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "TREMOLO ", 8 chars copied by ParamPopup_PartTremolo (0xF0020C).
+Str_Tremolo:
 	.ascii	"TREMOLO "
 	ret
 	ret
 	ret
 	ret
+	; "EXT.TAB EFFECT:" + "EN  " + "DIS " (23 bytes).  No reader found: no
+	; name at this address and no 24/32-bit value 0xF00273 anywhere in the
+	; ROM; the text sits where the three `ret` stubs 0xF0026F-0xF00272 end.
+Str_ExtTabEffectEnDis:
 	.ascii	"EXT.TAB EFFECT:EN  DIS "
 	ret
+	; ParamPopup_TotalReverb -- LCD parameter pop-up.
+	; Pop-up id 1.  Str_TotalReverb (13 chars at 0x0ED1), then 4 chars of
+	; Str_OnOffPair + 0 (bit 7 of (0x10f3) set) or + 4.
+ParamPopup_TotalReverb:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip15
 	stdi8	(0x0def), 1
@@ -15019,7 +15240,7 @@ StringData_APCModeNames_Code_Skip14:
 StringData_APCModeNames_Code_Skip15:
 	call	DisplayStr_ClearRegion
 	ld	xix, 0x0ed1
-	ld	xiy, StringData_APCModeNames_0x456
+	ld	xiy, Str_TotalReverb
 	ldw	bc, 13
 	ldir85
 	xor	hl, hl
@@ -15027,14 +15248,20 @@ StringData_APCModeNames_Code_Skip15:
 	jrl	nz, StringData_APCModeNames_Code_Skip16
 	ld	l, 4:opc
 StringData_APCModeNames_Code_Skip16:
-	ld	xiy, StringData_PartNames_0x28F
+	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; "TOTAL REVERB ", 13 chars copied by ParamPopup_TotalReverb (0xF0028B).
+Str_TotalReverb:
 	.ascii	"TOTAL REVERB "
 	ret
+	; ParamPopup_PartTimbre -- LCD parameter pop-up.
+	; Pop-up id 1.  part name = StringData_PartNames[(0x10f1)*4], 4 chars at 0x0ED1, then 6 chars of
+	; Tbl_TimbreNames[((0x10f3) >> 6) * 6] (NORMAL/BRIGHT/MELLOW/WARM).
+ParamPopup_PartTimbre:
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip17
 	stdi8	(0x0def), 1
@@ -15058,13 +15285,20 @@ StringData_APCModeNames_Code_Skip17:
 	sla	l, 2
 	add	l, h
 	xor	h, h
-	ld	xiy, StringData_APCModeNames_0x4C0
+	ld	xiy, Tbl_TimbreNames
 	lda_rr	xiy, xiy, hl
 	ld	bc, 6:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; 4 x 6 chars NORMAL / BRIGHT / MELLOW / WARM, read by ParamPopup_PartTimbre
+	; (0xF002DB): index ((0x10f3) >> 6) times 6 (`sla h,1 / sla l,2 / add l,h`).
+Tbl_TimbreNames:
 	.ascii	"NORMALBRIGHTMELLOWWARM  "
+	; ParamPopup_Msa -- LCD parameter pop-up.
+	; Pop-up id 15 when (0x0d65) = 3, else 1.  Str_Msa (7 chars at 0x0ED1),
+	; then 4 chars of Tbl_MsaStates[((0x10f3) & 7) * 4] (OFF/ON/#2/#3).
+ParamPopup_Msa:
 	cpdi8	(0x0d65), 3
 	jrl	nz, StringData_APCModeNames_Code_Skip18
 	cpdi8	(0x0def), 15
@@ -15078,7 +15312,7 @@ StringData_APCModeNames_Code_Skip18:
 	stdi8	(0x0def), 1
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
-	ld	xiy, StringData_APCModeNames_0x537
+	ld	xiy, Str_Msa
 	ld	xix, 0x0ed1
 	ld	bc, 7:i3
 	ldir85
@@ -15086,13 +15320,19 @@ StringData_APCModeNames_Code_Skip18:
 	xor	h, h
 	and	l, 7
 	sla	hl, 2
-	ld	xiy, StringData_APCModeNames_0x53E
+	ld	xiy, Tbl_MsaStates
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
-	.ascii	"M.S.A. OFF ON  #2  #3  "
+	; "M.S.A. ", 7 chars copied by ParamPopup_Msa (0xF0034F).
+Str_Msa:
+	.ascii	"M.S.A. "
+	; 4 x 4 chars OFF / ON / #2 / #3, read by ParamPopup_Msa (0xF0034F):
+	; `ld l, (0x10f3) / and l, 7 / sla hl, 2`, 4 bytes copied.
+Tbl_MsaStates:
+	.ascii	"OFF ON  #2  #3  "
 	push	xiz
 	ldda32	xiz, (0x10fd)
 	ldfr_lerp	xiz, 56
@@ -15177,7 +15417,7 @@ StringData_APCModeNames_Code_Skip21:
 	cp	a, 176
 	jrl	z, StringData_APCModeNames_Code_Skip22
 StringData_APCModeNames_Code_Loop:
-	jp	StringData_APCModeNames_0x664
+	jp	ParamPopup_PartPedal
 StringData_APCModeNames_Code_Skip22:
 	ldb_d8	a, (0x0eb5)
 	and	a, 4
@@ -15194,6 +15434,11 @@ StringData_APCModeNames_Code_Skip22:
 	ldb_d8	a, (0x0eb9)
 	and	a, 1
 	stb_d8	(0x10f6), a
+	; ParamPopup_PartPedal -- LCD parameter pop-up.
+	; Pop-up id 1.  Part name of (0x10f2) at 0x0ED1, then 10 chars of
+	; Tbl_PedalNames[((0x10f1) - 181) * 10] (SUSTAIN/SOFT PEDAL/SOSTENUTE);
+	; the value (0x10f3) in decimal when (0x10f1) = 181.
+ParamPopup_PartPedal:
 	ret
 	cpdi8	(0x0def), 1
 	jrl	z, StringData_APCModeNames_Code_Skip23
@@ -15213,7 +15458,7 @@ StringData_APCModeNames_Code_Skip23:
 	ldb_d8	l, (0x10f1)
 	sub	l, 181
 	mul	l, 10
-	ld	xiy, StringData_APCModeNames_0x6F5
+	ld	xiy, Tbl_PedalNames
 	lda_rr	xiy, xiy, hl
 	ldw	bc, 10
 	ldir85
@@ -15236,12 +15481,15 @@ StringData_APCModeNames_Code_Skip24:
 	jrl	nc, StringData_APCModeNames_Code_Skip25
 	ld	hl, 4:i3
 StringData_APCModeNames_Code_Skip25:
-	ld	xiy, StringData_PartNames_0x28F
+	ld	xiy, Str_OnOffPair
 	lda_rr	xiy, xiy, hl
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; 3 x 10 chars " SUSTAIN  " / "SOFT PEDAL" / "SOSTENUTE ", read by
+	; ParamPopup_PartPedal (0xF004DB): index ((0x10f1) - 181) times 10.
+Tbl_PedalNames:
 	.ascii	" SUSTAIN  SOFT PEDALSOSTENUTE "
 	call	StringData_APCModeNames_0x9D6
 	cp	l, 0:i3
