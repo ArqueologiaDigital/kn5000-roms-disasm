@@ -72,8 +72,8 @@
 ;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (DISASSEMBLED)
 ;   0x28F8E0  HDAE5000_Load_Palette - Load all 256 palette entries (DISASSEMBLED)
 ;   0x28F90B  HDAE5000_Finalize_Init - Just returns (1-byte stub) (DISASSEMBLED)
-;   0x28F90C  HDAE5000_Display_Init - Display/callback initialization (LABEL EXPOSED)
-;   0x28F90C  HDAE5000_Display_Init - Display/callback initialization
+;   0x28F90C  HDAE5000_HD_FormatDrive - Display/callback initialization (LABEL EXPOSED)
+;   0x28F90C  HDAE5000_HD_FormatDrive - Display/callback initialization
 ;   0x28F97E  HDAE5000_Calc_Offset_16 - Calculate 16-byte offset in table
 ;   0x28F98B  HDAE5000_Copy_To_Table - Copy data to table at 0x201632
 ;   0x28F9AD  HDAE5000_Get_Display_Dimensions_A1_2F - Memory check routine
@@ -3967,7 +3967,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	calr HDAE5000_Event_Handler
 	; Write sector data
 	lda xwa, (xsp + 56)
-	call HDAE5000_PPI_Write_Sector_Helper3
+	call HDAE5000_HD_GetDiskUsage
 	; MemFill: clear buffer again
 	pushw 0x0020			; count = 32
 	pushw 0x0000			; fill value = 0

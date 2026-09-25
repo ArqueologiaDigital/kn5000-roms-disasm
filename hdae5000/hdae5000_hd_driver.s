@@ -510,7 +510,7 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 
 	; Compute capacity: divide total sectors by 100
 	lda xwa, (xsp + 0x10)			; bf 10 30
-	call HDAE5000_PPI_Write_Sector_Helper3				; 1d 6c 8b 29
+	call HDAE5000_HD_GetDiskUsage				; 1d 6c 8b 29
 	ld xwa, (xsp + 0x1c)			; af 1c 20 — load dividend
 	ld xbc, 0x00000064			; 41 64 00 00 00 — divisor = 100
 	call HDAE5000_UDivMod32		; 1d c5 b8 29
@@ -5025,7 +5025,7 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	call HDAE5000_MemCopy
 	lda xsp, (xsp + 0x0e)
 	lda xwa, (xsp + 0x28)
-	call HDAE5000_PPI_Write_Sector_Helper3
+	call HDAE5000_HD_GetDiskUsage
 	pushw 0x0010
 	pushw 0x0000
 	lda xwa, (xsp + 0x1c)
@@ -5482,7 +5482,7 @@ HDAE5000_AttenHDFormatSwCatch_Case6:
 	call (xhl)
 	calr HDAE5000_Wait_Callback_Loop
 	ld wa, 1:i3
-	call HDAE5000_Display_Init
+	call HDAE5000_HD_FormatDrive
 	cp hl, 0:i3
 	jr nz, .LCHSC__res2_err
 	; Success: display + FS read
