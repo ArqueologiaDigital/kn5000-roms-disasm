@@ -2577,8 +2577,97 @@ MainPmanControl:
 	lda xix, (MainPmanCtrl_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
+; MainPmanControl's six switch cases, not a table: it takes event - 0x1E00057 as
+; the case, `ld wa,(<offset word>)` from the six s16 at 0xEA99F8 (0, 17, 34, 100,
+; 125, 150; spelled DiskWarning_ConfirmStrings_0xD4C above), then `lda xix,(<this>);
+; jp t,xix+wa`.  Held as `.byte` (v10/v9) or a romslice `.incbin` (v7) before
+; scripts/converters/convert_mainpman_switch.py; each case offset is an
+; instruction boundary and every instruction re-encodes to the ROM bytes.
 MainPmanCtrl_DispatchTable:
-	.incbin "includes/romslices/v7_transplant_MainPmanCtrl_DispatchTable.bin"
+MainPmanCtrl_Case0:
+	ld xiz, xde
+	ld xwa, (xiz)
+	ld bc, (xiz+4)
+	ld de, (xiz+6)
+	call 16566832
+	jrl 301
+MainPmanCtrl_Case1:
+	ld xiz, xde
+	ld xwa, (xiz)
+	ld bc, (xiz+4)
+	ld de, (xiz+6)
+	call 16567134
+	jrl 284
+MainPmanCtrl_Case2:
+	ld xiz, xde
+	ld xwa, (xiz)
+	call AcApcToggleProc_Helper
+	ld (xiz+4), hl
+	pushw 12
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+4), xhl
+	ld xwa, (xsp+4)
+	ld xiy, xiz
+	ld xix, xwa
+	ld bc, 6:i3
+	ldirw
+	ld xwa, 4294967295
+	ld xbc, 29360156
+	ld xde, (xsp+4)
+	call ApPostEvent
+	ld xwa, 4294967295
+	ld xbc, 31457315
+	ld xde, (xsp+4)
+	jr MainBitControl_Code_Join
+MainPmanCtrl_Case3:
+	ld xiz, xde
+	ld xwa, (xiz)
+	srl xwa, 0
+	ld qwa, 0
+	ld xbc, (xiz)
+	pushm (xiz+6)
+	ld de, (xiz+4)
+	call 16567114
+	jrl 193
+MainPmanCtrl_Case4:
+	ld xiz, xde
+	ld xwa, (xiz)
+	srl xwa, 0
+	ld qwa, 0
+	ld xbc, (xiz)
+	pushm (xiz+6)
+	ld de, (xiz+4)
+	call 16567378
+	jrl 168
+MainPmanCtrl_Case5:
+	ld xiz, xde
+	ld xwa, (xiz)
+	srl xwa, 0
+	ld qwa, 0
+	ld xbc, (xiz)
+	call DkMdlyPly_CheckState_Helper
+	ld (xiz+4), hl
+	pushw 12
+	call SLIDE_Decompress_4K_Init_Helper2
+	inc 2, xsp
+	ld (xsp+4), xhl
+	ld xwa, (xsp+4)
+	ld xiy, xiz
+	ld xix, xwa
+	ld bc, 6:i3
+	ldirw
+	ld xwa, 4294967295
+	ld xbc, 29360156
+	ld xde, (xsp+4)
+	call ApPostEvent
+	ld xwa, 4294967295
+	ld xbc, 31457315
+	ld xde, (xsp+4)
+MainBitControl_Code_Join:
+	call ApPostEvent
+	jr MainTitle_SendEventDone
+
 MainPmanCtrl_HandleA0:
 	ld (xsp+6), (35998)
 	cp xde, 16
