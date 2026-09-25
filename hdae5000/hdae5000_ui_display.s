@@ -848,7 +848,7 @@ HDAE5000_ErrMsgTimerCatchLBN:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	ld	de, 6:i3
-	calr	HDAE5000_FS_Init
+	calr	HDAE5000_Lbn_ShowEntry
 	ld	xhl, 0:i3
 .LUIH_b525:
 	pop xiz                                 ; pop XIZ
@@ -9333,7 +9333,7 @@ HDAE5000_LoadSong_Lsw:	; 0x290753 (350 bytes)
 	ld a, (xbc)
 	ld (0x23a09e:24), a; (0x23A09E)
 	; Call 0x284FD6
-	call HDAE5000_HD_Status_Check
+	call HDAE5000_SeparateOutput_Apply
 	; Final workspace dispatch
 	ld wa, (xsp + 10)
 	ld xbc, (0x23a1a2:24)
@@ -11588,7 +11588,7 @@ HDAE5000_CopyFdSongToHd:
 	; stacked: part mask and flags.  Checks the free space
 	; (HDAE5000_Song_CheckFreeSpace), then per bit k HDAE5000_CopyFdSongToHd_<k>
 	; (clear bits delete that part, HDAE5000_DeleteSongParts).  Caller:
-	; HDAE5000_FS_Scan_Directory (the copy-to-HD screen).
+	; HDAE5000_CopyToHd_Execute (the copy-to-HD screen).
 	lda	xsp, (xsp-52)
 	push xiz
 	ld (xsp + 0x30), xde                    ; ld (XSP+0x30),XDE

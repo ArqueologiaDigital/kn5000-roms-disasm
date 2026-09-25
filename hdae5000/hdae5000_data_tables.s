@@ -13639,7 +13639,7 @@ HDAE5000_AttenHDFormatSwCatch_CaseTable:
 	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 6
 	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 7
 ;
-; HDAE5000_HD_Sector_Read_CaseTable (0x2E2CF2, 6 x u16): the switch of HDAE5000_HD_Sector_Read
+; HDAE5000_HD_Sector_Read_CaseTable (0x2E2CF2, 6 x u16): the switch of HDAE5000_Lbn_StepDigit
 ; (dispatch at 0x286A49, hdae5000_hd_driver.s:5493: bound `cp xwa,5`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
 ; `lda xix,(HDAE5000_HD_Sector_Read_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
 ; HDAE5000_HD_Sector_Read_Case0 of the case for value 0+i; 6 entries, pinned by the bound
@@ -13685,7 +13685,7 @@ HDAE5000_LBNPage1SwCatch_CaseTable:
 	.asciz " %2.2d"
 	.zero 1				; 0x2E2D45 (split off by the table below/above)
 ;
-; HDAE5000_FS_Init_CaseTable (0x2E2D46, 7 x u16): the switch of HDAE5000_FS_Init
+; HDAE5000_FS_Init_CaseTable (0x2E2D46, 7 x u16): the switch of HDAE5000_Lbn_ShowEntry
 ; (dispatch at 0x2870FC, hdae5000_filesystem.s:17: bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
 ; `lda xix,(HDAE5000_FS_Init_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
 ; HDAE5000_FS_Init_Case0 of the case for value 0+i; 7 entries, pinned by the bound

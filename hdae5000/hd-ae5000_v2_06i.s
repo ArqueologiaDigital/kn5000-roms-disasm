@@ -666,14 +666,14 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	pushw 0x0002
 	ld	bc, hl
 	lda xde, (0x2e1c96:24)
-	calr	HDAE5000_HD_Data_Copy
+	calr	HDAE5000_TypeSel_Init
 	jr t, .LRF_0436                        ; [68 12] jr T,0x280436
 .LRF_0424:
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	lda xde, (0x2e1c96:24)
 	ld	bc, 0:i3
-	calr	HDAE5000_HD_Data_Copy
+	calr	HDAE5000_TypeSel_Init
 .LRF_0436:
 	ld	wa, 1:i3
 	jp HDAE5000_Set_Menu_Visibility                             ; jp 0x28b258
@@ -3563,9 +3563,12 @@ HDAE5000_HDTitleMenuProc:
 	ret
 
 
-HDAE5000_Event_Handler:	; 0x2827F4 (932 bytes)
-	; Event handler - processes firmware events dispatched to HDAE5000
-	; Entry point 1: vtable trampoline — registers callback via vtable, then jp (xhl)
+HDAE5000_HardTest_Print:	; 0x2827F4 (932 bytes)
+	; Print a line on the hardware-test page: XWA = string, sent as event
+	; 0x01C00025 to every object (XWA = 0xFFFFFFFF) through the main-CPU
+	; workspace 0x0E0A table +0x100 (tail call).  Callers: HDAE5000_HardTestPage
+	; and its tests HDAE5000_HardTest_PortTest / _HddIdRead.  (Was "Event
+	; handler ... registers callback via vtable": it registers nothing.)
 	ld xde, xwa					; e8 8a
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20 — load context base
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — xwa = (xwa+0x0e0a) vtable ptr
@@ -3637,8 +3640,8 @@ HDAE5000_HardTestPage:
 	call (xhl)					; b3 e8 — call init
 	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
 	lda xwa, (0x2e21e4:24); f2 e4 21 2e 30
-	calr HDAE5000_Event_Handler			; 1e 17 ff — register handler
-	calr HDAE5000_PPI_Read_Register		; 1e 47 03
+	calr HDAE5000_HardTest_Print			; 1e 17 ff — register handler
+	calr HDAE5000_HardTest_PortTest		; 1e 47 03
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
@@ -3683,8 +3686,8 @@ HDAE5000_HardTestPage:
 	call (xhl)					; b3 e8
 	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
 	lda xwa, (0x2e21f0:24); f2 f0 21 2e 30
-	calr HDAE5000_Event_Handler			; 1e 6b fe
-	calr HDAE5000_PPI_Write_Sector			; 1e e2 02
+	calr HDAE5000_HardTest_Print			; 1e 6b fe
+	calr HDAE5000_HardTest_HddIdRead			; 1e e2 02
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
@@ -3728,7 +3731,7 @@ HDAE5000_HardTestPage:
 	call (xhl)					; b3 e8
 	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
 	lda xwa, (0x2e21fc:24); f2 fc 21 2e 30
-	calr HDAE5000_Event_Handler			; 1e bf fd
+	calr HDAE5000_HardTest_Print			; 1e bf fd
 	; Check disk status via 0x0e88 table
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e88)             ; e3 e1 88 0e 20 — (xwa+0x0e88)
@@ -3746,15 +3749,15 @@ HDAE5000_HardTestPage:
 	cp hl, 0:i3					; db d8
 	jr nz, .Leh_status_nonzero			; 6e 0a
 	lda xwa, (0x2e2204:24); f2 04 22 2e 30
-	calr HDAE5000_Event_Handler			; 1e 8d fd
+	calr HDAE5000_HardTest_Print			; 1e 8d fd
 	jr t, .Leh_after_status			; 68 12
 .Leh_status_nonzero:
 	lda xwa, (0x2e2208:24); f2 08 22 2e 30
-	calr HDAE5000_Event_Handler			; 1e 83 fd
+	calr HDAE5000_HardTest_Print			; 1e 83 fd
 	jr t, .Leh_after_status			; 68 08
 .Leh_status_other:
 	lda xwa, (0x2e220e:24); f2 0e 22 2e 30
-	calr HDAE5000_Event_Handler			; 1e 79 fd
+	calr HDAE5000_HardTest_Print			; 1e 79 fd
 .Leh_after_status:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
@@ -3804,7 +3807,7 @@ HDAE5000_HardTestPage:
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8
 	lda xwa, (0x2e2214:24); f2 14 22 2e 30
-	calr HDAE5000_Event_Handler			; 1e c0 fc
+	calr HDAE5000_HardTest_Print			; 1e c0 fc
 	jr t, .Leh_epilogue				; 68 45
 .Leh_xde_0c_no_device:
 	; Device not present: show "not connected" message
@@ -3816,7 +3819,7 @@ HDAE5000_HardTestPage:
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8
 	lda xwa, (0x2e2224:24); f2 24 22 2e 30
-	calr HDAE5000_Event_Handler			; 1e 99 fc
+	calr HDAE5000_HardTest_Print			; 1e 99 fc
 	; Final cleanup: call deregister via vtable
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
@@ -3846,8 +3849,11 @@ HDAE5000_PPI_Init:	; 0x282B98 (13 bytes)
 	ld (0x160000:24), 0xff; ld (0x160000), 0xFF - Port A: set all bits
 	ret
 
-HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
-	; Transfer one byte via PPI to/from IDE bus
+HDAE5000_PPI_LoopbackByte:	; 0x282BA5 (130 bytes)
+	; Send byte A to the PPI (0x160002/0x160004, two nibbles, handshake on
+	; 0x160000 bit 4) and read it back from port A -- the loopback of the
+	; hardware test's "PPORT TEST".  (Not the IDE bus: the drive sits on the
+	; ATA registers at 0x130010.., HDAE5000_ATA_*.)
 	; Input: A = byte to transfer. Returns: L = 0x00 on match, 0xFF on mismatch
 	; --- Low nibble phase ---
 	ld l, a				; save original byte
@@ -3897,10 +3903,11 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	ld l, 0xFF:opc			; failure: L = 0xFF
 	ret
 
-HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)
-	; Read an IDE register value via PPI
-	; Reads register pair (low byte at IZ=0, high byte at IZ=1)
-	; Returns 16-bit value in (XSP+2), reports event on success
+HDAE5000_HardTest_PortTest:	; 0x282C27 (71 bytes)
+	; "PPORT TEST" of the hardware-test page: loop all 256 byte values through
+	; HDAE5000_PPI_LoopbackByte, OR the failures together and print
+	; "=======> Port Test OK" / "... Error" (0x2E224A / 0x2E2234) with
+	; HDAE5000_HardTest_Print.  (Was "read an IDE register value via PPI".)
 	dec 2, xsp
 	pushw iz
 	ldw (xsp + 2), 0x0000		; result = 0
@@ -3911,7 +3918,7 @@ HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)
 .Lppi_rd_loop:
 	stb_erp a, 0xf8		; ld a, izl (extended register)
 	extz wa
-	calr HDAE5000_PPI_Transfer_Byte
+	calr HDAE5000_PPI_LoopbackByte
 	ld a, l				; result byte from transfer
 	exts wa				; sign-extend to 16-bit
 	or (xsp + 2), wa		; OR into result word
@@ -3922,18 +3929,21 @@ HDAE5000_PPI_Read_Register:	; 0x282C27 (71 bytes)
 	cpw (xsp + 2), 0x0000	; test if result is zero
 	jr nz, .Lppi_rd_nonzero
 	lda xwa, (0x2e2234:24); 0x2E2234 - error event string
-	calr HDAE5000_Event_Handler
+	calr HDAE5000_HardTest_Print
 	jr t, .Lppi_rd_done
 .Lppi_rd_nonzero:
 	lda xwa, (0x2e224a:24); 0x2E224A - success event string
-	calr HDAE5000_Event_Handler
+	calr HDAE5000_HardTest_Print
 .Lppi_rd_done:
 	popw iz
 	inc 2, xsp
 	ret
 
-HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
-	; Write a sector of data to HD via PPI
+HDAE5000_HardTest_HddIdRead:	; 0x282C6E (192 bytes)
+	; "HDD ID READ" of the hardware-test page: HDAE5000_HD_LoadTables,
+	; HDAE5000_HD_GetGeometry, then prints "HD-TYPE : <model>", "Fre Capa:
+	; %3.1f [MB]" (free space / 100.0 as a float) and "=======> HDD OK" or
+	; "... HDD NG!".  (Was "write a sector of data to HD via PPI".)
 	; Large 124-byte stack frame for sector buffer and parameter blocks
 	lda xsp, (xsp - 124)		; allocate stack frame
 	ld wa, 0:i3
@@ -3964,7 +3974,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	lda xsp, (xsp + 26)		; pop all args (26 bytes)
 	; Transfer byte to PPI
 	lda xwa, (xsp + 24)
-	calr HDAE5000_Event_Handler
+	calr HDAE5000_HardTest_Print
 	; Write sector data
 	lda xwa, (xsp + 56)
 	call HDAE5000_HD_GetDiskUsage
@@ -3999,22 +4009,26 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	lda xsp, (xsp + 24)		; pop args
 	; Transfer results
 	lda xwa, (xsp + 24)
-	calr HDAE5000_Event_Handler
+	calr HDAE5000_HardTest_Print
 	lda xwa, (0x2e2286:24); 0x2E2286
-	calr HDAE5000_Event_Handler
+	calr HDAE5000_HardTest_Print
 	lda xwa, (0x2e2288:24); 0x2E2288
-	calr HDAE5000_Event_Handler
+	calr HDAE5000_HardTest_Print
 	jr t, .Lpws_done
 .Lpws_error:
 	lda xwa, (0x2e2298:24); 0x2E2298
-	calr HDAE5000_Event_Handler
+	calr HDAE5000_HardTest_Print
 .Lpws_done:
 	lda xsp, (xsp + 124)		; deallocate stack frame
 	ret
 
-HDAE5000_PPI_Read_Sector:	; 0x282D2E (270 bytes)
-	; Read a sector of data from HD via PPI
-	; Registers PPI device handlers for read operations via workspace dispatch
+HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
+	; Blank the floppy-list screen: copy the empty title/row templates
+	; (0x2E1CE6, and the "01:" .. "20:" rows at 0x2E1CF4) to 0x22AA9C /
+	; 0x22AAAA and show them in objects 0x7F00DE / 0x7F00D7 (event
+	; 0x01EA000A, then 0x01C0000F), hide 0x7F00D9/0x7F00D8, clear the flag
+	; arrays 0x22AB9C and 0x22ABB0.  (Was "read a sector of data from HD via
+	; PPI ... registers PPI device handlers": no PPI access here.)
 	; Copy 14 bytes: source table → PPI buffer
 	pushw 0x000E			; count = 14
 	lda xwa, (0x2e1ce6:24); 0x2E1CE6
@@ -4095,8 +4109,10 @@ HDAE5000_PPI_Read_Sector:	; 0x282D2E (270 bytes)
 	lda xsp, (xsp + 16)		; pop all args (16 bytes)
 	ret
 
-HDAE5000_PPI_Transfer_Block:	; 0x282E3C (81 bytes)
-	; Transfer a block of data via PPI
+HDAE5000_FdName_SongNumber:	; 0x282E3C (81 bytes)
+	; XWA = a floppy file name: HL = n-1 when it starts with the 2-digit
+	; number n = 1..20 (SPrintf "%2.2d", StrNCmp over its length), else
+	; 0xFFFF.  (Was "transfer a block of data via PPI".)
 	; Iterates entries 1..20, copies block via PPI_Block_Copy, validates buffer,
 	; then compares with MemCompare_Block. Returns matching index-1 or 0xFFFF.
 	dec 0, xsp			; allocate 8 bytes on stack
