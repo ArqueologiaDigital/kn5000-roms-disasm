@@ -131,6 +131,28 @@ NOTES = []
 OLD_LONG = {}   # address -> symbolic operand text of an existing `.long` line there
 
 
+def asm_escape(b):
+    """String-literal body: escape quote/backslash and every control byte
+    (a raw newline inside a literal once slipped through here)."""
+    out = []
+    for c in b:
+        if c == 0x22:
+            out.append('\\"')
+        elif c == 0x5C:
+            out.append('\\\\')
+        elif c == 0x0A:
+            out.append('\\n')
+        elif c == 0x0D:
+            out.append('\\r')
+        elif c == 0x09:
+            out.append('\\t')
+        elif c < 0x20 or c == 0x7F:
+            out.append('\\%03o' % c)
+        else:
+            out.append(chr(c))
+    return "".join(out)
+
+
 def render(obj, data, lo, syms, keep_labels):
     """keep_labels: {addr: [names]} to re-emit inside the object."""
     t = obj["type"]
@@ -178,7 +200,7 @@ def render(obj, data, lo, syms, keep_labels):
             if a in keep_labels and a != lo:
                 for nm in keep_labels[a]:
                     out.append("%s:" % nm)
-            out.append('\t.asciz "%s"' % ptxt.decode("latin-1").replace("\\", "\\\\").replace('"', '\\"'))
+            out.append('\t.asciz "%s"' % asm_escape(ptxt))
             a += len(ptxt) + 1
         if parts[-1]:
             sys.exit("%s: asciz object does not end in NUL" % obj["label"])

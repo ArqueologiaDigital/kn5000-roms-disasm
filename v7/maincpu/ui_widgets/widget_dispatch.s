@@ -1266,9 +1266,13 @@ SndParam_BlockRamPtrs:
 ; it in xwa (`ld xwa,<this>`) to the routine at 0xFFFEA1 when an allocation
 ; fails.  NUL + 0xFF pad.
 SndParam_OutOfMemoryMsg:
-	.asciz "Out of Memory !!!
-"
+	.asciz "Out of Memory !!!\n"
 	.byte 0xff	; pad
+; Sound configuration lookup table (6136 bytes)
+; Source: maincpu/ui_widgets/sound_config_lookup.c
+; Structure: 138-byte header + 25 x 234-byte channel config records + 148-byte trailer
+; (header ported from v10, where the same C layout compiles the v10 bytes; the
+;  v7 copy is v7/maincpu/ui_widgets/sound_config_lookup.c)
 NakaInst_SoundConfig_LookupTable:
 	.incbin "includes/generated/sound_config_lookup.bin"
 SeqChan_CommandDispatch_Table:

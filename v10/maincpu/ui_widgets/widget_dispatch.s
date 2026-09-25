@@ -1205,8 +1205,7 @@ SndParam_BlockRamPtrs:
 ; it in xwa (`ld xwa,<this>`) to the routine at 0xFFFEA1 when an allocation
 ; fails.  NUL + 0xFF pad.
 SndParam_OutOfMemoryMsg:
-	.asciz "Out of Memory !!!
-"
+	.asciz "Out of Memory !!!\n"
 	.byte 0xff	; pad
 ; Sound configuration lookup table (6136 bytes)
 ; Source: maincpu/ui_widgets/sound_config_lookup.c
