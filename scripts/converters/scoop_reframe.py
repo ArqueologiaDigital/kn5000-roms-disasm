@@ -186,8 +186,9 @@ def linemap(img, files):
             if code.startswith(".endm"):
                 in_macro = False
             out.append(ln)
+        out.append("Zsr_%d_%d:" % (files.index(rel), len(lines)))   # end-of-file marker
         override[rel] = "\n".join(out)
-        marks[rel] = len(lines)
+        marks[rel] = len(lines) + 1
     ok, elf, data = build(img, override)
     if not ok:
         raise SystemExit("linemap build failed:\n" + data[-3000:])
@@ -703,8 +704,8 @@ def splice(img, spec, amap, a2n, rombytes, lines):
     last = next((i for i in range(first, len(addrs))
                  if addrs[i] is not None and addrs[i] >= b), None)
     if last is None:
-        raise SystemExit("no line starts at/after 0x%06X" % b)
-    if addrs[last] != b:
+        raise SystemExit("0x%06X is past the end of the file" % b)
+    elif addrs[last] != b:
         raise SystemExit("0x%06X is not a line boundary (line %d starts 0x%06X)"
                          % (b, last + 1, addrs[last]))
     # back `last` up over label / comment / blank lines that belong to b
@@ -939,8 +940,10 @@ def cmd_plan(args):
     ext = line_extents(addrs)
     lines = open(os.path.join(ROOT, rel), encoding="latin-1").read().split("\n")
     first = next(i for i, x in enumerate(addrs) if x == lo and ext[i] > 0)
-    last = next(i for i in range(first, len(addrs)) if addrs[i] is not None and addrs[i] >= hi)
-    if addrs[last] != hi:
+    last = next((i for i in range(first, len(addrs)) if addrs[i] is not None and addrs[i] >= hi), None)
+    if last is None:
+        raise SystemExit("hi 0x%06X is past the end of the file" % hi)
+    elif addrs[last] != hi:
         raise SystemExit("hi 0x%06X is not a line boundary" % hi)
     skip = {(rel, i) for i in range(first, last)}
     br, oth = scan_refs(img, n2a, lo, hi, skip)
