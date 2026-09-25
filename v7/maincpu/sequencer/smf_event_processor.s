@@ -354,7 +354,7 @@ VoiceChannel_ParamTable1:
 ; Only the low nibble of 0x0FAB is used (a MIDI channel number); the two
 ; bytes after it, 0x0FAC/0x0FAD, are clamped to 0x7F as a pair by
 ; MidiEvent_ClampVelocityA_High, the shape of a MIDI message's data bytes.
-; The meaning of the 0x11F8 mode values is not established here.
+; (Which setting the 0x11F8 mode values stand for is outside this table.)
 	.long 0x0000f496, 0x0000f4b0, 0x0000f4ca, 0x0000f4e4
 	.long 0x0000f4fe, 0x0000f518, 0x0000f532, 0x0000f54c
 	.long 0x0000f566, 0x0000f580, 0x0000f59a, 0x0000f5b4
@@ -964,7 +964,7 @@ SMF_SetupActiveChannel:
 
 SMF_WaitForReady:
 	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	bit 7, a
 	jr nz, SMF_WaitForReady
 	ldw wa, 0x58ff
@@ -975,7 +975,7 @@ SMF_WaitForReady:
 	ldw wa, 0x1802
 	stw_dpi WA, 0xf1
 	ld a, 0x8:opc
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld (4376:16), xix
 	ld l, (0xfc62:16)
 	xor h, h
@@ -1014,7 +1014,7 @@ SMF_Setup_SelectTablePtr:
 
 SMF_WriteChannelDataLoop:
 	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	pushw bc
 	push xiy
 	push xix
@@ -2135,11 +2135,11 @@ SMF_NoteOn_StoreVoiceData:
 	ld xix, 0x11f9
 	lda_dri XIX, 0x07, 0xf0, 0xec
 	ld a, 0x80:opc
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld a, (4211:16)
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld a, (4213:16)
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld a, (4216:16)
 	ld w, 0x60:opc
 	muls8rr a, w
@@ -4625,56 +4625,56 @@ SeqStep_FileSectorReturn:
 	ld	xwa, 22
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	srl	xwa, 8
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224
+	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	srl	xwa, 0
@@ -6465,7 +6465,6 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xwa+26)
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+2)
-	; v10 does not spell this byte either
 	bitm	3, (xwa+2)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip
 	ld	xwa, (xsp+2)
@@ -6481,7 +6480,6 @@ SeqByteBlock_ChannelContainer:
 	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue
 SeqByteBlock_StyleBitmapRef_Code_Skip:
 	ld	xwa, (xsp+2)
-	; v10 does not spell this byte either
 	setm	3, (xwa+2)
 SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip:
 	ld	xwa, (xsp+2)
@@ -6498,7 +6496,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip:
 	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue
 SeqByteBlock_StyleBitmapRef_Code_Skip2:
 	ld	xwa, (xsp+6)
-	; v10 does not spell this byte either
 	cpw	(xwa+38), 512
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip2
 	ld	hl, 1:i3
@@ -6508,7 +6505,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip2:
 	ld	xbc, (xsp+6)
 	ld	(xwa+30), xbc
 	ld	xwa, (xsp+14)
-	; v10 does not spell this byte either
 	bitm	2, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip3
 	ld	xwa, (xsp+14)
@@ -6522,7 +6518,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip3:
 	inc	8, xsp
 	ld	iz, hl
 	ld	xwa, (xsp+14)
-	; v10 does not spell this byte either
 	bitm	7, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Join
 	cp	iz, 0:i3
@@ -6539,17 +6534,14 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip3:
 	jr	SeqByteBlock_StyleBitmapRef_Code_Join
 SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip4:
 	ld	xwa, (xsp+14)
-	; v10 does not spell this byte either
 	bitm	3, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip5
 	ld	xwa, (xsp+14)
-	; v10 does not spell this byte either
 	ld	xbc, xwa
 	ld	xwa, (xwa+71)
 	ld	(xbc+22), xwa
 SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip5:
 	ld	xwa, (xsp+14)
-	; v10 does not spell this byte either
 	bitm	4, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Join
 	ld	xwa, (xsp+14)
@@ -6557,8 +6549,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip5:
 	calr	SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper3
 	inc	4, xsp
 	ld	xwa, (xsp+14)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	setm	7, (xwa+3)
 SeqByteBlock_StyleBitmapRef_Code_Join:
 	cp	iz, 0:i3
@@ -6601,8 +6591,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4:
 	ld	xwa, (xsp+22)
 	ld	xbc, (xwa)
 	ld	xwa, (xsp+8)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	sub	xbc, (xwa+28)
 	ld	xwa, (xsp+8)
 	ld	wa, (xwa+46)
@@ -6616,8 +6604,6 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+8)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	div	bc, (xwa+40)
 	ld	(xsp+4), bc
 	ld	xwa, (xsp+8)
@@ -6636,21 +6622,14 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	ld	(xsp+6), a
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cp	wa, (xsp+4)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip2
 	ld	xwa, (xsp+16)
-	; v10 does not spell this byte either
 	cpw	(xwa+42), 0
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip
 	ld	xwa, (xsp+16)
-	; v10 does not spell this byte either
 	bitm	1, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	pushm	(xsp+20)
 	pushw	0
 	ld	xwa, (xsp+20)
@@ -6663,7 +6642,6 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue2
 SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip:
 	ld	xwa, (xsp+16)
-	; v10 does not spell this byte either
 	cpw	(xwa+44), 0
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper4_Join
 	ld	xwa, (xsp+16)
@@ -6674,9 +6652,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip:
 SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip2:
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cp	wa, (xsp+4)
 	jr	ule, SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip3
 	ld	xwa, (xsp+16)
@@ -6690,9 +6665,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip3:
 	ld	hl, (xwa+42)
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cp	wa, (xsp+4)
 	jr	nc, SeqByteBlock_StyleBitmapRef_Code_Skip5
 SeqByteBlock_StyleBitmapRef_Code_Loop:
@@ -6715,10 +6687,8 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip4:
 	cp	hl, wa
 	jr	ule, SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip6
 	ld	xwa, (xsp+16)
-	; v10 does not spell this byte either
 	bitm	1, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip5
-	; v10 does not spell this byte either
 	pushm	(xsp+20)
 	pushw	0
 	ld	xwa, (xsp+20)
@@ -6739,9 +6709,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip6:
 	incw	1, (xwa+46)
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cp	wa, (xsp+4)
 	jr	c, SeqByteBlock_StyleBitmapRef_Code_Loop
 SeqByteBlock_StyleBitmapRef_Code_Skip5:
@@ -6754,7 +6721,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Join:
 	ld	a, (xsp+6)
 	ld	xbc, xwa
 	ld	xwa, (xsp+8)
-	; v10 does not spell this byte either
 	add	xbc, (xwa+20)
 	ld	xwa, (xsp+22)
 	ld	(xwa), xbc
@@ -6826,8 +6792,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Helper:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, (xsp+20)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cpw	(xsp+28), 0
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip
 	ld	hl, 0:i3
@@ -6837,16 +6801,12 @@ SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip:
 	ld	(xsp+6), xwa
 	ld	xbc, (xiz+22)
 	ld	xwa, (xsp+6)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	div	bc, (xwa+40)
 	ld	(xsp+4), bc
 	ld	wa, (xsp+28)
 	exts	xwa
 	ld	xbc, xwa
-	; v10 does not spell this byte either
 	add	xbc, (xiz+22)
-	; v10 does not spell this byte either
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa+40)
 	extz	xwa
@@ -6887,8 +6847,6 @@ SeqByteBlock_StyleBitmapRef_Code_Skip7:
 	cp	a, 3:i3
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip9
 	ld	xwa, (xiz+34)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	resm	3, (xwa+22)
 SeqByteBlock_StyleBitmapRef_Code_Skip8:
 	pushw	40
@@ -6902,10 +6860,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip8:
 	ld	(xiz+34), xhl
 	or	xhl, xhl
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip9
-	; v10 does not spell this byte either
 	ldw	(xiz+6), 10
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	stiw_da	(124220), 10
 	ld	hl, 0:i3
 	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue4
@@ -6918,13 +6873,11 @@ SeqByteBlock_StyleBitmapRef_Code_Skip9:
 	ld	bc, (xsp+4)
 	extz	xbc
 	ld	xwa, (xsp+6)
-	; v10 does not spell this byte either
 	div	bc, (xwa+38)
 	ld	(xsp+4), bc
 	ld	xbc, (xiz+34)
 	lda	xbc, (xbc+16)
 	ld	wa, (xsp+4)
-	; v10 does not spell this byte either
 	cp	wa, (xsp+10)
 	jr	nc, SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip2
 	ld	wa, (xsp+4)
@@ -6936,7 +6889,6 @@ SeqByteBlock_StyleBitmapRef_Code_Join2:
 	ld	xwa, (xiz+34)
 	ld	wa, (xwa+16)
 	ld	(xsp+4), wa
-	; v10 does not spell this byte either
 	cpw	(xsp+30), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip10
 	ld	xwa, (xiz+34)
@@ -6965,14 +6917,11 @@ SeqByteBlock_StyleBitmapRef_Code_Skip10:
 	ld	(xiz+6), hl
 SeqByteBlock_StyleBitmapRef_Code_Join3:
 	ld	xwa, (xiz+34)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	resm	3, (xwa+22)
 	ld	xbc, (xiz+34)
 	ld	xwa, 0:i3
 	ld	(xbc+12), xwa
 	ld	xwa, (xiz+34)
-	; v10 does not spell this byte either
 	cpw	(xwa+20), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip3
 	ld	hl, 0:i3
@@ -6980,21 +6929,17 @@ SeqByteBlock_StyleBitmapRef_Code_Join3:
 SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip3:
 	ld	bc, (xsp+4)
 	ld	xwa, (xsp+6)
-	; v10 does not spell this byte either
 	mul	bc, (xwa+38)
 	ld	hl, bc
 SeqByteBlock_StyleBitmapRef_Code_Helper5_Join:
 	ld	bc, hl
 	extz	xbc
 	ld	xwa, (xsp+6)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	div	bc, (xwa+40)
 	sub	(xiz+44), bc
 	ld	xwa, (xiz+34)
 	ld	(xwa+22), 0
 	ld	xwa, (xiz+34)
-	; v10 does not spell this byte either
 	cpw	(xwa+20), 35
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Epilogue4
 	ld	xwa, (xiz+34)
@@ -7012,13 +6957,9 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6:
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+71)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cp	xbc, (xwa+22)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	ormi16	(xwa+6), 32768
 	ld	hl, 0:i3
 	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue5
@@ -7026,8 +6967,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip:
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+71)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	sub	xbc, (xwa+22)
 	ld	wa, (xsp+18)
 	extz	xwa
@@ -7041,12 +6980,9 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip2:
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+71)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	sub	xbc, (xwa+22)
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Join:
 	ld	(xsp+18), bc
-	; v10 does not spell this byte either
 	cpw	(xsp+18), 0
 	jrl	z, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip12
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop:
@@ -7054,23 +6990,19 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop:
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
 	and	xbc, (xwa+22)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip3
 	ld	xwa, (xsp+10)
 	cpw	(xwa+6), 35
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip3
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
 	bitm	2, (xwa+3)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip3
-	; v10 does not spell this byte either
 	cpw	(xsp+20), 0
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip3
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+30)
 	ld	wa, (xsp+18)
-	; v10 does not spell this byte either
 	cp	wa, (xbc+38)
 	jrl	nc, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip6
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip3:
@@ -7095,16 +7027,13 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop2:
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip4:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+34)
-	; v10 does not spell this byte either
 	bitm	0, (xwa+22)
-	; v10 does not spell this byte either
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop2
 SeqByteBlock_StyleBitmapRef_Code_Skip11:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
 	and	xbc, (xwa+22)
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+30)
@@ -7114,14 +7043,10 @@ SeqByteBlock_StyleBitmapRef_Code_Skip11:
 	extz	xwa
 	lda	xbc, (xwa+26)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
 	add	xbc, (xwa+34)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
 	bitm	2, (xwa+3)
-	; v10 does not spell this byte either
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip8
-	; v10 does not spell this byte either
 	cpw	(xsp+20), 0
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip8
 	cp	(xsp+18), de
@@ -7147,7 +7072,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Join2:
 	extz	xbc
 	ld	xwa, (xsp+10)
 	add	(xwa+22), xbc
-	; v10 does not spell this byte either
 	cpw	(xsp+18), 0
 	jrl	z, SeqByteBlock_StyleBitmapRef_Code_Join4
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip6:
@@ -7169,8 +7093,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip6:
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cpw	(xwa+6), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip7
 	ld	hl, (xsp+2)
@@ -7198,7 +7120,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Join3:
 	cp	iz, 0:i3
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Join4
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
 	bitm	2, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip10
 	cp	(xbc), 13
@@ -7210,12 +7131,11 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip10:
 	incw	1, (xsp+2)
 	ldb_spi	e, 228
 	ld	xwa, (xsp+14)
-	lda_dpi	xiy, 224
+	lda_dpi	xiy, 224	; = ld (xwa+),e (backend mnemonic is swapped)
 	ld	(xsp+14), xwa
 	ld	xwa, (xsp+10)
 	cp	(xwa+2), e
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Join4
-	; v10 does not spell this byte either
 	cpw	(xsp+20), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper6_Join4
 	ldw	(xsp+18), 0
@@ -7230,31 +7150,22 @@ SeqByteBlock_StyleBitmapRef_Code_Join4:
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
 	and	xbc, (xwa+22)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip11
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+34)
-	; v10 does not spell this byte either
 	resm	3, (xwa+22)
 	ld	xwa, (xsp+10)
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
-	; v10 does not spell this byte either
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip11:
 	cpw	(xsp+18), 0
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip12:
 	ld	wa, (xsp+2)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cp	wa, (xsp+4)
 	jr	nc, SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip13
 	ld	xwa, (xsp+10)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	ormi16	(xwa+6), 32768
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip13:
 	ld	hl, (xsp+2)
@@ -7293,11 +7204,8 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7:
 	cpw	(xsp+20), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	setm	7, (xwa+3)
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
 	setm	5, (xwa+64)
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip:
 	cpw	(xsp+20), 0
@@ -7313,14 +7221,12 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Loop:
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
 	and	xbc, (xwa+22)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip2
 	ld	xwa, (xsp+12)
 	cpw	(xwa+6), 35
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip2
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
 	bitm	2, (xwa+3)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip2
 	cpw	(xsp+22), 0
@@ -7335,8 +7241,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip2:
 	ld	xwa, (xwa+34)
 	or	xwa, xwa
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip12
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cpw	(xsp+4), 0
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip3
 	ld	xwa, (xsp+12)
@@ -7366,8 +7270,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Join:
 SeqByteBlock_StyleBitmapRef_Code_Skip12:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	setm	1, (xwa+22)
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
@@ -7379,15 +7281,10 @@ SeqByteBlock_StyleBitmapRef_Code_Skip12:
 	add	bc, 26
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	lda_rr	xde, xwa, bc
 	ld	xwa, (xsp+12)
 	bitm	2, (xwa+3)
-	; v10 does not spell this byte either
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip8
-	; v10 does not spell this byte either
 	cpw	(xsp+22), 0
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip8
 	cp	(xsp+20), hl
@@ -7413,7 +7310,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Join2:
 	exts	xbc
 	ld	xwa, (xsp+12)
 	add	(xwa+22), xbc
-	; v10 does not spell this byte either
 	cpw	(xsp+20), 0
 	jrl	z, SeqByteBlock_StyleBitmapRef_Code_Join5
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip6:
@@ -7435,8 +7331,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip6:
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cpw	(xwa+6), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip7
 	ld	hl, (xsp+2)
@@ -7465,43 +7359,36 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Join3:
 	jrl	z, SeqByteBlock_StyleBitmapRef_Code_Join5
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Loop2:
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
 	bitm	2, (xwa+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip10
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	cpw	(xsp+6), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip9
 	stib_dsp	232, 10
 	ldw	(xsp+6), 0
 	decm	1, (xsp+20)
-	; v10 does not spell this byte either
 	cpw	(xsp+22), 0
-	jr	z, 95
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
 	ldw	(xsp+20), 0
 	ld	iz, 1:i3
-	jr	86
+	jr	SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip9:
 	ld	xwa, (xsp+16)
-	.byte 0x80	; v10 does not spell this byte either
-	push	xsp
-	ldw	(110:8), 62736:io
-	.byte 0xe8	; v10 does not spell this byte either
-	nop
-	decf
+	cp	(xwa), 10
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip17
+	stib_dsp	232, 13
 	ld	xwa, 1:i3
 	add	(xsp+16), xwa
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	ldw	(xsp+6), 1
-	jr	15
+	jr	SeqByteBlock_StyleBitmapRef_Code_Helper7_Join4
+SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip17:
 	ld	xwa, (xsp+16)
 	ldb_spi	c, 224
-	lda_dpi	xhl, 232
+	lda_dpi	xhl, 232	; = ld (xde+),c (backend mnemonic is swapped)
 	ld	(xsp+16), xwa
 	decm	1, (xsp+20)
+SeqByteBlock_StyleBitmapRef_Code_Helper7_Join4:
 	incw	1, (xsp+2)
-	jr	42
+	jr	SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip10:
 	ld	xwa, (xsp+16)
 	ldb_spi	c, 224
@@ -7513,7 +7400,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip10:
 	ld	a, (xwa+2)
 	cp_spib	a, 232
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
-	; v10 does not spell this byte either
 	cpw	(xsp+22), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
 	ldw	(xsp+20), 0
@@ -7528,11 +7414,9 @@ SeqByteBlock_StyleBitmapRef_Code_Join5:
 	ld	xwa, (xsp+12)
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
 	cp	xbc, (xwa+71)
 	jr	ule, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip12
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
 	ld	xbc, xwa
 	ld	xwa, (xwa+22)
 	ld	(xbc+71), xwa
@@ -7541,18 +7425,14 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip12:
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+12)
-	; v10 does not spell this byte either
 	and	xbc, (xwa+22)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip13
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	; v10 does not spell this byte either
-	; v10 does not spell this byte either
 	resm	3, (xwa+22)
 	ld	xwa, (xsp+12)
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
-	; v10 does not spell this byte either
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip13:
 	cpw	(xsp+20), 0
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Loop
@@ -9954,7 +9834,7 @@ WildMatch_ScanLoop:
 
 WildMatch_CopyChar:
 	ldb_spi A, 0xf8
-	lda_dpi XBC, 0xe4
+	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
 
 WildMatch_CheckEnd:
 	cp (xiz), 0x0
