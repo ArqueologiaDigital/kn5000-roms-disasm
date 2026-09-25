@@ -29214,7 +29214,7 @@ sub_F0F788_Skip:
 	and	c, 1	; F0F7BF  and C,0x01
 	jr	nz, sub_F0F788_Skip2	; F0F7C2  jr NZ,0xf0f7da
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F7C4  or (XIX),0x01
-	lda	xbc, (sub_F0F820:24)	; F0F7C7  lda XBC,0xf0f820
+	lda	xbc, (EffectEditor_PaintJob0:24)	; F0F7C7  lda XBC,0xf0f820
 	push	xbc	; F0F7CC  push XBC
 	call	T_CallbackQueue_Post	; F0F7CD  call 0xf42e84
 	pushw	1	; F0F7D1  push 0x0001
@@ -29226,7 +29226,7 @@ sub_F0F788_Skip2:
 	jr	nz, sub_F0F788_Skip3	; F0F7DF  jr NZ,0xf0f7fa
 	m_or_mi8 MBI+r4, 0, 0x02	; F0F7E1  or (XIX),0x02
 	m_and_mi8 MBI+r4, 0, 0xfb	; F0F7E4  and (XIX),0xfb
-	lda	xbc, (sub_F0F91C:24)	; F0F7E7  lda XBC,0xf0f91c
+	lda	xbc, (EffectEditor_PaintJob1:24)	; F0F7E7  lda XBC,0xf0f91c
 	push	xbc	; F0F7EC  push XBC
 	call	T_CallbackQueue_Post	; F0F7ED  call 0xf42e84
 	pushw	1	; F0F7F1  push 0x0001
@@ -29237,7 +29237,7 @@ sub_F0F788_Skip3:
 	and	c, 4	; F0F7FC  and C,0x04
 	jr	nz, sub_F0F788_Skip4	; F0F7FF  jr NZ,0xf0f817
 	m_or_mi8 MBI+r4, 0, 0x04	; F0F801  or (XIX),0x04
-	lda	xbc, (sub_F0F9F1:24)	; F0F804  lda XBC,0xf0f9f1
+	lda	xbc, (EffectEditor_PaintJob2:24)	; F0F804  lda XBC,0xf0f9f1
 	push	xbc	; F0F809  push XBC
 	call	T_CallbackQueue_Post	; F0F80A  call 0xf42e84
 	pushw	1	; F0F80E  push 0x0001
@@ -29249,7 +29249,18 @@ sub_F0F788_Skip4:
 	popw	bc	; F0F81D  pop BC
 	pop	xix	; F0F81E  pop XIX
 	ret	; F0F81F  ret
-sub_F0F820:
+
+; --------------------------------------------------------------------------
+; EffectEditor_PaintJob0 -- effect-editor PAINT JOB 0.
+; Evidence: its first instructions clear bit 0 of (0x2799) (`res 0,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF0F7C7 `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; --------------------------------------------------------------------------
+EffectEditor_PaintJob0:
 	push	xix	; F0F820  push XIX
 	lda	xix, (T_DisplayList_Run_Stack:24)	; F0F821  lda XIX,0xf42e00
 	m_res 0, MD16, 0x2799	; F0F826  res 0,(0x2799)
@@ -29298,10 +29309,10 @@ sub_F0F788_Skip9:
 	lda	xwa, (Data_F13D48 + 0xD0:24)	; F0F895  lda XWA,0xf13e18
 	push	xwa	; F0F89A  push XWA
 sub_F0F788_Join:
-	lda	xiy, (sub_F0F820_Resume:24)	; F0F89B  lda XIY,0xf0f8a3
+	lda	xiy, (EffectEditor_PaintJob0_Resume:24)	; F0F89B  lda XIY,0xf0f8a3
 	push	xiy	; F0F8A0  push XIY
 	jp	(xix)	; F0F8A1  jp T,XIX
-sub_F0F820_Resume:
+EffectEditor_PaintJob0_Resume:
 	inc	8, xsp	; F0F8A3  inc 0,XSP
 sub_F0F788_Join2:
 	lda	xbc, (DL_F1408A:24)	; F0F8A5  lda XBC,0xf1408a
@@ -29352,7 +29363,18 @@ sub_F0F900_Resume:
 	add	xsp, 24	; F0F914  add XSP,0x00000018
 	pop	xix	; F0F91A  pop XIX
 	ret	; F0F91B  ret
-sub_F0F91C:
+
+; --------------------------------------------------------------------------
+; EffectEditor_PaintJob1 -- effect-editor PAINT JOB 1.
+; Evidence: its first instructions clear bit 1 of (0x2799) (`res 1,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF0F7E7 `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; --------------------------------------------------------------------------
+EffectEditor_PaintJob1:
 	push	xix	; F0F91C  push XIX
 	lda	xix, (9536:16)	; F0F91D  lda XIX,0x2540
 	m_res 1, MD16, 0x2799	; F0F921  res 1,(0x2799)
@@ -29429,7 +29451,18 @@ sub_F0F788_Join5:
 	pop	xbc	; F0F9EE  pop XBC
 	pop	xix	; F0F9EF  pop XIX
 	ret	; F0F9F0  ret
-sub_F0F9F1:
+
+; --------------------------------------------------------------------------
+; EffectEditor_PaintJob2 -- effect-editor PAINT JOB 2.
+; Evidence: its first instructions clear bit 2 of (0x2799) (`res 2,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF0F804 `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; --------------------------------------------------------------------------
+EffectEditor_PaintJob2:
 	pushw	hl	; F0F9F1  push HL
 	push	xix	; F0F9F2  push XIX
 	lda	xix, (9792:16)	; F0F9F3  lda XIX,0x2640
@@ -29807,7 +29840,7 @@ sub_F0FD5F_Skip:
 	and	c, 8	; F0FD8D  and C,0x08
 	jr	nz, sub_F0FD5F_Skip2	; F0FD90  jr NZ,0xf0fda8
 	m_or_mi8 MBI+r4, 0, 0x08	; F0FD92  or (XIX),0x08
-	lda	xbc, (sub_F0FDCE:24)	; F0FD95  lda XBC,0xf0fdce
+	lda	xbc, (EffectEditor_PaintJob3:24)	; F0FD95  lda XBC,0xf0fdce
 	push	xbc	; F0FD9A  push XBC
 	call	T_CallbackQueue_Post	; F0FD9B  call 0xf42e84
 	pushw	1	; F0FD9F  push 0x0001
@@ -29818,7 +29851,7 @@ sub_F0FD5F_Skip2:
 	and	c, 16	; F0FDAA  and C,0x10
 	jr	nz, sub_F0FD5F_Skip3	; F0FDAD  jr NZ,0xf0fdc5
 	m_or_mi8 MBI+r4, 0, 0x10	; F0FDAF  or (XIX),0x10
-	lda	xbc, (sub_F0FED6:24)	; F0FDB2  lda XBC,0xf0fed6
+	lda	xbc, (EffectEditor_PaintJob4:24)	; F0FDB2  lda XBC,0xf0fed6
 	push	xbc	; F0FDB7  push XBC
 	call	T_CallbackQueue_Post	; F0FDB8  call 0xf42e84
 	pushw	1	; F0FDBC  push 0x0001
@@ -29830,7 +29863,18 @@ sub_F0FD5F_Skip3:
 	popw	bc	; F0FDCB  pop BC
 	pop	xix	; F0FDCC  pop XIX
 	ret	; F0FDCD  ret
-sub_F0FDCE:
+
+; --------------------------------------------------------------------------
+; EffectEditor_PaintJob3 -- effect-editor PAINT JOB 3.
+; Evidence: its first instructions clear bit 3 of (0x2799) (`res 3,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF0FD95 `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; --------------------------------------------------------------------------
+EffectEditor_PaintJob3:
 	push	xix	; F0FDCE  push XIX
 	lda	xix, (T_DisplayList_Run_Stack:24)	; F0FDCF  lda XIX,0xf42e00
 	m_res 3, MD16, 0x2799	; F0FDD4  res 3,(0x2799)
@@ -29879,10 +29923,10 @@ sub_F0FD5F_Skip8:
 	lda	xwa, (Data_F13D48 + 0xD0:24)	; F0FE43  lda XWA,0xf13e18
 	push	xwa	; F0FE48  push XWA
 sub_F0FD5F_Join:
-	lda	xiy, (sub_F0FDCE_Resume:24)	; F0FE49  lda XIY,0xf0fe51
+	lda	xiy, (EffectEditor_PaintJob3_Resume:24)	; F0FE49  lda XIY,0xf0fe51
 	push	xiy	; F0FE4E  push XIY
 	jp	(xix)	; F0FE4F  jp T,XIX
-sub_F0FDCE_Resume:
+EffectEditor_PaintJob3_Resume:
 	inc	8, xsp	; F0FE51  inc 0,XSP
 sub_F0FD5F_Join2:
 	lda	xbc, (Data_F13D48 + 0x165:24)	; F0FE53  lda XBC,0xf13ead
@@ -29931,7 +29975,18 @@ sub_F0FE8F_Resume:
 	add	xsp, 44	; F0FECE  add XSP,0x0000002c
 	pop	xix	; F0FED4  pop XIX
 	ret	; F0FED5  ret
-sub_F0FED6:
+
+; --------------------------------------------------------------------------
+; EffectEditor_PaintJob4 -- effect-editor PAINT JOB 4.
+; Evidence: its first instructions clear bit 4 of (0x2799) (`res 4,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF0FDB2 `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; --------------------------------------------------------------------------
+EffectEditor_PaintJob4:
 	link XIZ,0xfffc	; F0FED6  link XIZ,0xfffc
 	push	xix	; F0FEDA  push XIX
 	lda	xix, (9792:16)	; F0FEDB  lda XIX,0x2640
@@ -29992,7 +30047,7 @@ sub_F0FED6:
 ;          which is y = 135-24 and entry 24 of the gain strings is "  0.0" --
 ;          and then the patched frame through T_DisplayList_Run_Stack;
 ;          otherwise it runs DL_F13F32, whose first record prints "BYPASS".
-;          Both callers (sub_F0FED6 via 0xF0FF30, sub_F123F4 via 0xF1244B)
+;          Both callers (EffectEditor_PaintJob4 via 0xF0FF30, sub_F123F4 via 0xF1244B)
 ;          fill (0x2640)-(0x2643) first and run DL_F1465F, which prints
 ;          (0x2640)/(0x2641) through DLBTable_1k125k16k2k25k315k4k (frequency
 ;          strings) and (0x2642)/(0x2643) through DLBTable_F15C93 (-12.0 ..
@@ -30194,7 +30249,7 @@ sub_F1008E_Skip2:
 	and	c, 32	; F10113  and C,0x20
 	jr	nz, sub_F1008E_Skip3	; F10116  jr NZ,0xf1012e
 	m_or_mi8 MBI+r4, 0, 0x20	; F10118  or (XIX),0x20
-	lda	xbc, (Data_F10D62:24)	; F1011B  lda XBC,0xf10d62
+	lda	xbc, (EffectEditor_PaintJob5:24)	; F1011B  lda XBC,0xf10d62
 	push	xbc	; F10120  push XBC
 	call	T_CallbackQueue_Post	; F10121  call 0xf42e84
 	pushw	1	; F10125  push 0x0001
@@ -30206,7 +30261,7 @@ sub_F1008E_Skip3:
 	jr	nz, sub_F1008E_Skip4	; F10133  jr NZ,0xf1014e
 	m_or_mi8 MBI+r4, 0, 0x40	; F10135  or (XIX),0x40
 	m_and_mi8 MBI+r4, 0, 0x7f	; F10138  and (XIX),0x7f
-	lda	xbc, (Data_F10E0F + 0xA9:24)	; F1013B  lda XBC,0xf10eb8
+	lda	xbc, (EffectEditor_PaintJob6:24)	; F1013B  lda XBC,0xf10eb8
 	push	xbc	; F10140  push XBC
 	call	T_CallbackQueue_Post	; F10141  call 0xf42e84
 	pushw	1	; F10145  push 0x0001
@@ -30217,7 +30272,7 @@ sub_F1008E_Skip4:
 	and	c, 128	; F10150  and C,0x80
 	jr	nz, sub_F1008E_Skip5	; F10153  jr NZ,0xf1016b
 	m_or_mi8 MBI+r4, 0, 0x80	; F10155  or (XIX),0x80
-	lda	xbc, (Data_F10E0F + 0xCB:24)	; F10158  lda XBC,0xf10eda
+	lda	xbc, (EffectEditor_PaintJob7:24)	; F10158  lda XBC,0xf10eda
 	push	xbc	; F1015D  push XBC
 	call	T_CallbackQueue_Post	; F1015E  call 0xf42e84
 	pushw	1	; F10162  push 0x0001
@@ -31845,96 +31900,237 @@ sub_F10CC4_Skip2:
 	unlk XIZ	; F10D5F  unlk XIZ
 	ret	; F10D61  ret
 
+
 ; --------------------------------------------------------------------------
-; Data_F10D62 -- 158 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Contains: printable bytes |<....4..'......@%...v !....fD....fL....f.....f$
-;           ....f.hN..=.19.`=.08h6..=.19..=.08h(..=.19..=.08h...>.19..=.08h.
-;           .A>.19..>.08....5=...`..?.19..>.08....5=....>.1|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; EffectEditor_PaintJob5 -- effect-editor PAINT JOB 5.
+; Evidence: its first instructions clear bit 5 of (0x2799) (`res 5,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF1011B `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; Body:    XIX = T_DisplayList_Run_Stack; `call 0xF42E10`; (0x2540) = 0; then a
+;          `cp BC,..` ladder on (0x2076) (1, 9, 10, 22, 23) picks pairs of the
+;          interpreter-A lists at 0xF13D60-0xF13F1D and runs each pair by a
+;          hand-made call (`lda XIY,resume / push XIY / jp (XIX)`), then the
+;          captions (DL_F143AF with (0x2640) = (0x2797), DL_F1469B/DL_F146A6
+;          with (0x2640) = (0x2790)).
+; ⚠ WAS `Data_F10D62` + code + `Data_F10E0F`: the source framed this
+;          routine as
+;          158 bytes of data, 15 bytes of code and 240 bytes of data (the code
+;          walk had never reached it); prom_b 0xF1011B posts its address.
 ; --------------------------------------------------------------------------
-Data_F10D62:
-	.byte	0x3C, 0xF2, 0x00, 0x2E, 0xF4, 0x34, 0xF1, 0x99, 0x27, 0xB5, 0x1D, 0x10, 0x2E, 0xF4, 0xF1, 0x40	; F10D62  [0..15]
-	.byte	0x25, 0x00, 0x00, 0xD1, 0x76, 0x20, 0x21, 0xD9, 0x12, 0xD9, 0xD9, 0x66, 0x44, 0xD9, 0xCF, 0x09	; F10D72  [16..31]
-	.byte	0x00, 0x66, 0x4C, 0xD9, 0xCF, 0x0A, 0x00, 0x66, 0x1C, 0xD9, 0xCF, 0x16, 0x00, 0x66, 0x24, 0xD9	; F10D82  [32..47]
-	.byte	0xCF, 0x17, 0x00, 0x66, 0x02, 0x68, 0x4E, 0xF2, 0x8F, 0x3D, 0xF1, 0x31, 0x39, 0xF2, 0x60, 0x3D	; F10D92  [48..63]
-	.byte	0xF1, 0x30, 0x38, 0x68, 0x36, 0xF2, 0xBA, 0x3D, 0xF1, 0x31, 0x39, 0xF2, 0x8F, 0x3D, 0xF1, 0x30	; F10DA2  [64..79]
-	.byte	0x38, 0x68, 0x28, 0xF2, 0xE9, 0x3D, 0xF1, 0x31, 0x39, 0xF2, 0xBA, 0x3D, 0xF1, 0x30, 0x38, 0x68	; F10DB2  [80..95]
-	.byte	0x1A, 0xF2, 0x18, 0x3E, 0xF1, 0x31, 0x39, 0xF2, 0xE9, 0x3D, 0xF1, 0x30, 0x38, 0x68, 0x0C, 0xF2	; F10DC2  [96..111]
-	.byte	0x41, 0x3E, 0xF1, 0x31, 0x39, 0xF2, 0x18, 0x3E, 0xF1, 0x30, 0x38, 0xF2, 0xE5, 0x0D, 0xF1, 0x35	; F10DD2  [112..127]
-	.byte	0x3D, 0xB4, 0xD8, 0xEF, 0x60, 0xF2, 0x01, 0x3F, 0xF1, 0x31, 0x39, 0xF2, 0xD6, 0x3E, 0xF1, 0x30	; F10DE2  [128..143]
-	.byte	0x38, 0xF2, 0xFB, 0x0D, 0xF1, 0x35, 0x3D, 0xB4, 0xD8, 0xF2, 0xA3, 0x3E, 0xF1, 0x31	; F10DF2  [144..157]
+EffectEditor_PaintJob5:
+	push	xix	; F10D62  push XIX
+	lda	xix, (T_DisplayList_Run_Stack:24)	; F10D63  lda XIX,0xf42e00
+	m_res 5, MD16, 0x2799	; F10D68  res 5,(0x2799)
+	call	T_F42E10	; F10D6C  call 0xf42e10
+	ld	(9536:16), 0	; F10D70  ld (0x2540),0x00
+	ld	bc, (8310:16)	; F10D75  ld BC,(0x2076)
+	extz	bc	; F10D79  extz BC
+	cp	bc, 1:i3	; F10D7B  cp BC,1
+	jr	z, EffectEditor_PaintJob5_Case1	; F10D7D  jr Z,0xf10dc3
+	cp	bc, 9	; F10D7F  cp BC,0x0009
+	jr	z, EffectEditor_PaintJob5_Case9	; F10D83  jr Z,0xf10dd1
+	cp	bc, 10	; F10D85  cp BC,0x000a
+	jr	z, EffectEditor_PaintJob5_Case10	; F10D89  jr Z,0xf10da7
+	cp	bc, 22	; F10D8B  cp BC,0x0016
+	jr	z, EffectEditor_PaintJob5_Case22	; F10D8F  jr Z,0xf10db5
+	cp	bc, 23	; F10D91  cp BC,0x0017
+	jr	z, EffectEditor_PaintJob5_Case23	; F10D95  jr Z,0xf10d99
+	jr	EffectEditor_PaintJob5_Common	; F10D97  jr T,0xf10de7
+EffectEditor_PaintJob5_Case23:
+	lda	xbc, (Data_F13D48 + 0x47:24)	; F10D99  lda XBC,0xf13d8f
+	push	xbc	; F10D9E  push XBC
+	lda	xwa, (Data_F13D48 + 0x18:24)	; F10D9F  lda XWA,0xf13d60
+	push	xwa	; F10DA4  push XWA
+	jr	EffectEditor_PaintJob5_RunPair	; F10DA5  jr T,0xf10ddd
+EffectEditor_PaintJob5_Case10:
+	lda	xbc, (Data_F13D48 + 0x72:24)	; F10DA7  lda XBC,0xf13dba
+	push	xbc	; F10DAC  push XBC
+	lda	xwa, (Data_F13D48 + 0x47:24)	; F10DAD  lda XWA,0xf13d8f
+	push	xwa	; F10DB2  push XWA
+	jr	EffectEditor_PaintJob5_RunPair	; F10DB3  jr T,0xf10ddd
+EffectEditor_PaintJob5_Case22:
+	lda	xbc, (Data_F13D48 + 0xA1:24)	; F10DB5  lda XBC,0xf13de9
+	push	xbc	; F10DBA  push XBC
+	lda	xwa, (Data_F13D48 + 0x72:24)	; F10DBB  lda XWA,0xf13dba
+	push	xwa	; F10DC0  push XWA
+	jr	EffectEditor_PaintJob5_RunPair	; F10DC1  jr T,0xf10ddd
+EffectEditor_PaintJob5_Case1:
+	lda	xbc, (Data_F13D48 + 0xD0:24)	; F10DC3  lda XBC,0xf13e18
+	push	xbc	; F10DC8  push XBC
+	lda	xwa, (Data_F13D48 + 0xA1:24)	; F10DC9  lda XWA,0xf13de9
+	push	xwa	; F10DCE  push XWA
+	jr	EffectEditor_PaintJob5_RunPair	; F10DCF  jr T,0xf10ddd
+EffectEditor_PaintJob5_Case9:
+	lda	xbc, (Data_F13D48 + 0xF9:24)	; F10DD1  lda XBC,0xf13e41
+	push	xbc	; F10DD6  push XBC
+	lda	xwa, (Data_F13D48 + 0xD0:24)	; F10DD7  lda XWA,0xf13e18
+	push	xwa	; F10DDC  push XWA
+EffectEditor_PaintJob5_RunPair:
+	lda	xiy, (EffectEditor_PaintJob5_Resume:24)	; F10DDD  lda XIY,0xf10de5
+	push	xiy	; F10DE2  push XIY
+	jp	(xix)	; F10DE3  jp T,XIX
+EffectEditor_PaintJob5_Resume:
+	inc	8, xsp	; F10DE5  inc 0,XSP
+EffectEditor_PaintJob5_Common:
+	lda	xbc, (Data_F13D48 + 0x1B9:24)	; F10DE7  lda XBC,0xf13f01
+	push	xbc	; F10DEC  push XBC
+	lda	xwa, (Data_F13D48 + 0x18E:24)	; F10DED  lda XWA,0xf13ed6
+	push	xwa	; F10DF2  push XWA
+	lda	xiy, (EffectEditor_PaintJob5_Resume2:24)	; F10DF3  lda XIY,0xf10dfb
+	push	xiy	; F10DF8  push XIY
+	jp	(xix)	; F10DF9  jp T,XIX
+EffectEditor_PaintJob5_Resume2:
+	lda	xbc, (Data_F13D48 + 0x15B:24)	; F10DFB  lda XBC,0xf13ea3
 
 	push	xbc	; F10E00  push XBC
 	lda	xwa, (Data_F13D48 + 0xF9:24)	; F10E01  lda XWA,0xf13e41
 	push	xwa	; F10E06  push XWA
-	lda	xiy, (Data_F10E0F:24)	; F10E07  lda XIY,0xf10e0f
+	lda	xiy, (EffectEditor_PaintJob5_Resume3:24)	; F10E07  lda XIY,0xf10e0f
 	push	xiy	; F10E0C  push XIY
 	jp	(xix)	; F10E0D  jp T,XIX
 
-; --------------------------------------------------------------------------
-; Data_F10E0F -- 240 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |.`.`..'?.f...>.19..>.08....5=...`.|A.19.hA.08.D
-;           ..5=....?.19..?.08.X..5=....'.@&..C.19.....@%....A.19.|A.08....5
-;           =....A.19..A.08....5=...@%....'.@&..F.19..F.08......,...\...'..@
-;           %....'.@&..F.19..F.08.....`...'..N.............+*<.@&4..'&..''..
-;           '|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F10E0F:
-	.byte	0xEF, 0x60, 0xEF, 0x60, 0xC1, 0x90, 0x27, 0x3F, 0x02, 0x66, 0x16, 0xF2, 0xCC, 0x3E, 0xF1, 0x31	; F10E0F  [0..15]
-	.byte	0x39, 0xF2, 0xAD, 0x3E, 0xF1, 0x30, 0x38, 0xF2, 0x2E, 0x0E, 0xF1, 0x35, 0x3D, 0xB4, 0xD8, 0xEF	; F10E1F  [16..31]
-	.byte	0x60, 0xF2, 0x7C, 0x41, 0xF1, 0x31, 0x39, 0xF2, 0x68, 0x41, 0xF1, 0x30, 0x38, 0xF2, 0x44, 0x0E	; F10E2F  [32..47]
-	.byte	0xF1, 0x35, 0x3D, 0xB4, 0xD8, 0xF2, 0x1E, 0x3F, 0xF1, 0x31, 0x39, 0xF2, 0x01, 0x3F, 0xF1, 0x30	; F10E3F  [48..63]
-	.byte	0x38, 0xF2, 0x58, 0x0E, 0xF1, 0x35, 0x3D, 0xB4, 0xD8, 0xC1, 0x97, 0x27, 0x19, 0x40, 0x26, 0xF2	; F10E4F  [64..79]
-	.byte	0xAF, 0x43, 0xF1, 0x31, 0x39, 0x1D, 0x0C, 0x2E, 0xF4, 0xF1, 0x40, 0x25, 0x00, 0x02, 0xF2, 0x86	; F10E5F  [80..95]
-	.byte	0x41, 0xF1, 0x31, 0x39, 0xF2, 0x7C, 0x41, 0xF1, 0x30, 0x38, 0xF2, 0x81, 0x0E, 0xF1, 0x35, 0x3D	; F10E6F  [96..111]
-	.byte	0xB4, 0xD8, 0xF2, 0xD3, 0x41, 0xF1, 0x31, 0x39, 0xF2, 0x86, 0x41, 0xF1, 0x30, 0x38, 0xF2, 0x95	; F10E7F  [112..127]
-	.byte	0x0E, 0xF1, 0x35, 0x3D, 0xB4, 0xD8, 0xF1, 0x40, 0x25, 0x00, 0x01, 0xC1, 0x90, 0x27, 0x19, 0x40	; F10E8F  [128..143]
-	.byte	0x26, 0xF2, 0xA6, 0x46, 0xF1, 0x31, 0x39, 0xF2, 0x9B, 0x46, 0xF1, 0x30, 0x38, 0x1D, 0x04, 0x2E	; F10E9F  [144..159]
-	.byte	0xF4, 0xEF, 0xC8, 0x2C, 0x00, 0x00, 0x00, 0x5C, 0x0E, 0xF1, 0x99, 0x27, 0xB6, 0xF1, 0x40, 0x25	; F10EAF  [160..175]
-	.byte	0x00, 0x00, 0xC1, 0x96, 0x27, 0x19, 0x40, 0x26, 0xF2, 0xF0, 0x46, 0xF1, 0x31, 0x39, 0xF2, 0xE1	; F10EBF  [176..191]
-	.byte	0x46, 0xF1, 0x30, 0x38, 0x1D, 0x04, 0x2E, 0xF4, 0xEF, 0x60, 0x0E, 0xF1, 0x99, 0x27, 0xB7, 0x1E	; F10ECF  [192..207]
-	.byte	0x4E, 0xEE, 0x1E, 0x05, 0x00, 0x1D, 0x14, 0x2E, 0xF4, 0x0E, 0xEE, 0x0C, 0xFC, 0xFF, 0x2B, 0x2A	; F10EDF  [208..223]
-	.byte	0x3C, 0xF1, 0x40, 0x26, 0x34, 0xC1, 0x92, 0x27, 0x26, 0xC1, 0x93, 0x27, 0x27, 0xF1, 0x93, 0x27	; F10EEF  [224..239]
+EffectEditor_PaintJob5_Resume3:
+	inc	8, xsp	; F10E0F  inc 0,XSP
+	inc	8, xsp	; F10E11  inc 0,XSP
+	m_cp_mi8 MB16, 0x2790, 0x02	; F10E13  cp (0x2790),0x02
+	jr	z, EffectEditor_PaintJob5_Join	; F10E18  jr Z,0xf10e30
+	lda	xbc, (Data_F13D48 + 0x184:24)	; F10E1A  lda XBC,0xf13ecc
+	push	xbc	; F10E1F  push XBC
+	lda	xwa, (Data_F13D48 + 0x165:24)	; F10E20  lda XWA,0xf13ead
+	push	xwa	; F10E25  push XWA
+	lda	xiy, (EffectEditor_PaintJob5_Resume4:24)	; F10E26  lda XIY,0xf10e2e
+	push	xiy	; F10E2B  push XIY
+	jp	(xix)	; F10E2C  jp T,XIX
+EffectEditor_PaintJob5_Resume4:
+	inc	8, xsp	; F10E2E  inc 0,XSP
+EffectEditor_PaintJob5_Join:
+	lda	xbc, (DL_F1417C:24)	; F10E30  lda XBC,0xf1417c
+	push	xbc	; F10E35  push XBC
+	lda	xwa, (DL_F14168:24)	; F10E36  lda XWA,0xf14168
+	push	xwa	; F10E3B  push XWA
+	lda	xiy, (EffectEditor_PaintJob5_Resume5:24)	; F10E3C  lda XIY,0xf10e44
+	push	xiy	; F10E41  push XIY
+	jp	(xix)	; F10E42  jp T,XIX
+EffectEditor_PaintJob5_Resume5:
+	lda	xbc, (DL_F13F1E:24)	; F10E44  lda XBC,0xf13f1e
+	push	xbc	; F10E49  push XBC
+	lda	xwa, (Data_F13D48 + 0x1B9:24)	; F10E4A  lda XWA,0xf13f01
+	push	xwa	; F10E4F  push XWA
+	lda	xiy, (EffectEditor_PaintJob5_Resume6:24)	; F10E50  lda XIY,0xf10e58
+	push	xiy	; F10E55  push XIY
+	jp	(xix)	; F10E56  jp T,XIX
+EffectEditor_PaintJob5_Resume6:
+	m_ld_m16m MB16, 0x2797, 0x2640	; F10E58  ld (0x2640),(0x2797)
+	lda	xbc, (DL_F143AF:24)	; F10E5E  lda XBC,0xf143af
+	push	xbc	; F10E63  push XBC
+	call	T_DisplayListB_RunOne_Stack	; F10E64  call 0xf42e0c
+	ld	(9536:16), 2	; F10E68  ld (0x2540),0x02
+	lda	xbc, (DL_F14186:24)	; F10E6D  lda XBC,0xf14186
+	push	xbc	; F10E72  push XBC
+	lda	xwa, (DL_F1417C:24)	; F10E73  lda XWA,0xf1417c
+	push	xwa	; F10E78  push XWA
+	lda	xiy, (EffectEditor_PaintJob5_Resume7:24)	; F10E79  lda XIY,0xf10e81
+	push	xiy	; F10E7E  push XIY
+	jp	(xix)	; F10E7F  jp T,XIX
+EffectEditor_PaintJob5_Resume7:
+	lda	xbc, (DL_F141D3:24)	; F10E81  lda XBC,0xf141d3
+	push	xbc	; F10E86  push XBC
+	lda	xwa, (DL_F14186:24)	; F10E87  lda XWA,0xf14186
+	push	xwa	; F10E8C  push XWA
+	lda	xiy, (EffectEditor_PaintJob5_Resume8:24)	; F10E8D  lda XIY,0xf10e95
+	push	xiy	; F10E92  push XIY
+	jp	(xix)	; F10E93  jp T,XIX
+EffectEditor_PaintJob5_Resume8:
+	ld	(9536:16), 1	; F10E95  ld (0x2540),0x01
+	m_ld_m16m MB16, 0x2790, 0x2640	; F10E9A  ld (0x2640),(0x2790)
+	lda	xbc, (DL_F146A6:24)	; F10EA0  lda XBC,0xf146a6
+	push	xbc	; F10EA5  push XBC
+	lda	xwa, (DL_F1469B:24)	; F10EA6  lda XWA,0xf1469b
+	push	xwa	; F10EAB  push XWA
+	call	T_DisplayListB_Run_Stack	; F10EAC  call 0xf42e04
+	add	xsp, 44	; F10EB0  add XSP,0x0000002c
+	pop	xix	; F10EB6  pop XIX
+	ret	; F10EB7  ret
 
-	ld	xiz, 3506444043	; F10EFF  ld XIZ,0xd100170b
-	m_ld_rm MWI+r7, 0, 7	; F10F04  ld SP,(XSP)
-	ld	a, 217:opc	; F10F06  ld A,0xd9
-	ccf	; F10F08  ccf
+; --------------------------------------------------------------------------
+; EffectEditor_PaintJob6 -- effect-editor PAINT JOB 6.
+; Evidence: its first instructions clear bit 6 of (0x2799) (`res 6,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF1013B `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; ⚠ WAS the middle of `Data_F10E0F`.
+; --------------------------------------------------------------------------
+EffectEditor_PaintJob6:
+	m_res 6, MD16, 0x2799	; F10EB8  res 6,(0x2799)
+	ld	(9536:16), 0	; F10EBC  ld (0x2540),0x00
+	m_ld_m16m MB16, 0x2796, 0x2640	; F10EC1  ld (0x2640),(0x2796)
+	lda	xbc, (DL_F146F0:24)	; F10EC7  lda XBC,0xf146f0
+	push	xbc	; F10ECC  push XBC
+	lda	xwa, (DL_F146E1:24)	; F10ECD  lda XWA,0xf146e1
+	push	xwa	; F10ED2  push XWA
+	call	T_DisplayListB_Run_Stack	; F10ED3  call 0xf42e04
+	inc	8, xsp	; F10ED7  inc 0,XSP
+	ret	; F10ED9  ret
+
+; --------------------------------------------------------------------------
+; EffectEditor_PaintJob7 -- effect-editor PAINT JOB 7.
+; Evidence: its first instructions clear bit 7 of (0x2799) (`res 7,(0x2799)`),
+;          and it is only ever reached as a callback: 0xF10158 `lda XBC,this /
+;          push XBC / call T_CallbackQueue_Post` right after setting that same
+;          bit.  (0x2799) is therefore the editor's set of PENDING paint jobs,
+;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
+;          own bit and redraws with display lists.  All eight are checked by
+;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
+; Body:    `calr sub_F0FD2F`, `calr sub_F10EE9`, `call T_F42E14`.
+; ⚠ WAS the middle of `Data_F10E0F`.
+; --------------------------------------------------------------------------
+EffectEditor_PaintJob7:
+	m_res 7, MD16, 0x2799	; F10EDA  res 7,(0x2799)
+	calr	sub_F0FD2F	; F10EDE  calr 0xf0fd2f
+	calr	sub_F10EE9	; F10EE1  calr 0xf10ee9
+	call	T_F42E14	; F10EE4  call 0xf42e14
+	ret	; F10EE8  ret
+
+; --------------------------------------------------------------------------
+; sub_F10EE9
+; Called from: EffectEditor_PaintJob7 (`calr` at 0xF10EE1)
+; Evidence: reached by that `calr`; the name IS the address.  It
+;          saves (0x2793) in L and copies (0x2792) into it, tests
+;          IndexedTable_GetByte(23, (0x2797)+97) -- block byte 23, the flag
+;          EqGraph_Draw prints "BYPASS" for and sub_F1018F toggles -- and
+;          runs on into the code below (it calls DspEffect_LoadParamNames at
+;          0xF10F55).  What it is FOR as a whole is not decoded here.
+; ⚠ WAS the tail of `Data_F10E0F` plus four lines framed from
+;   0xF10EFF, inside `ld (0x2793),H` at 0xF10EFC.
+; --------------------------------------------------------------------------
+sub_F10EE9:
+	link XIZ,0xfffc	; F10EE9  link XIZ,0xfffc
+	pushw	hl	; F10EED  push HL
+	pushw	de	; F10EEE  push DE
+	push	xix	; F10EEF  push XIX
+	lda	xix, (9792:16)	; F10EF0  lda XIX,0x2640
+	ld	h, (10130:16)	; F10EF4  ld H,(0x2792)
+	ld	l, (10131:16)	; F10EF8  ld L,(0x2793)
+	ld	(10131:16), h	; F10EFC  ld (0x2793),H
+	pushw	23	; F10F00  push 0x0017
+	ld	bc, (10135:16)	; F10F03  ld BC,(0x2797)
+	extz	bc	; F10F07  extz BC
 	add	bc, 97	; F10F09  add BC,0x0061
 	pushw	bc	; F10F0D  push BC
 	call	T_IndexedTable_GetByte	; F10F0E  call 0xf42c90
 	pop	xiy	; F10F12  pop XIY
 	cp	a, 0:i3	; F10F13  cp A,0
-	jrl	nz, Data_F10E0F_Code_Skip6	; F10F15  jrl NZ,0xf10fc3
+	jrl	nz, sub_F10EE9_Skip6	; F10F15  jrl NZ,0xf10fc3
 	ld	c, (10132:16)	; F10F18  ld C,(0x2794)
 	m_cp_rm MB16, 0x2795, 3	; F10F1C  cp C,(0x2795)
-	jr	z, Data_F10E0F_Code_Skip	; F10F20  jr Z,0xf10f50
+	jr	z, sub_F10EE9_Skip	; F10F20  jr Z,0xf10f50
 	set_dd8	0, 198	; F10F22  set 0,(0xc6)
 	ld	(9536:16), 1	; F10F25  ld (0x2540),0x01
 	ld	(xix), c	; F10F2A  ld (XIX),C
@@ -31949,18 +32145,18 @@ Data_F10E0F:
 	call	T_DisplayListB_Run_Stack	; F10F47  call 0xf42e04
 	res_dd8	0, 198	; F10F4B  res 0,(0xc6)
 	inc	8, xsp	; F10F4E  inc 0,XSP
-Data_F10E0F_Code_Skip:
+sub_F10EE9_Skip:
 	cp	h, l	; F10F50  cp H,L
-	jrl	z, Data_F10E0F_Code_Skip5	; F10F52  jrl Z,0xf10fbe
+	jrl	z, sub_F10EE9_Skip5	; F10F52  jrl Z,0xf10fbe
 	calr	DspEffect_LoadParamNames	; F10F55  calr 0xf10ff1
 	ld	(9536:16), 0	; F10F58  ld (0x2540),0x00
 	extz	xix	; F10F5D  extz XIX
 	ld	(xix+2), 0	; F10F5F  ld (XIX+0x02),0x00
 	m_cp_mi8 MB16, 0x2792, 0x00	; F10F63  cp (0x2792),0x00
-	jr	z, Data_F10E0F_Code_Skip2	; F10F68  jr Z,0xf10f70
+	jr	z, sub_F10EE9_Skip2	; F10F68  jr Z,0xf10f70
 	extz	xix	; F10F6A  extz XIX
 	m_or_mi8 MBD+r4, 0x02, 0x01	; F10F6C  or (XIX+0x02),0x01
-Data_F10E0F_Code_Skip2:
+sub_F10EE9_Skip2:
 	ld	c, 4:opc	; F10F70  ld C,0x04
 	m_mul MB16, 0x2792, 3	; F10F72  mul BC,(0x2792)
 	extz	xbc	; F10F76  extz XBC
@@ -31974,25 +32170,25 @@ Data_F10E0F_Code_Skip2:
 	add	xwa, xbc	; F10F91  add XWA,XBC
 	ld	h, (xwa)	; F10F93  ld H,(XWA)
 	cp	h, 255	; F10F95  cp H,0xff
-	jr	z, Data_F10E0F_Code_Skip4	; F10F98  jr Z,0xf10fac
+	jr	z, sub_F10EE9_Skip4	; F10F98  jr Z,0xf10fac
 	cp	h, 21	; F10F9A  cp H,0x15
-	jr	nz, Data_F10E0F_Code_Skip3	; F10F9D  jr NZ,0xf10fa6
+	jr	nz, sub_F10EE9_Skip3	; F10F9D  jr NZ,0xf10fa6
 	m_cp_mi8 MB16, 0x2797, 0x02	; F10F9F  cp (0x2797),0x02
-	jr	z, Data_F10E0F_Code_Skip4	; F10FA4  jr Z,0xf10fac
-Data_F10E0F_Code_Skip3:
+	jr	z, sub_F10EE9_Skip4	; F10FA4  jr Z,0xf10fac
+sub_F10EE9_Skip3:
 	extz	xix	; F10FA6  extz XIX
 	m_or_mi8 MBD+r4, 0x02, 0x02	; F10FA8  or (XIX+0x02),0x02
-Data_F10E0F_Code_Skip4:
+sub_F10EE9_Skip4:
 	lda	xbc, (DL_F14712:24)	; F10FAC  lda XBC,0xf14712
 	push	xbc	; F10FB1  push XBC
 	lda	xwa, (DL_F146F0:24)	; F10FB2  lda XWA,0xf146f0
 	push	xwa	; F10FB7  push XWA
 	call	T_DisplayListB_Run_Stack	; F10FB8  call 0xf42e04
 	inc	8, xsp	; F10FBC  inc 0,XSP
-Data_F10E0F_Code_Skip5:
+sub_F10EE9_Skip5:
 	calr	DspEffect_PaintParamEditor	; F10FBE  calr 0xf11057
-	jr	Data_F10E0F_Code_Join	; F10FC1  jr T,0xf10feb
-Data_F10E0F_Code_Skip6:
+	jr	sub_F10EE9_Join	; F10FC1  jr T,0xf10feb
+sub_F10EE9_Skip6:
 	ld	(9536:16), 0	; F10FC3  ld (0x2540),0x00
 	lda	xbc, (DL_F13F32:24)	; F10FC8  lda XBC,0xf13f32
 	push	xbc	; F10FCD  push XBC
@@ -32005,7 +32201,7 @@ Data_F10E0F_Code_Skip6:
 	call	T_DisplayList_RunOne_Stack	; F10FE3  call 0xf42e08
 	inc	8, xsp	; F10FE7  inc 0,XSP
 	inc	4, xsp	; F10FE9  inc 4,XSP
-Data_F10E0F_Code_Join:
+sub_F10EE9_Join:
 	pop	xix	; F10FEB  pop XIX
 	popw	de	; F10FEC  pop DE
 	popw	hl	; F10FED  pop HL
@@ -33093,13 +33289,13 @@ sub_F116C4_Loop:
 	add	xwa, xbc	; F11700  add XWA,XBC
 	ld	e, (xwa)	; F11702  ld E,(XWA)
 	cp	e, 255	; F11704  cp E,0xff
-	jr	z, Data_F1173A_Code_Skip2	; F11707  jr Z,0xf11742
+	jr	z, sub_F116C4_Skip2	; F11707  jr Z,0xf11742
 	ld	xbc, xix	; F11709  ld XBC,XIX
 	inc	2, xbc	; F1170B  inc 2,XBC
 	m_add_rm MLD+r6, 0xfa, 1	; F1170D  add XBC,(XIZ+0xfa)
 	ld	h, (xbc)	; F11710  ld H,(XBC)
 	cp	h, 255	; F11712  cp H,0xff
-	jr	z, Data_F1173A_Code_Skip	; F11715  jr Z,0xf1173e
+	jr	z, sub_F116C4_Skip	; F11715  jr Z,0xf1173e
 	lda	xbc, (xiz-38)	; F11717  lda XBC,XIZ+0xda
 	push	xbc	; F1171A  push XBC
 	ld	xwa, (xiz+10)	; F1171B  ld XWA,(XIZ+0x0a)
@@ -33112,37 +33308,18 @@ sub_F116C4_Loop:
 	extz	xbc	; F11728  extz XBC
 	add	xbc, ScreenTable_F13364	; F1172A  add XBC,0x00f13364
 	ld	xbc, (xbc)	; F11730  ld XBC,(XBC)
-	lda	xiy, (Data_F1173A:24)	; F11732  lda XIY,0xf1173a
+	lda	xiy, (sub_F116C4_Resume:24)	; F11732  lda XIY,0xf1173a
 	push	xiy	; F11737  push XIY
 	jp	(xbc)	; F11738  jp T,XBC
 
-; --------------------------------------------------------------------------
-; Data_F1173A -- 4 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f0ea9f_layout.py --null-accept`).
-; Contains: printable bytes |.`.d|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F1173A:
-	.byte	0xEF, 0x60, 0xEF, 0x64	; F1173A  [0..3]
+sub_F116C4_Resume:
+	inc	8, xsp	; F1173A  inc 0,XSP
+	inc	4, xsp	; F1173C  inc 4,XSP
 
-Data_F1173A_Code_Skip:
+sub_F116C4_Skip:
 	inc	1, l	; F1173E  inc 1,L
-	jr	Data_F1173A_Code_Join2	; F11740  jr T,0xf11780
-Data_F1173A_Code_Skip2:
+	jr	sub_F116C4_Join2	; F11740  jr T,0xf11780
+sub_F116C4_Skip2:
 	ld	xix, (xiz+10)	; F11742  ld XIX,(XIZ+0x0a)
 	inc	1, l	; F11745  inc 1,L
 	ld	c, 4:opc	; F11747  ld C,0x04
@@ -33155,8 +33332,8 @@ Data_F1173A_Code_Skip2:
 	extz	bc	; F11756  extz BC
 	extz	xbc	; F11758  extz XBC
 	add	(xiz+10), xbc	; F1175A  add (XIZ+0x0a),XBC
-	jr	Data_F1173A_Code_Join	; F1175D  jr T,0xf11778
-Data_F1173A_Code_Loop:
+	jr	sub_F116C4_Join	; F1175D  jr T,0xf11778
+sub_F116C4_Loop2:
 	ld	c, h	; F1175F  ld C,H
 	extz	bc	; F11761  extz BC
 	extz	xbc	; F11763  extz XBC
@@ -33168,11 +33345,11 @@ Data_F1173A_Code_Loop:
 	inc	1, xbc	; F11771  inc 1,XBC
 	add	(xiz+10), xbc	; F11773  add (XIZ+0x0a),XBC
 	add	h, c	; F11776  add H,C
-Data_F1173A_Code_Join:
+sub_F116C4_Join:
 	cp	h, 16	; F11778  cp H,0x10
-	jr	ule, Data_F1173A_Code_Loop	; F1177B  jr ULE,0xf1175f
+	jr	ule, sub_F116C4_Loop2	; F1177B  jr ULE,0xf1175f
 	ld	(xiz+10), xix	; F1177D  ld (XIZ+0x0a),XIX
-Data_F1173A_Code_Join2:
+sub_F116C4_Join2:
 	cp	e, 255	; F11780  cp E,0xff
 	jrl	nz, sub_F116C4_Loop	; F11783  jrl NZ,0xf116e3
 	lda	xbc, (xiz-38)	; F11786  lda XBC,XIZ+0xda
@@ -33209,7 +33386,7 @@ Data_F1173A_Code_Join2:
 	ld	h, (xwa)	; F117D5  ld H,(XWA)
 	add	xsp, 48	; F117D7  add XSP,0x00000030
 	cp	h, 255	; F117DD  cp H,0xff
-	jr	z, Data_F1173A_Code_Skip4	; F117E0  jr Z,0xf1182b
+	jr	z, sub_F116C4_Skip4	; F117E0  jr Z,0xf1182b
 	ld	c, 4:opc	; F117E2  ld C,0x04
 	m_mul MBD+r6, 0x08, 3	; F117E4  mul BC,(XIZ+0x08)
 	ld	(xiz-40), bc	; F117E7  ld (XIZ+0xd8),BC
@@ -33219,7 +33396,7 @@ Data_F1173A_Code_Join2:
 	ld	xbc, (xbc)	; F117F4  ld XBC,(XBC)
 	ld	xix, xbc	; F117F6  ld XIX,XBC
 	ldw	hl, 0	; F117F8  ld HL,0x0000
-Data_F1173A_Code_Loop2:
+sub_F116C4_Loop3:
 	ld	bc, hl	; F117FB  ld BC,HL
 	extz	xbc	; F117FD  extz XBC
 	ld	(xiz-42), xbc	; F117FF  ld (XIZ+0xd6),XBC
@@ -33231,18 +33408,18 @@ Data_F1173A_Code_Loop2:
 	add	xbc, xix	; F1180D  add XBC,XIX
 	ld	a, (xbc)	; F1180F  ld A,(XBC)
 	cp	d, a	; F11811  cp D,A
-	jr	z, Data_F1173A_Code_Skip3	; F11813  jr Z,0xf1181c
+	jr	z, sub_F116C4_Skip3	; F11813  jr Z,0xf1181c
 	inc	4, hl	; F11815  inc 4,HL
 	cp	e, 255	; F11817  cp E,0xff
-	jr	nz, Data_F1173A_Code_Loop2	; F1181A  jr NZ,0xf117fb
-Data_F1173A_Code_Skip3:
+	jr	nz, sub_F116C4_Loop3	; F1181A  jr NZ,0xf117fb
+sub_F116C4_Skip3:
 	cp	e, 255	; F1181C  cp E,0xff
-	jr	nz, Data_F1173A_Code_Skip4	; F1181F  jr NZ,0xf1182b
+	jr	nz, sub_F116C4_Skip4	; F1181F  jr NZ,0xf1182b
 	ld	c, (xiz-16)	; F11821  ld C,(XIZ+0xf0)
 	ld	h, c	; F11824  ld H,C
 	ld	xbc, (xiz+10)	; F11826  ld XBC,(XIZ+0x0a)
 	ld	(xbc), h	; F11829  ld (XBC),H
-Data_F1173A_Code_Skip4:
+sub_F116C4_Skip4:
 	pop	xix	; F1182B  pop XIX
 	popw	de	; F1182C  pop DE
 	popw	hl	; F1182D  pop HL
