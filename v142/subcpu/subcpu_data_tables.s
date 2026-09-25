@@ -2975,9 +2975,12 @@ DSP_MixerGain_Curve:
 ;   0x0133cf  61 parameter-RANGE arrays of 6-byte records {s16 BE min, s16 BE max,
 ;             u16 BE parameter selector} -- note BIG-endian fields, matching the
 ;             hi-byte-first order of the DSP register writes.
-;   0x013e49  60 parameter-DEFAULTS records, 23 bytes each: up to 22 per-parameter
-;             default values (one byte per range record, same order) + final byte 99
-;             (constant in all 60 records).
+;   0x013e49  60 parameter-DEFAULTS records, 23 bytes each: byte 0 = the effect number
+;             (59 of 59 dedicated records; the shared EffDefault record has 0), then the
+;             parameter values packed from byte 1 in the fields the main-CPU reader decodes
+;             (see ESTABLISHED below), final byte 99 (constant in all 60 records).
+;             ★ CORRECTED 2026-09-25: this line used to say byte 0.. were "up to 22 per-parameter
+;             default values (one byte per range record, same order)"; byte 0 is the effect number.
 ;   0x0143ad  100 parameter counts, one per effect number.
 ;   0x014411  100 x u32 -> range array per effect number 0-99.
 ;   0x0145a1  100 x u32 -> defaults record per effect number 0-99.
@@ -3006,16 +3009,48 @@ DSP_MixerGain_Curve:
 ; KARAOKE / BATH ROOM / STAGE (main-CPU v10 name table, 18-byte records at 0x033568 - 18*n); and
 ; the 15/53 rotary labels were swapped: 15 is ROCK ROTARY, 53 ROTARY SPEAKER.  Labels renamed by
 ; scripts/renaming/rename_v142_effect_param_meta.sed.
+; ESTABLISHED 2026-09-25 -- WHAT THIS BLOCK IS: a copy of the MAIN CPU's effect-parameter
+; metadata, which the main CPU reads and this payload does not.  All of 0x0133CF-0x014738 is
+; identical to main-CPU program ROM 0xEE4FC6-0xEE636B (same address in v7, v9 and v10; the
+; block is also unchanged, at the same address, in sub-CPU payloads v1.40 and v1.41), except
+; that (a) the main copy's defaults records are 24 bytes (these 23 + one 0xFF) and (b) the
+; pointer tables hold main-CPU addresses -- relocation-identical, entry for entry.
+; Main-CPU readers of that copy (v10 names; each holds the twin's address as an operand):
+;   range pointer table  0xEE6044  DSPCfg_LookupAndExtract 0xFDC41D; DSPCfg_ClampAndExtract
+;                                  0xFDC803, which clamps a value to [min,max] (returns 0xFFFE
+;                                  below min, 0xFFFD above max)
+;   range record decode            DSPCfg_ExtractPairFromStruct 0xFDC3C9: +0 and +2 as s16 BE
+;                                  (so the BIG-endian reading above is the consumer's), +4 as
+;                                  a byte, +5 sign-extended
+;   count table          0xEE5FE0  DSPCfg_GetSlotCount 0xFDC456 (bounds the parameter index
+;                                  in DSPCfg_ClampAndExtract and DSPCfg_WriteAllSlots_Direct)
+;   defaults ptr table   0xEE61D4  DSPCfg_ResolveWithFallback 0xFDC710, DSPCfg_WriteAllSlots_Direct
+;                                  0xFDCB40 / _Clamped 0xFDCBFE (index = byte 0 of the live record)
+;   defaults record                DSPCfg_ReadViaTableLookup 0xFDC364: byte 0 indexes the
+;                                  per-effect descriptor pointer table at main 0xEE75F6, and
+;                                  DSPCfg_ReadMultiField 0xFDC2E8 / DSPCfg_ReadField 0xFDC171
+;                                  read the values from byte 1 (1- or 2-byte fields, some as
+;                                  5-/6-bit sub-fields, chosen by the descriptor's type byte)
+;   0x014731 twins       0xEE6364 / 0xEE6368  DSPCfg_Data_001 0xFDC448 / DSPCfg_Data_002 0xFDC464
+; So the layouts written here are pinned by a reader, even though it runs on the other CPU.
+; Proof: scripts/analysis/v142_param_meta_maincpu_twin.py (byte and relocation identity in
+; v7/v9/v10, byte 0 = effect number, and the operand bytes of every reader listed above).
+; Cross-ref: v10/maincpu/ui_widgets/widget_dispatch.s + tonekit_param_blocks.c, where the twin
+; is labelled ToneKit_NullParams .. ToneKit_VoiceDispatch_Table (that last label sits at
+; 0xEE6048, 4 bytes past the pointer table's first entry at 0xEE6044, which no code uses).
+; Why the sub-CPU carries a copy it never reads is not established.
 ; ===========================================================================
 
 ; Shared placeholder range array (2 records) used by all effect numbers without a
 ; dedicated one: 0, 7, 11, 12, 13, 14, 28, 29, 30, 31, 38, 40, 41, 42, 43, 44, 45, 46, 47, 49, 51, 55, 61, 62, 63, 69, 76, 77, 78, 80, 81, 82, 83, 84, 85, 86, 87, 92, 93, 94, 95.
 ; Pointed to by EFF_ParamRanges_PtrTable (effects 0 7 11-14 28-31 38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE4FC6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 EffDefault_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 32): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE4FD2 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff32_Distortion_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3024,6 +3059,7 @@ Eff32_Distortion_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 33): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE4FF0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff33_Overdrive_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3032,6 +3068,7 @@ Eff33_Overdrive_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 34): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE500E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff34_Fuzz_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3040,6 +3077,7 @@ Eff34_Fuzz_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 35): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE502C (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff35_Exciter_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3050,6 +3088,7 @@ Eff35_Exciter_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 39): 17 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 17.
+; Main-CPU twin at 0xEE5056 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff39_ParametricEq_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3070,6 +3109,7 @@ Eff39_ParametricEq_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 1): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE50BC (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff01_Chorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3078,6 +3118,7 @@ Eff01_Chorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 2): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE50DA (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff02_ModulatedChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x09	; param 9: 0..99
@@ -3088,6 +3129,7 @@ Eff02_ModulatedChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 3): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE5104 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff03_Enhancer_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x36	; param 54: 0..99
@@ -3098,6 +3140,7 @@ Eff03_Enhancer_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 4): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
+; Main-CPU twin at 0xEE512E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff04_Flanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3109,6 +3152,7 @@ Eff04_Flanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 5): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
+; Main-CPU twin at 0xEE515E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff05_Phaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3120,6 +3164,7 @@ Eff05_Phaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 15): 16 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 16.
+; Main-CPU twin at 0xEE518E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff15_RockRotary_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x14	; param 20: 0..99
@@ -3139,6 +3184,7 @@ Eff15_RockRotary_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 48): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE51EE (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff48_AutoPan_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3148,6 +3194,7 @@ Eff48_AutoPan_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 50): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE5212 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff50_Vibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3157,6 +3204,7 @@ Eff50_Vibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 52): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5236 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff52_AutoWah_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x02, 0x00, 0x0b	; param 11: 0..2
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
@@ -3165,6 +3213,7 @@ Eff52_AutoWah_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 53): 16 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 16.
+; Main-CPU twin at 0xEE5254 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff53_RotarySpeaker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x14	; param 20: 0..99
@@ -3184,6 +3233,7 @@ Eff53_RotarySpeaker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 54): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE52B4 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff54_RingModulator_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x15	; param 21: 0..99
 	.byte 0x00, 0x00, 0x00, 0xb4, 0x00, 0x38	; param 56: 0..180
@@ -3192,6 +3242,7 @@ Eff54_RingModulator_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 37): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE52D2 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff37_SlowAttacker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x28	; param 40: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x2c	; param 44: 0..99
@@ -3200,6 +3251,7 @@ Eff37_SlowAttacker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 8): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE52F0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff08_GatedReverb_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x2e	; param 46: 0..99
 	.byte 0x00, 0x00, 0x00, 0x18, 0x00, 0x24	; param 36: 0..24
@@ -3209,6 +3261,7 @@ Eff08_GatedReverb_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 6): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5314 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff06_Ensemble_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3217,6 +3270,7 @@ Eff06_Ensemble_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 36): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE5332 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff36_Compressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x28	; param 40: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x29	; param 41: 0..99
@@ -3226,6 +3280,7 @@ Eff36_Compressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 56): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
+; Main-CPU twin at 0xEE5356 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff56_MixUp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x09	; param 9: 0..99
@@ -3237,6 +3292,7 @@ Eff56_MixUp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 9): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE5386 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff09_SingleDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x01, 0x5e, 0x00, 0x16	; param 22: 0..350
 	.byte 0x00, 0x00, 0x01, 0x5e, 0x00, 0x17	; param 23: 0..350
@@ -3247,6 +3303,7 @@ Eff09_SingleDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 10): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE53B0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff10_MultiTapDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x02, 0xbc, 0x00, 0x4b	; param 75: 0..700
 	.byte 0x00, 0x00, 0x02, 0xbc, 0x00, 0x4c	; param 76: 0..700
@@ -3262,6 +3319,7 @@ Eff10_MultiTapDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 64): 11 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 11.
+; Main-CPU twin at 0xEE53F8 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff64_SDelayChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3276,6 +3334,7 @@ Eff64_SDelayChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 65): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE543A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff65_SDelaySDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x43	; param 67: 0..99
 	.byte 0x00, 0x00, 0x00, 0xb4, 0x00, 0x16	; param 22: 0..180
@@ -3291,6 +3350,7 @@ Eff65_SDelaySDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 66): 14 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 14.
+; Main-CPU twin at 0xEE5482 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff66_SDelayFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3308,6 +3368,7 @@ Eff66_SDelayFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 67): 11 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 11.
+; Main-CPU twin at 0xEE54D6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff67_SDelayVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3322,6 +3383,7 @@ Eff67_SDelayVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 68): 14 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 14.
+; Main-CPU twin at 0xEE5518 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff68_SDelayPhaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3339,6 +3401,7 @@ Eff68_SDelayPhaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 70): 10 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 10.
+; Main-CPU twin at 0xEE556C (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff70_AutoWahSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x02, 0x00, 0x0b	; param 11: 0..2
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
@@ -3352,6 +3415,7 @@ Eff70_AutoWahSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 16): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE55A8 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff16_RoomReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3360,6 +3424,7 @@ Eff16_RoomReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 17): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE55C6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff17_RoomReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3368,6 +3433,7 @@ Eff17_RoomReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 18): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE55E4 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff18_PlateReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3376,6 +3442,7 @@ Eff18_PlateReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 19): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5602 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff19_PlateReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3384,6 +3451,7 @@ Eff19_PlateReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 20): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5620 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff20_ConcertReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3392,6 +3460,7 @@ Eff20_ConcertReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 21): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE563E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff21_ConcertReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3400,6 +3469,7 @@ Eff21_ConcertReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 22): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE565C (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff22_DarkReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3408,6 +3478,7 @@ Eff22_DarkReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 23): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE567A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff23_DarkReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3416,6 +3487,7 @@ Eff23_DarkReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 24): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5698 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff24_BrightReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3424,6 +3496,7 @@ Eff24_BrightReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 25): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE56B6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff25_BrightReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3432,6 +3505,7 @@ Eff25_BrightReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 26): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE56D4 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff26_WaveReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3440,6 +3514,7 @@ Eff26_WaveReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 27): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE56F2 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff27_WaveReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3448,6 +3523,7 @@ Eff27_WaveReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 71): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE5710 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff71_PeqChorus_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3460,6 +3536,7 @@ Eff71_PeqChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 72): 10 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 10.
+; Main-CPU twin at 0xEE5746 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff72_PeqSDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3473,6 +3550,7 @@ Eff72_PeqSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 73): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE5782 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff73_PeqFlanger_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3488,6 +3566,7 @@ Eff73_PeqFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 74): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE57CA (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff74_PeqVibrato_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3500,6 +3579,7 @@ Eff74_PeqVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 75): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE5800 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff75_PeqCompressor_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3512,6 +3592,7 @@ Eff75_PeqCompressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 96): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE5836 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff96_PeqComprDist_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3527,6 +3608,7 @@ Eff96_PeqComprDist_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 97): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE587E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff97_PeqComprOverdr_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3542,6 +3624,7 @@ Eff97_PeqComprOverdr_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 98): 13 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 13.
+; Main-CPU twin at 0xEE58C6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff98_PeqDistDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3558,6 +3641,7 @@ Eff98_PeqDistDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 99): 13 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 13.
+; Main-CPU twin at 0xEE5914 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff99_PeqOverdrDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3577,6 +3661,7 @@ Eff99_PeqOverdrDelay_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 57 is "STANDARD", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*57; also the DSP zone's DSP2_Eff57_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 57): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE5962 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff57_Standard_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
@@ -3585,6 +3670,7 @@ Eff57_Standard_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 58 is "PERCUSSIVE", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*58; also the DSP zone's DSP2_Eff58_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 58): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE596E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff58_Percussive_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
@@ -3593,6 +3679,7 @@ Eff58_Percussive_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 59 is "SYMPHONIC", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*59; also the DSP zone's DSP2_Eff59_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 59): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE597A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff59_Symphonic_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
@@ -3601,6 +3688,7 @@ Eff59_Symphonic_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 60 is "DEEP SPACE", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*60; also the DSP zone's DSP2_Eff60_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 60): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE5986 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff60_DeepSpace_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
@@ -3609,6 +3697,7 @@ Eff60_DeepSpace_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 88 is "ROOM", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*88; also the DSP zone's DSP2_Eff88_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 88): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5992 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff88_Room_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
@@ -3620,6 +3709,7 @@ Eff88_Room_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 89 is "KARAOKE", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*89; also the DSP zone's DSP2_Eff89_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 89): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE59B0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff89_Karaoke_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
@@ -3631,6 +3721,7 @@ Eff89_Karaoke_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 90 is "BATH ROOM", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*90; also the DSP zone's DSP2_Eff90_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 90): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE59CE (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff90_BathRoom_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
@@ -3642,6 +3733,7 @@ Eff90_BathRoom_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 91 is "STAGE", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*91; also the DSP zone's DSP2_Eff91_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 91): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE59EC (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff91_Stage_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
@@ -3653,6 +3745,7 @@ Eff91_Stage_ParamRanges:
 ; IDENTIFIED 2026-09-25: effect 79 is "GEQ", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*79; also the DSP zone's DSP2_Eff79_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 79): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE5A0A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff79_Geq_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x16, 0x00, 0x1e	; param 30: 0..22
 	.byte 0x00, 0x00, 0x00, 0x30, 0x00, 0x1f	; param 31: 0..48
@@ -3666,302 +3759,362 @@ Eff79_Geq_ParamRanges:
 
 ; Shared placeholder defaults record for the same effect numbers as
 ; EffDefault_ParamRanges.
-; Pointed to by EFF_ParamDefaults_PtrTable (effects 0 7 11-14 28-31 38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effects 0 7 11-14 28-31 38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): 23-byte defaults record #0: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A40 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 EffDefault_ParamDefaults:
 	.byte 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 32): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 32): 23-byte defaults record #1: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A58 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff32_Distortion_ParamDefaults:
 	.byte 32, 80, 70, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 33): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 33): 23-byte defaults record #2: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A70 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff33_Overdrive_ParamDefaults:
 	.byte 33, 90, 68, 84, 75, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 34): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 34): 23-byte defaults record #3: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A88 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff34_Fuzz_ParamDefaults:
 	.byte 34, 90, 66, 84, 75, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 35): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 35): 23-byte defaults record #4: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AA0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff35_Exciter_ParamDefaults:
 	.byte 35, 30, 86, 5, 0, 70, 84, 75, 1, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 39): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 39): 23-byte defaults record #5: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AB8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff39_ParametricEq_ParamDefaults:
 	.byte 39, 89, 88, 90, 24, 90, 216, 91, 152, 92, 88, 84, 75, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 1): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 1): 23-byte defaults record #6: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AD0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff01_Chorus_ParamDefaults:
 	.byte 1, 30, 6, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 2): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 2): 23-byte defaults record #7: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AE8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff02_ModulatedChorus_ParamDefaults:
 	.byte 2, 30, 6, 60, 15, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 3): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 3): 23-byte defaults record #8: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B00 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff03_Enhancer_ParamDefaults:
 	.byte 3, 50, 99, 99, 0, 25, 0, 0, 84, 75, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 4): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 4): 23-byte defaults record #9: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B18 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff04_Flanger_ParamDefaults:
 	.byte 4, 80, 2, 60, 0, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 5): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 5): 23-byte defaults record #10: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B30 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff05_Phaser_ParamDefaults:
 	.byte 5, 80, 4, 60, 50, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 15): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 15): 23-byte defaults record #11: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B48 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff15_RockRotary_ParamDefaults:
 	.byte 15, 90, 58, 70, 45, 7, 10, 10, 60, 40, 6, 72, 79, 84, 1, 70
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 48): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 48): 23-byte defaults record #12: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B60 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff48_AutoPan_ParamDefaults:
 	.byte 48, 80, 8, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 50): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 50): 23-byte defaults record #13: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B78 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff50_Vibrato_ParamDefaults:
 	.byte 50, 20, 40, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 52): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 52): 23-byte defaults record #14: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B90 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff52_AutoWah_ParamDefaults:
 	.byte 52, 2, 0, 99, 99, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 53): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 53): 23-byte defaults record #15: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BA8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff53_RotarySpeaker_ParamDefaults:
 	.byte 53, 0, 75, 64, 45, 7, 10, 10, 60, 40, 6, 72, 79, 84, 1, 70
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 54): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 54): 23-byte defaults record #16: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BC0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff54_RingModulator_ParamDefaults:
 	.byte 54, 64, 90, 0, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 37): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 37): 23-byte defaults record #17: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BD8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff37_SlowAttacker_ParamDefaults:
 	.byte 37, 12, 49, 1, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 8): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 8): 23-byte defaults record #18: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BF0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff08_GatedReverb_ParamDefaults:
 	.byte 8, 20, 12, 40, 5, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 6): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 6): 23-byte defaults record #19: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C08 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff06_Ensemble_ParamDefaults:
 	.byte 6, 30, 4, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 36): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 36): 23-byte defaults record #20: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C20 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff36_Compressor_ParamDefaults:
 	.byte 36, 14, 28, 9, 9, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 56): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 56): 23-byte defaults record #21: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C38 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff56_MixUp_ParamDefaults:
 	.byte 56, 50, 30, 84, 81, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 9): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 9): 23-byte defaults record #22: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C50 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff09_SingleDelay_ParamDefaults:
 	.byte 9, 1, 94, 1, 94, 196, 196, 18, 84, 70, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 10): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 10): 23-byte defaults record #23: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C68 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff10_MultiTapDelay_ParamDefaults:
 	.byte 10, 0, 136, 1, 16, 1, 152, 2, 32, 0, 30, 60, 99, 196, 18, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 64): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 64): 23-byte defaults record #24: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C80 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff64_SDelayChorus_ParamDefaults:
 	.byte 64, 20, 1, 44, 1, 44, 216, 216, 50, 40, 6, 0, 84, 70, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 65): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 65): 23-byte defaults record #25: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C98 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff65_SDelaySDelay_ParamDefaults:
 	.byte 65, 30, 0, 180, 0, 180, 196, 196, 30, 0, 100, 0, 100, 176, 176, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 66): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 66): 23-byte defaults record #26: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CB0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff66_SDelayFlanger_ParamDefaults:
 	.byte 66, 20, 1, 44, 1, 44, 216, 216, 80, 80, 2, 60, 50, 90, 0, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 67): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 67): 23-byte defaults record #27: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CC8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff67_SDelayVibrato_ParamDefaults:
 	.byte 67, 20, 1, 44, 1, 44, 216, 216, 40, 6, 90, 0, 84, 70, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 68): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 68): 23-byte defaults record #28: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CE0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff68_SDelayPhaser_ParamDefaults:
 	.byte 68, 20, 1, 44, 1, 44, 216, 216, 80, 80, 4, 60, 50, 90, 0, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 70): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 70): 23-byte defaults record #29: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CF8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff70_AutoWahSDelay_ParamDefaults:
 	.byte 70, 2, 0, 99, 20, 1, 44, 1, 44, 216, 216, 99, 70, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 16): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 16): 23-byte defaults record #30: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D10 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff16_RoomReverb1_ParamDefaults:
 	.byte 16, 19, 0, 12, 18, 50, 94, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 17): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 17): 23-byte defaults record #31: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D28 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff17_RoomReverb2_ParamDefaults:
 	.byte 17, 25, 0, 12, 20, 50, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 18): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 18): 23-byte defaults record #32: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D40 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff18_PlateReverb1_ParamDefaults:
 	.byte 18, 35, 0, 45, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 19): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 19): 23-byte defaults record #33: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D58 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff19_PlateReverb2_ParamDefaults:
 	.byte 19, 41, 0, 45, 16, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 20): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 20): 23-byte defaults record #34: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D70 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff20_ConcertReverb1_ParamDefaults:
 	.byte 20, 35, 0, 11, 20, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 21): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 21): 23-byte defaults record #35: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D88 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff21_ConcertReverb2_ParamDefaults:
 	.byte 21, 39, 0, 60, 18, 80, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 22): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 22): 23-byte defaults record #36: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DA0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff22_DarkReverb1_ParamDefaults:
 	.byte 22, 45, 0, 45, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 23): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 23): 23-byte defaults record #37: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DB8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff23_DarkReverb2_ParamDefaults:
 	.byte 23, 55, 0, 90, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 24): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 24): 23-byte defaults record #38: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DD0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff24_BrightReverb1_ParamDefaults:
 	.byte 24, 41, 0, 25, 20, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 25): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 25): 23-byte defaults record #39: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DE8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff25_BrightReverb2_ParamDefaults:
 	.byte 25, 45, 0, 30, 6, 50, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 26): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 26): 23-byte defaults record #40: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E00 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff26_WaveReverb1_ParamDefaults:
 	.byte 26, 45, 0, 45, 18, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 27): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 27): 23-byte defaults record #41: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E18 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff27_WaveReverb2_ParamDefaults:
 	.byte 27, 55, 0, 45, 18, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 71): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 71): 23-byte defaults record #42: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E30 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff71_PeqChorus_ParamDefaults:
 	.byte 71, 92, 100, 50, 30, 6, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 72): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 72): 23-byte defaults record #43: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E48 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff72_PeqSDelay_ParamDefaults:
 	.byte 72, 92, 100, 20, 1, 44, 1, 44, 216, 216, 84, 75, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 73): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 73): 23-byte defaults record #44: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E60 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff73_PeqFlanger_ParamDefaults:
 	.byte 73, 92, 100, 80, 80, 2, 60, 50, 90, 0, 84, 75, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 74): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 74): 23-byte defaults record #45: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E78 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff74_PeqVibrato_ParamDefaults:
 	.byte 74, 92, 100, 40, 6, 90, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 75): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 75): 23-byte defaults record #46: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E90 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff75_PeqCompressor_ParamDefaults:
 	.byte 75, 92, 100, 14, 28, 9, 9, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 96): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 96): 23-byte defaults record #47: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5EA8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff96_PeqComprDist_ParamDefaults:
 	.byte 96, 92, 100, 14, 28, 9, 9, 65, 66, 84, 75, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 97): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 97): 23-byte defaults record #48: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5EC0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff97_PeqComprOverdr_ParamDefaults:
 	.byte 97, 92, 100, 14, 28, 9, 9, 80, 80, 84, 75, 1, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 98): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 98): 23-byte defaults record #49: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5ED8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff98_PeqDistDelay_ParamDefaults:
 	.byte 98, 92, 100, 80, 68, 20, 1, 44, 1, 44, 216, 216, 84, 75, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 99): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 99): 23-byte defaults record #50: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5EF0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff99_PeqOverdrDelay_ParamDefaults:
 	.byte 99, 92, 100, 80, 80, 20, 1, 44, 1, 44, 216, 216, 84, 75, 1, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 57): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 57): 23-byte defaults record #51: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F08 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff57_Standard_ParamDefaults:
 	.byte 57, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 58): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 58): 23-byte defaults record #52: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F20 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff58_Percussive_ParamDefaults:
 	.byte 58, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 59): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 59): 23-byte defaults record #53: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F38 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff59_Symphonic_ParamDefaults:
 	.byte 59, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 60): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 60): 23-byte defaults record #54: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F50 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff60_DeepSpace_ParamDefaults:
 	.byte 60, 99, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 88): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 88): 23-byte defaults record #55: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F68 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff88_Room_ParamDefaults:
 	.byte 88, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 89): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 89): 23-byte defaults record #56: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F80 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff89_Karaoke_ParamDefaults:
 	.byte 89, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 90): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 90): 23-byte defaults record #57: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F98 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff90_BathRoom_ParamDefaults:
 	.byte 90, 45, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 91): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 91): 23-byte defaults record #58: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5FB0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff91_Stage_ParamDefaults:
 	.byte 91, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-; Pointed to by EFF_ParamDefaults_PtrTable (effect 79): 23-byte defaults record, one byte per range record in order, final byte 99.
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 79): 23-byte defaults record #59: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5FC8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff79_Geq_ParamDefaults:
 	.byte 79, 1, 216, 3, 152, 5, 24, 5, 216, 84, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
@@ -3969,8 +4122,10 @@ Eff79_Geq_ParamDefaults:
 ; --- 0x0143ad  editable-parameter count per effect number 0-99 (10 per row, so row = tens
 ; digit).  For effects with a dedicated range array the count equals the number of range
 ; records; effects on the shared EffDefault_ParamRanges still carry their nominal count 5.
-; Reader: none found -- no reader in any dumped image; forms searched are listed in the RE-CHECKED note
-; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
+; Reader: none in this payload, and this address is used by no code in any dump (forms searched: the
+; RE-CHECKED note of the block header, 0x0133CF).  The byte-identical main-CPU twin at 0xEE5FE0 is
+; read by DSPCfg_GetSlotCount (0xFDC456): count = byte [table + effect number] (ESTABLISHED note).
+; Contents are consistent with the range arrays (the count
 ; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamCount_Table:
 	.byte 5, 5, 7, 7, 8, 8, 5, 5, 6, 7
@@ -3985,8 +4140,11 @@ EFF_ParamCount_Table:
 	.byte 5, 5, 5, 5, 5, 5, 12, 12, 13, 13
 
 ; --- 0x014411  100 x u32, effect number -> parameter-ranges record.
-; Reader: none found -- no reader in any dumped image; forms searched are listed in the RE-CHECKED note
-; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
+; Reader: none in this payload, and this address is used by no code in any dump (forms searched: the
+; RE-CHECKED note of the block header, 0x0133CF).  Its main-CPU twin at 0xEE6044 (same entries
+; relocated by 0xEE4FC6 - 0x0133CF) is read by DSPCfg_LookupAndExtract (0xFDC41D) and
+; DSPCfg_ClampAndExtract (0xFDC803): entry = [table + 4 * effect number] (ESTABLISHED note).
+; Contents are consistent with the range arrays (the count
 ; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 0
@@ -4091,8 +4249,11 @@ EFF_ParamRanges_PtrTable:
 	.long Eff99_PeqOverdrDelay_ParamRanges	; effect 99
 
 ; --- 0x0145a1  100 x u32, effect number -> parameter-defaults record.
-; Reader: none found -- no reader in any dumped image; forms searched are listed in the RE-CHECKED note
-; of the block header (0x0133CF).  Contents are consistent with the range arrays (the count
+; Reader: none in this payload, and this address is used by no code in any dump (forms searched: the
+; RE-CHECKED note of the block header, 0x0133CF).  Its main-CPU twin at 0xEE61D4 (same record
+; index in every entry; records there are 24 bytes) is read by DSPCfg_ResolveWithFallback
+; (0xFDC710) and DSPCfg_WriteAllSlots_Direct (0xFDCB40): entry = [table + 4 * effect number].
+; Contents are consistent with the range arrays (the count
 ; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 0
@@ -4196,10 +4357,23 @@ EFF_ParamDefaults_PtrTable:
 	.long Eff98_PeqDistDelay_ParamDefaults	; effect 98
 	.long Eff99_PeqOverdrDelay_ParamDefaults	; effect 99
 
-; --- 0x014731  null terminator of the pointer-table pair + four constant 0x01 bytes
-; (purpose unknown; no reference found).
-EFF_ParamPtrTable_Terminator:
-	.long 0
+; --- 0x014731  two 4-entry byte tables that end the block: twins of main-CPU 0xEE6364 and
+; 0xEE6368 (scripts/analysis/v142_param_meta_maincpu_twin.py).  Neither is read in this payload.
+; In the main CPU, DSPCfg_Data_001 (0xFDC448) returns byte [0xEE6364 + index] and
+; DSPCfg_Data_002 (0xFDC464) byte [0xEE6368 + index]; the 4-byte extents are pinned by the
+; next main-CPU table, at 0xEE6368 and 0xEE636C respectively (the latter read by
+; DSPCfg_WriteAllSlots_Direct 0xFDCB40).  No caller of either routine was found in v10
+; (searched: the routine address as a 3-byte LE value anywhere in the ROM, and every calr
+; displacement landing on it), so what the index and the values (0 x4, 1 x4) mean is not
+; established.
+; ★ CORRECTED 2026-09-25: this was labelled EFF_ParamPtrTable_Terminator and described as a
+; "null terminator of the pointer-table pair + four constant 0x01 bytes (purpose unknown;
+; no reference found)".  The main-CPU twin of the first four bytes is read as a byte table
+; (by DSPCfg_Data_001), not as a terminator; label renamed and split, `.long 0` retyped as
+; the four bytes it is.
+EFF_ParamMeta_ByteTableA:
+	.byte 0, 0, 0, 0
+EFF_ParamMeta_ByteTableB:
 	.byte 1, 1, 1, 1
 
 ; --- 0x014739-0x014744  OFFSETS_14739 -- 6 x u16 jump offsets, base 0x03C32E
