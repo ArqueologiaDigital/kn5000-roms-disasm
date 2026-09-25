@@ -10794,3138 +10794,2653 @@ SeMenu_EqEdit_DrawInit:
 	ret
 	.ascii "89:;<=>^]\\[ZYX"
 	ret
-	ld	(16:8), 40:io
-	rcf
-	ld	(16:8), 8:io
-	rcf
-	pushw	wa
-	push_a
-	nop
-	nop
-	.ascii "*U T*"
-	normal
-	pushw	de
-	.byte 0x54
-	ld	(16:8), 42:io
-	.byte 0x54
-	ld	(16:8), 8:io
-	rcf
-	ld	(4:8), 42:io
-	.byte 0x55
-	ld	b, 1:opc
-	push	sr
-	max
-	ld	(16:8), 42:io
-	.byte 0x55
-	nop
-	nop
-	.ascii "*U\"A\"A\"A"
-	push	sr
-	normal
-	push	sr
-	pop_a
-	pushw	de
-	ld	xbc, 0x152a4122
-	pushw	de
-	.byte 0x55
-	ld	b, 1:opc
-	ldw	(4:8), 0x4102:io
-	pushw	de
-	push_a
-	nop
-	nop
-	pushw	de
-	.ascii "U @ @ @"
-	push	sr
-	normal
-	push	sr
-	pop_a
-	pushw	de
-	ld	xbc, 0x152a4122
-	max
-	ldw	(20:8), 5130:io
-	ld	b, 85:opc
-	pushw	de
-	max
-	push	sr
-	rcf
-	ld	(84:8), 42:io
-	rcf
-	ld	(16:8), 8:io
-	push_a
-	ld	(64:8), 32:io
-	.byte 0x40
-	.ascii "*U\"A\"A\""
-	reti
-	push_f
-	.ascii " 'OOOO' "
-	push_f
-	reti
-	incm8	8, (xwa)
-	rcf
-	and	(xwa), wa
-	add	w, 200
-	.byte 0x90
-	rcf
-	jr	f, -128
-	reti
-	push_f
-	.ascii "  @@@@  "
-	push_f
-	reti
-	incm8	8, (xwa)
-	rcf
-	rcf
-	ld	(8:8), 8:io
-	ld	(16:8), 16:io
-	jr	f, -128
-SeBitmap_EnvCurve1:
-	swi	7
-	.fill 8, 1, 0x80
-	.byte 0x80, 0x80, 0x81, 0x81, 0x82, 0x84
-	add	(xix), w
-	.byte 0x88, 0x90, 0x90, 0x90, 0xa0, 0xa0, 0xa0, 0xa0
-	.byte 0xa0, 0xa0, 0xa0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0
-	.byte 0xc0, 0xc0, 0xc0, 0xc0
-	cp	(xwa), l
-	jrl	nc, 255
-	nop
-	nop
-	nop
-	pop	sr
-	.byte 0x04
-	push_f
-	ldw	wa, 0xc060
-	.byte 0x80
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 16
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	nop
-	reti
-	push	xwa
-	.byte 0xc0
-	nop
-	nop
-	nop
-	nop
-	.zero 24
+; -----------------------------------------------------------------------------
+; ScreenData record macros (lane seui 2026-09-25).  One macro = one record =
+; {u8 op, u8 len, payload}; the layouts are the reads the interpreter's own
+; handlers make (se_gfx_wrappers_probe.py / se_screendata_model.py):
+;  static (GraphicsRender_ProcessEntries, 36-entry table):
+;   sd_quad   op, a, b, c, d   len 10, four u16 at +2/+4/+6/+8 (ops 00 01 02 05
+;                              09 0A 11 12 13 15 1B 22: two corner points)
+;   sd_ctext  op, len, cell, text   u16 +2 = y*40 + x/8, written Y*40+C below
+;                              (the handler divides by 40: y = cell/40 pixel
+;                              rows, x = 8*(cell%40)); text = len-4 bytes
+;                              (ops 06 07 08 20)
+;   sd_ptext  op, len, x, y, text   u16 +2 = x, u16 +4 = y in pixels, text =
+;                              len-6 bytes (ops 17 1C)
+;   sd_blit   bitmap, cell, bpr, rows   op 03 len 12: u32 +2 1-bpp bitmap,
+;                              u16 +6 cell, u16 +8 bytes per row, u16 +10 rows
+;   sd_op23   style, cell      op 23 len 5: u8 +2, u16 +3 cell
+;   sd_rec    op, len, bytes...     any other static record, payload verbatim
+;  bound (GraphicsRender_Start, 12-entry table): value = (RAM[ram] & mask) >>
+;  (shift & 15), then:
+;   sdb_num   ram, mask, shift, style, cell, digits      op 00 len 10
+;   sdb_snum  ram, mask, shift, style, cell, digits, zero op 05 len 11: prints
+;                              value-zero with a '+'/'-' sign
+;   sdb_str   ram, mask, shift, style, table, width, cell      op 02 len 15:
+;                              `width` chars of table[value*width] at cell
+;   sdb_strxy ram, mask, shift, style, table, width, x, y      op 07 len 17
+;   sdb_box   op, ram, mask, shift, b6, table   ops 03/04/08 len 11: u32 +7
+;                              -> table of {x1,y1,x2,y2} u16 boxes, [value]
+; -----------------------------------------------------------------------------
+.macro sd_quad op, a, b, c, d
+	.byte \op, 10
+	.short \a, \b, \c, \d
+.endm
+.macro sd_ctext op, len, cell, text:vararg
+	.byte \op, \len
+	.short \cell
+	.ascii \text
+.endm
+.macro sd_ptext op, len, x, y, text:vararg
+	.byte \op, \len
+	.short \x, \y
+	.ascii \text
+.endm
+.macro sd_blit bitmap, cell, bpr, rows
+	.byte 0x03, 12
+	.long \bitmap
+	.short \cell, \bpr, \rows
+.endm
+.macro sd_op23 style, cell
+	.byte 0x23, 5, \style
+	.short \cell
+.endm
+.macro sd_rec op, len, bytes:vararg
+	.byte \op, \len, \bytes
+.endm
+.macro sdb_num ram, mask, shift, style, cell, digits
+	.byte 0x00, 10
+	.short \ram
+	.byte \mask, \shift, \style
+	.short \cell
+	.byte \digits
+.endm
+.macro sdb_snum ram, mask, shift, style, cell, digits, zero
+	.byte 0x05, 11
+	.short \ram
+	.byte \mask, \shift, \style
+	.short \cell
+	.byte \digits, \zero
+.endm
+.macro sdb_str ram, mask, shift, style, table, width, cell
+	.byte 0x02, 15
+	.short \ram
+	.byte \mask, \shift, \style
+	.long \table
+	.short \width, \cell
+.endm
+.macro sdb_strxy ram, mask, shift, style, table, width, x, y
+	.byte 0x07, 17
+	.short \ram
+	.byte \mask, \shift, \style
+	.long \table
+	.short \width, \x, \y
+.endm
+.macro sdb_box op, ram, mask, shift, b6, table
+	.byte \op, 11
+	.short \ram
+	.byte \mask, \shift, \b6
+	.long \table
+.endm
+; =============================================================================
+; SeScreenData -- the sound editor's screen-layout block (19617 bytes up to
+; SeScreenData_End).  Everything in it is read by the ScreenData interpreters
+; in display/graphics_text_vga.s through the SeGfx_* wrappers, or by the
+; sound-editor code directly; the model that pins every object -- which code
+; loads which address, which list parses exactly to its stated end, which
+; pointer field names which table -- is scripts/lanes/seui/se_screendata_model.py
+; (run it to see the evidence for any object).  Rendered from that model by
+; scripts/lanes/seui/se_screendata_render.py (lane seui, 2026-09-25); until then
+; the tree spelled this block as instructions (v10/v9) or verbatim ROM slices
+; (v7).  Labels are SeScreenData_0xNNNN = offset from SeScreenData, identical
+; in v10, v9 and v7.  The byte-exact C screen descriptors (`.incbin` of
+; includes/generated/se_*.bin) inside the block are earlier lanes' work and
+; are kept as they were.
+; =============================================================================
+SeScreenData:
+; 1-bpp bitmap 24x10 px, stored column by column (3 byte-columns of 10 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: static op03 record at SeScreenData_0x07EB, static op03 record at SeScreenData_0x0BC6, static op03 record at SeScreenData_0x0C7E, static op03 record at SeScreenData_0x3839
+SeBitmap_Pattern24x10_1:
+	; column 0 (x 0-7)
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00101000
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00101000
+	.byte	0b00010100
+	; column 1 (x 8-15)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00101010
+	.byte	0b01010101
+	.byte	0b00100000
+	.byte	0b01010100
+	.byte	0b00101010
+	.byte	0b00000001
+	.byte	0b00101010
+	.byte	0b01010100
+	; column 2 (x 16-23)
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00101010
+	.byte	0b01010100
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b00000100
+; 1-bpp bitmap 24x10 px, stored column by column (3 byte-columns of 10 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: static op03 record at SeScreenData_0x07F7, static op03 record at SeScreenData_0x0BD2, static op03 record at SeScreenData_0x0C96, static op03 record at SeScreenData_0x3845
+SeBitmap_Pattern24x10_2:
+	; column 0 (x 0-7)
+	.byte	0b00101010
+	.byte	0b01010101
+	.byte	0b00100010
+	.byte	0b00000001
+	.byte	0b00000010
+	.byte	0b00000100
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00101010
+	.byte	0b01010101
+	; column 1 (x 8-15)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00101010
+	.byte	0b01010101
+	.byte	0b00100010
+	.byte	0b01000001
+	.byte	0b00100010
+	.byte	0b01000001
+	.byte	0b00100010
+	.byte	0b01000001
+	; column 2 (x 16-23)
+	.byte	0b00000010
+	.byte	0b00000001
+	.byte	0b00000010
+	.byte	0b00010101
+	.byte	0b00101010
+	.byte	0b01000001
+	.byte	0b00100010
+	.byte	0b01000001
+	.byte	0b00101010
+	.byte	0b00010101
+; 1-bpp bitmap 24x10 px, stored column by column (3 byte-columns of 10 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: static op03 record at SeScreenData_0x0803, static op03 record at SeScreenData_0x0BDE, static op03 record at SeScreenData_0x0CAE, static op03 record at SeScreenData_0x3851
+SeBitmap_Pattern24x10_3:
+	; column 0 (x 0-7)
+	.byte	0b00101010
+	.byte	0b01010101
+	.byte	0b00100010
+	.byte	0b00000001
+	.byte	0b00001010
+	.byte	0b00000100
+	.byte	0b00000010
+	.byte	0b01000001
+	.byte	0b00101010
+	.byte	0b00010100
+	; column 1 (x 8-15)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00101010
+	.byte	0b01010101
+	.byte	0b00100000
+	.byte	0b01000000
+	.byte	0b00100000
+	.byte	0b01000000
+	.byte	0b00100000
+	.byte	0b01000000
+	; column 2 (x 16-23)
+	.byte	0b00000010
+	.byte	0b00000001
+	.byte	0b00000010
+	.byte	0b00010101
+	.byte	0b00101010
+	.byte	0b01000001
+	.byte	0b00100010
+	.byte	0b01000001
+	.byte	0b00101010
+	.byte	0b00010101
+; 1-bpp bitmap 24x10 px, stored column by column (3 byte-columns of 10 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: static op03 record at SeScreenData_0x080F, static op03 record at SeScreenData_0x0BEA, static op03 record at SeScreenData_0x0CC6, static op03 record at SeScreenData_0x385D
+SeBitmap_Pattern24x10_4:
+	; column 0 (x 0-7)
+	.byte	0b00000100
+	.byte	0b00001010
+	.byte	0b00010100
+	.byte	0b00001010
+	.byte	0b00010100
+	.byte	0b00100010
+	.byte	0b01010101
+	.byte	0b00101010
+	.byte	0b00000100
+	.byte	0b00000010
+	; column 1 (x 8-15)
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b01010100
+	.byte	0b00101010
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b00010100
+	.byte	0b00001000
+	; column 2 (x 16-23)
+	.byte	0b01000000
+	.byte	0b00100000
+	.byte	0b01000000
+	.byte	0b00101010
+	.byte	0b01010101
+	.byte	0b00100010
+	.byte	0b01000001
+	.byte	0b00100010
+	.byte	0b01000001
+	.byte	0b00100010
+; 1-bpp bitmap 16x12 px, stored column by column (2 byte-columns of 12 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: static op03 record at SeScreenData_0x0C0E, static op03 record at SeScreenData_0x0C21, static op03 record at SeScreenData_0x0C34, static op03 record at SeScreenData_0x0C47 (+2 more)
+SeBitmap_RadioOn:
+	; column 0 (x 0-7)
+	.byte	0b00000111
+	.byte	0b00011000
+	.byte	0b00100000
+	.byte	0b00100111
+	.byte	0b01001111
+	.byte	0b01001111
+	.byte	0b01001111
+	.byte	0b01001111
+	.byte	0b00100111
+	.byte	0b00100000
+	.byte	0b00011000
+	.byte	0b00000111
+	; column 1 (x 8-15)
+	.byte	0b10000000
+	.byte	0b01100000
+	.byte	0b00010000
+	.byte	0b10010000
+	.byte	0b11001000
+	.byte	0b11001000
+	.byte	0b11001000
+	.byte	0b11001000
+	.byte	0b10010000
+	.byte	0b00010000
+	.byte	0b01100000
+	.byte	0b10000000
+; 1-bpp bitmap 16x12 px, stored column by column (2 byte-columns of 12 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: static op03 record at SeScreenData_0x0C72, static op03 record at SeScreenData_0x0C8A, static op03 record at SeScreenData_0x0CA2, static op03 record at SeScreenData_0x0CBA (+2 more)
+SeBitmap_RadioOff:
+	; column 0 (x 0-7)
+	.byte	0b00000111
+	.byte	0b00011000
+	.byte	0b00100000
+	.byte	0b00100000
+	.byte	0b01000000
+	.byte	0b01000000
+	.byte	0b01000000
+	.byte	0b01000000
+	.byte	0b00100000
+	.byte	0b00100000
+	.byte	0b00011000
+	.byte	0b00000111
+	; column 1 (x 8-15)
+	.byte	0b10000000
+	.byte	0b01100000
+	.byte	0b00010000
+	.byte	0b00010000
+	.byte	0b00001000
+	.byte	0b00001000
+	.byte	0b00001000
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00010000
+	.byte	0b01100000
+	.byte	0b10000000
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF10D1F-0xF10D2F (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=4 near SeBitmap_EnvCurve1+113
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x0f, 0xf0, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-	.zero 24
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	6
-	swi	2
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	.fill 8, 1, 0x03
-	.fill 8, 1, 0x03
-	.fill 8, 1, 0x03
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	swi	7
-	swi	7
+; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: curve table code 0xF0F4D6
+SeBitmap_EnvCurve1:
+	; column 0 (x 0-7)
+	.byte	0b11111111
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000001
+	.byte	0b10000001
+	.byte	0b10000010
+	.byte	0b10000100
+	.byte	0b10000100
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10010000
+	.byte	0b10010000
+	.byte	0b10010000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b10000000
+	.byte	0b11111111
+	.byte	0b01111111
+	; column 1 (x 8-15)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000011
+	.byte	0b00000100
+	.byte	0b00011000
+	.byte	0b00110000
+	.byte	0b01100000
+	.byte	0b11000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 2 (x 16-23)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000111
+	.byte	0b00111000
+	.byte	0b11000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 3 (x 24-31)
+	.byte	0b11111111
+	.byte	0b00001111
+	.byte	0b11110000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 4 (x 32-39)
+	.byte	0b11111110
+	.byte	0b11111010
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b11111111
+	.byte	0b11111111
+; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: curve table code 0xF0F4D6
 SeBitmap_EnvCurve2:
-	swi	7
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.byte 0x80, 0x81, 0x81, 0x82, 0x82, 0x84
-	add	(xix), w
-	.byte 0x88, 0x90, 0x90, 0x90, 0xa0, 0xa0, 0xa0, 0xa0
-	.byte 0xc0, 0xc0, 0xc0, 0xc0, 0xc0
-	swi	7
-	.byte 0x7f
-	swi	7
-	.zero 8
-	.byte 0x01
-	push	sr
-	.byte 0x04
-	ld	(16:8), 32:io
-	ld	xwa, 0x8040
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	pop	sr
-	incf
-	rcf
-	ld	w, 192:opc
-	.zero 24
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x01
-	ret
-	jrl	f, 128
-	nop
-	nop
-	nop
-	.zero 24
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	6
-	swi	6
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	.fill 8, 1, 0x03
-	.fill 8, 1, 0x03
-	.fill 8, 1, 0x03
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	swi	7
-	swi	7
-SeBitmap_EnvCurve3:
-	swi	7
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.byte 0x81, 0x83, 0x86, 0x84
-	add	(xix), w
-	.byte 0x88, 0x90, 0x90, 0xa0, 0xa0, 0xa0, 0xc0
-	swi	7
-	jrl nc, 255
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	pop	sr
-	ei	12
-	ld	(24:8), 48:io
-	jr	f, -64
-	.byte 0x80, 0x80
+	; column 0 (x 0-7)
+	.byte	0b11111111
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000001
+	.byte	0b10000001
+	.byte	0b10000010
+	.byte	0b10000010
+	.byte	0b10000100
+	.byte	0b10000100
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10010000
+	.byte	0b10010000
+	.byte	0b10010000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11000000
+	.byte	0b11111111
+	.byte	0b01111111
+	; column 1 (x 8-15)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000010
+	.byte	0b00000100
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00100000
+	.byte	0b01000000
+	.byte	0b01000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 2 (x 16-23)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000011
+	.byte	0b00001100
+	.byte	0b00010000
+	.byte	0b00100000
+	.byte	0b11000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 3 (x 24-31)
+	.byte	0b11111111
+	.byte	0b00000001
+	.byte	0b00001110
+	.byte	0b01110000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 4 (x 32-39)
+	.byte	0b11111110
+	.byte	0b11111110
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b11111111
+	.byte	0b11111111
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF10E80-0xF10E96 (22 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=2 near SeBitmap_EnvCurve3+66
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x01
-	pop	sr
-	ei	12
-	push	xwa
-	jr	f, -64
-	.byte 0x80
-	nop
-	.zero 16
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	pop	sr
-	.byte 0x1c
-	ldw	wa, 0xc060
-	.zero 24
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	6
-	ei	59
-	.byte 0xc3
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	.fill 8, 1, 0x03
-	.fill 8, 1, 0x03
-	.fill 8, 1, 0x03
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	swi	7
-	swi	7
+; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: curve table code 0xF0F4D6
+SeBitmap_EnvCurve3:
+	; column 0 (x 0-7)
+	.byte	0b11111111
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000001
+	.byte	0b10000011
+	.byte	0b10000110
+	.byte	0b10000100
+	.byte	0b10000100
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10010000
+	.byte	0b10010000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b10100000
+	.byte	0b11000000
+	.byte	0b11111111
+	.byte	0b01111111
+	; column 1 (x 8-15)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000011
+	.byte	0b00000110
+	.byte	0b00001100
+	.byte	0b00001000
+	.byte	0b00011000
+	.byte	0b00110000
+	.byte	0b01100000
+	.byte	0b11000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 2 (x 16-23)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000011
+	.byte	0b00000110
+	.byte	0b00001100
+	.byte	0b00111000
+	.byte	0b01100000
+	.byte	0b11000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 3 (x 24-31)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000011
+	.byte	0b00011100
+	.byte	0b00110000
+	.byte	0b01100000
+	.byte	0b11000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 4 (x 32-39)
+	.byte	0b11111110
+	.byte	0b00000110
+	.byte	0b00111011
+	.byte	0b11000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b11111111
+	.byte	0b11111111
+; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: curve table code 0xF0F4D6
 SeBitmap_EnvCurve4:
-	swi	7
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.byte 0x80, 0x81, 0x86, 0xb8, 0xc0
-	swi	7
-	jrl nc, 255
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	reti
-	incf
-	push_f
-	jrl	f, 128
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	.zero 16
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	pop	sr
-	ei	12
-	push	xwa
-	jr	f, -64
-	.byte 0x80
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	.zero 8
-	nop
-	nop
-	nop
-	normal
-	pop	sr
-	push	sr
-	ei	12
-	push_f
-	ldw	wa, 0x6020
-	.byte 0xc0, 0x80
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	6
-	.byte 0x06
-	pushw	2827
-	zcf
-	zcf
-	ld	c, 35:opc
-	ld	xhl, 0x0383c343
-	pop	sr
-	pop	sr
-	pop	sr
-	.fill 8, 1, 0x03
-	.fill 8, 1, 0x03
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	swi	7
-	swi	7
+	; column 0 (x 0-7)
+	.byte	0b11111111
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000001
+	.byte	0b10000110
+	.byte	0b10111000
+	.byte	0b11000000
+	.byte	0b11111111
+	.byte	0b01111111
+	; column 1 (x 8-15)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000111
+	.byte	0b00001100
+	.byte	0b00011000
+	.byte	0b01110000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 2 (x 16-23)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000011
+	.byte	0b00000110
+	.byte	0b00001100
+	.byte	0b00111000
+	.byte	0b01100000
+	.byte	0b11000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 3 (x 24-31)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000011
+	.byte	0b00000010
+	.byte	0b00000110
+	.byte	0b00001100
+	.byte	0b00011000
+	.byte	0b00110000
+	.byte	0b00100000
+	.byte	0b01100000
+	.byte	0b11000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 4 (x 32-39)
+	.byte	0b11111110
+	.byte	0b00000110
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00010011
+	.byte	0b00010011
+	.byte	0b00100011
+	.byte	0b00100011
+	.byte	0b01000011
+	.byte	0b01000011
+	.byte	0b11000011
+	.byte	0b10000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b11111111
+	.byte	0b11111111
+; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: curve table code 0xF0F4D6
 SeBitmap_EnvCurve5:
-	swi	7
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.byte 0x80, 0x80, 0x80
-	cp	(xwa), l
-	swi	7
-	.byte 0x7f
-	swi	7
-	.zero 32
-	nop
-	pop	sr
-	.byte 0x1c, 0xe0
-	nop
-	swi	7
-	swi	7
-	swi	7
-	.zero 24
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01, 0x06
-	ld	(16:8), 96:io
-	.byte 0x80
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	.zero 16
-	nop
-	nop
-	.byte 0x01, 0x01
-	push	sr
-	.byte 0x04, 0x04
-	ld	(16:8), 32:io
-	ld	xwa, 128
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	6
-	ei	7
-	reti
-	reti
-	reti
-	pushw	2827
-	pushw	4883
-	zcf
-	ld	c, 35:opc
-	ld	xhl, 0x03838343
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	.fill 8, 1, 0x03
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.fill 8, 1, 0x80
-	.byte 0x80, 0x80, 0x80, 0x80, 0xbf
-	swi	7
-	.byte 0x7f
-	swi	7
-	.zero 32
-	nop
-	nop
-	nop
-	.byte 0x1f, 0xe0
-	swi	7
-	swi	7
-	swi	7
-	.zero 32
-	.byte 0x01, 0x06
-	push	xwa
-	.byte 0xc0
-	nop
-	swi	7
-	swi	7
-	swi	7
-	.zero 24
-	nop
-	.byte 0x01
-	pop	sr
-	ei	12
-	push_f
-	ldw	wa, 0x8040
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	6
-	push	sr
-	reti
-	reti
-	reti
-	reti
-	reti
-	reti
-	reti
-	reti
-	reti
-	pushw	2827
-	pushw	2827
-	pushw	4883
-	zcf
-	ld	c, 35:opc
-	ld	xhl, 0x03038343
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	pop	sr
-	swi	7
-	swi	7
+	; column 0 (x 0-7)
+	.byte	0b11111111
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b11111111
+	.byte	0b11111111
+	.byte	0b01111111
+	; column 1 (x 8-15)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000011
+	.byte	0b00011100
+	.byte	0b11100000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 2 (x 16-23)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000110
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b01100000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 3 (x 24-31)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000001
+	.byte	0b00000010
+	.byte	0b00000100
+	.byte	0b00000100
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b00100000
+	.byte	0b01000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 4 (x 32-39)
+	.byte	0b11111110
+	.byte	0b00000110
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00010011
+	.byte	0b00010011
+	.byte	0b00010011
+	.byte	0b00100011
+	.byte	0b00100011
+	.byte	0b01000011
+	.byte	0b01000011
+	.byte	0b10000011
+	.byte	0b10000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b11111111
+	.byte	0b11111111
+; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
+; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
+; evidence: curve table code 0xF0F4D6
+SeBitmap_EnvCurve6:
+	; column 0 (x 0-7)
+	.byte	0b11111111
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10000000
+	.byte	0b10111111
+	.byte	0b11111111
+	.byte	0b01111111
+	; column 1 (x 8-15)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00011111
+	.byte	0b11100000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 2 (x 16-23)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000110
+	.byte	0b00111000
+	.byte	0b11000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 3 (x 24-31)
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000011
+	.byte	0b00000110
+	.byte	0b00001100
+	.byte	0b00011000
+	.byte	0b00110000
+	.byte	0b01000000
+	.byte	0b10000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	; column 4 (x 32-39)
+	.byte	0b11111110
+	.byte	0b00000010
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00000111
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00001011
+	.byte	0b00010011
+	.byte	0b00010011
+	.byte	0b00010011
+	.byte	0b00100011
+	.byte	0b00100011
+	.byte	0b01000011
+	.byte	0b01000011
+	.byte	0b10000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b00000011
+	.byte	0b11111111
+	.byte	0b11111111
 ; se_setup_waveform: 206 bytes -- screen layout data, base 0xF1115E
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_waveform.c)
+SeScreenData_0x0558:
+	.set	SeScreenData_0x0562, . + 10
 	.incbin "includes/generated/se_setup_waveform.bin"
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1121D-0xF11236 (25 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=15 near SeBitmap_EnvCurve5_0x19A+181
 	; head of the next record, split off at se_setup_waveform's proven end
-	.byte 0x22, 0x0a, 0xae, 0x00, 0x3e, 0x00, 0x34, 0x01, 0x63
-	.byte 0x00
-	.byte 0x01
-	ldw	(15:8), 0x4100:io
-	nop
-	.byte 0xae
-	nop
-	ld	xbc, 0x0f0a0100
-	nop
-	.byte 0xd9
+	sd_quad	0x22, 174, 62, 308, 99
+	sd_quad	0x01, 15, 65, 174, 65
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11245-0xF11261 (28 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=62% dist=12 near SeBitmap_EnvCurve5_0x19A+221
-	.byte 0x00, 0x31, 0x01, 0xd9, 0x00, 0x02, 0x0a, 0x0f, 0x00, 0x41, 0x00, 0x0f
-	.byte 0x00, 0xd9, 0x00, 0x02, 0x0a, 0x31, 0x01, 0x65, 0x00, 0x31, 0x01, 0xd9
-	.byte 0x00, 0x23, 0x05, 0x10
-	.byte 0x82
-	nop
-	ld	c, 5:opc
-	jr	lt, -109
-	pushw	1315
-	jr	ule, -125
-	scf
-	ld	c, 5:opc
-	reti
-	jrl	ule, 8983
-	halt
-	ld	a, 179:opc
-	call	0x620523
-	.byte 0xea
-	ldw	(35:8), 0x6405:io
-	.byte 0xa2
-	scf
-	ld	c, 5:opc
-	ldw	(146:8), 8983:io
-	halt
-	pop	xsp
-	or	(0x0a1b1d:24), ix
-	nop
-	.byte 0x1f
-	nop
-	ldw	ix, 0x3201
-	nop
-	ei	14
-	.byte 0xbe
-	halt
-	.ascii "ORIGINAL "
-	scf
-	push	10
-	.byte 0xec
-	nop
-	.byte 0x1f
-	nop
-	ldw	ix, 0x3201
-	nop
-	push	10
-	.byte 0xee
-	nop
-	ld	a, 0:opc
-	ldw	de, 0x3001
-	nop
-	.long NakaInst_Hard_Analogue_148_0x65
-	.byte 0x1f
-	nop
-	ldw	ix, 0x3201
-	nop
-	ei	12
-	.byte 0xc0
-	halt
-	.byte 0x45, 0x44
-	.ascii "ITED "
-	scf
-	push	10
-	swi	4
-	nop
-	.byte 0x1f
-	nop
-	ldw	ix, 0x3201
-	nop
-	push	10
-	swi	6
-	nop
-	ld	a, 0:opc
-	ldw	de, 0x3001
-	nop
-	ei	5
-	.byte 0x90
-	pushw	1552
-	halt
-	pop	xwa
-	scf
-	rcf
-	ei	5
-	popw	wa
-	ldf	16
-	ei	5
-	rcf
-	call	16
-	.zero 16
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.byte 0x1f
-	ldw	wa, 3871
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	pop	sr
-	.byte 0x04, 0x0b
-	pop_a
-	.ascii "+-F@@@a?"
-	calr	11320
-	pushw	ix
-	pushw	ix
-	add	xhl, xsp
-	ld	xiz, 0xff182c
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	.byte 0x80
-	.ascii "@``phtz"
-	and	h, e
-	.byte 0x83, 0x81
+	sd_quad	0x01, 15, 217, 305, 217
+	sd_quad	0x02, 15, 65, 15, 217
+	sd_quad	0x02, 305, 101, 305, 217
+	sd_op23	0x10, 3*40+10
+	sd_op23	0x61, 74*40+3
+	sd_op23	0x63, 112*40+3
+	sd_op23	0x07, 150*40+3
+	sd_op23	0x21, 190*40+3
+	sd_op23	0x62, 69*40+34
+	sd_op23	0x64, 112*40+34
+	sd_op23	0x0a, 150*40+34
+	sd_op23	0x5f, 190*40+34
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x06B1
+; evidence: SeMenu_WaveformSelect_Data
+SeScreenData_0x0685:
+	sd_quad	0x1b, 236, 31, 308, 50
+	sd_ctext	0x06, 14, 36*40+30, "ORIGINAL \021"
+	sd_quad	0x09, 236, 31, 308, 50
+	sd_quad	0x09, 238, 33, 306, 48
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x06DB
+; evidence: SeMenu_WaveformSelect_Data
+SeScreenData_0x06B1:
+	sd_quad	0x1b, 236, 31, 308, 50
+	sd_ctext	0x06, 12, 36*40+32, "EDITED \021"
+	sd_quad	0x09, 252, 31, 308, 50
+	sd_quad	0x09, 254, 33, 306, 48
+; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x06E5, SeScreenData_0x06EF
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x06DB:
+	sd_ctext	0x06, 5, 74*40+0, "\020"
+	sd_ctext	0x06, 5, 111*40+0, "\020"
+	sd_ctext	0x06, 5, 149*40+0, "\020"
+	sd_ctext	0x06, 5, 186*40+0, "\020"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11353-0xF11367 (20 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=2 near SeBitmap_EnvCurve5_0x327+94
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
-	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 16
-	nop
-	.byte 0x80
-	ld	xwa, 0x3878d0a0
-	nop
-	nop
-	.byte 0x01
-	push	sr
-	.byte 0x04
-	ld	(16:8), 224:io
-	nop
-	swi	0
-	.byte 0xf4, 0x1a
-	decf
-	ei	3
-	.byte 0x01
-	nop
-	.zero 19
-	.ascii "  PPˆˆˆˆˆˆÈÈÈÈÈˆˆˆˆØÐ"
-	jrl	f, 32
-	nop
-	nop
-	nop
-	ld	w, 7:opc
-	.byte 0x91, 0x0b
-	.ascii "1ST "
-	reti
-	pop	xbc
-	scf
-	.ascii "2ND "
-	reti
-	popw	bc
-	.byte 0x17
-	.ascii "3RD "
-	reti
-	scf
-	call	0x485434
-	.byte 0xbd
-	zcf
-	.byte 0xf1
-	nop
-	.byte 0xbd
-	zcf
-	.byte 0xf1
-	nop
-	.byte 0xc4
-	zcf
-	.byte 0xf1
-	nop
-	exts	c
-	.byte 0xf1
-	nop
-	xor	(0xf113:24), bc
-	zcf
-	.byte 0xf1
-	nop
-	pop	sr
-	incf
-	ei	12
-	.byte 0xf1
-	nop
-	.byte 0x91
-	pushw	3
-	ldw	(0:8), 3075:io
-	ld	d, 12:opc
-	.byte 0xf1
+; NO READER FOUND for these 200 bytes.  Searched: LE32/LE24/LE16 of every
+; address in the span, ld xiy/xix/xiz immediates, and the loop bounds of the
+; tables beside it.
+; Shape only: read column by column like the six SeBitmap_EnvCurve* bitmaps
+; it follows, it is a coherent 40x40 picture.
+SeBitmap_Unreferenced40x40:
+	; column 0 (x 0-7)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00011111
+	.byte	0b00110000
+	.byte	0b00011111
+	.byte	0b00001111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	; column 1 (x 8-15)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000011
+	.byte	0b00000100
+	.byte	0b00001011
+	.byte	0b00010101
+	.byte	0b00101011
+	.byte	0b00101101
+	.byte	0b01000110
+	.byte	0b01000000
+	.byte	0b01000000
+	.byte	0b01000000
+	.byte	0b01100001
+	.byte	0b00111111
+	.byte	0b00011110
+	.byte	0b00111000
+	.byte	0b00101100
+	.byte	0b00101100
+	.byte	0b00101100
+	.byte	0b11101111
+	.byte	0b10000011
+	.byte	0b01000110
+	.byte	0b00101100
+	.byte	0b00011000
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	; column 2 (x 16-23)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b10000000
+	.byte	0b01000000
+	.byte	0b01100000
+	.byte	0b01100000
+	.byte	0b01110000
+	.byte	0b01101000
+	.byte	0b01110100
+	.byte	0b01111010
+	.byte	0b11001101
+	.byte	0b11000110
+	.byte	0b10000011
+	.byte	0b10000001
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b11111111
+	.byte	0b11111111
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	; column 3 (x 24-31)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b10000000
+	.byte	0b01000000
+	.byte	0b10100000
+	.byte	0b11010000
+	.byte	0b01111000
+	.byte	0b00111000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000001
+	.byte	0b00000010
+	.byte	0b00000100
+	.byte	0b00001000
+	.byte	0b00010000
+	.byte	0b11100000
+	.byte	0b00000000
+	.byte	0b11111000
+	.byte	0b11110100
+	.byte	0b00011010
+	.byte	0b00001101
+	.byte	0b00000110
+	.byte	0b00000011
+	.byte	0b00000001
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	; column 4 (x 32-39)
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00100000
+	.byte	0b00100000
+	.byte	0b01010000
+	.byte	0b01010000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b11001000
+	.byte	0b11001000
+	.byte	0b11001000
+	.byte	0b11001000
+	.byte	0b11001000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b10001000
+	.byte	0b11011000
+	.byte	0b11010000
+	.byte	0b01110000
+	.byte	0b00100000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+	.byte	0b00000000
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x07BE
+; evidence: bounds at SeScreenData_0x07D3
+SeScreenData_0x07B7:
+	sd_ctext	0x20, 7, 74*40+1, "1ST"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x07C5
+; evidence: bounds at SeScreenData_0x07D3
+SeScreenData_0x07BE:
+	sd_ctext	0x20, 7, 111*40+1, "2ND"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x07CC
+; evidence: bounds at SeScreenData_0x07D3
+SeScreenData_0x07C5:
+	sd_ctext	0x20, 7, 149*40+1, "3RD"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x07D3
+; evidence: bounds at SeScreenData_0x07D3
+SeScreenData_0x07CC:
+	sd_ctext	0x20, 7, 186*40+1, "4TH"
+; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x07D3:
+	.long	SeScreenData_0x07B7
+	.long	SeScreenData_0x07B7
+	.long	SeScreenData_0x07BE
+	.long	SeScreenData_0x07C5
+	.long	SeScreenData_0x07CC
+	.long	SeScreenData_0x07D3
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x07F7
+; evidence: bounds at SeScreenData_0x081B
+SeScreenData_0x07EB:
+	sd_blit	SeBitmap_Pattern24x10_1, 74*40+1, 3, 10
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11402-0xF11419 (23 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=73% dist=11 near SeBitmap_EnvCurve5_0x40B+41
-	.byte 0x00, 0x59, 0x11, 0x03, 0x00, 0x0a, 0x00, 0x03, 0x0c, 0x42, 0x0c, 0xf1
-	.byte 0x00, 0x49, 0x17, 0x03, 0x00, 0x0a, 0x00, 0x03, 0x0c, 0x60, 0x0c
-	.byte 0xf1
-	nop
-	scf
-	call	0x0a0003
-	nop
-	ld	(0xf113:16), 241
-	zcf
-	.byte 0xf1
-	nop
-	swi	5
-	zcf
-	.byte 0xf1
-	nop
-	push	20
-	.byte 0xf1
-	nop
-	pop_a
-	push_a
-	.byte 0xf1
-	nop
-	ld	a, 20:opc
-	.byte 0xf1
-	nop
-	.byte 0x06
-	push	80
-	halt
-	rcf
-	.byte 0x53
-	popw	sp
-	popw	ix
-	popw	sp
-	push	10
-	halt
-	nop
-	calr	11008
-	nop
-	pushw	sp
-	nop
-	push	10
-	reti
-	nop
-	ld	w, 0:opc
-	pushw	bc
-	nop
-	pushw	iy
-	nop
-	jp	1546
-	.byte 0x1f
-	nop
-	ei	0
-	pushw	iz
-	nop
-	halt
-	ldw	(8:8), 8448:io
-	nop
-	pushw	wa
-	nop
-	pushw	ix
-	nop
-	jp	2058
-	ld	a, 0:opc
-	pushw	wa
-	nop
-	pushw	ix
-	nop
-	jp	2058
-	popw	bc
-	nop
-	ld	b, 0:opc
-	.byte 0xc5
-	nop
-	pop	sr
-	pushw	1629
-	retd	1280
-	.byte 0x89
-	push_a
-	ld	(2048:16), 73
-	nop
-	ld	b, 0:opc
-	.byte 0x56
-	nop
-	ld	(0:8), 73:io
-	nop
-	ld	b, 0:opc
-	.byte 0x56
-	nop
-	ld	(0:8), 110:io
-	nop
-	ld	b, 0:opc
-	jrl	ugt, 2048
-	nop
-	.byte 0x93
-	nop
-	ld	b, 0:opc
-	.byte 0xa0
-	nop
-	ld	(0:8), 184:io
-	nop
-	ld	b, 0:opc
-	.byte 0xc5
-	nop
-	.ascii "NORM 1/2 1/4 1/81/161/321/64 FIXOFF ONOFFON "
-	.byte 0x1c
-	rcf
-	jrl	ule, 1280
-	nop
-	.ascii "T0NE LAYER"
-	ldf	16
-	ei	0
-	reti
-	nop
-	.ascii "SOUND EDIT"
-	ei	7
-	scf
-	pushw	0x454b
-	pop	xbc
-	ei	5
-	.byte 0xb7
-	pushw	1553
-	push	25
-	decf
-	popw	ix
-	ld	xbc, 0x06524559
-	reti
-	.byte 0x01
-	scf
-	.byte 0x56
-	ld	xiy, 0xa705064c
-	scf
-	scf
-	.byte 0x06
-	push	9
-	zcf
-	popw	ix
-	ld	xbc, 0x07524559
-	halt
-	jrl	le, 24351
-	reti
-	halt
-	.byte 0x82, 0x1f
-	pop	xsp
-	ei	5
-	jr	lt, 32
-	popw	ix
-	ei	19
-	.ascii "c FADE LOW HIGH H"
-	.byte 0x06, 0x08
-	.ascii "s FADE"
-	reti
-	halt
-	popw	hl
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x51
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x56
-	ld	d, 18:opc
-	reti
-	halt
-	pop	xhl
-	ld	d, 18:opc
-	push	10
-	.byte 0x04
-	nop
-	.byte 0x04
-	nop
-	ld	xix, 0x09001000
-	ldw	(4:8), 0x4201:io
-	nop
-	ldw	ix, 0x6001
-	nop
-	push	10
-	.byte 0x04, 0x01
-	jr	0
-	ldw	ix, 0x8601
-	nop
-	push	10
-	ld	xiy, 0xfb00cc00
-	nop
-	.byte 0xe9
-	nop
-	.byte 0x01
-	ldw	(69:8), 0xdb00:io
-	nop
-	swi	3
-	nop
-	.byte 0xdb
-	nop
-	push	sr
-	ldw	(156:8), 0xcc00:io
-	nop
-	.byte 0x9c
-	nop
-	.byte 0xe9
-	nop
-	halt
-	ldw	(70:8), 0xdc00:io
-	nop
-	.long NakaInst_LEFT_0x04
-	ld	c, 5:opc
-	jr	ov, -125
-	nop
-	.byte 0x1c
-	scf
-	jrl	le, 1280
-	nop
-	.byte 0x54
-	.ascii "0NE SELECT"
-	ldf	16
-	ei	0
-	reti
-	nop
-	.ascii "SOUND EDIT"
-	push	10
-	.byte 0x04
-	nop
-	.byte 0x04
-	nop
-	ld	xix, 0x23001000
-	halt
-	jr	lt, -125
-	nop
-	.byte 0x06
-	pushw	272
-	.byte 0x50
-	ld	xbc, 0x2f314547
-	ldw	hl, 2583
-	.byte 0x54
-	nop
-	push	xix
-	nop
-	.byte 0x54
-	popw	sp
-	popw	iz
-	ld	xiy, 0x720c17
-	push	xix
-	nop
-	.byte 0x53
-	ld	xiy, 0x5443454c
-	.byte 0x17
-	pushw	199
-	push	xix
-	nop
-	popw	ix
-	ld	xiy, 0x174c4556
-	push	241
-	nop
-	push	xix
-	nop
-	popw	hl
-	ld	xiy, 0x090c1759
-	.byte 0x01
-	push	xix
-	nop
-	ld	xix, 0x4e555445
-	ld	xiy, 0x0c300506
-	rcf
-	ei	5
-	.byte 0xd9
-	incf
-	push	xde
-	ei	5
-	.byte 0xd9
-	scf
-	push	xde
-	ei	5
-	swi	0
-	scf
-	rcf
-	ei	5
-	.byte 0xd9
-	ex_ff
-	push	xde
-	ei	5
-	jrl	f, 4119
-	ei	5
-	.byte 0xd9
-	jp	0x05063a
-	push	xwa
-	call	0x0c1710
-	push	sr
-	nop
-	.byte 0xd1
-	nop
-	.ascii "ON/OFF"
-	.byte 0x17
-	pushw	48
-	.byte 0xd1
-	nop
-	ld	xsp, 0x50554f52
-	.byte 0x17
-	ldw	(88:8), 0xd100:io
-	nop
-	.byte 0x54
-	popw	sp
-	popw	iz
-	ld	xiy, 0xcc0b17
-	.byte 0xd1
-	nop
-	popw	ix
-	ld	xiy, 0x174c4556
-	push	250
-	nop
-	.byte 0xd1
-	nop
-	popw	hl
-	ld	xiy, 0x190c1759
-	.byte 0x01, 0xd1
-	nop
-	ld	xix, 0x4e555445
-	ld	xiy, 0x22120506
-	.byte 0x8d
-	ei	5
-	.byte 0x17
-	ld	b, 141:opc
-	ei	5
-	.byte 0x1c
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0803
+; evidence: bounds at SeScreenData_0x081B
+SeScreenData_0x07F7:
+	sd_blit	SeBitmap_Pattern24x10_2, 111*40+1, 3, 10
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x080F
+; evidence: bounds at SeScreenData_0x081B
+SeScreenData_0x0803:
+	sd_blit	SeBitmap_Pattern24x10_3, 149*40+1, 3, 10
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x081B
+; evidence: bounds at SeScreenData_0x081B
+SeScreenData_0x080F:
+	sd_blit	SeBitmap_Pattern24x10_4, 186*40+1, 3, 10
+; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x081B:
+	.long	SeScreenData_0x07EB
+	.long	SeScreenData_0x07EB
+	.long	SeScreenData_0x07F7
+	.long	SeScreenData_0x0803
+	.long	SeScreenData_0x080F
+	.long	SeScreenData_0x081B
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x085A
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x0833:
+	sd_ctext	0x06, 9, 34*40+0, "\020SOLO"
+	sd_quad	0x09, 5, 30, 43, 47
+	sd_quad	0x09, 7, 32, 41, 45
+	sd_quad	0x1b, 6, 31, 6, 46
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0864
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x085A:
+	sd_quad	0x05, 8, 33, 40, 44
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x086E
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x0864:
+	sd_quad	0x1b, 8, 33, 40, 44
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0878
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x086E:
+	sd_quad	0x1b, 8, 73, 34, 197
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: SeMenu_ShowConfirmDialog_Data
+SeScreenData_0x0878:
+	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x0883
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x0878
+SeScreenData_0x0883:
+	.short	8, 73, 34, 86
+	.short	8, 73, 34, 86
+	.short	8, 110, 34, 123
+	.short	8, 147, 34, 160
+	.short	8, 184, 34, 197
+; NO READER FOUND for these 32 bytes.  Searched: LE32/LE24/LE16 of every
+; address in the span, ld xiy/xix/xiz immediates, and the loop bounds of the
+; tables beside it.
+; Shape only: printable text. The same 32 bytes also sit at
+; SeScreenData_0x27B9.
+SeScreenData_0x08AB:
+	.ascii	"NORM 1/2 1/4 1/81/161/321/64 FIX"
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 2)
+; evidence: bound op02 record at SeScreenData_0x28B4, bound op02 record DrumDetailEdit_Menu_Table
+SeScreenData_0x08CB:
+	.ascii	"OFF", " ON"
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 2)
+; evidence: bound op02 record at SeScreenData_0x4C6D
+SeScreenData_0x08D1:
+	.ascii	"OFF", "ON "
+; static record list (25 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x09AA
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x08D7:
+	sd_ptext	0x1c, 16, 115, 5, "T0NE LAYER"
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_ctext	0x06, 7, 70*40+33, "KEY"
+	sd_ctext	0x06, 5, 74*40+39, "\021"
+	sd_ctext	0x06, 9, 83*40+33, "LAYER"
+	sd_ctext	0x06, 7, 108*40+33, "VEL"
+	sd_ctext	0x06, 5, 112*40+39, "\021"
+	sd_ctext	0x06, 9, 121*40+33, "LAYER"
+	sd_ctext	0x07, 5, 201*40+10, "_"
+	sd_ctext	0x07, 5, 201*40+26, "_"
+	sd_ctext	0x06, 5, 207*40+9, "L"
+	sd_ctext	0x06, 19, 207*40+11, "FADE LOW HIGH H"
+	sd_ctext	0x06, 8, 207*40+27, "FADE"
+	sd_ctext	0x07, 5, 232*40+11, "\022"
+	sd_ctext	0x07, 5, 232*40+17, "\022"
+	sd_ctext	0x07, 5, 232*40+22, "\022"
+	sd_ctext	0x07, 5, 232*40+27, "\022"
+	sd_quad	0x09, 4, 4, 68, 16
+	sd_quad	0x09, 260, 66, 308, 96
+	sd_quad	0x09, 260, 104, 308, 134
+	sd_quad	0x09, 69, 204, 251, 233
+	sd_quad	0x01, 69, 219, 251, 219
+	sd_quad	0x02, 156, 204, 156, 233
+	sd_quad	0x05, 70, 220, 250, 232
+	sd_op23	0x64, 3*40+11
+; static record list (3 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x09D5
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x09AA:
+	sd_ptext	0x1c, 17, 114, 5, "T0NE SELECT"
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_quad	0x09, 4, 4, 68, 16
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x09DA
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x09D5:
+	sd_op23	0x61, 3*40+11
+; static record list (51 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0B7E
+; evidence: SeMenu_PresetManager_SaveApply
+SeScreenData_0x09DA:
+	sd_ctext	0x06, 11, 6*40+32, "PAGE1/3"
+	sd_ptext	0x17, 10, 84, 60, "TONE"
+	sd_ptext	0x17, 12, 114, 60, "SELECT"
+	sd_ptext	0x17, 11, 199, 60, "LEVEL"
+	sd_ptext	0x17, 9, 241, 60, "KEY"
+	sd_ptext	0x17, 12, 265, 60, "DETUNE"
+	sd_ctext	0x06, 5, 78*40+0, "\020"
+	sd_ctext	0x06, 5, 82*40+9, ":"
+	sd_ctext	0x06, 5, 114*40+9, ":"
+	sd_ctext	0x06, 5, 115*40+0, "\020"
+	sd_ctext	0x06, 5, 146*40+9, ":"
+	sd_ctext	0x06, 5, 150*40+0, "\020"
+	sd_ctext	0x06, 5, 178*40+9, ":"
+	sd_ctext	0x06, 5, 187*40+0, "\020"
+	sd_ptext	0x17, 12, 2, 209, "ON/OFF"
+	sd_ptext	0x17, 11, 48, 209, "GROUP"
+	sd_ptext	0x17, 10, 88, 209, "TONE"
+	sd_ptext	0x17, 11, 204, 209, "LEVEL"
+	sd_ptext	0x17, 9, 250, 209, "KEY"
+	sd_ptext	0x17, 12, 281, 209, "DETUNE"
+	sd_ctext	0x06, 5, 218*40+2, "\215"
+	sd_ctext	0x06, 5, 218*40+7, "\215"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11697-0xF116AC (21 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=75% dist=9 near SeBitmap_EnvCurve5_0x612+183
-	.byte 0x22, 0x8d, 0x06, 0x05, 0x2b, 0x22, 0x8d, 0x06, 0x05, 0x30, 0x22, 0x8d
-	.byte 0x06, 0x05, 0x35, 0x22, 0x8d, 0x06, 0x05, 0xa2, 0x23
-	.byte 0x8e
-	ei	5
-	ld	xhl, (xsp)
-	.byte 0x8e
-	ei	5
-	add	(xix+35), xiz
-	ei	5
-	.byte 0xbb
-	ld	c, 142:opc
-	ei	5
-	.byte 0xc0
-	ld	c, 142:opc
-	ei	5
-	.byte 0xc5
-	ld	c, 142:opc
-	ld	b, 10:opc
-	pushw	0x3600
-	nop
-	ldw	iy, 0xc701
-	nop
-	ld	b, 10:opc
-	push	0
-	.byte 0xda
+	sd_ctext	0x06, 5, 218*40+12, "\215"
+	sd_ctext	0x06, 5, 218*40+27, "\215"
+	sd_ctext	0x06, 5, 218*40+32, "\215"
+	sd_ctext	0x06, 5, 218*40+37, "\215"
+	sd_ctext	0x06, 5, 228*40+2, "\216"
+	sd_ctext	0x06, 5, 228*40+7, "\216"
+	sd_ctext	0x06, 5, 228*40+12, "\216"
+	sd_ctext	0x06, 5, 228*40+27, "\216"
+	sd_ctext	0x06, 5, 228*40+32, "\216"
+	sd_ctext	0x06, 5, 228*40+37, "\216"
+	sd_quad	0x22, 11, 54, 309, 199
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF116D5-0xF116EC (23 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=10 near SeBitmap_EnvCurve5_0x612+245
-	.byte 0x00, 0x1e, 0x00, 0xee, 0x00, 0x22, 0x0a, 0x31, 0x00, 0xda, 0x00, 0x46
-	.byte 0x00, 0xee, 0x00, 0x22, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	.byte 0xd1
-	nop
-	.byte 0xda
-	nop
-	.byte 0xe6
-	nop
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	swi	1
-	nop
-	.byte 0xda
-	nop
-	ret
-	.byte 0x01, 0xee
-	nop
-	ld	b, 10:opc
-	ld	a, 1:opc
-	.byte 0xda
-	nop
-	ldw	iz, 0xee01
-	nop
-	.byte 0x01
-	ldw	(11:8), 0x4700:io
-	nop
-	ldw	iy, 0x4701
-	nop
-	.byte 0x01
-	ldw	(11:8), 0x6700:io
-	nop
-	ldw	iy, 0x6701
-	nop
-	.byte 0x01
-	ldw	(11:8), 0x8700:io
-	nop
-	ldw	iy, 0x8701
-	nop
-	.byte 0x01
-	ldw	(11:8), 0xa700:io
-	nop
-	ldw	iy, 0xa701
-	nop
-	.byte 0x01
-	ldw	(9:8), 0xe400:io
-	nop
-	calr	SeMenu_PresetBrowser_Data_Sub
-	nop
-	.byte 0x01
+	sd_quad	0x22, 9, 218, 30, 238
+	sd_quad	0x22, 49, 218, 70, 238
+	sd_quad	0x22, 89, 218, 110, 238
+	sd_quad	0x22, 209, 218, 230, 238
+	sd_quad	0x22, 249, 218, 270, 238
+	sd_quad	0x22, 289, 218, 310, 238
+	sd_quad	0x01, 11, 71, 309, 71
+	sd_quad	0x01, 11, 103, 309, 103
+	sd_quad	0x01, 11, 135, 309, 135
+	sd_quad	0x01, 11, 167, 309, 167
+	sd_quad	0x01, 9, 228, 30, 228
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1173F-0xF11750 (17 B), unreached CODE-territory, was disassembled as 6 plausible-but-dead instruction lines; per=71% dist=8 near SeBitmap_EnvCurve5_0x612+351
-	.byte 0x0a, 0x31, 0x00, 0xe4, 0x00, 0x46, 0x00, 0xe4, 0x00, 0x01, 0x0a, 0x59
-	.byte 0x00, 0xe4, 0x00, 0x6e, 0x00
-	.byte 0xe4
-	nop
-	.byte 0x01
-	ldw	(209:8), 0xe400:io
-	nop
-	.byte 0xe6
-	nop
-	.byte 0xe4
-	nop
-	.byte 0x01
-	ldw	(249:8), 0xe400:io
-	nop
-	ret
-	.byte 0x01, 0xe4
-	nop
-	.byte 0x01
-	ldw	(33:8), 0xe401:io
-	nop
-	ldw	iz, 0xe401
-	nop
-	push	sr
-	ldw	(60:8), 0x3600:io
-	nop
-	push	xix
-	nop
-	.byte 0xc7
-	nop
-	push	sr
-	ldw	(188:8), 0x3600:io
-	nop
-	.byte 0xbc
-	nop
-	.byte 0xc7
-	nop
-	ei	5
-	ldw	wa, 4108
-	ei	5
-	swi	0
-	scf
-	rcf
-	ei	5
-	jrl	f, 4119
-	ei	5
-	push	xwa
-	call	0x072010
-	pop	xde
-	incf
-	ldw	bc, 0x5453
-	ld	w, 7:opc
-	pop	xde
-	scf
-	.ascii "2ND "
-	reti
-	pop	xde
-	ex_ff
-	.ascii "3RD "
-	reti
-	pop	xde
-	jp	0x485434
-	.byte 0x98, 0x17, 0xf1
-	nop
-	.byte 0x98, 0x17, 0xf1
-	nop
-	.byte 0x9f, 0x17, 0xf1
-	nop
-	.byte 0xa6, 0x17, 0xf1
-	nop
-	.byte 0xad, 0x17, 0xf1
-	nop
-	.byte 0xb4, 0x17, 0xf1
-	nop
-	pop	sr
-	incf
-	ei	12
-	.byte 0xf1
-	nop
-	pop	xde
-	incf
-	pop	sr
-	nop
-	ldw	(0:8), 3075:io
-	ld	d, 12:opc
-	.byte 0xf1
+	sd_quad	0x01, 49, 228, 70, 228
+	sd_quad	0x01, 89, 228, 110, 228
+	sd_quad	0x01, 209, 228, 230, 228
+	sd_quad	0x01, 249, 228, 270, 228
+	sd_quad	0x01, 289, 228, 310, 228
+	sd_quad	0x02, 60, 54, 60, 199
+	sd_quad	0x02, 188, 54, 188, 199
+; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x0B88, SeScreenData_0x0B92
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x0B7E:
+	sd_ctext	0x06, 5, 78*40+0, "\020"
+	sd_ctext	0x06, 5, 115*40+0, "\020"
+	sd_ctext	0x06, 5, 150*40+0, "\020"
+	sd_ctext	0x06, 5, 187*40+0, "\020"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0B99
+; evidence: bounds at SeScreenData_0x0BAE
+SeScreenData_0x0B92:
+	sd_ctext	0x20, 7, 79*40+2, "1ST"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BA0
+; evidence: bounds at SeScreenData_0x0BAE
+SeScreenData_0x0B99:
+	sd_ctext	0x20, 7, 111*40+2, "2ND"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BA7
+; evidence: bounds at SeScreenData_0x0BAE
+SeScreenData_0x0BA0:
+	sd_ctext	0x20, 7, 143*40+2, "3RD"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BAE
+; evidence: bounds at SeScreenData_0x0BAE
+SeScreenData_0x0BA7:
+	sd_ctext	0x20, 7, 175*40+2, "4TH"
+; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x0BAE:
+	.long	SeScreenData_0x0B92
+	.long	SeScreenData_0x0B92
+	.long	SeScreenData_0x0B99
+	.long	SeScreenData_0x0BA0
+	.long	SeScreenData_0x0BA7
+	.long	SeScreenData_0x0BAE
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BD2
+; evidence: bounds at SeScreenData_0x0BF6
+SeScreenData_0x0BC6:
+	sd_blit	SeBitmap_Pattern24x10_1, 79*40+2, 3, 10
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF117DD-0xF117F4 (23 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=82% dist=10 near SeBitmap_EnvCurve5_0x7E6+41
-	.byte 0x00, 0x5a, 0x11, 0x03, 0x00, 0x0a, 0x00, 0x03, 0x0c, 0x42, 0x0c, 0xf1
-	.byte 0x00, 0x5a, 0x16, 0x03, 0x00, 0x0a, 0x00, 0x03, 0x0c, 0x60, 0x0c
-	.byte 0xf1
-	nop
-	pop	xde
-	jp	0x0a0003
-	nop
-	.byte 0xcc, 0x17, 0xf1
-	nop
-	.byte 0xcc, 0x17, 0xf1
-	nop
-	.byte 0xd8, 0x17, 0xf1
-	nop
-	.byte 0xe4, 0x17, 0xf1
-	nop
-	.byte 0xf0, 0x17, 0xf1
-	nop
-	swi	4
-	.byte 0x17, 0xf1
-	nop
-	pop	sr
-	incf
-	jrl	nz, -3828
-	nop
-	.byte 0xd2
-	incf
-	push	sr
-	nop
-	incf
-	nop
-	ld	w, 7:opc
-	.byte 0xd4
-	incf
-	ldw	bc, 0x5453
-	pop	sr
-	incf
-	jrl	nz, -3828
-	nop
-	.byte 0xd2
-	scf
-	push	sr
-	nop
-	incf
-	nop
-	ld	w, 7:opc
-	.byte 0xd4
-	scf
-	ldw	de, 0x444e
-	pop	sr
-	incf
-	jrl	nz, -3828
-	nop
-	.byte 0xd2
-	ex_ff
-	push	sr
-	nop
-	incf
-	nop
-	ld	w, 7:opc
-	.byte 0xd4
-	ex_ff
-	ldw	hl, 0x4452
-	pop	sr
-	incf
-	jrl	nz, -3828
-	nop
-	.byte 0xd2
-	jp	0x0c0002
-	nop
-	ld	w, 7:opc
-	.byte 0xd4
-	jp	0x485434
-	push_a
-	push_f
-	.byte 0xf1
-	nop
-	push_a
-	push_f
-	.byte 0xf1
-	nop
-	ld	l, 24:opc
-	.byte 0xf1
-	nop
-	push	xde
-	push_f
-	.byte 0xf1
-	nop
-	popw	iy
-	push_f
-	.byte 0xf1
-	nop
-	jr	f, 24
-	.byte 0xf1
-	nop
-	pop	sr
-	incf
-	.byte 0x96
-	incf
-	.byte 0xf1
-	nop
-	.byte 0xd2
-	incf
-	push	sr
-	nop
-	incf
-	nop
-	pop	sr
-	incf
-	ei	12
-	.byte 0xf1
-	nop
-	.byte 0xd4
-	incf
-	pop	sr
-	nop
-	ldw	(0:8), 3075:io
-	.byte 0x96
-	incf
-	.byte 0xf1
-	nop
-	.byte 0xd2
-	scf
-	push	sr
-	nop
-	incf
-	nop
-	pop	sr
-	incf
-	ld	d, 12:opc
-	.byte 0xf1
-	nop
-	.byte 0xd4
-	scf
-	pop	sr
-	nop
-	ldw	(0:8), 3075:io
-	.byte 0x96
-	incf
-	.byte 0xf1
-	nop
-	.byte 0xd2
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BDE
+; evidence: bounds at SeScreenData_0x0BF6
+SeScreenData_0x0BD2:
+	sd_blit	SeBitmap_Pattern24x10_2, 111*40+2, 3, 10
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BEA
+; evidence: bounds at SeScreenData_0x0BF6
+SeScreenData_0x0BDE:
+	sd_blit	SeBitmap_Pattern24x10_3, 143*40+2, 3, 10
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BF6
+; evidence: bounds at SeScreenData_0x0BF6
+SeScreenData_0x0BEA:
+	sd_blit	SeBitmap_Pattern24x10_4, 175*40+2, 3, 10
+; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x0BF6:
+	.long	SeScreenData_0x0BC6
+	.long	SeScreenData_0x0BC6
+	.long	SeScreenData_0x0BD2
+	.long	SeScreenData_0x0BDE
+	.long	SeScreenData_0x0BEA
+	.long	SeScreenData_0x0BF6
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0C21
+; evidence: bounds at SeScreenData_0x0C5A
+SeScreenData_0x0C0E:
+	sd_blit	SeBitmap_RadioOn, 82*40+2, 2, 12
+	sd_ctext	0x20, 7, 82*40+4, "1ST"
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0C34
+; evidence: bounds at SeScreenData_0x0C5A
+SeScreenData_0x0C21:
+	sd_blit	SeBitmap_RadioOn, 114*40+2, 2, 12
+	sd_ctext	0x20, 7, 114*40+4, "2ND"
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0C47
+; evidence: bounds at SeScreenData_0x0C5A
+SeScreenData_0x0C34:
+	sd_blit	SeBitmap_RadioOn, 146*40+2, 2, 12
+	sd_ctext	0x20, 7, 146*40+4, "3RD"
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0C5A
+; evidence: bounds at SeScreenData_0x0C5A
+SeScreenData_0x0C47:
+	sd_blit	SeBitmap_RadioOn, 178*40+2, 2, 12
+	sd_ctext	0x20, 7, 178*40+4, "4TH"
+; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x0C5A:
+	.long	SeScreenData_0x0C0E
+	.long	SeScreenData_0x0C0E
+	.long	SeScreenData_0x0C21
+	.long	SeScreenData_0x0C34
+	.long	SeScreenData_0x0C47
+	.long	SeScreenData_0x0C5A
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0C8A
+; evidence: bounds at SeScreenData_0x0CD2
+SeScreenData_0x0C72:
+	sd_blit	SeBitmap_RadioOff, 82*40+2, 2, 12
+	sd_blit	SeBitmap_Pattern24x10_1, 82*40+4, 3, 10
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0CA2
+; evidence: bounds at SeScreenData_0x0CD2
+SeScreenData_0x0C8A:
+	sd_blit	SeBitmap_RadioOff, 114*40+2, 2, 12
+	sd_blit	SeBitmap_Pattern24x10_2, 114*40+4, 3, 10
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF118AF-0xF118C2 (19 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=71% dist=9 near SeBitmap_EnvCurve5_0x892+79
-	.byte 0x16, 0x02, 0x00, 0x0c, 0x00, 0x03, 0x0c, 0x42, 0x0c, 0xf1, 0x00, 0xd4
-	.byte 0x16, 0x03, 0x00, 0x0a, 0x00, 0x03, 0x0c
-	.byte 0x96
-	incf
-	.byte 0xf1
-	nop
-	.byte 0xd2
-	jp	0x0c0002
-	nop
-	pop	sr
-	incf
-	jr	f, 12
-	.byte 0xf1
-	nop
-	.byte 0xd4
-	jp	0x0a0003
-	nop
-	jrl	-3816
-	nop
-	jrl	-3816
-	nop
-	.byte 0x90
-	push_f
-	.byte 0xf1
-	nop
-	.byte 0xa8
-	push_f
-	.byte 0xf1
-	nop
-	.byte 0xc0
-	push_f
-	.byte 0xf1
-	nop
-	.byte 0xd8
-	push_f
-	.byte 0xf1
-	nop
-	pop	sr
-	incf
-	jrl	nz, -3828
-	nop
-	.byte 0x9a
-	ccf
-	push	sr
-	nop
-	incf
-	nop
-	.byte 0x17
-	push	33
-	nop
-	jrl	gt, 12544
-	.byte 0x53, 0x54
-	pop	sr
-	incf
-	jrl	nz, -3828
-	nop
-	popw	de
-	ldf	2
-	nop
-	incf
-	nop
-	.byte 0x17
-	push	33
-	nop
-	.byte 0x98
-	nop
-	ldw	de, 0x444e
-	.byte 0xf0
-	push_f
-	.byte 0xf1
-	nop
-	.byte 0xf0
-	push_f
-	.byte 0xf1
-	nop
-	halt
-	pop_f
-	.byte 0xf1
-	nop
-	.byte 0x1a
-	pop_f
-	.byte 0xf1
-	nop
-	pop	sr
-	incf
-	.byte 0x96
-	incf
-	.byte 0xf1
-	nop
-	.byte 0x9a
-	ccf
-	push	sr
-	nop
-	incf
-	nop
-	.byte 0x17
-	push	33
-	nop
-	jrl	gt, 12544
-	.byte 0x53, 0x54
-	pop	sr
-	incf
-	.byte 0x96
-	incf
-	.byte 0xf1
-	nop
-	popw	de
-	ldf	2
-	nop
-	incf
-	nop
-	.byte 0x17
-	push	33
-	nop
-	.byte 0x98
-	nop
-	ldw	de, 0x444e
-	pushw	de
-	pop_f
-	.byte 0xf1
-	nop
-	pushw	de
-	pop_f
-	.byte 0xf1
-	nop
-	push	xsp
-	pop_f
-	.byte 0xf1
-	nop
-	.byte 0x54
-	pop_f
-	.byte 0xf1
-	nop
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0CBA
+; evidence: bounds at SeScreenData_0x0CD2
+SeScreenData_0x0CA2:
+	sd_blit	SeBitmap_RadioOff, 146*40+2, 2, 12
+	sd_blit	SeBitmap_Pattern24x10_3, 146*40+4, 3, 10
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0CD2
+; evidence: bounds at SeScreenData_0x0CD2
+SeScreenData_0x0CBA:
+	sd_blit	SeBitmap_RadioOff, 178*40+2, 2, 12
+	sd_blit	SeBitmap_Pattern24x10_4, 178*40+4, 3, 10
+; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x0CD2:
+	.long	SeScreenData_0x0C72
+	.long	SeScreenData_0x0C72
+	.long	SeScreenData_0x0C8A
+	.long	SeScreenData_0x0CA2
+	.long	SeScreenData_0x0CBA
+	.long	SeScreenData_0x0CD2
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0CFF
+; evidence: bounds at SeScreenData_0x0D14
+SeScreenData_0x0CEA:
+	sd_blit	SeBitmap_RadioOn, 119*40+2, 2, 12
+	sd_ptext	0x17, 9, 33, 122, "1ST"
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0D14
+; evidence: bounds at SeScreenData_0x0D14
+SeScreenData_0x0CFF:
+	sd_blit	SeBitmap_RadioOn, 149*40+2, 2, 12
+	sd_ptext	0x17, 9, 33, 152, "2ND"
+; list-boundary table: entry i and i+1 bound list i (4 entries, LE32)
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x0D14:
+	.long	SeScreenData_0x0CEA
+	.long	SeScreenData_0x0CEA
+	.long	SeScreenData_0x0CFF
+	.long	SeScreenData_0x0D14
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0D39
+; evidence: bounds at SeScreenData_0x0D4E
+SeScreenData_0x0D24:
+	sd_blit	SeBitmap_RadioOff, 119*40+2, 2, 12
+	sd_ptext	0x17, 9, 33, 122, "1ST"
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0D4E
+; evidence: bounds at SeScreenData_0x0D4E
+SeScreenData_0x0D39:
+	sd_blit	SeBitmap_RadioOff, 149*40+2, 2, 12
+	sd_ptext	0x17, 9, 33, 152, "2ND"
+; list-boundary table: entry i and i+1 bound list i (4 entries, LE32)
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x0D4E:
+	.long	SeScreenData_0x0D24
+	.long	SeScreenData_0x0D24
+	.long	SeScreenData_0x0D39
+	.long	SeScreenData_0x0D4E
 ; se_setup_params_full: 471 bytes -- screen layout data, base 0xF11964
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_params_full.c)
+SeScreenData_0x0D5E:
+	.set	SeScreenData_0x0E0E, . + 176
+	.set	SeScreenData_0x0E31, . + 211
 	.incbin "includes/generated/se_setup_params_full.bin"
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11A18-0xF11A37 (31 B), unreached CODE-territory, was disassembled as 16 plausible-but-dead instruction lines; per=100% dist=13 near SeBitmap_EnvCurve5_0x986+196
-	ld	b, 10:opc
-	pushw	0x3300
-	nop
-	.byte 0xa8
-	nop
-	.byte 0xca
-	nop
-	ld	b, 10:opc
-	ld	(xhl), 51
-	nop
-	swi	3
-	nop
-	.byte 0x52
+	sd_quad	0x22, 11, 51, 168, 202
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11B4E-0xF11B61 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=8 near SeBitmap_EnvCurve5_0x986+506
-	.byte 0x00, 0x22, 0x0a, 0xb3, 0x00, 0x5b, 0x00, 0xfb, 0x00, 0x7a, 0x00, 0x22
-	.byte 0x0a, 0xb3, 0x00, 0x83, 0x00, 0xfb, 0x00
-	.byte 0xa2
-	nop
-	push	10
-	.byte 0x17, 0x01, 0x94
-	nop
-	ldw	wa, 0xa301
-	nop
-	push	10
-	pop_f
-	.byte 0x01, 0x96
-	nop
-	pushw	iz
-	.byte 0x01, 0xa1
-	nop
-	ld	b, 10:opc
-	ld	(xhl), 171
-	nop
-	swi	3
-	nop
-	.byte 0xca
-	nop
-	push	10
-	.byte 0x17, 0x01, 0xbb
-	nop
-	ldw	wa, 0xca01
-	nop
-	push	10
-	pop_f
-	.byte 0x01, 0xbd
-	nop
-	pushw	iz
-	.byte 0x01, 0xc8
+	sd_quad	0x22, 179, 51, 251, 82
+	sd_quad	0x22, 179, 91, 251, 122
+	sd_quad	0x22, 179, 131, 251, 162
+	sd_quad	0x09, 279, 148, 304, 163
+	sd_quad	0x09, 281, 150, 302, 161
+	sd_quad	0x22, 179, 171, 251, 202
+	sd_quad	0x09, 279, 187, 304, 202
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11B94-0xF11BA7 (19 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=100% dist=9 near SeBitmap_EnvCurve5_0x986+576
-	.byte 0x00, 0x22, 0x0a, 0x31, 0x00, 0xda, 0x00, 0x46, 0x00, 0xee, 0x00, 0x22
-	.byte 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	.byte 0x81
-	nop
-	.byte 0xda
-	nop
-	.long NakaInst_Param_Val7F
-	ld	b, 10:opc
-	.byte 0xd1
-	nop
-	.long NakaData_DescriptorPad_ZeroC
-	.byte 0xee
-	nop
-	.byte 0x01
-	ldw	(179:8), 0x4100:io
-	nop
-	swi	3
-	nop
-	ld	xbc, 0x0b0a0100
-	nop
-	popw	de
-	nop
-	.byte 0xa8
-	nop
-	popw	de
-	nop
-	.byte 0x01
-	ldw	(179:8), 0x6900:io
-	nop
-	swi	3
-	nop
-	jr	ge, 0
-	.byte 0x01
-	ldw	(11:8), 0x6a00:io
-	nop
-	.byte 0xa8
-	nop
-	jr	gt, 0
-	.byte 0x01
-	ldw	(11:8), 0x8a00:io
-	nop
-	.byte 0xa8
-	nop
-	.byte 0x8a
-	nop
-	.byte 0x01
-	ldw	(179:8), 0x9100:io
-	nop
-	swi	3
-	nop
-	.byte 0x91
-	nop
-	.byte 0x01
-	ldw	(11:8), 0xaa00:io
-	nop
-	.byte 0xa8
-	nop
-	.byte 0xaa
-	nop
-	.byte 0x01
-	ldw	(179:8), 0xb900:io
-	nop
-	swi	3
-	nop
-	.byte 0xb9
-	nop
-	.byte 0x01, 0x0a
-	.long Pad_NakaExternal_Block2
-	.long Pad_NakaExternal_Block3
-	.byte 0x01
-	ldw	(89:8), 0xe400:io
-	nop
-	jr	nz, 0
-	.byte 0xe4
-	nop
-	.byte 0x01
-	ldw	(129:8), 0xe400:io
-	nop
-	.long NakaData_ExternalPadBlock_A
-	.byte 0x01, 0x0a, 0xd1
-	nop
-	.long NakaData_DescriptorZero_PadA
-	.byte 0xe4
-	nop
-	push	sr
-	ldw	(44:8), 0x3300:io
-	nop
-	pushw	ix
-	nop
-	.byte 0xca
-	nop
-	halt
-	ldw	(6:8), 0x4301:io
-	nop
-	ldw	de, 0x5c01
-	nop
-	ldf	17
-	.byte 0x43
-	nop
-	.byte 0xb2
-	nop
-	.ascii "START PITCH"
-	.byte 0x17
-	ldw	(146:8), 0xb200:io
-	nop
-	.byte 0x53, 0x54
-	popw	sp
-	.byte 0x50, 0x17
-	pushw	173
-	ld	(xde), 80
-	popw	bc
-	.byte 0x54
-	ld	xhl, 0xd80b1748
-	nop
-	ld	(xde), 84
-	popw	sp
-	.byte 0x54
-	ld	xbc, 0xfc0b174c
-	nop
-	.byte 0xb2
-	nop
-	ld	xix, 0x48545045
-	push	sr
-	ldw	(213:8), 0xae00:io
-	nop
-	.byte 0xd5
-	nop
-	.byte 0xcb
-	nop
-	.byte 0x1c
-	retd	122
-	halt
-	nop
-	.byte 0x41
-	popw	iy
-	.ascii "PLITUDE"
-	ldf	16
-	ei	0
-	reti
-	nop
-	.byte 0x53
-	popw	sp
-	.byte 0x55
-	.ascii "ND EDIT"
-	.byte 0x06
-	push	139
-	.byte 0x06
-	.ascii "ENV "
-	scf
-	.byte 0x06
-	push	219
-	.byte 0x0b
-	.ascii "AMP "
-	scf
-	push	10
-	.byte 0x04
-	nop
-	.byte 0x04
+	sd_quad	0x09, 281, 189, 302, 200
+	sd_quad	0x22, 49, 218, 70, 238
+	sd_quad	0x22, 89, 218, 110, 238
+	sd_quad	0x22, 129, 218, 150, 238
+	sd_quad	0x22, 209, 218, 230, 238
+	sd_quad	0x01, 179, 65, 251, 65
+	sd_quad	0x01, 11, 74, 168, 74
+	sd_quad	0x01, 179, 105, 251, 105
+	sd_quad	0x01, 11, 106, 168, 106
+	sd_quad	0x01, 11, 138, 168, 138
+	sd_quad	0x01, 179, 145, 251, 145
+	sd_quad	0x01, 11, 170, 168, 170
+	sd_quad	0x01, 179, 185, 251, 185
+	sd_quad	0x01, 49, 228, 70, 228
+	sd_quad	0x01, 89, 228, 110, 228
+	sd_quad	0x01, 129, 228, 150, 228
+	sd_quad	0x01, 209, 228, 230, 228
+	sd_quad	0x02, 44, 51, 44, 202
+	sd_quad	0x05, 262, 67, 306, 92
+; static record list (6 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1089
+; evidence: SeMenu_FxEdit_DataBlock2
+SeScreenData_0x1043:
+	sd_ptext	0x17, 17, 67, 178, "START PITCH"
+	sd_ptext	0x17, 10, 146, 178, "STOP"
+	sd_ptext	0x17, 11, 173, 178, "PITCH"
+	sd_ptext	0x17, 11, 216, 178, "TOTAL"
+	sd_ptext	0x17, 11, 252, 178, "DEPTH"
+	sd_quad	0x02, 213, 174, 213, 203
+; static record list (17 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x1100, SeScreenData_0x113B
+; evidence: SeMenu_CompareAndApply_Data3
+SeScreenData_0x1089:
+	sd_ptext	0x1c, 15, 122, 5, "AMPLITUDE"
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_ctext	0x06, 9, 41*40+35, "ENV \021"
+	sd_ctext	0x06, 9, 75*40+35, "AMP \021"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11CC5-0xF11CD7 (18 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=62% dist=10 near SeBitmap_EnvCurve5_0xCC1+54
-	.byte 0x00, 0x44, 0x00, 0x10, 0x00, 0x09, 0x0a, 0x14, 0x01, 0x25, 0x00, 0x34
-	.byte 0x01, 0x36, 0x00, 0x09, 0x0a, 0x14
-	.byte 0x01
-	ld	xbc, 0x5e013400
-	nop
-	.byte 0x01
-	ldw	(32:8), 0x3d01:io
-	nop
-	ld	l, 1:opc
-	push	xiy
-	nop
-	.byte 0x01
-	ldw	(33:8), 0x3e01:io
-	nop
-	ld	h, 1:opc
-	push	xiz
-	nop
-	.byte 0x01
-	ldw	(34:8), 0x3f01:io
-	nop
-	ld	e, 1:opc
-	push	xsp
-	nop
-	push	10
-	ld	c, 1:opc
-	ldw	iz, 9216
-	.byte 0x01
-	ld	xbc, 0x2b090600
-	scf
-	.ascii "LF0 "
-	scf
-	.byte 0x01
-	ldw	(34:8), 0x6001:io
-	nop
-	ld	e, 1:opc
-	jr	f, 0
-	.byte 0x01
-	ldw	(33:8), 0x6101:io
-	nop
-	ld	h, 1:opc
-	jr	lt, 0
-	.byte 0x01
-	ldw	(32:8), 0x6201:io
-	nop
-	ld	l, 1:opc
-	jr	le, 0
-	push	10
-	ld	c, 1:opc
-	pop	xiz
-	nop
-	ld	d, 1:opc
-	jr	ge, 0
-	push	10
-	push_a
-	.byte 0x01
-	jr	ge, 0
-	ldw	ix, 0x7a01
-	nop
+	sd_quad	0x09, 4, 4, 68, 16
+	sd_quad	0x09, 276, 37, 308, 54
+	sd_quad	0x09, 276, 65, 308, 94
+	sd_quad	0x01, 288, 61, 295, 61
+	sd_quad	0x01, 289, 62, 294, 62
+	sd_quad	0x01, 290, 63, 293, 63
+	sd_quad	0x09, 291, 54, 292, 65
+	sd_ctext	0x06, 9, 109*40+35, "LF0 \021"
+	sd_quad	0x01, 290, 96, 293, 96
+	sd_quad	0x01, 289, 97, 294, 97
+	sd_quad	0x01, 288, 98, 295, 98
+	sd_quad	0x09, 291, 94, 292, 105
+	sd_quad	0x09, 276, 105, 308, 122
 ; se_setup_labels: 47 bytes -- screen layout data, base 0xF11D41
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_labels.c)
+SeScreenData_0x113B:
+	.set	SeScreenData_0x1140, . + 5
+	.set	SeScreenData_0x114A, . + 15
+	.set	SeScreenData_0x1154, . + 25
 	.incbin "includes/generated/se_setup_labels.bin"
 	; head of the next record, split off at se_setup_labels's proven end
-	.byte 0x22, 0x0a, 0xe0, 0x00
-	ld	xiz, 0x6c010600
-	nop
-	.byte 0x01
-	ldw	(214:8), 0x5a00:io
-	nop
-	.byte 0xe0
-	nop
-	pop	xde
-	nop
-	.byte 0x17
-	pushw	226
-	.byte 0x92
-	nop
-	.ascii "TOUCH"
-	.long NakaObj_FmuteVol_LinkEntry1
-	.byte 0x9b
-	nop
-	ld	xhl, 0x45565255
-	ld	b, 10:opc
-	.byte 0xe0
-	nop
-	jr	z, 0
-	ei	1
-	.byte 0x8c
-	nop
-	.byte 0x01
-	ldw	(214:8), 0x7a00:io
-	nop
-	.byte 0xe0
-	nop
-	jrl	gt, 5888
-	pushw	226
-	ld	(xde), 84
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xe80b1748
-	nop
-	.byte 0xbb
-	nop
-	.ascii "CURVE\""
-	ldw	(224:8), 0x8600:io
-	nop
-	ei	1
-	.byte 0xac
-	nop
-	.byte 0x01
-	ldw	(214:8), 0x9a00:io
-	nop
-	.byte 0xe0
-	nop
-	.byte 0x9a
-	nop
-	.byte 0x17
-	pushw	226
-	.byte 0xd2
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xe80b1748
-	nop
-	.byte 0xdb
-	nop
-	.ascii "CURVE\""
-	ldw	(224:8), 0xa600:io
-	nop
-	ei	1
-	.byte 0xcc
-	nop
-	.byte 0x01
-	ldw	(214:8), 0xba00:io
-	nop
-	.byte 0xe0
-	nop
-	.byte 0xba
-	nop
-	.byte 0x17
-	pushw	170
-	jrl	le, 21504
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xb00b1748
-	nop
-	jrl	ugt, 17152
-	.byte 0x55, 0x52, 0x56
-	ld	xiy, 0xa80a22
-	ld	xiz, 0x6c00ce00
-	nop
-	.byte 0x01
-	ldw	(158:8), 0x5a00:io
-	nop
-	.byte 0xa8
-	nop
-	pop	xde
-	nop
-	.byte 0x17
-	pushw	170
-	.byte 0x92
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xb00b1748
-	nop
-	.byte 0x9b
-	nop
-	ld	xhl, 0x45565255
-	ld	b, 10:opc
-	.byte 0xa8
-	nop
-	jr	z, 0
-	.byte 0xce
-	nop
-	.byte 0x8c
-	nop
-	.byte 0x01
-	ldw	(158:8), 0x7a00:io
-	nop
-	.byte 0xa8
+	sd_quad	0x22, 224, 70, 262, 108
+	sd_quad	0x01, 214, 90, 224, 90
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x11A8
+; evidence: startptrs at SeScreenData_0x1250
+SeScreenData_0x117E:
+	sd_ptext	0x17, 11, 226, 146, "TOUCH"
+	sd_ptext	0x17, 11, 232, 155, "CURVE"
+	sd_quad	0x22, 224, 102, 262, 140
+	sd_quad	0x01, 214, 122, 224, 122
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x11D2
+; evidence: startptrs at SeScreenData_0x1250
+SeScreenData_0x11A8:
+	sd_ptext	0x17, 11, 226, 178, "TOUCH"
+	sd_ptext	0x17, 11, 232, 187, "CURVE"
+	sd_quad	0x22, 224, 134, 262, 172
+	sd_quad	0x01, 214, 154, 224, 154
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x11FC
+; evidence: startptrs at SeScreenData_0x1250
+SeScreenData_0x11D2:
+	sd_ptext	0x17, 11, 226, 210, "TOUCH"
+	sd_ptext	0x17, 11, 232, 219, "CURVE"
+	sd_quad	0x22, 224, 166, 262, 204
+	sd_quad	0x01, 214, 186, 224, 186
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1226
+; evidence: startptrs at SeScreenData_0x1264
+SeScreenData_0x11FC:
+	sd_ptext	0x17, 11, 170, 114, "TOUCH"
+	sd_ptext	0x17, 11, 176, 123, "CURVE"
+	sd_quad	0x22, 168, 70, 206, 108
+	sd_quad	0x01, 158, 90, 168, 90
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1250
+; evidence: startptrs at SeScreenData_0x1264
+SeScreenData_0x1226:
+	sd_ptext	0x17, 11, 170, 146, "TOUCH"
+	sd_ptext	0x17, 11, 176, 155, "CURVE"
+	sd_quad	0x22, 168, 102, 206, 140
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11E53-0xF11E76 (35 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=74% dist=11 near SeBitmap_EnvCurve5_0xD8C+249
-	.byte 0x00, 0x7a, 0x00, 0x5a, 0x1d, 0xf1, 0x00, 0x5a, 0x1d, 0xf1, 0x00, 0x84
-	.byte 0x1d, 0xf1, 0x00, 0xae, 0x1d, 0xf1, 0x00, 0xd8, 0x1d, 0xf1, 0x00, 0x02
-	.byte 0x1e, 0xf1, 0x00, 0x02, 0x1e, 0xf1, 0x00, 0x2c, 0x1e, 0xf1, 0x00
-	.byte 0xe0
-	nop
-	ld	xiz, 0x4600e000
-	nop
-	.byte 0xe0
-	nop
-	jr	z, 0
-	.byte 0xe0
-	nop
-	.byte 0x86
-	nop
-	.byte 0xe0
-	nop
-	.byte 0xa6
-	nop
-	.byte 0xa8
-	nop
-	ld	xiz, 0x4600a800
-	nop
-	.byte 0xa8
-	nop
-	jr	z, 0
+	sd_quad	0x01, 158, 122, 168, 122
+; list-start table: entry i -> a list of 42 bytes (5 entries, LE32)
+; evidence: code 0xF0F42E
+SeScreenData_0x1250:
+	.long	SeScreenData_0x1154
+	.long	SeScreenData_0x1154
+	.long	SeScreenData_0x117E
+	.long	SeScreenData_0x11A8
+	.long	SeScreenData_0x11D2
+; list-start table: entry i -> a list of 42 bytes (3 entries, LE32)
+; evidence: code 0xF0F42E
+SeScreenData_0x1264:
+	.long	SeScreenData_0x11FC
+	.long	SeScreenData_0x11FC
+	.long	SeScreenData_0x1226
+; u16 table, stride 4, fields +0/+2, indexed directly by code
+; evidence: code 0xF0F3E2, code 0xF0F3E8
+SeScreenData_0x1270:
+	.short	224, 70
+	.short	224, 70
+	.short	224, 102
+	.short	224, 134
+	.short	224, 166
+; u16 table, stride 4, fields +0/+2, indexed directly by code
+; evidence: code 0xF0F3E2, code 0xF0F3E8
+SeScreenData_0x1284:
+	.short	168, 70
+	.short	168, 70
+	.short	168, 102
 ; se_setup_env: 107 bytes -- screen layout data, base 0xF11E96
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_env.c)
+SeScreenData_0x1290:
 	.incbin "includes/generated/se_setup_env.bin"
-	ld	b, 10:opc
-	pushw	0x3500
-	nop
-	.byte 0xd4
-	nop
-	.byte 0xca
-	nop
-	ld	b, 10:opc
-	.byte 0x51
-	nop
-	.byte 0xda
-	nop
-	jr	z, 0
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	.byte 0x81
-	nop
-	.byte 0xda
-	nop
-	.byte 0x96
-	nop
-	.byte 0xee
-	nop
-	ld	b, 10:opc
-	.byte 0xa9
-	nop
-	.byte 0xda
-	nop
-	.byte 0xbe
-	nop
-	.byte 0xee
-	nop
-	.byte 0x01
-	ldw	(11:8), 0x4a00:io
-	nop
-	.byte 0xd4
-	nop
-	popw	de
-	nop
-	.byte 0x01
-	ldw	(11:8), 0x6a00:io
-	nop
-	.byte 0xd4
-	nop
-	jr	gt, 0
-	.byte 0x01
-	ldw	(11:8), 0x8a00:io
-	nop
-	.byte 0xd4
-	nop
-	.byte 0x8a
-	nop
-	.byte 0x01
-	ldw	(11:8), 0xaa00:io
-	nop
-	.byte 0xd4
-	nop
-	.byte 0xaa
-	nop
-	.byte 0x01
-	ldw	(81:8), 0xe400:io
-	nop
-	.long NakaData_ExternalBase_0x66
-	.byte 0x01
-	ldw	(129:8), 0xe400:io
-	nop
-	.byte 0x96
-	nop
-	.byte 0xe4
-	nop
-	.byte 0x01, 0x0a
-	.long NakaData_ExternalPadBlock_B
-	.long Pad_BeforeNakaData_UserMemoryConfig
-	push	sr
-	ldw	(46:8), 0x3500:io
-	nop
-	pushw	iz
-	nop
-	.byte 0xca
-	nop
-	halt
-	ldw	(22:8), 0x4301:io
-	nop
-	ldw	de, 0x5c01
-	nop
+	sd_quad	0x22, 11, 53, 212, 202
+	sd_quad	0x22, 81, 218, 102, 238
+	sd_quad	0x22, 129, 218, 150, 238
+	sd_quad	0x22, 169, 218, 190, 238
+	sd_quad	0x01, 11, 74, 212, 74
+	sd_quad	0x01, 11, 106, 212, 106
+	sd_quad	0x01, 11, 138, 212, 138
+	sd_quad	0x01, 11, 170, 212, 170
+	sd_quad	0x01, 81, 228, 102, 228
+	sd_quad	0x01, 129, 228, 150, 228
+	sd_quad	0x01, 169, 228, 190, 228
+	sd_quad	0x02, 46, 53, 46, 202
+	sd_quad	0x05, 278, 67, 306, 92
 ; se_screen_f11f83: 130 bytes -- screen layout data, base 0xF11F83
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f11f83.c)
+SeScreenData_0x137D:
 	.incbin "includes/generated/se_screen_f11f83.bin"
-	ld	b, 10:opc
-	pushw	sp
-	nop
-	popw	wa
-	nop
-	swi	7
-	nop
-	jrl	gt, 256
-	ldw	(82:8), 0xdb00:io
-	nop
-	.byte 0xeb
-	nop
-	.byte 0xdb
-	nop
-	push	sr
-	ldw	(119:8), 0xcd00:io
-	nop
-	.long Bitmap_TechnichordBackground_1
-	halt
-	ldw	(22:8), 0x4301:io
-	nop
-	ldw	de, 0x5c01
-	nop
-	halt
-	ldw	(83:8), 0xdc00:io
-	nop
-	.byte 0xea
-	nop
-	.byte 0xe8
-	nop
-	.byte 0x17
-	pushw	14
-	pop	xsp
-	nop
-	popw	ix
-	ld	xiy, 0x174c4556
-	ex_ff
-	jr	pl, 0
-	.byte 0xc3
-	nop
-	.ascii "LEVEL KEY FOLLOW"
-	.byte 0x01
-	ldw	(47:8), 0x6100:io
-	nop
-	swi	7
-	nop
-	jr	lt, 0
-	push	10
-	.byte 0x52
-	nop
-	.byte 0xcd
-	nop
-	.byte 0xeb
-	nop
-	.byte 0xe9
-	nop
-	ldf	14
-	jrl	nc, 12288
-	nop
-	.ascii "ENVELOPE\""
-	ldw	(50:8), 0x3a00:io
-	nop
-	.byte 0x01, 0x01, 0x91
-	nop
-	ldf	12
-	.byte 0xc3
-	nop
-	.byte 0x97
-	nop
-	popw	hl
-	ld	xiy, 0x46464f59
-	.byte 0x17
-	push	11
-	nop
-	.byte 0xcf
-	nop
-	ld	xbc, 0x0a174b54
-	pushw	bc
-	nop
-	.byte 0xcf
-	nop
-	.byte 0x50
-	ld	xiy, 0x0c174b41
-	.byte 0x47
-	nop
-	.byte 0xcf
-	nop
-	.ascii "DECAY1"
-	.byte 0x17
-	pushw	113
-	.byte 0xcf
-	nop
-	.byte 0x53, 0x55, 0x53, 0x54
-	ldw	bc, 3095
-	.byte 0x9b
-	nop
-	.byte 0xcf
-	nop
-	.ascii "DECAY2"
-	.byte 0x17
-	pushw	197
-	.byte 0xcf
-	nop
-	.byte 0x53, 0x55, 0x53, 0x54
-	ldw	de, 3351
-	.byte 0xef
-	nop
-	.byte 0xcf
-	nop
-	.ascii "RELEASE"
-	reti
-	halt
-	.byte 0x1a
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x1f
+	sd_quad	0x22, 47, 72, 255, 122
+	sd_quad	0x01, 82, 219, 235, 219
+	sd_quad	0x02, 119, 205, 119, 233
+	sd_quad	0x05, 278, 67, 306, 92
+	sd_quad	0x05, 83, 220, 234, 232
+	sd_ptext	0x17, 11, 14, 95, "LEVEL"
+	sd_ptext	0x17, 22, 109, 195, "LEVEL KEY FOLLOW"
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1466
+; evidence: SeMenu_CompareAndApply_Data6, SeMenu_FxEdit_DataBlock4
+SeScreenData_0x1452:
+	sd_quad	0x01, 47, 97, 255, 97
+	sd_quad	0x09, 82, 205, 235, 233
+; static record list (21 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x147E, SeScreenData_0x1523
+; evidence: SeMenu_Utility_CopyBlock
+SeScreenData_0x1466:
+	sd_ptext	0x17, 14, 127, 48, "ENVELOPE"
+	sd_quad	0x22, 50, 58, 257, 145
+	sd_ptext	0x17, 12, 195, 151, "KEYOFF"
+	sd_ptext	0x17, 9, 11, 207, "ATK"
+	sd_ptext	0x17, 10, 41, 207, "PEAK"
+	sd_ptext	0x17, 12, 71, 207, "DECAY1"
+	sd_ptext	0x17, 11, 113, 207, "SUST1"
+	sd_ptext	0x17, 12, 155, 207, "DECAY2"
+	sd_ptext	0x17, 11, 197, 207, "SUST2"
+	sd_ptext	0x17, 13, 239, 207, "RELEASE"
+	sd_ctext	0x07, 5, 231*40+2, "\022"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF120E6-0xF12105 (31 B), unreached CODE-territory, was disassembled as 23 plausible-but-dead instruction lines; per=69% dist=12 near SeBitmap_EnvCurve5_0x10B6+98
-	.byte 0x24, 0x12, 0x07, 0x05, 0x24, 0x24, 0x12, 0x07, 0x05, 0x29, 0x24, 0x12
-	.byte 0x07, 0x05, 0x2e, 0x24, 0x12, 0x07, 0x05, 0x33, 0x24, 0x12, 0x07, 0x05
-	.byte 0x39, 0x24, 0x12, 0x09, 0x0a, 0x03, 0x00
-	.byte 0xcb
-	nop
-	.long NakaInst_2d_d
-	.byte 0x01
-	ldw	(3:8), 0xd900:io
-	nop
-	call	0xd901
-	halt
-	ldw	(4:8), 0xda00:io
-	nop
-	.byte 0x1c, 0x01, 0xe7
-	nop
-	halt
-	ldw	(22:8), 9985:io
-	nop
-	ldw	de, 0x3401
-	nop
-	.byte 0x06
-	pushw	272
-	.byte 0x50, 0x41
-	ld	xsp, 0x322f3245
-	ldf	18
-	.byte 0x55
-	nop
-	push	xiz
-	nop
-	.ascii "KEY FOLLOW ("
-	ldf	7
-	ld	xde, 0x30008200
-	ldf	7
-	pop	xiy
-	nop
-	.byte 0x82
-	nop
-	ldw	bc, 1815
-	jrl	gt, -32256
-	nop
-	ldw	de, 1815
-	.byte 0x96
-	nop
-	.byte 0x82
-	nop
-	ldw	hl, 1815
-	ld	(xde), 130
-	nop
-	ldw	ix, 1815
-	.byte 0xce
-	nop
-	.byte 0x82
-	nop
-	ldw	iy, 1815
-	.byte 0xea
-	nop
-	.byte 0x82
-	nop
-	ldw	iz, 3607
-	push	xiy
-	nop
-	.byte 0xc3
-	nop
-	.byte 0x45
-	popw	iz
-	.ascii "VELOPE"
-	.byte 0x17
-	push	115
-	nop
-	.byte 0xc3
-	nop
-	popw	hl
-	ld	xiy, 0x8b0c1759
-	nop
-	.byte 0xc3
-	nop
-	ld	xiz, 0x4f4c4c4f
-	.byte 0x57, 0x17
-	pushw	256
-	.byte 0xc3
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0x07091748
-	nop
-	.byte 0xd1
-	nop
-	ld	xbc, 0x0b174b54
-	ld	e, 0:opc
-	.byte 0xd1
-	nop
-	ld	xix, 0x59414345
-	ldf	13
-	popw	bc
-	nop
-	.byte 0xd1
-	nop
-	.ascii "RELEASE"
-	.byte 0x17
-	pushw	158
-	.byte 0xd1
-	nop
-	.byte 0x52
-	ld	xbc, 0x1745474e
-	incf
-	.byte 0xf1
-	nop
-	.byte 0xd1
-	nop
-	.ascii "ATTACK"
-	.byte 0x17
-	pushw	283
-	.byte 0xd1
-	nop
-	ld	xix, 0x59414345
-	reti
-	halt
-	.byte 0xaa
-	ld	a, 95:opc
-	reti
-	halt
-	.byte 0xb0
+	sd_ctext	0x07, 5, 231*40+7, "\022"
+	sd_ctext	0x07, 5, 231*40+12, "\022"
+	sd_ctext	0x07, 5, 231*40+17, "\022"
+	sd_ctext	0x07, 5, 231*40+22, "\022"
+	sd_ctext	0x07, 5, 231*40+27, "\022"
+	sd_ctext	0x07, 5, 231*40+33, "\022"
+	sd_quad	0x09, 3, 203, 285, 232
+	sd_quad	0x01, 3, 217, 285, 217
+	sd_quad	0x05, 4, 218, 284, 231
+	sd_quad	0x05, 278, 39, 306, 52
+; static record list (39 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x166E
+; evidence: SeMenu_Utility_FillBlock
+SeScreenData_0x1523:
+	sd_ctext	0x06, 11, 6*40+32, "PAGE2/2"
+	sd_ptext	0x17, 18, 85, 62, "KEY FOLLOW ("
+	sd_ptext	0x17, 7, 66, 130, "0"
+	sd_ptext	0x17, 7, 93, 130, "1"
+	sd_ptext	0x17, 7, 122, 130, "2"
+	sd_ptext	0x17, 7, 150, 130, "3"
+	sd_ptext	0x17, 7, 178, 130, "4"
+	sd_ptext	0x17, 7, 206, 130, "5"
+	sd_ptext	0x17, 7, 234, 130, "6"
+	sd_ptext	0x17, 14, 61, 195, "ENVELOPE"
+	sd_ptext	0x17, 9, 115, 195, "KEY"
+	sd_ptext	0x17, 12, 139, 195, "FOLLOW"
+	sd_ptext	0x17, 11, 256, 195, "TOUCH"
+	sd_ptext	0x17, 9, 7, 209, "ATK"
+	sd_ptext	0x17, 11, 37, 209, "DECAY"
+	sd_ptext	0x17, 13, 73, 209, "RELEASE"
+	sd_ptext	0x17, 11, 158, 209, "RANGE"
+	sd_ptext	0x17, 12, 241, 209, "ATTACK"
+	sd_ptext	0x17, 11, 283, 209, "DECAY"
+	sd_ctext	0x07, 5, 215*40+18, "_"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF121F0-0xF1220D (29 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=71% dist=12 near SeBitmap_EnvCurve5_0x115B+199
-	.byte 0x21, 0x5f, 0x06, 0x05, 0xfb, 0x21, 0x5f, 0x06, 0x05, 0xff, 0x21, 0x5f
-	.byte 0x07, 0x05, 0x42, 0x24, 0x12, 0x07, 0x05, 0x47, 0x24, 0x12, 0x07, 0x05
-	.byte 0x4c, 0x24, 0x12, 0x07, 0x05
-	.byte 0x51
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x56
-	ld	d, 18:opc
-	reti
-	halt
-	pop	xhl
-	ld	d, 18:opc
-	reti
-	halt
-	jr	f, 36
-	ccf
-	reti
-	halt
-	jr	z, 36
-	ccf
-	ld	b, 10:opc
-	pushw	sp
-	nop
-	popw	wa
-	nop
-	swi	7
-	nop
-	jrl	gt, 2304
-	ldw	(237:8), 0xcd00:io
-	nop
-	push	xiy
-	.byte 0x01, 0xe9
-	nop
-	.byte 0x01
-	ldw	(3:8), 0xda00:io
-	nop
-	.byte 0xe6
-	nop
-	.byte 0xda
-	nop
-	.byte 0x01
-	ldw	(237:8), 0xda00:io
-	nop
-	push	xiy
-	.byte 0x01, 0xda
+	sd_ctext	0x07, 5, 215*40+24, "_"
+	sd_ctext	0x06, 5, 217*40+19, "_"
+	sd_ctext	0x06, 5, 217*40+23, "_"
+	sd_ctext	0x07, 5, 232*40+2, "\022"
+	sd_ctext	0x07, 5, 232*40+7, "\022"
+	sd_ctext	0x07, 5, 232*40+12, "\022"
+	sd_ctext	0x07, 5, 232*40+17, "\022"
+	sd_ctext	0x07, 5, 232*40+22, "\022"
+	sd_ctext	0x07, 5, 232*40+27, "\022"
+	sd_ctext	0x07, 5, 232*40+32, "\022"
+	sd_ctext	0x07, 5, 232*40+38, "\022"
+	sd_quad	0x22, 47, 72, 255, 122
+	sd_quad	0x09, 237, 205, 317, 233
+	sd_quad	0x01, 3, 218, 230, 218
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1224B-0xF12266 (27 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=14 near SeBitmap_EnvCurve5_0x115B+290
-	.byte 0x00, 0x02, 0x0a, 0x75, 0x00, 0xcd, 0x00, 0x75, 0x00, 0xe9, 0x00, 0x05
-	.byte 0x0a, 0x16, 0x01, 0x27, 0x00, 0x32, 0x01, 0x34, 0x00, 0x05, 0x0a, 0x04
-	.byte 0x00, 0xdb, 0x00
-	.byte 0xe5
-	nop
-	.byte 0xe8
-	nop
-	halt
-	ldw	(238:8), 0xdb00:io
-	nop
-	push	xix
-	.byte 0x01, 0xe8
-	nop
-	.byte 0x01
-	ldw	(47:8), 0x6100:io
-	nop
-	swi	7
-	nop
-	jr	lt, 0
-	push	10
-	pop	sr
-	nop
-	.byte 0xcd
-	nop
-	.byte 0xe6
-	nop
-	.byte 0xe9
-	nop
-	.byte 0x1c
-	incf
-	.byte 0x8c
-	nop
-	halt
-	nop
-	ld	xiz, 0x45544c49
-	.byte 0x52, 0x17
-	rcf
-	ei	0
-	reti
-	nop
-	.ascii "SOUND EDIT"
-	push	10
-	.byte 0x04
-	nop
-	.byte 0x04
-	nop
-	ld	xix, 0x06001000
-	push	139
-	.byte 0x06
-	.ascii "ENV "
-	scf
-	ei	7
-	.byte 0xea
-	ldw	(70:8), 0x4c49:io
-	ei	5
-	.byte 0xdf
-	pushw	1553
-	reti
-	.byte 0xcb
-	incf
-	.byte 0x54
-	ld	xiy, 0x2b090652
-	scf
-	popw	ix
-	ld	xiz, 0x09112030
-	ldw	(20:8), 9473:io
-	nop
-	ldw	ix, 0x3601
-	nop
-	push	10
-	incf
-	.byte 0x01
-	ld	xbc, 0x5e013400
-	nop
-	push	10
-	push_a
-	.byte 0x01
-	jr	ge, 0
-	ldw	ix, 0x7a01
-	nop
-	.byte 0x01
-	ldw	(32:8), 0x3d01:io
-	nop
-	ld	l, 1:opc
-	push	xiy
-	nop
-	.byte 0x01
-	ldw	(33:8), 0x3e01:io
-	nop
-	ld	h, 1:opc
-	push	xiz
-	nop
-	.byte 0x01
-	ldw	(34:8), 0x3f01:io
-	nop
-	ld	e, 1:opc
-	push	xsp
-	nop
-	.byte 0x01
-	ldw	(34:8), 0x6001:io
-	nop
-	ld	e, 1:opc
-	jr	f, 0
-	.byte 0x01
-	ldw	(33:8), 0x6101:io
-	nop
-	ld	h, 1:opc
-	jr	lt, 0
-	.byte 0x01
-	ldw	(32:8), 0x6201:io
-	nop
-	ld	l, 1:opc
-	jr	le, 0
-	push	10
-	ld	c, 1:opc
-	ldw	iz, 9216
-	.byte 0x01
-	ld	xbc, 0x230a0900
-	.byte 0x01
-	pop	xiz
-	nop
-	ld	d, 1:opc
-	jr	ge, 0
+	sd_quad	0x01, 237, 218, 317, 218
+	sd_quad	0x02, 117, 205, 117, 233
+	sd_quad	0x05, 278, 39, 306, 52
+	sd_quad	0x05, 4, 219, 229, 232
+	sd_quad	0x05, 238, 219, 316, 232
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1682
+; evidence: SeMenu_Utility_FillBlock
+SeScreenData_0x166E:
+	sd_quad	0x01, 47, 97, 255, 97
+	sd_quad	0x09, 3, 205, 230, 233
+; static record list (19 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x16A8, SeScreenData_0x173B
+; evidence: SeMenu_Utility_FormatNumber
+SeScreenData_0x1682:
+	sd_ptext	0x1c, 12, 140, 5, "FILTER"
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_quad	0x09, 4, 4, 68, 16
+	sd_ctext	0x06, 9, 41*40+35, "ENV \021"
+	sd_ctext	0x06, 7, 69*40+34, "FIL"
+	sd_ctext	0x06, 5, 75*40+39, "\021"
+	sd_ctext	0x06, 7, 81*40+35, "TER"
+	sd_ctext	0x06, 9, 109*40+35, "LF0 \021"
+	sd_quad	0x09, 276, 37, 308, 54
+	sd_quad	0x09, 268, 65, 308, 94
+	sd_quad	0x09, 276, 105, 308, 122
+	sd_quad	0x01, 288, 61, 295, 61
+	sd_quad	0x01, 289, 62, 294, 62
+	sd_quad	0x01, 290, 63, 293, 63
+	sd_quad	0x01, 290, 96, 293, 96
+	sd_quad	0x01, 289, 97, 294, 97
+	sd_quad	0x01, 288, 98, 295, 98
+	sd_quad	0x09, 291, 54, 292, 65
+	sd_quad	0x09, 291, 94, 292, 105
 ; se_setup_nav_full: 293 bytes -- screen layout data, base 0xF12341
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_nav_full.c)
+SeScreenData_0x173B:
+	.set	SeScreenData_0x175E, . + 35
+	.set	SeScreenData_0x1780, . + 69
+	.set	SeScreenData_0x178B, . + 80
 	.incbin "includes/generated/se_setup_nav_full.bin"
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12440-0xF12454 (20 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=67% dist=9 near SeBitmap_EnvCurve5_0x13C3+175
-	ld	b, 10:opc
-	ld	xde, 0xe9002700
-	nop
-	pop	xiz
-	nop
-	ld	b, 10:opc
-	ld	xde, 0xe9007500
-	nop
-	.byte 0xac
-	nop
-	push	10
-	push	sr
-	nop
-	.byte 0xcd
-	nop
-	.byte 0xa0
-	nop
-	.byte 0xe9
-	nop
-	push	10
-	.byte 0xbb
-	nop
-	.byte 0xcd
-	nop
-	push	xix
-	.byte 0x01, 0xe9
-	nop
-	.byte 0x01
-	ldw	(146:8), 0x7100:io
-	nop
-	.byte 0x99
-	nop
-	jrl	lt, 256
-	ldw	(147:8), 0x7200:io
-	nop
-	.byte 0x98
-	nop
-	jrl	le, 256
-	ldw	(148:8), 0x7300:io
-	nop
-	.byte 0x97
-	nop
-	jrl	ule, 256
-	ldw	(2:8), 0xdb00:io
-	nop
-	.byte 0xa0
-	nop
-	.byte 0xdb
-	nop
-	.byte 0x01
-	ldw	(187:8), 0xdb00:io
-	nop
-	push	xix
-	.byte 0x01, 0xdb
-	nop
-	push	10
-	.byte 0x95
-	nop
-	jr	f, 0
-	.byte 0x96
-	nop
-	jrl	mi, 1280
-	ldw	(3:8), 0xdc00:io
-	nop
-	.byte 0x9f
-	nop
-	.byte 0xe8
-	nop
-	halt
-	ldw	(188:8), 0xdc00:io
-	nop
-	push	xhl
-	.byte 0x01, 0xe8
-	nop
-	ldf	21
-	jr	pl, 0
-	calr	18432
-	popw	bc
-	.byte 0x47
-	.ascii "H PASS -12dB"
+	sd_quad	0x22, 66, 39, 233, 94
+	sd_quad	0x22, 66, 117, 233, 172
+	sd_quad	0x09, 2, 205, 160, 233
+	sd_quad	0x09, 187, 205, 316, 233
+	sd_quad	0x01, 146, 113, 153, 113
+	sd_quad	0x01, 147, 114, 152, 114
+	sd_quad	0x01, 148, 115, 151, 115
+	sd_quad	0x01, 2, 219, 160, 219
+	sd_quad	0x01, 187, 219, 316, 219
+	sd_quad	0x09, 149, 96, 150, 117
+	sd_quad	0x05, 3, 220, 159, 232
+	sd_quad	0x05, 188, 220, 315, 232
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x18ED
+; evidence: SeMenu_Utility_FormatSigned_Data
+SeScreenData_0x18D8:
+	sd_ptext	0x17, 21, 109, 30, "HIGH PASS -12dB"
 ; se_setup_ctrl_list: 130 bytes -- screen layout data, base 0xF124F3
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_ctrl_list.c)
+SeScreenData_0x18ED:
+	.set	SeScreenData_0x1901, . + 20
 	.incbin "includes/generated/se_setup_ctrl_list.bin"
-	ld	b, 10:opc
-	ld	xde, 0xe9004c00
-	nop
-	.byte 0x83
-	nop
-	push	10
-	popw	iy
-	nop
-	.byte 0xcd
-	nop
-	.byte 0xf0
-	nop
-	.byte 0xe9
-	nop
-	.byte 0x01
-	ldw	(77:8), 0xdb00:io
-	nop
-	.byte 0xf0
-	nop
-	.byte 0xdb
-	nop
-	halt
-	.byte 0x0a
-	popw	iz
-	nop
-	.long NakaState_ZeroBlock_0
-	.byte 0xe8
-	nop
-	ldf	20
-	jr	pl, 0
-	.byte 0x43
-	nop
-	.ascii "LOW PASS -24dB"
-	ldf	21
-	jr	pl, 0
-	.byte 0x43
-	nop
-	.ascii "HIGH PASS -24dB"
-	ldf	13
-	ld	xhl, 0x46004300
-	popw	bc
-	popw	ix
-	.byte 0x54
-	ld	xiy, 0x0f173a52
-	jr	pl, 0
-	.byte 0x43
-	nop
-	.ascii "BAND PASS"
-	.byte 0x17
-	pushw	85
-	.byte 0x87
-	nop
-	.byte 0x7f
-	.ascii " LOW"
-	ldf	12
-	.byte 0xa9
-	nop
-	.byte 0x87
-	nop
-	popw	wa
-	popw	bc
-	ld	xsp, 0x177e2048
-	incf
-	.byte 0xd4
-	nop
-	.byte 0x87
-	nop
-	.ascii "CUTOFF"
-	ei	7
-	ldw	wa, 0x4c1e
-	ldw	wa, 1623
-	ld	(63:8), 30:io
-	popw	wa
-	popw	bc
-	ld	xsp, 0x260c1748
-	nop
-	.byte 0xd1
-	nop
-	ld	xhl, 0x464f5455
-	ld	xiz, 0x540a17
-	.byte 0xd1
-	nop
-	.byte 0x52
-	ld	xiy, 0x0c174f53
-	jrl	nz, -12032
-	nop
-	.ascii "CUTOFF"
-	.byte 0x17
-	ldw	(172:8), 0xd100:io
-	nop
-	.byte 0x52
-	ld	xiy, 0x0b174f53
-	.byte 0xd1
-	nop
-	.byte 0xd1
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xf50b1748
-	nop
-	.byte 0xd1
-	nop
-	ld	xhl, 0x45565255
-	ei	5
-	.byte 0x8f
-	ld	b, 75:opc
-	ei	6
-	ld	de, (xix)
-	jr	ov, 66
-	ei	5
-	.byte 0x9b
-	ld	b, 75:opc
-	ei	6
-	ld	xde, (xwa)
-	jr	ov, 66
-	reti
-	halt
-	ld	xiz, 0x05071224
-	popw	hl
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x51
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x56
-	ld	d, 18:opc
-	reti
-	halt
-	pop	xhl
-	ld	d, 18:opc
-	reti
-	halt
-	jr	f, 36
-	ccf
-	ld	b, 10:opc
-	ld	xde, 0xe9004c00
-	nop
-	.byte 0x83
+	sd_quad	0x22, 66, 76, 233, 131
+	sd_quad	0x09, 77, 205, 240, 233
+	sd_quad	0x01, 77, 219, 240, 219
+	sd_quad	0x05, 78, 220, 239, 232
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x19AB
+; evidence: SeMenu_Utility_FormatPercent
+SeScreenData_0x1997:
+	sd_ptext	0x17, 20, 109, 67, "LOW PASS -24dB"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x19C0
+; evidence: SeMenu_Utility_FormatPercent_Data
+SeScreenData_0x19AB:
+	sd_ptext	0x17, 21, 109, 67, "HIGH PASS -24dB"
+; static record list (30 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1ACA
+; evidence: SeMenu_Utility_FormatHex
+SeScreenData_0x19C0:
+	sd_ptext	0x17, 13, 67, 67, "FILTER:"
+	sd_ptext	0x17, 15, 109, 67, "BAND PASS"
+	sd_ptext	0x17, 11, 85, 135, "\177 LOW"
+	sd_ptext	0x17, 12, 169, 135, "HIGH ~"
+	sd_ptext	0x17, 12, 212, 135, "CUTOFF"
+	sd_ctext	0x06, 7, 193*40+8, "L0W"
+	sd_ctext	0x06, 8, 193*40+23, "HIGH"
+	sd_ptext	0x17, 12, 38, 209, "CUTOFF"
+	sd_ptext	0x17, 10, 84, 209, "RESO"
+	sd_ptext	0x17, 12, 126, 209, "CUTOFF"
+	sd_ptext	0x17, 10, 172, 209, "RESO"
+	sd_ptext	0x17, 11, 209, 209, "TOUCH"
+	sd_ptext	0x17, 11, 245, 209, "CURVE"
+	sd_ctext	0x06, 5, 221*40+7, "K"
+	sd_ctext	0x06, 6, 221*40+12, "dB"
+	sd_ctext	0x06, 5, 221*40+19, "K"
+	sd_ctext	0x06, 6, 221*40+24, "dB"
+	sd_ctext	0x07, 5, 232*40+6, "\022"
+	sd_ctext	0x07, 5, 232*40+11, "\022"
+	sd_ctext	0x07, 5, 232*40+17, "\022"
+	sd_ctext	0x07, 5, 232*40+22, "\022"
+	sd_ctext	0x07, 5, 232*40+27, "\022"
+	sd_ctext	0x07, 5, 232*40+32, "\022"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12693-0xF126A5 (18 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=75% dist=9 near SeBitmap_EnvCurve5_0x15F8+205
-	.byte 0x00, 0x09, 0x0a, 0x1d, 0x00, 0xcd, 0x00, 0x75, 0x00, 0xe9, 0x00, 0x09
-	.byte 0x0a, 0x7a, 0x00, 0xcd, 0x00, 0x18
-	.byte 0x01, 0xe9
-	nop
-	.byte 0x01
-	ldw	(29:8), 0xdb00:io
-	nop
-	jrl	mi, -9472
-	nop
-	.byte 0x01
-	ldw	(122:8), 0xdb00:io
-	nop
-	push_f
-	.byte 0x01, 0xdb
+	sd_quad	0x22, 66, 76, 233, 131
+	sd_quad	0x09, 29, 205, 117, 233
+	sd_quad	0x09, 122, 205, 280, 233
+	sd_quad	0x01, 29, 219, 117, 219
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF126BB-0xF126CC (17 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=100% dist=8 near SeBitmap_EnvCurve5_0x15F8+245
-	.byte 0x00, 0x05, 0x0a, 0x1e, 0x00, 0xdc, 0x00, 0x74, 0x00, 0xe8, 0x00, 0x05
-	.byte 0x0a, 0x7b, 0x00, 0xdc, 0x00
-	.byte 0x17, 0x01, 0xe8
-	nop
-	.byte 0x1c
-	decf
-	jrl	f, 24576
-	nop
-	.byte 0x54
-	.ascii "HROUGH\""
-	ldw	(66:8), 0x4c00:io
-	nop
-	.byte 0xe9
-	nop
-	.byte 0x83
-	nop
-	scf
-	ldw	(50:8), 0x6600:io
-	nop
-	.byte 0x01, 0x01
-	jr	z, 0
-	ccf
-	ldw	(213:8), 0x3a00:io
-	nop
-	.byte 0xd5
-	nop
-	.byte 0x91
-	nop
-	ldf	12
-	.byte 0xc3
-	nop
-	.byte 0x97
-	nop
-	.ascii "KEYOFF"
-	jp	0xc30a
-	push	xde
-	nop
-	.byte 0xe7
-	nop
-	.byte 0x9d
-	nop
-	.byte 0x06
-	pushw	272
-	.byte 0x50, 0x41
-	ld	xsp, 0x322f3145
-	ldf	14
-	jrl	nc, 12288
-	nop
-	ld	xiy, 0x4c45564e
-	popw	sp
-	.byte 0x50
-	ld	xiy, 0xc30c17
-	.byte 0x97
-	nop
-	.ascii "KEYOFF"
-	ei	6
-	.byte 0xe6, 0x17, 0x8d
-	ld	w, 23:opc
-	push	38
-	.byte 0x01, 0xaa
-	nop
-	ld	xhl, 0x09175255
-	pushw	ix
-	.byte 0x01
-	ld	(xhl), 83
-	popw	sp
-	.byte 0x52
-	ei	6
-	ld	h, 30:opc
-	.byte 0x8e
-	ld	w, 23:opc
-	push	11
-	nop
-	.byte 0xcf
-	nop
-	ld	xbc, 0x0a174b54
-	pushw	bc
-	nop
-	.byte 0xcf
-	nop
-	.byte 0x50
-	ld	xiy, 0x0c174b41
-	ld	xsp, 0x4400cf00
-	ld	xiy, 0x31594143
-	.byte 0x17
-	pushw	113
-	.byte 0xcf
-	nop
-	.byte 0x53, 0x55, 0x53, 0x54
-	ldw	bc, 3095
-	.byte 0x9b
-	nop
-	.byte 0xcf
-	nop
-	ld	xix, 0x59414345
-	ldw	de, 2839
-	.byte 0xc5
-	nop
-	.byte 0xcf
-	nop
-	.byte 0x53, 0x55, 0x53, 0x54
-	ldw	de, 3351
-	.byte 0xef
-	nop
-	.byte 0xcf
-	nop
-	.byte 0x52
-	ld	xiy, 0x5341454c
-	ld	xiy, 0x241a0507
-	ccf
-	reti
-	halt
-	.byte 0x1f
+	sd_quad	0x01, 122, 219, 280, 219
+	sd_quad	0x05, 30, 220, 116, 232
+	sd_quad	0x05, 123, 220, 279, 232
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1AE1
+; evidence: SeMenu_Utility_FormatHex_Data
+SeScreenData_0x1ACA:
+	sd_ptext	0x1c, 13, 112, 96, "THROUGH"
+	sd_quad	0x22, 66, 76, 233, 131
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1AF5
+; evidence: SeMenu_Utility_End
+SeScreenData_0x1AE1:
+	sd_quad	0x11, 50, 102, 257, 102
+; static record list (2 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x1AF5, SeScreenData_0x1B01
+; evidence: SeMenu_Utility_CopyBlock
+SeScreenData_0x1AEB:
+	sd_quad	0x12, 213, 58, 213, 145
+	sd_ptext	0x17, 12, 195, 151, "KEYOFF"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1B0B
+; evidence: SeMenu_Utility_CopyBlock
+SeScreenData_0x1B01:
+	sd_quad	0x1b, 195, 58, 231, 157
+; static record list (32 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1C2D
+; evidence: SeMenu_Utility_End
+SeScreenData_0x1B0B:
+	sd_ctext	0x06, 11, 6*40+32, "PAGE1/2"
+	sd_ptext	0x17, 14, 127, 48, "ENVELOPE"
+	sd_ptext	0x17, 12, 195, 151, "KEYOFF"
+	sd_ctext	0x06, 6, 152*40+38, "\215 "
+	sd_ptext	0x17, 9, 294, 170, "CUR"
+	sd_ptext	0x17, 9, 300, 179, "SOR"
+	sd_ctext	0x06, 6, 192*40+38, "\216 "
+	sd_ptext	0x17, 9, 11, 207, "ATK"
+	sd_ptext	0x17, 10, 41, 207, "PEAK"
+	sd_ptext	0x17, 12, 71, 207, "DECAY1"
+	sd_ptext	0x17, 11, 113, 207, "SUST1"
+	sd_ptext	0x17, 12, 155, 207, "DECAY2"
+	sd_ptext	0x17, 11, 197, 207, "SUST2"
+	sd_ptext	0x17, 13, 239, 207, "RELEASE"
+	sd_ctext	0x07, 5, 231*40+2, "\022"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF127AA-0xF127CB (33 B), unreached CODE-territory, was disassembled as 23 plausible-but-dead instruction lines; per=64% dist=13 near SeBitmap_EnvCurve5_0x1743+153
-	.byte 0x24, 0x12, 0x07, 0x05, 0x24, 0x24, 0x12, 0x07, 0x05, 0x29, 0x24, 0x12
-	.byte 0x07, 0x05, 0x2e, 0x24, 0x12, 0x07, 0x05, 0x33, 0x24, 0x12, 0x07, 0x05
-	.byte 0x39, 0x24, 0x12, 0x22, 0x0a, 0x32, 0x00, 0x3a, 0x00
-	.byte 0x01, 0x01, 0x91
-	nop
-	push	10
-	ld	h, 1:opc
-	.byte 0x96
-	nop
-	push	xsp
-	.byte 0x01, 0xa5
-	nop
-	push	10
-	pushw	wa
-	.byte 0x01, 0x98
-	nop
-	push	xiy
-	.byte 0x01, 0xa3
-	nop
-	push	10
-	push	xix
-	nop
-	.byte 0xae
-	nop
-	call	0xcb01
-	push	10
-	ld	h, 1:opc
-	.byte 0xbd
-	nop
-	push	xsp
-	.byte 0x01, 0xcc
-	nop
-	push	10
-	pushw	wa
-	.byte 0x01, 0xbf
-	nop
-	push	xiy
-	.byte 0x01, 0xca
-	nop
-	.byte 0x01
-	ldw	(60:8), 0xbc00:io
-	nop
-	call	0xbc01
-	push	sr
-	ldw	(138:8), 0xae00:io
-	nop
-	.byte 0x8a
-	nop
-	.byte 0xcb
-	nop
-	push	10
-	pop	sr
-	nop
-	.byte 0xcb
-	nop
-	call	0xe801
-	.byte 0x01
-	ldw	(3:8), 0xd900:io
-	nop
-	call	0xd901
-	halt
-	ldw	(22:8), 9985:io
-	nop
-	ldw	de, 0x3401
-	nop
-	.byte 0x17
-	pushw	65
-	ld	(xde), 83
-	.byte 0x54
-	ld	xbc, 0x0b175452
-	jr	ule, 0
-	ld	(xde), 80
-	popw	sp
-	popw	bc
-	popw	iz
-	.byte 0x54, 0x17
-	ldw	(142:8), 0xb200:io
-	nop
-	.byte 0x53, 0x54
-	popw	sp
-	.byte 0x50, 0x17
-	pushw	169
-	ld	(xde), 80
-	popw	sp
-	popw	bc
-	popw	iz
-	.byte 0x54, 0x17
-	incf
-	.byte 0xcc
-	nop
-	ld	(xde), 67
-	.byte 0x55, 0x54
-	popw	sp
-	ld	xiz, 0xf60c1746
-	nop
-	.byte 0xb2
-	nop
-	.ascii "ADJUST"
-	push	sr
-	ldw	(202:8), 0xae00:io
-	nop
-	.byte 0xca
-	nop
-	.byte 0xcb
-	nop
-	.byte 0x06
-	pushw	272
-	.byte 0x50
-	ld	xbc, 0x2f324547
-	ldw	de, 2327
-	.byte 0x55
-	nop
-	push	xiz
-	nop
-	popw	hl
-	ld	xiy, 0x6d0c1759
-	nop
-	push	xiz
-	nop
-	ld	xiz, 0x4f4c4c4f
-	.byte 0x57, 0x17
-	reti
-	.byte 0x97
-	nop
-	push	xiz
-	nop
-	pushw	wa
-	ldf	7
-	ld	xde, 0x30008200
-	ldf	7
-	pop	xiy
-	nop
-	.byte 0x82
-	nop
-	ldw	bc, 1815
-	jrl	gt, -32256
-	nop
-	ldw	de, 1815
-	.byte 0x96
-	nop
-	.byte 0x82
-	nop
-	ldw	hl, 1815
-	ld	(xde), 130
-	nop
-	ldw	ix, 1815
-	.byte 0xce
-	nop
-	.byte 0x82
-	nop
-	ldw	iy, 1815
-	.byte 0xea
-	nop
-	.byte 0x82
-	nop
-	ldw	iz, 3607
-	push	xiy
-	nop
-	.byte 0xc3
-	nop
-	.byte 0x45
-	.ascii "NVELOPE"
-	.byte 0x17
-	push	115
-	nop
-	.byte 0xc3
-	nop
-	popw	hl
-	ld	xiy, 0x8b0c1759
-	nop
-	.byte 0xc3
-	nop
-	ld	xiz, 0x4f4c4c4f
-	.byte 0x57, 0x17
-	pushw	256
-	.byte 0xc3
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0x220c1748
-	nop
-	.byte 0xd1
-	nop
-	ld	xbc, 0x43415454
-	popw	hl
-	.byte 0x17
-	pushw	76
-	.byte 0xd1
-	nop
-	ld	xix, 0x59414345
-	ldf	13
-	jrl	f, -12032
-	nop
-	.byte 0x52
-	ld	xiy, 0x5341454c
-	ld	xiy, 0xa40c17
-	.byte 0xd1
-	nop
-	.ascii "CENTER"
-	ldf	14
-	.byte 0xe6
-	nop
-	.byte 0xd1
-	nop
-	ld	xbc, 0x542d5244
-	popw	bc
-	popw	iy
-	ld	xiy, 0x011c0b17
-	.byte 0xd1
-	nop
-	ld	xix, 0x48545045
-	reti
-	halt
-	ld	xsp, 0x05071224
-	popw	ix
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x51
-	ld	d, 18:opc
-	reti
-	halt
-	.byte 0x56
-	ld	d, 18:opc
-	reti
-	halt
-	jr	f, 36
-	ccf
-	reti
-	halt
-	jr	z, 36
-	ccf
-	ld	b, 10:opc
-	pushw	sp
-	nop
-	popw	wa
-	nop
-	swi	7
-	nop
-	.byte 0x7a
-	nop
-	.long NakaData_ExternalBitmapBlock
-	.byte 0xcd
-	nop
-	push	xiy
-	.byte 0x01, 0xe9
-	nop
-	.byte 0x01
-	ldw	(30:8), 0xda00:io
-	nop
-	.byte 0xce
-	nop
-	.byte 0xda
-	nop
-	.byte 0x01
-	ldw	(228:8), 0xda00:io
-	nop
-	push	xiy
-	.byte 0x01, 0xda
-	nop
-	push	sr
-	ldw	(158:8), 0xcd00:io
-	nop
-	.byte 0x9e
-	nop
-	.byte 0xe9
-	nop
-	halt
-	ldw	(31:8), 0xdb00:io
-	nop
-	.byte 0xcd
-	nop
-	.byte 0xe8
-	nop
-	halt
-	ldw	(229:8), 0xdb00:io
-	nop
-	.long AlignedStr_ON
-	halt
-	ldw	(22:8), 9985:io
-	nop
-	ldw	de, 0x3401
-	nop
-	.byte 0x01
-	ldw	(47:8), 0x6100:io
-	nop
-	swi	7
-	nop
-	jr	lt, 0
-	push	10
-	calr	52480
-	nop
-	.byte 0xce
-	nop
-	.byte 0xe9
-	nop
+	sd_ctext	0x07, 5, 231*40+7, "\022"
+	sd_ctext	0x07, 5, 231*40+12, "\022"
+	sd_ctext	0x07, 5, 231*40+17, "\022"
+	sd_ctext	0x07, 5, 231*40+22, "\022"
+	sd_ctext	0x07, 5, 231*40+27, "\022"
+	sd_ctext	0x07, 5, 231*40+33, "\022"
+	sd_quad	0x22, 50, 58, 257, 145
+	sd_quad	0x09, 294, 150, 319, 165
+	sd_quad	0x09, 296, 152, 317, 163
+	sd_quad	0x09, 60, 174, 285, 203
+	sd_quad	0x09, 294, 189, 319, 204
+	sd_quad	0x09, 296, 191, 317, 202
+	sd_quad	0x01, 60, 188, 285, 188
+	sd_quad	0x02, 138, 174, 138, 203
+	sd_quad	0x09, 3, 203, 285, 232
+	sd_quad	0x01, 3, 217, 285, 217
+	sd_quad	0x05, 278, 39, 306, 52
+; static record list (7 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1C7A
+; evidence: SeMenu_Utility_End
+SeScreenData_0x1C2D:
+	sd_ptext	0x17, 11, 65, 178, "START"
+	sd_ptext	0x17, 11, 99, 178, "POINT"
+	sd_ptext	0x17, 10, 142, 178, "STOP"
+	sd_ptext	0x17, 11, 169, 178, "POINT"
+	sd_ptext	0x17, 12, 204, 178, "CUTOFF"
+	sd_ptext	0x17, 12, 246, 178, "ADJUST"
+	sd_quad	0x02, 202, 174, 202, 203
+; static record list (35 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1DB7
+; evidence: SeMenu_FilterEdit_Init
+SeScreenData_0x1C7A:
+	sd_ctext	0x06, 11, 6*40+32, "PAGE2/2"
+	sd_ptext	0x17, 9, 85, 62, "KEY"
+	sd_ptext	0x17, 12, 109, 62, "FOLLOW"
+	sd_ptext	0x17, 7, 151, 62, "("
+	sd_ptext	0x17, 7, 66, 130, "0"
+	sd_ptext	0x17, 7, 93, 130, "1"
+	sd_ptext	0x17, 7, 122, 130, "2"
+	sd_ptext	0x17, 7, 150, 130, "3"
+	sd_ptext	0x17, 7, 178, 130, "4"
+	sd_ptext	0x17, 7, 206, 130, "5"
+	sd_ptext	0x17, 7, 234, 130, "6"
+	sd_ptext	0x17, 14, 61, 195, "ENVELOPE"
+	sd_ptext	0x17, 9, 115, 195, "KEY"
+	sd_ptext	0x17, 12, 139, 195, "FOLLOW"
+	sd_ptext	0x17, 11, 256, 195, "TOUCH"
+	sd_ptext	0x17, 12, 34, 209, "ATTACK"
+	sd_ptext	0x17, 11, 76, 209, "DECAY"
+	sd_ptext	0x17, 13, 112, 209, "RELEASE"
+	sd_ptext	0x17, 12, 164, 209, "CENTER"
+	sd_ptext	0x17, 14, 230, 209, "ADR-TIME"
+	sd_ptext	0x17, 11, 284, 209, "DEPTH"
+	sd_ctext	0x07, 5, 232*40+7, "\022"
+	sd_ctext	0x07, 5, 232*40+12, "\022"
+	sd_ctext	0x07, 5, 232*40+17, "\022"
+	sd_ctext	0x07, 5, 232*40+22, "\022"
+	sd_ctext	0x07, 5, 232*40+32, "\022"
+	sd_ctext	0x07, 5, 232*40+38, "\022"
+	sd_quad	0x22, 47, 72, 255, 122
+	sd_quad	0x09, 228, 205, 317, 233
+	sd_quad	0x01, 30, 218, 206, 218
+	sd_quad	0x01, 228, 218, 317, 218
+	sd_quad	0x02, 158, 205, 158, 233
+	sd_quad	0x05, 31, 219, 205, 232
+	sd_quad	0x05, 229, 219, 316, 232
+	sd_quad	0x05, 278, 39, 306, 52
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1DCB
+; evidence: SeMenu_FilterEdit_Init
+SeScreenData_0x1DB7:
+	sd_quad	0x01, 47, 97, 255, 97
+	sd_quad	0x09, 30, 205, 206, 233
 ; se_screen_f129d1: 248 bytes -- screen layout data, base 0xF129D1
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f129d1.c)
+SeScreenData_0x1DCB:
+	.set	SeScreenData_0x1DE9, . + 30
+	.set	SeScreenData_0x1E07, . + 60
+	.set	SeScreenData_0x1E25, . + 90
+	.set	SeScreenData_0x1E43, . + 120
+	.set	SeScreenData_0x1E4D, . + 130
+	.set	SeScreenData_0x1E58, . + 141
+	.set	SeScreenData_0x1E63, . + 152
+	.set	SeScreenData_0x1E6D, . + 162
+	.set	SeScreenData_0x1E78, . + 173
+	.set	SeScreenData_0x1E83, . + 184
+	.set	SeScreenData_0x1E8D, . + 194
+	.set	SeScreenData_0x1E98, . + 205
+	.set	SeScreenData_0x1EA3, . + 216
+	.set	SeScreenData_0x1EAD, . + 226
+	.set	SeScreenData_0x1EB8, . + 237
 	.incbin "includes/generated/se_screen_f129d1.bin"
 	; head of the next record, split off at se_screen_f129d1's proven end
-	.byte 0x03
-	pushw	1629
-	retd	1280
 ; ** RE-FRAMED 2026-08-30 (lane B4). Was CODE territory. It is a chain of
 ; records whose every boundary is confirmed twice over -- once by a length
 ; field, once by a pointer from OUTSIDE the span:
@@ -13938,345 +13453,477 @@ SeBitmap_EnvCurve5:
 ; The last record's trailing LE32 is 0x00F12D0B; the tree framed its 0x00 high
 ; byte as a `nop`, and that phantom is what gave run 9 of the reachability work
 ; list a STRONG fall-through seed.
-	.long 0x00f12b53
+; bound record (op 0x03), pointed at by the table below/above;
+; part of the record lists that table bounds
+; evidence: bounds at SeScreenData_0x1EF7
+SeScreenData_0x1EC3:
+	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x1F4D
 	; 0xF12AD4: 25 one-character cells (note: no 'T')
-	.ascii "ABCDEFGHIJKLMNOPQRSUVWXYZ"
+; string table, 1-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 16)
+; evidence: bound op02 record at SeScreenData_0x1DCB, bound op02 record at SeScreenData_0x1DE9, bound op02 record at SeScreenData_0x1E07, bound op02 record at SeScreenData_0x1E25
+SeScreenData_0x1ECE:
+	.ascii	"A", "B", "C", "D", "E", "F", "G", "H"
+	.ascii	"I", "J", "K", "L", "M", "N", "O", "P"
+	.ascii	"Q", "R", "S", "U", "V", "W", "X", "Y"
+	.ascii	"Z"
 	; 0xF12AED: two 4-byte cells -- 0xF12AED is referenced from outside
-	.ascii "LOW "
-	.ascii "HIGH"
 	; 0xF12AF5: two more 4-byte cells
-	.ascii "MONO"
-	.ascii "POLY"
+; string table, 4-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 2)
+; evidence: bound op02 record at SeScreenData_0x21A2
+SeScreenData_0x1EE7:
+	.ascii	"LOW ", "HIGH", "MONO", "POLY"
 	; 0xF12AFD: 19 LE32 pointers back into the record stream above
-	.long 0x00f12ac9
-	.long 0x00f12a49
-	.long 0x00f12a49
-	.long 0x00f12a53
-	.long 0x00f12a5e
-	.long 0x00f12a69
-	.long 0x00f12a73
-	.long 0x00f12a7e
-	.long 0x00f12a89
-	.long 0x00f12a93
-	.long 0x00f12a9e
-	.long 0x00f12aa9
-	.long 0x00f12ab3
-	.long 0x00f12abe
-	.long 0x00f129d1
-	.long 0x00f129ef
-	.long 0x00f12a0d
-	.long 0x00f12a2b
-	.long 0x00f12a49
+; list-boundary table: entry i and i+1 bound list i (19 entries, LE32)
+; evidence: SeMenu_PatchEdit_Dispatch, SeMenu_PatchEdit_DefaultPath
+SeScreenData_0x1EF7:
+	.long	SeScreenData_0x1EC3
+	.long	SeScreenData_0x1E43
+	.long	SeScreenData_0x1E43
+	.long	SeScreenData_0x1E4D
+	.long	SeScreenData_0x1E58
+	.long	SeScreenData_0x1E63
+	.long	SeScreenData_0x1E6D
+	.long	SeScreenData_0x1E78
+	.long	SeScreenData_0x1E83
+	.long	SeScreenData_0x1E8D
+	.long	SeScreenData_0x1E98
+	.long	SeScreenData_0x1EA3
+	.long	SeScreenData_0x1EAD
+	.long	SeScreenData_0x1EB8
+	.long	SeScreenData_0x1DCB
+	.long	SeScreenData_0x1DE9
+	.long	SeScreenData_0x1E07
+	.long	SeScreenData_0x1E25
+	.long	SeScreenData_0x1E43
 	; 0xF12B49: record, type 0x1b, length 0x0a
 ; se_setup_sel1: 10 bytes -- screen layout data, base 0xF12B49
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel1.c)
+SeScreenData_0x1F43:
 	.incbin "includes/generated/se_setup_sel1.bin"
 	; 0xF12B53: five 8-byte cells
-	.byte 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0x65, 0x00	; |..I.3.e.|
-	.byte 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0x65, 0x00	; |..I.3.e.|
-	.byte 0x0d, 0x00, 0x69, 0x00, 0x33, 0x01, 0x85, 0x00	; |..i.3...|
-	.byte 0x0d, 0x00, 0x89, 0x00, 0x33, 0x01, 0xa5, 0x00	; |....3...|
-	.byte 0x0d, 0x00, 0xa9, 0x00, 0x33, 0x01, 0xc5, 0x00	; |....3...|
+	; |..I.3.e.|
+	; |..I.3.e.|
+	; |..i.3...|
+	; |....3...|
+	; |....3...|
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x1EC3
+SeScreenData_0x1F4D:
+	.short	13, 73, 307, 101
+	.short	13, 73, 307, 101
+	.short	13, 105, 307, 133
+	.short	13, 137, 307, 165
+	.short	13, 169, 307, 197
 	; 0xF12B7B: record, type 0x03, length 0x0b, trailing pointer 0x00F12D0B
-	.byte 0x03, 0x0b, 0x60, 0x06, 0x0f, 0x00, 0x05	; |..`....|
-	.long 0x00f12d0b
+	; |..`....|
+; bound record list (1 record), read by GraphicsRender_Start; end SeScreenData_0x1F80
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x1F75:
+	sdb_box	0x03, 0x0660, 0x0f, 0, 0x05, SeScreenData_0x2105
 ; se_drumkit_display: 329 bytes (293 screen data + 36 DrumKit_VariantSelect_Table)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_drumkit_display.c)
+SeScreenData_0x1F80:
+	.set	SeScreenData_0x1FA8, . + 40
+	.set	SeScreenData_0x1FDA, . + 90
+	.set	SeScreenData_0x200C, . + 140
+	.set	SeScreenData_0x203E, . + 190
+	.set	SeScreenData_0x2046, . + 198
+	.set	SeScreenData_0x204B, . + 203
+	.set	SeScreenData_0x2050, . + 208
+	.set	SeScreenData_0x2069, . + 233
+	.set	SeScreenData_0x207D, . + 253
+	.set	SeScreenData_0x2091, . + 273
 	.incbin "includes/generated/se_drumkit_display.bin"
-	.ascii "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:U:V:W:X:Y:Z:"
+; string table, 2-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 32)
+; evidence: bound op07 record DrumDetailEdit_Entry_02, bound op07 record DrumDetailEdit_Entry_06, bound op02 record at SeScreenData_0x1F80, bound op02 record at SeScreenData_0x1FA8 (+2 more)
+SeScreenData_0x20C9:
+	.ascii	"A:", "B:", "C:", "D:", "E:", "F:", "G:", "H:"
+	.ascii	"I:", "J:", "K:", "L:", "M:", "N:", "O:", "P:"
+	.ascii	"Q:", "R:", "S:", "U:", "V:", "W:", "X:", "Y:"
+	.ascii	"Z:"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12D01-0xF12D11 (16 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=75% dist=7 near SeBitmap_EnvCurve5_0x1BB8+379
 ; se_setup_sel2: 10 bytes -- screen layout data, base 0xF12D01
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel2.c)
+SeScreenData_0x20FB:
 	.incbin "includes/generated/se_setup_sel2.bin"
 	; head of the next record, split off at se_setup_sel2's proven end
-	.byte 0x3d, 0x00
-	.byte 0x76, 0x00, 0xfc, 0x00
-	.byte 0x84
-	nop
-	push	xiy
-	nop
-	jrl	z, -1024
-	nop
-	.byte 0x84
-	nop
-	push	xiy
-	nop
-	.byte 0x86
-	nop
-	swi	4
-	nop
-	.byte 0x94
-	nop
-	push	xiy
-	nop
-	.byte 0x96
-	nop
-	swi	4
-	nop
-	.byte 0xa4
-	nop
-	push	xiy
-	nop
-	.byte 0xa6
-	nop
-	swi	4
-	nop
 	; tail of the record before se_screen_f12d33, split off at its proven boundary
-	.byte 0xb4, 0x00
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x1F75
+SeScreenData_0x2105:
+	.short	61, 118, 252, 132
+	.short	61, 118, 252, 132
+	.short	61, 134, 252, 148
+	.short	61, 150, 252, 164
+	.short	61, 166, 252, 180
 ; se_screen_f12d33: 15 bytes -- screen layout data, base 0xF12D33
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f12d33.c)
+SeScreenData_0x212D:
 	.incbin "includes/generated/se_screen_f12d33.bin"
-	.ascii "LPF+EQHPF+EQLPF24 HPF24  BPF   THRU "
+; string table, 6-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 8)
+; evidence: bound op02 record at SeScreenData_0x212D
+SeScreenData_0x213C:
+	.ascii	"LPF+EQ"
+	.ascii	"HPF+EQ"
+	.ascii	"LPF24 "
+	.ascii	"HPF24 "
+	.ascii	" BPF  "
+	.ascii	" THRU "
 ; se_general_edit: 96 bytes (7 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_general_edit.c)
+SeScreenData_0x2160:
+	.set	SeScreenData_0x216B, . + 11
+	.set	SeScreenData_0x2175, . + 21
+	.set	SeScreenData_0x2184, . + 36
+	.set	SeScreenData_0x2193, . + 51
+	.set	SeScreenData_0x21A2, . + 66
 	.incbin "includes/generated/se_general_edit.bin"
-	jr	z, 45
-	.byte 0xf1
-	nop
-	jrl	lt, -3795
-	nop
-	jrl	ugt, -3795
-	nop
-	.byte 0x8a
-	pushw	iy
-	.byte 0xf1
-	nop
-	.byte 0x99
-	pushw	iy
-	.byte 0xf1
-	nop
-	.ascii "-6-3 0+3+6+9-12- 6  0+ 6+12+18 -- -6 -5 -4 -3 -2 -1  0 +1 +2 +3 +4 +5 +6"
-	halt
-	pushw	1632
-	.byte 0xe0
-	halt
-	ld	w, 162:opc
-	ld	b, 1:opc
-	pop	sr
-	nop
-	ldw	(97:8), 0x3f06:io
-	nop
-	ld	w, 158:opc
-	ld	b, 2:opc
-	push	sr
-	retd	1634
-	jrl	nc, 8192
-	.byte 0xf2
-	push	xix
-	ld	(1280:16), 146
-	ld	b, 2:opc
-	retd	1635
-	reti
-	nop
-	ld	w, 230:opc
-	pushw	iy
-	ld	(768:16), 152
-	ld	b, 34:opc
-	pushw	iz
-	.byte 0xf1
-	nop
-	pushw	iy
-	pushw	iz
-	.byte 0xf1
-	nop
-	.byte 0x37
-	pushw	iz
-	.byte 0xf1
-	nop
-	ld	xiz, 0x0500f12e
-	pushw	1632
-	.byte 0xe0
-	halt
-	ld	w, 167:opc
-	ld	b, 1:opc
-	pop	sr
-	nop
-	ldw	(97:8), 0x3f06:io
-	nop
-	ld	w, 163:opc
-	ld	b, 2:opc
-	push	sr
-	retd	1634
-	jrl	nc, 8192
-	.byte 0xf2
-	push	xix
-	ld	(1280:16), 140
-	ld	b, 2:opc
-	retd	1635
-	reti
-	nop
-	ld	w, 218:opc
-	pushw	iy
-	ld	(512:16), 146
-	ld	b, 2:opc
-	retd	1636
-	jrl	nc, 8192
-	.byte 0xf2
-	push	xix
-	ld	(1280:16), 152
-	ld	b, 2:opc
-	retd	1637
-	reti
-	nop
-	ld	w, 218:opc
-	pushw	iy
-	ld	(512:16), 158
-	ld	b, 101:opc
-	pushw	iz
-	.byte 0xf1
-	nop
-	jrl	f, -3794
-	nop
-	jrl	gt, -3794
-	nop
-	.byte 0x89
-	pushw	iz
-	.byte 0xf1
-	nop
-	.byte 0x98
-	pushw	iz
-	.byte 0xf1
-	nop
-	.byte 0xa7
-	pushw	iz
-	.byte 0xf1
-	nop
-	halt
-	pushw	1634
-	swi	7
-	nop
-	ld	w, 226:opc
-	call	0x050002
-	pushw	1642
-	swi	7
-	nop
-	ld	w, 236:opc
-	call	0x050002
-	pushw	1633
-	swi	7
-	nop
-	ld	w, 247:opc
-	call	2
-	ldw	(99:8), 0xff06:io
-	nop
-	ld	w, 97:opc
-	ld	b, 3:opc
-	halt
-	pushw	1636
-	swi	7
-	nop
-	ld	w, 101:opc
-	ld	b, 2:opc
-	nop
-	nop
-	ldw	(101:8), 0x7f06:io
-	nop
-	ld	w, 106:opc
-	ld	b, 3:opc
-	halt
-	pushw	1638
-	swi	7
-	nop
-	ld	w, 111:opc
-	ld	b, 2:opc
-	nop
-	nop
-	ldw	(103:8), 0x7f06:io
-	nop
-	ld	w, 116:opc
-	ld	b, 3:opc
-	halt
-	pushw	1640
-	swi	7
-	nop
-	ld	w, 121:opc
-	ld	b, 2:opc
-	nop
-	nop
-	ldw	(105:8), 0x7f06:io
-	nop
-	ld	w, 127:opc
-	ld	b, 3:opc
-	pop	sr
-	pushw	1632
-	.byte 0x01
-	nop
-	halt
-	ld	xiy, 0x2b00f12f
-	pushw	iy
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (5 entries, LE32)
+; evidence: SeMenu_DataBlock_05, SeMenu_DataBlock_06
+SeScreenData_0x21C0:
+	.long	SeScreenData_0x2160
+	.long	SeScreenData_0x216B
+	.long	SeScreenData_0x2175
+	.long	SeScreenData_0x2184
+	.long	SeScreenData_0x2193
+; string table, 2-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 8)
+; evidence: bound op02 record at SeScreenData_0x2184, bound op02 record at SeScreenData_0x2283, bound op02 record at SeScreenData_0x22A1
+SeScreenData_0x21D4:
+	.ascii	"-6", "-3", " 0", "+3", "+6", "+9"
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 8)
+; evidence: bound op02 record at SeScreenData_0x2240
+SeScreenData_0x21E0:
+	.ascii	"-12", "- 6", "  0", "+ 6"
+	.ascii	"+12", "+18"
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 128)
+; evidence: bound op02 record at SeScreenData_0x21B1
+SeScreenData_0x21F2:
+	.ascii	" --", " -6", " -5", " -4"
+	.ascii	" -3", " -2", " -1", "  0"
+	.ascii	" +1", " +2", " +3", " +4"
+	.ascii	" +5", " +6"
+; bound record list (4 records), read by GraphicsRender_Start; end SeScreenData_0x224F
+; evidence: SeMenu_Utility_FormatPercent, SeMenu_Utility_FormatPercent_Data
+SeScreenData_0x221C:
+	sdb_snum	0x0660, 0xe0, 5, 0x20, 221*40+26, 1, 0x03
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x224F
+SeScreenData_0x2227:
+	sdb_num	0x0661, 0x3f, 0, 0x20, 221*40+22, 2
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x224F
+SeScreenData_0x2231:
+	sdb_str	0x0662, 0x7f, 0, 0x20, SeScreenData_0x30EC, 5, 221*40+10
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x224F
+SeScreenData_0x2240:
+	sdb_str	0x0663, 0x07, 0, 0x20, SeScreenData_0x21E0, 3, 221*40+16
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (4 entries, LE32)
+; evidence: SeMenu_DataBlock_07, SeMenu_DataBlock_08
+SeScreenData_0x224F:
+	.long	SeScreenData_0x221C
+	.long	SeScreenData_0x2227
+	.long	SeScreenData_0x2231
+	.long	SeScreenData_0x2240
+; bound record list (6 records), read by GraphicsRender_Start; end SeScreenData_0x22B0
+; evidence: SeMenu_Utility_FormatHex
+SeScreenData_0x225F:
+	sdb_snum	0x0660, 0xe0, 5, 0x20, 221*40+31, 1, 0x03
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x22B0
+SeScreenData_0x226A:
+	sdb_num	0x0661, 0x3f, 0, 0x20, 221*40+27, 2
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x22B0
+SeScreenData_0x2274:
+	sdb_str	0x0662, 0x7f, 0, 0x20, SeScreenData_0x30EC, 5, 221*40+4
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x22B0
+SeScreenData_0x2283:
+	sdb_str	0x0663, 0x07, 0, 0x20, SeScreenData_0x21D4, 2, 221*40+10
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x22B0
+SeScreenData_0x2292:
+	sdb_str	0x0664, 0x7f, 0, 0x20, SeScreenData_0x30EC, 5, 221*40+16
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x22B0
+SeScreenData_0x22A1:
+	sdb_str	0x0665, 0x07, 0, 0x20, SeScreenData_0x21D4, 2, 221*40+22
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (6 entries, LE32)
+; evidence: SeMenu_DataBlock_09
+SeScreenData_0x22B0:
+	.long	SeScreenData_0x225F
+	.long	SeScreenData_0x226A
+	.long	SeScreenData_0x2274
+	.long	SeScreenData_0x2283
+	.long	SeScreenData_0x2292
+	.long	SeScreenData_0x22A1
+; bound record list (11 records), read by GraphicsRender_Start; end SeScreenData_0x233D
+; evidence: SeMenu_Utility_End
+SeScreenData_0x22C8:
+	sdb_snum	0x0662, 0xff, 0, 0x20, 191*40+10, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x22D3:
+	sdb_snum	0x066a, 0xff, 0, 0x20, 191*40+20, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x22DE:
+	sdb_snum	0x0661, 0xff, 0, 0x20, 191*40+31, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x22E9:
+	sdb_num	0x0663, 0xff, 0, 0x20, 220*40+1, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x22F3:
+	sdb_snum	0x0664, 0xff, 0, 0x20, 220*40+5, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x22FE:
+	sdb_num	0x0665, 0x7f, 0, 0x20, 220*40+10, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x2308:
+	sdb_snum	0x0666, 0xff, 0, 0x20, 220*40+15, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x2313:
+	sdb_num	0x0667, 0x7f, 0, 0x20, 220*40+20, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x231D:
+	sdb_snum	0x0668, 0xff, 0, 0x20, 220*40+25, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x2328:
+	sdb_num	0x0669, 0x7f, 0, 0x20, 220*40+31, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2363
+SeScreenData_0x2332:
+	sdb_box	0x03, 0x0660, 0x01, 0, 0x05, SeMenu_CompareScreen_DataTable
+; NO READER FOUND for these 2 bytes.  Searched: LE32/LE24/LE16 of every
+; address in the span, ld xiy/xix/xiz immediates, and the loop bounds of the
+; tables beside it.
+; Shape only: printable text. The same 2 bytes also sit at
+; SeScreenData_0x071D, SeScreenData_0x290A.
+SeScreenData_0x233D:
+	.ascii	"+-"
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 2)
+; evidence: bound op03 record at SeScreenData_0x2332
 SeMenu_CompareScreen_DataTable:
-	.byte 0x3d, 0x00
-	.byte 0xbd, 0x00, 0x1c, 0x01, 0xca, 0x00, 0x04, 0x00
-	.byte 0xda, 0x00, 0x1c, 0x01, 0xe7, 0x00, 0x1b, 0x0a
-	.byte 0x3d, 0x00, 0xbd, 0x00, 0x1c, 0x01, 0xca, 0x00
-	.byte 0x1b, 0x0a, 0x04, 0x00, 0xda, 0x00, 0x1c, 0x01
-	.byte 0xe7, 0x00, 0x38, 0x2f, 0xf1, 0x00, 0xe4, 0x2e
-	.byte 0xf1, 0x00, 0xce, 0x2e, 0xf1, 0x00, 0xef, 0x2e
-	.byte 0xf1, 0x00, 0xf9, 0x2e, 0xf1, 0x00, 0x04, 0x2f
-	.byte 0xf1, 0x00, 0x0e, 0x2f, 0xf1, 0x00, 0x19, 0x2f
-	.byte 0xf1, 0x00, 0x23, 0x2f, 0xf1, 0x00, 0x2e, 0x2f
-	.byte 0xf1, 0x00, 0xd9, 0x2e, 0xf1, 0x00
+	.short	61, 189, 284, 202
+	.short	4, 218, 284, 231
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2363
+; evidence: SeMenu_DataBlock_10
+SeScreenData_0x234F:
+	sd_quad	0x1b, 61, 189, 284, 202
+	sd_quad	0x1b, 4, 218, 284, 231
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (11 entries, LE32)
+; evidence: SeMenu_DataBlock_10
+SeScreenData_0x2363:
+	.long	SeScreenData_0x2332
+	.long	SeScreenData_0x22DE
+	.long	SeScreenData_0x22C8
+	.long	SeScreenData_0x22E9
+	.long	SeScreenData_0x22F3
+	.long	SeScreenData_0x22FE
+	.long	SeScreenData_0x2308
+	.long	SeScreenData_0x2313
+	.long	SeScreenData_0x231D
+	.long	SeScreenData_0x2328
+	.long	SeScreenData_0x22D3
 ; se_compare_screen: 139 bytes (13 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_compare_screen.c)
+SeScreenData_0x238F:
+	.set	SeScreenData_0x2399, . + 10
+	.set	SeScreenData_0x23A3, . + 20
+	.set	SeScreenData_0x23AD, . + 30
+	.set	SeScreenData_0x23B7, . + 40
+	.set	SeScreenData_0x23C2, . + 51
+	.set	SeScreenData_0x23CD, . + 62
+	.set	SeScreenData_0x23D8, . + 73
+	.set	SeScreenData_0x23E3, . + 84
+	.set	SeScreenData_0x23EE, . + 95
+	.set	SeScreenData_0x23F9, . + 106
+	.set	SeScreenData_0x2404, . + 117
+	.set	SeScreenData_0x240F, . + 128
 	.incbin "includes/generated/se_compare_screen.bin"
-	.byte 0x15, 0x30, 0xf1, 0x00, 0x95, 0x2f, 0xf1
-	.byte 0x00, 0x9f, 0x2f, 0xf1, 0x00, 0xa9, 0x2f, 0xf1
-	.byte 0x00, 0xb3, 0x2f, 0xf1, 0x00, 0xbd, 0x2f, 0xf1
-	.byte 0x00, 0xc8, 0x2f, 0xf1, 0x00, 0xd3, 0x2f, 0xf1
-	.byte 0x00, 0xde, 0x2f, 0xf1, 0x00, 0xe9, 0x2f, 0xf1
-	.byte 0x00, 0xf4, 0x2f, 0xf1, 0x00, 0xff, 0x2f, 0xf1
-	.byte 0x00, 0x0a, 0x30, 0xf1, 0x00, 0x1b, 0x0a, 0x0d
-	.byte 0x00, 0x4c, 0x00, 0xd2, 0x00, 0xc8, 0x00, 0x0d
-	.byte 0x00, 0x4c, 0x00, 0xd2, 0x00, 0x68, 0x00, 0x0d
-	.byte 0x00, 0x4c, 0x00, 0xd2, 0x00, 0x68, 0x00, 0x0d
-	.byte 0x00, 0x6c, 0x00, 0xd2, 0x00, 0x88, 0x00, 0x0d
-	.byte 0x00, 0x8c, 0x00, 0xd2, 0x00, 0xa8, 0x00, 0x0d
-	.byte 0x00, 0xac, 0x00, 0xd2, 0x00, 0xc8, 0x00, 0x05
-	.byte 0x0b, 0x63, 0x06, 0xff, 0x00, 0x20, 0x93, 0x22
-	.byte 0x02, 0x00, 0x02, 0x0f, 0x61, 0x06, 0x7f, 0x00
-	.byte 0x20, 0x72, 0x3b, 0xf1, 0x00, 0x03, 0x00, 0x98
-	.byte 0x22, 0x02, 0x0f, 0x60, 0x06, 0x7f, 0x00, 0x20
-	.byte 0x72, 0x3b, 0xf1, 0x00, 0x03, 0x00, 0x9d, 0x22
-	.byte 0x02, 0x0f, 0x62, 0x06, 0x7f, 0x00, 0x20, 0x72
-	.byte 0x3b, 0xf1, 0x00, 0x03, 0x00, 0xa2, 0x22, 0xa0
-	.byte 0x30, 0xf1, 0x00, 0x91, 0x30, 0xf1, 0x00, 0xaf
-	.byte 0x30, 0xf1, 0x00, 0x86, 0x30, 0xf1, 0x00, 0x00
-	.byte 0x0a, 0x60, 0x06, 0x7f, 0x00, 0x20, 0x61, 0x22
-	.byte 0x03, 0x00, 0x0a, 0x61, 0x06, 0x7f, 0x00, 0x20
-	.byte 0x65, 0x22, 0x03, 0x00, 0x0a, 0x62, 0x06, 0x7f
-	.byte 0x00, 0x20, 0x6a, 0x22, 0x03, 0x00, 0x0a, 0x63
-	.byte 0x06, 0x7f, 0x00, 0x20, 0x6f, 0x22, 0x03, 0x00
-	.byte 0x0a, 0x64, 0x06, 0x7f, 0x00, 0x20, 0x74, 0x22
-	.byte 0x03, 0x00, 0x0a, 0x65, 0x06, 0x7f, 0x00, 0x20
-	.byte 0x79, 0x22, 0x03, 0x00, 0x0a, 0x66, 0x06, 0x7f
-	.byte 0x00, 0x20, 0x7f, 0x22, 0x03, 0xce, 0x30, 0xf1
-	.byte 0x00, 0xd8, 0x30, 0xf1, 0x00, 0xe2, 0x30, 0xf1
-	.byte 0x00, 0xec, 0x30, 0xf1, 0x00, 0xf6, 0x30, 0xf1
-	.byte 0x00, 0x00, 0x31, 0xf1, 0x00, 0x0a, 0x31, 0xf1
-	.byte 0x00, 0x05, 0x0b, 0x60, 0x06, 0xff, 0x00, 0x20
-	.byte 0xa6, 0x22, 0x02, 0x00, 0x05, 0x0b, 0x61, 0x06
-	.byte 0xff, 0x00, 0x20, 0xac, 0x22, 0x02, 0x00, 0x02
-	.byte 0x0f, 0x62, 0x06, 0x7f, 0x00, 0x06, 0x72, 0x3b
-	.byte 0xf1, 0x00, 0x03, 0x00, 0x9c, 0x22, 0x02, 0x0f
-	.byte 0x63, 0x06, 0x7f, 0x00, 0x06, 0x72, 0x3b, 0xf1
-	.byte 0x00, 0x03, 0x00, 0x97, 0x22, 0x02, 0x0f, 0x64
-	.byte 0x06, 0x7f, 0x00, 0x06, 0x72, 0x3b, 0xf1, 0x00
-	.byte 0x03, 0x00, 0xa1, 0x22, 0x05, 0x0b, 0x65, 0x06
-	.byte 0xff, 0x00, 0x20, 0x89, 0x22, 0x02, 0x00, 0x05
-	.byte 0x0b, 0x66, 0x06, 0xff, 0x00, 0x20, 0x8e, 0x22
-	.byte 0x02, 0x00, 0x05, 0x0b, 0x67, 0x06, 0xff, 0x00
-	.byte 0x20, 0x92, 0x22, 0x02, 0x00, 0x07, 0x11, 0x69
-	.byte 0x06, 0x03, 0x00, 0x17, 0xa5, 0x31, 0xf1, 0x00
-	.byte 0x08, 0x00, 0x9d, 0x00, 0x3e, 0x00, 0x41, 0x54
-	.ascii "TACK) DECAY)  RELEASE)01"
-	.byte 0xf1, 0x00, 0x3b, 0x31, 0xf1, 0x00, 0x46, 0x31
-	.byte 0xf1, 0x00, 0x55, 0x31, 0xf1, 0x00, 0x64, 0x31
-	.byte 0xf1, 0x00, 0x73, 0x31, 0xf1, 0x00, 0x7e, 0x31
-	.byte 0xf1, 0x00, 0x89, 0x31, 0xf1, 0x00, 0x94, 0x31
-	.byte 0xf1, 0x00, 0x94, 0x31, 0xf1, 0x00
-TuningSys_Param_01:
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (13 entries, LE32)
+; evidence: SeMenu_DataBlock_01
+SeScreenData_0x241A:
+	.long	SeScreenData_0x240F
+	.long	SeScreenData_0x238F
+	.long	SeScreenData_0x2399
+	.long	SeScreenData_0x23A3
+	.long	SeScreenData_0x23AD
+	.long	SeScreenData_0x23B7
+	.long	SeScreenData_0x23C2
+	.long	SeScreenData_0x23CD
+	.long	SeScreenData_0x23D8
+	.long	SeScreenData_0x23E3
+	.long	SeScreenData_0x23EE
+	.long	SeScreenData_0x23F9
+	.long	SeScreenData_0x2404
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2458
+; evidence: SeMenu_DataBlock_01
+SeScreenData_0x244E:
+	sd_quad	0x1b, 13, 76, 210, 200
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x240F
+SeScreenData_0x2458:
+	.short	13, 76, 210, 104
+	.short	13, 76, 210, 104
+	.short	13, 108, 210, 136
+	.short	13, 140, 210, 168
+	.short	13, 172, 210, 200
+; bound record list (4 records), read by GraphicsRender_Start; end SeScreenData_0x24B8
+; evidence: SeMenu_CompareAndApply_Data6
+SeScreenData_0x2480:
+	sdb_snum	0x0663, 0xff, 0, 0x20, 221*40+11, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x24B8
+SeScreenData_0x248B:
+	sdb_str	0x0661, 0x7f, 0, 0x20, SeScreenData_0x2F6C, 3, 221*40+16
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x24B8
+SeScreenData_0x249A:
+	sdb_str	0x0660, 0x7f, 0, 0x20, SeScreenData_0x2F6C, 3, 221*40+21
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x24B8
+SeScreenData_0x24A9:
+	sdb_str	0x0662, 0x7f, 0, 0x20, SeScreenData_0x2F6C, 3, 221*40+26
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (4 entries, LE32)
+; evidence: SeMenu_DataBlock_02
+SeScreenData_0x24B8:
+	.long	SeScreenData_0x249A
+	.long	SeScreenData_0x248B
+	.long	SeScreenData_0x24A9
+	.long	SeScreenData_0x2480
+; bound record list (7 records), read by GraphicsRender_Start; end SeScreenData_0x250E
+; evidence: SeMenu_Utility_CopyBlock
+SeScreenData_0x24C8:
+	sdb_num	0x0660, 0x7f, 0, 0x20, 220*40+1, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x250E
+SeScreenData_0x24D2:
+	sdb_num	0x0661, 0x7f, 0, 0x20, 220*40+5, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x250E
+SeScreenData_0x24DC:
+	sdb_num	0x0662, 0x7f, 0, 0x20, 220*40+10, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x250E
+SeScreenData_0x24E6:
+	sdb_num	0x0663, 0x7f, 0, 0x20, 220*40+15, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x250E
+SeScreenData_0x24F0:
+	sdb_num	0x0664, 0x7f, 0, 0x20, 220*40+20, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x250E
+SeScreenData_0x24FA:
+	sdb_num	0x0665, 0x7f, 0, 0x20, 220*40+25, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x250E
+SeScreenData_0x2504:
+	sdb_num	0x0666, 0x7f, 0, 0x20, 220*40+31, 3
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (7 entries, LE32)
+; evidence: SeMenu_DataBlock_03
+SeScreenData_0x250E:
+	.long	SeScreenData_0x24C8
+	.long	SeScreenData_0x24D2
+	.long	SeScreenData_0x24DC
+	.long	SeScreenData_0x24E6
+	.long	SeScreenData_0x24F0
+	.long	SeScreenData_0x24FA
+	.long	SeScreenData_0x2504
+; bound record list (9 records), read by GraphicsRender_Start; end SeScreenData_0x259F
+; evidence: SeMenu_Utility_FillBlock
+SeScreenData_0x252A:
+	sdb_snum	0x0660, 0xff, 0, 0x20, 221*40+30, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x2535:
+	sdb_snum	0x0661, 0xff, 0, 0x20, 221*40+36, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x2540:
+	sdb_str	0x0662, 0x7f, 0, 0x06, SeScreenData_0x2F6C, 3, 221*40+20
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x254F:
+	sdb_str	0x0663, 0x7f, 0, 0x06, SeScreenData_0x2F6C, 3, 221*40+15
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x255E:
+	sdb_str	0x0664, 0x7f, 0, 0x06, SeScreenData_0x2F6C, 3, 221*40+25
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x256D:
+	sdb_snum	0x0665, 0xff, 0, 0x20, 221*40+1, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x2578:
+	sdb_snum	0x0666, 0xff, 0, 0x20, 221*40+6, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x2583:
+	sdb_snum	0x0667, 0xff, 0, 0x20, 221*40+10, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x25B7
+SeScreenData_0x258E:
+	sdb_strxy	0x0669, 0x03, 0, 0x17, SeScreenData_0x259F, 8, 157, 62
+; string table, 8-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 4)
+; evidence: bound op07 record at SeScreenData_0x258E, bound op07 record at SeScreenData_0x3BCA
+SeScreenData_0x259F:
+	.ascii	"ATTACK) "
+	.ascii	"DECAY)  "
+	.ascii	"RELEASE)"
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (10 entries, LE32)
+; evidence: SeMenu_DataBlock_04
+SeScreenData_0x25B7:
+	.long	SeScreenData_0x252A
+	.long	SeScreenData_0x2535
+	.long	SeScreenData_0x2540
+	.long	SeScreenData_0x254F
+	.long	SeScreenData_0x255E
+	.long	SeScreenData_0x256D
+	.long	SeScreenData_0x2578
+	.long	SeScreenData_0x2583
+	.long	SeScreenData_0x258E
+	.long	SeScreenData_0x258E
 ; se_name_editor: 218 bytes (15 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_name_editor.c)
+TuningSys_Param_01:
+	.set	SeScreenData_0x25EA, . + 11
+	.set	SeScreenData_0x25F5, . + 22
+	.set	SeScreenData_0x2604, . + 37
+	.set	SeScreenData_0x260F, . + 48
+	.set	SeScreenData_0x261A, . + 59
+	.set	SeScreenData_0x2629, . + 74
+	.set	SeScreenData_0x2634, . + 85
+	.set	SeScreenData_0x263F, . + 96
+	.set	SeScreenData_0x264E, . + 111
+	.set	SeScreenData_0x2659, . + 122
+	.set	SeScreenData_0x2664, . + 133
+	.set	SeScreenData_0x2673, . + 148
+	.set	SeScreenData_0x2682, . + 163
+	.set	SeScreenData_0x268D, . + 174
+	.set	SeScreenData_0x26A3, . + 196
+	.set	SeScreenData_0x26AE, . + 207
 	.incbin "includes/generated/se_name_editor.bin"
 .set TuningSys_Param_02, TuningSys_Param_01 + 11
 .set TuningSys_Param_03, TuningSys_Param_01 + 22
@@ -14292,1518 +13939,1493 @@ TuningSys_Param_01:
 .set TuningSys_Param_13, TuningSys_Param_01 + 148
 .set TuningSys_Param_NamesAndCoords, TuningSys_Param_01 + 163
 .set TuningSys_Param_ModeSelect, TuningSys_Param_01 + 207
-	.ascii "OFF     PURE MAJPURE MINPHYTHAGOWERCKMEIKIRNBERGOFF     OFF     OFF     OFF     OFF     OFF     OFF     OFF     OFF     OFF     ARABIC1 ARABIC2 ARABIC3 ARABIC4 ARABIC5 SLENDRO PELOG   OFF     OFF     OFF     OFF     OFF     OFF     OFF     OFF     OFF     NORM 1/2 1/4 1/81/161/321/64 FIX"
-	decf
-	nop
-	popw	ix
-	nop
-	.byte 0xa6
-	nop
-	jr	0
-	decf
-	nop
-	popw	ix
-	nop
-	.byte 0xa6
-	nop
-	jr	0
-	decf
-	nop
-	jr	nov, 0
-	.byte 0xa6
-	nop
-	.byte 0x88
-	nop
-	decf
-	nop
-	.byte 0x8c
-	nop
-	.byte 0xa6
-	nop
-	.byte 0xa8
-	nop
-	decf
-	nop
-	.byte 0xac
-	nop
-	.byte 0xa6
-	nop
-	.byte 0xc8
-	nop
-	ld	(xiy), 67
-	nop
-	swi	1
-	nop
-	.byte 0x50
-	nop
-	ld	(xiy), 67
-	nop
-	swi	1
-	nop
-	.byte 0x50
-	nop
-	ld	(xiy), 107
-	nop
-	swi	1
-	nop
-	jrl	-19200
-	nop
-	.byte 0x93
-	nop
-	swi	1
-	nop
-	.byte 0xa0
-	nop
-	ld	(xiy), 187
-	nop
-	swi	1
-	nop
-	.byte 0xc8
-	nop
-	jp	3338
-	popw	ix
-	nop
-	.byte 0xa6
-	nop
-	.byte 0xc8
-	nop
-	jp	0xb50a
-	ld	xhl, 0xc800f900
-	nop
-	.byte 0xa9
-	ldw	de, 241
-TuningSystem_Handler_Table:
-	.long TuningSys_Param_01
-	.long TuningSys_Param_02
-	.long TuningSys_Param_03
-	.long TuningSys_Param_04
-	.long TuningSys_Param_05
-	.long TuningSys_Param_06
-	.long TuningSys_Param_07
-	.long TuningSys_Param_08
-	.long TuningSys_Param_09
-	.long TuningSys_Param_10
-	.long TuningSys_Param_11
-	.long TuningSys_Param_12
-	.long TuningSys_Param_ModeSelect
-	.long TuningSys_Param_13
-	.long TuningSys_Param_NamesAndCoords
-	push	sr
-	retd	0x0664
-	ld_sd8b	w, 6
-	ldw	iz, 0xf135
-	nop
-	pop	sr
-	nop
-	ld	de, (xix)
-	nop
-	ldw	(100:8), 7942:io
-	nop
-	ld	w, 152:opc
-	ld	b, 3:opc
-	nop
-	ldw	(98:8), 0x7f06:io
-	nop
-	ld	w, 157:opc
-	ld	b, 3:opc
-	nop
-	ldw	(97:8), 0x7f06:io
-	nop
-	ld	w, 161:opc
-	ld	b, 3:opc
-	nop
-	ldw	(99:8), 0x3f06:io
-	nop
-	ld	w, 166:opc
-	ld	b, 2:opc
-	push	sr
-	retd	0x0663
-	.byte 0x80, 0x07
-	ld	w, 209:opc
-	push_a
-	ld	(768:16), 171
-	ld	b, 3:opc
-	pushw 1632
-	reti
-	nop
-	halt
-	ld	xde, 0x0200f135
-	retd	0x0665
-	rcf
-	max
-	ld	w, 16:opc
-	ldw	iy, 241
-	normal
-	nop
-	ldw	de, 522
-	retd	0x0666
-	rcf
-	max
-	ld	w, 16:opc
-	ldw	iy, 241
-	normal
-	nop
-	ldw	(15:8), 3842:io
-	jr	c, 6
-	rcf
-	max
-	ld	w, 16:opc
-	ldw	iy, 241
-	normal
-	nop
-	.byte 0xe2, 0x13, 0x02, 0x0f, 0x68
-	ei	0x10
-	max
-	ld	w, 16:opc
-	ldw	iy, 241
-	normal
-	nop
-	.byte 0xba, 0x18, 0x2b
-	pushw	iy
-	.byte 0xc9, 0x34, 0xf1
-	nop
-	.byte 0xa6, 0x34
+; string table, 8-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 32)
+; evidence: bound op02 record at SeScreenData_0x2673
+SeScreenData_0x26B9:
+	.ascii	"OFF     "
+	.ascii	"PURE MAJ"
+	.ascii	"PURE MIN"
+	.ascii	"PHYTHAGO"
+	.ascii	"WERCKMEI"
+	.ascii	"KIRNBERG"
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"ARABIC1 "
+	.ascii	"ARABIC2 "
+	.ascii	"ARABIC3 "
+	.ascii	"ARABIC4 "
+	.ascii	"ARABIC5 "
+	.ascii	"SLENDRO "
+	.ascii	"PELOG   "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+	.ascii	"OFF     "
+; string table, 4-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 8)
+; evidence: bound op02 record at SeScreenData_0x25F5, bound op02 record at SeScreenData_0x261A, bound op02 record at SeScreenData_0x263F, bound op02 record at SeScreenData_0x2664
+SeScreenData_0x27B9:
+	.ascii	"NORM", " 1/2", " 1/4", " 1/8"
+	.ascii	"1/16", "1/32", "1/64", " FIX"
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 8)
+; evidence: bound op03 record at SeScreenData_0x26A3
+SeScreenData_0x27D9:
+	.short	13, 76, 166, 104
+	.short	13, 76, 166, 104
+	.short	13, 108, 166, 136
+	.short	13, 140, 166, 168
+	.short	13, 172, 166, 200
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x26AE
+SeScreenData_0x2801:
+	.short	181, 67, 249, 80
+	.short	181, 67, 249, 80
+	.short	181, 107, 249, 120
+	.short	181, 147, 249, 160
+	.short	181, 187, 249, 200
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2833
+; evidence: SeMenu_DrumKit_Dispatch
+SeScreenData_0x2829:
+	sd_quad	0x1b, 13, 76, 166, 200
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x283D
+; evidence: SeMenu_DrumKit_Dispatch
+SeScreenData_0x2833:
+	sd_quad	0x1b, 181, 67, 249, 200
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (16 entries, LE32)
+; evidence: SeMenu_DrumKit_Dispatch
+	.set	TuningSystem_Handler_Table, . + 4
+SeScreenData_0x283D:
+	.long	SeScreenData_0x26A3
+	.long	TuningSys_Param_01
+	.long	SeScreenData_0x25EA
+	.long	SeScreenData_0x25F5
+	.long	SeScreenData_0x2604
+	.long	SeScreenData_0x260F
+	.long	SeScreenData_0x261A
+	.long	SeScreenData_0x2629
+	.long	SeScreenData_0x2634
+	.long	SeScreenData_0x263F
+	.long	SeScreenData_0x264E
+	.long	SeScreenData_0x2659
+	.long	SeScreenData_0x2664
+	.long	SeScreenData_0x26AE
+	.long	SeScreenData_0x2673
+	.long	SeScreenData_0x2682
+; bound record list (7 records), read by GraphicsRender_Start; ends SeScreenData_0x2896, SeScreenData_0x28CE
+; evidence: SeMenu_PresetBrowser_Data, Data_UnknownBlock
+SeScreenData_0x287D:
+	sdb_str	0x0664, 0xc0, 6, 0x20, SeScreenData_0x2930, 3, 221*40+12
+	sdb_num	0x0664, 0x1f, 0, 0x20, 221*40+16, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x290C
+SeScreenData_0x2896:
+	sdb_num	0x0662, 0x7f, 0, 0x20, 221*40+21, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x290C
+SeScreenData_0x28A0:
+	sdb_num	0x0661, 0x7f, 0, 0x20, 221*40+25, 3
+; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x28C3
+; evidence: Data_UnknownBlock
+SeScreenData_0x28AA:
+	sdb_num	0x0663, 0x3f, 0, 0x20, 221*40+30, 2
+	sdb_str	0x0663, 0x80, 7, 0x20, SeScreenData_0x08CB, 3, 221*40+35
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x290C
+SeScreenData_0x28C3:
+	sdb_box	0x03, 0x0660, 0x07, 0, 0x05, SeScreenData_0x293C
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2920
+SeScreenData_0x28CE:
+	sdb_str	0x0665, 0x10, 4, 0x20, SeScreenData_0x290A, 1, 65*40+10
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2920
+SeScreenData_0x28DD:
+	sdb_str	0x0666, 0x10, 4, 0x20, SeScreenData_0x290A, 1, 96*40+10
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2920
+SeScreenData_0x28EC:
+	sdb_str	0x0667, 0x10, 4, 0x20, SeScreenData_0x290A, 1, 127*40+10
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x2920
+SeScreenData_0x28FB:
+	sdb_str	0x0668, 0x10, 4, 0x20, SeScreenData_0x290A, 1, 158*40+10
+; string table, 1-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 2)
+; evidence: bound op02 record at SeScreenData_0x28CE, bound op02 record at SeScreenData_0x28DD, bound op02 record at SeScreenData_0x28EC, bound op02 record at SeScreenData_0x28FB
+SeScreenData_0x290A:
+	.ascii	"+", "-"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF13518-0xF13534 (28 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=71% dist=11 near TuningSystem_Handler_Table_0xCB+6
-	.byte 0xf1, 0x00, 0x9c, 0x34, 0xf1, 0x00, 0xb0, 0x34, 0xf1, 0x00, 0x83, 0x34
-	.byte 0xf1, 0x00, 0xd4, 0x34, 0xf1, 0x00, 0xe3, 0x34, 0xf1, 0x00, 0xf2, 0x34
-	.byte 0xf1, 0x00, 0x01, 0x35
-	.byte 0xf1, 0x00, 0x53
-	.ascii "INTRISQRSAW"
-	.byte 0xb6, 0x00, 0x3e, 0x00, 0xda
-	.byte 0x00, 0x4b, 0x00, 0xb6, 0x00, 0x3e, 0x00, 0xda
-	.byte 0x00, 0x4b, 0x00, 0xb6, 0x00, 0x5e, 0x00, 0xda
-	.byte 0x00, 0x6b, 0x00, 0xb6, 0x00, 0x7c, 0x00, 0xda
-	.byte 0x00, 0x89, 0x00, 0xb6, 0x00, 0x9c, 0x00, 0xda
-	.byte 0x00, 0xa9, 0x00, 0x1b, 0x0a, 0xb6, 0x00, 0x3e
-	.byte 0x00, 0xda, 0x00, 0xa9, 0x00, 0x1b, 0x0a, 0x2e
-	.byte 0x00, 0x3e, 0x00, 0x4a, 0x00, 0xa9, 0x00, 0x05
-	.byte 0x0a, 0x2e, 0x00, 0x3e, 0x00, 0x4a, 0x00, 0x4b
-	.byte 0x00, 0x05, 0x0a, 0x2e, 0x00, 0x5d, 0x00, 0x4a
-	.byte 0x00, 0x6a, 0x00, 0x05, 0x0a, 0x2e, 0x00, 0x7c
-	.byte 0x00, 0x4a, 0x00, 0x89, 0x00, 0x05, 0x0a, 0x2e
-	.byte 0x00, 0x9c, 0x00, 0x4a, 0x00, 0xa9, 0x00, 0x7e
-	.byte 0x35, 0xf1, 0x00, 0x88, 0x35, 0xf1, 0x00, 0x92
-	.byte 0x35, 0xf1, 0x00, 0x9c, 0x35, 0xf1, 0x00, 0xa6
-	.byte 0x35, 0xf1, 0x00, 0x1b, 0x0a, 0xdd, 0x00, 0x44
-	.byte 0x00, 0xed, 0x00, 0xcb, 0x00, 0x1b, 0x0a, 0x59
-	.byte 0x00, 0x43, 0x00, 0xb3, 0x00, 0xa6, 0x00, 0x1b
-	.byte 0x0a, 0x4d, 0x00, 0x41, 0x00, 0x58, 0x00, 0xa7
-	.byte 0x00, 0x11, 0x0a, 0xde, 0x00, 0x44, 0x00, 0xed
-	.byte 0x00, 0x44, 0x00, 0x12, 0x0a, 0xed, 0x00, 0x44
-	.byte 0x00, 0xed, 0x00, 0xcb, 0x00, 0x11, 0x0a, 0xde
-	.byte 0x00, 0x64, 0x00, 0xed, 0x00, 0x64, 0x00, 0x12
-	.byte 0x0a, 0xed, 0x00, 0x64, 0x00, 0xed, 0x00, 0xcb
-	.byte 0x00, 0x11, 0x0a, 0xde, 0x00, 0x82, 0x00, 0xed
-	.byte 0x00, 0x82, 0x00, 0x12, 0x0a, 0xed, 0x00, 0x82
-	.byte 0x00, 0xed, 0x00, 0xcb, 0x00, 0x11, 0x0a, 0xde
-	.byte 0x00, 0xa2, 0x00, 0xed, 0x00, 0xa2, 0x00, 0x12
-	.byte 0x0a, 0xed, 0x00, 0xa2, 0x00, 0xed, 0x00, 0xcb
-	.byte 0x00, 0xd8, 0x35, 0xf1, 0x00, 0xd8, 0x35, 0xf1
-	.byte 0x00, 0xec, 0x35, 0xf1, 0x00, 0x00, 0x36, 0xf1
-	.byte 0x00, 0x14, 0x36, 0xf1, 0x00, 0x01, 0x0a, 0x5d
-	.byte 0x00, 0x46, 0x00, 0xb4, 0x00, 0x46, 0x00, 0x00
-	.byte 0x0a, 0x5d, 0x00, 0x46, 0x00, 0xb4, 0x00, 0x65
-	.byte 0x00, 0x00, 0x0a, 0x5d, 0x00, 0x46, 0x00, 0xb4
-	.byte 0x00, 0x84, 0x00, 0x00, 0x0a, 0x5d, 0x00, 0x46
-	.byte 0x00, 0xb4, 0x00, 0xa3, 0x00, 0x00, 0x0a, 0x5d
-	.byte 0x00, 0x65, 0x00, 0xb4, 0x00, 0x46, 0x00, 0x01
-	.byte 0x0a, 0x5d, 0x00, 0x65, 0x00, 0xb4, 0x00, 0x65
-	.byte 0x00, 0x00, 0x0a, 0x5d, 0x00, 0x65, 0x00, 0xb4
-	.byte 0x00, 0x84, 0x00, 0x00, 0x0a, 0x5d, 0x00, 0x65
-	.byte 0x00, 0xb4, 0x00, 0xa3, 0x00, 0x00, 0x0a, 0x5d
-	.byte 0x00, 0x84, 0x00, 0xb4, 0x00, 0x46, 0x00, 0x00
-	.byte 0x0a, 0x5d, 0x00, 0x84, 0x00, 0xb4, 0x00, 0x65
-	.byte 0x00, 0x01, 0x0a, 0x5d, 0x00, 0x84, 0x00, 0xb4
-	.byte 0x00, 0x84, 0x00, 0x00, 0x0a, 0x5d, 0x00, 0x84
-	.byte 0x00, 0xb4, 0x00, 0xa3, 0x00, 0x00, 0x0a, 0x5d
-	.byte 0x00, 0xa3, 0x00, 0xb4, 0x00, 0x46, 0x00, 0x00
-	.byte 0x0a, 0x5d, 0x00, 0xa3, 0x00, 0xb4, 0x00, 0x65
-	.byte 0x00, 0x00, 0x0a, 0x5d, 0x00, 0xa3, 0x00, 0xb4
-	.byte 0x00, 0x84, 0x00, 0x01, 0x0a, 0x5d, 0x00, 0xa3
-	.byte 0x00, 0xb4, 0x00, 0xa3, 0x00, 0x3c, 0x36, 0xf1
-	.byte 0x00, 0x64, 0x36, 0xf1, 0x00, 0x8c, 0x36, 0xf1
-	.byte 0x00, 0xb4, 0x36, 0xf1, 0x00, 0x17, 0x07, 0x58
-	.byte 0x00, 0x43, 0x00, 0x10, 0x17, 0x07, 0x58, 0x00
-	.byte 0x62, 0x00, 0x10, 0x17, 0x07, 0x58, 0x00, 0x81
-	.byte 0x00, 0x10, 0x17, 0x07, 0x58, 0x00, 0xa0, 0x00
-	.byte 0x10, 0xec, 0x36, 0xf1, 0x00, 0xf3, 0x36, 0xf1
-	.byte 0x00, 0xfa, 0x36, 0xf1, 0x00, 0x01, 0x37, 0xf1
-	.byte 0x00, 0x1c, 0x12, 0x63, 0x00, 0x05, 0x00, 0x4d
-	.ascii "EM0RY WRITE"
-	.byte 0x17, 0x10, 0x06, 0x00, 0x07
-	.byte 0x00
-	.ascii "SOUND EDIT"
-	reti
-	halt
-	.byte 0x50
-	halt
-	rcf
-	ld	w, 6:opc
-	jrl	gt, 12293
-	popw hl
-	reti
-	.byte 0x09
-	jr	nc, 0x0b
-	popw iz
-	ld	xbc, 0x173a454d
-	reti
-	ldw	iz, 0x6d01
-	nop
-	.byte 0x91, 0x07
-	halt
-	jrl	po, 0x8d11
-	reti
-	halt
-	.byte 0xcf, 0x11, 0xa9, 0x07, 0x13, 0x67, 0x13
-	.ascii "MEMORY BANK:  -"
-	.byte 0x17, 0x07, 0x36, 0x01, 0x94
-	.byte 0x00, 0x91, 0x07, 0x05, 0xbc, 0x17, 0x8e, 0x07
-	.byte 0x05, 0xe7, 0x17, 0xa9, 0x07, 0x05, 0xd7, 0x1d
-	.byte 0x11, 0x07, 0x10, 0xf0, 0x1d, 0x53, 0x4f, 0x55
-	.ascii "ND NAMING"
-	.byte 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x44
-	.byte 0x00, 0x10, 0x00, 0x09, 0x0a, 0x0b, 0x00, 0x1e
-	.byte 0x00, 0x25, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d
-	.byte 0x00, 0x20, 0x00, 0x23, 0x00, 0x2f, 0x00, 0x22
-	.byte 0x0a, 0x29, 0x00, 0x3c, 0x00, 0xee, 0x00, 0xac
-	.byte 0x00, 0x09, 0x0a, 0x12, 0x01, 0x6c, 0x00, 0x35
-	.byte 0x01, 0x7f, 0x00, 0x09, 0x0a, 0x14, 0x01, 0x6e
-	.byte 0x00, 0x33, 0x01, 0x7d, 0x00, 0x09, 0x0a, 0x12
-	.byte 0x01, 0x93, 0x00, 0x35, 0x01, 0xa6, 0x00, 0x09
-	.byte 0x0a, 0x14, 0x01, 0x95, 0x00, 0x33, 0x01, 0xa4
-	.byte 0x00, 0x22, 0x0a, 0xb1, 0x00, 0xb3, 0x00, 0x30
-	.byte 0x01, 0xd6, 0x00, 0x09, 0x0a, 0xf7, 0x00, 0x89
-	.byte 0x00, 0x0a, 0x01, 0x8a, 0x00, 0x09, 0x0a, 0x0a
-	.byte 0x01, 0x75, 0x00, 0x0b, 0x01, 0x9e, 0x00, 0x01
-	.byte 0x0a, 0x29, 0x00, 0x72, 0x00, 0xee, 0x00, 0x72
-	.byte 0x00, 0x02, 0x0f, 0x60, 0x06, 0x03, 0x00, 0x07
-	.byte 0x38, 0x38, 0xf1, 0x00, 0x01, 0x00, 0x74, 0x13
-	.byte 0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x07, 0x76
-	.byte 0x13, 0x02, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00
-	.byte 0x07, 0xf3, 0x0b, 0x02, 0x00, 0x10, 0x00, 0x69
-	.byte 0x0e, 0x20, 0x41, 0x42, 0x07, 0x05, 0x50, 0x05
-	.byte 0x10, 0x06, 0x09, 0x7a, 0x05, 0x57, 0x52, 0x49
-	.byte 0x54, 0x45, 0x09, 0x0a, 0x0c, 0x00, 0x1e, 0x00
-	.byte 0x3c, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0e, 0x00
-	.byte 0x20, 0x00, 0x3a, 0x00, 0x2f, 0x00, 0x17, 0x10
-	.byte 0x06, 0x00, 0x07, 0x00
-	.ascii "SOUND EDIT"
-	.byte 0x1c, 0x12
-	.byte 0x66, 0x00, 0x05, 0x00
-	.ascii "S0UND NAMING"
-	.byte 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x44, 0x00
-	.byte 0x10, 0x00, 0x06, 0x21, 0x46, 0x10, 0x41, 0x20
-	.ascii "B C D E F G H I J K L M N O"
-	.byte 0x06, 0x23, 0x9c, 0x12, 0x50
-	.ascii " Q R S T U V W X Y Z a b c d e"
-	.byte 0x06, 0x23
-	.byte 0xf4, 0x14
-	.ascii "f g h i j k l m n o p q r s t u"
-	.byte 0x06, 0x23, 0x4c, 0x17, 0x76, 0x20, 0x77
-	.ascii " x y z 0 1 2 3 4 5 6 7 8 9 !"
-	.byte 0x06, 0x23, 0xa4, 0x19
-	.ascii "\" # $ % & ' ( ) + - * / = , . @"
-	.byte 0x06
-	.byte 0x23, 0xfc, 0x1b
-	.ascii ": ; ? \\ ^ _ ` | ~ "
-	jrl	nc, 0x3c20
-	.ascii " > [ ] ( )"
-	.byte 0x06, 0x07, 0x9b, 0x05, 0x43, 0x4c
-	.byte 0x52, 0x07, 0x05, 0x9f, 0x05, 0x11, 0x07, 0x05
-	.byte 0x8b, 0x0b, 0x7e, 0x07, 0x05, 0x8d, 0x0b, 0x7f
-	.byte 0x07, 0x05, 0x8f, 0x0b, 0x11, 0x06, 0x05, 0xb4
-	.byte 0x0b, 0x20, 0x07, 0x06, 0x98, 0x1e, 0x2e, 0x2e
-	.byte 0x06, 0x0c, 0xc9, 0x1e
-	.ascii "P0SITI0N"
-	.byte 0x06, 0x07, 0xe5, 0x1e
-	.byte 0x41, 0x42, 0x43, 0x06, 0x07, 0xea, 0x1e, 0x5d
-	.byte 0x28, 0x29, 0x06, 0x05, 0x18, 0x21, 0x8d, 0x06
-	.byte 0x0a, 0x12
-	.ascii "\"<    >"
-	.byte 0x06, 0x11, 0x1b
-	.ascii "\"INS  DEL  A/a"
-	ei	5
-	pushw hl
-	ld	b, 60:opc
-	ei	5
-	ldw	iy, 0x3e22
-	ei	5
-	swi	0
-	ld	b, 142:opc
-	ldw	(10:8), 277:io
-	call16	0x3200
-	normal
-	ldw	ix, 2560
-	ldw	(21:8), 0x4201:io
-	nop
-	ldw	de, 0x5a01
-	nop
-	zcf
-	ldw	(15:8), 0x6200:io
-	nop
-	pushw ix
-	normal
-	.byte 0xc2, 0x00, 0x0a, 0x0a, 0x05
-	nop
-	or	(8704:24), de
-	nop
-	.byte 0x0a, 0x0a, 0x2d, 0x00, 0xd2, 0x00, 0x4a, 0x00
-	.byte 0xea
-	nop
-	.byte 0x0a, 0x0a, 0x55, 0x00, 0xd2, 0x00, 0x72, 0x00
-	.byte 0xea
-	nop
-	.byte 0x0a, 0x0a, 0x7d, 0x00, 0xd2, 0x00, 0x9a, 0x00
-	.byte 0xea
-	nop
-	.byte 0x0a, 0x0a, 0xa5, 0x00, 0xd2, 0x00, 0xc2, 0x00
-	.byte 0xea
-	nop
-	.byte 0x0a, 0x0a, 0xcd, 0x00, 0xd2, 0x00, 0xea, 0x00
-	.byte 0xea
-	nop
-	.byte 0x0a, 0x0a, 0xf5, 0x00, 0xd2, 0x00, 0x12, 0x01
-	.byte 0xea
-	nop
-	ldw	(10:8), 285:io
-	or	(80384:24), de
-	nop
-	normal
-	ldw	(245:8), 0xde00:io
-	nop
-	ccf
-	normal
-	.byte 0xde, 0x00, 0x0a, 0x0a, 0x4d, 0x00
-	push xhl
-	nop
-	halt
-	normal
-	.byte 0x51
-	nop
-	ldw	(10:8), 77:io
-	push xhl
-	nop
-	.byte 0xe5, 0x00, 0x51
-	nop
-	ldw	(10:8), 77:io
-	push xhl
-	nop
-	jr	po, 0
-	.byte 0x51
-	nop
-	reti
-	scf
-	nop
-	nop
-	nop
-	nop
-	call16	3059
-	push	sr
-	nop
-	rcf
-	nop
-	.byte 0x51
-	nop
-	push xsp
-	nop
-	pop	sr
-	pushw 1632
-	retd	1280
-	.byte 0xc6
-	push xde
-	.byte 0xf1, 0x00, 0x07, 0x11
-	nop
-	nop
-	nop
-	nop
-	call16	3059
-	push	sr
-	nop
-	decf
-	nop
-	.byte 0x51
-	nop
-	push xsp
-	nop
-	pop	sr
-	pushw 1632
-	retd	1280
-	.byte 0xc6
-	push xde
-	.byte 0xf1, 0x00, 0x07, 0x11
-	nop
-	nop
-	nop
-	nop
-	call16	3059
-	push	sr
-	nop
-	push	sr
-	nop
-	.byte 0x51
-	nop
-	push xsp
-	nop
-	pop	sr
-	pushw 1632
-	retd	1280
-	.byte 0xc6
-	push xde
-	.byte 0xf1, 0x00, 0x1b, 0x0a, 0x51
-	nop
-	push xiz
-	nop
-	normal
-	normal
-	popw sp
-	nop
-	jp	8202
-	jr	c, 0
-	push_f
-	normal
-	.byte 0xc0, 0x00, 0x51
-	nop
-	push xiz
-	nop
-	pop xix
-	nop
-	.byte 0x4f
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (5 entries, LE32)
+; evidence: Data_UnknownBlock
+SeScreenData_0x290C:
+	.long	SeScreenData_0x28C3
+	.long	SeScreenData_0x28A0
+	.long	SeScreenData_0x2896
+	.long	SeScreenData_0x28AA
+	.long	SeScreenData_0x287D
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (4 entries, LE32)
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x2920:
+	.long	SeScreenData_0x28CE
+	.long	SeScreenData_0x28DD
+	.long	SeScreenData_0x28EC
+	.long	SeScreenData_0x28FB
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 4)
+; evidence: bound op02 record at SeScreenData_0x287D
+SeScreenData_0x2930:
+	.ascii	"SIN", "TRI", "SQR", "SAW"
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 8)
+; evidence: bound op03 record at SeScreenData_0x28C3
+SeScreenData_0x293C:
+	.short	182, 62, 218, 75
+	.short	182, 62, 218, 75
+	.short	182, 94, 218, 107
+	.short	182, 124, 218, 137
+	.short	182, 156, 218, 169
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x296E
+; evidence: Data_UnknownBlock
+SeScreenData_0x2964:
+	sd_quad	0x1b, 182, 62, 218, 169
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2978
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x296E:
+	sd_quad	0x1b, 46, 62, 74, 169
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2982
+; evidence: bounds at SeScreenData_0x29A0
+SeScreenData_0x2978:
+	sd_quad	0x05, 46, 62, 74, 75
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x298C
+; evidence: bounds at SeScreenData_0x29A0
+SeScreenData_0x2982:
+	sd_quad	0x05, 46, 93, 74, 106
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2996
+; evidence: bounds at SeScreenData_0x29A0
+SeScreenData_0x298C:
+	sd_quad	0x05, 46, 124, 74, 137
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x29A0
+; evidence: bounds at SeScreenData_0x29A0
+SeScreenData_0x2996:
+	sd_quad	0x05, 46, 156, 74, 169
+; list-boundary table: entry i and i+1 bound list i (5 entries, LE32)
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x29A0:
+	.long	SeScreenData_0x2978
+	.long	SeScreenData_0x2982
+	.long	SeScreenData_0x298C
+	.long	SeScreenData_0x2996
+	.long	SeScreenData_0x29A0
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x29BE
+; evidence: Data_UnknownBlock
+SeScreenData_0x29B4:
+	sd_quad	0x1b, 221, 68, 237, 203
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x29C8
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x29BE:
+	sd_quad	0x1b, 89, 67, 179, 166
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x29D2
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x29C8:
+	sd_quad	0x1b, 77, 65, 88, 167
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x29E6
+; evidence: startptrs at SeScreenData_0x2A22
+SeScreenData_0x29D2:
+	sd_quad	0x11, 222, 68, 237, 68
+	sd_quad	0x12, 237, 68, 237, 203
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x29FA
+; evidence: startptrs at SeScreenData_0x2A22
+SeScreenData_0x29E6:
+	sd_quad	0x11, 222, 100, 237, 100
+	sd_quad	0x12, 237, 100, 237, 203
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A0E
+; evidence: startptrs at SeScreenData_0x2A22
+SeScreenData_0x29FA:
+	sd_quad	0x11, 222, 130, 237, 130
+	sd_quad	0x12, 237, 130, 237, 203
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A22
+; evidence: startptrs at SeScreenData_0x2A22
+SeScreenData_0x2A0E:
+	sd_quad	0x11, 222, 162, 237, 162
+	sd_quad	0x12, 237, 162, 237, 203
+; list-start table: entry i -> a list of 20 bytes (5 entries, LE32)
+; evidence: Data_UnknownBlock
+SeScreenData_0x2A22:
+	.long	SeScreenData_0x29D2
+	.long	SeScreenData_0x29D2
+	.long	SeScreenData_0x29E6
+	.long	SeScreenData_0x29FA
+	.long	SeScreenData_0x2A0E
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A40
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A36:
+	sd_quad	0x01, 93, 70, 180, 70
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A4A
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A40:
+	sd_quad	0x00, 93, 70, 180, 101
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A54
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A4A:
+	sd_quad	0x00, 93, 70, 180, 132
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A5E
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A54:
+	sd_quad	0x00, 93, 70, 180, 163
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A68
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A5E:
+	sd_quad	0x00, 93, 101, 180, 70
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A72
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A68:
+	sd_quad	0x01, 93, 101, 180, 101
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A7C
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A72:
+	sd_quad	0x00, 93, 101, 180, 132
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A86
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A7C:
+	sd_quad	0x00, 93, 101, 180, 163
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A90
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A86:
+	sd_quad	0x00, 93, 132, 180, 70
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2A9A
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A90:
+	sd_quad	0x00, 93, 132, 180, 101
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AA4
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2A9A:
+	sd_quad	0x01, 93, 132, 180, 132
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AAE
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2AA4:
+	sd_quad	0x00, 93, 132, 180, 163
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AB8
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2AAE:
+	sd_quad	0x00, 93, 163, 180, 70
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AC2
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2AB8:
+	sd_quad	0x00, 93, 163, 180, 101
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2ACC
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2AC2:
+	sd_quad	0x00, 93, 163, 180, 132
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AD6
+; evidence: grouptab at SeScreenData_0x2AD6
+SeScreenData_0x2ACC:
+	sd_quad	0x01, 93, 163, 180, 163
+; record-group table: entry i -> 10-byte records, one picked by value (4 entries, LE32)
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x2AD6:
+	.long	SeScreenData_0x2A36
+	.long	SeScreenData_0x2A5E
+	.long	SeScreenData_0x2A86
+	.long	SeScreenData_0x2AAE
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AED
+; evidence: startptrs at SeScreenData_0x2B02
+SeScreenData_0x2AE6:
+	sd_ptext	0x17, 7, 88, 67, "\020"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AF4
+; evidence: startptrs at SeScreenData_0x2B02
+SeScreenData_0x2AED:
+	sd_ptext	0x17, 7, 88, 98, "\020"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2AFB
+; evidence: startptrs at SeScreenData_0x2B02
+SeScreenData_0x2AF4:
+	sd_ptext	0x17, 7, 88, 129, "\020"
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2B02
+; evidence: startptrs at SeScreenData_0x2B02
+SeScreenData_0x2AFB:
+	sd_ptext	0x17, 7, 88, 160, "\020"
+; list-start table: entry i -> a list of 7 bytes (4 entries, LE32)
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x2B02:
+	.long	SeScreenData_0x2AE6
+	.long	SeScreenData_0x2AED
+	.long	SeScreenData_0x2AF4
+	.long	SeScreenData_0x2AFB
+; static record list (26 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2C0A
+; evidence: SeMenu_DataBlock_11
+SeScreenData_0x2B12:
+	sd_ptext	0x1c, 18, 99, 5, "MEM0RY WRITE"
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_ctext	0x07, 5, 34*40+0, "\020"
+	sd_ctext	0x20, 6, 35*40+2, "0K"
+	sd_ctext	0x07, 9, 73*40+7, "NAME:"
+	sd_ptext	0x17, 7, 310, 109, "\221"
+	sd_ctext	0x07, 5, 111*40+36, "\215"
+	sd_ctext	0x07, 5, 113*40+39, "\251"
+	sd_ctext	0x07, 19, 124*40+7, "MEMORY BANK:  -"
+	sd_ptext	0x17, 7, 310, 148, "\221"
+	sd_ctext	0x07, 5, 151*40+36, "\216"
+	sd_ctext	0x07, 5, 152*40+39, "\251"
+	sd_ctext	0x07, 5, 190*40+39, "\021"
+	sd_ctext	0x07, 16, 191*40+24, "SOUND NAMING"
+	sd_quad	0x09, 4, 4, 68, 16
+	sd_quad	0x09, 11, 30, 37, 49
+	sd_quad	0x09, 13, 32, 35, 47
+	sd_quad	0x22, 41, 60, 238, 172
+	sd_quad	0x09, 274, 108, 309, 127
+	sd_quad	0x09, 276, 110, 307, 125
+	sd_quad	0x09, 274, 147, 309, 166
+	sd_quad	0x09, 276, 149, 307, 164
+	sd_quad	0x22, 177, 179, 304, 214
+	sd_quad	0x09, 247, 137, 266, 138
+	sd_quad	0x09, 266, 117, 267, 158
+	sd_quad	0x01, 41, 114, 238, 114
+; bound record list (3 records), read by GraphicsRender_Start; end SeScreenData_0x2C32
+; evidence: SeMenu_DataBlock_11, SeMenu_DataBlock_13
+SeScreenData_0x2C0A:
+	sdb_str	0x0660, 0x03, 0, 0x07, SeScreenData_0x2C32, 1, 124*40+20
+	sdb_num	0x0661, 0xff, 0, 0x07, 124*40+22, 2
+	sdb_str	0x0000, 0x00, 0, 0x07, 0x00020bf3, 16, 92*40+9
+; string table, 1-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 4)
+; evidence: bound op02 record at SeScreenData_0x2C0A
+SeScreenData_0x2C32:
+	.ascii	" ", "A", "B"
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2C57
+; evidence: SeMenu_DataBlock_12
+SeScreenData_0x2C35:
+	sd_ctext	0x07, 5, 34*40+0, "\020"
+	sd_ctext	0x06, 9, 35*40+2, "WRITE"
+	sd_quad	0x09, 12, 30, 60, 49
+	sd_quad	0x09, 14, 32, 58, 47
+; static record list (37 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2E3A
+; evidence: SeMenu_DataBlock_12
+SeScreenData_0x2C57:
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_ptext	0x1c, 18, 102, 5, "S0UND NAMING"
+	sd_quad	0x09, 4, 4, 68, 16
+; static record list (34 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2E3A
+; evidence: SeMenu_DataBlock_12
+SeScreenData_0x2C83:
+	sd_ctext	0x06, 33, 104*40+6, "A B C D E F G H I J K L M N O"
+	sd_ctext	0x06, 35, 119*40+4, "P Q R S T U V W X Y Z a b c d e"
+	sd_ctext	0x06, 35, 134*40+4, "f g h i j k l m n o p q r s t u"
+	sd_ctext	0x06, 35, 149*40+4, "v w x y z 0 1 2 3 4 5 6 7 8 9 !"
+	sd_ctext	0x06, 35, 164*40+4, "\" # $ % & ' ( ) + - * / = , . @"
+	sd_ctext	0x06, 35, 179*40+4, ": ; ? \\ ^ _ ` | ~ \177 < > [ ] ( )"
+	sd_ctext	0x06, 7, 35*40+35, "CLR"
+	sd_ctext	0x07, 5, 35*40+39, "\021"
+	sd_ctext	0x07, 5, 73*40+35, "~"
+	sd_ctext	0x07, 5, 73*40+37, "\177"
+	sd_ctext	0x07, 5, 73*40+39, "\021"
+	sd_ctext	0x06, 5, 74*40+36, " "
+	sd_ctext	0x07, 6, 195*40+32, ".."
+	sd_ctext	0x06, 12, 197*40+1, "P0SITI0N"
+	sd_ctext	0x06, 7, 197*40+29, "ABC"
+	sd_ctext	0x06, 7, 197*40+34, "]()"
+	sd_ctext	0x06, 5, 211*40+32, "\215"
+	sd_ctext	0x06, 10, 218*40+2, "<    >"
+	sd_ctext	0x06, 17, 218*40+11, "INS  DEL  A/a"
+	sd_ctext	0x06, 5, 218*40+27, "<"
+	sd_ctext	0x06, 5, 218*40+37, ">"
+	sd_ctext	0x06, 5, 223*40+32, "\216"
+	sd_quad	0x0a, 277, 28, 306, 52
+	sd_quad	0x0a, 277, 66, 306, 90
+	sd_quad	0x13, 15, 98, 300, 194
+	sd_quad	0x0a, 5, 210, 34, 234
+	sd_quad	0x0a, 45, 210, 74, 234
+	sd_quad	0x0a, 85, 210, 114, 234
+	sd_quad	0x0a, 125, 210, 154, 234
+	sd_quad	0x0a, 165, 210, 194, 234
+	sd_quad	0x0a, 205, 210, 234, 234
+	sd_quad	0x0a, 245, 210, 274, 234
+	sd_quad	0x0a, 285, 210, 314, 234
+	sd_quad	0x01, 245, 222, 274, 222
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2E44
+; evidence: SeMenu_DataBlock_12
+SeScreenData_0x2E3A:
+	sd_quad	0x0a, 77, 59, 261, 81
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2E4E
+; evidence: SeMenu_DataBlock_12
+SeScreenData_0x2E44:
+	sd_quad	0x0a, 77, 59, 229, 81
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2E58
+; evidence: SeMenu_DataBlock_12
+SeScreenData_0x2E4E:
+	sd_quad	0x0a, 77, 59, 108, 81
+; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x2E74
+; evidence: SeMenu_DataBlock_12, SeMenu_DataBlock_14
+SeScreenData_0x2E58:
+	sdb_strxy	0x0000, 0x00, 0, 0x1c, 0x00020bf3, 16, 81, 63
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: SeMenu_DataBlock_14
+SeScreenData_0x2E69:
+	sdb_box	0x03, 0x0660, 0x0f, 0, 0x05, SeScreenData_0x2EC0
+; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x2E90
+; evidence: SeMenu_DataBlock_12, SeMenu_DataBlock_14
+SeScreenData_0x2E74:
+	sdb_strxy	0x0000, 0x00, 0, 0x1c, 0x00020bf3, 13, 81, 63
+	sdb_box	0x03, 0x0660, 0x0f, 0, 0x05, SeScreenData_0x2EC0
+; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x2EAC
+; evidence: SeMenu_DataBlock_12, SeMenu_DataBlock_14
+SeScreenData_0x2E90:
+	sdb_strxy	0x0000, 0x00, 0, 0x1c, 0x00020bf3, 2, 81, 63
+	sdb_box	0x03, 0x0660, 0x0f, 0, 0x05, SeScreenData_0x2EC0
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2EC0
+; evidence: SeMenu_DataBlock_14
+SeScreenData_0x2EAC:
+	sd_quad	0x1b, 81, 62, 257, 79
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2EC0
+; evidence: SeMenu_DataBlock_14
+SeScreenData_0x2EB6:
+	sd_quad	0x1b, 32, 103, 280, 192
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF13ACD-0xF13AE2 (21 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=6 near TuningSystem_Handler_Table_0x67F+7
-	.byte 0x00, 0x5c, 0x00, 0x3e, 0x00, 0x67, 0x00, 0x4f, 0x00, 0x67, 0x00, 0x3e
-	.byte 0x00, 0x72, 0x00, 0x4f, 0x00, 0x72, 0x00, 0x3e, 0x00
-	.byte 0x7d, 0x00, 0x4f
-	nop
-	jrl	pl, 15872
-	nop
-	.byte 0x88, 0x00, 0x4f
-	nop
-	.byte 0x88, 0x00, 0x3e, 0x00, 0x93, 0x00
-	popw sp
-	nop
-	.byte 0x93, 0x00
-	push xiz
-	nop
-	.byte 0x9e, 0x00, 0x4f
-	nop
-	.byte 0x9e, 0x00, 0x3e, 0x00, 0xa9
-	nop
-	popw	sp
-	nop
-	.byte 0xa9, 0x00, 0x3e
-	nop
-	ld	(xix), 79
-	nop
-	ld	(xix), 62
-	nop
-	.byte 0xbf, 0x00, 0x4f
-	nop
-	.byte 0xbf, 0x00, 0x3e
-	nop
-	.byte 0xca, 0x00
-	popw sp
-	nop
-	.byte 0xca, 0x00
-	push xiz
-	nop
-	.byte 0xd5, 0x00, 0x4f
-	nop
-	or_spiw_im	0, 0, 224
-	nop
-	popw	sp
-	nop
-	.byte 0xe0, 0x00, 0x3e
-	nop
-	.byte 0xeb, 0x00
-	popw sp
-	nop
-	.byte 0xeb, 0x00
-	push xiz
-	nop
-	.byte 0xf6
-	nop
-	popw	sp
-	nop
-	.byte 0xf6
-	nop
-	push xiz
-	nop
-	normal
-	normal
-	popw sp
-	nop
-	ld	w, 0:opc
-	ldw	wa, 0x4000
-	nop
-	.byte 0x50
-	nop
-	jr	f, 0
-	jrl	f, 0x8000
-	nop
-	.byte 0x90, 0x00, 0xa0, 0x00
-	ld	(xwa), 192
-	nop
-	.byte 0xd0, 0x00, 0xe0
-	nop
-	stib_d8	0, 1
-	rcf
-	normal
-	jr	c, 0
-	jrl	z, 0x8500
-	nop
-	.byte 0x94, 0x00, 0xa3, 0x00
-	ld	(xde), 67
-	pushw iy
-	ldw	de, 0x8844
-	pushw iy
-	.byte 0x44, 0x2d, 0x32, 0x45
-	mul8_rid8 xwa, 0x2d, e
-	.ascii "-2F-2FŒ-G-2Aˆ-A-"
-	ldw	de, 0x8842
-	pushw iy
-	ld	xde, 0xb043322d
-	ld	w, 68:opc
-	.byte 0x88, 0xb0, 0x44, 0xb0, 0x20
-	ld	xiy, 0xb045b088
-	ld	w, 70:opc
-	.byte 0xb0, 0x20
-	ld	xiz, 0xb047b08c
-	ld	w, 65:opc
-	.byte 0x88, 0xb0, 0x41, 0xb0, 0x20
-	ld	xde, 0xb042b088
-	.ascii " C0 Dˆ0D0 E"
-	mul8_rid8 xwa, 0x30, e
-	.ascii "0 F0 FŒ0G0 Aˆ0A0 Bˆ0B0 C1 Dˆ1D1 Eˆ1E1 F1 FŒ1G1 Aˆ1A1 Bˆ1B1 C2 Dˆ2D2 E"
-	mul8_rid8 xwa, 0x32, e
-	.ascii "2 F2 FŒ2G2 Aˆ2A2 Bˆ2B2 C3 Dˆ3D3 Eˆ3E3 F3 FŒ3G3 Aˆ3A3 Bˆ3B3 C4 Dˆ4D4 E"
-	mul8_rid8 xwa, 0x34, e
-	.ascii "4 F4 FŒ4G4 Aˆ4A4 Bˆ4B4 C5 Dˆ5D5 Eˆ5E5 F5 FŒ5G5 Aˆ5A5 Bˆ5B5 C6 Dˆ6D6 E"
-	mul8_rid8 xwa, 0x36, e
-	.ascii "6 F6 FŒ6G6 Aˆ6A6 Bˆ6B6 C7 Dˆ7D7 Eˆ7E7 F7 FŒ7G7 Aˆ7A7 Bˆ7B7 C8 Dˆ8D8 E"
-	mul8_rid8 xwa, 0x38, e
-	.ascii "8 F8 FŒ8G8  65.4 69.3 73.4 77.8 82.4 87.3 92.5 98.0103.8110.0116.5123.5130.8138.6146.8155.6164.8174.6185.0196.0207.6220.0233.1246.9261.6277.2293.6311.1329.6349.2370.0392.0415.3440.0466.1493.8523.2554.3587.3622.2659.2698.4739.9783.9830.5879.9932.2987.71.05K1.11K1.17K1.24K1.32K1.40K1.48K1.57K1.66K1.76K1.86K1.98K2.09K2.22K2.35K2.49K2.64K2.79K2.96K3.14K3.32K3.52K3.73K3.95K4.19K4.43K4.70K4.98K5.27K5.59K5.92K6.27K6.64K7.04K7.46K7.90K8.37K8.87K9.40K9.96K10.5K11.2K11.8K12.5K13.3K14.1K14.9K15.8K16.7K17.7K18.8K19.9K21.1K 22K  23K  24K  25K  26K  27K  28K  29K  30K  31K  32K  33K  34K  35K  36K  37K  38K  39K  40K  41K  42K  43K  44K  45K  46K  47K  48K "
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x2E85, bound op03 record at SeScreenData_0x2EA1, bound op03 record at SeScreenData_0x2E69
+SeScreenData_0x2EC0:
+	.short	81, 62, 92, 79
+	.short	92, 62, 103, 79
+	.short	103, 62, 114, 79
+	.short	114, 62, 125, 79
+	.short	125, 62, 136, 79
+	.short	136, 62, 147, 79
+	.short	147, 62, 158, 79
+	.short	158, 62, 169, 79
+	.short	169, 62, 180, 79
+	.short	180, 62, 191, 79
+	.short	191, 62, 202, 79
+	.short	202, 62, 213, 79
+	.short	213, 62, 224, 79
+	.short	224, 62, 235, 79
+	.short	235, 62, 246, 79
+	.short	246, 62, 257, 79
+; u16 table, stride 2, fields +0, indexed directly by code
+; evidence: SeMenu_DataBlock_14
+SeScreenData_0x2F40:
+	.short	32, 48, 64, 80, 96, 112, 128, 144
+	.short	160, 176, 192, 208, 224, 240, 256, 272
+; u16 table, stride 2, fields +0, indexed directly by code
+; evidence: SeMenu_DataBlock_14
+SeScreenData_0x2F60:
+	.short	103, 118, 133, 148, 163, 178
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 128)
+; evidence: bound op07 record DrumDetailEdit_Entry_01, bound op02 record at SeScreenData_0x248B, bound op02 record at SeScreenData_0x249A, bound op02 record at SeScreenData_0x24A9 (+8 more)
+SeScreenData_0x2F6C:
+	.ascii	"C-2", "D\210-", "D-2", "E\210-"
+	.ascii	"E-2", "F-2", "F\214-", "G-2"
+	.ascii	"A\210-", "A-2", "B\210-", "B-2"
+	.ascii	"C\260 ", "D\210\260", "D\260 ", "E\210\260"
+	.ascii	"E\260 ", "F\260 ", "F\214\260", "G\260 "
+	.ascii	"A\210\260", "A\260 ", "B\210\260", "B\260 "
+	.ascii	"C0 ", "D\2100", "D0 ", "E\2100"
+	.ascii	"E0 ", "F0 ", "F\2140", "G0 "
+	.ascii	"A\2100", "A0 ", "B\2100", "B0 "
+	.ascii	"C1 ", "D\2101", "D1 ", "E\2101"
+	.ascii	"E1 ", "F1 ", "F\2141", "G1 "
+	.ascii	"A\2101", "A1 ", "B\2101", "B1 "
+	.ascii	"C2 ", "D\2102", "D2 ", "E\2102"
+	.ascii	"E2 ", "F2 ", "F\2142", "G2 "
+	.ascii	"A\2102", "A2 ", "B\2102", "B2 "
+	.ascii	"C3 ", "D\2103", "D3 ", "E\2103"
+	.ascii	"E3 ", "F3 ", "F\2143", "G3 "
+	.ascii	"A\2103", "A3 ", "B\2103", "B3 "
+	.ascii	"C4 ", "D\2104", "D4 ", "E\2104"
+	.ascii	"E4 ", "F4 ", "F\2144", "G4 "
+	.ascii	"A\2104", "A4 ", "B\2104", "B4 "
+	.ascii	"C5 ", "D\2105", "D5 ", "E\2105"
+	.ascii	"E5 ", "F5 ", "F\2145", "G5 "
+	.ascii	"A\2105", "A5 ", "B\2105", "B5 "
+	.ascii	"C6 ", "D\2106", "D6 ", "E\2106"
+	.ascii	"E6 ", "F6 ", "F\2146", "G6 "
+	.ascii	"A\2106", "A6 ", "B\2106", "B6 "
+	.ascii	"C7 ", "D\2107", "D7 ", "E\2107"
+	.ascii	"E7 ", "F7 ", "F\2147", "G7 "
+	.ascii	"A\2107", "A7 ", "B\2107", "B7 "
+	.ascii	"C8 ", "D\2108", "D8 ", "E\2108"
+	.ascii	"E8 ", "F8 ", "F\2148", "G8 "
+; string table, 5-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 128)
+; evidence: bound op02 record at SeScreenData_0x2175, bound op02 record at SeScreenData_0x2193, bound op02 record at SeScreenData_0x2231, bound op02 record at SeScreenData_0x2274 (+1 more)
+SeScreenData_0x30EC:
+	.ascii	" 65.4"
+	.ascii	" 69.3"
+	.ascii	" 73.4"
+	.ascii	" 77.8"
+	.ascii	" 82.4"
+	.ascii	" 87.3"
+	.ascii	" 92.5"
+	.ascii	" 98.0"
+	.ascii	"103.8"
+	.ascii	"110.0"
+	.ascii	"116.5"
+	.ascii	"123.5"
+	.ascii	"130.8"
+	.ascii	"138.6"
+	.ascii	"146.8"
+	.ascii	"155.6"
+	.ascii	"164.8"
+	.ascii	"174.6"
+	.ascii	"185.0"
+	.ascii	"196.0"
+	.ascii	"207.6"
+	.ascii	"220.0"
+	.ascii	"233.1"
+	.ascii	"246.9"
+	.ascii	"261.6"
+	.ascii	"277.2"
+	.ascii	"293.6"
+	.ascii	"311.1"
+	.ascii	"329.6"
+	.ascii	"349.2"
+	.ascii	"370.0"
+	.ascii	"392.0"
+	.ascii	"415.3"
+	.ascii	"440.0"
+	.ascii	"466.1"
+	.ascii	"493.8"
+	.ascii	"523.2"
+	.ascii	"554.3"
+	.ascii	"587.3"
+	.ascii	"622.2"
+	.ascii	"659.2"
+	.ascii	"698.4"
+	.ascii	"739.9"
+	.ascii	"783.9"
+	.ascii	"830.5"
+	.ascii	"879.9"
+	.ascii	"932.2"
+	.ascii	"987.7"
+	.ascii	"1.05K"
+	.ascii	"1.11K"
+	.ascii	"1.17K"
+	.ascii	"1.24K"
+	.ascii	"1.32K"
+	.ascii	"1.40K"
+	.ascii	"1.48K"
+	.ascii	"1.57K"
+	.ascii	"1.66K"
+	.ascii	"1.76K"
+	.ascii	"1.86K"
+	.ascii	"1.98K"
+	.ascii	"2.09K"
+	.ascii	"2.22K"
+	.ascii	"2.35K"
+	.ascii	"2.49K"
+	.ascii	"2.64K"
+	.ascii	"2.79K"
+	.ascii	"2.96K"
+	.ascii	"3.14K"
+	.ascii	"3.32K"
+	.ascii	"3.52K"
+	.ascii	"3.73K"
+	.ascii	"3.95K"
+	.ascii	"4.19K"
+	.ascii	"4.43K"
+	.ascii	"4.70K"
+	.ascii	"4.98K"
+	.ascii	"5.27K"
+	.ascii	"5.59K"
+	.ascii	"5.92K"
+	.ascii	"6.27K"
+	.ascii	"6.64K"
+	.ascii	"7.04K"
+	.ascii	"7.46K"
+	.ascii	"7.90K"
+	.ascii	"8.37K"
+	.ascii	"8.87K"
+	.ascii	"9.40K"
+	.ascii	"9.96K"
+	.ascii	"10.5K"
+	.ascii	"11.2K"
+	.ascii	"11.8K"
+	.ascii	"12.5K"
+	.ascii	"13.3K"
+	.ascii	"14.1K"
+	.ascii	"14.9K"
+	.ascii	"15.8K"
+	.ascii	"16.7K"
+	.ascii	"17.7K"
+	.ascii	"18.8K"
+	.ascii	"19.9K"
+	.ascii	"21.1K"
+	.ascii	" 22K "
+	.ascii	" 23K "
+	.ascii	" 24K "
+	.ascii	" 25K "
+	.ascii	" 26K "
+	.ascii	" 27K "
+	.ascii	" 28K "
+	.ascii	" 29K "
+	.ascii	" 30K "
+	.ascii	" 31K "
+	.ascii	" 32K "
+	.ascii	" 33K "
+	.ascii	" 34K "
+	.ascii	" 35K "
+	.ascii	" 36K "
+	.ascii	" 37K "
+	.ascii	" 38K "
+	.ascii	" 39K "
+	.ascii	" 40K "
+	.ascii	" 41K "
+	.ascii	" 42K "
+	.ascii	" 43K "
+	.ascii	" 44K "
+	.ascii	" 45K "
+	.ascii	" 46K "
+	.ascii	" 47K "
+	.ascii	" 48K "
 ; se_setup_rhythm: 191 bytes -- screen layout data, base 0xF13F72
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_rhythm.c)
+SeScreenData_0x336C:
 	.incbin "includes/generated/se_setup_rhythm.bin"
 	; head of the next record, split off at se_setup_rhythm's proven end
-	.byte 0x22, 0x0a, 0x0b, 0x00, 0x38, 0x00
-	.byte 0xe6, 0x00, 0xca, 0x00, 0x22, 0x0a, 0xf2, 0x00
-	.byte 0x9a, 0x00, 0x21, 0x01, 0xca, 0x00, 0x22, 0x0a
-	.byte 0x31, 0x00, 0xda, 0x00, 0x46, 0x00, 0xee, 0x00
-	.byte 0x22, 0x0a, 0x81, 0x00, 0xda, 0x00, 0x96, 0x00
-	.byte 0xee, 0x00, 0x22, 0x0a, 0xc9, 0x00, 0xda, 0x00
-	.long NakaInst_Param_Val01_07
-	ld	b, 10:opc
-	normal
-	normal
-	.byte 0xda, 0x00
-	ex_ff
-	normal
-	.byte 0xee, 0x00
-	normal
-	ldw	(11:8), 0x4a00:io
-	nop
-	.byte 0xe6
-	nop
-	popw	de
-	nop
-	normal
-	ldw	(11:8), 0x6a00:io
-	nop
-	.byte 0xe6
-	nop
-	jr	gt, 0
-	normal
-	ldw	(11:8), 0x8a00:io
-	nop
-	.byte 0xe6
-	nop
-	.byte 0x8a, 0x00, 0x01, 0x0a, 0x0b, 0x00
-	.long NakaData_DescriptorPad_ZeroB
-	.byte 0xaa, 0x00, 0x01
+	sd_quad	0x22, 11, 56, 230, 202
+	sd_quad	0x22, 242, 154, 289, 202
+	sd_quad	0x22, 49, 218, 70, 238
+	sd_quad	0x22, 129, 218, 150, 238
+	sd_quad	0x22, 201, 218, 222, 238
+	sd_quad	0x22, 257, 218, 278, 238
+	sd_quad	0x01, 11, 74, 230, 74
+	sd_quad	0x01, 11, 106, 230, 106
+	sd_quad	0x01, 11, 138, 230, 138
+	sd_quad	0x01, 11, 170, 230, 170
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF14096-0xF140AF (25 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=60% dist=10 near TuningSystem_Handler_Table_0x71F+1328
-	.byte 0x0a, 0xf2, 0x00, 0xb2, 0x00, 0x21, 0x01, 0xb2, 0x00, 0x01, 0x0a, 0x31
-	.byte 0x00, 0xe4, 0x00, 0x46, 0x00, 0xe4, 0x00, 0x01, 0x0a, 0x81, 0x00, 0xe4
-	.byte 0x00
-	.long NakaData_ExternalPadBlock_A
-	normal
-	ldw	(201:8), 0xe400:io
-	nop
-	.byte 0xde, 0x00, 0xe4, 0x00, 0x01, 0x0a
-	.long Pad_AfterNakaData_UserMemoryConfig
-	.long Pad_BeforeNakaData_StyleBitmapPad
-	push	sr
-	ldw	(44:8), 0x3800:io
-	nop
-	pushw	ix
-	nop
-	.byte 0xca, 0x00
+	sd_quad	0x01, 242, 178, 289, 178
+	sd_quad	0x01, 49, 228, 70, 228
+	sd_quad	0x01, 129, 228, 150, 228
+	sd_quad	0x01, 201, 228, 222, 228
+	sd_quad	0x01, 257, 228, 278, 228
+	sd_quad	0x02, 44, 56, 44, 202
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF140D1-0xF140E1 (16 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=83% dist=7 near TuningSystem_Handler_Table_0x71F+1387
-	.byte 0x02, 0x0a, 0x7c, 0x00, 0x38, 0x00, 0x7c, 0x00, 0xca, 0x00, 0x02, 0x0a
-	.byte 0xae, 0x00, 0x38, 0x00
-	and	(xiz+256), xde
-	nop
-	halt
-	ldw	(244:8), 0xb400:io
-	nop
-	.byte 0x1f
-	normal
-	.byte 0xc8, 0x00
+	sd_quad	0x02, 124, 56, 124, 202
+	sd_quad	0x02, 174, 56, 174, 202
+	sd_quad	0x05, 244, 180, 287, 200
 ; se_screen_f140ef: 180 bytes -- screen layout data, base 0xF140EF
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f140ef.c)
+SeScreenData_0x34E9:
+	.set	SeScreenData_0x34F3, . + 10
+	.set	SeScreenData_0x3563, . + 122
 	.incbin "includes/generated/se_screen_f140ef.bin"
 	; head of the next record, split off at se_screen_f140ef's proven end
-	.byte 0x11, 0x0a, 0x30, 0x00
-	.byte 0x3d, 0x00, 0xf0, 0x00, 0x3d, 0x00, 0x09, 0x0a
-	.byte 0x30, 0x00, 0x62, 0x00, 0xf0, 0x00, 0x63, 0x00
-	.byte 0x09, 0x0a, 0x30, 0x00, 0x81, 0x00, 0xf0, 0x00
-	.byte 0x82, 0x00, 0x09, 0x0a, 0x30, 0x00, 0xa0, 0x00
-	.byte 0xf0, 0x00, 0xa1, 0x00, 0x09, 0x0a, 0x30, 0x00
-	.byte 0xbf, 0x00, 0xf0, 0x00, 0xc0, 0x00, 0x02, 0x0a
-	.byte 0x30, 0x00, 0x3c, 0x00, 0x30, 0x00, 0x3e, 0x00
-	.byte 0x02, 0x0a, 0x48, 0x00, 0x3c, 0x00, 0x48, 0x00
-	.byte 0x3e, 0x00, 0x02, 0x0a, 0x60, 0x00, 0x3c, 0x00
-	.byte 0x60, 0x00, 0x3e, 0x00, 0x02, 0x0a, 0x78, 0x00
-	.byte 0x3c, 0x00, 0x78, 0x00, 0x3e, 0x00, 0x02, 0x0a
-	.byte 0x90, 0x00, 0x3c, 0x00, 0x90, 0x00, 0x3e, 0x00
-	.byte 0x02, 0x0a, 0xa8, 0x00, 0x3c, 0x00, 0xa8, 0x00
-	.byte 0x3e, 0x00, 0x02, 0x0a, 0xc0, 0x00, 0x3c, 0x00
-	.byte 0xc0, 0x00, 0x3e, 0x00, 0x02, 0x0a, 0xd8, 0x00
-	.byte 0x3c, 0x00, 0xd8, 0x00, 0x3e, 0x00, 0x02, 0x0a
-	.byte 0xf0, 0x00, 0x3c, 0x00, 0xf0, 0x00, 0x3e, 0x00
-	.byte 0x05, 0x0a, 0x06, 0x01, 0x6a, 0x00, 0x32, 0x01
-	.byte 0x84, 0x00, 0x17, 0x0c, 0x08, 0x00, 0x5f, 0x00
-	.ascii "CUTOFF"
-	.byte 0x17, 0x17
-	.byte 0x6a, 0x00, 0xc3, 0x00
-	.ascii "FILTER KEY FOLLOW"
-	halt
-	ldw	(14:8), 0x4301:io
-	nop
-	ldw	de, 0x5c01
-	nop
-	ei	8
-	ldf	10
-	popw ix
-	ld	xiz, 0x05063130
-	.byte 0xb8, 0x0b, 0x10
-	ei	8
-	ldf	15
-	popw ix
-	ld	xiz, 0x05063230
-	.byte 0xa8, 0x11, 0x10
-	ei	8
-	.byte 0xc7, 0x13, 0x4c
-	ld	xiz, 0x05063330
-	.byte 0xc0, 0x17, 0x10
-	ei	8
-	.byte 0xc7, 0x18, 0x4c
-	ld	xiz, 0x05063430
-	.byte 0xb0, 0x1d
-	rcf
-	ei	7
-	ld	w, (xix)
-	popw ix
-	ld	xiz, 0x600a1730
-	nop
-	.byte 0xd0, 0x00, 0x57
-	ld	xbc, 0x0b174556
-	jrl	nz, 0xd000
-	nop
-	ld	xix, 0x59414c45
-	ldf	11
-	.byte 0xa2, 0x00, 0xd0, 0x00, 0x53, 0x50
-	ld	xiy, 0x0b174445
-	.byte 0xc6
-	nop
-	.byte 0xd0, 0x00
-	ld	xix, 0x48545045
-	ldf	11
-	.byte 0xea, 0x00, 0xd0, 0x00, 0x54
-	popw sp
-	.byte 0x55
-	ld	xhl, 0x0e0d1748
-	normal
-	.byte 0xd0, 0x00, 0x4b
-	ld	xiy, 0x4e595359
-	.byte 0x43, 0x06, 0x0a, 0x64
-	.ascii "\"SELECT"
-	.byte 0x07
-	.byte 0x05, 0x47, 0x24, 0x12, 0x07, 0x05, 0x4c, 0x24
-	.byte 0x12, 0x07, 0x05, 0x51, 0x24, 0x12, 0x07, 0x05
-	.byte 0x56, 0x24, 0x12, 0x07, 0x05, 0x5b, 0x24, 0x12
-	.byte 0x07, 0x05, 0x60, 0x24, 0x12, 0x07, 0x05, 0x65
-	.byte 0x24, 0x12, 0x09, 0x0a, 0x2c, 0x00, 0x3c, 0x00
-	.byte 0x4c, 0x00, 0x4d, 0x00, 0x09, 0x0a, 0xb4, 0x00
-	.byte 0x3c, 0x00, 0xdc, 0x00, 0x4d, 0x00, 0x09, 0x0a
-	.byte 0x2c, 0x00, 0x5b, 0x00, 0x4c, 0x00, 0x6c, 0x00
-	.byte 0x09, 0x0a, 0xb4, 0x00, 0x5c, 0x00, 0xdc, 0x00
-	.byte 0x6d, 0x00, 0x09, 0x0a, 0x2c, 0x00, 0x7a, 0x00
-	.byte 0x4c, 0x00, 0x8b, 0x00, 0x09, 0x0a, 0xb4, 0x00
-	.byte 0x7a, 0x00, 0xdc, 0x00, 0x8b, 0x00, 0x09, 0x0a
-	.byte 0x2c, 0x00, 0x9a, 0x00, 0x4c, 0x00, 0xab, 0x00
-	.byte 0x09, 0x0a, 0xb4, 0x00, 0x9a, 0x00, 0xdc, 0x00
-	.byte 0xab, 0x00, 0x09, 0x0a, 0x59, 0x00, 0xcc, 0x00
-	.long NakaData_TechnichordBitmap2
-	ld	b, 10:opc
-	call	0xcd00
-	.byte 0x52
-	nop
-	.byte 0xe8, 0x00
-	scf
-	ldw	(24:8), 0x4400:io
-	nop
-	pushw	ix
-	nop
-	ld	xix, 0x080a1100
-	nop
-	popw	sp
-	nop
-	push_f
-	nop
-	popw	sp
+	sd_quad	0x11, 48, 61, 240, 61
+	sd_quad	0x09, 48, 98, 240, 99
+	sd_quad	0x09, 48, 129, 240, 130
+	sd_quad	0x09, 48, 160, 240, 161
+	sd_quad	0x09, 48, 191, 240, 192
+	sd_quad	0x02, 48, 60, 48, 62
+	sd_quad	0x02, 72, 60, 72, 62
+	sd_quad	0x02, 96, 60, 96, 62
+	sd_quad	0x02, 120, 60, 120, 62
+	sd_quad	0x02, 144, 60, 144, 62
+	sd_quad	0x02, 168, 60, 168, 62
+	sd_quad	0x02, 192, 60, 192, 62
+	sd_quad	0x02, 216, 60, 216, 62
+	sd_quad	0x02, 240, 60, 240, 62
+	sd_quad	0x05, 262, 106, 306, 132
+; static record list (3 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3660
+; evidence: SeMenu_FxEdit_DataBlock4
+SeScreenData_0x3633:
+	sd_ptext	0x17, 12, 8, 95, "CUTOFF"
+	sd_ptext	0x17, 23, 106, 195, "FILTER KEY FOLLOW"
+	sd_quad	0x05, 270, 67, 306, 92
+; static record list (48 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3805
+; evidence: SeMenu_PresetBrowser_Data
+SeScreenData_0x3660:
+	sd_ctext	0x06, 8, 64*40+23, "LF01"
+	sd_ctext	0x06, 5, 75*40+0, "\020"
+	sd_ctext	0x06, 8, 96*40+23, "LF02"
+	sd_ctext	0x06, 5, 113*40+0, "\020"
+	sd_ctext	0x06, 8, 126*40+23, "LF03"
+	sd_ctext	0x06, 5, 152*40+0, "\020"
+	sd_ctext	0x06, 8, 158*40+23, "LF04"
+	sd_ctext	0x06, 5, 190*40+0, "\020"
+	sd_ctext	0x06, 7, 208*40+4, "LF0"
+	sd_ptext	0x17, 10, 96, 208, "WAVE"
+	sd_ptext	0x17, 11, 126, 208, "DELAY"
+	sd_ptext	0x17, 11, 162, 208, "SPEED"
+	sd_ptext	0x17, 11, 198, 208, "DEPTH"
+	sd_ptext	0x17, 11, 234, 208, "TOUCH"
+	sd_ptext	0x17, 13, 270, 208, "KEYSYNC"
+	sd_ctext	0x06, 10, 220*40+4, "SELECT"
+	sd_ctext	0x07, 5, 232*40+7, "\022"
+	sd_ctext	0x07, 5, 232*40+12, "\022"
+	sd_ctext	0x07, 5, 232*40+17, "\022"
+	sd_ctext	0x07, 5, 232*40+22, "\022"
+	sd_ctext	0x07, 5, 232*40+27, "\022"
+	sd_ctext	0x07, 5, 232*40+32, "\022"
+	sd_ctext	0x07, 5, 232*40+37, "\022"
+	sd_quad	0x09, 44, 60, 76, 77
+	sd_quad	0x09, 180, 60, 220, 77
+	sd_quad	0x09, 44, 91, 76, 108
+	sd_quad	0x09, 180, 92, 220, 109
+	sd_quad	0x09, 44, 122, 76, 139
+	sd_quad	0x09, 180, 122, 220, 139
+	sd_quad	0x09, 44, 154, 76, 171
+	sd_quad	0x09, 180, 154, 220, 171
+	sd_quad	0x09, 89, 204, 317, 233
+	sd_quad	0x22, 29, 205, 82, 232
+	sd_quad	0x11, 24, 68, 44, 68
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF14388-0xF143A5 (29 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=9 near TuningSystem_Handler_Table_0xE1F+290
-	.byte 0x00, 0x11, 0x0a, 0x18, 0x00, 0x64, 0x00, 0x2c, 0x00, 0x64, 0x00, 0x11
-	.byte 0x0a, 0x08, 0x00, 0x75, 0x00, 0x18, 0x00, 0x75, 0x00, 0x11, 0x0a, 0x18
-	.byte 0x00, 0x82, 0x00, 0x2c, 0x00
-	.byte 0x82, 0x00
-	scf
-	ldw	(8:8), 0x9c00:io
-	nop
-	push_f
-	nop
-	.byte 0x9c, 0x00, 0x11
-	ldw	(31:8), 0xa200:io
-	nop
-	pushw	ix
-	nop
-	.byte 0xa2, 0x00
-	scf
-	ldw	(8:8), 0xc200:io
-	nop
-	.byte 0x1f
-	nop
-	.byte 0xc2, 0x00, 0x12, 0x0a, 0x18
+	sd_quad	0x11, 8, 79, 24, 79
+	sd_quad	0x11, 24, 100, 44, 100
+	sd_quad	0x11, 8, 117, 24, 117
+	sd_quad	0x11, 24, 130, 44, 130
+	sd_quad	0x11, 8, 156, 24, 156
+	sd_quad	0x11, 31, 162, 44, 162
+	sd_quad	0x11, 8, 194, 31, 194
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF143C8-0xF143E1 (25 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=9 near TuningSystem_Handler_Table_0xE1F+354
-	.byte 0x00, 0x44, 0x00, 0x18, 0x00, 0x4f, 0x00, 0x12, 0x0a, 0x18, 0x00, 0x64
-	.byte 0x00, 0x18, 0x00, 0x75, 0x00, 0x12, 0x0a, 0x18, 0x00, 0x82, 0x00, 0x18
-	.byte 0x00
-	.byte 0x9c, 0x00, 0x12
-	ldw	(31:8), 0xa200:io
-	nop
-	.byte 0x1f
-	nop
-	.byte 0xc2, 0x00, 0x01, 0x0a, 0x59
-	nop
-	.byte 0xdb, 0x00
-	push	xiy
-	normal
-	.byte 0xdb, 0x00
-	halt
-	ldw	(22:8), 0x6b01:io
-	nop
-	ldw	de, 0x7801
-	nop
-	halt
-	ldw	(90:8), 0xdc00:io
-	nop
-	.long AlignedStr_ON
+	sd_quad	0x12, 24, 68, 24, 79
+	sd_quad	0x12, 24, 100, 24, 117
+	sd_quad	0x12, 24, 130, 24, 156
+	sd_quad	0x12, 31, 162, 31, 194
+	sd_quad	0x01, 89, 219, 317, 219
+	sd_quad	0x05, 278, 107, 306, 120
+	sd_quad	0x05, 90, 220, 316, 232
 ; se_rhythm_transport_tables: 220 bytes (16 commands + 2 dispatch tables)
 ; RhythmTransport_Control_Table (6 entries) + DrumSound_ParamEdit_Table (10 entries)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_rhythm_transport_tables.c)
+SeScreenData_0x3805:
+	.set	SeScreenData_0x380C, . + 7
+	.set	SeScreenData_0x3813, . + 14
+	.set	SeScreenData_0x381A, . + 21
+	.set	SeScreenData_0x3839, . + 52
+	.set	SeScreenData_0x3845, . + 64
+	.set	SeScreenData_0x3851, . + 76
+	.set	SeScreenData_0x385D, . + 88
+	.set	SeScreenData_0x3891, . + 140
+	.set	SeScreenData_0x38A5, . + 160
+	.set	SeScreenData_0x38B9, . + 180
+	.set	SeScreenData_0x38CD, . + 200
 	.incbin "includes/generated/se_rhythm_transport_tables.bin"
 ; se_parameter_grid: 221 bytes (17 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_parameter_grid.c)
+SeScreenData_0x38E1:
+	.set	SeScreenData_0x391D, . + 60
+	.set	SeScreenData_0x3927, . + 70
+	.set	SeScreenData_0x3931, . + 80
+	.set	SeScreenData_0x393B, . + 90
+	.set	SeScreenData_0x3945, . + 100
+	.set	SeScreenData_0x394F, . + 110
+	.set	SeScreenData_0x398B, . + 170
+	.set	SeScreenData_0x3996, . + 181
+	.set	SeScreenData_0x39A0, . + 191
+	.set	SeScreenData_0x39AA, . + 201
+	.set	SeScreenData_0x39B4, . + 211
 	.incbin "includes/generated/se_parameter_grid.bin"
-	.byte 0x91, 0x45
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF145C6-0xF14602 (60 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=83% dist=15 near TuningSystem_Handler_Table_0x117D+2
-	.byte 0xf1, 0x00, 0xe7, 0x44, 0xf1, 0x00, 0x23, 0x45, 0xf1, 0x00, 0x2d, 0x45
-	.byte 0xf1, 0x00, 0x37, 0x45, 0xf1, 0x00, 0x41, 0x45, 0xf1, 0x00, 0x9c, 0x45
-	.byte 0xf1, 0x00, 0xa6, 0x45, 0xf1, 0x00, 0xb0, 0x45, 0xf1, 0x00, 0xba, 0x45
-	.byte 0xf1, 0x00, 0x4b, 0x45, 0xf1, 0x00, 0x55, 0x45, 0xf1, 0x00, 0x9c, 0x45
-	.byte 0xf1, 0x00, 0xa6, 0x45, 0xf1, 0x00, 0xb0, 0x45, 0xf1, 0x00, 0xba, 0x45
-	.byte 0xf1, 0x00, 0x02, 0x0f
-	jr	le, 6
-	.byte 0x80, 0x07
-	ld	w, 118:opc
-	ld	xiz, 0x0700f1
-	popw	sp
-	decf
-	push	sr
-	retd	0x0663
-	.byte 0x80, 0x07
-	ld	w, 118:opc
-	ld	xiz, 0x0700f1
-	jrl	c, 530
-	retd	0x0664
-	.byte 0x80, 0x07
-	ld	w, 118:opc
-	ld	xiz, 0x0700f1
-	popw	sp
-	ldf	2
-	retd	0x0665
-	.byte 0x80, 0x07
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (16 entries, LE32)
+; evidence: SeMenu_PresetInit_TableLookup2, SeMenu_FilterEdit_Dispatch
+SeScreenData_0x39BE:
+	.long	SeScreenData_0x398B
+	.long	SeScreenData_0x38E1
+	.long	SeScreenData_0x391D
+	.long	SeScreenData_0x3927
+	.long	SeScreenData_0x3931
+	.long	SeScreenData_0x393B
+	.long	SeScreenData_0x3996
+	.long	SeScreenData_0x39A0
+	.long	SeScreenData_0x39AA
+	.long	SeScreenData_0x39B4
+	.long	SeScreenData_0x3945
+	.long	SeScreenData_0x394F
+	.long	SeScreenData_0x3996
+	.long	SeScreenData_0x39A0
+	.long	SeScreenData_0x39AA
+	.long	SeScreenData_0x39B4
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3A3A
+SeScreenData_0x39FE:
+	sdb_str	0x0662, 0x80, 7, 0x20, SeScreenData_0x3A70, 7, 85*40+7
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3A3A
+SeScreenData_0x3A0D:
+	sdb_str	0x0663, 0x80, 7, 0x20, SeScreenData_0x3A70, 7, 118*40+7
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3A3A
+SeScreenData_0x3A1C:
+	sdb_str	0x0664, 0x80, 7, 0x20, SeScreenData_0x3A70, 7, 149*40+7
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF14637-0xF14656 (31 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=61% dist=12 near TuningSystem_Handler_Table_0x117D+115
-	.byte 0x20, 0x76, 0x46, 0xf1, 0x00, 0x07, 0x00, 0x4f, 0x1c, 0x04, 0x46, 0xf1
-	.byte 0x00, 0x04, 0x46, 0xf1, 0x00, 0x04, 0x46, 0xf1, 0x00, 0x13, 0x46, 0xf1
-	.byte 0x00, 0x22, 0x46, 0xf1, 0x00, 0x31, 0x46
-	.byte 0xf1, 0x00
-	.ascii "CTRL  R  KEY ON KEY OFFLEGATO NON LEGCHORD  "
-	.byte 0x1b, 0x0a, 0x0d
-	.byte 0x00, 0x4c, 0x00, 0xe4, 0x00, 0xc8, 0x00, 0x0d
-	.byte 0x00, 0x4c, 0x00, 0xe4, 0x00, 0x68, 0x00, 0x0d
-	.byte 0x00, 0x4c, 0x00, 0xe4, 0x00, 0x68, 0x00, 0x0d
-	.byte 0x00, 0x6c, 0x00, 0xe4, 0x00, 0x88, 0x00, 0x0d
-	.byte 0x00, 0x8c, 0x00, 0xe4, 0x00, 0xa8, 0x00, 0x0d
-	.byte 0x00, 0xac, 0x00, 0xe4, 0x00, 0xc8, 0x00, 0x02
-	.byte 0x0f, 0x62, 0x06, 0x7f, 0x00, 0x20, 0x72, 0x3b
-	.byte 0xf1, 0x00, 0x03, 0x00, 0x92, 0x22, 0x02, 0x0f
-	.byte 0x61, 0x06, 0x7f, 0x00, 0x20, 0x72, 0x3b, 0xf1
-	.byte 0x00, 0x03, 0x00, 0x98, 0x22, 0x02, 0x0f, 0x63
-	.byte 0x06, 0x7f, 0x00, 0x20, 0x72, 0x3b, 0xf1, 0x00
-	.byte 0x03, 0x00, 0x9d, 0x22, 0x02, 0x0f, 0x64, 0x06
-	.byte 0x7f, 0x00, 0x20, 0x72, 0x3b, 0xf1, 0x00, 0x03
-	.byte 0x00, 0xa2, 0x22, 0x03, 0x0b, 0x5d, 0x06, 0x0f
-	.byte 0x00, 0x05, 0x1b, 0x47, 0xf1, 0x00, 0xf2, 0x46
-	.byte 0xf1, 0x00, 0xc5, 0x46, 0xf1, 0x00, 0xb6, 0x46
-	.byte 0xf1, 0x00, 0xd4, 0x46, 0xf1, 0x00, 0xe3, 0x46
-	.byte 0xf1, 0x00, 0x1b, 0x0a, 0x08, 0x00, 0x49, 0x00
-	.byte 0xfa, 0x00, 0xc5, 0x00, 0x08, 0x00, 0x49, 0x00
-	.byte 0xfa, 0x00, 0x67, 0x00, 0x08, 0x00, 0x49, 0x00
-	.byte 0xfa, 0x00, 0x67, 0x00, 0x08, 0x00, 0x68, 0x00
-	.byte 0xfa, 0x00, 0x86, 0x00, 0x08, 0x00, 0x87, 0x00
-	.byte 0xfa, 0x00, 0xa5, 0x00, 0x08, 0x00, 0xa6, 0x00
-	.byte 0xfa, 0x00, 0xc5, 0x00, 0x00, 0x0a, 0x62, 0x06
-	.byte 0x7f, 0x00, 0x20, 0x91, 0x22, 0x03, 0x00, 0x0a
-	.byte 0x61, 0x06, 0x7f, 0x00, 0x20, 0x97, 0x22, 0x03
-	.byte 0x00, 0x0a, 0x63, 0x06, 0x7f, 0x00, 0x20, 0x9d
-	.byte 0x22, 0x03, 0x00, 0x0a, 0x64, 0x06, 0x7f, 0x00
-	.byte 0x20, 0xa2, 0x22, 0x03, 0x03, 0x0b, 0x5d, 0x06
-	.byte 0x0f, 0x00, 0x05, 0x1b, 0x47, 0xf1, 0x00, 0x6b
-	.byte 0x47, 0xf1, 0x00, 0x4d, 0x47, 0xf1, 0x00, 0x43
-	.byte 0x47, 0xf1, 0x00, 0x57, 0x47, 0xf1, 0x00, 0x61
-	.byte 0x47, 0xf1, 0x00, 0x05, 0x0b, 0x60, 0x06, 0xff
-	.byte 0x00, 0x20, 0xa6, 0x22, 0x02, 0x00, 0x05, 0x0b
-	.byte 0x61, 0x06, 0xff, 0x00, 0x20, 0xac, 0x22, 0x02
-	.byte 0x00, 0x02, 0x0f, 0x62, 0x06, 0x7f, 0x00, 0x06
-	.byte 0x72, 0x3b, 0xf1, 0x00, 0x03, 0x00, 0x9d, 0x22
-	.byte 0x05, 0x0b, 0x63, 0x06, 0xff, 0x00, 0x20, 0x8d
-	.byte 0x22, 0x02, 0x00, 0x05, 0x0b, 0x64, 0x06, 0xff
-	.byte 0x00, 0x20, 0x92, 0x22, 0x02, 0x00, 0x05, 0x0b
-	.byte 0x65, 0x06, 0xff, 0x00, 0x20, 0x97, 0x22, 0x02
-	.byte 0x00, 0x07, 0x11, 0x69, 0x06, 0x03, 0x00, 0x17
-	.byte 0xa5, 0x31, 0xf1, 0x00, 0x08, 0x00, 0x9d, 0x00
-	.byte 0x3e, 0x00, 0x8a, 0x47, 0xf1, 0x00, 0x95, 0x47
-	.byte 0xf1, 0x00, 0xa0, 0x47, 0xf1, 0x00, 0xaf, 0x47
-	.byte 0xf1, 0x00, 0xba, 0x47, 0xf1, 0x00, 0xc5, 0x47
-	.byte 0xf1, 0x00, 0xd0, 0x47, 0xf1, 0x00, 0xd0, 0x47
-	.byte 0xf1, 0x00, 0xd0, 0x47, 0xf1, 0x00, 0xd0, 0x47
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3A3A
+SeScreenData_0x3A2B:
+	sdb_str	0x0665, 0x80, 7, 0x20, SeScreenData_0x3A70, 7, 181*40+7
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (6 entries, LE32)
+; evidence: SeMenu_PresetInit_TableLookup1
+SeScreenData_0x3A3A:
+	.long	SeScreenData_0x39FE
+	.long	SeScreenData_0x39FE
+	.long	SeScreenData_0x39FE
+	.long	SeScreenData_0x3A0D
+	.long	SeScreenData_0x3A1C
+	.long	SeScreenData_0x3A2B
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 4)
+; evidence: bound op07 record DrumDetailEdit_Entry_09, bound op02 record at SeScreenData_0x394F, bound op02 record at SeScreenData_0x395E, bound op02 record at SeScreenData_0x396D (+1 more)
+SeScreenData_0x3A52:
+	.ascii	"CTR", "L  ", "R  "
+; string table, 7-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 4)
+; evidence: bound op02 record at SeScreenData_0x38E1, bound op02 record at SeScreenData_0x38F0, bound op02 record at SeScreenData_0x38FF, bound op02 record at SeScreenData_0x390E
+SeScreenData_0x3A5B:
+	.ascii	"KEY ON "
+	.ascii	"KEY OFF"
+	.ascii	"LEGATO "
+; string table, 7-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 2)
+; evidence: bound op02 record at SeScreenData_0x39FE, bound op02 record at SeScreenData_0x3A0D, bound op02 record at SeScreenData_0x3A1C, bound op02 record at SeScreenData_0x3A2B
+SeScreenData_0x3A70:
+	.ascii	"NON LEG"
+	.ascii	"CHORD  "
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3A88
+; evidence: SeMenu_FilterEdit_Dispatch
+SeScreenData_0x3A7E:
+	sd_quad	0x1b, 13, 76, 228, 200
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x398B
+SeScreenData_0x3A88:
+	.short	13, 76, 228, 104
+	.short	13, 76, 228, 104
+	.short	13, 108, 228, 136
+	.short	13, 140, 228, 168
+	.short	13, 172, 228, 200
+; bound record list (5 records), read by GraphicsRender_Start; end SeScreenData_0x3AF7
+; evidence: SeMenu_FxEdit_Init
+SeScreenData_0x3AB0:
+	sdb_str	0x0662, 0x7f, 0, 0x20, SeScreenData_0x2F6C, 3, 221*40+10
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3AF7
+SeScreenData_0x3ABF:
+	sdb_str	0x0661, 0x7f, 0, 0x20, SeScreenData_0x2F6C, 3, 221*40+16
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3AF7
+SeScreenData_0x3ACE:
+	sdb_str	0x0663, 0x7f, 0, 0x20, SeScreenData_0x2F6C, 3, 221*40+21
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3AF7
+SeScreenData_0x3ADD:
+	sdb_str	0x0664, 0x7f, 0, 0x20, SeScreenData_0x2F6C, 3, 221*40+26
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3AF7
+SeScreenData_0x3AEC:
+	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x3B15
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (5 entries, LE32)
+; evidence: SeMenu_FilterEdit_AltDispatch
+SeScreenData_0x3AF7:
+	.long	SeScreenData_0x3AEC
+	.long	SeScreenData_0x3ABF
+	.long	SeScreenData_0x3AB0
+	.long	SeScreenData_0x3ACE
+	.long	SeScreenData_0x3ADD
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3B15
+; evidence: SeMenu_FilterEdit_AltDispatch, SeMenu_FilterEdit_DataBlock3
+SeScreenData_0x3B0B:
+	sd_quad	0x1b, 8, 73, 250, 197
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 16)
+; evidence: bound op03 record at SeScreenData_0x3AEC, bound op03 record at SeScreenData_0x3B65
+SeScreenData_0x3B15:
+	.short	8, 73, 250, 103
+	.short	8, 73, 250, 103
+	.short	8, 104, 250, 134
+	.short	8, 135, 250, 165
+	.short	8, 166, 250, 197
+; bound record list (5 records), read by GraphicsRender_Start; end SeScreenData_0x3B70
+; evidence: SeMenu_FxEdit_DataBlock1
+SeScreenData_0x3B3D:
+	sdb_num	0x0662, 0x7f, 0, 0x20, 221*40+9, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3B70
+SeScreenData_0x3B47:
+	sdb_num	0x0661, 0x7f, 0, 0x20, 221*40+15, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3B70
+SeScreenData_0x3B51:
+	sdb_num	0x0663, 0x7f, 0, 0x20, 221*40+21, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3B70
+SeScreenData_0x3B5B:
+	sdb_num	0x0664, 0x7f, 0, 0x20, 221*40+26, 3
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3B70
+SeScreenData_0x3B65:
+	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x3B15
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (5 entries, LE32)
+; evidence: SeMenu_FilterEdit_DataBlock3
+SeScreenData_0x3B70:
+	.long	SeScreenData_0x3B65
+	.long	SeScreenData_0x3B47
+	.long	SeScreenData_0x3B3D
+	.long	SeScreenData_0x3B51
+	.long	SeScreenData_0x3B5B
+; bound record list (7 records), read by GraphicsRender_Start; end SeScreenData_0x3BDB
+; evidence: SeMenu_FilterEdit_Init
+SeScreenData_0x3B84:
+	sdb_snum	0x0660, 0xff, 0, 0x20, 221*40+30, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3BDB
+SeScreenData_0x3B8F:
+	sdb_snum	0x0661, 0xff, 0, 0x20, 221*40+36, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3BDB
+SeScreenData_0x3B9A:
+	sdb_str	0x0662, 0x7f, 0, 0x06, SeScreenData_0x2F6C, 3, 221*40+21
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3BDB
+SeScreenData_0x3BA9:
+	sdb_snum	0x0663, 0xff, 0, 0x20, 221*40+5, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3BDB
+SeScreenData_0x3BB4:
+	sdb_snum	0x0664, 0xff, 0, 0x20, 221*40+10, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3BDB
+SeScreenData_0x3BBF:
+	sdb_snum	0x0665, 0xff, 0, 0x20, 221*40+15, 2, 0x00
+; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
+; evidence: recptrs at SeScreenData_0x3BDB
+SeScreenData_0x3BCA:
+	sdb_strxy	0x0669, 0x03, 0, 0x17, SeScreenData_0x259F, 8, 157, 62
 	; tail of the record before se_setup_ctrl_full, split off at its proven boundary
-	.byte 0xf1, 0x00
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (10 entries, LE32)
+; evidence: SeMenu_FilterEdit_DataBlock4
+SeScreenData_0x3BDB:
+	.long	SeScreenData_0x3B84
+	.long	SeScreenData_0x3B8F
+	.long	SeScreenData_0x3B9A
+	.long	SeScreenData_0x3BA9
+	.long	SeScreenData_0x3BB4
+	.long	SeScreenData_0x3BBF
+	.long	SeScreenData_0x3BCA
+	.long	SeScreenData_0x3BCA
+	.long	SeScreenData_0x3BCA
+	.long	SeScreenData_0x3BCA
 ; se_setup_ctrl_full: 167 bytes -- screen layout data, base 0xF14809
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_ctrl_full.c)
+SeScreenData_0x3C03:
+	.set	SeScreenData_0x3C32, . + 47
+	.set	SeScreenData_0x3C37, . + 52
 	.incbin "includes/generated/se_setup_ctrl_full.bin"
 	; head of the next record, split off at se_setup_ctrl_full's proven end
-	.byte 0x22, 0x0a, 0x13, 0x00, 0xcc, 0x00, 0x5d
-	.byte 0x00, 0xe7, 0x00, 0x09, 0x0a, 0x75, 0x00, 0xcc
-	.byte 0x00, 0xa4, 0x00, 0xe9, 0x00, 0x02, 0x0a, 0xbc
-	.byte 0x00, 0x48, 0x00, 0xbc, 0x00, 0x5b, 0x00, 0x02
-	.byte 0x0a, 0xbc, 0x00, 0x6c, 0x00, 0xbc, 0x00, 0x7f
-	.byte 0x00, 0x23, 0x05, 0x60, 0x1b, 0x0b, 0x23, 0x05
-	.byte 0x39, 0xbb, 0x10, 0x05, 0x0a, 0x76, 0x00, 0xdc
-	.byte 0x00, 0xa3, 0x00, 0xe8, 0x00, 0x06, 0x13, 0x6f
-	.ascii " 1ST 2ND 3RD 4TH"
-	.byte 0x07, 0x05, 0x61, 0x24, 0x12, 0x07, 0x05, 0x66
-	.byte 0x24, 0x12, 0x09, 0x0a, 0xb5, 0x00, 0xcc, 0x00
-	.long NakaInst_SequencerComboBox_0x03
-	.byte 0x05, 0x0a, 0xb6, 0x00
-	.byte 0xdb, 0x00, 0x32, 0x01, 0xe8, 0x00, 0x06, 0x0b
-	.ascii "o 1ST 2ND"
-	.byte 0x09, 0x0a, 0xb5, 0x00, 0xcc, 0x00, 0xf4
-	.byte 0x00, 0xe9, 0x00, 0x05, 0x0a, 0xb6, 0x00, 0xdb
+	sd_quad	0x22, 19, 204, 93, 231
+	sd_quad	0x09, 117, 204, 164, 233
+	sd_quad	0x02, 188, 72, 188, 91
+	sd_quad	0x02, 188, 108, 188, 127
+	sd_op23	0x60, 71*40+3
+	sd_op23	0x39, 107*40+3
+	sd_quad	0x05, 118, 220, 163, 232
+	sd_ctext	0x06, 19, 207*40+23, "1ST 2ND 3RD 4TH"
+	sd_ctext	0x07, 5, 232*40+33, "\022"
+	sd_ctext	0x07, 5, 232*40+38, "\022"
+	sd_quad	0x09, 181, 204, 307, 233
+	sd_quad	0x05, 182, 219, 306, 232
+; static record list (3 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3D36
+; evidence: SeMenu_FilterEdit_DataBlock5
+SeScreenData_0x3D17:
+	sd_ctext	0x06, 11, 207*40+23, "1ST 2ND"
+	sd_quad	0x09, 181, 204, 244, 233
 	; tail of the record before se_setup_transport, split off at its proven boundary
-	.byte 0x00, 0xf3, 0x00, 0xe8, 0x00
+	sd_quad	0x05, 182, 219, 243, 232
 ; se_setup_transport: 107 bytes -- screen layout data, base 0xF1493C
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_transport.c)
+SeScreenData_0x3D36:
 	.incbin "includes/generated/se_setup_transport.bin"
-	.byte 0x22, 0x0a, 0x21, 0x00, 0x4e, 0x00, 0x18, 0x01
-	.byte 0x84, 0x00, 0x22, 0x0a, 0x59, 0x00, 0xda, 0x00
-	.long NakaInst_Param_Field48
-	.byte 0x22, 0x0a, 0xd1, 0x00
-	.long NakaData_DescriptorPad_ZeroC
-	.byte 0xee, 0x00, 0x01, 0x0a
-	.long Pad_BeforeNakaData_ExternalBase_0x66
-	.long Pad_AfterNakaData_ExternalBase_0x66
-	normal
-	ldw	(209:8), 0xe400:io
-	nop
-	.byte 0xe6
-	nop
-	.byte 0xe4, 0x00
+	sd_quad	0x22, 33, 78, 280, 132
+	sd_quad	0x22, 89, 218, 110, 238
+	sd_quad	0x22, 209, 218, 230, 238
+	sd_quad	0x01, 89, 228, 110, 228
+	sd_quad	0x01, 209, 228, 230, 228
 ; se_transport_display: 141 bytes (14 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_transport_display.c)
+SeScreenData_0x3DD3:
+	.set	SeScreenData_0x3DF1, . + 30
+	.set	SeScreenData_0x3E00, . + 45
+	.set	SeScreenData_0x3E0F, . + 60
+	.set	SeScreenData_0x3E1E, . + 75
+	.set	SeScreenData_0x3E2D, . + 90
+	.set	SeScreenData_0x3E37, . + 100
+	.set	SeScreenData_0x3E55, . + 130
 	.incbin "includes/generated/se_transport_display.bin"
-	pop	xhl
-	popw	de
-	.byte 0xf1, 0x00, 0xf7, 0x49, 0xf1, 0x00, 0x06, 0x4a, 0xf1, 0x00, 0x15, 0x4a, 0xf1, 0x00, 0x24, 0x4a, 0xf1, 0x00, 0x15, 0x4a, 0xf1, 0x00, 0x24, 0x4a, 0xf1, 0x00, 0x33, 0x4a, 0xf1, 0x00, 0x4f
-	.ascii "FF ON---INV-------------PITCH BEND   AMP ENV SUST FILTER CUTOFFPTCH LFO1 DEPPTCH LFO2 DEPPTCH LFO3 DEPPTCH LFO4 DEPAMP LFO1 DEP AMP LFO2 DEP AMP LFO3 DEP AMP LFO4 DEP FLT LFO1 DEP FLT LFO2 DEP FLT LFO3 DEP FLT LFO4 DEP PTCH LFO1 SPDPTCH LFO2 SPDPTCH LFO3 SPDPTCH LFO4 SPDAMP LFO1 SPD AMP LFO2 SPD AMP LFO3 SPD AMP LFO4 SPD FLT LFO1 SPD FLT LFO2 SPD FLT LFO3 SPD FLT LFO4 SPD            28           29           30           31           32           33           34           35           36           37           38           39           40           41           42           43           44           45           46           47           48           49           50           51           52           53           54           55           56           57           58           59           60           61           62           63"
+; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (8 entries, LE32)
+; evidence: SeMenu_EqEdit_DefaultPath
+SeScreenData_0x3E60:
+	.long	SeScreenData_0x3E55
+	.long	SeScreenData_0x3DF1
+	.long	SeScreenData_0x3E00
+	.long	SeScreenData_0x3E0F
+	.long	SeScreenData_0x3E1E
+	.long	SeScreenData_0x3E0F
+	.long	SeScreenData_0x3E1E
+	.long	SeScreenData_0x3E2D
+; string table, 3-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 4)
+; evidence: bound op02 record at SeScreenData_0x3E37, bound op02 record at SeScreenData_0x3E46, bound op02 record at SeScreenData_0x3DD3, bound op02 record at SeScreenData_0x3DE2
+SeScreenData_0x3E80:
+	.ascii	"OFF", " ON", "---", "INV"
+; string table, 13-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 64)
+; evidence: bound op02 record at SeScreenData_0x3DF1, bound op02 record at SeScreenData_0x3E00, bound op02 record at SeScreenData_0x3E0F, bound op02 record at SeScreenData_0x3E1E
+SeScreenData_0x3E8C:
+	.ascii	"-------------"
+	.ascii	"PITCH BEND   "
+	.ascii	"AMP ENV SUST "
+	.ascii	"FILTER CUTOFF"
+	.ascii	"PTCH LFO1 DEP"
+	.ascii	"PTCH LFO2 DEP"
+	.ascii	"PTCH LFO3 DEP"
+	.ascii	"PTCH LFO4 DEP"
+	.ascii	"AMP LFO1 DEP "
+	.ascii	"AMP LFO2 DEP "
+	.ascii	"AMP LFO3 DEP "
+	.ascii	"AMP LFO4 DEP "
+	.ascii	"FLT LFO1 DEP "
+	.ascii	"FLT LFO2 DEP "
+	.ascii	"FLT LFO3 DEP "
+	.ascii	"FLT LFO4 DEP "
+	.ascii	"PTCH LFO1 SPD"
+	.ascii	"PTCH LFO2 SPD"
+	.ascii	"PTCH LFO3 SPD"
+	.ascii	"PTCH LFO4 SPD"
+	.ascii	"AMP LFO1 SPD "
+	.ascii	"AMP LFO2 SPD "
+	.ascii	"AMP LFO3 SPD "
+	.ascii	"AMP LFO4 SPD "
+	.ascii	"FLT LFO1 SPD "
+	.ascii	"FLT LFO2 SPD "
+	.ascii	"FLT LFO3 SPD "
+	.ascii	"FLT LFO4 SPD "
+	.ascii	"           28"
+	.ascii	"           29"
+	.ascii	"           30"
+	.ascii	"           31"
+	.ascii	"           32"
+	.ascii	"           33"
+	.ascii	"           34"
+	.ascii	"           35"
+	.ascii	"           36"
+	.ascii	"           37"
+	.ascii	"           38"
+	.ascii	"           39"
+	.ascii	"           40"
+	.ascii	"           41"
+	.ascii	"           42"
+	.ascii	"           43"
+	.ascii	"           44"
+	.ascii	"           45"
+	.ascii	"           46"
+	.ascii	"           47"
+	.ascii	"           48"
+	.ascii	"           49"
+	.ascii	"           50"
+	.ascii	"           51"
+	.ascii	"           52"
+	.ascii	"           53"
+	.ascii	"           54"
+	.ascii	"           55"
+	.ascii	"           56"
+	.ascii	"           57"
+	.ascii	"           58"
+	.ascii	"           59"
+	.ascii	"           60"
+	.ascii	"           61"
+	.ascii	"           62"
+	.ascii	"           63"
 ; se_setup_sel_rects: 30 bytes -- screen layout data, base 0xF14DD2
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel_rects.c)
+SeScreenData_0x41CC:
 	.incbin "includes/generated/se_setup_sel_rects.bin"
 	; head of the next record, split off at se_setup_sel_rects's proven end
-	.byte 0x4d, 0x00, 0x4a, 0x00, 0xba, 0x00, 0x59
-	.byte 0x00, 0x4d, 0x00, 0x4a, 0x00, 0xba, 0x00, 0x59
-	.byte 0x00, 0xbe, 0x00, 0x4a, 0x00, 0x2a, 0x01, 0x59
-	.byte 0x00, 0x4d, 0x00, 0x8d, 0x00, 0xba, 0x00, 0x9c
-	.byte 0x00, 0xbe, 0x00, 0x8d, 0x00, 0x2a, 0x01, 0x9c
-	.byte 0x00, 0x4d, 0x00, 0x6e, 0x00, 0xba, 0x00, 0x7d
-	.byte 0x00, 0xbe, 0x00, 0x6e, 0x00, 0x2a, 0x01, 0x7d
-	.byte 0x00
+; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
+; record's value (pointer field +7; value range up to 8)
+; evidence: bound op03 record at SeScreenData_0x3E55
+SeScreenData_0x41EA:
+	.short	77, 74, 186, 89
+	.short	77, 74, 186, 89
+	.short	190, 74, 298, 89
+	.short	77, 141, 186, 156
+	.short	190, 141, 298, 156
+	.short	77, 110, 186, 125
+	.short	190, 110, 298, 125
 ; se_setup_sel3: 30 bytes (2 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel3.c)
+SeScreenData_0x4222:
 	.incbin "includes/generated/se_setup_sel3.bin"
-	.byte 0x4c
-	.ascii "ONGHOLDDISABLEENABLE "
-	.byte 0x06, 0x0b, 0x10
-	.byte 0x01
-	.ascii "PAGE2/3"
-	.byte 0x09, 0x0a, 0x65, 0x00, 0x3a, 0x00, 0xc5, 0x00
-	.byte 0x48, 0x00, 0x1b, 0x0a, 0x63, 0x00, 0x36, 0x00
-	.byte 0xc3, 0x00, 0x44, 0x00, 0x09, 0x0a, 0x63, 0x00
-	.byte 0x36, 0x00, 0xc3, 0x00, 0x44, 0x00, 0x1b, 0x0a
-	.byte 0x61, 0x00, 0x32, 0x00, 0xc1, 0x00, 0x40, 0x00
-	.byte 0x09, 0x0a, 0x61, 0x00, 0x32, 0x00, 0xc1, 0x00
-	.byte 0x40, 0x00, 0x1b, 0x0a, 0x5f, 0x00, 0x2e, 0x00
-	.byte 0xbf, 0x00, 0x3c, 0x00, 0x09, 0x0a, 0x5f, 0x00
-	.byte 0x2e, 0x00, 0xbf, 0x00, 0x3c, 0x00, 0x17, 0x0a
-	.byte 0x83, 0x00, 0x23, 0x00
-	.byte 0x54, 0x4f, 0x4e, 0x45
-	.byte 0x17, 0x13, 0x67, 0x00, 0x32, 0x00, 0x54, 0x4f
-	.ascii "NE WAVEFORM"
-	.byte 0x17, 0x13, 0x55, 0x00, 0x67
-	.byte 0x00
-	.ascii "TONE WAVEFORM"
-	.byte 0x17, 0x0e
-	.byte 0xc3, 0x00, 0x67, 0x00
-	.ascii "VELOCITY"
-	.byte 0x17, 0x0a, 0x58, 0x00
-	.byte 0xc8, 0x00
-	.byte 0x54, 0x4f, 0x4e, 0x45
-	.byte 0x06, 0x0a
-	.ascii "* CURS0R"
-	.byte 0x17, 0x0b, 0x24, 0x00, 0xd1, 0x00, 0x47, 0x52
-	.byte 0x4f, 0x55, 0x50, 0x17, 0x0e, 0x4c, 0x00, 0xd1
-	.byte 0x00
-	.ascii "WAVEFORM"
-	.byte 0x17, 0x0e, 0xc4, 0x00, 0xd1, 0x00, 0x56
-	.ascii "ELOCITY"
-	.byte 0x06
-	.byte 0x05, 0x16, 0x22, 0x8d, 0x06, 0x05, 0x1c, 0x22
-	.byte 0x8d, 0x06, 0x05, 0x2b, 0x22, 0x8d, 0x07, 0x05
-	.byte 0x0d, 0x22, 0x8d, 0x06, 0x05, 0xa6, 0x23, 0x8e
-	.byte 0x06, 0x05, 0xac, 0x23, 0x8e, 0x06, 0x05, 0xbb
-	.byte 0x23, 0x8e, 0x07, 0x05, 0x9d, 0x23, 0x8e, 0x22
-	.byte 0x0a, 0x3c, 0x00, 0x61, 0x00, 0xfd, 0x00, 0xb7
-	.byte 0x00, 0x22, 0x0a, 0x29, 0x00, 0xda, 0x00, 0x3e
-	.byte 0x00, 0xee, 0x00, 0x22, 0x0a, 0x59, 0x00, 0xda
-	.byte 0x00, 0x6e, 0x00, 0xee, 0x00, 0x22, 0x0a, 0xd1
-	.byte 0x00, 0xda, 0x00, 0xe6, 0x00, 0xee, 0x00, 0x22
-	.byte 0x0a, 0x1d, 0x01, 0xda, 0x00, 0x3a, 0x01, 0xee
-	.byte 0x00, 0x01, 0x0a, 0x55, 0x00, 0x26, 0x00, 0x80
-	.byte 0x00, 0x26, 0x00, 0x01, 0x0a, 0x9d, 0x00, 0x26
-	.byte 0x00, 0xcf, 0x00, 0x26, 0x00, 0x09, 0x0a, 0xcf
-	.byte 0x00, 0x39, 0x00, 0xf5, 0x00, 0x3a, 0x00, 0x01
-	.byte 0x0a, 0xf2, 0x00, 0x3a, 0x00, 0xf5, 0x00, 0x3a
-	.byte 0x00, 0x01, 0x0a, 0x55, 0x00, 0x51, 0x00, 0xcf
-	.byte 0x00, 0x51, 0x00, 0x01, 0x0a, 0x3c, 0x00, 0x72
-	.byte 0x00, 0xfd, 0x00, 0x72, 0x00, 0x01, 0x0a, 0x29
-	.byte 0x00, 0xe4, 0x00, 0x3e, 0x00, 0xe4, 0x00, 0x01
-	.byte 0x0a, 0x59, 0x00, 0xe4, 0x00, 0x6e, 0x00, 0xe4
-	.byte 0x00, 0x01, 0x0a, 0xd1, 0x00, 0xe4, 0x00, 0xe6
-	.byte 0x00, 0xe4, 0x00, 0x01, 0x0a, 0x1d, 0x01, 0xe4
-	.byte 0x00, 0x3a, 0x01, 0xe4, 0x00, 0x02, 0x0a, 0x55
-	.byte 0x00, 0x26, 0x00, 0x55, 0x00, 0x51, 0x00, 0x02
-	.byte 0x0a, 0xbd, 0x00, 0x61, 0x00, 0xbd, 0x00, 0xb7
-	.byte 0x00, 0x02, 0x0a, 0xcf, 0x00, 0x26, 0x00, 0xcf
-	.byte 0x00, 0x51, 0x00, 0x02, 0x0a, 0xf2, 0x00, 0x36
-	.byte 0x00, 0xf2, 0x00, 0x3d, 0x00, 0x02, 0x0a, 0xf3
-	.byte 0x00, 0x37, 0x00, 0xf3, 0x00, 0x3c, 0x00, 0x02
-	.byte 0x0a, 0xf4, 0x00, 0x38, 0x00, 0xf4, 0x00, 0x3b
-	.byte 0x00, 0x1c, 0x13, 0x72, 0x00, 0x05, 0x00, 0x54
-	.ascii "ONE DYNAMICS"
-	.byte 0x17, 0x10, 0x06, 0x00
-	.byte 0x07, 0x00
-	.ascii "SOUND EDIT"
-	.byte 0x09, 0x0a, 0x04, 0x00
-	.byte 0x04, 0x00, 0x44, 0x00, 0x10, 0x00, 0x07, 0x05
-	.byte 0xb7, 0x0b, 0x11, 0x20, 0x07, 0xdb, 0x0b, 0x59
-	.byte 0x45, 0x53, 0x07, 0x05, 0xcf, 0x11, 0x11, 0x20
-	.byte 0x06, 0xf3, 0x11, 0x4e, 0x4f, 0x09, 0x0a, 0x13
-	.byte 0x01, 0x46, 0x00, 0x35, 0x01, 0x59, 0x00, 0x09
-	.byte 0x0a, 0x15, 0x01, 0x48, 0x00, 0x33, 0x01, 0x57
-	.byte 0x00, 0x09, 0x0a, 0x13, 0x01, 0x6d, 0x00, 0x35
-	.byte 0x01, 0x80, 0x00, 0x09, 0x0a, 0x15, 0x01, 0x6f
-	.byte 0x00, 0x33, 0x01, 0x7e, 0x00, 0x08, 0x0e, 0x07
-	.byte 0x0a
-	.ascii "ATTENTION!"
-	.byte 0x07, 0x1e, 0x6c, 0x10, 0x54
-	.ascii "HE SELECTED DRUM KIT WILL"
-	.byte 0x07, 0x1e, 0xf4, 0x14, 0x42, 0x45, 0x20
-	.ascii "COPIED TO THE USER KIT."
-	.byte 0x08
-	.byte 0x11, 0xf4, 0x19
-	.ascii "ARE YOU SURE?\""
-	.byte 0x0a, 0x07, 0x00, 0x2f, 0x00, 0x0b, 0x01
-	.byte 0xcc, 0x00, 0x09, 0x0a, 0x36, 0x00, 0x50, 0x00
-	.byte 0xd4, 0x00, 0x51, 0x00, 0x08, 0x0c, 0xd9, 0x07
-	.ascii "ACHTUNG!"
-	.byte 0x07, 0x23, 0x89, 0x0e
-	.ascii "SIE KOPIEREN EIN PRESET-DRUMKIT"
-	.byte 0x07, 0x14, 0x71, 0x12, 0x49
-	.ascii "N DAS USER KIT."
-	.byte 0x08
-	.byte 0x14, 0xa1, 0x19
-	.ascii "SIND SIE SICHER?\""
-	.byte 0x0a, 0x02, 0x00, 0x21
-	.byte 0x00, 0x0b, 0x01, 0xc9, 0x00, 0x09, 0x0a, 0x48
-	.byte 0x00, 0x42, 0x00, 0xc6, 0x00, 0x43, 0x00, 0x08
-	.byte 0x0e, 0x77, 0x08
-	.ascii "ATTENTION!"
-	.byte 0x07, 0x1c, 0x8d
-	.byte 0x0e
-	.ascii "COPIE DU DRUMKIT VERS LE"
-	.byte 0x07, 0x0d, 0x75, 0x12, 0x55, 0x53, 0x45
-	.ascii "R KIT."
-	.byte 0x07, 0x17
-	.byte 0x40, 0x18
-	.ascii "VEUILLEZ CONFIRMER,"
-	.byte 0x07, 0x05, 0xc2
-	.byte 0x1a, 0x2c, 0x07, 0x05, 0x51, 0x1c, 0x53, 0x07
-	.byte 0x12, 0x53, 0x1c
-	.ascii "IL VOUS PLAIT!\""
-	.byte 0x0a, 0x03, 0x00, 0x25, 0x00, 0x0e
-	.byte 0x01, 0xd2, 0x00, 0x09, 0x0a, 0x36, 0x00, 0x46
-	.byte 0x00, 0xd8, 0x00, 0x47, 0x00, 0x08, 0x0d, 0x30
-	.byte 0x0a
-	.ascii "ATENCION!"
-	.byte 0x07, 0x21, 0x7b, 0x0f, 0x43, 0x4f
-	.ascii "PIA DEL EQUIPO DE TAMBOR EN"
-	.byte 0x07, 0x1a, 0x8b, 0x13, 0x45
-	.ascii "L EQUIPO DEL USUARIO."
-	.byte 0x08, 0x09, 0x7c
-	.byte 0x19, 0xbb, 0x45, 0x53, 0x54, 0xb4, 0x08, 0x0b
-	.byte 0x88, 0x19
-	.ascii "SEGURO?\""
-	.byte 0x0a, 0x07, 0x00, 0x2f, 0x00, 0x0b
-	.byte 0x01, 0xcc, 0x00, 0x09, 0x0a, 0x40, 0x00, 0x51
-	.byte 0x00, 0xcb, 0x00, 0x52, 0x00, 0x08, 0x0f, 0x56
-	.byte 0x0a
-	.ascii "ATTENZIONE!"
-	.byte 0x07, 0x19, 0xbe, 0x10
-	.ascii "COPIATURA DEL DRUMKIT"
-	.byte 0x07, 0x05, 0x41
-	.byte 0x13, 0x2c, 0x07, 0x07, 0xce, 0x14, 0x41, 0x4c
-	.byte 0x4c, 0x07, 0x0d, 0xd2, 0x14, 0x55, 0x53, 0x45
-	.ascii "R KIT."
-	.byte 0x08, 0x11
-	.byte 0xbc, 0x1a
-	.ascii "SIETE SICURI?\""
-	.byte 0x0a, 0x07, 0x00, 0x2f, 0x00, 0x0b, 0x01, 0xcc
-	.byte 0x00, 0x09, 0x0a, 0x2e, 0x00, 0x52, 0x00, 0xdd
-	.byte 0x00, 0x53, 0x00, 0x8c, 0x50, 0xf1, 0x00, 0xfb
-	.byte 0x50, 0xf1, 0x00, 0x66, 0x51, 0xf1, 0x00, 0xe4
-	.byte 0x51, 0xf1, 0x00, 0x54, 0x52, 0xf1, 0x00, 0xba
-	.byte 0x52, 0xf1, 0x00, 0x06, 0x05, 0x12, 0x22, 0x8d
-	.byte 0x06, 0x05, 0xa2, 0x23, 0x8e, 0x22, 0x0a, 0x09
-	.byte 0x00, 0xda, 0x00, 0x1e, 0x00, 0xee, 0x00, 0x01
-	.byte 0x0a, 0x09, 0x00, 0xe4, 0x00, 0x1e, 0x00, 0xe4
-	.byte 0x00, 0x06, 0x05, 0x17, 0x22, 0x8d, 0x06, 0x05
-	.byte 0xa7, 0x23, 0x8e, 0x22, 0x0a, 0x31, 0x00, 0xda
-	.byte 0x00, 0x46, 0x00, 0xee, 0x00, 0x01, 0x0a, 0x31
-	.byte 0x00, 0xe4, 0x00, 0x46, 0x00, 0xe4, 0x00, 0x06
-	.byte 0x05, 0x1c, 0x22, 0x8d, 0x06, 0x05, 0xac, 0x23
-	.byte 0x8e, 0x22, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e
-	.byte 0x00, 0xee, 0x00, 0x01, 0x0a, 0x59, 0x00, 0xe4
-	.byte 0x00, 0x6e, 0x00, 0xe4, 0x00, 0x06, 0x05, 0x21
-	.byte 0x22, 0x8d, 0x06, 0x05, 0xb1, 0x23, 0x8e, 0x22
-	.byte 0x0a, 0x81, 0x00, 0xda, 0x00, 0x96, 0x00, 0xee
-	.byte 0x00, 0x01, 0x0a, 0x81, 0x00, 0xe4, 0x00, 0x96
-	.byte 0x00, 0xe4, 0x00, 0x06, 0x05, 0x26, 0x22, 0x8d
-	.byte 0x06, 0x05, 0xb6, 0x23, 0x8e, 0x22, 0x0a, 0xa9
-	.byte 0x00, 0xda, 0x00, 0xbe, 0x00, 0xee, 0x00, 0x01
-	.byte 0x0a, 0xa9, 0x00, 0xe4, 0x00, 0xbe, 0x00, 0xe4
-	.byte 0x00, 0x06, 0x05, 0x2b, 0x22, 0x8d, 0x06, 0x05
-	.byte 0xbb, 0x23, 0x8e, 0x22, 0x0a, 0xd1, 0x00, 0xda
-	.byte 0x00, 0xe6, 0x00, 0xee, 0x00, 0x01, 0x0a, 0xd1
-	.byte 0x00, 0xe4, 0x00, 0xe6, 0x00, 0xe4, 0x00, 0x06
-	.byte 0x05, 0x30, 0x22, 0x8d, 0x06, 0x05, 0xc0, 0x23
-	.byte 0x8e, 0x22, 0x0a, 0xf9, 0x00, 0xda, 0x00, 0x0e
-	.byte 0x01, 0xee, 0x00, 0x01, 0x0a, 0xf9, 0x00, 0xe4
-	.byte 0x00, 0x0e, 0x01, 0xe4, 0x00, 0x06, 0x05, 0x35
-	.byte 0x22, 0x8d, 0x06, 0x05, 0xc5, 0x23, 0x8e, 0x22
-	.byte 0x0a, 0x21, 0x01, 0xda, 0x00, 0x36, 0x01, 0xee
-	.byte 0x00, 0x01, 0x0a, 0x21, 0x01, 0xe4, 0x00, 0x36
-	.byte 0x01, 0xe4, 0x00, 0x06, 0x0d, 0x0b, 0x19, 0x49
-	.ascii "NTENSITY"
-	.byte 0x06, 0x05, 0x19, 0x19, 0x3a, 0x17, 0x0d, 0xf0
-	.byte 0x00, 0xd1, 0x00
-	.byte 0x49, 0x4e, 0x54, 0x45, 0x4e
-	.byte 0x53, 0x2e, 0x23, 0x05, 0x0a, 0x82, 0x00, 0x1c
-	.byte 0x14, 0x6f, 0x00, 0x05, 0x00, 0x44, 0x49, 0x47
-	.ascii "ITAL EFFECT"
-	.byte 0x17, 0x10, 0x06, 0x00, 0x07
-	.byte 0x00
-	.ascii "SOUND EDIT"
-	.byte 0x06, 0x08, 0x03, 0x08, 0x54
-	.byte 0x59, 0x50, 0x45, 0x06, 0x05, 0x08, 0x08, 0x3a
-	.byte 0x17, 0x07, 0x36, 0x01, 0x46, 0x00, 0x91, 0x07
-	.byte 0x05, 0x68, 0x0b, 0x10, 0x07, 0x07, 0x8c, 0x0b
-	.byte 0x8d, 0x20, 0x20, 0x07, 0x05, 0xb7, 0x0b, 0xa9
-	.byte 0x06, 0x08, 0xaa, 0x0e
-	.byte 0x54, 0x59, 0x50, 0x45
-	.byte 0x17, 0x07, 0x36, 0x01, 0x6d, 0x00, 0x91, 0x07
-	.byte 0x05, 0x80, 0x11, 0x10, 0x07, 0x07, 0xa4, 0x11
-	.byte 0x8e, 0x20, 0x20, 0x07, 0x05, 0xcf, 0x11, 0xa9
-	.byte 0x06, 0x13, 0x63, 0x1b
-	.ascii "REVERB DEPTH  :"
-	.byte 0x17, 0x0c, 0x1a, 0x01, 0xd1
-	.byte 0x00
-	.ascii "REVERB"
-	.byte 0x09
-	.byte 0x0a, 0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10
-	.byte 0x00, 0x22, 0x0a, 0x47, 0x00, 0x2e, 0x00, 0xfb
-	.byte 0x00, 0xbb, 0x00, 0x09, 0x0a, 0x12, 0x01, 0x45
-	.byte 0x00, 0x35, 0x01, 0x58, 0x00, 0x09, 0x0a, 0x0c
-	.byte 0x00, 0x46, 0x00, 0x2c, 0x00, 0x59, 0x00, 0x09
-	.byte 0x0a, 0x14, 0x01, 0x47, 0x00, 0x33, 0x01, 0x56
-	.byte 0x00, 0x09, 0x0a, 0x0e, 0x00, 0x48, 0x00, 0x2a
-	.byte 0x00, 0x57, 0x00, 0x09, 0x0a, 0x0c, 0x00, 0x6c
-	.byte 0x00, 0x44, 0x00, 0x7f, 0x00, 0x09, 0x0a, 0x12
-	.byte 0x01, 0x6c, 0x00, 0x35, 0x01, 0x7f, 0x00, 0x09
-	.byte 0x0a, 0x0e, 0x00, 0x6e, 0x00, 0x42, 0x00, 0x7d
-	.byte 0x00, 0x09, 0x0a, 0x14, 0x01, 0x6e, 0x00, 0x33
-	.byte 0x01, 0x7d, 0x00, 0x01, 0x0a, 0x47, 0x00, 0x41
-	.byte 0x00, 0xfb, 0x00, 0x41, 0x00, 0x23, 0x05, 0x0a
-	.byte 0x82, 0x00, 0x06, 0x09, 0xfb, 0x0a, 0x44, 0x45
-	.byte 0x50, 0x54, 0x48, 0x06, 0x05, 0x09, 0x0b, 0x3a
-	.byte 0x06, 0x09, 0x53, 0x0d
-	.byte 0x53, 0x50, 0x45, 0x45
-	.byte 0x44, 0x06, 0x05, 0x61, 0x0d, 0x3a, 0x06, 0x0a
-	.byte 0xab, 0x0f
-	.ascii "DETUNE"
-	ei	5
-	.byte 0xb9, 0x0f, 0x3a
-	ei	9
-	pop	sr
-	ccf
-	ld	xix, 0x59414c45
-	ei	5
-	scf
-	ccf
-	push xde
-	ei	11
-	pop xhl
-	push_a
-	.byte 0x42
-	.ascii "ALANCE"
-	ei	5
-	jr	ge, 20
-	push xde
-	ldf	11
-	ei	0
-	.byte 0xd1, 0x00
-	ld	xix, 0x48545045
-	ldf	11
-	pushw iy
-	nop
-	.byte 0xd1, 0x00, 0x53, 0x50
-	ld	xiy, 0x0c174445
-	.byte 0x52
-	nop
-	.byte 0xd1, 0x00, 0x44
-	ld	xiy, 0x454e5554
-	ldf	11
-	jrl	po, 0xd100
-	nop
-	ld	xix, 0x59414c45
-	ldf	13
-	.byte 0xa0, 0x00, 0xd1, 0x00, 0x42, 0x41
-	popw	ix
-	ld	xbc, 0x0645434e
-	.byte 0x0a, 0xfb, 0x0a
-	.ascii "DEPTH1"
-	.byte 0x06
-	.byte 0x05, 0x09, 0x0b, 0x3a, 0x06, 0x0a, 0x53, 0x0d
-	.ascii "SPEED1"
-	ei	5
-	jr	lt, 13
-	push xde
-	ei	10
-	.byte 0xab, 0x0f, 0x44
-	ld	xiy, 0x32485450
-	ei	5
-	.byte 0xb9, 0x0f, 0x3a
-	ei	10
-	pop	sr
-	ccf
-	.byte 0x53, 0x50
-	ld	xiy, 0x06324445
-	halt
-	scf
-	ccf
-	push xde
-	ei	10
-	pop xhl
-	push_a
-	ld	xix, 0x4e555445
-	ld	xiy, 0x14690506
-	push xde
-	ei	9
-	.byte 0xb3, 0x16, 0x44, 0x45
-	popw ix
-	ld	xbc, 0xc1050659
-	ex_ff
-	push xde
-	ldf	12
-	push	sr
-	nop
-	.byte 0xd1, 0x00, 0x44, 0x45, 0x50, 0x54
-	popw wa
-	ldw	bc, 3095
-	pushw de
-	nop
-	.byte 0xd1, 0x00
-	.ascii "SPEED1"
-	.byte 0x17, 0x0c
-	.byte 0x52, 0x00, 0xd1, 0x00
-	.byte 0x44, 0x45, 0x50, 0x54
-	.byte 0x48, 0x32, 0x17, 0x0c, 0x7a, 0x00, 0xd1, 0x00
-	.ascii "SPEED2"
-	ldf	12
-	.byte 0xa2, 0x00, 0xd1, 0x00, 0x44, 0x45, 0x54, 0x55
-	popw iz
-	ld	xiy, 0xcd0b17
-	.byte 0xd1, 0x00
-	ld	xix, 0x59414c45
-	ei	9
-	swi	3
-	.byte 0x0a
-	ld	xix, 0x48545045
-	ei	5
-	push 11
-	push xde
-	ei	9
-	.byte 0x53
-	decf
-	.byte 0x53, 0x50
-	ld	xiy, 0x05064445
-	jr	lt, 13
-	push xde
-	ei	8
-	.byte 0xab, 0x0f, 0x57
-	ld	xbc, 0x05064556
-	.byte 0xb9, 0x0f, 0x3a
-	ei	11
-	pop	sr
-	ccf
-	.ascii "BALANCE"
-	ei	5
-	scf
-	ccf
-	push xde
-	ldf	11
-	halt
-	nop
-	.byte 0xd1, 0x00, 0x44, 0x45, 0x50, 0x54
-	popw wa
-	ldf	11
-	pushw ix
-	nop
-	.byte 0xd1, 0x00, 0x53, 0x50
-	ld	xiy, 0x0a174445
-	pop xwa
-	nop
-	.byte 0xd1, 0x00, 0x57, 0x41, 0x56
-	ld	xiy, 0x770d17
-	.byte 0xd1, 0x00, 0x42, 0x41
-	popw ix
-	ld	xbc, 0x0645434e
-	ldw	(251:8), 0x440a:io
-	ld	xiy, 0x31485450
-	ei	0x05
-	push 11
-	push	xde
-	ei	0x0a
-	.byte 0x53
-	decf
-	.byte 0x53, 0x50
-	ld	xiy, 0x06314445
-	halt
-	jr	lt, 13
-	push	xde
-	ei	0x0a
-	.byte 0xab, 0x0f, 0x44
-	ld	xiy, 0x32485450
-	ei	0x05
-	.byte 0xb9, 0x0f, 0x3a
-	ei	0x0a
-	pop	sr
-	ccf
-	.byte 0x53, 0x50
-	ld	xiy, 0x06324445
-	halt
-	scf
-	ccf
-	push	xde
-	ldf	12
-	push	sr
-	nop
-	.byte 0xd1, 0x00, 0x44, 0x45, 0x50, 0x54
-	popw	wa
-	ldw	bc, 3095
-	pushw	de
-	nop
-	.byte 0xd1, 0x00
-	.ascii "SPEED1"
-	.byte 0x17
-	.byte 0x0c, 0x52, 0x00, 0xd1, 0x00, 0x44, 0x45, 0x50
-	.byte 0x54, 0x48, 0x32, 0x17, 0x0c, 0x7a, 0x00, 0xd1
-	.byte 0x00
-	.ascii "SPEED2"
-	ei	9
-	swi	3
-	.byte 0x0a
-	ld	xix, 0x59414c45
-	ei	5
-	push 11
-	push xde
-	ei	10
-	.byte 0x53
-	decf
-	.ascii "DETUNE"
-	.byte 0x06
-	.byte 0x05, 0x61, 0x0d, 0x3a, 0x06, 0x0d, 0xab, 0x0f
-	.ascii "KEY SHIFT"
-	.byte 0x06, 0x05, 0xb9, 0x0f, 0x3a, 0x06, 0x0b
-	.byte 0x03, 0x12
-	.ascii "BALANCE"
-	ei	5
-	scf
-	ccf
-	push xde
-	ldf	11
-	push	sr
-	nop
-	.byte 0xd1, 0x00, 0x44, 0x45
-	popw ix
-	ld	xbc, 0x2a0c1759
-	nop
-	.byte 0xd1, 0x00, 0x44
-	ld	xiy, 0x454e5554
-	ldf	9
-	pop xhl
-	nop
-	.byte 0xd1, 0x00, 0x4b, 0x45
-	pop xbc
-	ldf	13
-	jrl	t, 0xd100
-	nop
-	ld	xde, 0x4e414c41
-	ld	xhl, 0xfb090645
-	ldw	(83:8), 0x4550:io
-	ld	xiy, 0x09050644
-	pushw 1594
-	push 83
-	decf
-	ld	xix, 0x59414345
-	ei	5
-	jr	lt, 13
-	push xde
-	.byte 0x06
-	pushw 0x0fab
-	.byte 0x53, 0x55, 0x53, 0x54
-	ld	xbc, 0x05064e49
-	.byte 0xb9, 0x0f, 0x3a, 0x06
-	pushw 0x1203
-	.byte 0x52
-	ld	xiy, 0x5341454c
-	ld	xiy, 0x12110506
-	push	xde
-	ldf	11
-	max
-	nop
-	.byte 0xd1, 0x00, 0x53, 0x50
-	ld	xiy, 0x0b174445
-	pushw	iy
-	nop
-	.byte 0xd1, 0x00
-	ld	xix, 0x59414345
-	ldf	13
-	.byte 0x50
-	nop
-	.byte 0xd1, 0x00, 0x53, 0x55, 0x53, 0x54
-	ld	xbc, 0x0d174e49
-	.byte 0x80, 0x00, 0xd1, 0x00
-	.ascii "RELEASE"
-	.byte 0x06
-	.byte 0x0e, 0xfb, 0x0a
-	.ascii "DISTORTION"
-	.byte 0x06, 0x05, 0x09
-	.byte 0x0b, 0x3a, 0x06, 0x0f, 0x53, 0x0d, 0x54, 0x4f
-	.ascii "UCH DEPTH"
-	ei	5
-	jr	lt, 13
-	push xde
-	ei	9
-	.byte 0xab, 0x0f
-	ld	xix, 0x48545045
-	ei	5
-	.byte 0xb9, 0x0f, 0x3a
-	ldf	11
-	reti
-	nop
-	.byte 0xd1, 0x00
-	ld	xix, 0x2e545349
-	ldf	11
-	pushw iy
-	nop
-	.byte 0xd1, 0x00, 0x54, 0x4f, 0x55
-	ld	xhl, 0x550b1748
-	nop
-	.byte 0xd1, 0x00
-	ld	xix, 0x48545045
-	.byte 0xe1, 0x54, 0xf1, 0x00, 0x64, 0x55
+; string table, 4-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 2)
+; evidence: bound op02 record at SeScreenData_0x4222
+SeScreenData_0x4240:
+	.ascii	"LONG", "HOLD"
+; string table, 7-char cells, indexed by a bound record's value (field +7 of
+; a bound op 02/07 record; value range up to 2)
+; evidence: bound op02 record at SeScreenData_0x4231
+SeScreenData_0x4248:
+	.ascii	"DISABLE"
+	.ascii	"ENABLE "
+; static record list (46 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x441A
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x4256:
+	sd_ctext	0x06, 11, 6*40+32, "PAGE2/3"
+; static record list (45 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x441A
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x4261:
+	sd_quad	0x09, 101, 58, 197, 72
+	sd_quad	0x1b, 99, 54, 195, 68
+	sd_quad	0x09, 99, 54, 195, 68
+	sd_quad	0x1b, 97, 50, 193, 64
+	sd_quad	0x09, 97, 50, 193, 64
+	sd_quad	0x1b, 95, 46, 191, 60
+	sd_quad	0x09, 95, 46, 191, 60
+	sd_ptext	0x17, 10, 131, 35, "TONE"
+	sd_ptext	0x17, 19, 103, 50, "TONE WAVEFORM"
+	sd_ptext	0x17, 19, 85, 103, "TONE WAVEFORM"
+	sd_ptext	0x17, 14, 195, 103, "VELOCITY"
+	sd_ptext	0x17, 10, 88, 200, "TONE"
+	sd_ctext	0x06, 10, 205*40+34, "CURS0R"
+	sd_ptext	0x17, 11, 36, 209, "GROUP"
+	sd_ptext	0x17, 14, 76, 209, "WAVEFORM"
+	sd_ptext	0x17, 14, 196, 209, "VELOCITY"
+	sd_ctext	0x06, 5, 218*40+6, "\215"
+	sd_ctext	0x06, 5, 218*40+12, "\215"
+	sd_ctext	0x06, 5, 218*40+27, "\215"
+	sd_ctext	0x07, 5, 217*40+37, "\215"
+	sd_ctext	0x06, 5, 228*40+6, "\216"
+	sd_ctext	0x06, 5, 228*40+12, "\216"
+	sd_ctext	0x06, 5, 228*40+27, "\216"
+	sd_ctext	0x07, 5, 227*40+37, "\216"
+	sd_quad	0x22, 60, 97, 253, 183
+	sd_quad	0x22, 41, 218, 62, 238
+	sd_quad	0x22, 89, 218, 110, 238
+	sd_quad	0x22, 209, 218, 230, 238
+	sd_quad	0x22, 285, 218, 314, 238
+	sd_quad	0x01, 85, 38, 128, 38
+	sd_quad	0x01, 157, 38, 207, 38
+	sd_quad	0x09, 207, 57, 245, 58
+	sd_quad	0x01, 242, 58, 245, 58
+	sd_quad	0x01, 85, 81, 207, 81
+	sd_quad	0x01, 60, 114, 253, 114
+	sd_quad	0x01, 41, 228, 62, 228
+	sd_quad	0x01, 89, 228, 110, 228
+	sd_quad	0x01, 209, 228, 230, 228
+	sd_quad	0x01, 285, 228, 314, 228
+	sd_quad	0x02, 85, 38, 85, 81
+	sd_quad	0x02, 189, 97, 189, 183
+	sd_quad	0x02, 207, 38, 207, 81
+	sd_quad	0x02, 242, 54, 242, 61
+	sd_quad	0x02, 243, 55, 243, 60
+	sd_quad	0x02, 244, 56, 244, 59
+; static record list (3 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4447
+; evidence: SeMenu_PresetManager_Data
+SeScreenData_0x441A:
+	sd_ptext	0x1c, 19, 114, 5, "TONE DYNAMICS"
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_quad	0x09, 4, 4, 68, 16
+; static record list (8 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4486
+; evidence: SeMenu_WaveformSelect_Apply
+SeScreenData_0x4447:
+	sd_ctext	0x07, 5, 74*40+39, "\021"
+	sd_ctext	0x20, 7, 75*40+35, "YES"
+	sd_ctext	0x07, 5, 113*40+39, "\021"
+	sd_ctext	0x20, 6, 114*40+35, "NO"
+	sd_quad	0x09, 275, 70, 309, 89
+	sd_quad	0x09, 277, 72, 307, 87
+	sd_quad	0x09, 275, 109, 309, 128
+	sd_quad	0x09, 277, 111, 307, 126
+; static record list (6 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x44F5
+; evidence: bounds at SeScreenData_0x46B4
+SeScreenData_0x4486:
+	sd_ctext	0x08, 14, 64*40+7, "ATTENTION!"
+	sd_ctext	0x07, 30, 105*40+4, "THE SELECTED DRUM KIT WILL"
+	sd_ctext	0x07, 30, 134*40+4, "BE COPIED TO THE USER KIT."
+	sd_ctext	0x08, 17, 166*40+4, "ARE YOU SURE?"
+	sd_quad	0x22, 7, 47, 267, 204
+	sd_quad	0x09, 54, 80, 212, 81
+; static record list (6 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4560
+; evidence: bounds at SeScreenData_0x46B4
+SeScreenData_0x44F5:
+	sd_ctext	0x08, 12, 50*40+9, "ACHTUNG!"
+	sd_ctext	0x07, 35, 93*40+1, "SIE KOPIEREN EIN PRESET-DRUMKIT"
+	sd_ctext	0x07, 20, 118*40+1, "IN DAS USER KIT."
+	sd_ctext	0x08, 20, 164*40+1, "SIND SIE SICHER?"
+	sd_quad	0x22, 2, 33, 267, 201
+	sd_quad	0x09, 72, 66, 198, 67
+; static record list (9 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x45DE
+; evidence: bounds at SeScreenData_0x46B4
+SeScreenData_0x4560:
+	sd_ctext	0x08, 14, 54*40+7, "ATTENTION!"
+	sd_ctext	0x07, 28, 93*40+5, "COPIE DU DRUMKIT VERS LE"
+	sd_ctext	0x07, 13, 118*40+5, "USER KIT."
+	sd_ctext	0x07, 23, 155*40+8, "VEUILLEZ CONFIRMER,"
+	sd_ctext	0x07, 5, 171*40+10, ","
+	sd_ctext	0x07, 5, 181*40+9, "S"
+	sd_ctext	0x07, 18, 181*40+11, "IL VOUS PLAIT!"
+	sd_quad	0x22, 3, 37, 270, 210
+	sd_quad	0x09, 54, 70, 216, 71
+; static record list (7 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x464E
+; evidence: bounds at SeScreenData_0x46B4
+SeScreenData_0x45DE:
+	sd_ctext	0x08, 13, 65*40+8, "ATENCION!"
+	sd_ctext	0x07, 33, 99*40+3, "COPIA DEL EQUIPO DE TAMBOR EN"
+	sd_ctext	0x07, 26, 125*40+3, "EL EQUIPO DEL USUARIO."
+	sd_ctext	0x08, 9, 163*40+4, "\273EST\264"
+	sd_ctext	0x08, 11, 163*40+16, "SEGURO?"
+	sd_quad	0x22, 7, 47, 267, 204
+	sd_quad	0x09, 64, 81, 203, 82
+; static record list (8 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x46B4
+; evidence: bounds at SeScreenData_0x46B4
+SeScreenData_0x464E:
+	sd_ctext	0x08, 15, 66*40+6, "ATTENZIONE!"
+	sd_ctext	0x07, 25, 107*40+6, "COPIATURA DEL DRUMKIT"
+	sd_ctext	0x07, 5, 123*40+9, ","
+	sd_ctext	0x07, 7, 133*40+6, "ALL"
+	sd_ctext	0x07, 13, 133*40+10, "USER KIT."
+	sd_ctext	0x08, 17, 171*40+4, "SIETE SICURI?"
+	sd_quad	0x22, 7, 47, 267, 204
+	sd_quad	0x09, 46, 82, 221, 83
+; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
+; evidence: SeMenu_WaveformSelect_Apply
+SeScreenData_0x46B4:
+	.long	SeScreenData_0x4486
+	.long	SeScreenData_0x44F5
+	.long	SeScreenData_0x4560
+	.long	SeScreenData_0x45DE
+	.long	SeScreenData_0x464E
+	.long	SeScreenData_0x46B4
+; static record list (24 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x4726, SeScreenData_0x4744, SeScreenData_0x4762 ...
+; evidence: SeMenu_NameEdit_DataBlock1
+SeScreenData_0x46CC:
+	sd_ctext	0x06, 5, 218*40+2, "\215"
+	sd_ctext	0x06, 5, 228*40+2, "\216"
+	sd_quad	0x22, 9, 218, 30, 238
+	sd_quad	0x01, 9, 228, 30, 228
+	sd_ctext	0x06, 5, 218*40+7, "\215"
+	sd_ctext	0x06, 5, 228*40+7, "\216"
+	sd_quad	0x22, 49, 218, 70, 238
+	sd_quad	0x01, 49, 228, 70, 228
+	sd_ctext	0x06, 5, 218*40+12, "\215"
+	sd_ctext	0x06, 5, 228*40+12, "\216"
+	sd_quad	0x22, 89, 218, 110, 238
+	sd_quad	0x01, 89, 228, 110, 228
+	sd_ctext	0x06, 5, 218*40+17, "\215"
+	sd_ctext	0x06, 5, 228*40+17, "\216"
+	sd_quad	0x22, 129, 218, 150, 238
+	sd_quad	0x01, 129, 228, 150, 228
+	sd_ctext	0x06, 5, 218*40+22, "\215"
+	sd_ctext	0x06, 5, 228*40+22, "\216"
+	sd_quad	0x22, 169, 218, 190, 238
+	sd_quad	0x01, 169, 228, 190, 228
+	sd_ctext	0x06, 5, 218*40+27, "\215"
+	sd_ctext	0x06, 5, 228*40+27, "\216"
+	sd_quad	0x22, 209, 218, 230, 238
+	sd_quad	0x01, 209, 228, 230, 228
+; static record list (8 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x47BC
+; evidence: SeMenu_NameEdit_DataBlock1
+SeScreenData_0x4780:
+	sd_ctext	0x06, 5, 218*40+32, "\215"
+	sd_ctext	0x06, 5, 228*40+32, "\216"
+	sd_quad	0x22, 249, 218, 270, 238
+	sd_quad	0x01, 249, 228, 270, 228
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x47BC
+; evidence: SeMenu_NameEdit_DataBlock1
+SeScreenData_0x479E:
+	sd_ctext	0x06, 5, 218*40+37, "\215"
+	sd_ctext	0x06, 5, 228*40+37, "\216"
+	sd_quad	0x22, 289, 218, 310, 238
+	sd_quad	0x01, 289, 228, 310, 228
+; static record list (31 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x48DB
+; evidence: SeMenu_NameEdit_DataBlock1
+SeScreenData_0x47BC:
+	sd_ctext	0x06, 13, 160*40+11, "INTENSITY"
+	sd_ctext	0x06, 5, 160*40+25, ":"
+	sd_ptext	0x17, 13, 240, 209, "INTENS."
+; static record list (28 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x48DB
+; evidence: SeMenu_NameEdit_DataBlock1
+SeScreenData_0x47DB:
+	sd_op23	0x0a, 3*40+10
+	sd_ptext	0x1c, 20, 111, 5, "DIGITAL EFFECT"
+	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
+	sd_ctext	0x06, 8, 51*40+11, "TYPE"
+	sd_ctext	0x06, 5, 51*40+16, ":"
+	sd_ptext	0x17, 7, 310, 70, "\221"
+	sd_ctext	0x07, 5, 73*40+0, "\020"
+	sd_ctext	0x07, 7, 73*40+36, "\215  "
+	sd_ctext	0x07, 5, 74*40+39, "\251"
+	sd_ctext	0x06, 8, 93*40+34, "TYPE"
+	sd_ptext	0x17, 7, 310, 109, "\221"
+	sd_ctext	0x07, 5, 112*40+0, "\020"
+	sd_ctext	0x07, 7, 112*40+36, "\216  "
+	sd_ctext	0x07, 5, 113*40+39, "\251"
+	sd_ctext	0x06, 19, 175*40+11, "REVERB DEPTH  :"
+	sd_ptext	0x17, 12, 282, 209, "REVERB"
+	sd_quad	0x09, 4, 4, 68, 16
+	sd_quad	0x22, 71, 46, 251, 187
+	sd_quad	0x09, 274, 69, 309, 88
+	sd_quad	0x09, 12, 70, 44, 89
+	sd_quad	0x09, 276, 71, 307, 86
+	sd_quad	0x09, 14, 72, 42, 87
+	sd_quad	0x09, 12, 108, 68, 127
+	sd_quad	0x09, 274, 108, 309, 127
+	sd_quad	0x09, 14, 110, 66, 125
+	sd_quad	0x09, 276, 110, 307, 125
+	sd_quad	0x01, 71, 65, 251, 65
+	sd_op23	0x0a, 3*40+10
+; static record list (15 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x495E
+; evidence: pairs at SeScreenData_0x4BFE
+SeScreenData_0x48DB:
+	sd_ctext	0x06, 9, 70*40+11, "DEPTH"
+	sd_ctext	0x06, 5, 70*40+25, ":"
+	sd_ctext	0x06, 9, 85*40+11, "SPEED"
+	sd_ctext	0x06, 5, 85*40+25, ":"
+	sd_ctext	0x06, 10, 100*40+11, "DETUNE"
+	sd_ctext	0x06, 5, 100*40+25, ":"
+	sd_ctext	0x06, 9, 115*40+11, "DELAY"
+	sd_ctext	0x06, 5, 115*40+25, ":"
+	sd_ctext	0x06, 11, 130*40+11, "BALANCE"
+	sd_ctext	0x06, 5, 130*40+25, ":"
+	sd_ptext	0x17, 11, 6, 209, "DEPTH"
+	sd_ptext	0x17, 11, 45, 209, "SPEED"
+	sd_ptext	0x17, 12, 82, 209, "DETUNE"
+	sd_ptext	0x17, 11, 124, 209, "DELAY"
+	sd_ptext	0x17, 13, 160, 209, "BALANCE"
+; static record list (18 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x49FE
+; evidence: pairs at SeScreenData_0x4BFE
+SeScreenData_0x495E:
+	sd_ctext	0x06, 10, 70*40+11, "DEPTH1"
+	sd_ctext	0x06, 5, 70*40+25, ":"
+	sd_ctext	0x06, 10, 85*40+11, "SPEED1"
+	sd_ctext	0x06, 5, 85*40+25, ":"
+	sd_ctext	0x06, 10, 100*40+11, "DEPTH2"
+	sd_ctext	0x06, 5, 100*40+25, ":"
+	sd_ctext	0x06, 10, 115*40+11, "SPEED2"
+	sd_ctext	0x06, 5, 115*40+25, ":"
+	sd_ctext	0x06, 10, 130*40+11, "DETUNE"
+	sd_ctext	0x06, 5, 130*40+25, ":"
+	sd_ctext	0x06, 9, 145*40+11, "DELAY"
+	sd_ctext	0x06, 5, 145*40+25, ":"
+	sd_ptext	0x17, 12, 2, 209, "DEPTH1"
+	sd_ptext	0x17, 12, 42, 209, "SPEED1"
+	sd_ptext	0x17, 12, 82, 209, "DEPTH2"
+	sd_ptext	0x17, 12, 122, 209, "SPEED2"
+	sd_ptext	0x17, 12, 162, 209, "DETUNE"
+	sd_ptext	0x17, 11, 205, 209, "DELAY"
+; static record list (12 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4A64
+; evidence: pairs at SeScreenData_0x4BFE
+SeScreenData_0x49FE:
+	sd_ctext	0x06, 9, 70*40+11, "DEPTH"
+	sd_ctext	0x06, 5, 70*40+25, ":"
+	sd_ctext	0x06, 9, 85*40+11, "SPEED"
+	sd_ctext	0x06, 5, 85*40+25, ":"
+	sd_ctext	0x06, 8, 100*40+11, "WAVE"
+	sd_ctext	0x06, 5, 100*40+25, ":"
+	sd_ctext	0x06, 11, 115*40+11, "BALANCE"
+	sd_ctext	0x06, 5, 115*40+25, ":"
+	sd_ptext	0x17, 11, 5, 209, "DEPTH"
+	sd_ptext	0x17, 11, 44, 209, "SPEED"
+	sd_ptext	0x17, 10, 88, 209, "WAVE"
+	sd_ptext	0x17, 13, 119, 209, "BALANCE"
+; static record list (12 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4AD0
+; evidence: pairs at SeScreenData_0x4BFE
+SeScreenData_0x4A64:
+	sd_ctext	0x06, 10, 70*40+11, "DEPTH1"
+	sd_ctext	0x06, 5, 70*40+25, ":"
+	sd_ctext	0x06, 10, 85*40+11, "SPEED1"
+	sd_ctext	0x06, 5, 85*40+25, ":"
+	sd_ctext	0x06, 10, 100*40+11, "DEPTH2"
+	sd_ctext	0x06, 5, 100*40+25, ":"
+	sd_ctext	0x06, 10, 115*40+11, "SPEED2"
+	sd_ctext	0x06, 5, 115*40+25, ":"
+	sd_ptext	0x17, 12, 2, 209, "DEPTH1"
+	sd_ptext	0x17, 12, 42, 209, "SPEED1"
+	sd_ptext	0x17, 12, 82, 209, "DEPTH2"
+	sd_ptext	0x17, 12, 122, 209, "SPEED2"
+; static record list (12 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4B3C
+; evidence: pairs at SeScreenData_0x4BFE
+SeScreenData_0x4AD0:
+	sd_ctext	0x06, 9, 70*40+11, "DELAY"
+	sd_ctext	0x06, 5, 70*40+25, ":"
+	sd_ctext	0x06, 10, 85*40+11, "DETUNE"
+	sd_ctext	0x06, 5, 85*40+25, ":"
+	sd_ctext	0x06, 13, 100*40+11, "KEY SHIFT"
+	sd_ctext	0x06, 5, 100*40+25, ":"
+	sd_ctext	0x06, 11, 115*40+11, "BALANCE"
+	sd_ctext	0x06, 5, 115*40+25, ":"
+	sd_ptext	0x17, 11, 2, 209, "DELAY"
+	sd_ptext	0x17, 12, 42, 209, "DETUNE"
+	sd_ptext	0x17, 9, 91, 209, "KEY"
+	sd_ptext	0x17, 13, 120, 209, "BALANCE"
+; static record list (12 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4BA8
+; evidence: pairs at SeScreenData_0x4BFE
+SeScreenData_0x4B3C:
+	sd_ctext	0x06, 9, 70*40+11, "SPEED"
+	sd_ctext	0x06, 5, 70*40+25, ":"
+	sd_ctext	0x06, 9, 85*40+11, "DECAY"
+	sd_ctext	0x06, 5, 85*40+25, ":"
+	sd_ctext	0x06, 11, 100*40+11, "SUSTAIN"
+	sd_ctext	0x06, 5, 100*40+25, ":"
+	sd_ctext	0x06, 11, 115*40+11, "RELEASE"
+	sd_ctext	0x06, 5, 115*40+25, ":"
+	sd_ptext	0x17, 11, 4, 209, "SPEED"
+	sd_ptext	0x17, 11, 45, 209, "DECAY"
+	sd_ptext	0x17, 13, 80, 209, "SUSTAIN"
+	sd_ptext	0x17, 13, 128, 209, "RELEASE"
+; static record list (9 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4BFE
+; evidence: pairs at SeScreenData_0x4BFE
+SeScreenData_0x4BA8:
+	sd_ctext	0x06, 14, 70*40+11, "DISTORTION"
+	sd_ctext	0x06, 5, 70*40+25, ":"
+	sd_ctext	0x06, 15, 85*40+11, "TOUCH DEPTH"
+	sd_ctext	0x06, 5, 85*40+25, ":"
+	sd_ctext	0x06, 9, 100*40+11, "DEPTH"
+	sd_ctext	0x06, 5, 100*40+25, ":"
+	sd_ptext	0x17, 11, 7, 209, "DIST."
+	sd_ptext	0x17, 11, 45, 209, "TOUCH"
+	sd_ptext	0x17, 11, 85, 209, "DEPTH"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1580A-0xF15846 (60 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=81% dist=10 near TuningSystem_Handler_Table_0x23BD+6
-	.byte 0xf1, 0x00, 0xe1, 0x54, 0xf1, 0x00, 0x64, 0x55, 0xf1, 0x00, 0xe1, 0x54
-	.byte 0xf1, 0x00, 0x64, 0x55, 0xf1, 0x00, 0xe1, 0x54, 0xf1, 0x00, 0x64, 0x55
-	.byte 0xf1, 0x00, 0x64, 0x55, 0xf1, 0x00, 0x04, 0x56, 0xf1, 0x00, 0x64, 0x55
-	.byte 0xf1, 0x00, 0x04, 0x56, 0xf1, 0x00, 0x04, 0x56, 0xf1, 0x00, 0x6a, 0x56
-	.byte 0xf1, 0x00, 0x6a, 0x56, 0xf1, 0x00, 0xd6, 0x56, 0xf1, 0x00, 0xd6, 0x56
-	.byte 0xf1, 0x00, 0x42, 0x57, 0xf1, 0x00, 0x42, 0x57, 0xf1, 0x00, 0xae, 0x57, 0xf1, 0x00, 0xae, 0x57, 0xf1, 0x00, 0x04, 0x58, 0xf1, 0x00, 0xae, 0x57, 0xf1, 0x00, 0x04, 0x58, 0xf1, 0x00, 0x02, 0x0f
+; (start, end) pair table, 8 bytes per list (24 entries, LE32)
+; evidence: SeMenu_NameEdit_DataBlock1
+SeScreenData_0x4BFE:
+	.long	SeScreenData_0x48DB, SeScreenData_0x495E
+	.long	SeScreenData_0x48DB, SeScreenData_0x495E
+	.long	SeScreenData_0x48DB, SeScreenData_0x495E
+	.long	SeScreenData_0x48DB, SeScreenData_0x495E
+	.long	SeScreenData_0x495E, SeScreenData_0x49FE
+	.long	SeScreenData_0x495E, SeScreenData_0x49FE
+	.long	SeScreenData_0x49FE, SeScreenData_0x4A64
+	.long	SeScreenData_0x4A64, SeScreenData_0x4AD0
+	.long	SeScreenData_0x4AD0, SeScreenData_0x4B3C
+	.long	SeScreenData_0x4B3C, SeScreenData_0x4BA8
+	.long	SeScreenData_0x4BA8, SeScreenData_0x4BFE
+	.long	SeScreenData_0x4BA8, SeScreenData_0x4BFE
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15866-0xF15877 (17 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=100% dist=12 near TuningSystem_Handler_Table_0x241D+2
-	.byte 0x60, 0x06, 0x0f, 0x00, 0x20, 0x01, 0x5b, 0xf1, 0x00, 0x0d, 0x00, 0x09
-	.byte 0x08, 0x02, 0x0f, 0x60, 0x06
-	.byte 0x80, 0x07
-	ld	w, 215:opc
-	push_a
-	ld	(768:16), 186
-	pushw 3842
-	jr	f, 6
-	ld	xwa, 0x5b9d2006
-	ld	(1536:16), 170
-	scf
-	halt
-	pushw 1640
-	swi	7
-	nop
-	ld	w, 115:opc
-	jp	0x050002
-	pushw 1639
-	swi	7
-	nop
-	ld	w, 27:opc
-	pop_f
-	push	sr
-	nop
+; bound record list (5 records), read by GraphicsRender_Start; ends SeScreenData_0x4C96, SeScreenData_End
+; evidence: SeMenu_NameEdit_DataBlock1
+SeScreenData_0x4C5E:
+	sdb_str	0x0660, 0x0f, 0, 0x20, 0x00f15b01, 13, 51*40+17
+; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x4C8B
+; evidence: SeMenu_PatchEdit_DataBlock
+SeScreenData_0x4C6D:
+	sdb_str	0x0660, 0x80, 7, 0x20, SeScreenData_0x08D1, 3, 75*40+2
+	sdb_str	0x0660, 0x40, 6, 0x20, 0x00f15b9d, 6, 113*40+2
+	sdb_snum	0x0668, 0xff, 0, 0x20, 175*40+27, 2, 0x00
+	sdb_snum	0x0667, 0xff, 0, 0x20, 160*40+27, 2, 0x00
+SeScreenData_End:
 
 	.include "storage/flash_floppy_handlers.s"
 

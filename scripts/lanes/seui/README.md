@@ -14,3 +14,39 @@ The rename itself is `scripts/renaming/rename_seui_gfx_wrappers.sed` (applied to
 the three `sound_editor_ui.s`).  `scripts/renaming/rename_maincpu_seq_init_labels.py`
 still holds the old `SeMenu_NameEditor_*` names: it is the historical record of
 an earlier pass and is deliberately left as it was.
+
+## The screen-data block (`SeScreenData` .. `SeScreenData_End`)
+
+| script | question it answers | command |
+|---|---|---|
+| `se_screendata_model.py` | What is every byte of the 19,617-byte block v10/v9 0xF10C06-0xF158A7 (v7 -0x2A), and which code or pointer field pins it? Seeds on every `ld xiy/xix/xiz, imm32` into the block, walks the code symbolically to the `SeGfx_*` call, parses each list exactly as the interpreter does, follows every pointer field the handlers dereference. | `python3 scripts/lanes/seui/se_screendata_model.py --image v10 [--json out.json]` |
+| `se_screendata_render.py` | Re-spell the block as typed data (one macro line per record, `.long` tables, `.ascii` cells, `.short` boxes, one `.byte 0b........` per bitmap byte) keeping the C-descriptor `.incbin`s, comments, `.set`s and referenced labels. `--apply` writes; `make gate` certifies. | `python3 scripts/lanes/seui/seui_amap.py --image v10 --out A.json --files audio/sound_editor_ui.s && python3 scripts/lanes/seui/se_screendata_render.py --image v10 --amap A.json --apply` |
+| `gate_perturbed_2026-09-25.log` | Does the byte gate SEE the rendered data? One number changed in one record (`sd_quad 0x09, 5, 30, 43, 47` -> `48`): `make gate` went red, `kn5000_v10_program 1 BYTES DIFFER` (at 0xF1144A). Restored before commit. | (a log, not a script) |
+
+What the model established (v10; v9 and v7 have identical structure):
+
+* **248 record lists, every one parsing EXACTLY to the end its code states** --
+  0 over/under-runs, from 143 code sites; 1,382 records (1,188 static, 194
+  bound), 13,709 B.  A misread length anywhere in a list would miss its end;
+  that is the falsifiable test of the framing.
+* 128 single records, 13 list-boundary tables (entry i..i+1 = list i), 17
+  record-pointer tables (read by the helper at v10 0xF10BE7, `xiy=table[wa]`),
+  8 list-start tables, 1 (start,end) pair table, 1 record-group table
+  (`ptr + 10*value`), 24 string tables, 12 box tables, 4 u16 coordinate
+  tables, 13 bitmaps.
+* Record layouts are the handlers' reads, each disassembled from the ROM with
+  MAME unidasm: see the macro header at `SeScreenData` in
+  `audio/sound_editor_ui.s`.
+* Bitmaps are stored COLUMN BY COLUMN: the blitter reached from static op 03
+  (v10 0xFAFB48) loops y inside each 8-pixel column (`incw 1,(xsp+8)`,
+  `add (xsp+0x18),1`) and only then steps x by 8 (`incw 0,(xsp+6)`).  Read that
+  way the 13 bitmaps are coherent pictures (six 40x40 envelope curves, four
+  24x10 patterns, a filled and an empty 16x12 circle, one unreferenced 40x40
+  picture); a row-major reading is noise.
+* 314 B have no reader (listed with their admission in the source): a 40x40
+  picture, a duplicate of a referenced string table, two identical 30-byte
+  record groups and a 20-byte one inside C blocks, and `"+-"`.
+* ⚠ Correction to `sound_editor_screens/*.c`: `SD_LABELED_REF_TYPE.addr`
+  (op 06) is not an address -- the op-06 handler divides it by 40; it is the
+  y*40 + x/8 cell position.  The "op 0x02 subtype" there is the ordinary length
+  byte.  The C files still compile byte-exact and are left as they are.

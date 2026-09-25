@@ -19,7 +19,7 @@ RUN
 """
 import argparse, json, os, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(HERE))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import data_range_census as drc  # noqa: E402
 
