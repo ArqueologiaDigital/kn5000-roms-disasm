@@ -4564,7 +4564,7 @@ MainVocalistPage2OKFunc:
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
+	call	ApPostEvent
 VocalistPage2_ReturnZero:
 	ld xhl, 0:i3
 	ret

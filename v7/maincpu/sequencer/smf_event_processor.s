@@ -693,13 +693,13 @@ SMF_SysEx_CheckBlockLimit:
 	ld	xix, xiy
 	ld	xiy, 4206
 	.byte 0x85, 0x11	; ldir
-	call	15888211
+	call	SysEx_ReadBytesLoop_Init
 	cpdi8	(6880), 255
 	jr	z, 19
 	ld	xwa, 6753
 	ld	xbc, 0:i3
 	call	16623141
-	jp	15888210
+	jp	Seq_ReturnToDispatcher
 Seq_AdvanceBlock:
 	call Sequencer_AdvanceBlockPosition
 
@@ -840,7 +840,7 @@ SeqPlay_QueueDisplayEvent:
 	ld	d, 3:opc
 	ld	w, 4:opc
 	call	16624640
-	call	15668398
+	call	SwbtWr_ReinitBothBanks
 	call	16625070
 	ret
 SMF_InitPlaybackState:
@@ -8697,7 +8697,7 @@ FDC_Format2DD_WriteFAT2:
 	calr	65096
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	612	; -> 0xF51E86
@@ -8720,7 +8720,7 @@ FDC_Format2DD_WriteRoot:
 	calr	65035
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	551	; -> 0xF51E86
@@ -8779,7 +8779,7 @@ FDC_Format2DD_WriteDataSec2:
 	calr	64865
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	381	; -> 0xF51E86
@@ -8802,7 +8802,7 @@ FDC_Format2DD_WriteDataSec3:
 	calr	64804
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	320	; -> 0xF51E86

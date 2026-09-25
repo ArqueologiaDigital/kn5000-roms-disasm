@@ -353,7 +353,7 @@ SeqPlay_ResetPlaybackState:
 	ldmm16 0x28c6, 0x28a8
 
 SeqPlay_InitTempoAndActivateParts:
-	call	15672539
+	call	TempoRingBuf_Init
 	ldw_d16	wa, (10408)
 	cp	wa, 0:i3
 	jr	z, 38
@@ -740,7 +740,7 @@ SeqAcc_ProcessTempo_NextPart:
 	setda	4, (10419)
 	resda	3, (10407)
 	ldw	wa, 35
-	call	16017021
+	call	SoundCtrl_SaveAndSendCmd_EE
 	jr	41
 SeqAcc_ProcessTempo_NoActiveParts:
 	ldw (0x28aa:16), 0
@@ -758,10 +758,10 @@ SeqAcc_ProcessTempo_NoActiveParts:
 	ldw wa, 0x32
 
 	; call SeqBuf_WriteNoteOffEntry (v7 addr)
-	call	15982563
+	call	SeqBuf_WriteNoteOffEntry
 
 	; call Part_ReinitAllActive (v7 addr)
-	call	16557167
+	call	Part_ReinitAllActive
 
 
 
@@ -787,7 +787,7 @@ SeqPlay_SelectStopCommand_Default18:
 
 SeqPlay_SendStopAndClearParts:
 	; call SoundCtrl_SaveAndSendCmd_EE (v7 addr)
-	call	16017021
+	call	SoundCtrl_SaveAndSendCmd_EE
 
 	; resda 0, 0x8d88 (v7 patched)
 	resda	0, (36076)
@@ -1180,7 +1180,7 @@ SeqPlay_SyncPosition_StopAndReset:
 	jr	nz, 15
 	stdi8	(8956), 0
 	ldmm16	9832, 62010
-	call	16016598
+	call	NoteEditSy_SendModeScrollReset
 SeqPlay_PopIzRet:
 	popw iz
 	ret
@@ -2205,14 +2205,14 @@ SeqPlay_InitFresh_PartLoopNext:
 	call	16635550
 SeqPlay_InitFresh_SetPosition:
 	ldw	(9008:16), 0
-	call	16016598
+	call	NoteEditSy_SendModeScrollReset
 	ei	0x06
 	ldw	(1052:16), 0
 	ld	(1051:16), 0
 	ei	0x00
 	ld	a, (1075:16)
 	ld	(9010:16), a
-	call	16016734
+	call	SeqMode_SendStatusUpdate
 	cpw	(61854:16), 0
 	jr	z, 10
 	setda	3, (10419)
@@ -2228,7 +2228,7 @@ SeqPlay_InitFresh_NoVoices:
 
 SeqPlay_InitFresh_TempoInit:
 	call	16635550
-	call	15672539
+	call	TempoRingBuf_Init
 	call	16625030
 	bitda	0, (10418)
 	jr	nz, 16
@@ -2402,7 +2402,7 @@ SeqPlay_SaveState_NoActiveParts:
 	bitda	0, (10418)
 	jr	z, 10
 	ldmm16	9832, 9014
-	call	16016598
+	call	NoteEditSy_SendModeScrollReset
 SeqPlay_SaveState_CheckBit1:
 	bit 1, (0x28b3:16)
 	jr nz, SeqPlay_SaveState_SetPlayFlags
@@ -2589,12 +2589,12 @@ SeqPlay_HandleEvent_StopAndClean:
 	stda16	(8980), wa
 	stdi16	(10420), 0
 	ldw	wa, 50
-	call	15982563
-	call	16648638
-	call	16641574
-	call	15987051
-	call	15982509
-	call	16179766
+	call	SeqBuf_WriteNoteOffEntry
+	call	Interrupt_FlagSetBytecode_Helper2
+	call	Interrupt_FlagSetBytecode_Helper
+	call	VoiceAlloc_ProcessAll
+	call	BitMapOut_PrepareAndDisplaySimple
+	call	AccompSeq_StopSequence
 	cpdi16	(61854), 0
 	jr	z, 112
 	cpdi8	(35992), 19
@@ -2604,7 +2604,7 @@ SeqPlay_HandleEvent_StopAndClean:
 	stdi16	(10420), 0
 SeqPlay_HandleEvent_SyncTiming:
 	setda	2, (10407)
-	call	15983021
+	call	Seq_SyncPositionAndOutputMIDITiming
 	stdi8	(1073), 0
 	call	16635550
 	ldb_d8	a, (13278)
@@ -2677,13 +2677,13 @@ SeqPlay_ProcessVoice_CheckActive:
 	call Part_WriteSubBlock32
 SeqPlay_StopAndCleanup:
 	ldw	wa, 50
-	call	15982563
-	call	16648638
-	call	16641574
-	call	15987051
-	call	15982432
-	call	16179766
-	call	16094901
+	call	SeqBuf_WriteNoteOffEntry
+	call	Interrupt_FlagSetBytecode_Helper2
+	call	Interrupt_FlagSetBytecode_Helper
+	call	VoiceAlloc_ProcessAll
+	call	BitMapOut_PrepareAndDisplay
+	call	AccompSeq_StopSequence
+	call	AccWrap_PlayModeDispatch
 	ld	a, (10418:16)
 	res	2, a
 	res	1, a
@@ -2693,7 +2693,7 @@ SeqPlay_StopAndCleanup:
 	ldw	(10420:16), 0
 	resda	3, (10419)
 	call	16635550
-	call	15984117
+	call	SeqBuffer_ClearAndInitIteration
 	call	16635550
 	jrl	178
 SeqPlay_ProcessVoice_ReadTempo:
@@ -5106,7 +5106,7 @@ AccPedalTempo_ClearBit7:
 	call	16624211
 
 	; call SeqTimer_UpdateTempoReg (v7 addr)
-	call	16554829
+	call	SeqTimer_UpdateTempoReg
 
 	ld l, 0x0:opc
 
@@ -7212,14 +7212,14 @@ SeqPlay_EmergencyStopAll:
 	stdi8	(8976), 1
 	ldw	(0xf19e:16), 0x0000
 	call	16635550
-	call	16094959
+	call	AccWrap_PositionClear
 	resda	0, (10406)
 	ldw	wa, 50
-	call	15982563
-	call	16648638
-	call	16641574
-	call	15987051
-	call	15982432
+	call	SeqBuf_WriteNoteOffEntry
+	call	Interrupt_FlagSetBytecode_Helper2
+	call	Interrupt_FlagSetBytecode_Helper
+	call	VoiceAlloc_ProcessAll
+	call	BitMapOut_PrepareAndDisplay
 	stdi8	(8976), 0
 	ret
 Seq_ResetAndRestartAccompaniment:
@@ -8661,8 +8661,8 @@ SeqActivate_PartLoopNext:
 	ldw	(10410:16), 0
 	ldw	wa, 50
 	call	SeqBuf_WriteNoteOffEntry
-	call	16648638
-	call	16641574
+	call	Interrupt_FlagSetBytecode_Helper2
+	call	Interrupt_FlagSetBytecode_Helper
 	call	VoiceAlloc_ProcessAll
 	call	BitMapOut_PrepareAndDisplay
 	call	16635550
@@ -8959,9 +8959,9 @@ SeqBufDirect_Return:
 	ret
 
 SeqBuf_FlushAndReinit_NoteEvents:
-	call	15672433
+	call	SeqBuf_SaveWritePos
 	call	16646645
-	call	15672365
+	call	SeqBuf_Init
 	ld	(7556:16), 0
 	ret
 SeqBuf_FlushAndReinit_VoiceCCEvents:
@@ -9712,7 +9712,7 @@ PartDeact_CheckSysFlags:
 	ldw	(0xf19e:16), 0x0000
 	call	16635550
 	call	16635550
-	call	15672365
+	call	SeqBuf_Init
 	jr	50
 PartDeact_SendVoiceOff:
 	calr Part_SendVoiceOffAndCCEvents
@@ -9761,7 +9761,7 @@ AccompMode_ApplyAndNotify:
 	ld	(61854:16), wa
 	call	16635550
 	ldw	wa, 76
-	jp	16544114
+	jp	CtrlPanel_SetIndicatorBit
 Accomp_ValidateAutoPlayChordVoice:
 	pushw_erp 0xfa
 	ldib_erp 0xfb, 1
@@ -19066,7 +19066,7 @@ SeqPlay_DeactClearBit:
 	jr	nz, 16
 	bitda	2, (1054)
 	jr	z, 6
-	call	16094927
+	call	AccWrap_PlayModeStopExpr
 	jr	4
 SeqPlay_DeactDispatchAccomp:
 	call AccWrap_PlayModeDispatch
@@ -19235,7 +19235,7 @@ SeqVoice_DeactivateAndReinit:
 	ldw	(0x41c:16), 0x0000
 	stdi8	(1051), 0
 	ei	0x00
-	call	15672365
+	call	SeqBuf_Init
 SeqDeact_DetectTypeReturn:
 	calr Part_DetectSingleVoiceType
 	inc 2, xsp
@@ -19530,9 +19530,9 @@ SeqPlay_StopAndClearChannels:
 	ldw	(10408:16), 0
 	call	16635550
 	ldw	(10410:16), 0
-	call	15672539
+	call	TempoRingBuf_Init
 	ldw	wa, 15
-	call	16017021
+	call	SoundCtrl_SaveAndSendCmd_EE
 	ldw	wa, 8
 	jp	16692690
 SeqPlay_StopAndClearSequence:
@@ -23244,12 +23244,12 @@ SeqAccomp_StartHandler:
 	ldda32	xwa, (10610)
 	ld	xbc, 29360143
 	ld	xde, 11
-	call	16423418
+	call	ApDeliveryEvent
 	ldmm16	10296, 61854
 	bitda	2, (1057)
 	jrl	nz, 370
 ApPlaySyori_Skip15:
-	call	15984591
+	call	SeqPlay_AllocBuffersAndInit
 	jrl	363
 SeqAccomp_StartHelper:
 	cpdi8	(35994), 133
@@ -23288,11 +23288,11 @@ SeqAccomp_HandleStartStop:
 	call	16635550
 	ld	xwa, 8716308
 	ld	bc, 0:i3
-	call	16407167
+	call	SetVisible
 	ld	xwa, 8716307
 	ld	xbc, 31457436
 	ld	xde, 0:i3
-	call	16423418
+	call	ApDeliveryEvent
 	jrl	207
 SeqAccomp_ActivateAndAssign:
 	call SeqVoice_ScanAndAssignParts
@@ -24334,9 +24334,9 @@ SqRealRec_SetBitMaskLoop:
 	ld (0x28be:16), a
 
 SqRealRec_DetectAndInit:
-	call	15982646
+	call	Part_DetectSingleVoiceType
 	call	16635550
-	call	15965303
+	call	SeqPlay_InitializePlayback
 	ld	(9508:16), 0
 	jr	11
 SqRealRec_HandleExitState:
@@ -24807,7 +24807,7 @@ MainExeCall:
 MainExe_HandleD6:
 	call	16648347
 	call	16626122
-	call	16005707
+	call	SeqData_SendVoiceTableBlock
 	jrl	1042
 MainExe_Handle83:
 	calr MainExe_SequencerStop
@@ -25274,25 +25274,25 @@ MainExe_SeqStopFinish:
 	ld	wa, 0:i3
 	ldw	bc, 80
 	ldw	de, 65535
-	call	15996213
+	call	Part_WriteWord
 	ld	wa, 0:i3
 	ldw	bc, 50
-	call	15987532
+	call	Part_ReleaseVoicesForRange
 	ldw	(0xf19e:16), 0x0000
 	call	16635550
-	call	16094959
+	call	AccWrap_PositionClear
 	resda	0, (10406)
 	stiw_da	(65516), 0
 	stdi8	(9980), 1
-	call	15982646
+	call	Part_DetectSingleVoiceType
 	ldw	wa, 11
-	jp	16355414
+	jp	UI_PostPartChangeEvent
 MainPanic:
 	cp	xbc, 31981686
 	jr	nz, 12
 	call	16648347
 	call	16626122
-	call	16005707
+	call	SeqData_SendVoiceTableBlock
 MainPanic_ReturnZero:
 	ld xhl, 0:i3
 	ret
@@ -25491,15 +25491,15 @@ SeqLoad_PostInitParts:
 	ld	wa, 1:i3
 	ld	bc, 4:i3
 	ld	de, 0:i3
-	call	15996176
+	call	Part_WriteByte
 	calr	1843
-	call	16049013
+	call	SeqStep_FindLastUsedPart
 	ld	a, (0xffe3:24)
 	extz	wa
-	call	15995928
+	call	VoicePreset_LoadAndInitPan
 	cpdi16	(61902), 0
 	jr	z, 17
-	call	16049062
+	call	SeqStep_FindAndCompactEntry
 	ldw	(0xf19e:16), (0xffec:24)
 	call	16635550
 	jr	9
@@ -25529,16 +25529,16 @@ SeqLoad_AltInitParts:
 	ld	wa, 1:i3
 	ld	bc, 4:i3
 	ld	de, 0:i3
-	call	15996176
+	call	Part_WriteByte
 	ld	(0xffe3:24), 0x00
-	call	16049013
+	call	SeqStep_FindLastUsedPart
 	ld	a, (0xffe3:24)
 	extz	wa
-	call	15995928
+	call	VoicePreset_LoadAndInitPan
 	ldw	(0xffec:24), (0xf19e:16)
 	cpdi16	(61902), 0
 	jr	z, 10
-	call	16049062
+	call	SeqStep_FindAndCompactEntry
 	call	16635550
 	jr	9
 SeqLoad_AltSetPositions:

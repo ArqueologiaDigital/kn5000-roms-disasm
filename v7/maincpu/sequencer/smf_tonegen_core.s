@@ -262,7 +262,7 @@ FloppyIO_ConfigSwb_QueueEvent:
 
 FloppyIO_ConfigSwb_DispatchAndReinit:
 	call	16624640
-	call	15668398
+	call	SwbtWr_ReinitBothBanks
 	ret
 SeqPlay_PrepareAndScanChannels:
 	call SeqPlay_CheckStartConditions
