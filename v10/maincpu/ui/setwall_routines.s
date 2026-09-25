@@ -631,20 +631,13 @@ SetWall_CrossTypeChange:
 	call Audio_CheckSubsystemReady
 	ret
 
+; 20 x u8 slot -> type map, 0xFF = no type.  SetWall_CrossType_MapLookup reads it with
+; `ld xde,<this>; ld l,(xde+hl)` (hl = slot) and branches to SetWall_CrossType_Reset on
+; 0xFF; SetWall_ParseB0ControlChange does the same lookup and compares the entry with a.
+; (Formerly decoded as instructions.)
 SetWall_SlotTypeMap:
-	nop
-	push	sr
-	normal
-	reti
-	ld	(9:8), 10:io
-	pushw	1284
-	ei	3
-	retd	0xffff
-	swi	7
-	swi	7
-	incf
-	decf
-	ret
+	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05
+	.byte 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff, 0xff, 0x0c, 0x0d, 0x0e
 
 SetWall_CrossType_Validate:
 	and (0x2879:16), 252
