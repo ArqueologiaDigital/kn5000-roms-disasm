@@ -341,108 +341,34 @@ VoiceChannel_StoreParamPtr:
 	ret
 
 VoiceChannel_ParamTable1:
-	.byte 0x96, 0xf4
-	nop
-	nop
-	ret	ov
-	nop
-	nop
-	cp	d, b
-	nop
-	nop
-	.byte 0xe4, 0xf4
-	nop
-	nop
-	swi	6
-	.byte 0xf4
-	nop
-	nop
-	push_f
-	.byte 0xf5
-	nop
-	nop
-	ldw	de, 245
-	nop
-	popw	ix
-	.byte 0xf5
-	nop
-	nop
-	jr	z, -11
-	nop
-	nop
-	.byte 0x80, 0xf5
-	nop
-	nop
-	.byte 0x9a, 0xf5
-	nop
-	nop
-	.byte 0xb4, 0xf5
-	nop
-	nop
-	cp	e, h
-	nop
-	nop
-	cp	xiy, xwa
-	nop
-	nop
-	push	sr
-	.byte 0xf6
-	nop
-	nop
-	.byte 0x1c, 0xf6
-	nop
-	nop
-	.byte 0x96, 0xf4
-	nop
-	nop
-	ret	ov
-	nop
-	nop
-	cp	d, b
-	nop
-	nop
-	.byte 0xe4, 0xf4
-	nop
-	nop
-	swi	6
-	.byte 0xf4
-	nop
-	nop
-	push_f
-	.byte 0xf5
-	nop
-	nop
-	ldw	de, 245
-	nop
-	popw	ix
-	.byte 0xf5
-	nop
-	nop
-	jr	z, -11
-	nop
-	nop
-	.byte 0x1c, 0xf6
-	nop
-	nop
-	.byte 0x9a, 0xf5
-	nop
-	nop
-	.byte 0xb4, 0xf5
-	nop
-	nop
-	cp	e, h
-	nop
-	nop
-	cp	xiy, xwa
-	nop
-	nop
-	push	sr
-	.byte 0xf6
-	nop
-	nop
-	.byte 0x80, 0xf5
-	nop
-	nop
+; Two 16-entry tables of 32-bit pointers (128 B) to the sixteen 26-byte (0x1A) channel records at RAM 0xF496 + 26*k, k = 0..15.
+; TYPED 2026-09-25 (lane seqeng); was spelled as nop / ret ov / cp d,b /
+; swi 6 / push_f / ldw de,245 ... around lone .byte fragments.
+; Read by VoiceChannel_GetParamBlock (0xF26BEE, just above):
+; HL = ((byte at 0x0FAB) & 15) * 4, then ld XHL,(XIX+HL) with XIX = this
+; table when the byte at 0x11F8 is 1, else +0x40 (VoiceChannel_ParamTable1_0x40);
+; the record pointer is returned in XIY.  Stride 4, 16 entries per table,
+; pinned by the `& 15` index and by the routine at +0x80.
+;   +0x00: record k for channel index k (identity).
+;   +0x40: identity except index 9 -> record 15 and index 15 -> record 9.
+; Only the low nibble of 0x0FAB is used (a MIDI channel number); the two
+; bytes after it, 0x0FAC/0x0FAD, are clamped to 0x7F as a pair by
+; MidiEvent_ClampVelocityA_High, the shape of a MIDI message's data bytes.
+; The meaning of the 0x11F8 mode values is not established here.
+	.long 0x0000f496, 0x0000f4b0, 0x0000f4ca, 0x0000f4e4
+	.long 0x0000f4fe, 0x0000f518, 0x0000f532, 0x0000f54c
+	.long 0x0000f566, 0x0000f580, 0x0000f59a, 0x0000f5b4
+	.long 0x0000f5ce, 0x0000f5e8, 0x0000f602, 0x0000f61c
+	.long 0x0000f496, 0x0000f4b0, 0x0000f4ca, 0x0000f4e4
+	.long 0x0000f4fe, 0x0000f518, 0x0000f532, 0x0000f54c
+	.long 0x0000f566, 0x0000f61c, 0x0000f59a, 0x0000f5b4
+	.long 0x0000f5ce, 0x0000f5e8, 0x0000f602, 0x0000f580
+; VoiceChannel_SetRecordField3 (= VoiceChannel_ParamTable1 +0x80, which
+; shared/positional_labels.s still names VoiceChannel_ParamTable1_0x80):
+; XIY = the channel record of the MIDI channel in 0x0FAB
+; (VoiceChannel_GetParamBlock), then record field +3 = byte at 0x0FAD.
+; Called from smf_tonegen_core.s (two sites).
+VoiceChannel_SetRecordField3:
 	call	VoiceChannel_GetParamBlock
 	ld	a, (4013:16)
 	ld	(xiy+3), a
@@ -660,9 +586,13 @@ SoundGen_InitVoiceLoop:
 	ret
 
 SoundGen_InitVoiceData:
-	max
-	halt
-	.byte 0x06
+; 3 bytes (4, 5, 6), one per pass IY = 0..2 of SoundGen_InitVoiceLoop
+; (0xF26E29), read by `ld xde, SoundGen_InitVoiceData /
+; ld A,(XDE+IY)` and passed in A to SoundGen_UpdateAndRefresh as the 4th of
+; the six values that loop sends per voice.  Was spelled `max / halt /
+; .byte 0x06` (TYPED 2026-09-25, lane seqeng).  What the value selects in
+; SoundGen_UpdateAndRefresh is not established.
+	.byte 0x04, 0x05, 0x06
 
 SndParam_LookupChannelVoice:
 	push xhl
@@ -10640,8 +10570,20 @@ FileIO_ReadDir_Return:
 	ret
 
 SeqByteBlock_DispatchJumpTable:
-	.byte 0xb2, 0x32, 0xf5, 0x00, 0xb1, 0x32, 0xf5, 0x00
-	.byte 0xbb, 0x32, 0xf5, 0x00, 0xb1, 0x32, 0xf5, 0x00
+; Four handler pointers, one per screen-group ID 0..3 (stride 4).
+; Read by ScreenGroup_Dispatch / VoiceInit_Dispatch (0xFDDB5A,
+; boot/screen_group_dispatch.s): for each entry k of SystemConfig_PointerTable
+; until a zero entry, XHL = long [entry_k + 4*group] and `call (xhl)`.  This
+; table is SystemConfig_PointerTable's 14th entry (widget_dispatch.s), so
+; when ScreenGroup_Dispatch runs for screen group N the sequencer gets: 0 ->
+; SeqDispatch_ResetAndValidate, group 2 -> SeqDispatch_InitWithPayload, groups
+; 1 and 3 -> SeqDispatch_ReturnNop.  Written as symbolic .long 2026-09-25
+; (lane seqeng); it was eight raw .byte.  The table ends where
+; SeqDispatch_ReturnNop begins.
+	.long SeqDispatch_ResetAndValidate
+	.long SeqDispatch_ReturnNop
+	.long SeqDispatch_InitWithPayload
+	.long SeqDispatch_ReturnNop
 
 SeqDispatch_ReturnNop:
 	ret

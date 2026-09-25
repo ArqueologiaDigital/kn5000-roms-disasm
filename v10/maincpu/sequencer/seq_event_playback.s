@@ -438,8 +438,13 @@ SeqEvtBuf_AdvanceRet:
 	ret
 
 SeqEvt_RotationOffsetTable:
-	.byte 0x00, 0x00, 0x09, 0x00, 0x12, 0x00, 0x1b, 0x00
-	.byte 0x24, 0x00, 0x2d, 0x00, 0x36, 0x00, 0x3f, 0x00
+; 8 LE16 byte offsets 0, 9, 18, ... 63: the starts of eight 9-byte slots.
+; Read by SeqEvt_WriteNoteOnRotating (0xF70CAB): A = byte
+; at 0x7E0A (a rotating index advanced by 2 per call and wrapped at the
+; byte at 0x7E06), IX = word [this + A]; the slot's bytes +0 and +2 are
+; then read at (XHL+IX).  Stride 2, 8 entries (16 B up to
+; SeqEvt_InitVoiceScan).  TYPED 2026-09-25 (lane seqeng).
+	.short 0x0000, 0x0009, 0x0012, 0x001b, 0x0024, 0x002d, 0x0036, 0x003f
 
 SeqEvt_InitVoiceScan:
 	ldw (0x7e00:16), 0xff5f
@@ -1708,33 +1713,27 @@ AccPlay_NoteAllocRet:
 	ret
 
 AccPlay_NoteParamTable:
-	.zero 8
-	nop
-	nop
-	nop
-	nop
-	normal
-	nop
-	scf
-	nop
-	normal
-	nop
-	scf
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	pop sr
-	nop
-	nop
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x11, 0x11, 0x00
+; 12 records x 4 bytes: +0 flag, +1 and +2 two extra event bytes, +3 unused
+; (0 in every record).  Read by AccPlay_NoteAllocAndWrite
+; (0xF722AB): L = byte at 0x7F38, A = byte
+; [Display_FontPalette_Table_0x12EA + L], HL = 4*A (12 records), then
+; +0/+1/+2 go to 0x7E54/0x7E55/0x7E56.  A nonzero +0 makes the event
+; status 0x91 instead of 0x90 and appends bytes +1 and +2 to the event.
+; Non-zero records: 3 and 4 = (1, 0x00, 0x11), 7 = (1, 0x03, 0x00),
+; 11 = (1, 0x11, 0x11).  TYPED 2026-09-25 (lane seqeng); it was spelled
+; as .zero / nop / normal / scf / pop sr.
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x01, 0x00, 0x11, 0x00
+	.byte 0x01, 0x00, 0x11, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x01, 0x03, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.byte 0x01, 0x11, 0x11, 0x00
 
 AccPlay_FindActiveSlot:
 	ld xhl, 0x7e7b
