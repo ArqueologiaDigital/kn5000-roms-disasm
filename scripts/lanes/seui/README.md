@@ -55,3 +55,22 @@ What the model established (v10; v9 and v7 have identical structure):
   (op 06) is not an address -- the op-06 handler divides it by 40; it is the
   y*40 + x/8 cell position.  The "op 0x02 subtype" there is the ordinary length
   byte.  The C files still compile byte-exact and are left as they are.
+
+## Mis-framed code (`se_reframe_code.py`)
+
+| mode | question it answers | command |
+|---|---|---|
+| auto (v10/v9) | Where does this lane's code spell a real instruction as a lone `.byte` prefix plus "instructions" made of its operand bytes (e.g. `.byte 0x8f` / `push xsp` / `nop` for `cp (xsp+2), 0`), and what is the right instruction? Seeds on `.byte` and data-as-code-marker lines; replaces only the mis-framed middle of a window where the tree's backend (llvm-objdump) and MAME unidasm agree on every instruction boundary and meet the old framing again; the window must be flanked by real instructions on both sides (a `.byte` row of a data table never is), and the SeScreenData block is excluded. Lines whose framing the decode confirms are kept verbatim. | `python3 scripts/lanes/seui/seui_amap.py --image v10 --out A.json --files audio/semenu_routines.s,audio/sndparam_routines.s,audio/sound_editor_ui.s,audio/sound_editor_routines.s` then `python3 scripts/lanes/seui/se_reframe_code.py --image v10 --file audio/semenu_routines.s --amap A.json [--show] [--apply]` |
+| --runs (v7) | Can a v7 `.byte` / romslice run in code be spelled as instructions? Lock-step decode following unidasm's framing, each instruction spelled by the backend at the same address and length (else kept as `.byte`), ending where the old framing resumes; a THIRD witness is required: at least 90% of the instructions whose bytes are equal in the witness image (offset chosen from same-named labels) must start a source line there. | `... --image v7 --file F --amap A7.json --runs --witness v10 A10.json [--apply]` |
+
+Result of the auto mode on 2026-09-25 (then `symbolize_numeric_branches.py
+--only <the four files> --apply --verify`):
+
+| image | windows re-framed (semenu / sound_editor_ui / sndparam) | branch operands symbolised | labels added |
+|---|---|---:|---:|
+| v10 | 269 / 363 / 20 | 620 | 380 |
+| v9 | 269 / 363 / 22 | 622 | 381 |
+
+Refused (left as they were): backend cannot decode 13/37/29, not flanked by
+code 21/48/25, a label that would fall inside a new instruction 1
+(`SeMenu_CompareAndApply_Data6`).
