@@ -1,0 +1,4 @@
+UIState_HandlerTable_WithProbe=SwbtB2_Code00_Listeners
+UIState_HandlerTable_Standard=SwbtB2_Code01_Listeners
+UIState_HandlerTable_Compact=SwbtB2_Code02_Listeners
+tables at=SwbtWr bank-2 listener lists

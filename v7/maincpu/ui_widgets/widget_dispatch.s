@@ -4113,730 +4113,577 @@ Naka_DisplayMode_Table:
 	.long DspFxRecs_97_PeqComprOverdr	; 97 PEQ+COMPR+OVERDR
 	.long DspFxRecs_98_PeqDistDelay	; 98 PEQ+DIST+DELAY
 	.long DspFxRecs_99_PeqOverdrDelay	; 99 PEQ+OVERDR+DELAY
-	.long UIState_ConfigA_000
-	.long UIState_ConfigA_001
-	.long UIState_ConfigA_002
-	.long UIState_ConfigA_003
-	.long UIState_ConfigA_004
-	.long UIState_ConfigA_005
-	.long UIState_ConfigA_006
-	.long UIState_ConfigA_007
-	.long UIState_ConfigA_008
-	.long UIState_ConfigA_009
-	.long UIState_ConfigA_010
-	.long UIState_ConfigA_011
-	.long UIState_ConfigA_012
-	.long UIState_ConfigA_013
-	.long UIState_ConfigA_014
-	.long UIState_ConfigA_015
-	.long UIState_ConfigA_016
-	.long UIState_ConfigA_017
-	.long UIState_ConfigA_018
-	.long UIState_ConfigA_019
-	.long UIState_ConfigA_020
-	.long UIState_ConfigA_021
-	.long UIState_ConfigA_022
-	.long UIState_ConfigA_023
-	.long UIState_ConfigA_024
-	.long UIState_ConfigA_025
-	.long UIState_ConfigA_026
-	.long UIState_ConfigA_027
-	.long UIState_ConfigA_028
-	.long UIState_ConfigA_029
-	.long UIState_ConfigA_030
-	.long UIState_ConfigA_031
-	.long UIState_ConfigA_032
-	.long UIState_ConfigA_033
-	.long UIState_ConfigA_034
-	.long UIState_ConfigA_035
-	.long UIState_ConfigA_036
-	.long UIState_ConfigA_037
-	.long UIState_ConfigA_038
-	.long UIState_ConfigA_039
-	.long UIState_ConfigA_040
-	.long UIState_ConfigA_041
-	.long UIState_ConfigA_042
-	.long UIState_ConfigA_043
-	.long UIState_ConfigA_044
-	.long UIState_ConfigA_045
-	.long UIState_ConfigA_046
-	.long UIState_ConfigA_047
-	.long UIState_ConfigA_048
-	.long UIState_ConfigA_049
-	.long UIState_ConfigA_050
-	.long UIState_ConfigA_051
-	.long UIState_ConfigA_052
-	.long UIState_ConfigA_053
-	.long UIState_ConfigA_054
-	.long UIState_ConfigA_055
-	.long UIState_ConfigA_056
-	.long UIState_ConfigA_057
-	.long UIState_ConfigA_058
-	.long UIState_ConfigA_059
-	.long UIState_ConfigA_060
-	.long UIState_ConfigA_061
-	.long UIState_ConfigA_062
-	.long UIState_ConfigA_063
-	.long UIState_ConfigA_064
-	.long UIState_ConfigA_065
-	.long UIState_ConfigA_066
-	.long UIState_ConfigA_067
-	.long UIState_ConfigA_068
-	.long UIState_ConfigA_069
-	.long UIState_ConfigA_070
-	.long UIState_ConfigA_071
-	.long UIState_ConfigA_072
-	.long UIState_ConfigA_073
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_074
-	.long UIState_ConfigA_075
-	.long UIState_ConfigA_076
-	.long UIState_ConfigA_077
-	.long UIState_ConfigA_078
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_079
-	.long UIState_ConfigA_080
-	.long UIState_ConfigA_081
-	.long UIState_ConfigA_082
-	.long UIState_ConfigA_083
-	.long UIState_ConfigA_084
-	.long UIState_ConfigA_085
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_086
-	.long UIState_ConfigA_087
-	.long UIState_ConfigA_088
-	.long UIState_ConfigA_089
-	.long UIState_ConfigA_090
-	.long UIState_ConfigA_091
-	.long UIState_ConfigA_092
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_093
-	.long UIState_ConfigA_094
-	.long UIState_ConfigA_095
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_096
-	.long UIState_ConfigA_097
-	.long UIState_ConfigA_098
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_099
-	.long UIState_ConfigA_100
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_101
-	.long UIState_ConfigA_102
-	.long UIState_ConfigA_103
-	.long UIState_ConfigA_104
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_105
-	.long UIState_ConfigA_106
-	.long UIState_ConfigA_107
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_108
-	.long UIState_ConfigA_109
-	.long UIState_ConfigA_110
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_111
-	.long UIState_ConfigA_112
-	.long UIState_ConfigA_113
-	.long UIState_DefaultConfig_A
-	.long UIState_ConfigA_114
-	.long UIState_ConfigA_115
-	.long UIState_ConfigA_116
-	.long UIState_ConfigA_117
-	.long UIState_ConfigA_118
-	.long UIState_ConfigA_119
-	.long UIState_ConfigA_120
-	.long UIState_ConfigA_121
-	.long UIState_ConfigA_122
-	.long UIState_ConfigA_123
-	.long UIState_ConfigA_124
-	.long UIState_ConfigA_125
-	.long UIState_ConfigA_126
-	.long UIState_ConfigA_127
-	.long UIState_DefaultConfig_A
-	.long UIState_DefaultConfig_A
-	swi	7
-UIState_ConfigA_000:
-	swi	7
-	.fill 3, 1, 0xff
-UIState_ConfigA_001:
-	.fill 4, 1, 0xff
-UIState_ConfigA_002:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_003:
-	.fill 4, 1, 0xff
-UIState_ConfigA_004:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_005:
-	.fill 4, 1, 0xff
-UIState_ConfigA_006:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_007:
-	.fill 4, 1, 0xff
-UIState_ConfigA_008:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_009:
-	.fill 4, 1, 0xff
-UIState_ConfigA_010:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_011:
-	.fill 4, 1, 0xff
-UIState_ConfigA_012:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_013:
-	.fill 4, 1, 0xff
-UIState_ConfigA_014:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_015:
-	.fill 4, 1, 0xff
-UIState_ConfigA_016:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_017:
-	.fill 4, 1, 0xff
-UIState_ConfigA_018:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_019:
-	.fill 4, 1, 0xff
-UIState_ConfigA_020:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_021:
-	.fill 4, 1, 0xff
-UIState_ConfigA_022:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_023:
-	.fill 4, 1, 0xff
-UIState_ConfigA_024:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_025:
-	.fill 4, 1, 0xff
-UIState_ConfigA_026:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_027:
-	.fill 4, 1, 0xff
-UIState_ConfigA_028:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_029:
-	.fill 4, 1, 0xff
-UIState_ConfigA_030:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_031:
-	.fill 4, 1, 0xff
-UIState_ConfigA_032:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_033:
-	.fill 4, 1, 0xff
-UIState_ConfigA_034:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_035:
-	.fill 4, 1, 0xff
-UIState_ConfigA_036:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_037:
-	.fill 4, 1, 0xff
-UIState_ConfigA_038:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_039:
-	.fill 4, 1, 0xff
-UIState_ConfigA_040:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_041:
-	.fill 4, 1, 0xff
-UIState_ConfigA_042:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_043:
-	.fill 4, 1, 0xff
-UIState_ConfigA_044:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_045:
-	.fill 4, 1, 0xff
-UIState_ConfigA_046:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_047:
-	.fill 4, 1, 0xff
-UIState_ConfigA_048:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_049:
-	.fill 4, 1, 0xff
-UIState_ConfigA_050:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_051:
-	.fill 4, 1, 0xff
-UIState_ConfigA_052:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_053:
-	.fill 4, 1, 0xff
-UIState_ConfigA_054:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_055:
-	.fill 4, 1, 0xff
-UIState_ConfigA_056:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_057:
-	.fill 4, 1, 0xff
-UIState_ConfigA_058:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_059:
-	.fill 4, 1, 0xff
-UIState_ConfigA_060:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_061:
-	.fill 4, 1, 0xff
-UIState_ConfigA_062:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_063:
-	.fill 4, 1, 0xff
-UIState_ConfigA_064:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_065:
-	.fill 4, 1, 0xff
-UIState_ConfigA_066:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_067:
-	.fill 4, 1, 0xff
-UIState_ConfigA_068:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_069:
-	.fill 4, 1, 0xff
-UIState_ConfigA_070:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_071:
-	.fill 4, 1, 0xff
-UIState_ConfigA_072:
+; =============================================================================
+; SwbtWr EVENT-LISTENER BANKS  (0xEE7786-0xEE8C7D, 3 banks)
+; =============================================================================
+; Each bank: a 192 x u32 table indexed by event code 0x00..0xBF, one 0xFF
+; separator byte, then the listener lists it points at -- u32 callback
+; addresses ended by 0xFFFFFFFF -- and one post list.
+;
+; Readers (audio/dsp_config_sysex.s):
+;   SwbtWr_InitBank1/2/3 (0xFDB2CB/0xFDB2EA/0xFDB309) store (table, post
+;     list, queue) at RAM 0xC081/0xC085/0xC089:
+;       bank 1  SwbtBank1_ListenerTable  post UIState_DefaultConfig_A+4  queue 0xBD3C
+;       bank 2  Naka_RenderMode_A_Table  post UIState_DefaultConfig_B+4  queue 0xBD3C
+;       bank 3  Naka_EventHandler_Table  post UIState_DefaultConfig_C+4  queue 0xC039
+;   SwbtWr_DispatchLoop (0xFDB32E) walks the queue's 4-byte entries: byte 0
+;     is the code (-> RAM 0xC080; codes > 0xBF are skipped by `cp l,0xbf`),
+;     bytes 1-2 -> RAM 0xC07D, byte 3 -> RAM 0xC07F; list = table[code*4];
+;     each u32 is `call (xde)`'d until both halves read 0xFFFF.
+;   SwbtWr_PostCallback_Loop (0xFDB3BC) then calls every entry of the post
+;     list.  AssswbWr / SwbtWr_QueueMainEvent / SwbtWr fill the queues.
+;   Callbacks read the event back from RAM: BitMapOut_ByteData_RenderD
+;     (bank 2, code 0x90) begins `cp (0xc080),0x90`.
+; Pinned by scripts/generators/gen_swbt_listener_banks.py --probe: every list
+; ends in 0xFFFFFFFF; tables + separators + lists + one trailing 0xFF
+; partition the span; v9 == v10 byte-for-byte; v7 has the same layout with
+; relocated callback addresses.  Lists are named after the lowest event
+; code that selects them; the codes' meanings are not established here.
+; The old names UIState_Config{A,B,C}_NNN, UIState_HandlerTable_*,
+; UIState_SeqInit_Table and UIState_EventHandler_Table (a label in the
+; middle of a list) did not match the table index and are retired;
+; UIState_DefaultConfig_A/B/C, Naka_RenderMode_A_Table and
+; Naka_EventHandler_Table are kept because other files load them by name.
+; =============================================================================
+
+; ---- bank 1: event code -> listener list (queue 0xBD3C) ----
+SwbtBank1_ListenerTable:
+	.long SwbtB1_Code00_Listeners	; 0x00
+	.long SwbtB1_Code01_Listeners	; 0x01
+	.long SwbtB1_Code02_Listeners	; 0x02
+	.long SwbtB1_Code03_Listeners	; 0x03
+	.long SwbtB1_Code04_Listeners	; 0x04
+	.long SwbtB1_Code05_Listeners	; 0x05
+	.long SwbtB1_Code06_Listeners	; 0x06
+	.long SwbtB1_Code07_Listeners	; 0x07
+	.long SwbtB1_Code08_Listeners	; 0x08
+	.long SwbtB1_Code09_Listeners	; 0x09
+	.long SwbtB1_Code0A_Listeners	; 0x0A
+	.long SwbtB1_Code0B_Listeners	; 0x0B
+	.long SwbtB1_Code0C_Listeners	; 0x0C
+	.long SwbtB1_Code0D_Listeners	; 0x0D
+	.long SwbtB1_Code0E_Listeners	; 0x0E
+	.long SwbtB1_Code0F_Listeners	; 0x0F
+	.long SwbtB1_Code10_Listeners	; 0x10
+	.long SwbtB1_Code11_Listeners	; 0x11
+	.long SwbtB1_Code12_Listeners	; 0x12
+	.long SwbtB1_Code13_Listeners	; 0x13
+	.long SwbtB1_Code14_Listeners	; 0x14
+	.long SwbtB1_Code15_Listeners	; 0x15
+	.long SwbtB1_Code16_Listeners	; 0x16
+	.long SwbtB1_Code17_Listeners	; 0x17
+	.long SwbtB1_Code18_Listeners	; 0x18
+	.long SwbtB1_Code19_Listeners	; 0x19
+	.long SwbtB1_Code1A_Listeners	; 0x1A
+	.long SwbtB1_Code1B_Listeners	; 0x1B
+	.long SwbtB1_Code1C_Listeners	; 0x1C
+	.long SwbtB1_Code1D_Listeners	; 0x1D
+	.long SwbtB1_Code1E_Listeners	; 0x1E
+	.long SwbtB1_Code1F_Listeners	; 0x1F
+	.long SwbtB1_Code20_Listeners	; 0x20
+	.long SwbtB1_Code21_Listeners	; 0x21
+	.long SwbtB1_Code22_Listeners	; 0x22
+	.long SwbtB1_Code23_Listeners	; 0x23
+	.long SwbtB1_Code24_Listeners	; 0x24
+	.long SwbtB1_Code25_Listeners	; 0x25
+	.long SwbtB1_Code26_Listeners	; 0x26
+	.long SwbtB1_Code27_Listeners	; 0x27
+	.long SwbtB1_Code28_Listeners	; 0x28
+	.long SwbtB1_Code29_Listeners	; 0x29
+	.long SwbtB1_Code2A_Listeners	; 0x2A
+	.long SwbtB1_Code2B_Listeners	; 0x2B
+	.long SwbtB1_Code2C_Listeners	; 0x2C
+	.long SwbtB1_Code2D_Listeners	; 0x2D
+	.long SwbtB1_Code2E_Listeners	; 0x2E
+	.long SwbtB1_Code2F_Listeners	; 0x2F
+	.long SwbtB1_Code30_Listeners	; 0x30
+	.long SwbtB1_Code31_Listeners	; 0x31
+	.long SwbtB1_Code32_Listeners	; 0x32
+	.long SwbtB1_Code33_Listeners	; 0x33
+	.long SwbtB1_Code34_Listeners	; 0x34
+	.long SwbtB1_Code35_Listeners	; 0x35
+	.long SwbtB1_Code36_Listeners	; 0x36
+	.long SwbtB1_Code37_Listeners	; 0x37
+	.long SwbtB1_Code38_Listeners	; 0x38
+	.long SwbtB1_Code39_Listeners	; 0x39
+	.long SwbtB1_Code3A_Listeners	; 0x3A
+	.long SwbtB1_Code3B_Listeners	; 0x3B
+	.long SwbtB1_Code3C_Listeners	; 0x3C
+	.long SwbtB1_Code3D_Listeners	; 0x3D
+	.long SwbtB1_Code3E_Listeners	; 0x3E
+	.long SwbtB1_Code3F_Listeners	; 0x3F
+	.long SwbtB1_Code40_Listeners	; 0x40
+	.long SwbtB1_Code41_Listeners	; 0x41
+	.long SwbtB1_Code42_Listeners	; 0x42
+	.long SwbtB1_Code43_Listeners	; 0x43
+	.long SwbtB1_Code44_Listeners	; 0x44
+	.long SwbtB1_Code45_Listeners	; 0x45
+	.long SwbtB1_Code46_Listeners	; 0x46
+	.long SwbtB1_Code47_Listeners	; 0x47
+	.long SwbtB1_Code48_Listeners	; 0x48
+	.long SwbtB1_Code49_Listeners	; 0x49
+	.long UIState_DefaultConfig_A	; 0x4A
+	.long UIState_DefaultConfig_A	; 0x4B
+	.long UIState_DefaultConfig_A	; 0x4C
+	.long UIState_DefaultConfig_A	; 0x4D
+	.long UIState_DefaultConfig_A	; 0x4E
+	.long UIState_DefaultConfig_A	; 0x4F
+	.long SwbtB1_Code50_Listeners	; 0x50
+	.long SwbtB1_Code51_Listeners	; 0x51
+	.long SwbtB1_Code52_Listeners	; 0x52
+	.long SwbtB1_Code53_Listeners	; 0x53
+	.long SwbtB1_Code54_Listeners	; 0x54
+	.long UIState_DefaultConfig_A	; 0x55
+	.long UIState_DefaultConfig_A	; 0x56
+	.long UIState_DefaultConfig_A	; 0x57
+	.long UIState_DefaultConfig_A	; 0x58
+	.long UIState_DefaultConfig_A	; 0x59
+	.long UIState_DefaultConfig_A	; 0x5A
+	.long UIState_DefaultConfig_A	; 0x5B
+	.long UIState_DefaultConfig_A	; 0x5C
+	.long UIState_DefaultConfig_A	; 0x5D
+	.long UIState_DefaultConfig_A	; 0x5E
+	.long UIState_DefaultConfig_A	; 0x5F
+	.long SwbtB1_Code60_Listeners	; 0x60
+	.long SwbtB1_Code61_Listeners	; 0x61
+	.long SwbtB1_Code62_Listeners	; 0x62
+	.long SwbtB1_Code63_Listeners	; 0x63
+	.long SwbtB1_Code64_Listeners	; 0x64
+	.long SwbtB1_Code65_Listeners	; 0x65
+	.long SwbtB1_Code66_Listeners	; 0x66
+	.long UIState_DefaultConfig_A	; 0x67
+	.long SwbtB1_Code68_Listeners	; 0x68
+	.long SwbtB1_Code69_Listeners	; 0x69
+	.long SwbtB1_Code6A_Listeners	; 0x6A
+	.long SwbtB1_Code6B_Listeners	; 0x6B
+	.long SwbtB1_Code6C_Listeners	; 0x6C
+	.long SwbtB1_Code6D_Listeners	; 0x6D
+	.long SwbtB1_Code6E_Listeners	; 0x6E
+	.long UIState_DefaultConfig_A	; 0x6F
+	.long SwbtB1_Code70_Listeners	; 0x70
+	.long SwbtB1_Code71_Listeners	; 0x71
+	.long SwbtB1_Code72_Listeners	; 0x72
+	.long UIState_DefaultConfig_A	; 0x73
+	.long UIState_DefaultConfig_A	; 0x74
+	.long UIState_DefaultConfig_A	; 0x75
+	.long UIState_DefaultConfig_A	; 0x76
+	.long UIState_DefaultConfig_A	; 0x77
+	.long SwbtB1_Code78_Listeners	; 0x78
+	.long SwbtB1_Code79_Listeners	; 0x79
+	.long SwbtB1_Code7A_Listeners	; 0x7A
+	.long UIState_DefaultConfig_A	; 0x7B
+	.long UIState_DefaultConfig_A	; 0x7C
+	.long UIState_DefaultConfig_A	; 0x7D
+	.long UIState_DefaultConfig_A	; 0x7E
+	.long UIState_DefaultConfig_A	; 0x7F
+	.long SwbtB1_Code80_Listeners	; 0x80
+	.long SwbtB1_Code81_Listeners	; 0x81
+	.long UIState_DefaultConfig_A	; 0x82
+	.long UIState_DefaultConfig_A	; 0x83
+	.long UIState_DefaultConfig_A	; 0x84
+	.long UIState_DefaultConfig_A	; 0x85
+	.long UIState_DefaultConfig_A	; 0x86
+	.long UIState_DefaultConfig_A	; 0x87
+	.long UIState_DefaultConfig_A	; 0x88
+	.long UIState_DefaultConfig_A	; 0x89
+	.long UIState_DefaultConfig_A	; 0x8A
+	.long UIState_DefaultConfig_A	; 0x8B
+	.long UIState_DefaultConfig_A	; 0x8C
+	.long UIState_DefaultConfig_A	; 0x8D
+	.long UIState_DefaultConfig_A	; 0x8E
+	.long UIState_DefaultConfig_A	; 0x8F
+	.long SwbtB1_Code90_Listeners	; 0x90
+	.long SwbtB1_Code91_Listeners	; 0x91
+	.long SwbtB1_Code92_Listeners	; 0x92
+	.long SwbtB1_Code93_Listeners	; 0x93
+	.long UIState_DefaultConfig_A	; 0x94
+	.long UIState_DefaultConfig_A	; 0x95
+	.long UIState_DefaultConfig_A	; 0x96
+	.long UIState_DefaultConfig_A	; 0x97
+	.long SwbtB1_Code98_Listeners	; 0x98
+	.long SwbtB1_Code99_Listeners	; 0x99
+	.long SwbtB1_Code9A_Listeners	; 0x9A
+	.long UIState_DefaultConfig_A	; 0x9B
+	.long UIState_DefaultConfig_A	; 0x9C
+	.long UIState_DefaultConfig_A	; 0x9D
+	.long UIState_DefaultConfig_A	; 0x9E
+	.long UIState_DefaultConfig_A	; 0x9F
+	.long UIState_DefaultConfig_A	; 0xA0
+	.long UIState_DefaultConfig_A	; 0xA1
+	.long UIState_DefaultConfig_A	; 0xA2
+	.long UIState_DefaultConfig_A	; 0xA3
+	.long UIState_DefaultConfig_A	; 0xA4
+	.long UIState_DefaultConfig_A	; 0xA5
+	.long UIState_DefaultConfig_A	; 0xA6
+	.long UIState_DefaultConfig_A	; 0xA7
+	.long SwbtB1_CodeA8_Listeners	; 0xA8
+	.long SwbtB1_CodeA9_Listeners	; 0xA9
+	.long SwbtB1_CodeAA_Listeners	; 0xAA
+	.long UIState_DefaultConfig_A	; 0xAB
+	.long SwbtB1_CodeAC_Listeners	; 0xAC
+	.long SwbtB1_CodeAD_Listeners	; 0xAD
+	.long SwbtB1_CodeAE_Listeners	; 0xAE
+	.long UIState_DefaultConfig_A	; 0xAF
+	.long SwbtB1_CodeB0_Listeners	; 0xB0
+	.long SwbtB1_CodeB1_Listeners	; 0xB1
+	.long SwbtB1_CodeB2_Listeners	; 0xB2
+	.long SwbtB1_CodeB3_Listeners	; 0xB3
+	.long SwbtB1_CodeB4_Listeners	; 0xB4
+	.long SwbtB1_CodeB5_Listeners	; 0xB5
+	.long SwbtB1_CodeB6_Listeners	; 0xB6
+	.long SwbtB1_CodeB7_Listeners	; 0xB7
+	.long SwbtB1_CodeB8_Listeners	; 0xB8
+	.long SwbtB1_CodeB9_Listeners	; 0xB9
+	.long SwbtB1_CodeBA_Listeners	; 0xBA
+	.long SwbtB1_CodeBB_Listeners	; 0xBB
+	.long SwbtB1_CodeBC_Listeners	; 0xBC
+	.long SwbtB1_CodeBD_Listeners	; 0xBD
+	.long UIState_DefaultConfig_A	; 0xBE
+	.long UIState_DefaultConfig_A	; 0xBF
+	.byte 0xff				; separator (read by nothing)
+SwbtB1_Code00_Listeners:	.long 0xffffffff
+SwbtB1_Code01_Listeners:	.long 0xffffffff
+SwbtB1_Code02_Listeners:	.long 0xffffffff
+SwbtB1_Code03_Listeners:	.long 0xffffffff
+SwbtB1_Code04_Listeners:	.long 0xffffffff
+SwbtB1_Code05_Listeners:	.long 0xffffffff
+SwbtB1_Code06_Listeners:	.long 0xffffffff
+SwbtB1_Code07_Listeners:	.long 0xffffffff
+SwbtB1_Code08_Listeners:	.long 0xffffffff
+SwbtB1_Code09_Listeners:	.long 0xffffffff
+SwbtB1_Code0A_Listeners:	.long 0xffffffff
+SwbtB1_Code0B_Listeners:	.long 0xffffffff
+SwbtB1_Code0C_Listeners:	.long 0xffffffff
+SwbtB1_Code0D_Listeners:	.long 0xffffffff
+SwbtB1_Code0E_Listeners:	.long 0xffffffff
+SwbtB1_Code0F_Listeners:	.long 0xffffffff
+SwbtB1_Code10_Listeners:	.long 0xffffffff
+SwbtB1_Code11_Listeners:	.long 0xffffffff
+SwbtB1_Code12_Listeners:	.long 0xffffffff
+SwbtB1_Code13_Listeners:	.long 0xffffffff
+SwbtB1_Code14_Listeners:	.long 0xffffffff
+SwbtB1_Code15_Listeners:	.long 0xffffffff
+SwbtB1_Code16_Listeners:	.long 0xffffffff
+SwbtB1_Code17_Listeners:	.long 0xffffffff
+SwbtB1_Code18_Listeners:	.long 0xffffffff
+SwbtB1_Code19_Listeners:	.long 0xffffffff
+SwbtB1_Code1A_Listeners:	.long 0xffffffff
+SwbtB1_Code1B_Listeners:	.long 0xffffffff
+SwbtB1_Code1C_Listeners:	.long 0xffffffff
+SwbtB1_Code1D_Listeners:	.long 0xffffffff
+SwbtB1_Code1E_Listeners:	.long 0xffffffff
+SwbtB1_Code1F_Listeners:	.long 0xffffffff
+SwbtB1_Code20_Listeners:	.long 0xffffffff
+SwbtB1_Code21_Listeners:	.long 0xffffffff
+SwbtB1_Code22_Listeners:	.long 0xffffffff
+SwbtB1_Code23_Listeners:	.long 0xffffffff
+SwbtB1_Code24_Listeners:	.long 0xffffffff
+SwbtB1_Code25_Listeners:	.long 0xffffffff
+SwbtB1_Code26_Listeners:	.long 0xffffffff
+SwbtB1_Code27_Listeners:	.long 0xffffffff
+SwbtB1_Code28_Listeners:	.long 0xffffffff
+SwbtB1_Code29_Listeners:	.long 0xffffffff
+SwbtB1_Code2A_Listeners:	.long 0xffffffff
+SwbtB1_Code2B_Listeners:	.long 0xffffffff
+SwbtB1_Code2C_Listeners:	.long 0xffffffff
+SwbtB1_Code2D_Listeners:	.long 0xffffffff
+SwbtB1_Code2E_Listeners:	.long 0xffffffff
+SwbtB1_Code2F_Listeners:	.long 0xffffffff
+SwbtB1_Code30_Listeners:	.long 0xffffffff
+SwbtB1_Code31_Listeners:	.long 0xffffffff
+SwbtB1_Code32_Listeners:	.long 0xffffffff
+SwbtB1_Code33_Listeners:	.long 0xffffffff
+SwbtB1_Code34_Listeners:	.long 0xffffffff
+SwbtB1_Code35_Listeners:	.long 0xffffffff
+SwbtB1_Code36_Listeners:	.long 0xffffffff
+SwbtB1_Code37_Listeners:	.long 0xffffffff
+SwbtB1_Code38_Listeners:	.long 0xffffffff
+SwbtB1_Code39_Listeners:	.long 0xffffffff
+SwbtB1_Code3A_Listeners:	.long 0xffffffff
+SwbtB1_Code3B_Listeners:	.long 0xffffffff
+SwbtB1_Code3C_Listeners:	.long 0xffffffff
+SwbtB1_Code3D_Listeners:	.long 0xffffffff
+SwbtB1_Code3E_Listeners:	.long 0xffffffff
+SwbtB1_Code3F_Listeners:	.long 0xffffffff
+SwbtB1_Code40_Listeners:	.long 0xffffffff
+SwbtB1_Code41_Listeners:	.long 0xffffffff
+SwbtB1_Code42_Listeners:	.long 0xffffffff
+SwbtB1_Code43_Listeners:	.long 0xffffffff
+SwbtB1_Code44_Listeners:	.long 0xffffffff
+SwbtB1_Code45_Listeners:	.long 0xffffffff
+SwbtB1_Code46_Listeners:	.long 0xffffffff
+SwbtB1_Code47_Listeners:	.long 0xffffffff
+SwbtB1_Code48_Listeners:
 	.long EffectMode_ByteData_Block3
-	.fill 4, 1, 0xff
-UIState_ConfigA_073:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_074:
-	.fill 4, 1, 0xff
-UIState_ConfigA_075:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_076:
-	.fill 4, 1, 0xff
-UIState_ConfigA_077:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_078:
-	.fill 4, 1, 0xff
-UIState_ConfigA_079:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_080:
-	.fill 4, 1, 0xff
-UIState_ConfigA_081:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_082:
-	.fill 4, 1, 0xff
-UIState_ConfigA_083:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_084:
-	.fill 4, 1, 0xff
-UIState_ConfigA_085:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_086:
-	.fill 4, 1, 0xff
-UIState_ConfigA_087:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_088:
-	.fill 4, 1, 0xff
-UIState_ConfigA_089:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_090:
-	.fill 4, 1, 0xff
-UIState_ConfigA_091:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_092:
-	.fill 4, 1, 0xff
-UIState_ConfigA_093:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_094:
-	.fill 4, 1, 0xff
-UIState_ConfigA_095:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_096:
-	.fill 4, 1, 0xff
-UIState_ConfigA_097:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_098:
-	.fill 4, 1, 0xff
-UIState_ConfigA_099:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_100:
-	.fill 4, 1, 0xff
-UIState_ConfigA_101:
-	.fill 1, 1, 0xff
-	.byte 0xff, 0xff, 0xff
-UIState_ConfigA_102:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigA_102.bin"
-UIState_ConfigA_103:
-	.fill 4, 1, 0xff
-UIState_ConfigA_104:
-	.fill 1, 1, 0xff
-	.byte 0xff, 0xff, 0xff
-UIState_ConfigA_105:
+	.long 0xffffffff
+SwbtB1_Code49_Listeners:	.long 0xffffffff
+SwbtB1_Code50_Listeners:	.long 0xffffffff
+SwbtB1_Code51_Listeners:	.long 0xffffffff
+SwbtB1_Code52_Listeners:	.long 0xffffffff
+SwbtB1_Code53_Listeners:	.long 0xffffffff
+SwbtB1_Code54_Listeners:	.long 0xffffffff
+SwbtB1_Code60_Listeners:	.long 0xffffffff
+SwbtB1_Code61_Listeners:	.long 0xffffffff
+SwbtB1_Code62_Listeners:	.long 0xffffffff
+SwbtB1_Code63_Listeners:	.long 0xffffffff
+SwbtB1_Code64_Listeners:	.long 0xffffffff
+SwbtB1_Code65_Listeners:	.long 0xffffffff
+SwbtB1_Code66_Listeners:	.long 0xffffffff
+SwbtB1_Code68_Listeners:	.long 0xffffffff
+SwbtB1_Code69_Listeners:	.long 0xffffffff
+SwbtB1_Code6A_Listeners:	.long 0xffffffff
+SwbtB1_Code6B_Listeners:	.long 0xffffffff
+SwbtB1_Code6C_Listeners:	.long 0xffffffff
+SwbtB1_Code6D_Listeners:	.long 0xffffffff
+SwbtB1_Code6E_Listeners:	.long 0xffffffff
+SwbtB1_Code70_Listeners:	.long 0xffffffff
+SwbtB1_Code71_Listeners:	.long 0xffffffff
+SwbtB1_Code72_Listeners:	.long 0xffffffff
+SwbtB1_Code78_Listeners:	.long 0xffffffff
+SwbtB1_Code79_Listeners:	.long 0xffffffff
+SwbtB1_Code7A_Listeners:	.long 0xffffffff
+SwbtB1_Code80_Listeners:	.long 0xffffffff
+SwbtB1_Code81_Listeners:	.long 0xffffffff
+SwbtB1_Code90_Listeners:	.long 0xffffffff
+SwbtB1_Code91_Listeners:
+	.long MidiSysEx_ProcessBlock + 347	; no label at this callback entry yet; v10: MidiCtrl_ModeSwitchHandler
+	.long 0xffffffff
+SwbtB1_Code92_Listeners:	.long 0xffffffff
+SwbtB1_Code93_Listeners:	.long 0xffffffff
+SwbtB1_Code98_Listeners:
 	.long BitMapOut_ByteData_PresetCopy
 	.long EffectMode_ByteData_Block4
 	.long FDemoText_ByteData_VoiceProbeB
-	.fill 4, 1, 0xff
-UIState_ConfigA_106:
-	.fill 4, 1, 0xff
-UIState_ConfigA_107:
-	.fill 1, 1, 0xff
-	.byte 0xff, 0xff, 0xff
-UIState_ConfigA_108:
+	.long 0xffffffff
+SwbtB1_Code99_Listeners:	.long 0xffffffff
+SwbtB1_Code9A_Listeners:	.long 0xffffffff
+SwbtB1_CodeA8_Listeners:
 	.long EffectMode_ByteData_Block2
-	.fill 4, 1, 0xff
-UIState_ConfigA_109:
-	.fill 4, 1, 0xff
-UIState_ConfigA_110:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_111:
-	.fill 4, 1, 0xff
-UIState_ConfigA_112:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_113:
-	.fill 4, 1, 0xff
-UIState_ConfigA_114:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_115:
-	.fill 4, 1, 0xff
-UIState_ConfigA_116:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_117:
-	.fill 4, 1, 0xff
-UIState_ConfigA_118:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_119:
-	.fill 4, 1, 0xff
-UIState_ConfigA_120:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_121:
-	.fill 4, 1, 0xff
-UIState_ConfigA_122:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_123:
-	.fill 4, 1, 0xff
-UIState_ConfigA_124:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_125:
-	.fill 4, 1, 0xff
-UIState_ConfigA_126:
-	.fill 1, 1, 0xff
-	.fill 3, 1, 0xff
-UIState_ConfigA_127:
-	.fill 4, 1, 0xff
-UIState_DefaultConfig_A:
-	.fill 1, 1, 0xff
-	.fill 7, 1, 0xff
+	.long 0xffffffff
+SwbtB1_CodeA9_Listeners:	.long 0xffffffff
+SwbtB1_CodeAA_Listeners:	.long 0xffffffff
+SwbtB1_CodeAC_Listeners:	.long 0xffffffff
+SwbtB1_CodeAD_Listeners:	.long 0xffffffff
+SwbtB1_CodeAE_Listeners:	.long 0xffffffff
+SwbtB1_CodeB0_Listeners:	.long 0xffffffff
+SwbtB1_CodeB1_Listeners:	.long 0xffffffff
+SwbtB1_CodeB2_Listeners:	.long 0xffffffff
+SwbtB1_CodeB3_Listeners:	.long 0xffffffff
+SwbtB1_CodeB4_Listeners:	.long 0xffffffff
+SwbtB1_CodeB5_Listeners:	.long 0xffffffff
+SwbtB1_CodeB6_Listeners:	.long 0xffffffff
+SwbtB1_CodeB7_Listeners:	.long 0xffffffff
+SwbtB1_CodeB8_Listeners:	.long 0xffffffff
+SwbtB1_CodeB9_Listeners:	.long 0xffffffff
+SwbtB1_CodeBA_Listeners:	.long 0xffffffff
+SwbtB1_CodeBB_Listeners:	.long 0xffffffff
+SwbtB1_CodeBC_Listeners:	.long 0xffffffff
+SwbtB1_CodeBD_Listeners:	.long 0xffffffff
+UIState_DefaultConfig_A:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
+SwbtBank1_PostCallbacks:	.long 0xffffffff	; post list (called once per SwbtWr_DispatchLoop run)
 
-
+; ---- bank 2: event code -> listener list (queue 0xBD3C) ----
+; (name kept: SwbtWr_InitBank2 in audio/dsp_config_sysex.s loads it;
+;  it is SwbtWr bank 2, not the table its name suggests)
 Naka_RenderMode_A_Table:
-	.long UIState_HandlerTable_WithProbe
-	.long UIState_HandlerTable_Standard
-	.long UIState_HandlerTable_Compact
-	.long UIState_HandlerTable_Basic_00
-	.long UIState_HandlerTable_Basic_01
-	.long UIState_HandlerTable_Basic_02
-	.long UIState_HandlerTable_Basic_03
-	.long UIState_HandlerTable_Basic_04
-	.long UIState_HandlerTable_Basic_05
-	.long UIState_HandlerTable_Basic_06
-	.long UIState_HandlerTable_Basic_07
-	.long UIState_HandlerTable_00
-	.long UIState_HandlerTable_01
-	.long UIState_HandlerTable_02
-	.long UIState_HandlerTable_03
-	.long UIState_HandlerTable_04
-	.long UIState_HandlerTable_05
-	.long UIState_HandlerTable_06
-	.long UIState_HandlerTable_07
-	.long UIState_HandlerTable_08
-	.long UIState_HandlerTable_09
-	.long UIState_HandlerTable_10
-	.long UIState_HandlerTable_11
-	.long UIState_HandlerTable_12
-	.long UIState_HandlerTable_13
-	.long UIState_HandlerTable_14
-	.long UIState_HandlerTable_15
-	.long UIState_HandlerTable_16
-	.long UIState_ConfigB_000
-	.long UIState_ConfigB_001
-	.long UIState_ConfigB_002
-	.long UIState_ConfigB_003
-
-Naka_RenderMode_B_Table:
-	.long UIState_ConfigB_004
-	.long UIState_ConfigB_005
-	.long UIState_ConfigB_006
-	.long UIState_ConfigB_007
-	.long UIState_ConfigB_008
-	.long UIState_ConfigB_009
-	.long UIState_ConfigB_010
-	.long UIState_ConfigB_011
-	.long UIState_ConfigB_012
-	.long UIState_ConfigB_013
-	.long UIState_ConfigB_014
-	.long UIState_ConfigB_015
-	.long UIState_ConfigB_016
-	.long UIState_ConfigB_017
-	.long UIState_ConfigB_018
-	.long UIState_ConfigB_019
-	.long UIState_ConfigB_020
-	.long UIState_ConfigB_021
-	.long UIState_ConfigB_022
-	.long UIState_ConfigB_023
-	.long UIState_ConfigB_024
-	.long UIState_ConfigB_025
-	.long UIState_ConfigB_026
-	.long UIState_ConfigB_027
-	.long UIState_ConfigB_028
-	.long UIState_ConfigB_029
-	.long UIState_ConfigB_030
-	.long UIState_ConfigB_031
-	.long UIState_ConfigB_032
-	.long UIState_ConfigB_033
-	.long UIState_ConfigB_034
-	.long UIState_ConfigB_035
-	.long UIState_ConfigB_036
-	.long UIState_ConfigB_037
-	.long UIState_ConfigB_038
-	.long UIState_ConfigB_039
-	.long UIState_ConfigB_040
-	.long UIState_ConfigB_041
-	.long UIState_ConfigB_042
-	.long UIState_ConfigB_043
-	.long UIState_ConfigB_044
-	.long UIState_ConfigB_045
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_046
-	.long UIState_ConfigB_047
-	.long UIState_ConfigB_048
-	.long UIState_ConfigB_049
-	.long UIState_ConfigB_050
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_051
-	.long UIState_ConfigB_052
-	.long UIState_ConfigB_053
-	.long UIState_ConfigB_054
-	.long UIState_ConfigB_055
-	.long UIState_ConfigB_056
-	.long UIState_ConfigB_057
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_058
-	.long UIState_ConfigB_059
-	.long UIState_ConfigB_060
-	.long UIState_ConfigB_061
-	.long UIState_ConfigB_062
-	.long UIState_ConfigB_063
-	.long UIState_ConfigB_064
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_065
-	.long UIState_ConfigB_067
-	.long UIState_ConfigB_068
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_069
-	.long UIState_ConfigB_070
-	.long UIState_ConfigB_071
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_SeqInit_Table
-	.long UIState_ConfigB_072
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_073
-	.long UIState_ConfigB_074
-	.long UIState_ConfigB_075
-	.long UIState_ConfigB_076
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_077
-	.long UIState_ConfigB_078
-	.long UIState_ConfigB_079
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_080
-	.long UIState_ConfigB_082
-	.long UIState_ConfigB_083
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_084
-	.long UIState_ConfigB_085
-	.long UIState_ConfigB_086
-	.long UIState_DefaultConfig_B
-	.long UIState_ConfigB_087
-	.long UIState_ConfigB_088
-	.long UIState_ConfigB_089
-	.long UIState_ConfigB_090
-	.long UIState_ConfigB_091
-	.long UIState_ConfigB_092
-	.long UIState_ConfigB_093
-	.long UIState_ConfigB_094
-	.long UIState_ConfigB_095
-	.long UIState_ConfigB_096
-	.long UIState_ConfigB_097
-	.long UIState_ConfigB_098
-	.long UIState_ConfigB_099
-	.long UIState_ConfigB_100
-	.long UIState_DefaultConfig_B
-	.long UIState_DefaultConfig_B
-	swi	7
-
-
-UIState_HandlerTable_WithProbe:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+	.long SwbtB2_Code00_Listeners	; 0x00
+	.long SwbtB2_Code01_Listeners	; 0x01
+	.long SwbtB2_Code02_Listeners	; 0x02
+	.long SwbtB2_Code03_Listeners	; 0x03
+	.long SwbtB2_Code04_Listeners	; 0x04
+	.long SwbtB2_Code05_Listeners	; 0x05
+	.long SwbtB2_Code06_Listeners	; 0x06
+	.long SwbtB2_Code07_Listeners	; 0x07
+	.long SwbtB2_Code08_Listeners	; 0x08
+	.long SwbtB2_Code09_Listeners	; 0x09
+	.long SwbtB2_Code0A_Listeners	; 0x0A
+	.long SwbtB2_Code0B_Listeners	; 0x0B
+	.long SwbtB2_Code0C_Listeners	; 0x0C
+	.long SwbtB2_Code0D_Listeners	; 0x0D
+	.long SwbtB2_Code0E_Listeners	; 0x0E
+	.long SwbtB2_Code0F_Listeners	; 0x0F
+	.long SwbtB2_Code10_Listeners	; 0x10
+	.long SwbtB2_Code11_Listeners	; 0x11
+	.long SwbtB2_Code12_Listeners	; 0x12
+	.long SwbtB2_Code13_Listeners	; 0x13
+	.long SwbtB2_Code14_Listeners	; 0x14
+	.long SwbtB2_Code15_Listeners	; 0x15
+	.long SwbtB2_Code16_Listeners	; 0x16
+	.long SwbtB2_Code17_Listeners	; 0x17
+	.long SwbtB2_Code18_Listeners	; 0x18
+	.long SwbtB2_Code19_Listeners	; 0x19
+	.long SwbtB2_Code1A_Listeners	; 0x1A
+	.long SwbtB2_Code1B_Listeners	; 0x1B
+	.long SwbtB2_Code1C_Listeners	; 0x1C
+	.long SwbtB2_Code1D_Listeners	; 0x1D
+	.long SwbtB2_Code1E_Listeners	; 0x1E
+	.long SwbtB2_Code1F_Listeners	; 0x1F
+	.long SwbtB2_Code20_Listeners	; 0x20
+	.long SwbtB2_Code21_Listeners	; 0x21
+	.long SwbtB2_Code22_Listeners	; 0x22
+	.long SwbtB2_Code23_Listeners	; 0x23
+	.long SwbtB2_Code24_Listeners	; 0x24
+	.long SwbtB2_Code25_Listeners	; 0x25
+	.long SwbtB2_Code26_Listeners	; 0x26
+	.long SwbtB2_Code27_Listeners	; 0x27
+	.long SwbtB2_Code28_Listeners	; 0x28
+	.long SwbtB2_Code29_Listeners	; 0x29
+	.long SwbtB2_Code2A_Listeners	; 0x2A
+	.long SwbtB2_Code2B_Listeners	; 0x2B
+	.long SwbtB2_Code2C_Listeners	; 0x2C
+	.long SwbtB2_Code2D_Listeners	; 0x2D
+	.long SwbtB2_Code2E_Listeners	; 0x2E
+	.long SwbtB2_Code2F_Listeners	; 0x2F
+	.long SwbtB2_Code30_Listeners	; 0x30
+	.long SwbtB2_Code31_Listeners	; 0x31
+	.long SwbtB2_Code32_Listeners	; 0x32
+	.long SwbtB2_Code33_Listeners	; 0x33
+	.long SwbtB2_Code34_Listeners	; 0x34
+	.long SwbtB2_Code35_Listeners	; 0x35
+	.long SwbtB2_Code36_Listeners	; 0x36
+	.long SwbtB2_Code37_Listeners	; 0x37
+	.long SwbtB2_Code38_Listeners	; 0x38
+	.long SwbtB2_Code39_Listeners	; 0x39
+	.long SwbtB2_Code3A_Listeners	; 0x3A
+	.long SwbtB2_Code3B_Listeners	; 0x3B
+	.long SwbtB2_Code3C_Listeners	; 0x3C
+	.long SwbtB2_Code3D_Listeners	; 0x3D
+	.long SwbtB2_Code3E_Listeners	; 0x3E
+	.long SwbtB2_Code3F_Listeners	; 0x3F
+	.long SwbtB2_Code40_Listeners	; 0x40
+	.long SwbtB2_Code41_Listeners	; 0x41
+	.long SwbtB2_Code42_Listeners	; 0x42
+	.long SwbtB2_Code43_Listeners	; 0x43
+	.long SwbtB2_Code44_Listeners	; 0x44
+	.long SwbtB2_Code45_Listeners	; 0x45
+	.long SwbtB2_Code46_Listeners	; 0x46
+	.long SwbtB2_Code47_Listeners	; 0x47
+	.long SwbtB2_Code48_Listeners	; 0x48
+	.long SwbtB2_Code49_Listeners	; 0x49
+	.long UIState_DefaultConfig_B	; 0x4A
+	.long UIState_DefaultConfig_B	; 0x4B
+	.long UIState_DefaultConfig_B	; 0x4C
+	.long UIState_DefaultConfig_B	; 0x4D
+	.long UIState_DefaultConfig_B	; 0x4E
+	.long UIState_DefaultConfig_B	; 0x4F
+	.long SwbtB2_Code50_Listeners	; 0x50
+	.long SwbtB2_Code51_Listeners	; 0x51
+	.long SwbtB2_Code52_Listeners	; 0x52
+	.long SwbtB2_Code53_Listeners	; 0x53
+	.long SwbtB2_Code54_Listeners	; 0x54
+	.long UIState_DefaultConfig_B	; 0x55
+	.long UIState_DefaultConfig_B	; 0x56
+	.long UIState_DefaultConfig_B	; 0x57
+	.long UIState_DefaultConfig_B	; 0x58
+	.long UIState_DefaultConfig_B	; 0x59
+	.long UIState_DefaultConfig_B	; 0x5A
+	.long UIState_DefaultConfig_B	; 0x5B
+	.long UIState_DefaultConfig_B	; 0x5C
+	.long UIState_DefaultConfig_B	; 0x5D
+	.long UIState_DefaultConfig_B	; 0x5E
+	.long UIState_DefaultConfig_B	; 0x5F
+	.long SwbtB2_Code60_Listeners	; 0x60
+	.long SwbtB2_Code61_Listeners	; 0x61
+	.long SwbtB2_Code62_Listeners	; 0x62
+	.long SwbtB2_Code63_Listeners	; 0x63
+	.long SwbtB2_Code64_Listeners	; 0x64
+	.long SwbtB2_Code65_Listeners	; 0x65
+	.long SwbtB2_Code66_Listeners	; 0x66
+	.long UIState_DefaultConfig_B	; 0x67
+	.long SwbtB2_Code68_Listeners	; 0x68
+	.long SwbtB2_Code69_Listeners	; 0x69
+	.long SwbtB2_Code6A_Listeners	; 0x6A
+	.long SwbtB2_Code6B_Listeners	; 0x6B
+	.long SwbtB2_Code6C_Listeners	; 0x6C
+	.long SwbtB2_Code6D_Listeners	; 0x6D
+	.long SwbtB2_Code6E_Listeners	; 0x6E
+	.long UIState_DefaultConfig_B	; 0x6F
+	.long SwbtB2_Code70_Listeners	; 0x70
+	.long SwbtB2_Code71_Listeners	; 0x71
+	.long SwbtB2_Code72_Listeners	; 0x72
+	.long UIState_DefaultConfig_B	; 0x73
+	.long UIState_DefaultConfig_B	; 0x74
+	.long UIState_DefaultConfig_B	; 0x75
+	.long UIState_DefaultConfig_B	; 0x76
+	.long UIState_DefaultConfig_B	; 0x77
+	.long SwbtB2_Code78_Listeners	; 0x78
+	.long SwbtB2_Code79_Listeners	; 0x79
+	.long SwbtB2_Code7A_Listeners	; 0x7A
+	.long UIState_DefaultConfig_B	; 0x7B
+	.long UIState_DefaultConfig_B	; 0x7C
+	.long UIState_DefaultConfig_B	; 0x7D
+	.long UIState_DefaultConfig_B	; 0x7E
+	.long UIState_DefaultConfig_B	; 0x7F
+	.long SwbtB2_Code80_Listeners	; 0x80
+	.long SwbtB2_Code81_Listeners	; 0x81
+	.long UIState_DefaultConfig_B	; 0x82
+	.long UIState_DefaultConfig_B	; 0x83
+	.long UIState_DefaultConfig_B	; 0x84
+	.long UIState_DefaultConfig_B	; 0x85
+	.long UIState_DefaultConfig_B	; 0x86
+	.long UIState_DefaultConfig_B	; 0x87
+	.long UIState_DefaultConfig_B	; 0x88
+	.long UIState_DefaultConfig_B	; 0x89
+	.long UIState_DefaultConfig_B	; 0x8A
+	.long UIState_DefaultConfig_B	; 0x8B
+	.long UIState_DefaultConfig_B	; 0x8C
+	.long UIState_DefaultConfig_B	; 0x8D
+	.long UIState_DefaultConfig_B	; 0x8E
+	.long UIState_DefaultConfig_B	; 0x8F
+	.long SwbtB2_Code90_Listeners	; 0x90
+	.long SwbtB2_Code91_Listeners	; 0x91
+	.long SwbtB2_Code92_Listeners	; 0x92
+	.long SwbtB2_Code93_Listeners	; 0x93
+	.long UIState_DefaultConfig_B	; 0x94
+	.long UIState_DefaultConfig_B	; 0x95
+	.long UIState_DefaultConfig_B	; 0x96
+	.long UIState_DefaultConfig_B	; 0x97
+	.long SwbtB2_Code98_Listeners	; 0x98
+	.long SwbtB2_Code99_Listeners	; 0x99
+	.long SwbtB2_Code9A_Listeners	; 0x9A
+	.long UIState_DefaultConfig_B	; 0x9B
+	.long UIState_DefaultConfig_B	; 0x9C
+	.long UIState_DefaultConfig_B	; 0x9D
+	.long UIState_DefaultConfig_B	; 0x9E
+	.long UIState_DefaultConfig_B	; 0x9F
+	.long UIState_DefaultConfig_B	; 0xA0
+	.long UIState_DefaultConfig_B	; 0xA1
+	.long UIState_DefaultConfig_B	; 0xA2
+	.long UIState_DefaultConfig_B	; 0xA3
+	.long UIState_DefaultConfig_B	; 0xA4
+	.long UIState_DefaultConfig_B	; 0xA5
+	.long UIState_DefaultConfig_B	; 0xA6
+	.long UIState_DefaultConfig_B	; 0xA7
+	.long SwbtB2_CodeA8_Listeners	; 0xA8
+	.long SwbtB2_CodeA9_Listeners	; 0xA9
+	.long SwbtB2_CodeAA_Listeners	; 0xAA
+	.long UIState_DefaultConfig_B	; 0xAB
+	.long SwbtB2_CodeAC_Listeners	; 0xAC
+	.long SwbtB2_CodeAD_Listeners	; 0xAD
+	.long SwbtB2_CodeAE_Listeners	; 0xAE
+	.long UIState_DefaultConfig_B	; 0xAF
+	.long SwbtB2_CodeB0_Listeners	; 0xB0
+	.long SwbtB2_CodeB1_Listeners	; 0xB1
+	.long SwbtB2_CodeB2_Listeners	; 0xB2
+	.long SwbtB2_CodeB3_Listeners	; 0xB3
+	.long SwbtB2_CodeB4_Listeners	; 0xB4
+	.long SwbtB2_CodeB5_Listeners	; 0xB5
+	.long SwbtB2_CodeB6_Listeners	; 0xB6
+	.long SwbtB2_CodeB7_Listeners	; 0xB7
+	.long SwbtB2_CodeB8_Listeners	; 0xB8
+	.long SwbtB2_CodeB9_Listeners	; 0xB9
+	.long SwbtB2_CodeBA_Listeners	; 0xBA
+	.long SwbtB2_CodeBB_Listeners	; 0xBB
+	.long SwbtB2_CodeBC_Listeners	; 0xBC
+	.long SwbtB2_CodeBD_Listeners	; 0xBD
+	.long UIState_DefaultConfig_B	; 0xBE
+	.long UIState_DefaultConfig_B	; 0xBF
+	.byte 0xff				; separator (read by nothing)
+SwbtB2_Code00_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long SeMenu_NameEditor_End
 	.long BitMapOut_ByteData_RenderB
@@ -4844,548 +4691,470 @@ UIState_HandlerTable_WithProbe:
 	.long FDemoText_ByteData_VoiceProbeA
 	.long BitmapFinpic_ByteData
 	.long 0xffffffff
-UIState_HandlerTable_Standard:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code01_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long SeMenu_NameEditor_End
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long 0xffffffff
-UIState_HandlerTable_Compact:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code02_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long 0xffffffff
-UIState_HandlerTable_Basic_00:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code03_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_Basic_01:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code04_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_Basic_02:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code05_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_Basic_03:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code06_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_Basic_04:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code07_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_Basic_05:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code08_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_Basic_06:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code09_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_Basic_07:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code0A_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_00:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code0B_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_01:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code0C_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_02:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code0D_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_03:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code0E_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_04:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code0F_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_05:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code10_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_06:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code11_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_07:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code12_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_08:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code13_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_09:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code14_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_10:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code15_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_11:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code16_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_12:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code17_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_13:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code18_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_14:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code19_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_15:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code1A_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_HandlerTable_16:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code1B_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_000:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code1C_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_001:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code1D_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_002:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code1E_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_003:
-	.long VoiceSlot_CheckAndApply_Data_0x91 + 30
+SwbtB2_Code1F_Listeners:
+	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79
-	.long MidiCC_VoiceParam_8 + 38
+	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
+	.long MidiCC_VoiceParam_8_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_004:
-	.long 0xffffffff
-
-UIState_ConfigB_005:
-	.long 0xffffffff
-
-UIState_ConfigB_006:
-	.long 0xffffffff
-
-UIState_ConfigB_007:
-	.long 0xffffffff
-
-UIState_ConfigB_008:
-	.long 0xffffffff
-
-UIState_ConfigB_009:
-	.long 0xffffffff
-
-UIState_ConfigB_010:
-	.long 0xffffffff
-
-UIState_ConfigB_011:
-	.long 0xffffffff
-
-UIState_ConfigB_012:
-	.long 0xffffffff
-
-UIState_ConfigB_013:
-	.long 0xffffffff
-
-UIState_ConfigB_014:
-	.long 0xffffffff
-
-UIState_ConfigB_015:
-	.long 0xffffffff
-
-UIState_ConfigB_016:
-	.long 0xffffffff
-
-UIState_ConfigB_017:
-	.long 0xffffffff
-
-UIState_ConfigB_018:
-	.long 0xffffffff
-
-UIState_ConfigB_019:
-	.long 0xffffffff
-
-UIState_ConfigB_020:
-	.long 0xffffffff
-
-UIState_ConfigB_021:
-	.long 0xffffffff
-
-UIState_ConfigB_022:
-	.long 0xffffffff
-
-UIState_ConfigB_023:
-	.long 0xffffffff
-
-UIState_ConfigB_024:
-	.long 0xffffffff
-
-UIState_ConfigB_025:
-	.long 0xffffffff
-
-UIState_ConfigB_026:
-	.long 0xffffffff
-
-UIState_ConfigB_027:
-	.long 0xffffffff
-
-UIState_ConfigB_028:
-	.long 0xffffffff
-
-UIState_ConfigB_029:
-	.long 0xffffffff
-
-UIState_ConfigB_030:
-	.long 0xffffffff
-
-UIState_ConfigB_031:
-	.long 0xffffffff
-
-UIState_ConfigB_032:
-	.long 0xffffffff
-
-UIState_ConfigB_033:
-	.long 0xffffffff
-
-UIState_ConfigB_034:
-	.long 0xffffffff
-
-UIState_ConfigB_035:
-	.long 0xffffffff
-
-UIState_ConfigB_036:
+SwbtB2_Code20_Listeners:	.long 0xffffffff
+SwbtB2_Code21_Listeners:	.long 0xffffffff
+SwbtB2_Code22_Listeners:	.long 0xffffffff
+SwbtB2_Code23_Listeners:	.long 0xffffffff
+SwbtB2_Code24_Listeners:	.long 0xffffffff
+SwbtB2_Code25_Listeners:	.long 0xffffffff
+SwbtB2_Code26_Listeners:	.long 0xffffffff
+SwbtB2_Code27_Listeners:	.long 0xffffffff
+SwbtB2_Code28_Listeners:	.long 0xffffffff
+SwbtB2_Code29_Listeners:	.long 0xffffffff
+SwbtB2_Code2A_Listeners:	.long 0xffffffff
+SwbtB2_Code2B_Listeners:	.long 0xffffffff
+SwbtB2_Code2C_Listeners:	.long 0xffffffff
+SwbtB2_Code2D_Listeners:	.long 0xffffffff
+SwbtB2_Code2E_Listeners:	.long 0xffffffff
+SwbtB2_Code2F_Listeners:	.long 0xffffffff
+SwbtB2_Code30_Listeners:	.long 0xffffffff
+SwbtB2_Code31_Listeners:	.long 0xffffffff
+SwbtB2_Code32_Listeners:	.long 0xffffffff
+SwbtB2_Code33_Listeners:	.long 0xffffffff
+SwbtB2_Code34_Listeners:	.long 0xffffffff
+SwbtB2_Code35_Listeners:	.long 0xffffffff
+SwbtB2_Code36_Listeners:	.long 0xffffffff
+SwbtB2_Code37_Listeners:	.long 0xffffffff
+SwbtB2_Code38_Listeners:	.long 0xffffffff
+SwbtB2_Code39_Listeners:	.long 0xffffffff
+SwbtB2_Code3A_Listeners:	.long 0xffffffff
+SwbtB2_Code3B_Listeners:	.long 0xffffffff
+SwbtB2_Code3C_Listeners:	.long 0xffffffff
+SwbtB2_Code3D_Listeners:	.long 0xffffffff
+SwbtB2_Code3E_Listeners:	.long 0xffffffff
+SwbtB2_Code3F_Listeners:	.long 0xffffffff
+SwbtB2_Code40_Listeners:
 	.long UIState_UpdateControlBits
 	.long 0xffffffff
-
-UIState_ConfigB_037:
+SwbtB2_Code41_Listeners:	.long 0xffffffff
+SwbtB2_Code42_Listeners:	.long 0xffffffff
+SwbtB2_Code43_Listeners:
+	.long UIState_KeyScan_Dispatch
+	.long HdaeRom_TableEntry2 + 29	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry9
 	.long 0xffffffff
-
-UIState_ConfigB_038:
-	.long 0xffffffff
-
-UIState_ConfigB_039:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_039.bin"
-UIState_ConfigB_040:
+SwbtB2_Code44_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
 	.long 0xffffffff
-
-UIState_ConfigB_041:
+SwbtB2_Code45_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_042:
+	.long 0xffffffff
+SwbtB2_Code46_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_043:
+	.long 0xffffffff
+SwbtB2_Code47_Listeners:
 	.long UIState_KeyScan_Dispatch
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_044:
+	.long 0xffffffff
+SwbtB2_Code48_Listeners:
 	.long UIState_ProcessExtendedMode
 	.long AccWrap_ReplayStop
-	.long Audio_CheckSubsystemReady + 31
+	.long Audio_CheckSubsystemReady + 31	; no label at this callback entry yet; v10: UIStateEvt_ParamEdit_Data
 	.long NotePool_DataBlock_8BA
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_RenderE
-	.long MidiSysEx_ApplyChannel + 4
+	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
 	.long 0xffffffff
-UIState_ConfigB_045:
-	.fill 4, 1, 0xff
-UIState_ConfigB_046:
-	.fill 4, 1, 0xff
-UIState_ConfigB_047:
-	.fill 4, 1, 0xff
-UIState_ConfigB_048:
-	.fill 4, 1, 0xff
-UIState_ConfigB_049:
-	.fill 4, 1, 0xff
-UIState_ConfigB_050:
-	.fill 4, 1, 0xff
-UIState_ConfigB_051:
-	.long VoiceSlot_CheckAndApply_Data2 + 234
+SwbtB2_Code49_Listeners:	.long 0xffffffff
+SwbtB2_Code50_Listeners:	.long 0xffffffff
+SwbtB2_Code51_Listeners:	.long 0xffffffff
+SwbtB2_Code52_Listeners:	.long 0xffffffff
+SwbtB2_Code53_Listeners:	.long 0xffffffff
+SwbtB2_Code54_Listeners:	.long 0xffffffff
+SwbtB2_Code60_Listeners:
+	.long VoiceSlot_CheckAndApply_Data2 + 234	; no label at this callback entry yet; v10: HdaeRom_Entry
 	.long UIState_ProcessSimpleMode
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_052:
-	.long VoiceSlot_CheckAndApply_Data2 + 338
+SwbtB2_Code61_Listeners:
+	.long VoiceSlot_CheckAndApply_Data2 + 338	; no label at this callback entry yet; v10: HdaeRom_ProcessBlock
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
 	.long 0xffffffff
-UIState_ConfigB_053:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_053.bin"
-UIState_ConfigB_054:
-	.byte 0xf6, 0xa2, 0xfe, 0x00
+SwbtB2_Code62_Listeners:
+	.long VoiceSlot_CheckAndApply_Data2_Code_Epilogue + 3	; no label at this callback entry yet; v10: HdaeRom_ReadParam
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
+SwbtB2_Code63_Listeners:
+	.long VoiceSlot_CheckAndApply_Data2_Code_Epilogue + 4	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_055:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_055.bin"
-UIState_ConfigB_056:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_056.bin"
-UIState_ConfigB_057:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_057.bin"
-UIState_ConfigB_058:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_058.bin"
-UIState_ConfigB_059:
-	reti
-	cp (xix), xiz
-	nop
-	.long UIState_KeyScan_Dispatch
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_060:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_060.bin"
-UIState_ConfigB_061:
-	push 164
-	swi 6
-	nop
-	.long UIState_KeyScan_Dispatch
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_062:
-	.fill 4, 1, 0xff
-UIState_ConfigB_063:
-	.fill 4, 1, 0xff
-UIState_ConfigB_064:
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_065:
-	.byte 0x22, 0x74, 0xfc, 0x00
-UIState_ConfigB_066:
-	.long SndParam_ProcessEntry + 201
-	.long UIStateEvt_TransposeUpdate + 25
-	.long UIState_KeyScan_Dispatch
-	.long MidiSysEx_ApplyChannel + 4
 	.long 0xffffffff
-UIState_ConfigB_067:
-	or bc, ix
-	swi 5
-	nop
+SwbtB2_Code64_Listeners:
+	.long EffEdit_DSPConfigBlock
+	.long NoteDisplay_StoreAndDispatch + 23	; no label at this callback entry yet; v10: HdaeRom_WriteParam
+	.long 0xffffffff
+SwbtB2_Code65_Listeners:
+	.long EffEdit_DSPConfigBlock
+	.long NoteDisplay_StoreAnd_LoadReg + 13	; no label at this callback entry yet; v10: HdaeRom_CheckResult
+	.long 0xffffffff
+SwbtB2_Code66_Listeners:
+	.long EffEdit_DSPConfigBlock
+	.long NoteDisplay_StoreAnd_LoadDRAM + 22	; no label at this callback entry yet; v10: HdaeRom_FinishBlock
+	.long 0xffffffff
+SwbtB2_Code68_Listeners:
+	.long NoteDisplay_StoreAnd_LoadReg3 + 6	; no label at this callback entry yet; v10: HdaeRom_TableEntry0
 	.long UIState_KeyScan_Dispatch
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_068:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_068.bin"
-UIState_ConfigB_069:
-	.fill 4, 1, 0xff
-UIState_ConfigB_070:
-	.fill 4, 1, 0xff
-UIState_ConfigB_071:
-	.fill 4, 1, 0xff
-UIState_SeqInit_Table:
-	.long UIState_ProcessKeyEvent_0x3D + 25
-	.long UIStateEvt_ParamEdit_Data + 297
+	.long 0xffffffff
+SwbtB2_Code69_Listeners:
+	.long NoteDisplay_StoreAnd_LoadReg3 + 7	; no label at this callback entry yet
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
+SwbtB2_Code6A_Listeners:
+	.long NoteDisplay_StoreAnd_LoadReg3 + 8	; no label at this callback entry yet; v10: HdaeRom_TableEntry1
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
+SwbtB2_Code6B_Listeners:
+	.long NoteDisplay_StoreAnd_LoadReg3 + 9	; no label at this callback entry yet
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
+SwbtB2_Code6C_Listeners:	.long 0xffffffff
+SwbtB2_Code6D_Listeners:	.long 0xffffffff
+SwbtB2_Code6E_Listeners:	.long 0xffffffff
+SwbtB2_Code70_Listeners:
+	.long UIState_NullReturn
+	.long SndParam_ProcessEntry + 201	; no label at this callback entry yet; v10: HdaeRom_AltReadParam
+	.long UIStateEvt_TransposeUpdate + 25	; no label at this callback entry yet; v10: UIStateEvt_EffectSelect_Data
+	.long UIState_KeyScan_Dispatch
+	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
+	.long 0xffffffff
+SwbtB2_Code71_Listeners:
+	.long UIStateEvt_VolumeMixer_Data + 127	; no label at this callback entry yet
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
+SwbtB2_Code72_Listeners:
+	.long NoteDisplay_StoreAnd_LoadReg3 + 10	; no label at this callback entry yet; v10: HdaeRom_TableEntry2
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
+SwbtB2_Code78_Listeners:	.long 0xffffffff
+SwbtB2_Code79_Listeners:	.long 0xffffffff
+SwbtB2_Code7A_Listeners:	.long 0xffffffff
+SwbtB2_Code80_Listeners:
+	.long UIState_ProcessKeyEvent + 86	; no label at this callback entry yet; v10: HdaeRom_AltEntry
+	.long UIStateEvt_ParamEdit_Data + 297	; no label at this callback entry yet; v10: UIStateEvt_ChannelConfig_Data
 	.long UIWidget_MidiStreamControl
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_072:
-	.fill 4, 1, 0xff
-
-
-UIState_ConfigB_073:
+SwbtB2_Code81_Listeners:	.long 0xffffffff
+SwbtB2_Code90_Listeners:
 	.long UIState_SwitchOnDisplayMode
-	.long UIStateEvt_PartRouting + 42
+	.long UIStateEvt_PartRouting + 42	; no label at this callback entry yet; v10: UIStateEvt_VolumeMixer_Data
 	.long AccStyle_JumpTable2
 	.long UIState_KeyScan_Dispatch
 	.long CtrlPanel_HandleKeyInput
 	.long BitMapOut_ByteData_RenderD
 	.long 0xffffffff
-UIState_ConfigB_074:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_074.bin"
-UIState_EventHandler_Table:
-	.long UIState_ProcessKeyEvent_0x3D + 26
-	.long UIStateEvt_VolumeMixer_Data + 83
+SwbtB2_Code91_Listeners:
+	.long MidiSysEx_ProcessBlock_Code_Helper4 + 35	; no label at this callback entry yet; v10: MidiCtrl_ModeSwitch_Data
+	.long UIState_ProcessKeyEvent + 87	; no label at this callback entry yet; v10: UIStateEvt_ProcessHandler
+	.long UIStateEvt_VolumeMixer_Data + 83	; no label at this callback entry yet; v10: UIStateEvt_StubReturn
 	.long UIStateEvt_NullHandler
 	.long UIStateEvt_VoiceParamHandler
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
-UIState_ConfigB_075:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_075.bin"
-UIState_ConfigB_076:
-	.long UIStateEvt_VolumeMixer_Data + 84
-	.long ReadNextRecord_Block3 + 11
+SwbtB2_Code92_Listeners:
+	.long SndParam_ProcessEntry + 104	; no label at this callback entry yet; v10: HdaeRom_AltProcessBlock
+	.long UIState_KeyScan_Dispatch
+	.long 0xffffffff
+SwbtB2_Code93_Listeners:
+	.long UIStateEvt_VolumeMixer_Data + 84	; no label at this callback entry yet
+	.long ReadNextRecord_Block3 + 11	; no label at this callback entry yet; v10: CharMap_ActivePreamb_LoadDRAM
 	.long UIState_KeyScan_Dispatch
 	.long Encoder_ApplySystemModeSettings
 	.long 0xffffffff
-UIState_ConfigB_077:
+SwbtB2_Code98_Listeners:
 	.long UIState_ProcessAltMode
-	.long UIStateEvt_ParamEdit_Data + 243
+	.long UIStateEvt_ParamEdit_Data + 243	; no label at this callback entry yet; v10: UIStateEvt_PlayModeGuard_Data
 	.long AccWrap_ReplayStopAlt
-	.long SndParam_ProcessEntry + 302
+	.long SndParam_ProcessEntry + 302	; no label at this callback entry yet; v10: HdaeRom_AltCheckResult
 	.long BitMapOut_ByteData_DisplayUpdate
-	.long BitMapOut_CopyRegion_Done + 29
+	.long BitMapOut_CopyRegion_Done + 29	; no label at this callback entry yet; v10: MidiOut_RealtimeDispatch_Data
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_TransitionSeq
-	.long MidiSysEx_ApplyChannel + 4
+	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
 	.long 0xffffffff
-UIState_ConfigB_078:
+SwbtB2_Code99_Listeners:
 	.long UIState_KeyScan_Dispatch
 	.long UIState_CheckAndRenderBitmap
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_079:
-	jr ge, -90
-	swi 6
-	nop
+	.long 0xffffffff
+SwbtB2_Code9A_Listeners:
+	.long HdaeRom_Entry + 6	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigB_080:
+	.long 0xffffffff
+SwbtB2_CodeA8_Listeners:
 	.long UIState_SwitchForMidiFlags
 	.long AccompSeq_JumpTable
 	.long AccStyle_JumpTable
-	.byte 0x61, 0x75, 0xef, 0x00
-UIState_ConfigB_081:
+	.long PerfMode_Handler_EvtB_Return + 1	; no label at this callback entry yet
 	.long Demo_SelectEntry_ByteTable
-	.long UIStateEvt_VolumeMixer_Data + 85
+	.long UIStateEvt_VolumeMixer_Data + 85	; no label at this callback entry yet; v10: UIStateEvt_MuteToggle_Data
 	.long FileIO_ErrorCodeByteBlock
 	.long BitMapOut_ByteData_RenderState
 	.long UIState_KeyScan_Dispatch
@@ -5394,750 +5163,460 @@ UIState_ConfigB_081:
 	.long AccStyle_TableDataEntry
 	.long HelpLang_DispatchDataBlock
 	.long 0xffffffff
-UIState_ConfigB_082:
-	.fill 4, 1, 0xff
-UIState_ConfigB_083:
-	.fill 4, 1, 0xff
-UIState_ConfigB_084:
-	.fill 4, 1, 0xff
-UIState_ConfigB_085:
-	.fill 4, 1, 0xff
-UIState_ConfigB_086:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_086.bin"
-UIState_ConfigB_087:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_087.bin"
-UIState_ConfigB_088:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_088.bin"
-UIState_ConfigB_089:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_089.bin"
-UIState_ConfigB_090:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_090.bin"
-UIState_ConfigB_091:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_091.bin"
-UIState_ConfigB_092:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_092.bin"
-UIState_ConfigB_093:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_093.bin"
-UIState_ConfigB_094:
-	.incbin "includes/romslices/v7_transplant_UIState_ConfigB_094.bin"
-UIState_ConfigB_095:
-	.fill 4, 1, 0xff
-UIState_ConfigB_096:
-	.fill 4, 1, 0xff
-UIState_ConfigB_097:
-	.fill 4, 1, 0xff
-UIState_ConfigB_098:
-	.fill 4, 1, 0xff
-UIState_ConfigB_099:
-	.fill 4, 1, 0xff
-UIState_ConfigB_100:
-	.fill 4, 1, 0xff
-UIState_DefaultConfig_B:
+SwbtB2_CodeA9_Listeners:	.long 0xffffffff
+SwbtB2_CodeAA_Listeners:	.long 0xffffffff
+SwbtB2_CodeAC_Listeners:	.long 0xffffffff
+SwbtB2_CodeAD_Listeners:	.long 0xffffffff
+SwbtB2_CodeAE_Listeners:
+	.long HdaeRom_ProcessBlock + 4	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry0
 	.long 0xffffffff
-	.long SendEpilogue_Data + 597
-	.long DSPCfg_EventType50 + 27
-	.long PerfMode_Handler_EvtB_0x78 + 5
-	.long MidiCC_VoiceParam_8 + 59
+SwbtB2_CodeB0_Listeners:
+	.long HdaeRom_ProcessBlock + 48	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry1
+	.long 0xffffffff
+SwbtB2_CodeB1_Listeners:
+	.long HdaeRom_WriteParam + 3	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry2
+	.long 0xffffffff
+SwbtB2_CodeB2_Listeners:
+	.long HdaeRom_WriteParam + 47	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry3
+	.long 0xffffffff
+SwbtB2_CodeB3_Listeners:
+	.long HdaeRom_CheckResult + 23	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry4
+	.long 0xffffffff
+SwbtB2_CodeB4_Listeners:
+	.long HdaeRom_FinishBlock + 11	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry5
+	.long 0xffffffff
+SwbtB2_CodeB5_Listeners:
+	.long HdaeRom_FinishBlock + 55	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry6
+	.long 0xffffffff
+SwbtB2_CodeB6_Listeners:
+	.long HdaeRom_TableEntry2 + 27	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry7
+	.long 0xffffffff
+SwbtB2_CodeB7_Listeners:
+	.long HdaeRom_TableEntry2 + 28	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry8
+	.long 0xffffffff
+SwbtB2_CodeB8_Listeners:	.long 0xffffffff
+SwbtB2_CodeB9_Listeners:	.long 0xffffffff
+SwbtB2_CodeBA_Listeners:	.long 0xffffffff
+SwbtB2_CodeBB_Listeners:	.long 0xffffffff
+SwbtB2_CodeBC_Listeners:	.long 0xffffffff
+SwbtB2_CodeBD_Listeners:	.long 0xffffffff
+UIState_DefaultConfig_B:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
+; post list (called once per SwbtWr_DispatchLoop run)
+SwbtBank2_PostCallbacks:
+	.long SendEpilogue_Data_Code_Skip + 8	; no label at this callback entry yet; v10: Song_SendPartDataBlocks
+	.long DSPCfg_EventType50 + 27	; no label at this callback entry yet; v10: AudioInit_ProcessModeChange
+	.long PerfMode_Handler_EvtB_Epilogue + 5	; no label at this callback entry yet
+	.long MidiCC_VoiceParam_8_Return2 + 1	; no label at this callback entry yet; v10: UIState_DisplayUpdate_BitmapHandler
 	.long BitMapOut_ByteData_RenderC
 	.long FDemoText_ProcessVoiceFlags
 	.long 0xffffffff
+
+; ---- bank 3: event code -> listener list (queue 0xC039) ----
+; (name kept: SwbtWr_InitBank3 in audio/dsp_config_sysex.s loads it;
+;  it is SwbtWr bank 3, not the table its name suggests)
 Naka_EventHandler_Table:
-	.long UIState_ConfigC_000
-	.long UIState_ConfigC_001
-	.long UIState_ConfigC_002
-	.long UIState_ConfigC_003
-	.long UIState_ConfigC_004
-	.long UIState_ConfigC_005
-	.long UIState_ConfigC_006
-	.long UIState_ConfigC_007
-	.long UIState_ConfigC_008
-	.long UIState_ConfigC_009
-	.long UIState_ConfigC_010
-	.long UIState_ConfigC_011
-	.long UIState_ConfigC_012
-	.long UIState_ConfigC_013
-	.long UIState_ConfigC_014
-	.long UIState_ConfigC_015
-	.long UIState_ConfigC_016
-	.long UIState_ConfigC_017
-	.long UIState_ConfigC_018
-	.long UIState_ConfigC_019
-	.long UIState_ConfigC_020
-	.long UIState_ConfigC_021
-	.long UIState_ConfigC_022
-	.long UIState_ConfigC_023
-	.long UIState_ConfigC_024
-	.long UIState_ConfigC_025
-	.long UIState_ConfigC_026
-	.long UIState_ConfigC_027
-	.long UIState_ConfigC_028
-	.long UIState_ConfigC_029
-	.long UIState_ConfigC_030
-	.long UIState_ConfigC_031
-	.long UIState_ConfigC_032
-	.long UIState_ConfigC_033
-	.long UIState_ConfigC_034
-	.long UIState_ConfigC_035
-	.long UIState_ConfigC_036
-	.long UIState_ConfigC_037
-	.long UIState_ConfigC_038
-	.long UIState_ConfigC_039
-	.long UIState_ConfigC_040
-	.long UIState_ConfigC_041
-	.long UIState_ConfigC_042
-	.long UIState_ConfigC_043
-	.long UIState_ConfigC_044
-	.long UIState_ConfigC_045
-	.long UIState_ConfigC_046
-	.long UIState_ConfigC_047
-	.long UIState_ConfigC_048
-	.long UIState_ConfigC_049
-	.long UIState_ConfigC_050
-	.long UIState_ConfigC_051
-	.long UIState_ConfigC_052
-	.long UIState_ConfigC_053
-	.long UIState_ConfigC_054
-	.long UIState_ConfigC_055
-	.long UIState_ConfigC_056
-	.long UIState_ConfigC_057
-	.long UIState_ConfigC_058
-	.long UIState_ConfigC_059
-	.long UIState_ConfigC_060
-	.long UIState_ConfigC_061
-	.long UIState_ConfigC_062
-	.long UIState_ConfigC_063
-	.long UIState_ConfigC_064
-	.long UIState_ConfigC_065
-	.long UIState_ConfigC_066
-	.long UIState_ConfigC_067
-	.long UIState_ConfigC_068
-	.long UIState_ConfigC_069
-	.long UIState_ConfigC_070
-	.long UIState_ConfigC_071
-	.long UIState_ConfigC_072
-	.long UIState_ConfigC_073
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_074
-	.long UIState_ConfigC_075
-	.long UIState_ConfigC_076
-	.long UIState_ConfigC_077
-	.long UIState_ConfigC_078
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_079
-	.long UIState_ConfigC_080
-	.long UIState_ConfigC_081
-	.long UIState_ConfigC_082
-	.long UIState_ConfigC_083
-	.long UIState_ConfigC_084
-	.long UIState_ConfigC_085
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_086
-	.long UIState_ConfigC_087
-	.long UIState_ConfigC_088
-	.long UIState_ConfigC_089
-	.long UIState_ConfigC_090
-	.long UIState_ConfigC_091
-	.long UIState_ConfigC_092
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_093
-	.long UIState_ConfigC_094
-	.long UIState_ConfigC_095
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_096
-	.long UIState_ConfigC_097
-	.long UIState_ConfigC_098
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_099
-	.long UIState_ConfigC_100
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_101
-	.long UIState_ConfigC_102
-	.long UIState_ConfigC_103
-	.long UIState_ConfigC_104
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_105
-	.long UIState_ConfigC_106
-	.long UIState_ConfigC_107
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_108
-	.long UIState_ConfigC_109
-	.long UIState_ConfigC_110
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_111
-	.long UIState_ConfigC_112
-	.long UIState_ConfigC_113
-	.long UIState_DefaultConfig_C
-	.long UIState_ConfigC_114
-	.long UIState_ConfigC_115
-	.long UIState_ConfigC_116
-	.long UIState_ConfigC_117
-	.long UIState_ConfigC_118
-	.long UIState_ConfigC_119
-	.long UIState_ConfigC_120
-	.long UIState_ConfigC_121
-	.long UIState_ConfigC_122
-	.long UIState_ConfigC_123
-	.long UIState_ConfigC_124
-	.long UIState_ConfigC_125
-	.long UIState_ConfigC_126
-	.long UIState_ConfigC_127
-	.long UIState_DefaultConfig_C
-	.long UIState_DefaultConfig_C
-	swi	7
-UIState_ConfigC_000:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_001:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_002:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_003:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_004:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_005:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_006:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_007:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_008:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_009:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_010:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_011:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_012:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_013:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_014:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_015:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_016:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_017:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_018:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_019:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_020:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_021:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_022:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_023:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_024:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_025:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_026:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_027:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_028:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_029:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_030:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	swi	7
-UIState_ConfigC_031:
-	push 60
-	swi 3
-	nop
-	swi 7
-	swi 7
-	swi 7
-	.fill 1, 1, 0xff
-UIState_ConfigC_032:
-	.fill 4, 1, 0xff
-UIState_ConfigC_033:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_034:
-	.fill 4, 1, 0xff
-UIState_ConfigC_035:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_036:
-	.fill 4, 1, 0xff
-UIState_ConfigC_037:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_038:
-	.fill 4, 1, 0xff
-UIState_ConfigC_039:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_040:
-	.fill 4, 1, 0xff
-UIState_ConfigC_041:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_042:
-	.fill 4, 1, 0xff
-UIState_ConfigC_043:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_044:
-	.fill 4, 1, 0xff
-UIState_ConfigC_045:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_046:
-	.fill 4, 1, 0xff
-UIState_ConfigC_047:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_048:
-	.fill 4, 1, 0xff
-UIState_ConfigC_049:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_050:
-	.fill 4, 1, 0xff
-UIState_ConfigC_051:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_052:
-	.fill 4, 1, 0xff
-UIState_ConfigC_053:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_054:
-	.fill 4, 1, 0xff
-UIState_ConfigC_055:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_056:
-	.fill 4, 1, 0xff
-UIState_ConfigC_057:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_058:
-	.fill 4, 1, 0xff
-UIState_ConfigC_059:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_060:
-	.fill 4, 1, 0xff
-UIState_ConfigC_061:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_062:
-	.fill 4, 1, 0xff
-UIState_ConfigC_063:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_064:
-	.fill 4, 1, 0xff
-UIState_ConfigC_065:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_066:
-	.fill 4, 1, 0xff
-UIState_ConfigC_067:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_068:
-	.fill 4, 1, 0xff
-UIState_ConfigC_069:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_070:
-	.fill 4, 1, 0xff
-UIState_ConfigC_071:
-	.fill 3, 1, 0xff
-	swi	7
-UIState_ConfigC_072:
-	.byte 0xe0, 0x3d, 0xfb, 0x00, 0xff, 0xff, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_073:
-	.fill 4, 1, 0xff
-UIState_ConfigC_074:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_075:
-	.fill 4, 1, 0xff
-UIState_ConfigC_076:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_077:
-	.fill 4, 1, 0xff
-UIState_ConfigC_078:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_079:
-	.fill 4, 1, 0xff
-UIState_ConfigC_080:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_081:
-	.fill 4, 1, 0xff
-UIState_ConfigC_082:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_083:
-	.fill 4, 1, 0xff
-UIState_ConfigC_084:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_085:
-	.fill 4, 1, 0xff
-UIState_ConfigC_086:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_087:
-	.fill 4, 1, 0xff
-UIState_ConfigC_088:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_089:
-	.fill 4, 1, 0xff
-UIState_ConfigC_090:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_091:
-	.fill 4, 1, 0xff
-UIState_ConfigC_092:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_093:
-	.fill 4, 1, 0xff
-UIState_ConfigC_094:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_095:
-	.fill 4, 1, 0xff
-UIState_ConfigC_096:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_097:
-	.fill 4, 1, 0xff
-UIState_ConfigC_098:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_099:
-	.fill 4, 1, 0xff
-UIState_ConfigC_100:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_101:
-	.fill 4, 1, 0xff
-UIState_ConfigC_102:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_103:
-	.fill 4, 1, 0xff
-UIState_ConfigC_104:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_105:
-	.fill 4, 1, 0xff
-UIState_ConfigC_106:
-	.fill 3, 1, 0xff
-	swi	7
-UIState_ConfigC_107:
-	.byte 0xff, 0xff, 0xff, 0xff
-UIState_ConfigC_108:
-	.byte 0x40, 0xbb, 0xf5
-	.byte 0x00, 0x6a, 0x5a, 0xfb, 0x00, 0xf4, 0x7c, 0xf9
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff
-UIState_ConfigC_109:
-	.byte 0x76, 0x66, 0xf8
-	.byte 0x00, 0x32, 0xe2, 0xf6, 0x00, 0xf4, 0x7c, 0xf9
-	.byte 0x00, 0x68, 0xe0, 0xef, 0x00, 0xff, 0xff, 0xff
-	swi	7
-UIState_ConfigC_110:
-	.byte 0xf4, 0x7c, 0xf9, 0x00, 0xff, 0xff, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_111:
-	.fill 4, 1, 0xff
-UIState_ConfigC_112:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_113:
-	.fill 4, 1, 0xff
-UIState_ConfigC_114:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_115:
-	.fill 4, 1, 0xff
-UIState_ConfigC_116:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_117:
-	.fill 4, 1, 0xff
-UIState_ConfigC_118:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_119:
-	.fill 4, 1, 0xff
-UIState_ConfigC_120:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_121:
-	.fill 4, 1, 0xff
-UIState_ConfigC_122:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_123:
-	.fill 4, 1, 0xff
-UIState_ConfigC_124:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_125:
-	.fill 4, 1, 0xff
-UIState_ConfigC_126:
-	.fill 3, 1, 0xff
-	.fill 1, 1, 0xff
-UIState_ConfigC_127:
-	.fill 4, 1, 0xff
-UIState_DefaultConfig_C:
-	.fill 3, 1, 0xff
-	.fill 6, 1, 0xff
+	.long SwbtB3_Code00_Listeners	; 0x00
+	.long SwbtB3_Code01_Listeners	; 0x01
+	.long SwbtB3_Code02_Listeners	; 0x02
+	.long SwbtB3_Code03_Listeners	; 0x03
+	.long SwbtB3_Code04_Listeners	; 0x04
+	.long SwbtB3_Code05_Listeners	; 0x05
+	.long SwbtB3_Code06_Listeners	; 0x06
+	.long SwbtB3_Code07_Listeners	; 0x07
+	.long SwbtB3_Code08_Listeners	; 0x08
+	.long SwbtB3_Code09_Listeners	; 0x09
+	.long SwbtB3_Code0A_Listeners	; 0x0A
+	.long SwbtB3_Code0B_Listeners	; 0x0B
+	.long SwbtB3_Code0C_Listeners	; 0x0C
+	.long SwbtB3_Code0D_Listeners	; 0x0D
+	.long SwbtB3_Code0E_Listeners	; 0x0E
+	.long SwbtB3_Code0F_Listeners	; 0x0F
+	.long SwbtB3_Code10_Listeners	; 0x10
+	.long SwbtB3_Code11_Listeners	; 0x11
+	.long SwbtB3_Code12_Listeners	; 0x12
+	.long SwbtB3_Code13_Listeners	; 0x13
+	.long SwbtB3_Code14_Listeners	; 0x14
+	.long SwbtB3_Code15_Listeners	; 0x15
+	.long SwbtB3_Code16_Listeners	; 0x16
+	.long SwbtB3_Code17_Listeners	; 0x17
+	.long SwbtB3_Code18_Listeners	; 0x18
+	.long SwbtB3_Code19_Listeners	; 0x19
+	.long SwbtB3_Code1A_Listeners	; 0x1A
+	.long SwbtB3_Code1B_Listeners	; 0x1B
+	.long SwbtB3_Code1C_Listeners	; 0x1C
+	.long SwbtB3_Code1D_Listeners	; 0x1D
+	.long SwbtB3_Code1E_Listeners	; 0x1E
+	.long SwbtB3_Code1F_Listeners	; 0x1F
+	.long SwbtB3_Code20_Listeners	; 0x20
+	.long SwbtB3_Code21_Listeners	; 0x21
+	.long SwbtB3_Code22_Listeners	; 0x22
+	.long SwbtB3_Code23_Listeners	; 0x23
+	.long SwbtB3_Code24_Listeners	; 0x24
+	.long SwbtB3_Code25_Listeners	; 0x25
+	.long SwbtB3_Code26_Listeners	; 0x26
+	.long SwbtB3_Code27_Listeners	; 0x27
+	.long SwbtB3_Code28_Listeners	; 0x28
+	.long SwbtB3_Code29_Listeners	; 0x29
+	.long SwbtB3_Code2A_Listeners	; 0x2A
+	.long SwbtB3_Code2B_Listeners	; 0x2B
+	.long SwbtB3_Code2C_Listeners	; 0x2C
+	.long SwbtB3_Code2D_Listeners	; 0x2D
+	.long SwbtB3_Code2E_Listeners	; 0x2E
+	.long SwbtB3_Code2F_Listeners	; 0x2F
+	.long SwbtB3_Code30_Listeners	; 0x30
+	.long SwbtB3_Code31_Listeners	; 0x31
+	.long SwbtB3_Code32_Listeners	; 0x32
+	.long SwbtB3_Code33_Listeners	; 0x33
+	.long SwbtB3_Code34_Listeners	; 0x34
+	.long SwbtB3_Code35_Listeners	; 0x35
+	.long SwbtB3_Code36_Listeners	; 0x36
+	.long SwbtB3_Code37_Listeners	; 0x37
+	.long SwbtB3_Code38_Listeners	; 0x38
+	.long SwbtB3_Code39_Listeners	; 0x39
+	.long SwbtB3_Code3A_Listeners	; 0x3A
+	.long SwbtB3_Code3B_Listeners	; 0x3B
+	.long SwbtB3_Code3C_Listeners	; 0x3C
+	.long SwbtB3_Code3D_Listeners	; 0x3D
+	.long SwbtB3_Code3E_Listeners	; 0x3E
+	.long SwbtB3_Code3F_Listeners	; 0x3F
+	.long SwbtB3_Code40_Listeners	; 0x40
+	.long SwbtB3_Code41_Listeners	; 0x41
+	.long SwbtB3_Code42_Listeners	; 0x42
+	.long SwbtB3_Code43_Listeners	; 0x43
+	.long SwbtB3_Code44_Listeners	; 0x44
+	.long SwbtB3_Code45_Listeners	; 0x45
+	.long SwbtB3_Code46_Listeners	; 0x46
+	.long SwbtB3_Code47_Listeners	; 0x47
+	.long SwbtB3_Code48_Listeners	; 0x48
+	.long SwbtB3_Code49_Listeners	; 0x49
+	.long UIState_DefaultConfig_C	; 0x4A
+	.long UIState_DefaultConfig_C	; 0x4B
+	.long UIState_DefaultConfig_C	; 0x4C
+	.long UIState_DefaultConfig_C	; 0x4D
+	.long UIState_DefaultConfig_C	; 0x4E
+	.long UIState_DefaultConfig_C	; 0x4F
+	.long SwbtB3_Code50_Listeners	; 0x50
+	.long SwbtB3_Code51_Listeners	; 0x51
+	.long SwbtB3_Code52_Listeners	; 0x52
+	.long SwbtB3_Code53_Listeners	; 0x53
+	.long SwbtB3_Code54_Listeners	; 0x54
+	.long UIState_DefaultConfig_C	; 0x55
+	.long UIState_DefaultConfig_C	; 0x56
+	.long UIState_DefaultConfig_C	; 0x57
+	.long UIState_DefaultConfig_C	; 0x58
+	.long UIState_DefaultConfig_C	; 0x59
+	.long UIState_DefaultConfig_C	; 0x5A
+	.long UIState_DefaultConfig_C	; 0x5B
+	.long UIState_DefaultConfig_C	; 0x5C
+	.long UIState_DefaultConfig_C	; 0x5D
+	.long UIState_DefaultConfig_C	; 0x5E
+	.long UIState_DefaultConfig_C	; 0x5F
+	.long SwbtB3_Code60_Listeners	; 0x60
+	.long SwbtB3_Code61_Listeners	; 0x61
+	.long SwbtB3_Code62_Listeners	; 0x62
+	.long SwbtB3_Code63_Listeners	; 0x63
+	.long SwbtB3_Code64_Listeners	; 0x64
+	.long SwbtB3_Code65_Listeners	; 0x65
+	.long SwbtB3_Code66_Listeners	; 0x66
+	.long UIState_DefaultConfig_C	; 0x67
+	.long SwbtB3_Code68_Listeners	; 0x68
+	.long SwbtB3_Code69_Listeners	; 0x69
+	.long SwbtB3_Code6A_Listeners	; 0x6A
+	.long SwbtB3_Code6B_Listeners	; 0x6B
+	.long SwbtB3_Code6C_Listeners	; 0x6C
+	.long SwbtB3_Code6D_Listeners	; 0x6D
+	.long SwbtB3_Code6E_Listeners	; 0x6E
+	.long UIState_DefaultConfig_C	; 0x6F
+	.long SwbtB3_Code70_Listeners	; 0x70
+	.long SwbtB3_Code71_Listeners	; 0x71
+	.long SwbtB3_Code72_Listeners	; 0x72
+	.long UIState_DefaultConfig_C	; 0x73
+	.long UIState_DefaultConfig_C	; 0x74
+	.long UIState_DefaultConfig_C	; 0x75
+	.long UIState_DefaultConfig_C	; 0x76
+	.long UIState_DefaultConfig_C	; 0x77
+	.long SwbtB3_Code78_Listeners	; 0x78
+	.long SwbtB3_Code79_Listeners	; 0x79
+	.long SwbtB3_Code7A_Listeners	; 0x7A
+	.long UIState_DefaultConfig_C	; 0x7B
+	.long UIState_DefaultConfig_C	; 0x7C
+	.long UIState_DefaultConfig_C	; 0x7D
+	.long UIState_DefaultConfig_C	; 0x7E
+	.long UIState_DefaultConfig_C	; 0x7F
+	.long SwbtB3_Code80_Listeners	; 0x80
+	.long SwbtB3_Code81_Listeners	; 0x81
+	.long UIState_DefaultConfig_C	; 0x82
+	.long UIState_DefaultConfig_C	; 0x83
+	.long UIState_DefaultConfig_C	; 0x84
+	.long UIState_DefaultConfig_C	; 0x85
+	.long UIState_DefaultConfig_C	; 0x86
+	.long UIState_DefaultConfig_C	; 0x87
+	.long UIState_DefaultConfig_C	; 0x88
+	.long UIState_DefaultConfig_C	; 0x89
+	.long UIState_DefaultConfig_C	; 0x8A
+	.long UIState_DefaultConfig_C	; 0x8B
+	.long UIState_DefaultConfig_C	; 0x8C
+	.long UIState_DefaultConfig_C	; 0x8D
+	.long UIState_DefaultConfig_C	; 0x8E
+	.long UIState_DefaultConfig_C	; 0x8F
+	.long SwbtB3_Code90_Listeners	; 0x90
+	.long SwbtB3_Code91_Listeners	; 0x91
+	.long SwbtB3_Code92_Listeners	; 0x92
+	.long SwbtB3_Code93_Listeners	; 0x93
+	.long UIState_DefaultConfig_C	; 0x94
+	.long UIState_DefaultConfig_C	; 0x95
+	.long UIState_DefaultConfig_C	; 0x96
+	.long UIState_DefaultConfig_C	; 0x97
+	.long SwbtB3_Code98_Listeners	; 0x98
+	.long SwbtB3_Code99_Listeners	; 0x99
+	.long SwbtB3_Code9A_Listeners	; 0x9A
+	.long UIState_DefaultConfig_C	; 0x9B
+	.long UIState_DefaultConfig_C	; 0x9C
+	.long UIState_DefaultConfig_C	; 0x9D
+	.long UIState_DefaultConfig_C	; 0x9E
+	.long UIState_DefaultConfig_C	; 0x9F
+	.long UIState_DefaultConfig_C	; 0xA0
+	.long UIState_DefaultConfig_C	; 0xA1
+	.long UIState_DefaultConfig_C	; 0xA2
+	.long UIState_DefaultConfig_C	; 0xA3
+	.long UIState_DefaultConfig_C	; 0xA4
+	.long UIState_DefaultConfig_C	; 0xA5
+	.long UIState_DefaultConfig_C	; 0xA6
+	.long UIState_DefaultConfig_C	; 0xA7
+	.long SwbtB3_CodeA8_Listeners	; 0xA8
+	.long SwbtB3_CodeA9_Listeners	; 0xA9
+	.long SwbtB3_CodeAA_Listeners	; 0xAA
+	.long UIState_DefaultConfig_C	; 0xAB
+	.long SwbtB3_CodeAC_Listeners	; 0xAC
+	.long SwbtB3_CodeAD_Listeners	; 0xAD
+	.long SwbtB3_CodeAE_Listeners	; 0xAE
+	.long UIState_DefaultConfig_C	; 0xAF
+	.long SwbtB3_CodeB0_Listeners	; 0xB0
+	.long SwbtB3_CodeB1_Listeners	; 0xB1
+	.long SwbtB3_CodeB2_Listeners	; 0xB2
+	.long SwbtB3_CodeB3_Listeners	; 0xB3
+	.long SwbtB3_CodeB4_Listeners	; 0xB4
+	.long SwbtB3_CodeB5_Listeners	; 0xB5
+	.long SwbtB3_CodeB6_Listeners	; 0xB6
+	.long SwbtB3_CodeB7_Listeners	; 0xB7
+	.long SwbtB3_CodeB8_Listeners	; 0xB8
+	.long SwbtB3_CodeB9_Listeners	; 0xB9
+	.long SwbtB3_CodeBA_Listeners	; 0xBA
+	.long SwbtB3_CodeBB_Listeners	; 0xBB
+	.long SwbtB3_CodeBC_Listeners	; 0xBC
+	.long SwbtB3_CodeBD_Listeners	; 0xBD
+	.long UIState_DefaultConfig_C	; 0xBE
+	.long UIState_DefaultConfig_C	; 0xBF
+	.byte 0xff				; separator (read by nothing)
+SwbtB3_Code00_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code01_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code02_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code03_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code04_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code05_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code06_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code07_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code08_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code09_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code0A_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code0B_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code0C_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code0D_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code0E_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code0F_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code10_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code11_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code12_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code13_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code14_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code15_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code16_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code17_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code18_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code19_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code1A_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code1B_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code1C_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code1D_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code1E_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code1F_Listeners:
+	.long BitMapOut_ByteData_RenderA
+	.long 0xffffffff
+SwbtB3_Code20_Listeners:	.long 0xffffffff
+SwbtB3_Code21_Listeners:	.long 0xffffffff
+SwbtB3_Code22_Listeners:	.long 0xffffffff
+SwbtB3_Code23_Listeners:	.long 0xffffffff
+SwbtB3_Code24_Listeners:	.long 0xffffffff
+SwbtB3_Code25_Listeners:	.long 0xffffffff
+SwbtB3_Code26_Listeners:	.long 0xffffffff
+SwbtB3_Code27_Listeners:	.long 0xffffffff
+SwbtB3_Code28_Listeners:	.long 0xffffffff
+SwbtB3_Code29_Listeners:	.long 0xffffffff
+SwbtB3_Code2A_Listeners:	.long 0xffffffff
+SwbtB3_Code2B_Listeners:	.long 0xffffffff
+SwbtB3_Code2C_Listeners:	.long 0xffffffff
+SwbtB3_Code2D_Listeners:	.long 0xffffffff
+SwbtB3_Code2E_Listeners:	.long 0xffffffff
+SwbtB3_Code2F_Listeners:	.long 0xffffffff
+SwbtB3_Code30_Listeners:	.long 0xffffffff
+SwbtB3_Code31_Listeners:	.long 0xffffffff
+SwbtB3_Code32_Listeners:	.long 0xffffffff
+SwbtB3_Code33_Listeners:	.long 0xffffffff
+SwbtB3_Code34_Listeners:	.long 0xffffffff
+SwbtB3_Code35_Listeners:	.long 0xffffffff
+SwbtB3_Code36_Listeners:	.long 0xffffffff
+SwbtB3_Code37_Listeners:	.long 0xffffffff
+SwbtB3_Code38_Listeners:	.long 0xffffffff
+SwbtB3_Code39_Listeners:	.long 0xffffffff
+SwbtB3_Code3A_Listeners:	.long 0xffffffff
+SwbtB3_Code3B_Listeners:	.long 0xffffffff
+SwbtB3_Code3C_Listeners:	.long 0xffffffff
+SwbtB3_Code3D_Listeners:	.long 0xffffffff
+SwbtB3_Code3E_Listeners:	.long 0xffffffff
+SwbtB3_Code3F_Listeners:	.long 0xffffffff
+SwbtB3_Code40_Listeners:	.long 0xffffffff
+SwbtB3_Code41_Listeners:	.long 0xffffffff
+SwbtB3_Code42_Listeners:	.long 0xffffffff
+SwbtB3_Code43_Listeners:	.long 0xffffffff
+SwbtB3_Code44_Listeners:	.long 0xffffffff
+SwbtB3_Code45_Listeners:	.long 0xffffffff
+SwbtB3_Code46_Listeners:	.long 0xffffffff
+SwbtB3_Code47_Listeners:	.long 0xffffffff
+SwbtB3_Code48_Listeners:
+	.long BitMapOut_ByteData_RenderD_Epilogue + 3	; no label at this callback entry yet
+	.long 0xffffffff
+SwbtB3_Code49_Listeners:	.long 0xffffffff
+SwbtB3_Code50_Listeners:	.long 0xffffffff
+SwbtB3_Code51_Listeners:	.long 0xffffffff
+SwbtB3_Code52_Listeners:	.long 0xffffffff
+SwbtB3_Code53_Listeners:	.long 0xffffffff
+SwbtB3_Code54_Listeners:	.long 0xffffffff
+SwbtB3_Code60_Listeners:	.long 0xffffffff
+SwbtB3_Code61_Listeners:	.long 0xffffffff
+SwbtB3_Code62_Listeners:	.long 0xffffffff
+SwbtB3_Code63_Listeners:	.long 0xffffffff
+SwbtB3_Code64_Listeners:	.long 0xffffffff
+SwbtB3_Code65_Listeners:	.long 0xffffffff
+SwbtB3_Code66_Listeners:	.long 0xffffffff
+SwbtB3_Code68_Listeners:	.long 0xffffffff
+SwbtB3_Code69_Listeners:	.long 0xffffffff
+SwbtB3_Code6A_Listeners:	.long 0xffffffff
+SwbtB3_Code6B_Listeners:	.long 0xffffffff
+SwbtB3_Code6C_Listeners:	.long 0xffffffff
+SwbtB3_Code6D_Listeners:	.long 0xffffffff
+SwbtB3_Code6E_Listeners:	.long 0xffffffff
+SwbtB3_Code70_Listeners:	.long 0xffffffff
+SwbtB3_Code71_Listeners:	.long 0xffffffff
+SwbtB3_Code72_Listeners:	.long 0xffffffff
+SwbtB3_Code78_Listeners:	.long 0xffffffff
+SwbtB3_Code79_Listeners:	.long 0xffffffff
+SwbtB3_Code7A_Listeners:	.long 0xffffffff
+SwbtB3_Code80_Listeners:	.long 0xffffffff
+SwbtB3_Code81_Listeners:	.long 0xffffffff
+SwbtB3_Code90_Listeners:	.long 0xffffffff
+SwbtB3_Code91_Listeners:	.long 0xffffffff
+SwbtB3_Code92_Listeners:	.long 0xffffffff
+SwbtB3_Code93_Listeners:	.long 0xffffffff
+SwbtB3_Code98_Listeners:	.long 0xffffffff
+SwbtB3_Code99_Listeners:	.long 0xffffffff
+SwbtB3_Code9A_Listeners:	.long 0xffffffff
+SwbtB3_CodeA8_Listeners:
+	.long AccDir_JumpTable + 2	; no label at this callback entry yet
+	.long BitMapOut_UpdateWidget_Done
+	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
+	.long 0xffffffff
+SwbtB3_CodeA9_Listeners:
+	.long Demo_SelectionEntryHandler + 51	; no label at this callback entry yet
+	.long AccompSeq_JumpTable + 8	; no label at this callback entry yet
+	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
+	.long SubCPU_ToneParamRet + 977	; no label at this callback entry yet
+	.long 0xffffffff
+SwbtB3_CodeAA_Listeners:
+	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
+	.long 0xffffffff
+SwbtB3_CodeAC_Listeners:	.long 0xffffffff
+SwbtB3_CodeAD_Listeners:	.long 0xffffffff
+SwbtB3_CodeAE_Listeners:	.long 0xffffffff
+SwbtB3_CodeB0_Listeners:	.long 0xffffffff
+SwbtB3_CodeB1_Listeners:	.long 0xffffffff
+SwbtB3_CodeB2_Listeners:	.long 0xffffffff
+SwbtB3_CodeB3_Listeners:	.long 0xffffffff
+SwbtB3_CodeB4_Listeners:	.long 0xffffffff
+SwbtB3_CodeB5_Listeners:	.long 0xffffffff
+SwbtB3_CodeB6_Listeners:	.long 0xffffffff
+SwbtB3_CodeB7_Listeners:	.long 0xffffffff
+SwbtB3_CodeB8_Listeners:	.long 0xffffffff
+SwbtB3_CodeB9_Listeners:	.long 0xffffffff
+SwbtB3_CodeBA_Listeners:	.long 0xffffffff
+SwbtB3_CodeBB_Listeners:	.long 0xffffffff
+SwbtB3_CodeBC_Listeners:	.long 0xffffffff
+SwbtB3_CodeBD_Listeners:	.long 0xffffffff
+UIState_DefaultConfig_C:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
+SwbtBank3_PostCallbacks:	.long 0xffffffff	; post list (called once per SwbtWr_DispatchLoop run)
+	.byte 0xff				; pad (read by nothing)
+
 SystemConfig_PointerTable:
 	.long Seq_InitFuncTable
 	.long CharMap_FullPermutation_0x408 + 11
