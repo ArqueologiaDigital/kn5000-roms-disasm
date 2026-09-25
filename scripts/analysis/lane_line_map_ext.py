@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-r"""lane_line_map.py -- which address does each line of THESE source files emit at?
+r"""lane_line_map_ext.py -- which address does each line of THESE source files emit at?
 
 QUESTION ANSWERED
 -----------------
@@ -30,7 +30,7 @@ the tool refuses to size it and reports size -1 instead of guessing.
   under `<ver>/maincpu/includes/generated/` that the Makefile produces.
 
 RUN
-    python3 scripts/analysis/lane_line_map.py --ver v9 \
+    python3 scripts/analysis/lane_line_map_ext.py --ver v9 \
         --files extensions/extension_data.s,extensions/extension_init.s \
         --json /tmp/claude-1000/lane-ext/v9map.json
   JSON: {"<file>": [[line_no (1-based), addr, size, text], ...], ...}

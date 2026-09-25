@@ -37,7 +37,7 @@ was produced.
 
 RUN
     make gate                                   # target ELFs + generated bins
-    python3 scripts/analysis/lane_line_map.py --ver v10 \
+    python3 scripts/analysis/lane_line_map_ext.py --ver v10 \
         --files extensions/extension_data.s --json /tmp/claude-1000/lane-ext/v10map.json
     python3 scripts/tools/port_extension_data_from_v10.py --target v9 \
         --v10map /tmp/claude-1000/lane-ext/v10map.json --compare
