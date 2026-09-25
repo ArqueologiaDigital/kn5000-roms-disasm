@@ -44115,7 +44115,7 @@ sub_F98ADE:   ; entry: prom_b routine directory
 	unlk XIZ                                             ; F98DE2  ee 0d
 	ret                                                  ; F98DE4  0e
 ; ---------------------------------------------------------------------
-; PtrTable_F98DE5 -- 134 LE32 pointers (536 B) and a 135th entry TRUNCATED
+; MessageScreenStale_ListPairsTail -- 134 LE32 pointers (536 B) and a 135th entry TRUNCATED
 ; by the module boundary at 0xF99000 (3 B).  Converted 2026-09-02 by
 ; notes/gen_prom_a_f98de5_table.py; argument in
 ; notes/FINDINGS-prom_a-f98de5-investigation.md, rewritten this pass.
@@ -44156,11 +44156,26 @@ sub_F98ADE:   ; entry: prom_b routine directory
 ; boundary; the same thing happens at 0xFDFFDF-0xFE0000.  Emitted as
 ; `.byte`, not as a `.long`: the fourth byte does not exist.
 ;
-; NOT ESTABLISHED: what indexes the table.  No literal 0x00F98DE5, nor any
-; base inside 0xF98D00-0xF99010, exists in any of the four images.
-; PtrTable_F99121 has the same gap and was converted anyway.
+; WHAT IT IS -- established 2026-09-25 (lane proma), checks T1-T5 of
+;   notes/proma-2026-09-25/gen_message_stale.py: a SECOND COPY of the four
+;   MessageScreen_* tables at 0xF99121, 0x400 lower and unreachable -- the
+;   shape of the dead copies at 0xF8A44B and 0xFAA000.  Whether it is an
+;   older build or a variant's (its extra pairs name the GERMAN lists, see
+;   wsa1/notes/sysex-probes/decode-findings.json) is a reading, not shown.
+;   Laid against that structure, words 77..82 are its
+;   interpreter-B pairs verbatim, words 83..114 its 32 argument handlers
+;   and 115..117 its language pointers with every local value 0x400 lower,
+;   so the copy's pair table started at 0xF98D21 (63 pairs): its first 49
+;   words lie under the routine that ends at 0xF98DE4 and are gone, and
+;   words 0..76 here are its words 49..125.  Its own pointers (0xF98D20,
+;   0xF98D21, 0xF98C85) are not instruction starts in this image, and no
+;   address in the span is named anywhere in either CPU-1 image.
+; ★ CORRECTED: this paragraph said "what indexes the table" was open and
+;   that the 0xF99121 table (then PtrTable_F99121) had "the same gap".
+;   That table's readers are found (MessageScreen_ListPairs); this one has
+;   none because it is dead, and its sub-tables are labelled below.
 ; ---------------------------------------------------------------------
-PtrTable_F98DE5:
+MessageScreenStale_ListPairsTail:
 	.long DL_Error23ItIsImpossibleToChangeThe ; F98DE5  [  0] prom_b display list, record start
 	.long DL_Error23ItIsImpossibleToChangeThe ; F98DE9  [  1] prom_b display list, record start
 	.long DL_Error24ItIsImpossibleToAssignTwo ; F98DED  [  2] prom_b display list, record start
@@ -44238,12 +44253,24 @@ PtrTable_F98DE5:
 	.long 0x00f2f21a   ; F98F0D  [ 74] prom_b display list
 	.long 0x00f2f21a   ; F98F11  [ 75] prom_b display list
 	.long 0x00f2f2ce   ; F98F15  [ 76] prom_b display list
+; ---------------------------------------------------------------------
+; MessageScreenStale_ListPairsB -- 3 (start,end) pairs, the older build's
+;          MessageScreen_ListPairsB: the same six words (check T1).
+; ---------------------------------------------------------------------
+MessageScreenStale_ListPairsB:
 	.long DL_F2DE6B    ; F98F19  [ 77] prom_b display list, record start
 	.long DLTable_ARhythmTrackAlreadyExists ; F98F1D  [ 78] prom_b display list
 	.long DL_F2DE6B    ; F98F21  [ 79] prom_b display list, record start
 	.long DLTable_ARhythmTrackAlreadyExists ; F98F25  [ 80] prom_b display list
 	.long DL_F2DE6B    ; F98F29  [ 81] prom_b display list, record start
 	.long DLTable_ARhythmTrackAlreadyExists ; F98F2D  [ 82] prom_b display list
+; ---------------------------------------------------------------------
+; MessageScreenStale_ArgHandlers -- 32 LE32, the older build's
+;          MessageScreen_ArgHandlers: every value is the live one - 0x400
+;          (check T2).  Left numeric on purpose: 0xF98D20 and 0xF98C85 are
+;          not instruction starts in THIS image (check T4).
+; ---------------------------------------------------------------------
+MessageScreenStale_ArgHandlers:
 	.long 0x00f98d20   ; F98F31  [ 83] prom_a local
 	.long 0x00f98d20   ; F98F35  [ 84] prom_a local
 	.long 0x00f98d20   ; F98F39  [ 85] prom_a local
@@ -44276,9 +44303,21 @@ PtrTable_F98DE5:
 	.long 0x00f98d20   ; F98FA5  [112] prom_a local
 	.long 0x00f98d20   ; F98FA9  [113] prom_a local
 	.long 0x00f98d20   ; F98FAD  [114] prom_a local
+; ---------------------------------------------------------------------
+; MessageScreenStale_PairTableByLanguage -- 3 x 0xF98D21, the older build's
+;          pair-table base (live 0xF99121 - 0x400; check T3).  Numeric for
+;          the same reason: 0xF98D21 is mid-instruction here.
+; ---------------------------------------------------------------------
+MessageScreenStale_PairTableByLanguage:
 	.long 0x00f98d21   ; F98FB1  [115] prom_a local
 	.long 0x00f98d21   ; F98FB5  [116] prom_a local
 	.long 0x00f98d21   ; F98FB9  [117] prom_a local
+; ---------------------------------------------------------------------
+; MessageScreenStale_ExtraListPairs -- (start,end) words the live layout does
+;          not have, naming prom_b's German-language lists; the last word
+;          is cut by the module boundary at 0xF99000 (see the header above).
+; ---------------------------------------------------------------------
+MessageScreenStale_ExtraListPairs:
 	.long 0x00f30180   ; F98FBD  [118] prom_b display list, record start
 	.long DL_CopyCompletedIntroFillInsUndEndingDesVon ; F98FC1  [119] prom_b display list, record start
 	.long DL_CopyCompletedDasVonLhnenGew ; F98FC5  [120] prom_b display list, record start
