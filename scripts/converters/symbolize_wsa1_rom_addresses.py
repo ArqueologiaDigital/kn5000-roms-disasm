@@ -93,6 +93,7 @@ FORMS = [
     ("lda", re.compile(r'^(?P<pre>lda\s+x(?:wa|bc|de|hl|ix|iy|iz|sp)\s*,\s*\(\s*)' + NUMTOK.replace('(', '(?P<num>', 1) + r'(?P<post>\s*:\s*24\s*\)\s*)$')),
 ]
 CODE_KINDS = {"jp", "call", "ld", "add", "lda"}
+TERM = re.compile(r'^(ret|reti|retd|jp\s+[^,]+$|jr\s+[^,]+$|jrl\s+[^,]+$|jp\s+t\s*,|jr\s+t\s*,|jrl\s+t\s*,)')
 THUNK_LO, THUNK_HI = 0xF40000, 0xF44018      # the routine directory's extent
 
 
@@ -158,7 +159,7 @@ def split_code(text):
     return lead + ws, rest[len(ws):], tail
 
 
-def analyse():
+def analyse(arms=False):
     img = snb.image_by_key("prom_b")
     sh(["make", "-C", WSA1, "rebuilt_ROMs/wsa1_prom_a.llvm.elf", "rebuilt_ROMs/wsa1_prom_b.llvm.elf"])
     b_lab, b_names = elf_labels(os.path.join(WSA1, "rebuilt_ROMs/wsa1_prom_b.llvm.elf"))
@@ -193,6 +194,61 @@ def analyse():
                 eq_now[m.group(1)] = int(m.group(2), 16)
     own_names = b_names - set(eq_now)
     stats = collections.Counter()
+    starts = [sp[0] for sp in spans]
+    arm_new = {}                 # addr -> (li, name)
+    taken = set(b_names) | set(order)
+
+    def plan_arm(v):
+        """A `.long` in a pointer table names an UNLABELLED instruction start: give it a
+        label -- only when the line there is an instruction of THIS file, a second
+        decoder agrees an instruction starts there, and the bytes are not text."""
+        if v in arm_new:
+            return arm_new[v][1]
+        k = bisect.bisect_right(starts, v) - 1
+        if k < 0 or spans[k][0] != v or spans[k][2] != REL:
+            return None
+        tli = spans[k][3]
+        bk, _ = drc.classify_line(lines[tli], macros)
+        if bk != "code" or v not in uni:
+            return None
+        blob = rom[v - 0xF00000:v - 0xF00000 + 16]
+        if sum(0x20 <= c < 0x7F for c in blob) >= 13:
+            return None
+        # parent: nearest label above, structural suffixes stripped; a routine start
+        # (previous instruction is a terminator, or data/fill precedes) is sub_<ADDR>
+        prev_code = None
+        for j in range(tli - 1, max(-1, tli - 400), -1):
+            bj, _ = drc.classify_line(lines[j], macros)
+            if bj in ("data", "fill"):
+                prev_code = "DATA"
+                break
+            if bj == "code":
+                prev_code = split_code(lines[j])[1].lower()
+                break
+        if prev_code == "DATA" or (prev_code and TERM.match(prev_code)):
+            name = "sub_%06X" % v
+        else:
+            parent = None
+            for j in range(tli, max(-1, tli - 4000), -1):
+                mm = re.match(r'^\s*([A-Za-z_.$][\w.$@]*):', lines[j])
+                if mm and not mm.group(1).startswith((".L", "__")):
+                    parent = mm.group(1)
+                    break
+            if not parent:
+                return None
+            while STRUCT.search(parent):
+                parent = STRUCT.sub("", parent)
+            base = parent + "_Arm"
+            name, n = base, 1
+            while name in taken:
+                n += 1
+                name = "%s%d" % (base, n)
+        if name in taken:
+            return None
+        taken.add(name)
+        arm_new[v] = (tli, name)
+        return name
+
     edits, used_a = {}, {}
     rows = []
     for li, t in enumerate(lines):
@@ -236,6 +292,11 @@ def analyse():
                 cands = b_lab.get(v, [])
             else:
                 cands = [n for n in a_lab.get(v, []) if n not in own_names]
+            if not cands and arms and kind == "long" and side == "b":
+                nm = plan_arm(v)
+                if nm:
+                    cands = [nm]
+                    stats["new arm label " + key] += 1
             if not cands:
                 stats["no-label " + key] += 1
                 rows.append(dict(line=li + 1, kind=key, value="0x%06X" % v, why="no label at that address"))
@@ -250,7 +311,7 @@ def analyse():
             stats["convert " + key] += 1
             break
     return dict(img=img, src=src, lines=lines, edits=edits, used_a=used_a, eq_now=eq_now,
-                stats=stats, rows=rows, a_lab=a_lab)
+                stats=stats, rows=rows, a_lab=a_lab, arm_new=arm_new)
 
 
 def equate_block(used_a, a_lab):
@@ -275,6 +336,16 @@ def apply(res):
     assert lines == res["lines"], "source changed under us"
     for li, new in res["edits"].items():
         lines[li] = new
+    ins = collections.defaultdict(list)
+    for v, (tli, name) in res.get("arm_new", {}).items():
+        ins[tli].append(name)
+    if ins:
+        out = []
+        for li, t in enumerate(lines):
+            for nm in ins.get(li, []):
+                out.append("%s:" % nm)
+            out.append(t)
+        lines = out
     text = "\n".join(lines)
     used = dict(res["eq_now"])
     used.update(res["used_a"])
@@ -316,10 +387,12 @@ def main():
     ap.add_argument("--verify", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--check-equates", action="store_true")
+    ap.add_argument("--arms", action="store_true",
+                    help="also LABEL unlabelled instruction starts that a `.long` names")
     a = ap.parse_args()
     if a.check_equates:
         sys.exit(check_equates())
-    res = analyse()
+    res = analyse(a.arms)
     for k in sorted(res["stats"]):
         print("  %-28s %6d" % (k, res["stats"][k]))
     print("  %-28s %6d" % ("EDITS", len(res["edits"])))
