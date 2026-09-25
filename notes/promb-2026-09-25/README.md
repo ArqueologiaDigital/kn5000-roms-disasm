@@ -1,0 +1,30 @@
+# Lane `promb`, 2026-09-25 semantic push — instruments
+
+Every number this lane quotes in a commit message or in
+`notes/FINDINGS-promb-semantic-2026-09-25.md` comes from one of these.  Each
+re-derives its claims from the ROM dumps (`wsa1/original_ROMs/`) or the current
+source; none writes a `.s` unless it says `--apply`.
+
+| script | question it answers | run |
+|---|---|---|
+| `measure_promb.py` | before/after figures for the lane's files: census buckets (CODE / KNOWN-A / KNOWN-B / UNKNOWN / FILLER / research-target bytes, the `lane_worklists.py` rule), data-as-code markers, numeric ROM-address operands by mnemonic and target image, label population; optional split of symboliser refusals by target image | `python3 scripts/analysis/data_range_census.py --images prom_b --json X.json` then `python3 notes/promb-2026-09-25/measure_promb.py --census X.json [--symbr R.json]` |
+| `midline_artefact_probe.py` | are the "mid-instruction branch targets" real misframes?  Splits `mid-line-*` sites by whether the target is inside prom_b or past it (prom_a), and prints the open-ended last span that causes the second kind | `python3 notes/promb-2026-09-25/midline_artefact_probe.py` |
+| `stage_values_probe.py` | the five routines at 0xF57453 (ex-`Unclaimed_F57453`): their `calr` callers, the RAM cells each writes, and the source variables of the display list its caller runs next -- must be equal | `python3 notes/promb-2026-09-25/stage_values_probe.py --selftest` |
+| `note_name_tables_probe.py` | MsgLine_FormatNoteAndVelocity (0xF6DD17) and its two tables: callers, `divs WA,L` by 12, the 12 + 11 entries, the flat/sharp glyphs of Font_Svc06 | `python3 notes/promb-2026-09-25/note_name_tables_probe.py` |
+| `smf_param_sysex_probe.py` | the 74 x 19 SMF SysEx templates at 0xF74FCF: reader shape, constant fields, extent, the parallel RAM pointer table, and the stale `calr`s that land inside records | `python3 notes/promb-2026-09-25/smf_param_sysex_probe.py` |
+| `sysex_decode_tree_probe.py` | `LinkTable_F4FF61` as the SysEx decode tree prom_a sub_FB63D1 walks: reader shape and per-level failure codes, list/leaf census, terminator codes, and that all 74 exported SysEx bodies are complete paths | `python3 notes/promb-2026-09-25/sysex_decode_tree_probe.py` |
+| `annotate_kanji_cells.py` | do the kanji cell lines carry the transcription's characters, and are the ROM's defined cells exactly the transcribed codes? (`--apply` writes the annotations) | `python3 notes/promb-2026-09-25/annotate_kanji_cells.py` |
+| `reparent_code_labels.map` | the 811 `old=new` renames of `scripts/renaming/reparent_code_labels_prom_b.py` (input for `assert_comments_preserved.py --rename-map`) | — |
+
+Converters this lane added (under `scripts/`, not here):
+
+* `scripts/converters/symbolize_wsa1_rom_addresses.py` — numeric ROM-address
+  operands -> labels (`--arms`, `--offsets`, `--check-equates`; its docstring is
+  the spec).
+* `scripts/renaming/reparent_code_labels_prom_b.py` — `<Table>_Code_<Role>`
+  branch labels re-parented onto their routine.
+
+Baselines: the session-start figures were measured on commit `3958235e` (this
+branch's base).  To re-derive them, check that commit out in a scratch worktree
+and run `measure_promb.py` / `midline_artefact_probe.py` there; the scratch
+JSONs themselves were not kept (regenerable in ~20 s and ~40 s).
