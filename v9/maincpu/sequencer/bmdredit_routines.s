@@ -3947,7 +3947,12 @@ NoteEdit_UpdateScrollAndDisplay:
 	cp (0x279a:16), wa
 	ret nc
 	jrl NoteEditSy_UpdateAllWidgets
-NoteEdit_UpdateScrollAndDisplay_Helper:
+; BmDrEdit_SetRowOffsetFromDelta (was NoteEdit_UpdateScrollAndDisplay_Helper)
+; -- A := A - C; in drum mode (bit 0 of RAM 0x2742, set by
+; BmDrEdit_InitDrumMode) RAM 0x27CC := 11 - A, otherwise 0x27CC := A, plus 3
+; when RAM 0x2798 is 0 (the same rule BmDrEdit_ChordScrollUp applies).
+; Called only from BmDrEdit_CompoundWidgetUpdate.
+BmDrEdit_SetRowOffsetFromDelta:
 	sub a, c
 	bit 0, (0x2742:16)
 	jr z, BmDrEdit_UpdateDisplay_MelodicOffset
@@ -3971,7 +3976,7 @@ BmDrEdit_UpdateDisplay_MelodicOffset:
 ; coordinates and the scroll region, reads three event bytes through
 ; SeqData_ReadNextByte / SeqData_AdvancePosition, stores
 ; (third byte & 0x7F) * 96 + (second byte & 0x7F) in RAM 0x27D0 and clamps
-; it in NoteEdit_UpdateScrollAndDisplay_Helper2.
+; it in BmDrEdit_ClampScrollPos.
 ; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v9 0xF38309 -> none.
 ; -----------------------------------------------------------------------------
 BmDrEdit_CompoundWidgetUpdate:
@@ -3992,7 +3997,7 @@ BmDrEdit_CompoundWidgetUpdate:
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
-	calr	NoteEdit_UpdateScrollAndDisplay_Helper
+	calr	BmDrEdit_SetRowOffsetFromDelta
 	call	SeqData_AdvancePosition
 	call	SeqData_AdvancePosition
 	call	SeqData_ReadNextByte
@@ -4011,11 +4016,14 @@ BmDrEdit_CompoundWidgetUpdate:
 	extz	wa
 	add	bc, wa
 	ld	(10192:16), bc
-	calr	NoteEdit_UpdateScrollAndDisplay_Helper2
+	calr	BmDrEdit_ClampScrollPos
 	pop	qiz
 	inc	8, xsp
 	ret
-NoteEdit_UpdateScrollAndDisplay_Helper2:
+; BmDrEdit_ClampScrollPos (was NoteEdit_UpdateScrollAndDisplay_Helper2) --
+; with limit = RAM 0x2774 * 96 - 1: if word 0x27CE + word 0x27D0 exceeds it,
+; 0x27D0 := limit - 0x27CE.  Called only from BmDrEdit_CompoundWidgetUpdate.
+BmDrEdit_ClampScrollPos:
 	ld	e, (10100:16)
 	mul	e, 96
 	dec	1, de
