@@ -280,6 +280,8 @@ EMPTY_HANDLER_WITH_RESET:	; 01FBBD
 ; subcpu/boot/kn5000_subcpu_boot.s they are the init flag and the 4 x u32 channel table that
 ; the boot ROM's own TONE_GEN_CHANNEL_INIT (0xFF8437) reads; both are dumped bytes there
 ; (flag = 00 00, table = 4 x 00 04 00 00).
+; (Labelled there, since 2026-09-25, ToneGen_ChannelInit_Flag and ToneGen_ChannelInit_Config;
+; the sink named SUB_FEC1 further down this file is DEBUG_OUTPUT_CHAR_STUB there now.)
 	.equ	BootROM_ChannelInitFlag, 0xFFFEEE
 	.equ	BootROM_ChannelConfigTable, 0xFFFEF0
 

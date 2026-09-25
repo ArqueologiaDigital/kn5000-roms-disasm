@@ -398,6 +398,8 @@ ToneGen_VelCurve_Divisor:
 ; (`byte[0x01F420 + 3*mode]`), which is what fixes the record stride at 3 and
 ; the row count at 10 -- the run also self-describes, its first byte stepping
 ; 0x00,0x10,...,0x90.  The payload's copy of this table is still unlabelled.
+; ★ 2026-09-25: no longer -- the payload labels its copy ToneGen_VelCurve_ModeParams too
+; (v142/subcpu/subcpu_data_tables.s, 0x01F420).
 ToneGen_VelCurve_ModeParams:
 	.byte 0x00, 0xd0, 0x00	; mode 0: gain   0/128 (0.000x), pivot out 208, black-key trim  0
 	.byte 0x10, 0xc7, 0x03	; mode 1: gain  16/128 (0.125x), pivot out 199, black-key trim  3
@@ -405,6 +407,8 @@ ToneGen_VelCurve_ModeParams:
 	.byte 0x30, 0xb4, 0x08	; mode 3: gain  48/128 (0.375x), pivot out 180, black-key trim  8
 	.byte 0x40, 0xab, 0x0b	; mode 4: gain  64/128 (0.500x), pivot out 171, black-key trim 11
 	.byte 0x50, 0xa1, 0x0e	; mode 5: gain  80/128 (0.625x), pivot out 161, black-key trim 14
+; Row 6 is the only row the boot ROM reads: NOTE_VELOCITY_LOOKUP_CALCULATE loads it with
+; `lda xde,(ToneGen_VelCurve_ModeParams_Mode6:24)` (gain +0, pivot output +1, black-key trim +2).
 ToneGen_VelCurve_ModeParams_Mode6:	; 0xFF8040 -- the mode the boot ROM uses
 	.byte 0x60, 0x98, 0x10	; mode 6: gain  96/128 (0.750x), pivot out 152, black-key trim 16
 	.byte 0x70, 0x8f, 0x13	; mode 7: gain 112/128 (0.875x), pivot out 143, black-key trim 19
@@ -742,7 +746,7 @@ RESET_ENTRY:
 
 TONE_GEN_CHANNEL_INIT:
 	pushw_erp 0xFA	; Save QIZ (QIZH used as loop counter)
-	cpw (16776942:24), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
+	cpw (ToneGen_ChannelInit_Flag:24), 65535; cp (0xFFFEEE), 0xFFFF - check init flag
 	jr nz, TONE_GEN_CHANNEL_INIT__done	; Skip if memory not 0xFFFF (already initialized)
 	ldib_erp 0xFB, 0	; Clear loop counter (QIZH = 0)
 TONE_GEN_CHANNEL_INIT__loop:
@@ -751,7 +755,7 @@ TONE_GEN_CHANNEL_INIT__loop:
 	stb_erp C, 0xFB	; C = loop counter (QIZH)
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
-	lda xde, (0xfffef0:24); XDE = pointer to channel config table
+	lda xde, (ToneGen_ChannelInit_Config:24); XDE = pointer to channel config table
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1b_erp 0xFB	; Increment loop counter
@@ -767,7 +771,7 @@ TONE_GEN_CHANNEL_INIT__done:
 
 COPY_VECTORS:
 	ld xde, 0x400	; Destination: RAM at 0x0400
-	ld xhl, 0xFF8F6C	; Source: Trampoline data in ROM
+	ld xhl, VECTOR_TRAMPOLINES	; Source: Trampoline data in ROM
 	ld xbc, 0xE1	; Count: 225 bytes (45 handlers x 5 bytes)
 	or xbc, xbc
 	jr z, COPY_VECTORS__done
@@ -1600,7 +1604,7 @@ CMD_Dispatch_Handler:
 	ld a, c
 	extz wa
 	sla wa, 2	; index * 4
-	lda xbc, (0xff8000:24); XBC = CmdHandler_Table
+	lda xbc, (CmdHandler_Table:24); XBC = CmdHandler_Table
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
@@ -1780,7 +1784,7 @@ MEM_TEST_ROUTINE__next_region:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
-	lda xbc, (0xff8020:24); XBC = MemTest_RegionTable
+	lda xbc, (MemTest_RegionTable:24); XBC = MemTest_RegionTable
 	lda_dri XDE, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
@@ -2195,16 +2199,16 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	; Calculate velocity from tables
 	ld c, e	; C = velocity index
 	extz bc	; Zero-extend BC
-	lda xde, (0xff804c:24); XDE = ToneGen_Velocity_Input_Curve
+	lda xde, (ToneGen_Velocity_Input_Curve:24); XDE = ToneGen_Velocity_Input_Curve
 	ld xhl, 0:i3	; Clear XHL
 	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
-	ld bc, (0xff802a:24); BC = ToneGen_VelCurve_Pivot (77)
+	ld bc, (ToneGen_VelCurve_Pivot:24); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
-	lda xde, (0xff8040:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
+	lda xde, (ToneGen_VelCurve_ModeParams_Mode6:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
 	muls xbc, xhl	; XBC = BC * HL (signed)
-	ld hl, (0xff802c:24); HL = ToneGen_VelCurve_Divisor (128)
+	ld hl, (ToneGen_VelCurve_Divisor:24); HL = ToneGen_VelCurve_Divisor (128)
 	exts xbc	; Sign-extend XBC
 	divs xbc, xhl	; XBC = XBC / HL (signed)
 	ld hl, bc	; HL = quotient
@@ -2249,7 +2253,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_max:
 NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
-	lda xde, (0xff814c:24); XDE = ToneGen_Velocity_Output_Curve
+	lda xde, (ToneGen_Velocity_Output_Curve:24); XDE = ToneGen_Velocity_Output_Curve
 	ldb_sri C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret
@@ -2308,11 +2312,11 @@ __jrt_nop_FF8CA9:
 
 	; Call HARDWARE_PARAM_BLOCK_WRITE with ToneGen_ProbeVoice_ParamBlock (0xFF824C)
 	ld wa, 0:i3
-	ld xbc, 0xFF824C	; XBC = ToneGen_ProbeVoice_ParamBlock
+	ld xbc, ToneGen_ProbeVoice_ParamBlock	; XBC = ToneGen_ProbeVoice_ParamBlock
 	calr HARDWARE_PARAM_BLOCK_WRITE	; Write parameters to hardware
 
 	; Read back and verify
-	ld bc, (0xff824c:24); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
+	ld bc, (ToneGen_ProbeVoice_ParamBlock:24); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
 	ld wa, 0:i3
 	calr HARDWARE_VERIFY_WRITE	; Call verification routine
 
@@ -2831,17 +2835,17 @@ VECTOR_TRAMPOLINES:
 ; Debug/Utility Routines (0xFFFE80 - 0xFFFED1)
 ;
 ; These appear to be debug or diagnostic routines, possibly for serial output.
-; DEBUG_OUTPUT_BYTE_HEX: Wrapper that calls SUB_FEC1
-; HEX_BYTE_TO_ASCII: Output hex byte (calls NIBBLE_TO_HEX_ASCII for nibble conversion, SUB_FEC1 for output)
+; DEBUG_OUTPUT_BYTE_HEX: Wrapper that calls DEBUG_OUTPUT_CHAR_STUB
+; HEX_BYTE_TO_ASCII: Output hex byte (calls NIBBLE_TO_HEX_ASCII for nibble conversion, DEBUG_OUTPUT_CHAR_STUB for output)
 ; DEBUG_OUTPUT_STRING: Output null-terminated string from (XIX)
 ; NIBBLE_TO_HEX_ASCII: Convert nibble (0-15) to ASCII hex character ('0'-'9', 'a'-'f')
-; SUB_FEC1: Output character (loads IZ with 0xFE00, placeholder NOPs)
+; DEBUG_OUTPUT_CHAR_STUB: Output character (loads IZ with 0xFE00, placeholder NOPs)
 ;
 ; Evidence of use (2026-09-25): the v1.42 sub-CPU PAYLOAD calls two of these across the ROM
 ; boundary -- Debug_Print_String (payload 0x038365) does `call 0xFFFEA1` (DEBUG_OUTPUT_STRING)
 ; and Debug_Print_Byte / Debug_Print_Word do `call 0xFFFE86` (HEX_BYTE_TO_ASCII, which prints
 ; A as two hex digits).  The payload's EFF/DSP layer traces through them ("EFF %d mute",
-; "DSP %d anti reset", ...).  Since SUB_FEC1 as dumped writes nothing (IZ load + NOPs + RET),
+; "DSP %d anti reset", ...).  Since DEBUG_OUTPUT_CHAR_STUB as dumped writes nothing (IZ load + NOPs + RET),
 ; those traces are silent with this boot ROM.
 ; ==============================================================================
 
@@ -2849,7 +2853,7 @@ VECTOR_TRAMPOLINES:
 
 DEBUG_OUTPUT_BYTE_HEX:
 	push xiz
-	calr SUB_FEC1
+	calr DEBUG_OUTPUT_CHAR_STUB
 	pop xiz
 	ret
 
@@ -2859,12 +2863,12 @@ HEX_BYTE_TO_ASCII:
 	srl a, 4	; A >>= 4 (high nibble)
 	calr NIBBLE_TO_HEX_ASCII	; Convert to hex char
 	pushw wa
-	calr SUB_FEC1	; Output character
+	calr DEBUG_OUTPUT_CHAR_STUB	; Output character
 	popw wa
 	ld a, w	; Restore original A
 	and a, 0xF	; Mask low nibble
 	calr NIBBLE_TO_HEX_ASCII	; Convert to hex char
-	calr SUB_FEC1	; Output character
+	calr DEBUG_OUTPUT_CHAR_STUB	; Output character
 	pop xiz
 	ret
 
@@ -2876,7 +2880,7 @@ DEBUG_OUTPUT_STRING__loop:
 	cp a, 0:i3	; Check for null terminator
 	jr z, DEBUG_OUTPUT_STRING__done	; If null, exit
 	push xix
-	calr SUB_FEC1	; Output character
+	calr DEBUG_OUTPUT_CHAR_STUB	; Output character
 	pop xix
 	jr DEBUG_OUTPUT_STRING__loop	; Continue loop
 DEBUG_OUTPUT_STRING__done:
@@ -2892,7 +2896,11 @@ NIBBLE_TO_HEX_ASCII__letter:
 	add a, 0x57	; 'a' - 10 = 0x57
 	ret
 
-SUB_FEC1:
+; The per-character sink DEBUG_OUTPUT_STRING calls.  In this ROM it outputs nothing: it loads
+; IZ = 0xFE00 and burns twelve `nop`s before `ret` -- a stubbed-out debug port.  The v1.42 payload
+; reaches it through BootROM_DEBUG_OUTPUT_STRING, so its Debug_Print_* calls are no-ops.
+; ★ Renamed 2026-09-25 from SUB_FEC1 (its address, 0xFFFEC1).
+DEBUG_OUTPUT_CHAR_STUB:
 	ldw iz, 0xFE00	; Output port address (placeholder)
 	nop	; Timing/placeholder
 	nop
@@ -2936,15 +2944,25 @@ RESET_HANDLER:
 	.org 0xFFFEE5 - 0xFE0000, 0xFF
 
 	.fill 9, 1, 0xff	; 0xFFFEE5-0xFFFEED
+; u16 channel-init flag: TONE_GEN_CHANNEL_INIT (0xFF8437) runs its 4-channel loop only when
+; this word is 0xFFFF (`cpw (this:24),0xFFFF / jr nz`).  The dumped value is 0x0000, so the
+; loop is skipped.  The v1.42 payload reads the same cell as a byte, BootROM_ChannelInitFlag
+; (kn5000_subprogram_v142.s, DSP_Init_Channels_FromBootTable).
+ToneGen_ChannelInit_Flag:
 	.byte 0x00, 0x00	; 0xFFFEEE-0xFFFEEF
 
 ; ==============================================================================
 ; Reserved data area (0xFFFEF0 - 0xFFFEFF)
 ; Appears to be some kind of configuration or padding data
+; ★ 2026-09-25: it is TONE_GEN_CHANNEL_INIT's channel table -- 4 x u32, entry ch loaded
+; `lda xde,(ToneGen_ChannelInit_Config:24) / ld_sril3 XBC,(XDE+BC)` with BC = 4*ch and passed to
+; TONE_GEN_WRITE; the v1.42 payload addresses it as BootROM_ChannelConfigTable.  All four entries
+; are 0x00000400 in the dump.
 ; ==============================================================================
 
 	.org 0xFFFEF0 - 0xFE0000, 0xFF
 
+ToneGen_ChannelInit_Config:
 	.byte 0x00, 0x04, 0x00, 0x00	; 0xFFFEF0-0xFFFEF3
 	.byte 0x00, 0x04, 0x00, 0x00	; 0xFFFEF4-0xFFFEF7
 	.byte 0x00, 0x04, 0x00, 0x00	; 0xFFFEF8-0xFFFEFB
@@ -2959,7 +2977,7 @@ RESET_HANDLER:
 	.org 0xFFFF00 - 0xFE0000, 0xFF
 
 VECTOR_TABLE:
-	.long 0xFFFEe0	; Reset - points to ROM handler at 0xFFFEE0
+	.long RESET_HANDLER	; Reset - points to ROM handler at 0xFFFEE0
 	.long 0x405	; Handler 1 at 0x0405
 	.long 0x40A	; Handler 2 at 0x040A
 	.long 0x40F	; Handler 3 at 0x040F
