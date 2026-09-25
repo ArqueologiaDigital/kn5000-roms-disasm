@@ -713,6 +713,9 @@ SetWall_CrossType_Reset:
 	and (0x2879:16), 252
 	ret
 
+; 3 rows x 16 slot numbers.  SetWall_WriteSingleSlot, SetWall_WriteAllSlots and SetWall_LocalWriteAll
+; run `ld l,(0x0D3E); dec 1,l; sla l,4; ld xde,<this>; lda xiy,(xde+hl)`:
+; row = (byte at RAM 0x0D3E) - 1, 16 bytes per row.
 SetWall_SlotOrderTable:
 	.byte 0x00, 0x02, 0x01, 0x0d, 0x0f, 0x10, 0x0c, 0x0b
 	.byte 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07
