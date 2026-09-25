@@ -332,12 +332,163 @@ def apply(path):
     print("%s: replaced lines %d..%d (%d lines) with %d lines" % (path, s + 1, e + 1, e - s + 1, len(new)))
 
 
+# ---------------------------------------------------------------------------
+# 0xEE6048-0xEE63B9: the tail of the parameter-range pointer table, the
+# settings-block pointer table and seven small DSPCfg arrays.
+# ---------------------------------------------------------------------------
+SET_TAB = 0xEE61D4        # 100 x u32 -> 24-byte settings block per effect
+TAB_LO, TAB_HI = 0xEE6048, 0xEE63BA
+
+
+def nm_symbols(v="v10"):
+    import subprocess
+    nm = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
+    elf = os.path.join(ROOT, "rebuilt_ROMs/kn5000_%s_program.llvm.elf" % v)
+    out = subprocess.run([nm, "--defined-only", elf], capture_output=True, text=True,
+                         check=True).stdout
+    by = {}
+    for ln in out.splitlines():
+        p = ln.split()
+        if len(p) == 3 and p[1] in "tT" and not (TAB_LO <= int(p[0], 16) < TAB_HI):
+            by.setdefault(int(p[0], 16), []).append(p[2])
+    for a in by:
+        by[a].sort(key=lambda n: ("_0x" in n, len(n)))
+    return by
+
+
+def u16(d, a):
+    return struct.unpack_from("<H", d, a - B)[0]
+
+
+def probe_tables(d):
+    """Assertions behind the part-2 header."""
+    tabB = [u32(d, SET_TAB + 4 * i) for i in range(N)]
+    rec = [u32(d, REC_TAB + 4 * i) for i in range(N)]
+    for fx in range(N):
+        if rec[fx]:
+            assert d[tabB[fx] - B] == fx, ("settings block does not start with its effect", fx)
+    assert d[0xEE636C - B:0xEE6372 - B] == b"acefd\xff"
+    return sum(1 for r in rec if r)
+
+
+def emit_tables(d):
+    syms = nm_symbols("v10")
+    names = effect_names(d)
+    ndef = probe_tables(d)
+    L = []
+    w = L.append
+    w("; =============================================================================")
+    w("; DSP EFFECT TABLES, indexed by DSP effect number 0..99 (names from")
+    w("; DspEffectName_PtrTable 0xE32A7A), and seven small DSPCfg arrays")
+    w("; =============================================================================")
+    w("; Parameter-range pointer table, base 0xEE6044 (= ToneKit_ParamBlock_116_0x7C:")
+    w("; entry 0 is the last 4 bytes of the ToneKit C blob, so the label below is")
+    w("; ENTRY 1).  Entry n -> the effect's {min,max,param_id} u16 x3 records, one per")
+    w("; parameter; DSPCfg_LookupAndExtract (0xFDC41D) indexes it `sll xbc,2` from")
+    w("; ToneKit_ParamBlock_116_0x7C and steps records with `mul wa,6`.  The")
+    w("; parameter count is the byte table at 0xEE5FE0 (DSPCfg_GetSlotCount).")
+    w("; ToneKit_VoiceDispatch_Table keeps its name: shared/positional_labels.s")
+    w("; derives the DSPCfg arrays below from it (+0x18C .. +0x348).")
+    w("; -----------------------------------------------------------------------------")
+    w("ToneKit_VoiceDispatch_Table:")
+    for fx in range(1, N):
+        t = u32(d, RANGE_TAB + 4 * fx)
+        w("\t.long %s\t; %d %s" % (syms[t][0], fx, names[fx]))
+    w("")
+    w("; -----------------------------------------------------------------------------")
+    w("; DspFxSettingsPtrTable -- 100 x u32: effect n -> its 24-byte settings block")
+    w("; (the ToneKit_* C blocks it points at).  Readers: DSPCfg_ResolveWithFallback")
+    w("; (0xFDC710) and DSPCfg_WriteAllSlots_Direct (0xFDCB40) load entry n as")
+    w("; `ToneKit_VoiceDispatch_Table_0x18C + 4*n`, then DSPCfg_ReadViaTableLookup")
+    w("; (0xFDC364) reads block+0 with DSPCfg_GetParamCount (0xFDC35F, `ld l,(xwa)`)")
+    w("; and uses it to index DspFxRecListPtrTable, and hands block+1 plus that")
+    w("; record list to DSPCfg_ReadMultiField (0xFDC2E8).  So +0 is the EFFECT")
+    w("; NUMBER -- true for all %d effects that have a record list (gen_dsp_effect" % ndef)
+    w("; _records.py) -- and +1.. are the parameter bytes, laid out by the effect's")
+    w("; record list ('p'/'v' records pack bitfields).  Effects without a list point")
+    w("; at ToneKit_DefaultParams.")
+    w("; -----------------------------------------------------------------------------")
+    w("DspFxSettingsPtrTable:")
+    for fx in range(N):
+        t = u32(d, SET_TAB + 4 * fx)
+        w("\t.long %s\t; %d %s" % (syms[t][0], fx, names[fx]))
+    w("")
+    w("; -----------------------------------------------------------------------------")
+    w("; Seven small arrays read by audio/dsp_config_sysex.s through positional")
+    w("; names (ToneKit_VoiceDispatch_Table_0x31C .. _0x348).")
+    w("; -----------------------------------------------------------------------------")
+    w("; byte[n], read by DSPCfg_Data_001 (0xFDC448: `add xbc,xwa / ld l,(xbc)`).  No")
+    w("; call of DSPCfg_Data_001 was found (call/calr/jp/jr target scan of the v10")
+    w("; ELF disassembly), so the index range and purpose are not established.")
+    w("DspCfg_Data001_ByteTable:\t.byte 0, 0, 0, 0")
+    w("; byte[n], read by DSPCfg_Data_002 (0xFDC464), same shape; no caller found")
+    w("; by the same scan; purpose not established.")
+    w("DspCfg_Data002_ByteTable:\t.byte 1, 1, 1, 1")
+    w("; DSP block index 0..5 -> object code.  DSPCfg_LookupMidiMap (0xFDBFC6) passes")
+    w("; byte[block] to VoiceData_LookupPtrByIndex; DSPCfg_ResolveParamToSlot_Range49..4E")
+    w("; call it with the block of the 0x49xx..0x4Exx parameter id; and")
+    w("; DSPCfg_WriteParamFull / DSPCfg_WriteAllSlots_Direct post byte[block] as the")
+    w("; SwbtWr event code through AssswbWr.  The SwbtWr bank-2 lists of exactly")
+    w("; these five codes (0x61, 0x63, 0x64, 0x65, 0x66) contain EffEdit_DSPConfigBlock;")
+    w("; code 0x62's list does not.  The values happen to be ASCII 'a','c','e','f','d';")
+    w("; they are codes, not text.  0xFF = no object.")
+    w("DspBlock_ObjectCode_Table:\t.byte 0x61, 0x63, 0x65, 0x66, 0x64, 0xff")
+    w("; parameter id 0x4900+i (i = 0..7) -> signed byte, stored through the caller's")
+    w("; pointer by DSPCfg_DecodeParamIdRange (0xFDC504: `sub xwa,0x4900`, `cp xwa,7`,")
+    w("; `add xwa,<this>`, `ld c,(xwa) / exts bc`).")
+    w("DspParamId4900_ByteMap:\t.byte 0, 2, 6, 3, 8, 5, 9, 7")
+    w("; u16[i], read by DSPCfg_ResolveWithFallback (0xFDC710) as `add xwa,xwa` index")
+    w("; then `sll bc,8`; purpose of the resulting value not established.")
+    w("DspCfg_ResolveFallback_WordTable:\t.short 0, 2, 4, 5, 3")
+    w("; switch table: u16 offset per op letter 'a'..'f' (`sub wa,97`, `cp wa,5`),")
+    w("; jumped to as 0xFDCCD3 + offset by the code after DSPCfg_Data_ParamDispatch")
+    w("; (`jp_rr 8, xix, wa`).  The targets have no labels yet, so the offsets stay")
+    w("; numeric: 0xFDCCD3, 0xFDCCDC, 0xFDCCE3, 0xFDCCEC, 0xFDCCF5, 0xFDCCFE (v10).")
+    w("DspCfg_OpLetter_JumpOffsets:\t.short %s" % ", ".join(
+        str(u16(d, 0xEE6384 + 2 * i)) for i in range(6)))
+    w("; switch table: u16 offset from AssSwb_SwapEntriesAndDispatch, 21 entries,")
+    w("; used by DspConfig_EventDispatch (0xFDD29D: index = type-1 for 0..8, or")
+    w("; type-1-0x12 for 9..20; `add bc,bc`, `ldw_sri`, `jp_ind`).  Offset 0 is the")
+    w("; default (AssSwb_SwapEntriesAndDispatch itself); the other targets have no")
+    w("; labels yet.")
+    offs = [u16(d, 0xEE6390 + 2 * i) for i in range(21)]
+    for i in range(0, 21, 7):
+        chunk = offs[i:i + 7]
+        lab = "DspConfig_EventDispatch_JumpOffsets:" if i == 0 else ""
+        w("%s\t.short %s" % (lab, ", ".join(str(o) for o in chunk)))
+    return "\n".join(L) + "\n"
+
+
+def apply_tables(path):
+    raw = open(path, "rb").read()
+    lines = raw.split(b"\n")
+    s = next(i for i, l in enumerate(lines) if l == b"ToneKit_VoiceDispatch_Table:")
+    e = next(i for i, l in enumerate(lines)
+             if l.startswith(b"; DSP EFFECT PARAMETER-WRITE RECORDS")) - 1
+    assert lines[e].startswith(b"; ====="), lines[e]
+    for l in lines[s:e]:
+        assert b";" not in l, ("comment inside replaced block", l)
+    new = emit_tables(rom("v10")).encode("latin-1").rstrip(b"\n").split(b"\n")
+    out = lines[:s] + new + lines[e:]
+    open(path, "wb").write(b"\n".join(out))
+    print("%s: replaced lines %d..%d (%d lines) with %d lines" % (path, s + 1, e, e - s, len(new)))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--emit", action="store_true")
     ap.add_argument("--apply", nargs="+")
+    ap.add_argument("--emit-tables", action="store_true")
+    ap.add_argument("--apply-tables", nargs="+")
     a = ap.parse_args()
+    if a.emit_tables:
+        sys.stdout.write(emit_tables(rom("v10")))
+        return 0
+    if a.apply_tables:
+        for p in a.apply_tables:
+            apply_tables(p)
+        return 0
     if a.probe:
         return probe()
     if a.emit:

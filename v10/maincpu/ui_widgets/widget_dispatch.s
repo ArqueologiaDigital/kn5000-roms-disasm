@@ -3409,219 +3409,275 @@ ToneKit_ParamBlock_115:
 	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFEA, 0x18
 ToneKit_ParamBlock_116:
 	.incbin "includes/generated/tonekit_param_blocks.bin", 0x1002, 0x80
+; =============================================================================
+; DSP EFFECT TABLES, indexed by DSP effect number 0..99 (names from
+; DspEffectName_PtrTable 0xE32A7A), and seven small DSPCfg arrays
+; =============================================================================
+; Parameter-range pointer table, base 0xEE6044 (= ToneKit_ParamBlock_116_0x7C:
+; entry 0 is the last 4 bytes of the ToneKit C blob, so the label below is
+; ENTRY 1).  Entry n -> the effect's {min,max,param_id} u16 x3 records, one per
+; parameter; DSPCfg_LookupAndExtract (0xFDC41D) indexes it `sll xbc,2` from
+; ToneKit_ParamBlock_116_0x7C and steps records with `mul wa,6`.  The
+; parameter count is the byte table at 0xEE5FE0 (DSPCfg_GetSlotCount).
+; ToneKit_VoiceDispatch_Table keeps its name: shared/positional_labels.s
+; derives the DSPCfg arrays below from it (+0x18C .. +0x348).
+; -----------------------------------------------------------------------------
 ToneKit_VoiceDispatch_Table:
-	.long ToneKit_ParamBlock_005
-	.long ToneKit_ParamBlock_006
-	.long ToneKit_ParamBlock_007
-	.long ToneKit_ParamBlock_008
-	.long ToneKit_ParamBlock_009
-	.long ToneKit_ParamBlock_018
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_017
-	.long ToneKit_ParamBlock_021
-	.long ToneKit_ParamBlock_022
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_010
-	.long ToneKit_ParamBlock_029
-	.long ToneKit_ParamBlock_030
-	.long ToneKit_ParamBlock_031
-	.long ToneKit_ParamBlock_032
-	.long ToneKit_ParamBlock_033
-	.long ToneKit_ParamBlock_034
-	.long ToneKit_ParamBlock_035
-	.long ToneKit_ParamBlock_036
-	.long ToneKit_ParamBlock_037
-	.long ToneKit_ParamBlock_038
-	.long ToneKit_ParamBlock_039
-	.long ToneKit_ParamBlock_040
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_000
-	.long ToneKit_ParamBlock_001
-	.long ToneKit_ParamBlock_002
-	.long ToneKit_ParamBlock_003
-	.long ToneKit_ParamBlock_019
-	.long ToneKit_ParamBlock_016
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_004
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_011
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_012
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_013
-	.long ToneKit_ParamBlock_014
-	.long ToneKit_ParamBlock_015
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_020
-	.long ToneKit_ParamBlock_050
-	.long ToneKit_ParamBlock_051
-	.long ToneKit_ParamBlock_052
-	.long ToneKit_ParamBlock_053
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_023
-	.long ToneKit_ParamBlock_024
-	.long ToneKit_ParamBlock_025
-	.long ToneKit_ParamBlock_026
-	.long ToneKit_ParamBlock_027
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_028
-	.long ToneKit_ParamBlock_041
-	.long ToneKit_ParamBlock_042
-	.long ToneKit_ParamBlock_043
-	.long ToneKit_ParamBlock_044
-	.long ToneKit_ParamBlock_045
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_058
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_054
-	.long ToneKit_ParamBlock_055
-	.long ToneKit_ParamBlock_056
-	.long ToneKit_ParamBlock_057
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_NullParams
-	.long ToneKit_ParamBlock_046
-	.long ToneKit_ParamBlock_047
-	.long ToneKit_ParamBlock_048
-	.long ToneKit_ParamBlock_049
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_063
-	.long ToneKit_ParamBlock_064
-	.long ToneKit_ParamBlock_065
-	.long ToneKit_ParamBlock_066
-	.long ToneKit_ParamBlock_067
-	.long ToneKit_ParamBlock_076
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_075
-	.long ToneKit_ParamBlock_079
-	.long ToneKit_ParamBlock_080
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_068
-	.long ToneKit_ParamBlock_087
-	.long ToneKit_ParamBlock_088
-	.long ToneKit_ParamBlock_089
-	.long ToneKit_ParamBlock_090
-	.long ToneKit_ParamBlock_091
-	.long ToneKit_ParamBlock_092
-	.long ToneKit_ParamBlock_093
-	.long ToneKit_ParamBlock_094
-	.long ToneKit_ParamBlock_095
-	.long ToneKit_ParamBlock_096
-	.long ToneKit_ParamBlock_097
-	.long ToneKit_ParamBlock_098
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long NakaInst_PFTK
-	.long ToneKit_ParamBlock_059
-	.long ToneKit_ParamBlock_060
-	.long ToneKit_ParamBlock_061
-	.long ToneKit_ParamBlock_077
-	.long ToneKit_ParamBlock_074
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_062
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_069
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_070
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_071
-	.long ToneKit_ParamBlock_072
-	.long ToneKit_ParamBlock_073
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_078
-	.long ToneKit_ParamBlock_108
-	.long ToneKit_ParamBlock_109
-	.long ToneKit_ParamBlock_110
-	.long ToneKit_ParamBlock_111
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_081
-	.long ToneKit_ParamBlock_082
-	.long ToneKit_ParamBlock_083
-	.long ToneKit_ParamBlock_084
-	.long ToneKit_ParamBlock_085
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_086
-	.long ToneKit_ParamBlock_099
-	.long ToneKit_ParamBlock_100
-	.long ToneKit_ParamBlock_101
-	.long ToneKit_ParamBlock_102
-	.long ToneKit_ParamBlock_103
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_116
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_112
-	.long ToneKit_ParamBlock_113
-	.long ToneKit_ParamBlock_114
-	.long ToneKit_ParamBlock_115
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_DefaultParams
-	.long ToneKit_ParamBlock_104
-	.long ToneKit_ParamBlock_105
-	.long ToneKit_ParamBlock_106
-	.long ToneKit_ParamBlock_107
-	.long 0x00000000
-	.byte 0x01, 0x01, 0x01, 0x01
-	.ascii "acefd"
-	.byte 0xff, 0x00, 0x02, 0x06, 0x03, 0x08, 0x05
-	.byte 0x09, 0x07, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00
-	.byte 0x05, 0x00, 0x03, 0x00, 0x00, 0x00, 0x09, 0x00
-	.byte 0x10, 0x00, 0x19, 0x00, 0x22, 0x00, 0x2b, 0x00
-	.byte 0x1d, 0x01, 0x48, 0x01, 0x00, 0x00, 0xb4, 0x01
-	.byte 0xf5, 0x01, 0x6e, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x99, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x08, 0x00, 0x33, 0x00, 0x00, 0x00
-	.byte 0x5e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x97, 0x00
+	.long ToneKit_ParamBlock_005	; 1 CHORUS
+	.long ToneKit_ParamBlock_006	; 2 MODULATED CHORUS
+	.long ToneKit_ParamBlock_007	; 3 ENHANCER
+	.long ToneKit_ParamBlock_008	; 4 FLANGER
+	.long ToneKit_ParamBlock_009	; 5 PHASER
+	.long ToneKit_ParamBlock_018	; 6 ENSEMBLE
+	.long ToneKit_NullParams	; 7 ----------
+	.long ToneKit_ParamBlock_017	; 8 GATED REVERB
+	.long ToneKit_ParamBlock_021	; 9 SINGLE DELAY
+	.long ToneKit_ParamBlock_022	; 10 MULTI TAP DELAY
+	.long ToneKit_NullParams	; 11 MODULATION DELAY
+	.long ToneKit_NullParams	; 12 ----------
+	.long ToneKit_NullParams	; 13 ----------
+	.long ToneKit_NullParams	; 14 ----------
+	.long ToneKit_ParamBlock_010	; 15 ROCK ROTARY
+	.long ToneKit_ParamBlock_029	; 16 ROOM REVERB 1
+	.long ToneKit_ParamBlock_030	; 17 ROOM REVERB 2
+	.long ToneKit_ParamBlock_031	; 18 PLATE REVERB 1
+	.long ToneKit_ParamBlock_032	; 19 PLATE REVERB 2
+	.long ToneKit_ParamBlock_033	; 20 CONCERT REVERB 1
+	.long ToneKit_ParamBlock_034	; 21 CONCERT REVERB 2
+	.long ToneKit_ParamBlock_035	; 22 DARK REVERB 1
+	.long ToneKit_ParamBlock_036	; 23 DARK REVERB 2
+	.long ToneKit_ParamBlock_037	; 24 BRIGHT REVERB 1
+	.long ToneKit_ParamBlock_038	; 25 BRIGHT REVERB 2
+	.long ToneKit_ParamBlock_039	; 26 WAVE REVERB 1
+	.long ToneKit_ParamBlock_040	; 27 WAVE REVERB 2
+	.long ToneKit_NullParams	; 28 ----------
+	.long ToneKit_NullParams	; 29 ----------
+	.long ToneKit_NullParams	; 30 ----------
+	.long ToneKit_NullParams	; 31 ----------
+	.long ToneKit_ParamBlock_000	; 32 DISTORTION
+	.long ToneKit_ParamBlock_001	; 33 OVERDRIVE
+	.long ToneKit_ParamBlock_002	; 34 FUZZ
+	.long ToneKit_ParamBlock_003	; 35 EXCITER
+	.long ToneKit_ParamBlock_019	; 36 COMPRESSOR
+	.long ToneKit_ParamBlock_016	; 37 SLOW ATTACKER
+	.long ToneKit_NullParams	; 38 NOISE FLANGER
+	.long ToneKit_ParamBlock_004	; 39 PARAMETRIC EQ
+	.long ToneKit_NullParams	; 40 ----------
+	.long ToneKit_NullParams	; 41 ----------
+	.long ToneKit_NullParams	; 42 ----------
+	.long ToneKit_NullParams	; 43 ----------
+	.long ToneKit_NullParams	; 44 CEL
+	.long ToneKit_NullParams	; 45 CELM
+	.long ToneKit_NullParams	; 46 ----------
+	.long ToneKit_NullParams	; 47 ----------
+	.long ToneKit_ParamBlock_011	; 48 AUTO PAN
+	.long ToneKit_NullParams	; 49 PITCH SHIFTER
+	.long ToneKit_ParamBlock_012	; 50 VIBRATO
+	.long ToneKit_NullParams	; 51 PEDAL WAH
+	.long ToneKit_ParamBlock_013	; 52 AUTO WAH
+	.long ToneKit_ParamBlock_014	; 53 ROTARY SPEAKER
+	.long ToneKit_ParamBlock_015	; 54 RING MODULATOR
+	.long ToneKit_NullParams	; 55 HARS EFFECT
+	.long ToneKit_ParamBlock_020	; 56 MIX UP
+	.long ToneKit_ParamBlock_050	; 57 STANDARD
+	.long ToneKit_ParamBlock_051	; 58 PERCUSSIVE
+	.long ToneKit_ParamBlock_052	; 59 SYMPHONIC
+	.long ToneKit_ParamBlock_053	; 60 DEEP SPACE
+	.long ToneKit_NullParams	; 61 ----------
+	.long ToneKit_NullParams	; 62 ----------
+	.long ToneKit_NullParams	; 63 STRING
+	.long ToneKit_ParamBlock_023	; 64 S.DELAY+CHORUS
+	.long ToneKit_ParamBlock_024	; 65 S.DELAY+S.DELAY
+	.long ToneKit_ParamBlock_025	; 66 S.DELAY+FLANGER
+	.long ToneKit_ParamBlock_026	; 67 S.DELAY+VIBRATO
+	.long ToneKit_ParamBlock_027	; 68 S.DELAY+PHASER
+	.long ToneKit_NullParams	; 69 PEDAL WAH+DELAY
+	.long ToneKit_ParamBlock_028	; 70 AUTO WAH+S.DELAY
+	.long ToneKit_ParamBlock_041	; 71 PEQ+CHORUS
+	.long ToneKit_ParamBlock_042	; 72 PEQ+S.DELAY
+	.long ToneKit_ParamBlock_043	; 73 PEQ+FLANGER
+	.long ToneKit_ParamBlock_044	; 74 PEQ+VIBRATO
+	.long ToneKit_ParamBlock_045	; 75 PEQ+COMPRESSOR
+	.long ToneKit_NullParams	; 76 ----------
+	.long ToneKit_NullParams	; 77 ----------
+	.long ToneKit_NullParams	; 78 ----------
+	.long ToneKit_ParamBlock_058	; 79 GEQ
+	.long ToneKit_NullParams	; 80 DS_D
+	.long ToneKit_NullParams	; 81 OVER_D
+	.long ToneKit_NullParams	; 82 ----------
+	.long ToneKit_NullParams	; 83 ----------
+	.long ToneKit_NullParams	; 84 ----------
+	.long ToneKit_NullParams	; 85 ----------
+	.long ToneKit_NullParams	; 86 ----------
+	.long ToneKit_NullParams	; 87 ----------
+	.long ToneKit_ParamBlock_054	; 88 ROOM
+	.long ToneKit_ParamBlock_055	; 89 KARAOKE
+	.long ToneKit_ParamBlock_056	; 90 BATH ROOM
+	.long ToneKit_ParamBlock_057	; 91 STAGE
+	.long ToneKit_NullParams	; 92 ----------
+	.long ToneKit_NullParams	; 93 ----------
+	.long ToneKit_NullParams	; 94 ----------
+	.long ToneKit_NullParams	; 95 ----------
+	.long ToneKit_ParamBlock_046	; 96 PEQ+COMPR+DIST
+	.long ToneKit_ParamBlock_047	; 97 PEQ+COMPR+OVERDR
+	.long ToneKit_ParamBlock_048	; 98 PEQ+DIST+DELAY
+	.long ToneKit_ParamBlock_049	; 99 PEQ+OVERDR+DELAY
+
+; -----------------------------------------------------------------------------
+; DspFxSettingsPtrTable -- 100 x u32: effect n -> its 24-byte settings block
+; (the ToneKit_* C blocks it points at).  Readers: DSPCfg_ResolveWithFallback
+; (0xFDC710) and DSPCfg_WriteAllSlots_Direct (0xFDCB40) load entry n as
+; `ToneKit_VoiceDispatch_Table_0x18C + 4*n`, then DSPCfg_ReadViaTableLookup
+; (0xFDC364) reads block+0 with DSPCfg_GetParamCount (0xFDC35F, `ld l,(xwa)`)
+; and uses it to index DspFxRecListPtrTable, and hands block+1 plus that
+; record list to DSPCfg_ReadMultiField (0xFDC2E8).  So +0 is the EFFECT
+; NUMBER -- true for all 59 effects that have a record list (gen_dsp_effect
+; _records.py) -- and +1.. are the parameter bytes, laid out by the effect's
+; record list ('p'/'v' records pack bitfields).  Effects without a list point
+; at ToneKit_DefaultParams.
+; -----------------------------------------------------------------------------
+DspFxSettingsPtrTable:
+	.long ToneKit_DefaultParams	; 0 NO OPERATION
+	.long ToneKit_ParamBlock_063	; 1 CHORUS
+	.long ToneKit_ParamBlock_064	; 2 MODULATED CHORUS
+	.long ToneKit_ParamBlock_065	; 3 ENHANCER
+	.long ToneKit_ParamBlock_066	; 4 FLANGER
+	.long ToneKit_ParamBlock_067	; 5 PHASER
+	.long ToneKit_ParamBlock_076	; 6 ENSEMBLE
+	.long ToneKit_DefaultParams	; 7 ----------
+	.long ToneKit_ParamBlock_075	; 8 GATED REVERB
+	.long ToneKit_ParamBlock_079	; 9 SINGLE DELAY
+	.long ToneKit_ParamBlock_080	; 10 MULTI TAP DELAY
+	.long ToneKit_DefaultParams	; 11 MODULATION DELAY
+	.long ToneKit_DefaultParams	; 12 ----------
+	.long ToneKit_DefaultParams	; 13 ----------
+	.long ToneKit_DefaultParams	; 14 ----------
+	.long ToneKit_ParamBlock_068	; 15 ROCK ROTARY
+	.long ToneKit_ParamBlock_087	; 16 ROOM REVERB 1
+	.long ToneKit_ParamBlock_088	; 17 ROOM REVERB 2
+	.long ToneKit_ParamBlock_089	; 18 PLATE REVERB 1
+	.long ToneKit_ParamBlock_090	; 19 PLATE REVERB 2
+	.long ToneKit_ParamBlock_091	; 20 CONCERT REVERB 1
+	.long ToneKit_ParamBlock_092	; 21 CONCERT REVERB 2
+	.long ToneKit_ParamBlock_093	; 22 DARK REVERB 1
+	.long ToneKit_ParamBlock_094	; 23 DARK REVERB 2
+	.long ToneKit_ParamBlock_095	; 24 BRIGHT REVERB 1
+	.long ToneKit_ParamBlock_096	; 25 BRIGHT REVERB 2
+	.long ToneKit_ParamBlock_097	; 26 WAVE REVERB 1
+	.long ToneKit_ParamBlock_098	; 27 WAVE REVERB 2
+	.long ToneKit_DefaultParams	; 28 ----------
+	.long ToneKit_DefaultParams	; 29 ----------
+	.long ToneKit_DefaultParams	; 30 ----------
+	.long ToneKit_DefaultParams	; 31 ----------
+	.long NakaInst_PFTK	; 32 DISTORTION
+	.long ToneKit_ParamBlock_059	; 33 OVERDRIVE
+	.long ToneKit_ParamBlock_060	; 34 FUZZ
+	.long ToneKit_ParamBlock_061	; 35 EXCITER
+	.long ToneKit_ParamBlock_077	; 36 COMPRESSOR
+	.long ToneKit_ParamBlock_074	; 37 SLOW ATTACKER
+	.long ToneKit_DefaultParams	; 38 NOISE FLANGER
+	.long ToneKit_ParamBlock_062	; 39 PARAMETRIC EQ
+	.long ToneKit_DefaultParams	; 40 ----------
+	.long ToneKit_DefaultParams	; 41 ----------
+	.long ToneKit_DefaultParams	; 42 ----------
+	.long ToneKit_DefaultParams	; 43 ----------
+	.long ToneKit_DefaultParams	; 44 CEL
+	.long ToneKit_DefaultParams	; 45 CELM
+	.long ToneKit_DefaultParams	; 46 ----------
+	.long ToneKit_DefaultParams	; 47 ----------
+	.long ToneKit_ParamBlock_069	; 48 AUTO PAN
+	.long ToneKit_DefaultParams	; 49 PITCH SHIFTER
+	.long ToneKit_ParamBlock_070	; 50 VIBRATO
+	.long ToneKit_DefaultParams	; 51 PEDAL WAH
+	.long ToneKit_ParamBlock_071	; 52 AUTO WAH
+	.long ToneKit_ParamBlock_072	; 53 ROTARY SPEAKER
+	.long ToneKit_ParamBlock_073	; 54 RING MODULATOR
+	.long ToneKit_DefaultParams	; 55 HARS EFFECT
+	.long ToneKit_ParamBlock_078	; 56 MIX UP
+	.long ToneKit_ParamBlock_108	; 57 STANDARD
+	.long ToneKit_ParamBlock_109	; 58 PERCUSSIVE
+	.long ToneKit_ParamBlock_110	; 59 SYMPHONIC
+	.long ToneKit_ParamBlock_111	; 60 DEEP SPACE
+	.long ToneKit_DefaultParams	; 61 ----------
+	.long ToneKit_DefaultParams	; 62 ----------
+	.long ToneKit_DefaultParams	; 63 STRING
+	.long ToneKit_ParamBlock_081	; 64 S.DELAY+CHORUS
+	.long ToneKit_ParamBlock_082	; 65 S.DELAY+S.DELAY
+	.long ToneKit_ParamBlock_083	; 66 S.DELAY+FLANGER
+	.long ToneKit_ParamBlock_084	; 67 S.DELAY+VIBRATO
+	.long ToneKit_ParamBlock_085	; 68 S.DELAY+PHASER
+	.long ToneKit_DefaultParams	; 69 PEDAL WAH+DELAY
+	.long ToneKit_ParamBlock_086	; 70 AUTO WAH+S.DELAY
+	.long ToneKit_ParamBlock_099	; 71 PEQ+CHORUS
+	.long ToneKit_ParamBlock_100	; 72 PEQ+S.DELAY
+	.long ToneKit_ParamBlock_101	; 73 PEQ+FLANGER
+	.long ToneKit_ParamBlock_102	; 74 PEQ+VIBRATO
+	.long ToneKit_ParamBlock_103	; 75 PEQ+COMPRESSOR
+	.long ToneKit_DefaultParams	; 76 ----------
+	.long ToneKit_DefaultParams	; 77 ----------
+	.long ToneKit_DefaultParams	; 78 ----------
+	.long ToneKit_ParamBlock_116	; 79 GEQ
+	.long ToneKit_DefaultParams	; 80 DS_D
+	.long ToneKit_DefaultParams	; 81 OVER_D
+	.long ToneKit_DefaultParams	; 82 ----------
+	.long ToneKit_DefaultParams	; 83 ----------
+	.long ToneKit_DefaultParams	; 84 ----------
+	.long ToneKit_DefaultParams	; 85 ----------
+	.long ToneKit_DefaultParams	; 86 ----------
+	.long ToneKit_DefaultParams	; 87 ----------
+	.long ToneKit_ParamBlock_112	; 88 ROOM
+	.long ToneKit_ParamBlock_113	; 89 KARAOKE
+	.long ToneKit_ParamBlock_114	; 90 BATH ROOM
+	.long ToneKit_ParamBlock_115	; 91 STAGE
+	.long ToneKit_DefaultParams	; 92 ----------
+	.long ToneKit_DefaultParams	; 93 ----------
+	.long ToneKit_DefaultParams	; 94 ----------
+	.long ToneKit_DefaultParams	; 95 ----------
+	.long ToneKit_ParamBlock_104	; 96 PEQ+COMPR+DIST
+	.long ToneKit_ParamBlock_105	; 97 PEQ+COMPR+OVERDR
+	.long ToneKit_ParamBlock_106	; 98 PEQ+DIST+DELAY
+	.long ToneKit_ParamBlock_107	; 99 PEQ+OVERDR+DELAY
+
+; -----------------------------------------------------------------------------
+; Seven small arrays read by audio/dsp_config_sysex.s through positional
+; names (ToneKit_VoiceDispatch_Table_0x31C .. _0x348).
+; -----------------------------------------------------------------------------
+; byte[n], read by DSPCfg_Data_001 (0xFDC448: `add xbc,xwa / ld l,(xbc)`).  No
+; call of DSPCfg_Data_001 was found (call/calr/jp/jr target scan of the v10
+; ELF disassembly), so the index range and purpose are not established.
+DspCfg_Data001_ByteTable:	.byte 0, 0, 0, 0
+; byte[n], read by DSPCfg_Data_002 (0xFDC464), same shape; no caller found
+; by the same scan; purpose not established.
+DspCfg_Data002_ByteTable:	.byte 1, 1, 1, 1
+; DSP block index 0..5 -> object code.  DSPCfg_LookupMidiMap (0xFDBFC6) passes
+; byte[block] to VoiceData_LookupPtrByIndex; DSPCfg_ResolveParamToSlot_Range49..4E
+; call it with the block of the 0x49xx..0x4Exx parameter id; and
+; DSPCfg_WriteParamFull / DSPCfg_WriteAllSlots_Direct post byte[block] as the
+; SwbtWr event code through AssswbWr.  The SwbtWr bank-2 lists of exactly
+; these five codes (0x61, 0x63, 0x64, 0x65, 0x66) contain EffEdit_DSPConfigBlock;
+; code 0x62's list does not.  The values happen to be ASCII 'a','c','e','f','d';
+; they are codes, not text.  0xFF = no object.
+DspBlock_ObjectCode_Table:	.byte 0x61, 0x63, 0x65, 0x66, 0x64, 0xff
+; parameter id 0x4900+i (i = 0..7) -> signed byte, stored through the caller's
+; pointer by DSPCfg_DecodeParamIdRange (0xFDC504: `sub xwa,0x4900`, `cp xwa,7`,
+; `add xwa,<this>`, `ld c,(xwa) / exts bc`).
+DspParamId4900_ByteMap:	.byte 0, 2, 6, 3, 8, 5, 9, 7
+; u16[i], read by DSPCfg_ResolveWithFallback (0xFDC710) as `add xwa,xwa` index
+; then `sll bc,8`; purpose of the resulting value not established.
+DspCfg_ResolveFallback_WordTable:	.short 0, 2, 4, 5, 3
+; switch table: u16 offset per op letter 'a'..'f' (`sub wa,97`, `cp wa,5`),
+; jumped to as 0xFDCCD3 + offset by the code after DSPCfg_Data_ParamDispatch
+; (`jp_rr 8, xix, wa`).  The targets have no labels yet, so the offsets stay
+; numeric: 0xFDCCD3, 0xFDCCDC, 0xFDCCE3, 0xFDCCEC, 0xFDCCF5, 0xFDCCFE (v10).
+DspCfg_OpLetter_JumpOffsets:	.short 0, 9, 16, 25, 34, 43
+; switch table: u16 offset from AssSwb_SwapEntriesAndDispatch, 21 entries,
+; used by DspConfig_EventDispatch (0xFDD29D: index = type-1 for 0..8, or
+; type-1-0x12 for 9..20; `add bc,bc`, `ldw_sri`, `jp_ind`).  Offset 0 is the
+; default (AssSwb_SwapEntriesAndDispatch itself); the other targets have no
+; labels yet.
+DspConfig_EventDispatch_JumpOffsets:	.short 285, 328, 0, 436, 501, 878, 0
+	.short 0, 921, 0, 0, 0, 0, 8
+	.short 51, 0, 94, 0, 0, 0, 151
 ; =============================================================================
 ; DSP EFFECT PARAMETER-WRITE RECORDS  (0xEE63BA-0xEE75F5, 59 lists, 4668 bytes)
 ; =============================================================================
