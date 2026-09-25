@@ -123008,7 +123008,7 @@ sub_F5BCE8:
 	popw	iy	; F5BD2C  pop IY
 	popw	ix	; F5BD2D  pop IX
 	ld	c, 5:opc	; F5BD2E  ld C,0x05
-	ld	xiz, sub_F5BDA7	; F5BD30  ld XIZ,0x00f5bda7
+	ld	xiz, OctaveIcon_BlackKeyX	; F5BD30  ld XIZ,0x00f5bda7
 sub_F5BCE8_Loop:
 	ld	hl, (xiz)	; F5BD35  ld HL,(XIZ)
 	ld	de, (xiz+2)	; F5BD37  ld DE,(XIZ+0x02)
@@ -123052,23 +123052,28 @@ sub_F5BCE8_Loop:
 	dec	1, c	; F5BDA2  dec 1,C
 	jr	nz, -47	; F5BDA4  jr NZ,0xf5bd77
 	ret	; F5BDA6  ret
-sub_F5BDA7:
-	pop	sr	; F5BDA7  pop SR
-	nop	; F5BDA8  nop
-	halt	; F5BDA9  halt
-	nop	; F5BDAA  nop
-	reti	; F5BDAB  reti
-	nop	; F5BDAC  nop
-	push	0	; F5BDAD  push 0x00
-	retd	4352	; F5BDAF  retd 0x1100
-	nop	; F5BDB2  nop
-	zcf	; F5BDB3  zcf
-	nop	; F5BDB4  nop
-	pop_a	; F5BDB5  pop A
-	nop	; F5BDB6  nop
-	.byte 0x17, 0x00	; F5BDB7  ldf 0x00   [llvm-mc cannot encode this]
-	pop_f	; F5BDB9  pop F
-	nop	; F5BDBA  nop
+; --------------------------------------------------------------------------
+; OctaveIcon_BlackKeyX -- 0xF5BDA7-0xF5BDBA, 5 records of two 16-bit words:
+;   the left and right X offsets of the five BLACK KEYS of a one-octave
+;   keyboard picture.  Converted 2026-09-25 (lane promb): the source framed
+;   the 20 bytes as `pop SR`, `halt`, `reti`, `retd 0x1100`, `ldf` ...
+; Read by: sub_F5BCE8 (0xF5BCE8), the routine that draws the picture: its loop
+;   (`ld C,0x05`, `ld XIZ,0x00F5BDA7`, `ld HL,(XIZ)` / `ld DE,(XIZ+2)` /
+;   `add XIZ,4`) sets X0 = IX + first word, X1 = IX + second word, Y0 = IY+1,
+;   Y1 = IY+7 and calls SWI7 service 0x09, prom_a LCD_Svc_09_DrawBox.
+; Why "keyboard": the same routine first draws a 28-pixel-wide outline (X1 =
+;   IX + 0x1C) and afterwards six vertical lines (service 0x02,
+;   LCD_Svc_02_DrawVLine) at IX + 4, 8, 12, 16, 20, 24 -- seven 4-pixel white
+;   keys.  The five boxes span 3-5, 7-9, 15-17, 19-21, 23-25: centred on the
+;   dividers at 4, 8, 16, 20 and 24 and on none at 12, which is the C-D-E /
+;   F-G-A-B pattern of black keys.
+; --------------------------------------------------------------------------
+OctaveIcon_BlackKeyX:
+	.short	3, 5	; F5BDA7  [0]
+	.short	7, 9	; F5BDAB  [1]
+	.short	15, 17	; F5BDAF  [2]
+	.short	19, 21	; F5BDB3  [3]
+	.short	23, 25	; F5BDB7  [4]
 
 ; --------------------------------------------------------------------------
 ; sub_F5BDBB
@@ -137786,34 +137791,25 @@ sub_F65761_Skip:
 sub_F65792:
 	xor	hl, hl	; F65792  xor HL,HL
 	ld	l, (3402:16)	; F65794  ld L,(0x0d4a)
-	ld	xde, sub_F657A7	; F65798  ld XDE,0x00f657a7
+	ld	xde, Remap_0D4A_F657A7	; F65798  ld XDE,0x00f657a7
 	mx_ld_rm MXB, ra_DE, ra_HL, 7	; F6579D  ld L,(XDE+HL)
 	ld	(3402:16), l	; F657A2  ld (0x0d4a),L
 	ret	; F657A6  ret
-sub_F657A7:
-	nop	; F657A7  nop
-	nop	; F657A8  nop
-	push	sr	; F657A9  push SR
-	pop	sr	; F657AA  pop SR
-	max	; F657AB  max
-	halt	; F657AC  halt
-	ei	0	; F657AD  ei 0x00
-	nop	; F657AF  nop
-	push	10	; F657B0  push 0x0a
-
 ; --------------------------------------------------------------------------
-; Data_F657B2 -- 1 byte this block could not split.  It is neither a pointer
-;                table, a RAM-pointer table, a bit-weight table, an index
-;                map nor a 20-byte string, and the code walk never reached
-;                it, so it is emitted as bytes rather than guessed.
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched) and is stated as such.
-; Unknown: everything about it except its bytes.
+; Remap_0D4A_F657A7 -- 0xF657A7-0xF657B2, 12 bytes: 0 0 2 3 4 5 6 0 0 9 10 11.
+;   Converted 2026-09-25 (lane promb): the source framed the first 11 bytes as
+;   instructions (`push SR`, `pop SR`, `max`, `halt`, `ei 0` ...) under the
+;   label sub_F657A7 and the 12th as `Data_F657B2` ("everything about it
+;   except its bytes" unknown).
+; Read by: sub_F65792 -- L = (0x0D4A), `ld XDE,0x00F657A7 / ld L,(XDE+HL)`,
+;   `ld (0x0D4A),L`, called from seven sites in this module.  Entry k is k
+;   itself except 1, 7 and 8, which become 0: the routine replaces three
+;   values of (0x0D4A) by zero and leaves the others alone.
+; Entry count: 12 -- the bytes that follow are the module's 0x0E padding;
+;   what bounds (0x0D4A) is not decoded here.
 ; --------------------------------------------------------------------------
-Data_F657B2:
-	.byte	0x0B	; F657B2  [0..0]
+Remap_0D4A_F657A7:
+	.byte	0x00, 0x00, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x00, 0x09, 0x0A, 0x0B	; F657A7  [0..11]
 
 	.fill	1101, 1, 0x0E	; F657B3-F65BFF  `ret` padding (asserted pure 0x0E)
 
@@ -138043,14 +138039,14 @@ sub_F65D26_Skip:
 	xor	w, w	; F65D45  xor W,W
 	ld	iy, wa	; F65D47  ld IY,WA
 	push	xde	; F65D49  push XDE
-	ld	xde, sub_F65F5C	; F65D4A  ld XDE,0x00f65f5c
+	ld	xde, MaskTable_F65F5C	; F65D4A  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 3	; F65D4F  ld C,(XDE+IY)
 	ld	a, (3075:16)	; F65D54  ld A,(0x0c03)
 	ld	iy, wa	; F65D58  ld IY,WA
 	ld	xde, 6304802	; F65D5A  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65D5F  ld A,(XDE+IY)
 	ld	iy, wa	; F65D64  ld IY,WA
-	ld	xde, sub_F65F5C	; F65D66  ld XDE,0x00f65f5c
+	ld	xde, MaskTable_F65F5C	; F65D66  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65D6B  ld A,(XDE+IY)
 	pop	xde	; F65D70  pop XDE
 	and	a, c	; F65D71  and A,C
@@ -138202,7 +138198,7 @@ sub_F65DF8_Skip:
 	ld	l, a	; F65E10  ld L,A
 	xor	h, h	; F65E12  xor H,H
 	push	xde	; F65E14  push XDE
-	ld	xde, sub_F65E54	; F65E15  ld XDE,0x00f65e54
+	ld	xde, ClampDec_0to31	; F65E15  ld XDE,0x00f65e54
 	mx_ld_rm MXB, ra_DE, ra_HL, 1	; F65E1A  ld A,(XDE+HL)
 	pop	xde	; F65E1F  pop XDE
 	ld	(3078:16), a	; F65E20  ld (0x0c06),A
@@ -138213,7 +138209,7 @@ sub_F65DF8_Skip2:
 	ld	l, a	; F65E2B  ld L,A
 	xor	h, h	; F65E2D  xor H,H
 	push	xde	; F65E2F  push XDE
-	ld	xde, IndexMap_F65E55 + 0x1F	; F65E30  ld XDE,0x00f65e74
+	ld	xde, ClampInc_0to31	; F65E30  ld XDE,0x00f65e74
 	mx_ld_rm MXB, ra_DE, ra_HL, 1	; F65E35  ld A,(XDE+HL)
 	pop	xde	; F65E3A  pop XDE
 	ld	(3078:16), a	; F65E3B  ld (0x0c06),A
@@ -138226,46 +138222,32 @@ sub_F65DF8_Join:
 	jr	sub_F65DF8_Return	; F65E51  jr T,0xf65e53
 sub_F65DF8_Return:
 	ret	; F65E53  ret
-sub_F65E54:
-	nop	; F65E54  nop
-
 ; --------------------------------------------------------------------------
-; IndexMap_F65E55 -- 31 bytes at 0xF65E55 counting 0x00..0x1E; 31 bytes at
-;                    0xF65E74 counting 0x01..0x1F.  The name describes the
-;                    CONTENT and claims nothing about the purpose.
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Entry count: 62 bytes.  The run is maximal: the run starts at 0x00 and the
-;              rule does not wrap, so it cannot extend left at all, and the
-;              byte at 0xF65E93 is 0x1F, not the 0x20 that would extend it.
-; Evidence: every byte is compared with its predecessor + 1 on every emit.
-;           The IDENT rule (no wraparound past 0xFF) fires ZERO times over
-;           the 54,814 bytes of proven prom_b instruction text; ⚠ WITH
-;           wraparound allowed it eats the 0xFF that ends the `jrl` at
-;           0xF6A9A7, which is why the no-wrap clause is in the rule.
-; Unknown: why an index map that returns its own index exists at all.
-;          prom_b now has several; that is recorded, not explained.
+; ClampDec_0to31 -- 0xF65E54-0xF65E73, 32 bytes: entry k is k-1 (k = 1..31);
+;   entry 0 (0x00) is never read.  ClampInc_0to31 -- 0xF65E74-0xF65E93, 32
+;   bytes: entry k is k+1 (k = 0..30); entry 31 (0x1F) is never read.
+;   Converted 2026-09-25 (lane promb).
+; Read by: sub_F65DF8, on the byte at (0x0C06): with bit 7 of W set it skips
+;   when the byte is 0 and otherwise does `ld XDE,0x00F65E54 / ld A,(XDE+HL)`
+;   (0xF65E15); with bit 7 clear it skips when the byte is 0x1F and otherwise
+;   does `ld XDE,0x00F65E74 / ld A,(XDE+HL)` (0xF65E30); either way the result
+;   goes back to (0x0C06).  So the pair steps a 0..31 value down or up by one
+;   without wrapping, and the two entries the guards exclude are the ones
+;   that would leave the range.
+; ⚠ CORRECTED 2026-09-25: these 64 bytes were `sub_F65E54` (a label this
+;   lane's own pointer pass put on the first byte, which the source had
+;   framed as a `nop`), `IndexMap_F65E55` (62 bytes, "read by nothing" -- the
+;   reader names 0xF65E54 and 0xF65E74, never 0xF65E55 -- and filed as an
+;   index map of unexplained purpose) and `Data_F65E93` (one byte, filed as
+;   nothing known but its bytes).  The boundaries were one byte off at both
+;   ends; the reader fixes them.
 ; --------------------------------------------------------------------------
-IndexMap_F65E55:
-	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F65E55  [0..15]
-	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x01	; F65E65  [16..31]
-	.byte	0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11	; F65E75  [32..47]
-	.byte	0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F	; F65E85  [48..61]
-
-
-; --------------------------------------------------------------------------
-; Data_F65E93 -- 1 byte this block could not split.  It is neither a pointer
-;                table, a RAM-pointer table, a bit-weight table, an index
-;                map nor a 20-byte string, and the code walk never reached
-;                it, so it is emitted as bytes rather than guessed.
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched) and is stated as such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F65E93:
-	.byte	0x1F	; F65E93  [0..0]
+ClampDec_0to31:
+	.byte	0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E	; F65E54  [0..15]
+	.byte	0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E	; F65E64  [16..31]
+ClampInc_0to31:
+	.byte	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10	; F65E74  [0..15]
+	.byte	0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x1F	; F65E84  [16..31]
 
 
 ; --------------------------------------------------------------------------
@@ -138319,7 +138301,7 @@ sub_F65E98_Return:
 	xor	w, w	; F65ECA  xor W,W
 	ld	iy, wa	; F65ECC  ld IY,WA
 	push	xde	; F65ECE  push XDE
-	ld	xde, sub_F65F5C	; F65ECF  ld XDE,0x00f65f5c
+	ld	xde, MaskTable_F65F5C	; F65ECF  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 3	; F65ED4  ld C,(XDE+IY)
 	ld	a, (3075:16)	; F65ED9  ld A,(0x0c03)
 	ld	iy, wa	; F65EDD  ld IY,WA
@@ -138327,7 +138309,7 @@ sub_F65E98_Return:
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65EE4  ld A,(XDE+IY)
 	ld	(3085:16), a	; F65EE9  ld (0x0c0d),A
 	ld	iy, wa	; F65EED  ld IY,WA
-	ld	xde, sub_F65F5C	; F65EEF  ld XDE,0x00f65f5c
+	ld	xde, MaskTable_F65F5C	; F65EEF  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65EF4  ld A,(XDE+IY)
 	pop	xde	; F65EF9  pop XDE
 	and	a, c	; F65EFA  and A,C
@@ -138361,39 +138343,22 @@ sub_F65E98_Join:
 	call	T_F411B8	; F65F52  call 0xf411b8
 	ld	(8318:16), 0	; F65F56  ld (0x207e),0x00
 	ret	; F65F5B  ret
-sub_F65F5C:
-	swi	7	; F65F5C  swi 7
-	swi	7	; F65F5D  swi 7
-	swi	7	; F65F5E  swi 7
-	swi	7	; F65F5F  swi 7
-	swi	7	; F65F60  swi 7
-	swi	7	; F65F61  swi 7
-	swi	7	; F65F62  swi 7
-	swi	7	; F65F63  swi 7
-	swi	7	; F65F64  swi 7
-	swi	7	; F65F65  swi 7
-	swi	7	; F65F66  swi 7
-	swi	7	; F65F67  swi 7
-	swi	7	; F65F68  swi 7
-	swi	7	; F65F69  swi 7
-	swi	7	; F65F6A  swi 7
-	swi	7	; F65F6B  swi 7
-	swi	7	; F65F6C  swi 7
-	swi	7	; F65F6D  swi 7
-	swi	7	; F65F6E  swi 7
-	swi	7	; F65F6F  swi 7
-	swi	7	; F65F70  swi 7
-	swi	7	; F65F71  swi 7
-	swi	7	; F65F72  swi 7
-	swi	7	; F65F73  swi 7
-	swi	7	; F65F74  swi 7
-	swi	7	; F65F75  swi 7
-	swi	7	; F65F76  swi 7
-	swi	7	; F65F77  swi 7
-	swi	7	; F65F78  swi 7
-	swi	7	; F65F79  swi 7
-	swi	7	; F65F7A  swi 7
-	swi	7	; F65F7B  swi 7
+; --------------------------------------------------------------------------
+; MaskTable_F65F5C -- 0xF65F5C-0xF65F7B, 32 bytes, every one 0xFF.
+;   Converted 2026-09-25 (lane promb): the source framed them as 32 `swi 7`.
+; Read by: sub_F65D26 (0xF65D4A, 0xF65D66) and sub_F65E98 (0xF65ECF,
+;   0xF65EEF), each twice: C = entry[(0x0C06)] and A = entry[(0x603422 +
+;   (0x0C03))], then `and A,C` and a jump on zero.  With every entry 0xFF the
+;   AND is zero only if one looked-up byte is zero, which no entry is -- so in
+;   this build the table admits everything.
+; Entry count: 32, the range ClampDec_0to31 / ClampInc_0to31 keep (0x0C06)
+;   in; the table ends where sub_F65F7C, a thunk target, begins.
+; Unknown: what a zero entry would have excluded, and why 0x603422's byte
+;   (which can be 0x20, per ByteMap_F6F985) would index past entry 31.
+; --------------------------------------------------------------------------
+MaskTable_F65F5C:
+	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F65F5C  [0..15]
+	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F65F6C  [16..31]
 
 ; --------------------------------------------------------------------------
 ; sub_F65F7C
@@ -140711,7 +140676,7 @@ DispatchTable_F67616:
 	.long	sub_F675CB	; F67636  [8] -> ret stub
 	.long	sub_F675CB	; F6763A  [9] -> ret stub
 	.long	sub_F675CB	; F6763E  [10] -> ret stub
-	.long	DispatchTable_F688D0_Arm	; F67642  [11] -> 0xF688F0
+	.long	sub_F688F0	; F67642  [11] -> 0xF688F0
 	.long	sub_F675CB	; F67646  [12] -> ret stub
 	.long	sub_F675CB	; F6764A  [13] -> ret stub
 	.long	sub_F675CB	; F6764E  [14] -> ret stub
@@ -141537,7 +141502,7 @@ DispatchTable_F67C55:
 	.long	sub_F675CB	; F67C75  [8] -> ret stub
 	.long	sub_F675CB	; F67C79  [9] -> ret stub
 	.long	sub_F68F62	; F67C7D  [10] -> sub_F68F62
-	.long	DispatchTable_F688D0_Arm	; F67C81  [11] -> 0xF688F0
+	.long	sub_F688F0	; F67C81  [11] -> 0xF688F0
 	.long	sub_F675CB	; F67C85  [12] -> ret stub
 	.long	sub_F675CB	; F67C89  [13] -> ret stub
 	.long	sub_F675CB	; F67C8D  [14] -> ret stub
@@ -141616,7 +141581,7 @@ DispatchTable_F67CEF:
 	.long	sub_F675CB	; F67D0F  [8] -> ret stub
 	.long	sub_F675CB	; F67D13  [9] -> ret stub
 	.long	sub_F68F62	; F67D17  [10] -> sub_F68F62
-	.long	DispatchTable_F688D0_Arm	; F67D1B  [11] -> 0xF688F0
+	.long	sub_F688F0	; F67D1B  [11] -> 0xF688F0
 	.long	sub_F675CB	; F67D1F  [12] -> ret stub
 	.long	sub_F675CB	; F67D23  [13] -> ret stub
 	.long	sub_F675CB	; F67D27  [14] -> ret stub
@@ -142297,7 +142262,7 @@ DispatchTable_F6828B:
 	.long	sub_F675CB	; F682AB  [8] -> ret stub
 	.long	sub_F68F5B	; F682AF  [9] -> 0xF68F5B
 	.long	sub_F675CB	; F682B3  [10] -> ret stub
-	.long	DispatchTable_F688D0_Arm	; F682B7  [11] -> 0xF688F0
+	.long	sub_F688F0	; F682B7  [11] -> 0xF688F0
 	.long	sub_F675CB	; F682BB  [12] -> ret stub
 	.long	sub_F675CB	; F682BF  [13] -> ret stub
 	.long	sub_F675CB	; F682C3  [14] -> ret stub
@@ -142865,7 +142830,7 @@ DispatchTable_F6865B:
 	.long	sub_F675CB	; F6867B  [8] -> ret stub
 	.long	sub_F68F5B	; F6867F  [9] -> 0xF68F5B
 	.long	sub_F675CB	; F68683  [10] -> ret stub
-	.long	DispatchTable_F688D0_Arm	; F68687  [11] -> 0xF688F0
+	.long	sub_F688F0	; F68687  [11] -> 0xF688F0
 	.long	sub_F675CB	; F6868B  [12] -> ret stub
 	.long	sub_F675CB	; F6868F  [13] -> ret stub
 	.long	sub_F675CB	; F68693  [14] -> ret stub
@@ -143125,7 +143090,7 @@ sub_F687ED_Skip3:
 	xor	w, w	; F68890  xor W,W
 	ld	iy, wa	; F68892  ld IY,WA
 	push	xde	; F68894  push XDE
-	ld	xde, sub_F688E0	; F68895  ld XDE,0x00f688e0
+	ld	xde, Map_20B9_20BA_F688E0	; F68895  ld XDE,0x00f688e0
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F6889A  ld A,(XDE+IY)
 	pop	xde	; F6889F  pop XDE
 	and	a, 3	; F688A0  and A,0x03
@@ -143172,24 +143137,30 @@ DispatchTable_F688D0:
 	.long	sub_F675CB	; F688D8  [2] -> ret stub
 	.long	sub_F6A2FF	; F688DC  [3] -> sub_F6A2FF
 
-sub_F688E0:
-	nop	; F688E0  nop
-	pop	sr	; F688E1  pop SR
-	pop	sr	; F688E2  pop SR
-	pop	sr	; F688E3  pop SR
-	nop	; F688E4  nop
-	normal	; F688E5  normal
-	pop	sr	; F688E6  pop SR
-	pop	sr	; F688E7  pop SR
-	nop	; F688E8  nop
-	pop	sr	; F688E9  pop SR
-	push	sr	; F688EA  push SR
-	pop	sr	; F688EB  pop SR
-	nop	; F688EC  nop
-	nop	; F688ED  nop
-	nop	; F688EE  nop
-	nop	; F688EF  nop
-DispatchTable_F688D0_Arm:
+; --------------------------------------------------------------------------
+; Map_20B9_20BA_F688E0 -- 0xF688E0-0xF688EF, 16 bytes: a 4 x 4 map from two
+;   2-bit fields to an index of DispatchTable_F688D0.  Converted 2026-09-25
+;   (lane promb): the source framed the bytes as `nop` / `pop SR` / `normal`.
+; Read by: sub_F687ED at 0xF6887A: IY = ((0x20B9) AND 0x18) >> 1 OR
+;   ((0x20BA) AND 0x18) >> 3 -- bits 3-4 of each byte, as row and column --
+;   then `ld XDE,0x00F688E0 / ld A,(XDE+IY)`, `and A,0x03`, and the result
+;   times 4 indexes DispatchTable_F688D0, whose only non-`ret` entry is 3
+;   (sub_F6A2FF).
+; Values: row 0 (0x20B9 bits 3-4 = 0): 0 3 3 3;  row 1: 0 1 3 3;
+;   row 2: 0 3 2 3;  row 3: 0 0 0 0.
+; --------------------------------------------------------------------------
+Map_20B9_20BA_F688E0:
+	.byte	0x00, 0x03, 0x03, 0x03	; F688E0  [0..3]
+	.byte	0x00, 0x01, 0x03, 0x03	; F688E4  [4..7]
+	.byte	0x00, 0x03, 0x02, 0x03	; F688E8  [8..11]
+	.byte	0x00, 0x00, 0x00, 0x00	; F688EC  [12..15]
+
+; sub_F688F0 -- a routine start: five `.long` entries of this module's
+;   dispatch tables name 0xF688F0 (0xF67642, 0xF67C81, 0xF67D1B, 0xF682B7,
+;   0xF68687, each slot [11]); it follows the table above.  (Was labelled
+;   sub_F688F0 by this lane's pointer pass, before the table
+;   was reframed.)
+sub_F688F0:
 	bit	7, w	; F688F0  bit 0x07,W
 	jr	nz, 23	; F688F3  jr NZ,0xf6890c
 	ld	xiy, 3829	; F688F5  ld XIY,0x00000ef5
@@ -147969,7 +147940,7 @@ sub_F6A9E3:
 	ld	(3684:16), a	; F6A9FC  ld (0x0e64),A
 	calr	sub_F6ACC8	; F6AA00  calr 0xf6acc8
 	calr	sub_F6AD40	; F6AA03  calr 0xf6ad40
-	calr	849	; F6AA06  calr 0xf6ad5a
+	calr	Nop_Ret_F6AD5A	; F6AA06  calr 0xf6ad5a
 	m_cp_mi16 MW24, 0x6034ba, 0x0000	; F6AA09  cp (0x6034ba),0x0000
 	jr	nz, sub_F6A9E3_Skip	; F6AA10  jr NZ,0xf6aa21
 	calr	sub_F6C4A5	; F6AA12  calr 0xf6c4a5
@@ -148109,7 +148080,7 @@ sub_F6A9E3_Skip12:
 sub_F6A9E3_Return:
 	ret	; F6AB77  ret
 sub_F6A9E3_Skip13:
-	calr	479	; F6AB78  calr 0xf6ad5a
+	calr	Nop_Ret_F6AD5A	; F6AB78  calr 0xf6ad5a
 	m_bit 3, MD16, 0x0e4e	; F6AB7B  bit 3,(0x0e4e)
 	jr	z, 10	; F6AB7F  jr Z,0xf6ab8b
 	calr	50	; F6AB81  calr 0xf6abb6
@@ -148320,44 +148291,26 @@ sub_F6AC7E:
 	ld	xix, 6304802	; F6AC8D  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_IZ, 1	; F6AC92  ld A,(XIX+IZ)
 	pop	xix	; F6AC97  pop XIX
-	ld	xhl, sub_F6ACA7	; F6AC98  ld XHL,0x00f6aca7
+	ld	xhl, Map_0E63_F6ACA7	; F6AC98  ld XHL,0x00f6aca7
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6AC9D  ld A,(XHL+A)
 	ld	(3683:16), a	; F6ACA2  ld (0x0e63),A
 	ret	; F6ACA6  ret
-sub_F6ACA7:
-	normal	; F6ACA7  normal
-	normal	; F6ACA8  normal
-	normal	; F6ACA9  normal
-	normal	; F6ACAA  normal
-	normal	; F6ACAB  normal
-	normal	; F6ACAC  normal
-	normal	; F6ACAD  normal
-	normal	; F6ACAE  normal
-	normal	; F6ACAF  normal
-	normal	; F6ACB0  normal
-	normal	; F6ACB1  normal
-	normal	; F6ACB2  normal
-	normal	; F6ACB3  normal
-	normal	; F6ACB4  normal
-	normal	; F6ACB5  normal
-	normal	; F6ACB6  normal
-	normal	; F6ACB7  normal
-	normal	; F6ACB8  normal
-	normal	; F6ACB9  normal
-	normal	; F6ACBA  normal
-	normal	; F6ACBB  normal
-	normal	; F6ACBC  normal
-	normal	; F6ACBD  normal
-	normal	; F6ACBE  normal
-	normal	; F6ACBF  normal
-	normal	; F6ACC0  normal
-	normal	; F6ACC1  normal
-	normal	; F6ACC2  normal
-	normal	; F6ACC3  normal
-	normal	; F6ACC4  normal
-	normal	; F6ACC5  normal
-	normal	; F6ACC6  normal
-	push	sr	; F6ACC7  push SR
+; --------------------------------------------------------------------------
+; Map_0E63_F6ACA7 -- 0xF6ACA7-0xF6ACC7, 33 bytes: 0x01 for entries 0..31 and
+;   0x02 for entry 32 (0x20).  Converted 2026-09-25 (lane promb): the source
+;   framed them as 32 `normal` and a `push SR`.
+; Read by: sub_F6AC7E -- `ld A,(XIX+IZ)` from the byte map at 0x603422, then
+;   `ld XHL,0x00F6ACA7 / ld A,(XHL+A)` and `ld (0x0E63),A`.  0x603422's bytes
+;   are copied from ByteMap_F6F985 / ByteMap_F6F996 (0x00..0x0F and 0x20), so
+;   the index is 0..15 or 0x20, and the 33rd byte is the one 0x20 reads.
+; Entry count: 33, fixed by that 0x20 at the top and by sub_F6ACC8, a called
+;   routine, right after it.  (0x0E63) is then 1 or 2, and Map_0EF5_F6AD56
+;   and Map_0EF5_F6C282 are indexed by it.
+; --------------------------------------------------------------------------
+Map_0E63_F6ACA7:
+	.byte	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01	; F6ACA7  [0..15]
+	.byte	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01	; F6ACB7  [16..31]
+	.byte	0x02	; F6ACC7  [32..32]
 
 ; --------------------------------------------------------------------------
 ; sub_F6ACC8
@@ -148474,20 +148427,33 @@ sub_F6AD30:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6AD40:
-	ld	xhl, sub_F6AD56	; F6AD40  ld XHL,0x00f6ad56
+	ld	xhl, Map_0EF5_F6AD56	; F6AD40  ld XHL,0x00f6ad56
 	ld	a, (3683:16)	; F6AD45  ld A,(0x0e63)
 	and	a, 3	; F6AD49  and A,0x03
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6AD4C  ld A,(XHL+A)
 	ld	(3829:16), a	; F6AD51  ld (0x0ef5),A
 	ret	; F6AD55  ret
-sub_F6AD56:
-	nop	; F6AD56  nop
-	nop	; F6AD57  nop
-	ld	(12:8), 14:io	; F6AD58  ld (0x0c),0x0e
-	max	; F6AD5B  max
-	push	sr	; F6AD5C  push SR
-	push	sr	; F6AD5D  push SR
-	max	; F6AD5E  max
+; --------------------------------------------------------------------------
+; Map_0EF5_F6AD56 -- 0xF6AD56-0xF6AD59, 4 bytes: 0x00 0x00 0x08 0x0C.
+;   Converted 2026-09-25 (lane promb), with the two objects after it: the
+;   source framed all nine bytes as instructions (`nop`, `ld (0x0c),0x0e`,
+;   `max`, `push SR` ...).
+; Read by: sub_F6AD40 -- `ld XHL,0x00F6AD56`, A = (0x0E63) AND 3,
+;   `ld A,(XHL+A)`, `ld (0x0EF5),A`.  The AND fixes four entries.
+; --------------------------------------------------------------------------
+Map_0EF5_F6AD56:
+	.byte	0x00, 0x00, 0x08, 0x0C	; F6AD56  [0..3]
+; Nop_Ret_F6AD5A -- a lone `ret`: `calr 0xF6AD5A` at 0xF6AA06 and 0xF6AB78
+;   land here.  The byte sits between two tables, the same one-byte do-nothing
+;   routine this module uses elsewhere (sub_F675CB).
+Nop_Ret_F6AD5A:
+	ret	; F6AD5A  ret
+; Data_F6AD5B -- 4 bytes, 0x04 0x02 0x02 0x04.  No reader found: no 32-bit
+;   spelling of 0xF6AD5B-0xF6AD5E and no `calr`/`jr`/`jp` into it in either
+;   image (byte scan at every offset); an index offset from 0xF6AD56 (entry
+;   5..8) is excluded for sub_F6AD40 by its `and A,0x03`.
+Data_F6AD5B:
+	.byte	0x04, 0x02, 0x02, 0x04	; F6AD5B  [0..3]
 
 ; --------------------------------------------------------------------------
 ; sub_F6AD5F
@@ -151276,7 +151242,7 @@ sub_F6C230:
 ; --------------------------------------------------------------------------
 sub_F6C237:
 	ld	a, (3683:16)	; F6C237  ld A,(0x0e63)
-	ld	xhl, sub_F6C282	; F6C23B  ld XHL,0x00f6c282
+	ld	xhl, Map_0EF5_F6C282	; F6C23B  ld XHL,0x00f6c282
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6C240  ld A,(XHL+A)
 	ld	(3829:16), a	; F6C245  ld (0x0ef5),A
 	call	T_F431B0	; F6C249  call 0xf431b0
@@ -151321,21 +151287,19 @@ DispatchTable_F6C272:
 	.long	MsgLine_Rhythm	; F6C27A  [2] -> 0xF6D4E4
 	.long	sub_F6C269	; F6C27E  [3] -> 0xF6C269
 
-sub_F6C282:
-	nop	; F6C282  nop
-	halt	; F6C283  halt
-	halt	; F6C284  halt
-	retd	1536	; F6C285  retd 0x0600
-	max	; F6C288  max
-	halt	; F6C289  halt
-	pop	sr	; F6C28A  pop SR
-	reti	; F6C28B  reti
-	push	sr	; F6C28C  push SR
-	reti	; F6C28D  reti
-	normal	; F6C28E  normal
-	reti	; F6C28F  reti
-	reti	; F6C290  reti
-	reti	; F6C291  reti
+; --------------------------------------------------------------------------
+; Map_0EF5_F6C282 -- 0xF6C282-0xF6C291, 16 bytes.  Converted 2026-09-25 (lane
+;   promb): the source framed them as `nop`, `halt`, `retd 0x0600`, `reti` x5
+;   ... under the label sub_F6C282.
+; Read by: sub_F6C237 -- A = (0x0E63), `ld XHL,0x00F6C282 / ld A,(XHL+A)`,
+;   `ld (0x0EF5),A`, then it calls slot T_F431B0 and dispatches on
+;   (0x0E63) AND 3 through DispatchTable_F6C272.
+; Entry count: 16 at most -- sub_F6C292, called from 33 sites, begins at the
+;   next byte.  Which (0x0E63) values reach this reader is not bounded here
+;   (Map_0E63_F6ACA7 produces 1 and 2).
+; --------------------------------------------------------------------------
+Map_0EF5_F6C282:
+	.byte	0x00, 0x05, 0x05, 0x0F, 0x00, 0x06, 0x04, 0x05, 0x03, 0x07, 0x02, 0x07, 0x01, 0x07, 0x07, 0x07	; F6C282  [0..15]
 
 ; --------------------------------------------------------------------------
 ; sub_F6C292
@@ -167095,33 +167059,32 @@ sub_F72F20:
 sub_F72F2D:
 	xor	h, h	; F72F2D  xor H,H
 	push	xix	; F72F2F  push XIX
-	ld	xix, sub_F72F3C	; F72F30  ld XIX,0x00f72f3c
+	ld	xix, ByteMap_F72F3C	; F72F30  ld XIX,0x00f72f3c
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F72F35  ld L,(XIX+HL)
 	pop	xix	; F72F3A  pop XIX
 	ret	; F72F3B  ret
-sub_F72F3C:
-	swi	7	; F72F3C  swi 7
-	ld	c, 35:opc	; F72F3D  ld C,0x23
-	ld	c, 3:opc	; F72F3F  ld C,0x03
-	normal	; F72F41  normal
-	halt	; F72F42  halt
-	reti	; F72F43  reti
-	push	sr	; F72F44  push SR
-	ld	e, 38:opc	; F72F45  ld E,0x26
-	ld	l, 6:opc	; F72F47  ld L,0x06
-	max	; F72F49  max
-	pushw	wa	; F72F4A  push WA
-	ld	c, 0:opc	; F72F4B  ld C,0x00
-	pushw	2345	; F72F4D  push 0x0929
-	ld	(255:8), 255:io	; F72F50  ld (0xff),0xff
-	ldw	(255:8), 65315:io	; F72F53  ld (0xff),0xff23
-	pushw	hl	; F72F57  push HL
-	calr	1	; F72F58  calr 0xf72f5c
-	ret	; F72F5B  ret
+; --------------------------------------------------------------------------
+; ByteMap_F72F3C -- 0xF72F3C-0xF72F5B, 32 bytes, applied to L by sub_F72F2D.
+;   Converted 2026-09-25 (lane promb): the source framed them as `swi 7`,
+;   `ld C,0x23`, `normal`, `halt`, `reti`, `max`, `ld (0xff),0xff` ... and a
+;   `calr 0xF72F5C` / `ret` pair made of the last four bytes.
+; Read by: sub_F72F2D (called from 0xF6F7CE, 0xF72914, 0xF747E7): H = 0,
+;   `ld XIX,0x00F72F3C / ld L,(XIX+HL)`, `ret`.
+; Entry count: 32 at most -- sub_F72F5C, called from 0xF71BDF, begins at the
+;   next byte.  ⚠ Its header lists a caller at 0xF72F58: that `calr` was four
+;   of THESE bytes (1E 01 00 0E) framed as code, and no longer exists.
+; Unknown: what the byte in L is and what the mapped values (0x00-0x2B, 0xFF
+;   = none, several 0x23) mean.
+; --------------------------------------------------------------------------
+ByteMap_F72F3C:
+	.byte	0xFF, 0x23, 0x23, 0x23, 0x03, 0x01, 0x05, 0x07, 0x02, 0x25, 0x26, 0x27, 0x06, 0x04, 0x28, 0x23	; F72F3C  [0..15]
+	.byte	0x00, 0x0B, 0x29, 0x09, 0x08, 0xFF, 0xFF, 0x0A, 0xFF, 0x23, 0xFF, 0x2B, 0x1E, 0x01, 0x00, 0x0E	; F72F4C  [16..31]
 
 ; --------------------------------------------------------------------------
 ; sub_F72F5C
 ; Called from: in-module: 0xF71BDF 0xF72F58
+;          ⚠ CORRECTED 2026-09-25: 0xF72F58 was not a call -- those
+;          bytes belong to ByteMap_F72F3C; the one caller is 0xF71BDF.
 ; Touches: (0x0CFA) (0x1010) (0x1198) (0x119A) (0x119B) (0x1238) (0x1239)
 ;          (0x34D4)
 ; Calls:   sub_F7335A sub_F7330A sub_F73566 sub_F6FA70 sub_F7339C sub_F7328F
