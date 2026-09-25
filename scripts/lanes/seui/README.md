@@ -115,3 +115,22 @@ uses some as bases (`.long SndParam_ResolveWidget + 164`).  Moving them to the
 same-named v10 label's bytes was tried and REJECTED: two labels can share their
 first 10 bytes (common epilogues) and land on one address.  Then the
 symboliser: 298 operands, 235 labels, verify PASS.
+
+## Measurements (`census_before_after_2026-09-25.txt`)
+
+Produced by running, on a copy of the tree at each commit (the census reads
+the working tree lazily, so it must not change under it):
+
+    python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json
+    python3 scripts/lanes/seui/seui_census_summary.py X.json
+
+BEFORE = branch base 3958235e, AFTER = 9be12b01.  Lane totals (four `.s`
+files; the C screen descriptors count inside sound_editor_ui.s):
+
+| image | KNOWN-A | KNOWN-B | UNKNOWN | research target | data-as-code markers | numeric branches | v7 romslice |
+|---|---|---|---|---|---|---|---|
+| v10 | 3,323 -> 19,795 | 12,695 -> 417 | 8 -> 0 | 6,338 -> 417 | 915 -> 44 | 914 -> 136 | -- |
+| v9 | 0 -> 19,735 | 13,680 -> 477 | 8 -> 0 | 8,362 -> 477 | 1,112 -> 44 | 992 -> 136 | -- |
+| v7 | 0 -> 19,716 | 35,666 -> 1,979 | 1,151 -> 20 | 9,724 -> 1,983 | 258 -> 40 | 264 -> 163 | 19,833 -> 19 |
+
+The census JSONs (~66 MB each) are regenerable and not committed.

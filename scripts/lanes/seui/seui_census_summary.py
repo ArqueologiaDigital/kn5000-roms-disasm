@@ -18,6 +18,8 @@ plus two source-side counts the census does not make:
   markers   data-as-code markers, the regex of scripts/analysis/lane_worklists.py
             (halt/incf/decf/ldf/normal/max/min/swi, jr cc,0, jr f, nop-nop)
   romslice  bytes still pulled in verbatim from includes/romslices/ (v7)
+  numbr     branch operands still numeric (jr/jrl/jp/call/calr/djnz with a
+            number as target -- CLAUDE.md wants every cross-reference symbolic)
 
 RUN
     python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json
@@ -46,11 +48,14 @@ def mine(rel):
     return any(fnmatch.fnmatch(rel, g) for g in GLOBS)
 
 
+BR = re.compile(r"^(jr|jrl|jp|call|calr|djnz|djnz8)\s+(?:[a-z]+\s*,\s*)?(?:[a-z]+\s*,\s*)?(-?\d+|0x[0-9a-f]+)$")
+
+
 def markers_and_slices(v, rel):
     p = os.path.join(ROOT, v, "maincpu", rel)
     if not p.endswith(".s") or not os.path.exists(p):
-        return 0, 0
-    prev, n, sl = "", 0, 0
+        return 0, 0, 0
+    prev, n, sl, nb = "", 0, 0, 0
     for ln in open(p, encoding="latin-1").read().split("\n"):
         c = ln.split(";")[0]
         m = re.search(r'\.incbin\s+"(includes/romslices/[^"]+)"', c)
@@ -63,8 +68,10 @@ def markers_and_slices(v, rel):
             continue
         if ABS.match(cc) or (cc == "nop" and prev == "nop"):
             n += 1
+        if BR.match(re.sub(r"\s+", " ", cc)):
+            nb += 1
         prev = cc
-    return n, sl
+    return n, sl, nb
 
 
 def main():
@@ -79,23 +86,23 @@ def main():
         if is_target(r):
             t["TARGET"] += r["size"]
     hdr = "%-4s %-40s" % ("img", "file") + "".join("%9s" % g for g in GRADES) + \
-        "%9s%9s%9s" % ("TARGET", "markers", "romslice")
+        "%9s%9s%9s%9s" % ("TARGET", "markers", "romslice", "numbr")
     print(hdr)
     tot = {}
     for (v, rel) in sorted(per):
         t = per[(v, rel)]
-        mk, sl = markers_and_slices(v, rel)
-        t["markers"], t["romslice"] = mk, sl
+        mk, sl, nb = markers_and_slices(v, rel)
+        t["markers"], t["romslice"], t["numbr"] = mk, sl, nb
         if sum(t[g] for g in GRADES) == 0 and not mk:
             continue
         print("%-4s %-40s" % (v, rel) + "".join("%9d" % t[g] for g in GRADES) +
-              "%9d%9d%9d" % (t["TARGET"], mk, sl))
-        tt = tot.setdefault(v, dict.fromkeys(GRADES + ["TARGET", "markers", "romslice"], 0))
+              "%9d%9d%9d%9d" % (t["TARGET"], mk, sl, nb))
+        tt = tot.setdefault(v, dict.fromkeys(GRADES + ["TARGET", "markers", "romslice", "numbr"], 0))
         for g in tt:
             tt[g] += t[g]
     for v, tt in sorted(tot.items()):
         print("%-4s %-40s" % (v, "TOTAL") + "".join("%9d" % tt[g] for g in GRADES) +
-              "%9d%9d%9d" % (tt["TARGET"], tt["markers"], tt["romslice"]))
+              "%9d%9d%9d%9d" % (tt["TARGET"], tt["markers"], tt["romslice"], tt["numbr"]))
 
 
 if __name__ == "__main__":

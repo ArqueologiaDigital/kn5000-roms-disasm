@@ -1,0 +1,36 @@
+# seui_census_summary.py over data_range_census.py --images v10,v9,v7
+# BEFORE: tree at 3958235e (lane branch base), census run 2026-09-25
+img  file                                         CODE  KNOWN-A  KNOWN-B  UNKNOWN   FILLER   TARGET  markers romslice    numbr
+v10  audio/semenu_routines.s                     15629        0      659        0        0      659      126        0      289
+v10  audio/sndparam_routines.s                    7764        0      113        0        0      113       34        0      105
+v10  audio/sound_editor_routines.s                1639        0        0        0        0        0        0        0        0
+v10  audio/sound_editor_ui.s                     43364     3323    11923        8      379     5566      755        0      520
+v7   audio/semenu_routines.s                     13629        0     2659        0        0     1858       21     1139      106
+v7   audio/sndparam_routines.s                     968        0     6909        0        0      158        2       13       31
+v7   audio/sound_editor_routines.s                1639        0        0        0        0        0        0        0        0
+v7   audio/sound_editor_ui.s                     31580        0    26098     1151      168     7708      235    18681      127
+v9   audio/semenu_routines.s                     15629        0      659        0        0      659      126        0      289
+v9   audio/sndparam_routines.s                    7760        0      117        0        0      117       37        0      107
+v9   audio/sound_editor_routines.s                1639        0        0        0        0        0        0        0        0
+v9   audio/sound_editor_ui.s                     45706        0    12904        8      379     7586      949        0      596
+v10  TOTAL                                       68396     3323    12695        8      379     6338      915        0      914
+v7   TOTAL                                       47816        0    35666     1151      168     9724      258    19833      264
+v9   TOTAL                                       70734        0    13680        8      379     8362     1112        0      992
+
+# AFTER: tree at 9be12b01, census run 2026-09-25
+img  file                                         CODE  KNOWN-A  KNOWN-B  UNKNOWN   FILLER   TARGET  markers romslice    numbr
+v10  audio/semenu_routines.s                     16231        0       57        0        0       57        3        0        8
+v10  audio/sndparam_routines.s                    7827        0       50        0        0       50       24        0       77
+v10  audio/sound_editor_routines.s                1639        0        0        0        0        0        0        0        0
+v10  audio/sound_editor_ui.s                     38892    19795      310        0        0      310       17        0       51
+v7   audio/semenu_routines.s                     15648        0      640        0        0      640       21        6       78
+v7   audio/sndparam_routines.s                    7645        1      231        0        0      215        0       13       19
+v7   audio/sound_editor_routines.s                1639        0        0        0        0        0        0        0        0
+v7   audio/sound_editor_ui.s                     38154    19715     1108       20        0     1128       19        0       66
+v9   audio/semenu_routines.s                     16231        0       57        0        0       57        3        0        8
+v9   audio/sndparam_routines.s                    7827        0       50        0        0       50       24        0       77
+v9   audio/sound_editor_routines.s                1639        0        0        0        0        0        0        0        0
+v9   audio/sound_editor_ui.s                     38892    19735      370        0        0      370       17        0       51
+v10  TOTAL                                       64589    19795      417        0        0      417       44        0      136
+v7   TOTAL                                       63086    19716     1979       20        0     1983       40       19      163
+v9   TOTAL                                       64589    19735      477        0        0      477       44        0      136

@@ -10256,7 +10256,20 @@ SeMenu_EqEdit_DrawInit:
 	ld	xiy, (xiy)
 	call	SeGfx_DrawBoundRecord
 	ret
-	.ascii "89:;<=>^]\\[ZYX"
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
+	push	xiz
+	pop	xiz
+	pop	xiy
+	pop	xix
+	pop	xhl
+	pop	xde
+	pop	xbc
+	pop	xwa
 	ret
 ; -----------------------------------------------------------------------------
 ; ScreenData record macros (lane seui 2026-09-25).  One macro = one record =
