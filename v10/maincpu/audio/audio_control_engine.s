@@ -9681,15 +9681,25 @@ VoiceMode_ParamHandler_3:
 VoiceMode3_Done:
 	ret
 
+; VoiceMode3 record-type handler table: 16 x .long code pointer, starting one
+; byte in (after the 0xff pad byte; the reader uses VoiceMode3_DispatchTable_0x1,
+; a .set in shared/positional_labels.s).  Reader VoiceMode_ParamHandler_3:
+;   ld l, (0x91d1) / and l, 0xf / sll hl, 2 / ld xix, <table> /
+;   ld_sril3 xix, (xix + hl) / call (xix)
+; so 16 entries, index = low nibble of the byte at 0x91D1.  Entries 7-15 all
+; go to VoiceMode_ParamHandler_1.  Entries 0 and 2-6 are named by index only:
+; the event each index stands for is not pinned here (the processor tables
+; above map indices 0-6 to records C0, B0, 80, D2, D1, D3, D0, but no reader
+; ties this table's index to that numbering).
 VoiceMode3_DispatchTable:
-	.byte 0xff
-	.long 0x00fcb065
+	.byte	0xff	; pad: the table proper starts one byte in
+	.long	VoiceMode3_EvType0
 	.long MidiVoice_DataBlockHandler
-	.long 0x00fcb282
-	.long 0x00fcb2d6
-	.long 0x00fcb326
-	.long 0x00fcb18b
-	.long 0x00fcb0f2
+	.long	VoiceMode3_EvType2
+	.long	VoiceMode3_EvType3
+	.long	VoiceMode3_EvType4
+	.long	VoiceMode3_EvType5
+	.long	VoiceMode3_EvType6
 	.long VoiceMode_ParamHandler_1
 	.long VoiceMode_ParamHandler_1
 	.long VoiceMode_ParamHandler_1
@@ -9699,6 +9709,7 @@ VoiceMode3_DispatchTable:
 	.long VoiceMode_ParamHandler_1
 	.long VoiceMode_ParamHandler_1
 	.long VoiceMode_ParamHandler_1
+VoiceMode3_EvType0:
 	call	16562576
 	jr	nc, VoiceMode3_DispatchTable_Code_Skip3
 	ld	a, (37306:16)
@@ -9730,7 +9741,7 @@ VoiceMode3_DispatchTable_Code_Skip3:
 	extz	hl
 	ld	l, (37307:16)
 	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f
+	cpib_sri	0x07, 0xf0, 0xec, 0x0f
 	jr	nz, VoiceMode3_DispatchTable_Code_Return
 	ld	xix, 37070
 	ld_rrb	a, xix, hl
@@ -9744,6 +9755,7 @@ VoiceMode3_DispatchTable_Code_Skip3:
 	call	MIDI_DispatchCC_Guarded
 VoiceMode3_DispatchTable_Code_Return:
 	ret
+VoiceMode3_EvType6:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, VoiceMode3_DispatchTable_Code_Skip4
 	ld	bc, (37303:16)
@@ -9792,6 +9804,7 @@ VoiceMode3_DispatchTable_Code_Skip4:
 	call	MIDI_DispatchCC_Guarded
 VoiceMode3_DispatchTable_Code_Return2:
 	ret
+VoiceMode3_EvType5:
 	ld	bc, (37303:16)
 	ld	de, (37305:16)
 	bit	7, d
@@ -9799,7 +9812,7 @@ VoiceMode3_DispatchTable_Code_Return2:
 	extz	hl
 	ld	l, (37320:16)
 	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f
+	cpib_sri	0x07, 0xf0, 0xec, 0x0f
 	jr	z, MidiPartCC_WriteAndDispatch_Skip
 	set	7, e
 	ld	xix, 38066
@@ -9878,6 +9891,7 @@ MidiVoice_DataBlockHandler_Skip:
 	ld	(0x9129:16), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ret
+VoiceMode3_EvType2:
 	extz	hl
 	ld	l, (0x91c8:16)
 	ld	xix, 0xf1a0
@@ -9907,6 +9921,7 @@ MidiVoice_DataBlockHandler_Skip:
 	call	MIDI_DispatchCC_Guarded
 MidiVoice_DataBlockHandler_Return:
 	ret
+VoiceMode3_EvType3:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiVoice_DataBlockHandler_Skip2
 	ld	a, 0:opc
@@ -9932,6 +9947,7 @@ MidiVoice_DataBlockHandler_Skip2:
 	call	MIDI_DispatchCC_Guarded
 MidiVoice_DataBlockHandler_Return2:
 	ret
+VoiceMode3_EvType4:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiVoice_DataBlockHandler_Skip3
 	ld	wa, (0x91b7:16)

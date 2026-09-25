@@ -9711,79 +9711,91 @@ VoiceMode_ParamHandler_3:
 
 VoiceMode3_Done:
 	ret
-
+; VoiceMode3 record-type handler table: 16 x .long code pointer, starting one
+; byte in (after the 0xff pad byte; the reader uses VoiceMode3_DispatchTable_0x1,
+; a .set in shared/positional_labels.s).  Reader VoiceMode_ParamHandler_3:
+;   ld l, (0x91d1) / and l, 0xf / sll hl, 2 / ld xix, <table> /
+;   ld_sril3 xix, (xix + hl) / call (xix)
+; so 16 entries, index = low nibble of the byte at 0x91D1.  Entries 7-15 all
+; go to VoiceMode_ParamHandler_1.  Entries 0 and 2-6 are named by index only:
+; the event each index stands for is not pinned here (the processor tables
+; above map indices 0-6 to records C0, B0, 80, D2, D1, D3, D0, but no reader
+; ties this table's index to that numbering).
 VoiceMode3_DispatchTable:
-	swi	7
-	jr	mi, -80
-	swi	4
-	nop
-	pushw	de
-	.byte 0xb2, 0xfc
-	nop
-	.byte 0x82, 0xb2
-	swi	4
-	nop
-	.byte 0xd6, 0xb2, 0xfc
-	nop
-	ld	h, 179:opc
-	swi	4
-	nop
-	cp	(xhl-79), d
-	nop
-	.byte 0xf2, 0xb0, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00
-	call	16562576
-	jr	nc, 69
-	ld	a, (37306:16)
+	.byte	0xff	; pad: the table proper starts one byte in
+	.long	VoiceMode3_EvType0
+	.long	MidiVoice_DataBlockHandler
+	.long	VoiceMode3_EvType2
+	.long	VoiceMode3_EvType3
+	.long	VoiceMode3_EvType4
+	.long	VoiceMode3_EvType5
+	.long	VoiceMode3_EvType6
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+	.long	VoiceMode_ParamHandler_1
+VoiceMode3_EvType0:
+	call	0xfcb990
+	jr	nc, VoiceMode3_EvType0_Skip2
+	ldb_d8	a, (0x91ba)
 	and	a, 7
-	jr	z, 41
-	ld	bc, (37303:16)
+	jr	z, VoiceMode3_EvType0_Skip
+	ldw_d16	bc, (0x91b7)
 	extz	hl
-	ld	l, (37320:16)
-	ld	xix, 61856
+	ldb_d8	l, (0x91c8)
+	ld	xix, 0xf1a0
 	ld_rrb	a, xix, hl
 	cp	a, 14
 	jr	nz, VoiceMode_ParamHandler_3_Skip
 	ld	b, 4:opc
 VoiceMode_ParamHandler_3_Skip:
-	ld	e, (37305:16)
+	ldb_d8	e, (0x91b9)
 	ld	d, 7:opc
 	call	MIDI_WriteVoiceParamCC
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ld	bc, (37303:16)
-	ld	de, (37305:16)
+VoiceMode3_EvType0_Skip:
+	ldw_d16	bc, (0x91b7)
+	ldw_d16	de, (0x91b9)
 	and	d, 248
 	call	MIDI_WriteVoiceParamDirect
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	ld	a, (37306:16)
+VoiceMode3_EvType0_Skip2:
+	ldb_d8	a, (0x91ba)
 	and	a, 7
 	jr	z, VoiceMode_ParamHandler_3_Return
 	extz	hl
-	ld	l, (37307:16)
-	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f
+	ldb_d8	l, (0x91bb)
+	ld	xix, 0xf1a0
+	cpib_sri	0x07, 0xf0, 0xec, 0x0f
 	jr	nz, VoiceMode_ParamHandler_3_Return
-	ld	xix, 37070
+	ld	xix, 0x90ce
 	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, VoiceMode_ParamHandler_3_Return
 	set	7, a
-	ld	(37093:16), a
-	ld	bc, (37303:16)
-	ld	de, (37305:16)
+	stb_d8	(0x90e5), a
+	ldw_d16	bc, (0x91b7)
+	ldw_d16	de, (0x91b9)
 	and	d, 7
 	call	MIDI_DispatchCC_Guarded
 VoiceMode_ParamHandler_3_Return:
 	ret
+VoiceMode3_EvType6:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, VoiceMode_ParamHandler_3_Skip2
-	ld	bc, (37303:16)
-	ld	de, (37305:16)
+	ldw_d16	bc, (0x91b7)
+	ldw_d16	de, (0x91b9)
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (37106:16)
+	ldda32	xix, (0x90f2)
 	ld_rrl	xix, xix, hl
-	cp	xix, 4294967295
+	cp	xix, 0xffffffff
 	jr	z, VoiceMode_ParamHandler_3_Return2
 	extz	hl
 	ld	l, b
@@ -9794,16 +9806,16 @@ VoiceMode_ParamHandler_3_Return:
 	and	e, d
 	or	e, a
 	st_rrb	e, xix, hl
-	ld	(37159:16), bc
-	ld	(37161:16), de
+	stda16	(0x9127), bc
+	stda16	(0x9129), de
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	cpw	(37303:16), 920
+	cpdi16	(0x91b7), 0x398
 	jr	nz, VoiceMode_ParamHandler_3_Skip2
-	.byte 0xf1, 0x52, 0x8d, 0xbb
+	setda	3, (0x8d52)
 VoiceMode_ParamHandler_3_Skip2:
 	extz	hl
-	ld	l, (37320:16)
-	ld	xix, 61856
+	ldb_d8	l, (0x91c8)
+	ld	xix, 0xf1a0
 	ld_rrb	a, xix, hl
 	cp	a, 15
 	jr	z, VoiceMode_ParamHandler_3_Return2
@@ -9811,175 +9823,168 @@ VoiceMode_ParamHandler_3_Skip2:
 	jr	z, VoiceMode_ParamHandler_3_Return2
 	cp	a, 13
 	jr	z, VoiceMode_ParamHandler_3_Return2
-	ld	xix, 37070
+	ld	xix, 0x90ce
 	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, VoiceMode_ParamHandler_3_Return2
 	set	7, a
-	ld	(37093:16), a
-	ld	bc, (37303:16)
-	ld	de, (37305:16)
+	stb_d8	(0x90e5), a
+	ldw_d16	bc, (0x91b7)
+	ldw_d16	de, (0x91b9)
 	call	MIDI_DispatchCC_Guarded
 VoiceMode_ParamHandler_3_Return2:
 	ret
-	ld	bc, (37303:16)
-	ld	de, (37305:16)
+VoiceMode3_EvType5:
+	ldw_d16	bc, (0x91b7)
+	ldw_d16	de, (0x91b9)
 	bit	7, d
 	jr	nz, MidiPartCC_WriteAndDispatch_Skip
 	extz	hl
-	ld	l, (37320:16)
-	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f
+	ldb_d8	l, (0x91c8)
+	ld	xix, 0xf1a0
+	cpib_sri	0x07, 0xf0, 0xec, 0x0f
 	jr	z, MidiPartCC_WriteAndDispatch_Skip
 	set	7, e
-	ld	xix, 38066
+	ld	xix, 0x94b2
 	st_rrb	e, xix, hl
 	ret
-
 MidiPartCC_WriteAndDispatch:
-	extz hl
-	ld l, (0x91c8:16)
-	ld xix, 0xf1a0
-	ldb_sri L, 0x07, 0xf0, 0xec
-	ld xix, VoiceMode_ParamConfigTables_0x24
-	ldb_sri C, 0x07, 0xf0, 0xec
-	ld b, 0x3:opc
-	ld (0x915b:16), bc
-	ld d, 0x7f:opc
-	ld (0x915d:16), de
+	extz	hl
+	ldb_d8	l, (0x91c8)
+	ld	xix, 0xf1a0
+	ld_rrb	l, xix, hl
+	ld	xix, VoiceMode_ParamConfigTables_0x24
+	ld_rrb	c, xix, hl
+	ld	b, 3:opc
+	stda16	(0x915b), bc
+	ld	d, 127:opc
+	stda16	(0x915d), de
 MidiPartCC_WriteAndDispatch_Skip:
-	call PartCtrl_CheckBitmaskBit
-	jr nc, MidiPartCC_CheckAndGuard
-	call MIDI_WriteVoiceParamCC
-	call SwbtWr_WriteVoiceParam_PreserveRegs
-
+	call	PartCtrl_CheckBitmaskBit
+	jr	nc, MidiPartCC_CheckAndGuard
+	call	MIDI_WriteVoiceParamCC
+	call	SwbtWr_WriteVoiceParam_PreserveRegs
 MidiPartCC_CheckAndGuard:
-	extz hl
-	ld l, (0x91c8:16)
-	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0xe
-	jr z, MIDI_PartCC_DispatchExit
-	cp a, 0xd
-	jr z, MIDI_PartCC_DispatchExit
-	ld xix, 0x90ce
-	ldb_sri A, 0x07, 0xf0, 0xec
-	cp a, 0x10
-	jr z, MIDI_PartCC_DispatchExit
-	set 7, a
-	ld (0x90e5:16), a
-	ld bc, (0x915b:16)
-	ld de, (0x915d:16)
-	call MIDI_DispatchCC_Guarded
-
+	extz	hl
+	ldb_d8	l, (0x91c8)
+	ld	xix, 0xf1a0
+	ld_rrb	a, xix, hl
+	cp	a, 14
+	jr	z, MIDI_PartCC_DispatchExit
+	cp	a, 13
+	jr	z, MIDI_PartCC_DispatchExit
+	ld	xix, 0x90ce
+	ld_rrb	a, xix, hl
+	cp	a, 16
+	jr	z, MIDI_PartCC_DispatchExit
+	set	7, a
+	stb_d8	(0x90e5), a
+	ldw_d16	bc, (0x915b)
+	ldw_d16	de, (0x915d)
+	call	MIDI_DispatchCC_Guarded
 MIDI_PartCC_DispatchExit:
 	ret
-
 MidiVoice_DataBlockHandler:
 	ld	xiy, 0x91b7
-	ld	(0x90e4:16), 0
+	stdi8	(0x90e4), 0
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiPartCC_WriteAndDispatch_Skip2
-	.byte 0xc1, 0xe4, 0x90
-	push	xiz
-	ld	w, 149:opc
-	ld	w, 241:opc
-	ld	l, 145:opc
-	.byte 0x50
-	ld	wa, (xiy+2)
-	ld	(0x9129:16), wa
+	ordi8	(0x90e4), 32
+	ld	wa, (xiy)
+	stda16	(0x9127), wa
+	ld	wa, (xiy+0x2)
+	stda16	(0x9129), wa
 MidiPartCC_WriteAndDispatch_Skip2:
 	extz	hl
-	ld	l, (0x91c8:16)
+	ldb_d8	l, (0x91c8)
 	ld	xix, 0x90ce
-	ld_rrb a, xix, hl
-	cp a, 16
-	jr	z, 28
-	.byte 0xf1, 0x50
-	swi	5
-	dec	6, d
-	ex_ff
-	or	(0x90e4:16), a
-	.byte 0xc1, 0xe4, 0x90
-	push	xiz
-	ld_sd8b	w, 149
-	ld	(0x9127:16), wa
-	ld	wa, (xiy+2)
-	ld	(0x9129:16), wa
+	ld_rrb	a, xix, hl
+	cp	a, 16
+	jr	z, MidiVoice_DataBlockHandler_Skip
+	bitda	4, (0xfd50)
+	jr	nz, MidiVoice_DataBlockHandler_Skip
+	orddm8	(0x90e4), xbc
+	ordi8	(0x90e4), 192
+	ld	wa, (xiy)
+	stda16	(0x9127), wa
+	ld	wa, (xiy+0x2)
+	stda16	(0x9129), wa
+MidiVoice_DataBlockHandler_Skip:
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ret
+VoiceMode3_EvType2:
 	extz	hl
-	ld	l, (0x91c8:16)
+	ldb_d8	l, (0x91c8)
 	ld	xix, 0xf1a0
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	push	xsp
-	retd	0x406e
+	cpib_sri	0x07, 0xf0, 0xec, 0x0f
+	jr	nz, MidiPartCC_WriteAndDispatch_Return
 	call	PartCtrl_CheckBitmaskBit
-	jr	nc, 17
-	ldw	bc, 664
-	ld	e, (0x91b9:16)
+	jr	nc, VoiceMode3_EvType2_Skip
+	ldw	bc, 0x298
+	ldb_d8	e, (0x91b9)
 	ld	d, 128:opc
 	call	MIDI_WriteVoiceParamDirect
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
+VoiceMode3_EvType2_Skip:
 	extz	hl
-	ld	l, (0x91c8:16)
+	ldb_d8	l, (0x91c8)
 	ld	xix, 0x90ce
-	ld_rrb a, xix, hl
-	cp a, 16
+	ld_rrb	a, xix, hl
+	cp	a, 16
 	jr	z, MidiPartCC_WriteAndDispatch_Return
 	set	7, a
-	ld	(0x90e5:16), a
-	ldw	bc, 664
-	ld	e, (0x91b9:16)
+	stb_d8	(0x90e5), a
+	ldw	bc, 0x298
+	ldb_d8	e, (0x91b9)
 	ld	d, 128:opc
 	call	MIDI_DispatchCC_Guarded
 MidiPartCC_WriteAndDispatch_Return:
 	ret
+VoiceMode3_EvType3:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiPartCC_WriteAndDispatch_Skip3
 	ld	a, 0:opc
-	ld	(0x9644:16), a
-	ld	wa, (0x91b7:16)
-	ld	(0x9644:16), wa
+	stb_d8	(0x9644), a
+	ldw_d16	wa, (0x91b7)
+	stda16	(0x9644), wa
 	ldw	wa, 0x7f00
-	ld	(0x9646:16), wa
-	call	MidiStream_DispatchData_0xEE
-	ld	a, (0x91b6:16)
-	ld	(0x90f8:16), a
+	stda16	(0x9646), wa
+	call	VoiceMode3_EvType3_Helper
+	ldb_d8	a, (0x91b6)
+	stb_d8	(0x90f8), a
 MidiPartCC_WriteAndDispatch_Skip3:
 	extz	hl
-	ld	l, (0x91c8:16)
+	ldb_d8	l, (0x91c8)
 	ld	xix, 0x90ce
-	ld_rrb a, xix, hl
-	cp a, 16
+	ld_rrb	a, xix, hl
+	cp	a, 16
 	jr	z, MidiPartCC_WriteAndDispatch_Return2
 	set	7, a
-	ld	(0x90e5:16), a
-	ld	bc, (0x91b7:16)
-	ld	de, (0x91b9:16)
+	stb_d8	(0x90e5), a
+	ldw_d16	bc, (0x91b7)
+	ldw_d16	de, (0x91b9)
 	call	MIDI_DispatchCC_Guarded
 MidiPartCC_WriteAndDispatch_Return2:
 	ret
+VoiceMode3_EvType4:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiPartCC_WriteAndDispatch_Skip4
-	ld	wa, (0x91b7:16)
-	ld	(0x9127:16), wa
-	ld	wa, (0x91b9:16)
-	ld	(0x9129:16), wa
+	ldw_d16	wa, (0x91b7)
+	stda16	(0x9127), wa
+	ldw_d16	wa, (0x91b9)
+	stda16	(0x9129), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 MidiPartCC_WriteAndDispatch_Skip4:
 	extz	hl
-	ld	l, (0x91c8:16)
+	ldb_d8	l, (0x91c8)
 	ld	xix, 0x90ce
-	ld_rrb a, xix, hl
-	cp a, 16
+	ld_rrb	a, xix, hl
+	cp	a, 16
 	jr	z, MidiPartCC_WriteAndDispatch_Return3
 	set	7, a
-	ld	(0x90e5:16), a
-	ld	bc, (0x91b7:16)
-	ld	de, (0x91b9:16)
+	stb_d8	(0x90e5), a
+	ldw_d16	bc, (0x91b7)
+	ldw_d16	de, (0x91b9)
 	call	MIDI_DispatchCC_Guarded
 MidiPartCC_WriteAndDispatch_Return3:
 	ret
@@ -11119,6 +11124,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+VoiceMode3_EvType3_Helper:
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
 	ld	(0x90f8:16), 255
