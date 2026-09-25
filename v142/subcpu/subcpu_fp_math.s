@@ -1102,6 +1102,9 @@ Int_SignedDiv_ConstData:
 Int_SignedDiv_AltEntry:
 	ld d, 0x1:opc
 	jr Int_SignedDiv
+; The fourth entry point the header above describes ("unsigned remainder": call FP_UnsignedDiv
+; and return XDE in XHL); unlabelled until 2026-09-25, no caller found.
+Int_UnsignedRemainder:
 	calr FP_UnsignedDiv
 	ld xhl, xde
 	ret
@@ -3196,6 +3199,8 @@ FP_DP_CopyNoSign:
 FP_DP_CopyWithSign:
 	ld d, 0x1:opc
 	jr FP_DP_CopyDispatch
+; The third entry (D = 2) the header above says is unreferenced; labelled 2026-09-25.
+FP_CopyWithSign_D2:
 	ld d, 0x2:opc
 	jr __jrt_nop_03EA0E
 __jrt_nop_03EA0E:
@@ -3797,6 +3802,8 @@ FP_DP_NegNoSign:
 FP_DP_NegWithSign:
 	ld d, 0x1:opc
 	jr FP_DP_NegDispatch
+; The third entry (D = 2) the header above says is unreferenced; labelled 2026-09-25.
+FP_NegWithSign_D2:
 	ld d, 0x2:opc
 	jr __jrt_nop_03EE42
 __jrt_nop_03EE42:

@@ -22286,6 +22286,11 @@ Voice_SetPitchBendRangeAndApply:
 	call Voice_Query_AllChannels
 	ld xwa, xhl
 	jrl Pitch_Refresh_Sounding_Voices
+
+; A = enable flag: Voice_SetKeyShiftEnable(A), then Pitch_Refresh_Sounding_Voices over
+; Voice_Query_AllChannels -- the "...AndApply" shape of the entry above.  It had no label; no
+; caller in v1.42 (address as 3-byte LE value, calr displacement searched).
+Voice_SetKeyShiftEnableAndApply:
 	extz wa
 	calr Voice_SetKeyShiftEnable
 	call Voice_Query_AllChannels
