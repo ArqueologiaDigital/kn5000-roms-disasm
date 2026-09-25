@@ -11,3 +11,7 @@ s/\bAccDraw_Secondary_Helper14\b/AccScreen_SelectorToWidgetIndex/g
 # the symboliser's internal labels of the +0x1A routine
 s/\bAccDraw_Secondary_Helper14_Join\b/AccScreen_SelectorToWidgetIndex_Loop/g
 s/\bAccDraw_Secondary_Helper14_Skip\b/AccScreen_SelectorToWidgetIndex_Store/g
+# +0x06 entry of the +0x00 routine (called at the start of a screen-draw
+# routine that follows AccDraw_Secondary_Helper2): ld c,0 / ld a,12 / ld a,16 /
+# call Display_DeferOrDrawWall / ret
+s/\bAccScreen_DrawMeasureDetail_Sub\b/AccScreen_DrawWall/g

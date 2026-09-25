@@ -33827,7 +33827,7 @@ AccDraw_Secondary_Helper2_Skip2:
 	call	DrawFunc_StackEntry
 	inc	4, xsp
 	ret
-	calr	AccScreen_DrawMeasureDetail_Sub
+	calr	AccScreen_DrawWall
 	ld	(0x03efa8:24), 2
 	ld	xiy, AccScreen_UIDataBlock_0x33
 	ld	xix, AccScreen_UIDataBlock_0x15A
@@ -34468,7 +34468,7 @@ AccScreen_UIDataBlock:
 ; ** CORRECTED 2026-09-25 (lane accomp): bytes +0x00..+0x32 of this block are
 ; NOT data.  They are three routines (51 B) and AccDraw_Secondary CALLS the
 ; second and third (calr AccScreen_RefreshScreen / AccScreen_SelectorToWidgetIndex,
-; which the symboliser had named AccScreen_RefreshScreen / _Helper14), so the
+; which the symboliser had named AccDraw_Secondary_Helper13 / _Helper14), so the
 ; "never a branch target" reading above holds for the 23 positional labels
 ; only.  The records begin at +0x33 = AccScreen_UIDataBlock_0x33, the first
 ; positional label.  Evidence: clean llvm-mc/unidasm decode ending on `ret` at
@@ -34484,7 +34484,7 @@ AccScreen_UIDataBlock:
 ; |...f....g..ah...|
 ; |9@.#.4-.....STEP|
 	ld	(0x03efa8:24), 0
-AccScreen_DrawMeasureDetail_Sub:
+AccScreen_DrawWall:
 	ld	c, 0:opc
 	ld	a, 12:opc
 	ld	a, 16:opc
