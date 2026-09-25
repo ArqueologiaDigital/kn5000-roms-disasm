@@ -48745,7 +48745,7 @@ EFF_HeaderChangeLoop_PostAlgo:
 ; Fold this slot's settle time -- byte (0x01ED72 + slot), read with `ld A,(XWA+IZ)` -- into
 ; the QIZ running maximum through Unsigned_Max_Select.
 EFF_HeaderChangeLoop_ActiveSlot:
-	lda xwa, (0x01ed72:24)
+	lda xwa, (EFF_SlotSettleTime_Table:24)
 	ldb_sri A, 0x07, 0xE0, 0xF8
 	ld c, a
 	extz bc
@@ -48918,7 +48918,7 @@ EFF_SecLinkPath_Pass2Body:
 ; name is a little off -- this is a settle-time reduction, not a volume one.
 EFF_SecLinkPath_Pass2MaxVol:
 	ld de, iz
-	lda xwa, (0x01ed72:24)
+	lda xwa, (EFF_SlotSettleTime_Table:24)
 	ldb_sri A, 0x07, 0xE0, 0xFA
 	ld c, a
 	extz bc
@@ -49334,7 +49334,7 @@ EFF_Mute_WithDebug:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1F3BC
+	ld xbc, EFF_Mute_Program_PtrTable
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
@@ -49358,7 +49358,7 @@ DSP_Mute_WithDebug:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1F3D0
+	ld xbc, DSP_Mute_Program_PtrTable
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
@@ -49381,7 +49381,7 @@ DSP_Unmute_WithDebug:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1F3E0
+	ld xbc, DSP_Unmute_Program_PtrTable
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
@@ -49413,7 +49413,7 @@ EFF_Disconnect:
 	call Debug_Print_String
 	ld wa, iz
 	extz xwa
-	ld xbc, 0x1ED6D
+	ld xbc, EFF_SlotToChip_Table
 	add xbc, xwa
 	ld a, (xbc)
 	ld l, a
@@ -49429,7 +49429,7 @@ EFF_Disconnect:
 	add xde, xwa
 	sll xde, 2
 	add xde, xbc
-	ld xbc, 0x1F3F0
+	ld xbc, EFF_Disconnect_Program_PtrTable
 	add xbc, xde
 	ld wa, hl
 	ld xbc, (xbc)
@@ -49456,7 +49456,7 @@ EFF_Link:
 	call Debug_Print_String
 	ld wa, iz
 	extz xwa
-	ld xbc, 0x1ED6D
+	ld xbc, EFF_SlotToChip_Table
 	add xbc, xwa
 	ld a, (xbc)
 	ld l, a
@@ -49472,7 +49472,7 @@ EFF_Link:
 	add xde, xwa
 	sll xde, 2
 	add xde, xbc
-	ld xbc, 0x1F404
+	ld xbc, EFF_Link_Program_PtrTable
 	add xbc, xde
 	ld wa, hl
 	ld xbc, (xbc)
@@ -49496,7 +49496,7 @@ DSP_AlgorithmChange:
 	ld wa, (xwa + 6)
 	call Debug_Print_Byte
 	ld iz, 0:i3
-	lda xwa, (0x01e63c:24)
+	lda xwa, (DSP_AlgoChange_Program:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
@@ -49513,34 +49513,34 @@ DSP_AlgorithmChange:
 ;   chip 1: 0x01E7C5, 0x01E8A7, 0x01E891, 0x01E947
 ; These seven programs are the resident microcode that everything else assumes is loaded.
 EFF_LoadConfigs_ForChannel:
-	lda xwa, (0x01e6be:24)
+	lda xwa, (DSP1_BootProgram:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
 	ld iz, 1:i3
-	lda xwa, (0x01e996:24)
+	lda xwa, (DSP2_BootProgram_Step1:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
-	lda xwa, (0x01ea12:24)
+	lda xwa, (DSP2_BootProgram_Step2:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
 	ld wa, 1:i3
 	call DSP_WaitForDelay
-	lda xwa, (0x01e7c5:24)
+	lda xwa, (DSP2_BootProgram_Step3:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
-	lda xwa, (0x01e8a7:24)
+	lda xwa, (DSP2_BootProgram_Step4:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
-	lda xwa, (0x01e891:24)
+	lda xwa, (DSP2_BootProgram_Step5:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
-	lda xwa, (0x01e947:24)
+	lda xwa, (DSP2_BootProgram_Step6:24)
 	ld xbc, xwa
 	ld wa, iz
 	call DSP_WriteGlobalConfig
@@ -49565,14 +49565,14 @@ EFF_WriteHeader:
 	call Debug_Print_String
 	ld wa, iz
 	extz xwa
-	ld xbc, 0x1ED6D
+	ld xbc, EFF_SlotToChip_Table
 	add xbc, xwa
 	ld a, (xbc)
 	ld e, a
 	extz de
 	cp de, 0:i3
 	jr nz, EFF_WriteHeader_Return
-	lda xwa, (0x01e496:24)
+	lda xwa, (EFF_Header_Program:24)
 	ld xbc, xwa
 	ld wa, de
 	call DSP_WriteGlobalConfig
@@ -49613,20 +49613,20 @@ EFF_Change_WithDebug:
 	cp wa, 0x9
 	jr nz, EFF_Change_GenericLookup
 	ld wa, iz
-	lda xbc, (0x01dfa5:24)
+	lda xbc, (DSP_Eff09_Slot1_Algo_Bytecode:24)
 	call DSP_WriteEFFConfig
 	ld wa, iz
-	lda xbc, (0x01e0b9:24)
+	lda xbc, (DSP_Eff09_Slot1_Coef_Bytecode:24)
 	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
 ; Slot 1 / effect 0x0A override: upload 0x01E1DE then 0x01E342.
 EFF_Change_Case0xA:
 	ld wa, iz
-	lda xbc, (0x01e1de:24)
+	lda xbc, (DSP_Eff10_Slot1_Algo_Bytecode:24)
 	call DSP_WriteEFFConfig
 	ld wa, iz
-	lda xbc, (0x01e342:24)
+	lda xbc, (DSP_Eff10_Slot1_Coef_Bytecode:24)
 	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
@@ -49635,7 +49635,7 @@ EFF_Change_GenericLookup:
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1ED7C
+	ld xbc, EFF_AlgoProgram_PtrTable
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
@@ -49643,7 +49643,7 @@ EFF_Change_GenericLookup:
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1EF0C
+	ld xbc, EFF_CoefProgram_PtrTable
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
@@ -49656,7 +49656,7 @@ EFF_Change_ChannelNot1:
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1ED7C
+	ld xbc, EFF_AlgoProgram_PtrTable
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
@@ -49664,7 +49664,7 @@ EFF_Change_ChannelNot1:
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1EF0C
+	ld xbc, EFF_CoefProgram_PtrTable
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
@@ -49698,7 +49698,7 @@ EFF_DataChange_WithDebug:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0x1EF0C
+	ld xbc, EFF_CoefProgram_PtrTable
 	add xbc, xwa
 	ld wa, (xsp + 2)
 	ld xbc, (xbc)
@@ -50346,6 +50346,16 @@ DSP_UnpackParam3B:
 ;   COMMAND 0x03
 ; So each entry is one indexed word plus three raw coefficients -- a four-coefficient
 ; lookup-table row. Only one caller, at 0x045692.
+; CORRECTION (2026-09-25, from the instructions below): two claims above are wrong.
+;  * The table family is NOT chosen by BC.  0x0386AD `ld c,(xwa+)` reads the selector C from the
+;    caller's VALUE STREAM (the operand byte of the op74 record `00 06 74 00 <C> 7a`), and
+;    `cp c,1` picks the 32-word family on C == 1, the 36-word family otherwise.  So "chip 0" /
+;    "chip 1" here and in the branch comments below mean C != 1 / C == 1.  All 26 effects whose
+;    value table has an op74 record are IC311 effects, and C is 1 for ten of them (see
+;    DSP_Op74_LUT_Rows9_Var0 in subcpu_data_tables.s).  The BC argument's copy at (xsp+14) is
+;    overwritten with the base index at DSP_WriteLUT_MainLoop_Init before any use.
+;  * The caller's cursor DOES advance, by exactly that one selector byte: 0x0386B0 re-saves the
+;    post-incremented XWA to (xsp+6), which DSP_WriteLUT_MainLoop_Done writes back.
 DSP_WriteLUTParamSet:
 	lda xsp, (xsp - 18)
 	pushw iz
@@ -50363,19 +50373,19 @@ DSP_WriteLUTParamSet:
 	jr z, DSP_WriteLUT_AlgoC0_TypeDE2
 	cp xde, 0x1
 	jr z, DSP_WriteLUT_AlgoC0_TypeDE1
-	lda xwa, (0x01eafa:24)
+	lda xwa, (DSP_Op74_LUT_Rows9_Var0:24)
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
 ; chip 0, variant 1: select the blob at 0x01EB67.
 DSP_WriteLUT_AlgoC0_TypeDE1:
-	lda xwa, (0x01eb67:24)
+	lda xwa, (DSP_Op74_LUT_Rows9_Var1:24)
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
 ; chip 0, variant 2: select the blob at 0x01EBD4.
 DSP_WriteLUT_AlgoC0_TypeDE2:
-	lda xwa, (0x01ebd4:24)
+	lda xwa, (DSP_Op74_LUT_Rows9_Var2:24)
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
@@ -50386,19 +50396,19 @@ DSP_WriteLUT_AlgoC1:
 	jr z, DSP_WriteLUT_AlgoC1_TypeDE2
 	cp xde, 0x1
 	jr z, DSP_WriteLUT_AlgoC1_TypeDE1
-	lda xwa, (0x01ec41:24)
+	lda xwa, (DSP_Op74_LUT_Rows8_Var0:24)
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
 ; chip 1, variant 1: select the blob at 0x01ECA5.
 DSP_WriteLUT_AlgoC1_TypeDE1:
-	lda xwa, (0x01eca5:24)
+	lda xwa, (DSP_Op74_LUT_Rows8_Var1:24)
 	ld (xsp + 10), xwa
 	jr DSP_WriteLUT_MainLoop_Init
 
 ; chip 1, variant 2: select the blob at 0x01ED09.
 DSP_WriteLUT_AlgoC1_TypeDE2:
-	lda xwa, (0x01ed09:24)
+	lda xwa, (DSP_Op74_LUT_Rows8_Var2:24)
 	ld (xsp + 10), xwa
 
 ; Read the blob's first byte as the base index, advance the local cursor past it, zero the
@@ -55935,7 +55945,7 @@ DSP_MixerCoeff_Compute:
 DSP_WriteEFFConfig:
 	ld de, wa
 	extz xde
-	ld xhl, 0x1ED6D
+	ld xhl, EFF_SlotToChip_Table
 	add xhl, xde
 	ld e, (xhl)
 	extz de
@@ -55980,8 +55990,8 @@ DSP_WriteParam_EFFCase:
 	jr z, DSP_WriteParam_EFFCase0xA
 	cp bc, 0x9
 	jrl nz, DSP_WriteParam_Return
-	lda xhl, (0x01e17f:24)
-	lda xbc, (0x01e19e:24)
+	lda xhl, (DSP_Eff9_Param_Descriptors:24)
+	lda xbc, (DSP_Eff9_Param_Values:24)
 	push xbc
 	pushw de
 	ld bc, wa
@@ -56001,8 +56011,8 @@ DSP_WriteParam_EFFCase:
 
 ; Effect id 0x0A: descriptor tables 0x01E40A / 0x01E42D.
 DSP_WriteParam_EFFCase0xA:
-	lda xhl, (0x01e40a:24)
-	lda xbc, (0x01e42d:24)
+	lda xhl, (DSP_EffA_Param_Descriptors:24)
+	lda xbc, (DSP_EffA_Param_Values:24)
 	push xbc
 	pushw de
 	ld bc, wa
@@ -56025,12 +56035,12 @@ DSP_WriteParam_Generic:
 	ld hl, bc
 	extz xhl
 	sll xhl, 2
-	ld xiy, 0x1F22C
+	ld xiy, DSP_Param_Block_Ptrs_B
 	add xiy, xhl
 	ld xhl, (xiy)
 	extz xbc
 	sll xbc, 2
-	ld xiy, 0x1F09C
+	ld xiy, DSP_Param_Block_Ptrs_A
 	add xiy, xbc
 	ld xbc, (xiy)
 	push xbc
@@ -56897,7 +56907,7 @@ DSP_ParameterWriteEngine:
 	ld xiz, (xsp + 32)
 	ld wa, (xsp + 20)
 	extz xwa
-	ld xbc, 0x1ED6D
+	ld xbc, EFF_SlotToChip_Table
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
