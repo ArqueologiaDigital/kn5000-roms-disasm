@@ -517,8 +517,8 @@ SeqPlay_DataBlock_BBE_Skip9:
 	ld	wa, (0xf238:16)
 	sub wa, (62015:16)
 	ld	(9832:16), wa
-	.byte 0xf1, 0xec
-	.ascii "&PxCü"
+	stda16	(9964), wa
+	jrl	SeqAcc_SetupRepeatCount
 
 
 ; -----------------------------------------------------------------------------
@@ -12195,7 +12195,8 @@ SeqPos_DataBlock:
 	push	qiz
 	ld	a, (0x2878:16)
 	ldb_erp	a, 251
-	.byte 0xc2, 0xe3, 0xff, 0x00, 0x19, 0x78, 0x28	; ld (0x2878),(0x00ffe3)
+	; ld (0x2878),(0x00ffe3)
+	ld	(0x2878:16), (0xffe3:24)
 	call	SeqVoice_InitEntry
 	stb_erp	a, 251
 	ld	(0x2878:16), a
@@ -17656,7 +17657,8 @@ Rhythm_NoteAllocBlock:
 	calr	SeqEvt_ProcessBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	.ascii "n3h>"
+	jr	nz, Rhythm_ComputeNoteAllocation_Skip2
+	jr	Rhythm_ComputeNoteAllocation_Join
 Rhythm_ComputeNoteAllocation_Skip:
 	calr	SeqEvt_ProcessBlock
 	ld	iz, hl
@@ -20932,9 +20934,11 @@ AppEvent_InlineHandler_Skip16:
 	lda_d16	xwa, (9722)
 	jr	AppEvent_InlineHandler_Join9
 	lda	xiz, (9758:16)
-	.byte 0xf1
-	.ascii " &0h&ñ×ñ6ñ,&0h"
-	.byte 0x1c
+	lda_d16	xwa, (9760)
+	jr	AppEvent_InlineHandler_Join9
+	lda_d16	xiz, (61911)
+	lda_d16	xwa, (9772)
+	jr	AppEvent_InlineHandler_Join9
 	lda	xiz, (0xf1dc:16)
 	lda	xwa, (9766:16)
 	jr	AppEvent_InlineHandler_Join9
@@ -20956,7 +20960,7 @@ AppEvent_InlineHandler_Join9:
 AppEvent_InlineHandler_Skip18:
 	ld	bc, (xiz)
 	ld	xwa, (xsp+4)
-	.byte 0x90, 0xf1
+	cp	bc, (xwa)
 	jr	ule, AppEvent_InlineHandler_Skip
 	ld	bc, (xiz)
 	ld	(xwa), bc
@@ -20993,9 +20997,8 @@ AppEvent_InlineHandler_Skip:
 	lda	xwa, (9760:16)
 	jr	AppEvent_InlineHandler_Join
 	lda	xiz, (0xf1d7:16)
-	.byte 0xf1
-	.ascii ",&0h"
-	.byte 0x1c
+	lda_d16	xwa, (9772)
+	jr	AppEvent_InlineHandler_Join
 	lda	xiz, (0xf1dc:16)
 	lda_d16	xwa, (9766)
 	jr	AppEvent_InlineHandler_Join
@@ -21018,7 +21021,7 @@ AppEvent_InlineHandler_Join:
 AppEvent_InlineHandler_Skip2:
 	ld	bc, (xiz)
 	ld	xwa, (xsp+4)
-	.byte 0x90, 0xf1
+	cp	bc, (xwa)
 	jr	ule, AppEvent_InlineHandler_Skip3
 	ld	wa, (xwa)
 	ld	(xiz), wa
@@ -21714,8 +21717,8 @@ SoundData_HandlerDispatch:
 	jrl	AppEvent_PopIzSkip2Ret
 	call	PartParam_Handler_02
 	jrl	AppEvent_PopIzSkip2Ret
-	.byte 0x1d, 0xa9, 0x04
-	.long SOUND_DATA_FLUTE_EXTRA
+	call	PartParam_Handler_03
+	jrl	AppEvent_PopIzSkip2Ret
 	call	PartParam_Handler_04
 	jrl	AppEvent_PopIzSkip2Ret
 	call	PartParam_Handler_05
@@ -22850,13 +22853,17 @@ SeqAccomp_SubHandlerA:
 	jrl	nz, AppEvent_ReturnZero
 	stb_erp	a, 239
 	cp_erpb	239, 130
-	jr	nz, 19
+	jr	nz, ApPlaySyori_Skip13
 	ld	a, (0x28b1:16)
 	bit	0, a
 	jrl	nz, AppEvent_ReturnZero
 	set	0, a
-	.byte 0xf1, 0xb1
-	.ascii "(Ah0ÉÏ†n+ñ²(Ê"
+	stb_d8	(10417), a
+	jr	ApPlaySyori_Join9
+ApPlaySyori_Skip13:
+	cp	a, 134
+	jr	nz, ApPlaySyori_Join9
+	bitda	2, (10418)
 	jrl	nz, AppEvent_ReturnZero
 	bitda	1, (10417)
 	jrl	nz, AppEvent_ReturnZero
@@ -22867,6 +22874,7 @@ SeqAccomp_SubHandlerA:
 	ld	xbc, 29360143
 	ld	xde, 3:i3
 	call	ApDeliveryEvent
+ApPlaySyori_Join9:
 	ldda32	xwa, (10610)
 	ld	xbc, 29360143
 	ld	xde, 4:i3
@@ -25287,8 +25295,7 @@ HelpLang_DispatchDataBlock_Skip2:
 	ld	xwa, WidgetData_CharsetMappingTable_0x50A
 	jr	HelpLang_DispatchDataBlock_Join
 HelpLang_DispatchDataBlock_Entry:
-	.byte 0x40
-	.long FontPalette_Gradient7
+	ld	xwa, FontPalette_Gradient7
 	jr	HelpLang_DispatchDataBlock_Join
 HelpLang_DispatchDataBlock_Skip3:
 	ld	xwa, WidgetData_CharsetMappingTable_0x474
@@ -25603,7 +25610,8 @@ SeqLoad_ProcessDataBlock_Skip2:
 	dec	2, xsp
 	pushw	iz
 	ld	(xsp+2), a
-	.byte 0xd2, 0xec, 0xff, 0x00, 0x19, 0x9e, 0xf1	; ldw (0xf19e),(0x00ffec)
+	; ldw (0xf19e),(0x00ffec)
+	ldw	(0xf19e:16), (0xffec:24)
 	call	Audio_CheckSubsystemReady
 	ld	a, (0xffe3:24)
 	extz	wa
@@ -25680,7 +25688,7 @@ SeqLoad_ProcessDataBlock_Skip5:
 	jr	ule, SeqLoad_ProcessDataBlock_Skip7
 SeqLoad_ProcessDataBlock_Loop5:
 	ld	wa, iz
-	.byte 0x9f, 0x04, 0x80
+	add	wa, (xsp+4)
 	call	PartCtrl_ReadWord_Off1
 	ld	bc, hl
 	cp	bc, 0xffff
@@ -25693,7 +25701,7 @@ SeqLoad_ProcessDataBlock_Loop5:
 	call	PartCtrl_WriteWord_Off1
 SeqLoad_ProcessDataBlock_Skip6:
 	ld	wa, iz
-	.byte 0x9f, 0x04, 0x80
+	add	wa, (xsp+4)
 	call	PartCtrl_ReadWord
 	ld	bc, hl
 	cp	bc, 0xffff
@@ -25720,7 +25728,8 @@ SeqLoad_ProcessDataBlock_Skip7:
 	calr	SeqLoad_InitPartPanPresets
 	calr	SeqLoad_ProcessAllVoiceData
 	call	Seq_ResetAndRestartAccompaniment
-	.byte 0xf2, 0xec, 0xff, 0x00, 0x16, 0x9e, 0xf1	; ldw (0x00ffec),(0xf19e)
+	; ldw (0x00ffec),(0xf19e)
+	ldw	(0xffec:24), (0xf19e:16)
 SeqLoad_ProcessDataBlock_Join:
 	pop	xiz
 	inc	8, xsp

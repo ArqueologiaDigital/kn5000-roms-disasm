@@ -5017,12 +5017,10 @@ ToneGen_AdvValidate_StoreAndDone:
 VoiceSynth_Algo_SimpleStore:
 	ld	iy, (4011:16)
 	and	iy, 15
-	.byte 0xc1, 0xad, 0x0f
-	.ascii "!<Dr"
-	retd	0
-	.byte 0xf3
-	reti
-	st_dd8b	a, 244
+	ldb_d8	a, (4013)
+	push	xix
+	ld	xix, 3954
+	st_rrb	a, xix, iy
 	pop	xix
 	ret
 VoiceSynth_Algo_MultiPath:
@@ -5225,7 +5223,7 @@ VoiceSynth_Algo_PitchModulated_Skip:
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	cpdi8	(4323), 0
-	jr	nz, 13
+	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
 	ld	(4323:16), 0
@@ -5234,12 +5232,10 @@ VoiceSynth_Algo_PitchModulated_Return:
 VoiceSynth_Algo_DirectStore:
 	ld	iy, (4011:16)
 	and	iy, 15
-	.byte 0xc1, 0xad, 0x0f
-	.ascii "!<Dr"
-	retd	0
-	.byte 0xf3
-	reti
-	st_dd8b	a, 244
+	ldb_d8	a, (4013)
+	push	xix
+	ld	xix, 3954
+	st_rrb	a, xix, iy
 	pop	xix
 	ret
 VoiceSynth_Algo_PitchShift:

@@ -3174,8 +3174,7 @@ VocalistGridCheck_Join16:
 	cp	xwa, 19
 	jrl	ugt, AcVocalist_ReturnZero
 	add	xwa, xwa
-	.byte 0xe8, 0xc8
-	.long MidiPart_ColWidthData
+	add	xwa, MidiPart_ColWidthData
 	ld	wa, (xwa)
 	lda	xix, (VocalistGrid_DispatchData_0x160:24)
 	jp_rr 8, xix, wa
@@ -3212,7 +3211,8 @@ VocalistGridCheck_Join3:
 	jrl	VocalistGridCheck_Join12
 	ld	wa, (xbc)
 	inc	1, wa
-	.long Bitmap_MIDIConnections_Header
+	pushw	wa
+	pushw	231
 	pushw	0xef04
 	ld	xwa, (xsp+14)
 	push	xwa
@@ -3496,8 +3496,7 @@ VocalistGridCheck_Skip12:
 	ld	xwa, MidiPart_OctaveStr_m2_0x194
 	jr	VocalistGridCheck_Join9
 VocalistGridCheck_Entry:
-	.byte 0x40
-	.long MidiPart_RecvTransStr
+	ld	xwa, MidiPart_RecvTransStr
 VocalistGridCheck_Join9:
 	push	xwa
 	lda	xwa, (xsp+24)
@@ -3520,8 +3519,7 @@ VocalistGridCheck_Skip13:
 	ld	xwa, MidiPart_RecvTransStr_0xC
 	jr	VocalistGridCheck_Join10
 VocalistGridCheck_Entry2:
-	.byte 0x40
-	.long MidiPart_AfterStr
+	ld	xwa, MidiPart_AfterStr
 VocalistGridCheck_Join10:
 	push	xwa
 	push	xbc
