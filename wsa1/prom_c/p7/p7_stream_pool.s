@@ -2170,8 +2170,15 @@ P7Stream_FD0527:
 ;      [INFERENCE, stated as such] a count byte 0x20 = 32 followed by 24-bit
 ;      big-endian values that rise in equal steps of 0x059999 to 0x400000, hold
 ;      there for eight entries and fall back symmetrically -- a trapezoid.  The
-;      step and the symmetry are in the bytes; the ELEMENT SIZE is not proved by
-;      any instruction, so this is an observation, not a decode.
+;      step and the symmetry are in the bytes.  (Corrected 2026-09-25, lane promcd:
+;      this said the ELEMENT SIZE was not proved by any instruction.  It is three
+;      bytes, the width P7Unit_SendValueTable reads with Stream_ReadU24BE at
+;      0xF9F84F -- see the Layout line below.)
+;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
+;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD06FA:
 	.byte	0x20, 0x00, 0x00, 0x00, 0x05, 0x99, 0x99, 0x0b, 0x33, 0x33, 0x10, 0xcc, 0xcc, 0x16, 0x66, 0x66   ; 0xFD06FA
 	.byte	0x1c, 0x00, 0x00, 0x21, 0x99, 0x99, 0x27, 0x33, 0x33, 0x2c, 0xcc, 0xcc, 0x32, 0x66, 0x66, 0x38   ; 0xFD070A
@@ -3360,7 +3367,11 @@ P7Stream_FD27D5:
 ; ---- 0xFD28C7-0xFD292A  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA4828, LDA instruction at 0xFA485E
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
+;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD28C7:
 	.byte	0x1d, 0xc0, 0xa3, 0xd7, 0xc1, 0x25, 0x99, 0xc1, 0x66, 0x7b, 0xc1, 0xca, 0xc0, 0xc2, 0x29, 0x1f   ; 0xFD28C7
 	.byte	0xc3, 0x2c, 0xa5, 0xc3, 0xce, 0xd9, 0xc4, 0xb1, 0xee, 0xc6, 0x57, 0xa7, 0xc7, 0x9c, 0x0e, 0xc9   ; 0xFD28D7
@@ -3980,7 +3991,11 @@ P7Stream_FD3A82:
 ; ---- 0xFD3B60-0xFD3BC3  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA483C
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
+;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD3B60:
 	.byte	0x1d, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7   ; 0xFD3B60
 	.byte	0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0   ; 0xFD3B70
@@ -4735,7 +4750,11 @@ P7Stream_FD4CBD:
 ; ---- 0xFD4E13-0xFD4E76  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA4832
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
+;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD4E13:
 	.byte	0x1d, 0xc0, 0xa3, 0xd7, 0xc4, 0x99, 0x99, 0xc8, 0x8f, 0x5c, 0xcc, 0x85, 0x1e, 0xd0, 0x7a, 0xe1   ; 0xFD4E13
 	.byte	0xd4, 0x70, 0xa3, 0xd8, 0x66, 0x66, 0xdc, 0x5c, 0x28, 0xe0, 0x51, 0xeb, 0xe4, 0x47, 0xae, 0xe8   ; 0xFD4E23
@@ -7567,7 +7586,11 @@ P7Stream_FDA3C8:
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA48C5
 ;      Also pointed at inside it: 0xFDA554, 0xFDA5C1
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
+;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FDA4E7:
 	.byte	0x1d, 0x0c, 0x23, 0xc6, 0x2b, 0x0a, 0x8f, 0x47, 0x02, 0x73, 0x5e, 0x23, 0x82, 0x6e, 0xda, 0x3a   ; 0xFDA4E7
 	.byte	0x78, 0x03, 0x04, 0x78, 0xfe, 0x14, 0x71, 0xba, 0x50, 0x62, 0xb6, 0x74, 0x4c, 0xf8, 0x74, 0x31   ; 0xFDA4F7
