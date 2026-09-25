@@ -116211,7 +116211,8 @@ sub_FCC573:
 ;
 ; THE MODULE'S SHAPE
 ;   0xFCF000  17 LE32 dispatch entries (this table)
-;   0xFCF044  3,427 bytes of tables -- see ModuleTables_FCF044 below
+;   0xFCF044  3,427 bytes of tables -- framed by their readers below
+;             (this span was `ModuleTables_FCF044` until 2026-09-25)
 ;   0xFCFDA7  code, to 0xFDE70E
 ;
 ; ---------------------------------------------------------------------
@@ -116232,269 +116233,1133 @@ sub_FCC573:
 ;          the shape of a default arm -- and the other fourteen are distinct and
 ;          ascending.
 ; Unknown:  what the seventeen operations are.
+; ⚠ CORRECTION 2026-09-25 (lane proma): the count IS bound, one step
+;          removed.  The reader, sub_FCFDA7, first calls
+;          PanelEvent_ToFieldIndex (0xFD7905), which returns WA=0 only after
+;          storing an operation in 0..16 at (XIZ-4) -- the byte this reader
+;          multiplies -- and the reader skips the dispatch on 0xFFFF.  And
+;          word 17 (0xFCF044), 0x00000000, is not the start of another table:
+;          it is the zero word that ends all 38 tables of this shape framed below.
 ; ---------------------------------------------------------------------
 DispatchTable_FCF000:
-	.long 0x00fcfe42                                 ; FCF000  [  0]
-	.long 0x00fcfea1                                 ; FCF004  [  1]
-	.long 0x00fcff46                                 ; FCF008  [  2]
-	.long 0x00fcffca                                 ; FCF00C  [  3]
-	.long 0x00fd006b                                 ; FCF010  [  4]
-	.long 0x00fd00f5                                 ; FCF014  [  5]
-	.long 0x00fd017d                                 ; FCF018  [  6]
-	.long 0x00fd0267                                 ; FCF01C  [  7]
-	.long 0x00fd02cb                                 ; FCF020  [  8]
-	.long 0x00fd0374                                 ; FCF024  [  9]
-	.long 0x00fd0409                                 ; FCF028  [ 10]
-	.long 0x00fd046f                                 ; FCF02C  [ 11]
-	.long 0x00fd04d5                                 ; FCF030  [ 12]
-	.long 0x00fd6c93                                 ; FCF034  [ 13]
-	.long 0x00fd6c93                                 ; FCF038  [ 14]
-	.long 0x00fd0521                                 ; FCF03C  [ 15]
-	.long 0x00fd6c93                                 ; FCF040  [ 16]
+	.long sub_FCFE42                              ; FCF000  [  0]
+	.long sub_FCFEA1                              ; FCF004  [  1]
+	.long sub_FCFF46                              ; FCF008  [  2]
+	.long sub_FCFFCA                              ; FCF00C  [  3]
+	.long sub_FD006B                              ; FCF010  [  4]
+	.long sub_FD00F5                              ; FCF014  [  5]
+	.long sub_FD017D                              ; FCF018  [  6]
+	.long sub_FD0267                              ; FCF01C  [  7]
+	.long sub_FD02CB                              ; FCF020  [  8]
+	.long sub_FD0374                              ; FCF024  [  9]
+	.long sub_FD0409                              ; FCF028  [ 10]
+	.long sub_FD046F                              ; FCF02C  [ 11]
+	.long sub_FD04D5                              ; FCF030  [ 12]
+	.long PanelOp_Nop                             ; FCF034  [ 13]
+	.long PanelOp_Nop                             ; FCF038  [ 14]
+	.long sub_FD0521                              ; FCF03C  [ 15]
+	.long PanelOp_Nop                             ; FCF040  [ 16]
 
 ; ---------------------------------------------------------------------
-; ModuleTables_FCF044 -- 3,427 bytes of DATA between the dispatch table and the
-;                        module's first instruction
+; 0xFCF044-0xFCFDA6 -- THE MODULE'S TABLES, FRAMED BY THEIR READERS (3,427 B)
 ;
-; Emitted as `.byte`: only the parts listed here are framed, and the block as a
-; whole is not.  ⚠ Do not promote any of it to `.long`/`.short` without a reader.
+; This span was `ModuleTables_FCF044`, whose header said nothing in prom_a or
+; prom_b adds a base inside it.  56 instructions do: 45 `add XBC/XIY,0x00FCFxxx`
+; in this module's own code and 11 `add XBC,0x00FCFxxx` in prom_b (spelled as
+; decimal immediates there).  Every table below is named by at least one of
+; them, its element size and count come from that reader, and together they
+; tile the span with no gap -- which is the independent check on every count.
+; Regenerate / re-check: notes/proma-2026-09-25/gen_fcf044_tables.py (repo root).
 ;
-; WHAT IS READABLE IN IT:
-;   0xFCF044  16 bytes, the ramp 00 00 00 00 00 02 04 06 08 0C 0E 10 12 14 16 18
-;   0xFCF054  13 bytes  00 00 00 61 00 80 00 9F 00 BE 00 00 00
-;   0xFCF061  ★ 96 ASCII characters, and this is the module's CHARACTER SET:
-;             ' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-;             then '!"#$%&\'()+-*/=,.@:;?\^_`|~' then 0x7F then '<>[]{}'.
-;             It is NOT in ASCII order, so it is an index-to-glyph map: character
-;             0 is a space, 1 is 'A', 27 is 'a', 53 is '0'.
-;   0xFCF0C1  34 bytes of 0x00
-;   0xFCF0E3  a byte table beginning 3F 40 41 42 43 44 45 46 47 4A 48 4D 49 4E 4B
-;             -- values in the range of the set above, i.e. the inverse map
-;   0xFCFD80  a run of 4-byte values whose low three bytes are addresses in
-;             0x00FD____.  ⚠ THE ALIGNMENT IS NOT ESTABLISHED: read from
-;             0xFCFDA2 backwards in 4-byte steps the words are not addresses, so
-;             the run is offset from the block's own 4-byte grid and nothing
-;             names its base.
-; Unknown:  everything else, and what reads any of it.  This block is not
-;          referenced by any `add Xrr,imm32` in prom_a or prom_b other than the
-;          two named above for the tables that bracket it.
 ; ---------------------------------------------------------------------
+; ModuleTables_FCF044 is KEPT as a label for the span's first byte because
+; wsa1/notes/FINDINGS-prom_a-fcf000-module.md and
+; wsa1/notes/prom_a_fcf000_checks.py name it.  Its first word is the
+; zero word that ends DispatchTable_FCF000 -- the 18th word every handler
+; table of this module has (see PanelOpTable_FCF21B's header).
 ModuleTables_FCF044:
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x04, 0x06, 0x08, 0x0c, 0x0e, 0x10, 0x12, 0x14, 0x16, 0x18  ; FCF044
-	.byte 0x00, 0x00, 0x00, 0x61, 0x00, 0x80, 0x00, 0x9f, 0x00, 0xbe, 0x00, 0x00, 0x00, 0x20, 0x41, 0x42  ; FCF054
-	.byte 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f, 0x50, 0x51, 0x52  ; FCF064
-	.byte 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68  ; FCF074
-	.byte 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78  ; FCF084
-	.byte 0x79, 0x7a, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x21, 0x22, 0x23, 0x24  ; FCF094
-	.byte 0x25, 0x26, 0x27, 0x28, 0x29, 0x2b, 0x2d, 0x2a, 0x2f, 0x3d, 0x2c, 0x2e, 0x40, 0x3a, 0x3b, 0x3f  ; FCF0A4
-	.byte 0x5c, 0x5e, 0x5f, 0x60, 0x7c, 0x7e, 0x7f, 0x3c, 0x3e, 0x5b, 0x5d, 0x7b, 0x7d, 0x00, 0x00, 0x00  ; FCF0B4
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF0C4
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3f  ; FCF0D4
-	.byte 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x4a, 0x48, 0x4d, 0x49, 0x4e, 0x4b, 0x35, 0x36  ; FCF0E4
-	.byte 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x50, 0x51, 0x5a, 0x4c, 0x5b, 0x52, 0x4f, 0x01  ; FCF0F4
-	.byte 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11  ; FCF104
-	.byte 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x5c, 0x53, 0x5d, 0x54, 0x55, 0x56, 0x1b  ; FCF114
-	.byte 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b  ; FCF124
-	.byte 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x5e, 0x57, 0x5f, 0x58, 0x59, 0x00, 0x00  ; FCF134
-	.byte 0x00, 0x40, 0x41, 0x42, 0x03, 0x04, 0x05, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x80, 0x00  ; FCF144
-	.byte 0x1c, 0x1d, 0x1e, 0x20, 0x21, 0x23, 0x24, 0x25, 0x2a, 0x2b, 0x2c, 0x02, 0x2d, 0x01, 0x03, 0x2e  ; FCF154
-	.byte 0x26, 0x27, 0x28, 0x29, 0x2f, 0x30, 0x31, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c  ; FCF164
-	.byte 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x00  ; FCF174
-	.byte 0x00, 0x00, 0x0e, 0x0c, 0x0f, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22  ; FCF184
-	.byte 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x01, 0x02, 0x03  ; FCF194
-	.byte 0x00, 0x04, 0x05, 0x00, 0x06, 0x07, 0x08, 0x11, 0x12, 0x13, 0x14, 0x09, 0x0a, 0x0b, 0x0d, 0x10  ; FCF1A4
-	.byte 0x15, 0x16, 0x17, 0x00, 0x1d, 0x1e, 0x20, 0x21, 0x25, 0x02, 0x01, 0x03, 0x2f, 0x30, 0x31, 0x04  ; FCF1B4
-	.byte 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14  ; FCF1C4
-	.byte 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF1D4
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x06, 0x08, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12  ; FCF1E4
-	.byte 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22  ; FCF1F4
-	.byte 0x23, 0x00, 0x01, 0x02, 0x00, 0x03, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF204
-	.byte 0x00, 0x00, 0x00, 0x00, 0x09, 0x0a, 0x0b, 0x93, 0x6c, 0xfd, 0x00, 0x03, 0x29, 0xfd, 0x00, 0x8a  ; FCF214
-	.byte 0x29, 0xfd, 0x00, 0x3c, 0x2a, 0xfd, 0x00, 0xd8, 0x2a, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x74  ; FCF224
-	.byte 0x2b, 0xfd, 0x00, 0xd8, 0x2b, 0xfd, 0x00, 0x3c, 0x2c, 0xfd, 0x00, 0x5a, 0x2c, 0xfd, 0x00, 0x76  ; FCF234
-	.byte 0x2c, 0xfd, 0x00, 0xae, 0x2c, 0xfd, 0x00, 0xd9, 0x2c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF244
-	.byte 0x6c, 0xfd, 0x00, 0x2b, 0x2d, 0xfd, 0x00, 0x04, 0x2d, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF254
-	.byte 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x5f, 0x2d, 0xfd, 0x00, 0xea, 0x2d, 0xfd, 0x00, 0x66  ; FCF264
-	.byte 0x2e, 0xfd, 0x00, 0x08, 0x2f, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x84  ; FCF274
-	.byte 0x2f, 0xfd, 0x00, 0xa2, 0x2f, 0xfd, 0x00, 0xc6, 0x2f, 0xfd, 0x00, 0xf2, 0x2f, 0xfd, 0x00, 0x16  ; FCF284
-	.byte 0x30, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x52, 0x30, 0xfd, 0x00, 0x3a  ; FCF294
-	.byte 0x30, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x72, 0x30, 0xfd, 0x00, 0x12, 0x31, 0xfd, 0x00, 0xb2  ; FCF2A4
-	.byte 0x31, 0xfd, 0x00, 0x52, 0x32, 0xfd, 0x00, 0xf2, 0x32, 0xfd, 0x00, 0xaa, 0x33, 0xfd, 0x00, 0x66  ; FCF2B4
-	.byte 0x34, 0xfd, 0x00, 0x1e, 0x35, 0xfd, 0x00, 0x9e, 0x35, 0xfd, 0x00, 0xaf, 0x35, 0xfd, 0x00, 0xdb  ; FCF2C4
-	.byte 0x35, 0xfd, 0x00, 0x16, 0x36, 0xfd, 0x00, 0x49, 0x36, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF2D4
-	.byte 0x6c, 0xfd, 0x00, 0xf5, 0x36, 0xfd, 0x00, 0xce, 0x36, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x29  ; FCF2E4
-	.byte 0x37, 0xfd, 0x00, 0xd3, 0x37, 0xfd, 0x00, 0x7d, 0x38, 0xfd, 0x00, 0x27, 0x39, 0xfd, 0x00, 0xa3  ; FCF2F4
-	.byte 0x39, 0xfd, 0x00, 0x45, 0x3a, 0xfd, 0x00, 0xc1, 0x3a, 0xfd, 0x00, 0x21, 0x3b, 0xfd, 0x00, 0x81  ; FCF304
-	.byte 0x3b, 0xfd, 0x00, 0x92, 0x3b, 0xfd, 0x00, 0xbe, 0x3b, 0xfd, 0x00, 0xea, 0x3b, 0xfd, 0x00, 0x0e  ; FCF314
-	.byte 0x3c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x4a, 0x3c, 0xfd, 0x00, 0x32  ; FCF324
-	.byte 0x3c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x6a, 0x3c, 0xfd, 0x00, 0x7f  ; FCF334
-	.byte 0x3c, 0xfd, 0x00, 0x94, 0x3c, 0xfd, 0x00, 0xa9, 0x3c, 0xfd, 0x00, 0xbe, 0x3c, 0xfd, 0x00, 0xd3  ; FCF344
-	.byte 0x3c, 0xfd, 0x00, 0xe8, 0x3c, 0xfd, 0x00, 0xfd, 0x3c, 0xfd, 0x00, 0x1b, 0x3d, 0xfd, 0x00, 0x3f  ; FCF354
-	.byte 0x3d, 0xfd, 0x00, 0x57, 0x3d, 0xfd, 0x00, 0x6f, 0x3d, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF364
-	.byte 0x6c, 0xfd, 0x00, 0x87, 0x3d, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF374
-	.byte 0x6c, 0xfd, 0x00, 0x62, 0xa1, 0xf0, 0x00, 0xd1, 0xa1, 0xf0, 0x00, 0x40, 0xa2, 0xf0, 0x00, 0x93  ; FCF384
-	.byte 0x6c, 0xfd, 0x00, 0xab, 0xa2, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xa1  ; FCF394
-	.byte 0xa3, 0xf0, 0x00, 0xbf, 0xa3, 0xf0, 0x00, 0xdb, 0xa3, 0xf0, 0x00, 0x04, 0xa4, 0xf0, 0x00, 0x51  ; FCF3A4
-	.byte 0xa4, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x9e, 0xa4, 0xf0, 0x00, 0x93  ; FCF3B4
-	.byte 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0xbe, 0xa4, 0xf0, 0x00, 0xd7, 0xa4, 0xf0, 0x00, 0xf0  ; FCF3C4
-	.byte 0xa4, 0xf0, 0x00, 0x09, 0xa5, 0xf0, 0x00, 0x22, 0xa5, 0xf0, 0x00, 0x3b, 0xa5, 0xf0, 0x00, 0x54  ; FCF3D4
-	.byte 0xa5, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x6d, 0xa5, 0xf0, 0x00, 0x7e, 0xa5, 0xf0, 0x00, 0xaa  ; FCF3E4
-	.byte 0xa5, 0xf0, 0x00, 0xd6, 0xa5, 0xf0, 0x00, 0x04, 0xa6, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF3F4
-	.byte 0x6c, 0xfd, 0x00, 0x4a, 0xa6, 0xf0, 0x00, 0x32, 0xa6, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF404
-	.byte 0x6c, 0xfd, 0x00, 0x6a, 0xa6, 0xf0, 0x00, 0x7f, 0xa6, 0xf0, 0x00, 0x94, 0xa6, 0xf0, 0x00, 0xa9  ; FCF414
-	.byte 0xa6, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xbe, 0xa6, 0xf0, 0x00, 0xd3, 0xa6, 0xf0, 0x00, 0xe8  ; FCF424
-	.byte 0xa6, 0xf0, 0x00, 0xf9, 0xa6, 0xf0, 0x00, 0x25, 0xa7, 0xf0, 0x00, 0x51, 0xa7, 0xf0, 0x00, 0x75  ; FCF434
-	.byte 0xa7, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xb1, 0xa7, 0xf0, 0x00, 0x99  ; FCF444
-	.byte 0xa7, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xd1, 0xa7, 0xf0, 0x00, 0xe6  ; FCF454
-	.byte 0xa7, 0xf0, 0x00, 0xfb, 0xa7, 0xf0, 0x00, 0x10, 0xa8, 0xf0, 0x00, 0x25, 0xa8, 0xf0, 0x00, 0x3a  ; FCF464
-	.byte 0xa8, 0xf0, 0x00, 0x4f, 0xa8, 0xf0, 0x00, 0x64, 0xa8, 0xf0, 0x00, 0x82, 0xa8, 0xf0, 0x00, 0xa6  ; FCF474
-	.byte 0xa8, 0xf0, 0x00, 0xbe, 0xa8, 0xf0, 0x00, 0xd6, 0xa8, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF484
-	.byte 0x6c, 0xfd, 0x00, 0xee, 0xa8, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x60  ; FCF494
-	.byte 0xe7, 0xfd, 0x00, 0x1c, 0xe8, 0xfd, 0x00, 0xd8, 0xe8, 0xfd, 0x00, 0x88, 0xe9, 0xfd, 0x00, 0x93  ; FCF4A4
-	.byte 0x6c, 0xfd, 0x00, 0x38, 0xea, 0xfd, 0x00, 0xd2, 0xea, 0xfd, 0x00, 0x6d, 0xeb, 0xfd, 0x00, 0x08  ; FCF4B4
-	.byte 0xec, 0xfd, 0x00, 0x35, 0xec, 0xfd, 0x00, 0x59, 0xec, 0xfd, 0x00, 0x94, 0xec, 0xfd, 0x00, 0xee  ; FCF4C4
-	.byte 0xec, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x48, 0xed, 0xfd, 0x00, 0x21  ; FCF4D4
-	.byte 0xed, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7c, 0xed, 0xfd, 0x00, 0xa0, 0xed, 0xfd, 0x00, 0xc4  ; FCF4E4
-	.byte 0xed, 0xfd, 0x00, 0xdc, 0xed, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xf4, 0xed, 0xfd, 0x00, 0x05  ; FCF4F4
-	.byte 0xee, 0xfd, 0x00, 0x16, 0xee, 0xfd, 0x00, 0x27, 0xee, 0xfd, 0x00, 0x38, 0xee, 0xfd, 0x00, 0x49  ; FCF504
-	.byte 0xee, 0xfd, 0x00, 0x5a, 0xee, 0xfd, 0x00, 0xb4, 0xee, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF514
-	.byte 0x6c, 0xfd, 0x00, 0xec, 0xee, 0xfd, 0x00, 0xc5, 0xee, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF524
-	.byte 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x20, 0xef, 0xfd, 0x00, 0x44, 0xef, 0xfd, 0x00, 0x68  ; FCF534
-	.byte 0xef, 0xfd, 0x00, 0x80, 0xef, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x98  ; FCF544
-	.byte 0xef, 0xfd, 0x00, 0xc5, 0xef, 0xfd, 0x00, 0xe9, 0xef, 0xfd, 0x00, 0x24, 0xf0, 0xfd, 0x00, 0x7e  ; FCF554
-	.byte 0xf0, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xd8, 0xf0, 0xfd, 0x00, 0xb1  ; FCF564
-	.byte 0xf0, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x0c  ; FCF574
-	.byte 0xf1, 0xfd, 0x00, 0x30, 0xf1, 0xfd, 0x00, 0x54, 0xf1, 0xfd, 0x00, 0x6c, 0xf1, 0xfd, 0x00, 0x93  ; FCF584
-	.byte 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x84, 0xf1, 0xfd, 0x00, 0x95, 0xf1, 0xfd, 0x00, 0xa6  ; FCF594
-	.byte 0xf1, 0xfd, 0x00, 0xb7, 0xf1, 0xfd, 0x00, 0x11, 0xf2, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF5A4
-	.byte 0x6c, 0xfd, 0x00, 0x49, 0xf2, 0xfd, 0x00, 0x22, 0xf2, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF5B4
-	.byte 0x6c, 0xfd, 0x00, 0x7d, 0xf2, 0xfd, 0x00, 0x22, 0xf3, 0xfd, 0x00, 0x3e, 0xf3, 0xfd, 0x00, 0xdf  ; FCF5C4
-	.byte 0xf3, 0xfd, 0x00, 0x71, 0xf4, 0xfd, 0x00, 0x89, 0xf4, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xa1  ; FCF5D4
-	.byte 0xf4, 0xfd, 0x00, 0xce, 0xf4, 0xfd, 0x00, 0xf2, 0xf4, 0xfd, 0x00, 0x2d, 0xf5, 0xfd, 0x00, 0x7d  ; FCF5E4
-	.byte 0xf5, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xd7, 0xf5, 0xfd, 0x00, 0xb0  ; FCF5F4
-	.byte 0xf5, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF604
-	.byte 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF614
-	.byte 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x0b, 0xf6, 0xfd, 0x00, 0x38, 0xf6, 0xfd, 0x00, 0x5c  ; FCF624
-	.byte 0xf6, 0xfd, 0x00, 0x97, 0xf6, 0xfd, 0x00, 0xf1, 0xf6, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF634
-	.byte 0x6c, 0xfd, 0x00, 0x4b, 0xf7, 0xfd, 0x00, 0x24, 0xf7, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF644
-	.byte 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x7f, 0xf7, 0xfd, 0x00, 0x0a, 0xf8, 0xfd, 0x00, 0x86  ; FCF654
-	.byte 0xf8, 0xfd, 0x00, 0x28, 0xf9, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xa4  ; FCF664
-	.byte 0xf9, 0xfd, 0x00, 0xc2, 0xf9, 0xfd, 0x00, 0xe6, 0xf9, 0xfd, 0x00, 0x12, 0xfa, 0xfd, 0x00, 0x36  ; FCF674
-	.byte 0xfa, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x72, 0xfa, 0xfd, 0x00, 0x5a  ; FCF684
-	.byte 0xfa, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x92, 0xfa, 0xfd, 0x00, 0xab, 0xfa, 0xfd, 0x00, 0xc4  ; FCF694
-	.byte 0xfa, 0xfd, 0x00, 0xdd, 0xfa, 0xfd, 0x00, 0xf6, 0xfa, 0xfd, 0x00, 0x0f, 0xfb, 0xfd, 0x00, 0x28  ; FCF6A4
-	.byte 0xfb, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x41, 0xfb, 0xfd, 0x00, 0x52, 0xfb, 0xfd, 0x00, 0x7e  ; FCF6B4
-	.byte 0xfb, 0xfd, 0x00, 0xaa, 0xfb, 0xfd, 0x00, 0xd8, 0xfb, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF6C4
-	.byte 0x6c, 0xfd, 0x00, 0x1e, 0xfc, 0xfd, 0x00, 0x06, 0xfc, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF6D4
-	.byte 0x6c, 0xfd, 0x00, 0x3e, 0xfc, 0xfd, 0x00, 0x53, 0xfc, 0xfd, 0x00, 0x68, 0xfc, 0xfd, 0x00, 0x7d  ; FCF6E4
-	.byte 0xfc, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x92, 0xfc, 0xfd, 0x00, 0xa7, 0xfc, 0xfd, 0x00, 0xbc  ; FCF6F4
-	.byte 0xfc, 0xfd, 0x00, 0xcd, 0xfc, 0xfd, 0x00, 0xf9, 0xfc, 0xfd, 0x00, 0x25, 0xfd, 0xfd, 0x00, 0x49  ; FCF704
-	.byte 0xfd, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x85, 0xfd, 0xfd, 0x00, 0x6d  ; FCF714
-	.byte 0xfd, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xa5, 0xfd, 0xfd, 0x00, 0xba  ; FCF724
-	.byte 0xfd, 0xfd, 0x00, 0xcf, 0xfd, 0xfd, 0x00, 0xe4, 0xfd, 0xfd, 0x00, 0xf9, 0xfd, 0xfd, 0x00, 0x0e  ; FCF734
-	.byte 0xfe, 0xfd, 0x00, 0x23, 0xfe, 0xfd, 0x00, 0x38, 0xfe, 0xfd, 0x00, 0x56, 0xfe, 0xfd, 0x00, 0x7a  ; FCF744
-	.byte 0xfe, 0xfd, 0x00, 0x92, 0xfe, 0xfd, 0x00, 0xaa, 0xfe, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF754
-	.byte 0x6c, 0xfd, 0x00, 0xc2, 0xfe, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93  ; FCF764
-	.byte 0x6c, 0xfd, 0x00, 0x02, 0x06, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x2b, 0x06, 0xfd, 0x00, 0x3d  ; FCF774
-	.byte 0x06, 0xfd, 0x00, 0x52, 0x06, 0xfd, 0x00, 0x67, 0x06, 0xfd, 0x00, 0x8b, 0x06, 0xfd, 0x00, 0x93  ; FCF784
-	.byte 0x6c, 0xfd, 0x00, 0xaf, 0x06, 0xfd, 0x00, 0x0b, 0x07, 0xfd, 0x00, 0x67, 0x07, 0xfd, 0x00, 0x93  ; FCF794
-	.byte 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x57, 0x08, 0xfd, 0x00, 0x3f  ; FCF7A4
-	.byte 0x08, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x83, 0x08, 0xfd, 0x00, 0x93  ; FCF7B4
-	.byte 0x6c, 0xfd, 0x00, 0xa3, 0x08, 0xfd, 0x00, 0xb5, 0x08, 0xfd, 0x00, 0xca, 0x08, 0xfd, 0x00, 0xdf  ; FCF7C4
-	.byte 0x08, 0xfd, 0x00, 0x03, 0x09, 0xfd, 0x00, 0x27, 0x09, 0xfd, 0x00, 0x5d, 0x09, 0xfd, 0x00, 0x9e  ; FCF7D4
-	.byte 0x09, 0xfd, 0x00, 0xdf, 0x09, 0xfd, 0x00, 0x20, 0x0a, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93  ; FCF7E4
-	.byte 0x6c, 0xfd, 0x00, 0x79, 0x0a, 0xfd, 0x00, 0x61, 0x0a, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01  ; FCF7F4
-	.byte 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x58, 0x0c, 0xfd, 0x00  ; FCF804
-	.byte 0xed, 0x0c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x61, 0x0d, 0xfd, 0x00, 0x1c, 0x0e, 0xfd, 0x00  ; FCF814
-	.byte 0xca, 0x0e, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x68, 0x0f, 0xfd, 0x00, 0x79, 0x0f, 0xfd, 0x00  ; FCF824
-	.byte 0xa2, 0x0f, 0xfd, 0x00, 0xcb, 0x0f, 0xfd, 0x00, 0xf4, 0x0f, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF834
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x10, 0x10, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF844
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x28, 0x10, 0xfd, 0x00, 0xd7, 0x11, 0xfd, 0x00, 0x59, 0x11, 0xfd, 0x00  ; FCF854
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF864
-	.byte 0xb0, 0x12, 0xfd, 0x00, 0xec, 0x12, 0xfd, 0x00, 0x15, 0x13, 0xfd, 0x00, 0x3e, 0x13, 0xfd, 0x00  ; FCF874
-	.byte 0x85, 0x13, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xa1, 0x13, 0xfd, 0x00  ; FCF884
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF894
-	.byte 0xc1, 0x13, 0xfd, 0x00, 0x43, 0x14, 0xfd, 0x00, 0xeb, 0x14, 0xfd, 0x00, 0x93, 0x15, 0xfd, 0x00  ; FCF8A4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x15, 0x16, 0xfd, 0x00, 0x3e, 0x16, 0xfd, 0x00  ; FCF8B4
-	.byte 0x62, 0x16, 0xfd, 0x00, 0x8e, 0x16, 0xfd, 0x00, 0xc5, 0x16, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF8C4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0xe9, 0x16, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF8D4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x09, 0x17, 0xfd, 0x00, 0x90, 0x17, 0xfd, 0x00  ; FCF8E4
-	.byte 0x27, 0x18, 0xfd, 0x00, 0xbe, 0x18, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF8F4
-	.byte 0x45, 0x19, 0xfd, 0x00, 0x6e, 0x19, 0xfd, 0x00, 0x9a, 0x19, 0xfd, 0x00, 0xbe, 0x19, 0xfd, 0x00  ; FCF904
-	.byte 0xf5, 0x19, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x19, 0x1a, 0xfd, 0x00  ; FCF914
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x9c, 0x1a, 0xfd, 0x00  ; FCF924
-	.byte 0x45, 0x1b, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xcf, 0x1b, 0xfd, 0x00  ; FCF934
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x39, 0x1a, 0xfd, 0x00, 0x3d, 0x1f, 0xfd, 0x00, 0x5b, 0x1f, 0xfd, 0x00  ; FCF944
-	.byte 0x7f, 0x1f, 0xfd, 0x00, 0xab, 0x1f, 0xfd, 0x00, 0xd7, 0x1f, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF954
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0xfb, 0x1f, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF964
-	.byte 0xe0, 0x3f, 0xfd, 0x00, 0x39, 0x40, 0xfd, 0x00, 0xd4, 0x40, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF974
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x4e, 0x41, 0xfd, 0x00, 0x2b, 0x42, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF984
-	.byte 0xc6, 0x43, 0xfd, 0x00, 0xe4, 0x43, 0xfd, 0x00, 0x0a, 0x44, 0xfd, 0x00, 0x30, 0x44, 0xfd, 0x00  ; FCF994
-	.byte 0x68, 0x44, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x44, 0xfd, 0x00  ; FCF9A4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xc7, 0x44, 0xfd, 0x00  ; FCF9B4
-	.byte 0xb0, 0x45, 0xfd, 0x00, 0x26, 0x46, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x9c, 0x46, 0xfd, 0x00  ; FCF9C4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x12, 0x47, 0xfd, 0x00, 0x30, 0x47, 0xfd, 0x00  ; FCF9D4
-	.byte 0x5c, 0x47, 0xfd, 0x00, 0x80, 0x47, 0xfd, 0x00, 0xac, 0x47, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCF9E4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0xe8, 0x47, 0xfd, 0x00, 0xd0, 0x47, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF9F4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x48, 0xfd, 0x00, 0x76, 0x48, 0xfd, 0x00, 0xec, 0x48, 0xfd, 0x00  ; FCFA04
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x62, 0x49, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFA14
-	.byte 0xd8, 0x49, 0xfd, 0x00, 0xf6, 0x49, 0xfd, 0x00, 0x22, 0x4a, 0xfd, 0x00, 0x46, 0x4a, 0xfd, 0x00  ; FCFA24
-	.byte 0x72, 0x4a, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xae, 0x4a, 0xfd, 0x00  ; FCFA34
-	.byte 0x96, 0x4a, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xc6, 0x4a, 0xfd, 0x00  ; FCFA44
-	.byte 0xa4, 0x4b, 0xfd, 0x00, 0x39, 0x4d, 0xfd, 0x00, 0x1a, 0x4e, 0xfd, 0x00, 0xfb, 0x4e, 0xfd, 0x00  ; FCFA54
-	.byte 0xdc, 0x4f, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x1d, 0x50, 0xfd, 0x00, 0x3b, 0x50, 0xfd, 0x00  ; FCFA64
-	.byte 0x67, 0x50, 0xfd, 0x00, 0x93, 0x50, 0xfd, 0x00, 0x14, 0x51, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFA74
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x59, 0x51, 0xfd, 0x00, 0x41, 0x51, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCFA84
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x71, 0x51, 0xfd, 0x00, 0x52, 0x52, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFA94
-	.byte 0x33, 0x53, 0xfd, 0x00, 0xcf, 0x53, 0xfd, 0x00, 0x6b, 0x54, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFAA4
-	.byte 0x6f, 0x54, 0xfd, 0x00, 0x8d, 0x54, 0xfd, 0x00, 0xb9, 0x54, 0xfd, 0x00, 0xe5, 0x54, 0xfd, 0x00  ; FCFAB4
-	.byte 0x12, 0x55, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x5c, 0x55, 0xfd, 0x00  ; FCFAC4
-	.byte 0x3f, 0x55, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x74, 0x55, 0xfd, 0x00  ; FCFAD4
-	.byte 0x55, 0x56, 0xfd, 0x00, 0x32, 0x57, 0xfd, 0x00, 0x83, 0x58, 0xfd, 0x00, 0x0e, 0x5a, 0xfd, 0x00  ; FCFAE4
-	.byte 0x5f, 0x5b, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x63, 0x5b, 0xfd, 0x00, 0x81, 0x5b, 0xfd, 0x00  ; FCFAF4
-	.byte 0xad, 0x5b, 0xfd, 0x00, 0xd9, 0x5b, 0xfd, 0x00, 0x06, 0x5c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFB04
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x4b, 0x5c, 0xfd, 0x00, 0x33, 0x5c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCFB14
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x63, 0x5c, 0xfd, 0x00, 0xb8, 0x5c, 0xfd, 0x00, 0x01, 0x5d, 0xfd, 0x00  ; FCFB24
-	.byte 0x56, 0x5d, 0xfd, 0x00, 0xa3, 0x5d, 0xfd, 0x00, 0x3e, 0x5f, 0xfd, 0x00, 0x43, 0x60, 0xfd, 0x00  ; FCFB34
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFB44
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x57, 0x60, 0xfd, 0x00  ; FCFB54
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFB64
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFB74
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x33, 0xb5, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFB84
-	.byte 0x78, 0xb5, 0xf0, 0x00, 0x2f, 0xb6, 0xf0, 0x00, 0xd7, 0xb6, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFB94
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0xef, 0xb6, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCFBA4
-	.byte 0x0f, 0xb7, 0xf0, 0x00, 0x13, 0xb7, 0xf0, 0x00, 0x17, 0xb7, 0xf0, 0x00, 0x1b, 0xb7, 0xf0, 0x00  ; FCFBB4
-	.byte 0x1f, 0xb7, 0xf0, 0x00, 0x23, 0xb7, 0xf0, 0x00, 0x27, 0xb7, 0xf0, 0x00, 0x47, 0xb7, 0xf0, 0x00  ; FCFBC4
-	.byte 0x4b, 0xb7, 0xf0, 0x00, 0x0d, 0xb8, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFBD4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x1d, 0xb8, 0xf0, 0x00  ; FCFBE4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd4, 0xad, 0xf0, 0x00, 0x9b, 0xae, 0xf0, 0x00  ; FCFBF4
-	.byte 0x66, 0xaf, 0xf0, 0x00, 0x41, 0xb0, 0xf0, 0x00, 0xff, 0xb0, 0xf0, 0x00, 0xa9, 0xb1, 0xf0, 0x00  ; FCFC04
-	.byte 0x28, 0xb2, 0xf0, 0x00, 0xe2, 0xb2, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x9c, 0xb3, 0xf0, 0x00  ; FCFC14
-	.byte 0x62, 0xb4, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFC24
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x1b, 0xb5, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCFC34
-	.byte 0xbb, 0xc0, 0xf0, 0x00, 0x5d, 0xc3, 0xf0, 0x00, 0xf9, 0xc3, 0xf0, 0x00, 0x7b, 0xc4, 0xf0, 0x00  ; FCFC44
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x28, 0xc5, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFC54
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x16, 0xc6, 0xf0, 0x00  ; FCFC64
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x0a, 0xc7, 0xf0, 0x00  ; FCFC74
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x4b, 0xab, 0xf0, 0x00  ; FCFC84
-	.byte 0xb9, 0xab, 0xf0, 0x00, 0x43, 0xac, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFC94
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0xb1, 0xac, 0xf0, 0x00, 0xce, 0xac, 0xf0, 0x00  ; FCFCA4
-	.byte 0x02, 0xad, 0xf0, 0x00, 0x36, 0xad, 0xf0, 0x00, 0x75, 0xad, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00  ; FCFCB4
-	.byte 0x93, 0x6c, 0xfd, 0x00, 0xbc, 0xad, 0xf0, 0x00, 0x93, 0x6c, 0xfd, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCFCC4
-	.byte 0x00, 0x01, 0x08, 0x09, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x06, 0x00, 0x01, 0x02  ; FCFCD4
-	.byte 0x03, 0x04, 0x06, 0x44, 0xad, 0xfd, 0x00, 0x13, 0x20, 0xfd, 0x00, 0xb5, 0xc5, 0xfd, 0x00, 0x4c  ; FCFCE4
-	.byte 0xc8, 0xfd, 0x00, 0x5b, 0xc9, 0xfd, 0x00, 0x77, 0xca, 0xfd, 0x00, 0x93, 0xcb, 0xfd, 0x00, 0x2f  ; FCFCF4
-	.byte 0xb2, 0xfd, 0x00, 0x8c, 0xb3, 0xfd, 0x00, 0x4d, 0xb4, 0xfd, 0x00, 0x29, 0xb5, 0xfd, 0x00, 0x93  ; FCFD04
-	.byte 0xb6, 0xfd, 0x00, 0xd9, 0xb8, 0xfd, 0x00, 0xab, 0xb9, 0xfd, 0x00, 0xe7, 0xba, 0xfd, 0x00, 0xc3  ; FCFD14
-	.byte 0xbb, 0xfd, 0x00, 0xed, 0xc0, 0xfd, 0x00, 0x7b, 0xc2, 0xfd, 0x00, 0xa7, 0xc2, 0xfd, 0x00, 0xcf  ; FCFD24
-	.byte 0xc2, 0xfd, 0x00, 0xf7, 0xc2, 0xfd, 0x00, 0x17, 0xc3, 0xfd, 0x00, 0x33, 0xc3, 0xfd, 0x00, 0x05  ; FCFD34
-	.byte 0xc4, 0xfd, 0x00, 0xc6, 0xc4, 0xfd, 0x00, 0xa2, 0xc5, 0xfd, 0x00, 0x13, 0x20, 0xfd, 0x00, 0xde  ; FCFD44
-	.byte 0xbe, 0xfd, 0x00, 0xe1, 0xc0, 0xfd, 0x00, 0xd4, 0xd0, 0xfd, 0x00, 0xe0, 0xcd, 0xfd, 0x00, 0xeb  ; FCFD54
-	.byte 0xcf, 0xfd, 0x00, 0x37, 0xd4, 0xfd, 0x00, 0xf7, 0xd7, 0xfd, 0x00, 0xf8, 0xd7, 0xfd, 0x00, 0xf9  ; FCFD64
-	.byte 0xd7, 0xfd, 0x00, 0x58, 0xd9, 0xfd, 0x00, 0x1c, 0xda, 0xfd, 0x00, 0x3a, 0xdc, 0xfd, 0x00, 0xaa  ; FCFD74
-	.byte 0xdd, 0xfd, 0x00, 0x36, 0xdf, 0xfd, 0x00, 0x13, 0x20, 0xfd, 0x00, 0x72, 0xd2, 0xfd, 0x00, 0x7f  ; FCFD84
-	.byte 0xd2, 0xfd, 0x00, 0x36, 0xd4, 0xfd, 0x00, 0xd6, 0xbb, 0xfd, 0x00, 0x13, 0x20, 0xfd, 0x00, 0x13  ; FCFD94
-	.byte 0x20, 0xfd, 0x00                                                    ; FCFDA4
+	.long 0x00000000                              ; FCF044  [17] zero, DispatchTable_FCF000's 18th word
+
+; KeyboardX_SemitoneOffset -- 12 bytes: the x offset, in pixels, of each
+; semitone C..B within one octave of a drawn keyboard: C 0, C# 2, D 4, D# 6,
+; E 8, F 12, F# 14, G 16, G# 18, A 20, A# 22, B 24 (white keys 4 apart).
+; Read by: sub_FD9414 at 0xFD9450 (the one add of 0x00FCF048 in prom_a or
+;          prom_b).  sub_FD9414(note, &x)
+;          clamps note to 20..108, then x = 28*((note-12)/12)
+;          + this[(note-12)%12] - 18: 28 = 7 white keys x 4 px per octave.
+;          COUNT 12 = the `div C,0x0C` remainder range.
+KeyboardX_SemitoneOffset:
+	.byte 0x00, 0x02, 0x04, 0x06, 0x08, 0x0c, 0x0e, 0x10, 0x12, 0x14, 0x16, 0x18  ; FCF048  [  0]
+
+; Unread_FCF054 -- one byte, 0x00, between the two tables that bracket it.
+; No reader is known (no add/ld of 0x00FCF054 in prom_a or prom_b); it is
+; not claimed as part of either neighbour.
+Unread_FCF054:
+	.byte 0x00  ; FCF054  [  0]
+
+; FieldColumnX_ByIndex -- 6 x LE16: 0, 97, 128, 159, 190, 0 -- pixel x
+; positions 31 apart for indices 1..4, zero at both ends.
+; Read by: sub_FD96DE at 0xFD96FB: `ld C,2 / mul BC,(XIZ+0x0A)
+;          / add XBC,0x00FCF055 / ld DE,(XBC)`; DE is then the x passed to
+;          the draw call at 0xFD9721 (as DE-20).  COUNT 6 is the extent to the
+;          next reader-named base, 0xFCF061; the reader has no bound of its
+;          own (sub_FD6C34 vets the index first).  Which fields: not established.
+FieldColumnX_ByIndex:
+	.short 0                                   ; FCF055  [0]
+	.short 97                                  ; FCF057  [1]
+	.short 128                                 ; FCF059  [2]
+	.short 159                                 ; FCF05B  [3]
+	.short 190                                 ; FCF05D  [4]
+	.short 0                                   ; FCF05F  [5]
+
+; NameChar_IndexToAscii -- 97 bytes: character-set INDEX -> ASCII.  0 is
+; a space, 1-26 'A'-'Z', 27-52 'a'-'z', 53-62 '0'-'9', then punctuation,
+; 0x7F and '<>[]{}'; index 96 is 0x00.
+; Read by: sub_FD7C5A at 0xFD7C73: sub_FD7C5A(index, &out): out = index < 0x61 ?
+;          this[index] : ' '.  COUNT 97 = that bound, `cp (XIZ+8),0x61`.
+; ★ It is the exact inverse of NameChar_AsciiToIndex below, checked for
+;   all 96 characters by gen_fcf044_tables.py -- so the pair is the
+;   ordered alphabet a name editor steps through, and its inverse.
+NameChar_IndexToAscii:
+	.byte 0x20, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f  ; FCF061  [  0]  ABCDEFGHIJKLMNO
+	.byte 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x61, 0x62, 0x63, 0x64, 0x65  ; FCF071  [ 16] PQRSTUVWXYZabcde
+	.byte 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75  ; FCF081  [ 32] fghijklmnopqrstu
+	.byte 0x76, 0x77, 0x78, 0x79, 0x7a, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x21  ; FCF091  [ 48] vwxyz0123456789!
+	.byte 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2b, 0x2d, 0x2a, 0x2f, 0x3d, 0x2c, 0x2e, 0x40  ; FCF0A1  [ 64] "#$%&'()+-*/=,.@
+	.byte 0x3a, 0x3b, 0x3f, 0x5c, 0x5e, 0x5f, 0x60, 0x7c, 0x7e, 0x7f, 0x3c, 0x3e, 0x5b, 0x5d, 0x7b, 0x7d  ; FCF0B1  [ 80] :;?\^_`|~.<>[]{}
+	.byte 0x00  ; FCF0C1  [ 96] .
+
+; NameChar_AsciiToIndex -- 130 bytes: ASCII code -> character-set index,
+; the inverse of NameChar_IndexToAscii (0 for codes not in the set).
+; Read by: sub_FD7C83 at 0xFD7C9D: sub_FD7C83(code, &out): out = code < 0x82 ?
+;          this[code] : 0, then replaces a result above 0x5F with 0 (so
+;          valid indices are 0..95).  COUNT 130 = the bound `cp (XIZ+8),0x82`.
+NameChar_AsciiToIndex:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF0C2  [  0]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF0D2  [ 16]
+	.byte 0x00, 0x3f, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x4a, 0x48, 0x4d, 0x49, 0x4e, 0x4b  ; FCF0E2  [ 32]
+	.byte 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x50, 0x51, 0x5a, 0x4c, 0x5b, 0x52  ; FCF0F2  [ 48]
+	.byte 0x4f, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f  ; FCF102  [ 64]
+	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x5c, 0x53, 0x5d, 0x54, 0x55  ; FCF112  [ 80]
+	.byte 0x56, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29  ; FCF122  [ 96]
+	.byte 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x5e, 0x57, 0x5f, 0x58, 0x59  ; FCF132  [112]
+	.byte 0x00, 0x00  ; FCF142  [128]
+
+; IndexMap_FCF144 -- 15 bytes, a byte-to-byte map (values 0x00..0x80).
+; Read by: sub_FDA777 at 0xFDA782: sub_FDA777(i, &out): out = this[i].
+;          COUNT 15 is the extent to the next reader-named base; the reader
+;          has no bound.  What the index and the values denote: not established.
+IndexMap_FCF144:
+	.byte 0x00, 0x40, 0x41, 0x42, 0x03, 0x04, 0x05, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x80  ; FCF144  [  0]
+
+; IndexMap_FCF153 -- 50 bytes, a byte-to-byte map (values 0x00..0x31).
+; Read by: sub_FDA7DC at 0xFDA7E7: sub_FDA7DC(i): A = this[i].
+;          COUNT 50 is the extent to the next reader-named base; the reader
+;          has no bound.  What the index and the values denote: not established.
+IndexMap_FCF153:
+	.byte 0x00, 0x1c, 0x1d, 0x1e, 0x20, 0x21, 0x23, 0x24, 0x25, 0x2a, 0x2b, 0x2c, 0x02, 0x2d, 0x01, 0x03  ; FCF153  [  0]
+	.byte 0x2e, 0x26, 0x27, 0x28, 0x29, 0x2f, 0x30, 0x31, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b  ; FCF163  [ 16]
+	.byte 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b  ; FCF173  [ 32]
+	.byte 0x00, 0x00  ; FCF183  [ 48]
+
+; IndexMap_FCF185 -- 50 bytes, a byte-to-byte map (values 0x00..0x2F).
+; Read by: sub_FDA7B0 at 0xFDA7BB: sub_FDA7B0(i): A = this[i].
+;          COUNT 50 is the extent to the next reader-named base; the reader
+;          has no bound.  What the index and the values denote: not established.
+IndexMap_FCF185:
+	.byte 0x00, 0x0e, 0x0c, 0x0f, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23  ; FCF185  [  0]
+	.byte 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x01, 0x02, 0x03, 0x00  ; FCF195  [ 16]
+	.byte 0x04, 0x05, 0x00, 0x06, 0x07, 0x08, 0x11, 0x12, 0x13, 0x14, 0x09, 0x0a, 0x0b, 0x0d, 0x10, 0x15  ; FCF1A5  [ 32]
+	.byte 0x16, 0x17  ; FCF1B5  [ 48]
+
+; IndexMap_FCF1B7 -- 50 bytes, a byte-to-byte map (values 0x00..0x31).
+; Read by: sub_FDA7F2 at 0xFDA7FD: sub_FDA7F2(i): A = this[i].
+;          COUNT 50 is the extent to the next reader-named base; the reader
+;          has no bound.  What the index and the values denote: not established.
+IndexMap_FCF1B7:
+	.byte 0x00, 0x1d, 0x1e, 0x20, 0x21, 0x25, 0x02, 0x01, 0x03, 0x2f, 0x30, 0x31, 0x04, 0x05, 0x06, 0x07  ; FCF1B7  [  0]
+	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17  ; FCF1C7  [ 16]
+	.byte 0x18, 0x19, 0x1a, 0x1b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FCF1D7  [ 32]
+	.byte 0x00, 0x00  ; FCF1E7  [ 48]
+
+; IndexMap_FCF1E9 -- 50 bytes, a byte-to-byte map (values 0x00..0x23).
+; Read by: sub_FDA7C6 at 0xFDA7D1: sub_FDA7C6(i): A = this[i].
+;          COUNT 50 is the extent to the next reader-named base; the reader
+;          has no bound.  What the index and the values denote: not established.
+IndexMap_FCF1E9:
+	.byte 0x00, 0x07, 0x06, 0x08, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17  ; FCF1E9  [  0]
+	.byte 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x00, 0x01, 0x02, 0x00  ; FCF1F9  [ 16]
+	.byte 0x03, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09  ; FCF209  [ 32]
+	.byte 0x0a, 0x0b  ; FCF219  [ 48]
+
+; ---------------------------------------------------------------------
+; ★ THE 72-BYTE HANDLER TABLES (38 of them, plus DispatchTable_FCF000 above).
+;   Every reader has one shape:
+;       call PanelEvent_ToFieldIndex(event, flags, &op, &flag)  ; 0xFD7905
+;       cp WA,0xFFFF / jr z, skip
+;       ld C,4 / mul BC,(XIZ-4) / add XBC,<table> / ld XBC,(XBC)
+;       push <return> / jp (XBC)             ; a computed CALL of slot `op`
+;   PanelEvent_ToFieldIndex returns WA=0 only after storing `op` in 0..16:
+;   event 0x00-0x10 -> op = event; 0x11-0x18 -> op = event-0x11 (and it sets
+;   the flag byte's bit 7); 0x19 -> op = 0x10; every other event returns 0xFFFF
+;   and the reader skips the dispatch.  So 17 slots are BOUND BY THE PRODUCER;
+;   each table's 18th word is 0x00000000, which no reader can index.
+;   PanelOp_Nop (0xFD6C93, a lone `ret`) fills the slots a field does not
+;   handle.  Which field each table serves is the reader's; what the 17
+;   operations mean is not established here.
+; ---------------------------------------------------------------------
+; PanelOpTable_FCF21B -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD2751 at 0xFD277E.
+PanelOpTable_FCF21B:
+	.long PanelOp_Nop                             ; FCF21B  [ 0]
+	.long sub_FD2903                              ; FCF21F  [ 1]
+	.long sub_FD298A                              ; FCF223  [ 2]
+	.long sub_FD2A3C                              ; FCF227  [ 3]
+	.long sub_FD2AD8                              ; FCF22B  [ 4]
+	.long PanelOp_Nop                             ; FCF22F  [ 5]
+	.long sub_FD2B74                              ; FCF233  [ 6]
+	.long sub_FD2BD8                              ; FCF237  [ 7]
+	.long sub_FD2C3C                              ; FCF23B  [ 8]
+	.long sub_FD2C5A                              ; FCF23F  [ 9]
+	.long sub_FD2C76                              ; FCF243  [10]
+	.long sub_FD2CAE                              ; FCF247  [11]
+	.long sub_FD2CD9                              ; FCF24B  [12]
+	.long PanelOp_Nop                             ; FCF24F  [13]
+	.long PanelOp_Nop                             ; FCF253  [14]
+	.long sub_FD2D2B                              ; FCF257  [15]
+	.long sub_FD2D04                              ; FCF25B  [16]
+	.long 0x00000000                              ; FCF25F  [17] zero
+
+; PanelOpTable_FCF263 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD27BA at 0xFD27D6.
+PanelOpTable_FCF263:
+	.long PanelOp_Nop                             ; FCF263  [ 0]
+	.long PanelOp_Nop                             ; FCF267  [ 1]
+	.long sub_FD2D5F                              ; FCF26B  [ 2]
+	.long sub_FD2DEA                              ; FCF26F  [ 3]
+	.long sub_FD2E66                              ; FCF273  [ 4]
+	.long sub_FD2F08                              ; FCF277  [ 5]
+	.long PanelOp_Nop                             ; FCF27B  [ 6]
+	.long PanelOp_Nop                             ; FCF27F  [ 7]
+	.long sub_FD2F84                              ; FCF283  [ 8]
+	.long sub_FD2FA2                              ; FCF287  [ 9]
+	.long sub_FD2FC6                              ; FCF28B  [10]
+	.long sub_FD2FF2                              ; FCF28F  [11]
+	.long sub_FD3016                              ; FCF293  [12]
+	.long PanelOp_Nop                             ; FCF297  [13]
+	.long PanelOp_Nop                             ; FCF29B  [14]
+	.long sub_FD3052                              ; FCF29F  [15]
+	.long sub_FD303A                              ; FCF2A3  [16]
+	.long 0x00000000                              ; FCF2A7  [17] zero
+
+; PanelOpTable_FCF2AB -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD27F2 at 0xFD2826.
+PanelOpTable_FCF2AB:
+	.long sub_FD3072                              ; FCF2AB  [ 0]
+	.long sub_FD3112                              ; FCF2AF  [ 1]
+	.long sub_FD31B2                              ; FCF2B3  [ 2]
+	.long sub_FD3252                              ; FCF2B7  [ 3]
+	.long sub_FD32F2                              ; FCF2BB  [ 4]
+	.long sub_FD33AA                              ; FCF2BF  [ 5]
+	.long sub_FD3466                              ; FCF2C3  [ 6]
+	.long sub_FD351E                              ; FCF2C7  [ 7]
+	.long sub_FD359E                              ; FCF2CB  [ 8]
+	.long sub_FD35AF                              ; FCF2CF  [ 9]
+	.long sub_FD35DB                              ; FCF2D3  [10]
+	.long sub_FD3616                              ; FCF2D7  [11]
+	.long sub_FD3649                              ; FCF2DB  [12]
+	.long PanelOp_Nop                             ; FCF2DF  [13]
+	.long PanelOp_Nop                             ; FCF2E3  [14]
+	.long sub_FD36F5                              ; FCF2E7  [15]
+	.long sub_FD36CE                              ; FCF2EB  [16]
+	.long 0x00000000                              ; FCF2EF  [17] zero
+
+; PanelOpTable_FCF2F3 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD2864 at 0xFD2886.
+PanelOpTable_FCF2F3:
+	.long sub_FD3729                              ; FCF2F3  [ 0]
+	.long sub_FD37D3                              ; FCF2F7  [ 1]
+	.long sub_FD387D                              ; FCF2FB  [ 2]
+	.long sub_FD3927                              ; FCF2FF  [ 3]
+	.long sub_FD39A3                              ; FCF303  [ 4]
+	.long sub_FD3A45                              ; FCF307  [ 5]
+	.long sub_FD3AC1                              ; FCF30B  [ 6]
+	.long sub_FD3B21                              ; FCF30F  [ 7]
+	.long sub_FD3B81                              ; FCF313  [ 8]
+	.long sub_FD3B92                              ; FCF317  [ 9]
+	.long sub_FD3BBE                              ; FCF31B  [10]
+	.long sub_FD3BEA                              ; FCF31F  [11]
+	.long sub_FD3C0E                              ; FCF323  [12]
+	.long PanelOp_Nop                             ; FCF327  [13]
+	.long PanelOp_Nop                             ; FCF32B  [14]
+	.long sub_FD3C4A                              ; FCF32F  [15]
+	.long sub_FD3C32                              ; FCF333  [16]
+	.long 0x00000000                              ; FCF337  [17] zero
+
+; PanelOpTable_FCF33B -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD28B2 at 0xFD28DF.
+PanelOpTable_FCF33B:
+	.long PanelOp_Nop                             ; FCF33B  [ 0]
+	.long sub_FD3C6A                              ; FCF33F  [ 1]
+	.long sub_FD3C7F                              ; FCF343  [ 2]
+	.long sub_FD3C94                              ; FCF347  [ 3]
+	.long sub_FD3CA9                              ; FCF34B  [ 4]
+	.long sub_FD3CBE                              ; FCF34F  [ 5]
+	.long sub_FD3CD3                              ; FCF353  [ 6]
+	.long sub_FD3CE8                              ; FCF357  [ 7]
+	.long sub_FD3CFD                              ; FCF35B  [ 8]
+	.long sub_FD3D1B                              ; FCF35F  [ 9]
+	.long sub_FD3D3F                              ; FCF363  [10]
+	.long sub_FD3D57                              ; FCF367  [11]
+	.long sub_FD3D6F                              ; FCF36B  [12]
+	.long PanelOp_Nop                             ; FCF36F  [13]
+	.long PanelOp_Nop                             ; FCF373  [14]
+	.long sub_FD3D87                              ; FCF377  [15]
+	.long PanelOp_Nop                             ; FCF37B  [16]
+	.long 0x00000000                              ; FCF37F  [17] zero
+
+; PanelOpTable_FCF383 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0A000 (prom_b) at 0xF0A02D.
+PanelOpTable_FCF383:
+	.long PanelOp_Nop                             ; FCF383  [ 0]
+	.long 0x00f0a162                              ; FCF387  [ 1] prom_b sub_F0A162
+	.long 0x00f0a1d1                              ; FCF38B  [ 2] prom_b sub_F0A1D1
+	.long 0x00f0a240                              ; FCF38F  [ 3] prom_b sub_F0A240
+	.long PanelOp_Nop                             ; FCF393  [ 4]
+	.long 0x00f0a2ab                              ; FCF397  [ 5] prom_b sub_F0A2AB
+	.long PanelOp_Nop                             ; FCF39B  [ 6]
+	.long PanelOp_Nop                             ; FCF39F  [ 7]
+	.long 0x00f0a3a1                              ; FCF3A3  [ 8] prom_b sub_F0A3A1
+	.long 0x00f0a3bf                              ; FCF3A7  [ 9] prom_b sub_F0A3BF
+	.long 0x00f0a3db                              ; FCF3AB  [10] prom_b sub_F0A3DB
+	.long 0x00f0a404                              ; FCF3AF  [11] prom_b sub_F0A404
+	.long 0x00f0a451                              ; FCF3B3  [12] prom_b sub_F0A451
+	.long PanelOp_Nop                             ; FCF3B7  [13]
+	.long PanelOp_Nop                             ; FCF3BB  [14]
+	.long 0x00f0a49e                              ; FCF3BF  [15] prom_b sub_F0A49E
+	.long PanelOp_Nop                             ; FCF3C3  [16]
+	.long 0x00000000                              ; FCF3C7  [17] zero
+
+; PanelOpTable_FCF3CB -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0A051 (prom_b) at 0xF0A085.
+PanelOpTable_FCF3CB:
+	.long 0x00f0a4be                              ; FCF3CB  [ 0] prom_b sub_F0A4BE
+	.long 0x00f0a4d7                              ; FCF3CF  [ 1] prom_b sub_F0A4D7
+	.long 0x00f0a4f0                              ; FCF3D3  [ 2] prom_b sub_F0A4F0
+	.long 0x00f0a509                              ; FCF3D7  [ 3] prom_b sub_F0A509
+	.long 0x00f0a522                              ; FCF3DB  [ 4] prom_b sub_F0A522
+	.long 0x00f0a53b                              ; FCF3DF  [ 5] prom_b sub_F0A53B
+	.long 0x00f0a554                              ; FCF3E3  [ 6] prom_b sub_F0A554
+	.long PanelOp_Nop                             ; FCF3E7  [ 7]
+	.long 0x00f0a56d                              ; FCF3EB  [ 8] prom_b sub_F0A56D
+	.long 0x00f0a57e                              ; FCF3EF  [ 9] prom_b sub_F0A57E
+	.long 0x00f0a5aa                              ; FCF3F3  [10] prom_b sub_F0A5AA
+	.long 0x00f0a5d6                              ; FCF3F7  [11] prom_b sub_F0A5D6
+	.long 0x00f0a604                              ; FCF3FB  [12] prom_b sub_F0A604
+	.long PanelOp_Nop                             ; FCF3FF  [13]
+	.long PanelOp_Nop                             ; FCF403  [14]
+	.long 0x00f0a64a                              ; FCF407  [15] prom_b sub_F0A64A
+	.long 0x00f0a632                              ; FCF40B  [16] prom_b sub_F0A632
+	.long 0x00000000                              ; FCF40F  [17] zero
+
+; PanelOpTable_FCF413 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0A0B1 (prom_b) at 0xF0A0E5.
+PanelOpTable_FCF413:
+	.long PanelOp_Nop                             ; FCF413  [ 0]
+	.long 0x00f0a66a                              ; FCF417  [ 1] prom_b sub_F0A66A
+	.long 0x00f0a67f                              ; FCF41B  [ 2] prom_b sub_F0A67F
+	.long 0x00f0a694                              ; FCF41F  [ 3] prom_b sub_F0A694
+	.long 0x00f0a6a9                              ; FCF423  [ 4] prom_b sub_F0A6A9
+	.long PanelOp_Nop                             ; FCF427  [ 5]
+	.long 0x00f0a6be                              ; FCF42B  [ 6] prom_b sub_F0A6BE
+	.long 0x00f0a6d3                              ; FCF42F  [ 7] prom_b sub_F0A6D3
+	.long 0x00f0a6e8                              ; FCF433  [ 8] prom_b sub_F0A6E8
+	.long 0x00f0a6f9                              ; FCF437  [ 9] prom_b sub_F0A6F9
+	.long 0x00f0a725                              ; FCF43B  [10] prom_b sub_F0A725
+	.long 0x00f0a751                              ; FCF43F  [11] prom_b sub_F0A751
+	.long 0x00f0a775                              ; FCF443  [12] prom_b sub_F0A775
+	.long PanelOp_Nop                             ; FCF447  [13]
+	.long PanelOp_Nop                             ; FCF44B  [14]
+	.long 0x00f0a7b1                              ; FCF44F  [15] prom_b sub_F0A7B1
+	.long 0x00f0a799                              ; FCF453  [16] prom_b sub_F0A799
+	.long 0x00000000                              ; FCF457  [17] zero
+
+; PanelOpTable_FCF45B -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0A111 (prom_b) at 0xF0A13E.
+PanelOpTable_FCF45B:
+	.long PanelOp_Nop                             ; FCF45B  [ 0]
+	.long 0x00f0a7d1                              ; FCF45F  [ 1] prom_b sub_F0A7D1
+	.long 0x00f0a7e6                              ; FCF463  [ 2] prom_b sub_F0A7E6
+	.long 0x00f0a7fb                              ; FCF467  [ 3] prom_b sub_F0A7FB
+	.long 0x00f0a810                              ; FCF46B  [ 4] prom_b sub_F0A810
+	.long 0x00f0a825                              ; FCF46F  [ 5] prom_b sub_F0A825
+	.long 0x00f0a83a                              ; FCF473  [ 6] prom_b sub_F0A83A
+	.long 0x00f0a84f                              ; FCF477  [ 7] prom_b sub_F0A84F
+	.long 0x00f0a864                              ; FCF47B  [ 8] prom_b sub_F0A864
+	.long 0x00f0a882                              ; FCF47F  [ 9] prom_b sub_F0A882
+	.long 0x00f0a8a6                              ; FCF483  [10] prom_b sub_F0A8A6
+	.long 0x00f0a8be                              ; FCF487  [11] prom_b sub_F0A8BE
+	.long 0x00f0a8d6                              ; FCF48B  [12] prom_b sub_F0A8D6
+	.long PanelOp_Nop                             ; FCF48F  [13]
+	.long PanelOp_Nop                             ; FCF493  [14]
+	.long 0x00f0a8ee                              ; FCF497  [15] prom_b sub_F0A8EE
+	.long PanelOp_Nop                             ; FCF49B  [16]
+	.long 0x00000000                              ; FCF49F  [17] zero
+
+; PanelOpTable_FCF4A3 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE3BE at 0xFDE3F2.
+PanelOpTable_FCF4A3:
+	.long sub_FDE760                              ; FCF4A3  [ 0]
+	.long sub_FDE81C                              ; FCF4A7  [ 1]
+	.long sub_FDE8D8                              ; FCF4AB  [ 2]
+	.long sub_FDE988                              ; FCF4AF  [ 3]
+	.long PanelOp_Nop                             ; FCF4B3  [ 4]
+	.long sub_FDEA38                              ; FCF4B7  [ 5]
+	.long sub_FDEAD2                              ; FCF4BB  [ 6]
+	.long sub_FDEB6D                              ; FCF4BF  [ 7]
+	.long sub_FDEC08                              ; FCF4C3  [ 8]
+	.long sub_FDEC35                              ; FCF4C7  [ 9]
+	.long sub_FDEC59                              ; FCF4CB  [10]
+	.long sub_FDEC94                              ; FCF4CF  [11]
+	.long sub_FDECEE                              ; FCF4D3  [12]
+	.long PanelOp_Nop                             ; FCF4D7  [13]
+	.long PanelOp_Nop                             ; FCF4DB  [14]
+	.long sub_FDED48                              ; FCF4DF  [15]
+	.long sub_FDED21                              ; FCF4E3  [16]
+	.long 0x00000000                              ; FCF4E7  [17] zero
+
+; PanelOpTable_FCF4EB -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE41E at 0xFDE452.
+PanelOpTable_FCF4EB:
+	.long sub_FDED7C                              ; FCF4EB  [ 0]
+	.long sub_FDEDA0                              ; FCF4EF  [ 1]
+	.long sub_FDEDC4                              ; FCF4F3  [ 2]
+	.long sub_FDEDDC                              ; FCF4F7  [ 3]
+	.long PanelOp_Nop                             ; FCF4FB  [ 4]
+	.long sub_FDEDF4                              ; FCF4FF  [ 5]
+	.long sub_FDEE05                              ; FCF503  [ 6]
+	.long sub_FDEE16                              ; FCF507  [ 7]
+	.long sub_FDEE27                              ; FCF50B  [ 8]
+	.long sub_FDEE38                              ; FCF50F  [ 9]
+	.long sub_FDEE49                              ; FCF513  [10]
+	.long sub_FDEE5A                              ; FCF517  [11]
+	.long sub_FDEEB4                              ; FCF51B  [12]
+	.long PanelOp_Nop                             ; FCF51F  [13]
+	.long PanelOp_Nop                             ; FCF523  [14]
+	.long sub_FDEEEC                              ; FCF527  [15]
+	.long sub_FDEEC5                              ; FCF52B  [16]
+	.long 0x00000000                              ; FCF52F  [17] zero
+
+; PanelOpTable_FCF533 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE47E at 0xFDE4B2.
+PanelOpTable_FCF533:
+	.long PanelOp_Nop                             ; FCF533  [ 0]
+	.long PanelOp_Nop                             ; FCF537  [ 1]
+	.long sub_FDEF20                              ; FCF53B  [ 2]
+	.long sub_FDEF44                              ; FCF53F  [ 3]
+	.long sub_FDEF68                              ; FCF543  [ 4]
+	.long sub_FDEF80                              ; FCF547  [ 5]
+	.long PanelOp_Nop                             ; FCF54B  [ 6]
+	.long PanelOp_Nop                             ; FCF54F  [ 7]
+	.long sub_FDEF98                              ; FCF553  [ 8]
+	.long sub_FDEFC5                              ; FCF557  [ 9]
+	.long sub_FDEFE9                              ; FCF55B  [10]
+	.long sub_FDF024                              ; FCF55F  [11]
+	.long sub_FDF07E                              ; FCF563  [12]
+	.long PanelOp_Nop                             ; FCF567  [13]
+	.long PanelOp_Nop                             ; FCF56B  [14]
+	.long sub_FDF0D8                              ; FCF56F  [15]
+	.long sub_FDF0B1                              ; FCF573  [16]
+	.long 0x00000000                              ; FCF577  [17] zero
+
+; PanelOpTable_FCF57B -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE4DE at 0xFDE512.
+PanelOpTable_FCF57B:
+	.long PanelOp_Nop                             ; FCF57B  [ 0]
+	.long PanelOp_Nop                             ; FCF57F  [ 1]
+	.long sub_FDF10C                              ; FCF583  [ 2]
+	.long sub_FDF130                              ; FCF587  [ 3]
+	.long sub_FDF154                              ; FCF58B  [ 4]
+	.long sub_FDF16C                              ; FCF58F  [ 5]
+	.long PanelOp_Nop                             ; FCF593  [ 6]
+	.long PanelOp_Nop                             ; FCF597  [ 7]
+	.long sub_FDF184                              ; FCF59B  [ 8]
+	.long sub_FDF195                              ; FCF59F  [ 9]
+	.long sub_FDF1A6                              ; FCF5A3  [10]
+	.long sub_FDF1B7                              ; FCF5A7  [11]
+	.long sub_FDF211                              ; FCF5AB  [12]
+	.long PanelOp_Nop                             ; FCF5AF  [13]
+	.long PanelOp_Nop                             ; FCF5B3  [14]
+	.long sub_FDF249                              ; FCF5B7  [15]
+	.long sub_FDF222                              ; FCF5BB  [16]
+	.long 0x00000000                              ; FCF5BF  [17] zero
+
+; PanelOpTable_FCF5C3 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE53E at 0xFDE572.
+PanelOpTable_FCF5C3:
+	.long PanelOp_Nop                             ; FCF5C3  [ 0]
+	.long sub_FDF27D                              ; FCF5C7  [ 1]
+	.long sub_FDF322                              ; FCF5CB  [ 2]
+	.long sub_FDF33E                              ; FCF5CF  [ 3]
+	.long sub_FDF3DF                              ; FCF5D3  [ 4]
+	.long sub_FDF471                              ; FCF5D7  [ 5]
+	.long sub_FDF489                              ; FCF5DB  [ 6]
+	.long PanelOp_Nop                             ; FCF5DF  [ 7]
+	.long sub_FDF4A1                              ; FCF5E3  [ 8]
+	.long sub_FDF4CE                              ; FCF5E7  [ 9]
+	.long sub_FDF4F2                              ; FCF5EB  [10]
+	.long sub_FDF52D                              ; FCF5EF  [11]
+	.long sub_FDF57D                              ; FCF5F3  [12]
+	.long PanelOp_Nop                             ; FCF5F7  [13]
+	.long PanelOp_Nop                             ; FCF5FB  [14]
+	.long sub_FDF5D7                              ; FCF5FF  [15]
+	.long sub_FDF5B0                              ; FCF603  [16]
+	.long 0x00000000                              ; FCF607  [17] zero
+
+; PanelOpTable_FCF60B -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE59E at 0xFDE5CB.
+PanelOpTable_FCF60B:
+	.long PanelOp_Nop                             ; FCF60B  [ 0]
+	.long PanelOp_Nop                             ; FCF60F  [ 1]
+	.long PanelOp_Nop                             ; FCF613  [ 2]
+	.long PanelOp_Nop                             ; FCF617  [ 3]
+	.long PanelOp_Nop                             ; FCF61B  [ 4]
+	.long PanelOp_Nop                             ; FCF61F  [ 5]
+	.long PanelOp_Nop                             ; FCF623  [ 6]
+	.long PanelOp_Nop                             ; FCF627  [ 7]
+	.long sub_FDF60B                              ; FCF62B  [ 8]
+	.long sub_FDF638                              ; FCF62F  [ 9]
+	.long sub_FDF65C                              ; FCF633  [10]
+	.long sub_FDF697                              ; FCF637  [11]
+	.long sub_FDF6F1                              ; FCF63B  [12]
+	.long PanelOp_Nop                             ; FCF63F  [13]
+	.long PanelOp_Nop                             ; FCF643  [14]
+	.long sub_FDF74B                              ; FCF647  [15]
+	.long sub_FDF724                              ; FCF64B  [16]
+	.long 0x00000000                              ; FCF64F  [17] zero
+
+; PanelOpTable_FCF653 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE5EF at 0xFDE623.
+PanelOpTable_FCF653:
+	.long PanelOp_Nop                             ; FCF653  [ 0]
+	.long PanelOp_Nop                             ; FCF657  [ 1]
+	.long sub_FDF77F                              ; FCF65B  [ 2]
+	.long sub_FDF80A                              ; FCF65F  [ 3]
+	.long sub_FDF886                              ; FCF663  [ 4]
+	.long sub_FDF928                              ; FCF667  [ 5]
+	.long PanelOp_Nop                             ; FCF66B  [ 6]
+	.long PanelOp_Nop                             ; FCF66F  [ 7]
+	.long sub_FDF9A4                              ; FCF673  [ 8]
+	.long sub_FDF9C2                              ; FCF677  [ 9]
+	.long sub_FDF9E6                              ; FCF67B  [10]
+	.long sub_FDFA12                              ; FCF67F  [11]
+	.long sub_FDFA36                              ; FCF683  [12]
+	.long PanelOp_Nop                             ; FCF687  [13]
+	.long PanelOp_Nop                             ; FCF68B  [14]
+	.long sub_FDFA72                              ; FCF68F  [15]
+	.long sub_FDFA5A                              ; FCF693  [16]
+	.long 0x00000000                              ; FCF697  [17] zero
+
+; PanelOpTable_FCF69B -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE64F at 0xFDE683.
+PanelOpTable_FCF69B:
+	.long sub_FDFA92                              ; FCF69B  [ 0]
+	.long sub_FDFAAB                              ; FCF69F  [ 1]
+	.long sub_FDFAC4                              ; FCF6A3  [ 2]
+	.long sub_FDFADD                              ; FCF6A7  [ 3]
+	.long sub_FDFAF6                              ; FCF6AB  [ 4]
+	.long sub_FDFB0F                              ; FCF6AF  [ 5]
+	.long sub_FDFB28                              ; FCF6B3  [ 6]
+	.long PanelOp_Nop                             ; FCF6B7  [ 7]
+	.long sub_FDFB41                              ; FCF6BB  [ 8]
+	.long sub_FDFB52                              ; FCF6BF  [ 9]
+	.long sub_FDFB7E                              ; FCF6C3  [10]
+	.long sub_FDFBAA                              ; FCF6C7  [11]
+	.long sub_FDFBD8                              ; FCF6CB  [12]
+	.long PanelOp_Nop                             ; FCF6CF  [13]
+	.long PanelOp_Nop                             ; FCF6D3  [14]
+	.long sub_FDFC1E                              ; FCF6D7  [15]
+	.long sub_FDFC06                              ; FCF6DB  [16]
+	.long 0x00000000                              ; FCF6DF  [17] zero
+
+; PanelOpTable_FCF6E3 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE6AF at 0xFDE6E3.
+PanelOpTable_FCF6E3:
+	.long PanelOp_Nop                             ; FCF6E3  [ 0]
+	.long sub_FDFC3E                              ; FCF6E7  [ 1]
+	.long sub_FDFC53                              ; FCF6EB  [ 2]
+	.long sub_FDFC68                              ; FCF6EF  [ 3]
+	.long sub_FDFC7D                              ; FCF6F3  [ 4]
+	.long PanelOp_Nop                             ; FCF6F7  [ 5]
+	.long sub_FDFC92                              ; FCF6FB  [ 6]
+	.long sub_FDFCA7                              ; FCF6FF  [ 7]
+	.long sub_FDFCBC                              ; FCF703  [ 8]
+	.long sub_FDFCCD                              ; FCF707  [ 9]
+	.long sub_FDFCF9                              ; FCF70B  [10]
+	.long sub_FDFD25                              ; FCF70F  [11]
+	.long sub_FDFD49                              ; FCF713  [12]
+	.long PanelOp_Nop                             ; FCF717  [13]
+	.long PanelOp_Nop                             ; FCF71B  [14]
+	.long sub_FDFD85                              ; FCF71F  [15]
+	.long sub_FDFD6D                              ; FCF723  [16]
+	.long 0x00000000                              ; FCF727  [17] zero
+
+; PanelOpTable_FCF72B -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FDE729 at 0xFDE73C.
+PanelOpTable_FCF72B:
+	.long PanelOp_Nop                             ; FCF72B  [ 0]
+	.long sub_FDFDA5                              ; FCF72F  [ 1]
+	.long sub_FDFDBA                              ; FCF733  [ 2]
+	.long sub_FDFDCF                              ; FCF737  [ 3]
+	.long sub_FDFDE4                              ; FCF73B  [ 4]
+	.long sub_FDFDF9                              ; FCF73F  [ 5]
+	.long sub_FDFE0E                              ; FCF743  [ 6]
+	.long sub_FDFE23                              ; FCF747  [ 7]
+	.long sub_FDFE38                              ; FCF74B  [ 8]
+	.long sub_FDFE56                              ; FCF74F  [ 9]
+	.long sub_FDFE7A                              ; FCF753  [10]
+	.long sub_FDFE92                              ; FCF757  [11]
+	.long sub_FDFEAA                              ; FCF75B  [12]
+	.long PanelOp_Nop                             ; FCF75F  [13]
+	.long PanelOp_Nop                             ; FCF763  [14]
+	.long sub_FDFEC2                              ; FCF767  [15]
+	.long PanelOp_Nop                             ; FCF76B  [16]
+	.long 0x00000000                              ; FCF76F  [17] zero
+
+; PanelOpTable_FCF773 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD053D at 0xFD056A.
+PanelOpTable_FCF773:
+	.long PanelOp_Nop                             ; FCF773  [ 0]
+	.long sub_FD0602                              ; FCF777  [ 1]
+	.long PanelOp_Nop                             ; FCF77B  [ 2]
+	.long sub_FD062B                              ; FCF77F  [ 3]
+	.long sub_FD063D                              ; FCF783  [ 4]
+	.long sub_FD0652                              ; FCF787  [ 5]
+	.long sub_FD0667                              ; FCF78B  [ 6]
+	.long sub_FD068B                              ; FCF78F  [ 7]
+	.long PanelOp_Nop                             ; FCF793  [ 8]
+	.long sub_FD06AF                              ; FCF797  [ 9]
+	.long sub_FD070B                              ; FCF79B  [10]
+	.long sub_FD0767                              ; FCF79F  [11]
+	.long PanelOp_Nop                             ; FCF7A3  [12]
+	.long PanelOp_Nop                             ; FCF7A7  [13]
+	.long PanelOp_Nop                             ; FCF7AB  [14]
+	.long sub_FD0857                              ; FCF7AF  [15]
+	.long sub_FD083F                              ; FCF7B3  [16]
+	.long 0x00000000                              ; FCF7B7  [17] zero
+
+; PanelOpTable_FCF7BB -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD058E at 0xFD05DE.
+PanelOpTable_FCF7BB:
+	.long PanelOp_Nop                             ; FCF7BB  [ 0]
+	.long sub_FD0883                              ; FCF7BF  [ 1]
+	.long PanelOp_Nop                             ; FCF7C3  [ 2]
+	.long sub_FD08A3                              ; FCF7C7  [ 3]
+	.long sub_FD08B5                              ; FCF7CB  [ 4]
+	.long sub_FD08CA                              ; FCF7CF  [ 5]
+	.long sub_FD08DF                              ; FCF7D3  [ 6]
+	.long sub_FD0903                              ; FCF7D7  [ 7]
+	.long sub_FD0927                              ; FCF7DB  [ 8]
+	.long sub_FD095D                              ; FCF7DF  [ 9]
+	.long sub_FD099E                              ; FCF7E3  [10]
+	.long sub_FD09DF                              ; FCF7E7  [11]
+	.long sub_FD0A20                              ; FCF7EB  [12]
+	.long PanelOp_Nop                             ; FCF7EF  [13]
+	.long PanelOp_Nop                             ; FCF7F3  [14]
+	.long sub_FD0A79                              ; FCF7F7  [15]
+	.long sub_FD0A61                              ; FCF7FB  [16]
+	.long 0x00000000                              ; FCF7FF  [17] zero
+
+; BitMask_Bit0to7 -- 9 bytes: 1<<0 .. 1<<7, then 0x00.
+; Read by: sub_FD058E at 0xFD07E5: `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with
+;          H forced into 0..5 just before (`cp H,6 / jr c` else H = 0), so
+;          this reader uses entries 0-5 only.  Entries 6-8 (0x40, 0x80, 0x00)
+;          complete the 8-bit ladder and a zero; no other reader is known.
+BitMask_Bit0to7:
+	.byte 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x00  ; FCF803  [  0]
+
+; PanelOpTable_FCF80C -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD0AA5 at 0xFD0AD2.
+PanelOpTable_FCF80C:
+	.long PanelOp_Nop                             ; FCF80C  [ 0]
+	.long sub_FD0C58                              ; FCF810  [ 1]
+	.long sub_FD0CED                              ; FCF814  [ 2]
+	.long PanelOp_Nop                             ; FCF818  [ 3]
+	.long sub_FD0D61                              ; FCF81C  [ 4]
+	.long sub_FD0E1C                              ; FCF820  [ 5]
+	.long sub_FD0ECA                              ; FCF824  [ 6]
+	.long PanelOp_Nop                             ; FCF828  [ 7]
+	.long sub_FD0F68                              ; FCF82C  [ 8]
+	.long sub_FD0F79                              ; FCF830  [ 9]
+	.long sub_FD0FA2                              ; FCF834  [10]
+	.long sub_FD0FCB                              ; FCF838  [11]
+	.long sub_FD0FF4                              ; FCF83C  [12]
+	.long PanelOp_Nop                             ; FCF840  [13]
+	.long PanelOp_Nop                             ; FCF844  [14]
+	.long sub_FD1010                              ; FCF848  [15]
+	.long PanelOp_Nop                             ; FCF84C  [16]
+	.long 0x00000000                              ; FCF850  [17] zero
+
+; PanelOpTable_FCF854 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD0AF6 at 0xFD0B23.
+PanelOpTable_FCF854:
+	.long PanelOp_Nop                             ; FCF854  [ 0]
+	.long sub_FD1028                              ; FCF858  [ 1]
+	.long sub_FD11D7                              ; FCF85C  [ 2]
+	.long sub_FD1159                              ; FCF860  [ 3]
+	.long PanelOp_Nop                             ; FCF864  [ 4]
+	.long PanelOp_Nop                             ; FCF868  [ 5]
+	.long PanelOp_Nop                             ; FCF86C  [ 6]
+	.long PanelOp_Nop                             ; FCF870  [ 7]
+	.long sub_FD12B0                              ; FCF874  [ 8]
+	.long sub_FD12EC                              ; FCF878  [ 9]
+	.long sub_FD1315                              ; FCF87C  [10]
+	.long sub_FD133E                              ; FCF880  [11]
+	.long sub_FD1385                              ; FCF884  [12]
+	.long PanelOp_Nop                             ; FCF888  [13]
+	.long PanelOp_Nop                             ; FCF88C  [14]
+	.long sub_FD13A1                              ; FCF890  [15]
+	.long PanelOp_Nop                             ; FCF894  [16]
+	.long 0x00000000                              ; FCF898  [17] zero
+
+; PanelOpTable_FCF89C -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD0B47 at 0xFD0B7B.
+PanelOpTable_FCF89C:
+	.long PanelOp_Nop                             ; FCF89C  [ 0]
+	.long PanelOp_Nop                             ; FCF8A0  [ 1]
+	.long sub_FD13C1                              ; FCF8A4  [ 2]
+	.long sub_FD1443                              ; FCF8A8  [ 3]
+	.long sub_FD14EB                              ; FCF8AC  [ 4]
+	.long sub_FD1593                              ; FCF8B0  [ 5]
+	.long PanelOp_Nop                             ; FCF8B4  [ 6]
+	.long PanelOp_Nop                             ; FCF8B8  [ 7]
+	.long sub_FD1615                              ; FCF8BC  [ 8]
+	.long sub_FD163E                              ; FCF8C0  [ 9]
+	.long sub_FD1662                              ; FCF8C4  [10]
+	.long sub_FD168E                              ; FCF8C8  [11]
+	.long sub_FD16C5                              ; FCF8CC  [12]
+	.long PanelOp_Nop                             ; FCF8D0  [13]
+	.long PanelOp_Nop                             ; FCF8D4  [14]
+	.long sub_FD16E9                              ; FCF8D8  [15]
+	.long PanelOp_Nop                             ; FCF8DC  [16]
+	.long 0x00000000                              ; FCF8E0  [17] zero
+
+; PanelOpTable_FCF8E4 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD0BA7 at 0xFD0BDB.
+PanelOpTable_FCF8E4:
+	.long PanelOp_Nop                             ; FCF8E4  [ 0]
+	.long PanelOp_Nop                             ; FCF8E8  [ 1]
+	.long sub_FD1709                              ; FCF8EC  [ 2]
+	.long sub_FD1790                              ; FCF8F0  [ 3]
+	.long sub_FD1827                              ; FCF8F4  [ 4]
+	.long sub_FD18BE                              ; FCF8F8  [ 5]
+	.long PanelOp_Nop                             ; FCF8FC  [ 6]
+	.long PanelOp_Nop                             ; FCF900  [ 7]
+	.long sub_FD1945                              ; FCF904  [ 8]
+	.long sub_FD196E                              ; FCF908  [ 9]
+	.long sub_FD199A                              ; FCF90C  [10]
+	.long sub_FD19BE                              ; FCF910  [11]
+	.long sub_FD19F5                              ; FCF914  [12]
+	.long PanelOp_Nop                             ; FCF918  [13]
+	.long PanelOp_Nop                             ; FCF91C  [14]
+	.long sub_FD1A19                              ; FCF920  [15]
+	.long PanelOp_Nop                             ; FCF924  [16]
+	.long 0x00000000                              ; FCF928  [17] zero
+
+; PanelOpTable_FCF92C -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_FD0C07 at 0xFD0C34.
+PanelOpTable_FCF92C:
+	.long PanelOp_Nop                             ; FCF92C  [ 0]
+	.long sub_FD1A9C                              ; FCF930  [ 1]
+	.long sub_FD1B45                              ; FCF934  [ 2]
+	.long PanelOp_Nop                             ; FCF938  [ 3]
+	.long PanelOp_Nop                             ; FCF93C  [ 4]
+	.long sub_FD1BCF                              ; FCF940  [ 5]
+	.long PanelOp_Nop                             ; FCF944  [ 6]
+	.long sub_FD1A39                              ; FCF948  [ 7]
+	.long sub_FD1F3D                              ; FCF94C  [ 8]
+	.long sub_FD1F5B                              ; FCF950  [ 9]
+	.long sub_FD1F7F                              ; FCF954  [10]
+	.long sub_FD1FAB                              ; FCF958  [11]
+	.long sub_FD1FD7                              ; FCF95C  [12]
+	.long PanelOp_Nop                             ; FCF960  [13]
+	.long PanelOp_Nop                             ; FCF964  [14]
+	.long sub_FD1FFB                              ; FCF968  [15]
+	.long PanelOp_Nop                             ; FCF96C  [16]
+	.long 0x00000000                              ; FCF970  [17] zero
+
+; ToneEditPage_A0_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: ToneEditPage_A0_KeyDispatch at 0xFD3DD4.
+ToneEditPage_A0_OpTable:
+	.long sub_FD3FE0                              ; FCF974  [ 0]
+	.long sub_FD4039                              ; FCF978  [ 1]
+	.long sub_FD40D4                              ; FCF97C  [ 2]
+	.long PanelOp_Nop                             ; FCF980  [ 3]
+	.long PanelOp_Nop                             ; FCF984  [ 4]
+	.long ToneEditField_A0_ResonatorType          ; FCF988  [ 5]
+	.long ToneEditField_A0_Group                  ; FCF98C  [ 6]
+	.long PanelOp_Nop                             ; FCF990  [ 7]
+	.long sub_FD43C6                              ; FCF994  [ 8]
+	.long sub_FD43E4                              ; FCF998  [ 9]
+	.long sub_FD440A                              ; FCF99C  [10]
+	.long sub_FD4430                              ; FCF9A0  [11]
+	.long sub_FD4468                              ; FCF9A4  [12]
+	.long PanelOp_Nop                             ; FCF9A8  [13]
+	.long PanelOp_Nop                             ; FCF9AC  [14]
+	.long sub_FD4493                              ; FCF9B0  [15]
+	.long PanelOp_Nop                             ; FCF9B4  [16]
+	.long 0x00000000                              ; FCF9B8  [17] zero
+
+; ToneEditPage_A3_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: ToneEditPage_A3_KeyDispatch at 0xFD3E27.
+ToneEditPage_A3_OpTable:
+	.long PanelOp_Nop                             ; FCF9BC  [ 0]
+	.long ToneEditField_A3_Position               ; FCF9C0  [ 1]
+	.long ToneEditField_A3_Depth                  ; FCF9C4  [ 2]
+	.long ToneEditField_A3_Formant                ; FCF9C8  [ 3]
+	.long PanelOp_Nop                             ; FCF9CC  [ 4]
+	.long ToneEditField_A3_InteractionGain        ; FCF9D0  [ 5]
+	.long PanelOp_Nop                             ; FCF9D4  [ 6]
+	.long PanelOp_Nop                             ; FCF9D8  [ 7]
+	.long sub_FD4712                              ; FCF9DC  [ 8]
+	.long sub_FD4730                              ; FCF9E0  [ 9]
+	.long sub_FD475C                              ; FCF9E4  [10]
+	.long sub_FD4780                              ; FCF9E8  [11]
+	.long sub_FD47AC                              ; FCF9EC  [12]
+	.long PanelOp_Nop                             ; FCF9F0  [13]
+	.long PanelOp_Nop                             ; FCF9F4  [14]
+	.long sub_FD47E8                              ; FCF9F8  [15]
+	.long sub_FD47D0                              ; FCF9FC  [16]
+	.long 0x00000000                              ; FCFA00  [17] zero
+
+; ToneEditPage_A4_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: ToneEditPage_A4_KeyDispatch at 0xFD3E78.
+ToneEditPage_A4_OpTable:
+	.long PanelOp_Nop                             ; FCFA04  [ 0]
+	.long ToneEditField_A4_Width                  ; FCFA08  [ 1]
+	.long ToneEditField_A4_Speed                  ; FCFA0C  [ 2]
+	.long ToneEditField_A4_SampleHold             ; FCFA10  [ 3]
+	.long PanelOp_Nop                             ; FCFA14  [ 4]
+	.long ToneEditField_A4_Touch                  ; FCFA18  [ 5]
+	.long PanelOp_Nop                             ; FCFA1C  [ 6]
+	.long PanelOp_Nop                             ; FCFA20  [ 7]
+	.long sub_FD49D8                              ; FCFA24  [ 8]
+	.long sub_FD49F6                              ; FCFA28  [ 9]
+	.long sub_FD4A22                              ; FCFA2C  [10]
+	.long sub_FD4A46                              ; FCFA30  [11]
+	.long sub_FD4A72                              ; FCFA34  [12]
+	.long PanelOp_Nop                             ; FCFA38  [13]
+	.long PanelOp_Nop                             ; FCFA3C  [14]
+	.long sub_FD4AAE                              ; FCFA40  [15]
+	.long sub_FD4A96                              ; FCFA44  [16]
+	.long 0x00000000                              ; FCFA48  [17] zero
+
+; ToneEditPage_A5_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: ToneEditPage_A5_KeyDispatch at 0xFD3EC9.
+ToneEditPage_A5_OpTable:
+	.long PanelOp_Nop                             ; FCFA4C  [ 0]
+	.long ToneEditField_A5_Fitting                ; FCFA50  [ 1]
+	.long ToneEditField_A5_Muting                 ; FCFA54  [ 2]
+	.long ToneEditField_A5_KeyShift               ; FCFA58  [ 3]
+	.long ToneEditField_A5_Detune                 ; FCFA5C  [ 4]
+	.long ToneEditField_A5_ResoScale              ; FCFA60  [ 5]
+	.long sub_FD4FDC                              ; FCFA64  [ 6]
+	.long PanelOp_Nop                             ; FCFA68  [ 7]
+	.long sub_FD501D                              ; FCFA6C  [ 8]
+	.long sub_FD503B                              ; FCFA70  [ 9]
+	.long sub_FD5067                              ; FCFA74  [10]
+	.long sub_FD5093                              ; FCFA78  [11]
+	.long sub_FD5114                              ; FCFA7C  [12]
+	.long PanelOp_Nop                             ; FCFA80  [13]
+	.long PanelOp_Nop                             ; FCFA84  [14]
+	.long sub_FD5159                              ; FCFA88  [15]
+	.long sub_FD5141                              ; FCFA8C  [16]
+	.long 0x00000000                              ; FCFA90  [17] zero
+
+; ToneEditPage_A6_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: ToneEditPage_A6_KeyDispatch at 0xFD3F1A.
+ToneEditPage_A6_OpTable:
+	.long PanelOp_Nop                             ; FCFA94  [ 0]
+	.long ToneEditField_A6_FittingTouchDepth      ; FCFA98  [ 1]
+	.long ToneEditField_A6_MutingTouchDepth       ; FCFA9C  [ 2]
+	.long PanelOp_Nop                             ; FCFAA0  [ 3]
+	.long ToneEditField_A6_SubGainTouchDepth      ; FCFAA4  [ 4]
+	.long ToneEditField_A6_SubGain                ; FCFAA8  [ 5]
+	.long sub_FD546B                              ; FCFAAC  [ 6]
+	.long PanelOp_Nop                             ; FCFAB0  [ 7]
+	.long sub_FD546F                              ; FCFAB4  [ 8]
+	.long sub_FD548D                              ; FCFAB8  [ 9]
+	.long sub_FD54B9                              ; FCFABC  [10]
+	.long sub_FD54E5                              ; FCFAC0  [11]
+	.long sub_FD5512                              ; FCFAC4  [12]
+	.long PanelOp_Nop                             ; FCFAC8  [13]
+	.long PanelOp_Nop                             ; FCFACC  [14]
+	.long sub_FD555C                              ; FCFAD0  [15]
+	.long sub_FD553F                              ; FCFAD4  [16]
+	.long 0x00000000                              ; FCFAD8  [17] zero
+
+; ToneEditPage_A7_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: ToneEditPage_A7_KeyDispatch at 0xFD3F6B.
+ToneEditPage_A7_OpTable:
+	.long PanelOp_Nop                             ; FCFADC  [ 0]
+	.long ToneEditField_A7_ResoMode               ; FCFAE0  [ 1]
+	.long ToneEditField_A7_MutingSlope            ; FCFAE4  [ 2]
+	.long ToneEditField_A7_KeyFollowLow           ; FCFAE8  [ 3]
+	.long ToneEditField_A7_KeyFollowBreak         ; FCFAEC  [ 4]
+	.long ToneEditField_A7_KeyFollowHigh          ; FCFAF0  [ 5]
+	.long sub_FD5B5F                              ; FCFAF4  [ 6]
+	.long PanelOp_Nop                             ; FCFAF8  [ 7]
+	.long sub_FD5B63                              ; FCFAFC  [ 8]
+	.long sub_FD5B81                              ; FCFB00  [ 9]
+	.long sub_FD5BAD                              ; FCFB04  [10]
+	.long sub_FD5BD9                              ; FCFB08  [11]
+	.long sub_FD5C06                              ; FCFB0C  [12]
+	.long PanelOp_Nop                             ; FCFB10  [13]
+	.long PanelOp_Nop                             ; FCFB14  [14]
+	.long sub_FD5C4B                              ; FCFB18  [15]
+	.long sub_FD5C33                              ; FCFB1C  [16]
+	.long 0x00000000                              ; FCFB20  [17] zero
+
+; ToneEditPage_A8_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: ToneEditPage_A8_KeyDispatch at 0xFD3FBC.
+ToneEditPage_A8_OpTable:
+	.long PanelOp_Nop                             ; FCFB24  [ 0]
+	.long sub_FD5C63                              ; FCFB28  [ 1]
+	.long sub_FD5CB8                              ; FCFB2C  [ 2]
+	.long sub_FD5D01                              ; FCFB30  [ 3]
+	.long sub_FD5D56                              ; FCFB34  [ 4]
+	.long sub_FD5DA3                              ; FCFB38  [ 5]
+	.long sub_FD5F3E                              ; FCFB3C  [ 6]
+	.long sub_FD6043                              ; FCFB40  [ 7]
+	.long PanelOp_Nop                             ; FCFB44  [ 8]
+	.long PanelOp_Nop                             ; FCFB48  [ 9]
+	.long PanelOp_Nop                             ; FCFB4C  [10]
+	.long PanelOp_Nop                             ; FCFB50  [11]
+	.long PanelOp_Nop                             ; FCFB54  [12]
+	.long PanelOp_Nop                             ; FCFB58  [13]
+	.long PanelOp_Nop                             ; FCFB5C  [14]
+	.long sub_FD6057                              ; FCFB60  [15]
+	.long PanelOp_Nop                             ; FCFB64  [16]
+	.long 0x00000000                              ; FCFB68  [17] zero
+
+; PanelOpTable_FCFB6C -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0A95F (prom_b) at 0xF0A993.
+PanelOpTable_FCFB6C:
+	.long PanelOp_Nop                             ; FCFB6C  [ 0]
+	.long PanelOp_Nop                             ; FCFB70  [ 1]
+	.long PanelOp_Nop                             ; FCFB74  [ 2]
+	.long PanelOp_Nop                             ; FCFB78  [ 3]
+	.long PanelOp_Nop                             ; FCFB7C  [ 4]
+	.long PanelOp_Nop                             ; FCFB80  [ 5]
+	.long PanelOp_Nop                             ; FCFB84  [ 6]
+	.long PanelOp_Nop                             ; FCFB88  [ 7]
+	.long 0x00f0b533                              ; FCFB8C  [ 8] prom_b sub_F0B533
+	.long PanelOp_Nop                             ; FCFB90  [ 9]
+	.long 0x00f0b578                              ; FCFB94  [10] prom_b sub_F0B578
+	.long 0x00f0b62f                              ; FCFB98  [11] prom_b sub_F0B62F
+	.long 0x00f0b6d7                              ; FCFB9C  [12] prom_b sub_F0B6D7
+	.long PanelOp_Nop                             ; FCFBA0  [13]
+	.long PanelOp_Nop                             ; FCFBA4  [14]
+	.long 0x00f0b6ef                              ; FCFBA8  [15] prom_b sub_F0B6EF
+	.long PanelOp_Nop                             ; FCFBAC  [16]
+	.long 0x00000000                              ; FCFBB0  [17] zero
+
+; PanelOpTable_FCFBB4 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0A9BF (prom_b) at 0xF0A9EC.
+PanelOpTable_FCFBB4:
+	.long 0x00f0b70f                              ; FCFBB4  [ 0] prom_b sub_F0B70F
+	.long 0x00f0b713                              ; FCFBB8  [ 1] prom_b sub_F0B713
+	.long 0x00f0b717                              ; FCFBBC  [ 2] prom_b sub_F0B717
+	.long 0x00f0b71b                              ; FCFBC0  [ 3] prom_b sub_F0B71B
+	.long 0x00f0b71f                              ; FCFBC4  [ 4] prom_b sub_F0B71F
+	.long 0x00f0b723                              ; FCFBC8  [ 5] prom_b sub_F0B723
+	.long 0x00f0b727                              ; FCFBCC  [ 6] prom_b sub_F0B727
+	.long 0x00f0b747                              ; FCFBD0  [ 7] prom_b sub_F0B747
+	.long 0x00f0b74b                              ; FCFBD4  [ 8] prom_b sub_F0B74B
+	.long 0x00f0b80d                              ; FCFBD8  [ 9] prom_b sub_F0B80D
+	.long PanelOp_Nop                             ; FCFBDC  [10]
+	.long PanelOp_Nop                             ; FCFBE0  [11]
+	.long PanelOp_Nop                             ; FCFBE4  [12]
+	.long PanelOp_Nop                             ; FCFBE8  [13]
+	.long PanelOp_Nop                             ; FCFBEC  [14]
+	.long 0x00f0b81d                              ; FCFBF0  [15] prom_b sub_F0B81D
+	.long PanelOp_Nop                             ; FCFBF4  [16]
+	.long 0x00000000                              ; FCFBF8  [17] zero
+
+; PanelOpTable_FCFBFC -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0AA10 (prom_b) at 0xF0AA3D; sub_F0AA61 (prom_b) at 0xF0AA8E.
+PanelOpTable_FCFBFC:
+	.long 0x00f0add4                              ; FCFBFC  [ 0] prom_b sub_F0ADD4
+	.long 0x00f0ae9b                              ; FCFC00  [ 1] prom_b sub_F0AE9B
+	.long 0x00f0af66                              ; FCFC04  [ 2] prom_b sub_F0AF66
+	.long 0x00f0b041                              ; FCFC08  [ 3] prom_b sub_F0B041
+	.long 0x00f0b0ff                              ; FCFC0C  [ 4] prom_b sub_F0B0FF
+	.long 0x00f0b1a9                              ; FCFC10  [ 5] prom_b sub_F0B1A9
+	.long 0x00f0b228                              ; FCFC14  [ 6] prom_b sub_F0B228
+	.long 0x00f0b2e2                              ; FCFC18  [ 7] prom_b sub_F0B2E2
+	.long PanelOp_Nop                             ; FCFC1C  [ 8]
+	.long 0x00f0b39c                              ; FCFC20  [ 9] prom_b sub_F0B39C
+	.long 0x00f0b462                              ; FCFC24  [10] prom_b sub_F0B462
+	.long PanelOp_Nop                             ; FCFC28  [11]
+	.long PanelOp_Nop                             ; FCFC2C  [12]
+	.long PanelOp_Nop                             ; FCFC30  [13]
+	.long PanelOp_Nop                             ; FCFC34  [14]
+	.long 0x00f0b51b                              ; FCFC38  [15] prom_b sub_F0B51B
+	.long PanelOp_Nop                             ; FCFC3C  [16]
+	.long 0x00000000                              ; FCFC40  [17] zero
+
+; PanelOpTable_FCFC44 -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0A90E (prom_b) at 0xF0A93B.
+PanelOpTable_FCFC44:
+	.long 0x00f0c0bb                              ; FCFC44  [ 0] prom_b sub_F0C0BB
+	.long 0x00f0c35d                              ; FCFC48  [ 1] prom_b sub_F0C35D
+	.long 0x00f0c3f9                              ; FCFC4C  [ 2] prom_b sub_F0C3F9
+	.long 0x00f0c47b                              ; FCFC50  [ 3] prom_b sub_F0C47B
+	.long PanelOp_Nop                             ; FCFC54  [ 4]
+	.long 0x00f0c528                              ; FCFC58  [ 5] prom_b sub_F0C528
+	.long PanelOp_Nop                             ; FCFC5C  [ 6]
+	.long PanelOp_Nop                             ; FCFC60  [ 7]
+	.long PanelOp_Nop                             ; FCFC64  [ 8]
+	.long PanelOp_Nop                             ; FCFC68  [ 9]
+	.long PanelOp_Nop                             ; FCFC6C  [10]
+	.long 0x00f0c616                              ; FCFC70  [11] prom_b sub_F0C616
+	.long PanelOp_Nop                             ; FCFC74  [12]
+	.long PanelOp_Nop                             ; FCFC78  [13]
+	.long PanelOp_Nop                             ; FCFC7C  [14]
+	.long 0x00f0c70a                              ; FCFC80  [15] prom_b sub_F0C70A
+	.long PanelOp_Nop                             ; FCFC84  [16]
+	.long 0x00000000                              ; FCFC88  [17] zero
+
+; PanelOpTable_FCFC8C -- 17 handler addresses + the zero word (72 bytes), one per
+; panel operation 0..16; see the block header for the reader shape.
+; Read by: sub_F0AAF9 (prom_b) at 0xF0AB26.
+PanelOpTable_FCFC8C:
+	.long PanelOp_Nop                             ; FCFC8C  [ 0]
+	.long 0x00f0ab4b                              ; FCFC90  [ 1] prom_b sub_F0AB4B
+	.long 0x00f0abb9                              ; FCFC94  [ 2] prom_b sub_F0ABB9
+	.long 0x00f0ac43                              ; FCFC98  [ 3] prom_b sub_F0AC43
+	.long PanelOp_Nop                             ; FCFC9C  [ 4]
+	.long PanelOp_Nop                             ; FCFCA0  [ 5]
+	.long PanelOp_Nop                             ; FCFCA4  [ 6]
+	.long PanelOp_Nop                             ; FCFCA8  [ 7]
+	.long 0x00f0acb1                              ; FCFCAC  [ 8] prom_b sub_F0ACB1
+	.long 0x00f0acce                              ; FCFCB0  [ 9] prom_b sub_F0ACCE
+	.long 0x00f0ad02                              ; FCFCB4  [10] prom_b sub_F0AD02
+	.long 0x00f0ad36                              ; FCFCB8  [11] prom_b sub_F0AD36
+	.long 0x00f0ad75                              ; FCFCBC  [12] prom_b sub_F0AD75
+	.long PanelOp_Nop                             ; FCFCC0  [13]
+	.long PanelOp_Nop                             ; FCFCC4  [14]
+	.long 0x00f0adbc                              ; FCFCC8  [15] prom_b sub_F0ADBC
+	.long PanelOp_Nop                             ; FCFCCC  [16]
+	.long 0x00000000                              ; FCFCD0  [17] zero
+
+; IndexMap_FCFCD4 -- 19 bytes, a byte-to-byte map (values 0x00..0x09).
+; Read by: sub_F0C291 (prom_b) at 0xF0C2AF: sub_F0C291 (prom_b): A = this[v], v from call 0xFD6C7B(3, &v).
+;          COUNT 19 is the extent to the next reader-named base; the reader
+;          has no bound.  What the index and the values denote: not established.
+IndexMap_FCFCD4:
+	.byte 0x00, 0x01, 0x08, 0x09, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x06, 0x00, 0x01, 0x02  ; FCFCD4  [  0]
+	.byte 0x03, 0x04, 0x06  ; FCFCE4  [ 16]
+
+; ScreenCode80_Handlers -- 32 handler addresses for screen codes 0x80-0x9F.
+; Read by: sub_FD2014 at 0xFD2186; sub_FD21E9 at 0xFD22E4; sub_FD21E9 at 0xFD24B3: `cp (0x207C),0x80 / jr c` + `cp (0x207C),
+;          0xA0 / jr nc` bound the code, then `ld C,4 / mul BC,(0x207C) /
+;          sub XBC,0x200 / add XBC,0x00FCFCE7 / ld XBC,(XBC) / push <ret> /
+;          jp (XBC)`.  COUNT 32 is that bound.  (0x207C) holds the screen code.
+ScreenCode80_Handlers:
+	.long sub_FDAD44                              ; FCFCE7  [ 0]
+	.long ScreenCode_Nop                          ; FCFCEB  [ 1]
+	.long sub_FDC5B5                              ; FCFCEF  [ 2]
+	.long sub_FDC84C                              ; FCFCF3  [ 3]
+	.long sub_FDC95B                              ; FCFCF7  [ 4]
+	.long sub_FDCA77                              ; FCFCFB  [ 5]
+	.long sub_FDCB93                              ; FCFCFF  [ 6]
+	.long sub_FDB22F                              ; FCFD03  [ 7]
+	.long sub_FDB38C                              ; FCFD07  [ 8]
+	.long sub_FDB44D                              ; FCFD0B  [ 9]
+	.long sub_FDB529                              ; FCFD0F  [10]
+	.long sub_FDB693                              ; FCFD13  [11]
+	.long sub_FDB8D9                              ; FCFD17  [12]
+	.long sub_FDB9AB                              ; FCFD1B  [13]
+	.long sub_FDBAE7                              ; FCFD1F  [14]
+	.long sub_FDBBC3                              ; FCFD23  [15]
+	.long sub_FDC0ED                              ; FCFD27  [16]
+	.long sub_FDC27B                              ; FCFD2B  [17]
+	.long sub_FDC2A7                              ; FCFD2F  [18]
+	.long sub_FDC2CF                              ; FCFD33  [19]
+	.long sub_FDC2F7                              ; FCFD37  [20]
+	.long sub_FDC317                              ; FCFD3B  [21]
+	.long sub_FDC333                              ; FCFD3F  [22]
+	.long sub_FDC405                              ; FCFD43  [23]
+	.long sub_FDC4C6                              ; FCFD47  [24]
+	.long sub_FDC5A2                              ; FCFD4B  [25]
+	.long ScreenCode_Nop                          ; FCFD4F  [26]
+	.long sub_FDBEDE                              ; FCFD53  [27]
+	.long sub_FDC0E1                              ; FCFD57  [28]
+	.long sub_FDD0D4                              ; FCFD5B  [29]
+	.long sub_FDCDE0                              ; FCFD5F  [30]
+	.long sub_FDCFEB                              ; FCFD63  [31]
+
+; ScreenCodeC0_Handlers -- 16 handler addresses for screen codes 0xC0-0xCF.
+; Read by: sub_FD2014 at 0xFD21B4; sub_FD21E9 at 0xFD2315; sub_FD21E9 at 0xFD24E1: the same shape as ScreenCode80_Handlers with
+;          bounds 0xC0/0xD0 and `sub XBC,0x300`.  COUNT 16 is that bound.
+;          Entry 3 is ToneEditPage_A3_PositionParameter, whose own header
+;          says Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k.
+ScreenCodeC0_Handlers:
+	.long sub_FDD437                              ; FCFD67  [ 0]
+	.long sub_FDD7F7                              ; FCFD6B  [ 1]
+	.long sub_FDD7F8                              ; FCFD6F  [ 2]
+	.long ToneEditPage_A3_PositionParameter       ; FCFD73  [ 3]
+	.long ToneEditPage_A4_PositionMovement        ; FCFD77  [ 4]
+	.long ToneEditPage_A5_FittingMutingTuning     ; FCFD7B  [ 5]
+	.long ToneEditPage_A6_TouchDepth              ; FCFD7F  [ 6]
+	.long ToneEditPage_A7_ResoModeKeyFollow       ; FCFD83  [ 7]
+	.long sub_FDDF36                              ; FCFD87  [ 8]
+	.long ScreenCode_Nop                          ; FCFD8B  [ 9]
+	.long sub_FDD272                              ; FCFD8F  [10]
+	.long sub_FDD27F                              ; FCFD93  [11]
+	.long sub_FDD436                              ; FCFD97  [12]
+	.long sub_FDBBD6                              ; FCFD9B  [13]
+	.long ScreenCode_Nop                          ; FCFD9F  [14]
+	.long ScreenCode_Nop                          ; FCFDA3  [15]
+
 sub_FCFDA7:
 	link XIZ,0xfff8                                      ; FCFDA7  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FCFDAB  be fe 31
@@ -116560,6 +117425,8 @@ sub_FCFDA7:
 .LFCFE3F:
 	unlk XIZ                                             ; FCFE3F  ee 0d
 	ret                                                  ; FCFE41  0e
+; sub_FCFE42 -- a handler: an entry of DispatchTable_FCF000
+sub_FCFE42:
 	link XIZ,0xfffc                                      ; FCFE42  ee 0c fc ff
 	pushw hl                                             ; FCFE46  2b
 	lda xbc, (xiz-2)                                     ; FCFE47  be fe 31
@@ -116602,6 +117469,8 @@ sub_FCFDA7:
 	popw hl                                              ; FCFE9D  4b
 	unlk XIZ                                             ; FCFE9E  ee 0d
 	ret                                                  ; FCFEA0  0e
+; sub_FCFEA1 -- a handler: an entry of DispatchTable_FCF000
+sub_FCFEA1:
 	link XIZ,0xfff6                                      ; FCFEA1  ee 0c f6 ff
 	pushw hl                                             ; FCFEA5  2b
 	lda xbc, (xiz-2)                                     ; FCFEA6  be fe 31
@@ -116668,6 +117537,8 @@ sub_FCFDA7:
 	popw hl                                              ; FCFF42  4b
 	unlk XIZ                                             ; FCFF43  ee 0d
 	ret                                                  ; FCFF45  0e
+; sub_FCFF46 -- a handler: an entry of DispatchTable_FCF000
+sub_FCFF46:
 	link XIZ,0xfff8                                      ; FCFF46  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FCFF4A  be fe 31
 	push XBC                                             ; FCFF4D  39
@@ -116722,6 +117593,8 @@ sub_FCFDA7:
 .LFCFFC7:
 	unlk XIZ                                             ; FCFFC7  ee 0d
 	ret                                                  ; FCFFC9  0e
+; sub_FCFFCA -- a handler: an entry of DispatchTable_FCF000
+sub_FCFFCA:
 	link XIZ,0xffec                                      ; FCFFCA  ee 0c ec ff
 	pushw hl                                             ; FCFFCE  2b
 	pushw de                                             ; FCFFCF  2a
@@ -116791,6 +117664,8 @@ sub_FCFDA7:
 	popw hl                                              ; FD0067  4b
 	unlk XIZ                                             ; FD0068  ee 0d
 	ret                                                  ; FD006A  0e
+; sub_FD006B -- a handler: an entry of DispatchTable_FCF000
+sub_FD006B:
 	link XIZ,0xffec                                      ; FD006B  ee 0c ec ff
 	pushw hl                                             ; FD006F  2b
 	pushw de                                             ; FD0070  2a
@@ -116848,6 +117723,8 @@ sub_FCFDA7:
 	popw hl                                              ; FD00F1  4b
 	unlk XIZ                                             ; FD00F2  ee 0d
 	ret                                                  ; FD00F4  0e
+; sub_FD00F5 -- a handler: an entry of DispatchTable_FCF000
+sub_FD00F5:
 	link XIZ,0xffec                                      ; FD00F5  ee 0c ec ff
 	pushw hl                                             ; FD00F9  2b
 	pushw de                                             ; FD00FA  2a
@@ -116904,6 +117781,8 @@ sub_FCFDA7:
 	popw hl                                              ; FD0179  4b
 	unlk XIZ                                             ; FD017A  ee 0d
 	ret                                                  ; FD017C  0e
+; sub_FD017D -- a handler: an entry of DispatchTable_FCF000
+sub_FD017D:
 	link XIZ,0xfff8                                      ; FD017D  ee 0c f8 ff
 	pushw hl                                             ; FD0181  2b
 	pushw de                                             ; FD0182  2a
@@ -116999,6 +117878,8 @@ sub_FCFDA7:
 	popw hl                                              ; FD0263  4b
 	unlk XIZ                                             ; FD0264  ee 0d
 	ret                                                  ; FD0266  0e
+; sub_FD0267 -- a handler: an entry of DispatchTable_FCF000
+sub_FD0267:
 	link XIZ,0xfff2                                      ; FD0267  ee 0c f2 ff
 	push XIX                                             ; FD026B  3c
 	lda xix, (xiz-14)                                    ; FD026C  be f2 34
@@ -117035,6 +117916,8 @@ sub_FCFDA7:
 	pop XIX                                              ; FD02C7  5c
 	unlk XIZ                                             ; FD02C8  ee 0d
 	ret                                                  ; FD02CA  0e
+; sub_FD02CB -- a handler: an entry of DispatchTable_FCF000
+sub_FD02CB:
 	link XIZ,0xfff8                                      ; FD02CB  ee 0c f8 ff
 	pushw hl                                             ; FD02CF  2b
 	lda xbc, (xiz-2)                                     ; FD02D0  be fe 31
@@ -117109,6 +117992,8 @@ sub_FCFDA7:
 	popw hl                                              ; FD0370  4b
 	unlk XIZ                                             ; FD0371  ee 0d
 	ret                                                  ; FD0373  0e
+; sub_FD0374 -- a handler: an entry of DispatchTable_FCF000
+sub_FD0374:
 	link XIZ,0xfffa                                      ; FD0374  ee 0c fa ff
 	pushw hl                                             ; FD0378  2b
 	lda xbc, (xiz-2)                                     ; FD0379  be fe 31
@@ -117175,6 +118060,8 @@ sub_FCFDA7:
 	popw hl                                              ; FD0405  4b
 	unlk XIZ                                             ; FD0406  ee 0d
 	ret                                                  ; FD0408  0e
+; sub_FD0409 -- a handler: an entry of DispatchTable_FCF000
+sub_FD0409:
 	link XIZ,0xfffc                                      ; FD0409  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD040D  be fe 31
 	push XBC                                             ; FD0410  39
@@ -117216,6 +118103,8 @@ sub_FCFDA7:
 .LFD046C:
 	unlk XIZ                                             ; FD046C  ee 0d
 	ret                                                  ; FD046E  0e
+; sub_FD046F -- a handler: an entry of DispatchTable_FCF000
+sub_FD046F:
 	link XIZ,0xfffc                                      ; FD046F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0473  be fe 31
 	push XBC                                             ; FD0476  39
@@ -117257,6 +118146,8 @@ sub_FCFDA7:
 .LFD04D2:
 	unlk XIZ                                             ; FD04D2  ee 0d
 	ret                                                  ; FD04D4  0e
+; sub_FD04D5 -- a handler: an entry of DispatchTable_FCF000
+sub_FD04D5:
 	link XIZ,0xfffe                                      ; FD04D5  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD04D9  be fe 31
 	push XBC                                             ; FD04DC  39
@@ -117291,6 +118182,8 @@ sub_FCFDA7:
 .LFD051E:
 	unlk XIZ                                             ; FD051E  ee 0d
 	ret                                                  ; FD0520  0e
+; sub_FD0521 -- a handler: an entry of DispatchTable_FCF000
+sub_FD0521:
 	link XIZ,0x0000                                      ; FD0521  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0525  8e 08 3f 00
 	jr nz, .LFD053A                                      ; FD0529  6e 0f
@@ -117385,6 +118278,8 @@ sub_FD058E:
 .LFD05FF:
 	unlk XIZ                                             ; FD05FF  ee 0d
 	ret                                                  ; FD0601  0e
+; sub_FD0602 -- a handler: an entry of PanelOpTable_FCF773
+sub_FD0602:
 	link XIZ,0x0000                                      ; FD0602  ee 0c 00 00
 	pushw 0x01                                           ; FD0606  0b 01 00
 	ld BC,(XIZ+0x08)                                     ; FD0609  9e 08 21
@@ -117400,6 +118295,8 @@ sub_FD058E:
 	inc 2,XSP                                            ; FD0626  ef 62
 	unlk XIZ                                             ; FD0628  ee 0d
 	ret                                                  ; FD062A  0e
+; sub_FD062B -- a handler: an entry of PanelOpTable_FCF773
+sub_FD062B:
 	link XIZ,0x0000                                      ; FD062B  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD062F  9e 08 21
 	extz BC                                              ; FD0632  d9 12
@@ -117408,6 +118305,8 @@ sub_FD058E:
 	popw bc                                              ; FD0639  49
 	unlk XIZ                                             ; FD063A  ee 0d
 	ret                                                  ; FD063C  0e
+; sub_FD063D -- a handler: an entry of PanelOpTable_FCF773
+sub_FD063D:
 	link XIZ,0x0000                                      ; FD063D  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD0641  9e 08 21
 	extz BC                                              ; FD0644  d9 12
@@ -117417,6 +118316,8 @@ sub_FD058E:
 	pop XBC                                              ; FD064E  59
 	unlk XIZ                                             ; FD064F  ee 0d
 	ret                                                  ; FD0651  0e
+; sub_FD0652 -- a handler: an entry of PanelOpTable_FCF773
+sub_FD0652:
 	link XIZ,0x0000                                      ; FD0652  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD0656  9e 08 21
 	extz BC                                              ; FD0659  d9 12
@@ -117426,6 +118327,8 @@ sub_FD058E:
 	pop XBC                                              ; FD0663  59
 	unlk XIZ                                             ; FD0664  ee 0d
 	ret                                                  ; FD0666  0e
+; sub_FD0667 -- a handler: an entry of PanelOpTable_FCF773
+sub_FD0667:
 	link XIZ,0xfffe                                      ; FD0667  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD066B  be fe 31
 	push XBC                                             ; FD066E  39
@@ -117442,6 +118345,8 @@ sub_FD058E:
 .LFD0688:
 	unlk XIZ                                             ; FD0688  ee 0d
 	ret                                                  ; FD068A  0e
+; sub_FD068B -- a handler: an entry of PanelOpTable_FCF773
+sub_FD068B:
 	link XIZ,0xfffe                                      ; FD068B  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD068F  be fe 31
 	push XBC                                             ; FD0692  39
@@ -117458,6 +118363,8 @@ sub_FD058E:
 .LFD06AC:
 	unlk XIZ                                             ; FD06AC  ee 0d
 	ret                                                  ; FD06AE  0e
+; sub_FD06AF -- a handler: an entry of PanelOpTable_FCF773
+sub_FD06AF:
 	link XIZ,0xfffe                                      ; FD06AF  ee 0c fe ff
 	pushw hl                                             ; FD06B3  2b
 	lda xbc, (xiz-2)                                     ; FD06B4  be fe 31
@@ -117498,6 +118405,8 @@ sub_FD058E:
 	popw hl                                              ; FD0707  4b
 	unlk XIZ                                             ; FD0708  ee 0d
 	ret                                                  ; FD070A  0e
+; sub_FD070B -- a handler: an entry of PanelOpTable_FCF773
+sub_FD070B:
 	link XIZ,0xfffe                                      ; FD070B  ee 0c fe ff
 	pushw hl                                             ; FD070F  2b
 	lda xbc, (xiz-2)                                     ; FD0710  be fe 31
@@ -117538,6 +118447,8 @@ sub_FD058E:
 	popw hl                                              ; FD0763  4b
 	unlk XIZ                                             ; FD0764  ee 0d
 	ret                                                  ; FD0766  0e
+; sub_FD0767 -- a handler: an entry of PanelOpTable_FCF773
+sub_FD0767:
 	link XIZ,0xfffc                                      ; FD0767  ee 0c fc ff
 	pushw hl                                             ; FD076B  2b
 	pushw de                                             ; FD076C  2a
@@ -117639,6 +118550,8 @@ sub_FD058E:
 	popw hl                                              ; FD083B  4b
 	unlk XIZ                                             ; FD083C  ee 0d
 	ret                                                  ; FD083E  0e
+; sub_FD083F -- a handler: an entry of PanelOpTable_FCF773
+sub_FD083F:
 	link XIZ,0x0000                                      ; FD083F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0843  8e 08 3f 00
 	jr nz, .LFD0854                                      ; FD0847  6e 0b
@@ -117649,6 +118562,8 @@ sub_FD058E:
 .LFD0854:
 	unlk XIZ                                             ; FD0854  ee 0d
 	ret                                                  ; FD0856  0e
+; sub_FD0857 -- a handler: an entry of PanelOpTable_FCF773
+sub_FD0857:
 	link XIZ,0xfffe                                      ; FD0857  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD085B  be fe 31
 	push XBC                                             ; FD085E  39
@@ -117669,6 +118584,8 @@ sub_FD058E:
 .LFD0880:
 	unlk XIZ                                             ; FD0880  ee 0d
 	ret                                                  ; FD0882  0e
+; sub_FD0883 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD0883:
 	link XIZ,0x0000                                      ; FD0883  ee 0c 00 00
 	pushw 0x02                                           ; FD0887  0b 02 00
 	ld BC,(XIZ+0x08)                                     ; FD088A  9e 08 21
@@ -117681,6 +118598,8 @@ sub_FD058E:
 	inc 0,XSP                                            ; FD089E  ef 60
 	unlk XIZ                                             ; FD08A0  ee 0d
 	ret                                                  ; FD08A2  0e
+; sub_FD08A3 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD08A3:
 	link XIZ,0x0000                                      ; FD08A3  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08A7  9e 08 21
 	extz BC                                              ; FD08AA  d9 12
@@ -117689,6 +118608,8 @@ sub_FD058E:
 	popw bc                                              ; FD08B1  49
 	unlk XIZ                                             ; FD08B2  ee 0d
 	ret                                                  ; FD08B4  0e
+; sub_FD08B5 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD08B5:
 	link XIZ,0x0000                                      ; FD08B5  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08B9  9e 08 21
 	extz BC                                              ; FD08BC  d9 12
@@ -117698,6 +118619,8 @@ sub_FD058E:
 	pop XBC                                              ; FD08C6  59
 	unlk XIZ                                             ; FD08C7  ee 0d
 	ret                                                  ; FD08C9  0e
+; sub_FD08CA -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD08CA:
 	link XIZ,0x0000                                      ; FD08CA  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08CE  9e 08 21
 	extz BC                                              ; FD08D1  d9 12
@@ -117707,6 +118630,8 @@ sub_FD058E:
 	pop XBC                                              ; FD08DB  59
 	unlk XIZ                                             ; FD08DC  ee 0d
 	ret                                                  ; FD08DE  0e
+; sub_FD08DF -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD08DF:
 	link XIZ,0xfffe                                      ; FD08DF  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD08E3  be fe 31
 	push XBC                                             ; FD08E6  39
@@ -117723,6 +118648,8 @@ sub_FD058E:
 .LFD0900:
 	unlk XIZ                                             ; FD0900  ee 0d
 	ret                                                  ; FD0902  0e
+; sub_FD0903 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD0903:
 	link XIZ,0xfffe                                      ; FD0903  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0907  be fe 31
 	push XBC                                             ; FD090A  39
@@ -117739,6 +118666,8 @@ sub_FD058E:
 .LFD0924:
 	unlk XIZ                                             ; FD0924  ee 0d
 	ret                                                  ; FD0926  0e
+; sub_FD0927 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD0927:
 	link XIZ,0xfffe                                      ; FD0927  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD092B  8e 08 3f 00
 	jr z, .LFD095A                                       ; FD092F  66 29
@@ -117759,6 +118688,8 @@ sub_FD058E:
 .LFD095A:
 	unlk XIZ                                             ; FD095A  ee 0d
 	ret                                                  ; FD095C  0e
+; sub_FD095D -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD095D:
 	link XIZ,0xfffe                                      ; FD095D  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0961  be fe 31
 	push XBC                                             ; FD0964  39
@@ -117785,6 +118716,8 @@ sub_FD058E:
 .LFD099B:
 	unlk XIZ                                             ; FD099B  ee 0d
 	ret                                                  ; FD099D  0e
+; sub_FD099E -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD099E:
 	link XIZ,0xfffe                                      ; FD099E  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD09A2  be fe 31
 	push XBC                                             ; FD09A5  39
@@ -117811,6 +118744,8 @@ sub_FD058E:
 .LFD09DC:
 	unlk XIZ                                             ; FD09DC  ee 0d
 	ret                                                  ; FD09DE  0e
+; sub_FD09DF -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD09DF:
 	link XIZ,0xfffe                                      ; FD09DF  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD09E3  be fe 31
 	push XBC                                             ; FD09E6  39
@@ -117837,6 +118772,8 @@ sub_FD058E:
 .LFD0A1D:
 	unlk XIZ                                             ; FD0A1D  ee 0d
 	ret                                                  ; FD0A1F  0e
+; sub_FD0A20 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD0A20:
 	link XIZ,0xfffe                                      ; FD0A20  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0A24  be fe 31
 	push XBC                                             ; FD0A27  39
@@ -117863,6 +118800,8 @@ sub_FD058E:
 .LFD0A5E:
 	unlk XIZ                                             ; FD0A5E  ee 0d
 	ret                                                  ; FD0A60  0e
+; sub_FD0A61 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD0A61:
 	link XIZ,0x0000                                      ; FD0A61  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0A65  8e 08 3f 00
 	jr z, .LFD0A76                                       ; FD0A69  66 0b
@@ -117873,6 +118812,8 @@ sub_FD058E:
 .LFD0A76:
 	unlk XIZ                                             ; FD0A76  ee 0d
 	ret                                                  ; FD0A78  0e
+; sub_FD0A79 -- a handler: an entry of PanelOpTable_FCF7BB
+sub_FD0A79:
 	link XIZ,0xfffe                                      ; FD0A79  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0A7D  be fe 31
 	push XBC                                             ; FD0A80  39
@@ -118071,6 +119012,8 @@ sub_FD0C07:
 .LFD0C55:
 	unlk XIZ                                             ; FD0C55  ee 0d
 	ret                                                  ; FD0C57  0e
+; sub_FD0C58 -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0C58:
 	link XIZ,0xfff8                                      ; FD0C58  ee 0c f8 ff
 	pushw hl                                             ; FD0C5C  2b
 	lda xbc, (xiz-2)                                     ; FD0C5D  be fe 31
@@ -118131,6 +119074,8 @@ sub_FD0C07:
 	popw hl                                              ; FD0CE9  4b
 	unlk XIZ                                             ; FD0CEA  ee 0d
 	ret                                                  ; FD0CEC  0e
+; sub_FD0CED -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0CED:
 	link XIZ,0xfffa                                      ; FD0CED  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD0CF1  be fe 31
 	push XBC                                             ; FD0CF4  39
@@ -118179,6 +119124,8 @@ sub_FD0C07:
 .LFD0D5E:
 	unlk XIZ                                             ; FD0D5E  ee 0d
 	ret                                                  ; FD0D60  0e
+; sub_FD0D61 -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0D61:
 	link XIZ,0xffec                                      ; FD0D61  ee 0c ec ff
 	pushw hl                                             ; FD0D65  2b
 	pushw de                                             ; FD0D66  2a
@@ -118261,6 +119208,8 @@ sub_FD0C07:
 	popw hl                                              ; FD0E18  4b
 	unlk XIZ                                             ; FD0E19  ee 0d
 	ret                                                  ; FD0E1B  0e
+; sub_FD0E1C -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0E1C:
 	link XIZ,0xffec                                      ; FD0E1C  ee 0c ec ff
 	pushw hl                                             ; FD0E20  2b
 	push XIX                                             ; FD0E21  3c
@@ -118334,6 +119283,8 @@ sub_FD0E49:
 	popw hl                                              ; FD0EC6  4b
 	unlk XIZ                                             ; FD0EC7  ee 0d
 	ret                                                  ; FD0EC9  0e
+; sub_FD0ECA -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0ECA:
 	link XIZ,0xffec                                      ; FD0ECA  ee 0c ec ff
 	pushw hl                                             ; FD0ECE  2b
 	pushw de                                             ; FD0ECF  2a
@@ -118400,6 +119351,8 @@ sub_FD0E49:
 	popw hl                                              ; FD0F64  4b
 	unlk XIZ                                             ; FD0F65  ee 0d
 	ret                                                  ; FD0F67  0e
+; sub_FD0F68 -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0F68:
 	link XIZ,0x0000                                      ; FD0F68  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0F6C  8e 08 3f 00
 	jr z, .LFD0F76                                       ; FD0F70  66 04
@@ -118407,6 +119360,8 @@ sub_FD0E49:
 .LFD0F76:
 	unlk XIZ                                             ; FD0F76  ee 0d
 	ret                                                  ; FD0F78  0e
+; sub_FD0F79 -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0F79:
 	link XIZ,0x0000                                      ; FD0F79  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0F7D  8e 08 3f 00
 	jr nz, .LFD0F90                                      ; FD0F81  6e 0d
@@ -118424,6 +119379,8 @@ sub_FD0E49:
 .LFD0F9F:
 	unlk XIZ                                             ; FD0F9F  ee 0d
 	ret                                                  ; FD0FA1  0e
+; sub_FD0FA2 -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0FA2:
 	link XIZ,0x0000                                      ; FD0FA2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FA6  8e 08 3f 00
 	jr nz, .LFD0FB9                                      ; FD0FAA  6e 0d
@@ -118441,6 +119398,8 @@ sub_FD0E49:
 .LFD0FC8:
 	unlk XIZ                                             ; FD0FC8  ee 0d
 	ret                                                  ; FD0FCA  0e
+; sub_FD0FCB -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0FCB:
 	link XIZ,0x0000                                      ; FD0FCB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FCF  8e 08 3f 00
 	jr nz, .LFD0FE2                                      ; FD0FD3  6e 0d
@@ -118458,6 +119417,8 @@ sub_FD0E49:
 .LFD0FF1:
 	unlk XIZ                                             ; FD0FF1  ee 0d
 	ret                                                  ; FD0FF3  0e
+; sub_FD0FF4 -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD0FF4:
 	link XIZ,0x0000                                      ; FD0FF4  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FF8  8e 08 3f 00
 	jr z, .LFD100D                                       ; FD0FFC  66 0f
@@ -118469,6 +119430,8 @@ sub_FD0E49:
 .LFD100D:
 	unlk XIZ                                             ; FD100D  ee 0d
 	ret                                                  ; FD100F  0e
+; sub_FD1010 -- a handler: an entry of PanelOpTable_FCF80C
+sub_FD1010:
 	link XIZ,0x0000                                      ; FD1010  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1014  8e 08 3f 00
 	jr nz, .LFD1025                                      ; FD1018  6e 0b
@@ -118479,6 +119442,8 @@ sub_FD0E49:
 .LFD1025:
 	unlk XIZ                                             ; FD1025  ee 0d
 	ret                                                  ; FD1027  0e
+; sub_FD1028 -- a handler: an entry of PanelOpTable_FCF854
+sub_FD1028:
 	link XIZ,0xfff8                                      ; FD1028  ee 0c f8 ff
 	pushw hl                                             ; FD102C  2b
 	push XIX                                             ; FD102D  3c
@@ -118607,6 +119572,8 @@ sub_FD0E49:
 	popw hl                                              ; FD1155  4b
 	unlk XIZ                                             ; FD1156  ee 0d
 	ret                                                  ; FD1158  0e
+; sub_FD1159 -- a handler: an entry of PanelOpTable_FCF854
+sub_FD1159:
 	link XIZ,0xfff0                                      ; FD1159  ee 0c f0 ff
 	pushw hl                                             ; FD115D  2b
 	pushw de                                             ; FD115E  2a
@@ -118658,6 +119625,8 @@ sub_FD0E49:
 	popw hl                                              ; FD11D3  4b
 	unlk XIZ                                             ; FD11D4  ee 0d
 	ret                                                  ; FD11D6  0e
+; sub_FD11D7 -- a handler: an entry of PanelOpTable_FCF854
+sub_FD11D7:
 	link XIZ,0xfff8                                      ; FD11D7  ee 0c f8 ff
 	pushw hl                                             ; FD11DB  2b
 	pushw de                                             ; FD11DC  2a
@@ -118748,6 +119717,8 @@ sub_FD1221:
 	popw hl                                              ; FD12AC  4b
 	unlk XIZ                                             ; FD12AD  ee 0d
 	ret                                                  ; FD12AF  0e
+; sub_FD12B0 -- a handler: an entry of PanelOpTable_FCF854
+sub_FD12B0:
 	link XIZ,0xfffe                                      ; FD12B0  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD12B4  8e 08 3f 00
 	jr nz, .LFD12E5                                      ; FD12B8  6e 2b
@@ -118771,6 +119742,8 @@ sub_FD1221:
 .LFD12E9:
 	unlk XIZ                                             ; FD12E9  ee 0d
 	ret                                                  ; FD12EB  0e
+; sub_FD12EC -- a handler: an entry of PanelOpTable_FCF854
+sub_FD12EC:
 	link XIZ,0x0000                                      ; FD12EC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD12F0  8e 08 3f 00
 	jr nz, .LFD1303                                      ; FD12F4  6e 0d
@@ -118788,6 +119761,8 @@ sub_FD1221:
 .LFD1312:
 	unlk XIZ                                             ; FD1312  ee 0d
 	ret                                                  ; FD1314  0e
+; sub_FD1315 -- a handler: an entry of PanelOpTable_FCF854
+sub_FD1315:
 	link XIZ,0x0000                                      ; FD1315  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1319  8e 08 3f 00
 	jr nz, .LFD132C                                      ; FD131D  6e 0d
@@ -118805,6 +119780,8 @@ sub_FD1221:
 .LFD133B:
 	unlk XIZ                                             ; FD133B  ee 0d
 	ret                                                  ; FD133D  0e
+; sub_FD133E -- a handler: an entry of PanelOpTable_FCF854
+sub_FD133E:
 	link XIZ,0xfffe                                      ; FD133E  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD1342  8e 08 3f 00
 	jr nz, .LFD1373                                      ; FD1346  6e 2b
@@ -118832,6 +119809,8 @@ sub_FD1221:
 .LFD1382:
 	unlk XIZ                                             ; FD1382  ee 0d
 	ret                                                  ; FD1384  0e
+; sub_FD1385 -- a handler: an entry of PanelOpTable_FCF854
+sub_FD1385:
 	link XIZ,0x0000                                      ; FD1385  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1389  8e 08 3f 00
 	jr z, .LFD139E                                       ; FD138D  66 0f
@@ -118843,6 +119822,8 @@ sub_FD1221:
 .LFD139E:
 	unlk XIZ                                             ; FD139E  ee 0d
 	ret                                                  ; FD13A0  0e
+; sub_FD13A1 -- a handler: an entry of PanelOpTable_FCF854
+sub_FD13A1:
 	link XIZ,0x0000                                      ; FD13A1  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD13A5  8e 08 3f 00
 	jr nz, .LFD13BE                                      ; FD13A9  6e 13
@@ -118855,6 +119836,8 @@ sub_FD1221:
 .LFD13BE:
 	unlk XIZ                                             ; FD13BE  ee 0d
 	ret                                                  ; FD13C0  0e
+; sub_FD13C1 -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD13C1:
 	link XIZ,0xfffa                                      ; FD13C1  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD13C5  be fe 31
 	push XBC                                             ; FD13C8  39
@@ -118905,6 +119888,8 @@ sub_FD1221:
 	popw bc                                              ; FD143F  49
 	unlk XIZ                                             ; FD1440  ee 0d
 	ret                                                  ; FD1442  0e
+; sub_FD1443 -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD1443:
 	link XIZ,0xfff8                                      ; FD1443  ee 0c f8 ff
 	push XIX                                             ; FD1447  3c
 	lda xix, (0xfd6c7b:24)                               ; FD1448  f2 7b 6c fd 34
@@ -118970,6 +119955,8 @@ sub_FD1221:
 	pop XIX                                              ; FD14E7  5c
 	unlk XIZ                                             ; FD14E8  ee 0d
 	ret                                                  ; FD14EA  0e
+; sub_FD14EB -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD14EB:
 	link XIZ,0xfff8                                      ; FD14EB  ee 0c f8 ff
 	push XIX                                             ; FD14EF  3c
 	lda xix, (0xfd6c7b:24)                               ; FD14F0  f2 7b 6c fd 34
@@ -119035,6 +120022,8 @@ sub_FD1221:
 	pop XIX                                              ; FD158F  5c
 	unlk XIZ                                             ; FD1590  ee 0d
 	ret                                                  ; FD1592  0e
+; sub_FD1593 -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD1593:
 	link XIZ,0xfffa                                      ; FD1593  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD1597  be fe 31
 	push XBC                                             ; FD159A  39
@@ -119085,6 +120074,8 @@ sub_FD1221:
 	popw bc                                              ; FD1611  49
 	unlk XIZ                                             ; FD1612  ee 0d
 	ret                                                  ; FD1614  0e
+; sub_FD1615 -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD1615:
 	link XIZ,0x0000                                      ; FD1615  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1619  8e 08 3f 00
 	jr nz, .LFD1637                                      ; FD161D  6e 18
@@ -119101,6 +120092,8 @@ sub_FD1221:
 .LFD163B:
 	unlk XIZ                                             ; FD163B  ee 0d
 	ret                                                  ; FD163D  0e
+; sub_FD163E -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD163E:
 	link XIZ,0x0000                                      ; FD163E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1642  8e 08 3f 00
 	jr z, .LFD165F                                       ; FD1646  66 17
@@ -119116,6 +120109,8 @@ sub_FD1221:
 .LFD165F:
 	unlk XIZ                                             ; FD165F  ee 0d
 	ret                                                  ; FD1661  0e
+; sub_FD1662 -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD1662:
 	link XIZ,0x0000                                      ; FD1662  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1666  8e 08 3f 00
 	jr nz, .LFD1674                                      ; FD166A  6e 08
@@ -119136,6 +120131,8 @@ sub_FD1221:
 .LFD168B:
 	unlk XIZ                                             ; FD168B  ee 0d
 	ret                                                  ; FD168D  0e
+; sub_FD168E -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD168E:
 	link XIZ,0x0000                                      ; FD168E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1692  8e 08 3f 00
 	jr z, .LFD16AC                                       ; FD1696  66 14
@@ -119160,6 +120157,8 @@ sub_FD1221:
 .LFD16C2:
 	unlk XIZ                                             ; FD16C2  ee 0d
 	ret                                                  ; FD16C4  0e
+; sub_FD16C5 -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD16C5:
 	link XIZ,0x0000                                      ; FD16C5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD16C9  8e 08 3f 00
 	jr z, .LFD16E6                                       ; FD16CD  66 17
@@ -119175,6 +120174,8 @@ sub_FD1221:
 .LFD16E6:
 	unlk XIZ                                             ; FD16E6  ee 0d
 	ret                                                  ; FD16E8  0e
+; sub_FD16E9 -- a handler: an entry of PanelOpTable_FCF89C
+sub_FD16E9:
 	link XIZ,0x0000                                      ; FD16E9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD16ED  8e 08 3f 00
 	jr nz, .LFD1706                                      ; FD16F1  6e 13
@@ -119187,6 +120188,8 @@ sub_FD1221:
 .LFD1706:
 	unlk XIZ                                             ; FD1706  ee 0d
 	ret                                                  ; FD1708  0e
+; sub_FD1709 -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD1709:
 	link XIZ,0xfff0                                      ; FD1709  ee 0c f0 ff
 	push XIX                                             ; FD170D  3c
 	lda xix, (xiz-16)                                    ; FD170E  be f0 34
@@ -119239,6 +120242,8 @@ sub_FD173D:
 	pop XIX                                              ; FD178C  5c
 	unlk XIZ                                             ; FD178D  ee 0d
 	ret                                                  ; FD178F  0e
+; sub_FD1790 -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD1790:
 	link XIZ,0xffee                                      ; FD1790  ee 0c ee ff
 	push XIX                                             ; FD1794  3c
 	lda xix, (xiz-18)                                    ; FD1795  be ee 34
@@ -119297,6 +120302,8 @@ sub_FD17B1:
 	pop XIX                                              ; FD1823  5c
 	unlk XIZ                                             ; FD1824  ee 0d
 	ret                                                  ; FD1826  0e
+; sub_FD1827 -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD1827:
 	link XIZ,0xffee                                      ; FD1827  ee 0c ee ff
 	push XIX                                             ; FD182B  3c
 	lda xix, (xiz-18)                                    ; FD182C  be ee 34
@@ -119354,6 +120361,8 @@ sub_FD17B1:
 	pop XIX                                              ; FD18BA  5c
 	unlk XIZ                                             ; FD18BB  ee 0d
 	ret                                                  ; FD18BD  0e
+; sub_FD18BE -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD18BE:
 	link XIZ,0xfff0                                      ; FD18BE  ee 0c f0 ff
 	push XIX                                             ; FD18C2  3c
 	lda xix, (xiz-16)                                    ; FD18C3  be f0 34
@@ -119405,6 +120414,8 @@ sub_FD17B1:
 	pop XIX                                              ; FD1941  5c
 	unlk XIZ                                             ; FD1942  ee 0d
 	ret                                                  ; FD1944  0e
+; sub_FD1945 -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD1945:
 	link XIZ,0x0000                                      ; FD1945  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1949  8e 08 3f 00
 	jr nz, .LFD1967                                      ; FD194D  6e 18
@@ -119421,6 +120432,8 @@ sub_FD17B1:
 .LFD196B:
 	unlk XIZ                                             ; FD196B  ee 0d
 	ret                                                  ; FD196D  0e
+; sub_FD196E -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD196E:
 	link XIZ,0x0000                                      ; FD196E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1972  8e 08 3f 00
 	jr nz, .LFD1980                                      ; FD1976  6e 08
@@ -119441,6 +120454,8 @@ sub_FD17B1:
 .LFD1997:
 	unlk XIZ                                             ; FD1997  ee 0d
 	ret                                                  ; FD1999  0e
+; sub_FD199A -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD199A:
 	link XIZ,0x0000                                      ; FD199A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD199E  8e 08 3f 00
 	jr z, .LFD19BB                                       ; FD19A2  66 17
@@ -119456,6 +120471,8 @@ sub_FD17B1:
 .LFD19BB:
 	unlk XIZ                                             ; FD19BB  ee 0d
 	ret                                                  ; FD19BD  0e
+; sub_FD19BE -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD19BE:
 	link XIZ,0x0000                                      ; FD19BE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD19C2  8e 08 3f 00
 	jr z, .LFD19DC                                       ; FD19C6  66 14
@@ -119480,6 +120497,8 @@ sub_FD17B1:
 .LFD19F2:
 	unlk XIZ                                             ; FD19F2  ee 0d
 	ret                                                  ; FD19F4  0e
+; sub_FD19F5 -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD19F5:
 	link XIZ,0x0000                                      ; FD19F5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD19F9  8e 08 3f 00
 	jr z, .LFD1A16                                       ; FD19FD  66 17
@@ -119495,6 +120514,8 @@ sub_FD17B1:
 .LFD1A16:
 	unlk XIZ                                             ; FD1A16  ee 0d
 	ret                                                  ; FD1A18  0e
+; sub_FD1A19 -- a handler: an entry of PanelOpTable_FCF8E4
+sub_FD1A19:
 	link XIZ,0x0000                                      ; FD1A19  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1A1D  8e 08 3f 00
 	jr nz, .LFD1A36                                      ; FD1A21  6e 13
@@ -119507,6 +120528,8 @@ sub_FD17B1:
 .LFD1A36:
 	unlk XIZ                                             ; FD1A36  ee 0d
 	ret                                                  ; FD1A38  0e
+; sub_FD1A39 -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1A39:
 	link XIZ,0xfffc                                      ; FD1A39  ee 0c fc ff
 	pushw hl                                             ; FD1A3D  2b
 	ld H,(XIZ+0x08)                                      ; FD1A3E  8e 08 26
@@ -119549,6 +120572,8 @@ sub_FD17B1:
 	popw hl                                              ; FD1A98  4b
 	unlk XIZ                                             ; FD1A99  ee 0d
 	ret                                                  ; FD1A9B  0e
+; sub_FD1A9C -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1A9C:
 	link XIZ,0xfff6                                      ; FD1A9C  ee 0c f6 ff
 	pushw hl                                             ; FD1AA0  2b
 	lda xbc, (xiz-2)                                     ; FD1AA1  be fe 31
@@ -119619,6 +120644,8 @@ sub_FD1AA5:
 	popw hl                                              ; FD1B41  4b
 	unlk XIZ                                             ; FD1B42  ee 0d
 	ret                                                  ; FD1B44  0e
+; sub_FD1B45 -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1B45:
 	link XIZ,0xfff8                                      ; FD1B45  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FD1B49  be fe 31
 	push XBC                                             ; FD1B4C  39
@@ -119675,6 +120702,8 @@ sub_FD1AA5:
 .LFD1BCC:
 	unlk XIZ                                             ; FD1BCC  ee 0d
 	ret                                                  ; FD1BCE  0e
+; sub_FD1BCF -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1BCF:
 	link XIZ,0xffe0                                      ; FD1BCF  ee 0c e0 ff
 	pushw hl                                             ; FD1BD3  2b
 	pushw de                                             ; FD1BD4  2a
@@ -120056,6 +121085,8 @@ sub_FD1C35:
 	popw hl                                              ; FD1F39  4b
 	unlk XIZ                                             ; FD1F3A  ee 0d
 	ret                                                  ; FD1F3C  0e
+; sub_FD1F3D -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1F3D:
 	link XIZ,0x0000                                      ; FD1F3D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F41  8e 08 3f 00
 	jr nz, .LFD1F54                                      ; FD1F45  6e 0d
@@ -120069,6 +121100,8 @@ sub_FD1C35:
 .LFD1F58:
 	unlk XIZ                                             ; FD1F58  ee 0d
 	ret                                                  ; FD1F5A  0e
+; sub_FD1F5B -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1F5B:
 	link XIZ,0x0000                                      ; FD1F5B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F5F  8e 08 3f 00
 	jr z, .LFD1F7C                                       ; FD1F63  66 17
@@ -120084,6 +121117,8 @@ sub_FD1C35:
 .LFD1F7C:
 	unlk XIZ                                             ; FD1F7C  ee 0d
 	ret                                                  ; FD1F7E  0e
+; sub_FD1F7F -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1F7F:
 	link XIZ,0x0000                                      ; FD1F7F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F83  8e 08 3f 00
 	jr nz, .LFD1F91                                      ; FD1F87  6e 08
@@ -120104,6 +121139,8 @@ sub_FD1C35:
 .LFD1FA8:
 	unlk XIZ                                             ; FD1FA8  ee 0d
 	ret                                                  ; FD1FAA  0e
+; sub_FD1FAB -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1FAB:
 	link XIZ,0x0000                                      ; FD1FAB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FAF  8e 08 3f 00
 	jr nz, .LFD1FBD                                      ; FD1FB3  6e 08
@@ -120124,6 +121161,8 @@ sub_FD1C35:
 .LFD1FD4:
 	unlk XIZ                                             ; FD1FD4  ee 0d
 	ret                                                  ; FD1FD6  0e
+; sub_FD1FD7 -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1FD7:
 	link XIZ,0x0000                                      ; FD1FD7  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FDB  8e 08 3f 00
 	jr z, .LFD1FF8                                       ; FD1FDF  66 17
@@ -120139,6 +121178,8 @@ sub_FD1C35:
 .LFD1FF8:
 	unlk XIZ                                             ; FD1FF8  ee 0d
 	ret                                                  ; FD1FFA  0e
+; sub_FD1FFB -- a handler: an entry of PanelOpTable_FCF92C
+sub_FD1FFB:
 	link XIZ,0x0000                                      ; FD1FFB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FFF  8e 08 3f 00
 	jr nz, .LFD2010                                      ; FD2003  6e 0b
@@ -120149,6 +121190,9 @@ sub_FD1C35:
 .LFD2010:
 	unlk XIZ                                             ; FD2010  ee 0d
 	ret                                                  ; FD2012  0e
+; ScreenCode_Nop -- a lone `ret`: the entry ScreenCode80_Handlers and
+; ScreenCodeC0_Handlers use for a screen code with no handler.
+ScreenCode_Nop:
 	ret                                                  ; FD2013  0e
 sub_FD2014:
 	link XIZ,0xfff2                                      ; FD2014  ee 0c f2 ff
@@ -121095,6 +122139,8 @@ sub_FD28F8:
 .LFD2900:
 	unlk XIZ                                             ; FD2900  ee 0d
 	ret                                                  ; FD2902  0e
+; sub_FD2903 -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2903:
 	link XIZ,0xffec                                      ; FD2903  ee 0c ec ff
 	pushw hl                                             ; FD2907  2b
 	pushw de                                             ; FD2908  2a
@@ -121151,6 +122197,8 @@ sub_FD28F8:
 	popw hl                                              ; FD2986  4b
 	unlk XIZ                                             ; FD2987  ee 0d
 	ret                                                  ; FD2989  0e
+; sub_FD298A -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD298A:
 	link XIZ,0xffec                                      ; FD298A  ee 0c ec ff
 	pushw hl                                             ; FD298E  2b
 	pushw de                                             ; FD298F  2a
@@ -121229,6 +122277,8 @@ sub_FD28F8:
 	popw hl                                              ; FD2A38  4b
 	unlk XIZ                                             ; FD2A39  ee 0d
 	ret                                                  ; FD2A3B  0e
+; sub_FD2A3C -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2A3C:
 	link XIZ,0xffec                                      ; FD2A3C  ee 0c ec ff
 	pushw hl                                             ; FD2A40  2b
 	pushw de                                             ; FD2A41  2a
@@ -121295,6 +122345,8 @@ sub_FD28F8:
 	popw hl                                              ; FD2AD4  4b
 	unlk XIZ                                             ; FD2AD5  ee 0d
 	ret                                                  ; FD2AD7  0e
+; sub_FD2AD8 -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2AD8:
 	link XIZ,0xffec                                      ; FD2AD8  ee 0c ec ff
 	pushw hl                                             ; FD2ADC  2b
 	pushw de                                             ; FD2ADD  2a
@@ -121362,6 +122414,8 @@ sub_FD2B23:
 	popw hl                                              ; FD2B70  4b
 	unlk XIZ                                             ; FD2B71  ee 0d
 	ret                                                  ; FD2B73  0e
+; sub_FD2B74 -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2B74:
 	link XIZ,0xfff2                                      ; FD2B74  ee 0c f2 ff
 	push XIX                                             ; FD2B78  3c
 	lda xix, (xiz-14)                                    ; FD2B79  be f2 34
@@ -121398,6 +122452,8 @@ sub_FD2B23:
 	pop XIX                                              ; FD2BD4  5c
 	unlk XIZ                                             ; FD2BD5  ee 0d
 	ret                                                  ; FD2BD7  0e
+; sub_FD2BD8 -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2BD8:
 	link XIZ,0xfff2                                      ; FD2BD8  ee 0c f2 ff
 	push XIX                                             ; FD2BDC  3c
 	lda xix, (xiz-14)                                    ; FD2BDD  be f2 34
@@ -121434,6 +122490,8 @@ sub_FD2B23:
 	pop XIX                                              ; FD2C38  5c
 	unlk XIZ                                             ; FD2C39  ee 0d
 	ret                                                  ; FD2C3B  0e
+; sub_FD2C3C -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2C3C:
 	link XIZ,0x0000                                      ; FD2C3C  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2C40  8e 08 3f 00
 	jr nz, .LFD2C53                                      ; FD2C44  6e 0d
@@ -121447,6 +122505,8 @@ sub_FD2B23:
 .LFD2C57:
 	unlk XIZ                                             ; FD2C57  ee 0d
 	ret                                                  ; FD2C59  0e
+; sub_FD2C5A -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2C5A:
 	link XIZ,0x0000                                      ; FD2C5A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2C5E  8e 08 3f 00
 	jr z, .LFD2C73                                       ; FD2C62  66 0f
@@ -121458,6 +122518,8 @@ sub_FD2B23:
 .LFD2C73:
 	unlk XIZ                                             ; FD2C73  ee 0d
 	ret                                                  ; FD2C75  0e
+; sub_FD2C76 -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2C76:
 	link XIZ,0xfffe                                      ; FD2C76  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2C7A  be fe 31
 	push XBC                                             ; FD2C7D  39
@@ -121481,6 +122543,8 @@ sub_FD2B23:
 .LFD2CAB:
 	unlk XIZ                                             ; FD2CAB  ee 0d
 	ret                                                  ; FD2CAD  0e
+; sub_FD2CAE -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2CAE:
 	link XIZ,0xfffe                                      ; FD2CAE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CB2  be fe 31
 	push XBC                                             ; FD2CB5  39
@@ -121498,6 +122562,8 @@ sub_FD2B23:
 .LFD2CD6:
 	unlk XIZ                                             ; FD2CD6  ee 0d
 	ret                                                  ; FD2CD8  0e
+; sub_FD2CD9 -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2CD9:
 	link XIZ,0xfffe                                      ; FD2CD9  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CDD  be fe 31
 	push XBC                                             ; FD2CE0  39
@@ -121515,6 +122581,8 @@ sub_FD2B23:
 .LFD2D01:
 	unlk XIZ                                             ; FD2D01  ee 0d
 	ret                                                  ; FD2D03  0e
+; sub_FD2D04 -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2D04:
 	link XIZ,0xfffe                                      ; FD2D04  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2D08  be fe 31
 	push XBC                                             ; FD2D0B  39
@@ -121531,6 +122599,8 @@ sub_FD2B23:
 .LFD2D28:
 	unlk XIZ                                             ; FD2D28  ee 0d
 	ret                                                  ; FD2D2A  0e
+; sub_FD2D2B -- a handler: an entry of PanelOpTable_FCF21B
+sub_FD2D2B:
 	link XIZ,0xfffe                                      ; FD2D2B  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD2D2F  8e 08 3f 00
 	jr nz, .LFD2D5C                                      ; FD2D33  6e 27
@@ -121553,6 +122623,8 @@ sub_FD2B23:
 .LFD2D5C:
 	unlk XIZ                                             ; FD2D5C  ee 0d
 	ret                                                  ; FD2D5E  0e
+; sub_FD2D5F -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2D5F:
 	link XIZ,0xfff0                                      ; FD2D5F  ee 0c f0 ff
 	push XIX                                             ; FD2D63  3c
 	lda xix, (xiz-16)                                    ; FD2D64  be f0 34
@@ -121605,6 +122677,8 @@ sub_FD2B23:
 	pop XIX                                              ; FD2DE6  5c
 	unlk XIZ                                             ; FD2DE7  ee 0d
 	ret                                                  ; FD2DE9  0e
+; sub_FD2DEA -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2DEA:
 	link XIZ,0xfffa                                      ; FD2DEA  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD2DEE  be fe 31
 	push XBC                                             ; FD2DF1  39
@@ -121652,6 +122726,8 @@ sub_FD2B23:
 	popw bc                                              ; FD2E62  49
 	unlk XIZ                                             ; FD2E63  ee 0d
 	ret                                                  ; FD2E65  0e
+; sub_FD2E66 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2E66:
 	link XIZ,0xfff8                                      ; FD2E66  ee 0c f8 ff
 	push XIX                                             ; FD2E6A  3c
 	lda xix, (0xfd6c7b:24)                               ; FD2E6B  f2 7b 6c fd 34
@@ -121714,6 +122790,8 @@ sub_FD2B23:
 	pop XIX                                              ; FD2F04  5c
 	unlk XIZ                                             ; FD2F05  ee 0d
 	ret                                                  ; FD2F07  0e
+; sub_FD2F08 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2F08:
 	link XIZ,0xfffa                                      ; FD2F08  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD2F0C  be fe 31
 	push XBC                                             ; FD2F0F  39
@@ -121761,6 +122839,8 @@ sub_FD2B23:
 	popw bc                                              ; FD2F80  49
 	unlk XIZ                                             ; FD2F81  ee 0d
 	ret                                                  ; FD2F83  0e
+; sub_FD2F84 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2F84:
 	link XIZ,0x0000                                      ; FD2F84  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2F88  8e 08 3f 00
 	jr nz, .LFD2F9B                                      ; FD2F8C  6e 0d
@@ -121774,6 +122854,8 @@ sub_FD2B23:
 .LFD2F9F:
 	unlk XIZ                                             ; FD2F9F  ee 0d
 	ret                                                  ; FD2FA1  0e
+; sub_FD2FA2 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2FA2:
 	link XIZ,0x0000                                      ; FD2FA2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2FA6  8e 08 3f 00
 	jr z, .LFD2FC3                                       ; FD2FAA  66 17
@@ -121789,6 +122871,8 @@ sub_FD2B23:
 .LFD2FC3:
 	unlk XIZ                                             ; FD2FC3  ee 0d
 	ret                                                  ; FD2FC5  0e
+; sub_FD2FC6 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2FC6:
 	link XIZ,0x0000                                      ; FD2FC6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2FCA  8e 08 3f 00
 	jr nz, .LFD2FD8                                      ; FD2FCE  6e 08
@@ -121809,6 +122893,8 @@ sub_FD2B23:
 .LFD2FEF:
 	unlk XIZ                                             ; FD2FEF  ee 0d
 	ret                                                  ; FD2FF1  0e
+; sub_FD2FF2 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD2FF2:
 	link XIZ,0x0000                                      ; FD2FF2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2FF6  8e 08 3f 00
 	jr z, .LFD3013                                       ; FD2FFA  66 17
@@ -121824,6 +122910,8 @@ sub_FD2B23:
 .LFD3013:
 	unlk XIZ                                             ; FD3013  ee 0d
 	ret                                                  ; FD3015  0e
+; sub_FD3016 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD3016:
 	link XIZ,0x0000                                      ; FD3016  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD301A  8e 08 3f 00
 	jr z, .LFD3037                                       ; FD301E  66 17
@@ -121840,6 +122928,8 @@ sub_FD3023:
 .LFD3037:
 	unlk XIZ                                             ; FD3037  ee 0d
 	ret                                                  ; FD3039  0e
+; sub_FD303A -- a handler: an entry of PanelOpTable_FCF263
+sub_FD303A:
 	link XIZ,0x0000                                      ; FD303A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD303E  8e 08 3f 00
 	jr z, .LFD304F                                       ; FD3042  66 0b
@@ -121850,6 +122940,8 @@ sub_FD3023:
 .LFD304F:
 	unlk XIZ                                             ; FD304F  ee 0d
 	ret                                                  ; FD3051  0e
+; sub_FD3052 -- a handler: an entry of PanelOpTable_FCF263
+sub_FD3052:
 	link XIZ,0x0000                                      ; FD3052  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3056  8e 08 3f 00
 	jr nz, .LFD306F                                      ; FD305A  6e 13
@@ -121862,6 +122954,8 @@ sub_FD3023:
 .LFD306F:
 	unlk XIZ                                             ; FD306F  ee 0d
 	ret                                                  ; FD3071  0e
+; sub_FD3072 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD3072:
 	link XIZ,0xffec                                      ; FD3072  ee 0c ec ff
 	pushw hl                                             ; FD3076  2b
 	push XIX                                             ; FD3077  3c
@@ -121930,6 +123024,8 @@ sub_FD3023:
 	popw hl                                              ; FD310E  4b
 	unlk XIZ                                             ; FD310F  ee 0d
 	ret                                                  ; FD3111  0e
+; sub_FD3112 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD3112:
 	link XIZ,0xffec                                      ; FD3112  ee 0c ec ff
 	pushw hl                                             ; FD3116  2b
 	push XIX                                             ; FD3117  3c
@@ -121999,6 +123095,8 @@ sub_FD3191:
 	popw hl                                              ; FD31AE  4b
 	unlk XIZ                                             ; FD31AF  ee 0d
 	ret                                                  ; FD31B1  0e
+; sub_FD31B2 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD31B2:
 	link XIZ,0xffec                                      ; FD31B2  ee 0c ec ff
 	pushw hl                                             ; FD31B6  2b
 	push XIX                                             ; FD31B7  3c
@@ -122067,6 +123165,8 @@ sub_FD3191:
 	popw hl                                              ; FD324E  4b
 	unlk XIZ                                             ; FD324F  ee 0d
 	ret                                                  ; FD3251  0e
+; sub_FD3252 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD3252:
 	link XIZ,0xffec                                      ; FD3252  ee 0c ec ff
 	pushw hl                                             ; FD3256  2b
 	push XIX                                             ; FD3257  3c
@@ -122135,6 +123235,8 @@ sub_FD3191:
 	popw hl                                              ; FD32EE  4b
 	unlk XIZ                                             ; FD32EF  ee 0d
 	ret                                                  ; FD32F1  0e
+; sub_FD32F2 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD32F2:
 	link XIZ,0xffea                                      ; FD32F2  ee 0c ea ff
 	pushw hl                                             ; FD32F6  2b
 	push XIX                                             ; FD32F7  3c
@@ -122214,6 +123316,8 @@ sub_FD3191:
 	popw hl                                              ; FD33A6  4b
 	unlk XIZ                                             ; FD33A7  ee 0d
 	ret                                                  ; FD33A9  0e
+; sub_FD33AA -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD33AA:
 	link XIZ,0xffea                                      ; FD33AA  ee 0c ea ff
 	pushw hl                                             ; FD33AE  2b
 	push XIX                                             ; FD33AF  3c
@@ -122293,6 +123397,8 @@ sub_FD3191:
 	popw hl                                              ; FD3462  4b
 	unlk XIZ                                             ; FD3463  ee 0d
 	ret                                                  ; FD3465  0e
+; sub_FD3466 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD3466:
 	link XIZ,0xffec                                      ; FD3466  ee 0c ec ff
 	pushw hl                                             ; FD346A  2b
 	pushw de                                             ; FD346B  2a
@@ -122367,6 +123473,8 @@ sub_FD3191:
 	popw hl                                              ; FD351A  4b
 	unlk XIZ                                             ; FD351B  ee 0d
 	ret                                                  ; FD351D  0e
+; sub_FD351E -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD351E:
 	link XIZ,0xffec                                      ; FD351E  ee 0c ec ff
 	push XIX                                             ; FD3522  3c
 	lda xix, (xiz-16)                                    ; FD3523  be f0 34
@@ -122414,6 +123522,8 @@ sub_FD3191:
 	pop XIX                                              ; FD359A  5c
 	unlk XIZ                                             ; FD359B  ee 0d
 	ret                                                  ; FD359D  0e
+; sub_FD359E -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD359E:
 	link XIZ,0x0000                                      ; FD359E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD35A2  8e 08 3f 00
 	jr z, .LFD35AC                                       ; FD35A6  66 04
@@ -122421,6 +123531,8 @@ sub_FD3191:
 .LFD35AC:
 	unlk XIZ                                             ; FD35AC  ee 0d
 	ret                                                  ; FD35AE  0e
+; sub_FD35AF -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD35AF:
 	link XIZ,0x0000                                      ; FD35AF  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD35B3  8e 08 3f 00
 	jr nz, .LFD35C1                                      ; FD35B7  6e 08
@@ -122441,6 +123553,8 @@ sub_FD3191:
 .LFD35D8:
 	unlk XIZ                                             ; FD35D8  ee 0d
 	ret                                                  ; FD35DA  0e
+; sub_FD35DB -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD35DB:
 	link XIZ,0xfffe                                      ; FD35DB  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD35DF  be fe 31
 	push XBC                                             ; FD35E2  39
@@ -122467,6 +123581,8 @@ sub_FD3191:
 .LFD3613:
 	unlk XIZ                                             ; FD3613  ee 0d
 	ret                                                  ; FD3615  0e
+; sub_FD3616 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD3616:
 	link XIZ,0xfffe                                      ; FD3616  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD361A  be fe 31
 	push XBC                                             ; FD361D  39
@@ -122488,6 +123604,8 @@ sub_FD3191:
 .LFD3646:
 	unlk XIZ                                             ; FD3646  ee 0d
 	ret                                                  ; FD3648  0e
+; sub_FD3649 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD3649:
 	link XIZ,0xfffc                                      ; FD3649  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD364D  be fe 31
 	push XBC                                             ; FD3650  39
@@ -122540,6 +123658,8 @@ sub_FD3191:
 .LFD36CB:
 	unlk XIZ                                             ; FD36CB  ee 0d
 	ret                                                  ; FD36CD  0e
+; sub_FD36CE -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD36CE:
 	link XIZ,0xfffe                                      ; FD36CE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD36D2  be fe 31
 	push XBC                                             ; FD36D5  39
@@ -122556,6 +123676,8 @@ sub_FD3191:
 .LFD36F2:
 	unlk XIZ                                             ; FD36F2  ee 0d
 	ret                                                  ; FD36F4  0e
+; sub_FD36F5 -- a handler: an entry of PanelOpTable_FCF2AB
+sub_FD36F5:
 	link XIZ,0xfffe                                      ; FD36F5  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD36F9  8e 08 3f 00
 	jr nz, .LFD3726                                      ; FD36FD  6e 27
@@ -122578,6 +123700,8 @@ sub_FD3191:
 .LFD3726:
 	unlk XIZ                                             ; FD3726  ee 0d
 	ret                                                  ; FD3728  0e
+; sub_FD3729 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3729:
 	link XIZ,0xfff0                                      ; FD3729  ee 0c f0 ff
 	push XIX                                             ; FD372D  3c
 	lda xix, (xiz-16)                                    ; FD372E  be f0 34
@@ -122639,6 +123763,8 @@ sub_FD3191:
 	pop XIX                                              ; FD37CF  5c
 	unlk XIZ                                             ; FD37D0  ee 0d
 	ret                                                  ; FD37D2  0e
+; sub_FD37D3 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD37D3:
 	link XIZ,0xfff0                                      ; FD37D3  ee 0c f0 ff
 	push XIX                                             ; FD37D7  3c
 	lda xix, (xiz-16)                                    ; FD37D8  be f0 34
@@ -122700,6 +123826,8 @@ sub_FD3191:
 	pop XIX                                              ; FD3879  5c
 	unlk XIZ                                             ; FD387A  ee 0d
 	ret                                                  ; FD387C  0e
+; sub_FD387D -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD387D:
 	link XIZ,0xfff0                                      ; FD387D  ee 0c f0 ff
 	push XIX                                             ; FD3881  3c
 	lda xix, (xiz-16)                                    ; FD3882  be f0 34
@@ -122761,6 +123889,8 @@ sub_FD3191:
 	pop XIX                                              ; FD3923  5c
 	unlk XIZ                                             ; FD3924  ee 0d
 	ret                                                  ; FD3926  0e
+; sub_FD3927 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3927:
 	link XIZ,0xfffa                                      ; FD3927  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD392B  be fe 31
 sub_FD392E:
@@ -122810,6 +123940,8 @@ sub_FD3955:
 	popw bc                                              ; FD399F  49
 	unlk XIZ                                             ; FD39A0  ee 0d
 	ret                                                  ; FD39A2  0e
+; sub_FD39A3 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD39A3:
 	link XIZ,0xfff8                                      ; FD39A3  ee 0c f8 ff
 	push XIX                                             ; FD39A7  3c
 	lda xix, (0xfd6c7b:24)                               ; FD39A8  f2 7b 6c fd 34
@@ -122873,6 +124005,8 @@ sub_FD3A40:
 	pop XIX                                              ; FD3A41  5c
 	unlk XIZ                                             ; FD3A42  ee 0d
 	ret                                                  ; FD3A44  0e
+; sub_FD3A45 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3A45:
 	link XIZ,0xfffa                                      ; FD3A45  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD3A49  be fe 31
 	push XBC                                             ; FD3A4C  39
@@ -122920,6 +124054,8 @@ sub_FD3A40:
 	popw bc                                              ; FD3ABD  49
 	unlk XIZ                                             ; FD3ABE  ee 0d
 	ret                                                  ; FD3AC0  0e
+; sub_FD3AC1 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3AC1:
 	link XIZ,0xfff2                                      ; FD3AC1  ee 0c f2 ff
 	push XIX                                             ; FD3AC5  3c
 	lda xix, (xiz-14)                                    ; FD3AC6  be f2 34
@@ -122955,6 +124091,8 @@ sub_FD3AE1:
 	pop XIX                                              ; FD3B1D  5c
 	unlk XIZ                                             ; FD3B1E  ee 0d
 	ret                                                  ; FD3B20  0e
+; sub_FD3B21 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3B21:
 	link XIZ,0xfff2                                      ; FD3B21  ee 0c f2 ff
 	push XIX                                             ; FD3B25  3c
 	lda xix, (xiz-14)                                    ; FD3B26  be f2 34
@@ -122989,6 +124127,8 @@ sub_FD3AE1:
 	pop XIX                                              ; FD3B7D  5c
 	unlk XIZ                                             ; FD3B7E  ee 0d
 	ret                                                  ; FD3B80  0e
+; sub_FD3B81 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3B81:
 	link XIZ,0x0000                                      ; FD3B81  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3B85  8e 08 3f 00
 	jr z, .LFD3B8F                                       ; FD3B89  66 04
@@ -122996,6 +124136,8 @@ sub_FD3AE1:
 .LFD3B8F:
 	unlk XIZ                                             ; FD3B8F  ee 0d
 	ret                                                  ; FD3B91  0e
+; sub_FD3B92 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3B92:
 	link XIZ,0x0000                                      ; FD3B92  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3B96  8e 08 3f 00
 	jr nz, .LFD3BA4                                      ; FD3B9A  6e 08
@@ -123016,6 +124158,8 @@ sub_FD3AE1:
 .LFD3BBB:
 	unlk XIZ                                             ; FD3BBB  ee 0d
 	ret                                                  ; FD3BBD  0e
+; sub_FD3BBE -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3BBE:
 	link XIZ,0x0000                                      ; FD3BBE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3BC2  8e 08 3f 00
 	jr nz, .LFD3BD0                                      ; FD3BC6  6e 08
@@ -123036,6 +124180,8 @@ sub_FD3AE1:
 .LFD3BE7:
 	unlk XIZ                                             ; FD3BE7  ee 0d
 	ret                                                  ; FD3BE9  0e
+; sub_FD3BEA -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3BEA:
 	link XIZ,0x0000                                      ; FD3BEA  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3BEE  8e 08 3f 00
 	jr z, .LFD3C0B                                       ; FD3BF2  66 17
@@ -123051,6 +124197,8 @@ sub_FD3AE1:
 .LFD3C0B:
 	unlk XIZ                                             ; FD3C0B  ee 0d
 	ret                                                  ; FD3C0D  0e
+; sub_FD3C0E -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3C0E:
 	link XIZ,0x0000                                      ; FD3C0E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3C12  8e 08 3f 00
 	jr z, .LFD3C2F                                       ; FD3C16  66 17
@@ -123066,6 +124214,8 @@ sub_FD3AE1:
 .LFD3C2F:
 	unlk XIZ                                             ; FD3C2F  ee 0d
 	ret                                                  ; FD3C31  0e
+; sub_FD3C32 -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3C32:
 	link XIZ,0x0000                                      ; FD3C32  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3C36  8e 08 3f 00
 	jr z, .LFD3C47                                       ; FD3C3A  66 0b
@@ -123076,6 +124226,8 @@ sub_FD3AE1:
 .LFD3C47:
 	unlk XIZ                                             ; FD3C47  ee 0d
 	ret                                                  ; FD3C49  0e
+; sub_FD3C4A -- a handler: an entry of PanelOpTable_FCF2F3
+sub_FD3C4A:
 	link XIZ,0x0000                                      ; FD3C4A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3C4E  8e 08 3f 00
 	jr nz, .LFD3C67                                      ; FD3C52  6e 13
@@ -123088,6 +124240,8 @@ sub_FD3AE1:
 .LFD3C67:
 	unlk XIZ                                             ; FD3C67  ee 0d
 	ret                                                  ; FD3C69  0e
+; sub_FD3C6A -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3C6A:
 	link XIZ,0x0000                                      ; FD3C6A  ee 0c 00 00
 	pushw 0x00                                           ; FD3C6E  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C71  9e 08 21
@@ -123097,6 +124251,8 @@ sub_FD3AE1:
 	pop XBC                                              ; FD3C7B  59
 	unlk XIZ                                             ; FD3C7C  ee 0d
 	ret                                                  ; FD3C7E  0e
+; sub_FD3C7F -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3C7F:
 	link XIZ,0x0000                                      ; FD3C7F  ee 0c 00 00
 	pushw 0x00                                           ; FD3C83  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C86  9e 08 21
@@ -123116,6 +124272,8 @@ sub_FD3C94:
 	pop XBC                                              ; FD3CA5  59
 	unlk XIZ                                             ; FD3CA6  ee 0d
 	ret                                                  ; FD3CA8  0e
+; sub_FD3CA9 -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3CA9:
 	link XIZ,0x0000                                      ; FD3CA9  ee 0c 00 00
 	pushw 0x00                                           ; FD3CAD  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CB0  9e 08 21
@@ -123125,6 +124283,8 @@ sub_FD3C94:
 	pop XBC                                              ; FD3CBA  59
 	unlk XIZ                                             ; FD3CBB  ee 0d
 	ret                                                  ; FD3CBD  0e
+; sub_FD3CBE -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3CBE:
 	link XIZ,0x0000                                      ; FD3CBE  ee 0c 00 00
 	pushw 0x00                                           ; FD3CC2  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CC5  9e 08 21
@@ -123134,6 +124294,8 @@ sub_FD3C94:
 	pop XBC                                              ; FD3CCF  59
 	unlk XIZ                                             ; FD3CD0  ee 0d
 	ret                                                  ; FD3CD2  0e
+; sub_FD3CD3 -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3CD3:
 	link XIZ,0x0000                                      ; FD3CD3  ee 0c 00 00
 	pushw 0x00                                           ; FD3CD7  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CDA  9e 08 21
@@ -123143,6 +124305,8 @@ sub_FD3C94:
 	pop XBC                                              ; FD3CE4  59
 	unlk XIZ                                             ; FD3CE5  ee 0d
 	ret                                                  ; FD3CE7  0e
+; sub_FD3CE8 -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3CE8:
 	link XIZ,0x0000                                      ; FD3CE8  ee 0c 00 00
 	pushw 0x00                                           ; FD3CEC  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CEF  9e 08 21
@@ -123152,6 +124316,8 @@ sub_FD3C94:
 	pop XBC                                              ; FD3CF9  59
 	unlk XIZ                                             ; FD3CFA  ee 0d
 	ret                                                  ; FD3CFC  0e
+; sub_FD3CFD -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3CFD:
 	link XIZ,0x0000                                      ; FD3CFD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D01  8e 08 3f 00
 	jr nz, .LFD3D14                                      ; FD3D05  6e 0d
@@ -123165,6 +124331,8 @@ sub_FD3C94:
 .LFD3D18:
 	unlk XIZ                                             ; FD3D18  ee 0d
 	ret                                                  ; FD3D1A  0e
+; sub_FD3D1B -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3D1B:
 	link XIZ,0x0000                                      ; FD3D1B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D1F  8e 08 3f 00
 	jr nz, .LFD3D31                                      ; FD3D23  6e 0c
@@ -123180,6 +124348,8 @@ sub_FD3C94:
 	pop XIY                                              ; FD3D3B  5d
 	unlk XIZ                                             ; FD3D3C  ee 0d
 	ret                                                  ; FD3D3E  0e
+; sub_FD3D3F -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3D3F:
 	link XIZ,0x0000                                      ; FD3D3F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D43  8e 08 3f 00
 	jr z, .LFD3D54                                       ; FD3D47  66 0b
@@ -123190,6 +124360,8 @@ sub_FD3C94:
 .LFD3D54:
 	unlk XIZ                                             ; FD3D54  ee 0d
 	ret                                                  ; FD3D56  0e
+; sub_FD3D57 -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3D57:
 	link XIZ,0x0000                                      ; FD3D57  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D5B  8e 08 3f 00
 	jr z, .LFD3D6C                                       ; FD3D5F  66 0b
@@ -123200,6 +124372,8 @@ sub_FD3C94:
 .LFD3D6C:
 	unlk XIZ                                             ; FD3D6C  ee 0d
 	ret                                                  ; FD3D6E  0e
+; sub_FD3D6F -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3D6F:
 	link XIZ,0x0000                                      ; FD3D6F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D73  8e 08 3f 00
 	jr z, .LFD3D84                                       ; FD3D77  66 0b
@@ -123210,6 +124384,8 @@ sub_FD3C94:
 .LFD3D84:
 	unlk XIZ                                             ; FD3D84  ee 0d
 	ret                                                  ; FD3D86  0e
+; sub_FD3D87 -- a handler: an entry of PanelOpTable_FCF33B
+sub_FD3D87:
 	link XIZ,0x0000                                      ; FD3D87  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D8B  8e 08 3f 00
 	jr nz, .LFD3DA4                                      ; FD3D8F  6e 13
@@ -123464,6 +124640,8 @@ ToneEditPage_A8_KeyDispatch:
 .LFD3FDD:
 	unlk XIZ                                             ; FD3FDD  ee 0d
 	ret                                                  ; FD3FDF  0e
+; sub_FD3FE0 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD3FE0:
 	link XIZ,0xfffe                                      ; FD3FE0  ee 0c fe ff
 	pushw hl                                             ; FD3FE4  2b
 	lda xbc, (xiz-2)                                     ; FD3FE5  be fe 31
@@ -123504,6 +124682,8 @@ sub_FD400D:
 	popw hl                                              ; FD4035  4b
 	unlk XIZ                                             ; FD4036  ee 0d
 	ret                                                  ; FD4038  0e
+; sub_FD4039 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD4039:
 	link XIZ,0xfff8                                      ; FD4039  ee 0c f8 ff
 	pushw hl                                             ; FD403D  2b
 	lda xbc, (xiz-2)                                     ; FD403E  be fe 31
@@ -123567,6 +124747,8 @@ sub_FD40B6:
 	popw hl                                              ; FD40D0  4b
 	unlk XIZ                                             ; FD40D1  ee 0d
 	ret                                                  ; FD40D3  0e
+; sub_FD40D4 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD40D4:
 	link XIZ,0xfffa                                      ; FD40D4  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD40D8  be fe 31
 	push XBC                                             ; FD40DB  39
@@ -123933,6 +125115,8 @@ sub_FD42A5:
 	popw hl                                              ; FD43C2  4b
 	unlk XIZ                                             ; FD43C3  ee 0d
 	ret                                                  ; FD43C5  0e
+; sub_FD43C6 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD43C6:
 	link XIZ,0x0000                                      ; FD43C6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD43CA  8e 08 3f 00
 	jr nz, .LFD43DD                                      ; FD43CE  6e 0d
@@ -123946,6 +125130,8 @@ sub_FD42A5:
 .LFD43E1:
 	unlk XIZ                                             ; FD43E1  ee 0d
 	ret                                                  ; FD43E3  0e
+; sub_FD43E4 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD43E4:
 	link XIZ,0x0000                                      ; FD43E4  ee 0c 00 00
 	pushw 0x00                                           ; FD43E8  0b 00 00
 	cp (XIZ+0x08),0x00                                   ; FD43EB  8e 08 3f 00
@@ -123962,6 +125148,8 @@ sub_FD42A5:
 .LFD4407:
 	unlk XIZ                                             ; FD4407  ee 0d
 	ret                                                  ; FD4409  0e
+; sub_FD440A -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD440A:
 	link XIZ,0x0000                                      ; FD440A  ee 0c 00 00
 	pushw 0x00                                           ; FD440E  0b 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4411  8e 08 3f 00
@@ -123978,6 +125166,8 @@ sub_FD42A5:
 .LFD442D:
 	unlk XIZ                                             ; FD442D  ee 0d
 	ret                                                  ; FD442F  0e
+; sub_FD4430 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD4430:
 	link XIZ,0xfffe                                      ; FD4430  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD4434  8e 08 3f 00
 	jr nz, .LFD4447                                      ; FD4438  6e 0d
@@ -124001,6 +125191,8 @@ sub_FD42A5:
 .LFD4465:
 	unlk XIZ                                             ; FD4465  ee 0d
 	ret                                                  ; FD4467  0e
+; sub_FD4468 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD4468:
 	link XIZ,0xfffe                                      ; FD4468  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD446C  8e 08 3f 00
 	jr z, .LFD4490                                       ; FD4470  66 1e
@@ -124018,6 +125210,8 @@ sub_FD42A5:
 .LFD4490:
 	unlk XIZ                                             ; FD4490  ee 0d
 	ret                                                  ; FD4492  0e
+; sub_FD4493 -- a handler: an entry of ToneEditPage_A0_OpTable
+sub_FD4493:
 	link XIZ,0xfffe                                      ; FD4493  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD4497  8e 08 3f 00
 	jr nz, .LFD44C4                                      ; FD449B  6e 27
@@ -124354,6 +125548,8 @@ ToneEditField_A3_InteractionGain:
 	pop XIX                                              ; FD470E  5c
 	unlk XIZ                                             ; FD470F  ee 0d
 	ret                                                  ; FD4711  0e
+; sub_FD4712 -- a handler: an entry of ToneEditPage_A3_OpTable
+sub_FD4712:
 	link XIZ,0x0000                                      ; FD4712  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4716  8e 08 3f 00
 	jr nz, .LFD4729                                      ; FD471A  6e 0d
@@ -124367,6 +125563,8 @@ ToneEditField_A3_InteractionGain:
 .LFD472D:
 	unlk XIZ                                             ; FD472D  ee 0d
 	ret                                                  ; FD472F  0e
+; sub_FD4730 -- a handler: an entry of ToneEditPage_A3_OpTable
+sub_FD4730:
 	link XIZ,0x0000                                      ; FD4730  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4734  8e 08 3f 00
 	jr nz, .LFD4742                                      ; FD4738  6e 08
@@ -124387,6 +125585,8 @@ ToneEditField_A3_InteractionGain:
 .LFD4759:
 	unlk XIZ                                             ; FD4759  ee 0d
 	ret                                                  ; FD475B  0e
+; sub_FD475C -- a handler: an entry of ToneEditPage_A3_OpTable
+sub_FD475C:
 	link XIZ,0x0000                                      ; FD475C  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4760  8e 08 3f 00
 	jr z, .LFD477D                                       ; FD4764  66 17
@@ -124402,6 +125602,8 @@ ToneEditField_A3_InteractionGain:
 .LFD477D:
 	unlk XIZ                                             ; FD477D  ee 0d
 	ret                                                  ; FD477F  0e
+; sub_FD4780 -- a handler: an entry of ToneEditPage_A3_OpTable
+sub_FD4780:
 	link XIZ,0x0000                                      ; FD4780  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4784  8e 08 3f 00
 	jr nz, .LFD4792                                      ; FD4788  6e 08
@@ -124422,6 +125624,8 @@ ToneEditField_A3_InteractionGain:
 .LFD47A9:
 	unlk XIZ                                             ; FD47A9  ee 0d
 	ret                                                  ; FD47AB  0e
+; sub_FD47AC -- a handler: an entry of ToneEditPage_A3_OpTable
+sub_FD47AC:
 	link XIZ,0x0000                                      ; FD47AC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD47B0  8e 08 3f 00
 	jr z, .LFD47CD                                       ; FD47B4  66 17
@@ -124437,6 +125641,8 @@ ToneEditField_A3_InteractionGain:
 .LFD47CD:
 	unlk XIZ                                             ; FD47CD  ee 0d
 	ret                                                  ; FD47CF  0e
+; sub_FD47D0 -- a handler: an entry of ToneEditPage_A3_OpTable
+sub_FD47D0:
 	link XIZ,0x0000                                      ; FD47D0  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD47D4  8e 08 3f 00
 	jr nz, .LFD47E5                                      ; FD47D8  6e 0b
@@ -124447,6 +125653,8 @@ ToneEditField_A3_InteractionGain:
 .LFD47E5:
 	unlk XIZ                                             ; FD47E5  ee 0d
 	ret                                                  ; FD47E7  0e
+; sub_FD47E8 -- a handler: an entry of ToneEditPage_A3_OpTable
+sub_FD47E8:
 	link XIZ,0x0000                                      ; FD47E8  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD47EC  8e 08 3f 00
 	jr nz, .LFD47FD                                      ; FD47F0  6e 0b
@@ -124717,6 +125925,8 @@ ToneEditField_A4_Touch:
 	pop XIX                                              ; FD49D4  5c
 	unlk XIZ                                             ; FD49D5  ee 0d
 	ret                                                  ; FD49D7  0e
+; sub_FD49D8 -- a handler: an entry of ToneEditPage_A4_OpTable
+sub_FD49D8:
 	link XIZ,0x0000                                      ; FD49D8  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD49DC  8e 08 3f 00
 	jr nz, .LFD49EF                                      ; FD49E0  6e 0d
@@ -124730,6 +125940,8 @@ ToneEditField_A4_Touch:
 .LFD49F3:
 	unlk XIZ                                             ; FD49F3  ee 0d
 	ret                                                  ; FD49F5  0e
+; sub_FD49F6 -- a handler: an entry of ToneEditPage_A4_OpTable
+sub_FD49F6:
 	link XIZ,0x0000                                      ; FD49F6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD49FA  8e 08 3f 00
 	jr NZ,.LFD4A08                                       ; FD49FE  6e 08
@@ -124750,6 +125962,8 @@ ToneEditField_A4_Touch:
 .LFD4A1F:
 	unlk XIZ                                             ; FD4A1F  ee 0d
 	ret                                                  ; FD4A21  0e
+; sub_FD4A22 -- a handler: an entry of ToneEditPage_A4_OpTable
+sub_FD4A22:
 	link XIZ,0x0000                                      ; FD4A22  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A26  8e 08 3f 00
 	jr z, .LFD4A43                                       ; FD4A2A  66 17
@@ -124765,6 +125979,8 @@ ToneEditField_A4_Touch:
 .LFD4A43:
 	unlk XIZ                                             ; FD4A43  ee 0d
 	ret                                                  ; FD4A45  0e
+; sub_FD4A46 -- a handler: an entry of ToneEditPage_A4_OpTable
+sub_FD4A46:
 	link XIZ,0x0000                                      ; FD4A46  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A4A  8e 08 3f 00
 	jr nz, .LFD4A58                                      ; FD4A4E  6e 08
@@ -124785,6 +126001,8 @@ ToneEditField_A4_Touch:
 .LFD4A6F:
 	unlk XIZ                                             ; FD4A6F  ee 0d
 	ret                                                  ; FD4A71  0e
+; sub_FD4A72 -- a handler: an entry of ToneEditPage_A4_OpTable
+sub_FD4A72:
 	link XIZ,0x0000                                      ; FD4A72  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A76  8e 08 3f 00
 	jr z, .LFD4A93                                       ; FD4A7A  66 17
@@ -124800,6 +126018,8 @@ ToneEditField_A4_Touch:
 .LFD4A93:
 	unlk XIZ                                             ; FD4A93  ee 0d
 	ret                                                  ; FD4A95  0e
+; sub_FD4A96 -- a handler: an entry of ToneEditPage_A4_OpTable
+sub_FD4A96:
 	link XIZ,0x0000                                      ; FD4A96  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A9A  8e 08 3f 00
 	jr z, .LFD4AAB                                       ; FD4A9E  66 0b
@@ -124810,6 +126030,8 @@ ToneEditField_A4_Touch:
 .LFD4AAB:
 	unlk XIZ                                             ; FD4AAB  ee 0d
 	ret                                                  ; FD4AAD  0e
+; sub_FD4AAE -- a handler: an entry of ToneEditPage_A4_OpTable
+sub_FD4AAE:
 	link XIZ,0x0000                                      ; FD4AAE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4AB2  8e 08 3f 00
 	jr nz, .LFD4AC3                                      ; FD4AB6  6e 0b
@@ -125511,6 +126733,8 @@ ToneEditField_A5_ResoScale:
 	popw hl                                              ; FD4FD8  4b
 	unlk XIZ                                             ; FD4FD9  ee 0d
 	ret                                                  ; FD4FDB  0e
+; sub_FD4FDC -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD4FDC:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD4FDC  1e 01 00
 	ret                                                  ; FD4FDF  0e
 ToneEditPage_ToggleRowFocus:
@@ -125538,6 +126762,8 @@ ToneEditPage_ToggleRowFocus:
 	inc 0,XSP                                            ; FD5018  ef 60
 	unlk XIZ                                             ; FD501A  ee 0d
 	ret                                                  ; FD501C  0e
+; sub_FD501D -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD501D:
 	link XIZ,0x0000                                      ; FD501D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5021  8e 08 3f 00
 	jr nz, .LFD5034                                      ; FD5025  6e 0d
@@ -125551,6 +126777,8 @@ ToneEditPage_ToggleRowFocus:
 .LFD5038:
 	unlk XIZ                                             ; FD5038  ee 0d
 	ret                                                  ; FD503A  0e
+; sub_FD503B -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD503B:
 	link XIZ,0x0000                                      ; FD503B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD503F  8e 08 3f 00
 	jr nz, .LFD504D                                      ; FD5043  6e 08
@@ -125571,6 +126799,8 @@ ToneEditPage_ToggleRowFocus:
 .LFD5064:
 	unlk XIZ                                             ; FD5064  ee 0d
 	ret                                                  ; FD5066  0e
+; sub_FD5067 -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD5067:
 	link XIZ,0x0000                                      ; FD5067  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD506B  8e 08 3f 00
 	jr nz, .LFD5079                                      ; FD506F  6e 08
@@ -125591,6 +126821,8 @@ ToneEditPage_ToggleRowFocus:
 .LFD5090:
 	unlk XIZ                                             ; FD5090  ee 0d
 	ret                                                  ; FD5092  0e
+; sub_FD5093 -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD5093:
 	link XIZ,0x0000                                      ; FD5093  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5097  8e 08 3f 00
 	jr nz, .LFD50A6                                      ; FD509B  6e 09
@@ -125645,6 +126877,8 @@ sub_FD50C0:
 .LFD5111:
 	unlk XIZ                                             ; FD5111  ee 0d
 	ret                                                  ; FD5113  0e
+; sub_FD5114 -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD5114:
 	link XIZ,0x0000                                      ; FD5114  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5118  8e 08 3f 00
 	jr nz, .LFD5127                                      ; FD511C  6e 09
@@ -125665,6 +126899,8 @@ sub_FD50C0:
 .LFD513E:
 	unlk XIZ                                             ; FD513E  ee 0d
 	ret                                                  ; FD5140  0e
+; sub_FD5141 -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD5141:
 	link XIZ,0x0000                                      ; FD5141  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5145  8e 08 3f 00
 	jr nz, .LFD5156                                      ; FD5149  6e 0b
@@ -125675,6 +126911,8 @@ sub_FD50C0:
 .LFD5156:
 	unlk XIZ                                             ; FD5156  ee 0d
 	ret                                                  ; FD5158  0e
+; sub_FD5159 -- a handler: an entry of ToneEditPage_A5_OpTable
+sub_FD5159:
 	link XIZ,0x0000                                      ; FD5159  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD515D  8e 08 3f 00
 	jr nz, .LFD516E                                      ; FD5161  6e 0b
@@ -126094,8 +127332,12 @@ ToneEditField_A6_SubGain:
 	pop XIX                                              ; FD5467  5c
 	unlk XIZ                                             ; FD5468  ee 0d
 	ret                                                  ; FD546A  0e
+; sub_FD546B -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD546B:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD546B  1e 72 fb
 	ret                                                  ; FD546E  0e
+; sub_FD546F -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD546F:
 	link XIZ,0x0000                                      ; FD546F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5473  8e 08 3f 00
 	jr nz, sub_FD5486                                    ; FD5477  6e 0d
@@ -126109,6 +127351,8 @@ sub_FD5486:
 .LFD548A:
 	unlk XIZ                                             ; FD548A  ee 0d
 	ret                                                  ; FD548C  0e
+; sub_FD548D -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD548D:
 	link XIZ,0x0000                                      ; FD548D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5491  8e 08 3f 00
 	jr nz, .LFD549F                                      ; FD5495  6e 08
@@ -126129,6 +127373,8 @@ sub_FD5486:
 .LFD54B6:
 	unlk XIZ                                             ; FD54B6  ee 0d
 	ret                                                  ; FD54B8  0e
+; sub_FD54B9 -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD54B9:
 	link XIZ,0x0000                                      ; FD54B9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD54BD  8e 08 3f 00
 	jr nz, .LFD54CB                                      ; FD54C1  6e 08
@@ -126149,6 +127395,8 @@ sub_FD5486:
 .LFD54E2:
 	unlk XIZ                                             ; FD54E2  ee 0d
 	ret                                                  ; FD54E4  0e
+; sub_FD54E5 -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD54E5:
 	link XIZ,0x0000                                      ; FD54E5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD54E9  8e 08 3f 00
 	jr nz, .LFD54F8                                      ; FD54ED  6e 09
@@ -126169,6 +127417,8 @@ sub_FD5486:
 .LFD550F:
 	unlk XIZ                                             ; FD550F  ee 0d
 	ret                                                  ; FD5511  0e
+; sub_FD5512 -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD5512:
 	link XIZ,0x0000                                      ; FD5512  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5516  8e 08 3f 00
 	jr nz, .LFD5525                                      ; FD551A  6e 09
@@ -126189,6 +127439,8 @@ sub_FD5486:
 .LFD553C:
 	unlk XIZ                                             ; FD553C  ee 0d
 	ret                                                  ; FD553E  0e
+; sub_FD553F -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD553F:
 	link XIZ,0x0000                                      ; FD553F  ee 0c 00 00
 	pushw 0x00                                           ; FD5543  0b 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5546  8e 08 3f 00
@@ -126202,6 +127454,8 @@ sub_FD5486:
 	pop XBC                                              ; FD5558  59
 	unlk XIZ                                             ; FD5559  ee 0d
 	ret                                                  ; FD555B  0e
+; sub_FD555C -- a handler: an entry of ToneEditPage_A6_OpTable
+sub_FD555C:
 	link XIZ,0x0000                                      ; FD555C  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5560  8e 08 3f 00
 	jr nz, .LFD5571                                      ; FD5564  6e 0b
@@ -127006,8 +128260,12 @@ ToneEditField_A7_KeyFollowHigh:
 	popw hl                                              ; FD5B5B  4b
 	unlk XIZ                                             ; FD5B5C  ee 0d
 	ret                                                  ; FD5B5E  0e
+; sub_FD5B5F -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5B5F:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD5B5F  1e 7e f4
 	ret                                                  ; FD5B62  0e
+; sub_FD5B63 -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5B63:
 	link XIZ,0x0000                                      ; FD5B63  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5B67  8e 08 3f 00
 	jr nz, .LFD5B7A                                      ; FD5B6B  6e 0d
@@ -127021,6 +128279,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5B7E:
 	unlk XIZ                                             ; FD5B7E  ee 0d
 	ret                                                  ; FD5B80  0e
+; sub_FD5B81 -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5B81:
 	link XIZ,0x0000                                      ; FD5B81  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5B85  8e 08 3f 00
 	jr nz, .LFD5B93                                      ; FD5B89  6e 08
@@ -127041,6 +128301,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5BAA:
 	unlk XIZ                                             ; FD5BAA  ee 0d
 	ret                                                  ; FD5BAC  0e
+; sub_FD5BAD -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5BAD:
 	link XIZ,0x0000                                      ; FD5BAD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5BB1  8e 08 3f 00
 	jr nz, .LFD5BBF                                      ; FD5BB5  6e 08
@@ -127061,6 +128323,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5BD6:
 	unlk XIZ                                             ; FD5BD6  ee 0d
 	ret                                                  ; FD5BD8  0e
+; sub_FD5BD9 -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5BD9:
 	link XIZ,0x0000                                      ; FD5BD9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5BDD  8e 08 3f 00
 	jr nz, .LFD5BEC                                      ; FD5BE1  6e 09
@@ -127081,6 +128345,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5C03:
 	unlk XIZ                                             ; FD5C03  ee 0d
 	ret                                                  ; FD5C05  0e
+; sub_FD5C06 -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5C06:
 	link XIZ,0x0000                                      ; FD5C06  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5C0A  8e 08 3f 00
 	jr nz, .LFD5C19                                      ; FD5C0E  6e 09
@@ -127101,6 +128367,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5C30:
 	unlk XIZ                                             ; FD5C30  ee 0d
 	ret                                                  ; FD5C32  0e
+; sub_FD5C33 -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5C33:
 	link XIZ,0x0000                                      ; FD5C33  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5C37  8e 08 3f 00
 	jr z, .LFD5C48                                       ; FD5C3B  66 0b
@@ -127111,6 +128379,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5C48:
 	unlk XIZ                                             ; FD5C48  ee 0d
 	ret                                                  ; FD5C4A  0e
+; sub_FD5C4B -- a handler: an entry of ToneEditPage_A7_OpTable
+sub_FD5C4B:
 	link XIZ,0x0000                                      ; FD5C4B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5C4F  8e 08 3f 00
 	jr nz, .LFD5C60                                      ; FD5C53  6e 0b
@@ -127121,6 +128391,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5C60:
 	unlk XIZ                                             ; FD5C60  ee 0d
 	ret                                                  ; FD5C62  0e
+; sub_FD5C63 -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD5C63:
 	link XIZ,0xfff4                                      ; FD5C63  ee 0c f4 ff
 	push XIX                                             ; FD5C67  3c
 	lda xix, (xiz-12)                                    ; FD5C68  be f4 34
@@ -127150,6 +128422,8 @@ ToneEditField_A7_KeyFollowHigh:
 	pop XIX                                              ; FD5CB4  5c
 	unlk XIZ                                             ; FD5CB5  ee 0d
 	ret                                                  ; FD5CB7  0e
+; sub_FD5CB8 -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD5CB8:
 	link XIZ,0xfffe                                      ; FD5CB8  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD5CBC  be fe 31
 	push XBC                                             ; FD5CBF  39
@@ -127179,6 +128453,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5CFE:
 	unlk XIZ                                             ; FD5CFE  ee 0d
 	ret                                                  ; FD5D00  0e
+; sub_FD5D01 -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD5D01:
 	link XIZ,0xfff4                                      ; FD5D01  ee 0c f4 ff
 	push XIX                                             ; FD5D05  3c
 	lda xix, (xiz-12)                                    ; FD5D06  be f4 34
@@ -127208,6 +128484,8 @@ ToneEditField_A7_KeyFollowHigh:
 	pop XIX                                              ; FD5D52  5c
 	unlk XIZ                                             ; FD5D53  ee 0d
 	ret                                                  ; FD5D55  0e
+; sub_FD5D56 -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD5D56:
 	link XIZ,0xfffe                                      ; FD5D56  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD5D5A  be fe 31
 	push XBC                                             ; FD5D5D  39
@@ -127239,6 +128517,8 @@ ToneEditField_A7_KeyFollowHigh:
 .LFD5DA0:
 	unlk XIZ                                             ; FD5DA0  ee 0d
 	ret                                                  ; FD5DA2  0e
+; sub_FD5DA3 -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD5DA3:
 	link XIZ,0xfffe                                      ; FD5DA3  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD5DA7  be fe 31
 	push XBC                                             ; FD5DAA  39
@@ -127398,6 +128678,8 @@ sub_FD5E06:
 	pop XIX                                              ; FD5F3A  5c
 	unlk XIZ                                             ; FD5F3B  ee 0d
 	ret                                                  ; FD5F3D  0e
+; sub_FD5F3E -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD5F3E:
 	link XIZ,0x0000                                      ; FD5F3E  ee 0c 00 00
 	pushw 0x01                                           ; FD5F42  0b 01 00
 	ld BC,(XIZ+0x08)                                     ; FD5F45  9e 08 21
@@ -127512,6 +128794,8 @@ sub_FD5F52:
 	popw hl                                              ; FD603F  4b
 	unlk XIZ                                             ; FD6040  ee 0d
 	ret                                                  ; FD6042  0e
+; sub_FD6043 -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD6043:
 	link XIZ,0x0000                                      ; FD6043  ee 0c 00 00
 	pushw 0x02                                           ; FD6047  0b 02 00
 	ld BC,(XIZ+0x08)                                     ; FD604A  9e 08 21
@@ -127521,6 +128805,8 @@ sub_FD5F52:
 	pop XBC                                              ; FD6053  59
 	unlk XIZ                                             ; FD6054  ee 0d
 	ret                                                  ; FD6056  0e
+; sub_FD6057 -- a handler: an entry of ToneEditPage_A8_OpTable
+sub_FD6057:
 	link XIZ,0xfffe                                      ; FD6057  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD605B  8e 08 3f 00
 	jr nz, .LFD6088                                      ; FD605F  6e 27
@@ -129119,6 +130405,9 @@ Arr27A6_Get:
 	ld (XBC),A                                           ; FD6C8E  b1 41
 	unlk XIZ                                             ; FD6C90  ee 0d
 	ret                                                  ; FD6C92  0e
+; PanelOp_Nop -- a lone `ret`: the slot every PanelOpTable_* (and
+; DispatchTable_FCF000) uses for an operation its field does not handle.
+PanelOp_Nop:
 	ret                                                  ; FD6C93  0e
 sub_FD6C94:
 	link XIZ,0x0000                                      ; FD6C94  ee 0c 00 00
@@ -143844,6 +145133,8 @@ sub_FDE760:
 	popw hl                                       ; FDE818  4b
 	unlk XIZ                                      ; FDE819  ee 0d
 	ret                                           ; FDE81B  0e
+; sub_FDE81C -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDE81C:
 	link XIZ,0x0000                               ; FDE81C  ee 0c 00 00
 	pushw 0x90                                    ; FDE820  0b 90 00
 	pushw 0x02                                    ; FDE823  0b 02 00
@@ -143919,6 +145210,8 @@ sub_FDE760:
 	popw hl                                       ; FDE8D4  4b
 	unlk XIZ                                      ; FDE8D5  ee 0d
 	ret                                           ; FDE8D7  0e
+; sub_FDE8D8 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDE8D8:
 	link XIZ,0x0000                               ; FDE8D8  ee 0c 00 00
 	pushw 0x90                                    ; FDE8DC  0b 90 00
 	pushw 0x03                                    ; FDE8DF  0b 03 00
@@ -143990,6 +145283,8 @@ sub_FDE760:
 	popw hl                                       ; FDE984  4b
 	unlk XIZ                                      ; FDE985  ee 0d
 	ret                                           ; FDE987  0e
+; sub_FDE988 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDE988:
 	link XIZ,0x0000                               ; FDE988  ee 0c 00 00
 	pushw 0x90                                    ; FDE98C  0b 90 00
 	pushw 0x04                                    ; FDE98F  0b 04 00
@@ -144062,6 +145357,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEA35  ee 0d
 	ret                                           ; FDEA37  0e
 .LFDEA38:
+; sub_FDEA38 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDEA38:
 	link XIZ,0xffec                               ; FDEA38  ee 0c ec ff
 	pushw hl                                      ; FDEA3C  2b
 	push XIX                                      ; FDEA3D  3c
@@ -144127,6 +145424,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEACF  ee 0d
 	ret                                           ; FDEAD1  0e
 .LFDEAD2:
+; sub_FDEAD2 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDEAD2:
 	link XIZ,0xffec                               ; FDEAD2  ee 0c ec ff
 	pushw hl                                      ; FDEAD6  2b
 	push XIX                                      ; FDEAD7  3c
@@ -144189,6 +145488,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEB6A  ee 0d
 	ret                                           ; FDEB6C  0e
 .LFDEB6D:
+; sub_FDEB6D -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDEB6D:
 	link XIZ,0xffec                               ; FDEB6D  ee 0c ec ff
 	pushw hl                                      ; FDEB71  2b
 	push XIX                                      ; FDEB72  3c
@@ -144251,6 +145552,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEC05  ee 0d
 	ret                                           ; FDEC07  0e
 .LFDEC08:
+; sub_FDEC08 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDEC08:
 	link XIZ,0xfffe                               ; FDEC08  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEC0C  be fe 31
 	push XBC                                      ; FDEC0F  39
@@ -144271,6 +145574,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEC32  ee 0d
 	ret                                           ; FDEC34  0e
 .LFDEC35:
+; sub_FDEC35 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDEC35:
 	link XIZ,0x0000                               ; FDEC35  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDEC39  8e 08 3f 00
 	jr z, .LFDEC56                                ; FDEC3D  66 17
@@ -144287,6 +145592,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEC56  ee 0d
 	ret                                           ; FDEC58  0e
 .LFDEC59:
+; sub_FDEC59 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDEC59:
 	link XIZ,0xfffe                               ; FDEC59  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEC5D  be fe 31
 	push XBC                                      ; FDEC60  39
@@ -144313,6 +145620,8 @@ sub_FDE760:
 .LFDEC91:
 	unlk XIZ                                      ; FDEC91  ee 0d
 	ret                                           ; FDEC93  0e
+; sub_FDEC94 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDEC94:
 	link XIZ,0xfffc                               ; FDEC94  ee 0c fc ff
 	pushw hl                                      ; FDEC98  2b
 	lda xbc, (xiz-2)                              ; FDEC99  be fe 31
@@ -144353,6 +145662,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDECEB  ee 0d
 	ret                                           ; FDECED  0e
 .LFDECEE:
+; sub_FDECEE -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDECEE:
 	link XIZ,0xfffe                               ; FDECEE  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDECF2  be fe 31
 	push XBC                                      ; FDECF5  39
@@ -144374,6 +145685,8 @@ sub_FDE760:
 .LFDED1E:
 	unlk XIZ                                      ; FDED1E  ee 0d
 	ret                                           ; FDED20  0e
+; sub_FDED21 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDED21:
 	link XIZ,0xfffe                               ; FDED21  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDED25  be fe 31
 	push XBC                                      ; FDED28  39
@@ -144390,6 +145703,8 @@ sub_FDE760:
 .LFDED45:
 	unlk XIZ                                      ; FDED45  ee 0d
 	ret                                           ; FDED47  0e
+; sub_FDED48 -- a handler: an entry of PanelOpTable_FCF4A3
+sub_FDED48:
 	link XIZ,0xfffe                               ; FDED48  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDED4C  8e 08 3f 00
 	jr nz, .LFDED79                               ; FDED50  6e 27
@@ -144412,6 +145727,8 @@ sub_FDE760:
 .LFDED79:
 	unlk XIZ                                      ; FDED79  ee 0d
 	ret                                           ; FDED7B  0e
+; sub_FDED7C -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDED7C:
 	link XIZ,0x0000                               ; FDED7C  ee 0c 00 00
 	pushw 0x91                                    ; FDED80  0b 91 00
 	pushw 0x01                                    ; FDED83  0b 01 00
@@ -144426,6 +145743,8 @@ sub_FDE760:
 	inc 2,XSP                                     ; FDED9B  ef 62
 	unlk XIZ                                      ; FDED9D  ee 0d
 	ret                                           ; FDED9F  0e
+; sub_FDEDA0 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEDA0:
 	link XIZ,0x0000                               ; FDEDA0  ee 0c 00 00
 	pushw 0x91                                    ; FDEDA4  0b 91 00
 	pushw 0x02                                    ; FDEDA7  0b 02 00
@@ -144440,6 +145759,8 @@ sub_FDE760:
 	inc 2,XSP                                     ; FDEDBF  ef 62
 	unlk XIZ                                      ; FDEDC1  ee 0d
 	ret                                           ; FDEDC3  0e
+; sub_FDEDC4 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEDC4:
 	link XIZ,0x0000                               ; FDEDC4  ee 0c 00 00
 	pushw 0x91                                    ; FDEDC8  0b 91 00
 	pushw 0x03                                    ; FDEDCB  0b 03 00
@@ -144450,6 +145771,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDEDD7  ef 66
 	unlk XIZ                                      ; FDEDD9  ee 0d
 	ret                                           ; FDEDDB  0e
+; sub_FDEDDC -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEDDC:
 	link XIZ,0x0000                               ; FDEDDC  ee 0c 00 00
 	pushw 0x91                                    ; FDEDE0  0b 91 00
 	pushw 0x04                                    ; FDEDE3  0b 04 00
@@ -144460,6 +145783,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDEDEF  ef 66
 	unlk XIZ                                      ; FDEDF1  ee 0d
 	ret                                           ; FDEDF3  0e
+; sub_FDEDF4 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEDF4:
 	link XIZ,0x0000                               ; FDEDF4  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEDF8  9e 08 21
 	extz BC                                       ; FDEDFB  d9 12
@@ -144468,6 +145793,8 @@ sub_FDE760:
 	popw bc                                       ; FDEE01  49
 	unlk XIZ                                      ; FDEE02  ee 0d
 	ret                                           ; FDEE04  0e
+; sub_FDEE05 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEE05:
 	link XIZ,0x0000                               ; FDEE05  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE09  9e 08 21
 	extz BC                                       ; FDEE0C  d9 12
@@ -144476,6 +145803,8 @@ sub_FDE760:
 	popw bc                                       ; FDEE12  49
 	unlk XIZ                                      ; FDEE13  ee 0d
 	ret                                           ; FDEE15  0e
+; sub_FDEE16 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEE16:
 	link XIZ,0x0000                               ; FDEE16  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE1A  9e 08 21
 	extz BC                                       ; FDEE1D  d9 12
@@ -144484,6 +145813,8 @@ sub_FDE760:
 	popw bc                                       ; FDEE23  49
 	unlk XIZ                                      ; FDEE24  ee 0d
 	ret                                           ; FDEE26  0e
+; sub_FDEE27 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEE27:
 	link XIZ,0x0000                               ; FDEE27  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE2B  9e 08 21
 	extz BC                                       ; FDEE2E  d9 12
@@ -144492,6 +145823,8 @@ sub_FDE760:
 	popw bc                                       ; FDEE34  49
 	unlk XIZ                                      ; FDEE35  ee 0d
 	ret                                           ; FDEE37  0e
+; sub_FDEE38 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEE38:
 	link XIZ,0x0000                               ; FDEE38  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE3C  9e 08 21
 	extz BC                                       ; FDEE3F  d9 12
@@ -144500,6 +145833,8 @@ sub_FDE760:
 	popw bc                                       ; FDEE45  49
 	unlk XIZ                                      ; FDEE46  ee 0d
 	ret                                           ; FDEE48  0e
+; sub_FDEE49 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEE49:
 	link XIZ,0x0000                               ; FDEE49  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE4D  9e 08 21
 	extz BC                                       ; FDEE50  d9 12
@@ -144508,6 +145843,8 @@ sub_FDE760:
 	popw bc                                       ; FDEE56  49
 	unlk XIZ                                      ; FDEE57  ee 0d
 	ret                                           ; FDEE59  0e
+; sub_FDEE5A -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEE5A:
 	link XIZ,0xfffc                               ; FDEE5A  ee 0c fc ff
 	pushw hl                                      ; FDEE5E  2b
 	lda xbc, (xiz-2)                              ; FDEE5F  be fe 31
@@ -144547,6 +145884,8 @@ sub_FDE760:
 	popw hl                                       ; FDEEB0  4b
 	unlk XIZ                                      ; FDEEB1  ee 0d
 	ret                                           ; FDEEB3  0e
+; sub_FDEEB4 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEEB4:
 	link XIZ,0x0000                               ; FDEEB4  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEEB8  9e 08 21
 	extz BC                                       ; FDEEBB  d9 12
@@ -144555,6 +145894,8 @@ sub_FDE760:
 	popw bc                                       ; FDEEC1  49
 	unlk XIZ                                      ; FDEEC2  ee 0d
 	ret                                           ; FDEEC4  0e
+; sub_FDEEC5 -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEEC5:
 	link XIZ,0xfffe                               ; FDEEC5  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEEC9  be fe 31
 	push XBC                                      ; FDEECC  39
@@ -144571,6 +145912,8 @@ sub_FDE760:
 .LFDEEE9:
 	unlk XIZ                                      ; FDEEE9  ee 0d
 	ret                                           ; FDEEEB  0e
+; sub_FDEEEC -- a handler: an entry of PanelOpTable_FCF4EB
+sub_FDEEEC:
 	link XIZ,0xfffe                               ; FDEEEC  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDEEF0  8e 08 3f 00
 	jr nz, .LFDEF1D                               ; FDEEF4  6e 27
@@ -144593,6 +145936,8 @@ sub_FDE760:
 .LFDEF1D:
 	unlk XIZ                                      ; FDEF1D  ee 0d
 	ret                                           ; FDEF1F  0e
+; sub_FDEF20 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDEF20:
 	link XIZ,0x0000                               ; FDEF20  ee 0c 00 00
 	pushw 0x92                                    ; FDEF24  0b 92 00
 	pushw 0x03                                    ; FDEF27  0b 03 00
@@ -144607,6 +145952,8 @@ sub_FDE760:
 	inc 2,XSP                                     ; FDEF3F  ef 62
 	unlk XIZ                                      ; FDEF41  ee 0d
 	ret                                           ; FDEF43  0e
+; sub_FDEF44 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDEF44:
 	link XIZ,0x0000                               ; FDEF44  ee 0c 00 00
 	pushw 0x92                                    ; FDEF48  0b 92 00
 	pushw 0x04                                    ; FDEF4B  0b 04 00
@@ -144621,6 +145968,8 @@ sub_FDE760:
 	inc 2,XSP                                     ; FDEF63  ef 62
 	unlk XIZ                                      ; FDEF65  ee 0d
 	ret                                           ; FDEF67  0e
+; sub_FDEF68 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDEF68:
 	link XIZ,0x0000                               ; FDEF68  ee 0c 00 00
 	pushw 0x92                                    ; FDEF6C  0b 92 00
 	pushw 0x05                                    ; FDEF6F  0b 05 00
@@ -144631,6 +145980,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDEF7B  ef 66
 	unlk XIZ                                      ; FDEF7D  ee 0d
 	ret                                           ; FDEF7F  0e
+; sub_FDEF80 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDEF80:
 	link XIZ,0x0000                               ; FDEF80  ee 0c 00 00
 	pushw 0x92                                    ; FDEF84  0b 92 00
 	pushw 0x06                                    ; FDEF87  0b 06 00
@@ -144642,6 +145993,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEF95  ee 0d
 	ret                                           ; FDEF97  0e
 .LFDEF98:
+; sub_FDEF98 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDEF98:
 	link XIZ,0xfffe                               ; FDEF98  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEF9C  be fe 31
 	push XBC                                      ; FDEF9F  39
@@ -144662,6 +146015,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEFC2  ee 0d
 	ret                                           ; FDEFC4  0e
 .LFDEFC5:
+; sub_FDEFC5 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDEFC5:
 	link XIZ,0x0000                               ; FDEFC5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDEFC9  8e 08 3f 00
 	jr z, .LFDEFE6                                ; FDEFCD  66 17
@@ -144678,6 +146033,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDEFE6  ee 0d
 	ret                                           ; FDEFE8  0e
 .LFDEFE9:
+; sub_FDEFE9 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDEFE9:
 	link XIZ,0xfffe                               ; FDEFE9  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEFED  be fe 31
 	push XBC                                      ; FDEFF0  39
@@ -144704,6 +146061,8 @@ sub_FDE760:
 .LFDF021:
 	unlk XIZ                                      ; FDF021  ee 0d
 	ret                                           ; FDF023  0e
+; sub_FDF024 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDF024:
 	link XIZ,0xfffc                               ; FDF024  ee 0c fc ff
 	pushw hl                                      ; FDF028  2b
 	lda xbc, (xiz-2)                              ; FDF029  be fe 31
@@ -144744,6 +146103,8 @@ sub_FDE760:
 	unlk XIZ                                      ; FDF07B  ee 0d
 	ret                                           ; FDF07D  0e
 .LFDF07E:
+; sub_FDF07E -- a handler: an entry of PanelOpTable_FCF533
+sub_FDF07E:
 	link XIZ,0xfffe                               ; FDF07E  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF082  be fe 31
 	push XBC                                      ; FDF085  39
@@ -144765,6 +146126,8 @@ sub_FDE760:
 .LFDF0AE:
 	unlk XIZ                                      ; FDF0AE  ee 0d
 	ret                                           ; FDF0B0  0e
+; sub_FDF0B1 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDF0B1:
 	link XIZ,0xfffe                               ; FDF0B1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF0B5  be fe 31
 	push XBC                                      ; FDF0B8  39
@@ -144781,6 +146144,8 @@ sub_FDE760:
 .LFDF0D5:
 	unlk XIZ                                      ; FDF0D5  ee 0d
 	ret                                           ; FDF0D7  0e
+; sub_FDF0D8 -- a handler: an entry of PanelOpTable_FCF533
+sub_FDF0D8:
 	link XIZ,0xfffe                               ; FDF0D8  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF0DC  8e 08 3f 00
 	jr nz, .LFDF109                               ; FDF0E0  6e 27
@@ -144803,6 +146168,8 @@ sub_FDE760:
 .LFDF109:
 	unlk XIZ                                      ; FDF109  ee 0d
 	ret                                           ; FDF10B  0e
+; sub_FDF10C -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF10C:
 	link XIZ,0x0000                               ; FDF10C  ee 0c 00 00
 	pushw 0x93                                    ; FDF110  0b 93 00
 	pushw 0x03                                    ; FDF113  0b 03 00
@@ -144817,6 +146184,8 @@ sub_FDE760:
 	inc 2,XSP                                     ; FDF12B  ef 62
 	unlk XIZ                                      ; FDF12D  ee 0d
 	ret                                           ; FDF12F  0e
+; sub_FDF130 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF130:
 	link XIZ,0x0000                               ; FDF130  ee 0c 00 00
 	pushw 0x93                                    ; FDF134  0b 93 00
 	pushw 0x04                                    ; FDF137  0b 04 00
@@ -144831,6 +146200,8 @@ sub_FDE760:
 	inc 2,XSP                                     ; FDF14F  ef 62
 	unlk XIZ                                      ; FDF151  ee 0d
 	ret                                           ; FDF153  0e
+; sub_FDF154 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF154:
 	link XIZ,0x0000                               ; FDF154  ee 0c 00 00
 	pushw 0x93                                    ; FDF158  0b 93 00
 	pushw 0x05                                    ; FDF15B  0b 05 00
@@ -144841,6 +146212,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDF167  ef 66
 	unlk XIZ                                      ; FDF169  ee 0d
 	ret                                           ; FDF16B  0e
+; sub_FDF16C -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF16C:
 	link XIZ,0x0000                               ; FDF16C  ee 0c 00 00
 	pushw 0x93                                    ; FDF170  0b 93 00
 	pushw 0x06                                    ; FDF173  0b 06 00
@@ -144851,6 +146224,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDF17F  ef 66
 	unlk XIZ                                      ; FDF181  ee 0d
 	ret                                           ; FDF183  0e
+; sub_FDF184 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF184:
 	link XIZ,0x0000                               ; FDF184  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF188  9e 08 21
 	extz BC                                       ; FDF18B  d9 12
@@ -144859,6 +146234,8 @@ sub_FDE760:
 	popw bc                                       ; FDF191  49
 	unlk XIZ                                      ; FDF192  ee 0d
 	ret                                           ; FDF194  0e
+; sub_FDF195 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF195:
 	link XIZ,0x0000                               ; FDF195  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF199  9e 08 21
 	extz BC                                       ; FDF19C  d9 12
@@ -144867,6 +146244,8 @@ sub_FDE760:
 	popw bc                                       ; FDF1A2  49
 	unlk XIZ                                      ; FDF1A3  ee 0d
 	ret                                           ; FDF1A5  0e
+; sub_FDF1A6 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF1A6:
 	link XIZ,0x0000                               ; FDF1A6  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF1AA  9e 08 21
 	extz BC                                       ; FDF1AD  d9 12
@@ -144875,6 +146254,8 @@ sub_FDE760:
 	popw bc                                       ; FDF1B3  49
 	unlk XIZ                                      ; FDF1B4  ee 0d
 	ret                                           ; FDF1B6  0e
+; sub_FDF1B7 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF1B7:
 	link XIZ,0xfffc                               ; FDF1B7  ee 0c fc ff
 	pushw hl                                      ; FDF1BB  2b
 	lda xbc, (xiz-2)                              ; FDF1BC  be fe 31
@@ -144914,6 +146295,8 @@ sub_FDE760:
 	popw hl                                       ; FDF20D  4b
 	unlk XIZ                                      ; FDF20E  ee 0d
 	ret                                           ; FDF210  0e
+; sub_FDF211 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF211:
 	link XIZ,0x0000                               ; FDF211  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF215  9e 08 21
 	extz BC                                       ; FDF218  d9 12
@@ -144922,6 +146305,8 @@ sub_FDE760:
 	popw bc                                       ; FDF21E  49
 	unlk XIZ                                      ; FDF21F  ee 0d
 	ret                                           ; FDF221  0e
+; sub_FDF222 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF222:
 	link XIZ,0xfffe                               ; FDF222  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF226  be fe 31
 	push XBC                                      ; FDF229  39
@@ -144938,6 +146323,8 @@ sub_FDE760:
 .LFDF246:
 	unlk XIZ                                      ; FDF246  ee 0d
 	ret                                           ; FDF248  0e
+; sub_FDF249 -- a handler: an entry of PanelOpTable_FCF57B
+sub_FDF249:
 	link XIZ,0xfffe                               ; FDF249  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF24D  8e 08 3f 00
 	jr nz, .LFDF27A                               ; FDF251  6e 27
@@ -144960,6 +146347,8 @@ sub_FDE760:
 .LFDF27A:
 	unlk XIZ                                      ; FDF27A  ee 0d
 	ret                                           ; FDF27C  0e
+; sub_FDF27D -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF27D:
 	link XIZ,0xffea                               ; FDF27D  ee 0c ea ff
 	pushw hl                                      ; FDF281  2b
 	push XIX                                      ; FDF282  3c
@@ -145023,6 +146412,8 @@ sub_FDE760:
 	popw hl                                       ; FDF31E  4b
 	unlk XIZ                                      ; FDF31F  ee 0d
 	ret                                           ; FDF321  0e
+; sub_FDF322 -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF322:
 	link XIZ,0x0000                               ; FDF322  ee 0c 00 00
 	pushw 0x94                                    ; FDF326  0b 94 00
 	pushw 0x03                                    ; FDF329  0b 03 00
@@ -145034,6 +146425,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDF339  ef 66
 	unlk XIZ                                      ; FDF33B  ee 0d
 	ret                                           ; FDF33D  0e
+; sub_FDF33E -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF33E:
 	link XIZ,0xffea                               ; FDF33E  ee 0c ea ff
 	push XIX                                      ; FDF342  3c
 	lda xix, (xiz-18)                             ; FDF343  be ee 34
@@ -145095,6 +146488,8 @@ sub_FDE760:
 	pop XIX                                       ; FDF3DB  5c
 	unlk XIZ                                      ; FDF3DC  ee 0d
 	ret                                           ; FDF3DE  0e
+; sub_FDF3DF -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF3DF:
 	link XIZ,0xffec                               ; FDF3DF  ee 0c ec ff
 	push XIX                                      ; FDF3E3  3c
 	lda xix, (xiz-16)                             ; FDF3E4  be f0 34
@@ -145150,6 +146545,8 @@ sub_FDE760:
 	pop XIX                                       ; FDF46D  5c
 	unlk XIZ                                      ; FDF46E  ee 0d
 	ret                                           ; FDF470  0e
+; sub_FDF471 -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF471:
 	link XIZ,0x0000                               ; FDF471  ee 0c 00 00
 	pushw 0x94                                    ; FDF475  0b 94 00
 	pushw 0x06                                    ; FDF478  0b 06 00
@@ -145160,6 +146557,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDF484  ef 66
 	unlk XIZ                                      ; FDF486  ee 0d
 	ret                                           ; FDF488  0e
+; sub_FDF489 -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF489:
 	link XIZ,0x0000                               ; FDF489  ee 0c 00 00
 	pushw 0x94                                    ; FDF48D  0b 94 00
 	pushw 0x07                                    ; FDF490  0b 07 00
@@ -145170,6 +146569,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDF49C  ef 66
 	unlk XIZ                                      ; FDF49E  ee 0d
 	ret                                           ; FDF4A0  0e
+; sub_FDF4A1 -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF4A1:
 	link XIZ,0xfffe                               ; FDF4A1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF4A5  be fe 31
 	push XBC                                      ; FDF4A8  39
@@ -145189,6 +146590,8 @@ sub_FDE760:
 .LFDF4CB:
 	unlk XIZ                                      ; FDF4CB  ee 0d
 	ret                                           ; FDF4CD  0e
+; sub_FDF4CE -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF4CE:
 	link XIZ,0x0000                               ; FDF4CE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF4D2  8e 08 3f 00
 	jr z, .LFDF4EF                                ; FDF4D6  66 17
@@ -145204,6 +146607,8 @@ sub_FDE760:
 .LFDF4EF:
 	unlk XIZ                                      ; FDF4EF  ee 0d
 	ret                                           ; FDF4F1  0e
+; sub_FDF4F2 -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF4F2:
 	link XIZ,0xfffe                               ; FDF4F2  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF4F6  be fe 31
 	push XBC                                      ; FDF4F9  39
@@ -145230,6 +146635,8 @@ sub_FDE760:
 .LFDF52A:
 	unlk XIZ                                      ; FDF52A  ee 0d
 	ret                                           ; FDF52C  0e
+; sub_FDF52D -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF52D:
 	link XIZ,0xfffc                               ; FDF52D  ee 0c fc ff
 	lda xbc, (xiz-2)                              ; FDF531  be fe 31
 	push XBC                                      ; FDF534  39
@@ -145264,6 +146671,8 @@ sub_FDE760:
 .LFDF57A:
 	unlk XIZ                                      ; FDF57A  ee 0d
 	ret                                           ; FDF57C  0e
+; sub_FDF57D -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF57D:
 	link XIZ,0xfffe                               ; FDF57D  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF581  be fe 31
 	push XBC                                      ; FDF584  39
@@ -145285,6 +146694,8 @@ sub_FDE760:
 .LFDF5AD:
 	unlk XIZ                                      ; FDF5AD  ee 0d
 	ret                                           ; FDF5AF  0e
+; sub_FDF5B0 -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF5B0:
 	link XIZ,0xfffe                               ; FDF5B0  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF5B4  be fe 31
 	push XBC                                      ; FDF5B7  39
@@ -145301,6 +146712,8 @@ sub_FDE760:
 .LFDF5D4:
 	unlk XIZ                                      ; FDF5D4  ee 0d
 	ret                                           ; FDF5D6  0e
+; sub_FDF5D7 -- a handler: an entry of PanelOpTable_FCF5C3
+sub_FDF5D7:
 	link XIZ,0xfffe                               ; FDF5D7  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF5DB  8e 08 3f 00
 	jr nz, .LFDF608                               ; FDF5DF  6e 27
@@ -145323,6 +146736,8 @@ sub_FDE760:
 .LFDF608:
 	unlk XIZ                                      ; FDF608  ee 0d
 	ret                                           ; FDF60A  0e
+; sub_FDF60B -- a handler: an entry of PanelOpTable_FCF60B
+sub_FDF60B:
 	link XIZ,0xfffe                               ; FDF60B  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF60F  be fe 31
 	push XBC                                      ; FDF612  39
@@ -145342,6 +146757,8 @@ sub_FDE760:
 .LFDF635:
 	unlk XIZ                                      ; FDF635  ee 0d
 	ret                                           ; FDF637  0e
+; sub_FDF638 -- a handler: an entry of PanelOpTable_FCF60B
+sub_FDF638:
 	link XIZ,0x0000                               ; FDF638  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF63C  8e 08 3f 00
 	jr z, .LFDF659                                ; FDF640  66 17
@@ -145357,6 +146774,8 @@ sub_FDE760:
 .LFDF659:
 	unlk XIZ                                      ; FDF659  ee 0d
 	ret                                           ; FDF65B  0e
+; sub_FDF65C -- a handler: an entry of PanelOpTable_FCF60B
+sub_FDF65C:
 	link XIZ,0xfffe                               ; FDF65C  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF660  be fe 31
 	push XBC                                      ; FDF663  39
@@ -145383,6 +146802,8 @@ sub_FDE760:
 .LFDF694:
 	unlk XIZ                                      ; FDF694  ee 0d
 	ret                                           ; FDF696  0e
+; sub_FDF697 -- a handler: an entry of PanelOpTable_FCF60B
+sub_FDF697:
 	link XIZ,0xfffc                               ; FDF697  ee 0c fc ff
 	pushw hl                                      ; FDF69B  2b
 	lda xbc, (xiz-2)                              ; FDF69C  be fe 31
@@ -145422,6 +146843,8 @@ sub_FDE760:
 	popw hl                                       ; FDF6ED  4b
 	unlk XIZ                                      ; FDF6EE  ee 0d
 	ret                                           ; FDF6F0  0e
+; sub_FDF6F1 -- a handler: an entry of PanelOpTable_FCF60B
+sub_FDF6F1:
 	link XIZ,0xfffe                               ; FDF6F1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF6F5  be fe 31
 	push XBC                                      ; FDF6F8  39
@@ -145443,6 +146866,8 @@ sub_FDE760:
 .LFDF721:
 	unlk XIZ                                      ; FDF721  ee 0d
 	ret                                           ; FDF723  0e
+; sub_FDF724 -- a handler: an entry of PanelOpTable_FCF60B
+sub_FDF724:
 	link XIZ,0xfffe                               ; FDF724  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF728  be fe 31
 	push XBC                                      ; FDF72B  39
@@ -145459,6 +146884,8 @@ sub_FDE760:
 .LFDF748:
 	unlk XIZ                                      ; FDF748  ee 0d
 	ret                                           ; FDF74A  0e
+; sub_FDF74B -- a handler: an entry of PanelOpTable_FCF60B
+sub_FDF74B:
 	link XIZ,0xfffe                               ; FDF74B  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF74F  8e 08 3f 00
 	jr nz, .LFDF77C                               ; FDF753  6e 27
@@ -145481,6 +146908,8 @@ sub_FDE760:
 .LFDF77C:
 	unlk XIZ                                      ; FDF77C  ee 0d
 	ret                                           ; FDF77E  0e
+; sub_FDF77F -- a handler: an entry of PanelOpTable_FCF653
+sub_FDF77F:
 	link XIZ,0xfff0                               ; FDF77F  ee 0c f0 ff
 	push XIX                                      ; FDF783  3c
 	lda xix, (xiz-16)                             ; FDF784  be f0 34
@@ -145533,6 +146962,8 @@ sub_FDE760:
 	pop XIX                                       ; FDF806  5c
 	unlk XIZ                                      ; FDF807  ee 0d
 	ret                                           ; FDF809  0e
+; sub_FDF80A -- a handler: an entry of PanelOpTable_FCF653
+sub_FDF80A:
 	link XIZ,0xfffa                               ; FDF80A  ee 0c fa ff
 	lda xbc, (xiz-2)                              ; FDF80E  be fe 31
 	push XBC                                      ; FDF811  39
@@ -145580,6 +147011,8 @@ sub_FDE760:
 	popw bc                                       ; FDF882  49
 	unlk XIZ                                      ; FDF883  ee 0d
 	ret                                           ; FDF885  0e
+; sub_FDF886 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDF886:
 	link XIZ,0xfff8                               ; FDF886  ee 0c f8 ff
 	push XIX                                      ; FDF88A  3c
 	lda xix, (0xfd6c7b:24)                        ; FDF88B  f2 7b 6c fd 34
@@ -145642,6 +147075,8 @@ sub_FDE760:
 	pop XIX                                       ; FDF924  5c
 	unlk XIZ                                      ; FDF925  ee 0d
 	ret                                           ; FDF927  0e
+; sub_FDF928 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDF928:
 	link XIZ,0xfffa                               ; FDF928  ee 0c fa ff
 	lda xbc, (xiz-2)                              ; FDF92C  be fe 31
 	push XBC                                      ; FDF92F  39
@@ -145689,6 +147124,8 @@ sub_FDE760:
 	popw bc                                       ; FDF9A0  49
 	unlk XIZ                                      ; FDF9A1  ee 0d
 	ret                                           ; FDF9A3  0e
+; sub_FDF9A4 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDF9A4:
 	link XIZ,0x0000                               ; FDF9A4  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9A8  8e 08 3f 00
 	jr nz, .LFDF9BB                               ; FDF9AC  6e 0d
@@ -145702,6 +147139,8 @@ sub_FDE760:
 .LFDF9BF:
 	unlk XIZ                                      ; FDF9BF  ee 0d
 	ret                                           ; FDF9C1  0e
+; sub_FDF9C2 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDF9C2:
 	link XIZ,0x0000                               ; FDF9C2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9C6  8e 08 3f 00
 	jr z, .LFDF9E3                                ; FDF9CA  66 17
@@ -145717,6 +147156,8 @@ sub_FDE760:
 .LFDF9E3:
 	unlk XIZ                                      ; FDF9E3  ee 0d
 	ret                                           ; FDF9E5  0e
+; sub_FDF9E6 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDF9E6:
 	link XIZ,0x0000                               ; FDF9E6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9EA  8e 08 3f 00
 	jr nz, .LFDF9F8                               ; FDF9EE  6e 08
@@ -145737,6 +147178,8 @@ sub_FDE760:
 .LFDFA0F:
 	unlk XIZ                                      ; FDFA0F  ee 0d
 	ret                                           ; FDFA11  0e
+; sub_FDFA12 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDFA12:
 	link XIZ,0x0000                               ; FDFA12  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA16  8e 08 3f 00
 	jr z, .LFDFA33                                ; FDFA1A  66 17
@@ -145752,6 +147195,8 @@ sub_FDE760:
 .LFDFA33:
 	unlk XIZ                                      ; FDFA33  ee 0d
 	ret                                           ; FDFA35  0e
+; sub_FDFA36 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDFA36:
 	link XIZ,0x0000                               ; FDFA36  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA3A  8e 08 3f 00
 	jr z, .LFDFA57                                ; FDFA3E  66 17
@@ -145767,6 +147212,8 @@ sub_FDE760:
 .LFDFA57:
 	unlk XIZ                                      ; FDFA57  ee 0d
 	ret                                           ; FDFA59  0e
+; sub_FDFA5A -- a handler: an entry of PanelOpTable_FCF653
+sub_FDFA5A:
 	link XIZ,0x0000                               ; FDFA5A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA5E  8e 08 3f 00
 	jr z, .LFDFA6F                                ; FDFA62  66 0b
@@ -145777,6 +147224,8 @@ sub_FDE760:
 .LFDFA6F:
 	unlk XIZ                                      ; FDFA6F  ee 0d
 	ret                                           ; FDFA71  0e
+; sub_FDFA72 -- a handler: an entry of PanelOpTable_FCF653
+sub_FDFA72:
 	link XIZ,0x0000                               ; FDFA72  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA76  8e 08 3f 00
 	jr nz, .LFDFA8F                               ; FDFA7A  6e 13
@@ -145789,6 +147238,8 @@ sub_FDE760:
 .LFDFA8F:
 	unlk XIZ                                      ; FDFA8F  ee 0d
 	ret                                           ; FDFA91  0e
+; sub_FDFA92 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFA92:
 	link XIZ,0x0000                               ; FDFA92  ee 0c 00 00
 	pushw 0x00                                    ; FDFA96  0b 00 00
 	pushw 0x3f                                    ; FDFA99  0b 3f 00
@@ -145799,6 +147250,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDFAA6  ef 66
 	unlk XIZ                                      ; FDFAA8  ee 0d
 	ret                                           ; FDFAAA  0e
+; sub_FDFAAB -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFAAB:
 	link XIZ,0x0000                               ; FDFAAB  ee 0c 00 00
 	pushw 0x00                                    ; FDFAAF  0b 00 00
 	pushw 0x40                                    ; FDFAB2  0b 40 00
@@ -145809,6 +147262,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDFABF  ef 66
 	unlk XIZ                                      ; FDFAC1  ee 0d
 	ret                                           ; FDFAC3  0e
+; sub_FDFAC4 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFAC4:
 	link XIZ,0x0000                               ; FDFAC4  ee 0c 00 00
 	pushw 0x41                                    ; FDFAC8  0b 41 00
 	pushw 0x3e                                    ; FDFACB  0b 3e 00
@@ -145819,6 +147274,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDFAD8  ef 66
 	unlk XIZ                                      ; FDFADA  ee 0d
 	ret                                           ; FDFADC  0e
+; sub_FDFADD -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFADD:
 	link XIZ,0x0000                               ; FDFADD  ee 0c 00 00
 	pushw 0x00                                    ; FDFAE1  0b 00 00
 	pushw 0x42                                    ; FDFAE4  0b 42 00
@@ -145829,6 +147286,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDFAF1  ef 66
 	unlk XIZ                                      ; FDFAF3  ee 0d
 	ret                                           ; FDFAF5  0e
+; sub_FDFAF6 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFAF6:
 	link XIZ,0x0000                               ; FDFAF6  ee 0c 00 00
 	pushw 0x43                                    ; FDFAFA  0b 43 00
 	pushw 0x46                                    ; FDFAFD  0b 46 00
@@ -145839,6 +147298,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDFB0A  ef 66
 	unlk XIZ                                      ; FDFB0C  ee 0d
 	ret                                           ; FDFB0E  0e
+; sub_FDFB0F -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFB0F:
 	link XIZ,0x0000                               ; FDFB0F  ee 0c 00 00
 	pushw 0x00                                    ; FDFB13  0b 00 00
 	pushw 0x44                                    ; FDFB16  0b 44 00
@@ -145849,6 +147310,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDFB23  ef 66
 	unlk XIZ                                      ; FDFB25  ee 0d
 	ret                                           ; FDFB27  0e
+; sub_FDFB28 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFB28:
 	link XIZ,0x0000                               ; FDFB28  ee 0c 00 00
 	pushw 0x45                                    ; FDFB2C  0b 45 00
 	pushw 0x3d                                    ; FDFB2F  0b 3d 00
@@ -145859,6 +147322,8 @@ sub_FDE760:
 	inc 6,XSP                                     ; FDFB3C  ef 66
 	unlk XIZ                                      ; FDFB3E  ee 0d
 	ret                                           ; FDFB40  0e
+; sub_FDFB41 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFB41:
 	link XIZ,0x0000                               ; FDFB41  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB45  8e 08 3f 00
 	jr z, .LFDFB4F                                ; FDFB49  66 04
@@ -145866,6 +147331,8 @@ sub_FDE760:
 .LFDFB4F:
 	unlk XIZ                                      ; FDFB4F  ee 0d
 	ret                                           ; FDFB51  0e
+; sub_FDFB52 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFB52:
 	link XIZ,0x0000                               ; FDFB52  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB56  8e 08 3f 00
 	jr nz, .LFDFB64                               ; FDFB5A  6e 08
@@ -145886,6 +147353,8 @@ sub_FDE760:
 .LFDFB7B:
 	unlk XIZ                                      ; FDFB7B  ee 0d
 	ret                                           ; FDFB7D  0e
+; sub_FDFB7E -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFB7E:
 	link XIZ,0x0000                               ; FDFB7E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB82  8e 08 3f 00
 	jr nz, .LFDFB90                               ; FDFB86  6e 08
@@ -145906,6 +147375,8 @@ sub_FDE760:
 .LFDFBA7:
 	unlk XIZ                                      ; FDFBA7  ee 0d
 	ret                                           ; FDFBA9  0e
+; sub_FDFBAA -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFBAA:
 	link XIZ,0x0000                               ; FDFBAA  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFBAE  8e 08 3f 00
 	jr nz, .LFDFBBE                               ; FDFBB2  6e 0a
@@ -145926,6 +147397,8 @@ sub_FDE760:
 .LFDFBD5:
 	unlk XIZ                                      ; FDFBD5  ee 0d
 	ret                                           ; FDFBD7  0e
+; sub_FDFBD8 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFBD8:
 	link XIZ,0x0000                               ; FDFBD8  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFBDC  8e 08 3f 00
 	jr nz, .LFDFBEC                               ; FDFBE0  6e 0a
@@ -145946,6 +147419,8 @@ sub_FDE760:
 .LFDFC03:
 	unlk XIZ                                      ; FDFC03  ee 0d
 	ret                                           ; FDFC05  0e
+; sub_FDFC06 -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFC06:
 	link XIZ,0x0000                               ; FDFC06  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFC0A  8e 08 3f 00
 	jr nz, .LFDFC1B                               ; FDFC0E  6e 0b
@@ -145956,6 +147431,8 @@ sub_FDE760:
 .LFDFC1B:
 	unlk XIZ                                      ; FDFC1B  ee 0d
 	ret                                           ; FDFC1D  0e
+; sub_FDFC1E -- a handler: an entry of PanelOpTable_FCF69B
+sub_FDFC1E:
 	link XIZ,0x0000                               ; FDFC1E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFC22  8e 08 3f 00
 	jr nz, .LFDFC3B                               ; FDFC26  6e 13
@@ -145968,6 +147445,8 @@ sub_FDE760:
 .LFDFC3B:
 	unlk XIZ                                      ; FDFC3B  ee 0d
 	ret                                           ; FDFC3D  0e
+; sub_FDFC3E -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFC3E:
 	link XIZ,0x0000                               ; FDFC3E  ee 0c 00 00
 	pushw 0x4a                                    ; FDFC42  0b 4a 00
 	ld BC,(XIZ+0x08)                              ; FDFC45  9e 08 21
@@ -145977,6 +147456,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFC4F  59
 	unlk XIZ                                      ; FDFC50  ee 0d
 	ret                                           ; FDFC52  0e
+; sub_FDFC53 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFC53:
 	link XIZ,0x0000                               ; FDFC53  ee 0c 00 00
 	pushw 0x4b                                    ; FDFC57  0b 4b 00
 	ld BC,(XIZ+0x08)                              ; FDFC5A  9e 08 21
@@ -145986,6 +147467,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFC64  59
 	unlk XIZ                                      ; FDFC65  ee 0d
 	ret                                           ; FDFC67  0e
+; sub_FDFC68 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFC68:
 	link XIZ,0x0000                               ; FDFC68  ee 0c 00 00
 	pushw 0x4c                                    ; FDFC6C  0b 4c 00
 	ld BC,(XIZ+0x08)                              ; FDFC6F  9e 08 21
@@ -145995,6 +147478,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFC79  59
 	unlk XIZ                                      ; FDFC7A  ee 0d
 	ret                                           ; FDFC7C  0e
+; sub_FDFC7D -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFC7D:
 	link XIZ,0x0000                               ; FDFC7D  ee 0c 00 00
 	pushw 0x49                                    ; FDFC81  0b 49 00
 	ld BC,(XIZ+0x08)                              ; FDFC84  9e 08 21
@@ -146004,6 +147489,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFC8E  59
 	unlk XIZ                                      ; FDFC8F  ee 0d
 	ret                                           ; FDFC91  0e
+; sub_FDFC92 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFC92:
 	link XIZ,0x0000                               ; FDFC92  ee 0c 00 00
 	pushw 0x47                                    ; FDFC96  0b 47 00
 	ld BC,(XIZ+0x08)                              ; FDFC99  9e 08 21
@@ -146013,6 +147500,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFCA3  59
 	unlk XIZ                                      ; FDFCA4  ee 0d
 	ret                                           ; FDFCA6  0e
+; sub_FDFCA7 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFCA7:
 	link XIZ,0x0000                               ; FDFCA7  ee 0c 00 00
 	pushw 0x48                                    ; FDFCAB  0b 48 00
 	ld BC,(XIZ+0x08)                              ; FDFCAE  9e 08 21
@@ -146022,6 +147511,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFCB8  59
 	unlk XIZ                                      ; FDFCB9  ee 0d
 	ret                                           ; FDFCBB  0e
+; sub_FDFCBC -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFCBC:
 	link XIZ,0x0000                               ; FDFCBC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCC0  8e 08 3f 00
 	jr z, .LFDFCCA                                ; FDFCC4  66 04
@@ -146029,6 +147520,8 @@ sub_FDE760:
 .LFDFCCA:
 	unlk XIZ                                      ; FDFCCA  ee 0d
 	ret                                           ; FDFCCC  0e
+; sub_FDFCCD -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFCCD:
 	link XIZ,0x0000                               ; FDFCCD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCD1  8e 08 3f 00
 	jr nz, .LFDFCDF                               ; FDFCD5  6e 08
@@ -146049,6 +147542,8 @@ sub_FDE760:
 .LFDFCF6:
 	unlk XIZ                                      ; FDFCF6  ee 0d
 	ret                                           ; FDFCF8  0e
+; sub_FDFCF9 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFCF9:
 	link XIZ,0x0000                               ; FDFCF9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCFD  8e 08 3f 00
 	jr nz, .LFDFD0B                               ; FDFD01  6e 08
@@ -146069,6 +147564,8 @@ sub_FDE760:
 .LFDFD22:
 	unlk XIZ                                      ; FDFD22  ee 0d
 	ret                                           ; FDFD24  0e
+; sub_FDFD25 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFD25:
 	link XIZ,0x0000                               ; FDFD25  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD29  8e 08 3f 00
 	jr z, .LFDFD46                                ; FDFD2D  66 17
@@ -146084,6 +147581,8 @@ sub_FDE760:
 .LFDFD46:
 	unlk XIZ                                      ; FDFD46  ee 0d
 	ret                                           ; FDFD48  0e
+; sub_FDFD49 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFD49:
 	link XIZ,0x0000                               ; FDFD49  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD4D  8e 08 3f 00
 	jr z, .LFDFD6A                                ; FDFD51  66 17
@@ -146099,6 +147598,8 @@ sub_FDE760:
 .LFDFD6A:
 	unlk XIZ                                      ; FDFD6A  ee 0d
 	ret                                           ; FDFD6C  0e
+; sub_FDFD6D -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFD6D:
 	link XIZ,0x0000                               ; FDFD6D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD71  8e 08 3f 00
 	jr z, .LFDFD82                                ; FDFD75  66 0b
@@ -146109,6 +147610,8 @@ sub_FDE760:
 .LFDFD82:
 	unlk XIZ                                      ; FDFD82  ee 0d
 	ret                                           ; FDFD84  0e
+; sub_FDFD85 -- a handler: an entry of PanelOpTable_FCF6E3
+sub_FDFD85:
 	link XIZ,0x0000                               ; FDFD85  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD89  8e 08 3f 00
 	jr nz, .LFDFDA2                               ; FDFD8D  6e 13
@@ -146121,6 +147624,8 @@ sub_FDE760:
 .LFDFDA2:
 	unlk XIZ                                      ; FDFDA2  ee 0d
 	ret                                           ; FDFDA4  0e
+; sub_FDFDA5 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFDA5:
 	link XIZ,0x0000                               ; FDFDA5  ee 0c 00 00
 	pushw 0x02                                    ; FDFDA9  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDAC  9e 08 21
@@ -146130,6 +147635,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFDB6  59
 	unlk XIZ                                      ; FDFDB7  ee 0d
 	ret                                           ; FDFDB9  0e
+; sub_FDFDBA -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFDBA:
 	link XIZ,0x0000                               ; FDFDBA  ee 0c 00 00
 	pushw 0x02                                    ; FDFDBE  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDC1  9e 08 21
@@ -146139,6 +147646,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFDCB  59
 	unlk XIZ                                      ; FDFDCC  ee 0d
 	ret                                           ; FDFDCE  0e
+; sub_FDFDCF -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFDCF:
 	link XIZ,0x0000                               ; FDFDCF  ee 0c 00 00
 	pushw 0x02                                    ; FDFDD3  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDD6  9e 08 21
@@ -146148,6 +147657,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFDE0  59
 	unlk XIZ                                      ; FDFDE1  ee 0d
 	ret                                           ; FDFDE3  0e
+; sub_FDFDE4 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFDE4:
 	link XIZ,0x0000                               ; FDFDE4  ee 0c 00 00
 	pushw 0x02                                    ; FDFDE8  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDEB  9e 08 21
@@ -146157,6 +147668,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFDF5  59
 	unlk XIZ                                      ; FDFDF6  ee 0d
 	ret                                           ; FDFDF8  0e
+; sub_FDFDF9 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFDF9:
 	link XIZ,0x0000                               ; FDFDF9  ee 0c 00 00
 	pushw 0x02                                    ; FDFDFD  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFE00  9e 08 21
@@ -146166,6 +147679,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFE0A  59
 	unlk XIZ                                      ; FDFE0B  ee 0d
 	ret                                           ; FDFE0D  0e
+; sub_FDFE0E -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFE0E:
 	link XIZ,0x0000                               ; FDFE0E  ee 0c 00 00
 	pushw 0x02                                    ; FDFE12  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFE15  9e 08 21
@@ -146175,6 +147690,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFE1F  59
 	unlk XIZ                                      ; FDFE20  ee 0d
 	ret                                           ; FDFE22  0e
+; sub_FDFE23 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFE23:
 	link XIZ,0x0000                               ; FDFE23  ee 0c 00 00
 	pushw 0x02                                    ; FDFE27  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFE2A  9e 08 21
@@ -146184,6 +147701,8 @@ sub_FDE760:
 	pop XBC                                       ; FDFE34  59
 	unlk XIZ                                      ; FDFE35  ee 0d
 	ret                                           ; FDFE37  0e
+; sub_FDFE38 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFE38:
 	link XIZ,0x0000                               ; FDFE38  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE3C  8e 08 3f 00
 	jr nz, .LFDFE4F                               ; FDFE40  6e 0d
@@ -146197,6 +147716,8 @@ sub_FDE760:
 .LFDFE53:
 	unlk XIZ                                      ; FDFE53  ee 0d
 	ret                                           ; FDFE55  0e
+; sub_FDFE56 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFE56:
 	link XIZ,0x0000                               ; FDFE56  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE5A  8e 08 3f 00
 	jr nz, .LFDFE6C                               ; FDFE5E  6e 0c
@@ -146212,6 +147733,8 @@ sub_FDE760:
 	pop XIY                                       ; FDFE76  5d
 	unlk XIZ                                      ; FDFE77  ee 0d
 	ret                                           ; FDFE79  0e
+; sub_FDFE7A -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFE7A:
 	link XIZ,0x0000                               ; FDFE7A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE7E  8e 08 3f 00
 	jr z, .LFDFE8F                                ; FDFE82  66 0b
@@ -146222,6 +147745,8 @@ sub_FDE760:
 .LFDFE8F:
 	unlk XIZ                                      ; FDFE8F  ee 0d
 	ret                                           ; FDFE91  0e
+; sub_FDFE92 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFE92:
 	link XIZ,0x0000                               ; FDFE92  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE96  8e 08 3f 00
 	jr z, .LFDFEA7                                ; FDFE9A  66 0b
@@ -146232,6 +147757,8 @@ sub_FDE760:
 .LFDFEA7:
 	unlk XIZ                                      ; FDFEA7  ee 0d
 	ret                                           ; FDFEA9  0e
+; sub_FDFEAA -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFEAA:
 	link XIZ,0x0000                               ; FDFEAA  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFEAE  8e 08 3f 00
 	jr z, .LFDFEBF                                ; FDFEB2  66 0b
@@ -146242,6 +147769,8 @@ sub_FDE760:
 .LFDFEBF:
 	unlk XIZ                                      ; FDFEBF  ee 0d
 	ret                                           ; FDFEC1  0e
+; sub_FDFEC2 -- a handler: an entry of PanelOpTable_FCF72B
+sub_FDFEC2:
 	link XIZ,0x0000                               ; FDFEC2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFEC6  8e 08 3f 00
 	jr nz, .LFDFEDF                               ; FDFECA  6e 13
