@@ -28,6 +28,10 @@ FAIL and the numbers it saw; exit status is non-zero if any check fails.
   counts     the count words InitializeToshi reads with `ldw_da`: 0xED2D02 = 28,
              0xED2D92 = 8, 0xED2F64 = 26, and the tables they count end in NULL
              after exactly that many entries.
+  presets    the reverb (10 x 24 B), EQ (9 x 24 B) and combined (9 x 48 B)
+             preset records behind the three pointer tables at 0xEDB36C:
+             contiguous, byte 22 = 0x63, EQ records start 0x4F, a combined
+             record is a reverb record + an EQ record.
   lng        the seven language-indexed string tables (LngTable_*): six
              pointers EN DE FR ES IT ID, the six strings right after them in
              reverse order, the IT one either the literal "Italian" or a copy
@@ -231,7 +235,25 @@ def lng(r):
     return not bad, "7 tables x 6 languages (EN DE FR ES IT ID), strings in reverse order; failures: %s" % (bad or "none")
 
 
-CHECKS = {"lng": lng, "vmaps": vmaps, "test1": test1, "chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
+def presets(r):
+    bad = []
+    for name, t, n, sz in (("reverb", 0xEDB36C, 10, 24), ("eq", 0xEDB394, 9, 24), ("comb", 0xEDB3B8, 9, 48)):
+        ps = [r.u32(t + 4 * k) for k in range(n)]
+        for k, p in enumerate(ps):
+            if k and ps[k] != ps[k - 1] + sz:
+                bad.append((name, k, "not contiguous"))
+            if r.u8(p + 22) != 0x63:
+                bad.append((name, k, "byte22"))
+            if name == "eq" and r.u8(p) != 0x4F:
+                bad.append((name, k, "algo"))
+            if name == "comb" and (r.u8(p + 24) != 0x4F or r.u8(p + 46) != 0x63):
+                bad.append((name, k, "second half"))
+    ends = r.u32(0xEDB3B8 + 32) + 48
+    return not bad and ends == 0xEDAA64, "10 reverb / 9 EQ / 9 combined records, contiguous, ending 0x%06X; failures: %s" % (
+        ends, bad or "none")
+
+
+CHECKS = {"presets": presets, "lng": lng, "vmaps": vmaps, "test1": test1, "chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
 
 
 def main():
