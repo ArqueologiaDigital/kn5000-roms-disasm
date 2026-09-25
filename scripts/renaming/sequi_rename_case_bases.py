@@ -9,7 +9,7 @@ inserts a header before each.  Applied once; kept as the record of the exact
 transformation.  Comment gate: scripts/analysis/assert_comments_preserved.py
 --rename-map notes/sequi-2026-09-25/rename-case-bases.map.
 
-RUN (already applied; a re-run finds nothing to rename)
+RUN (already applied; a re-run renames nothing and adds no second header)
     python3 scripts/renaming/sequi_rename_case_bases.py FILE...
 """
 import re, sys
@@ -36,10 +36,17 @@ CASES = {
 for p in sys.argv[1:]:
     s = open(p, encoding='latin-1').read()
     pat = re.compile(r'(?<![\w.$@])(%s)(?=[\w.$@]*)' % "|".join(map(re.escape, REN)))
-    s = pat.sub(lambda m: REN[m.group(1)], s)
+    # rename in the CODE part of each line only: the headers below say
+    # "formerly <old name>", and no pre-existing comment mentioned an old name
+    lines = s.split('\n')
+    for i, ln in enumerate(lines):
+        k = ln.find(';')
+        code, com = (ln, '') if k < 0 else (ln[:k], ln[k:])
+        lines[i] = pat.sub(lambda m: REN[m.group(1)], code) + com
+    s = '\n'.join(lines)
     for lab, who in CASES.items():
         key = '\n%s:\n' % lab
-        if key in s:
+        if key in s and ('; code.' + key) not in s:
             s = s.replace(key, '''
 ; Case bodies of the `jp_ind` switch in %s: jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
@@ -47,7 +54,7 @@ for p in sys.argv[1:]:
 %s:
 ''' % (who, lab), 1)
     key = '\nTrAsGrid_StepListValue:\n'
-    if key in s:
+    if key in s and ('the TrAsGridCheck cases.' + key) not in s:
         s = s.replace(key, '''
 ; TrAsGrid_StepListValue (formerly TrAsGrid_ByteData1: it is code) -- A :=
 ; position of value A in the 20-entry list NakaWidgetPtrTbl_SmfDp_0x23B8; step
@@ -57,7 +64,7 @@ for p in sys.argv[1:]:
 TrAsGrid_StepListValue:
 ''', 1)
     key = '\nSMF_AdvanceInPageChain:\n'
-    if key in s:
+    if key in s and ('on its address).' + key) not in s:
         s = s.replace(key, '''
 ; SMF_AdvanceInPageChain (formerly SMF_ConfigSlot_CodeBlock) -- RAM 0x113F :=
 ; word 0x2887; word 0x1141 := IY + 1; once that passes 255, follow the link
