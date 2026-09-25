@@ -2895,40 +2895,40 @@ SMF_SlotParam_PortaReturn:
 	ret
 
 ; -----------------------------------------------------------------------------
-; SMF_SlotParam_PortamentoTime -- a slot-parameter handler shaped like its
+; SMF_SlotParam_Remap14To2 (was SMF_SlotParam_PortamentoTime; nothing found
+; supports "PortamentoTime") -- a slot-parameter handler shaped like its
 ; neighbours (SMF_SlotParam_Sustain, ...): when RAM 0x112A is 2 or 3, RAM
 ; 0x2873 is 15, and the record at XIY has (XIY+2) = 0x14 and (XIY+3) = 4, it
 ; translates (XIY+2) through SMF_TranslateChannel (0xF29034), stores it back,
 ; sets (XIY+3) := 2 and bit 0 of RAM 0x113B.
 ; NOT CALLED: it is absent from the `calr SMF_SlotParam_*` chain that runs
 ; every other handler, and scripts/analysis/sequi_find_refs.py v7 0xF299BB finds
-; no reference.  Nothing found supports "PortamentoTime" in the name.  Was
-; `.byte` until 2026-09-25.
+; no reference.  Was `.byte` until 2026-09-25.
 ; -----------------------------------------------------------------------------
-SMF_SlotParam_PortamentoTime:
+SMF_SlotParam_Remap14To2:
 	ld a, (0x112a:16)
 	cp a, 2:i3
-	jr z, SMF_SlotParam_PortamentoTime_Match
+	jr z, SMF_SlotParam_Remap14To2_Match
 	cp a, 3:i3
-	jr nz, SMF_SlotParam_PortamentoTime_Return
-SMF_SlotParam_PortamentoTime_Match:
+	jr nz, SMF_SlotParam_Remap14To2_Return
+SMF_SlotParam_Remap14To2_Match:
 	cp (0x2873:16), 15
-	jr nz, SMF_SlotParam_PortamentoTime_Return
+	jr nz, SMF_SlotParam_Remap14To2_Return
 	cp (xiy+2), 20
-	jr nz, SMF_SlotParam_PortamentoTime_Return
+	jr nz, SMF_SlotParam_Remap14To2_Return
 	cp (xiy+3), 4
-	jr nz, SMF_SlotParam_PortamentoTime_Return
+	jr nz, SMF_SlotParam_Remap14To2_Return
 	ld a, (xiy+2)
 	calr SMF_TranslateChannel
 	bit 7, a
-	jr z, SMF_SlotParam_PortamentoTime_Store
+	jr z, SMF_SlotParam_Remap14To2_Store
 	and a, 127
 	ormi8 (xiy), 4
-SMF_SlotParam_PortamentoTime_Store:
+SMF_SlotParam_Remap14To2_Store:
 	ld (xiy+2), a
 	ld (xiy+3), 2
 	or (0x113b:16), 0x01
-SMF_SlotParam_PortamentoTime_Return:
+SMF_SlotParam_Remap14To2_Return:
 	ret
 
 SMF_SlotParam_Sustain:
