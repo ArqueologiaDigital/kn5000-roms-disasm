@@ -29,7 +29,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import hdae5000_line_map as hlm  # noqa: E402
 
-LO, HI = 0x2E1C82, 0x2E3704
+LO, HI = 0x2E1C82, 0x2E5DCE   # both .rodata blocks (0x2E1C82-0x2E3703, 0x2E5B80-0x2E5DCD)
 LABEL = re.compile(r"^([.A-Za-z_][\w.$]*):")
 FORMS = [
     re.compile(r"^(?P<pre>\s*lda\s+x\w+,\s*\()(?P<num>0x[0-9a-fA-F]+)(?P<post>:24\).*)$"),
@@ -44,7 +44,8 @@ def main(apply):
     labels = {}
     for a, rel, n, t in rows:
         m = LABEL.match(t)
-        if m and rel == "hdae5000_data_tables.s" and LO <= a < HI and not m.group(1).startswith("."):
+        if (m and rel == "hdae5000_data_tables.s" and (LO <= a < 0x2E3704 or 0x2E5B80 <= a < HI)
+                and not m.group(1).startswith(".")):
             labels.setdefault(a, m.group(1))
     files = {}
     edits = collections.Counter()
@@ -60,9 +61,9 @@ def main(apply):
             if not body.strip():
                 continue
         code = body.split(";")[0].strip()
-        mm = re.match(r"pushw\s+0x([0-9a-fA-F]{4})$", code)
+        mm = re.match(r"pushw\s+(0x[0-9a-fA-F]{1,4}|\d+)$", code)
         if mm:
-            v = int(mm.group(1), 16)
+            v = int(mm.group(1), 16) if mm.group(1).lower().startswith("0x") else int(mm.group(1))
             if hi_line is not None:
                 full = 0x2E0000 | v
                 if LO <= full < HI:
@@ -71,6 +72,11 @@ def main(apply):
                         if "low half of" not in L[n - 1]:
                             L[n - 1] = L[n - 1].rstrip() + "\t\t; low half of " + labels[full]
                             edits["pushw pair"] += 1
+                        hn = hi_line
+                        if hn and "high half of" not in L[hn - 1] and re.search(r";\s*\w", L[hn - 1]):
+                            # an existing comment on the high half described it as something else
+                            L[hn - 1] = L[hn - 1].rstrip() + " -- high half of " + labels[full]
+                            edits["high half noted"] += 1
                     else:
                         inside.append((a, rel, n, full))
                 hi_line = None

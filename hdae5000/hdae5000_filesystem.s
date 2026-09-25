@@ -1429,7 +1429,7 @@ HDAE5000_FlsList_BuildPage:	; 0x287F55 (832 bytes)
 	add wa, iz                              ; WA = page_base + index
 	inc 1, wa                               ; WA = entry_number (1-based)
 	pushw wa                                ; push entry number
-	pushw 0x002e		; format spec offset (decimal number formatting)
+	pushw 0x002e		; format spec offset (decimal number formatting) -- high half of HDAE5000_Fmt_3_3d_FlsList_BuildPage
 	pushw 0x2e76		; format handler ROM address		; low half of HDAE5000_Fmt_3_3d_FlsList_BuildPage
 	lda xwa, (xsp + 0x12)                   ; XWA = entry buffer ptr
 	push xwa

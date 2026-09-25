@@ -3190,7 +3190,7 @@ HDAE5000_SeparateOutputModeCheck:
 	add xbc, xwa
 	ld xwa, (xbc)			; load address from table
 	push xwa
-	pushw 0x002e		; push 0x002E
+	pushw 0x002e		; push 0x002E -- high half of HDAE5000_Fmt_s_SeparateOutputModeCheck
 	pushw 0x2786		; low half of HDAE5000_Fmt_s_SeparateOutputModeCheck
 	ld xwa, (xde + 0x12)
 	push xwa
@@ -3259,7 +3259,7 @@ HDAE5000_SeparateDrumPartCheck:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	pushw 0x002e		; push 0x002E
+	pushw 0x002e		; push 0x002E -- high half of HDAE5000_Fmt_s_SeparateDrumPartCheck
 	pushw 0x2848		; low half of HDAE5000_Fmt_s_SeparateDrumPartCheck
 	ld xwa, (xde + 0x12)
 	push xwa
@@ -3328,7 +3328,7 @@ HDAE5000_SeparateBassPartCheck:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	pushw 0x002e		; push 0x002E
+	pushw 0x002e		; push 0x002E -- high half of HDAE5000_Fmt_s_SeparateBassPartCheck
 	pushw 0x290a		; push 0x290A		; low half of HDAE5000_Fmt_s_SeparateBassPartCheck
 	ld xwa, (xde + 0x12)
 	push xwa
@@ -5098,7 +5098,7 @@ HDAE5000_SetupPage_BuildDriveInfo:	; 0x2862AC (818 bytes)
 	push xix
 	ld xix, (xiy)
 	push xix
-	pushw 0x002e		; push 0x002E
+	pushw 0x002e		; push 0x002E -- high half of HDAE5000_Fmt_6_1f
 	pushw 0x2cbe		; push 0x2CBE		; low half of HDAE5000_Fmt_6_1f
 	lda xwa, (xsp + 0x2c)
 	push xwa
@@ -5134,7 +5134,7 @@ HDAE5000_SetupPage_BuildDriveInfo:	; 0x2862AC (818 bytes)
 	push xix
 	ld xix, (xiy)
 	push xix
-	pushw 0x002e		; push 0x002E
+	pushw 0x002e		; push 0x002E -- high half of HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo
 	pushw 0x2cc4		; push 0x2CC4		; low half of HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo
 	lda xwa, (xsp + 0x24)
 	push xwa
@@ -5169,7 +5169,7 @@ HDAE5000_SetupPage_BuildDriveInfo:	; 0x2862AC (818 bytes)
 	push xix
 	ld xix, (xiy)
 	push xix
-	pushw 0x002e		; push 0x002E
+	pushw 0x002e		; push 0x002E -- high half of HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo_2
 	pushw 0x2cca		; push 0x2CCA		; low half of HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo_2
 	lda xwa, (xsp + 0x2c)
 	push xwa

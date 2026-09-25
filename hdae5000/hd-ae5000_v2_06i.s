@@ -4015,7 +4015,7 @@ HDAE5000_HardTest_HddIdRead:	; 0x282C6E (192 bytes)
 	push xwa			; buffer address
 	call HDAE5000_MemFill
 	; MemCopy_Block: copy 46 bytes from 0x2264 offset
-	pushw 0x002E			; count = 46
+	pushw 0x002E			; count = 46 -- high half of HDAE5000_Str_HDTYPE
 	pushw 0x2264			; source offset		; low half of HDAE5000_Str_HDTYPE
 	lda xwa, (xsp + 36)
 	push xwa			; dest address
@@ -4057,7 +4057,7 @@ HDAE5000_HardTest_HddIdRead:	; 0x282C6E (192 bytes)
 	push xix
 	ld xix, (xiy + 0)
 	push xix
-	pushw 0x002E			; count = 46
+	pushw 0x002E			; count = 46 -- high half of HDAE5000_Fmt_Fre_Capa_3_1f_MB
 	pushw 0x2270			; offset		; low half of HDAE5000_Fmt_Fre_Capa_3_1f_MB
 	lda xwa, (xsp + 44)
 	push xwa
@@ -4179,7 +4179,7 @@ HDAE5000_FdName_SongNumber:	; 0x282E3C (81 bytes)
 	jr gt, .Lptb_not_found
 .Lptb_loop:
 	pushw iz
-	pushw 0x002E			; block size = 46
+	pushw 0x002E			; block size = 46 -- high half of HDAE5000_Fmt_2_2d
 	pushw 0x22AE			; source base address		; low half of HDAE5000_Fmt_2_2d
 	lda xwa, (xsp + 8)		; pointer to local buffer
 	push xwa

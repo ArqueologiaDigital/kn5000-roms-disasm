@@ -15862,15 +15862,30 @@ HDAE5000_LangText_CaseTable:
 	.short	HDAE5000_AcLanguageText1Proc_Msg211 - HDAE5000_AcLanguageText1Proc_Msg001	; message 211
 	.short	HDAE5000_AcLanguageText1Proc_Msg212 - HDAE5000_AcLanguageText1Proc_Msg001	; message 212
 
-HDAE5000_Lang_Codes:	; 0x2E5B80
-	; Language code strings and file types
+; ============================================================================
+; LYRICS MODULE .RODATA, 0x2E5B80-0x2E5DCD: the read-only data of the code
+; around HDAE5000_LyricBoxProc and HDAE5000_FDFileSelectProc (lyric files
+; "TLhd"/"TLtr", ".TLX"/".TTX"/".MID", the lyric messages), laid out
+; after the trilingual message block.  Rebuilt object by object by
+; scripts/generators/gen_hdae5000_rodata.py --block2, as the main .rodata
+; block above: every object starts where the code names it, and its note
+; names the readers; the switch tables keep their own headers.
+; ============================================================================
+HDAE5000_Str_Blank40:	; 0x2E5B80
+	; read by LyricBoxProc at 0x28D0A5 (lda operand)
 	.asciz "                                        "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Reset:	; 0x2E5BAA
+	; read by LyricBoxProc at 0x28D261 (lda operand)
 	.asciz "Reset"
+HDAE5000_Str_Load:	; 0x2E5BB0
+	; read by LyricBoxProc at 0x28D283 (lda operand)
 	.asciz "Load"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_03i_i:	; 0x2E5BB6
+	; read by LyricBoxProc at 0x28D4B7 (pushed operand)
 	.asciz "%03i - %i "
-	.zero 1				; 0x2E5BC1 (split off by the table below/above)
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
 ; HDAE5000_LyricBoxProc_CaseTable2 (0x2E5BC2, 8 x u16): the switch of HDAE5000_LyricBoxProc
 ; (dispatch at 0x28D57C, hdae5000_ui_display.s:3786: bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
@@ -15887,15 +15902,6 @@ HDAE5000_LyricBoxProc_CaseTable2:
 	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 5 (default)
 	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 6 (default)
 	.short	HDAE5000_LyricBoxProc_Case7_2 - HDAE5000_LyricBoxProc_Case0_2	; 7
-	; 0x2E5BD2-0x2E5BDF (14 B): CONFIRMED DATA, not code -- was disassembled as
-	; "ei 16 / reti / pushw bc / push sr" chained by no label and reached by no
-	; call or jump anywhere in the tree (checked across every .s file).  It sits
-	; between two single-character .asciz entries above and the .asciz "rb" /
-	; "TESTTEST.TLX" pair below, both of which ARE genuine lda_24 targets
-	; (hdae5000_ui_display.s:3799-3800) -- i.e. real string constants read as
-	; addresses immediately either side of this span, with nothing pointing
-	; inside it.  Left as an undecoded numeric field; a plain .byte run rather
-	; than fake mnemonics is the honest way to spell "unknown data".
 ;
 ; HDAE5000_LyricBoxProc_CaseTable1 (0x2E5BD2, 7 x u16): the switch of HDAE5000_LyricBoxProc
 ; (dispatch at 0x28CD6A, hdae5000_ui_display.s:3194: `sub xwa,0x01ca0003`, bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
@@ -15911,76 +15917,162 @@ HDAE5000_LyricBoxProc_CaseTable1:
 	.short	HDAE5000_LyricBoxProc_Ev01CA0007 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0007
 	.short	HDAE5000_LyricBoxProc_Ev01CA0008 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0008
 	.short	HDAE5000_LyricBoxProc_Ev01CA0009 - HDAE5000_LyricBoxProc_Ev01C0000D	; 0x01CA0009
+HDAE5000_Str_Rb:	; 0x2E5BE0
+	; read by Display_Error at 0x28D67B (lda operand)
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_TESTTESTTLX:	; 0x2E5BE4
+	; read by Display_Error at 0x28D676 (lda operand)
 	.asciz "TESTTEST.TLX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_Fault_No_Lyrics_loaded_o:	; 0x2E5BF2
+	; read by File_Operation at 0x28D78B (pushed operand)
 	.asciz "Fault : No Lyrics loaded or corrupt Data - Code %i %i %i     "
+HDAE5000_Fmt_i_i:	; 0x2E5C30
+	; read by File_Operation at 0x28D9F3 (pushed operand)
 	.asciz " %i/%i "
+HDAE5000_Fmt_Chord_s:	; 0x2E5C38
+	; read by File_Operation at 0x28DA35 (pushed operand)
 	.asciz "Chord : %s               "
+HDAE5000_Str_Info:	; 0x2E5C52
+	; read by File_Save at 0x28DB2F (pushed operand)
 	.asciz "Info :                            "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_NoCopyrightInfo:	; 0x2E5C76
+	; read by File_Load at 0x28DC63 (pushed operand)
 	.asciz "No Copyright Info"
+HDAE5000_Str_NoSongTitle:	; 0x2E5C88
+	; read by File_Load at 0x28DCDD (pushed operand)
 	.asciz "No Song Title"
+HDAE5000_Fmt_i_i_File_Load:	; 0x2E5C96
+	; read by File_Load at 0x28DDB7 (pushed operand)
 	.asciz " %i/%i "
-	.zero 4
+HDAE5000_Str_Empty_File_Delete:	; 0x2E5C9E
+	; read by File_Delete at 0x28DF7B (pushed operand)
+	.zero 2
+HDAE5000_Str_Empty_File_Delete_2:	; 0x2E5CA0
+	; read by File_Delete at 0x28DFF0 (pushed operand)
+	.zero 2
+HDAE5000_Str_Tlhd:	; 0x2E5CA2
+	; read by Display_Notify at 0x28E540 (lda operand)
 	.asciz "TLhd"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Tltr:	; 0x2E5CA8
+	; read by Display_Progress at 0x28E5B1 (lda operand)
 	.asciz "TLtr"
-	.zero 3
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Empty_FDFileSelectProc:	; 0x2E5CAE
+	; read by FDFileSelectProc at 0x28E78D (pushed operand)
+	.zero 2
+HDAE5000_Str_Blank27:	; 0x2E5CB0
+	; read by FDFileSelectProc at 0x28E85E (lda operand)
 	.asciz "                           "
+HDAE5000_Str_Blank27_FDFileSelectProc:	; 0x2E5CCC
+	; read by FDFileSelectProc at 0x28E917 (lda operand)
 	.asciz "                           "
+HDAE5000_Str_Mid:	; 0x2E5CE8
+	; read by FDFileSelectProc at 0x28E9EA (lda operand)
 	.asciz "mid"
+HDAE5000_Str_Blank3:	; 0x2E5CEC
+	; read by FDFileSelectProc at 0x28EA19 (lda operand)
 	.asciz "   "
+HDAE5000_Str_Blank49:	; 0x2E5CF0
+	; read by FDFileSelectProc at 0x28EB62 (lda operand)
 	.asciz "                                                 "
+HDAE5000_Fmt_s_s:	; 0x2E5D22
+	; read by FDFileSelectProc at 0x28EBC8 (pushed operand)
 	.asciz "%s %s"
+HDAE5000_Fmt_s_s_FDFileSelectProc:	; 0x2E5D28
+	; read by FDFileSelectProc at 0x28EBF7 (pushed operand)
 	.asciz "%s %s"
+HDAE5000_Str_TLX_FDFileSelectProc:	; 0x2E5D2E
+	; read by FDFileSelectProc at 0x28EEE1 (pushed operand)
 	.asciz ".TLX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Rb_FDFileSelectProc:	; 0x2E5D34
+	; read by FDFileSelectProc at 0x28EEF2 (lda operand)
 	.asciz "rb"
-	.zero 3
-	.byte 0x03, 0x03, 0x03, 0x03, 0x02, 0x02
-	.zero 2
-	.byte 0x01, 0x01, 0x01, 0x01, 0x02, 0x02
-	.byte 0xe9  ; "é"
-	.byte 0x01
-	.byte 0x95  ; ""
-	.byte 0x00
-	.byte 0x1e, 0x01
-	.zero 2
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+;
+; HDAE5000_FDFileSelectProc_KeyCaseMap (0x2E5D38, 16 bytes) and
+; HDAE5000_FDFileSelectProc_KeyCaseTable (0x2E5D48, 4 x u16): the two-level
+; switch of HDAE5000_FDFileSelectProc's event 0x01C00007 (dispatch at
+; 0x28ED74): a key code k = 0..7, or 0x80..0x87 folded to 8..15 by `sub
+; xwa,0x78`, indexes the byte map (`add xwa,<map>`, `ld wa,(xwa)`, `extz wa`);
+; that case number, doubled, indexes the u16 table (`ld xix,<table>`, `ld
+; WA,(XIX+WA)`), whose entries are offsets from .Lsc_07_btn_down (`lda
+; xix,(.Lsc_07_btn_down)`, `jp T,XIX+WA`).  Case 0 (k 0,1,8,9) returns 0,
+; case 1 (k 10..13) = .Lsc_07_btn_up, case 2 (k 6,7,14,15) =
+; .Lsc_07_btn_enter, case 3 (k 2..5) = .Lsc_07_btn_down.  16 map bytes and 4
+; entries, pinned by the range checks and the largest map value.
+;
+HDAE5000_FDFileSelectProc_KeyCaseMap:
+	.byte 0, 0, 3, 3, 3, 3, 2, 2		; key codes 0..7
+	.byte 0, 0, 1, 1, 1, 1, 2, 2		; key codes 0x80..0x87
+HDAE5000_FDFileSelectProc_KeyCaseTable:
+	.short	.Lsc_ret0 - .Lsc_07_btn_down	; case 0
+	.short	.Lsc_07_btn_up - .Lsc_07_btn_down	; case 1
+	.short	.Lsc_07_btn_enter - .Lsc_07_btn_down	; case 2
+	.short	.Lsc_07_btn_down - .Lsc_07_btn_down	; case 3
+HDAE5000_Str_Chr202D3E:	; 0x2E5D50
+	; read by Path_Builder at 0x28EFF1 (pushed operand)
 	.asciz " ->"
+HDAE5000_Str_Chr2A2E2A:	; 0x2E5D54
+	; read by Path_Builder at 0x28F000 (lda operand)
 	.asciz "*.*"
+HDAE5000_Str_TTX:	; 0x2E5D58
+	; read by Path_Builder at 0x28F08E (pushed operand)
 	.asciz ".TTX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Rb_Path_Builder:	; 0x2E5D5E
+	; read by Path_Builder at 0x28F0A3 (lda operand)
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_MID:	; 0x2E5D62
+	; read by Path_Builder at 0x28F114 (pushed operand)
 	.asciz ".MID"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Rb_Path_Builder_2:	; 0x2E5D68
+	; read by Path_Builder at 0x28F129 (lda operand)
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_XLT:	; 0x2E5D6C
+	; read by Directory_Handler at 0x28F1BA (pushed operand)
 	.asciz "XLT."
-	.byte 0x00
-	.byte 0xbc  ; "¼"
-	.asciz "]."
-	.byte 0xb2  ; "²"
-	.asciz "]."
-	.byte 0xa8  ; "¨"
-	.asciz "]."
-	.byte 0x9e  ; ""
-	.asciz "]."
-	.byte 0x94  ; ""
-	.asciz "]."
-	.byte 0x8a  ; ""
-	.asciz "]."
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_TextPtrs_LANENG001_to_LANENG006:	; 0x2E5D72, 6 x .long -> string
+	; read by LanguageTextReturn at 0x28F2FF (lda operand); 6 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_LANENG001
+	.long	HDAE5000_Str_LANDEU002
+	.long	HDAE5000_Str_LANFRA003
+	.long	HDAE5000_Str_LANENG004
+	.long	HDAE5000_Str_LANENG005
+	.long	HDAE5000_Str_LANENG006
+HDAE5000_Str_LANENG006:	; 0x2E5D8A
+	; pointed at by entry 5 of HDAE5000_TextPtrs_LANENG001_to_LANENG006, a table read by LanguageTextReturn
 	.asciz "LANENG006"
+HDAE5000_Str_LANENG005:	; 0x2E5D94
+	; pointed at by entry 4 of HDAE5000_TextPtrs_LANENG001_to_LANENG006, a table read by LanguageTextReturn
 	.asciz "LANENG005"
+HDAE5000_Str_LANENG004:	; 0x2E5D9E
+	; pointed at by entry 3 of HDAE5000_TextPtrs_LANENG001_to_LANENG006, a table read by LanguageTextReturn
 	.asciz "LANENG004"
+HDAE5000_Str_LANFRA003:	; 0x2E5DA8
+	; pointed at by entry 2 of HDAE5000_TextPtrs_LANENG001_to_LANENG006, a table read by LanguageTextReturn
 	.asciz "LANFRA003"
+HDAE5000_Str_LANDEU002:	; 0x2E5DB2
+	; pointed at by entry 1 of HDAE5000_TextPtrs_LANENG001_to_LANENG006, a table read by LanguageTextReturn
 	.asciz "LANDEU002"
+HDAE5000_Str_LANENG001:	; 0x2E5DBC
+	; pointed at by entry 0 of HDAE5000_TextPtrs_LANENG001_to_LANENG006, a table read by LanguageTextReturn
 	.asciz "LANENG001"
+HDAE5000_Str_XAP:	; 0x2E5DC6
+	; read by PPORT_Svc28_FlashXapFile at 0x28F314 (pushed operand)
 	.asciz "XAP"
+HDAE5000_Str_Rb_Extension_Check:	; 0x2E5DCA
+	; read by Extension_Check at 0x28F474 (lda operand)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
 HDAE5000_Palette_Data:	; 0x2E5DCE
 	; Boot-splash palette: 0x400 B = 256 RGBX entries (202 distinct colours).

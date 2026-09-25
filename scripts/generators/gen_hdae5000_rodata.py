@@ -47,6 +47,10 @@ import hdae5000_line_map as hlm  # noqa: E402
 B0 = 0x280000
 LO, HI = 0x2E1C82, 0x2E3704
 PAL, BMP, BMP_W, BMP_H = 0x2E3064, 0x2E3464, 42, 15
+if "--block2" in sys.argv[1:]:
+    # the lyrics module's .rodata after the trilingual messages
+    LO, HI = 0x2E5B80, 0x2E5DCE
+    PAL = BMP = None
 SRC = os.path.join(hlm.HDAE, "hdae5000_data_tables.s")
 LABEL = re.compile(r"^([.A-Za-z_][\w.$]*):")
 STRUCT = re.compile(r"_(Skip|Join|Loop|Sub|Return|Epilogue|Entry|Exit|Done|Fail|Read|Store|Copy)\d*$|"
@@ -76,9 +80,9 @@ def readers(rows):
         if not b or a >= 0x29BAFC or rel in ("hdae5000_data_tables.s", "hdae5000_init_data.s"):
             hi = None
             continue
-        mm = re.match(r"pushw\s+0x([0-9a-fA-F]{4})$", b)
+        mm = re.match(r"pushw\s+(0x[0-9a-fA-F]{1,4}|\d+)$", b)
         if mm:
-            v = int(mm.group(1), 16)
+            v = int(mm.group(1), 16) if mm.group(1).lower().startswith("0x") else int(mm.group(1))
             if hi is not None:
                 full = (hi << 16) | v
                 if LO <= full < HI:
@@ -108,19 +112,22 @@ def switch_tables(rows, lines):
     for a, rel, n, t in rows:
         if rel == "hdae5000_data_tables.s" and LO <= a < HI:
             m = LABEL.match(t)
-            if m and m.group(1).endswith(("_CaseTable", "_CaseTable1", "_CaseTable2")) or \
-               (m and re.search(r"_CaseTable\d*$", m.group(1))):
+            if m and re.search(r"Case(Table|Map)\d*$", m.group(1)):
                 names[a] = (n, m.group(1))
     for a, (n, name) in sorted(names.items()):
-        # header comment block above the label, then `.short` rows below it
+        # header comment block above the label, then `.short` / `.byte` rows below it
         first = n
         while first > 1 and lines[first - 2].startswith(";") and not lines[first - 2].startswith(";;"):
             first -= 1
-        last = n
-        while last < len(lines) and re.match(r"\s*\.short\b", lines[last]):
+        last, size = n, 0
+        while last < len(lines):
+            mm = re.match(r"\s*\.(short|byte)\s+([^;]*)", lines[last])
+            if not mm:
+                break
+            k = len([x for x in mm.group(2).split(",") if x.strip()]) if mm.group(1) == "byte" else 1
+            size += k * (2 if mm.group(1) == "short" else 1)
             last += 1
-        count = last - n
-        tabs.append((a, a + 2 * count, first, last, name))
+        tabs.append((a, a + size, first, last, name))
     return tabs
 
 
@@ -132,8 +139,9 @@ def main(write):
     rd = readers(rows)
     tabs = switch_tables(rows, lines)
     fixed = {s: (s, e, "switch", name) for s, e, fl, ll, name in tabs}
-    fixed[PAL] = (PAL, BMP, "palette", None)
-    fixed[BMP] = (BMP, BMP + BMP_W * BMP_H, "bitmap", None)
+    if PAL is not None:
+        fixed[PAL] = (PAL, BMP, "palette", None)
+        fixed[BMP] = (BMP, BMP + BMP_W * BMP_H, "bitmap", None)
 
     def in_fixed(a):
         return any(s <= a < e for s, e, k, nm in fixed.values())
@@ -343,6 +351,10 @@ def build(rom, rd, tabs, fixed, ptrtabs, starts, ends, lines):
         if m and "HdaeUiName_" in ln:
             uinames[int(m.group(1))] = m.group(2)
     used = set()
+    for ln in lines:               # labels defined anywhere else in the file stay taken
+        m = LABEL.match(ln)
+        if m:
+            used.add(m.group(1))
     out = []
     names = {}
     for s in starts:
@@ -488,6 +500,21 @@ def run(write):
     dl = [(a, n, t) for a, rel, n, t in rows if rel == "hdae5000_data_tables.s"]
     first = min(n for a, n, t in dl if a >= LO and LABEL.match(t))
     last = max(n for a, n, t in dl if a < HI)
+    if LO == 0x2E5B80:
+        hdr = ["; ============================================================================",
+               "; LYRICS MODULE .RODATA, 0x2E5B80-0x2E5DCD: the read-only data of the code",
+               "; around HDAE5000_LyricBoxProc and HDAE5000_FDFileSelectProc (lyric files",
+               "; \"TLhd\"/\"TLtr\", \".TLX\"/\".TTX\"/\".MID\", the lyric messages), laid out",
+               "; after the trilingual message block.  Rebuilt object by object by",
+               "; scripts/generators/gen_hdae5000_rodata.py --block2, as the main .rodata",
+               "; block above: every object starts where the code names it, and its note",
+               "; names the readers; the switch tables keep their own headers.",
+               "; ============================================================================"]
+        lines[first - 1:last] = hdr + out
+        open(SRC, "w", encoding="latin-1").write("\n".join(lines))
+        hlm.build_map()
+        print("written; relinked mirror byte-identical")
+        return
     hdr = ["; ============================================================================",
            "; HD-AE5000 PROGRAM .RODATA, 0x2E1C82-0x2E3703 (the C program's read-only data)",
            "; Rebuilt object by object by scripts/generators/gen_hdae5000_rodata.py: every",
