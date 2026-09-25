@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 r"""symbolize_v142_abs24_operands.py -- numeric `(0xNNNNNN:24)` operands in the v1.42 sub-CPU
 code that name an address INSIDE the payload image become `(Label:24)` / `(Label+N:24)`.
+(Also the decimal spelling `(63191:24)` and the 16-bit absolute form `(61462:16)`, added
+2026-09-25 after the first pass: same rules, the `:24`/`:16` width is kept.)
 
 QUESTION THIS ANSWERS
     How many absolute 24-bit memory operands in kn5000_subprogram_v142.s / subcpu_fp_math.s
@@ -48,7 +50,7 @@ TREE = os.path.join(ROOT, "v142/subcpu")
 ROM = os.path.join(ROOT, "original_ROMs/kn5000_subprogram_v142.rom")
 LLVM = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
 FILES = ["kn5000_subprogram_v142.s", "subcpu_fp_math.s"]
-OPER = re.compile(r"\((0x[0-9a-fA-F]+):24\)")
+OPER = re.compile(r"\((0x[0-9a-fA-F]+|[0-9]+):(24|16)\)")
 
 
 def build():
@@ -107,7 +109,8 @@ def main():
 
             def sub(m):
                 nonlocal changed
-                v = int(m.group(1), 16)
+                v = int(m.group(1), 0)
+                w = m.group(2)
                 if not (0xF000 <= v < end):
                     st["outside image (left numeric)"] += 1
                     return m.group(0)
@@ -115,7 +118,7 @@ def main():
                     if len(at[v]) > 1:
                         st["exact, several labels (left numeric)"] += 1
                         return m.group(0)
-                    new = "(%s:24)" % at[v][0]
+                    new = "(%s:%s)" % (at[v][0], w)
                     st["exact label"] += 1
                 else:
                     j = bisect.bisect_right(addrs, v) - 1
@@ -123,7 +126,7 @@ def main():
                     if not (a.interior and len(par) == 1 and par[0] in dlab):
                         st["interior (%s)" % ("data object" if par[0] in dlab else "not data")] += 1
                         return m.group(0)
-                    new = "(%s+%d:24)" % (par[0], v - addrs[j])
+                    new = "(%s+%d:%s)" % (par[0], v - addrs[j], w)
                     st["interior of a data object"] += 1
                 if a.list:
                     print("%s:%d  %s -> %s" % (f, i + 1, m.group(0), new))

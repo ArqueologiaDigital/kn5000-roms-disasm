@@ -937,7 +937,7 @@ TaskSched_SoftTimer_Unlock:
 TaskSched_SoftTimer_Fire:
 	ld16_src_rid8	xix, 0x02, wa	; ld wa,(XIX+0x02)
 	ld	(xix+256), wa	; ld (XIX+0x00),wa
-	lda	xwa, (130984:24)
+	lda	xwa, (TaskSched_SoftTimer_Next:24)
 	push	xwa
 	ld	xwa, (xix+4)
 	jp	(xwa)
@@ -18253,7 +18253,7 @@ LABEL_0284C8:
 	add	wa, wa
 	lda	xix, (63199:24)
 	ld_rrw	wa, xix, wa	; ld WA,(XIX+WA)
-	lda	xix, (165120:24)
+	lda	xix, (AudioMod_Porta_Curve_JumpBase:24)
 	jp_rr	8, xix, wa	; jp T,XIX+WA
 ; Base address of the 10-entry computed jump inside AudioMod_Apply_Porta_Curve; offsets come
 ; from the word table at 0x00F6DF.  Entry 0 (this address) triples then shifts left 2.
@@ -29428,7 +29428,7 @@ LABEL_02E0EB:
 	nop
 	nop
 	nop
-	lda	xwa, (63769:24)
+	lda	xwa, (ToneGen_ProbeVoice_ParamBlock:24)
 	ld	xbc, xwa
 	ld	wa, 0:i3
 	calr	ToneGen_WriteVoiceParams
@@ -30282,9 +30282,9 @@ VoiceParam_Set_Tone_Option:
 	cp	wa, 6:i3
 	jrl	gt, VoiceParam_Set_Tone_Option_Epilogue
 	add	wa, wa
-	lda	xix, (63845:24)
+	lda	xix, (VOICEPARAM_TONE_OPTION_JUMPTABLE:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (190619:24)
+	lda	xix, (VoiceParam_Set_Tone_Option_Case0:24)
 	jp_rr	8, xix, wa
 ; Base of the 7-way jump table at ROM 0x00F965; also the handler for option index 0.
 VoiceParam_Set_Tone_Option_Case0:
@@ -30832,9 +30832,9 @@ Audio_Cmd_ToneEdit_Dispatch:
 ; offset is added to 0x02EDB9 and jumped to.
 Audio_Cmd_ToneEdit_TableJump:
 	add	wa, wa
-	lda	xix, (63859:24)
+	lda	xix, (AUDIO_CMD_TONEEDIT_JUMPTABLE:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (191929:24)
+	lda	xix, (Audio_Cmd_ToneEdit_Op00:24)
 	jp_rr	8, xix, wa
 ; Opcode 0x00: VoiceParam_FullSetup_ExtData(WA = part from rec+1, BC = value from rec+4).
 Audio_Cmd_ToneEdit_Op00:
@@ -31124,7 +31124,7 @@ DSP_EffParam_Copy_V0:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31152,7 +31152,7 @@ DSP_EffParam_Copy_V1:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31182,7 +31182,7 @@ DSP_EffParam_Copy_V2:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31210,7 +31210,7 @@ DSP_EffParam_Copy_V3:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31238,7 +31238,7 @@ DSP_EffParam_Copy_V4:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31266,7 +31266,7 @@ DSP_EffParam_Copy_V5:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31296,7 +31296,7 @@ DSP_EffParam_Copy_V6:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31330,7 +31330,7 @@ DSP_EffParam_Copy_V7:
 	ld	a, c
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xwa
@@ -31377,9 +31377,9 @@ DSP_EffParam_Apply_By_AlgoType:
 	cp	bc, 11
 	ret	gt
 	add	bc, bc
-	lda	xix, (63899:24)
+	lda	xix, (DSP_EFFPARAM_APPLY_JUMPTABLE:24)
 	ld_rrw	bc, xix, bc
-	lda	xix, (193241:24)
+	lda	xix, (DSP_EffParam_Apply_T0:24)
 	jp_rr	8, xix, bc
 ; Algorithm type 0: DSP_EffParam_Copy_V0 with descriptor 0.
 DSP_EffParam_Apply_T0:
@@ -32057,9 +32057,9 @@ Audio_Cmd_EffectParam_Dispatch:
 	cp	wa, 18
 	jrl	gt, Audio_Cmd_EffParam_Cache_And_Dispatch2
 	add	wa, wa
-	lda	xix, (64118:24)
+	lda	xix, (AUDIO_CMD_EFFECTPARAM_JUMPTABLE:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (194671:24)
+	lda	xix, (Audio_Cmd_EffParam_Grp0:24)
 	jp_rr	8, xix, wa
 ; Opcode 0x15: AudioChannel_Dispatch(WA=part, XDE=&patch[0x14], BC=0).
 Audio_Cmd_EffParam_Grp0:
@@ -32205,7 +32205,7 @@ Audio_Cmd_EffParam_TableJump:
 	jrl	lt, Audio_Cmd_EffParam_Return
 	cp	wa, 84
 	jrl	gt, Audio_Cmd_EffParam_Return
-	lda	xix, (63971:24)
+	lda	xix, (AUDIO_CMD_EFFPARAM_CASEMAP:24)
 	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
@@ -32882,13 +32882,13 @@ Audio_Cmd_DSPUnit_Normalise:
 	jrl	gt, Audio_Cmd_DSPUnit_Return
 ; Two-level lookup into the case map and jump table.
 Audio_Cmd_DSPUnit_TableJump:
-	lda	xix, (64156:24)
+	lda	xix, (AUDIO_CMD_DSPUNIT_CASEMAP:24)
 	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
 	ld	xix, 64182
 	ld_rrw	wa, xix, wa
-	lda	xix, (196601:24)
+	lda	xix, (Audio_Cmd_DSPUnit_Op01:24)
 	jp_rr	8, xix, wa
 ; Opcode 0x01: EnvTranspose_UpdateLoop(part).
 Audio_Cmd_DSPUnit_Op01:
@@ -33438,13 +33438,13 @@ Audio_Cmd_ToneEdit_Write_And_Reply:
 	jr	gt, Audio_Cmd_ToneEdit_Reply_Send
 ; Fold opcodes 0x19..0x24 and 0x2B..0x36 into one 0..0x17 index and jump.
 Audio_Cmd_ToneEdit_Reply_TableJump:
-	lda	xix, (64200:24)
+	lda	xix, (AUDIO_CMD_TONEEDIT_REPLY_CASEMAP:24)
 	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
 	ld	xix, 64224
 	ld_rrw	wa, xix, wa
-	lda	xix, (197814:24)
+	lda	xix, (Audio_Cmd_ToneEdit_Reply_Case_Pan:24)
 	jp_rr	8, xix, wa
 ; Voice_Query_PartVoices(part) then 0x029071 over the returned voice list.
 Audio_Cmd_ToneEdit_Reply_Case_Pan:
@@ -35771,7 +35771,7 @@ DSP_SetCoeff_MasterConfig:
 	cp	wa, 23
 	jrl	gt, DSP_SetCoeff_MasterConfig_Epilogue
 	add	wa, wa
-	lda	xix, (64238:24)
+	lda	xix, (DSP_SETCOEFF_MASTERCONFIG_JUMPTABLE:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (202703:24)
 	jp_rr	8, xix, wa
@@ -39403,7 +39403,7 @@ DSP_AlgoType_Dispatch1_TableData:
 	ld	e, b
 	extz	de
 	muls	de, 6
-	lda	xhl, (69582:24)
+	lda	xhl, (DSP_AlgoChannel_SelectorRecords:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrb	w, xde, ix
@@ -39419,7 +39419,7 @@ DSP_AlgoType_Dispatch1_TableData:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (70470:24)
+	lda	xhl, (DSP_ChanFreq_Dispatch1_Curves:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -39435,7 +39435,7 @@ DSP_AlgoType_D1_Arm_Type457:
 	ld	e, b
 	extz	de
 	muls	de, 6
-	lda	xix, (69582:24)
+	lda	xix, (DSP_AlgoChannel_SelectorRecords:24)
 	exts	xde
 	add	xde, xix
 	ld_rrb	w, xde, iy
@@ -39453,7 +39453,7 @@ DSP_AlgoType_D1_Arm_Type457:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (70470:24)
+	lda	xhl, (DSP_ChanFreq_Dispatch1_Curves:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -39474,7 +39474,7 @@ DSP_AlgoType_D1_Arm_Type457_Ch1:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (70470:24)
+	lda	xhl, (DSP_ChanFreq_Dispatch1_Curves:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -39491,7 +39491,7 @@ DSP_AlgoType_D1_Arm_TypeAB:
 	ld	e, b
 	extz	de
 	muls	de, 6
-	lda	xix, (69582:24)
+	lda	xix, (DSP_AlgoChannel_SelectorRecords:24)
 	exts	xde
 	add	xde, xix
 	ld_rrb	w, xde, iy
@@ -39509,7 +39509,7 @@ DSP_AlgoType_D1_Arm_TypeAB:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (70470:24)
+	lda	xhl, (DSP_ChanFreq_Dispatch1_Curves:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -39522,7 +39522,7 @@ DSP_AlgoType_D1_Arm_TypeAB_Or:
 	ld	e, b
 	extz	de
 	muls	de, 39
-	lda	xix, (73238:24)
+	lda	xix, (DSP_AlgoDescriptor_Records:24)
 	exts	xde
 	add	xde, xix
 	lda_rr	xde, xde, iy
@@ -39531,7 +39531,7 @@ DSP_AlgoType_D1_Arm_TypeAB_Or:
 	srl	e, 6
 	extz	de
 	add	de, de
-	lda	xix, (70929:24)
+	lda	xix, (EGEnv_ModeBits_Table:24)
 	or_sriw_rm	hl, 7, 240, 232
 
 ; Common store: (part + 0x57 + 4*channel) = HL.  Also the no-op arm for types 6, 8 and 9
@@ -39588,7 +39588,7 @@ DSP_AlgoType_Dispatch2_TableData:
 	ld	e, b
 	extz	de
 	muls	de, 6
-	lda	xhl, (69582:24)
+	lda	xhl, (DSP_AlgoChannel_SelectorRecords:24)
 	exts	xde
 	add	xde, xhl
 	lda_rr	xde, xde, ix
@@ -39605,7 +39605,7 @@ DSP_AlgoType_Dispatch2_TableData:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (69654:24)
+	lda	xhl, (DSP_ChanFreq_CurvePool:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -39620,7 +39620,7 @@ DSP_AlgoType_D2_Arm_Type457:
 	ld	e, b
 	extz	de
 	muls	de, 6
-	lda	xix, (69582:24)
+	lda	xix, (DSP_AlgoChannel_SelectorRecords:24)
 	exts	xde
 	add	xde, xix
 	lda_rr	xde, xde, iy
@@ -39639,7 +39639,7 @@ DSP_AlgoType_D2_Arm_Type457:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (69654:24)
+	lda	xhl, (DSP_ChanFreq_CurvePool:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -39660,7 +39660,7 @@ DSP_AlgoType_D2_Arm_Type457_Ch1:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (69654:24)
+	lda	xhl, (DSP_ChanFreq_CurvePool:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -39676,7 +39676,7 @@ DSP_AlgoType_D2_Arm_TypeAB:
 	ld	e, b
 	extz	de
 	muls	de, 6
-	lda	xix, (69582:24)
+	lda	xix, (DSP_AlgoChannel_SelectorRecords:24)
 	exts	xde
 	add	xde, xix
 	lda_rr	xde, xde, iy
@@ -39690,7 +39690,7 @@ DSP_AlgoType_D2_Arm_TypeAB:
 	ld	e, b
 	extz	de
 	muls	de, 39
-	lda	xhl, (73238:24)
+	lda	xhl, (DSP_AlgoDescriptor_Records:24)
 	exts	xde
 	add	xde, xhl
 	lda_rr	xde, xde, ix
@@ -39701,7 +39701,7 @@ DSP_AlgoType_D2_Arm_TypeAB:
 	ld	e, w
 	extz	de
 	muls	de, 102
-	lda	xhl, (69654:24)
+	lda	xhl, (DSP_ChanFreq_CurvePool:24)
 	exts	xde
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
@@ -40064,7 +40064,7 @@ DSP_AlgoType_D3_Arm_Types0to5_7:
 	ld	e, b
 	extz	de
 	muls	de, 39
-	lda	xix, (73238:24)
+	lda	xix, (DSP_AlgoDescriptor_Records:24)
 	exts	xde
 	add	xde, xix
 	.byte	0xf3, 0x07, 0xe8, 0xf4, 0xcf	; bit 7,(XDE+IY)  (unidasm; no llvm-mc spelling)
@@ -40083,7 +40083,7 @@ DSP_AlgoType_D3_Arm_Types0to5_7:
 	ld	a, b
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	.byte	0xf3, 0x07, 0xe0, 0xe8, 0xcb	; bit 3,(XWA+DE)  (unidasm; no llvm-mc spelling)
@@ -40107,7 +40107,7 @@ DSP_AlgoType_D3_Arm_Type05_SubNZ:
 	ld	e, b
 	extz	de
 	muls	de, 39
-	lda	xix, (73238:24)
+	lda	xix, (DSP_AlgoDescriptor_Records:24)
 	exts	xde
 	add	xde, xix
 	.byte	0xf3, 0x07, 0xe8, 0xf4, 0xce	; bit 6,(XDE+IY)  (unidasm; no llvm-mc spelling)
@@ -40126,7 +40126,7 @@ DSP_AlgoType_D3_Arm_Type05_SubNZ:
 	ld	a, b
 	extz	wa
 	muls	wa, 39
-	lda	xbc, (73238:24)
+	lda	xbc, (DSP_AlgoDescriptor_Records:24)
 	exts	xwa
 	add	xwa, xbc
 	.byte	0xf3, 0x07, 0xe0, 0xe8, 0xca	; bit 2,(XWA+DE)  (unidasm; no llvm-mc spelling)
@@ -40558,7 +40558,7 @@ Algo_SubTable_JumpTable3:
 	ld_rrl	xwa, xbc, wa
 	ld	a, (xwa+97)
 	extz	wa
-	lda	xbc, (70878:24)
+	lda	xbc, (DSP_ChanFreq_IndexMap:24)
 	ld_rrb	l, xbc, wa
 	jr	Algo_SubTable_Bit15Dispatch_Return
 ; Bit15Dispatch arm for algorithm types 4 and 5: 0x0114DE[descriptor[0x63]].
@@ -40571,7 +40571,7 @@ Algo_SubTable_Bit15_Arm_Type45:
 	ld_rrl	xwa, xbc, wa
 	ld	a, (xwa+99)
 	extz	wa
-	lda	xbc, (70878:24)
+	lda	xbc, (DSP_ChanFreq_IndexMap:24)
 	ld_rrb	l, xbc, wa
 	jr	Algo_SubTable_Bit15Dispatch_Return
 ; Bit15Dispatch arm for algorithm type 8: 0x0114DE[descriptor[0x5E]].
@@ -40584,7 +40584,7 @@ Algo_SubTable_Bit15_Arm_Type8:
 	ld_rrl	xwa, xbc, wa
 	ld	a, (xwa+94)
 	extz	wa
-	lda	xbc, (70878:24)
+	lda	xbc, (DSP_ChanFreq_IndexMap:24)
 	ld_rrb	l, xbc, wa
 	jr	Algo_SubTable_Bit15Dispatch_Return
 
@@ -58586,7 +58586,7 @@ ToneGen_Poll_Init:	; 03D1FBh
 ToneGen_Clear_Voice_Loop:	; 03D203h
 	ld wa, hl
 	extz xwa
-	add xwa, (128028:24)	; Voice status buffer base
+	add xwa, (ToneGen_Voice_Bitmap_Ptr:24)	; Voice status buffer base
 	ld (xwa), 0x0	; Clear voice status
 	inc 1, hl
 	cp hl, 0x8
