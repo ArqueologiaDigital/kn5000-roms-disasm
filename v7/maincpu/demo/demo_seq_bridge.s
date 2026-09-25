@@ -418,13 +418,26 @@ SongBank_EventHandler_Return:
 	popw iz
 	ret
 
-CDlikeSwTtl_DispatchData:
+; -----------------------------------------------------------------------------
+; Until 2026-09-25 the stubs and routines from here to CDlikeSwTtl_SendStartEvt
+; sat under one label, CDlikeSwTtl_DispatchData, with local .Lc_* labels
+; inside.  Same code as v9/v10 (see v10's demo/demo_seq_bridge.s, where it was
+; a `.byte` block): two `return 0` stubs (no call, jump or 24-bit pointer to
+; either found) and the two routines ui/setwall_routines.s calls as
+; CDlikeSwTtl_DispatchData_0x6 / _0x4A (shared/positional_labels.s aliases).
+; -----------------------------------------------------------------------------
+CDlikeSwTtl_ReturnZeroStub:
 	ld xhl, 0:i3
 	ret
+CDlikeSwTtl_ReturnZeroStub2:
 	ld xhl, 0:i3
 	ret
+; Post event 0x8B0004 (XBC = 0x01E0008D) with XDE = 0x10000 + n, where
+; n = (0xCDF) + 2 when bit 0 of (0xCE0) is clear, (0xCDF) - 6 when it is set.
+; Called twice from ui/setwall_routines.s.
+CDlikeSwTtl_SendEvt4:
 	bit 0, (0x0ce0:16)
-	jr nz, .Lc_f22901
+	jr nz, CDlikeSwTtl_SendEvt4_Bit0Set
 	ld a, (0x0cdf:16)
 	inc 2,A
 	extz WA
@@ -433,8 +446,8 @@ CDlikeSwTtl_DispatchData:
 	add XDE,0x00010000
 	ld XWA,0x008b0004
 	ld XBC,0x01e0008d
-	jr t, .Lc_f2291d
-.Lc_f22901:
+	jr t, CDlikeSwTtl_SendEvt4_Post
+CDlikeSwTtl_SendEvt4_Bit0Set:
 	ld a, (0x0cdf:16)
 	dec 6,A
 	extz WA
@@ -443,8 +456,11 @@ CDlikeSwTtl_DispatchData:
 	add XDE,0x00010000
 	ld XWA,0x008b0004
 	ld XBC,0x01e0008d
-.Lc_f2291d:
+CDlikeSwTtl_SendEvt4_Post:
 	jp ApPostEvent
+; Same event as CDlikeSwTtl_SendStartEvt (0x8B0003) but with XDE = 1.
+; Called from ui/setwall_routines.s.
+CDlikeSwTtl_SendStartEvtArg1:
 	ld XWA,0x008b0003
 	ld XBC,0x01e0009c
 	ld xde, 1:i3

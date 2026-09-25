@@ -2735,26 +2735,37 @@ EmptyRoutine_03:
 ; Hashes parameter ID and triggers UI refresh for affected widgets.
 ; Called after preset loads: 0x4002 for reverb, 0x4006 for EQ.
 ; Args: xwa = parameter ID
-SoundParam_NotifyChange:
+; v7 note (2026-09-25): the routine described above is NOT here in v7.  v7's
+; SoundParam_NotifyChange is 0xFCCA30 (54 `call`s in the v7 ROM), inside the
+; bytes of audio/audio_control_engine.s; this spot, 0xFCCE4A, had no caller and
+; holds the code v10 carries at 0xFCD61B, inside SndParam_ResolveWidget
+; (audio/sndparam_routines.s), 0x7D1 bytes on.  The label that stood here was
+; dropped for that reason; the 85-byte romslice below was ported from v10 by
+; scripts/lanes/sys/port_islands.py.  Its branch targets are v10's
+; SndParam_RW_ChainCheckFirst / _FoundCallback / _ChainContinue / _ProcessResult;
+; they carry those names with a _v7 suffix because v7 still defines the plain
+; names, 0x41A higher, in audio/sndparam_routines.s.
 ; (was .incbin "includes/romslices/v7_block_soundparam_notifychange.bin")
 	.byte	0x00, 0x00
 	and	xwa, xix
 	and	xwa, 0xff
-	jr	z, SoundParam_NotifyChange_Code_Skip
+	jr	z, SndParam_RW_ChainCheckFirst_v7
+EmptyRoutine_03_Skip:
 	ld	hl, 0:i3
-	jr	SoundParam_NotifyChange_Code_Join
-SoundParam_NotifyChange_Code_Skip:
+	jr	SndParam_RW_FoundCallback_v7
+SndParam_RW_ChainCheckFirst_v7:
 	cp	hl, 0xffff
-	jr	z, SoundParam_NotifyChange_Code_Skip2
-SoundParam_NotifyChange_Code_Join:
+	jr	z, SndParam_RW_ChainContinue_v7
+SndParam_RW_FoundCallback_v7:
 	ld	xwa, (xde + 4)
-	jr	SoundParam_NotifyChange_Code_Join2
-SoundParam_NotifyChange_Code_Skip2:
+	jr	SndParam_RW_ProcessResult_v7
+SndParam_RW_ChainContinue_v7:
 	ld	xwa, (xde + 8)
 	or	xwa, xwa
-	jr	nz, -72
+	jr	nz, DkMdlyPly_CheckState_Helper_Loop
+EmptyRoutine_03_Skip2:
 	ld	xwa, 0:i3
-SoundParam_NotifyChange_Code_Join2:
+SndParam_RW_ProcessResult_v7:
 	ld	xiz, xwa
 	or	xwa, xwa
 	jr	z, 98

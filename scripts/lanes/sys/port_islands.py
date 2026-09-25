@@ -306,6 +306,13 @@ class Porter:
                 for lab in split_line(e[3])[0]:
                     self.dlab_at[e[0]].add(lab)
         self.incdir = os.path.join(ROOT, dst, "maincpu")
+        self.keep = None           # --whole: the only dst labels kept
+        self.dropped = set()
+        self.lo_hi = (0, 0)
+
+    def kept_at(self, a):
+        labs = self.dlab_at.get(a, set())
+        return bool(labs if self.keep is None else labs & self.keep)
 
     # -- anchor + alignment
     def anchor_delta(self, k0):
@@ -398,10 +405,15 @@ class Porter:
         def dval(nm):
             if nm in labs_new:
                 return labs_new[nm]
+            if self.keep is not None and nm not in self.keep and nm in self.dropped:
+                return None
             return self.sd.get(nm)
 
         def dlabel(v):
-            names = sorted(x for x, a in labs_new.items() if a == v) + sorted(self.dlab_at.get(v, ()))
+            here = self.dlab_at.get(v, set())
+            if self.keep is not None and self.lo_hi[0] <= v < self.lo_hi[1]:
+                here = here & self.keep
+            names = sorted(x for x, a in labs_new.items() if a == v) + sorted(here)
             names = [x for x in names if not x.startswith("__")]
             return names[0] if names else None
         new, test, pos = [], [], 0
@@ -446,11 +458,17 @@ class Porter:
         return mn + (sep + "".join(new) if ops else ""), mn + (" " + "".join(test) if ops else ""), com
 
     # -- one island
-    def port_island(self, k0, k1, lo, hi, demoted=frozenset()):
-        delta = self.anchor_delta(k0)
+    def port_island(self, k0, k1, lo, hi, demoted=frozenset(), delta=None):
+        if delta is None:
+            delta = self.anchor_delta(k0)
         if delta is None:
             return None, "no anchor label"
         dm, s0, s1 = self.align(lo, hi, delta)
+        self.lo_hi = (lo, hi)
+        self.dropped = set()
+        if self.keep is not None:
+            for k in range(k0, k1):
+                self.dropped |= set(split_line(self.od[k][3])[0]) - self.keep
         cands = [c for c in self.candidates(lo, hi, dm, s0, s1) if c[2] not in demoted]
         cands.sort()
         # if the src counterpart itself holds data-as-code markers, it is
@@ -466,7 +484,8 @@ class Porter:
         else:
             self.note = ""
         # non-overlapping, not straddling a dst label
-        dlabels_in = {a for a in self.dlab_at if lo < a < hi}
+        dlabels_in = {a for a in self.dlab_at if lo < a < hi
+                      and (self.keep is None or self.dlab_at[a] & self.keep)}
         items, last = [], lo
         for a7, n, k in cands:
             if a7 < last:
@@ -479,13 +498,13 @@ class Porter:
         labs_new = {}
         for a7, n, k in items:
             for lab in split_line(self.os[k][3])[0]:
-                if lab not in self.dnames and not self.dlab_at.get(a7) and lab not in labs_new:
+                if lab not in self.dnames and not self.kept_at(a7) and lab not in labs_new:
                     labs_new[lab] = a7
             # labels on label-only lines directly above
             q = k - 1
             while q >= 0 and self.os[q][4] == 0 and self.os[q][1] == self.os[k][1]:
                 for lab in split_line(self.os[q][3])[0]:
-                    if lab not in self.dnames and not self.dlab_at.get(a7) and lab not in labs_new:
+                    if lab not in self.dnames and not self.kept_at(a7) and lab not in labs_new:
                         labs_new[lab] = a7
                 if split_line(self.os[q][3])[1]:
                     break
@@ -534,6 +553,9 @@ class Porter:
             elif com.strip():
                 notes[addr].append(com.strip())
             for lab in labs:
+                if self.keep is not None and lab not in self.keep:
+                    notes[addr].append("; (v7 label %s stood here; dropped, see the file header)" % lab)
+                    continue
                 dlabs[addr].append(lab)
             if body.startswith(".incbin"):
                 notes[addr].append("; (was %s)" % body)
@@ -595,12 +617,24 @@ def main():
     ap.add_argument("--min", type=int, default=8)
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--show", action="store_true")
+    ap.add_argument("--whole", help="L0-L1: replace dst lines L0..L1 of the (single) --file, of any kind")
+    ap.add_argument("--delta", type=lambda x: int(x, 0), help="src - dst address delta (no anchor search)")
+    ap.add_argument("--keep", default=None, help="--whole: comma list of dst labels to keep; others become notes")
     a = ap.parse_args()
     P = Porter(a.src, a.dst)
+    if a.keep is not None:
+        P.keep = set(x for x in a.keep.split(",") if x)
     plan = []
     for rel in a.file:
-        for (k0, k1, lo, hi) in islands(P.od, rel, a.min, set(a.line) or None):
-            res, why = P.port_island(k0, k1, lo, hi)
+        if a.whole:
+            l0, l1 = [int(x) for x in a.whole.split("-")]
+            ks = [k for k, e in enumerate(P.od) if e[1] == rel and l0 <= e[2] <= l1]
+            byte_ks = [k for k in ks if P.od[k][0] is not None and P.od[k][4] > 0]
+            isl = [(ks[0], ks[-1] + 1, P.od[byte_ks[0]][0], P.od[byte_ks[-1]][0] + P.od[byte_ks[-1]][4])]
+        else:
+            isl = islands(P.od, rel, a.min, set(a.line) or None)
+        for (k0, k1, lo, hi) in isl:
+            res, why = P.port_island(k0, k1, lo, hi, delta=a.delta)
             if res is None:
                 print("  %s:%d 0x%06X %5d B  SKIP (%s)" % (rel, P.od[k0][2], lo, hi - lo, why))
                 continue

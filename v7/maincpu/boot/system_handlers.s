@@ -1822,23 +1822,25 @@ AudioMix_WriteChannelGroup_Loop:
 	popw de
 	ret
 
-AudioMix_BytecodeData:
-; [v10] -----------------------------------------------------------------------------
-; [v10] AudioMix_WriteAllGroupRegs -- load all four channel groups of the audio/mixer
-; [v10] register file at 0x150000 (address latch) / 0x150002 (data), 8 bytes each.
-; [v10] Until 2026-09-25 this was `AudioMix_BytecodeData`, 124 B of `.byte`; it is code
-; [v10] (scripts/lanes/sys/convert_code_runs.py: unidasm tiles it exactly with no
-; [v10] absurd instruction, the four `calr` land on the helper's first instruction,
-; [v10] every instruction re-assembles to the ROM bytes).
-; [v10] Group g's registers are (g << 5) | 0x10 .. +7 -- the same indices
-; [v10] AudioMix_WriteChannelGroup fills with a constant during AudioMix_Init.  Here
-; [v10] AudioMix_WriteGroupRegs8 writes XBC's four bytes then XDE's (low byte first)
-; [v10] to group <word pushed by the caller>: group 1 <- XBC:XDE as passed, group 0
-; [v10] <- (xsp+0x0a):XIZ, group 2 <- XWA:XHL, group 3 <- XIX:XIY.
-; [v10] No caller found in v7, v9 or v10: searched `call`/`jp` to the address,
-; [v10] `calr` whose target is it, and its 24-bit little-endian value anywhere in
-; [v10] the ROM (a pointer table entry); the same 124 bytes are in all three.
-; [v10] -----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
+; AudioMix_WriteAllGroupRegs -- load all four channel groups of the audio/mixer
+; register file at 0x150000 (address latch) / 0x150002 (data), 8 bytes each.
+; v7 0xEF1830 (v9/v10 0xEF185A).  Until 2026-09-25 this was
+; `AudioMix_BytecodeData`, 124 B of `.byte`; it is code, ported from v10 by
+; scripts/lanes/sys/port_islands.py; in v10
+; (scripts/lanes/sys/convert_code_runs.py: unidasm tiles it exactly with no
+; absurd instruction, the four `calr` land on the helper's first instruction,
+; every instruction re-assembles to the ROM bytes).
+; Group g's registers are (g << 5) | 0x10 .. +7 -- the same indices
+; AudioMix_WriteChannelGroup fills with a constant during AudioMix_Init.  Here
+; AudioMix_WriteGroupRegs8 writes XBC's four bytes then XDE's (low byte first)
+; to group <word pushed by the caller>: group 1 <- XBC:XDE as passed, group 0
+; <- (xsp+0x0a):XIZ, group 2 <- XWA:XHL, group 3 <- XIX:XIY.
+; No caller found in v7, v9 or v10: searched `call`/`jp` to the address,
+; `calr` whose target is it, and its 24-bit little-endian value anywhere in
+; the ROM (a pointer table entry); the same 124 bytes are in all three.
+; -----------------------------------------------------------------------------
+AudioMix_WriteAllGroupRegs:
 	push	xbc
 	push	xde
 	pushw	1
@@ -1859,9 +1861,9 @@ AudioMix_BytecodeData:
 	pop	xde
 	pop	xbc
 	ret
+; A = (group << 5) | 0x10; for 8 registers: latch A at (0x150000), write the
+; next byte of XBC then XDE at (0x150002), A += 1.  Group = word argument.
 AudioMix_WriteGroupRegs8:
-; [v10] A = (group << 5) | 0x10; for 8 registers: latch A at (0x150000), write the
-; [v10] next byte of XBC then XDE at (0x150002), A += 1.  Group = word argument.
 	push	xiy
 	pushw	wa
 	pushw	bc
