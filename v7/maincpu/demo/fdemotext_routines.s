@@ -74,21 +74,13 @@ FDemoText_ByteData_VoiceProbeC:
 	ret	gt
 	add	wa, wa
 	lda	xix, (DemoDiskPrompt_English1_0x96:24)
-; v10 does not spell this byte either
 	ld_rrw	wa, xix, wa
 	lda_24	xix, (0xf84397)
 	jp_rr	8, xix, wa
 	setda_24	6, (0x247ec)
 	ret
 	ld	xwa, DemoDiskPrompt_English1_0x8E
-; v10 does not spell this byte either
-; v10 does not spell this byte either
 ; differs from v10 here and llvm-objdump cannot read it
-; v10 does not spell this byte either
-; v10 does not spell this byte either
-; v10 does not spell this byte either
-; v10 does not spell this byte either
-; v10 does not spell this byte either
 	jr	FDemoText_ByteData_VoiceProbeC_Join
 	ld	a, (49123:16)
 	and	a, 15
@@ -1737,7 +1729,6 @@ FDemoText_ByteData_TextRenderer:
 	ld	wa, iz
 	exts	xwa
 	sll	xwa, 2
-; v10 does not spell this byte either
 	add	xwa, (xsp+0xa)
 	ld	xwa, (xwa)
 	push	xwa
@@ -1768,19 +1759,13 @@ FDemoText_ByteData_TextRenderer:
 	ld	xwa, (xsp+18)
 	ld	(xwa), 0
 	ld	xwa, (xsp+2)
-; v10 does not spell this byte either
 	cp	(xwa), 0
 	jr	z, FDemoText_ProcessTextMarkup_Skip2
 FDemoText_ByteData_TextRenderer_Loop:
 	ld	xde, (xsp+2)
 	lda_rr	xwa, xde, iz
 	ld	xbc, xwa
-; v10 does not spell this byte either
-; v10 does not spell this byte either
-; v10 does not spell this byte either
 	cp	(xwa), 61
-; v10 does not spell this byte either
-; v10 does not spell this byte either
 	jr	nz, FDemoText_ByteData_TextRenderer_Skip
 	ld	(xbc), 0
 	push	xde
@@ -1822,7 +1807,6 @@ FDemoText_ByteData_TextRenderer_Skip:
 	ld	xwa, (xsp+2)
 ; v10 does not spell this byte either
 	.byte	0xc3, 0x07, 0xe0, 0xf8, 0x3f, 0x00	; cp (XWA+IZ),0x00
-; v10 does not spell this byte either
 	jr	nz, FDemoText_ByteData_TextRenderer_Loop
 FDemoText_ProcessTextMarkup_Skip2:
 	ld	xwa, (xsp+2)

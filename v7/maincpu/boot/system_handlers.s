@@ -6024,12 +6024,9 @@ E1DMA_ISR_BytecodeBlock:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 40 of 57 slots byte-identical
 	ei	6
 	lda	xwa, (1566:16)
-; v10 does not spell this byte either
 	bitm	7, (xwa)
 	jr	z, INTTC0_HANDLER_Skip3
-; v10 does not spell this byte either
 	resm	7, (xwa)
-; v10 does not spell this byte either
 	ei	0
 	lda	xde, (1556:16)
 	ld	xwa, (xde)
@@ -6065,7 +6062,6 @@ INTTC0_HANDLER_Join2:
 	ret
 	ld	de, (1033:16)
 INTTC0_HANDLER_Entry:
-; v10 does not spell this byte either
 	bitda	7, (0x620)
 	jr	nz, INTTC0_HANDLER_Skip4
 	ld	hl, 0:i3
@@ -6078,11 +6074,8 @@ INTTC0_HANDLER_Skip4:
 	jr	le, INTTC0_HANDLER_Entry
 	ld	(256:16), 0
 	ld	(1506:16), 0
-; v10 does not spell this byte either
 	set_dd8	1, 104
-; v10 does not spell this byte either
 	resda	7, (0x620)
-; v10 does not spell this byte either
 	inc	1, (58056:16)
 	ldw	hl, 65535
 	ret
