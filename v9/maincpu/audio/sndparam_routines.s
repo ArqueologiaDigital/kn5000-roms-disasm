@@ -511,10 +511,7 @@ SndParam_ResolveWidgetEx_Data:
 	ld	(xsp+10), xde
 	ld	xde, xbc
 	ld	(xsp+14), xwa
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	ld	xwa, (xsp+14)
 	ld	xiy, Naka_ToshiParam_Table_0x6C8
 	ld	xix, xwa
@@ -585,11 +582,10 @@ SndParam_ResolveWidget_Skip2:
 	lda	xde, (xhl+3)
 	ld	c, (xwa+6)
 	ld	(xde), c
-	.byte 0x83
-	push	xsp
-	ld	(xbc), xiz
-	ld	b, 175:opc
-	ldw	(33:8), 8593:io
+	cp	(xhl), 177
+	jr	z, SndParam_ResolveWidget_Skip3
+	ld	xbc, (xsp+10)
+	ld	bc, (xbc)
 	ld	e, (xwa+15)
 	extz	de
 	sla	de, 2
@@ -600,7 +596,8 @@ SndParam_ResolveWidget_Skip2:
 	call	(xix)
 	ld	xwa, (xsp+14)
 	ld	(xwa+2), l
-	jr	33
+	jr	SndParam_ResolveWidget_Join3
+SndParam_ResolveWidget_Skip3:
 	ld	xhl, (xsp+10)
 	ld	bc, (xhl)
 	and	bc, 127
@@ -610,12 +607,10 @@ SndParam_ResolveWidget_Skip2:
 	sra	wa, 7
 	and	wa, 127
 	ld	(xde), a
-	jr	5
+	jr	SndParam_ResolveWidget_Join3
 SndParam_ResolveWidget_Entry:
-	.byte 0xbf, 0x04
-	push	sr
-	swi	7
-	swi	7
+	ldw	(xsp+4), 65535
+SndParam_ResolveWidget_Join3:
 	ld	hl, (xsp+4)
 	pop	xiz
 	lda	xsp, (xsp+14)
@@ -769,6 +764,7 @@ SndParam_ResolveWidgetVariant2_Data:
 	call	DivMod32
 	ld	ix, hl
 	jr	SndParam_DecodeMidiAddr_Join2
+SndParam_DecodeMidiAddr_Loop:
 	ld	bc, 0:i3
 	cp	xiz, xde
 	jr	z, SndParam_DecodeMidiAddr_Skip
@@ -796,27 +792,23 @@ SndParam_DecodeMidiAddr_Join2:
 	add	xwa, xbc
 	ld	xde, (xwa)
 	cp	xde, NakaData_RomEnd
-	jr	nz, -68
+	jr	nz, SndParam_DecodeMidiAddr_Loop
 SndParam_DecodeMidiAddr_Skip2:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	z, 31
+	jr	z, SndParam_DecodeMidiAddr_Skip3
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
 	ld	l, (xwa+5)
 	extz	hl
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ld	w, 243:opc
-	reti
-	.byte 0xe0, 0xec
-	ldw	wa, 1215
-	jr	f, -81
-	.byte 0x04
-	ld	c, 94:opc
+	ld_rrl	xwa, xde, bc
+	lda_rr	xwa, xwa, hl
+	ld	(xsp+4), xwa
+SndParam_DecodeMidiAddr_Skip3:
+	ld	xhl, (xsp+4)
+	pop	xiz
 	inc	8, xsp
 	ret
 
@@ -1098,7 +1090,8 @@ SndParam_RegisterEntry_Data_Skip:
 	ld	xwa, (xsp+8)
 	ld	(xwa), c
 	lda	xhl, (0x96e0:16)
-	.byte 0xc7, 0xe7, 0x89, 0x8b, 0x06, 0xf1
+	stb_erp	a, 231
+	cp	a, (xhl+6)
 	jr	nz, SndParam_RegisterEntry_Data_Skip2
 	cpw	(xsp+12), 4
 	jr	nz, SndParam_RegisterEntry_Data_Join
@@ -1253,14 +1246,10 @@ SndParam_RegisterMultiField_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x04
-	jr	f, -24
-	.byte 0xe0
-	jrl	z, 177
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+4), xwa
+	or	xwa, xwa
+	jrl	z, SndParam_RegisterMultiField_Data_Skip2
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9704
 	ld	bc, 6:i3
@@ -1268,12 +1257,9 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	.byte 0xe3
-	pop	sr
-	.byte 0xe4, 0xe0
-	ld	a, 232:opc
-	.byte 0xa9, 0x81
-	ldx
+	ld_rr8l	xbc, xbc, a
+	ld	xwa, 1:i3
+	cp	l, (xbc)
 	jr	c, 2
 	ld	xwa, 2:i3
 	add	xbc, xwa
@@ -1334,6 +1320,7 @@ SndParam_RegisterMultiField_Data_Skip:
 	ld	a, (xix)
 	ld	(xbc+7), a
 	jr	SndParam_RegisterMultiField_Data_Join
+SndParam_RegisterMultiField_Data_Skip2:
 	ldw	(0x9704:16), 0xffff
 SndParam_RegisterMultiField_Data_Join:
 	ld	xhl, 0x9704
@@ -1386,13 +1373,11 @@ SndParam_RegisterBitfield_Data_Skip2:
 	exts	xbc
 	add	xbc, xiz
 	cp	(xbc), de
-	jr	z, 63
-	.byte 0x9f, 0x04
-	push	xsp
-	max
-	nop
-	jr	z, 2
+	jr	z, SndParam_RegisterBitfield_Data_Join
+	cpw	(xsp+4), 4
+	jr	z, SndParam_RegisterBitfield_Data_Skip4
 	ld	(xbc), de
+SndParam_RegisterBitfield_Data_Skip4:
 	ld	c, (xhl)
 	ld	(xix+4), c
 	ld	c, (xiy)
@@ -1553,22 +1538,20 @@ SndParam_RegisterLinked2_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x04
-	jr	f, -24
-	.byte 0xe0
-	jrl	z, 269
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+4), xwa
+	or	xwa, xwa
+	jrl	z, SndParam_RegisterLinked2_Data_Skip5
 	ld	a, (xde+7)
 	cp	a, l
-	jr	ule, 2
+	jr	ule, SndParam_RegisterLinked2_Data_Skip2
 	ld	l, a
+SndParam_RegisterLinked2_Data_Skip2:
 	ld	a, (xde+8)
 	cp	a, l
-	jr	nc, 2
+	jr	nc, SndParam_RegisterLinked2_Data_Skip3
 	ld	l, a
+SndParam_RegisterLinked2_Data_Skip3:
 	lda	xbc, (NakaInst_Param_IdxA0_01_0x12:24)
 	ld	a, (xde+11)
 	cp	a, 255
@@ -1580,10 +1563,7 @@ SndParam_RegisterLinked2_Data:
 	extz	hl
 	ld	xix, xiy
 	ld	bc, 0:i3
-	.byte 0x9d, 0x04
-	push	xsp
-	nop
-	nop
+	cpw	(xiy+4), 0
 	jr	le, 20
 	ld	xwa, (xix)
 	.byte 0xc3
@@ -1603,26 +1583,21 @@ SndParam_RegisterLinked2_Data:
 	jr	ge, 6
 	ld	xwa, (xhl)
 	ld	l, (xwa)
-	jr	27
+	jr	SndParam_RegisterLinked2_Data_Join2
 	ld	wa, (xhl+4)
 	cp	bc, wa
-	jr	ge, 9
+	jr	ge, SndParam_RegisterLinked2_Data_Skip4
 	ld	xwa, (xhl)
 	ld_rrb l, xwa, bc
-	jr 11
+	jr SndParam_RegisterLinked2_Data_Join2
+SndParam_RegisterLinked2_Data_Skip4:
 	ld bc, wa
 	dec	1, bc
 	ld	xwa, (xhl)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe4
-	ld	l, 69:opc
-	pushw	ix
-	ld	(xde-19), 68
-	pushw	wa
-	.byte 0x97
-	nop
-	nop
+	ld_rrb	l, xwa, bc
+SndParam_RegisterLinked2_Data_Join2:
+	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xix, 38696
 	ld	bc, 6:i3
 	ldirw
 	ld	c, (xde+10)
@@ -1681,6 +1656,7 @@ SndParam_RegisterLinked2_Data_Skip:
 	ld	a, (xbc)
 	ld	(xix+7), a
 	jr	SndParam_RegisterLinked2_Data_Join
+SndParam_RegisterLinked2_Data_Skip5:
 	ldw	(0x9728:16), 0xffff
 SndParam_RegisterLinked2_Data_Join:
 	ld	xhl, 0x9728
@@ -2005,34 +1981,33 @@ SndParam_RegisterComplex_Data:
 	ld	a, (xwa+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	.byte 0xe3
-	pop	sr
-	.byte 0xe4, 0xe0
-	ld	a, 159:opc
-	ldw	(63:8), 0:io
-	jr	lt, 9
+	ld_rr8l	xbc, xbc, a
+	cpw	(xsp+10), 0
+	jr	lt, SndParam_RegisterComplex_Data_Skip3
 	ld	a, (xbc)
 	extz	wa
 	ld	(xsp+10), wa
-	jr	7
+	jr	SndParam_RegisterComplex_Data_Join
+SndParam_RegisterComplex_Data_Skip3:
 	ld	a, (xbc)
 	extz	wa
 	sub	(xsp+10), wa
-	.byte 0x9f
-	ldw	(131:8), 3247:io
-	ld	w, 136:opc
-	reti
-	ld	a, 216:opc
-	ccf
+SndParam_RegisterComplex_Data_Join:
+	add	hl, (xsp+10)
+	ld	xwa, (xsp+12)
+	ld	a, (xwa+7)
+	extz	wa
 	cp	wa, hl
-	jr	le, 2
+	jr	le, SndParam_RegisterComplex_Data_Skip4
 	ld	hl, wa
+SndParam_RegisterComplex_Data_Skip4:
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+8)
 	extz	wa
 	cp	wa, hl
-	jr	ge, 2
+	jr	ge, SndParam_RegisterComplex_Data_Skip5
 	ld	hl, wa
+SndParam_RegisterComplex_Data_Skip5:
 	ld	e, (xbc)
 	extz	de
 	ld	xwa, 1:i3
@@ -2076,22 +2051,21 @@ SndParam_RegisterComplex_Data_Skip:
 	ld	(xhl), e
 	stb_erp a, 234
 	cp	a, e
-	jr	z, 63
+	jr	z, SndParam_RegisterComplex_Data_Join3
 	cpw	(xsp+8), 4
-	jr	z, 16
+	jr	z, SndParam_RegisterComplex_Data_Skip6
 	ld	xwa, (xsp+4)
 	ld	c, (xwa)
 	extz	bc
 	ld	xwa, (xsp)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ld	xiy, 0x06890a68
-	push	xsp
-	normal
-	jr	nz, 4
+	st_rrb	e, xwa, bc
+	jr	SndParam_RegisterComplex_Data_Join2
+SndParam_RegisterComplex_Data_Skip6:
+	cp	(xbc+6), 1
+	jr	nz, SndParam_RegisterComplex_Data_Join2
 	ld	a, (xiy)
 	ld	(xhl), a
+SndParam_RegisterComplex_Data_Join2:
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+4)
 	ld	(xix+4), a
@@ -2100,9 +2074,10 @@ SndParam_RegisterComplex_Data_Skip:
 	ld	(xix+5), a
 	ld	a, (xiy)
 	ld	(xix+7), a
-	jr	6
+	jr	SndParam_RegisterComplex_Data_Join3
 SndParam_RegisterComplex_Data_Skip2:
 	ldw	(0x9764:16), 0xffff
+SndParam_RegisterComplex_Data_Join3:
 	ld	xhl, 0x9764
 	lda	xsp, (xsp+16)
 	ret
@@ -2118,27 +2093,28 @@ SndParam_NotifyQuick_Data:
 	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl xwa, xbc, wa
 	or xwa, xwa
-	jr	z, 44
+	jr	z, SndParam_NotifyQuick_Data_Skip3
 	ld	xwa, xiz
-	calr	62655
+	calr	SndParam_ReadRegWord
 	ld	bc, hl
-	.byte 0x9f, 0x06
-	add	(xbc), h
-	reti
-	ld	a, 216:opc
-	ccf
+	add	bc, (xsp+6)
+	ld	a, (xiz+7)
+	extz	wa
 	cp	wa, bc
-	jr	le, 2
+	jr	le, SndParam_NotifyQuick_Data_Skip
 	ld	bc, wa
+SndParam_NotifyQuick_Data_Skip:
 	ld	a, (xiz+8)
 	extz	wa
 	cp	wa, bc
-	jr	ge, 2
+	jr	ge, SndParam_NotifyQuick_Data_Skip2
 	ld	bc, wa
+SndParam_NotifyQuick_Data_Skip2:
 	ld	xwa, xiz
 	ld	de, (xsp+4)
 	calr	SndParam_RegisterBitfield_Data
 	ld	(0x9770:16), xhl
+SndParam_NotifyQuick_Data_Skip3:
 	ld	xhl, (0x9770:16)
 	pop	xiz
 	inc	4, xsp
@@ -2195,10 +2171,7 @@ SndParam_RegisterDual_Data:
 	ld	xix, xiy
 	ld	w, a
 	ld	de, 0:i3
-	.byte 0x9d, 0x04
-	push	xsp
-	nop
-	nop
+	cpw	(xiy+4), 0
 	jr	le, 20
 	ld	xbc, (xix)
 	.byte 0xc3
@@ -2212,10 +2185,9 @@ SndParam_RegisterDual_Data:
 	.byte 0x9c, 0x04, 0xf2
 	jr	lt, -20
 	ld	wa, (xix+7)
-	.byte 0x9f
-	ccf
-	or	(xwa), e
-	add	(xde-40), a
+	add	wa, (xsp+18)
+	ld	xde, xiy
+	ld	bc, wa
 	cp	wa, 0:i3
 	jr	ge, 6
 	ld	xwa, (xde)
@@ -2299,10 +2271,8 @@ SndParam_RegisterOffset_Data:
 	ld	iz, (xiy)
 	ld	bc, iz
 	and	bc, 511
-	.byte 0x9f
-	ldw	(129:8), 0xcfd9:io
-	pushw	wa
-	nop
+	add	bc, (xsp+10)
+	cp	bc, 40
 	jr	ge, SndParam_RegisterOffset_Data_Skip
 	ldw	bc, 40
 	jr	SndParam_RegisterOffset_Data_Join
@@ -2366,14 +2336,10 @@ SndParam_RegisterWide_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x04
-	jr	f, -24
-	.byte 0xe0
-	jrl	z, 238
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+4), xwa
+	or	xwa, xwa
+	jrl	z, SndParam_RegisterWide_Data_Skip4
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x978c
 	ld	bc, 6:i3
@@ -2474,6 +2440,7 @@ SndParam_RegisterWide_Data_Skip3:
 	ld	a, (xwa)
 	ld	(xiz+7), a
 	jr	SndParam_RegisterWide_Data_Join2
+SndParam_RegisterWide_Data_Skip4:
 	ldw	(0x978c:16), 0xffff
 SndParam_RegisterWide_Data_Join2:
 	ld	xhl, 0x978c
@@ -2509,12 +2476,9 @@ SndParam_EncodeFieldSub_Data:
 	ld	a, (xbc+11)
 	sla	a, 2
 	lda	xde, (Naka_SubDispatch_B_Table:24)
-	.byte 0xe3
-	pop	sr
-	or	xwa, xwa
-	ld	b, 232:opc
-	.byte 0xa9, 0x82
-	ldx
+	ld_rr8l	xde, xde, a
+	ld	xwa, 1:i3
+	cp	l, (xde)
 	jr	c, 2
 	ld	xwa, 2:i3
 	add	xde, xwa
@@ -2582,12 +2546,8 @@ SndParam_DecodeFieldAlt_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	.byte 0xe3
-	pop	sr
-	.byte 0xe4, 0xe0
-	ld	a, 137:opc
-	normal
-	ldx
+	ld_rr8l	xbc, xbc, a
+	cp	l, (xbc+1)
 	jr	nz, 4
 	ld	xwa, 3:i3
 	jr	9
@@ -2653,12 +2613,9 @@ SndParam_WriteFieldSub_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	.byte 0xe3
-	pop	sr
-	.byte 0xe4, 0xe0
-	ld	a, 232:opc
-	.byte 0xa9, 0x81
-	ldx
+	ld_rr8l	xbc, xbc, a
+	ld	xwa, 1:i3
+	cp	l, (xbc)
 	jr	c, 2
 	ld	xwa, 2:i3
 	add	xbc, xwa
