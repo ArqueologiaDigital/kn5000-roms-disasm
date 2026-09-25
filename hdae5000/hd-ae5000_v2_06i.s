@@ -3932,7 +3932,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	cp hl, 0:i3
 	jrl nz, .Lpws_error
 	lda xwa, (xsp + 72)
-	call HDAE5000_PPI_Write_Sector_Helper2
+	call HDAE5000_HD_GetGeometry
 	; MemFill: clear 32-byte buffer
 	pushw 0x0020			; count = 32
 	pushw 0x0000			; fill value = 0

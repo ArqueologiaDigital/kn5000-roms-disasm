@@ -8942,7 +8942,7 @@ HDAE5000_Display_Manager_Helper:
 	ld xhl, (xwa + 0x0538)
 	call (xhl)
 .Ltl2_skip_extra:
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	; Test bits 0-8, calling Cell_Render subroutines
 	ld wa, (xsp + 4)		; reload DE (bitmask param)
 	; --- Bit 0 ---
@@ -9975,7 +9975,7 @@ HDAE5000_Display_Scroll_Helper:
 	ld	xhl, (xwa + 0x0538)
 	call	(xhl)
 .LTS_1197:
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	ld	wa, (xsp+22)
 	bit	0x00, wa
 	jr z, .LTS_11c3                        ; [66 20] jr Z,0x2911c3
@@ -10184,7 +10184,7 @@ HDAE5000_Display_Scroll_Helper:
 	push xwa
 	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
-	call .Lhciv_hd_check
+	call HDAE5000_HD_WriteTables_Status
 	jr t, .LTS_13e7                        ; [68 12] jr T,0x2913e7
 .LTS_13d5:
 	pushw 0x0000
@@ -11340,7 +11340,7 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	xhl, (xwa + 0x0538)
 	call	(xhl)
 .LTCI_219b:
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	ld	wa, (xsp+64)
 	bit	0x00, wa
 	jr z, .LTCI_21c8                       ; [66 21] jr Z,0x2921c8
@@ -11560,7 +11560,7 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	push xwa
 	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
-	call .Lhciv_hd_check
+	call HDAE5000_HD_WriteTables_Status
 	jr t, .LTCI_2433                       ; [68 12] jr T,0x292433
 .LTCI_2421:
 	pushw 0x0000
@@ -12808,7 +12808,7 @@ HDAE5000_AttenDelDirSwCatch_Helper:
 	ld xhl, (xwa + 0x0538)             ; XHL = (XWA+0x0538)
 	call (xhl)
 .Lwh_skip_extra:
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	ldw (xsp + 4), 0x0000		; slot counter = 0
 	; Loop over 16 slots
 	cpw (xsp + 4), 0x0010
@@ -12886,7 +12886,7 @@ HDAE5000_AttenDelDirSwCatch_Helper:
 	call HDAE5000_MemFill
 	inc 0, xsp			; stack cleanup
 	; Final handler calls
-	call .Lhciv_hd_check
+	call HDAE5000_HD_WriteTables_Status
 	cpw (xsp + 6), 0x0001	; DE == 1?
 	call nz, (2716853:24)		; call nz, 0x2974B5
 	cpw (xsp + 8), 0x0001	; BC == 1?
@@ -12932,7 +12932,7 @@ HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 	ld xhl, (xwa + 0x0538)
 	call (xhl)
 .Lws36b_skip1:
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	; Bitmask dispatch: test bits of IZ, call corresponding renderers
 	bit 0, iz
 	jr z, .Lws36b_bit1
@@ -13018,7 +13018,7 @@ HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 	ld bc, (xsp + 4)
 	calr HDAE5000_Workspace_Handler
 .Lws36b_post:
-	call .Lhciv_hd_check
+	call HDAE5000_HD_WriteTables_Status
 	; Conditional call NZ to 0x2974B5
 	cpw (xsp + 12), 0x0001
 	call nz, (2716853:24)	; call nz, 0x2974B5
@@ -13815,7 +13815,7 @@ HDAE5000_Cell_Validate:	; 0x293C96 (347 bytes)
 	ld xwa, xiz			; total accumulated size
 	call HDAE5000_Cell_Validate_Helper			; validate total
 	ld xiz, xhl			; save result
-	call .Lhdd_wrapper3			; get available space
+	call HDAE5000_HD_CountFreeClusters_Status			; get available space
 	cp xhl, xiz			; available > needed?
 	jr ugt, .Lcv_done
 	ldw (xsp + 4), 0xFFFF		; set error flag
@@ -13869,13 +13869,13 @@ HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
 	ld_sril	xhl, (xwa + 0x00e8)
 	ld	wa, 1:i3
 	call	(xhl)
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	ld	iz, hl
-	call .Lhciv_hd_check
+	call HDAE5000_HD_WriteTables_Status
 	or	iz, hl
 	cpw	(xsp+2), 0x0001
 	jr z, .LDC_3e60                        ; [66 06] jr Z,0x293e60
-	call HDAE5000_Display_Callback_Helper
+	call HDAE5000_ATA_Standby_Status
 	or	iz, hl
 .LDC_3e60:
 	ld	xwa, (0x23a1a2)
@@ -13900,13 +13900,13 @@ HDAE5000_PPI_Write_Sector_Helper:
 	ld_sril	xhl, (xwa + 0x00e8)
 	ld	wa, 1:i3
 	call	(xhl)
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	ld	iz, hl
-	call .Lhdd_wrapper2
+	call HDAE5000_HD_ReadTables_Status
 	or	iz, hl
 	cpw	(xsp+2), 0x0001
 	jr z, .LDC_3eba                        ; [66 06] jr Z,0x293eba
-	call HDAE5000_Display_Callback_Helper
+	call HDAE5000_ATA_Standby_Status
 	or	iz, hl
 .LDC_3eba:
 	ld	xwa, (0x23a1a2)
@@ -13930,13 +13930,13 @@ HDAE5000_PPI_Write_Sector_Helper:
 	ld_sril	xhl, (xwa + 0x00e8)
 	ld	wa, 1:i3
 	call	(xhl)
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	ld	iz, hl
 	call 0x2998e4
 	or	iz, hl
 	cpw	(xsp+2), 0x0001
 	jr z, .LDC_3f14                        ; [66 06] jr Z,0x293f14
-	call HDAE5000_Display_Callback_Helper
+	call HDAE5000_ATA_Standby_Status
 	or	iz, hl
 .LDC_3f14:
 	ld	xwa, (0x23a1a2)
@@ -13961,13 +13961,13 @@ HDAE5000_SetupP2SwCatch_Helper:
 	ld_sril	xhl, (xwa + 0x00e8)
 	ld	wa, 1:i3
 	call	(xhl)
-	call HDAE5000_Table_Lookup_Helper
+	call HDAE5000_ATA_SoftReset_Status
 	ld	iz, hl
 	call HDAE5000_Display_Callback_Helper3
 	or	iz, hl
 	cpw	(xsp+2), 0x0001
 	jr z, .LDC_3f6e                        ; [66 06] jr Z,0x293f6e
-	call HDAE5000_Display_Callback_Helper
+	call HDAE5000_ATA_Standby_Status
 	or	iz, hl
 .LDC_3f6e:
 	ld	xwa, (0x23a1a2)
@@ -14438,7 +14438,7 @@ HDAE5000_PPORT_Svc02_TurnHdMotorOff:
 	; "TurnHdMotorOff".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
-	call HDAE5000_Display_Callback_Helper
+	call HDAE5000_ATA_Standby_Status
 	cp	hl, 0xffff
 	jr nz, .LDS_445d                       ; [6e 02] jr NZ,0x29445d
 	ld	iz, 1:i3
@@ -14458,7 +14458,7 @@ HDAE5000_PPORT_Svc03_SendInfosAboutHd:
 	; "SendInfosAboutHd".
 	lda	xsp, (xsp-116)
 	lda	xwa, (xsp+64)
-	call HDAE5000_PPI_Write_Sector_Helper2
+	call HDAE5000_HD_GetGeometry
 	pushw 0x001e
 	lda	xwa, (xsp+76)
 	push xwa
@@ -18959,10 +18959,12 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 HDAE5000_Check_HD_Present:	; 2971A3h
 	; Entry wrapper for HD presence detection
 	; Clears result flag, calls internal RAM test routine, returns result
-	; Output: L = 0 if no HD, non-zero if HD detected
+	; Output: L = the HDAE5000_HD_Init error code: 0 = drive up and ready,
+	;         non-zero = the step that failed (a missing drive times out in
+	;         HDAE5000_ATA_WaitReady and reports 3)
 	push xiz
 	ld (0x229d92:24), 0x00; ld (229D92h), 0 - clear result flag
-	call HDAE5000_RAM_Test	; Call internal test routine
+	call HDAE5000_HD_Init	; Call internal test routine
 	pop xiz
 	xor hl, hl	; Clear HL
 	ld l, (0x229d92:24); ld L, (229D92h) - get result
@@ -18980,36 +18982,51 @@ HDAE5000_Check_HD_Present:	; 2971A3h
 ;   - sprintf-like string formatting library (decimal/hex/octal conversion)
 ; ============================================================================
 
-HDAE5000_RAM_Test:	; 0x2971B7 (1902 bytes)
+HDAE5000_HD_Init:	; 0x2971B7 (1902 bytes)
+	; HD bring-up.  Each step's failure stores its code in RAM 0x229D92
+	; (read back by HDAE5000_Check_HD_Present) and ends at HDAE5000_HD_Init_Fail:
+	;   2  the 32 KB SRAM at 0x230F1C-0x238F1B does not hold 0x5A5A
+	;   3  HDAE5000_ATA_SoftReset failed      5  HDAE5000_ATA_IdentifyDevice failed
+	;   6  reading sector 1 (to 0x200628) failed
+	;   1  sector 1 lacks the AA55AA55 F4F1F2F3 signature (not formatted);
+	;      the free-cluster count 0x229C80 is zeroed
+	;   7  HDAE5000_HD_CountFreeClusters failed
+	;   8  HDAE5000_HD_ReadTables failed
+	; Between those: HDAE5000_HD_ParseIdentify (via HDAE5000_ATA_IdentifyDevice's
+	; data), six setting bytes copied from sector 1's image (0x2006A0) to
+	; 0x229DA9..AE, blank tables (HDAE5000_HD_InitTables).  Always ends with
+	; HDAE5000_ATA_Standby.  0 in 0x229D92 = drive ready and formatted.
 	; RAM test: fill/verify 32KB at 0x230F1C-0x238F1C with 0x5A5A pattern
 ; LRT: 0x2971B7 (1902 bytes)
+	; ^ region size, not routine size: the ATA primitives, geometry and
+	;   table I/O routines below each carry their own label now.
 
 	ldw	wa, 0x5a5a
 	lda xiy, (0x230f1c:24)
-HDAE5000_RAM_Test_Join:
+HDAE5000_HD_Init_SramFillLoop:
 	cp	xiy, 0x00238f1c
 	jp	z, (0x2971D2:24)
 	ld (xiy), wa                            ; ld (XIY),WA
 	inc 2, xiy                              ; inc 2,XIY
-	jp HDAE5000_RAM_Test_Join                             ; jp 0x2971bf
+	jp HDAE5000_HD_Init_SramFillLoop                             ; jp 0x2971bf
 	lda xiy, (0x230f1c:24)
-HDAE5000_RAM_Test_Join2:
+HDAE5000_HD_Init_SramVerifyLoop:
 	cp	xiy, 0x00238f1c
 	jp	z, (0x2971F5:24)
 	cp	(xiy), wa
 	jp	z, (0x2971EF:24)
 	ld	a, 0x02:opc
-	jp HDAE5000_RAM_Test_Join8                             ; jp 0x29742f
+	jp HDAE5000_HD_Init_Fail                             ; jp 0x29742f
 	inc 2, xiy                              ; inc 2,XIY
-	jp HDAE5000_RAM_Test_Join2                             ; jp 0x2971d7
+	jp HDAE5000_HD_Init_SramVerifyLoop                             ; jp 0x2971d7
 	xor	wa, wa
 	lda xiy, (0x230f1c:24)
-HDAE5000_RAM_Test_Join3:
+HDAE5000_HD_Init_SramClearLoop:
 	cp	xiy, 0x00238f1c
 	jp	z, (0x29720F:24)
 	ld (xiy), wa                            ; ld (XIY),WA
 	inc 2, xiy                              ; inc 2,XIY
-	jp HDAE5000_RAM_Test_Join3                             ; jp 0x2971fc
+	jp HDAE5000_HD_Init_SramClearLoop                             ; jp 0x2971fc
 	call HDAE5000_RAM_Test_Helper9
 	call .Lppe_write_setup
 	lda xwa, (0x298c9d:24)
@@ -19036,13 +19053,13 @@ HDAE5000_RAM_Test_Join3:
 	ld	(0x229DC5:24), 0
 	ld	(0x229DC6:24), 0
 	ld	(0x229DC7:24), 0
-HDAE5000_RAM_Test_Join4:
+HDAE5000_HD_Init_SpaceFillLoop:
 	cp	xbc, 0x00000000
 	jp	z, (0x2972B7:24)
 	ld	(xix), 0x20
 	dec	1, xbc
 	inc 1, xix                              ; inc 1,XIX
-	jp HDAE5000_RAM_Test_Join4                             ; jp 0x2972a1
+	jp HDAE5000_HD_Init_SpaceFillLoop                             ; jp 0x2972a1
 	ld	(0x229D9F:24), 0
 	ld	(0x229DDA:24), 0
 	ld	(0x229DDB:24), 0
@@ -19060,48 +19077,48 @@ HDAE5000_RAM_Test_Join4:
 	ld	(0x229E5C:24), 0
 	xor	bc, bc
 	lda xix, (0x229e5c:24)
-HDAE5000_RAM_Test_Join5:
+HDAE5000_HD_Init_ClearLoop1:
 	cp	bc, 0x0078
 	jp	z, (0x29732C:24)
 	ld	(xix), 0x00
 	inc 1, xix                              ; inc 1,XIX
 	inc	1, bc
-	jp HDAE5000_RAM_Test_Join5                             ; jp 0x297318
+	jp HDAE5000_HD_Init_ClearLoop1                             ; jp 0x297318
 	xor	bc, bc
 	lda xix, (0x229ddf:24)
-HDAE5000_RAM_Test_Join6:
+HDAE5000_HD_Init_ClearLoop2:
 	cp	bc, 0x0078
 	jp	z, (0x297347:24)
 	ld	(xix), 0x00
 	inc 1, xix                              ; inc 1,XIX
 	inc	1, bc
-	jp HDAE5000_RAM_Test_Join6                             ; jp 0x297333
-	call HDAE5000_RAM_Test_Helper2
+	jp HDAE5000_HD_Init_ClearLoop2                             ; jp 0x297333
+	call HDAE5000_ATA_SoftReset
 	cp	(0x200222:24), 0
 	jp	z, (0x29735C:24)
 	ld	a, 0x03:opc
-	jp HDAE5000_RAM_Test_Join8                             ; jp 0x29742f
-	call HDAE5000_RAM_Test_Helper7
+	jp HDAE5000_HD_Init_Fail                             ; jp 0x29742f
+	call HDAE5000_ATA_IdentifyDevice
 	cp	(0x200222:24), 0
 	jp	z, (0x297371:24)
 	ld	a, 0x05:opc
-	jp HDAE5000_RAM_Test_Join8                             ; jp 0x29742f
-	call HDAE5000_RAM_Test_Helper5
+	jp HDAE5000_HD_Init_Fail                             ; jp 0x29742f
+	call HDAE5000_HD_ParseIdentify
 	ld	xhl, 1:i3
 	lda xix, (0x200628:24)
 	ld	xde, 0x00000200
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	cp	(0x200222:24), 0
 	jp	z, (0x297396:24)
 	ld	a, 0x06:opc
-	jp HDAE5000_RAM_Test_Join8                             ; jp 0x29742f
-	call HDAE5000_RAM_Test_Helper4
+	jp HDAE5000_HD_Init_Fail                             ; jp 0x29742f
+	call HDAE5000_HD_CheckSignature
 	cp	(0x229D98:24), 1
 	jp	z, (0x2973B2:24)
 	ld	xwa, 0:i3
 	ld	(0x229c80), xwa
 	ld	a, 0x01:opc
-	jp HDAE5000_RAM_Test_Join8                             ; jp 0x29742f
+	jp HDAE5000_HD_Init_Fail                             ; jp 0x29742f
 	lda xix, (0x2006a0:24)
 	ld	a, (xix)
 	ld	(0x229DA9:24), a
@@ -19120,32 +19137,35 @@ HDAE5000_RAM_Test_Join6:
 	inc 1, xix                              ; inc 1,XIX
 	ld	a, (xix)
 	ld	(0x229DAE:24), a
-	call .Lhdd_count_sectors
+	call HDAE5000_HD_CountFreeClusters
 	cp	(0x200222:24), 0
 	jp	z, (0x297400:24)
 	ld	a, 0x07:opc
-	jp HDAE5000_RAM_Test_Join8                             ; jp 0x29742f
-	call .Lhciv_mem_init
+	jp HDAE5000_HD_Init_Fail                             ; jp 0x29742f
+	call HDAE5000_HD_InitTables
 	cp	(0x229D98:24), 1
 	jp	nz, (0x297424:24)
-	call .Lhdd_config_init2
+	call HDAE5000_HD_ReadTables
 	cp	(0x200222:24), 0
 	jp	z, (0x297424:24)
 	ld	a, 0x08:opc
-	jp HDAE5000_RAM_Test_Join8                             ; jp 0x29742f
+	jp HDAE5000_HD_Init_Fail                             ; jp 0x29742f
 	ld	(0x229D92:24), 0
-HDAE5000_RAM_Test_Join7:
-	call HDAE5000_RAM_Test_Helper3
+HDAE5000_HD_Init_Exit:
+	call HDAE5000_ATA_Standby
 	ret
 
-HDAE5000_RAM_Test_Join8:
+HDAE5000_HD_Init_Fail:
 	ld	(0x229D92:24), a
-	jp HDAE5000_RAM_Test_Join7                             ; jp 0x29742a
-HDAE5000_RAM_Test_Helper:
+	jp HDAE5000_HD_Init_Exit                             ; jp 0x29742a
+HDAE5000_ATA_WaitReady:
+	; poll the ATA status register (0x13001E) until (status & 0xC0) == 0x40
+	; (BSY clear, DRDY set); after 0x3FFFFF polls give up with the error
+	; flag RAM 0x200222 = 1.  Preserves XIX, WA.
 	push xix
 	pushw wa                                ; push WA
 	ld	xix, 0:i3
-HDAE5000_RAM_Test_Join9:
+HDAE5000_ATA_WaitReady_Poll:
 	cp	xix, 0x003fffff
 	jp	z, (0x29745D:24)
 	ld	a, (0x13001E:24)
@@ -19153,15 +19173,16 @@ HDAE5000_RAM_Test_Join9:
 	cp	a, 0x40
 	jp	z, (0x297463:24)
 	inc 1, xix                              ; inc 1,XIX
-	jp HDAE5000_RAM_Test_Join9                             ; jp 0x29743c
+	jp HDAE5000_ATA_WaitReady_Poll                             ; jp 0x29743c
 	ld	(0x200222:24), 1
 	popw wa                                 ; pop WA
 	pop xix                                 ; pop XIX
 	ret
 
-HDAE5000_Table_Lookup_Helper:
+HDAE5000_ATA_SoftReset_Status:
+	; C-callable wrapper: HDAE5000_ATA_SoftReset, returns HL = 0 or 0xFFFF.
 	push xiz
-	call HDAE5000_RAM_Test_Helper2
+	call HDAE5000_ATA_SoftReset
 	xor	hl, hl
 	cp	(0x200222:24), 0
 	jr z, .LRT_7478                        ; [66 03] jr Z,0x297478
@@ -19170,23 +19191,27 @@ HDAE5000_Table_Lookup_Helper:
 	pop xiz                                 ; pop XIZ
 	ret
 
-HDAE5000_RAM_Test_Helper2:
+HDAE5000_ATA_SoftReset:
+	; ATA software reset: wait ready, write device control 0x130020 = 0x0E
+	; (SRST + nIEN) then 0x0A (nIEN), wait ready again.  Error flag 0x200222.
 	ld	(0x200222:24), 0
-	call HDAE5000_RAM_Test_Helper
+	call HDAE5000_ATA_WaitReady
 	cp	(0x200222:24), 0
 	jp	z, (0x297493:24)
-	jp HDAE5000_RAM_Test_Return                             ; jp 0x2974b4
+	jp HDAE5000_ATA_SoftReset_Return                             ; jp 0x2974b4
 	ld	(0x130020:24), 14
 	ld	(0x130020:24), 10
-	call HDAE5000_RAM_Test_Helper
+	call HDAE5000_ATA_WaitReady
 	cp	(0x200222:24), 0
 	jp	z, (0x2974B4:24)
 	ld	(0x200222:24), 1
-HDAE5000_RAM_Test_Return:
+HDAE5000_ATA_SoftReset_Return:
 	ret
 
-HDAE5000_Display_Callback_Helper:
-	call HDAE5000_RAM_Test_Helper3
+HDAE5000_ATA_Standby_Status:
+	; C-callable wrapper: HDAE5000_ATA_Standby, returns HL = 0 or 0xFFFF.
+	; Reached through `call nz, (0x2974B5:24)` from several UI paths.
+	call HDAE5000_ATA_Standby
 	xor	hl, hl
 	cp	(0x200222:24), 0
 	jr z, .LRT_74c6                        ; [66 03] jr Z,0x2974c6
@@ -19194,7 +19219,10 @@ HDAE5000_Display_Callback_Helper:
 .LRT_74c6:
 	ret
 
-HDAE5000_RAM_Test_Helper3:
+HDAE5000_ATA_Standby:
+	; spin the drive down: wait ready, features/sector/cylinder registers =
+	; 0xFF, sector count = 0, device/head = 0xA0, command 0x94 (STANDBY
+	; IMMEDIATE in the ATA-1/2 opcode map).  Saves all registers.
 	push xwa
 	push xbc
 	push xde
@@ -19202,7 +19230,7 @@ HDAE5000_RAM_Test_Helper3:
 	push xix
 	push xiy
 	push xiz
-	call HDAE5000_RAM_Test_Helper
+	call HDAE5000_ATA_WaitReady
 	cp	(0x200222:24), 0
 	jp	nz, (0x297507:24)
 	ld	(0x130012:24), 255
@@ -19221,7 +19249,11 @@ HDAE5000_RAM_Test_Helper3:
 	pop xwa                                 ; pop XWA
 	ret
 
-HDAE5000_RAM_Test_Helper4:
+HDAE5000_HD_CheckSignature:
+	; RAM 0x229D98 = 1 if the sector-1 image at 0x200628 starts with the
+	; longs 0xAA55AA55, 0xF4F1F2F3 (the signature
+	; HDAE5000_Display_Callback_Helper3 builds there and writes to sector 1),
+	; else 0.
 	push xix
 	push xbc
 	push xwa
@@ -19231,13 +19263,13 @@ HDAE5000_RAM_Test_Helper4:
 	cp	xwa, 0xaa55aa55
 	jp	z, (0x297531:24)
 	ld	(0x229D98:24), 0
-	jp HDAE5000_RAM_Test_Join10                             ; jp 0x29754c
+	jp HDAE5000_HD_CheckSignature_Done                             ; jp 0x29754c
 	cp	xbc, 0xf4f1f2f3
 	jp	z, (0x297546:24)
 	ld	(0x229D98:24), 0
-	jp HDAE5000_RAM_Test_Join10                             ; jp 0x29754c
+	jp HDAE5000_HD_CheckSignature_Done                             ; jp 0x29754c
 	ld	(0x229D98:24), 1
-HDAE5000_RAM_Test_Join10:
+HDAE5000_HD_CheckSignature_Done:
 	call HDAE5000_RAM_Test_Helper8
 	pop xwa                                 ; pop XWA
 	pop xbc                                 ; pop XBC
@@ -19263,10 +19295,13 @@ HDAE5000_RAM_Test_Join10:
 	pop xwa                                 ; pop XWA
 	ret
 
-HDAE5000_PPI_Write_Sector_Helper2:
+HDAE5000_HD_GetGeometry:
+	; (XWA = dest) HDAE5000_HD_ParseIdentify, then store cylinders (0x229C32),
+	; heads (0x229C34), sectors per track (0x200220), usable sectors
+	; (0x200223) and the 40-byte model string (0x20083C) at dest.
 	push xiz
 	push xwa
-	call HDAE5000_RAM_Test_Helper5
+	call HDAE5000_HD_ParseIdentify
 	pop xwa                                 ; pop XWA
 	ld	xix, xwa
 	ld	wa, (0x229C32:24)
@@ -19284,7 +19319,18 @@ HDAE5000_PPI_Write_Sector_Helper2:
 	pop xiz                                 ; pop XIZ
 	ret
 
-HDAE5000_RAM_Test_Helper5:
+HDAE5000_HD_ParseIdentify:
+	; read the IDENTIFY DEVICE block at 0x200000 (HDAE5000_ATA_IdentifyDevice):
+	; words 54/55/56 (+108/+110/+112: current cylinders, heads, sectors per
+	; track) and 57-58 (+114: current capacity, minus 2) into
+	; 0x229C32/0x229C34/0x200220/0x200223, then derive the disk layout:
+	;   cluster = 0x20 sectors, or 0x40 if the capacity is >= 0x14DC93
+	;   (0x229C5C);  cylinders x sectors (0x200200, the head stride used by
+	;   HDAE5000_ATA_ReadSector/WriteSector);  FAT at sector 2 (0x229C68),
+	;   the 323 table sectors at 3908 (0x229C64), data from 4231 (0x229C6C),
+	;   data sector count (0x229C94) and FAT entry count (0x229C70, whole
+	;   128-entry FAT sectors).  Finally words 27-46 (the model number) are
+	;   copied byte-swapped to 0x20083C.
 	lda xix, (0x200000:24)
 	ld	wa, (xix+108)
 	ld	(0x229c32), wa
@@ -19300,18 +19346,18 @@ HDAE5000_RAM_Test_Helper5:
 	jp	ge, (0x2975EE:24)
 	ld	xwa, 0x00000020
 	ld	(0x229c5c), xwa
-	jp HDAE5000_RAM_Test_Join11                             ; jp 0x2975f8
+	jp HDAE5000_HD_ParseIdentify_ClusterSet                             ; jp 0x2975f8
 	ld	xwa, 0x00000040
 	ld	(0x229c5c), xwa
-HDAE5000_RAM_Test_Join11:
+HDAE5000_HD_ParseIdentify_ClusterSet:
 	ld	xbc, 0x00000200
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	(0x229c58), xwa
 	xor	xwa, xwa
 	xor	xbc, xbc
 	ld	wa, (0x229C32:24)
 	ld	bc, (0x200220:24)
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	(0x200200), xwa
 	ld	xwa, 2:i3
 	ld	(0x229c68), xwa
@@ -19326,17 +19372,17 @@ HDAE5000_RAM_Test_Join11:
 	ld	(0x229c94), xwa
 	ld	xwa, (0x229c5c)
 	ld	xbc, 0x00000080
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, xwa
 	ld	xwa, (0x229c94)
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	ld	xbc, 0x00000080
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	(0x229c70), xwa
 	lda xiy, (0x20083c:24)
 	lda xix, (0x200036:24)
 	ld	bc, 0:i3
-HDAE5000_RAM_Test_Join12:
+HDAE5000_HD_ParseIdentify_ModelLoop:
 	cp	bc, 0x0028
 	jp	z, (0x29769A:24)
 	ld	wa, (xix)
@@ -19345,31 +19391,38 @@ HDAE5000_RAM_Test_Join12:
 	inc	2, bc
 	inc 2, xix                              ; inc 2,XIX
 	inc 2, xiy                              ; inc 2,XIY
-	jp HDAE5000_RAM_Test_Join12                             ; jp 0x297680
+	jp HDAE5000_HD_ParseIdentify_ModelLoop                             ; jp 0x297680
 	ret
 
-HDAE5000_HD_Config_Init_Values_Helper:
+HDAE5000_ATA_WriteSector:
+	; write one 512-byte sector: XHL = sector number (1-based), XIX = data.
+	; The number is split with HDAE5000_HD_UDiv32 by the head stride
+	; (0x200200) and by sectors per track (0x200220) into head (device/head
+	; 0x13001C |= 0xA0), cylinder (0x130018/1A) and sector (0x130016);
+	; sector count 1, command 0x30 (WRITE SECTORS), wait DRQ ((status &
+	; 0xC8) == 0x48), 256 words to the data port 0x130010, wait ready;
+	; error flag 0x200222 = status bit 0 (ERR).
 	ld	(0x200204), xhl
 	ld	(0x200208), xix
 	ld	(0x200222:24), 0
-HDAE5000_RAM_Test_Join13:
+HDAE5000_ATA_WriteSector_WaitReady:
 	ld	a, (0x13001E:24)
 	and	a, 0xc0
 	cp	a, 0x40
 	jp	z, (0x2976BF:24)
-	jp HDAE5000_RAM_Test_Join13                             ; jp 0x2976ab
+	jp HDAE5000_ATA_WriteSector_WaitReady                             ; jp 0x2976ab
 	ld	(0x130014:24), 1
 	ld	xwa, (0x200204)
 	dec	1, xwa
 	ld	xbc, (0x200200)
-	calr	HDAE5000_HD_Config_Init_Values
+	calr	HDAE5000_HD_UDiv32
 	ld	e, a
 	or	a, 0xa0
 	ld	(0x13001C:24), a
 	xor	xwa, xwa
 	ld	a, e
 	ld	xbc, (0x200200)
-	calr	HDAE5000_HD_Init_Variables
+	calr	HDAE5000_HD_Mul32
 	ld	(0x200218), xwa
 	ld	xbc, xwa
 	ld	xwa, (0x200204)
@@ -19377,27 +19430,27 @@ HDAE5000_RAM_Test_Join13:
 	dec	1, xwa
 	xor	xbc, xbc
 	ld	bc, (0x200220:24)
-	calr	HDAE5000_HD_Config_Init_Values
+	calr	HDAE5000_HD_UDiv32
 	ld	(0x130018:24), a
 	ld	(0x13001A:24), w
 	xor	xbc, xbc
 	ld	bc, (0x200220:24)
-	calr	HDAE5000_HD_Init_Variables
+	calr	HDAE5000_HD_Mul32
 	ld	xbc, (0x200218)
 	add	xbc, xwa
 	ld	xwa, (0x200204)
 	sub	xwa, xbc
 	ld	(0x130016:24), a
 	ld	(0x13001E:24), 48
-HDAE5000_RAM_Test_Join14:
+HDAE5000_ATA_WriteSector_WaitDrq:
 	ld	a, (0x13001E:24)
 	and	a, 0xc8
 	cp	a, 0x48
 	jp	z, (0x297745:24)
-	jp HDAE5000_RAM_Test_Join14                             ; jp 0x297731
+	jp HDAE5000_ATA_WriteSector_WaitDrq                             ; jp 0x297731
 	ld	bc, 0:i3
 	ld	xix, (0x200208)
-HDAE5000_RAM_Test_Join15:
+HDAE5000_ATA_WriteSector_DataLoop:
 	cp	bc, 0x0200
 	jp	nc, (0x297766:24)
 	ld	wa, (xix)
@@ -19405,41 +19458,44 @@ HDAE5000_RAM_Test_Join15:
 	inc 2, xix                              ; inc 2,XIX
 	inc 2, xiy                              ; inc 2,XIY
 	inc	2, bc
-	jp HDAE5000_RAM_Test_Join15                             ; jp 0x29774c
-HDAE5000_RAM_Test_Join16:
+	jp HDAE5000_ATA_WriteSector_DataLoop                             ; jp 0x29774c
+HDAE5000_ATA_WriteSector_WaitDone:
 	ld	a, (0x13001E:24)
 	and	a, 0xc0
 	cp	a, 0x40
 	jp	z, (0x29777A:24)
-	jp HDAE5000_RAM_Test_Join16                             ; jp 0x297766
+	jp HDAE5000_ATA_WriteSector_WaitDone                             ; jp 0x297766
 	ld	a, (0x13001E:24)
 	and	a, 0x01
 	ld	(0x200222:24), a
 	ret
 
-HDAE5000_RAM_Test_Helper6:
+HDAE5000_ATA_ReadSector:
+	; read one sector: XHL = sector number (1-based), XIX = buffer, XDE =
+	; bytes to keep (all 512 are read from 0x130010).  Same CHS split and
+	; handshake as HDAE5000_ATA_WriteSector with command 0x20 (READ SECTORS).
 	ld	(0x20020c), xhl
 	ld	(0x200210), xix
 	ld	(0x200214), xde
 	ld	(0x200222:24), 0
-HDAE5000_RAM_Test_Join17:
+HDAE5000_ATA_ReadSector_WaitReady:
 	ld	a, (0x13001E:24)
 	and	a, 0xc0
 	cp	a, 0x40
 	jp	z, (0x2977B1:24)
-	jp HDAE5000_RAM_Test_Join17                             ; jp 0x29779d
+	jp HDAE5000_ATA_ReadSector_WaitReady                             ; jp 0x29779d
 	ld	(0x130014:24), 1
 	ld	xwa, (0x20020c)
 	dec	1, xwa
 	ld	xbc, (0x200200)
-	calr	HDAE5000_HD_Config_Init_Values
+	calr	HDAE5000_HD_UDiv32
 	ld	e, a
 	or	a, 0xa0
 	ld	(0x13001C:24), a
 	xor	xwa, xwa
 	ld	a, e
 	ld	xbc, (0x200200)
-	calr	HDAE5000_HD_Init_Variables
+	calr	HDAE5000_HD_Mul32
 	ld	(0x20021c), xwa
 	ld	xbc, xwa
 	ld	xwa, (0x20020c)
@@ -19447,28 +19503,28 @@ HDAE5000_RAM_Test_Join17:
 	dec	1, xwa
 	xor	xbc, xbc
 	ld	bc, (0x200220:24)
-	calr	HDAE5000_HD_Config_Init_Values
+	calr	HDAE5000_HD_UDiv32
 	ld	(0x130018:24), a
 	ld	(0x13001A:24), w
 	xor	xbc, xbc
 	ld	bc, (0x200220:24)
-	calr	HDAE5000_HD_Init_Variables
+	calr	HDAE5000_HD_Mul32
 	ld	xbc, (0x20021c)
 	add	xbc, xwa
 	ld	xwa, (0x20020c)
 	sub	xwa, xbc
 	ld	(0x130016:24), a
 	ld	(0x13001E:24), 32
-HDAE5000_RAM_Test_Join18:
+HDAE5000_ATA_ReadSector_WaitDrq:
 	ld	a, (0x13001E:24)
 	and	a, 0xc8
 	cp	a, 0x48
 	jp	z, (0x297837:24)
-	jp HDAE5000_RAM_Test_Join18                             ; jp 0x297823
+	jp HDAE5000_ATA_ReadSector_WaitDrq                             ; jp 0x297823
 	ld	bc, 0:i3
 	ld	xix, (0x200210)
 	ld	xde, (0x200214)
-HDAE5000_RAM_Test_Join19:
+HDAE5000_ATA_ReadSector_DataLoop:
 	cp	bc, 0x0200
 	jp	nc, (0x297862:24)
 	ld	wa, (0x130010:24)
@@ -19477,19 +19533,22 @@ HDAE5000_RAM_Test_Join19:
 	ld (xix), wa                            ; ld (XIX),WA
 	inc 2, xix                              ; inc 2,XIX
 	inc	2, bc
-	jp HDAE5000_RAM_Test_Join19                             ; jp 0x297843
-HDAE5000_RAM_Test_Join20:
+	jp HDAE5000_ATA_ReadSector_DataLoop                             ; jp 0x297843
+HDAE5000_ATA_ReadSector_WaitDone:
 	ld	a, (0x13001E:24)
 	and	a, 0xc0
 	cp	a, 0x40
 	jp	z, (0x297876:24)
-	jp HDAE5000_RAM_Test_Join20                             ; jp 0x297862
+	jp HDAE5000_ATA_ReadSector_WaitDone                             ; jp 0x297862
 	ld	a, (0x13001E:24)
 	and	a, 0x01
 	ld	(0x200222:24), a
 	ret
 
-HDAE5000_RAM_Test_Helper7:
+HDAE5000_ATA_IdentifyDevice:
+	; command 0xEC (IDENTIFY DEVICE) with 0xFF in the task-file registers and
+	; device/head 0xA0; the 512-byte answer goes to RAM 0x200000 (parsed by
+	; HDAE5000_HD_ParseIdentify).  Error flag 0x200222 = status bit 0.
 	push xwa
 	push xbc
 	push xde
@@ -19497,12 +19556,12 @@ HDAE5000_RAM_Test_Helper7:
 	push xix
 	push xiy
 	push xiz
-HDAE5000_RAM_Test_Join21:
+HDAE5000_ATA_Identify_WaitReady:
 	ld	a, (0x13001E:24)
 	and	a, 0xc0
 	cp	a, 0x40
 	jp	z, (0x29789F:24)
-	jp HDAE5000_RAM_Test_Join21                             ; jp 0x29788b
+	jp HDAE5000_ATA_Identify_WaitReady                             ; jp 0x29788b
 	ld	(0x130012:24), 255
 	ld	(0x130014:24), 255
 	ld	(0x130016:24), 255
@@ -19510,28 +19569,28 @@ HDAE5000_RAM_Test_Join21:
 	ld	(0x13001A:24), 255
 	ld	(0x13001C:24), 160
 	ld	(0x13001E:24), 236
-HDAE5000_RAM_Test_Join22:
+HDAE5000_ATA_Identify_WaitDrq:
 	ld	a, (0x13001E:24)
 	and	a, 0xc8
 	cp	a, 0x48
 	jp	z, (0x2978DD:24)
-	jp HDAE5000_RAM_Test_Join22                             ; jp 0x2978c9
+	jp HDAE5000_ATA_Identify_WaitDrq                             ; jp 0x2978c9
 	ld	bc, 0:i3
 	ld	xix, 0x00200000
-HDAE5000_RAM_Test_Join23:
+HDAE5000_ATA_Identify_DataLoop:
 	cp	bc, 0x0200
 	jp	nc, (0x2978FC:24)
 	ld	wa, (0x130010:24)
 	ld (xix), wa                            ; ld (XIX),WA
 	inc 2, xix                              ; inc 2,XIX
 	inc	2, bc
-	jp HDAE5000_RAM_Test_Join23                             ; jp 0x2978e4
-HDAE5000_RAM_Test_Join24:
+	jp HDAE5000_ATA_Identify_DataLoop                             ; jp 0x2978e4
+HDAE5000_ATA_Identify_WaitDone:
 	ld	a, (0x13001E:24)
 	and	a, 0xc0
 	cp	a, 0x40
 	jp	z, (0x297910:24)
-	jp HDAE5000_RAM_Test_Join24                             ; jp 0x2978fc
+	jp HDAE5000_ATA_Identify_WaitDone                             ; jp 0x2978fc
 	ld	a, (0x13001E:24)
 	and	a, 0x01
 	ld	(0x200222:24), a
@@ -19545,8 +19604,9 @@ HDAE5000_RAM_Test_Join24:
 	ret
 
 
-HDAE5000_HD_Init_Variables:	; 0x297925 (37 bytes)
-	; 32x32 → 64-bit multiply using partial products
+HDAE5000_HD_Mul32:	; 0x297925 (37 bytes)
+	; 32x32 -> 32-bit multiply using partial products (the high products are
+	; added into the upper half only; nothing above bit 31 is kept)
 	; Computes XWA = BC * WA (full 32-bit result via 3 partial 16×16 multiplies)
 	; Input: WA = multiplicand, BC = multiplier (16-bit halves)
 	; Output: XWA = 32-bit product
@@ -19570,7 +19630,7 @@ HDAE5000_HD_Init_Variables:	; 0x297925 (37 bytes)
 	pop xhl
 	ret
 
-HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
+HDAE5000_HD_UDiv32:	; 0x29794A (392 bytes)
 	; Contains: 32-bit division, memory region init, HD config init (start)
 
 	; --- 32-bit unsigned division ---
@@ -19609,7 +19669,9 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
 
 	; --- Memory region initialization ---
 	; Fill HD file allocation tables with spaces, zeros, 0xFFFFFFFF markers
-.Lhciv_mem_init:				; 0x29797F
+	; (blank images of the filesystem tables before HDAE5000_HD_ReadTables
+	; or a format; called from HDAE5000_HD_Init and one other site)
+HDAE5000_HD_InitTables:				; 0x29797F
 	push xwa
 	push xbc
 	push xde
@@ -19665,7 +19727,7 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
 	jp z, (2718233:24)		; jp Z, .Lhciv_next_record
 	push xbc
 	ld xwa, 4:i3			; entry size = 4 bytes
-	call HDAE5000_HD_Init_Variables	; XWA = XBC * 4 (multiply)
+	call HDAE5000_HD_Mul32	; XWA = XBC * 4 (multiply)
 	add xwa, 36			; offset = 4*i + 36
 	ld xbc, xwa
 	push xix
@@ -19722,8 +19784,9 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
 
 	; --- HD presence check wrapper ---
 	; Calls HD config init, returns HL = 0 (success) or 0xFFFF (error)
-.Lhciv_hd_check:			; 0x297A78
-	call .Lhciv_hd_config_init
+	; (C-callable wrapper of HDAE5000_HD_WriteTables, not a presence check.)
+HDAE5000_HD_WriteTables_Status:			; 0x297A78
+	call HDAE5000_HD_WriteTables
 	xor hl, hl
 	cp (0x200222:24), 0x00; cp (0x200222), 0
 	jp z, (2718348:24)		; jp Z, ret (no error)
@@ -19732,7 +19795,11 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
 
 	; --- HD config initialization (start — continues in next block) ---
 	; Write all 323 sectors from RAM to HD, with retry
-.Lhciv_hd_config_init:			; 0x297A8D
+	; The 323 sectors are the filesystem tables held in RAM 0x201632-
+	; 0x229B31 (HDAE5000_HD_InitTables' regions), written to sector
+	; (0x229C64) = 3908 on; then every sector is read back into 0x200228 and
+	; compared 4 bytes at a time.  7 retries; failure -> 0x200222 = 1.
+HDAE5000_HD_WriteTables:			; 0x297A8D
 	push xwa
 	push xbc
 	push xde
@@ -19754,13 +19821,17 @@ HDAE5000_HD_Config_Init_Values:	; 0x29794A (392 bytes)
 	jp z, (2718473:24)		; jp Z, verify phase (0x297B09 in next block)
 	ld xhl, (0x229c74:24); XHL = (0x229C74) — current sector
 	ld xix, (0x229c78:24); XIX = (0x229C78) — current buffer ptr
-	call HDAE5000_HD_Config_Init_Values_Helper			; call 0x29769B — write sector to HD
+	call HDAE5000_ATA_WriteSector			; call 0x29769B — write sector to HD
 	; Function continues in next block (HD_Detect_Drive)
 
-HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
+HDAE5000_HD_WriteTables_Next:	; 0x297AD2 (836 bytes)
+	; (no caller: this label sits inside HDAE5000_HD_WriteTables, right after
+	; its HDAE5000_ATA_WriteSector call; it was HD_Detect_Drive, a region
+	; name.  The region also holds HDAE5000_HD_ReadTables and
+	; HDAE5000_HD_CountFreeClusters below.)
 	; HD config write+verify (continuation), read+verify, sector counting
 
-	; --- Write phase continuation (from .Lhciv_hd_config_init in prev block) ---
+	; --- Write phase continuation (from HDAE5000_HD_WriteTables in prev block) ---
 	; After calling write sector, check error and increment counters
 	cp (0x200222:24), 0x00; cp (0x200222), 0 — error?
 	jp nz, (2718639:24)		; jp NZ, .Lhdd_error1
@@ -19790,7 +19861,7 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	ld xhl, (0x229c74:24); XHL = current sector
 	ld xde, 512			; 512 bytes
 	ld xix, 2097704			; 0x200228 read buffer
-	call HDAE5000_RAM_Test_Helper6			; read sector to buffer
+	call HDAE5000_ATA_ReadSector			; read sector to buffer
 	cp (0x200222:24), 0x00; error check
 	jp nz, (2718639:24)		; jp NZ, .Lhdd_error1
 	ld xix, (0x229c78:24); XIX = RAM buffer ptr
@@ -19841,8 +19912,8 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 
 	; === HD Config Read+Verify Wrapper ===
 	; Calls config init 2, returns HL = 0 (ok) or 0xFFFF (error)
-.Lhdd_wrapper2:				; 0x297BD4
-	call .Lhdd_config_init2
+HDAE5000_HD_ReadTables_Status:				; 0x297BD4
+	call HDAE5000_HD_ReadTables
 	xor hl, hl
 	cp (0x200222:24), 0x00; error?
 	jp z, (2718696:24)		; jp Z, .Lhdd_wrapper2_ret
@@ -19851,7 +19922,8 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	ret
 
 	; === HD Config Init 2: Read all sectors, then verify by re-reading ===
-.Lhdd_config_init2:			; 0x297BE9
+	; (the 323 filesystem-table sectors at (0x229C64) into RAM 0x201632)
+HDAE5000_HD_ReadTables:			; 0x297BE9
 	push xwa
 	push xbc
 	push xde
@@ -19875,7 +19947,7 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	ld xde, 512
 	ld xhl, (0x229c74:24); current sector
 	ld xix, (0x229c78:24); current buffer ptr
-	call HDAE5000_RAM_Test_Helper6			; read sector
+	call HDAE5000_ATA_ReadSector			; read sector
 	cp (0x200222:24), 0x00
 	jp nz, (2718992:24)		; jp NZ, .Lhdd_error2
 	ld xwa, (0x229c7c:24); counter++
@@ -19903,7 +19975,7 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	ld xhl, (0x229c74:24)
 	ld xde, 512
 	ld xix, 2097704			; read into 0x200228
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	cp (0x200222:24), 0x00
 	jp nz, (2718992:24)		; jp NZ, .Lhdd_error2
 	ld xix, (0x229c78:24); RAM buffer
@@ -19951,10 +20023,10 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	jp .Lhdd_success2
 
 	; === HD Count Used Sectors Wrapper ===
-	; Returns XHL = count of used sectors (or 0 on error)
-.Lhdd_wrapper3:				; 0x297D35
-	call .Lhdd_count_sectors
-	ld xhl, (0x229c80:24); XHL = (0x229C80) used count
+	; Returns XHL = the FREE-cluster count (0x229C80), or 0 on error.
+HDAE5000_HD_CountFreeClusters_Status:				; 0x297D35
+	call HDAE5000_HD_CountFreeClusters
+	ld xhl, (0x229c80:24); XHL = (0x229C80) free-cluster count
 	cp (0x200222:24), 0x00
 	jr z, .Lhdd_wrapper3_ret
 	xor xhl, xhl			; error → return 0
@@ -19962,8 +20034,11 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	ret
 
 	; === Count Used Sectors ===
-	; Reads each sector, counts those with non-zero 32-bit words
-.Lhdd_count_sectors:			; 0x297D49
+	; Reads the FAT from sector (0x229C68) = 2 and counts its ZERO 32-bit
+	; entries, (0x229C70) entries in all, into 0x229C80.  Zero = free: the
+	; allocator at 0x297E16 writes chains ending 0xFFFFFFFE and then
+	; subtracts the clusters it took from this same count.  5 retries.
+HDAE5000_HD_CountFreeClusters:			; 0x297D49
 	push xwa
 	push xbc
 	push xde
@@ -19974,7 +20049,7 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	ld (0x229d93:24), 0x05; retry = 5
 .Lhdd_restart3:				; 0x297D56
 	xor xwa, xwa
-	ld (0x229c80:24), xwa; used count = 0
+	ld (0x229c80:24), xwa; free count = 0
 	ld xwa, (0x229c68:24); base sector from (0x229C68)
 	ld (0x229c84:24), xwa; → (0x229C84) current sector
 	xor xwa, xwa
@@ -19986,7 +20061,7 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	ld xde, 512
 	ld xhl, (0x229c84:24); current sector
 	lda xix, (0x200228:24); XIX = &0x200228
-	call HDAE5000_RAM_Test_Helper6			; read sector
+	call HDAE5000_ATA_ReadSector			; read sector
 	cp (0x200222:24), 0x00
 	jp nz, (2719217:24)		; jp NZ, .Lhdd_error3
 	lda xix, (0x200228:24)
@@ -20001,7 +20076,7 @@ HDAE5000_HD_Detect_Drive:	; 0x297AD2 (836 bytes)
 	inc 4, bc
 	cp xwa, 0			; is this 32-bit word zero?
 	jp nz, (2719138:24)		; jp NZ, .Lhdd_inner3 (non-zero, keep scanning)
-	ld xwa, (0x229c80:24); used count++
+	ld xwa, (0x229c80:24); free count++ (this entry is 0)
 	inc 1, xwa
 	ld (0x229c80:24), xwa
 	jp .Lhdd_inner3			; continue scanning
@@ -20066,7 +20141,7 @@ HDAE5000_Display_Copy:	; 0x297E16 (443 bytes)
 	xor xbc, xbc
 	ld xwa, (0x229d38:24); total bytes
 	ld xbc, (0x229c58:24); sector size (0x229C58)
-	call HDAE5000_HD_Config_Init_Values	; divide XWA/XBC
+	call HDAE5000_HD_UDiv32	; divide XWA/XBC
 	cp xbc, 0			; remainder?
 	jp z, (2719344:24)		; jp Z, no round-up
 	inc 1, xwa			; round up
@@ -20199,7 +20274,7 @@ HDAE5000_Display_Restore_Helper:
 	xor	xbc, xbc
 	ld	xwa, (0x229d38)
 	ld	xbc, (0x229c58)
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	cp	xbc, 0x00000000
 	jp	z, (0x29802B:24)
 	inc 1, xwa                              ; inc 1,XWA
@@ -20386,7 +20461,7 @@ HDAE5000_Display_Copy_Helper:
 	ld	xhl, (0x229cb4)
 	ld	xde, 0x00000200
 	lda xix, (0x200898:24)
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	cp	(0x200222:24), 0
 	jp	z, (0x2982B7:24)
 	ld	xwa, 0xfffffffd
@@ -20404,11 +20479,11 @@ HDAE5000_Display_Copy_Helper:
 	jp HDAE5000_Display_Copy_Helper                             ; jp 0x298243
 	ld	xwa, (0x229cb0)
 	ld	xbc, 0x00000080
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	push xwa
 	ld	xwa, (0x229cac)
 	ld	xbc, 4:i3
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	ld	xbc, xwa
 	pop xwa                                 ; pop XWA
 	add	xwa, xbc
@@ -20433,14 +20508,14 @@ HDAE5000_Display_Restore_Join4:
 	ld	xwa, (0x229ca8)
 	dec	1, xwa
 	ld	xbc, (0x229c5c)
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, (0x229c6c)
 	add	xwa, xbc
 	ld	xbc, (0x229cc0)
 	add	xwa, xbc
 	ld	xhl, xwa
 	ld	xix, (0x229d40)
-	call HDAE5000_HD_Config_Init_Values_Helper
+	call HDAE5000_ATA_WriteSector
 	cp	(0x200222:24), 0
 	jp	z, (0x298389:24)
 	ld	(0x229D97:24), 1
@@ -20461,10 +20536,10 @@ HDAE5000_Display_Copy_Helper3:
 	ld	xwa, (0x229c9c)
 	dec	1, xwa
 	ld	xbc, 0x00000080
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	push xwa
 	ld	xwa, 4:i3
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, xwa
 	pop xwa                                 ; pop XWA
 	ld	(0x229d48), xwa
@@ -20500,7 +20575,7 @@ HDAE5000_Display_Restore_Helper4:
 	add	xhl, xwa
 	ld	xde, 0x00000200
 	lda xix, (0x200a98:24)
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	ld	xwa, (0x229d48)
 	ld	(0x229d28), xwa
 	ret
@@ -20510,7 +20585,7 @@ HDAE5000_Display_Restore_Helper5:
 	ld	xwa, (0x229d28)
 	add	xhl, xwa
 	lda xix, (0x200a98:24)
-	call HDAE5000_HD_Config_Init_Values_Helper
+	call HDAE5000_ATA_WriteSector
 	ret
 
 HDAE5000_Display_Restore_Helper6:
@@ -20529,7 +20604,7 @@ HDAE5000_Display_Restore_Join6:
 	ld	xwa, (0x229d30)
 	dec	1, xwa
 	ld	xbc, (0x229c5c)
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, (0x229c6c)
 	add	xwa, xbc
 	ld	xbc, (0x229d34)
@@ -20547,7 +20622,7 @@ HDAE5000_Display_Restore_Join6:
 HDAE5000_Display_Restore_Join7:
 	ld	xix, (0x229d40)
 	ld	xde, (0x229d3c)
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	cp	(0x200222:24), 0
 	jp	z, (0x298503:24)
 	ld	(0x229DBE:24), 1
@@ -20573,10 +20648,10 @@ HDAE5000_Display_Restore_Helper7:
 	ld	xwa, (0x229d30)
 	dec	1, xwa
 	ld	xbc, 0x00000080
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	ld	(0x229d48), xwa
 	ld	xwa, 4:i3
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	(0x229d4c), xwa
 	ld	xwa, (0x229d48)
 	cp	xwa, (0x229d28)
@@ -20650,7 +20725,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	xor	hl, hl
 	ld	l, (0x200222:24)
 	pushw hl                                ; push HL
-	call HDAE5000_RAM_Test_Helper3
+	call HDAE5000_ATA_Standby
 	call HDAE5000_RAM_Test_Helper9
 	popw hl                                 ; pop HL
 	ret
@@ -20663,14 +20738,14 @@ HDAE5000_Display_String_Render_Helper:
 	push xix
 	push xiy
 	push xiz
-	call HDAE5000_RAM_Test_Helper7
+	call HDAE5000_ATA_IdentifyDevice
 	cp	(0x200222:24), 0
 	jp	z, (0x298654:24)
 	ld	a, 0x06:opc
 	jp HDAE5000_Display_String_Render_Join4                             ; jp 0x29888a
-	call HDAE5000_RAM_Test_Helper5
-	call .Lhciv_mem_init
-	call .Lhciv_hd_config_init
+	call HDAE5000_HD_ParseIdentify
+	call HDAE5000_HD_InitTables
+	call HDAE5000_HD_WriteTables
 	cp	(0x200222:24), 0
 	jp	z, (0x298675:24)
 	ld	(0x200222:24), 1
@@ -20687,7 +20762,7 @@ HDAE5000_Display_String_Render_Join:
 	jp	z, (0x2986E6:24)
 	ld	xhl, (0x229c8c)
 	lda xix, (0x200228:24)
-	call HDAE5000_HD_Config_Init_Values_Helper
+	call HDAE5000_ATA_WriteSector
 	cp	(0x200222:24), 0
 	jp	z, (0x2986C2:24)
 	ld	(0x200222:24), 2
@@ -20710,7 +20785,7 @@ HDAE5000_Display_String_Render_Join2:
 	ld	xhl, (0x229c8c)
 	ld	xde, 0x00000200
 	lda xix, (0x200428:24)
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	cp	(0x200222:24), 0
 	jp	z, (0x29872F:24)
 	ld	(0x200222:24), 3
@@ -20739,32 +20814,32 @@ HDAE5000_Display_String_Render_Join3:
 	call HDAE5000_Display_String_Render_Helper3
 	ld	xhl, 1:i3
 	lda xix, (0x200628:24)
-	call HDAE5000_HD_Config_Init_Values_Helper
+	call HDAE5000_ATA_WriteSector
 	cp	(0x200222:24), 0
 	jp	z, (0x2987A8:24)
 	ld	(0x200222:24), 5
 	jp HDAE5000_Display_String_Render_Join4                             ; jp 0x29888a
-	call HDAE5000_RAM_Test_Helper2
+	call HDAE5000_ATA_SoftReset
 	cp	(0x200222:24), 0
 	jp	z, (0x2987C1:24)
 	ld	(0x200222:24), 11
 	jp HDAE5000_Display_String_Render_Join4                             ; jp 0x29888a
-	call HDAE5000_RAM_Test_Helper7
+	call HDAE5000_ATA_IdentifyDevice
 	cp	(0x200222:24), 0
 	jp	z, (0x2987DA:24)
 	ld	(0x200222:24), 6
 	jp HDAE5000_Display_String_Render_Join4                             ; jp 0x29888a
-	call HDAE5000_RAM_Test_Helper5
+	call HDAE5000_HD_ParseIdentify
 	ld	xhl, 1:i3
 	lda xix, (0x200628:24)
 	ld	xde, 0x00000200
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	cp	(0x200222:24), 0
 	jr z, .LDSR_8800                       ; [66 0a] jr Z,0x298800
 	ld	(0x200222:24), 7
 	jp HDAE5000_Display_String_Render_Join4                             ; jp 0x29888a
 .LDSR_8800:
-	call HDAE5000_RAM_Test_Helper4
+	call HDAE5000_HD_CheckSignature
 	cp	(0x229D98:24), 1
 	jp	z, (0x298819:24)
 	ld	(0x200222:24), 8
@@ -20787,19 +20862,19 @@ HDAE5000_Display_String_Render_Join3:
 	inc 1, xix                              ; inc 1,XIX
 	ld	a, (xix)
 	ld	(0x229DAE:24), a
-	call .Lhdd_count_sectors
+	call HDAE5000_HD_CountFreeClusters
 	cp	(0x200222:24), 0
 	cp	(0x200222:24), 0
 	jp	z, (0x298871:24)
 	ld	(0x200222:24), 9
 	jp HDAE5000_Display_String_Render_Join4                             ; jp 0x29888a
-	call .Lhdd_config_init2
+	call HDAE5000_HD_ReadTables
 	cp	(0x200222:24), 0
 	jp	z, (0x29888A:24)
 	ld	(0x200222:24), 10
 	jp HDAE5000_Display_String_Render_Join4                             ; jp 0x29888a
 HDAE5000_Display_String_Render_Join4:
-	call HDAE5000_RAM_Test_Helper3
+	call HDAE5000_ATA_Standby
 	pop xiz                                 ; pop XIZ
 	pop xiy                                 ; pop XIY
 	pop xix                                 ; pop XIX
@@ -21016,7 +21091,7 @@ HDAE5000_Display_String_Render_Helper8:
 HDAE5000_Display_String_Render_Join15:
 	ld	xde, 0:i3
 	ld	xbc, 0x0000000a
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	push xbc
 	inc 1, xde                              ; inc 1,XDE
 	cp	xwa, 0x00000000
@@ -21118,32 +21193,32 @@ HDAE5000_Display_String_Render_Helper9:
 	push xbc
 	ld	xwa, (0x200223)
 	ld	xbc, 0x00000200
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, 0x00002710
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	ld	(0x229d18), xwa
 	ld	xwa, (0x229c6c)
 	dec	1, xwa
 	add	xwa, 0x00000002
 	ld	xbc, 0x00000200
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, 0x00002710
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	ld	(0x229d1c), xwa
 	ld	xwa, (0x229c5c)
 	ld	xbc, 0x00000200
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	push xwa
 	ld	xbc, (0x229c70)
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, 0x00002710
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	ld	(0x229d10), xwa
 	pop xwa                                 ; pop XWA
 	ld	xbc, (0x229c80)
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xbc, 0x00002710
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	ld	(0x229d14), xwa
 	pop xbc                                 ; pop XBC
 	pop xwa                                 ; pop XWA
@@ -21190,7 +21265,7 @@ HDAE5000_Cell_Validate_Helper:
 
 HDAE5000_Display_String_Render_Helper11:
 	ld	xbc, (0x229c58)
-	call HDAE5000_HD_Config_Init_Values
+	call HDAE5000_HD_UDiv32
 	cp	xbc, 0x00000000
 	jp	z, (0x298C9C:24)
 	inc 1, xwa                              ; inc 1,XWA
@@ -21220,13 +21295,13 @@ HDAE5000_Display_String_Render_Helper11:
 	ld	wa, (0x229C4E:24)
 	dec	1, wa
 	ld	xbc, 0x000004c0
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	ld	wa, (0x229C50:24)
 	dec	1, wa
 	ld	xbc, 0x0000004c
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	lda xwa, (0x201db2:24)
 	add	xix, xwa
@@ -21261,7 +21336,7 @@ HDAE5000_Display_String_Render_Join24:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -21291,7 +21366,7 @@ HDAE5000_Display_String_Render_Join25:
 	xor	xwa, xwa
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
@@ -21473,7 +21548,7 @@ HDAE5000_Display_String_Render_Join33:
 	xor	xwa, xwa
 	ld	a, (0x229DC3:24)
 	ld	xbc, 0x0000001a
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	lda xiy, (0x200c98:24)
 	ld	xbc, 0:i3
@@ -21507,7 +21582,7 @@ HDAE5000_Display_String_Render_Join34:
 	xor	xwa, xwa
 	ld	a, (0x229DC3:24)
 	ld	xbc, 0x0000001a
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	ld	xiy, (0x229cf0)
 	ld	xbc, 0:i3
@@ -21536,7 +21611,7 @@ HDAE5000_Display_String_Render_Join35:
 	xor	xwa, xwa
 	ld	a, (0x229DC6:24)
 	ld	xbc, 0x0000001a
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	push xix
 	call HDAE5000_Display_String_Render_Helper5
@@ -21597,15 +21672,15 @@ HDAE5000_Display_String_Render_Join37:
 	xor	xbc, xbc
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000180
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xwa, xix
 	ld	xbc, 0x0000004c
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	lda xix, (0x201db2:24)
 	add	xwa, xix
 	ld	(0x229cf0), xwa
@@ -21619,18 +21694,18 @@ HDAE5000_Display_String_Render_Join37:
 	xor	xbc, xbc
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000180
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper12
 	add	xwa, xix
 	ld	xbc, 0x0000004c
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	lda xix, (0x201db2:24)
 	add	xwa, xix
 	ld	(0x229cf0), xwa
@@ -21644,7 +21719,7 @@ HDAE5000_Display_String_Render_Helper12:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -21662,7 +21737,7 @@ HDAE5000_Display_String_Render_Helper13:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -21679,7 +21754,7 @@ HDAE5000_Display_String_Render_Helper13:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -21697,7 +21772,7 @@ HDAE5000_Display_String_Render_Helper14:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -21715,7 +21790,7 @@ HDAE5000_Display_String_Render_Helper14:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -21736,13 +21811,13 @@ HDAE5000_Display_String_Render_Helper14:
 	xor	xbc, xbc
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000180
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	lda xix, (0x201632:24)
 	add	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	ld	(0x229cec), xix
 	ld	xbc, 0:i3
@@ -21800,7 +21875,7 @@ HDAE5000_Display_String_Render_Join39:
 	xor	xwa, xwa
 	ld	a, (0x229DC2:24)
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	lda xiy, (0x200c98:24)
 	ld	xbc, 0:i3
@@ -21829,7 +21904,7 @@ HDAE5000_Display_String_Render_Join40:
 	xor	xwa, xwa
 	ld	a, (0x229DC5:24)
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	push xix
 	call HDAE5000_Display_String_Render_Helper5
@@ -21864,13 +21939,13 @@ HDAE5000_Display_String_Render_Epilogue2:
 	xor	xbc, xbc
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000180
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	lda xix, (0x201632:24)
 	add	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	ld	xbc, 0:i3
 	lda xiy, (0x200870:24)
@@ -21892,7 +21967,7 @@ HDAE5000_Display_String_Render_Join42:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -21905,7 +21980,7 @@ HDAE5000_Display_String_Render_Join42:
 	xor	xwa, xwa
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	inc 1, xwa                              ; inc 1,XWA
 	pop xbc                                 ; pop XBC
 	ret
@@ -21918,7 +21993,7 @@ HDAE5000_Display_String_Render_Join42:
 	ld	xde, 0x00201632
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000180
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xwa, xde
 	pop xde                                 ; pop XDE
 	pop xbc                                 ; pop XBC
@@ -21993,13 +22068,13 @@ HDAE5000_Display_String_Render_Helper17:
 	xor	xbc, xbc
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000d80
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	lda xix, (0x2257b2:24)
 	add	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
 	ld	xbc, 0x00000090
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	ld	(0x229cec), xix
 	ld	xbc, 0:i3
@@ -22057,7 +22132,7 @@ HDAE5000_Display_String_Render_Join44:
 	xor	xwa, xwa
 	ld	a, (0x229DC4:24)
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	lda xiy, (0x200c98:24)
 	ld	xbc, 0:i3
@@ -22086,7 +22161,7 @@ HDAE5000_Display_String_Render_Join45:
 	xor	xwa, xwa
 	ld	a, (0x229DC7:24)
 	ld	xbc, 0x00000010
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	push xix
 	call HDAE5000_Display_String_Render_Helper5
@@ -22121,13 +22196,13 @@ HDAE5000_Display_String_Render_Epilogue3:
 	xor	xbc, xbc
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000d80
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	lda xix, (0x2257b2:24)
 	add	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
 	ld	xbc, 0x00000090
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xix, xwa
 	ld	xbc, 0:i3
 	lda xiy, (0x200870:24)
@@ -22155,12 +22230,12 @@ HDAE5000_Display_String_Render_Helper18:
 	ld	xde, 0x002257b2
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000d80
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xde, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
 	ld	xbc, 0x00000090
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xwa, xde
 	pop xde                                 ; pop XDE
 	pop xbc                                 ; pop XBC
@@ -22170,7 +22245,7 @@ HDAE5000_Display_String_Render_Helper18:
 	xor	xwa, xwa
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	inc 1, xwa                              ; inc 1,XWA
 	pop xbc                                 ; pop XBC
 	ret
@@ -22183,7 +22258,7 @@ HDAE5000_Display_String_Render_Helper18:
 	ld	xde, 0x002257b2
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000d80
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xwa, xde
 	pop xde                                 ; pop XDE
 	pop xbc                                 ; pop XBC
@@ -22193,7 +22268,7 @@ HDAE5000_Display_String_Render_Helper18:
 	xor	xbc, xbc
 	ld	a, (0x229D9F:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper15
@@ -22217,7 +22292,7 @@ HDAE5000_Display_String_Render_Helper20:
 	xor	xwa, xwa
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
@@ -22256,7 +22331,7 @@ HDAE5000_Display_String_Render_Helper22:
 	xor	xwa, xwa
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
@@ -22273,7 +22348,7 @@ HDAE5000_Display_String_Render_Helper22:
 	xor	xwa, xwa
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
@@ -22310,7 +22385,7 @@ HDAE5000_Display_String_Render_Helper24:
 	xor	xwa, xwa
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
@@ -22327,7 +22402,7 @@ HDAE5000_Display_String_Render_Helper24:
 	xor	xwa, xwa
 	ld	a, (0x229DA0:24)
 	ld	xbc, 0x00000018
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	ld	xix, xwa
 	xor	xwa, xwa
 	call HDAE5000_Display_String_Render_Helper19
@@ -22376,7 +22451,7 @@ HDAE5000_Display_String_Render_Join49:
 	xor	xbc, xbc
 	call HDAE5000_Display_String_Render_Helper20
 	ld	xbc, 2:i3
-	call HDAE5000_HD_Init_Variables
+	call HDAE5000_HD_Mul32
 	add	xwa, xix
 	ret
 
@@ -22388,7 +22463,7 @@ HDAE5000_Display_String_Render_Join49:
 	ld	xhl, 1:i3
 	lda xix, (0x200628:24)
 	ld	xde, 0x00000200
-	call HDAE5000_RAM_Test_Helper6
+	call HDAE5000_ATA_ReadSector
 	lda xix, (0x2006a0:24)
 	ldb_spi a, 0xf0		; ld A,(XIX+)
 	ld	(0x229DA9:24), a
@@ -22443,7 +22518,7 @@ HDAE5000_Display_String_Render_Join50:
 	ld (xix), xwa                           ; ld (XIX),XWA
 	ld	xhl, 1:i3
 	lda xix, (0x200628:24)
-	call HDAE5000_HD_Config_Init_Values_Helper
+	call HDAE5000_ATA_WriteSector
 	pop xiz                                 ; pop XIZ
 	ret
 

@@ -4843,7 +4843,7 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	call HDAE5000_MemCopy			; HDAE5000_MemCopy
 	lda xsp, (xsp + 0x0a)
 	lda xwa, (xsp + 0x38)
-	call HDAE5000_PPI_Write_Sector_Helper2
+	call HDAE5000_HD_GetGeometry
 	pushw 0x0010
 	lda xwa, (xsp + 0x44)
 	push xwa
