@@ -169,31 +169,62 @@ SMF_PopReturn:
 	popw wa
 	ret
 
+; =============================================================================
+; SMF_HeaderConstants -- constant pieces of the Standard MIDI File the
+; sequencer writes (SMF export), 0x66 = 102 bytes, to SMF_ScanChannels.  Every
+; piece is addressed through a positional alias (shared/positional_labels.s,
+; `.set SMF_HeaderConstants_0xNN, SMF_HeaderConstants + NN`); readers are in
+; sequencer/smf_event_processor.s.  Until 2026-09-25 the first 24 bytes were
+; framed as instructions (`nop / swi 7 / pop sr / rcf / .asciz "MThd" ...`).
+; =============================================================================
 SMF_HeaderConstants:
-	nop
-	swi 7
-	pop sr
-	rcf
-	.asciz "MThd"
-	nop
-	nop
-	ei	0
-	nop
-	nop
-	normal
-	nop
-	.asciz "`MTrk"
-	nop
-	.byte 0x00, 0x00, 0x36, 0x00, 0x6a, 0x00, 0x50, 0x00
-	.byte 0xec, 0x00, 0x06, 0x01, 0x20, 0x01, 0x3a, 0x01
-	.byte 0x54, 0x01, 0x9e, 0x00, 0xb8, 0x00, 0xd2, 0x00
-	.byte 0x84, 0x00, 0xbc, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0x01, 0x88, 0x01
-	.byte 0xa2, 0x01, 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09
-	.byte 0x01, 0xf7, 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09
-	.byte 0x02, 0xf7, 0x00, 0x02, 0x01, 0x07, 0x08, 0x09
-	.byte 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03, 0x0f, 0x7f
-	.byte 0x7f, 0x7f, 0x7f, 0x0c, 0x0d, 0x0e
+	; +0x00: delta-time 0, meta event FF 03 (sequence/track name), length 16.
+	; SMF_SetupActiveChannel (0xF27146) copies these 4 bytes (`ld bc, 4; ldir85`)
+	; and then the 16-byte name from RAM 0xF280 (`ldw bc, 0x10; ldir85`).
+	.byte 0x00, 0xff, 0x03, 0x10
+	; +0x04 (SMF_HeaderConstants_0x4): the MThd chunk -- "MThd", length 6,
+	; format 0, 1 track, division 96 ticks per quarter note.  Copied whole to
+	; RAM 0x13FA by SMF_SetupActiveChannel (`ld bc, 7; ldirw` = 7 words).
+	.ascii "MThd"
+	.byte 0x00, 0x00, 0x00, 0x06	; chunk length (big-endian)
+	.byte 0x00, 0x00		; format 0
+	.byte 0x00, 0x01		; one track
+	.byte 0x00, 0x60		; 96 ticks per quarter note
+	; +0x12 (SMF_HeaderConstants_0x12): "MTrk", copied after the MThd chunk
+	; by SMF_SetupActiveChannel (`ld bc, 4; ldir85`).
+	.ascii "MTrk"
+	; +0x16: four zero bytes that nothing reads -- SMF_SetupActiveChannel
+	; writes the track-length placeholder from RAM words 0x0FA2/0x0FA4
+	; instead (scripts/analysis/sequi_find_refs.py v7 0xF28226 -> none).
+	.byte 0x00, 0x00, 0x00, 0x00
+	; +0x1A (SMF_HeaderConstants_0x1A): 20 x 16-bit offsets indexed by the
+	; PART-TYPE CODE a MIDI channel carries in RAM 0xF1A0[channel] (x2).
+	; Readers SMF_ScanAndProcessChannel (0xF2727F), SMF_WriteVol_PanAndPitch (0xF274EB),
+	; SMF_WriteRPN_FineTune (0xF2759F), SMF_WriteRPN_CoarseTune (0xF27661) and
+	; SMF_WriteRPN_Transpose (0xF27719): `ld xix, SMF_HeaderConstants_0x1A`,
+	; `ldw_sri HL, ...` (hl := table[code]); 0xFFFF skips the channel;
+	; otherwise the offset is added to RAM 0xF460 (`lda_dri XIY`) to reach
+	; that part's record.  The offsets are 0x36 + 26*k (k = 0..15), so the
+	; records sit 26 bytes apart.  20 entries, pinned by the next piece at +0x42.
+	.short 0x0036, 0x006a, 0x0050, 0x00ec, 0x0106	; codes 0-4
+	.short 0x0120, 0x013a, 0x0154, 0x009e, 0x00b8	; codes 5-9
+	.short 0x00d2, 0x0084, 0x01bc, 0xffff, 0xffff	; codes 10-14
+	.short 0xffff, 0xffff, 0x016e, 0x0188, 0x01a2	; codes 15-19
+	; +0x42 (SMF_HeaderConstants_0x42): delta 0 + SysEx F0 05 7E 7F 09 01 F7,
+	; "General MIDI System On".  +0x4A (SMF_HeaderConstants_0x4A): the same
+	; with 09 02, "GM System Off".  SMF_Setup_WriteLoop (0xF27224) writes 8 bytes
+	; of the first when RAM byte 0x10E4 is non-zero, of the second when it
+	; is zero.
+	.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x01, 0xf7
+	.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x02, 0xf7
+	; +0x52 (SMF_HeaderConstants_0x52): 20 bytes, indexed by the same
+	; part-type code.  SMF_ProgramChange_ProcessPatch (0xF27B68): L := 0xF1A0[ch],
+	; `ld xix, SMF_HeaderConstants_0x52`, `ldb_sri L, ...` (L := table[L]),
+	; stored at RAM 0x1A5C, the third byte of the 3-byte message built at
+	; 0x1A5A before SndParam_InitBufferConverge.  0x7F exactly where the
+	; offset table above holds 0xFFFF (codes 13-16).
+	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05	; codes 0-9
+	.byte 0x06, 0x03, 0x0f, 0x7f, 0x7f, 0x7f, 0x7f, 0x0c, 0x0d, 0x0e	; codes 10-19
 
 SMF_ScanChannels:
 	xor xhl, xhl
@@ -1233,10 +1264,22 @@ SMF_EventLoop_SkipCC:
 SMF_EventLoop_Return:
 	ret
 
+; -----------------------------------------------------------------------------
+; SMF_PartAssignTable -- maps a value 0..15 read from the SMF event stream to
+; a PART-TYPE CODE of the kind RAM 0xF1A0[channel] holds (0xFF = none).
+; Readers: SMF_Event_ProgramChange (0xF2896F) and SMF_Event_ControlChange (0xF28A03),
+; identically: after checking the value is 0..0xF, `ld xde,
+; SMF_PartAssignTable` / `ldb_sri A, 0x07, 0xe8, 0xec` (A := table[value]),
+; then search 0xF1A0[0..15] for that code to find the channel (0x7F if none).
+; Only entries 0-15 are reachable through that range check; entries 16-23
+; (to SMF_EncodeTimeDelta, code) are read by nothing found
+; (scripts/analysis/sequi_find_refs.py v7 --window 24 0xF28AB1).  The codes used
+; (0..0x13) are the same 20 codes SMF_HeaderConstants' two tables index by.
+; -----------------------------------------------------------------------------
 SMF_PartAssignTable:
-	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03
-	.byte 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0xff, 0x13
-	.byte 0xff, 0x0c, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03	; values 0-7
+	.byte 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0xff, 0x13	; values 8-15
+	.byte 0xff, 0x0c, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; 16-23: past the 0..15 check
 
 SMF_EncodeTimeDelta:
 	ldw (4206:16), 0
@@ -2258,8 +2301,7 @@ SMF_ConfigSlot_CodeBlock:
 	ld	hl, wa
 	calr	SMF_CalcPageAddress
 	ld	xhl, (4349:16)
-	.byte 0xb3	; v10 does not spell this byte either
-	.byte 0xcf	; v10 does not spell this byte either
+	bitm 7, (xhl)
 	jr	nz, SMF_ConfigSlot_Skip
 	ld	(10362:16), 2
 	jr	SMF_ConfigSlot_Epilogue
@@ -2833,15 +2875,42 @@ SMF_SlotParam_PortaImpl:
 SMF_SlotParam_PortaReturn:
 	ret
 
+; -----------------------------------------------------------------------------
+; SMF_SlotParam_PortamentoTime -- a slot-parameter handler shaped like its
+; neighbours (SMF_SlotParam_Sustain, ...): when RAM 0x112A is 2 or 3, RAM
+; 0x2873 is 15, and the record at XIY has (XIY+2) = 0x14 and (XIY+3) = 4, it
+; translates (XIY+2) through SMF_TranslateChannel (0xF29034), stores it back,
+; sets (XIY+3) := 2 and bit 0 of RAM 0x113B.
+; NOT CALLED: it is absent from the `calr SMF_SlotParam_*` chain that runs
+; every other handler, and scripts/analysis/sequi_find_refs.py v7 0xF299BB finds
+; no reference.  Nothing found supports "PortamentoTime" in the name.  Was
+; `.byte` until 2026-09-25.
+; -----------------------------------------------------------------------------
 SMF_SlotParam_PortamentoTime:
-	.byte 0xc1, 0x2a, 0x11, 0x21, 0xc9, 0xda, 0x66, 0x04
-	.byte 0xc9, 0xdb, 0x6e, 0x30, 0xc1, 0x73, 0x28, 0x3f
-	.byte 0x0f, 0x6e, 0x29, 0x8d, 0x02, 0x3f, 0x14, 0x6e
-	.byte 0x23, 0x8d, 0x03, 0x3f, 0x04, 0x6e, 0x1d, 0x8d
-	.byte 0x02, 0x21, 0x1e, 0x54, 0xf6, 0xc9, 0x33, 0x07
-	.byte 0x66, 0x06, 0xc9, 0xcc, 0x7f, 0x85, 0x3e, 0x04
-	.byte 0xbd, 0x02, 0x41, 0xbd, 0x03, 0x00, 0x02, 0xc1
-	.byte 0x3b, 0x11, 0x3e, 0x01, 0x0e
+	ld a, (0x112a:16)
+	cp a, 2:i3
+	jr z, SMF_SlotParam_PortamentoTime_Match
+	cp a, 3:i3
+	jr nz, SMF_SlotParam_PortamentoTime_Return
+SMF_SlotParam_PortamentoTime_Match:
+	cp (0x2873:16), 15
+	jr nz, SMF_SlotParam_PortamentoTime_Return
+	cp (xiy+2), 20
+	jr nz, SMF_SlotParam_PortamentoTime_Return
+	cp (xiy+3), 4
+	jr nz, SMF_SlotParam_PortamentoTime_Return
+	ld a, (xiy+2)
+	calr SMF_TranslateChannel
+	bit 7, a
+	jr z, SMF_SlotParam_PortamentoTime_Store
+	and a, 127
+	ormi8 (xiy), 4
+SMF_SlotParam_PortamentoTime_Store:
+	ld (xiy+2), a
+	ld (xiy+3), 2
+	or (0x113b:16), 0x01
+SMF_SlotParam_PortamentoTime_Return:
+	ret
 
 SMF_SlotParam_Sustain:
 	bit 0, (4411:16)
@@ -3154,16 +3223,25 @@ SMF_SlotParam_RPN:
 SMF_SlotParam_RPNDone:
 	ret
 
+; -----------------------------------------------------------------------------
+; SMF_SlotParam_RPNReturn -- two identical 31-byte halves, remapping the byte
+; at (XIY+3) of a slot record.
+; Reader: SMF_SlotParam_BankLSBReturn (0xF29C95), for a record whose (XIY+2) is
+; 0x39: with HL := 0 and L := (XIY+3), `ld_sri`-style load A := (XIX+HL);
+;   bit 5 of (XIY+3) clear: XIX = SMF_SlotParam_RPNReturn,       (XIY+2) := 0xAD
+;   bit 5 of (XIY+3) set:   XIX = SMF_SlotParam_RPNReturn_0x1F,  (XIY+2) := 0xAE
+; and A is written back to (XIY+3).  62 bytes to SMF_SlotParam_NRPN (code).
+; NOT RESOLVED: the second lookup uses the unmasked index, which has bit 5
+; set, so it addresses +0x3F or beyond -- past this table.  Either (XIY+3)
+; never has bit 5 set here in practice, or that lookup reads the following
+; code.  What the remapped values mean is not established.
+; -----------------------------------------------------------------------------
 SMF_SlotParam_RPNReturn:
-	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
-	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x17, 0x0e
-	.byte 0x18, 0x0f, 0x00, 0x10, 0x00, 0x11, 0x00, 0x00
-	.byte 0x00, 0x00, 0x12, 0x13, 0x14, 0x15, 0x16, 0x00
-	.byte 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08
-	.byte 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x17, 0x0e, 0x18
-	.byte 0x0f, 0x00, 0x10, 0x00, 0x11, 0x00, 0x00, 0x00
-	.byte 0x00, 0x12, 0x13, 0x14, 0x15, 0x16
-
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x17, 0x0e
+	.byte 0x18, 0x0f, 0x00, 0x10, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x12, 0x13, 0x14, 0x15, 0x16
+	; +0x1F (SMF_SlotParam_RPNReturn_0x1F): the same 31 bytes again
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x17, 0x0e
+	.byte 0x18, 0x0f, 0x00, 0x10, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x12, 0x13, 0x14, 0x15, 0x16
 SMF_SlotParam_NRPN:
 	bit 0, (4411:16)
 	jr nz, SMF_SlotParam_NRPNDone
