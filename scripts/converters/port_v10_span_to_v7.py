@@ -488,6 +488,7 @@ def build_items(P, demoted=frozenset()):
     items = []
     P.orphans = collections.defaultdict(list)
     pending_comments = []
+    pending_src = None
     pending_labels = []            # (name, v10 addr)
     seen_code = set()              # v10 files whose first byte line has been seen
     for k, i in P.rows:
@@ -497,16 +498,25 @@ def build_items(P, demoted=frozenset()):
         header = in_span and rel not in seen_code
         if in_span and not header and not body and not labels and text.strip().startswith(";"):
             pending_comments.append(("post" if pending_labels else "line", text.rstrip()))
+            pending_src = rel
         for lab in labels:
             if in_span:
                 pending_labels.append((lab, a10))
         if not body or body.startswith(".include"):
             if com and not header and in_span and labels:
                 pending_comments.append(("post", com.rstrip()))
+                pending_src = rel
             continue
         n = P.z10[i]
         if n == 0:
             continue
+        if pending_comments and pending_src != rel:
+            # a comment trailing file F must not migrate into the next file:
+            # emit it at this address, but as a note of F
+            d = P.dm.get(a10)
+            if d is not None:
+                P.orphans[a10 + d].extend(c for _, c in pending_comments)
+            pending_comments = []
         seen_code.add(rel) if in_span else None
         a7 = P.map_line(i)
         it = None
