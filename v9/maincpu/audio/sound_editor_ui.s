@@ -3668,27 +3668,28 @@ SeMenu_CopyWriteUpdate_Epilogue53:
 	call	SeMenu_LoadObjEntries
 	lda	xwa, (xsp+2)
 	cp	(xsp+4), 0
-	jr	nz, 32
+	jr	nz, SeMenu_CopyWriteUpdate_Skip84
 	cp	(xsp+2), 0
-	jr	nz, 7
+	jr	nz, SeMenu_CopyWriteUpdate_Skip83
 	ldw	wa, 59
 	ld	bc, 0:i3
-	jr	30
+	jr	SeMenu_CopyWriteUpdate_Join41
+SeMenu_CopyWriteUpdate_Skip83:
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f
-	push	sr
-	push	xsp
-	normal
-	jr	z, 105
+	cp	(xsp+2), 1
+	jr	z, SeMenu_CopyWriteUpdate_Epilogue12
 	ldw	wa, 61
 	call	SeMenu_SetupPartDisplay_End_0x26E
-	jr	96
+	jr	SeMenu_CopyWriteUpdate_Epilogue12
+SeMenu_CopyWriteUpdate_Skip84:
 	cp	(xsp+2), 0
-	jr	nz, 11
+	jr	nz, SeMenu_CopyWriteUpdate_Skip85
 	ldw	wa, 48
 	ld	bc, 0:i3
+SeMenu_CopyWriteUpdate_Join41:
 	call	SeMenu_SendEvent
-	jr	79
+	jr	SeMenu_CopyWriteUpdate_Epilogue12
+SeMenu_CopyWriteUpdate_Skip85:
 	call	SeMenu_LoadPatchStatus
 	cp	(xsp+2), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue12
@@ -4140,11 +4141,8 @@ SeMenu_CopyWriteUpdate_Skip58:
 	ldw	wa, 0xc907
 	dec	6, wa
 	push_f
-	.byte 0xbf
-	push	sr
-	scc8	nz, l
-	.byte 0xab
-	nop
+	bitm	7, (xsp+2)
+	jrl	nz, 171
 	cpib_erp	250, 1
 	jr	nz, 8
 	setm	7, (xsp+2)
@@ -6082,7 +6080,9 @@ SeMenu_CopyWriteUpdate_Skip39:
 	ld	xwa, 5:i3
 	lda	xwa, (xwa+94)
 	extz	wa
-	.asciz "(90:"
+	pushw	wa
+	push	xbc
+	ldw	wa, 58
 	ld	bc, 6:i3
 	ld	de, 0:i3
 	call	SeMenu_TransferPartValues_EndData_0x169
@@ -6123,7 +6123,9 @@ SeMenu_CopyWriteUpdate_Skip40:
 	ld	xwa, 6:i3
 	lda	xwa, (xwa+94)
 	extz	wa
-	.asciz "(90:"
+	pushw	wa
+	push	xbc
+	ldw	wa, 58
 	ld	bc, 7:i3
 	ld	de, 0:i3
 	call	SeMenu_TransferPartValues_EndData_0x169
@@ -7012,16 +7014,11 @@ SeMenu_CopyWriteUpdate_Data_Loop_Join:
 	stb_erp a, 250
 	extz	wa
 	lda	xbc, (xsp+28)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe0
-	ldw	bc, 0x691d
-	jrl	ov, -14352
-	swi	2
-	jr	lt, -57
-	swi	2
-	.byte 0xcf
-	retd	0xe663
+	lda_rr	xbc, xbc, wa
+	call	SeMenu_SetupPartDisplay_End_0x1C6
+	inc1b_erp	250
+	cp_erpb	250, 15
+	jr	ule, -26
 	ldib_erp	250, 0
 	ld	a, (xsp+4)
 	dec	1, a
@@ -7808,11 +7805,21 @@ SeMenu_DisplayPartValue_Data_Code_Join2:
 	ld	(0x03efa8:24), 0
 	call	SeGfx_StaticOp09_FromBuf
 	pop	xiy
-	.ascii "\\[ZYX^"
+	pop	xix
+	pop	xhl
+	pop	xde
+	pop	xbc
+	pop	xwa
+	pop	xiz
 	ret
 	push xiz
 	ld	xiz, xsp
-	.ascii "89:;<="
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
 	ld	wa, (xiz+8)
 	ld	(1740:16), wa
 	ld	wa, (xiz+10)
@@ -8069,13 +8076,8 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x081B
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8084,13 +8086,8 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x07D3
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8102,11 +8099,21 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	ld	xiy, SeScreenData_0x0878
 	call	SeGfx_BoundOp03
 	pop	xiz
-	.ascii "]\\[ZYX"
+	pop	xiy
+	pop	xix
+	pop	xhl
+	pop	xde
+	pop	xbc
+	pop	xwa
 	ret
 	push	xiz
 	ld	xiz, xsp
-	.ascii "89:;<="
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
 	ld	wa, (xiz+8)
 	ld	(1740:16), wa
 	ld	wa, (xiz+10)
@@ -8638,13 +8645,8 @@ SeMenu_PresetManager_Data_Skip2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0BF6
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8653,13 +8655,8 @@ SeMenu_PresetManager_Data_Skip2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0BAE
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8682,13 +8679,8 @@ SeMenu_PresetManager_Data_Skip2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0CD2
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8697,13 +8689,8 @@ SeMenu_PresetManager_Data_Skip2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0C5A
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8722,13 +8709,8 @@ SeMenu_PresetManager_Data_Skip2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0D4E
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8737,13 +8719,8 @@ SeMenu_PresetManager_Data_Skip2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0D14
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8823,13 +8800,8 @@ SeMenu_PresetBrowser_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x385D + 12
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -8838,13 +8810,8 @@ SeMenu_PresetBrowser_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x381A + 7
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe4
-	ld	e, 217:opc
-	push	w
-	nop
+	ld_rrl	xiy, xiz, bc
+	add	bc, 4
 	ld_rrl	xix, xiz, bc
 	call	SeGfx_DrawStaticList
 	pop	c
@@ -9799,11 +9766,8 @@ Data_UnknownBlock_Skip16:
 	call	SeGfx_DrawStaticList
 Data_UnknownBlock_Join9:
 	cpdi8	(0x662), 16
-	jr	z, 41
-	.byte 0xc1
-	jr	le, 6
-	push	xsp
-	push	sr
+	jr	z, Data_UnknownBlock_Skip25
+	cpdi8	(0x662), 2
 	jr	z, Data_UnknownBlock_Skip17
 	ld	xiy, SeScreenData_0x2E44
 	ld	xix, SeScreenData_0x2E4E
@@ -9812,8 +9776,9 @@ Data_UnknownBlock_Join9:
 	ld	xix, SeScreenData_0x2E90
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x46B
-	.ascii "hBE@:ñ"
-	nop
+	jr	Data_UnknownBlock_Return6
+Data_UnknownBlock_Skip25:
+	ld	xiy, SeScreenData_0x2E3A
 	ld	xix, SeScreenData_0x2E44
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x2E58
@@ -9883,10 +9848,7 @@ Data_UnknownBlock_Skip22:
 	ld	(0x03efa8:24), 0
 	cpdi8	(0x662), 13
 	jr	z, Data_UnknownBlock_Skip23
-	.byte 0xc1
-	jr	le, 6
-	push	xsp
-	push	sr
+	cpdi8	(0x662), 2
 	jr	z, Data_UnknownBlock_Skip24
 	ld	xiy, SeScreenData_0x2E58
 	ld	xix, SeScreenData_0x2E74

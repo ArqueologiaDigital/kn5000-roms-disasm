@@ -74,3 +74,21 @@ Result of the auto mode on 2026-09-25 (then `symbolize_numeric_branches.py
 Refused (left as they were): backend cannot decode 13/37/29, not flanked by
 code 21/48/25, a label that would fall inside a new instruction 1
 (`SeMenu_CompareAndApply_Data6`).
+
+Round 2 (short `.ascii`/`.asciz` rows of 8 bytes or less are seeds too -- e.g.
+`.asciz "(90:"` for `pushw wa / push xbc / ldw wa, 58`, `.ascii "89:;<="` for six
+pushes): v10 22, v9 22 more windows in sound_editor_ui.s; symboliser pass 2: 9
+operands each.
+
+v7, `--runs --witness v10` (witness map regenerated AFTER the v10 re-frame; only
+v10 INSTRUCTION lines vouch, and a run is refused if any of its instructions
+lands on a v10 data line -- `.long`/`.ascii`/`sd_*` -- with equal bytes):
+
+| file | runs converted | bytes | refused |
+|---|---:|---:|---|
+| semenu_routines.s | 34 | 1,197 | witness disagrees 9, no line boundary 1 |
+| sound_editor_ui.s | 36 | 6,742 | witness disagrees 30, witness has data 1 (the romslice that ends inside the envelope-curve pointer table) |
+| sndparam_routines.s | 0 | 0 | NOT APPLIED: the v7 labels there sit on `.byte` rows and 30+ of them fall inside instructions; relocating them needs more than this tool's by-content search (see the lane report) |
+
+then `symbolize_numeric_branches.py --image v7 --only ...`: 376 operands, 202
+labels, verify PASS.

@@ -105,6 +105,8 @@ class Reframer:
                 continue
             self.byaddr.setdefault(a, []).append(n)
         self.edits = []          # (first_line, last_line_incl, new_lines, note)
+        self.moved = []          # (label, old addr, new addr)
+        self._refs = None
 
     # ---------------------------------------------------------------- naming
     def sym(self, a):
@@ -150,7 +152,7 @@ class Reframer:
                 return None
         return first, last
 
-    def render(self, a, b, dec):
+    def render(self, a, b, dec, relabel=None):
         """new text for [a, b) from decode `dec`.  Lines whose framing the new
         decode CONFIRMS (same address, same length) at the two ends of the
         window are kept verbatim -- their symbols and spelling stay; only the
@@ -193,7 +195,24 @@ class Reframer:
             addr = self.addr_of_line(li)
             if m:
                 if addr not in bounds:
-                    return None, "label %s at %06x falls inside a new instruction" % (m.group(1), addr)
+                    # v7's labels here were copied onto `.byte` rows and some
+                    # fall inside instructions.  Where the witness image has
+                    # the same label, find ITS code in this window by content
+                    # and move the label there; an unreferenced label that
+                    # cannot be placed is kept as a comment, not deleted.
+                    name = m.group(1)
+                    if relabel is None or self.referenced(name):
+                        return None, "label %s at %06x falls inside a new instruction" % (name, addr)
+                    fix = relabel(name, a, b)
+                    if fix is not None and fix in bounds:
+                        self.moved.append((name, addr, fix))
+                        addr = fix
+                    else:
+                        self.moved.append((name, addr, None))
+                        extra.append((addr if addr in bounds else max(x for x in bounds if x <= addr),
+                                      li, "\t; (label %s stood here, inside an instruction; nothing "
+                                          "references it)" % name))
+                        continue
                 extra.append((addr, li, m.group(1) + ":"))
                 rest = st[m.end():].strip()
                 if rest.startswith(";"):
@@ -255,7 +274,8 @@ class Reframer:
         for li, (a, e) in sorted(self.emit.items(), key=lambda x: x[1][0]):
             s = self.L[li].split(";")[0].strip()
             s = re.sub(r"^[\w.$]+:\s*", "", s).lower()
-            if (s.startswith(".byte") or ABS.match(s)) and not self.excluded(a):
+            short_text = s.startswith((".ascii", ".asciz")) and e - a <= 8
+            if (s.startswith(".byte") or ABS.match(s) or short_text) and not self.excluded(a):
                 out.append(a)
         return out
 
@@ -323,6 +343,23 @@ class Reframer:
         self.edits.append(r + ("span %06x-%06x" % (a, b),))
         return None
 
+    def referenced(self, name):
+        """is `name` used anywhere in this image's sources besides its own
+        definition?  (a label that code or data refers to must not move)"""
+        if self._refs is None:
+            self._refs = {}
+            tok = re.compile(r"[A-Za-z_.$][\w.$]*")
+            root = os.path.join(ROOT, self.v, "maincpu")
+            for dp, _, fns in os.walk(root):
+                for fn in fns:
+                    if fn.endswith((".s", ".c", ".h", ".ld", ".inc")):
+                        for ln in open(os.path.join(dp, fn), encoding="latin-1"):
+                            code = ln.split(";")[0]
+                            code = LABEL_RE.sub("", code.strip())
+                            for t in tok.findall(code):
+                                self._refs[t] = self._refs.get(t, 0) + 1
+        return self._refs.get(name, 0) > 0
+
     # ---------------------------------------------------------------- v7 runs
     def lockstep(self, a, limit):
         """decode from a following MAME unidasm's framing; each instruction
@@ -352,10 +389,17 @@ class Reframer:
         both images define (same name), the one under which the most bytes of
         the run are equal"""
         rom10, starts10, shared = w
-        near = sorted(shared, key=lambda x: abs(x[0] - a))[:12]
+        cands = {d for (x, d) in sorted(shared, key=lambda x: abs(x[0] - a))[:12]}
+        # plus: where do 8-byte pieces of the run occur verbatim in the witness?
+        for i in range(a, max(a + 1, b - 8), max(1, (b - a) // 12)):
+            piece = self.rom[i - BASE:i - BASE + 8]
+            j = rom10.find(piece)
+            if j >= 0 and rom10.find(piece, j + 1) < 0:
+                cands.add(BASE + j - i)
         best = (-1, 0)
-        for (x, d) in near:
-            eq = sum(1 for i in range(a, b) if rom10[i + d - BASE] == self.rom[i - BASE])
+        for d in cands:
+            eq = sum(1 for i in range(a, b) if 0 <= i + d - BASE < len(rom10)
+                     and rom10[i + d - BASE] == self.rom[i - BASE])
             if eq > best[0]:
                 best = (eq, d)
         return best[1]
@@ -410,10 +454,28 @@ class Reframer:
                 why = "no line boundary to end on"
             else:
                 ag, cp = self.witness(w, a, dec)
+                d = self.delta_for(w, a, T)
+                wd = getattr(self, "wdata", ())
+                hits = [p for (p, k, t) in dec
+                        if any(q in wd for q in range(p + d, p + d + k))
+                        and w[0][p + d - BASE:p + d - BASE + k] == self.rom[p - BASE:p - BASE + k]]
                 if cp == 0 or ag < need * cp:
                     why = "witness disagrees (%d/%d)" % (ag, cp)
+                elif hits:
+                    why = "witness has DATA at %06x" % hits[0]
             if not why:
-                r, why = self.render(a, T, dec)
+                rom10 = w[0]
+
+                def relabel(name, lo, hi, rom10=rom10):
+                    q = self.w10syms.get(name)
+                    if q is None:
+                        return None
+                    piece = rom10[q - BASE:q - BASE + 10]
+                    j = self.rom.find(piece, lo - BASE, hi - BASE)
+                    if j < 0 or self.rom.find(piece, j + 1, hi - BASE) >= 0:
+                        return None
+                    return BASE + j
+                r, why = self.render(a, T, dec, relabel)
                 if r:
                     self.edits.append(r + ("run %06x-%06x" % (a, T),))
                     report["ok"] += 1
@@ -443,17 +505,39 @@ def main():
                     help="e.g. v10 amap_v10.json: the witness image and its address map")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--show", action="store_true")
+    ap.add_argument("--notes", action="store_true", help="list the windows/runs only")
     a = ap.parse_args()
     r = Reframer(a.image, a.file, a.amap)
     if a.runs:
         wimg, wamap = a.witness
         rom10 = open(os.path.join(ROOT, "original_ROMs/kn5000_%s_program.rom" % wimg), "rb").read()
         sp = [x for x in json.load(open(wamap)) if x[2] == a.file]
-        starts10 = {x[0] for x in sp}
+        # only INSTRUCTION lines of the witness count: a `.long` row of a
+        # pointer table also starts a line, and must not vouch for code
+        wl = open(os.path.join(ROOT, wimg, "maincpu", a.file), encoding="latin-1").read().split("\n")
+
+        def insn(li):
+            c = re.sub(r"^[\w.$]+:\s*", "", wl[li].split(";")[0].strip())
+            return bool(c) and not c.startswith(".") and not ABS.match(c.lower())
+        starts10 = {x[0] for x in sp if insn(x[3])}
+
+        def data(li):
+            # `.byte` rows are neutral: in these files they are mostly
+            # single instructions the backend still cannot spell
+            c = re.sub(r"^[\w.$]+:\s*", "", wl[li].split(";")[0].strip())
+            return c.startswith((".long", ".short", ".hword", ".word", ".ascii", ".asciz",
+                                 ".fill", ".zero", ".space", "sd_", "sdb_"))
+        r.wdata = set()
+        for x in sp:
+            if data(x[3]):
+                r.wdata.update(range(x[0], x[1]))     # every byte of a data line
         s10 = sm.symbols(wimg)
         shared = [(av, s10[n] - av) for n, av in r.byname.items()
                   if n in s10 and not n.startswith(("__", ".")) and 0xF00000 <= av < 0x1000000]
+        r.w10syms = s10
         rep = r.convert_runs((rom10, starts10, shared))
+        for (n, x, y) in r.moved:
+            print("  label %s %06x -> %s" % (n, x, ("%06x (by %s content)" % (y, wimg)) if y else "comment"))
         print("%s %s: %d runs (%d B) converted; refused %s"
               % (a.image, a.file, rep["ok"], rep["bytes"], rep["refused"]))
     elif a.span:
@@ -462,6 +546,9 @@ def main():
     else:
         rep = r.auto()
         print("%s %s: %d windows re-framed; refused %s" % (a.image, a.file, rep["ok"], rep["refused"]))
+    if a.notes:
+        for (first, last, new, note) in r.edits:
+            print("  %s  lines %d-%d -> %d lines" % (note, first + 1, last + 1, len(new)))
     if a.show:
         for (first, last, new, note) in r.edits[:40]:
             print("---", note, "lines %d-%d" % (first + 1, last + 1))
