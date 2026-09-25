@@ -16821,9 +16821,11 @@ ToneDB_EnvDescTable_317_ElemArray:
 ; 
 ; The per-note LE16 selects a drum instrument.  Values run up to 0x0530,
 ; beyond the 504 drum-instrument records, so it is not a direct index into
-; them; it is consistent with an index into DrumKit_NoteMapA/B (slots +0x74
-; /+0x7C, 2048 entries each, whose values ARE valid drum-instrument
-; indices), but that chain has NOT been confirmed against code.
+; them; it is a (program, bank) byte pair resolved through DrumKit_NoteMapA
+; (slot +0x74, 2048 entries, whose values ARE valid drum-instrument
+; indices) -- confirmed against code; each kit's NoteMap header gives the
+; chain and the instrument every note plays (corrected 2026-09-25, lane
+; promcd: this sentence said the chain was unconfirmed).
 ; 
 ; The head is RELATED to the melodic tone-record head but is not the same
 ; structure.  The 8-byte token 11 00 01 63 1E 06 00 54 sits at melodic
@@ -16842,7 +16844,8 @@ ToneDB_EnvDescTable_317_ElemArray:
 ; +0x74) and 0xFB495A multiplies the value it finds by the +0xEE stride
 ; word, 150, i.e. into the drum-instrument records.  That is the chain this
 ; banner previously said had NOT been confirmed against code, for the note
-; map; it is still NOT confirmed for the per-record map emitted below.
+; map; and for the per-record map emitted below it is confirmed too, by
+; 0xFB891C / 0xFB892A (corrected 2026-09-25, lane promcd).
 ; notes/prom_d_documentation_round3.py Q4a and Q4d.
 ; 
 ; ★ WAVE 7 ROUND 4 -- THESE LABELS NOW CARRY THE RECORD'S OWN NAME.
@@ -16892,6 +16895,38 @@ DrumKit_103_StandardKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B31C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B32C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B33C  |.....X..|
+; Note map of tone 0x103 'Standard Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'HiHatAccent 1', 15 'HiHat HfOpen1', 16 'HiHatClosed 7', 17 'ReverseCymbl1', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22
+; 'Rock Snare 2', 23 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Trad BassDrm1',
+; 36 'Rock Bass Drm', 37 'Rock Rim', 38 'Rock Snare 1', 39 'Hand Claps', 40 'Piccolo Snare',
+; 41 'RockBassTomLo', 42 'HiHatClosed 1', 43 'RockBassTomHi', 44 'HiHat Pedal 1', 45
+; 'Rock Tom 3', 46 'HiHat Open 1', 47 'Rock Tom 2', 48 'Rock Tom 1', 49 'CrashCymbal 1', 50
+; 'Rock Tom High', 51 'Ride Cymbal 1', 52 'ChinaCymbal 1', 53 'Ride Bell 1', 54
+; 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2', 57 'CrashCymbal 6', 58 'Vibraslap',
+; 59 'Ride Cymbal 8', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_103_StandardKit_NoteMap:
 	.short 0x0000	; 2B344  [  0] note   0
 	.short 0x0000	; 2B346  [  1] note   1
@@ -17048,6 +17083,38 @@ DrumKit_104_RoomKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B4B4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B4C4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B4D4  |.....X..|
+; Note map of tone 0x104 'Room Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 5', 15
+; 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18 'ElectricTom 3', 19
+; 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22 'Room Snare 2', 23
+; 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'PowerBassDrm2', 36
+; 'Room BassDrm1', 37 'Rock Rim', 38 'Room Snare 1', 39 'Hand Claps', 40 'Funk Snare 1', 41
+; 'RoomBassTomLo', 42 'HiHatClosed 5', 43 'RoomBassTomHi', 44 'HiHat Pedal 1', 45
+; 'Room Tom 3', 46 'HiHat Open 5', 47 'Room Tom 2', 48 'Room Tom 1', 49 'CrashCymbal 1', 50
+; 'Room Tom High', 51 'Ride Cymbal 8', 52 'ChinaCymbal 1', 53 'Ride Bell 1', 54
+; 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2', 57 'CrashCymbal 6', 58 'Vibraslap',
+; 59 'Ride Cymbal 1', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_104_RoomKit_NoteMap:
 	.short 0x0000	; 2B4DC  [  0] note   0
 	.short 0x0000	; 2B4DE  [  1] note   1
@@ -17204,6 +17271,38 @@ DrumKit_106_PowerKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B64C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B65C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B66C  |.....X..|
+; Note map of tone 0x106 'Power Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 6', 15
+; 'HiHat HfOpen6', 16 'HiHatClosed12', 17 'ReverseCymbl3', 18 'ElectricTom 3', 19
+; 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare3', 22 'Power Snare 2', 23
+; 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'ElectBassDrm2', 36
+; 'PowerBassDrm1', 37 'Rock Rim', 38 'Power Snare 1', 39 'Hand Claps', 40 'Funk Snare 1', 41
+; 'PowerBassTomL', 42 'HiHatClosed 6', 43 'PowerBassTomH', 44 'HiHat Pedal 2', 45
+; 'Power Tom 3', 46 'HiHat Open 6', 47 'Power Tom 2', 48 'Power Tom 1', 49 'CrashCymbal 1',
+; 50 'PowerTom High', 51 'Ride Cymbal11', 52 'ChinaCymbal 3', 53 'Ride Bell 4', 54
+; 'TambourinAcc1', 55 'SplashCymbal1', 56 'Cowbell 2', 57 'CrashCymbal 8', 58 'Vibraslap',
+; 59 'Ride Cymbal 4', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_106_PowerKit_NoteMap:
 	.short 0x0000	; 2B674  [  0] note   0
 	.short 0x0000	; 2B676  [  1] note   1
@@ -17360,6 +17459,38 @@ DrumKit_105_LightRockKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B7E4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B7F4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B804  |.....X..|
+; Note map of tone 0x105 'Light Rock Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'HiHatAccent 3', 15 'HiHat HfOpen3', 16 'HiHatClosed 8', 17 'ReverseCymbl2', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare2', 22
+; 'LtRockSnare 2', 23 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Room BassDrm2',
+; 36 'LtRockBassDrm', 37 'Rock Rim', 38 'LtRockSnare 1', 39 'Hand Claps', 40 'Funk Snare 2',
+; 41 'RockBassTomLo', 42 'HiHatClosed 2', 43 'RockBassTomHi', 44 'HiHat Pedal 3', 45
+; 'Rock Tom 3', 46 'HiHat Open 2', 47 'Rock Tom 2', 48 'Rock Tom 1', 49 'CrashCymbal 3', 50
+; 'Rock Tom High', 51 'Ride Cymbal12', 52 'ChinaCymbal 4', 53 'Ride Bell 5', 54
+; 'TambourinAcc1', 55 'SplashCymbal4', 56 'Cowbell 2', 57 'CrashCymbal 9', 58 'Vibraslap',
+; 59 'Ride Cymbal 5', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_105_LightRockKit_NoteMap:
 	.short 0x0000	; 2B80C  [  0] note   0
 	.short 0x0000	; 2B80E  [  1] note   1
@@ -17516,6 +17647,38 @@ DrumKit_107_FunkKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B97C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B98C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B99C  |.....X..|
+; Note map of tone 0x107 'Funk Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 5', 15
+; 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18 'ElectricTom 3', 19
+; 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22 'Funk Snare 2', 23
+; 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Room BassDrm1', 36
+; 'Funk Bass Drm', 37 'Rock Rim', 38 'Funk Snare 1', 39 'Hand Claps', 40 'Piccolo Snare', 41
+; 'RockBassTomLo', 42 'HiHatClosed 5', 43 'RockBassTomHi', 44 'HiHat Pedal 1', 45
+; 'Rock Tom 3', 46 'HiHat Open 5', 47 'Rock Tom 2', 48 'Rock Tom 1', 49 'CrashCymbal 1', 50
+; 'Rock Tom High', 51 'Ride Cymbal 8', 52 'ChinaCymbal 1', 53 'Ride Bell 1', 54
+; 'TambourinAcc1', 55 'SplashCymbal4', 56 'Cowbell 2', 57 'CrashCymbal 6', 58 'Vibraslap',
+; 59 'Ride Cymbal 1', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_107_FunkKit_NoteMap:
 	.short 0x0000	; 2B9A4  [  0] note   0
 	.short 0x0000	; 2B9A6  [  1] note   1
@@ -17672,6 +17835,38 @@ DrumKit_100_JazzKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BB14  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BB24  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BB34  |.....X..|
+; Note map of tone 0x100 'Jazz Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 1', 15
+; 'HiHat HfOpen1', 16 'HiHatClosed 7', 17 'ReverseCymbl1', 18 'Jazz Tom 6', 19 'Jazz Tom 5',
+; 20 'Jazz Tom 4', 21 'ReverseSnare1', 22 'Brush Hit', 23 'Brush Short', 28 'Slap 1', 29
+; 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Trad BassDrm2', 36 'Jazz BassDrm1', 37 'Rock Rim', 38 'Jazz Snare',
+; 39 'Hand Claps', 40 'Piccolo Snare', 41 'JazzBassTomLo', 42 'HiHatClosed 1', 43
+; 'JazzBassTomHi', 44 'HiHat Pedal 1', 45 'Jazz Tom 3', 46 'HiHat Open 1', 47 'Jazz Tom 2',
+; 48 'Jazz Tom 1', 49 'CrashCymbal 1', 50 'Jazz Tom High', 51 'Ride Cymbal 2', 52
+; 'ChinaCymbal 1', 53 'Ride Bell 2', 54 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2',
+; 57 'CrashCymbal 6', 58 'Vibraslap', 59 'Ride Cymbal 9', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_100_JazzKit_NoteMap:
 	.short 0x0000	; 2BB3C  [  0] note   0
 	.short 0x0000	; 2BB3E  [  1] note   1
@@ -17828,6 +18023,38 @@ DrumKit_102_TradKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BCAC  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BCBC  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BCCC  |.....X..|
+; Note map of tone 0x102 'Trad Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 5', 15
+; 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18 'Jazz Tom 6', 19 'Jazz Tom 5',
+; 20 'Jazz Tom 4', 21 'ReverseSnare1', 22 'Brush Hit', 23 'Brush Short', 28 'Slap 1', 29
+; 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Jazz BassDrm1', 36 'Trad BassDrm1', 37 'Rock Rim', 38 'Trad Snare',
+; 39 'Hand Claps', 40 'Piccolo Snare', 41 'JazzBassTomLo', 42 'HiHatClosed 1', 43
+; 'JazzBassTomHi', 44 'HiHat Pedal 1', 45 'Jazz Tom 3', 46 'HiHat Open 5', 47 'Jazz Tom 2',
+; 48 'Jazz Tom 1', 49 'CrashCymbal 1', 50 'Jazz Tom High', 51 'Ride Cymbal 9', 52
+; 'ChinaCymbal 1', 53 'Ride Bell 2', 54 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2',
+; 57 'CrashCymbal 6', 58 'Vibraslap', 59 'Ride Cymbal 2', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_102_TradKit_NoteMap:
 	.short 0x0000	; 2BCD4  [  0] note   0
 	.short 0x0000	; 2BCD6  [  1] note   1
@@ -17984,6 +18211,38 @@ DrumKit_101_BrushKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BE44  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BE54  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BE64  |.....X..|
+; Note map of tone 0x101 'Brush Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 2', 15
+; 'HiHat HfOpen1', 16 'HiHatClosed 7', 17 'ReverseCymbl1', 18 'Brush Tom 6', 19
+; 'Brush Tom 5', 20 'Brush Tom 4', 21 'ReverseSnare1', 22 'Brush Hit', 23 'Brush Long', 28
+; 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33
+; 'MetronomeClik', 34 'MetronomeBell', 35 'Trad BassDrm2', 36 'Jazz BassDrm2', 37
+; 'Rock Rim', 38 'Brush Short', 39 'Brush Hit', 40 'Brush Long', 41 'BrushBassTomL', 42
+; 'HiHatClosed 4', 43 'BrushBassTomH', 44 'HiHat Pedal 1', 45 'Brush Tom 3', 46
+; 'HiHat Open 4', 47 'Brush Tom 2', 48 'Brush Tom 1', 49 'CrashCymbal 2', 50
+; 'BrushTom High', 51 'Ride Cymbal 2', 52 'ChinaCymbal 2', 53 'Ride Bell 3', 54
+; 'TambourinAcc1', 55 'SplashCymbal3', 56 'Cowbell 2', 57 'CrashCymbal 7', 58 'Vibraslap',
+; 59 'Ride Cymbal10', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_101_BrushKit_NoteMap:
 	.short 0x0000	; 2BE6C  [  0] note   0
 	.short 0x0000	; 2BE6E  [  1] note   1
@@ -18140,6 +18399,38 @@ DrumKit_108_DanceKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BFDC  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BFEC  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BFFC  |.....X..|
+; Note map of tone 0x108 'Dance Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'DanceHHClose1', 15
+; 'Dance HH.Open', 16 'DanceHHClose2', 17 'ReverseCymbl4', 18 'Soul Tom 3', 19 'Soul Tom 2',
+; 20 'Soul Tom 1', 21 'ReverseSnare1', 22 'Dance Snare 2', 23 'House Snare 1', 28 'Slap 1',
+; 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Soul BassDrm2', 36 'Dance BassDrm', 37 'Dance Rim', 38
+; 'Dance Snare 1', 39 'ReverseCymbl4', 40 'Soul Snare 1', 41 'DanceBassTomL', 42
+; 'DanceHHClose1', 43 'DanceBassTomH', 44 'DanceHHClose1', 45 'Dance Tom 3', 46
+; 'Dance HH.Open', 47 'Dance Tom 2', 48 'Dance Tom 1', 49 'CrashCymbal 4', 50
+; 'DanceTom High', 51 'Ride Cymbal13', 52 'ChinaCymbal 5', 53 'Ride Bell 6', 54
+; 'TambourinAcc1', 55 'SplashCymbal5', 56 'Cowbell 2', 57 'CrashCymbal 5', 58 'Vibraslap',
+; 59 'Ride Cymbal 6', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_108_DanceKit_NoteMap:
 	.short 0x0000	; 2C004  [  0] note   0
 	.short 0x0000	; 2C006  [  1] note   1
@@ -18296,6 +18587,40 @@ DrumKit_109_HouseKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C174  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C184  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C194  |.....X..|
+; Note map of tone 0x109 'House Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 4', 15
+; 'HiHat HfOpen4', 16 'HiHatClosed 9', 17 'ReverseCymbl4', 18 'Dance Tom 3', 19
+; 'Dance Tom 2', 20 'Dance Tom 1', 21 'ReverseSnare1', 22 'House Snare 2', 23
+; 'Dance Snare 1', 28 'Slap 2', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Soul BassDrm2', 36
+; 'House BassDrm', 37 'Soul Rim', 38 'House Snare 1', 39 'Syn.HandClaps', 40 'Analog Snare',
+; 41 'HouseBassTomL', 42 'HiHatClosed 3', 43 'HouseBassTomH', 44 'HiHat Pedal 4', 45
+; 'House Tom 3', 46 'HiHat Open 3', 47 'House Tom 2', 48 'House Tom 1', 49 'CrashCymbal 4',
+; 50 'HouseTom High', 51 'Ride Cymbal13', 52 'ChinaCymbal 5', 53 'Ride Bell 6', 54
+; 'TambourinAcc2', 55 'SplashCymbal5', 56 'SynthCowbell2', 57 'CrashCymbal 5', 58
+; 'Syn.Vibraslap', 59 'Ride Cymbal 6', 60 'ModelBongo H', 61 'ModelBongo L', 62
+; 'Syn.CongaCrsh', 63 'SynthConga Lo', 64 'SynthConga Hi', 65 'SynTimbOpenRm', 66
+; 'SynTimbOpenLo', 67 'SynthAgogo Hi', 68 'SynthAgogo Lo', 69 'Cabasa 2', 70
+; 'Syn.MaracasOn', 71 'SynSmbWhShort', 72 'SynSmbWh Long', 73 'Guiro Short 2', 74
+; 'Guiro Long 2', 75 'Synth Claves', 76 'MdlWdblock Hi', 77 'MdlWdBlockLow', 78
+; 'Mdl.Cuica Hi', 79 'Mdl.Cuica Low', 80 'SynTriangle M', 81 'SynTriangle O', 82
+; 'Syn.Shaker On', 83 'Mdl.SleighBel', 84 'Syn.WindChime', 85 'ModelCastanet', 86
+; 'Surdo Mute', 87 'Surdo Open', 88 'SynthBassDrm3', 89 'SynOrchSnare', 90 'SynOrchCymbal',
+; 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95
+; 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SynSambaWhi H', 104
+; 'SynSambaWhi L', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'SynthCowbell1', 110
+; 'SynthCowbell3', 111 'SynthCowbell4', 112 'SynTimbOpenHi', 113 'Syn.TimbPaila', 114
+; 'TambourineBt2', 115 'Syn.ShakerOff', 116 'SynMaracasOff', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Syn.HandClaps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'MdlWdBlockHi2'.
 DrumKit_109_HouseKit_NoteMap:
 	.short 0x0000	; 2C19C  [  0] note   0
 	.short 0x0000	; 2C19E  [  1] note   1
@@ -18452,6 +18777,38 @@ DrumKit_10A_SoulKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C30C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C31C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C32C  |.....X..|
+; Note map of tone 0x10A 'Soul Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'DanceHHClose1', 15
+; 'Dance HH.Open', 16 'DanceHHClose2', 17 'ReverseCymbl4', 18 'Soul Tom 3', 19 'Soul Tom 2',
+; 20 'Soul Tom 1', 21 'ReverseSnare1', 22 'Soul Snare 2', 23 'House Snare 1', 28 'Slap 1',
+; 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Soul BassDrm2', 36 'Soul BassDrm1', 37 'Soul Rim', 38 'Analog Snare',
+; 39 'Hand Claps', 40 'Soul Snare 1', 41 'SoulBassTom L', 42 'DanceHHClose1', 43
+; 'SoulBassTom H', 44 'DanceHHClose1', 45 'Soul Tom 3', 46 'Dance HH.Open', 47 'Soul Tom 2',
+; 48 'Soul Tom 1', 49 'CrashCymbal 4', 50 'Soul Tom High', 51 'Ride Cymbal13', 52
+; 'ChinaCymbal 5', 53 'Ride Bell 6', 54 'TambourinAcc1', 55 'SplashCymbal5', 56 'Cowbell 2',
+; 57 'CrashCymbal 5', 58 'Vibraslap', 59 'Ride Cymbal 6', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_10A_SoulKit_NoteMap:
 	.short 0x0000	; 2C334  [  0] note   0
 	.short 0x0000	; 2C336  [  1] note   1
@@ -18608,6 +18965,39 @@ DrumKit_10B_ElectricKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C4A4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C4B4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C4C4  |.....X..|
+; Note map of tone 0x10B 'Electric Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'HiHatAccent 5', 15 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22
+; 'Elect.Snare 2', 23 'House Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Soul BassDrm2',
+; 36 'ElectBassDrm1', 37 'Rock Rim', 38 'Elect.Snare 1', 39 'ReverseCymbl1', 40
+; 'Soul Snare 1', 41 'ElectBassTomL', 42 'HiHatClosed 5', 43 'ElectBassTomH', 44
+; 'HiHat Pedal 1', 45 'ElectricTom 3', 46 'HiHat Open 5', 47 'ElectricTom 2', 48
+; 'ElectricTom 1', 49 'CrashCymbal 1', 50 'ElectTom High', 51 'Ride Cymbal 1', 52
+; 'ChinaCymbal 1', 53 'Ride Bell 1', 54 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2',
+; 57 'CrashCymbal 6', 58 'Vibraslap', 59 'Ride Cymbal 8', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_10B_ElectricKit_NoteMap:
 	.short 0x0000	; 2C4CC  [  0] note   0
 	.short 0x0000	; 2C4CE  [  1] note   1
@@ -18764,6 +19154,32 @@ DrumKit_10E_OrchestraKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C63C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C64C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C65C  |.....X..|
+; Note map of tone 0x10E 'Orchestra Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 40 notes to PercInst record 0 'Silent' and the rest to: 12 'Timpani C', 13
+; 'Timpani C#', 14 'Timpani D', 20 'Brush Long', 21 'Brush Short', 22 'HiHat Pedal 1', 23
+; 'HiHat HfOpen1', 24 'HiHatClosed 1', 25 'HiHatAccent 1', 26 'HiHat Open 1', 27
+; 'JazzBassTomHi', 28 'Jazz Tom 3', 29 'Jazz Tom 2', 30 'Jazz Tom 1', 31 'Jazz Tom High', 32
+; 'Ride Bell 1', 33 'Ride Cymbal 1', 34 'Orch.Snare 3', 35 'Orch.BassDrm3', 36
+; 'Orch.BassDrm1', 37 'Rock Rim', 38 'Orch.Snare 1', 39 'Castanets', 40 'Orch.Snare 2', 41
+; 'Orch.Cymbal 1', 42 'Triangle Open', 43 'Orch.Cymbal 2', 44 'OrchTambourin', 45
+; 'CymSoftMallet', 46 'Rattle', 47 'Ride Cymbal 8', 48 'WoodBlock Low', 49 'WoodBlockHigh',
+; 50 'WoodBlock Hi2', 51 'Timpani D#', 52 'Timpani E', 53 'Timpani F', 54 'Timpani F#', 55
+; 'Timpani G', 56 'Timpani G#', 57 'Timpani A', 58 'Timpani A#', 59 'Timpani B', 60
+; 'Timpani c', 61 'Timpani c#', 62 'Timpani d', 63 'Timpani d#', 64 'Timpani e', 65
+; 'Timpani f', 66 'Timpani f#', 67 'Timpani g', 68 'Timpani g#', 69 'Timpani a', 70
+; 'Timpani a#', 71 'Timpani b', 72 'TublarBell C', 73 'TublarBell C#', 74 'TublarBell D', 75
+; 'TublarBell D#', 76 'TublarBell E', 77 'TublarBell F', 78 'TublarBell F#', 79
+; 'TublarBell G', 80 'TublarBell G#', 81 'TublarBell A', 82 'TublarBell A#', 83
+; 'TublarBell B', 84 'TublarBell c', 85 'TublarBell c#', 86 'TublarBell d', 87
+; 'TublarBell d#', 88 'TublarBell e', 89 'TublarBell f', 90 'TublarBell f#', 91
+; 'TublarBell g', 92 'TublarBell g#', 93 'TublarBell a', 94 'TublarBell a#', 95
+; 'TublarBell b', 96 'Tam-Tam', 97 'TambourinAcc1', 98 'TambourineBt1', 99 'Sleigh Bell',
+; 100 'Cowbell 2', 101 'Triangle Mute', 102 'Triangle Open', 103 'ChinaCymbal 1', 104
+; 'Vibraslap'.
 DrumKit_10E_OrchestraKit_NoteMap:
 	.short 0x0000	; 2C664  [  0] note   0
 	.short 0x0000	; 2C666  [  1] note   1
@@ -18920,6 +19336,23 @@ DrumKit_10F_SoundEffectKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C7D4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C7E4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C7F4  |.....X..|
+; Note map of tone 0x10F 'Sound Effect Kit': entry n is the drum-instrument SELECTOR for
+; MIDI note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 71 notes to PercInst record 0 'Silent' and the rest to: 36 'Fret Noise', 37
+; 'Pick Noise 1', 38 'Pick Noise 2', 39 'Pick Noise 3', 40 'Pick Noise 4', 41 'Sax Breath',
+; 42 'Flute Breath', 43 'Slap Shot', 44 'MetronomeClik', 45 'MetronomeBell', 46 'Scratch 3',
+; 47 'Scratch 1', 48 'Zap 1', 49 'ElectroUnizon', 50 'Electro Shot1', 51 'Electro Shot2', 52
+; 'Zap 2', 53 'Square Click', 54 'Slap 1', 55 'AmbientHammer', 56 'Orch.Hit High', 57
+; 'Orch.Hit Low', 58 'Metal Hit Hi', 59 'Metal Hit Low', 60 'Crikets', 61 'Nutshell Tree',
+; 62 'Rain Stick', 63 'Temple Block', 64 'Small Bell', 65 'Finger Cym.H', 66 'Finger Cym.L',
+; 67 'Sleigh Bell', 68 'Wind Chime', 69 'Tam-Tam', 70 'Voice Uh', 71 'Voice Ah', 72
+; 'Voice Yeh', 73 'Heart Beat', 74 'Hand Claps', 75 'Applause 1', 76 'Applause 2', 77
+; 'Gun Shot', 78 'Explosion', 79 'Helicopter', 80 'Train', 81 'Steam Whistle', 82
+; 'Telephone', 83 'Wave 1', 84 'Wave 2', 85 'Wind', 86 'Bird 1', 87 'Bird 2', 88 'Bullfrog',
+; 89 'Little Dog', 125 'Click 1', 126 'Click 2', 127 'Click 1'.
 DrumKit_10F_SoundEffectKit_NoteMap:
 	.short 0x0000	; 2C7FC  [  0] note   0
 	.short 0x0000	; 2C7FE  [  1] note   1
@@ -19076,6 +19509,40 @@ DrumKit_10D_ModelingKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C96C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C97C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C98C  |.....X..|
+; Note map of tone 0x10D 'Modeling Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'ModelHHAccent', 15 'ModelHH.HfOpn', 16 'ModelHHClose2', 17 'ReverseCymbl1', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22
+; 'Model.Snare 2', 23 'Model.Snare 3', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'ModelBassDrm2',
+; 36 'ModelBassDrm1', 37 'Modeling Rim', 38 'Model.Snare 1', 39 'Mdl.HandClaps', 40
+; 'Model.Snare 4', 41 'ModelBassTomL', 42 'ModelHHClose1', 43 'ModelBassTomH', 44
+; 'ModelHH.Pedal', 45 'Modeling Tom3', 46 'Model.HH.Open', 47 'Modeling Tom2', 48
+; 'Modeling Tom1', 49 'Mdl.CrashCym1', 50 'ModelingTomHi', 51 'ModelRideCym1', 52
+; 'ModelChinaCym', 53 'ModelRideBell', 54 'MdlTamburnAcc', 55 'Mdl.SplashCym', 56
+; 'ModelCowbell2', 57 'Mdl.CrashCym2', 58 'Mdl.Vibraslap', 59 'ModelRideCym2', 60
+; 'ModelBongo H', 61 'ModelBongo L', 62 'MdlCngMtCrash', 63 'ModelConga Hi', 64
+; 'ModelConga Lo', 65 'MdlTimbOpenRm', 66 'ModelTimbOpnL', 67 'ModelAgogo Hi', 68
+; 'ModelAgogo Lo', 69 'Model.Cabasa', 70 'Mdl.MaracasOn', 71 'MdlSmbWhShort', 72
+; 'MdlSmbWh Long', 73 'MdlGuiroShort', 74 'Mdl.GuiroLong', 75 'Model.Claves', 76
+; 'MdlWdblock Hi', 77 'MdlWdBlockLow', 78 'Mdl.Cuica Hi', 79 'Mdl.Cuica Low', 80
+; 'MdlTriangle M', 81 'MdlTriangle O', 82 'Mdl.Shaker On', 83 'Mdl.SleighBel', 84
+; 'Mdl.WindChime', 85 'ModelCastanet', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1',
+; 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93
+; 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98
+; 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101 'Samba Drum On', 102
+; 'SambaDrum Off', 103 'MdlSambaWhi H', 104 'MdlSambaWhi L', 105 'MdlsmallCngHi', 106
+; 'MdlsmallCngLo', 109 'ModelCowbell1', 110 'ModelCowbell3', 111 'ModelCowbell4', 112
+; 'ModelTimbOpnH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Mdl.ShakerOff', 116
+; 'MdlMaracasOff', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'MdlWdBlockHi2'.
 DrumKit_10D_ModelingKit_NoteMap:
 	.short 0x0000	; 2C994  [  0] note   0
 	.short 0x0000	; 2C996  [  1] note   1
@@ -19232,6 +19699,40 @@ DrumKit_10C_SynthKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CB04  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CB14  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2CB24  |.....X..|
+; Note map of tone 0x10C 'Synth Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'Syn.HH.Accent', 15
+; 'Syn.HH.HfOpen', 16 'Syn.HH.Close2', 17 'ReverseCymbl5', 18 'Dance Tom 3', 19
+; 'Dance Tom 2', 20 'Dance Tom 1', 21 'Syn.Rev.Snare', 22 'Synth Snare 2', 23
+; 'Synth Snare 3', 28 'Slap 2', 29 'Scratch 4', 30 'Scratch 2', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'SynthBassDrm2', 36
+; 'SynthBassDrm1', 37 'Synth Rim', 38 'Synth Snare 1', 39 'ReverseCymbl5', 40
+; 'Analog Snare', 41 'SynthBassTomL', 42 'Syn.HH.Close1', 43 'SynthBassTomH', 44
+; 'Syn.HH.Pedal', 45 'Synth Tom 3', 46 'Synth HH.Open', 47 'Synth Tom 2', 48 'Synth Tom 1',
+; 49 'CrashCymbal11', 50 'SynthTom High', 51 'Ride Cymbal14', 52 'Syn.ChinaCym.', 53
+; 'Ride Bell 7', 54 'TambourinAcc2', 55 'SplashCymbal5', 56 'SynthCowbell2', 57
+; 'CrashCymbal10', 58 'Syn.Vibraslap', 59 'Ride Cymbal 7', 60 'ModelBongo H', 61
+; 'ModelBongo L', 62 'Syn.CongaCrsh', 63 'SynthConga Lo', 64 'SynthConga Hi', 65
+; 'SynTimbOpenRm', 66 'SynTimbOpenLo', 67 'SynthAgogo Hi', 68 'SynthAgogo Lo', 69
+; 'Cabasa 2', 70 'Syn.MaracasOn', 71 'SynSmbWhShort', 72 'SynSmbWh Long', 73
+; 'Guiro Short 2', 74 'Guiro Long 2', 75 'Synth Claves', 76 'MdlWdblock Hi', 77
+; 'MdlWdBlockLow', 78 'Mdl.Cuica Hi', 79 'Mdl.Cuica Low', 80 'SynTriangle M', 81
+; 'SynTriangle O', 82 'Syn.Shaker On', 83 'Mdl.SleighBel', 84 'Syn.WindChime', 85
+; 'ModelCastanet', 86 'Surdo Mute', 87 'Surdo Open', 88 'SynthBassDrm3', 89 'SynOrchSnare',
+; 90 'SynOrchCymbal', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94
+; 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap',
+; 99 'Darbuka Open', 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103
+; 'SynSambaWhi H', 104 'SynSambaWhi L', 105 'SmallConga Hi', 106 'SmallConga Lo', 109
+; 'SynthCowbell1', 110 'SynthCowbell3', 111 'SynthCowbell4', 112 'SynTimbOpenHi', 113
+; 'Syn.TimbPaila', 114 'TambourineBt2', 115 'Syn.ShakerOff', 116 'SynMaracasOff', 117
+; 'SurdoLeftHand', 118 'Shekele Off', 119 'Syn.HandClaps', 120 'Conga Mute On', 121
+; 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125
+; 'Bongo Mute 1', 126 'OrchTambourin', 127 'MdlWdBlockHi2'.
 DrumKit_10C_SynthKit_NoteMap:
 	.short 0x0000	; 2CB2C  [  0] note   0
 	.short 0x0000	; 2CB2E  [  1] note   1
@@ -19383,6 +19884,12 @@ DrumKit_110_SpecialSound:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CC9C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CCAC  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2CCBC  |.....X..|
+; Note map of tone 0x110 'Special sound': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 127 notes to PercInst record 0 'Silent' and the rest to: 64 'Organ Click'.
 DrumKit_110_SpecialSound_NoteMap:
 	.short 0x0000	; 2CCC4  [  0] note   0
 	.short 0x0000	; 2CCC6  [  1] note   1
@@ -19534,6 +20041,25 @@ DrumKit_111_GMOrchestraKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CE34  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CE44  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2CE54  |.....X..|
+; Note map of tone 0x111 'GM Orchestra Kit': entry n is the drum-instrument SELECTOR for
+; MIDI note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 66 notes to PercInst record 0 'Silent' and the rest to: 27 'HiHatClosed 1', 28
+; 'HiHat Pedal 1', 29 'HiHat Open 1', 30 'Ride Cymbal 8', 31 'Rock Rim', 32 'Square Click',
+; 33 'MetronomeClik', 34 'MetronomeBell', 35 'Orch.BassDrm3', 36 'Orch.BassDrm1', 37
+; 'Rock Rim', 38 'Orch.Snare 1', 39 'Castanets', 40 'Orch.Snare 1', 41 'Timpani F', 42
+; 'Timpani F#', 43 'Timpani G', 44 'Timpani G#', 45 'Timpani A', 46 'Timpani A#', 47
+; 'Timpani B', 48 'Timpani c', 49 'Timpani c#', 50 'Timpani d', 51 'Timpani d#', 52
+; 'Timpani e', 53 'Timpani f', 54 'OrchTambourin', 55 'SplashCymbal2', 56 'Cowbell 2', 57
+; 'Orch.Cymbal 1', 58 'Vibraslap', 59 'Orch.Cymbal 2', 60 'Bongo High', 61 'Bongo Low', 62
+; 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL',
+; 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72
+; 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh',
+; 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81
+; 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86
+; 'Surdo Mute', 87 'Surdo Open', 88 'Applause 1'.
 DrumKit_111_GMOrchestraKit_NoteMap:
 	.short 0x0000	; 2CE5C  [  0] note   0
 	.short 0x0000	; 2CE5E  [  1] note   1
