@@ -2074,8 +2074,7 @@ IvNamingExit_ScreenData_Skip:
 	sub	bc, (xde)
 	exts	xbc
 	ld	xwa, (xsp+22)
-	.byte 0x98
-	ld	h, 89:opc
+	divs bc, (xwa+38)
 	ld	(xsp+8), bc
 	ld	wa, (xde+2)
 	inc	1, wa
@@ -2087,9 +2086,7 @@ IvNamingExit_ScreenData_Skip:
 	jr	IvNamingExit_ScreenData_Join
 IvNamingExit_ScreenData_Loop:
 	ld	wa, (xsp+8)
-	.byte 0x9f
-	push_a
-	.byte 0x40
+	mul wa, (xsp+20)
 	ld	bc, (xsp+154)
 	add	bc, wa
 	dec	1, bc
@@ -2121,9 +2118,7 @@ IvNamingExit_ScreenData_Skip2:
 	or	xde, xde
 	jrl	z, IvNamingExit_ScreenData_Skip4
 	ld	bc, (xwa+38)
-	.byte 0x98
-	pushw	wa
-	popw	bc
+	muls bc, (xwa+40)
 	ld	a, (xde)
 	exts	wa
 	cp	wa, bc
@@ -2138,8 +2133,7 @@ IvNamingExit_ScreenData_Skip2:
 	sub	de, (xbc)
 	exts	xde
 	ld	xhl, (xsp+10)
-	.byte 0x9b
-	ld	h, 90:opc
+	divs de, (xhl+38)
 	ld	(xsp+8), de
 	lda	xwa, (xbc+6)
 	ld	(xsp+14), xwa
@@ -2223,9 +2217,7 @@ IvNamingExit_ScreenData_Skip4:
 	ld	xwa, (xsp+178)
 	call	GetViewInstance
 	ld	wa, (xhl+38)
-	.byte 0x9b
-	pushw	wa
-	popw	wa
+	muls wa, (xhl+40)
 	exts	xwa
 	cp	(xsp+170), xwa
 	jr	nc, IvNamingExit_ScreenData_Join3
@@ -2725,20 +2717,20 @@ TrAsGrid_ByteData1:
 	lda	xde, (NakaWidgetPtrTbl_SmfDp_0x23B8:24)
 	ld_rrb a, xde, wa
 	cp c, 0:i3
-	jr nz, 9
+	jr nz, TrAsGrid_ByteData1_Skip
 	cp a, 19
-	jr	nc, 10
+	jr	nc, TrAsGrid_ByteData1_Join
 	inc	1, a
-	jr	6
+	jr	TrAsGrid_ByteData1_Join
+TrAsGrid_ByteData1_Skip:
 	cp	a, 0:i3
-	jr	z, 2
+	jr	z, TrAsGrid_ByteData1_Join
 	dec	1, a
+TrAsGrid_ByteData1_Join:
 	extz	wa
 	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x23CC
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ld	l, 14:opc
+	ld_rrb l, xbc, wa
+	ret
 
 TrAsGrid_CheckTrackType:
 	cp a, 0:i3
@@ -2807,19 +2799,14 @@ TrAsGridChk_ByteData:
 	cp	bc, 2:i3
 	jr	z, TrAsGrid_CheckTrackType_Skip
 	cp	bc, 1:i3
-	jrl	nz, 1197
+	jrl	nz, TrAsGridChk_ReturnZero
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 0:i3
-	calr	65318
+	calr	TrAsGrid_ByteData1
 	ld	(0x2873:16), l
-	.byte 0xf2, 0x82
-	rcf
-	push	sr
-	push_a
-	jrl ule, 16424
-	call16 18176
-	normal
+	ld (0x021082:24), (0x2873:16)
+	ld xwa, 0x0147001c
 	ld	xbc, 0x01e70006
 	ld	xde, xiz
 	call	MainFuncCall
@@ -2917,19 +2904,14 @@ TrAsGrid_CheckTrackType_Join2:
 	cp	bc, 2:i3
 	jr	z, TrAsGrid_CheckTrackType_Skip5
 	cp	bc, 1:i3
-	jrl	nz, 881
+	jrl	nz, TrAsGridChk_ReturnZero
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 1:i3
-	calr	65002
+	calr	TrAsGrid_ByteData1
 	ld	(0x2873:16), l
-	.byte 0xf2, 0x82
-	rcf
-	push	sr
-	push_a
-	jrl ule, 16424
-	call16 18176
-	normal
+	ld (0x021082:24), (0x2873:16)
+	ld xwa, 0x0147001c
 	ld	xbc, 0x01e70007
 	ld	xde, xiz
 	call	MainFuncCall
@@ -4099,8 +4081,7 @@ DemoMedDsp_Dispatch:
 	ld	xwa, MedleyDisp_Blank_0xC
 	or	xhl, xhl
 	jr	nz, AcDemoMedleyDispBoxProc_Skip
-	.byte 0x40
-	.long MedleyDisp_Blank
+	ld xwa, MedleyDisp_Blank
 AcDemoMedleyDispBoxProc_Skip:
 	push	xwa
 	push	xbc
@@ -4149,8 +4130,7 @@ DPPlayDsp_Dispatch:
 	ld	xwa, PlayModeStr_Play_0x6
 	or	xhl, xhl
 	jr	nz, AcDemoMedleyDispBoxProc_Skip2
-	.byte 0x40
-	.long PlayModeStr_Play
+	ld xwa, PlayModeStr_Play
 AcDemoMedleyDispBoxProc_Skip2:
 	push	xwa
 	push	xbc
@@ -4199,8 +4179,7 @@ DPPauseDsp_Dispatch:
 	ld	xwa, PlayModeStr_Pause_0x6
 	or	xhl, xhl
 	jr	nz, AcDemoMedleyDispBoxProc_Skip3
-	.byte 0x40
-	.long PlayModeStr_Pause
+	ld xwa, PlayModeStr_Pause
 AcDemoMedleyDispBoxProc_Skip3:
 	push	xwa
 	push	xbc
@@ -5929,10 +5908,10 @@ InitializeKubo_Skip:
 	ld	bc, (xde+2)
 	ld	(xhl), bc
 	ld	bc, (xwa)
-	.byte 0x9a, 0x04, 0x81
+	add bc, (xde+4)
 	ld	(xwa+4), bc
 	ld	bc, (xhl)
-	.byte 0x9a, 0x06, 0x81
+	add bc, (xde+6)
 	ld	(xwa+6), bc
 	ld	bc, 0:i3
 	ldw	de, 245
@@ -5940,8 +5919,9 @@ InitializeKubo_Skip:
 	call	GetTitleNow
 	ld	(xsp+10), 7
 	cp	xhl, 0x01a00095
-	jr	nz, 4
+	jr	nz, InitializeKubo_Skip4
 	ld	(xsp+10), 6
+InitializeKubo_Skip4:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80051
@@ -5949,11 +5929,8 @@ InitializeKubo_Skip:
 	call	ApFuncCall
 	lda	xix, (xsp+28)
 	ld	(xix), hl
-	.byte 0x94
-	push	xsp
-	nop
-	nop
-	jr	z, 120
+	cpw (xix), 0
+	jr	z, InitializeKubo_Skip5
 	lda	xde, (xix+2)
 	ld	a, (xsp+10)
 	extz	wa
@@ -5963,17 +5940,16 @@ InitializeKubo_Skip:
 	ld wa, (xbc+2)
 	ld (xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94
-	or	(xwa), xwa
-	zcf
+	sub wa, (xix)
+	exts xwa
 	divs	wa, 2
 	ld	bc, (xix)
 	add	bc, wa
@@ -5985,9 +5961,8 @@ InitializeKubo_Skip:
 	exts	xwa
 	divs	wa, 2
 	add	bc, wa
-	.byte 0xbc
-	push	sr
-	.long Str_42a03242322043
+	ld (xix+2), bc
+	pushw 0x00e3
 	pushw	0x460c
 	lda	xwa, (xsp+40)
 	push	xwa
@@ -6001,6 +5976,7 @@ InitializeKubo_Skip:
 	pushw	251
 	pushw	245
 	call	DrawStringLeftJustify
+InitializeKubo_Skip5:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80052
@@ -6017,17 +5993,16 @@ InitializeKubo_Skip:
 	ld wa, (xbc+2)
 	ld (xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94
-	or	(xwa), xwa
-	zcf
+	sub wa, (xix)
+	exts xwa
 	divs	wa, 2
 	ld	bc, (xix)
 	add	bc, wa
@@ -6069,8 +6044,8 @@ InitializeKubo_Skip:
 	ld	de, (xwa)
 	ld	(xbc), de
 	ld	de, (xhl)
-	.byte 0x9c
-	ld	xiz, 0x5202b982
+	add de, (xix+70)
+	ld (xbc+2), de
 	ldw	de, 242
 	call	DrawLine
 	jrl	NoteEdit_ReturnZero
@@ -6090,8 +6065,7 @@ InitializeKubo_Join2:
 	ld	xde, 0:i3
 	call	ApFuncCall
 	ld	(xsp+8), hl
-	.byte 0xbf
-	ldw	(2:8), 1:io
+	ldw (xsp+10), 1
 	ldib_erp 251, 0
 InitializeKubo_Loop:
 	stb_erp a, 251
@@ -6107,19 +6081,18 @@ InitializeKubo_Loop:
 	ld	xbc, 0x01e8005d
 	call	ApFuncCall
 	or	xhl, xhl
-	jr	z, 76
+	jr	z, InitializeKubo_Skip7
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
 	ldw (xwa+2), 32
 	ldw (xwa+6), 43
-	.byte 0xc7
-	swi	3
-	dec	6, wa
-	ldw	(159:8), 1032:io
-	.byte 0x40
-	.long FmtStr_pct3d
-	jr	21
+	cpib_erp 251, 0
+	jr nz, InitializeKubo_Skip6
+	pushm (xsp+8)
+	ld xwa, FmtStr_pct3d
+	jr	InitializeKubo_Join10
+InitializeKubo_Skip6:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
@@ -6127,6 +6100,7 @@ InitializeKubo_Loop:
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x140
+InitializeKubo_Join10:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
@@ -6135,14 +6109,14 @@ InitializeKubo_Loop:
 	incw	1, (xsp+8)
 	ldw (xsp+10), 2
 	jr	InitializeKubo_Join3
+InitializeKubo_Skip7:
 	ld	xwa, 3:i3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
 	ldw (xwa+2), 33
 	ldw (xwa+6), 42
-	.byte 0x9f
-	ldw	(4:8), 0xe30b:io
-	nop
+	pushm (xsp+10)
+	pushw 0x00e3
 	pushw	0x461c
 	lda	xwa, (xsp+42)
 	push	xwa
@@ -6154,9 +6128,8 @@ InitializeKubo_Join3:
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90
-	or	(xbc), xbc
-	zcf
+	sub bc, (xwa)
+	exts xbc
 	divs	bc, 2
 	ld	de, (xwa)
 	add	de, bc
@@ -6185,8 +6158,7 @@ InitializeKubo_Join3:
 	ld	xde, 0:i3
 	call	ApFuncCall
 	ld	(xsp+8), hl
-	.byte 0xbf
-	ldw	(2:8), 1:io
+	ldw (xsp+10), 1
 	ldib_erp 251, 0
 InitializeKubo_Loop2:
 	stb_erp a, 251
@@ -6206,18 +6178,17 @@ InitializeKubo_Loop2:
 	lda	xbc, (xwa+2)
 	lda	xix, (xwa+6)
 	or	xhl, xhl
-	jr	z, 68
+	jr	z, InitializeKubo_Skip9
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 	ldw (xbc), 38
-	.byte 0xb4
-	push	sr
-	ldw	bc, 0xc700
-	swi	3
-	dec	6, wa
-	ldw	(159:8), 1032:io
+	ldw (xix), 49
+	cpib_erp 251, 0
+	jr nz, InitializeKubo_Skip8
+	pushm (xsp+8)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x148
-	jr	21
+	jr	InitializeKubo_Join11
+InitializeKubo_Skip8:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
@@ -6225,6 +6196,7 @@ InitializeKubo_Loop2:
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x14C
+InitializeKubo_Join11:
 	push	xwa
 	push	xde
 	call	Sprintf_Locked
@@ -6232,14 +6204,13 @@ InitializeKubo_Loop2:
 	incw	1, (xsp+8)
 	ldw (xsp+10), 2
 	jr	InitializeKubo_Join4
+InitializeKubo_Skip9:
 	ld	xwa, 3:i3
 	ld	(xsp+4), xwa
 	ldw (xbc), 40
-	.byte 0xb4
-	push	sr
-	ldw	bc, 0x9f00
-	ldw	(4:8), 0xe30b:io
-	nop
+	ldw (xix), 49
+	pushm (xsp+10)
+	pushw 0x00e3
 	pushw	0x4628
 	push	xde
 	call	Sprintf_Locked
@@ -6250,9 +6221,8 @@ InitializeKubo_Join4:
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90
-	or	(xbc), xbc
-	zcf
+	sub bc, (xwa)
+	exts xbc
 	divs	bc, 2
 	ld	de, (xwa)
 	add	de, bc
@@ -6305,9 +6275,8 @@ InitializeKubo_Join5:
 	inc	6, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94
-	or	(xwa), xwa
-	zcf
+	sub wa, (xix)
+	exts xwa
 	divs	wa, 2
 	ld	ix, (xix)
 	add	ix, wa
@@ -6353,9 +6322,8 @@ InitializeKubo_Loop3:
 	lda	xde, (xhl+6)
 	ldw (xde), 161
 	ld	wa, (xhl+4)
-	.byte 0x93
-	or	(xwa), xwa
-	zcf
+	sub wa, (xhl)
+	exts xwa
 	divs	wa, 2
 	ld	ix, (xhl)
 	add	ix, wa
@@ -6424,9 +6392,8 @@ InitializeKubo_Loop5:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94
-	or	(xwa), xwa
-	zcf
+	sub wa, (xix)
+	exts xwa
 	divs	wa, 2
 	ld	ix, (xix)
 	add	ix, wa
@@ -6480,9 +6447,8 @@ InitializeKubo_Join7:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94
-	or	(xwa), xwa
-	zcf
+	sub wa, (xix)
+	exts xwa
 	divs	wa, 2
 	ld	ix, (xix)
 	add	ix, wa
@@ -7570,43 +7536,32 @@ SndParam_Dispatch:
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
 	srl	xwa, 0
-	.byte 0xd7
-	sub	(0x50b1a8:24), xsp
-	push	xde
-	ld	b, 185:opc
-	push	sr
-	.byte 0x52, 0x91
-	push	xsp
-	normal
-	nop
-	jrl	nz, 1331
+	ld qwa, 0
+	ld (xbc), wa
+	ld xde, (xsp+58)
+	ld (xbc+2), de
+	cpw (xbc), 1
+	jrl	nz, SndParam_ReturnZero
 	ld	wa, de
 	cp	wa, 0:i3
-	jrl	mi, 1324
+	jrl	mi, SndParam_ReturnZero
 	cp	wa, 8
-	jrl	gt, 1317
+	jrl	gt, SndParam_ReturnZero
 	add	wa, wa
 	lda	xix, (ExtDevice_ModeDispatch_Table_0x308:24)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ld	w, 242:opc
-	pushw	bc
-	.byte 0x04, 0xf3
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	ld	wa, 7:i3
-	push	xiz
-	ld	a, 218:opc
-	.byte 0xec
-	push	sr
+	ld_rrw wa, xix, wa
+	lda_24 xix, (0xf30429)
+	jp_rr 8, xix, wa
+	ld xbc, (xsp+62)
+	sla de, 2
 	cp	xbc, 0x01c00019
-	jr	nz, 16
+	jr	nz, InitializeKubo_Skip10
 	lda	xbc, (ExtDevice_ModeDispatch_Table_0x278:24)
 	ld_rrl xwa, xbc, de
 	ld bc, 4:i3
 	ld de, 4:i3
 	jr	InitializeKubo_Join8
+InitializeKubo_Skip10:
 	lda	xbc, (ExtDevice_ModeDispatch_Table_0x278:24)
 	ld_rrl xwa, xbc, de
 	ld bc, 1:i3
@@ -7633,51 +7588,37 @@ InitializeKubo_Join8:
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
 	srl	xwa, 0
-	.byte 0xd7
-	sub	(0x50b1a8:24), xsp
-	push	xde
-	ld	c, 185:opc
-	push	sr
-	.byte 0x53, 0x91
-	push	xsp
-	normal
-	nop
-	jrl	nz, 1159
+	ld qwa, 0
+	ld (xbc), wa
+	ld xhl, (xsp+58)
+	ld (xbc+2), hl
+	cpw (xbc), 1
+	jrl	nz, SndParam_ReturnZero
 	ld	wa, hl
 	cp	wa, 0:i3
-	jrl	mi, 1152
+	jrl	mi, SndParam_ReturnZero
 	cp	wa, 8
-	jrl	gt, 1145
+	jrl	gt, SndParam_ReturnZero
 	add	wa, wa
 	lda	xix, (ExtDevice_ModeDispatch_Table_0x2F6:24)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ld	w, 242:opc
-	cp_spiw	hl, 4
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	ld	wa, 7:i3
-	push	xiz
-	ld	b, 219:opc
-	.byte 0xec
-	push	sr
+	ld_rrw wa, xix, wa
+	lda_24 xix, (0xf304d5)
+	jp_rr 8, xix, wa
+	ld xde, (xsp+62)
+	sla hl, 2
 	lda	xwa, (ExtDevice_ModeDispatch_Table_0x278:24)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ld	w, 234:opc
-	.byte 0xcf, 0x1a
-	nop
-	.byte 0xc0, 0x01
-	jr	nz, 7
+	ld_rrl xwa, xwa, hl
+	cp xde, 0x01c0001a
+	jr	nz, InitializeKubo_Skip11
 	ldw	bc, 0xfffc
 	ld	de, 4:i3
-	jr	5
+	jr	InitializeKubo_Join12
+InitializeKubo_Skip11:
 	ldw	bc, 0xffff
 	ld	de, 4:i3
+InitializeKubo_Join12:
 	call	MainLswAdd
-	jrl	1080
+	jrl	SndParam_ReturnZero
 	ld	xwa, 0x01480002
 	ld	xbc, 0x01e80011
 	ld	xde, 0xffffffff
@@ -7690,29 +7631,27 @@ InitializeKubo_Join8:
 	ld	xde, xhl
 InitializeKubo_Join9:
 	call	MainPostEvent
-	jrl	1034
+	jrl	SndParam_ReturnZero
 	lda	xhl, (xsp+40)
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
+	ldw (xhl), 1
 	lda	xde, (xhl+2)
 	ldw (xde), 0
 	lda	xix, (ExtDevice_ModeDispatch_Table_0x278:24)
 	ld	xiz, (xsp+58)
-	jr	18
+	jr	InitializeKubo_Join13
+InitializeKubo_Loop6:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xf4, 0xf0
-	jr	z, 12
+	cpl_sri_rm xwa, 0x07, 0xf0, 0xf4
+	jr	z, InitializeKubo_Skip12
 	inc	1, bc
 	ld	(xde), bc
+InitializeKubo_Join13:
 	ld	bc, (xde)
 	cp	bc, 9
-	jr	lt, -26
+	jr	lt, InitializeKubo_Loop6
+InitializeKubo_Skip12:
 	lda	xbc, (xsp+48)
 	ld	(xhl+4), xbc
 	ld	xwa, (xsp+58)
@@ -7722,7 +7661,7 @@ InitializeKubo_Join9:
 	jr	z, InitializeKubo_Skip3
 	cp	xhl, 0x4141
 	jrl	nz, SndParam_ReturnZero
-	.byte 0x92, 0x04
+	pushm (xde)
 	pushw	227
 	pushw	0x477e
 	push	xbc
@@ -7732,15 +7671,13 @@ InitializeKubo_Join9:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x01e0008c
-	jrl	916
+	jrl	SndParam_SendEventReturnZero
 InitializeKubo_Skip3:
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x2BA
-	.byte 0x92
-	push	xsp
-	nop
-	nop
-	jr	z, 5
+	cpw (xde), 0
+	jr	z, InitializeKubo_Skip13
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x2B0
+InitializeKubo_Skip13:
 	push	xwa
 	push	xbc
 	call	Strcpy
@@ -7749,7 +7686,7 @@ InitializeKubo_Skip3:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x01e0008c
-	jrl	t, 0x036b
+	jrl	t, SndParam_SendEventReturnZero
 
 ; EntertainerGridCheck handler
 EntGridCheck_Handler:
@@ -8480,11 +8417,8 @@ SqplyVal_ExtraParamsData_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+10)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 SqplyVal_ExtraParamsData_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+68)
@@ -8954,11 +8888,8 @@ SqedtVal_DrawParamsData_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 SqedtVal_DrawParamsData_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+74)
@@ -10602,11 +10533,8 @@ AccIll_Dispatch_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 AccIll_Dispatch_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+4)
@@ -10631,9 +10559,8 @@ AccIll_Dispatch_Join2:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95
-	or	(xwa), xwa
-	zcf
+	sub wa, (xiy)
+	exts xwa
 	divs	wa, 2
 	ld	iy, (xiy)
 	add	iy, wa
@@ -10680,9 +10607,8 @@ AccIll_Dispatch_Skip2:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95
-	or	(xwa), xwa
-	zcf
+	sub wa, (xiy)
+	exts xwa
 	divs	wa, 2
 	ld	iy, (xiy)
 	add	iy, wa
@@ -10704,11 +10630,8 @@ AccIll_Dispatch_Skip3:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 AccIll_Dispatch_Join4:
 	call	DrawStringLeftJustify
 	jrl	AccIll_ReturnZero2
@@ -13001,10 +12924,10 @@ SeqAccomp_Dispatch:
 	ld	xbc, 0x01e80062
 	jr	SeqAccomp_Dispatch_Join
 	ld	xbc, 0x01e80063
-	.asciz "h*Ad"
-	.byte 0xe8, 0x01
-	.asciz "h#Ae"
-	.byte 0xe8, 0x01
+	jr SeqAccomp_Dispatch_Join
+	ld xbc, 0x01e80064
+	jr SeqAccomp_Dispatch_Join
+	ld xbc, 0x01e80065
 	jr	SeqAccomp_Dispatch_Join
 	ld	xbc, 0x01e80066
 	jr	SeqAccomp_Dispatch_Join
@@ -13541,41 +13464,41 @@ SqplyFunc_ParamFormatData_Skip2:
 	extz	wa
 	pushw	wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5D6
-	jrl	292
+	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	call	GetTitleNow
 	ld	xwa, (xsp)
 	lda	xbc, (xwa+18)
 	cp	l, 130
-	jr	nz, 24
-	.byte 0xf1, 0xb1
-	pushw	wa
-	inc	6, w
-	reti
+	jr	nz, SqplyFunc_ParamFormatData_Skip2_Skip2
+	bitda 0, (0x28b1)
+	jr z, SqplyFunc_ParamFormatData_Skip2_Skip
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5DA
-	jr	5
+	jr	SqplyFunc_ParamFormatData_Skip2_Join
+SqplyFunc_ParamFormatData_Skip2_Skip:
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5E0
+SqplyFunc_ParamFormatData_Skip2_Join:
 	push	xwa
-	.byte 0xa1
-	.ascii " 8h6¡!ñ±"
-	pushw	wa
-	inc	6, a
-	reti
+	ld xwa, (xbc)
+	push xwa
+	jr SqplyFunc_ParamFormatData_Skip2_Join3
+SqplyFunc_ParamFormatData_Skip2_Skip2:
+	ld xbc, (xbc)
+	bitda 1, (0x28b1)
+	jr z, SqplyFunc_ParamFormatData_Skip2_Skip3
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5E6
-	jr	5
+	jr	SqplyFunc_ParamFormatData_Skip2_Join2
+SqplyFunc_ParamFormatData_Skip2_Skip3:
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5EC
+SqplyFunc_ParamFormatData_Skip2_Join2:
 	push	xwa
 	push	xbc
-	jr	30
+	jr	SqplyFunc_ParamFormatData_Skip2_Join3
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F8
-	.byte 0xc1
-	push	xde
-	pushw	wa
-	push	xsp
-	nop
+	cpdi8 (0x283a), 0
 	jr	z, SqplyFunc_ParamFormatData_Skip3
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F2
 SqplyFunc_ParamFormatData_Skip3:
@@ -13583,37 +13506,36 @@ SqplyFunc_ParamFormatData_Skip3:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
+SqplyFunc_ParamFormatData_Skip2_Join3:
 	call	Strcpy
 	inc	8, xsp
-	jrl	201
+	jrl	SqplyFunc_RestoreAndReturn
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	call	GetTitleNow
 	cp	l, 134
-	jr	nz, 11
-	.byte 0xd1
-	ld	w, 37:opc
-	max
+	jr	nz, SqplyFunc_ParamFormatData_Skip3_Skip
+	pushdi_w (0x2520)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5FE
-	jr	9
-	.byte 0xd1, 0x1c
-	ld	e, 4:opc
+	jr	SqplyFunc_ParamFormatData_Skip3_Join
+SqplyFunc_ParamFormatData_Skip3_Skip:
+	pushdi_w (0x251c)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x604
-	jrl	149
+SqplyFunc_ParamFormatData_Skip3_Join:
+	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	call	GetTitleNow
 	cp	l, 134
-	jr	nz, 11
-	.byte 0xd1
-	ld	b, 37:opc
-	max
+	jr	nz, SqplyFunc_ParamFormatData_Skip3_Skip2
+	pushdi_w (0x2522)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x60A
-	jr	9
-	.byte 0xd1
-	calr	1061
+	jr	SqplyFunc_ParamFormatData_Skip3_Join2
+SqplyFunc_ParamFormatData_Skip3_Skip2:
+	pushdi_w (0x251e)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x610
-	jr	113
+SqplyFunc_ParamFormatData_Skip3_Join2:
+	jr	SqplyFunc_PushFormatAddr
 
 SqplyFunc_FormatRhythmPattern:
 	ld xwa, (xsp + 4)
@@ -13939,37 +13861,26 @@ Sqedt_ParamDispatch_Join:
 	ld_rrw hl, xix, hl
 	lda xix, (15944414:24)
 	jp_rr 8, xix, hl
-	.byte 0xd1
-	rcf
-	ld	h, 4:opc
+	pushdi_w (0x2610)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x674
 	jr	Sqedt_ParamDispatch_Join2
-	.byte 0xd1
-	calr	1062
+	pushdi_w (0x261e)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x67A
 	jr	Sqedt_ParamDispatch_Join2
-	.byte 0xd1, 0xd7, 0xf1, 0x04
+	pushdi_w (0xf1d7)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x680
 	jr	Sqedt_ParamDispatch_Join2
-	.byte 0xd1
-	cp	bc, ix
-	.byte 0x04, 0x40
-	.long FmtStr_pct3d_4B5E
+	pushdi_w (0xf1dc)
+	ld xwa, FmtStr_pct3d_4B5E
 	jr	Sqedt_ParamDispatch_Join2
-	.byte 0xd1
-	ld	(0x4004f1:24), xix
-	popw	hl
-	.byte 0xe3
-	nop
+	pushdi_w (0xf1f2)
+	ld xwa, 0x00e34b64
 	jr	Sqedt_ParamDispatch_Join2
-	.byte 0xd1
-	pushw	bc
-	.byte 0xf2, 0x04
+	pushdi_w (0xf229)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x692
 	jr	Sqedt_ParamDispatch_Join2
 Sqedt_ParamDispatch_Entry:
-	.byte 0xd1, 0x06
-	ld	h, 4:opc
+	pushdi_w (0x2606)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x698
 Sqedt_ParamDispatch_Join2:
 	jrl	Sqedt_ParamDispatch_Join10
@@ -13980,58 +13891,48 @@ Sqedt_ParamDispatch_Join2:
 	cp	hl, 0:i3
 	jr	lt, Sqedt_ParamDispatch_Entry2
 	cp	hl, 7:i3
-	jr	gt, 88
+	jr	gt, Sqedt_ParamDispatch_Entry2
 	add	hl, hl
 	lda	xix, (NakaInst_2d_0xA0:24)
 	ld_rrw hl, xix, hl
 	lda xix, (15944534:24)
 	jp_rr 8, xix, hl
-	.byte 0xd1
-	ccf
-	ld	h, 4:opc
+	pushdi_w (0x2612)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E
-	jr	64
-	.byte 0xd1
-	ld	w, 38:opc
-	max
+	jr	Sqedt_ParamDispatch_Join2_Join
+	pushdi_w (0x2620)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
-	jr	53
-	.byte 0xd1
-	pushw	ix
-	ld	h, 4:opc
+	jr	Sqedt_ParamDispatch_Join2_Join
+	pushdi_w (0x262c)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA
-	jr	42
-	.byte 0xd1
-	ld	h, 38:opc
-	.byte 0x04, 0x40
-	.long NakaInst_3d
-	jr	31
-	.byte 0xd1
-	swi	4
-	ld	e, 4:opc
+	jr	Sqedt_ParamDispatch_Join2_Join
+	pushdi_w (0x2626)
+	ld xwa, NakaInst_3d
+	jr	Sqedt_ParamDispatch_Join2_Join
+	pushdi_w (0x25fc)
 	ld	xwa, NakaInst_3d_0x6
-	jr	20
-	.byte 0xd1
-	swi	2
-	ld	e, 4:opc
+	jr	Sqedt_ParamDispatch_Join2_Join
+	pushdi_w (0x25fa)
 	ld	xwa, NakaInst_3d_0xC
-	jr	9
+	jr	Sqedt_ParamDispatch_Join2_Join
 Sqedt_ParamDispatch_Entry2:
-	.byte 0xd1
-	ld	(38:8), 4:io
+	pushdi_w (0x2608)
 	ld	xwa, NakaInst_3d_0x12
-	jrl	1031
+Sqedt_ParamDispatch_Join2_Join:
+	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9740:16)
 	cp	e, 0:i3
-	jr	le, 17
+	jr	le, Sqedt_ParamDispatch_Entry2_Skip
 	exts	de
-	.long Str_20469e32473220
+	pushw de
+	pushw 0x00e3
 	pushw	0x4ba0
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jr	Sqedt_ParamDispatch_Join3
+Sqedt_ParamDispatch_Entry2_Skip:
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+18)
 	cp	e, 0:i3
@@ -14058,8 +13959,7 @@ Sqedt_ParamDispatch_Skip2:
 	jr	le, Sqedt_ParamDispatch_Skip3
 	exts	de
 	pushw	de
-	.byte 0x40
-	.long FmtStr_pluspct3d
+	ld xwa, FmtStr_pluspct3d
 	jr	Sqedt_ParamDispatch_Join4
 Sqedt_ParamDispatch_Skip3:
 	cp	e, 0:i3
@@ -14067,8 +13967,7 @@ Sqedt_ParamDispatch_Skip3:
 	neg	e
 	exts	de
 	pushw	de
-	.byte 0x40
-	.long FmtStr_minuspct3d
+	ld xwa, FmtStr_minuspct3d
 	jr	Sqedt_ParamDispatch_Join4
 Sqedt_ParamDispatch_Skip4:
 	exts	de
@@ -14232,51 +14131,45 @@ Sqedt_ParamDispatch_Join7:
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x92
-	jrl	501
+	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (0xf1e9:16)
-	jrl	175
+	jrl	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1
-	cp	xbc, xde
-	max
+	pushdi_w (0xf1ea)
 	ld	xwa, NakaInst_3d_0x98
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	409
+	jrl	Sqedt_ParamDispatch_Join9
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1
-	pushw	wa
-	ld	h, 4:opc
+	pushdi_w (0x2628)
 	ld	xwa, NakaInst_3d_0x9E
-	jrl	442
+	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (0xf1ee:16)
-	jr	117
+	jr	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1
-	cp	xbc, xsp
-	max
+	pushdi_w (0xf1ef)
 	ld	xwa, NakaInst_3d_0xA4
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	351
+	jrl	Sqedt_ParamDispatch_Join9
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9770:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0xAA
-	jrl	381
+	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
@@ -14284,7 +14177,7 @@ Sqedt_ParamDispatch_Join7:
 	jr	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1, 0xe2, 0xf1, 0x04
+	pushdi_w (0xf1e2)
 	ld	xwa, NakaInst_3d_0xB0
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -14292,9 +14185,7 @@ Sqedt_ParamDispatch_Join7:
 	jrl	Sqedt_ParamDispatch_Join9
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1
-	pushw	iz
-	ld	h, 4:opc
+	pushdi_w (0x262e)
 	ld	xwa, NakaInst_3d_0xB6
 	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
@@ -14304,19 +14195,15 @@ Sqedt_ParamDispatch_Join7:
 Sqedt_ParamDispatch_Join8:
 	extz	wa
 	muls	wa, 5
-	.byte 0x41
-	.long LongStr_1_2_3
+	ld xbc, LongStr_1_2_3
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
 	jrl	SqedtFunc_ModeC_Entry
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1, 0xe7
-	ld	(0x4004:16), d
-	popw	ix
-	.byte 0xe3
-	nop
+	pushdi_w (0xf1e7)
+	ld xwa, 0x00e34c44
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14333,29 +14220,28 @@ Sqedt_ParamDispatch_Join8:
 	ld	a, (9992:16)
 	extz	wa
 	pushw	wa
-	.byte 0x40
-	.long NakaInst_2d
+	ld xwa, NakaInst_2d
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	166
+	jrl	Sqedt_ParamDispatch_Join9
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
-	.byte 0xc1
-	incf
-	.ascii "'!h\""
+	ldb_d8 a, (0x270c)
+	jr Sqedt_ParamDispatch_Join8_Join
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9994:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_2d_0x6
-	jrl	181
+	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
 	ld	a, (9998:16)
+Sqedt_ParamDispatch_Join8_Join:
 	extz	wa
 	muls	wa, 3
 	ld	xbc, ExtDevice_ModeDispatch_Table_0x4C6
@@ -15673,11 +15559,15 @@ Equalizer_FormatDispatch:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 EqFormat_DispatchTable:
-	.byte 0x0b, 0x05, 0x00, 0x40, 0x90, 0x23, 0xe3, 0x00
-	.byte 0x78, 0xc2, 0x00, 0x0b, 0x05, 0x00, 0x40, 0xf0
-	.byte 0x22, 0xe3, 0x00, 0x78, 0xb7, 0x00, 0x0b, 0x05
-	.byte 0x00, 0x40, 0xfa, 0x21, 0xe3, 0x00, 0x78, 0xac
-	nop
+	pushw 0x0005
+	ld xwa, NakaData_WidgetDescriptors_0x1530
+	jrl FormatParamStr_CopyEnumName
+	pushw 0x0005
+	ld xwa, 0x00e322f0
+	jrl FormatParamStr_CopyEnumName
+	pushw 0x0005
+	ld xwa, NakaData_WidgetDescriptors_0x139A
+	jrl FormatParamStr_CopyEnumName
 
 FormatParamString:
 	pushw 0x5
