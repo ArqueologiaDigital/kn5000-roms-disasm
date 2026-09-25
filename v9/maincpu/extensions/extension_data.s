@@ -1,263 +1,204 @@
 ; Extension Device Data Tables & NAKA Widget Descriptors
 ; Extension subsystem (codename "TOSHI"): chord type tables, MSP configuration,
 ; accompaniment parameters, and UI widget descriptors for expansion devices
+;
+; ---------------------------------------------------------------------------
+; THE 18-BYTE SOUND-PARAMETER DESCRIPTOR (0xEDBA44-0xEE0154, 974 records)
+; ---------------------------------------------------------------------------
+; CORRECTED 2026-09-02.  This header used to say "0xEDCAD6-0xEE0010, 956
+; records" and to describe the fields only as statistical CLASSES (VARY / FLAG
+; / CONST).  Both were wrong or incomplete:
+;
+;   * the pointer table is at 0xEE0198 and holds 974 record pointers, not 956;
+;     the first two (0xEE0198, 0xEE019C) name two SHORT auxiliary tables of
+;     8 and 12 bytes, and SndParam_RegisterAllWidgets iterates the other 972
+;     from 0xEE01A0 with `cp xiz, 0x3cc`;
+;   * the block starts at 0xEDBA44, 0x1092 bytes lower than stated, and ends at
+;     0xEE0154 -- which is 0x144 bytes INSIDE ui_widgets/widget_dispatch.s,
+;     because this file ends at 0xEE0010;
+;   * every field except +0x11 has a reader.  See
+;     audio/sndparam_records/sndparam_types.h for the C struct and, per field,
+;     the instruction in audio/sndparam_routines.s that reads it: the u32 hash
+;     key at +0x00, the RAM-bank index and byte offset at +0x04/+0x05, the
+;     mask / clamp-min / clamp-max / shift / xor at +0x06..+0x0A, the auxiliary
+;     record index at +0x0B, and the four bounds-checked accessor indices plus
+;     the codec selector at +0x0C..+0x10.  +0x11 has NO reader anywhere in the
+;     0xFCD200-0xFCF000 accessor region.
+;
+; 951 of the 974 records are now C structs, compiled byte-exact by
+; `clang -target tlcs900` and .incbin'd in nine runs below and one in
+; ui_widgets/widget_dispatch.s (see scripts/generators/gen_sndparam_records_c.py).
+; The 23 that are not are in runs of 1-7 records whose last record ends in the
+; middle of a source line that continues into an unrelated auxiliary table; the
+; generator refuses those rather than guessing where to cut.
+;
+; !! THIS IS THE v9 COPY.  The ROM bytes of this file's whole range,
+; 0xED0008-0xEE0010, are IDENTICAL in the v9 and v10 dumps (0 differing bytes),
+; and so is this text, except that the Makefile compiles the C structs above
+; for v10 only: here each of those 951 records is one `sndparam_descriptor`
+; macro line (defined above the first run below) with the same fields in the
+; same order.  Produced by scripts/tools/port_extension_data_from_v10.py.
+;
+; SURVIVING FROM THE OLD HEADER, still true and still worth keeping:
+;
+; !! BYTE FIELDS, NOT u16 (except the +0x00 key).  Reading the record as nine
+; little-endian u16s fails: the high halves at +0x01, +0x05, +0x0B, +0x0D and
+; +0x11 are set in 93-100% of records.  Do not "improve" these rows to `.hword`.
+;
+; !! WHY THIS BLOCK LOOKS LIKE CODE TO A STATISTIC.  Before this file was
+; re-typed, 1,590 of its 1,721 `.byte` runs beginning with an undecodable byte
+; started INSIDE one of these records, clustered at a few field offsets --
+; +0x0C alone 48.0%, +0x08 17.5%, +0x00 9.2%, +0x05 7.2% -- and 0x01/0x04 were
+; 97.9% of them.  That is the value 1 in a low-valued parameter field, not an
+; opcode.  Nothing calls or jumps to any address in this file: 0 of the 59,849
+; absolute call/jp/jr targets named anywhere in v10/maincpu land inside it.
+;
+; !! THE RECORD LABELS ARE NOT EVIDENCE.  ExtPartParam_*, SeqMixParam_*,
+; PartParam_*, MidiChParam_*, VoiceParamEx_* and VoiceCtrlR1_* were assigned by
+; ADDRESS-RANGE BUCKETING in commits feda55d9 and 16f0917a, not by any reader.
+; Nothing distinguishes the six kinds structurally and no code references any
+; of the labels -- they exist only so the pointer table can name them.
+; ---------------------------------------------------------------------------
 
+; ---------------------------------------------------------------------------
+; CHORD-TYPE NAMES: the tail of the chord-type pointer table, then the names
+; ---------------------------------------------------------------------------
+; Reader: MainChordPre (kn5000_v10_program.s, 0xFC304E) builds the chord
+; display string with Strcat: the root-note name (RAM byte 0x8D40 x4 into
+; Naka_MemoryC_Screens), then the CHORD-TYPE name -- RAM byte 0x8D42, `sla
+; wa, 2`, `lda xbc, (0xecff6a:24)`, `ld_sril3` -- then "on" or "  "
+; (ChordStr_On / ChordStr_Blank, loaded as the immediates 0xED1C96 and
+; 0xED1C9A).  The pointer table it indexes is 64 entries, 0xECFF6A-0xED0069:
+; entries 0-39 lie in MemScreen_Blank's blob in ui_widgets/style_bitmaps.s
+; (naka_style_bitmaps.c), so this file BEGINS with the high half of entry 39
+; (0x00ED00FA) and holds entries 40-63.  Entry k points at the name of chord
+; type k; the 64 names follow in REVERSE order of k, NUL-terminated and
+; 0xFF-padded to even addresses (`scripts/analysis/ext_lane_checks.py chord`
+; re-checks all of it on the v10, v9 and v7 dumps).
+;
+; Glyph escapes: "~9e" is SHARP and "~a0" is FLAT in these strings (the
+; note-name tables below settle it: NoteNameStr_Table_0 spells C#, D#, F#, G#,
+; A# with ~9e, SplitNoteStr_* spells Db, Eb, Ab, Bb with ~a0 and F# with ~9e;
+; `ext_lane_checks.py sharp`).  The older
+; ChordTypeStr_* labels below read the two the other way round in several
+; places (ChordTypeStr_7_Flat9 is "7 (#9)", ChordTypeStr_M7_Sharp5 is
+; "M7(b5)"); they are kept because ui_widgets/naka_style_bitmaps.c cites them
+; by name, and the entry index in each new ChordTypeStr_TypeNN label is the
+; reliable identity.  ExtData_ChordTypeTable_Top keeps its old name because
+; naka_perf_style_link.ld and naka_extension_device_link.ld name the address.
+; ---------------------------------------------------------------------------
 ExtData_ChordTypeTable_Top:
-	.long SeqVoice_ValidateState_StoreChannel
-	.byte 0xed
-	nop
-	.byte 0xee
-	nop
-	.long NakaData_PartConfig
-	.long SepaOut_FormatData_Tail
-	.byte 0xed
-	nop
-	.byte 0xdc
-	nop
-	.byte 0xed
-	nop
-	.byte 0xd6
-	nop
-	.byte 0xed
-	nop
-	.byte 0xd0
-	nop
-	.byte 0xed
-	nop
-	.byte 0xca
-	nop
-	.byte 0xed
-	nop
-	.byte 0xc4
-	nop
-	.byte 0xed
-	nop
-	.byte 0xbe
-	nop
-	.byte 0xed
-	nop
-	.byte 0xb8
-	nop
-	.byte 0xed
-	nop
-	.byte 0xb2
-	nop
-ExtData_ChordTypeTable_Mid:
-	.byte 0xed
-	nop
-	.byte 0xac
-	nop
-	.byte 0xed
-	nop
-	.byte 0xa6
-	nop
-	.byte 0xed
-	nop
-	.byte 0xa0
-	nop
-	.byte 0xed
-	nop
-	.byte 0x9a
-	nop
-	.byte 0xed
-	nop
-	.byte 0x94
-	nop
-	.byte 0xed
-	nop
-	.byte 0x8e
-	nop
-	.byte 0xed
-	nop
-	.byte 0x88
-	nop
-	.byte 0xed
-	nop
-	.byte 0x82
-	nop
-	.byte 0xed
-	nop
-	jrl	nov, -4864
-	nop
-	jrl	z, -4864
-	nop
-	jrl	f, -4864
-	nop
-	jr	gt, 0
-	.byte 0xed
-ExtData_ChordType_NullByte:
-	nop
-ChordTypeStr_Blank_0:	aligned_string "     "
-ChordTypeStr_Blank_1:	aligned_string "     "
-ChordTypeStr_Blank_2:	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	aligned_string "     "
-	aligned_string "     "
-	jr	pl, 0x61
-	jr	ov, 100
-	push	xbc
-	nop
-	aligned_string " add9"
-	aligned_string "+7~9e11"
-	aligned_string "m7 11"
-	aligned_string "7 ~9e11"
-	aligned_string "  ~a013"
-	aligned_string "   13"
-	aligned_string "~9e9~a013"
+	.short 0x00ed	; high half of entry 39, begun in style_bitmaps.s
+	.long ChordTypeStr_Type40
+	.long ChordTypeStr_Type41
+	.long ChordTypeStr_Type42
+	.long ChordTypeStr_Type43
+	.long ChordTypeStr_Type44
+	.long ChordTypeStr_Type45
+	.long ChordTypeStr_Type46
+	.long ChordTypeStr_Type47
+	.long ChordTypeStr_Type48
+	.long ChordTypeStr_Type49
+	.long ChordTypeStr_Type50
+	.long ChordTypeStr_Type51
+	.long ChordTypeStr_Type52
+	.long ChordTypeStr_Type53
+	.long ChordTypeStr_Type54
+	.long ChordTypeStr_Type55
+	.long ChordTypeStr_Type56
+	.long ChordTypeStr_Type57
+	.long ChordTypeStr_Type58
+	.long ChordTypeStr_Type59
+	.long ChordTypeStr_Type60
+	.long ChordTypeStr_Blank_2
+	.long ChordTypeStr_Blank_1
+	.long ChordTypeStr_Blank_0
+ChordTypeStr_Blank_0:		aligned_string "     "
+ChordTypeStr_Blank_1:		aligned_string "     "
+ChordTypeStr_Blank_2:		aligned_string "     "
+ChordTypeStr_Type60:		aligned_string "     "
+ChordTypeStr_Type59:		aligned_string "     "
+ChordTypeStr_Type58:		aligned_string "     "
+ChordTypeStr_Type57:		aligned_string "     "
+ChordTypeStr_Type56:		aligned_string "     "
+ChordTypeStr_Type55:		aligned_string "     "
+ChordTypeStr_Type54:		aligned_string "     "
+ChordTypeStr_Type53:		aligned_string "     "
+ChordTypeStr_Type52:		aligned_string "     "
+ChordTypeStr_Type51:		aligned_string "     "
+ChordTypeStr_Type50:		aligned_string "     "
+ChordTypeStr_Type49:		aligned_string "     "
+ChordTypeStr_Type48:		aligned_string "     "
+ChordTypeStr_Type47:		aligned_string "     "
+ChordTypeStr_Type46:		aligned_string "     "
+ChordTypeStr_Type45:		aligned_string "     "
+ChordTypeStr_Type44:		aligned_string "     "
+ChordTypeStr_Type43:		aligned_string "     "
+ChordTypeStr_Type42:		aligned_string "     "
+ChordTypeStr_Type41:		aligned_string "madd9"
+ChordTypeStr_Type40:		aligned_string " add9"
+ChordTypeStr_Type39:		aligned_string "+7~9e11"
+ChordTypeStr_Type38:		aligned_string "m7 11"
+ChordTypeStr_Type37:		aligned_string "7 ~9e11"
+ChordTypeStr_Type36:		aligned_string "  ~a013"
+ChordTypeStr_Type35:		aligned_string "   13"
+ChordTypeStr_Type34:		aligned_string "~9e9~a013"
 ChordTypeStr_Flat9_Flat13:	aligned_string "~a09~a013"
 ChordTypeStr_Sharp9_Flat13:	aligned_string "  ~a013"
 ChordTypeStr_Flat13_Only:	aligned_string "~9e9 13"
-ChordTypeStr_Sharp9_13:	aligned_string "~a09 13"
-ChordTypeStr_9_Flat5:	aligned_string "9~9e5  "
-ChordTypeStr_13_Only:	aligned_string "   13"
+ChordTypeStr_Sharp9_13:		aligned_string "~a09 13"
+ChordTypeStr_9_Flat5:		aligned_string "9~9e5  "
+ChordTypeStr_13_Only:		aligned_string "   13"
 ChordTypeStr_mM7_Sharp5:	aligned_string "mM7~a05"
-ChordTypeStr_M7_Flat5:	aligned_string "M7~9e5 "
-ChordTypeStr_M7_Sharp5:	aligned_string "M7~a05 "
-ChordTypeStr_7_Flat9:	aligned_string "7 ~9e9 "
-ChordTypeStr_sus4:	aligned_string "sus4 "
-ChordTypeStr_69:	jr	pl, 0x36
-	push	xbc
-	ld	w, 32:opc
-	nop
-	aligned_string "m79  "
-	aligned_string "m ~a05 "
-	aligned_string "m6   "
-	aligned_string "69   "
-	popw	iy
-	.byte 0x37
-ChordTypeStr_M7_9:	.byte 0x39, 0x20, 0x20, 0x00
-	aligned_string "7 ~a09 "
-	aligned_string "79   "
-	aligned_string "7 ~a05 "
-	aligned_string "  ~a05 "
-	aligned_string "aug7 "
-	aligned_string "6    "
-	.byte 0x37, 0x73
-ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
-	aligned_string "mM7  "
-	aligned_string "m7~a05 "
-	aligned_string "dim  "
-	aligned_string "min7 "
-	jr	pl, 0x69
-	jr	nz, 32
-	ld	w, 0:opc
-	aligned_string "aug  "
-	aligned_string "Maj7 "
-	aligned_string "7    "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	aligned_string "     "
-	or	(xwa+2), iy
-	nop
-	.byte 0x94
-	push	sr
-	.byte 0xed
-	nop
-	or	(xiz+2), e
-	nop
-	or	(xde+2), e
-	nop
-	.byte 0x84
-	push	sr
-	.byte 0xed
-	nop
-	.byte 0x80
-	push	sr
-	.byte 0xed
-	nop
-	jrl	nov, -4862
-	nop
-	jrl	z, -4862
-	nop
-	jrl	le, -4862
-	nop
-	jr	nov, 2
-	.byte 0xed
-	nop
-	jr	2
-	.byte 0xed
-	nop
-	jr	le, 2
-	.byte 0xed
-	nop
-	pop	xiz
-	push	sr
-	.byte 0xed
-	nop
-	pop	xde
-	push	sr
-	.byte 0xed
-	nop
-	.byte 0x56
-	push	sr
-	.byte 0xed
-	nop
-	.byte 0x52
-	push	sr
-	.byte 0xed
-	nop
-	ld	w, 32:opc
-	nop
-	swi	7
-	ld	w, 32:opc
-	nop
-	swi	7
-	ld	w, 32:opc
-	nop
-	swi	7
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+ChordTypeStr_M7_Flat5:		aligned_string "M7~9e5 "
+ChordTypeStr_M7_Sharp5:		aligned_string "M7~a05 "
+ChordTypeStr_7_Flat9:		aligned_string "7 ~9e9 "
+ChordTypeStr_sus4:		aligned_string "sus4 "
+ChordTypeStr_69:		aligned_string "m69  "
+ChordTypeStr_Type21:		aligned_string "m79  "
+ChordTypeStr_Type20:		aligned_string "m ~a05 "
+ChordTypeStr_Type19:		aligned_string "m6   "
+ChordTypeStr_Type18:		aligned_string "69   "
+ChordTypeStr_M7_9:		aligned_string "M79  "
+ChordTypeStr_Type16:		aligned_string "7 ~a09 "
+ChordTypeStr_Type15:		aligned_string "79   "
+ChordTypeStr_Type14:		aligned_string "7 ~a05 "
+ChordTypeStr_Type13:		aligned_string "  ~a05 "
+ChordTypeStr_Type12:		aligned_string "aug7 "
+ChordTypeStr_Type11:		aligned_string "6    "
+ChordTypeStr_7sus4:		aligned_string "7sus4"
+ChordTypeStr_Type09:		aligned_string "mM7  "
+ChordTypeStr_Type08:		aligned_string "m7~a05 "
+ChordTypeStr_Type07:		aligned_string "dim  "
+ChordTypeStr_Type06:		aligned_string "min7 "
+ChordTypeStr_Type05:		aligned_string "min  "
+ChordTypeStr_Type04:		aligned_string "aug  "
+ChordTypeStr_Type03:		aligned_string "Maj7 "
+ChordTypeStr_Type02:		aligned_string "7    "
+ChordTypeStr_Type01:		aligned_string "     "
+ChordTypeStr_Type00:		aligned_string "     "
+	.byte 0x98, 0x02, 0xed, 0x00, 0x94, 0x02, 0xed, 0x00, 0x8e, 0x02, 0xed, 0x00, 0x8a, 0x02, 0xed, 0x00
+	.byte 0x84, 0x02, 0xed, 0x00, 0x80, 0x02, 0xed, 0x00, 0x7c, 0x02, 0xed, 0x00, 0x76, 0x02, 0xed, 0x00
+	.byte 0x72, 0x02, 0xed, 0x00, 0x6c, 0x02, 0xed, 0x00, 0x68, 0x02, 0xed, 0x00, 0x62, 0x02, 0xed, 0x00
+	.byte 0x5e, 0x02, 0xed, 0x00, 0x5a, 0x02, 0xed, 0x00, 0x56, 0x02, 0xed, 0x00, 0x52, 0x02, 0xed, 0x00
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x42, 0x20, 0x00, 0xff
 	aligned_string "B~a0"
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 	aligned_string "A~a0"
-	ld	xsp, 0x47ff0020
-	jrl	nz, 12385
-	nop
-	swi	7
-	ld	xiz, 0x45ff0020
-	ld	w, 0:opc
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED0272-0xED0284 (18 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=75% dist=9 near ChordTypeStr_7sus4+162
+	aligned_string "G "
+	aligned_string "G~a0"
+	aligned_string "F "
+	aligned_string "E "
 	aligned_string "E~a0"
-	ld	xix, 0x44ff0020
-	jrl	nz, 12385
-	nop
-	swi	7
-	ld	xhl, 0x20ff0020
-	ld	w, 0:opc
-	swi	7
-	ld	b, 3:opc
-	.byte 0xed
-	nop
+	.byte 0x44, 0x20, 0x00, 0xff
+	.byte 0x44, 0x7e, 0x61, 0x30, 0x00, 0xff
+	.byte 0x43, 0x20, 0x00, 0xff
+	.byte 0x20, 0x20, 0x00, 0xff
+	.byte 0x22, 0x03, 0xed, 0x00
 NoteNameStr_Table_0:
 	.long NoteStr0_C
 	.long NoteStr0_CSharp
@@ -275,51 +216,31 @@ NoteNameStr_Table_0:
 	.long NoteStr0_Blank_1
 	.long NoteStr0_Blank_0
 NoteStr0_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr0_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr0_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr0_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr0_ASharp:	aligned_string "A~9e"
 NoteStr0_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 NoteStr0_GSharp:	aligned_string "G~9e"
 NoteStr0_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 NoteStr0_FSharp:	aligned_string "F~9e"
 NoteStr0_F:	aligned_string "F "
 NoteStr0_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 NoteStr0_DSharp:	aligned_string "D~9e"
 NoteStr0_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 NoteStr0_CSharp:	aligned_string "C~9e"
 NoteStr0_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 NoteStr0_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 
 
 NoteNameStr_Table_1:
@@ -340,50 +261,31 @@ NoteNameStr_Table_1:
 	.long NoteStr1_Blank_1
 	.long NoteStr1_Blank_0
 NoteStr1_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr1_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr1_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr1_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr1_AFlat:
-	ld	xbc, 0x65397e
-	swi	7
+	aligned_string "A~9e"
 NoteStr1_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 NoteStr1_ASharp:	aligned_string "A~a0"
 NoteStr1_G:	aligned_string "G "
 NoteStr1_FSharp:	aligned_string "F~9e"
 NoteStr1_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 NoteStr1_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 NoteStr1_DSharp:	aligned_string "D~9e"
 NoteStr1_D:	aligned_string "D "
 NoteStr1_CSharp:	aligned_string "C~9e"
 NoteStr1_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 NoteStr1_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 
 
 NoteNameStr_Table_2:
@@ -404,48 +306,30 @@ NoteNameStr_Table_2:
 	.long NoteStr2_Blank_1
 	.long NoteStr2_Blank_0
 NoteStr2_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr2_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr2_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr2_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr2_BFlat:	aligned_string "B~a0"
 NoteStr2_A:	aligned_string "A "
 NoteStr2_GSharp:	aligned_string "G~9e"
 NoteStr2_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 NoteStr2_FSharp:	aligned_string "F~9e"
 NoteStr2_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 NoteStr2_E:	aligned_string "E "
 NoteStr2_DSharp:	aligned_string "D~9e"
 NoteStr2_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 NoteStr2_CSharp:	aligned_string "C~9e"
 NoteStr2_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 NoteStr2_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 
 
 NoteNameStr_Table_3:
@@ -466,353 +350,242 @@ NoteNameStr_Table_3:
 	.long NoteStr3_Blank_1
 	.long NoteStr3_Blank_0
 NoteStr3_Blank_0:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr3_Blank_1:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr3_Blank_2:
-	ld	w, 32:opc
-	nop
-	swi	7
+	aligned_string "  "
 NoteStr3_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 NoteStr3_AFlat:	aligned_string "A~9e"
 NoteStr3_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 NoteStr3_GSharp:	aligned_string "G~9e"
 NoteStr3_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 NoteStr3_FSharp:	aligned_string "F~9e"
 NoteStr3_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 NoteStr3_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 NoteStr3_EFlat:	aligned_string "E~a0"
 NoteStr3_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 NoteStr3_CSharp:	aligned_string "C~9e"
 NoteStr3_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
+; ---------------------------------------------------------------------------
+; LANGUAGE-INDEXED STRING TABLES (seven, 0xED04C4-0xED0D17 and 0xED1932)
+; ---------------------------------------------------------------------------
+; Each LngTable_* is six string pointers indexed by display language --
+; 0 EN, 1 DE, 2 FR, 3 ES, 4 IT, 5 ID -- followed by the six strings in
+; REVERSE order.  Each is returned, as the answer to event 0x1E0009F, by one
+; of the *LngCheck functions of Toshi_ApFunction_Table (`cp xbc, 0x1e0009f` /
+; `lda xhl, (<table>:24)` / `ret`, ui/ui_mode_handlers.s and, for
+; WallSureLngCheck, display/graphics_text_vga.s), which reach them through
+; positional names such as Str_Attention_EN_0xC.  Four tables are
+; translated except for Italian, whose entry is the literal "Italian"; the
+; three description tables (FactoryResetDesc, StoreSoundBalance,
+; StoreTotalSetting) have only EN and DE, the FR/ES/IT/ID slots pointing at
+; English copies -- the Str_*_EN0..EN3 labels (kept: positional names are
+; built on them) sit on those copies.  Layout checked by
+; scripts/analysis/ext_lane_checks.py lng.
+; ---------------------------------------------------------------------------
 NoteStr3_Blank_3:
-	ld	w, 32:opc
-	nop
-	swi	7
-	ccf
-	halt
-	.byte 0xed
-	nop
-Str_Attention_Multilingual:
-	.long Str_Attention_DE
-	.long Str_Attention_FR
-	.long Str_Attention_ES
-	.long Str_Attention_IT
-	.long Str_Attention_ID
-Str_Attention_ID:	aligned_string "PERHATIAN!"
-Str_Attention_IT:	aligned_string "Italian"
-Str_Attention_ES:	aligned_string "ATTENCI0N!"
-Str_Attention_FR:	aligned_string "ATTENTION!"
-Str_Attention_DE:	aligned_string "ACHTUNG!"
-Str_Attention_EN:	aligned_string "ATTENTION!"
-	.byte 0xe6, 0x06, 0xed
-	nop
-	jrl	nz, -4858
-	nop
-	push_f
-	.byte 0x06, 0xed
-	nop
-	or	(xix+5), xiy
-	nop
-	.byte 0xa4
-	halt
-	.byte 0xed
-	nop
-	ldw	iz, 0xed05
-	nop
-Str_InitSettingWarn_ID:	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
-Str_InitSettingWarn_IT:	aligned_string "Italian"
-	aligned_string "El uso del ajuste inicial hará que se reemplacen los datos actuales por los ajustes originales de fá brica!"
-	aligned_string "La procédure d'initialisation va remplacer tous les réglages effectués par les présélections d'usine"
-	.byte 0x44, 0x75
-	aligned_string "rch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zurückversetzt."
-	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
-	or	(xwa+7), xiy
-	nop
-	.byte 0x96
-	reti
-	.byte 0xed
-	nop
-	.byte 0x86
-	reti
-	.byte 0xed
-	nop
-	jrl	-4857
-	nop
-	jrl	f, -4857
-	nop
-	.byte 0x56
-	reti
-	.byte 0xed
-	nop
-Str_AreYouSure_ID:	aligned_string "Apakah Anda sudah yakin ?"
-Str_AreYouSure_IT:	aligned_string "Italian"
-	.byte 0xbf, 0x45
-	jrl	ule, -7820
-	aligned_string " seguro?"
-	.byte 0x45, 0x74
-	.ascii "es vous s"
-	swi	3
-	jrl	le, 63
-	swi	7
-	aligned_string "SIND SIE SICHER?"
-	aligned_string "Are You Sure?"
-	max
-	ldw	(237:8), 0x8e00:io
-	push	237
-	nop
-Str_FactoryResetDesc_Multilingual:
-	.long Str_FactoryResetDesc_EN3
-	.long Str_FactoryResetDesc_EN2
-	.long Str_FactoryResetDesc_EN1
-	.long Str_FactoryResetDesc_EN0
-Str_FactoryResetDesc_EN0:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-Str_FactoryResetDesc_EN1:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-Str_FactoryResetDesc_EN2:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-Str_FactoryResetDesc_EN3:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-	.byte 0x53, 0x65
-	.ascii "tzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurüc"
-	jr	ugt, 46
-	nop
-	swi	7
+	aligned_string "  "
+LngTable_Attention:	; returned by AttnLngCheck
+	.long Str_Attention_EN	; EN
+	.long Str_Attention_DE	; DE
+	.long Str_Attention_FR	; FR
+	.long Str_Attention_ES	; ES
+	.long Str_Attention_IT	; IT
+	.long Str_Attention_ID	; ID
+Str_Attention_ID:
+	aligned_string "PERHATIAN!"
+Str_Attention_IT:
+	aligned_string "Italian"
+Str_Attention_ES:
+	aligned_string "ATTENCI0N!"
+Str_Attention_FR:
+	aligned_string "ATTENTION!"
+Str_Attention_DE:
+	aligned_string "ACHTUNG!"
+Str_Attention_EN:
+	aligned_string "ATTENTION!"
+LngTable_InitSettingWarn:	; returned by SysSureLngCheck
+	.long Str_InitSettingWarn_EN	; EN
+	.long Str_InitSettingWarn_DE	; DE
+	.long Str_InitSettingWarn_FR	; FR
+	.long Str_InitSettingWarn_ES	; ES
+	.long Str_InitSettingWarn_IT	; IT
+	.long Str_InitSettingWarn_ID	; ID
+Str_InitSettingWarn_ID:
+	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
+Str_InitSettingWarn_IT:
+	aligned_string "Italian"
+Str_InitSettingWarn_ES:	aligned_string "El uso del ajuste inicial hará que se reemplacen los datos actuales por los ajustes originales de fá brica!"
+Str_InitSettingWarn_FR:	aligned_string "La procédure d'initialisation va remplacer tous les réglages effectués par les présélections d'usine"
+Str_InitSettingWarn_DE:	aligned_string "Durch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zurückversetzt."
+Str_InitSettingWarn_EN:	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
+LngTable_AreYouSure:	; returned by SureLngCheck
+	.long Str_AreYouSure_EN	; EN
+	.long Str_AreYouSure_DE	; DE
+	.long Str_AreYouSure_FR	; FR
+	.long Str_AreYouSure_ES	; ES
+	.long Str_AreYouSure_IT	; IT
+	.long Str_AreYouSure_ID	; ID
+Str_AreYouSure_ID:
+	aligned_string "Apakah Anda sudah yakin ?"
+Str_AreYouSure_IT:
+	aligned_string "Italian"
+Str_AreYouSure_ES:	aligned_string "¿Está seguro?"
+Str_AreYouSure_FR:	aligned_string "Etes vous sûr?"
+Str_AreYouSure_DE:	aligned_string "SIND SIE SICHER?"
+Str_AreYouSure_EN:	aligned_string "Are You Sure?"
+LngTable_FactoryResetDesc:	; returned by CtlIniLngCheck
+	.long Str_FactoryResetDesc_EN	; EN
+	.long Str_FactoryResetDesc_DE	; DE
+	.long Str_FactoryResetDesc_EN3	; FR
+	.long Str_FactoryResetDesc_EN2	; ES
+	.long Str_FactoryResetDesc_EN1	; IT
+	.long Str_FactoryResetDesc_EN0	; ID
+Str_FactoryResetDesc_EN0:
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-	.byte 0x56
-	pushw	237
-Str_StoreSoundBalance_Multilingual:
-	.long Str_StoreSoundBalance_DE
-	.long Str_StoreSoundBalance_EN3
-	.long Str_StoreSoundBalance_EN2
-	.long Str_StoreSoundBalance_EN1
-	.long Str_StoreSoundBalance_EN0
-Str_StoreSoundBalance_EN0:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_EN1:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_EN2:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_EN3:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_DE:	.asciz "Speichert nur Klang- und Lautstärkeeinstellungen."
+Str_FactoryResetDesc_EN1:
+	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_EN2:
+	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_EN3:
+	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_DE:	aligned_string "Setzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurück."
+Str_FactoryResetDesc_EN:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+LngTable_StoreSoundBalance:	; returned by PmemNormLngCheck
+	.long Str_StoreSoundBalance_EN	; EN
+	.long Str_StoreSoundBalance_DE	; DE
+	.long Str_StoreSoundBalance_EN3	; FR
+	.long Str_StoreSoundBalance_EN2	; ES
+	.long Str_StoreSoundBalance_EN1	; IT
+	.long Str_StoreSoundBalance_EN0	; ID
+Str_StoreSoundBalance_EN0:
 	aligned_string "Stores sound & balance settings only."
-	.byte 0xda
-	incf
-	.byte 0xed
-	nop
-Str_StoreTotalSetting_Multilingual:
-	.long Str_StoreTotalSetting_DE
-	.long Str_StoreTotalSetting_EN3
-	.long Str_StoreTotalSetting_EN2
-	.long Str_StoreTotalSetting_EN1
-	.long Str_StoreTotalSetting_EN0
-Str_StoreTotalSetting_EN0:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_EN1:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_EN2:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_EN3:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus, Transpose & Tempo."
+Str_StoreSoundBalance_EN1:
+	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_EN2:
+	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_EN3:
+	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_DE:
+	aligned_string "Speichert nur Klang- und Lautstärkeeinstellungen."
+Str_StoreSoundBalance_EN:	aligned_string "Stores sound & balance settings only."
+LngTable_StoreTotalSetting:	; returned by PmemExpLngCheck
+	.long Str_StoreTotalSetting_EN	; EN
+	.long Str_StoreTotalSetting_DE	; DE
+	.long Str_StoreTotalSetting_EN3	; FR
+	.long Str_StoreTotalSetting_EN2	; ES
+	.long Str_StoreTotalSetting_EN1	; IT
+	.long Str_StoreTotalSetting_EN0	; ID
+Str_StoreTotalSetting_EN0:
 	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN1:
+	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN2:
+	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN3:
+	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_DE:
+	aligned_string "Speichert die gesamte Einstellung einschließlich Rhythmus, Transpose & Tempo."
+Str_StoreTotalSetting_EN:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 	aligned_string "%c:%d/%d  "
-	.byte 0xef
-	push	sr
-	call	0x02ef05
-	call	0x082705
-	swi	5
-	reti
-	swi	5
-	reti
-	ld	w, 0:opc
+; ---------------------------------------------------------------------------
+; Event-offset tables and screen strings of the Toshi grid/box procedures
+; ---------------------------------------------------------------------------
+; Eleven procedures in ui/ui_mode_handlers.s dispatch the seven events
+; 0x1C00017-0x1C0001D the same way: `sub x, 0x1c00017`, bounds 0..6, `add
+; x, x`, add a table address, `ld wa/bc, (table)`, `lda xix, (<base>:24)`,
+; `jp_ind` -- so each *_EventOffsets table is SEVEN u16 offsets FROM ITS
+; BASE LABEL (0 = the base itself).  The procedure names are the originals
+; from Toshi_Function_Table / Toshi_ApFunctionName_Table.  The code still
+; reaches these tables through positional names Str_StoreTotalSetting_DE_0xNN
+; (shared/positional_labels.s), given with each; the targets carry no labels
+; in ui_mode_handlers.s, which is why the offsets stay numeric here -- and
+; why they differ in v7, whose handlers moved.
+; The strings between them are loaded by the same procedures as immediates
+; (`ld xwa, Str_StoreTotalSetting_DE_0xNN` then Strcpy): "     " (0x15A),
+; "TEMPO" (0x164, 0x16E) by the MstStyle2 name drawers, the 32-space
+; blanks (0x188, 0x1AC, 0x1D0, 0x1F4, 0x216) by MstGrid2_OutOfRange_*, and
+; "ON "/"OFF" (0x258/0x25C, 0x270/0x26C) by TchSensGrid.
+; ---------------------------------------------------------------------------
+AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (Str_StoreTotalSetting_DE_0x98)
+	.short 0x02ef, 0x051d, 0x02ef, 0x051d, 0x0827, 0x07fd, 0x07fd
+	aligned_string " "
 	aligned_string "                                "
-	ld	w, 0:opc
-	.zero 8
-	.byte 0xf1, 0x01, 0xf1, 0x01
-	ld	(0x5901:16), 101
-	normal
-	pop	xbc
-	nop
-	jr	mi, 1
-	rcf
-	pop	sr
-	swi	0
-	push	sr
-	swi	0
-	push	sr
-	ld	w, 0:opc
+	aligned_string " "
+MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAlp_EventDispatch (Str_StoreTotalSetting_DE_0xCC)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x01f1, 0x01f1, 0x01f1
+AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (Str_StoreTotalSetting_DE_0xDA)
+	.short 0x0059, 0x0165, 0x0059, 0x0165, 0x0310, 0x02f8, 0x02f8
+	aligned_string " "
 	aligned_string "                "
-	ld	w, 0:opc
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	jr	gt, 1
-	nop
-	nop
-	nop
-	nop
+	aligned_string " "
+MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_EventDispatch (Str_StoreTotalSetting_DE_0xFE)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x016a, 0x0000, 0x0000
 	aligned_string "%d/%d"
-	.byte 0xcc, 0x01
-	swi	2
-	push	sr
-	.byte 0xcc, 0x01
-	swi	2
-	push	sr
-	pushw	bc
-	halt
-	scf
-	halt
-	scf
-	halt
-	ld	w, 0:opc
+AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (Str_StoreTotalSetting_DE_0x112)
+	.short 0x01cc, 0x02fa, 0x01cc, 0x02fa, 0x0529, 0x0511, 0x0511
+	aligned_string " "
 	aligned_string "                "
-	ld	w, 0:opc
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	pop	xiz
-	normal
-	nop
-	nop
-	nop
-	nop
-	ld	e, 115:opc
-	push	xde
-	nop
+	aligned_string " "
+MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (Str_StoreTotalSetting_DE_0x136)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x015e, 0x0000, 0x0000
+	aligned_string "%s:"
 	aligned_string "                 "
-	ld	w, 0x20:opc
-	ld	w, 32:opc
-	ld	w, 0:opc
-	ld	e, 115:opc
-	push	xde
-	nop
+	aligned_string "     "
+	aligned_string "%s:"
 	aligned_string "TEMPO"
-	ld	e, 0x73:opc
-	push	xde
-	nop
+	aligned_string "%s:"
 	aligned_string "TEMPO"
-	ld	e, 115:opc
-	nop
-	swi	7
-	pop	xde
-	halt
-	jr	gt, 7
-	pop	xde
-	halt
-	jr	gt, 7
-	.byte 0xae
-	pushw	2966
-	.byte 0x96
-	pushw	32
+	aligned_string "%s"
+AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (Str_StoreTotalSetting_DE_0x178)
+	.short 0x055a, 0x076a, 0x055a, 0x076a, 0x0bae, 0x0b96, 0x0b96
+	aligned_string " "
 	aligned_string "                                "
-	ld	w, 0:opc
+	aligned_string " "
 	aligned_string "                                "
-	ld	w, 0:opc
+	aligned_string " "
 	aligned_string "                                "
-	ld	w, 0:opc
+	aligned_string " "
 	aligned_string "                                "
 	aligned_string "                                "
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.byte 0xdb
-	push	sr
-	.byte 0xdb
-	push	sr
-	.byte 0xdb
-	push	sr
-	jr	gt, 0
-	ld	l, 1:opc
-	jr	gt, 0
-	ld	l, 1:opc
-	ldw	ix, 3074
-	push	sr
-	incf
-	push	sr
-	ld	e, 51:opc
-	jr	ov, 0
-	popw	sp
-	popw	iz
-	ld	w, 0:opc
-	popw	sp
-	ld	xiz, 0x33250046
-	jr	ov, 0
-	ld	e, 51:opc
-	jr	ov, 0
-	ld	e, 51:opc
-	jr	ov, 0
-	popw	sp
-	ld	xiz, 0x4e4f0046
-	ld	w, 0:opc
-	ld	e, 51:opc
-	jr	ov, 0
-	ld	e, 51:opc
-	jr	ov, 0
-	nop
-	nop
-	jrl	nov, 0
-	nop
-	jrl	nov, -2048
-	push	sr
-	swi	6
-	nop
-	swi	6
-	nop
-	jr	gt, 0
-	ret
-	normal
-	jr	gt, 0
-	ret
-	normal
-	push	sr
-	push	sr
-	.byte 0xda, 0x01, 0xda, 0x01
-	nop
-	.byte 0x90, 0x91, 0xb3, 0xb4, 0xc0
-	and	d, (0xc3c2:16)
-	.byte 0xc5, 0xc6, 0xc7, 0xb2, 0x88, 0x92, 0x93, 0x94
-	.byte 0x95
-	ld	xwa, 0x98979996
-	.byte 0xad, 0xb0, 0xb1, 0xb8, 0xb9, 0xb6, 0xb7
-	swi	7
-	.byte 0xdc
-	scf
-	.byte 0xed
-	nop
-
-
-NoteNameStr_Table_4:
+MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_ScrollJumpTable (Str_StoreTotalSetting_DE_0x238)
+	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x02db, 0x02db, 0x02db
+AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (Str_StoreTotalSetting_DE_0x246)
+	.short 0x006a, 0x0127, 0x006a, 0x0127, 0x0234, 0x020c, 0x020c
+	aligned_string "%3d"
+	aligned_string "ON "
+	aligned_string "OFF"
+	aligned_string "%3d"
+	aligned_string "%3d"
+	aligned_string "%3d"
+	aligned_string "OFF"
+	aligned_string "ON "
+	aligned_string "%3d"
+	aligned_string "%3d"
+TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (Str_StoreTotalSetting_DE_0x27C)
+	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x02f8, 0x00fe, 0x00fe
+AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (Str_StoreTotalSetting_DE_0x28A)
+	.short 0x006a, 0x010e, 0x006a, 0x010e, 0x0202, 0x01da, 0x01da
+; FswAssign_FunctionCodes / FswAssign_FunctionNames: the foot-switch
+; assignable functions.  FSWAssGrid_EventDispatch (ui/ui_mode_handlers.s)
+; indexes the codes with `ld_rrb c, xbc, hl` (Str_StoreTotalSetting_DE_0x298)
+; and, after AudioTable_FindMatchIndex, the names with `sla hl, 2` /
+; `ld_rrl xwa, xbc, hl` (Str_StoreTotalSetting_DE_0x2B8).  31 codes -- 0x00
+; is OFF, then 0x90.. in the order of the names -- and a 0xFF terminator;
+; 31 name pointers, entry k naming code k.
+FswAssign_FunctionCodes:
+	.byte 0x00, 0x90, 0x91, 0xb3, 0xb4, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xb2, 0x88, 0x92
+	.byte 0x93, 0x94, 0x95, 0x40, 0x96, 0x99, 0x97, 0x98, 0xad, 0xb0, 0xb1, 0xb8, 0xb9, 0xb6, 0xb7, 0xff
+FswAssign_FunctionNames:
+	.long CtrlAssignStr_Off
 	.long CtrlAssignStr_PMemIncrement
 	.long CtrlAssignStr_PMemDecrement
 	.long CtrlAssignStr_PMemBankInc
@@ -874,67 +647,25 @@ CtrlAssignStr_PMemBankInc:	aligned_string "P.MEM BANK INC. "
 CtrlAssignStr_PMemDecrement:	aligned_string "P.MEM DECREMENT "
 CtrlAssignStr_PMemIncrement:	aligned_string "P.MEM INCREMENT "
 CtrlAssignStr_Off:	aligned_string "      OFF       "
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	nop
-	nop
-	pushw	sp
-	push	sr
-	nop
-	nop
-	pushw	sp
-	push	sr
-	.byte 0xea
-	ld	(91:8), 4:io
-	pop	xhl
-	.byte 0x04
-	ei	0
-	nop
-	nop
-	ei	0
-	ei	0
-	ei	0
-	ei	0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED11EE-0xED1226 (56 B), unreached CODE-territory, was disassembled as 42 plausible-but-dead instruction lines; per=100% dist=4 near CtrlAssignStr_Off+18
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+	aligned_string "%s"
+FSWAssGridCheck_EventOffsets:	; read by FSWAssGridCheck via FSWAssGrid_EventDispatch (CtrlAssignStr_Off_0x4A)
+	.short 0x0000, 0x022f, 0x0000, 0x022f, 0x08ea, 0x045b, 0x045b
+FswAsIniFunc_EventOffsets:	; read by FswAsIniFunc via FswAsIni_EventDispatch (CtrlAssignStr_Off_0x58), six entries
+	.short 0x0006, 0x0000, 0x0006, 0x0006, 0x0006, 0x0006
 ParamStr_Table_01:
 	.long ParamStr01_RhythmSelection
 	.long ParamStr01_Tempo
@@ -974,126 +705,41 @@ ParamStr02_Reverb:	aligned_string "      REVERB       "
 ParamStr02_Midi:	aligned_string "       MIDI        "
 ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	aligned_string "FILTER TYPE"
-	popw	sp
-	popw	iz
-	pushw	sp
-	popw	sp
-	ld	xiz, 0x25ff0046
-	jrl	ule, -256
+	.byte 0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 	aligned_string "PAGE 2/3"
-	ld	e, 115:opc
-	nop
-	swi	7
+	.byte 0x25, 0x73, 0x00, 0xff
 	aligned_string "PAGE 3/3"
-	.byte 0xbe
-	push	sr
-	.byte 0xa7
-	pop	sr
-	.byte 0xbe
-	push	sr
-	.byte 0xa7
-	pop	sr
-	popw	iz
-	halt
-	push	w
-	push	w
-	nop
-	pushw	bc
-	nop
-	nop
-	.byte 0x01
-	pushw	bc
-	nop
-	nop
-	.byte 0x04
-	pushw	bc
-	nop
-	nop
-	push	sr
-	pushw	bc
-	nop
-	nop
-	pop	sr
-	pushw	bc
-	nop
-	nop
-	ldw	(41:8), 0:io
-	pushw	41
-	nop
-	incf
-	pushw	bc
-	nop
-	nop
-	decf
-	pushw	bc
-	nop
-	nop
-	ret
-	pushw	bc
-	nop
-	nop
-	halt
-	pushw	bc
-	nop
-	nop
-	reti
-	pushw	bc
-	nop
-	nop
-	ld	(41:8), 0:io
-	nop
-	retd	41
-	nop
-	rcf
-	pushw	bc
-	nop
-	nop
-	push	41
-	nop
-	nop
-	.byte 0x06
-	pushw	bc
-	nop
-	nop
-	scf
-	pushw	bc
-	nop
-	nop
-	popw	sp
-	ld	xiz, 0x4e4f0046
-	ld	w, 0:opc
-	popw	sp
-	ld	xiz, 0x4e4f0046
-	ld	w, 0:opc
-	popw	sp
-	popw	iz
-	ld	w, 0:opc
-	popw	sp
-	ld	xiz, 0x4e4f0046
-	ld	w, 0:opc
-	popw	sp
-	ld	xiz, 0x20200046
-	ld	w, 0:opc
-	nop
-	nop
-	jrl	nov, 0
-	nop
-	jrl	nov, -26880
-	push	sr
-	swi	2
-	nop
-	swi	2
-	nop
-	.byte 0xd5
-	nop
-	jrl	ge, -11007
-	nop
-	jrl	ge, 27905
-	push	sr
-	.byte 0x45
-	push	sr
-	.byte 0x45
-	push	sr
+AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (ParamStr02_Vocalist_0x44)
+	.short 0x02be, 0x03a7, 0x02be, 0x03a7, 0x054e, 0x04c8, 0x04c8
+; PmExpFilter_CellKeys / PmExpFilter_AltKeys: two lists of nine u32 sound-
+; parameter KEYS -- all 18 are the +0x00 key of an 18-byte descriptor in this
+; file -- that PmExpFilterGridCheck picks with `ld_rrl xwa, xbc, wa` (cell
+; index 2..10) through ParamStr02_Vocalist_0x52 / _0x76.
+PmExpFilter_CellKeys:
+	.long 0x00002900, 0x00002901, 0x00002904
+	.long 0x00002902, 0x00002903, 0x0000290a
+	.long 0x0000290b, 0x0000290c, 0x0000290d
+PmExpFilter_AltKeys:
+	.long 0x0000290e, 0x00002905, 0x00002907
+	.long 0x00002908, 0x0000290f, 0x00002910
+	.long 0x00002909, 0x00002906, 0x00002911
+	; ON/OFF cell texts: PmExpFilter_EventDispatch (ParamStr02_Vocalist_0x9A..0xA6),
+	; PmExpFilterCheck_CellDecode (_0xAA, _0xAE), PmExpFilterCheck_AltDecode (_0xB2, _0xB6)
+	aligned_string "OFF"
+	aligned_string "ON "
+	aligned_string "OFF"
+	aligned_string "ON "
+	aligned_string "ON "
+	aligned_string "OFF"
+	aligned_string "ON "
+	aligned_string "OFF"
+	aligned_string "   "
+PmExpFilterGridCheck_EventOffsets:	; read by PmExpFilterGridCheck via PmExpFilter_EventDispatch (ParamStr02_Vocalist_0xBE)
+	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x0297, 0x00fa, 0x00fa
+AcDispTimeSetGridBoxProc_EventOffsets:	; read by AcDispTimeSetGridBoxProc via PmExpFilter2_EventDispatch (ParamStr02_Vocalist_0xCC)
+	.short 0x00d5, 0x0179, 0x00d5, 0x0179, 0x026d, 0x0245, 0x0245
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x52+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x76+1
 ParamStr_Table_03:
 	.long FadeTimeStr_Off
 	.long FadeTimeStr_Default
@@ -1121,198 +767,62 @@ FadeTimeStr_1sec:	aligned_string " 1 sec "
 FadeTimeStr_Hold:	aligned_string " HOLD  "
 FadeTimeStr_Default:	aligned_string "DEFAULT"
 FadeTimeStr_Off:	aligned_string "  OFF  "
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	ld	e, 115:opc
-	nop
-	swi	7
-	nop
-	nop
-	ldw	iz, 1
-	nop
-	ldw	iz, 0xbc01
-	halt
-	.byte 0x83
-	push	sr
-	.byte 0x83
-	push	sr
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1552-0xED1582 (48 B), unreached CODE-territory, was disassembled as 36 plausible-but-dead instruction lines; per=100% dist=4 near FadeTimeStr_Off+8
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (FadeTimeStr_Off_0x38)
+	.short 0x0000, 0x0136, 0x0000, 0x0136, 0x05bc, 0x0283, 0x0283
 	aligned_string "PAGE"
 	aligned_string "Memory data "
-	ld	w, 32:opc
-	nop
-	swi	7
-	ld	w, 32:opc
-	nop
-	swi	7
-	.byte 0xa4
-	nop
-	.byte 0xa4
-	nop
-	.byte 0xb9
-	nop
-	.byte 0xb9
-	nop
-	.byte 0xb9
-	nop
-	.byte 0xa8
-	nop
-	.byte 0xa4
-	nop
-	.byte 0xaf
-	nop
-	ld	(xiy), 0
-	nop
+	.byte 0x20, 0x20, 0x00, 0xff, 0x20, 0x20, 0x00, 0xff, 0xa4, 0x00, 0xa4, 0x00, 0xb9, 0x00, 0xb9, 0x00
+	.byte 0xb9, 0x00, 0xa8, 0x00, 0xa4, 0x00, 0xaf, 0x00, 0xb5, 0x00, 0x00, 0x00
 	aligned_string "        "
 	aligned_string "%d-%d:"
-	ld	e, 100:opc
-	push	xde
-	nop
+	.byte 0x25, 0x64, 0x3a, 0x00
 	aligned_string "PAGE 1/3"
 	aligned_string "BANK%2d:"
-	ld	e, 100:opc
-	push	xde
-	nop
-	.byte 0x01
-	nop
-	.byte 0x01
-	nop
-	ldw	(0:8), 10:io
-	ldw	(0:8), 4:io
-	ldw	(0:8), 13:io
-	.byte 0x01
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	.byte 0x53
-	popw	sp
-	.byte 0x55
-	popw	iz
-	ld	xix, 0x3a642500
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
+	.byte 0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xff, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 	aligned_string "PAGE %d/%d"
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 ParamStr_Table_04:
 	.long VariationStr_V1
 	.long VariationStr_V2
 	.long VariationStr_V3
 	.long VariationStr_V4
 VariationStr_V4:
-	.byte 0x56
-	ldw	ix, 0xff00
+	.byte 0x56, 0x34, 0x00, 0xff
 VariationStr_V3:
-	.byte 0x56
-	ldw	hl, 0xff00
+	.byte 0x56, 0x33, 0x00, 0xff
 VariationStr_V2:
-	.byte 0x56
-	ldw	de, 0xff00
+	.byte 0x56, 0x32, 0x00, 0xff
 VariationStr_V1:
-	.byte 0x56
-	ldw	bc, 0xff00
+	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
-	ld	e, 115:opc
-	push	xde
-	nop
-	ld	e, 115:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 115:opc
-	push	xde
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
+	aligned_string "%s:"
+	aligned_string "%s:"
+	aligned_string "%d:"
+	aligned_string "%d:"
+	aligned_string "%s:"
 	aligned_string "PAGE %d/%d"
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 115:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
-	ld	e, 100:opc
-	push	xde
-	nop
-	push	sr
-	nop
-	push	xiz
-	nop
-	pushw	iz
-	normal
-	pop	xiy
-	nop
-	push	sr
-	nop
-	jr	le, 0
-	push	xix
-	.byte 0x01, 0x81
-	nop
-	push	sr
-	nop
-	.long NakaInst_Param_EmptyStr
-	.byte 0x99
-	nop
-	push	sr
-	nop
-	.long NakaData_DescriptorPad_ZeroA
-	.byte 0xad
-	nop
-	push	sr
-	nop
-	.byte 0xae
-	nop
-	ei	1
-	.byte 0xc1
-	nop
-	push	sr
-	nop
-	xor	e, (0x011600:24)
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+40
+	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+; SelectRect_Table: six screen rectangles {x1, y1, x2, y2}, 8 bytes each,
+; read with `sla wa, 3` / `lda xbc, (VariationStr_V1_0x3C:24)` by PmBank_OnSelect
+; and ToneGen_WriteParamByIndex (display/graphics_text_vga.s), which copy the
+; four words.  Two of the y1/x2 pairs used to be written as pointers
+; (`.long NakaInst_Param_EmptyStr` = {134, 238}, `.long
+; NakaData_DescriptorPad_ZeroA` = {154, 230}); neither is one.
+SelectRect_Table:
+	.short 2, 62, 302, 93
+	.short 2, 98, 316, 129
+	.short 2, 134, 238, 153
+	.short 2, 154, 230, 173
+	.short 2, 174, 262, 193
+	.short 2, 194, 278, 213
 ParamStr_Table_05:
 	.long TransposeNoteStr_C
 	.long TransposeNoteStr_DFlat
@@ -1327,43 +837,43 @@ ParamStr_Table_05:
 	.long TransposeNoteStr_BFlat
 	.long TransposeNoteStr_B
 TransposeNoteStr_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 TransposeNoteStr_BFlat:	aligned_string "B~a0"
 TransposeNoteStr_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 TransposeNoteStr_AFlat:	aligned_string "A~a0"
 TransposeNoteStr_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 TransposeNoteStr_FSharp:	aligned_string "F~9e"
 TransposeNoteStr_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 TransposeNoteStr_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 TransposeNoteStr_EFlat:	aligned_string "E~a0"
 TransposeNoteStr_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 TransposeNoteStr_DFlat:	aligned_string "D~a0"
 TransposeNoteStr_C:
-	ld xhl, 687800352
-	ld e, 115:opc
-	ld e, 50:opc
-	jr ov, 44
-	ld w, 37:opc
-	ldw hl, 10596
-	nop
-	swi 7
+	aligned_string "C "
+; ---------------------------------------------------------------------------
+; SOUND-CHECK SCREEN TEXT (0xED1718-0xED18AD) and three WALLPAPER-EDIT blocks
+; ---------------------------------------------------------------------------
+; The code reaches these through positional names TransposeNoteStr_C_0xNN
+; (shared/positional_labels.s); readers, all in display/graphics_text_vga.s:
+;   +0x12 "CHECK BY SINE WAVE", +0x26 "Select the mode by sound button...",
+;   +0x58 "CHECK MODE:", +0x64 "KEY DOWN INFORMATION ="  -- PmBank_OnPaint
+;   +0x7C .. +0x16A the six "(n)..." check-mode lines and their key
+;                   legends                               -- ToneGen_ParamWriteDispatch
+;   +0x18E six words 0, 86, 174, 221, 267, 313            -- ToneGen_WriteParamByIndex
+;   +0x19A, +0x1C6, +0x1F2: three blocks {"DEFAULT", " USER  ", " ERROR ",
+;   ten words}, one per Toshi ApFunction WallHomeEditCheck (+0x1B2 words),
+;   WallMenuEditCheck (+0x1DE) and WallOthEditCheck (+0x20A); their
+;   *_EventDispatch / WallHomeEdit_LoadSndAddr3 helpers read the strings.
+; The screen these draw is a factory sound check ("IC304&305", "GENERATOR
+; LSI OUTSEL"); how it is entered is not traced here.
+; ---------------------------------------------------------------------------
+SoundCheck_Text:
+	aligned_string "(%s%2d, %3d)"
 	aligned_string "CHECK BY SINE WAVE"
 	aligned_string "Select the mode by sound button of highest line."
 	aligned_string "CHECK MODE:"
@@ -1376,111 +886,36 @@ TransposeNoteStr_C:
 	aligned_string "(4)LOW SOUND check(-2octave)"
 	aligned_string "(5)NORMAL SOUND check with TOUCH"
 	aligned_string "(6)SINE WAVE & ROM check 16dB DOWN"
-	nop
-	nop
-	.byte 0x56
-	nop
-	xor (xiz+256), xiy
-	nop
-	pushw	0x3901
-	normal
-	aligned_string "DEFAULT"
-	ld	w, 0x55:opc
-	aligned_string "SER  "
-	ld	w, 0x45:opc
-	aligned_string "RROR "
-	.byte 0x9c
-	nop
-	incw 8, (xix+256)
-	nop
-	jr	f, 0
-	jr	f, 0
-	incw 8, (xix+256)
-	nop
-	.byte 0xa0
-	nop
-	.byte 0xa7
-	nop
-	jr	ov, 0x00
+	.short 0, 86, 174, 221, 267, 313
+WallHomeEdit_Text:
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
-	ldw	bc, 0x3100
-	nop
-	ld	xwa, 0x40004000
-	nop
-	ldw	bc, 0x4000
-	nop
-	ldw	iy, 0x3c00
-	nop
-	nop
-	nop
+	.short 156, 156, 96, 96, 96, 156, 96, 160, 167, 100
+WallMenuEdit_Text:
 	aligned_string "DEFAULT"
-	ld	w, 0x55:opc
-	aligned_string "SER  "
-	ld	w, 0x45:opc
-	aligned_string "RROR "
-	ldw	bc, 0x3100
-	nop
-	ld	xwa, 0x40004000
-	nop
-	ldw	bc, 0x4000
-	nop
-	ldw	iy, 0x3c00
-	nop
-	nop
-	nop
-	.byte 0xca, 0x1a, 0xed
-	nop
-	jrl	gt, -4838
-	nop
-	ldw	iz, 0xed1a
-	nop
-	.byte 0xd8
-	pop_f
-	.byte 0xed
-	nop
-	.byte 0xd0
-	pop_f
-	.byte 0xed
-	nop
-	popw	de
-	pop_f
-	.byte 0xed
-	nop
-	aligned_string "USER INITIAL akan menggantikan penggunaan kertas tempel (stiker) yang sekarang dengan sticker/kertas tempel yg hitam-licin dan rata!"
-	aligned_string "Italian"
-	.byte 0xa1
-	.ascii "El USER INITIAL cambiará el patrÓn de fondo actual por un \"Plain Black\" (negro sin dise"
-	.byte 0xf1
-	jr	nc, 41
-	ld	a, 0:opc
-	swi	7
-	.byte 0x55, 0x53
-	aligned_string "ER INITIAL va remplacer votre fond de l'écran par un fond noir !"
-	aligned_string "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fläche !"
-	.asciz "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
-	swi	7
-	nop
-	nop
-	ld	h, 0:opc
-	pushw	ix
-	nop
-	ldw	de, 6656
-	nop
-	ld	(0:8), 14:io
-	nop
-	ld	w, 0:opc
-	push_a
-	nop
-	nop
-	nop
-	ld	(0:8), 8:io
-	nop
-	ld	(0:8), 8:io
-	nop
-	.byte 0x08
-	nop
+	aligned_string " USER  "
+	aligned_string " ERROR "
+	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
+WallOthEdit_Text:
+	aligned_string "DEFAULT"
+	aligned_string " USER  "
+	aligned_string " ERROR "
+	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
+LngTable_UserInitialWallpaper:	; returned by WallSureLngCheck
+	.long Str_UserInitialWallpaper_EN	; EN
+	.long Str_UserInitialWallpaper_DE	; DE
+	.long Str_UserInitialWallpaper_FR	; FR
+	.long Str_UserInitialWallpaper_ES	; ES
+	.long Str_UserInitialWallpaper_IT	; IT
+	.long Str_UserInitialWallpaper_ID	; ID
+Str_UserInitialWallpaper_ID:	aligned_string "USER INITIAL akan menggantikan penggunaan kertas tempel (stiker) yang sekarang dengan sticker/kertas tempel yg hitam-licin dan rata!"
+Str_UserInitialWallpaper_IT:	aligned_string "Italian"
+Str_UserInitialWallpaper_ES:	aligned_string "¡El USER INITIAL cambiará el patrÓn de fondo actual por un \"Plain Black\" (negro sin diseño)!"
+Str_UserInitialWallpaper_FR:	aligned_string "USER INITIAL va remplacer votre fond de l'écran par un fond noir !"
+Str_UserInitialWallpaper_DE:	aligned_string "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fläche !"
+Str_UserInitialWallpaper_EN:	aligned_string "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
+	.short 0, 38, 44, 50, 26, 8, 14, 32, 20, 0, 8, 8, 8, 8, 8
 
 
 ParamStr_Table_06:
@@ -1497,76 +932,70 @@ ParamStr_Table_06:
 	.long SplitNoteStr_BFlat
 	.long SplitNoteStr_B
 SplitNoteStr_B:
-	.byte 0x42
-	ld	w, 0:opc
-	swi	7
+	aligned_string "B "
 SplitNoteStr_BFlat:	aligned_string "B~a0"
 SplitNoteStr_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 SplitNoteStr_AFlat:	aligned_string "A~a0"
 SplitNoteStr_G:
-	.byte 0x47
-	ld	w, 0:opc
-	swi	7
+	aligned_string "G "
 SplitNoteStr_FSharp:	aligned_string "F~9e"
 SplitNoteStr_F:	aligned_string "F "
 SplitNoteStr_E:
-	.byte 0x45
-	ld	w, 0:opc
-	swi	7
+	aligned_string "E "
 SplitNoteStr_EFlat:	aligned_string "E~a0"
 SplitNoteStr_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 SplitNoteStr_DFlat:	aligned_string "D~a0"
-SplitNoteStr_C:
-	ld	xhl, 0xeaff0020
-	jp	NakaData_PartConfig
-	jp	Bitmap_SplitPoint_Gb_0x2B
-	jp	Bitmap_Dredt0d_0xA8D
-	jp	SepaOut_FormatData_Tail
-	jp	FILETYPE_SIG_TABLE_2_0x15
-	jp	0xde00ed
-	jp	0xdc00ed
-	jp	0xda00ed
-	jp	0xd800ed
-	jp	0xd600ed
-	.byte 0x1b, 0xed
-	nop
-OctaveDigitStr_8:
-	push	xwa
-	nop
-	.byte 0x37
-	nop
-OctaveDigitStr_6:
-	.byte 0x36
-	nop
-OctaveDigitStr_5:
-	.byte 0x35
-	nop
-OctaveDigitStr_4:
-	ldw	ix, 0x3300
-	nop
-OctaveDigitStr_2:
-	.byte 0x32
-	nop
-OctaveDigitStr_1:
-	.byte 0x31
-	nop
-OctaveDigitStr_0A:
-	ldw	wa, 0x3000
-	nop
-OctaveDigitStr_0B:
-	ldw wa, 8192
-	ld w, 32:opc
-	ld w, 32:opc
-	ld w, 32:opc
-	ld w, 32:opc
-	ld w, 0:opc
-	swi 7
+; -----------------------------------------------------------------------------
+; ** RE-FRAMED 2026-08-30 (lane B4): this was CODE territory and it is DATA.
+; The tree read the pointer table below ONE BYTE LATE, from 0xED1BAB, which
+; turned each 4-byte pointer into a `jp` whose high byte was the LOW byte of
+; the NEXT entry -- so the phantom entry points marched downward in steps of
+; exactly 0x020000. An arithmetic progression of entry points 128 KiB apart is
+; not a jump table.
+;
+; It is a table because:
+;   * all 11 entries land on the 2-byte NUL-terminated digit cells right below
+;     it, and the last entry (0x00ED1BD6) is exactly the first byte past the
+;     table's own end (0xED1BAA + 11*4);
+;   * display/graphics_text_vga.s indexes THIS address -- `divs hl, 0xc` then
+;     `sla hl, 2` then `lda_24 xbc, (SplitNoteStr_C_0x4)` at 0xFC2DE2 and
+;     0xFC2E67. Note number / 12, scaled by 4 = the pointer width.
+; The five phantom `jp` operands (NakaData_PartConfig,
+; Bitmap_SplitPoint_Gb_0x2B, Bitmap_Dredt0d_0xA8D, SepaOut_FormatData_Tail,
+; FILETYPE_SIG_TABLE_2_0x15) were REFERENCES to labels defined elsewhere, not
+; definitions here; nothing lost a name.
+; -----------------------------------------------------------------------------
+SplitNoteStr_C:	aligned_string "C "
+	; 0xED1BAA = SplitNoteStr_C_0x4: octave-digit pointers, index = note / 12
+	.long OctaveDigitStr_0B
+	.long OctaveDigitStr_0C
+	.long OctaveDigitStr_0A
+	.long OctaveDigitStr_1
+	.long OctaveDigitStr_2
+	.long OctaveDigitStr_3
+	.long OctaveDigitStr_4
+	.long OctaveDigitStr_5
+	.long OctaveDigitStr_6
+	.long OctaveDigitStr_7
+	.long OctaveDigitStr_8
+	; the cells themselves, 2 bytes each, in DESCENDING digit order
+OctaveDigitStr_8:	.asciz "8"
+OctaveDigitStr_7:	.asciz "7"
+OctaveDigitStr_6:	.asciz "6"
+OctaveDigitStr_5:	.asciz "5"
+OctaveDigitStr_4:	.asciz "4"
+OctaveDigitStr_3:	.asciz "3"
+OctaveDigitStr_2:	.asciz "2"
+OctaveDigitStr_1:	.asciz "1"
+OctaveDigitStr_0A:	.asciz "0"
+; ** 0xED1BE8 only became visible when the table above stopped being framed as
+; code, so it could not be called _0B: that name (0xED1BEA) is already in use
+; and is aliased by positional_labels.s. Hence A, C, B in address order.
+OctaveDigitStr_0C:	.asciz "0"
+OctaveDigitStr_0B:	.asciz "0"
+	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
@@ -1585,148 +1014,90 @@ ParamStr_Table_07:
 	.long KeyScaleNoteStr_FSharp
 KeyScaleNoteStr_FSharp:	aligned_string "F~9e"
 KeyScaleNoteStr_F:
-	.byte 0x46
-	ld	w, 0:opc
-	swi	7
+	aligned_string "F "
 KeyScaleNoteStr_E:	aligned_string "E "
 KeyScaleNoteStr_EFlat:	aligned_string "E~a0"
 KeyScaleNoteStr_D:
-	.byte 0x44
-	ld	w, 0:opc
-	swi	7
+	aligned_string "D "
 KeyScaleNoteStr_DFlat:	aligned_string "D~a0"
 KeyScaleNoteStr_C:
-	.byte 0x43
-	ld	w, 0:opc
-	swi	7
+	aligned_string "C "
 KeyScaleNoteStr_B:	aligned_string "B "
 KeyScaleNoteStr_BFlat:	aligned_string "B~a0"
 KeyScaleNoteStr_A:
-	.byte 0x41
-	ld	w, 0:opc
-	swi	7
+	aligned_string "A "
 KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
-KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
-	ld	w, 32:opc
-	nop
-	swi	7
+KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20, 0x20, 0x20, 0x00, 0xff
 	aligned_string "<%s>"
-	ld	e, 115:opc
-	nop
-	swi	7
-	jr	nc, 110
-	nop
-	swi	7
-	ld	w, 32:opc
-	nop
-	swi	7
-	.byte 0xc3, 0xe0
-	swi	3
-	nop
-	ldw	iy, 0xfbd2
-	nop
-	ldw	bc, 0xfbd1
-	nop
-	swi	3
-	.byte 0xd2
-	swi	3
-	nop
-	popw	wa
-	jrl	nc, 251
-	cp	(xix+127), c
-	nop
-	.byte 0xa2
-	jrl	nc, 251
-	.byte 0xb8
-	jrl	nc, 251
-	.byte 0xbb
-	jrl	nc, 251
-	scc8	nc, d
-	swi	3
-	nop
-	scc16	nc, iy
-	swi	3
-	nop
-	jr	lt, -86
-	swi	3
-	nop
-	retd	0xfbb0
-	nop
-	.byte 0x37
-	cp	(251:16), b
-	.byte 0xc6
-	swi	3
-	nop
-	ld	e, 128:opc
-	swi	3
-	nop
-	.byte 0xd5, 0x88
-	swi	3
-	nop
-	cp	(xsp-114), c
-	nop
-	adc	xiy, xix
-	swi	3
-	nop
-	.byte 0xc1
-	cp	(xhl), xhl
-	nop
-	.byte 0xe5
-	cp	(xiz), xhl
-	nop
-	sub	xiz, xix
-	swi	3
-	nop
-	popw	de
-	jrl	nz, 251
-	jrl	c, -1154
-	nop
-	.byte 0xa4
-	jrl	nz, 251
-	.byte 0xd1
-	jrl	nz, 251
-	.byte 0x01
-	cp	(251:16), xwa
-	.byte 0xcc
-	swi	3
-	nop
-	swi	6
-	jrl	nz, 251
-	ld	xiy, 0x3700fc24
-	ld	e, 252:opc
-	nop
-	.byte 0xb2
-	ld	e, 252:opc
-	nop
-	pushw	iy
-	ld	h, 252:opc
-	nop
-	reti
-	ld	l, 252:opc
-	nop
-	ld	xhl, 0x5900fc27
-	ld	l, 252:opc
-	nop
-	jr	pl, 39
-	swi	4
-	nop
-	jr	gt, 39
-	swi	4
-	nop
-	ldw	de, 0xfc27
-	nop
-	.byte 0xee
-	jrl	nc, 251
-	swi	7
-	jrl	nc, 251
-	rcf
-	cp	(xwa), c
-	nop
-	nop
-	nop
-	nop
-	nop
-NoteNameStr_Table_5:
+	aligned_string "%s"
+ChordStr_On:	aligned_string "on"	; MainChordPre appends it when byte 0x8D44 != 0 and bit 1 of 0xCEDE is set
+ChordStr_Blank:	aligned_string "  "
+; ---------------------------------------------------------------------------
+; Toshi_ApFunction_Table -- TOSHI object table: 42 "application function"
+; code pointers + NULL (0xED1C9E-0xED1D49)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (extensions/extension_init.s, 0xFC311A):
+;   RegObjTabl 0x1600002, ApFunctionProc, 42, Toshi_ApFunction_Table, 0x122
+; which has RegisterObjectTable (ui/ui_widget_defs.s, 0xFA42FB) copy the
+; 14-byte descriptor {class +0, proc +4, u16 count +8, table +10} into slot
+; 0x122 of the object registry at RAM 0x27ED2 (14 bytes a slot).  An object
+; id is (slot << 16) | element; CheckViewObject (0xFA42C4) reads the table
+; pointer at +10 and indexes it with `extz xwa` / `sll xwa, 2` / `ld xwa, (xwa)`
+; -- one 4-byte pointer per element, 0 = no object.  Slot 0x422 (= 0x122 +
+; 0x300, the pairing RegisterObject 0xFA431A uses for an object's name) is
+; Toshi_ApFunctionName_Table below: entry k there is the NAME of entry k here,
+; and scripts/tools/ext_retype_toshi_object_tables.py --check verifies that
+; every pointer lands on the routine of exactly that name (v10 and v7).
+Toshi_ApFunction_Table:
+	.long PmBkNameFunc
+	.long PmBankNamingCheck
+	.long PmNamingCheck
+	.long MssNameFunc
+	.long SystemInitOkFunc
+	.long SysIniNoFunc
+	.long SysIniYesFunc
+	.long SysSureShowHideFunc
+	.long AttnLngCheck
+	.long SysSureLngCheck
+	.long SureLngCheck
+	.long TchSensGridCheck
+	.long FSWAssGridCheck
+	.long PmExpFilterGridCheck
+	.long DispTimeSetGridCheck
+	.long MstSugAlpGridCheck
+	.long MstStyleAlpGridCheck
+	.long MstStyle1GridCheck
+	.long MstStyle1SubGridCheck
+	.long MstStyle2GridCheck
+	.long MstSong1GridCheck
+	.long MstSong2GridCheck
+	.long BitmapFinpic
+	.long BitmapFinst
+	.long BitmapFoutpic
+	.long BitmapFoutst
+	.long GmOnOffFunc
+	.long DispTimeSetOKFunc
+	.long SystemInitMDFunc
+	.long WallHomeEditCheck
+	.long WallMenuEditCheck
+	.long WallOthEditCheck
+	.long WallSetOKFunc
+	.long WallUsrIniFunc
+	.long WallUsrIniNoFunc
+	.long WallUsrIniYesFunc
+	.long WallUsrShowHideFunc
+	.long WallSureShowHideFunc
+	.long WallSureLngCheck
+	.long CtlIniLngCheck
+	.long PmemNormLngCheck
+	.long PmemExpLngCheck
+	.long 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1D1B-0xED1D3A (31 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=70% dist=12 near KeyScaleNoteStr_G_0x18+129
+; Toshi_ApFunctionName_Table -- object-registry slot 0x422 (InitializeToshi:
+; RegObjTabl 0x1600002, ApFunctionProc, 42, Toshi_ApFunctionName_Table, 0x422):
+; the name of each Toshi_ApFunction_Table entry, same index, then "" as the
+; terminator.  The strings follow in REVERSE order.
+Toshi_ApFunctionName_Table:
 	.long FuncNameStr_PmBkNameFunc
 	.long FuncNameStr_PmBankNamingCheck
 	.long FuncNameStr_PmNamingCheck
@@ -1771,8 +1142,7 @@ NoteNameStr_Table_5:
 	.long FuncNameStr_PmemExpLngCheck
 	.long FuncNameStr_NullTerm
 FuncNameStr_NullTerm:
-	nop
-	swi	7
+	aligned_string ""
 FuncNameStr_PmemExpLngCheck:	aligned_string "PmemExpLngCheck"
 FuncNameStr_PmemNormLngCheck:	aligned_string "PmemNormLngCheck"
 FuncNameStr_CtlIniLngCheck:	aligned_string "CtlIniLngCheck"
@@ -1815,39 +1185,53 @@ FuncNameStr_MssNameFunc:	aligned_string "MssNameFunc"
 FuncNameStr_PmNamingCheck:	aligned_string "PmNamingCheck"
 FuncNameStr_PmBankNamingCheck:	aligned_string "PmBankNamingCheck"
 FuncNameStr_PmBkNameFunc:	aligned_string "PmBkNameFunc"
+; ---------------------------------------------------------------------------
+; TOSHI CLASS INSTANCE-VARIABLE NAME TABLES (28, 0xED20C6-0xED27E3)
+; ---------------------------------------------------------------------------
+; Field +0x14 of each Toshi_Class_Table record points at one of these: the
+; names of the class's instance variables, ""-terminated, the strings
+; following each table in reverse order.  The first entry of every table is
+; commented with its class and variable count (checked against the class's
+; type-signature string by scripts/analysis/ext_lane_checks.py class).
+; !! The older labels on the tables are cited by ui_widgets/naka_master_style.c
+; and so are kept, but most name the WRONG class -- NakaParam_VariScreen is
+; NormScreen's table, NakaParam_RVariScreen is VariScreen's; the comment on
+; each first entry is authoritative.  New labels ClassVar_<class>_<var> name
+; the strings that had none.
+; ---------------------------------------------------------------------------
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED239D-0xED23AE (17 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near NakaParam_AcMstStyleAlpGridBox+7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2663-0xED267C (25 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=71% dist=9 near NakaParam_AcMstSong2GridBox+5
 NakaParam_VariScreen:
-	.long NakaParam_VariScreen_Empty
-NakaParam_VariScreen_Empty:	aligned_string ""
+	.long NakaParam_VariScreen_Empty	; NormScreen: 0 variables
+NakaParam_VariScreen_Empty:
+	aligned_string ""
 NakaParam_RVariScreen:
-	ldw	de, 0xed21
-	nop
-ParamStr_Table_08:
-	.long ParamStr08_func
-	.long ParamStr08_font
-	.long ParamStr08_fontcolor
-	.long ParamStr08_page
-	.long ParamStr08_varisupart
+	.long ClassVar_VariScreen_func	; VariScreen: 9 variables
+	.long ClassVar_VariScreen_font
+	.long ClassVar_VariScreen_fontcolor
+	.long ClassVar_VariScreen_page
+	.long ClassVar_VariScreen_part
+	.long ClassVar_VariScreen_varisu
 	.long ParamStr08_nowswno
 	.long ParamStr08_nowvari
 	.long ParamStr08_oldvari
 	.long ParamStr08_Empty
-ParamStr08_Empty:	aligned_string ""
-ParamStr08_oldvari:	aligned_string "oldvari"
-ParamStr08_nowvari:	aligned_string "nowvari"
+ParamStr08_Empty:
+	aligned_string ""
+ParamStr08_oldvari:
+	aligned_string "oldvari"
+ParamStr08_nowvari:
+	aligned_string "nowvari"
 ParamStr08_nowswno:
-	jr	nz, 0x6f
-	aligned_string "wswno"
-	aligned_string "varisu"
-	jrl	f, 29281
-	jrl	ov, -256
-	aligned_string "page"
-	aligned_string "fontcolor"
-	aligned_string "font"
-	aligned_string "func"
-
-
+	aligned_string "nowswno"
+ClassVar_VariScreen_varisu:	aligned_string "varisu"
+ClassVar_VariScreen_part:	aligned_string "part"
+ClassVar_VariScreen_page:	aligned_string "page"
+ClassVar_VariScreen_fontcolor:	aligned_string "fontcolor"
+ClassVar_VariScreen_font:	aligned_string "font"
+ClassVar_VariScreen_func:	aligned_string "func"
 ParamStr_Table_09:
-	.long ParamStr09_func
+	.long ParamStr09_func	; RVariScreen: 9 variables
 	.long ParamStr09_font
 	.long ParamStr09_fontcolor
 	.long ParamStr09_page
@@ -1857,187 +1241,219 @@ ParamStr_Table_09:
 	.long ParamStr09_nowvari
 	.long ParamStr09_oldvari
 	.long ParamStr09_Empty
-ParamStr09_Empty:	aligned_string ""
-ParamStr09_oldvari:	aligned_string "oldvari"
-ParamStr09_nowvari:	aligned_string "nowvari"
-ParamStr09_nowswno:	aligned_string "nowswno"
-ParamStr09_varisu:	aligned_string "varisu"
-ParamStr09_part:	aligned_string "part"
-ParamStr09_page:	aligned_string "page"
-ParamStr09_fontcolor:	aligned_string "fontcolor"
-ParamStr09_font:	aligned_string "font"
-ParamStr09_func:	aligned_string "func"
+ParamStr09_Empty:
+	aligned_string ""
+ParamStr09_oldvari:
+	aligned_string "oldvari"
+ParamStr09_nowvari:
+	aligned_string "nowvari"
+ParamStr09_nowswno:
+	aligned_string "nowswno"
+ParamStr09_varisu:
+	aligned_string "varisu"
+ParamStr09_part:
+	aligned_string "part"
+ParamStr09_page:
+	aligned_string "page"
+ParamStr09_fontcolor:
+	aligned_string "fontcolor"
+ParamStr09_font:
+	aligned_string "font"
+ParamStr09_func:
+	aligned_string "func"
 NakaParam_AcChordBox:
-	.long NakaParam_AcChordBox_Empty
-NakaParam_AcChordBox_Empty:	aligned_string ""
+	.long NakaParam_AcChordBox_Empty	; TransposeBox: 0 variables
+NakaParam_AcChordBox_Empty:
+	aligned_string ""
 NakaParam_AcFreeSplitBox:
-	.long NakaParam_AcFreeSplitBox_Empty
-NakaParam_AcFreeSplitBox_Empty:	aligned_string ""
+	.long NakaParam_AcFreeSplitBox_Empty	; ChordBox: 0 variables
+NakaParam_AcFreeSplitBox_Empty:
+	aligned_string ""
 NakaParam_AcBkNoBox:
-	.long NakaParam_AcBkNoBox_Empty
-NakaParam_AcBkNoBox_Empty:	aligned_string ""
+	.long NakaParam_AcBkNoBox_Empty	; FreeSplitBox: 0 variables
+NakaParam_AcBkNoBox_Empty:
+	aligned_string ""
 NakaParam_AcPmBkNoBox:
-	.long NakaParam_AcPmBkNoBox_Empty
-NakaParam_AcPmBkNoBox_Empty:	aligned_string ""
+	.long NakaParam_AcPmBkNoBox_Empty	; BkNoBox: 0 variables
+NakaParam_AcPmBkNoBox_Empty:
+	aligned_string ""
 NakaParam_PmBankScreen:
-	.long NakaParam_PmBankScreen_Empty
-NakaParam_PmBankScreen_Empty:	aligned_string ""
+	.long NakaParam_PmBankScreen_Empty	; PmBkNoBox: 0 variables
+NakaParam_PmBankScreen_Empty:
+	aligned_string ""
 ParamStr_Table_10:
-	.long ParamStr10_func
+	.long ParamStr10_func	; PmBankScreen: 6 variables
 	.long ParamStr10_font
 	.long ParamStr10_fontcolor
 	.long ParamStr10_page
 	.long ParamStr10_nowbank
 	.long ParamStr10_oldbank
 	.long ParamStr10_Empty
-ParamStr10_Empty:	aligned_string ""
-ParamStr10_oldbank:	aligned_string "oldbank"
-ParamStr10_nowbank:	aligned_string "nowbank"
-ParamStr10_page:	aligned_string "page"
-ParamStr10_fontcolor:	aligned_string "fontcolor"
-ParamStr10_font:	aligned_string "font"
-ParamStr10_func:	aligned_string "func"
+ParamStr10_Empty:
+	aligned_string ""
+ParamStr10_oldbank:
+	aligned_string "oldbank"
+ParamStr10_nowbank:
+	aligned_string "nowbank"
+ParamStr10_page:
+	aligned_string "page"
+ParamStr10_fontcolor:
+	aligned_string "fontcolor"
+ParamStr10_font:
+	aligned_string "font"
+ParamStr10_func:
+	aligned_string "func"
 ParamStr_Table_11:
-	.long ParamStr11_func
+	.long ParamStr11_func	; AcPmBkEditBox: 2 variables
 	.long ParamStr11_data
 	.long ParamStr11_Empty
-ParamStr11_Empty:	aligned_string ""
-ParamStr11_data:	aligned_string "data"
-ParamStr11_func:	aligned_string "func"
+ParamStr11_Empty:
+	aligned_string ""
+ParamStr11_data:
+	aligned_string "data"
+ParamStr11_func:
+	aligned_string "func"
 ParamStr_Table_12:
-	.long ParamStr12_func
+	.long ParamStr12_func	; MsaModeScreen: 5 variables
 	.long ParamStr12_font
 	.long ParamStr12_fontcolor
 	.long ParamStr12_newmsamode
 	.long ParamStr12_oldmsamode
 	.long ParamStr12_Empty
-ParamStr12_Empty:	aligned_string ""
-ParamStr12_oldmsamode:	aligned_string "oldmsamode"
-ParamStr12_newmsamode:	aligned_string "newmsamode"
-ParamStr12_fontcolor:	aligned_string "fontcolor"
-ParamStr12_font:	aligned_string "font"
-ParamStr12_func:	aligned_string "func"
-
-
+ParamStr12_Empty:
+	aligned_string ""
+ParamStr12_oldmsamode:
+	aligned_string "oldmsamode"
+ParamStr12_newmsamode:
+	aligned_string "newmsamode"
+ParamStr12_fontcolor:
+	aligned_string "fontcolor"
+ParamStr12_font:
+	aligned_string "font"
+ParamStr12_func:
+	aligned_string "func"
 ParamStr_Table_13:
-	.long ParamStr13_func
+	.long ParamStr13_func	; PmemModeBox: 5 variables
 	.long ParamStr13_font
 	.long ParamStr13_fontcolo
 	.long ParamStr13_newpmemmode
 	.long ParamStr13_oldpmemmode
 	.long ParamStr13_Empty
-ParamStr13_Empty:	aligned_string ""
-ParamStr13_oldpmemmode:	aligned_string "oldpmemmode"
-ParamStr13_newpmemmode:	aligned_string "newpmemmode"
-ParamStr13_fontcolo:	aligned_string "fontcolo"
-ParamStr13_font:	aligned_string "font"
-ParamStr13_func:	aligned_string "func"
+ParamStr13_Empty:
+	aligned_string ""
+ParamStr13_oldpmemmode:
+	aligned_string "oldpmemmode"
+ParamStr13_newpmemmode:
+	aligned_string "newpmemmode"
+ParamStr13_fontcolo:
+	aligned_string "fontcolo"
+ParamStr13_font:
+	aligned_string "font"
+ParamStr13_func:
+	aligned_string "func"
 NakaParam_IvPmemWindowPageCtl:
-	.long NakaParam_IvPmemWinPg_page
+	.long NakaParam_IvPmemWinPg_page	; IvWindowPageControl: 1 variable
 	.long NakaParam_IvPmemWinPg_Empty
-NakaParam_IvPmemWinPg_Empty:	aligned_string ""
-NakaParam_IvPmemWinPg_page:	aligned_string "page"
+NakaParam_IvPmemWinPg_Empty:
+	aligned_string ""
+NakaParam_IvPmemWinPg_page:
+	aligned_string "page"
 NakaParam_IvMstStyleWindowPgCtl:
-	.long NakaParam_IvMstStyleWinPg_page
+	.long NakaParam_IvMstStyleWinPg_page	; IvPmemWindowPageCtl: 1 variable
 	.long NakaParam_IvMstStyleWinPg_Empty
-NakaParam_IvMstStyleWinPg_Empty:	aligned_string ""
-NakaParam_IvMstStyleWinPg_page:	aligned_string "page"
+NakaParam_IvMstStyleWinPg_Empty:
+	aligned_string ""
+NakaParam_IvMstStyleWinPg_page:
+	aligned_string "page"
 NakaParam_AcTchSensGridBox:
-	.long NakaParam_AcTchSens_page
+	.long NakaParam_AcTchSens_page	; IvMstStyleWindowPgCtl: 1 variable
 	.long NakaParam_AcTchSens_Empty
-NakaParam_AcTchSens_Empty:	aligned_string ""
-NakaParam_AcTchSens_page:	aligned_string "page"
+NakaParam_AcTchSens_Empty:
+	aligned_string ""
+NakaParam_AcTchSens_page:
+	aligned_string "page"
 ParamStr_Table_14:
-	.long ParamStr14_fixedcol
+	.long ParamStr14_fixedcol	; AcTchSensGridBox: 3 variables
 	.long ParamStr14_fixedrow
 	.long ParamStr14_func
 	.long ParamStr14_Empty
-ParamStr14_Empty:	aligned_string ""
-ParamStr14_func:	aligned_string "func"
-ParamStr14_fixedrow:	aligned_string "fixedrow"
-ParamStr14_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr14_Empty:
+	aligned_string ""
+ParamStr14_func:
+	aligned_string "func"
+ParamStr14_fixedrow:
+	aligned_string "fixedrow"
+ParamStr14_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_15:
-	.long ParamStr15_fixedcol
+	.long ParamStr15_fixedcol	; AcFSWAssGridBox: 3 variables
 	.long ParamStr15_fixedrow
 	.long ParamStr15_func
 	.long ParamStr15_Empty
-ParamStr15_Empty:	aligned_string ""
-ParamStr15_func:	aligned_string "func"
-ParamStr15_fixedrow:	aligned_string "fixedrow"
-ParamStr15_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr15_Empty:
+	aligned_string ""
+ParamStr15_func:
+	aligned_string "func"
+ParamStr15_fixedrow:
+	aligned_string "fixedrow"
+ParamStr15_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_16:
-	.long ParamStr16_fixedcol
+	.long ParamStr16_fixedcol	; AcPmExpFilterGridBox: 3 variables
 	.long ParamStr16_fixedrow
 	.long ParamStr16_func
 	.long ParamStr16_Empty
-ParamStr16_Empty:	aligned_string ""
-ParamStr16_func:	aligned_string "func"
-ParamStr16_fixedrow:	aligned_string "fixedrow"
-ParamStr16_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr16_Empty:
+	aligned_string ""
+ParamStr16_func:
+	aligned_string "func"
+ParamStr16_fixedrow:
+	aligned_string "fixedrow"
+ParamStr16_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_17:
-	.long ParamStr17_fixedcol
+	.long ParamStr17_fixedcol	; AcDispTimeSetGridBox: 3 variables
 	.long ParamStr17_fixedrow
 	.long ParamStr17_func
 	.long ParamStr17_Empty
-ParamStr17_Empty:	aligned_string ""
-ParamStr17_func:	aligned_string "func"
-ParamStr17_fixedrow:	aligned_string "fixedrow"
-ParamStr17_fixedcol:	aligned_string "fixedcol"
-NakaParam_AcMstStyleAlpGridBox:
-	pushw	iz
-	ld	d, 237:opc
-	nop
-	ld	d, 36:opc
-	.byte 0xed
-	nop
-	calr	60708
-	nop
-	ex_ff
-	ld	d, 237:opc
-	nop
-	ldw	(36:8), 237:io
-	swi	6
-	ld	c, 237:opc
-	nop
-	.byte 0xee
-	ld	c, 237:opc
-	nop
-	.byte 0xe2
-	ld	c, 237:opc
-	nop
-	and	ix, (0xed23:24)
-	ld	c, 237:opc
-	nop
-	.byte 0xc2
-	ld	c, 237:opc
-	nop
-MstStyleAlpGrid_Empty:
-	nop
-	swi	7
-MstStyleAlpGrid_nowttlselsong:	aligned_string "nowttlselsong"
-MstStyleAlpGrid_nowalphselsong:	aligned_string "nowalphselsong"
-MstStyleAlpGrid_nowalphpage:	aligned_string "nowalphpage"
-MstStyleAlpGrid_nowalphmaxpage:	jr	nz, 0x6f
-	aligned_string "walphmaxpage"
-	aligned_string "nowalphdtno"
-	aligned_string "nowalphtop"
-	aligned_string "nowalph"
-	jr	z, 0x75
-	jr	nz, 99
-	nop
-	swi	7
+ParamStr17_Empty:
+	aligned_string ""
+ParamStr17_func:
+	aligned_string "func"
+ParamStr17_fixedrow:
 	aligned_string "fixedrow"
+ParamStr17_fixedcol:
 	aligned_string "fixedcol"
-
-
+NakaParam_AcMstStyleAlpGridBox:
+	.long ClassVar_AcMstSugAlpGridBox_fixedcol	; AcMstSugAlpGridBox: 10 variables
+	.long ClassVar_AcMstSugAlpGridBox_fixedrow
+	.long ClassVar_AcMstSugAlpGridBox_func
+	.long ClassVar_AcMstSugAlpGridBox_nowalph
+	.long ClassVar_AcMstSugAlpGridBox_nowalphtop
+	.long ClassVar_AcMstSugAlpGridBox_nowalphdtno
+	.long MstStyleAlpGrid_nowalphmaxpage
+	.long MstStyleAlpGrid_nowalphpage
+	.long MstStyleAlpGrid_nowalphselsong
+	.long MstStyleAlpGrid_nowttlselsong
+	.long MstStyleAlpGrid_Empty
+MstStyleAlpGrid_Empty:
+	aligned_string ""
+MstStyleAlpGrid_nowttlselsong:
+	aligned_string "nowttlselsong"
+MstStyleAlpGrid_nowalphselsong:
+	aligned_string "nowalphselsong"
+MstStyleAlpGrid_nowalphpage:
+	aligned_string "nowalphpage"
+MstStyleAlpGrid_nowalphmaxpage:
+	aligned_string "nowalphmaxpage"
+ClassVar_AcMstSugAlpGridBox_nowalphdtno:	aligned_string "nowalphdtno"
+ClassVar_AcMstSugAlpGridBox_nowalphtop:	aligned_string "nowalphtop"
+ClassVar_AcMstSugAlpGridBox_nowalph:	aligned_string "nowalph"
+ClassVar_AcMstSugAlpGridBox_func:	aligned_string "func"
+ClassVar_AcMstSugAlpGridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstSugAlpGridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_18:
-	.long ParamStr18_fixedcol
+	.long ParamStr18_fixedcol	; AcMstStyleAlpGridBox: 8 variables
 	.long ParamStr18_fixedrow
 	.long ParamStr18_func
 	.long ParamStr18_nowalph
@@ -2046,58 +1462,68 @@ ParamStr_Table_18:
 	.long ParamStr18_nowalphmaxpage
 	.long ParamStr18_nowalphpage
 	.long ParamStr18_Empty
-ParamStr18_Empty:	aligned_string ""
-ParamStr18_nowalphpage:	aligned_string "nowalphpage"
-ParamStr18_nowalphmaxpage:	aligned_string "nowalphmaxpage"
-ParamStr18_nowalphdtno:	aligned_string "nowalphdtno"
-ParamStr18_nowalphtop:	aligned_string "nowalphtop"
-ParamStr18_nowalph:	aligned_string "nowalph"
-ParamStr18_func:	aligned_string "func"
-ParamStr18_fixedrow:	aligned_string "fixedrow"
-ParamStr18_fixedcol:	aligned_string "fixedcol"
+ParamStr18_Empty:
+	aligned_string ""
+ParamStr18_nowalphpage:
+	aligned_string "nowalphpage"
+ParamStr18_nowalphmaxpage:
+	aligned_string "nowalphmaxpage"
+ParamStr18_nowalphdtno:
+	aligned_string "nowalphdtno"
+ParamStr18_nowalphtop:
+	aligned_string "nowalphtop"
+ParamStr18_nowalph:
+	aligned_string "nowalph"
+ParamStr18_func:
+	aligned_string "func"
+ParamStr18_fixedrow:
+	aligned_string "fixedrow"
+ParamStr18_fixedcol:
+	aligned_string "fixedcol"
 NakaParam_AcMstStyle1SubGridBox:
-	ex_ff
-	ld	e, 237:opc
-	nop
-ParamStr_Table_19:
-	.long ParamStr19_fixedcol
+	.long ClassVar_AcMstStyle1GridBox_fixedcol	; AcMstStyle1GridBox: 6 variables
+	.long ClassVar_AcMstStyle1GridBox_fixedrow
 	.long ParamStr19_func
 	.long ParamStr19_nowstylectgdtno
 	.long ParamStr19_nowstylectgmaxpage
 	.long ParamStr19_nowstylectgpage
 	.long ParamStr19_Empty
-ParamStr19_Empty:	aligned_string ""
-ParamStr19_nowstylectgpage:	aligned_string "nowstylectgpage"
-ParamStr19_nowstylectgmaxpage:	aligned_string "nowstylectgmaxpage"
-ParamStr19_nowstylectgdtno:	aligned_string "nowstylectgdtno"
+ParamStr19_Empty:
+	aligned_string ""
+ParamStr19_nowstylectgpage:
+	aligned_string "nowstylectgpage"
+ParamStr19_nowstylectgmaxpage:
+	aligned_string "nowstylectgmaxpage"
+ParamStr19_nowstylectgdtno:
+	aligned_string "nowstylectgdtno"
 ParamStr19_func:
-	jr	z, 0x75
-	jr	nz, 99
-	nop
-	swi	7
-	aligned_string "fixedrow"
-	aligned_string "fixedcol"
-
-
+	aligned_string "func"
+ClassVar_AcMstStyle1GridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstStyle1GridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_20:
-	.long ParamStr20_fixedcol
+	.long ParamStr20_fixedcol	; AcMstStyle1SubGridBox: 6 variables
 	.long ParamStr20_fixedrow
 	.long ParamStr20_func
 	.long ParamStr20_nowstylesubctgdtno
 	.long ParamStr20_nowstylesubctgmaxpage
 	.long ParamStr20_nowstylesubctgpage
 	.long ParamStr20_Empty
-ParamStr20_Empty:	aligned_string ""
-ParamStr20_nowstylesubctgpage:	aligned_string "nowstylesubctgpage"
-ParamStr20_nowstylesubctgmaxpage:	aligned_string "nowstylesubctgmaxpage"
-ParamStr20_nowstylesubctgdtno:	aligned_string "nowstylesubctgdtno"
-ParamStr20_func:	aligned_string "func"
-ParamStr20_fixedrow:	aligned_string "fixedrow"
-ParamStr20_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr20_Empty:
+	aligned_string ""
+ParamStr20_nowstylesubctgpage:
+	aligned_string "nowstylesubctgpage"
+ParamStr20_nowstylesubctgmaxpage:
+	aligned_string "nowstylesubctgmaxpage"
+ParamStr20_nowstylesubctgdtno:
+	aligned_string "nowstylesubctgdtno"
+ParamStr20_func:
+	aligned_string "func"
+ParamStr20_fixedrow:
+	aligned_string "fixedrow"
+ParamStr20_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_21:
-	.long ParamStr21_fixedcol
+	.long ParamStr21_fixedcol	; AcMstStyle2GridBox: 10 variables
 	.long ParamStr21_fixedrow
 	.long ParamStr21_func
 	.long ParamStr21_nowstylesubctgdtno
@@ -2108,52 +1534,52 @@ ParamStr_Table_21:
 	.long ParamStr21_nowstylesubsubdtno1
 	.long ParamStr21_nowstylesubsubdtno2
 	.long ParamStr21_Empty
-ParamStr21_Empty:	aligned_string ""
-ParamStr21_nowstylesubsubdtno2:	aligned_string "nowstylesubsubdtno2"
-ParamStr21_nowstylesubsubdtno1:	aligned_string "nowstylesubsubdtno1"
-ParamStr21_nowstyle:	aligned_string "nowstyle"
-ParamStr21_nowstylesubctg:	aligned_string "nowstylesubctg"
-ParamStr21_nowstylesubctgpage:	aligned_string "nowstylesubctgpage"
-ParamStr21_nowstylesubctgmaxpage:	aligned_string "nowstylesubctgmaxpage"
-ParamStr21_nowstylesubctgdtno:	aligned_string "nowstylesubctgdtno"
-ParamStr21_func:	aligned_string "func"
-ParamStr21_fixedrow:	aligned_string "fixedrow"
-ParamStr21_fixedcol:	aligned_string "fixedcol"
-NakaParam_AcMstSong2GridBox:
-	.byte 0xbe
-	ld	h, 237:opc
-	nop
-	.byte 0xb4
-	ld	h, 237:opc
-	nop
-	or	(xiz+38), xiy
-	nop
-	or	(xiz+38), iy
-	nop
-	or	(xix+38), e
-	nop
-	jrl	nov, -4826
-	nop
-	jrl	gt, -4826
-	nop
-MstSong2Grid_Empty:
-	nop
-	swi	7
-MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
-MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
-MstSong2Grid_nowsongctgdtno:	jr	nz, 0x6f
-	aligned_string "wsongctgdtno"
-	jr	z, 117
-MstSong2Grid_func:	.byte 0x6e, 0x63, 0x00, 0xff
+ParamStr21_Empty:
+	aligned_string ""
+ParamStr21_nowstylesubsubdtno2:
+	aligned_string "nowstylesubsubdtno2"
+ParamStr21_nowstylesubsubdtno1:
+	aligned_string "nowstylesubsubdtno1"
+ParamStr21_nowstyle:
+	aligned_string "nowstyle"
+ParamStr21_nowstylesubctg:
+	aligned_string "nowstylesubctg"
+ParamStr21_nowstylesubctgpage:
+	aligned_string "nowstylesubctgpage"
+ParamStr21_nowstylesubctgmaxpage:
+	aligned_string "nowstylesubctgmaxpage"
+ParamStr21_nowstylesubctgdtno:
+	aligned_string "nowstylesubctgdtno"
+ParamStr21_func:
+	aligned_string "func"
+ParamStr21_fixedrow:
 	aligned_string "fixedrow"
+ParamStr21_fixedcol:
 	aligned_string "fixedcol"
-
-
+NakaParam_AcMstSong2GridBox:
+	.long ClassVar_AcMstSong1GridBox_fixedcol	; AcMstSong1GridBox: 6 variables
+	.long ClassVar_AcMstSong1GridBox_fixedrow
+	.long MstSong2Grid_func
+	.long MstSong2Grid_nowsongctgdtno
+	.long MstSong2Grid_nowsongctgmaxpage
+	.long MstSong2Grid_nowsongctgpage
+	.long ClassVar_AcMstSong1GridBox_End
+ClassVar_AcMstSong1GridBox_End:	aligned_string ""
+MstSong2Grid_nowsongctgpage:
+	aligned_string "nowsongctgpage"
+MstSong2Grid_nowsongctgmaxpage:
+	aligned_string "nowsongctgmaxpage"
+MstSong2Grid_nowsongctgdtno:
+	aligned_string "nowsongctgdtno"
+MstSong2Grid_func:
+	aligned_string "func"
+ClassVar_AcMstSong1GridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstSong1GridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_22:
-	.long ParamStr22_fixedcol
-	.long ParamStr22_fixedrow
-	.long ParamStr22_func
-	.long ParamStr22_nowsongsubctgdtno
+	.long ClassVar_AcMstSong2GridBox_fixedcol	; AcMstSong2GridBox: 10 variables
+	.long ClassVar_AcMstSong2GridBox_fixedrow
+	.long ClassVar_AcMstSong2GridBox_func
+	.long ClassVar_AcMstSong2GridBox_nowsongsubctgdtno
 	.long ParamStr22_nowsongsubctgmaxpage
 	.long ParamStr22_nowsongsubctgpage
 	.long ParamStr22_nowsongsubctg
@@ -2161,83 +1587,114 @@ ParamStr_Table_22:
 	.long ParamStr22_nowsongsubsubdtno1
 	.long ParamStr22_nowsongsubsubdtno2
 	.long ParamStr22_Empty
-ParamStr22_Empty:	aligned_string ""
-ParamStr22_nowsongsubsubdtno2:	aligned_string "nowsongsubsubdtno2"
-ParamStr22_nowsongsubsubdtno1:	aligned_string "nowsongsubsubdtno1"
-ParamStr22_nowsong:	aligned_string "nowsong"
-ParamStr22_nowsongsubctg:	aligned_string "nowsongsubctg"
-ParamStr22_nowsongsubctgpage:	aligned_string "nowsongsubctgpage"
+ParamStr22_Empty:
+	aligned_string ""
+ParamStr22_nowsongsubsubdtno2:
+	aligned_string "nowsongsubsubdtno2"
+ParamStr22_nowsongsubsubdtno1:
+	aligned_string "nowsongsubsubdtno1"
+ParamStr22_nowsong:
+	aligned_string "nowsong"
+ParamStr22_nowsongsubctg:
+	aligned_string "nowsongsubctg"
+ParamStr22_nowsongsubctgpage:
+	aligned_string "nowsongsubctgpage"
 ParamStr22_nowsongsubctgmaxpage:
-	jr	nz, 0x6f
-	aligned_string "wsongsubctgmaxpage"
-	aligned_string "nowsongsubctgdtno"
-	jr	z, 0x75
-	jr	nz, 99
-	nop
-	swi	7
-	aligned_string "fixedrow"
-	aligned_string "fixedcol"
-
-
+	aligned_string "nowsongsubctgmaxpage"
+ClassVar_AcMstSong2GridBox_nowsongsubctgdtno:	aligned_string "nowsongsubctgdtno"
+ClassVar_AcMstSong2GridBox_func:	aligned_string "func"
+ClassVar_AcMstSong2GridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstSong2GridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_23:
-	.long ParamStr23_func
+	.long ParamStr23_func	; SineWaveScreen: 5 variables
 	.long ParamStr23_font
 	.long ParamStr23_fontcolor
 	.long ParamStr23_nowswno
 	.long ParamStr23_oldswno
 	.long ParamStr23_Empty
-ParamStr23_Empty:	aligned_string ""
-ParamStr23_oldswno:	aligned_string "oldswno"
-ParamStr23_nowswno:	aligned_string "nowswno"
-ParamStr23_fontcolor:	aligned_string "fontcolor"
-ParamStr23_font:	aligned_string "font"
-ParamStr23_func:	aligned_string "func"
+ParamStr23_Empty:
+	aligned_string ""
+ParamStr23_oldswno:
+	aligned_string "oldswno"
+ParamStr23_nowswno:
+	aligned_string "nowswno"
+ParamStr23_fontcolor:
+	aligned_string "fontcolor"
+ParamStr23_font:
+	aligned_string "font"
+ParamStr23_func:
+	aligned_string "func"
 ParamStr_Table_24:
-	.long ParamStr24_page
+	.long ParamStr24_page	; IvPageOverWr: 2 variables
 	.long ParamStr24_window
 	.long ParamStr24_Empty
-ParamStr24_Empty:	aligned_string ""
-ParamStr24_window:	aligned_string "window"
-ParamStr24_page:	aligned_string "page"
+ParamStr24_Empty:
+	aligned_string ""
+ParamStr24_window:
+	aligned_string "window"
+ParamStr24_page:
+	aligned_string "page"
 
-ExtData_NormScreenProc_Ptr:
+; ---------------------------------------------------------------------------
+; Toshi_Class_Table -- TOSHI object-registry slot 0x162: 28 class records of
+; 24 bytes (0xED27E4-0xED2A83), registered by InitializeToshi with
+;   RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+; (count word Toshi_Class_Count = 28, after the class-name strings).  Record
+; shape, read off the bytes -- all 28 records agree:
+;   +0x00 class procedure (record 0: NormScreenProc; every one is a *Proc
+;         routine in 0xFB-0xFC code)
+;   +0x04 u16 (0x12..0x54)      +0x06 u16, always 0x0160
+;   +0x08 u16, +0x0A u16 -- +0x0A is 0 for a class with no variables and
+;         rises by exactly 4 per extra 'n' variable (instance-variable
+;         storage size, by inference; not traced to a reader)
+;   +0x0C class-name string ("NormScreen", "VariScreen", ...)
+;   +0x10 type-signature string, ONE character per instance variable
+;         ("kc^nnnnnn" for VariScreen's 9 variables)
+;   +0x14 the class's instance-variable NAME table ("func", "font", ...,
+;         "" terminated); its length equals the signature's in all 28.
+; Only record 0's +0x00 is in this file: the table's other 668 bytes, and
+; the name/signature strings after it, are the start of
+; NakaData_MasterStyleGrid (ui_widgets/master_style_grid_screens.s,
+; naka_master_style.c), included right below.
+; ---------------------------------------------------------------------------
+Toshi_Class_Table:
 	.long NormScreenProc
 .include "ui_widgets/master_style_grid_screens.s"
-	jr	gt, 0x00
+; ---------------------------------------------------------------------------
+; The tail of Toshi_Class_Table's string pool.  Each of the 28 class records
+; points at a type-signature string (+0x10) and a class-name string (+0x0C);
+; the pool holds them as (signature, name) pairs in REVERSE record order, and
+; its first part -- down to "XX" of record 18's signature -- is inside the
+; naka_master_style.c blob included above, so this file resumes with "j".
+; !! The NakaDesc_* / NakaInst_* labels below are ONE CLASS OFF: each labels
+; the signature / name of the class that FOLLOWS its namesake in the pool
+; (NakaInst_VariScreen is the string "NormScreen").  They are kept because
+; ui_widgets/naka_master_style.c and its .ld cite them by name.  Record
+; layout and the check that each signature has one character per variable:
+; Toshi_Class_Table's header, scripts/analysis/ext_lane_checks.py class.
+; ---------------------------------------------------------------------------
+	.byte 0x6a, 0x00	; tail of record 18's signature "XXj"
 	aligned_string "AcDispTimeSetGridBox"
-NakaDesc_AcDispTimeSetGridBox:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0
+NakaDesc_AcDispTimeSetGridBox:	aligned_string "XXj"
 NakaInst_AcDispTimeSetGridBox:	aligned_string "AcPmExpFilterGridBox"
-NakaDesc_AcPmExpFilterGridBox:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0
+NakaDesc_AcPmExpFilterGridBox:	aligned_string "XXj"
 NakaInst_AcPmExpFilterGridBox:	aligned_string "AcFSWAssGridBox"
-NakaDesc_AcFSWAssGridBox:
-	pop	xwa
-	pop	xwa
-	jr	gt, 0x00
+NakaDesc_AcFSWAssGridBox:	aligned_string "XXj"
 	aligned_string "AcTchSensGridBox"
-	jr	nz, 0
+	aligned_string "n"
 	aligned_string "IvMstStyleWindowPgCtl"
-	jr	nz, 0
+	aligned_string "n"
 	aligned_string "IvPmemWindowPageCtl"
-	jr	nz, 0x00
+	aligned_string "n"
 	aligned_string "IvWindowPageControl"
 NakaDesc_IvWindowPageControl:	aligned_string "kc^nn"
 NakaInst_IvWindowPageControl:	aligned_string "PmemModeBox"
 NakaDesc_PmemModeBox:	aligned_string "kc^nn"
 NakaInst_PmemModeBox:	aligned_string "MsaModeScreen"
-NakaDesc_MsaModeScreen:
-	jr	gt, 0x72
-	nop
-	swi	7
+NakaDesc_MsaModeScreen:	aligned_string "jr"
 	aligned_string "AcPmBkEditBox"
 NakaDesc_AcPmBkEditBox:	aligned_string "kc^nnn"
-NakaInst_AcPmBkEditBox:	.asciz "PmBankScreen"
-	swi	7
+NakaInst_AcPmBkEditBox:	aligned_string "PmBankScreen"
 NakaDesc_PmBankScreen:	aligned_string ""
 NakaInst_PmBankScreen:	aligned_string "PmBkNoBox"
 NakaDesc_AcPmBkNoBox:	aligned_string ""
@@ -2254,10 +1711,19 @@ NakaDesc_RVariScreen:	aligned_string "kc^nnnnnn"
 NakaInst_RVariScreen:	aligned_string "VariScreen"
 NakaDesc_VariScreen:	aligned_string ""
 NakaInst_VariScreen:	aligned_string "NormScreen"
-	call16 33792
-	pushw	iy
-	.byte 0xed
-	nop
+; Toshi class count: 28 -- read by InitializeToshi's first registration,
+;   RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+; whose count argument is loaded FROM this address (`ldw_da`), not immediate.
+Toshi_Class_Count:	.short 28
+; ---------------------------------------------------------------------------
+; Toshi_ResEvent_Table -- object-registry slot 0x1C2: 8 event-name string
+; pointers + NULL, registered by InitializeToshi with
+;   RegObjTable 0x160000c, ResEventProc, Toshi_ResEvent_Count, Toshi_ResEvent_Table, 0x1c2
+; (the count word follows the strings).  The strings are the EV_* event
+; names; they follow in reverse order.
+; ---------------------------------------------------------------------------
+Toshi_ResEvent_Table:
+	.long EventNameStr_EV_CHORDSHOW
 ParamStr_Table_25:
 	.long EventNameStr_EV_CHORDDSP
 	.long EventNameStr_EV_PMBKNAME
@@ -2266,10 +1732,7 @@ ParamStr_Table_25:
 	.long EventNameStr_EV_SUBCTSHOW
 	.long EventNameStr_EV_PAGESET
 	.long EventNameStr_EV_TVARIPAINT
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x00, 0x00
 EventNameStr_EV_TVARIPAINT:	aligned_string "EV_TVARIPAINT"
 EventNameStr_EV_PAGESET:	aligned_string "EV_PAGESET"
 EventNameStr_EV_SUBCTSHOW:	aligned_string "EV_SUBCTSHOW"
@@ -2277,11 +1740,17 @@ EventNameStr_EV_FRTPAGECHANGE:	aligned_string "EV_FRTPAGECHANGE"
 EventNameStr_EV_PMNAME:	aligned_string "EV_PMNAME"
 EventNameStr_EV_PMBKNAME:	aligned_string "EV_PMBKNAME"
 EventNameStr_EV_CHORDDSP:	aligned_string "EV_CHORDDSP"
-	aligned_string "EV_CHORDSHOW"
-	ld	(0:8), 86:io
-	pushw	sp
-	.byte 0xed
-	nop
+EventNameStr_EV_CHORDSHOW:	aligned_string "EV_CHORDSHOW"
+Toshi_ResEvent_Count:	.short 8
+; ---------------------------------------------------------------------------
+; Toshi_ResMethod_Table -- object-registry slot 0x1E2: 26 method-name string
+; pointers + NULL, registered by InitializeToshi with
+;   RegObjTable 0x160000d, ResMethodProc, Toshi_ResMethod_Count, Toshi_ResMethod_Table, 0x1e2
+; (the count word follows the strings).  The strings are the MT_* method
+; names; they follow in reverse order.
+; ---------------------------------------------------------------------------
+Toshi_ResMethod_Table:
+	.long MethodNameStr_MT_VariWrite
 NoteNameStr_Table_6:
 	.long MethodNameStr_MT_SvariIni
 	.long MethodNameStr_MT_SvariSet
@@ -2308,10 +1777,7 @@ NoteNameStr_Table_6:
 	.long MethodNameStr_MT_KEYINFO
 	.long MethodNameStr_MT_OTPCNTSET
 	.long MethodNameStr_MT_OTPCNTRESET
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00, 0x00, 0x00, 0x00
 MethodNameStr_MT_OTPCNTRESET:	aligned_string "MT_OTPCNTRESET"
 MethodNameStr_MT_OTPCNTSET:	aligned_string "MT_OTPCNTSET"
 MethodNameStr_MT_KEYINFO:	aligned_string "MT_KEYINFO"
@@ -2337,90 +1803,56 @@ MethodNameStr_MT_GetSndGrpName:	aligned_string "MT_GetSndGrpName"
 MethodNameStr_MT_GetSndName:	aligned_string "MT_GetSndName"
 MethodNameStr_MT_SvariSet:	aligned_string "MT_SvariSet"
 MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
-	aligned_string "MT_VariWrite"
-	.byte 0x1a
-	nop
-	jr	le, -51
-	swi	3
-	nop
-	.byte 0xe7, 0xe1
-	swi	3
-	nop
-	push_f
-	.byte 0xf5
-	swi	3
-	nop
-	.byte 0xc3
-	pushw	iz
-	swi	4
-	nop
-	pushw	0xfc2d
-	nop
-	.byte 0xbb
-	pushw	sp
-	swi	4
-	nop
-	ld	b, 26:opc
-	swi	4
-	nop
-	push	xiy
-	.byte 0xdb
-	swi	3
-	nop
-	.byte 0xc3, 0xd5
-	swi	3
-	nop
-	ld	xbc, 0xeb00fbd8
-	.byte 0xd4
-	swi	3
-	nop
-	xor	xhl, xix
-	swi	3
-	nop
-	ld	(0xfbcd:16), 208
-	ld	(xbc-5), 187
-	cp	(xsp), xhl
-	nop
-	cp	(xhl-83), hl
-	nop
-	popw	ix
-	ld	(xhl-5), 18
-	.byte 0xc4
-	swi	3
-	nop
-	ld	a, 128:opc
-	swi	3
-	nop
-	pushw	wa
-	cp	(xwa), c
-	nop
-	sub	xiz, xsp
-	swi	3
-	nop
-	pushw	0xfb8b
-	nop
-	push	xiy
-	cp	(xwa), hl
-	nop
-	cp	(xiy-105), c
-	nop
-	.byte 0xe1
-	cp	(xiz), xhl
-	nop
-	sub	xiz, xwa
-	swi	3
-	nop
-	ld	h, 31:opc
-	swi	4
-	nop
-	ld	b, 208:opc
-	swi	3
-	nop
-	nop
-	nop
-	nop
-	nop
-NoteNameStr_Table_7:
+MethodNameStr_MT_VariWrite:	aligned_string "MT_VariWrite"
+Toshi_ResMethod_Count:	.short 26
+; ---------------------------------------------------------------------------
+; Toshi_Function_Table -- TOSHI object table: 28 screen/box procedure
+; pointers + NULL (0xED2F66-0xED2FD9)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (0xFC311A) with
+;   RegObjTabl 0x1600001, FunctionProc, 28, Toshi_Function_Table, 0x102
+; into object-registry slot 0x102 (layout and indexing: see
+; Toshi_ApFunction_Table).  Its names are Toshi_FunctionName_Table (slot
+; 0x402); entry k there names entry k here -- verified for all 28 in v10 by
+; scripts/tools/ext_retype_toshi_object_tables.py --check (in v7 for 27: v7
+; labels entry 19's routine only AcMstStyleAlp_Boundary).
+Toshi_Function_Table:
+	.long NormScreenProc
+	.long VariScreenProc
+	.long RVariScreenProc
+	.long AcTransposeBoxProc
+	.long AcFreeSplitBoxProc
+	.long AcChordBoxProc
+	.long PmBankScreenProc
+	.long AcPmBkEditBoxProc
+	.long MsaModeScreenProc
+	.long PmemModeBoxProc
+	.long AcBkNoBoxProc
+	.long AcPmBkNoBoxProc
+	.long IvWindowPageControlProc
+	.long IvPmemWindowPageCtlProc
+	.long AcTchSensGridBoxProc
+	.long AcFSWAssGridBoxProc
+	.long AcPmExpFilterGridBoxProc
+	.long AcDispTimeSetGridBoxProc
+	.long AcMstSugAlpGridBoxProc
+	.long AcMstStyleAlpGridBoxProc
+	.long IvMstStyleWindowPgCtlProc
+	.long AcMstStyle1GridBoxProc
+	.long AcMstStyle1SubGridBoxProc
+	.long AcMstStyle2GridBoxProc
+	.long AcMstSong1GridBoxProc
+	.long AcMstSong2GridBoxProc
+	.long SineWaveScreenProc
+	.long IvPageOverWrProc
+	.long 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2F90-0xED2FAB (27 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=67% dist=14 near MethodNameStr_MT_SvariIni+70
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2FAC-0xED2FC6 (26 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=13 near MethodNameStr_MT_SvariIni+98
+; Toshi_FunctionName_Table -- object-registry slot 0x402 (InitializeToshi:
+; RegObjTabl 0x1600001, FunctionProc, 28, Toshi_FunctionName_Table, 0x402):
+; the name of each Toshi_Function_Table entry, same index; strings follow in
+; reverse order.
+Toshi_FunctionName_Table:
 	.long ProcNameStr_NormScreenProc
 	.long ProcNameStr_VariScreenProc
 	.long ProcNameStr_RVariScreenProc
@@ -2451,8 +1883,7 @@ NoteNameStr_Table_7:
 	.long ProcNameStr_IvPageOverWrProc
 	.long ProcNameStr_NullTerm
 ProcNameStr_NullTerm:
-	nop
-	swi	7
+	aligned_string ""
 ProcNameStr_IvPageOverWrProc:	aligned_string "IvPageOverWrProc"
 ProcNameStr_SineWaveScreenProc:	aligned_string "SineWaveScreenProc"
 ProcNameStr_AcMstSong2GridBoxProc:	aligned_string "AcMstSong2GridBoxProc"
@@ -2481,66 +1912,46 @@ ProcNameStr_AcTransposeBoxProc:	aligned_string "AcTransposeBoxProc"
 ProcNameStr_RVariScreenProc:	aligned_string "RVariScreenProc"
 ProcNameStr_VariScreenProc:	aligned_string "VariScreenProc"
 ProcNameStr_NormScreenProc:	aligned_string "NormScreenProc"
-	.byte 0xd9
-	ld	l, 252:opc
-	nop
-	pop_a
-	pushw	wa
-	swi	4
-	nop
-	pop	xiz
-	pushw	bc
-	swi	4
-	nop
-	.byte 0x87
-	pushw	wa
-	swi	4
-	nop
-	ld	xix, 0xec00fc2a
-	pushw	wa
-	swi	4
-	nop
-	.byte 0xca
-	pushw	bc
-	swi	4
-	nop
-	popw	iz
-	ldw	wa, 252
-	.byte 0xb9
-	pushw	de
-	swi	4
-	nop
-	nop
-	jr	ule, -5
-	nop
-	.byte 0xbf
-	pushw	hl
-	swi	4
-	nop
-	cp	(xhl+44), xix
-	nop
-	pop	xbc
-	ld	(xbc-5), 228
-	pushw	ix
-	swi	4
-	nop
-	scf
-	.byte 0xcd
-	swi	3
-	nop
-	ld	xiz, 0x4400fc26
-	jrl	pl, 251
-	jrl	-1155
-	nop
-	cp	(xix+125), xhl
-	nop
-	.byte 0xe0
-	jrl	pl, 251
-	nop
-	nop
-	nop
-	nop
-NoteNameStr_Table_8:
+; ---------------------------------------------------------------------------
+; Toshi_MainFunction_Table -- TOSHI object table: 20 "main function" code
+; pointers + NULL (0xED3292-0xED32E5)
+; ---------------------------------------------------------------------------
+; Registered by InitializeToshi (0xFC311A) with
+;   RegObjTabl 0x1600003, MainFunctionProc, 20, Toshi_MainFunction_Table, 0x142
+; into object-registry slot 0x142 (layout and indexing: see
+; Toshi_ApFunction_Table).  Its names are Toshi_MainFunctionName_Table (slot
+; 0x442), whose strings sit in ui_widgets/normal_mode_layout.s; entry k there
+; names entry k here -- verified for all 20, in v10 and v7, by
+; scripts/tools/ext_retype_toshi_object_tables.py --check.
+Toshi_MainFunction_Table:
+	.long MainVariSet
+	.long MainSvariIni
+	.long MainGetSndName
+	.long MainRvariIni
+	.long MainGetRhyName
+	.long MainGetSndGrpName
+	.long MainGetRhyGrpName
+	.long MainChordPre
+	.long MainPmGet
+	.long OneTchFUNC
+	.long MainSysControl
+	.long CntIniFunc
+	.long FswAsIniFunc
+	.long MainMssSetUp
+	.long MainTimeFlashFunc
+	.long MainWallSetFlashFunc
+	.long TEST2FUNC
+	.long TEST3FUNC
+	.long TEST4FUNC
+	.long TEST6FUNC
+	.long 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED32CC-0xED32DE (18 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=100% dist=9 near ProcNameStr_NormScreenProc+74
+; Toshi_MainFunctionName_Table -- object-registry slot 0x442 (InitializeToshi:
+; RegObjTabl 0x1600003, MainFunctionProc, 20, Toshi_MainFunctionName_Table,
+; 0x442): the name of each Toshi_MainFunction_Table entry, same index, then ""
+; as the terminator.  The 20 name strings are the NakaInst_* cells of
+; ui_widgets/normal_mode_layout.s (naka_normal_mode.c), included just below.
+Toshi_MainFunctionName_Table:
 	.long NakaInst_MainVariSet
 	.long NakaInst_MainSvariIni
 	.long NakaInst_MainGetSndName
@@ -2562,1430 +1973,491 @@ NoteNameStr_Table_8:
 	.long NakaInst_TEST4FUNC
 	.long NakaInst_TEST6FUNC
 	.long NakaInstTable8_NullTerm
-NakaInstTable8_NullTerm:
-	nop
-	swi	7
+NakaInstTable8_NullTerm:	aligned_string ""
 .include "ui_widgets/normal_mode_layout.s"
-	stib_dsp 0x00, 0x00
-	nop
-	nop
-	max
-	stib_dpd 3, 8
-	stib_dpd 3, 60
-
-
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	jp16 65280
-	swi	7
-	ld	(0:8), 21:io
-	.byte 0x01, 0x80
-	nop
-	push	xhl
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	nop
-	nop
-	reti
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	jp	6400
-	ld	(0:8), 238:io
-	nop
-	.byte 0x80
-	nop
-	push_a
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	normal
-	nop
-	ei	0
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	call16 6656
-	nop
-	ld	(0:8), 199:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xed
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	push	sr
-	nop
-	halt
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	call	6912
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xc6
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	zcf
-	nop
-	max
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	calr	7168
-	nop
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
-	or (xsp+256), hl
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	rcf
-	nop
-	pop	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	.byte 0x1f
-	nop
-	call	2048
-	.byte 0x52
-	nop
-	.byte 0x80
-	nop
-	jrl	-5376
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	scf
-	nop
-	push	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	ld	w, 0:opc
-	calr	2048
-	nop
-	pushw	hl
-	nop
-	.byte 0x80
-	nop
-	.byte 0x51
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	ccf
-	nop
-	normal
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	push_f
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x1f
-	nop
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
-	pushw	de
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	push_a
-	nop
-	nop
-	nop
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	ld	b, 0:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 0:io
-	nop
-	jrl	nc, 16128
-	.byte 0x01, 0xef
-	nop
-	stib_dsp 0, 0
-	nop
-	nop
-	incf
-	stib_dpd 3, 16
-	stib_dpd 3, 60
-
-
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	c, 0:opc
-	swi	7
-	swi	7
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_I2
-	reti
-	nop
-	cp	(0xff00:16), l
-	pop_a
-	nop
-	max
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	d, 0:opc
-	ld	b, 0:opc
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_F2
-	reti
-	nop
-	cp	(0xff00:16), l
-	ex_ff
-	nop
-	pop	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	e, 0:opc
-	ld	c, 0:opc
-	ld	(0:8), 82:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_E
-	reti
-	nop
-	cp	(0xff00:16), l
-	ldf 0
-	push	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	ld	h, 0:opc
-	ld	d, 0:opc
-	ld	(0:8), 43:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_D
-	reti
-	nop
-	cp	(0xff00:16), l
-	.byte 0x1a
-	nop
-	.byte 0x01
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	a, 0:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	e, 0:opc
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_C
-	reti
-	nop
-	cp	(0xff00:16), l
-	jp	0
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	pushw	wa
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 0:io
-	nop
-	.byte 0x7f
-	nop
-	.long Naka_PresentationRootState
-	stib_dsp 0x00, 0x00
-	nop
-	nop
-	push_a
-	stib_dpd 3, 24
-	stib_dpd 3, 60
-
-
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	bc
-	nop
-	swi	7
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
-	pushw	de
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	nop
-	nop
-	nop
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	de
-	nop
-	pushw	wa
-	nop
-	ld	(0:8), 43:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0x51
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	normal
-	nop
-	normal
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	hl
-	nop
-	pushw	bc
-	nop
-	ld	(0:8), 82:io
-	nop
-	.byte 0x80
-	nop
-	jrl	-5376
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	push	sr
-	nop
-	push	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	ix
-	nop
-	pushw	de
-	nop
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
-	or (xsp+256), hl
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	pop	sr
-	nop
-	pop	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	iy
-	nop
-	pushw	hl
-	nop
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xc6
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	max
-	nop
-	max
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	iz
-	nop
-	pushw	ix
-	nop
-	ld	(0:8), 199:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xed
-	nop
-	.byte 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	halt
-	nop
-	halt
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	pushw	sp
-	nop
-	pushw	iy
-	nop
-	ld	(0:8), 238:io
-	nop
-	.byte 0x80
-	nop
-	push_a
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	ei	0
-	ei	0
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ld	l, 0:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pushw	iz
-	nop
-	ld	(0:8), 21:io
-	.byte 0x01, 0x80
-	nop
-	push	xhl
-	.byte 0x01, 0xeb
-	nop
-	reti
-	nop
-	cp	(0xff00:16), l
-	reti
-	nop
-	reti
-	nop
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	ldw	bc, 0xff00
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 0:io
-	nop
-	jrl	nc, 16128
-	.byte 0x01, 0xef
-	nop
-	stib_dsp 0, 0
-	nop
-	nop
-	call16 1012
-	nop
-	ld	w, 244:opc
-	pop	sr
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	de, 0xff00
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_C
-	reti
-	nop
-	cp	(0xff00:16), l
-	ld	(0:8), 0:io
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	hl, 0x3100
-	nop
-	ld	(0:8), 43:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_D
-	reti
-	nop
-	cp	(0xff00:16), l
-	push	0
-	normal
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	ix, 0x3200
-	nop
-	ld	(0:8), 82:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_E
-	reti
-	nop
-	cp	(0xff00:16), l
-	ldw	(0:8), 2:io
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	iy, 0x3300
-	nop
-	ld	(0:8), 121:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_F2
-	reti
-	nop
-	cp	(0xff00:16), l
-	pushw	768
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw	iz, 0x3400
-	nop
-	ld	(0:8), 160:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_I2
-	reti
-	nop
-	cp	(0xff00:16), l
-	incf
-	nop
-	max
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	ldw sp, 13568
-	nop
-	ld (0:8), 199:io
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_L
-	reti
-	nop
-	cp	(0xff00:16), l
-	decf
-	nop
-	halt
-	nop
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	push	xwa
-	nop
-	ldw	iz, 2048
-	nop
-	.byte 0xee
-	nop
-	.byte 0x80
-	nop
-	.long WidgetName_PtrBlock_M2
-	reti
-	nop
-	cp	(0xff00:16), l
-	ret
-	nop
-	ei	0
-
-
-	push	xix
-	nop
-	jr	f, 1
-	ldw	wa, 0xff00
-	swi	7
-	swi	7
-	swi	7
-	ldw sp, 2048
-	nop
-	pop_a
-	.byte 0x01, 0x80
-	nop
-	.long WidgetName_PtrBlock_N1
-	reti
-	nop
-	cp	(0xff00:16), l
-	retd	1792
-	nop
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	push	xde
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0xbe
-	nop
-	.long SoundName_ToTheBone
-	reti
-	nop
-	.byte 0xc1
-	nop
-	nop
-	nop
-	ld	d, 244:opc
-	pop	sr
-	nop
-	pushw	wa
-	stib_dpd 3, 105
-	nop
-
-
-	jr	f, 1
-	push	xbc
-	nop
-	swi	7
-	swi	7
-	push	xhl
-	nop
-	swi	7
-	swi	7
-	ld	(0:8), 152:io
-	nop
-	.byte 0xc8
-	nop
-	reti
-	.byte 0x01, 0xe0
-	nop
-	ex_ff
-	nop
-	ld	b, 1:opc
-
-
-	jr	ge, 0
-	jr	f, 1
-	push	xbc
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	push	xde
-	nop
-	ld	(0:8), 56:io
-	nop
-	.byte 0xcc
-	nop
-	.byte 0x87
-	nop
-	.byte 0xdd
-	nop
-	ldf 0
-	ld	b, 1:opc
-
-
-	ldw	iy, 0x6000
-	normal
-	swi	7
-	swi	7
-	push	xiy
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	(0:8), 4:io
-	nop
-	.byte 0xbe
-	nop
-	.long SoundName_ToTheBone
-	reti
-	nop
-	.byte 0xc1
-	nop
-	nop
-	nop
-	pushw	ix
-	stib_dpd 3, 48
-	stib_dpd 3, 105
-	nop
-
-
-	jr	f, 1
-	push	xix
-	nop
-	swi	7
-	swi	7
-	push	xiz
-	nop
-	swi	7
-	swi	7
-	ld	(0:8), 40:io
-	nop
-	.byte 0xcc
-	nop
-	.byte 0x93
-	nop
-	.byte 0xdf
-	nop
-	pop_f
-	nop
-	ld	b, 1:opc
-
-
-	jr	ge, 0
-	jr	f, 1
-	push	xix
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	push	xiy
-	nop
-	ld	(0:8), 160:io
-	nop
-	.byte 0xc8
-	nop
-	rcf
-	.byte 0x01, 0xe0
-	nop
-	push_f
-	nop
-	ld	b, 1:opc
+; naka_node -- the first 12 bytes every NAKA widget record shares: the 4-byte
+; header {type, 0x00, 0x60, 0x01} and four element-index links (see below).
+.macro naka_node type, parent, child, next, prev
+	.byte \type, 0x00, 0x60, 0x01
+	.short \parent, \child, \next, \prev
+.endm
+; ---------------------------------------------------------------------------
+; NAKA widget records: elements 24-62 of Toshi_Viewable_NORMAL (object-
+; registry slot 1, 63 entries, registered by InitializeToshi -- see
+; extensions/extension_init.s).  Every entry of that table from 25 to 62
+; points at one of the records below, in order; element 24 begins in
+; ui_widgets/normal_mode_layout.s and only its last 14 bytes are here.
+;
+; Common part (`naka_node`): the 4-byte NAKA header, then four element
+; indices into the SAME viewable table -- parent, first child, next
+; sibling, previous sibling -- NAKA_INDEX_NONE when absent.  That reading
+; is checked for all 38 records: every next/prev pair and every child/parent
+; pair agree (scripts/analysis/ext_lane_checks.py widgets).  It contradicts
+; ui_widgets/naka_types.h, which calls +6 prev_sibling, +8 self_idx and +10
+; next_sibling: record 25's +8 is 26, and element 26's +10 is 25.
+; +0x0E..+0x14 are a rectangle x1, y1, x2, y2 on the 320x240 screen that
+; lies inside the parent's rectangle in every record (same script).  The
+; six 0x35 records are root panels: elements 24, 33, 39 and 48 span the
+; bottom of the screen, (0,127)-(319,23x), and parent 8, 5, 8 and 8 0x3C
+; cells at x = 4, 43, 82, ... (39 px apart); elements 57 and 60 span
+; (4,190)-(315,236) and parent two 0x69 records each.  +0x0C (always 8)
+; and the fields after the rectangle are not traced to a reader; each 0x35
+; panel ends in two consecutive u32 RAM addresses, 0x3F404/0x3F408 for
+; element 24 up to 0x3F42C/0x3F430 for element 60.  Record sizes: 0x3C 32 B,
+; 0x35 36 B, 0x69 26 B.
+; Until 2026-09-25 sixteen of these rectangles' (x2, y2) corners
+; were written as POINTERS -- `.long WidgetName_PtrBlock_C` ({42, 235}), _D,
+; _E, _F2, _I2, _L, _M2, _N1, `.long SoundName_ToTheBone` and `.long
+; Naka_PresentationRootState` (element 39's right/bottom edge {319, 239}).
+; None is a pointer: every one is a rectangle corner inside its parent, and
+; v7 proves the last one -- it moved Naka_PresentationRootState by -0x2A and
+; kept these bytes.
+; ---------------------------------------------------------------------------
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED37EF-0xED380A (27 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=12 near NakaInst_MainVariSet+935
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED382F-0xED384A (27 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=14 near NakaInst_MainVariSet+999
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3859-0xED386A (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1041
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED391D-0xED392E (17 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1237
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED395B-0xED396E (19 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+1299
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED397D-0xED398E (17 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=9 near NakaInst_MainVariSet+1333
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED39D7-0xED39F2 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=12 near NakaInst_MainVariSet+1423
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A01-0xED3A12 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1465
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A13-0xED3A32 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=100% dist=15 near NakaInst_MainVariSet+1483
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A37-0xED3A52 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=13 near NakaInst_MainVariSet+1519
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A61-0xED3A72 (17 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1561
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3A77-0xED3A92 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=13 near NakaInst_MainVariSet+1583
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3B25-0xED3B36 (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near NakaInst_MainVariSet+1757
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C1F-0xED3C34 (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2007
+	; element 24 (0x35), +0x16..+0x23 -- begun in normal_mode_layout.s
+	.short 245, 0, 0
+	.long 0x0003f404, 0x0003f408
+Toshi_NORMAL_Elem25:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 26, NAKA_INDEX_NONE
+	.short 8, 277, 128, 315, 235
+	.short 7, 193, 0xffff, 0, 7
+Toshi_NORMAL_Elem26:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 27, 25
+	.short 8, 238, 128, 276, 235
+	.short 7, 193, 0xffff, 1, 6
+Toshi_NORMAL_Elem27:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 28, 26
+	.short 8, 199, 128, 237, 235
+	.short 7, 193, 0xffff, 2, 5
+Toshi_NORMAL_Elem28:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 29, 27
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 19, 4
+Toshi_NORMAL_Elem29:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 30, 28
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 16, 3
+Toshi_NORMAL_Elem30:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 31, 29
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 17, 2
+Toshi_NORMAL_Elem31:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, 32, 30
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 18, 1
+Toshi_NORMAL_Elem32:
+	naka_node 0x3c, 24, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 31
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 20, 0
+Toshi_NORMAL_Elem33:
+	naka_node 0x35, NAKA_INDEX_NONE, 34, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 0, 127, 319, 239
+	.short 245, 0, 0
+	.long 0x0003f40c, 0x0003f410
+Toshi_NORMAL_Elem34:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 35, NAKA_INDEX_NONE
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 21, 4
+Toshi_NORMAL_Elem35:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 36, 34
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 22, 3
+Toshi_NORMAL_Elem36:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 37, 35
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 23, 2
+Toshi_NORMAL_Elem37:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, 38, 36
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 26, 1
+Toshi_NORMAL_Elem38:
+	naka_node 0x3c, 33, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 37
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 27, 0
+Toshi_NORMAL_Elem39:
+	naka_node 0x35, NAKA_INDEX_NONE, 40, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 0, 127, 319, 239
+	.short 245, 0, 0
+	.long 0x0003f414, 0x0003f418
+Toshi_NORMAL_Elem40:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 41, NAKA_INDEX_NONE
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 0, 0
+Toshi_NORMAL_Elem41:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 42, 40
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 1, 1
+Toshi_NORMAL_Elem42:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 43, 41
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 2, 2
+Toshi_NORMAL_Elem43:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 44, 42
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 3, 3
+Toshi_NORMAL_Elem44:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 45, 43
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 4, 4
+Toshi_NORMAL_Elem45:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 46, 44
+	.short 8, 199, 128, 237, 235
+	.short 7, 193, 0xffff, 5, 5
+Toshi_NORMAL_Elem46:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, 47, 45
+	.short 8, 238, 128, 276, 235
+	.short 7, 193, 0xffff, 6, 6
+Toshi_NORMAL_Elem47:
+	naka_node 0x3c, 39, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 46
+	.short 8, 277, 128, 315, 235
+	.short 7, 193, 0xffff, 7, 7
+Toshi_NORMAL_Elem48:
+	naka_node 0x35, NAKA_INDEX_NONE, 49, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 0, 127, 319, 239
+	.short 245, 0, 0
+	.long 0x0003f41c, 0x0003f420
+Toshi_NORMAL_Elem49:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 50, NAKA_INDEX_NONE
+	.short 8, 4, 128, 42, 235
+	.short 7, 193, 0xffff, 8, 0
+Toshi_NORMAL_Elem50:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 51, 49
+	.short 8, 43, 128, 81, 235
+	.short 7, 193, 0xffff, 9, 1
+Toshi_NORMAL_Elem51:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 52, 50
+	.short 8, 82, 128, 120, 235
+	.short 7, 193, 0xffff, 10, 2
+Toshi_NORMAL_Elem52:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 53, 51
+	.short 8, 121, 128, 159, 235
+	.short 7, 193, 0xffff, 11, 3
+Toshi_NORMAL_Elem53:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 54, 52
+	.short 8, 160, 128, 198, 235
+	.short 7, 193, 0xffff, 12, 4
+Toshi_NORMAL_Elem54:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 55, 53
+	.short 8, 199, 128, 237, 235
+	.short 7, 193, 0xffff, 13, 5
+Toshi_NORMAL_Elem55:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, 56, 54
+	.short 8, 238, 128, 276, 235
+	.short 7, 193, 0xffff, 14, 6
+Toshi_NORMAL_Elem56:
+	naka_node 0x3c, 48, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 55
+	.short 8, 277, 128, 315, 235
+	.short 7, 193, 0xffff, 15, 7
+Toshi_NORMAL_Elem57:
+	naka_node 0x35, NAKA_INDEX_NONE, 58, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 4, 190, 315, 236
+	.short 7, 193, 0
+	.long 0x0003f424, 0x0003f428
+Toshi_NORMAL_Elem58:
+	naka_node 0x69, 57, NAKA_INDEX_NONE, 59, NAKA_INDEX_NONE
+	.short 8, 152, 200, 263, 224
+	.short 22, 290
+Toshi_NORMAL_Elem59:
+	naka_node 0x69, 57, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 58
+	.short 8, 56, 204, 135, 221
+	.short 23, 290
+Toshi_NORMAL_Elem60:
+	naka_node 0x35, NAKA_INDEX_NONE, 61, NAKA_INDEX_NONE, NAKA_INDEX_NONE
+	.short 8, 4, 190, 315, 236
+	.short 7, 193, 0
+	.long 0x0003f42c, 0x0003f430
+Toshi_NORMAL_Elem61:
+	naka_node 0x69, 60, NAKA_INDEX_NONE, 62, NAKA_INDEX_NONE
+	.short 8, 40, 204, 147, 223
+	.short 25, 290
+Toshi_NORMAL_Elem62:
+	naka_node 0x69, 60, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 61
+	.short 8, 160, 200, 272, 224
+	.short 24, 290
+
+
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED3C77-0xED3C8C (21 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=100% dist=11 near NakaInst_MainVariSet+2095
 .include "ui_widgets/control_menu_screens.s"
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	push	0
-	swi	7
-	swi	7
-	ld	(0:8), 78:io
-	nop
-	.byte 0x80
-	nop
-	.byte 0xe1
-	nop
-	.byte 0x92
-	nop
+; ---------------------------------------------------------------------------
+; The "CPU data transmission" error texts: five LABEL (type 0x2B) records,
+; elements 8-12 of Toshi_Viewable_TEST1 (object-registry slot 0xF4, 14
+; entries, registered by InitializeToshi -- extensions/extension_init.s),
+; all children of element 7, the 0x35 panel at 0xED6676 in
+; ui_widgets/control_menu_screens.s.  Layout as the NORMAL records above:
+; `naka_node` (parent, first child, next, previous -- element indices of the
+; same table), +0x0C (8), the text rectangle x1, y1, x2, y2, +0x16 a pointer
+; to the record's string, +0x1A..+0x1E three words, then the string.  The
+; links are checked by scripts/analysis/ext_lane_checks.py test1.  Element 8
+; begins 2 bytes before this file resumes: its type byte 0x2B and the 0x00
+; after it are the last two bytes of the control_menu_screens.s blob.
+; ---------------------------------------------------------------------------
+	.byte 0x60, 0x01	; element 8: header bytes 2-3
+	.short 7, NAKA_INDEX_NONE, 9, NAKA_INDEX_NONE
+	.short 8, 78, 128, 225, 146
 	.long Str_ErrorDialog_Caution
-	push	sr
-	nop
-	nop
-	nop
-	swi	1
-	nop
+	.short 2, 0, 249
 Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 
 
 ; ---------------------------------------------------------------------------
-; Widget 10 (0x0a): ERROR Message
+; Element 9 of Toshi_Viewable_TEST1: ERROR Message
 ; "** ERROR in CPU data transmission **"
-; Screen group 7, index 10 - Main error message
+; CORRECTED 2026-09-25: this used to say "Widget 10 (0x0a)" and "Screen group
+; 7, index 10"; 7 is the PARENT element and 0x0a the NEXT sibling (element 10).
 ; ---------------------------------------------------------------------------
 ErrorDialog_CPUTransmissionError:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	ldw	(0:8), 8:io
-	ld	(0:8), 14:io
-	nop
-	.byte 0x96
-	nop
-	ldw	bc, 0xa801
-	nop
-	.byte 0xe4
-	jr	z, -19
-	nop
-	nop
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	aligned_string "** ERROR in CPU data transmission **"
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, 10, 8
+	.short 8, 14, 150, 305, 168
+	.long Str_ErrorDialog_CPUTransmission
+	.short 0, 0, 2
+Str_ErrorDialog_CPUTransmission:	aligned_string "** ERROR in CPU data transmission **"
 
 
 ; ---------------------------------------------------------------------------
-; Widget 11 (0x0b): Recovery Instruction Line 1
+; Element 10 of Toshi_Viewable_TEST1: Recovery Instruction Line 1
 ; "Please try turning off and on again."
-; Screen group 7, index 11
+; (was "Widget 11 (0x0b)" / "Screen group 7, index 11": parent 7, next 11)
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine1:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	pushw	2304
-	nop
-	ld	(0:8), 46:io
-	nop
-	.byte 0xae
-	nop
-	push	1
-	.byte 0xb8
-	nop
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, 11, 9
+	.short 8, 46, 174, 265, 184
 	.long Str_ErrorDialog_TryTurningOff
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	nop
+	.short 3, 0, 0
 Str_ErrorDialog_TryTurningOff:	aligned_string "Please try turning off and on again."
 
 
 ; ---------------------------------------------------------------------------
-; Widget 12 (0x0c): Recovery Instruction Line 2
+; Element 11 of Toshi_Viewable_TEST1: Recovery Instruction Line 2
 ; "If this message appears again,"
-; Screen group 7, index 12
+; (was "Widget 12 (0x0c)" / "Screen group 7, index 12": parent 7, next 12;
+; its rectangle's y1/x2 pair used to be written `.long
+; TechnichordParam_Block3`, an absolute symbol that happens to equal
+; 0x00E500BE = {190, 229})
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine2:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	incf
-	nop
-	ldw	(0:8), 8:io
-	pushw	iz
-	nop
-	.long TechnichordParam_Block3
-	.byte 0xc8
-	nop
-	jrl	f, -4761
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	nop
-	aligned_string "If this message appears again,"
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, 12, 10
+	.short 8, 46, 190, 229, 200
+	.long Str_ErrorDialog_AppearsAgain
+	.short 3, 0, 0
+Str_ErrorDialog_AppearsAgain:	aligned_string "If this message appears again,"
 
 
 ; ---------------------------------------------------------------------------
-; Widget 13 (end marker 0xffff): Recovery Instruction Line 3
+; Element 12 of Toshi_Viewable_TEST1: Recovery Instruction Line 3
 ; "this unit needs repairing."
-; Screen group 7, final widget
+; (was "Widget 13 (end marker 0xffff)" / "Screen group 7, final widget": the
+; 0xffff is "no next sibling", i.e. the LAST child of element 7)
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine3:
-	pushw	hl
-	nop
-	jr	f, 0x01
-	reti
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pushw	2048
-	nop
-	pushw	iz
-	nop
-	.byte 0xce
-	nop
-	.byte 0xcd
-	nop
-	.byte 0xd8
-	nop
-	ld	(xwa), xsp
-	.byte 0xed
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	nop
-	aligned_string "this unit needs repairing."
+	naka_node 0x2b, 7, NAKA_INDEX_NONE, NAKA_INDEX_NONE, 11
+	.short 8, 46, 206, 205, 216
+	.long Str_ErrorDialog_NeedsRepairing
+	.short 3, 0, 0
+Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 .include "ui_widgets/extension_device_screens.s"
-	.ascii "!\"#$%%&'()*+,,-./01234456789:;;<=>?@ABCCDEFGHIJKKLMNOPQRRSTUVWXYZZ[\\]^_`abbcdefghiijklmqtx{"
-	jrl	nc, 256
-	.byte 0x01
-	push	sr
-	push	sr
-	pop	sr
-	pop	sr
-	.byte 0x04, 0x04
-	halt
-	halt
-	ei	7
-	reti
-	ld	(8:8), 9:io
-	push	10
-	ldw	(11:8), 3083:io
-	incf
-	decf
-	ret
-	ret
-	retd	4111
-	rcf
-	scf
-	scf
-	ccf
-	ccf
-	zcf
-	push_a
-	push_a
-	pop_a
-	pop_a
-	ex_ff
-	ex_ff
-	.byte 0x17, 0x17
-	push_f
-	push_f
-	pop_f
-	pop_f
-	.byte 0x1a
-	jp	0x1c1c1b
-	call	0x1e1e1d
-	.byte 0x1f, 0x1f, 0x20
-	.ascii "!!\"\"##$$%%&''(())**++,,-..//0011223445566778899::;;<<==>>??@@AABBCCDDEEFFGGHHIIJJKKLLMNNOPQQRSTTUVWWXYZZ[\\\\]^__`abbcdeefghijklmmnopqrstuvwxyzz{|}~"
-	jrl	nc, -32128
-	.byte 0x83, 0x85
-	add	(xsp), w
-	add	(xde-116), e
-	.byte 0x8f, 0x91, 0x92, 0x94, 0x96, 0x97, 0x99, 0x9b
-	.byte 0x9d, 0x9f, 0xa1, 0xa3, 0xa5
-	sub	(xsp), xbc
-	sub	(xhl-83), xsp
-	.byte 0xb1, 0xb3, 0xb7, 0xba, 0xbe
-	and	(0xc8c5:16), d
-	.byte 0xd1, 0xd6
-	or	bc, ix
-	.byte 0xe6
-	sla	xbc, 239
-	.byte 0xf3, 0xf6
-	swi	1
-	swi	4
-	swi	7
-	nop
-	nop
-	ei	0
-	ld	(0:8), 10:io
-	nop
-	decf
-	nop
-	rcf
-	nop
-	zcf
-	nop
-	ex_ff
-	nop
-	pop_f
-	nop
-	calr	10240
-	nop
-	nop
-	nop
-	nop
-	nop
-	push	sr
-	.byte 0x04, 0x06
-	ld	(10:8), 12:io
-	ret
-	rcf
-	ccf
-	push_a
-	ex_ff
-	push_f
-	.byte 0x1a, 0x1c
-	calr	8736
-	.byte 0x24
-	.ascii "&(*,.0234568:<>?@BDEFHJKLMNPQRTUVXYZ[\\]^_`abcdefghijjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}}~~~"
-	jrl	nc, 32639
-	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
-	.fill 8, 1, 0x80
-	.byte 0x80, 0x80, 0x80, 0x80, 0x81, 0x81, 0x81, 0x81
-	.byte 0x82, 0x82, 0x82, 0x82, 0x83, 0x83, 0x83, 0x84
-	.byte 0x84, 0x85, 0x85, 0x86, 0x86, 0x87
-	add	(xsp), w
-	add	(xwa-119), a
-	add	(xde-118), c
-	add	(xhl-116), d
-	add	(xiy-115), h
-	add	(xiz-113), l
-	.byte 0x90, 0x90, 0x91, 0x91, 0x92, 0x92, 0x93, 0x94
-	.byte 0x95, 0x96, 0x96, 0x97, 0x98, 0x99, 0x9a, 0x9b
-	.byte 0x9c, 0x9d, 0x9e, 0x9f, 0xa0, 0xa1, 0xa2, 0xa4
-	.byte 0xa5, 0xa6
-	sub	(xsp), xwa
-	sub	(xde-85), xix
-	.byte 0xad, 0xae, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6
-	.byte 0xb7, 0xb8, 0xba, 0xbc, 0xbe, 0xbf, 0xc0
-	and	(0xc6c4c3:24), w
-	and	b, 205
-	xor	w, h
-	xor	(0xd8d6d4:24), de
-	cp	ix, 5:i3
-	or	wa, iz
-	.byte 0xe2, 0xe4, 0xe6, 0xe8
-	sla	xde, 238
-	.byte 0xf0, 0xf2, 0xf5
-	ldx
-	swi	1
-	swi	3
-	swi	5
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pop_a
-	nop
-	pushw	hl
-	nop
-	ld	xwa, 0x6b005500
-	nop
-	.byte 0x80
-	nop
-	.byte 0x95
-	nop
-	.byte 0xab
-	nop
-	.byte 0xc0
-	nop
-	.byte 0xd5
-	nop
-	.byte 0xeb
-	nop
-	nop
-	.byte 0x01, 0x55
-	halt
-	.byte 0xab
-	ldw	(0:8), 0x5510:io
-	pop_a
-	.byte 0xab, 0x1a
-	nop
-	ld	w, 85:opc
-	ld	e, 171:opc
-	pushw	de
-	nop
-	ldw	wa, 0x3555
-	.byte 0xab
-	push	xde
-	nop
-	ld	xwa, 0x02010000
-	pop	sr
-	.byte 0x04
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	retd	4368
-	ccf
-	zcf
-	push_a
-	pop_a
-	ex_ff
-	.byte 0x17
-	push_f
-	pop_f
-	.byte 0x1a
-	jp	0x1e1d1c
-	.byte 0x1f
-	.ascii " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{}"
-	jrl	nc, 127
-	.byte 0x01
-	push	sr
-	pop	sr
-	.byte 0x04
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	retd	4368
-	ccf
-	zcf
-	push_a
-	pop_a
-	ex_ff
-	.byte 0x17
-	push_f
-	pop_f
-	.byte 0x1a
-	jp	0x1e1d1c
-	.byte 0x1f
-	.ascii " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-	jrl	nc, Str_ErrorDialog_TryTurningOff_Code_Skip
-	.byte 0xe3
-Str_ErrorDialog_TryTurningOff_Code_Skip:
-	jrl	mi, 252
-	push	sr
-	nop
-	.byte 0x04
-	jrl	c, Str_ErrorDialog_TryTurningOff_Code_Skip2
-	.byte 0x04
-	nop
+; ---------------------------------------------------------------------------
+; ENCODER LOOKUP TABLES and the BITMASK HANDLER LISTS (0xEDA160-0xEDA615)
+; ---------------------------------------------------------------------------
+; The lookup tables are named by absolute `.set`s in kn5000_v10_program.s
+; (ENCODER_LUT_*; listed also in midi_encoder_constants.s) and read by the
+; Encoder_Process* routines of midi/midi_encoder_routines.s, e.g.
+; Encoder_ProcessVolume (0xFC6CAE): `extz wa` / `lda xbc,
+; (ENCODER_LUT_VOLUME:24)` / `ldb_sri a` -- one byte per raw controller
+; value.  They are monotonic curves, which is why earlier passes wrote whole
+; stretches of them as .ascii "!\"#$%&..."; they are bytes, not text.
+;
+; The eight lists are read by DispatchBitmaskHandlers (audio/
+; audio_control_engine.s, 0xFC712B): entries of {u16 mask, u32 handler},
+; `and wa, (xiz)` / `call (xiz + 2)` for every mask bit set in the flag word
+; the caller passes, `inc 6, xiz`, until a mask of 0xFFFF.
+; MIDI_ProcessChangedChannels (0xFC700A) passes four "changed" words and
+; MidiChannel_DispatchChanged (0xFC707D) four others; the callers reach the
+; lists through positional names ENCODER_LUT_MODWHEEL_0x3C6 .. _0x4D4
+; (shared/positional_labels.s).  Six handlers (0xFC75E3, 0xFC7704, 0xFC7686,
+; 0xFC75A6, 0xFC75B7, 0xFC7741) have no label there and stay numeric.
+; ---------------------------------------------------------------------------
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA545-0xEDA558 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=10 near ENCODER_LUT_MODWHEEL_0x3FC+13
+	; ENCODER_LUT_MODWHEEL, entries 36-127 (0-35 are in the blob above): 92 bytes
+	.byte 0x21, 0x22, 0x23, 0x24, 0x25, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2c, 0x2d, 0x2e
+	.byte 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3b, 0x3c
+	.byte 0x3d, 0x3e, 0x3f, 0x40, 0x41, 0x42, 0x43, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b
+	.byte 0x4b, 0x4c, 0x4d, 0x4e, 0x4f, 0x50, 0x51, 0x52, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59
+	.byte 0x5a, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f, 0x60, 0x61, 0x62, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67
+	.byte 0x68, 0x69, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x71, 0x74, 0x78, 0x7b, 0x7f
+	; ENCODER_LUT_VOLUME: 256 bytes
+	.byte 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x06, 0x07, 0x07, 0x08, 0x08
+	.byte 0x09, 0x09, 0x0a, 0x0a, 0x0b, 0x0b, 0x0c, 0x0c, 0x0d, 0x0e, 0x0e, 0x0f, 0x0f, 0x10, 0x10, 0x11
+	.byte 0x11, 0x12, 0x12, 0x13, 0x14, 0x14, 0x15, 0x15, 0x16, 0x16, 0x17, 0x17, 0x18, 0x18, 0x19, 0x19
+	.byte 0x1a, 0x1b, 0x1b, 0x1c, 0x1c, 0x1d, 0x1d, 0x1e, 0x1e, 0x1f, 0x1f, 0x20, 0x21, 0x21, 0x22, 0x22
+	.byte 0x23, 0x23, 0x24, 0x24, 0x25, 0x25, 0x26, 0x27, 0x27, 0x28, 0x28, 0x29, 0x29, 0x2a, 0x2a, 0x2b
+	.byte 0x2b, 0x2c, 0x2c, 0x2d, 0x2e, 0x2e, 0x2f, 0x2f, 0x30, 0x30, 0x31, 0x31, 0x32, 0x32, 0x33, 0x34
+	.byte 0x34, 0x35, 0x35, 0x36, 0x36, 0x37, 0x37, 0x38, 0x38, 0x39, 0x39, 0x3a, 0x3a, 0x3b, 0x3b, 0x3c
+	.byte 0x3c, 0x3d, 0x3d, 0x3e, 0x3e, 0x3f, 0x3f, 0x40, 0x40, 0x41, 0x41, 0x42, 0x42, 0x43, 0x43, 0x44
+	.byte 0x44, 0x45, 0x45, 0x46, 0x46, 0x47, 0x47, 0x48, 0x48, 0x49, 0x49, 0x4a, 0x4a, 0x4b, 0x4b, 0x4c
+	.byte 0x4c, 0x4d, 0x4e, 0x4e, 0x4f, 0x50, 0x51, 0x51, 0x52, 0x53, 0x54, 0x54, 0x55, 0x56, 0x57, 0x57
+	.byte 0x58, 0x59, 0x5a, 0x5a, 0x5b, 0x5c, 0x5c, 0x5d, 0x5e, 0x5f, 0x5f, 0x60, 0x61, 0x62, 0x62, 0x63
+	.byte 0x64, 0x65, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6d, 0x6e, 0x6f, 0x70, 0x71
+	.byte 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f, 0x80
+	.byte 0x82, 0x83, 0x85, 0x87, 0x88, 0x8a, 0x8c, 0x8d, 0x8f, 0x91, 0x92, 0x94, 0x96, 0x97, 0x99, 0x9b
+	.byte 0x9d, 0x9f, 0xa1, 0xa3, 0xa5, 0xa7, 0xa9, 0xab, 0xad, 0xaf, 0xb1, 0xb3, 0xb7, 0xba, 0xbe, 0xc1
+	.byte 0xc5, 0xc8, 0xcc, 0xd1, 0xd6, 0xdc, 0xe1, 0xe6, 0xe9, 0xec, 0xef, 0xf3, 0xf6, 0xf9, 0xfc, 0xff
+	; ENCODER_LUT_BREATH_INDEX: 22 bytes
+	.byte 0x00, 0x00, 0x06, 0x00, 0x08, 0x00, 0x0a, 0x00, 0x0d, 0x00, 0x10, 0x00, 0x13, 0x00, 0x16, 0x00
+	.byte 0x19, 0x00, 0x1e, 0x00, 0x28, 0x00
+	; ENCODER_LUT_BREATH_VALUE: 256 bytes
+	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x04, 0x06, 0x08, 0x0a, 0x0c, 0x0e, 0x10, 0x12, 0x14, 0x16, 0x18
+	.byte 0x1a, 0x1c, 0x1e, 0x20, 0x22, 0x24, 0x26, 0x28, 0x2a, 0x2c, 0x2e, 0x30, 0x32, 0x33, 0x34, 0x35
+	.byte 0x36, 0x38, 0x3a, 0x3c, 0x3e, 0x3f, 0x40, 0x42, 0x44, 0x45, 0x46, 0x48, 0x4a, 0x4b, 0x4c, 0x4d
+	.byte 0x4e, 0x50, 0x51, 0x52, 0x54, 0x55, 0x56, 0x58, 0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f, 0x60
+	.byte 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6a, 0x6b, 0x6b, 0x6c, 0x6c, 0x6d
+	.byte 0x6d, 0x6e, 0x6e, 0x6f, 0x6f, 0x70, 0x70, 0x71, 0x71, 0x72, 0x72, 0x73, 0x73, 0x74, 0x74, 0x75
+	.byte 0x75, 0x76, 0x76, 0x77, 0x77, 0x78, 0x78, 0x79, 0x79, 0x7a, 0x7a, 0x7b, 0x7b, 0x7c, 0x7c, 0x7d
+	.byte 0x7d, 0x7d, 0x7e, 0x7e, 0x7e, 0x7f, 0x7f, 0x7f, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
+	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x81, 0x81, 0x81, 0x81, 0x82, 0x82
+	.byte 0x82, 0x82, 0x83, 0x83, 0x83, 0x84, 0x84, 0x85, 0x85, 0x86, 0x86, 0x87, 0x87, 0x88, 0x88, 0x89
+	.byte 0x89, 0x8a, 0x8a, 0x8b, 0x8b, 0x8c, 0x8c, 0x8d, 0x8d, 0x8e, 0x8e, 0x8f, 0x8f, 0x90, 0x90, 0x91
+	.byte 0x91, 0x92, 0x92, 0x93, 0x94, 0x95, 0x96, 0x96, 0x97, 0x98, 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e
+	.byte 0x9f, 0xa0, 0xa1, 0xa2, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xb0, 0xb1
+	.byte 0xb2, 0xb4, 0xb5, 0xb6, 0xb7, 0xb8, 0xba, 0xbc, 0xbe, 0xbf, 0xc0, 0xc2, 0xc3, 0xc4, 0xc6, 0xc8
+	.byte 0xca, 0xcc, 0xcd, 0xce, 0xd0, 0xd2, 0xd4, 0xd6, 0xd8, 0xda, 0xdc, 0xdd, 0xde, 0xe0, 0xe2, 0xe4
+	.byte 0xe6, 0xe8, 0xea, 0xec, 0xee, 0xf0, 0xf2, 0xf5, 0xf7, 0xf9, 0xfb, 0xfd, 0xff, 0xff, 0xff, 0xff
+	; ENCODER_LUT_BREATH_MULT: 24 bytes
+	.byte 0x15, 0x00, 0x2b, 0x00, 0x40, 0x00, 0x55, 0x00, 0x6b, 0x00, 0x80, 0x00, 0x95, 0x00, 0xab, 0x00
+	.byte 0xc0, 0x00, 0xd5, 0x00, 0xeb, 0x00, 0x00, 0x01
+	; ENCODER_LUT_BREATH_OFFSET: 24 bytes
+	.byte 0x55, 0x05, 0xab, 0x0a, 0x00, 0x10, 0x55, 0x15, 0xab, 0x1a, 0x00, 0x20, 0x55, 0x25, 0xab, 0x2a
+	.byte 0x00, 0x30, 0x55, 0x35, 0xab, 0x3a, 0x00, 0x40
+	; ENCODER_LUT_FOOT: 128 bytes
+	.byte 0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e
+	.byte 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e
+	.byte 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e
+	.byte 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e
+	.byte 0x3f, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e
+	.byte 0x4f, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e
+	.byte 0x5f, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e
+	.byte 0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7d, 0x7f, 0x7f
+	; ENCODER_LUT_EXPRESSION: 128 bytes
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
+	.byte 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f
+	.byte 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f
+	.byte 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f
+	.byte 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f
+	.byte 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f
+	.byte 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f
+	; MIDI_ProcessChangedChannels, group 1: flags 0x8F3A & ~0x8F3C
+	.short 0x0001
+	.long 0x00fc75e3
+	.short 0x0002
+	.long 0x00fc7704
+	.short 0x0004
 	.long SndParam_TableLookup_Via4100
-	ld	(0:8), 29:io
-	jrl	ule, 252
-	rcf
-	nop
-	.byte 0xbc
-	jrl	le, 252
-	ld	w, 0:opc
-	jrl	ge, -909
-	nop
-	.byte 0x40
-	nop
+	.short 0x0008
+	.long SndParam_SetResBit1_ViaPartCC5E
+	.short 0x0010
+	.long SndParam_SetResBit3_Via4002
+	.short 0x0020
+	.long SndParam_SetResBit0_ViaPartCC40
+	.short 0x0040
 	.long SndParam_SetResBit2_ViaPartCC5D
-	.byte 0x80
-	nop
-	scc16	le, bc
-	swi	4
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x01
-	nop
-	.byte 0x86
-	jrl	z, 252
-	push	sr
-	nop
+	.short 0x0080
+	.long SndParam_SetResBit4_Via4004
+	.short 0xffff	; end of list
+	.long 0xffffffff
+	; MIDI_ProcessChangedChannels, group 2: 0x8F3E & ~0x8F40
+	.short 0x0001
+	.long 0x00fc7686
+	.short 0x0002
 	.long SndParam_VoiceEntryLookup_ViaReg8000
-	.byte 0x04
-	nop
-	cp	(xiz+115), ix
-	nop
-	ld	(0:8), 217:io
-	jrl	ule, 252
-	rcf
-	nop
-	jr	gt, 114
-	swi	4
-	nop
-	ld	w, 0:opc
+	.short 0x0004
+	.long SndParam_GuardedNibbleSet_ViaReg0103
+	.short 0x0008
+	.long SndParam_SetResBit0_Via028103
+	.short 0x0010
+	.long SndParam_SetResBit2_ViaRegs0101_0102
+	.short 0x0020
 	.long SndParam_SetResBit3_ViaRegs0101_0102
-	ld	xwa, 0xfc722400
-	nop
-	.byte 0x80
-	nop
-	ld	xbc, 0xfc72
-	.byte 0x01, 0xf6
-	jrl	ule, 252
-	nop
-	push	sr
+	.short 0x0040
+	.long SndParam_SetResBit0_Via028100
+	.short 0x0080
+	.long SndParam_SetResBit1_ViaRegs0100_0101
+	.short 0x0100
+	.long SndParam_SetResBit5_Via028080
+	.short 0x0200
 	.long SndParam_VoiceEntryLookup_ViaReg8000
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x01
-	nop
-	cp	(xsp+116), ix
-	nop
-	.byte 0x04
-	nop
-	.byte 0xe4
-	jrl	ov, 252
-	.byte 0x08
-	nop
+	.short 0xffff	; end of list
+	.long 0xffffffff
+	; MIDI_ProcessChangedChannels, group 3: 0x8F42 & ~0x8F44
+	.short 0x0001
+	.long SndParam_DecrLookup_Via0300
+	.short 0x0004
+	.long SndParam_SetResBit7_ViaSelection
+	.short 0x0008
 	.long SndParam_SetResBit4_Via0400
-	rcf
-	nop
-	jr	nz, 116
-	swi	4
-	nop
-	ld	w, 0:opc
-	cp	(xhl+116), d
-	nop
-	ld	xwa, 0xfc750100
-	nop
-	nop
-	.byte 0x01
+	.short 0x0010
+	.long SndParam_SetResBit7_Via4200
+	.short 0x0020
+	.long SndParam_MaskShiftMerge_8F58
+	.short 0x0040
+	.long SndParam_SetResBit7_ViaF9A541
+	.short 0x0100
 	.long ExtData_VoiceParam_DispatchBytecode
-	nop
-	.byte 0x04, 0xa6
-	jrl	mi, 252
-	nop
-	rcf
-	.byte 0xb7
-	jrl	mi, 252
-	nop
-	ld	w, 65:opc
-	jrl	c, 252
-	nop
-	.byte 0x40
+	.short 0x0400
+	.long 0x00fc75a6
+	.short 0x1000
+	.long 0x00fc75b7
+	.short 0x2000
+	.long 0x00fc7741
+	.short 0x4000
 	.long CtrlPanel_SetResBit6_ViaLookup
-	nop
-	.byte 0x80
-	jrl	mi, -905
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x01
-	nop
-	.byte 0xbf
-	jrl	c, 252
-	push	sr
-	nop
+	.short 0x8000
+	.long CtrlPanel_MultiWayBitManip_ViaE0
+	.short 0xffff	; end of list
+	.long 0xffffffff
+	; MIDI_ProcessChangedChannels, group 4: 0x8F46 & ~0x8F48
+	.short 0x0001
+	.long CtrlPanel_SyncBit0_From8F5C
+	.short 0x0002
 	.long CtrlPanel_SetBit3_OnStyleD0D3
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	ld	xwa, 0xfc77f000
-	nop
-	.byte 0x08
-	nop
+	.short 0xffff	; end of list
+	.long 0xffffffff
+	; MidiChannel_DispatchChanged, group 1: 0x8F3C
+	.short 0xffff	; end of list
+	.long 0xffffffff
+	; MidiChannel_DispatchChanged, group 2: 0x8F40
+	.short 0x0040
+	.long CtrlPanel_SetResBit0_ViaLookup4
+	.short 0x0008
 	.long CtrlPanel_SetResBit0_ViaLookup4C
-	.byte 0x04
-	nop
-	jrl	-904
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x04
-	nop
-	.byte 0xe6
-	jrl	252
-	nop
-	.byte 0x20
+	.short 0x0004
+	.long CtrlPanel_GuardedNibbleSet_8F4E
+	.short 0xffff	; end of list
+	.long 0xffffffff
+	; MidiChannel_DispatchChanged, group 3: 0x8F44
+	.short 0x0004
+	.long CtrlPanel_SetResBit7_ViaLookup4C
+	.short 0x2000
 	.long CtrlPanel_SetResBit5_ViaLookup4C
-	nop
-	ld	xwa, CtrlPanel_SetResBit6_ViaLookup4C
-Str_ErrorDialog_TryTurningOff_Code_Skip2:
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 6, 1, 0xff
+	.short 0x4000
+	.long CtrlPanel_SetResBit6_ViaLookup4C
+	.short 0xffff	; end of list
+	.long 0xffffffff
+	; MidiChannel_DispatchChanged, group 4: 0x8F48
+	.short 0xffff	; end of list
+	.long 0xffffffff
 
 
 Protocol_values_for_LED_rows:
@@ -4010,659 +2482,192 @@ Protocol_values_for_LED_rows:
 	;  12: 0x0a = MEMORY A, MEMORY B
 	;  13: 0x0b = SYNCHRO&BREAK, R1/R2 OCTAVE -/+, BANK VIEW
 	;  14: 0x0c = START/STOP BEAT 1-4
-	.byte 0xc0
-	and	d, (0xc3c2:16)
-	.byte 0xc8
-	nop
-	.byte 0x01
-	push	sr
-	pop	sr
-	.byte 0x04
-	ld	(10:8), 11:io
-	incf
-
-	swi	7
-	.byte 0x04
-	push	sr
-	ei	7
-	halt
-	pop	sr
-	ld	c, 0:opc
-	ld	c, 0:opc
-	pushw	hl
-	nop
-	ld	l, 0:opc
-	pushw	sp
-	nop
-	ldw	hl, 3072
-	nop
-	.byte 0x1f
-	nop
-	push	xix
-	nop
-	rcf
-	nop
-	incf
-	nop
-	incf
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	push	xix
-	nop
-	ld	(0:8), 55:io
-	nop
-	.byte 0x01
-	push	sr
-	.byte 0x04, 0x01
-	push	sr
-	.byte 0x04, 0x01
-	push	sr
-	.byte 0x04
-	ld	(1:8), 2:io
-	.byte 0x04
-	ld	(0:8), 0:io
-	ldw	ix, 0x3400
-	nop
-	ret
-	nop
-	ld	l, 0:opc
-	reti
-	nop
-	reti
-	nop
-	pushw	iz
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 0x80000000
-	scf
-	ldw	de, 3072
-	push_a
-	ldw	de, 93
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	push_f
-	nop
-	jr	lt, 24
-	jr	ule, 94
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ccf
-	push	sr
-	nop
-	pushw	iy
-	incf
-	ldw	de, 80
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_a
-	pushw	iz
-	nop
-	call	0x503a14
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	pop_a
-	ld	w, 0:opc
-	push	xix
-	push_f
-	.byte 0x50
-	popw	iz
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ex_ff
-	push_a
-	nop
-	pop_a
-	push_f
-	ldw	ix, 73
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_f
-	ld	a, 0:opc
-	push	sr
-	nop
-	jr	f, 79
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	pop_f
-	pushw	hl
-	nop
-	.byte 0x1a
-	nop
-	halt
-	push	xde
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	.byte 0x1a
-	retd	4352
-	pop_a
-	.byte 0x17
-	popw	sp
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	jp	0x1a003c
-	ccf
-	ldw	de, 4694
-	.byte 0x54
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	.byte 0x1c
-	pop	sr
-	.byte 0x97, 0x04, 0xd5
-	halt
-	.byte 0xa2, 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0xd8
-	push	sr
-	.byte 0x84, 0x04, 0xc4, 0x06
-	pop	xwa
-	.byte 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	ld	xhl, 0x29042a03
-	.byte 0x04, 0xc0, 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	nop
-	ld	h, 152
-	halt
-	push_f
-	halt
-	jr	84
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	nop
-	.byte 0x1c
-	push	sr
-	.byte 0x54
-	pop	sr
-	push_a
-	.byte 0x04
-	push	sr
-	.byte 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	ld	wa, 1432
-	push	sr
-	halt
-	div	xix, xwa
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	nop
-	ccf
-	.byte 0x01, 0xa8
-	halt
-	push_f
-	halt
-	div	xix, xwa
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0xc0
-	pop	sr
-	.byte 0x98
-	halt
-	push_f
-	.byte 0x06, 0x54, 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	call	0x05ea04
-	.byte 0xf0, 0x06
-	ld	(xwa), ix
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_a
-	ldw	iz, 2816
-	push_a
-	ldw	de, 74
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	jp	0x038e02
-	pop	xwa
-	.byte 0x04
-	retd	84
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	push	sr
-	nop
-	ldw	iy, 0x5400
-	jr	ov, 0
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	scf
-	push	sr
-	.byte 0x83
-	pop	sr
-	popw	ix
-	halt
-	.byte 0xe8, 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	rcf
-	.byte 0x1c
-	nop
-	.byte 0x56
-	nop
-	.byte 0x52
-	jr	ov, 0
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	pop	xwa
-	pop	sr
-	push_f
-	pop	sr
-	.byte 0xe8
-	halt
-	incf
-	.byte 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ccf
-	ld	c, 0:opc
-	ldw	bc, 0x320c
-	popw	iz
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0x98
-	push	sr
-	popw	hl
-	pop	sr
-	pop	b
-	rcf
-	.byte 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	ex_ff
-	pushw	iy
-	nop
-	push	xde
-	incf
-	ldw	de, 82
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01, 0x98
-	push	sr
-	pop	xwa
-	.byte 0x04
-	ld	a, 5:opc
-	ld	b, 84:opc
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	push_f
-	pushw	bc
-	nop
-	pop_f
-	push_a
-	ldw	de, 74
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	ld	wa, 1176
-	push_f
-	.byte 0x04, 0x8e, 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	pop_f
-	zcf
-	nop
-	ccf
-	ldw	(87:8), 63:io
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	.byte 0x01
-	ld	wa, 1163
-	pop	xiz
-	halt
-	div	xix, xwa
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	jp	0x590034
-	ccf
-	ldw	de, 79
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	.byte 0x8b
-	pop	sr
-	.byte 0x92
-	halt
-	ld	b, 5:opc
-	.byte 0xd1, 0x54
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	scf
-	ld	c, 0:opc
-	ld	xsp, 0x693214
-	nop
-	nop
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
-	popw	sp
-	push	sr
-	.byte 0x53
-	push	sr
-	.byte 0x83
-	halt
-	push_f
-	halt
-	div	xix, xwa
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	jr	ule, 0
+	.byte 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc8, 0x00, 0x01, 0x02, 0x03, 0x04, 0x08, 0x0a, 0x0b, 0x0c, 0xff
+; ---------------------------------------------------------------------------
+; Small tables after the LED-row list, each reached through a positional name
+; Protocol_values_for_LED_rows_0xNN by one routine of audio/audio_control_engine.s:
+;   +0x10  6 bytes         SndParam_TableLookup_Via4100
+;   +0x16  17 u16          ExtData_VoiceParam_DispatchBytecode
+;   +0x38  6 bytes         MidiChOut_Mode6or3_Mask7
+;   +0x3E  8 bytes         MidiChOut_OtherMode_Mask3
+;   +0x46  8 u16           UIState_ProcessExtendedMode
+;   +0x56  32 u32, 1 << k  CtrlPanel_LookupIndicatorEntry (a bit-mask table)
+; ---------------------------------------------------------------------------
+AudioCtl_SmallTables:
+	.byte 4, 2, 6, 7, 5, 3
+	.short 0x0023, 0x0023, 0x002b, 0x0027, 0x002f, 0x0033, 0x000c, 0x001f, 0x003c
+	.short 0x0010, 0x000c, 0x000c, 0x0004, 0x0000, 0x003c, 0x0008, 0x0037
+	.byte 1, 2, 4, 1, 2, 4
+	.byte 1, 2, 4, 8, 1, 2, 4, 8
+	.short 0x0000, 0x0034, 0x0034, 0x000e, 0x0027, 0x0007, 0x0007, 0x002e
+	.long 0x00000001, 0x00000002, 0x00000004, 0x00000008
+	.long 0x00000010, 0x00000020, 0x00000040, 0x00000080
+	.long 0x00000100, 0x00000200, 0x00000400, 0x00000800
+	.long 0x00001000, 0x00002000, 0x00004000, 0x00008000
+	.long 0x00010000, 0x00020000, 0x00040000, 0x00080000
+	.long 0x00100000, 0x00200000, 0x00400000, 0x00800000
+	.long 0x01000000, 0x02000000, 0x04000000, 0x08000000
+	.long 0x10000000, 0x20000000, 0x40000000, 0x80000000
+; ---------------------------------------------------------------------------
+; SOUND-EFFECT PRESETS: 10 reverb, 9 EQ and 9 combined records (0xEDA6EC-0xEDAA63)
+; ---------------------------------------------------------------------------
+; Reached through ReverbPreset_Table / EQPreset_Table / CombinedPreset_Table
+; (after SoundProgram_DispatchTable, below).  The loaders in
+; audio/audio_control_engine.s copy a record to RAM and send it to the Sub
+; CPU: ReverbPreset_Load (24 B to 0xFC8E, command 0x63, index 0-9),
+; EQPreset_Load (24 B to 0xFCA8, command 0x64, index 0-8); the *_FindMatch
+; routines compare the RAM copies against every record with Mem_Compare, and
+; CombinedPreset_SearchLoop compares 0xFC8E with a combined record's first
+; 24 bytes and 0xFCA8 with its second 24 -- a combined preset is one reverb
+; record followed by one EQ record.  Byte 22 is 0x63 (99) in all 28 records
+; (and byte 46 in the combined ones); `ext_lane_checks.py presets` checks it.
+; Every EQ record starts 0x4F (the EQ algorithm) followed by four big-endian
+; 16-bit values (ReverbPreset_Load's and EQPreset_Load's own headers in
+; audio_control_engine.s name them); kn5000_v10_program.s still holds the
+; old absolute names ToshiParam_Entry_01..27 for records 1-27 as `.set`s.
+; ---------------------------------------------------------------------------
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA65B-0xEDA66C (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=60% dist=7 near Protocol_values_for_LED_rows_0x3E+7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA675-0xEDA68D (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA696-0xEDA6AE (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+42
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6B7-0xEDA6CF (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+75
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6D8-0xEDA6F8 (32 B), unreached CODE-territory, was disassembled as 21 plausible-but-dead instruction lines; per=100% dist=11 near Protocol_values_for_LED_rows_0x56+108
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA700-0xEDA710 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+148
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA718-0xEDA728 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+172
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA730-0xEDA740 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+196
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA760-0xEDA770 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+244
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA778-0xEDA788 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+268
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA820-0xEDA830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near Protocol_values_for_LED_rows_0x56+436
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8B0-0xEDA8C0 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+580
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8E0-0xEDA8F0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+628
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA940-0xEDA950 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+724
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA970-0xEDA980 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+772
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9A0-0xEDA9B0 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+820
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9D0-0xEDA9E0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+868
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA00-0xEDAA10 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+916
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA30-0xEDAA40 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+964
+ReverbPreset_0:
+	.byte 0x11, 0x32, 0x00, 0x0c, 0x14, 0x32, 0x5d, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_1:
+	.byte 0x10, 0x18, 0x00, 0x61, 0x18, 0x63, 0x5e, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_2:
+	.byte 0x12, 0x02, 0x00, 0x2d, 0x0c, 0x32, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_3:
+	.byte 0x14, 0x2e, 0x00, 0x1d, 0x14, 0x3a, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_4:
+	.byte 0x15, 0x20, 0x00, 0x3c, 0x18, 0x50, 0x4e, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_5:
+	.byte 0x16, 0x14, 0x00, 0x15, 0x18, 0x34, 0x49, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_6:
+	.byte 0x18, 0x21, 0x00, 0x02, 0x00, 0x60, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_7:
+	.byte 0x19, 0x2b, 0x00, 0x1a, 0x00, 0x05, 0x3a, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_8:
+	.byte 0x1a, 0x0f, 0x00, 0x11, 0x15, 0x17, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+ReverbPreset_9:
+	.byte 0x1b, 0x3c, 0x00, 0x1a, 0x12, 0x32, 0x56, 0x12, 0x54, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_0:
+	.byte 0x4f, 0x02, 0x1c, 0x03, 0x97, 0x04, 0xd5, 0x05, 0xa2, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_1:
+	.byte 0x4f, 0x01, 0xd8, 0x02, 0x84, 0x04, 0xc4, 0x06, 0x58, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_2:
+	.byte 0x4f, 0x02, 0x43, 0x03, 0x2a, 0x04, 0x29, 0x04, 0xc0, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_3:
+	.byte 0x4f, 0x00, 0xce, 0x03, 0x98, 0x05, 0x18, 0x05, 0x68, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_4:
+	.byte 0x4f, 0x00, 0x1c, 0x02, 0x54, 0x03, 0x14, 0x04, 0x02, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_5:
+	.byte 0x4f, 0x01, 0xd8, 0x03, 0x98, 0x05, 0x02, 0x05, 0xd8, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_6:
+	.byte 0x4f, 0x00, 0x12, 0x01, 0xa8, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_7:
+	.byte 0x4f, 0x01, 0xc0, 0x03, 0x98, 0x05, 0x18, 0x06, 0x54, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+EQPreset_8:
+	.byte 0x4f, 0x01, 0x1d, 0x04, 0xea, 0x05, 0xf0, 0x06, 0xb0, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_0:
+	.byte 0x14, 0x36, 0x00, 0x0b, 0x14, 0x32, 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0x1b, 0x02, 0x8e, 0x03, 0x58, 0x04, 0x0f, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_1:
+	.byte 0x10, 0x02, 0x00, 0x35, 0x00, 0x54, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0x11, 0x02, 0x83, 0x03, 0x4c, 0x05, 0xe8, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_2:
+	.byte 0x10, 0x1c, 0x00, 0x56, 0x00, 0x52, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x02, 0x58, 0x03, 0x18, 0x03, 0xe8, 0x05, 0x0c, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_3:
+	.byte 0x12, 0x23, 0x00, 0x31, 0x0c, 0x32, 0x4e, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0x98, 0x02, 0x4b, 0x03, 0xca, 0x05, 0x10, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_4:
+	.byte 0x16, 0x2d, 0x00, 0x3a, 0x0c, 0x32, 0x52, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0x98, 0x02, 0x58, 0x04, 0x21, 0x05, 0x22, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_5:
+	.byte 0x18, 0x29, 0x00, 0x19, 0x14, 0x32, 0x4a, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0xd8, 0x03, 0x98, 0x04, 0x18, 0x04, 0x8e, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_6:
+	.byte 0x19, 0x13, 0x00, 0x12, 0x0a, 0x57, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x01, 0xd8, 0x03, 0x8b, 0x04, 0x5e, 0x05, 0xd8, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_7:
+	.byte 0x1b, 0x34, 0x00, 0x59, 0x12, 0x32, 0x4f, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x02, 0x8b, 0x03, 0x92, 0x05, 0x22, 0x05, 0xd1, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+CombinedPreset_8:
+	.byte 0x11, 0x23, 0x00, 0x47, 0x14, 0x32, 0x69, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+	.byte 0x4f, 0x02, 0x53, 0x02, 0x83, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
+; ---------------------------------------------------------------------------
+; SoundProgram_DispatchTable -- 256 handler pointers, one per value of a
+; command byte
+; ---------------------------------------------------------------------------
+; Reader: FileIO_OperationDispatch (audio/audio_control_engine.s, 0xFC84EA)
+; walks a byte stream whose base pointer is at RAM 0xC039 and whose cursor
+; word is at 0x9133, until the byte at the cursor is 0xFF.  For each 3-byte
+; record SndParam_FetchSequencerParams (0xFC95CE) moves byte 0 to RAM 0x9127
+; (the command), byte 1 to 0x9128/0x912F and byte 2 to 0x9130; the
+; dispatcher then does `ld a, (0x9127)` / `sla wa, 2` / `lda xbc,
+; (SoundProgram_DispatchTable)` / `ld_sril3` / `call (xhl)`.
+; Entries: 0x00-0x19 ExtData_ToneParam_DispatchHandler; 0x43-0x48, 0x60,
+; 0x68, 0x70, 0x72, 0x7A, 0x90, 0x98, 0xA8 and 0xB0 their own handlers;
+; 0xB1-0xBD the MidiCh_Iterate* volume / expression / pan loops; every other
+; entry is a bare `ret` -- ToshiCmd_DefaultHandler_Ret (0xFC95CD), or for
+; 0x20-0x3F FileIO_AllocBuffer (0xFC873C), which is also a one-byte `ret`
+; (0x0E) whatever its name says.  The table and handler names are
+; historical; what the command stream encodes beyond this is not traced
+; here.  The three tables after it (+0x400, +0x800, +0x880) are indexed by
+; the same command byte, or by channel -- see their headers.
+; ---------------------------------------------------------------------------
 SoundProgram_DispatchTable:
 	.long ExtData_ToneParam_DispatchHandler
 	.long ExtData_ToneParam_DispatchHandler
@@ -4920,15500 +2925,2346 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.byte 0xb6, 0xf9, 0x00, 0x00
-	.byte 0xd0, 0xf9, 0x00, 0x00, 0xea, 0xf9, 0x00, 0x00
-	.byte 0x04, 0xfa, 0x00, 0x00, 0x1e, 0xfa, 0x00, 0x00
-	.byte 0x38, 0xfa, 0x00, 0x00, 0x52, 0xfa, 0x00, 0x00
-	.byte 0x6c, 0xfa, 0x00, 0x00, 0x86, 0xfa, 0x00, 0x00
-	.byte 0xa0, 0xfa, 0x00, 0x00, 0xba, 0xfa, 0x00, 0x00
-	.byte 0xd4, 0xfa, 0x00, 0x00, 0xee, 0xfa, 0x00, 0x00
-	.byte 0x08, 0xfb, 0x00, 0x00, 0x22, 0xfb, 0x00, 0x00
-	.byte 0x3c, 0xfb, 0x00, 0x00, 0x56, 0xfb, 0x00, 0x00
-	.byte 0x70, 0xfb, 0x00, 0x00, 0x8a, 0xfb, 0x00, 0x00
-	.byte 0xa4, 0xfb, 0x00, 0x00, 0xbe, 0xfb, 0x00, 0x00
-	.byte 0xd8, 0xfb, 0x00, 0x00, 0xf2, 0xfb, 0x00, 0x00
-	.byte 0x62, 0xfd, 0x00, 0x00, 0x7c, 0xfd, 0x00, 0x00
-	.byte 0x0c, 0xfc, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0x54, 0xfc, 0x00, 0x00, 0x26, 0xfc, 0x00, 0x00
-	.byte 0x32, 0xfc, 0x00, 0x00, 0x3e, 0xfc, 0x00, 0x00
-	.byte 0x4a, 0xfc, 0x00, 0x00, 0x5a, 0xfc, 0x00, 0x00
-	.byte 0x92, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0xfc, 0x00, 0x00
-	.byte 0x74, 0xfc, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.byte 0x8e, 0xfc, 0x00, 0x00, 0xa8, 0xfc, 0x00, 0x00
-	.byte 0xc2, 0xfc, 0x00, 0x00, 0xdc, 0xfc, 0x00, 0x00
-	.byte 0xff, 0xff, 0xff, 0xff, 0xf6, 0xfc, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x02, 0xfd, 0x00, 0x00
-	.byte 0x2c, 0xfd, 0x00, 0x00, 0x0c, 0xfd, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xa2, 0xf9, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x50, 0xfd, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x66, 0xfc, 0x00, 0x00
-	.byte 0xaa, 0xfd, 0x00, 0x00, 0x1c, 0xfd, 0x00, 0x00
-	.byte 0xb6, 0xfd, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x96, 0xfd, 0x00, 0x00
-	.byte 0x30, 0xfd, 0x00, 0x00, 0xa4, 0xff, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xda, 0xfd, 0x00, 0x00
-	.byte 0xee, 0xfd, 0x00, 0x00, 0x02, 0xfe, 0x00, 0x00
-	.byte 0x16, 0xfe, 0x00, 0x00, 0x2a, 0xfe, 0x00, 0x00
-	.byte 0x3e, 0xfe, 0x00, 0x00, 0x52, 0xfe, 0x00, 0x00
-	.byte 0x66, 0xfe, 0x00, 0x00, 0x7a, 0xfe, 0x00, 0x00
-	.byte 0x8e, 0xfe, 0x00, 0x00, 0xa2, 0xfe, 0x00, 0x00
-	.byte 0xb6, 0xfe, 0x00, 0x00, 0xca, 0xfe, 0x00, 0x00
-	.byte 0xde, 0xfe, 0x00, 0x00, 0xf2, 0xfe, 0x00, 0x00
-	.byte 0x06, 0xff, 0x00, 0x00, 0x1a, 0xff, 0x00, 0x00
-	.byte 0x2e, 0xff, 0x00, 0x00, 0x42, 0xff, 0x00, 0x00
-	.byte 0x56, 0xff, 0x00, 0x00, 0x6a, 0xff, 0x00, 0x00
-	.byte 0x1a, 0xff, 0x00, 0x00, 0x56, 0xff, 0x00, 0x00
-	.byte 0x7e, 0xff, 0x00, 0x00, 0x7e, 0xff, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xda, 0xfd, 0x00, 0x00
-	.byte 0xee, 0xfd, 0x00, 0x00, 0x02, 0xfe, 0x00, 0x00
-	.byte 0x16, 0xfe, 0x00, 0x00, 0x2a, 0xfe, 0x00, 0x00
-	.byte 0x3e, 0xfe, 0x00, 0x00, 0x52, 0xfe, 0x00, 0x00
-	.byte 0x66, 0xfe, 0x00, 0x00, 0x7a, 0xfe, 0x00, 0x00
-	.byte 0x8e, 0xfe, 0x00, 0x00, 0xa2, 0xfe, 0x00, 0x00
-	.byte 0xb6, 0xfe, 0x00, 0x00, 0xca, 0xfe, 0x00, 0x00
-	.byte 0xde, 0xfe, 0x00, 0x00, 0xf2, 0xfe, 0x00, 0x00
-	.byte 0x06, 0xff, 0x00, 0x00, 0x1a, 0xff, 0x00, 0x00
-	.byte 0x2e, 0xff, 0x00, 0x00, 0x42, 0xff, 0x00, 0x00
-	.byte 0x56, 0xff, 0x00, 0x00, 0x6a, 0xff, 0x00, 0x00
-	.byte 0x1a, 0xff, 0x00, 0x00, 0x56, 0xff, 0x00, 0x00
-	.byte 0x7e, 0xff, 0x00, 0x00, 0x7e, 0xff, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x49, 0x7c, 0xfc, 0x00
+; SoundProgram_DispatchTable + 0x400 (SoundProgram_DispatchTable_0x400 in
+; shared/positional_labels.s): 256 RAM addresses, indexed by the SAME command
+; byte.  VoiceData_LookupPtrByIndex (audio/audio_control_engine.s, 0xFC9DF4)
+; does `sla wa, 2` / `lda xbc, (+0x400)` / `ld_sril3`, and
+; SndParam_FetchSequencerParams stores the result at RAM 0x912B next to the
+; command byte it fetched; Audio_InitAllDefaults (0xFC7C49) stores this
+; table's address at RAM 0x90F2.
+; 0xFFFFFFFF = no RAM block for that command.  The live entries are 26 bytes
+; apart (0xF9B6, 0xF9D0, ...) -- the same spacing as the RAM-bank table
+; sndparam_types.h describes.
+	.long 0x0000f9b6, 0x0000f9d0, 0x0000f9ea, 0x0000fa04, 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa6c	; [0x00]
+	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4, 0x0000faee, 0x0000fb08, 0x0000fb22, 0x0000fb3c	; [0x08]
+	.long 0x0000fb56, 0x0000fb70, 0x0000fb8a, 0x0000fba4, 0x0000fbbe, 0x0000fbd8, 0x0000fbf2, 0x0000fd62	; [0x10]
+	.long 0x0000fd7c, 0x0000fc0c, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x18]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x20]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x28]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x30]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x38]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0x0000fc54, 0x0000fc26, 0x0000fc32, 0x0000fc3e, 0x0000fc4a	; [0x40]
+	.long 0x0000fc5a, 0x0000ff92, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x48]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x50]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x58]
+	.long 0x0000fc6e, 0x0000fc74, 0xffffffff, 0x0000fc8e, 0x0000fca8, 0x0000fcc2, 0x0000fcdc, 0xffffffff	; [0x60]
+	.long 0x0000fcf6, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x68]
+	.long 0x0000fd02, 0x0000fd2c, 0x0000fd0c, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x70]
+	.long 0x0000f9a2, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x78]
+	.long 0x0000fd50, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x80]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x88]
+	.long 0x0000fc66, 0x0000fdaa, 0x0000fd1c, 0x0000fdb6, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x90]
+	.long 0x0000fd96, 0x0000fd30, 0x0000ffa4, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x98]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xa0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xa8]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xb0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xb8]
+	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0xc0]
+	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6, 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; [0xc8]
+	.long 0x0000ff1a, 0x0000ff2e, 0x0000ff42, 0x0000ff56, 0x0000ff6a, 0x0000ff1a, 0x0000ff56, 0x0000ff7e	; [0xd0]
+	.long 0x0000ff7e, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xd8]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xe0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xe8]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf8]
+; SoundProgram_DispatchTable + 0x800 (..._0x800): 32 RAM addresses, one per
+; channel 0-31: VoiceData_LookupPtrByChannel (0xFC9E04) does `cp a, 0x1f` /
+; `jr ugt` / `sla wa, 2` / `lda xbc, (+0x800)` / `ld_sril3`;
+; Audio_InitAllDefaults stores the table's address at RAM 0x9182.
+	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0x00]
+	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6, 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; [0x08]
+	.long 0x0000ff1a, 0x0000ff2e, 0x0000ff42, 0x0000ff56, 0x0000ff6a, 0x0000ff1a, 0x0000ff56, 0x0000ff7e	; [0x10]
+	.long 0x0000ff7e, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x18]
+; SoundProgram_DispatchTable + 0x880: four audio (re)initialisation routines.
+; midi/midi_dispatch_handlers.s calls the third through it (`ld xhl,
+; (SoundProgram_DispatchTable_0x888:24)` / `call (xhl)`), and entry 6 of
+; SystemConfig_PointerTable (ui_widgets/widget_dispatch.s) points at the
+; table's head under the `.set` name SoundProgram_ParamPtrTable
+; (kn5000_v10_program.s).  Searched for other readers: the positional names
+; SoundProgram_DispatchTable_0x880..0x88C and the literals 0xEDB2E4-0xEDB2F3.
+	.long Audio_InitAllDefaults
 	.long Audio_ReinitToneGenAndOutput
 	.long Audio_ResetAfterPayloadError
 	.long Audio_FullReinitWithPreset
-	.byte 0x50, 0x00, 0x43, 0x01
-	.byte 0x3c, 0x7f, 0x00, 0x00, 0x20, 0x00, 0x20, 0x00
-	.byte 0x02, 0x00, 0x05, 0x00, 0x08, 0x00, 0x0b, 0x00
-	.byte 0x0e, 0x00, 0x11, 0x00, 0x14, 0x00, 0x17, 0x00
-	.byte 0x1a, 0x00, 0x00, 0x00, 0x02, 0x00, 0x02, 0x00
-	.byte 0x04, 0x00, 0x04, 0x00, 0x04, 0x00, 0x04, 0x00
-	.byte 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00
-	.byte 0x10, 0x00, 0x02, 0x00, 0x04, 0x00, 0x07, 0x00
-	.byte 0x07, 0x00, 0x0a, 0x00, 0x0d, 0x00, 0x01, 0x01
-	.byte 0x02, 0x03, 0x00, 0x01, 0x02, 0x04, 0x00, 0x01
-	.byte 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
-	.byte 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11
-	.byte 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0xff
-	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b
-	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0x19
-	.byte 0x14, 0x0c, 0x0d, 0x0e, 0xec, 0xa6, 0xed, 0x00
+; SoundProgram_DispatchTable + 0x890..+0x907: seven small tables, each read
+; through its positional name SoundProgram_DispatchTable_0xNNN by the routine
+; named with it (all in audio/audio_control_engine.s).
+; ---------------------------------------------------------------------------
+; The three preset pointer tables (records: see the header above the records)
+; ---------------------------------------------------------------------------
+; ReverbPreset_Table: 10 pointers; ReverbPreset_Load and SoundPreset_FindMatch
+; (audio/audio_control_engine.s) index it as SoundProgram_DispatchTable_0x908.
+; Naka_ToshiParam_Table sits ONE ENTRY INTO it, which is how the tree had
+; it; the label stays because positional names are built on it:
+; EQPreset_Table is Naka_ToshiParam_Table_0x24 (9 pointers, EQPreset_Load /
+; EQPreset_FindMatch) and CombinedPreset_Table is Naka_ToshiParam_Table_0x48
+; (9 pointers, CombinedPreset_Load / CombinedPreset_SearchLoop).
+; ---------------------------------------------------------------------------
+	; +0x890: one 6-byte record.  BitmapTable_ProcessEntry (0xFC8235) takes
+	; index*6 and reads +0 with `cpw (xwa), 0x50`, +2 (at +0x892) as a
+	; command byte for VoiceData_LookupPtrByIndex, and +3, +4, +5.
+	.short 0x0050
+	.byte 0x43, 0x01, 0x3c, 0x7f
+	; +0x896: 12 jump offsets.  ExtData_ToneParam_DispatchHandler (0xFC8542):
+	; `cp wa, 11` / `add wa, wa` / `ld_rrw wa, xix, wa` / `jp_rr` from 0xFC8570
+	; (no label there in audio_control_engine.s, so the offsets are numeric).
+	.short 0x0000, 0x0020, 0x0020, 0x0002, 0x0005, 0x0008, 0x000b, 0x000e, 0x0011, 0x0014, 0x0017, 0x001a
+	; +0x8AE: 9 jump offsets, ExtData_ToneParam_AltDispatch (0xFC876A), from 0xFC8793.
+	.short 0x0000, 0x0002, 0x0002, 0x0004, 0x0004, 0x0004, 0x0004, 0x0006, 0x0000
+	; +0x8C0: 9 jump offsets, ExtData_ToneParam_AltBody (0xFC87D4), from 0xFC87FD.
+	.short 0x0000, 0x0010, 0x0010, 0x0002, 0x0004, 0x0007, 0x0007, 0x000a, 0x000d
+	; +0x8D2: 4 bytes, indexed by a value & 3 in ExtData_ToneParam_MultiChannel.
+	.byte 1, 1, 2, 3
+	; +0x8D6: 4 bytes, indexed by (RAM 0xFD02) & 3 in ExtData_Voice_MixedHandler.
+	.byte 0, 1, 2, 4
+	; +0x8DA: 26 bytes, 0..24 then 0xFF, read by CtrlPanel_BuildIndicatorBitmask (0xFC9249).
+	.byte 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+	.byte 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0xff
+	; +0x8F4: 20 bytes, a channel remap read with `ldb_sri a` by
+	; VoiceChannels_InitPanFromPreset; its result goes to VoiceData_LookupPtrByIndex.
+	.byte 0, 2, 1, 7, 8, 9, 10, 11, 4, 5, 6, 3, 15, 21, 21, 25, 20, 12, 13, 14
+ReverbPreset_Table:
+	.long ReverbPreset_0
 Naka_ToshiParam_Table:
-	.long ToshiParam_Entry_01
-	.long ToshiParam_Entry_02
-	.long ToshiParam_Entry_03
-	.long ToshiParam_Entry_04
-	.long ToshiParam_Entry_05
-	.long ToshiParam_Entry_06
-	.long ToshiParam_Entry_07
-	.long ToshiParam_Entry_08
-	.long ToshiParam_Entry_09
-	.long ToshiParam_Entry_10
-	.long ToshiParam_Entry_11
-	.long ToshiParam_Entry_12
-	.long ToshiParam_Entry_13
-	.long ToshiParam_Entry_14
-	.long ToshiParam_Entry_15
-	.long ToshiParam_Entry_16
-	.long ToshiParam_Entry_17
-	.long ToshiParam_Entry_18
-	.long ToshiParam_Entry_19
-	.long ToshiParam_Entry_20
-	.long ToshiParam_Entry_21
-	.long ToshiParam_Entry_22
-	.long ToshiParam_Entry_23
-	.long ToshiParam_Entry_24
-	.long ToshiParam_Entry_25
-	.long ToshiParam_Entry_26
-	.long ToshiParam_Entry_27
-	.byte 0x5a, 0x5a, 0x00, 0x00
-	.byte 0x48, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 16
-	.byte 0x00, 0x00, 0x00, 0x00, 0x78, 0x12, 0x20, 0x20
-	.asciz "              "
-	nop
-	.byte 0x00, 0x18, 0x00, 0x00, 0x00, 0x7f, 0x35, 0x00
-	.byte 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x38, 0x00
-	.byte 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00
-	.byte 0x01, 0x00, 0x01, 0x18, 0x38, 0x00, 0x00, 0x7f
-	.byte 0x35, 0x00, 0x00, 0x5a, 0x50, 0x40, 0x80, 0x02
-	.byte 0x38, 0x01, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80
-	.byte 0x80, 0x00, 0x01, 0x00, 0x02, 0x18, 0x06, 0x00
-	.byte 0x00, 0x71, 0x45, 0x00, 0x00, 0x5a, 0x30, 0x40
-	.byte 0x80, 0x02, 0x00, 0x02, 0x80, 0x00, 0x00, 0x80
-	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x03, 0x18
-	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a
-	.byte 0x40, 0x40, 0x80, 0x02, 0x20, 0x03, 0x80, 0x00
-	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
-	.byte 0x04, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00
-	.byte 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x04
-	.byte 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00
-	.byte 0x00, 0x00, 0x05, 0x18, 0x00, 0x00, 0x00, 0x64
-	.byte 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02
-	.byte 0x20, 0x05, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80
-	.byte 0x80, 0x00, 0x00, 0x00, 0x06, 0x18, 0x00, 0x00
-	.byte 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40
-	.byte 0x80, 0x02, 0x20, 0x06, 0x80, 0x00, 0x00, 0x80
-	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x07, 0x18
-	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a
-	.byte 0x40, 0x40, 0x80, 0x02, 0x20, 0x07, 0x80, 0x00
-	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
-	.byte 0x08, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00
-	.byte 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x08
-	.byte 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00
-	.byte 0x00, 0x00, 0x09, 0x18, 0x00, 0x00, 0x00, 0x64
-	.byte 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02
-	.byte 0x20, 0x09, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80
-	.byte 0x80, 0x00, 0x00, 0x00, 0x0a, 0x18, 0x00, 0x00
-	.byte 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40
-	.byte 0x80, 0x02, 0x20, 0x0a, 0x80, 0x00, 0x00, 0x80
-	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0b, 0x18
-	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a
-	.byte 0x40, 0x40, 0x80, 0x02, 0x20, 0x0b, 0x80, 0x00
-	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
-	.byte 0x0c, 0x18, 0x00, 0x00, 0x00, 0x64, 0x35, 0x00
-	.byte 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0c
-	.byte 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00
-	.byte 0x00, 0x00, 0x0d, 0x18, 0x00, 0x00, 0x00, 0x64
-	.byte 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02
-	.byte 0x20, 0x0d, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80
-	.byte 0x80, 0x00, 0x00, 0x00, 0x0e, 0x18, 0x00, 0x00
-	.byte 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40
-	.byte 0x80, 0x02, 0x20, 0x0e, 0x80, 0x00, 0x00, 0x80
-	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0f, 0x18
-	.byte 0xf0, 0x00, 0x00, 0x64, 0x25, 0x00, 0x00, 0x5a
-	.byte 0x40, 0x40, 0x80, 0x02, 0x00, 0x0f, 0x80, 0x00
-	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
-	.byte 0x10, 0x18, 0x06, 0x00, 0x00, 0x71, 0x55, 0x00
-	.byte 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc4
-	.byte 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00
-	.byte 0x00, 0x00, 0x11, 0x18, 0x1a, 0x00, 0x00, 0x71
-	.byte 0x55, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02
-	.byte 0x00, 0xc8, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80
-	.byte 0x80, 0x00, 0x00, 0x00, 0x12, 0x18, 0x64, 0x00
-	.byte 0x00, 0x71, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40
-	.byte 0x80, 0x02, 0x00, 0xc9, 0x80, 0x00, 0x00, 0x80
-	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x13, 0x18
-	.byte 0x28, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a
-	.byte 0x40, 0x40, 0x80, 0x02, 0x00, 0xc2, 0x80, 0x00
-	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
-	.byte 0x14, 0x18, 0xf0, 0x00, 0x00, 0x76, 0x05, 0x00
-	.byte 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xce
-	.byte 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00
-	.byte 0x00, 0x00, 0x15, 0x18, 0x06, 0x00, 0x00, 0x71
-	.byte 0x45, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02
-	.byte 0x00, 0xc4, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80
-	.byte 0x80, 0x00, 0x00, 0x00, 0x16, 0x18, 0x28, 0x00
-	.byte 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40
-	.byte 0x80, 0x02, 0x00, 0xc0, 0x80, 0x00, 0x00, 0x80
-	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x19, 0x18
-	.byte 0x00, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a
-	.byte 0x40, 0x40, 0x80, 0x02, 0x00, 0xcf, 0x80, 0x00
-	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
-	.byte 0x44, 0x0a, 0x00, 0x00, 0x00, 0x88, 0x80, 0x80
-	.byte 0x00, 0x00, 0x00, 0x00, 0x45, 0x0a, 0x00, 0x00
-	.byte 0x00, 0x88, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00
-	.byte 0x46, 0x0a, 0x00, 0x00, 0x00, 0x88, 0x80, 0x80
-	.byte 0x00, 0x00, 0x00, 0x00, 0x47, 0x08, 0xff, 0x00
-	.byte 0x00, 0x00, 0xc0, 0x00, 0xff, 0xff, 0x43, 0x04
-	.byte 0x80, 0x3c, 0x00, 0x00, 0x48, 0x0a, 0x60, 0x02
-	.byte 0x00, 0xe8, 0x00, 0x00, 0x00, 0x00, 0x78, 0x00
-	.byte 0x90, 0x06, 0x01, 0x00, 0x67, 0x00, 0x40, 0x00
-	.byte 0x60, 0x04, 0x00, 0x80, 0x00, 0x00, 0x61, 0x18
-	.byte 0x01, 0x1e, 0x06, 0x00, 0x54, 0x4b, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
-	.byte 0x63, 0x18, 0x14, 0x23, 0x00, 0x0b, 0x14, 0x32
-	.byte 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x63, 0x00, 0x64, 0x18, 0x4f, 0x01, 0xd8, 0x03
-	.byte 0x98, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x63, 0x00, 0x65, 0x18, 0x39, 0x32
-	.byte 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x66, 0x18
-	.byte 0x58, 0x23, 0x03, 0x9c, 0x54, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
-	.byte 0x68, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x70, 0x08, 0x06, 0x3c
-	.byte 0x05, 0xff, 0x07, 0x02, 0x04, 0x07, 0x72, 0x0e
-	.byte 0x00, 0x00, 0x00, 0x76, 0x00, 0x00, 0x00, 0x5a
-	.byte 0x1d, 0x45, 0x1d, 0x33, 0x00, 0x00, 0x92, 0x0e
-	.byte 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
-	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x71, 0x02
-	.byte 0x00, 0x00, 0x99, 0x1e, 0x00, 0x00, 0xb6, 0x00
-	.byte 0x40, 0x96, 0x88, 0x90, 0x91, 0xb3, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x82, 0x01, 0x02, 0x81
-	.byte 0x00, 0x10, 0x11, 0x12, 0x13, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x80, 0x0e, 0x00, 0x0c, 0x04, 0x45
-	.byte 0x00, 0x20, 0xfa, 0xdf, 0xbf, 0x01, 0x00, 0x00
-	.byte 0x50, 0x00, 0xff, 0xff, 0x17, 0x18, 0x00, 0x00
-	.byte 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40
-	.byte 0x80, 0x02, 0x00, 0xc0, 0x80, 0x00, 0x00, 0x80
-	.byte 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x18, 0x18
-	.byte 0x00, 0x00, 0x00, 0x76, 0x05, 0x00, 0x00, 0x5a
-	.byte 0x40, 0x40, 0x80, 0x02, 0x00, 0xc1, 0x80, 0x00
-	.byte 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00
-	.byte 0x98, 0x12, 0x40, 0x00, 0x00, 0x20, 0x76, 0x00
-	.byte 0x00, 0x20, 0x5c, 0x01, 0x5a, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x91, 0x0a, 0x00, 0x00
-	.zero 8
-	.byte 0x93, 0x22, 0x06, 0x06, 0x7f, 0x7f, 0x02, 0x05
-	.byte 0x94, 0x00, 0xff
-	.ascii "                ??ÿÿÿ"
-	.byte 0xff, 0x00, 0x00, 0x00, 0xc0, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xc1, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xc2, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xc3, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xc4, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xc5, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xc6, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xc7, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xc8, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xc9, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xca, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xcb, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xcc, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xcd, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xce, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xcf, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xd0, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xd1, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xd2, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xd3, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0x12, 0x00, 0x00
-	.zero 16
-	.byte 0xd7, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x49, 0x10, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9a, 0x1a
-	.zero 24
-	.byte 0x00, 0x00, 0xff, 0xff, 0x48, 0x4b, 0x20, 0x00
-	.zero 8
-	.byte 0x00, 0xc0, 0x03, 0x50, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00
-	.zero 8
-	.byte 0x91, 0x00, 0xff, 0x00, 0xff, 0x00, 0x00, 0x00
-	.byte 0x01, 0x07, 0x05, 0x00, 0x00, 0xff, 0xc0, 0xc1
-	.byte 0xc3, 0xc4, 0xc6, 0xc8, 0xca, 0xcb, 0xcd, 0xcf
-	.byte 0xd0, 0xd2, 0xd4, 0xd6, 0xd7, 0xd9, 0xdb, 0xdc
-	.byte 0xde, 0xe0, 0xe2
-	or	(xbc-5913), xde
-	.byte 0xec, 0xed, 0xef, 0xf1, 0xf3, 0xf4, 0xf6, 0xf8
-	.byte 0xf9, 0xfb, 0xfd, 0xfe, 0x00, 0x02, 0x03, 0x05
-	.byte 0x07, 0x08, 0x0a, 0x0c, 0x0d, 0x0f, 0x11, 0x12
-	.byte 0x14, 0x16, 0x17, 0x19, 0x1b, 0x1c, 0x1e, 0x20
-	.ascii "!#%&(*+-/023578:<=>?V"
-	.byte 0xba, 0xed, 0x00
-	.byte 0x4e, 0x00, 0x00, 0x26, 0x00, 0xff, 0x01, 0x00
-	.byte 0x00, 0x00, 0x48, 0x05, 0x01, 0x00, 0x01, 0x00
-	.byte 0x00, 0xff, 0x01, 0x01, 0x01, 0x00, 0x00, 0xff
-VoiceCtrlR1_Entry_001:
-	pop	sr
-	nop
-	nop
-	nop
-	jrl	f, -254
-	nop
-	pushw	0
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_002:
-	max
-	nop
-	nop
-	nop
-	popw	wa
-	ld	(255:8), 40:io
-	swi	7
-	nop
-	nop
-	nop
-	.byte 0x06
-	ld	(6:8), 2:io
-	nop
-	swi	7
-VoiceCtrlR1_Entry_003:
-	halt
-	nop
-	nop
-	nop
-	popw	wa
-	push	1
-	nop
-	normal
-	nop
-	nop
-	nop
-	.byte 0x06
-	ld	(6:8), 2:io
-	nop
-	swi	7
-VoiceCtrlR1_Entry_004:
-	.byte 0xc0
-	nop
-	nop
-	nop
-	.byte 0x91
-	pop	sr
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_005:
-	.byte 0xc1
-	nop
-	nop
-	nop
-	.byte 0x91
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_006:
-	nop
-	normal
-	nop
-	nop
-	.byte 0x93
-	nop
-	retd	2304
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_007:
-	push	sr
-	normal
-	nop
-	nop
-	.byte 0x93
-	halt
-	swi	7
-	normal
-	ldw	(0:8), 0xff00:io
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_008:
-	pop	sr
-	normal
-	nop
-	nop
-	.byte 0x93, 0x06
-	jrl	nc, 32513
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_009:
-	max
-	normal
-	nop
-	nop
-	.byte 0x93, 0x06, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_010:
-	nop
-	pop	sr
-	nop
-	nop
-	.byte 0x98, 0x01
-	jrl	nc, 20480
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_011:
-	normal
-	pop	sr
-	nop
-	nop
-	.byte 0x98, 0x01, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_012:
-	push	sr
-	pop	sr
-	nop
-	nop
-	.byte 0x98
-	nop
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_013:
-	nop
-	max
-	nop
-	nop
-	.byte 0x98
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_014:
-	normal
-	max
-	nop
-	nop
-	.byte 0x98
-	pop	sr
-	jrl	f, 769
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_015:
-	nop
-	ld	a, 0:opc
-	nop
-	.byte 0x80
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_016:
-	normal
-	ld	a, 0:opc
-	nop
-	.byte 0x80
-	pop	sr
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_017:
-	ld	a, (xbc)
-	nop
-	nop
-	.byte 0x80
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_018:
-	ld	a, (xde)
-	nop
-	nop
-	.byte 0x80
-	nop
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_019:
-	ld	a, (xhl)
-	nop
-	nop
-	.byte 0x80
-	pop	sr
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_020:
-	ld	a, (xix)
-	nop
-	nop
-	.byte 0x80
-	nop
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_021:
-	nop
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_022:
-	normal
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	pop	sr
-	nop
-	pop	sr
-	nop
-	nop
-	normal
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
+	.long ReverbPreset_1
+	.long ReverbPreset_2
+	.long ReverbPreset_3
+	.long ReverbPreset_4
+	.long ReverbPreset_5
+	.long ReverbPreset_6
+	.long ReverbPreset_7
+	.long ReverbPreset_8
+	.long ReverbPreset_9
+EQPreset_Table:
+	.long EQPreset_0
+	.long EQPreset_1
+	.long EQPreset_2
+	.long EQPreset_3
+	.long EQPreset_4
+	.long EQPreset_5
+	.long EQPreset_6
+	.long EQPreset_7
+	.long EQPreset_8
+CombinedPreset_Table:
+	.long CombinedPreset_0
+	.long CombinedPreset_1
+	.long CombinedPreset_2
+	.long CombinedPreset_3
+	.long CombinedPreset_4
+	.long CombinedPreset_5
+	.long CombinedPreset_6
+	.long CombinedPreset_7
+	.long CombinedPreset_8
+; Naka_ToshiParam_Table + 0x6C: 32 bytes DataBuf_InitSlotFromPreset
+; (midi/midi_dispatch_handlers.s) copies to offset 0x2E0 of a data slot
+; (slot 0: RAM 0xF180 + 0x2E0; slot n: 0xAB000 + (n-1) * 0x800 + 0x2E0).
+DataSlot_HeaderTemplate:
+	.byte 0x5a, 0x5a, 0x00, 0x00, 0x48, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+; ---------------------------------------------------------------------------
+; Naka_ToshiParam_Table + 0x8C: DEFAULT IMAGE OF RAM 0xF9A0-0xFDA1 (1,026 B)
+; ---------------------------------------------------------------------------
+; DataBuf_InitSlotFromPreset copies 0xFDA2 - 0xF9A0 bytes from here (it
+; pushes the address as `pushw 0xed` / `pushw 0xb3fc`) to a slot; the
+; audio_control_engine.s loaders copy parts of it (0x7C bytes, then 0x11E
+; from +0x7C) with 0xF9A0 as the destination base, and
+; SMF_SlotChain (sequencer/smf_config_routines.s) indexes into it.  RAM
+; 0xF9B6 + 26k are the blocks SoundProgram_DispatchTable + 0x400 points at,
+; so the rows below are the 22-byte head (0xF9A0) and then 26-byte blocks,
+; each tagged with its RAM address.
+; ---------------------------------------------------------------------------
+SndParamRam_DefaultImage:
+	.byte 0x78, 0x12, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00, 0x00, 0x00, 0x18	; 0xF9A0
+	.byte 0x00, 0x00, 0x00, 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x38, 0x00, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x01, 0x00, 0x01, 0x18	; 0xF9B6
+	.byte 0x38, 0x00, 0x00, 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x50, 0x40, 0x80, 0x02, 0x38, 0x01, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x01, 0x00, 0x02, 0x18	; 0xF9D0
+	.byte 0x06, 0x00, 0x00, 0x71, 0x45, 0x00, 0x00, 0x5a, 0x30, 0x40, 0x80, 0x02, 0x00, 0x02, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x03, 0x18	; 0xF9EA
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x03, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x04, 0x18	; 0xFA04
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x04, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x05, 0x18	; 0xFA1E
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x05, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x06, 0x18	; 0xFA38
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x06, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x07, 0x18	; 0xFA52
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x07, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x08, 0x18	; 0xFA6C
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x08, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x09, 0x18	; 0xFA86
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x09, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0a, 0x18	; 0xFAA0
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0a, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0b, 0x18	; 0xFABA
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0b, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0c, 0x18	; 0xFAD4
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0c, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0d, 0x18	; 0xFAEE
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0d, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0e, 0x18	; 0xFB08
+	.byte 0x00, 0x00, 0x00, 0x64, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x20, 0x0e, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x0f, 0x18	; 0xFB22
+	.byte 0xf0, 0x00, 0x00, 0x64, 0x25, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0x0f, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x10, 0x18	; 0xFB3C
+	.byte 0x06, 0x00, 0x00, 0x71, 0x55, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc4, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x11, 0x18	; 0xFB56
+	.byte 0x1a, 0x00, 0x00, 0x71, 0x55, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc8, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x12, 0x18	; 0xFB70
+	.byte 0x64, 0x00, 0x00, 0x71, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc9, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x13, 0x18	; 0xFB8A
+	.byte 0x28, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc2, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x14, 0x18	; 0xFBA4
+	.byte 0xf0, 0x00, 0x00, 0x76, 0x05, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xce, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x15, 0x18	; 0xFBBE
+	.byte 0x06, 0x00, 0x00, 0x71, 0x45, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc4, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x16, 0x18	; 0xFBD8
+	.byte 0x28, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc0, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x19, 0x18	; 0xFBF2
+	.byte 0x00, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xcf, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x00, 0x00, 0x44, 0x0a	; 0xFC0C
+	.byte 0x00, 0x00, 0x00, 0x88, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x45, 0x0a, 0x00, 0x00, 0x00, 0x88, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x46, 0x0a, 0x00, 0x00	; 0xFC26
+	.byte 0x00, 0x88, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x47, 0x08, 0xff, 0x00, 0x00, 0x00, 0xc0, 0x00, 0xff, 0xff, 0x43, 0x04, 0x80, 0x3c, 0x00, 0x00, 0x48, 0x0a	; 0xFC40
+	.byte 0x60, 0x02, 0x00, 0xe8, 0x00, 0x00, 0x00, 0x00, 0x78, 0x00, 0x90, 0x06, 0x01, 0x00, 0x67, 0x00, 0x40, 0x00, 0x60, 0x04, 0x00, 0x80, 0x00, 0x00, 0x61, 0x18	; 0xFC5A
+	.byte 0x01, 0x1e, 0x06, 0x00, 0x54, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x63, 0x18	; 0xFC74
+	.byte 0x14, 0x23, 0x00, 0x0b, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x64, 0x18	; 0xFC8E
+	.byte 0x4f, 0x01, 0xd8, 0x03, 0x98, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x65, 0x18	; 0xFCA8
+	.byte 0x39, 0x32, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x66, 0x18	; 0xFCC2
+	.byte 0x58, 0x23, 0x03, 0x9c, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00, 0x68, 0x0a	; 0xFCDC
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 0x08, 0x06, 0x3c, 0x05, 0xff, 0x07, 0x02, 0x04, 0x07, 0x72, 0x0e, 0x00, 0x00, 0x00, 0x76	; 0xFCF6
+	.byte 0x00, 0x00, 0x00, 0x5a, 0x1d, 0x45, 0x1d, 0x33, 0x00, 0x00, 0x92, 0x0e, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80	; 0xFD10
+	.byte 0x71, 0x02, 0x00, 0x00, 0x99, 0x1e, 0x00, 0x00, 0xb6, 0x00, 0x40, 0x96, 0x88, 0x90, 0x91, 0xb3, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x82, 0x01, 0x02, 0x81	; 0xFD2A
+	.byte 0x00, 0x10, 0x11, 0x12, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x0e, 0x00, 0x0c, 0x04, 0x45, 0x00, 0x20, 0xfa, 0xdf, 0xbf, 0x01, 0x00, 0x00, 0x50, 0x00	; 0xFD44
+	.byte 0xff, 0xff, 0x17, 0x18, 0x00, 0x00, 0x00, 0x76, 0x15, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc0, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00	; 0xFD5E
+	.byte 0x00, 0x00, 0x18, 0x18, 0x00, 0x00, 0x00, 0x76, 0x05, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x00, 0xc1, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00	; 0xFD78
+	.byte 0x00, 0x00, 0x98, 0x12, 0x40, 0x00, 0x00, 0x20, 0x76, 0x00, 0x00, 0x20, 0x5c, 0x01, 0x5a, 0x00	; 0xFD92
+; 0xEDB7FE-0xEDBA2B (558 B, 468 of them zero) follow the image directly.
+; No reader found.  Searched: positional names on Naka_ToshiParam_Table and
+; SoundProgram_DispatchTable landing here, 16/24-bit literals in the .s/.c
+; sources, and every even address here as a u32 anywhere in the ROM.  It
+; may be the image continued past 0xFDA1 and copied by a path with its own
+; base; that is a guess.
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x91, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x93, 0x22, 0x06, 0x06, 0x7f, 0x7f, 0x02, 0x05, 0x94, 0x00, 0xff, 0x20, 0x20, 0x20
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3f, 0x3f, 0xff
+	.byte 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0xc0, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc1, 0x12, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc2, 0x12
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0xc3, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc4, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc5, 0x12, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc6, 0x12
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0xc7, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc8, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc9, 0x12, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xca, 0x12
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0xcb, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xcc, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xcd, 0x12, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xce, 0x12
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0xcf, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd1, 0x12, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd2, 0x12
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0xd3, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd4, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd7, 0x12, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x49, 0x10
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x9a, 0x1a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x48, 0x4b
+	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x03, 0x50
+; Naka_ToshiParam_Table + 0x6BC / 0x6C8 / 0x6CC: three templates the
+; audio/sndparam_routines.s code copies with ldirw / ldiw:
+;   +0x6BC 12 zero bytes -> RAM 0x96D4 (SndParam_ResetDefaultTable, which
+;          then writes 0xFFFF at 0x96D4);
+;   +0x6C8 4 zero bytes, the first two words of a new registration
+;          (SndParam_RegisterEntry_Data);
+;   +0x6CC {u32 0x00FFFFFF, u32 0}: one EMPTY 8-byte hash slot, stamped over
+;          the whole {key, record pointer} table at RAM 0x34100 by
+;          SndParam_InitHashFillLoop.
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+	.long 0x00ffffff, 0x00000000
+; ---------------------------------------------------------------------------
+; sndparam_descriptor -- ONE 18-byte sound-parameter descriptor
+; ---------------------------------------------------------------------------
+; The same record as struct sndparam_descriptor_t in
+; v10/maincpu/audio/sndparam_records/sndparam_types.h, field for field and in
+; the same order; that header cites, per field, the SndParam_* accessor
+; instruction in v10's audio/sndparam_routines.s that reads it.  v10 compiles
+; 951 of the 974 records from C; this macro writes the rest -- the 20 records
+; in this file the C generator refused because they share a source line with
+; a value map -- and, in the v9 and v7 copies of this file, every record
+; (the Makefile compiles the C for v10 only).
+;
+;   +0x00 key (u32, byte +3 always 0)   +0x04 bank_index   +0x05 bank_offset
+;   +0x06 mask   +0x07 clamp_min   +0x08 clamp_max   +0x09 shift (low nibble)
+;   +0x0A xor_value   +0x0B aux_index (0xff = none)   +0x0C read_accessor
+;   +0x0D register_accessor   +0x0E lookup2_accessor   +0x0F codec
+;   +0x10 write_accessor   +0x11 unknown_0x11 (sndparam_types.h: read by no
+;   instruction of the 0xFCD200-0xFCF000 accessors)
+.macro sndparam_descriptor key, bank_index, bank_offset, mask, clamp_min, clamp_max, shift, xor_value, aux_index, read_acc, register_acc, lookup2_acc, codec, write_acc, unknown_0x11
+	.long \key
+	.byte \bank_index, \bank_offset, \mask, \clamp_min, \clamp_max, \shift, \xor_value, \aux_index
+	.byte \read_acc, \register_acc, \lookup2_acc, \codec, \write_acc, \unknown_0x11
+.endm
+	; WidgetParam_TestMode_Entry (a `.set` in kn5000_v10_program.s names this record)
+	sndparam_descriptor 0x000000, 145, 0, 0xff, 0, 255, 0, 0x00, 0x00, 1, 7, 5, 0, 0, 0xff
+; ---------------------------------------------------------------------------
+; VALUE MAPS AND THEIR 10-BYTE DESCRIPTORS (11 of them, 0xEDBA56-0xEDE9FB)
+; ---------------------------------------------------------------------------
+; The eleven descriptors are the entries of the pointer table at 0xEE0154 in
+; ui_widgets/widget_dispatch.s (NakaInst_Param_IdxA0_01_0x12 there, then
+; Naka_SubDispatch_A_Table).  The accessors in audio/sndparam_routines.s that
+; load that address (`lda xbc, (NakaInst_Param_IdxA0_01_0x12:24)`, two sites)
+; take a record's +0x0B aux_index: 0xFF selects entry 0, anything else is
+; `sla a, 2` / `ld_rr8l xiy, xbc, a`; the descriptor is then read at +0x00
+; and `ld wa, (xix+7)`.  Descriptor layout, uniform in all 11:
+;   +0x00 u32 pointer to the byte map      +0x04 u16 number of map entries
+;   +0x06 u8 (0, 128, 255 or 7)             +0x07 u16, UNALIGNED
+;   +0x09 u8, always 0xFF
+; +0x07 (read by the accessor above) is 0 in six descriptors; in three --
+; this one (38 of 78), the PitchBend map (3) and the DspEffect map (5) -- it
+; is the index of the map's 0x00 entry; in the Sustain (100 of 201) and Pan
+; (8 of 14) maps it is not.  Each map is `count` bytes, most followed by a
+; 0xFF.  Names: the
+; WidgetParam_MidiCC_* labels are historical (address bucketing, not a
+; reader); SndParamValueMap_0 / SndParamValueDesc_0 are entry 0, which no
+; older label covered.  scripts/analysis/ext_lane_checks.py vmaps re-checks
+; the layout.
+; ---------------------------------------------------------------------------
+SndParamValueMap_0:
+	.byte 0xc0, 0xc1, 0xc3, 0xc4, 0xc6, 0xc8, 0xca, 0xcb, 0xcd, 0xcf, 0xd0, 0xd2, 0xd4, 0xd6, 0xd7, 0xd9
+	.byte 0xdb, 0xdc, 0xde, 0xe0, 0xe2, 0xe3, 0xe5, 0xe7, 0xe8, 0xea, 0xec, 0xed, 0xef, 0xf1, 0xf3, 0xf4
+	.byte 0xf6, 0xf8, 0xf9, 0xfb, 0xfd, 0xfe, 0x00, 0x02, 0x03, 0x05, 0x07, 0x08, 0x0a, 0x0c, 0x0d, 0x0f
+	.byte 0x11, 0x12, 0x14, 0x16, 0x17, 0x19, 0x1b, 0x1c, 0x1e, 0x20, 0x21, 0x23, 0x25, 0x26, 0x28, 0x2a
+	.byte 0x2b, 0x2d, 0x2f, 0x30, 0x32, 0x33, 0x35, 0x37, 0x38, 0x3a, 0x3c, 0x3d, 0x3e, 0x3f
+SndParamValueDesc_0:
+	.long SndParamValueMap_0
+	.short 78
+	.byte 0x00, 0x26, 0x00, 0xff
+	; WidgetParam_SineWave_Entry (a `.set` in kn5000_v10_program.s names this record)
+	sndparam_descriptor 0x000001, 72, 5, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+;  22 x 18-byte sound-parameter descriptors, 0xEDBAC0-0xEDBC4C, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edbac0.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDBAC0:
+	sndparam_descriptor 0x000003, 112, 2, 0xff, 0, 11, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x000004, 72, 8, 0xff, 40, 255, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
+	sndparam_descriptor 0x000005, 72, 9, 0x01, 0, 1, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
+	sndparam_descriptor 0x0000c0, 145, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0000c1, 145, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000100, 147, 0, 0x0f, 0, 9, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000102, 147, 5, 0xff, 1, 10, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000103, 147, 6, 0x7f, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000104, 147, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000300, 152, 1, 0x7f, 0, 80, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000301, 152, 1, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000302, 152, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000400, 152, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000401, 152, 3, 0x70, 1, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002100, 128, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002101, 128, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002181, 128, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002182, 128, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002183, 128, 3, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002184, 128, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002200, 128, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002201, 128, 0, 0x03, 0, 3, 0, 0x00, 0x01, 1, 7, 5, 0, 0, 0xff
+.set VoiceCtrlR1_Entry_001, SndParamRun_EDBAC0 + 0
+.set VoiceCtrlR1_Entry_002, SndParamRun_EDBAC0 + 18
+.set VoiceCtrlR1_Entry_003, SndParamRun_EDBAC0 + 36
+.set VoiceCtrlR1_Entry_004, SndParamRun_EDBAC0 + 54
+.set VoiceCtrlR1_Entry_005, SndParamRun_EDBAC0 + 72
+.set VoiceCtrlR1_Entry_006, SndParamRun_EDBAC0 + 90
+.set VoiceCtrlR1_Entry_007, SndParamRun_EDBAC0 + 108
+.set VoiceCtrlR1_Entry_008, SndParamRun_EDBAC0 + 126
+.set VoiceCtrlR1_Entry_009, SndParamRun_EDBAC0 + 144
+.set VoiceCtrlR1_Entry_010, SndParamRun_EDBAC0 + 162
+.set VoiceCtrlR1_Entry_011, SndParamRun_EDBAC0 + 180
+.set VoiceCtrlR1_Entry_012, SndParamRun_EDBAC0 + 198
+.set VoiceCtrlR1_Entry_013, SndParamRun_EDBAC0 + 216
+.set VoiceCtrlR1_Entry_014, SndParamRun_EDBAC0 + 234
+.set VoiceCtrlR1_Entry_015, SndParamRun_EDBAC0 + 252
+.set VoiceCtrlR1_Entry_016, SndParamRun_EDBAC0 + 270
+.set VoiceCtrlR1_Entry_017, SndParamRun_EDBAC0 + 288
+.set VoiceCtrlR1_Entry_018, SndParamRun_EDBAC0 + 306
+.set VoiceCtrlR1_Entry_019, SndParamRun_EDBAC0 + 324
+.set VoiceCtrlR1_Entry_020, SndParamRun_EDBAC0 + 342
+.set VoiceCtrlR1_Entry_021, SndParamRun_EDBAC0 + 360
+.set VoiceCtrlR1_Entry_022, SndParamRun_EDBAC0 + 378
 VoiceCtrlR1_Entry_023:
-	nop
-	normal
-	pop	sr
-	swi	7
+	.byte 0x00, 0x01, 0x03
+	.byte 0xff
 WidgetParam_MidiCC_Program:
 	.long VoiceCtrlR1_Entry_023
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	swi	7
+	.short 3
+	.byte 0x00, 0x00, 0x00, 0xff
 VoiceCtrlR1_Entry_024:
-	push	sr
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x002202, 128, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 VoiceCtrlR1_Entry_025:
-	pop	sr
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	nop
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x002203, 128, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 VoiceCtrlR1_Entry_026:
-	halt
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	push	sr
-	push_f
-	nop
-	pop	sr
-	pop	sr
-	nop
-	pop	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	pop	sr
-	swi	7
+	sndparam_descriptor 0x002205, 128, 2, 0x18, 0, 3, 3, 0x00, 0x03, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_BankSelect_Map:
+	.byte 0x00, 0x01, 0x03
+	.byte 0xff
 WidgetParam_MidiCC_BankSelect:
-	.byte 0x90
-	ld	(xix-19), 3
-	nop
-	nop
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_027:
-	ld	b, (xwa)
-	nop
-	nop
-	.byte 0x80, 0x01
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_028:
-	ld	b, (xbc)
-	nop
-	nop
-	.byte 0x80
-	push	sr
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_029:
-	ld	b, (xde)
-	nop
-	nop
-	.byte 0x80, 0x06
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_030:
-	.byte 0x8a
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_031:
-	.byte 0x8b
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_032:
-	.byte 0x8c
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_033:
-	.byte 0x8d
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	ld	(128:8), 0:io
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_034:
-	.byte 0x8e
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	ld	(4:8), 0:io
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_035:
-	.byte 0x8f
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	ld	(8:8), 0:io
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_036:
-	ld	de, (xwa)
-	nop
-	nop
-	.byte 0x80
-	ld	(16:8), 0:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_037:
-	ld	de, (xbc)
-	nop
-	nop
-	.byte 0x80
-	ld	(1:8), 0:io
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_038:
-	ld	de, (xix)
-	nop
-	nop
-	.byte 0x80
-	ld	(32:8), 0:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_039:
-	ld	de, (xiy)
-	nop
-	nop
-	.byte 0x80
-	ld	(2:8), 0:io
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_040:
-	ld	de, (xiz)
-	nop
-	nop
-	.byte 0x80
-	reti
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_041:
-	.byte 0x98
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	reti
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_042:
-	.byte 0x99
-	ld	b, 0:opc
-	nop
-	.byte 0x80
-	push	1
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_043:
-	.byte 0x9a
-	ld	b, 0:opc
-	nop
-	.byte 0x80, 0x01, 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_044:
-	.byte 0x80
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	push	sr
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_045:
-	.byte 0x82
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_046:
-	.byte 0x81
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	pop	sr
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_047:
-	.byte 0x86
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x04
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_048:
-	.byte 0x87
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_049:
-	.byte 0x88
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	halt
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_050:
-	.byte 0x89
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_051:
-	.byte 0x8a
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x06
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_052:
-	.byte 0x8b
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	.byte 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_053:
-	.byte 0x8c
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	reti
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_054:
-	.byte 0x8d
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_055:
-	.byte 0x8e
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	ld	(255:8), 0:io
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_056:
-	.byte 0x8f
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_057:
-	.byte 0x90
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	push	255
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_058:
-	.byte 0x91
-	pushw	wa
-	nop
-	nop
-	ld wa, (xbc+256)
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_059:
-	.byte 0x92
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	ldw	(255:8), 0xc700:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_060:
-	.byte 0x93
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_061:
-	.byte 0x94
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	pushw	255
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_062:
-	.byte 0x95
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	nop
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_063:
-	.byte 0x96
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	incf
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_064:
-	.byte 0x97
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01, 0x01
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_065:
-	.byte 0x98
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	decf
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_066:
-	.byte 0x99
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_067:
-	.byte 0x9a
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	ret
-	swi	7
-	nop
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_068:
-	.byte 0x9b
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01, 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_069:
-	.byte 0x9c
-	pushw	wa
-	nop
-	nop
-	.byte 0x99
-	retd	255
-	.byte 0xc7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_070:
-	.byte 0x9d
-	pushw	wa
-	nop
-	nop
-	.byte 0x99, 0x01
-	ld	(0:8), 1:io
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_071:
-	nop
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_072:
-	normal
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_073:
-	push	sr
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	.byte 0x04
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_074:
-	pop	sr
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceCtrlR1_Entry_075:
-	max
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_001:
-	halt
-	pushw	bc
-	nop
-	nop
-	ld	wa, (xwa+7)
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_002:
-	ei	41
-	nop
-	nop
-	.byte 0x98
-	reti
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_003:
-	reti
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	reti
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_004:
-	ld	(41:8), 0:io
-	nop
-	.byte 0x98
-	ld	(1:8), 0:io
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_005:
-	push	41
-	nop
-	nop
-	.byte 0x98
-	ld	(2:8), 0:io
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_006:
-	ldw	(41:8), 0:io
-	.byte 0x98
-	ld	(4:8), 0:io
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_007:
-	pushw	41
-	nop
-	.byte 0x98
-	ld	(8:8), 0:io
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_008:
-	incf
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	ld	(16:8), 0:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_009:
-	decf
-	pushw	bc
-	nop
-	nop
-	ld	wa, (xwa+8)
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_010:
-	ret
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	ld	(64:8), 0:io
-	normal
-	ei	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_011:
-	retd	41
-	nop
-	.byte 0x98
-	ld	(128:8), 0:io
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_012:
-	rcf
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	push	1
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_013:
-	scf
-	pushw	bc
-	nop
-	nop
-	.byte 0x98
-	push	2
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_014:
-	nop
-	pushw	de
-	nop
-	nop
-	jrl	f, -251
-	normal
-	rcf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_015:
-	normal
-	pushw	de
-	nop
-	nop
-	jrl	f, -250
-	normal
-	rcf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_016:
-	rcf
-	pushw	de
-	nop
-	nop
-	jrl	f, 263
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_017:
-	scf
-	pushw	de
-	nop
-	nop
-	jrl	f, 519
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_018:
-	ccf
-	pushw	de
-	nop
-	nop
-	jrl	f, 1031
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_019:
-	nop
-	pushw	ix
-	nop
-	nop
-	.byte 0x98
-	ret
-	pop	sr
-	nop
-	push	sr
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_020:
-	nop
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x11001f01
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_021:
-	normal
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000100
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_022:
-	push	sr
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x63007f02
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_023:
-	pop	sr
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000200
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_024:
-	max
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x07000703
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_025:
-	halt
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000400
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_026:
-	ei	45
-	nop
-	nop
-	ld	xsp, 0x0b00f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_027:
-	reti
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01000800
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_028:
-	ld	(45:8), 0:io
-	nop
-	ld	xsp, 0x0300c004
-	ei	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_029:
-	push	45
-	nop
-	nop
-	ld	xsp, 0x01001000
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.long WidgetParam_MidiCC_BankSelect_Map
+	.short 3
+	.byte 0x00, 0x00, 0x00, 0xff
+;  78 x 18-byte sound-parameter descriptors, 0xEDBC9E-0xEDC21A, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edbc9e.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDBC9E:
+	sndparam_descriptor 0x002280, 128, 1, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002281, 128, 2, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002282, 128, 6, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228a, 128, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228b, 128, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228c, 128, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228d, 128, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228e, 128, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228f, 128, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002290, 128, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002291, 128, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002294, 128, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002295, 128, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002296, 128, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002298, 128, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002299, 128, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00229a, 128, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002880, 153, 2, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002882, 153, 1, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002881, 153, 3, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002886, 153, 4, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002887, 153, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002888, 153, 5, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002889, 153, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288a, 153, 6, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288b, 153, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288c, 153, 7, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288d, 153, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288e, 153, 8, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288f, 153, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002890, 153, 9, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002891, 153, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002892, 153, 10, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002893, 153, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002894, 153, 11, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002895, 153, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002896, 153, 12, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002897, 153, 1, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002898, 153, 13, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002899, 153, 1, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289a, 153, 14, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289b, 153, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289c, 153, 15, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289d, 153, 1, 0x08, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002900, 152, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002901, 152, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002902, 152, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002903, 152, 7, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002904, 152, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002905, 152, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002906, 152, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002907, 152, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002908, 152, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002909, 152, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290a, 152, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290b, 152, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290c, 152, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290d, 152, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290e, 152, 8, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290f, 152, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002910, 152, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002911, 152, 9, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a00, 112, 5, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a01, 112, 6, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a10, 112, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a11, 112, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a12, 112, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002c00, 152, 14, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d00, 71, 1, 0x1f, 0, 17, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d01, 71, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d02, 71, 2, 0x7f, 0, 99, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d03, 71, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d04, 71, 3, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d05, 71, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d06, 71, 3, 0xf0, 0, 11, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d07, 71, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d08, 71, 4, 0xc0, 0, 3, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d09, 71, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+.set VoiceCtrlR1_Entry_027, SndParamRun_EDBC9E + 0
+.set VoiceCtrlR1_Entry_028, SndParamRun_EDBC9E + 18
+.set VoiceCtrlR1_Entry_029, SndParamRun_EDBC9E + 36
+.set VoiceCtrlR1_Entry_030, SndParamRun_EDBC9E + 54
+.set VoiceCtrlR1_Entry_031, SndParamRun_EDBC9E + 72
+.set VoiceCtrlR1_Entry_032, SndParamRun_EDBC9E + 90
+.set VoiceCtrlR1_Entry_033, SndParamRun_EDBC9E + 108
+.set VoiceCtrlR1_Entry_034, SndParamRun_EDBC9E + 126
+.set VoiceCtrlR1_Entry_035, SndParamRun_EDBC9E + 144
+.set VoiceCtrlR1_Entry_036, SndParamRun_EDBC9E + 162
+.set VoiceCtrlR1_Entry_037, SndParamRun_EDBC9E + 180
+.set VoiceCtrlR1_Entry_038, SndParamRun_EDBC9E + 198
+.set VoiceCtrlR1_Entry_039, SndParamRun_EDBC9E + 216
+.set VoiceCtrlR1_Entry_040, SndParamRun_EDBC9E + 234
+.set VoiceCtrlR1_Entry_041, SndParamRun_EDBC9E + 252
+.set VoiceCtrlR1_Entry_042, SndParamRun_EDBC9E + 270
+.set VoiceCtrlR1_Entry_043, SndParamRun_EDBC9E + 288
+.set VoiceCtrlR1_Entry_044, SndParamRun_EDBC9E + 306
+.set VoiceCtrlR1_Entry_045, SndParamRun_EDBC9E + 324
+.set VoiceCtrlR1_Entry_046, SndParamRun_EDBC9E + 342
+.set VoiceCtrlR1_Entry_047, SndParamRun_EDBC9E + 360
+.set VoiceCtrlR1_Entry_048, SndParamRun_EDBC9E + 378
+.set VoiceCtrlR1_Entry_049, SndParamRun_EDBC9E + 396
+.set VoiceCtrlR1_Entry_050, SndParamRun_EDBC9E + 414
+.set VoiceCtrlR1_Entry_051, SndParamRun_EDBC9E + 432
+.set VoiceCtrlR1_Entry_052, SndParamRun_EDBC9E + 450
+.set VoiceCtrlR1_Entry_053, SndParamRun_EDBC9E + 468
+.set VoiceCtrlR1_Entry_054, SndParamRun_EDBC9E + 486
+.set VoiceCtrlR1_Entry_055, SndParamRun_EDBC9E + 504
+.set VoiceCtrlR1_Entry_056, SndParamRun_EDBC9E + 522
+.set VoiceCtrlR1_Entry_057, SndParamRun_EDBC9E + 540
+.set VoiceCtrlR1_Entry_058, SndParamRun_EDBC9E + 558
+.set VoiceCtrlR1_Entry_059, SndParamRun_EDBC9E + 576
+.set VoiceCtrlR1_Entry_060, SndParamRun_EDBC9E + 594
+.set VoiceCtrlR1_Entry_061, SndParamRun_EDBC9E + 612
+.set VoiceCtrlR1_Entry_062, SndParamRun_EDBC9E + 630
+.set VoiceCtrlR1_Entry_063, SndParamRun_EDBC9E + 648
+.set VoiceCtrlR1_Entry_064, SndParamRun_EDBC9E + 666
+.set VoiceCtrlR1_Entry_065, SndParamRun_EDBC9E + 684
+.set VoiceCtrlR1_Entry_066, SndParamRun_EDBC9E + 702
+.set VoiceCtrlR1_Entry_067, SndParamRun_EDBC9E + 720
+.set VoiceCtrlR1_Entry_068, SndParamRun_EDBC9E + 738
+.set VoiceCtrlR1_Entry_069, SndParamRun_EDBC9E + 756
+.set VoiceCtrlR1_Entry_070, SndParamRun_EDBC9E + 774
+.set VoiceCtrlR1_Entry_071, SndParamRun_EDBC9E + 792
+.set VoiceCtrlR1_Entry_072, SndParamRun_EDBC9E + 810
+.set VoiceCtrlR1_Entry_073, SndParamRun_EDBC9E + 828
+.set VoiceCtrlR1_Entry_074, SndParamRun_EDBC9E + 846
+.set VoiceCtrlR1_Entry_075, SndParamRun_EDBC9E + 864
+.set MidiChParam_Entry_001, SndParamRun_EDBC9E + 882
+.set MidiChParam_Entry_002, SndParamRun_EDBC9E + 900
+.set MidiChParam_Entry_003, SndParamRun_EDBC9E + 918
+.set MidiChParam_Entry_004, SndParamRun_EDBC9E + 936
+.set MidiChParam_Entry_005, SndParamRun_EDBC9E + 954
+.set MidiChParam_Entry_006, SndParamRun_EDBC9E + 972
+.set MidiChParam_Entry_007, SndParamRun_EDBC9E + 990
+.set MidiChParam_Entry_008, SndParamRun_EDBC9E + 1008
+.set MidiChParam_Entry_009, SndParamRun_EDBC9E + 1026
+.set MidiChParam_Entry_010, SndParamRun_EDBC9E + 1044
+.set MidiChParam_Entry_011, SndParamRun_EDBC9E + 1062
+.set MidiChParam_Entry_012, SndParamRun_EDBC9E + 1080
+.set MidiChParam_Entry_013, SndParamRun_EDBC9E + 1098
+.set MidiChParam_Entry_014, SndParamRun_EDBC9E + 1116
+.set MidiChParam_Entry_015, SndParamRun_EDBC9E + 1134
+.set MidiChParam_Entry_016, SndParamRun_EDBC9E + 1152
+.set MidiChParam_Entry_017, SndParamRun_EDBC9E + 1170
+.set MidiChParam_Entry_018, SndParamRun_EDBC9E + 1188
+.set MidiChParam_Entry_019, SndParamRun_EDBC9E + 1206
+.set MidiChParam_Entry_020, SndParamRun_EDBC9E + 1224
+.set MidiChParam_Entry_021, SndParamRun_EDBC9E + 1242
+.set MidiChParam_Entry_022, SndParamRun_EDBC9E + 1260
+.set MidiChParam_Entry_023, SndParamRun_EDBC9E + 1278
+.set MidiChParam_Entry_024, SndParamRun_EDBC9E + 1296
+.set MidiChParam_Entry_025, SndParamRun_EDBC9E + 1314
+.set MidiChParam_Entry_026, SndParamRun_EDBC9E + 1332
+.set MidiChParam_Entry_027, SndParamRun_EDBC9E + 1350
+.set MidiChParam_Entry_028, SndParamRun_EDBC9E + 1368
+.set MidiChParam_Entry_029, SndParamRun_EDBC9E + 1386
 MidiChParam_Entry_030:
-	ldw	(45:8), 0:io
-	ld	xsp, 0x79007f05
-	nop
-	nop
-	ldw	(1:8), 1287:io
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	retd	7709
-	.byte 0x1f, 0x20
-	.ascii "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyÿ"
+	sndparam_descriptor 0x002d0a, 71, 5, 0x7f, 0, 121, 0, 0x00, 0x0a, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_NameEdit_Map:
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+	.byte 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c
+	.byte 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c
+	.byte 0x3d, 0x3e, 0x3f, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c
+	.byte 0x4d, 0x4e, 0x4f, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x5b, 0x5c
+	.byte 0x5d, 0x5e, 0x5f, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c
+	.byte 0x6d, 0x6e, 0x6f, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79
+	.byte 0xff
 WidgetParam_MidiCC_NameEdit:
-	pushw	ix
-	.byte 0xc2, 0xed
-	nop
-	jr	pl, 0
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_031:
-	pushw	45
-	nop
-	ld	xsp, 0x01002000
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_032:
-	incf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0xff00ff06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_033:
-	decf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x7f007f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_034:
-	ret
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01008006
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_035:
-	retd	45
-	nop
-	ld	xsp, 0x01004000
-	ei	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_036:
-	rcf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0xff00ff07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_037:
-	scf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x7f007f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_038:
-	ccf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01008007
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_039:
-	zcf
-	pushw	iy
-	nop
-	nop
-	ld	xsp, 0x01008000
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_040:
-	nop
-	ld	xwa, 0xb00000
-	jrl	nc, 32512
-	nop
-	nop
-	normal
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_041:
-	normal
-	ld	xwa, 0x01b00000
-	jrl	nc, 32512
-	nop
-	nop
-	nop
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_042:
-	push	sr
-	.byte 0x40
-
-
-	nop
-	nop
-	jr	f, 1
-	.byte 0x80
-	nop
-	jrl	nc, 7
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-MidiChParam_Entry_043:
-	pop	sr
-	ld	xwa, 0x700000
-	max
-	nop
-	normal
-	push	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_044:
-	.byte 0x04, 0x40
-
-
-	nop
-	nop
-	jr	f, 1
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_045:
-	halt
-	ld	xwa, 0x03b00000
-	jrl	nc, 32512
-	nop
-	nop
-	nop
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_046:
-	.byte 0x06, 0x40
-
-
-	nop
-	nop
-	jr	f, 1
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_047:
-	.byte 0x80
-	ld	xwa, 0x02980000
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	push	sr
-	push	sr
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_048:
-	.byte 0x81
-	ld	xwa, 0x02980000
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	push	sr
-	push	sr
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_049:
-	.byte 0xc0
-	ld	xwa, 0x0b980000
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_050:
-	.byte 0xc1
-	ld	xwa, 0x0b980000
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_051:
-	.byte 0xe0
-	ld	xwa, 0x04900000
-	swi	7
-	pushw	wa
-	pop	xwa
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_052:
-	nop
-	ld	xbc, 0x900000
-	.byte 0x1f
-	nop
-	halt
-	nop
-	nop
-	nop
-	max
-	halt
-	max
-	nop
-	nop
-	swi	7
+	.long WidgetParam_MidiCC_NameEdit_Map
+	.short 109
+	.byte 0x00, 0x00, 0x00, 0xff
+;  22 x 18-byte sound-parameter descriptors, 0xEDC2A4-0xEDC430, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc2a4.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDC2A4:
+	sndparam_descriptor 0x002d0b, 71, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0c, 71, 6, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0d, 71, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0e, 71, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0f, 71, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d10, 71, 7, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d11, 71, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d12, 71, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d13, 71, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004000, 176, 0, 0x7f, 0, 127, 0, 0x00, 0x01, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x004001, 176, 1, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x004002, 96, 1, 0x80, 0, 127, 7, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x004003, 112, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004004, 96, 1, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004005, 176, 3, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x004006, 96, 1, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004080, 152, 2, 0x80, 0, 1, 7, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
+	sndparam_descriptor 0x004081, 152, 2, 0x40, 0, 1, 6, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
+	sndparam_descriptor 0x0040c0, 152, 11, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0040c1, 152, 11, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0040e0, 144, 4, 0xff, 40, 88, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x004100, 144, 0, 0x1f, 0, 5, 0, 0x00, 0x00, 4, 5, 4, 0, 0, 0xff
+.set MidiChParam_Entry_031, SndParamRun_EDC2A4 + 0
+.set MidiChParam_Entry_032, SndParamRun_EDC2A4 + 18
+.set MidiChParam_Entry_033, SndParamRun_EDC2A4 + 36
+.set MidiChParam_Entry_034, SndParamRun_EDC2A4 + 54
+.set MidiChParam_Entry_035, SndParamRun_EDC2A4 + 72
+.set MidiChParam_Entry_036, SndParamRun_EDC2A4 + 90
+.set MidiChParam_Entry_037, SndParamRun_EDC2A4 + 108
+.set MidiChParam_Entry_038, SndParamRun_EDC2A4 + 126
+.set MidiChParam_Entry_039, SndParamRun_EDC2A4 + 144
+.set MidiChParam_Entry_040, SndParamRun_EDC2A4 + 162
+.set MidiChParam_Entry_041, SndParamRun_EDC2A4 + 180
+.set MidiChParam_Entry_042, SndParamRun_EDC2A4 + 198
+.set MidiChParam_Entry_043, SndParamRun_EDC2A4 + 216
+.set MidiChParam_Entry_044, SndParamRun_EDC2A4 + 234
+.set MidiChParam_Entry_045, SndParamRun_EDC2A4 + 252
+.set MidiChParam_Entry_046, SndParamRun_EDC2A4 + 270
+.set MidiChParam_Entry_047, SndParamRun_EDC2A4 + 288
+.set MidiChParam_Entry_048, SndParamRun_EDC2A4 + 306
+.set MidiChParam_Entry_049, SndParamRun_EDC2A4 + 324
+.set MidiChParam_Entry_050, SndParamRun_EDC2A4 + 342
+.set MidiChParam_Entry_051, SndParamRun_EDC2A4 + 360
+.set MidiChParam_Entry_052, SndParamRun_EDC2A4 + 378
 WidgetParam_MidiCC_SysExcl:
-	normal
-	nop
-	push	sr
-	nop
-	pop	sr
-	nop
-	pop	sr
-	push	sr
-	normal
-	push	sr
-	push	sr
-	push	sr
+	.byte 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x03, 0x02, 0x01, 0x02, 0x02, 0x02
 MidiChParam_Entry_053:
-	ld	xwa, 0x43000041
-	nop
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004140, 67, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_054:
-	ld	xbc, 0x43000041
-	normal
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004141, 67, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_055:
-	ld	xde, 0x43000041
-	.byte 0x01, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004142, 67, 1, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_056:
-	.byte 0x80
-	ld	xbc, 0x700000
-	pop	sr
-	nop
-	pop	sr
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004180, 112, 0, 0x03, 0, 3, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_057:
-	.byte 0x81
-	ld	xbc, 0x01700000
-	jrl	nc, 27669
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004181, 112, 1, 0x7f, 21, 108, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_058:
-	nop
-	ld	xde, 0x04480000
-	ld	xwa, 0x060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004200, 72, 4, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_059:
-	normal
-	ld	xde, 0x03700000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	ei	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	swi	7
-	nop
-	normal
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	swi	7
+	sndparam_descriptor 0x004201, 112, 3, 0xff, 0, 255, 0, 0x00, 0x06, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_Volume_Map:
+	.byte 0xff, 0x00, 0x01, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e
+	.byte 0xff
 WidgetParam_MidiCC_Volume:
-	.byte 0xba, 0xc4, 0xed
-	nop
-	retd	0xff00
-	nop
-	nop
-	swi	7
+	.long WidgetParam_MidiCC_Volume_Map
+	.short 15
+	.byte 0xff, 0x00, 0x00, 0xff
 MidiChParam_Entry_060:
-	push	sr
-	ld	xde, 0x04700000
-	retd	3328
-	nop
-	nop
-	ld	(1:8), 7:io
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	push	sr
-	decf
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	.byte 0x0b
-	incf
+	sndparam_descriptor 0x004202, 112, 4, 0x0f, 0, 13, 0, 0x00, 0x08, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_Pan_Map:
+	.byte 0x00, 0x01, 0x02, 0x0d, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
 WidgetParam_MidiCC_Pan:
-	.byte 0xe6, 0xc4, 0xed
-	nop
-	ret
-	nop
-	reti
-	ld	(0:8), 255:io
+	.long WidgetParam_MidiCC_Pan_Map
+	.short 14
+	.byte 0x07, 0x08, 0x00, 0xff
 MidiChParam_Entry_061:
-	.byte 0x80
-	ld	xde, 0x01920000
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004280, 146, 1, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_062:
-	.byte 0x81
-	ld	xde, 0x920000
-	swi	7
-	nop
-	.byte 0x80
-	nop
-	nop
-	max
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	ld	xwa, 0x04034241
-	halt
-	rcf
-	scf
-	ccf
-	zcf
-	push_a
-	pop_a
-	ex_ff
-	cp	(xwa), l
+	sndparam_descriptor 0x004281, 146, 0, 0xff, 0, 128, 0, 0x00, 0x04, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_Expression_Map:
+	.byte 0x00, 0x40, 0x41, 0x42, 0x03, 0x04, 0x05, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x80
+	.byte 0xff
 WidgetParam_MidiCC_Expression:
-	ld	b, 197:opc
-	.byte 0xed
-	nop
-	retd	0
-	nop
-	nop
-	swi	7
+	.long WidgetParam_MidiCC_Expression_Map
+	.short 15
+	.byte 0x00, 0x00, 0x00, 0xff
 MidiChParam_Entry_063:
-	.byte 0x82
-	ld	xde, 0x01920000
-	retd	2816
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	sndparam_descriptor 0x004282, 146, 1, 0x0f, 0, 11, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
 MidiChParam_Entry_064:
-	.byte 0x83
-	ld	xde, 0x02920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	nop
-	normal
-	pop	sr
-	max
-	halt
-	reti
-	ld	(9:8), 10:io
-	incf
-	decf
-	ret
-	retd	4625
-	zcf
-	pop_a
-	ex_ff
-	ldf 24
-	.byte 0x1a
-	jp	0x1f1d1c
-	.ascii " !#$%&()*+-./12346789;<=?@ABDEFGIJKMNOPRSTUWXY[\\]^`abcefgijklnopqstuwxyz|}~€‚ƒ…†‡ˆŠ‹ŒŽ‘“”•–˜™šœžŸ¡¢"
-	.byte 0xa3, 0xa4, 0xa6
-	sub	(xsp), xwa
-	sub	(xde-85), xix
-	.byte 0xad, 0xaf, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6
-	.byte 0xb8, 0xb9, 0xba, 0xbb, 0xbd, 0xbe, 0xbf, 0xc0
-	and	l, (0xc6c4c3:24)
-	adc	w, 203
-	xor	d, 206
-	.byte 0xd0, 0xd1, 0xd2, 0xd4, 0xd5, 0xd6, 0xd7
-	cp	bc, 2:i3
-	cp	hl, 4:i3
-	cp	iz, 7:i3
-	.byte 0xe0, 0xe2, 0xe3, 0xe4, 0xe5, 0xe7, 0xe8, 0xe9
-	sla	xde, 237
-	cp	xwa, xiz
-	.byte 0xf1, 0xf2, 0xf3, 0xf5, 0xf6
-	ldx
-	swi	0
-	swi	2
-	swi	3
-	swi	4
-	swi	6
-	swi	7
-	swi	7
+	sndparam_descriptor 0x004283, 146, 2, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_Sustain_Map:
+	.byte 0x00, 0x01, 0x03, 0x04, 0x05, 0x07, 0x08, 0x09, 0x0a, 0x0c, 0x0d, 0x0e, 0x0f, 0x11, 0x12, 0x13
+	.byte 0x15, 0x16, 0x17, 0x18, 0x1a, 0x1b, 0x1c, 0x1d, 0x1f, 0x20, 0x21, 0x23, 0x24, 0x25, 0x26, 0x28
+	.byte 0x29, 0x2a, 0x2b, 0x2d, 0x2e, 0x2f, 0x31, 0x32, 0x33, 0x34, 0x36, 0x37, 0x38, 0x39, 0x3b, 0x3c
+	.byte 0x3d, 0x3f, 0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x47, 0x49, 0x4a, 0x4b, 0x4d, 0x4e, 0x4f, 0x50
+	.byte 0x52, 0x53, 0x54, 0x55, 0x57, 0x58, 0x59, 0x5b, 0x5c, 0x5d, 0x5e, 0x60, 0x61, 0x62, 0x63, 0x65
+	.byte 0x66, 0x67, 0x69, 0x6a, 0x6b, 0x6c, 0x6e, 0x6f, 0x70, 0x71, 0x73, 0x74, 0x75, 0x77, 0x78, 0x79
+	.byte 0x7a, 0x7c, 0x7d, 0x7e, 0x80, 0x81, 0x82, 0x83, 0x85, 0x86, 0x87, 0x88, 0x8a, 0x8b, 0x8c, 0x8e
+	.byte 0x8f, 0x90, 0x91, 0x93, 0x94, 0x95, 0x96, 0x98, 0x99, 0x9a, 0x9c, 0x9d, 0x9e, 0x9f, 0xa1, 0xa2
+	.byte 0xa3, 0xa4, 0xa6, 0xa7, 0xa8, 0xaa, 0xab, 0xac, 0xad, 0xaf, 0xb0, 0xb1, 0xb2, 0xb4, 0xb5, 0xb6
+	.byte 0xb8, 0xb9, 0xba, 0xbb, 0xbd, 0xbe, 0xbf, 0xc0, 0xc2, 0xc3, 0xc4, 0xc6, 0xc7, 0xc8, 0xc9, 0xcb
+	.byte 0xcc, 0xcd, 0xce, 0xd0, 0xd1, 0xd2, 0xd4, 0xd5, 0xd6, 0xd7, 0xd9, 0xda, 0xdb, 0xdc, 0xde, 0xdf
+	.byte 0xe0, 0xe2, 0xe3, 0xe4, 0xe5, 0xe7, 0xe8, 0xe9, 0xea, 0xec, 0xed, 0xee, 0xf0, 0xf1, 0xf2, 0xf3
+	.byte 0xf5, 0xf6, 0xf7, 0xf8, 0xfa, 0xfb, 0xfc, 0xfe, 0xff
+	.byte 0xff
 WidgetParam_MidiCC_Sustain:
-	jr	f, -59
-	.byte 0xed
-	nop
-	.byte 0xc9
-	nop
-	incm8	4, (xwa)
-	nop
-	swi	7
-MidiChParam_Entry_065:
-	.byte 0x84
-	ld	xde, 0x03920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_066:
-	.byte 0x85
-	ld	xde, 0x04920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_067:
-	.byte 0x86
-	ld	xde, 0x05920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_068:
-	.byte 0x87
-	ld	xde, 0x06920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_069:
-	.byte 0x88
-	ld	xde, 0x07920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_070:
-	.byte 0x89
-	ld	xde, 0x08920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_071:
-	.byte 0x8a
-	ld	xde, 0x09920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_072:
-	.byte 0x8b
-	ld	xde, 0x0a920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_073:
-	.byte 0x8c
-	ld	xde, 0x0b920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_074:
-	.byte 0x8d
-	ld	xde, 0x0c920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_075:
-	.byte 0x8e
-	ld	xde, 0x0d920000
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	halt
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_076:
-	nop
-	popw	bc
-	nop
-	nop
-	jr	lt, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_077:
-	nop
-	popw	de
-	nop
-	nop
-	jr	le, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_078:
-	nop
-	popw	hl
-	nop
-	nop
-	jr	ule, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_079:
-	nop
-	popw	ix
-	nop
-	nop
-	jr	ov, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_080:
-	nop
-	popw	iy
-	nop
-	nop
-	jr	mi, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_081:
-	nop
-	popw	iz
-	nop
-	nop
-	jr	z, 0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_082:
-	nop
-	.byte 0x50
-	nop
-	nop
-	.byte 0x80
-	ldw	(3:8), 512:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_083:
-	.byte 0x01, 0x50
-	nop
-	nop
-	.byte 0x80
-	pushw	255
-	swi	7
-	nop
-	nop
-	reti
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
+	.long WidgetParam_MidiCC_Sustain_Map
+	.short 201
+	.byte 0x80, 0x64, 0x00, 0xff
+;  19 x 18-byte sound-parameter descriptors, 0xEDC634-0xEDC78A, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc634.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDC634:
+	sndparam_descriptor 0x004284, 146, 3, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004285, 146, 4, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004286, 146, 5, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004287, 146, 6, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004288, 146, 7, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004289, 146, 8, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428a, 146, 9, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428b, 146, 10, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428c, 146, 11, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428d, 146, 12, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428e, 146, 13, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004900, 97, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004a00, 98, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004b00, 99, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004c00, 100, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004d00, 101, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004e00, 102, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x005000, 128, 10, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x005001, 128, 11, 0xff, 0, 255, 0, 0x00, 0x07, 1, 7, 5, 0, 0, 0xff
+.set MidiChParam_Entry_065, SndParamRun_EDC634 + 0
+.set MidiChParam_Entry_066, SndParamRun_EDC634 + 18
+.set MidiChParam_Entry_067, SndParamRun_EDC634 + 36
+.set MidiChParam_Entry_068, SndParamRun_EDC634 + 54
+.set MidiChParam_Entry_069, SndParamRun_EDC634 + 72
+.set MidiChParam_Entry_070, SndParamRun_EDC634 + 90
+.set MidiChParam_Entry_071, SndParamRun_EDC634 + 108
+.set MidiChParam_Entry_072, SndParamRun_EDC634 + 126
+.set MidiChParam_Entry_073, SndParamRun_EDC634 + 144
+.set MidiChParam_Entry_074, SndParamRun_EDC634 + 162
+.set MidiChParam_Entry_075, SndParamRun_EDC634 + 180
+.set MidiChParam_Entry_076, SndParamRun_EDC634 + 198
+.set MidiChParam_Entry_077, SndParamRun_EDC634 + 216
+.set MidiChParam_Entry_078, SndParamRun_EDC634 + 234
+.set MidiChParam_Entry_079, SndParamRun_EDC634 + 252
+.set MidiChParam_Entry_080, SndParamRun_EDC634 + 270
+.set MidiChParam_Entry_081, SndParamRun_EDC634 + 288
+.set MidiChParam_Entry_082, SndParamRun_EDC634 + 306
+.set MidiChParam_Entry_083, SndParamRun_EDC634 + 324
 MidiChParam_Entry_084:
-	cp	h, 208
-	.byte 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7
-	cp	wa, 1:i3
-	cp	de, 3:i3
-	cp	ix, 5:i3
-	cp	iz, 7:i3
-	.byte 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7
-	.byte 0xe8, 0xe9, 0xea
-	sla	xhl, 237
-	srl	xiz, 240
-	.byte 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6
-	ldx
-	swi	0
-	swi	1
-	swi	2
-	swi	3
-	swi	4
-	swi	5
-	swi	6
-	swi	7
-	nop
-	normal
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	retd	4368
-	ccf
-	zcf
-	push_a
-	pop_a
-	ex_ff
-	ldf 24
-	pop_f
-	.byte 0x1a
-	jp	0x1e1d1c
-	.byte 0x1f
-	.ascii " !\"#$%&'()*+,-./012ÿ"
+	.byte 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7, 0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd
+	.byte 0xde, 0xdf, 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed
+	.byte 0xee, 0xef, 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd
+	.byte 0xfe, 0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
+	.byte 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d
+	.byte 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d
+	.byte 0x2e, 0x2f, 0x30, 0x31, 0x32
+	.byte 0xff
 WidgetParam_MidiCC_Reverb:
 	.long MidiChParam_Entry_084
-	jr	mi, 0
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_085:
-	push	sr
-	.byte 0x50
-	nop
-	nop
-	.byte 0x80
-	incf
-	swi	7
-	normal
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_086:
-	nop
-	.byte 0x80
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_087:
-	.byte 0x01, 0x80
-	nop
-	nop
-	ld	(xde), 127
-	nop
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_088:
-	reti
-	.byte 0x80
-	nop
-	nop
-	nop
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_089:
-	ld	(128:8), 0:io
-	nop
-	nop
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_090:
-	ldw	(128:8), 0:io
-	nop
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_091:
-	pushw	128
-	nop
-	ld	(xhl), 127
-	nop
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_092:
-	ld	w, 128:opc
-	nop
-	nop
-	nop
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_093:
-	ld	xwa, 128
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
+	.short 101
+	.byte 0x00, 0x00, 0x00, 0xff
+;  9 x 18-byte sound-parameter descriptors, 0xEDC7FA-0xEDC89C, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc7fa.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDC7FA:
+	sndparam_descriptor 0x005002, 128, 12, 0xff, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008000, 0, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008001, 178, 0, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008007, 0, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008008, 0, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00800a, 0, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00800b, 179, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008020, 0, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008040, 0, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+.set MidiChParam_Entry_085, SndParamRun_EDC7FA + 0
+.set MidiChParam_Entry_086, SndParamRun_EDC7FA + 18
+.set MidiChParam_Entry_087, SndParamRun_EDC7FA + 36
+.set MidiChParam_Entry_088, SndParamRun_EDC7FA + 54
+.set MidiChParam_Entry_089, SndParamRun_EDC7FA + 72
+.set MidiChParam_Entry_090, SndParamRun_EDC7FA + 90
+.set MidiChParam_Entry_091, SndParamRun_EDC7FA + 108
+.set MidiChParam_Entry_092, SndParamRun_EDC7FA + 126
+.set MidiChParam_Entry_093, SndParamRun_EDC7FA + 144
 WidgetParam_MidiCC_Chorus:
-	ld	xwa, 0x7f000100
-	nop
-	normal
-	swi	7
-MidiChParam_Entry_094:
-	pop	xhl
-	.byte 0x80
-	nop
-	nop
-	nop
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_095:
-	pop	xiy
-	.byte 0x80
-	nop
-	nop
-	nop
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_096:
-	pop	xiz
-	.byte 0x80
-	nop
-	nop
-	nop
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-MidiChParam_Entry_097:
-	jrl	128
-	nop
-	.byte 0xae
-	nop
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_098:
-	.byte 0x80, 0x80
-	nop
-	nop
-	nop
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_099:
-	.byte 0x81, 0x80
-	nop
-	nop
-	nop
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_100:
-	.byte 0x82, 0x80
-	nop
-	nop
-	nop
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_101:
-	.byte 0xb0, 0x81
-	nop
-	nop
-	ld	(xbc), 127
-	nop
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_102:
-	.byte 0xb2, 0x81
-	nop
-	nop
-	ld	(xix), 127
-	nop
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_103:
-	ld	a, 130:opc
-	nop
-	nop
-	ld	xix, 0x01000f08
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.byte 0x40, 0x00, 0x01, 0x00, 0x7f, 0x00, 0x01, 0xff
+;  10 x 18-byte sound-parameter descriptors, 0xEDC8A4-0xEDC958, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc8a4.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDC8A4:
+	sndparam_descriptor 0x00805b, 0, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00805d, 0, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00805e, 0, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008078, 174, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008080, 0, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008081, 0, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008082, 0, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0081b0, 177, 0, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0081b2, 180, 0, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008221, 68, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+.set MidiChParam_Entry_094, SndParamRun_EDC8A4 + 0
+.set MidiChParam_Entry_095, SndParamRun_EDC8A4 + 18
+.set MidiChParam_Entry_096, SndParamRun_EDC8A4 + 36
+.set MidiChParam_Entry_097, SndParamRun_EDC8A4 + 54
+.set MidiChParam_Entry_098, SndParamRun_EDC8A4 + 72
+.set MidiChParam_Entry_099, SndParamRun_EDC8A4 + 90
+.set MidiChParam_Entry_100, SndParamRun_EDC8A4 + 108
+.set MidiChParam_Entry_101, SndParamRun_EDC8A4 + 126
+.set MidiChParam_Entry_102, SndParamRun_EDC8A4 + 144
+.set MidiChParam_Entry_103, SndParamRun_EDC8A4 + 162
 MidiChParam_Entry_104:
-	add	b, d
-	nop
-	nop
-	ld	xix, 0x0f000f01
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	pushw	3340
-	ret
-	retd	256
-	push	sr
-	pop	sr
-	max
-	halt
-	swi	7
+	sndparam_descriptor 0x0082cc, 68, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_DspEffect_Map:
+	.byte 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05
+	.byte 0xff
 WidgetParam_MidiCC_DspEffect:
-	jr	gt, -55
-	.byte 0xed
-	nop
-	pushw	0
-	halt
-	nop
-	swi	7
-MidiChParam_Entry_105:
-	add	b, c
-	nop
-	nop
-	ld	xix, 0x0f00f001
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_106:
-	.byte 0x93, 0x82
-	nop
-	nop
-	ld	xix, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_107:
-	.byte 0x94, 0x82
-	nop
-	nop
-	ld	xix, 0x0f00f002
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_108:
-	.byte 0x80, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f03
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_109:
-	.byte 0x81, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_110:
-	.byte 0x82, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f04
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_111:
-	.byte 0x83, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f004
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-MidiChParam_Entry_112:
-	.byte 0x84, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f05
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_001:
-	.byte 0x85, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f005
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_002:
-	.byte 0x86, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_003:
-	.byte 0x87, 0x82
-	nop
-	nop
-	ld	xix, 0x0800f006
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_004:
-	.byte 0x88, 0x82
-	nop
-	nop
-	ld	xix, 0x08000f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_005:
-	.byte 0xc0, 0x82
-	nop
-	nop
-	ld	xix, 0x01001007
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_006:
-	.byte 0xc1, 0x82
-	nop
-	nop
-	ld	xix, 0x01002007
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_007:
-	nop
-	.byte 0x84
-	nop
-	nop
-	normal
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_008:
-	.byte 0x01, 0x84
-	nop
-	nop
-	.byte 0xb2, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_009:
-	reti
-	.byte 0x84
-	nop
-	nop
-	normal
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_010:
-	ld	(132:8), 0:io
-	nop
-	normal
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_011:
-	ldw	(132:8), 0:io
-	normal
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_012:
-	pushw	132
-	nop
-	.byte 0xb3, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_013:
-	ld	w, 132:opc
-	nop
-	nop
-	normal
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_014:
-	ld	xwa, 0x01000084
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_015:
-	pop	xhl
-	.byte 0x84
-	nop
-	nop
-	normal
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_016:
-	pop	xiy
-	.byte 0x84
-	nop
-	nop
-	normal
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_017:
-	pop	xiz
-	.byte 0x84
-	nop
-	nop
-	normal
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_018:
-	jrl	132
-	nop
-	.byte 0xae, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_019:
-	.byte 0x80, 0x84
-	nop
-	nop
-	normal
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_020:
-	.byte 0x81, 0x84
-	nop
-	nop
-	normal
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_021:
-	.byte 0x82, 0x84
-	nop
-	nop
-	normal
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_022:
-	.byte 0xb0, 0x85
-	nop
-	nop
-	.byte 0xb1, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_023:
-	.byte 0xb2, 0x85
-	nop
-	nop
-	.byte 0xb4, 0x01
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_024:
-	ld	a, 134:opc
-	nop
-	nop
-	ld	xiy, 0x01000f08
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_025:
-	add	h, d
-	nop
-	nop
-	ld	xiy, 0x0f000f01
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_026:
-	add	h, c
-	nop
-	nop
-	ld	xiy, 0x0f00f001
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_027:
-	.byte 0x93, 0x86
-	nop
-	nop
-	ld	xiy, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_028:
-	.byte 0x94, 0x86
-	nop
-	nop
-	ld	xiy, 0x0f00f002
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_029:
-	.byte 0x80, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f03
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_030:
-	.byte 0x81, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_031:
-	.byte 0x82, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f04
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_032:
-	.byte 0x83, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f004
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_033:
-	.byte 0x84, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f05
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_034:
-	.byte 0x85, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f005
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_035:
-	.byte 0x86, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_036:
-	.byte 0x87, 0x86
-	nop
-	nop
-	ld	xiy, 0x0800f006
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_037:
-	.byte 0x88, 0x86
-	nop
-	nop
-	ld	xiy, 0x08000f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_038:
-	.byte 0xc0, 0x86
-	nop
-	nop
-	ld	xiy, 0x01001007
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_039:
-	.byte 0xc1, 0x86
-	nop
-	nop
-	ld	xiy, 0x01002007
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_040:
-	nop
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_041:
-	.byte 0x01, 0x88
-	nop
-	nop
-	ldw (xde), 127
-	jrl nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_042:
-	reti
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_043:
-	ld	(136:8), 0:io
-	nop
-	push	sr
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_044:
-	ldw	(136:8), 0:io
-	push	sr
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_045:
-	pushw	136
-	nop
-	ldw (xhl), 127
-	jrl nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_046:
-	ld	w, 136:opc
-	nop
-	nop
-	push	sr
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_047:
-	ld	xwa, 0x02000088
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_048:
-	pop	xhl
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_049:
-	pop	xiy
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_050:
-	pop	xiz
-	.byte 0x88
-	nop
-	nop
-	push	sr
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_051:
-	jrl	136
-	nop
-	.byte 0xae
-	push	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_052:
-	add	(xwa), w
-	nop
-	nop
-	push	sr
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_053:
-	add	(xbc), w
-	nop
-	nop
-	push	sr
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_054:
-	add	(xde), w
-	nop
-	nop
-	push	sr
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_055:
-	.byte 0xb0, 0x89
-	nop
-	nop
-	ldw (xbc), 127
-	jrl nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_056:
-	.byte 0xb2, 0x89
-	nop
-	nop
-	ldw (xix), 127
-	jrl nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_057:
-	ld	a, 138:opc
-	nop
-	nop
-	ld	xiz, 0x01000f08
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_058:
-	ld	b, d
-	nop
-	nop
-	ld	xiz, 0x0f000f01
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_059:
-	ld	b, c
-	nop
-	nop
-	ld	xiz, 0x0f00f001
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_060:
-	add	(xhl), de
-	nop
-	nop
-	ld	xiz, 0x0f000f02
-	nop
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_061:
-	add	(xix), de
-	nop
-	nop
-	ld	xiz, 0x0f00f002
-	max
-	nop
-	push	1
-	reti
-	halt
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_062:
-	add	(xwa), b
-	nop
-	nop
-	ld	xiz, 0x08000f03
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_063:
-	add	(xbc), b
-	nop
-	nop
-	ld	xiz, 0x0800f003
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_064:
-	add	(xde), b
-	nop
-	nop
-	ld	xiz, 0x08000f04
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_065:
-	add	(xhl), b
-	nop
-	nop
-	ld	xiz, 0x0800f004
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_066:
-	add	(xix), b
-	nop
-	nop
-	ld	xiz, 0x08000f05
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_067:
-	add	(xiy), b
-	nop
-	nop
-	ld	xiz, 0x0800f005
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_068:
-	add	(xiz), b
-	nop
-	nop
-	ld	xiz, 0x08000f06
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_069:
-	add	(xsp), b
-	nop
-	nop
-	ld	xiz, 0x0800f006
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_070:
-	.byte 0x88, 0x8a
-	nop
-	nop
-	ld	xiz, 0x08000f07
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_071:
-	.byte 0xc0, 0x8a
-	nop
-	nop
-	ld	xiz, 0x01001007
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_072:
-	.byte 0xc1, 0x8a
-	nop
-	nop
-	ld	xiz, 0x01002007
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_073:
-	nop
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_074:
-	.byte 0x01, 0x8c
-	nop
-	nop
-	.byte 0xb2
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_075:
-	reti
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_076:
-	ld	(140:8), 0:io
-	nop
-	pop	sr
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_077:
-	ldw	(140:8), 0:io
-	pop	sr
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_078:
-	pushw	140
-	nop
-	.byte 0xb3
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_079:
-	ld	w, 140:opc
-	nop
-	nop
-	pop	sr
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_080:
-	ld	xwa, 0x0300008c
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_081:
-	pop	xhl
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_082:
-	pop	xiy
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_083:
-	pop	xiz
-	.byte 0x8c
-	nop
-	nop
-	pop	sr
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-VoiceParamEx_Entry_084:
-	jrl	140
-	nop
-	.byte 0xae
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-VoiceParamEx_Entry_085:
-	add	(xwa), d
-	nop
-	nop
-	pop	sr
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_001:
-	add	(xbc), d
-	nop
-	nop
-	pop	sr
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_002:
-	add	(xde), d
-	nop
-	nop
-	pop	sr
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_003:
-	.byte 0xb0, 0x8d
-	nop
-	nop
-	.byte 0xb1
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_004:
-	.byte 0xb2, 0x8d
-	nop
-	nop
-	.byte 0xb4
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_005:
-	nop
-	.byte 0x90
-	nop
-	nop
-	max
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_006:
-	.byte 0x01, 0x90
-	nop
-	nop
-	.byte 0xb2, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_007:
-	reti
-	.byte 0x90
-	nop
-	nop
-	max
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_008:
-	ld	(144:8), 0:io
-	nop
-	max
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_009:
-	ldw	(144:8), 0:io
-	max
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_010:
-	pushw	144
-	nop
-	.byte 0xb3, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_011:
-	ld	w, 144:opc
-	nop
-	nop
-	max
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_012:
-	ld	xwa, 0x04000090
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_013:
-	pop	xhl
-	.byte 0x90
-	nop
-	nop
-	max
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_014:
-	pop	xiy
-	.byte 0x90
-	nop
-	nop
-	max
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_015:
-	pop	xiz
-	.byte 0x90
-	nop
-	nop
-	max
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_016:
-	jrl	144
-	nop
-	.byte 0xae, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_017:
-	.byte 0x80, 0x90
-	nop
-	nop
-	max
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_018:
-	.byte 0x81, 0x90
-	nop
-	nop
-	max
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_019:
-	.byte 0x82, 0x90
-	nop
-	nop
-	max
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_020:
-	.byte 0xb0, 0x91
-	nop
-	nop
-	.byte 0xb1, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_021:
-	.byte 0xb2, 0x91
-	nop
-	nop
-	.byte 0xb4, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_022:
-	nop
-	.byte 0x94
-	nop
-	nop
-	halt
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_023:
-	.byte 0x01, 0x94
-	nop
-	nop
-	.byte 0xb2
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_024:
-	reti
-	.byte 0x94
-	nop
-	nop
-	halt
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_025:
-	ld	(148:8), 0:io
-	nop
-	halt
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_026:
-	ldw	(148:8), 0:io
-	halt
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_027:
-	pushw	148
-	nop
-	.byte 0xb3
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_028:
-	ld	w, 148:opc
-	nop
-	nop
-	halt
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_029:
-	ld	xwa, 0x05000094
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_030:
-	pop	xhl
-	.byte 0x94
-	nop
-	nop
-	halt
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_031:
-	pop	xiy
-	.byte 0x94
-	nop
-	nop
-	halt
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_032:
-	pop	xiz
-	.byte 0x94
-	nop
-	nop
-	halt
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_033:
-	jrl	148
-	nop
-	.byte 0xae
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_034:
-	.byte 0x80, 0x94
-	nop
-	nop
-	halt
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_035:
-	.byte 0x81, 0x94
-	nop
-	nop
-	halt
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_036:
-	.byte 0x82, 0x94
-	nop
-	nop
-	halt
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_037:
-	.byte 0xb0, 0x95
-	nop
-	nop
-	.byte 0xb1
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_038:
-	.byte 0xb2, 0x95
-	nop
-	nop
-	.byte 0xb4
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_039:
-	nop
-	.byte 0x98
-	nop
-	nop
-	ei	0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_040:
-	.byte 0x01, 0x98
-	nop
-	nop
-	.byte 0xb2, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_041:
-	reti
-	.byte 0x98
-	nop
-	nop
-	ei	3
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_042:
-	ld	(152:8), 0:io
-	nop
-	ei	3
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_043:
-	ldw	(152:8), 0:io
-	.byte 0x06
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_044:
-	pushw	152
-	nop
-	.byte 0xb3, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_045:
-	ld	w, 152:opc
-	nop
-	nop
-	ei	1
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_046:
-	ld	xwa, 0x06000098
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_047:
-	pop	xhl
-	.byte 0x98
-	nop
-	nop
-	ei	7
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_048:
-	pop	xiy
-	.byte 0x98
-	nop
-	nop
-	ei	5
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_049:
-	pop	xiz
-	.byte 0x98
-	nop
-	nop
-	ei	4
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_050:
-	jrl	152
-	nop
-	.byte 0xae, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_051:
-	.byte 0x80, 0x98
-	nop
-	nop
-	.byte 0x06
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_052:
-	.byte 0x81, 0x98
-	nop
-	nop
-	.byte 0x06
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_053:
-	.byte 0x82, 0x98
-	nop
-	nop
-	.byte 0x06
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_054:
-	.byte 0xb0, 0x99
-	nop
-	nop
-	.byte 0xb1, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_055:
-	.byte 0xb2, 0x99
-	nop
-	nop
-	.byte 0xb4, 0x06
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_056:
-	nop
-	.byte 0x9c
-	nop
-	nop
-	reti
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_057:
-	.byte 0x01, 0x9c
-	nop
-	nop
-	.byte 0xb2
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_058:
-	reti
-	.byte 0x9c
-	nop
-	nop
-	reti
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_059:
-	ld	(156:8), 0:io
-	nop
-	reti
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_060:
-	ldw	(156:8), 0:io
-	reti
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_061:
-	pushw	156
-	nop
-	.byte 0xb3
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_062:
-	ld	w, 156:opc
-	nop
-	nop
-	reti
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_063:
-	ld	xwa, 0x0700009c
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_064:
-	pop	xhl
-	.byte 0x9c
-	nop
-	nop
-	reti
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_065:
-	pop	xiy
-	.byte 0x9c
-	nop
-	nop
-	reti
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_066:
-	pop	xiz
-	.byte 0x9c
-	nop
-	nop
-	reti
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_067:
-	jrl	156
-	nop
-	.byte 0xae
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_068:
-	.byte 0x80, 0x9c
-	nop
-	nop
-	reti
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_069:
-	.byte 0x81, 0x9c
-	nop
-	nop
-	reti
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_070:
-	.byte 0x82, 0x9c
-	nop
-	nop
-	reti
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_071:
-	.byte 0xb0, 0x9d
-	nop
-	nop
-	.byte 0xb1
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_072:
-	.byte 0xb2, 0x9d
-	nop
-	nop
-	.byte 0xb4
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_073:
-	nop
-	.byte 0xa0
-	nop
-	nop
-	ld	(0:8), 255:io
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_074:
-	.byte 0x01, 0xa0
-	nop
-	nop
-	.byte 0xb2
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_075:
-	reti
-	.byte 0xa0
-	nop
-	nop
-	ld	(3:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_076:
-	ld	(160:8), 0:io
-	nop
-	ld	(3:8), 128:io
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_077:
-	ldw	(160:8), 0:io
-	ld	(8:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_078:
-	pushw	160
-	nop
-	.byte 0xb3
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_079:
-	ld	w, 160:opc
-	nop
-	nop
-	ld	(1:8), 127:io
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_080:
-	ld	xwa, 0x080000a0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_081:
-	pop	xhl
-	.byte 0xa0
-	nop
-	nop
-	ld	(7:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_082:
-	pop	xiy
-	.byte 0xa0
-	nop
-	nop
-	ld	(5:8), 127:io
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_083:
-	pop	xiz
-	.byte 0xa0
-	nop
-	nop
-	ld	(4:8), 64:io
-	nop
-	jrl	nc, 6
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_084:
-	jrl	160
-	nop
-	.byte 0xae
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_085:
-	.byte 0x80, 0xa0
-	nop
-	nop
-	ld	(11:8), 127:io
-	nop
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_086:
-	.byte 0x81, 0xa0
-	nop
-	nop
-	ld	(10:8), 255:io
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_087:
-	.byte 0x82, 0xa0
-	nop
-	nop
-	ld	(9:8), 127:io
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_088:
-	.byte 0xb0, 0xa1
-	nop
-	nop
-	.byte 0xb1
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_089:
-	.byte 0xb2, 0xa1
-	nop
-	nop
-	.byte 0xb4
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	.byte 0x04
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_090:
-	nop
-	.byte 0xa4
-	nop
-	nop
-	push	0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_091:
-	.byte 0x01, 0xa4
-	nop
-	nop
-	.byte 0xb2
-	push	127
-	nop
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_092:
-	reti
-	.byte 0xa4
-	nop
-	nop
-	push	3
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_093:
-	ld	(164:8), 0:io
-	nop
-	push	3
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_094:
-	ldw	(164:8), 0:io
-	push	8
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_095:
-	pushw	164
-	nop
-	.byte 0xb3
-	push	127
-	nop
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_096:
-	ld	w, 164:opc
-	nop
-	nop
-	push	1
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_097:
-	ld	xwa, 0x090000a4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_098:
-	pop	xhl
-	.byte 0xa4
-	nop
-	nop
-	push	7
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_099:
-	pop	xiy
-	.byte 0xa4
-	nop
-	nop
-	push	5
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_100:
-	pop	xiz
-	.byte 0xa4
-	nop
-	nop
-	push	4
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_101:
-	jrl	164
-	nop
-	.byte 0xae
-	push	127
-	nop
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_102:
-	.byte 0x80, 0xa4
-	nop
-	nop
-	push	11
-	jrl	nc, 3072
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_103:
-	.byte 0x81, 0xa4
-	nop
-	nop
-	push	10
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_104:
-	.byte 0x82, 0xa4
-	nop
-	nop
-	push	9
-	jrl	nc, 19508
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_105:
-	.byte 0xb0, 0xa5
-	nop
-	nop
-	.byte 0xb1
-	push	127
-	nop
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_106:
-	.byte 0xb2, 0xa5
-	nop
-	nop
-	.byte 0xb4
-	push	127
-	nop
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_107:
-	nop
-	.byte 0xa8
-	nop
-	nop
-	ldw	(0:8), 255:io
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_108:
-	.byte 0x01, 0xa8
-	nop
-	nop
-	.byte 0xb2
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_109:
-	reti
-	.byte 0xa8
-	nop
-	nop
-	ldw	(3:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_110:
-	ld	(168:8), 0:io
-	nop
-	ldw	(3:8), 128:io
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_111:
-	ldw	(168:8), 0:io
-	ldw	(8:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_112:
-	pushw	168
-	nop
-	.byte 0xb3
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_113:
-	ld	w, 168:opc
-	nop
-	nop
-	ldw	(1:8), 127:io
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_114:
-	ld	xwa, 0x0a0000a8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_115:
-	pop	xhl
-	.byte 0xa8
-	nop
-	nop
-	ldw	(7:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_116:
-	pop	xiy
-	.byte 0xa8
-	nop
-	nop
-	ldw	(5:8), 127:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_117:
-	pop	xiz
-	.byte 0xa8
-	nop
-	nop
-	ldw	(4:8), 64:io
-	jrl	nc, 6
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_118:
-	jrl	168
-	nop
-	.byte 0xae
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_119:
-	sub	(xwa), w
-	nop
-	nop
-	ldw	(11:8), 127:io
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_120:
-	sub	(xbc), w
-	nop
-	nop
-	ldw	(10:8), 255:io
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_121:
-	sub	(xde), w
-	nop
-	nop
-	ldw	(9:8), 0x347f:io
-	popw	ix
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_122:
-	.byte 0xb0, 0xa9
-	nop
-	nop
-	.byte 0xb1
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_123:
-	.byte 0xb2, 0xa9
-	nop
-	nop
-	.byte 0xb4
-	ldw	(127:8), 0x7f00:io
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_124:
-	nop
-	.byte 0xac
-	nop
-	nop
-	pushw	0xff00
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_125:
-	.byte 0x01, 0xac
-	nop
-	nop
-	.byte 0xb2
-	pushw	127
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_126:
-	reti
-	.byte 0xac
-	nop
-	nop
-	pushw	0x7f03
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_127:
-	ld	(172:8), 0:io
-	nop
-	pushw	0x8003
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_128:
-	ldw	(172:8), 0:io
-	pushw	0x7f08
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_129:
-	pushw	172
-	nop
-	.byte 0xb3
-	pushw	127
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_130:
-	ld	w, 172:opc
-	nop
-	nop
-	pushw	0x7f01
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_131:
-	ld	xwa, 0x0b0000ac
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_132:
-	pop	xhl
-	.byte 0xac
-	nop
-	nop
-	pushw	0x7f07
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_133:
-	pop	xiy
-	.byte 0xac
-	nop
-	nop
-	pushw	0x7f05
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_134:
-	pop	xiz
-	.byte 0xac
-	nop
-	nop
-	pushw	0x4004
-	nop
-	jrl	nc, 6
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_135:
-	jrl	172
-	nop
-	.byte 0xae
-	pushw	127
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_136:
-	sub	(xwa), d
-	nop
-	nop
-	pushw	0x7f0b
-	nop
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_137:
-	sub	(xbc), d
-	nop
-	nop
-	pushw	0xff0a
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_138:
-	sub	(xde), d
-	nop
-	nop
-	pushw	0x7f09
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_139:
-	.byte 0xb0, 0xad
-	nop
-	nop
-	.byte 0xb1
-	pushw	127
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_140:
-	.byte 0xb2, 0xad
-	nop
-	nop
-	.byte 0xb4
-	pushw	127
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_141:
-	nop
-	ld	(xwa), 0
-	incf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_142:
-	normal
-	ld	(xwa), 0
-	.byte 0xb2
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_143:
-	reti
-	ld	(xwa), 0
-	incf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_144:
-	ld	(176:8), 0:io
-	nop
-	incf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_145:
-	ldw	(176:8), 0:io
-	incf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_146:
-	pushw	176
-	nop
-	.byte 0xb3
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_147:
-	ld	w, 176:opc
-	nop
-	nop
-	incf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_148:
-	ld	xwa, 0x0c0000b0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_149:
-	pop	xhl
-	ld	(xwa), 0
-	incf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_150:
-	pop	xiy
-	ld	(xwa), 0
-	incf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_151:
-	pop	xiz
-	ld	(xwa), 0
-	incf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_152:
-	jrl	176
-	nop
-	.byte 0xae
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_153:
-	.byte 0x80
-	ld	(xwa), 0
-	incf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_154:
-	.byte 0x81
-	ld	(xwa), 0
-	incf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_155:
-	.byte 0x82
-	ld	(xwa), 0
-	incf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_156:
-	.byte 0xb0
-	ld	(xbc), 0
-	.byte 0xb1
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_157:
-	.byte 0xb2
-	ld	(xbc), 0
-	.byte 0xb4
-	incf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_158:
-	nop
-	ld	(xix), 0
-	decf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_159:
-	normal
-	ld	(xix), 0
-	.byte 0xb2
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_160:
-	reti
-	ld	(xix), 0
-	decf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_161:
-	ld	(180:8), 0:io
-	nop
-	decf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_162:
-	ldw	(180:8), 0:io
-	decf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_163:
-	pushw	180
-	nop
-	.byte 0xb3
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_164:
-	ld	w, 180:opc
-	nop
-	nop
-	decf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_165:
-	ld	xwa, 0x0d0000b4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_166:
-	pop	xhl
-	ld	(xix), 0
-	decf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_167:
-	pop	xiy
-	ld	(xix), 0
-	decf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_168:
-	pop	xiz
-	ld	(xix), 0
-	decf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_169:
-	jrl	180
-	nop
-	.byte 0xae
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_170:
-	.byte 0x80
-	ld	(xix), 0
-	decf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_171:
-	.byte 0x81
-	ld	(xix), 0
-	decf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_172:
-	.byte 0x82
-	ld	(xix), 0
-	decf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_173:
-	.byte 0xb0
-	ld	(xiy), 0
-	.byte 0xb1
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_174:
-	.byte 0xb2
-	ld	(xiy), 0
-	.byte 0xb4
-	decf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_175:
-	nop
-	ld (xwa+256), 14
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_176:
-	normal
-	ld (xwa+256), 178
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_177:
-	reti
-	ld (xwa+256), 14
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_178:
-	ld	(184:8), 0:io
-	nop
-	ret
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_179:
-	ldw	(184:8), 0:io
-	ret
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_180:
-	pushw	184
-	nop
-	.byte 0xb3
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_181:
-	ld	w, 184:opc
-	nop
-	nop
-	ret
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_182:
-	ld	xwa, 0x0e0000b8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_183:
-	pop	xhl
-	ld (xwa+256), 14
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_184:
-	pop	xiy
-	ld (xwa+256), 14
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_185:
-	pop	xiz
-	ld (xwa+256), 14
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_186:
-	jrl	184
-	nop
-	.byte 0xae
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_187:
-	.byte 0x80, 0xb8
-	nop
-	nop
-	ret
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_188:
-	.byte 0x81, 0xb8
-	nop
-	nop
-	ret
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_189:
-	.byte 0x82, 0xb8
-	nop
-	nop
-	ret
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_190:
-	.byte 0xb0, 0xb9
-	nop
-	nop
-	.byte 0xb1
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_191:
-	.byte 0xb2, 0xb9
-	nop
-	nop
-	.byte 0xb4
-	ret
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_192:
-	nop
-	ld (xix+256), 15
-	nop
-	swi 7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_193:
-	normal
-	ld (xix+256), 178
-	retd	127
-	jrl	nc, 0
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_194:
-	reti
-	ld (xix+256), 15
-	pop sr
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_195:
-	ld	(188:8), 0:io
-	nop
-	retd	0x8003
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_196:
-	ldw	(188:8), 0:io
-	retd	0x7f08
-	nop
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_197:
-	pushw	188
-	nop
-	.byte 0xb3
-	retd	127
-	jrl	nc, 0
-	swi	7
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_198:
-	ld	w, 188:opc
-	nop
-	nop
-	retd	0x7f01
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_199:
-	ld	xwa, 0x0f0000bc
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_200:
-	pop	xhl
-	ld (xix+256), 15
-	reti
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_201:
-	pop	xiy
-	ld (xix+256), 15
-	halt
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_202:
-	pop	xiz
-	ld (xix+256), 15
-	max
-	ld xwa, 425728
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-PartParam_Entry_203:
-	jrl	188
-	nop
-	.byte 0xae
-	retd	127
-	jrl	nc, 0
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_204:
-	.byte 0x80, 0xbc
-	nop
-	nop
-	retd	0x7f0b
-	nop
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_205:
-	.byte 0x81, 0xbc
-	nop
-	nop
-	retd	0xff0a
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_206:
-	.byte 0x82, 0xbc
-	nop
-	nop
-	retd	0x7f09
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_207:
-	.byte 0xb0, 0xbd
-	nop
-	nop
-	.byte 0xb1
-	retd	127
-	jrl	nc, 0
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_208:
-	.byte 0xb2, 0xbd
-	nop
-	nop
-	.byte 0xb4
-	retd	127
-	jrl	nc, 0
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_209:
-	nop
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-PartParam_Entry_210:
-	.byte 0x01, 0xc0
-	nop
-	nop
-	.byte 0xb2
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-PartParam_Entry_211:
-	reti
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_212:
-	ld	(192:8), 0:io
-	nop
-	rcf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_213:
-	ldw	(192:8), 0:io
-	rcf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-PartParam_Entry_214:
-	pushw	192
-	nop
-	.byte 0xb3
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-PartParam_Entry_215:
-	ld	w, 192:opc
-	nop
-	nop
-	rcf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-PartParam_Entry_216:
-	ld	xwa, 0x100000c0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-PartParam_Entry_217:
-	pop	xhl
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_218:
-	pop	xiy
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_219:
-	pop	xiz
-	.byte 0xc0
-	nop
-	nop
-	rcf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-PartParam_Entry_220:
-	jrl	192
-	nop
-	.byte 0xae
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_221:
-	.byte 0x80, 0xc0
-	nop
-	nop
-	rcf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_222:
-	.byte 0x81, 0xc0
-	nop
-	nop
-	rcf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_223:
-	.byte 0x82, 0xc0
-	nop
-	nop
-	rcf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-PartParam_Entry_224:
-	.byte 0xb0, 0xc1
-	nop
-	nop
-	.byte 0xb1
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-PartParam_Entry_225:
-	.byte 0xb2, 0xc1
-	nop
-	nop
-	.byte 0xb4
-	rcf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-PartParam_Entry_226:
-	nop
-	.byte 0xc4
-	nop
-	nop
-	scf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-PartParam_Entry_227:
-	.byte 0x01, 0xc4
-	nop
-	nop
-	.byte 0xb2
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_228:
-	reti
-	.byte 0xc4
-	nop
-	nop
-	scf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_229:
-	ld	(196:8), 0:io
-	nop
-	scf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_230:
-	ldw	(196:8), 0:io
-	scf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_231:
-	pushw	196
-	nop
-	.byte 0xb3
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_232:
-	ld	w, 196:opc
-	nop
-	nop
-	scf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_233:
-	ld	xwa, 0x110000c4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_234:
-	pop	xhl
-	.byte 0xc4
-	nop
-	nop
-	scf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_235:
-	pop	xiy
-	.byte 0xc4
-	nop
-	nop
-	scf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_236:
-	pop	xiz
-	.byte 0xc4
-	nop
-	nop
-	scf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_237:
-	jrl	196
-	nop
-	.byte 0xae
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_238:
-	.byte 0x80, 0xc4
-	nop
-	nop
-	scf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_239:
-	.byte 0x81, 0xc4
-	nop
-	nop
-	scf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_240:
-	.byte 0x82, 0xc4
-	nop
-	nop
-	scf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_241:
-	.byte 0xb0, 0xc5
-	nop
-	nop
-	.byte 0xb1
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_242:
-	.byte 0xb2, 0xc5
-	nop
-	nop
-	.byte 0xb4
-	scf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_243:
-	nop
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_244:
-	.byte 0x01, 0xc8
-	nop
-	nop
-	.byte 0xb2
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_245:
-	reti
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_246:
-	ld	(200:8), 0:io
-	nop
-	ccf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_247:
-	ldw	(200:8), 0:io
-	ccf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_248:
-	pushw	200
-	nop
-	.byte 0xb3
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_249:
-	ld	w, 200:opc
-	nop
-	nop
-	ccf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_250:
-	ld	xwa, 0x120000c8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_251:
-	pop	xhl
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_252:
-	pop	xiy
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_253:
-	pop	xiz
-	.byte 0xc8
-	nop
-	nop
-	ccf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_254:
-	jrl	200
-	nop
-	.byte 0xae
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_255:
-	and	(xwa), w
-	nop
-	nop
-	ccf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_256:
-	and	(xbc), w
-	nop
-	nop
-	ccf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_257:
-	and	(xde), w
-	nop
-	nop
-	ccf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_258:
-	.byte 0xb0, 0xc9
-	nop
-	nop
-	.byte 0xb1
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_259:
-	.byte 0xb2, 0xc9
-	nop
-	nop
-	.byte 0xb4
-	ccf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_260:
-	nop
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_261:
-	.byte 0x01, 0xcc
-	nop
-	nop
-	.byte 0xb2
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_262:
-	reti
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_263:
-	ld	(204:8), 0:io
-	nop
-	zcf
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_264:
-	ldw	(204:8), 0:io
-	zcf
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_265:
-	pushw	204
-	nop
-	.byte 0xb3
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_266:
-	ld	w, 204:opc
-	nop
-	nop
-	zcf
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_267:
-	ld	xwa, 0x130000cc
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_268:
-	pop	xhl
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_269:
-	pop	xiy
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_270:
-	pop	xiz
-	.byte 0xcc
-	nop
-	nop
-	zcf
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_271:
-	jrl	204
-	nop
-	.byte 0xae
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_272:
-	and	(xwa), d
-	nop
-	nop
-	zcf
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_273:
-	and	(xbc), d
-	nop
-	nop
-	zcf
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_274:
-	and	(xde), d
-	nop
-	nop
-	zcf
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_275:
-	.byte 0xb0, 0xcd
-	nop
-	nop
-	.byte 0xb1
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_276:
-	.byte 0xb2, 0xcd
-	nop
-	nop
-	.byte 0xb4
-	zcf
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_277:
-	nop
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_278:
-	.byte 0x01, 0xd0
-	nop
-	nop
-	.byte 0xb2
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_279:
-	reti
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_280:
-	ld	(208:8), 0:io
-	nop
-	push_a
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_281:
-	ldw	(208:8), 0:io
-	push_a
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_282:
-	pushw	208
-	nop
-	.byte 0xb3
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_283:
-	ld	w, 208:opc
-	nop
-	nop
-	push_a
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_284:
-	ld	xwa, 0x140000d0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_285:
-	pop	xhl
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_286:
-	pop	xiy
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_287:
-	pop	xiz
-	.byte 0xd0
-	nop
-	nop
-	push_a
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_288:
-	jrl	208
-	nop
-	.byte 0xae
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_289:
-	.byte 0x80, 0xd0
-	nop
-	nop
-	push_a
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_290:
-	.byte 0x81, 0xd0
-	nop
-	nop
-	push_a
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_291:
-	.byte 0x82, 0xd0
-	nop
-	nop
-	push_a
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_292:
-	.byte 0xb0, 0xd1
-	nop
-	nop
-	.byte 0xb1
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_293:
-	.byte 0xb2, 0xd1
-	nop
-	nop
-	.byte 0xb4
-	push_a
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_294:
-	nop
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_295:
-	.byte 0x01, 0xd4
-	nop
-	nop
-	.byte 0xb2
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_296:
-	reti
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_297:
-	ld	(212:8), 0:io
-	nop
-	pop_a
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_298:
-	ldw	(212:8), 0:io
-	pop_a
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_299:
-	pushw	212
-	nop
-	.byte 0xb3
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_300:
-	ld	w, 212:opc
-	nop
-	nop
-	pop_a
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_301:
-	ld	xwa, 0x150000d4
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_302:
-	pop	xhl
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_303:
-	pop	xiy
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_304:
-	pop	xiz
-	.byte 0xd4
-	nop
-	nop
-	pop_a
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_305:
-	jrl	212
-	nop
-	.byte 0xae
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_306:
-	.byte 0x80, 0xd4
-	nop
-	nop
-	pop_a
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_307:
-	.byte 0x81, 0xd4
-	nop
-	nop
-	pop_a
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_308:
-	.byte 0x82, 0xd4
-	nop
-	nop
-	pop_a
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_309:
-	.byte 0xb0, 0xd5
-	nop
-	nop
-	.byte 0xb1
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_310:
-	.byte 0xb2, 0xd5
-	nop
-	nop
-	.byte 0xb4
-	pop_a
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_311:
-	nop
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_312:
-	.byte 0x01, 0xd8
-	nop
-	nop
-	.byte 0xb2
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_313:
-	reti
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_314:
-	ld	(216:8), 0:io
-	nop
-	ex_ff
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_315:
-	ldw	(216:8), 0:io
-	ex_ff
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_316:
-	pushw	216
-	nop
-	.byte 0xb3
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_317:
-	ld	w, 216:opc
-	nop
-	nop
-	ex_ff
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_318:
-	ld	xwa, 0x160000d8
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_319:
-	pop	xhl
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_320:
-	pop	xiy
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_321:
-	pop	xiz
-	.byte 0xd8
-	nop
-	nop
-	ex_ff
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	nop
-	swi	7
-ExtPartParam_Entry_322:
-	jrl	216
-	nop
-	.byte 0xae
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_323:
-	xor	(xwa), w
-	nop
-	nop
-	ex_ff
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_324:
-	xor	(xbc), w
-	nop
-	nop
-	ex_ff
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_325:
-	xor	(xde), w
-	nop
-	nop
-	ex_ff
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_326:
-	.byte 0xb0, 0xd9
-	nop
-	nop
-	.byte 0xb1
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_327:
-	.byte 0xb2, 0xd9
-	nop
-	nop
-	.byte 0xb4
-	ex_ff
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_328:
-	nop
-	.byte 0xdc
-	nop
-	nop
-	ldf	0
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_329:
-	.byte 0x01, 0xdc
-	nop
-	nop
-	.byte 0xb2, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_330:
-	reti
-	.byte 0xdc
-	nop
-	nop
-	ldf	3
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_331:
-	ld	(220:8), 0:io
-	nop
-	ldf 3
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_332:
-	ldw	(220:8), 0:io
-	ldf 8
-	jrl nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_333:
-	pushw	220
-	nop
-	.byte 0xb3, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_334:
-	ld	w, 220:opc
-	nop
-	nop
-	.byte 0x17, 0x01
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_335:
-	ld	xwa, 0x170000dc
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_336:
-	pop	xhl
-	.byte 0xdc
-	nop
-	nop
-	ldf	7
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_337:
-	pop	xiy
-	.byte 0xdc
-	nop
-	nop
-	ldf	5
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_338:
-	pop	xiz
-	.byte 0xdc
-	nop
-	nop
-	.byte 0x17, 0x04
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_339:
-	jrl	220
-	nop
-	.byte 0xae, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_340:
-	xor	(xwa), d
-	nop
-	nop
-	ldf 11
-	jrl nc, 3072
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_341:
-	xor	(xbc), d
-	nop
-	nop
-	ldf 10
-	swi 7
-	nop
-	swi 7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_342:
-	xor	(xde), d
-	nop
-	nop
-	ldf 9
-	jrl nc, 19508
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_343:
-	.byte 0xb0, 0xdd
-	nop
-	nop
-	.byte 0xb1, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_344:
-	.byte 0xb2, 0xdd
-	nop
-	nop
-	.byte 0xb4, 0x17
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_345:
-	nop
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	halt
-	swi	7
-ExtPartParam_Entry_346:
-	.byte 0x01, 0xe0
-	nop
-	nop
-	.byte 0xb2
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	pop	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_347:
-	reti
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	pop	sr
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_348:
-	ld	(224:8), 0:io
-	nop
-	push_f
-	pop	sr
-	.byte 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_349:
-	ldw	(224:8), 0:io
-	push_f
-	ld	(127:8), 0:io
-	jrl	nc, 0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_350:
-	pushw	224
-	nop
-	.byte 0xb3
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	normal
-	swi	7
-ExtPartParam_Entry_351:
-	ld	w, 224:opc
-	nop
-	nop
-	push_f
-	normal
-	jrl	nc, -256
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	max
-	swi	7
-ExtPartParam_Entry_352:
-	ld	xwa, 0x180000e0
-	max
-	ld	(0:8), 127:io
-	pop	sr
-	nop
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_353:
-	pop	xhl
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	reti
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_354:
-	pop	xiy
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	halt
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_355:
-	pop	xiz
-	.byte 0xe0
-	nop
-	nop
-	push_f
-	max
-	ld	xwa, 0x067f00
-	nop
-	pop	sr
-	max
-	pop	sr
-	normal
-	push	sr
-	swi	7
-ExtPartParam_Entry_356:
-	jrl	224
-	nop
-	.byte 0xae
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	nop
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_357:
-	.byte 0x80, 0xe0
-	nop
-	nop
-	push_f
-	pushw	127
-	incf
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_358:
-	.byte 0x81, 0xe0
-	nop
-	nop
-	push_f
-	ldw	(255:8), 0xff00:io
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_359:
-	.byte 0x82, 0xe0
-	nop
-	nop
-	push_f
-	push	127
-	ldw	ix, 76
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_360:
-	.byte 0xb0, 0xe1
-	nop
-	nop
-	.byte 0xb1
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	push	sr
-	push	sr
-	pop	sr
-	nop
-	nop
-	pop	sr
-	swi	7
-ExtPartParam_Entry_361:
-	.byte 0xb2, 0xe1
-	nop
-	nop
-	.byte 0xb4
-	push_f
-	jrl	nc, 32512
-	nop
-	nop
-	max
-	push	sr
-	pop	sr
-	nop
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_362:
-	reti
-	.byte 0xe8
-	nop
-	nop
-	.byte 0x98, 0x04
-	jrl	nc, 32512
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_363:
-	ld	(232:8), 0:io
-	nop
-	.byte 0x98, 0x04, 0x80
-	nop
-	normal
-	reti
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_364:
-	nop
-	.byte 0x80, 0x01
-	nop
-	nop
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_365:
-	.byte 0x01, 0x80, 0x01
-	nop
-	nop
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_366:
-	push	sr
-	.byte 0x80, 0x01
-	nop
-	nop
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_367:
-	pop	sr
-	.byte 0x80, 0x01
-	nop
-	nop
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.long WidgetParam_MidiCC_DspEffect_Map
+	.short 11
+	.byte 0x00, 0x05, 0x00, 0xff
+;  460 x 18-byte sound-parameter descriptors, 0xEDC980-0xEDE9D8, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_edc980.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDC980:
+	sndparam_descriptor 0x0082cb, 68, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008293, 68, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008294, 68, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008280, 68, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008281, 68, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008282, 68, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008283, 68, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008284, 68, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008285, 68, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008286, 68, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008287, 68, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008288, 68, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0082c0, 68, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0082c1, 68, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008400, 1, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008401, 178, 1, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008407, 1, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008408, 1, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00840a, 1, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00840b, 179, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008420, 1, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008440, 1, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00845b, 1, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00845d, 1, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00845e, 1, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008478, 174, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008480, 1, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008481, 1, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008482, 1, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0085b0, 177, 1, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0085b2, 180, 1, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008621, 69, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0086cc, 69, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x0086cb, 69, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008693, 69, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008694, 69, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008680, 69, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008681, 69, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008682, 69, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008683, 69, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008684, 69, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008685, 69, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008686, 69, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008687, 69, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008688, 69, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0086c0, 69, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0086c1, 69, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008800, 2, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008801, 178, 2, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008807, 2, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008808, 2, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00880a, 2, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00880b, 179, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008820, 2, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008840, 2, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00885b, 2, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00885d, 2, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00885e, 2, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008878, 174, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008880, 2, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008881, 2, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008882, 2, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0089b0, 177, 2, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0089b2, 180, 2, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008a21, 70, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008acc, 70, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008acb, 70, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008a93, 70, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008a94, 70, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008a80, 70, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a81, 70, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a82, 70, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a83, 70, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a84, 70, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a85, 70, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a86, 70, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a87, 70, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a88, 70, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008ac0, 70, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008ac1, 70, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c00, 3, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c01, 178, 3, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008c07, 3, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c08, 3, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c0a, 3, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c0b, 179, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008c20, 3, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c40, 3, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008c5b, 3, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c5d, 3, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c5e, 3, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008c78, 174, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008c80, 3, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c81, 3, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c82, 3, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008db0, 177, 3, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008db2, 180, 3, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009000, 4, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009001, 178, 4, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009007, 4, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009008, 4, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00900a, 4, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00900b, 179, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009020, 4, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009040, 4, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00905b, 4, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00905d, 4, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00905e, 4, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009078, 174, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009080, 4, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009081, 4, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009082, 4, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0091b0, 177, 4, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0091b2, 180, 4, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009400, 5, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009401, 178, 5, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009407, 5, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009408, 5, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00940a, 5, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00940b, 179, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009420, 5, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009440, 5, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00945b, 5, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00945d, 5, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00945e, 5, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009478, 174, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009480, 5, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009481, 5, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009482, 5, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0095b0, 177, 5, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0095b2, 180, 5, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009800, 6, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009801, 178, 6, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009807, 6, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009808, 6, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00980a, 6, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00980b, 179, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009820, 6, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009840, 6, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00985b, 6, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00985d, 6, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00985e, 6, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009878, 174, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009880, 6, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009881, 6, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009882, 6, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0099b0, 177, 6, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0099b2, 180, 6, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c00, 7, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c01, 178, 7, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c07, 7, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c08, 7, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c0a, 7, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c0b, 179, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c20, 7, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c40, 7, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009c5b, 7, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c5d, 7, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c5e, 7, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009c78, 174, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c80, 7, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c81, 7, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c82, 7, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009db0, 177, 7, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009db2, 180, 7, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a000, 8, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a001, 178, 8, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a007, 8, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a008, 8, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a00a, 8, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a00b, 179, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a020, 8, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a040, 8, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a05b, 8, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a05d, 8, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a05e, 8, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a078, 174, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a080, 8, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a081, 8, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a082, 8, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a1b0, 177, 8, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a1b2, 180, 8, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a400, 9, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a401, 178, 9, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a407, 9, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a408, 9, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a40a, 9, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a40b, 179, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a420, 9, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a440, 9, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a45b, 9, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a45d, 9, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a45e, 9, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a478, 174, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a480, 9, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a481, 9, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a482, 9, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a5b0, 177, 9, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a5b2, 180, 9, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a800, 10, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a801, 178, 10, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a807, 10, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a808, 10, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a80a, 10, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a80b, 179, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a820, 10, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a840, 10, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a85b, 10, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a85d, 10, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a85e, 10, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a878, 174, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a880, 10, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a881, 10, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a882, 10, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a9b0, 177, 10, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a9b2, 180, 10, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac00, 11, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac01, 178, 11, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac07, 11, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac08, 11, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac0a, 11, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac0b, 179, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac20, 11, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac40, 11, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00ac5b, 11, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac5d, 11, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac5e, 11, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00ac78, 174, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac80, 11, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac81, 11, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac82, 11, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00adb0, 177, 11, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00adb2, 180, 11, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b000, 12, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b001, 178, 12, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b007, 12, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b008, 12, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b00a, 12, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b00b, 179, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b020, 12, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b040, 12, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b05b, 12, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b05d, 12, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b05e, 12, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b078, 174, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b080, 12, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b081, 12, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b082, 12, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b1b0, 177, 12, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b1b2, 180, 12, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b400, 13, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b401, 178, 13, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b407, 13, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b408, 13, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b40a, 13, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b40b, 179, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b420, 13, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b440, 13, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b45b, 13, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b45d, 13, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b45e, 13, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b478, 174, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b480, 13, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b481, 13, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b482, 13, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b5b0, 177, 13, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b5b2, 180, 13, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b800, 14, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b801, 178, 14, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b807, 14, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b808, 14, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b80a, 14, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b80b, 179, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b820, 14, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b840, 14, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b85b, 14, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b85d, 14, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b85e, 14, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b878, 174, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b880, 14, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b881, 14, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b882, 14, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b9b0, 177, 14, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b9b2, 180, 14, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc00, 15, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc01, 178, 15, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc07, 15, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc08, 15, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc0a, 15, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc0b, 179, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc20, 15, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc40, 15, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00bc5b, 15, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc5d, 15, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc5e, 15, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00bc78, 174, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc80, 15, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc81, 15, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc82, 15, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bdb0, 177, 15, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bdb2, 180, 15, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c000, 16, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00c001, 178, 16, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00c007, 16, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c008, 16, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c00a, 16, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c00b, 179, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c020, 16, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00c040, 16, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c05b, 16, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c05d, 16, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c05e, 16, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c078, 174, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c080, 16, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c081, 16, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c082, 16, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c1b0, 177, 16, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00c1b2, 180, 16, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c400, 17, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00c401, 178, 17, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00c407, 17, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c408, 17, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c40a, 17, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c40b, 179, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c420, 17, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00c440, 17, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c45b, 17, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c45d, 17, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c45e, 17, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c478, 174, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c480, 17, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c481, 17, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c482, 17, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c5b0, 177, 17, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00c5b2, 180, 17, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c800, 18, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00c801, 178, 18, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00c807, 18, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c808, 18, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c80a, 18, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c80b, 179, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c820, 18, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00c840, 18, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c85b, 18, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c85d, 18, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c85e, 18, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c878, 174, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c880, 18, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c881, 18, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c882, 18, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c9b0, 177, 18, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00c9b2, 180, 18, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00cc00, 19, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00cc01, 178, 19, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00cc07, 19, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc08, 19, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc0a, 19, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00cc0b, 179, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00cc20, 19, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00cc40, 19, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00cc5b, 19, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc5d, 19, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc5e, 19, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00cc78, 174, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00cc80, 19, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc81, 19, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc82, 19, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cdb0, 177, 19, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00cdb2, 180, 19, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d000, 20, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d001, 178, 20, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00d007, 20, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d008, 20, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d00a, 20, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d00b, 179, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d020, 20, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d040, 20, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00d05b, 20, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d05d, 20, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d05e, 20, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00d078, 174, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d080, 20, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d081, 20, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d082, 20, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d1b0, 177, 20, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00d1b2, 180, 20, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d400, 21, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d401, 178, 21, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d407, 21, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d408, 21, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d40a, 21, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d40b, 179, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d420, 21, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d440, 21, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d45b, 21, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d45d, 21, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d45e, 21, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d478, 174, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d480, 21, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d481, 21, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d482, 21, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d5b0, 177, 21, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d5b2, 180, 21, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d800, 22, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d801, 178, 22, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d807, 22, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d808, 22, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d80a, 22, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d80b, 179, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d820, 22, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d840, 22, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d85b, 22, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d85d, 22, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d85e, 22, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d878, 174, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d880, 22, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d881, 22, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d882, 22, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d9b0, 177, 22, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d9b2, 180, 22, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00dc00, 23, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00dc01, 178, 23, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00dc07, 23, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc08, 23, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc0a, 23, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00dc0b, 179, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00dc20, 23, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00dc40, 23, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00dc5b, 23, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc5d, 23, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc5e, 23, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00dc78, 174, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00dc80, 23, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc81, 23, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc82, 23, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ddb0, 177, 23, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00ddb2, 180, 23, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00e000, 24, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00e001, 178, 24, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00e007, 24, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e008, 24, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e00a, 24, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00e00b, 179, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00e020, 24, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00e040, 24, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00e05b, 24, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e05d, 24, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e05e, 24, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00e078, 174, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00e080, 24, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e081, 24, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e082, 24, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e1b0, 177, 24, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00e1b2, 180, 24, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00e807, 152, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e808, 152, 4, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018000, 0, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018001, 0, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018002, 0, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018003, 0, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+.set MidiChParam_Entry_105, SndParamRun_EDC980 + 0
+.set MidiChParam_Entry_106, SndParamRun_EDC980 + 18
+.set MidiChParam_Entry_107, SndParamRun_EDC980 + 36
+.set MidiChParam_Entry_108, SndParamRun_EDC980 + 54
+.set MidiChParam_Entry_109, SndParamRun_EDC980 + 72
+.set MidiChParam_Entry_110, SndParamRun_EDC980 + 90
+.set MidiChParam_Entry_111, SndParamRun_EDC980 + 108
+.set MidiChParam_Entry_112, SndParamRun_EDC980 + 126
+.set VoiceParamEx_Entry_001, SndParamRun_EDC980 + 144
+.set VoiceParamEx_Entry_002, SndParamRun_EDC980 + 162
+.set VoiceParamEx_Entry_003, SndParamRun_EDC980 + 180
+.set VoiceParamEx_Entry_004, SndParamRun_EDC980 + 198
+.set VoiceParamEx_Entry_005, SndParamRun_EDC980 + 216
+.set VoiceParamEx_Entry_006, SndParamRun_EDC980 + 234
+.set VoiceParamEx_Entry_007, SndParamRun_EDC980 + 252
+.set VoiceParamEx_Entry_008, SndParamRun_EDC980 + 270
+.set VoiceParamEx_Entry_009, SndParamRun_EDC980 + 288
+.set VoiceParamEx_Entry_010, SndParamRun_EDC980 + 306
+.set VoiceParamEx_Entry_011, SndParamRun_EDC980 + 324
+.set VoiceParamEx_Entry_012, SndParamRun_EDC980 + 342
+.set VoiceParamEx_Entry_013, SndParamRun_EDC980 + 360
+.set VoiceParamEx_Entry_014, SndParamRun_EDC980 + 378
+.set VoiceParamEx_Entry_015, SndParamRun_EDC980 + 396
+.set VoiceParamEx_Entry_016, SndParamRun_EDC980 + 414
+.set VoiceParamEx_Entry_017, SndParamRun_EDC980 + 432
+.set VoiceParamEx_Entry_018, SndParamRun_EDC980 + 450
+.set VoiceParamEx_Entry_019, SndParamRun_EDC980 + 468
+.set VoiceParamEx_Entry_020, SndParamRun_EDC980 + 486
+.set VoiceParamEx_Entry_021, SndParamRun_EDC980 + 504
+.set VoiceParamEx_Entry_022, SndParamRun_EDC980 + 522
+.set VoiceParamEx_Entry_023, SndParamRun_EDC980 + 540
+.set VoiceParamEx_Entry_024, SndParamRun_EDC980 + 558
+.set VoiceParamEx_Entry_025, SndParamRun_EDC980 + 576
+.set VoiceParamEx_Entry_026, SndParamRun_EDC980 + 594
+.set VoiceParamEx_Entry_027, SndParamRun_EDC980 + 612
+.set VoiceParamEx_Entry_028, SndParamRun_EDC980 + 630
+.set VoiceParamEx_Entry_029, SndParamRun_EDC980 + 648
+.set VoiceParamEx_Entry_030, SndParamRun_EDC980 + 666
+.set VoiceParamEx_Entry_031, SndParamRun_EDC980 + 684
+.set VoiceParamEx_Entry_032, SndParamRun_EDC980 + 702
+.set VoiceParamEx_Entry_033, SndParamRun_EDC980 + 720
+.set VoiceParamEx_Entry_034, SndParamRun_EDC980 + 738
+.set VoiceParamEx_Entry_035, SndParamRun_EDC980 + 756
+.set VoiceParamEx_Entry_036, SndParamRun_EDC980 + 774
+.set VoiceParamEx_Entry_037, SndParamRun_EDC980 + 792
+.set VoiceParamEx_Entry_038, SndParamRun_EDC980 + 810
+.set VoiceParamEx_Entry_039, SndParamRun_EDC980 + 828
+.set VoiceParamEx_Entry_040, SndParamRun_EDC980 + 846
+.set VoiceParamEx_Entry_041, SndParamRun_EDC980 + 864
+.set VoiceParamEx_Entry_042, SndParamRun_EDC980 + 882
+.set VoiceParamEx_Entry_043, SndParamRun_EDC980 + 900
+.set VoiceParamEx_Entry_044, SndParamRun_EDC980 + 918
+.set VoiceParamEx_Entry_045, SndParamRun_EDC980 + 936
+.set VoiceParamEx_Entry_046, SndParamRun_EDC980 + 954
+.set VoiceParamEx_Entry_047, SndParamRun_EDC980 + 972
+.set VoiceParamEx_Entry_048, SndParamRun_EDC980 + 990
+.set VoiceParamEx_Entry_049, SndParamRun_EDC980 + 1008
+.set VoiceParamEx_Entry_050, SndParamRun_EDC980 + 1026
+.set VoiceParamEx_Entry_051, SndParamRun_EDC980 + 1044
+.set VoiceParamEx_Entry_052, SndParamRun_EDC980 + 1062
+.set VoiceParamEx_Entry_053, SndParamRun_EDC980 + 1080
+.set VoiceParamEx_Entry_054, SndParamRun_EDC980 + 1098
+.set VoiceParamEx_Entry_055, SndParamRun_EDC980 + 1116
+.set VoiceParamEx_Entry_056, SndParamRun_EDC980 + 1134
+.set VoiceParamEx_Entry_057, SndParamRun_EDC980 + 1152
+.set VoiceParamEx_Entry_058, SndParamRun_EDC980 + 1170
+.set VoiceParamEx_Entry_059, SndParamRun_EDC980 + 1188
+.set VoiceParamEx_Entry_060, SndParamRun_EDC980 + 1206
+.set VoiceParamEx_Entry_061, SndParamRun_EDC980 + 1224
+.set VoiceParamEx_Entry_062, SndParamRun_EDC980 + 1242
+.set VoiceParamEx_Entry_063, SndParamRun_EDC980 + 1260
+.set VoiceParamEx_Entry_064, SndParamRun_EDC980 + 1278
+.set VoiceParamEx_Entry_065, SndParamRun_EDC980 + 1296
+.set VoiceParamEx_Entry_066, SndParamRun_EDC980 + 1314
+.set VoiceParamEx_Entry_067, SndParamRun_EDC980 + 1332
+.set VoiceParamEx_Entry_068, SndParamRun_EDC980 + 1350
+.set VoiceParamEx_Entry_069, SndParamRun_EDC980 + 1368
+.set VoiceParamEx_Entry_070, SndParamRun_EDC980 + 1386
+.set VoiceParamEx_Entry_071, SndParamRun_EDC980 + 1404
+.set VoiceParamEx_Entry_072, SndParamRun_EDC980 + 1422
+.set VoiceParamEx_Entry_073, SndParamRun_EDC980 + 1440
+.set VoiceParamEx_Entry_074, SndParamRun_EDC980 + 1458
+.set VoiceParamEx_Entry_075, SndParamRun_EDC980 + 1476
+.set VoiceParamEx_Entry_076, SndParamRun_EDC980 + 1494
+.set VoiceParamEx_Entry_077, SndParamRun_EDC980 + 1512
+.set VoiceParamEx_Entry_078, SndParamRun_EDC980 + 1530
+.set VoiceParamEx_Entry_079, SndParamRun_EDC980 + 1548
+.set VoiceParamEx_Entry_080, SndParamRun_EDC980 + 1566
+.set VoiceParamEx_Entry_081, SndParamRun_EDC980 + 1584
+.set VoiceParamEx_Entry_082, SndParamRun_EDC980 + 1602
+.set VoiceParamEx_Entry_083, SndParamRun_EDC980 + 1620
+.set VoiceParamEx_Entry_084, SndParamRun_EDC980 + 1638
+.set VoiceParamEx_Entry_085, SndParamRun_EDC980 + 1656
+.set PartParam_Entry_001, SndParamRun_EDC980 + 1674
+.set PartParam_Entry_002, SndParamRun_EDC980 + 1692
+.set PartParam_Entry_003, SndParamRun_EDC980 + 1710
+.set PartParam_Entry_004, SndParamRun_EDC980 + 1728
+.set PartParam_Entry_005, SndParamRun_EDC980 + 1746
+.set PartParam_Entry_006, SndParamRun_EDC980 + 1764
+.set PartParam_Entry_007, SndParamRun_EDC980 + 1782
+.set PartParam_Entry_008, SndParamRun_EDC980 + 1800
+.set PartParam_Entry_009, SndParamRun_EDC980 + 1818
+.set PartParam_Entry_010, SndParamRun_EDC980 + 1836
+.set PartParam_Entry_011, SndParamRun_EDC980 + 1854
+.set PartParam_Entry_012, SndParamRun_EDC980 + 1872
+.set PartParam_Entry_013, SndParamRun_EDC980 + 1890
+.set PartParam_Entry_014, SndParamRun_EDC980 + 1908
+.set PartParam_Entry_015, SndParamRun_EDC980 + 1926
+.set PartParam_Entry_016, SndParamRun_EDC980 + 1944
+.set PartParam_Entry_017, SndParamRun_EDC980 + 1962
+.set PartParam_Entry_018, SndParamRun_EDC980 + 1980
+.set PartParam_Entry_019, SndParamRun_EDC980 + 1998
+.set PartParam_Entry_020, SndParamRun_EDC980 + 2016
+.set PartParam_Entry_021, SndParamRun_EDC980 + 2034
+.set PartParam_Entry_022, SndParamRun_EDC980 + 2052
+.set PartParam_Entry_023, SndParamRun_EDC980 + 2070
+.set PartParam_Entry_024, SndParamRun_EDC980 + 2088
+.set PartParam_Entry_025, SndParamRun_EDC980 + 2106
+.set PartParam_Entry_026, SndParamRun_EDC980 + 2124
+.set PartParam_Entry_027, SndParamRun_EDC980 + 2142
+.set PartParam_Entry_028, SndParamRun_EDC980 + 2160
+.set PartParam_Entry_029, SndParamRun_EDC980 + 2178
+.set PartParam_Entry_030, SndParamRun_EDC980 + 2196
+.set PartParam_Entry_031, SndParamRun_EDC980 + 2214
+.set PartParam_Entry_032, SndParamRun_EDC980 + 2232
+.set PartParam_Entry_033, SndParamRun_EDC980 + 2250
+.set PartParam_Entry_034, SndParamRun_EDC980 + 2268
+.set PartParam_Entry_035, SndParamRun_EDC980 + 2286
+.set PartParam_Entry_036, SndParamRun_EDC980 + 2304
+.set PartParam_Entry_037, SndParamRun_EDC980 + 2322
+.set PartParam_Entry_038, SndParamRun_EDC980 + 2340
+.set PartParam_Entry_039, SndParamRun_EDC980 + 2358
+.set PartParam_Entry_040, SndParamRun_EDC980 + 2376
+.set PartParam_Entry_041, SndParamRun_EDC980 + 2394
+.set PartParam_Entry_042, SndParamRun_EDC980 + 2412
+.set PartParam_Entry_043, SndParamRun_EDC980 + 2430
+.set PartParam_Entry_044, SndParamRun_EDC980 + 2448
+.set PartParam_Entry_045, SndParamRun_EDC980 + 2466
+.set PartParam_Entry_046, SndParamRun_EDC980 + 2484
+.set PartParam_Entry_047, SndParamRun_EDC980 + 2502
+.set PartParam_Entry_048, SndParamRun_EDC980 + 2520
+.set PartParam_Entry_049, SndParamRun_EDC980 + 2538
+.set PartParam_Entry_050, SndParamRun_EDC980 + 2556
+.set PartParam_Entry_051, SndParamRun_EDC980 + 2574
+.set PartParam_Entry_052, SndParamRun_EDC980 + 2592
+.set PartParam_Entry_053, SndParamRun_EDC980 + 2610
+.set PartParam_Entry_054, SndParamRun_EDC980 + 2628
+.set PartParam_Entry_055, SndParamRun_EDC980 + 2646
+.set PartParam_Entry_056, SndParamRun_EDC980 + 2664
+.set PartParam_Entry_057, SndParamRun_EDC980 + 2682
+.set PartParam_Entry_058, SndParamRun_EDC980 + 2700
+.set PartParam_Entry_059, SndParamRun_EDC980 + 2718
+.set PartParam_Entry_060, SndParamRun_EDC980 + 2736
+.set PartParam_Entry_061, SndParamRun_EDC980 + 2754
+.set PartParam_Entry_062, SndParamRun_EDC980 + 2772
+.set PartParam_Entry_063, SndParamRun_EDC980 + 2790
+.set PartParam_Entry_064, SndParamRun_EDC980 + 2808
+.set PartParam_Entry_065, SndParamRun_EDC980 + 2826
+.set PartParam_Entry_066, SndParamRun_EDC980 + 2844
+.set PartParam_Entry_067, SndParamRun_EDC980 + 2862
+.set PartParam_Entry_068, SndParamRun_EDC980 + 2880
+.set PartParam_Entry_069, SndParamRun_EDC980 + 2898
+.set PartParam_Entry_070, SndParamRun_EDC980 + 2916
+.set PartParam_Entry_071, SndParamRun_EDC980 + 2934
+.set PartParam_Entry_072, SndParamRun_EDC980 + 2952
+.set PartParam_Entry_073, SndParamRun_EDC980 + 2970
+.set PartParam_Entry_074, SndParamRun_EDC980 + 2988
+.set PartParam_Entry_075, SndParamRun_EDC980 + 3006
+.set PartParam_Entry_076, SndParamRun_EDC980 + 3024
+.set PartParam_Entry_077, SndParamRun_EDC980 + 3042
+.set PartParam_Entry_078, SndParamRun_EDC980 + 3060
+.set PartParam_Entry_079, SndParamRun_EDC980 + 3078
+.set PartParam_Entry_080, SndParamRun_EDC980 + 3096
+.set PartParam_Entry_081, SndParamRun_EDC980 + 3114
+.set PartParam_Entry_082, SndParamRun_EDC980 + 3132
+.set PartParam_Entry_083, SndParamRun_EDC980 + 3150
+.set PartParam_Entry_084, SndParamRun_EDC980 + 3168
+.set PartParam_Entry_085, SndParamRun_EDC980 + 3186
+.set PartParam_Entry_086, SndParamRun_EDC980 + 3204
+.set PartParam_Entry_087, SndParamRun_EDC980 + 3222
+.set PartParam_Entry_088, SndParamRun_EDC980 + 3240
+.set PartParam_Entry_089, SndParamRun_EDC980 + 3258
+.set PartParam_Entry_090, SndParamRun_EDC980 + 3276
+.set PartParam_Entry_091, SndParamRun_EDC980 + 3294
+.set PartParam_Entry_092, SndParamRun_EDC980 + 3312
+.set PartParam_Entry_093, SndParamRun_EDC980 + 3330
+.set PartParam_Entry_094, SndParamRun_EDC980 + 3348
+.set PartParam_Entry_095, SndParamRun_EDC980 + 3366
+.set PartParam_Entry_096, SndParamRun_EDC980 + 3384
+.set PartParam_Entry_097, SndParamRun_EDC980 + 3402
+.set PartParam_Entry_098, SndParamRun_EDC980 + 3420
+.set PartParam_Entry_099, SndParamRun_EDC980 + 3438
+.set PartParam_Entry_100, SndParamRun_EDC980 + 3456
+.set PartParam_Entry_101, SndParamRun_EDC980 + 3474
+.set PartParam_Entry_102, SndParamRun_EDC980 + 3492
+.set PartParam_Entry_103, SndParamRun_EDC980 + 3510
+.set PartParam_Entry_104, SndParamRun_EDC980 + 3528
+.set PartParam_Entry_105, SndParamRun_EDC980 + 3546
+.set PartParam_Entry_106, SndParamRun_EDC980 + 3564
+.set PartParam_Entry_107, SndParamRun_EDC980 + 3582
+.set PartParam_Entry_108, SndParamRun_EDC980 + 3600
+.set PartParam_Entry_109, SndParamRun_EDC980 + 3618
+.set PartParam_Entry_110, SndParamRun_EDC980 + 3636
+.set PartParam_Entry_111, SndParamRun_EDC980 + 3654
+.set PartParam_Entry_112, SndParamRun_EDC980 + 3672
+.set PartParam_Entry_113, SndParamRun_EDC980 + 3690
+.set PartParam_Entry_114, SndParamRun_EDC980 + 3708
+.set PartParam_Entry_115, SndParamRun_EDC980 + 3726
+.set PartParam_Entry_116, SndParamRun_EDC980 + 3744
+.set PartParam_Entry_117, SndParamRun_EDC980 + 3762
+.set PartParam_Entry_118, SndParamRun_EDC980 + 3780
+.set PartParam_Entry_119, SndParamRun_EDC980 + 3798
+.set PartParam_Entry_120, SndParamRun_EDC980 + 3816
+.set PartParam_Entry_121, SndParamRun_EDC980 + 3834
+.set PartParam_Entry_122, SndParamRun_EDC980 + 3852
+.set PartParam_Entry_123, SndParamRun_EDC980 + 3870
+.set PartParam_Entry_124, SndParamRun_EDC980 + 3888
+.set PartParam_Entry_125, SndParamRun_EDC980 + 3906
+.set PartParam_Entry_126, SndParamRun_EDC980 + 3924
+.set PartParam_Entry_127, SndParamRun_EDC980 + 3942
+.set PartParam_Entry_128, SndParamRun_EDC980 + 3960
+.set PartParam_Entry_129, SndParamRun_EDC980 + 3978
+.set PartParam_Entry_130, SndParamRun_EDC980 + 3996
+.set PartParam_Entry_131, SndParamRun_EDC980 + 4014
+.set PartParam_Entry_132, SndParamRun_EDC980 + 4032
+.set PartParam_Entry_133, SndParamRun_EDC980 + 4050
+.set PartParam_Entry_134, SndParamRun_EDC980 + 4068
+.set PartParam_Entry_135, SndParamRun_EDC980 + 4086
+.set PartParam_Entry_136, SndParamRun_EDC980 + 4104
+.set PartParam_Entry_137, SndParamRun_EDC980 + 4122
+.set PartParam_Entry_138, SndParamRun_EDC980 + 4140
+.set PartParam_Entry_139, SndParamRun_EDC980 + 4158
+.set PartParam_Entry_140, SndParamRun_EDC980 + 4176
+.set PartParam_Entry_141, SndParamRun_EDC980 + 4194
+.set PartParam_Entry_142, SndParamRun_EDC980 + 4212
+.set PartParam_Entry_143, SndParamRun_EDC980 + 4230
+.set PartParam_Entry_144, SndParamRun_EDC980 + 4248
+.set PartParam_Entry_145, SndParamRun_EDC980 + 4266
+.set PartParam_Entry_146, SndParamRun_EDC980 + 4284
+.set PartParam_Entry_147, SndParamRun_EDC980 + 4302
+.set PartParam_Entry_148, SndParamRun_EDC980 + 4320
+.set PartParam_Entry_149, SndParamRun_EDC980 + 4338
+.set PartParam_Entry_150, SndParamRun_EDC980 + 4356
+.set PartParam_Entry_151, SndParamRun_EDC980 + 4374
+.set PartParam_Entry_152, SndParamRun_EDC980 + 4392
+.set PartParam_Entry_153, SndParamRun_EDC980 + 4410
+.set PartParam_Entry_154, SndParamRun_EDC980 + 4428
+.set PartParam_Entry_155, SndParamRun_EDC980 + 4446
+.set PartParam_Entry_156, SndParamRun_EDC980 + 4464
+.set PartParam_Entry_157, SndParamRun_EDC980 + 4482
+.set PartParam_Entry_158, SndParamRun_EDC980 + 4500
+.set PartParam_Entry_159, SndParamRun_EDC980 + 4518
+.set PartParam_Entry_160, SndParamRun_EDC980 + 4536
+.set PartParam_Entry_161, SndParamRun_EDC980 + 4554
+.set PartParam_Entry_162, SndParamRun_EDC980 + 4572
+.set PartParam_Entry_163, SndParamRun_EDC980 + 4590
+.set PartParam_Entry_164, SndParamRun_EDC980 + 4608
+.set PartParam_Entry_165, SndParamRun_EDC980 + 4626
+.set PartParam_Entry_166, SndParamRun_EDC980 + 4644
+.set PartParam_Entry_167, SndParamRun_EDC980 + 4662
+.set PartParam_Entry_168, SndParamRun_EDC980 + 4680
+.set PartParam_Entry_169, SndParamRun_EDC980 + 4698
+.set PartParam_Entry_170, SndParamRun_EDC980 + 4716
+.set PartParam_Entry_171, SndParamRun_EDC980 + 4734
+.set PartParam_Entry_172, SndParamRun_EDC980 + 4752
+.set PartParam_Entry_173, SndParamRun_EDC980 + 4770
+.set PartParam_Entry_174, SndParamRun_EDC980 + 4788
+.set PartParam_Entry_175, SndParamRun_EDC980 + 4806
+.set PartParam_Entry_176, SndParamRun_EDC980 + 4824
+.set PartParam_Entry_177, SndParamRun_EDC980 + 4842
+.set PartParam_Entry_178, SndParamRun_EDC980 + 4860
+.set PartParam_Entry_179, SndParamRun_EDC980 + 4878
+.set PartParam_Entry_180, SndParamRun_EDC980 + 4896
+.set PartParam_Entry_181, SndParamRun_EDC980 + 4914
+.set PartParam_Entry_182, SndParamRun_EDC980 + 4932
+.set PartParam_Entry_183, SndParamRun_EDC980 + 4950
+.set PartParam_Entry_184, SndParamRun_EDC980 + 4968
+.set PartParam_Entry_185, SndParamRun_EDC980 + 4986
+.set PartParam_Entry_186, SndParamRun_EDC980 + 5004
+.set PartParam_Entry_187, SndParamRun_EDC980 + 5022
+.set PartParam_Entry_188, SndParamRun_EDC980 + 5040
+.set PartParam_Entry_189, SndParamRun_EDC980 + 5058
+.set PartParam_Entry_190, SndParamRun_EDC980 + 5076
+.set PartParam_Entry_191, SndParamRun_EDC980 + 5094
+.set PartParam_Entry_192, SndParamRun_EDC980 + 5112
+.set PartParam_Entry_193, SndParamRun_EDC980 + 5130
+.set PartParam_Entry_194, SndParamRun_EDC980 + 5148
+.set PartParam_Entry_195, SndParamRun_EDC980 + 5166
+.set PartParam_Entry_196, SndParamRun_EDC980 + 5184
+.set PartParam_Entry_197, SndParamRun_EDC980 + 5202
+.set PartParam_Entry_198, SndParamRun_EDC980 + 5220
+.set PartParam_Entry_199, SndParamRun_EDC980 + 5238
+.set PartParam_Entry_200, SndParamRun_EDC980 + 5256
+.set PartParam_Entry_201, SndParamRun_EDC980 + 5274
+.set PartParam_Entry_202, SndParamRun_EDC980 + 5292
+.set PartParam_Entry_203, SndParamRun_EDC980 + 5310
+.set PartParam_Entry_204, SndParamRun_EDC980 + 5328
+.set PartParam_Entry_205, SndParamRun_EDC980 + 5346
+.set PartParam_Entry_206, SndParamRun_EDC980 + 5364
+.set PartParam_Entry_207, SndParamRun_EDC980 + 5382
+.set PartParam_Entry_208, SndParamRun_EDC980 + 5400
+.set PartParam_Entry_209, SndParamRun_EDC980 + 5418
+.set PartParam_Entry_210, SndParamRun_EDC980 + 5436
+.set PartParam_Entry_211, SndParamRun_EDC980 + 5454
+.set PartParam_Entry_212, SndParamRun_EDC980 + 5472
+.set PartParam_Entry_213, SndParamRun_EDC980 + 5490
+.set PartParam_Entry_214, SndParamRun_EDC980 + 5508
+.set PartParam_Entry_215, SndParamRun_EDC980 + 5526
+.set PartParam_Entry_216, SndParamRun_EDC980 + 5544
+.set PartParam_Entry_217, SndParamRun_EDC980 + 5562
+.set PartParam_Entry_218, SndParamRun_EDC980 + 5580
+.set PartParam_Entry_219, SndParamRun_EDC980 + 5598
+.set PartParam_Entry_220, SndParamRun_EDC980 + 5616
+.set PartParam_Entry_221, SndParamRun_EDC980 + 5634
+.set PartParam_Entry_222, SndParamRun_EDC980 + 5652
+.set PartParam_Entry_223, SndParamRun_EDC980 + 5670
+.set PartParam_Entry_224, SndParamRun_EDC980 + 5688
+.set PartParam_Entry_225, SndParamRun_EDC980 + 5706
+.set PartParam_Entry_226, SndParamRun_EDC980 + 5724
+.set PartParam_Entry_227, SndParamRun_EDC980 + 5742
+.set ExtPartParam_Entry_228, SndParamRun_EDC980 + 5760
+.set ExtPartParam_Entry_229, SndParamRun_EDC980 + 5778
+.set ExtPartParam_Entry_230, SndParamRun_EDC980 + 5796
+.set ExtPartParam_Entry_231, SndParamRun_EDC980 + 5814
+.set ExtPartParam_Entry_232, SndParamRun_EDC980 + 5832
+.set ExtPartParam_Entry_233, SndParamRun_EDC980 + 5850
+.set ExtPartParam_Entry_234, SndParamRun_EDC980 + 5868
+.set ExtPartParam_Entry_235, SndParamRun_EDC980 + 5886
+.set ExtPartParam_Entry_236, SndParamRun_EDC980 + 5904
+.set ExtPartParam_Entry_237, SndParamRun_EDC980 + 5922
+.set ExtPartParam_Entry_238, SndParamRun_EDC980 + 5940
+.set ExtPartParam_Entry_239, SndParamRun_EDC980 + 5958
+.set ExtPartParam_Entry_240, SndParamRun_EDC980 + 5976
+.set ExtPartParam_Entry_241, SndParamRun_EDC980 + 5994
+.set ExtPartParam_Entry_242, SndParamRun_EDC980 + 6012
+.set ExtPartParam_Entry_243, SndParamRun_EDC980 + 6030
+.set ExtPartParam_Entry_244, SndParamRun_EDC980 + 6048
+.set ExtPartParam_Entry_245, SndParamRun_EDC980 + 6066
+.set ExtPartParam_Entry_246, SndParamRun_EDC980 + 6084
+.set ExtPartParam_Entry_247, SndParamRun_EDC980 + 6102
+.set ExtPartParam_Entry_248, SndParamRun_EDC980 + 6120
+.set ExtPartParam_Entry_249, SndParamRun_EDC980 + 6138
+.set ExtPartParam_Entry_250, SndParamRun_EDC980 + 6156
+.set ExtPartParam_Entry_251, SndParamRun_EDC980 + 6174
+.set ExtPartParam_Entry_252, SndParamRun_EDC980 + 6192
+.set ExtPartParam_Entry_253, SndParamRun_EDC980 + 6210
+.set ExtPartParam_Entry_254, SndParamRun_EDC980 + 6228
+.set ExtPartParam_Entry_255, SndParamRun_EDC980 + 6246
+.set ExtPartParam_Entry_256, SndParamRun_EDC980 + 6264
+.set ExtPartParam_Entry_257, SndParamRun_EDC980 + 6282
+.set ExtPartParam_Entry_258, SndParamRun_EDC980 + 6300
+.set ExtPartParam_Entry_259, SndParamRun_EDC980 + 6318
+.set ExtPartParam_Entry_260, SndParamRun_EDC980 + 6336
+.set ExtPartParam_Entry_261, SndParamRun_EDC980 + 6354
+.set ExtPartParam_Entry_262, SndParamRun_EDC980 + 6372
+.set ExtPartParam_Entry_263, SndParamRun_EDC980 + 6390
+.set ExtPartParam_Entry_264, SndParamRun_EDC980 + 6408
+.set ExtPartParam_Entry_265, SndParamRun_EDC980 + 6426
+.set ExtPartParam_Entry_266, SndParamRun_EDC980 + 6444
+.set ExtPartParam_Entry_267, SndParamRun_EDC980 + 6462
+.set ExtPartParam_Entry_268, SndParamRun_EDC980 + 6480
+.set ExtPartParam_Entry_269, SndParamRun_EDC980 + 6498
+.set ExtPartParam_Entry_270, SndParamRun_EDC980 + 6516
+.set ExtPartParam_Entry_271, SndParamRun_EDC980 + 6534
+.set ExtPartParam_Entry_272, SndParamRun_EDC980 + 6552
+.set ExtPartParam_Entry_273, SndParamRun_EDC980 + 6570
+.set ExtPartParam_Entry_274, SndParamRun_EDC980 + 6588
+.set ExtPartParam_Entry_275, SndParamRun_EDC980 + 6606
+.set ExtPartParam_Entry_276, SndParamRun_EDC980 + 6624
+.set ExtPartParam_Entry_277, SndParamRun_EDC980 + 6642
+.set ExtPartParam_Entry_278, SndParamRun_EDC980 + 6660
+.set ExtPartParam_Entry_279, SndParamRun_EDC980 + 6678
+.set ExtPartParam_Entry_280, SndParamRun_EDC980 + 6696
+.set ExtPartParam_Entry_281, SndParamRun_EDC980 + 6714
+.set ExtPartParam_Entry_282, SndParamRun_EDC980 + 6732
+.set ExtPartParam_Entry_283, SndParamRun_EDC980 + 6750
+.set ExtPartParam_Entry_284, SndParamRun_EDC980 + 6768
+.set ExtPartParam_Entry_285, SndParamRun_EDC980 + 6786
+.set ExtPartParam_Entry_286, SndParamRun_EDC980 + 6804
+.set ExtPartParam_Entry_287, SndParamRun_EDC980 + 6822
+.set ExtPartParam_Entry_288, SndParamRun_EDC980 + 6840
+.set ExtPartParam_Entry_289, SndParamRun_EDC980 + 6858
+.set ExtPartParam_Entry_290, SndParamRun_EDC980 + 6876
+.set ExtPartParam_Entry_291, SndParamRun_EDC980 + 6894
+.set ExtPartParam_Entry_292, SndParamRun_EDC980 + 6912
+.set ExtPartParam_Entry_293, SndParamRun_EDC980 + 6930
+.set ExtPartParam_Entry_294, SndParamRun_EDC980 + 6948
+.set ExtPartParam_Entry_295, SndParamRun_EDC980 + 6966
+.set ExtPartParam_Entry_296, SndParamRun_EDC980 + 6984
+.set ExtPartParam_Entry_297, SndParamRun_EDC980 + 7002
+.set ExtPartParam_Entry_298, SndParamRun_EDC980 + 7020
+.set ExtPartParam_Entry_299, SndParamRun_EDC980 + 7038
+.set ExtPartParam_Entry_300, SndParamRun_EDC980 + 7056
+.set ExtPartParam_Entry_301, SndParamRun_EDC980 + 7074
+.set ExtPartParam_Entry_302, SndParamRun_EDC980 + 7092
+.set ExtPartParam_Entry_303, SndParamRun_EDC980 + 7110
+.set ExtPartParam_Entry_304, SndParamRun_EDC980 + 7128
+.set ExtPartParam_Entry_305, SndParamRun_EDC980 + 7146
+.set ExtPartParam_Entry_306, SndParamRun_EDC980 + 7164
+.set ExtPartParam_Entry_307, SndParamRun_EDC980 + 7182
+.set ExtPartParam_Entry_308, SndParamRun_EDC980 + 7200
+.set ExtPartParam_Entry_309, SndParamRun_EDC980 + 7218
+.set ExtPartParam_Entry_310, SndParamRun_EDC980 + 7236
+.set ExtPartParam_Entry_311, SndParamRun_EDC980 + 7254
+.set ExtPartParam_Entry_312, SndParamRun_EDC980 + 7272
+.set ExtPartParam_Entry_313, SndParamRun_EDC980 + 7290
+.set ExtPartParam_Entry_314, SndParamRun_EDC980 + 7308
+.set ExtPartParam_Entry_315, SndParamRun_EDC980 + 7326
+.set ExtPartParam_Entry_316, SndParamRun_EDC980 + 7344
+.set ExtPartParam_Entry_317, SndParamRun_EDC980 + 7362
+.set ExtPartParam_Entry_318, SndParamRun_EDC980 + 7380
+.set ExtPartParam_Entry_319, SndParamRun_EDC980 + 7398
+.set ExtPartParam_Entry_320, SndParamRun_EDC980 + 7416
+.set ExtPartParam_Entry_321, SndParamRun_EDC980 + 7434
+.set ExtPartParam_Entry_322, SndParamRun_EDC980 + 7452
+.set ExtPartParam_Entry_323, SndParamRun_EDC980 + 7470
+.set ExtPartParam_Entry_324, SndParamRun_EDC980 + 7488
+.set ExtPartParam_Entry_325, SndParamRun_EDC980 + 7506
+.set ExtPartParam_Entry_326, SndParamRun_EDC980 + 7524
+.set ExtPartParam_Entry_327, SndParamRun_EDC980 + 7542
+.set ExtPartParam_Entry_328, SndParamRun_EDC980 + 7560
+.set ExtPartParam_Entry_329, SndParamRun_EDC980 + 7578
+.set ExtPartParam_Entry_330, SndParamRun_EDC980 + 7596
+.set ExtPartParam_Entry_331, SndParamRun_EDC980 + 7614
+.set ExtPartParam_Entry_332, SndParamRun_EDC980 + 7632
+.set ExtPartParam_Entry_333, SndParamRun_EDC980 + 7650
+.set ExtPartParam_Entry_334, SndParamRun_EDC980 + 7668
+.set ExtPartParam_Entry_335, SndParamRun_EDC980 + 7686
+.set ExtPartParam_Entry_336, SndParamRun_EDC980 + 7704
+.set ExtPartParam_Entry_337, SndParamRun_EDC980 + 7722
+.set ExtPartParam_Entry_338, SndParamRun_EDC980 + 7740
+.set ExtPartParam_Entry_339, SndParamRun_EDC980 + 7758
+.set ExtPartParam_Entry_340, SndParamRun_EDC980 + 7776
+.set ExtPartParam_Entry_341, SndParamRun_EDC980 + 7794
+.set ExtPartParam_Entry_342, SndParamRun_EDC980 + 7812
+.set ExtPartParam_Entry_343, SndParamRun_EDC980 + 7830
+.set ExtPartParam_Entry_344, SndParamRun_EDC980 + 7848
+.set ExtPartParam_Entry_345, SndParamRun_EDC980 + 7866
+.set ExtPartParam_Entry_346, SndParamRun_EDC980 + 7884
+.set ExtPartParam_Entry_347, SndParamRun_EDC980 + 7902
+.set ExtPartParam_Entry_348, SndParamRun_EDC980 + 7920
+.set ExtPartParam_Entry_349, SndParamRun_EDC980 + 7938
+.set ExtPartParam_Entry_350, SndParamRun_EDC980 + 7956
+.set ExtPartParam_Entry_351, SndParamRun_EDC980 + 7974
+.set ExtPartParam_Entry_352, SndParamRun_EDC980 + 7992
+.set ExtPartParam_Entry_353, SndParamRun_EDC980 + 8010
+.set ExtPartParam_Entry_354, SndParamRun_EDC980 + 8028
+.set ExtPartParam_Entry_355, SndParamRun_EDC980 + 8046
+.set ExtPartParam_Entry_356, SndParamRun_EDC980 + 8064
+.set ExtPartParam_Entry_357, SndParamRun_EDC980 + 8082
+.set ExtPartParam_Entry_358, SndParamRun_EDC980 + 8100
+.set ExtPartParam_Entry_359, SndParamRun_EDC980 + 8118
+.set ExtPartParam_Entry_360, SndParamRun_EDC980 + 8136
+.set ExtPartParam_Entry_361, SndParamRun_EDC980 + 8154
+.set ExtPartParam_Entry_362, SndParamRun_EDC980 + 8172
+.set ExtPartParam_Entry_363, SndParamRun_EDC980 + 8190
+.set ExtPartParam_Entry_364, SndParamRun_EDC980 + 8208
+.set ExtPartParam_Entry_365, SndParamRun_EDC980 + 8226
+.set ExtPartParam_Entry_366, SndParamRun_EDC980 + 8244
+.set ExtPartParam_Entry_367, SndParamRun_EDC980 + 8262
 ExtPartParam_Entry_368:
-	.byte 0x04, 0x80, 0x01
-	nop
-	nop
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-	halt
-	ei	7
-	nop
-	normal
-	push	sr
-	pop	sr
-	swi	7
+	sndparam_descriptor 0x018004, 0, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+WidgetParam_MidiCC_PitchBend_Map:
+	.byte 0x05, 0x06, 0x07, 0x00, 0x01, 0x02, 0x03
+	.byte 0xff
 WidgetParam_MidiCC_PitchBend:
-	.byte 0xea
-	sra	xbc, 0
-	reti
-	nop
-	nop
-	pop	sr
-	nop
-	swi	7
-ExtPartParam_Entry_369:
-	nop
-	.byte 0x82, 0x01
-	nop
-	nop
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_370:
-	.byte 0x01, 0x82, 0x01
-	nop
-	nop
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_371:
-	push	sr
-	.byte 0x82, 0x01
-	nop
-	nop
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_372:
-	pop	sr
-	.byte 0x82, 0x01
-	nop
-	nop
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_373:
-	.byte 0x04, 0x82, 0x01
-	nop
-	nop
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_374:
-	halt
-	.byte 0x82, 0x01
-	nop
-	nop
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_375:
-	.byte 0x06, 0x82, 0x01
-	nop
-	nop
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_376:
-	nop
-	.byte 0x84, 0x01
-	nop
-	normal
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_377:
-	.byte 0x01, 0x84, 0x01
-	nop
-	normal
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_378:
-	push	sr
-	.byte 0x84, 0x01
-	nop
-	normal
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_379:
-	pop	sr
-	.byte 0x84, 0x01
-	nop
-	normal
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_380:
-	.byte 0x04, 0x84, 0x01
-	nop
-	normal
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_381:
-	nop
-	.byte 0x86, 0x01
-	nop
-	normal
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_382:
-	.byte 0x01, 0x86, 0x01
-	nop
-	normal
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_383:
-	push	sr
-	.byte 0x86, 0x01
-	nop
-	normal
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_384:
-	pop	sr
-	.byte 0x86, 0x01
-	nop
-	normal
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_385:
-	.byte 0x04, 0x86, 0x01
-	nop
-	normal
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_386:
-	halt
-	.byte 0x86, 0x01
-	nop
-	normal
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_387:
-	.byte 0x06, 0x86, 0x01
-	nop
-	normal
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_388:
-	nop
-	.byte 0x88, 0x01
-	nop
-	push	sr
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_389:
-	.byte 0x01, 0x88, 0x01
-	nop
-	push	sr
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_390:
-	push	sr
-	.byte 0x88, 0x01
-	nop
-	push	sr
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_391:
-	pop	sr
-	.byte 0x88, 0x01
-	nop
-	push	sr
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_392:
-	.byte 0x04, 0x88, 0x01
-	nop
-	push	sr
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_393:
-	nop
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_394:
-	.byte 0x01, 0x8a, 0x01
-	nop
-	push	sr
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_395:
-	push	sr
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_396:
-	pop	sr
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_397:
-	.byte 0x04, 0x8a, 0x01
-	nop
-	push	sr
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_398:
-	halt
-	.byte 0x8a, 0x01
-	nop
-	push	sr
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_399:
-	.byte 0x06, 0x8a, 0x01
-	nop
-	push	sr
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_400:
-	nop
-	.byte 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_401:
-	.byte 0x01, 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_402:
-	push	sr
-	.byte 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_403:
-	pop	sr
-	.byte 0x8c, 0x01
-	nop
-	pop	sr
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_404:
-	.byte 0x04, 0x8c, 0x01
-	nop
-	pop	sr
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_405:
-	nop
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_406:
-	.byte 0x01, 0x8e, 0x01
-	nop
-	pop	sr
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_407:
-	push	sr
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_408:
-	pop	sr
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_409:
-	.byte 0x04, 0x8e, 0x01
-	nop
-	pop	sr
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_410:
-	halt
-	.byte 0x8e, 0x01
-	nop
-	pop	sr
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_411:
-	.byte 0x06, 0x8e, 0x01
-	nop
-	pop	sr
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_412:
-	nop
-	.byte 0x90, 0x01
-	nop
-	max
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_413:
-	.byte 0x01, 0x90, 0x01
-	nop
-	max
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_414:
-	push	sr
-	.byte 0x90, 0x01
-	nop
-	max
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_415:
-	pop	sr
-	.byte 0x90, 0x01
-	nop
-	max
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_416:
-	.byte 0x04, 0x90, 0x01
-	nop
-	max
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_417:
-	nop
-	.byte 0x92, 0x01
-	nop
-	max
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_418:
-	.byte 0x01, 0x92, 0x01
-	nop
-	max
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_419:
-	push	sr
-	.byte 0x92, 0x01
-	nop
-	max
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_420:
-	pop	sr
-	.byte 0x92, 0x01
-	nop
-	max
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_421:
-	.byte 0x04, 0x92, 0x01
-	nop
-	max
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_422:
-	halt
-	.byte 0x92, 0x01
-	nop
-	max
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_423:
-	.byte 0x06, 0x92, 0x01
-	nop
-	max
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_424:
-	nop
-	.byte 0x94, 0x01
-	nop
-	halt
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_425:
-	.byte 0x01, 0x94, 0x01
-	nop
-	halt
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_426:
-	push	sr
-	.byte 0x94, 0x01
-	nop
-	halt
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_427:
-	pop	sr
-	.byte 0x94, 0x01
-	nop
-	halt
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_428:
-	.byte 0x04, 0x94, 0x01
-	nop
-	halt
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_429:
-	nop
-	.byte 0x96, 0x01
-	nop
-	halt
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_430:
-	.byte 0x01, 0x96, 0x01
-	nop
-	halt
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_431:
-	push	sr
-	.byte 0x96, 0x01
-	nop
-	halt
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_432:
-	pop	sr
-	.byte 0x96, 0x01
-	nop
-	halt
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_433:
-	.byte 0x04, 0x96, 0x01
-	nop
-	halt
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_434:
-	halt
-	.byte 0x96, 0x01
-	nop
-	halt
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_435:
-	.byte 0x06, 0x96, 0x01
-	nop
-	halt
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_436:
-	nop
-	.byte 0x98, 0x01
-	nop
-	ei	13
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_437:
-	.byte 0x01, 0x98, 0x01
-	nop
-	ei	13
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_438:
-	push	sr
-	.byte 0x98, 0x01
-	nop
-	ei	13
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_439:
-	pop	sr
-	.byte 0x98, 0x01
-	nop
-	ei	13
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_440:
-	.byte 0x04, 0x98, 0x01
-	nop
-	ei	12
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_441:
-	nop
-	.byte 0x9a, 0x01
-	nop
-	ei	4
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_442:
-	.byte 0x01, 0x9a, 0x01
-	nop
-	ei	4
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_443:
-	push	sr
-	.byte 0x9a, 0x01
-	nop
-	ei	12
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_444:
-	pop	sr
-	.byte 0x9a, 0x01
-	nop
-	ei	12
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_445:
-	.byte 0x04, 0x9a, 0x01
-	nop
-	ei	4
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_446:
-	halt
-	.byte 0x9a, 0x01
-	nop
-	ei	22
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_447:
-	.byte 0x06, 0x9a, 0x01
-	nop
-	ei	12
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_448:
-	nop
-	.byte 0x9c, 0x01
-	nop
-	reti
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_449:
-	.byte 0x01, 0x9c, 0x01
-	nop
-	reti
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_450:
-	push	sr
-	.byte 0x9c, 0x01
-	nop
-	reti
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_451:
-	pop	sr
-	.byte 0x9c, 0x01
-	nop
-	reti
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_452:
-	.byte 0x04, 0x9c, 0x01
-	nop
-	reti
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_453:
-	nop
-	.byte 0x9e, 0x01
-	nop
-	reti
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-ExtPartParam_Entry_454:
-	.byte 0x01, 0x9e, 0x01
-	nop
-	reti
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_001:
-	push	sr
-	.byte 0x9e, 0x01
-	nop
-	reti
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_002:
-	pop	sr
-	.byte 0x9e, 0x01
-	nop
-	reti
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_003:
-	.byte 0x04, 0x9e, 0x01
-	nop
-	reti
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_004:
-	halt
-	.byte 0x9e, 0x01
-	nop
-	reti
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_005:
-	.byte 0x06, 0x9e, 0x01
-	nop
-	reti
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_006:
-	nop
-	.byte 0xa0, 0x01
-	nop
-	ld	(13:8), 32:io
-	nop
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_007:
-	.byte 0x01, 0xa0, 0x01
-	nop
-	ld	(13:8), 15:io
-	nop
-	retd	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_008:
-	push	sr
-	.byte 0xa0, 0x01
-	nop
-	ld	(13:8), 64:io
-	nop
-	.byte 0x01, 0x06
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_009:
-	pop	sr
-	.byte 0xa0, 0x01
-	nop
-	ld	(13:8), 128:io
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_010:
-	.byte 0x04, 0xa0, 0x01
-	nop
-	ld	(12:8), 7:io
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_011:
-	nop
-	.byte 0xa2, 0x01
-	nop
-	ld	(4:8), 7:io
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_012:
-	.byte 0x01, 0xa2, 0x01
-	nop
-	ld	(4:8), 16:io
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_013:
-	push	sr
-	.byte 0xa2, 0x01
-	nop
-	ld	(12:8), 8:io
-	nop
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_014:
-	pop	sr
-	.byte 0xa2, 0x01
-	nop
-	ld	(12:8), 32:io
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_015:
-	.byte 0x04, 0xa2, 0x01
-	nop
-	ld	(4:8), 32:io
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_016:
-	halt
-	.byte 0xa2, 0x01
-	nop
-	ld	(22:8), 1:io
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_017:
-	.byte 0x06, 0xa2, 0x01
-	nop
-	ld	(12:8), 16:io
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_018:
-	nop
-	.byte 0xa4, 0x01
-	nop
-	push	13
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_019:
-	.byte 0x01, 0xa4, 0x01
-	nop
-	push	13
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_020:
-	push	sr
-	.byte 0xa4, 0x01
-	nop
-	push	13
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_021:
-	pop	sr
-	.byte 0xa4, 0x01
-	nop
-	push	13
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_022:
-	.byte 0x04, 0xa4, 0x01
-	nop
-	push	12
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_023:
-	nop
-	.byte 0xa6, 0x01
-	nop
-	push	4
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_024:
-	.byte 0x01, 0xa6, 0x01
-	nop
-	push	4
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_025:
-	push	sr
-	.byte 0xa6, 0x01
-	nop
-	push	12
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_026:
-	pop	sr
-	.byte 0xa6, 0x01
-	nop
-	push	12
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_027:
-	.byte 0x04, 0xa6, 0x01
-	nop
-	push	4
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_028:
-	halt
-	.byte 0xa6, 0x01
-	nop
-	push	22
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_029:
-	.byte 0x06, 0xa6, 0x01
-	nop
-	push	12
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_030:
-	nop
-	.byte 0xa8, 0x01
-	nop
-	ldw	(13:8), 32:io
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_031:
-	.byte 0x01, 0xa8, 0x01
-	nop
-	ldw	(13:8), 15:io
-	retd	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_032:
-	push	sr
-	.byte 0xa8, 0x01
-	nop
-	ldw	(13:8), 64:io
-	.byte 0x01, 0x06
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_033:
-	pop	sr
-	.byte 0xa8, 0x01
-	nop
-	ldw	(13:8), 128:io
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_034:
-	.byte 0x04, 0xa8, 0x01
-	nop
-	ldw	(12:8), 7:io
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_035:
-	nop
-	.byte 0xaa, 0x01
-	nop
-	ldw	(4:8), 7:io
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_036:
-	.byte 0x01, 0xaa, 0x01
-	nop
-	ldw	(4:8), 16:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_037:
-	push	sr
-	.byte 0xaa, 0x01
-	nop
-	ldw	(12:8), 8:io
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_038:
-	pop	sr
-	.byte 0xaa, 0x01
-	nop
-	ldw	(12:8), 32:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_039:
-	.byte 0x04, 0xaa, 0x01
-	nop
-	ldw	(4:8), 32:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_040:
-	halt
-	.byte 0xaa, 0x01
-	nop
-	ldw	(22:8), 1:io
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_041:
-	.byte 0x06, 0xaa, 0x01
-	nop
-	ldw	(12:8), 16:io
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_042:
-	nop
-	.byte 0xac, 0x01
-	nop
-	pushw	8205
-	nop
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_043:
-	.byte 0x01, 0xac, 0x01
-	nop
-	pushw	3853
-	nop
-	retd	0
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_044:
-	push	sr
-	.byte 0xac, 0x01
-	nop
-	pushw	0x400d
-	nop
-	.byte 0x01, 0x06
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_045:
-	pop	sr
-	.byte 0xac, 0x01
-	nop
-	pushw	0x800d
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_046:
-	.byte 0x04, 0xac, 0x01
-	nop
-	pushw	1804
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_047:
-	nop
-	.byte 0xae, 0x01
-	nop
-	pushw	1796
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_048:
-	.byte 0x01, 0xae, 0x01
-	nop
-	pushw	4100
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_049:
-	push	sr
-	.byte 0xae, 0x01
-	nop
-	pushw	2060
-	nop
-	normal
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_050:
-	pop	sr
-	.byte 0xae, 0x01
-	nop
-	pushw	8204
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_051:
-	.byte 0x04, 0xae, 0x01
-	nop
-	pushw	8196
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_052:
-	halt
-	.byte 0xae, 0x01
-	nop
-	pushw	278
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_053:
-	.byte 0x06, 0xae, 0x01
-	nop
-	pushw	4108
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_054:
-	nop
-	.byte 0xb0, 0x01
-	nop
-	incf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_055:
-	.byte 0x01, 0xb0, 0x01
-	nop
-	incf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_056:
-	push	sr
-	.byte 0xb0, 0x01
-	nop
-	incf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_057:
-	pop	sr
-	.byte 0xb0, 0x01
-	nop
-	incf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_058:
-	.byte 0x04, 0xb0, 0x01
-	nop
-	incf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_059:
-	nop
-	.byte 0xb2, 0x01
-	nop
-	incf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_060:
-	.byte 0x01, 0xb2, 0x01
-	nop
-	incf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_061:
-	push	sr
-	.byte 0xb2, 0x01
-	nop
-	incf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_062:
-	pop	sr
-	.byte 0xb2, 0x01
-	nop
-	incf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_063:
-	.byte 0x04, 0xb2, 0x01
-	nop
-	incf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_064:
-	halt
-	.byte 0xb2, 0x01
-	nop
-	incf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_065:
-	.byte 0x06, 0xb2, 0x01
-	nop
-	incf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_066:
-	nop
-	.byte 0xb4, 0x01
-	nop
-	decf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_067:
-	.byte 0x01, 0xb4, 0x01
-	nop
-	decf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_068:
-	push	sr
-	.byte 0xb4, 0x01
-	nop
-	decf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_069:
-	pop	sr
-	.byte 0xb4, 0x01
-	nop
-	decf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_070:
-	.byte 0x04, 0xb4, 0x01
-	nop
-	decf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_071:
-	nop
-	.byte 0xb6, 0x01
-	nop
-	decf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_072:
-	.byte 0x01, 0xb6, 0x01
-	nop
-	decf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_073:
-	push	sr
-	.byte 0xb6, 0x01
-	nop
-	decf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_074:
-	pop	sr
-	.byte 0xb6, 0x01
-	nop
-	decf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_075:
-	.byte 0x04, 0xb6, 0x01
-	nop
-	decf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_076:
-	halt
-	.byte 0xb6, 0x01
-	nop
-	decf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_077:
-	.byte 0x06, 0xb6, 0x01
-	nop
-	decf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_078:
-	nop
-	ld	(xwa+1), 14
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_079:
-	normal
-	ld	(xwa+1), 14
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_080:
-	push	sr
-	ld	(xwa+1), 14
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_081:
-	pop	sr
-	ld	(xwa+1), 14
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_082:
-	max
-	ld	(xwa+1), 14
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_083:
-	nop
-	ld	(xde+1), 14
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_084:
-	normal
-	ld	(xde+1), 14
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_085:
-	push	sr
-	ld	(xde+1), 14
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_086:
-	pop	sr
-	ld	(xde+1), 14
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_087:
-	max
-	ld	(xde+1), 14
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_088:
-	halt
-	ld	(xde+1), 14
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_089:
-	.byte 0x06
-	ld	(xde+1), 14
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_090:
-	nop
-	ld	(xix+1), 15
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_091:
-	normal
-	ld	(xix+1), 15
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_092:
-	push	sr
-	ld	(xix+1), 15
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_093:
-	pop	sr
-	ld	(xix+1), 15
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_094:
-	max
-	ld	(xix+1), 15
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_095:
-	nop
-	ld	(xiz+1), 15
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_096:
-	normal
-	ld	(xiz+1), 15
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_097:
-	push	sr
-	ld	(xiz+1), 15
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_098:
-	pop	sr
-	ld	(xiz+1), 15
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_099:
-	max
-	ld	(xiz+1), 15
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_100:
-	halt
-	ld	(xiz+1), 15
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_101:
-	.byte 0x06
-	ld	(xiz+1), 15
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_102:
-	nop
-	.byte 0xc0, 0x01
-	nop
-	rcf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_103:
-	.byte 0x01, 0xc0, 0x01
-	nop
-	rcf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_104:
-	push	sr
-	.byte 0xc0, 0x01
-	nop
-	rcf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_105:
-	pop	sr
-	.byte 0xc0, 0x01
-	nop
-	rcf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_106:
-	.byte 0x04, 0xc0, 0x01
-	nop
-	rcf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_107:
-	nop
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	reti
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_108:
-	.byte 0x01, 0xc2, 0x01
-	nop
-	rcf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_109:
-	push	sr
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_110:
-	pop	sr
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_111:
-	.byte 0x04, 0xc2, 0x01
-	nop
-	rcf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_112:
-	halt
-	.byte 0xc2, 0x01
-	nop
-	rcf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_113:
-	.byte 0x06, 0xc2, 0x01
-	nop
-	rcf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_114:
-	nop
-	.byte 0xc4, 0x01
-	nop
-	scf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_115:
-	.byte 0x01, 0xc4, 0x01
-	nop
-	scf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_116:
-	push	sr
-	.byte 0xc4, 0x01
-	nop
-	scf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_117:
-	pop	sr
-	.byte 0xc4, 0x01
-	nop
-	scf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_118:
-	.byte 0x04, 0xc4, 0x01
-	nop
-	scf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_119:
-	nop
-	.byte 0xc6, 0x01
-	nop
-	scf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_120:
-	.byte 0x01, 0xc6, 0x01
-	nop
-	scf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_121:
-	push	sr
-	.byte 0xc6, 0x01
-	nop
-	scf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_122:
-	pop	sr
-	.byte 0xc6, 0x01
-	nop
-	scf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_123:
-	.byte 0x04, 0xc6, 0x01
-	nop
-	scf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_124:
-	halt
-	.byte 0xc6, 0x01
-	nop
-	scf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_125:
-	.byte 0x06, 0xc6, 0x01
-	nop
-	scf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_126:
-	nop
-	.byte 0xc8, 0x01
-	nop
-	ccf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_127:
-	.byte 0x01, 0xc8, 0x01
-	nop
-	ccf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_128:
-	push	sr
-	.byte 0xc8, 0x01
-	nop
-	ccf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_129:
-	pop	sr
-	.byte 0xc8, 0x01
-	nop
-	ccf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_130:
-	.byte 0x04, 0xc8, 0x01
-	nop
-	ccf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_131:
-	nop
-	.byte 0xca, 0x01
-	nop
-	ccf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_132:
-	.byte 0x01, 0xca, 0x01
-	nop
-	ccf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_133:
-	push	sr
-	.byte 0xca, 0x01
-	nop
-	ccf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_134:
-	pop	sr
-	.byte 0xca, 0x01
-	nop
-	ccf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_135:
-	.byte 0x04, 0xca, 0x01
-	nop
-	ccf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_136:
-	halt
-	.byte 0xca, 0x01
-	nop
-	ccf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_137:
-	.byte 0x06, 0xca, 0x01
-	nop
-	ccf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_138:
-	nop
-	.byte 0xcc, 0x01
-	nop
-	zcf
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_139:
-	.byte 0x01, 0xcc, 0x01
-	nop
-	zcf
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_140:
-	push	sr
-	.byte 0xcc, 0x01
-	nop
-	zcf
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_141:
-	pop	sr
-	.byte 0xcc, 0x01
-	nop
-	zcf
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_142:
-	.byte 0x04, 0xcc, 0x01
-	nop
-	zcf
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_143:
-	nop
-	.byte 0xce, 0x01
-	nop
-	zcf
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_144:
-	.byte 0x01, 0xce, 0x01
-	nop
-	zcf
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_145:
-	push	sr
-	.byte 0xce, 0x01
-	nop
-	zcf
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_146:
-	pop	sr
-	.byte 0xce, 0x01
-	nop
-	zcf
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_147:
-	.byte 0x04, 0xce, 0x01
-	nop
-	zcf
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_148:
-	halt
-	.byte 0xce, 0x01
-	nop
-	zcf
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_149:
-	.byte 0x06, 0xce, 0x01
-	nop
-	zcf
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_150:
-	nop
-	.byte 0xd0, 0x01
-	nop
-	push_a
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_151:
-	.byte 0x01, 0xd0, 0x01
-	nop
-	push_a
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_152:
-	push	sr
-	.byte 0xd0, 0x01
-	nop
-	push_a
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_153:
-	pop	sr
-	.byte 0xd0, 0x01
-	nop
-	push_a
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_154:
-	.byte 0x04, 0xd0, 0x01
-	nop
-	push_a
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_155:
-	nop
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_156:
-	.byte 0x01, 0xd2, 0x01
-	nop
-	push_a
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_157:
-	push	sr
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_158:
-	pop	sr
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_159:
-	.byte 0x04, 0xd2, 0x01
-	nop
-	push_a
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_160:
-	halt
-	.byte 0xd2, 0x01
-	nop
-	push_a
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_161:
-	.byte 0x06, 0xd2, 0x01
-	nop
-	push_a
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_162:
-	nop
-	.byte 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_163:
-	.byte 0x01, 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_164:
-	push	sr
-	.byte 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_165:
-	pop	sr
-	.byte 0xd4, 0x01
-	nop
-	pop_a
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_166:
-	.byte 0x04, 0xd4, 0x01
-	nop
-	pop_a
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_167:
-	nop
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_168:
-	.byte 0x01, 0xd6, 0x01
-	nop
-	pop_a
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_169:
-	push	sr
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_170:
-	pop	sr
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_171:
-	.byte 0x04, 0xd6, 0x01
-	nop
-	pop_a
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_172:
-	halt
-	.byte 0xd6, 0x01
-	nop
-	pop_a
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_173:
-	.byte 0x06, 0xd6, 0x01
-	nop
-	pop_a
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_174:
-	nop
-	.byte 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_175:
-	.byte 0x01, 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_176:
-	push	sr
-	.byte 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_177:
-	pop	sr
-	.byte 0xd8, 0x01
-	nop
-	ex_ff
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_178:
-	.byte 0x04, 0xd8, 0x01
-	nop
-	ex_ff
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_179:
-	nop
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_180:
-	.byte 0x01, 0xda, 0x01
-	nop
-	ex_ff
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_181:
-	push	sr
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_182:
-	pop	sr
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_183:
-	.byte 0x04, 0xda, 0x01
-	nop
-	ex_ff
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_184:
-	halt
-	.byte 0xda, 0x01
-	nop
-	ex_ff
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_185:
-	.byte 0x06, 0xda, 0x01
-	nop
-	ex_ff
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_186:
-	nop
-	.byte 0xdc, 0x01
-	nop
-	ldf	13
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_187:
-	.byte 0x01, 0xdc, 0x01
-	nop
-	ldf	13
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_188:
-	push	sr
-	.byte 0xdc, 0x01
-	nop
-	ldf	13
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_189:
-	pop	sr
-	.byte 0xdc, 0x01
-	nop
-	ldf	13
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_190:
-	.byte 0x04, 0xdc, 0x01
-	nop
-	ldf	12
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_191:
-	nop
-	.byte 0xde, 0x01
-	nop
-	.byte 0x17, 0x04
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_192:
-	.byte 0x01, 0xde, 0x01
-	nop
-	.byte 0x17, 0x04
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_193:
-	push	sr
-	.byte 0xde, 0x01
-	nop
-	ldf	12
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_194:
-	pop	sr
-	.byte 0xde, 0x01
-	nop
-	ldf	12
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_195:
-	.byte 0x04, 0xde, 0x01
-	nop
-	.byte 0x17, 0x04
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_196:
-	halt
-	.byte 0xde, 0x01
-	nop
-	ldf	22
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_197:
-	.byte 0x06, 0xde, 0x01
-	nop
-	ldf	12
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_198:
-	nop
-	.byte 0xe0, 0x01
-	nop
-	push_f
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_199:
-	.byte 0x01, 0xe0, 0x01
-	nop
-	push_f
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_200:
-	push	sr
-	.byte 0xe0, 0x01
-	nop
-	push_f
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_201:
-	pop	sr
-	.byte 0xe0, 0x01
-	nop
-	push_f
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_202:
-	.byte 0x04, 0xe0, 0x01
-	nop
-	push_f
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_203:
-	nop
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_204:
-	.byte 0x01, 0xe2, 0x01
-	nop
-	push_f
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_205:
-	push	sr
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_206:
-	pop	sr
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_207:
-	.byte 0x04, 0xe2, 0x01
-	nop
-	push_f
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_208:
-	halt
-	.byte 0xe2, 0x01
-	nop
-	push_f
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_209:
-	.byte 0x06, 0xe2, 0x01
-	nop
-	push_f
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_210:
-	nop
-	.byte 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	ld	w, 0:opc
-	normal
-	halt
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_211:
-	.byte 0x01, 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	retd	3840
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_212:
-	push	sr
-	.byte 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	ld	xwa, 0xff060100
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_213:
-	pop	sr
-	.byte 0xe4, 0x01
-	nop
-	pop_f
-	decf
-	.byte 0x80
-	nop
-	normal
-	reti
-	swi	7
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_214:
-	.byte 0x04, 0xe4, 0x01
-	nop
-	pop_f
-	incf
-	reti
-	nop
-	jrl	nc, 0
-	push	sr
-	normal
-	reti
-	halt
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_215:
-	nop
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	max
-	reti
-	nop
-	reti
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_216:
-	.byte 0x01, 0xe6, 0x01
-	nop
-	pop_f
-	max
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_217:
-	push	sr
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	incf
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_218:
-	pop	sr
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	incf
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_219:
-	.byte 0x04, 0xe6, 0x01
-	nop
-	pop_f
-	max
-	ld	w, 0:opc
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_220:
-	halt
-	.byte 0xe6, 0x01
-	nop
-	pop_f
-	ex_ff
-	normal
-	nop
-	normal
-	halt
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_221:
-	.byte 0x06, 0xe6, 0x01
-	nop
-	pop_f
-	incf
-	rcf
-	nop
-	normal
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_222:
-	nop
-	.byte 0x80
-	push	sr
-	nop
-	popw	wa
-	nop
-	swi	7
-	nop
-	swi	7
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_223:
-	.byte 0x01, 0x80
-	push	sr
-	nop
-	popw	wa
-	normal
-	jrl	nc, 1792
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_224:
-	push	sr
-	.byte 0x80
-	push	sr
-	nop
-	popw	wa
-	reti
-	ldw	wa, 768
-	max
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_225:
-	.byte 0x80, 0x80
-	push	sr
-	nop
-	popw	wa
-	pop	sr
-	reti
-	nop
-	pop	sr
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_226:
-	.byte 0x81, 0x80
-	push	sr
-	nop
-	popw	wa
-	pop	sr
-	ld	(0:8), 1:io
-	pop	sr
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_227:
-	.byte 0x82, 0x80
-	push	sr
-	nop
-	.byte 0x90
-	pop	sr
-	normal
-	nop
-	normal
-	nop
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
-SeqMixParam_Entry_228:
-	.byte 0x83, 0x80
-	push	sr
-	nop
-	.byte 0x90
-	pop	sr
-	push	sr
-	nop
-	normal
-	normal
-	nop
-	swi	7
-	normal
-	normal
-	normal
-	nop
-	nop
-	swi	7
+	.long WidgetParam_MidiCC_PitchBend_Map
+	.short 7
+	.byte 0x00, 0x03, 0x00, 0xff
+;  314 x 18-byte sound-parameter descriptors, 0xEDE9FC-0xEE0010, one
+;  `sndparam_descriptor` per record (fields: the macro above).  v10
+;  compiles the same records from audio/sndparam_records/run_ede9fc.c;
+;  the record labels follow the run as `.set` equates, as in v10.
+SndParamRun_EDE9FC:
+	sndparam_descriptor 0x018200, 0, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x018201, 0, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018202, 0, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018203, 0, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018204, 0, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018205, 0, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018206, 0, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018400, 1, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018401, 1, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018402, 1, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018403, 1, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018404, 1, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x018600, 1, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018601, 1, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018602, 1, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018603, 1, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018604, 1, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018605, 1, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018606, 1, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018800, 2, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018801, 2, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018802, 2, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018803, 2, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018804, 2, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x018a00, 2, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a01, 2, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a02, 2, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a03, 2, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a04, 2, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a05, 2, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a06, 2, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c00, 3, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c01, 3, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c02, 3, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c03, 3, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c04, 3, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x018e00, 3, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e01, 3, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e02, 3, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e03, 3, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e04, 3, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e05, 3, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e06, 3, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019000, 4, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019001, 4, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019002, 4, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019003, 4, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019004, 4, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019200, 4, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019201, 4, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019202, 4, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019203, 4, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019204, 4, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019205, 4, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019206, 4, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019400, 5, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019401, 5, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019402, 5, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019403, 5, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019404, 5, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019600, 5, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019601, 5, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019602, 5, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019603, 5, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019604, 5, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019605, 5, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019606, 5, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019800, 6, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019801, 6, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019802, 6, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019803, 6, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019804, 6, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019a00, 6, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a01, 6, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a02, 6, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a03, 6, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a04, 6, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a05, 6, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a06, 6, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c00, 7, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c01, 7, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c02, 7, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c03, 7, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c04, 7, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019e00, 7, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e01, 7, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e02, 7, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e03, 7, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e04, 7, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e05, 7, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e06, 7, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a000, 8, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a001, 8, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a002, 8, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a003, 8, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a004, 8, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01a200, 8, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a201, 8, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a202, 8, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a203, 8, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a204, 8, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a205, 8, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a206, 8, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a400, 9, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a401, 9, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a402, 9, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a403, 9, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a404, 9, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01a600, 9, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a601, 9, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a602, 9, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a603, 9, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a604, 9, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a605, 9, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a606, 9, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a800, 10, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a801, 10, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a802, 10, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a803, 10, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a804, 10, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01aa00, 10, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa01, 10, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa02, 10, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa03, 10, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa04, 10, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa05, 10, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa06, 10, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac00, 11, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac01, 11, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac02, 11, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac03, 11, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac04, 11, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ae00, 11, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae01, 11, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae02, 11, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae03, 11, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae04, 11, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae05, 11, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae06, 11, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b000, 12, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b001, 12, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b002, 12, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b003, 12, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b004, 12, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01b200, 12, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b201, 12, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b202, 12, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b203, 12, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b204, 12, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b205, 12, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b206, 12, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b400, 13, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b401, 13, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b402, 13, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b403, 13, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b404, 13, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01b600, 13, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b601, 13, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b602, 13, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b603, 13, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b604, 13, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b605, 13, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b606, 13, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b800, 14, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b801, 14, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b802, 14, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b803, 14, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b804, 14, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ba00, 14, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba01, 14, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba02, 14, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba03, 14, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba04, 14, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba05, 14, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba06, 14, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc00, 15, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc01, 15, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc02, 15, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc03, 15, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc04, 15, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01be00, 15, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x01be01, 15, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be02, 15, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be03, 15, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be04, 15, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be05, 15, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be06, 15, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c000, 16, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c001, 16, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c002, 16, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c003, 16, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c004, 16, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01c200, 16, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x01c201, 16, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c202, 16, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c203, 16, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c204, 16, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c205, 16, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c206, 16, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c400, 17, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c401, 17, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c402, 17, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c403, 17, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c404, 17, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01c600, 17, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c601, 17, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c602, 17, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c603, 17, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c604, 17, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c605, 17, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c606, 17, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c800, 18, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c801, 18, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c802, 18, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c803, 18, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c804, 18, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ca00, 18, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca01, 18, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca02, 18, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca03, 18, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca04, 18, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca05, 18, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca06, 18, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc00, 19, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc01, 19, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc02, 19, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc03, 19, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc04, 19, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ce00, 19, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce01, 19, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce02, 19, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce03, 19, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce04, 19, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce05, 19, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce06, 19, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d000, 20, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d001, 20, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d002, 20, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d003, 20, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d004, 20, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01d200, 20, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d201, 20, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d202, 20, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d203, 20, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d204, 20, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d205, 20, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d206, 20, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d400, 21, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d401, 21, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d402, 21, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d403, 21, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d404, 21, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01d600, 21, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d601, 21, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d602, 21, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d603, 21, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d604, 21, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d605, 21, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d606, 21, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d800, 22, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d801, 22, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d802, 22, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d803, 22, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d804, 22, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01da00, 22, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da01, 22, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da02, 22, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da03, 22, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da04, 22, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da05, 22, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da06, 22, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc00, 23, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc01, 23, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc02, 23, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc03, 23, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc04, 23, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01de00, 23, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de01, 23, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de02, 23, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de03, 23, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de04, 23, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de05, 23, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de06, 23, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e000, 24, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e001, 24, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e002, 24, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e003, 24, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e004, 24, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01e200, 24, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e201, 24, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e202, 24, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e203, 24, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e204, 24, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e205, 24, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e206, 24, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e400, 25, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e401, 25, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e402, 25, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e403, 25, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e404, 25, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01e600, 25, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e601, 25, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e602, 25, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e603, 25, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e604, 25, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e605, 25, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e606, 25, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028000, 72, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028001, 72, 1, 0x7f, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028002, 72, 7, 0x30, 0, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028080, 72, 3, 0x07, 0, 3, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028081, 72, 3, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028082, 144, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028083, 144, 3, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+.set ExtPartParam_Entry_369, SndParamRun_EDE9FC + 0
+.set ExtPartParam_Entry_370, SndParamRun_EDE9FC + 18
+.set ExtPartParam_Entry_371, SndParamRun_EDE9FC + 36
+.set ExtPartParam_Entry_372, SndParamRun_EDE9FC + 54
+.set ExtPartParam_Entry_373, SndParamRun_EDE9FC + 72
+.set ExtPartParam_Entry_374, SndParamRun_EDE9FC + 90
+.set ExtPartParam_Entry_375, SndParamRun_EDE9FC + 108
+.set ExtPartParam_Entry_376, SndParamRun_EDE9FC + 126
+.set ExtPartParam_Entry_377, SndParamRun_EDE9FC + 144
+.set ExtPartParam_Entry_378, SndParamRun_EDE9FC + 162
+.set ExtPartParam_Entry_379, SndParamRun_EDE9FC + 180
+.set ExtPartParam_Entry_380, SndParamRun_EDE9FC + 198
+.set ExtPartParam_Entry_381, SndParamRun_EDE9FC + 216
+.set ExtPartParam_Entry_382, SndParamRun_EDE9FC + 234
+.set ExtPartParam_Entry_383, SndParamRun_EDE9FC + 252
+.set ExtPartParam_Entry_384, SndParamRun_EDE9FC + 270
+.set ExtPartParam_Entry_385, SndParamRun_EDE9FC + 288
+.set ExtPartParam_Entry_386, SndParamRun_EDE9FC + 306
+.set ExtPartParam_Entry_387, SndParamRun_EDE9FC + 324
+.set ExtPartParam_Entry_388, SndParamRun_EDE9FC + 342
+.set ExtPartParam_Entry_389, SndParamRun_EDE9FC + 360
+.set ExtPartParam_Entry_390, SndParamRun_EDE9FC + 378
+.set ExtPartParam_Entry_391, SndParamRun_EDE9FC + 396
+.set ExtPartParam_Entry_392, SndParamRun_EDE9FC + 414
+.set ExtPartParam_Entry_393, SndParamRun_EDE9FC + 432
+.set ExtPartParam_Entry_394, SndParamRun_EDE9FC + 450
+.set ExtPartParam_Entry_395, SndParamRun_EDE9FC + 468
+.set ExtPartParam_Entry_396, SndParamRun_EDE9FC + 486
+.set ExtPartParam_Entry_397, SndParamRun_EDE9FC + 504
+.set ExtPartParam_Entry_398, SndParamRun_EDE9FC + 522
+.set ExtPartParam_Entry_399, SndParamRun_EDE9FC + 540
+.set ExtPartParam_Entry_400, SndParamRun_EDE9FC + 558
+.set ExtPartParam_Entry_401, SndParamRun_EDE9FC + 576
+.set ExtPartParam_Entry_402, SndParamRun_EDE9FC + 594
+.set ExtPartParam_Entry_403, SndParamRun_EDE9FC + 612
+.set ExtPartParam_Entry_404, SndParamRun_EDE9FC + 630
+.set ExtPartParam_Entry_405, SndParamRun_EDE9FC + 648
+.set ExtPartParam_Entry_406, SndParamRun_EDE9FC + 666
+.set ExtPartParam_Entry_407, SndParamRun_EDE9FC + 684
+.set ExtPartParam_Entry_408, SndParamRun_EDE9FC + 702
+.set ExtPartParam_Entry_409, SndParamRun_EDE9FC + 720
+.set ExtPartParam_Entry_410, SndParamRun_EDE9FC + 738
+.set ExtPartParam_Entry_411, SndParamRun_EDE9FC + 756
+.set ExtPartParam_Entry_412, SndParamRun_EDE9FC + 774
+.set ExtPartParam_Entry_413, SndParamRun_EDE9FC + 792
+.set ExtPartParam_Entry_414, SndParamRun_EDE9FC + 810
+.set ExtPartParam_Entry_415, SndParamRun_EDE9FC + 828
+.set ExtPartParam_Entry_416, SndParamRun_EDE9FC + 846
+.set ExtPartParam_Entry_417, SndParamRun_EDE9FC + 864
+.set ExtPartParam_Entry_418, SndParamRun_EDE9FC + 882
+.set ExtPartParam_Entry_419, SndParamRun_EDE9FC + 900
+.set ExtPartParam_Entry_420, SndParamRun_EDE9FC + 918
+.set ExtPartParam_Entry_421, SndParamRun_EDE9FC + 936
+.set ExtPartParam_Entry_422, SndParamRun_EDE9FC + 954
+.set ExtPartParam_Entry_423, SndParamRun_EDE9FC + 972
+.set ExtPartParam_Entry_424, SndParamRun_EDE9FC + 990
+.set ExtPartParam_Entry_425, SndParamRun_EDE9FC + 1008
+.set ExtPartParam_Entry_426, SndParamRun_EDE9FC + 1026
+.set ExtPartParam_Entry_427, SndParamRun_EDE9FC + 1044
+.set ExtPartParam_Entry_428, SndParamRun_EDE9FC + 1062
+.set ExtPartParam_Entry_429, SndParamRun_EDE9FC + 1080
+.set ExtPartParam_Entry_430, SndParamRun_EDE9FC + 1098
+.set ExtPartParam_Entry_431, SndParamRun_EDE9FC + 1116
+.set ExtPartParam_Entry_432, SndParamRun_EDE9FC + 1134
+.set ExtPartParam_Entry_433, SndParamRun_EDE9FC + 1152
+.set ExtPartParam_Entry_434, SndParamRun_EDE9FC + 1170
+.set ExtPartParam_Entry_435, SndParamRun_EDE9FC + 1188
+.set ExtPartParam_Entry_436, SndParamRun_EDE9FC + 1206
+.set ExtPartParam_Entry_437, SndParamRun_EDE9FC + 1224
+.set ExtPartParam_Entry_438, SndParamRun_EDE9FC + 1242
+.set ExtPartParam_Entry_439, SndParamRun_EDE9FC + 1260
+.set ExtPartParam_Entry_440, SndParamRun_EDE9FC + 1278
+.set ExtPartParam_Entry_441, SndParamRun_EDE9FC + 1296
+.set ExtPartParam_Entry_442, SndParamRun_EDE9FC + 1314
+.set ExtPartParam_Entry_443, SndParamRun_EDE9FC + 1332
+.set ExtPartParam_Entry_444, SndParamRun_EDE9FC + 1350
+.set ExtPartParam_Entry_445, SndParamRun_EDE9FC + 1368
+.set ExtPartParam_Entry_446, SndParamRun_EDE9FC + 1386
+.set ExtPartParam_Entry_447, SndParamRun_EDE9FC + 1404
+.set ExtPartParam_Entry_448, SndParamRun_EDE9FC + 1422
+.set ExtPartParam_Entry_449, SndParamRun_EDE9FC + 1440
+.set ExtPartParam_Entry_450, SndParamRun_EDE9FC + 1458
+.set ExtPartParam_Entry_451, SndParamRun_EDE9FC + 1476
+.set ExtPartParam_Entry_452, SndParamRun_EDE9FC + 1494
+.set ExtPartParam_Entry_453, SndParamRun_EDE9FC + 1512
+.set ExtPartParam_Entry_454, SndParamRun_EDE9FC + 1530
+.set SeqMixParam_Entry_001, SndParamRun_EDE9FC + 1548
+.set SeqMixParam_Entry_002, SndParamRun_EDE9FC + 1566
+.set SeqMixParam_Entry_003, SndParamRun_EDE9FC + 1584
+.set SeqMixParam_Entry_004, SndParamRun_EDE9FC + 1602
+.set SeqMixParam_Entry_005, SndParamRun_EDE9FC + 1620
+.set SeqMixParam_Entry_006, SndParamRun_EDE9FC + 1638
+.set SeqMixParam_Entry_007, SndParamRun_EDE9FC + 1656
+.set SeqMixParam_Entry_008, SndParamRun_EDE9FC + 1674
+.set SeqMixParam_Entry_009, SndParamRun_EDE9FC + 1692
+.set SeqMixParam_Entry_010, SndParamRun_EDE9FC + 1710
+.set SeqMixParam_Entry_011, SndParamRun_EDE9FC + 1728
+.set SeqMixParam_Entry_012, SndParamRun_EDE9FC + 1746
+.set SeqMixParam_Entry_013, SndParamRun_EDE9FC + 1764
+.set SeqMixParam_Entry_014, SndParamRun_EDE9FC + 1782
+.set SeqMixParam_Entry_015, SndParamRun_EDE9FC + 1800
+.set SeqMixParam_Entry_016, SndParamRun_EDE9FC + 1818
+.set SeqMixParam_Entry_017, SndParamRun_EDE9FC + 1836
+.set SeqMixParam_Entry_018, SndParamRun_EDE9FC + 1854
+.set SeqMixParam_Entry_019, SndParamRun_EDE9FC + 1872
+.set SeqMixParam_Entry_020, SndParamRun_EDE9FC + 1890
+.set SeqMixParam_Entry_021, SndParamRun_EDE9FC + 1908
+.set SeqMixParam_Entry_022, SndParamRun_EDE9FC + 1926
+.set SeqMixParam_Entry_023, SndParamRun_EDE9FC + 1944
+.set SeqMixParam_Entry_024, SndParamRun_EDE9FC + 1962
+.set SeqMixParam_Entry_025, SndParamRun_EDE9FC + 1980
+.set SeqMixParam_Entry_026, SndParamRun_EDE9FC + 1998
+.set SeqMixParam_Entry_027, SndParamRun_EDE9FC + 2016
+.set SeqMixParam_Entry_028, SndParamRun_EDE9FC + 2034
+.set SeqMixParam_Entry_029, SndParamRun_EDE9FC + 2052
+.set SeqMixParam_Entry_030, SndParamRun_EDE9FC + 2070
+.set SeqMixParam_Entry_031, SndParamRun_EDE9FC + 2088
+.set SeqMixParam_Entry_032, SndParamRun_EDE9FC + 2106
+.set SeqMixParam_Entry_033, SndParamRun_EDE9FC + 2124
+.set SeqMixParam_Entry_034, SndParamRun_EDE9FC + 2142
+.set SeqMixParam_Entry_035, SndParamRun_EDE9FC + 2160
+.set SeqMixParam_Entry_036, SndParamRun_EDE9FC + 2178
+.set SeqMixParam_Entry_037, SndParamRun_EDE9FC + 2196
+.set SeqMixParam_Entry_038, SndParamRun_EDE9FC + 2214
+.set SeqMixParam_Entry_039, SndParamRun_EDE9FC + 2232
+.set SeqMixParam_Entry_040, SndParamRun_EDE9FC + 2250
+.set SeqMixParam_Entry_041, SndParamRun_EDE9FC + 2268
+.set SeqMixParam_Entry_042, SndParamRun_EDE9FC + 2286
+.set SeqMixParam_Entry_043, SndParamRun_EDE9FC + 2304
+.set SeqMixParam_Entry_044, SndParamRun_EDE9FC + 2322
+.set SeqMixParam_Entry_045, SndParamRun_EDE9FC + 2340
+.set SeqMixParam_Entry_046, SndParamRun_EDE9FC + 2358
+.set SeqMixParam_Entry_047, SndParamRun_EDE9FC + 2376
+.set SeqMixParam_Entry_048, SndParamRun_EDE9FC + 2394
+.set SeqMixParam_Entry_049, SndParamRun_EDE9FC + 2412
+.set SeqMixParam_Entry_050, SndParamRun_EDE9FC + 2430
+.set SeqMixParam_Entry_051, SndParamRun_EDE9FC + 2448
+.set SeqMixParam_Entry_052, SndParamRun_EDE9FC + 2466
+.set SeqMixParam_Entry_053, SndParamRun_EDE9FC + 2484
+.set SeqMixParam_Entry_054, SndParamRun_EDE9FC + 2502
+.set SeqMixParam_Entry_055, SndParamRun_EDE9FC + 2520
+.set SeqMixParam_Entry_056, SndParamRun_EDE9FC + 2538
+.set SeqMixParam_Entry_057, SndParamRun_EDE9FC + 2556
+.set SeqMixParam_Entry_058, SndParamRun_EDE9FC + 2574
+.set SeqMixParam_Entry_059, SndParamRun_EDE9FC + 2592
+.set SeqMixParam_Entry_060, SndParamRun_EDE9FC + 2610
+.set SeqMixParam_Entry_061, SndParamRun_EDE9FC + 2628
+.set SeqMixParam_Entry_062, SndParamRun_EDE9FC + 2646
+.set SeqMixParam_Entry_063, SndParamRun_EDE9FC + 2664
+.set SeqMixParam_Entry_064, SndParamRun_EDE9FC + 2682
+.set SeqMixParam_Entry_065, SndParamRun_EDE9FC + 2700
+.set SeqMixParam_Entry_066, SndParamRun_EDE9FC + 2718
+.set SeqMixParam_Entry_067, SndParamRun_EDE9FC + 2736
+.set SeqMixParam_Entry_068, SndParamRun_EDE9FC + 2754
+.set SeqMixParam_Entry_069, SndParamRun_EDE9FC + 2772
+.set SeqMixParam_Entry_070, SndParamRun_EDE9FC + 2790
+.set SeqMixParam_Entry_071, SndParamRun_EDE9FC + 2808
+.set SeqMixParam_Entry_072, SndParamRun_EDE9FC + 2826
+.set SeqMixParam_Entry_073, SndParamRun_EDE9FC + 2844
+.set SeqMixParam_Entry_074, SndParamRun_EDE9FC + 2862
+.set SeqMixParam_Entry_075, SndParamRun_EDE9FC + 2880
+.set SeqMixParam_Entry_076, SndParamRun_EDE9FC + 2898
+.set SeqMixParam_Entry_077, SndParamRun_EDE9FC + 2916
+.set SeqMixParam_Entry_078, SndParamRun_EDE9FC + 2934
+.set SeqMixParam_Entry_079, SndParamRun_EDE9FC + 2952
+.set SeqMixParam_Entry_080, SndParamRun_EDE9FC + 2970
+.set SeqMixParam_Entry_081, SndParamRun_EDE9FC + 2988
+.set SeqMixParam_Entry_082, SndParamRun_EDE9FC + 3006
+.set SeqMixParam_Entry_083, SndParamRun_EDE9FC + 3024
+.set SeqMixParam_Entry_084, SndParamRun_EDE9FC + 3042
+.set SeqMixParam_Entry_085, SndParamRun_EDE9FC + 3060
+.set SeqMixParam_Entry_086, SndParamRun_EDE9FC + 3078
+.set SeqMixParam_Entry_087, SndParamRun_EDE9FC + 3096
+.set SeqMixParam_Entry_088, SndParamRun_EDE9FC + 3114
+.set SeqMixParam_Entry_089, SndParamRun_EDE9FC + 3132
+.set SeqMixParam_Entry_090, SndParamRun_EDE9FC + 3150
+.set SeqMixParam_Entry_091, SndParamRun_EDE9FC + 3168
+.set SeqMixParam_Entry_092, SndParamRun_EDE9FC + 3186
+.set SeqMixParam_Entry_093, SndParamRun_EDE9FC + 3204
+.set SeqMixParam_Entry_094, SndParamRun_EDE9FC + 3222
+.set SeqMixParam_Entry_095, SndParamRun_EDE9FC + 3240
+.set SeqMixParam_Entry_096, SndParamRun_EDE9FC + 3258
+.set SeqMixParam_Entry_097, SndParamRun_EDE9FC + 3276
+.set SeqMixParam_Entry_098, SndParamRun_EDE9FC + 3294
+.set SeqMixParam_Entry_099, SndParamRun_EDE9FC + 3312
+.set SeqMixParam_Entry_100, SndParamRun_EDE9FC + 3330
+.set SeqMixParam_Entry_101, SndParamRun_EDE9FC + 3348
+.set SeqMixParam_Entry_102, SndParamRun_EDE9FC + 3366
+.set SeqMixParam_Entry_103, SndParamRun_EDE9FC + 3384
+.set SeqMixParam_Entry_104, SndParamRun_EDE9FC + 3402
+.set SeqMixParam_Entry_105, SndParamRun_EDE9FC + 3420
+.set SeqMixParam_Entry_106, SndParamRun_EDE9FC + 3438
+.set SeqMixParam_Entry_107, SndParamRun_EDE9FC + 3456
+.set SeqMixParam_Entry_108, SndParamRun_EDE9FC + 3474
+.set SeqMixParam_Entry_109, SndParamRun_EDE9FC + 3492
+.set SeqMixParam_Entry_110, SndParamRun_EDE9FC + 3510
+.set SeqMixParam_Entry_111, SndParamRun_EDE9FC + 3528
+.set SeqMixParam_Entry_112, SndParamRun_EDE9FC + 3546
+.set SeqMixParam_Entry_113, SndParamRun_EDE9FC + 3564
+.set SeqMixParam_Entry_114, SndParamRun_EDE9FC + 3582
+.set SeqMixParam_Entry_115, SndParamRun_EDE9FC + 3600
+.set SeqMixParam_Entry_116, SndParamRun_EDE9FC + 3618
+.set SeqMixParam_Entry_117, SndParamRun_EDE9FC + 3636
+.set SeqMixParam_Entry_118, SndParamRun_EDE9FC + 3654
+.set SeqMixParam_Entry_119, SndParamRun_EDE9FC + 3672
+.set SeqMixParam_Entry_120, SndParamRun_EDE9FC + 3690
+.set SeqMixParam_Entry_121, SndParamRun_EDE9FC + 3708
+.set SeqMixParam_Entry_122, SndParamRun_EDE9FC + 3726
+.set SeqMixParam_Entry_123, SndParamRun_EDE9FC + 3744
+.set SeqMixParam_Entry_124, SndParamRun_EDE9FC + 3762
+.set SeqMixParam_Entry_125, SndParamRun_EDE9FC + 3780
+.set SeqMixParam_Entry_126, SndParamRun_EDE9FC + 3798
+.set SeqMixParam_Entry_127, SndParamRun_EDE9FC + 3816
+.set SeqMixParam_Entry_128, SndParamRun_EDE9FC + 3834
+.set SeqMixParam_Entry_129, SndParamRun_EDE9FC + 3852
+.set SeqMixParam_Entry_130, SndParamRun_EDE9FC + 3870
+.set SeqMixParam_Entry_131, SndParamRun_EDE9FC + 3888
+.set SeqMixParam_Entry_132, SndParamRun_EDE9FC + 3906
+.set SeqMixParam_Entry_133, SndParamRun_EDE9FC + 3924
+.set SeqMixParam_Entry_134, SndParamRun_EDE9FC + 3942
+.set SeqMixParam_Entry_135, SndParamRun_EDE9FC + 3960
+.set SeqMixParam_Entry_136, SndParamRun_EDE9FC + 3978
+.set SeqMixParam_Entry_137, SndParamRun_EDE9FC + 3996
+.set SeqMixParam_Entry_138, SndParamRun_EDE9FC + 4014
+.set SeqMixParam_Entry_139, SndParamRun_EDE9FC + 4032
+.set SeqMixParam_Entry_140, SndParamRun_EDE9FC + 4050
+.set SeqMixParam_Entry_141, SndParamRun_EDE9FC + 4068
+.set SeqMixParam_Entry_142, SndParamRun_EDE9FC + 4086
+.set SeqMixParam_Entry_143, SndParamRun_EDE9FC + 4104
+.set SeqMixParam_Entry_144, SndParamRun_EDE9FC + 4122
+.set SeqMixParam_Entry_145, SndParamRun_EDE9FC + 4140
+.set SeqMixParam_Entry_146, SndParamRun_EDE9FC + 4158
+.set SeqMixParam_Entry_147, SndParamRun_EDE9FC + 4176
+.set SeqMixParam_Entry_148, SndParamRun_EDE9FC + 4194
+.set SeqMixParam_Entry_149, SndParamRun_EDE9FC + 4212
+.set SeqMixParam_Entry_150, SndParamRun_EDE9FC + 4230
+.set SeqMixParam_Entry_151, SndParamRun_EDE9FC + 4248
+.set SeqMixParam_Entry_152, SndParamRun_EDE9FC + 4266
+.set SeqMixParam_Entry_153, SndParamRun_EDE9FC + 4284
+.set SeqMixParam_Entry_154, SndParamRun_EDE9FC + 4302
+.set SeqMixParam_Entry_155, SndParamRun_EDE9FC + 4320
+.set SeqMixParam_Entry_156, SndParamRun_EDE9FC + 4338
+.set SeqMixParam_Entry_157, SndParamRun_EDE9FC + 4356
+.set SeqMixParam_Entry_158, SndParamRun_EDE9FC + 4374
+.set SeqMixParam_Entry_159, SndParamRun_EDE9FC + 4392
+.set SeqMixParam_Entry_160, SndParamRun_EDE9FC + 4410
+.set SeqMixParam_Entry_161, SndParamRun_EDE9FC + 4428
+.set SeqMixParam_Entry_162, SndParamRun_EDE9FC + 4446
+.set SeqMixParam_Entry_163, SndParamRun_EDE9FC + 4464
+.set SeqMixParam_Entry_164, SndParamRun_EDE9FC + 4482
+.set SeqMixParam_Entry_165, SndParamRun_EDE9FC + 4500
+.set SeqMixParam_Entry_166, SndParamRun_EDE9FC + 4518
+.set SeqMixParam_Entry_167, SndParamRun_EDE9FC + 4536
+.set SeqMixParam_Entry_168, SndParamRun_EDE9FC + 4554
+.set SeqMixParam_Entry_169, SndParamRun_EDE9FC + 4572
+.set SeqMixParam_Entry_170, SndParamRun_EDE9FC + 4590
+.set SeqMixParam_Entry_171, SndParamRun_EDE9FC + 4608
+.set SeqMixParam_Entry_172, SndParamRun_EDE9FC + 4626
+.set SeqMixParam_Entry_173, SndParamRun_EDE9FC + 4644
+.set SeqMixParam_Entry_174, SndParamRun_EDE9FC + 4662
+.set SeqMixParam_Entry_175, SndParamRun_EDE9FC + 4680
+.set SeqMixParam_Entry_176, SndParamRun_EDE9FC + 4698
+.set SeqMixParam_Entry_177, SndParamRun_EDE9FC + 4716
+.set SeqMixParam_Entry_178, SndParamRun_EDE9FC + 4734
+.set SeqMixParam_Entry_179, SndParamRun_EDE9FC + 4752
+.set SeqMixParam_Entry_180, SndParamRun_EDE9FC + 4770
+.set SeqMixParam_Entry_181, SndParamRun_EDE9FC + 4788
+.set SeqMixParam_Entry_182, SndParamRun_EDE9FC + 4806
+.set SeqMixParam_Entry_183, SndParamRun_EDE9FC + 4824
+.set SeqMixParam_Entry_184, SndParamRun_EDE9FC + 4842
+.set SeqMixParam_Entry_185, SndParamRun_EDE9FC + 4860
+.set SeqMixParam_Entry_186, SndParamRun_EDE9FC + 4878
+.set SeqMixParam_Entry_187, SndParamRun_EDE9FC + 4896
+.set SeqMixParam_Entry_188, SndParamRun_EDE9FC + 4914
+.set SeqMixParam_Entry_189, SndParamRun_EDE9FC + 4932
+.set SeqMixParam_Entry_190, SndParamRun_EDE9FC + 4950
+.set SeqMixParam_Entry_191, SndParamRun_EDE9FC + 4968
+.set SeqMixParam_Entry_192, SndParamRun_EDE9FC + 4986
+.set SeqMixParam_Entry_193, SndParamRun_EDE9FC + 5004
+.set SeqMixParam_Entry_194, SndParamRun_EDE9FC + 5022
+.set SeqMixParam_Entry_195, SndParamRun_EDE9FC + 5040
+.set SeqMixParam_Entry_196, SndParamRun_EDE9FC + 5058
+.set SeqMixParam_Entry_197, SndParamRun_EDE9FC + 5076
+.set SeqMixParam_Entry_198, SndParamRun_EDE9FC + 5094
+.set SeqMixParam_Entry_199, SndParamRun_EDE9FC + 5112
+.set SeqMixParam_Entry_200, SndParamRun_EDE9FC + 5130
+.set SeqMixParam_Entry_201, SndParamRun_EDE9FC + 5148
+.set SeqMixParam_Entry_202, SndParamRun_EDE9FC + 5166
+.set SeqMixParam_Entry_203, SndParamRun_EDE9FC + 5184
+.set SeqMixParam_Entry_204, SndParamRun_EDE9FC + 5202
+.set SeqMixParam_Entry_205, SndParamRun_EDE9FC + 5220
+.set SeqMixParam_Entry_206, SndParamRun_EDE9FC + 5238
+.set SeqMixParam_Entry_207, SndParamRun_EDE9FC + 5256
+.set SeqMixParam_Entry_208, SndParamRun_EDE9FC + 5274
+.set SeqMixParam_Entry_209, SndParamRun_EDE9FC + 5292
+.set SeqMixParam_Entry_210, SndParamRun_EDE9FC + 5310
+.set SeqMixParam_Entry_211, SndParamRun_EDE9FC + 5328
+.set SeqMixParam_Entry_212, SndParamRun_EDE9FC + 5346
+.set SeqMixParam_Entry_213, SndParamRun_EDE9FC + 5364
+.set SeqMixParam_Entry_214, SndParamRun_EDE9FC + 5382
+.set SeqMixParam_Entry_215, SndParamRun_EDE9FC + 5400
+.set SeqMixParam_Entry_216, SndParamRun_EDE9FC + 5418
+.set SeqMixParam_Entry_217, SndParamRun_EDE9FC + 5436
+.set SeqMixParam_Entry_218, SndParamRun_EDE9FC + 5454
+.set SeqMixParam_Entry_219, SndParamRun_EDE9FC + 5472
+.set SeqMixParam_Entry_220, SndParamRun_EDE9FC + 5490
+.set SeqMixParam_Entry_221, SndParamRun_EDE9FC + 5508
+.set SeqMixParam_Entry_222, SndParamRun_EDE9FC + 5526
+.set SeqMixParam_Entry_223, SndParamRun_EDE9FC + 5544
+.set SeqMixParam_Entry_224, SndParamRun_EDE9FC + 5562
+.set SeqMixParam_Entry_225, SndParamRun_EDE9FC + 5580
+.set SeqMixParam_Entry_226, SndParamRun_EDE9FC + 5598
+.set SeqMixParam_Entry_227, SndParamRun_EDE9FC + 5616
+.set SeqMixParam_Entry_228, SndParamRun_EDE9FC + 5634

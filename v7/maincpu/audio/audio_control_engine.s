@@ -2673,6 +2673,7 @@ Set_LEDs:
 	calr	LED_WriteToPanel
 	ret
 	.include "ui/led_panel_write.s"
+SndParam_SetResBit0_Via028100:
 	push	xiz
 	.byte 0xf1, 0x7c, 0x8e, 0x36
 	ld	xwa, 0x00028100

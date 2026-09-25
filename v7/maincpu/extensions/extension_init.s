@@ -15,904 +15,188 @@
 ;   extension_data.s  - Extension device data tables and NAKA descriptors
 ; =============================================================================
 
+; -----------------------------------------------------------------------------
+; The 30 viewable-object tables (ViewableProc, registry slot N) and their
+; parallel resource-name tables (ResNameProc, slot N + 0x300) that
+; InitializeToshi registers lie inside NakaInst_ExtDevice_Screens
+; (ui_widgets/extension_device_screens.s, compiled from naka_extension_device.c),
+; which carries no labels at these offsets, so they are named here as offsets
+; from it.  Each table is `count` 4-byte pointers plus a NULL (the names: string
+; pointers, most of them to "").  The suffix is the title RegTitle registers
+; for the same index N below ("TT_CTMENU" for 0x40); slot 0x46 (CTPMPARA) is
+; registered with count 0 and holds only the NULL.  Offsets checked against the
+; v10 dump; the tables sit at the same addresses in v9 and v7.
+; -----------------------------------------------------------------------------
+Toshi_Viewable_NORMAL     = NakaInst_ExtDevice_Screens + 0x1002	; slot 0x001, 63 entries
+Toshi_ResName_NORMAL      = NakaInst_ExtDevice_Screens + 0x168a	; slot 0x301, 63 entries
+Toshi_Viewable_CTMENU     = NakaInst_ExtDevice_Screens + 0x1102	; slot 0x040, 9 entries
+Toshi_ResName_CTMENU      = NakaInst_ExtDevice_Screens + 0x182a	; slot 0x340, 9 entries
+Toshi_Viewable_CTINIT     = NakaInst_ExtDevice_Screens + 0x112a	; slot 0x041, 17 entries
+Toshi_ResName_CTINIT      = NakaInst_ExtDevice_Screens + 0x1870	; slot 0x341, 17 entries
+Toshi_Viewable_CTFSWAS    = NakaInst_ExtDevice_Screens + 0x1172	; slot 0x042, 6 entries
+Toshi_ResName_CTFSWAS     = NakaInst_ExtDevice_Screens + 0x18f6	; slot 0x342, 6 entries
+Toshi_Viewable_CTTOUCH    = NakaInst_ExtDevice_Screens + 0x118e	; slot 0x043, 8 entries
+Toshi_ResName_CTTOUCH     = NakaInst_ExtDevice_Screens + 0x192a	; slot 0x343, 8 entries
+Toshi_Viewable_MSAMODE    = NakaInst_ExtDevice_Screens + 0x11b2	; slot 0x044, 19 entries
+Toshi_ResName_MSAMODE     = NakaInst_ExtDevice_Screens + 0x196a	; slot 0x344, 19 entries
+Toshi_Viewable_CTPMMD     = NakaInst_ExtDevice_Screens + 0x1202	; slot 0x045, 19 entries
+Toshi_ResName_CTPMMD      = NakaInst_ExtDevice_Screens + 0x19e2	; slot 0x345, 19 entries
+Toshi_Viewable_CTPMPARA   = NakaInst_ExtDevice_Screens + 0x1252	; slot 0x046, 0 entries
+Toshi_ResName_CTPMPARA    = NakaInst_ExtDevice_Screens + 0x1a62	; slot 0x346, 0 entries
+Toshi_Viewable_CTSYSTEM   = NakaInst_ExtDevice_Screens + 0x1256	; slot 0x047, 7 entries
+Toshi_ResName_CTSYSTEM    = NakaInst_ExtDevice_Screens + 0x1a68	; slot 0x347, 7 entries
+Toshi_Viewable_CTWALLSET  = NakaInst_ExtDevice_Screens + 0x1276	; slot 0x048, 25 entries
+Toshi_ResName_CTWALLSET   = NakaInst_ExtDevice_Screens + 0x1aa2	; slot 0x348, 25 entries
+Toshi_Viewable_ONETCH     = NakaInst_ExtDevice_Screens + 0x12de	; slot 0x0c0, 4 entries
+Toshi_ResName_ONETCH      = NakaInst_ExtDevice_Screens + 0x1b56	; slot 0x3c0, 4 entries
+Toshi_Viewable_MUSICSTYL  = NakaInst_ExtDevice_Screens + 0x12f2	; slot 0x0c1, 4 entries
+Toshi_ResName_MUSICSTYL   = NakaInst_ExtDevice_Screens + 0x1b7a	; slot 0x3c1, 4 entries
+Toshi_Viewable_MSCTSEL    = NakaInst_ExtDevice_Screens + 0x1306	; slot 0x0c2, 20 entries
+Toshi_ResName_MSCTSEL     = NakaInst_ExtDevice_Screens + 0x1ba0	; slot 0x3c2, 20 entries
+Toshi_Viewable_MSSCTSEL   = NakaInst_ExtDevice_Screens + 0x135a	; slot 0x0c3, 17 entries
+Toshi_ResName_MSSCTSEL    = NakaInst_ExtDevice_Screens + 0x1c30	; slot 0x3c3, 17 entries
+Toshi_Viewable_MSSONGLIST = NakaInst_ExtDevice_Screens + 0x13a2	; slot 0x0c4, 8 entries
+Toshi_ResName_MSSONGLIST  = NakaInst_ExtDevice_Screens + 0x1cac	; slot 0x3c4, 8 entries
+Toshi_Viewable_MSALPSEL   = NakaInst_ExtDevice_Screens + 0x13c6	; slot 0x0c5, 7 entries
+Toshi_ResName_MSALPSEL    = NakaInst_ExtDevice_Screens + 0x1cec	; slot 0x3c5, 7 entries
+Toshi_Viewable_PMBKSEL    = NakaInst_ExtDevice_Screens + 0x13e6	; slot 0x0d0, 6 entries
+Toshi_ResName_PMBKSEL     = NakaInst_ExtDevice_Screens + 0x1d24	; slot 0x3d0, 6 entries
+Toshi_Viewable_PMVIEW     = NakaInst_ExtDevice_Screens + 0x1402	; slot 0x0d1, 13 entries
+Toshi_ResName_PMVIEW      = NakaInst_ExtDevice_Screens + 0x1d54	; slot 0x3d1, 13 entries
+Toshi_Viewable_PMNAME     = NakaInst_ExtDevice_Screens + 0x143a	; slot 0x0d2, 7 entries
+Toshi_ResName_PMNAME      = NakaInst_ExtDevice_Screens + 0x1dae	; slot 0x3d2, 7 entries
+Toshi_Viewable_PMBKNAME   = NakaInst_ExtDevice_Screens + 0x145a	; slot 0x0d3, 7 entries
+Toshi_ResName_PMBKNAME    = NakaInst_ExtDevice_Screens + 0x1de4	; slot 0x3d3, 7 entries
+Toshi_Viewable_SVARI      = NakaInst_ExtDevice_Screens + 0x147a	; slot 0x0e8, 2 entries
+Toshi_ResName_SVARI       = NakaInst_ExtDevice_Screens + 0x1e1c	; slot 0x3e8, 2 entries
+Toshi_Viewable_RVARI      = NakaInst_ExtDevice_Screens + 0x1486	; slot 0x0e9, 3 entries
+Toshi_ResName_RVARI       = NakaInst_ExtDevice_Screens + 0x1e32	; slot 0x3e9, 3 entries
+Toshi_Viewable_TEST1      = NakaInst_ExtDevice_Screens + 0x1496	; slot 0x0f4, 14 entries
+Toshi_ResName_TEST1       = NakaInst_ExtDevice_Screens + 0x1e4e	; slot 0x3f4, 14 entries
+Toshi_Viewable_TEST2      = NakaInst_ExtDevice_Screens + 0x14d2	; slot 0x0f5, 23 entries
+Toshi_ResName_TEST2       = NakaInst_ExtDevice_Screens + 0x1eb6	; slot 0x3f5, 23 entries
+Toshi_Viewable_TEST3      = NakaInst_ExtDevice_Screens + 0x1532	; slot 0x0f6, 1 entries
+Toshi_ResName_TEST3       = NakaInst_ExtDevice_Screens + 0x1f6a	; slot 0x3f6, 1 entries
+Toshi_Viewable_TEST4      = NakaInst_ExtDevice_Screens + 0x153a	; slot 0x0f7, 3 entries
+Toshi_ResName_TEST4       = NakaInst_ExtDevice_Screens + 0x1f7a	; slot 0x3f7, 3 entries
+Toshi_Viewable_TEST5      = NakaInst_ExtDevice_Screens + 0x154a	; slot 0x0f8, 67 entries
+Toshi_ResName_TEST5       = NakaInst_ExtDevice_Screens + 0x1f96	; slot 0x3f8, 67 entries
+Toshi_Viewable_TEST6      = NakaInst_ExtDevice_Screens + 0x165a	; slot 0x0f9, 9 entries
+Toshi_ResName_TEST6       = NakaInst_ExtDevice_Screens + 0x2156	; slot 0x3f9, 9 entries
+Toshi_Viewable_EXT        = NakaInst_ExtDevice_Screens + 0x1682	; slot 0x0fb, 1 entries
+Toshi_ResName_EXT         = NakaInst_ExtDevice_Screens + 0x21a2	; slot 0x3fb, 1 entries
+
 InitializeToshi:
-	lda xsp, (xsp - 0x0e)
-	lda XBC, (XSP)
-	ld XWA,0x01600004
-	ld (XBC),XWA
-	lda xwa, (ClassProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xed2d02:24)
-	ld (XBC+0x08),WA
-	lda xwa, (ExtData_NormScreenProc_Ptr:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0162
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000c
-	ld (XBC),XWA
-	lda xwa, (ResEventProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xed2d92:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xed2d04:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01c2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000d
-	ld (XBC),XWA
-	lda xwa, (ResMethodProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xed2f64:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xed2d94:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01e2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002a
-	lda xwa, (KeyScaleNoteStr_G_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0122
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002a
-	lda xwa, (NoteNameStr_Table_5:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0422
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (MethodNameStr_MT_SvariIni_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0102
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (NoteNameStr_Table_7:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0402
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0014
-	lda xwa, (ProcNameStr_NormScreenProc_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0142
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0014
-	lda xwa, (NoteNameStr_Table_8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0442
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x003f
-	lda xwa, (0xed77ce:24)
-	ld (XBC+0x0a),XWA
-	ld wa, 1:i3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x003f
-	lda xwa, (0xed7e56:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0301
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0009
-	lda xwa, (0xed78ce:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0040
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0009
-	lda xwa, (0xed7ff6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0340
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xed78f6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0041
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xed803c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0341
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xed793e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0042
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xed80c2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0342
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xed795a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0043
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xed80f6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0343
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xed797e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0044
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xed8136:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0344
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xed79ce:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0045
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xed81ae:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0345
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xed7a1e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0046
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xed822e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0346
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed7a22:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0047
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed8234:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0347
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xed7a42:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0048
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xed826e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0348
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xed7aaa:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00c0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xed8322:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03c0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xed7abe:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00c1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xed8346:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03c1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0014
-	lda xwa, (0xed7ad2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00c2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0014
-	lda xwa, (0xed836c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03c2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xed7b26:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00c3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xed83fc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03c3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xed7b6e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00c4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xed8478:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03c4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed7b92:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00c5
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed84b8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03c5
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xed7bb2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00d0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xed84f0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03d0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000d
-	lda xwa, (0xed7bce:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00d1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000d
-	lda xwa, (0xed8520:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03d1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed7c06:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00d2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed857a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03d2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed7c26:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00d3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xed85b0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03d3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xed7c46:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xed85e8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xed7c52:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xed85fe:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000e
-	lda xwa, (0xed7c62:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00f4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000e
-	lda xwa, (0xed861a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03f4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0017
-	lda xwa, (0xed7c9e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00f5
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0017
-	lda xwa, (0xed8682:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03f5
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xed7cfe:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00f6
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xed8736:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03f6
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xed7d06:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00f7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xed8746:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03f7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0043
-	lda xwa, (0xed7d16:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00f8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0043
-	lda xwa, (0xed8762:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03f8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0009
-	lda xwa, (0xed7e26:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00f9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0009
-	lda xwa, (0xed8922:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03f9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xed7e4e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00fb
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xed896e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03fb
-	call RegisterObjectTable
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x897c
-	ld xwa, 1:i3
-	ld XBC,0x01200000
-	ld XDE,0x01a00001
-	call RegisterMode
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8986
-	ld xwa, 4:i3
-	ld XBC,0x01200000
-	ld XDE,0x01a00040
-	call RegisterMode
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8992
-	ld XWA,0x00000012
-	ld XBC,0x01200000
-	ld XDE,0x01a000c0
-	call RegisterMode
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x899a
-	ld xwa, 1:i3
-	ld XBC,0x01200000
-	ld XDE,0x00010001
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89a4
-	ld XWA,0x00000040
-	ld XBC,0x01200000
-	ld XDE,0x00400000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89ae
-	ld XWA,0x00000041
-	ld XBC,0x0142000b
-	ld XDE,0x00410000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89b8
-	ld XWA,0x00000042
-	ld XBC,0x0142000c
-	ld XDE,0x00420000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89c4
-	ld XWA,0x00000043
-	ld XBC,0x01200000
-	ld XDE,0x00430000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89d0
-	ld XWA,0x00000044
-	ld XBC,0x01200000
-	ld XDE,0x00440000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89dc
-	ld XWA,0x00000045
-	ld XBC,0x01200000
-	ld XDE,0x00450000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89e6
-	ld XWA,0x00000046
-	ld XBC,0x01200000
-	ld XDE,0x00410000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89f2
-	ld XWA,0x00000047
-	ld XBC,0x01200000
-	ld XDE,0x00470000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x89fe
-	ld XWA,0x00000048
-	ld XBC,0x01200000
-	ld XDE,0x00480002
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a0c
-	ld XWA,0x000000c0
-	ld XBC,0x01420009
-	ld XDE,0x00c00000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a16
-	ld XWA,0x000000c1
-	ld XBC,0x01200000
-	ld XDE,0x00c10000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a24
-	ld XWA,0x000000c2
-	ld XBC,0x01200000
-	ld XDE,0x00c20000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a30
-	ld XWA,0x000000c3
-	ld XBC,0x01200000
-	ld XDE,0x00c30000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a3c
-	ld XWA,0x000000c4
-	ld XBC,0x01200000
-	ld XDE,0x00c40000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a4a
-	ld XWA,0x000000c5
-	ld XBC,0x01200000
-	ld XDE,0x00c50000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a56
-	ld XWA,0x000000d0
-	ld XBC,0x01200000
-	ld XDE,0x00d00000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a62
-	ld XWA,0x000000d1
-	ld XBC,0x01200000
-	ld XDE,0x00d10000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a6c
-	ld XWA,0x000000d2
-	ld XBC,0x01200000
-	ld XDE,0x00d20000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a76
-	ld XWA,0x000000d3
-	ld XBC,0x01200000
-	ld XDE,0x00d30000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a82
-	ld XWA,0x000000e8
-	ld XBC,0x01200000
-	ld XDE,0x00e80000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a8c
-	ld XWA,0x000000e9
-	ld XBC,0x01200000
-	ld XDE,0x00e90000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8a96
-	ld XWA,0x000000f4
-	ld XBC,0x01200000
-	ld XDE,0x00f40000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8aa0
-	ld XWA,0x000000f5
-	ld XBC,0x01420010
-	ld XDE,0x00f50000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8aaa
-	ld XWA,0x000000f6
-	ld XBC,0x01420011
-	ld XDE,0x00f60000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8ab4
-	ld XWA,0x000000f7
-	ld XBC,0x01420012
-	ld XDE,0x00f70000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8abe
-	ld XWA,0x000000f8
-	ld XBC,0x01200000
-	ld XDE,0x00f80000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8ac8
-	ld XWA,0x000000f9
-	ld XBC,0x01420013
-	ld XDE,0x00f90000
-	call RegisterTitle
-	pushw 0x0002
-	pushw 0x00ed
-	pushw 0x8ad2
-	ld XWA,0x000000fb
-	ld XBC,0x01200000
-	ld XDE,0x00fb0000
-	call RegisterTitle
-	lda xsp, (xsp + 0x0e)
+	lda xsp, (xsp - 14)
+
+	RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+	RegObjTable 0x160000c, ResEventProc, Toshi_ResEvent_Count, Toshi_ResEvent_Table, 0x1c2
+	RegObjTable 0x160000d, ResMethodProc, Toshi_ResMethod_Count, Toshi_ResMethod_Table, 0x1e2
+	RegObjTabl 0x1600002, ApFunctionProc, 0x2a, Toshi_ApFunction_Table, 0x122
+	RegObjTabl 0x1600002, ApFunctionProc, 0x2a, Toshi_ApFunctionName_Table, 0x422
+	RegObjTabl 0x1600001, FunctionProc, 0x1c, Toshi_Function_Table, 0x102
+	RegObjTabl 0x1600001, FunctionProc, 0x1c, Toshi_FunctionName_Table, 0x402
+	RegObjTabl 0x1600003, MainFunctionProc, 0x14, Toshi_MainFunction_Table, 0x142
+	RegObjTabl 0x1600003, MainFunctionProc, 0x14, Toshi_MainFunctionName_Table, 0x442
+	RegObjTabl 0x1600010, ViewableProc, 0x3f, Toshi_Viewable_NORMAL, 0x1
+	RegObjTabl 0x160000f, ResNameProc, 0x3f, Toshi_ResName_NORMAL, 0x301
+	RegObjTabl 0x1600010, ViewableProc, 0x9, Toshi_Viewable_CTMENU, 0x40
+	RegObjTabl 0x160000f, ResNameProc, 0x9, Toshi_ResName_CTMENU, 0x340
+	RegObjTabl 0x1600010, ViewableProc, 0x11, Toshi_Viewable_CTINIT, 0x41
+	RegObjTabl 0x160000f, ResNameProc, 0x11, Toshi_ResName_CTINIT, 0x341
+	RegObjTabl 0x1600010, ViewableProc, 0x6, Toshi_Viewable_CTFSWAS, 0x42
+	RegObjTabl 0x160000f, ResNameProc, 0x6, Toshi_ResName_CTFSWAS, 0x342
+	RegObjTabl 0x1600010, ViewableProc, 0x8, Toshi_Viewable_CTTOUCH, 0x43
+	RegObjTabl 0x160000f, ResNameProc, 0x8, Toshi_ResName_CTTOUCH, 0x343
+	RegObjTabl 0x1600010, ViewableProc, 0x13, Toshi_Viewable_MSAMODE, 0x44
+	RegObjTabl 0x160000f, ResNameProc, 0x13, Toshi_ResName_MSAMODE, 0x344
+	RegObjTabl 0x1600010, ViewableProc, 0x13, Toshi_Viewable_CTPMMD, 0x45
+	RegObjTabl 0x160000f, ResNameProc, 0x13, Toshi_ResName_CTPMMD, 0x345
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Toshi_Viewable_CTPMPARA, 0x46
+	RegObjTabl 0x160000f, ResNameProc, 0x0, Toshi_ResName_CTPMPARA, 0x346
+	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_CTSYSTEM, 0x47
+	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_CTSYSTEM, 0x347
+	RegObjTabl 0x1600010, ViewableProc, 0x19, Toshi_Viewable_CTWALLSET, 0x48
+	RegObjTabl 0x160000f, ResNameProc, 0x19, Toshi_ResName_CTWALLSET, 0x348
+	RegObjTabl 0x1600010, ViewableProc, 0x4, Toshi_Viewable_ONETCH, 0xc0
+	RegObjTabl 0x160000f, ResNameProc, 0x4, Toshi_ResName_ONETCH, 0x3c0
+	RegObjTabl 0x1600010, ViewableProc, 0x4, Toshi_Viewable_MUSICSTYL, 0xc1
+	RegObjTabl 0x160000f, ResNameProc, 0x4, Toshi_ResName_MUSICSTYL, 0x3c1
+	RegObjTabl 0x1600010, ViewableProc, 0x14, Toshi_Viewable_MSCTSEL, 0xc2
+	RegObjTabl 0x160000f, ResNameProc, 0x14, Toshi_ResName_MSCTSEL, 0x3c2
+	RegObjTabl 0x1600010, ViewableProc, 0x11, Toshi_Viewable_MSSCTSEL, 0xc3
+	RegObjTabl 0x160000f, ResNameProc, 0x11, Toshi_ResName_MSSCTSEL, 0x3c3
+	RegObjTabl 0x1600010, ViewableProc, 0x8, Toshi_Viewable_MSSONGLIST, 0xc4
+	RegObjTabl 0x160000f, ResNameProc, 0x8, Toshi_ResName_MSSONGLIST, 0x3c4
+	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_MSALPSEL, 0xc5
+	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_MSALPSEL, 0x3c5
+	RegObjTabl 0x1600010, ViewableProc, 0x6, Toshi_Viewable_PMBKSEL, 0xd0
+	RegObjTabl 0x160000f, ResNameProc, 0x6, Toshi_ResName_PMBKSEL, 0x3d0
+	RegObjTabl 0x1600010, ViewableProc, 0xd, Toshi_Viewable_PMVIEW, 0xd1
+	RegObjTabl 0x160000f, ResNameProc, 0xd, Toshi_ResName_PMVIEW, 0x3d1
+	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_PMNAME, 0xd2
+	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_PMNAME, 0x3d2
+	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_PMBKNAME, 0xd3
+	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_PMBKNAME, 0x3d3
+	RegObjTabl 0x1600010, ViewableProc, 0x2, Toshi_Viewable_SVARI, 0xe8
+	RegObjTabl 0x160000f, ResNameProc, 0x2, Toshi_ResName_SVARI, 0x3e8
+	RegObjTabl 0x1600010, ViewableProc, 0x3, Toshi_Viewable_RVARI, 0xe9
+	RegObjTabl 0x160000f, ResNameProc, 0x3, Toshi_ResName_RVARI, 0x3e9
+	RegObjTabl 0x1600010, ViewableProc, 0xe, Toshi_Viewable_TEST1, 0xf4
+	RegObjTabl 0x160000f, ResNameProc, 0xe, Toshi_ResName_TEST1, 0x3f4
+	RegObjTabl 0x1600010, ViewableProc, 0x17, Toshi_Viewable_TEST2, 0xf5
+	RegObjTabl 0x160000f, ResNameProc, 0x17, Toshi_ResName_TEST2, 0x3f5
+	RegObjTabl 0x1600010, ViewableProc, 0x1, Toshi_Viewable_TEST3, 0xf6
+	RegObjTabl 0x160000f, ResNameProc, 0x1, Toshi_ResName_TEST3, 0x3f6
+	RegObjTabl 0x1600010, ViewableProc, 0x3, Toshi_Viewable_TEST4, 0xf7
+	RegObjTabl 0x160000f, ResNameProc, 0x3, Toshi_ResName_TEST4, 0x3f7
+	RegObjTabl 0x1600010, ViewableProc, 0x43, Toshi_Viewable_TEST5, 0xf8
+	RegObjTabl 0x160000f, ResNameProc, 0x43, Toshi_ResName_TEST5, 0x3f8
+	RegObjTabl 0x1600010, ViewableProc, 0x9, Toshi_Viewable_TEST6, 0xf9
+	RegObjTabl 0x160000f, ResNameProc, 0x9, Toshi_ResName_TEST6, 0x3f9
+	RegObjTabl 0x1600010, ViewableProc, 0x1, Toshi_Viewable_EXT, 0xfb
+	RegObjTabl 0x160000f, ResNameProc, 0x1, Toshi_ResName_EXT, 0x3fb
+
+	; RegMode / RegTitle push 0x0002 and then the 32-bit address of a name
+	; string as two words (high 0x00ed, then low), because the macros take the
+	; halves separately -- the assembler cannot split a symbol into halves, so
+	; each name is given in a comment.  All the strings are in
+	; NakaInst_ExtDevice_Screens.  RegisterMode (ui/ui_widget_defs.s) stores
+	; {XBC, XDE, word 2, name} in a 14-byte slot of the mode table at RAM
+	; 0x328FC indexed by XWA; RegisterTitle stores the same four fields in a
+	; 22-byte slot of the title table at RAM 0x32ABC, again indexed by XWA --
+	; the index each Toshi_Viewable_* table above is registered under.
+	RegMode 0x2, 0xed, 0x897c, 0x1, 0x1200000, 0x1a00001	; "MD_NORMAL"
+	RegMode 0x2, 0xed, 0x8986, 0x4, 0x1200000, 0x1a00040	; "MD_CONTROL"
+	RegMode 0x2, 0xed, 0x8992, 0x12, 0x1200000, 0x1a000c0	; "MD_OTP"
+	RegTitle 0x2, 0xed, 0x899a, 0x1, 0x1200000, 0x10001	; "TT_NORMAL"
+	RegTitle 0x2, 0xed, 0x89a4, 0x40, 0x1200000, 0x400000	; "TT_CTMENU"
+	RegTitle 0x2, 0xed, 0x89ae, 0x41, 0x142000b, 0x410000	; "TT_CTINIT"
+	RegTitle 0x2, 0xed, 0x89b8, 0x42, 0x142000c, 0x420000	; "TT_CTFSWAS"
+	RegTitle 0x2, 0xed, 0x89c4, 0x43, 0x1200000, 0x430000	; "TT_CTTOUCH"
+	RegTitle 0x2, 0xed, 0x89d0, 0x44, 0x1200000, 0x440000	; "TT_MSAMODE"
+	RegTitle 0x2, 0xed, 0x89dc, 0x45, 0x1200000, 0x450000	; "TT_CTPMMD"
+	RegTitle 0x2, 0xed, 0x89e6, 0x46, 0x1200000, 0x410000	; "TT_CTPMPARA"
+	RegTitle 0x2, 0xed, 0x89f2, 0x47, 0x1200000, 0x470000	; "TT_CTSYSTEM"
+	RegTitle 0x2, 0xed, 0x89fe, 0x48, 0x1200000, 0x480002	; "TT_CTWALLSET"
+	RegTitle 0x2, 0xed, 0x8a0c, 0xc0, 0x1420009, 0xc00000	; "TT_ONETCH"
+	RegTitle 0x2, 0xed, 0x8a16, 0xc1, 0x1200000, 0xc10000	; "TT_MUSICSTYL"
+	RegTitle 0x2, 0xed, 0x8a24, 0xc2, 0x1200000, 0xc20000	; "TT_MSCTSEL"
+	RegTitle 0x2, 0xed, 0x8a30, 0xc3, 0x1200000, 0xc30000	; "TT_MSSCTSEL"
+	RegTitle 0x2, 0xed, 0x8a3c, 0xc4, 0x1200000, 0xc40000	; "TT_MSSONGLIST"
+	RegTitle 0x2, 0xed, 0x8a4a, 0xc5, 0x1200000, 0xc50000	; "TT_MSALPSEL"
+	RegTitle 0x2, 0xed, 0x8a56, 0xd0, 0x1200000, 0xd00000	; "TT_PMBKSEL"
+	RegTitle 0x2, 0xed, 0x8a62, 0xd1, 0x1200000, 0xd10000	; "TT_PMVIEW"
+	RegTitle 0x2, 0xed, 0x8a6c, 0xd2, 0x1200000, 0xd20000	; "TT_PMNAME"
+	RegTitle 0x2, 0xed, 0x8a76, 0xd3, 0x1200000, 0xd30000	; "TT_PMBKNAME"
+	RegTitle 0x2, 0xed, 0x8a82, 0xe8, 0x1200000, 0xe80000	; "TT_SVARI"
+	RegTitle 0x2, 0xed, 0x8a8c, 0xe9, 0x1200000, 0xe90000	; "TT_RVARI"
+	RegTitle 0x2, 0xed, 0x8a96, 0xf4, 0x1200000, 0xf40000	; name "TT_TEST1" = 0xED8A96, NakaInst_ExtDevice_Screens + 0x22CA
+	RegTitle 0x2, 0xed, 0x8aa0, 0xf5, 0x1420010, 0xf50000	; name "TT_TEST2" = 0xED8AA0, NakaInst_ExtDevice_Screens + 0x22D4
+	RegTitle 0x2, 0xed, 0x8aaa, 0xf6, 0x1420011, 0xf60000	; name "TT_TEST3" = 0xED8AAA, NakaInst_ExtDevice_Screens + 0x22DE
+	RegTitle 0x2, 0xed, 0x8ab4, 0xf7, 0x1420012, 0xf70000	; name "TT_TEST4" = 0xED8AB4, NakaInst_ExtDevice_Screens + 0x22E8
+	RegTitle 0x2, 0xed, 0x8abe, 0xf8, 0x1200000, 0xf80000	; name "TT_TEST5" = 0xED8ABE, NakaInst_ExtDevice_Screens + 0x22F2
+	RegTitle 0x2, 0xed, 0x8ac8, 0xf9, 0x1420013, 0xf90000	; name "TT_TEST6" = 0xED8AC8, NakaInst_ExtDevice_Screens + 0x22FC
+	RegTitle 0x2, 0xed, 0x8ad2, 0xfb, 0x1200000, 0xfb0000	; "TT_EXT"
+	lda xsp, (xsp + 14)
 	ret
