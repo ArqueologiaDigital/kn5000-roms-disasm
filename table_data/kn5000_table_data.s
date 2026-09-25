@@ -82,15 +82,20 @@
 ; =============================================================================
 ; Subcpu boot ROM handler addresses (cross-ROM references for IVT)
 ; =============================================================================
-.equ BOOT_RESET_HANDLER, 0x00FFFEE0
-.equ BOOT_EMPTY_HANDLER, 0x00FFB705
-.equ BOOT_NMI_HANDLER, 0x00FFB7FB
-.equ BOOT_INT4_HANDLER, 0x00FFEAB2
-.equ BOOT_INTA_HANDLER, 0x00FFF229
-.equ BOOT_INTT1_HANDLER, 0x00FFB7F2
-.equ BOOT_INTRX1_HANDLER, 0x00FFF2D0
-.equ BOOT_INTTX1_HANDLER, 0x00FFF2AE
-.equ BOOT_INTTC3_HANDLER, 0x00FFEA9D
+; CORRECTED 2026-09-25: these are not sub-CPU boot ROM addresses.  Each value
+; is the boot-time alias (ROM label + 0x600000) of a handler in THIS ROM --
+; e.g. 0xFFFEE0 = RESET_HANDLER at 0x9FFEE0 -- which the IVT at 0x9FFF00
+; must hold because the CPU fetches it while this ROM is mapped at 0xE00000.
+; Now written symbolically; values unchanged (byte gate).
+.equ BOOT_RESET_HANDLER, RESET_HANDLER + 0x600000
+.equ BOOT_EMPTY_HANDLER, Empty_Handler + 0x600000
+.equ BOOT_NMI_HANDLER, BootCode_NMI_Handler + 0x600000
+.equ BOOT_INT4_HANDLER, Handler_INT4 + 0x600000
+.equ BOOT_INTA_HANDLER, Handler_INTA + 0x600000
+.equ BOOT_INTT1_HANDLER, BootCode_INTT1_Handler + 0x600000
+.equ BOOT_INTRX1_HANDLER, Handler_INTRX1 + 0x600000
+.equ BOOT_INTTX1_HANDLER, Handler_INTTX1 + 0x600000
+.equ BOOT_INTTC3_HANDLER, BootTimer_InterruptHandler + 0x600000
 
 ; Program-ROM fixed entry stubs the bootloader jumps to once the program ROM
 ; is mapped (cross-ROM).  Each is a 4-byte `jp` at the same address in v7, v9
