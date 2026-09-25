@@ -162236,7 +162236,11 @@ sub_F6EC43_Return:
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0C8A) (0x0E02) (0x0E4F) (0x12F6) (0x2070) (0x207B) (0x207E)
 ;          (0x20A9) (0x212E) (0x215E) +3 more  |  0x603422
-; Calls:   T_F409F8 T_F409F4 sub_F6F05E
+; Calls:   T_F409F8 T_F409F4 OldCopy_SongStore_LoadSongHeaderToDisplay
+; ⚠ CORRECTED 2026-09-25: this routine ends with the `ret` at 0xF6EC9F (the
+;   first byte of the 0x0E fill that its two jumps target).  The `Calls:`
+;   and part of the `Touches:` above counted 0xF6F000-0xF6F3FF, which is an
+;   older build's copy of another module (banner there).
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -162277,53 +162281,79 @@ sub_F6EC6A_Join2:
 
 	.fill	865, 1, 0x0E	; F6EC9F-F6EFFF  `ret` padding (asserted pure 0x0E, and maximal)
 
-	jr	sub_F6EC6A_Join3	; F6F000  jr T,0xf6f004
-	jr	sub_F6EC6A_Join4	; F6F002  jr T,0xf6f01f
-sub_F6EC6A_Join3:
+; ==========================================================================
+; 0xF6F000-0xF6F3FF -- AN OLDER BUILD'S COPY OF THE MODULE AT 0xF7AA00-0xF7ADFF
+;   Byte for byte the live module this build enters through the routine-
+;   directory slots T_F428B0.. (sub_F7AA00, sub_F7AA02, sub_F7AA29,
+;   SongStore_LoadSongHeaderToDisplay, sub_F7AB3F, sub_F7AB9C ...), 0xBA00
+;   lower, except at the nine bytes relocation changes: four `call`s inside
+;   the block read the live target - 0xBA00, and the `calr` at 0xF6F3E4 calls
+;   0xF7127B where the live copy calls sub_F7CCDB (0xBA60 higher -- that
+;   routine moved 0x60 further between the builds).  It starts on the 4 KB
+;   boundary after 0x0E fill (the live copy is preceded by fill too) and ends
+;   on the 1 KB boundary 0xF6F400, where this build's sub_F6F400 cuts the old
+;   copy's last instruction after 4 of its 5 bytes.  Nothing outside these
+;   1,024 bytes names an address in them: DEAD in this build.  The same
+;   phenomenon as OldBuild_DLHandlerTables_Tail (0xF0ED50) and
+;   OldBuild2_ValueGlyph_* (0xF17A5F).
+;   Labels are `OldCopy_<live label>` for an entry, `OldCopy_<live address>`
+;   for a branch target; a branch to outside the block is spelled
+;   `<live target> - <delta>`, since what sits at the old address now is
+;   unrelated.  notes/promb-2026-09-25/old_module_copy_f6f000.py checks all of
+;   it.
+; ==========================================================================
+OldCopy_sub_F7AA00:
+	jr	OldCopy_F7AA04	; F6F000  jr T,0xf6f004
+OldCopy_sub_F7AA02:
+	jr	OldCopy_F7AA1F	; F6F002  jr T,0xf6f01f
+OldCopy_F7AA04:
 	call	T_F409F8	; F6F004  call 0xf409f8
 	ld	(8318:16), 0	; F6F008  ld (0x207e),0x00
 	ldw	(8542:16), 0	; F6F00D  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F6F013  or (0x212e),0x0100
 	m_or_mi8 MB16, 0x34bb, 0x04	; F6F019  or (0x34bb),0x04
 	ret	; F6F01E  ret
-sub_F6EC6A_Join4:
+OldCopy_F7AA1F:
 	call	T_F409F4	; F6F01F  call 0xf409f4
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F6F023  and (0x34bb),0xfb
 	ret	; F6F028  ret
+OldCopy_sub_F7AA29:
 	m_cp_mi8 MB16, 0x207b, 0x1b	; F6F029  cp (0x207b),0x1b
-	jr	z, sub_F6EC6A_Skip3	; F6F02E  jr Z,0xf6f049
+	jr	z, OldCopy_F7AA49	; F6F02E  jr Z,0xf6f049
 	ld	(10368:16), 255	; F6F030  ld (0x2880),0xff
 	ld	a, (13834:16)	; F6F035  ld A,(0x360a)
 	ld	(3586:16), a	; F6F039  ld (0x0e02),A
 	inc	1, a	; F6F03D  inc 1,A
 	ld	(4854:16), a	; F6F03F  ld (0x12f6),A
-	call	sub_F6F05E	; F6F043  call 0xf6f05e
-	jr	sub_F6EC6A_Return	; F6F047  jr T,0xf6f05d
-sub_F6EC6A_Skip3:
+	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F043  call 0xf6f05e
+	jr	OldCopy_F7AA5D	; F6F047  jr T,0xf6f05d
+OldCopy_F7AA49:
 	m_cp_mi8 MB16, 0x2880, 0x23	; F6F049  cp (0x2880),0x23
-	jr	nz, sub_F6EC6A_Return	; F6F04E  jr NZ,0xf6f05d
+	jr	nz, OldCopy_F7AA5D	; F6F04E  jr NZ,0xf6f05d
 	ldw	(8304:16), 513	; F6F050  ld (0x2070),0x0201
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F6F056  and (0x20a9),0xfe
-	jr	sub_F6EC6A_Return	; F6F05B  jr T,0xf6f05d
-sub_F6EC6A_Return:
+	jr	OldCopy_F7AA5D	; F6F05B  jr T,0xf6f05d
+OldCopy_F7AA5D:
 	ret	; F6F05D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6F05E
+; OldCopy_SongStore_LoadSongHeaderToDisplay
 ; Called from: in-module: 0xF6F043 0xF6F0AA 0xF6F0D8
 ; Touches: (0x0D4A) (0x0E02) (0x12F6) (0x2070) (0x2071) (0x2075) (0x207E)
 ;          (0x2880) (0x3010) (0x360A) +1 more  |  0x610000
-; Calls:   sub_F6F05E T_F426E0 sub_F6F13F
+; Calls:   OldCopy_SongStore_LoadSongHeaderToDisplay T_F426E0 OldCopy_sub_F7AB3F
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
 ;                  decodes is still a real instruction.  0xF6F05E is an
 ;                  instruction boundary of this transcription, re-asserted
 ;                  on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ⚠ ANSWERED 2026-09-25: the older build's copy of SongStore_LoadSongHeaderToDisplay
+;   (0xF7AA5E); was `sub_F6F05E`, a name that
+;   was the address.  See the banner at 0xF6F000: its callers are inside
+;   that copy, which is dead here.
 ; --------------------------------------------------------------------------
-sub_F6F05E:
+OldCopy_SongStore_LoadSongHeaderToDisplay:
 	xor	xbc, xbc	; F6F05E  xor XBC,XBC
 	xor	xwa, xwa	; F6F060  xor XWA,XWA
 	ld	a, (3586:16)	; F6F062  ld A,(0x0e02)
@@ -162338,71 +162368,76 @@ sub_F6F05E:
 	ldw	bc, 6	; F6F082  ld BC,0x0006
 	ldir85	; F6F085  ldir
 	ret	; F6F087  ret
+OldCopy_sub_F7AA88:
 	ret	; F6F088  ret
+OldCopy_sub_F7AA89:
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F089  cp (0x207e),0x01
-	jr	z, sub_F6F05E_Return	; F6F08E  jr Z,0xf6f0ae
+	jr	z, OldCopy_F7AAAE	; F6F08E  jr Z,0xf6f0ae
 	m_or_mi8 MB16, 0x2075, 0x09	; F6F090  or (0x2075),0x09
 	ld	a, (3586:16)	; F6F095  ld A,(0x0e02)
 	cp	a, 10	; F6F099  cp A,0x0a
-	jr	z, sub_F6F05E_Return	; F6F09C  jr Z,0xf6f0ae
+	jr	z, OldCopy_F7AAAE	; F6F09C  jr Z,0xf6f0ae
 	inc	1, a	; F6F09E  inc 1,A
 	ld	(3586:16), a	; F6F0A0  ld (0x0e02),A
 	inc	1, a	; F6F0A4  inc 1,A
 	ld	(4854:16), a	; F6F0A6  ld (0x12f6),A
-	call	sub_F6F05E	; F6F0AA  call 0xf6f05e
-sub_F6F05E_Return:
+	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F0AA  call 0xf6f05e
+OldCopy_F7AAAE:
 	ret	; F6F0AE  ret
+OldCopy_sub_F7AAAF:
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0AF  cp (0x207e),0x01
-	jr	z, sub_F6F05E_Return2	; F6F0B4  jr Z,0xf6f0dc
+	jr	z, OldCopy_F7AADC	; F6F0B4  jr Z,0xf6f0dc
 	m_or_mi8 MB16, 0x2075, 0x09	; F6F0B6  or (0x2075),0x09
 	ld	a, (3586:16)	; F6F0BB  ld A,(0x0e02)
 	cp	a, 0:i3	; F6F0BF  cp A,0
-	jr	z, sub_F6F05E_Return2	; F6F0C1  jr Z,0xf6f0dc
+	jr	z, OldCopy_F7AADC	; F6F0C1  jr Z,0xf6f0dc
 	cp	a, 10	; F6F0C3  cp A,0x0a
-	jr	nz, sub_F6F05E_Skip	; F6F0C6  jr NZ,0xf6f0cc
+	jr	nz, OldCopy_F7AACC	; F6F0C6  jr NZ,0xf6f0cc
 	ld	a, 9:opc	; F6F0C8  ld A,0x09
-	jr	sub_F6F05E_Join	; F6F0CA  jr T,0xf6f0ce
-sub_F6F05E_Skip:
+	jr	OldCopy_F7AACE	; F6F0CA  jr T,0xf6f0ce
+OldCopy_F7AACC:
 	dec	1, a	; F6F0CC  dec 1,A
-sub_F6F05E_Join:
+OldCopy_F7AACE:
 	ld	(3586:16), a	; F6F0CE  ld (0x0e02),A
 	inc	1, a	; F6F0D2  inc 1,A
 	ld	(4854:16), a	; F6F0D4  ld (0x12f6),A
-	call	sub_F6F05E	; F6F0D8  call 0xf6f05e
-sub_F6F05E_Return2:
+	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F0D8  call 0xf6f05e
+OldCopy_F7AADC:
 	ret	; F6F0DC  ret
+OldCopy_sub_F7AADD:
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0DD  cp (0x207e),0x01
-	jr	nz, sub_F6F05E_Return3	; F6F0E2  jr NZ,0xf6f0ef
+	jr	nz, OldCopy_F7AAEF	; F6F0E2  jr NZ,0xf6f0ef
 	ld	(8318:16), 0	; F6F0E4  ld (0x207e),0x00
 	ldw	(8304:16), 32794	; F6F0E9  ld (0x2070),0x801a
-sub_F6F05E_Return3:
+OldCopy_F7AAEF:
 	ret	; F6F0EF  ret
+OldCopy_sub_F7AAF0:
 	m_and_mi8 MB16, 0x2075, 0xf6	; F6F0F0  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0F5  cp (0x207e),0x01
-	jr	z, sub_F6F05E_Skip2	; F6F0FA  jr Z,0xf6f108
+	jr	z, OldCopy_F7AB08	; F6F0FA  jr Z,0xf6f108
 	ld	(8318:16), 1	; F6F0FC  ld (0x207e),0x01
 	m_or_mi8 MB16, 0x2071, 0x10	; F6F101  or (0x2071),0x10
-	jr	sub_F6F05E_Return4	; F6F106  jr T,0xf6f13e
-sub_F6F05E_Skip2:
+	jr	OldCopy_F7AB3E	; F6F106  jr T,0xf6f13e
+OldCopy_F7AB08:
 	ld	(10368:16), 255	; F6F108  ld (0x2880),0xff
 	ld	(3402:16), 0	; F6F10D  ld (0x0d4a),0x00
 	call	T_F426E0	; F6F112  call 0xf426e0
-	call	sub_F6F13F	; F6F116  call 0xf6f13f
+	call	OldCopy_sub_F7AB3F	; F6F116  call 0xf6f13f
 	ld	a, (3586:16)	; F6F11A  ld A,(0x0e02)
 	m_cp_rm MB16, 0x360a, 1	; F6F11E  cp A,(0x360a)
-	jr	nz, sub_F6F05E_Skip3	; F6F122  jr NZ,0xf6f12e
+	jr	nz, OldCopy_F7AB2E	; F6F122  jr NZ,0xf6f12e
 	xor	xwa, xwa	; F6F124  xor XWA,XWA
 	ld	(12304:16), xwa	; F6F126  ld (0x3010),XWA
 	ld	(13836:16), xwa	; F6F12A  ld (0x360c),XWA
-sub_F6F05E_Skip3:
+OldCopy_F7AB2E:
 	ld	(8318:16), 0	; F6F12E  ld (0x207e),0x00
 	ld	(10368:16), 35	; F6F133  ld (0x2880),0x23
 	ldw	(8304:16), 16555	; F6F138  ld (0x2070),0x40ab
-sub_F6F05E_Return4:
+OldCopy_F7AB3E:
 	ret	; F6F13E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6F13F
+; OldCopy_sub_F7AB3F
 ; Called from: in-module: 0xF6F116
 ; Touches: (0x0E02) (0x360C)  |  0x610000
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -162411,16 +162446,18 @@ sub_F6F05E_Return4:
 ;                  decodes is still a real instruction.  0xF6F13F is an
 ;                  instruction boundary of this transcription, re-asserted
 ;                  on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ⚠ ANSWERED 2026-09-25: the older build's copy of sub_F7AB3F
+;   (0xF7AB3F); was `sub_F6F13F`, a name that
+;   was the address.  See the banner at 0xF6F000: its callers are inside
+;   that copy, which is dead here.
 ; --------------------------------------------------------------------------
-sub_F6F13F:
+OldCopy_sub_F7AB3F:
 	m_cp_mi8 MB16, 0x0e02, 0x0a	; F6F13F  cp (0x0e02),0x0a
-	jr	nz, sub_F6F13F_Skip	; F6F144  jr NZ,0xf6f176
+	jr	nz, OldCopy_F7AB76	; F6F144  jr NZ,0xf6f176
 	xor	xwa, xwa	; F6F146  xor XWA,XWA
 	ld	(13836:16), xwa	; F6F148  ld (0x360c),XWA
 	ld	xde, 6356992	; F6F14C  ld XDE,0x00610000
-sub_F6F13F_Loop:
+OldCopy_F7AB51:
 	ld	xhl, xwa	; F6F151  ld XHL,XWA
 	push	xbc	; F6F153  push XBC
 	ld	xbc, xhl	; F6F154  ld XBC,XHL
@@ -162436,9 +162473,9 @@ sub_F6F13F_Loop:
 	pop	xbc	; F6F16C  pop XBC
 	inc	1, a	; F6F16D  inc 1,A
 	cp	a, 10	; F6F16F  cp A,0x0a
-	jr	c, sub_F6F13F_Loop	; F6F172  jr C,0xf6f151
-	jr	sub_F6F13F_Return	; F6F174  jr T,0xf6f19b
-sub_F6F13F_Skip:
+	jr	c, OldCopy_F7AB51	; F6F172  jr C,0xf6f151
+	jr	OldCopy_F7AB9B	; F6F174  jr T,0xf6f19b
+OldCopy_F7AB76:
 	ld	xde, 6356992	; F6F176  ld XDE,0x00610000
 	push	xbc	; F6F17B  push XBC
 	xor	xwa, xwa	; F6F17C  xor XWA,XWA
@@ -162454,7 +162491,7 @@ sub_F6F13F_Skip:
 	xor	xbc, xbc	; F6F196  xor XBC,XBC
 	ld	(xde), xbc	; F6F198  ld (XDE),XBC
 	pop	xbc	; F6F19A  pop XBC
-sub_F6F13F_Return:
+OldCopy_F7AB9B:
 	ret	; F6F19B  ret
 
 ; --------------------------------------------------------------------------
@@ -162480,48 +162517,239 @@ sub_F6F13F_Return:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; ⚠ ANSWERED 2026-09-25 (the "nothing but its bytes" verdict that stood
+;   here): 0xF6F19C-0xF6F3FF is CODE, the older build's copy of
+;   0xF7AB9C-0xF7ADFF -- see the banner at 0xF6F000.  The label
+;   `Data_F6F19C` is retired; the lines below mirror the live copy's.
 ; --------------------------------------------------------------------------
-Data_F6F19C:
-	.byte	0xC1, 0x7A, 0x20, 0x21, 0xC1, 0x7B, 0x20, 0xF1, 0x66, 0x12, 0xF1, 0xBE, 0x0D, 0x02, 0x00, 0x00	; F6F19C  [0..15]
-	.byte	0xF1, 0x5E, 0x21, 0x02, 0x00, 0x00, 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01, 0x0E, 0xC1, 0x7A, 0x20	; F6F1AC  [16..31]
-	.byte	0x3F, 0x1C, 0x66, 0x1B, 0xD1, 0x46, 0x0E, 0x20, 0xD8, 0xCD, 0xFF, 0xFF, 0xD1, 0x0C, 0x36, 0xC8	; F6F1BC  [32..47]
-	.byte	0xF2, 0x1E, 0x34, 0x60, 0x50, 0xE8, 0xD0, 0xF1, 0x10, 0x30, 0x60, 0x1D, 0xE0, 0x09, 0xF4, 0x0E	; F6F1CC  [48..63]
-	.byte	0xC1, 0x75, 0x20, 0x3C, 0xF6, 0xC1, 0x7E, 0x20, 0x3F, 0x01, 0x66, 0x02, 0x68, 0x1C, 0xF1, 0x7E	; F6F1DC  [64..79]
-	.byte	0x20, 0x00, 0x00, 0xC1, 0x71, 0x20, 0x3E, 0x10, 0xF1, 0xBE, 0x0D, 0x02, 0x00, 0x00, 0xF1, 0x5E	; F6F1EC  [80..95]
-	.byte	0x21, 0x02, 0x00, 0x00, 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01, 0x0E, 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F6F1FC  [96..111]
-	.byte	0xC1, 0x7E, 0x20, 0x3F, 0x01, 0x66, 0x0B, 0xF1, 0x7E, 0x20, 0x00, 0x01, 0xC1, 0x71, 0x20, 0x3E	; F6F20C  [112..127]
-	.byte	0x10, 0x0E, 0xD1, 0xBE, 0x0D, 0x3F, 0x00, 0x00, 0x6E, 0x0C, 0xF1, 0x7E, 0x20, 0x00, 0x00, 0xC1	; F6F21C  [128..143]
-	.byte	0x71, 0x20, 0x3E, 0x10, 0x68, 0x6A, 0xCB, 0xD3, 0xD1, 0xBE, 0x0D, 0x23, 0xD7, 0x3E, 0x9B, 0xCB	; F6F22C  [144..159]
-	.byte	0x89, 0x11, 0xD7, 0x3E, 0x2A, 0x67, 0x1A, 0xCB, 0x89, 0xC9, 0x61, 0xF1, 0x70, 0x0C, 0x41, 0x29	; F6F23C  [160..175]
-	.byte	0x2B, 0xF1, 0x80, 0x28, 0x00, 0xFF, 0xF1, 0x4A, 0x0D, 0x00, 0x00, 0x1D, 0xE4, 0x26, 0xF4, 0x4B	; F6F24C  [176..191]
-	.byte	0x49, 0xCB, 0x61, 0xCB, 0xCF, 0x0F, 0x63, 0xD4, 0xD1, 0xBE, 0x0D, 0x21, 0xD1, 0x10, 0x30, 0x20	; F6F25C  [192..207]
-	.byte	0xD8, 0xC1, 0xD1, 0x10, 0x30, 0xD9, 0xD1, 0xBE, 0x0D, 0x20, 0xF1, 0x46, 0x0E, 0x50, 0xF1, 0xBE	; F6F26C  [208..223]
-	.byte	0x0D, 0x02, 0x00, 0x00, 0xF1, 0x5E, 0x21, 0x02, 0x00, 0x00, 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F6F27C  [224..239]
-	.byte	0xF1, 0x7E, 0x20, 0x00, 0x00, 0xF1, 0x80, 0x28, 0x00, 0x23, 0xF1, 0x70, 0x20, 0x02, 0xAB, 0x40	; F6F28C  [240..255]
-	.byte	0x0E, 0x1E, 0x38, 0x03, 0xF1, 0xBA, 0x0D, 0x00, 0x01, 0x0E, 0xC1, 0x7A, 0x20, 0x3F, 0x1F, 0x66	; F6F29C  [256..271]
-	.byte	0x17, 0xE1, 0x10, 0x30, 0x20, 0xE1, 0x0C, 0x36, 0xE8, 0xF2, 0x1E, 0x34, 0x60, 0x60, 0xE8, 0xD0	; F6F2AC  [272..287]
-	.byte	0xF1, 0x10, 0x30, 0x60, 0x1D, 0xE0, 0x09, 0xF4, 0x0E, 0xF1, 0xBA, 0x0D, 0x00, 0x01, 0xC1, 0x75	; F6F2BC  [288..303]
-	.byte	0x20, 0x3E, 0x09, 0x0E, 0xF1, 0xBA, 0x0D, 0x00, 0x02, 0xC1, 0x75, 0x20, 0x3E, 0x09, 0x0E, 0xF1	; F6F2CC  [304..319]
-	.byte	0xBA, 0x0D, 0x00, 0x03, 0xC1, 0x75, 0x20, 0x3E, 0x09, 0x0E, 0xF1, 0x4E, 0x0C, 0x40, 0xC8, 0xCC	; F6F2DC  [320..335]
-	.byte	0x80, 0xF1, 0x4F, 0x0C, 0x40, 0xC1, 0xBA, 0x0D, 0x3F, 0x01, 0x6E, 0x05, 0x1E, 0x47, 0x00, 0x68	; F6F2EC  [336..351]
-	.byte	0x16, 0xC1, 0xBA, 0x0D, 0x3F, 0x02, 0x6E, 0x05, 0x1E, 0x88, 0x00, 0x68, 0x0A, 0xC1, 0xBA, 0x0D	; F6F2FC  [352..367]
-	.byte	0x3F, 0x03, 0x6E, 0x03, 0x1E, 0xC9, 0x00, 0x0E, 0xF1, 0x4E, 0x0C, 0x40, 0xC8, 0xCC, 0x80, 0xF1	; F6F30C  [368..383]
-	.byte	0x4F, 0x0C, 0x40, 0xC1, 0xBA, 0x0D, 0x3F, 0x01, 0x6E, 0x05, 0x1E, 0x19, 0x00, 0x68, 0x16, 0xC1	; F6F31C  [384..399]
-	.byte	0xBA, 0x0D, 0x3F, 0x02, 0x6E, 0x05, 0x1E, 0x5A, 0x00, 0x68, 0x0A, 0xC1, 0xBA, 0x0D, 0x3F, 0x03	; F6F32C  [400..415]
-	.byte	0x6E, 0x03, 0x1E, 0x9B, 0x00, 0x0E, 0xC1, 0x75, 0x20, 0x3E, 0x09, 0xC1, 0x13, 0x0C, 0x21, 0xC1	; F6F33C  [416..431]
-	.byte	0x4F, 0x0C, 0x3F, 0x80, 0x66, 0x19, 0xC9, 0x61, 0xC9, 0xCF, 0x10, 0x63, 0x0A, 0x21, 0x01, 0xC1	; F6F34C  [432..447]
-	.byte	0x14, 0x0C, 0xF1, 0x6E, 0x20, 0x68, 0xEF, 0xC1, 0x14, 0x0C, 0xF1, 0x66, 0xE9, 0x68, 0x16, 0xC9	; F6F35C  [448..463]
-	.byte	0x69, 0xC9, 0xD8, 0x6B, 0x0A, 0x21, 0x10, 0xC1, 0x14, 0x0C, 0xF1, 0x6E, 0x08, 0x68, 0xF0, 0xC1	; F6F36C  [464..479]
-	.byte	0x14, 0x0C, 0xF1, 0x66, 0xEA, 0xF1, 0x13, 0x0C, 0x41, 0xF2, 0x59, 0x34, 0x60, 0x41, 0xF1, 0xF6	; F6F37C  [480..495]
-	.byte	0x12, 0x41, 0x0E, 0xC1, 0x75, 0x20, 0x3E, 0x09, 0xC1, 0x14, 0x0C, 0x21, 0xC1, 0x4F, 0x0C, 0x3F	; F6F38C  [496..511]
-	.byte	0x80, 0x66, 0x19, 0xC9, 0x61, 0xC9, 0xCF, 0x10, 0x63, 0x0A, 0x21, 0x01, 0xC1, 0x13, 0x0C, 0xF1	; F6F39C  [512..527]
-	.byte	0x6E, 0x20, 0x68, 0xEF, 0xC1, 0x13, 0x0C, 0xF1, 0x66, 0xE9, 0x68, 0x16, 0xC9, 0x69, 0xC9, 0xD8	; F6F3AC  [528..543]
-	.byte	0x6B, 0x0A, 0x21, 0x10, 0xC1, 0x13, 0x0C, 0xF1, 0x6E, 0x08, 0x68, 0xF0, 0xC1, 0x13, 0x0C, 0xF1	; F6F3BC  [544..559]
-	.byte	0x66, 0xEA, 0xF1, 0x14, 0x0C, 0x41, 0xF2, 0x5A, 0x34, 0x60, 0x41, 0xF1, 0xF7, 0x12, 0x41, 0x0E	; F6F3CC  [560..575]
-	.byte	0xC1, 0x15, 0x0C, 0x21, 0x27, 0x01, 0x26, 0x10, 0x1E, 0x94, 0x1E, 0xF1, 0x15, 0x0C, 0x41, 0xF2	; F6F3DC  [576..591]
-	.byte	0x5B, 0x34, 0x60, 0x41, 0xF1, 0xF8, 0x12, 0x41, 0x0E, 0xC1, 0x7E, 0x20, 0x3F, 0x01, 0x6E, 0x0F	; F6F3EC  [592..607]
-	.byte	0xC1, 0x75, 0x20, 0x3C	; F6F3FC  [608..611]
+OldCopy_sub_F7AB9C:
+	ld	a, (8314:16)	; F6F19C  ld A,(0x207a)
+	m_cp_rm MB16, 0x207b, 1	; F6F1A0  cp A,(0x207b)
+	jr	z, OldCopy_F7ABB8	; F6F1A4  jr Z,0xf6f1b8
+	ldw	(3518:16), 0	; F6F1A6  ld (0x0dbe),0x0000
+	ldw	(8542:16), 0	; F6F1AC  ld (0x215e),0x0000
+	m_or_mi16 MW16, 0x212e, 0x0100	; F6F1B2  or (0x212e),0x0100
+OldCopy_F7ABB8:
+	ret	; F6F1B8  ret
+OldCopy_sub_F7ABB9:
+	m_cp_mi8 MB16, 0x207a, 0x1c	; F6F1B9  cp (0x207a),0x1c
+	jr	z, OldCopy_F7ABDB	; F6F1BE  jr Z,0xf6f1db
+	ld	wa, (3654:16)	; F6F1C0  ld WA,(0x0e46)
+	xor	wa, 65535	; F6F1C4  xor WA,0xffff
+	m_and_mr MW16, 0x360c, 0	; F6F1C8  and (0x360c),WA
+	ld	(6304798:24), wa	; F6F1CC  ld (0x60341e),WA
+	xor	xwa, xwa	; F6F1D1  xor XWA,XWA
+	ld	(12304:16), xwa	; F6F1D3  ld (0x3010),XWA
+	call	T_F409E0	; F6F1D7  call 0xf409e0
+OldCopy_F7ABDB:
+	ret	; F6F1DB  ret
+OldCopy_sub_F7ABDC:
+	m_and_mi8 MB16, 0x2075, 0xf6	; F6F1DC  and (0x2075),0xf6
+	m_cp_mi8 MB16, 0x207e, 0x01	; F6F1E1  cp (0x207e),0x01
+	jr	z, OldCopy_F7ABEA	; F6F1E6  jr Z,0xf6f1ea
+	jr	OldCopy_F7AC06	; F6F1E8  jr T,0xf6f206
+OldCopy_F7ABEA:
+	ld	(8318:16), 0	; F6F1EA  ld (0x207e),0x00
+	m_or_mi8 MB16, 0x2071, 0x10	; F6F1EF  or (0x2071),0x10
+	ldw	(3518:16), 0	; F6F1F4  ld (0x0dbe),0x0000
+	ldw	(8542:16), 0	; F6F1FA  ld (0x215e),0x0000
+	m_or_mi16 MW16, 0x212e, 0x0100	; F6F200  or (0x212e),0x0100
+OldCopy_F7AC06:
+	ret	; F6F206  ret
+OldCopy_sub_F7AC07:
+	m_and_mi8 MB16, 0x2075, 0xf6	; F6F207  and (0x2075),0xf6
+	m_cp_mi8 MB16, 0x207e, 0x01	; F6F20C  cp (0x207e),0x01
+	jr	z, OldCopy_F7AC1E	; F6F211  jr Z,0xf6f21e
+	ld	(8318:16), 1	; F6F213  ld (0x207e),0x01
+	m_or_mi8 MB16, 0x2071, 0x10	; F6F218  or (0x2071),0x10
+	ret	; F6F21D  ret
+OldCopy_F7AC1E:
+	m_cp_mi16 MW16, 0x0dbe, 0x0000	; F6F21E  cp (0x0dbe),0x0000
+	jr	nz, OldCopy_F7AC32	; F6F224  jr NZ,0xf6f232
+	ld	(8318:16), 0	; F6F226  ld (0x207e),0x00
+	m_or_mi8 MB16, 0x2071, 0x10	; F6F22B  or (0x2071),0x10
+	jr	OldCopy_F7AC9C	; F6F230  jr T,0xf6f29c
+OldCopy_F7AC32:
+	xor	c, c	; F6F232  xor C,C
+	ld	hl, (3518:16)	; F6F234  ld HL,(0x0dbe)
+OldCopy_F7AC38:
+	m_rd_ld_rr2x RWX, 0x3E, r3	; F6F238  ld QHL3,HL
+	ld	a, c	; F6F23B  ld A,C
+	scf	; F6F23D  scf
+	m_rd_xorcf_ax RWX, 0x3E	; F6F23E  xorcf A,QHL3
+	jr	c, OldCopy_F7AC5D	; F6F241  jr C,0xf6f25d
+	ld	a, c	; F6F243  ld A,C
+	inc	1, a	; F6F245  inc 1,A
+	ld	(3184:16), a	; F6F247  ld (0x0c70),A
+	pushw	bc	; F6F24B  push BC
+	pushw	hl	; F6F24C  push HL
+	ld	(10368:16), 255	; F6F24D  ld (0x2880),0xff
+	ld	(3402:16), 0	; F6F252  ld (0x0d4a),0x00
+	call	T_F426E4	; F6F257  call 0xf426e4
+	popw	hl	; F6F25B  pop HL
+	popw	bc	; F6F25C  pop BC
+OldCopy_F7AC5D:
+	inc	1, c	; F6F25D  inc 1,C
+	cp	c, 15	; F6F25F  cp C,0x0f
+	jr	ule, OldCopy_F7AC38	; F6F262  jr ULE,0xf6f238
+	ld	bc, (3518:16)	; F6F264  ld BC,(0x0dbe)
+	ld	wa, (12304:16)	; F6F268  ld WA,(0x3010)
+	and	bc, wa	; F6F26C  and BC,WA
+	m_xor_mr MW16, 0x3010, 1	; F6F26E  xor (0x3010),BC
+	ld	wa, (3518:16)	; F6F272  ld WA,(0x0dbe)
+	ld	(3654:16), wa	; F6F276  ld (0x0e46),WA
+	ldw	(3518:16), 0	; F6F27A  ld (0x0dbe),0x0000
+	ldw	(8542:16), 0	; F6F280  ld (0x215e),0x0000
+	m_or_mi16 MW16, 0x212e, 0x0100	; F6F286  or (0x212e),0x0100
+	ld	(8318:16), 0	; F6F28C  ld (0x207e),0x00
+	ld	(10368:16), 35	; F6F291  ld (0x2880),0x23
+	ldw	(8304:16), 16555	; F6F296  ld (0x2070),0x40ab
+OldCopy_F7AC9C:
+	ret	; F6F29C  ret
+OldCopy_sub_F7AC9D:
+	calr	sub_F7AFD8 - 0xBA00	; F6F29D  calr 0xf6f5d8
+	ld	(3514:16), 1	; F6F2A0  ld (0x0dba),0x01
+	ret	; F6F2A5  ret
+OldCopy_sub_F7ACA6:
+	m_cp_mi8 MB16, 0x207a, 0x1f	; F6F2A6  cp (0x207a),0x1f
+	jr	z, OldCopy_F7ACC4	; F6F2AB  jr Z,0xf6f2c4
+	ld	xwa, (12304:16)	; F6F2AD  ld XWA,(0x3010)
+	m_or_mr ML16, 0x360c, 0	; F6F2B1  or (0x360c),XWA
+	ld	(6304798:24), xwa	; F6F2B5  ld (0x60341e),XWA
+	xor	xwa, xwa	; F6F2BA  xor XWA,XWA
+	ld	(12304:16), xwa	; F6F2BC  ld (0x3010),XWA
+	call	T_F409E0	; F6F2C0  call 0xf409e0
+OldCopy_F7ACC4:
+	ret	; F6F2C4  ret
+OldCopy_sub_F7ACC5:
+	ld	(3514:16), 1	; F6F2C5  ld (0x0dba),0x01
+	m_or_mi8 MB16, 0x2075, 0x09	; F6F2CA  or (0x2075),0x09
+	ret	; F6F2CF  ret
+OldCopy_sub_F7ACD0:
+	ld	(3514:16), 2	; F6F2D0  ld (0x0dba),0x02
+	m_or_mi8 MB16, 0x2075, 0x09	; F6F2D5  or (0x2075),0x09
+	ret	; F6F2DA  ret
+OldCopy_sub_F7ACDB:
+	ld	(3514:16), 3	; F6F2DB  ld (0x0dba),0x03
+	m_or_mi8 MB16, 0x2075, 0x09	; F6F2E0  or (0x2075),0x09
+	ret	; F6F2E5  ret
+OldCopy_sub_F7ACE6:
+	ld	(3150:16), w	; F6F2E6  ld (0x0c4e),W
+	and	w, 128	; F6F2EA  and W,0x80
+	ld	(3151:16), w	; F6F2ED  ld (0x0c4f),W
+	m_cp_mi8 MB16, 0x0dba, 0x01	; F6F2F1  cp (0x0dba),0x01
+	jr	nz, OldCopy_F7ACFD	; F6F2F6  jr NZ,0xf6f2fd
+	calr	OldCopy_sub_F7AD42	; F6F2F8  calr 0xf6f342
+	jr	OldCopy_F7AD13	; F6F2FB  jr T,0xf6f313
+OldCopy_F7ACFD:
+	m_cp_mi8 MB16, 0x0dba, 0x02	; F6F2FD  cp (0x0dba),0x02
+	jr	nz, OldCopy_F7AD09	; F6F302  jr NZ,0xf6f309
+	calr	OldCopy_sub_F7AD8F	; F6F304  calr 0xf6f38f
+	jr	OldCopy_F7AD13	; F6F307  jr T,0xf6f313
+OldCopy_F7AD09:
+	m_cp_mi8 MB16, 0x0dba, 0x03	; F6F309  cp (0x0dba),0x03
+	jr	nz, OldCopy_F7AD13	; F6F30E  jr NZ,0xf6f313
+	calr	OldCopy_sub_F7ADDC	; F6F310  calr 0xf6f3dc
+OldCopy_F7AD13:
+	ret	; F6F313  ret
+OldCopy_sub_F7AD14:
+	ld	(3150:16), w	; F6F314  ld (0x0c4e),W
+	and	w, 128	; F6F318  and W,0x80
+	ld	(3151:16), w	; F6F31B  ld (0x0c4f),W
+	m_cp_mi8 MB16, 0x0dba, 0x01	; F6F31F  cp (0x0dba),0x01
+	jr	nz, OldCopy_F7AD2B	; F6F324  jr NZ,0xf6f32b
+	calr	OldCopy_sub_F7AD42	; F6F326  calr 0xf6f342
+	jr	OldCopy_F7AD41	; F6F329  jr T,0xf6f341
+OldCopy_F7AD2B:
+	m_cp_mi8 MB16, 0x0dba, 0x02	; F6F32B  cp (0x0dba),0x02
+	jr	nz, OldCopy_F7AD37	; F6F330  jr NZ,0xf6f337
+	calr	OldCopy_sub_F7AD8F	; F6F332  calr 0xf6f38f
+	jr	OldCopy_F7AD41	; F6F335  jr T,0xf6f341
+OldCopy_F7AD37:
+	m_cp_mi8 MB16, 0x0dba, 0x03	; F6F337  cp (0x0dba),0x03
+	jr	nz, OldCopy_F7AD41	; F6F33C  jr NZ,0xf6f341
+	calr	OldCopy_sub_F7ADDC	; F6F33E  calr 0xf6f3dc
+OldCopy_F7AD41:
+	ret	; F6F341  ret
+OldCopy_sub_F7AD42:
+	m_or_mi8 MB16, 0x2075, 0x09	; F6F342  or (0x2075),0x09
+	ld	a, (3091:16)	; F6F347  ld A,(0x0c13)
+	m_cp_mi8 MB16, 0x0c4f, 0x80	; F6F34B  cp (0x0c4f),0x80
+	jr	z, OldCopy_F7AD6B	; F6F350  jr Z,0xf6f36b
+OldCopy_F7AD52:
+	inc	1, a	; F6F352  inc 1,A
+	cp	a, 16	; F6F354  cp A,0x10
+	jr	ule, OldCopy_F7AD63	; F6F357  jr ULE,0xf6f363
+	ld	a, 1:opc	; F6F359  ld A,0x01
+	m_cp_rm MB16, 0x0c14, 1	; F6F35B  cp A,(0x0c14)
+	jr	nz, OldCopy_F7AD81	; F6F35F  jr NZ,0xf6f381
+	jr	OldCopy_F7AD52	; F6F361  jr T,0xf6f352
+OldCopy_F7AD63:
+	m_cp_rm MB16, 0x0c14, 1	; F6F363  cp A,(0x0c14)
+	jr	z, OldCopy_F7AD52	; F6F367  jr Z,0xf6f352
+	jr	OldCopy_F7AD81	; F6F369  jr T,0xf6f381
+OldCopy_F7AD6B:
+	dec	1, a	; F6F36B  dec 1,A
+	cp	a, 0:i3	; F6F36D  cp A,0
+	jr	ugt, OldCopy_F7AD7B	; F6F36F  jr UGT,0xf6f37b
+	ld	a, 16:opc	; F6F371  ld A,0x10
+	m_cp_rm MB16, 0x0c14, 1	; F6F373  cp A,(0x0c14)
+	jr	nz, OldCopy_F7AD81	; F6F377  jr NZ,0xf6f381
+	jr	OldCopy_F7AD6B	; F6F379  jr T,0xf6f36b
+OldCopy_F7AD7B:
+	m_cp_rm MB16, 0x0c14, 1	; F6F37B  cp A,(0x0c14)
+	jr	z, OldCopy_F7AD6B	; F6F37F  jr Z,0xf6f36b
+OldCopy_F7AD81:
+	ld	(3091:16), a	; F6F381  ld (0x0c13),A
+	ld	(6304857:24), a	; F6F385  ld (0x603459),A
+	ld	(4854:16), a	; F6F38A  ld (0x12f6),A
+	ret	; F6F38E  ret
+OldCopy_sub_F7AD8F:
+	m_or_mi8 MB16, 0x2075, 0x09	; F6F38F  or (0x2075),0x09
+	ld	a, (3092:16)	; F6F394  ld A,(0x0c14)
+	m_cp_mi8 MB16, 0x0c4f, 0x80	; F6F398  cp (0x0c4f),0x80
+	jr	z, OldCopy_F7ADB8	; F6F39D  jr Z,0xf6f3b8
+OldCopy_F7AD9F:
+	inc	1, a	; F6F39F  inc 1,A
+	cp	a, 16	; F6F3A1  cp A,0x10
+	jr	ule, OldCopy_F7ADB0	; F6F3A4  jr ULE,0xf6f3b0
+	ld	a, 1:opc	; F6F3A6  ld A,0x01
+	m_cp_rm MB16, 0x0c13, 1	; F6F3A8  cp A,(0x0c13)
+	jr	nz, OldCopy_F7ADCE	; F6F3AC  jr NZ,0xf6f3ce
+	jr	OldCopy_F7AD9F	; F6F3AE  jr T,0xf6f39f
+OldCopy_F7ADB0:
+	m_cp_rm MB16, 0x0c13, 1	; F6F3B0  cp A,(0x0c13)
+	jr	z, OldCopy_F7AD9F	; F6F3B4  jr Z,0xf6f39f
+	jr	OldCopy_F7ADCE	; F6F3B6  jr T,0xf6f3ce
+OldCopy_F7ADB8:
+	dec	1, a	; F6F3B8  dec 1,A
+	cp	a, 0:i3	; F6F3BA  cp A,0
+	jr	ugt, OldCopy_F7ADC8	; F6F3BC  jr UGT,0xf6f3c8
+	ld	a, 16:opc	; F6F3BE  ld A,0x10
+	m_cp_rm MB16, 0x0c13, 1	; F6F3C0  cp A,(0x0c13)
+	jr	nz, OldCopy_F7ADCE	; F6F3C4  jr NZ,0xf6f3ce
+	jr	OldCopy_F7ADB8	; F6F3C6  jr T,0xf6f3b8
+OldCopy_F7ADC8:
+	m_cp_rm MB16, 0x0c13, 1	; F6F3C8  cp A,(0x0c13)
+	jr	z, OldCopy_F7ADB8	; F6F3CC  jr Z,0xf6f3b8
+OldCopy_F7ADCE:
+	ld	(3092:16), a	; F6F3CE  ld (0x0c14),A
+	ld	(6304858:24), a	; F6F3D2  ld (0x60345a),A
+	ld	(4855:16), a	; F6F3D7  ld (0x12f7),A
+	ret	; F6F3DB  ret
+OldCopy_sub_F7ADDC:
+	ld	a, (3093:16)	; F6F3DC  ld A,(0x0c15)
+	ld	l, 1:opc	; F6F3E0  ld L,0x01
+	ld	h, 16:opc	; F6F3E2  ld H,0x10
+	calr	sub_F7CCDB - 0xBA60	; F6F3E4  calr 0xf7127b
+	ld	(3093:16), a	; F6F3E7  ld (0x0c15),A
+	ld	(6304859:24), a	; F6F3EB  ld (0x60345b),A
+	ld	(4856:16), a	; F6F3F0  ld (0x12f8),A
+	ret	; F6F3F4  ret
+OldCopy_sub_F7ADF5:
+	m_cp_mi8 MB16, 0x207e, 0x01	; F6F3F5  cp (0x207e),0x01
+	jr	nz, sub_F7ADDC_Return - 0xBA00	; F6F3FA  jr NZ,0xf6f40b
+	.byte	0xC1, 0x75, 0x20, 0x3C	; F6F3FC  the first 4 of the 5 bytes of `and (0x2075),0xf6` (live 0xF7ADFC); this build's sub_F6F400 begins at 0xF6F400
 
 
 ; --------------------------------------------------------------------------
