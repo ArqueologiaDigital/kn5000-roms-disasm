@@ -85,10 +85,15 @@
 ; record's entry out of the table at slot +0x08 and at 0xFB429F it ADDS THE
 ; BASE AGAIN.  A stored absolute address would not need that second add.
 ; 
-; ⚠ WHAT IS STILL NOT ESTABLISHED: 13 of the 39 filled primary slots have no
-; reader at all -- they are named on each banner, and every one of them
-; keeps its transplanted name on that basis.  And no FIELD inside any
-; record these slots point at is identified by anything.
+; ★ CORRECTED 2026-09-25 (lane promcd).  This paragraph said 13 of the 39
+; filled primary slots lacked any reader and that no field of any record
+; had been read.  All 13 have one now: +0x0C/+0x10/+0x14 and +0x18/+0x1C/+0x20
+; ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3), +0x24/+0x28/+0x2C and
+; +0x30/+0x34/+0x38 ToneDB_ResolveEnvDescriptor (0xFB45C0), +0x48 at 0xFC0435
+; and +0x5C at 0xFC05C3 (ToneQuery_ReplySourceName1/2_ViaIndexMap) -- each
+; banner cites its own.  Fields read by the firmware are listed, with the
+; instruction for each, in prom_d/wsa1_prom_d.s's wave-17 block; most other
+; bytes still carry no name.
 ; ==========================================================================
 ToneDB_Base:
 ToneDB_Directory:

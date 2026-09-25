@@ -209,7 +209,11 @@ ToneRec_Template_Clear_WaveSel3:
 ; DRUM-INSTRUMENT RECORD, stride 150 = the directory's own word at +0xEE.
 ; 
 ;     +0x00  13 B   name, ASCII, space-padded  ('Rock Bass Drm', 'Slap Shot')
-;     +0x0D 137 B   parameters, unidentified
+;     +0x0D  51 B   head, no field named
+;     +0x40  43 B   wave-select record 0 \ prom_c copies 0x40 bytes of head
+;     +0x6B  43 B   wave-select record 1 / (0xFB85F4), then 43*j, j < 2
+;                   (0xFB868F, 0xFB897D); 64 + 2*43 = 150.  Corrected
+;                   2026-09-25, lane promcd: this gave 137 undivided bytes.
 ; 
 ; Same directory slot and same shape as the KN5000's PercInst_000_Silent
 ; block (stride 58 there).  Every one of the 504 records in this image starts
@@ -605,18 +609,16 @@ ToneDB_ToneIndexMapB:
 ; count 322 is fixed at BOTH ends and is not a stride guess.  43 is the
 ; directory's own word at +0xEA, and prom_c reads that word at 11 sites.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x18 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
-; 
-; ⚠ NO reader was found for THIS array.  What follows is about the
-; array at slot +0x3C, which has the same record shape, and is quoted
-; as corroboration for the 43 -- not as evidence about this block.
+; ★ READER (corrected 2026-09-25, lane promcd -- this paragraph said there
+; was none, that nothing confirmed the name, and that it lacked a reader).
+; ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3) reads this slot with `ld XIY,(XBC+0x18)` at 0xFB836F (its +0x1C alias at
+; 0xFB83CC), stride +0xEA at 0xFB837A,
+; multiplies the index-map value by the stride word and adds the base: this
+; array's record n is the wave-select record a wave selector resolves to (see
+; ToneDB_ToneIndexMapA's banner).  Round 3's base-load census missed it
+; because that routine parks the base in a frame slot first.
+; What follows is about the array at slot +0x3C, which has the same record
+; shape, and is quoted as further corroboration for the 43.
 ; One prom_c routine
 ; reaches a record by multiplying the directory's stride word, and then
 ; uses the SAME word as the loop bound of a byte copy out of it:
@@ -20816,7 +20818,11 @@ ToneDB_DrumToneIndexMap:
 ; DRUM-INSTRUMENT RECORD, stride 150 = the directory's own word at +0xEE.
 ; 
 ;     +0x00  13 B   name, ASCII, space-padded  ('Rock Bass Drm', 'Slap Shot')
-;     +0x0D 137 B   parameters, unidentified
+;     +0x0D  51 B   head, no field named
+;     +0x40  43 B   wave-select record 0 \ prom_c copies 0x40 bytes of head
+;     +0x6B  43 B   wave-select record 1 / (0xFB85F4), then 43*j, j < 2
+;                   (0xFB868F, 0xFB897D); 64 + 2*43 = 150.  Corrected
+;                   2026-09-25, lane promcd: this gave 137 undivided bytes.
 ; 
 ; Same directory slot and same shape as the KN5000's PercInst_000_Silent
 ; block (stride 58 there).  Every one of the 504 records in this image starts
@@ -20865,7 +20871,7 @@ ToneDB_DrumToneIndexMap:
 ; ==========================================================================
 
 ; ---- drum instrument   0 'Silent       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1545 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1034
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20883,7 +20889,7 @@ PercInst_000_Silent:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2EFE9  |.........|
 
 ; ---- drum instrument   1 'Square Click ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20901,7 +20907,7 @@ PercInst_001_SquareClick:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F07F  |.........|
 
 ; ---- drum instrument   2 'Rock Bass Drm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20919,7 +20925,7 @@ PercInst_002_RockBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F115  |.........|
 
 ; ---- drum instrument   3 'Room BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20937,7 +20943,7 @@ PercInst_003_RoomBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F1AB  |.........|
 
 ; ---- drum instrument   4 'Room BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20955,7 +20961,7 @@ PercInst_004_RoomBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F241  |.........|
 
 ; ---- drum instrument   5 'Jazz BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20973,7 +20979,7 @@ PercInst_005_JazzBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F2D7  |.........|
 
 ; ---- drum instrument   6 'Jazz BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20991,7 +20997,7 @@ PercInst_006_JazzBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F36D  |.........|
 
 ; ---- drum instrument   7 'Trad BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21009,7 +21015,7 @@ PercInst_007_TradBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F403  |.........|
 
 ; ---- drum instrument   8 'Trad BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21027,7 +21033,7 @@ PercInst_008_TradBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F499  |.........|
 
 ; ---- drum instrument   9 'LtRockBassDrm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21045,7 +21051,7 @@ PercInst_009_LtRockBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F52F  |.........|
 
 ; ---- drum instrument  10 'PowerBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21063,7 +21069,7 @@ PercInst_010_PowerBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F5C5  |.........|
 
 ; ---- drum instrument  11 'PowerBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21081,7 +21087,7 @@ PercInst_011_PowerBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F65B  |.........|
 
 ; ---- drum instrument  12 'ModelBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21099,7 +21105,7 @@ PercInst_012_ModelBassDrm1:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05	; 2F6F1  |.........|
 
 ; ---- drum instrument  13 'House BassDrm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21117,7 +21123,7 @@ PercInst_013_HouseBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F787  |.........|
 
 ; ---- drum instrument  14 'Soul BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21135,7 +21141,7 @@ PercInst_014_SoulBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F81D  |.........|
 
 ; ---- drum instrument  15 'Dance BassDrm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21153,7 +21159,7 @@ PercInst_015_DanceBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F8B3  |.........|
 
 ; ---- drum instrument  16 'ElectBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21171,7 +21177,7 @@ PercInst_016_ElectBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F949  |.........|
 
 ; ---- drum instrument  17 'ElectBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21189,7 +21195,7 @@ PercInst_017_ElectBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F9DF  |.........|
 
 ; ---- drum instrument  18 'ModelBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21207,7 +21213,7 @@ PercInst_018_ModelBassDrm2:
 	.byte 0xEC, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xDC, 0xA6	; 2FA75  |.........|
 
 ; ---- drum instrument  19 'Funk Bass Drm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21225,7 +21231,7 @@ PercInst_019_FunkBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FB0B  |.........|
 
 ; ---- drum instrument  20 'Orch.BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21243,7 +21249,7 @@ PercInst_020_OrchBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FBA1  |.........|
 
 ; ---- drum instrument  21 'Orch.BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21261,7 +21267,7 @@ PercInst_021_OrchBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FC37  |.........|
 
 ; ---- drum instrument  22 'Orch.BassDrm3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21279,7 +21285,7 @@ PercInst_022_OrchBassDrm3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FCCD  |.........|
 
 ; ---- drum instrument  23 'Rock Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21297,7 +21303,7 @@ PercInst_023_RockSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FD63  |.........|
 
 ; ---- drum instrument  24 'Rock Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21315,7 +21321,7 @@ PercInst_024_RockSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FDF9  |.........|
 
 ; ---- drum instrument  25 'Room Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21333,7 +21339,7 @@ PercInst_025_RoomSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FE8F  |.........|
 
 ; ---- drum instrument  26 'Room Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21351,7 +21357,7 @@ PercInst_026_RoomSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FF25  |.........|
 
 ; ---- drum instrument  27 'Model.Snare 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21369,7 +21375,7 @@ PercInst_027_ModelSnare4:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0xE9, 0x03	; 2FFBB  |.........|
 
 ; ---- drum instrument  28 'Jazz Snare   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21387,7 +21393,7 @@ PercInst_028_JazzSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30051  |.........|
 
 ; ---- drum instrument  29 'Trad Snare   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21405,7 +21411,7 @@ PercInst_029_TradSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 300E7  |.........|
 
 ; ---- drum instrument  30 'LtRockSnare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21423,7 +21429,7 @@ PercInst_030_LtRockSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3017D  |.........|
 
 ; ---- drum instrument  31 'LtRockSnare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21441,7 +21447,7 @@ PercInst_031_LtRockSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30213  |.........|
 
 ; ---- drum instrument  32 'Power Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21459,7 +21465,7 @@ PercInst_032_PowerSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 302A9  |.........|
 
 ; ---- drum instrument  33 'Power Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21477,7 +21483,7 @@ PercInst_033_PowerSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3033F  |.........|
 
 ; ---- drum instrument  34 'Model.Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21495,7 +21501,7 @@ PercInst_034_ModelSnare1:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 303D5  |.........|
 
 ; ---- drum instrument  35 'Model.Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21513,7 +21519,7 @@ PercInst_035_ModelSnare2:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 3046B  |.........|
 
 ; ---- drum instrument  36 'House Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21531,7 +21537,7 @@ PercInst_036_HouseSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30501  |.........|
 
 ; ---- drum instrument  37 'House Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21549,7 +21555,7 @@ PercInst_037_HouseSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30597  |.........|
 
 ; ---- drum instrument  38 'Soul Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21567,7 +21573,7 @@ PercInst_038_SoulSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3062D  |.........|
 
 ; ---- drum instrument  39 'Soul Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21585,7 +21591,7 @@ PercInst_039_SoulSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 306C3  |.........|
 
 ; ---- drum instrument  40 'Dance Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21603,7 +21609,7 @@ PercInst_040_DanceSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30759  |.........|
 
 ; ---- drum instrument  41 'Dance Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21621,7 +21627,7 @@ PercInst_041_DanceSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 307EF  |.........|
 
 ; ---- drum instrument  42 'Elect.Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21639,7 +21645,7 @@ PercInst_042_ElectSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30885  |.........|
 
 ; ---- drum instrument  43 'Elect.Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21657,7 +21663,7 @@ PercInst_043_ElectSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3091B  |.........|
 
 ; ---- drum instrument  44 'Model.Snare 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21675,7 +21681,7 @@ PercInst_044_ModelSnare3:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEA, 0xC8	; 309B1  |.........|
 
 ; ---- drum instrument  45 'Funk Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21693,7 +21699,7 @@ PercInst_045_FunkSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30A47  |.........|
 
 ; ---- drum instrument  46 'Funk Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21711,7 +21717,7 @@ PercInst_046_FunkSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30ADD  |.........|
 
 ; ---- drum instrument  47 'Synth Rim    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21729,7 +21735,7 @@ PercInst_047_SynthRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30B73  |.........|
 
 ; ---- drum instrument  48 'Analog Snare ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21747,7 +21753,7 @@ PercInst_048_AnalogSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30C09  |.........|
 
 ; ---- drum instrument  49 'Piccolo Snare' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21765,7 +21771,7 @@ PercInst_049_PiccoloSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30C9F  |.........|
 
 ; ---- drum instrument  50 'Orch.Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21783,7 +21789,7 @@ PercInst_050_OrchSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30D35  |.........|
 
 ; ---- drum instrument  51 'Orch.Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21801,7 +21807,7 @@ PercInst_051_OrchSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30DCB  |.........|
 
 ; ---- drum instrument  52 'Orch.Snare 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21819,7 +21825,7 @@ PercInst_052_OrchSnare3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30E61  |.........|
 
 ; ---- drum instrument  53 'ReverseSnare1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21837,7 +21843,7 @@ PercInst_053_ReverseSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30EF7  |.........|
 
 ; ---- drum instrument  54 'ReverseSnare2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21855,7 +21861,7 @@ PercInst_054_ReverseSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30F8D  |.........|
 
 ; ---- drum instrument  55 'ReverseSnare3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21873,7 +21879,7 @@ PercInst_055_ReverseSnare3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31023  |.........|
 
 ; ---- drum instrument  56 'Syn.Rev.Snare' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21891,7 +21897,7 @@ PercInst_056_SynRevSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 310B9  |.........|
 
 ; ---- drum instrument  57 'Synth Snare 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21909,7 +21915,7 @@ PercInst_057_SynthSnare3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3114F  |.........|
 
 ; ---- drum instrument  58 'Brush Long   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21927,7 +21933,7 @@ PercInst_058_BrushLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 311E5  |.........|
 
 ; ---- drum instrument  59 'Brush Hit    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21945,7 +21951,7 @@ PercInst_059_BrushHit:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3127B  |.........|
 
 ; ---- drum instrument  60 'Brush Short  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21963,7 +21969,7 @@ PercInst_060_BrushShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31311  |.........|
 
 ; ---- drum instrument  61 'Rock Rim     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21981,7 +21987,7 @@ PercInst_061_RockRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 313A7  |.........|
 
 ; ---- drum instrument  62 'MetronomeClik' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21999,7 +22005,7 @@ PercInst_062_MetronomeClik:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3143D  |.........|
 
 ; ---- drum instrument  63 'MetronomeBell' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22017,7 +22023,7 @@ PercInst_063_MetronomeBell:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 314D3  |.........|
 
 ; ---- drum instrument  64 'Modeling Rim ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22035,7 +22041,7 @@ PercInst_064_ModelingRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31569  |.........|
 
 ; ---- drum instrument  65 'Soul Rim     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22053,7 +22059,7 @@ PercInst_065_SoulRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 315FF  |.........|
 
 ; ---- drum instrument  66 'Dance Rim    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22071,7 +22077,7 @@ PercInst_066_DanceRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31695  |.........|
 
 ; ---- drum instrument  67 'Rock Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22089,7 +22095,7 @@ PercInst_067_RockTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3172B  |.........|
 
 ; ---- drum instrument  68 'Rock Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22107,7 +22113,7 @@ PercInst_068_RockTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 317C1  |.........|
 
 ; ---- drum instrument  69 'Rock Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22125,7 +22131,7 @@ PercInst_069_RockTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31857  |.........|
 
 ; ---- drum instrument  70 'Rock Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22143,7 +22149,7 @@ PercInst_070_RockTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 318ED  |.........|
 
 ; ---- drum instrument  71 'Jazz Tom 4   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22161,7 +22167,7 @@ PercInst_071_JazzTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31983  |.........|
 
 ; ---- drum instrument  72 'Jazz Tom 5   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22179,7 +22185,7 @@ PercInst_072_JazzTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31A19  |.........|
 
 ; ---- drum instrument  73 'Jazz Tom 6   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22197,7 +22203,7 @@ PercInst_073_JazzTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31AAF  |.........|
 
 ; ---- drum instrument  74 'Brush Tom 4  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22215,7 +22221,7 @@ PercInst_074_BrushTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31B45  |.........|
 
 ; ---- drum instrument  75 'Brush Tom 5  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22233,7 +22239,7 @@ PercInst_075_BrushTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31BDB  |.........|
 
 ; ---- drum instrument  76 'Brush Tom 6  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22251,7 +22257,7 @@ PercInst_076_BrushTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31C71  |.........|
 
 ; ---- drum instrument  77 'Jazz Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22269,7 +22275,7 @@ PercInst_077_JazzTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31D07  |.........|
 
 ; ---- drum instrument  78 'Jazz Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22287,7 +22293,7 @@ PercInst_078_JazzTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31D9D  |.........|
 
 ; ---- drum instrument  79 'Jazz Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22305,7 +22311,7 @@ PercInst_079_JazzTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31E33  |.........|
 
 ; ---- drum instrument  80 'Jazz Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22323,7 +22329,7 @@ PercInst_080_JazzTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31EC9  |.........|
 
 ; ---- drum instrument  81 'Brush Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22341,7 +22347,7 @@ PercInst_081_BrushTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31F5F  |.........|
 
 ; ---- drum instrument  82 'Brush Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22359,7 +22365,7 @@ PercInst_082_BrushTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31FF5  |.........|
 
 ; ---- drum instrument  83 'Brush Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22377,7 +22383,7 @@ PercInst_083_BrushTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3208B  |.........|
 
 ; ---- drum instrument  84 'BrushTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22395,7 +22401,7 @@ PercInst_084_BrushTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32121  |.........|
 
 ; ---- drum instrument  85 'RockBassTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22413,7 +22419,7 @@ PercInst_085_RockBassTomHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 321B7  |.........|
 
 ; ---- drum instrument  86 'RockBassTomLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22431,7 +22437,7 @@ PercInst_086_RockBassTomLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3224D  |.........|
 
 ; ---- drum instrument  87 'JazzBassTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22449,7 +22455,7 @@ PercInst_087_JazzBassTomHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 322E3  |.........|
 
 ; ---- drum instrument  88 'JazzBassTomLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22467,7 +22473,7 @@ PercInst_088_JazzBassTomLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32379  |.........|
 
 ; ---- drum instrument  89 'BrushBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22485,7 +22491,7 @@ PercInst_089_BrushBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3240F  |.........|
 
 ; ---- drum instrument  90 'BrushBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22503,7 +22509,7 @@ PercInst_090_BrushBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 324A5  |.........|
 
 ; ---- drum instrument  91 'Power Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22521,7 +22527,7 @@ PercInst_091_PowerTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3253B  |.........|
 
 ; ---- drum instrument  92 'Power Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22539,7 +22545,7 @@ PercInst_092_PowerTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 325D1  |.........|
 
 ; ---- drum instrument  93 'Power Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22557,7 +22563,7 @@ PercInst_093_PowerTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32667  |.........|
 
 ; ---- drum instrument  94 'Power Tom 4  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22575,7 +22581,7 @@ PercInst_094_PowerTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 326FD  |.........|
 
 ; ---- drum instrument  95 'Power Tom 5  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22593,7 +22599,7 @@ PercInst_095_PowerTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32793  |.........|
 
 ; ---- drum instrument  96 'Power Tom 6  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22611,7 +22617,7 @@ PercInst_096_PowerTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32829  |.........|
 
 ; ---- drum instrument  97 'PowerTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22629,7 +22635,7 @@ PercInst_097_PowerTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 328BF  |.........|
 
 ; ---- drum instrument  98 'Room Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22647,7 +22653,7 @@ PercInst_098_RoomTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32955  |.........|
 
 ; ---- drum instrument  99 'Room Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22665,7 +22671,7 @@ PercInst_099_RoomTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 329EB  |.........|
 
 ; ---- drum instrument 100 'Room Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22683,7 +22689,7 @@ PercInst_100_RoomTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32A81  |.........|
 
 ; ---- drum instrument 101 'Room Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22701,7 +22707,7 @@ PercInst_101_RoomTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32B17  |.........|
 
 ; ---- drum instrument 102 'Modeling Tom1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22719,7 +22725,7 @@ PercInst_102_ModelingTom1:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32BAD  |.........|
 
 ; ---- drum instrument 103 'Modeling Tom2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22737,7 +22743,7 @@ PercInst_103_ModelingTom2:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32C43  |.........|
 
 ; ---- drum instrument 104 'Modeling Tom3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22755,7 +22761,7 @@ PercInst_104_ModelingTom3:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32CD9  |.........|
 
 ; ---- drum instrument 105 'ModelingTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22773,7 +22779,7 @@ PercInst_105_ModelingTomHi:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32D6F  |.........|
 
 ; ---- drum instrument 106 'PowerBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22791,7 +22797,7 @@ PercInst_106_PowerBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32E05  |.........|
 
 ; ---- drum instrument 107 'PowerBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22809,7 +22815,7 @@ PercInst_107_PowerBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32E9B  |.........|
 
 ; ---- drum instrument 108 'ModelBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22827,7 +22833,7 @@ PercInst_108_ModelBassTomH:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5	; 32F31  |.........|
 
 ; ---- drum instrument 109 'ModelBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22845,7 +22851,7 @@ PercInst_109_ModelBassTomL:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5	; 32FC7  |.........|
 
 ; ---- drum instrument 110 'RoomBassTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22863,7 +22869,7 @@ PercInst_110_RoomBassTomHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3305D  |.........|
 
 ; ---- drum instrument 111 'RoomBassTomLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22881,7 +22887,7 @@ PercInst_111_RoomBassTomLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 330F3  |.........|
 
 ; ---- drum instrument 112 'ElectricTom 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22899,7 +22905,7 @@ PercInst_112_ElectricTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33189  |.........|
 
 ; ---- drum instrument 113 'ElectricTom 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22917,7 +22923,7 @@ PercInst_113_ElectricTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3321F  |.........|
 
 ; ---- drum instrument 114 'ElectricTom 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22935,7 +22941,7 @@ PercInst_114_ElectricTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 332B5  |.........|
 
 ; ---- drum instrument 115 'ElectricTom 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22953,7 +22959,7 @@ PercInst_115_ElectricTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3334B  |.........|
 
 ; ---- drum instrument 116 'ElectricTom 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22971,7 +22977,7 @@ PercInst_116_ElectricTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 333E1  |.........|
 
 ; ---- drum instrument 117 'ElectricTom 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22989,7 +22995,7 @@ PercInst_117_ElectricTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33477  |.........|
 
 ; ---- drum instrument 118 'ElectTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23007,7 +23013,7 @@ PercInst_118_ElectTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3350D  |.........|
 
 ; ---- drum instrument 119 'Synth Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23025,7 +23031,7 @@ PercInst_119_SynthTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 335A3  |.........|
 
 ; ---- drum instrument 120 'Synth Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23043,7 +23049,7 @@ PercInst_120_SynthTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33639  |.........|
 
 ; ---- drum instrument 121 'Synth Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23061,7 +23067,7 @@ PercInst_121_SynthTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 336CF  |.........|
 
 ; ---- drum instrument 122 'SynthTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23079,7 +23085,7 @@ PercInst_122_SynthTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33765  |.........|
 
 ; ---- drum instrument 123 'SynthBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23097,7 +23103,7 @@ PercInst_123_SynthBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 337FB  |.........|
 
 ; ---- drum instrument 124 'SynthBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23115,7 +23121,7 @@ PercInst_124_SynthBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33891  |.........|
 
 ; ---- drum instrument 125 'ElectBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23133,7 +23139,7 @@ PercInst_125_ElectBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33927  |.........|
 
 ; ---- drum instrument 126 'ElectBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23151,7 +23157,7 @@ PercInst_126_ElectBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 339BD  |.........|
 
 ; ---- drum instrument 127 'SynOrchSnare ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23169,7 +23175,7 @@ PercInst_127_SynOrchSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33A53  |.........|
 
 ; ---- drum instrument 128 'Soul Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23187,7 +23193,7 @@ PercInst_128_SoulTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33AE9  |.........|
 
 ; ---- drum instrument 129 'Soul Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23205,7 +23211,7 @@ PercInst_129_SoulTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33B7F  |.........|
 
 ; ---- drum instrument 130 'Soul Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23223,7 +23229,7 @@ PercInst_130_SoulTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33C15  |.........|
 
 ; ---- drum instrument 131 'Soul Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23241,7 +23247,7 @@ PercInst_131_SoulTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33CAB  |.........|
 
 ; ---- drum instrument 132 'House Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23259,7 +23265,7 @@ PercInst_132_HouseTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33D41  |.........|
 
 ; ---- drum instrument 133 'House Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23277,7 +23283,7 @@ PercInst_133_HouseTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33DD7  |.........|
 
 ; ---- drum instrument 134 'House Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23295,7 +23301,7 @@ PercInst_134_HouseTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33E6D  |.........|
 
 ; ---- drum instrument 135 'HouseTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23313,7 +23319,7 @@ PercInst_135_HouseTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33F03  |.........|
 
 ; ---- drum instrument 136 'SynthConga Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23331,7 +23337,7 @@ PercInst_136_SynthCongaLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33F99  |.........|
 
 ; ---- drum instrument 137 'SynthConga Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23349,7 +23355,7 @@ PercInst_137_SynthCongaHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3402F  |.........|
 
 ; ---- drum instrument 138 'Syn.CongaCrsh' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23367,7 +23373,7 @@ PercInst_138_SynCongaCrsh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 340C5  |.........|
 
 ; ---- drum instrument 139 'SoulBassTom H' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23385,7 +23391,7 @@ PercInst_139_SoulBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3415B  |.........|
 
 ; ---- drum instrument 140 'SoulBassTom L' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23403,7 +23409,7 @@ PercInst_140_SoulBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 341F1  |.........|
 
 ; ---- drum instrument 141 'HouseBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23421,7 +23427,7 @@ PercInst_141_HouseBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34287  |.........|
 
 ; ---- drum instrument 142 'HouseBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23439,7 +23445,7 @@ PercInst_142_HouseBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3431D  |.........|
 
 ; ---- drum instrument 143 'Soul BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23457,7 +23463,7 @@ PercInst_143_SoulBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 343B3  |.........|
 
 ; ---- drum instrument 144 'SynthBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23475,7 +23481,7 @@ PercInst_144_SynthBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34449  |.........|
 
 ; ---- drum instrument 145 'SynthBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23493,7 +23499,7 @@ PercInst_145_SynthBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 344DF  |.........|
 
 ; ---- drum instrument 146 'Dance Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23511,7 +23517,7 @@ PercInst_146_DanceTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34575  |.........|
 
 ; ---- drum instrument 147 'Dance Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23529,7 +23535,7 @@ PercInst_147_DanceTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3460B  |.........|
 
 ; ---- drum instrument 148 'Dance Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23547,7 +23553,7 @@ PercInst_148_DanceTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 346A1  |.........|
 
 ; ---- drum instrument 149 'DanceTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23565,7 +23571,7 @@ PercInst_149_DanceTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34737  |.........|
 
 ; ---- drum instrument 150 'DanceBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23583,7 +23589,7 @@ PercInst_150_DanceBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 347CD  |.........|
 
 ; ---- drum instrument 151 'DanceBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23601,7 +23607,7 @@ PercInst_151_DanceBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34863  |.........|
 
 ; ---- drum instrument 152 'HiHatClosed 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23619,7 +23625,7 @@ PercInst_152_HiHatClosed1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 348F9  |.........|
 
 ; ---- drum instrument 153 'HiHatClosed 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23637,7 +23643,7 @@ PercInst_153_HiHatClosed2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3498F  |.........|
 
 ; ---- drum instrument 154 'HiHatClosed 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23655,7 +23661,7 @@ PercInst_154_HiHatClosed3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34A25  |.........|
 
 ; ---- drum instrument 155 'HiHatClosed 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23673,7 +23679,7 @@ PercInst_155_HiHatClosed4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34ABB  |.........|
 
 ; ---- drum instrument 156 'HiHatClosed 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23691,7 +23697,7 @@ PercInst_156_HiHatClosed5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34B51  |.........|
 
 ; ---- drum instrument 157 'HiHatClosed 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23709,7 +23715,7 @@ PercInst_157_HiHatClosed6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34BE7  |.........|
 
 ; ---- drum instrument 158 'HiHatClosed 7' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23727,7 +23733,7 @@ PercInst_158_HiHatClosed7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34C7D  |.........|
 
 ; ---- drum instrument 159 'HiHatClosed 8' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23745,7 +23751,7 @@ PercInst_159_HiHatClosed8:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34D13  |.........|
 
 ; ---- drum instrument 160 'HiHatClosed 9' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23763,7 +23769,7 @@ PercInst_160_HiHatClosed9:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34DA9  |.........|
 
 ; ---- drum instrument 161 'HiHatClosed10' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23781,7 +23787,7 @@ PercInst_161_HiHatClosed10:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34E3F  |.........|
 
 ; ---- drum instrument 162 'HiHatClosed11' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23799,7 +23805,7 @@ PercInst_162_HiHatClosed11:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34ED5  |.........|
 
 ; ---- drum instrument 163 'HiHatClosed12' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23817,7 +23823,7 @@ PercInst_163_HiHatClosed12:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34F6B  |.........|
 
 ; ---- drum instrument 164 'ModelHHClose1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23835,7 +23841,7 @@ PercInst_164_ModelHHClose1:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35001  |.........|
 
 ; ---- drum instrument 165 'ModelHHClose2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23853,7 +23859,7 @@ PercInst_165_ModelHHClose2:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35097  |.........|
 
 ; ---- drum instrument 166 'DanceHHClose1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23871,7 +23877,7 @@ PercInst_166_DanceHHClose1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3512D  |.........|
 
 ; ---- drum instrument 167 'DanceHHClose2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23889,7 +23895,7 @@ PercInst_167_DanceHHClose2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 351C3  |.........|
 
 ; ---- drum instrument 168 'Syn.HH.Close1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23907,7 +23913,7 @@ PercInst_168_SynHHClose1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35259  |.........|
 
 ; ---- drum instrument 169 'Syn.HH.Close2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23925,7 +23931,7 @@ PercInst_169_SynHHClose2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 352EF  |.........|
 
 ; ---- drum instrument 170 'Syn.HH.Accent' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23943,7 +23949,7 @@ PercInst_170_SynHHAccent:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35385  |.........|
 
 ; ---- drum instrument 171 'Syn.HH.Pedal ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23961,7 +23967,7 @@ PercInst_171_SynHHPedal:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3541B  |.........|
 
 ; ---- drum instrument 172 'HiHat Open 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23979,7 +23985,7 @@ PercInst_172_HiHatOpen1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 354B1  |.........|
 
 ; ---- drum instrument 173 'HiHat Open 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23997,7 +24003,7 @@ PercInst_173_HiHatOpen2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35547  |.........|
 
 ; ---- drum instrument 174 'HiHat Open 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24015,7 +24021,7 @@ PercInst_174_HiHatOpen3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 355DD  |.........|
 
 ; ---- drum instrument 175 'HiHat Open 4 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24033,7 +24039,7 @@ PercInst_175_HiHatOpen4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35673  |.........|
 
 ; ---- drum instrument 176 'HiHat Open 5 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24051,7 +24057,7 @@ PercInst_176_HiHatOpen5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35709  |.........|
 
 ; ---- drum instrument 177 'HiHat Open 6 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24069,7 +24075,7 @@ PercInst_177_HiHatOpen6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3579F  |.........|
 
 ; ---- drum instrument 178 'HiHat HfOpen1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24087,7 +24093,7 @@ PercInst_178_HiHatHfOpen1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35835  |.........|
 
 ; ---- drum instrument 179 'HiHat HfOpen2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24105,7 +24111,7 @@ PercInst_179_HiHatHfOpen2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 358CB  |.........|
 
 ; ---- drum instrument 180 'HiHat HfOpen3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24123,7 +24129,7 @@ PercInst_180_HiHatHfOpen3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35961  |.........|
 
 ; ---- drum instrument 181 'HiHat HfOpen4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24141,7 +24147,7 @@ PercInst_181_HiHatHfOpen4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 359F7  |.........|
 
 ; ---- drum instrument 182 'HiHat HfOpen5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24159,7 +24165,7 @@ PercInst_182_HiHatHfOpen5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35A8D  |.........|
 
 ; ---- drum instrument 183 'HiHat HfOpen6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24177,7 +24183,7 @@ PercInst_183_HiHatHfOpen6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35B23  |.........|
 
 ; ---- drum instrument 184 'Model.HH.Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24195,7 +24201,7 @@ PercInst_184_ModelHHOpen:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35BB9  |.........|
 
 ; ---- drum instrument 185 'ModelHH.HfOpn' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24213,7 +24219,7 @@ PercInst_185_ModelHHHfOpn:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35C4F  |.........|
 
 ; ---- drum instrument 186 'Dance HH.Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24231,7 +24237,7 @@ PercInst_186_DanceHHOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35CE5  |.........|
 
 ; ---- drum instrument 187 'Synth HH.Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24249,7 +24255,7 @@ PercInst_187_SynthHHOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35D7B  |.........|
 
 ; ---- drum instrument 188 'Syn.HH.HfOpen' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24267,7 +24273,7 @@ PercInst_188_SynHHHfOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35E11  |.........|
 
 ; ---- drum instrument 189 'HiHat Pedal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24285,7 +24291,7 @@ PercInst_189_HiHatPedal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35EA7  |.........|
 
 ; ---- drum instrument 190 'HiHat Pedal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24303,7 +24309,7 @@ PercInst_190_HiHatPedal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35F3D  |.........|
 
 ; ---- drum instrument 191 'HiHat Pedal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24321,7 +24327,7 @@ PercInst_191_HiHatPedal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35FD3  |.........|
 
 ; ---- drum instrument 192 'HiHat Pedal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24339,7 +24345,7 @@ PercInst_192_HiHatPedal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36069  |.........|
 
 ; ---- drum instrument 193 'ModelHH.Pedal' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24357,7 +24363,7 @@ PercInst_193_ModelHHPedal:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 360FF  |.........|
 
 ; ---- drum instrument 194 'HiHatAccent 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24375,7 +24381,7 @@ PercInst_194_HiHatAccent1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36195  |.........|
 
 ; ---- drum instrument 195 'HiHatAccent 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24393,7 +24399,7 @@ PercInst_195_HiHatAccent2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3622B  |.........|
 
 ; ---- drum instrument 196 'HiHatAccent 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24411,7 +24417,7 @@ PercInst_196_HiHatAccent3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 362C1  |.........|
 
 ; ---- drum instrument 197 'HiHatAccent 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24429,7 +24435,7 @@ PercInst_197_HiHatAccent4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36357  |.........|
 
 ; ---- drum instrument 198 'HiHatAccent 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24447,7 +24453,7 @@ PercInst_198_HiHatAccent5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 363ED  |.........|
 
 ; ---- drum instrument 199 'HiHatAccent 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24465,7 +24471,7 @@ PercInst_199_HiHatAccent6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36483  |.........|
 
 ; ---- drum instrument 200 'ModelHHAccent' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24483,7 +24489,7 @@ PercInst_200_ModelHHAccent:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 36519  |.........|
 
 ; ---- drum instrument 201 'CrashCymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24501,7 +24507,7 @@ PercInst_201_CrashCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 365AF  |.........|
 
 ; ---- drum instrument 202 'CrashCymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24519,7 +24525,7 @@ PercInst_202_CrashCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36645  |.........|
 
 ; ---- drum instrument 203 'CrashCymbal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24537,7 +24543,7 @@ PercInst_203_CrashCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 366DB  |.........|
 
 ; ---- drum instrument 204 'CrashCymbal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24555,7 +24561,7 @@ PercInst_204_CrashCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36771  |.........|
 
 ; ---- drum instrument 205 'CrashCymbal11' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24573,7 +24579,7 @@ PercInst_205_CrashCymbal11:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36807  |.........|
 
 ; ---- drum instrument 206 'Syn.ChinaCym.' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24591,7 +24597,7 @@ PercInst_206_SynChinaCym:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3689D  |.........|
 
 ; ---- drum instrument 207 'CymSoftMallet' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24609,7 +24615,7 @@ PercInst_207_CymSoftMallet:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36933  |.........|
 
 ; ---- drum instrument 208 'Tam-Tam      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24627,7 +24633,7 @@ PercInst_208_TamTam:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 369C9  |.........|
 
 ; ---- drum instrument 209 'Mdl.CrashCym1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24645,7 +24651,7 @@ PercInst_209_MdlCrashCym1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36A5F  |.........|
 
 ; ---- drum instrument 210 'CrashCymbal 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24663,7 +24669,7 @@ PercInst_210_CrashCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36AF5  |.........|
 
 ; ---- drum instrument 211 'CrashCymbal 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24681,7 +24687,7 @@ PercInst_211_CrashCymbal6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36B8B  |.........|
 
 ; ---- drum instrument 212 'CrashCymbal 7' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24699,7 +24705,7 @@ PercInst_212_CrashCymbal7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36C21  |.........|
 
 ; ---- drum instrument 213 'CrashCymbal 8' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24717,7 +24723,7 @@ PercInst_213_CrashCymbal8:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36CB7  |.........|
 
 ; ---- drum instrument 214 'CrashCymbal 9' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24735,7 +24741,7 @@ PercInst_214_CrashCymbal9:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36D4D  |.........|
 
 ; ---- drum instrument 215 'CrashCymbal10' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24753,7 +24759,7 @@ PercInst_215_CrashCymbal10:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36DE3  |.........|
 
 ; ---- drum instrument 216 'Mdl.CrashCym2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24771,7 +24777,7 @@ PercInst_216_MdlCrashCym2:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x01, 0xB4, 0x00, 0x3A, 0x1B	; 36E79  |.......:.|
 
 ; ---- drum instrument 217 'SplashCymbal1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24789,7 +24795,7 @@ PercInst_217_SplashCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36F0F  |.........|
 
 ; ---- drum instrument 218 'SplashCymbal2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24807,7 +24813,7 @@ PercInst_218_SplashCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36FA5  |.........|
 
 ; ---- drum instrument 219 'SplashCymbal3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24825,7 +24831,7 @@ PercInst_219_SplashCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3703B  |.........|
 
 ; ---- drum instrument 220 'SplashCymbal4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24843,7 +24849,7 @@ PercInst_220_SplashCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 370D1  |.........|
 
 ; ---- drum instrument 221 'SplashCymbal5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24861,7 +24867,7 @@ PercInst_221_SplashCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37167  |.........|
 
 ; ---- drum instrument 222 'Mdl.SplashCym' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24879,7 +24885,7 @@ PercInst_222_MdlSplashCym:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x04, 0xCD, 0x00, 0x10, 0x6F	; 371FD  |........o|
 
 ; ---- drum instrument 223 'ChinaCymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24897,7 +24903,7 @@ PercInst_223_ChinaCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37293  |.........|
 
 ; ---- drum instrument 224 'ChinaCymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24915,7 +24921,7 @@ PercInst_224_ChinaCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37329  |.........|
 
 ; ---- drum instrument 225 'ChinaCymbal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24933,7 +24939,7 @@ PercInst_225_ChinaCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 373BF  |.........|
 
 ; ---- drum instrument 226 'ChinaCymbal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24951,7 +24957,7 @@ PercInst_226_ChinaCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37455  |.........|
 
 ; ---- drum instrument 227 'ChinaCymbal 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24969,7 +24975,7 @@ PercInst_227_ChinaCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 374EB  |.........|
 
 ; ---- drum instrument 228 'ModelChinaCym' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24987,7 +24993,7 @@ PercInst_228_ModelChinaCym:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0A, 0x6F	; 37581  |........o|
 
 ; ---- drum instrument 229 'Orch.Cymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25005,7 +25011,7 @@ PercInst_229_OrchCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37617  |.........|
 
 ; ---- drum instrument 230 'Orch.Cymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25023,7 +25029,7 @@ PercInst_230_OrchCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 376AD  |.........|
 
 ; ---- drum instrument 231 'SynOrchCymbal' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25041,7 +25047,7 @@ PercInst_231_SynOrchCymbal:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37743  |.........|
 
 ; ---- drum instrument 232 'Ride Cymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25059,7 +25065,7 @@ PercInst_232_RideCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 377D9  |.........|
 
 ; ---- drum instrument 233 'Ride Cymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25077,7 +25083,7 @@ PercInst_233_RideCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3786F  |.........|
 
 ; ---- drum instrument 234 'Ride Cymbal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25095,7 +25101,7 @@ PercInst_234_RideCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37905  |.........|
 
 ; ---- drum instrument 235 'Ride Cymbal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25113,7 +25119,7 @@ PercInst_235_RideCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3799B  |.........|
 
 ; ---- drum instrument 236 'Ride Cymbal 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25131,7 +25137,7 @@ PercInst_236_RideCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37A31  |.........|
 
 ; ---- drum instrument 237 'Ride Cymbal 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25149,7 +25155,7 @@ PercInst_237_RideCymbal6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37AC7  |.........|
 
 ; ---- drum instrument 238 'Ride Cymbal 7' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25167,7 +25173,7 @@ PercInst_238_RideCymbal7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37B5D  |.........|
 
 ; ---- drum instrument 239 'Synth Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25185,7 +25191,7 @@ PercInst_239_SynthSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37BF3  |.........|
 
 ; ---- drum instrument 240 'Synth Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25203,7 +25209,7 @@ PercInst_240_SynthSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37C89  |.........|
 
 ; ---- drum instrument 241 'TimbalesPaila' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25221,7 +25227,7 @@ PercInst_241_TimbalesPaila:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37D1F  |.........|
 
 ; ---- drum instrument 242 'ModelRideCym2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25239,7 +25245,7 @@ PercInst_242_ModelRideCym2:
 	.byte 0xE1, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCC	; 37DB5  |.........|
 
 ; ---- drum instrument 243 'Ride Cymbal 8' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25257,7 +25263,7 @@ PercInst_243_RideCymbal8:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37E4B  |.........|
 
 ; ---- drum instrument 244 'Ride Cymbal 9' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25275,7 +25281,7 @@ PercInst_244_RideCymbal9:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37EE1  |.........|
 
 ; ---- drum instrument 245 'Ride Cymbal10' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25293,7 +25299,7 @@ PercInst_245_RideCymbal10:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37F77  |.........|
 
 ; ---- drum instrument 246 'Ride Cymbal11' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25311,7 +25317,7 @@ PercInst_246_RideCymbal11:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3800D  |.........|
 
 ; ---- drum instrument 247 'Ride Cymbal12' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25329,7 +25335,7 @@ PercInst_247_RideCymbal12:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 380A3  |.........|
 
 ; ---- drum instrument 248 'Ride Cymbal13' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25347,7 +25353,7 @@ PercInst_248_RideCymbal13:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38139  |.........|
 
 ; ---- drum instrument 249 'Ride Cymbal14' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25365,7 +25371,7 @@ PercInst_249_RideCymbal14:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 381CF  |.........|
 
 ; ---- drum instrument 250 'ModelRideCym1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25383,7 +25389,7 @@ PercInst_250_ModelRideCym1:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF6, 0xEB	; 38265  |.........|
 
 ; ---- drum instrument 251 'Ride Bell 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25401,7 +25407,7 @@ PercInst_251_RideBell1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 382FB  |.........|
 
 ; ---- drum instrument 252 'Ride Bell 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25419,7 +25425,7 @@ PercInst_252_RideBell2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38391  |.........|
 
 ; ---- drum instrument 253 'Ride Bell 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25437,7 +25443,7 @@ PercInst_253_RideBell3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38427  |.........|
 
 ; ---- drum instrument 254 'Ride Bell 4  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25455,7 +25461,7 @@ PercInst_254_RideBell4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 384BD  |.........|
 
 ; ---- drum instrument 255 'Ride Bell 5  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25473,7 +25479,7 @@ PercInst_255_RideBell5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38553  |.........|
 
 ; ---- drum instrument 256 'Ride Bell 6  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25491,7 +25497,7 @@ PercInst_256_RideBell6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 385E9  |.........|
 
 ; ---- drum instrument 257 'Ride Bell 7  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25509,7 +25515,7 @@ PercInst_257_RideBell7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3867F  |.........|
 
 ; ---- drum instrument 258 'SynthCowbell1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25527,7 +25533,7 @@ PercInst_258_SynthCowbell1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38715  |.........|
 
 ; ---- drum instrument 259 'SynthCowbell2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25545,7 +25551,7 @@ PercInst_259_SynthCowbell2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 387AB  |.........|
 
 ; ---- drum instrument 260 'SynthCowbell3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25563,7 +25569,7 @@ PercInst_260_SynthCowbell3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38841  |.........|
 
 ; ---- drum instrument 261 'SynthCowbell4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25581,7 +25587,7 @@ PercInst_261_SynthCowbell4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 388D7  |.........|
 
 ; ---- drum instrument 262 'ModelRideBell' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25599,7 +25605,7 @@ PercInst_262_ModelRideBell:
 	.byte 0xEE, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF5, 0xF4	; 3896D  |.........|
 
 ; ---- drum instrument 263 'ReverseCymbl1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25617,7 +25623,7 @@ PercInst_263_ReverseCymbl1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38A03  |.........|
 
 ; ---- drum instrument 264 'ReverseCymbl2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25635,7 +25641,7 @@ PercInst_264_ReverseCymbl2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38A99  |.........|
 
 ; ---- drum instrument 265 'ReverseCymbl3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25653,7 +25659,7 @@ PercInst_265_ReverseCymbl3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38B2F  |.........|
 
 ; ---- drum instrument 266 'ReverseCymbl4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25671,7 +25677,7 @@ PercInst_266_ReverseCymbl4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38BC5  |.........|
 
 ; ---- drum instrument 267 'ReverseCymbl5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25689,7 +25695,7 @@ PercInst_267_ReverseCymbl5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38C5B  |.........|
 
 ; ---- drum instrument 268 'Agogo Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25707,7 +25713,7 @@ PercInst_268_AgogoLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38CF1  |.........|
 
 ; ---- drum instrument 269 'Agogo High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25725,7 +25731,7 @@ PercInst_269_AgogoHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38D87  |.........|
 
 ; ---- drum instrument 270 'SynthAgogo Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25743,7 +25749,7 @@ PercInst_270_SynthAgogoLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38E1D  |.........|
 
 ; ---- drum instrument 271 'SynthAgogo Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25761,7 +25767,7 @@ PercInst_271_SynthAgogoHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38EB3  |.........|
 
 ; ---- drum instrument 272 'ModelAgogo Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25779,7 +25785,7 @@ PercInst_272_ModelAgogoLo:
 	.byte 0x1E, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14	; 38F49  |.........|
 
 ; ---- drum instrument 273 'ModelAgogo Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25797,7 +25803,7 @@ PercInst_273_ModelAgogoHi:
 	.byte 0x1E, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14	; 38FDF  |.........|
 
 ; ---- drum instrument 274 'Sleigh Bell  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25815,7 +25821,7 @@ PercInst_274_SleighBell:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39075  |.........|
 
 ; ---- drum instrument 275 'Mdl.SleighBel' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25833,7 +25839,7 @@ PercInst_275_MdlSleighBel:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x13, 0xE7	; 3910B  |.........|
 
 ; ---- drum instrument 276 'Cowbell 1    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25851,7 +25857,7 @@ PercInst_276_Cowbell1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 391A1  |.........|
 
 ; ---- drum instrument 277 'Cowbell 2    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25869,7 +25875,7 @@ PercInst_277_Cowbell2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39237  |.........|
 
 ; ---- drum instrument 278 'Cowbell 3    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25887,7 +25893,7 @@ PercInst_278_Cowbell3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 392CD  |.........|
 
 ; ---- drum instrument 279 'Cowbell 4    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25905,7 +25911,7 @@ PercInst_279_Cowbell4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39363  |.........|
 
 ; ---- drum instrument 280 'ModelCowbell1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25923,7 +25929,7 @@ PercInst_280_ModelCowbell1:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 393F9  |.........|
 
 ; ---- drum instrument 281 'ModelCowbell2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25941,7 +25947,7 @@ PercInst_281_ModelCowbell2:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 3948F  |.........|
 
 ; ---- drum instrument 282 'ModelCowbell3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25959,7 +25965,7 @@ PercInst_282_ModelCowbell3:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 39525  |.........|
 
 ; ---- drum instrument 283 'ModelCowbell4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25977,7 +25983,7 @@ PercInst_283_ModelCowbell4:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 395BB  |.........|
 
 ; ---- drum instrument 284 'Wind Chime   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25995,7 +26001,7 @@ PercInst_284_WindChime:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39651  |.........|
 
 ; ---- drum instrument 285 'Syn.WindChime' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26013,7 +26019,7 @@ PercInst_285_SynWindChime:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 396E7  |.........|
 
 ; ---- drum instrument 286 'Mdl.WindChime' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26031,7 +26037,7 @@ PercInst_286_MdlWindChime:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0F, 0xE7	; 3977D  |.........|
 
 ; ---- drum instrument 287 'Triangle Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26049,7 +26055,7 @@ PercInst_287_TriangleOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39813  |.........|
 
 ; ---- drum instrument 288 'SynTriangle O' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26067,7 +26073,7 @@ PercInst_288_SynTriangleO:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 398A9  |.........|
 
 ; ---- drum instrument 289 'Metal Hit Low' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26085,7 +26091,7 @@ PercInst_289_MetalHitLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3993F  |.........|
 
 ; ---- drum instrument 290 'Metal Hit Hi ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26103,7 +26109,7 @@ PercInst_290_MetalHitHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 399D5  |.........|
 
 ; ---- drum instrument 291 'MdlTriangle O' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26121,7 +26127,7 @@ PercInst_291_MdlTriangleO:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 39A6B  |.........|
 
 ; ---- drum instrument 292 'Triangle Mute' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26139,7 +26145,7 @@ PercInst_292_TriangleMute:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39B01  |.........|
 
 ; ---- drum instrument 293 'SynTriangle M' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26157,7 +26163,7 @@ PercInst_293_SynTriangleM:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39B97  |.........|
 
 ; ---- drum instrument 294 'Syn.TimbPaila' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26175,7 +26181,7 @@ PercInst_294_SynTimbPaila:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39C2D  |.........|
 
 ; ---- drum instrument 295 'MdlTriangle M' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26193,7 +26199,7 @@ PercInst_295_MdlTriangleM:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 39CC3  |.........|
 
 ; ---- drum instrument 296 'Small Bell   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26211,7 +26217,7 @@ PercInst_296_SmallBell:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39D59  |.........|
 
 ; ---- drum instrument 297 'Finger Cymbal' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26229,7 +26235,7 @@ PercInst_297_FingerCymbal:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39DEF  |.........|
 
 ; ---- drum instrument 298 'Finger Cym.H ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26247,7 +26253,7 @@ PercInst_298_FingerCymH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39E85  |.........|
 
 ; ---- drum instrument 299 'Finger Cym.L ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26265,7 +26271,7 @@ PercInst_299_FingerCymL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39F1B  |.........|
 
 ; ---- drum instrument 300 'TublarBell C ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26283,7 +26289,7 @@ PercInst_300_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 39FB1  |.........|
 
 ; ---- drum instrument 301 'TublarBell C#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26301,7 +26307,7 @@ PercInst_301_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A047  |.........|
 
 ; ---- drum instrument 302 'TublarBell D ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26319,7 +26325,7 @@ PercInst_302_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A0DD  |.........|
 
 ; ---- drum instrument 303 'TublarBell D#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26337,7 +26343,7 @@ PercInst_303_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A173  |.........|
 
 ; ---- drum instrument 304 'TublarBell E ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26355,7 +26361,7 @@ PercInst_304_TublarBellE:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A209  |.........|
 
 ; ---- drum instrument 305 'TublarBell F ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26373,7 +26379,7 @@ PercInst_305_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A29F  |.........|
 
 ; ---- drum instrument 306 'TublarBell F#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26391,7 +26397,7 @@ PercInst_306_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A335  |.........|
 
 ; ---- drum instrument 307 'TublarBell G ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26409,7 +26415,7 @@ PercInst_307_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A3CB  |.........|
 
 ; ---- drum instrument 308 'TublarBell G#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26427,7 +26433,7 @@ PercInst_308_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A461  |.........|
 
 ; ---- drum instrument 309 'TublarBell A ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26445,7 +26451,7 @@ PercInst_309_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A4F7  |.........|
 
 ; ---- drum instrument 310 'TublarBell A#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26463,7 +26469,7 @@ PercInst_310_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A58D  |.........|
 
 ; ---- drum instrument 311 'TublarBell B ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26481,7 +26487,7 @@ PercInst_311_TublarBellB:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A623  |.........|
 
 ; ---- drum instrument 312 'TublarBell c ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26499,7 +26505,7 @@ PercInst_312_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A6B9  |.........|
 
 ; ---- drum instrument 313 'TublarBell c#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26517,7 +26523,7 @@ PercInst_313_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A74F  |.........|
 
 ; ---- drum instrument 314 'TublarBell d ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26535,7 +26541,7 @@ PercInst_314_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A7E5  |.........|
 
 ; ---- drum instrument 315 'TublarBell d#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26553,7 +26559,7 @@ PercInst_315_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A87B  |.........|
 
 ; ---- drum instrument 316 'TublarBell e ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26571,7 +26577,7 @@ PercInst_316_TublarBellE:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A911  |.........|
 
 ; ---- drum instrument 317 'TublarBell f ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26589,7 +26595,7 @@ PercInst_317_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A9A7  |.........|
 
 ; ---- drum instrument 318 'TublarBell f#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26607,7 +26613,7 @@ PercInst_318_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AA3D  |.........|
 
 ; ---- drum instrument 319 'TublarBell g ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26625,7 +26631,7 @@ PercInst_319_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AAD3  |.........|
 
 ; ---- drum instrument 320 'TublarBell g#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26643,7 +26649,7 @@ PercInst_320_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AB69  |.........|
 
 ; ---- drum instrument 321 'TublarBell a ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26661,7 +26667,7 @@ PercInst_321_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3ABFF  |.........|
 
 ; ---- drum instrument 322 'TublarBell a#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26679,7 +26685,7 @@ PercInst_322_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AC95  |.........|
 
 ; ---- drum instrument 323 'TublarBell b ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26697,7 +26703,7 @@ PercInst_323_TublarBellB:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AD2B  |.........|
 
 ; ---- drum instrument 324 'Bongo Mute 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26715,7 +26721,7 @@ PercInst_324_BongoMute1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3ADC1  |.........|
 
 ; ---- drum instrument 325 'SynSmalCongaL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26733,7 +26739,7 @@ PercInst_325_SynSmalCongaL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3AE57  |.........|
 
 ; ---- drum instrument 326 'SynSmalCongaH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26751,7 +26757,7 @@ PercInst_326_SynSmalCongaH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3AEED  |.........|
 
 ; ---- drum instrument 327 'Bongo Mute 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26769,7 +26775,7 @@ PercInst_327_BongoMute2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3AF83  |.........|
 
 ; ---- drum instrument 328 'Bongo Mute 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26787,7 +26793,7 @@ PercInst_328_BongoMute3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B019  |.........|
 
 ; ---- drum instrument 329 'Bongo High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26805,7 +26811,7 @@ PercInst_329_BongoHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B0AF  |.........|
 
 ; ---- drum instrument 330 'ModelBongo H ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26823,7 +26829,7 @@ PercInst_330_ModelBongoH:
 	.byte 0xF2, 0xE8, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0x04	; 3B145  |.........|
 
 ; ---- drum instrument 331 'ModelBongo L ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26841,7 +26847,7 @@ PercInst_331_ModelBongoL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3B1DB  |.........|
 
 ; ---- drum instrument 332 'Bongo Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26859,7 +26865,7 @@ PercInst_332_BongoLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B271  |.........|
 
 ; ---- drum instrument 333 'Conga Mute On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26877,7 +26883,7 @@ PercInst_333_CongaMuteOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B307  |.........|
 
 ; ---- drum instrument 334 'Conga MuteOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26895,7 +26901,7 @@ PercInst_334_CongaMuteOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B39D  |.........|
 
 ; ---- drum instrument 335 'CongaMutCrash' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26913,7 +26919,7 @@ PercInst_335_CongaMutCrash:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B433  |.........|
 
 ; ---- drum instrument 336 'MdlCngMtCrash' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26931,7 +26937,7 @@ PercInst_336_MdlCngMtCrash:
 	.byte 0xF2, 0xE1, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3B4C9  |.........|
 
 ; ---- drum instrument 337 'Conga High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26949,7 +26955,7 @@ PercInst_337_CongaHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B55F  |.........|
 
 ; ---- drum instrument 338 'SmallConga Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26967,7 +26973,7 @@ PercInst_338_SmallCongaHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B5F5  |.........|
 
 ; ---- drum instrument 339 'Click 1      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26985,7 +26991,7 @@ PercInst_339_Click1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B68B  |.........|
 
 ; ---- drum instrument 340 'Click 2      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27003,7 +27009,7 @@ PercInst_340_Click2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B721  |.........|
 
 ; ---- drum instrument 341 'Conga Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27021,7 +27027,7 @@ PercInst_341_CongaLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B7B7  |.........|
 
 ; ---- drum instrument 342 'SmallConga Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27039,7 +27045,7 @@ PercInst_342_SmallCongaLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B84D  |.........|
 
 ; ---- drum instrument 343 'SynthBassDrm3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27057,7 +27063,7 @@ PercInst_343_SynthBassDrm3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B8E3  |.........|
 
 ; ---- drum instrument 344 'Steam Whistle' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27075,7 +27081,7 @@ PercInst_344_SteamWhistle:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B979  |.........|
 
 ; ---- drum instrument 345 'ModelConga Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27093,7 +27099,7 @@ PercInst_345_ModelCongaHi:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BA0F  |.........|
 
 ; ---- drum instrument 346 'ModelConga Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27111,7 +27117,7 @@ PercInst_346_ModelCongaLo:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BAA5  |.........|
 
 ; ---- drum instrument 347 'MdlsmallCngHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27129,7 +27135,7 @@ PercInst_347_MdlsmallCngHi:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BB3B  |.........|
 
 ; ---- drum instrument 348 'MdlsmallCngLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27147,7 +27153,7 @@ PercInst_348_MdlsmallCngLo:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BBD1  |.........|
 
 ; ---- drum instrument 349 'Conga Crash  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27165,7 +27171,7 @@ PercInst_349_CongaCrash:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BC67  |.........|
 
 ; ---- drum instrument 350 'TimbalesOpenL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27183,7 +27189,7 @@ PercInst_350_TimbalesOpenL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BCFD  |.........|
 
 ; ---- drum instrument 351 'TimbalesOpenH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27201,7 +27207,7 @@ PercInst_351_TimbalesOpenH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BD93  |.........|
 
 ; ---- drum instrument 352 'ModelTimbOpnL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27219,7 +27225,7 @@ PercInst_352_ModelTimbOpnL:
 	.byte 0xE2, 0xCE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8	; 3BE29  |.........|
 
 ; ---- drum instrument 353 'ModelTimbOpnH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27237,7 +27243,7 @@ PercInst_353_ModelTimbOpnH:
 	.byte 0xE2, 0xCE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8	; 3BEBF  |.........|
 
 ; ---- drum instrument 354 'TimblsOpenRim' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27255,7 +27261,7 @@ PercInst_354_TimblsOpenRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BF55  |.........|
 
 ; ---- drum instrument 355 'MdlTimbOpenRm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27273,7 +27279,7 @@ PercInst_355_MdlTimbOpenRm:
 	.byte 0xE6, 0xD2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEE, 0x28	; 3BFEB  |........(|
 
 ; ---- drum instrument 356 'SynTimbOpenLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27291,7 +27297,7 @@ PercInst_356_SynTimbOpenLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C081  |.........|
 
 ; ---- drum instrument 357 'SynTimbOpenRm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27309,7 +27315,7 @@ PercInst_357_SynTimbOpenRm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C117  |.........|
 
 ; ---- drum instrument 358 'SynTimbOpenHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27327,7 +27333,7 @@ PercInst_358_SynTimbOpenHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C1AD  |.........|
 
 ; ---- drum instrument 359 'BataDrum Slap' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27345,7 +27351,7 @@ PercInst_359_BataDrumSlap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C243  |.........|
 
 ; ---- drum instrument 360 'BataDrum Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27363,7 +27369,7 @@ PercInst_360_BataDrumOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C2D9  |.........|
 
 ; ---- drum instrument 361 'Timpani C    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27381,7 +27387,7 @@ PercInst_361_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C36F  |.........|
 
 ; ---- drum instrument 362 'Timpani C#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27399,7 +27405,7 @@ PercInst_362_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C405  |.........|
 
 ; ---- drum instrument 363 'Timpani D    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27417,7 +27423,7 @@ PercInst_363_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C49B  |.........|
 
 ; ---- drum instrument 364 'Timpani D#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27435,7 +27441,7 @@ PercInst_364_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C531  |.........|
 
 ; ---- drum instrument 365 'Timpani E    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27453,7 +27459,7 @@ PercInst_365_TimpaniE:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C5C7  |.........|
 
 ; ---- drum instrument 366 'Timpani F    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27471,7 +27477,7 @@ PercInst_366_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C65D  |.........|
 
 ; ---- drum instrument 367 'Timpani F#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27489,7 +27495,7 @@ PercInst_367_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C6F3  |.........|
 
 ; ---- drum instrument 368 'Timpani G    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27507,7 +27513,7 @@ PercInst_368_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C789  |.........|
 
 ; ---- drum instrument 369 'Timpani G#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27525,7 +27531,7 @@ PercInst_369_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C81F  |.........|
 
 ; ---- drum instrument 370 'Timpani A    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27543,7 +27549,7 @@ PercInst_370_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C8B5  |.........|
 
 ; ---- drum instrument 371 'Timpani A#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27561,7 +27567,7 @@ PercInst_371_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C94B  |.........|
 
 ; ---- drum instrument 372 'Timpani B    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27579,7 +27585,7 @@ PercInst_372_TimpaniB:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C9E1  |.........|
 
 ; ---- drum instrument 373 'Timpani c    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27597,7 +27603,7 @@ PercInst_373_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CA77  |.........|
 
 ; ---- drum instrument 374 'Timpani c#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27615,7 +27621,7 @@ PercInst_374_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CB0D  |.........|
 
 ; ---- drum instrument 375 'Timpani d    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27633,7 +27639,7 @@ PercInst_375_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CBA3  |.........|
 
 ; ---- drum instrument 376 'Timpani d#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27651,7 +27657,7 @@ PercInst_376_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CC39  |.........|
 
 ; ---- drum instrument 377 'Timpani e    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27669,7 +27675,7 @@ PercInst_377_TimpaniE:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CCCF  |.........|
 
 ; ---- drum instrument 378 'Timpani f    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27687,7 +27693,7 @@ PercInst_378_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CD65  |.........|
 
 ; ---- drum instrument 379 'Timpani f#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27705,7 +27711,7 @@ PercInst_379_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CDFB  |.........|
 
 ; ---- drum instrument 380 'Timpani g    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27723,7 +27729,7 @@ PercInst_380_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CE91  |.........|
 
 ; ---- drum instrument 381 'Timpani g#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27741,7 +27747,7 @@ PercInst_381_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CF27  |.........|
 
 ; ---- drum instrument 382 'Timpani a    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27759,7 +27765,7 @@ PercInst_382_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CFBD  |.........|
 
 ; ---- drum instrument 383 'Timpani a#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27777,7 +27783,7 @@ PercInst_383_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3D053  |.........|
 
 ; ---- drum instrument 384 'Timpani b    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27795,7 +27801,7 @@ PercInst_384_TimpaniB:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3D0E9  |.........|
 
 ; ---- drum instrument 385 'Cuica High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27813,7 +27819,7 @@ PercInst_385_CuicaHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D17F  |.........|
 
 ; ---- drum instrument 386 'Little Dog   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27831,7 +27837,7 @@ PercInst_386_LittleDog:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D215  |.........|
 
 ; ---- drum instrument 387 'Mdl.Cuica Hi ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27849,7 +27855,7 @@ PercInst_387_MdlCuicaHi:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x4C	; 3D2AB  |........L|
 
 ; ---- drum instrument 388 'Cuica Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27867,7 +27873,7 @@ PercInst_388_CuicaLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D341  |.........|
 
 ; ---- drum instrument 389 'Bullfrog     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27885,7 +27891,7 @@ PercInst_389_Bullfrog:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D3D7  |.........|
 
 ; ---- drum instrument 390 'Mdl.Cuica Low' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27903,7 +27909,7 @@ PercInst_390_MdlCuicaLow:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCB	; 3D46D  |.........|
 
 ; ---- drum instrument 391 'Guiro Long 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27921,7 +27927,7 @@ PercInst_391_GuiroLong1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D503  |.........|
 
 ; ---- drum instrument 392 'Guiro Long 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27939,7 +27945,7 @@ PercInst_392_GuiroLong2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D599  |.........|
 
 ; ---- drum instrument 393 'Heart Beat   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27957,7 +27963,7 @@ PercInst_393_HeartBeat:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D62F  |.........|
 
 ; ---- drum instrument 394 'Mdl.GuiroLong' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27975,7 +27981,7 @@ PercInst_394_MdlGuiroLong:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x04, 0x00	; 3D6C5  |.........|
 
 ; ---- drum instrument 395 'Guiro Short 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27993,7 +27999,7 @@ PercInst_395_GuiroShort1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D75B  |.........|
 
 ; ---- drum instrument 396 'Guiro Short 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28011,7 +28017,7 @@ PercInst_396_GuiroShort2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D7F1  |.........|
 
 ; ---- drum instrument 397 'MdlGuiroShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28029,7 +28035,7 @@ PercInst_397_MdlGuiroShort:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x08, 0x00	; 3D887  |.........|
 
 ; ---- drum instrument 398 'Hand Claps   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28047,7 +28053,7 @@ PercInst_398_HandClaps:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D91D  |.........|
 
 ; ---- drum instrument 399 'Mdl.HandClaps' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28065,7 +28071,7 @@ PercInst_399_MdlHandClaps:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3D9B3  |.........|
 
 ; ---- drum instrument 400 'Shaker On    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28083,7 +28089,7 @@ PercInst_400_ShakerOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DA49  |.........|
 
 ; ---- drum instrument 401 'Shaker Off   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28101,7 +28107,7 @@ PercInst_401_ShakerOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DADF  |.........|
 
 ; ---- drum instrument 402 'Syn.Shaker On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28119,7 +28125,7 @@ PercInst_402_SynShakerOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DB75  |.........|
 
 ; ---- drum instrument 403 'Syn.ShakerOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28137,7 +28143,7 @@ PercInst_403_SynShakerOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DC0B  |.........|
 
 ; ---- drum instrument 404 'Mdl.Shaker On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28155,7 +28161,7 @@ PercInst_404_MdlShakerOn:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 3DCA1  |.........|
 
 ; ---- drum instrument 405 'Mdl.ShakerOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28173,7 +28179,7 @@ PercInst_405_MdlShakerOff:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 3DD37  |.........|
 
 ; ---- drum instrument 406 'Shekele On   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28191,7 +28197,7 @@ PercInst_406_ShekeleOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DDCD  |.........|
 
 ; ---- drum instrument 407 'Shekele Off  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28209,7 +28215,7 @@ PercInst_407_ShekeleOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DE63  |.........|
 
 ; ---- drum instrument 408 'Cabasa 1     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28227,7 +28233,7 @@ PercInst_408_Cabasa1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DEF9  |.........|
 
 ; ---- drum instrument 409 'Cabasa 2     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28245,7 +28251,7 @@ PercInst_409_Cabasa2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DF8F  |.........|
 
 ; ---- drum instrument 410 'Model.Cabasa ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28263,7 +28269,7 @@ PercInst_410_ModelCabasa:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 3E025  |.........|
 
 ; ---- drum instrument 411 'Maracas On   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28281,7 +28287,7 @@ PercInst_411_MaracasOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E0BB  |.........|
 
 ; ---- drum instrument 412 'Maracas Off  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28299,7 +28305,7 @@ PercInst_412_MaracasOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E151  |.........|
 
 ; ---- drum instrument 413 'Syn.MaracasOn' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28317,7 +28323,7 @@ PercInst_413_SynMaracasOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E1E7  |.........|
 
 ; ---- drum instrument 414 'SynMaracasOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28335,7 +28341,7 @@ PercInst_414_SynMaracasOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E27D  |.........|
 
 ; ---- drum instrument 415 'Mdl.MaracasOn' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28353,7 +28359,7 @@ PercInst_415_MdlMaracasOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3E313  |.........|
 
 ; ---- drum instrument 416 'MdlMaracasOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28371,7 +28377,7 @@ PercInst_416_MdlMaracasOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3E3A9  |.........|
 
 ; ---- drum instrument 417 'Caxixi On    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28389,7 +28395,7 @@ PercInst_417_CaxixiOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E43F  |.........|
 
 ; ---- drum instrument 418 'Caxixi Off   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28407,7 +28413,7 @@ PercInst_418_CaxixiOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E4D5  |.........|
 
 ; ---- drum instrument 419 'SambaWhistleL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28425,7 +28431,7 @@ PercInst_419_SambaWhistleL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E56B  |.........|
 
 ; ---- drum instrument 420 'SambaWhistleH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28443,7 +28449,7 @@ PercInst_420_SambaWhistleH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E601  |.........|
 
 ; ---- drum instrument 421 'SambaWhiShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28461,7 +28467,7 @@ PercInst_421_SambaWhiShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E697  |.........|
 
 ; ---- drum instrument 422 'SambaWhi Long' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28479,7 +28485,7 @@ PercInst_422_SambaWhiLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E72D  |.........|
 
 ; ---- drum instrument 423 'MdlSambaWhi L' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28497,7 +28503,7 @@ PercInst_423_MdlSambaWhiL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E7C3  |.........|
 
 ; ---- drum instrument 424 'MdlSambaWhi H' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28515,7 +28521,7 @@ PercInst_424_MdlSambaWhiH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E859  |.........|
 
 ; ---- drum instrument 425 'MdlSmbWhShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28533,7 +28539,7 @@ PercInst_425_MdlSmbWhShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E8EF  |.........|
 
 ; ---- drum instrument 426 'MdlSmbWh Long' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28551,7 +28557,7 @@ PercInst_426_MdlSmbWhLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E985  |.........|
 
 ; ---- drum instrument 427 'SynSambaWhi L' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28569,7 +28575,7 @@ PercInst_427_SynSambaWhiL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EA1B  |.........|
 
 ; ---- drum instrument 428 'SynSambaWhi H' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28587,7 +28593,7 @@ PercInst_428_SynSambaWhiH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EAB1  |.........|
 
 ; ---- drum instrument 429 'SynSmbWhShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28605,7 +28611,7 @@ PercInst_429_SynSmbWhShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EB47  |.........|
 
 ; ---- drum instrument 430 'SynSmbWh Long' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28623,7 +28629,7 @@ PercInst_430_SynSmbWhLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EBDD  |.........|
 
 ; ---- drum instrument 431 'Samba Drum On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28641,7 +28647,7 @@ PercInst_431_SambaDrumOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EC73  |.........|
 
 ; ---- drum instrument 432 'SambaDrum Off' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28659,7 +28665,7 @@ PercInst_432_SambaDrumOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3ED09  |.........|
 
 ; ---- drum instrument 433 'Darbuka Slap ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28677,7 +28683,7 @@ PercInst_433_DarbukaSlap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3ED9F  |.........|
 
 ; ---- drum instrument 434 'Darbuka Open ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28695,7 +28701,7 @@ PercInst_434_DarbukaOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EE35  |.........|
 
 ; ---- drum instrument 435 'Surdo Open   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28713,7 +28719,7 @@ PercInst_435_SurdoOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EECB  |.........|
 
 ; ---- drum instrument 436 'Surdo Mute   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28731,7 +28737,7 @@ PercInst_436_SurdoMute:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EF61  |.........|
 
 ; ---- drum instrument 437 'SurdoLeftHand' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28749,7 +28755,7 @@ PercInst_437_SurdoLeftHand:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EFF7  |.........|
 
 ; ---- drum instrument 438 'TambourinAcc1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28767,7 +28773,7 @@ PercInst_438_TambourinAcc1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F08D  |.........|
 
 ; ---- drum instrument 439 'TambourinAcc2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28785,7 +28791,7 @@ PercInst_439_TambourinAcc2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F123  |.........|
 
 ; ---- drum instrument 440 'MdlTamburnAcc' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28803,7 +28809,7 @@ PercInst_440_MdlTamburnAcc:
 	.byte 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 3F1B9  |........o|
 
 ; ---- drum instrument 441 'TambourineBt1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28821,7 +28827,7 @@ PercInst_441_TambourineBt1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F24F  |.........|
 
 ; ---- drum instrument 442 'TambourineBt2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28839,7 +28845,7 @@ PercInst_442_TambourineBt2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F2E5  |.........|
 
 ; ---- drum instrument 443 'Mdl.TamburnBt' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28857,7 +28863,7 @@ PercInst_443_MdlTamburnBt:
 	.byte 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 3F37B  |........o|
 
 ; ---- drum instrument 444 'OrchTambourin' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28875,7 +28881,7 @@ PercInst_444_OrchTambourin:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F411  |.........|
 
 ; ---- drum instrument 445 'Nutshell Tree' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28893,7 +28899,7 @@ PercInst_445_NutshellTree:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F4A7  |.........|
 
 ; ---- drum instrument 446 'Crikets      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28911,7 +28917,7 @@ PercInst_446_Crikets:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F53D  |.........|
 
 ; ---- drum instrument 447 'Rain Stick   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28929,7 +28935,7 @@ PercInst_447_RainStick:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F5D3  |.........|
 
 ; ---- drum instrument 448 'Vibraslap    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28947,7 +28953,7 @@ PercInst_448_Vibraslap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F669  |.........|
 
 ; ---- drum instrument 449 'Syn.Vibraslap' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28965,7 +28971,7 @@ PercInst_449_SynVibraslap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F6FF  |.........|
 
 ; ---- drum instrument 450 'Rattle       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28983,7 +28989,7 @@ PercInst_450_Rattle:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F795  |.........|
 
 ; ---- drum instrument 451 'Mdl.Vibraslap' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29001,7 +29007,7 @@ PercInst_451_MdlVibraslap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x00	; 3F82B  |.........|
 
 ; ---- drum instrument 452 'WoodBlockHigh' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29019,7 +29025,7 @@ PercInst_452_WoodBlockHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F8C1  |.........|
 
 ; ---- drum instrument 453 'WoodBlock Low' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29037,7 +29043,7 @@ PercInst_453_WoodBlockLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F957  |.........|
 
 ; ---- drum instrument 454 'WoodBlock Hi2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29055,7 +29061,7 @@ PercInst_454_WoodBlockHi2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F9ED  |.........|
 
 ; ---- drum instrument 455 'Temple Block ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29073,7 +29079,7 @@ PercInst_455_TempleBlock:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FA83  |.........|
 
 ; ---- drum instrument 456 'MdlWdblock Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29091,7 +29097,7 @@ PercInst_456_MdlWdblockHi:
 	.byte 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 3FB19  |.........|
 
 ; ---- drum instrument 457 'MdlWdBlockLow' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29109,7 +29115,7 @@ PercInst_457_MdlWdBlockLow:
 	.byte 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 3FBAF  |.........|
 
 ; ---- drum instrument 458 'MdlWdBlockHi2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29127,7 +29133,7 @@ PercInst_458_MdlWdBlockHi2:
 	.byte 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 3FC45  |.........|
 
 ; ---- drum instrument 459 'Castanets    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29145,7 +29151,7 @@ PercInst_459_Castanets:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FCDB  |.........|
 
 ; ---- drum instrument 460 'ModelCastanet' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29163,7 +29169,7 @@ PercInst_460_ModelCastanet:
 	.byte 0xD6, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x11, 0x89	; 3FD71  |.........|
 
 ; ---- drum instrument 461 'Claves       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29181,7 +29187,7 @@ PercInst_461_Claves:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FE07  |.........|
 
 ; ---- drum instrument 462 'Synth Claves ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29199,7 +29205,7 @@ PercInst_462_SynthClaves:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FE9D  |.........|
 
 ; ---- drum instrument 463 'Model.Claves ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29217,7 +29223,7 @@ PercInst_463_ModelClaves:
 	.byte 0x14, 0x0D, 0x00, 0x80, 0x00, 0x00, 0x00, 0x06, 0x42	; 3FF33  |........B|
 
 ; ---- drum instrument 464 'Slap 1       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29235,7 +29241,7 @@ PercInst_464_Slap1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FFC9  |.........|
 
 ; ---- drum instrument 465 'Slap 2       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29253,7 +29259,7 @@ PercInst_465_Slap2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4005F  |.........|
 
 ; ---- drum instrument 466 'Slap 3       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29271,7 +29277,7 @@ PercInst_466_Slap3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 400F5  |.........|
 
 ; ---- drum instrument 467 'Scratch 1    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29289,7 +29295,7 @@ PercInst_467_Scratch1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4018B  |.........|
 
 ; ---- drum instrument 468 'Scratch 2    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29307,7 +29313,7 @@ PercInst_468_Scratch2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40221  |.........|
 
 ; ---- drum instrument 469 'Scratch 3    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29325,7 +29331,7 @@ PercInst_469_Scratch3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 402B7  |.........|
 
 ; ---- drum instrument 470 'Scratch 4    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29343,7 +29349,7 @@ PercInst_470_Scratch4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4034D  |.........|
 
 ; ---- drum instrument 471 'Zap 1        ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29361,7 +29367,7 @@ PercInst_471_Zap1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 403E3  |.........|
 
 ; ---- drum instrument 472 'ElectroUnizon' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29379,7 +29385,7 @@ PercInst_472_ElectroUnizon:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40479  |.........|
 
 ; ---- drum instrument 473 'Electro Shot1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29397,7 +29403,7 @@ PercInst_473_ElectroShot1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4050F  |.........|
 
 ; ---- drum instrument 474 'Electro Shot2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29415,7 +29421,7 @@ PercInst_474_ElectroShot2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 405A5  |.........|
 
 ; ---- drum instrument 475 'Zap 2        ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29433,7 +29439,7 @@ PercInst_475_Zap2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4063B  |.........|
 
 ; ---- drum instrument 476 'AmbientHammer' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29451,7 +29457,7 @@ PercInst_476_AmbientHammer:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 406D1  |.........|
 
 ; ---- drum instrument 477 'Wave 1       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29469,7 +29475,7 @@ PercInst_477_Wave1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40767  |.........|
 
 ; ---- drum instrument 478 'Wave 2       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29487,7 +29493,7 @@ PercInst_478_Wave2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 407FD  |.........|
 
 ; ---- drum instrument 479 'Applause 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29505,7 +29511,7 @@ PercInst_479_Applause1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40893  |.........|
 
 ; ---- drum instrument 480 'Applause 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29523,7 +29529,7 @@ PercInst_480_Applause2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40929  |.........|
 
 ; ---- drum instrument 481 'Voice Ah     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29541,7 +29547,7 @@ PercInst_481_VoiceAh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 409BF  |.........|
 
 ; ---- drum instrument 482 'Voice Yeh    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29559,7 +29565,7 @@ PercInst_482_VoiceYeh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40A55  |.........|
 
 ; ---- drum instrument 483 'Voice Uh     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29577,7 +29583,7 @@ PercInst_483_VoiceUh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40AEB  |.........|
 
 ; ---- drum instrument 484 'Helicopter   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29595,7 +29601,7 @@ PercInst_484_Helicopter:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40B81  |.........|
 
 ; ---- drum instrument 485 'Train        ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29613,7 +29619,7 @@ PercInst_485_Train:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40C17  |.........|
 
 ; ---- drum instrument 486 'Telephone    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29631,7 +29637,7 @@ PercInst_486_Telephone:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40CAD  |.........|
 
 ; ---- drum instrument 487 'Gun Shot     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29649,7 +29655,7 @@ PercInst_487_GunShot:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40D43  |.........|
 
 ; ---- drum instrument 488 'Syn.HandClaps' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29667,7 +29673,7 @@ PercInst_488_SynHandClaps:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40DD9  |.........|
 
 ; ---- drum instrument 489 'Explosion    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29685,7 +29691,7 @@ PercInst_489_Explosion:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40E6F  |.........|
 
 ; ---- drum instrument 490 'Orch.Hit High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29703,7 +29709,7 @@ PercInst_490_OrchHitHigh:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 40F05  |.........|
 
 ; ---- drum instrument 491 'Orch.Hit Low ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29721,7 +29727,7 @@ PercInst_491_OrchHitLow:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 40F9B  |.........|
 
 ; ---- drum instrument 492 'Wind         ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29739,7 +29745,7 @@ PercInst_492_Wind:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41031  |.........|
 
 ; ---- drum instrument 493 'Bird 1       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29757,7 +29763,7 @@ PercInst_493_Bird1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 410C7  |.........|
 
 ; ---- drum instrument 494 'Bird 2       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29775,7 +29781,7 @@ PercInst_494_Bird2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4115D  |.........|
 
 ; ---- drum instrument 495 'Sax Breath   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29793,7 +29799,7 @@ PercInst_495_SaxBreath:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 411F3  |.........|
 
 ; ---- drum instrument 496 'Flute Breath ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29811,7 +29817,7 @@ PercInst_496_FluteBreath:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41289  |.........|
 
 ; ---- drum instrument 497 'Pick Noise 4 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29829,7 +29835,7 @@ PercInst_497_PickNoise4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4131F  |.........|
 
 ; ---- drum instrument 498 'Pick Noise 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29847,7 +29853,7 @@ PercInst_498_PickNoise2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 413B5  |.........|
 
 ; ---- drum instrument 499 'Pick Noise 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29865,7 +29871,7 @@ PercInst_499_PickNoise1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4144B  |.........|
 
 ; ---- drum instrument 500 'Pick Noise 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29883,7 +29889,7 @@ PercInst_500_PickNoise3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 414E1  |.........|
 
 ; ---- drum instrument 501 'Fret Noise   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29901,7 +29907,7 @@ PercInst_501_FretNoise:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41577  |.........|
 
 ; ---- drum instrument 502 'Organ Click  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29919,7 +29925,7 @@ PercInst_502_OrganClick:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4160D  |.........|
 
 ; ---- drum instrument 503 'Slap Shot    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 0
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -29959,18 +29965,16 @@ PercInst_503_SlapShot:
 ; count 208 is fixed at BOTH ends and is not a stride guess.  43 is the
 ; directory's own word at +0xF0, and prom_c reads that word at 8 sites.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x20 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
-; 
-; ⚠ NO reader was found for THIS array.  What follows is about the
-; array at slot +0x3C, which has the same record shape, and is quoted
-; as corroboration for the 43 -- not as evidence about this block.
+; ★ READER (corrected 2026-09-25, lane promcd -- this paragraph said there
+; was none, that nothing confirmed the name, and that it lacked a reader).
+; ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3) reads this slot with `ld XIY,(XBC+0x20)` at 0xFB839E, stride +0xF0 at
+; 0xFB83A9,
+; multiplies the index-map value by the stride word and adds the base: this
+; array's record n is the wave-select record a wave selector resolves to (see
+; ToneDB_ToneIndexMapA's banner).  Round 3's base-load census missed it
+; because that routine parks the base in a frame slot first.
+; What follows is about the array at slot +0x3C, which has the same record
+; shape, and is quoted as further corroboration for the 43.
 ; One prom_c routine
 ; reaches a record by multiplying the directory's stride word, and then
 ; uses the SAME word as the loop bound of a byte copy out of it:
