@@ -51,6 +51,21 @@ def runs(m):
                 if mn in ("jrl", "calr") and v > 32767:
                     v -= 65536
                 targets.add(addr_of[i] + SZ[mn] + v)
+    # a `lda XIY,(0xADDR:24)` / `push XIY` / `jp (xreg)` computed call returns to
+    # ADDR, so a 24-bit lda immediate is a CONTROL target; any other 32-bit
+    # immediate that lands in the image (ld XIX,imm / add XBC,imm ...) is kept
+    # apart as a possible DATA READER.
+    readers = {}
+    for i, l in enumerate(L):
+        c = l.split(";")[0]
+        for mm in re.finditer(r'\(0x([0-9a-fA-F]{6}):24\)', c):
+            v = int(mm.group(1), 16)
+            if 0xF80000 <= v <= 0xFFFFFF:
+                targets.add(v)
+        for mm in re.finditer(r'\b0x00([0-9a-fA-F]{6})\b', c):
+            v = int(mm.group(1), 16)
+            if 0xF80000 <= v <= 0xFFFFFF:
+                readers.setdefault(v, []).append((addr_of.get(i), c.strip()[:48]))
     out, cur, after_term = [], None, False
     for i, l in enumerate(L):
         c = l.split(";")[0]
@@ -93,7 +108,8 @@ def runs(m):
             j += 1
         end = addr_of.get(j, a1 + 1)
         hit = [t for t in targets if a0 <= t < end]
-        res.append((a0, end, r["markers"], r["lines"], hit, r["first"] + 1))
+        rd = [(v, readers[v]) for v in sorted(readers) if a0 <= v < end]
+        res.append((a0, end, r["markers"], r["lines"], hit, r["first"] + 1, rd))
     return res
 
 
@@ -103,10 +119,13 @@ def main():
     a = ap.parse_args()
     m = srcmap.load()
     tot = 0
-    for a0, end, mk, n, hit, ln in runs(m):
+    for a0, end, mk, n, hit, ln, rd in runs(m):
         if mk >= a.min_markers and not hit:
             tot += end - a0
-            print("0x%06X-0x%06X %5d B  %3d markers / %3d lines  line %d" % (a0, end, end - a0, mk, n, ln))
+            print("0x%06X-0x%06X %5d B  %3d markers / %3d lines  line %d%s" % (
+                a0, end, end - a0, mk, n, ln,
+                ("  DATA READERS: " + "; ".join("0x%06X by %s" % (v, ", ".join(
+                    "0x%06X" % x[0] if x[0] else "?" for x in r[:3])) for v, r in rd[:3])) if rd else ""))
     print("total %d bytes" % tot)
 
 
