@@ -103762,6 +103762,38 @@ PtrTable_F4FB38:
 ; Unknown: what the keys mean.  353 distinct keys over 782 records, spanning
 ;          0x0000-0xFFFF.  The traversal that follows `next` is not located.
 ; --------------------------------------------------------------------------
+; ⚠ ANSWERED 2026-09-25 (lane promb): the traversal IS located, and the
+;   "keys" are two bytes, not one u16.  This is a SYSEX DECODE TREE.
+; Read by: prom_a sub_FB63D1 (0xFB63D1), called from sub_FB63AF (0xFB63AF)
+;   after the MIDI receiver around 0xFB20E3 has collected a System Exclusive
+;   message -- it waits for 0xF0, accepts ID 0x50 or 0x7E, appends data bytes
+;   to the buffer at (0x60FC80) and calls the parse on 0xF7.  The walk starts
+;   at record 767, SysExDecodeTree_Root (0xF5115B, `add XBC,0x00F5115B` at
+;   0xFB63FC), and descends ONE MESSAGE BYTE PER LEVEL, levels 0..9: it reads
+;   the next byte (sub_FB61B1; 0xFF ends the message), scans the current list
+;   of 6-byte records for +0 == byte (+0 == 0xFE matches any byte, below the
+;   top level), stores the byte in field 5+level of the result object at
+;   (0x60FCD8) (sub_FB6219), and then
+;     +1 == 0   descend: +2 is the next level's list;
+;     +1 != 0   a LEAF: field 0 := +1, and the first two bytes of the record
+;               +2 points at become fields 1 and 2;
+;     +0 == 0xFF (end of list) fails the parse with code 7+level in field 4.
+; Record layout: +0 u8 match byte, +1 u8 result, +2 u32 pointer (this
+;   table's own records only).  The 782 records are 127 lists (562 records)
+;   reachable from the root, 213 leaf PAYLOAD records (+0/+1 are the two
+;   result bytes, +2 always names record 0) and 7 reached by neither.
+; What it decodes: the top-level match bytes are 0x21-0x2D, 0x7E and 0x7F,
+;   i.e. the byte after the SysEx ID -- `2C 04 00 11 00 gg pp` is a
+;   parameter-change address, and all 74 bodies SmfExport_ParamSysExTemplates
+;   writes (from their +4 byte) are complete 7-byte paths ending on a leaf, so
+;   an exported file's setup messages are ones this machine decodes.
+; Check: every list's terminator carries 7+depth in its +1 byte in 123 of the
+;   127 lists -- the very code the reader stores on failing at that depth
+;   (it does not read the byte; four depth-8/9 lists say 14).
+;   python3 notes/promb-2026-09-25/sysex_decode_tree_probe.py re-derives all
+;   of the above from the ROMs (reader decode included).
+; Open question: what the leaf's result and pair bytes select -- they are
+;   consumed after the walk (prom_a 0xFB6B87 onwards), not here.
 LinkTable_F4FF61:
 	.byte 0xff, 0xff, 0x61, 0xff, 0xf4, 0x00   ; F4FF61  [  0] key 0xFFFF  -> rec 0
 	.byte 0x11, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F4FF67  [  1] key 0x0711  -> rec 0
@@ -104530,6 +104562,9 @@ LinkTable_F4FF61:
 	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F51149  [764] key 0x09FF  -> rec 0
 	.byte 0x04, 0x00, 0x3d, 0x11, 0xf5, 0x00   ; F5114F  [765] key 0x0004  -> rec 762
 	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F51155  [766] key 0x08FF  -> rec 0
+; SysExDecodeTree_Root -- record 767: the level-0 list prom_a sub_FB63D1
+;   starts from (14 entries and the 0xFF terminator with code 7).
+SysExDecodeTree_Root:
 	.byte 0x25, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F5115B  [767] key 0x0925  -> rec 0
 	.byte 0x7e, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F51161  [768] key 0x0A7E  -> rec 0
 	.byte 0x23, 0x00, 0xd9, 0xff, 0xf4, 0x00   ; F51167  [769] key 0x0023  -> rec 20
