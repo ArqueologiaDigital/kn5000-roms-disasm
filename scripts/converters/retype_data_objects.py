@@ -27,6 +27,11 @@ SPEC (JSON list, one object each)
     name other files still load (positional_labels.s bases etc.).
     "signed": true prints short/byte values as signed (switch offsets, steps).
     "row_index": "0x%02X" comments each line with the index of its first element.
+    "anchors": {"0xADDR": {"before": [lines], "eol": "text"}} starts a new line at
+    ADDR, writes `before` as comment lines above it and `eol` at its end -- for
+    carrying existing per-line comments over a re-rendering verbatim.
+    "row_ram": "0x3D524" comments each line with the RAM address its first byte
+    is copied to (for ROM images of initialised RAM).
     Top-level: the spec may be {"renames": {"old": "new"}, "objects": [...]};
     renames apply to every label name the tool writes (so a `.long` of a
     label renamed in the same run is written with the new name).
@@ -185,8 +190,10 @@ def render(obj, data, lo, syms, keep_labels):
         sys.exit("%s: size %d is not a multiple of %d" % (obj["label"], n, size))
     row = []
     row_start = [0]
+    row_eol = [False]
 
     ri = obj.get("row_index")
+    ra = int(obj["row_ram"], 0) if obj.get("row_ram") else None
 
     def flush():
         if row:
@@ -194,6 +201,8 @@ def render(obj, data, lo, syms, keep_labels):
             c = "; ".join(x for _, x in row if x)
             if ri:
                 c = (ri % row_start[0]) + ("; " + c if c else "")
+            if ra is not None:
+                c = ("RAM 0x%05X" % (ra + row_start[0] * size)) + ("; " + c if c else "")
             directive = {"byte": ".byte", "short": ".short", "long": ".long"}[t]
             out.append("\t%s %s" % (directive, vals) + ("\t; " + c if c else ""))
             row.clear()
@@ -210,8 +219,16 @@ def render(obj, data, lo, syms, keep_labels):
         if parts[-1]:
             sys.exit("%s: asciz object does not end in NUL" % obj["label"])
         return out
+    anchors = {int(k, 0): v for k, v in obj.get("anchors", {}).items()}
     while i < n:
         a = lo + i
+        if a in anchors:
+            flush()
+            for ln in anchors[a].get("before", []):
+                out.append(("; " + ln).rstrip())
+            if anchors[a].get("eol"):
+                cm[a] = anchors[a]["eol"]
+                row_eol[0] = True
         for k in range(1, size):
             if a + k in keep_labels:
                 sys.exit("label %s falls inside an element of %s at 0x%X" %
@@ -242,8 +259,11 @@ def render(obj, data, lo, syms, keep_labels):
             txt = obj.get("fmt_byte", "0x%02x") % v
         if not row:
             row_start[0] = i // size
+        eol_here = row_eol[0]
         row.append((txt, cm.get(a)))
-        if len(row) >= per or cm.get(a):
+        row_eol[0] = False
+        nxt = a + size
+        if len(row) >= per or (cm.get(a) and not eol_here) or nxt in anchors:
             flush()
         i += size
     flush()
