@@ -3193,7 +3193,18 @@ PsEditSwBox_Return:
 	lda xsp, (xsp + 20)
 	ret
 
-PsEditSwBox_InlineData:
+; -----------------------------------------------------------------------------
+; PsEditSwBox_CalcEdgeSwitchRect -- code (was named PsEditSwBox_InlineData)
+; WA = edit-switch index, XBC = rect {x0,y0,x1,y1} to fill, DE = value given
+; to BoxLeftCheck / BoxRightCheck (ui/ui_control_panel.s: 1 for 0x80-0x88 /
+; 0xa0-0xa8).  point = GetEditSwPoint(WA).  A switch on the left edge
+; (point.x == 0) gets x0 = 0 if BoxLeftCheck(DE) else 8, x1 = 38; one on the
+; right edge (point.x == 319) gets x0 = 281, x1 = 319 if BoxRightCheck(DE)
+; else 311; both span y = point.y-9 .. point.y+8.  One on the bottom edge
+; (point.y == 239) gets x = point.x-16 .. point.x+15, y = 216 .. 238.
+; No caller was found (see scripts/renaming/uiproc_misc_names.py).
+; -----------------------------------------------------------------------------
+PsEditSwBox_CalcEdgeSwitchRect:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+8), de
@@ -3202,7 +3213,7 @@ PsEditSwBox_InlineData:
 	calr	GetEditSwPoint
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 0
-	jr	nz, PsEditSwBoxProc_Skip2
+	jr	nz, PsEditSwBox_CalcEdgeSwitchRect_Skip2
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3214,15 +3225,15 @@ PsEditSwBox_InlineData:
 	calr	BoxLeftCheck
 	ldw	wa, 8
 	cp	hl, 0:i3
-	jr	z, PsEditSwBoxProc_Skip
+	jr	z, PsEditSwBox_CalcEdgeSwitchRect_Skip
 	ld	wa, 0:i3
-PsEditSwBoxProc_Skip:
+PsEditSwBox_CalcEdgeSwitchRect_Skip:
 	ld	(xiz), wa
 	ldw	(xiz+4), 38
-PsEditSwBoxProc_Skip2:
+PsEditSwBox_CalcEdgeSwitchRect_Skip2:
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 319
-	jr	nz, PsEditSwBoxProc_Join
+	jr	nz, PsEditSwBox_CalcEdgeSwitchRect_Join
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3235,15 +3246,15 @@ PsEditSwBoxProc_Skip2:
 	calr	BoxRightCheck
 	lda	xwa, (xiz+4)
 	cp	hl, 0:i3
-	jr	z, PsEditSwBoxProc_Skip3
+	jr	z, PsEditSwBox_CalcEdgeSwitchRect_Skip3
 	ldw	(xwa), 319
-	jr	PsEditSwBoxProc_Join
-PsEditSwBoxProc_Skip3:
+	jr	PsEditSwBox_CalcEdgeSwitchRect_Join
+PsEditSwBox_CalcEdgeSwitchRect_Skip3:
 	ldw	(xwa), 311
-PsEditSwBoxProc_Join:
+PsEditSwBox_CalcEdgeSwitchRect_Join:
 	lda	xbc, (xsp+4)
 	cpw	(xbc+2), 239
-	jr	nz, PsEditSwBoxProc_Epilogue
+	jr	nz, PsEditSwBox_CalcEdgeSwitchRect_Epilogue
 	ldw	(xiz+2), 216
 	ldw	(xiz+6), 238
 	ld	wa, (xbc)
@@ -3252,7 +3263,7 @@ PsEditSwBoxProc_Join:
 	ld	wa, (xbc)
 	add	wa, 15
 	ld	(xiz+4), wa
-PsEditSwBoxProc_Epilogue:
+PsEditSwBox_CalcEdgeSwitchRect_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -6920,7 +6931,9 @@ DbMemo_DrawContent_Loop:
 	inc 4, xsp
 	ret
 
-DbMemo_TrailingData:
+; DbMemo_LoneRet -- a single `ret` instruction (was named DbMemo_TrailingData);
+; no caller was found (see scripts/renaming/uiproc_misc_names.py).
+DbMemo_LoneRet:
 	ret
 
 DbMemoryDumpProc:
@@ -7953,7 +7966,14 @@ PsTrkSw_Epilogue:
 	lda_dri XSP, 0xfd, 0xb2, 0x00
 	ret
 
-PsTrkSw_TrailingData:
+; -----------------------------------------------------------------------------
+; PsTrackSwitch_SetBoxFromIndex -- code (was named PsTrkSw_TrailingData)
+; XWA = track-switch widget.  n = word +22 of its view instance
+; (GetViewInstance); the widget's box becomes x = (n & 7)*40 + 4 .. +31,
+; y = 164 (n < 8) or 196 (n >= 8) .. +28, stored with SetBox: two rows of
+; eight switches.  No caller was found (see scripts/renaming/uiproc_misc_names.py).
+; -----------------------------------------------------------------------------
+PsTrackSwitch_SetBoxFromIndex:
 	dec	8, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -7963,12 +7983,12 @@ PsTrkSw_TrailingData:
 	lda	xbc, (xsp+4)
 	lda	xwa, (xbc+2)
 	cpw	(xde), 8
-	jr	nc, PsTrackSwitchProc_Skip
+	jr	nc, PsTrackSwitch_SetBoxFromIndex_Skip
 	ldw	(xwa), 164
-	jr	PsTrackSwitchProc_Join
-PsTrackSwitchProc_Skip:
+	jr	PsTrackSwitch_SetBoxFromIndex_Join
+PsTrackSwitch_SetBoxFromIndex_Skip:
 	ldw	(xwa), 196
-PsTrackSwitchProc_Join:
+PsTrackSwitch_SetBoxFromIndex_Join:
 	ld	wa, (xde)
 	and	wa, 7
 	mul	wa, 40
