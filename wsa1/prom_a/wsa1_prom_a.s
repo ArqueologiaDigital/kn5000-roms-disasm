@@ -184160,7 +184160,8 @@ sub_FF79DB:
 ;   OR-composites its layers, so together they make the solid shape; alone,
 ;   either is a 50% grey of it.
 ;
-; ⚠ WHAT THE ARTWORK SAYS IS NOT ESTABLISHED for images 0 and 1.  The preview
+; ⚠ WHAT THE ARTWORK SAYS was left open for images 0 and 1 until 2026-09-02
+;   (closed just below).  The preview
 ;   below shows a large italic script logotype in four glyph-like clusters,
 ;   occupying rows 72-153 of the panel.  This file does not name it.
 ; ★ CLOSED 2026-09-02, lane IMAGE.  Images 0 and 1 are committed as PNGs --
