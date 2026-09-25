@@ -26,10 +26,13 @@ SPEC (JSON list, one object each)
     "alias": {"LegacyName": 4} emits `.set LegacyName, <label> + 4` -- for a
     name other files still load (positional_labels.s bases etc.).
     "signed": true prints short/byte values as signed (switch offsets, steps).
+    "row_index": "0x%02X" comments each line with the index of its first element.
     Top-level: the spec may be {"renames": {"old": "new"}, "objects": [...]};
     renames apply to every label name the tool writes (so a `.long` of a
     label renamed in the same run is written with the new name).
-    type "long" resolves each value to a label of THIS image (exact address,
+    type "long" keeps the symbolic operand an existing `.long` line at the same
+    address already had (the rebuild proves it has the same value); otherwise
+    it resolves the value to a label of THIS image (exact address,
     non-positional names first); a value with no exact label stays hex.
 
 GUARDS
@@ -125,6 +128,7 @@ def symname(v, syms, at=None):
 
 
 NOTES = []
+OLD_LONG = {}   # address -> symbolic operand text of an existing `.long` line there
 
 
 def render(obj, data, lo, syms, keep_labels):
@@ -153,11 +157,16 @@ def render(obj, data, lo, syms, keep_labels):
     if n % size:
         sys.exit("%s: size %d is not a multiple of %d" % (obj["label"], n, size))
     row = []
+    row_start = [0]
+
+    ri = obj.get("row_index")
 
     def flush():
         if row:
             vals = ", ".join(v for v, _ in row)
             c = "; ".join(x for _, x in row if x)
+            if ri:
+                c = (ri % row_start[0]) + ("; " + c if c else "")
             directive = {"byte": ".byte", "short": ".short", "long": ".long"}[t]
             out.append("\t%s %s" % (directive, vals) + ("\t; " + c if c else ""))
             row.clear()
@@ -185,7 +194,10 @@ def render(obj, data, lo, syms, keep_labels):
             for nm in keep_labels[a]:
                 out.append("%s:" % nm)
         v = int.from_bytes(data[i:i + size], "little")
-        if t == "long":
+        if t == "long" and a in OLD_LONG:
+            txt = OLD_LONG[a]           # keep the operand the source already used
+            txt = RENAMES.get(txt, txt)
+        elif t == "long":
             n0 = len(NOTES)
             txt = symname(v, syms, a)
             if len(NOTES) > n0:
@@ -201,6 +213,8 @@ def render(obj, data, lo, syms, keep_labels):
             if obj.get("signed") and v >= 0x80:
                 v -= 0x100
             txt = obj.get("fmt_byte", "0x%02x") % v
+        if not row:
+            row_start[0] = i // size
         row.append((txt, cm.get(a)))
         if len(row) >= per or cm.get(a):
             flush()
@@ -343,6 +357,12 @@ def main():
             if ad is None:
                 sys.exit("label %s on line %d has no address" % (nm, k))
             keep.setdefault(ad, []).append(nm)
+        OLD_LONG.clear()
+        for k in range(fl, ll + 1):
+            m = re.match(r'^\s*\.long\s+([A-Za-z_.$][\w.$]*(?:\s*[-+]\s*\w+)?)\s*(;.*)?$',
+                         lines[k - 1])
+            if m and k in addr_of_line:
+                OLD_LONG[addr_of_line[k]] = m.group(1)
         new = []
         for o in run:
             olo, ohi = int(o["lo"], 0), int(o["hi"], 0)

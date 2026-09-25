@@ -108,11 +108,20 @@ NakaInst_Param_Flag01:
 NakaInst_Param_PadEnd:
 	.byte 0x01, 0x01, 0x00
 	.byte 0x00, 0xff
+; 18-byte sound-parameter descriptor -- the same record type as the 17 compiled
+; from audio/sndparam_records/run_ee0010.c just above (0xEE0010-0xEE0141);
+; SndParam_Registry entry 971 points at it.
 NakaInst_Param_IdxA0_01:
-	.byte 0x01, 0xa0, 0x02, 0x00, 0x80, 0x09
-	.byte 0x40, 0x00, 0x01, 0x06, 0x00, 0xff, 0x01, 0x01
-	.byte 0x01, 0x00, 0x00, 0xff, 0xa4, 0xba, 0xed, 0x00
-Naka_SubDispatch_A_Table:
+	.byte 0x01, 0xa0, 0x02, 0x00, 0x80, 0x09, 0x40, 0x00, 0x01
+	.byte 0x06, 0x00, 0xff, 0x01, 0x01, 0x01, 0x00, 0x00, 0xff
+; 11 x u32 pointers into the 0xEDxxxx sound-parameter value tables.
+; SndParam_RegisterLinked2_Data (0xFCE06E) and SndParam_RegisterDual_Data
+; (0xFCE616): `lda xbc,(<this>); ld a,(xde+11); cp a,255; ... sla a,2;
+; ld_rr8l xiy,xbc,a` -- the record's +11 byte selects the entry (0xFF = none).
+; Legacy name Naka_SubDispatch_A_Table (= entry 1) kept as an alias.
+SndParam_LinkTargetPtrs:
+	.set Naka_SubDispatch_A_Table, SndParam_LinkTargetPtrs + 4
+	.long WidgetParam_TestMode_Entry + 96	; no label at this target yet
 	.long WidgetParam_MidiCC_Program
 	.long WidgetParam_MidiCC_PitchBend
 	.long WidgetParam_MidiCC_BankSelect
@@ -123,10 +132,36 @@ Naka_SubDispatch_A_Table:
 	.long WidgetParam_MidiCC_Pan
 	.long WidgetParam_MidiCC_DspEffect
 	.long WidgetParam_MidiCC_NameEdit
-	.incbin "includes/romslices/v7_data_naka_subdispatch_a_table_tail.bin"
-Naka_SubDispatch_B_Table:
+; 6 x u32 RAM addresses (0x8EE4, 0x8EE6, 0x8EE8, 0x8EEA, 0x8EF4, 0xC1EC).
+; SndParam_ReadRegWithLUT (0xFCD9FF): `lda xhl,(<this>); ld_rr8l xbc,xhl,c;
+; ld c,(xbc)` -- reads the byte at the selected RAM address.
+SndParam_RegRamPtrs:
+	.long 0x00008e48
+	.long 0x00008e4a
+	.long 0x00008e4c
+	.long 0x00008e4e
+	.long 0x00008e58
+	.long 0x0000c150
+; 2 x u32 pointers (0xEDC89C, 0xEDC430) into the value tables.  Two readers use
+; two bases: SndParam_CompareShifted (0xFCDA79) / SndParam_RegisterMultiField_Data
+; (0xFCDD9B) index from +0 (`lda xbc,(<this>); ld_rr8l xbc,xbc,a`, then compare
+; with (xbc+1)/(xbc+2)); SndParam_ReadRegWord (0xFCDAA6) and
+; SndParam_RegisterBitfield_Data_Skip2 index from +4.  audio/sndparam_routines.s
+; loads this address as Naka_SubDispatch_B_Table (alias kept); index ranges not
+; traced, so whether either base reads past +8 into SndParam_Registry is open.
+SndParam_ValueTablePtrPair:
+	.set Naka_SubDispatch_B_Table, SndParam_ValueTablePtrPair
 	.long WidgetParam_MidiCC_Chorus
 	.long WidgetParam_MidiCC_SysExcl
+; 972 x u32 pointers to sound-parameter descriptor records.  Count pinned by
+; SndParam_RegisterAllWidgets / SndParam_RegisterLoop (0xFCEEC7): `ld xbc,xiz;
+; sll xbc,2; ld xwa,<this>; add xwa,xbc; ld xbc,(xwa); ...; inc 1,xiz;
+; cp xiz,972; jr c` -- every entry is registered once at start-up;
+; SndParam_ReregisterLoop (0xFCEFBC) walks it again reading record +4/+5/+6.
+; Legacy name Naka_MainDispatch_Table (= entry 92) kept as an alias: shared/
+; positional_labels.s derives Naka_MainDispatch_Table_0xNN names from it.
+SndParam_Registry:
+	.set Naka_MainDispatch_Table, SndParam_Registry + 368
 	.long WidgetParam_TestMode_Entry
 	.long WidgetParam_SineWave_Entry
 	.long VoiceCtrlR1_Entry_001
@@ -219,9 +254,6 @@ Naka_SubDispatch_B_Table:
 	.long VoiceCtrlR1_Entry_044
 	.long VoiceCtrlR1_Entry_045
 	.long VoiceCtrlR1_Entry_046
-
-
-Naka_MainDispatch_Table:
 	.long VoiceCtrlR1_Entry_047
 	.long VoiceCtrlR1_Entry_048
 	.long VoiceCtrlR1_Entry_049
@@ -1102,6 +1134,10 @@ Naka_MainDispatch_Table:
 	.long NakaInst_Param_Idx0B_88
 	.long NakaInst_Param_IdxA0_00
 	.long NakaInst_Param_IdxA0_01
+; 7 x u32 routine pointers, one per record type; SndParam_RO_Dispatch (0xFCD4C9):
+; `lda xbc,(<this>); lda_rr xbc,xbc,wa; ld xhl,(xbc); call (xhl)`.
+; Extent: up to the next table's base (each base is loaded by its own reader).
+SndParam_ReadHandlers:
 	.long SndParam_ResolveWidget + 164
 	.long SndParam_ResolveWidget + 168
 	.long SndParam_RW_ExactMatch + 1
@@ -1109,6 +1145,10 @@ Naka_MainDispatch_Table:
 	.long SndParam_RW_HandleB1Type + 9
 	.long SndParam_ResolveWidgetEx_Data + 34
 	.long SndParam_ResolveWidgetEx_Data + 123
+; 9 x u32 routine pointers, one per record type; SndParam_DispatchCallback (0xFCD29A):
+; `lda xde,(<this>); lda_rr xhl,xde,bc; ld xhl,(xhl); call (xhl)`.
+; Extent: up to the next table's base (each base is loaded by its own reader).
+SndParam_RegisterHandlers:
 	.long SndParam_ResolveWidgetEx_Data + 158
 	.long SndParam_ResolveWidgetEx_Data + 181
 	.long SndParam_DMA_ProbeEntry + 9
@@ -1118,6 +1158,10 @@ Naka_MainDispatch_Table:
 	.long SndParam_ReadRegBitfield + 64
 	.long SndParam_RegisterEntry_Data + 214
 	.long SndParam_RegisterMultiField_Data
+; 8 x u32 routine pointers, one per record type; SndParam_Lkp2_Dispatch (0xFCD3C8):
+; `lda xbc,(<this>); lda_rr xhl,xbc,wa; ld xhl,(xhl); call (xhl)`.
+; Extent: up to the next table's base (each base is loaded by its own reader).
+SndParam_Register2Handlers:
 	.long SndParam_RegisterMultiField_Data + 163
 	.long SndParam_RegisterMultiField_Data + 186
 	.long SndParam_RegisterLinked_Data + 37
@@ -1126,19 +1170,105 @@ Naka_MainDispatch_Table:
 	.long SndParam_RegisterSimple_Data + 71
 	.long SndParam_RegisterChained_Data + 216
 	.long SndParam_RegisterChained2_Data + 131
+; 6 x u32 routine pointers, one per record type; SndParam_RW_ProcessResult (0xFCD63F):
+; `lda xbc,(<this>); lda_rr xde,xbc,wa; ld xix,(xde); call (xix)` (also SndParam_ResolveWidget_Skip2).
+; Extent: up to the next table's base (each base is loaded by its own reader).
+SndParam_EncodeHandlers:
 	.long SndParam_RegisterComplex_Data + 161
 	.long SndParam_RegisterComplex_Data + 208
 	.long SndParam_RegisterComplex_Data + 263
 	.long SndParam_RegisterComplex_Data + 296
 	.long SndParam_NotifyQuick_Data + 37
 	.long SndParam_RegisterDual_Data + 19
+; 6 x u32 routine pointers, one per record type; SndParam_DispatchTypeDE5 (0xFCD2F9):
+; `lda xde,(<this>); lda_rr xde,xde,bc; ld xhl,(xde); call (xhl)`.
+; Extent: up to the next table's base (each base is loaded by its own reader).
+SndParam_WriteHandlers:
 	.long SndParam_RegisterDual_Data + 52
 	.long SndParam_RegisterDual_Data + 56
 	.long SndParam_RegisterDual_Data + 120
 	.long SndParam_RegisterDual_Data + 208
 	.long SndParam_RegisterDual_Data + 252
 	.long SndParam_RegisterDual_Data + 271
-	.incbin "includes/romslices/v7_transplant_Naka_MainDispatch_Table_tail.bin"
+; 256 x u32 RAM block addresses, 0 = no block, indexed by a descriptor's +4 byte:
+; SndParam_ReadRegField (0xFCD9C1) does `ld c,(xwa+4); sla bc,2; lda xde,(<this>);
+; ld_rrl xde,xde,bc; or xde,xde; ret z` (20 sites in all, e.g.
+; SndParam_DecodeMidiAddr_Skip2 0xFCD990).  Entry 0x48 is also read directly by
+; SndParam_ClampReverbTime (0xFCE9B0) and SndParam_ClampDelayTime (0xFCEA43)
+; (`ldl_da xwa,(<this>+0x120)`).  Entries 0-22 equal PartRecord_RamPtrTable's
+; (0xF9B6 + 0x1A*i).  256 entries = exactly up to the string that follows.
+SndParam_BlockRamPtrs:
+	.long 0x0000f9b6, 0x0000f9d0, 0x0000f9ea, 0x0000fa04	; 0x00
+	.long 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa6c	; 0x04
+	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4	; 0x08
+	.long 0x0000faee, 0x0000fb08, 0x0000fb22, 0x0000fb3c	; 0x0C
+	.long 0x0000fb56, 0x0000fb70, 0x0000fb8a, 0x0000fba4	; 0x10
+	.long 0x0000fbbe, 0x0000fbd8, 0x0000fbf2, 0x0000fd62	; 0x14
+	.long 0x0000fd7c, 0x0000fc0c, 0x00000000, 0x00000000	; 0x18
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x1C
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x20
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x24
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x28
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x2C
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x30
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x34
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x38
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x3C
+	.long 0x00000000, 0x00000000, 0x00000000, 0x0000fc54	; 0x40
+	.long 0x0000fc26, 0x0000fc32, 0x0000fc3e, 0x0000fc4a	; 0x44
+	.long 0x0000fc5a, 0x0000ff92, 0x00000000, 0x00000000	; 0x48
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x4C
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x50
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x54
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x58
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x5C
+	.long 0x0000fc6e, 0x0000fc74, 0x00000000, 0x0000fc8e	; 0x60
+	.long 0x0000fca8, 0x0000fcc2, 0x0000fcdc, 0x00000000	; 0x64
+	.long 0x0000fcf6, 0x00000000, 0x00000000, 0x00000000	; 0x68
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x6C
+	.long 0x0000fd02, 0x0000fd2c, 0x0000fd0c, 0x00000000	; 0x70
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x74
+	.long 0x0000f9a2, 0x00000000, 0x00000000, 0x00000000	; 0x78
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x7C
+	.long 0x0000fd50, 0x00000000, 0x00000000, 0x00000000	; 0x80
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x84
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x88
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x8C
+	.long 0x0000fc66, 0x0000fdaa, 0x0000fd1c, 0x0000fdb6	; 0x90
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x94
+	.long 0x0000fd96, 0x0000fd30, 0x0000ffa4, 0x00000000	; 0x98
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x9C
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xA0
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xA4
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xA8
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xAC
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xB0
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xB4
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xB8
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xBC
+	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16	; 0xC0
+	.long 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; 0xC4
+	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6	; 0xC8
+	.long 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; 0xCC
+	.long 0x0000ff1a, 0x0000ff2e, 0x0000ff42, 0x0000ff56	; 0xD0
+	.long 0x0000ff6a, 0x0000ff1a, 0x0000ff56, 0x0000ff7e	; 0xD4
+	.long 0x0000ff7e, 0x00000000, 0x00000000, 0x00000000	; 0xD8
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xDC
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xE0
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xE4
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xE8
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xEC
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xF0
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xF4
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xF8
+	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0xFC
+; Debug message "Out of Memory !!!\n": SndParam_AllocAndInsert (0xFCEFE3) passes
+; it in xwa (`ld xwa,<this>`) to the routine at 0xFFFEA1 when an allocation
+; fails.  NUL + 0xFF pad.
+SndParam_OutOfMemoryMsg:
+	.asciz "Out of Memory !!!
+"
+	.byte 0xff	; pad
 NakaInst_SoundConfig_LookupTable:
 	.incbin "includes/generated/sound_config_lookup.bin"
 SeqChan_CommandDispatch_Table:
