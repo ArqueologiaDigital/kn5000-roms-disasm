@@ -330,7 +330,7 @@ INTTC3_HANDLER:
 	extz xbc
 	dec 1, bc
 	cp bc, 0x0008
-	jrl ugt, (0x00F99E56 - 0x00F99D3E)
+	jrl ugt, INTTC3_HANDLER__return
 	sll bc, 2
 	add xbc, INTTC3_HANDLER__jumptable
 	ld xbc, (xbc)

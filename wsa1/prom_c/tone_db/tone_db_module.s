@@ -11624,6 +11624,7 @@ sub_FBDCD3__FBDFDC:
 	cpw (xiz-10), 0x0004                       ; FBDFDC  cp (XIZ+0xf6),0x0004
 	jrl nc, sub_FBDCD3__FBE0D4                 ; FBDFE1  jrl NC,0xfbe0d4
 	jr sub_FBDCD3__FBDFEB                      ; FBDFE4  jr T,0xfbdfeb
+sub_FBDCD3__FBDFE6:
 	incw	1, (xiz-10)                           ; FBDFE6  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBDFDC                      ; FBDFE9  jr T,0xfbdfdc
 sub_FBDCD3__FBDFEB:
@@ -11712,7 +11713,7 @@ sub_FBDCD3_JumpTable_FBE0B9:
 	.long sub_FBDCD3__FBE00D	; 0xFBE0C9  entry 4 -> 0xFBE00D
 	.long sub_FBDCD3__FBE040	; 0xFBE0CD  entry 5 -> 0xFBE040
 sub_FBDCD3__FBE0D1:
-	jrl	-0xEE                                  ; FBE0D1  jrl T,0xfbdfe6
+	jrl	sub_FBDCD3__FBDFE6                                  ; FBE0D1  jrl T,0xfbdfe6
 sub_FBDCD3__FBE0D4:
 	jrl sub_FBDCD3__FBF27B                     ; FBE0D4  jrl T,0xfbf27b
 sub_FBDCD3__FBE0D7:
@@ -13312,6 +13313,7 @@ sub_FBDCD3__FBF0AB:
 	cpw (xiz-10), 0x0004                       ; FBF0AB  cp (XIZ+0xf6),0x0004
 	jrl nc, sub_FBDCD3__FBF1A3                 ; FBF0B0  jrl NC,0xfbf1a3
 	jr sub_FBDCD3__FBF0BA                      ; FBF0B3  jr T,0xfbf0ba
+sub_FBDCD3__FBF0B5:
 	incw	1, (xiz-10)                           ; FBF0B5  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBF0AB                      ; FBF0B8  jr T,0xfbf0ab
 sub_FBDCD3__FBF0BA:
@@ -13400,7 +13402,7 @@ sub_FBDCD3_JumpTable_FBF188:
 	.long sub_FBDCD3__FBF0DC	; 0xFBF198  entry 4 -> 0xFBF0DC
 	.long sub_FBDCD3__FBF10F	; 0xFBF19C  entry 5 -> 0xFBF10F
 sub_FBDCD3__FBF1A0:
-	jrl	-0xEE                                  ; FBF1A0  jrl T,0xfbf0b5
+	jrl	sub_FBDCD3__FBF0B5                                  ; FBF1A0  jrl T,0xfbf0b5
 sub_FBDCD3__FBF1A3:
 	jrl sub_FBDCD3__FBF27B                     ; FBF1A3  jrl T,0xfbf27b
 sub_FBDCD3__FBF1A6:
@@ -13827,6 +13829,7 @@ sub_FBF280__FBF5AD:
 	cpw (xiz-10), 0x0002                       ; FBF5AD  cp (XIZ+0xf6),0x0002
 	jrl nc, sub_FBF280__FBF699                 ; FBF5B2  jrl NC,0xfbf699
 	jr sub_FBF280__FBF5BC                      ; FBF5B5  jr T,0xfbf5bc
+sub_FBF280__FBF5B7:
 	incw	1, (xiz-10)                           ; FBF5B7  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF5AD                      ; FBF5BA  jr T,0xfbf5ad
 sub_FBF280__FBF5BC:
@@ -13915,7 +13918,7 @@ sub_FBF280_Loop3_JumpTable_FBF67E:
 	.long sub_FBF280__FBF5ED	; 0xFBF68E  entry 4 -> 0xFBF5ED
 	.long sub_FBF280__FBF617	; 0xFBF692  entry 5 -> 0xFBF617
 sub_FBF280__FBF696:
-	jrl	-0xE2                                  ; FBF696  jrl T,0xfbf5b7
+	jrl	sub_FBF280__FBF5B7                                  ; FBF696  jrl T,0xfbf5b7
 sub_FBF280__FBF699:
 	jrl sub_FBF280__FBFFCF                     ; FBF699  jrl T,0xfbffcf
 sub_FBF280_Loop4:
@@ -14682,6 +14685,7 @@ sub_FBF280__FBFE51:
 	cpw (xiz-10), 0x0002                       ; FBFE51  cp (XIZ+0xf6),0x0002
 	jrl nc, sub_FBF280__FBFF3D                 ; FBFE56  jrl NC,0xfbff3d
 	jr sub_FBF280__FBFE60                      ; FBFE59  jr T,0xfbfe60
+sub_FBF280__FBFE5B:
 	incw	1, (xiz-10)                           ; FBFE5B  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFE51                      ; FBFE5E  jr T,0xfbfe51
 sub_FBF280__FBFE60:
@@ -14770,7 +14774,7 @@ sub_FBF280_Loop20_JumpTable_FBFF22:
 	.long sub_FBF280__FBFE91	; 0xFBFF32  entry 4 -> 0xFBFE91
 	.long sub_FBF280__FBFEBB	; 0xFBFF36  entry 5 -> 0xFBFEBB
 sub_FBF280__FBFF3A:
-	jrl	-0xE2                                  ; FBFF3A  jrl T,0xfbfe5b
+	jrl	sub_FBF280__FBFE5B                                  ; FBFF3A  jrl T,0xfbfe5b
 sub_FBF280__FBFF3D:
 	jrl sub_FBF280__FBFFCF                     ; FBFF3D  jrl T,0xfbffcf
 sub_FBF280__FBFF40:

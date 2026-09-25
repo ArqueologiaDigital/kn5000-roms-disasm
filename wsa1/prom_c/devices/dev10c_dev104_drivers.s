@@ -4260,7 +4260,7 @@ Dev10C_ResetAllChannels__FB81DB:
 	lda	xbc, (0x00D8DB:24)                       ; FB8215  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB821A  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB821B  9e f6 04          pushw (XIZ+0xf6)
-	calr (0xFB7E13 - 0xFB8221)                 ; FB821E  1e f2 fb          calr 0xfb7e13
+	calr Dev10C_Slot1_WriteGateAndValue                 ; FB821E  1e f2 fb          calr 0xfb7e13
 	lda	xbc, (0x00D8DB:24)                       ; FB8221  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB8226  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8227  9e f6 04          pushw (XIZ+0xf6)

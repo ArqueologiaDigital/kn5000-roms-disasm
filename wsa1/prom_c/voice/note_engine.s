@@ -5504,7 +5504,7 @@ MidiNote_OnByPartMode__FB38DD:
 	push	0                                     ; FB3917  push 0x00
 	push	h                                     ; FB3919  push H
 	pushw	hl                                   ; FB391B  push HL
-	call	0xFC4C85                              ; FB391C  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB391C  call 0xfc4c85
 	lda	xbc, (0xD7A2:24)                       ; FB3920  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3925  push XBC
 	pushw	de                                   ; FB3926  push DE
@@ -5644,7 +5644,7 @@ MidiNote_OnByPartMode__FB3A28:
 	push	0                                     ; FB3A62  push 0x00
 	push	h                                     ; FB3A64  push H
 	pushw	hl                                   ; FB3A66  push HL
-	call	0xFC4C85                              ; FB3A67  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB3A67  call 0xfc4c85
 	lda	xbc, (0xD7A2:24)                       ; FB3A6B  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3A70  push XBC
 	pushw	de                                   ; FB3A71  push DE
@@ -5736,7 +5736,7 @@ MidiNote_OnByPartMode__FB3B29:
 	push	h                                     ; FB3B3D  push H
 	push	0                                     ; FB3B3F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB3B41  push (XIZ+0x08)
-	call	0xFAB818                              ; FB3B44  call 0xfab818
+	call	Dev10C_StageRegs_0800_0840_ForNoteOn                              ; FB3B44  call 0xfab818
 	ld	(xiz-9), 1                              ; FB3B48  ld (XIZ+0xf7),0x01
 	pop	xiy                                    ; FB3B4C  pop XIY
 MidiNote_OnByPartMode__FB3B4D:
@@ -5764,7 +5764,7 @@ MidiNote_OnByPartMode__FB3B4D:
 	push	0                                     ; FB3B80  push 0x00
 	push	h                                     ; FB3B82  push H
 	pushw	hl                                   ; FB3B84  push HL
-	call	0xFC4C85                              ; FB3B85  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB3B85  call 0xfc4c85
 	lda	xbc, (0xD7A2:24)                       ; FB3B89  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3B8E  push XBC
 	pushw	de                                   ; FB3B8F  push DE
