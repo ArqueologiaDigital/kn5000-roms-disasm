@@ -349,158 +349,277 @@ ToneGen_Velocity_Output_Curve:
 ; ----------------------------------------------------------------------------
 fp_constant_pool_FCC81A:
 	.long	0x0000FFF0               ; 0xFCC81A  32-bit element: address 0x0000FFF0
+; Read at 2 sites: sub_FA000B 0xFA1FD3, 0xFA1FD9.
 F64_56:
 	.long	0x00000000, 0x404C0000   ; 0xFCC81E  f64 56
+; Read at 2 sites: sub_FA000B 0xFA1D4D, 0xFA1D53.
 F64_16:
 	.long	0x00000000, 0x40300000   ; 0xFCC826  f64 16
+; Read at 2 sites: sub_FA000B 0xFA1BAD, 0xFA1BB3.
 F64_0p005050505051:
 	.long	0xA052BF5B, 0x3F74AFD6   ; 0xFCC82E  f64 0.005050505051
+; Read at 2 sites: sub_FA000B 0xFA1724, 0xFA172A.
 F64_1100:
 	.long	0x00000000, 0x40913000   ; 0xFCC836  f64 1100
+; Read at 2 sites: sub_FA000B 0xFA16EE, 0xFA16F4.
 F64_81:
 	.long	0x00000000, 0x40544000   ; 0xFCC83E  f64 81
+; Read at 2 sites: sub_FA000B 0xFA1667, 0xFA166D.
 F64_550:
 	.long	0x00000000, 0x40813000   ; 0xFCC846  f64 550
+; Read at 2 sites: sub_FA000B 0xFA1654, 0xFA165A.
 F64_50:
 	.long	0x00000000, 0x40490000   ; 0xFCC84E  f64 50
+; Read at 2 sites: sub_FA000B 0xFA1631, 0xFA1637.
 F64_71:
 	.long	0x00000000, 0x4051C000   ; 0xFCC856  f64 71
+; Read at 2 sites: sub_FA000B 0xFA15A3, 0xFA15A9.
 F64_110:
 	.long	0x00000000, 0x405B8000   ; 0xFCC85E  f64 110
+; Read at 2 sites: sub_FA000B 0xFA14DF, 0xFA14E5.
 F64_55:
 	.long	0x00000000, 0x404B8000   ; 0xFCC866  f64 55
+; Read at 2 sites: sub_FA000B 0xFA14CC, 0xFA14D2.
 F64_5:
 	.long	0x00000000, 0x40140000   ; 0xFCC86E  f64 5
+; Read at 2 sites: sub_FA000B 0xFA14A9, 0xFA14AF.
 F64_21:
 	.long	0x00000000, 0x40350000   ; 0xFCC876  f64 21
+; Read at 2 sites: sub_FA000B 0xFA1396, 0xFA139C.
 F64_2376:
 	.long	0x00000000, 0x40A29000   ; 0xFCC87E  f64 2376
+; Read at 2 sites: sub_FA000B 0xFA0EFA, 0xFA0F00.
 F64_10800:
 	.long	0x00000000, 0x40C51800   ; 0xFCC886  f64 10800
+; Read at 2 sites: sub_FA000B 0xFA0EE5, 0xFA0EEB.
 F64_800:
 	.long	0x00000000, 0x40890000   ; 0xFCC88E  f64 800
+; Read at 2 sites: sub_FA000B 0xFA0EAE, 0xFA0EB4.
 F64_88:
 	.long	0x00000000, 0x40560000   ; 0xFCC896  f64 88
+; Read at 2 sites: sub_FA000B 0xFA0E49, 0xFA0E4F.
 F64_1200:
 	.long	0x00000000, 0x4092C000   ; 0xFCC89E  f64 1200
+; Read at 2 sites: sub_FA000B 0xFA0E34, 0xFA0E3A.
 F64_400:
 	.long	0x00000000, 0x40790000   ; 0xFCC8A6  f64 400
+; Read at 2 sites: sub_FA000B 0xFA0DFD, 0xFA0E03.
 F64_65:
 	.long	0x00000000, 0x40504000   ; 0xFCC8AE  f64 65
+; Read at 2 sites: sub_FA000B 0xFA0D91, 0xFA0D97.
 F64_120:
 	.long	0x00000000, 0x405E0000   ; 0xFCC8B6  f64 120
+; Read at 2 sites: sub_FA000B 0xFA0C8D, 0xFA0C93.
 F64_11:
 	.long	0x00000000, 0x40260000   ; 0xFCC8BE  f64 11
+; Read at 2 sites: sub_FA000B 0xFA0BDC, 0xFA0BE2.
 F64_111:
 	.long	0x00000000, 0x405BC000   ; 0xFCC8C6  f64 111
+; Read at 2 sites: sub_FA000B 0xFA0B16, 0xFA0B1C.
 F64_4:
 	.long	0x00000000, 0x40100000   ; 0xFCC8CE  f64 4
+; Read at 4 sites: sub_FA000B 0xFA0ADF, 0xFA0AE5, 0xFA210F, 0xFA2115.
 F64_76:
 	.long	0x00000000, 0x40530000   ; 0xFCC8D6  f64 76
+; Read at 2 sites: sub_FA000B 0xFA0A77, 0xFA0A7D.
 F64_26:
 	.long	0x00000000, 0x403A0000   ; 0xFCC8DE  f64 26
+; Read at 2 sites: sub_FA000B 0xFA0A48, 0xFA0A4E.
 F64_51:
 	.long	0x00000000, 0x40498000   ; 0xFCC8E6  f64 51
+; Read at 6 sites: sub_FA000B 0xFA0443, 0xFA0449, 0xFA075C, 0xFA0762 +2 more.
 F64_54:
 	.long	0x00000000, 0x404B0000   ; 0xFCC8EE  f64 54
+; Read at 4 sites: sub_FA000B 0xFA0345, 0xFA034B, 0xFA065E, 0xFA0664.
 F64_84:
 	.long	0x00000000, 0x40550000   ; 0xFCC8F6  f64 84
+; Read at 1 site: sub_F9ECF1 0xF9F745.
 F32_0p980392158:
 	.long	0x3F7AFAFB               ; 0xFCC8FE  32-bit element: f32 0.980392158
+; Read at 16 sites: sub_F9ECF1 0xF9EE2C, 0xF9EE32, 0xF9EE63, 0xF9EE69 +12 more.
 F64_0p0001424758573:
 	.long	0x4B8EB24E, 0x3F22ACB2   ; 0xFCC902  f64 0.0001424758573
+; Read at 2 sites: sub_F9ECF1 0xF9ECF6, 0xF9ECFC.
 F64_0p51:
 	.long	0x851EB852, 0x3FE051EB   ; 0xFCC90A  f64 0.51
+; Read at 4 sites: sub_F9E1ED 0xF9E39B, 0xF9E3A1, 0xF9EAC2, 0xF9EAC8.
 F64_neg2:
 	.long	0x00000000, 0xC0000000   ; 0xFCC912  f64 -2
+; Read at 4 sites: sub_F9E1ED 0xF9E2C3, 0xF9E2C9, 0xF9E9EA, 0xF9E9F0.
 F64_7p123792865em05:
 	.long	0x4B8EB24E, 0x3F12ACB2   ; 0xFCC91A  f64 7.123792865e-05
+; Read at 2 sites: sub_F9E1ED 0xF9E253, 0xF9E259.
 F64_12:
 	.long	0x00000000, 0x40280000   ; 0xFCC922  f64 12
+; Read at 12 sites: sub_F9BE3A 0xF9DEAF, 0xF9DEB5; sub_FA000B 0xFA1444, 0xFA144A, 0xFA1508,
+; 0xFA150E +6 more.
 F64_0p001:
 	.long	0xD2F1A9FC, 0x3F50624D   ; 0xFCC92A  f64 0.001
+; Read at 6 sites: sub_F9BE3A 0xF9DB02, 0xF9DB08; sub_FA000B 0xFA0BC7, 0xFA0BCD, 0xFA213E,
+; 0xFA2144.
 F64_9:
 	.long	0x00000000, 0x40220000   ; 0xFCC932  f64 9
+; Read at 4 sites: sub_F9BE3A 0xF9D9E6, 0xF9D9EC; sub_FA000B 0xFA201F, 0xFA2025.
 F64_4p2:
 	.long	0xCCCCCCCD, 0x4010CCCC   ; 0xFCC93A  f64 4.2
+; Read at 4 sites: sub_F9BE3A 0xF9D8C1, 0xF9D8C7; sub_FA000B 0xFA1EDC, 0xFA1EE2.
 F64_0p9:
 	.long	0xCCCCCCCD, 0x3FECCCCC   ; 0xFCC942  f64 0.9
+; Read at 4 sites: sub_F9BE3A 0xF9D79C, 0xF9D7A2; sub_FA000B 0xFA1D99, 0xFA1D9F.
 F64_0p45:
 	.long	0xCCCCCCCD, 0x3FDCCCCC   ; 0xFCC94A  f64 0.45
+; Read at 20 sites: sub_F9BE3A 0xF9D6B5, 0xF9D6BB, 0xF9D7D8, 0xF9D7DE +6 more; sub_FA000B
+; 0xFA1C96, 0xFA1C9C, 0xFA1DD5, 0xFA1DDB +6 more.
 F64_neg4p816:
 	.long	0x810624DD, 0xC0134395   ; 0xFCC952  f64 -4.816
+; Read at 10 sites: sub_F9BE3A 0xF9D679, 0xF9D67F, 0xF9D8AC, 0xF9D8B2; sub_F9E1ED 0xF9E9AF,
+; 0xF9E9B5; sub_FA000B 0xFA1C60, 0xFA1C66, 0xFA1EC7, 0xFA1ECD.
 F64_0p1:
 	.long	0x9999999A, 0x3FB99999   ; 0xFCC95A  f64 0.1
+; Read at 4 sites: sub_F9BE3A 0xF9D664, 0xF9D66A; sub_FA000B 0xFA1C4D, 0xFA1C53.
 F64_0p02:
 	.long	0x47AE147B, 0x3F947AE1   ; 0xFCC962  f64 0.02
+; Read at 4 sites: sub_F9BE3A 0xF9D3B1, 0xF9D3B7, 0xF9D45D, 0xF9D463.
 F64_0p9999:
 	.long	0x48E8A71E, 0x3FEFFF2E   ; 0xFCC96A  f64 0.9999
+; Read at 4 sites: sub_F9BE3A 0xF9D36F, 0xF9D375, 0xF9D417, 0xF9D41D.
 F64_neg0p0697:
 	.long	0xF487FCB9, 0xBFB1D7DB   ; 0xFCC972  f64 -0.0697
+; Read at 8 sites: sub_F9BE3A 0xF9D281, 0xF9D287, 0xF9D2E4, 0xF9D2EA; sub_FA000B 0xFA1A82,
+; 0xFA1A88, 0xFA1AE5, 0xFA1AEB.
 F64_0p0004166666667:
 	.long	0xB4E81B4F, 0x3F3B4E81   ; 0xFCC97A  f64 0.0004166666667
+; Read at 4 sites: sub_F9BE3A 0xF9D21A, 0xF9D220; sub_FA000B 0xFA1A25, 0xFA1A2B.
 F64_1400:
 	.long	0x00000000, 0x4095E000   ; 0xFCC982  f64 1400
+; Read at 6 sites: sub_F9BE3A 0xF9D1D8, 0xF9D1DE; sub_FA000B 0xFA156D, 0xFA1573, 0xFA19EF,
+; 0xFA19F5.
 F64_31:
 	.long	0x00000000, 0x403F0000   ; 0xFCC98A  f64 31
+; Read at 8 sites: sub_F9BE3A 0xF9D16B, 0xF9D171, 0xF9D205, 0xF9D20B; sub_FA000B 0xFA198A,
+; 0xFA1990, 0xFA1A12, 0xFA1A18.
 F64_200:
 	.long	0x00000000, 0x40690000   ; 0xFCC992  f64 200
+; Read at 6 sites: sub_F9BE3A 0xF9D156, 0xF9D15C; sub_FA000B 0xFA1711, 0xFA1717, 0xFA1977,
+; 0xFA197D.
 F64_100:
 	.long	0x00000000, 0x40590000   ; 0xFCC99A  f64 100
+; Read at 4 sites: sub_F9BE3A 0xF9D129, 0xF9D12F; sub_FA000B 0xFA1954, 0xFA195A.
 F64_19:
 	.long	0x00000000, 0x40330000   ; 0xFCC9A2  f64 19
+; Read at 14 sites: sub_F9BE3A 0xF9D07D, 0xF9D083, 0xF9D092, 0xF9D098; sub_FA000B 0xFA0CD9,
+; 0xFA0CDF, 0xFA0D45, 0xFA0D4B +6 more.
 F64_20:
 	.long	0x00000000, 0x40340000   ; 0xFCC9AA  f64 20
+; Read at 24 sites: sub_F9BE3A 0xF9CB04, 0xF9CB0A, 0xF9CB67, 0xF9CB6D +4 more; sub_FA000B
+; 0xFA0061, 0xFA0067, 0xFA0143, 0xFA0149 +12 more.
 F64_99:
 	.long	0x00000000, 0x4058C000   ; 0xFCC9B2  f64 99
+; Read at 6 sites: sub_F9BE3A 0xF9C9C4, 0xF9C9CA; sub_FA000B 0xFA0B90, 0xFA0B96, 0xFA11F8,
+; 0xFA11FE.
 F64_89:
 	.long	0x00000000, 0x40564000   ; 0xFCC9BA  f64 89
+; Read at 8 sites: sub_F9BE3A 0xF9C960, 0xF9C966, 0xF9CA33, 0xF9CA39; sub_FA000B 0xFA1196,
+; 0xFA119C, 0xFA1257, 0xFA125D.
 F64_0p4270422:
 	.long	0xCEC0C2D3, 0x3FDB54A8   ; 0xFCC9C2  f64 0.4270422
+; Read at 4 sites: sub_F9BE3A 0xF9C91E, 0xF9C924; sub_FA000B 0xFA115A, 0xFA1160.
 F64_441:
 	.long	0x00000000, 0x407B9000   ; 0xFCC9CA  f64 441
+; Read at 82 sites: sub_F9BE3A 0xF9C8F1, 0xF9C8F7, 0xF9C981, 0xF9C987 +6 more; sub_F9E1ED
+; 0xF9E29B, 0xF9E2A1, 0xF9E347, 0xF9E34D +18 more; sub_F9ECF1 0xF9EE87, 0xF9EE8D, 0xF9EED8,
+; 0xF9EEDE +40 more; sub_FA000B 0xFA1137, 0xFA113D, 0xFA11B7, 0xFA11BD +2 more.
 F64_1:
 	.long	0x00000000, 0x3FF00000   ; 0xFCC9D2  f64 1
+; Read at 18 sites: sub_F9BE3A 0xF9C518, 0xF9C51E, 0xF9C60C, 0xF9C612 +6 more; sub_FA000B
+; 0xFA13B9, 0xFA13BF, 0xFA140E, 0xFA1414 +4 more.
 F64_2:
 	.long	0x00000000, 0x40000000   ; 0xFCC9DA  f64 2
+; Read at 36 sites: sub_F9BE3A 0xF9C36B, 0xF9C371, 0xF9C49D, 0xF9C4A3 +18 more; sub_FA000B
+; 0xFA121B, 0xFA1221, 0xFA1354, 0xFA135A +10 more.
 F64_44100:
 	.long	0x00000000, 0x40E58880   ; 0xFCC9E2  f64 44100
+; Read at 6 sites: sub_F9BE3A 0xF9C2DE, 0xF9C2E4; sub_FA000B 0xFA0FC1, 0xFA0FC7, 0xFA10A9,
+; 0xFA10AF.
 F64_0p0101010101:
 	.long	0xA052BF5B, 0x3F84AFD6   ; 0xFCC9EA  f64 0.0101010101
+; Read at 20 sites: sub_F9BE3A 0xF9C029, 0xF9C02F, 0xF9C0A8, 0xF9C0AE +6 more; sub_FA000B
+; 0xFA0C54, 0xFA0C5A, 0xFA0D06, 0xFA0D0C +6 more.
 F64_2p267573696em05:
 	.long	0xC751F177, 0x3EF7C6F8   ; 0xFCC9F2  f64 2.267573696e-05
+; Read at 12 sites: sub_F9BE3A 0xF9BEDF, 0xF9BEE5, 0xF9BF60, 0xF9BF66 +2 more; sub_FA000B
+; 0xFA0AA0, 0xFA0AA6, 0xFA0B58, 0xFA0B5E +2 more.
 F64_4p535147392em06:
 	.long	0xD2A7F45F, 0x3ED30593   ; 0xFCC9FA  f64 4.535147392e-06
+; Read at 4 sites: sub_F9BE3A 0xF9BE79, 0xF9BE7F; sub_FA000B 0xFA0A0F, 0xFA0A15.
 F64_2p267573696em06:
 	.long	0xD2A7F45F, 0x3EC30593   ; 0xFCCA02  f64 2.267573696e-06
+; Read at 4 sites: sub_F9B887 0xF9BE09, 0xF9BE0F; sub_FA000B 0xFA09AF, 0xFA09B5.
 F64_0p999999:
 	.long	0xE7210BE9, 0x3FEFFFFD   ; 0xFCCA0A  f64 0.999999
+; Read at 4 sites: sub_F9B887 0xF9BCEE, 0xF9BCF4; sub_FA000B 0xFA089E, 0xFA08A4.
 F64_0p516:
 	.long	0x6E978D50, 0x3FE08312   ; 0xFCCA12  f64 0.516
+; Read at 16 sites: sub_F9B887 0xF9BA78, 0xF9BA7E, 0xF9BB59, 0xF9BB5F +4 more; sub_FA000B
+; 0xFA05D1, 0xFA05D7, 0xFA06CF, 0xFA06D5 +4 more.
 F64_0p025:
 	.long	0x9999999A, 0x3F999999   ; 0xFCCA1A  f64 0.025
+; Read at 8 sites: sub_F9B887 0xF9B957, 0xF9B95D, 0xF9BC19, 0xF9BC1F; sub_FA000B 0xFA0493,
+; 0xFA0499, 0xFA07AC, 0xFA07B2.
 F64_neg12:
 	.long	0x00000000, 0xC0280000   ; 0xFCCA22  f64 -12
+; Read at 6 sites: sub_F9B887 0xF9B936, 0xF9B93C; sub_FA000B 0xFA0472, 0xFA0478, 0xFA078B,
+; 0xFA0791.
 F64_0p6:
 	.long	0x33333333, 0x3FE33333   ; 0xFCCA2A  f64 0.6
+; Read at 8 sites: sub_F9B5A5 0xF9B855, 0xF9B85B; sub_F9B887 0xF9BB17, 0xF9BB1D; sub_FA000B
+; 0xFA0374, 0xFA037A, 0xFA068D, 0xFA0693.
 F64_0p4:
 	.long	0x9999999A, 0x3FD99999   ; 0xFCCA32  f64 0.4
+; Read at 14 sites: sub_F9B5A5 0xF9B774, 0xF9B77A; sub_F9B887 0xF9BA36, 0xF9BA3C, 0xF9BBF8,
+; 0xF9BBFE; sub_F9BE3A 0xF9D9D1, 0xF9D9D7; sub_FA000B 0xFA0276, 0xFA027C, 0xFA058F, 0xFA0595
+; +2 more.
 F64_0p2:
 	.long	0x9999999A, 0x3FC99999   ; 0xFCCA3A  f64 0.2
+; Read at 32 sites: sub_F9B5A5 0xF9B71A, 0xF9B720, 0xF9B876, 0xF9B87C; sub_F9B887 0xF9B9E8,
+; 0xF9B9EE, 0xF9BB38, 0xF9BB3E +4 more; sub_F9E1ED 0xF9E649, 0xF9E64F, 0xF9EB5C, 0xF9EB62;
+; sub_F9ECF1 0xF9EDFA, 0xF9EE00, 0xF9F2B5, 0xF9F2BB; sub_FA000B 0xFA0203, 0xFA0209,
+; 0xFA0395, 0xFA039B +8 more.
 F64_0:
 	.long	0x00000000, 0x00000000   ; 0xFCCA42  f64 0
+; Read at 28 sites: sub_F9B5A5 0xF9B6AA, 0xF9B6B0, 0xF9B7B6, 0xF9B7BC; sub_F9B887 0xF9B897,
+; 0xF9B89D, 0xF9B978, 0xF9B97E; sub_F9BE3A 0xF9D787, 0xF9D78D; sub_F9E1ED 0xF9E467,
+; 0xF9E46D, 0xF9E576, 0xF9E57C; sub_F9ECF1 0xF9EDAC, 0xF9EDB2, 0xF9F267, 0xF9F26D;
+; sub_FA000B 0xFA0193, 0xFA0199, 0xFA02B8, 0xFA02BE +6 more.
 F64_0p05:
 	.long	0x9999999A, 0x3FA99999   ; 0xFCCA4A  f64 0.05
+; Read at 16 sites: sub_F9B5A5 0xF9B689, 0xF9B68F, 0xF9B795, 0xF9B79B; sub_F9B887 0xF9BA57,
+; 0xF9BA5D, 0xF9BD0F, 0xF9BD15; sub_FA000B 0xFA0172, 0xFA0178, 0xFA0297, 0xFA029D +4 more.
 F64_3:
 	.long	0x00000000, 0x40080000   ; 0xFCCA52  f64 3
+; Read at 94 sites: sub_F9B5A5 0xF9B623, 0xF9B629, 0xF9B6EC, 0xF9B6F2 +2 more; sub_F9B887
+; 0xF9B8D9, 0xF9B8DF, 0xF9B9BA, 0xF9B9C0 +8 more; sub_F9BE3A 0xF9D72D, 0xF9D733, 0xF9D850,
+; 0xF9D856 +8 more; sub_F9E1ED 0xF9E240, 0xF9E246, 0xF9E87E, 0xF9E884 +18 more; sub_F9ECF1
+; 0xF9ED42, 0xF9ED48, 0xF9F198, 0xF9F19E +10 more; sub_FA000B 0xFA00F3, 0xFA00F9, 0xFA01D5,
+; 0xFA01DB +24 more.
 F64_0p5:
 	.long	0x00000000, 0x3FE00000   ; 0xFCCA5A  f64 0.5
+; Read at 86 sites: sub_F9B5A5 0xF9B602, 0xF9B608, 0xF9B6CB, 0xF9B6D1 +2 more; sub_F9B887
+; 0xF9B8B8, 0xF9B8BE, 0xF9B999, 0xF9B99F +8 more; sub_F9BE3A 0xF9C93F, 0xF9C945, 0xF9CA12,
+; 0xF9CA18 +16 more; sub_F9E1ED 0xF9E482, 0xF9E488, 0xF9E591, 0xF9E597; sub_F9ECF1 0xF9EDC7,
+; 0xF9EDCD, 0xF9F282, 0xF9F288; sub_FA000B 0xFA00D2, 0xFA00D8, 0xFA01B4, 0xFA01BA +36 more.
 F64_10:
 	.long	0x00000000, 0x40240000   ; 0xFCCA62  f64 10
+; Read at 4 sites: sub_F9B5A5 0xF9B5E1, 0xF9B5E7; sub_FA000B 0xFA00B1, 0xFA00B7.
 F64_0p0125:
 	.long	0x9999999A, 0x3F899999   ; 0xFCCA6A  f64 0.0125
+; Read at 8 sites: sub_F9B5A5 0xF9B5C0, 0xF9B5C6; sub_F9ECF1 0xF9ED1F, 0xF9ED25; sub_FA000B
+; 0xFA0090, 0xFA0096, 0xFA1E90, 0xFA1E96.
 F64_24:
 	.long	0x00000000, 0x40380000   ; 0xFCCA72  f64 24
+; Read at 8 sites: P7Group_SendOp0AddrValueScaled 0xF9AF2D, 0xF9AF33;
+; P7Group_SendOp1AddrValueScaled 0xF9B1DC, 0xF9B1E2; P7Group_SendValueScaled 0xF9B397,
+; 0xF9B39D; sub_F9FD0E 0xF9FDE9, 0xF9FDEF.
 F64_2147483648:
 	.long	0x00000000, 0x41E00000   ; 0xFCCA7A  f64 2147483648
 
@@ -730,90 +849,133 @@ DSP_MixerGain_Curve_A:
 ; ----------------------------------------------------------------------------
 DescriptorStrings:
 	.asciz	"bbbvb"	; [ 0] 0xFCCF71
+; Pointed at by 21 .long words in PoolDir_Records (x21).
 DescStr_01234:
 	.asciz	"01234"	; [ 1] 0xFCCF77
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbbwbvb:
 	.asciz	"bbbwbvb"	; [ 2] 0xFCCF7D
+; Pointed at by 7 .long words in PoolDir_Records (x7).
 DescStr_0123456:
 	.asciz	"0123456"	; [ 3] 0xFCCF85
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wwwwwwv:
 	.asciz	"wwwwwwv"	; [ 4] 0xFCCF8D
+; Pointed at by 4 .long words in PoolDir_Records (x4).
 DescStr_bbbbv:
 	.asciz	"bbbbv"	; [ 5] 0xFCCF95
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbbbbbv:
 	.asciz	"bbbbbbv"	; [ 6] 0xFCCF9B
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbbbwwv:
 	.asciz	"bbbbwwv"	; [ 7] 0xFCCFA3
+; Pointed at by 3 .long words in PoolDir_Records (x3).
 DescStr_bbbbbbbv:
 	.asciz	"bbbbbbbv"	; [ 8] 0xFCCFAB
+; Pointed at by 7 .long words in PoolDir_Records (x7).
 DescStr_01234567:
 	.asciz	"01234567"	; [ 9] 0xFCCFB4
+; Pointed at by 2 .long words in PoolDir_Records (x2).
 DescStr_bbbbbv:
 	.asciz	"bbbbbv"	; [10] 0xFCCFBD
+; Pointed at by 6 .long words in PoolDir_Records (x6).
 DescStr_012345:
 	.asciz	"012345"	; [11] 0xFCCFC4
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bsssbv:
 	.asciz	"bsssbv"	; [12] 0xFCCFCB
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bsssv:
 	.asciz	"bsssv"	; [13] 0xFCCFD2
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbbbbbbbbvb:
 	.asciz	"bbbbbbbbbvb"	; [14] 0xFCCFD8
+; Pointed at by 6 .long words in PoolDir_Records (x6).
 DescStr_0123456789a:
 	.asciz	"0123456789a"	; [15] 0xFCCFE4
+; Pointed at by 2 .long words in PoolDir_Records (x2).
 DescStr_v:
 	.asciz	"v"	; [16] 0xFCCFF0
+; Pointed at by 2 .long words in PoolDir_Records (x2).
 DescStr_0:
 	.asciz	"0"	; [17] 0xFCCFF2
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbhbbv:
 	.asciz	"bbhbbv"	; [18] 0xFCCFF4
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bwwbbv:
 	.asciz	"bwwbbv"	; [19] 0xFCCFFB
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bcbbv:
 	.asciz	"bcbbv"	; [20] 0xFCD002
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bwwbbbv:
 	.asciz	"bwwbbbv"	; [21] 0xFCD008
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bwwwwbbbbbbv:
 	.asciz	"bwwwwbbbbbbv"	; [22] 0xFCD010
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_0123456789ab:
 	.asciz	"0123456789ab"	; [23] 0xFCD01D
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbwwBBbv:
 	.asciz	"bbwwBBbv"	; [24] 0xFCD02A
+; Pointed at by 12 .long words in PoolDir_Records (x12).
 DescStr_bbhbv:
 	.asciz	"bbhbv"	; [25] 0xFCD033
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bwwbbbbbbv:
 	.asciz	"bwwbbbbbbv"	; [26] 0xFCD039
+; Pointed at by 3 .long words in PoolDir_Records (x3).
 DescStr_0123456789:
 	.asciz	"0123456789"	; [27] 0xFCD044
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bwwbbbwwbbv:
 	.asciz	"bwwbbbwwbbv"	; [28] 0xFCD04F
+; Pointed at by 2 .long words in PoolDir_Records (x2).
 DescStr_bwwbbbbbbbbbv:
 	.asciz	"bwwbbbbbbbbbv"	; [29] 0xFCD05B
+; Pointed at by 2 .long words in PoolDir_Records (x2).
 DescStr_0123456789abc:
 	.asciz	"0123456789abc"	; [30] 0xFCD069
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bwwbbbbbbbv:
 	.asciz	"bwwbbbbbbbv"	; [31] 0xFCD077
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbbbbwwbbv:
 	.asciz	"bbbbbwwbbv"	; [32] 0xFCD083
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wwbbbbv:
 	.asciz	"wwbbbbv"	; [33] 0xFCD08E
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wwbwwbbv:
 	.asciz	"wwbwwbbv"	; [34] 0xFCD096
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wwbbbbbbbv:
 	.asciz	"wwbbbbbbbv"	; [35] 0xFCD09F
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wwbbbbbv:
 	.asciz	"wwbbbbbv"	; [36] 0xFCD0AA
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wwcbbv:
 	.asciz	"wwcbbv"	; [37] 0xFCD0B3
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wwcbbbbbv:
 	.asciz	"wwcbbbbbv"	; [38] 0xFCD0BA
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_012345678:
 	.asciz	"012345678"	; [39] 0xFCD0C4
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_wcbbbbvb:
 	.asciz	"wcbbbbvb"	; [40] 0xFCD0CE
+; Pointed at by 2 .long words in PoolDir_Records (x2).
 DescStr_wwbbbwwbbvb:
 	.asciz	"wwbbbwwbbvb"	; [41] 0xFCD0D7
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bBBbBvb:
 	.asciz	"bBBbBvb"	; [42] 0xFCD0E3
+; Pointed at by 1 .long word in PoolDir_Records (x1).
 DescStr_bbbbbbwwbbv:
 	.asciz	"bbbbbbwwbbv"	; [43] 0xFCD0EB
 
