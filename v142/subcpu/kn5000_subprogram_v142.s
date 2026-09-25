@@ -2536,10 +2536,10 @@ FIFO_Engine512_Get_NotEmpty:
 FIFO_Engine512_Get_Marked:
 	ld	ix, (xde-10)
 	cp16_src_rid8	xde, 0xfa, ix	; cp IX,(XDE+0xfa)
-	jr	nz, LABEL_020B38
+	jr	nz, FIFO_Engine512_Get_Marked_Skip
 	ldw	hl, 65535
 	ret
-LABEL_020B38:
+FIFO_Engine512_Get_Marked_Skip:
 	xor	hl, hl
 	ld_rrb	l, xde, ix	; ld L,(XDE+IX)
 	minc1_16	ix, 0x01ff	; minc1 0x01ff,IX
@@ -2549,10 +2549,10 @@ LABEL_020B38:
 FIFO_Engine512_Get_From_Mark:
 	ld	ix, (xde-10)
 	cp16_src_rid8	xde, 0xfc, ix	; cp IX,(XDE+0xfc)
-	jr	nz, LABEL_020B53
+	jr	nz, FIFO_Engine512_Get_From_Mark_Skip
 	ldw	hl, 65535
 	ret
-LABEL_020B53:
+FIFO_Engine512_Get_From_Mark_Skip:
 	xor	hl, hl
 	ld_rrb	l, xde, ix	; ld L,(XDE+IX)
 	minc1_16	ix, 0x01ff	; minc1 0x01ff,IX
@@ -17252,7 +17252,7 @@ Voice_DSP_OutputConfig:
 	ld	(xsp+6), c
 	ld	(xsp+8), a
 	cp8_imm_rid8	xsp, 0x06, 0x00	; cp (XSP+0x06),0x00
-	jr	nz, LABEL_027D61
+	jr	nz, Voice_DSP_OutputConfig_Skip
 	ld	a, (xsp+8)
 	ld	e, a
 	extz	de
@@ -17275,8 +17275,8 @@ Voice_DSP_OutputConfig:
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
-	jr	LABEL_027D4A
-LABEL_027D31:
+	jr	Voice_DSP_OutputConfig_Join
+Voice_DSP_OutputConfig_Loop:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17286,7 +17286,7 @@ LABEL_027D31:
 	lda	xbc, (283084:24)
 	call	ToneGen_WriteReg0640
 	incw	1, (xsp+4)
-LABEL_027D4A:
+Voice_DSP_OutputConfig_Join:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17294,9 +17294,9 @@ LABEL_027D4A:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jr	c, LABEL_027D31
-	jr	LABEL_027DCD
-LABEL_027D61:
+	jr	c, Voice_DSP_OutputConfig_Loop
+	jr	Voice_DSP_OutputConfig_Epilogue
+Voice_DSP_OutputConfig_Skip:
 	ld	a, (xsp+8)
 	ld	e, a
 	extz	de
@@ -17319,8 +17319,8 @@ LABEL_027D61:
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
-	jr	LABEL_027DB8
-LABEL_027D9F:
+	jr	Voice_DSP_OutputConfig_Join2
+Voice_DSP_OutputConfig_Loop2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17330,7 +17330,7 @@ LABEL_027D9F:
 	lda	xbc, (283084:24)
 	call	ToneGen_WriteExtParam_600
 	incw	1, (xsp+4)
-LABEL_027DB8:
+Voice_DSP_OutputConfig_Join2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17338,8 +17338,8 @@ LABEL_027DB8:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jr	c, LABEL_027D9F
-LABEL_027DCD:
+	jr	c, Voice_DSP_OutputConfig_Loop2
+Voice_DSP_OutputConfig_Epilogue:
 	lda	xsp, (xsp+10)
 	ret
 ; ----------------------------------------------------------------------------
@@ -17354,7 +17354,7 @@ Voice_DSP_OutputConfig2:
 	ld	(xsp+6), c
 	ld	(xsp+8), a
 	cp8_imm_rid8	xsp, 0x06, 0x00	; cp (XSP+0x06),0x00
-	jr	nz, LABEL_027E4E
+	jr	nz, Voice_DSP_OutputConfig2_Skip
 	ld	a, (xsp+8)
 	ld	e, a
 	extz	de
@@ -17377,8 +17377,8 @@ Voice_DSP_OutputConfig2:
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
-	jr	LABEL_027E37
-LABEL_027E1E:
+	jr	Voice_DSP_OutputConfig2_Join
+Voice_DSP_OutputConfig2_Loop:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17388,7 +17388,7 @@ LABEL_027E1E:
 	lda	xbc, (283084:24)
 	call	ToneGen_Write_ExtParam_05C0_Strobe
 	incw	1, (xsp+4)
-LABEL_027E37:
+Voice_DSP_OutputConfig2_Join:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17396,9 +17396,9 @@ LABEL_027E37:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jr	c, LABEL_027E1E
-	jr	LABEL_027EBA
-LABEL_027E4E:
+	jr	c, Voice_DSP_OutputConfig2_Loop
+	jr	Voice_DSP_OutputConfig2_Epilogue
+Voice_DSP_OutputConfig2_Skip:
 	ld	a, (xsp+8)
 	ld	e, a
 	extz	de
@@ -17421,8 +17421,8 @@ LABEL_027E4E:
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
-	jr	LABEL_027EA5
-LABEL_027E8C:
+	jr	Voice_DSP_OutputConfig2_Join2
+Voice_DSP_OutputConfig2_Loop2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17432,7 +17432,7 @@ LABEL_027E8C:
 	lda	xbc, (283084:24)
 	call	ToneGen_WriteExtParams_56_Alt
 	incw	1, (xsp+4)
-LABEL_027EA5:
+Voice_DSP_OutputConfig2_Join2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17440,8 +17440,8 @@ LABEL_027EA5:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jr	c, LABEL_027E8C
-LABEL_027EBA:
+	jr	c, Voice_DSP_OutputConfig2_Loop2
+Voice_DSP_OutputConfig2_Epilogue:
 	lda	xsp, (xsp+10)
 	ret
 ; ----------------------------------------------------------------------------
@@ -17466,8 +17466,8 @@ Voice_DSP_SimpleCopy:
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
-	jr	LABEL_027F01
-LABEL_027EE8:
+	jr	Voice_DSP_SimpleCopy_Join
+Voice_DSP_SimpleCopy_Loop:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17477,7 +17477,7 @@ LABEL_027EE8:
 	lda	xbc, (283084:24)
 	call	ToneGen_WriteExtParam_1C0_Single
 	incw	1, (xsp+4)
-LABEL_027F01:
+Voice_DSP_SimpleCopy_Join:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17485,7 +17485,7 @@ LABEL_027F01:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
-	jr	c, LABEL_027EE8
+	jr	c, Voice_DSP_SimpleCopy_Loop
 	inc	8, xsp
 	ret
 ; ----------------------------------------------------------------------------
@@ -17509,8 +17509,8 @@ Voice_DSP_SimpleCopy2:
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
 	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
-	jr	LABEL_027F5C
-LABEL_027F43:
+	jr	Voice_DSP_SimpleCopy2_Join
+Voice_DSP_SimpleCopy2_Loop:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17520,7 +17520,7 @@ LABEL_027F43:
 	lda	xbc, (283084:24)
 	call	ToneGen_WriteExtParams_15_Alt
 	incw	1, (xsp+4)
-LABEL_027F5C:
+Voice_DSP_SimpleCopy2_Join:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
@@ -17528,7 +17528,7 @@ LABEL_027F5C:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
-	jr	c, LABEL_027F43
+	jr	c, Voice_DSP_SimpleCopy2_Loop
 	inc	8, xsp
 	ret
 
@@ -17805,8 +17805,8 @@ VoiceCC_DataTable_0280FE:
 	set_dd8	7, 24
 	ld	wa, (xiz+46)
 	ld	(1048578:24), wa
-	jr	LABEL_02811B
-LABEL_02811B:
+	jr	__jrt_nop_02811B
+__jrt_nop_02811B:
 	nop
 	nop
 	nop
@@ -17831,8 +17831,8 @@ ToneGen_WriteVoice_Pan_Pair:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
 	ld	(1048578:24), wa
-	jr	LABEL_028147
-LABEL_028147:
+	jr	__jrt_nop_028147
+__jrt_nop_028147:
 	nop
 	nop
 	nop
@@ -17845,8 +17845,8 @@ LABEL_028147:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
 	ld	(1048578:24), wa
-	jr	LABEL_028169
-LABEL_028169:
+	jr	__jrt_nop_028169
+__jrt_nop_028169:
 	nop
 	nop
 	nop
@@ -17871,8 +17871,8 @@ ToneGen_WriteVoice_Reg21_Reg22:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+26)
 	ld	(1048578:24), wa
-	jr	LABEL_028197
-LABEL_028197:
+	jr	__jrt_nop_028197
+__jrt_nop_028197:
 	nop
 	nop
 	nop
@@ -17885,8 +17885,8 @@ LABEL_028197:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+28)
 	ld	(1048578:24), wa
-	jr	LABEL_0281B9
-LABEL_0281B9:
+	jr	__jrt_nop_0281B9
+__jrt_nop_0281B9:
 	nop
 	nop
 	nop
@@ -17907,8 +17907,8 @@ ToneGen_WriteVoice_EnvLevel:
 	set_dd8	7, 24
 	ld	wa, (xiz+12)
 	ld	(1048578:24), wa
-	jr	LABEL_0281DD
-LABEL_0281DD:
+	jr	__jrt_nop_0281DD
+__jrt_nop_0281DD:
 	nop
 	nop
 	nop
@@ -17925,8 +17925,8 @@ ToneGen_WriteVoice_Reg11:
 	set_dd8	7, 24
 	ld	wa, (xiz+16)
 	ld	(1048578:24), wa
-	jr	LABEL_0281FF
-LABEL_0281FF:
+	jr	__jrt_nop_0281FF
+__jrt_nop_0281FF:
 	nop
 	nop
 	nop
@@ -17943,8 +17943,8 @@ ToneGen_WriteVoice_Reg13:
 	set_dd8	7, 24
 	ld	wa, (xiz+20)
 	ld	(1048578:24), wa
-	jr	LABEL_028221
-LABEL_028221:
+	jr	__jrt_nop_028221
+__jrt_nop_028221:
 	nop
 	nop
 	nop
@@ -17961,8 +17961,8 @@ ToneGen_WriteVoice_Reg18:
 	set_dd8	7, 24
 	ld	wa, (xiz+64)
 	ld	(1048578:24), wa
-	jr	LABEL_028243
-LABEL_028243:
+	jr	__jrt_nop_028243
+__jrt_nop_028243:
 	nop
 	nop
 	nop
@@ -17979,8 +17979,8 @@ ToneGen_WriteVoice_Reg16:
 	set_dd8	7, 24
 	ld	wa, (xiz+60)
 	ld	(1048578:24), wa
-	jr	LABEL_028265
-LABEL_028265:
+	jr	__jrt_nop_028265
+__jrt_nop_028265:
 	nop
 	nop
 	nop
@@ -17997,8 +17997,8 @@ ToneGen_WriteVoice_Reg07:
 	set_dd8	7, 24
 	ld	wa, (xiz+56)
 	ld	(1048578:24), wa
-	jr	LABEL_028287
-LABEL_028287:
+	jr	__jrt_nop_028287
+__jrt_nop_028287:
 	nop
 	nop
 	nop
@@ -18015,8 +18015,8 @@ ToneGen_WriteVoice_Reg15:
 	set_dd8	7, 24
 	ld	wa, (xiz+58)
 	ld	(1048578:24), wa
-	jr	LABEL_0282A9
-LABEL_0282A9:
+	jr	__jrt_nop_0282A9
+__jrt_nop_0282A9:
 	nop
 	nop
 	nop
@@ -18030,7 +18030,7 @@ ToneGen_WriteVoice_Reg07_Or_Reg18:
 	push	xiz
 	ld	xiz, xbc
 	cp	wa, 64
-	jr	nc, LABEL_0282D6
+	jr	nc, ToneGen_WriteVoice_Reg07_Or_Reg18_Skip
 	res_dd8	7, 24
 	add	wa, 448
 	ld	(1048576:24), wa
@@ -18038,13 +18038,13 @@ ToneGen_WriteVoice_Reg07_Or_Reg18:
 	set_dd8	7, 24
 	ld	wa, (xiz+56)
 	ld	(1048578:24), wa
-	jr	LABEL_0282D1
-LABEL_0282D1:
+	jr	__jrt_nop_0282D1
+__jrt_nop_0282D1:
 	nop
 	nop
 	nop
-	jr	LABEL_0282F3
-LABEL_0282D6:
+	jr	ToneGen_WriteVoice_Reg07_Or_Reg18_Epilogue
+ToneGen_WriteVoice_Reg07_Or_Reg18_Skip:
 	res_dd8	7, 24
 	add	wa, 1536
 	ld	(1048576:24), wa
@@ -18052,12 +18052,12 @@ LABEL_0282D6:
 	set_dd8	7, 24
 	ld	wa, (xiz+66)
 	ld	(1048578:24), wa
-	jr	LABEL_0282F0
-LABEL_0282F0:
+	jr	__jrt_nop_0282F0
+__jrt_nop_0282F0:
 	nop
 	nop
 	nop
-LABEL_0282F3:
+ToneGen_WriteVoice_Reg07_Or_Reg18_Epilogue:
 	pop	xiz
 	ret
 ; Same shape: WA < 0x40 -> register 0x15 from XBC+0x3A, else register 0x16 from XBC+0x3E.
@@ -18065,7 +18065,7 @@ ToneGen_WriteVoice_Reg15_Or_Reg16:
 	push	xiz
 	ld	xiz, xbc
 	cp	wa, 64
-	jr	nc, LABEL_02831D
+	jr	nc, ToneGen_WriteVoice_Reg15_Or_Reg16_Skip
 	res_dd8	7, 24
 	add	wa, 1344
 	ld	(1048576:24), wa
@@ -18073,13 +18073,13 @@ ToneGen_WriteVoice_Reg15_Or_Reg16:
 	set_dd8	7, 24
 	ld	wa, (xiz+58)
 	ld	(1048578:24), wa
-	jr	LABEL_028318
-LABEL_028318:
+	jr	__jrt_nop_028318
+__jrt_nop_028318:
 	nop
 	nop
 	nop
-	jr	LABEL_02833A
-LABEL_02831D:
+	jr	ToneGen_WriteVoice_Reg15_Or_Reg16_Epilogue
+ToneGen_WriteVoice_Reg15_Or_Reg16_Skip:
 	res_dd8	7, 24
 	add	wa, 1408
 	ld	(1048576:24), wa
@@ -18087,12 +18087,12 @@ LABEL_02831D:
 	set_dd8	7, 24
 	ld	wa, (xiz+62)
 	ld	(1048578:24), wa
-	jr	LABEL_028337
-LABEL_028337:
+	jr	__jrt_nop_028337
+__jrt_nop_028337:
 	nop
 	nop
 	nop
-LABEL_02833A:
+ToneGen_WriteVoice_Reg15_Or_Reg16_Epilogue:
 	pop	xiz
 	ret
 ; A = part index, C = a bus mask, XDE and XIX = bit patterns to set/clear, one word on the
@@ -18107,20 +18107,20 @@ AudioMod_Apply_BusRouting:
 	ld	ix, (xsp+6)
 	ld	w, 0:opc
 	cp	w, 4:i3
-	jrl	nc, LABEL_028422
-LABEL_028347:
+	jrl	nc, AudioMod_Apply_BusRouting_Epilogue
+AudioMod_Apply_BusRouting_Loop:
 	ld	l, w
 	extz	hl
 	lda	xiy, (AudioMod_BusRouting_EnableBits:24)
 	ld_rrb	l, xiy, hl	; ld L,(XIY+HL)
 	and	l, c
-	jrl	z, LABEL_0283EE
+	jrl	z, AudioMod_Apply_BusRouting_Skip2
 	ld	l, w
 	extz	hl
 	lda	xiy, (AudioMod_BusRouting_OrIXBits:24)
 	ld_rrb	l, xiy, hl	; ld L,(XIY+HL)
 	and	l, c
-	jr	z, LABEL_02839A
+	jr	z, AudioMod_Apply_BusRouting_Skip
 	ld	l, w
 	extz	hl
 	muls	hl, 37
@@ -18136,8 +18136,8 @@ LABEL_028347:
 	ld	iy, de
 	or	iy, ix
 	or	(xhl+24), iy
-	jrl	LABEL_02841B
-LABEL_02839A:
+	jrl	AudioMod_Apply_BusRouting_Join
+AudioMod_Apply_BusRouting_Skip:
 	ld	l, w
 	extz	hl
 	muls	hl, 37
@@ -18166,8 +18166,8 @@ LABEL_02839A:
 	add	xhl, xiy
 	lda_rr	xhl, xhl, iz	; lda XHL,XHL+IZ
 	or	(xhl+24), de
-	jr	LABEL_02841B
-LABEL_0283EE:
+	jr	AudioMod_Apply_BusRouting_Join
+AudioMod_Apply_BusRouting_Skip2:
 	ld	l, w
 	extz	hl
 	muls	hl, 37
@@ -18184,11 +18184,11 @@ LABEL_0283EE:
 	or	hl, ix
 	cpl	hl
 	and	(xiy+24), hl
-LABEL_02841B:
+AudioMod_Apply_BusRouting_Join:
 	inc	1, w
 	cp	w, 4:i3
-	jrl	c, LABEL_028347
-LABEL_028422:
+	jrl	c, AudioMod_Apply_BusRouting_Loop
+AudioMod_Apply_BusRouting_Epilogue:
 	popw	iz
 	retd	2
 ; A = part index, BC = controller value, XDE = 3-byte modulation-routing descriptor.
@@ -18271,16 +18271,16 @@ AudioMod_Apply_Porta_Curve:
 	dec	2, xsp
 	ld	(xsp), a
 	bit	7, (xde+1)	; bit 7,(XDE+0x01)
-	jr	z, LABEL_0284C1
+	jr	z, AudioMod_Apply_Porta_Curve_Skip2
 	ld	hl, bc
 	exts	xhl
 	sub	xhl, 8192
-	jr	LABEL_0284C8
-LABEL_0284C1:
+	jr	AudioMod_Apply_Porta_Curve_Join
+AudioMod_Apply_Porta_Curve_Skip2:
 	ld	hl, bc
 	exts	xhl
 	sra	xhl, 1
-LABEL_0284C8:
+AudioMod_Apply_Porta_Curve_Join:
 	ld	a, (xde+2)
 	ld	xbc, 0:i3
 	ld	c, a
@@ -18306,7 +18306,7 @@ AudioMod_Porta_Curve_JumpBase:
 	add	xhl, xhl
 	add	xhl, xwa
 	sla	xhl, 2
-	jr	LABEL_028527
+	jr	AudioMod_Apply_Porta_Curve_Join2
 AudioMod_Apply_Porta_Curve_Skip:
 	ld	a, (xsp)
 	extz	wa
@@ -18317,19 +18317,19 @@ AudioMod_Apply_Porta_Curve_Skip:
 	ld	c, a
 	ld	xwa, xhl
 	call	FP_MulAccum64
-LABEL_028527:
+AudioMod_Apply_Porta_Curve_Join2:
 	sla	xhl, 9
 	cp	xhl, 0
-	jr	le, LABEL_02853F
+	jr	le, AudioMod_Apply_Porta_Curve_Skip3
 	ld	xwa, xhl
 	ld	xbc, 16384
 	call	Int_SignedDiv_AltEntry
-	jr	LABEL_02854A
-LABEL_02853F:
+	jr	AudioMod_Apply_Porta_Curve_Join3
+AudioMod_Apply_Porta_Curve_Skip3:
 	ld	xwa, xhl
 	ld	xbc, 16383
 	call	Int_SignedDiv_AltEntry
-LABEL_02854A:
+AudioMod_Apply_Porta_Curve_Join3:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -18341,7 +18341,7 @@ LABEL_02854A:
 ; shift right 1, then divided by 0x7F; stores the byte at 0x041387 + part*0x11F (part+0x1F).
 AudioMod_Scale_To_Part_1F:
 	bit	7, (xde+1)	; bit 7,(XDE+0x01)
-	jr	z, LABEL_02857D
+	jr	z, AudioMod_Scale_To_Part_1F_Skip
 	ld	e, (xde+2)
 	ld	l, e
 	extz	hl
@@ -18352,8 +18352,8 @@ AudioMod_Scale_To_Part_1F:
 	ld	bc, de
 	muls	xbc, xhl
 	ld	de, bc
-	jr	LABEL_02858E
-LABEL_02857D:
+	jr	AudioMod_Scale_To_Part_1F_Join
+AudioMod_Scale_To_Part_1F_Skip:
 	ld	e, (xde+2)
 	ld	l, e
 	extz	hl
@@ -18362,7 +18362,7 @@ LABEL_02857D:
 	ld	bc, de
 	muls	xbc, xhl
 	ld	de, bc
-LABEL_02858E:
+AudioMod_Scale_To_Part_1F_Join:
 	sra	de, 1
 	ld	bc, de
 	exts	xbc
@@ -18376,7 +18376,7 @@ LABEL_02858E:
 ; As above without the >>1; stores the byte at 0x041388 + part*0x11F (part+0x20).
 AudioMod_Scale_To_Part_20:
 	bit	7, (xde+1)	; bit 7,(XDE+0x01)
-	jr	z, LABEL_0285CA
+	jr	z, AudioMod_Scale_To_Part_20_Skip
 	ld	e, (xde+2)
 	ld	l, e
 	extz	hl
@@ -18387,8 +18387,8 @@ AudioMod_Scale_To_Part_20:
 	ld	bc, de
 	muls	xbc, xhl
 	ld	de, bc
-	jr	LABEL_0285DB
-LABEL_0285CA:
+	jr	AudioMod_Scale_To_Part_20_Join
+AudioMod_Scale_To_Part_20_Skip:
 	ld	e, (xde+2)
 	ld	l, e
 	extz	hl
@@ -18397,7 +18397,7 @@ LABEL_0285CA:
 	ld	bc, de
 	muls	xbc, xhl
 	ld	de, bc
-LABEL_0285DB:
+AudioMod_Scale_To_Part_20_Join:
 	ld	bc, de
 	exts	xbc
 	divs	bc, 127
@@ -18421,18 +18421,18 @@ AudioMod_Apply_Slot_Field2A:
 	ld	l, (xsp+6)
 	ld	w, (xsp+8)
 	bit	7, (xix+1)	; bit 7,(XIX+0x01)
-	jr	z, LABEL_028614
+	jr	z, AudioMod_Apply_Slot_Field2A_Join
 	cp	c, 64
-	jr	ule, LABEL_028612
+	jr	ule, AudioMod_Apply_Slot_Field2A_Skip
 	sub	c, 64
 	ld	e, c
 	add	c, e
-	jr	LABEL_028614
-LABEL_028612:
+	jr	AudioMod_Apply_Slot_Field2A_Join
+AudioMod_Apply_Slot_Field2A_Skip:
 	ld	c, 0:opc
-LABEL_028614:
+AudioMod_Apply_Slot_Field2A_Join:
 	cp	c, 0:i3
-	jr	z, LABEL_028691
+	jr	z, AudioMod_Apply_Slot_Field2A_Skip2
 	ld	e, w
 	extz	de
 	ld	iy, de
@@ -18480,8 +18480,8 @@ LABEL_028614:
 	ld	e, h
 	or	e, b
 	ld	(xiy+40), e
-	jr	LABEL_0286BF
-LABEL_028691:
+	jr	AudioMod_Apply_Slot_Field2A_Join2
+AudioMod_Apply_Slot_Field2A_Skip2:
 	ld	e, w
 	extz	de
 	ld	iy, de
@@ -18499,7 +18499,7 @@ LABEL_028691:
 	add	xde, xiy
 	lda_rr	xde, xde, iz	; lda XDE,XDE+IZ
 	ld	(xde+40), 0
-LABEL_0286BF:
+AudioMod_Apply_Slot_Field2A_Join2:
 	ldb_erp	c, 0xf4	; ld IYL,C
 	extz	iy
 	ld	e, (xix+2)
@@ -18509,11 +18509,11 @@ LABEL_0286BF:
 	mul	xde, xix
 	ld	iy, de
 	srl	iy, 6
-	jr	nz, LABEL_0286DD
+	jr	nz, AudioMod_Apply_Slot_Field2A_Skip3
 	cp	c, 0:i3
-	jr	z, LABEL_0286DD
+	jr	z, AudioMod_Apply_Slot_Field2A_Skip3
 	ld	iy, 1:i3
-LABEL_0286DD:
+AudioMod_Apply_Slot_Field2A_Skip3:
 	ld	c, w
 	extz	bc
 	ld	de, bc
@@ -18542,18 +18542,18 @@ AudioMod_Apply_Slot_Field29:
 	ld	l, (xsp+6)
 	ld	w, (xsp+8)
 	bit	7, (xix+1)	; bit 7,(XIX+0x01)
-	jr	z, LABEL_02872D
+	jr	z, AudioMod_Apply_Slot_Field29_Join
 	cp	c, 64
-	jr	ule, LABEL_02872B
+	jr	ule, AudioMod_Apply_Slot_Field29_Skip
 	sub	c, 64
 	ld	e, c
 	add	c, e
-	jr	LABEL_02872D
-LABEL_02872B:
+	jr	AudioMod_Apply_Slot_Field29_Join
+AudioMod_Apply_Slot_Field29_Skip:
 	ld	c, 0:opc
-LABEL_02872D:
+AudioMod_Apply_Slot_Field29_Join:
 	cp	c, 0:i3
-	jr	z, LABEL_0287AA
+	jr	z, AudioMod_Apply_Slot_Field29_Skip2
 	ld	e, w
 	extz	de
 	ld	iy, de
@@ -18601,8 +18601,8 @@ LABEL_02872D:
 	ld	e, h
 	or	e, b
 	ld	(xiy+40), e
-	jr	LABEL_0287D8
-LABEL_0287AA:
+	jr	AudioMod_Apply_Slot_Field29_Join2
+AudioMod_Apply_Slot_Field29_Skip2:
 	ld	e, w
 	extz	de
 	ld	iy, de
@@ -18620,7 +18620,7 @@ LABEL_0287AA:
 	add	xde, xiy
 	lda_rr	xde, xde, iz	; lda XDE,XDE+IZ
 	ld	(xde+40), 0
-LABEL_0287D8:
+AudioMod_Apply_Slot_Field29_Join2:
 	ldb_erp	c, 0xf4	; ld IYL,C
 	extz	iy
 	ld	e, (xix+2)
@@ -18630,11 +18630,11 @@ LABEL_0287D8:
 	mul	xde, xix
 	ld	iy, de
 	srl	iy, 6
-	jr	nz, LABEL_0287F6
+	jr	nz, AudioMod_Apply_Slot_Field29_Skip3
 	cp	c, 0:i3
-	jr	z, LABEL_0287F6
+	jr	z, AudioMod_Apply_Slot_Field29_Skip3
 	ld	iy, 1:i3
-LABEL_0287F6:
+AudioMod_Apply_Slot_Field29_Skip3:
 	ld	c, w
 	extz	bc
 	ld	de, bc
@@ -18658,14 +18658,14 @@ LABEL_0287F6:
 ; range [DE, BC] using signed comparisons.  Tail utility of the 0x0280FE block.
 Audio_Clamp_To_Range:
 	cp	wa, de
-	jr	ge, LABEL_028830
+	jr	ge, Audio_Clamp_To_Range_Skip
 	ld	wa, de
-	jr	LABEL_028836
-LABEL_028830:
+	jr	Audio_Clamp_To_Range_Join
+Audio_Clamp_To_Range_Skip:
 	cp	wa, bc
-	jr	le, LABEL_028836
+	jr	le, Audio_Clamp_To_Range_Join
 	ld	wa, bc
-LABEL_028836:
+Audio_Clamp_To_Range_Join:
 	ld	hl, wa
 	ret
 
@@ -19627,8 +19627,8 @@ VoiceCC_DataTable_028F75:
 	inc	5, xwa
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	nc, LABEL_028FE4
-LABEL_028F89:
+	jr	nc, VoiceCC_DataTable_028F75_Epilogue
+VoiceCC_DataTable_028F75_Loop:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -19639,33 +19639,33 @@ LABEL_028F89:
 	ld	wa, (xbc+1)
 	and	wa, 60
 	cp	wa, 8
-	jr	z, LABEL_028FDD
+	jr	z, VoiceCC_DataTable_028F75_Join
 	cp	wa, 16
-	jr	z, LABEL_028FCB
+	jr	z, VoiceCC_DataTable_028F75_Skip2
 	cp	wa, 32
-	jr	z, LABEL_028FB7
+	jr	z, VoiceCC_DataTable_028F75_Skip
 	cp	wa, 4:i3
-	jr	nz, LABEL_028FDD
-LABEL_028FB7:
+	jr	nz, VoiceCC_DataTable_028F75_Join
+VoiceCC_DataTable_028F75_Skip:
 	ld	xwa, xbc
 	call	TVF_Emit_Registers
 	ld	a, (xiz)
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Pan_Pair
-	jr	LABEL_028FDD
-LABEL_028FCB:
+	jr	VoiceCC_DataTable_028F75_Join
+VoiceCC_DataTable_028F75_Skip2:
 	ld	xwa, xbc
 	call	Voice_PanReg_WriteDispatchB
 	ld	a, (xiz)
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Pan_Pair
-LABEL_028FDD:
+VoiceCC_DataTable_028F75_Join:
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_028F89
-LABEL_028FE4:
+	jr	c, VoiceCC_DataTable_028F75_Loop
+VoiceCC_DataTable_028F75_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -19681,8 +19681,8 @@ AudioChannel_AllVoices_Update_PanShift:
 	inc	5, xwa
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	nc, LABEL_02906D
-LABEL_028FFC:
+	jr	nc, AudioChannel_AllVoices_Update_PanShift_Epilogue
+AudioChannel_AllVoices_Update_PanShift_Loop:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -19693,16 +19693,16 @@ LABEL_028FFC:
 	ld	wa, (xbc+1)
 	and	wa, 60
 	cp	wa, 8
-	jr	z, LABEL_029066
+	jr	z, AudioChannel_AllVoices_Update_PanShift_Join
 	cp	wa, 16
-	jr	z, LABEL_029045
+	jr	z, AudioChannel_AllVoices_Update_PanShift_Skip2
 	cp	wa, 32
-	jr	z, LABEL_02902A
+	jr	z, AudioChannel_AllVoices_Update_PanShift_Skip
 	cp	wa, 4:i3
-	jr	nz, LABEL_029066
-LABEL_02902A:
+	jr	nz, AudioChannel_AllVoices_Update_PanShift_Join
+AudioChannel_AllVoices_Update_PanShift_Skip:
 	bit	7, (xbc+5)	; bit 7,(XBC+0x05)
-	jr	z, LABEL_029066
+	jr	z, AudioChannel_AllVoices_Update_PanShift_Join
 	ld	xwa, xbc
 	ld	bc, 1:i3
 	call	Voice_WriteChPanShift
@@ -19710,14 +19710,14 @@ LABEL_02902A:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg21_Reg22
-	jr	LABEL_029066
-LABEL_029045:
+	jr	AudioChannel_AllVoices_Update_PanShift_Join
+AudioChannel_AllVoices_Update_PanShift_Skip2:
 	ld	xwa, (xbc+19)
 	bit	5, (xwa+13)	; bit 5,(XWA+0x0d)
-	jr	z, LABEL_029052
+	jr	z, AudioChannel_AllVoices_Update_PanShift_Skip3
 	bit	7, (xbc+5)	; bit 7,(XBC+0x05)
-	jr	z, LABEL_029066
-LABEL_029052:
+	jr	z, AudioChannel_AllVoices_Update_PanShift_Join
+AudioChannel_AllVoices_Update_PanShift_Skip3:
 	ld	xwa, xbc
 	ld	bc, 1:i3
 	call	Voice_WriteChPanShift2
@@ -19725,11 +19725,11 @@ LABEL_029052:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg21_Reg22
-LABEL_029066:
+AudioChannel_AllVoices_Update_PanShift_Join:
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_028FFC
-LABEL_02906D:
+	jr	c, AudioChannel_AllVoices_Update_PanShift_Loop
+AudioChannel_AllVoices_Update_PanShift_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -19745,8 +19745,8 @@ AudioChannel_AllVoices_Update_Variant3:
 	inc	5, xwa
 	ld	(xsp+8), xwa
 	cp8_imm_ri	xwa, 0x40	; cp (XWA),0x40
-	jr	nc, LABEL_0290E3
-LABEL_029086:
+	jr	nc, AudioChannel_AllVoices_Update_Variant3_Epilogue
+AudioChannel_AllVoices_Update_Variant3_Loop:
 	ld	xwa, (xsp+8)
 	ld	a, (xwa)
 	extz	wa
@@ -19757,13 +19757,13 @@ LABEL_029086:
 	ld	wa, (xiz+1)
 	and	wa, 60
 	cp	wa, 16
-	jr	z, LABEL_0290B6
+	jr	z, AudioChannel_AllVoices_Update_Variant3_Skip
 	cp	wa, 8
-	jr	z, LABEL_0290D6
+	jr	z, AudioChannel_AllVoices_Update_Variant3_Join
 	cp	wa, 32
-	jr	z, LABEL_0290D6
-	jr	LABEL_0290D6
-LABEL_0290B6:
+	jr	z, AudioChannel_AllVoices_Update_Variant3_Join
+	jr	AudioChannel_AllVoices_Update_Variant3_Join
+AudioChannel_AllVoices_Update_Variant3_Skip:
 	ld	xwa, (xiz+19)
 	ld	xwa, xiz
 	call	Voice_Calc_LevelPair_FixedAtk
@@ -19775,13 +19775,13 @@ LABEL_0290B6:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg21_Reg22
-LABEL_0290D6:
+AudioChannel_AllVoices_Update_Variant3_Join:
 	ld	xwa, 1:i3
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
 	cp8_imm_ri	xwa, 0x40	; cp (XWA),0x40
-	jr	c, LABEL_029086
-LABEL_0290E3:
+	jr	c, AudioChannel_AllVoices_Update_Variant3_Loop
+AudioChannel_AllVoices_Update_Variant3_Epilogue:
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -19796,12 +19796,12 @@ AudioChannel_Handler_Cmd01:
 	ld	wa, bc
 	extz	xwa
 	bit	15, wa
-	jr	z, LABEL_0290FD
+	jr	z, AudioChannel_Handler_Cmd01_Skip
 	res	15, bc
-	jr	LABEL_029100
-LABEL_0290FD:
+	jr	AudioChannel_Handler_Cmd01_Join
+AudioChannel_Handler_Cmd01_Skip:
 	sll	bc, 7
-LABEL_029100:
+AudioChannel_Handler_Cmd01_Join:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	xde, xiz
@@ -19883,24 +19883,24 @@ AudioChannel_Handler_Cmd02:
 	ld	a, (xwa+16)
 	and	a, 192
 	cp	a, 192
-	jr	z, LABEL_0291E4
+	jr	z, AudioChannel_Handler_Cmd02_Join
 	cp	a, 64
-	jr	z, LABEL_0291E4
+	jr	z, AudioChannel_Handler_Cmd02_Join
 	cp	a, 128
-	jr	z, LABEL_0291D8
+	jr	z, AudioChannel_Handler_Cmd02_Skip
 	cp	a, 0:i3
-	jr	nz, LABEL_0291E4
+	jr	nz, AudioChannel_Handler_Cmd02_Join
 	ld	a, (xsp+8)
 	extz	wa
 	call	Voice_Query_PartVoices_Mask7F
 	ld	(xsp+4), xhl
-	jr	LABEL_0291E4
-LABEL_0291D8:
+	jr	AudioChannel_Handler_Cmd02_Join
+AudioChannel_Handler_Cmd02_Skip:
 	ld	a, (xsp+8)
 	extz	wa
 	call	Voice_Query_PartVoices
 	ld	(xsp+4), xhl
-LABEL_0291E4:
+AudioChannel_Handler_Cmd02_Join:
 	ld	xwa, (xsp+4)
 	calr	AudioChannel_AllVoices_Update_PanShift
 	pop	xiz
@@ -19929,7 +19929,7 @@ AudioChannel_Handler_Cmd04_07:
 	add	xwa, xbc
 	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
 	cp8_imm_rid8	xwa, 0x03, 0x00	; cp (XWA+0x03),0x00
-	jrl	nz, LABEL_0292D7
+	jrl	nz, AudioChannel_Handler_Cmd04_07_Skip2
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -19954,8 +19954,8 @@ AudioChannel_Handler_Cmd04_07:
 	call	AlgoFlag_Write
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_02927A
-LABEL_02925E:
+	jr	nc, AudioChannel_Handler_Cmd04_07_Skip
+AudioChannel_Handler_Cmd04_07_Loop:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -19967,8 +19967,8 @@ LABEL_02925E:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_02925E
-LABEL_02927A:
+	jr	c, AudioChannel_Handler_Cmd04_07_Loop
+AudioChannel_Handler_Cmd04_07_Skip:
 	ld	a, (xsp+12)
 	extz	wa
 	call	Voice_Query_PartVoices
@@ -19982,8 +19982,8 @@ LABEL_02927A:
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jrl	nc, LABEL_0293E9
-LABEL_0292AB:
+	jrl	nc, AudioChannel_Handler_Cmd04_07_Epilogue
+AudioChannel_Handler_Cmd04_07_Loop2:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -19997,9 +19997,9 @@ LABEL_0292AB:
 	calr	ToneGen_WriteVoice_Reg11
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_0292AB
-	jrl	LABEL_0293E9
-LABEL_0292D7:
+	jr	c, AudioChannel_Handler_Cmd04_07_Loop2
+	jrl	AudioChannel_Handler_Cmd04_07_Epilogue
+AudioChannel_Handler_Cmd04_07_Skip2:
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20024,8 +20024,8 @@ LABEL_0292D7:
 	call	AlgoFlag_Write
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_02932D
-LABEL_029311:
+	jr	nc, AudioChannel_Handler_Cmd04_07_Skip3
+AudioChannel_Handler_Cmd04_07_Loop3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20037,8 +20037,8 @@ LABEL_029311:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029311
-LABEL_02932D:
+	jr	c, AudioChannel_Handler_Cmd04_07_Loop3
+AudioChannel_Handler_Cmd04_07_Skip3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20051,8 +20051,8 @@ LABEL_02932D:
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
-	jrl	LABEL_0293D2
-LABEL_029351:
+	jrl	AudioChannel_Handler_Cmd04_07_Join2
+AudioChannel_Handler_Cmd04_07_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20077,26 +20077,26 @@ LABEL_029351:
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
 	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
-	jr	nz, LABEL_0293B4
+	jr	nz, AudioChannel_Handler_Cmd04_07_Skip4
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
 	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	ldw	(283148:24), 0
-	jr	LABEL_0293C2
-LABEL_0293B4:
+	jr	AudioChannel_Handler_Cmd04_07_Join
+AudioChannel_Handler_Cmd04_07_Skip4:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_A
 	ld	(283148:24), hl
-LABEL_0293C2:
+AudioChannel_Handler_Cmd04_07_Join:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg18
 	incw	1, (xsp+8)
-LABEL_0293D2:
+AudioChannel_Handler_Cmd04_07_Join2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20104,8 +20104,8 @@ LABEL_0293D2:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jrl	c, LABEL_029351
-LABEL_0293E9:
+	jrl	c, AudioChannel_Handler_Cmd04_07_Loop4
+AudioChannel_Handler_Cmd04_07_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	retd	2
@@ -20128,7 +20128,7 @@ AudioChannel_Handler_Cmd10_13:
 	add	xwa, xbc
 	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
 	cp8_imm_rid8	xwa, 0x02, 0x00	; cp (XWA+0x02),0x00
-	jrl	nz, LABEL_0294D9
+	jrl	nz, AudioChannel_Handler_Cmd10_13_Skip2
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20153,8 +20153,8 @@ AudioChannel_Handler_Cmd10_13:
 	call	AlgoFlag_Write_Bit3
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_02947C
-LABEL_029460:
+	jr	nc, AudioChannel_Handler_Cmd10_13_Skip
+AudioChannel_Handler_Cmd10_13_Loop:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20166,8 +20166,8 @@ LABEL_029460:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029460
-LABEL_02947C:
+	jr	c, AudioChannel_Handler_Cmd10_13_Loop
+AudioChannel_Handler_Cmd10_13_Skip:
 	ld	a, (xsp+12)
 	extz	wa
 	call	Voice_Query_PartVoices
@@ -20181,8 +20181,8 @@ LABEL_02947C:
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jrl	nc, LABEL_0295F8
-LABEL_0294AD:
+	jrl	nc, AudioChannel_Handler_Cmd10_13_Epilogue
+AudioChannel_Handler_Cmd10_13_Loop2:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -20196,9 +20196,9 @@ LABEL_0294AD:
 	calr	ToneGen_WriteVoice_Reg11
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_0294AD
-	jrl	LABEL_0295F8
-LABEL_0294D9:
+	jr	c, AudioChannel_Handler_Cmd10_13_Loop2
+	jrl	AudioChannel_Handler_Cmd10_13_Epilogue
+AudioChannel_Handler_Cmd10_13_Skip2:
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20223,8 +20223,8 @@ LABEL_0294D9:
 	call	AlgoFlag_Write_Bit3
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_02952F
-LABEL_029513:
+	jr	nc, AudioChannel_Handler_Cmd10_13_Skip3
+AudioChannel_Handler_Cmd10_13_Loop3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20236,8 +20236,8 @@ LABEL_029513:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029513
-LABEL_02952F:
+	jr	c, AudioChannel_Handler_Cmd10_13_Loop3
+AudioChannel_Handler_Cmd10_13_Skip3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20250,8 +20250,8 @@ LABEL_02952F:
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
-	jrl	LABEL_0295E1
-LABEL_029553:
+	jrl	AudioChannel_Handler_Cmd10_13_Join2
+AudioChannel_Handler_Cmd10_13_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20276,7 +20276,7 @@ LABEL_029553:
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
 	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
-	jr	nz, LABEL_0295C3
+	jr	nz, AudioChannel_Handler_Cmd10_13_Skip4
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
@@ -20287,8 +20287,8 @@ LABEL_029553:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg18
-	jr	LABEL_0295DE
-LABEL_0295C3:
+	jr	AudioChannel_Handler_Cmd10_13_Join
+AudioChannel_Handler_Cmd10_13_Skip4:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_A_Simple
@@ -20297,9 +20297,9 @@ LABEL_0295C3:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg16
-LABEL_0295DE:
+AudioChannel_Handler_Cmd10_13_Join:
 	incw	1, (xsp+8)
-LABEL_0295E1:
+AudioChannel_Handler_Cmd10_13_Join2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20307,8 +20307,8 @@ LABEL_0295E1:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jrl	c, LABEL_029553
-LABEL_0295F8:
+	jrl	c, AudioChannel_Handler_Cmd10_13_Loop4
+AudioChannel_Handler_Cmd10_13_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	retd	2
@@ -20331,7 +20331,7 @@ AudioChannel_Handler_Cmd08_0B:
 	add	xwa, xbc
 	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
 	cp8_imm_rid8	xwa, 0x03, 0x00	; cp (XWA+0x03),0x00
-	jrl	nz, LABEL_0296E8
+	jrl	nz, AudioChannel_Handler_Cmd08_0B_Skip2
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20356,8 +20356,8 @@ AudioChannel_Handler_Cmd08_0B:
 	call	AlgoFlag_Write
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_02968B
-LABEL_02966F:
+	jr	nc, AudioChannel_Handler_Cmd08_0B_Skip
+AudioChannel_Handler_Cmd08_0B_Loop:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20369,8 +20369,8 @@ LABEL_02966F:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_02966F
-LABEL_02968B:
+	jr	c, AudioChannel_Handler_Cmd08_0B_Loop
+AudioChannel_Handler_Cmd08_0B_Skip:
 	ld	a, (xsp+12)
 	extz	wa
 	call	Voice_Query_PartVoices
@@ -20384,8 +20384,8 @@ LABEL_02968B:
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jrl	nc, LABEL_0297FD
-LABEL_0296BC:
+	jrl	nc, AudioChannel_Handler_Cmd08_0B_Epilogue
+AudioChannel_Handler_Cmd08_0B_Loop2:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -20399,9 +20399,9 @@ LABEL_0296BC:
 	calr	ToneGen_WriteVoice_EnvLevel
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_0296BC
-	jrl	LABEL_0297FD
-LABEL_0296E8:
+	jr	c, AudioChannel_Handler_Cmd08_0B_Loop2
+	jrl	AudioChannel_Handler_Cmd08_0B_Epilogue
+AudioChannel_Handler_Cmd08_0B_Skip2:
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20426,8 +20426,8 @@ LABEL_0296E8:
 	call	AlgoFlag_Write
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_02973E
-LABEL_029722:
+	jr	nc, AudioChannel_Handler_Cmd08_0B_Skip3
+AudioChannel_Handler_Cmd08_0B_Loop3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20439,8 +20439,8 @@ LABEL_029722:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029722
-LABEL_02973E:
+	jr	c, AudioChannel_Handler_Cmd08_0B_Loop3
+AudioChannel_Handler_Cmd08_0B_Skip3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20454,8 +20454,8 @@ LABEL_02973E:
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
-	jrl	LABEL_0297E6
-LABEL_029765:
+	jrl	AudioChannel_Handler_Cmd08_0B_Join2
+AudioChannel_Handler_Cmd08_0B_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20480,26 +20480,26 @@ LABEL_029765:
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
 	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
-	jr	nz, LABEL_0297C8
+	jr	nz, AudioChannel_Handler_Cmd08_0B_Skip4
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
 	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	ldw	(283140:24), 0
-	jr	LABEL_0297D6
-LABEL_0297C8:
+	jr	AudioChannel_Handler_Cmd08_0B_Join
+AudioChannel_Handler_Cmd08_0B_Skip4:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_B
 	ld	(283140:24), hl
-LABEL_0297D6:
+AudioChannel_Handler_Cmd08_0B_Join:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg07
 	incw	1, (xsp+8)
-LABEL_0297E6:
+AudioChannel_Handler_Cmd08_0B_Join2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20507,8 +20507,8 @@ LABEL_0297E6:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
-	jrl	c, LABEL_029765
-LABEL_0297FD:
+	jrl	c, AudioChannel_Handler_Cmd08_0B_Loop4
+AudioChannel_Handler_Cmd08_0B_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	retd	2
@@ -20531,7 +20531,7 @@ AudioChannel_Handler_Cmd14_17:
 	add	xwa, xbc
 	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
 	cp8_imm_rid8	xwa, 0x02, 0x00	; cp (XWA+0x02),0x00
-	jrl	nz, LABEL_0298ED
+	jrl	nz, AudioChannel_Handler_Cmd14_17_Skip2
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20556,8 +20556,8 @@ AudioChannel_Handler_Cmd14_17:
 	call	AlgoFlag_Write_Bit3
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_029890
-LABEL_029874:
+	jr	nc, AudioChannel_Handler_Cmd14_17_Skip
+AudioChannel_Handler_Cmd14_17_Loop:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20569,8 +20569,8 @@ LABEL_029874:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029874
-LABEL_029890:
+	jr	c, AudioChannel_Handler_Cmd14_17_Loop
+AudioChannel_Handler_Cmd14_17_Skip:
 	ld	a, (xsp+12)
 	extz	wa
 	call	Voice_Query_PartVoices
@@ -20584,8 +20584,8 @@ LABEL_029890:
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jrl	nc, LABEL_029A0F
-LABEL_0298C1:
+	jrl	nc, AudioChannel_Handler_Cmd14_17_Epilogue
+AudioChannel_Handler_Cmd14_17_Loop2:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -20599,9 +20599,9 @@ LABEL_0298C1:
 	calr	ToneGen_WriteVoice_EnvLevel
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_0298C1
-	jrl	LABEL_029A0F
-LABEL_0298ED:
+	jr	c, AudioChannel_Handler_Cmd14_17_Loop2
+	jrl	AudioChannel_Handler_Cmd14_17_Epilogue
+AudioChannel_Handler_Cmd14_17_Skip2:
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20626,8 +20626,8 @@ LABEL_0298ED:
 	call	AlgoFlag_Write_Bit3
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_029943
-LABEL_029927:
+	jr	nc, AudioChannel_Handler_Cmd14_17_Skip3
+AudioChannel_Handler_Cmd14_17_Loop3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20639,8 +20639,8 @@ LABEL_029927:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029927
-LABEL_029943:
+	jr	c, AudioChannel_Handler_Cmd14_17_Loop3
+AudioChannel_Handler_Cmd14_17_Skip3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20654,8 +20654,8 @@ LABEL_029943:
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
-	jrl	LABEL_0299F8
-LABEL_02996A:
+	jrl	AudioChannel_Handler_Cmd14_17_Join2
+AudioChannel_Handler_Cmd14_17_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20680,7 +20680,7 @@ LABEL_02996A:
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
 	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
-	jr	nz, LABEL_0299DA
+	jr	nz, AudioChannel_Handler_Cmd14_17_Skip4
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
@@ -20691,8 +20691,8 @@ LABEL_02996A:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg07
-	jr	LABEL_0299F5
-LABEL_0299DA:
+	jr	AudioChannel_Handler_Cmd14_17_Join
+AudioChannel_Handler_Cmd14_17_Skip4:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_B_Simple
@@ -20701,9 +20701,9 @@ LABEL_0299DA:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg15
-LABEL_0299F5:
+AudioChannel_Handler_Cmd14_17_Join:
 	incw	1, (xsp+8)
-LABEL_0299F8:
+AudioChannel_Handler_Cmd14_17_Join2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20711,8 +20711,8 @@ LABEL_0299F8:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
-	jrl	c, LABEL_02996A
-LABEL_029A0F:
+	jrl	c, AudioChannel_Handler_Cmd14_17_Loop4
+AudioChannel_Handler_Cmd14_17_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	retd	2
@@ -20735,7 +20735,7 @@ AudioChannel_Handler_Cmd0C_0F:
 	add	xwa, xbc
 	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
 	cp8_imm_rid8	xwa, 0x03, 0x00	; cp (XWA+0x03),0x00
-	jrl	nz, LABEL_029AFF
+	jrl	nz, AudioChannel_Handler_Cmd0C_0F_Skip2
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20760,8 +20760,8 @@ AudioChannel_Handler_Cmd0C_0F:
 	call	AlgoFlag_Write
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_029AA2
-LABEL_029A86:
+	jr	nc, AudioChannel_Handler_Cmd0C_0F_Skip
+AudioChannel_Handler_Cmd0C_0F_Loop:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20773,8 +20773,8 @@ LABEL_029A86:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029A86
-LABEL_029AA2:
+	jr	c, AudioChannel_Handler_Cmd0C_0F_Loop
+AudioChannel_Handler_Cmd0C_0F_Skip:
 	ld	a, (xsp+12)
 	extz	wa
 	call	Voice_Query_PartVoices
@@ -20788,8 +20788,8 @@ LABEL_029AA2:
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jrl	nc, LABEL_029C16
-LABEL_029AD3:
+	jrl	nc, AudioChannel_Handler_Cmd0C_0F_Epilogue
+AudioChannel_Handler_Cmd0C_0F_Loop2:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -20803,9 +20803,9 @@ LABEL_029AD3:
 	calr	ToneGen_WriteVoice_Reg13
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_029AD3
-	jrl	LABEL_029C16
-LABEL_029AFF:
+	jr	c, AudioChannel_Handler_Cmd0C_0F_Loop2
+	jrl	AudioChannel_Handler_Cmd0C_0F_Epilogue
+AudioChannel_Handler_Cmd0C_0F_Skip2:
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20830,8 +20830,8 @@ LABEL_029AFF:
 	call	AlgoFlag_Write
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_029B55
-LABEL_029B39:
+	jr	nc, AudioChannel_Handler_Cmd0C_0F_Skip3
+AudioChannel_Handler_Cmd0C_0F_Loop3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20843,8 +20843,8 @@ LABEL_029B39:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029B39
-LABEL_029B55:
+	jr	c, AudioChannel_Handler_Cmd0C_0F_Loop3
+AudioChannel_Handler_Cmd0C_0F_Skip3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20858,8 +20858,8 @@ LABEL_029B55:
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
-	jrl	LABEL_029BFF
-LABEL_029B7C:
+	jrl	AudioChannel_Handler_Cmd0C_0F_Join2
+AudioChannel_Handler_Cmd0C_0F_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20884,7 +20884,7 @@ LABEL_029B7C:
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
 	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
-	jr	nz, LABEL_029BE6
+	jr	nz, AudioChannel_Handler_Cmd0C_0F_Skip4
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
@@ -20892,18 +20892,18 @@ LABEL_029B7C:
 	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	ldw	(283140:24), 0
 	ldw	(283150:24), 0
-	jr	LABEL_029BEF
-LABEL_029BE6:
+	jr	AudioChannel_Handler_Cmd0C_0F_Join
+AudioChannel_Handler_Cmd0C_0F_Skip4:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	Voice_Freq_WriteLeft
-LABEL_029BEF:
+AudioChannel_Handler_Cmd0C_0F_Join:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg07_Or_Reg18
 	incw	1, (xsp+8)
-LABEL_029BFF:
+AudioChannel_Handler_Cmd0C_0F_Join2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -20911,8 +20911,8 @@ LABEL_029BFF:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jrl	c, LABEL_029B7C
-LABEL_029C16:
+	jrl	c, AudioChannel_Handler_Cmd0C_0F_Loop4
+AudioChannel_Handler_Cmd0C_0F_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	retd	2
@@ -20936,7 +20936,7 @@ AudioChannel_Handler_Cmd18_1B:
 	add	xwa, xbc
 	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
 	cp8_imm_rid8	xwa, 0x02, 0x00	; cp (XWA+0x02),0x00
-	jrl	nz, LABEL_029D06
+	jrl	nz, AudioChannel_Handler_Cmd18_1B_Skip2
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20961,8 +20961,8 @@ AudioChannel_Handler_Cmd18_1B:
 	call	AlgoFlag_Write_Bit3
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_029CA9
-LABEL_029C8D:
+	jr	nc, AudioChannel_Handler_Cmd18_1B_Skip
+AudioChannel_Handler_Cmd18_1B_Loop:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -20974,8 +20974,8 @@ LABEL_029C8D:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029C8D
-LABEL_029CA9:
+	jr	c, AudioChannel_Handler_Cmd18_1B_Loop
+AudioChannel_Handler_Cmd18_1B_Skip:
 	ld	a, (xsp+12)
 	extz	wa
 	call	Voice_Query_PartVoices
@@ -20989,8 +20989,8 @@ LABEL_029CA9:
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jrl	nc, LABEL_029E2A
-LABEL_029CDA:
+	jrl	nc, AudioChannel_Handler_Cmd18_1B_Epilogue
+AudioChannel_Handler_Cmd18_1B_Loop2:
 	ld	a, (xiz)
 	extz	wa
 	muls	wa, 71
@@ -21004,9 +21004,9 @@ LABEL_029CDA:
 	calr	ToneGen_WriteVoice_Reg13
 	inc	1, xiz
 	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
-	jr	c, LABEL_029CDA
-	jrl	LABEL_029E2A
-LABEL_029D06:
+	jr	c, AudioChannel_Handler_Cmd18_1B_Loop2
+	jrl	AudioChannel_Handler_Cmd18_1B_Epilogue
+AudioChannel_Handler_Cmd18_1B_Skip2:
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -21031,8 +21031,8 @@ LABEL_029D06:
 	call	AlgoFlag_Write_Bit3
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_029D5C
-LABEL_029D40:
+	jr	nc, AudioChannel_Handler_Cmd18_1B_Skip3
+AudioChannel_Handler_Cmd18_1B_Loop3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -21044,8 +21044,8 @@ LABEL_029D40:
 	call	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_029D40
-LABEL_029D5C:
+	jr	c, AudioChannel_Handler_Cmd18_1B_Loop3
+AudioChannel_Handler_Cmd18_1B_Skip3:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -21059,8 +21059,8 @@ LABEL_029D5C:
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
-	jrl	LABEL_029E13
-LABEL_029D83:
+	jrl	AudioChannel_Handler_Cmd18_1B_Join2
+AudioChannel_Handler_Cmd18_1B_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -21085,7 +21085,7 @@ LABEL_029D83:
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
 	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
-	jr	nz, LABEL_029DFA
+	jr	nz, AudioChannel_Handler_Cmd18_1B_Skip4
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
@@ -21097,8 +21097,8 @@ LABEL_029D83:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg07_Or_Reg18
-	jr	LABEL_029E10
-LABEL_029DFA:
+	jr	AudioChannel_Handler_Cmd18_1B_Join
+AudioChannel_Handler_Cmd18_1B_Skip4:
 	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	Voice_Freq_WriteRight
@@ -21106,9 +21106,9 @@ LABEL_029DFA:
 	extz	wa
 	lda	xbc, (283084:24)
 	calr	ToneGen_WriteVoice_Reg15_Or_Reg16
-LABEL_029E10:
+AudioChannel_Handler_Cmd18_1B_Join:
 	incw	1, (xsp+8)
-LABEL_029E13:
+AudioChannel_Handler_Cmd18_1B_Join2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -21116,8 +21116,8 @@ LABEL_029E13:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jrl	c, LABEL_029D83
-LABEL_029E2A:
+	jrl	c, AudioChannel_Handler_Cmd18_1B_Loop4
+AudioChannel_Handler_Cmd18_1B_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	retd	2
@@ -27201,8 +27201,8 @@ ToneGen_WriteReg0080_StrobeClear:
 	ld	wa, (xiz+4)
 	res	15, wa
 	ld	(1048578:24), wa
-	jr	LABEL_02D0FC
-LABEL_02D0FC:
+	jr	__jrt_nop_02D0FC
+__jrt_nop_02D0FC:
 	nop
 	nop
 	nop
@@ -28519,8 +28519,8 @@ ToneGen_WriteReg0440_0480:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+16)
 	ld	(1048578:24), wa
-	jr	LABEL_02D965
-LABEL_02D965:
+	jr	__jrt_nop_02D965
+__jrt_nop_02D965:
 	nop
 	nop
 	nop
@@ -28533,8 +28533,8 @@ LABEL_02D965:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+18)
 	ld	(1048578:24), wa
-	jr	LABEL_02D987
-LABEL_02D987:
+	jr	__jrt_nop_02D987
+__jrt_nop_02D987:
 	nop
 	nop
 	nop
@@ -28553,8 +28553,8 @@ ToneGen_Write_Reg0180:
 	set_dd8	7, 24
 	ld	wa, (xiz+12)
 	ld	(1048578:24), wa
-	jr	LABEL_02D9AB
-LABEL_02D9AB:
+	jr	__jrt_nop_02D9AB
+__jrt_nop_02D9AB:
 	nop
 	nop
 	nop
@@ -28571,8 +28571,8 @@ ToneGen_Write_Reg0440:
 	set_dd8	7, 24
 	ld	wa, (xiz+16)
 	ld	(1048578:24), wa
-	jr	LABEL_02D9CD
-LABEL_02D9CD:
+	jr	__jrt_nop_02D9CD
+__jrt_nop_02D9CD:
 	nop
 	nop
 	nop
@@ -28589,8 +28589,8 @@ ToneGen_Write_Reg0480:
 	set_dd8	7, 24
 	ld	wa, (xiz+18)
 	ld	(1048578:24), wa
-	jr	LABEL_02D9EF
-LABEL_02D9EF:
+	jr	__jrt_nop_02D9EF
+__jrt_nop_02D9EF:
 	nop
 	nop
 	nop
@@ -28607,8 +28607,8 @@ ToneGen_Write_Reg04C0:
 	set_dd8	7, 24
 	ld	wa, (xiz+20)
 	ld	(1048578:24), wa
-	jr	LABEL_02DA11
-LABEL_02DA11:
+	jr	__jrt_nop_02DA11
+__jrt_nop_02DA11:
 	nop
 	nop
 	nop
@@ -28856,8 +28856,8 @@ ToneGen_WriteReg0640:
 	set_dd8	7, 24
 	ld	wa, (xiz+66)
 	ld	(1048578:24), wa
-	jr	LABEL_02DBD0
-LABEL_02DBD0:
+	jr	__jrt_nop_02DBD0
+__jrt_nop_02DBD0:
 	nop
 	nop
 	nop
@@ -28873,7 +28873,7 @@ ToneGen_Write_ExtParam_05C0_Strobe:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	bit	15, wa
-	jr	z, LABEL_02DC0A
+	jr	z, ToneGen_Write_ExtParam_05C0_Strobe_Skip
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1472
@@ -28883,12 +28883,12 @@ ToneGen_Write_ExtParam_05C0_Strobe:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	ld	(1048578:24), wa
-	jr	LABEL_02DC07
-LABEL_02DC07:
+	jr	__jrt_nop_02DC07
+__jrt_nop_02DC07:
 	nop
 	nop
 	nop
-LABEL_02DC0A:
+ToneGen_Write_ExtParam_05C0_Strobe_Skip:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1472
@@ -28899,8 +28899,8 @@ LABEL_02DC0A:
 	ld	wa, (xwa+62)
 	res	15, wa
 	ld	(1048578:24), wa
-	jr	LABEL_02DC2C
-LABEL_02DC2C:
+	jr	__jrt_nop_02DC2C
+__jrt_nop_02DC2C:
 	nop
 	nop
 	nop
@@ -28915,8 +28915,8 @@ ToneGen_Mute_Reg05C0:
 	nop
 	set_dd8	7, 24
 	ldw	(1048578:24), 33024
-	jr	LABEL_02DC4C
-LABEL_02DC4C:
+	jr	__jrt_nop_02DC4C
+__jrt_nop_02DC4C:
 	nop
 	nop
 	nop
@@ -29089,11 +29089,11 @@ ToneGen_WriteExtParams_15_Banked:
 	ld	(xsp+2), xbc
 	ld	iz, wa
 	cp	iz, 64
-	jr	nc, LABEL_02DDF1
+	jr	nc, ToneGen_WriteExtParams_15_Banked_Skip2
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+58)
 	bit	15, wa
-	jr	z, LABEL_02DDA8
+	jr	z, ToneGen_WriteExtParams_15_Banked_Skip
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1344
@@ -29103,12 +29103,12 @@ ToneGen_WriteExtParams_15_Banked:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+58)
 	ld	(1048578:24), wa
-	jr	LABEL_02DDA5
-LABEL_02DDA5:
+	jr	__jrt_nop_02DDA5
+__jrt_nop_02DDA5:
 	nop
 	nop
 	nop
-LABEL_02DDA8:
+ToneGen_WriteExtParams_15_Banked_Skip:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 448
@@ -29118,8 +29118,8 @@ LABEL_02DDA8:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+56)
 	ld	(1048578:24), wa
-	jr	LABEL_02DDC7
-LABEL_02DDC7:
+	jr	__jrt_nop_02DDC7
+__jrt_nop_02DDC7:
 	nop
 	nop
 	nop
@@ -29133,17 +29133,17 @@ LABEL_02DDC7:
 	ld	wa, (xwa+58)
 	res	15, wa
 	ld	(1048578:24), wa
-	jr	LABEL_02DDEC
-LABEL_02DDEC:
+	jr	__jrt_nop_02DDEC
+__jrt_nop_02DDEC:
 	nop
 	nop
 	nop
-	jr	LABEL_02DE65
-LABEL_02DDF1:
+	jr	ToneGen_WriteExtParams_15_Banked_Epilogue
+ToneGen_WriteExtParams_15_Banked_Skip2:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	bit	15, wa
-	jr	z, LABEL_02DE1E
+	jr	z, ToneGen_WriteExtParams_15_Banked_Skip3
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1408
@@ -29153,12 +29153,12 @@ LABEL_02DDF1:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	ld	(1048578:24), wa
-	jr	LABEL_02DE1B
-LABEL_02DE1B:
+	jr	__jrt_nop_02DE1B
+__jrt_nop_02DE1B:
 	nop
 	nop
 	nop
-LABEL_02DE1E:
+ToneGen_WriteExtParams_15_Banked_Skip3:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1536
@@ -29168,8 +29168,8 @@ LABEL_02DE1E:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+66)
 	ld	(1048578:24), wa
-	jr	LABEL_02DE3D
-LABEL_02DE3D:
+	jr	__jrt_nop_02DE3D
+__jrt_nop_02DE3D:
 	nop
 	nop
 	nop
@@ -29183,12 +29183,12 @@ LABEL_02DE3D:
 	ld	wa, (xwa+62)
 	res	15, wa
 	ld	(1048578:24), wa
-	jr	LABEL_02DE62
-LABEL_02DE62:
+	jr	__jrt_nop_02DE62
+__jrt_nop_02DE62:
 	nop
 	nop
 	nop
-LABEL_02DE65:
+ToneGen_WriteExtParams_15_Banked_Epilogue:
 	popw	iz
 	inc	4, xsp
 	ret
@@ -29527,8 +29527,8 @@ ToneGen_SelfTest_ProbeVoice0:
 	nop
 	set_dd8	7, 24
 	ldw	(1048578:24), 65280
-	jr	LABEL_02E0D1
-LABEL_02E0D1:
+	jr	__jrt_nop_02E0D1
+__jrt_nop_02E0D1:
 	nop
 	nop
 	nop
@@ -29537,8 +29537,8 @@ LABEL_02E0D1:
 	nop
 	set_dd8	7, 24
 	ldw	(1048578:24), 65408
-	jr	LABEL_02E0EB
-LABEL_02E0EB:
+	jr	__jrt_nop_02E0EB
+__jrt_nop_02E0EB:
 	nop
 	nop
 	nop
@@ -29550,20 +29550,20 @@ LABEL_02E0EB:
 	ldw	bc, 61440
 	calr	ToneGen_WriteSingleReg
 	cpw	qiz, 1000
-	jr	nc, LABEL_02E155
-LABEL_02E109:
+	jr	nc, ToneGen_SelfTest_ProbeVoice0_Join
+ToneGen_SelfTest_ProbeVoice0_Loop:
 	ld	wa, 0:i3
 	call	ToneGen_Read_Register
 	cp	hl, 0:i3
-	jr	z, LABEL_02E14B
+	jr	z, ToneGen_SelfTest_ProbeVoice0_Skip
 	ld	iz, 0:i3
 	res_dd8	7, 24
 	ldw	(1048576:24), 2112
 	nop
 	set_dd8	7, 24
 	ldw	(1048578:24), 65280
-	jr	LABEL_02E12C
-LABEL_02E12C:
+	jr	__jrt_nop_02E12C
+__jrt_nop_02E12C:
 	nop
 	nop
 	nop
@@ -29572,24 +29572,24 @@ LABEL_02E12C:
 	nop
 	set_dd8	7, 24
 	ldw	(1048578:24), 65408
-	jr	LABEL_02E146
-LABEL_02E146:
+	jr	__jrt_nop_02E146
+__jrt_nop_02E146:
 	nop
 	nop
 	nop
-	jr	LABEL_02E155
-LABEL_02E14B:
+	jr	ToneGen_SelfTest_ProbeVoice0_Join
+ToneGen_SelfTest_ProbeVoice0_Skip:
 	inc	1, qiz
 	cpw	qiz, 1000
-	jr	c, LABEL_02E109
-LABEL_02E155:
+	jr	c, ToneGen_SelfTest_ProbeVoice0_Loop
+ToneGen_SelfTest_ProbeVoice0_Join:
 	res_dd8	7, 24
 	ldw	(1048576:24), 192
 	nop
 	set_dd8	7, 24
 	ldw	(1048578:24), 0
-	jr	LABEL_02E16C
-LABEL_02E16C:
+	jr	__jrt_nop_02E16C
+__jrt_nop_02E16C:
 	nop
 	nop
 	nop
@@ -29598,8 +29598,8 @@ LABEL_02E16C:
 	nop
 	set_dd8	7, 24
 	ldw	(1048578:24), 32256
-	jr	LABEL_02E186
-LABEL_02E186:
+	jr	__jrt_nop_02E186
+__jrt_nop_02E186:
 	nop
 	nop
 	nop
@@ -35216,8 +35216,8 @@ DSP_SetCoeff_CopyDirect:
 	ldw	hl, 13
 	ld	ix, 0:i3
 	cp	ix, hl
-	jr	nc, LABEL_031272
-LABEL_03124A:
+	jr	nc, DSP_SetCoeff_CopyDirect_Epilogue
+DSP_SetCoeff_CopyDirect_Loop:
 	ld	de, ix
 	extz	xde
 	ld	bc, wa
@@ -35235,8 +35235,8 @@ LABEL_03124A:
 	ld	(xiz), c
 	inc	1, ix
 	cp	ix, hl
-	jr	c, LABEL_03124A
-LABEL_031272:
+	jr	c, DSP_SetCoeff_CopyDirect_Loop
+DSP_SetCoeff_CopyDirect_Epilogue:
 	pop	xiz
 	ret
 ; ----------------------------------------------------------------------------
@@ -35413,8 +35413,8 @@ DSP_SetCoeff_CopyDirect2:
 	ldw	hl, 13
 	ld	ix, 0:i3
 	cp	ix, hl
-	jr	nc, LABEL_03140F
-LABEL_0313E7:
+	jr	nc, DSP_SetCoeff_CopyDirect2_Epilogue
+DSP_SetCoeff_CopyDirect2_Loop:
 	ld	de, ix
 	extz	xde
 	ld	bc, wa
@@ -35432,8 +35432,8 @@ LABEL_0313E7:
 	ld	(xiz), c
 	inc	1, ix
 	cp	ix, hl
-	jr	c, LABEL_0313E7
-LABEL_03140F:
+	jr	c, DSP_SetCoeff_CopyDirect2_Loop
+DSP_SetCoeff_CopyDirect2_Epilogue:
 	pop	xiz
 	ret
 ; ----------------------------------------------------------------------------
@@ -35485,18 +35485,18 @@ DSP_SetCoeff_RouteWithCallback:
 	extz	wa
 	and	wa, 192
 	cp	wa, 192
-	jr	z, LABEL_031480
+	jr	z, DSP_SetCoeff_RouteWithCallback_Skip
 	cp	wa, 128
-	jr	z, LABEL_031480
+	jr	z, DSP_SetCoeff_RouteWithCallback_Skip
 	cp	wa, 64
-	jr	z, LABEL_031480
+	jr	z, DSP_SetCoeff_RouteWithCallback_Skip
 	cp	wa, 0:i3
-	jr	nz, LABEL_03148B
-LABEL_031480:
+	jr	nz, DSP_SetCoeff_RouteWithCallback_Skip2
+DSP_SetCoeff_RouteWithCallback_Skip:
 	ld	xwa, (283412:24)
 	ld	xwa, (xwa+76)
 	ld	(xsp+4), xwa
-LABEL_03148B:
+DSP_SetCoeff_RouteWithCallback_Skip2:
 	ld	wa, bc
 	sll	wa, 7
 	add	wa, de
@@ -35514,8 +35514,8 @@ LABEL_03148B:
 	ldw	hl, 13
 	ld	iy, 0:i3
 	cp	iy, hl
-	jr	nc, LABEL_0314E8
-LABEL_0314C0:
+	jr	nc, DSP_SetCoeff_RouteWithCallback_Skip3
+DSP_SetCoeff_RouteWithCallback_Loop:
 	ld	bc, iy
 	extz	xbc
 	ld	wa, de
@@ -35533,8 +35533,8 @@ LABEL_0314C0:
 	ld	(xiz), a
 	inc	1, iy
 	cp	iy, hl
-	jr	c, LABEL_0314C0
-LABEL_0314E8:
+	jr	c, DSP_SetCoeff_RouteWithCallback_Loop
+DSP_SetCoeff_RouteWithCallback_Skip3:
 	ld	wa, hl
 	inc	6, wa
 	extz	xwa
@@ -35834,17 +35834,17 @@ DSP_SetCoeff_WriteParams:
 	ld	c, (xbc+93)
 	and	c, 15
 	cp	c, 12
-	jr	nz, LABEL_03178E
+	jr	nz, DSP_SetCoeff_WriteParams_Skip
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267118:24)
 	ld_rrl	xwa, xbc, wa	; ld XWA,(XBC+WA)
 	ld	a, (xwa+95)
 	ld	(283159:24), a
-	jr	LABEL_031794
-LABEL_03178E:
+	jr	DSP_SetCoeff_WriteParams_Return
+DSP_SetCoeff_WriteParams_Skip:
 	ld	(283159:24), 0
-LABEL_031794:
+DSP_SetCoeff_WriteParams_Return:
 	ret
 ; ----------------------------------------------------------------------------
 ; DSP_SetCoeff_MasterConfig - Master coefficient configuration routine
@@ -40944,11 +40944,11 @@ Voice_Part_ResetSlotRouting:
 	pushw	iz
 	ld	(xsp+2), a
 	cp	(0x0451a7:24), 0xf5	; cp (0x0451a7),0xf5
-	jr	z, LABEL_034590
+	jr	z, Voice_Part_ResetSlotRouting_Skip2
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_034576
-LABEL_034517:
+	jr	nc, Voice_Part_ResetSlotRouting_Skip
+Voice_Part_ResetSlotRouting_Loop:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 37
@@ -40979,8 +40979,8 @@ LABEL_034517:
 	set	5, (xwa+6)	; set 5,(XWA+0x06)
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_034517
-LABEL_034576:
+	jr	c, Voice_Part_ResetSlotRouting_Loop
+Voice_Part_ResetSlotRouting_Skip:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	bc, 0:i3
@@ -40991,12 +40991,12 @@ LABEL_034576:
 	ld	bc, 0:i3
 	ld	de, 0:i3
 	calr	AlgoFlag_Write
-	jr	LABEL_0345E1
-LABEL_034590:
+	jr	Voice_Part_ResetSlotRouting_Join
+Voice_Part_ResetSlotRouting_Skip2:
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_0345C9
-LABEL_034596:
+	jr	nc, Voice_Part_ResetSlotRouting_Skip3
+Voice_Part_ResetSlotRouting_Loop2:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 37
@@ -41013,8 +41013,8 @@ LABEL_034596:
 	and8_imm_rid8	xwa, 0x06, 0x07	; and (XWA+0x06),0x07
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_034596
-LABEL_0345C9:
+	jr	c, Voice_Part_ResetSlotRouting_Loop2
+Voice_Part_ResetSlotRouting_Skip3:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	bc, 0:i3
@@ -41025,11 +41025,11 @@ LABEL_0345C9:
 	ld	bc, 0:i3
 	ld	de, 0:i3
 	calr	AlgoFlag_Write
-LABEL_0345E1:
+Voice_Part_ResetSlotRouting_Join:
 	ld	iz, 0:i3
 	cp	iz, 4:i3
-	jr	nc, LABEL_034602
-LABEL_0345E7:
+	jr	nc, Voice_Part_ResetSlotRouting_Epilogue
+Voice_Part_ResetSlotRouting_Loop3:
 	ld	a, (xsp+2)
 	ld	e, a
 	extz	de
@@ -41041,8 +41041,8 @@ LABEL_0345E7:
 	calr	EFF_RoutingInit
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, LABEL_0345E7
-LABEL_034602:
+	jr	c, Voice_Part_ResetSlotRouting_Loop3
+Voice_Part_ResetSlotRouting_Epilogue:
 	popw	iz
 	inc	2, xsp
 	ret
