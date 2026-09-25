@@ -1273,7 +1273,10 @@ SndParam_OutOfMemoryMsg:
 ; Structure: 138-byte header + 25 x 234-byte channel config records + 148-byte trailer
 NakaInst_SoundConfig_LookupTable:
 	.incbin "includes/generated/sound_config_lookup.bin"
-SeqChan_CommandDispatch_Table:
+; 39 x u32 routine pointers; MidiTable_DispatchHelper (0xFD7AF5): `lda xbc,(<this>); ld_rrl xhl,xbc,wa; call (xhl)`.
+; Extent: to the next object's base (loaded by its own reader).
+SeqChan_CommandHandlers:
+	.set SeqChan_CommandDispatch_Table, SeqChan_CommandHandlers
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd_0x01
 	.long SeqChan_UnhandledCmd_0x02
@@ -1313,6 +1316,9 @@ SeqChan_CommandDispatch_Table:
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
+; 22 x u32 routine pointers; MidiPkt_ArpExtHandler_N_Data (0xFD7E10): `lda xbc,(<this>); ld_rrl xhl,xbc,hl; call (xhl)`.
+; Extent: to the next object's base (loaded by its own reader).
+SeqChan_StepCmdHandlers:
 	.long SeqChan_ProcessStepCmd
 	.long SeqChan_StepCmd_Field1to2
 	.long SeqChan_StepCmd_Field2to3
@@ -1335,6 +1341,9 @@ SeqChan_CommandDispatch_Table:
 	.long SeqChan_StepCmd_Field13_Data
 	.long SeqChan_StepCmd_Field20to21
 	.long SeqChan_ProcessStepCmd
+; 22 x u32 routine pointers; SeqChan_DispatchByType_Data (0xFD80B2): `lda xbc,(<this>); ld_rrl xhl,xbc,wa; call (xhl)`.
+; Extent: to the next object's base (loaded by its own reader).
+SeqChan_WriteFieldHandlers:
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
@@ -1357,35 +1366,70 @@ SeqChan_CommandDispatch_Table:
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_WriteField_Data_E
-	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00, 0x9b, 0x82
-	.byte 0xfd, 0x00, 0x9c, 0x82, 0xfd, 0x00, 0x9c, 0x82
-	.byte 0xfd, 0x00, 0x9c, 0x82, 0xfd, 0x00, 0xa0, 0x82
-	.byte 0xfd, 0x00, 0xa0, 0x82, 0xfd, 0x00, 0xa0, 0x82
-	.byte 0xfd, 0x00, 0xa4, 0x82, 0xfd, 0x00, 0xa4, 0x82
-	.byte 0xfd, 0x00, 0xa4, 0x82, 0xfd, 0x00, 0xa4, 0x82
-	.byte 0xfd, 0x00, 0xa8, 0x82, 0xfd, 0x00, 0xa8, 0x82
-	.byte 0xfd, 0x00, 0xa8, 0x82, 0xfd, 0x00, 0xa8, 0x82
-	.byte 0xfd, 0x00, 0xac, 0x82, 0xfd, 0x00, 0xac, 0x82
-	.byte 0xfd, 0x00, 0xac, 0x82, 0xfd, 0x00, 0xad, 0x82
-	.byte 0xfd, 0x00, 0xad, 0x82, 0xfd, 0x00, 0xad, 0x82
-	.byte 0xfd, 0x00, 0xad, 0x82, 0xfd, 0x00, 0x00, 0x00
-	.zero 14
-SeqFormat_ReferenceData:
-	.byte 0xf0, 0x84
-	.byte 0xfd, 0x00, 0xf2, 0x84, 0xfd, 0x00, 0xf3, 0x84
-	.byte 0xfd, 0x00, 0xf4, 0x84, 0xfd, 0x00, 0xda, 0xfd
-	.byte 0x00, 0x00, 0xee, 0xfd, 0x00, 0x00, 0x02, 0xfe
-	.byte 0x00, 0x00, 0x16, 0xfe, 0x00, 0x00, 0x2a, 0xfe
-	.byte 0x00, 0x00, 0x3e, 0xfe, 0x00, 0x00, 0x52, 0xfe
-	.byte 0x00, 0x00, 0x66, 0xfe, 0x00, 0x00, 0x7a, 0xfe
-	.byte 0x00, 0x00, 0x8e, 0xfe, 0x00, 0x00, 0xa2, 0xfe
-	.byte 0x00, 0x00, 0xb6, 0xfe, 0x00, 0x00, 0xca, 0xfe
-	.byte 0x00, 0x00, 0xde, 0xfe, 0x00, 0x00, 0xf2, 0xfe
-	.byte 0x00, 0x00, 0x06, 0xff, 0x00, 0x00, 0x43, 0x64
-	.byte 0x65, 0x66, 0x99, 0x98, 0x93, 0xff, 0x00, 0x00
-	.byte 0x15, 0x00, 0x1b, 0x00, 0x21, 0x00, 0x27, 0x00
-	.byte 0x2d, 0x00, 0x33, 0x00
-SeqData_SubDispatch_Table:
+; 6-byte template: MidiSysEx_ProcessBlock_Helper7 (0xFD81EE) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ld bc,3; ldirw`).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiSysEx_BlockTemplate:
+	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00
+; 22 x u32 routine pointers; MidiSysEx_ProcessBlock_Helper11 (0xFD827D): `lda xbc,(<this>); ld_rrl xhl,xbc,wa; call (xhl)` -- entries point 0-4 bytes apart into one run of short entry points at 0xFD829B.
+; Extent: to the next object's base (loaded by its own reader).
+MidiSysEx_BlockHandlers:
+	.long MidiSysEx_ProcessBlock_Helper11 + 30	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 35	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 35	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 35	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 47	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 47	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 47	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
+	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
+; 16-byte template: MidiChan_InitSoundRegisters (0xFD8484) copies it into its frame (`ld xiy,<this>; ld xix,<ram>; ldw bc,8; ldirw`, four times).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiChan_ZeroRegTemplate:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+; 4 x u32 routine pointers (0xFD84F0, 0xFD84F2, 0xFD84F3, 0xFD84F4): entry 4 of
+; Subsys_HandlerTableList, so VoiceInit_Dispatch (0xFDDB5A) calls entry
+; [xde/4] of it with the other subsystems' tables.  Legacy name
+; SeqFormat_ReferenceData kept (positional_labels.s derives from it).
+SeqFormat_HandlerTable:
+	.set SeqFormat_ReferenceData, SeqFormat_HandlerTable
+	.long SoundMode_ResetJump2
+	.long SoundMode_RetStub_A
+	.long SoundMode_RetStub_B
+	.long SoundMode_RetStub_C
+; 16 x u32 RAM addresses 0xFDDA + 0x14*i.  VoiceData_ZeroFillAll (0xFD8A4E):
+; `lda xbc,(<this>); ld xwa,xbc; lda xbc,(xbc+64)` -- walks the 16 entries
+; (end = <this>+64) and clears each block.
+VoiceData_RamBlockPtrs:
+	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16
+	.long 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66
+	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6
+	.long 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06
+; 0xFF-terminated list of object codes (0x43, 0x64, 0x65, 0x66, 0x99, 0x98, 0x93).
+; VoiceData_SyncLoop (0xFD8C35): `ld xbc,<this>; add xbc,xwa; ld a,(xbc);
+; call VoiceData_LookupPtrByIndex` for each code until 0xFF.
+VoiceData_SyncCodeList:
+	.byte 0x43, 0x64, 0x65, 0x66, 0x99, 0x98, 0x93, 0xff
+; 7 x s16 switch offsets.  SysEx_InitiateSend (0xFD8CAE): `ld_rrw ..,xix,..;
+; lda xix,(0xFD8CF1); jp_rr 8,xix,..` -- targets 0xFD8CF1 (SysEx_SendDispatch) + offset (no labels yet).
+SysExSend_SwitchOffsets:
+	.short 0, 21, 27, 33, 39, 45, 51
+; 39 x u32 routine pointers; SeqData_DispatchHandler (0xFD8DB4): `lda xbc,(<this>); ld_rrl xhl,xbc,hl; call (xhl)`.
+; Extent: to the next object's base (loaded by its own reader).
+SeqData_Handlers:
+	.set SeqData_SubDispatch_Table, SeqData_Handlers
 	.long SeqData_DispatchLoop_Check
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
@@ -1425,15 +1469,32 @@ SeqData_SubDispatch_Table:
 	.long MidiPkt_SysExValidator_Data
 	.long MidiPkt_SysExProcessor_Data
 	.long MidiPkt_SysExBulkTransfer_Data
-	.byte 0x08, 0x07, 0xf7, 0xff, 0x00, 0x00, 0x02, 0x00
-	.byte 0x04, 0x00, 0x07, 0x00, 0x0a, 0x00, 0x0d, 0x00
-	.byte 0x10, 0x00, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00
-	.byte 0x07, 0x00, 0x0a, 0x00, 0x0d, 0x00, 0x10, 0x00
+; 4-byte template: SeqData_DispatchLoop_Done (0xFD8DFD) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+SeqData_OutTemplate:
+	.byte 0x08, 0x07, 0xf7, 0xff
+; 7 x s16 switch offsets.  SeqData_FormatOutput_Data (0xFD8F2A): `ld_rrw ..,xix,..;
+; lda xix,(0xFD8F7E); jp_rr 8,xix,..` -- targets 0xFD8F7E + offset (no labels yet).
+SeqDataFmt_SwitchOffsets:
+	.short 0, 2, 4, 7, 10, 13, 16
+; 7 x s16 switch offsets.  VoiceParam_AssSwb_MultiBlock_Data (0xFD9A0C): `ld_rrw ..,xix,..;
+; lda xix,(0xFD9A3E); jp_rr 8,xix,..` -- targets 0xFD9A3E + offset (no labels yet).
+AssSwbMulti_SwitchOffsets:
+	.short 0, 2, 4, 7, 10, 13, 16
+; 4-byte template: MidiPkt_BuildControl (0xFD9DA0) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+6); ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_ControlTemplate:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; MIDI packet event type dispatch table
 ; Index: event byte from queue (0x00-0xbf), entries: 192
 ; Called from MidiPkt_ProcessEventQueue (midipkt_routines.s:275)
 ; Most entries are Nop; active entries dispatch to sub-table handlers
+; (the :275 line reference above predates later edits; the reader is below)
+; 192 x u32 handler pointers, one per queued event code 0x00-0xBF.
+; MidiPkt_ProcessEventQueue_Loop (0xFDA03B): `lda xde,(<this>); exts xbc;
+; add xbc,xde; ld xhl,(xbc); call (xhl)` with bc = code*4.  Most entries are
+; MidiPkt_Nop; the rest dispatch to sub-table handlers.
+; 192 entries = exactly up to the next referenced object.
 MidiPkt_EventType_Table:
 	.long MidiPkt_Nop
 	.long MidiPkt_Nop
@@ -1627,82 +1688,305 @@ MidiPkt_EventType_Table:
 	.long MidiPkt_Nop
 	.long MidiPkt_Nop
 	.long MidiPkt_Nop
+; 4-byte template: MidiPkt_EnqueueControl_3354 (0xFDA278) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_334C:
 	.byte 0x00, 0x00, 0x00, 0xff
-	.byte 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff
-	.byte 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff
-	.byte 0x00, 0x00, 0x02, 0x00, 0x05, 0x00, 0x08, 0x00
-	.byte 0x0b, 0x00, 0x0e, 0x00, 0x0f, 0x00, 0x01, 0x02
-	.byte 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0a, 0x0b
-	.byte 0x0c, 0x0d, 0x0e, 0x09, 0x00, 0x00, 0xff, 0x00
-	.byte 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0xff
-	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff
-	.byte 0x00, 0x00, 0x00, 0xff, 0x14, 0x14, 0x14, 0x14
-	.byte 0x14, 0x12, 0x09, 0x09, 0x00, 0x03, 0x06, 0x09
-	.byte 0x0c, 0x10, 0x13, 0x16, 0x19, 0x1c, 0x20, 0x23
-	.ascii "&),/223445667889::;<<==>??@AABCCDEEFFGGHIIJKKLMMNOOPPPQQRRSSTTUUUVVWWWWWXXXXXXYYYYYYZZZZZZZZ[[[[[[[[\\\\\\\\\\\\]]]]]]]^^^"
-	.byte 0x01, 0x02, 0x01, 0x02
-	.byte 0x04, 0x04, 0x09, 0x09, 0x00, 0x03, 0x06, 0x09
-	.byte 0x0c, 0x10, 0x13, 0x16, 0x19, 0x1c, 0x20, 0x23
-	.ascii "&),/223445667889::;<<==>??@AABCCDEEFFGGHIIJKKLMMNOOPPPQQRRSSTTUUUVVWWWWWXXXXXXYYYYYYZZZZZZZZ[[[[[[[[\\\\\\\\\\\\]]]]]]]^^^"
-	.byte 0x1e, 0x00, 0x04, 0x00
-	.byte 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x54, 0x00
-	.byte 0x0a, 0x00, 0x35, 0x00, 0x50, 0x00, 0x00, 0x00
-	.byte 0x50, 0x00, 0x00, 0x00, 0x5a, 0x00, 0x06, 0x00
-	.byte 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x56, 0x00
-	.byte 0x0a, 0x00, 0x35, 0x00, 0x23, 0x00, 0x00, 0x00
-	.byte 0x50, 0x00, 0x00, 0x00, 0x5f, 0x00, 0x08, 0x00
-	.byte 0x28, 0x00, 0x00, 0x00, 0x4b, 0x00, 0x00, 0x00
-	.byte 0x50, 0x00, 0x00, 0x00, 0x50, 0x00, 0x02, 0x00
-	.byte 0x58, 0x00, 0x00, 0x00, 0x5a, 0x00, 0x00, 0x00
-	.byte 0x50, 0x00, 0x00, 0x00, 0x46, 0x00, 0x46, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x18, 0x00, 0x50, 0x00
-	.byte 0x00, 0x00, 0x46, 0x00, 0x46, 0x00, 0x32, 0x00
-	.byte 0x32, 0x00, 0x18, 0x00, 0x50, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x0b, 0x00, 0x16, 0x00, 0x21, 0x00
-	.byte 0x2c, 0x00, 0x38, 0x00, 0x44, 0x00, 0x4f, 0x00
-	.byte 0x1f, 0x00, 0x0b, 0x00, 0x00, 0x00, 0x32, 0x00
-	.byte 0x50, 0x00, 0x22, 0x00, 0x0b, 0x00, 0x0c, 0x00
-	.byte 0x32, 0x00, 0x50, 0x00, 0x22, 0x00, 0x0b, 0x00
-	.byte 0x10, 0x00, 0x32, 0x00, 0x50, 0x00, 0x28, 0x00
-	.byte 0x32, 0x00, 0x0c, 0x00, 0x46, 0x00, 0x50, 0x00
-	.byte 0x25, 0x00, 0x14, 0x00, 0x10, 0x00, 0x32, 0x00
-	.byte 0x50, 0x00, 0x25, 0x00, 0x14, 0x00, 0x00, 0x00
-	.byte 0x32, 0x00, 0x50, 0x00, 0x64, 0x00, 0x64, 0x00
-	.byte 0x24, 0x00, 0x24, 0x00, 0x18, 0x00, 0x50, 0x00
-	.byte 0xaa, 0x00, 0xfa, 0x00, 0x28, 0x00, 0xe2, 0xff
-	.byte 0x18, 0x00, 0x50, 0x00, 0x00, 0x00, 0x0b, 0x00
-	.byte 0x16, 0x00, 0x21, 0x00, 0x2c, 0x00, 0x37, 0x00
-	.byte 0x42, 0x00, 0x4d, 0x00, 0xf0, 0x50, 0x23, 0x7e
-	.byte 0xf7, 0xff, 0xf0, 0x50, 0x24, 0x7e, 0xf7, 0xff
-	.byte 0xf0, 0x50, 0x27, 0x7e, 0xf7, 0xff, 0xf0, 0x50
-	.byte 0x28, 0x7e, 0xf7, 0xff, 0xf0, 0x50, 0x29, 0x7e
-	.byte 0xf7, 0xff, 0xf0, 0x50, 0x2a, 0x7e, 0xf7, 0xff
-	.byte 0xf0, 0x50, 0x7e, 0xff, 0xf0, 0x50, 0x21, 0x01
-	.byte 0x28, 0x12, 0xf7, 0xff, 0xf0, 0x50, 0x22, 0x01
-	.byte 0x28, 0x12, 0xf7, 0xff, 0xf0, 0x50, 0x25, 0xff
-	.byte 0xf0, 0x7e, 0x7f, 0x09, 0x01, 0xf7, 0xf0, 0x7e
-	.byte 0x7f, 0x09, 0x02, 0xf7, 0xf0, 0x50, 0x2c, 0x01
-	.byte 0x28, 0x12, 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12
-	.byte 0x20, 0x00, 0x00, 0x00, 0x0c, 0x40, 0xf0, 0x50
-	.byte 0x2d, 0x01, 0x28, 0x12, 0x24, 0x00, 0x00, 0x04
-	.byte 0x59, 0x30, 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12
-	.byte 0x38, 0x00, 0x00, 0x00, 0x00, 0x10, 0xf0, 0x50
-	.byte 0x2d, 0x01, 0x28, 0x12, 0x38, 0x00, 0x10, 0x00
-	.byte 0x5a, 0x50, 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12
-	.byte 0x50, 0x00, 0x00, 0x00, 0x00, 0x60, 0xf0, 0x50
-	.byte 0x2d, 0x01, 0x28, 0x12, 0x50, 0x00, 0x60, 0x00
-	.byte 0x26, 0x60, 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12
-	.byte 0x50, 0x27, 0x40, 0xff, 0xf0, 0x50, 0x2d, 0x01
-	.byte 0x28, 0x12, 0x60, 0x00, 0x00, 0x00, 0x10, 0x00
-	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x60, 0x10
-	.byte 0x00, 0x01, 0x20, 0x00, 0xf0, 0x50, 0x2d, 0x01
-	.byte 0x28, 0x12, 0x61, 0x30, 0x00, 0xff, 0xf0, 0x50
-	.byte 0x2d, 0x01, 0x28, 0x12, 0x48, 0x00, 0x00, 0x00
-	.byte 0x00, 0x20, 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12
-	.byte 0x48, 0x00, 0x20, 0x00, 0x01, 0x60, 0xf0, 0x50
-	.byte 0x2d, 0x01, 0x28, 0x12, 0x48, 0x02, 0x00, 0xff
+; 4-byte template: MidiPkt_EnqueueExtended_Data (0xFDA302) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_3350:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 4-byte template: MidiPkt_EnqueueControl_335C (0xFDA389) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_3354:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 6-byte template: MidiPkt_EnqueueControl_3358 (0xFDA40F) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_3358:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
+; 6-byte template: MidiPkt_EnqueueControl_335E (0xFDA4EE) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_335E:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
+; 4-byte template: MidiPkt_EnqueueControl_3364 (0xFDA587) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_3364:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 4-byte template: MidiPkt_EnqueueControl_3368 (0xFDA616) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_3368:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 4-byte template: MidiPkt_BuildControl_Helper (0xFDA6CE) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; Trailing 0xFF (if any) is padding the copy does not take.
+MidiPkt_MsgTemplate_336C:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 6 x s16 switch offsets.  MidiPkt_SysExBulkTransfer_Data (0xFDA921): `ld_rrw ..,xix,..;
+; lda xix,(0xFDA94D); jp_rr 8,xix,..` -- targets 0xFDA94D + offset (no labels yet).
+SysExBulk_SwitchOffsets:
+	.short 0, 2, 5, 8, 11, 14
+; 16 x u8 (15, 0..8, 10..14, 9).  MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1):
+; `lda xbc,(<this>); ld_rrb a,xbc,wa`.
+SysExBulk_SlotMap:
+	.byte 0x0f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x09
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; Trailing 0xFF (if any) is padding the copy does not take.
+SysExBulk_FrameTemplate0:
+	.byte 0x00, 0x00, 0xff, 0x00
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; Trailing 0xFF (if any) is padding the copy does not take.
+SysExBulk_FrameTemplate1:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; Trailing 0xFF (if any) is padding the copy does not take.
+SysExBulk_FrameTemplate2:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; Trailing 0xFF (if any) is padding the copy does not take.
+SysExBulk_FrameTemplate3:
+	.byte 0x00, 0x00, 0xff, 0x00
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; Trailing 0xFF (if any) is padding the copy does not take.
+SysExBulk_FrameTemplate4:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; Trailing 0xFF (if any) is padding the copy does not take.
+SysExBulk_FrameTemplate5:
+	.byte 0x00, 0x00, 0x00, 0xff
+; 8 x u8.  SysEx_ClampVoiceIndex8_DoLookup (0xFDAB4B): index clamped to 0..7
+; (`cp a,8; jr c` else 0), then `lda xbc,(<this>); ld_rrb l,xbc,wa`.
+SysEx4B_VoiceIndexMap8:
+	.byte 20, 20, 20, 20, 20, 18, 9, 9
+; 128 x u8 monotone curve 0..94.  SysEx_ClampVoiceIndex128_DoLookup (0xFDABCF):
+; index clamped to 0..127, then `lda xbc,(<this>); ld_rrb l,xbc,wa`.
+SysEx4B_LevelCurve128:
+	.byte 0, 3, 6, 9, 12, 16, 19, 22, 25, 28, 32, 35, 38, 41, 44, 47
+	.byte 50, 50, 51, 52, 52, 53, 54, 54, 55, 56, 56, 57, 58, 58, 59, 60
+	.byte 60, 61, 61, 62, 63, 63, 64, 65, 65, 66, 67, 67, 68, 69, 69, 70
+	.byte 70, 71, 71, 72, 73, 73, 74, 75, 75, 76, 77, 77, 78, 79, 79, 80
+	.byte 80, 80, 81, 81, 82, 82, 83, 83, 84, 84, 85, 85, 85, 86, 86, 87
+	.byte 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89
+	.byte 90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91
+	.byte 92, 92, 92, 92, 92, 92, 93, 93, 93, 93, 93, 93, 93, 94, 94, 94
+; 8 x u8.  SysEx_ClampVoiceIndex8_49_DoLookup (0xFDAC59), same access as
+; SysEx4B_VoiceIndexMap8.
+SysEx49_VoiceIndexMap8:
+	.byte 1, 2, 1, 2, 4, 4, 9, 9
+; 128 x u8, the same curve as SysEx4B_LevelCurve128 in a separate copy.
+; SysEx_ClampVoiceIndex128_49_DoLookup (0xFDACDD), same access.
+SysEx49_LevelCurve128:
+	.byte 0, 3, 6, 9, 12, 16, 19, 22, 25, 28, 32, 35, 38, 41, 44, 47
+	.byte 50, 50, 51, 52, 52, 53, 54, 54, 55, 56, 56, 57, 58, 58, 59, 60
+	.byte 60, 61, 61, 62, 63, 63, 64, 65, 65, 66, 67, 67, 68, 69, 69, 70
+	.byte 70, 71, 71, 72, 73, 73, 74, 75, 75, 76, 77, 77, 78, 79, 79, 80
+	.byte 80, 80, 81, 81, 82, 82, 83, 83, 84, 84, 85, 85, 85, 86, 86, 87
+	.byte 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89
+	.byte 90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91
+	.byte 92, 92, 92, 92, 92, 92, 93, 93, 93, 93, 93, 93, 93, 94, 94, 94
+; 5 x u16 (count pinned by the `cp c,5; ret nc` guard): case 0 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords0:
+	.short 30, 4, 0, 80, 0
+; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 1 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords1:
+	.short 84, 10, 53, 80, 0, 80, 0
+; 5 x u16 (count pinned by the `cp c,5; ret nc` guard): case 2 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords2:
+	.short 90, 6, 0, 80, 0
+; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 3 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords3:
+	.short 86, 10, 53, 35, 0, 80, 0
+; 8 x u16 (count pinned by the `cp c,8; ret nc` guard): case 4 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords4:
+	.short 95, 8, 40, 0, 75, 0, 80, 0
+; 8 x u16 (count pinned by the `cp c,8; ret nc` guard): case 5 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords5:
+	.short 80, 2, 88, 0, 90, 0, 80, 0
+; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 6 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords6:
+	.short 70, 70, 0, 0, 24, 80, 0
+; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 7 of
+; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx4B_ChannelWords7:
+	.short 70, 70, 50, 50, 24, 80, 0
+; 8 x s16 switch offsets.  SysEx_DispatchByChannel (0xFDACEA): `ld_rrw ..,xix,..;
+; lda xix,(0xFDAD13); jp_rr 8,xix,..` -- targets 0xFDAD13 (SysEx_ChannelHandler_4B_Data) + offset (no labels yet).
+SysEx4B_ChannelSwitch:
+	.short 0, 11, 22, 33, 44, 56, 68, 79
+; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 0 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords0:
+	.short 31, 11, 0, 50, 80
+; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 1 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords1:
+	.short 34, 11, 12, 50, 80
+; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 2 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords2:
+	.short 34, 11, 16, 50, 80
+; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 3 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords3:
+	.short 40, 50, 12, 70, 80
+; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 4 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords4:
+	.short 37, 20, 16, 50, 80
+; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 5 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords5:
+	.short 37, 20, 0, 50, 80
+; 6 x s16 (count pinned by the `cp c,6; ret nc` guard): case 6 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords6:
+	.short 100, 100, 36, 36, 24, 80
+; 6 x s16 (count pinned by the `cp c,6; ret nc` guard): case 7 of
+; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; returns word c (`ld_rrw hl,xwa,de`).
+SysEx49_ChannelWords7:
+	.short 170, 250, 40, -30, 24, 80
+; 8 x s16 switch offsets.  SysEx_DispatchByChannel_49 (0xFDAD71): `ld_rrw ..,xix,..;
+; lda xix,(0xFDAD9A); jp_rr 8,xix,..` -- targets 0xFDAD9A (SysEx_ChannelHandler_49_Data) + offset (no labels yet).
+SysEx49_ChannelSwitch:
+	.short 0, 11, 22, 33, 44, 55, 66, 77
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_FlushArpNotes (0xFD7B2F): `ld xwa,<this>;
+; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
+SysEx_Msg_3594:
+	.byte 0xf0, 0x50, 0x23, 0x7e, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_UseDefaultBuf (0xFD7B5B): `ld xwa,<this>;
+; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
+SysEx_Msg_359A:
+	.byte 0xf0, 0x50, 0x24, 0x7e, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_Helper18 (0xFD7A34): `ld xwa,<this>;
+; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
+SysEx_Msg_35A0:
+	.byte 0xf0, 0x50, 0x27, 0x7e, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD7A59): `ld xwa,<this>;
+; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
+SysEx_Msg_35A6:
+	.byte 0xf0, 0x50, 0x28, 0x7e, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD7A59): `ld xwa,<this>;
+; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
+SysEx_Msg_35AC:
+	.byte 0xf0, 0x50, 0x29, 0x7e, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_CheckSpecialSlot (0xFD7B4D): `ld xwa,<this>;
+; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
+SysEx_Msg_35B2:
+	.byte 0xf0, 0x50, 0x2a, 0x7e, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by ArpQueue_ProcessAndSort_Data_Helper (0xFD6AD2): `ld xwa,<this>;
+; ld bc,3; call SeqBuf_FlushNoteOffs` queues the first 3 bytes; the rest is 0xFF padding.
+SysEx_Msg_35B8:
+	.byte 0xf0, 0x50, 0x7e, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpPassLoop (0xFD7673): `ld xwa,<this>;
+; ld bc,7; call SeqBuf_FlushNoteOffs` queues the first 7 bytes; the rest is 0xFF padding.
+SysEx_Msg_35BC:
+	.byte 0xf0, 0x50, 0x21, 0x01, 0x28, 0x12, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpSecondLoop (0xFD76DA): `ld xwa,<this>;
+; ld bc,7; call SeqBuf_FlushNoteOffs` queues the first 7 bytes; the rest is 0xFF padding.
+SysEx_Msg_35C4:
+	.byte 0xf0, 0x50, 0x22, 0x01, 0x28, 0x12, 0xf7, 0xff
+; MIDI system-exclusive bytes (0xF0 ...) sent by SeqData_DispatchLoop_Done (0xFD8DFD): `ld xwa,<this>;
+; ld bc,3; call SeqBuf_FlushNoteOffs` queues the first 3 bytes; the rest is 0xFF padding.
+SysEx_Msg_35CC:
+	.byte 0xf0, 0x50, 0x25, 0xff
+; Universal Non-Real-Time SysEx F0 7E 7F 09 01 F7 = General MIDI System On.
+; MidiPkt_DispatchSpecialType (0xFDA1ED) sends it: `ld xwa,<this>; ld bc,6; call ArpQueue_Enqueue`.
+SysEx_GmSystemOn:
+	.byte 0xf0, 0x7e, 0x7f, 0x09, 0x01, 0xf7
+; F0 7E 7F 09 02 F7 = General MIDI System Off.  MidiPkt_DispatchSpecialType_Type10 (0xFDA20B)
+; sends it: `ld xwa,<this>; ld bc,6; call ArpQueue_Enqueue`.
+SysEx_GmSystemOff:
+	.byte 0xf0, 0x7e, 0x7f, 0x09, 0x02, 0xf7
+; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_BuildControl_Skip (0xFD9EA7): `ld xwa,<this>;
+; ld bc,6; call ArpQueue_Enqueue` queues the first 6 bytes.
+SysEx_Msg_35DC:
+	.byte 0xf0, 0x50, 0x2c, 0x01, 0x28, 0x12
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper2: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_35E2:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x20, 0x00, 0x00, 0x00, 0x0c, 0x40
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper3: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_35EE:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x24, 0x00, 0x00, 0x04, 0x59, 0x30
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper5: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_35FA:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper6: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_3606:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x38, 0x00, 0x10, 0x00, 0x5a, 0x50
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper8: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_3612:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x50, 0x00, 0x00, 0x00, 0x00, 0x60
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper9: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_361E:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x50, 0x00, 0x60, 0x00, 0x26, 0x60
+; SysEx F0 50 2D 01 28 12 + address/data (9 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper10: `ld xwa,<this>; ldw bc,9;
+; call SeqBuf_FlushNoteOffs`; trailing 0xFF is padding.
+SysEx_TechMsg_362A:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x50, 0x27, 0x40, 0xff
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper11: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_3634:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x60, 0x00, 0x00, 0x00, 0x10, 0x00
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper12: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_3640:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x60, 0x10, 0x00, 0x01, 0x20, 0x00
+; SysEx F0 50 2D 01 28 12 + address/data (9 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper13: `ld xwa,<this>; ldw bc,9;
+; call SeqBuf_FlushNoteOffs`; trailing 0xFF is padding.
+SysEx_TechMsg_364C:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x61, 0x30, 0x00, 0xff
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper15: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_3656:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x48, 0x00, 0x00, 0x00, 0x00, 0x20
+; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper16: `ld xwa,<this>; ldw bc,12;
+; call SeqBuf_FlushNoteOffs`.
+SysEx_TechMsg_3662:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x48, 0x00, 0x20, 0x00, 0x01, 0x60
+; SysEx F0 50 2D 01 28 12 + address/data (9 bytes, no F7: the sender appends
+; the rest).  MidiPkt_ArpConfigChain_Data_Helper17: `ld xwa,<this>; ldw bc,9;
+; call SeqBuf_FlushNoteOffs`; trailing 0xFF is padding.
+SysEx_TechMsg_366E:
+	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x48, 0x02, 0x00, 0xff
 DisplayScript_NullNode:
 	swi 7
 	swi 7

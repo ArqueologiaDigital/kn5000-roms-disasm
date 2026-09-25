@@ -10,6 +10,7 @@ edit unless the ROM is byte-identical.
 
 | file | question it answers | command |
 |---|---|---|
+| `mk_spec_ee2d6c.py` | what are the 80 objects in 0xEE2D6C-0xEE3678 (the tree's `SeqChan_CommandDispatch_Table`, `SeqFormat_ReferenceData`, `SeqData_SubDispatch_Table`, `MidiPkt_EventType_Table` and its tail)? handler tables, SysEx messages (GM System On/Off, Technics F0 50 ...), per-channel word tables with `cp c,N` counts | same command with this spec |
 | `mk_spec_ee0142.py` | what are the 12 objects in 0xEE0142-0xEE1574 (the tree's `Naka_SubDispatch_A/B_Table`, `Naka_MainDispatch_Table`)? the 972-entry SndParam registry, five per-type handler tables, the 256-entry block RAM pointer table | same command with this spec |
 | `mk_spec_eeae44.py` | what are the 38 objects in 0xEEAE44-0xEEC288 (the tree's `SoundEffect_Dispatch_Table` tail + 36 positional names)? chord-recognition table, semitone tables, SMF chunk ids, "COM-ESEQ", switch tables | same command with this spec |
 | `mk_spec_ee8c7e.py` | what are the 42 objects in 0xEE8C7E-0xEEAE44 (the tree's `SystemConfig_PointerTable`, `AudioInit_VoiceDispatch_Table`, `CharMap_ValueData_A/B`, 4 B of `SoundEffect_Dispatch_Table`)? | `python3 notes/uimisc-specs/mk_spec_ee8c7e.py > s.json; python3 scripts/converters/retype_data_objects.py --image v10 --file ui_widgets/widget_dispatch.s --spec s.json --nearest --apply` (v9/v7: add `--v10-names`) |
