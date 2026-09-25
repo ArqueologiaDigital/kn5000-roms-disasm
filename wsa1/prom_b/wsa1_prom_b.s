@@ -9965,7 +9965,7 @@ DL_F04038:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F04042 -- 316 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF04042-0xF0417D -- 316 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F04042 appears as a 32-bit word at 0xF0413E 0xF04142
 ;               0xF5BDCD; converted code at 0xF5BDCC loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -9973,31 +9973,171 @@ DL_F04038:
 ; Measured: 32% printable ASCII; a linear decode runs 132 instructions and
 ;           ends `nop`, with 46% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   its readers split it into the six lists and four tables below
+;   (notes/promb-2026-09-25/touch_curve_lists.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F04042:
-	.byte	0x17, 0x0B, 0xE2, 0x00, 0x72, 0x00, 0x54, 0x4F, 0x55, 0x43, 0x48, 0x17, 0x0B, 0xE8, 0x00, 0x7B	; F04042  |....r.TOUCH....{|
-	.byte	0x00, 0x43, 0x55, 0x52, 0x56, 0x45, 0x22, 0x0A, 0xE0, 0x00, 0x46, 0x00, 0x06, 0x01, 0x6C, 0x00	; F04052  |.CURVE"...F...l.|
-	.byte	0x01, 0x0A, 0xD6, 0x00, 0x5A, 0x00, 0xE0, 0x00, 0x5A, 0x00, 0x17, 0x0B, 0xE2, 0x00, 0x92, 0x00	; F04062  |....Z...Z.......|
-	.byte	0x54, 0x4F, 0x55, 0x43, 0x48, 0x17, 0x0B, 0xE8, 0x00, 0x9B, 0x00, 0x43, 0x55, 0x52, 0x56, 0x45	; F04072  |TOUCH......CURVE|
-	.byte	0x22, 0x0A, 0xE0, 0x00, 0x66, 0x00, 0x06, 0x01, 0x8C, 0x00, 0x01, 0x0A, 0xD6, 0x00, 0x7A, 0x00	; F04082  |"...f.........z.|
-	.byte	0xE0, 0x00, 0x7A, 0x00, 0x17, 0x0B, 0xE2, 0x00, 0xB2, 0x00, 0x54, 0x4F, 0x55, 0x43, 0x48, 0x17	; F04092  |..z.......TOUCH.|
-	.byte	0x0B, 0xE8, 0x00, 0xBB, 0x00, 0x43, 0x55, 0x52, 0x56, 0x45, 0x22, 0x0A, 0xE0, 0x00, 0x86, 0x00	; F040A2  |.....CURVE".....|
-	.byte	0x06, 0x01, 0xAC, 0x00, 0x01, 0x0A, 0xD6, 0x00, 0x9A, 0x00, 0xE0, 0x00, 0x9A, 0x00, 0x17, 0x0B	; F040B2  |................|
-	.byte	0xE2, 0x00, 0xD2, 0x00, 0x54, 0x4F, 0x55, 0x43, 0x48, 0x17, 0x0B, 0xE8, 0x00, 0xDB, 0x00, 0x43	; F040C2  |....TOUCH......C|
-	.byte	0x55, 0x52, 0x56, 0x45, 0x22, 0x0A, 0xE0, 0x00, 0xA6, 0x00, 0x06, 0x01, 0xCC, 0x00, 0x01, 0x0A	; F040D2  |URVE"...........|
-	.byte	0xD6, 0x00, 0xBA, 0x00, 0xE0, 0x00, 0xBA, 0x00, 0x17, 0x0B, 0xE2, 0x00, 0x72, 0x00, 0x54, 0x4F	; F040E2  |............r.TO|
-	.byte	0x55, 0x43, 0x48, 0x17, 0x0B, 0xE8, 0x00, 0x7B, 0x00, 0x43, 0x55, 0x52, 0x56, 0x45, 0x22, 0x0A	; F040F2  |UCH....{.CURVE".|
-	.byte	0xE0, 0x00, 0x46, 0x00, 0x06, 0x01, 0x6C, 0x00, 0x01, 0x0A, 0xD6, 0x00, 0x5A, 0x00, 0xE0, 0x00	; F04102  |..F...l.....Z...|
-	.byte	0x5A, 0x00, 0x17, 0x0B, 0xE2, 0x00, 0x92, 0x00, 0x54, 0x4F, 0x55, 0x43, 0x48, 0x17, 0x0B, 0xE8	; F04112  |Z.......TOUCH...|
-	.byte	0x00, 0x9B, 0x00, 0x43, 0x55, 0x52, 0x56, 0x45, 0x22, 0x0A, 0xE0, 0x00, 0x66, 0x00, 0x06, 0x01	; F04122  |...CURVE"...f...|
-	.byte	0x8C, 0x00, 0x01, 0x0A, 0xD6, 0x00, 0x7A, 0x00, 0xE0, 0x00, 0x7A, 0x00, 0x42, 0x40, 0xF0, 0x00	; F04132  |......z...z.B@..|
-	.byte	0x42, 0x40, 0xF0, 0x00, 0x6C, 0x40, 0xF0, 0x00, 0x96, 0x40, 0xF0, 0x00, 0xC0, 0x40, 0xF0, 0x00	; F04142  |B@..l@...@...@..|
-	.byte	0xEA, 0x40, 0xF0, 0x00, 0xEA, 0x40, 0xF0, 0x00, 0x14, 0x41, 0xF0, 0x00, 0xE0, 0x00, 0x46, 0x00	; F04152  |.@...@...A....F.|
-	.byte	0xE0, 0x00, 0x46, 0x00, 0xE0, 0x00, 0x66, 0x00, 0xE0, 0x00, 0x86, 0x00, 0xE0, 0x00, 0xA6, 0x00	; F04162  |..F...f.........|
-	.byte	0xA8, 0x00, 0x46, 0x00, 0xE0, 0x00, 0x46, 0x00, 0xE0, 0x00, 0x66, 0x00	; F04172  |..F...F...f.|
+; DL_TouchCurve_0..5 -- 0xF04042-0xF0413D, six interpreter-A lists of 42 bytes
+;   (4 records each): the captions TOUCH and CURVE (op 0x17), a box (op 0x22)
+;   and a line (op 0x01), the same picture at six places.  Run one at a time
+;   by sub_F5BDBB through TouchCurve_ListPtrs / TouchCurve_ListPtrs3 (`ld
+;   XIY,(XIZ) / ld XIX,XIY / add XIX,42 / call T_DisplayList_Run` at
+;   0xF5BE4B-0xF5BE55).  0xF04042 is also the END of the list before it (`ld
+;   XIX,0x00F04042` at 0xF5BDCC).
+;   notes/promb-2026-09-25/touch_curve_lists.py.
+; --------------------------------------------------------------------------
+DL_TouchCurve_0:
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E2
+	.short 0x0072
+	.ascii "TOUCH"
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E8
+	.short 0x007B
+	.ascii "CURVE"
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x00E0
+	.short 0x0046
+	.short 0x0106
+	.short 0x006C
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D6
+	.short 0x005A
+	.short 0x00E0
+	.short 0x005A
+DL_TouchCurve_1:
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E2
+	.short 0x0092
+	.ascii "TOUCH"
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E8
+	.short 0x009B
+	.ascii "CURVE"
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x00E0
+	.short 0x0066
+	.short 0x0106
+	.short 0x008C
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D6
+	.short 0x007A
+	.short 0x00E0
+	.short 0x007A
+DL_TouchCurve_2:
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E2
+	.short 0x00B2
+	.ascii "TOUCH"
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E8
+	.short 0x00BB
+	.ascii "CURVE"
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x00E0
+	.short 0x0086
+	.short 0x0106
+	.short 0x00AC
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D6
+	.short 0x009A
+	.short 0x00E0
+	.short 0x009A
+DL_TouchCurve_3:
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E2
+	.short 0x00D2
+	.ascii "TOUCH"
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E8
+	.short 0x00DB
+	.ascii "CURVE"
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x00E0
+	.short 0x00A6
+	.short 0x0106
+	.short 0x00CC
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D6
+	.short 0x00BA
+	.short 0x00E0
+	.short 0x00BA
+DL_TouchCurve_4:
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E2
+	.short 0x0072
+	.ascii "TOUCH"
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E8
+	.short 0x007B
+	.ascii "CURVE"
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x00E0
+	.short 0x0046
+	.short 0x0106
+	.short 0x006C
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D6
+	.short 0x005A
+	.short 0x00E0
+	.short 0x005A
+DL_TouchCurve_5:
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E2
+	.short 0x0092
+	.ascii "TOUCH"
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x00E8
+	.short 0x009B
+	.ascii "CURVE"
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x00E0
+	.short 0x0066
+	.short 0x0106
+	.short 0x008C
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00D6
+	.short 0x007A
+	.short 0x00E0
+	.short 0x007A
+; TouchCurve_ListPtrs -- 0xF0413E: 5 pointers to DL_TouchCurve_*, entry
+;   (0x27A3) when (0x27F5) != 1: `ld XIZ,this` at 0xF5BE44, then `add XIZ,XWA
+;   / ld XIY,(XIZ)`, XWA = 4 * (0x27A3).  5 = the distance to
+;   TouchCurve_ListPtrs3 over 4.
+TouchCurve_ListPtrs:
+	.long	DL_TouchCurve_0	; F0413E  [0] -> DL_TouchCurve_0
+	.long	DL_TouchCurve_0	; F04142  [1] -> DL_TouchCurve_0
+	.long	DL_TouchCurve_1	; F04146  [2] -> DL_TouchCurve_1
+	.long	DL_TouchCurve_2	; F0414A  [3] -> DL_TouchCurve_2
+	.long	DL_TouchCurve_3	; F0414E  [4] -> DL_TouchCurve_3
+; TouchCurve_ListPtrs3 -- 0xF04152: 3 pointers, the same when (0x27F5) == 1
+;   (`cp (0x27f5),1` at 0xF5BE36, `ld XIZ,this` at 0xF5BE3D).  3 = the
+;   distance to TouchCurve_BoxOrigins over 4.
+TouchCurve_ListPtrs3:
+	.long	DL_TouchCurve_4	; F04152  [0] -> DL_TouchCurve_4
+	.long	DL_TouchCurve_4	; F04156  [1] -> DL_TouchCurve_4
+	.long	DL_TouchCurve_5	; F0415A  [2] -> DL_TouchCurve_5
+; TouchCurve_BoxOrigins -- 0xF0415E: 5 (x, y) word pairs, entry (0x27A3) when
+;   (0x27F5) != 1 -> (0x2350), (0x2352): `ld XIZ,this` at 0xF5BE01, then `add
+;   XIZ,XWA / ld WA,(XIZ) / ld (0x2350),WA / ld WA,(XIZ+2) / ld (0x2352),WA`.
+;   Entry k is the top-left corner of the box the list TouchCurve_ListPtrs[k]
+;   draws.  5 = the distance to TouchCurve_BoxOrigins3 over 4.
+TouchCurve_BoxOrigins:
+	.short	224, 70	; F0415E  [0]
+	.short	224, 70	; F04162  [1]
+	.short	224, 102	; F04166  [2]
+	.short	224, 134	; F0416A  [3]
+	.short	224, 166	; F0416E  [4]
+; TouchCurve_BoxOrigins3 -- 0xF04172: 3 pairs, the same when (0x27F5) == 1
+;   (`ld XIZ,this` at 0xF5BDFA), matching TouchCurve_ListPtrs3 -- except entry
+;   0, x = 0xA8 where its list's box starts at x = 0xE0; they end the object
+;   at 0xF0417D.
+TouchCurve_BoxOrigins3:
+	.short	168, 70	; F04172  [0]
+	.short	224, 70	; F04176  [1]
+	.short	224, 102	; F0417A  [2]
 
 ; === END COVER-R1 0xF04042-0xF0417E ===
 
@@ -127198,7 +127338,7 @@ sub_F5BDBB:
 	jr	nz, sub_F5BDBB_Skip4	; F5BDC0  jr NZ,0xf5bdd7
 	ld	(9536:16), 0	; F5BDC2  ld (0x2540),0x00
 	ld	xiy, DL_F04038	; F5BDC7  ld XIY,0x00f04038
-	ld	xix, Data_F04042	; F5BDCC  ld XIX,0x00f04042
+	ld	xix, DL_TouchCurve_0	; F5BDCC  ld XIX,0x00f04042
 	call	T_DisplayList_Run	; F5BDD1  call 0xf417f0
 	jr	sub_F5BDBB_Join	; F5BDD5  jr T,0xf5bdea
 sub_F5BDBB_Skip4:
@@ -127212,10 +127352,10 @@ sub_F5BDBB_Join:
 	sla	wa, 2	; F5BDF0  sla 0x02,WA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BDF3  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip	; F5BDF8  jr NZ,0xf5be01
-	ld	xiz, Data_F04042 + 0x130	; F5BDFA  ld XIZ,0x00f04172
+	ld	xiz, TouchCurve_BoxOrigins3	; F5BDFA  ld XIZ,0x00f04172
 	jr	sub_F5BDBB_Join2	; F5BDFF  jr T,0xf5be06
 sub_F5BDBB_Skip:
-	ld	xiz, Data_F04042 + 0x11C	; F5BE01  ld XIZ,0x00f0415e
+	ld	xiz, TouchCurve_BoxOrigins	; F5BE01  ld XIZ,0x00f0415e
 sub_F5BDBB_Join2:
 	push	xwa	; F5BE06  push XWA
 	add	xiz, xwa	; F5BE07  add XIZ,XWA
@@ -127237,10 +127377,10 @@ sub_F5BDBB_Join3:
 	pop	xwa	; F5BE35  pop XWA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BE36  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip3	; F5BE3B  jr NZ,0xf5be44
-	ld	xiz, Data_F04042 + 0x110	; F5BE3D  ld XIZ,0x00f04152
+	ld	xiz, TouchCurve_ListPtrs3	; F5BE3D  ld XIZ,0x00f04152
 	jr	sub_F5BDBB_Join4	; F5BE42  jr T,0xf5be49
 sub_F5BDBB_Skip3:
-	ld	xiz, Data_F04042 + 0xFC	; F5BE44  ld XIZ,0x00f0413e
+	ld	xiz, TouchCurve_ListPtrs	; F5BE44  ld XIZ,0x00f0413e
 sub_F5BDBB_Join4:
 	add	xiz, xwa	; F5BE49  add XIZ,XWA
 	ld	xiy, (xiz)	; F5BE4B  ld XIY,(XIZ)
