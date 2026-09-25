@@ -309,6 +309,9 @@ def main():
             sys.exit("%s: run end 0x%X is not the start of a line" % (run[-1]["label"], hi))
         fl = first_line_at[lo]
         ll = first_line_at[hi] - 1
+        # comment / blank lines right above the next object belong to it
+        while ll >= fl and (not lines[ll - 1].strip() or lines[ll - 1].lstrip().startswith(";")):
+            ll -= 1
         old = lines[fl - 1:ll]
         if first["type"] == "keep":
             new = [("; " + h).rstrip() for h in first.get("header", [])] + ["%s:" % first["label"]]

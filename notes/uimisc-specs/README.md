@@ -10,6 +10,7 @@ edit unless the ROM is byte-identical.
 
 | file | question it answers | command |
 |---|---|---|
+| `mk_spec_eeae44.py` | what are the 38 objects in 0xEEAE44-0xEEC288 (the tree's `SoundEffect_Dispatch_Table` tail + 36 positional names)? chord-recognition table, semitone tables, SMF chunk ids, "COM-ESEQ", switch tables | same command with this spec |
 | `mk_spec_ee8c7e.py` | what are the 43 objects in 0xEE8C7E-0xEEAE44 (the tree's `SystemConfig_PointerTable`, `AudioInit_VoiceDispatch_Table`, `CharMap_ValueData_A/B`, 4 B of `SoundEffect_Dispatch_Table`)? | `python3 notes/uimisc-specs/mk_spec_ee8c7e.py > s.json; python3 scripts/converters/retype_data_objects.py --image v10 --file ui_widgets/widget_dispatch.s --spec s.json --nearest --apply` (v9/v7: add `--v10-names`) |
 
 How the readers were found (repeat for any range):
