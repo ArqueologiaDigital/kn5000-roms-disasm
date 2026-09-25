@@ -60,42 +60,36 @@ EffectMode_CopyVoiceParams_Done:
 
 EffectMode_ByteData_Block1:
 	ldw	(0x8d58:16), 0xffff
-	jrl	648
+	jrl	EffectMode_CheckTransposeChanged
 EffectMode_ByteData_Block2:
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	push	sr
+	cpdi8	(49277), 2
 	ret	nz
-	ld	a, (0xc07e:16)
-	and	a, (0xc07f:16)
+	ldb_d8	a, (49278)
+	andda8	xbc, (49279)
 	bit	0, a
-	jrl	z, 145
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	normal
-	jr	z, 78
-	ld	a, (0x8d36:16)
+	jrl	z, EffectMode_ByteData_Block2_Skip4
+	cpdi8	(36148), 1
+	jr	z, EffectMode_ByteData_Block2_Skip3
+	ldb_d8	a, (36150)
 	cp	a, 192
-	jr	z, 40
+	jr	z, EffectMode_ByteData_Block2_Skip2
 	cp	a, 193
-	jr	z, 15
+	jr	z, EffectMode_ByteData_Block2_Skip
 	cp	a, 194
-	jr	z, 10
+	jr	z, EffectMode_ByteData_Block2_Skip
 	cp	a, 195
-	jr	z, 5
+	jr	z, EffectMode_ByteData_Block2_Skip
 	cp	a, 197
 	ret	nz
+EffectMode_ByteData_Block2_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e0009a
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jr	EffectMode_ByteData_Block2_Code_Join
-	.byte 0xc1
-	popw	iz
-	.byte 0x8d
-	push	xsp
-	nop
+EffectMode_ByteData_Block2_Skip2:
+	cpdi8	(36174), 0
 	ret	nz
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e0009a
@@ -103,11 +97,8 @@ EffectMode_ByteData_Block2:
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jp	UI_PostPartChangeEvent
-	.byte 0xc1
-	popw	iz
-	.byte 0x8d
-	push	xsp
-	nop
+EffectMode_ByteData_Block2_Skip3:
+	cpdi8	(36174), 0
 	jr	z, EffectMode_ByteData_Block2_Code_Skip
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e0009a
@@ -124,13 +115,10 @@ EffectMode_ByteData_Block2_Code_Skip:
 	call	ApPostEvent
 	ldw	wa, 18
 	call	UI_PostPartChangeEvent
-	ld	(0x8d4e:16), 15
+	stdi8	(36174), 15
 	ret
-	.byte 0xc1
-	popw	iz
-	.byte 0x8d
-	push	xsp
-	nop
+EffectMode_ByteData_Block2_Skip4:
+	cpdi8	(36174), 0
 	ret	z
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e0009a
@@ -139,78 +127,71 @@ EffectMode_ByteData_Block2_Code_Skip:
 	ldw	wa, 193
 	call	UI_PostModeChangeEvent
 EffectMode_ByteData_Block2_Code_Join2:
-	ld	(0x8d4e:16), 0
+	stdi8	(36174), 0
 	ret
 EffectMode_ByteData_Block3:
-	ld	a, (0xc07d:16)
+	ldb_d8	a, (49277)
 	cp	a, 0:i3
 	jr	nz, EffectMode_ByteData_Block3_Skip3
-	.byte 0xc1
-	jrl	nc, 0x3fc0
-	nop
-	jr	z, 83
-	.byte 0xf1
-	jrl	nz, -12352
-	jr	nz, 77
-	.byte 0xf1, 0x52
-	decm8	6, (xiy-52)
-	ld	xsp, 0x3f8d36c1
-	.byte 0xc0
+	cpdi8	(49279), 0
+	jr	z, EffectMode_ByteData_Block3_Join
+	bitda	7, (49278)
+	jr	nz, EffectMode_ByteData_Block3_Join
+	bitda	4, (36178)
+	jr	nz, EffectMode_ByteData_Block3_Join
+	cpdi8	(36150), 192
 	jr	nz, EffectMode_ByteData_Block3_Skip
 	call	UI_PostTimerResetEvent
-	jr	58
+	jr	EffectMode_ByteData_Block3_Join
 EffectMode_ByteData_Block3_Skip:
 	ld	xwa, 1025
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, EffectMode_ByteData_Block3_Skip2
 	cp	hl, 2:i3
-	jr	nz, 41
+	jr	nz, EffectMode_ByteData_Block3_Join
 EffectMode_ByteData_Block3_Skip2:
 	ld	xwa, 1024
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	z, 28
-	ld	xwa, 0x28002
+	jr	z, EffectMode_ByteData_Block3_Join
+	ld	xwa, 0x028002
 	call	SndParam_LookupReadOnly
-	ld	(0x8d54:16), l
-	.byte 0xf1, 0xe2, 0xb7
-	ld	(xsp-15), de
-	.byte 0x8d, 0xbb
-	calr	1623
-	.byte 0xf1, 0x52, 0x8d, 0xb3, 0xf1, 0x52, 0x8d, 0xb4
+	stb_d8	(36180), l
+	setda	7, (47074)
+	setda	3, (36178)
+	calr	EffectMode_CheckModeAndReinit
+	resda	3, (36178)
+EffectMode_ByteData_Block3_Join:
+	resda	4, (36178)
 	ret
 EffectMode_ByteData_Block3_Skip3:
 	cp	a, 7:i3
-	jr	nz, 59
-	ld	a, (0x8d52:16)
-	.byte 0xc9, 0xcc
-	.ascii "(f2@"
-	.byte 0x01, 0x04
-	nop
-	nop
+	jr	nz, EffectMode_ByteData_Block3_Skip5
+	ldb_d8	a, (36178)
+	and	a, 0x28
+	jr	z, EffectMode_ByteData_Block3_Skip5
+	ld	xwa, 1025
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
-	jr	z, 4
+	jr	z, EffectMode_ByteData_Block3_Skip4
 	cp	hl, 2:i3
-	jr	nz, 33
+	jr	nz, EffectMode_ByteData_Block3_Skip5
+EffectMode_ByteData_Block3_Skip4:
 	ld	xwa, 1024
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	z, 20
-	ld	xwa, 0x28002
+	jr	z, EffectMode_ByteData_Block3_Skip5
+	ld	xwa, 0x028002
 	call	SndParam_LookupReadOnly
-	ld	(0x8d54:16), l
-	.byte 0xf1, 0xe2, 0xb7, 0xbf
+	stb_d8	(36180), l
+	setda	7, (47074)
 	calr	EffectMode_CheckModeAndReinit
-	.byte 0xc1, 0x52, 0x8d
-	push	xix
-	.byte 0xd7
+EffectMode_ByteData_Block3_Skip5:
+	anddi8	(36178), 215
 	ret
 EffectMode_ByteData_Block4:
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	pop	sr
+	cpdi8	(49277), 3
 	jr	nz, EffectMode_ByteData_Block4_Code_Entry
 	ld	a, (0xc07e:16)
 	and	a, 7
@@ -232,12 +213,10 @@ EffectMode_ByteData_Block4_Code_Skip:
 	ld	xwa, 0x28002
 	call	SndParam_LookupReadOnly
 	ld	(0x8d54:16), l
-	.byte 0xf1, 0xe2, 0xb7, 0xbf
+	setda	7, (47074)
 	calr	EffectMode_CheckModeAndReinit
 EffectMode_ByteData_Block4_Code_Entry:
-	.byte 0xc1, 0x52, 0x8d
-	push	xix
-	.byte 0xd7
+	anddi8	(36178), 215
 	ret
 
 
@@ -2290,9 +2269,7 @@ BitmapFinpic_ByteData:
 	ld	a, (0xc080:16)
 	cp a, (36154:16)
 	ret	nz
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	nop
+	cpdi8	(49277), 0
 	ret	nz
 	call	GetTitleNow
 	cp	xhl, 0x1a000f6
@@ -6703,38 +6680,34 @@ TchSensGrid_EventDispatch:
 	ld	xwa, 256
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jrl	190
+	jrl	TchSensGrid_EventDispatch_Join
 TchSensGrid_EventDispatch_Skip:
 	cpw	(xwa), 1
-	jr	nz, 16
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip
 	cp	de, 4:i3
-	jr	nz, 12
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip
 	ld	xwa, 260
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jrl	168
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 16
+	jrl	TchSensGrid_EventDispatch_Join
+TchSensGrid_EventDispatch_Skip_Skip:
+	cpw	(xwa), 1
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip2
 	cp	de, 5:i3
-	jr	nz, 12
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip2
 	ld	xwa, 258
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jrl	146
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jrl	nz, 652
+	jrl	TchSensGrid_EventDispatch_Join
+TchSensGrid_EventDispatch_Skip_Skip2:
+	cpw	(xwa), 1
+	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
-	jrl	nz, 647
+	jrl	nz, TchSensGrid_ReturnZero
 	ld	xwa, 259
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	123
+	jr	TchSensGrid_EventDispatch_Join
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
@@ -6747,68 +6720,53 @@ TchSensGrid_EventDispatch_Skip:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 16
+	cpw	(xwa), 1
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip3
 	cp	de, 1:i3
-	jr	nz, 12
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip3
 	ld	xwa, 256
-	ldw	bc, 0xffff
+	ldw	bc, 65535
 	ld	de, 2:i3
-	jr	66
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 16
+	jr	TchSensGrid_EventDispatch_Join
+TchSensGrid_EventDispatch_Skip_Skip3:
+	cpw	(xwa), 1
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip4
 	cp	de, 4:i3
-	jr	nz, 12
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip4
 	ld	xwa, 260
-	ldw	bc, 0xffff
+	ldw	bc, 65535
 	ld	de, 2:i3
-	jr	44
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 16
+	jr	TchSensGrid_EventDispatch_Join
+TchSensGrid_EventDispatch_Skip_Skip4:
+	cpw	(xwa), 1
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip5
 	cp	de, 5:i3
-	jr	nz, 12
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip5
 	ld	xwa, 258
-	ldw	bc, 0xffff
+	ldw	bc, 65535
 	ld	de, 2:i3
-	jr	22
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jrl	nz, 528
+	jr	TchSensGrid_EventDispatch_Join
+TchSensGrid_EventDispatch_Skip_Skip5:
+	cpw	(xwa), 1
+	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
-	jrl	nz, 523
+	jrl	nz, TchSensGrid_ReturnZero
 	ld	xwa, 259
-	ldw	bc, 0xffff
+	ldw	bc, 65535
 	ld	de, 2:i3
+TchSensGrid_EventDispatch_Join:
 	call	MainLswAdd
-	jrl	506
+	jrl	TchSensGrid_ReturnZero
 	lda	xix, (xde+4)
 	ld	xwa, (xde)
 	cp	xwa, 256
 	jr	nz, TchSensGrid_EventDispatch_Skip2
 	lda	xwa, (xsp+14)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
-	.byte 0xb8
-	push	sr
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa), 1
+	ldw	(xwa+2), 1
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
-	pushw (xix)	; FBABB9 (pushw (xix))
+	pushm	(xix)	; FBABB9 (pushw (xix))
 	pushw	237
 	pushw	3808
 	push	xbc
@@ -6822,26 +6780,17 @@ TchSensGrid_EventDispatch_Skip:
 TchSensGrid_EventDispatch_Skip2:
 	ld	xwa, (xde)
 	cp	xwa, 260
-	jr	nz, 59
+	jr	nz, TchSensGrid_EventDispatch_Skip2_Skip2
 	lda	xwa, (xsp+14)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
-	.byte 0xb8
-	push	sr
-	push	sr
-	.byte 0x04
-	nop
+	ldw	(xwa), 1
+	ldw	(xwa+2), 4
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	ld	xwa, Str_StoreTotalSetting_DE_0x25C
-	.byte 0x94
-	push	xsp
-	nop
-	nop
-	jr	z, 5
+	cpw	(xix), 0
+	jr	z, TchSensGrid_EventDispatch_Skip2_Skip
 	ld	xwa, Str_StoreTotalSetting_DE_0x258
+TchSensGrid_EventDispatch_Skip2_Skip:
 	push	xwa
 	push	xbc
 	call	Strcpy
@@ -6850,7 +6799,8 @@ TchSensGrid_EventDispatch_Skip2:
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 0x1e0008c
-	jrl	369
+	jrl	TchSensGrid_SendEvent
+TchSensGrid_EventDispatch_Skip2_Skip2:
 	lda	xiy, (xsp+14)
 	lda	xiz, (xsp+4)
 	lda	xbc, (xiy+2)
@@ -6858,13 +6808,10 @@ TchSensGrid_EventDispatch_Skip2:
 	ld	xwa, (xde)
 	cp	xwa, 258
 	jr	nz, TchSensGrid_EventDispatch_Skip3
-	.byte 0xb5
-	push	sr
-	.byte 0x01
-	nop
-	ldw (xbc), 5
+	ldw	(xiy), 1
+	ldw	(xbc), 5
 	ld	(xhl), xiz
-	.byte 0x94, 0x04
+	pushm	(xix)
 	pushw	237
 	pushw	3820
 	push	xiz
@@ -6879,13 +6826,10 @@ TchSensGrid_EventDispatch_Skip3:
 	ld	xwa, (xde)
 	cp	xwa, 259
 	jrl	nz, TchSensGrid_ReturnZero
-	.byte 0xb5
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xiy), 1
 	ldw (xbc), 6
 	ld	(xhl), xiz
-	.byte 0x94, 0x04
+	pushm	(xix)
 	pushw	237
 	pushw	3824
 	push	xiz
@@ -7258,25 +7202,22 @@ FSWAssGrid_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 68
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip4
 	cp	de, 2:i3
-	jr	nz, 64
+	jr	nz, FSWAssGrid_EventDispatch_Skip4
 	ld	xwa, 0x2886
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	2228
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 2213
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 0x2886
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	2206
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7284,26 +7225,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2886
 	ld	de, 2:i3
-	jrl	997
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 68
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip4:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip5
 	cp	de, 3:i3
-	jr	nz, 64
+	jr	nz, FSWAssGrid_EventDispatch_Skip5
 	ld	xwa, 0x2888
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	2154
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 2139
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 0x2888
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	2132
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7311,26 +7250,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2888
 	ld	de, 2:i3
-	jrl	923
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 68
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip5:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip6
 	cp	de, 4:i3
-	jr	nz, 64
+	jr	nz, FSWAssGrid_EventDispatch_Skip6
 	ld	xwa, 0x288a
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	2080
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 2065
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 0x288a
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	2058
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7338,26 +7275,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x288a
 	ld	de, 2:i3
-	jrl	849
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 68
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip6:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip7
 	cp	de, 5:i3
-	jr	nz, 64
+	jr	nz, FSWAssGrid_EventDispatch_Skip7
 	ld	xwa, 0x288c
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	2006
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 1991
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 0x288c
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1984
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7365,26 +7300,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x288c
 	ld	de, 2:i3
-	jrl	775
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 68
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip7:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip8
 	cp	de, 6:i3
-	jr	nz, 64
+	jr	nz, FSWAssGrid_EventDispatch_Skip8
 	ld	xwa, 0x288e
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1932
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 1917
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 0x288e
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1910
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7392,26 +7325,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x288e
 	ld	de, 2:i3
-	jrl	701
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 68
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip8:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip9
 	cp	de, 7:i3
-	jr	nz, 64
+	jr	nz, FSWAssGrid_EventDispatch_Skip9
 	ld	xwa, 0x2890
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1858
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 1843
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 0x2890
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1836
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7419,21 +7350,19 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2890
 	ld	de, 2:i3
-	jrl	627
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jrl	nz, 1794
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip9:
+	cpw	(xwa), 1
+	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8
-	jrl	nz, 1787
+	jrl	nz, AudioTable_ReturnZero
 	ld	xwa, 0x2880
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1780
+	calr	AudioTable_FindMatchIndex
 	cp	l, 30
-	jrl	nc, 1765
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 0x2880
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7446,7 +7375,7 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2880
 	ld	de, 2:i3
-	jrl	549
+	jrl	FSWAssGrid_EventDispatch_Join
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
@@ -7454,30 +7383,27 @@ FSWAssGrid_EventDispatch:
 	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
-	.byte 0xea
-	.long OscScope_FinalizeRender
-	.byte 0xd7, 0xe6, 0xa8
+	ld	xbc, xde
+	srl	xbc, 0
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 67
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip10
 	cp	de, 2:i3
-	jr	nz, 63
+	jr	nz, FSWAssGrid_EventDispatch_Skip10
 	ld	xwa, 0x2886
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1669
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1655
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 0x2886
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1648
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7485,26 +7411,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2886
 	ld	de, 2:i3
-	jrl	439
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 67
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip10:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip11
 	cp	de, 3:i3
-	jr	nz, 63
+	jr	nz, FSWAssGrid_EventDispatch_Skip11
 	ld	xwa, 0x2888
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1596
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1582
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 0x2888
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1575
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7512,26 +7436,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2888
 	ld	de, 2:i3
-	jrl	366
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 67
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip11:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip12
 	cp	de, 4:i3
-	jr	nz, 63
+	jr	nz, FSWAssGrid_EventDispatch_Skip12
 	ld	xwa, 0x288a
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1523
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1509
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 0x288a
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1502
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7539,26 +7461,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x288a
 	ld	de, 2:i3
-	jrl	293
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 67
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip12:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip13
 	cp	de, 5:i3
-	jr	nz, 63
+	jr	nz, FSWAssGrid_EventDispatch_Skip13
 	ld	xwa, 0x288c
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1450
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1436
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 0x288c
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1429
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7566,26 +7486,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x288c
 	ld	de, 2:i3
-	jrl	220
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 67
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip13:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip14
 	cp	de, 6:i3
-	jr	nz, 63
+	jr	nz, FSWAssGrid_EventDispatch_Skip14
 	ld	xwa, 0x288e
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1377
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1363
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 0x288e
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1356
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7593,26 +7511,24 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x288e
 	ld	de, 2:i3
-	jrl	147
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 66
+	jrl	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip14:
+	cpw	(xwa), 1
+	jr	nz, FSWAssGrid_EventDispatch_Skip15
 	cp	de, 7:i3
-	jr	nz, 62
+	jr	nz, FSWAssGrid_EventDispatch_Skip15
 	ld	xwa, 0x2890
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1304
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1290
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 0x2890
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1283
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7620,21 +7536,19 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2890
 	ld	de, 2:i3
-	jr	75
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jrl	nz, 1242
+	jr	FSWAssGrid_EventDispatch_Join
+FSWAssGrid_EventDispatch_Skip15:
+	cpw	(xwa), 1
+	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8
-	jrl	nz, 1235
+	jrl	nz, AudioTable_ReturnZero
 	ld	xwa, 0x2880
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1228
+	calr	AudioTable_FindMatchIndex
 	cp	l, 29
-	jrl	ule, 1213
+	jrl	ule, AudioTable_ReturnZero
 	ld	xwa, 0x2880
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7647,6 +7561,7 @@ FSWAssGrid_EventDispatch:
 	extz bc
 	ld	xwa, 0x2880
 	ld	de, 2:i3
+FSWAssGrid_EventDispatch_Join:
 	call	MainLswPut
 	jrl	AudioTable_ReturnZero
 	lda	xix, (xde+4)
@@ -7655,10 +7570,7 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 0x2886
 	jr	nz, FSWAssGrid_EventDispatch_Entry
 	lda	xwa, (xsp+260)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa), 1
 	ldw (xwa+2), 2
 	ld	(xwa+4), xiy
 	ld	wa, (xix)
@@ -7679,24 +7591,19 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
-	jrl	1071
+	jrl	AudioTable_SendEventAndContinue
 FSWAssGrid_EventDispatch_Entry:
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	hl, 1211
-	ldw	bc, 8354
-	cp	xwa, 0x2888
-	jr	nz, 70
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
+	lda	xhl, (xsp+260)
+	lda	xbc, (xhl+4)
+	ld	xwa, (xde)
+	cp	xwa, 10376
+	jr	nz, FSWAssGrid_EventDispatch_Entry_Skip
+	ldw	(xhl), 1
 	ldw (xhl+2), 3
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	1048
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
@@ -7713,18 +7620,12 @@ FSWAssGrid_EventDispatch_Entry:
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
 	jrl	AudioTable_SendEventAndContinue
+FSWAssGrid_EventDispatch_Entry_Skip:
 	ld	xwa, (xde)
 	cp	xwa, 0x288a
 	jr	nz, FSWAssGrid_EventDispatch_Skip
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
-	.byte 0xbb
-	push	sr
-	push	sr
-	.byte 0x04
-	nop
+	ldw	(xhl), 1
+	ldw	(xhl+2), 4
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7749,10 +7650,7 @@ FSWAssGrid_EventDispatch_Skip:
 	ld	xwa, (xde)
 	cp	xwa, 0x288c
 	jr	nz, FSWAssGrid_EventDispatch_Skip2
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xhl), 1
 	ldw (xhl+2), 5
 	ld	(xbc), xiy
 	ld	wa, (xix)
@@ -7779,11 +7677,8 @@ FSWAssGrid_EventDispatch_Skip2:
 	ld	xwa, (xde)
 	cp	xwa, 0x288e
 	jr	nz, FSWAssGrid_EventDispatch_Skip3
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
-	ldw (xiz), 6
+	ldw	(xhl), 1
+	ldw	(xiz), 6
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7791,8 +7686,8 @@ FSWAssGrid_EventDispatch_Skip2:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ld_rrl xwa, xbc, hl
-	push xwa
+	ld_rrl	xwa, xbc, hl	; ld xwa, (xbc+hl)
+	push	xwa
 	pushw	237
 	pushw	4606
 	lda	xwa, (xsp+12)
@@ -7801,21 +7696,14 @@ FSWAssGrid_EventDispatch_Skip2:
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	de, 0x8c41
-	nop
-	.byte 0xe0, 0x01
-	jrl	741
+	lda	xde, (xsp+260)
+	ld	xbc, 0x1e0008c
+	jrl	AudioTable_SendEventAndContinue
 FSWAssGrid_EventDispatch_Skip3:
 	ld	xwa, (xde)
-	cp	xwa, 0x2890
-	jr	nz, 69
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
+	cp	xwa, 10384
+	jr	nz, FSWAssGrid_EventDispatch_Skip3_Skip
+	ldw	(xhl), 1
 	ldw (xiz), 7
 	ld	(xbc), xiy
 	ld	wa, (xix)
@@ -7837,13 +7725,11 @@ FSWAssGrid_EventDispatch_Skip3:
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
 	jrl	AudioTable_SendEventAndContinue
+FSWAssGrid_EventDispatch_Skip3_Skip:
 	ld	xwa, (xde)
 	cp	xwa, 0x2880
 	jrl	nz, AudioTable_ReturnZero
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xhl), 1
 	ldw (xiz), 8
 	ld (xbc), xiy
 	ld wa, (xix)
@@ -8810,17 +8696,14 @@ PmExpFilter_EventDispatch:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	.byte 0xf3
-	swi	5
-	nop
-	.byte 0x01, 0x30
+	.byte	0xf3, 0xfd, 0x00, 0x01, 0x30	; lda xwa, xsp+0x0100
 	ld	xbc, xde
 	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jrl	nz, 619
+	jrl	nz, SeqLoad_StoreReturnZero
 	ld	c, (0x340e2:24)
 	ld	wa, de
 	sla	wa, 2
@@ -8842,22 +8725,19 @@ FSWAss_RefreshAllVoices_Skip:
 	cp	de, 2:i3
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 556
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 0xffff
 	ld	de, 2:i3
-	jr	119
+	jr	FSWAss_RefreshAllVoices_Join
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	.byte 0xf3
-	swi	5
-	nop
-	.byte 0x01, 0x31
+	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31	; lda xbc, xsp+0x0100
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -8867,7 +8747,7 @@ FSWAss_RefreshAllVoices_Skip:
 	sla	wa, 2
 	dec	8, wa
 	cpw	(xbc), 1
-	jrl	nz, 488
+	jrl	nz, SeqLoad_StoreReturnZero
 	ld	c, (0x340e2:24)
 	cp	c, 2:i3
 	jr	z, FSWAss_RefreshAllVoices_Skip2
@@ -8893,26 +8773,22 @@ FSWAss_RefreshAllVoices_Skip2:
 	ld	de, 2:i3
 FSWAss_RefreshAllVoices_Join:
 	call	MainLswAdd
-	jrl	413
+	jrl	SeqLoad_StoreReturnZero
 	ld	a, (0x340e2:24)
 	cp	a, 2:i3
-	jr	z, 103
+	jr	z, FSWAss_RefreshAllVoices_Skip11
 	cp	a, 1:i3
-	jrl	nz, 399
+	jrl	nz, SeqLoad_StoreReturnZero
 	ld	l, 0:opc
 	lda	xix, (ParamStr02_Vocalist_0x52:24)
 	ld	xwa, (xde)
+FSWAss_RefreshAllVoices_Loop:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe4, 0xf0
-	jr	nz, 65
-	.byte 0xf3
-	swi	5
-	nop
-	.byte 0x01, 0x31
+	.byte	0xe3, 0x07, 0xf0, 0xe4, 0xf0	; cp xwa, (xix+bc)
+	jr	nz, FSWAss_RefreshAllVoices_Skip10
+	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -8921,38 +8797,34 @@ FSWAss_RefreshAllVoices_Join:
 	ld	(xbc+4), xhl
 	ld	xwa, ParamStr02_Vocalist_0x9E
 	cpw	(xde+4), 0
-	jr	z, 5
+	jr	z, FSWAss_RefreshAllVoices_Skip9
 	ld	xwa, ParamStr02_Vocalist_0x9A
+FSWAss_RefreshAllVoices_Skip9:
 	push	xwa
 	push	xhl
 	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte 0xf3
-	swi	5
-	nop
-	.byte 0x01, 0x32
+	.byte	0xf3, 0xfd, 0x00, 0x01, 0x32	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
-	jrl	307
+	jrl	PmExpFilterCheck_DoSend
+FSWAss_RefreshAllVoices_Skip10:
 	inc	1, l
 	cp	l, 9
-	jr	c, -86
-	jrl	301
+	jr	c, FSWAss_RefreshAllVoices_Loop
+	jrl	SeqLoad_StoreReturnZero
+FSWAss_RefreshAllVoices_Skip11:
 	ld	l, 0:opc
 	lda	xix, (ParamStr02_Vocalist_0x76:24)
 	ld	xwa, (xde)
+FSWAss_RefreshAllVoices_Loop2:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe4, 0xf0
-	jr	nz, 65
-	.byte 0xf3
-	swi	5
-	nop
-	.byte 0x01, 0x31
+	.byte	0xe3, 0x07, 0xf0, 0xe4, 0xf0	; cp xwa, (xix+bc)
+	jr	nz, FSWAss_RefreshAllVoices_Skip13
+	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -8961,24 +8833,23 @@ FSWAss_RefreshAllVoices_Join:
 	ld	(xbc+4), xhl
 	ld	xwa, ParamStr02_Vocalist_0xA6
 	cpw	(xde+4), 0
-	jr	z, 5
+	jr	z, FSWAss_RefreshAllVoices_Skip12
 	ld	xwa, ParamStr02_Vocalist_0xA2
+FSWAss_RefreshAllVoices_Skip12:
 	push	xwa
 	push	xhl
 	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte 0xf3
-	swi	5
-	nop
-	.byte 0x01, 0x32
+	.byte	0xf3, 0xfd, 0x00, 0x01, 0x32	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
-	jrl	209
+	jrl	PmExpFilterCheck_DoSend
+FSWAss_RefreshAllVoices_Skip13:
 	inc	1, l
 	cp	l, 9
-	jr	c, -86
-	jrl	203
+	jr	c, FSWAss_RefreshAllVoices_Loop2
+	jrl	SeqLoad_StoreReturnZero
 
 PmExpFilterCheck_CellDecode:
 	lda_dri XHL, 0xfd, 0x00, 0x01
@@ -9366,10 +9237,7 @@ DispTimeSet_EventDispatch:
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x340e6:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 1:i3
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9383,97 +9251,73 @@ FSWAss_RefreshAllVoices_Skip3:
 	cp	de, 3:i3
 	jr	nz, FSWAss_RefreshAllVoices_Entry
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340e8:24)
+	lda	xbc, (0x0340e8:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 1:i3
 	ld	(xwa+14), xbc
 	ld	xbc, 12
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	509
+	jrl	FSWAss_RefreshAllVoices_Join2
 FSWAss_RefreshAllVoices_Entry:
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 37
+	cpw	(xwa), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip14
 	cp	de, 4:i3
-	jr	nz, 33
+	jr	nz, FSWAss_RefreshAllVoices_Skip14
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340ea:24)
+	lda	xbc, (0x0340ea:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 1:i3
 	ld	(xwa+14), xbc
 	ld	xbc, 2:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	466
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 40
+	jrl	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip14:
+	cpw	(xwa), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip15
 	cp	de, 5:i3
-	jr	nz, 36
+	jr	nz, FSWAss_RefreshAllVoices_Skip15
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340ec:24)
+	lda	xbc, (0x0340ec:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 1:i3
 	ld	(xwa+14), xbc
 	ld	xbc, 12
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jrl	420
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jr	nz, 40
+	jrl	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip15:
+	cpw	(xwa), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip16
 	cp	de, 6:i3
-	jr	nz, 36
+	jr	nz, FSWAss_RefreshAllVoices_Skip16
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340ee:24)
+	lda	xbc, (0x0340ee:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 1:i3
 	ld	(xwa+14), xbc
 	ld	xbc, 12
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jrl	374
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jrl	nz, 1199
+	jrl	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip16:
+	cpw	(xwa), 1
+	jrl	nz, DispTimeSet_ReturnZero
 	cp	de, 7:i3
-	jrl	nz, 1194
+	jrl	nz, DispTimeSet_ReturnZero
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340f0:24)
+	lda	xbc, (0x0340f0:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 1:i3
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9494,128 +9338,97 @@ FSWAss_RefreshAllVoices_Entry:
 	ld	(xiy), wa
 	ld	iz, de
 	ld	(xiy+2), iz
-	.byte 0x95
-	push	xsp
-	normal
-	nop
-	jr	nz, 43
+	cpw	(xiy), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip17
 	cp	iz, 2:i3
-	jr	nz, 39
+	jr	nz, FSWAss_RefreshAllVoices_Skip17
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340e6:24)
+	lda	xbc, (0x0340e6:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	ld	xbc, 12
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	240
-	.byte 0x95
-	push	xsp
-	normal
-	nop
-	jr	nz, 43
+	jrl	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip17:
+	cpw	(xiy), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip18
 	cp	iz, 3:i3
-	jr	nz, 39
+	jr	nz, FSWAss_RefreshAllVoices_Skip18
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340e8:24)
+	lda	xbc, (0x0340e8:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	ld	xbc, 12
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	191
-	.byte 0x95
-	push	xsp
-	normal
-	nop
-	jr	nz, 40
+	jrl	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip18:
+	cpw	(xiy), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip19
 	cp	iz, 4:i3
-	jr	nz, 36
+	jr	nz, FSWAss_RefreshAllVoices_Skip19
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340ea:24)
+	lda	xbc, (0x0340ea:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	ld	xbc, 2:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	145
-	.byte 0x95
-	push	xsp
-	normal
-	nop
-	jr	nz, 42
+	jrl	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip19:
+	cpw	(xiy), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip20
 	cp	iz, 5:i3
-	jr	nz, 38
+	jr	nz, FSWAss_RefreshAllVoices_Skip20
 	lda	xwa, (xsp+8)
-	lda	xbc, (0x340ec:24)
+	lda	xbc, (0x0340ec:24)
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+4), 1
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	ld	xbc, 12
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jr	97
+	jr	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip20:
 	lda	xwa, (xsp+8)
 	lda	xbc, (xwa+4)
 	lda	xhl, (xwa+6)
 	lda	xde, (xwa+10)
 	lda	xix, (xwa+14)
-	.byte 0x95
-	push	xsp
-	normal
-	nop
-	jr	nz, 35
+	cpw	(xiy), 1
+	jr	nz, FSWAss_RefreshAllVoices_Skip21
 	cp	iz, 6:i3
-	jr	nz, 31
-	lda	xiy, (0x340ee:24)
+	jr	nz, FSWAss_RefreshAllVoices_Skip21
+	lda	xiy, (0x0340ee:24)
 	ld	(xwa), xiy
-	.byte 0xb1
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xbc), 1
 	ld	xbc, 0xffffffff
 	ld	(xix), xbc
 	ld	xbc, 12
 	ld	(xhl), xbc
 	ld	xbc, 1:i3
 	ld	(xde), xbc
-	jr	41
-	.byte 0x95
-	push	xsp
-	normal
-	nop
-	jrl	nz, 866
+	jr	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip21:
+	cpw	(xiy), 1
+	jrl	nz, DispTimeSet_ReturnZero
 	cp	iz, 7:i3
-	jrl	nz, 861
-	lda	xiy, (0x340f0:24)
+	jrl	nz, DispTimeSet_ReturnZero
+	lda	xiy, (0x0340f0:24)
 	ld	(xwa), xiy
-	.byte 0xb1
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xbc), 1
 	ld	xbc, 0xffffffff
 	ld	(xix), xbc
 	ld	xbc, 12
@@ -9625,15 +9438,12 @@ FSWAss_RefreshAllVoices_Entry:
 FSWAss_RefreshAllVoices_Join2:
 	call	MainRamAdd
 	jrl	DispTimeSet_ReturnZero
-	lda	xwa, (0x340e6:24)
+	lda	xwa, (0x0340e6:24)
 	lda	xiy, (xde+14)
-	cp xwa, (xde)	; FBC9C0 (cp xwa,(xde))
+	cp	xwa, (xde)	; FBC9C0 (cp xwa,(xde))
 	jr	nz, FSWAss_RefreshAllVoices_Skip4
 	lda	xwa, (xsp+40)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa), 1
 	ldw (xwa+2), 2
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
@@ -9655,13 +9465,10 @@ FSWAss_RefreshAllVoices_Join2:
 	jrl	DispTimeSet_SendEventReturn
 FSWAss_RefreshAllVoices_Skip4:
 	lda	xwa, (0x340e8:24)
-	.byte 0xa2, 0xf0
+	cp	xwa, (xde)
 	jr	nz, FSWAss_RefreshAllVoices_Skip5
 	lda	xwa, (xsp+40)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa), 1
 	ldw (xwa+2), 3
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
@@ -9685,18 +9492,11 @@ FSWAss_RefreshAllVoices_Skip5:
 	lda	xbc, (0x340ea:24)
 	lda	xwa, (ParamStr_Table_03:24)
 	ld	(xsp+4), xwa
-	.byte 0xa2, 0xf1
+	cp	xbc, (xde)
 	jr	nz, FSWAss_RefreshAllVoices_Skip6
 	lda	xwa, (xsp+40)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
-	.byte 0xb8
-	push	sr
-	push	sr
-	.byte 0x04
-	nop
+	ldw	(xwa), 1
+	ldw	(xwa+2), 4
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9716,14 +9516,11 @@ FSWAss_RefreshAllVoices_Skip5:
 	ld	xbc, 0x1e0008c
 	jrl	DispTimeSet_SendEventReturn
 FSWAss_RefreshAllVoices_Skip6:
-	lda	xwa, (0x340ec:24)
-	.byte 0xa2, 0xf0
+	lda	xwa, (0x0340ec:24)
+	cp	xwa, (xde)
 	jr	nz, FSWAss_RefreshAllVoices_Skip7
 	lda	xwa, (xsp+40)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa), 1
 	ldw (xwa+2), 5
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
@@ -9749,13 +9546,10 @@ FSWAss_RefreshAllVoices_Skip7:
 	lda	xix, (xsp+30)
 	lda	xwa, (xhl+2)
 	lda	xbc, (xhl+4)
-	.byte 0xa2, 0xf6
+	cp	xiz, (xde)
 	jr	nz, FSWAss_RefreshAllVoices_Skip8
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
-	ldw (xwa), 6
+	ldw	(xhl), 1
+	ldw	(xwa), 6
 	ld	(xbc), xix
 	ld	xwa, (xiy)
 	sll	xwa, 2
@@ -9774,13 +9568,10 @@ FSWAss_RefreshAllVoices_Skip7:
 	ld	xbc, 0x1e0008c
 	jrl	DispTimeSet_SendEventReturn
 FSWAss_RefreshAllVoices_Skip8:
-	lda	xiz, (0x340f0:24)
-	.byte 0xa2, 0xf6
+	lda	xiz, (0x0340f0:24)
+	cp	xiz, (xde)
 	jrl	nz, DispTimeSet_ReturnZero
-	.byte 0xb3
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xhl), 1
 	ldw (xwa), 7
 	ld	(xbc), xix
 	ld	xwa, (xiy)

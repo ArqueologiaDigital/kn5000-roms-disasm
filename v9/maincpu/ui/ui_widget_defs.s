@@ -3237,8 +3237,7 @@ PsEditSwBoxProc_Skip4:
 	jr	nz, PsEditSwBoxProc_Epilogue2
 	ld	xwa, (xsp+10)
 	ldw	(xwa+2), 216
-	.byte 0xb8
-	.long Naka_SubDispatch_B_Table_0x6E
+	ldw	(xwa+6), 238
 	ld	bc, (xbc)
 	sub	bc, 16
 	ld	(xwa), bc
@@ -3448,8 +3447,7 @@ ButtonState_DispatchDSP_InlineData:
 	jr	ButtonState_PaintProc_Join
 	ld	xwa, Data_SoundEditorCharsLayout_0x424
 	jr	ButtonState_PaintProc_Join
-	.byte 0x40
-	.long NakaInst_OK
+	ld	xwa, NakaInst_OK
 	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0x4
 	jr	ButtonState_PaintProc_Join
@@ -3465,8 +3463,7 @@ ButtonState_DispatchDSP_InlineData:
 	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0x18
 	jr	ButtonState_PaintProc_Join
-	.byte 0x40
-	.long Str_No
+	ld	xwa, Str_No
 ButtonState_PaintProc_Join:
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -7928,7 +7925,7 @@ PsTrkSw_TrailingData:
 	lda	xde, (xhl+22)
 	lda	xbc, (xsp+4)
 	lda	xwa, (xbc+2)
-	.byte 0x92, 0x3f, 0x08, 0x00
+	cpw	(xde), 8
 	jr	nc, PsTrackSwitchProc_Skip
 	ldw	(xwa), 164
 	jr	PsTrackSwitchProc_Join
@@ -8370,13 +8367,14 @@ AcTrkSw_Return:
 	ld	xde, 0x01600010
 	call	SendEvent
 	or	xhl, xhl
-	.byte 0x66
-	.long Data_DiskFuncPtrTbl_EA0B12
+	jr	z, ObjectProc_Skip3
+	pushw	234
 	pushw 0xa890
 	ld	xwa, (xsp+140)
 	push	xwa
 	call	Strcat
 	inc	8, xsp
+ObjectProc_Skip3:
 	ld	xhl, (xsp+4)
 	jrl	ObjectProc_Join5
 	ld	xwa, xiz
@@ -19463,9 +19461,12 @@ UpdateScreen_Prologue:
 	ret
 
 UpdateScreen_CheckDirty:
-	.byte 0x1e, 0x0f, 0x00, 0xd2, 0x50, 0x04, 0x03, 0x20
-	.byte 0xd8, 0xd8, 0xb0, 0xfe, 0xf2, 0x4e, 0x04, 0x03
-	.byte 0x50, 0x0e
+	calr	Gfx_BlitDirtyRegions
+	ld	wa, (0x030450:24)
+	cp	wa, 0:i3
+	ret	nz
+	ld	(0x03044e:24), wa
+	ret
 
 Gfx_BlitDirtyRegions:
 	dec 8, xsp

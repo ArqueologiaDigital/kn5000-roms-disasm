@@ -99,11 +99,18 @@ def build_map(img, srcroot):
         for n, (rel, li) in enumerate(marks):
             if n in ma:
                 amap[(rel, li)] = ma[n]
-        syms = {}
+        syms, absyms = {}, {}
         for line in drc.sh([drc.NM, "-n", elf]).split("\n"):
             p = line.split()
-            if len(p) >= 3 and p[1] in ("t", "T") and not p[2].startswith(drc.MARK):
-                syms.setdefault(int(p[0], 16), []).append(p[2])
+            if len(p) >= 3 and not p[2].startswith(drc.MARK):
+                v = int(p[0], 16)
+                if p[1] in ("t", "T"):
+                    syms.setdefault(v, []).append(p[2])
+                elif p[1] in ("a", "A") and ROM_LO <= v < ROM_HI:
+                    # `.set X, Label + N` positional names come out absolute
+                    absyms.setdefault(v, []).append(p[2])
+        for v, ns in absyms.items():
+            syms.setdefault(v, []).extend(ns)
         return amap, syms, rom, ok
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -387,7 +394,8 @@ def render_window(img, rom, amap, syms, lines, rel, lo0, hi0, datar, srcroot, ex
             body += "\t; " + re.sub(r',(?=\S)', ', ', u.lower())
         out_ins[ad] = body
     for ad, li, k, t in carry:
-        if k == "label" and ad not in boundaries:
+        # a label AT the window end (B) belongs to the next line, not inside ours
+        if k == "label" and ad not in boundaries and ad != B:
             rep["stranded"].append((ad, t))
     if rep["stranded"]:
         names = set(t for ad, t in rep["stranded"])

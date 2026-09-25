@@ -62,6 +62,9 @@ def kind(text):
 
 
 def audit(img, rom, amap, rel):
+    """-> list of (kind, from_line, to_line, from_addr, to_addr, nbad, nabsurd, dlines)
+    kind: MISFRAME (window with no data directive), MISFRAME-D (window that holds
+    `.ascii`/`.long`/... lines: review by hand, it may be real data), BYTE-CODE."""
     src = open(os.path.join(ROOT, img["mirror"], rel), encoding="latin-1").read().split("\n")
     emit = sorted((ad, int(k.rsplit(":", 1)[1])) for k, ad in amap.items()
                   if k.rsplit(":", 1)[0] == rel)
@@ -69,15 +72,17 @@ def audit(img, rom, amap, rel):
     for i, (ad, li) in enumerate(emit):
         end = emit[i + 1][0] if i + 1 < len(emit) else ad
         rows.append((ad, end, li, kind(src[li])))
-    # runs of I/B lines, address-contiguous, starting with an I
+    # runs of emitting lines, address-contiguous, starting with an instruction
     runs, cur = [], []
     for r in rows:
-        if r[3] in ("I", "B") and (not cur or cur[-1][1] == r[0]):
+        if r[1] == r[0]:
+            continue        # a label-only line: emits nothing, must not split a run
+        if cur and cur[-1][1] == r[0]:
             cur.append(r)
         else:
             if cur:
                 runs.append(cur)
-            cur = [r] if r[3] in ("I", "B") else []
+            cur = [r] if r[1] > r[0] else []
     if cur:
         runs.append(cur)
     out = []
@@ -91,9 +96,8 @@ def audit(img, rom, amap, rel):
         U = {d[0] for d in dec}
         uend = {d[0] + d[1] for d in dec}
         absurd_at = {d[0]: d[2] for d in dec if ABSURD.match(d[2])}
-        bad = [r for r in run if r[3] == "I" and r[0] not in U]
+        bad = [r for r in run if r[3] in ("I", "B", "D") and r[0] not in U]
         if bad:
-            # group into windows: consecutive bad lines within 64 bytes
             wins = []
             for r in bad:
                 if wins and r[0] - wins[-1][-1][0] <= 64:
@@ -101,19 +105,24 @@ def audit(img, rom, amap, rel):
                 else:
                     wins.append([r])
             for w in wins:
-                # extend window to the previous and next source line that IS a
-                # common boundary
                 lo_ad = w[0][0]
-                prev = [r for r in run if r[0] < lo_ad and r[0] in U]
+                prev = [r for r in run if r[0] < lo_ad and r[0] in U and r[3] == "I"]
                 start = prev[-1] if prev else run[0]
                 nxt = [r for r in run if r[0] > w[-1][0] and r[0] in U and r[3] == "I"]
                 stop = nxt[0] if nxt else None
-                nabs = sum(1 for x in absurd_at if start[0] <= x < (stop[0] if stop else b))
-                out.append(("MISFRAME", start[2] + 1, (stop[2] if stop else run[-1][2] + 1),
-                            start[0], stop[0] if stop else b, len(w), nabs))
+                end_ad = stop[0] if stop else b
+                nabs = sum(1 for x in absurd_at if start[0] <= x < end_ad)
+                dl = [r[2] + 1 for r in run if start[0] <= r[0] < end_ad and r[3] == "D"]
+                out.append(("MISFRAME-D" if dl else "MISFRAME", start[2] + 1,
+                            (stop[2] if stop else run[-1][2] + 1),
+                            start[0], end_ad, len(w), nabs, dl))
         for r in run:
+            # `\t.byte\t...\t; reading` is the re-framer's own spelling of an
+            # instruction the backend cannot encode: already handled
+            if r[3] == "B" and re.match(r'^\t\.byte\t[^;]*;', src[r[2]]):
+                continue
             if r[3] == "B" and r[0] in U and r[1] in (U | uend):
-                out.append(("BYTE-CODE", r[2] + 1, r[2] + 1, r[0], r[1], 1, 0))
+                out.append(("BYTE-CODE", r[2] + 1, r[2] + 1, r[0], r[1], 1, 0, []))
     return out
 
 
@@ -153,13 +162,18 @@ def main():
     for rel in a.file:
         res = audit(img, rom, amap, rel)
         mis = [r for r in res if r[0] == "MISFRAME"]
+        misd = [r for r in res if r[0] == "MISFRAME-D"]
         bc = [r for r in res if r[0] == "BYTE-CODE"]
-        print("== %s %s: %d misframe windows (%d bad lines), %d .byte lines that decode as "
-              "aligned code (%d B)" % (a.image, rel, len(mis), sum(r[5] for r in mis), len(bc),
-                                       sum(r[4] - r[3] for r in bc)))
+        print("== %s %s: %d misframe windows (%d bad lines), %d more holding data directives "
+              "(%d bad lines), %d .byte lines that decode as aligned code (%d B)" % (
+                  a.image, rel, len(mis), sum(r[5] for r in mis), len(misd),
+                  sum(r[5] for r in misd), len(bc), sum(r[4] - r[3] for r in bc)))
         if not a.summary:
             for r in mis:
-                print("  MISFRAME lines %d-%d  %06X-%06X  bad=%d absurd=%d" % r[1:])
+                print("  MISFRAME lines %d-%d  %06X-%06X  bad=%d absurd=%d" % r[1:7])
+            for r in misd:
+                print("  MISFRAME-D lines %d-%d  %06X-%06X  bad=%d absurd=%d  data lines %s"
+                      % (r[1:7] + (r[7][:8],)))
             # merge BYTE-CODE into line ranges
             m = []
             for r in bc:
@@ -171,7 +185,7 @@ def main():
             for x in m:
                 print("  BYTE-CODE lines %d-%d  %06X-%06X" % tuple(x))
         if a.windows_out:
-            w = sorted([r[1], r[2]] for r in res)
+            w = sorted([r[1], r[2]] for r in res if r[0] != "MISFRAME-D")
             merged = []
             for x in w:
                 if merged and x[0] <= merged[-1][1] + 1:
@@ -180,6 +194,10 @@ def main():
                     merged.append(list(x))
             json.dump(merged, open(a.windows_out, "w"))
             print("wrote %d windows to %s" % (len(merged), a.windows_out))
+            wd = sorted([r[1], r[2]] for r in res if r[0] == "MISFRAME-D")
+            json.dump(wd, open(a.windows_out + ".data-review", "w"))
+            print("wrote %d data-holding windows (REVIEW BY HAND) to %s.data-review"
+                  % (len(wd), a.windows_out))
 
 
 if __name__ == "__main__":

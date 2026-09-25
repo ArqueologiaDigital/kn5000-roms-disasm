@@ -268,7 +268,8 @@ ComSetGridCheck_JumpTable_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
+	; cp xwa, (xix+iy)
+	.byte	0xe3, 0x07, 0xf0, 0xf4, 0xf0	; cp xwa, (xix+iy)
 	jr	z, ComSetGridCheck_JumpTable_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -331,8 +332,7 @@ ComSetGridCheck_JumpTable_Skip7:
 	jr	z, ComSetGridCheck_JumpTable_Skip8
 	cp	wa, 0:i3
 	jr	nz, ComSetGridCheck_JumpTable_Skip10
-	.byte 0x40
-	.long NakaInst_NORMAL
+	ld	xwa, NakaInst_NORMAL
 	jr	ComSetGridCheck_JumpTable_Join3
 ComSetGridCheck_JumpTable_Skip8:
 	ld	xwa, NakaInst_NORMAL_0xA
@@ -1141,7 +1141,7 @@ PmemOutLGridCheck:
 PmemOutLGridCheck_JumpTable:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 31457423
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+36)
@@ -1150,7 +1150,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, PmemOutGrid_ReturnZero
 	cp	hl, 3:i3
 	jr	z, PmemOutLGridCheck_JumpTable_Skip2
@@ -1158,30 +1158,30 @@ PmemOutLGridCheck_JumpTable:
 	jr	z, PmemOutLGridCheck_JumpTable_Skip
 	cp	hl, 0:i3
 	jrl	nz, PmemOutGrid_ReturnZero
-	ld	xiy, 15204622
+	ld	xiy, NakaData_PartFlags
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+60)
-	lda	xbc, (149362:24)
+	lda	xbc, (0x024772:24)
 	ld	(xwa), xbc
 	ld	xbc, 79
 	ld	(xwa+6), xbc
 	jrl	PmemOutLGridCheck_JumpTable_Join2
 PmemOutLGridCheck_JumpTable_Skip:
-	ld	xiy, 15204622
+	ld	xiy, NakaData_PartFlags
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
-	lda	xde, (64812:16)
+	ldirw
+	lda_d16	xde, (64812)
 	sub	xde, 63904
 	ld	xwa, 0:i3
-	ld	a, (149362:24)
+	ld	a, (0x024772:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda	xwa, (2020352:24)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	ld	xbc, xwa
 	add	xbc, xde
@@ -1197,19 +1197,19 @@ PmemOutLGridCheck_JumpTable_Skip:
 	ld	(xwa+14), xbc
 	jrl	PmemOutLGridCheck_JumpTable_Join
 PmemOutLGridCheck_JumpTable_Skip2:
-	ld	xiy, 15204622
+	ld	xiy, NakaData_PartFlags
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+60)
-	lda	xbc, (149364:24)
+	lda	xbc, (0x024774:24)
 	ld	(xwa), xbc
 	ld	xbc, 2:i3
 	ld	(xwa+6), xbc
 	jrl	PmemOutLGridCheck_JumpTable_Join2
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 31457423
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+36)
@@ -1218,7 +1218,7 @@ PmemOutLGridCheck_JumpTable_Skip2:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, PmemOutGrid_ReturnZero
 	cp	hl, 3:i3
 	jrl	z, PmemOutLGridCheck_JumpTable_Skip3
@@ -1226,34 +1226,32 @@ PmemOutLGridCheck_JumpTable_Skip2:
 	jr	z, PmemOutLGridCheck_JumpTable_Entry
 	cp	hl, 0:i3
 	jrl	nz, PmemOutGrid_ReturnZero
-	ld	xiy, 15204622
+	ld	xiy, NakaData_PartFlags
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+60)
-	lda	xbc, (149362:24)
+	lda	xbc, (0x024772:24)
 	ld	(xwa), xbc
 	ld	xbc, 79
 	ld	(xwa+6), xbc
-	ld	xbc, 4294967295
+	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	jr	PmemOutLGridCheck_JumpTable_Join2
 PmemOutLGridCheck_JumpTable_Entry:
-	.byte 0x45
-	ret
-	.byte 0x01, 0xe8, 0x00
+	ld	xiy, NakaData_PartFlags
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
-	lda	xde, (64812:16)
+	ldirw
+	lda_d16	xde, (64812)
 	sub	xde, 63904
 	ld	xwa, 0:i3
-	ld	a, (149362:24)
+	ld	a, (0x024772:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda	xwa, (2020352:24)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	ld	xbc, xwa
 	add	xbc, xde
@@ -1271,16 +1269,16 @@ PmemOutLGridCheck_JumpTable_Join:
 	call	MainRamPut
 	jrl	PmemOutGrid_ReturnZero
 PmemOutLGridCheck_JumpTable_Skip3:
-	ld	xiy, 15204622
+	ld	xiy, NakaData_PartFlags
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+60)
-	lda	xbc, (149364:24)
+	lda	xbc, (0x024774:24)
 	ld	(xwa), xbc
 	ld	xbc, 2:i3
 	ld	(xwa+6), xbc
-	ld	xbc, 4294967295
+	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 PmemOutLGridCheck_JumpTable_Join2:
 	call	MainRamAdd
@@ -1292,12 +1290,12 @@ PmemOutLGridCheck_JumpTable_Join2:
 	ld	xwa, (xsp+28)
 	ld	xhl, (xsp+12)
 	ld	(xwa), xhl
-	lda	xbc, (149362:24)
+	lda	xbc, (0x024772:24)
 	ld	(xsp+16), xiy
 	ld	xde, (xsp+4)
 	lda	xwa, (xde+14)
 	ld	(xsp+28), xwa
-	.byte 0xa2, 0xf1
+	cp	xbc, (xde)
 	jrl	nz, PmemOutLGridCheck_JumpTable_Skip5
 	ld	xwa, (xsp+16)
 	ldw	(xwa), 0
@@ -1309,7 +1307,7 @@ PmemOutLGridCheck_JumpTable_Join2:
 	sra	xbc, 0
 	and	xbc, 7
 	add	xbc, xwa
-	and	xbc, 4294967288
+	and	xbc, 0xfffffff8
 	sub	xwa, xbc
 	inc	1, xwa
 	pushw	wa
@@ -1324,105 +1322,162 @@ PmemOutLGridCheck_JumpTable_Join2:
 	pushw	232
 	pushw	308
 	push	xhl
-	.byte 0x1d
-	addr24 Sprintf_Locked
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+36)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	call	SendEvent
-	lda	xde, (64812:16)
+	lda_d16	xde, (64812)
 	sub	xde, 63904
 	ld	xwa, 0:i3
-	ld	a, (149362:24)
+	ld	a, (0x024772:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda	xwa, (2020352:24)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xde
-	.byte 0xb0, 0xc9
+	bitm	1, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Skip4
-	ld	xwa, 15204670
+	ld	xwa, 0xe8013e
 	jr	PmemOutLGridCheck_JumpTable_Join3
 PmemOutLGridCheck_JumpTable_Skip4:
-	ld	xwa, 15204676
+	ld	xwa, NakaInst_OFF_E80144
 PmemOutLGridCheck_JumpTable_Join3:
 	push	xwa
 	lda	xwa, (xsp+48)
 	push	xwa
-	.byte 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0xbf
-	.byte 0x26, 0x02, 0x01, 0x00, 0x1d, 0xd0, 0x44, 0xfa
-	.byte 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41, 0x8c, 0x00
-	.byte 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x26
-	.byte 0x02, 0x00, 0x00, 0xf1, 0xc4, 0xf9, 0x30, 0xe8
-	.byte 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20, 0x60
-	.byte 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21, 0x41
-	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21, 0xe8
-	.byte 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9, 0xee
-	.byte 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9, 0x80
-	.byte 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
-	.long Str_ol
-	.byte 0x0b, 0x4a, 0x01, 0xbf
-	.byte 0x30, 0x30, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef
-	.byte 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8, 0x12, 0x28
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x50, 0x01, 0xbf, 0x32
-	.byte 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a
-	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
-	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60
-	.byte 0x96, 0xfa, 0xbf, 0x26, 0x02, 0x01, 0x00, 0xf1
-	.byte 0xc5, 0xf9, 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00
-	.byte 0x00, 0xbf, 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74
-	.byte 0x47, 0x02, 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00
-	.byte 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72
-	.byte 0x47, 0x02, 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04
-	.byte 0xe8, 0xa1, 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4
-	.byte 0x1e, 0x30, 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20
-	.byte 0x80, 0x80, 0x21, 0xd8, 0x12, 0x28, 0x0b, 0xe8
-	.byte 0x00, 0x0b, 0x56, 0x01, 0xbf, 0x32, 0x30, 0x38
-	.byte 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0xbf
-	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
-	.byte 0xbf, 0x26, 0x02, 0x02, 0x00, 0xf1, 0xc7, 0xf9
-	.byte 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf
-	.byte 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02
-	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02
-	.byte 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1
-	.byte 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30
-	.byte 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0
-	.byte 0xcf, 0x66, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0x5c
-	.byte 0x01, 0xbf, 0x30, 0x30, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8
-	.byte 0x12, 0x28, 0x0b, 0xe8, 0x00, 0x0b, 0x62, 0x01
-	.byte 0xbf, 0x32, 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
+	call	Strcpy
+	inc	8, xsp
+	ldw	(xsp+38), 1
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+36)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 0
+	lda_d16	xwa, (63940)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	Math_MultiplyAccumulate
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Join3_Skip
+	pushw	232
+	pushw	330
+	lda	xwa, (xsp+48)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join3_Join
+PmemOutLGridCheck_JumpTable_Join3_Skip:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	336
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join3_Join:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 1
+	lda_d16	xwa, (63941)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	Math_MultiplyAccumulate
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	342
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+36)
-	ld	xwa, 5963785
-	ld	xbc, 31457420
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 2
+	lda_d16	xwa, (63943)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	Math_MultiplyAccumulate
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Join3_Skip2
+	pushw	232
+	pushw	348
+	lda	xwa, (xsp+48)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join3_Join2
+PmemOutLGridCheck_JumpTable_Join3_Skip2:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	354
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join3_Join2:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
 	jrl	PmemOutL_GridCheck_Return
 PmemOutLGridCheck_JumpTable_Skip5:
 	ld	xwa, (xsp+20)
 	ld	(xsp+20), xwa
 	ld	xwa, 0:i3
-	ld	a, (149362:24)
+	ld	a, (0x024772:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1431,131 +1486,239 @@ PmemOutLGridCheck_JumpTable_Skip5:
 	add	xwa, xbc
 	ld	(xsp+24), xwa
 	ld	xbc, xwa
-	.byte 0xaf, 0x20, 0x81
+	add	xbc, (xsp+32)
 	ld	xwa, (xsp+4)
 	cp	(xwa), xbc
-	jr	nz, 57
+	jr	nz, PmemOutLGridCheck_JumpTable_Skip5_Skip
 	ld	xwa, (xsp+16)
 	ldw	(xwa), 1
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	bit	1, wa
 	jr	z, PmemOutLGridCheck_JumpTable_Skip6
-	ld	xwa, 15204712
+	ld	xwa, NakaInst_ON_E80168
 	jr	PmemOutLGridCheck_JumpTable_Join4
 PmemOutLGridCheck_JumpTable_Skip6:
-	ld	xwa, 15204718
+	ld	xwa, 0xe8016e
 PmemOutLGridCheck_JumpTable_Join4:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	.byte 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d, 0xd0
-	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x81, 0x03, 0xf2
-	.byte 0x74, 0x47, 0x02, 0x31, 0xaf, 0x04, 0x20, 0xa0
-	.byte 0xf1, 0x7e, 0x8d, 0x01, 0xaf, 0x10, 0x20, 0xb0
-	.byte 0x02, 0x03, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20
-	.byte 0xe8, 0xee, 0x02, 0xaf, 0x08, 0x21, 0xe8, 0x81
-	.byte 0xa1, 0x20, 0x38, 0xaf, 0x10, 0x20, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d, 0xd0, 0x44
-	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41, 0x8c
-	.byte 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf
-	.byte 0x26, 0x02, 0x00, 0x00, 0xf1, 0xc4, 0xf9, 0x30
-	.byte 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20
-	.byte 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21
-	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21
-	.byte 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9
-	.byte 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9
-	.byte 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xbf, 0x2c
-	.byte 0x31, 0xb0, 0xcf, 0x66, 0x0f, 0x0b, 0xe8, 0x00
-	.byte 0x0b, 0x74, 0x01, 0x39, 0x1d
-	addr24 Strcpy
-	inc 8, xsp
-	jr 19
-	ld a, (xwa)
-	extz wa
-	.long AudioStream_Property_Table
-	.byte 0x0b, 0x7a, 0x01, 0x39
-	.byte 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0xbf
-	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
-	.byte 0xbf, 0x26, 0x02, 0x01, 0x00, 0xf1, 0xc5, 0xf9
-	.byte 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf
-	.byte 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02
-	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02
-	.byte 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1
-	.byte 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30
-	.byte 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0x80
-	.byte 0x21, 0xd8, 0x12, 0x28, 0x0b, 0xe8, 0x00, 0x0b
-	.byte 0x80, 0x01, 0xbf, 0x32, 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0xbf, 0x24, 0x32
-	.byte 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41, 0x8c, 0x00
-	.byte 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x26
-	.byte 0x02, 0x02, 0x00, 0xf1, 0xc7, 0xf9, 0x30, 0xe8
-	.byte 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20, 0x60
-	.byte 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21, 0x41
-	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21, 0xe8
-	.byte 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9, 0xee
-	.byte 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9, 0x80
-	.byte 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
-	.long Str_ol
-	.byte 0x0b, 0x86, 0x01, 0xbf
-	.byte 0x30, 0x30, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef
-	.byte 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8, 0x12, 0x28
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x8c, 0x01, 0xbf, 0x32
-	.byte 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a
-	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
-	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xe7
-	.byte 0x01, 0xf1, 0xb6, 0xf9, 0x30, 0xbf, 0x20, 0x60
-	.byte 0xb8, 0x0e, 0x30, 0xaf, 0x14, 0xa0, 0xbf, 0x08
-	.byte 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21
-	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d
-	addr24 Math_MultiplyAccumulate
-	.byte 0xaf, 0x18, 0x21, 0xeb, 0x81, 0xe9, 0x8a
-	.byte 0xaf, 0x08, 0x82, 0xaf, 0x04, 0x20, 0xa0, 0xfa
-	.byte 0x6e, 0x45, 0xaf, 0x10, 0x20, 0xb0, 0x02, 0x00
-	.byte 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20, 0xd8, 0x33
-	.byte 0x07, 0x66, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0x92
-	.byte 0x01, 0xaf, 0x10, 0x20, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x12, 0x38, 0x0b, 0xe8
-	.byte 0x00, 0x0b, 0x98, 0x01, 0xaf, 0x14, 0x20, 0x38
-	.byte 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0c, 0x37, 0xbf
-	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x71, 0x01, 0xaf
-	.byte 0x20, 0x20, 0xb8, 0x0f, 0x30, 0xaf, 0x14, 0xa0
-	.byte 0xe9, 0x8a, 0xe8, 0x82, 0xaf, 0x04, 0x20, 0xa0
-	.byte 0xfa, 0x6e, 0x2e, 0xaf, 0x10, 0x20, 0xb0, 0x02
-	.byte 0x01, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20, 0x38
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x9e, 0x01, 0xaf, 0x14
-	.byte 0x20, 0x38, 0x1d
-	addr24 Sprintf_Locked
+	call	Strcpy
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+36)
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Skip5_Skip:
+	lda	xbc, (0x024774:24)
+	ld	xwa, (xsp+4)
+	cp	xbc, (xwa)
+	jrl	nz, PmemOutLGridCheck_JumpTable_Join4_Skip3
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 3
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	sll	xwa, 2
+	ld	xbc, (xsp+8)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	push	xwa
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+36)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 0
+	lda_d16	xwa, (63940)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	Math_MultiplyAccumulate
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	lda	xbc, (xsp+44)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Join4_Skip
+	pushw	232
+	pushw	372
+	push	xbc
+	call	Strcpy
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join4_Join
+PmemOutLGridCheck_JumpTable_Join4_Skip:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	378
+	push	xbc
+	call	Sprintf_Locked
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join4_Join:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 1
+	lda_d16	xwa, (63941)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	Math_MultiplyAccumulate
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	384
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+10)
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 2
+	lda_d16	xwa, (63943)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	Math_MultiplyAccumulate
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Join4_Skip2
+	pushw	232
+	pushw	390
+	lda	xwa, (xsp+48)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join4_Join2
+PmemOutLGridCheck_JumpTable_Join4_Skip2:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	396
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join4_Join2:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Join4_Skip3:
+	lda_d16	xwa, (63926)
+	ld	(xsp+32), xwa
+	lda	xwa, (xwa+14)
+	sub	xwa, (xsp+20)
+	ld	(xsp+8), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	Math_MultiplyAccumulate
+	ld	xbc, (xsp+24)
+	add	xbc, xhl
+	ld	xde, xbc
+	add	xde, (xsp+8)
+	ld	xwa, (xsp+4)
+	cp	(xwa), xde
+	jr	nz, PmemOutLGridCheck_JumpTable_Join4_Skip5
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 0
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	bit	7, wa
+	jr	z, PmemOutLGridCheck_JumpTable_Join4_Skip4
+	pushw	232
+	pushw	402
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join4_Join3
+PmemOutLGridCheck_JumpTable_Join4_Skip4:
+	push	xwa
+	pushw	232
+	pushw	408
+	ld	xwa, (xsp+20)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+12)
+PmemOutLGridCheck_JumpTable_Join4_Join3:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Join4_Skip5:
+	ld	xwa, (xsp+32)
+	lda	xwa, (xwa+15)
+	sub	xwa, (xsp+20)
+	ld	xde, xbc
+	add	xde, xwa
+	ld	xwa, (xsp+4)
+	cp	(xwa), xde
+	jr	nz, PmemOutLGridCheck_JumpTable_Join4_Skip6
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 1
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	push	xwa
+	pushw	232
+	pushw	414
+	ld	xwa, (xsp+20)
+	push	xwa
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xde, (xsp+36)
-	ld	xwa, 5963785
-	ld	xbc, 31457420
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
 	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Join4_Skip6:
 	ld	xwa, (xsp+32)
 	lda	xwa, (xwa+17)
-	.byte 0xaf, 0x14, 0xa0
+	sub	xwa, (xsp+20)
 	add	xbc, xwa
 	ld	xwa, (xsp+4)
 	cp	(xwa), xbc
@@ -1565,21 +1728,27 @@ PmemOutLGridCheck_JumpTable_Join4:
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	bit	7, wa
-	jr	z, 18
+	jr	z, PmemOutLGridCheck_JumpTable_Join4_Skip7
 	pushw	232
 	pushw	420
 	ld	xwa, (xsp+16)
 	push	xwa
-	.byte 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x12, 0x38
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xaa, 0x01, 0xaf, 0x14
-	.byte 0x20, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0c
-	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
-	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xd7
-	nop
+	call	Strcpy
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join4_Join4
+PmemOutLGridCheck_JumpTable_Join4_Skip7:
+	push	xwa
+	pushw	232
+	pushw	426
+	ld	xwa, (xsp+20)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+12)
+PmemOutLGridCheck_JumpTable_Join4_Join4:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
 
 ; PmemOutLGridCheck dispatch
 PmemOutL_GridCheck:
@@ -1740,22 +1909,18 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jrl	nz, 2053
+	cpw	(xwa), 1
+	jrl	nz, TtMdCtlMsg_ReturnZero2
 	cp	bc, 2:i3
-	jrl	z, 205
+	jrl	z, TtMdCtlMsg_EventDispatch_Skip7
 	cp	bc, 1:i3
-	jr	z, 112
+	jr	z, TtMdCtlMsg_EventDispatch_Skip6
 	cp	bc, 0:i3
-	jrl	nz, 2039
+	jrl	nz, TtMdCtlMsg_ReturnZero2
 	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (0xf9c4:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -1779,19 +1944,19 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1
-	inc	6, l
-	incf
+	bitm	7, (xbc)
+	jr	z, TtMdCtlMsg_EventDispatch_Skip5
 	ld	xbc, 0:i3
 	ld	(xwa+14), xbc
 	call	MainRamPut
-	jrl	1935
-	jrl	598
+	jrl	TtMdCtlMsg_ReturnZero2
+TtMdCtlMsg_EventDispatch_Skip5:
+	jrl	TtMdCtlMsg_EventDispatch_Join2
+TtMdCtlMsg_EventDispatch_Skip6:
 	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -1809,17 +1974,17 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 255
 	ld	(xwa+6), xbc
 	jrl	TtMdCtlMsg_EventDispatch_Join2
+TtMdCtlMsg_EventDispatch_Skip7:
 	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (0xf9c7:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -1837,20 +2002,20 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1
-	inc	6, l
-	incf
+	bitm	7, (xbc)
+	jr	z, TtMdCtlMsg_EventDispatch_Skip8
 	ld	xbc, 0:i3
 	ld	(xwa+14), xbc
 	call	MainRamPut
-	jrl	1739
-	jrl	402
+	jrl	TtMdCtlMsg_ReturnZero2
+TtMdCtlMsg_EventDispatch_Skip8:
+	jrl	TtMdCtlMsg_EventDispatch_Join2
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
@@ -1858,28 +2023,24 @@ TtMdCtlMsg_EventDispatch:
 	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+32)
-	.byte 0xee
-	.long OscScope_FinalizeRender
-	.byte 0xd7, 0xe6, 0xa8
+	ld	xbc, xiz
+	srl	xbc, 0
+	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90
-	push	xsp
-	normal
-	nop
-	jrl	nz, 1692
+	cpw	(xwa), 1
+	jrl	nz, TtMdCtlMsg_ReturnZero2
 	cp	bc, 2:i3
-	jrl	z, 229
+	jrl	z, TtMdCtlMsg_EventDispatch_Skip10
 	cp	bc, 1:i3
-	jrl	z, 128
+	jrl	z, TtMdCtlMsg_EventDispatch_Skip9
 	cp	bc, 0:i3
-	jrl	nz, 1677
+	jrl	nz, TtMdCtlMsg_ReturnZero2
 	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (0xf9c4:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -1897,19 +2058,17 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1
-	scc8	nz, l
-	ldw	wa, 0xa006
-	ld	a, 184:opc
-	ret
-	ldw	de, 0x3f81
-	nop
+	bitm	7, (xbc)
+	jrl	nz, TtMdCtlMsg_ReturnZero2
+	ld	xbc, (xwa)
+	lda	xde, (xwa+14)
+	cp	(xbc), 0
 	jr	nz, TtMdCtlMsg_EventDispatch_Skip
 	ld	xbc, 128
 	ld	(xde), xbc
@@ -1918,12 +2077,11 @@ TtMdCtlMsg_EventDispatch_Skip:
 	ld	xbc, 0xffffffff
 	ld	(xde), xbc
 	jrl	TtMdCtlMsg_EventDispatch_Join2
-	.byte 0x45
-	.long NakaInst_ON_E80168_0x6C
+TtMdCtlMsg_EventDispatch_Skip9:
+	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -1941,20 +2099,19 @@ TtMdCtlMsg_EventDispatch_Skip:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 255
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
-	.byte 0xb8
-	ret
-	.ascii "ah|E"
-	.long NakaInst_ON_E80168_0x6C
+	ld	(xwa+14), xbc
+	jr	TtMdCtlMsg_EventDispatch_Join2
+TtMdCtlMsg_EventDispatch_Skip10:
+	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (0xf9c7:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -1972,37 +2129,31 @@ TtMdCtlMsg_EventDispatch_Skip:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1
-	scc8	nz, l
-	.byte 0x55
-	halt
+	bitm	7, (xbc)
+	jrl	nz, TtMdCtlMsg_ReturnZero2
 	ld	xbc, (xwa)
 	lda	xde, (xwa+14)
-	.byte 0x81
-	push	xsp
-	nop
-	jr	nz, 14
+	cp	(xbc), 0
+	jr	nz, TtMdCtlMsg_EventDispatch_Skip_Skip
 	ld	xbc, 128
 	ld	(xde), xbc
 TtMdCtlMsg_EventDispatch_Join:
 	call	MainRamPut
-	jrl	1341
+	jrl	TtMdCtlMsg_ReturnZero2
+TtMdCtlMsg_EventDispatch_Skip_Skip:
 	ld	xbc, 0xffffffff
 	ld	(xde), xbc
 TtMdCtlMsg_EventDispatch_Join2:
 	call	MainRamAdd
 	jrl	TtMdCtlMsg_ReturnZero2
 	ld	(xsp+4), xiz
-	.byte 0xb1
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xbc), 1
 	lda	xbc, (xsp+40)
 	ld	(xsp+12), xbc
 	ld	xwa, (xsp+24)
@@ -2010,7 +2161,7 @@ TtMdCtlMsg_EventDispatch_Join2:
 	lda	xwa, (0x24772:24)
 	ld	(xsp+24), xiy
 	lda	xbc, (0xf9a0:16)
-	.byte 0xa6, 0xf0
+	cp	xwa, (xiz)
 	jrl	nz, TtMdCtlMsg_EventDispatch_Skip2
 	ld	xwa, (xsp+24)
 	ldw (xwa), 0
@@ -2031,15 +2182,16 @@ TtMdCtlMsg_EventDispatch_Join2:
 	add	xwa, xbc
 	add	xwa, xhl
 	add	xwa, xiz
-	.byte 0xb0
-	inc	6, l
-	.long Str_ol
+	bitm	7, (xwa)
+	jr	z, TtMdCtlMsg_EventDispatch_Join2_Skip
+	pushw	232
 	pushw	506
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
 	jr	TtMdCtlMsg_EventDispatch_Join3
+TtMdCtlMsg_EventDispatch_Join2_Skip:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
@@ -2055,10 +2207,7 @@ TtMdCtlMsg_EventDispatch_Join3:
 	lda	xde, (xsp+32)
 	ld	xbc, 0x1e0008c
 	call	SendEvent
-	.byte 0xbf
-	ld	b, 2:opc
-	.byte 0x01
-	nop
+	ldw	(xsp+34), 1
 	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -2075,7 +2224,7 @@ TtMdCtlMsg_EventDispatch_Join3:
 	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
@@ -2107,9 +2256,9 @@ TtMdCtlMsg_EventDispatch_Join3:
 	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0
-	inc	6, l
-	ccf
+	add	xwa, (xsp+28)
+	bitm	7, (xwa)
+	jr	z, TtMdCtlMsg_EventDispatch_Join3_Skip
 	pushw	232
 	pushw	524
 	lda	xwa, (xsp+44)
@@ -2117,6 +2266,7 @@ TtMdCtlMsg_EventDispatch_Join3:
 	call	Strcpy
 	inc	8, xsp
 	jr	TtMdCtlMsg_EventDispatch_Join4
+TtMdCtlMsg_EventDispatch_Join3_Skip:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
@@ -2131,25 +2281,22 @@ TtMdCtlMsg_EventDispatch_Join4:
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 0x1e0008c
-	jrl	943
+	jrl	CtlMsg_SendEventReturn
 TtMdCtlMsg_EventDispatch_Skip2:
 	lda	xde, (0x24774:24)
 	ld	xwa, (xsp+28)
 	sub	xwa, xbc
 	ld	(xsp+28), xwa
-	.byte 0xa6, 0xf2
-	jrl	nz, 336
+	cp	xde, (xiz)
+	jrl	nz, TtMdCtlMsg_EventDispatch_Skip2_Skip2
 	ld	xwa, (xsp+24)
-	.byte 0xb0
-	push	sr
-	nop
-	nop
+	ldw	(xwa), 0
 	ld	xwa, 0:i3
-	ld	a, (0x24774:24)
+	ld	a, (0x024774:24)
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
-	ld	a, (0x24772:24)
+	ld	a, (0x024772:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -2157,9 +2304,9 @@ TtMdCtlMsg_EventDispatch_Skip2:
 	ld	xwa, (xsp+16)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0
-	inc	6, l
-	ccf
+	add	xwa, (xsp+28)
+	bitm	7, (xwa)
+	jr	z, TtMdCtlMsg_EventDispatch_Skip2_Skip
 	pushw	232
 	pushw	536
 	ld	xwa, (xsp+16)
@@ -2167,6 +2314,7 @@ TtMdCtlMsg_EventDispatch_Skip2:
 	call	Strcpy
 	inc	8, xsp
 	jr	TtMdCtlMsg_EventDispatch_Join5
+TtMdCtlMsg_EventDispatch_Skip2_Skip:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
@@ -2182,10 +2330,7 @@ TtMdCtlMsg_EventDispatch_Join5:
 	lda	xde, (xsp+32)
 	ld	xbc, 0x1e0008c
 	call	SendEvent
-	.byte 0xbf
-	ld	b, 2:opc
-	.byte 0x01
-	nop
+	ldw	(xsp+34), 1
 	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
@@ -2202,7 +2347,7 @@ TtMdCtlMsg_EventDispatch_Join5:
 	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
@@ -2234,17 +2379,17 @@ TtMdCtlMsg_EventDispatch_Join5:
 	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	lda	xbc, (xsp+40)
-	.byte 0xb0
-	inc	6, l
-	retd	0xe80b
-	nop
+	bitm	7, (xwa)
+	jr	z, TtMdCtlMsg_EventDispatch_Join5_Skip
+	pushw	232
 	pushw	554
 	push	xbc
 	call	Strcpy
 	inc	8, xsp
 	jr	TtMdCtlMsg_EventDispatch_Join6
+TtMdCtlMsg_EventDispatch_Join5_Skip:
 	ld	a, (xwa)
 	extz	wa
 	.long AudioStream_Property_Table
@@ -2258,6 +2403,7 @@ TtMdCtlMsg_EventDispatch_Join6:
 	lda	xde, (xsp+32)
 	ld	xbc, 0x1e0008c
 	jrl	CtlMsg_SendEventReturn
+TtMdCtlMsg_EventDispatch_Skip2_Skip2:
 	ld	(xsp+8), xbc
 	ld	xwa, (xsp+20)
 	ld	(xsp+20), xwa
@@ -2275,21 +2421,22 @@ TtMdCtlMsg_EventDispatch_Join6:
 	add	xbc, xwa
 	add	xbc, xhl
 	ld	xwa, xbc
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	cp	(xiz), xwa
 	jr	nz, TtMdCtlMsg_EventDispatch_Skip3
 	ld	xwa, (xsp+24)
 	ldw (xwa), 0
 	ld	xwa, (xiz+14)
 	bit	7, wa
-	.byte 0x66
-	.long Str_ol
+	jr	z, TtMdCtlMsg_EventDispatch_Join6_Skip
+	pushw	232
 	pushw	566
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
 	jr	TtMdCtlMsg_EventDispatch_Join7
+TtMdCtlMsg_EventDispatch_Join6_Skip:
 	push	xwa
 	pushw	232
 	pushw	572
@@ -2306,19 +2453,15 @@ TtMdCtlMsg_EventDispatch_Join7:
 TtMdCtlMsg_EventDispatch_Skip3:
 	ld	xwa, (xsp+20)
 	lda	xwa, (xwa+15)
-	.byte 0xaf
-	ld	(160:8), 233:io
-	.byte 0x8b
+	sub	xwa, (xsp+8)
+	ld	xhl, xbc
 	add	xhl, xwa
 	ld	xwa, (xsp+4)
 	lda	xde, (xwa+14)
 	cp	(xwa), xhl
 	jr	nz, TtMdCtlMsg_EventDispatch_Skip4
 	ld	xwa, (xsp+24)
-	.byte 0xb0
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa), 1
 	ld	xwa, (xde)
 	push	xwa
 	pushw	232
@@ -2331,22 +2474,20 @@ TtMdCtlMsg_EventDispatch_Skip3:
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 0x1e0008c
-	jrl	396
+	jrl	CtlMsg_SendEventReturn
 TtMdCtlMsg_EventDispatch_Skip4:
 	ld	xwa, (xsp+20)
 	lda	xwa, (xwa+17)
-	.byte 0xaf
-	ld	(160:8), 232:io
-	sub	(xbc), l
-	max
-	ld	w, 160:opc
-	swi	1
-	jrl	nz, 381
+	sub	xwa, (xsp+8)
+	add	xbc, xwa
+	ld	xwa, (xsp+4)
+	cp	(xwa), xbc
+	jrl	nz, TtMdCtlMsg_ReturnZero2
 	ld	xwa, (xsp+24)
 	ldw (xwa), 2
 	ld	xwa, (xde)
 	bit	7, wa
-	jr	z, 18
+	jr	z, TtMdCtlMsg_EventDispatch_Skip4_Skip
 	pushw	232
 	pushw	584
 	ld	xwa, (xsp+16)
@@ -2354,6 +2495,7 @@ TtMdCtlMsg_EventDispatch_Skip4:
 	call	Strcpy
 	inc	8, xsp
 	jr	TtMdCtlMsg_EventDispatch_Join8
+TtMdCtlMsg_EventDispatch_Skip4_Skip:
 	push	xwa
 	pushw	232
 	pushw	590
@@ -3044,8 +3186,8 @@ CtlMsgGridCheck_JumpTable:
 	ldw	bc, 0xffff
 	ld	de, 2:i3
 CtlMsgGridCheck_Entry:
-	.byte 0x1d, 0x42, 0xf9
-	.long Bitmap_AccompBitmapSpacer
+	call	MainLswAdd
+	jrl	CtlMsgGrid_ReturnZero
 	ld	(xsp+4), xhl
 	ldw	(xhl), 1
 	ld	xde, xbc
@@ -3063,7 +3205,8 @@ CtlMsgGridCheck_Loop:
 	ld	iy, ix
 	add	iy, wa
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xec, 0xf4, 0xf0
+	; cp xwa, (xhl+iy)
+	.byte	0xe3, 0x07, 0xec, 0xf4, 0xf0	; cp xwa, (xhl+iy)
 	jr	nz, CtlMsgGridCheck_Skip2
 	lda	xde, (xsp+20)
 	ld	xwa, (xsp+4)
@@ -3969,7 +4112,8 @@ MidiPartGridCheck_Join2:
 	ld	(xde), xhl
 	ld	(xsp+12), xbc
 	ldw	(xbc), 2
-	jrl	344
+	jrl	MidiPartGridCheck_Join5
+MidiPartGridCheck_Loop:
 	ld	de, bc
 	muls	de, 12
 	sub	de, 24
@@ -3982,64 +4126,130 @@ MidiPartGridCheck_Join2:
 	ld_rrl	xiz, xhl, iy
 	ld	xde, (xsp+34)
 	cp	(xde), xiz
-	jr	nz, 80
+	jr	nz, MidiPartGridCheck_Skip10
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 1
 	ld	xwa, (xde)
 	inc	1, xwa
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	nz, 18
+	jr	nz, MidiPartGridCheck_Skip9
 	pushw	232
 	pushw	1722
 	lda	xwa, (xsp+28)
 	push	xwa
-	.byte 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68, 0x1a, 0xaf, 0x22, 0x20, 0x98
-	.byte 0x04, 0x20, 0xd8, 0x61, 0x28, 0x0b, 0xe8, 0x00
-	.byte 0x0b, 0xc0, 0x06, 0xbf, 0x1e, 0x30, 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37, 0x1d, 0xd0
-	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41
-	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x0b, 0x02, 0xa4
-	.byte 0x20, 0xe8, 0x69, 0xbc, 0x04, 0x32, 0xee, 0xf0
-	.byte 0x6e, 0x4f, 0xaf, 0x04, 0x20, 0xb0, 0x02, 0x01
-	.byte 0x00, 0x92, 0x3f, 0x00, 0x00, 0x6e, 0x12, 0x0b
-	.byte 0xe8, 0x00, 0x0b, 0xc8, 0x06, 0xaf, 0x0c, 0x20
-	.byte 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x68
-	.byte 0x1f, 0xaf, 0x22, 0x20, 0xa0, 0x20, 0xe8, 0x69
-	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x61, 0x2b, 0x0b
-	.byte 0xe8, 0x00, 0x0b, 0xce, 0x06, 0xbf, 0x1e, 0x30
-	.byte 0x38, 0x1d
-	addr24 Sprintf_Locked
-	.byte 0xbf, 0x0a, 0x37
-	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10
-	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xb1
-	.byte 0x01, 0xdd, 0x8e, 0xde, 0x64, 0xa4, 0x20, 0xe3
-	.byte 0x07, 0xec, 0xf8, 0xf0, 0x6e, 0x32, 0xaf, 0x04
-	.byte 0x20, 0xb0, 0x02, 0x02, 0x00, 0x92, 0x20, 0xd8
-	.byte 0xec, 0x02, 0xf2, 0x60, 0x06, 0xe8, 0x31, 0xe3
-	.byte 0x07, 0xe4, 0xe0, 0x20, 0x38, 0xaf, 0x0c, 0x20
-	.byte 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d
-	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32
-	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x72, 0x01
-	.byte 0xdd, 0x60, 0xa4, 0x20, 0xe3, 0x07, 0xec, 0xf4
-	.byte 0xf0, 0x6e, 0x33, 0xaf, 0x04, 0x20, 0xb0, 0x02
-	.byte 0x03, 0x00, 0x40, 0xdc, 0x06, 0xe8, 0x00, 0x92
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x05, 0x40, 0xd6, 0x06
-	.byte 0xe8, 0x00, 0x38, 0xaf, 0x0c, 0x20, 0x38, 0x1d
-	addr24 Strcpy
-	.byte 0xef, 0x60, 0x1d, 0xd0, 0x44
-	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41, 0x8c
-	.byte 0x00, 0xe0, 0x01, 0x78, 0x34, 0x01, 0xd9, 0x61
-	.byte 0xaf, 0x0c, 0x20, 0xb0, 0x51, 0xaf, 0x0c, 0x20
-	.byte 0x90, 0x21, 0xd9, 0xcf, 0x0a, 0x00, 0x71, 0x9c
-	.byte 0xfe, 0x78, 0x22, 0x01
+	call	Strcpy
+	inc	8, xsp
+	jr	MidiPartGridCheck_Join3
+MidiPartGridCheck_Skip9:
+	ld	xwa, (xsp+34)
+	ld	wa, (xwa+4)
+	inc	1, wa
+	pushw	wa
+	pushw	232
+	pushw	1728
+	lda	xwa, (xsp+30)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+10)
+MidiPartGridCheck_Join3:
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip10:
+	ld	xwa, (xix)
+	dec	1, xwa
+	lda	xde, (xix+4)
+	cp	xwa, xiz
+	jr	nz, MidiPartGridCheck_Skip12
+	ld	xwa, (xsp+4)
+	ldw	(xwa), 1
+	cpw	(xde), 0
+	jr	nz, MidiPartGridCheck_Skip11
+	pushw	232
+	pushw	1736
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	jr	MidiPartGridCheck_Join4
+MidiPartGridCheck_Skip11:
+	ld	xwa, (xsp+34)
+	ld	xwa, (xwa)
+	dec	1, xwa
+	call	SndParam_LookupReadOnly
+	inc	1, hl
+	pushw	hl
+	pushw	232
+	pushw	1742
+	lda	xwa, (xsp+30)
+	push	xwa
+	call	Sprintf_Locked
+	lda	xsp, (xsp+10)
+MidiPartGridCheck_Join4:
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip12:
+	ld	iz, iy
+	inc	4, iz
+	ld	xwa, (xix)
+	; cp xwa, (xhl+iz)
+	.byte	0xe3, 0x07, 0xec, 0xf8, 0xf0	; cp xwa, (xhl+iz)
+	jr	nz, MidiPartGridCheck_Skip13
+	ld	xwa, (xsp+4)
+	ldw	(xwa), 2
+	ld	wa, (xde)
+	sla	wa, 2
+	lda	xbc, (Transpose_ValueDisplay_Table:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	push	xwa
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip13:
+	inc	8, iy
+	ld	xwa, (xix)
+	; cp xwa, (xhl+iy)
+	.byte	0xe3, 0x07, 0xec, 0xf4, 0xf0	; cp xwa, (xhl+iy)
+	jr	nz, MidiPartGridCheck_Skip15
+	ld	xwa, (xsp+4)
+	ldw	(xwa), 3
+	ld	xwa, 0xe806dc
+	cpw	(xde), 0
+	jr	z, MidiPartGridCheck_Skip14
+	ld	xwa, 0xe806d6
+MidiPartGridCheck_Skip14:
+	push	xwa
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	Strcpy
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip15:
+	inc	1, bc
+	ld	xwa, (xsp+12)
+	ld	(xwa), bc
+MidiPartGridCheck_Join5:
+	ld	xwa, (xsp+12)
+	ld	bc, (xwa)
+	cp	bc, 10
+	jrl	lt, MidiPartGridCheck_Loop
+	jrl	MidiSetup_ReturnZero
 
 ; MidiSetup event handler dispatch (6-entry, table 0xe806fc)
 MidiSetup_EventHandler:
@@ -4157,24 +4367,18 @@ MidiSetup_ReturnZero:
 	ret
 
 MidiPart_DataBlock:
-	.byte 0xc1, 0x80, 0xc0
-	push	xsp
-	cp	(xwa-80), xiz
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	halt
+	cpdi8	(49280), 168
 	ret	nz
-	ld	c, (0xc07f:16)
+	cpdi8	(49277), 5
+	ret	nz
+	ldb_d8	c, (49279)
 	bit	6, c
 	ret	z
-	ld	a, (0xc07e:16)
+	ldb_d8	a, (49278)
 	and	a, c
 	ret	z
-	.byte 0xc1
-	push	xwa
-	.byte 0x8d
-	push	xsp
-	retd	0xf6b0
+	cpdi8	(36152), 15
+	ret	z
 	ldw	wa, 15
 	call	SoundCtrl_SendCommand
 	ret
@@ -10808,63 +11012,54 @@ AcWelcomScreen_RenderBytecode:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e000b3
 	ld	xde, 0:i3
-	jrl	987
+	jrl	AcWelcomScreen_DispatchEvent
 	ld	iz, (xbc+10)
 	cp	iz, 2:i3
-	jrl	ge, 873
+	jrl	ge, AcWelcomScreen_Select_NextStep
 	ld	bc, iz
 	muls	bc, 12
-	lda	xwa, (0x3ea0c:24)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	wa, 2712
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 26
-	cp	iz, 0xffff
-	jr	z, 20
+	lda	xwa, (0x03ea0c:24)
+	lda_rr	xwa, xwa, bc	; lda xwa, xwa+bc
+	cpw	(xwa+10), 65535
+	jr	z, AcWelcomScreen_RenderBytecode_Skip4
+	cp	iz, 65535
+	jr	z, AcWelcomScreen_RenderBytecode_Skip4
 	lda	xiy, (xwa+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
 	call	ClipBlit_Direct
-	ld	wa, (0x24784:24)
+AcWelcomScreen_RenderBytecode_Skip4:
+	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	add	xbc, (0x24786:24)
+	add	xbc, (0x024786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
 	call	ClipBlit_Replace
-	cp	iz, 0xffff
+	cp	iz, 65535
 	jrl	z, AcWelcomScreen_Select_NextStep
 	muls	iz, 12
-	lda	xwa, (0x3ea0c:24)
-	ld	bc, (0x24784:24)
+	lda	xwa, (0x03ea0c:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xiy, xbc
 	add	xiy, xiy
 	add	xiy, xbc
 	sll	xiy, 2
-	add	xiy, (0x24786:24)
-	lda_rr xix, xwa, iz
-	ld bc, 6:i3
-	.byte 0x95
-	scf
+	add	xiy, (0x024786:24)
+	lda_rr	xix, xwa, iz	; lda xix, xwa+iz
+	ld	bc, 6:i3
+	ldirw
 	jrl	AcWelcomScreen_Select_NextStep
 	ld	xwa, (xsp+20)
 	ld	xbc, 0x1c0000c
@@ -10872,86 +11067,68 @@ AcWelcomScreen_RenderBytecode:
 	call	SendEvent
 	jrl	AcWelcomScreen_Select_NextStep
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	pushw (xde)	; F7F709 (pushw (xde))
+	pushm	(xde)	; F7F709 (pushw (xde))
 	pushw	247
 	ld	xbc, NakaInst_TOTAL_0x34
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
-	.byte 0x41
-	.long Bitmap_DigitL
+	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
 	jr	AcWelcomScreen_RenderBytecode_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
 	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	jr	AcWelcomScreen_RenderBytecode_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
-	.byte 0x41
-	.long Bitmap_DigitR
+	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
 	jr	AcWelcomScreen_RenderBytecode_Join
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
 	pushw	255
 	pushw	247
-	.byte 0x41
-	.long Bitmap_Digit1
+	ld	xbc, Bitmap_Digit1
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
 	pushw	255
 	pushw	247
@@ -10960,9 +11137,8 @@ AcWelcomScreen_RenderBytecode:
 AcWelcomScreen_RenderBytecode_Join:
 	call	DrawBitmapSP2
 	jrl	AcWelcomScreen_Select_NextStep
-	lda	xhl, (0x3ea24:24)
-	.byte 0x9b
-	ldw	(63:8), 0xffff:io
+	lda	xhl, (0x03ea24:24)
+	cpw	(xhl+10), 65535
 	jr	z, AcWelcomScreen_RenderBytecode_Skip2
 	lda	xwa, (xsp+4)
 	lda	xde, (xwa+2)
@@ -10985,14 +11161,9 @@ AcWelcomScreen_RenderBytecode_Join:
 	sll	xde, 2
 	ld	xbc, (0x24786:24)
 	add	xde, xbc
-	.byte 0x9a
-	ld	(63:8), 12:io
-	nop
+	cpw	(xde+8), 12
 	jr	nz, AcWelcomScreen_RenderBytecode_Skip
-	.byte 0x93
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xhl), 16
 AcWelcomScreen_RenderBytecode_Skip:
 	ldw	bc, 245
 	call	DrawBox
@@ -11006,146 +11177,119 @@ AcWelcomScreen_RenderBytecode_Skip2:
 	add	xbc, (0x24786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, NakaInst_TOTAL_0x34
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
 	call	DrawBitmapSP2
-	ld	wa, (0x24784:24)
+	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	ld	xwa, (0x24786:24)
+	ld	xwa, (0x024786:24)
 	add	xbc, xwa
-	.byte 0x99
-	ld	(63:8), 12:io
-	nop
+	cpw	(xbc+8), 12
 	jr	nz, AcWelcomScreen_RenderBytecode_Skip3
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	ld	xbc, (0x24786:24)
+	ld	xbc, (0x024786:24)
 	add	xde, xbc
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
-	.byte 0x41
-	.long Bitmap_DigitD
+	pushm	(xde+10)
+	pushw	247
+	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	call	DrawBitmapSP2
 AcWelcomScreen_RenderBytecode_Skip3:
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
 	call	DrawBitmapSP2
-	ld	wa, (0x24784:24)
+	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xiy, xwa
 	add	xiy, xiy
 	add	xiy, xwa
 	sll	xiy, 2
-	add	xiy, (0x24786:24)
-	ld	xix, 0x3ea24
+	add	xiy, (0x024786:24)
+	ld	xix, 0x03ea24
 	ld	bc, 6:i3
-	.byte 0x95
-	scf
+	ldirw
 	jr	AcWelcomScreen_Select_NextStep
 	ld	xwa, 0x120000b
 	ld	xbc, 0x1e000ac
@@ -12560,8 +12704,7 @@ AudioCtrl_DataBlock:
 	ld	xiy, xiz
 	lda	xix, (xsp+16)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (xsp+16)
 	ld	bc, (xsp+4)
 	dec	2, bc
@@ -12581,6 +12724,7 @@ AudioCtrl_DataBlock:
 	dec	2, wa
 	ld	(xde+2), wa
 	ld	iz, 0:i3
+AudioCtrl_DataBlock_Loop4:
 	lda	xwa, (xsp+12)
 	lda	xbc, (xsp+8)
 	ldw	de, 248
@@ -12591,16 +12735,11 @@ AudioCtrl_DataBlock:
 	incw	1, (xbc)
 	ldw	de, 255
 	call	DrawLine
-	.byte 0x9f
-	incf
-	push	xwa
-	ld	e, 0:opc
-	.byte 0x9f
-	ld	(56:8), 37:io
-	nop
+	addiw_da	(xsp+12), 37
+	addiw_da	(xsp+8), 37
 	inc	1, iz
 	cp	iz, 7:i3
-	jr	lt, -46
+	jr	lt, AudioCtrl_DataBlock_Loop4
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
@@ -12616,8 +12755,7 @@ AudioCtrl_DataBlock_Helper:
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (xsp+8)
 	ld	bc, (xsp+4)
 	dec	2, bc
@@ -12643,23 +12781,20 @@ AudioCtrl_DataBlock_Helper2:
 	ld	(xwa), bc
 	ld	bc, (xiz+2)
 	ld	(xwa+2), bc
-	.byte 0x9f
-	push_f
-	push	xsp
-	nop
-	nop
-	jr	z, 8
+	cpw	(xsp+24), 0
+	jr	z, AudioCtrl_DataBlock_Helper2_Skip
 	ldw	bc, 52
 	ldw	de, 242
-	jr	6
+	jr	AudioCtrl_DataBlock_Helper2_Join
+AudioCtrl_DataBlock_Helper2_Skip:
 	ldw	bc, 52
 	ldw	de, 8
+AudioCtrl_DataBlock_Helper2_Join:
 	call	DrawFrameSP
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (xsp+12)
 	ld	bc, (xiz)
 	add bc, (xsp+0x06)	; F809F6 (add bc,(xsp+0x06))
@@ -12699,25 +12834,21 @@ AudioCtrl_DataBlock_Helper3:
 	ld	wa, (xbc+4)
 	ld	(xsp+4), wa
 	ldw	wa, 136
-	.byte 0x9f, 0x06, 0x80
+	add	wa, (xsp+6)
 	lda	xbc, (xsp+8)
 	call	GetEditSwPoint
 	lda	xde, (xiz+2)
 	lda	xbc, (xsp+10)
 	ld	wa, (xbc)
 	sub	wa, 9
-	.byte 0x9f, 0x06, 0xa0
+	sub	wa, (xsp+6)
 	ld	(xde), wa
-	.byte 0xb6
-	push	sr
-	ld	(0:8), 190:io
-	.byte 0x04
-	push	sr
-	.byte 0x37, 0x01
+	ldw	(xiz), 8
+	ldw	(xiz+4), 311
 	lda	xhl, (xiz+6)
 	ld	wa, (xbc)
 	add	wa, 31
-	.byte 0x9f, 0x06, 0xa0
+	sub	wa, (xsp+6)
 	ld	(xhl), wa
 	ld	wa, (xsp+4)
 	add	(xde), wa
@@ -12738,8 +12869,7 @@ AudioCtrl_DataBlock_Helper4:
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	wa, (xsp+4)
 	dec	2, wa
 	add	(xsp+14), wa
@@ -12777,8 +12907,7 @@ AudioCtrl_DataBlock_Helper5:
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xde, (xsp+8)
 	lda	xbc, (xde+2)
 	ld	wa, (xsp+4)
@@ -12787,11 +12916,10 @@ AudioCtrl_DataBlock_Helper5:
 	ld	wa, (xsp+16)
 	exts	xwa
 	divs	wa, 8
-	.byte 0xd7
-	ld	xwa, (0x49a8b:24)
-	.byte 0x92
-	xor	(xwa), xwa
-	.byte 0x8c
+	ld	hl, qwa
+	ld	wa, (xde+4)
+	sub	wa, (xde)
+	ld	ix, wa
 	exts	xix
 	divs	ix, 4
 	ld	wa, hl
@@ -12852,10 +12980,8 @@ AudioCtrl_DataBlock_Helper5:
 	ld	bc, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+20)
-	.byte 0x98
-	push	sr
-	push	xwa
-	ldw	(0:8), 0xafd9:io
+	addiw_da	(xwa+2), 10
+	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock
 	jrl	AudioCtrl_DataBlock_Join2
 AudioCtrl_DataBlock_Skip:
@@ -12866,13 +12992,10 @@ AudioCtrl_DataBlock_Skip:
 	ld	bc, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+20)
-	.byte 0x98
-	push	sr
-	push	xwa
-	ldw	(0:8), 4287:io
-	ldw	bc, 3743
-	ld	b, 30:opc
-	cp	(xwa), h
+	addiw_da	(xwa+2), 10
+	lda	xbc, (xsp+16)
+	ld	de, (xsp+14)
+	calr	AudioCtrl_DataBlock_Helper4
 	lda	xbc, (xsp+16)
 	lda	xwa, (0x3eab0:24)
 	ld	de, (xsp+4)
@@ -12898,26 +13021,21 @@ AudioCtrl_DataBlock_Skip2:
 	pushw	0
 AudioCtrl_DataBlock_Join:
 	call	DrawStringReverse
-	jrl	193
+	jrl	AudioCtrl_DataBlock_Join2
 AudioCtrl_DataBlock_Skip3:
 	ld	wa, (xsp+12)
-	calr	64606
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+14)
-	calr	64621
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	incf
-	jr	f, -97
-	.byte 0x04
-	ld	b, 234:opc
-	zcf
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	(xsp+12), xwa
+	ld	de, (xsp+4)
+	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e0003e
 	call	ApFuncCall
@@ -12952,10 +13070,9 @@ AudioCtrl_DataBlock_Skip3:
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
-	.byte 0x9f
-	ld	(4:8), 159:io
-	ld	(32:8), 219:io
-	.byte 0x89
+	pushm	(xsp+8)
+	ld	wa, (xsp+8)
+	ld	bc, hl
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
 	jr	AudioCtrl_DataBlock_Join2
@@ -13028,59 +13145,46 @@ AudioCtrl_DataBlock_Skip5:
 	pushw	247
 	call	DrawStringCentered
 	lda	xbc, (xsp+16)
-	.byte 0x99
-	push	sr
-	push	xwa
-	ldw	(0:8), 0x88f2:io
-	.byte 0xeb
-	pop	sr
-	ldw	wa, 3743
-	ld	b, 218:opc
-	.byte 0xec
-	push	sr
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe8
-	ld	b, 191:opc
-	push_a
-	ldw	wa, 3743
-	ld	c, 210:opc
-	.byte 0x90
-	ld	xsp, 0x116ef302
+	addiw_da	(xbc+2), 10
+	lda	xwa, (0x03eb88:24)
+	ld	de, (xsp+14)
+	sla	de, 2
+	ld_rrl	xde, xwa, de	; ld xde, (xwa+de)
+	lda	xwa, (xsp+20)
+	ld	hl, (xsp+14)
+	cpda16_24	xhl, (0x024790)
+	jr	nz, AudioCtrl_DataBlock_Helper5_Skip
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	242
 	pushw	0
 	pushw	0
-	jr	15
+	jr	AudioCtrl_DataBlock_Helper5_Join
+AudioCtrl_DataBlock_Helper5_Skip:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	8
 	pushw	0
 	pushw	0
+AudioCtrl_DataBlock_Helper5_Join:
 	call	DrawStringReverse
-	jrl	193
+	jrl	AudioCtrl_DataBlock_Join3
 AudioCtrl_DataBlock_Skip6:
 	ld	wa, (xsp+12)
-	calr	64150
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+14)
-	calr	64165
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	incf
-	jr	f, -97
-	.byte 0x04
-	ld	b, 234:opc
-	zcf
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	(xsp+12), xwa
+	ld	de, (xsp+4)
+	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e0003e
 	call	ApFuncCall
@@ -13115,10 +13219,9 @@ AudioCtrl_DataBlock_Skip6:
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
-	.byte 0x9f
-	ld	(4:8), 159:io
-	ld	(32:8), 219:io
-	.byte 0x89
+	pushm	(xsp+8)
+	ld	wa, (xsp+8)
+	ld	bc, hl
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
 	jr	AudioCtrl_DataBlock_Join3
@@ -13143,12 +13246,10 @@ AudioCtrl_DataBlock_Join3:
 	ld	(xsp+10), wa
 	ld	xwa, (xsp+70)
 	srl	xwa, 0
-	.byte 0xd7
-	sub	(0x89d8a8:24), xsp
-	popw	de
-	ld	w, 232:opc
-	set	0, l
-	.byte 0xc0, 0x01
+	ld	qwa, 0
+	ld	bc, wa
+	ld	xwa, (xsp+74)
+	cp	xwa, 0x1c00031
 	jrl	z, AudioCtrl_DataBlock_Skip14
 	ld	(xsp+12), bc
 	cp	xwa, 0x1c0001a
@@ -13213,10 +13314,7 @@ AudioCtrl_DataBlock_Skip9:
 	lda	xbc, (xsp+58)
 	ld	de, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper4
-	.byte 0x9f
-	push	xix
-	push	xde
-	push	0
+	submi16	(xsp+60), 9
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -13248,8 +13346,8 @@ AudioCtrl_DataBlock_Join4:
 	ld	bc, iz
 	extz	xbc
 	ld	wa, (xsp+4)
-	.byte 0xe8
-	.long Pad_AfterNaka_DrawbarOrgan_Screens
+	extz	xwa
+	sll	xwa, 0
 	add	xwa, xbc
 	lda	xde, (xsp+46)
 	ld	(xde), xwa
@@ -13325,27 +13423,22 @@ AudioCtrl_DataBlock_Join6:
 	lda	xwa, (xsp+58)
 	ld	xbc, 5:i3
 	call	DrawBitmap
-	jrl	405
+	jrl	AudioCtrl_DataBlock_Join7
 AudioCtrl_DataBlock_Skip13:
 	ld	wa, (xsp+10)
-	calr	63396
+	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
 	ld	wa, (xsp+12)
-	calr	63410
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x06
-	jr	f, -97
-	.byte 0x04
-	ld	b, 234:opc
-	zcf
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	(xsp+6), xwa
+	ld	de, (xsp+4)
+	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e0003e
 	call	ApFuncCall
@@ -13378,19 +13471,18 @@ AudioCtrl_DataBlock_Skip13:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 0xffff
-	jr	z, 32
+	jr	z, AudioCtrl_DataBlock_Helper5_Skip2
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f
-	incf
-	.byte 0x04
+	pushm	(xsp+12)
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
-	jrl	223
+	jrl	AudioCtrl_DataBlock_Join7
+AudioCtrl_DataBlock_Helper5_Skip2:
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
@@ -13398,33 +13490,28 @@ AudioCtrl_DataBlock_Skip13:
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
 	call	MainLswAdd
-	jrl	196
+	jrl	AudioCtrl_DataBlock_Join7
 AudioCtrl_DataBlock_Skip14:
 	ld	iz, bc
 	ld	wa, (xsp+10)
-	calr	63185
+	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
 	ld	wa, iz
-	calr	63200
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x06
-	jr	f, -97
-	.byte 0x04
-	ld	b, 234:opc
-	zcf
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	(xsp+6), xwa
+	ld	de, (xsp+4)
+	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e000b8
 	call	ApFuncCall
 	or	xhl, xhl
-	jrl	z, 134
+	jrl	z, AudioCtrl_DataBlock_Join7
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -13445,21 +13532,20 @@ AudioCtrl_DataBlock_Skip14:
 	ld	(xsp+10), hl
 	ld	wa, (xsp+2)
 	cp	wa, 0xffff
-	jr	z, 36
+	jr	z, AudioCtrl_DataBlock_Helper5_Skip3
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f
-	incf
-	.byte 0x04
+	pushm	(xsp+12)
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
 	call	MainLswPartPut
-	jr	29
+	jr	AudioCtrl_DataBlock_Join7
+AudioCtrl_DataBlock_Helper5_Skip3:
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -13480,9 +13566,8 @@ AudioCtrl_DataBlock_Helper6:
 	ld	(xsp+72), xde
 	ld	(xsp+76), xbc
 	ld	xwa, (xsp+72)
-	.byte 0xaf
-	popw	wa
-	.long OscScope_RenderBlock
+	ld	xbc, (xsp+72)
+	srl	xbc, 0
 	ld	(xsp+12), wa
 	ld	qbc, 0
 	ld	(xsp+14), bc
@@ -13668,9 +13753,7 @@ AudioCtrl_DataBlock_Skip19:
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f
-	ret
-	.byte 0x04
+	pushm	(xsp+14)
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
@@ -13731,9 +13814,7 @@ AudioCtrl_DataBlock_Skip21:
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f
-	ret
-	.byte 0x04
+	pushm	(xsp+14)
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
@@ -13825,14 +13906,11 @@ AudioCtrl_DataBlock_Skip24:
 	calr	AudioCtrl_DataBlock_Helper4
 	lda	xiy, (xsp+62)
 	lda	xix, (xsp+58)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
-	.byte 0x9f
-	ld	xwa, 0xbf00093a
-	push	xde
-	ldw	wa, 0x6f90
+	ldiw
+	ldiw
+	submi16	(xsp+64), 9
+	lda	xwa, (xsp+58)
+	decw	7, (xwa)
 	decm	1, (xwa+2)
 	ld	de, (xsp+4)
 	exts	xde
@@ -13908,9 +13986,7 @@ AudioCtrl_DataBlock_Join12:
 	lda	xwa, (xsp+58)
 	or	xhl, xhl
 	jr	z, AudioCtrl_DataBlock_Skip27
-	.byte 0x9f
-	ldw	de, 63
-	nop
+	cpw	(xsp+50), 0
 	jr	nz, AudioCtrl_DataBlock_Skip28
 AudioCtrl_DataBlock_Skip27:
 	ld	xbc, 30
@@ -13919,26 +13995,21 @@ AudioCtrl_DataBlock_Skip28:
 	ld	xbc, 29
 AudioCtrl_DataBlock_Join13:
 	call	DrawBitmap
-	jrl	192
+	jrl	AudioCtrl_DataBlock_Join14
 AudioCtrl_DataBlock_Skip29:
 	ld	wa, (xsp+10)
-	calr	61678
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+12)
-	calr	61693
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x06
-	jr	f, -97
-	.byte 0x04
-	ld	b, 234:opc
-	zcf
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	(xsp+6), xwa
+	ld	de, (xsp+4)
+	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e0003e
 	call	ApFuncCall
@@ -13969,18 +14040,18 @@ AudioCtrl_DataBlock_Skip29:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 0xffff
-	jr	z, 32
+	jr	z, AudioCtrl_DataBlock_Helper6_Skip
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
-	.byte 0xd7
-	swi	2
-	.byte 0x9b, 0x9f
-	ldw	(4:8), 0x88de:io
+	ld	qiz, hl
+	pushm	(xsp+10)
+	ld	wa, iz
 	ld bc, qiz
 	ld	de, (xsp+14)
 	call	MainLswPartAdd
-	jr	24
+	jr	AudioCtrl_DataBlock_Join14
+AudioCtrl_DataBlock_Helper6_Skip:
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
@@ -14023,9 +14094,7 @@ AudioCtrl_DataBlock_Helper7:
 	ld	bc, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+64)
-	.byte 0x98, 0x06
-	push	xwa
-	ld	w, 0:opc
+	addiw_da	(xwa+6), 32
 	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock
 	ld	wa, (xsp+12)
@@ -14068,10 +14137,7 @@ AudioCtrl_DataBlock_Skip31:
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
 	calr	AudioCtrl_DataBlock_Helper4
-	.byte 0x9f
-	push	xiz
-	push	xde
-	push	0
+	submi16	(xsp+62), 9
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
@@ -14148,29 +14214,18 @@ AudioCtrl_DataBlock_Skip34:
 AudioCtrl_DataBlock_Join16:
 	call	DrawStringReverse
 	lda	xwa, (xsp+64)
-	.byte 0x98, 0x06
-	push	xwa
-	ld	w, 0:opc
+	addiw_da	(xwa+6), 32
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
-	calr	61494
+	calr	AudioCtrl_DataBlock_Helper4
 	lda	xwa, (xsp+60)
-	.byte 0x90
-	push	xde
-	incf
-	nop
-	.byte 0x98
-	push	sr
-	push	xde
-	zcf
-	nop
+	submi16	(xwa), 12
+	submi16	(xwa+2), 19
 	ld	xbc, 2:i3
 	call	DrawBitmap
 	ldw	wa, 128
-	.byte 0x9f
-	ldw	ix, 0xd8a0
-	push	36
-	nop
+	sub	wa, (xsp+52)
+	muls	wa, 36
 	exts	xwa
 	divs	wa, 128
 	ld	bc, wa
@@ -14223,19 +14278,18 @@ AudioCtrl_DataBlock_Skip35:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 0xffff
-	jr	z, 32
+	jr	z, AudioCtrl_DataBlock_Helper7_Skip
 	ld	xwa, (xsp+8)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	(xsp+4), hl
-	.byte 0x9f
-	incf
-	.byte 0x04
+	pushm	(xsp+12)
 	ld	wa, iz
 	ld	bc, (xsp+6)
 	ld	de, (xsp+16)
 	call	MainLswPartAdd
-	jr	24
+	jr	AudioCtrl_DataBlock_Join17
+AudioCtrl_DataBlock_Helper7_Skip:
 	ld	xwa, (xsp+8)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
@@ -14255,12 +14309,10 @@ AudioCtrl_DataBlock_Join17:
 	ld	xde, (xsp+34)
 	cp	xde, 0x1c0001c
 	jrl	z, AudioCtrl_DataBlock_Skip40
-	.byte 0xaf, 0x1e
-	.long OscScope_RenderBlock
-	.byte 0xd7, 0xe6
-	and	(xwa-22), xsp
-	ldw	bc, 0xc000
-	.byte 0x01
+	ld	xbc, (xsp+30)
+	srl	xbc, 0
+	ld	qbc, 0
+	cp	xde, 0x1c00031
 	jrl	z, AudioCtrl_DataBlock_Skip39
 	cp	xde, 0x1c0001a
 	jrl	z, AudioCtrl_DataBlock_Skip37
@@ -14324,26 +14376,18 @@ AudioCtrl_DataBlock_Skip36:
 	call	SndParam_LookupReadOnly
 	ld	(xsp+16), hl
 AudioCtrl_DataBlock_Entry:
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 80
+	cpw	(xsp+16), 0
+	jr	z, AudioCtrl_DataBlock_Loop
 	lda	xwa, (xsp+22)
 	ld	bc, (xsp+8)
-	calr	60878
+	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
 	ld	de, (xsp+10)
-	calr	60973
+	calr	AudioCtrl_DataBlock_Helper4
 	lda	xbc, (xsp+18)
 	incw	1, (xbc)
-	.byte 0x99
-	push	sr
-	push	xwa
-	ccf
-	nop
+	addiw_da	(xbc+2), 18
 	lda	xwa, (xsp+22)
 	ld	de, (xbc)
 	sub	de, 12
@@ -14351,10 +14395,7 @@ AudioCtrl_DataBlock_Entry:
 	ld	de, (xbc)
 	add	de, 12
 	ld	(xwa+4), de
-	.byte 0x98, 0x06
-	push	xwa
-	ccf
-	nop
+	addiw_da	(xwa+6), 18
 	ld	xde, 3:i3
 	push	xde
 	pushw	251
@@ -14399,21 +14440,14 @@ AudioCtrl_DataBlock_Skip37:
 	ld	bc, (xsp+14)
 	call	SndParam_LookupViaEncode
 	ld	(xsp+16), hl
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 63
-	.byte 0x9f
-	ldw	(4:8), 1695:io
-	ld	w, 159:opc
-	rcf
-	ld	a, 218:opc
-	xor	(xwa+29), xiy
-	swi	0
-	swi	1
-	jr	46
+	cpw	(xsp+16), 0
+	jr	z, AudioCtrl_DataBlock_Entry_Code_Join
+	pushm	(xsp+10)
+	ld	wa, (xsp+6)
+	ld	bc, (xsp+16)
+	ld	de, 0:i3
+	call	MainLswPartPut
+	jr	AudioCtrl_DataBlock_Entry_Code_Join
 AudioCtrl_DataBlock_Skip38:
 	ld	de, (xsp+6)
 	exts	xde
@@ -14424,24 +14458,17 @@ AudioCtrl_DataBlock_Skip38:
 	ld	xwa, xiz
 	call	SndParam_LookupReadOnly
 	ld	(xsp+16), hl
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 11
+	cpw	(xsp+16), 0
+	jr	z, AudioCtrl_DataBlock_Entry_Code_Join
 	ld	xwa, xiz
 	ld	bc, 0:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
-	.byte 0x9f
-	rcf
-	push	xsp
-	nop
-	nop
-	jrl	nz, -187
+AudioCtrl_DataBlock_Entry_Code_Join:
+	cpw	(xsp+16), 0
+	jrl	nz, AudioCtrl_DataBlock_Loop
 	ld	wa, (xsp+8)
-	calr	60252
+	calr	Util_SignExtendAndDouble
 	ld	wa, (xhl)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
@@ -14481,20 +14508,18 @@ AudioCtrl_DataBlock_Skip38:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 0xffff
-	jr	z, 34
+	jr	z, AudioCtrl_DataBlock_Entry_Code_Skip
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	(xsp+14), hl
-	.byte 0x9f
-	ldw	(4:8), 1695:io
-	ld	w, 159:opc
-	rcf
-	ld	a, 159:opc
-	ldw	(34:8), 0x951d:io
-	swi	1
-	swi	1
-	jrl	-356
+	pushm	(xsp+10)
+	ld	wa, (xsp+6)
+	ld	bc, (xsp+16)
+	ld	de, (xsp+10)
+	call	MainLswPartAdd
+	jrl	AudioCtrl_DataBlock_Loop
+AudioCtrl_DataBlock_Entry_Code_Skip:
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
@@ -14503,10 +14528,10 @@ AudioCtrl_DataBlock_Skip38:
 	ld	bc, (xsp+16)
 	ld	de, (xsp+10)
 	call	MainLswAdd
-	jrl	-385
+	jrl	AudioCtrl_DataBlock_Loop
 AudioCtrl_DataBlock_Skip39:
 	ld	wa, bc
-	calr	60078
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
 	ld	xwa, (MixerPartTable_Start_0x104:24)
 	ld	(xsp+12), xwa
@@ -14526,20 +14551,18 @@ AudioCtrl_DataBlock_Skip39:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 0xffff
-	jr	z, 33
+	jr	z, AudioCtrl_DataBlock_Entry_Code_Skip2
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	(xsp+14), hl
-	.byte 0x9f
-	ldw	(4:8), 1695:io
-	ld	w, 159:opc
-	rcf
-	ld	a, 218:opc
-	xor	(xbc+29), xiy
-	swi	0
-	swi	1
-	jrl	-488
+	pushm	(xsp+10)
+	ld	wa, (xsp+6)
+	ld	bc, (xsp+16)
+	ld	de, 1:i3
+	call	MainLswPartPut
+	jrl	AudioCtrl_DataBlock_Loop
+AudioCtrl_DataBlock_Entry_Code_Skip2:
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
@@ -14548,7 +14571,7 @@ AudioCtrl_DataBlock_Skip39:
 	ld	bc, 1:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
-	jrl	-516
+	jrl	AudioCtrl_DataBlock_Loop
 AudioCtrl_DataBlock_Skip40:
 	ld	xwa, (xsp+30)
 	cp	xwa, 8
@@ -14600,28 +14623,23 @@ AudioCtrl_DataBlock_Helper8:
 	ld	bc, (xsp+18)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+82)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22
 	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock_Helper
 	ld	wa, (xsp+18)
 	exts	xwa
 	divs	wa, 5
-	ld wa, qwa
-	add wa, 136
+	ld	wa, qwa
+	add	wa, 136
 	call	DrawEditSw
 	lda	xbc, (xsp+68)
-	.byte 0xbf
-	.asciz "B204"
+	lda	xde, (xsp+66)
+	ldw	wa, 52
 	call	GetFrameSPSize
 	lda	xhl, (xsp+82)
 	ld	wa, (xhl+4)
-	.byte 0x93
-	or	(xwa), xwa
-	zcf
+	sub	wa, (xhl)
+	exts	xwa
 	divs	wa, 2
 	ld	bc, (xhl)
 	add	bc, wa
@@ -14629,12 +14647,9 @@ AudioCtrl_DataBlock_Helper8:
 	ld	(xwa), bc
 	ld	bc, (xsp+66)
 	dec	2, bc
-	.byte 0x9b
-	push	sr
-	xor	(xbc), a
-	jr	le, -72
-	push	sr
-	.byte 0x51
+	add	bc, (xhl+2)
+	inc	2, bc
+	ld	(xwa+2), bc
 	lda	xbc, (xsp+70)
 	ld	de, (xwa)
 	ld	(xbc), de
@@ -14654,17 +14669,14 @@ AudioCtrl_DataBlock_Helper8:
 	sla	wa, 3
 	ld	(xsp+12), wa
 	ldw (xsp+18), 0
+AudioCtrl_DataBlock_Helper8_Loop:
 	lda	xwa, (xsp+82)
 	lda	xbc, (xsp+78)
 	ld	de, (xsp+12)
-	calr	60184
-	.byte 0x9f
-	popw	iz
-	push	xde
-	ldw	ix, 0x9f00
-	incf
-	ld	w, 30:opc
-	.byte 0xef, 0xe8
+	calr	AudioCtrl_DataBlock_Helper5
+	submi16	(xsp+78), 52
+	ld	wa, (xsp+12)
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	sla	hl, 2
 	lda	xwa, (0x3ea38:24)
@@ -14686,11 +14698,8 @@ AudioCtrl_DataBlock_Helper8:
 	call	DrawStringCentered
 	incw	1, (xsp+12)
 	incw	1, (xsp+18)
-	.byte 0x9f
-	ccf
-	push	xsp
-	ld	(0:8), 97:io
-	.byte 0xa4
+	cpw	(xsp+18), 8
+	jr	lt, AudioCtrl_DataBlock_Helper8_Loop
 	jrl	AudioCtrl_DataBlock_Join19
 AudioCtrl_DataBlock_Skip43:
 	ld	wa, (xsp+18)
@@ -14700,11 +14709,7 @@ AudioCtrl_DataBlock_Skip43:
 	ld	bc, (xsp+18)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+82)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22
 	ld	xbc, (xsp+90)
 	srl	xbc, 0
 	ld	qbc, 0
@@ -14730,55 +14735,41 @@ AudioCtrl_DataBlock_Skip45:
 	muls	wa, 5
 	ld	(xsp+10), wa
 	ldw (xsp+18), 0
+AudioCtrl_DataBlock_Helper8_Loop2:
 	ld	wa, (xsp+10)
-	calr	59424
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	ret
-	jr	f, -24
-	.byte 0xcf
-	ld	l, 0:opc
-	ld	a, 1:opc
-	jrl	nz, 205
-	ld	wa, (0x24794:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	(xsp+14), xwa
+	cp	xwa, 0x1210027
+	jrl	nz, AudioCtrl_DataBlock_Helper8_Skip2
+	ld	wa, (0x024794:24)
 	ld	(xsp+12), wa
 	sla	wa, 3
 	ld	(xsp+12), wa
-	ldw (xsp+20), 0
+	ldw	(xsp+20), 0
+AudioCtrl_DataBlock_Helper8_Loop3:
 	ld	wa, (xsp+12)
-	calr	59393
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa)
 	ld	xwa, MixerPartTable_Start_0x12C
 	calr	SdpartLookupPartId
-	.byte 0x9f
-	ld	(243:8), 126:io
-	.byte 0x90
-	nop
+	cp	hl, (xsp+8)
+	jrl	nz, AudioCtrl_DataBlock_Helper8_Skip
 	lda	xwa, (xsp+82)
 	ld	bc, (xsp+10)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+82)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22
 	lda	xbc, (xsp+78)
 	ld	de, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper5
-	.byte 0x9f
-	popw	iz
-	push	xwa
-	push_a
-	nop
+	addiw_da	(xsp+78), 20
 	lda	xwa, (xsp+54)
 	ld	bc, (xsp+8)
 	extz	xbc
@@ -14821,27 +14812,23 @@ AudioCtrl_DataBlock_Skip46:
 	pushw	0
 AudioCtrl_DataBlock_Join18:
 	call	DrawStringReverse
+AudioCtrl_DataBlock_Helper8_Skip:
 	incw	1, (xsp+12)
 	incw	1, (xsp+20)
-	.byte 0x9f
-	push_a
-	push	xsp
-	ld	(0:8), 113:io
-	ld	xiz, 0x610a9fff
+	cpw	(xsp+20), 8
+	jrl	lt, AudioCtrl_DataBlock_Helper8_Loop3
+AudioCtrl_DataBlock_Helper8_Skip2:
+	incw	1, (xsp+10)
 	incw	1, (xsp+18)
-	.byte 0x9f
-	ccf
-	push	xsp
-	halt
-	nop
-	jrl	lt, -254
-	jrl	131
+	cpw	(xsp+18), 5
+	jrl	lt, AudioCtrl_DataBlock_Helper8_Loop2
+	jrl	AudioCtrl_DataBlock_Join19
 AudioCtrl_DataBlock_Skip47:
 	ld	wa, (xsp+18)
-	calr	59167
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+20)
-	calr	59182
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	ld	wa, (xiz)
 	sla	wa, 2
@@ -14895,18 +14882,14 @@ AudioCtrl_DataBlock_Skip48:
 	ld	bc, iz
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+52)
-	.byte 0x98
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22
 	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock_Helper
 	ld	wa, iz
 	exts	xwa
 	divs	wa, 5
-	ld wa, qwa
-	add wa, 136
+	ld	wa, qwa
+	add	wa, 136
 	call	DrawEditSw
 	lda	xbc, (xsp+38)
 	lda	xde, (xsp+36)
@@ -14914,9 +14897,8 @@ AudioCtrl_DataBlock_Skip48:
 	call	GetFrameSPSize
 	lda	xhl, (xsp+52)
 	ld	wa, (xhl+4)
-	.byte 0x93
-	or	(xwa), xwa
-	zcf
+	sub	wa, (xhl)
+	exts	xwa
 	divs	wa, 2
 	ld	bc, (xhl)
 	add	bc, wa
@@ -14924,12 +14906,9 @@ AudioCtrl_DataBlock_Skip48:
 	ld	(xwa), bc
 	ld	bc, (xsp+36)
 	dec	2, bc
-	.byte 0x9b
-	push	sr
-	xor	(xbc), a
-	jr	le, -72
-	push	sr
-	.byte 0x51
+	add	bc, (xhl+2)
+	inc	2, bc
+	ld	(xwa+2), bc
 	lda	xbc, (xsp+40)
 	ld	de, (xwa)
 	ld	(xbc), de
@@ -14952,9 +14931,7 @@ AudioCtrl_DataBlock_Loop2:
 	lda	xbc, (xsp+48)
 	ld	de, iz
 	calr	AudioCtrl_DataBlock_Helper5
-	.byte 0x9f
-	ldw	wa, 0x343a
-	nop
+	submi16	(xsp+48), 52
 	ld	wa, iz
 	sla	wa, 2
 	lda	xbc, (0x3eb28:24)
@@ -15054,58 +15031,51 @@ AudioCtrl_DataBlock_Skip49:
 	ld	(xsp+12), hl
 	ld	wa, (xsp+2)
 	cp	wa, 0xffff
-	jrl	z, 144
-	.byte 0x9f
-	ret
-	push	xsp
-	nop
-	nop
-	jrl	z, 140
+	jrl	z, AudioCtrl_DataBlock_Loop3
+	cpw	(xsp+14), 0
+	jrl	z, AudioCtrl_DataBlock_Entry2
 	ld	xwa, (xsp+16)
 	cp	xwa, 0x1c0001a
-	jr	z, 81
+	jr	z, AudioCtrl_DataBlock_Helper8_Skip4
 	cp	xwa, 0x1c00018
-	jr	z, 73
+	jr	z, AudioCtrl_DataBlock_Helper8_Skip4
 	cp	xwa, 0x1c00019
-	jr	z, 8
+	jr	z, AudioCtrl_DataBlock_Helper8_Skip3
 	cp	xwa, 0x1c00017
-	jr	nz, 105
+	jr	nz, AudioCtrl_DataBlock_Entry2
+AudioCtrl_DataBlock_Helper8_Skip3:
 	ld	wa, (xsp+2)
 	ldw	bc, 1026
 	call	SndParam_LookupViaEncode
 	cp	hl, 0:i3
 	jr	nz, AudioCtrl_DataBlock_Entry2
-	.byte 0x9f
-	ei	4
+	pushm	(xsp+6)
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
 	ld	de, 1:i3
 	call	MainLswPartPut
-	.byte 0x9f
-	ei	4
+	pushm	(xsp+6)
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
 	ld	de, 1:i3
 	call	MainLswPartPut
-	.byte 0x9f
-	ei	4
+	pushm	(xsp+6)
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
 	ld	de, 0:i3
 	jr	AudioCtrl_DataBlock_Join20
+AudioCtrl_DataBlock_Helper8_Skip4:
 	ld	wa, (xsp+2)
 	ldw	bc, 1025
 	call	SndParam_LookupViaEncode
 	cp	hl, 0:i3
 	jr	nz, AudioCtrl_DataBlock_Entry2
-	.byte 0x9f
-	ei	4
+	pushm	(xsp+6)
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
 	ld	de, 0:i3
 	call	MainLswPartPut
-	.byte 0x9f
-	ei	4
+	pushm	(xsp+6)
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
 	ld	de, 0:i3
@@ -15115,8 +15085,7 @@ AudioCtrl_DataBlock_Loop3:
 	ld	xhl, 0:i3
 	jr	AudioCtrl_DataBlock_Epilogue3
 AudioCtrl_DataBlock_Entry2:
-	.byte 0x9f
-	ei	4
+	pushm	(xsp+6)
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
 	ld	de, (xsp+6)
