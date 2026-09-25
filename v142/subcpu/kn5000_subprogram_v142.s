@@ -111,17 +111,17 @@ RESET:	; 01F924
 	ld (342:16), 1
 	ld (SC0MOD:8), 0x01:io
 	ld (SC0CR:8), 0x00:io
-	and_sd8b_im 0xD3, 0xCF
-	and_sd8b_im 0xD3, 0xF0
+	and_sd8b_im BR0CR, 0xCF
+	and_sd8b_im BR0CR, 0xF0
 	ld (SC1MOD:8), 0x29:io	;receive-enable | 8-bit uart mode | serial transfer clock: baud-rate generator
-	lda_dd8l XBC, 0xD6
+	lda_dd8l XBC, SC1MOD
 	ld a, (xbc)
 	and a, 0xFC
 	set 0, a
 	ld (xbc), a
 	ld (SC1CR:8), 0x00:io	; parity addition: disable
-	and_sd8b_im 0xD7, 0xCF	; T0 (4/fc)
-	and_sd8b_im 0xD7, 0xF0	; divide by 16
+	and_sd8b_im BR1CR, 0xCF	; T0 (4/fc)
+	and_sd8b_im BR1CR, 0xF0	; divide by 16
 	ld (304:16), 255
 	ld (305:16), 255
 	ld (306:16), 3
@@ -159,7 +159,7 @@ PostReset_InitAudio:
 ; so everything from here on -- Audio_System_Init and Audio_Main_Loop -- runs as task 1,
 ; ready-queue priority 3.  The return address the `call` pushed is simply abandoned.
 Task1_AudioMain_Entry:
-	lda_dd8l XBC, 0xE4
+	lda_dd8l XBC, INTET01
 	ld a, (xbc)
 	and a, 0x8F
 	or a, 0x30
@@ -854,10 +854,10 @@ TaskSched_ConfigAndDispatch:
 	call Task_ConfigTimer
 	calr Timer3_Stop
 	ld (TREG3:8), 0x1D:io
-	ld_sd8b A, 0xE5
+	ld_sd8b A, INTET23
 	and a, 0xF
 	or a, 0x20
-	st_dd8b A, 0xE5
+	st_dd8b A, INTET23
 	calr Timer3_Start
 	ld a, 0x1:opc
 	calr TaskSched_SpawnTask
@@ -2733,19 +2733,19 @@ Audio_CmdHandler_C0_FF:
 ;        Initializes DMA_XFER_STATE and CMD_PROCESSING_STATE to 0
 ; ===========================================================================
 InterCPU_Latch_Setup:
-	and_sd8b_im 0xE5, 0xF8
+	and_sd8b_im INTET23, 0xF8
 	res_dd8 2, T8RUN
-	lda_dd8l XBC, 0xEC
+	lda_dd8l XBC, INTETC01
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	lda_dd8l XBC, 0xED
+	lda_dd8l XBC, INTETC23
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	lda_dd8l XBC, 0xF0
+	lda_dd8l XBC, INTE0AD
 	ld a, (xbc)
 	and a, 0xF8
 	set 0, a
@@ -45216,7 +45216,7 @@ DSP_Send_Cmd_Ready:
 	cp hl, 0:i3
 	jr z, DSP_Send_Cmd_Error
 	ld a, (xsp + 8)	; Get command byte
-	st_dd8b A, 0x68	; Write to DSP data port
+	st_dd8b A, PZ	; Write to DSP data port
 	jr DSP_Send_Cmd_Cleanup
 
 ; Status went back to zero between poll and write: result = 1.
@@ -46802,7 +46802,7 @@ DSP_Send_Data_Ready:
 	cp hl, 0:i3
 	jr z, DSP_Send_Data_Error
 	ld a, (xsp + 8)	; Get data byte
-	st_dd8b A, 0x68	; Write to DSP data port
+	st_dd8b A, PZ	; Write to DSP data port
 	jr DSP_Send_Data_Cleanup
 
 ; result = 1.

@@ -12883,13 +12883,13 @@ INTRX1_HANDLER:	; 1F736
 	push xde
 	push xbc
 	push xwa
-	ld_sd8b C, 0xD4
-	ld_sd8b A, 0xD5
+	ld_sd8b C, SC1BUF
+	ld_sd8b A, SC1CR
 	and a, 0x1C	; 0001 1100
 	jr z, Serial1_RX_NoError
 
 	; serial comms error happened:
-	ldmm_sd8b 0xD5, 0x36, 0x10	; LD (1036h), (SC1CR)
+	ldmm_sd8b SC1CR, 0x36, 0x10	; LD (1036h), (SC1CR)
 	jr Serial1_RX_Exit
 
 Serial1_RX_NoError:	; 01F74Fh
@@ -12933,7 +12933,7 @@ Serial1_TX_Normal:	; 01F77Bh
 	calr READ_BYTE_FROM_RING_BUFFER
 	cp hl, 0xFFFF	; Buffer empty?
 	jr z, Serial1_TX_CheckEmpty
-	st_dd8b L, 0xD4	; Send byte
+	st_dd8b L, SC1BUF	; Send byte
 
 Serial1_TX_CheckEmpty:	; 01F78Ch
 	bit 0, (SERIAL_1_VAR_1034:16)

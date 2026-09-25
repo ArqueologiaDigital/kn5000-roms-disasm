@@ -77,3 +77,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Follow-up applied in the next commit (2026-09-25), same rule, the byte-macro forms: the address
+# operand of and_sd8b_im / ldmm_sd8b (first) and lda_dd8l / ld_sd8b / st_dd8b (second), 18 sites
+# -- e.g. `st_dd8b A, 0x68` -> `st_dd8b A, PZ`, `lda_dd8l XBC, 0xE4` -> `lda_dd8l XBC, INTET01`.
