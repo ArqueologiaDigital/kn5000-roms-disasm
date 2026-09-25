@@ -106,6 +106,15 @@ RAM = {
     0x230EC4: ("LyricPosStep", "(sq_beadt >> 3) + 1 at the last post; a change triggers the next one"),
     0x230EC6: ("LyricPosition", "sqbtof * 12 + (sq_beadt >> 3) + 2: the position"
                                 " HDAE5000_Lyrics_PlayToPosition scales by division / 12"),
+    # fourth run: the floppy lyric list (HDAE5000_FdLyricList_Scan)
+    0x230884: ("FdLyricNames", "40 x 9-byte base names of the *.TLX files on the floppy, sorted"
+                               " (HDAE5000_FdLyricList_AddTlx)"),
+    0x230E72: ("FdLyricCount", "entries in FdLyricNames, at most 40 (HDAE5000_FdLyricList_AddTlx)"),
+    0x2309F6: ("FdLyricTitles", "40 x 27 bytes: the first 26 bytes of each <name>.TTX"
+                                " (HDAE5000_FdLyricList_Scan)"),
+    0x230E4A: ("FdLyricHasMid", "40 flags: <name>.MID opens (HDAE5000_FdLyricList_Scan)"),
+    0x230E7A: ("FdVolumeLabel", "the floppy's volume label (HamaFn_GetVolumeLabel) + \" ->\""
+                                " (HDAE5000_FdLyricList_Scan)"),
     0x23A19E: ("LyricBoxObj", "the open lyric box's object id, 0xFFFFFFFF when closed"
                               " (HDAE5000_LyricBoxProc); redraw events go to it"),
 }

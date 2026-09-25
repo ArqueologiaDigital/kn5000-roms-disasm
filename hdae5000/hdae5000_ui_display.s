@@ -544,24 +544,25 @@ HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
 	lda xsp, (xsp + 34)		; deallocate stack
 	retd 0x000A			; return and pop 10 bytes
 
-HDAE5000_Display_Clear:	; 0x28B200 (43 bytes)
-	; Clear display area: copy 7 bytes from ROM table, then call buffer validate
-	; Input: XWA = pointer to display buffer
+HDAE5000_CopyVersionString:	; 0x28B200 (43 bytes)
+	; Copy the version string "V2.06i" with its NUL (7 bytes, HDAE5000_Str_V206i)
+	; to (XWA) and return HL = its length, 6 (HDAE5000_StrLen).  Caller:
+	; HDAE5000_SetupPage_BuildDriveInfo (hdae5000_hd_driver.s).
 	ld ix, 0:i3			; IX = loop counter = 0
 	cp ix, 7:i3
-	jr nc, HDAE5000_Display_Clear__push
-HDAE5000_Display_Clear__loop:
-	stb_dpi c, 0xE0		; lda XHL, (XWA+) - get next dest addr, post-inc XWA
+	jr nc, HDAE5000_CopyVersionString__len
+HDAE5000_CopyVersionString__loop:
+	stb_dpi c, 0xE0		; lda XHL, XWA+ (unidasm): XHL = XWA, then XWA++
 	ld bc, ix			; BC = current index
 	extz xbc			; zero-extend to 32 bits
-	ld xde, HDAE5000_Str_V206i		; ROM source table
+	ld xde, HDAE5000_Str_V206i		; "V2.06i"
 	add xde, xbc			; XDE = &table[index]
 	ld c, (xde)			; C = table byte
-	ld (xhl), c			; store to display buffer
+	ld (xhl), c			; store to the caller's buffer
 	inc 1, ix			; index++
 	cp ix, 7:i3
-	jr c, HDAE5000_Display_Clear__loop
-HDAE5000_Display_Clear__push:
+	jr c, HDAE5000_CopyVersionString__loop
+HDAE5000_CopyVersionString__len:
 	pushw 0x002E			; push 0x2E (size param) -- high half of HDAE5000_Str_V206i
 	pushw 0x1C82			; push 0x1C82 (offset param)		; low half of HDAE5000_Str_V206i
 	call HDAE5000_StrLen
@@ -5783,7 +5784,7 @@ HDAE5000_FDFileSelectProc:
 	ld xbc, xwa
 	sll xbc, 3
 	add xbc, xwa
-	ld xde, 0x00230884
+	ld xde, HDAE5000_RAM_FdLyricNames
 	add xde, xbc
 	ld xwa, 3:i3
 	push xwa
@@ -5848,7 +5849,7 @@ HDAE5000_FDFileSelectProc:
 	extz xwa
 	ld xbc, 0x0000001b
 	call HDAE5000_Multiply
-	ld xde, 0x002309f6
+	ld xde, HDAE5000_RAM_FdLyricTitles
 	add xde, xhl
 	ld xwa, 3:i3
 	push xwa
@@ -5891,7 +5892,7 @@ HDAE5000_FDFileSelectProc:
 	ld wa, (0x230e78:24)
 	add wa, (xsp + 0x04)
 	extz xwa
-	ld xbc, 0x00230e4a
+	ld xbc, HDAE5000_RAM_FdLyricHasMid
 	add xbc, xwa
 	cp (xbc), 0x00
 	jr z, .Lsc_0c_z
@@ -6044,7 +6045,7 @@ HDAE5000_FDFileSelectProc:
 	extz xwa
 	ld xbc, 0x0000001b
 	call HDAE5000_Multiply
-	ld xwa, 0x002309f6
+	ld xwa, HDAE5000_RAM_FdLyricTitles
 	add xwa, xhl
 	push xwa
 	call HDAE5000_StrLen
@@ -6057,7 +6058,7 @@ HDAE5000_FDFileSelectProc:
 	extz xwa
 	ld xbc, 0x0000001b
 	call HDAE5000_Multiply
-	ld xwa, 0x002309f6
+	ld xwa, HDAE5000_RAM_FdLyricTitles
 	add xwa, xhl
 	push xwa
 	pushw 0x0023
@@ -6077,7 +6078,7 @@ HDAE5000_FDFileSelectProc:
 	ld xbc, xwa
 	sll xbc, 3
 	add xbc, xwa
-	ld xwa, 0x00230884
+	ld xwa, HDAE5000_RAM_FdLyricNames
 	add xwa, xbc
 	push xwa
 	pushw 0x0023
@@ -6115,27 +6116,27 @@ HDAE5000_FDFileSelectProc:
 .Lsc_case_0e:
 	ldw (0x230e76:24), 0x0000
 	ldw (0x230e78:24), 0x0000
-	ldw (0x230e72:24), 0x0000
+	ldw (HDAE5000_RAM_FdLyricCount:24), 0x0000
 	ldw (0x230e74:24), 0x0000
 
 	pushw 0x0171
 	pushw 0x0000
-	lda xwa, (0x230884:24)
+	lda xwa, (HDAE5000_RAM_FdLyricNames:24)
 	push xwa
 	call HDAE5000_MemFill
 	pushw 0x0453
 	pushw 0x0000
-	lda xwa, (0x2309f6:24)
+	lda xwa, (HDAE5000_RAM_FdLyricTitles:24)
 	push xwa
 	call HDAE5000_MemFill
 	pushw 0x0028
 	pushw 0x0000
-	lda xwa, (0x230e4a:24)
+	lda xwa, (HDAE5000_RAM_FdLyricHasMid:24)
 	push xwa
 	call HDAE5000_MemFill
 	lda xsp, (xsp + 0x18)		; clean 24 bytes (3 calls x 8)
 
-	calr HDAE5000_Path_Builder
+	calr HDAE5000_FdLyricList_Scan
 	ld xhl, 0:i3
 	jrl t, .Lsc_epilogue
 
@@ -6280,7 +6281,7 @@ HDAE5000_FDFileSelectProc:
 
 	; --- Up button handler ---
 .Lsc_07_btn_up:
-	ld wa, (0x230e72:24)
+	ld wa, (HDAE5000_RAM_FdLyricCount:24)
 	dec 1, wa
 	cp (0x230e76:24), wa; compare slot_index with limit
 	jr c, .Lsc_up_ok
@@ -6345,7 +6346,7 @@ HDAE5000_FDFileSelectProc:
 	ld xbc, xwa
 	sll xbc, 3
 	add xbc, xwa
-	ld xwa, 0x00230884
+	ld xwa, HDAE5000_RAM_FdLyricNames
 	add xwa, xbc
 	push xwa			; slot data address
 	lda xwa, (xsp + 0x0e)
@@ -6401,10 +6402,18 @@ HDAE5000_FDFileSelectProc:
 	lda_dri xsp, 0xfd, 0x82, 0x00	; lda XSP, XSP+130 (restore stack)
 	ret
 
-HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
-	; Build file path strings using vtable dispatch
-	; Scans directory entries, builds path strings, validates filenames
-	; Uses nested vtable calls through (0x23A1A2) + offsets
+HDAE5000_FdLyricList_Scan:	; 0x28EF6B (556 bytes)
+	; Build the floppy's lyric-file list (the "LOAD LYRICS FROM FD" screen),
+	; all through the main CPU's file functions (WS_HamaFnTable):
+	;   HamaFn_GetMediaType must be 2 or 3, else return;
+	;   RootFn_SleepMainTask; HamaFn_GetVolumeLabel -> HDAE5000_RAM_FdVolumeLabel
+	;   + " ->";
+	;   _findfirst("*.*") / _findnext / _findclose: every name goes to
+	;   HDAE5000_FdLyricList_AddTlx, which keeps the *.TLX ones (sorted, <= 40);
+	;   for each kept name: fopen_ext(name + ".TTX", "rb"), fread_ext 26 bytes
+	;   into HDAE5000_RAM_FdLyricTitles + 27*i, fclose_ext; and
+	;   HDAE5000_RAM_FdLyricHasMid[i] = fopen_ext(name + ".MID", "rb") >= 0;
+	;   RootFn_WakeUpMainTask.
 
 	; --- Prologue: allocate ~370 bytes of stack ---
 	lda_dri xsp, 0xfd, 0x8e, 0xfe	; lda XSP, XSP-370
@@ -6447,18 +6456,18 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	pushw hl			; push strlen
 	ld xwa, xiz
 	push xwa
-	lda xwa, (0x230e7a:24); XWA = &0x230E7A (path buffer)
+	lda xwa, (HDAE5000_RAM_FdVolumeLabel:24); XWA = &0x230E7A (path buffer)
 	push xwa
 	call HDAE5000_MemCopy			; call 0x29AE9F (strcpy with length)
 	lda xsp, (xsp + 14)		; pop 14 bytes
 	jr t, .Lpb_after_path
 
 .Lpb_empty_path:			; 0x28EFD2
-	ld (0x230e7a:24), 0x00; (0x230E7A) = '\0'
+	ld (HDAE5000_RAM_FdVolumeLabel:24), 0x00; (0x230E7A) = '\0'
 
 .Lpb_after_path:			; 0x28EFD8
 	ld (0x230e82:24), 0x00; (0x230E82) = '\0'
-	lda xwa, (0x230e7a:24); XWA = &0x230E7A
+	lda xwa, (HDAE5000_RAM_FdVolumeLabel:24); XWA = &0x230E7A
 	push xwa
 	call HDAE5000_StrLen			; strlen(path buffer)
 	inc 4, xsp
@@ -6486,16 +6495,16 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	call (xhl)
 	ld xiz, xhl			; XIZ = scan result
 
-	; --- Call Directory_Handler for validation ---
+	; --- each name found: HDAE5000_FdLyricList_AddTlx ---
 	lda xwa, (xsp + 14)		; XWA = &local[0x0E]
-	calr HDAE5000_Directory_Handler
+	calr HDAE5000_FdLyricList_AddTlx
 	ld (xsp + 4), xhl		; save result
 
 	jr t, .Lpb_validate		; always jump to validation
 
 .Lpb_retry:				; 0x28F02C
 	lda xwa, (xsp + 14)
-	calr HDAE5000_Directory_Handler
+	calr HDAE5000_FdLyricList_AddTlx
 	ld (xsp + 4), xhl
 
 .Lpb_validate:				; 0x28F035
@@ -6519,7 +6528,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 
 	; --- Directory entry loop ---
 	ld iz, 0:i3			; IZ = 0 (loop counter)
-	cp iz, (2297458:24); cp IZ, (0x230E72) — entry count
+	cp iz, (HDAE5000_RAM_FdLyricCount:24); cp IZ, (0x230E72) — entry count
 	jrl nc, .Lpb_loop_done		; if IZ >= count, done
 
 .Lpb_entry_loop:			; 0x28F06E
@@ -6529,7 +6538,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	ld xbc, xwa
 	sll xbc, 3			; XBC = IZ * 8
 	add xbc, xwa			; XBC = IZ * 9
-	ld xwa, 2295940			; XWA = 0x00230884
+	ld xwa, HDAE5000_RAM_FdLyricNames			; XWA = 0x00230884
 	add xwa, xbc			; XWA = entry address
 	push xwa
 	lda_dri xwa, 0xfd, 0x16, 0x01	; lda XWA, XSP+0x0116
@@ -6546,7 +6555,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 
 	; --- Call vtable method at +0x00A0 (display entry) ---
 	lda_dri xwa, 0xfd, 0x12, 0x01	; lda XWA, XSP+0x0112
-	lda xbc, (HDAE5000_Str_Rb_Path_Builder:24); XBC = 0x2E5D5E
+	lda xbc, (HDAE5000_Str_Rb_FdLyricTtx:24); XBC = 0x2E5D5E
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24); XDE = (0x23A1A2)
 	ld xde, (xde + WS_HamaFnTable)             ; XDE = (XDE + 0x0E88)
 	ld_sril xhl, (xde + HamaFn_fopen_ext)             ; XHL = (XDE + 0x00A0)
@@ -6557,7 +6566,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	extz xwa
 	ld xbc, 27			; 0x1B
 	call HDAE5000_Multiply			; call 0x29B72D (multiply)
-	ld xwa, 2296310			; XWA = 0x002309F6
+	ld xwa, HDAE5000_RAM_FdLyricTitles			; XWA = 0x002309F6
 	add xwa, xhl			; XWA = base + IZ*27
 
 	; --- Call vtable method at +0x00A8 ---
@@ -6579,7 +6588,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	ld xbc, xwa
 	sll xbc, 3
 	add xbc, xwa
-	ld xwa, 2295940			; 0x00230884
+	ld xwa, HDAE5000_RAM_FdLyricNames			; 0x00230884
 	add xwa, xbc
 	push xwa
 	lda_dri xwa, 0xfd, 0x16, 0x01	; lda XWA, XSP+0x0116
@@ -6594,7 +6603,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 
 	; --- Call vtable method at +0x00A0 via XIX ---
 	lda_dri xwa, 0xfd, 0x12, 0x01	; lda XWA, XSP+0x0112
-	lda xbc, (HDAE5000_Str_Rb_Path_Builder_2:24); XBC = 0x2E5D68
+	lda xbc, (HDAE5000_Str_Rb_FdLyricMid:24); XBC = 0x2E5D68
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24); XDE = (0x23A1A2)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn_fopen_ext)             ; XIX = (XDE + 0x00A0)
@@ -6606,7 +6615,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	; HL >= 0: set flag to 1
 	ld wa, iz
 	extz xwa
-	ld xbc, 2297418			; XBC = 0x00230E4A
+	ld xbc, HDAE5000_RAM_FdLyricHasMid			; XBC = 0x00230E4A
 	add xbc, xwa
 	ld (xbc), 1			; flag[IZ] = 1
 	jr t, .Lpb_entry_next
@@ -6614,7 +6623,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 .Lpb_set_zero:				; 0x28F153
 	ld wa, iz
 	extz xwa
-	ld xbc, 2297418			; XBC = 0x00230E4A
+	ld xbc, HDAE5000_RAM_FdLyricHasMid			; XBC = 0x00230E4A
 	add xbc, xwa
 	ld (xbc), 0			; flag[IZ] = 0
 
@@ -6627,7 +6636,7 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 
 	; --- Loop control ---
 	inc 1, iz			; IZ++
-	cp iz, (2297458:24); cp IZ, (0x230E72)
+	cp iz, (HDAE5000_RAM_FdLyricCount:24); cp IZ, (0x230E72)
 	jrl c, .Lpb_entry_loop		; if IZ < count, loop
 
 .Lpb_loop_done:				; 0x28F17C
@@ -6644,10 +6653,14 @@ HDAE5000_Path_Builder:	; 0x28EF6B (556 bytes)
 	lda_dri xsp, 0xfd, 0x72, 0x01	; lda XSP, XSP+0x0172
 	ret
 
-HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
-	; Directory entry insertion with sorted-position insert logic
-	; Calls string format/compare utilities, manages (0x230e72) entry count
-	; Max 40 entries (0x28), each 9 bytes in table at 0x230884
+HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
+	; XWA = a file name from the floppy scan (HDAE5000_FdLyricList_Scan).  Keep
+	; it only when it ends in ".TLX" (the reversed, upper-cased name must start
+	; with "XLT." -- HDAE5000_StrRev, HDAE5000_StrUpr, HDAE5000_StrNCmp against
+	; HDAE5000_Str_XLT) and the list holds fewer than 40: its base name (the
+	; extension cut off) is inserted in HDAE5000_StrPrefixCmp order into the
+	; 9-byte slots at HDAE5000_RAM_FdLyricNames, HDAE5000_RAM_FdLyricCount + 1.
+	; Returns 0, or -1 when the list is full.
 
 	; --- Prologue ---
 	lda	xsp, (xsp-100)
@@ -6673,7 +6686,7 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	jrl nz, .Ldh_ret0
 
 	; Check max entries
-	cpw (0x230e72:24), 0x0028
+	cpw (HDAE5000_RAM_FdLyricCount:24), 0x0028
 	jr c, .Ldh_under_limit
 	ld xhl, 0xffffffff		; return -1 (full)
 	jrl t, .Ldh_epilogue
@@ -6699,17 +6712,17 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	ld (xbc), 0x00		; null-terminate
 
 	; First entry? (count == 0)
-	cpw (0x230e72:24), 0x0000
+	cpw (HDAE5000_RAM_FdLyricCount:24), 0x0000
 	jr nz, .Ldh_search
 
 	; Direct insert at slot 0
 	lda xwa, (xsp + 0x04)
 	push xwa
-	lda xwa, (0x230884:24)
+	lda xwa, (HDAE5000_RAM_FdLyricNames:24)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 0, xsp			; clean 8 bytes
-	incw 1, (0x230e72:24)
+	incw 1, (HDAE5000_RAM_FdLyricCount:24)
 	ld xhl, 0:i3
 	jrl t, .Ldh_epilogue
 
@@ -6717,13 +6730,13 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 .Ldh_search:
 	ldiw_erp 0xfa, 0		; QIZ = 0 (search index)
 	stw_erp wa, 0xfa		; WA = QIZ
-	cp wa, (0x230e72:24); compare QIZ with count
+	cp wa, (HDAE5000_RAM_FdLyricCount:24); compare QIZ with count
 	jrl nc, .Ldh_append
 
 .Ldh_search_loop:
 	stw_erp wa, 0xfa		; WA = QIZ
 	muls wa, 0x0009			; slot offset = QIZ * 9
-	lda xbc, (0x230884:24)
+	lda xbc, (HDAE5000_RAM_FdLyricNames:24)
 	exts xwa
 	add xwa, xbc			; XWA = slot address
 	push xwa
@@ -6735,7 +6748,7 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	jr ge, .Ldh_next_slot
 
 	; Found insert position — shift entries down
-	ld iz, (0x230e72:24); IZ = total count
+	ld iz, (HDAE5000_RAM_FdLyricCount:24); IZ = total count
 	cpw_erp iz, 0xfa		; compare IZ with QIZ
 	jr le, .Ldh_do_insert
 
@@ -6743,13 +6756,13 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 .Ldh_shift_loop:
 	ld wa, iz
 	muls wa, 0x0009
-	lda xbc, (0x23087b:24); offset -9 from table base (src)
+	lda xbc, (HDAE5000_RAM_FdLyricNames - 9:24); offset -9 from table base (src)
 	exts xwa
 	add xwa, xbc
 	push xwa			; source
 	ld wa, iz
 	muls wa, 0x0009
-	lda xbc, (0x230884:24); table base (dst)
+	lda xbc, (HDAE5000_RAM_FdLyricNames:24); table base (dst)
 	exts xwa
 	add xwa, xbc
 	push xwa			; destination
@@ -6764,37 +6777,37 @@ HDAE5000_Directory_Handler:	; 0x28F197 (614 bytes)
 	push xwa
 	stw_erp wa, 0xfa
 	muls wa, 0x0009
-	lda xbc, (0x230884:24)
+	lda xbc, (HDAE5000_RAM_FdLyricNames:24)
 	exts xwa
 	add xwa, xbc
 	push xwa
 	call HDAE5000_StrCpy			; copy entry to insert position
 	inc 0, xsp
-	incw 1, (0x230e72:24)
+	incw 1, (HDAE5000_RAM_FdLyricCount:24)
 	ld xhl, 0:i3
 	jr t, .Ldh_epilogue
 
 .Ldh_next_slot:
 	inc1w_erp 0xfa			; QIZ++
 	stw_erp wa, 0xfa
-	cp wa, (0x230e72:24)
+	cp wa, (HDAE5000_RAM_FdLyricCount:24)
 	jrl c, .Ldh_search_loop
 
 	; Append at end (no sorted position found)
 .Ldh_append:
 	lda xwa, (xsp + 0x04)
 	push xwa
-	ld wa, (0x230e72:24)
+	ld wa, (HDAE5000_RAM_FdLyricCount:24)
 	extz xwa
 	ld xbc, xwa
 	sll xbc, 3
 	add xbc, xwa
-	ld xwa, 0x00230884
+	ld xwa, HDAE5000_RAM_FdLyricNames
 	add xwa, xbc
 	push xwa
 	call HDAE5000_StrCpy
 	inc 0, xsp
-	incw 1, (0x230e72:24)
+	incw 1, (HDAE5000_RAM_FdLyricCount:24)
 	ld xhl, 0:i3
 	jr t, .Ldh_epilogue
 

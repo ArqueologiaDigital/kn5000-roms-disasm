@@ -12376,7 +12376,7 @@ HDAE5000_Bitmap_HddIcon:	; 0x2E198E
 ; typed as text throughout.
 ; ============================================================================
 HDAE5000_Str_V206i:	; 0x2E1C82
-	; read by Display_Clear at 0x28B20D (ld #, pushed operand)
+	; read by CopyVersionString at 0x28B20D (ld #, pushed operand)
 	.asciz "V2.06i"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_TypeSel_TemplateAllNo:	; 0x2E1C8A
@@ -16015,29 +16015,29 @@ HDAE5000_FDFileSelectProc_KeyCaseTable:
 	.short	.Lsc_07_btn_enter - .Lsc_07_btn_down	; case 2
 	.short	.Lsc_07_btn_down - .Lsc_07_btn_down	; case 3
 HDAE5000_Str_Chr202D3E:	; 0x2E5D50
-	; read by Path_Builder at 0x28EFF1 (pushed operand)
+	; read by FdLyricList_Scan at 0x28EFF1 (pushed operand)
 	.asciz " ->"
 HDAE5000_Str_Chr2A2E2A:	; 0x2E5D54
-	; read by Path_Builder at 0x28F000 (lda operand)
+	; read by FdLyricList_Scan at 0x28F000 (lda operand)
 	.asciz "*.*"
 HDAE5000_Str_TTX:	; 0x2E5D58
-	; read by Path_Builder at 0x28F08E (pushed operand)
+	; read by FdLyricList_Scan at 0x28F08E (pushed operand)
 	.asciz ".TTX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-HDAE5000_Str_Rb_Path_Builder:	; 0x2E5D5E
-	; read by Path_Builder at 0x28F0A3 (lda operand)
+HDAE5000_Str_Rb_FdLyricTtx:	; 0x2E5D5E
+	; read by FdLyricList_Scan at 0x28F0A3 (lda operand)
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_MID:	; 0x2E5D62
-	; read by Path_Builder at 0x28F114 (pushed operand)
+	; read by FdLyricList_Scan at 0x28F114 (pushed operand)
 	.asciz ".MID"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-HDAE5000_Str_Rb_Path_Builder_2:	; 0x2E5D68
-	; read by Path_Builder at 0x28F129 (lda operand)
+HDAE5000_Str_Rb_FdLyricMid:	; 0x2E5D68
+	; read by FdLyricList_Scan at 0x28F129 (lda operand)
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_XLT:	; 0x2E5D6C
-	; read by Directory_Handler at 0x28F1BA (pushed operand)
+	; read by FdLyricList_AddTlx at 0x28F1BA (pushed operand)
 	.asciz "XLT."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_TextPtrs_LANENG001_to_LANENG006:	; 0x2E5D72, 6 x .long -> string

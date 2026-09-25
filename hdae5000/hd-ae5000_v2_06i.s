@@ -66,6 +66,11 @@
 	.equ HDAE5000_RAM_SqBtofPtr, 0x230ed2	; address of the main CPU's sqbtof word (HamaFn_GetAdr_sqbtof = 0x041C, HDAE5000_Boot_Init)
 	.equ HDAE5000_RAM_SqBeadtPtr, 0x230ed6	; address of the main CPU's sq_beadt byte (HamaFn_GetAdr_sq_beadt = 0x041B, HDAE5000_Boot_Init)
 	.equ HDAE5000_RAM_HdPresent, 0x230eda	; HDAE5000_Check_HD_Present's result (HDAE5000_Boot_Init; HDAE5000_Get_Init_Flag)
+	.equ HDAE5000_RAM_FdLyricNames, 0x230884	; 40 x 9-byte base names of the *.TLX files on the floppy, sorted (HDAE5000_FdLyricList_AddTlx)
+	.equ HDAE5000_RAM_FdLyricTitles, 0x2309f6	; 40 x 27 bytes: the first 26 bytes of each <name>.TTX (HDAE5000_FdLyricList_Scan)
+	.equ HDAE5000_RAM_FdLyricHasMid, 0x230e4a	; 40 flags: <name>.MID opens (HDAE5000_FdLyricList_Scan)
+	.equ HDAE5000_RAM_FdLyricCount, 0x230e72	; entries in FdLyricNames, at most 40 (HDAE5000_FdLyricList_AddTlx)
+	.equ HDAE5000_RAM_FdVolumeLabel, 0x230e7a	; the floppy's volume label (HamaFn_GetVolumeLabel) + " ->" (HDAE5000_FdLyricList_Scan)
 
 ; ----------------------------------------------------------------------------
 ; The main CPU's function tables, as the HD-AE5000 reaches them: workspace
