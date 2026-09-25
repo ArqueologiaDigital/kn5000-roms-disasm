@@ -29,20 +29,58 @@ extern const char NakaDesc_PmanOnOff2_Table;
 
 #define BASE  0x00E55A36u
 
+/* A NAKA class definition (24 bytes).  Its field names are the firmware's
+ * own: the root class "Class" (class id 0x01600004) names them in its
+ * propname block -- proc, parent, allsize, selfsize, name, propdata,
+ * propname -- and ClassProc (ui/ui_widget_defs.s) indexes a registered
+ * Class table with 24 * (class id & 0xFFFF).  parent is the parent's class
+ * id; allsize the instance size (parent.allsize + selfsize, the root Object
+ * contributing nothing); propdata one type character per own field;
+ * propname points at len(propdata) + 1 field-name pointers, the last to an
+ * empty string (THE CLASS SYSTEM, scripts/analysis/nakarest_objtab_map.py). */
 typedef struct __attribute__((packed)) {
-    naka_dispatch_t w0;  /* NAKA_TYPE_PANEL */
-    naka_dispatch_t w1;  /* 0x18 */
-    naka_dispatch_t w2;  /* 0x15 */
-    naka_dispatch_t w3;  /* 0x12 */
-    naka_dispatch_t w4;  /* 0x54 */
-    naka_dispatch_t w5;  /* 0x54 */
-    naka_dispatch_t w6;  /* 0x54 */
-    naka_dispatch_t w7;  /* 0x54 */
-    naka_dispatch_t w8;  /* 0x54 */
-    naka_dispatch_t w9;  /* 0x54 */
-    naka_dispatch_t w10;  /* 0x54 */
-    naka_dispatch_t w11;  /* 0x54 */
-    naka_dispatch_t w12;  /* 0x54 */
+    uint32_t proc;        /* +0  J  class procedure */
+    uint32_t parent;      /* +4  M  parent class id */
+    uint16_t allsize;     /* +8  B  instance size */
+    uint16_t selfsize;    /* +10 B  size of the own fields */
+    uint32_t name;        /* +12 X  class name string */
+    uint32_t propdata;    /* +16 X  field type characters */
+    uint32_t propname;    /* +20 L  field-name pointer block */
+} naka_classdef_t;
+
+typedef struct __attribute__((packed)) {
+    /* class definition 0x163:3: AcSendEditSw -- the part of the record in this blob (the rest is in the neighbouring blob) */
+    uint32_t classdef_163_3_parent;
+    uint16_t classdef_163_3_allsize;
+    uint16_t classdef_163_3_selfsize;
+    uint32_t classdef_163_3_name;
+    uint32_t classdef_163_3_propdata;
+    uint32_t classdef_163_3_propname;
+    /* class definition 0x163:4: AcGMOnOffBox (parent AcOnOffBox, allsize 54, fields -) */
+    naka_classdef_t classdef_163_4;
+    /* class definition 0x163:5: AcLswFuncEditBox (parent PsEditBox, allsize 68, fields data, on_str, off_str, pman_adr, pman_out) */
+    naka_classdef_t classdef_163_5;
+    /* class definition 0x163:6: AcLswFuncBox (parent PsParaBox, allsize 54, fields data, on_str, off_str, pman_adr, pman_out) */
+    naka_classdef_t classdef_163_6;
+    /* class definition 0x163:7: AcFadeSetGridBox (parent PsGridBox, allsize 74, fields fixedcol, fixedrow, func) */
+    naka_classdef_t classdef_163_7;
+    /* class definition 0x163:8: AcVocalGridBox (parent PsGridBox, allsize 74, fields fixedcol, fixedrow, func) */
+    naka_classdef_t classdef_163_8;
+    /* class definition 0x163:9: AcInOutGridBox (parent PsGridBox, allsize 74, fields fixedcol, fixedrow, func) */
+    naka_classdef_t classdef_163_9;
+    /* class definition 0x163:10: AcParaLoadOptGridBox (parent PsGridBox, allsize 74, fields fixedcol, fixedrow, func) */
+    naka_classdef_t classdef_163_10;
+    /* class definition 0x163:11: AcPcgOutGridBox (parent PsGridBox, allsize 74, fields fixedcol, fixedrow, func) */
+    naka_classdef_t classdef_163_11;
+    /* class definition 0x163:12: AcPmemOutLGridBox (parent PsGridBox, allsize 74, fields fixedcol, fixedrow, func) */
+    naka_classdef_t classdef_163_12;
+    /* class definition 0x163:13: AcPmemOutRGridBox (parent PsGridBox, allsize 74, fields fixedcol, fixedrow, func) */
+    naka_classdef_t classdef_163_13;
+    /* class definition 0x163:14: AcCtlMsgGridBox (parent PsGridBox, allsize 78, fields fixedcol, fixedrow, func, page) */
+    naka_classdef_t classdef_163_14;
+    /* class definition 0x163:15: AcMidiPartGridBox (parent PsGridBox, allsize 78, fields fixedcol, fixedrow, func, page) */
+    naka_classdef_t classdef_163_15;
+    uint32_t classrun_163_x0134;
     uint8_t pad_0[20];  /* zero padding */
     char AcMidiPartGridBox_code[6];
     char AcMidiPartGridBox_name[18];
@@ -62,135 +100,43 @@ _Static_assert(sizeof(naka_block_007_t) == 402,
 const naka_block_007_t naka_block_007_data
     __attribute__((section(".text"), used)) = {
 
-    .w0 = {
-        .header    = NAKA_HDR(NAKA_TYPE_PANEL),
-        .field_04   = 0x0034,
-        .field_06   = 0x000E,
-        .name_ptr   = 0x00E55C8A,
-        .inst_ptr   = 0x00E55C84,
-        .link_ptr   = NAKA_ADDR(NakaDesc_OnOffStyle_Table),
-        .proc_addr  = NAKA_ADDR(AcGMOnOffBoxProc),
-    },
+    .classdef_163_3_parent = 0x0160001E,
 
-    .w1 = {
-        .header    = NAKA_HDR(0x18),
-        .field_04   = 0x0036,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E55C76,
-        .inst_ptr   = 0x00E55C74,
-        .link_ptr   = 0x00E557BC,
-        .proc_addr  = NAKA_ADDR(AcLswFuncEditBoxProc),
-    },
+    .classdef_163_3_allsize = 0x0034,
 
-    .w2 = {
-        .header    = NAKA_HDR(0x15),
-        .field_04   = 0x0044,
-        .field_06   = 0x0012,
-        .name_ptr   = 0x00E55C62,
-        .inst_ptr   = 0x00E55C5C,
-        .link_ptr   = NAKA_ADDR(NakaDesc_PmanOnOff1_Table),
-        .proc_addr  = NAKA_ADDR(AcLswFuncBoxProc),
-    },
+    .classdef_163_3_selfsize = 0x000E,
 
-    .w3 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x0036,
-        .field_06   = 0x0012,
-        .name_ptr   = 0x00E55C4E,
-        .inst_ptr   = 0x00E55C48,
-        .link_ptr   = NAKA_ADDR(NakaDesc_PmanOnOff2_Table),
-        .proc_addr  = NAKA_ADDR(AcFadeSetGridBoxProc),
-    },
+    .classdef_163_3_name = 0x00E55C8A,
 
-    .w4 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55C36,
-        .inst_ptr   = 0x00E55C32,
-        .link_ptr   = 0x00E5584A,
-        .proc_addr  = NAKA_ADDR(AcVocalGridBoxProc),
-    },
+    .classdef_163_3_propdata = 0x00E55C84,
 
-    .w5 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55C22,
-        .inst_ptr   = 0x00E55C1E,
-        .link_ptr   = 0x00E55876,
-        .proc_addr  = NAKA_ADDR(AcInOutGridBoxProc),
-    },
+    .classdef_163_3_propname = NAKA_ADDR(NakaDesc_OnOffStyle_Table),
 
-    .w6 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55C0E,
-        .inst_ptr   = 0x00E55C0A,
-        .link_ptr   = 0x00E558A2,
-        .proc_addr  = NAKA_ADDR(AcParaLoadOptGridBoxProc),
-    },
+    .classdef_163_4 = { .proc = NAKA_ADDR(AcGMOnOffBoxProc), .parent = 0x01600018, .allsize = 54, .selfsize = 0, .name = 0x00E55C76, .propdata = 0x00E55C74, .propname = 0x00E557BC },
 
-    .w7 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55BF4,
-        .inst_ptr   = 0x00E55BF0,
-        .link_ptr   = 0x00E558CE,
-        .proc_addr  = NAKA_ADDR(AcPcgOutGridBoxProc),
-    },
+    .classdef_163_5 = { .proc = NAKA_ADDR(AcLswFuncEditBoxProc), .parent = 0x01600015, .allsize = 68, .selfsize = 18, .name = 0x00E55C62, .propdata = 0x00E55C5C, .propname = NAKA_ADDR(NakaDesc_PmanOnOff1_Table) },
 
-    .w8 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55BE0,
-        .inst_ptr   = 0x00E55BDC,
-        .link_ptr   = 0x00E558FA,
-        .proc_addr  = NAKA_ADDR(AcPmemOutLGridBoxProc),
-    },
+    .classdef_163_6 = { .proc = NAKA_ADDR(AcLswFuncBoxProc), .parent = 0x01600012, .allsize = 54, .selfsize = 18, .name = 0x00E55C4E, .propdata = 0x00E55C48, .propname = NAKA_ADDR(NakaDesc_PmanOnOff2_Table) },
 
-    .w9 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E55BCA,
-        .inst_ptr   = SELF(field_0190),
-        .link_ptr   = 0x00E55926,
-        .proc_addr  = NAKA_ADDR(AcPmemOutRGridBoxProc),
-    },
+    .classdef_163_7 = { .proc = NAKA_ADDR(AcFadeSetGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00E55C36, .propdata = 0x00E55C32, .propname = 0x00E5584A },
 
-    .w10 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004A,
-        .field_06   = 0x000C,
-        .name_ptr   = SELF(AcPmemOutRGridBox_name),
-        .inst_ptr   = SELF(AcPmemOutRGridBox_code),
-        .link_ptr   = 0x00E55952,
-        .proc_addr  = NAKA_ADDR(AcCtlMsgGridBoxProc),
-    },
+    .classdef_163_8 = { .proc = NAKA_ADDR(AcVocalGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00E55C22, .propdata = 0x00E55C1E, .propname = 0x00E55876 },
 
-    .w11 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004E,
-        .field_06   = 0x0010,
-        .name_ptr   = SELF(AcCtlMsgGridBox_name),
-        .inst_ptr   = SELF(AcCtlMsgGridBox_code),
-        .link_ptr   = NAKA_ADDR(NakaDesc_PageGridBox1_Table),
-        .proc_addr  = NAKA_ADDR(AcMidiPartGridBoxProc),
-    },
+    .classdef_163_9 = { .proc = NAKA_ADDR(AcInOutGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00E55C0E, .propdata = 0x00E55C0A, .propname = 0x00E558A2 },
 
-    .w12 = {
-        .header    = NAKA_HDR(0x54),
-        .field_04   = 0x004E,
-        .field_06   = 0x0010,
-        .name_ptr   = SELF(AcMidiPartGridBox_name),
-        .inst_ptr   = SELF(AcMidiPartGridBox_code),
-        .link_ptr   = 0x00E559B4,
-        .proc_addr  = 0x00000000,
-    },
+    .classdef_163_10 = { .proc = NAKA_ADDR(AcParaLoadOptGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00E55BF4, .propdata = 0x00E55BF0, .propname = 0x00E558CE },
+
+    .classdef_163_11 = { .proc = NAKA_ADDR(AcPcgOutGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00E55BE0, .propdata = 0x00E55BDC, .propname = 0x00E558FA },
+
+    .classdef_163_12 = { .proc = NAKA_ADDR(AcPmemOutLGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00E55BCA, .propdata = SELF(field_0190), .propname = 0x00E55926 },
+
+    .classdef_163_13 = { .proc = NAKA_ADDR(AcPmemOutRGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = SELF(AcPmemOutRGridBox_name), .propdata = SELF(AcPmemOutRGridBox_code), .propname = 0x00E55952 },
+
+    .classdef_163_14 = { .proc = NAKA_ADDR(AcCtlMsgGridBoxProc), .parent = 0x01600054, .allsize = 78, .selfsize = 16, .name = SELF(AcCtlMsgGridBox_name), .propdata = SELF(AcCtlMsgGridBox_code), .propname = NAKA_ADDR(NakaDesc_PageGridBox1_Table) },
+
+    .classdef_163_15 = { .proc = NAKA_ADDR(AcMidiPartGridBoxProc), .parent = 0x01600054, .allsize = 78, .selfsize = 16, .name = SELF(AcMidiPartGridBox_name), .propdata = SELF(AcMidiPartGridBox_code), .propname = 0x00E559B4 },
+
+    .classrun_163_x0134 = 0x00000000,
 
     .pad_0 = { 0 },
 

@@ -15,456 +15,168 @@ extern const char PlySngSel2Func;
 
 #define BASE  0x00E1A73Eu
 
+/* NAKA class AcWindowPage -- class id 0x01600025 (Class table slot 0x160, entry 37),
+ * parent PsPageBox; allsize 36.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
 typedef struct __attribute__((packed)) {
-    naka_dispatch_t w0;  /* 0x25 */
-    uint16_t field_0018;
-    uint16_t field_001a;
-    uint16_t field_001c;
-    uint16_t field_001e;
-    uint16_t field_0020;
-    uint16_t field_0022;
-    char str_0[2];
-    uint16_t field_0026;
-    uint8_t pad_0[2];  /* zero padding */
-    uint16_t field_002a;
-    uint16_t field_002c;
-    uint16_t field_002e;
-    uint16_t field_0030;
-    uint8_t pad_1[4];  /* zero padding */
-    uint16_t field_0036;
-    uint16_t field_0038;
-    uint16_t field_003a;
-    uint16_t field_003c;
-    uint16_t field_003e;
-    char str_1[2];
-    uint16_t field_0042;
-    uint8_t pad_2[2];  /* zero padding */
-    uint16_t field_0046;
-    uint16_t field_0048;
-    uint16_t field_004a;
-    uint16_t field_004c;
-    uint8_t pad_3[4];  /* zero padding */
-    uint16_t field_0052;
-    uint16_t field_0054;
-    uint16_t field_0056;
-    uint16_t field_0058;
-    uint16_t field_005a;
-    char str_2[2];
-    uint16_t field_005e;
-    uint8_t pad_4[2];  /* zero padding */
-    uint16_t field_0062;
-    uint16_t field_0064;
-    uint16_t field_0066;
-    uint16_t field_0068;
-    uint8_t pad_5[4];  /* zero padding */
-    uint16_t field_006e;
-    uint16_t field_0070;
-    uint16_t field_0072;
-    uint16_t field_0074;
-    char str_3[2];
-    uint16_t field_0078;
-    uint8_t pad_6[2];  /* zero padding */
-    uint16_t field_007c;
-    uint16_t field_007e;
-    uint16_t field_0080;
-    uint16_t field_0082;
-    uint8_t pad_7[4];  /* zero padding */
-    uint16_t field_0088;
-    uint16_t field_008a;
-    uint16_t field_008c;
-    char str_4[2];
-    uint16_t field_0090;
-    uint16_t field_0092;
-    uint16_t field_0094;
-    uint16_t field_0096;
-    uint16_t field_0098;
-    uint16_t field_009a;
-    uint8_t pad_8[2];  /* zero padding */
-    uint16_t field_009e;
-    uint32_t ptr_00a0;
-    uint16_t field_00a4;
-    uint8_t pad_9[4];  /* zero padding */
-    uint16_t field_00aa;
-    uint16_t field_00ac;
-    uint16_t field_00ae;
-    uint16_t field_00b0;
-    char str_5[2];
-    uint16_t field_00b4;
-    uint16_t field_00b6;
-    uint16_t field_00b8;
-    uint16_t field_00ba;
-    uint16_t field_00bc;
-    uint16_t field_00be;
-    uint16_t field_00c0;
-    uint16_t field_00c2;
-    uint16_t field_00c4;
-    char str_6[2];
-    uint16_t field_00c8;
-    uint16_t field_00ca;
-    uint8_t pad_10[8];  /* zero padding */
-    uint16_t field_00d4;
-    uint16_t field_00d6;
-    uint16_t field_00d8;
-    uint16_t field_00da;
-    uint8_t pad_11[2];  /* zero padding */
-    char str_7[2];
-    uint16_t field_00e0;
-    uint16_t field_00e2;
-    uint16_t field_00e4;
-    uint16_t field_00e6;
-    uint16_t field_00e8;
-    uint16_t field_00ea;
-    uint16_t field_00ec;
-    char str_8[2];
-    uint16_t field_00f0;
-    char str_9[2];
-    uint16_t field_00f4;
-    uint16_t field_00f6;
-    uint8_t pad_12[8];  /* zero padding */
-    uint16_t field_0100;
-    uint16_t field_0102;
-    uint16_t field_0104;
-    uint16_t field_0106;
-    uint16_t field_0108;
-    char str_10[2];
-    uint16_t field_010c;
-    uint16_t field_010e;
-    uint16_t field_0110;
-    uint16_t field_0112;
-    uint16_t field_0114;
-    uint16_t field_0116;
-    uint16_t field_0118;
-    char str_11[2];
-    uint16_t field_011c;
-    uint16_t field_011e;
-    uint16_t field_0120;
-    uint16_t field_0122;
-    uint8_t pad_13[8];  /* zero padding */
-    uint16_t field_012c;
-    uint16_t field_012e;
-    uint16_t field_0130;
-    uint16_t field_0132;
-    uint16_t field_0134;
-    char str_12[2];
-    uint16_t field_0138;
-    uint16_t field_013a;
-    uint16_t field_013c;
-    uint16_t field_013e;
-    uint16_t field_0140;
-    uint16_t field_0142;
-    uint16_t field_0144;
-    uint16_t field_0146;
-    uint16_t field_0148;
-    uint16_t field_014a;
-    uint16_t field_014c;
-    uint16_t field_014e;
-    uint8_t pad_14[8];  /* zero padding */
-    uint16_t field_0158;
-    uint16_t field_015a;
-    uint16_t field_015c;
-    uint16_t field_015e;
-    uint16_t field_0160;
-    char str_13[2];
-    uint16_t field_0164;
-    uint16_t field_0166;
-    uint16_t field_0168;
-    uint16_t field_016a;
-    uint16_t field_016c;
-    uint16_t field_016e;
-    uint16_t field_0170;
-    uint16_t field_0172;
-    uint16_t field_0174;
-    uint16_t field_0176;
-    uint16_t field_0178;
-    uint16_t field_017a;
-    uint8_t pad_15[8];  /* zero padding */
-    uint16_t field_0184;
-    uint16_t field_0186;
-    uint16_t field_0188;
-    uint16_t field_018a;
-    uint16_t field_018c;
-    char str_14[2];
-    uint16_t field_0190;
-    uint16_t field_0192;
-    uint16_t field_0194;
-    uint16_t field_0196;
-    uint16_t field_0198;
-    uint16_t field_019a;
-    uint16_t field_019c;
-    uint16_t field_019e;
-    uint16_t field_01a0;
-    char str_15[2];
-    uint16_t field_01a4;
-    uint16_t field_01a6;
-    uint8_t pad_16[8];  /* zero padding */
-    uint16_t field_01b0;
-    uint16_t field_01b2;
-    uint16_t field_01b4;
-    uint16_t field_01b6;
-    uint16_t field_01b8;
-    char str_16[2];
-    uint16_t field_01bc;
-    uint16_t field_01be;
-    uint16_t field_01c0;
-    uint16_t field_01c2;
-    uint16_t field_01c4;
-    uint16_t field_01c6;
-    uint16_t field_01c8;
-    char str_17[2];
-    uint16_t field_01cc;
-    char str_18[2];
-    uint16_t field_01d0;
-    uint16_t field_01d2;
-    uint8_t pad_17[8];  /* zero padding */
-    uint16_t field_01dc;
-    uint16_t field_01de;
-    uint16_t field_01e0;
-    uint16_t field_01e2;
-    uint16_t field_01e4;
-    char str_19[2];
-    uint16_t field_01e8;
-    uint16_t field_01ea;
-    uint16_t field_01ec;
-    uint16_t field_01ee;
-    uint16_t field_01f0;
-    uint16_t field_01f2;
-    uint16_t field_01f4;
-    char str_20[2];
-    uint16_t field_01f8;
-    uint16_t field_01fa;
-    uint16_t field_01fc;
-    uint16_t field_01fe;
-    uint8_t pad_18[8];  /* zero padding */
-    uint16_t field_0208;
-    uint16_t field_020a;
-    uint16_t field_020c;
-    uint16_t field_020e;
-    uint16_t field_0210;
-    char str_21[2];
-    uint16_t field_0214;
-    uint16_t field_0216;
-    uint16_t field_0218;
-    uint16_t field_021a;
-    uint16_t field_021c;
-    uint16_t field_021e;
-    uint16_t field_0220;
-    uint16_t field_0222;
-    uint16_t field_0224;
-    uint16_t field_0226;
-    uint16_t field_0228;
-    uint16_t field_022a;
-    uint8_t pad_19[8];  /* zero padding */
-    uint16_t field_0234;
-    uint16_t field_0236;
-    uint16_t field_0238;
-    uint16_t field_023a;
-    uint16_t field_023c;
-    char str_22[2];
-    uint16_t field_0240;
-    uint16_t field_0242;
-    uint16_t field_0244;
-    uint16_t field_0246;
-    uint16_t field_0248;
-    uint16_t field_024a;
-    uint16_t field_024c;
-    uint16_t field_024e;
-    uint16_t field_0250;
-    uint16_t field_0252;
-    uint16_t field_0254;
-    uint16_t field_0256;
-    uint8_t pad_20[8];  /* zero padding */
-    uint16_t field_0260;
-    uint16_t field_0262;
-    uint16_t field_0264;
-    uint16_t field_0266;
-    uint16_t field_0268;
-    char str_23[2];
-    uint16_t field_026c;
-    uint16_t field_026e;
-    uint16_t field_0270;
-    uint16_t field_0272;
-    uint16_t field_0274;
-    uint16_t field_0276;
-    uint8_t pad_21[2];  /* zero padding */
-    uint16_t field_027a;
-    uint32_t ptr_027c;
-    uint16_t field_0280;
-    uint8_t pad_22[4];  /* zero padding */
-    uint16_t field_0286;
-    uint16_t field_0288;
-    uint16_t field_028a;
-    uint16_t field_028c;
-    char str_24[2];
-    uint16_t field_0290;
-    uint16_t field_0292;
-    uint16_t field_0294;
-    uint16_t field_0296;
-    uint16_t field_0298;
-    uint16_t field_029a;
-    uint16_t field_029c;
-    uint16_t field_029e;
-    uint16_t field_02a0;
-    char str_25[2];
-    uint16_t field_02a4;
-    uint16_t field_02a6;
-    uint8_t pad_23[8];  /* zero padding */
-    uint16_t field_02b0;
-    uint16_t field_02b2;
-    uint16_t field_02b4;
-    uint16_t field_02b6;
-    uint16_t field_02b8;
-    char str_26[2];
-    uint16_t field_02bc;
-    uint16_t field_02be;
-    uint16_t field_02c0;
-    uint16_t field_02c2;
-    uint16_t field_02c4;
-    uint16_t field_02c6;
-    uint16_t field_02c8;
-    char str_27[2];
-    uint16_t field_02cc;
-    char str_28[2];
-    uint16_t field_02d0;
-    uint16_t field_02d2;
-    uint8_t pad_24[8];  /* zero padding */
-    uint16_t field_02dc;
-    uint16_t field_02de;
-    uint16_t field_02e0;
-    uint16_t field_02e2;
-    uint16_t field_02e4;
-    char str_29[2];
-    uint16_t field_02e8;
-    uint16_t field_02ea;
-    uint16_t field_02ec;
-    uint16_t field_02ee;
-    uint16_t field_02f0;
-    uint16_t field_02f2;
-    uint16_t field_02f4;
-    char str_30[2];
-    uint16_t field_02f8;
-    uint16_t field_02fa;
-    uint16_t field_02fc;
-    uint16_t field_02fe;
-    uint8_t pad_25[8];  /* zero padding */
-    uint16_t field_0308;
-    uint16_t field_030a;
-    uint16_t field_030c;
-    uint16_t field_030e;
-    uint16_t field_0310;
-    char str_31[2];
-    uint16_t field_0314;
-    uint16_t field_0316;
-    uint16_t field_0318;
-    uint16_t field_031a;
-    uint16_t field_031c;
-    uint16_t field_031e;
-    uint16_t field_0320;
-    uint16_t field_0322;
-    uint16_t field_0324;
-    uint16_t field_0326;
-    uint16_t field_0328;
-    uint16_t field_032a;
-    uint8_t pad_26[8];  /* zero padding */
-    uint16_t field_0334;
-    uint16_t field_0336;
-    uint16_t field_0338;
-    uint16_t field_033a;
-    uint16_t field_033c;
-    char str_32[2];
-    uint16_t field_0340;
-    uint16_t field_0342;
-    uint16_t field_0344;
-    uint16_t field_0346;
-    uint16_t field_0348;
-    uint16_t field_034a;
-    uint16_t field_034c;
-    uint16_t field_034e;
-    uint16_t field_0350;
-    uint16_t field_0352;
-    uint16_t field_0354;
-    uint16_t field_0356;
-    uint8_t pad_27[8];  /* zero padding */
-    uint16_t field_0360;
-    uint16_t field_0362;
-    uint16_t field_0364;
-    uint16_t field_0366;
-    uint16_t field_0368;
-    char str_33[2];
-    uint16_t field_036c;
-    uint16_t field_036e;
-    uint16_t field_0370;
-    uint16_t field_0372;
-    uint16_t field_0374;
-    uint16_t field_0376;
-    uint16_t field_0378;
-    uint16_t field_037a;
-    uint16_t field_037c;
-    char str_34[2];
-    uint16_t field_0380;
-    uint16_t field_0382;
-    uint8_t pad_28[8];  /* zero padding */
-    uint16_t field_038c;
-    uint16_t field_038e;
-    uint16_t field_0390;
-    uint16_t field_0392;
-    uint16_t field_0394;
-    char str_35[2];
-    uint16_t field_0398;
-    uint16_t field_039a;
-    uint16_t field_039c;
-    uint16_t field_039e;
-    uint16_t field_03a0;
-    uint16_t field_03a2;
-    uint16_t field_03a4;
-    char str_36[2];
-    uint16_t field_03a8;
-    char str_37[2];
-    uint16_t field_03ac;
-    uint16_t field_03ae;
-    uint8_t pad_29[8];  /* zero padding */
-    uint16_t field_03b8;
-    uint16_t field_03ba;
-    uint16_t field_03bc;
-    uint16_t field_03be;
-    uint16_t field_03c0;
-    char str_38[2];
-    uint16_t field_03c4;
-    uint16_t field_03c6;
-    uint16_t field_03c8;
-    uint16_t field_03ca;
-    uint16_t field_03cc;
-    uint16_t field_03ce;
-    uint16_t field_03d0;
-    char str_39[2];
-    uint16_t field_03d4;
-    uint16_t field_03d6;
-    uint16_t field_03d8;
-    uint16_t field_03da;
-    uint8_t pad_30[8];  /* zero padding */
-    uint16_t field_03e4;
-    uint16_t field_03e6;
-    uint16_t field_03e8;
-    uint16_t field_03ea;
-    uint16_t field_03ec;
-    char str_40[2];
-    uint16_t field_03f0;
-    uint16_t field_03f2;
-    uint16_t field_03f4;
-    uint16_t field_03f6;
-    uint16_t field_03f8;
-    uint16_t field_03fa;
-    uint16_t field_03fc;
-    uint16_t field_03fe;
-    uint16_t field_0400;
-    uint16_t field_0402;
-    uint16_t field_0404;
-    uint16_t field_0406;
-    uint8_t pad_31[8];  /* zero padding */
-    uint16_t field_0410;
-    uint16_t field_0412;
-    uint16_t field_0414;
-    uint16_t field_0416;
-    uint16_t field_0418;
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint16_t color;             /* +22 ^ */
+    uint16_t border;            /* +24 _ */
+    uint16_t index;             /* +26 A */
+    uint32_t page;              /* +28 n */
+    uint16_t pagemin;           /* +32 A */
+    uint16_t pagemax;           /* +34 A */
+} naka_cls_AcWindowPage_t;
+
+/* NAKA class IvPageControl -- class id 0x01600028 (Class table slot 0x160, entry 40),
+ * parent PsInvisibleBox; allsize 28.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint16_t page;              /* +22 A */
+    uint32_t window;            /* +24 t */
+} naka_cls_IvPageControl_t;
+
+/* NAKA class IvShowHide -- class id 0x01600064 (Class table slot 0x160, entry 100),
+ * parent PsInvisibleBox; allsize 26.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint32_t func;              /* +22 j */
+} naka_cls_IvShowHide_t;
+
+/* NAKA class IvIntVari -- class id 0x01600062 (Class table slot 0x160, entry 98),
+ * parent IvInterrupt; allsize 24.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint16_t time;              /* +22 w */
+} naka_cls_IvIntVari_t;
+
+/* NAKA class Window -- class id 0x01600035 (Class table slot 0x160, entry 53),
+ * parent GroupBox; allsize 36.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint16_t color;             /* +22 ^ */
+    uint16_t border;            /* +24 _ */
+    uint16_t modal;             /* +26 G */
+    uint32_t parent;            /* +28 r */
+    uint32_t child;             /* +32 r */
+} naka_cls_Window_t;
+
+/* NAKA class VwVariBox -- class id 0x01640024 (Class table slot 0x164, entry 36),
+ * parent VwBox; allsize 44.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint16_t color;             /* +22 ^ */
+    uint16_t border;            /* +24 _ */
+    uint16_t index;             /* +26 A */
+    uint32_t font;              /* +28 c */
+    uint16_t fontcolor;         /* +32 ^ */
+    uint16_t align;             /* +34 d */
+    uint16_t editsw;            /* +36 e */
+    uint32_t selected;          /* +38 m */
+    uint8_t mspbnk;            /* +42 C */
+    uint8_t _pad_43[1];
+} naka_cls_VwVariBox_t;
+
+typedef struct __attribute__((packed)) {
+    /* element 1 of Viewable slot 0xC8 "MspBkslWin": AcWindowPage (class id 0x01600025) */
+    naka_cls_AcWindowPage_t vC8_e1;
+    /* element 2 of Viewable slot 0xC8 "MspBnkP1Ctl": IvPageControl (class id 0x01600028) */
+    naka_cls_IvPageControl_t vC8_e2;
+    /* element 3 of Viewable slot 0xC8 "MspBnkP2Ctl": IvPageControl (class id 0x01600028) */
+    naka_cls_IvPageControl_t vC8_e3;
+    /* element 4 of Viewable slot 0xC8: IvShowHide (class id 0x01600064) */
+    naka_cls_IvShowHide_t vC8_e4;
+    /* element 5 of Viewable slot 0xC8: IvIntVari (class id 0x01600062) */
+    naka_cls_IvIntVari_t vC8_e5;
+    /* element 6 of Viewable slot 0xC8 "MspBkslP1Win": Window (class id 0x01600035) */
+    naka_cls_Window_t vC8_e6;
+    /* element 7 of Viewable slot 0xC8 "Eff1Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e7;
+    /* element 8 of Viewable slot 0xC8 "Eff2Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e8;
+    /* element 9 of Viewable slot 0xC8 "ComicBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e9;
+    /* element 10 of Viewable slot 0xC8 "MovieBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e10;
+    /* element 11 of Viewable slot 0xC8 "EnterBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e11;
+    /* element 12 of Viewable slot 0xC8 "ArpgioBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e12;
+    /* element 13 of Viewable slot 0xC8 "Rock1Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e13;
+    /* element 14 of Viewable slot 0xC8 "Rock2Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e14;
+    /* element 15 of Viewable slot 0xC8 "DanceBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e15;
+    /* element 16 of Viewable slot 0xC8 "FunkBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e16;
+    /* element 17 of Viewable slot 0xC8 "MspBkslP2Win": Window (class id 0x01600035) */
+    naka_cls_Window_t vC8_e17;
+    /* element 18 of Viewable slot 0xC8 "JazzBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e18;
+    /* element 19 of Viewable slot 0xC8 "LatinBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e19;
+    /* element 20 of Viewable slot 0xC8 "HitBnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e20;
+    /* element 21 of Viewable slot 0xC8 "User1Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e21;
+    /* element 22 of Viewable slot 0xC8 "User2Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e22;
+    /* element 23 of Viewable slot 0xC8 "Cmpile1Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e23;
+    /* element 24 of Viewable slot 0xC8 "Cmpile2Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e24;
+    /* element 25 of Viewable slot 0xC8 "Ctrl1Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e25;
+    /* element 26 of Viewable slot 0xC8 "Ctrl2Bnk": VwVariBox (class id 0x01640024) */
+    naka_cls_VwVariBox_t vC8_e26;
 } naka_accomp7_widgets_t;
 
 #define SELF(field) \
@@ -476,911 +188,477 @@ _Static_assert(sizeof(naka_accomp7_widgets_t) == 1050,
 const naka_accomp7_widgets_t naka_accomp7_widgets_data
     __attribute__((section(".text"), used)) = {
 
-    .w0 = {
-        .header    = NAKA_HDR(0x25),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0xFFFF0002,
-        .inst_ptr   = 0x00F50008,
-        .link_ptr   = 0x013B0006,
-        .proc_addr  = NAKA_ADDR(PlySngSel2Func),
+    .vC8_e1 = {
+        .class_ = 0x01600025,
+        .super = 0,
+        .sub = NAKA_NONE,
+        .next = 2,
+        .prev = NAKA_NONE,
+        .flag = 0x0008,
+        .rect = { 245, 6, 315, 23 },
+        .color = 0x00F3,
+        .border = 0x00C1,
+        .index = 0xFFFF,
+        .page = 0x0003D72A,
+        .pagemin = 0x0001,
+        .pagemax = 0x0002,
     },
 
-    .field_0018 = 0x00C1,
-
-    .field_001a = NAKA_NONE,
-
-    .field_001c = 0xD72A,
-
-    .field_001e = 0x0003,
-
-    .field_0020 = 0x0001,
-
-    .field_0022 = 0x0002,
-
-    .str_0 = "(",
-
-    .field_0026 = 0x0160,
-
-    .pad_0 = { 0 },
-
-    .field_002a = NAKA_NONE,
-
-    .field_002c = 0x0003,
-
-    .field_002e = 0x0001,
-
-    .field_0030 = 0x0018,
-
-    .pad_1 = { 0 },
-
-    .field_0036 = 0x001F,
-
-    .field_0038 = 0x001F,
-
-    .field_003a = 0x0001,
-
-    .field_003c = 0x0006,
-
-    .field_003e = 0x00C8,
-
-    .str_1 = "(",
-
-    .field_0042 = 0x0160,
-
-    .pad_2 = { 0 },
-
-    .field_0046 = NAKA_NONE,
-
-    .field_0048 = 0x0004,
-
-    .field_004a = 0x0002,
-
-    .field_004c = 0x0018,
-
-    .pad_3 = { 0 },
-
-    .field_0052 = 0x001F,
-
-    .field_0054 = 0x001F,
-
-    .field_0056 = 0x0002,
-
-    .field_0058 = 0x0011,
-
-    .field_005a = 0x00C8,
-
-    .str_2 = "d",
-
-    .field_005e = 0x0160,
-
-    .pad_4 = { 0 },
-
-    .field_0062 = NAKA_NONE,
-
-    .field_0064 = 0x0005,
-
-    .field_0066 = 0x0003,
-
-    .field_0068 = 0x0018,
-
-    .pad_5 = { 0 },
-
-    .field_006e = 0x001F,
-
-    .field_0070 = 0x001F,
-
-    .field_0072 = 0x0016,
-
-    .field_0074 = 0x0124,
-
-    .str_3 = "b",
-
-    .field_0078 = 0x0160,
-
-    .pad_6 = { 0 },
-
-    .field_007c = NAKA_NONE,
-
-    .field_007e = NAKA_NONE,
-
-    .field_0080 = 0x0004,
-
-    .field_0082 = 0x0018,
-
-    .pad_7 = { 0 },
-
-    .field_0088 = 0x001F,
-
-    .field_008a = 0x001F,
-
-    .field_008c = 0x0001,
-
-    .str_4 = "5",
-
-    .field_0090 = 0x0160,
-
-    .field_0092 = NAKA_NONE,
-
-    .field_0094 = 0x0007,
-
-    .field_0096 = NAKA_NONE,
-
-    .field_0098 = NAKA_NONE,
-
-    .field_009a = 0x0008,
-
-    .pad_8 = { 0 },
-
-    .field_009e = 0x001E,
-
-    .ptr_00a0 = NAKA_ADDR(Naka_PresentationRootState),
-
-    .field_00a4 = 0x00F5,
-
-    .pad_9 = { 0 },
-
-    .field_00aa = 0xD72C,
-
-    .field_00ac = 0x0003,
-
-    .field_00ae = 0xD730,
-
-    .field_00b0 = 0x0003,
-
-    .str_5 = "$",
-
-    .field_00b4 = 0x0164,
-
-    .field_00b6 = 0x0006,
-
-    .field_00b8 = NAKA_NONE,
-
-    .field_00ba = 0x0008,
-
-    .field_00bc = NAKA_NONE,
-
-    .field_00be = 0x0008,
-
-    .field_00c0 = 0x0008,
-
-    .field_00c2 = 0x001E,
-
-    .field_00c4 = 0x009C,
-
-    .str_6 = "7",
-
-    .field_00c8 = 0x0007,
-
-    .field_00ca = 0x00C1,
-
-    .pad_10 = { 0 },
-
-    .field_00d4 = 0x0001,
-
-    .field_00d6 = 0x0088,
-
-    .field_00d8 = 0xD734,
-
-    .field_00da = 0x0003,
-
-    .pad_11 = { 0 },
-
-    .str_7 = "$",
-
-    .field_00e0 = 0x0164,
-
-    .field_00e2 = 0x0006,
-
-    .field_00e4 = NAKA_NONE,
-
-    .field_00e6 = 0x0009,
-
-    .field_00e8 = 0x0007,
-
-    .field_00ea = 0x0008,
-
-    .field_00ec = 0x0008,
-
-    .str_8 = "H",
-
-    .field_00f0 = 0x009C,
-
-    .str_9 = "a",
-
-    .field_00f4 = 0x0007,
-
-    .field_00f6 = 0x00C1,
-
-    .pad_12 = { 0 },
-
-    .field_0100 = 0x0001,
-
-    .field_0102 = 0x0089,
-
-    .field_0104 = 0xD736,
-
-    .field_0106 = 0x0003,
-
-    .field_0108 = 0x0001,
-
-    .str_10 = "$",
-
-    .field_010c = 0x0164,
-
-    .field_010e = 0x0006,
-
-    .field_0110 = NAKA_NONE,
-
-    .field_0112 = 0x000A,
-
-    .field_0114 = 0x0008,
-
-    .field_0116 = 0x0008,
-
-    .field_0118 = 0x0008,
-
-    .str_11 = "r",
-
-    .field_011c = 0x009C,
-
-    .field_011e = 0x008B,
-
-    .field_0120 = 0x0007,
-
-    .field_0122 = 0x00C1,
-
-    .pad_13 = { 0 },
-
-    .field_012c = 0x0001,
-
-    .field_012e = 0x008A,
-
-    .field_0130 = 0xD738,
-
-    .field_0132 = 0x0003,
-
-    .field_0134 = 0x0002,
-
-    .str_12 = "$",
-
-    .field_0138 = 0x0164,
-
-    .field_013a = 0x0006,
-
-    .field_013c = NAKA_NONE,
-
-    .field_013e = 0x000B,
-
-    .field_0140 = 0x0009,
-
-    .field_0142 = 0x0008,
-
-    .field_0144 = 0x0008,
-
-    .field_0146 = 0x009C,
-
-    .field_0148 = 0x009C,
-
-    .field_014a = 0x00B5,
-
-    .field_014c = 0x0007,
-
-    .field_014e = 0x00C1,
-
-    .pad_14 = { 0 },
-
-    .field_0158 = 0x0001,
-
-    .field_015a = 0x008B,
-
-    .field_015c = 0xD73A,
-
-    .field_015e = 0x0003,
-
-    .field_0160 = 0x0003,
-
-    .str_13 = "$",
-
-    .field_0164 = 0x0164,
-
-    .field_0166 = 0x0006,
-
-    .field_0168 = NAKA_NONE,
-
-    .field_016a = 0x000C,
-
-    .field_016c = 0x000A,
-
-    .field_016e = 0x0008,
-
-    .field_0170 = 0x0008,
-
-    .field_0172 = 0x00C6,
-
-    .field_0174 = 0x009C,
-
-    .field_0176 = 0x00DF,
-
-    .field_0178 = 0x0007,
-
-    .field_017a = 0x00C1,
-
-    .pad_15 = { 0 },
-
-    .field_0184 = 0x0001,
-
-    .field_0186 = 0x008C,
-
-    .field_0188 = 0xD73C,
-
-    .field_018a = 0x0003,
-
-    .field_018c = 0x0004,
-
-    .str_14 = "$",
-
-    .field_0190 = 0x0164,
-
-    .field_0192 = 0x0006,
-
-    .field_0194 = NAKA_NONE,
-
-    .field_0196 = 0x000D,
-
-    .field_0198 = 0x000B,
-
-    .field_019a = 0x0008,
-
-    .field_019c = 0x00A3,
-
-    .field_019e = 0x001E,
-
-    .field_01a0 = 0x0137,
-
-    .str_15 = "7",
-
-    .field_01a4 = 0x0007,
-
-    .field_01a6 = 0x00C1,
-
-    .pad_16 = { 0 },
-
-    .field_01b0 = 0x0001,
-
-    .field_01b2 = 0x0008,
-
-    .field_01b4 = 0xD73E,
-
-    .field_01b6 = 0x0003,
-
-    .field_01b8 = 0x0005,
-
-    .str_16 = "$",
-
-    .field_01bc = 0x0164,
-
-    .field_01be = 0x0006,
-
-    .field_01c0 = NAKA_NONE,
-
-    .field_01c2 = 0x000E,
-
-    .field_01c4 = 0x000C,
-
-    .field_01c6 = 0x0008,
-
-    .field_01c8 = 0x00A3,
-
-    .str_17 = "H",
-
-    .field_01cc = 0x0137,
-
-    .str_18 = "a",
-
-    .field_01d0 = 0x0007,
-
-    .field_01d2 = 0x00C1,
-
-    .pad_17 = { 0 },
-
-    .field_01dc = 0x0001,
-
-    .field_01de = 0x0009,
-
-    .field_01e0 = 0xD740,
-
-    .field_01e2 = 0x0003,
-
-    .field_01e4 = 0x0006,
-
-    .str_19 = "$",
-
-    .field_01e8 = 0x0164,
-
-    .field_01ea = 0x0006,
-
-    .field_01ec = NAKA_NONE,
-
-    .field_01ee = 0x000F,
-
-    .field_01f0 = 0x000D,
-
-    .field_01f2 = 0x0008,
-
-    .field_01f4 = 0x00A3,
-
-    .str_20 = "r",
-
-    .field_01f8 = 0x0137,
-
-    .field_01fa = 0x008B,
-
-    .field_01fc = 0x0007,
-
-    .field_01fe = 0x00C1,
-
-    .pad_18 = { 0 },
-
-    .field_0208 = 0x0001,
-
-    .field_020a = 0x000A,
-
-    .field_020c = 0xD742,
-
-    .field_020e = 0x0003,
-
-    .field_0210 = 0x0007,
-
-    .str_21 = "$",
-
-    .field_0214 = 0x0164,
-
-    .field_0216 = 0x0006,
-
-    .field_0218 = NAKA_NONE,
-
-    .field_021a = 0x0010,
-
-    .field_021c = 0x000E,
-
-    .field_021e = 0x0008,
-
-    .field_0220 = 0x00A3,
-
-    .field_0222 = 0x009C,
-
-    .field_0224 = 0x0137,
-
-    .field_0226 = 0x00B5,
-
-    .field_0228 = 0x0007,
-
-    .field_022a = 0x00C1,
-
-    .pad_19 = { 0 },
-
-    .field_0234 = 0x0001,
-
-    .field_0236 = 0x000B,
-
-    .field_0238 = 0xD744,
-
-    .field_023a = 0x0003,
-
-    .field_023c = 0x0008,
-
-    .str_22 = "$",
-
-    .field_0240 = 0x0164,
-
-    .field_0242 = 0x0006,
-
-    .field_0244 = NAKA_NONE,
-
-    .field_0246 = NAKA_NONE,
-
-    .field_0248 = 0x000F,
-
-    .field_024a = 0x0008,
-
-    .field_024c = 0x00A3,
-
-    .field_024e = 0x00C6,
-
-    .field_0250 = 0x0137,
-
-    .field_0252 = 0x00DF,
-
-    .field_0254 = 0x0007,
-
-    .field_0256 = 0x00C1,
-
-    .pad_20 = { 0 },
-
-    .field_0260 = 0x0001,
-
-    .field_0262 = 0x000C,
-
-    .field_0264 = 0xD746,
-
-    .field_0266 = 0x0003,
-
-    .field_0268 = 0x0009,
-
-    .str_23 = "5",
-
-    .field_026c = 0x0160,
-
-    .field_026e = NAKA_NONE,
-
-    .field_0270 = 0x0012,
-
-    .field_0272 = NAKA_NONE,
-
-    .field_0274 = NAKA_NONE,
-
-    .field_0276 = 0x0008,
-
-    .pad_21 = { 0 },
-
-    .field_027a = 0x001E,
-
-    .ptr_027c = NAKA_ADDR(Naka_PresentationRootState),
-
-    .field_0280 = 0x00F5,
-
-    .pad_22 = { 0 },
-
-    .field_0286 = 0xD748,
-
-    .field_0288 = 0x0003,
-
-    .field_028a = 0xD74C,
-
-    .field_028c = 0x0003,
-
-    .str_24 = "$",
-
-    .field_0290 = 0x0164,
-
-    .field_0292 = 0x0011,
-
-    .field_0294 = NAKA_NONE,
-
-    .field_0296 = 0x0013,
-
-    .field_0298 = NAKA_NONE,
-
-    .field_029a = 0x0008,
-
-    .field_029c = 0x0008,
-
-    .field_029e = 0x001E,
-
-    .field_02a0 = 0x009C,
-
-    .str_25 = "7",
-
-    .field_02a4 = 0x0007,
-
-    .field_02a6 = 0x00C1,
-
-    .pad_23 = { 0 },
-
-    .field_02b0 = 0x0001,
-
-    .field_02b2 = 0x0088,
-
-    .field_02b4 = 0xD750,
-
-    .field_02b6 = 0x0003,
-
-    .field_02b8 = 0x000A,
-
-    .str_26 = "$",
-
-    .field_02bc = 0x0164,
-
-    .field_02be = 0x0011,
-
-    .field_02c0 = NAKA_NONE,
-
-    .field_02c2 = 0x0014,
-
-    .field_02c4 = 0x0012,
-
-    .field_02c6 = 0x0008,
-
-    .field_02c8 = 0x0008,
-
-    .str_27 = "H",
-
-    .field_02cc = 0x009C,
-
-    .str_28 = "a",
-
-    .field_02d0 = 0x0007,
-
-    .field_02d2 = 0x00C1,
-
-    .pad_24 = { 0 },
-
-    .field_02dc = 0x0001,
-
-    .field_02de = 0x0089,
-
-    .field_02e0 = 0xD752,
-
-    .field_02e2 = 0x0003,
-
-    .field_02e4 = 0x000B,
-
-    .str_29 = "$",
-
-    .field_02e8 = 0x0164,
-
-    .field_02ea = 0x0011,
-
-    .field_02ec = NAKA_NONE,
-
-    .field_02ee = 0x0015,
-
-    .field_02f0 = 0x0013,
-
-    .field_02f2 = 0x0008,
-
-    .field_02f4 = 0x0008,
-
-    .str_30 = "r",
-
-    .field_02f8 = 0x009C,
-
-    .field_02fa = 0x008B,
-
-    .field_02fc = 0x0007,
-
-    .field_02fe = 0x00C1,
-
-    .pad_25 = { 0 },
-
-    .field_0308 = 0x0001,
-
-    .field_030a = 0x008A,
-
-    .field_030c = 0xD754,
-
-    .field_030e = 0x0003,
-
-    .field_0310 = 0x000C,
-
-    .str_31 = "$",
-
-    .field_0314 = 0x0164,
-
-    .field_0316 = 0x0011,
-
-    .field_0318 = NAKA_NONE,
-
-    .field_031a = 0x0016,
-
-    .field_031c = 0x0014,
-
-    .field_031e = 0x0008,
-
-    .field_0320 = 0x0008,
-
-    .field_0322 = 0x009C,
-
-    .field_0324 = 0x009C,
-
-    .field_0326 = 0x00B5,
-
-    .field_0328 = 0x0007,
-
-    .field_032a = 0x00C1,
-
-    .pad_26 = { 0 },
-
-    .field_0334 = 0x0001,
-
-    .field_0336 = 0x008B,
-
-    .field_0338 = 0xD756,
-
-    .field_033a = 0x0003,
-
-    .field_033c = 0x000D,
-
-    .str_32 = "$",
-
-    .field_0340 = 0x0164,
-
-    .field_0342 = 0x0011,
-
-    .field_0344 = NAKA_NONE,
-
-    .field_0346 = 0x0017,
-
-    .field_0348 = 0x0015,
-
-    .field_034a = 0x0008,
-
-    .field_034c = 0x0008,
-
-    .field_034e = 0x00C6,
-
-    .field_0350 = 0x009C,
-
-    .field_0352 = 0x00DF,
-
-    .field_0354 = 0x0007,
-
-    .field_0356 = 0x00C1,
-
-    .pad_27 = { 0 },
-
-    .field_0360 = 0x0001,
-
-    .field_0362 = 0x008C,
-
-    .field_0364 = 0xD758,
-
-    .field_0366 = 0x0003,
-
-    .field_0368 = 0x000E,
-
-    .str_33 = "$",
-
-    .field_036c = 0x0164,
-
-    .field_036e = 0x0011,
-
-    .field_0370 = NAKA_NONE,
-
-    .field_0372 = 0x0018,
-
-    .field_0374 = 0x0016,
-
-    .field_0376 = 0x0008,
-
-    .field_0378 = 0x00A3,
-
-    .field_037a = 0x001E,
-
-    .field_037c = 0x0137,
-
-    .str_34 = "7",
-
-    .field_0380 = 0x0007,
-
-    .field_0382 = 0x00C1,
-
-    .pad_28 = { 0 },
-
-    .field_038c = 0x0001,
-
-    .field_038e = 0x0008,
-
-    .field_0390 = 0xD75A,
-
-    .field_0392 = 0x0003,
-
-    .field_0394 = 0x000F,
-
-    .str_35 = "$",
-
-    .field_0398 = 0x0164,
-
-    .field_039a = 0x0011,
-
-    .field_039c = NAKA_NONE,
-
-    .field_039e = 0x0019,
-
-    .field_03a0 = 0x0017,
-
-    .field_03a2 = 0x0008,
-
-    .field_03a4 = 0x00A3,
-
-    .str_36 = "H",
-
-    .field_03a8 = 0x0137,
-
-    .str_37 = "a",
-
-    .field_03ac = 0x0007,
-
-    .field_03ae = 0x00C1,
-
-    .pad_29 = { 0 },
-
-    .field_03b8 = 0x0001,
-
-    .field_03ba = 0x0009,
-
-    .field_03bc = 0xD75C,
-
-    .field_03be = 0x0003,
-
-    .field_03c0 = 0x0010,
-
-    .str_38 = "$",
-
-    .field_03c4 = 0x0164,
-
-    .field_03c6 = 0x0011,
-
-    .field_03c8 = NAKA_NONE,
-
-    .field_03ca = 0x001A,
-
-    .field_03cc = 0x0018,
-
-    .field_03ce = 0x0008,
-
-    .field_03d0 = 0x00A3,
-
-    .str_39 = "r",
-
-    .field_03d4 = 0x0137,
-
-    .field_03d6 = 0x008B,
-
-    .field_03d8 = 0x0007,
-
-    .field_03da = 0x00C1,
-
-    .pad_30 = { 0 },
-
-    .field_03e4 = 0x0001,
-
-    .field_03e6 = 0x000A,
-
-    .field_03e8 = 0xD75E,
-
-    .field_03ea = 0x0003,
-
-    .field_03ec = 0x0011,
-
-    .str_40 = "$",
-
-    .field_03f0 = 0x0164,
-
-    .field_03f2 = 0x0011,
-
-    .field_03f4 = NAKA_NONE,
-
-    .field_03f6 = NAKA_NONE,
-
-    .field_03f8 = 0x0019,
-
-    .field_03fa = 0x0008,
-
-    .field_03fc = 0x00A3,
-
-    .field_03fe = 0x009C,
-
-    .field_0400 = 0x0137,
-
-    .field_0402 = 0x00B5,
-
-    .field_0404 = 0x0007,
-
-    .field_0406 = 0x00C1,
-
-    .pad_31 = { 0 },
-
-    .field_0410 = 0x0001,
-
-    .field_0412 = 0x000B,
-
-    .field_0414 = 0xD760,
-
-    .field_0416 = 0x0003,
-
-    .field_0418 = 0x0012,
+    .vC8_e2 = {
+        .class_ = 0x01600028,
+        .super = 0,
+        .sub = NAKA_NONE,
+        .next = 3,
+        .prev = 1,
+        .flag = 0x0018,
+        .rect = { 0, 0, 31, 31 },
+        .page = 0x0001,
+        .window = 0x00C80006,
+    },
+
+    .vC8_e3 = {
+        .class_ = 0x01600028,
+        .super = 0,
+        .sub = NAKA_NONE,
+        .next = 4,
+        .prev = 2,
+        .flag = 0x0018,
+        .rect = { 0, 0, 31, 31 },
+        .page = 0x0002,
+        .window = 0x00C80011,
+    },
+
+    .vC8_e4 = {
+        .class_ = 0x01600064,
+        .super = 0,
+        .sub = NAKA_NONE,
+        .next = 5,
+        .prev = 3,
+        .flag = 0x0018,
+        .rect = { 0, 0, 31, 31 },
+        .func = 0x01240016,
+    },
+
+    .vC8_e5 = {
+        .class_ = 0x01600062,
+        .super = 0,
+        .sub = NAKA_NONE,
+        .next = NAKA_NONE,
+        .prev = 4,
+        .flag = 0x0018,
+        .rect = { 0, 0, 31, 31 },
+        .time = 0x0001,
+    },
+
+    .vC8_e6 = {
+        .class_ = 0x01600035,
+        .super = NAKA_NONE,
+        .sub = 7,
+        .next = NAKA_NONE,
+        .prev = NAKA_NONE,
+        .flag = 0x0008,
+        .rect = { 0, 30, 319, 239 },
+        .color = 0x00F5,
+        .border = 0x0000,
+        .modal = 0x0000,
+        .parent = 0x0003D72C,
+        .child = 0x0003D730,
+    },
+
+    .vC8_e7 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 8,
+        .prev = NAKA_NONE,
+        .flag = 0x0008,
+        .rect = { 8, 30, 156, 55 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0088,
+        .selected = 0x0003D734,
+        .mspbnk = 0x00,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e8 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 9,
+        .prev = 7,
+        .flag = 0x0008,
+        .rect = { 8, 72, 156, 97 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0089,
+        .selected = 0x0003D736,
+        .mspbnk = 0x01,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e9 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 10,
+        .prev = 8,
+        .flag = 0x0008,
+        .rect = { 8, 114, 156, 139 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x008A,
+        .selected = 0x0003D738,
+        .mspbnk = 0x02,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e10 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 11,
+        .prev = 9,
+        .flag = 0x0008,
+        .rect = { 8, 156, 156, 181 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x008B,
+        .selected = 0x0003D73A,
+        .mspbnk = 0x03,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e11 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 12,
+        .prev = 10,
+        .flag = 0x0008,
+        .rect = { 8, 198, 156, 223 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x008C,
+        .selected = 0x0003D73C,
+        .mspbnk = 0x04,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e12 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 13,
+        .prev = 11,
+        .flag = 0x0008,
+        .rect = { 163, 30, 311, 55 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0008,
+        .selected = 0x0003D73E,
+        .mspbnk = 0x05,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e13 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 14,
+        .prev = 12,
+        .flag = 0x0008,
+        .rect = { 163, 72, 311, 97 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0009,
+        .selected = 0x0003D740,
+        .mspbnk = 0x06,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e14 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 15,
+        .prev = 13,
+        .flag = 0x0008,
+        .rect = { 163, 114, 311, 139 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x000A,
+        .selected = 0x0003D742,
+        .mspbnk = 0x07,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e15 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = 16,
+        .prev = 14,
+        .flag = 0x0008,
+        .rect = { 163, 156, 311, 181 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x000B,
+        .selected = 0x0003D744,
+        .mspbnk = 0x08,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e16 = {
+        .class_ = 0x01640024,
+        .super = 6,
+        .sub = NAKA_NONE,
+        .next = NAKA_NONE,
+        .prev = 15,
+        .flag = 0x0008,
+        .rect = { 163, 198, 311, 223 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x000C,
+        .selected = 0x0003D746,
+        .mspbnk = 0x09,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e17 = {
+        .class_ = 0x01600035,
+        .super = NAKA_NONE,
+        .sub = 18,
+        .next = NAKA_NONE,
+        .prev = NAKA_NONE,
+        .flag = 0x0008,
+        .rect = { 0, 30, 319, 239 },
+        .color = 0x00F5,
+        .border = 0x0000,
+        .modal = 0x0000,
+        .parent = 0x0003D748,
+        .child = 0x0003D74C,
+    },
+
+    .vC8_e18 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 19,
+        .prev = NAKA_NONE,
+        .flag = 0x0008,
+        .rect = { 8, 30, 156, 55 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0088,
+        .selected = 0x0003D750,
+        .mspbnk = 0x0A,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e19 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 20,
+        .prev = 18,
+        .flag = 0x0008,
+        .rect = { 8, 72, 156, 97 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0089,
+        .selected = 0x0003D752,
+        .mspbnk = 0x0B,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e20 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 21,
+        .prev = 19,
+        .flag = 0x0008,
+        .rect = { 8, 114, 156, 139 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x008A,
+        .selected = 0x0003D754,
+        .mspbnk = 0x0C,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e21 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 22,
+        .prev = 20,
+        .flag = 0x0008,
+        .rect = { 8, 156, 156, 181 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x008B,
+        .selected = 0x0003D756,
+        .mspbnk = 0x0D,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e22 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 23,
+        .prev = 21,
+        .flag = 0x0008,
+        .rect = { 8, 198, 156, 223 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x008C,
+        .selected = 0x0003D758,
+        .mspbnk = 0x0E,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e23 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 24,
+        .prev = 22,
+        .flag = 0x0008,
+        .rect = { 163, 30, 311, 55 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0008,
+        .selected = 0x0003D75A,
+        .mspbnk = 0x0F,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e24 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 25,
+        .prev = 23,
+        .flag = 0x0008,
+        .rect = { 163, 72, 311, 97 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x0009,
+        .selected = 0x0003D75C,
+        .mspbnk = 0x10,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e25 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = 26,
+        .prev = 24,
+        .flag = 0x0008,
+        .rect = { 163, 114, 311, 139 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x000A,
+        .selected = 0x0003D75E,
+        .mspbnk = 0x11,
+        ._pad_43 = { 0x00 },
+    },
+
+    .vC8_e26 = {
+        .class_ = 0x01640024,
+        .super = 17,
+        .sub = NAKA_NONE,
+        .next = NAKA_NONE,
+        .prev = 25,
+        .flag = 0x0008,
+        .rect = { 163, 156, 311, 181 },
+        .color = 0x0007,
+        .border = 0x00C1,
+        .index = 0x0000,
+        .font = 0x00000000,
+        .fontcolor = 0x0000,
+        .align = 0x0001,
+        .editsw = 0x000B,
+        .selected = 0x0003D760,
+        .mspbnk = 0x12,
+        ._pad_43 = { 0x00 },
+    },
 
 };
 

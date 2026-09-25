@@ -51,13 +51,64 @@ extern const char VwUserBitmapSpProc;
 
 #define BASE  0x00E80FE2u
 
+/* NAKA class TtlScreen -- class id 0x01600034 (Class table slot 0x160, entry 52),
+ * parent Screen; allsize 42.  Field names and type characters are the
+ * class chain's own propname / propdata (see THE CLASS SYSTEM in
+ * scripts/analysis/nakarest_objtab_map.py). */
 typedef struct __attribute__((packed)) {
-    naka_dispatch_t w0;  /* NAKA_TYPE_CONTAINER */
-    naka_dispatch_t w1;  /* 0x40 */
-    naka_dispatch_t w2;  /* 0x12 */
-    naka_dispatch_t w3;  /* 0x26 */
-    naka_dispatch_t w4;  /* 0x12 */
-    naka_dispatch_t w5;  /* 0x27 */
+    uint32_t class_;            /* +0 M */
+    uint16_t super;             /* +4 [ */
+    uint16_t sub;               /* +6 [ */
+    uint16_t next;              /* +8 [ */
+    uint16_t prev;              /* +10 [ */
+    uint16_t flag;              /* +12 ] */
+    int16_t rect[4];          /* +14 P */
+    uint16_t color;             /* +22 ^ */
+    uint16_t border;            /* +24 _ */
+    uint32_t exit;              /* +26 a */
+    uint32_t window;            /* +30 r */
+    uint32_t title;             /* +34 X */
+    uint32_t icon;              /* +38 b */
+} naka_cls_TtlScreen_t;
+
+/* A NAKA class definition (24 bytes).  Its field names are the firmware's
+ * own: the root class "Class" (class id 0x01600004) names them in its
+ * propname block -- proc, parent, allsize, selfsize, name, propdata,
+ * propname -- and ClassProc (ui/ui_widget_defs.s) indexes a registered
+ * Class table with 24 * (class id & 0xFFFF).  parent is the parent's class
+ * id; allsize the instance size (parent.allsize + selfsize, the root Object
+ * contributing nothing); propdata one type character per own field;
+ * propname points at len(propdata) + 1 field-name pointers, the last to an
+ * empty string (THE CLASS SYSTEM, scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t proc;        /* +0  J  class procedure */
+    uint32_t parent;      /* +4  M  parent class id */
+    uint16_t allsize;     /* +8  B  instance size */
+    uint16_t selfsize;    /* +10 B  size of the own fields */
+    uint32_t name;        /* +12 X  class name string */
+    uint32_t propdata;    /* +16 X  field type characters */
+    uint32_t propname;    /* +20 L  field-name pointer block */
+} naka_classdef_t;
+
+typedef struct __attribute__((packed)) {
+    /* class definition 0x161:31: AcFdemoScreen -- the part of the record in this blob (the rest is in the neighbouring blob) */
+    uint32_t classdef_161_31_parent;
+    uint16_t classdef_161_31_allsize;
+    uint16_t classdef_161_31_selfsize;
+    uint32_t classdef_161_31_name;
+    uint32_t classdef_161_31_propdata;
+    uint32_t classdef_161_31_propname;
+    /* class definition 0x161:32: AcSndEMenu (parent AcModeMenu, allsize 54, fields -) */
+    naka_classdef_t classdef_161_32;
+    /* class definition 0x161:33: AcPleaseWait (parent PsParaBox, allsize 36, fields -) */
+    naka_classdef_t classdef_161_33;
+    /* class definition 0x161:34: AcDrawSetting (parent PsToggleBox, allsize 44, fields index, tag) */
+    naka_classdef_t classdef_161_34;
+    /* class definition 0x161:35: AcDrawbarName (parent PsParaBox, allsize 40, fields part, editsw) */
+    naka_classdef_t classdef_161_35;
+    /* class definition 0x161:36: IvMPver (parent PsInvisibleBox, allsize 22, fields -) */
+    naka_classdef_t classdef_161_36;
+    uint32_t classrun_161_x008C;
     uint8_t pad_0[21];  /* zero padding */
     uint16_t field_00a5;
     char str_0[7];
@@ -202,7 +253,8 @@ typedef struct __attribute__((packed)) {
     char str_60[22];
     char str_61[22];
     char str_62[14];
-    naka_container_t w43;  /* NAKA_TYPE_CONTAINER */
+    /* element 0 of Viewable slot 0x2 "Sdmenu": TtlScreen (class id 0x01600034) */
+    naka_cls_TtlScreen_t v2_e0;
     char w43_text[12];
     char str_63[2];
     uint16_t field_0906;
@@ -218,65 +270,29 @@ _Static_assert(sizeof(naka_sound_menu_drawbar_t) == 2314,
 const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
     __attribute__((section(".text"), used)) = {
 
-    .w0 = {
-        .header    = NAKA_HDR(NAKA_TYPE_CONTAINER),
-        .field_04   = 0x002A,
-        .field_06   = 0x0000,
-        .name_ptr   = SELF(AcFdemoScreen_name),
-        .inst_ptr   = SELF(AcFdemoScreen_code),
-        .link_ptr   = 0x00E80CAA,
-        .proc_addr  = NAKA_ADDR(AcSndEMenuProc),
-    },
+    .classdef_161_31_parent = 0x01600034,
 
-    .w1 = {
-        .header    = NAKA_HDR(0x40),
-        .field_04   = 0x0036,
-        .field_06   = 0x0000,
-        .name_ptr   = SELF(AcSndEMenu_name),
-        .inst_ptr   = SELF(AcSndEMenu_code),
-        .link_ptr   = 0x00E80CB0,
-        .proc_addr  = NAKA_ADDR(AcPleaseWaitProc),
-    },
+    .classdef_161_31_allsize = 0x002A,
 
-    .w2 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x0024,
-        .field_06   = 0x0000,
-        .name_ptr   = SELF(AcPleaseWait_name),
-        .inst_ptr   = SELF(AcPleaseWait_code),
-        .link_ptr   = 0x00E80CB6,
-        .proc_addr  = NAKA_ADDR(AcDrawSettingProc),
-    },
+    .classdef_161_31_selfsize = 0x0000,
 
-    .w3 = {
-        .header    = NAKA_HDR(0x26),
-        .field_04   = 0x002C,
-        .field_06   = 0x0004,
-        .name_ptr   = SELF(AcDrawSetting_name),
-        .inst_ptr   = SELF(AcDrawSetting_code),
-        .link_ptr   = 0x00E80CBC,
-        .proc_addr  = NAKA_ADDR(AcDrawbarNameProc),
-    },
+    .classdef_161_31_name = SELF(AcFdemoScreen_name),
 
-    .w4 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x0028,
-        .field_06   = 0x0004,
-        .name_ptr   = SELF(AcDrawbarName_name),
-        .inst_ptr   = SELF(AcDrawbarName_code),
-        .link_ptr   = 0x00E80CD4,
-        .proc_addr  = NAKA_ADDR(IvMPverProc),
-    },
+    .classdef_161_31_propdata = SELF(AcFdemoScreen_code),
 
-    .w5 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81088,
-        .inst_ptr   = 0x00E81086,
-        .link_ptr   = 0x00E80CF0,
-        .proc_addr  = 0x00000000,
-    },
+    .classdef_161_31_propname = 0x00E80CAA,
+
+    .classdef_161_32 = { .proc = NAKA_ADDR(AcSndEMenuProc), .parent = 0x01600040, .allsize = 54, .selfsize = 0, .name = SELF(AcSndEMenu_name), .propdata = SELF(AcSndEMenu_code), .propname = 0x00E80CB0 },
+
+    .classdef_161_33 = { .proc = NAKA_ADDR(AcPleaseWaitProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = SELF(AcPleaseWait_name), .propdata = SELF(AcPleaseWait_code), .propname = 0x00E80CB6 },
+
+    .classdef_161_34 = { .proc = NAKA_ADDR(AcDrawSettingProc), .parent = 0x01600026, .allsize = 44, .selfsize = 4, .name = SELF(AcDrawSetting_name), .propdata = SELF(AcDrawSetting_code), .propname = 0x00E80CBC },
+
+    .classdef_161_35 = { .proc = NAKA_ADDR(AcDrawbarNameProc), .parent = 0x01600012, .allsize = 40, .selfsize = 4, .name = SELF(AcDrawbarName_name), .propdata = SELF(AcDrawbarName_code), .propname = 0x00E80CD4 },
+
+    .classdef_161_36 = { .proc = NAKA_ADDR(IvMPverProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = 0x00E81088, .propdata = 0x00E81086, .propname = 0x00E80CF0 },
+
+    .classrun_161_x008C = 0x00000000,
 
     .pad_0 = { 0 },
 
@@ -672,24 +688,20 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .str_62 = ALIGNED_STRING("IvSdpartProc"),
 
-    .w43 = {
-        .header       = NAKA_HDR(NAKA_TYPE_CONTAINER),
-        .parent_idx     = NAKA_NONE,
-        .self_idx       = 0x0001,
-        .next_sibling   = NAKA_NONE,
-        .prev_sibling   = NAKA_NONE,
-        .child_count    = 0x000A,
-        .field_0e       = 0x0000,
-        .field_10       = 0x0000,
-        .handler        = NAKA_ADDR(Naka_PresentationRootState),
-        .style          = 0x00F8,
-        .field_18       = 0x0002,
-        .field_1a       = 0x0000,
-        .screen_id      = 0x01A0,
-        .handler_table  = 0x0003E660,
-        .string_ptr     = SELF(w43_text),
-        .string_id      = 0x0015,
-        .reserved       = 0x0000,
+    .v2_e0 = {
+        .class_ = 0x01600034,
+        .super = NAKA_NONE,
+        .sub = 1,
+        .next = NAKA_NONE,
+        .prev = NAKA_NONE,
+        .flag = 0x000A,
+        .rect = { 0, 0, 319, 239 },
+        .color = 0x00F8,
+        .border = 0x0002,
+        .exit = 0x01A00000,
+        .window = 0x0003E660,
+        .title = SELF(w43_text),
+        .icon = 0x00000015,
     },
 
     .w43_text = ALIGNED_STRING("SOUND MENU"),

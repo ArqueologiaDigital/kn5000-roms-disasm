@@ -34,7 +34,6 @@ NakaInst_Param_EndFF = 0x00EE013B;
 NakaInst_Param_PadEnd = 0x00EE013D;
 NakaInst_Param_Repeat = 0x00EE009B;
 NakaInst_Param_Val00_01 = 0x00EE0113;
-NakaInst_o_s_Guitar_110 = 0x00EC0008;
 NakaState_ZeroBlock_4 = 0x00EF013B;
 NakaState_ZeroBlock_5 = 0x00EF013D;
 Naka_PresentationRootState = 0x00EF013F;
