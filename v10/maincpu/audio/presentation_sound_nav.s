@@ -799,11 +799,11 @@ EditSwParam_Mode4_Store:
 	ld (xbc), wa
 	ldw (xde), 0xd3
 	ret
-
 ; GetEditSwPoint handler: tempo table lookup
 EditSwParam_TempoTable:
-	ldw	wa, 0x0014
-	.asciz "h!0<"
+	ldw	wa, 20
+	jr	GetEditSwPoint_Join
+	ldw	wa, 60
 	jr	GetEditSwPoint_Join
 	ldw	wa, 100
 	jr	GetEditSwPoint_Join
@@ -818,7 +818,7 @@ EditSwParam_TempoTable:
 	ldw	wa, 300
 GetEditSwPoint_Join:
 	ld	(xbc), wa
-	.long NakaState_PresentationTail
+	ldw	(xde), 239
 	ret
 
 ; GetEditSwPoint handler: default (value=0xa0/0x78)

@@ -56,6 +56,9 @@ RESULT 2026-09-25 (lane audio; toolchain tlcs900_backend@4d7fa4f6b37c)
     and no v7 instruction references these names symbolically -- v7 has 343
     `call 0xFCCC66` (the real SndParam_LookupReadOnly) and none to its label's
     address 0xFCD080; the name occurs in the v7 tree only at its definition.
+    (The call counts: python3 -c "r=open('original_ROMs/kn5000_v7_program.rom',
+    'rb').read(); print([r.count(bytes([0x1d,t&255,t>>8&255,t>>16])) for t in
+    (0xFCCC66, 0xFCD080)])"  ->  [343, 0].)
     Labels that ARE referenced from other v7 files (78 in note_voice_mapping.s,
     4 in sprintf_core.s, mostly `*_Helper` names made at real call targets)
     are at real entry points, since a symbolic reference could not otherwise
