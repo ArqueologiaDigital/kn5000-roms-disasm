@@ -4462,6 +4462,8 @@ Data_F0191A:
 ;   cannot encode this]`).  It is 28 bytes = 7 * 4 and every word is one of
 ;   the six addresses below.  It is OUTSIDE this span and is deliberately
 ;   NOT touched here.
+;   ⚠ UPDATED 2026-09-25 (lane promb): it is now framed, as
+;   CurveBitmapSelector -- seven `.long`s naming these six bitmaps.
 ;
 ; ★ THE 24-BYTE ICON GRID IS PINNED BY TEN EXTERNAL REFERENCES.  0x00F019AA
 ; appears as a 32-bit word ten times in the display-list region, and
@@ -123187,7 +123189,7 @@ sub_F5BE5A:
 	swi	7	; F5BECB  swi 7
 	jr	sub_F5BE5A_Return	; F5BECC  jr T,0xf5befa
 sub_F5BE5A_Skip:
-	ld	xiz, sub_F5BEFB	; F5BECE  ld XIZ,0x00f5befb
+	ld	xiz, CurveBitmapSelector	; F5BECE  ld XIZ,0x00f5befb
 	xor	w, w	; F5BED3  xor W,W
 	sll	wa, 2	; F5BED5  sll 0x02,WA
 	mx_ld_rm MXL, ra_IZ, ra_WA, 5	; F5BED8  ld XIY,(XIZ+WA)
@@ -123204,15 +123206,29 @@ sub_F5BE5A_Skip:
 	swi	7	; F5BEF9  swi 7
 sub_F5BE5A_Return:
 	ret	; F5BEFA  ret
-sub_F5BEFB:
-	m_cp_rm MLD+r2, 0x1d, 0	; F5BEFB  cp XWA,(XDE+0x1d)
-	nop	; F5BEFE  nop
-	.byte 0xE2, 0x1C, 0xF0, 0x00, 0x1A	; F5BEFF  db   [llvm-mc cannot encode this]
-	.byte 0x1C, 0xF0, 0x00	; F5BF04  call 0x00f0   [llvm-mc cannot encode this]
-	.byte 0xC2, 0x19, 0xF0, 0x00, 0x52	; F5BF07  div ??,(0x00f019)   [llvm-mc cannot encode this]
-	jp	9044208	; F5BF0C  jp 0x8a00f0
-	.byte 0x1A, 0xF0, 0x00	; F5BF10  jp 0x00f0   [llvm-mc cannot encode this]
-	.byte 0xC2, 0x19, 0xF0, 0x00, 0x0E	; F5BF13  db   [llvm-mc cannot encode this]
+; --------------------------------------------------------------------------
+; CurveBitmapSelector -- 0xF5BEFB-0xF5BF16, 7 pointers to the six 40 x 40
+;   response-curve thumbnails at 0xF019C2-0xF01E71 (entries 3 and 6 are the
+;   same bitmap).  Converted 2026-09-25 (lane promb): the source framed the
+;   28 bytes as `cp XWA,(XDE+0x1d)`, `nop`, `jp 0x8a00f0` and four `.byte`
+;   rows of "instructions" -- the mis-framing the 0xF01800 block's banner
+;   records ("THE SELECTOR TABLE AT 0xF5BEFB IS ITSELF STILL MIS-FRAMED AS
+;   CODE ... deliberately NOT touched here").
+; Read by: sub_F5BE5A at 0xF5BECE -- `ld XIZ,0x00F5BEFB`, index * 4,
+;   `ld XIY,(XIZ+WA)`, destination y*40 + x/8 from (0x2350)/(0x2352), BC = 5,
+;   HL = 40, SWI7 service 0x03 (a 5-column x 40-row blit).
+; Entry count: 7 -- 28 bytes, and every word is one of the six bitmaps; the
+;   byte after the table is 0x0E and sub_F5BF18 begins after that.
+; --------------------------------------------------------------------------
+CurveBitmapSelector:
+	.long	Bitmap_F01DAA	; F5BEFB  [0]
+	.long	Bitmap_F01CE2	; F5BEFF  [1]
+	.long	Bitmap_F01C1A	; F5BF03  [2]
+	.long	Bitmap_F019C2	; F5BF07  [3]
+	.long	Bitmap_F01B52	; F5BF0B  [4]
+	.long	Bitmap_F01A8A	; F5BF0F  [5]
+	.long	Bitmap_F019C2	; F5BF13  [6]
+	.byte	0x0E	; F5BF17  a lone 0x0E (`ret`) that nothing reaches
 sub_F5BF18:
 	ld	c, 0:opc	; F5BF18  ld C,0x00
 	ld	a, 12:opc	; F5BF1A  ld A,0x0c
@@ -152345,7 +152361,7 @@ sub_F6C935_Skip2:
 	ld	(xix+2), a	; F6C96B  ld (XIX+0x02),A
 	ld	l, (4844:16)	; F6C96E  ld L,(0x12ec)
 	exts	hl	; F6C972  exts HL
-	ld	xiy, sub_F6CAE3	; F6C974  ld XIY,0x00f6cae3
+	ld	xiy, Map_12EC_F6CAE3	; F6C974  ld XIY,0x00f6cae3
 	mx_ld_rm MXB, ra_IY, ra_HL, 1	; F6C979  ld A,(XIY+HL)
 	ld	(xix+3), a	; F6C97E  ld (XIX+0x03),A
 	pop	xiy	; F6C981  pop XIY
@@ -152376,7 +152392,7 @@ sub_F6C984:
 	jr	z, sub_F6C984_Epilogue	; F6C9AA  jr Z,0xf6c9c5
 	xor	wa, wa	; F6C9AC  xor WA,WA
 	ld	a, (4844:16)	; F6C9AE  ld A,(0x12ec)
-	ld	xix, sub_F6CAE3	; F6C9B2  ld XIX,0x00f6cae3
+	ld	xix, Map_12EC_F6CAE3	; F6C9B2  ld XIX,0x00f6cae3
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6C9B7  ld A,(XIX+WA)
 	mx_ld_rm MXB, ra_HL, ra_WA, 1	; F6C9BC  ld A,(XHL+WA)
 	ld	(4845:16), a	; F6C9C1  ld (0x12ed),A
@@ -152531,9 +152547,26 @@ RamPtrTable_F6CA63:
 	.long	0x00007E62	; F6CADB  [30] -> RAM 0x7E62
 	.long	0x00007EA2	; F6CADF  [31] -> RAM 0x7EA2
 
-sub_F6CAE3:
-	ld	(9:8), 10:io	; F6CAE3  ld (0x09),0x0a
-	pushw	55247	; F6CAE6  push 0xd7cf
+; --------------------------------------------------------------------------
+; Map_12EC_F6CAE3 -- 0xF6CAE3-0xF6CAE6, 4 bytes: 0x08 0x09 0x0A 0x0B.
+;   Converted 2026-09-25 (lane promb): the source framed them, with the first
+;   byte of the routine after them, as `ld (0x09),0x0a` / `push 0xd7cf`.
+; Read by: sub_F6C935 at 0xF6C974 and sub_F6C984 at 0xF6C9B2, both indexing
+;   it with the byte (0x12EC) (`ld A,(XIY+HL)` / `ld A,(XIX+WA)`).
+; Entry count: 4 -- 0xF6CAE7, the next byte, is a routine start two `.long`
+;   entries name.
+; --------------------------------------------------------------------------
+Map_12EC_F6CAE3:
+	.byte	0x08, 0x09, 0x0A, 0x0B	; F6CAE3  [0..3]
+
+; --------------------------------------------------------------------------
+; sub_F6CAE7 -- named by `.long 0x00F6CAE7` at 0xF6CBF2 and 0xF6CC36 (entries
+;   [1] and [18] of DispatchTable_F6CBEE).  Until 2026-09-25 the source framed its
+;   first instruction, `xor L,L`, inside a `push 0xd7cf`, so those two
+;   pointers appeared to land mid-instruction.
+; --------------------------------------------------------------------------
+sub_F6CAE7:
+	xor	l, l	; F6CAE7  xor L,L
 	bit	7, w	; F6CAE9  bit 0x07,W
 	jr	nz, RamPtrTable_F6CA63_Code_Skip	; F6CAEC  jr NZ,0xf6caf0
 	ld	l, 3:opc	; F6CAEE  ld L,0x03
@@ -152693,7 +152726,7 @@ sub_F6CB52_Return2:
 ; --------------------------------------------------------------------------
 DispatchTable_F6CBEE:
 	.long	sub_F678F8	; F6CBEE  [0] -> 0xF678F8
-	.long	0x00F6CAE7	; F6CBF2  [1] -> 0xF6CAE7
+	.long	sub_F6CAE7	; F6CBF2  [1] -> 0xF6CAE7
 	.long	sub_F675CB	; F6CBF6  [2] -> ret stub
 	.long	sub_F6CB13	; F6CBFA  [3] -> 0xF6CB13
 	.long	sub_F675CB	; F6CBFE  [4] -> ret stub
@@ -152710,7 +152743,7 @@ DispatchTable_F6CBEE:
 	.long	sub_F67696	; F6CC2A  [15] -> 0xF67696
 	.long	sub_F675CB	; F6CC2E  [16] -> ret stub
 	.long	sub_F678F8	; F6CC32  [17] -> 0xF678F8
-	.long	0x00F6CAE7	; F6CC36  [18] -> 0xF6CAE7
+	.long	sub_F6CAE7	; F6CC36  [18] -> 0xF6CAE7
 	.long	sub_F675CB	; F6CC3A  [19] -> ret stub
 	.long	sub_F6CB13	; F6CC3E  [20] -> 0xF6CB13
 	.long	sub_F675CB	; F6CC42  [21] -> ret stub
