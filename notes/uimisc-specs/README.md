@@ -10,6 +10,7 @@ edit unless the ROM is byte-identical.
 
 | file | question it answers | command |
 |---|---|---|
+| `mk_spec_eec288.py` | what are the tree's "Character Mapping Tables" (0xEEC288-0xEED117)? the Subsys handler table 18, 128 bytes of 0xFF, and 28 byte maps (identity, permutations, sparse) that only CharMap_ModeDispatchTable points at -- reader NOT established, the scans that were run are listed | same command with this spec |
 | `mk_spec_eedd36.py` | what is the tree's `ScaleNote_Display_Table` (0xEEDD36-0xEEE077)? the power-on image of nine RAM string-pointer tables (number, note-name, pan, beat, genre ... strings) that the UI reads at RAM 0x3D992+ | same command with this spec |
 | `mk_spec_eed118.py` | what are the 41 objects in 0xEED118-0xEEDD35 (the tree's `CharMap_FullPermutation` + ~40 positional names)? note maps, messages, value curves, two-level switch tables, Sound-RAM model identifiers, the C-library ctype table, printf hex digits, and the start of the boot-time RAM initialisation image | same command with this spec |
 | `mk_spec_ee49e8.py` | what are the 76 objects in 0xEE49E8-0xEE4FC5 (the tree's `ToneKit_FrequencyTable`, `WidgetParam_SelfRef_Table`)? 41 twenty-byte MIDI control records, the sentinel-terminated match lists and select tables that point at them, three handler tables indexed by record +16/+17/+18, gate records, MIDI all-off template | same command with this spec |
