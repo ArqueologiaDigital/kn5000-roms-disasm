@@ -19472,8 +19472,8 @@ sub_F8A818:
 	call T_AsciiField_Clear                              ; F8A818  1d f8 32 f4
 	ret                                                  ; F8A81C  0e
 sub_F8A81D:
-	calr 0x04                                            ; F8A81D  1e 04 00
-	calr 0x0aa1                                          ; F8A820  1e a1 0a
+	calr PanelGroupQueue_ExpandToEvents                                            ; F8A81D  1e 04 00
+	calr sub_F8B2C4                                          ; F8A820  1e a1 0a
 	ret                                                  ; F8A823  0e
 ; ---------------------------------------------------------------------
 ; PanelGroupQueue_ExpandToEvents -- turn the group queue at RAM 0x2000 into
@@ -19512,9 +19512,9 @@ PanelGroupQueue_ExpandToEvents:
 .LF8A82E:
 	ldb_spi a, 0xf4                                      ; F8A82E  c5 f4 21
 	cp A,0xff                                            ; F8A831  c9 cf ff
-	jr z, 0x55                                           ; F8A834  66 55
+	jr z, .LF8A88B                                           ; F8A834  66 55
 	cp A,0xfe                                            ; F8A836  c9 cf fe
-	jr z, 0x4d                                           ; F8A839  66 4d
+	jr z, .LF8A888                                           ; F8A839  66 4d
 	cp A,0x18                                            ; F8A83B  c9 cf 18
 	jr ugt, .LF8A884                                         ; F8A83E  6b 44
 	ld (0x2251:16), a                                   ; F8A840  f1 51 22 41
@@ -19541,13 +19541,13 @@ PanelGroupQueue_ExpandToEvents:
 	ld DE,(XIY)                                          ; F8A879  95 22
 	and D,W                                              ; F8A87B  c8 c4
 	and E,W                                              ; F8A87D  c8 c5
-	calr 0x1f                                            ; F8A87F  1e 1f 00
-	jr -34                                               ; F8A882  68 de
+	calr PanelEvent_ShiftThenRunAction                                            ; F8A87F  1e 1f 00
+	jr .LF8A862                                               ; F8A882  68 de
 .LF8A884:
 	inc 2,XIY                                            ; F8A884  ed 62
-	jr -90                                               ; F8A886  68 a6
+	jr .LF8A82E                                               ; F8A886  68 a6
 .LF8A888:
-	calr 0x12                                            ; F8A888  1e 12 00
+	calr sub_F8A89D                                            ; F8A888  1e 12 00
 .LF8A88B:
 	ld (XIX),0xff                                        ; F8A88B  b4 00 ff
 	ld (0x2000:16), 0xff                                 ; F8A88E  f1 00 20 00 ff
@@ -19555,7 +19555,7 @@ PanelGroupQueue_ExpandToEvents:
 	ret                                                  ; F8A898  0e
 .LF8A899:
 	dec 2,XIX                                            ; F8A899  ec 6a
-	jr -18                                               ; F8A89B  68 ee
+	jr .LF8A88B                                               ; F8A89B  68 ee
 sub_F8A89D:
 	nop                                                  ; F8A89D  00
 	nop                                                  ; F8A89E  00
@@ -19593,20 +19593,20 @@ PanelEvent_ShiftThenRunAction:
 	ld a, (xhl-1)                                        ; F8A8A1  8b ff 21
 	inc 1,XHL                                            ; F8A8A4  eb 61
 	cp a, 0x00:i3                                          ; F8A8A6  c9 d8
-	jr z, 0x15                                           ; F8A8A8  66 15
+	jr z, .LF8A8BF                                           ; F8A8A8  66 15
 	bit 0x04,A                                           ; F8A8AA  c9 33 04
-	jr z, 0x09                                           ; F8A8AD  66 09
+	jr z, .LF8A8B8                                           ; F8A8AD  66 09
 	and A,0x07                                           ; F8A8AF  c9 cc 07
 	.byte 0xcc, 0xfc                                     ; F8A8B2  cc fc   sla A,D
 	.byte 0xcd, 0xfc                                     ; F8A8B4  cd fc   sla A,E
-	jr 0x07                                              ; F8A8B6  68 07
+	jr .LF8A8BF                                              ; F8A8B6  68 07
 .LF8A8B8:
 	and A,0x07                                           ; F8A8B8  c9 cc 07
 	.byte 0xcc, 0xff                                     ; F8A8BB  cc ff   srl A,D
 	.byte 0xcd, 0xff                                     ; F8A8BD  cd ff   srl A,E
 .LF8A8BF:
 	cp d, 0x00:i3                                          ; F8A8BF  cc d8
-	jr nz, 0x04                                          ; F8A8C1  6e 04
+	jr nz, .LF8A8C7                                          ; F8A8C1  6e 04
 	dec 2,XIX                                            ; F8A8C3  ec 6a
 	jr .LF8A90E                                              ; F8A8C5  68 47
 .LF8A8C7:
