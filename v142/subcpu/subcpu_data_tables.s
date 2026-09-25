@@ -3808,7 +3808,7 @@ Eff99_PeqOverdrDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 57: unidentified
+; effect 57: STANDARD (an open question here until the IDENTIFIED note below)
 ; IDENTIFIED 2026-09-25: effect 57 is "STANDARD", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*57; also the DSP zone's DSP2_Eff57_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 57): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
@@ -3817,7 +3817,7 @@ Eff57_Standard_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 58: unidentified
+; effect 58: PERCUSSIVE (an open question here until the IDENTIFIED note below)
 ; IDENTIFIED 2026-09-25: effect 58 is "PERCUSSIVE", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*58; also the DSP zone's DSP2_Eff58_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 58): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
@@ -3826,7 +3826,7 @@ Eff58_Percussive_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 59: unidentified
+; effect 59: SYMPHONIC (an open question here until the IDENTIFIED note below)
 ; IDENTIFIED 2026-09-25: effect 59 is "SYMPHONIC", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*59; also the DSP zone's DSP2_Eff59_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 59): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
@@ -3835,7 +3835,7 @@ Eff59_Symphonic_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 60: unidentified
+; effect 60: DEEP SPACE (an open question here until the IDENTIFIED note below)
 ; IDENTIFIED 2026-09-25: effect 60 is "DEEP SPACE", an IC310 (MN19413) effect -- main-CPU v10 name
 ; table record 0x033568 - 18*60; also the DSP zone's DSP2_Eff60_* banner.
 ; Pointed to by EFF_ParamRanges_PtrTable (effect 60): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
