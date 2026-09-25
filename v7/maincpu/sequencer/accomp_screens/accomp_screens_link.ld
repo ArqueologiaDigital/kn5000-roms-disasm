@@ -2,6 +2,7 @@
  *
  * Provides absolute symbol addresses for extern references in accomp screen C files.
  * These addresses point to data tables in accompaniment_engine.s.
+ * v7 COPY: every address is 0x404 below its v9/v10 value.
  */
 
 ENTRY(0)
@@ -12,6 +13,6 @@ SECTIONS {
 }
 
 /* Accompaniment display string name tables */
-Accomp_SectionParam_Names  = 0x00F6ACA0;  /* "CONTROL PITCH BEND =..." */
-Accomp_PartOnOff_Names     = 0x00F6AD27;  /* "OFF ON" */
-Accomp_Articulation_Names  = 0x00F6AE4C;  /* "TENUNORMSTACCUTTACCOMP 1..." */
+Accomp_SectionParam_Names  = 0x00F6A89C;  /* "CONTROL PITCH BEND =..." */
+Accomp_PartOnOff_Names     = 0x00F6A923;  /* "OFF ON" */
+Accomp_Articulation_Names  = 0x00F6AA48;  /* "TENUNORMSTACCUTTACCOMP 1..." */

@@ -271,16 +271,16 @@ AccompSeq_AdvanceDone:
 	ret
 
 AccompSeq_VRAMHelperData:
-	.byte 0xc1
-	ld	e, 126:opc
-	push	xsp
-	incm8	7, (xwa)
-	halt
-	calr	9
-	jr	6
+	cp	(0x7e25:16), 128
+	jr	c, AccompSeq_VRAMHelperData_Skip
+	calr	AccompSeq_VRAMHelperData_Helper
+	jr	AccompSeq_VRAMHelperData_Return
+AccompSeq_VRAMHelperData_Skip:
 	ld	wa, (0x7e42:16)
 	ld	iy, wa
+AccompSeq_VRAMHelperData_Return:
 	ret
+AccompSeq_VRAMHelperData_Helper:
 	ld	wa, (0x7e42:16)
 	and	xwa, 4095
 	sla	xwa, 8
@@ -972,29 +972,26 @@ AccompSeq_PortaFadeOut_Return:
 	ld	a, 159:opc
 	ld	w, 127:opc
 	ld	e, 127:opc
-	calr	11
+	calr	AccompSeq_PortaFadeOut_Helper_Helper
 	ret
 	ld	a, 223:opc
 	ld	w, 127:opc
 	ld	e, 127:opc
-	calr	1
+	calr	AccompSeq_PortaFadeOut_Helper_Helper
 	ret
+AccompSeq_PortaFadeOut_Helper_Helper:
 	pushw	iy
 	ld	xhl, 0x7aec
 	ei	6
 	ld	iy, (xhl+4)
 	ld	bc, (xhl+2)
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ld	xiy, 0xf3fe8c1e
-	reti
-	.byte 0xf4, 0xec
-	ld	xix, 0xf3fe841e
-	reti
-	.byte 0xf4, 0xec
-	ld	xbc, 0xbbfe7c1e
-	.byte 0x04, 0x55
+	st_rrb	e, xiy, hl
+	calr	AccompSeq_AdvanceBufferPtr
+	st_rrb	d, xiy, hl
+	calr	AccompSeq_AdvanceBufferPtr
+	st_rrb	a, xiy, hl
+	calr	AccompSeq_AdvanceBufferPtr
+	ld	(xhl+4), iy
 	ei	0
 	popw	iy
 	ret
@@ -1009,22 +1006,18 @@ AccompSeq_PortaFadeOut_Return:
 	ld	(0x7e62:16), w
 	cp	a, w
 	jr	z, AccompSeq_PortaFadeOut_Return2
-	.byte 0xf1
-	pop	xsp
-	jrl	nz, 26312
-	push	xix
-	.byte 0xc1
-	pop	xsp
-	jrl	nz, -452
+	bit	0, (0x7e5f:16)
+	jr	z, AccompSeq_PortaFadeOut_Return2
+	and	(0x7e5f:16), 254
 	ld	l, (0x7e60:16)
 	ld	h, (0x7e61:16)
 	ld	a, (0x7e24:16)
-	.byte 0xc0
-	pop	sr
-	dec	6, (0xd8c9:16)
-	.byte 0x06
+	and	a, (0x03:8)
+	cp	a, 0:i3
+	jr	nz, AccompSeq_PortaFadeOut_Helper_Skip
 	call	AccompSeq_InitPartFull
 	jr	AccompSeq_PortaFadeOut_Join
+AccompSeq_PortaFadeOut_Helper_Skip:
 	call	AccompSeq_ReinitPart
 AccompSeq_PortaFadeOut_Join:
 	ei	6
@@ -1129,12 +1122,9 @@ AccompSeq_ProcessAfterNote_Skip5:
 	call	Voice_NoteChannelTable1_0x422
 	cp	h, 0:i3
 	jr	z, AccompSeq_ProcessAfterNote_Return
-	.byte 0xc1
-	pushw	0x3f7f
-	nop
+	cp	(0x7f0b:16), 0
 	jr	nz, AccompSeq_ProcessAfterNote_Return
-	.byte 0xf1
-	jrl	gt, -14210
+	bit	0, (0x7e7a:16)
 	jr	z, AccompSeq_ProcessAfterNote_Skip6
 	calr	AccompSeq_HandleSpecialMode
 	jr	AccompSeq_ProcessAfterNote_Return
@@ -1516,45 +1506,39 @@ AccompSeq_WriteMidiToBuffer:
 AccompSeq_WriteMidi_CodeBlock:
 	inc	1, iy
 	cp	iy, bc
-	jr	ule, 3
+	jr	ule, AccompSeq_WriteMidiToBuffer_Return
 	ld iy, (xhl+256)
+AccompSeq_WriteMidiToBuffer_Return:
 	ret
 AccompSeq_ProcessAfterNote_Helper:
 	ld	a, (0xc07e:16)
 	bit	7, a
-	jr	nz, 7
-	.byte 0xc1
-	jrl	gt, 15486
-	swi	6
-	jr	60
-	.byte 0xc1
-	jrl	gt, 15998
-	normal
+	jr	nz, AccompSeq_ProcessAfterNote_Helper_Skip2
+	and	(0x7e7a:16), 254
+	jr	AccompSeq_ProcessAfterNote_Helper_Return
+AccompSeq_ProcessAfterNote_Helper_Skip2:
+	or	(0x7e7a:16), 1
 	ld	a, (0x7f0b:16)
 	cp	a, 0:i3
-	jr	z, 8
+	jr	z, AccompSeq_ProcessAfterNote_Helper_Skip3
 	ld	a, 0:opc
 	ld	(0x7f0b:16), a
-	jr	39
+	jr	AccompSeq_ProcessAfterNote_Helper_Return
+AccompSeq_ProcessAfterNote_Helper_Skip3:
 	ld	a, (0x7e24:16)
 	and	a, 3
 	cp	a, 0:i3
-	jr	z, 28
-	.byte 0xf1
-	ld	l, 126:opc
-	inc	6, b
-	zcf
-	.byte 0xf1
-	ld	d, 126:opc
-	dec	6, l
-	decf
+	jr	z, AccompSeq_ProcessAfterNote_Helper_Return
+	bit	2, (0x7e27:16)
+	jr	z, AccompSeq_ProcessAfterNote_Helper_Skip
+	bit	7, (0x7e24:16)
+	jr	nz, AccompSeq_ProcessAfterNote_Helper_Skip
 	ldw	(0x7e70:16), 2048
-	.byte 0xc1
-	ld	d, 126:opc
-	push	xiz
-	decm8	8, (xwa)
-	pop	sr
-	calr	124
+	or	(0x7e24:16), 128
+	jr	AccompSeq_ProcessAfterNote_Helper_Return
+AccompSeq_ProcessAfterNote_Helper_Skip:
+	calr	AccompSeq_CleanupSequence
+AccompSeq_ProcessAfterNote_Helper_Return:
 	ret
 
 AccompSeq_AllNotesOffImpl:
@@ -1687,9 +1671,7 @@ AccompSeq_MidiFilterCodeBlock:
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
 	ld	(14:8), 14:io
-	.byte 0xc1
-	pushw	0x3f7f
-	nop
+	cp	(0x7f0b:16), 0
 	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip
 	jp	AccompSeq_MidiFilterCodeBlock_0x79
 AccompSeq_MidiFilterCodeBlock_Code_Skip:
@@ -1711,9 +1693,7 @@ AccompSeq_MidiFilterCodeBlock_Code_Skip3:
 AccompSeq_MidiFilterCodeBlock_Code_Join:
 	ld	(0xfd12:16), a
 	ld	(0x7e78:16), 0
-	.byte 0xc1, 0xe0, 0xe3
-	push	xiz
-	rcf
+	or	(0xe3e0:16), 16
 	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
 	.byte 0xc1
 	jrl	16254
@@ -1721,27 +1701,21 @@ AccompSeq_MidiFilterCodeBlock_Code_Join:
 	jr	nz, AccompSeq_MidiFilterCodeBlock_Code_Entry
 	ld	(0x7e79:16), a
 	ld	(0x7e78:16), 1
-	.byte 0xc1
-	or	hl, iz
-	push	xiz
-	rcf
+	or	(0xe3de:16), 16
 	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
 AccompSeq_MidiFilterCodeBlock_Code_Entry:
-	.byte 0xc1
-	.ascii "y~! "
-	ldw	(200:8), 0xc981:io
-	inc	6, wa
-	push	sr
+	ld	a, (0x7e79:16)
+	ld	w, 10:opc
+	add	a, w
+	cp	a, 0:i3
+	jr	z, 2
 	dec	1, a
 	cp	a, e
 	jr	ule, 2
 	ld	a, e
 	ld	(0xfd12:16), a
 	ld	(0x7e78:16), 0
-	.byte 0xc1
-	or	hl, iz
-	push	xiz
-	rcf
+	or	(0xe3de:16), 16
 AccompSeq_MidiFilterCodeBlock_Code_Return:
 	ret
 	nop
