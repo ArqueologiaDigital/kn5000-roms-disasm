@@ -2113,9 +2113,9 @@ TaskSched_TerminateTask:
 Timer_Delay_Ticks:
 	srl	wa, 1
 	add	wa, (4160:16)
-RingBuf_Access_Opaque_A_Code_Loop:
+Timer_Delay_Ticks_Loop:
 	cp	wa, (4160:16)
-	jr	gt, RingBuf_Access_Opaque_A_Code_Loop
+	jr	gt, Timer_Delay_Ticks_Loop
 	ret
 
 IntMask_SetBit3:
@@ -2130,7 +2130,7 @@ IntMask_ClearBit3:
 ; (0x01FF21) returns through ContextRestore without switching tasks and TaskSwitch_Countdown
 ; (0x01FFD0) merely counts down. Unlike TASKSCHED_SOFTTIMER_SERVICE this pair does NOT
 ; mirror the new depth into control register 0x7C.
-RingBuf_Control_Opaque:
+TaskSched_Lock:
 	incw	1, (4306:16)
 	ret
 ; decw 1,(0x10D2) -- release the scheduler lock. Nesting-safe, no reschedule on release.
@@ -2213,7 +2213,7 @@ RingBuf_Init_1K:
 
 ; Copies the read index (0x040C26) into the mark/replay cursor (0x040C24), so the bytes
 ; consumed from here on can be re-read from the mark by FIFO1K_Get_Marked.
-RingBuf_ReadWrite_Opaque_A:
+FIFO1K_SetMark:
 	pushw	hl
 	ld	hl, (265254:24)
 	ld	(265252:24), hl
@@ -2322,7 +2322,7 @@ RingBuf_Init_256:
 	ret
 
 ; Read index (0x041030) -> mark cursor (0x04102E).
-RingBuf_ReadWrite_Opaque_B:
+FIFO256_SetMark:
 	pushw	hl
 	ld	hl, (266288:24)
 	ld	(266286:24), hl
@@ -2433,7 +2433,7 @@ RingBuf_Init_512:
 ; from the audio buffer control block at 0x041138-0x041142.
 ; Each routine saves/restores caller registers.
 ; Read index (0x04113A) -> mark cursor (0x041138).
-AudioBuf_PtrUtils:
+FIFO512_SetMark:
 	pushw	hl
 	ld	hl, (266554:24)
 	ld	(266552:24), hl
@@ -2870,7 +2870,7 @@ InterCPU_E3_Gate1:
 InterCPU_E3_Gate2:
 	bit_dd8	4, 52
 	jr	nz, E3_Wait_MSTAT1_Set
-InterCPU_LatchProtocol_Opaque_Code_Loop:
+InterCPU_E3_RaiseSSTAT0:
 	set_dd8	0, 52
 	ret
 
@@ -2887,7 +2887,7 @@ E3_Wait_MSTAT1_Set:
 	ld	wa, bc
 	inc	1, bc
 	cp	wa, 60000
-	jr	ugt, InterCPU_LatchProtocol_Opaque_Code_Loop
+	jr	ugt, InterCPU_E3_RaiseSSTAT0
 	jr	InterCPU_E3_Gate2
 
 ; Sends command byte 0xE2 followed by a fixed 10-byte parameter block staged at 010D4h (XWA/XDE/BC) via micro-DMA ch2. Sibling of InterCPU_E1_DMA_Transfer.
@@ -2915,7 +2915,7 @@ E2_DMA_Ready:
 	ld	(4328:16), 1
 	ld	(1179648:24), 226
 	ld	ix, 0:i3
-InterCPU_LatchProtocol_Opaque_Code_Loop2:
+InterCPU_E2_Gate2:
 	bit_dd8	4, 52
 	jr	nz, E2_Wait_MSTAT1_Set
 
@@ -2954,7 +2954,7 @@ E2_Wait_MSTAT1_Set:
 	ld	hl, ix
 	inc	1, ix
 	cp	hl, 60000
-	jr	ule, InterCPU_LatchProtocol_Opaque_Code_Loop2
+	jr	ule, InterCPU_E2_Gate2
 	set_dd8	0, 52
 	ret
 
