@@ -45,7 +45,9 @@ import nakarest_c_model as M          # noqa: E402
 import nakarest_retype as RT          # noqa: E402
 import nakarest_objtab_map as O       # noqa: E402
 
-BLOBS = ['naka_msp_recording', 'naka_accomp7_widgets', 'naka_normal_mode', 'naka_debug_naming',
+BLOBS = ['naka_disk_warning', 'naka_block_012', 'naka_block_007', 'naka_sequencer_exit',
+         'naka_technichord_strings',
+         'naka_master_style', 'naka_msp_recording', 'naka_accomp7_widgets', 'naka_normal_mode', 'naka_debug_naming',
          'naka_disk_menu_file_io', 'naka_midi_reverb', 'naka_direct_play', 'naka_composer_style',
          'naka_effects_seq', 'naka_sound_menu_drawbar', 'naka_technichord_part',
          'naka_extension_device', 'naka_perf_style', 'naka_ctrl_menu_body']
@@ -231,13 +233,158 @@ def ensure_typedef(cb, name, text):
     cb.i1 += n
 
 
+CLASSDEF_T = 'naka_classdef_t'
+CLASSDEF_FIELDS = [(0, 'proc', 4, 'J'), (4, 'parent', 4, 'M'), (8, 'allsize', 2, 'B'),
+                   (10, 'selfsize', 2, 'B'), (12, 'name', 4, 'X'), (16, 'propdata', 4, 'X'),
+                   (20, 'propname', 4, 'L')]
+CLASSDEF_TEXT = """/* A NAKA class definition (24 bytes).  Its field names are the firmware's
+ * own: the root class "Class" (class id 0x01600004) names them in its
+ * propname block -- proc, parent, allsize, selfsize, name, propdata,
+ * propname -- and ClassProc (ui/ui_widget_defs.s) indexes a registered
+ * Class table with 24 * (class id & 0xFFFF).  parent is the parent's class
+ * id; allsize the instance size (parent.allsize + selfsize, the root Object
+ * contributing nothing); propdata one type character per own field;
+ * propname points at len(propdata) + 1 field-name pointers, the last to an
+ * empty string (THE CLASS SYSTEM, scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t proc;        /* +0  J  class procedure */
+    uint32_t parent;      /* +4  M  parent class id */
+    uint16_t allsize;     /* +8  B  instance size */
+    uint16_t selfsize;    /* +10 B  size of the own fields */
+    uint32_t name;        /* +12 X  class name string */
+    uint32_t propdata;    /* +16 X  field type characters */
+    uint32_t propname;    /* +20 L  field-name pointer block */
+} naka_classdef_t;
+"""
+
+
+def classdef_expr(m, c, data, off, sym):
+    parts = []
+    for o, f, n, ch in CLASSDEF_FIELDS:
+        if o in sym:
+            parts.append('.%s = %s' % (f, sym.pop(o)[0]))
+            continue
+        v = int.from_bytes(data[off + o:off + o + n], 'little')
+        if f in ('allsize', 'selfsize'):
+            parts.append('.%s = %d' % (f, v))            # sizes, in bytes
+        else:
+            parts.append('.%s = 0x%0*X' % (f, 2 * n, v))
+    if sym:
+        return None
+    return '{ ' + ', '.join(parts) + ' }'
+
+
+def type_class_run(v, m, cb, data, base, r, lo, hi, layouts, false_log):
+    """Retype blob [lo', hi') -- [lo, hi) widened to member boundaries -- as the
+    class definitions of Class table r that it holds: whole records as
+    naka_classdef_t, a record cut by the blob edge as its fields, and the
+    widening bytes as plain members.  Returns the number of whole records, or
+    None when a symbolic value cannot be placed."""
+    t0 = r['table']
+    k0 = cb.index_at(lo)
+    k1 = cb.index_at(hi - 1)
+    wlo = cb.members[k0].offset
+    whi = cb.members[k1].offset + cb.members[k1].size
+    if cb.members[k0].name.startswith('classdef_'):
+        return 0
+    sym = {}
+    for kk in range(k0, k1 + 1):
+        ss = symbolic_at(cb, kk, layouts)
+        if ss is None:
+            return None
+        for o, sn, x in ss:
+            sym[o] = (x, sn)          # blob offsets
+    new = []
+    placed = set()
+
+    def scalar(name, off, n, pre=()):
+        v_ = int.from_bytes(data[off:off + n], 'little')
+        ct = {1: 'uint8_t', 2: 'uint16_t', 4: 'uint32_t'}[n]
+        if off in sym and sym[off][1] == n == 4:
+            placed.add(off)
+            ex = sym[off][0]
+        else:
+            ex = '0x%0*X' % (2 * n, v_)
+        return M.NewMember(ct, name, '', n, ex, list(pre))
+
+    def rawbytes(name, a, b):
+        return M.NewMember('uint8_t', name, '[%d]' % (b - a), b - a,
+                           '{ ' + ', '.join('0x%02X' % x for x in data[a:b]) + ' }')
+
+    off = wlo
+    while off < whi:
+        rel = off + base - t0
+        k, within = divmod(rel, 24)
+        if rel < 0 or k >= r['count']:
+            # outside the table: plain words (a symbolic 4-byte value kept)
+            end = min(whi, t0 - base) if rel < 0 else whi
+            while off < end:
+                n = 4 if end - off >= 4 else (2 if end - off >= 2 else 1)
+                new.append(scalar('classrun_%X_x%04X' % (r['slot'], off), off, n))
+                off += n
+            continue
+        c = m.classes[((r['slot'] & 0xFFF) << 16) | k]
+        if within == 0 and off + 24 <= whi:
+            sy = {o - off: sym[o] for o in list(sym) if off <= o < off + 24}
+            four = {o for o, f, n, ch in CLASSDEF_FIELDS if n == 4}
+            for o in list(sy):
+                if o not in four or sy[o][1] != 4:
+                    false_log.append('%s classdef_%X_%d +%d: %s' % (v, r['slot'], k, o, sy.pop(o)[0]))
+            for o in sy:
+                placed.add(off + o)
+            p = m.klass(c['parent']) if c['parent'] != 0xFFFFFFFF else None
+            pre = ['    /* class definition 0x%X:%d: %s (parent %s, allsize %d, fields %s) */'
+                   % (r['slot'], k, c['name'], p['name'] if p else '-', c['allsize'],
+                      ', '.join(c['fields'][:-1]) or '-')]
+            M.TYPE_SIZES[CLASSDEF_T] = 24
+            new.append(RecordMember(CLASSDEF_T, 'classdef_%X_%d' % (r['slot'], k), 24,
+                                    classdef_expr(m, c, data, off, sy),
+                                    [(o, f, n) for o, f, n, ch in CLASSDEF_FIELDS], pre))
+            off += 24
+            continue
+        # a record cut by the blob edge (or by the widened span): its fields
+        pre = ['    /* class definition 0x%X:%d: %s -- the part of the record in this blob '
+               '(the rest is in the neighbouring blob) */' % (r['slot'], k, c['name'])]
+        first = True
+        for o, f, n, ch in CLASSDEF_FIELDS:
+            a = t0 - base + 24 * k + o
+            if a < off or a >= whi:
+                continue
+            if a + n > whi:
+                break
+            new.append(scalar('classdef_%X_%d_%s' % (r['slot'], k, f), a, n, pre if first else ()))
+            first = False
+            off = a + n
+        # bytes of the record past the widened end, if any, are not ours
+        nxt = t0 - base + 24 * (k + 1)
+        if off < min(nxt, whi):
+            new.append(rawbytes('classdef_%X_%d_rest' % (r['slot'], k), off, min(nxt, whi)))
+            off = min(nxt, whi)
+    if set(sym) - placed:
+        for o in sorted(set(sym) - placed):
+            false_log.append('%s classrun +0x%X: %s (not a pointer field)' % (v, o, sym[o][0]))
+    keeps = [cb.members[kk].name for kk in range(k0, k1 + 1)
+             if M.SYMBOLIC_RE.search(cb.entries[kk].expr)]
+    try:
+        ensure_typedef(cb, CLASSDEF_T, CLASSDEF_TEXT)
+        cb.retype(wlo, whi, new, data, false_pointers=keeps)
+    except SystemExit as e:
+        print('     class run refused: %s' % str(e)[:120])
+        return None
+    return sum(1 for nm in new if nm.ctype == CLASSDEF_T)
+
+
 FALSE_LOG = []
 
 
 def type_blob(v, blob, apply, layouts):
     m = RT.objmap(v)
     cpath = os.path.join(RT.ui(v), blob + '.c')
-    cb = M.CBlob(cpath)
+    try:
+        cb = M.CBlob(cpath)
+    except (SystemExit, StopIteration, KeyError) as e:
+        print('%s %-24s not parsable by the C model (%s) -- skipped' % (v, blob, str(e)[:60]))
+        return
     data = RT.compile_blob(v, blob)
     base = cb.base()
     if len(data) != cb.size:
@@ -320,19 +467,61 @@ def type_blob(v, blob, apply, layouts):
             skipped += 1
             continue
         done += 1
-    print('%s %-24s records %4d: typed %4d, already %4d, skipped %4d' % (v, blob, len(recs), done,
-                                                                       already, skipped))
+    # class tables overlapping this blob, typed as one run each: the old
+    # members (naka_dispatch_t) sit 4 bytes off the 24-byte records, so no
+    # single record boundary is a member boundary
+    cdone = cskip = 0
+    for r in m.regs:
+        if r['cls'] != 0x1600004 or not r['count']:
+            continue
+        t0, t1 = r['table'], r['table'] + 24 * r['count']
+        lo, hi = max(t0, base), min(t1, base + cb.size)
+        if lo >= hi:
+            continue
+        res = type_class_run(v, m, cb, data, base, r, lo - base, hi - base, layouts, false_log)
+        if res is None:
+            cskip += 1
+        else:
+            cdone += res
+    done += cdone
+    print('%s %-24s records %4d: typed %4d, already %4d, skipped %4d; class definitions typed %d, '
+          'skipped %d' % (v, blob, len(recs), done - cdone, already, skipped, cdone, cskip))
     for why, ms in reasons.items():
         print('     skipped (%s): %d, e.g. %s' % (why, len(ms), ', '.join(ms[:4])))
     if false_log:
         print('     %d symbolic values off the class\'s 4-byte fields retired as false '
               'pointers, e.g. %s' % (len(false_log), '; '.join(false_log[:3])))
     FALSE_LOG.extend(false_log)
-    if apply and done:
+    ns = self_pointers(cb)
+    if ns:
+        print('     %d numeric pointer fields made SELF(member)' % ns)
+    if apply and (done or ns):
         cb.write()
         if RT.compile_blob(v, blob) != data:
             raise SystemExit('%s %s: typed C compiles to different bytes' % (v, blob))
         print('     %s %s: recompiled, byte-identical' % (v, blob))
+
+
+def self_pointers(cb):
+    """In every naka_cls_*_t / naka_classdef_t initializer, a 4-byte field
+    whose numeric value is the address of a member START in this blob
+    becomes SELF(member).  Returns the count."""
+    base = cb.base()
+    starts = {base + mb.offset: mb.name for mb in cb.members}
+    n = 0
+    for mb, e in zip(cb.members, cb.entries):
+        if not (mb.ctype.startswith('naka_cls_') or mb.ctype == CLASSDEF_T):
+            continue
+
+        def sub(mm):
+            nonlocal n
+            v = int(mm.group(2), 16)
+            if v in starts and starts[v] != mb.name:
+                n += 1
+                return '%sSELF(%s)' % (mm.group(1), starts[v])
+            return mm.group(0)
+        e.expr = re.sub(r'(\.\w+ = )0x([0-9A-F]{8})\b', sub, e.expr)
+    return n
 
 
 def main():

@@ -115,6 +115,25 @@ typedef struct __attribute__((packed)) {
     uint16_t arg;    /* +10 op operand; the glyph ops' colour */
 } welcome_step_t;
 
+/* A NAKA class definition (24 bytes).  Its field names are the firmware's
+ * own: the root class "Class" (class id 0x01600004) names them in its
+ * propname block -- proc, parent, allsize, selfsize, name, propdata,
+ * propname -- and ClassProc (ui/ui_widget_defs.s) indexes a registered
+ * Class table with 24 * (class id & 0xFFFF).  parent is the parent's class
+ * id; allsize the instance size (parent.allsize + selfsize, the root Object
+ * contributing nothing); propdata one type character per own field;
+ * propname points at len(propdata) + 1 field-name pointers, the last to an
+ * empty string (THE CLASS SYSTEM, scripts/analysis/nakarest_objtab_map.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t proc;        /* +0  J  class procedure */
+    uint32_t parent;      /* +4  M  parent class id */
+    uint16_t allsize;     /* +8  B  instance size */
+    uint16_t selfsize;    /* +10 B  size of the own fields */
+    uint32_t name;        /* +12 X  class name string */
+    uint32_t propdata;    /* +16 X  field type characters */
+    uint32_t propname;    /* +20 L  field-name pointer block */
+} naka_classdef_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t ptrs_0[30];  /* 30 pointers */
     char str_0[2];
@@ -9475,20 +9494,33 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_1afee;
     char str_1670[2];
     char str_1671[4];
-    uint32_t ptr_1aff8;
-    naka_dispatch_t w56;  /* 0x11 */
-    naka_dispatch_t w57;  /* 0x26 */
-    naka_dispatch_t w58;  /* 0x3D */
-    naka_dispatch_t w59;  /* 0x12 */
-    naka_dispatch_t w60;  /* 0x10 */
-    naka_dispatch_t w61;  /* 0x26 */
-    naka_dispatch_t w62;  /* 0x27 */
-    naka_dispatch_t w63;  /* 0x11 */
-    naka_dispatch_t w64;  /* 0x10 */
-    naka_dispatch_t w65;  /* 0x27 */
-    naka_dispatch_t w66;  /* 0x12 */
-    naka_dispatch_t w67;  /* 0x27 */
-    naka_dispatch_t w68;  /* 0x27 */
+    /* class definition 0x165:0: PsFileNameBox (parent VwBox, allsize 58, fields font, fontcolor, main_func, column, row, sel_num, dial, auto_inc, paintok, aicok) */
+    naka_classdef_t classdef_165_0;
+    /* class definition 0x165:1: PsWindowToggle (parent PsToggleBox, allsize 52, fields onwin, offwin, main_func) */
+    naka_classdef_t classdef_165_1;
+    /* class definition 0x165:2: AcTtlJgBox (parent VwMenuBox, allsize 54, fields main_func) */
+    naka_classdef_t classdef_165_2;
+    /* class definition 0x165:3: AcParaStrBox (parent PsParaBox, allsize 44, fields main_func, paintok) */
+    naka_classdef_t classdef_165_3;
+    /* class definition 0x165:4: AcFileSfxBox (parent Viewable, allsize 34, fields font, main_func, paintok) */
+    naka_classdef_t classdef_165_4;
+    /* class definition 0x165:5: AcMonoIndexToggle (parent PsToggleBox, allsize 42, fields index) */
+    naka_classdef_t classdef_165_5;
+    /* class definition 0x165:6: IvOneShotTimer (parent PsInvisibleBox, allsize 26, fields main_func) */
+    naka_classdef_t classdef_165_6;
+    /* class definition 0x165:7: VwScreenTitle (parent VwBox, allsize 38, fields title, icon, page) */
+    naka_classdef_t classdef_165_7;
+    /* class definition 0x165:8: Arrow (parent Viewable, allsize 32, fields color, frame_only, dir, tail_x_rate, tail_y_rate) */
+    naka_classdef_t classdef_165_8;
+    /* class definition 0x165:9: IvIndexSwCtrl (parent PsInvisibleBox, allsize 32, fields index_min, index_max, dial, dial_inv, auto_inc) */
+    naka_classdef_t classdef_165_9;
+    /* class definition 0x165:10: AcRotStrBox (parent PsParaBox, allsize 48, fields func, interval, length, paintok) */
+    naka_classdef_t classdef_165_10;
+    /* class definition 0x165:11: IvIndexSwDelay (parent PsInvisibleBox, allsize 30, fields index_min, index_max, interval, send_index) */
+    naka_classdef_t classdef_165_11;
+    /* class definition 0x165:12: IvWaitWinCtl (parent PsInvisibleBox, allsize 26, fields win) */
+    naka_classdef_t classdef_165_12;
+    uint32_t classrun_165_x1B130;
     uint8_t pad_2095[20];  /* zero padding */
     char IvWaitWinCtl_code[2];
     char IvWaitWinCtl_name[14];
@@ -32045,137 +32077,33 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1671 = "win",
 
-    .ptr_1aff8 = NAKA_ADDR(PsFileNameBoxProc),
+    .classdef_165_0 = { .proc = NAKA_ADDR(PsFileNameBoxProc), .parent = 0x01600011, .allsize = 58, .selfsize = 30, .name = SELF(PsFileNameBox_name), .propdata = SELF(PsFileNameBox_code), .propname = SELF(ptrs_275) },
 
-    .w56 = {
-        .header    = NAKA_HDR(0x11),
-        .field_04   = 0x003A,
-        .field_06   = 0x001E,
-        .name_ptr   = SELF(PsFileNameBox_name),
-        .inst_ptr   = SELF(PsFileNameBox_code),
-        .link_ptr   = SELF(ptrs_275),
-        .proc_addr  = NAKA_ADDR(PsWindowToggleProc),
-    },
+    .classdef_165_1 = { .proc = NAKA_ADDR(PsWindowToggleProc), .parent = 0x01600026, .allsize = 52, .selfsize = 12, .name = SELF(PsWindowToggle_name), .propdata = SELF(PsWindowToggle_code), .propname = SELF(ptrs_276) },
 
-    .w57 = {
-        .header    = NAKA_HDR(0x26),
-        .field_04   = 0x0034,
-        .field_06   = 0x000C,
-        .name_ptr   = SELF(PsWindowToggle_name),
-        .inst_ptr   = SELF(PsWindowToggle_code),
-        .link_ptr   = SELF(ptrs_276),
-        .proc_addr  = NAKA_ADDR(AcTtlJgBoxProc),
-    },
+    .classdef_165_2 = { .proc = NAKA_ADDR(AcTtlJgBoxProc), .parent = 0x0160003D, .allsize = 54, .selfsize = 4, .name = SELF(AcTtlJgBox_name), .propdata = SELF(AcTtlJgBox_code), .propname = SELF(ptr_1ae3e) },
 
-    .w58 = {
-        .header    = NAKA_HDR(0x3D),
-        .field_04   = 0x0036,
-        .field_06   = 0x0004,
-        .name_ptr   = SELF(AcTtlJgBox_name),
-        .inst_ptr   = SELF(AcTtlJgBox_code),
-        .link_ptr   = SELF(ptr_1ae3e),
-        .proc_addr  = NAKA_ADDR(AcParaStrBoxProc),
-    },
+    .classdef_165_3 = { .proc = NAKA_ADDR(AcParaStrBoxProc), .parent = 0x01600012, .allsize = 44, .selfsize = 8, .name = SELF(AcParaStrBox_name), .propdata = SELF(AcParaStrBox_code), .propname = SELF(ptrs_277) },
 
-    .w59 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x002C,
-        .field_06   = 0x0008,
-        .name_ptr   = SELF(AcParaStrBox_name),
-        .inst_ptr   = SELF(AcParaStrBox_code),
-        .link_ptr   = SELF(ptrs_277),
-        .proc_addr  = NAKA_ADDR(AcFileSfxBoxProc),
-    },
+    .classdef_165_4 = { .proc = NAKA_ADDR(AcFileSfxBoxProc), .parent = 0x01600010, .allsize = 34, .selfsize = 12, .name = SELF(AcFileSfxBox_name), .propdata = SELF(AcFileSfxBox_code), .propname = SELF(ptrs_278) },
 
-    .w60 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x0022,
-        .field_06   = 0x000C,
-        .name_ptr   = SELF(AcFileSfxBox_name),
-        .inst_ptr   = SELF(AcFileSfxBox_code),
-        .link_ptr   = SELF(ptrs_278),
-        .proc_addr  = NAKA_ADDR(AcMonoIndexToggleProc),
-    },
+    .classdef_165_5 = { .proc = NAKA_ADDR(AcMonoIndexToggleProc), .parent = 0x01600026, .allsize = 42, .selfsize = 2, .name = SELF(AcMonoIndexToggle_name), .propdata = SELF(AcMonoIndexToggle_code), .propname = SELF(ptr_1ae9c) },
 
-    .w61 = {
-        .header    = NAKA_HDR(0x26),
-        .field_04   = 0x002A,
-        .field_06   = 0x0002,
-        .name_ptr   = SELF(AcMonoIndexToggle_name),
-        .inst_ptr   = SELF(AcMonoIndexToggle_code),
-        .link_ptr   = SELF(ptr_1ae9c),
-        .proc_addr  = NAKA_ADDR(IvOneShotTimerProc),
-    },
+    .classdef_165_6 = { .proc = NAKA_ADDR(IvOneShotTimerProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvOneShotTimer_name), .propdata = SELF(IvOneShotTimer_code), .propname = SELF(ptr_1aeac) },
 
-    .w62 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x001A,
-        .field_06   = 0x0004,
-        .name_ptr   = SELF(IvOneShotTimer_name),
-        .inst_ptr   = SELF(IvOneShotTimer_code),
-        .link_ptr   = SELF(ptr_1aeac),
-        .proc_addr  = NAKA_ADDR(VwScreenTitleProc),
-    },
+    .classdef_165_7 = { .proc = NAKA_ADDR(VwScreenTitleProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = SELF(str_1677), .propdata = SELF(w71_name), .propname = SELF(ptrs_279) },
 
-    .w63 = {
-        .header    = NAKA_HDR(0x11),
-        .field_04   = 0x0026,
-        .field_06   = 0x000A,
-        .name_ptr   = SELF(str_1677),
-        .inst_ptr   = SELF(w71_name),
-        .link_ptr   = SELF(ptrs_279),
-        .proc_addr  = NAKA_ADDR(ArrowProc),
-    },
+    .classdef_165_8 = { .proc = NAKA_ADDR(ArrowProc), .parent = 0x01600010, .allsize = 32, .selfsize = 10, .name = SELF(w71_code), .propdata = SELF(str_1676), .propname = SELF(ptrs_280) },
 
-    .w64 = {
-        .header    = NAKA_HDR(0x10),
-        .field_04   = 0x0020,
-        .field_06   = 0x000A,
-        .name_ptr   = SELF(w71_code),
-        .inst_ptr   = SELF(str_1676),
-        .link_ptr   = SELF(ptrs_280),
-        .proc_addr  = NAKA_ADDR(IvIndexSwCtrlProc),
-    },
+    .classdef_165_9 = { .proc = NAKA_ADDR(IvIndexSwCtrlProc), .parent = 0x01600027, .allsize = 32, .selfsize = 10, .name = SELF(str_1675), .propdata = SELF(str_1674), .propname = SELF(ptrs_281) },
 
-    .w65 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0020,
-        .field_06   = 0x000A,
-        .name_ptr   = SELF(str_1675),
-        .inst_ptr   = SELF(str_1674),
-        .link_ptr   = SELF(ptrs_281),
-        .proc_addr  = NAKA_ADDR(AcRotStrBoxProc),
-    },
+    .classdef_165_10 = { .proc = NAKA_ADDR(AcRotStrBoxProc), .parent = 0x01600012, .allsize = 48, .selfsize = 12, .name = SELF(AcRotStrBox_name), .propdata = SELF(AcRotStrBox_code), .propname = SELF(ptrs_282) },
 
-    .w66 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x0030,
-        .field_06   = 0x000C,
-        .name_ptr   = SELF(AcRotStrBox_name),
-        .inst_ptr   = SELF(AcRotStrBox_code),
-        .link_ptr   = SELF(ptrs_282),
-        .proc_addr  = NAKA_ADDR(IvIndexSwDelayProc),
-    },
+    .classdef_165_11 = { .proc = NAKA_ADDR(IvIndexSwDelayProc), .parent = 0x01600027, .allsize = 30, .selfsize = 8, .name = SELF(str_1673), .propdata = SELF(str_1672), .propname = SELF(ptrs_283) },
 
-    .w67 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x001E,
-        .field_06   = 0x0008,
-        .name_ptr   = SELF(str_1673),
-        .inst_ptr   = SELF(str_1672),
-        .link_ptr   = SELF(ptrs_283),
-        .proc_addr  = NAKA_ADDR(IvWaitWinCtlProc),
-    },
+    .classdef_165_12 = { .proc = NAKA_ADDR(IvWaitWinCtlProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvWaitWinCtl_name), .propdata = SELF(IvWaitWinCtl_code), .propname = SELF(ptr_1afea) },
 
-    .w68 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x001A,
-        .field_06   = 0x0004,
-        .name_ptr   = SELF(IvWaitWinCtl_name),
-        .inst_ptr   = SELF(IvWaitWinCtl_code),
-        .link_ptr   = SELF(ptr_1afea),
-        .proc_addr  = 0x00000000,
-    },
+    .classrun_165_x1B130 = 0x00000000,
 
     .pad_2095 = { 0 },
 

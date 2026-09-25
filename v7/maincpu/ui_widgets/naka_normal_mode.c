@@ -435,7 +435,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .border = 0x0001,
         .exit = 0x01A00000,
         .window = 0x0003F3FC,
-        .title = 0x00ED34B0,
+        .title = SELF(field_0174),
         .icon = 0x00000000,
     },
 
