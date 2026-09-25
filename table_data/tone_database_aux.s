@@ -66,15 +66,15 @@
 
 	.org 0x855A48 - 0x800000, 0xff
 
-; Typed zone-record rows (ToneEnv_*_B and DrawbarPreset_EnvData_*): one row =
+; Typed zone-record rows (ToneSet_*_Zones and DrawbarPreset_EnvData_*): one row =
 ; one zone record, fields as documented in the ToneEnv chunk header below.
-;   ToneEnvZone4  selector (LE16), level-field byte, s8 fine trim
-;   ToneEnvZone6  the same + s16 coarse trim (8.8 semitones)
-.macro ToneEnvZone4 sel, fld, trim
+;   ToneSetZone4  selector (LE16), level-field byte, s8 fine trim
+;   ToneSetZone6  the same + s16 coarse trim (8.8 semitones)
+.macro ToneSetZone4 sel, fld, trim
 	.short	\sel
 	.byte	\fld, \trim
 .endm
-.macro ToneEnvZone6 sel, fld, trim, coarse
+.macro ToneSetZone6 sel, fld, trim, coarse
 	.short	\sel
 	.byte	\fld, \trim
 	.short	\coarse
@@ -856,493 +856,493 @@ ToneDB_MixerDefaultTable:
 ; descriptor pointer itself lives at voice slot +0x1F and part +0x76.  Both
 ; "UNIDENTIFIED" admissions above therefore stand, with that search stated.
 ToneDB_EnvDescTable:
-	ToneSetDesc	0x80, ToneEnv_Rec000_A, ToneEnv_Rec000_B, 12, 120, 0x42, 0x4280, 0	; 0
-	ToneSetDesc	0x80, ToneEnv_Rec001_A, ToneEnv_Rec001_B, 12, 120, 0x42, 0x4280, 0	; 1
-	ToneSetDesc	0x80, ToneEnv_Rec002_A, ToneEnv_Rec002_B, 12, 120, 0x42, 0x4280, 0	; 2
-	ToneSetDesc	0x80, ToneEnv_Rec003_A, ToneEnv_Rec003_B, 12, 96, 0x42, 0x4280, 0	; 3
-	ToneSetDesc	0x80, ToneEnv_Rec004_A, ToneEnv_Rec004_B, 12, 120, 0x42, 0x4280, 0	; 4
-	ToneSetDesc	0x80, ToneEnv_Rec005_A, ToneEnv_Rec005_B, 12, 120, 0x42, 0x4280, 0	; 5
-	ToneSetDesc	0x80, ToneEnv_Rec006_A, ToneEnv_Rec006_B, 12, 120, 0x42, 0x4280, 0	; 6
-	ToneSetDesc	0x80, ToneEnv_Rec007_A, ToneEnv_Rec007_B, 24, 86, 0x42, 0x4280, 0	; 7
-	ToneSetDesc	0x80, ToneEnv_Rec008_A, ToneEnv_Rec008_B, 12, 108, 0x42, 0x4280, 0	; 8
-	ToneSetDesc	0x00, ToneEnv_Rec009_A, ToneEnv_Rec009_B, 12, 114, 0x42, 0x4280, 0	; 9
-	ToneSetDesc	0x00, ToneEnv_Rec010_A, ToneEnv_Rec010_B, 12, 114, 0x42, 0x4280, 0	; 10
-	ToneSetDesc	0x00, ToneEnv_Rec011_A, ToneEnv_Rec011_B, 12, 114, 0x42, 0x4280, 0	; 11
-	ToneSetDesc	0x00, ToneEnv_Rec012_A, ToneEnv_Rec012_B, 12, 111, 0x42, 0x4280, 0	; 12
-	ToneSetDesc	0x00, ToneEnv_Rec013_A, ToneEnv_Rec013_B, 12, 114, 0x42, 0x4280, 0	; 13
-	ToneSetDesc	0x00, ToneEnv_Rec014_A, ToneEnv_Rec014_B, 12, 111, 0x42, 0x4280, 0	; 14
-	ToneSetDesc	0x00, ToneEnv_Rec015_A, ToneEnv_Rec015_B, 12, 114, 0x42, 0x4280, 0	; 15
-	ToneSetDesc	0x00, ToneEnv_Rec016_A, ToneEnv_Rec016_B, 12, 114, 0x42, 0x4280, 0	; 16
-	ToneSetDesc	0x00, ToneEnv_Rec017_A, ToneEnv_Rec017_B, 14, 92, 0x42, 0x4280, 0	; 17
-	ToneSetDesc	0x01, ToneEnv_Rec018_A, ToneEnv_Rec018_B, 14, 92, 0x42, 0x4280, 0	; 18
-	ToneSetDesc	0x00, ToneEnv_Rec019_A, ToneEnv_Rec019_B, 12, 120, 0x42, 0x4280, 0	; 19
-	ToneSetDesc	0x00, ToneEnv_Rec020_A, ToneEnv_Rec020_B, 12, 120, 0x42, 0x4280, 0	; 20
-	ToneSetDesc	0x80, ToneEnv_Rec021_A, ToneEnv_Rec021_B, 12, 108, 0x42, 0x4280, 0	; 21
-	ToneSetDesc	0x00, ToneEnv_Rec022_A, ToneEnv_Rec022_B, 12, 120, 0x42, 0x4280, 0	; 22
-	ToneSetDesc	0x00, ToneEnv_Rec023_A, ToneEnv_Rec023_B, 12, 120, 0x42, 0x4280, 0	; 23
-	ToneSetDesc	0x00, ToneEnv_Rec024_A, ToneEnv_Rec024_B, 12, 120, 0x42, 0x4280, 0	; 24
-	ToneSetDesc	0x00, ToneEnv_Rec025_A, ToneEnv_Rec025_B, 12, 120, 0x42, 0x4280, 0	; 25
-	ToneSetDesc	0x00, ToneEnv_Rec026_A, ToneEnv_Rec026_B, 12, 78, 0x42, 0x4280, 0	; 26
-	ToneSetDesc	0x00, ToneEnv_Rec027_A, ToneEnv_Rec027_B, 12, 78, 0x42, 0x4280, 0	; 27
-	ToneSetDesc	0x00, ToneEnv_Rec028_A, ToneEnv_Rec028_B, 12, 108, 0x42, 0x4280, 0	; 28
-	ToneSetDesc	0x00, ToneEnv_Rec029_A, ToneEnv_Rec029_B, 12, 120, 0x42, 0x4280, 0	; 29
-	ToneSetDesc	0x00, ToneEnv_Rec030_A, ToneEnv_Rec030_B, 12, 111, 0x42, 0x4280, 0	; 30
-	ToneSetDesc	0x00, ToneEnv_Rec031_A, ToneEnv_Rec031_B, 12, 114, 0x42, 0x4280, 0	; 31
-	ToneSetDesc	0x00, ToneEnv_Rec032_A, ToneEnv_Rec032_B, 12, 120, 0x42, 0x4280, 0	; 32
-	ToneSetDesc	0x80, ToneEnv_Rec033_A, ToneEnv_Rec033_B, 12, 100, 0x42, 0x4280, 0	; 33
-	ToneSetDesc	0x80, ToneEnv_Rec034_A, ToneEnv_Rec034_B, 12, 100, 0x42, 0x4280, 0	; 34
-	ToneSetDesc	0x00, ToneEnv_Rec035_A, ToneEnv_Rec035_B, 12, 120, 0x42, 0x4280, 0	; 35
-	ToneSetDesc	0x01, ToneEnv_Rec036_A, ToneEnv_Rec036_B, 12, 102, 0x42, 0x4280, 0	; 36
-	ToneSetDesc	0x00, ToneEnv_Rec037_A, ToneEnv_Rec037_B, 12, 120, 0x42, 0x4280, 0	; 37
-	ToneSetDesc	0x80, ToneEnv_Rec038_A, ToneEnv_Rec038_B, 12, 120, 0x42, 0x4280, 0	; 38
-	ToneSetDesc	0x00, ToneEnv_Rec039_A, ToneEnv_Rec039_B, 12, 102, 0x42, 0x4280, 0	; 39
-	ToneSetDesc	0x80, ToneEnv_Rec040_A, ToneEnv_Rec040_B, 12, 114, 0x42, 0x4280, 0	; 40
-	ToneSetDesc	0x00, ToneEnv_Rec041_A, ToneEnv_Rec041_B, 12, 114, 0x42, 0x4280, 0	; 41
-	ToneSetDesc	0x00, ToneEnv_Rec042_A, ToneEnv_Rec042_B, 12, 114, 0x42, 0x4280, 0	; 42
-	ToneSetDesc	0x80, ToneEnv_Rec043_A, ToneEnv_Rec043_B, 12, 114, 0x42, 0x4280, 0	; 43
-	ToneSetDesc	0x80, ToneEnv_Rec044_A, ToneEnv_Rec044_B, 12, 114, 0x42, 0x4280, 0	; 44
-	ToneSetDesc	0x00, ToneEnv_Rec045_A, ToneEnv_Rec045_B, 12, 114, 0x42, 0x4280, 0	; 45
-	ToneSetDesc	0x00, ToneEnv_Rec046_A, ToneEnv_Rec046_B, 17, 120, 0x42, 0x4280, 0	; 46
-	ToneSetDesc	0x00, ToneEnv_Rec047_A, ToneEnv_Rec047_B, 12, 120, 0x42, 0x4280, 0	; 47
-	ToneSetDesc	0x00, ToneEnv_Rec048_A, ToneEnv_Rec048_B, 12, 120, 0x42, 0x4280, 0	; 48
-	ToneSetDesc	0x02, ToneEnv_Rec049_A, ToneEnv_Rec049_B, 12, 113, 0x08, 0x417f, 0	; 49
-	ToneSetDesc	0x02, ToneEnv_Rec050_A, ToneEnv_Rec050_B, 12, 102, 0x08, 0x417f, 0	; 50
-	ToneSetDesc	0x00, ToneEnv_Rec051_A, ToneEnv_Rec051_B, 12, 102, 0x42, 0x4280, 0	; 51
-	ToneSetDesc	0x02, ToneEnv_Rec052_A, ToneEnv_Rec052_B, 12, 113, 0x08, 0x417f, 0	; 52
-	ToneSetDesc	0x80, ToneEnv_Rec053_A, ToneEnv_Rec053_B, 12, 114, 0x42, 0x4280, 0	; 53
-	ToneSetDesc	0x00, ToneEnv_Rec054_A, ToneEnv_Rec054_B, 12, 114, 0x42, 0x4280, 0	; 54
-	ToneSetDesc	0x80, ToneEnv_Rec055_A, ToneEnv_Rec055_B, 12, 114, 0x42, 0x4280, 0	; 55
-	ToneSetDesc	0x80, ToneEnv_Rec056_A, ToneEnv_Rec056_B, 12, 114, 0x42, 0x4280, 0	; 56
-	ToneSetDesc	0x80, ToneEnv_Rec057_A, ToneEnv_Rec057_B, 12, 108, 0x42, 0x4280, 0	; 57
-	ToneSetDesc	0x80, ToneEnv_Rec058_A, ToneEnv_Rec058_B, 12, 108, 0x42, 0x4280, 0	; 58
-	ToneSetDesc	0x80, ToneEnv_Rec059_A, ToneEnv_Rec059_B, 12, 108, 0x42, 0x4280, 0	; 59
-	ToneSetDesc	0x80, ToneEnv_Rec060_A, ToneEnv_Rec060_B, 12, 108, 0x42, 0x4280, 0	; 60
-	ToneSetDesc	0x02, ToneEnv_Rec061_A, ToneEnv_Rec061_B, 12, 111, 0x10, 0x417f, 0	; 61
-	ToneSetDesc	0x80, ToneEnv_Rec062_A, ToneEnv_Rec062_B, 12, 120, 0x42, 0x4280, 0	; 62
-	ToneSetDesc	0x02, ToneEnv_Rec063_A, ToneEnv_Rec063_B, 12, 113, 0x10, 0x417f, 0	; 63
-	ToneSetDesc	0x02, ToneEnv_Rec064_A, ToneEnv_Rec064_B, 12, 113, 0x10, 0x417f, 0	; 64
-	ToneSetDesc	0x00, ToneEnv_Rec065_A, ToneEnv_Rec065_B, 12, 120, 0x42, 0x4280, 0	; 65
-	ToneSetDesc	0x02, ToneEnv_Rec066_A, ToneEnv_Rec066_B, 12, 114, 0x00, 0x417f, 0	; 66
-	ToneSetDesc	0x02, ToneEnv_Rec067_A, ToneEnv_Rec067_B, 12, 114, 0x00, 0x417f, 0	; 67
-	ToneSetDesc	0x02, ToneEnv_Rec068_A, ToneEnv_Rec068_B, 12, 114, 0x00, 0x417f, 0	; 68
-	ToneSetDesc	0x00, ToneEnv_Rec069_A, ToneEnv_Rec069_B, 12, 120, 0x42, 0x4280, 0	; 69
-	ToneSetDesc	0x00, ToneEnv_Rec070_A, ToneEnv_Rec070_B, 12, 111, 0x42, 0x4280, 0	; 70
-	ToneSetDesc	0x00, ToneEnv_Rec071_A, ToneEnv_Rec071_B, 12, 114, 0x42, 0x4280, 0	; 71
-	ToneSetDesc	0x00, ToneEnv_Rec072_A, ToneEnv_Rec072_B, 12, 120, 0x42, 0x4280, 0	; 72
-	ToneSetDesc	0x02, ToneEnv_Rec073_A, ToneEnv_Rec073_B, 12, 113, 0x00, 0x417f, 0	; 73
-	ToneSetDesc	0x02, ToneEnv_Rec074_A, ToneEnv_Rec074_B, 12, 114, 0x10, 0x417f, 0	; 74
-	ToneSetDesc	0x02, ToneEnv_Rec075_A, ToneEnv_Rec075_B, 12, 114, 0x10, 0x417f, 0	; 75
-	ToneSetDesc	0x00, ToneEnv_Rec076_A, ToneEnv_Rec076_B, 12, 111, 0x42, 0x4280, 0	; 76
-	ToneSetDesc	0x00, ToneEnv_Rec077_A, ToneEnv_Rec077_B, 12, 111, 0x42, 0x4280, 0	; 77
-	ToneSetDesc	0x02, ToneEnv_Rec078_A, ToneEnv_Rec078_B, 12, 111, 0x00, 0x417f, 0	; 78
-	ToneSetDesc	0x00, ToneEnv_Rec079_A, ToneEnv_Rec079_B, 12, 111, 0x42, 0x4280, 0	; 79
-	ToneSetDesc	0x00, ToneEnv_Rec080_A, ToneEnv_Rec080_B, 12, 114, 0x42, 0x4280, 0	; 80
-	ToneSetDesc	0x00, ToneEnv_Rec081_A, ToneEnv_Rec081_B, 12, 120, 0x42, 0x4280, 0	; 81
-	ToneSetDesc	0x00, ToneEnv_Rec082_A, ToneEnv_Rec082_B, 16, 120, 0x42, 0x4280, 0	; 82
-	ToneSetDesc	0x00, ToneEnv_Rec083_A, ToneEnv_Rec083_B, 12, 109, 0x42, 0x4280, 0	; 83
-	ToneSetDesc	0x80, ToneEnv_Rec084_A, ToneEnv_Rec084_B, 12, 108, 0x42, 0x4280, 0	; 84
-	ToneSetDesc	0x80, ToneEnv_Rec085_A, ToneEnv_Rec085_B, 12, 108, 0x42, 0x4280, 0	; 85
-	ToneSetDesc	0x00, ToneEnv_Rec086_A, ToneEnv_Rec086_B, 12, 114, 0x42, 0x4280, 0	; 86
-	ToneSetDesc	0x80, ToneEnv_Rec087_A, ToneEnv_Rec087_B, 17, 114, 0x42, 0x4280, 0	; 87
-	ToneSetDesc	0x80, ToneEnv_Rec088_A, ToneEnv_Rec088_B, 12, 108, 0x42, 0x4280, 0	; 88
-	ToneSetDesc	0x80, ToneEnv_Rec089_A, ToneEnv_Rec089_B, 12, 108, 0x42, 0x4280, 0	; 89
-	ToneSetDesc	0x00, ToneEnv_Rec090_A, ToneEnv_Rec090_B, 12, 114, 0x42, 0x4280, 0	; 90
-	ToneSetDesc	0x00, ToneEnv_Rec091_A, ToneEnv_Rec091_B, 12, 114, 0x42, 0x4280, 0	; 91
-	ToneSetDesc	0x80, ToneEnv_Rec092_A, ToneEnv_Rec092_B, 12, 108, 0x42, 0x4280, 0	; 92
-	ToneSetDesc	0x00, ToneEnv_Rec093_A, ToneEnv_Rec093_B, 12, 114, 0x42, 0x4280, 0	; 93
-	ToneSetDesc	0x00, ToneEnv_Rec094_A, ToneEnv_Rec094_B, 12, 114, 0x42, 0x4280, 0	; 94
-	ToneSetDesc	0x80, ToneEnv_Rec095_A, ToneEnv_Rec095_B, 12, 120, 0x42, 0x4280, 0	; 95
-	ToneSetDesc	0x00, ToneEnv_Rec096_A, ToneEnv_Rec096_B, 12, 114, 0x42, 0x4280, 0	; 96
-	ToneSetDesc	0x00, ToneEnv_Rec097_A, ToneEnv_Rec097_B, 12, 114, 0x42, 0x4280, 0	; 97
-	ToneSetDesc	0x80, ToneEnv_Rec098_A, ToneEnv_Rec098_B, 12, 108, 0x42, 0x4280, 0	; 98
-	ToneSetDesc	0x00, ToneEnv_Rec099_A, ToneEnv_Rec099_B, 12, 108, 0x42, 0x4280, 0	; 99
-	ToneSetDesc	0x80, ToneEnv_Rec100_A, ToneEnv_Rec100_B, 12, 120, 0x42, 0x4280, 0	; 100
-	ToneSetDesc	0x80, ToneEnv_Rec101_A, ToneEnv_Rec101_B, 12, 120, 0x42, 0x4280, 0	; 101
-	ToneSetDesc	0x00, ToneEnv_Rec102_A, ToneEnv_Rec102_B, 12, 108, 0x42, 0x4280, 0	; 102
-	ToneSetDesc	0x00, ToneEnv_Rec103_A, ToneEnv_Rec103_B, 12, 102, 0x42, 0x4280, 0	; 103
-	ToneSetDesc	0x00, ToneEnv_Rec104_A, ToneEnv_Rec104_B, 12, 102, 0x42, 0x4280, 0	; 104
-	ToneSetDesc	0x00, ToneEnv_Rec105_A, ToneEnv_Rec105_B, 12, 102, 0x42, 0x4280, 0	; 105
-	ToneSetDesc	0x00, ToneEnv_Rec106_A, ToneEnv_Rec106_B, 12, 102, 0x42, 0x4280, 0	; 106
-	ToneSetDesc	0x00, ToneEnv_Rec107_A, ToneEnv_Rec107_B, 12, 102, 0x42, 0x4280, 0	; 107
-	ToneSetDesc	0x80, ToneEnv_Rec108_A, ToneEnv_Rec108_B, 12, 108, 0x42, 0x4280, 0	; 108
-	ToneSetDesc	0x80, ToneEnv_Rec109_A, ToneEnv_Rec109_B, 12, 120, 0x42, 0x4280, 0	; 109
-	ToneSetDesc	0x00, ToneEnv_Rec110_A, ToneEnv_Rec110_B, 12, 102, 0x42, 0x4280, 0	; 110
-	ToneSetDesc	0x00, ToneEnv_Rec111_A, ToneEnv_Rec111_B, 12, 102, 0x42, 0x4280, 0	; 111
-	ToneSetDesc	0x00, ToneEnv_Rec112_A, ToneEnv_Rec112_B, 12, 102, 0x42, 0x4280, 0	; 112
-	ToneSetDesc	0x00, ToneEnv_Rec113_A, ToneEnv_Rec113_B, 12, 102, 0x42, 0x4280, 0	; 113
-	ToneSetDesc	0x80, ToneEnv_Rec114_A, ToneEnv_Rec114_B, 12, 120, 0x42, 0x4280, 0	; 114
-	ToneSetDesc	0x00, ToneEnv_Rec115_A, ToneEnv_Rec115_B, 12, 102, 0x42, 0x4280, 0	; 115
-	ToneSetDesc	0x00, ToneEnv_Rec116_A, ToneEnv_Rec116_B, 12, 102, 0x42, 0x4280, 0	; 116
-	ToneSetDesc	0x00, ToneEnv_Rec117_A, ToneEnv_Rec117_B, 12, 102, 0x42, 0x4280, 0	; 117
-	ToneSetDesc	0x80, ToneEnv_Rec118_A, ToneEnv_Rec118_B, 12, 104, 0x42, 0x4280, 0	; 118
-	ToneSetDesc	0x00, ToneEnv_Rec119_A, ToneEnv_Rec119_B, 12, 102, 0x42, 0x4280, 0	; 119
-	ToneSetDesc	0x00, ToneEnv_Rec120_A, ToneEnv_Rec120_B, 12, 102, 0x42, 0x4280, 0	; 120
-	ToneSetDesc	0x00, ToneEnv_Rec121_A, ToneEnv_Rec121_B, 12, 102, 0x42, 0x4280, 0	; 121
-	ToneSetDesc	0x80, ToneEnv_Rec122_A, ToneEnv_Rec122_B, 12, 114, 0x42, 0x4280, 0	; 122
-	ToneSetDesc	0x80, ToneEnv_Rec123_A, ToneEnv_Rec123_B, 12, 108, 0x42, 0x4280, 0	; 123
-	ToneSetDesc	0x00, ToneEnv_Rec124_A, ToneEnv_Rec124_B, 12, 102, 0x42, 0x4280, 0	; 124
-	ToneSetDesc	0x00, ToneEnv_Rec125_A, ToneEnv_Rec125_B, 12, 102, 0x42, 0x4280, 0	; 125
-	ToneSetDesc	0x00, ToneEnv_Rec126_A, ToneEnv_Rec126_B, 12, 102, 0x42, 0x4280, 0	; 126
-	ToneSetDesc	0x00, ToneEnv_Rec127_A, ToneEnv_Rec127_B, 12, 102, 0x42, 0x4280, 0	; 127
-	ToneSetDesc	0x00, ToneEnv_Rec128_A, ToneEnv_Rec128_B, 12, 102, 0x42, 0x4280, 0	; 128
-	ToneSetDesc	0x80, ToneEnv_Rec129_A, ToneEnv_Rec129_B, 12, 114, 0x42, 0x4280, 0	; 129
-	ToneSetDesc	0x00, ToneEnv_Rec130_A, ToneEnv_Rec130_B, 12, 102, 0x42, 0x4280, 0	; 130
-	ToneSetDesc	0x00, ToneEnv_Rec131_A, ToneEnv_Rec131_B, 12, 102, 0x42, 0x4280, 0	; 131
-	ToneSetDesc	0x00, ToneEnv_Rec132_A, ToneEnv_Rec132_B, 12, 102, 0x42, 0x4280, 0	; 132
-	ToneSetDesc	0x80, ToneEnv_Rec133_A, ToneEnv_Rec133_B, 12, 104, 0x42, 0x4280, 0	; 133
-	ToneSetDesc	0x00, ToneEnv_Rec134_A, ToneEnv_Rec134_B, 12, 112, 0x42, 0x4280, 0	; 134
-	ToneSetDesc	0x00, ToneEnv_Rec135_A, ToneEnv_Rec135_B, 12, 108, 0x42, 0x4280, 0	; 135
-	ToneSetDesc	0x00, ToneEnv_Rec136_A, ToneEnv_Rec136_B, 12, 114, 0x42, 0x4280, 0	; 136
-	ToneSetDesc	0x00, ToneEnv_Rec137_A, ToneEnv_Rec137_B, 12, 102, 0x42, 0x4280, 0	; 137
-	ToneSetDesc	0x80, ToneEnv_Rec138_A, ToneEnv_Rec138_B, 12, 96, 0x42, 0x4280, 0	; 138
-	ToneSetDesc	0x00, ToneEnv_Rec139_A, ToneEnv_Rec139_B, 12, 102, 0x42, 0x4280, 0	; 139
-	ToneSetDesc	0x00, ToneEnv_Rec140_A, ToneEnv_Rec140_B, 12, 102, 0x42, 0x4280, 0	; 140
-	ToneSetDesc	0x00, ToneEnv_Rec141_A, ToneEnv_Rec141_B, 12, 102, 0x42, 0x4280, 0	; 141
-	ToneSetDesc	0x80, ToneEnv_Rec142_A, ToneEnv_Rec142_B, 12, 96, 0x42, 0x4280, 0	; 142
-	ToneSetDesc	0x00, ToneEnv_Rec143_A, ToneEnv_Rec143_B, 12, 102, 0x42, 0x4280, 0	; 143
-	ToneSetDesc	0x00, ToneEnv_Rec144_A, ToneEnv_Rec144_B, 12, 102, 0x42, 0x4280, 0	; 144
-	ToneSetDesc	0x00, ToneEnv_Rec145_A, ToneEnv_Rec145_B, 12, 102, 0x42, 0x4280, 0	; 145
-	ToneSetDesc	0x80, ToneEnv_Rec146_A, ToneEnv_Rec146_B, 12, 108, 0x42, 0x4280, 0	; 146
-	ToneSetDesc	0x00, ToneEnv_Rec147_A, ToneEnv_Rec147_B, 12, 102, 0x42, 0x4280, 0	; 147
-	ToneSetDesc	0x80, ToneEnv_Rec148_A, ToneEnv_Rec148_B, 12, 102, 0x42, 0x4280, 0	; 148
-	ToneSetDesc	0x80, ToneEnv_Rec149_A, ToneEnv_Rec149_B, 12, 108, 0x42, 0x4280, 0	; 149
-	ToneSetDesc	0x00, ToneEnv_Rec150_A, ToneEnv_Rec150_B, 12, 102, 0x42, 0x4280, 0	; 150
-	ToneSetDesc	0x80, ToneEnv_Rec151_A, ToneEnv_Rec151_B, 12, 108, 0x42, 0x4280, 0	; 151
-	ToneSetDesc	0x00, ToneEnv_Rec152_A, ToneEnv_Rec152_B, 12, 113, 0x42, 0x4280, 0	; 152
-	ToneSetDesc	0x00, ToneEnv_Rec153_A, ToneEnv_Rec153_B, 12, 102, 0x42, 0x4280, 0	; 153
-	ToneSetDesc	0x80, ToneEnv_Rec154_A, ToneEnv_Rec154_B, 12, 84, 0x42, 0x4280, 0	; 154
-	ToneSetDesc	0x00, ToneEnv_Rec155_A, ToneEnv_Rec155_B, 12, 102, 0x42, 0x4280, 0	; 155
-	ToneSetDesc	0x80, ToneEnv_Rec156_A, ToneEnv_Rec156_B, 12, 96, 0x42, 0x4280, 0	; 156
-	ToneSetDesc	0x80, ToneEnv_Rec157_A, ToneEnv_Rec157_B, 12, 96, 0x42, 0x4280, 0	; 157
-	ToneSetDesc	0x80, ToneEnv_Rec158_A, ToneEnv_Rec158_B, 12, 77, 0x42, 0x4280, 0	; 158
-	ToneSetDesc	0x80, ToneEnv_Rec159_A, ToneEnv_Rec159_B, 12, 96, 0x42, 0x4280, 0	; 159
-	ToneSetDesc	0x80, ToneEnv_Rec160_A, ToneEnv_Rec160_B, 12, 77, 0x42, 0x4280, 0	; 160
-	ToneSetDesc	0x80, ToneEnv_Rec161_A, ToneEnv_Rec161_B, 12, 84, 0x42, 0x4280, 0	; 161
-	ToneSetDesc	0x00, ToneEnv_Rec162_A, ToneEnv_Rec162_B, 16, 96, 0x42, 0x4280, 0	; 162
-	ToneSetDesc	0x00, ToneEnv_Rec163_A, ToneEnv_Rec163_B, 16, 93, 0x42, 0x4280, 0	; 163
-	ToneSetDesc	0x00, ToneEnv_Rec164_A, ToneEnv_Rec164_B, 16, 92, 0x42, 0x4280, 0	; 164
-	ToneSetDesc	0x00, ToneEnv_Rec165_A, ToneEnv_Rec165_B, 16, 96, 0x42, 0x4280, 0	; 165
-	ToneSetDesc	0x80, ToneEnv_Rec166_A, ToneEnv_Rec166_B, 12, 96, 0x42, 0x4280, 0	; 166
-	ToneSetDesc	0x80, ToneEnv_Rec167_A, ToneEnv_Rec167_B, 12, 99, 0x42, 0x4280, 0	; 167
-	ToneSetDesc	0x80, ToneEnv_Rec168_A, ToneEnv_Rec168_B, 12, 96, 0x42, 0x4280, 0	; 168
-	ToneSetDesc	0x00, ToneEnv_Rec169_A, ToneEnv_Rec169_B, 12, 102, 0x42, 0x4280, 0	; 169
-	ToneSetDesc	0x00, ToneEnv_Rec170_A, ToneEnv_Rec170_B, 12, 96, 0x42, 0x4280, 0	; 170
-	ToneSetDesc	0x00, ToneEnv_Rec171_A, ToneEnv_Rec171_B, 12, 102, 0x42, 0x4280, 0	; 171
-	ToneSetDesc	0x00, ToneEnv_Rec172_A, ToneEnv_Rec172_B, 12, 96, 0x42, 0x4280, 0	; 172
-	ToneSetDesc	0x00, ToneEnv_Rec173_A, ToneEnv_Rec173_B, 12, 96, 0x42, 0x4280, 0	; 173
-	ToneSetDesc	0x00, ToneEnv_Rec174_A, ToneEnv_Rec174_B, 12, 96, 0x42, 0x4280, 0	; 174
-	ToneSetDesc	0x00, ToneEnv_Rec175_A, ToneEnv_Rec175_B, 12, 96, 0x42, 0x4280, 0	; 175
-	ToneSetDesc	0x80, ToneEnv_Rec176_A, ToneEnv_Rec176_B, 14, 111, 0x42, 0x4280, 0	; 176
-	ToneSetDesc	0x80, ToneEnv_Rec177_A, ToneEnv_Rec177_B, 12, 108, 0x42, 0x4280, 0	; 177
-	ToneSetDesc	0x80, ToneEnv_Rec178_A, ToneEnv_Rec178_B, 9, 120, 0x42, 0x4280, 0	; 178
-	ToneSetDesc	0x80, ToneEnv_Rec179_A, ToneEnv_Rec179_B, 9, 120, 0x42, 0x4280, 0	; 179
-	ToneSetDesc	0x80, ToneEnv_Rec180_A, ToneEnv_Rec180_B, 12, 108, 0x42, 0x4280, 0	; 180
-	ToneSetDesc	0x80, ToneEnv_Rec181_A, ToneEnv_Rec181_B, 12, 108, 0x42, 0x4280, 0	; 181
-	ToneSetDesc	0x80, ToneEnv_Rec182_A, ToneEnv_Rec182_B, 16, 120, 0x42, 0x4280, 0	; 182
-	ToneSetDesc	0x00, ToneEnv_Rec183_A, ToneEnv_Rec183_B, 12, 102, 0x42, 0x4280, 0	; 183
-	ToneSetDesc	0x00, ToneEnv_Rec184_A, ToneEnv_Rec184_B, 12, 102, 0x42, 0x4280, 0	; 184
-	ToneSetDesc	0x80, ToneEnv_Rec185_A, ToneEnv_Rec185_B, 16, 108, 0x42, 0x4280, 0	; 185
-	ToneSetDesc	0x00, ToneEnv_Rec186_A, ToneEnv_Rec186_B, 12, 102, 0x42, 0x4280, 0	; 186
-	ToneSetDesc	0x00, ToneEnv_Rec187_A, ToneEnv_Rec187_B, 12, 102, 0x42, 0x4280, 0	; 187
-	ToneSetDesc	0x00, ToneEnv_Rec188_A, ToneEnv_Rec188_B, 12, 102, 0x42, 0x4280, 0	; 188
-	ToneSetDesc	0x00, ToneEnv_Rec189_A, ToneEnv_Rec189_B, 12, 102, 0x42, 0x4280, 0	; 189
-	ToneSetDesc	0x00, ToneEnv_Rec190_A, ToneEnv_Rec190_B, 12, 102, 0x42, 0x4280, 0	; 190
-	ToneSetDesc	0x80, ToneEnv_Rec191_A, ToneEnv_Rec191_B, 12, 108, 0x42, 0x4280, 0	; 191
-	ToneSetDesc	0x00, ToneEnv_Rec192_A, ToneEnv_Rec192_B, 12, 102, 0x42, 0x4280, 0	; 192
-	ToneSetDesc	0x80, ToneEnv_Rec193_A, ToneEnv_Rec193_B, 12, 104, 0x42, 0x4280, 0	; 193
-	ToneSetDesc	0x80, ToneEnv_Rec194_A, ToneEnv_Rec194_B, 12, 108, 0x42, 0x4280, 0	; 194
-	ToneSetDesc	0x80, ToneEnv_Rec195_A, ToneEnv_Rec195_B, 12, 108, 0x42, 0x4280, 0	; 195
-	ToneSetDesc	0x80, ToneEnv_Rec196_A, ToneEnv_Rec196_B, 12, 108, 0x42, 0x4280, 0	; 196
-	ToneSetDesc	0x00, ToneEnv_Rec197_A, ToneEnv_Rec197_B, 12, 102, 0x42, 0x4280, 0	; 197
-	ToneSetDesc	0x00, ToneEnv_Rec198_A, ToneEnv_Rec198_B, 12, 108, 0x42, 0x4280, 0	; 198
-	ToneSetDesc	0x80, ToneEnv_Rec199_A, ToneEnv_Rec199_B, 12, 108, 0x42, 0x4280, 0	; 199
-	ToneSetDesc	0x80, ToneEnv_Rec200_A, ToneEnv_Rec200_B, 12, 108, 0x42, 0x4280, 0	; 200
-	ToneSetDesc	0x80, ToneEnv_Rec201_A, ToneEnv_Rec201_B, 12, 108, 0x42, 0x4280, 0	; 201
-	ToneSetDesc	0x80, ToneEnv_Rec202_A, ToneEnv_Rec202_B, 12, 108, 0x42, 0x4280, 0	; 202
-	ToneSetDesc	0x80, ToneEnv_Rec203_A, ToneEnv_Rec203_B, 0, 108, 0x42, 0x4280, 0	; 203
-	ToneSetDesc	0x00, ToneEnv_Rec204_A, ToneEnv_Rec204_B, 12, 102, 0x42, 0x4280, 0	; 204
-	ToneSetDesc	0x00, ToneEnv_Rec205_A, ToneEnv_Rec205_B, 12, 102, 0x42, 0x4280, 0	; 205
-	ToneSetDesc	0x80, ToneEnv_Rec206_A, ToneEnv_Rec206_B, 21, 108, 0x42, 0x4280, 0	; 206
-	ToneSetDesc	0x80, ToneEnv_Rec207_A, ToneEnv_Rec207_B, 12, 102, 0x42, 0x4280, 0	; 207
-	ToneSetDesc	0x80, ToneEnv_Rec208_A, ToneEnv_Rec208_B, 17, 96, 0x42, 0x4280, 0	; 208
-	ToneSetDesc	0x80, ToneEnv_Rec209_A, ToneEnv_Rec209_B, 12, 96, 0x42, 0x4280, 0	; 209
-	ToneSetDesc	0x00, ToneEnv_Rec210_A, ToneEnv_Rec210_B, 12, 102, 0x42, 0x4280, 0	; 210
-	ToneSetDesc	0x80, ToneEnv_Rec211_A, ToneEnv_Rec211_B, 12, 102, 0x42, 0x4280, 0	; 211
-	ToneSetDesc	0x80, ToneEnv_Rec212_A, ToneEnv_Rec212_B, 12, 96, 0x42, 0x4280, 0	; 212
-	ToneSetDesc	0x00, ToneEnv_Rec213_A, ToneEnv_Rec213_B, 12, 102, 0x42, 0x4280, 0	; 213
-	ToneSetDesc	0x00, ToneEnv_Rec214_A, ToneEnv_Rec214_B, 12, 102, 0x42, 0x4280, 0	; 214
-	ToneSetDesc	0x80, ToneEnv_Rec215_A, ToneEnv_Rec215_B, 12, 108, 0x42, 0x4280, 0	; 215
-	ToneSetDesc	0x00, ToneEnv_Rec216_A, ToneEnv_Rec216_B, 12, 108, 0x42, 0x4280, 0	; 216
-	ToneSetDesc	0x00, ToneEnv_Rec217_A, ToneEnv_Rec217_B, 12, 108, 0x42, 0x4280, 0	; 217
-	ToneSetDesc	0x00, ToneEnv_Rec218_A, ToneEnv_Rec218_B, 12, 108, 0x42, 0x4280, 0	; 218
-	ToneSetDesc	0x00, ToneEnv_Rec219_A, ToneEnv_Rec219_B, 12, 108, 0x42, 0x4280, 0	; 219
-	ToneSetDesc	0x00, ToneEnv_Rec220_A, ToneEnv_Rec220_B, 12, 108, 0x42, 0x4280, 0	; 220
-	ToneSetDesc	0x80, ToneEnv_Rec221_A, ToneEnv_Rec221_B, 12, 84, 0x42, 0x4280, 0	; 221
-	ToneSetDesc	0x00, ToneEnv_Rec222_A, ToneEnv_Rec222_B, 12, 108, 0x42, 0x4280, 0	; 222
-	ToneSetDesc	0x00, ToneEnv_Rec223_A, ToneEnv_Rec223_B, 12, 108, 0x42, 0x4280, 0	; 223
-	ToneSetDesc	0x00, ToneEnv_Rec224_A, ToneEnv_Rec224_B, 12, 108, 0x42, 0x4280, 0	; 224
-	ToneSetDesc	0x00, ToneEnv_Rec225_A, ToneEnv_Rec225_B, 12, 108, 0x42, 0x4280, 0	; 225
-	ToneSetDesc	0x00, ToneEnv_Rec226_A, ToneEnv_Rec226_B, 12, 108, 0x42, 0x4280, 0	; 226
-	ToneSetDesc	0x00, ToneEnv_Rec227_A, ToneEnv_Rec227_B, 12, 108, 0x42, 0x4280, 0	; 227
-	ToneSetDesc	0x80, ToneEnv_Rec228_A, ToneEnv_Rec228_B, 12, 84, 0x42, 0x4280, 0	; 228
-	ToneSetDesc	0x80, ToneEnv_Rec229_A, ToneEnv_Rec229_B, 12, 96, 0x42, 0x4280, 0	; 229
-	ToneSetDesc	0x80, ToneEnv_Rec230_A, ToneEnv_Rec230_B, 12, 96, 0x42, 0x4280, 0	; 230
-	ToneSetDesc	0x00, ToneEnv_Rec231_A, ToneEnv_Rec231_B, 12, 108, 0x42, 0x4280, 0	; 231
-	ToneSetDesc	0x80, ToneEnv_Rec232_A, ToneEnv_Rec232_B, 12, 84, 0x42, 0x4280, 0	; 232
-	ToneSetDesc	0x00, ToneEnv_Rec233_A, ToneEnv_Rec233_B, 12, 102, 0x42, 0x4280, 0	; 233
-	ToneSetDesc	0x00, ToneEnv_Rec234_A, ToneEnv_Rec234_B, 12, 102, 0x42, 0x4280, 0	; 234
-	ToneSetDesc	0x80, ToneEnv_Rec235_A, ToneEnv_Rec235_B, 12, 65, 0x42, 0x4280, 0	; 235
-	ToneSetDesc	0x80, ToneEnv_Rec236_A, ToneEnv_Rec236_B, 12, 96, 0x42, 0x4280, 0	; 236
-	ToneSetDesc	0x80, ToneEnv_Rec237_A, ToneEnv_Rec237_B, 12, 89, 0x42, 0x4280, 0	; 237
-	ToneSetDesc	0x00, ToneEnv_Rec238_A, ToneEnv_Rec238_B, 12, 108, 0x42, 0x4280, 0	; 238
-	ToneSetDesc	0x00, ToneEnv_Rec239_A, ToneEnv_Rec239_B, 12, 108, 0x42, 0x4280, 0	; 239
-	ToneSetDesc	0x80, ToneEnv_Rec240_A, ToneEnv_Rec240_B, 12, 89, 0x42, 0x4280, 0	; 240
-	ToneSetDesc	0x80, ToneEnv_Rec241_A, ToneEnv_Rec241_B, 12, 96, 0x42, 0x4280, 0	; 241
-	ToneSetDesc	0x80, ToneEnv_Rec242_A, ToneEnv_Rec242_B, 12, 96, 0x42, 0x4280, 0	; 242
-	ToneSetDesc	0x80, ToneEnv_Rec243_A, ToneEnv_Rec243_B, 21, 108, 0x42, 0x4280, 0	; 243
-	ToneSetDesc	0x80, ToneEnv_Rec244_A, ToneEnv_Rec244_B, 12, 103, 0x42, 0x4280, 0	; 244
-	ToneSetDesc	0x00, ToneEnv_Rec245_A, ToneEnv_Rec245_B, 12, 79, 0x42, 0x4280, 0	; 245
-	ToneSetDesc	0x00, ToneEnv_Rec246_A, ToneEnv_Rec246_B, 12, 120, 0x42, 0x4280, 0	; 246
-	ToneSetDesc	0x80, ToneEnv_Rec247_A, ToneEnv_Rec247_B, 28, 96, 0x42, 0x4280, 0	; 247
-	ToneSetDesc	0x00, ToneEnv_Rec248_A, ToneEnv_Rec248_B, 12, 120, 0x42, 0x4280, 0	; 248
-	ToneSetDesc	0x80, ToneEnv_Rec249_A, ToneEnv_Rec249_B, 12, 120, 0x42, 0x4280, 0	; 249
-	ToneSetDesc	0x80, ToneEnv_Rec250_A, ToneEnv_Rec250_B, 12, 96, 0x42, 0x4280, 0	; 250
-	ToneSetDesc	0x00, ToneEnv_Rec251_A, ToneEnv_Rec251_B, 12, 120, 0x42, 0x4280, 0	; 251
-	ToneSetDesc	0x00, ToneEnv_Rec252_A, ToneEnv_Rec252_B, 12, 120, 0x42, 0x4280, 0	; 252
-	ToneSetDesc	0x00, ToneEnv_Rec253_A, ToneEnv_Rec253_B, 12, 120, 0x42, 0x4280, 0	; 253
-	ToneSetDesc	0x00, ToneEnv_Rec254_A, ToneEnv_Rec254_B, 12, 79, 0x42, 0x4280, 0	; 254
-	ToneSetDesc	0x80, ToneEnv_Rec255_A, ToneEnv_Rec255_B, 12, 95, 0x42, 0x4280, 0	; 255
-	ToneSetDesc	0x00, ToneEnv_Rec256_A, ToneEnv_Rec256_B, 12, 79, 0x42, 0x4280, 0	; 256
-	ToneSetDesc	0x80, ToneEnv_Rec257_A, ToneEnv_Rec257_B, 19, 108, 0x42, 0x4280, 0	; 257
-	ToneSetDesc	0x00, ToneEnv_Rec258_A, ToneEnv_Rec258_B, 12, 120, 0x42, 0x4280, 0	; 258
-	ToneSetDesc	0x00, ToneEnv_Rec259_A, ToneEnv_Rec259_B, 16, 90, 0x42, 0x4280, 0	; 259
-	ToneSetDesc	0x00, ToneEnv_Rec260_A, ToneEnv_Rec260_B, 12, 120, 0x42, 0x4280, 0	; 260
-	ToneSetDesc	0x00, ToneEnv_Rec261_A, ToneEnv_Rec261_B, 12, 108, 0x42, 0x4280, 0	; 261
-	ToneSetDesc	0x80, ToneEnv_Rec262_A, ToneEnv_Rec262_B, 24, 91, 0x42, 0x4280, 0	; 262
-	ToneSetDesc	0x80, ToneEnv_Rec263_A, ToneEnv_Rec263_B, 19, 91, 0x42, 0x4280, 0	; 263
-	ToneSetDesc	0x80, ToneEnv_Rec264_A, ToneEnv_Rec264_B, 12, 102, 0x42, 0x4280, 0	; 264
-	ToneSetDesc	0x00, ToneEnv_Rec265_A, ToneEnv_Rec265_B, 12, 96, 0x42, 0x4280, 0	; 265
-	ToneSetDesc	0x00, ToneEnv_Rec266_A, ToneEnv_Rec266_B, 12, 96, 0x42, 0x4280, 0	; 266
-	ToneSetDesc	0x00, ToneEnv_Rec267_A, ToneEnv_Rec267_B, 12, 96, 0x42, 0x4280, 0	; 267
-	ToneSetDesc	0x00, ToneEnv_Rec268_A, ToneEnv_Rec268_B, 12, 96, 0x42, 0x4280, 0	; 268
-	ToneSetDesc	0x80, ToneEnv_Rec269_A, ToneEnv_Rec269_B, 12, 102, 0x42, 0x4280, 0	; 269
-	ToneSetDesc	0x00, ToneEnv_Rec270_A, ToneEnv_Rec270_B, 12, 96, 0x42, 0x4280, 0	; 270
-	ToneSetDesc	0x80, ToneEnv_Rec271_A, ToneEnv_Rec271_B, 12, 102, 0x42, 0x4280, 0	; 271
-	ToneSetDesc	0x00, ToneEnv_Rec272_A, ToneEnv_Rec272_B, 12, 114, 0x42, 0x4280, 0	; 272
-	ToneSetDesc	0x80, ToneEnv_Rec273_A, ToneEnv_Rec273_B, 12, 108, 0x42, 0x4280, 0	; 273
-	ToneSetDesc	0x81, ToneEnv_Rec274_A, ToneEnv_Rec274_B, 12, 108, 0x42, 0x4280, 0	; 274
-	ToneSetDesc	0x80, ToneEnv_Rec275_A, ToneEnv_Rec275_B, 12, 108, 0x42, 0x4280, 0	; 275
-	ToneSetDesc	0x81, ToneEnv_Rec276_A, ToneEnv_Rec276_B, 12, 108, 0x42, 0x4280, 0	; 276
-	ToneSetDesc	0x80, ToneEnv_Rec277_A, ToneEnv_Rec277_B, 12, 108, 0x42, 0x4280, 0	; 277
-	ToneSetDesc	0x80, ToneEnv_Rec278_A, ToneEnv_Rec278_B, 12, 108, 0x42, 0x4280, 0	; 278
-	ToneSetDesc	0x80, ToneEnv_Rec279_A, ToneEnv_Rec279_B, 12, 108, 0x42, 0x4280, 0	; 279
-	ToneSetDesc	0x80, ToneEnv_Rec280_A, ToneEnv_Rec280_B, 12, 108, 0x42, 0x4280, 0	; 280
-	ToneSetDesc	0x80, ToneEnv_Rec281_A, ToneEnv_Rec281_B, 12, 108, 0x42, 0x4280, 0	; 281
-	ToneSetDesc	0x80, ToneEnv_Rec282_A, ToneEnv_Rec282_B, 12, 108, 0x42, 0x4280, 0	; 282
-	ToneSetDesc	0x80, ToneEnv_Rec283_A, ToneEnv_Rec283_B, 12, 96, 0x42, 0x4280, 0	; 283
-	ToneSetDesc	0x81, ToneEnv_Rec284_A, ToneEnv_Rec284_B, 12, 104, 0x42, 0x4280, 0	; 284
-	ToneSetDesc	0x80, ToneEnv_Rec285_A, ToneEnv_Rec285_B, 12, 101, 0x42, 0x4280, 0	; 285
-	ToneSetDesc	0x81, ToneEnv_Rec286_A, ToneEnv_Rec286_B, 12, 101, 0x42, 0x4280, 0	; 286
-	ToneSetDesc	0x81, ToneEnv_Rec287_A, ToneEnv_Rec287_B, 12, 101, 0x42, 0x4280, 0	; 287
-	ToneSetDesc	0x81, ToneEnv_Rec288_A, ToneEnv_Rec288_B, 12, 104, 0x42, 0x4280, 0	; 288
-	ToneSetDesc	0x81, ToneEnv_Rec289_A, ToneEnv_Rec289_B, 12, 108, 0x42, 0x4280, 0	; 289
-	ToneSetDesc	0x00, ToneEnv_Rec290_A, ToneEnv_Rec290_B, 12, 108, 0x42, 0x4280, 0	; 290
-	ToneSetDesc	0x00, ToneEnv_Rec291_A, ToneEnv_Rec291_B, 19, 120, 0x42, 0x4280, 0	; 291
-	ToneSetDesc	0x00, ToneEnv_Rec292_A, ToneEnv_Rec292_B, 12, 102, 0x42, 0x4280, 0	; 292
-	ToneSetDesc	0x80, ToneEnv_Rec293_A, ToneEnv_Rec293_B, 12, 102, 0x42, 0x4280, 0	; 293
-	ToneSetDesc	0x00, ToneEnv_Rec294_A, ToneEnv_Rec294_B, 12, 120, 0x42, 0x4280, 0	; 294
-	ToneSetDesc	0x00, ToneEnv_Rec295_A, ToneEnv_Rec295_B, 12, 120, 0x42, 0x4280, 0	; 295
-	ToneSetDesc	0x00, ToneEnv_Rec296_A, ToneEnv_Rec296_B, 12, 120, 0x42, 0x4280, 0	; 296
-	ToneSetDesc	0x00, ToneEnv_Rec297_A, ToneEnv_Rec297_B, 12, 120, 0x42, 0x4280, 0	; 297
-	ToneSetDesc	0x00, ToneEnv_Rec298_A, ToneEnv_Rec298_B, 12, 120, 0x42, 0x4280, 0	; 298
-	ToneSetDesc	0x00, ToneEnv_Rec299_A, ToneEnv_Rec299_B, 12, 120, 0x42, 0x4280, 0	; 299
-	ToneSetDesc	0x80, ToneEnv_Rec300_A, ToneEnv_Rec300_B, 12, 108, 0x42, 0x4280, 0	; 300
-	ToneSetDesc	0x00, ToneEnv_Rec301_A, ToneEnv_Rec301_B, 12, 111, 0x42, 0x4280, 0	; 301
-	ToneSetDesc	0x80, ToneEnv_Rec302_A, ToneEnv_Rec302_B, 12, 81, 0x42, 0x4280, 0	; 302
-	ToneSetDesc	0x00, ToneEnv_Rec303_A, ToneEnv_Rec303_B, 12, 114, 0x42, 0x4280, 0	; 303
-	ToneSetDesc	0x81, ToneEnv_Rec304_A, ToneEnv_Rec304_B, 12, 108, 0x42, 0x4280, 0	; 304
-	ToneSetDesc	0x80, ToneEnv_Rec305_A, ToneEnv_Rec305_B, 12, 102, 0x42, 0x4280, 0	; 305
-	ToneSetDesc	0x80, ToneEnv_Rec306_A, ToneEnv_Rec306_B, 12, 96, 0x42, 0x4280, 0	; 306
-	ToneSetDesc	0x80, ToneEnv_Rec307_A, ToneEnv_Rec307_B, 12, 96, 0x42, 0x4280, 0	; 307
-	ToneSetDesc	0x81, ToneEnv_Rec308_A, ToneEnv_Rec308_B, 12, 96, 0x42, 0x4280, 0	; 308
-	ToneSetDesc	0x80, ToneEnv_Rec309_A, ToneEnv_Rec309_B, 12, 108, 0x42, 0x4280, 0	; 309
-	ToneSetDesc	0x80, ToneEnv_Rec310_A, ToneEnv_Rec310_B, 12, 108, 0x42, 0x4280, 0	; 310
-	ToneSetDesc	0x80, ToneEnv_Rec311_A, ToneEnv_Rec311_B, 12, 108, 0x42, 0x4280, 0	; 311
-	ToneSetDesc	0x80, ToneEnv_Rec312_A, ToneEnv_Rec312_B, 12, 108, 0x42, 0x4280, 0	; 312
-	ToneSetDesc	0x80, ToneEnv_Rec313_A, ToneEnv_Rec313_B, 12, 108, 0x42, 0x4280, 0	; 313
-	ToneSetDesc	0x80, ToneEnv_Rec314_A, ToneEnv_Rec314_B, 12, 108, 0x42, 0x4280, 0	; 314
-	ToneSetDesc	0x80, ToneEnv_Rec315_A, ToneEnv_Rec315_B, 12, 102, 0x42, 0x4280, 0	; 315
-	ToneSetDesc	0x80, ToneEnv_Rec316_A, ToneEnv_Rec316_B, 12, 96, 0x42, 0x4280, 0	; 316
-	ToneSetDesc	0x00, ToneEnv_Rec317_A, ToneEnv_Rec317_B, 12, 120, 0x42, 0x4280, 0	; 317
-	ToneSetDesc	0x00, ToneEnv_Rec318_A, ToneEnv_Rec318_B, 12, 120, 0x42, 0x4280, 0	; 318
-	ToneSetDesc	0x00, ToneEnv_Rec319_A, ToneEnv_Rec319_B, 12, 120, 0x42, 0x4280, 0	; 319
-	ToneSetDesc	0x00, ToneEnv_Rec320_A, ToneEnv_Rec320_B, 12, 120, 0x42, 0x4280, 0	; 320
-	ToneSetDesc	0x00, ToneEnv_Rec321_A, ToneEnv_Rec321_B, 12, 120, 0x42, 0x4280, 0	; 321
-	ToneSetDesc	0x00, ToneEnv_Rec322_A, ToneEnv_Rec322_B, 12, 120, 0x42, 0x4280, 0	; 322
-	ToneSetDesc	0x00, ToneEnv_Rec323_A, ToneEnv_Rec323_B, 12, 120, 0x42, 0x4280, 0	; 323
-	ToneSetDesc	0x00, ToneEnv_Rec324_A, ToneEnv_Rec324_B, 12, 120, 0x42, 0x4280, 0	; 324
-	ToneSetDesc	0x00, ToneEnv_Rec325_A, ToneEnv_Rec325_B, 12, 120, 0x42, 0x4280, 0	; 325
-	ToneSetDesc	0x00, ToneEnv_Rec326_A, ToneEnv_Rec326_B, 12, 120, 0x42, 0x4280, 0	; 326
-	ToneSetDesc	0x00, ToneEnv_Rec327_A, ToneEnv_Rec327_B, 12, 120, 0x42, 0x4280, 0	; 327
-	ToneSetDesc	0x00, ToneEnv_Rec328_A, ToneEnv_Rec328_B, 12, 120, 0x42, 0x4280, 0	; 328
-	ToneSetDesc	0x01, ToneEnv_Rec329_A, ToneEnv_Rec329_B, 12, 120, 0x42, 0x4280, 0	; 329
-	ToneSetDesc	0x00, ToneEnv_Rec330_A, ToneEnv_Rec330_B, 12, 120, 0x42, 0x4280, 0	; 330
-	ToneSetDesc	0x00, ToneEnv_Rec331_A, ToneEnv_Rec331_B, 12, 120, 0x42, 0x4280, 0	; 331
-	ToneSetDesc	0x00, ToneEnv_Rec332_A, ToneEnv_Rec332_B, 12, 120, 0x42, 0x4280, 0	; 332
-	ToneSetDesc	0x80, ToneEnv_Rec333_A, ToneEnv_Rec333_B, 12, 96, 0x42, 0x4280, 0	; 333
-	ToneSetDesc	0x80, ToneEnv_Rec334_A, ToneEnv_Rec334_B, 12, 96, 0x42, 0x4280, 0	; 334
-	ToneSetDesc	0x00, ToneEnv_Rec335_A, ToneEnv_Rec335_B, 12, 120, 0x42, 0x4280, 0	; 335
-	ToneSetDesc	0x00, ToneEnv_Rec336_A, ToneEnv_Rec336_B, 12, 108, 0x42, 0x4280, 0	; 336
-	ToneSetDesc	0x80, ToneEnv_Rec337_A, ToneEnv_Rec337_B, 12, 108, 0x42, 0x4280, 0	; 337
-	ToneSetDesc	0x80, ToneEnv_Rec338_A, ToneEnv_Rec338_B, 12, 108, 0x42, 0x4280, 0	; 338
-	ToneSetDesc	0x00, ToneEnv_Rec339_A, ToneEnv_Rec339_B, 12, 79, 0x42, 0x4280, 0	; 339
-	ToneSetDesc	0x00, ToneEnv_Rec340_A, ToneEnv_Rec340_B, 12, 108, 0x42, 0x4280, 0	; 340
-	ToneSetDesc	0x00, ToneEnv_Rec341_A, ToneEnv_Rec341_B, 12, 120, 0x42, 0x4d44, 0	; 341
-	ToneSetDesc	0x00, ToneEnv_Rec342_A, ToneEnv_Rec342_B, 12, 120, 0x42, 0x4880, 0	; 342
-	ToneSetDesc	0x00, ToneEnv_Rec343_A, ToneEnv_Rec343_B, 12, 120, 0x42, 0x4d44, 0	; 343
-	ToneSetDesc	0x00, ToneEnv_Rec344_A, ToneEnv_Rec344_B, 12, 120, 0x42, 0x4d44, 0	; 344
-	ToneSetDesc	0x00, ToneEnv_Rec345_A, ToneEnv_Rec345_B, 12, 120, 0x42, 0x4d44, 0	; 345
-	ToneSetDesc	0x00, ToneEnv_Rec346_A, ToneEnv_Rec346_B, 12, 120, 0x42, 0x4d44, 0	; 346
-	ToneSetDesc	0x00, ToneEnv_Rec347_A, ToneEnv_Rec347_B, 12, 120, 0x42, 0x4d44, 0	; 347
-	ToneSetDesc	0x00, ToneEnv_Rec348_A, ToneEnv_Rec348_B, 12, 120, 0x42, 0x4d44, 0	; 348
-	ToneSetDesc	0x00, ToneEnv_Rec349_A, ToneEnv_Rec349_B, 12, 120, 0x42, 0x4d44, 0	; 349
-	ToneSetDesc	0x00, ToneEnv_Rec350_A, ToneEnv_Rec350_B, 12, 120, 0x42, 0x4d44, 0	; 350
-	ToneSetDesc	0x00, ToneEnv_Rec351_A, ToneEnv_Rec351_B, 12, 120, 0x42, 0x4d44, 0	; 351
-	ToneSetDesc	0x00, ToneEnv_Rec352_A, ToneEnv_Rec352_B, 12, 120, 0x42, 0x4d44, 0	; 352
-	ToneSetDesc	0x00, ToneEnv_Rec353_A, ToneEnv_Rec353_B, 12, 120, 0x42, 0x4d44, 0	; 353
-	ToneSetDesc	0x00, ToneEnv_Rec354_A, ToneEnv_Rec354_B, 12, 120, 0x42, 0x4ebc, 0	; 354
-	ToneSetDesc	0x00, ToneEnv_Rec355_A, ToneEnv_Rec355_B, 12, 120, 0x42, 0x4d44, 0	; 355
-	ToneSetDesc	0x00, ToneEnv_Rec356_A, ToneEnv_Rec356_B, 12, 120, 0x42, 0x4d44, 0	; 356
-	ToneSetDesc	0x00, ToneEnv_Rec357_A, ToneEnv_Rec357_B, 12, 120, 0x42, 0x4d44, 0	; 357
-	ToneSetDesc	0x00, ToneEnv_Rec358_A, ToneEnv_Rec358_B, 12, 120, 0x42, 0x4d44, 0	; 358
-	ToneSetDesc	0x00, ToneEnv_Rec359_A, ToneEnv_Rec359_B, 12, 120, 0x42, 0x4d44, 0	; 359
-	ToneSetDesc	0x00, ToneEnv_Rec360_A, ToneEnv_Rec360_B, 12, 120, 0x42, 0x4d44, 0	; 360
-	ToneSetDesc	0x00, ToneEnv_Rec361_A, ToneEnv_Rec361_B, 12, 120, 0x42, 0x4d44, 0	; 361
-	ToneSetDesc	0x00, ToneEnv_Rec362_A, ToneEnv_Rec362_B, 12, 120, 0x42, 0x4d44, 0	; 362
-	ToneSetDesc	0x00, ToneEnv_Rec363_A, ToneEnv_Rec363_B, 12, 120, 0x42, 0x4d44, 0	; 363
-	ToneSetDesc	0x00, ToneEnv_Rec364_A, ToneEnv_Rec364_B, 12, 120, 0x42, 0x4d44, 0	; 364
-	ToneSetDesc	0x00, ToneEnv_Rec365_A, ToneEnv_Rec365_B, 12, 120, 0x42, 0x4d44, 0	; 365
-	ToneSetDesc	0x00, ToneEnv_Rec366_A, ToneEnv_Rec366_B, 12, 120, 0x42, 0x4d44, 0	; 366
-	ToneSetDesc	0x00, ToneEnv_Rec367_A, ToneEnv_Rec367_B, 12, 120, 0x42, 0x4d44, 0	; 367
-	ToneSetDesc	0x00, ToneEnv_Rec368_A, ToneEnv_Rec368_B, 12, 120, 0x42, 0x4d44, 0	; 368
-	ToneSetDesc	0x00, ToneEnv_Rec369_A, ToneEnv_Rec369_B, 12, 120, 0x42, 0x4d44, 0	; 369
-	ToneSetDesc	0x00, ToneEnv_Rec370_A, ToneEnv_Rec370_B, 12, 120, 0x42, 0x4d44, 0	; 370
-	ToneSetDesc	0x00, ToneEnv_Rec371_A, ToneEnv_Rec371_B, 12, 120, 0x42, 0x4ebc, 0	; 371
-	ToneSetDesc	0x00, ToneEnv_Rec372_A, ToneEnv_Rec372_B, 12, 120, 0x42, 0x4d44, 0	; 372
-	ToneSetDesc	0x00, ToneEnv_Rec373_A, ToneEnv_Rec373_B, 12, 120, 0x42, 0x4561, 0	; 373
-	ToneSetDesc	0x08, ToneEnv_Rec374_A, ToneEnv_Rec374_B, 12, 120, 0x42, 0x4d44, 4	; 374
-	ToneSetDesc	0x00, ToneEnv_Rec375_A, ToneEnv_Rec375_B, 12, 120, 0x42, 0x4d44, 0	; 375
-	ToneSetDesc	0x00, ToneEnv_Rec376_A, ToneEnv_Rec376_B, 12, 120, 0x42, 0x534d, 0	; 376
-	ToneSetDesc	0x00, ToneEnv_Rec377_A, ToneEnv_Rec377_B, 12, 120, 0x42, 0x4d44, 0	; 377
-	ToneSetDesc	0x00, ToneEnv_Rec378_A, ToneEnv_Rec378_B, 12, 120, 0x42, 0x4d44, 0	; 378
-	ToneSetDesc	0x00, ToneEnv_Rec379_A, ToneEnv_Rec379_B, 12, 120, 0x42, 0x534d, 0	; 379
-	ToneSetDesc	0x00, ToneEnv_Rec380_A, ToneEnv_Rec380_B, 12, 120, 0x42, 0x501e, 0	; 380
-	ToneSetDesc	0x00, ToneEnv_Rec381_A, ToneEnv_Rec381_B, 12, 120, 0x42, 0x5167, 0	; 381
-	ToneSetDesc	0x00, ToneEnv_Rec382_A, ToneEnv_Rec382_B, 12, 120, 0x42, 0x5167, 0	; 382
-	ToneSetDesc	0x00, ToneEnv_Rec383_A, ToneEnv_Rec383_B, 12, 120, 0x42, 0x534d, 0	; 383
-	ToneSetDesc	0x00, ToneEnv_Rec384_A, ToneEnv_Rec384_B, 12, 120, 0x42, 0x5167, 0	; 384
-	ToneSetDesc	0x00, ToneEnv_Rec385_A, ToneEnv_Rec385_B, 12, 120, 0x42, 0x534d, 0	; 385
-	ToneSetDesc	0x00, ToneEnv_Rec386_A, ToneEnv_Rec386_B, 12, 120, 0x42, 0x4d44, 0	; 386
-	ToneSetDesc	0x00, ToneEnv_Rec387_A, ToneEnv_Rec387_B, 12, 120, 0x42, 0x4d44, 0	; 387
-	ToneSetDesc	0x00, ToneEnv_Rec388_A, ToneEnv_Rec388_B, 12, 120, 0x42, 0x1f87, 0	; 388
-	ToneSetDesc	0x00, ToneEnv_Rec389_A, ToneEnv_Rec389_B, 12, 120, 0x42, 0x4d44, 0	; 389
-	ToneSetDesc	0x08, ToneEnv_Rec390_A, ToneEnv_Rec390_B, 12, 120, 0x42, 0x4d44, 1	; 390
-	ToneSetDesc	0x00, ToneEnv_Rec391_A, ToneEnv_Rec391_B, 12, 120, 0x42, 0x4d44, 0	; 391
-	ToneSetDesc	0x08, ToneEnv_Rec392_A, ToneEnv_Rec392_B, 12, 120, 0x42, 0x4d44, 1	; 392
-	ToneSetDesc	0x08, ToneEnv_Rec393_A, ToneEnv_Rec393_B, 12, 120, 0x42, 0x4d44, 1	; 393
-	ToneSetDesc	0x08, ToneEnv_Rec394_A, ToneEnv_Rec394_B, 12, 120, 0x42, 0x4561, 1	; 394
-	ToneSetDesc	0x00, ToneEnv_Rec395_A, ToneEnv_Rec395_B, 12, 120, 0x42, 0x4d44, 1	; 395
-	ToneSetDesc	0x00, ToneEnv_Rec396_A, ToneEnv_Rec396_B, 12, 120, 0x42, 0x4d44, 1	; 396
-	ToneSetDesc	0x00, ToneEnv_Rec397_A, ToneEnv_Rec397_B, 12, 120, 0x42, 0x4561, 1	; 397
-	ToneSetDesc	0x08, ToneEnv_Rec398_A, ToneEnv_Rec398_B, 12, 120, 0x42, 0x4d44, 1	; 398
-	ToneSetDesc	0x00, ToneEnv_Rec399_A, ToneEnv_Rec399_B, 12, 120, 0x42, 0x534d, 0	; 399
-	ToneSetDesc	0x00, ToneEnv_Rec400_A, ToneEnv_Rec400_B, 12, 120, 0x42, 0x534d, 0	; 400
-	ToneSetDesc	0x00, ToneEnv_Rec401_A, ToneEnv_Rec401_B, 12, 120, 0x42, 0x534d, 0	; 401
-	ToneSetDesc	0x00, ToneEnv_Rec402_A, ToneEnv_Rec402_B, 12, 120, 0x42, 0x534d, 0	; 402
-	ToneSetDesc	0x00, ToneEnv_Rec403_A, ToneEnv_Rec403_B, 12, 120, 0x42, 0x4d44, 0	; 403
-	ToneSetDesc	0x00, ToneEnv_Rec404_A, ToneEnv_Rec404_B, 12, 120, 0x42, 0x49c1, 0	; 404
-	ToneSetDesc	0x00, ToneEnv_Rec405_A, ToneEnv_Rec405_B, 12, 120, 0x42, 0x4d44, 0	; 405
-	ToneSetDesc	0x00, ToneEnv_Rec406_A, ToneEnv_Rec406_B, 12, 120, 0x42, 0x4d44, 0	; 406
-	ToneSetDesc	0x00, ToneEnv_Rec407_A, ToneEnv_Rec407_B, 12, 120, 0x42, 0x4d44, 0	; 407
-	ToneSetDesc	0x00, ToneEnv_Rec408_A, ToneEnv_Rec408_B, 12, 120, 0x42, 0x4d44, 0	; 408
-	ToneSetDesc	0x00, ToneEnv_Rec409_A, ToneEnv_Rec409_B, 12, 120, 0x42, 0x4d44, 0	; 409
-	ToneSetDesc	0x00, ToneEnv_Rec410_A, ToneEnv_Rec410_B, 12, 120, 0x42, 0x4d44, 0	; 410
-	ToneSetDesc	0x00, ToneEnv_Rec411_A, ToneEnv_Rec411_B, 12, 120, 0x42, 0x4d44, 0	; 411
-	ToneSetDesc	0x00, ToneEnv_Rec412_A, ToneEnv_Rec412_B, 12, 120, 0x42, 0x4d44, 2	; 412
-	ToneSetDesc	0x08, ToneEnv_Rec413_A, ToneEnv_Rec413_B, 12, 120, 0x42, 0x4d44, 2	; 413
-	ToneSetDesc	0x00, ToneEnv_Rec414_A, ToneEnv_Rec414_B, 12, 120, 0x42, 0x4e80, 0	; 414
-	ToneSetDesc	0x00, ToneEnv_Rec415_A, ToneEnv_Rec415_B, 12, 120, 0x42, 0x3280, 0	; 415
-	ToneSetDesc	0x00, ToneEnv_Rec416_A, ToneEnv_Rec416_B, 12, 120, 0x42, 0x34d5, 0	; 416
-	ToneSetDesc	0x00, ToneEnv_Rec417_A, ToneEnv_Rec417_B, 12, 120, 0x42, 0x4ebc, 0	; 417
-	ToneSetDesc	0x00, ToneEnv_Rec418_A, ToneEnv_Rec418_B, 12, 120, 0x42, 0x4ebc, 0	; 418
-	ToneSetDesc	0x00, ToneEnv_Rec419_A, ToneEnv_Rec419_B, 12, 120, 0x42, 0x4ebc, 0	; 419
-	ToneSetDesc	0x00, ToneEnv_Rec420_A, ToneEnv_Rec420_B, 12, 120, 0x42, 0x4ebc, 0	; 420
-	ToneSetDesc	0x00, ToneEnv_Rec421_A, ToneEnv_Rec421_B, 12, 120, 0x42, 0x4d44, 0	; 421
-	ToneSetDesc	0x00, ToneEnv_Rec422_A, ToneEnv_Rec422_B, 12, 120, 0x42, 0x4d44, 0	; 422
-	ToneSetDesc	0x00, ToneEnv_Rec423_A, ToneEnv_Rec423_B, 12, 120, 0x42, 0x4d44, 0	; 423
-	ToneSetDesc	0x00, ToneEnv_Rec424_A, ToneEnv_Rec424_B, 12, 120, 0x42, 0x4f44, 0	; 424
-	ToneSetDesc	0x08, ToneEnv_Rec425_A, ToneEnv_Rec425_B, 12, 120, 0x42, 0x4d44, 5	; 425
-	ToneSetDesc	0x00, ToneEnv_Rec426_A, ToneEnv_Rec426_B, 12, 120, 0x42, 0x4d44, 0	; 426
-	ToneSetDesc	0x00, ToneEnv_Rec427_A, ToneEnv_Rec427_B, 12, 120, 0x42, 0x4ebc, 0	; 427
-	ToneSetDesc	0x00, ToneEnv_Rec428_A, ToneEnv_Rec428_B, 12, 120, 0x42, 0x4ebc, 0	; 428
-	ToneSetDesc	0x00, ToneEnv_Rec429_A, ToneEnv_Rec429_B, 12, 120, 0x42, 0x4d44, 0	; 429
-	ToneSetDesc	0x00, ToneEnv_Rec430_A, ToneEnv_Rec430_B, 12, 120, 0x42, 0x4d44, 0	; 430
-	ToneSetDesc	0x00, ToneEnv_Rec431_A, ToneEnv_Rec431_B, 12, 120, 0x42, 0x4d44, 0	; 431
-	ToneSetDesc	0x00, ToneEnv_Rec432_A, ToneEnv_Rec432_B, 12, 120, 0x42, 0x4d44, 0	; 432
-	ToneSetDesc	0x00, ToneEnv_Rec433_A, ToneEnv_Rec433_B, 12, 120, 0x42, 0x1fc4, 0	; 433
-	ToneSetDesc	0x00, ToneEnv_Rec434_A, ToneEnv_Rec434_B, 12, 120, 0x42, 0x4ebc, 0	; 434
-	ToneSetDesc	0x00, ToneEnv_Rec435_A, ToneEnv_Rec435_B, 12, 120, 0x42, 0x4ebc, 0	; 435
-	ToneSetDesc	0x00, ToneEnv_Rec436_A, ToneEnv_Rec436_B, 12, 120, 0x42, 0x4ebc, 0	; 436
-	ToneSetDesc	0x00, ToneEnv_Rec437_A, ToneEnv_Rec437_B, 12, 120, 0x42, 0x4ebc, 0	; 437
-	ToneSetDesc	0x00, ToneEnv_Rec438_A, ToneEnv_Rec438_B, 12, 120, 0x42, 0x4d44, 0	; 438
-	ToneSetDesc	0x00, ToneEnv_Rec439_A, ToneEnv_Rec439_B, 12, 120, 0x42, 0x4d44, 0	; 439
-	ToneSetDesc	0x00, ToneEnv_Rec440_A, ToneEnv_Rec440_B, 12, 120, 0x42, 0x4d44, 0	; 440
-	ToneSetDesc	0x00, ToneEnv_Rec441_A, ToneEnv_Rec441_B, 12, 120, 0x42, 0x4d44, 0	; 441
-	ToneSetDesc	0x08, ToneEnv_Rec442_A, ToneEnv_Rec442_B, 12, 120, 0x42, 0x4ebc, 3	; 442
-	ToneSetDesc	0x08, ToneEnv_Rec443_A, ToneEnv_Rec443_B, 12, 120, 0x42, 0x4d44, 3	; 443
-	ToneSetDesc	0x00, ToneEnv_Rec444_A, ToneEnv_Rec444_B, 12, 120, 0x42, 0x4ebc, 0	; 444
-	ToneSetDesc	0x00, ToneEnv_Rec445_A, ToneEnv_Rec445_B, 12, 120, 0x42, 0x4ebc, 0	; 445
-	ToneSetDesc	0x00, ToneEnv_Rec446_A, ToneEnv_Rec446_B, 12, 120, 0x42, 0x4d44, 0	; 446
-	ToneSetDesc	0x00, ToneEnv_Rec447_A, ToneEnv_Rec447_B, 12, 120, 0x42, 0x4d44, 0	; 447
-	ToneSetDesc	0x00, ToneEnv_Rec448_A, ToneEnv_Rec448_B, 12, 120, 0x42, 0x4d44, 0	; 448
-	ToneSetDesc	0x00, ToneEnv_Rec449_A, ToneEnv_Rec449_B, 12, 120, 0x42, 0x4ebc, 0	; 449
-	ToneSetDesc	0x00, ToneEnv_Rec450_A, ToneEnv_Rec450_B, 12, 120, 0x42, 0x4ebc, 0	; 450
-	ToneSetDesc	0x00, ToneEnv_Rec451_A, ToneEnv_Rec451_B, 12, 120, 0x42, 0x4ebc, 0	; 451
-	ToneSetDesc	0x00, ToneEnv_Rec452_A, ToneEnv_Rec452_B, 12, 120, 0x42, 0x4ebc, 0	; 452
-	ToneSetDesc	0x00, ToneEnv_Rec453_A, ToneEnv_Rec453_B, 12, 120, 0x42, 0x4d44, 0	; 453
-	ToneSetDesc	0x00, ToneEnv_Rec454_A, ToneEnv_Rec454_B, 12, 120, 0x42, 0x4d44, 0	; 454
-	ToneSetDesc	0x00, ToneEnv_Rec455_A, ToneEnv_Rec455_B, 12, 120, 0x42, 0x4d44, 0	; 455
-	ToneSetDesc	0x00, ToneEnv_Rec456_A, ToneEnv_Rec456_B, 12, 120, 0x42, 0x4d44, 0	; 456
-	ToneSetDesc	0x00, ToneEnv_Rec457_A, ToneEnv_Rec457_B, 12, 120, 0x42, 0x4d44, 0	; 457
-	ToneSetDesc	0x00, ToneEnv_Rec458_A, ToneEnv_Rec458_B, 12, 120, 0x42, 0x4d44, 0	; 458
-	ToneSetDesc	0x00, ToneEnv_Rec459_A, ToneEnv_Rec459_B, 12, 120, 0x42, 0x4d44, 0	; 459
-	ToneSetDesc	0x00, ToneEnv_Rec460_A, ToneEnv_Rec460_B, 12, 120, 0x42, 0x4d44, 0	; 460
-	ToneSetDesc	0x00, ToneEnv_Rec461_A, ToneEnv_Rec461_B, 12, 120, 0x42, 0x4d44, 0	; 461
-	ToneSetDesc	0x00, ToneEnv_Rec462_A, ToneEnv_Rec462_B, 12, 120, 0x42, 0x4d44, 0	; 462
-	ToneSetDesc	0x00, ToneEnv_Rec463_A, ToneEnv_Rec463_B, 12, 120, 0x42, 0x4d44, 0	; 463
-	ToneSetDesc	0x00, ToneEnv_Rec464_A, ToneEnv_Rec464_B, 12, 120, 0x42, 0x4d44, 0	; 464
-	ToneSetDesc	0x00, ToneEnv_Rec465_A, ToneEnv_Rec465_B, 12, 120, 0x42, 0x4d44, 0	; 465
-	ToneSetDesc	0x00, ToneEnv_Rec466_A, ToneEnv_Rec466_B, 12, 120, 0x42, 0x4d44, 0	; 466
-	ToneSetDesc	0x00, ToneEnv_Rec467_A, ToneEnv_Rec467_B, 12, 120, 0x42, 0x4d44, 0	; 467
-	ToneSetDesc	0x00, ToneEnv_Rec468_A, ToneEnv_Rec468_B, 12, 120, 0x42, 0x4d44, 0	; 468
-	ToneSetDesc	0x00, ToneEnv_Rec469_A, ToneEnv_Rec469_B, 12, 120, 0x42, 0x4180, 0	; 469
-	ToneSetDesc	0x00, ToneEnv_Rec470_A, ToneEnv_Rec470_B, 12, 120, 0x42, 0x4880, 0	; 470
-	ToneSetDesc	0x00, ToneEnv_Rec471_A, ToneEnv_Rec471_B, 12, 120, 0x42, 0x4d44, 0	; 471
-	ToneSetDesc	0x00, ToneEnv_Rec472_A, ToneEnv_Rec472_B, 12, 120, 0x42, 0x4d44, 0	; 472
-	ToneSetDesc	0x00, ToneEnv_Rec473_A, ToneEnv_Rec473_B, 12, 120, 0x42, 0x2e80, 0	; 473
-	ToneSetDesc	0x00, ToneEnv_Rec474_A, ToneEnv_Rec474_B, 12, 120, 0x42, 0x4527, 0	; 474
-	ToneSetDesc	0x00, ToneEnv_Rec475_A, ToneEnv_Rec475_B, 12, 120, 0x42, 0x4ebc, 0	; 475
-	ToneSetDesc	0x00, ToneEnv_Rec476_A, ToneEnv_Rec476_B, 12, 120, 0x42, 0x4ebc, 0	; 476
-	ToneSetDesc	0x00, ToneEnv_Rec477_A, ToneEnv_Rec477_B, 12, 120, 0x42, 0x4ebc, 0	; 477
-	ToneSetDesc	0x00, ToneEnv_Rec478_A, ToneEnv_Rec478_B, 12, 120, 0x42, 0x4d44, 0	; 478
-	ToneSetDesc	0x00, ToneEnv_Rec479_A, ToneEnv_Rec479_B, 12, 120, 0x42, 0x5167, 0	; 479
-	ToneSetDesc	0x00, ToneEnv_Rec480_A, ToneEnv_Rec480_B, 12, 120, 0x42, 0x5880, 0	; 480
-	ToneSetDesc	0x00, ToneEnv_Rec481_A, ToneEnv_Rec481_B, 12, 120, 0x42, 0x49c1, 0	; 481
-	ToneSetDesc	0x00, ToneEnv_Rec482_A, ToneEnv_Rec482_B, 12, 120, 0x42, 0x4d44, 0	; 482
-	ToneSetDesc	0x00, ToneEnv_Rec483_A, ToneEnv_Rec483_B, 12, 120, 0x42, 0x4d44, 0	; 483
-	ToneSetDesc	0x00, ToneEnv_Rec484_A, ToneEnv_Rec484_B, 12, 120, 0x42, 0x4d44, 0	; 484
-	ToneSetDesc	0x00, ToneEnv_Rec485_A, ToneEnv_Rec485_B, 12, 120, 0x42, 0x4d44, 0	; 485
-	ToneSetDesc	0x00, ToneEnv_Rec486_A, ToneEnv_Rec486_B, 12, 120, 0x42, 0x4d44, 0	; 486
+	ToneSetDesc	0x80, ToneSet_000_KeyMap, ToneSet_000_Zones, 12, 120, 0x42, 0x4280, 0	; 0
+	ToneSetDesc	0x80, ToneSet_001_KeyMap, ToneSet_001_Zones, 12, 120, 0x42, 0x4280, 0	; 1
+	ToneSetDesc	0x80, ToneSet_002_KeyMap, ToneSet_002_Zones, 12, 120, 0x42, 0x4280, 0	; 2
+	ToneSetDesc	0x80, ToneSet_003_KeyMap, ToneSet_003_Zones, 12, 96, 0x42, 0x4280, 0	; 3
+	ToneSetDesc	0x80, ToneSet_004_KeyMap, ToneSet_004_Zones, 12, 120, 0x42, 0x4280, 0	; 4
+	ToneSetDesc	0x80, ToneSet_005_KeyMap, ToneSet_005_Zones, 12, 120, 0x42, 0x4280, 0	; 5
+	ToneSetDesc	0x80, ToneSet_006_KeyMap, ToneSet_006_Zones, 12, 120, 0x42, 0x4280, 0	; 6
+	ToneSetDesc	0x80, ToneSet_007_KeyMap, ToneSet_007_Zones, 24, 86, 0x42, 0x4280, 0	; 7
+	ToneSetDesc	0x80, ToneSet_008_KeyMap, ToneSet_008_Zones, 12, 108, 0x42, 0x4280, 0	; 8
+	ToneSetDesc	0x00, ToneSet_009_KeyMap, ToneSet_009_Zones, 12, 114, 0x42, 0x4280, 0	; 9
+	ToneSetDesc	0x00, ToneSet_010_KeyMap, ToneSet_010_Zones, 12, 114, 0x42, 0x4280, 0	; 10
+	ToneSetDesc	0x00, ToneSet_011_KeyMap, ToneSet_011_Zones, 12, 114, 0x42, 0x4280, 0	; 11
+	ToneSetDesc	0x00, ToneSet_012_KeyMap, ToneSet_012_Zones, 12, 111, 0x42, 0x4280, 0	; 12
+	ToneSetDesc	0x00, ToneSet_013_KeyMap, ToneSet_013_Zones, 12, 114, 0x42, 0x4280, 0	; 13
+	ToneSetDesc	0x00, ToneSet_014_KeyMap, ToneSet_014_Zones, 12, 111, 0x42, 0x4280, 0	; 14
+	ToneSetDesc	0x00, ToneSet_015_KeyMap, ToneSet_015_Zones, 12, 114, 0x42, 0x4280, 0	; 15
+	ToneSetDesc	0x00, ToneSet_016_KeyMap, ToneSet_016_Zones, 12, 114, 0x42, 0x4280, 0	; 16
+	ToneSetDesc	0x00, ToneSet_017_KeyMap, ToneSet_017_Zones, 14, 92, 0x42, 0x4280, 0	; 17
+	ToneSetDesc	0x01, ToneSet_018_KeyMap, ToneSet_018_Zones, 14, 92, 0x42, 0x4280, 0	; 18
+	ToneSetDesc	0x00, ToneSet_019_KeyMap, ToneSet_019_Zones, 12, 120, 0x42, 0x4280, 0	; 19
+	ToneSetDesc	0x00, ToneSet_020_KeyMap, ToneSet_020_Zones, 12, 120, 0x42, 0x4280, 0	; 20
+	ToneSetDesc	0x80, ToneSet_021_KeyMap, ToneSet_021_Zones, 12, 108, 0x42, 0x4280, 0	; 21
+	ToneSetDesc	0x00, ToneSet_022_KeyMap, ToneSet_022_Zones, 12, 120, 0x42, 0x4280, 0	; 22
+	ToneSetDesc	0x00, ToneSet_023_KeyMap, ToneSet_023_Zones, 12, 120, 0x42, 0x4280, 0	; 23
+	ToneSetDesc	0x00, ToneSet_024_KeyMap, ToneSet_024_Zones, 12, 120, 0x42, 0x4280, 0	; 24
+	ToneSetDesc	0x00, ToneSet_025_KeyMap, ToneSet_025_Zones, 12, 120, 0x42, 0x4280, 0	; 25
+	ToneSetDesc	0x00, ToneSet_026_KeyMap, ToneSet_026_Zones, 12, 78, 0x42, 0x4280, 0	; 26
+	ToneSetDesc	0x00, ToneSet_027_KeyMap, ToneSet_027_Zones, 12, 78, 0x42, 0x4280, 0	; 27
+	ToneSetDesc	0x00, ToneSet_028_KeyMap, ToneSet_028_Zones, 12, 108, 0x42, 0x4280, 0	; 28
+	ToneSetDesc	0x00, ToneSet_029_KeyMap, ToneSet_029_Zones, 12, 120, 0x42, 0x4280, 0	; 29
+	ToneSetDesc	0x00, ToneSet_030_KeyMap, ToneSet_030_Zones, 12, 111, 0x42, 0x4280, 0	; 30
+	ToneSetDesc	0x00, ToneSet_031_KeyMap, ToneSet_031_Zones, 12, 114, 0x42, 0x4280, 0	; 31
+	ToneSetDesc	0x00, ToneSet_032_KeyMap, ToneSet_032_Zones, 12, 120, 0x42, 0x4280, 0	; 32
+	ToneSetDesc	0x80, ToneSet_033_KeyMap, ToneSet_033_Zones, 12, 100, 0x42, 0x4280, 0	; 33
+	ToneSetDesc	0x80, ToneSet_034_KeyMap, ToneSet_034_Zones, 12, 100, 0x42, 0x4280, 0	; 34
+	ToneSetDesc	0x00, ToneSet_035_KeyMap, ToneSet_035_Zones, 12, 120, 0x42, 0x4280, 0	; 35
+	ToneSetDesc	0x01, ToneSet_036_KeyMap, ToneSet_036_Zones, 12, 102, 0x42, 0x4280, 0	; 36
+	ToneSetDesc	0x00, ToneSet_037_KeyMap, ToneSet_037_Zones, 12, 120, 0x42, 0x4280, 0	; 37
+	ToneSetDesc	0x80, ToneSet_038_KeyMap, ToneSet_038_Zones, 12, 120, 0x42, 0x4280, 0	; 38
+	ToneSetDesc	0x00, ToneSet_039_KeyMap, ToneSet_039_Zones, 12, 102, 0x42, 0x4280, 0	; 39
+	ToneSetDesc	0x80, ToneSet_040_KeyMap, ToneSet_040_Zones, 12, 114, 0x42, 0x4280, 0	; 40
+	ToneSetDesc	0x00, ToneSet_041_KeyMap, ToneSet_041_Zones, 12, 114, 0x42, 0x4280, 0	; 41
+	ToneSetDesc	0x00, ToneSet_042_KeyMap, ToneSet_042_Zones, 12, 114, 0x42, 0x4280, 0	; 42
+	ToneSetDesc	0x80, ToneSet_043_KeyMap, ToneSet_043_Zones, 12, 114, 0x42, 0x4280, 0	; 43
+	ToneSetDesc	0x80, ToneSet_044_KeyMap, ToneSet_044_Zones, 12, 114, 0x42, 0x4280, 0	; 44
+	ToneSetDesc	0x00, ToneSet_045_KeyMap, ToneSet_045_Zones, 12, 114, 0x42, 0x4280, 0	; 45
+	ToneSetDesc	0x00, ToneSet_046_KeyMap, ToneSet_046_Zones, 17, 120, 0x42, 0x4280, 0	; 46
+	ToneSetDesc	0x00, ToneSet_047_KeyMap, ToneSet_047_Zones, 12, 120, 0x42, 0x4280, 0	; 47
+	ToneSetDesc	0x00, ToneSet_048_KeyMap, ToneSet_048_Zones, 12, 120, 0x42, 0x4280, 0	; 48
+	ToneSetDesc	0x02, ToneSet_049_KeyMap, ToneSet_049_Zones, 12, 113, 0x08, 0x417f, 0	; 49
+	ToneSetDesc	0x02, ToneSet_050_KeyMap, ToneSet_050_Zones, 12, 102, 0x08, 0x417f, 0	; 50
+	ToneSetDesc	0x00, ToneSet_051_KeyMap, ToneSet_051_Zones, 12, 102, 0x42, 0x4280, 0	; 51
+	ToneSetDesc	0x02, ToneSet_052_KeyMap, ToneSet_052_Zones, 12, 113, 0x08, 0x417f, 0	; 52
+	ToneSetDesc	0x80, ToneSet_053_KeyMap, ToneSet_053_Zones, 12, 114, 0x42, 0x4280, 0	; 53
+	ToneSetDesc	0x00, ToneSet_054_KeyMap, ToneSet_054_Zones, 12, 114, 0x42, 0x4280, 0	; 54
+	ToneSetDesc	0x80, ToneSet_055_KeyMap, ToneSet_055_Zones, 12, 114, 0x42, 0x4280, 0	; 55
+	ToneSetDesc	0x80, ToneSet_056_KeyMap, ToneSet_056_Zones, 12, 114, 0x42, 0x4280, 0	; 56
+	ToneSetDesc	0x80, ToneSet_057_KeyMap, ToneSet_057_Zones, 12, 108, 0x42, 0x4280, 0	; 57
+	ToneSetDesc	0x80, ToneSet_058_KeyMap, ToneSet_058_Zones, 12, 108, 0x42, 0x4280, 0	; 58
+	ToneSetDesc	0x80, ToneSet_059_KeyMap, ToneSet_059_Zones, 12, 108, 0x42, 0x4280, 0	; 59
+	ToneSetDesc	0x80, ToneSet_060_KeyMap, ToneSet_060_Zones, 12, 108, 0x42, 0x4280, 0	; 60
+	ToneSetDesc	0x02, ToneSet_061_KeyMap, ToneSet_061_Zones, 12, 111, 0x10, 0x417f, 0	; 61
+	ToneSetDesc	0x80, ToneSet_062_KeyMap, ToneSet_062_Zones, 12, 120, 0x42, 0x4280, 0	; 62
+	ToneSetDesc	0x02, ToneSet_063_KeyMap, ToneSet_063_Zones, 12, 113, 0x10, 0x417f, 0	; 63
+	ToneSetDesc	0x02, ToneSet_064_KeyMap, ToneSet_064_Zones, 12, 113, 0x10, 0x417f, 0	; 64
+	ToneSetDesc	0x00, ToneSet_065_KeyMap, ToneSet_065_Zones, 12, 120, 0x42, 0x4280, 0	; 65
+	ToneSetDesc	0x02, ToneSet_066_KeyMap, ToneSet_066_Zones, 12, 114, 0x00, 0x417f, 0	; 66
+	ToneSetDesc	0x02, ToneSet_067_KeyMap, ToneSet_067_Zones, 12, 114, 0x00, 0x417f, 0	; 67
+	ToneSetDesc	0x02, ToneSet_068_KeyMap, ToneSet_068_Zones, 12, 114, 0x00, 0x417f, 0	; 68
+	ToneSetDesc	0x00, ToneSet_069_KeyMap, ToneSet_069_Zones, 12, 120, 0x42, 0x4280, 0	; 69
+	ToneSetDesc	0x00, ToneSet_070_KeyMap, ToneSet_070_Zones, 12, 111, 0x42, 0x4280, 0	; 70
+	ToneSetDesc	0x00, ToneSet_071_KeyMap, ToneSet_071_Zones, 12, 114, 0x42, 0x4280, 0	; 71
+	ToneSetDesc	0x00, ToneSet_072_KeyMap, ToneSet_072_Zones, 12, 120, 0x42, 0x4280, 0	; 72
+	ToneSetDesc	0x02, ToneSet_073_KeyMap, ToneSet_073_Zones, 12, 113, 0x00, 0x417f, 0	; 73
+	ToneSetDesc	0x02, ToneSet_074_KeyMap, ToneSet_074_Zones, 12, 114, 0x10, 0x417f, 0	; 74
+	ToneSetDesc	0x02, ToneSet_075_KeyMap, ToneSet_075_Zones, 12, 114, 0x10, 0x417f, 0	; 75
+	ToneSetDesc	0x00, ToneSet_076_KeyMap, ToneSet_076_Zones, 12, 111, 0x42, 0x4280, 0	; 76
+	ToneSetDesc	0x00, ToneSet_077_KeyMap, ToneSet_077_Zones, 12, 111, 0x42, 0x4280, 0	; 77
+	ToneSetDesc	0x02, ToneSet_078_KeyMap, ToneSet_078_Zones, 12, 111, 0x00, 0x417f, 0	; 78
+	ToneSetDesc	0x00, ToneSet_079_KeyMap, ToneSet_079_Zones, 12, 111, 0x42, 0x4280, 0	; 79
+	ToneSetDesc	0x00, ToneSet_080_KeyMap, ToneSet_080_Zones, 12, 114, 0x42, 0x4280, 0	; 80
+	ToneSetDesc	0x00, ToneSet_081_KeyMap, ToneSet_081_Zones, 12, 120, 0x42, 0x4280, 0	; 81
+	ToneSetDesc	0x00, ToneSet_082_KeyMap, ToneSet_082_Zones, 16, 120, 0x42, 0x4280, 0	; 82
+	ToneSetDesc	0x00, ToneSet_083_KeyMap, ToneSet_083_Zones, 12, 109, 0x42, 0x4280, 0	; 83
+	ToneSetDesc	0x80, ToneSet_084_KeyMap, ToneSet_084_Zones, 12, 108, 0x42, 0x4280, 0	; 84
+	ToneSetDesc	0x80, ToneSet_085_KeyMap, ToneSet_085_Zones, 12, 108, 0x42, 0x4280, 0	; 85
+	ToneSetDesc	0x00, ToneSet_086_KeyMap, ToneSet_086_Zones, 12, 114, 0x42, 0x4280, 0	; 86
+	ToneSetDesc	0x80, ToneSet_087_KeyMap, ToneSet_087_Zones, 17, 114, 0x42, 0x4280, 0	; 87
+	ToneSetDesc	0x80, ToneSet_088_KeyMap, ToneSet_088_Zones, 12, 108, 0x42, 0x4280, 0	; 88
+	ToneSetDesc	0x80, ToneSet_089_KeyMap, ToneSet_089_Zones, 12, 108, 0x42, 0x4280, 0	; 89
+	ToneSetDesc	0x00, ToneSet_090_KeyMap, ToneSet_090_Zones, 12, 114, 0x42, 0x4280, 0	; 90
+	ToneSetDesc	0x00, ToneSet_091_KeyMap, ToneSet_091_Zones, 12, 114, 0x42, 0x4280, 0	; 91
+	ToneSetDesc	0x80, ToneSet_092_KeyMap, ToneSet_092_Zones, 12, 108, 0x42, 0x4280, 0	; 92
+	ToneSetDesc	0x00, ToneSet_093_KeyMap, ToneSet_093_Zones, 12, 114, 0x42, 0x4280, 0	; 93
+	ToneSetDesc	0x00, ToneSet_094_KeyMap, ToneSet_094_Zones, 12, 114, 0x42, 0x4280, 0	; 94
+	ToneSetDesc	0x80, ToneSet_095_KeyMap, ToneSet_095_Zones, 12, 120, 0x42, 0x4280, 0	; 95
+	ToneSetDesc	0x00, ToneSet_096_KeyMap, ToneSet_096_Zones, 12, 114, 0x42, 0x4280, 0	; 96
+	ToneSetDesc	0x00, ToneSet_097_KeyMap, ToneSet_097_Zones, 12, 114, 0x42, 0x4280, 0	; 97
+	ToneSetDesc	0x80, ToneSet_098_KeyMap, ToneSet_098_Zones, 12, 108, 0x42, 0x4280, 0	; 98
+	ToneSetDesc	0x00, ToneSet_099_KeyMap, ToneSet_099_Zones, 12, 108, 0x42, 0x4280, 0	; 99
+	ToneSetDesc	0x80, ToneSet_100_KeyMap, ToneSet_100_Zones, 12, 120, 0x42, 0x4280, 0	; 100
+	ToneSetDesc	0x80, ToneSet_101_KeyMap, ToneSet_101_Zones, 12, 120, 0x42, 0x4280, 0	; 101
+	ToneSetDesc	0x00, ToneSet_102_KeyMap, ToneSet_102_Zones, 12, 108, 0x42, 0x4280, 0	; 102
+	ToneSetDesc	0x00, ToneSet_103_KeyMap, ToneSet_103_Zones, 12, 102, 0x42, 0x4280, 0	; 103
+	ToneSetDesc	0x00, ToneSet_104_KeyMap, ToneSet_104_Zones, 12, 102, 0x42, 0x4280, 0	; 104
+	ToneSetDesc	0x00, ToneSet_105_KeyMap, ToneSet_105_Zones, 12, 102, 0x42, 0x4280, 0	; 105
+	ToneSetDesc	0x00, ToneSet_106_KeyMap, ToneSet_106_Zones, 12, 102, 0x42, 0x4280, 0	; 106
+	ToneSetDesc	0x00, ToneSet_107_KeyMap, ToneSet_107_Zones, 12, 102, 0x42, 0x4280, 0	; 107
+	ToneSetDesc	0x80, ToneSet_108_KeyMap, ToneSet_108_Zones, 12, 108, 0x42, 0x4280, 0	; 108
+	ToneSetDesc	0x80, ToneSet_109_KeyMap, ToneSet_109_Zones, 12, 120, 0x42, 0x4280, 0	; 109
+	ToneSetDesc	0x00, ToneSet_110_KeyMap, ToneSet_110_Zones, 12, 102, 0x42, 0x4280, 0	; 110
+	ToneSetDesc	0x00, ToneSet_111_KeyMap, ToneSet_111_Zones, 12, 102, 0x42, 0x4280, 0	; 111
+	ToneSetDesc	0x00, ToneSet_112_KeyMap, ToneSet_112_Zones, 12, 102, 0x42, 0x4280, 0	; 112
+	ToneSetDesc	0x00, ToneSet_113_KeyMap, ToneSet_113_Zones, 12, 102, 0x42, 0x4280, 0	; 113
+	ToneSetDesc	0x80, ToneSet_114_KeyMap, ToneSet_114_Zones, 12, 120, 0x42, 0x4280, 0	; 114
+	ToneSetDesc	0x00, ToneSet_115_KeyMap, ToneSet_115_Zones, 12, 102, 0x42, 0x4280, 0	; 115
+	ToneSetDesc	0x00, ToneSet_116_KeyMap, ToneSet_116_Zones, 12, 102, 0x42, 0x4280, 0	; 116
+	ToneSetDesc	0x00, ToneSet_117_KeyMap, ToneSet_117_Zones, 12, 102, 0x42, 0x4280, 0	; 117
+	ToneSetDesc	0x80, ToneSet_118_KeyMap, ToneSet_118_Zones, 12, 104, 0x42, 0x4280, 0	; 118
+	ToneSetDesc	0x00, ToneSet_119_KeyMap, ToneSet_119_Zones, 12, 102, 0x42, 0x4280, 0	; 119
+	ToneSetDesc	0x00, ToneSet_120_KeyMap, ToneSet_120_Zones, 12, 102, 0x42, 0x4280, 0	; 120
+	ToneSetDesc	0x00, ToneSet_121_KeyMap, ToneSet_121_Zones, 12, 102, 0x42, 0x4280, 0	; 121
+	ToneSetDesc	0x80, ToneSet_122_KeyMap, ToneSet_122_Zones, 12, 114, 0x42, 0x4280, 0	; 122
+	ToneSetDesc	0x80, ToneSet_123_KeyMap, ToneSet_123_Zones, 12, 108, 0x42, 0x4280, 0	; 123
+	ToneSetDesc	0x00, ToneSet_124_KeyMap, ToneSet_124_Zones, 12, 102, 0x42, 0x4280, 0	; 124
+	ToneSetDesc	0x00, ToneSet_125_KeyMap, ToneSet_125_Zones, 12, 102, 0x42, 0x4280, 0	; 125
+	ToneSetDesc	0x00, ToneSet_126_KeyMap, ToneSet_126_Zones, 12, 102, 0x42, 0x4280, 0	; 126
+	ToneSetDesc	0x00, ToneSet_127_KeyMap, ToneSet_127_Zones, 12, 102, 0x42, 0x4280, 0	; 127
+	ToneSetDesc	0x00, ToneSet_128_KeyMap, ToneSet_128_Zones, 12, 102, 0x42, 0x4280, 0	; 128
+	ToneSetDesc	0x80, ToneSet_129_KeyMap, ToneSet_129_Zones, 12, 114, 0x42, 0x4280, 0	; 129
+	ToneSetDesc	0x00, ToneSet_130_KeyMap, ToneSet_130_Zones, 12, 102, 0x42, 0x4280, 0	; 130
+	ToneSetDesc	0x00, ToneSet_131_KeyMap, ToneSet_131_Zones, 12, 102, 0x42, 0x4280, 0	; 131
+	ToneSetDesc	0x00, ToneSet_132_KeyMap, ToneSet_132_Zones, 12, 102, 0x42, 0x4280, 0	; 132
+	ToneSetDesc	0x80, ToneSet_133_KeyMap, ToneSet_133_Zones, 12, 104, 0x42, 0x4280, 0	; 133
+	ToneSetDesc	0x00, ToneSet_134_KeyMap, ToneSet_134_Zones, 12, 112, 0x42, 0x4280, 0	; 134
+	ToneSetDesc	0x00, ToneSet_135_KeyMap, ToneSet_135_Zones, 12, 108, 0x42, 0x4280, 0	; 135
+	ToneSetDesc	0x00, ToneSet_136_KeyMap, ToneSet_136_Zones, 12, 114, 0x42, 0x4280, 0	; 136
+	ToneSetDesc	0x00, ToneSet_137_KeyMap, ToneSet_137_Zones, 12, 102, 0x42, 0x4280, 0	; 137
+	ToneSetDesc	0x80, ToneSet_138_KeyMap, ToneSet_138_Zones, 12, 96, 0x42, 0x4280, 0	; 138
+	ToneSetDesc	0x00, ToneSet_139_KeyMap, ToneSet_139_Zones, 12, 102, 0x42, 0x4280, 0	; 139
+	ToneSetDesc	0x00, ToneSet_140_KeyMap, ToneSet_140_Zones, 12, 102, 0x42, 0x4280, 0	; 140
+	ToneSetDesc	0x00, ToneSet_141_KeyMap, ToneSet_141_Zones, 12, 102, 0x42, 0x4280, 0	; 141
+	ToneSetDesc	0x80, ToneSet_142_KeyMap, ToneSet_142_Zones, 12, 96, 0x42, 0x4280, 0	; 142
+	ToneSetDesc	0x00, ToneSet_143_KeyMap, ToneSet_143_Zones, 12, 102, 0x42, 0x4280, 0	; 143
+	ToneSetDesc	0x00, ToneSet_144_KeyMap, ToneSet_144_Zones, 12, 102, 0x42, 0x4280, 0	; 144
+	ToneSetDesc	0x00, ToneSet_145_KeyMap, ToneSet_145_Zones, 12, 102, 0x42, 0x4280, 0	; 145
+	ToneSetDesc	0x80, ToneSet_146_KeyMap, ToneSet_146_Zones, 12, 108, 0x42, 0x4280, 0	; 146
+	ToneSetDesc	0x00, ToneSet_147_KeyMap, ToneSet_147_Zones, 12, 102, 0x42, 0x4280, 0	; 147
+	ToneSetDesc	0x80, ToneSet_148_KeyMap, ToneSet_148_Zones, 12, 102, 0x42, 0x4280, 0	; 148
+	ToneSetDesc	0x80, ToneSet_149_KeyMap, ToneSet_149_Zones, 12, 108, 0x42, 0x4280, 0	; 149
+	ToneSetDesc	0x00, ToneSet_150_KeyMap, ToneSet_150_Zones, 12, 102, 0x42, 0x4280, 0	; 150
+	ToneSetDesc	0x80, ToneSet_151_KeyMap, ToneSet_151_Zones, 12, 108, 0x42, 0x4280, 0	; 151
+	ToneSetDesc	0x00, ToneSet_152_KeyMap, ToneSet_152_Zones, 12, 113, 0x42, 0x4280, 0	; 152
+	ToneSetDesc	0x00, ToneSet_153_KeyMap, ToneSet_153_Zones, 12, 102, 0x42, 0x4280, 0	; 153
+	ToneSetDesc	0x80, ToneSet_154_KeyMap, ToneSet_154_Zones, 12, 84, 0x42, 0x4280, 0	; 154
+	ToneSetDesc	0x00, ToneSet_155_KeyMap, ToneSet_155_Zones, 12, 102, 0x42, 0x4280, 0	; 155
+	ToneSetDesc	0x80, ToneSet_156_KeyMap, ToneSet_156_Zones, 12, 96, 0x42, 0x4280, 0	; 156
+	ToneSetDesc	0x80, ToneSet_157_KeyMap, ToneSet_157_Zones, 12, 96, 0x42, 0x4280, 0	; 157
+	ToneSetDesc	0x80, ToneSet_158_KeyMap, ToneSet_158_Zones, 12, 77, 0x42, 0x4280, 0	; 158
+	ToneSetDesc	0x80, ToneSet_159_KeyMap, ToneSet_159_Zones, 12, 96, 0x42, 0x4280, 0	; 159
+	ToneSetDesc	0x80, ToneSet_160_KeyMap, ToneSet_160_Zones, 12, 77, 0x42, 0x4280, 0	; 160
+	ToneSetDesc	0x80, ToneSet_161_KeyMap, ToneSet_161_Zones, 12, 84, 0x42, 0x4280, 0	; 161
+	ToneSetDesc	0x00, ToneSet_162_KeyMap, ToneSet_162_Zones, 16, 96, 0x42, 0x4280, 0	; 162
+	ToneSetDesc	0x00, ToneSet_163_KeyMap, ToneSet_163_Zones, 16, 93, 0x42, 0x4280, 0	; 163
+	ToneSetDesc	0x00, ToneSet_164_KeyMap, ToneSet_164_Zones, 16, 92, 0x42, 0x4280, 0	; 164
+	ToneSetDesc	0x00, ToneSet_165_KeyMap, ToneSet_165_Zones, 16, 96, 0x42, 0x4280, 0	; 165
+	ToneSetDesc	0x80, ToneSet_166_KeyMap, ToneSet_166_Zones, 12, 96, 0x42, 0x4280, 0	; 166
+	ToneSetDesc	0x80, ToneSet_167_KeyMap, ToneSet_167_Zones, 12, 99, 0x42, 0x4280, 0	; 167
+	ToneSetDesc	0x80, ToneSet_168_KeyMap, ToneSet_168_Zones, 12, 96, 0x42, 0x4280, 0	; 168
+	ToneSetDesc	0x00, ToneSet_169_KeyMap, ToneSet_169_Zones, 12, 102, 0x42, 0x4280, 0	; 169
+	ToneSetDesc	0x00, ToneSet_170_KeyMap, ToneSet_170_Zones, 12, 96, 0x42, 0x4280, 0	; 170
+	ToneSetDesc	0x00, ToneSet_171_KeyMap, ToneSet_171_Zones, 12, 102, 0x42, 0x4280, 0	; 171
+	ToneSetDesc	0x00, ToneSet_172_KeyMap, ToneSet_172_Zones, 12, 96, 0x42, 0x4280, 0	; 172
+	ToneSetDesc	0x00, ToneSet_173_KeyMap, ToneSet_173_Zones, 12, 96, 0x42, 0x4280, 0	; 173
+	ToneSetDesc	0x00, ToneSet_174_KeyMap, ToneSet_174_Zones, 12, 96, 0x42, 0x4280, 0	; 174
+	ToneSetDesc	0x00, ToneSet_175_KeyMap, ToneSet_175_Zones, 12, 96, 0x42, 0x4280, 0	; 175
+	ToneSetDesc	0x80, ToneSet_176_KeyMap, ToneSet_176_Zones, 14, 111, 0x42, 0x4280, 0	; 176
+	ToneSetDesc	0x80, ToneSet_177_KeyMap, ToneSet_177_Zones, 12, 108, 0x42, 0x4280, 0	; 177
+	ToneSetDesc	0x80, ToneSet_178_KeyMap, ToneSet_178_Zones, 9, 120, 0x42, 0x4280, 0	; 178
+	ToneSetDesc	0x80, ToneSet_179_KeyMap, ToneSet_179_Zones, 9, 120, 0x42, 0x4280, 0	; 179
+	ToneSetDesc	0x80, ToneSet_180_KeyMap, ToneSet_180_Zones, 12, 108, 0x42, 0x4280, 0	; 180
+	ToneSetDesc	0x80, ToneSet_181_KeyMap, ToneSet_181_Zones, 12, 108, 0x42, 0x4280, 0	; 181
+	ToneSetDesc	0x80, ToneSet_182_KeyMap, ToneSet_182_Zones, 16, 120, 0x42, 0x4280, 0	; 182
+	ToneSetDesc	0x00, ToneSet_183_KeyMap, ToneSet_183_Zones, 12, 102, 0x42, 0x4280, 0	; 183
+	ToneSetDesc	0x00, ToneSet_184_KeyMap, ToneSet_184_Zones, 12, 102, 0x42, 0x4280, 0	; 184
+	ToneSetDesc	0x80, ToneSet_185_KeyMap, ToneSet_185_Zones, 16, 108, 0x42, 0x4280, 0	; 185
+	ToneSetDesc	0x00, ToneSet_186_KeyMap, ToneSet_186_Zones, 12, 102, 0x42, 0x4280, 0	; 186
+	ToneSetDesc	0x00, ToneSet_187_KeyMap, ToneSet_187_Zones, 12, 102, 0x42, 0x4280, 0	; 187
+	ToneSetDesc	0x00, ToneSet_188_KeyMap, ToneSet_188_Zones, 12, 102, 0x42, 0x4280, 0	; 188
+	ToneSetDesc	0x00, ToneSet_189_KeyMap, ToneSet_189_Zones, 12, 102, 0x42, 0x4280, 0	; 189
+	ToneSetDesc	0x00, ToneSet_190_KeyMap, ToneSet_190_Zones, 12, 102, 0x42, 0x4280, 0	; 190
+	ToneSetDesc	0x80, ToneSet_191_KeyMap, ToneSet_191_Zones, 12, 108, 0x42, 0x4280, 0	; 191
+	ToneSetDesc	0x00, ToneSet_192_KeyMap, ToneSet_192_Zones, 12, 102, 0x42, 0x4280, 0	; 192
+	ToneSetDesc	0x80, ToneSet_193_KeyMap, ToneSet_193_Zones, 12, 104, 0x42, 0x4280, 0	; 193
+	ToneSetDesc	0x80, ToneSet_194_KeyMap, ToneSet_194_Zones, 12, 108, 0x42, 0x4280, 0	; 194
+	ToneSetDesc	0x80, ToneSet_195_KeyMap, ToneSet_195_Zones, 12, 108, 0x42, 0x4280, 0	; 195
+	ToneSetDesc	0x80, ToneSet_196_KeyMap, ToneSet_196_Zones, 12, 108, 0x42, 0x4280, 0	; 196
+	ToneSetDesc	0x00, ToneSet_197_KeyMap, ToneSet_197_Zones, 12, 102, 0x42, 0x4280, 0	; 197
+	ToneSetDesc	0x00, ToneSet_198_KeyMap, ToneSet_198_Zones, 12, 108, 0x42, 0x4280, 0	; 198
+	ToneSetDesc	0x80, ToneSet_199_KeyMap, ToneSet_199_Zones, 12, 108, 0x42, 0x4280, 0	; 199
+	ToneSetDesc	0x80, ToneSet_200_KeyMap, ToneSet_200_Zones, 12, 108, 0x42, 0x4280, 0	; 200
+	ToneSetDesc	0x80, ToneSet_201_KeyMap, ToneSet_201_Zones, 12, 108, 0x42, 0x4280, 0	; 201
+	ToneSetDesc	0x80, ToneSet_202_KeyMap, ToneSet_202_Zones, 12, 108, 0x42, 0x4280, 0	; 202
+	ToneSetDesc	0x80, ToneSet_203_KeyMap, ToneSet_203_Zones, 0, 108, 0x42, 0x4280, 0	; 203
+	ToneSetDesc	0x00, ToneSet_204_KeyMap, ToneSet_204_Zones, 12, 102, 0x42, 0x4280, 0	; 204
+	ToneSetDesc	0x00, ToneSet_205_KeyMap, ToneSet_205_Zones, 12, 102, 0x42, 0x4280, 0	; 205
+	ToneSetDesc	0x80, ToneSet_206_KeyMap, ToneSet_206_Zones, 21, 108, 0x42, 0x4280, 0	; 206
+	ToneSetDesc	0x80, ToneSet_207_KeyMap, ToneSet_207_Zones, 12, 102, 0x42, 0x4280, 0	; 207
+	ToneSetDesc	0x80, ToneSet_208_KeyMap, ToneSet_208_Zones, 17, 96, 0x42, 0x4280, 0	; 208
+	ToneSetDesc	0x80, ToneSet_209_KeyMap, ToneSet_209_Zones, 12, 96, 0x42, 0x4280, 0	; 209
+	ToneSetDesc	0x00, ToneSet_210_KeyMap, ToneSet_210_Zones, 12, 102, 0x42, 0x4280, 0	; 210
+	ToneSetDesc	0x80, ToneSet_211_KeyMap, ToneSet_211_Zones, 12, 102, 0x42, 0x4280, 0	; 211
+	ToneSetDesc	0x80, ToneSet_212_KeyMap, ToneSet_212_Zones, 12, 96, 0x42, 0x4280, 0	; 212
+	ToneSetDesc	0x00, ToneSet_213_KeyMap, ToneSet_213_Zones, 12, 102, 0x42, 0x4280, 0	; 213
+	ToneSetDesc	0x00, ToneSet_214_KeyMap, ToneSet_214_Zones, 12, 102, 0x42, 0x4280, 0	; 214
+	ToneSetDesc	0x80, ToneSet_215_KeyMap, ToneSet_215_Zones, 12, 108, 0x42, 0x4280, 0	; 215
+	ToneSetDesc	0x00, ToneSet_216_KeyMap, ToneSet_216_Zones, 12, 108, 0x42, 0x4280, 0	; 216
+	ToneSetDesc	0x00, ToneSet_217_KeyMap, ToneSet_217_Zones, 12, 108, 0x42, 0x4280, 0	; 217
+	ToneSetDesc	0x00, ToneSet_218_KeyMap, ToneSet_218_Zones, 12, 108, 0x42, 0x4280, 0	; 218
+	ToneSetDesc	0x00, ToneSet_219_KeyMap, ToneSet_219_Zones, 12, 108, 0x42, 0x4280, 0	; 219
+	ToneSetDesc	0x00, ToneSet_220_KeyMap, ToneSet_220_Zones, 12, 108, 0x42, 0x4280, 0	; 220
+	ToneSetDesc	0x80, ToneSet_221_KeyMap, ToneSet_221_Zones, 12, 84, 0x42, 0x4280, 0	; 221
+	ToneSetDesc	0x00, ToneSet_222_KeyMap, ToneSet_222_Zones, 12, 108, 0x42, 0x4280, 0	; 222
+	ToneSetDesc	0x00, ToneSet_223_KeyMap, ToneSet_223_Zones, 12, 108, 0x42, 0x4280, 0	; 223
+	ToneSetDesc	0x00, ToneSet_224_KeyMap, ToneSet_224_Zones, 12, 108, 0x42, 0x4280, 0	; 224
+	ToneSetDesc	0x00, ToneSet_225_KeyMap, ToneSet_225_Zones, 12, 108, 0x42, 0x4280, 0	; 225
+	ToneSetDesc	0x00, ToneSet_226_KeyMap, ToneSet_226_Zones, 12, 108, 0x42, 0x4280, 0	; 226
+	ToneSetDesc	0x00, ToneSet_227_KeyMap, ToneSet_227_Zones, 12, 108, 0x42, 0x4280, 0	; 227
+	ToneSetDesc	0x80, ToneSet_228_KeyMap, ToneSet_228_Zones, 12, 84, 0x42, 0x4280, 0	; 228
+	ToneSetDesc	0x80, ToneSet_229_KeyMap, ToneSet_229_Zones, 12, 96, 0x42, 0x4280, 0	; 229
+	ToneSetDesc	0x80, ToneSet_230_KeyMap, ToneSet_230_Zones, 12, 96, 0x42, 0x4280, 0	; 230
+	ToneSetDesc	0x00, ToneSet_231_KeyMap, ToneSet_231_Zones, 12, 108, 0x42, 0x4280, 0	; 231
+	ToneSetDesc	0x80, ToneSet_232_KeyMap, ToneSet_232_Zones, 12, 84, 0x42, 0x4280, 0	; 232
+	ToneSetDesc	0x00, ToneSet_233_KeyMap, ToneSet_233_Zones, 12, 102, 0x42, 0x4280, 0	; 233
+	ToneSetDesc	0x00, ToneSet_234_KeyMap, ToneSet_234_Zones, 12, 102, 0x42, 0x4280, 0	; 234
+	ToneSetDesc	0x80, ToneSet_235_KeyMap, ToneSet_235_Zones, 12, 65, 0x42, 0x4280, 0	; 235
+	ToneSetDesc	0x80, ToneSet_236_KeyMap, ToneSet_236_Zones, 12, 96, 0x42, 0x4280, 0	; 236
+	ToneSetDesc	0x80, ToneSet_237_KeyMap, ToneSet_237_Zones, 12, 89, 0x42, 0x4280, 0	; 237
+	ToneSetDesc	0x00, ToneSet_238_KeyMap, ToneSet_238_Zones, 12, 108, 0x42, 0x4280, 0	; 238
+	ToneSetDesc	0x00, ToneSet_239_KeyMap, ToneSet_239_Zones, 12, 108, 0x42, 0x4280, 0	; 239
+	ToneSetDesc	0x80, ToneSet_240_KeyMap, ToneSet_240_Zones, 12, 89, 0x42, 0x4280, 0	; 240
+	ToneSetDesc	0x80, ToneSet_241_KeyMap, ToneSet_241_Zones, 12, 96, 0x42, 0x4280, 0	; 241
+	ToneSetDesc	0x80, ToneSet_242_KeyMap, ToneSet_242_Zones, 12, 96, 0x42, 0x4280, 0	; 242
+	ToneSetDesc	0x80, ToneSet_243_KeyMap, ToneSet_243_Zones, 21, 108, 0x42, 0x4280, 0	; 243
+	ToneSetDesc	0x80, ToneSet_244_KeyMap, ToneSet_244_Zones, 12, 103, 0x42, 0x4280, 0	; 244
+	ToneSetDesc	0x00, ToneSet_245_KeyMap, ToneSet_245_Zones, 12, 79, 0x42, 0x4280, 0	; 245
+	ToneSetDesc	0x00, ToneSet_246_KeyMap, ToneSet_246_Zones, 12, 120, 0x42, 0x4280, 0	; 246
+	ToneSetDesc	0x80, ToneSet_247_KeyMap, ToneSet_247_Zones, 28, 96, 0x42, 0x4280, 0	; 247
+	ToneSetDesc	0x00, ToneSet_248_KeyMap, ToneSet_248_Zones, 12, 120, 0x42, 0x4280, 0	; 248
+	ToneSetDesc	0x80, ToneSet_249_KeyMap, ToneSet_249_Zones, 12, 120, 0x42, 0x4280, 0	; 249
+	ToneSetDesc	0x80, ToneSet_250_KeyMap, ToneSet_250_Zones, 12, 96, 0x42, 0x4280, 0	; 250
+	ToneSetDesc	0x00, ToneSet_251_KeyMap, ToneSet_251_Zones, 12, 120, 0x42, 0x4280, 0	; 251
+	ToneSetDesc	0x00, ToneSet_252_KeyMap, ToneSet_252_Zones, 12, 120, 0x42, 0x4280, 0	; 252
+	ToneSetDesc	0x00, ToneSet_253_KeyMap, ToneSet_253_Zones, 12, 120, 0x42, 0x4280, 0	; 253
+	ToneSetDesc	0x00, ToneSet_254_KeyMap, ToneSet_254_Zones, 12, 79, 0x42, 0x4280, 0	; 254
+	ToneSetDesc	0x80, ToneSet_255_KeyMap, ToneSet_255_Zones, 12, 95, 0x42, 0x4280, 0	; 255
+	ToneSetDesc	0x00, ToneSet_256_KeyMap, ToneSet_256_Zones, 12, 79, 0x42, 0x4280, 0	; 256
+	ToneSetDesc	0x80, ToneSet_257_KeyMap, ToneSet_257_Zones, 19, 108, 0x42, 0x4280, 0	; 257
+	ToneSetDesc	0x00, ToneSet_258_KeyMap, ToneSet_258_Zones, 12, 120, 0x42, 0x4280, 0	; 258
+	ToneSetDesc	0x00, ToneSet_259_KeyMap, ToneSet_259_Zones, 16, 90, 0x42, 0x4280, 0	; 259
+	ToneSetDesc	0x00, ToneSet_260_KeyMap, ToneSet_260_Zones, 12, 120, 0x42, 0x4280, 0	; 260
+	ToneSetDesc	0x00, ToneSet_261_KeyMap, ToneSet_261_Zones, 12, 108, 0x42, 0x4280, 0	; 261
+	ToneSetDesc	0x80, ToneSet_262_KeyMap, ToneSet_262_Zones, 24, 91, 0x42, 0x4280, 0	; 262
+	ToneSetDesc	0x80, ToneSet_263_KeyMap, ToneSet_263_Zones, 19, 91, 0x42, 0x4280, 0	; 263
+	ToneSetDesc	0x80, ToneSet_264_KeyMap, ToneSet_264_Zones, 12, 102, 0x42, 0x4280, 0	; 264
+	ToneSetDesc	0x00, ToneSet_265_KeyMap, ToneSet_265_Zones, 12, 96, 0x42, 0x4280, 0	; 265
+	ToneSetDesc	0x00, ToneSet_266_KeyMap, ToneSet_266_Zones, 12, 96, 0x42, 0x4280, 0	; 266
+	ToneSetDesc	0x00, ToneSet_267_KeyMap, ToneSet_267_Zones, 12, 96, 0x42, 0x4280, 0	; 267
+	ToneSetDesc	0x00, ToneSet_268_KeyMap, ToneSet_268_Zones, 12, 96, 0x42, 0x4280, 0	; 268
+	ToneSetDesc	0x80, ToneSet_269_KeyMap, ToneSet_269_Zones, 12, 102, 0x42, 0x4280, 0	; 269
+	ToneSetDesc	0x00, ToneSet_270_KeyMap, ToneSet_270_Zones, 12, 96, 0x42, 0x4280, 0	; 270
+	ToneSetDesc	0x80, ToneSet_271_KeyMap, ToneSet_271_Zones, 12, 102, 0x42, 0x4280, 0	; 271
+	ToneSetDesc	0x00, ToneSet_272_KeyMap, ToneSet_272_Zones, 12, 114, 0x42, 0x4280, 0	; 272
+	ToneSetDesc	0x80, ToneSet_273_KeyMap, ToneSet_273_Zones, 12, 108, 0x42, 0x4280, 0	; 273
+	ToneSetDesc	0x81, ToneSet_274_KeyMap, ToneSet_274_Zones, 12, 108, 0x42, 0x4280, 0	; 274
+	ToneSetDesc	0x80, ToneSet_275_KeyMap, ToneSet_275_Zones, 12, 108, 0x42, 0x4280, 0	; 275
+	ToneSetDesc	0x81, ToneSet_276_KeyMap, ToneSet_276_Zones, 12, 108, 0x42, 0x4280, 0	; 276
+	ToneSetDesc	0x80, ToneSet_277_KeyMap, ToneSet_277_Zones, 12, 108, 0x42, 0x4280, 0	; 277
+	ToneSetDesc	0x80, ToneSet_278_KeyMap, ToneSet_278_Zones, 12, 108, 0x42, 0x4280, 0	; 278
+	ToneSetDesc	0x80, ToneSet_279_KeyMap, ToneSet_279_Zones, 12, 108, 0x42, 0x4280, 0	; 279
+	ToneSetDesc	0x80, ToneSet_280_KeyMap, ToneSet_280_Zones, 12, 108, 0x42, 0x4280, 0	; 280
+	ToneSetDesc	0x80, ToneSet_281_KeyMap, ToneSet_281_Zones, 12, 108, 0x42, 0x4280, 0	; 281
+	ToneSetDesc	0x80, ToneSet_282_KeyMap, ToneSet_282_Zones, 12, 108, 0x42, 0x4280, 0	; 282
+	ToneSetDesc	0x80, ToneSet_283_KeyMap, ToneSet_283_Zones, 12, 96, 0x42, 0x4280, 0	; 283
+	ToneSetDesc	0x81, ToneSet_284_KeyMap, ToneSet_284_Zones, 12, 104, 0x42, 0x4280, 0	; 284
+	ToneSetDesc	0x80, ToneSet_285_KeyMap, ToneSet_285_Zones, 12, 101, 0x42, 0x4280, 0	; 285
+	ToneSetDesc	0x81, ToneSet_286_KeyMap, ToneSet_286_Zones, 12, 101, 0x42, 0x4280, 0	; 286
+	ToneSetDesc	0x81, ToneSet_287_KeyMap, ToneSet_287_Zones, 12, 101, 0x42, 0x4280, 0	; 287
+	ToneSetDesc	0x81, ToneSet_288_KeyMap, ToneSet_288_Zones, 12, 104, 0x42, 0x4280, 0	; 288
+	ToneSetDesc	0x81, ToneSet_289_KeyMap, ToneSet_289_Zones, 12, 108, 0x42, 0x4280, 0	; 289
+	ToneSetDesc	0x00, ToneSet_290_KeyMap, ToneSet_290_Zones, 12, 108, 0x42, 0x4280, 0	; 290
+	ToneSetDesc	0x00, ToneSet_291_KeyMap, ToneSet_291_Zones, 19, 120, 0x42, 0x4280, 0	; 291
+	ToneSetDesc	0x00, ToneSet_292_KeyMap, ToneSet_292_Zones, 12, 102, 0x42, 0x4280, 0	; 292
+	ToneSetDesc	0x80, ToneSet_293_KeyMap, ToneSet_293_Zones, 12, 102, 0x42, 0x4280, 0	; 293
+	ToneSetDesc	0x00, ToneSet_294_KeyMap, ToneSet_294_Zones, 12, 120, 0x42, 0x4280, 0	; 294
+	ToneSetDesc	0x00, ToneSet_295_KeyMap, ToneSet_295_Zones, 12, 120, 0x42, 0x4280, 0	; 295
+	ToneSetDesc	0x00, ToneSet_296_KeyMap, ToneSet_296_Zones, 12, 120, 0x42, 0x4280, 0	; 296
+	ToneSetDesc	0x00, ToneSet_297_KeyMap, ToneSet_297_Zones, 12, 120, 0x42, 0x4280, 0	; 297
+	ToneSetDesc	0x00, ToneSet_298_KeyMap, ToneSet_298_Zones, 12, 120, 0x42, 0x4280, 0	; 298
+	ToneSetDesc	0x00, ToneSet_299_KeyMap, ToneSet_299_Zones, 12, 120, 0x42, 0x4280, 0	; 299
+	ToneSetDesc	0x80, ToneSet_300_KeyMap, ToneSet_300_Zones, 12, 108, 0x42, 0x4280, 0	; 300
+	ToneSetDesc	0x00, ToneSet_301_KeyMap, ToneSet_301_Zones, 12, 111, 0x42, 0x4280, 0	; 301
+	ToneSetDesc	0x80, ToneSet_302_KeyMap, ToneSet_302_Zones, 12, 81, 0x42, 0x4280, 0	; 302
+	ToneSetDesc	0x00, ToneSet_303_KeyMap, ToneSet_303_Zones, 12, 114, 0x42, 0x4280, 0	; 303
+	ToneSetDesc	0x81, ToneSet_304_KeyMap, ToneSet_304_Zones, 12, 108, 0x42, 0x4280, 0	; 304
+	ToneSetDesc	0x80, ToneSet_305_KeyMap, ToneSet_305_Zones, 12, 102, 0x42, 0x4280, 0	; 305
+	ToneSetDesc	0x80, ToneSet_306_KeyMap, ToneSet_306_Zones, 12, 96, 0x42, 0x4280, 0	; 306
+	ToneSetDesc	0x80, ToneSet_307_KeyMap, ToneSet_307_Zones, 12, 96, 0x42, 0x4280, 0	; 307
+	ToneSetDesc	0x81, ToneSet_308_KeyMap, ToneSet_308_Zones, 12, 96, 0x42, 0x4280, 0	; 308
+	ToneSetDesc	0x80, ToneSet_309_KeyMap, ToneSet_309_Zones, 12, 108, 0x42, 0x4280, 0	; 309
+	ToneSetDesc	0x80, ToneSet_310_KeyMap, ToneSet_310_Zones, 12, 108, 0x42, 0x4280, 0	; 310
+	ToneSetDesc	0x80, ToneSet_311_KeyMap, ToneSet_311_Zones, 12, 108, 0x42, 0x4280, 0	; 311
+	ToneSetDesc	0x80, ToneSet_312_KeyMap, ToneSet_312_Zones, 12, 108, 0x42, 0x4280, 0	; 312
+	ToneSetDesc	0x80, ToneSet_313_KeyMap, ToneSet_313_Zones, 12, 108, 0x42, 0x4280, 0	; 313
+	ToneSetDesc	0x80, ToneSet_314_KeyMap, ToneSet_314_Zones, 12, 108, 0x42, 0x4280, 0	; 314
+	ToneSetDesc	0x80, ToneSet_315_KeyMap, ToneSet_315_Zones, 12, 102, 0x42, 0x4280, 0	; 315
+	ToneSetDesc	0x80, ToneSet_316_KeyMap, ToneSet_316_Zones, 12, 96, 0x42, 0x4280, 0	; 316
+	ToneSetDesc	0x00, ToneSet_317_KeyMap, ToneSet_317_Zones, 12, 120, 0x42, 0x4280, 0	; 317
+	ToneSetDesc	0x00, ToneSet_318_KeyMap, ToneSet_318_Zones, 12, 120, 0x42, 0x4280, 0	; 318
+	ToneSetDesc	0x00, ToneSet_319_KeyMap, ToneSet_319_Zones, 12, 120, 0x42, 0x4280, 0	; 319
+	ToneSetDesc	0x00, ToneSet_320_KeyMap, ToneSet_320_Zones, 12, 120, 0x42, 0x4280, 0	; 320
+	ToneSetDesc	0x00, ToneSet_321_KeyMap, ToneSet_321_Zones, 12, 120, 0x42, 0x4280, 0	; 321
+	ToneSetDesc	0x00, ToneSet_322_KeyMap, ToneSet_322_Zones, 12, 120, 0x42, 0x4280, 0	; 322
+	ToneSetDesc	0x00, ToneSet_323_KeyMap, ToneSet_323_Zones, 12, 120, 0x42, 0x4280, 0	; 323
+	ToneSetDesc	0x00, ToneSet_324_KeyMap, ToneSet_324_Zones, 12, 120, 0x42, 0x4280, 0	; 324
+	ToneSetDesc	0x00, ToneSet_325_KeyMap, ToneSet_325_Zones, 12, 120, 0x42, 0x4280, 0	; 325
+	ToneSetDesc	0x00, ToneSet_326_KeyMap, ToneSet_326_Zones, 12, 120, 0x42, 0x4280, 0	; 326
+	ToneSetDesc	0x00, ToneSet_327_KeyMap, ToneSet_327_Zones, 12, 120, 0x42, 0x4280, 0	; 327
+	ToneSetDesc	0x00, ToneSet_328_KeyMap, ToneSet_328_Zones, 12, 120, 0x42, 0x4280, 0	; 328
+	ToneSetDesc	0x01, ToneSet_329_KeyMap, ToneSet_329_Zones, 12, 120, 0x42, 0x4280, 0	; 329
+	ToneSetDesc	0x00, ToneSet_330_KeyMap, ToneSet_330_Zones, 12, 120, 0x42, 0x4280, 0	; 330
+	ToneSetDesc	0x00, ToneSet_331_KeyMap, ToneSet_331_Zones, 12, 120, 0x42, 0x4280, 0	; 331
+	ToneSetDesc	0x00, ToneSet_332_KeyMap, ToneSet_332_Zones, 12, 120, 0x42, 0x4280, 0	; 332
+	ToneSetDesc	0x80, ToneSet_333_KeyMap, ToneSet_333_Zones, 12, 96, 0x42, 0x4280, 0	; 333
+	ToneSetDesc	0x80, ToneSet_334_KeyMap, ToneSet_334_Zones, 12, 96, 0x42, 0x4280, 0	; 334
+	ToneSetDesc	0x00, ToneSet_335_KeyMap, ToneSet_335_Zones, 12, 120, 0x42, 0x4280, 0	; 335
+	ToneSetDesc	0x00, ToneSet_336_KeyMap, ToneSet_336_Zones, 12, 108, 0x42, 0x4280, 0	; 336
+	ToneSetDesc	0x80, ToneSet_337_KeyMap, ToneSet_337_Zones, 12, 108, 0x42, 0x4280, 0	; 337
+	ToneSetDesc	0x80, ToneSet_338_KeyMap, ToneSet_338_Zones, 12, 108, 0x42, 0x4280, 0	; 338
+	ToneSetDesc	0x00, ToneSet_339_KeyMap, ToneSet_339_Zones, 12, 79, 0x42, 0x4280, 0	; 339
+	ToneSetDesc	0x00, ToneSet_340_KeyMap, ToneSet_340_Zones, 12, 108, 0x42, 0x4280, 0	; 340
+	ToneSetDesc	0x00, ToneSet_341_KeyMap, ToneSet_341_Zones, 12, 120, 0x42, 0x4d44, 0	; 341
+	ToneSetDesc	0x00, ToneSet_342_KeyMap, ToneSet_342_Zones, 12, 120, 0x42, 0x4880, 0	; 342
+	ToneSetDesc	0x00, ToneSet_343_KeyMap, ToneSet_343_Zones, 12, 120, 0x42, 0x4d44, 0	; 343
+	ToneSetDesc	0x00, ToneSet_344_KeyMap, ToneSet_344_Zones, 12, 120, 0x42, 0x4d44, 0	; 344
+	ToneSetDesc	0x00, ToneSet_345_KeyMap, ToneSet_345_Zones, 12, 120, 0x42, 0x4d44, 0	; 345
+	ToneSetDesc	0x00, ToneSet_346_KeyMap, ToneSet_346_Zones, 12, 120, 0x42, 0x4d44, 0	; 346
+	ToneSetDesc	0x00, ToneSet_347_KeyMap, ToneSet_347_Zones, 12, 120, 0x42, 0x4d44, 0	; 347
+	ToneSetDesc	0x00, ToneSet_348_KeyMap, ToneSet_348_Zones, 12, 120, 0x42, 0x4d44, 0	; 348
+	ToneSetDesc	0x00, ToneSet_349_KeyMap, ToneSet_349_Zones, 12, 120, 0x42, 0x4d44, 0	; 349
+	ToneSetDesc	0x00, ToneSet_350_KeyMap, ToneSet_350_Zones, 12, 120, 0x42, 0x4d44, 0	; 350
+	ToneSetDesc	0x00, ToneSet_351_KeyMap, ToneSet_351_Zones, 12, 120, 0x42, 0x4d44, 0	; 351
+	ToneSetDesc	0x00, ToneSet_352_KeyMap, ToneSet_352_Zones, 12, 120, 0x42, 0x4d44, 0	; 352
+	ToneSetDesc	0x00, ToneSet_353_KeyMap, ToneSet_353_Zones, 12, 120, 0x42, 0x4d44, 0	; 353
+	ToneSetDesc	0x00, ToneSet_354_KeyMap, ToneSet_354_Zones, 12, 120, 0x42, 0x4ebc, 0	; 354
+	ToneSetDesc	0x00, ToneSet_355_KeyMap, ToneSet_355_Zones, 12, 120, 0x42, 0x4d44, 0	; 355
+	ToneSetDesc	0x00, ToneSet_356_KeyMap, ToneSet_356_Zones, 12, 120, 0x42, 0x4d44, 0	; 356
+	ToneSetDesc	0x00, ToneSet_357_KeyMap, ToneSet_357_Zones, 12, 120, 0x42, 0x4d44, 0	; 357
+	ToneSetDesc	0x00, ToneSet_358_KeyMap, ToneSet_358_Zones, 12, 120, 0x42, 0x4d44, 0	; 358
+	ToneSetDesc	0x00, ToneSet_359_KeyMap, ToneSet_359_Zones, 12, 120, 0x42, 0x4d44, 0	; 359
+	ToneSetDesc	0x00, ToneSet_360_KeyMap, ToneSet_360_Zones, 12, 120, 0x42, 0x4d44, 0	; 360
+	ToneSetDesc	0x00, ToneSet_361_KeyMap, ToneSet_361_Zones, 12, 120, 0x42, 0x4d44, 0	; 361
+	ToneSetDesc	0x00, ToneSet_362_KeyMap, ToneSet_362_Zones, 12, 120, 0x42, 0x4d44, 0	; 362
+	ToneSetDesc	0x00, ToneSet_363_KeyMap, ToneSet_363_Zones, 12, 120, 0x42, 0x4d44, 0	; 363
+	ToneSetDesc	0x00, ToneSet_364_KeyMap, ToneSet_364_Zones, 12, 120, 0x42, 0x4d44, 0	; 364
+	ToneSetDesc	0x00, ToneSet_365_KeyMap, ToneSet_365_Zones, 12, 120, 0x42, 0x4d44, 0	; 365
+	ToneSetDesc	0x00, ToneSet_366_KeyMap, ToneSet_366_Zones, 12, 120, 0x42, 0x4d44, 0	; 366
+	ToneSetDesc	0x00, ToneSet_367_KeyMap, ToneSet_367_Zones, 12, 120, 0x42, 0x4d44, 0	; 367
+	ToneSetDesc	0x00, ToneSet_368_KeyMap, ToneSet_368_Zones, 12, 120, 0x42, 0x4d44, 0	; 368
+	ToneSetDesc	0x00, ToneSet_369_KeyMap, ToneSet_369_Zones, 12, 120, 0x42, 0x4d44, 0	; 369
+	ToneSetDesc	0x00, ToneSet_370_KeyMap, ToneSet_370_Zones, 12, 120, 0x42, 0x4d44, 0	; 370
+	ToneSetDesc	0x00, ToneSet_371_KeyMap, ToneSet_371_Zones, 12, 120, 0x42, 0x4ebc, 0	; 371
+	ToneSetDesc	0x00, ToneSet_372_KeyMap, ToneSet_372_Zones, 12, 120, 0x42, 0x4d44, 0	; 372
+	ToneSetDesc	0x00, ToneSet_373_KeyMap, ToneSet_373_Zones, 12, 120, 0x42, 0x4561, 0	; 373
+	ToneSetDesc	0x08, ToneSet_374_KeyMap, ToneSet_374_Zones, 12, 120, 0x42, 0x4d44, 4	; 374
+	ToneSetDesc	0x00, ToneSet_375_KeyMap, ToneSet_375_Zones, 12, 120, 0x42, 0x4d44, 0	; 375
+	ToneSetDesc	0x00, ToneSet_376_KeyMap, ToneSet_376_Zones, 12, 120, 0x42, 0x534d, 0	; 376
+	ToneSetDesc	0x00, ToneSet_377_KeyMap, ToneSet_377_Zones, 12, 120, 0x42, 0x4d44, 0	; 377
+	ToneSetDesc	0x00, ToneSet_378_KeyMap, ToneSet_378_Zones, 12, 120, 0x42, 0x4d44, 0	; 378
+	ToneSetDesc	0x00, ToneSet_379_KeyMap, ToneSet_379_Zones, 12, 120, 0x42, 0x534d, 0	; 379
+	ToneSetDesc	0x00, ToneSet_380_KeyMap, ToneSet_380_Zones, 12, 120, 0x42, 0x501e, 0	; 380
+	ToneSetDesc	0x00, ToneSet_381_KeyMap, ToneSet_381_Zones, 12, 120, 0x42, 0x5167, 0	; 381
+	ToneSetDesc	0x00, ToneSet_382_KeyMap, ToneSet_382_Zones, 12, 120, 0x42, 0x5167, 0	; 382
+	ToneSetDesc	0x00, ToneSet_383_KeyMap, ToneSet_383_Zones, 12, 120, 0x42, 0x534d, 0	; 383
+	ToneSetDesc	0x00, ToneSet_384_KeyMap, ToneSet_384_Zones, 12, 120, 0x42, 0x5167, 0	; 384
+	ToneSetDesc	0x00, ToneSet_385_KeyMap, ToneSet_385_Zones, 12, 120, 0x42, 0x534d, 0	; 385
+	ToneSetDesc	0x00, ToneSet_386_KeyMap, ToneSet_386_Zones, 12, 120, 0x42, 0x4d44, 0	; 386
+	ToneSetDesc	0x00, ToneSet_387_KeyMap, ToneSet_387_Zones, 12, 120, 0x42, 0x4d44, 0	; 387
+	ToneSetDesc	0x00, ToneSet_388_KeyMap, ToneSet_388_Zones, 12, 120, 0x42, 0x1f87, 0	; 388
+	ToneSetDesc	0x00, ToneSet_389_KeyMap, ToneSet_389_Zones, 12, 120, 0x42, 0x4d44, 0	; 389
+	ToneSetDesc	0x08, ToneSet_390_KeyMap, ToneSet_390_Zones, 12, 120, 0x42, 0x4d44, 1	; 390
+	ToneSetDesc	0x00, ToneSet_391_KeyMap, ToneSet_391_Zones, 12, 120, 0x42, 0x4d44, 0	; 391
+	ToneSetDesc	0x08, ToneSet_392_KeyMap, ToneSet_392_Zones, 12, 120, 0x42, 0x4d44, 1	; 392
+	ToneSetDesc	0x08, ToneSet_393_KeyMap, ToneSet_393_Zones, 12, 120, 0x42, 0x4d44, 1	; 393
+	ToneSetDesc	0x08, ToneSet_394_KeyMap, ToneSet_394_Zones, 12, 120, 0x42, 0x4561, 1	; 394
+	ToneSetDesc	0x00, ToneSet_395_KeyMap, ToneSet_395_Zones, 12, 120, 0x42, 0x4d44, 1	; 395
+	ToneSetDesc	0x00, ToneSet_396_KeyMap, ToneSet_396_Zones, 12, 120, 0x42, 0x4d44, 1	; 396
+	ToneSetDesc	0x00, ToneSet_397_KeyMap, ToneSet_397_Zones, 12, 120, 0x42, 0x4561, 1	; 397
+	ToneSetDesc	0x08, ToneSet_398_KeyMap, ToneSet_398_Zones, 12, 120, 0x42, 0x4d44, 1	; 398
+	ToneSetDesc	0x00, ToneSet_399_KeyMap, ToneSet_399_Zones, 12, 120, 0x42, 0x534d, 0	; 399
+	ToneSetDesc	0x00, ToneSet_400_KeyMap, ToneSet_400_Zones, 12, 120, 0x42, 0x534d, 0	; 400
+	ToneSetDesc	0x00, ToneSet_401_KeyMap, ToneSet_401_Zones, 12, 120, 0x42, 0x534d, 0	; 401
+	ToneSetDesc	0x00, ToneSet_402_KeyMap, ToneSet_402_Zones, 12, 120, 0x42, 0x534d, 0	; 402
+	ToneSetDesc	0x00, ToneSet_403_KeyMap, ToneSet_403_Zones, 12, 120, 0x42, 0x4d44, 0	; 403
+	ToneSetDesc	0x00, ToneSet_404_KeyMap, ToneSet_404_Zones, 12, 120, 0x42, 0x49c1, 0	; 404
+	ToneSetDesc	0x00, ToneSet_405_KeyMap, ToneSet_405_Zones, 12, 120, 0x42, 0x4d44, 0	; 405
+	ToneSetDesc	0x00, ToneSet_406_KeyMap, ToneSet_406_Zones, 12, 120, 0x42, 0x4d44, 0	; 406
+	ToneSetDesc	0x00, ToneSet_407_KeyMap, ToneSet_407_Zones, 12, 120, 0x42, 0x4d44, 0	; 407
+	ToneSetDesc	0x00, ToneSet_408_KeyMap, ToneSet_408_Zones, 12, 120, 0x42, 0x4d44, 0	; 408
+	ToneSetDesc	0x00, ToneSet_409_KeyMap, ToneSet_409_Zones, 12, 120, 0x42, 0x4d44, 0	; 409
+	ToneSetDesc	0x00, ToneSet_410_KeyMap, ToneSet_410_Zones, 12, 120, 0x42, 0x4d44, 0	; 410
+	ToneSetDesc	0x00, ToneSet_411_KeyMap, ToneSet_411_Zones, 12, 120, 0x42, 0x4d44, 0	; 411
+	ToneSetDesc	0x00, ToneSet_412_KeyMap, ToneSet_412_Zones, 12, 120, 0x42, 0x4d44, 2	; 412
+	ToneSetDesc	0x08, ToneSet_413_KeyMap, ToneSet_413_Zones, 12, 120, 0x42, 0x4d44, 2	; 413
+	ToneSetDesc	0x00, ToneSet_414_KeyMap, ToneSet_414_Zones, 12, 120, 0x42, 0x4e80, 0	; 414
+	ToneSetDesc	0x00, ToneSet_415_KeyMap, ToneSet_415_Zones, 12, 120, 0x42, 0x3280, 0	; 415
+	ToneSetDesc	0x00, ToneSet_416_KeyMap, ToneSet_416_Zones, 12, 120, 0x42, 0x34d5, 0	; 416
+	ToneSetDesc	0x00, ToneSet_417_KeyMap, ToneSet_417_Zones, 12, 120, 0x42, 0x4ebc, 0	; 417
+	ToneSetDesc	0x00, ToneSet_418_KeyMap, ToneSet_418_Zones, 12, 120, 0x42, 0x4ebc, 0	; 418
+	ToneSetDesc	0x00, ToneSet_419_KeyMap, ToneSet_419_Zones, 12, 120, 0x42, 0x4ebc, 0	; 419
+	ToneSetDesc	0x00, ToneSet_420_KeyMap, ToneSet_420_Zones, 12, 120, 0x42, 0x4ebc, 0	; 420
+	ToneSetDesc	0x00, ToneSet_421_KeyMap, ToneSet_421_Zones, 12, 120, 0x42, 0x4d44, 0	; 421
+	ToneSetDesc	0x00, ToneSet_422_KeyMap, ToneSet_422_Zones, 12, 120, 0x42, 0x4d44, 0	; 422
+	ToneSetDesc	0x00, ToneSet_423_KeyMap, ToneSet_423_Zones, 12, 120, 0x42, 0x4d44, 0	; 423
+	ToneSetDesc	0x00, ToneSet_424_KeyMap, ToneSet_424_Zones, 12, 120, 0x42, 0x4f44, 0	; 424
+	ToneSetDesc	0x08, ToneSet_425_KeyMap, ToneSet_425_Zones, 12, 120, 0x42, 0x4d44, 5	; 425
+	ToneSetDesc	0x00, ToneSet_426_KeyMap, ToneSet_426_Zones, 12, 120, 0x42, 0x4d44, 0	; 426
+	ToneSetDesc	0x00, ToneSet_427_KeyMap, ToneSet_427_Zones, 12, 120, 0x42, 0x4ebc, 0	; 427
+	ToneSetDesc	0x00, ToneSet_428_KeyMap, ToneSet_428_Zones, 12, 120, 0x42, 0x4ebc, 0	; 428
+	ToneSetDesc	0x00, ToneSet_429_KeyMap, ToneSet_429_Zones, 12, 120, 0x42, 0x4d44, 0	; 429
+	ToneSetDesc	0x00, ToneSet_430_KeyMap, ToneSet_430_Zones, 12, 120, 0x42, 0x4d44, 0	; 430
+	ToneSetDesc	0x00, ToneSet_431_KeyMap, ToneSet_431_Zones, 12, 120, 0x42, 0x4d44, 0	; 431
+	ToneSetDesc	0x00, ToneSet_432_KeyMap, ToneSet_432_Zones, 12, 120, 0x42, 0x4d44, 0	; 432
+	ToneSetDesc	0x00, ToneSet_433_KeyMap, ToneSet_433_Zones, 12, 120, 0x42, 0x1fc4, 0	; 433
+	ToneSetDesc	0x00, ToneSet_434_KeyMap, ToneSet_434_Zones, 12, 120, 0x42, 0x4ebc, 0	; 434
+	ToneSetDesc	0x00, ToneSet_435_KeyMap, ToneSet_435_Zones, 12, 120, 0x42, 0x4ebc, 0	; 435
+	ToneSetDesc	0x00, ToneSet_436_KeyMap, ToneSet_436_Zones, 12, 120, 0x42, 0x4ebc, 0	; 436
+	ToneSetDesc	0x00, ToneSet_437_KeyMap, ToneSet_437_Zones, 12, 120, 0x42, 0x4ebc, 0	; 437
+	ToneSetDesc	0x00, ToneSet_438_KeyMap, ToneSet_438_Zones, 12, 120, 0x42, 0x4d44, 0	; 438
+	ToneSetDesc	0x00, ToneSet_439_KeyMap, ToneSet_439_Zones, 12, 120, 0x42, 0x4d44, 0	; 439
+	ToneSetDesc	0x00, ToneSet_440_KeyMap, ToneSet_440_Zones, 12, 120, 0x42, 0x4d44, 0	; 440
+	ToneSetDesc	0x00, ToneSet_441_KeyMap, ToneSet_441_Zones, 12, 120, 0x42, 0x4d44, 0	; 441
+	ToneSetDesc	0x08, ToneSet_442_KeyMap, ToneSet_442_Zones, 12, 120, 0x42, 0x4ebc, 3	; 442
+	ToneSetDesc	0x08, ToneSet_443_KeyMap, ToneSet_443_Zones, 12, 120, 0x42, 0x4d44, 3	; 443
+	ToneSetDesc	0x00, ToneSet_444_KeyMap, ToneSet_444_Zones, 12, 120, 0x42, 0x4ebc, 0	; 444
+	ToneSetDesc	0x00, ToneSet_445_KeyMap, ToneSet_445_Zones, 12, 120, 0x42, 0x4ebc, 0	; 445
+	ToneSetDesc	0x00, ToneSet_446_KeyMap, ToneSet_446_Zones, 12, 120, 0x42, 0x4d44, 0	; 446
+	ToneSetDesc	0x00, ToneSet_447_KeyMap, ToneSet_447_Zones, 12, 120, 0x42, 0x4d44, 0	; 447
+	ToneSetDesc	0x00, ToneSet_448_KeyMap, ToneSet_448_Zones, 12, 120, 0x42, 0x4d44, 0	; 448
+	ToneSetDesc	0x00, ToneSet_449_KeyMap, ToneSet_449_Zones, 12, 120, 0x42, 0x4ebc, 0	; 449
+	ToneSetDesc	0x00, ToneSet_450_KeyMap, ToneSet_450_Zones, 12, 120, 0x42, 0x4ebc, 0	; 450
+	ToneSetDesc	0x00, ToneSet_451_KeyMap, ToneSet_451_Zones, 12, 120, 0x42, 0x4ebc, 0	; 451
+	ToneSetDesc	0x00, ToneSet_452_KeyMap, ToneSet_452_Zones, 12, 120, 0x42, 0x4ebc, 0	; 452
+	ToneSetDesc	0x00, ToneSet_453_KeyMap, ToneSet_453_Zones, 12, 120, 0x42, 0x4d44, 0	; 453
+	ToneSetDesc	0x00, ToneSet_454_KeyMap, ToneSet_454_Zones, 12, 120, 0x42, 0x4d44, 0	; 454
+	ToneSetDesc	0x00, ToneSet_455_KeyMap, ToneSet_455_Zones, 12, 120, 0x42, 0x4d44, 0	; 455
+	ToneSetDesc	0x00, ToneSet_456_KeyMap, ToneSet_456_Zones, 12, 120, 0x42, 0x4d44, 0	; 456
+	ToneSetDesc	0x00, ToneSet_457_KeyMap, ToneSet_457_Zones, 12, 120, 0x42, 0x4d44, 0	; 457
+	ToneSetDesc	0x00, ToneSet_458_KeyMap, ToneSet_458_Zones, 12, 120, 0x42, 0x4d44, 0	; 458
+	ToneSetDesc	0x00, ToneSet_459_KeyMap, ToneSet_459_Zones, 12, 120, 0x42, 0x4d44, 0	; 459
+	ToneSetDesc	0x00, ToneSet_460_KeyMap, ToneSet_460_Zones, 12, 120, 0x42, 0x4d44, 0	; 460
+	ToneSetDesc	0x00, ToneSet_461_KeyMap, ToneSet_461_Zones, 12, 120, 0x42, 0x4d44, 0	; 461
+	ToneSetDesc	0x00, ToneSet_462_KeyMap, ToneSet_462_Zones, 12, 120, 0x42, 0x4d44, 0	; 462
+	ToneSetDesc	0x00, ToneSet_463_KeyMap, ToneSet_463_Zones, 12, 120, 0x42, 0x4d44, 0	; 463
+	ToneSetDesc	0x00, ToneSet_464_KeyMap, ToneSet_464_Zones, 12, 120, 0x42, 0x4d44, 0	; 464
+	ToneSetDesc	0x00, ToneSet_465_KeyMap, ToneSet_465_Zones, 12, 120, 0x42, 0x4d44, 0	; 465
+	ToneSetDesc	0x00, ToneSet_466_KeyMap, ToneSet_466_Zones, 12, 120, 0x42, 0x4d44, 0	; 466
+	ToneSetDesc	0x00, ToneSet_467_KeyMap, ToneSet_467_Zones, 12, 120, 0x42, 0x4d44, 0	; 467
+	ToneSetDesc	0x00, ToneSet_468_KeyMap, ToneSet_468_Zones, 12, 120, 0x42, 0x4d44, 0	; 468
+	ToneSetDesc	0x00, ToneSet_469_KeyMap, ToneSet_469_Zones, 12, 120, 0x42, 0x4180, 0	; 469
+	ToneSetDesc	0x00, ToneSet_470_KeyMap, ToneSet_470_Zones, 12, 120, 0x42, 0x4880, 0	; 470
+	ToneSetDesc	0x00, ToneSet_471_KeyMap, ToneSet_471_Zones, 12, 120, 0x42, 0x4d44, 0	; 471
+	ToneSetDesc	0x00, ToneSet_472_KeyMap, ToneSet_472_Zones, 12, 120, 0x42, 0x4d44, 0	; 472
+	ToneSetDesc	0x00, ToneSet_473_KeyMap, ToneSet_473_Zones, 12, 120, 0x42, 0x2e80, 0	; 473
+	ToneSetDesc	0x00, ToneSet_474_KeyMap, ToneSet_474_Zones, 12, 120, 0x42, 0x4527, 0	; 474
+	ToneSetDesc	0x00, ToneSet_475_KeyMap, ToneSet_475_Zones, 12, 120, 0x42, 0x4ebc, 0	; 475
+	ToneSetDesc	0x00, ToneSet_476_KeyMap, ToneSet_476_Zones, 12, 120, 0x42, 0x4ebc, 0	; 476
+	ToneSetDesc	0x00, ToneSet_477_KeyMap, ToneSet_477_Zones, 12, 120, 0x42, 0x4ebc, 0	; 477
+	ToneSetDesc	0x00, ToneSet_478_KeyMap, ToneSet_478_Zones, 12, 120, 0x42, 0x4d44, 0	; 478
+	ToneSetDesc	0x00, ToneSet_479_KeyMap, ToneSet_479_Zones, 12, 120, 0x42, 0x5167, 0	; 479
+	ToneSetDesc	0x00, ToneSet_480_KeyMap, ToneSet_480_Zones, 12, 120, 0x42, 0x5880, 0	; 480
+	ToneSetDesc	0x00, ToneSet_481_KeyMap, ToneSet_481_Zones, 12, 120, 0x42, 0x49c1, 0	; 481
+	ToneSetDesc	0x00, ToneSet_482_KeyMap, ToneSet_482_Zones, 12, 120, 0x42, 0x4d44, 0	; 482
+	ToneSetDesc	0x00, ToneSet_483_KeyMap, ToneSet_483_Zones, 12, 120, 0x42, 0x4d44, 0	; 483
+	ToneSetDesc	0x00, ToneSet_484_KeyMap, ToneSet_484_Zones, 12, 120, 0x42, 0x4d44, 0	; 484
+	ToneSetDesc	0x00, ToneSet_485_KeyMap, ToneSet_485_Zones, 12, 120, 0x42, 0x4d44, 0	; 485
+	ToneSetDesc	0x00, ToneSet_486_KeyMap, ToneSet_486_Zones, 12, 120, 0x42, 0x4d44, 0	; 486
 
 ; -----------------------------------------------------------------------------
 ; 1024 LE16 tone indices (dir +0x24/+0x9C).  Values 0-338; mostly ToneDB_ToneIndexMapA shifted down by 1.
@@ -1835,6 +1835,10 @@ ToneDB_VelocityCurve_5:
 	.byte	 92,  93,  94,  95,  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107	; v112-127
 
 ; -----------------------------------------------------------------------------
+; RENAMED 2026-09-25: the chunks below were labelled ToneEnv_RecNNN_A / _B; they
+; are ToneSet_NNN_KeyMap / ToneSet_NNN_Zones (NNN = the SET, i.e. the
+; ToneDB_EnvDescTable record; no chunk holds an envelope -- see CORRECTED below).
+; The "ToneEnv_*_A / _B" wording in this header means the same two chunk kinds.
 ; SET KEY MAPS AND ZONE RECORDS -- 974 variable-length chunks, one per LE32
 ; offset in ToneDB_EnvDescTable (chunk N ends where the next referenced offset
 ; begins).  Every SET descriptor owns exactly two: its key map (ToneEnv_*_A)
@@ -1899,67 +1903,67 @@ ToneDB_VelocityCurve_5:
 ; from 6-byte segments of the form 70 00 xx xx xx NN with NN incrementing, and
 ; called them envelope segment lists (rate/level pairs).  That framing was off
 ; by one byte: the segments are the zone records above, and the incrementing
-; byte is the low half of the selector at +0x00 -- ToneEnv_Rec000_B runs
+; byte is the low half of the selector at +0x00 -- ToneSet_000_Zones runs
 ; 0x7000, 0x7001, 0x7002, ...  Nothing in these chunks is an envelope.
 ; Every census above is re-derived by analysis/wave7-probes/
 ; probe_set_descriptors.py (no arguments; reads original_ROMs).
 ; SET 000 key map (descriptor 000: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..16 of 17.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec000_A:
+ToneSet_000_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   2,   3,   4,   5,   5,   6	; +0x04 bands 0-15 -> zone
 	.byte	  7,   8,   8,   9,  10,  11,  11,  12,  13,  14,  14,  15,  16,  16,  16,  16	; +0x14 bands 16-31 -> zone
 	.byte	 16,  16,  16								; +0x24 bands 32-34 -> zone
 ; SET 000 zone records: 17 x 6 bytes (descriptor flags bit 7 set), selectors 0x7000..0x701f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec000_B:
-	ToneEnvZone6	0x7000, 0x00, -9, -3378						; zone 0, coarse -13.20 st
-	ToneEnvZone6	0x7001, 0x00, -18, -1714					; zone 1, coarse -6.70 st
-	ToneEnvZone6	0x7002, 0x00, -9, -2883						; zone 2, coarse -11.26 st
-	ToneEnvZone6	0x7003, 0x00, -14, -3984					; zone 3, coarse -15.56 st
-	ToneEnvZone6	0x7004, 0x00, -18, -1944					; zone 4, coarse -7.59 st
-	ToneEnvZone6	0x7005, 0x00, -12, -2723					; zone 5, coarse -10.64 st
-	ToneEnvZone6	0x7006, 0x00, -23, -3804					; zone 6, coarse -14.86 st
-	ToneEnvZone6	0x7007, 0x00, -16, -1983					; zone 7, coarse -7.75 st
-	ToneEnvZone6	0x7017, 0x00, -15, -1983					; zone 8, coarse -7.75 st
-	ToneEnvZone6	0x7018, 0x00, -21, -2708					; zone 9, coarse -10.58 st
-	ToneEnvZone6	0x7019, 0x00, -13, -3932					; zone 10, coarse -15.36 st
-	ToneEnvZone6	0x701a, 0x00, -12, -1747					; zone 11, coarse -6.82 st
-	ToneEnvZone6	0x701b, 0x00, -8, -2522						; zone 12, coarse -9.85 st
-	ToneEnvZone6	0x701c, 0x00, -15, -3533					; zone 13, coarse -13.80 st
-	ToneEnvZone6	0x701d, 0x00, -7, -1996						; zone 14, coarse -7.80 st
-	ToneEnvZone6	0x701e, 0x00, -17, -3006					; zone 15, coarse -11.74 st
-	ToneEnvZone6	0x701f, 0x00, -9, -3513						; zone 16, coarse -13.72 st
+ToneSet_000_Zones:
+	ToneSetZone6	0x7000, 0x00, -9, -3378						; zone 0, coarse -13.20 st
+	ToneSetZone6	0x7001, 0x00, -18, -1714					; zone 1, coarse -6.70 st
+	ToneSetZone6	0x7002, 0x00, -9, -2883						; zone 2, coarse -11.26 st
+	ToneSetZone6	0x7003, 0x00, -14, -3984					; zone 3, coarse -15.56 st
+	ToneSetZone6	0x7004, 0x00, -18, -1944					; zone 4, coarse -7.59 st
+	ToneSetZone6	0x7005, 0x00, -12, -2723					; zone 5, coarse -10.64 st
+	ToneSetZone6	0x7006, 0x00, -23, -3804					; zone 6, coarse -14.86 st
+	ToneSetZone6	0x7007, 0x00, -16, -1983					; zone 7, coarse -7.75 st
+	ToneSetZone6	0x7017, 0x00, -15, -1983					; zone 8, coarse -7.75 st
+	ToneSetZone6	0x7018, 0x00, -21, -2708					; zone 9, coarse -10.58 st
+	ToneSetZone6	0x7019, 0x00, -13, -3932					; zone 10, coarse -15.36 st
+	ToneSetZone6	0x701a, 0x00, -12, -1747					; zone 11, coarse -6.82 st
+	ToneSetZone6	0x701b, 0x00, -8, -2522						; zone 12, coarse -9.85 st
+	ToneSetZone6	0x701c, 0x00, -15, -3533					; zone 13, coarse -13.80 st
+	ToneSetZone6	0x701d, 0x00, -7, -1996						; zone 14, coarse -7.80 st
+	ToneSetZone6	0x701e, 0x00, -17, -3006					; zone 15, coarse -11.74 st
+	ToneSetZone6	0x701f, 0x00, -9, -3513						; zone 16, coarse -13.72 st
 ; SET 004 key map (descriptor 004: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..16 of 17.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec004_A:
+ToneSet_004_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   2,   3,   4,   5,   5,   6	; +0x04 bands 0-15 -> zone
 	.byte	  7,   8,   8,   9,  10,  11,  11,  12,  13,  14,  14,  15,  16,  16,  16,  16	; +0x14 bands 16-31 -> zone
 	.byte	 16,  16,  16								; +0x24 bands 32-34 -> zone
 ; SET 004 zone records: 17 x 6 bytes (descriptor flags bit 7 set), selectors 0x7010..0x701f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec004_B:
-	ToneEnvZone6	0x7010, 0x00, -17, -3378					; zone 0, coarse -13.20 st
-	ToneEnvZone6	0x7010, 0x00, -17, -3378					; zone 1, coarse -13.20 st
-	ToneEnvZone6	0x7011, 0x00, -20, -1714					; zone 2, coarse -6.70 st
-	ToneEnvZone6	0x7012, 0x00, -13, -2883					; zone 3, coarse -11.26 st
-	ToneEnvZone6	0x7013, 0x00, -18, -3984					; zone 4, coarse -15.56 st
-	ToneEnvZone6	0x7014, 0x00, -21, -1944					; zone 5, coarse -7.59 st
-	ToneEnvZone6	0x7015, 0x00, -23, -2723					; zone 6, coarse -10.64 st
-	ToneEnvZone6	0x7016, 0x00, -18, -3804					; zone 7, coarse -14.86 st
-	ToneEnvZone6	0x7017, 0x00, -15, -1983					; zone 8, coarse -7.75 st
-	ToneEnvZone6	0x7018, 0x00, -21, -2708					; zone 9, coarse -10.58 st
-	ToneEnvZone6	0x7019, 0x00, -13, -3932					; zone 10, coarse -15.36 st
-	ToneEnvZone6	0x701a, 0x00, -12, -1747					; zone 11, coarse -6.82 st
-	ToneEnvZone6	0x701b, 0x00, -8, -2522						; zone 12, coarse -9.85 st
-	ToneEnvZone6	0x701c, 0x00, -15, -3533					; zone 13, coarse -13.80 st
-	ToneEnvZone6	0x701d, 0x00, -7, -1996						; zone 14, coarse -7.80 st
-	ToneEnvZone6	0x701e, 0x00, -17, -3006					; zone 15, coarse -11.74 st
-	ToneEnvZone6	0x701f, 0x00, -9, -3513						; zone 16, coarse -13.72 st
+ToneSet_004_Zones:
+	ToneSetZone6	0x7010, 0x00, -17, -3378					; zone 0, coarse -13.20 st
+	ToneSetZone6	0x7010, 0x00, -17, -3378					; zone 1, coarse -13.20 st
+	ToneSetZone6	0x7011, 0x00, -20, -1714					; zone 2, coarse -6.70 st
+	ToneSetZone6	0x7012, 0x00, -13, -2883					; zone 3, coarse -11.26 st
+	ToneSetZone6	0x7013, 0x00, -18, -3984					; zone 4, coarse -15.56 st
+	ToneSetZone6	0x7014, 0x00, -21, -1944					; zone 5, coarse -7.59 st
+	ToneSetZone6	0x7015, 0x00, -23, -2723					; zone 6, coarse -10.64 st
+	ToneSetZone6	0x7016, 0x00, -18, -3804					; zone 7, coarse -14.86 st
+	ToneSetZone6	0x7017, 0x00, -15, -1983					; zone 8, coarse -7.75 st
+	ToneSetZone6	0x7018, 0x00, -21, -2708					; zone 9, coarse -10.58 st
+	ToneSetZone6	0x7019, 0x00, -13, -3932					; zone 10, coarse -15.36 st
+	ToneSetZone6	0x701a, 0x00, -12, -1747					; zone 11, coarse -6.82 st
+	ToneSetZone6	0x701b, 0x00, -8, -2522						; zone 12, coarse -9.85 st
+	ToneSetZone6	0x701c, 0x00, -15, -3533					; zone 13, coarse -13.80 st
+	ToneSetZone6	0x701d, 0x00, -7, -1996						; zone 14, coarse -7.80 st
+	ToneSetZone6	0x701e, 0x00, -17, -3006					; zone 15, coarse -11.74 st
+	ToneSetZone6	0x701f, 0x00, -9, -3513						; zone 16, coarse -13.72 st
 ; SET 008 key map (descriptor 008: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec008_A:
+ToneSet_008_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   2	; +0x14 bands 16-31 -> zone
@@ -1970,18 +1974,18 @@ ToneEnv_Rec008_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 008 zone records: 8 x 6 bytes (descriptor flags bit 7 set), selectors 0x200c..0x2013;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec008_B:
-	ToneEnvZone6	0x200c, 0x00, -13, -407						; zone 0, coarse -1.59 st
-	ToneEnvZone6	0x200d, 0x00, -14, -362						; zone 1, coarse -1.41 st
-	ToneEnvZone6	0x200e, 0x00, -10, -1570					; zone 2, coarse -6.13 st
-	ToneEnvZone6	0x200f, 0x00, -12, -186						; zone 3, coarse -0.73 st
-	ToneEnvZone6	0x2010, 0x00, -7, -1929						; zone 4, coarse -7.54 st
-	ToneEnvZone6	0x2011, 0x00, -6, -487						; zone 5, coarse -1.90 st
-	ToneEnvZone6	0x2012, 0x00, -6, -2806						; zone 6, coarse -10.96 st
-	ToneEnvZone6	0x2013, 0x00, -10, 72						; zone 7, coarse +0.28 st
+ToneSet_008_Zones:
+	ToneSetZone6	0x200c, 0x00, -13, -407						; zone 0, coarse -1.59 st
+	ToneSetZone6	0x200d, 0x00, -14, -362						; zone 1, coarse -1.41 st
+	ToneSetZone6	0x200e, 0x00, -10, -1570					; zone 2, coarse -6.13 st
+	ToneSetZone6	0x200f, 0x00, -12, -186						; zone 3, coarse -0.73 st
+	ToneSetZone6	0x2010, 0x00, -7, -1929						; zone 4, coarse -7.54 st
+	ToneSetZone6	0x2011, 0x00, -6, -487						; zone 5, coarse -1.90 st
+	ToneSetZone6	0x2012, 0x00, -6, -2806						; zone 6, coarse -10.96 st
+	ToneSetZone6	0x2013, 0x00, -10, 72						; zone 7, coarse +0.28 st
 ; SET 009 key map (descriptor 009: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..13 of 14.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec009_A:
+ToneSet_009_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   4,   4,   4,   5	; +0x14 bands 16-31 -> zone
@@ -1992,24 +1996,24 @@ ToneEnv_Rec009_A:
 	.byte	 13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13		; +0x64 bands 96-107 -> zone
 ; SET 009 zone records: 14 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2052..0x205e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec009_B:
-	ToneEnvZone4	0x2053, 0x80, -12						; zone 0
-	ToneEnvZone4	0x2053, 0x00, -12						; zone 1
-	ToneEnvZone4	0x2052, 0x00, -12						; zone 2
-	ToneEnvZone4	0x2055, 0x00, -18						; zone 3
-	ToneEnvZone4	0x2054, 0x00, -18						; zone 4
-	ToneEnvZone4	0x2056, 0x00, -5						; zone 5
-	ToneEnvZone4	0x2058, 0x00, -7						; zone 6
-	ToneEnvZone4	0x2057, 0x00, -7						; zone 7
-	ToneEnvZone4	0x2059, 0x00, -6						; zone 8
-	ToneEnvZone4	0x205a, 0x00, -6						; zone 9
-	ToneEnvZone4	0x205b, 0x00, -2						; zone 10
-	ToneEnvZone4	0x205c, 0x00, -4						; zone 11
-	ToneEnvZone4	0x205d, 0x00, -4						; zone 12
-	ToneEnvZone4	0x205e, 0x00, -4						; zone 13
+ToneSet_009_Zones:
+	ToneSetZone4	0x2053, 0x80, -12						; zone 0
+	ToneSetZone4	0x2053, 0x00, -12						; zone 1
+	ToneSetZone4	0x2052, 0x00, -12						; zone 2
+	ToneSetZone4	0x2055, 0x00, -18						; zone 3
+	ToneSetZone4	0x2054, 0x00, -18						; zone 4
+	ToneSetZone4	0x2056, 0x00, -5						; zone 5
+	ToneSetZone4	0x2058, 0x00, -7						; zone 6
+	ToneSetZone4	0x2057, 0x00, -7						; zone 7
+	ToneSetZone4	0x2059, 0x00, -6						; zone 8
+	ToneSetZone4	0x205a, 0x00, -6						; zone 9
+	ToneSetZone4	0x205b, 0x00, -2						; zone 10
+	ToneSetZone4	0x205c, 0x00, -4						; zone 11
+	ToneSetZone4	0x205d, 0x00, -4						; zone 12
+	ToneSetZone4	0x205e, 0x00, -4						; zone 13
 ; SET 011 key map (descriptor 011: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec011_A:
+ToneSet_011_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -2020,37 +2024,37 @@ ToneEnv_Rec011_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 011 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x201b..0x202b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec011_B:
-	ToneEnvZone4	0x2025, 0x80, -21						; zone 0
-	ToneEnvZone4	0x2025, 0x00, -21						; zone 1
-	ToneEnvZone4	0x2024, 0x00, -21						; zone 2
-	ToneEnvZone4	0x2026, 0x00, -17						; zone 3
-	ToneEnvZone4	0x2027, 0x00, -14						; zone 4
-	ToneEnvZone4	0x2028, 0x00, -25						; zone 5
-	ToneEnvZone4	0x2029, 0x00, -9						; zone 6
-	ToneEnvZone4	0x202a, 0x00, -9						; zone 7
-	ToneEnvZone4	0x202b, 0x00, -9						; zone 8
-	ToneEnvZone4	0x201b, 0x00, -14						; zone 9
+ToneSet_011_Zones:
+	ToneSetZone4	0x2025, 0x80, -21						; zone 0
+	ToneSetZone4	0x2025, 0x00, -21						; zone 1
+	ToneSetZone4	0x2024, 0x00, -21						; zone 2
+	ToneSetZone4	0x2026, 0x00, -17						; zone 3
+	ToneSetZone4	0x2027, 0x00, -14						; zone 4
+	ToneSetZone4	0x2028, 0x00, -25						; zone 5
+	ToneSetZone4	0x2029, 0x00, -9						; zone 6
+	ToneSetZone4	0x202a, 0x00, -9						; zone 7
+	ToneSetZone4	0x202b, 0x00, -9						; zone 8
+	ToneSetZone4	0x201b, 0x00, -14						; zone 9
 ; SET 019 key map (descriptor 019: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec019_A:
+ToneSet_019_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   2,   2,   2,   2,   3,   4,   4,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  6,   6,   6								; +0x24 bands 32-34 -> zone
 ; SET 019 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2072..0x207c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec019_B:
-	ToneEnvZone4	0x2077, 0x90, -8						; zone 0
-	ToneEnvZone4	0x2078, 0x00, -9						; zone 1
-	ToneEnvZone4	0x2079, 0x00, -10						; zone 2
-	ToneEnvZone4	0x207a, 0x00, -10						; zone 3
-	ToneEnvZone4	0x207b, 0x00, -16						; zone 4
-	ToneEnvZone4	0x207c, 0x00, -16						; zone 5
-	ToneEnvZone4	0x2072, 0x00, -14						; zone 6
+ToneSet_019_Zones:
+	ToneSetZone4	0x2077, 0x90, -8						; zone 0
+	ToneSetZone4	0x2078, 0x00, -9						; zone 1
+	ToneSetZone4	0x2079, 0x00, -10						; zone 2
+	ToneSetZone4	0x207a, 0x00, -10						; zone 3
+	ToneSetZone4	0x207b, 0x00, -16						; zone 4
+	ToneSetZone4	0x207c, 0x00, -16						; zone 5
+	ToneSetZone4	0x2072, 0x00, -14						; zone 6
 ; SET 025 key map (descriptor 025: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec025_A:
+ToneSet_025_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2061,39 +2065,39 @@ ToneEnv_Rec025_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 025 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1094..0x30f0;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec025_B:
-	ToneEnvZone4	0x30ee, 0x80, -11						; zone 0
-	ToneEnvZone4	0x30ee, 0x00, -11						; zone 1
-	ToneEnvZone4	0x30ef, 0x00, -11						; zone 2
-	ToneEnvZone4	0x30f0, 0x00, -11						; zone 3
-	ToneEnvZone4	0x209b, 0x00, -12						; zone 4
-	ToneEnvZone4	0x209c, 0x00, -12						; zone 5
-	ToneEnvZone4	0x1094, 0x00, -21						; zone 6
+ToneSet_025_Zones:
+	ToneSetZone4	0x30ee, 0x80, -11						; zone 0
+	ToneSetZone4	0x30ee, 0x00, -11						; zone 1
+	ToneSetZone4	0x30ef, 0x00, -11						; zone 2
+	ToneSetZone4	0x30f0, 0x00, -11						; zone 3
+	ToneSetZone4	0x209b, 0x00, -12						; zone 4
+	ToneSetZone4	0x209c, 0x00, -12						; zone 5
+	ToneSetZone4	0x1094, 0x00, -21						; zone 6
 ; SET 028 key map (descriptor 028: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec028_A:
+ToneSet_028_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   4,   4,   5	; +0x04 bands 0-15 -> zone
 	.byte	  6,   7,   7,   8,   9,   9,   9,   9,  10,  10,  10,  10,  11,  11,  11,  11	; +0x14 bands 16-31 -> zone
 	.byte	 11,  11,  11								; +0x24 bands 32-34 -> zone
 ; SET 028 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1082..0x1088;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec028_B:
-	ToneEnvZone4	0x1082, 0x80, -26						; zone 0
-	ToneEnvZone4	0x1082, 0x80, -22						; zone 1
-	ToneEnvZone4	0x1082, 0x80, -18						; zone 2
-	ToneEnvZone4	0x1082, 0x00, -14						; zone 3
-	ToneEnvZone4	0x1082, 0x00, -10						; zone 4
-	ToneEnvZone4	0x1082, 0x00, -6						; zone 5
-	ToneEnvZone4	0x1083, 0x00, -10						; zone 6
-	ToneEnvZone4	0x1084, 0x00, -10						; zone 7
-	ToneEnvZone4	0x1085, 0x00, -6						; zone 8
-	ToneEnvZone4	0x1086, 0x00, -6						; zone 9
-	ToneEnvZone4	0x1087, 0x00, -6						; zone 10
-	ToneEnvZone4	0x1088, 0x00, -6						; zone 11
+ToneSet_028_Zones:
+	ToneSetZone4	0x1082, 0x80, -26						; zone 0
+	ToneSetZone4	0x1082, 0x80, -22						; zone 1
+	ToneSetZone4	0x1082, 0x80, -18						; zone 2
+	ToneSetZone4	0x1082, 0x00, -14						; zone 3
+	ToneSetZone4	0x1082, 0x00, -10						; zone 4
+	ToneSetZone4	0x1082, 0x00, -6						; zone 5
+	ToneSetZone4	0x1083, 0x00, -10						; zone 6
+	ToneSetZone4	0x1084, 0x00, -10						; zone 7
+	ToneSetZone4	0x1085, 0x00, -6						; zone 8
+	ToneSetZone4	0x1086, 0x00, -6						; zone 9
+	ToneSetZone4	0x1087, 0x00, -6						; zone 10
+	ToneSetZone4	0x1088, 0x00, -6						; zone 11
 ; SET 029 key map (descriptor 029: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec029_A:
+ToneSet_029_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2104,52 +2108,52 @@ ToneEnv_Rec029_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 029 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1094..0x209c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec029_B:
-	ToneEnvZone4	0x2097, 0x80, -8						; zone 0
-	ToneEnvZone4	0x2097, 0x00, -8						; zone 1
-	ToneEnvZone4	0x2096, 0x00, -8						; zone 2
-	ToneEnvZone4	0x2098, 0x00, -11						; zone 3
-	ToneEnvZone4	0x2099, 0x00, -8						; zone 4
-	ToneEnvZone4	0x209a, 0x00, -8						; zone 5
-	ToneEnvZone4	0x209b, 0x00, -12						; zone 6
-	ToneEnvZone4	0x209c, 0x00, -12						; zone 7
-	ToneEnvZone4	0x1094, 0x00, -21						; zone 8
+ToneSet_029_Zones:
+	ToneSetZone4	0x2097, 0x80, -8						; zone 0
+	ToneSetZone4	0x2097, 0x00, -8						; zone 1
+	ToneSetZone4	0x2096, 0x00, -8						; zone 2
+	ToneSetZone4	0x2098, 0x00, -11						; zone 3
+	ToneSetZone4	0x2099, 0x00, -8						; zone 4
+	ToneSetZone4	0x209a, 0x00, -8						; zone 5
+	ToneSetZone4	0x209b, 0x00, -12						; zone 6
+	ToneSetZone4	0x209c, 0x00, -12						; zone 7
+	ToneSetZone4	0x1094, 0x00, -21						; zone 8
 ; SET 030 key map (descriptor 030: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec030_A:
+ToneSet_030_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   4,   4,   5,   5	; +0x04 bands 0-15 -> zone
 	.byte	  6,   6,   6,   6,   6							; +0x14 bands 16-20 -> zone
 ; SET 030 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x209d..0x20a2;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec030_B:
-	ToneEnvZone4	0x209d, 0x80, -12						; zone 0
-	ToneEnvZone4	0x209d, 0x00, -12						; zone 1
-	ToneEnvZone4	0x209e, 0x00, -16						; zone 2
-	ToneEnvZone4	0x209f, 0x00, -3						; zone 3
-	ToneEnvZone4	0x20a0, 0x00, 0							; zone 4
-	ToneEnvZone4	0x20a1, 0x00, 0							; zone 5
-	ToneEnvZone4	0x20a2, 0x00, 0							; zone 6
+ToneSet_030_Zones:
+	ToneSetZone4	0x209d, 0x80, -12						; zone 0
+	ToneSetZone4	0x209d, 0x00, -12						; zone 1
+	ToneSetZone4	0x209e, 0x00, -16						; zone 2
+	ToneSetZone4	0x209f, 0x00, -3						; zone 3
+	ToneSetZone4	0x20a0, 0x00, 0							; zone 4
+	ToneSetZone4	0x20a1, 0x00, 0							; zone 5
+	ToneSetZone4	0x20a2, 0x00, 0							; zone 6
 ; SET 031 key map (descriptor 031: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec031_A:
+ToneSet_031_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   4,   5	; +0x04 bands 0-15 -> zone
 	.byte	  6,   6,   7,   7,   7							; +0x14 bands 16-20 -> zone
 ; SET 031 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x20a3..0x20a9;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec031_B:
-	ToneEnvZone4	0x20a4, 0x80, -9						; zone 0
-	ToneEnvZone4	0x20a4, 0x00, -9						; zone 1
-	ToneEnvZone4	0x20a3, 0x00, -9						; zone 2
-	ToneEnvZone4	0x20a5, 0x00, -10						; zone 3
-	ToneEnvZone4	0x20a6, 0x00, -11						; zone 4
-	ToneEnvZone4	0x20a7, 0x00, -13						; zone 5
-	ToneEnvZone4	0x20a8, 0x00, -13						; zone 6
-	ToneEnvZone4	0x20a9, 0x00, -13						; zone 7
+ToneSet_031_Zones:
+	ToneSetZone4	0x20a4, 0x80, -9						; zone 0
+	ToneSetZone4	0x20a4, 0x00, -9						; zone 1
+	ToneSetZone4	0x20a3, 0x00, -9						; zone 2
+	ToneSetZone4	0x20a5, 0x00, -10						; zone 3
+	ToneSetZone4	0x20a6, 0x00, -11						; zone 4
+	ToneSetZone4	0x20a7, 0x00, -13						; zone 5
+	ToneSetZone4	0x20a8, 0x00, -13						; zone 6
+	ToneSetZone4	0x20a9, 0x00, -13						; zone 7
 ; SET 032 key map (descriptor 032: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec032_A:
+ToneSet_032_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -2160,65 +2164,65 @@ ToneEnv_Rec032_A:
 	.byte	 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12		; +0x64 bands 96-107 -> zone
 ; SET 032 zone records: 13 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1089..0x1094;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec032_B:
-	ToneEnvZone4	0x1089, 0x80, -15						; zone 0
-	ToneEnvZone4	0x1089, 0x80, -15						; zone 1
-	ToneEnvZone4	0x1089, 0x00, -15						; zone 2
-	ToneEnvZone4	0x108b, 0x00, -9						; zone 3
-	ToneEnvZone4	0x108d, 0x00, -2						; zone 4
-	ToneEnvZone4	0x108c, 0x00, -2						; zone 5
-	ToneEnvZone4	0x108e, 0x00, -4						; zone 6
-	ToneEnvZone4	0x108f, 0x00, -4						; zone 7
-	ToneEnvZone4	0x1090, 0x00, -6						; zone 8
-	ToneEnvZone4	0x1091, 0x00, -9						; zone 9
-	ToneEnvZone4	0x1092, 0x00, -9						; zone 10
-	ToneEnvZone4	0x1093, 0x00, -13						; zone 11
-	ToneEnvZone4	0x1094, 0x00, -13						; zone 12
+ToneSet_032_Zones:
+	ToneSetZone4	0x1089, 0x80, -15						; zone 0
+	ToneSetZone4	0x1089, 0x80, -15						; zone 1
+	ToneSetZone4	0x1089, 0x00, -15						; zone 2
+	ToneSetZone4	0x108b, 0x00, -9						; zone 3
+	ToneSetZone4	0x108d, 0x00, -2						; zone 4
+	ToneSetZone4	0x108c, 0x00, -2						; zone 5
+	ToneSetZone4	0x108e, 0x00, -4						; zone 6
+	ToneSetZone4	0x108f, 0x00, -4						; zone 7
+	ToneSetZone4	0x1090, 0x00, -6						; zone 8
+	ToneSetZone4	0x1091, 0x00, -9						; zone 9
+	ToneSetZone4	0x1092, 0x00, -9						; zone 10
+	ToneSetZone4	0x1093, 0x00, -13						; zone 11
+	ToneSetZone4	0x1094, 0x00, -13						; zone 12
 ; SET 035 key map (descriptor 035: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec035_A:
+ToneSet_035_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   6			; +0x04 bands 0-10 -> zone
 ; SET 035 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x20b2..0x20b7;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec035_B:
-	ToneEnvZone4	0x20b3, 0x80, -3						; zone 0
-	ToneEnvZone4	0x20b3, 0x00, -3						; zone 1
-	ToneEnvZone4	0x20b2, 0x00, -3						; zone 2
-	ToneEnvZone4	0x20b4, 0x00, -3						; zone 3
-	ToneEnvZone4	0x20b5, 0x00, -3						; zone 4
-	ToneEnvZone4	0x20b6, 0x00, -3						; zone 5
-	ToneEnvZone4	0x20b7, 0x00, -3						; zone 6
+ToneSet_035_Zones:
+	ToneSetZone4	0x20b3, 0x80, -3						; zone 0
+	ToneSetZone4	0x20b3, 0x00, -3						; zone 1
+	ToneSetZone4	0x20b2, 0x00, -3						; zone 2
+	ToneSetZone4	0x20b4, 0x00, -3						; zone 3
+	ToneSetZone4	0x20b5, 0x00, -3						; zone 4
+	ToneSetZone4	0x20b6, 0x00, -3						; zone 5
+	ToneSetZone4	0x20b7, 0x00, -3						; zone 6
 ; SET 036 key map (descriptor 036: flags 0x01, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec036_A:
+ToneSet_036_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
 	.byte	  1,   1,   1								; +0x24 bands 32-34 -> zone
 ; SET 036 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x20ae..0x20af;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec036_B:
-	ToneEnvZone4	0x20ae, 0x90, 0							; zone 0
-	ToneEnvZone4	0x20af, 0x90, 0							; zone 1
+ToneSet_036_Zones:
+	ToneSetZone4	0x20ae, 0x90, 0							; zone 0
+	ToneSetZone4	0x20af, 0x90, 0							; zone 1
 ; SET 039 key map (descriptor 039: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec039_A:
+ToneSet_039_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   3,   4,   4	; +0x04 bands 0-15 -> zone
 	.byte	  5,   5,   5,   5,   5							; +0x14 bands 16-20 -> zone
 ; SET 039 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x20aa..0x20ad;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec039_B:
-	ToneEnvZone4	0x20aa, 0x80, -7						; zone 0
-	ToneEnvZone4	0x20aa, 0x00, -7						; zone 1
-	ToneEnvZone4	0x20ab, 0x00, -1						; zone 2
-	ToneEnvZone4	0x20ac, 0x80, -1						; zone 3
-	ToneEnvZone4	0x20ac, 0x00, -1						; zone 4
-	ToneEnvZone4	0x20ad, 0x00, -1						; zone 5
+ToneSet_039_Zones:
+	ToneSetZone4	0x20aa, 0x80, -7						; zone 0
+	ToneSetZone4	0x20aa, 0x00, -7						; zone 1
+	ToneSetZone4	0x20ab, 0x00, -1						; zone 2
+	ToneSetZone4	0x20ac, 0x80, -1						; zone 3
+	ToneSetZone4	0x20ac, 0x00, -1						; zone 4
+	ToneSetZone4	0x20ad, 0x00, -1						; zone 5
 ; SET 041 key map (descriptor 041: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..15 of 16.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec041_A:
+ToneSet_041_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -2229,26 +2233,26 @@ ToneEnv_Rec041_A:
 	.byte	 15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15		; +0x64 bands 96-107 -> zone
 ; SET 041 zone records: 16 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106a..0x107b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec041_B:
-	ToneEnvZone4	0x1072, 0x80, -20						; zone 0
-	ToneEnvZone4	0x1072, 0x00, -20						; zone 1
-	ToneEnvZone4	0x1071, 0x00, -20						; zone 2
-	ToneEnvZone4	0x1074, 0x00, -20						; zone 3
-	ToneEnvZone4	0x1073, 0x00, -20						; zone 4
-	ToneEnvZone4	0x1075, 0x00, -21						; zone 5
-	ToneEnvZone4	0x1076, 0x00, -14						; zone 6
-	ToneEnvZone4	0x1077, 0x00, -16						; zone 7
-	ToneEnvZone4	0x1079, 0x00, -6						; zone 8
-	ToneEnvZone4	0x1078, 0x00, -6						; zone 9
-	ToneEnvZone4	0x107a, 0x00, -8						; zone 10
-	ToneEnvZone4	0x107b, 0x00, -8						; zone 11
-	ToneEnvZone4	0x106a, 0x00, -6						; zone 12
-	ToneEnvZone4	0x106d, 0x00, -19						; zone 13
-	ToneEnvZone4	0x106f, 0x00, -30						; zone 14
-	ToneEnvZone4	0x1070, 0x00, -30						; zone 15
+ToneSet_041_Zones:
+	ToneSetZone4	0x1072, 0x80, -20						; zone 0
+	ToneSetZone4	0x1072, 0x00, -20						; zone 1
+	ToneSetZone4	0x1071, 0x00, -20						; zone 2
+	ToneSetZone4	0x1074, 0x00, -20						; zone 3
+	ToneSetZone4	0x1073, 0x00, -20						; zone 4
+	ToneSetZone4	0x1075, 0x00, -21						; zone 5
+	ToneSetZone4	0x1076, 0x00, -14						; zone 6
+	ToneSetZone4	0x1077, 0x00, -16						; zone 7
+	ToneSetZone4	0x1079, 0x00, -6						; zone 8
+	ToneSetZone4	0x1078, 0x00, -6						; zone 9
+	ToneSetZone4	0x107a, 0x00, -8						; zone 10
+	ToneSetZone4	0x107b, 0x00, -8						; zone 11
+	ToneSetZone4	0x106a, 0x00, -6						; zone 12
+	ToneSetZone4	0x106d, 0x00, -19						; zone 13
+	ToneSetZone4	0x106f, 0x00, -30						; zone 14
+	ToneSetZone4	0x1070, 0x00, -30						; zone 15
 ; SET 045 key map (descriptor 045: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec045_A:
+ToneSet_045_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -2259,22 +2263,22 @@ ToneEnv_Rec045_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 045 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x2095;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec045_B:
-	ToneEnvZone4	0x208d, 0x80, -5						; zone 0
-	ToneEnvZone4	0x208c, 0x00, -5						; zone 1
-	ToneEnvZone4	0x208e, 0x00, -3						; zone 2
-	ToneEnvZone4	0x208f, 0x00, -6						; zone 3
-	ToneEnvZone4	0x2091, 0x00, -3						; zone 4
-	ToneEnvZone4	0x2090, 0x00, -3						; zone 5
-	ToneEnvZone4	0x2092, 0x00, -10						; zone 6
-	ToneEnvZone4	0x2093, 0x00, -9						; zone 7
-	ToneEnvZone4	0x2094, 0x00, -7						; zone 8
-	ToneEnvZone4	0x2095, 0x00, -7						; zone 9
-	ToneEnvZone4	0x106f, 0x00, -26						; zone 10
-	ToneEnvZone4	0x1070, 0x00, -26						; zone 11
+ToneSet_045_Zones:
+	ToneSetZone4	0x208d, 0x80, -5						; zone 0
+	ToneSetZone4	0x208c, 0x00, -5						; zone 1
+	ToneSetZone4	0x208e, 0x00, -3						; zone 2
+	ToneSetZone4	0x208f, 0x00, -6						; zone 3
+	ToneSetZone4	0x2091, 0x00, -3						; zone 4
+	ToneSetZone4	0x2090, 0x00, -3						; zone 5
+	ToneSetZone4	0x2092, 0x00, -10						; zone 6
+	ToneSetZone4	0x2093, 0x00, -9						; zone 7
+	ToneSetZone4	0x2094, 0x00, -7						; zone 8
+	ToneSetZone4	0x2095, 0x00, -7						; zone 9
+	ToneSetZone4	0x106f, 0x00, -26						; zone 10
+	ToneSetZone4	0x1070, 0x00, -26						; zone 11
 ; SET 049 key map (descriptor 049: flags 0x02, keys 12..113): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec049_A:
+ToneSet_049_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -2285,18 +2289,18 @@ ToneEnv_Rec049_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 049 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3000..0x3048;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec049_B:
-	ToneEnvZone4	0x3000, 0xd0, -1						; zone 0
-	ToneEnvZone4	0x3001, 0xa0, -4						; zone 1
-	ToneEnvZone4	0x3002, 0x80, -3						; zone 2
-	ToneEnvZone4	0x3003, 0x80, -7						; zone 3
-	ToneEnvZone4	0x3003, 0x00, -7						; zone 4
-	ToneEnvZone4	0x3040, 0x00, -10						; zone 5
-	ToneEnvZone4	0x3041, 0x00, -10						; zone 6
-	ToneEnvZone4	0x3048, 0xd0, -19						; zone 7
+ToneSet_049_Zones:
+	ToneSetZone4	0x3000, 0xd0, -1						; zone 0
+	ToneSetZone4	0x3001, 0xa0, -4						; zone 1
+	ToneSetZone4	0x3002, 0x80, -3						; zone 2
+	ToneSetZone4	0x3003, 0x80, -7						; zone 3
+	ToneSetZone4	0x3003, 0x00, -7						; zone 4
+	ToneSetZone4	0x3040, 0x00, -10						; zone 5
+	ToneSetZone4	0x3041, 0x00, -10						; zone 6
+	ToneSetZone4	0x3048, 0xd0, -19						; zone 7
 ; SET 052 key map (descriptor 052: flags 0x02, keys 12..113): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec052_A:
+ToneSet_052_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -2307,23 +2311,23 @@ ToneEnv_Rec052_A:
 	.byte	 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12		; +0x64 bands 96-107 -> zone
 ; SET 052 zone records: 13 x 4 bytes (descriptor flags bit 7 clear), selectors 0x300f..0x3048;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec052_B:
-	ToneEnvZone4	0x3010, 0x80, -4						; zone 0
-	ToneEnvZone4	0x3010, 0x00, -4						; zone 1
-	ToneEnvZone4	0x300f, 0x00, -4						; zone 2
-	ToneEnvZone4	0x3011, 0x00, -2						; zone 3
-	ToneEnvZone4	0x3013, 0x00, -1						; zone 4
-	ToneEnvZone4	0x3012, 0x00, -1						; zone 5
-	ToneEnvZone4	0x3014, 0x00, -3						; zone 6
-	ToneEnvZone4	0x3016, 0x00, -1						; zone 7
-	ToneEnvZone4	0x3015, 0x00, -1						; zone 8
-	ToneEnvZone4	0x3017, 0x00, -1						; zone 9
-	ToneEnvZone4	0x3040, 0x00, -6						; zone 10
-	ToneEnvZone4	0x3041, 0x00, -6						; zone 11
-	ToneEnvZone4	0x3048, 0xd0, -15						; zone 12
+ToneSet_052_Zones:
+	ToneSetZone4	0x3010, 0x80, -4						; zone 0
+	ToneSetZone4	0x3010, 0x00, -4						; zone 1
+	ToneSetZone4	0x300f, 0x00, -4						; zone 2
+	ToneSetZone4	0x3011, 0x00, -2						; zone 3
+	ToneSetZone4	0x3013, 0x00, -1						; zone 4
+	ToneSetZone4	0x3012, 0x00, -1						; zone 5
+	ToneSetZone4	0x3014, 0x00, -3						; zone 6
+	ToneSetZone4	0x3016, 0x00, -1						; zone 7
+	ToneSetZone4	0x3015, 0x00, -1						; zone 8
+	ToneSetZone4	0x3017, 0x00, -1						; zone 9
+	ToneSetZone4	0x3040, 0x00, -6						; zone 10
+	ToneSetZone4	0x3041, 0x00, -6						; zone 11
+	ToneSetZone4	0x3048, 0xd0, -15						; zone 12
 ; SET 054 key map (descriptor 054: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..13 of 14.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec054_A:
+ToneSet_054_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -2334,24 +2338,24 @@ ToneEnv_Rec054_A:
 	.byte	 13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13		; +0x64 bands 96-107 -> zone
 ; SET 054 zone records: 14 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x3037;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec054_B:
-	ToneEnvZone4	0x302e, 0x80, -5						; zone 0
-	ToneEnvZone4	0x302e, 0x00, -5						; zone 1
-	ToneEnvZone4	0x302f, 0x00, -4						; zone 2
-	ToneEnvZone4	0x3030, 0x00, -8						; zone 3
-	ToneEnvZone4	0x3031, 0x00, -9						; zone 4
-	ToneEnvZone4	0x3032, 0x00, -8						; zone 5
-	ToneEnvZone4	0x3033, 0x00, -8						; zone 6
-	ToneEnvZone4	0x3034, 0x00, -9						; zone 7
-	ToneEnvZone4	0x3035, 0x00, -7						; zone 8
-	ToneEnvZone4	0x3036, 0x00, -7						; zone 9
-	ToneEnvZone4	0x3037, 0x00, -7						; zone 10
-	ToneEnvZone4	0x2095, 0x00, -11						; zone 11
-	ToneEnvZone4	0x106f, 0x00, -30						; zone 12
-	ToneEnvZone4	0x1070, 0x00, -30						; zone 13
+ToneSet_054_Zones:
+	ToneSetZone4	0x302e, 0x80, -5						; zone 0
+	ToneSetZone4	0x302e, 0x00, -5						; zone 1
+	ToneSetZone4	0x302f, 0x00, -4						; zone 2
+	ToneSetZone4	0x3030, 0x00, -8						; zone 3
+	ToneSetZone4	0x3031, 0x00, -9						; zone 4
+	ToneSetZone4	0x3032, 0x00, -8						; zone 5
+	ToneSetZone4	0x3033, 0x00, -8						; zone 6
+	ToneSetZone4	0x3034, 0x00, -9						; zone 7
+	ToneSetZone4	0x3035, 0x00, -7						; zone 8
+	ToneSetZone4	0x3036, 0x00, -7						; zone 9
+	ToneSetZone4	0x3037, 0x00, -7						; zone 10
+	ToneSetZone4	0x2095, 0x00, -11						; zone 11
+	ToneSetZone4	0x106f, 0x00, -30						; zone 12
+	ToneSetZone4	0x1070, 0x00, -30						; zone 13
 ; SET 061 key map (descriptor 061: flags 0x02, keys 12..111): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec061_A:
+ToneSet_061_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   2	; +0x14 bands 16-31 -> zone
@@ -2362,37 +2366,37 @@ ToneEnv_Rec061_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 061 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3049..0x3053;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec061_B:
-	ToneEnvZone4	0x3049, 0x00, 1							; zone 0
-	ToneEnvZone4	0x304a, 0x00, 1							; zone 1
-	ToneEnvZone4	0x304b, 0x00, 0							; zone 2
-	ToneEnvZone4	0x304c, 0x00, -1						; zone 3
-	ToneEnvZone4	0x304d, 0x00, -1						; zone 4
-	ToneEnvZone4	0x304e, 0x00, 1							; zone 5
-	ToneEnvZone4	0x304f, 0x00, 0							; zone 6
-	ToneEnvZone4	0x3050, 0x00, 0							; zone 7
-	ToneEnvZone4	0x3051, 0x00, 3							; zone 8
-	ToneEnvZone4	0x3052, 0x00, 3							; zone 9
-	ToneEnvZone4	0x3053, 0x00, 3							; zone 10
+ToneSet_061_Zones:
+	ToneSetZone4	0x3049, 0x00, 1							; zone 0
+	ToneSetZone4	0x304a, 0x00, 1							; zone 1
+	ToneSetZone4	0x304b, 0x00, 0							; zone 2
+	ToneSetZone4	0x304c, 0x00, -1						; zone 3
+	ToneSetZone4	0x304d, 0x00, -1						; zone 4
+	ToneSetZone4	0x304e, 0x00, 1							; zone 5
+	ToneSetZone4	0x304f, 0x00, 0							; zone 6
+	ToneSetZone4	0x3050, 0x00, 0							; zone 7
+	ToneSetZone4	0x3051, 0x00, 3							; zone 8
+	ToneSetZone4	0x3052, 0x00, 3							; zone 9
+	ToneSetZone4	0x3053, 0x00, 3							; zone 10
 ; SET 063 key map (descriptor 063: flags 0x02, keys 12..113): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec063_A:
+ToneSet_063_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   4,   5,   6,   6,   6	; +0x04 bands 0-15 -> zone
 	.byte	  6,   6,   6,   6,   6							; +0x14 bands 16-20 -> zone
 ; SET 063 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3042..0x3048;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec063_B:
-	ToneEnvZone4	0x3042, 0xb0, -1						; zone 0
-	ToneEnvZone4	0x3043, 0xe0, -4						; zone 1
-	ToneEnvZone4	0x3044, 0xa0, 0							; zone 2
-	ToneEnvZone4	0x3045, 0xe0, -1						; zone 3
-	ToneEnvZone4	0x3046, 0x90, -4						; zone 4
-	ToneEnvZone4	0x3047, 0xa0, -4						; zone 5
-	ToneEnvZone4	0x3048, 0xd0, -11						; zone 6
+ToneSet_063_Zones:
+	ToneSetZone4	0x3042, 0xb0, -1						; zone 0
+	ToneSetZone4	0x3043, 0xe0, -4						; zone 1
+	ToneSetZone4	0x3044, 0xa0, 0							; zone 2
+	ToneSetZone4	0x3045, 0xe0, -1						; zone 3
+	ToneSetZone4	0x3046, 0x90, -4						; zone 4
+	ToneSetZone4	0x3047, 0xa0, -4						; zone 5
+	ToneSetZone4	0x3048, 0xd0, -11						; zone 6
 ; SET 066 key map (descriptor 066: flags 0x02, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..14 of 15.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec066_A:
+ToneSet_066_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   3,   3	; +0x14 bands 16-31 -> zone
@@ -2403,44 +2407,44 @@ ToneEnv_Rec066_A:
 	.byte	 14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14		; +0x64 bands 96-107 -> zone
 ; SET 066 zone records: 15 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106a..0x305d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec066_B:
-	ToneEnvZone4	0x3054, 0x80, -2						; zone 0
-	ToneEnvZone4	0x3054, 0x00, -2						; zone 1
-	ToneEnvZone4	0x3055, 0x00, -2						; zone 2
-	ToneEnvZone4	0x3056, 0x00, 0							; zone 3
-	ToneEnvZone4	0x3057, 0x00, -4						; zone 4
-	ToneEnvZone4	0x3058, 0x00, -4						; zone 5
-	ToneEnvZone4	0x3059, 0x00, -6						; zone 6
-	ToneEnvZone4	0x305a, 0x00, -2						; zone 7
-	ToneEnvZone4	0x305b, 0x00, -2						; zone 8
-	ToneEnvZone4	0x305c, 0x00, -10						; zone 9
-	ToneEnvZone4	0x305d, 0x00, -10						; zone 10
-	ToneEnvZone4	0x106a, 0x00, -10						; zone 11
-	ToneEnvZone4	0x106d, 0x00, -23						; zone 12
-	ToneEnvZone4	0x106f, 0x00, -34						; zone 13
-	ToneEnvZone4	0x1070, 0x00, -34						; zone 14
+ToneSet_066_Zones:
+	ToneSetZone4	0x3054, 0x80, -2						; zone 0
+	ToneSetZone4	0x3054, 0x00, -2						; zone 1
+	ToneSetZone4	0x3055, 0x00, -2						; zone 2
+	ToneSetZone4	0x3056, 0x00, 0							; zone 3
+	ToneSetZone4	0x3057, 0x00, -4						; zone 4
+	ToneSetZone4	0x3058, 0x00, -4						; zone 5
+	ToneSetZone4	0x3059, 0x00, -6						; zone 6
+	ToneSetZone4	0x305a, 0x00, -2						; zone 7
+	ToneSetZone4	0x305b, 0x00, -2						; zone 8
+	ToneSetZone4	0x305c, 0x00, -10						; zone 9
+	ToneSetZone4	0x305d, 0x00, -10						; zone 10
+	ToneSetZone4	0x106a, 0x00, -10						; zone 11
+	ToneSetZone4	0x106d, 0x00, -23						; zone 12
+	ToneSetZone4	0x106f, 0x00, -34						; zone 13
+	ToneSetZone4	0x1070, 0x00, -34						; zone 14
 ; SET 073 key map (descriptor 073: flags 0x02, keys 12..113): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec073_A:
+ToneSet_073_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   4,   5,   6,   6,   7,   7	; +0x04 bands 0-15 -> zone
 	.byte	  8,   9,   9,   9,   9							; +0x14 bands 16-20 -> zone
 ; SET 073 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3048..0x3069;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec073_B:
-	ToneEnvZone4	0x3062, 0x80, -4						; zone 0
-	ToneEnvZone4	0x3062, 0x00, -4						; zone 1
-	ToneEnvZone4	0x3063, 0x00, -2						; zone 2
-	ToneEnvZone4	0x3064, 0x00, -9						; zone 3
-	ToneEnvZone4	0x3065, 0x00, -9						; zone 4
-	ToneEnvZone4	0x3066, 0x00, -10						; zone 5
-	ToneEnvZone4	0x3067, 0x00, -12						; zone 6
-	ToneEnvZone4	0x3068, 0x00, -12						; zone 7
-	ToneEnvZone4	0x3069, 0x00, -12						; zone 8
-	ToneEnvZone4	0x3048, 0xd0, -35						; zone 9
+ToneSet_073_Zones:
+	ToneSetZone4	0x3062, 0x80, -4						; zone 0
+	ToneSetZone4	0x3062, 0x00, -4						; zone 1
+	ToneSetZone4	0x3063, 0x00, -2						; zone 2
+	ToneSetZone4	0x3064, 0x00, -9						; zone 3
+	ToneSetZone4	0x3065, 0x00, -9						; zone 4
+	ToneSetZone4	0x3066, 0x00, -10						; zone 5
+	ToneSetZone4	0x3067, 0x00, -12						; zone 6
+	ToneSetZone4	0x3068, 0x00, -12						; zone 7
+	ToneSetZone4	0x3069, 0x00, -12						; zone 8
+	ToneSetZone4	0x3048, 0xd0, -35						; zone 9
 ; SET 074 key map (descriptor 074: flags 0x02, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec074_A:
+ToneSet_074_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -2451,23 +2455,23 @@ ToneEnv_Rec074_A:
 	.byte	 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12		; +0x64 bands 96-107 -> zone
 ; SET 074 zone records: 13 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106d..0x3085;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec074_B:
-	ToneEnvZone4	0x307d, 0x80, -2						; zone 0
-	ToneEnvZone4	0x307d, 0x00, -2						; zone 1
-	ToneEnvZone4	0x307e, 0x00, -4						; zone 2
-	ToneEnvZone4	0x307f, 0x00, -7						; zone 3
-	ToneEnvZone4	0x3080, 0x00, 2							; zone 4
-	ToneEnvZone4	0x3081, 0x00, -8						; zone 5
-	ToneEnvZone4	0x3082, 0x00, -5						; zone 6
-	ToneEnvZone4	0x3083, 0x00, -12						; zone 7
-	ToneEnvZone4	0x3084, 0x00, -12						; zone 8
-	ToneEnvZone4	0x3085, 0x00, -12						; zone 9
-	ToneEnvZone4	0x106d, 0x00, -27						; zone 10
-	ToneEnvZone4	0x106f, 0x00, -38						; zone 11
-	ToneEnvZone4	0x1070, 0x00, -38						; zone 12
+ToneSet_074_Zones:
+	ToneSetZone4	0x307d, 0x80, -2						; zone 0
+	ToneSetZone4	0x307d, 0x00, -2						; zone 1
+	ToneSetZone4	0x307e, 0x00, -4						; zone 2
+	ToneSetZone4	0x307f, 0x00, -7						; zone 3
+	ToneSetZone4	0x3080, 0x00, 2							; zone 4
+	ToneSetZone4	0x3081, 0x00, -8						; zone 5
+	ToneSetZone4	0x3082, 0x00, -5						; zone 6
+	ToneSetZone4	0x3083, 0x00, -12						; zone 7
+	ToneSetZone4	0x3084, 0x00, -12						; zone 8
+	ToneSetZone4	0x3085, 0x00, -12						; zone 9
+	ToneSetZone4	0x106d, 0x00, -27						; zone 10
+	ToneSetZone4	0x106f, 0x00, -38						; zone 11
+	ToneSetZone4	0x1070, 0x00, -38						; zone 12
 ; SET 076 key map (descriptor 076: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec076_A:
+ToneSet_076_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -2478,35 +2482,35 @@ ToneEnv_Rec076_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 076 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3092..0x30c5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec076_B:
-	ToneEnvZone4	0x3092, 0x80, -6						; zone 0
-	ToneEnvZone4	0x3092, 0x00, -6						; zone 1
-	ToneEnvZone4	0x3096, 0x00, -8						; zone 2
-	ToneEnvZone4	0x3099, 0x00, -5						; zone 3
-	ToneEnvZone4	0x309c, 0x00, -4						; zone 4
-	ToneEnvZone4	0x309e, 0x00, -4						; zone 5
-	ToneEnvZone4	0x30a1, 0x00, -1						; zone 6
-	ToneEnvZone4	0x30a3, 0x00, -9						; zone 7
-	ToneEnvZone4	0x30a4, 0x00, -9						; zone 8
-	ToneEnvZone4	0x30a5, 0x00, -9						; zone 9
-	ToneEnvZone4	0x30c5, 0x00, -8						; zone 10
+ToneSet_076_Zones:
+	ToneSetZone4	0x3092, 0x80, -6						; zone 0
+	ToneSetZone4	0x3092, 0x00, -6						; zone 1
+	ToneSetZone4	0x3096, 0x00, -8						; zone 2
+	ToneSetZone4	0x3099, 0x00, -5						; zone 3
+	ToneSetZone4	0x309c, 0x00, -4						; zone 4
+	ToneSetZone4	0x309e, 0x00, -4						; zone 5
+	ToneSetZone4	0x30a1, 0x00, -1						; zone 6
+	ToneSetZone4	0x30a3, 0x00, -9						; zone 7
+	ToneSetZone4	0x30a4, 0x00, -9						; zone 8
+	ToneSetZone4	0x30a5, 0x00, -9						; zone 9
+	ToneSetZone4	0x30c5, 0x00, -8						; zone 10
 ; SET 077 key map (descriptor 077: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec077_A:
+ToneSet_077_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   1,   2,   2,   3,   3,   3,   3,   3,   3	; +0x04 bands 0-15 -> zone
 	.byte	  3,   4,   4,   4,   4							; +0x14 bands 16-20 -> zone
 ; SET 077 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30c5..0x30c7;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec077_B:
-	ToneEnvZone4	0x30c6, 0xe0, -13						; zone 0
-	ToneEnvZone4	0x30c6, 0xe0, -9						; zone 1
-	ToneEnvZone4	0x30c6, 0xe0, -5						; zone 2
-	ToneEnvZone4	0x30c7, 0x80, -9						; zone 3
-	ToneEnvZone4	0x30c5, 0x00, -20						; zone 4
+ToneSet_077_Zones:
+	ToneSetZone4	0x30c6, 0xe0, -13						; zone 0
+	ToneSetZone4	0x30c6, 0xe0, -9						; zone 1
+	ToneSetZone4	0x30c6, 0xe0, -5						; zone 2
+	ToneSetZone4	0x30c7, 0x80, -9						; zone 3
+	ToneSetZone4	0x30c5, 0x00, -20						; zone 4
 ; SET 083 key map (descriptor 083: flags 0x00, keys 12..109): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec083_A:
+ToneSet_083_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   4,   4	; +0x14 bands 16-31 -> zone
@@ -2517,22 +2521,22 @@ ToneEnv_Rec083_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 083 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30e1..0x30eb;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec083_B:
-	ToneEnvZone4	0x30e2, 0x80, -12						; zone 0
-	ToneEnvZone4	0x30e2, 0x00, -12						; zone 1
-	ToneEnvZone4	0x30e1, 0x00, -12						; zone 2
-	ToneEnvZone4	0x30e3, 0x00, -12						; zone 3
-	ToneEnvZone4	0x30e4, 0x00, -13						; zone 4
-	ToneEnvZone4	0x30e5, 0x00, -8						; zone 5
-	ToneEnvZone4	0x30e6, 0x00, -9						; zone 6
-	ToneEnvZone4	0x30e7, 0x00, -12						; zone 7
-	ToneEnvZone4	0x30e8, 0x00, -6						; zone 8
-	ToneEnvZone4	0x30e9, 0x00, -10						; zone 9
-	ToneEnvZone4	0x30ea, 0x00, -5						; zone 10
-	ToneEnvZone4	0x30eb, 0x00, -5						; zone 11
+ToneSet_083_Zones:
+	ToneSetZone4	0x30e2, 0x80, -12						; zone 0
+	ToneSetZone4	0x30e2, 0x00, -12						; zone 1
+	ToneSetZone4	0x30e1, 0x00, -12						; zone 2
+	ToneSetZone4	0x30e3, 0x00, -12						; zone 3
+	ToneSetZone4	0x30e4, 0x00, -13						; zone 4
+	ToneSetZone4	0x30e5, 0x00, -8						; zone 5
+	ToneSetZone4	0x30e6, 0x00, -9						; zone 6
+	ToneSetZone4	0x30e7, 0x00, -12						; zone 7
+	ToneSetZone4	0x30e8, 0x00, -6						; zone 8
+	ToneSetZone4	0x30e9, 0x00, -10						; zone 9
+	ToneSetZone4	0x30ea, 0x00, -5						; zone 10
+	ToneSetZone4	0x30eb, 0x00, -5						; zone 11
 ; SET 086 key map (descriptor 086: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec086_A:
+ToneSet_086_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -2543,43 +2547,43 @@ ToneEnv_Rec086_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 086 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x3100;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec086_B:
-	ToneEnvZone4	0x30d3, 0x80, -1						; zone 0
-	ToneEnvZone4	0x30d3, 0x00, -1						; zone 1
-	ToneEnvZone4	0x30d5, 0x00, -4						; zone 2
-	ToneEnvZone4	0x30d4, 0x00, -4						; zone 3
-	ToneEnvZone4	0x30d6, 0x00, -5						; zone 4
-	ToneEnvZone4	0x30d7, 0x00, -8						; zone 5
-	ToneEnvZone4	0x30d8, 0x00, -8						; zone 6
-	ToneEnvZone4	0x3100, 0x00, -5						; zone 7
-	ToneEnvZone4	0x30f9, 0x00, -16						; zone 8
-	ToneEnvZone4	0x106f, 0x00, -32						; zone 9
-	ToneEnvZone4	0x1070, 0x00, -32						; zone 10
+ToneSet_086_Zones:
+	ToneSetZone4	0x30d3, 0x80, -1						; zone 0
+	ToneSetZone4	0x30d3, 0x00, -1						; zone 1
+	ToneSetZone4	0x30d5, 0x00, -4						; zone 2
+	ToneSetZone4	0x30d4, 0x00, -4						; zone 3
+	ToneSetZone4	0x30d6, 0x00, -5						; zone 4
+	ToneSetZone4	0x30d7, 0x00, -8						; zone 5
+	ToneSetZone4	0x30d8, 0x00, -8						; zone 6
+	ToneSetZone4	0x3100, 0x00, -5						; zone 7
+	ToneSetZone4	0x30f9, 0x00, -16						; zone 8
+	ToneSetZone4	0x106f, 0x00, -32						; zone 9
+	ToneSetZone4	0x1070, 0x00, -32						; zone 10
 ; SET 090 key map (descriptor 090: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec090_A:
+ToneSet_090_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2	; +0x04 bands 0-15 -> zone
 	.byte	  3,   3,   3,   4,   5,   5,   6,   6,   7,   7,   7,   8,   9,   9,  10,  10	; +0x14 bands 16-31 -> zone
 	.byte	 11,  11,  11								; +0x24 bands 32-34 -> zone
 ; SET 090 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x3111;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec090_B:
-	ToneEnvZone4	0x30db, 0x80, -6						; zone 0
-	ToneEnvZone4	0x30db, 0x00, -6						; zone 1
-	ToneEnvZone4	0x30da, 0x00, -6						; zone 2
-	ToneEnvZone4	0x30dc, 0x00, -4						; zone 3
-	ToneEnvZone4	0x30de, 0x00, -2						; zone 4
-	ToneEnvZone4	0x30dd, 0x00, -2						; zone 5
-	ToneEnvZone4	0x30df, 0x00, -13						; zone 6
-	ToneEnvZone4	0x30e0, 0x00, -13						; zone 7
-	ToneEnvZone4	0x3110, 0x00, -17						; zone 8
-	ToneEnvZone4	0x3111, 0x00, -17						; zone 9
-	ToneEnvZone4	0x106f, 0x00, -30						; zone 10
-	ToneEnvZone4	0x1070, 0x00, -30						; zone 11
+ToneSet_090_Zones:
+	ToneSetZone4	0x30db, 0x80, -6						; zone 0
+	ToneSetZone4	0x30db, 0x00, -6						; zone 1
+	ToneSetZone4	0x30da, 0x00, -6						; zone 2
+	ToneSetZone4	0x30dc, 0x00, -4						; zone 3
+	ToneSetZone4	0x30de, 0x00, -2						; zone 4
+	ToneSetZone4	0x30dd, 0x00, -2						; zone 5
+	ToneSetZone4	0x30df, 0x00, -13						; zone 6
+	ToneSetZone4	0x30e0, 0x00, -13						; zone 7
+	ToneSetZone4	0x3110, 0x00, -17						; zone 8
+	ToneSetZone4	0x3111, 0x00, -17						; zone 9
+	ToneSetZone4	0x106f, 0x00, -30						; zone 10
+	ToneSetZone4	0x1070, 0x00, -30						; zone 11
 ; SET 093 key map (descriptor 093: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec093_A:
+ToneSet_093_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -2590,21 +2594,21 @@ ToneEnv_Rec093_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 093 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x3100;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec093_B:
-	ToneEnvZone4	0x30fa, 0x80, -5						; zone 0
-	ToneEnvZone4	0x30fa, 0x00, -5						; zone 1
-	ToneEnvZone4	0x30fb, 0x00, -4						; zone 2
-	ToneEnvZone4	0x30fc, 0x00, -4						; zone 3
-	ToneEnvZone4	0x30fd, 0x00, -7						; zone 4
-	ToneEnvZone4	0x30fe, 0x00, -5						; zone 5
-	ToneEnvZone4	0x30ff, 0x00, -5						; zone 6
-	ToneEnvZone4	0x3100, 0x00, -5						; zone 7
-	ToneEnvZone4	0x30f9, 0x00, -16						; zone 8
-	ToneEnvZone4	0x106f, 0x00, -32						; zone 9
-	ToneEnvZone4	0x1070, 0x00, -32						; zone 10
+ToneSet_093_Zones:
+	ToneSetZone4	0x30fa, 0x80, -5						; zone 0
+	ToneSetZone4	0x30fa, 0x00, -5						; zone 1
+	ToneSetZone4	0x30fb, 0x00, -4						; zone 2
+	ToneSetZone4	0x30fc, 0x00, -4						; zone 3
+	ToneSetZone4	0x30fd, 0x00, -7						; zone 4
+	ToneSetZone4	0x30fe, 0x00, -5						; zone 5
+	ToneSetZone4	0x30ff, 0x00, -5						; zone 6
+	ToneSetZone4	0x3100, 0x00, -5						; zone 7
+	ToneSetZone4	0x30f9, 0x00, -16						; zone 8
+	ToneSetZone4	0x106f, 0x00, -32						; zone 9
+	ToneSetZone4	0x1070, 0x00, -32						; zone 10
 ; SET 094 key map (descriptor 094: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec094_A:
+ToneSet_094_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -2615,52 +2619,52 @@ ToneEnv_Rec094_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 094 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x30f9;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec094_B:
-	ToneEnvZone4	0x30f2, 0x80, -13						; zone 0
-	ToneEnvZone4	0x30f2, 0x00, -13						; zone 1
-	ToneEnvZone4	0x30f1, 0x00, -13						; zone 2
-	ToneEnvZone4	0x30f3, 0x00, -9						; zone 3
-	ToneEnvZone4	0x30f4, 0x00, -6						; zone 4
-	ToneEnvZone4	0x30f5, 0x00, -6						; zone 5
-	ToneEnvZone4	0x30f6, 0x00, -3						; zone 6
-	ToneEnvZone4	0x30f7, 0x00, -8						; zone 7
-	ToneEnvZone4	0x30f8, 0x00, -8						; zone 8
-	ToneEnvZone4	0x30f9, 0x00, -8						; zone 9
-	ToneEnvZone4	0x106f, 0x00, -26						; zone 10
-	ToneEnvZone4	0x1070, 0x00, -26						; zone 11
+ToneSet_094_Zones:
+	ToneSetZone4	0x30f2, 0x80, -13						; zone 0
+	ToneSetZone4	0x30f2, 0x00, -13						; zone 1
+	ToneSetZone4	0x30f1, 0x00, -13						; zone 2
+	ToneSetZone4	0x30f3, 0x00, -9						; zone 3
+	ToneSetZone4	0x30f4, 0x00, -6						; zone 4
+	ToneSetZone4	0x30f5, 0x00, -6						; zone 5
+	ToneSetZone4	0x30f6, 0x00, -3						; zone 6
+	ToneSetZone4	0x30f7, 0x00, -8						; zone 7
+	ToneSetZone4	0x30f8, 0x00, -8						; zone 8
+	ToneSetZone4	0x30f9, 0x00, -8						; zone 9
+	ToneSetZone4	0x106f, 0x00, -26						; zone 10
+	ToneSetZone4	0x1070, 0x00, -26						; zone 11
 ; SET 096 key map (descriptor 096: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec096_A:
+ToneSet_096_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   3,   4,   4,   5,   5	; +0x04 bands 0-15 -> zone
 	.byte	  6,   7,   8,   8,   8							; +0x14 bands 16-20 -> zone
 ; SET 096 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106a..0x3108;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec096_B:
-	ToneEnvZone4	0x3104, 0x80, -1						; zone 0
-	ToneEnvZone4	0x3104, 0x00, -1						; zone 1
-	ToneEnvZone4	0x3105, 0x00, -22						; zone 2
-	ToneEnvZone4	0x3106, 0x00, -11						; zone 3
-	ToneEnvZone4	0x3108, 0x00, -13						; zone 4
-	ToneEnvZone4	0x106a, 0x00, -14						; zone 5
-	ToneEnvZone4	0x106d, 0x00, -27						; zone 6
-	ToneEnvZone4	0x106f, 0x00, -38						; zone 7
-	ToneEnvZone4	0x1070, 0x00, -38						; zone 8
+ToneSet_096_Zones:
+	ToneSetZone4	0x3104, 0x80, -1						; zone 0
+	ToneSetZone4	0x3104, 0x00, -1						; zone 1
+	ToneSetZone4	0x3105, 0x00, -22						; zone 2
+	ToneSetZone4	0x3106, 0x00, -11						; zone 3
+	ToneSetZone4	0x3108, 0x00, -13						; zone 4
+	ToneSetZone4	0x106a, 0x00, -14						; zone 5
+	ToneSetZone4	0x106d, 0x00, -27						; zone 6
+	ToneSetZone4	0x106f, 0x00, -38						; zone 7
+	ToneSetZone4	0x1070, 0x00, -38						; zone 8
 ; SET 099 key map (descriptor 099: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec099_A:
+ToneSet_099_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   1,   2,   3,   3,   3			; +0x04 bands 0-10 -> zone
 ; SET 099 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3101..0x3103;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec099_B:
-	ToneEnvZone4	0x3101, 0x80, -8						; zone 0
-	ToneEnvZone4	0x3101, 0x00, -8						; zone 1
-	ToneEnvZone4	0x3102, 0x00, -8						; zone 2
-	ToneEnvZone4	0x3103, 0x00, -8						; zone 3
+ToneSet_099_Zones:
+	ToneSetZone4	0x3101, 0x80, -8						; zone 0
+	ToneSetZone4	0x3101, 0x00, -8						; zone 1
+	ToneSetZone4	0x3102, 0x00, -8						; zone 2
+	ToneSetZone4	0x3103, 0x00, -8						; zone 3
 ; SET 102 key map (descriptor 102: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec102_A:
+ToneSet_102_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
@@ -2671,39 +2675,39 @@ ToneEnv_Rec102_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 102 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40b6..0x40be;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec102_B:
-	ToneEnvZone4	0x40b6, 0x80, -2						; zone 0
-	ToneEnvZone4	0x40b6, 0x00, -2						; zone 1
-	ToneEnvZone4	0x40b7, 0x00, -2						; zone 2
-	ToneEnvZone4	0x40b8, 0x00, -8						; zone 3
-	ToneEnvZone4	0x40b9, 0x00, -9						; zone 4
-	ToneEnvZone4	0x40ba, 0x00, -9						; zone 5
-	ToneEnvZone4	0x40bb, 0x00, -9						; zone 6
-	ToneEnvZone4	0x40bc, 0x00, -9						; zone 7
-	ToneEnvZone4	0x40bd, 0x00, -9						; zone 8
-	ToneEnvZone4	0x40be, 0x00, -9						; zone 9
+ToneSet_102_Zones:
+	ToneSetZone4	0x40b6, 0x80, -2						; zone 0
+	ToneSetZone4	0x40b6, 0x00, -2						; zone 1
+	ToneSetZone4	0x40b7, 0x00, -2						; zone 2
+	ToneSetZone4	0x40b8, 0x00, -8						; zone 3
+	ToneSetZone4	0x40b9, 0x00, -9						; zone 4
+	ToneSetZone4	0x40ba, 0x00, -9						; zone 5
+	ToneSetZone4	0x40bb, 0x00, -9						; zone 6
+	ToneSetZone4	0x40bc, 0x00, -9						; zone 7
+	ToneSetZone4	0x40bd, 0x00, -9						; zone 8
+	ToneSetZone4	0x40be, 0x00, -9						; zone 9
 ; SET 110 key map (descriptor 110: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec110_A:
+ToneSet_110_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3	; +0x04 bands 0-15 -> zone
 	.byte	  4,   4,   4,   4,   5,   5,   5,   5,   6,   7,   7,   7,   8,   8,   8,   8	; +0x14 bands 16-31 -> zone
 	.byte	  8,   8,   8								; +0x24 bands 32-34 -> zone
 ; SET 110 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x31a6..0x5098;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec110_B:
-	ToneEnvZone4	0x31a7, 0x80, -9						; zone 0
-	ToneEnvZone4	0x31a7, 0x00, -9						; zone 1
-	ToneEnvZone4	0x31a6, 0x00, -9						; zone 2
-	ToneEnvZone4	0x31a8, 0x00, -9						; zone 3
-	ToneEnvZone4	0x31a9, 0x00, -9						; zone 4
-	ToneEnvZone4	0x31aa, 0x00, -9						; zone 5
-	ToneEnvZone4	0x31ab, 0x00, -9						; zone 6
-	ToneEnvZone4	0x5097, 0x00, -6						; zone 7
-	ToneEnvZone4	0x5098, 0x00, -6						; zone 8
+ToneSet_110_Zones:
+	ToneSetZone4	0x31a7, 0x80, -9						; zone 0
+	ToneSetZone4	0x31a7, 0x00, -9						; zone 1
+	ToneSetZone4	0x31a6, 0x00, -9						; zone 2
+	ToneSetZone4	0x31a8, 0x00, -9						; zone 3
+	ToneSetZone4	0x31a9, 0x00, -9						; zone 4
+	ToneSetZone4	0x31aa, 0x00, -9						; zone 5
+	ToneSetZone4	0x31ab, 0x00, -9						; zone 6
+	ToneSetZone4	0x5097, 0x00, -6						; zone 7
+	ToneSetZone4	0x5098, 0x00, -6						; zone 8
 ; SET 115 key map (descriptor 115: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec115_A:
+ToneSet_115_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -2714,38 +2718,38 @@ ToneEnv_Rec115_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 115 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x319f..0x31b1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec115_B:
-	ToneEnvZone4	0x31a0, 0x80, -5						; zone 0
-	ToneEnvZone4	0x31a0, 0x00, -5						; zone 1
-	ToneEnvZone4	0x319f, 0x00, -5						; zone 2
-	ToneEnvZone4	0x31a1, 0x00, -12						; zone 3
-	ToneEnvZone4	0x31a2, 0x00, -12						; zone 4
-	ToneEnvZone4	0x31a3, 0x00, -12						; zone 5
-	ToneEnvZone4	0x31a4, 0x00, -12						; zone 6
-	ToneEnvZone4	0x31a5, 0x00, -12						; zone 7
-	ToneEnvZone4	0x31b1, 0x80, -9						; zone 8
+ToneSet_115_Zones:
+	ToneSetZone4	0x31a0, 0x80, -5						; zone 0
+	ToneSetZone4	0x31a0, 0x00, -5						; zone 1
+	ToneSetZone4	0x319f, 0x00, -5						; zone 2
+	ToneSetZone4	0x31a1, 0x00, -12						; zone 3
+	ToneSetZone4	0x31a2, 0x00, -12						; zone 4
+	ToneSetZone4	0x31a3, 0x00, -12						; zone 5
+	ToneSetZone4	0x31a4, 0x00, -12						; zone 6
+	ToneSetZone4	0x31a5, 0x00, -12						; zone 7
+	ToneSetZone4	0x31b1, 0x80, -9						; zone 8
 ; SET 119 key map (descriptor 119: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec119_A:
+ToneSet_119_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   2,   3,   3,   3,   4,   4,   4,   4	; +0x04 bands 0-15 -> zone
 	.byte	  5,   5,   5,   5,   6,   6,   6,   6,   7,   7,   7,   7,   8,   8,   8,   8	; +0x14 bands 16-31 -> zone
 	.byte	  8,   8,   8								; +0x24 bands 32-34 -> zone
 ; SET 119 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1099..0x10a0;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec119_B:
-	ToneEnvZone4	0x1099, 0x80, -7						; zone 0
-	ToneEnvZone4	0x1099, 0x00, -7						; zone 1
-	ToneEnvZone4	0x109a, 0x00, -7						; zone 2
-	ToneEnvZone4	0x109b, 0x00, -2						; zone 3
-	ToneEnvZone4	0x109c, 0x00, -2						; zone 4
-	ToneEnvZone4	0x109d, 0x00, -2						; zone 5
-	ToneEnvZone4	0x109e, 0x00, -2						; zone 6
-	ToneEnvZone4	0x109f, 0x00, -2						; zone 7
-	ToneEnvZone4	0x10a0, 0x00, -2						; zone 8
+ToneSet_119_Zones:
+	ToneSetZone4	0x1099, 0x80, -7						; zone 0
+	ToneSetZone4	0x1099, 0x00, -7						; zone 1
+	ToneSetZone4	0x109a, 0x00, -7						; zone 2
+	ToneSetZone4	0x109b, 0x00, -2						; zone 3
+	ToneSetZone4	0x109c, 0x00, -2						; zone 4
+	ToneSetZone4	0x109d, 0x00, -2						; zone 5
+	ToneSetZone4	0x109e, 0x00, -2						; zone 6
+	ToneSetZone4	0x109f, 0x00, -2						; zone 7
+	ToneSetZone4	0x10a0, 0x00, -2						; zone 8
 ; SET 124 key map (descriptor 124: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec124_A:
+ToneSet_124_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2756,28 +2760,28 @@ ToneEnv_Rec124_A:
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1		; +0x64 bands 96-107 -> zone
 ; SET 124 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x10ad..0x10af;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec124_B:
-	ToneEnvZone4	0x10af, 0xe0, -5						; zone 0
-	ToneEnvZone4	0x10ad, 0x80, -12						; zone 1
+ToneSet_124_Zones:
+	ToneSetZone4	0x10af, 0xe0, -5						; zone 0
+	ToneSetZone4	0x10ad, 0x80, -12						; zone 1
 ; SET 134 key map (descriptor 134: flags 0x00, keys 12..112): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec134_A:
+ToneSet_134_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   1,   2,   3,   4,   5,   6,   7,   7,   7			; +0x04 bands 0-10 -> zone
 ; SET 134 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5099..0x509f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec134_B:
-	ToneEnvZone4	0x509a, 0x80, -6						; zone 0
-	ToneEnvZone4	0x509a, 0x00, -6						; zone 1
-	ToneEnvZone4	0x5099, 0x00, -6						; zone 2
-	ToneEnvZone4	0x509b, 0x00, -6						; zone 3
-	ToneEnvZone4	0x509c, 0x00, -6						; zone 4
-	ToneEnvZone4	0x509d, 0x00, -6						; zone 5
-	ToneEnvZone4	0x509e, 0x00, -6						; zone 6
-	ToneEnvZone4	0x509f, 0x00, -6						; zone 7
+ToneSet_134_Zones:
+	ToneSetZone4	0x509a, 0x80, -6						; zone 0
+	ToneSetZone4	0x509a, 0x00, -6						; zone 1
+	ToneSetZone4	0x5099, 0x00, -6						; zone 2
+	ToneSetZone4	0x509b, 0x00, -6						; zone 3
+	ToneSetZone4	0x509c, 0x00, -6						; zone 4
+	ToneSetZone4	0x509d, 0x00, -6						; zone 5
+	ToneSetZone4	0x509e, 0x00, -6						; zone 6
+	ToneSetZone4	0x509f, 0x00, -6						; zone 7
 ; SET 139 key map (descriptor 139: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec139_A:
+ToneSet_139_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2788,16 +2792,16 @@ ToneEnv_Rec139_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 139 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1011..0x1016;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec139_B:
-	ToneEnvZone4	0x1011, 0xf0, -8						; zone 0
-	ToneEnvZone4	0x1012, 0x90, -4						; zone 1
-	ToneEnvZone4	0x1013, 0xc0, -4						; zone 2
-	ToneEnvZone4	0x1014, 0x80, -8						; zone 3
-	ToneEnvZone4	0x1015, 0xc0, -10						; zone 4
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 5
+ToneSet_139_Zones:
+	ToneSetZone4	0x1011, 0xf0, -8						; zone 0
+	ToneSetZone4	0x1012, 0x90, -4						; zone 1
+	ToneSetZone4	0x1013, 0xc0, -4						; zone 2
+	ToneSetZone4	0x1014, 0x80, -8						; zone 3
+	ToneSetZone4	0x1015, 0xc0, -10						; zone 4
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 5
 ; SET 143 key map (descriptor 143: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec143_A:
+ToneSet_143_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2808,16 +2812,16 @@ ToneEnv_Rec143_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 143 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x1026;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec143_B:
-	ToneEnvZone4	0x1020, 0xb0, -16						; zone 0
-	ToneEnvZone4	0x1021, 0xd0, -10						; zone 1
-	ToneEnvZone4	0x1022, 0xa0, -6						; zone 2
-	ToneEnvZone4	0x1023, 0xc0, -8						; zone 3
-	ToneEnvZone4	0x1026, 0xc0, -7						; zone 4
-	ToneEnvZone4	0x1016, 0xc0, -14						; zone 5
+ToneSet_143_Zones:
+	ToneSetZone4	0x1020, 0xb0, -16						; zone 0
+	ToneSetZone4	0x1021, 0xd0, -10						; zone 1
+	ToneSetZone4	0x1022, 0xa0, -6						; zone 2
+	ToneSetZone4	0x1023, 0xc0, -8						; zone 3
+	ToneSetZone4	0x1026, 0xc0, -7						; zone 4
+	ToneSetZone4	0x1016, 0xc0, -14						; zone 5
 ; SET 145 key map (descriptor 145: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec145_A:
+ToneSet_145_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2828,16 +2832,16 @@ ToneEnv_Rec145_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 145 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x102b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec145_B:
-	ToneEnvZone4	0x1027, 0xf0, -3						; zone 0
-	ToneEnvZone4	0x1028, 0x80, -7						; zone 1
-	ToneEnvZone4	0x1029, 0xd0, -10						; zone 2
-	ToneEnvZone4	0x102a, 0x90, -1						; zone 3
-	ToneEnvZone4	0x102b, 0xc0, -5						; zone 4
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 5
+ToneSet_145_Zones:
+	ToneSetZone4	0x1027, 0xf0, -3						; zone 0
+	ToneSetZone4	0x1028, 0x80, -7						; zone 1
+	ToneSetZone4	0x1029, 0xd0, -10						; zone 2
+	ToneSetZone4	0x102a, 0x90, -1						; zone 3
+	ToneSetZone4	0x102b, 0xc0, -5						; zone 4
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 5
 ; SET 147 key map (descriptor 147: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec147_A:
+ToneSet_147_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2	; +0x14 bands 16-31 -> zone
@@ -2848,35 +2852,35 @@ ToneEnv_Rec147_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 147 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x1033;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec147_B:
-	ToneEnvZone4	0x102c, 0xe0, -3						; zone 0
-	ToneEnvZone4	0x102d, 0x80, -5						; zone 1
-	ToneEnvZone4	0x102e, 0xb0, -4						; zone 2
-	ToneEnvZone4	0x102f, 0xf0, -6						; zone 3
-	ToneEnvZone4	0x1030, 0xb0, -5						; zone 4
-	ToneEnvZone4	0x1031, 0xe0, -5						; zone 5
-	ToneEnvZone4	0x1032, 0x00, -5						; zone 6
-	ToneEnvZone4	0x1033, 0x00, -5						; zone 7
-	ToneEnvZone4	0x101f, 0xe0, -7						; zone 8
-	ToneEnvZone4	0x1016, 0xc0, -14						; zone 9
+ToneSet_147_Zones:
+	ToneSetZone4	0x102c, 0xe0, -3						; zone 0
+	ToneSetZone4	0x102d, 0x80, -5						; zone 1
+	ToneSetZone4	0x102e, 0xb0, -4						; zone 2
+	ToneSetZone4	0x102f, 0xf0, -6						; zone 3
+	ToneSetZone4	0x1030, 0xb0, -5						; zone 4
+	ToneSetZone4	0x1031, 0xe0, -5						; zone 5
+	ToneSetZone4	0x1032, 0x00, -5						; zone 6
+	ToneSetZone4	0x1033, 0x00, -5						; zone 7
+	ToneSetZone4	0x101f, 0xe0, -7						; zone 8
+	ToneSetZone4	0x1016, 0xc0, -14						; zone 9
 ; SET 150 key map (descriptor 150: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec150_A:
+ToneSet_150_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   5,   5,   5	; +0x04 bands 0-15 -> zone
 	.byte	  5,   5,   5,   5,   5							; +0x14 bands 16-20 -> zone
 ; SET 150 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1034..0x1039;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec150_B:
-	ToneEnvZone4	0x1034, 0xd0, -5						; zone 0
-	ToneEnvZone4	0x1035, 0x90, -7						; zone 1
-	ToneEnvZone4	0x1036, 0xd0, -7						; zone 2
-	ToneEnvZone4	0x1037, 0x90, -2						; zone 3
-	ToneEnvZone4	0x1038, 0xd0, -6						; zone 4
-	ToneEnvZone4	0x1039, 0x90, -5						; zone 5
+ToneSet_150_Zones:
+	ToneSetZone4	0x1034, 0xd0, -5						; zone 0
+	ToneSetZone4	0x1035, 0x90, -7						; zone 1
+	ToneSetZone4	0x1036, 0xd0, -7						; zone 2
+	ToneSetZone4	0x1037, 0x90, -2						; zone 3
+	ToneSetZone4	0x1038, 0xd0, -6						; zone 4
+	ToneSetZone4	0x1039, 0x90, -5						; zone 5
 ; SET 152 key map (descriptor 152: flags 0x00, keys 12..113): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec152_A:
+ToneSet_152_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2887,15 +2891,15 @@ ToneEnv_Rec152_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 152 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1040..0x1044;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec152_B:
-	ToneEnvZone4	0x1040, 0xa0, -2						; zone 0
-	ToneEnvZone4	0x1041, 0xc0, -3						; zone 1
-	ToneEnvZone4	0x1042, 0xe0, -7						; zone 2
-	ToneEnvZone4	0x1043, 0xa0, -8						; zone 3
-	ToneEnvZone4	0x1044, 0xd0, -4						; zone 4
+ToneSet_152_Zones:
+	ToneSetZone4	0x1040, 0xa0, -2						; zone 0
+	ToneSetZone4	0x1041, 0xc0, -3						; zone 1
+	ToneSetZone4	0x1042, 0xe0, -7						; zone 2
+	ToneSetZone4	0x1043, 0xa0, -8						; zone 3
+	ToneSetZone4	0x1044, 0xd0, -4						; zone 4
 ; SET 155 key map (descriptor 155: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec155_A:
+ToneSet_155_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -2906,35 +2910,35 @@ ToneEnv_Rec155_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 155 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1014..0x104e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec155_B:
-	ToneEnvZone4	0x104a, 0xe0, -6						; zone 0
-	ToneEnvZone4	0x104b, 0xa0, -5						; zone 1
-	ToneEnvZone4	0x104c, 0xc0, -2						; zone 2
-	ToneEnvZone4	0x104d, 0xe0, -5						; zone 3
-	ToneEnvZone4	0x104e, 0x80, -4						; zone 4
-	ToneEnvZone4	0x1014, 0x80, -8						; zone 5
-	ToneEnvZone4	0x1015, 0xc0, -10						; zone 6
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 7
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 8
+ToneSet_155_Zones:
+	ToneSetZone4	0x104a, 0xe0, -6						; zone 0
+	ToneSetZone4	0x104b, 0xa0, -5						; zone 1
+	ToneSetZone4	0x104c, 0xc0, -2						; zone 2
+	ToneSetZone4	0x104d, 0xe0, -5						; zone 3
+	ToneSetZone4	0x104e, 0x80, -4						; zone 4
+	ToneSetZone4	0x1014, 0x80, -8						; zone 5
+	ToneSetZone4	0x1015, 0xc0, -10						; zone 6
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 7
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 8
 ; SET 157 key map (descriptor 157: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec157_A:
+ToneSet_157_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   6,   6	; +0x04 bands 0-15 -> zone
 	.byte	  6,   6,   6,   6,   6							; +0x14 bands 16-20 -> zone
 ; SET 157 zone records: 7 x 6 bytes (descriptor flags bit 7 set), selectors 0x1006..0x100c;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec157_B:
-	ToneEnvZone6	0x1006, 0xe0, -8, -2776						; zone 0, coarse -10.84 st
-	ToneEnvZone6	0x1007, 0xa0, -2, -1513						; zone 1, coarse -5.91 st
-	ToneEnvZone6	0x1008, 0xd0, -2, -2512						; zone 2, coarse -9.81 st
-	ToneEnvZone6	0x1009, 0x90, -3, -1012						; zone 3, coarse -3.95 st
-	ToneEnvZone6	0x100a, 0xd0, 1, -2799						; zone 4, coarse -10.93 st
-	ToneEnvZone6	0x100b, 0x90, -1, -1012						; zone 5, coarse -3.95 st
-	ToneEnvZone6	0x100c, 0xd0, -6, 0						; zone 6, coarse +0.00 st
+ToneSet_157_Zones:
+	ToneSetZone6	0x1006, 0xe0, -8, -2776						; zone 0, coarse -10.84 st
+	ToneSetZone6	0x1007, 0xa0, -2, -1513						; zone 1, coarse -5.91 st
+	ToneSetZone6	0x1008, 0xd0, -2, -2512						; zone 2, coarse -9.81 st
+	ToneSetZone6	0x1009, 0x90, -3, -1012						; zone 3, coarse -3.95 st
+	ToneSetZone6	0x100a, 0xd0, 1, -2799						; zone 4, coarse -10.93 st
+	ToneSetZone6	0x100b, 0x90, -1, -1012						; zone 5, coarse -3.95 st
+	ToneSetZone6	0x100c, 0xd0, -6, 0						; zone 6, coarse +0.00 st
 ; SET 159 key map (descriptor 159: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec159_A:
+ToneSet_159_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1	; +0x14 bands 16-31 -> zone
@@ -2945,30 +2949,30 @@ ToneEnv_Rec159_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 159 zone records: 7 x 6 bytes (descriptor flags bit 7 set), selectors 0x1000..0x100c;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec159_B:
-	ToneEnvZone6	0x1000, 0xf0, 4, -215						; zone 0, coarse -0.84 st
-	ToneEnvZone6	0x1001, 0xa0, -1, -1450						; zone 1, coarse -5.66 st
-	ToneEnvZone6	0x1002, 0xe0, 1, -2830						; zone 2, coarse -11.05 st
-	ToneEnvZone6	0x1003, 0x90, 16, -989						; zone 3, coarse -3.86 st
-	ToneEnvZone6	0x1004, 0xc0, 6, -2315						; zone 4, coarse -9.04 st
-	ToneEnvZone6	0x1005, 0x80, 4, -1520						; zone 5, coarse -5.94 st
-	ToneEnvZone6	0x100c, 0xd0, -2, 0						; zone 6, coarse +0.00 st
+ToneSet_159_Zones:
+	ToneSetZone6	0x1000, 0xf0, 4, -215						; zone 0, coarse -0.84 st
+	ToneSetZone6	0x1001, 0xa0, -1, -1450						; zone 1, coarse -5.66 st
+	ToneSetZone6	0x1002, 0xe0, 1, -2830						; zone 2, coarse -11.05 st
+	ToneSetZone6	0x1003, 0x90, 16, -989						; zone 3, coarse -3.86 st
+	ToneSetZone6	0x1004, 0xc0, 6, -2315						; zone 4, coarse -9.04 st
+	ToneSetZone6	0x1005, 0x80, 4, -1520						; zone 5, coarse -5.94 st
+	ToneSetZone6	0x100c, 0xd0, -2, 0						; zone 6, coarse +0.00 st
 ; SET 161 key map (descriptor 161: flags 0x80, keys 12..84): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..2 of 3.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec161_A:
+ToneSet_161_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
 	.byte	  2,   2,   2								; +0x24 bands 32-34 -> zone
 ; SET 161 zone records: 3 x 6 bytes (descriptor flags bit 7 set), selectors 0x105d..0x105f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec161_B:
-	ToneEnvZone6	0x105d, 0xe0, 5, 4804						; zone 0, coarse +18.77 st
-	ToneEnvZone6	0x105e, 0xb0, 6, 3012						; zone 1, coarse +11.77 st
-	ToneEnvZone6	0x105f, 0xe0, 5, 1696						; zone 2, coarse +6.62 st
+ToneSet_161_Zones:
+	ToneSetZone6	0x105d, 0xe0, 5, 4804						; zone 0, coarse +18.77 st
+	ToneSetZone6	0x105e, 0xb0, 6, 3012						; zone 1, coarse +11.77 st
+	ToneSetZone6	0x105f, 0xe0, 5, 1696						; zone 2, coarse +6.62 st
 ; SET 166 key map (descriptor 166: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec166_A:
+ToneSet_166_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -2979,16 +2983,16 @@ ToneEnv_Rec166_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 166 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x1005..0x1010;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec166_B:
-	ToneEnvZone6	0x100d, 0xe0, 10, -932						; zone 0, coarse -3.64 st
-	ToneEnvZone6	0x100e, 0xa0, 11, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x100f, 0xe0, 11, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x1010, 0xe0, 6, -2877						; zone 3, coarse -11.24 st
-	ToneEnvZone6	0x1005, 0x80, 0, -1520						; zone 4, coarse -5.94 st
-	ToneEnvZone6	0x100c, 0xd0, -6, 0						; zone 5, coarse +0.00 st
+ToneSet_166_Zones:
+	ToneSetZone6	0x100d, 0xe0, 10, -932						; zone 0, coarse -3.64 st
+	ToneSetZone6	0x100e, 0xa0, 11, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x100f, 0xe0, 11, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x1010, 0xe0, 6, -2877						; zone 3, coarse -11.24 st
+	ToneSetZone6	0x1005, 0x80, 0, -1520						; zone 4, coarse -5.94 st
+	ToneSetZone6	0x100c, 0xd0, -6, 0						; zone 5, coarse +0.00 st
 ; SET 176 key map (descriptor 176: flags 0x80, keys 14..111): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..2 of 3.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec176_A:
+ToneSet_176_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -2999,13 +3003,13 @@ ToneEnv_Rec176_A:
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2		; +0x64 bands 96-107 -> zone
 ; SET 176 zone records: 3 x 6 bytes (descriptor flags bit 7 set), selectors 0x5000..0x5002;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec176_B:
-	ToneEnvZone6	0x5000, 0x80, -8, -2264						; zone 0, coarse -8.84 st
-	ToneEnvZone6	0x5001, 0xd0, -6, -2264						; zone 1, coarse -8.84 st
-	ToneEnvZone6	0x5002, 0x90, -11, -1587					; zone 2, coarse -6.20 st
+ToneSet_176_Zones:
+	ToneSetZone6	0x5000, 0x80, -8, -2264						; zone 0, coarse -8.84 st
+	ToneSetZone6	0x5001, 0xd0, -6, -2264						; zone 1, coarse -8.84 st
+	ToneSetZone6	0x5002, 0x90, -11, -1587					; zone 2, coarse -6.20 st
 ; SET 180 key map (descriptor 180: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec180_A:
+ToneSet_180_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3016,47 +3020,47 @@ ToneEnv_Rec180_A:
 	.byte	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3		; +0x64 bands 96-107 -> zone
 ; SET 180 zone records: 4 x 6 bytes (descriptor flags bit 7 set), selectors 0x5003..0x5006;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec180_B:
-	ToneEnvZone6	0x5003, 0x00, -14, -2027					; zone 0, coarse -7.92 st
-	ToneEnvZone6	0x5004, 0x00, -10, -1881					; zone 1, coarse -7.35 st
-	ToneEnvZone6	0x5005, 0x00, -8, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x5006, 0x00, -8, -1669						; zone 3, coarse -6.52 st
+ToneSet_180_Zones:
+	ToneSetZone6	0x5003, 0x00, -14, -2027					; zone 0, coarse -7.92 st
+	ToneSetZone6	0x5004, 0x00, -10, -1881					; zone 1, coarse -7.35 st
+	ToneSetZone6	0x5005, 0x00, -8, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x5006, 0x00, -8, -1669						; zone 3, coarse -6.52 st
 ; SET 183 key map (descriptor 183: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec183_A:
+ToneSet_183_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   1,   2,   3,   3,   4,   4,   4,   4,   6,   6,   6,   6,   6,   6	; +0x14 bands 16-31 -> zone
 	.byte	  6,   6,   6								; +0x24 bands 32-34 -> zone
 ; SET 183 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1015..0x3182;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec183_B:
-	ToneEnvZone4	0x317e, 0x90, -3						; zone 0
-	ToneEnvZone4	0x317f, 0xc0, -7						; zone 1
-	ToneEnvZone4	0x3180, 0xe0, -1						; zone 2
-	ToneEnvZone4	0x3181, 0x90, -4						; zone 3
-	ToneEnvZone4	0x3182, 0xb0, -9						; zone 4
-	ToneEnvZone4	0x1015, 0xc0, -10						; zone 5
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 6
+ToneSet_183_Zones:
+	ToneSetZone4	0x317e, 0x90, -3						; zone 0
+	ToneSetZone4	0x317f, 0xc0, -7						; zone 1
+	ToneSetZone4	0x3180, 0xe0, -1						; zone 2
+	ToneSetZone4	0x3181, 0x90, -4						; zone 3
+	ToneSetZone4	0x3182, 0xb0, -9						; zone 4
+	ToneSetZone4	0x1015, 0xc0, -10						; zone 5
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 6
 ; SET 184 key map (descriptor 184: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec184_A:
+ToneSet_184_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   2,   2,   3,   3,   3,   3,   3,   4,   5,   5,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  5,   5,   5								; +0x24 bands 32-34 -> zone
 ; SET 184 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1015..0x3186;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec184_B:
-	ToneEnvZone4	0x3183, 0xe0, -18						; zone 0
-	ToneEnvZone4	0x3184, 0x90, -4						; zone 1
-	ToneEnvZone4	0x3185, 0xe0, -4						; zone 2
-	ToneEnvZone4	0x3186, 0x80, -2						; zone 3
-	ToneEnvZone4	0x1015, 0xc0, -10						; zone 4
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 5
+ToneSet_184_Zones:
+	ToneSetZone4	0x3183, 0xe0, -18						; zone 0
+	ToneSetZone4	0x3184, 0x90, -4						; zone 1
+	ToneSetZone4	0x3185, 0xe0, -4						; zone 2
+	ToneSetZone4	0x3186, 0x80, -2						; zone 3
+	ToneSetZone4	0x1015, 0xc0, -10						; zone 4
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 5
 ; SET 186 key map (descriptor 186: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec186_A:
+ToneSet_186_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3067,55 +3071,55 @@ ToneEnv_Rec186_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 186 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3167..0x3194;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec186_B:
-	ToneEnvZone4	0x3167, 0xc0, -8						; zone 0
-	ToneEnvZone4	0x3168, 0xe0, -9						; zone 1
-	ToneEnvZone4	0x3169, 0xa0, -10						; zone 2
-	ToneEnvZone4	0x316a, 0xc0, -6						; zone 3
-	ToneEnvZone4	0x316b, 0x80, -3						; zone 4
-	ToneEnvZone4	0x3178, 0xd0, -3						; zone 5
-	ToneEnvZone4	0x3194, 0xc0, -15						; zone 6
+ToneSet_186_Zones:
+	ToneSetZone4	0x3167, 0xc0, -8						; zone 0
+	ToneSetZone4	0x3168, 0xe0, -9						; zone 1
+	ToneSetZone4	0x3169, 0xa0, -10						; zone 2
+	ToneSetZone4	0x316a, 0xc0, -6						; zone 3
+	ToneSetZone4	0x316b, 0x80, -3						; zone 4
+	ToneSetZone4	0x3178, 0xd0, -3						; zone 5
+	ToneSetZone4	0x3194, 0xc0, -15						; zone 6
 ; SET 189 key map (descriptor 189: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec189_A:
+ToneSet_189_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   3,   3,   4,   5,   6,   6,   7,   7,   7,   7,   8,   8,   8,   8,   8	; +0x14 bands 16-31 -> zone
 	.byte	  8,   8,   8								; +0x24 bands 32-34 -> zone
 ; SET 189 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3171..0x3194;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec189_B:
-	ToneEnvZone4	0x3171, 0xb0, -7						; zone 0
-	ToneEnvZone4	0x3172, 0xe0, -11						; zone 1
-	ToneEnvZone4	0x3173, 0x80, -7						; zone 2
-	ToneEnvZone4	0x3174, 0xa0, -14						; zone 3
-	ToneEnvZone4	0x3175, 0xe0, -16						; zone 4
-	ToneEnvZone4	0x3176, 0xa0, -17						; zone 5
-	ToneEnvZone4	0x3177, 0xb0, -10						; zone 6
-	ToneEnvZone4	0x3178, 0xd0, -7						; zone 7
-	ToneEnvZone4	0x3194, 0xc0, -19						; zone 8
+ToneSet_189_Zones:
+	ToneSetZone4	0x3171, 0xb0, -7						; zone 0
+	ToneSetZone4	0x3172, 0xe0, -11						; zone 1
+	ToneSetZone4	0x3173, 0x80, -7						; zone 2
+	ToneSetZone4	0x3174, 0xa0, -14						; zone 3
+	ToneSetZone4	0x3175, 0xe0, -16						; zone 4
+	ToneSetZone4	0x3176, 0xa0, -17						; zone 5
+	ToneSetZone4	0x3177, 0xb0, -10						; zone 6
+	ToneSetZone4	0x3178, 0xd0, -7						; zone 7
+	ToneSetZone4	0x3194, 0xc0, -19						; zone 8
 ; SET 192 key map (descriptor 192: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec192_A:
+ToneSet_192_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   2,   3,   3	; +0x04 bands 0-15 -> zone
 	.byte	  4,   4,   5,   5,   5,   5,   6,   6,   6,   7,   8,   8,   8,   8,   8,   8	; +0x14 bands 16-31 -> zone
 	.byte	  8,   8,   8								; +0x24 bands 32-34 -> zone
 ; SET 192 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1015..0x318c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec192_B:
-	ToneEnvZone4	0x3187, 0x90, -2						; zone 0
-	ToneEnvZone4	0x3188, 0xe0, -3						; zone 1
-	ToneEnvZone4	0x3189, 0x90, -6						; zone 2
-	ToneEnvZone4	0x318a, 0xd0, -11						; zone 3
-	ToneEnvZone4	0x318b, 0xa0, -10						; zone 4
-	ToneEnvZone4	0x318c, 0xe0, -3						; zone 5
-	ToneEnvZone4	0x3186, 0x80, -2						; zone 6
-	ToneEnvZone4	0x1015, 0xc0, -10						; zone 7
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 8
+ToneSet_192_Zones:
+	ToneSetZone4	0x3187, 0x90, -2						; zone 0
+	ToneSetZone4	0x3188, 0xe0, -3						; zone 1
+	ToneSetZone4	0x3189, 0x90, -6						; zone 2
+	ToneSetZone4	0x318a, 0xd0, -11						; zone 3
+	ToneSetZone4	0x318b, 0xa0, -10						; zone 4
+	ToneSetZone4	0x318c, 0xe0, -3						; zone 5
+	ToneSetZone4	0x3186, 0x80, -2						; zone 6
+	ToneSetZone4	0x1015, 0xc0, -10						; zone 7
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 8
 ; SET 194 key map (descriptor 194: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec194_A:
+ToneSet_194_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3126,26 +3130,26 @@ ToneEnv_Rec194_A:
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1		; +0x64 bands 96-107 -> zone
 ; SET 194 zone records: 2 x 6 bytes (descriptor flags bit 7 set), selectors 0x5006..0x5011;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec194_B:
-	ToneEnvZone6	0x5011, 0x00, -1, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x5006, 0x00, 0, -1669						; zone 1, coarse -6.52 st
+ToneSet_194_Zones:
+	ToneSetZone6	0x5011, 0x00, -1, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x5006, 0x00, 0, -1669						; zone 1, coarse -6.52 st
 ; SET 197 key map (descriptor 197: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec197_A:
+ToneSet_197_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   1,   1,   2,   2,   2,   2,   2,   3,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
 	.byte	  3,   3,   3								; +0x24 bands 32-34 -> zone
 ; SET 197 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x3197;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec197_B:
-	ToneEnvZone4	0x3195, 0xe0, -7						; zone 0
-	ToneEnvZone4	0x3196, 0xa0, -9						; zone 1
-	ToneEnvZone4	0x3197, 0xc0, -17						; zone 2
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 3
+ToneSet_197_Zones:
+	ToneSetZone4	0x3195, 0xe0, -7						; zone 0
+	ToneSetZone4	0x3196, 0xa0, -9						; zone 1
+	ToneSetZone4	0x3197, 0xc0, -17						; zone 2
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 3
 ; SET 200 key map (descriptor 200: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec200_A:
+ToneSet_200_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3156,16 +3160,16 @@ ToneEnv_Rec200_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 200 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x5012..0x5015;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec200_B:
-	ToneEnvZone6	0x5012, 0x00, -17, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x5012, 0x00, -9, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x5012, 0x00, -1, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x5013, 0x00, -7, 0						; zone 3, coarse +0.00 st
-	ToneEnvZone6	0x5014, 0x00, -1, 0						; zone 4, coarse +0.00 st
-	ToneEnvZone6	0x5015, 0xc0, -3, 35						; zone 5, coarse +0.14 st
+ToneSet_200_Zones:
+	ToneSetZone6	0x5012, 0x00, -17, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x5012, 0x00, -9, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x5012, 0x00, -1, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x5013, 0x00, -7, 0						; zone 3, coarse +0.00 st
+	ToneSetZone6	0x5014, 0x00, -1, 0						; zone 4, coarse +0.00 st
+	ToneSetZone6	0x5015, 0xc0, -3, 35						; zone 5, coarse +0.14 st
 ; SET 202 key map (descriptor 202: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec202_A:
+ToneSet_202_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3176,16 +3180,16 @@ ToneEnv_Rec202_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 202 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x5006..0x501b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec202_B:
-	ToneEnvZone6	0x5017, 0x90, -14, -1008					; zone 0, coarse -3.94 st
-	ToneEnvZone6	0x5018, 0xc0, -12, -2594					; zone 1, coarse -10.13 st
-	ToneEnvZone6	0x5019, 0x80, -14, -833						; zone 2, coarse -3.25 st
-	ToneEnvZone6	0x501a, 0xe0, -13, 0						; zone 3, coarse +0.00 st
-	ToneEnvZone6	0x501b, 0xa0, 0, 0						; zone 4, coarse +0.00 st
-	ToneEnvZone6	0x5006, 0x00, -8, -1669						; zone 5, coarse -6.52 st
+ToneSet_202_Zones:
+	ToneSetZone6	0x5017, 0x90, -14, -1008					; zone 0, coarse -3.94 st
+	ToneSetZone6	0x5018, 0xc0, -12, -2594					; zone 1, coarse -10.13 st
+	ToneSetZone6	0x5019, 0x80, -14, -833						; zone 2, coarse -3.25 st
+	ToneSetZone6	0x501a, 0xe0, -13, 0						; zone 3, coarse +0.00 st
+	ToneSetZone6	0x501b, 0xa0, 0, 0						; zone 4, coarse +0.00 st
+	ToneSetZone6	0x5006, 0x00, -8, -1669						; zone 5, coarse -6.52 st
 ; SET 204 key map (descriptor 204: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec204_A:
+ToneSet_204_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -3196,20 +3200,20 @@ ToneEnv_Rec204_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 204 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x3145;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec204_B:
-	ToneEnvZone4	0x313f, 0x80, -4						; zone 0
-	ToneEnvZone4	0x313f, 0x00, -4						; zone 1
-	ToneEnvZone4	0x3140, 0x00, -4						; zone 2
-	ToneEnvZone4	0x313e, 0x00, -4						; zone 3
-	ToneEnvZone4	0x3141, 0xc0, -2						; zone 4
-	ToneEnvZone4	0x3142, 0xe0, -5						; zone 5
-	ToneEnvZone4	0x3143, 0xa0, 0							; zone 6
-	ToneEnvZone4	0x3144, 0xd0, -1						; zone 7
-	ToneEnvZone4	0x3145, 0xd0, -5						; zone 8
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 9
+ToneSet_204_Zones:
+	ToneSetZone4	0x313f, 0x80, -4						; zone 0
+	ToneSetZone4	0x313f, 0x00, -4						; zone 1
+	ToneSetZone4	0x3140, 0x00, -4						; zone 2
+	ToneSetZone4	0x313e, 0x00, -4						; zone 3
+	ToneSetZone4	0x3141, 0xc0, -2						; zone 4
+	ToneSetZone4	0x3142, 0xe0, -5						; zone 5
+	ToneSetZone4	0x3143, 0xa0, 0							; zone 6
+	ToneSetZone4	0x3144, 0xd0, -1						; zone 7
+	ToneSetZone4	0x3145, 0xd0, -5						; zone 8
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 9
 ; SET 207 key map (descriptor 207: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec207_A:
+ToneSet_207_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3220,33 +3224,33 @@ ToneEnv_Rec207_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 207 zone records: 7 x 6 bytes (descriptor flags bit 7 set), selectors 0x1015..0x314a;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec207_B:
-	ToneEnvZone6	0x3146, 0xe0, -3, -2083						; zone 0, coarse -8.14 st
-	ToneEnvZone6	0x3147, 0x90, -3, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x3148, 0xd0, -3, -1275						; zone 2, coarse -4.98 st
-	ToneEnvZone6	0x3149, 0xf0, -2, -1275						; zone 3, coarse -4.98 st
-	ToneEnvZone6	0x314a, 0x90, -3, -592						; zone 4, coarse -2.31 st
-	ToneEnvZone6	0x1015, 0xc0, -10, 0						; zone 5, coarse +0.00 st
-	ToneEnvZone6	0x1016, 0xc0, -10, 0						; zone 6, coarse +0.00 st
+ToneSet_207_Zones:
+	ToneSetZone6	0x3146, 0xe0, -3, -2083						; zone 0, coarse -8.14 st
+	ToneSetZone6	0x3147, 0x90, -3, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x3148, 0xd0, -3, -1275						; zone 2, coarse -4.98 st
+	ToneSetZone6	0x3149, 0xf0, -2, -1275						; zone 3, coarse -4.98 st
+	ToneSetZone6	0x314a, 0x90, -3, -592						; zone 4, coarse -2.31 st
+	ToneSetZone6	0x1015, 0xc0, -10, 0						; zone 5, coarse +0.00 st
+	ToneSetZone6	0x1016, 0xc0, -10, 0						; zone 6, coarse +0.00 st
 ; SET 209 key map (descriptor 209: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec209_A:
+ToneSet_209_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2	; +0x04 bands 0-15 -> zone
 	.byte	  3,   3,   4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  5,   5,   5								; +0x24 bands 32-34 -> zone
 ; SET 209 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x3157..0x315b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec209_B:
-	ToneEnvZone6	0x3157, 0x00, -5, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x3158, 0x00, -2, -2058						; zone 1, coarse -8.04 st
-	ToneEnvZone6	0x3159, 0x00, -3, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x315a, 0x00, -3, -1520						; zone 3, coarse -5.94 st
-	ToneEnvZone6	0x315b, 0x00, -4, -1384						; zone 4, coarse -5.41 st
-	ToneEnvZone6	0x315b, 0x00, -7, -1384						; zone 5, coarse -5.41 st
+ToneSet_209_Zones:
+	ToneSetZone6	0x3157, 0x00, -5, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x3158, 0x00, -2, -2058						; zone 1, coarse -8.04 st
+	ToneSetZone6	0x3159, 0x00, -3, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x315a, 0x00, -3, -1520						; zone 3, coarse -5.94 st
+	ToneSetZone6	0x315b, 0x00, -4, -1384						; zone 4, coarse -5.41 st
+	ToneSetZone6	0x315b, 0x00, -7, -1384						; zone 5, coarse -5.41 st
 ; SET 213 key map (descriptor 213: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec213_A:
+ToneSet_213_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3257,19 +3261,19 @@ ToneEnv_Rec213_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 213 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x3161;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec213_B:
-	ToneEnvZone4	0x315c, 0xe0, -9						; zone 0
-	ToneEnvZone4	0x315d, 0xb0, -5						; zone 1
-	ToneEnvZone4	0x315e, 0x80, -6						; zone 2
-	ToneEnvZone4	0x315f, 0x80, -11						; zone 3
-	ToneEnvZone4	0x3160, 0xc0, -12						; zone 4
-	ToneEnvZone4	0x3161, 0x90, -14						; zone 5
-	ToneEnvZone4	0x3144, 0xd0, -5						; zone 6
-	ToneEnvZone4	0x3145, 0xd0, -9						; zone 7
-	ToneEnvZone4	0x1016, 0xc0, -14						; zone 8
+ToneSet_213_Zones:
+	ToneSetZone4	0x315c, 0xe0, -9						; zone 0
+	ToneSetZone4	0x315d, 0xb0, -5						; zone 1
+	ToneSetZone4	0x315e, 0x80, -6						; zone 2
+	ToneSetZone4	0x315f, 0x80, -11						; zone 3
+	ToneSetZone4	0x3160, 0xc0, -12						; zone 4
+	ToneSetZone4	0x3161, 0x90, -14						; zone 5
+	ToneSetZone4	0x3144, 0xd0, -5						; zone 6
+	ToneSetZone4	0x3145, 0xd0, -9						; zone 7
+	ToneSetZone4	0x1016, 0xc0, -14						; zone 8
 ; SET 216 key map (descriptor 216: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec216_A:
+ToneSet_216_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3280,18 +3284,18 @@ ToneEnv_Rec216_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 216 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4036..0x4067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec216_B:
-	ToneEnvZone4	0x4036, 0xe0, -8						; zone 0
-	ToneEnvZone4	0x4037, 0xa0, -12						; zone 1
-	ToneEnvZone4	0x4038, 0xe0, -13						; zone 2
-	ToneEnvZone4	0x403e, 0x80, -5						; zone 3
-	ToneEnvZone4	0x403f, 0x80, -9						; zone 4
-	ToneEnvZone4	0x4066, 0xa0, -9						; zone 5
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 6
-	ToneEnvZone4	0x4067, 0xa0, -19						; zone 7
+ToneSet_216_Zones:
+	ToneSetZone4	0x4036, 0xe0, -8						; zone 0
+	ToneSetZone4	0x4037, 0xa0, -12						; zone 1
+	ToneSetZone4	0x4038, 0xe0, -13						; zone 2
+	ToneSetZone4	0x403e, 0x80, -5						; zone 3
+	ToneSetZone4	0x403f, 0x80, -9						; zone 4
+	ToneSetZone4	0x4066, 0xa0, -9						; zone 5
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 6
+	ToneSetZone4	0x4067, 0xa0, -19						; zone 7
 ; SET 222 key map (descriptor 222: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec222_A:
+ToneSet_222_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3302,36 +3306,36 @@ ToneEnv_Rec222_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 222 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4039..0x4067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec222_B:
-	ToneEnvZone4	0x4039, 0xc0, -3						; zone 0
-	ToneEnvZone4	0x403a, 0xe0, -6						; zone 1
-	ToneEnvZone4	0x403b, 0x80, -9						; zone 2
-	ToneEnvZone4	0x403c, 0xc0, -11						; zone 3
-	ToneEnvZone4	0x403d, 0xd0, -9						; zone 4
-	ToneEnvZone4	0x403e, 0x80, -5						; zone 5
-	ToneEnvZone4	0x403f, 0x80, -9						; zone 6
-	ToneEnvZone4	0x4066, 0xa0, -9						; zone 7
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 8
-	ToneEnvZone4	0x4067, 0xa0, -19						; zone 9
+ToneSet_222_Zones:
+	ToneSetZone4	0x4039, 0xc0, -3						; zone 0
+	ToneSetZone4	0x403a, 0xe0, -6						; zone 1
+	ToneSetZone4	0x403b, 0x80, -9						; zone 2
+	ToneSetZone4	0x403c, 0xc0, -11						; zone 3
+	ToneSetZone4	0x403d, 0xd0, -9						; zone 4
+	ToneSetZone4	0x403e, 0x80, -5						; zone 5
+	ToneSetZone4	0x403f, 0x80, -9						; zone 6
+	ToneSetZone4	0x4066, 0xa0, -9						; zone 7
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 8
+	ToneSetZone4	0x4067, 0xa0, -19						; zone 9
 ; SET 229 key map (descriptor 229: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec229_A:
+ToneSet_229_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   3,   3,   4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  5,   5,   5								; +0x24 bands 32-34 -> zone
 ; SET 229 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x4040..0x4045;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec229_B:
-	ToneEnvZone6	0x4040, 0xb0, -22, -1456					; zone 0, coarse -5.69 st
-	ToneEnvZone6	0x4041, 0xe0, -13, -3133					; zone 1, coarse -12.24 st
-	ToneEnvZone6	0x4042, 0x90, -5, -1330						; zone 2, coarse -5.20 st
-	ToneEnvZone6	0x4043, 0xe0, -15, -3387					; zone 3, coarse -13.23 st
-	ToneEnvZone6	0x4044, 0xa0, -12, -1581					; zone 4, coarse -6.18 st
-	ToneEnvZone6	0x4045, 0xe0, -14, 0						; zone 5, coarse +0.00 st
+ToneSet_229_Zones:
+	ToneSetZone6	0x4040, 0xb0, -22, -1456					; zone 0, coarse -5.69 st
+	ToneSetZone6	0x4041, 0xe0, -13, -3133					; zone 1, coarse -12.24 st
+	ToneSetZone6	0x4042, 0x90, -5, -1330						; zone 2, coarse -5.20 st
+	ToneSetZone6	0x4043, 0xe0, -15, -3387					; zone 3, coarse -13.23 st
+	ToneSetZone6	0x4044, 0xa0, -12, -1581					; zone 4, coarse -6.18 st
+	ToneSetZone6	0x4045, 0xe0, -14, 0						; zone 5, coarse +0.00 st
 ; SET 233 key map (descriptor 233: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec233_A:
+ToneSet_233_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3342,38 +3346,38 @@ ToneEnv_Rec233_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 233 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x318d..0x3194;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec233_B:
-	ToneEnvZone4	0x318d, 0xc0, -9						; zone 0
-	ToneEnvZone4	0x318e, 0x80, -5						; zone 1
-	ToneEnvZone4	0x318f, 0x80, -11						; zone 2
-	ToneEnvZone4	0x3190, 0x80, -13						; zone 3
-	ToneEnvZone4	0x3194, 0xc0, -11						; zone 4
+ToneSet_233_Zones:
+	ToneSetZone4	0x318d, 0xc0, -9						; zone 0
+	ToneSetZone4	0x318e, 0x80, -5						; zone 1
+	ToneSetZone4	0x318f, 0x80, -11						; zone 2
+	ToneSetZone4	0x3190, 0x80, -13						; zone 3
+	ToneSetZone4	0x3194, 0xc0, -11						; zone 4
 ; SET 236 key map (descriptor 236: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec236_A:
+ToneSet_236_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   2	; +0x04 bands 0-15 -> zone
 	.byte	  3,   3,   4,   4,   5,   5,   6,   7,   8,   9,  10,  11,  12,  12,  12,  12	; +0x14 bands 16-31 -> zone
 	.byte	 12,  12,  12								; +0x24 bands 32-34 -> zone
 ; SET 236 zone records: 13 x 6 bytes (descriptor flags bit 7 set), selectors 0x4022..0x4027;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec236_B:
-	ToneEnvZone6	0x4022, 0x00, -10, -1690					; zone 0, coarse -6.60 st
-	ToneEnvZone6	0x4023, 0x00, -8, -792						; zone 1, coarse -3.09 st
-	ToneEnvZone6	0x4024, 0x00, -8, -2047						; zone 2, coarse -8.00 st
-	ToneEnvZone6	0x4025, 0x00, -10, -1008					; zone 3, coarse -3.94 st
-	ToneEnvZone6	0x4026, 0x00, -7, -2541						; zone 4, coarse -9.93 st
-	ToneEnvZone6	0x4027, 0x00, -3, 0						; zone 5, coarse +0.00 st
-	ToneEnvZone6	0x4027, 0x00, -5, 0						; zone 6, coarse +0.00 st
-	ToneEnvZone6	0x4027, 0x00, -7, 0						; zone 7, coarse +0.00 st
-	ToneEnvZone6	0x4027, 0x00, -11, 0						; zone 8, coarse +0.00 st
-	ToneEnvZone6	0x4027, 0x00, -13, 0						; zone 9, coarse +0.00 st
-	ToneEnvZone6	0x4027, 0x00, -15, 0						; zone 10, coarse +0.00 st
-	ToneEnvZone6	0x4027, 0x00, -17, 0						; zone 11, coarse +0.00 st
-	ToneEnvZone6	0x4027, 0x00, -19, 0						; zone 12, coarse +0.00 st
+ToneSet_236_Zones:
+	ToneSetZone6	0x4022, 0x00, -10, -1690					; zone 0, coarse -6.60 st
+	ToneSetZone6	0x4023, 0x00, -8, -792						; zone 1, coarse -3.09 st
+	ToneSetZone6	0x4024, 0x00, -8, -2047						; zone 2, coarse -8.00 st
+	ToneSetZone6	0x4025, 0x00, -10, -1008					; zone 3, coarse -3.94 st
+	ToneSetZone6	0x4026, 0x00, -7, -2541						; zone 4, coarse -9.93 st
+	ToneSetZone6	0x4027, 0x00, -3, 0						; zone 5, coarse +0.00 st
+	ToneSetZone6	0x4027, 0x00, -5, 0						; zone 6, coarse +0.00 st
+	ToneSetZone6	0x4027, 0x00, -7, 0						; zone 7, coarse +0.00 st
+	ToneSetZone6	0x4027, 0x00, -11, 0						; zone 8, coarse +0.00 st
+	ToneSetZone6	0x4027, 0x00, -13, 0						; zone 9, coarse +0.00 st
+	ToneSetZone6	0x4027, 0x00, -15, 0						; zone 10, coarse +0.00 st
+	ToneSetZone6	0x4027, 0x00, -17, 0						; zone 11, coarse +0.00 st
+	ToneSetZone6	0x4027, 0x00, -19, 0						; zone 12, coarse +0.00 st
 ; SET 246 key map (descriptor 246: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec246_A:
+ToneSet_246_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3384,15 +3388,15 @@ ToneEnv_Rec246_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 246 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x4013;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec246_B:
-	ToneEnvZone4	0x4001, 0xe0, -4						; zone 0
-	ToneEnvZone4	0x4002, 0xa0, -8						; zone 1
-	ToneEnvZone4	0x4003, 0xe0, -11						; zone 2
-	ToneEnvZone4	0x4013, 0xe0, -21						; zone 3
-	ToneEnvZone4	0x0000, 0x00, -28						; zone 4
+ToneSet_246_Zones:
+	ToneSetZone4	0x4001, 0xe0, -4						; zone 0
+	ToneSetZone4	0x4002, 0xa0, -8						; zone 1
+	ToneSetZone4	0x4003, 0xe0, -11						; zone 2
+	ToneSetZone4	0x4013, 0xe0, -21						; zone 3
+	ToneSetZone4	0x0000, 0x00, -28						; zone 4
 ; SET 248 key map (descriptor 248: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec248_A:
+ToneSet_248_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3403,19 +3407,19 @@ ToneEnv_Rec248_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 248 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x4013;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec248_B:
-	ToneEnvZone4	0x4004, 0xe0, -3						; zone 0
-	ToneEnvZone4	0x4005, 0xa0, 0							; zone 1
-	ToneEnvZone4	0x4006, 0xe0, -8						; zone 2
-	ToneEnvZone4	0x4007, 0xa0, -11						; zone 3
-	ToneEnvZone4	0x4008, 0xe0, -17						; zone 4
-	ToneEnvZone4	0x4009, 0xa0, -14						; zone 5
-	ToneEnvZone4	0x400a, 0xe0, -15						; zone 6
-	ToneEnvZone4	0x4013, 0xe0, -21						; zone 7
-	ToneEnvZone4	0x0000, 0x00, -28						; zone 8
+ToneSet_248_Zones:
+	ToneSetZone4	0x4004, 0xe0, -3						; zone 0
+	ToneSetZone4	0x4005, 0xa0, 0							; zone 1
+	ToneSetZone4	0x4006, 0xe0, -8						; zone 2
+	ToneSetZone4	0x4007, 0xa0, -11						; zone 3
+	ToneSetZone4	0x4008, 0xe0, -17						; zone 4
+	ToneSetZone4	0x4009, 0xa0, -14						; zone 5
+	ToneSetZone4	0x400a, 0xe0, -15						; zone 6
+	ToneSetZone4	0x4013, 0xe0, -21						; zone 7
+	ToneSetZone4	0x0000, 0x00, -28						; zone 8
 ; SET 251 key map (descriptor 251: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec251_A:
+ToneSet_251_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3426,14 +3430,14 @@ ToneEnv_Rec251_A:
 	.byte	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3		; +0x64 bands 96-107 -> zone
 ; SET 251 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x4013;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec251_B:
-	ToneEnvZone4	0x4011, 0xb0, -7						; zone 0
-	ToneEnvZone4	0x4012, 0xe0, -11						; zone 1
-	ToneEnvZone4	0x4013, 0xe0, -21						; zone 2
-	ToneEnvZone4	0x0000, 0x00, -28						; zone 3
+ToneSet_251_Zones:
+	ToneSetZone4	0x4011, 0xb0, -7						; zone 0
+	ToneSetZone4	0x4012, 0xe0, -11						; zone 1
+	ToneSetZone4	0x4013, 0xe0, -21						; zone 2
+	ToneSetZone4	0x0000, 0x00, -28						; zone 3
 ; SET 258 key map (descriptor 258: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec258_A:
+ToneSet_258_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3444,17 +3448,17 @@ ToneEnv_Rec258_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 258 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x4010;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec258_B:
-	ToneEnvZone4	0x400b, 0xe0, -8						; zone 0
-	ToneEnvZone4	0x400c, 0xa0, -12						; zone 1
-	ToneEnvZone4	0x400d, 0xe0, -11						; zone 2
-	ToneEnvZone4	0x400e, 0xa0, -9						; zone 3
-	ToneEnvZone4	0x400f, 0xe0, -11						; zone 4
-	ToneEnvZone4	0x4010, 0xa0, -18						; zone 5
-	ToneEnvZone4	0x0000, 0x00, -28						; zone 6
+ToneSet_258_Zones:
+	ToneSetZone4	0x400b, 0xe0, -8						; zone 0
+	ToneSetZone4	0x400c, 0xa0, -12						; zone 1
+	ToneSetZone4	0x400d, 0xe0, -11						; zone 2
+	ToneSetZone4	0x400e, 0xa0, -9						; zone 3
+	ToneSetZone4	0x400f, 0xe0, -11						; zone 4
+	ToneSetZone4	0x4010, 0xa0, -18						; zone 5
+	ToneSetZone4	0x0000, 0x00, -28						; zone 6
 ; SET 265 key map (descriptor 265: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec265_A:
+ToneSet_265_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3465,16 +3469,16 @@ ToneEnv_Rec265_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 265 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00a1..0x00a5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec265_B:
-	ToneEnvZone4	0x00a1, 0x80, -17						; zone 0
-	ToneEnvZone4	0x00a2, 0xc0, -22						; zone 1
-	ToneEnvZone4	0x00a3, 0x80, -23						; zone 2
-	ToneEnvZone4	0x00a4, 0xc0, -23						; zone 3
-	ToneEnvZone4	0x00a5, 0x80, -25						; zone 4
-	ToneEnvZone4	0x00a5, 0x80, -29						; zone 5
+ToneSet_265_Zones:
+	ToneSetZone4	0x00a1, 0x80, -17						; zone 0
+	ToneSetZone4	0x00a2, 0xc0, -22						; zone 1
+	ToneSetZone4	0x00a3, 0x80, -23						; zone 2
+	ToneSetZone4	0x00a4, 0xc0, -23						; zone 3
+	ToneSetZone4	0x00a5, 0x80, -25						; zone 4
+	ToneSetZone4	0x00a5, 0x80, -29						; zone 5
 ; SET 267 key map (descriptor 267: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec267_A:
+ToneSet_267_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -3485,19 +3489,19 @@ ToneEnv_Rec267_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 267 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00a4..0x00b5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec267_B:
-	ToneEnvZone4	0x00b0, 0x90, -9						; zone 0
-	ToneEnvZone4	0x00b1, 0xe0, -12						; zone 1
-	ToneEnvZone4	0x00b2, 0x90, -9						; zone 2
-	ToneEnvZone4	0x00b3, 0xe0, -17						; zone 3
-	ToneEnvZone4	0x00b4, 0x90, -14						; zone 4
-	ToneEnvZone4	0x00b5, 0xe0, -14						; zone 5
-	ToneEnvZone4	0x00a4, 0xc0, -23						; zone 6
-	ToneEnvZone4	0x00a5, 0x80, -25						; zone 7
-	ToneEnvZone4	0x00a5, 0x80, -29						; zone 8
+ToneSet_267_Zones:
+	ToneSetZone4	0x00b0, 0x90, -9						; zone 0
+	ToneSetZone4	0x00b1, 0xe0, -12						; zone 1
+	ToneSetZone4	0x00b2, 0x90, -9						; zone 2
+	ToneSetZone4	0x00b3, 0xe0, -17						; zone 3
+	ToneSetZone4	0x00b4, 0x90, -14						; zone 4
+	ToneSetZone4	0x00b5, 0xe0, -14						; zone 5
+	ToneSetZone4	0x00a4, 0xc0, -23						; zone 6
+	ToneSetZone4	0x00a5, 0x80, -25						; zone 7
+	ToneSetZone4	0x00a5, 0x80, -29						; zone 8
 ; SET 270 key map (descriptor 270: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec270_A:
+ToneSet_270_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -3508,17 +3512,17 @@ ToneEnv_Rec270_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 270 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00a4..0x00b8;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec270_B:
-	ToneEnvZone4	0x00b6, 0xe0, -20						; zone 0
-	ToneEnvZone4	0x00b7, 0x90, -19						; zone 1
-	ToneEnvZone4	0x00b8, 0xc0, -14						; zone 2
-	ToneEnvZone4	0x00b5, 0xe0, -14						; zone 3
-	ToneEnvZone4	0x00a4, 0xc0, -23						; zone 4
-	ToneEnvZone4	0x00a5, 0x80, -25						; zone 5
-	ToneEnvZone4	0x00a5, 0x80, -29						; zone 6
+ToneSet_270_Zones:
+	ToneSetZone4	0x00b6, 0xe0, -20						; zone 0
+	ToneSetZone4	0x00b7, 0x90, -19						; zone 1
+	ToneSetZone4	0x00b8, 0xc0, -14						; zone 2
+	ToneSetZone4	0x00b5, 0xe0, -14						; zone 3
+	ToneSetZone4	0x00a4, 0xc0, -23						; zone 4
+	ToneSetZone4	0x00a5, 0x80, -25						; zone 5
+	ToneSetZone4	0x00a5, 0x80, -29						; zone 6
 ; SET 272 key map (descriptor 272: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..14 of 15.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec272_A:
+ToneSet_272_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -3529,25 +3533,25 @@ ToneEnv_Rec272_A:
 	.byte	 14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14		; +0x64 bands 96-107 -> zone
 ; SET 272 zone records: 15 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0093..0x00a0;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec272_B:
-	ToneEnvZone4	0x0094, 0x80, -4						; zone 0
-	ToneEnvZone4	0x0094, 0x00, -4						; zone 1
-	ToneEnvZone4	0x0093, 0x00, -4						; zone 2
-	ToneEnvZone4	0x0095, 0x00, -6						; zone 3
-	ToneEnvZone4	0x0096, 0x00, -11						; zone 4
-	ToneEnvZone4	0x0097, 0x00, -1						; zone 5
-	ToneEnvZone4	0x0099, 0x00, -8						; zone 6
-	ToneEnvZone4	0x0098, 0x00, -8						; zone 7
-	ToneEnvZone4	0x009a, 0x00, -3						; zone 8
-	ToneEnvZone4	0x009c, 0x00, -1						; zone 9
-	ToneEnvZone4	0x009b, 0x00, -1						; zone 10
-	ToneEnvZone4	0x009d, 0x00, -7						; zone 11
-	ToneEnvZone4	0x009f, 0x00, -12						; zone 12
-	ToneEnvZone4	0x009e, 0x00, -12						; zone 13
-	ToneEnvZone4	0x00a0, 0x00, -12						; zone 14
+ToneSet_272_Zones:
+	ToneSetZone4	0x0094, 0x80, -4						; zone 0
+	ToneSetZone4	0x0094, 0x00, -4						; zone 1
+	ToneSetZone4	0x0093, 0x00, -4						; zone 2
+	ToneSetZone4	0x0095, 0x00, -6						; zone 3
+	ToneSetZone4	0x0096, 0x00, -11						; zone 4
+	ToneSetZone4	0x0097, 0x00, -1						; zone 5
+	ToneSetZone4	0x0099, 0x00, -8						; zone 6
+	ToneSetZone4	0x0098, 0x00, -8						; zone 7
+	ToneSetZone4	0x009a, 0x00, -3						; zone 8
+	ToneSetZone4	0x009c, 0x00, -1						; zone 9
+	ToneSetZone4	0x009b, 0x00, -1						; zone 10
+	ToneSetZone4	0x009d, 0x00, -7						; zone 11
+	ToneSetZone4	0x009f, 0x00, -12						; zone 12
+	ToneSetZone4	0x009e, 0x00, -12						; zone 13
+	ToneSetZone4	0x00a0, 0x00, -12						; zone 14
 ; SET 273 key map (descriptor 273: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec273_A:
+ToneSet_273_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3558,19 +3562,19 @@ ToneEnv_Rec273_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 273 zone records: 9 x 6 bytes (descriptor flags bit 7 set), selectors 0x0073..0x0091;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec273_B:
-	ToneEnvZone6	0x0073, 0x00, -8, -2042						; zone 0, coarse -7.98 st
-	ToneEnvZone6	0x0075, 0x00, -2, -1261						; zone 1, coarse -4.93 st
-	ToneEnvZone6	0x0077, 0x00, -3, -2778						; zone 2, coarse -10.85 st
-	ToneEnvZone6	0x0079, 0x00, -11, -1282					; zone 3, coarse -5.01 st
-	ToneEnvZone6	0x007b, 0x00, -9, -2784						; zone 4, coarse -10.88 st
-	ToneEnvZone6	0x007d, 0x00, -4, -1297						; zone 5, coarse -5.07 st
-	ToneEnvZone6	0x007f, 0x00, -21, -2810					; zone 6, coarse -10.98 st
-	ToneEnvZone6	0x0081, 0x00, -11, -1003					; zone 7, coarse -3.92 st
-	ToneEnvZone6	0x0091, 0x00, -10, -922						; zone 8, coarse -3.60 st
+ToneSet_273_Zones:
+	ToneSetZone6	0x0073, 0x00, -8, -2042						; zone 0, coarse -7.98 st
+	ToneSetZone6	0x0075, 0x00, -2, -1261						; zone 1, coarse -4.93 st
+	ToneSetZone6	0x0077, 0x00, -3, -2778						; zone 2, coarse -10.85 st
+	ToneSetZone6	0x0079, 0x00, -11, -1282					; zone 3, coarse -5.01 st
+	ToneSetZone6	0x007b, 0x00, -9, -2784						; zone 4, coarse -10.88 st
+	ToneSetZone6	0x007d, 0x00, -4, -1297						; zone 5, coarse -5.07 st
+	ToneSetZone6	0x007f, 0x00, -21, -2810					; zone 6, coarse -10.98 st
+	ToneSetZone6	0x0081, 0x00, -11, -1003					; zone 7, coarse -3.92 st
+	ToneSetZone6	0x0091, 0x00, -10, -922						; zone 8, coarse -3.60 st
 ; SET 277 key map (descriptor 277: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec277_A:
+ToneSet_277_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3581,20 +3585,20 @@ ToneEnv_Rec277_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 277 zone records: 10 x 6 bytes (descriptor flags bit 7 set), selectors 0x0081..0x600e;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec277_B:
-	ToneEnvZone6	0x600d, 0x00, -1, -2244						; zone 0, coarse -8.77 st
-	ToneEnvZone6	0x600e, 0x00, -7, -989						; zone 1, coarse -3.86 st
-	ToneEnvZone6	0x6001, 0x00, -3, -1525						; zone 2, coarse -5.96 st
-	ToneEnvZone6	0x6002, 0x00, -6, -1242						; zone 3, coarse -4.85 st
-	ToneEnvZone6	0x6003, 0x00, -9, -3029						; zone 4, coarse -11.83 st
-	ToneEnvZone6	0x6004, 0x00, -7, -1725						; zone 5, coarse -6.74 st
-	ToneEnvZone6	0x6005, 0x00, -6, -3015						; zone 6, coarse -11.78 st
-	ToneEnvZone6	0x6006, 0x00, -13, -2153					; zone 7, coarse -8.41 st
-	ToneEnvZone6	0x0081, 0x00, -11, -1003					; zone 8, coarse -3.92 st
-	ToneEnvZone6	0x0091, 0x00, -10, -922						; zone 9, coarse -3.60 st
+ToneSet_277_Zones:
+	ToneSetZone6	0x600d, 0x00, -1, -2244						; zone 0, coarse -8.77 st
+	ToneSetZone6	0x600e, 0x00, -7, -989						; zone 1, coarse -3.86 st
+	ToneSetZone6	0x6001, 0x00, -3, -1525						; zone 2, coarse -5.96 st
+	ToneSetZone6	0x6002, 0x00, -6, -1242						; zone 3, coarse -4.85 st
+	ToneSetZone6	0x6003, 0x00, -9, -3029						; zone 4, coarse -11.83 st
+	ToneSetZone6	0x6004, 0x00, -7, -1725						; zone 5, coarse -6.74 st
+	ToneSetZone6	0x6005, 0x00, -6, -3015						; zone 6, coarse -11.78 st
+	ToneSetZone6	0x6006, 0x00, -13, -2153					; zone 7, coarse -8.41 st
+	ToneSetZone6	0x0081, 0x00, -11, -1003					; zone 8, coarse -3.92 st
+	ToneSetZone6	0x0091, 0x00, -10, -922						; zone 9, coarse -3.60 st
 ; SET 279 key map (descriptor 279: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec279_A:
+ToneSet_279_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3605,18 +3609,18 @@ ToneEnv_Rec279_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 279 zone records: 8 x 6 bytes (descriptor flags bit 7 set), selectors 0x0081..0x6006;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec279_B:
-	ToneEnvZone6	0x6001, 0x00, -3, -1525						; zone 0, coarse -5.96 st
-	ToneEnvZone6	0x6002, 0x00, -6, -1242						; zone 1, coarse -4.85 st
-	ToneEnvZone6	0x6003, 0x00, -9, -3029						; zone 2, coarse -11.83 st
-	ToneEnvZone6	0x6004, 0x00, -7, -1725						; zone 3, coarse -6.74 st
-	ToneEnvZone6	0x6005, 0x00, -6, -3015						; zone 4, coarse -11.78 st
-	ToneEnvZone6	0x6006, 0x00, -13, -2153					; zone 5, coarse -8.41 st
-	ToneEnvZone6	0x0081, 0x00, -11, -1003					; zone 6, coarse -3.92 st
-	ToneEnvZone6	0x0091, 0x00, -10, -922						; zone 7, coarse -3.60 st
+ToneSet_279_Zones:
+	ToneSetZone6	0x6001, 0x00, -3, -1525						; zone 0, coarse -5.96 st
+	ToneSetZone6	0x6002, 0x00, -6, -1242						; zone 1, coarse -4.85 st
+	ToneSetZone6	0x6003, 0x00, -9, -3029						; zone 2, coarse -11.83 st
+	ToneSetZone6	0x6004, 0x00, -7, -1725						; zone 3, coarse -6.74 st
+	ToneSetZone6	0x6005, 0x00, -6, -3015						; zone 4, coarse -11.78 st
+	ToneSetZone6	0x6006, 0x00, -13, -2153					; zone 5, coarse -8.41 st
+	ToneSetZone6	0x0081, 0x00, -11, -1003					; zone 6, coarse -3.92 st
+	ToneSetZone6	0x0091, 0x00, -10, -922						; zone 7, coarse -3.60 st
 ; SET 282 key map (descriptor 282: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec282_A:
+ToneSet_282_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3627,20 +3631,20 @@ ToneEnv_Rec282_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 282 zone records: 10 x 6 bytes (descriptor flags bit 7 set), selectors 0x0081..0x6011;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec282_B:
-	ToneEnvZone6	0x600d, 0x00, -1, -2244						; zone 0, coarse -8.77 st
-	ToneEnvZone6	0x600e, 0x00, -7, -989						; zone 1, coarse -3.86 st
-	ToneEnvZone6	0x600f, 0x00, -3, -2797						; zone 2, coarse -10.93 st
-	ToneEnvZone6	0x6010, 0x00, -1, -1495						; zone 3, coarse -5.84 st
-	ToneEnvZone6	0x6011, 0x00, -1, -3573						; zone 4, coarse -13.96 st
-	ToneEnvZone6	0x6004, 0x00, -7, -1725						; zone 5, coarse -6.74 st
-	ToneEnvZone6	0x6005, 0x00, -6, -3015						; zone 6, coarse -11.78 st
-	ToneEnvZone6	0x6006, 0x00, -13, -2153					; zone 7, coarse -8.41 st
-	ToneEnvZone6	0x0081, 0x00, -11, -1003					; zone 8, coarse -3.92 st
-	ToneEnvZone6	0x0091, 0x00, -10, -922						; zone 9, coarse -3.60 st
+ToneSet_282_Zones:
+	ToneSetZone6	0x600d, 0x00, -1, -2244						; zone 0, coarse -8.77 st
+	ToneSetZone6	0x600e, 0x00, -7, -989						; zone 1, coarse -3.86 st
+	ToneSetZone6	0x600f, 0x00, -3, -2797						; zone 2, coarse -10.93 st
+	ToneSetZone6	0x6010, 0x00, -1, -1495						; zone 3, coarse -5.84 st
+	ToneSetZone6	0x6011, 0x00, -1, -3573						; zone 4, coarse -13.96 st
+	ToneSetZone6	0x6004, 0x00, -7, -1725						; zone 5, coarse -6.74 st
+	ToneSetZone6	0x6005, 0x00, -6, -3015						; zone 6, coarse -11.78 st
+	ToneSetZone6	0x6006, 0x00, -13, -2153					; zone 7, coarse -8.41 st
+	ToneSetZone6	0x0081, 0x00, -11, -1003					; zone 8, coarse -3.92 st
+	ToneSetZone6	0x0091, 0x00, -10, -922						; zone 9, coarse -3.60 st
 ; SET 288 key map (descriptor 288: flags 0x81, keys 12..104): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec288_A:
+ToneSet_288_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3651,40 +3655,40 @@ ToneEnv_Rec288_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 288 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x00c7..0x00cb;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec288_B:
-	ToneEnvZone6	0x00c7, 0x00, -8, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x00c8, 0x00, -15, -783						; zone 1, coarse -3.06 st
-	ToneEnvZone6	0x00c9, 0x00, -14, -2304					; zone 2, coarse -9.00 st
-	ToneEnvZone6	0x00ca, 0x00, -13, -787						; zone 3, coarse -3.07 st
-	ToneEnvZone6	0x00cb, 0x00, -6, -1201						; zone 4, coarse -4.69 st
-	ToneEnvZone6	0x00cb, 0x00, -6, -1201						; zone 5, coarse -4.69 st
+ToneSet_288_Zones:
+	ToneSetZone6	0x00c7, 0x00, -8, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x00c8, 0x00, -15, -783						; zone 1, coarse -3.06 st
+	ToneSetZone6	0x00c9, 0x00, -14, -2304					; zone 2, coarse -9.00 st
+	ToneSetZone6	0x00ca, 0x00, -13, -787						; zone 3, coarse -3.07 st
+	ToneSetZone6	0x00cb, 0x00, -6, -1201						; zone 4, coarse -4.69 st
+	ToneSetZone6	0x00cb, 0x00, -6, -1201						; zone 5, coarse -4.69 st
 ; SET 292 key map (descriptor 292: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..2 of 3.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec292_A:
+ToneSet_292_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
 	.byte	  2,   2,   2								; +0x24 bands 32-34 -> zone
 ; SET 292 zone records: 3 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00cc..0x00ce;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec292_B:
-	ToneEnvZone4	0x00cc, 0x00, -12						; zone 0
-	ToneEnvZone4	0x00cd, 0x00, -3						; zone 1
-	ToneEnvZone4	0x00ce, 0x00, -1						; zone 2
+ToneSet_292_Zones:
+	ToneSetZone4	0x00cc, 0x00, -12						; zone 0
+	ToneSetZone4	0x00cd, 0x00, -3						; zone 1
+	ToneSetZone4	0x00ce, 0x00, -1						; zone 2
 ; SET 294 key map (descriptor 294: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..2 of 3.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec294_A:
+ToneSet_294_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   2,   2,   2,   2,   2,   2			; +0x04 bands 0-10 -> zone
 ; SET 294 zone records: 3 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5016..0x5016;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec294_B:
-	ToneEnvZone4	0x5016, 0xe0, -17						; zone 0
-	ToneEnvZone4	0x5016, 0xe0, -9						; zone 1
-	ToneEnvZone4	0x5016, 0xe0, -1						; zone 2
+ToneSet_294_Zones:
+	ToneSetZone4	0x5016, 0xe0, -17						; zone 0
+	ToneSetZone4	0x5016, 0xe0, -9						; zone 1
+	ToneSetZone4	0x5016, 0xe0, -1						; zone 2
 ; SET 295 key map (descriptor 295: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec295_A:
+ToneSet_295_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3695,64 +3699,64 @@ ToneEnv_Rec295_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 295 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1094..0x312b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec295_B:
-	ToneEnvZone4	0x3129, 0x80, -13						; zone 0
-	ToneEnvZone4	0x3129, 0x00, -13						; zone 1
-	ToneEnvZone4	0x3128, 0x00, -13						; zone 2
-	ToneEnvZone4	0x312a, 0x00, -13						; zone 3
-	ToneEnvZone4	0x312b, 0x00, -13						; zone 4
-	ToneEnvZone4	0x209c, 0x00, -12						; zone 5
-	ToneEnvZone4	0x1094, 0x00, -21						; zone 6
+ToneSet_295_Zones:
+	ToneSetZone4	0x3129, 0x80, -13						; zone 0
+	ToneSetZone4	0x3129, 0x00, -13						; zone 1
+	ToneSetZone4	0x3128, 0x00, -13						; zone 2
+	ToneSetZone4	0x312a, 0x00, -13						; zone 3
+	ToneSetZone4	0x312b, 0x00, -13						; zone 4
+	ToneSetZone4	0x209c, 0x00, -12						; zone 5
+	ToneSetZone4	0x1094, 0x00, -21						; zone 6
 ; SET 301 key map (descriptor 301: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec301_A:
+ToneSet_301_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   3	; +0x14 bands 16-31 -> zone
 	.byte	  3,   3,   3								; +0x24 bands 32-34 -> zone
 ; SET 301 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1095..0x1098;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec301_B:
-	ToneEnvZone4	0x1095, 0x90, -4						; zone 0
-	ToneEnvZone4	0x1096, 0x90, -8						; zone 1
-	ToneEnvZone4	0x1097, 0x90, -12						; zone 2
-	ToneEnvZone4	0x1098, 0x90, -12						; zone 3
+ToneSet_301_Zones:
+	ToneSetZone4	0x1095, 0x90, -4						; zone 0
+	ToneSetZone4	0x1096, 0x90, -8						; zone 1
+	ToneSetZone4	0x1097, 0x90, -12						; zone 2
+	ToneSetZone4	0x1098, 0x90, -12						; zone 3
 ; SET 303 key map (descriptor 303: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec303_A:
+ToneSet_303_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   3,   3,   3,   3,   4,   4,   4,   5,   5,   5,   6,   6	; +0x14 bands 16-31 -> zone
 	.byte	  7,   7,   7								; +0x24 bands 32-34 -> zone
 ; SET 303 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x1081;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec303_B:
-	ToneEnvZone4	0x107c, 0x90, -15						; zone 0
-	ToneEnvZone4	0x107d, 0x90, -16						; zone 1
-	ToneEnvZone4	0x107e, 0x90, -15						; zone 2
-	ToneEnvZone4	0x107f, 0x90, -18						; zone 3
-	ToneEnvZone4	0x1080, 0x90, -21						; zone 4
-	ToneEnvZone4	0x1081, 0x90, -28						; zone 5
-	ToneEnvZone4	0x106f, 0x00, -30						; zone 6
-	ToneEnvZone4	0x1070, 0x00, -30						; zone 7
+ToneSet_303_Zones:
+	ToneSetZone4	0x107c, 0x90, -15						; zone 0
+	ToneSetZone4	0x107d, 0x90, -16						; zone 1
+	ToneSetZone4	0x107e, 0x90, -15						; zone 2
+	ToneSetZone4	0x107f, 0x90, -18						; zone 3
+	ToneSetZone4	0x1080, 0x90, -21						; zone 4
+	ToneSetZone4	0x1081, 0x90, -28						; zone 5
+	ToneSetZone4	0x106f, 0x00, -30						; zone 6
+	ToneSetZone4	0x1070, 0x00, -30						; zone 7
 ; SET 304 key map (descriptor 304: flags 0x81, keys 12..108): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec304_A:
+ToneSet_304_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  1,   2,   2,   2,   2,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
 	.byte	  4,   4,   4								; +0x24 bands 32-34 -> zone
 ; SET 304 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x2085..0x208b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec304_B:
-	ToneEnvZone6	0x2085, 0x00, -9, -186						; zone 0, coarse -0.73 st
-	ToneEnvZone6	0x2085, 0x00, -13, -186						; zone 1, coarse -0.73 st
-	ToneEnvZone6	0x2087, 0x00, -4, -841						; zone 2, coarse -3.29 st
-	ToneEnvZone6	0x2089, 0x00, -5, -1577						; zone 3, coarse -6.16 st
-	ToneEnvZone6	0x208b, 0x00, -9, 0						; zone 4, coarse +0.00 st
+ToneSet_304_Zones:
+	ToneSetZone6	0x2085, 0x00, -9, -186						; zone 0, coarse -0.73 st
+	ToneSetZone6	0x2085, 0x00, -13, -186						; zone 1, coarse -0.73 st
+	ToneSetZone6	0x2087, 0x00, -4, -841						; zone 2, coarse -3.29 st
+	ToneSetZone6	0x2089, 0x00, -5, -1577						; zone 3, coarse -6.16 st
+	ToneSetZone6	0x208b, 0x00, -9, 0						; zone 4, coarse +0.00 st
 ; SET 306 key map (descriptor 306: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec306_A:
+ToneSet_306_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3763,24 +3767,24 @@ ToneEnv_Rec306_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 306 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x0040..0x0048;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec306_B:
-	ToneEnvZone6	0x0040, 0x00, -5, -1312						; zone 0, coarse -5.12 st
-	ToneEnvZone6	0x0042, 0x00, -6, -2979						; zone 1, coarse -11.64 st
-	ToneEnvZone6	0x0044, 0x00, -3, -1241						; zone 2, coarse -4.85 st
-	ToneEnvZone6	0x0046, 0x00, -6, -2159						; zone 3, coarse -8.43 st
-	ToneEnvZone6	0x0048, 0x00, -7, -1718						; zone 4, coarse -6.71 st
+ToneSet_306_Zones:
+	ToneSetZone6	0x0040, 0x00, -5, -1312						; zone 0, coarse -5.12 st
+	ToneSetZone6	0x0042, 0x00, -6, -2979						; zone 1, coarse -11.64 st
+	ToneSetZone6	0x0044, 0x00, -3, -1241						; zone 2, coarse -4.85 st
+	ToneSetZone6	0x0046, 0x00, -6, -2159						; zone 3, coarse -8.43 st
+	ToneSetZone6	0x0048, 0x00, -7, -1718						; zone 4, coarse -6.71 st
 ; SET 315 key map (descriptor 315: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec315_A:
+ToneSet_315_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 315 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x004e..0x004e;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec315_B:
-	ToneEnvZone6	0x004e, 0x00, -12, -1596					; zone 0, coarse -6.23 st
+ToneSet_315_Zones:
+	ToneSetZone6	0x004e, 0x00, -12, -1596					; zone 0, coarse -6.23 st
 ; SET 317 key map (descriptor 317: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec317_A:
+ToneSet_317_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -3791,21 +3795,21 @@ ToneEnv_Rec317_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 317 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0012;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec317_B:
-	ToneEnvZone4	0x000a, 0x00, -5						; zone 0
-	ToneEnvZone4	0x000b, 0x00, -6						; zone 1
-	ToneEnvZone4	0x000c, 0x00, -6						; zone 2
-	ToneEnvZone4	0x000d, 0x00, -8						; zone 3
-	ToneEnvZone4	0x000e, 0x00, -9						; zone 4
-	ToneEnvZone4	0x000f, 0x00, -11						; zone 5
-	ToneEnvZone4	0x0010, 0x00, -13						; zone 6
-	ToneEnvZone4	0x0011, 0x00, -13						; zone 7
-	ToneEnvZone4	0x0012, 0x00, -16						; zone 8
-	ToneEnvZone4	0x0009, 0x00, -8						; zone 9
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 10
+ToneSet_317_Zones:
+	ToneSetZone4	0x000a, 0x00, -5						; zone 0
+	ToneSetZone4	0x000b, 0x00, -6						; zone 1
+	ToneSetZone4	0x000c, 0x00, -6						; zone 2
+	ToneSetZone4	0x000d, 0x00, -8						; zone 3
+	ToneSetZone4	0x000e, 0x00, -9						; zone 4
+	ToneSetZone4	0x000f, 0x00, -11						; zone 5
+	ToneSetZone4	0x0010, 0x00, -13						; zone 6
+	ToneSetZone4	0x0011, 0x00, -13						; zone 7
+	ToneSetZone4	0x0012, 0x00, -16						; zone 8
+	ToneSetZone4	0x0009, 0x00, -8						; zone 9
+	ToneSetZone4	0x0000, 0x00, -16						; zone 10
 ; SET 325 key map (descriptor 325: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec325_A:
+ToneSet_325_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -3816,32 +3820,32 @@ ToneEnv_Rec325_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 325 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0027;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec325_B:
-	ToneEnvZone4	0x0020, 0x00, -9						; zone 0
-	ToneEnvZone4	0x0021, 0x00, -9						; zone 1
-	ToneEnvZone4	0x0022, 0x00, -10						; zone 2
-	ToneEnvZone4	0x0023, 0x00, -10						; zone 3
-	ToneEnvZone4	0x0024, 0x00, -10						; zone 4
-	ToneEnvZone4	0x0025, 0x00, -11						; zone 5
-	ToneEnvZone4	0x0026, 0x00, -12						; zone 6
-	ToneEnvZone4	0x0027, 0x00, -12						; zone 7
-	ToneEnvZone4	0x0012, 0x00, -16						; zone 8
-	ToneEnvZone4	0x0009, 0x00, -8						; zone 9
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 10
+ToneSet_325_Zones:
+	ToneSetZone4	0x0020, 0x00, -9						; zone 0
+	ToneSetZone4	0x0021, 0x00, -9						; zone 1
+	ToneSetZone4	0x0022, 0x00, -10						; zone 2
+	ToneSetZone4	0x0023, 0x00, -10						; zone 3
+	ToneSetZone4	0x0024, 0x00, -10						; zone 4
+	ToneSetZone4	0x0025, 0x00, -11						; zone 5
+	ToneSetZone4	0x0026, 0x00, -12						; zone 6
+	ToneSetZone4	0x0027, 0x00, -12						; zone 7
+	ToneSetZone4	0x0012, 0x00, -16						; zone 8
+	ToneSetZone4	0x0009, 0x00, -8						; zone 9
+	ToneSetZone4	0x0000, 0x00, -16						; zone 10
 ; SET 329 key map (descriptor 329: flags 0x01, keys 12..120): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec329_A:
+ToneSet_329_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   1,   1,   1,   1							; +0x14 bands 16-20 -> zone
 ; SET 329 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0068;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec329_B:
-	ToneEnvZone4	0x0068, 0x00, -16						; zone 0
-	ToneEnvZone4	0x0000, 0x00, -24						; zone 1
+ToneSet_329_Zones:
+	ToneSetZone4	0x0068, 0x00, -16						; zone 0
+	ToneSetZone4	0x0000, 0x00, -24						; zone 1
 ; SET 332 key map (descriptor 332: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec332_A:
+ToneSet_332_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -3852,102 +3856,102 @@ ToneEnv_Rec332_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 332 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0018;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec332_B:
-	ToneEnvZone4	0x0013, 0x00, -9						; zone 0
-	ToneEnvZone4	0x0014, 0x00, -12						; zone 1
-	ToneEnvZone4	0x0015, 0x00, -13						; zone 2
-	ToneEnvZone4	0x0016, 0x00, -15						; zone 3
-	ToneEnvZone4	0x0017, 0x00, -17						; zone 4
-	ToneEnvZone4	0x0018, 0x00, -19						; zone 5
-	ToneEnvZone4	0x0009, 0x00, -8						; zone 6
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 7
+ToneSet_332_Zones:
+	ToneSetZone4	0x0013, 0x00, -9						; zone 0
+	ToneSetZone4	0x0014, 0x00, -12						; zone 1
+	ToneSetZone4	0x0015, 0x00, -13						; zone 2
+	ToneSetZone4	0x0016, 0x00, -15						; zone 3
+	ToneSetZone4	0x0017, 0x00, -17						; zone 4
+	ToneSetZone4	0x0018, 0x00, -19						; zone 5
+	ToneSetZone4	0x0009, 0x00, -8						; zone 6
+	ToneSetZone4	0x0000, 0x00, -16						; zone 7
 ; SET 333 key map (descriptor 333: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec333_A:
+ToneSet_333_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   3	; +0x04 bands 0-15 -> zone
 	.byte	  3,   3,   3,   3,   3							; +0x14 bands 16-20 -> zone
 ; SET 333 zone records: 4 x 6 bytes (descriptor flags bit 7 set), selectors 0x0070..0x0072;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec333_B:
-	ToneEnvZone6	0x0070, 0x80, -8, 4292						; zone 0, coarse +16.77 st
-	ToneEnvZone6	0x0071, 0x80, -5, 1220						; zone 1, coarse +4.77 st
-	ToneEnvZone6	0x0071, 0x80, -9, 1220						; zone 2, coarse +4.77 st
-	ToneEnvZone6	0x0072, 0x80, -12, 1220						; zone 3, coarse +4.77 st
+ToneSet_333_Zones:
+	ToneSetZone6	0x0070, 0x80, -8, 4292						; zone 0, coarse +16.77 st
+	ToneSetZone6	0x0071, 0x80, -5, 1220						; zone 1, coarse +4.77 st
+	ToneSetZone6	0x0071, 0x80, -9, 1220						; zone 2, coarse +4.77 st
+	ToneSetZone6	0x0072, 0x80, -12, 1220						; zone 3, coarse +4.77 st
 ; SET 334 key map (descriptor 334: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec334_A:
+ToneSet_334_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 334 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x30ed..0x30ed;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec334_B:
-	ToneEnvZone6	0x30ed, 0xe0, -1, -444						; zone 0, coarse -1.73 st
+ToneSet_334_Zones:
+	ToneSetZone6	0x30ed, 0xe0, -1, -444						; zone 0, coarse -1.73 st
 ; SET 335 key map (descriptor 335: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec335_A:
+ToneSet_335_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 335 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0002..0x0002;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec335_B:
-	ToneEnvZone4	0x0002, 0x00, -8						; zone 0
+ToneSet_335_Zones:
+	ToneSetZone4	0x0002, 0x00, -8						; zone 0
 ; SET 001 key map (descriptor 001: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..15 of 16.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec001_A:
+ToneSet_001_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   2,   3,   4,   5,   5,   6	; +0x04 bands 0-15 -> zone
 	.byte	  7,   8,   8,   9,  10,  11,  11,  12,  13,  14,  14,  15,  15,  15,  15,  15	; +0x14 bands 16-31 -> zone
 	.byte	 15,  15,  15								; +0x24 bands 32-34 -> zone
 ; SET 001 zone records: 16 x 6 bytes (descriptor flags bit 7 set), selectors 0x7000..0x700f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec001_B:
-	ToneEnvZone6	0x7000, 0x00, -9, -3378						; zone 0, coarse -13.20 st
-	ToneEnvZone6	0x7001, 0x00, -18, -1714					; zone 1, coarse -6.70 st
-	ToneEnvZone6	0x7002, 0x00, -9, -2883						; zone 2, coarse -11.26 st
-	ToneEnvZone6	0x7003, 0x00, -14, -3984					; zone 3, coarse -15.56 st
-	ToneEnvZone6	0x7004, 0x00, -18, -1944					; zone 4, coarse -7.59 st
-	ToneEnvZone6	0x7005, 0x00, -12, -2723					; zone 5, coarse -10.64 st
-	ToneEnvZone6	0x7006, 0x00, -23, -3804					; zone 6, coarse -14.86 st
-	ToneEnvZone6	0x7007, 0x00, -16, -1983					; zone 7, coarse -7.75 st
-	ToneEnvZone6	0x7008, 0x00, -22, -2708					; zone 8, coarse -10.58 st
-	ToneEnvZone6	0x7009, 0x00, -17, -3932					; zone 9, coarse -15.36 st
-	ToneEnvZone6	0x700a, 0x00, -15, -1747					; zone 10, coarse -6.82 st
-	ToneEnvZone6	0x700b, 0x00, -13, -2522					; zone 11, coarse -9.85 st
-	ToneEnvZone6	0x700c, 0x00, -16, -3533					; zone 12, coarse -13.80 st
-	ToneEnvZone6	0x700d, 0x00, -15, -1996					; zone 13, coarse -7.80 st
-	ToneEnvZone6	0x700e, 0x00, -19, -3006					; zone 14, coarse -11.74 st
-	ToneEnvZone6	0x700f, 0x00, -13, -3513					; zone 15, coarse -13.72 st
+ToneSet_001_Zones:
+	ToneSetZone6	0x7000, 0x00, -9, -3378						; zone 0, coarse -13.20 st
+	ToneSetZone6	0x7001, 0x00, -18, -1714					; zone 1, coarse -6.70 st
+	ToneSetZone6	0x7002, 0x00, -9, -2883						; zone 2, coarse -11.26 st
+	ToneSetZone6	0x7003, 0x00, -14, -3984					; zone 3, coarse -15.56 st
+	ToneSetZone6	0x7004, 0x00, -18, -1944					; zone 4, coarse -7.59 st
+	ToneSetZone6	0x7005, 0x00, -12, -2723					; zone 5, coarse -10.64 st
+	ToneSetZone6	0x7006, 0x00, -23, -3804					; zone 6, coarse -14.86 st
+	ToneSetZone6	0x7007, 0x00, -16, -1983					; zone 7, coarse -7.75 st
+	ToneSetZone6	0x7008, 0x00, -22, -2708					; zone 8, coarse -10.58 st
+	ToneSetZone6	0x7009, 0x00, -17, -3932					; zone 9, coarse -15.36 st
+	ToneSetZone6	0x700a, 0x00, -15, -1747					; zone 10, coarse -6.82 st
+	ToneSetZone6	0x700b, 0x00, -13, -2522					; zone 11, coarse -9.85 st
+	ToneSetZone6	0x700c, 0x00, -16, -3533					; zone 12, coarse -13.80 st
+	ToneSetZone6	0x700d, 0x00, -15, -1996					; zone 13, coarse -7.80 st
+	ToneSetZone6	0x700e, 0x00, -19, -3006					; zone 14, coarse -11.74 st
+	ToneSetZone6	0x700f, 0x00, -13, -3513					; zone 15, coarse -13.72 st
 ; SET 005 key map (descriptor 005: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..16 of 17.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec005_A:
+ToneSet_005_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   2,   3,   4,   5,   5,   6	; +0x04 bands 0-15 -> zone
 	.byte	  7,   8,   8,   9,  10,  11,  11,  12,  13,  14,  14,  15,  16,  16,  16,  16	; +0x14 bands 16-31 -> zone
 	.byte	 16,  16,  16								; +0x24 bands 32-34 -> zone
 ; SET 005 zone records: 17 x 6 bytes (descriptor flags bit 7 set), selectors 0x7000..0x700f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec005_B:
-	ToneEnvZone6	0x7000, 0x00, -9, -3378						; zone 0, coarse -13.20 st
-	ToneEnvZone6	0x7000, 0x00, -9, -3378						; zone 1, coarse -13.20 st
-	ToneEnvZone6	0x7001, 0x00, -18, -1714					; zone 2, coarse -6.70 st
-	ToneEnvZone6	0x7002, 0x00, -9, -2883						; zone 3, coarse -11.26 st
-	ToneEnvZone6	0x7003, 0x00, -14, -3984					; zone 4, coarse -15.56 st
-	ToneEnvZone6	0x7004, 0x00, -18, -1944					; zone 5, coarse -7.59 st
-	ToneEnvZone6	0x7005, 0x00, -12, -2723					; zone 6, coarse -10.64 st
-	ToneEnvZone6	0x7006, 0x00, -23, -3804					; zone 7, coarse -14.86 st
-	ToneEnvZone6	0x7007, 0x00, -16, -1983					; zone 8, coarse -7.75 st
-	ToneEnvZone6	0x7008, 0x00, -22, -2708					; zone 9, coarse -10.58 st
-	ToneEnvZone6	0x7009, 0x00, -17, -3932					; zone 10, coarse -15.36 st
-	ToneEnvZone6	0x700a, 0x00, -15, -1747					; zone 11, coarse -6.82 st
-	ToneEnvZone6	0x700b, 0x00, -13, -2522					; zone 12, coarse -9.85 st
-	ToneEnvZone6	0x700c, 0x00, -16, -3533					; zone 13, coarse -13.80 st
-	ToneEnvZone6	0x700d, 0x00, -15, -1996					; zone 14, coarse -7.80 st
-	ToneEnvZone6	0x700e, 0x00, -19, -3006					; zone 15, coarse -11.74 st
-	ToneEnvZone6	0x700f, 0x00, -13, -3513					; zone 16, coarse -13.72 st
+ToneSet_005_Zones:
+	ToneSetZone6	0x7000, 0x00, -9, -3378						; zone 0, coarse -13.20 st
+	ToneSetZone6	0x7000, 0x00, -9, -3378						; zone 1, coarse -13.20 st
+	ToneSetZone6	0x7001, 0x00, -18, -1714					; zone 2, coarse -6.70 st
+	ToneSetZone6	0x7002, 0x00, -9, -2883						; zone 3, coarse -11.26 st
+	ToneSetZone6	0x7003, 0x00, -14, -3984					; zone 4, coarse -15.56 st
+	ToneSetZone6	0x7004, 0x00, -18, -1944					; zone 5, coarse -7.59 st
+	ToneSetZone6	0x7005, 0x00, -12, -2723					; zone 6, coarse -10.64 st
+	ToneSetZone6	0x7006, 0x00, -23, -3804					; zone 7, coarse -14.86 st
+	ToneSetZone6	0x7007, 0x00, -16, -1983					; zone 8, coarse -7.75 st
+	ToneSetZone6	0x7008, 0x00, -22, -2708					; zone 9, coarse -10.58 st
+	ToneSetZone6	0x7009, 0x00, -17, -3932					; zone 10, coarse -15.36 st
+	ToneSetZone6	0x700a, 0x00, -15, -1747					; zone 11, coarse -6.82 st
+	ToneSetZone6	0x700b, 0x00, -13, -2522					; zone 12, coarse -9.85 st
+	ToneSetZone6	0x700c, 0x00, -16, -3533					; zone 13, coarse -13.80 st
+	ToneSetZone6	0x700d, 0x00, -15, -1996					; zone 14, coarse -7.80 st
+	ToneSetZone6	0x700e, 0x00, -19, -3006					; zone 15, coarse -11.74 st
+	ToneSetZone6	0x700f, 0x00, -13, -3513					; zone 16, coarse -13.72 st
 ; SET 012 key map (descriptor 012: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..15 of 16.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec012_A:
+ToneSet_012_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
@@ -3958,26 +3962,26 @@ ToneEnv_Rec012_A:
 	.byte	 15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15		; +0x64 bands 96-107 -> zone
 ; SET 012 zone records: 16 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2043..0x2051;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec012_B:
-	ToneEnvZone4	0x2044, 0x80, -16						; zone 0
-	ToneEnvZone4	0x2044, 0x00, -16						; zone 1
-	ToneEnvZone4	0x2043, 0x00, -16						; zone 2
-	ToneEnvZone4	0x2045, 0x00, -17						; zone 3
-	ToneEnvZone4	0x2047, 0x00, -14						; zone 4
-	ToneEnvZone4	0x2046, 0x00, -14						; zone 5
-	ToneEnvZone4	0x2048, 0x00, -6						; zone 6
-	ToneEnvZone4	0x204a, 0x00, -11						; zone 7
-	ToneEnvZone4	0x2049, 0x00, -11						; zone 8
-	ToneEnvZone4	0x204b, 0x00, -4						; zone 9
-	ToneEnvZone4	0x204d, 0x00, -10						; zone 10
-	ToneEnvZone4	0x204c, 0x00, -10						; zone 11
-	ToneEnvZone4	0x204e, 0x00, -4						; zone 12
-	ToneEnvZone4	0x2050, 0x00, -2						; zone 13
-	ToneEnvZone4	0x204f, 0x00, -2						; zone 14
-	ToneEnvZone4	0x2051, 0x00, -2						; zone 15
+ToneSet_012_Zones:
+	ToneSetZone4	0x2044, 0x80, -16						; zone 0
+	ToneSetZone4	0x2044, 0x00, -16						; zone 1
+	ToneSetZone4	0x2043, 0x00, -16						; zone 2
+	ToneSetZone4	0x2045, 0x00, -17						; zone 3
+	ToneSetZone4	0x2047, 0x00, -14						; zone 4
+	ToneSetZone4	0x2046, 0x00, -14						; zone 5
+	ToneSetZone4	0x2048, 0x00, -6						; zone 6
+	ToneSetZone4	0x204a, 0x00, -11						; zone 7
+	ToneSetZone4	0x2049, 0x00, -11						; zone 8
+	ToneSetZone4	0x204b, 0x00, -4						; zone 9
+	ToneSetZone4	0x204d, 0x00, -10						; zone 10
+	ToneSetZone4	0x204c, 0x00, -10						; zone 11
+	ToneSetZone4	0x204e, 0x00, -4						; zone 12
+	ToneSetZone4	0x2050, 0x00, -2						; zone 13
+	ToneSetZone4	0x204f, 0x00, -2						; zone 14
+	ToneSetZone4	0x2051, 0x00, -2						; zone 15
 ; SET 020 key map (descriptor 020: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec020_A:
+ToneSet_020_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -3988,18 +3992,18 @@ ToneEnv_Rec020_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 020 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2072..0x2083;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec020_B:
-	ToneEnvZone4	0x2081, 0x80, -15						; zone 0
-	ToneEnvZone4	0x2081, 0x00, -15						; zone 1
-	ToneEnvZone4	0x2082, 0x00, -17						; zone 2
-	ToneEnvZone4	0x2082, 0xc0, -17						; zone 3
-	ToneEnvZone4	0x2083, 0xc0, -16						; zone 4
-	ToneEnvZone4	0x207b, 0x00, -16						; zone 5
-	ToneEnvZone4	0x207c, 0x00, -16						; zone 6
-	ToneEnvZone4	0x2072, 0x00, -14						; zone 7
+ToneSet_020_Zones:
+	ToneSetZone4	0x2081, 0x80, -15						; zone 0
+	ToneSetZone4	0x2081, 0x00, -15						; zone 1
+	ToneSetZone4	0x2082, 0x00, -17						; zone 2
+	ToneSetZone4	0x2082, 0xc0, -17						; zone 3
+	ToneSetZone4	0x2083, 0xc0, -16						; zone 4
+	ToneSetZone4	0x207b, 0x00, -16						; zone 5
+	ToneSetZone4	0x207c, 0x00, -16						; zone 6
+	ToneSetZone4	0x2072, 0x00, -14						; zone 7
 ; SET 037 key map (descriptor 037: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec037_A:
+ToneSet_037_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4010,16 +4014,16 @@ ToneEnv_Rec037_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 037 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1094..0x20b1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec037_B:
-	ToneEnvZone4	0x20b0, 0x80, -6						; zone 0
-	ToneEnvZone4	0x20b0, 0x00, -6						; zone 1
-	ToneEnvZone4	0x20b0, 0xf0, -6						; zone 2
-	ToneEnvZone4	0x20b1, 0x00, -23						; zone 3
-	ToneEnvZone4	0x20b1, 0xf0, -23						; zone 4
-	ToneEnvZone4	0x1094, 0x00, -37						; zone 5
+ToneSet_037_Zones:
+	ToneSetZone4	0x20b0, 0x80, -6						; zone 0
+	ToneSetZone4	0x20b0, 0x00, -6						; zone 1
+	ToneSetZone4	0x20b0, 0xf0, -6						; zone 2
+	ToneSetZone4	0x20b1, 0x00, -23						; zone 3
+	ToneSetZone4	0x20b1, 0xf0, -23						; zone 4
+	ToneSetZone4	0x1094, 0x00, -37						; zone 5
 ; SET 050 key map (descriptor 050: flags 0x02, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec050_A:
+ToneSet_050_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -4030,21 +4034,21 @@ ToneEnv_Rec050_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 050 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3005..0x300e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec050_B:
-	ToneEnvZone4	0x3006, 0x80, 0							; zone 0
-	ToneEnvZone4	0x3006, 0x00, 0							; zone 1
-	ToneEnvZone4	0x3005, 0x00, 0							; zone 2
-	ToneEnvZone4	0x3007, 0x00, -5						; zone 3
-	ToneEnvZone4	0x3008, 0x00, -4						; zone 4
-	ToneEnvZone4	0x3009, 0x00, -6						; zone 5
-	ToneEnvZone4	0x300a, 0x00, -5						; zone 6
-	ToneEnvZone4	0x300b, 0x00, -5						; zone 7
-	ToneEnvZone4	0x300c, 0x00, -7						; zone 8
-	ToneEnvZone4	0x300d, 0x00, -7						; zone 9
-	ToneEnvZone4	0x300e, 0x00, -7						; zone 10
+ToneSet_050_Zones:
+	ToneSetZone4	0x3006, 0x80, 0							; zone 0
+	ToneSetZone4	0x3006, 0x00, 0							; zone 1
+	ToneSetZone4	0x3005, 0x00, 0							; zone 2
+	ToneSetZone4	0x3007, 0x00, -5						; zone 3
+	ToneSetZone4	0x3008, 0x00, -4						; zone 4
+	ToneSetZone4	0x3009, 0x00, -6						; zone 5
+	ToneSetZone4	0x300a, 0x00, -5						; zone 6
+	ToneSetZone4	0x300b, 0x00, -5						; zone 7
+	ToneSetZone4	0x300c, 0x00, -7						; zone 8
+	ToneSetZone4	0x300d, 0x00, -7						; zone 9
+	ToneSetZone4	0x300e, 0x00, -7						; zone 10
 ; SET 064 key map (descriptor 064: flags 0x02, keys 12..113): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec064_A:
+ToneSet_064_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -4055,22 +4059,22 @@ ToneEnv_Rec064_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 064 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3038..0x3048;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec064_B:
-	ToneEnvZone4	0x3038, 0x80, -8						; zone 0
-	ToneEnvZone4	0x3038, 0x00, -8						; zone 1
-	ToneEnvZone4	0x3039, 0x00, -4						; zone 2
-	ToneEnvZone4	0x303a, 0x00, -4						; zone 3
-	ToneEnvZone4	0x303b, 0x00, -4						; zone 4
-	ToneEnvZone4	0x303c, 0x00, -4						; zone 5
-	ToneEnvZone4	0x303d, 0x00, 0							; zone 6
-	ToneEnvZone4	0x303e, 0x00, 0							; zone 7
-	ToneEnvZone4	0x303f, 0x00, -2						; zone 8
-	ToneEnvZone4	0x3040, 0x00, -2						; zone 9
-	ToneEnvZone4	0x3041, 0x00, -2						; zone 10
-	ToneEnvZone4	0x3048, 0xd0, -11						; zone 11
+ToneSet_064_Zones:
+	ToneSetZone4	0x3038, 0x80, -8						; zone 0
+	ToneSetZone4	0x3038, 0x00, -8						; zone 1
+	ToneSetZone4	0x3039, 0x00, -4						; zone 2
+	ToneSetZone4	0x303a, 0x00, -4						; zone 3
+	ToneSetZone4	0x303b, 0x00, -4						; zone 4
+	ToneSetZone4	0x303c, 0x00, -4						; zone 5
+	ToneSetZone4	0x303d, 0x00, 0							; zone 6
+	ToneSetZone4	0x303e, 0x00, 0							; zone 7
+	ToneSetZone4	0x303f, 0x00, -2						; zone 8
+	ToneSetZone4	0x3040, 0x00, -2						; zone 9
+	ToneSetZone4	0x3041, 0x00, -2						; zone 10
+	ToneSetZone4	0x3048, 0xd0, -11						; zone 11
 ; SET 067 key map (descriptor 067: flags 0x02, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec067_A:
+ToneSet_067_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -4081,22 +4085,22 @@ ToneEnv_Rec067_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 067 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x3071;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec067_B:
-	ToneEnvZone4	0x306a, 0x80, -5						; zone 0
-	ToneEnvZone4	0x306a, 0x00, -5						; zone 1
-	ToneEnvZone4	0x306b, 0x00, -3						; zone 2
-	ToneEnvZone4	0x306c, 0x00, 0							; zone 3
-	ToneEnvZone4	0x306d, 0xf0, -1						; zone 4
-	ToneEnvZone4	0x306d, 0xf0, -1						; zone 5
-	ToneEnvZone4	0x306f, 0x00, -6						; zone 6
-	ToneEnvZone4	0x3070, 0x00, -6						; zone 7
-	ToneEnvZone4	0x3071, 0x00, -14						; zone 8
-	ToneEnvZone4	0x2095, 0x00, -7						; zone 9
-	ToneEnvZone4	0x106f, 0x00, -26						; zone 10
-	ToneEnvZone4	0x1070, 0x00, -26						; zone 11
+ToneSet_067_Zones:
+	ToneSetZone4	0x306a, 0x80, -5						; zone 0
+	ToneSetZone4	0x306a, 0x00, -5						; zone 1
+	ToneSetZone4	0x306b, 0x00, -3						; zone 2
+	ToneSetZone4	0x306c, 0x00, 0							; zone 3
+	ToneSetZone4	0x306d, 0xf0, -1						; zone 4
+	ToneSetZone4	0x306d, 0xf0, -1						; zone 5
+	ToneSetZone4	0x306f, 0x00, -6						; zone 6
+	ToneSetZone4	0x3070, 0x00, -6						; zone 7
+	ToneSetZone4	0x3071, 0x00, -14						; zone 8
+	ToneSetZone4	0x2095, 0x00, -7						; zone 9
+	ToneSetZone4	0x106f, 0x00, -26						; zone 10
+	ToneSetZone4	0x1070, 0x00, -26						; zone 11
 ; SET 070 key map (descriptor 070: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec070_A:
+ToneSet_070_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4107,30 +4111,30 @@ ToneEnv_Rec070_A:
 	.byte	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3		; +0x64 bands 96-107 -> zone
 ; SET 070 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30b3..0x30b6;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec070_B:
-	ToneEnvZone4	0x30b3, 0xe0, -11						; zone 0
-	ToneEnvZone4	0x30b4, 0x90, -3						; zone 1
-	ToneEnvZone4	0x30b5, 0xf0, -15						; zone 2
-	ToneEnvZone4	0x30b6, 0xf0, -18						; zone 3
+ToneSet_070_Zones:
+	ToneSetZone4	0x30b3, 0xe0, -11						; zone 0
+	ToneSetZone4	0x30b4, 0x90, -3						; zone 1
+	ToneSetZone4	0x30b5, 0xf0, -15						; zone 2
+	ToneSetZone4	0x30b6, 0xf0, -18						; zone 3
 ; SET 078 key map (descriptor 078: flags 0x02, keys 12..111): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec078_A:
+ToneSet_078_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   4,   4,   5,   5	; +0x04 bands 0-15 -> zone
 	.byte	  5,   6,   6,   6,   6							; +0x14 bands 16-20 -> zone
 ; SET 078 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30b7..0x30c5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec078_B:
-	ToneEnvZone4	0x30b7, 0x80, -3						; zone 0
-	ToneEnvZone4	0x30b7, 0x00, -3						; zone 1
-	ToneEnvZone4	0x30b8, 0x00, -1						; zone 2
-	ToneEnvZone4	0x30b9, 0x00, -6						; zone 3
-	ToneEnvZone4	0x30ba, 0x00, -5						; zone 4
-	ToneEnvZone4	0x30bb, 0x00, -5						; zone 5
-	ToneEnvZone4	0x30c5, 0x00, -12						; zone 6
+ToneSet_078_Zones:
+	ToneSetZone4	0x30b7, 0x80, -3						; zone 0
+	ToneSetZone4	0x30b7, 0x00, -3						; zone 1
+	ToneSetZone4	0x30b8, 0x00, -1						; zone 2
+	ToneSetZone4	0x30b9, 0x00, -6						; zone 3
+	ToneSetZone4	0x30ba, 0x00, -5						; zone 4
+	ToneSetZone4	0x30bb, 0x00, -5						; zone 5
+	ToneSetZone4	0x30c5, 0x00, -12						; zone 6
 ; SET 097 key map (descriptor 097: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec097_A:
+ToneSet_097_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -4141,22 +4145,22 @@ ToneEnv_Rec097_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 097 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x3111;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec097_B:
-	ToneEnvZone4	0x310a, 0x80, -8						; zone 0
-	ToneEnvZone4	0x310a, 0x00, -8						; zone 1
-	ToneEnvZone4	0x3109, 0x00, -8						; zone 2
-	ToneEnvZone4	0x310b, 0x00, -7						; zone 3
-	ToneEnvZone4	0x310c, 0x00, -2						; zone 4
-	ToneEnvZone4	0x310d, 0x00, -2						; zone 5
-	ToneEnvZone4	0x310e, 0x00, -5						; zone 6
-	ToneEnvZone4	0x310f, 0x00, -10						; zone 7
-	ToneEnvZone4	0x3110, 0x00, -13						; zone 8
-	ToneEnvZone4	0x3111, 0x00, -13						; zone 9
-	ToneEnvZone4	0x106f, 0x00, -26						; zone 10
-	ToneEnvZone4	0x1070, 0x00, -26						; zone 11
+ToneSet_097_Zones:
+	ToneSetZone4	0x310a, 0x80, -8						; zone 0
+	ToneSetZone4	0x310a, 0x00, -8						; zone 1
+	ToneSetZone4	0x3109, 0x00, -8						; zone 2
+	ToneSetZone4	0x310b, 0x00, -7						; zone 3
+	ToneSetZone4	0x310c, 0x00, -2						; zone 4
+	ToneSetZone4	0x310d, 0x00, -2						; zone 5
+	ToneSetZone4	0x310e, 0x00, -5						; zone 6
+	ToneSetZone4	0x310f, 0x00, -10						; zone 7
+	ToneSetZone4	0x3110, 0x00, -13						; zone 8
+	ToneSetZone4	0x3111, 0x00, -13						; zone 9
+	ToneSetZone4	0x106f, 0x00, -26						; zone 10
+	ToneSetZone4	0x1070, 0x00, -26						; zone 11
 ; SET 103 key map (descriptor 103: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec103_A:
+ToneSet_103_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -4167,20 +4171,20 @@ ToneEnv_Rec103_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 103 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5097..0x601d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec103_B:
-	ToneEnvZone4	0x6016, 0x80, 0							; zone 0
-	ToneEnvZone4	0x6016, 0x00, 0							; zone 1
-	ToneEnvZone4	0x6017, 0x00, -9						; zone 2
-	ToneEnvZone4	0x6019, 0x00, -12						; zone 3
-	ToneEnvZone4	0x601a, 0x00, -12						; zone 4
-	ToneEnvZone4	0x601b, 0x00, -12						; zone 5
-	ToneEnvZone4	0x601c, 0x00, -12						; zone 6
-	ToneEnvZone4	0x601d, 0x00, -12						; zone 7
-	ToneEnvZone4	0x5097, 0x00, -6						; zone 8
-	ToneEnvZone4	0x5098, 0x00, -6						; zone 9
+ToneSet_103_Zones:
+	ToneSetZone4	0x6016, 0x80, 0							; zone 0
+	ToneSetZone4	0x6016, 0x00, 0							; zone 1
+	ToneSetZone4	0x6017, 0x00, -9						; zone 2
+	ToneSetZone4	0x6019, 0x00, -12						; zone 3
+	ToneSetZone4	0x601a, 0x00, -12						; zone 4
+	ToneSetZone4	0x601b, 0x00, -12						; zone 5
+	ToneSetZone4	0x601c, 0x00, -12						; zone 6
+	ToneSetZone4	0x601d, 0x00, -12						; zone 7
+	ToneSetZone4	0x5097, 0x00, -6						; zone 8
+	ToneSetZone4	0x5098, 0x00, -6						; zone 9
 ; SET 111 key map (descriptor 111: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec111_A:
+ToneSet_111_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2	; +0x04 bands 0-15 -> zone
 	.byte	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -4191,19 +4195,19 @@ ToneEnv_Rec111_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 111 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x7020..0x7027;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec111_B:
-	ToneEnvZone4	0x7020, 0x80, -3						; zone 0
-	ToneEnvZone4	0x7020, 0x00, -3						; zone 1
-	ToneEnvZone4	0x7022, 0x00, -2						; zone 2
-	ToneEnvZone4	0x7021, 0x00, -2						; zone 3
-	ToneEnvZone4	0x7023, 0x00, -2						; zone 4
-	ToneEnvZone4	0x7024, 0x00, -2						; zone 5
-	ToneEnvZone4	0x7025, 0x00, -2						; zone 6
-	ToneEnvZone4	0x7026, 0x00, -2						; zone 7
-	ToneEnvZone4	0x7027, 0x00, -2						; zone 8
+ToneSet_111_Zones:
+	ToneSetZone4	0x7020, 0x80, -3						; zone 0
+	ToneSetZone4	0x7020, 0x00, -3						; zone 1
+	ToneSetZone4	0x7022, 0x00, -2						; zone 2
+	ToneSetZone4	0x7021, 0x00, -2						; zone 3
+	ToneSetZone4	0x7023, 0x00, -2						; zone 4
+	ToneSetZone4	0x7024, 0x00, -2						; zone 5
+	ToneSetZone4	0x7025, 0x00, -2						; zone 6
+	ToneSetZone4	0x7026, 0x00, -2						; zone 7
+	ToneSetZone4	0x7027, 0x00, -2						; zone 8
 ; SET 120 key map (descriptor 120: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec120_A:
+ToneSet_120_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
@@ -4214,28 +4218,28 @@ ToneEnv_Rec120_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 120 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x10a1..0x10a4;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec120_B:
-	ToneEnvZone4	0x10a1, 0x80, -6						; zone 0
-	ToneEnvZone4	0x10a1, 0x00, -6						; zone 1
-	ToneEnvZone4	0x10a2, 0x00, -6						; zone 2
-	ToneEnvZone4	0x10a3, 0x00, -2						; zone 3
-	ToneEnvZone4	0x10a4, 0x00, -4						; zone 4
-	ToneEnvZone4	0x10a4, 0xf0, -4						; zone 5
+ToneSet_120_Zones:
+	ToneSetZone4	0x10a1, 0x80, -6						; zone 0
+	ToneSetZone4	0x10a1, 0x00, -6						; zone 1
+	ToneSetZone4	0x10a2, 0x00, -6						; zone 2
+	ToneSetZone4	0x10a3, 0x00, -2						; zone 3
+	ToneSetZone4	0x10a4, 0x00, -4						; zone 4
+	ToneSetZone4	0x10a4, 0xf0, -4						; zone 5
 ; SET 130 key map (descriptor 130: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec130_A:
+ToneSet_130_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
 	.byte	  1,   1,   1								; +0x24 bands 32-34 -> zone
 ; SET 130 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x10ae..0x31b1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec130_B:
-	ToneEnvZone4	0x10ae, 0x80, -5						; zone 0
-	ToneEnvZone4	0x31b1, 0x80, -5						; zone 1
+ToneSet_130_Zones:
+	ToneSetZone4	0x10ae, 0x80, -5						; zone 0
+	ToneSetZone4	0x31b1, 0x80, -5						; zone 1
 ; SET 140 key map (descriptor 140: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec140_A:
+ToneSet_140_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4246,30 +4250,30 @@ ToneEnv_Rec140_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 140 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x101f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec140_B:
-	ToneEnvZone4	0x101b, 0x80, -9						; zone 0
-	ToneEnvZone4	0x101c, 0xa0, -10						; zone 1
-	ToneEnvZone4	0x101d, 0xe0, -1						; zone 2
-	ToneEnvZone4	0x101e, 0xa0, -6						; zone 3
-	ToneEnvZone4	0x101f, 0xe0, -3						; zone 4
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 5
+ToneSet_140_Zones:
+	ToneSetZone4	0x101b, 0x80, -9						; zone 0
+	ToneSetZone4	0x101c, 0xa0, -10						; zone 1
+	ToneSetZone4	0x101d, 0xe0, -1						; zone 2
+	ToneSetZone4	0x101e, 0xa0, -6						; zone 3
+	ToneSetZone4	0x101f, 0xe0, -3						; zone 4
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 5
 ; SET 144 key map (descriptor 144: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec144_A:
+ToneSet_144_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   1,   1,   1,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
 	.byte	  3,   3,   3								; +0x24 bands 32-34 -> zone
 ; SET 144 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x1026;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec144_B:
-	ToneEnvZone4	0x1024, 0x90, -4						; zone 0
-	ToneEnvZone4	0x1025, 0xf0, -5						; zone 1
-	ToneEnvZone4	0x1026, 0xc0, -7						; zone 2
-	ToneEnvZone4	0x1016, 0xc0, -14						; zone 3
+ToneSet_144_Zones:
+	ToneSetZone4	0x1024, 0x90, -4						; zone 0
+	ToneSetZone4	0x1025, 0xf0, -5						; zone 1
+	ToneSetZone4	0x1026, 0xc0, -7						; zone 2
+	ToneSetZone4	0x1016, 0xc0, -14						; zone 3
 ; SET 153 key map (descriptor 153: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec153_A:
+ToneSet_153_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4280,17 +4284,17 @@ ToneEnv_Rec153_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 153 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x1049;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec153_B:
-	ToneEnvZone4	0x1045, 0xa0, -3						; zone 0
-	ToneEnvZone4	0x1046, 0xe0, -7						; zone 1
-	ToneEnvZone4	0x1047, 0xa0, -3						; zone 2
-	ToneEnvZone4	0x1048, 0xe0, -1						; zone 3
-	ToneEnvZone4	0x1049, 0x80, -6						; zone 4
-	ToneEnvZone4	0x102b, 0xc0, -21						; zone 5
-	ToneEnvZone4	0x1016, 0xc0, -26						; zone 6
+ToneSet_153_Zones:
+	ToneSetZone4	0x1045, 0xa0, -3						; zone 0
+	ToneSetZone4	0x1046, 0xe0, -7						; zone 1
+	ToneSetZone4	0x1047, 0xa0, -3						; zone 2
+	ToneSetZone4	0x1048, 0xe0, -1						; zone 3
+	ToneSetZone4	0x1049, 0x80, -6						; zone 4
+	ToneSetZone4	0x102b, 0xc0, -21						; zone 5
+	ToneSetZone4	0x1016, 0xc0, -26						; zone 6
 ; SET 168 key map (descriptor 168: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec168_A:
+ToneSet_168_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4301,15 +4305,15 @@ ToneEnv_Rec168_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 168 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x0046..0x1051;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec168_B:
-	ToneEnvZone6	0x104f, 0x00, -14, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x1050, 0x00, -3, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x1051, 0x00, -4, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x0046, 0x00, -6, -2159						; zone 3, coarse -8.43 st
-	ToneEnvZone6	0x0048, 0x00, -7, -1718						; zone 4, coarse -6.71 st
+ToneSet_168_Zones:
+	ToneSetZone6	0x104f, 0x00, -14, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x1050, 0x00, -3, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x1051, 0x00, -4, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x0046, 0x00, -6, -2159						; zone 3, coarse -8.43 st
+	ToneSetZone6	0x0048, 0x00, -7, -1718						; zone 4, coarse -6.71 st
 ; SET 177 key map (descriptor 177: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec177_A:
+ToneSet_177_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4320,16 +4324,16 @@ ToneEnv_Rec177_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 177 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x5006..0x5010;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec177_B:
-	ToneEnvZone6	0x500c, 0x80, -13, -448						; zone 0, coarse -1.75 st
-	ToneEnvZone6	0x500d, 0xb0, -13, -2058					; zone 1, coarse -8.04 st
-	ToneEnvZone6	0x500e, 0xe0, -9, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x500f, 0x80, -1, -1069						; zone 3, coarse -4.18 st
-	ToneEnvZone6	0x5010, 0xb0, -10, -2026					; zone 4, coarse -7.91 st
-	ToneEnvZone6	0x5006, 0x00, -8, -1669						; zone 5, coarse -6.52 st
+ToneSet_177_Zones:
+	ToneSetZone6	0x500c, 0x80, -13, -448						; zone 0, coarse -1.75 st
+	ToneSetZone6	0x500d, 0xb0, -13, -2058					; zone 1, coarse -8.04 st
+	ToneSetZone6	0x500e, 0xe0, -9, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x500f, 0x80, -1, -1069						; zone 3, coarse -4.18 st
+	ToneSetZone6	0x5010, 0xb0, -10, -2026					; zone 4, coarse -7.91 st
+	ToneSetZone6	0x5006, 0x00, -8, -1669						; zone 5, coarse -6.52 st
 ; SET 181 key map (descriptor 181: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec181_A:
+ToneSet_181_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -4340,17 +4344,17 @@ ToneEnv_Rec181_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 181 zone records: 7 x 6 bytes (descriptor flags bit 7 set), selectors 0x5007..0x500b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec181_B:
-	ToneEnvZone6	0x5007, 0x00, -20, -2223					; zone 0, coarse -8.68 st
-	ToneEnvZone6	0x5007, 0x00, -12, -2223					; zone 1, coarse -8.68 st
-	ToneEnvZone6	0x5007, 0x00, -4, -2223						; zone 2, coarse -8.68 st
-	ToneEnvZone6	0x5008, 0x00, -10, -1978					; zone 3, coarse -7.73 st
-	ToneEnvZone6	0x5009, 0x00, -9, 0						; zone 4, coarse +0.00 st
-	ToneEnvZone6	0x500a, 0x00, -6, -343						; zone 5, coarse -1.34 st
-	ToneEnvZone6	0x500b, 0x00, -1, 0						; zone 6, coarse +0.00 st
+ToneSet_181_Zones:
+	ToneSetZone6	0x5007, 0x00, -20, -2223					; zone 0, coarse -8.68 st
+	ToneSetZone6	0x5007, 0x00, -12, -2223					; zone 1, coarse -8.68 st
+	ToneSetZone6	0x5007, 0x00, -4, -2223						; zone 2, coarse -8.68 st
+	ToneSetZone6	0x5008, 0x00, -10, -1978					; zone 3, coarse -7.73 st
+	ToneSetZone6	0x5009, 0x00, -9, 0						; zone 4, coarse +0.00 st
+	ToneSetZone6	0x500a, 0x00, -6, -343						; zone 5, coarse -1.34 st
+	ToneSetZone6	0x500b, 0x00, -1, 0						; zone 6, coarse +0.00 st
 ; SET 187 key map (descriptor 187: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec187_A:
+ToneSet_187_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4361,18 +4365,18 @@ ToneEnv_Rec187_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 187 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3167..0x3194;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec187_B:
-	ToneEnvZone4	0x3167, 0xc0, -8						; zone 0
-	ToneEnvZone4	0x3168, 0xe0, -9						; zone 1
-	ToneEnvZone4	0x3169, 0xa0, -10						; zone 2
-	ToneEnvZone4	0x316a, 0xc0, -6						; zone 3
-	ToneEnvZone4	0x316b, 0x80, -3						; zone 4
-	ToneEnvZone4	0x316b, 0x80, -3						; zone 5
-	ToneEnvZone4	0x3178, 0xd0, -3						; zone 6
-	ToneEnvZone4	0x3194, 0xc0, -15						; zone 7
+ToneSet_187_Zones:
+	ToneSetZone4	0x3167, 0xc0, -8						; zone 0
+	ToneSetZone4	0x3168, 0xe0, -9						; zone 1
+	ToneSetZone4	0x3169, 0xa0, -10						; zone 2
+	ToneSetZone4	0x316a, 0xc0, -6						; zone 3
+	ToneSetZone4	0x316b, 0x80, -3						; zone 4
+	ToneSetZone4	0x316b, 0x80, -3						; zone 5
+	ToneSetZone4	0x3178, 0xd0, -3						; zone 6
+	ToneSetZone4	0x3194, 0xc0, -15						; zone 7
 ; SET 190 key map (descriptor 190: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec190_A:
+ToneSet_190_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -4383,32 +4387,32 @@ ToneEnv_Rec190_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 190 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3174..0x3194;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec190_B:
-	ToneEnvZone4	0x3179, 0xf0, -12						; zone 0
-	ToneEnvZone4	0x317a, 0x90, -7						; zone 1
-	ToneEnvZone4	0x317b, 0xd0, -7						; zone 2
-	ToneEnvZone4	0x317c, 0x80, 0							; zone 3
-	ToneEnvZone4	0x317d, 0xa0, -8						; zone 4
-	ToneEnvZone4	0x3174, 0xa0, -14						; zone 5
-	ToneEnvZone4	0x3175, 0xe0, -16						; zone 6
-	ToneEnvZone4	0x3176, 0xa0, -17						; zone 7
-	ToneEnvZone4	0x3177, 0xb0, -10						; zone 8
-	ToneEnvZone4	0x3178, 0xd0, -7						; zone 9
-	ToneEnvZone4	0x3194, 0xc0, -19						; zone 10
+ToneSet_190_Zones:
+	ToneSetZone4	0x3179, 0xf0, -12						; zone 0
+	ToneSetZone4	0x317a, 0x90, -7						; zone 1
+	ToneSetZone4	0x317b, 0xd0, -7						; zone 2
+	ToneSetZone4	0x317c, 0x80, 0							; zone 3
+	ToneSetZone4	0x317d, 0xa0, -8						; zone 4
+	ToneSetZone4	0x3174, 0xa0, -14						; zone 5
+	ToneSetZone4	0x3175, 0xe0, -16						; zone 6
+	ToneSetZone4	0x3176, 0xa0, -17						; zone 7
+	ToneSetZone4	0x3177, 0xb0, -10						; zone 8
+	ToneSetZone4	0x3178, 0xd0, -7						; zone 9
+	ToneSetZone4	0x3194, 0xc0, -19						; zone 10
 ; SET 201 key map (descriptor 201: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..2 of 3.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec201_A:
+ToneSet_201_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   2,   2,   2,   2,   2,   2			; +0x04 bands 0-10 -> zone
 ; SET 201 zone records: 3 x 6 bytes (descriptor flags bit 7 set), selectors 0x5015..0x5015;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec201_B:
-	ToneEnvZone6	0x5015, 0xc0, -19, 35						; zone 0, coarse +0.14 st
-	ToneEnvZone6	0x5015, 0xc0, -11, 35						; zone 1, coarse +0.14 st
-	ToneEnvZone6	0x5015, 0xc0, -3, 35						; zone 2, coarse +0.14 st
+ToneSet_201_Zones:
+	ToneSetZone6	0x5015, 0xc0, -19, 35						; zone 0, coarse +0.14 st
+	ToneSetZone6	0x5015, 0xc0, -11, 35						; zone 1, coarse +0.14 st
+	ToneSetZone6	0x5015, 0xc0, -3, 35						; zone 2, coarse +0.14 st
 ; SET 205 key map (descriptor 205: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec205_A:
+ToneSet_205_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -4419,19 +4423,19 @@ ToneEnv_Rec205_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 205 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x3145;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec205_B:
-	ToneEnvZone4	0x313f, 0x80, -4						; zone 0
-	ToneEnvZone4	0x313f, 0x00, -4						; zone 1
-	ToneEnvZone4	0x3140, 0x00, -4						; zone 2
-	ToneEnvZone4	0x3141, 0xc0, -2						; zone 3
-	ToneEnvZone4	0x3142, 0xe0, -5						; zone 4
-	ToneEnvZone4	0x3143, 0xa0, 0							; zone 5
-	ToneEnvZone4	0x3144, 0xd0, -1						; zone 6
-	ToneEnvZone4	0x3145, 0xd0, -5						; zone 7
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 8
+ToneSet_205_Zones:
+	ToneSetZone4	0x313f, 0x80, -4						; zone 0
+	ToneSetZone4	0x313f, 0x00, -4						; zone 1
+	ToneSetZone4	0x3140, 0x00, -4						; zone 2
+	ToneSetZone4	0x3141, 0xc0, -2						; zone 3
+	ToneSetZone4	0x3142, 0xe0, -5						; zone 4
+	ToneSetZone4	0x3143, 0xa0, 0							; zone 5
+	ToneSetZone4	0x3144, 0xd0, -1						; zone 6
+	ToneSetZone4	0x3145, 0xd0, -5						; zone 7
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 8
 ; SET 210 key map (descriptor 210: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec210_A:
+ToneSet_210_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4442,18 +4446,18 @@ ToneEnv_Rec210_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 210 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x314f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec210_B:
-	ToneEnvZone4	0x314b, 0x90, -4						; zone 0
-	ToneEnvZone4	0x314c, 0xa0, -5						; zone 1
-	ToneEnvZone4	0x314d, 0xe0, -14						; zone 2
-	ToneEnvZone4	0x314e, 0x80, -6						; zone 3
-	ToneEnvZone4	0x314f, 0xc0, -8						; zone 4
-	ToneEnvZone4	0x3144, 0xd0, -17						; zone 5
-	ToneEnvZone4	0x3145, 0xd0, -21						; zone 6
-	ToneEnvZone4	0x1016, 0xc0, -26						; zone 7
+ToneSet_210_Zones:
+	ToneSetZone4	0x314b, 0x90, -4						; zone 0
+	ToneSetZone4	0x314c, 0xa0, -5						; zone 1
+	ToneSetZone4	0x314d, 0xe0, -14						; zone 2
+	ToneSetZone4	0x314e, 0x80, -6						; zone 3
+	ToneSetZone4	0x314f, 0xc0, -8						; zone 4
+	ToneSetZone4	0x3144, 0xd0, -17						; zone 5
+	ToneSetZone4	0x3145, 0xd0, -21						; zone 6
+	ToneSetZone4	0x1016, 0xc0, -26						; zone 7
 ; SET 214 key map (descriptor 214: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec214_A:
+ToneSet_214_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -4464,19 +4468,19 @@ ToneEnv_Rec214_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 214 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1016..0x3166;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec214_B:
-	ToneEnvZone4	0x3162, 0xa0, -11						; zone 0
-	ToneEnvZone4	0x3163, 0xe0, -12						; zone 1
-	ToneEnvZone4	0x3164, 0x90, -8						; zone 2
-	ToneEnvZone4	0x3165, 0xd0, -8						; zone 3
-	ToneEnvZone4	0x3166, 0xa0, -12						; zone 4
-	ToneEnvZone4	0x314f, 0xc0, -8						; zone 5
-	ToneEnvZone4	0x3144, 0xd0, -17						; zone 6
-	ToneEnvZone4	0x3145, 0xd0, -21						; zone 7
-	ToneEnvZone4	0x1016, 0xc0, -26						; zone 8
+ToneSet_214_Zones:
+	ToneSetZone4	0x3162, 0xa0, -11						; zone 0
+	ToneSetZone4	0x3163, 0xe0, -12						; zone 1
+	ToneSetZone4	0x3164, 0x90, -8						; zone 2
+	ToneSetZone4	0x3165, 0xd0, -8						; zone 3
+	ToneSetZone4	0x3166, 0xa0, -12						; zone 4
+	ToneSetZone4	0x314f, 0xc0, -8						; zone 5
+	ToneSetZone4	0x3144, 0xd0, -17						; zone 6
+	ToneSetZone4	0x3145, 0xd0, -21						; zone 7
+	ToneSetZone4	0x1016, 0xc0, -26						; zone 8
 ; SET 217 key map (descriptor 217: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..16 of 17.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec217_A:
+ToneSet_217_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -4487,27 +4491,27 @@ ToneEnv_Rec217_A:
 	.byte	 16,  16,  16,  16,  16,  16,  16,  16,  16,  16,  16,  16		; +0x64 bands 96-107 -> zone
 ; SET 217 zone records: 17 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4067..0x408f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec217_B:
-	ToneEnvZone4	0x4079, 0xc0, -11						; zone 0
-	ToneEnvZone4	0x407a, 0xf0, -12						; zone 1
-	ToneEnvZone4	0x407b, 0x90, -11						; zone 2
-	ToneEnvZone4	0x407c, 0xc0, -11						; zone 3
-	ToneEnvZone4	0x407d, 0xf0, -11						; zone 4
-	ToneEnvZone4	0x407e, 0xb0, -13						; zone 5
-	ToneEnvZone4	0x407f, 0xc0, -17						; zone 6
-	ToneEnvZone4	0x4080, 0xe0, -15						; zone 7
-	ToneEnvZone4	0x4081, 0x80, -18						; zone 8
-	ToneEnvZone4	0x4088, 0xc0, -12						; zone 9
-	ToneEnvZone4	0x4089, 0xe0, -15						; zone 10
-	ToneEnvZone4	0x408f, 0x90, -19						; zone 11
-	ToneEnvZone4	0x408f, 0x90, -23						; zone 12
-	ToneEnvZone4	0x408f, 0x90, -27						; zone 13
-	ToneEnvZone4	0x408f, 0x90, -31						; zone 14
-	ToneEnvZone4	0x408f, 0x90, -35						; zone 15
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 16
+ToneSet_217_Zones:
+	ToneSetZone4	0x4079, 0xc0, -11						; zone 0
+	ToneSetZone4	0x407a, 0xf0, -12						; zone 1
+	ToneSetZone4	0x407b, 0x90, -11						; zone 2
+	ToneSetZone4	0x407c, 0xc0, -11						; zone 3
+	ToneSetZone4	0x407d, 0xf0, -11						; zone 4
+	ToneSetZone4	0x407e, 0xb0, -13						; zone 5
+	ToneSetZone4	0x407f, 0xc0, -17						; zone 6
+	ToneSetZone4	0x4080, 0xe0, -15						; zone 7
+	ToneSetZone4	0x4081, 0x80, -18						; zone 8
+	ToneSetZone4	0x4088, 0xc0, -12						; zone 9
+	ToneSetZone4	0x4089, 0xe0, -15						; zone 10
+	ToneSetZone4	0x408f, 0x90, -19						; zone 11
+	ToneSetZone4	0x408f, 0x90, -23						; zone 12
+	ToneSetZone4	0x408f, 0x90, -27						; zone 13
+	ToneSetZone4	0x408f, 0x90, -31						; zone 14
+	ToneSetZone4	0x408f, 0x90, -35						; zone 15
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 16
 ; SET 223 key map (descriptor 223: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..15 of 16.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec223_A:
+ToneSet_223_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   2,   3	; +0x14 bands 16-31 -> zone
@@ -4518,59 +4522,59 @@ ToneEnv_Rec223_A:
 	.byte	 15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15		; +0x64 bands 96-107 -> zone
 ; SET 223 zone records: 16 x 4 bytes (descriptor flags bit 7 clear), selectors 0x404e..0x4067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec223_B:
-	ToneEnvZone4	0x404e, 0xe0, -3						; zone 0
-	ToneEnvZone4	0x404f, 0x80, -4						; zone 1
-	ToneEnvZone4	0x4050, 0x90, -8						; zone 2
-	ToneEnvZone4	0x4051, 0xa0, -9						; zone 3
-	ToneEnvZone4	0x4052, 0xe0, -11						; zone 4
-	ToneEnvZone4	0x4053, 0xf0, -12						; zone 5
-	ToneEnvZone4	0x4054, 0x90, -12						; zone 6
-	ToneEnvZone4	0x4055, 0xc0, -7						; zone 7
-	ToneEnvZone4	0x4056, 0xe0, -9						; zone 8
-	ToneEnvZone4	0x4057, 0x80, -4						; zone 9
-	ToneEnvZone4	0x405f, 0xa0, -7						; zone 10
-	ToneEnvZone4	0x4060, 0xb0, -10						; zone 11
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 12
-	ToneEnvZone4	0x4066, 0xa0, -17						; zone 13
-	ToneEnvZone4	0x4066, 0xa0, -21						; zone 14
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 15
+ToneSet_223_Zones:
+	ToneSetZone4	0x404e, 0xe0, -3						; zone 0
+	ToneSetZone4	0x404f, 0x80, -4						; zone 1
+	ToneSetZone4	0x4050, 0x90, -8						; zone 2
+	ToneSetZone4	0x4051, 0xa0, -9						; zone 3
+	ToneSetZone4	0x4052, 0xe0, -11						; zone 4
+	ToneSetZone4	0x4053, 0xf0, -12						; zone 5
+	ToneSetZone4	0x4054, 0x90, -12						; zone 6
+	ToneSetZone4	0x4055, 0xc0, -7						; zone 7
+	ToneSetZone4	0x4056, 0xe0, -9						; zone 8
+	ToneSetZone4	0x4057, 0x80, -4						; zone 9
+	ToneSetZone4	0x405f, 0xa0, -7						; zone 10
+	ToneSetZone4	0x4060, 0xb0, -10						; zone 11
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 12
+	ToneSetZone4	0x4066, 0xa0, -17						; zone 13
+	ToneSetZone4	0x4066, 0xa0, -21						; zone 14
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 15
 ; SET 234 key map (descriptor 234: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec234_A:
+ToneSet_234_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   2,   3,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
 	.byte	  3,   3,   3								; +0x24 bands 32-34 -> zone
 ; SET 234 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3191..0x3194;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec234_B:
-	ToneEnvZone4	0x3191, 0xa0, -13						; zone 0
-	ToneEnvZone4	0x3192, 0x80, -2						; zone 1
-	ToneEnvZone4	0x3193, 0xc0, -6						; zone 2
-	ToneEnvZone4	0x3194, 0xc0, -11						; zone 3
+ToneSet_234_Zones:
+	ToneSetZone4	0x3191, 0xa0, -13						; zone 0
+	ToneSetZone4	0x3192, 0x80, -2						; zone 1
+	ToneSetZone4	0x3193, 0xc0, -6						; zone 2
+	ToneSetZone4	0x3194, 0xc0, -11						; zone 3
 ; SET 252 key map (descriptor 252: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec252_A:
+ToneSet_252_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1			; +0x04 bands 0-10 -> zone
 ; SET 252 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x6096;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec252_B:
-	ToneEnvZone4	0x6096, 0xb0, -9						; zone 0
-	ToneEnvZone4	0x0000, 0x00, -8						; zone 1
+ToneSet_252_Zones:
+	ToneSetZone4	0x6096, 0xb0, -9						; zone 0
+	ToneSetZone4	0x0000, 0x00, -8						; zone 1
 ; SET 260 key map (descriptor 260: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec260_A:
+ToneSet_260_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 260 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0000;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec260_B:
-	ToneEnvZone4	0x0000, 0x00, -8						; zone 0
+ToneSet_260_Zones:
+	ToneSetZone4	0x0000, 0x00, -8						; zone 0
 ; SET 266 key map (descriptor 266: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec266_A:
+ToneSet_266_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4581,17 +4585,17 @@ ToneEnv_Rec266_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 266 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00a5..0x00ab;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec266_B:
-	ToneEnvZone4	0x00a7, 0xf0, -1						; zone 0
-	ToneEnvZone4	0x00a8, 0xa0, -12						; zone 1
-	ToneEnvZone4	0x00a9, 0xe0, -8						; zone 2
-	ToneEnvZone4	0x00aa, 0x80, -7						; zone 3
-	ToneEnvZone4	0x00ab, 0xf0, -7						; zone 4
-	ToneEnvZone4	0x00a5, 0x80, -29						; zone 5
-	ToneEnvZone4	0x00a5, 0x80, -33						; zone 6
+ToneSet_266_Zones:
+	ToneSetZone4	0x00a7, 0xf0, -1						; zone 0
+	ToneSetZone4	0x00a8, 0xa0, -12						; zone 1
+	ToneSetZone4	0x00a9, 0xe0, -8						; zone 2
+	ToneSetZone4	0x00aa, 0x80, -7						; zone 3
+	ToneSetZone4	0x00ab, 0xf0, -7						; zone 4
+	ToneSetZone4	0x00a5, 0x80, -29						; zone 5
+	ToneSetZone4	0x00a5, 0x80, -33						; zone 6
 ; SET 268 key map (descriptor 268: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec268_A:
+ToneSet_268_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4602,16 +4606,16 @@ ToneEnv_Rec268_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 268 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00a5..0x00af;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec268_B:
-	ToneEnvZone4	0x00ac, 0xa0, -23						; zone 0
-	ToneEnvZone4	0x00ad, 0xe0, -27						; zone 1
-	ToneEnvZone4	0x00ae, 0xa0, -22						; zone 2
-	ToneEnvZone4	0x00af, 0x80, -24						; zone 3
-	ToneEnvZone4	0x00a5, 0x80, -29						; zone 4
-	ToneEnvZone4	0x00a5, 0x80, -33						; zone 5
+ToneSet_268_Zones:
+	ToneSetZone4	0x00ac, 0xa0, -23						; zone 0
+	ToneSetZone4	0x00ad, 0xe0, -27						; zone 1
+	ToneSetZone4	0x00ae, 0xa0, -22						; zone 2
+	ToneSetZone4	0x00af, 0x80, -24						; zone 3
+	ToneSetZone4	0x00a5, 0x80, -29						; zone 4
+	ToneSetZone4	0x00a5, 0x80, -33						; zone 5
 ; SET 278 key map (descriptor 278: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec278_A:
+ToneSet_278_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -4622,19 +4626,19 @@ ToneEnv_Rec278_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 278 zone records: 9 x 6 bytes (descriptor flags bit 7 set), selectors 0x600b..0x6015;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec278_B:
-	ToneEnvZone6	0x6012, 0x00, 5, -3378						; zone 0, coarse -13.20 st
-	ToneEnvZone6	0x6013, 0x00, 1, -1797						; zone 1, coarse -7.02 st
-	ToneEnvZone6	0x6014, 0x00, -3, -3385						; zone 2, coarse -13.22 st
-	ToneEnvZone6	0x6015, 0x00, -9, -1797						; zone 3, coarse -7.02 st
-	ToneEnvZone6	0x600f, 0x00, -3, -2797						; zone 4, coarse -10.93 st
-	ToneEnvZone6	0x6010, 0x00, -1, -1495						; zone 5, coarse -5.84 st
-	ToneEnvZone6	0x6011, 0x00, -1, -3573						; zone 6, coarse -13.96 st
-	ToneEnvZone6	0x600b, 0x00, -12, -1075					; zone 7, coarse -4.20 st
-	ToneEnvZone6	0x600c, 0x00, -8, -2505						; zone 8, coarse -9.79 st
+ToneSet_278_Zones:
+	ToneSetZone6	0x6012, 0x00, 5, -3378						; zone 0, coarse -13.20 st
+	ToneSetZone6	0x6013, 0x00, 1, -1797						; zone 1, coarse -7.02 st
+	ToneSetZone6	0x6014, 0x00, -3, -3385						; zone 2, coarse -13.22 st
+	ToneSetZone6	0x6015, 0x00, -9, -1797						; zone 3, coarse -7.02 st
+	ToneSetZone6	0x600f, 0x00, -3, -2797						; zone 4, coarse -10.93 st
+	ToneSetZone6	0x6010, 0x00, -1, -1495						; zone 5, coarse -5.84 st
+	ToneSetZone6	0x6011, 0x00, -1, -3573						; zone 6, coarse -13.96 st
+	ToneSetZone6	0x600b, 0x00, -12, -1075					; zone 7, coarse -4.20 st
+	ToneSetZone6	0x600c, 0x00, -8, -2505						; zone 8, coarse -9.79 st
 ; SET 284 key map (descriptor 284: flags 0x81, keys 12..104): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec284_A:
+ToneSet_284_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4645,27 +4649,27 @@ ToneEnv_Rec284_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 284 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x00c7..0x00cb;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec284_B:
-	ToneEnvZone6	0x00c7, 0x00, -8, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x00c8, 0x00, -15, -783						; zone 1, coarse -3.06 st
-	ToneEnvZone6	0x00c9, 0x00, -14, -2304					; zone 2, coarse -9.00 st
-	ToneEnvZone6	0x00ca, 0x00, -13, -787						; zone 3, coarse -3.07 st
-	ToneEnvZone6	0x00cb, 0x00, -6, -1201						; zone 4, coarse -4.69 st
+ToneSet_284_Zones:
+	ToneSetZone6	0x00c7, 0x00, -8, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x00c8, 0x00, -15, -783						; zone 1, coarse -3.06 st
+	ToneSetZone6	0x00c9, 0x00, -14, -2304					; zone 2, coarse -9.00 st
+	ToneSetZone6	0x00ca, 0x00, -13, -787						; zone 3, coarse -3.07 st
+	ToneSetZone6	0x00cb, 0x00, -6, -1201						; zone 4, coarse -4.69 st
 ; SET 289 key map (descriptor 289: flags 0x81, keys 12..108): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec289_A:
+ToneSet_289_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1	; +0x14 bands 16-31 -> zone
 	.byte	  1,   1,   1								; +0x24 bands 32-34 -> zone
 ; SET 289 zone records: 2 x 6 bytes (descriptor flags bit 7 set), selectors 0x0082..0x0092;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec289_B:
-	ToneEnvZone6	0x0082, 0x00, -11, -1003					; zone 0, coarse -3.92 st
-	ToneEnvZone6	0x0092, 0x00, -10, -922						; zone 1, coarse -3.60 st
+ToneSet_289_Zones:
+	ToneSetZone6	0x0082, 0x00, -11, -1003					; zone 0, coarse -3.92 st
+	ToneSetZone6	0x0092, 0x00, -10, -922						; zone 1, coarse -3.60 st
 ; SET 293 key map (descriptor 293: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec293_A:
+ToneSet_293_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4676,15 +4680,15 @@ ToneEnv_Rec293_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 293 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x00cf..0x00d3;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec293_B:
-	ToneEnvZone6	0x00cf, 0x00, -13, -1114					; zone 0, coarse -4.35 st
-	ToneEnvZone6	0x00d0, 0x00, -6, -3755						; zone 1, coarse -14.67 st
-	ToneEnvZone6	0x00d1, 0x00, -15, -2389					; zone 2, coarse -9.33 st
-	ToneEnvZone6	0x00d2, 0x00, -3, -708						; zone 3, coarse -2.77 st
-	ToneEnvZone6	0x00d3, 0x00, -7, 0						; zone 4, coarse +0.00 st
+ToneSet_293_Zones:
+	ToneSetZone6	0x00cf, 0x00, -13, -1114					; zone 0, coarse -4.35 st
+	ToneSetZone6	0x00d0, 0x00, -6, -3755						; zone 1, coarse -14.67 st
+	ToneSetZone6	0x00d1, 0x00, -15, -2389					; zone 2, coarse -9.33 st
+	ToneSetZone6	0x00d2, 0x00, -3, -708						; zone 3, coarse -2.77 st
+	ToneSetZone6	0x00d3, 0x00, -7, 0						; zone 4, coarse +0.00 st
 ; SET 318 key map (descriptor 318: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec318_A:
+ToneSet_318_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4695,18 +4699,18 @@ ToneEnv_Rec318_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 318 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0009;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec318_B:
-	ToneEnvZone4	0x0003, 0x00, -8						; zone 0
-	ToneEnvZone4	0x0004, 0x00, -8						; zone 1
-	ToneEnvZone4	0x0005, 0x00, -8						; zone 2
-	ToneEnvZone4	0x0006, 0x00, -8						; zone 3
-	ToneEnvZone4	0x0007, 0x00, -8						; zone 4
-	ToneEnvZone4	0x0008, 0x00, -8						; zone 5
-	ToneEnvZone4	0x0009, 0x00, -8						; zone 6
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 7
+ToneSet_318_Zones:
+	ToneSetZone4	0x0003, 0x00, -8						; zone 0
+	ToneSetZone4	0x0004, 0x00, -8						; zone 1
+	ToneSetZone4	0x0005, 0x00, -8						; zone 2
+	ToneSetZone4	0x0006, 0x00, -8						; zone 3
+	ToneSetZone4	0x0007, 0x00, -8						; zone 4
+	ToneSetZone4	0x0008, 0x00, -8						; zone 5
+	ToneSetZone4	0x0009, 0x00, -8						; zone 6
+	ToneSetZone4	0x0000, 0x00, -16						; zone 7
 ; SET 324 key map (descriptor 324: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec324_A:
+ToneSet_324_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4717,19 +4721,19 @@ ToneEnv_Rec324_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 324 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x001f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec324_B:
-	ToneEnvZone4	0x0019, 0x00, -9						; zone 0
-	ToneEnvZone4	0x001a, 0x00, -11						; zone 1
-	ToneEnvZone4	0x001b, 0x00, -12						; zone 2
-	ToneEnvZone4	0x001c, 0x00, -13						; zone 3
-	ToneEnvZone4	0x001d, 0x00, -15						; zone 4
-	ToneEnvZone4	0x001e, 0x00, -17						; zone 5
-	ToneEnvZone4	0x001f, 0x00, -16						; zone 6
-	ToneEnvZone4	0x0009, 0x00, -8						; zone 7
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 8
+ToneSet_324_Zones:
+	ToneSetZone4	0x0019, 0x00, -9						; zone 0
+	ToneSetZone4	0x001a, 0x00, -11						; zone 1
+	ToneSetZone4	0x001b, 0x00, -12						; zone 2
+	ToneSetZone4	0x001c, 0x00, -13						; zone 3
+	ToneSetZone4	0x001d, 0x00, -15						; zone 4
+	ToneSetZone4	0x001e, 0x00, -17						; zone 5
+	ToneSetZone4	0x001f, 0x00, -16						; zone 6
+	ToneSetZone4	0x0009, 0x00, -8						; zone 7
+	ToneSetZone4	0x0000, 0x00, -16						; zone 8
 ; SET 326 key map (descriptor 326: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec326_A:
+ToneSet_326_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -4740,21 +4744,21 @@ ToneEnv_Rec326_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 326 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x002f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec326_B:
-	ToneEnvZone4	0x0028, 0x00, -7						; zone 0
-	ToneEnvZone4	0x0029, 0x00, -9						; zone 1
-	ToneEnvZone4	0x002a, 0x00, -10						; zone 2
-	ToneEnvZone4	0x002b, 0x00, -9						; zone 3
-	ToneEnvZone4	0x002c, 0x00, -10						; zone 4
-	ToneEnvZone4	0x002d, 0x00, -11						; zone 5
-	ToneEnvZone4	0x002e, 0x00, -11						; zone 6
-	ToneEnvZone4	0x002f, 0x00, -11						; zone 7
-	ToneEnvZone4	0x0012, 0x00, -16						; zone 8
-	ToneEnvZone4	0x0009, 0x00, -8						; zone 9
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 10
+ToneSet_326_Zones:
+	ToneSetZone4	0x0028, 0x00, -7						; zone 0
+	ToneSetZone4	0x0029, 0x00, -9						; zone 1
+	ToneSetZone4	0x002a, 0x00, -10						; zone 2
+	ToneSetZone4	0x002b, 0x00, -9						; zone 3
+	ToneSetZone4	0x002c, 0x00, -10						; zone 4
+	ToneSetZone4	0x002d, 0x00, -11						; zone 5
+	ToneSetZone4	0x002e, 0x00, -11						; zone 6
+	ToneSetZone4	0x002f, 0x00, -11						; zone 7
+	ToneSetZone4	0x0012, 0x00, -16						; zone 8
+	ToneSetZone4	0x0009, 0x00, -8						; zone 9
+	ToneSetZone4	0x0000, 0x00, -16						; zone 10
 ; SET 330 key map (descriptor 330: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec330_A:
+ToneSet_330_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -4765,55 +4769,55 @@ ToneEnv_Rec330_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 330 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x006c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec330_B:
-	ToneEnvZone4	0x0069, 0x00, -13						; zone 0
-	ToneEnvZone4	0x006a, 0x00, -13						; zone 1
-	ToneEnvZone4	0x006b, 0x00, -13						; zone 2
-	ToneEnvZone4	0x006c, 0x00, -13						; zone 3
-	ToneEnvZone4	0x0000, 0x00, -32						; zone 4
+ToneSet_330_Zones:
+	ToneSetZone4	0x0069, 0x00, -13						; zone 0
+	ToneSetZone4	0x006a, 0x00, -13						; zone 1
+	ToneSetZone4	0x006b, 0x00, -13						; zone 2
+	ToneSetZone4	0x006c, 0x00, -13						; zone 3
+	ToneSetZone4	0x0000, 0x00, -32						; zone 4
 ; SET 336 key map (descriptor 336: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec336_A:
+ToneSet_336_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 336 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30ec..0x30ec;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec336_B:
-	ToneEnvZone4	0x30ec, 0x00, -1						; zone 0
+ToneSet_336_Zones:
+	ToneSetZone4	0x30ec, 0x00, -1						; zone 0
 ; SET 013 key map (descriptor 013: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec013_A:
+ToneSet_013_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   1,   2,   3,   4,   5,   6,   7,   8,   8			; +0x04 bands 0-10 -> zone
 ; SET 013 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2014..0x201b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec013_B:
-	ToneEnvZone4	0x2015, 0x80, -21						; zone 0
-	ToneEnvZone4	0x2015, 0x00, -21						; zone 1
-	ToneEnvZone4	0x2014, 0x00, -21						; zone 2
-	ToneEnvZone4	0x2016, 0x00, -27						; zone 3
-	ToneEnvZone4	0x2017, 0x00, -18						; zone 4
-	ToneEnvZone4	0x2018, 0x00, -22						; zone 5
-	ToneEnvZone4	0x2019, 0x00, -14						; zone 6
-	ToneEnvZone4	0x201a, 0x00, -14						; zone 7
-	ToneEnvZone4	0x201b, 0x00, -14						; zone 8
+ToneSet_013_Zones:
+	ToneSetZone4	0x2015, 0x80, -21						; zone 0
+	ToneSetZone4	0x2015, 0x00, -21						; zone 1
+	ToneSetZone4	0x2014, 0x00, -21						; zone 2
+	ToneSetZone4	0x2016, 0x00, -27						; zone 3
+	ToneSetZone4	0x2017, 0x00, -18						; zone 4
+	ToneSetZone4	0x2018, 0x00, -22						; zone 5
+	ToneSetZone4	0x2019, 0x00, -14						; zone 6
+	ToneSetZone4	0x201a, 0x00, -14						; zone 7
+	ToneSetZone4	0x201b, 0x00, -14						; zone 8
 ; SET 021 key map (descriptor 021: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec021_A:
+ToneSet_021_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
 	.byte	  3,   3,   3								; +0x24 bands 32-34 -> zone
 ; SET 021 zone records: 4 x 6 bytes (descriptor flags bit 7 set), selectors 0x2084..0x208a;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec021_B:
-	ToneEnvZone6	0x2084, 0x00, -7, -186						; zone 0, coarse -0.73 st
-	ToneEnvZone6	0x2086, 0x00, -8, -841						; zone 1, coarse -3.29 st
-	ToneEnvZone6	0x2088, 0x00, -11, -1577					; zone 2, coarse -6.16 st
-	ToneEnvZone6	0x208a, 0x00, -15, 0						; zone 3, coarse +0.00 st
+ToneSet_021_Zones:
+	ToneSetZone6	0x2084, 0x00, -7, -186						; zone 0, coarse -0.73 st
+	ToneSetZone6	0x2086, 0x00, -8, -841						; zone 1, coarse -3.29 st
+	ToneSetZone6	0x2088, 0x00, -11, -1577					; zone 2, coarse -6.16 st
+	ToneSetZone6	0x208a, 0x00, -15, 0						; zone 3, coarse +0.00 st
 ; SET 042 key map (descriptor 042: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..14 of 15.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec042_A:
+ToneSet_042_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -4824,25 +4828,25 @@ ToneEnv_Rec042_A:
 	.byte	 14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14		; +0x64 bands 96-107 -> zone
 ; SET 042 zone records: 15 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1060..0x1070;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec042_B:
-	ToneEnvZone4	0x1061, 0x80, -17						; zone 0
-	ToneEnvZone4	0x1061, 0x00, -17						; zone 1
-	ToneEnvZone4	0x1060, 0x00, -17						; zone 2
-	ToneEnvZone4	0x1063, 0x00, -14						; zone 3
-	ToneEnvZone4	0x1062, 0x00, -14						; zone 4
-	ToneEnvZone4	0x1064, 0x00, -13						; zone 5
-	ToneEnvZone4	0x1065, 0x00, -10						; zone 6
-	ToneEnvZone4	0x1066, 0x00, -8						; zone 7
-	ToneEnvZone4	0x1068, 0x00, -8						; zone 8
-	ToneEnvZone4	0x1067, 0x00, -8						; zone 9
-	ToneEnvZone4	0x1069, 0x00, -6						; zone 10
-	ToneEnvZone4	0x106a, 0x00, -6						; zone 11
-	ToneEnvZone4	0x106d, 0x00, -19						; zone 12
-	ToneEnvZone4	0x106f, 0x00, -30						; zone 13
-	ToneEnvZone4	0x1070, 0x00, -30						; zone 14
+ToneSet_042_Zones:
+	ToneSetZone4	0x1061, 0x80, -17						; zone 0
+	ToneSetZone4	0x1061, 0x00, -17						; zone 1
+	ToneSetZone4	0x1060, 0x00, -17						; zone 2
+	ToneSetZone4	0x1063, 0x00, -14						; zone 3
+	ToneSetZone4	0x1062, 0x00, -14						; zone 4
+	ToneSetZone4	0x1064, 0x00, -13						; zone 5
+	ToneSetZone4	0x1065, 0x00, -10						; zone 6
+	ToneSetZone4	0x1066, 0x00, -8						; zone 7
+	ToneSetZone4	0x1068, 0x00, -8						; zone 8
+	ToneSetZone4	0x1067, 0x00, -8						; zone 9
+	ToneSetZone4	0x1069, 0x00, -6						; zone 10
+	ToneSetZone4	0x106a, 0x00, -6						; zone 11
+	ToneSetZone4	0x106d, 0x00, -19						; zone 12
+	ToneSetZone4	0x106f, 0x00, -30						; zone 13
+	ToneSetZone4	0x1070, 0x00, -30						; zone 14
 ; SET 068 key map (descriptor 068: flags 0x02, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..13 of 14.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec068_A:
+ToneSet_068_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   3,   3	; +0x14 bands 16-31 -> zone
@@ -4853,24 +4857,24 @@ ToneEnv_Rec068_A:
 	.byte	 13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13		; +0x64 bands 96-107 -> zone
 ; SET 068 zone records: 14 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x307c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec068_B:
-	ToneEnvZone4	0x3072, 0x80, -8						; zone 0
-	ToneEnvZone4	0x3072, 0x00, -8						; zone 1
-	ToneEnvZone4	0x3073, 0x00, -8						; zone 2
-	ToneEnvZone4	0x3074, 0x00, -9						; zone 3
-	ToneEnvZone4	0x3075, 0x00, -8						; zone 4
-	ToneEnvZone4	0x3076, 0x00, -8						; zone 5
-	ToneEnvZone4	0x3077, 0x00, -1						; zone 6
-	ToneEnvZone4	0x3078, 0x00, -2						; zone 7
-	ToneEnvZone4	0x3079, 0x00, -2						; zone 8
-	ToneEnvZone4	0x307a, 0x00, -3						; zone 9
-	ToneEnvZone4	0x307b, 0x00, -3						; zone 10
-	ToneEnvZone4	0x307c, 0x00, -3						; zone 11
-	ToneEnvZone4	0x106f, 0x00, -26						; zone 12
-	ToneEnvZone4	0x1070, 0x00, -26						; zone 13
+ToneSet_068_Zones:
+	ToneSetZone4	0x3072, 0x80, -8						; zone 0
+	ToneSetZone4	0x3072, 0x00, -8						; zone 1
+	ToneSetZone4	0x3073, 0x00, -8						; zone 2
+	ToneSetZone4	0x3074, 0x00, -9						; zone 3
+	ToneSetZone4	0x3075, 0x00, -8						; zone 4
+	ToneSetZone4	0x3076, 0x00, -8						; zone 5
+	ToneSetZone4	0x3077, 0x00, -1						; zone 6
+	ToneSetZone4	0x3078, 0x00, -2						; zone 7
+	ToneSetZone4	0x3079, 0x00, -2						; zone 8
+	ToneSetZone4	0x307a, 0x00, -3						; zone 9
+	ToneSetZone4	0x307b, 0x00, -3						; zone 10
+	ToneSetZone4	0x307c, 0x00, -3						; zone 11
+	ToneSetZone4	0x106f, 0x00, -26						; zone 12
+	ToneSetZone4	0x1070, 0x00, -26						; zone 13
 ; SET 071 key map (descriptor 071: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..14 of 15.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec071_A:
+ToneSet_071_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   3,   3,   3,   4	; +0x14 bands 16-31 -> zone
@@ -4881,25 +4885,25 @@ ToneEnv_Rec071_A:
 	.byte	 14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14,  14		; +0x64 bands 96-107 -> zone
 ; SET 071 zone records: 15 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x30b2;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec071_B:
-	ToneEnvZone4	0x30a9, 0x80, -9						; zone 0
-	ToneEnvZone4	0x30a9, 0x00, -9						; zone 1
-	ToneEnvZone4	0x30ab, 0x00, -9						; zone 2
-	ToneEnvZone4	0x30aa, 0x00, -9						; zone 3
-	ToneEnvZone4	0x30ac, 0x00, -5						; zone 4
-	ToneEnvZone4	0x30ad, 0x00, -8						; zone 5
-	ToneEnvZone4	0x30ae, 0x00, -8						; zone 6
-	ToneEnvZone4	0x30af, 0x00, -6						; zone 7
-	ToneEnvZone4	0x30b1, 0x00, -4						; zone 8
-	ToneEnvZone4	0x30b0, 0x00, -4						; zone 9
-	ToneEnvZone4	0x30b2, 0x00, -4						; zone 10
-	ToneEnvZone4	0x1080, 0x90, -13						; zone 11
-	ToneEnvZone4	0x1081, 0x90, -20						; zone 12
-	ToneEnvZone4	0x106f, 0x00, -22						; zone 13
-	ToneEnvZone4	0x1070, 0x00, -22						; zone 14
+ToneSet_071_Zones:
+	ToneSetZone4	0x30a9, 0x80, -9						; zone 0
+	ToneSetZone4	0x30a9, 0x00, -9						; zone 1
+	ToneSetZone4	0x30ab, 0x00, -9						; zone 2
+	ToneSetZone4	0x30aa, 0x00, -9						; zone 3
+	ToneSetZone4	0x30ac, 0x00, -5						; zone 4
+	ToneSetZone4	0x30ad, 0x00, -8						; zone 5
+	ToneSetZone4	0x30ae, 0x00, -8						; zone 6
+	ToneSetZone4	0x30af, 0x00, -6						; zone 7
+	ToneSetZone4	0x30b1, 0x00, -4						; zone 8
+	ToneSetZone4	0x30b0, 0x00, -4						; zone 9
+	ToneSetZone4	0x30b2, 0x00, -4						; zone 10
+	ToneSetZone4	0x1080, 0x90, -13						; zone 11
+	ToneSetZone4	0x1081, 0x90, -20						; zone 12
+	ToneSetZone4	0x106f, 0x00, -22						; zone 13
+	ToneSetZone4	0x1070, 0x00, -22						; zone 14
 ; SET 075 key map (descriptor 075: flags 0x02, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..13 of 14.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec075_A:
+ToneSet_075_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -4910,45 +4914,45 @@ ToneEnv_Rec075_A:
 	.byte	 13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13		; +0x64 bands 96-107 -> zone
 ; SET 075 zone records: 14 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x3091;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec075_B:
-	ToneEnvZone4	0x3087, 0x80, -5						; zone 0
-	ToneEnvZone4	0x3087, 0x00, -5						; zone 1
-	ToneEnvZone4	0x3088, 0x00, -5						; zone 2
-	ToneEnvZone4	0x3089, 0x00, -3						; zone 3
-	ToneEnvZone4	0x308a, 0x00, -3						; zone 4
-	ToneEnvZone4	0x308b, 0x00, -3						; zone 5
-	ToneEnvZone4	0x308c, 0x00, -8						; zone 6
-	ToneEnvZone4	0x308d, 0x00, -4						; zone 7
-	ToneEnvZone4	0x308e, 0x00, -8						; zone 8
-	ToneEnvZone4	0x308f, 0x00, -8						; zone 9
-	ToneEnvZone4	0x3090, 0x00, -8						; zone 10
-	ToneEnvZone4	0x3091, 0x00, -8						; zone 11
-	ToneEnvZone4	0x106f, 0x00, -34						; zone 12
-	ToneEnvZone4	0x1070, 0x00, -34						; zone 13
+ToneSet_075_Zones:
+	ToneSetZone4	0x3087, 0x80, -5						; zone 0
+	ToneSetZone4	0x3087, 0x00, -5						; zone 1
+	ToneSetZone4	0x3088, 0x00, -5						; zone 2
+	ToneSetZone4	0x3089, 0x00, -3						; zone 3
+	ToneSetZone4	0x308a, 0x00, -3						; zone 4
+	ToneSetZone4	0x308b, 0x00, -3						; zone 5
+	ToneSetZone4	0x308c, 0x00, -8						; zone 6
+	ToneSetZone4	0x308d, 0x00, -4						; zone 7
+	ToneSetZone4	0x308e, 0x00, -8						; zone 8
+	ToneSetZone4	0x308f, 0x00, -8						; zone 9
+	ToneSetZone4	0x3090, 0x00, -8						; zone 10
+	ToneSetZone4	0x3091, 0x00, -8						; zone 11
+	ToneSetZone4	0x106f, 0x00, -34						; zone 12
+	ToneSetZone4	0x1070, 0x00, -34						; zone 13
 ; SET 079 key map (descriptor 079: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec079_A:
+ToneSet_079_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2,   3,   3,   4	; +0x04 bands 0-15 -> zone
 	.byte	  5,   6,   6,   7,   8,   9,   9,   9,  10,  10,  10,  10,  10,  10,  10,  10	; +0x14 bands 16-31 -> zone
 	.byte	 10,  10,  10								; +0x24 bands 32-34 -> zone
 ; SET 079 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30bc..0x30c5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec079_B:
-	ToneEnvZone4	0x30bc, 0x80, -14						; zone 0
-	ToneEnvZone4	0x30bc, 0x00, -14						; zone 1
-	ToneEnvZone4	0x30bd, 0x00, -14						; zone 2
-	ToneEnvZone4	0x30be, 0x00, -11						; zone 3
-	ToneEnvZone4	0x30bf, 0x00, -2						; zone 4
-	ToneEnvZone4	0x30c0, 0x00, -2						; zone 5
-	ToneEnvZone4	0x30c1, 0x00, -10						; zone 6
-	ToneEnvZone4	0x30c2, 0x00, -7						; zone 7
-	ToneEnvZone4	0x30c3, 0x00, -7						; zone 8
-	ToneEnvZone4	0x30c4, 0x00, -12						; zone 9
-	ToneEnvZone4	0x30c5, 0x00, -12						; zone 10
+ToneSet_079_Zones:
+	ToneSetZone4	0x30bc, 0x80, -14						; zone 0
+	ToneSetZone4	0x30bc, 0x00, -14						; zone 1
+	ToneSetZone4	0x30bd, 0x00, -14						; zone 2
+	ToneSetZone4	0x30be, 0x00, -11						; zone 3
+	ToneSetZone4	0x30bf, 0x00, -2						; zone 4
+	ToneSetZone4	0x30c0, 0x00, -2						; zone 5
+	ToneSetZone4	0x30c1, 0x00, -10						; zone 6
+	ToneSetZone4	0x30c2, 0x00, -7						; zone 7
+	ToneSetZone4	0x30c3, 0x00, -7						; zone 8
+	ToneSetZone4	0x30c4, 0x00, -12						; zone 9
+	ToneSetZone4	0x30c5, 0x00, -12						; zone 10
 ; SET 104 key map (descriptor 104: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec104_A:
+ToneSet_104_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -4959,76 +4963,76 @@ ToneEnv_Rec104_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 104 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x10aa..0x10ad;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec104_B:
-	ToneEnvZone4	0x10aa, 0x80, -4						; zone 0
-	ToneEnvZone4	0x10aa, 0x00, -4						; zone 1
-	ToneEnvZone4	0x10ab, 0x00, -4						; zone 2
-	ToneEnvZone4	0x10ac, 0x00, -4						; zone 3
-	ToneEnvZone4	0x10ad, 0x80, -4						; zone 4
+ToneSet_104_Zones:
+	ToneSetZone4	0x10aa, 0x80, -4						; zone 0
+	ToneSetZone4	0x10aa, 0x00, -4						; zone 1
+	ToneSetZone4	0x10ab, 0x00, -4						; zone 2
+	ToneSetZone4	0x10ac, 0x00, -4						; zone 3
+	ToneSetZone4	0x10ad, 0x80, -4						; zone 4
 ; SET 121 key map (descriptor 121: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec121_A:
+ToneSet_121_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   2,   2,   3,   3,   4,   4,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
 	.byte	  4,   4,   4								; +0x24 bands 32-34 -> zone
 ; SET 121 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x702c..0x7030;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec121_B:
-	ToneEnvZone4	0x702c, 0x80, -3						; zone 0
-	ToneEnvZone4	0x702d, 0xc0, -3						; zone 1
-	ToneEnvZone4	0x702e, 0xc0, -8						; zone 2
-	ToneEnvZone4	0x702f, 0xc0, -9						; zone 3
-	ToneEnvZone4	0x7030, 0xc0, -14						; zone 4
+ToneSet_121_Zones:
+	ToneSetZone4	0x702c, 0x80, -3						; zone 0
+	ToneSetZone4	0x702d, 0xc0, -3						; zone 1
+	ToneSetZone4	0x702e, 0xc0, -8						; zone 2
+	ToneSetZone4	0x702f, 0xc0, -9						; zone 3
+	ToneSetZone4	0x7030, 0xc0, -14						; zone 4
 ; SET 131 key map (descriptor 131: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec131_A:
+ToneSet_131_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
 	.byte	  3,   3,   3								; +0x24 bands 32-34 -> zone
 ; SET 131 zone records: 4 x 4 bytes (descriptor flags bit 7 clear), selectors 0x31b1..0x50a1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec131_B:
-	ToneEnvZone4	0x50a0, 0xf0, -1						; zone 0
-	ToneEnvZone4	0x50a1, 0xc0, -1						; zone 1
-	ToneEnvZone4	0x31b2, 0x80, -4						; zone 2
-	ToneEnvZone4	0x31b1, 0x80, -1						; zone 3
+ToneSet_131_Zones:
+	ToneSetZone4	0x50a0, 0xf0, -1						; zone 0
+	ToneSetZone4	0x50a1, 0xc0, -1						; zone 1
+	ToneSetZone4	0x31b2, 0x80, -4						; zone 2
+	ToneSetZone4	0x31b1, 0x80, -1						; zone 3
 ; SET 135 key map (descriptor 135: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec135_A:
+ToneSet_135_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   1,   2,   3,   4,   5,   6,   7,   7,   7			; +0x04 bands 0-10 -> zone
 ; SET 135 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40bf..0x40c5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec135_B:
-	ToneEnvZone4	0x40bf, 0x80, -4						; zone 0
-	ToneEnvZone4	0x40bf, 0x00, -4						; zone 1
-	ToneEnvZone4	0x40c0, 0x00, -4						; zone 2
-	ToneEnvZone4	0x40c1, 0x00, -4						; zone 3
-	ToneEnvZone4	0x40c2, 0x00, -4						; zone 4
-	ToneEnvZone4	0x40c3, 0x00, -4						; zone 5
-	ToneEnvZone4	0x40c4, 0x00, -4						; zone 6
-	ToneEnvZone4	0x40c5, 0x00, -4						; zone 7
+ToneSet_135_Zones:
+	ToneSetZone4	0x40bf, 0x80, -4						; zone 0
+	ToneSetZone4	0x40bf, 0x00, -4						; zone 1
+	ToneSetZone4	0x40c0, 0x00, -4						; zone 2
+	ToneSetZone4	0x40c1, 0x00, -4						; zone 3
+	ToneSetZone4	0x40c2, 0x00, -4						; zone 4
+	ToneSetZone4	0x40c3, 0x00, -4						; zone 5
+	ToneSetZone4	0x40c4, 0x00, -4						; zone 6
+	ToneSetZone4	0x40c5, 0x00, -4						; zone 7
 ; SET 141 key map (descriptor 141: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec141_A:
+ToneSet_141_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   1,   1,   2,   2,   3,   3,   3,   3,   4,   5,   5,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  5,   5,   5								; +0x24 bands 32-34 -> zone
 ; SET 141 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1015..0x101a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec141_B:
-	ToneEnvZone4	0x1017, 0x80, -6						; zone 0
-	ToneEnvZone4	0x1018, 0xb0, 0							; zone 1
-	ToneEnvZone4	0x1019, 0x80, -4						; zone 2
-	ToneEnvZone4	0x101a, 0xb0, -4						; zone 3
-	ToneEnvZone4	0x1015, 0xc0, -10						; zone 4
-	ToneEnvZone4	0x1016, 0xc0, -10						; zone 5
+ToneSet_141_Zones:
+	ToneSetZone4	0x1017, 0x80, -6						; zone 0
+	ToneSetZone4	0x1018, 0xb0, 0							; zone 1
+	ToneSetZone4	0x1019, 0x80, -4						; zone 2
+	ToneSetZone4	0x101a, 0xb0, -4						; zone 3
+	ToneSetZone4	0x1015, 0xc0, -10						; zone 4
+	ToneSetZone4	0x1016, 0xc0, -10						; zone 5
 ; SET 188 key map (descriptor 188: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec188_A:
+ToneSet_188_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5039,17 +5043,17 @@ ToneEnv_Rec188_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 188 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x316c..0x3194;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec188_B:
-	ToneEnvZone4	0x316c, 0xc0, -1						; zone 0
-	ToneEnvZone4	0x316d, 0x80, -8						; zone 1
-	ToneEnvZone4	0x316e, 0xc0, -4						; zone 2
-	ToneEnvZone4	0x316f, 0xc0, -3						; zone 3
-	ToneEnvZone4	0x3170, 0xa0, -4						; zone 4
-	ToneEnvZone4	0x3178, 0xd0, -7						; zone 5
-	ToneEnvZone4	0x3194, 0xc0, -19						; zone 6
+ToneSet_188_Zones:
+	ToneSetZone4	0x316c, 0xc0, -1						; zone 0
+	ToneSetZone4	0x316d, 0x80, -8						; zone 1
+	ToneSetZone4	0x316e, 0xc0, -4						; zone 2
+	ToneSetZone4	0x316f, 0xc0, -3						; zone 3
+	ToneSetZone4	0x3170, 0xa0, -4						; zone 4
+	ToneSetZone4	0x3178, 0xd0, -7						; zone 5
+	ToneSetZone4	0x3194, 0xc0, -19						; zone 6
 ; SET 198 key map (descriptor 198: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec198_A:
+ToneSet_198_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5060,12 +5064,12 @@ ToneEnv_Rec198_A:
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1		; +0x64 bands 96-107 -> zone
 ; SET 198 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x501c..0x501d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec198_B:
-	ToneEnvZone4	0x501c, 0xa0, -12						; zone 0
-	ToneEnvZone4	0x501d, 0xc0, -4						; zone 1
+ToneSet_198_Zones:
+	ToneSetZone4	0x501c, 0xa0, -12						; zone 0
+	ToneSetZone4	0x501d, 0xc0, -4						; zone 1
 ; SET 211 key map (descriptor 211: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec211_A:
+ToneSet_211_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5076,20 +5080,20 @@ ToneEnv_Rec211_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 211 zone records: 10 x 6 bytes (descriptor flags bit 7 set), selectors 0x1015..0x3156;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec211_B:
-	ToneEnvZone6	0x3150, 0x80, -3, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x3151, 0xa0, -4, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x3152, 0xd0, -4, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x3153, 0x80, 1, 0						; zone 3, coarse +0.00 st
-	ToneEnvZone6	0x3154, 0xa0, 4, 0						; zone 4, coarse +0.00 st
-	ToneEnvZone6	0x3155, 0xc0, 2, 0						; zone 5, coarse +0.00 st
-	ToneEnvZone6	0x3156, 0xf0, -4, 0						; zone 6, coarse +0.00 st
-	ToneEnvZone6	0x314a, 0x90, -3, -592						; zone 7, coarse -2.31 st
-	ToneEnvZone6	0x1015, 0xc0, -10, 0						; zone 8, coarse +0.00 st
-	ToneEnvZone6	0x1016, 0xc0, -10, 0						; zone 9, coarse +0.00 st
+ToneSet_211_Zones:
+	ToneSetZone6	0x3150, 0x80, -3, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x3151, 0xa0, -4, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x3152, 0xd0, -4, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x3153, 0x80, 1, 0						; zone 3, coarse +0.00 st
+	ToneSetZone6	0x3154, 0xa0, 4, 0						; zone 4, coarse +0.00 st
+	ToneSetZone6	0x3155, 0xc0, 2, 0						; zone 5, coarse +0.00 st
+	ToneSetZone6	0x3156, 0xf0, -4, 0						; zone 6, coarse +0.00 st
+	ToneSetZone6	0x314a, 0x90, -3, -592						; zone 7, coarse -2.31 st
+	ToneSetZone6	0x1015, 0xc0, -10, 0						; zone 8, coarse +0.00 st
+	ToneSetZone6	0x1016, 0xc0, -10, 0						; zone 9, coarse +0.00 st
 ; SET 218 key map (descriptor 218: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..16 of 17.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec218_A:
+ToneSet_218_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5100,27 +5104,27 @@ ToneEnv_Rec218_A:
 	.byte	 16,  16,  16,  16,  16,  16,  16,  16,  16,  16,  16,  16		; +0x64 bands 96-107 -> zone
 ; SET 218 zone records: 17 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4067..0x408f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec218_B:
-	ToneEnvZone4	0x4079, 0xc0, -11						; zone 0
-	ToneEnvZone4	0x407a, 0xf0, -12						; zone 1
-	ToneEnvZone4	0x407b, 0x90, -11						; zone 2
-	ToneEnvZone4	0x4082, 0xc0, -10						; zone 3
-	ToneEnvZone4	0x4083, 0xf0, -9						; zone 4
-	ToneEnvZone4	0x4084, 0xa0, -10						; zone 5
-	ToneEnvZone4	0x4085, 0xf0, -14						; zone 6
-	ToneEnvZone4	0x4086, 0x90, -18						; zone 7
-	ToneEnvZone4	0x4087, 0xa0, -16						; zone 8
-	ToneEnvZone4	0x4088, 0xc0, -12						; zone 9
-	ToneEnvZone4	0x4089, 0xe0, -15						; zone 10
-	ToneEnvZone4	0x408f, 0x90, -19						; zone 11
-	ToneEnvZone4	0x408f, 0x90, -23						; zone 12
-	ToneEnvZone4	0x408f, 0x90, -27						; zone 13
-	ToneEnvZone4	0x408f, 0x90, -31						; zone 14
-	ToneEnvZone4	0x408f, 0x90, -35						; zone 15
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 16
+ToneSet_218_Zones:
+	ToneSetZone4	0x4079, 0xc0, -11						; zone 0
+	ToneSetZone4	0x407a, 0xf0, -12						; zone 1
+	ToneSetZone4	0x407b, 0x90, -11						; zone 2
+	ToneSetZone4	0x4082, 0xc0, -10						; zone 3
+	ToneSetZone4	0x4083, 0xf0, -9						; zone 4
+	ToneSetZone4	0x4084, 0xa0, -10						; zone 5
+	ToneSetZone4	0x4085, 0xf0, -14						; zone 6
+	ToneSetZone4	0x4086, 0x90, -18						; zone 7
+	ToneSetZone4	0x4087, 0xa0, -16						; zone 8
+	ToneSetZone4	0x4088, 0xc0, -12						; zone 9
+	ToneSetZone4	0x4089, 0xe0, -15						; zone 10
+	ToneSetZone4	0x408f, 0x90, -19						; zone 11
+	ToneSetZone4	0x408f, 0x90, -23						; zone 12
+	ToneSetZone4	0x408f, 0x90, -27						; zone 13
+	ToneSetZone4	0x408f, 0x90, -31						; zone 14
+	ToneSetZone4	0x408f, 0x90, -35						; zone 15
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 16
 ; SET 224 key map (descriptor 224: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec224_A:
+ToneSet_224_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5131,33 +5135,33 @@ ToneEnv_Rec224_A:
 	.byte	 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12		; +0x64 bands 96-107 -> zone
 ; SET 224 zone records: 13 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4058..0x4067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec224_B:
-	ToneEnvZone4	0x4058, 0xc0, -2						; zone 0
-	ToneEnvZone4	0x4059, 0xe0, -1						; zone 1
-	ToneEnvZone4	0x405a, 0x80, -11						; zone 2
-	ToneEnvZone4	0x405b, 0xa0, -12						; zone 3
-	ToneEnvZone4	0x405c, 0xc0, -12						; zone 4
-	ToneEnvZone4	0x405d, 0xe0, -10						; zone 5
-	ToneEnvZone4	0x405e, 0x80, -17						; zone 6
-	ToneEnvZone4	0x405f, 0xa0, -7						; zone 7
-	ToneEnvZone4	0x4060, 0xb0, -10						; zone 8
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 9
-	ToneEnvZone4	0x4066, 0xa0, -17						; zone 10
-	ToneEnvZone4	0x4066, 0xa0, -21						; zone 11
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 12
+ToneSet_224_Zones:
+	ToneSetZone4	0x4058, 0xc0, -2						; zone 0
+	ToneSetZone4	0x4059, 0xe0, -1						; zone 1
+	ToneSetZone4	0x405a, 0x80, -11						; zone 2
+	ToneSetZone4	0x405b, 0xa0, -12						; zone 3
+	ToneSetZone4	0x405c, 0xc0, -12						; zone 4
+	ToneSetZone4	0x405d, 0xe0, -10						; zone 5
+	ToneSetZone4	0x405e, 0x80, -17						; zone 6
+	ToneSetZone4	0x405f, 0xa0, -7						; zone 7
+	ToneSetZone4	0x4060, 0xb0, -10						; zone 8
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 9
+	ToneSetZone4	0x4066, 0xa0, -17						; zone 10
+	ToneSetZone4	0x4066, 0xa0, -21						; zone 11
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 12
 ; SET 253 key map (descriptor 253: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec253_A:
+ToneSet_253_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1			; +0x04 bands 0-10 -> zone
 ; SET 253 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x6070;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec253_B:
-	ToneEnvZone4	0x6070, 0xb0, -16						; zone 0
-	ToneEnvZone4	0x0000, 0x00, -8						; zone 1
+ToneSet_253_Zones:
+	ToneSetZone4	0x6070, 0xb0, -16						; zone 0
+	ToneSetZone4	0x0000, 0x00, -8						; zone 1
 ; SET 274 key map (descriptor 274: flags 0x81, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec274_A:
+ToneSet_274_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -5168,19 +5172,19 @@ ToneEnv_Rec274_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 274 zone records: 9 x 6 bytes (descriptor flags bit 7 set), selectors 0x0074..0x0092;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec274_B:
-	ToneEnvZone6	0x0074, 0x00, -8, -2042						; zone 0, coarse -7.98 st
-	ToneEnvZone6	0x0076, 0x00, -2, -1261						; zone 1, coarse -4.93 st
-	ToneEnvZone6	0x0078, 0x00, -3, -2778						; zone 2, coarse -10.85 st
-	ToneEnvZone6	0x007a, 0x00, -11, -1282					; zone 3, coarse -5.01 st
-	ToneEnvZone6	0x007c, 0x00, -9, -2784						; zone 4, coarse -10.88 st
-	ToneEnvZone6	0x007e, 0x00, -4, -1297						; zone 5, coarse -5.07 st
-	ToneEnvZone6	0x0080, 0x00, -21, -2810					; zone 6, coarse -10.98 st
-	ToneEnvZone6	0x0082, 0x00, -11, -1003					; zone 7, coarse -3.92 st
-	ToneEnvZone6	0x0092, 0x00, -10, -922						; zone 8, coarse -3.60 st
+ToneSet_274_Zones:
+	ToneSetZone6	0x0074, 0x00, -8, -2042						; zone 0, coarse -7.98 st
+	ToneSetZone6	0x0076, 0x00, -2, -1261						; zone 1, coarse -4.93 st
+	ToneSetZone6	0x0078, 0x00, -3, -2778						; zone 2, coarse -10.85 st
+	ToneSetZone6	0x007a, 0x00, -11, -1282					; zone 3, coarse -5.01 st
+	ToneSetZone6	0x007c, 0x00, -9, -2784						; zone 4, coarse -10.88 st
+	ToneSetZone6	0x007e, 0x00, -4, -1297						; zone 5, coarse -5.07 st
+	ToneSetZone6	0x0080, 0x00, -21, -2810					; zone 6, coarse -10.98 st
+	ToneSetZone6	0x0082, 0x00, -11, -1003					; zone 7, coarse -3.92 st
+	ToneSetZone6	0x0092, 0x00, -10, -922						; zone 8, coarse -3.60 st
 ; SET 285 key map (descriptor 285: flags 0x80, keys 12..101): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec285_A:
+ToneSet_285_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5191,31 +5195,31 @@ ToneEnv_Rec285_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 285 zone records: 12 x 6 bytes (descriptor flags bit 7 set), selectors 0x00bf..0x00c6;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec285_B:
-	ToneEnvZone6	0x00c0, 0x00, -6, -163						; zone 0, coarse -0.64 st
-	ToneEnvZone6	0x00c1, 0x00, -6, -2060						; zone 1, coarse -8.05 st
-	ToneEnvZone6	0x00c2, 0x00, -11, -2782					; zone 2, coarse -10.87 st
-	ToneEnvZone6	0x00c3, 0x00, -5, -1251						; zone 3, coarse -4.89 st
-	ToneEnvZone6	0x00c4, 0x00, -5, -2030						; zone 4, coarse -7.93 st
-	ToneEnvZone6	0x00c5, 0x00, -5, -2803						; zone 5, coarse -10.95 st
-	ToneEnvZone6	0x00c6, 0x00, -10, 0						; zone 6, coarse +0.00 st
-	ToneEnvZone6	0x00c6, 0x00, -14, 0						; zone 7, coarse +0.00 st
-	ToneEnvZone6	0x00c6, 0x00, -18, 0						; zone 8, coarse +0.00 st
-	ToneEnvZone6	0x00c6, 0x00, -22, 0						; zone 9, coarse +0.00 st
-	ToneEnvZone6	0x00c6, 0x00, -26, 0						; zone 10, coarse +0.00 st
-	ToneEnvZone6	0x00bf, 0x00, -28, 0						; zone 11, coarse +0.00 st
+ToneSet_285_Zones:
+	ToneSetZone6	0x00c0, 0x00, -6, -163						; zone 0, coarse -0.64 st
+	ToneSetZone6	0x00c1, 0x00, -6, -2060						; zone 1, coarse -8.05 st
+	ToneSetZone6	0x00c2, 0x00, -11, -2782					; zone 2, coarse -10.87 st
+	ToneSetZone6	0x00c3, 0x00, -5, -1251						; zone 3, coarse -4.89 st
+	ToneSetZone6	0x00c4, 0x00, -5, -2030						; zone 4, coarse -7.93 st
+	ToneSetZone6	0x00c5, 0x00, -5, -2803						; zone 5, coarse -10.95 st
+	ToneSetZone6	0x00c6, 0x00, -10, 0						; zone 6, coarse +0.00 st
+	ToneSetZone6	0x00c6, 0x00, -14, 0						; zone 7, coarse +0.00 st
+	ToneSetZone6	0x00c6, 0x00, -18, 0						; zone 8, coarse +0.00 st
+	ToneSetZone6	0x00c6, 0x00, -22, 0						; zone 9, coarse +0.00 st
+	ToneSetZone6	0x00c6, 0x00, -26, 0						; zone 10, coarse +0.00 st
+	ToneSetZone6	0x00bf, 0x00, -28, 0						; zone 11, coarse +0.00 st
 ; SET 290 key map (descriptor 290: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec290_A:
+ToneSet_290_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 290 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00d4..0x00d4;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec290_B:
-	ToneEnvZone4	0x00d4, 0x80, -8						; zone 0
+ToneSet_290_Zones:
+	ToneSetZone4	0x00d4, 0x80, -8						; zone 0
 ; SET 296 key map (descriptor 296: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec296_A:
+ToneSet_296_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -5226,18 +5230,18 @@ ToneEnv_Rec296_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 296 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1093..0x3116;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec296_B:
-	ToneEnvZone4	0x3114, 0x80, -13						; zone 0
-	ToneEnvZone4	0x3114, 0x00, -13						; zone 1
-	ToneEnvZone4	0x3113, 0x00, -13						; zone 2
-	ToneEnvZone4	0x3112, 0x00, -13						; zone 3
-	ToneEnvZone4	0x3115, 0x00, -13						; zone 4
-	ToneEnvZone4	0x3116, 0x00, -13						; zone 5
-	ToneEnvZone4	0x1093, 0x00, -13						; zone 6
-	ToneEnvZone4	0x1094, 0x00, -13						; zone 7
+ToneSet_296_Zones:
+	ToneSetZone4	0x3114, 0x80, -13						; zone 0
+	ToneSetZone4	0x3114, 0x00, -13						; zone 1
+	ToneSetZone4	0x3113, 0x00, -13						; zone 2
+	ToneSetZone4	0x3112, 0x00, -13						; zone 3
+	ToneSetZone4	0x3115, 0x00, -13						; zone 4
+	ToneSetZone4	0x3116, 0x00, -13						; zone 5
+	ToneSetZone4	0x1093, 0x00, -13						; zone 6
+	ToneSetZone4	0x1094, 0x00, -13						; zone 7
 ; SET 307 key map (descriptor 307: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec307_A:
+ToneSet_307_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5248,14 +5252,14 @@ ToneEnv_Rec307_A:
 	.byte	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3		; +0x64 bands 96-107 -> zone
 ; SET 307 zone records: 4 x 6 bytes (descriptor flags bit 7 set), selectors 0x0047..0x004b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec307_B:
-	ToneEnvZone6	0x004a, 0x00, -4, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x004b, 0x00, -2, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x0047, 0x00, -6, -2159						; zone 2, coarse -8.43 st
-	ToneEnvZone6	0x0049, 0x00, -7, -1718						; zone 3, coarse -6.71 st
+ToneSet_307_Zones:
+	ToneSetZone6	0x004a, 0x00, -4, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x004b, 0x00, -2, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x0047, 0x00, -6, -2159						; zone 2, coarse -8.43 st
+	ToneSetZone6	0x0049, 0x00, -7, -1718						; zone 3, coarse -6.71 st
 ; SET 319 key map (descriptor 319: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec319_A:
+ToneSet_319_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5266,20 +5270,20 @@ ToneEnv_Rec319_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 319 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0057;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec319_B:
-	ToneEnvZone4	0x0051, 0x00, -16						; zone 0
-	ToneEnvZone4	0x0052, 0x00, -16						; zone 1
-	ToneEnvZone4	0x0053, 0x00, -16						; zone 2
-	ToneEnvZone4	0x0054, 0x00, -16						; zone 3
-	ToneEnvZone4	0x0055, 0x00, -16						; zone 4
-	ToneEnvZone4	0x0056, 0x00, -16						; zone 5
-	ToneEnvZone4	0x0057, 0x00, -16						; zone 6
-	ToneEnvZone4	0x0012, 0x00, -16						; zone 7
-	ToneEnvZone4	0x0009, 0x00, -8						; zone 8
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 9
+ToneSet_319_Zones:
+	ToneSetZone4	0x0051, 0x00, -16						; zone 0
+	ToneSetZone4	0x0052, 0x00, -16						; zone 1
+	ToneSetZone4	0x0053, 0x00, -16						; zone 2
+	ToneSetZone4	0x0054, 0x00, -16						; zone 3
+	ToneSetZone4	0x0055, 0x00, -16						; zone 4
+	ToneSetZone4	0x0056, 0x00, -16						; zone 5
+	ToneSetZone4	0x0057, 0x00, -16						; zone 6
+	ToneSetZone4	0x0012, 0x00, -16						; zone 7
+	ToneSetZone4	0x0009, 0x00, -8						; zone 8
+	ToneSetZone4	0x0000, 0x00, -16						; zone 9
 ; SET 327 key map (descriptor 327: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec327_A:
+ToneSet_327_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5290,37 +5294,37 @@ ToneEnv_Rec327_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 327 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0037;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec327_B:
-	ToneEnvZone4	0x0030, 0x00, -9						; zone 0
-	ToneEnvZone4	0x0031, 0x00, -9						; zone 1
-	ToneEnvZone4	0x0032, 0x00, -10						; zone 2
-	ToneEnvZone4	0x0033, 0x00, -10						; zone 3
-	ToneEnvZone4	0x0034, 0x00, -10						; zone 4
-	ToneEnvZone4	0x0035, 0x00, -9						; zone 5
-	ToneEnvZone4	0x0036, 0x00, -10						; zone 6
-	ToneEnvZone4	0x0037, 0x00, -11						; zone 7
-	ToneEnvZone4	0x002f, 0x00, -15						; zone 8
-	ToneEnvZone4	0x0012, 0x00, -20						; zone 9
-	ToneEnvZone4	0x0009, 0x00, -12						; zone 10
-	ToneEnvZone4	0x0000, 0x00, -20						; zone 11
+ToneSet_327_Zones:
+	ToneSetZone4	0x0030, 0x00, -9						; zone 0
+	ToneSetZone4	0x0031, 0x00, -9						; zone 1
+	ToneSetZone4	0x0032, 0x00, -10						; zone 2
+	ToneSetZone4	0x0033, 0x00, -10						; zone 3
+	ToneSetZone4	0x0034, 0x00, -10						; zone 4
+	ToneSetZone4	0x0035, 0x00, -9						; zone 5
+	ToneSetZone4	0x0036, 0x00, -10						; zone 6
+	ToneSetZone4	0x0037, 0x00, -11						; zone 7
+	ToneSetZone4	0x002f, 0x00, -15						; zone 8
+	ToneSetZone4	0x0012, 0x00, -20						; zone 9
+	ToneSetZone4	0x0009, 0x00, -12						; zone 10
+	ToneSetZone4	0x0000, 0x00, -20						; zone 11
 ; SET 331 key map (descriptor 331: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec331_A:
+ToneSet_331_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   3,   3,   3,   4,   4	; +0x14 bands 16-31 -> zone
 	.byte	  4,   4,   4								; +0x24 bands 32-34 -> zone
 ; SET 331 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x006f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec331_B:
-	ToneEnvZone4	0x006d, 0x00, -8						; zone 0
-	ToneEnvZone4	0x006e, 0x00, -8						; zone 1
-	ToneEnvZone4	0x006f, 0x00, -8						; zone 2
-	ToneEnvZone4	0x0068, 0x00, -16						; zone 3
-	ToneEnvZone4	0x0000, 0x00, -24						; zone 4
+ToneSet_331_Zones:
+	ToneSetZone4	0x006d, 0x00, -8						; zone 0
+	ToneSetZone4	0x006e, 0x00, -8						; zone 1
+	ToneSetZone4	0x006f, 0x00, -8						; zone 2
+	ToneSetZone4	0x0068, 0x00, -16						; zone 3
+	ToneSetZone4	0x0000, 0x00, -24						; zone 4
 ; SET 014 key map (descriptor 014: flags 0x00, keys 12..111): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..15 of 16.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec014_A:
+ToneSet_014_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
@@ -5331,26 +5335,26 @@ ToneEnv_Rec014_A:
 	.byte	 15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15,  15		; +0x64 bands 96-107 -> zone
 ; SET 014 zone records: 16 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2034..0x2042;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec014_B:
-	ToneEnvZone4	0x2035, 0x80, -9						; zone 0
-	ToneEnvZone4	0x2035, 0x00, -9						; zone 1
-	ToneEnvZone4	0x2034, 0x00, -9						; zone 2
-	ToneEnvZone4	0x2036, 0x00, -14						; zone 3
-	ToneEnvZone4	0x2038, 0x00, -9						; zone 4
-	ToneEnvZone4	0x2037, 0x00, -9						; zone 5
-	ToneEnvZone4	0x2039, 0x00, -14						; zone 6
-	ToneEnvZone4	0x203a, 0x00, -10						; zone 7
-	ToneEnvZone4	0x203b, 0x00, -10						; zone 8
-	ToneEnvZone4	0x203c, 0x00, -5						; zone 9
-	ToneEnvZone4	0x203e, 0x00, -4						; zone 10
-	ToneEnvZone4	0x203d, 0x00, -4						; zone 11
-	ToneEnvZone4	0x203f, 0x00, 0							; zone 12
-	ToneEnvZone4	0x2041, 0x00, -6						; zone 13
-	ToneEnvZone4	0x2040, 0x00, -6						; zone 14
-	ToneEnvZone4	0x2042, 0x00, -6						; zone 15
+ToneSet_014_Zones:
+	ToneSetZone4	0x2035, 0x80, -9						; zone 0
+	ToneSetZone4	0x2035, 0x00, -9						; zone 1
+	ToneSetZone4	0x2034, 0x00, -9						; zone 2
+	ToneSetZone4	0x2036, 0x00, -14						; zone 3
+	ToneSetZone4	0x2038, 0x00, -9						; zone 4
+	ToneSetZone4	0x2037, 0x00, -9						; zone 5
+	ToneSetZone4	0x2039, 0x00, -14						; zone 6
+	ToneSetZone4	0x203a, 0x00, -10						; zone 7
+	ToneSetZone4	0x203b, 0x00, -10						; zone 8
+	ToneSetZone4	0x203c, 0x00, -5						; zone 9
+	ToneSetZone4	0x203e, 0x00, -4						; zone 10
+	ToneSetZone4	0x203d, 0x00, -4						; zone 11
+	ToneSetZone4	0x203f, 0x00, 0							; zone 12
+	ToneSetZone4	0x2041, 0x00, -6						; zone 13
+	ToneSetZone4	0x2040, 0x00, -6						; zone 14
+	ToneSetZone4	0x2042, 0x00, -6						; zone 15
 ; SET 072 key map (descriptor 072: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec072_A:
+ToneSet_072_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -5361,20 +5365,20 @@ ToneEnv_Rec072_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 072 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3021..0x3029;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec072_B:
-	ToneEnvZone4	0x3021, 0x80, -2						; zone 0
-	ToneEnvZone4	0x3021, 0x00, -2						; zone 1
-	ToneEnvZone4	0x3022, 0x00, -3						; zone 2
-	ToneEnvZone4	0x3023, 0x00, -7						; zone 3
-	ToneEnvZone4	0x3024, 0x00, -5						; zone 4
-	ToneEnvZone4	0x3025, 0x00, -5						; zone 5
-	ToneEnvZone4	0x3026, 0x00, -8						; zone 6
-	ToneEnvZone4	0x3027, 0x00, -8						; zone 7
-	ToneEnvZone4	0x3028, 0x00, -8						; zone 8
-	ToneEnvZone4	0x3029, 0x00, -8						; zone 9
+ToneSet_072_Zones:
+	ToneSetZone4	0x3021, 0x80, -2						; zone 0
+	ToneSetZone4	0x3021, 0x00, -2						; zone 1
+	ToneSetZone4	0x3022, 0x00, -3						; zone 2
+	ToneSetZone4	0x3023, 0x00, -7						; zone 3
+	ToneSetZone4	0x3024, 0x00, -5						; zone 4
+	ToneSetZone4	0x3025, 0x00, -5						; zone 5
+	ToneSetZone4	0x3026, 0x00, -8						; zone 6
+	ToneSetZone4	0x3027, 0x00, -8						; zone 7
+	ToneSetZone4	0x3028, 0x00, -8						; zone 8
+	ToneSetZone4	0x3029, 0x00, -8						; zone 9
 ; SET 080 key map (descriptor 080: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec080_A:
+ToneSet_080_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -5385,50 +5389,50 @@ ToneEnv_Rec080_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 080 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30c8..0x30d2;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec080_B:
-	ToneEnvZone4	0x30c8, 0x80, -10						; zone 0
-	ToneEnvZone4	0x30c8, 0x00, -10						; zone 1
-	ToneEnvZone4	0x30c9, 0x00, -10						; zone 2
-	ToneEnvZone4	0x30ca, 0x00, -8						; zone 3
-	ToneEnvZone4	0x30cb, 0x00, -9						; zone 4
-	ToneEnvZone4	0x30cc, 0x00, -9						; zone 5
-	ToneEnvZone4	0x30cd, 0x00, -8						; zone 6
-	ToneEnvZone4	0x30ce, 0x00, -8						; zone 7
-	ToneEnvZone4	0x30cf, 0x00, -8						; zone 8
-	ToneEnvZone4	0x30d0, 0x00, -9						; zone 9
-	ToneEnvZone4	0x30d1, 0x00, -9						; zone 10
-	ToneEnvZone4	0x30d2, 0x00, -9						; zone 11
+ToneSet_080_Zones:
+	ToneSetZone4	0x30c8, 0x80, -10						; zone 0
+	ToneSetZone4	0x30c8, 0x00, -10						; zone 1
+	ToneSetZone4	0x30c9, 0x00, -10						; zone 2
+	ToneSetZone4	0x30ca, 0x00, -8						; zone 3
+	ToneSetZone4	0x30cb, 0x00, -9						; zone 4
+	ToneSetZone4	0x30cc, 0x00, -9						; zone 5
+	ToneSetZone4	0x30cd, 0x00, -8						; zone 6
+	ToneSetZone4	0x30ce, 0x00, -8						; zone 7
+	ToneSetZone4	0x30cf, 0x00, -8						; zone 8
+	ToneSetZone4	0x30d0, 0x00, -9						; zone 9
+	ToneSetZone4	0x30d1, 0x00, -9						; zone 10
+	ToneSetZone4	0x30d2, 0x00, -9						; zone 11
 ; SET 105 key map (descriptor 105: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec105_A:
+ToneSet_105_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   1,   2,   3,   4,   5,   6,   7,   7,   7			; +0x04 bands 0-10 -> zone
 ; SET 105 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5092..0x5098;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec105_B:
-	ToneEnvZone4	0x5093, 0x80, -6						; zone 0
-	ToneEnvZone4	0x5093, 0x00, -6						; zone 1
-	ToneEnvZone4	0x5092, 0x00, -6						; zone 2
-	ToneEnvZone4	0x5094, 0x00, -6						; zone 3
-	ToneEnvZone4	0x5095, 0x00, -6						; zone 4
-	ToneEnvZone4	0x5096, 0x00, -6						; zone 5
-	ToneEnvZone4	0x5097, 0x00, -6						; zone 6
-	ToneEnvZone4	0x5098, 0x00, -6						; zone 7
+ToneSet_105_Zones:
+	ToneSetZone4	0x5093, 0x80, -6						; zone 0
+	ToneSetZone4	0x5093, 0x00, -6						; zone 1
+	ToneSetZone4	0x5092, 0x00, -6						; zone 2
+	ToneSetZone4	0x5094, 0x00, -6						; zone 3
+	ToneSetZone4	0x5095, 0x00, -6						; zone 4
+	ToneSetZone4	0x5096, 0x00, -6						; zone 5
+	ToneSetZone4	0x5097, 0x00, -6						; zone 6
+	ToneSetZone4	0x5098, 0x00, -6						; zone 7
 ; SET 125 key map (descriptor 125: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec125_A:
+ToneSet_125_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
 	.byte	  1,   1,   1								; +0x24 bands 32-34 -> zone
 ; SET 125 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x31b1..0x31b2;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec125_B:
-	ToneEnvZone4	0x31b2, 0x80, -4						; zone 0
-	ToneEnvZone4	0x31b1, 0x80, -1						; zone 1
+ToneSet_125_Zones:
+	ToneSetZone4	0x31b2, 0x80, -4						; zone 0
+	ToneSetZone4	0x31b1, 0x80, -1						; zone 1
 ; SET 136 key map (descriptor 136: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec136_A:
+ToneSet_136_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -5439,19 +5443,19 @@ ToneEnv_Rec136_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 136 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x7031..0x7038;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec136_B:
-	ToneEnvZone4	0x7031, 0x80, -3						; zone 0
-	ToneEnvZone4	0x7031, 0x00, -3						; zone 1
-	ToneEnvZone4	0x7032, 0x00, -3						; zone 2
-	ToneEnvZone4	0x7033, 0x00, -9						; zone 3
-	ToneEnvZone4	0x7034, 0x00, -9						; zone 4
-	ToneEnvZone4	0x7035, 0x00, -9						; zone 5
-	ToneEnvZone4	0x7036, 0x00, -9						; zone 6
-	ToneEnvZone4	0x7037, 0x00, -9						; zone 7
-	ToneEnvZone4	0x7038, 0x00, -9						; zone 8
+ToneSet_136_Zones:
+	ToneSetZone4	0x7031, 0x80, -3						; zone 0
+	ToneSetZone4	0x7031, 0x00, -3						; zone 1
+	ToneSetZone4	0x7032, 0x00, -3						; zone 2
+	ToneSetZone4	0x7033, 0x00, -9						; zone 3
+	ToneSetZone4	0x7034, 0x00, -9						; zone 4
+	ToneSetZone4	0x7035, 0x00, -9						; zone 5
+	ToneSetZone4	0x7036, 0x00, -9						; zone 6
+	ToneSetZone4	0x7037, 0x00, -9						; zone 7
+	ToneSetZone4	0x7038, 0x00, -9						; zone 8
 ; SET 148 key map (descriptor 148: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec148_A:
+ToneSet_148_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   2	; +0x14 bands 16-31 -> zone
@@ -5462,35 +5466,35 @@ ToneEnv_Rec148_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 148 zone records: 8 x 6 bytes (descriptor flags bit 7 set), selectors 0x1016..0x103f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec148_B:
-	ToneEnvZone6	0x103a, 0xe0, -12, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x103b, 0x90, -8, -1275						; zone 1, coarse -4.98 st
-	ToneEnvZone6	0x103c, 0xc0, -5, -1797						; zone 2, coarse -7.02 st
-	ToneEnvZone6	0x103d, 0x80, -13, -592						; zone 3, coarse -2.31 st
-	ToneEnvZone6	0x103e, 0xa0, -15, -1275					; zone 4, coarse -4.98 st
-	ToneEnvZone6	0x103f, 0xe0, -17, 0						; zone 5, coarse +0.00 st
-	ToneEnvZone6	0x101f, 0xe0, -11, 0						; zone 6, coarse +0.00 st
-	ToneEnvZone6	0x1016, 0xc0, -18, 0						; zone 7, coarse +0.00 st
+ToneSet_148_Zones:
+	ToneSetZone6	0x103a, 0xe0, -12, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x103b, 0x90, -8, -1275						; zone 1, coarse -4.98 st
+	ToneSetZone6	0x103c, 0xc0, -5, -1797						; zone 2, coarse -7.02 st
+	ToneSetZone6	0x103d, 0x80, -13, -592						; zone 3, coarse -2.31 st
+	ToneSetZone6	0x103e, 0xa0, -15, -1275					; zone 4, coarse -4.98 st
+	ToneSetZone6	0x103f, 0xe0, -17, 0						; zone 5, coarse +0.00 st
+	ToneSetZone6	0x101f, 0xe0, -11, 0						; zone 6, coarse +0.00 st
+	ToneSetZone6	0x1016, 0xc0, -18, 0						; zone 7, coarse +0.00 st
 ; SET 169 key map (descriptor 169: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec169_A:
+ToneSet_169_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   2,   2	; +0x04 bands 0-15 -> zone
 	.byte	  2,   3,   3,   4,   4,   4,   4,   4,   5,   5,   6,   6,   6,   6,   6,   6	; +0x14 bands 16-31 -> zone
 	.byte	  6,   6,   6								; +0x24 bands 32-34 -> zone
 ; SET 169 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1039..0x1057;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec169_B:
-	ToneEnvZone4	0x1052, 0x00, -11						; zone 0
-	ToneEnvZone4	0x1053, 0x00, -12						; zone 1
-	ToneEnvZone4	0x1054, 0x00, -8						; zone 2
-	ToneEnvZone4	0x1055, 0x00, -9						; zone 3
-	ToneEnvZone4	0x1056, 0x00, -11						; zone 4
-	ToneEnvZone4	0x1057, 0x00, -15						; zone 5
-	ToneEnvZone4	0x1039, 0x90, -5						; zone 6
+ToneSet_169_Zones:
+	ToneSetZone4	0x1052, 0x00, -11						; zone 0
+	ToneSetZone4	0x1053, 0x00, -12						; zone 1
+	ToneSetZone4	0x1054, 0x00, -8						; zone 2
+	ToneSetZone4	0x1055, 0x00, -9						; zone 3
+	ToneSetZone4	0x1056, 0x00, -11						; zone 4
+	ToneSetZone4	0x1057, 0x00, -15						; zone 5
+	ToneSetZone4	0x1039, 0x90, -5						; zone 6
 ; SET 171 key map (descriptor 171: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec171_A:
+ToneSet_171_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5501,16 +5505,16 @@ ToneEnv_Rec171_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 171 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1039..0x105c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec171_B:
-	ToneEnvZone4	0x1058, 0x80, -12						; zone 0
-	ToneEnvZone4	0x1059, 0x80, -10						; zone 1
-	ToneEnvZone4	0x105a, 0x80, -7						; zone 2
-	ToneEnvZone4	0x105b, 0x80, -8						; zone 3
-	ToneEnvZone4	0x105c, 0x80, -10						; zone 4
-	ToneEnvZone4	0x1039, 0x90, -5						; zone 5
+ToneSet_171_Zones:
+	ToneSetZone4	0x1058, 0x80, -12						; zone 0
+	ToneSetZone4	0x1059, 0x80, -10						; zone 1
+	ToneSetZone4	0x105a, 0x80, -7						; zone 2
+	ToneSetZone4	0x105b, 0x80, -8						; zone 3
+	ToneSetZone4	0x105c, 0x80, -10						; zone 4
+	ToneSetZone4	0x1039, 0x90, -5						; zone 5
 ; SET 219 key map (descriptor 219: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..16 of 17.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec219_A:
+ToneSet_219_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5521,27 +5525,27 @@ ToneEnv_Rec219_A:
 	.byte	 16,  16,  16,  16,  16,  16,  16,  16,  16,  16,  16,  16		; +0x64 bands 96-107 -> zone
 ; SET 219 zone records: 17 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4067..0x408f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec219_B:
-	ToneEnvZone4	0x4079, 0xc0, -11						; zone 0
-	ToneEnvZone4	0x407a, 0xf0, -12						; zone 1
-	ToneEnvZone4	0x407b, 0x90, -11						; zone 2
-	ToneEnvZone4	0x4082, 0xc0, -10						; zone 3
-	ToneEnvZone4	0x4083, 0xf0, -9						; zone 4
-	ToneEnvZone4	0x4084, 0xa0, -10						; zone 5
-	ToneEnvZone4	0x408a, 0xc0, -15						; zone 6
-	ToneEnvZone4	0x408b, 0xf0, -13						; zone 7
-	ToneEnvZone4	0x408c, 0xa0, -7						; zone 8
-	ToneEnvZone4	0x408d, 0xc0, -14						; zone 9
-	ToneEnvZone4	0x408e, 0xe0, -19						; zone 10
-	ToneEnvZone4	0x408f, 0x90, -19						; zone 11
-	ToneEnvZone4	0x408f, 0x90, -23						; zone 12
-	ToneEnvZone4	0x408f, 0x90, -27						; zone 13
-	ToneEnvZone4	0x408f, 0x90, -31						; zone 14
-	ToneEnvZone4	0x408f, 0x90, -35						; zone 15
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 16
+ToneSet_219_Zones:
+	ToneSetZone4	0x4079, 0xc0, -11						; zone 0
+	ToneSetZone4	0x407a, 0xf0, -12						; zone 1
+	ToneSetZone4	0x407b, 0x90, -11						; zone 2
+	ToneSetZone4	0x4082, 0xc0, -10						; zone 3
+	ToneSetZone4	0x4083, 0xf0, -9						; zone 4
+	ToneSetZone4	0x4084, 0xa0, -10						; zone 5
+	ToneSetZone4	0x408a, 0xc0, -15						; zone 6
+	ToneSetZone4	0x408b, 0xf0, -13						; zone 7
+	ToneSetZone4	0x408c, 0xa0, -7						; zone 8
+	ToneSetZone4	0x408d, 0xc0, -14						; zone 9
+	ToneSetZone4	0x408e, 0xe0, -19						; zone 10
+	ToneSetZone4	0x408f, 0x90, -19						; zone 11
+	ToneSetZone4	0x408f, 0x90, -23						; zone 12
+	ToneSetZone4	0x408f, 0x90, -27						; zone 13
+	ToneSetZone4	0x408f, 0x90, -31						; zone 14
+	ToneSetZone4	0x408f, 0x90, -35						; zone 15
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 16
 ; SET 225 key map (descriptor 225: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec225_A:
+ToneSet_225_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5552,19 +5556,19 @@ ToneEnv_Rec225_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 225 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4061..0x4067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec225_B:
-	ToneEnvZone4	0x4061, 0xc0, -9						; zone 0
-	ToneEnvZone4	0x4062, 0xf0, -3						; zone 1
-	ToneEnvZone4	0x4063, 0x90, -10						; zone 2
-	ToneEnvZone4	0x4064, 0xe0, -16						; zone 3
-	ToneEnvZone4	0x4065, 0x80, -13						; zone 4
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 5
-	ToneEnvZone4	0x4066, 0xa0, -17						; zone 6
-	ToneEnvZone4	0x4066, 0xa0, -21						; zone 7
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 8
+ToneSet_225_Zones:
+	ToneSetZone4	0x4061, 0xc0, -9						; zone 0
+	ToneSetZone4	0x4062, 0xf0, -3						; zone 1
+	ToneSetZone4	0x4063, 0x90, -10						; zone 2
+	ToneSetZone4	0x4064, 0xe0, -16						; zone 3
+	ToneSetZone4	0x4065, 0x80, -13						; zone 4
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 5
+	ToneSetZone4	0x4066, 0xa0, -17						; zone 6
+	ToneSetZone4	0x4066, 0xa0, -21						; zone 7
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 8
 ; SET 297 key map (descriptor 297: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec297_A:
+ToneSet_297_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5575,23 +5579,23 @@ ToneEnv_Rec297_A:
 	.byte	 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12		; +0x64 bands 96-107 -> zone
 ; SET 297 zone records: 13 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1094..0x3127;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec297_B:
-	ToneEnvZone4	0x3120, 0x80, -5						; zone 0
-	ToneEnvZone4	0x3120, 0x00, -5						; zone 1
-	ToneEnvZone4	0x3121, 0x00, -5						; zone 2
-	ToneEnvZone4	0x311e, 0x00, -5						; zone 3
-	ToneEnvZone4	0x311f, 0x00, -5						; zone 4
-	ToneEnvZone4	0x3122, 0x00, -4						; zone 5
-	ToneEnvZone4	0x3123, 0x00, -4						; zone 6
-	ToneEnvZone4	0x3124, 0x00, -9						; zone 7
-	ToneEnvZone4	0x3126, 0x00, -5						; zone 8
-	ToneEnvZone4	0x3125, 0x00, -5						; zone 9
-	ToneEnvZone4	0x3127, 0x00, -5						; zone 10
-	ToneEnvZone4	0x209c, 0x00, -12						; zone 11
-	ToneEnvZone4	0x1094, 0x00, -21						; zone 12
+ToneSet_297_Zones:
+	ToneSetZone4	0x3120, 0x80, -5						; zone 0
+	ToneSetZone4	0x3120, 0x00, -5						; zone 1
+	ToneSetZone4	0x3121, 0x00, -5						; zone 2
+	ToneSetZone4	0x311e, 0x00, -5						; zone 3
+	ToneSetZone4	0x311f, 0x00, -5						; zone 4
+	ToneSetZone4	0x3122, 0x00, -4						; zone 5
+	ToneSetZone4	0x3123, 0x00, -4						; zone 6
+	ToneSetZone4	0x3124, 0x00, -9						; zone 7
+	ToneSetZone4	0x3126, 0x00, -5						; zone 8
+	ToneSetZone4	0x3125, 0x00, -5						; zone 9
+	ToneSetZone4	0x3127, 0x00, -5						; zone 10
+	ToneSetZone4	0x209c, 0x00, -12						; zone 11
+	ToneSetZone4	0x1094, 0x00, -21						; zone 12
 ; SET 320 key map (descriptor 320: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec320_A:
+ToneSet_320_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5602,18 +5606,18 @@ ToneEnv_Rec320_A:
 	.byte	  7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7		; +0x64 bands 96-107 -> zone
 ; SET 320 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x005c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec320_B:
-	ToneEnvZone4	0x0058, 0x00, -9						; zone 0
-	ToneEnvZone4	0x0059, 0x00, -14						; zone 1
-	ToneEnvZone4	0x0059, 0x00, -10						; zone 2
-	ToneEnvZone4	0x005a, 0x00, -16						; zone 3
-	ToneEnvZone4	0x005b, 0x00, -16						; zone 4
-	ToneEnvZone4	0x005c, 0x00, -16						; zone 5
-	ToneEnvZone4	0x0009, 0x00, -24						; zone 6
-	ToneEnvZone4	0x0000, 0x00, -32						; zone 7
+ToneSet_320_Zones:
+	ToneSetZone4	0x0058, 0x00, -9						; zone 0
+	ToneSetZone4	0x0059, 0x00, -14						; zone 1
+	ToneSetZone4	0x0059, 0x00, -10						; zone 2
+	ToneSetZone4	0x005a, 0x00, -16						; zone 3
+	ToneSetZone4	0x005b, 0x00, -16						; zone 4
+	ToneSetZone4	0x005c, 0x00, -16						; zone 5
+	ToneSetZone4	0x0009, 0x00, -24						; zone 6
+	ToneSetZone4	0x0000, 0x00, -32						; zone 7
 ; SET 328 key map (descriptor 328: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec328_A:
+ToneSet_328_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5624,22 +5628,22 @@ ToneEnv_Rec328_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 328 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x003f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec328_B:
-	ToneEnvZone4	0x0038, 0x00, -8						; zone 0
-	ToneEnvZone4	0x0039, 0x00, -9						; zone 1
-	ToneEnvZone4	0x003a, 0x00, -10						; zone 2
-	ToneEnvZone4	0x003b, 0x00, -10						; zone 3
-	ToneEnvZone4	0x003c, 0x00, -10						; zone 4
-	ToneEnvZone4	0x003d, 0x00, -10						; zone 5
-	ToneEnvZone4	0x003e, 0x00, -12						; zone 6
-	ToneEnvZone4	0x003f, 0x00, -17						; zone 7
-	ToneEnvZone4	0x002f, 0x00, -27						; zone 8
-	ToneEnvZone4	0x0012, 0x00, -32						; zone 9
-	ToneEnvZone4	0x0009, 0x00, -24						; zone 10
-	ToneEnvZone4	0x0000, 0x00, -32						; zone 11
+ToneSet_328_Zones:
+	ToneSetZone4	0x0038, 0x00, -8						; zone 0
+	ToneSetZone4	0x0039, 0x00, -9						; zone 1
+	ToneSetZone4	0x003a, 0x00, -10						; zone 2
+	ToneSetZone4	0x003b, 0x00, -10						; zone 3
+	ToneSetZone4	0x003c, 0x00, -10						; zone 4
+	ToneSetZone4	0x003d, 0x00, -10						; zone 5
+	ToneSetZone4	0x003e, 0x00, -12						; zone 6
+	ToneSetZone4	0x003f, 0x00, -17						; zone 7
+	ToneSetZone4	0x002f, 0x00, -27						; zone 8
+	ToneSetZone4	0x0012, 0x00, -32						; zone 9
+	ToneSetZone4	0x0009, 0x00, -24						; zone 10
+	ToneSetZone4	0x0000, 0x00, -32						; zone 11
 ; SET 006 key map (descriptor 006: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec006_A:
+ToneSet_006_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5650,21 +5654,21 @@ ToneEnv_Rec006_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 006 zone records: 11 x 6 bytes (descriptor flags bit 7 set), selectors 0x2001..0x200b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec006_B:
-	ToneEnvZone6	0x2001, 0x00, -7, -790						; zone 0, coarse -3.09 st
-	ToneEnvZone6	0x2002, 0x00, -7, -1761						; zone 1, coarse -6.88 st
-	ToneEnvZone6	0x2003, 0x00, -9, -472						; zone 2, coarse -1.84 st
-	ToneEnvZone6	0x2004, 0x00, -8, -2277						; zone 3, coarse -8.89 st
-	ToneEnvZone6	0x2005, 0x00, -11, -498						; zone 4, coarse -1.95 st
-	ToneEnvZone6	0x2006, 0x00, -6, -2031						; zone 5, coarse -7.93 st
-	ToneEnvZone6	0x2007, 0x00, 0, -486						; zone 6, coarse -1.90 st
-	ToneEnvZone6	0x2008, 0x00, -3, -1786						; zone 7, coarse -6.98 st
-	ToneEnvZone6	0x2009, 0x00, 3, -3312						; zone 8, coarse -12.94 st
-	ToneEnvZone6	0x200a, 0x00, 2, -1771						; zone 9, coarse -6.92 st
-	ToneEnvZone6	0x200b, 0x00, -4, -3302						; zone 10, coarse -12.90 st
+ToneSet_006_Zones:
+	ToneSetZone6	0x2001, 0x00, -7, -790						; zone 0, coarse -3.09 st
+	ToneSetZone6	0x2002, 0x00, -7, -1761						; zone 1, coarse -6.88 st
+	ToneSetZone6	0x2003, 0x00, -9, -472						; zone 2, coarse -1.84 st
+	ToneSetZone6	0x2004, 0x00, -8, -2277						; zone 3, coarse -8.89 st
+	ToneSetZone6	0x2005, 0x00, -11, -498						; zone 4, coarse -1.95 st
+	ToneSetZone6	0x2006, 0x00, -6, -2031						; zone 5, coarse -7.93 st
+	ToneSetZone6	0x2007, 0x00, 0, -486						; zone 6, coarse -1.90 st
+	ToneSetZone6	0x2008, 0x00, -3, -1786						; zone 7, coarse -6.98 st
+	ToneSetZone6	0x2009, 0x00, 3, -3312						; zone 8, coarse -12.94 st
+	ToneSetZone6	0x200a, 0x00, 2, -1771						; zone 9, coarse -6.92 st
+	ToneSetZone6	0x200b, 0x00, -4, -3302						; zone 10, coarse -12.90 st
 ; SET 010 key map (descriptor 010: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..13 of 14.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec010_A:
+ToneSet_010_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   4,   4,   4,   5	; +0x14 bands 16-31 -> zone
@@ -5675,24 +5679,24 @@ ToneEnv_Rec010_A:
 	.byte	 13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13		; +0x64 bands 96-107 -> zone
 ; SET 010 zone records: 14 x 4 bytes (descriptor flags bit 7 clear), selectors 0x205f..0x206b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec010_B:
-	ToneEnvZone4	0x2060, 0x80, -13						; zone 0
-	ToneEnvZone4	0x2060, 0x00, -13						; zone 1
-	ToneEnvZone4	0x205f, 0x00, -13						; zone 2
-	ToneEnvZone4	0x2062, 0x00, -3						; zone 3
-	ToneEnvZone4	0x2061, 0x00, -3						; zone 4
-	ToneEnvZone4	0x2063, 0x00, -8						; zone 5
-	ToneEnvZone4	0x2065, 0x00, -5						; zone 6
-	ToneEnvZone4	0x2064, 0x00, -5						; zone 7
-	ToneEnvZone4	0x2066, 0x00, -10						; zone 8
-	ToneEnvZone4	0x2067, 0x00, -10						; zone 9
-	ToneEnvZone4	0x2068, 0x00, -10						; zone 10
-	ToneEnvZone4	0x2069, 0x00, -2						; zone 11
-	ToneEnvZone4	0x206a, 0x00, -2						; zone 12
-	ToneEnvZone4	0x206b, 0x00, -2						; zone 13
+ToneSet_010_Zones:
+	ToneSetZone4	0x2060, 0x80, -13						; zone 0
+	ToneSetZone4	0x2060, 0x00, -13						; zone 1
+	ToneSetZone4	0x205f, 0x00, -13						; zone 2
+	ToneSetZone4	0x2062, 0x00, -3						; zone 3
+	ToneSetZone4	0x2061, 0x00, -3						; zone 4
+	ToneSetZone4	0x2063, 0x00, -8						; zone 5
+	ToneSetZone4	0x2065, 0x00, -5						; zone 6
+	ToneSetZone4	0x2064, 0x00, -5						; zone 7
+	ToneSetZone4	0x2066, 0x00, -10						; zone 8
+	ToneSetZone4	0x2067, 0x00, -10						; zone 9
+	ToneSetZone4	0x2068, 0x00, -10						; zone 10
+	ToneSetZone4	0x2069, 0x00, -2						; zone 11
+	ToneSetZone4	0x206a, 0x00, -2						; zone 12
+	ToneSetZone4	0x206b, 0x00, -2						; zone 13
 ; SET 015 key map (descriptor 015: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec015_A:
+ToneSet_015_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -5703,37 +5707,37 @@ ToneEnv_Rec015_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 015 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x201b..0x2023;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec015_B:
-	ToneEnvZone4	0x201d, 0x80, -19						; zone 0
-	ToneEnvZone4	0x201d, 0x00, -19						; zone 1
-	ToneEnvZone4	0x201c, 0x00, -19						; zone 2
-	ToneEnvZone4	0x201e, 0x00, -20						; zone 3
-	ToneEnvZone4	0x201f, 0x00, -18						; zone 4
-	ToneEnvZone4	0x2020, 0x00, -19						; zone 5
-	ToneEnvZone4	0x2021, 0x00, -7						; zone 6
-	ToneEnvZone4	0x2022, 0x00, -7						; zone 7
-	ToneEnvZone4	0x2023, 0x00, -7						; zone 8
-	ToneEnvZone4	0x201b, 0x00, -14						; zone 9
+ToneSet_015_Zones:
+	ToneSetZone4	0x201d, 0x80, -19						; zone 0
+	ToneSetZone4	0x201d, 0x00, -19						; zone 1
+	ToneSetZone4	0x201c, 0x00, -19						; zone 2
+	ToneSetZone4	0x201e, 0x00, -20						; zone 3
+	ToneSetZone4	0x201f, 0x00, -18						; zone 4
+	ToneSetZone4	0x2020, 0x00, -19						; zone 5
+	ToneSetZone4	0x2021, 0x00, -7						; zone 6
+	ToneSetZone4	0x2022, 0x00, -7						; zone 7
+	ToneSetZone4	0x2023, 0x00, -7						; zone 8
+	ToneSetZone4	0x201b, 0x00, -14						; zone 9
 ; SET 022 key map (descriptor 022: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec022_A:
+ToneSet_022_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   2,   2,   2,   2,   3,   4,   4,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  6,   6,   6								; +0x24 bands 32-34 -> zone
 ; SET 022 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x206c..0x2072;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec022_B:
-	ToneEnvZone4	0x206c, 0x90, -13						; zone 0
-	ToneEnvZone4	0x206d, 0x00, -13						; zone 1
-	ToneEnvZone4	0x206e, 0x00, -14						; zone 2
-	ToneEnvZone4	0x206f, 0x00, -14						; zone 3
-	ToneEnvZone4	0x2070, 0x00, -14						; zone 4
-	ToneEnvZone4	0x2071, 0x00, -14						; zone 5
-	ToneEnvZone4	0x2072, 0x00, -14						; zone 6
+ToneSet_022_Zones:
+	ToneSetZone4	0x206c, 0x90, -13						; zone 0
+	ToneSetZone4	0x206d, 0x00, -13						; zone 1
+	ToneSetZone4	0x206e, 0x00, -14						; zone 2
+	ToneSetZone4	0x206f, 0x00, -14						; zone 3
+	ToneSetZone4	0x2070, 0x00, -14						; zone 4
+	ToneSetZone4	0x2071, 0x00, -14						; zone 5
+	ToneSetZone4	0x2072, 0x00, -14						; zone 6
 ; SET 038 key map (descriptor 038: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec038_A:
+ToneSet_038_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5744,15 +5748,15 @@ ToneEnv_Rec038_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 038 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x1094..0x20b8;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec038_B:
-	ToneEnvZone6	0x20b8, 0x80, -3, -5035						; zone 0, coarse -19.67 st
-	ToneEnvZone6	0x20b0, 0xf0, -10, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x20b1, 0x00, -27, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x20b1, 0xf0, -27, 0						; zone 3, coarse +0.00 st
-	ToneEnvZone6	0x1094, 0x00, -41, 0						; zone 4, coarse +0.00 st
+ToneSet_038_Zones:
+	ToneSetZone6	0x20b8, 0x80, -3, -5035						; zone 0, coarse -19.67 st
+	ToneSetZone6	0x20b0, 0xf0, -10, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x20b1, 0x00, -27, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x20b1, 0xf0, -27, 0						; zone 3, coarse +0.00 st
+	ToneSetZone6	0x1094, 0x00, -41, 0						; zone 4, coarse +0.00 st
 ; SET 051 key map (descriptor 051: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec051_A:
+ToneSet_051_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5763,20 +5767,20 @@ ToneEnv_Rec051_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 051 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3018..0x3020;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec051_B:
-	ToneEnvZone4	0x3018, 0x80, -3						; zone 0
-	ToneEnvZone4	0x3018, 0x00, -3						; zone 1
-	ToneEnvZone4	0x3019, 0x00, -3						; zone 2
-	ToneEnvZone4	0x301a, 0x00, -3						; zone 3
-	ToneEnvZone4	0x301b, 0x00, -3						; zone 4
-	ToneEnvZone4	0x301c, 0x00, -11						; zone 5
-	ToneEnvZone4	0x301d, 0x00, -6						; zone 6
-	ToneEnvZone4	0x301e, 0x00, -6						; zone 7
-	ToneEnvZone4	0x301f, 0x00, -6						; zone 8
-	ToneEnvZone4	0x3020, 0x00, -6						; zone 9
+ToneSet_051_Zones:
+	ToneSetZone4	0x3018, 0x80, -3						; zone 0
+	ToneSetZone4	0x3018, 0x00, -3						; zone 1
+	ToneSetZone4	0x3019, 0x00, -3						; zone 2
+	ToneSetZone4	0x301a, 0x00, -3						; zone 3
+	ToneSetZone4	0x301b, 0x00, -3						; zone 4
+	ToneSetZone4	0x301c, 0x00, -11						; zone 5
+	ToneSetZone4	0x301d, 0x00, -6						; zone 6
+	ToneSetZone4	0x301e, 0x00, -6						; zone 7
+	ToneSetZone4	0x301f, 0x00, -6						; zone 8
+	ToneSetZone4	0x3020, 0x00, -6						; zone 9
 ; SET 091 key map (descriptor 091: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec091_A:
+ToneSet_091_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5787,23 +5791,23 @@ ToneEnv_Rec091_A:
 	.byte	 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12		; +0x64 bands 96-107 -> zone
 ; SET 091 zone records: 13 x 4 bytes (descriptor flags bit 7 clear), selectors 0x106f..0x313b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec091_B:
-	ToneEnvZone4	0x3133, 0x80, -2						; zone 0
-	ToneEnvZone4	0x3133, 0x00, -2						; zone 1
-	ToneEnvZone4	0x3132, 0x00, -2						; zone 2
-	ToneEnvZone4	0x3134, 0x00, -2						; zone 3
-	ToneEnvZone4	0x3135, 0x00, -3						; zone 4
-	ToneEnvZone4	0x3136, 0x00, -6						; zone 5
-	ToneEnvZone4	0x3138, 0x00, -8						; zone 6
-	ToneEnvZone4	0x3137, 0x00, -8						; zone 7
-	ToneEnvZone4	0x3139, 0x00, -8						; zone 8
-	ToneEnvZone4	0x313a, 0x00, -8						; zone 9
-	ToneEnvZone4	0x313b, 0x00, -8						; zone 10
-	ToneEnvZone4	0x106f, 0x00, -26						; zone 11
-	ToneEnvZone4	0x1070, 0x00, -26						; zone 12
+ToneSet_091_Zones:
+	ToneSetZone4	0x3133, 0x80, -2						; zone 0
+	ToneSetZone4	0x3133, 0x00, -2						; zone 1
+	ToneSetZone4	0x3132, 0x00, -2						; zone 2
+	ToneSetZone4	0x3134, 0x00, -2						; zone 3
+	ToneSetZone4	0x3135, 0x00, -3						; zone 4
+	ToneSetZone4	0x3136, 0x00, -6						; zone 5
+	ToneSetZone4	0x3138, 0x00, -8						; zone 6
+	ToneSetZone4	0x3137, 0x00, -8						; zone 7
+	ToneSetZone4	0x3139, 0x00, -8						; zone 8
+	ToneSetZone4	0x313a, 0x00, -8						; zone 9
+	ToneSetZone4	0x313b, 0x00, -8						; zone 10
+	ToneSetZone4	0x106f, 0x00, -26						; zone 11
+	ToneSetZone4	0x1070, 0x00, -26						; zone 12
 ; SET 106 key map (descriptor 106: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec106_A:
+ToneSet_106_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -5814,19 +5818,19 @@ ToneEnv_Rec106_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 106 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3198..0x5098;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec106_B:
-	ToneEnvZone4	0x3198, 0x80, -1						; zone 0
-	ToneEnvZone4	0x3198, 0x00, -1						; zone 1
-	ToneEnvZone4	0x3199, 0x00, -1						; zone 2
-	ToneEnvZone4	0x319a, 0x00, -6						; zone 3
-	ToneEnvZone4	0x319b, 0x00, -6						; zone 4
-	ToneEnvZone4	0x319c, 0x00, -6						; zone 5
-	ToneEnvZone4	0x319d, 0x00, -6						; zone 6
-	ToneEnvZone4	0x319e, 0x00, -6						; zone 7
-	ToneEnvZone4	0x5098, 0x00, -6						; zone 8
+ToneSet_106_Zones:
+	ToneSetZone4	0x3198, 0x80, -1						; zone 0
+	ToneSetZone4	0x3198, 0x00, -1						; zone 1
+	ToneSetZone4	0x3199, 0x00, -1						; zone 2
+	ToneSetZone4	0x319a, 0x00, -6						; zone 3
+	ToneSetZone4	0x319b, 0x00, -6						; zone 4
+	ToneSetZone4	0x319c, 0x00, -6						; zone 5
+	ToneSetZone4	0x319d, 0x00, -6						; zone 6
+	ToneSetZone4	0x319e, 0x00, -6						; zone 7
+	ToneSetZone4	0x5098, 0x00, -6						; zone 8
 ; SET 112 key map (descriptor 112: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec112_A:
+ToneSet_112_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5837,19 +5841,19 @@ ToneEnv_Rec112_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 112 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x31ab..0x5098;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec112_B:
-	ToneEnvZone4	0x31ad, 0x80, -8						; zone 0
-	ToneEnvZone4	0x31ad, 0x00, -8						; zone 1
-	ToneEnvZone4	0x31ac, 0x00, -8						; zone 2
-	ToneEnvZone4	0x31ae, 0x00, -8						; zone 3
-	ToneEnvZone4	0x31af, 0x00, -8						; zone 4
-	ToneEnvZone4	0x31b0, 0x00, -8						; zone 5
-	ToneEnvZone4	0x31ab, 0x00, -9						; zone 6
-	ToneEnvZone4	0x5097, 0x00, -6						; zone 7
-	ToneEnvZone4	0x5098, 0x00, -6						; zone 8
+ToneSet_112_Zones:
+	ToneSetZone4	0x31ad, 0x80, -8						; zone 0
+	ToneSetZone4	0x31ad, 0x00, -8						; zone 1
+	ToneSetZone4	0x31ac, 0x00, -8						; zone 2
+	ToneSetZone4	0x31ae, 0x00, -8						; zone 3
+	ToneSetZone4	0x31af, 0x00, -8						; zone 4
+	ToneSetZone4	0x31b0, 0x00, -8						; zone 5
+	ToneSetZone4	0x31ab, 0x00, -9						; zone 6
+	ToneSetZone4	0x5097, 0x00, -6						; zone 7
+	ToneSetZone4	0x5098, 0x00, -6						; zone 8
 ; SET 116 key map (descriptor 116: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec116_A:
+ToneSet_116_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2	; +0x04 bands 0-15 -> zone
 	.byte	  3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
@@ -5860,21 +5864,21 @@ ToneEnv_Rec116_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 116 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x7020..0x702b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec116_B:
-	ToneEnvZone4	0x7020, 0x80, -3						; zone 0
-	ToneEnvZone4	0x7020, 0x00, -3						; zone 1
-	ToneEnvZone4	0x7022, 0x00, -2						; zone 2
-	ToneEnvZone4	0x7021, 0x00, -2						; zone 3
-	ToneEnvZone4	0x7029, 0x00, -4						; zone 4
-	ToneEnvZone4	0x7028, 0x00, -4						; zone 5
-	ToneEnvZone4	0x702a, 0x00, -4						; zone 6
-	ToneEnvZone4	0x702b, 0x00, -4						; zone 7
-	ToneEnvZone4	0x7025, 0x00, -2						; zone 8
-	ToneEnvZone4	0x7026, 0x00, -2						; zone 9
-	ToneEnvZone4	0x7027, 0x00, -2						; zone 10
+ToneSet_116_Zones:
+	ToneSetZone4	0x7020, 0x80, -3						; zone 0
+	ToneSetZone4	0x7020, 0x00, -3						; zone 1
+	ToneSetZone4	0x7022, 0x00, -2						; zone 2
+	ToneSetZone4	0x7021, 0x00, -2						; zone 3
+	ToneSetZone4	0x7029, 0x00, -4						; zone 4
+	ToneSetZone4	0x7028, 0x00, -4						; zone 5
+	ToneSetZone4	0x702a, 0x00, -4						; zone 6
+	ToneSetZone4	0x702b, 0x00, -4						; zone 7
+	ToneSetZone4	0x7025, 0x00, -2						; zone 8
+	ToneSetZone4	0x7026, 0x00, -2						; zone 9
+	ToneSetZone4	0x7027, 0x00, -2						; zone 10
 ; SET 126 key map (descriptor 126: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec126_A:
+ToneSet_126_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5885,21 +5889,21 @@ ToneEnv_Rec126_A:
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1		; +0x64 bands 96-107 -> zone
 ; SET 126 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x31b1..0x31b3;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec126_B:
-	ToneEnvZone4	0x31b3, 0x80, -10						; zone 0
-	ToneEnvZone4	0x31b1, 0x80, -5						; zone 1
+ToneSet_126_Zones:
+	ToneSetZone4	0x31b3, 0x80, -10						; zone 0
+	ToneSetZone4	0x31b1, 0x80, -5						; zone 1
 ; SET 132 key map (descriptor 132: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec132_A:
+ToneSet_132_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 132 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x31b1..0x31b1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec132_B:
-	ToneEnvZone4	0x31b1, 0x80, -5						; zone 0
+ToneSet_132_Zones:
+	ToneSetZone4	0x31b1, 0x80, -5						; zone 0
 ; SET 137 key map (descriptor 137: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec137_A:
+ToneSet_137_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -5910,34 +5914,34 @@ ToneEnv_Rec137_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 137 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x6021..0x7030;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec137_B:
-	ToneEnvZone4	0x6021, 0x80, -3						; zone 0
-	ToneEnvZone4	0x6021, 0x00, -3						; zone 1
-	ToneEnvZone4	0x6022, 0x00, -3						; zone 2
-	ToneEnvZone4	0x6023, 0x00, -3						; zone 3
-	ToneEnvZone4	0x6024, 0x00, -3						; zone 4
-	ToneEnvZone4	0x6025, 0x00, -3						; zone 5
-	ToneEnvZone4	0x6026, 0x00, -3						; zone 6
-	ToneEnvZone4	0x6027, 0x00, -3						; zone 7
-	ToneEnvZone4	0x7030, 0xc0, -14						; zone 8
+ToneSet_137_Zones:
+	ToneSetZone4	0x6021, 0x80, -3						; zone 0
+	ToneSetZone4	0x6021, 0x00, -3						; zone 1
+	ToneSetZone4	0x6022, 0x00, -3						; zone 2
+	ToneSetZone4	0x6023, 0x00, -3						; zone 3
+	ToneSetZone4	0x6024, 0x00, -3						; zone 4
+	ToneSetZone4	0x6025, 0x00, -3						; zone 5
+	ToneSetZone4	0x6026, 0x00, -3						; zone 6
+	ToneSetZone4	0x6027, 0x00, -3						; zone 7
+	ToneSetZone4	0x7030, 0xc0, -14						; zone 8
 ; SET 195 key map (descriptor 195: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec195_A:
+ToneSet_195_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   1,   2,   2,   2,   3,   3,   3,   3,   4,   4	; +0x14 bands 16-31 -> zone
 	.byte	  4,   4,   4								; +0x24 bands 32-34 -> zone
 ; SET 195 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x5015..0x5021;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec195_B:
-	ToneEnvZone6	0x501e, 0x80, -21, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x501f, 0xc0, -12, -1999					; zone 1, coarse -7.81 st
-	ToneEnvZone6	0x5020, 0x80, -9, -216						; zone 2, coarse -0.84 st
-	ToneEnvZone6	0x5021, 0xc0, -11, -2585					; zone 3, coarse -10.10 st
-	ToneEnvZone6	0x5015, 0xc0, -13, 35						; zone 4, coarse +0.14 st
+ToneSet_195_Zones:
+	ToneSetZone6	0x501e, 0x80, -21, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x501f, 0xc0, -12, -1999					; zone 1, coarse -7.81 st
+	ToneSetZone6	0x5020, 0x80, -9, -216						; zone 2, coarse -0.84 st
+	ToneSetZone6	0x5021, 0xc0, -11, -2585					; zone 3, coarse -10.10 st
+	ToneSetZone6	0x5015, 0xc0, -13, 35						; zone 4, coarse +0.14 st
 ; SET 226 key map (descriptor 226: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..12 of 13.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec226_A:
+ToneSet_226_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -5948,23 +5952,23 @@ ToneEnv_Rec226_A:
 	.byte	 12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12		; +0x64 bands 96-107 -> zone
 ; SET 226 zone records: 13 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4066..0x4070;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec226_B:
-	ToneEnvZone4	0x4068, 0xe0, -1						; zone 0
-	ToneEnvZone4	0x4069, 0xf0, -3						; zone 1
-	ToneEnvZone4	0x406a, 0x90, -3						; zone 2
-	ToneEnvZone4	0x406b, 0xb0, 0							; zone 3
-	ToneEnvZone4	0x406c, 0xf0, -2						; zone 4
-	ToneEnvZone4	0x406d, 0x90, 0							; zone 5
-	ToneEnvZone4	0x406e, 0xc0, -4						; zone 6
-	ToneEnvZone4	0x406f, 0xf0, -16						; zone 7
-	ToneEnvZone4	0x4070, 0x90, -8						; zone 8
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 9
-	ToneEnvZone4	0x4066, 0xa0, -17						; zone 10
-	ToneEnvZone4	0x4066, 0xa0, -21						; zone 11
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 12
+ToneSet_226_Zones:
+	ToneSetZone4	0x4068, 0xe0, -1						; zone 0
+	ToneSetZone4	0x4069, 0xf0, -3						; zone 1
+	ToneSetZone4	0x406a, 0x90, -3						; zone 2
+	ToneSetZone4	0x406b, 0xb0, 0							; zone 3
+	ToneSetZone4	0x406c, 0xf0, -2						; zone 4
+	ToneSetZone4	0x406d, 0x90, 0							; zone 5
+	ToneSetZone4	0x406e, 0xc0, -4						; zone 6
+	ToneSetZone4	0x406f, 0xf0, -16						; zone 7
+	ToneSetZone4	0x4070, 0x90, -8						; zone 8
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 9
+	ToneSetZone4	0x4066, 0xa0, -17						; zone 10
+	ToneSetZone4	0x4066, 0xa0, -21						; zone 11
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 12
 ; SET 230 key map (descriptor 230: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec230_A:
+ToneSet_230_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -5975,62 +5979,62 @@ ToneEnv_Rec230_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 230 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x4045..0x404a;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec230_B:
-	ToneEnvZone6	0x4046, 0xc0, -8, -2003						; zone 0, coarse -7.82 st
-	ToneEnvZone6	0x4047, 0x80, -13, -216						; zone 1, coarse -0.84 st
-	ToneEnvZone6	0x4048, 0xc0, -14, -1738					; zone 2, coarse -6.79 st
-	ToneEnvZone6	0x4049, 0x80, -16, -202						; zone 3, coarse -0.79 st
-	ToneEnvZone6	0x404a, 0xc0, -10, 0						; zone 4, coarse +0.00 st
-	ToneEnvZone6	0x4045, 0xe0, -14, 0						; zone 5, coarse +0.00 st
+ToneSet_230_Zones:
+	ToneSetZone6	0x4046, 0xc0, -8, -2003						; zone 0, coarse -7.82 st
+	ToneSetZone6	0x4047, 0x80, -13, -216						; zone 1, coarse -0.84 st
+	ToneSetZone6	0x4048, 0xc0, -14, -1738					; zone 2, coarse -6.79 st
+	ToneSetZone6	0x4049, 0x80, -16, -202						; zone 3, coarse -0.79 st
+	ToneSetZone6	0x404a, 0xc0, -10, 0						; zone 4, coarse +0.00 st
+	ToneSetZone6	0x4045, 0xe0, -14, 0						; zone 5, coarse +0.00 st
 ; SET 238 key map (descriptor 238: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec238_A:
+ToneSet_238_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   7,   8	; +0x04 bands 0-15 -> zone
 	.byte	  9,  10,  10,  10,  10							; +0x14 bands 16-20 -> zone
 ; SET 238 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x401b..0x4021;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec238_B:
-	ToneEnvZone4	0x401b, 0x00, -24						; zone 0
-	ToneEnvZone4	0x401c, 0x00, -20						; zone 1
-	ToneEnvZone4	0x401d, 0x00, -20						; zone 2
-	ToneEnvZone4	0x401e, 0x00, -28						; zone 3
-	ToneEnvZone4	0x401f, 0x00, -25						; zone 4
-	ToneEnvZone4	0x4020, 0x00, -26						; zone 5
-	ToneEnvZone4	0x4021, 0x00, -27						; zone 6
-	ToneEnvZone4	0x4021, 0x00, -31						; zone 7
-	ToneEnvZone4	0x4021, 0x00, -35						; zone 8
-	ToneEnvZone4	0x4021, 0x00, -39						; zone 9
-	ToneEnvZone4	0x4021, 0x00, -43						; zone 10
+ToneSet_238_Zones:
+	ToneSetZone4	0x401b, 0x00, -24						; zone 0
+	ToneSetZone4	0x401c, 0x00, -20						; zone 1
+	ToneSetZone4	0x401d, 0x00, -20						; zone 2
+	ToneSetZone4	0x401e, 0x00, -28						; zone 3
+	ToneSetZone4	0x401f, 0x00, -25						; zone 4
+	ToneSetZone4	0x4020, 0x00, -26						; zone 5
+	ToneSetZone4	0x4021, 0x00, -27						; zone 6
+	ToneSetZone4	0x4021, 0x00, -31						; zone 7
+	ToneSetZone4	0x4021, 0x00, -35						; zone 8
+	ToneSetZone4	0x4021, 0x00, -39						; zone 9
+	ToneSetZone4	0x4021, 0x00, -43						; zone 10
 ; SET 241 key map (descriptor 241: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec241_A:
+ToneSet_241_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   7,   7	; +0x04 bands 0-15 -> zone
 	.byte	  7,   7,   7,   7,   7							; +0x14 bands 16-20 -> zone
 ; SET 241 zone records: 8 x 6 bytes (descriptor flags bit 7 set), selectors 0x402f..0x4035;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec241_B:
-	ToneEnvZone6	0x402f, 0x00, 0, -3072						; zone 0, coarse -12.00 st
-	ToneEnvZone6	0x4030, 0x00, 1, -4347						; zone 1, coarse -16.98 st
-	ToneEnvZone6	0x4031, 0x00, -2, -3072						; zone 2, coarse -12.00 st
-	ToneEnvZone6	0x4032, 0x00, -5, -3072						; zone 3, coarse -12.00 st
-	ToneEnvZone6	0x4033, 0x00, -10, -3072					; zone 4, coarse -12.00 st
-	ToneEnvZone6	0x4034, 0x00, -17, -3072					; zone 5, coarse -12.00 st
-	ToneEnvZone6	0x4035, 0x00, -25, -3072					; zone 6, coarse -12.00 st
-	ToneEnvZone6	0x4035, 0x00, -33, -3072					; zone 7, coarse -12.00 st
+ToneSet_241_Zones:
+	ToneSetZone6	0x402f, 0x00, 0, -3072						; zone 0, coarse -12.00 st
+	ToneSetZone6	0x4030, 0x00, 1, -4347						; zone 1, coarse -16.98 st
+	ToneSetZone6	0x4031, 0x00, -2, -3072						; zone 2, coarse -12.00 st
+	ToneSetZone6	0x4032, 0x00, -5, -3072						; zone 3, coarse -12.00 st
+	ToneSetZone6	0x4033, 0x00, -10, -3072					; zone 4, coarse -12.00 st
+	ToneSetZone6	0x4034, 0x00, -17, -3072					; zone 5, coarse -12.00 st
+	ToneSetZone6	0x4035, 0x00, -25, -3072					; zone 6, coarse -12.00 st
+	ToneSetZone6	0x4035, 0x00, -33, -3072					; zone 7, coarse -12.00 st
 ; SET 261 key map (descriptor 261: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec261_A:
+ToneSet_261_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 261 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x505c..0x505c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec261_B:
-	ToneEnvZone4	0x505c, 0x00, -1						; zone 0
+ToneSet_261_Zones:
+	ToneSetZone4	0x505c, 0x00, -1						; zone 0
 ; SET 275 key map (descriptor 275: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec275_A:
+ToneSet_275_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -6041,20 +6045,20 @@ ToneEnv_Rec275_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 275 zone records: 10 x 6 bytes (descriptor flags bit 7 set), selectors 0x0081..0x0091;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec275_B:
-	ToneEnvZone6	0x0083, 0x00, -20, -2144					; zone 0, coarse -8.38 st
-	ToneEnvZone6	0x0085, 0x00, -4, -1011						; zone 1, coarse -3.95 st
-	ToneEnvZone6	0x0087, 0x00, -10, -2221					; zone 2, coarse -8.68 st
-	ToneEnvZone6	0x0089, 0x00, -6, -989						; zone 3, coarse -3.86 st
-	ToneEnvZone6	0x008b, 0x00, -7, -2498						; zone 4, coarse -9.76 st
-	ToneEnvZone6	0x008d, 0x00, -8, -999						; zone 5, coarse -3.90 st
-	ToneEnvZone6	0x008f, 0x00, -11, -2552					; zone 6, coarse -9.97 st
-	ToneEnvZone6	0x0091, 0x00, -10, -922						; zone 7, coarse -3.60 st
-	ToneEnvZone6	0x0081, 0x00, -11, -1003					; zone 8, coarse -3.92 st
-	ToneEnvZone6	0x0091, 0x00, -10, -922						; zone 9, coarse -3.60 st
+ToneSet_275_Zones:
+	ToneSetZone6	0x0083, 0x00, -20, -2144					; zone 0, coarse -8.38 st
+	ToneSetZone6	0x0085, 0x00, -4, -1011						; zone 1, coarse -3.95 st
+	ToneSetZone6	0x0087, 0x00, -10, -2221					; zone 2, coarse -8.68 st
+	ToneSetZone6	0x0089, 0x00, -6, -989						; zone 3, coarse -3.86 st
+	ToneSetZone6	0x008b, 0x00, -7, -2498						; zone 4, coarse -9.76 st
+	ToneSetZone6	0x008d, 0x00, -8, -999						; zone 5, coarse -3.90 st
+	ToneSetZone6	0x008f, 0x00, -11, -2552					; zone 6, coarse -9.97 st
+	ToneSetZone6	0x0091, 0x00, -10, -922						; zone 7, coarse -3.60 st
+	ToneSetZone6	0x0081, 0x00, -11, -1003					; zone 8, coarse -3.92 st
+	ToneSetZone6	0x0091, 0x00, -10, -922						; zone 9, coarse -3.60 st
 ; SET 280 key map (descriptor 280: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec280_A:
+ToneSet_280_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6065,16 +6069,16 @@ ToneEnv_Rec280_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 280 zone records: 6 x 6 bytes (descriptor flags bit 7 set), selectors 0x6007..0x600c;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec280_B:
-	ToneEnvZone6	0x6007, 0x00, 2, -697						; zone 0, coarse -2.72 st
-	ToneEnvZone6	0x6008, 0x00, 1, -2537						; zone 1, coarse -9.91 st
-	ToneEnvZone6	0x6009, 0x00, -4, -1215						; zone 2, coarse -4.75 st
-	ToneEnvZone6	0x600a, 0x00, -14, -3001					; zone 3, coarse -11.72 st
-	ToneEnvZone6	0x600b, 0x00, -12, -1075					; zone 4, coarse -4.20 st
-	ToneEnvZone6	0x600c, 0x00, -8, -2505						; zone 5, coarse -9.79 st
+ToneSet_280_Zones:
+	ToneSetZone6	0x6007, 0x00, 2, -697						; zone 0, coarse -2.72 st
+	ToneSetZone6	0x6008, 0x00, 1, -2537						; zone 1, coarse -9.91 st
+	ToneSetZone6	0x6009, 0x00, -4, -1215						; zone 2, coarse -4.75 st
+	ToneSetZone6	0x600a, 0x00, -14, -3001					; zone 3, coarse -11.72 st
+	ToneSetZone6	0x600b, 0x00, -12, -1075					; zone 4, coarse -4.20 st
+	ToneSetZone6	0x600c, 0x00, -8, -2505						; zone 5, coarse -9.79 st
 ; SET 283 key map (descriptor 283: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec283_A:
+ToneSet_283_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -6085,30 +6089,30 @@ ToneEnv_Rec283_A:
 	.byte	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3		; +0x64 bands 96-107 -> zone
 ; SET 283 zone records: 4 x 6 bytes (descriptor flags bit 7 set), selectors 0x6012..0x6015;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec283_B:
-	ToneEnvZone6	0x6012, 0x00, 5, -3378						; zone 0, coarse -13.20 st
-	ToneEnvZone6	0x6013, 0x00, 1, -1797						; zone 1, coarse -7.02 st
-	ToneEnvZone6	0x6014, 0x00, -3, -3385						; zone 2, coarse -13.22 st
-	ToneEnvZone6	0x6015, 0x00, -9, -1797						; zone 3, coarse -7.02 st
+ToneSet_283_Zones:
+	ToneSetZone6	0x6012, 0x00, 5, -3378						; zone 0, coarse -13.20 st
+	ToneSetZone6	0x6013, 0x00, 1, -1797						; zone 1, coarse -7.02 st
+	ToneSetZone6	0x6014, 0x00, -3, -3385						; zone 2, coarse -13.22 st
+	ToneSetZone6	0x6015, 0x00, -9, -1797						; zone 3, coarse -7.02 st
 ; SET 286 key map (descriptor 286: flags 0x81, keys 12..101): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec286_A:
+ToneSet_286_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   6,   6	; +0x04 bands 0-15 -> zone
 	.byte	  6,   6,   6,   6,   6							; +0x14 bands 16-20 -> zone
 ; SET 286 zone records: 7 x 6 bytes (descriptor flags bit 7 set), selectors 0x00b9..0x00bf;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec286_B:
-	ToneEnvZone6	0x00b9, 0x00, -13, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x00ba, 0x00, -22, -1237					; zone 1, coarse -4.83 st
-	ToneEnvZone6	0x00bb, 0x00, -11, -2761					; zone 2, coarse -10.79 st
-	ToneEnvZone6	0x00bc, 0x00, -11, -1275					; zone 3, coarse -4.98 st
-	ToneEnvZone6	0x00bd, 0x00, -9, -2819						; zone 4, coarse -11.01 st
-	ToneEnvZone6	0x00be, 0x00, -13, -1285					; zone 5, coarse -5.02 st
-	ToneEnvZone6	0x00bf, 0x00, -4, 0						; zone 6, coarse +0.00 st
+ToneSet_286_Zones:
+	ToneSetZone6	0x00b9, 0x00, -13, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x00ba, 0x00, -22, -1237					; zone 1, coarse -4.83 st
+	ToneSetZone6	0x00bb, 0x00, -11, -2761					; zone 2, coarse -10.79 st
+	ToneSetZone6	0x00bc, 0x00, -11, -1275					; zone 3, coarse -4.98 st
+	ToneSetZone6	0x00bd, 0x00, -9, -2819						; zone 4, coarse -11.01 st
+	ToneSetZone6	0x00be, 0x00, -13, -1285					; zone 5, coarse -5.02 st
+	ToneSetZone6	0x00bf, 0x00, -4, 0						; zone 6, coarse +0.00 st
 ; SET 298 key map (descriptor 298: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec298_A:
+ToneSet_298_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6119,20 +6123,20 @@ ToneEnv_Rec298_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 298 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1094..0x311d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec298_B:
-	ToneEnvZone4	0x3117, 0x80, -5						; zone 0
-	ToneEnvZone4	0x3117, 0x00, -5						; zone 1
-	ToneEnvZone4	0x3119, 0x00, -9						; zone 2
-	ToneEnvZone4	0x3118, 0x00, -9						; zone 3
-	ToneEnvZone4	0x311a, 0x00, -8						; zone 4
-	ToneEnvZone4	0x311c, 0x00, -11						; zone 5
-	ToneEnvZone4	0x311b, 0x00, -11						; zone 6
-	ToneEnvZone4	0x311d, 0x00, -11						; zone 7
-	ToneEnvZone4	0x209c, 0x00, -12						; zone 8
-	ToneEnvZone4	0x1094, 0x00, -21						; zone 9
+ToneSet_298_Zones:
+	ToneSetZone4	0x3117, 0x80, -5						; zone 0
+	ToneSetZone4	0x3117, 0x00, -5						; zone 1
+	ToneSetZone4	0x3119, 0x00, -9						; zone 2
+	ToneSetZone4	0x3118, 0x00, -9						; zone 3
+	ToneSetZone4	0x311a, 0x00, -8						; zone 4
+	ToneSetZone4	0x311c, 0x00, -11						; zone 5
+	ToneSetZone4	0x311b, 0x00, -11						; zone 6
+	ToneSetZone4	0x311d, 0x00, -11						; zone 7
+	ToneSetZone4	0x209c, 0x00, -12						; zone 8
+	ToneSetZone4	0x1094, 0x00, -21						; zone 9
 ; SET 308 key map (descriptor 308: flags 0x81, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec308_A:
+ToneSet_308_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6143,78 +6147,78 @@ ToneEnv_Rec308_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 308 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x0041..0x0049;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec308_B:
-	ToneEnvZone6	0x0041, 0x00, -5, -1312						; zone 0, coarse -5.12 st
-	ToneEnvZone6	0x0043, 0x00, -6, -2979						; zone 1, coarse -11.64 st
-	ToneEnvZone6	0x0045, 0x00, -3, -1241						; zone 2, coarse -4.85 st
-	ToneEnvZone6	0x0047, 0x00, -6, -2159						; zone 3, coarse -8.43 st
-	ToneEnvZone6	0x0049, 0x00, -7, -1718						; zone 4, coarse -6.71 st
+ToneSet_308_Zones:
+	ToneSetZone6	0x0041, 0x00, -5, -1312						; zone 0, coarse -5.12 st
+	ToneSetZone6	0x0043, 0x00, -6, -2979						; zone 1, coarse -11.64 st
+	ToneSetZone6	0x0045, 0x00, -3, -1241						; zone 2, coarse -4.85 st
+	ToneSetZone6	0x0047, 0x00, -6, -2159						; zone 3, coarse -8.43 st
+	ToneSetZone6	0x0049, 0x00, -7, -1718						; zone 4, coarse -6.71 st
 ; SET 321 key map (descriptor 321: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec321_A:
+ToneSet_321_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   1							; +0x14 bands 16-20 -> zone
 ; SET 321 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x005d..0x005e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec321_B:
-	ToneEnvZone4	0x005d, 0x00, -8						; zone 0
-	ToneEnvZone4	0x005e, 0x00, -8						; zone 1
+ToneSet_321_Zones:
+	ToneSetZone4	0x005d, 0x00, -8						; zone 0
+	ToneSetZone4	0x005e, 0x00, -8						; zone 1
 ; SET 337 key map (descriptor 337: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec337_A:
+ToneSet_337_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 337 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x313c..0x313c;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec337_B:
-	ToneEnvZone6	0x313c, 0x00, -1, 1476						; zone 0, coarse +5.77 st
+ToneSet_337_Zones:
+	ToneSetZone6	0x313c, 0x00, -1, 1476						; zone 0, coarse +5.77 st
 ; SET 002 key map (descriptor 002: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..15 of 16.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec002_A:
+ToneSet_002_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   2,   3,   4,   5,   5,   6	; +0x04 bands 0-15 -> zone
 	.byte	  7,   8,   8,   9,  10,  11,  11,  12,  13,  14,  14,  15,  15,  15,  15,  15	; +0x14 bands 16-31 -> zone
 	.byte	 15,  15,  15								; +0x24 bands 32-34 -> zone
 ; SET 002 zone records: 16 x 6 bytes (descriptor flags bit 7 set), selectors 0x7010..0x701f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec002_B:
-	ToneEnvZone6	0x7010, 0x00, -17, -3378					; zone 0, coarse -13.20 st
-	ToneEnvZone6	0x7011, 0x00, -20, -1714					; zone 1, coarse -6.70 st
-	ToneEnvZone6	0x7012, 0x00, -13, -2883					; zone 2, coarse -11.26 st
-	ToneEnvZone6	0x7013, 0x00, -18, -3984					; zone 3, coarse -15.56 st
-	ToneEnvZone6	0x7014, 0x00, -21, -1944					; zone 4, coarse -7.59 st
-	ToneEnvZone6	0x7015, 0x00, -23, -2723					; zone 5, coarse -10.64 st
-	ToneEnvZone6	0x7016, 0x00, -18, -3804					; zone 6, coarse -14.86 st
-	ToneEnvZone6	0x7017, 0x00, -15, -1983					; zone 7, coarse -7.75 st
-	ToneEnvZone6	0x7018, 0x00, -21, -2708					; zone 8, coarse -10.58 st
-	ToneEnvZone6	0x7019, 0x00, -13, -3932					; zone 9, coarse -15.36 st
-	ToneEnvZone6	0x701a, 0x00, -12, -1747					; zone 10, coarse -6.82 st
-	ToneEnvZone6	0x701b, 0x00, -8, -2522						; zone 11, coarse -9.85 st
-	ToneEnvZone6	0x701c, 0x00, -15, -3533					; zone 12, coarse -13.80 st
-	ToneEnvZone6	0x701d, 0x00, -7, -1996						; zone 13, coarse -7.80 st
-	ToneEnvZone6	0x701e, 0x00, -17, -3006					; zone 14, coarse -11.74 st
-	ToneEnvZone6	0x701f, 0x00, -9, -3513						; zone 15, coarse -13.72 st
+ToneSet_002_Zones:
+	ToneSetZone6	0x7010, 0x00, -17, -3378					; zone 0, coarse -13.20 st
+	ToneSetZone6	0x7011, 0x00, -20, -1714					; zone 1, coarse -6.70 st
+	ToneSetZone6	0x7012, 0x00, -13, -2883					; zone 2, coarse -11.26 st
+	ToneSetZone6	0x7013, 0x00, -18, -3984					; zone 3, coarse -15.56 st
+	ToneSetZone6	0x7014, 0x00, -21, -1944					; zone 4, coarse -7.59 st
+	ToneSetZone6	0x7015, 0x00, -23, -2723					; zone 5, coarse -10.64 st
+	ToneSetZone6	0x7016, 0x00, -18, -3804					; zone 6, coarse -14.86 st
+	ToneSetZone6	0x7017, 0x00, -15, -1983					; zone 7, coarse -7.75 st
+	ToneSetZone6	0x7018, 0x00, -21, -2708					; zone 8, coarse -10.58 st
+	ToneSetZone6	0x7019, 0x00, -13, -3932					; zone 9, coarse -15.36 st
+	ToneSetZone6	0x701a, 0x00, -12, -1747					; zone 10, coarse -6.82 st
+	ToneSetZone6	0x701b, 0x00, -8, -2522						; zone 11, coarse -9.85 st
+	ToneSetZone6	0x701c, 0x00, -15, -3533					; zone 12, coarse -13.80 st
+	ToneSetZone6	0x701d, 0x00, -7, -1996						; zone 13, coarse -7.80 st
+	ToneSetZone6	0x701e, 0x00, -17, -3006					; zone 14, coarse -11.74 st
+	ToneSetZone6	0x701f, 0x00, -9, -3513						; zone 15, coarse -13.72 st
 ; SET 023 key map (descriptor 023: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec023_A:
+ToneSet_023_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   2,   2,   2,   2,   3,   4,   4,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  6,   6,   6								; +0x24 bands 32-34 -> zone
 ; SET 023 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2070..0x2076;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec023_B:
-	ToneEnvZone4	0x2073, 0x90, -12						; zone 0
-	ToneEnvZone4	0x2074, 0x00, -13						; zone 1
-	ToneEnvZone4	0x2075, 0x00, -13						; zone 2
-	ToneEnvZone4	0x2076, 0x00, -13						; zone 3
-	ToneEnvZone4	0x2070, 0x00, -14						; zone 4
-	ToneEnvZone4	0x2071, 0x00, -14						; zone 5
-	ToneEnvZone4	0x2072, 0x00, -14						; zone 6
+ToneSet_023_Zones:
+	ToneSetZone4	0x2073, 0x90, -12						; zone 0
+	ToneSetZone4	0x2074, 0x00, -13						; zone 1
+	ToneSetZone4	0x2075, 0x00, -13						; zone 2
+	ToneSetZone4	0x2076, 0x00, -13						; zone 3
+	ToneSetZone4	0x2070, 0x00, -14						; zone 4
+	ToneSetZone4	0x2071, 0x00, -14						; zone 5
+	ToneSetZone4	0x2072, 0x00, -14						; zone 6
 ; SET 107 key map (descriptor 107: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec107_A:
+ToneSet_107_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -6225,32 +6229,32 @@ ToneEnv_Rec107_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 107 zone records: 5 x 4 bytes (descriptor flags bit 7 clear), selectors 0x10ad..0x6020;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec107_B:
-	ToneEnvZone4	0x601f, 0x80, -4						; zone 0
-	ToneEnvZone4	0x601f, 0x00, -4						; zone 1
-	ToneEnvZone4	0x601e, 0x00, -4						; zone 2
-	ToneEnvZone4	0x6020, 0x80, -4						; zone 3
-	ToneEnvZone4	0x10ad, 0x80, -4						; zone 4
+ToneSet_107_Zones:
+	ToneSetZone4	0x601f, 0x80, -4						; zone 0
+	ToneSetZone4	0x601f, 0x00, -4						; zone 1
+	ToneSetZone4	0x601e, 0x00, -4						; zone 2
+	ToneSetZone4	0x6020, 0x80, -4						; zone 3
+	ToneSetZone4	0x10ad, 0x80, -4						; zone 4
 ; SET 113 key map (descriptor 113: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec113_A:
+ToneSet_113_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   1,   1,   2,   2,   3,   3,   4,   5,   6,   6	; +0x04 bands 0-15 -> zone
 	.byte	  7,   7,   7,   7,   7							; +0x14 bands 16-20 -> zone
 ; SET 113 zone records: 8 x 4 bytes (descriptor flags bit 7 clear), selectors 0x7025..0x702b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec113_B:
-	ToneEnvZone4	0x7029, 0x80, -4						; zone 0
-	ToneEnvZone4	0x7029, 0x00, -4						; zone 1
-	ToneEnvZone4	0x7028, 0x00, -4						; zone 2
-	ToneEnvZone4	0x702a, 0x00, -4						; zone 3
-	ToneEnvZone4	0x702b, 0x00, -4						; zone 4
-	ToneEnvZone4	0x7025, 0x00, -2						; zone 5
-	ToneEnvZone4	0x7026, 0x00, -2						; zone 6
-	ToneEnvZone4	0x7027, 0x00, -2						; zone 7
+ToneSet_113_Zones:
+	ToneSetZone4	0x7029, 0x80, -4						; zone 0
+	ToneSetZone4	0x7029, 0x00, -4						; zone 1
+	ToneSetZone4	0x7028, 0x00, -4						; zone 2
+	ToneSetZone4	0x702a, 0x00, -4						; zone 3
+	ToneSetZone4	0x702b, 0x00, -4						; zone 4
+	ToneSetZone4	0x7025, 0x00, -2						; zone 5
+	ToneSetZone4	0x7026, 0x00, -2						; zone 6
+	ToneSetZone4	0x7027, 0x00, -2						; zone 7
 ; SET 127 key map (descriptor 127: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..1 of 2.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec127_A:
+ToneSet_127_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6261,12 +6265,12 @@ ToneEnv_Rec127_A:
 	.byte	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1		; +0x64 bands 96-107 -> zone
 ; SET 127 zone records: 2 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00d5..0x31b1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec127_B:
-	ToneEnvZone4	0x00d5, 0x80, -8						; zone 0
-	ToneEnvZone4	0x31b1, 0x80, -5						; zone 1
+ToneSet_127_Zones:
+	ToneSetZone4	0x00d5, 0x80, -8						; zone 0
+	ToneSetZone4	0x31b1, 0x80, -5						; zone 1
 ; SET 220 key map (descriptor 220: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..13 of 14.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec220_A:
+ToneSet_220_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6277,24 +6281,24 @@ ToneEnv_Rec220_A:
 	.byte	 13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13		; +0x64 bands 96-107 -> zone
 ; SET 220 zone records: 14 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4067..0x4097;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec220_B:
-	ToneEnvZone4	0x4090, 0xc0, -16						; zone 0
-	ToneEnvZone4	0x4091, 0xf0, -12						; zone 1
-	ToneEnvZone4	0x4092, 0xa0, -5						; zone 2
-	ToneEnvZone4	0x4093, 0xc0, -16						; zone 3
-	ToneEnvZone4	0x4094, 0xf0, -5						; zone 4
-	ToneEnvZone4	0x4095, 0x90, -14						; zone 5
-	ToneEnvZone4	0x4096, 0xa0, -21						; zone 6
-	ToneEnvZone4	0x4097, 0xe0, -18						; zone 7
-	ToneEnvZone4	0x408f, 0x90, -19						; zone 8
-	ToneEnvZone4	0x408f, 0x90, -23						; zone 9
-	ToneEnvZone4	0x408f, 0x90, -27						; zone 10
-	ToneEnvZone4	0x408f, 0x90, -31						; zone 11
-	ToneEnvZone4	0x408f, 0x90, -35						; zone 12
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 13
+ToneSet_220_Zones:
+	ToneSetZone4	0x4090, 0xc0, -16						; zone 0
+	ToneSetZone4	0x4091, 0xf0, -12						; zone 1
+	ToneSetZone4	0x4092, 0xa0, -5						; zone 2
+	ToneSetZone4	0x4093, 0xc0, -16						; zone 3
+	ToneSetZone4	0x4094, 0xf0, -5						; zone 4
+	ToneSetZone4	0x4095, 0x90, -14						; zone 5
+	ToneSetZone4	0x4096, 0xa0, -21						; zone 6
+	ToneSetZone4	0x4097, 0xe0, -18						; zone 7
+	ToneSetZone4	0x408f, 0x90, -19						; zone 8
+	ToneSetZone4	0x408f, 0x90, -23						; zone 9
+	ToneSetZone4	0x408f, 0x90, -27						; zone 10
+	ToneSetZone4	0x408f, 0x90, -31						; zone 11
+	ToneSetZone4	0x408f, 0x90, -35						; zone 12
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 13
 ; SET 227 key map (descriptor 227: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..11 of 12.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec227_A:
+ToneSet_227_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6305,22 +6309,22 @@ ToneEnv_Rec227_A:
 	.byte	 11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11,  11		; +0x64 bands 96-107 -> zone
 ; SET 227 zone records: 12 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4066..0x4078;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec227_B:
-	ToneEnvZone4	0x4071, 0xe0, -3						; zone 0
-	ToneEnvZone4	0x4072, 0x80, -5						; zone 1
-	ToneEnvZone4	0x4073, 0xa0, -10						; zone 2
-	ToneEnvZone4	0x4074, 0xc0, -8						; zone 3
-	ToneEnvZone4	0x4075, 0xf0, -5						; zone 4
-	ToneEnvZone4	0x4076, 0x80, -8						; zone 5
-	ToneEnvZone4	0x4077, 0xb0, -12						; zone 6
-	ToneEnvZone4	0x4078, 0xe0, -12						; zone 7
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 8
-	ToneEnvZone4	0x4066, 0xa0, -17						; zone 9
-	ToneEnvZone4	0x4066, 0xa0, -21						; zone 10
-	ToneEnvZone4	0x4067, 0xa0, -27						; zone 11
+ToneSet_227_Zones:
+	ToneSetZone4	0x4071, 0xe0, -3						; zone 0
+	ToneSetZone4	0x4072, 0x80, -5						; zone 1
+	ToneSetZone4	0x4073, 0xa0, -10						; zone 2
+	ToneSetZone4	0x4074, 0xc0, -8						; zone 3
+	ToneSetZone4	0x4075, 0xf0, -5						; zone 4
+	ToneSetZone4	0x4076, 0x80, -8						; zone 5
+	ToneSetZone4	0x4077, 0xb0, -12						; zone 6
+	ToneSetZone4	0x4078, 0xe0, -12						; zone 7
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 8
+	ToneSetZone4	0x4066, 0xa0, -17						; zone 9
+	ToneSetZone4	0x4066, 0xa0, -21						; zone 10
+	ToneSetZone4	0x4067, 0xa0, -27						; zone 11
 ; SET 231 key map (descriptor 231: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec231_A:
+ToneSet_231_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2	; +0x14 bands 16-31 -> zone
@@ -6331,57 +6335,57 @@ ToneEnv_Rec231_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 231 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x403c..0x4067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec231_B:
-	ToneEnvZone4	0x404b, 0x90, -3						; zone 0
-	ToneEnvZone4	0x404c, 0xb0, -15						; zone 1
-	ToneEnvZone4	0x404d, 0xe0, -9						; zone 2
-	ToneEnvZone4	0x403c, 0xc0, -15						; zone 3
-	ToneEnvZone4	0x403d, 0xd0, -13						; zone 4
-	ToneEnvZone4	0x403e, 0x80, -9						; zone 5
-	ToneEnvZone4	0x403f, 0x80, -13						; zone 6
-	ToneEnvZone4	0x4066, 0xa0, -13						; zone 7
-	ToneEnvZone4	0x4066, 0xa0, -17						; zone 8
-	ToneEnvZone4	0x4067, 0xa0, -23						; zone 9
+ToneSet_231_Zones:
+	ToneSetZone4	0x404b, 0x90, -3						; zone 0
+	ToneSetZone4	0x404c, 0xb0, -15						; zone 1
+	ToneSetZone4	0x404d, 0xe0, -9						; zone 2
+	ToneSetZone4	0x403c, 0xc0, -15						; zone 3
+	ToneSetZone4	0x403d, 0xd0, -13						; zone 4
+	ToneSetZone4	0x403e, 0x80, -9						; zone 5
+	ToneSetZone4	0x403f, 0x80, -13						; zone 6
+	ToneSetZone4	0x4066, 0xa0, -13						; zone 7
+	ToneSetZone4	0x4066, 0xa0, -17						; zone 8
+	ToneSetZone4	0x4067, 0xa0, -23						; zone 9
 ; SET 239 key map (descriptor 239: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec239_A:
+ToneSet_239_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   7,   8	; +0x04 bands 0-15 -> zone
 	.byte	  9,  10,  10,  10,  10							; +0x14 bands 16-20 -> zone
 ; SET 239 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x4014..0x401a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec239_B:
-	ToneEnvZone4	0x4014, 0x00, -29						; zone 0
-	ToneEnvZone4	0x4015, 0x00, -30						; zone 1
-	ToneEnvZone4	0x4016, 0x00, -30						; zone 2
-	ToneEnvZone4	0x4017, 0x00, -42						; zone 3
-	ToneEnvZone4	0x4018, 0x00, -40						; zone 4
-	ToneEnvZone4	0x4019, 0x00, -48						; zone 5
-	ToneEnvZone4	0x401a, 0x00, -48						; zone 6
-	ToneEnvZone4	0x401a, 0x00, -52						; zone 7
-	ToneEnvZone4	0x401a, 0x00, -56						; zone 8
-	ToneEnvZone4	0x401a, 0x00, -60						; zone 9
-	ToneEnvZone4	0x401a, 0x00, -64						; zone 10
+ToneSet_239_Zones:
+	ToneSetZone4	0x4014, 0x00, -29						; zone 0
+	ToneSetZone4	0x4015, 0x00, -30						; zone 1
+	ToneSetZone4	0x4016, 0x00, -30						; zone 2
+	ToneSetZone4	0x4017, 0x00, -42						; zone 3
+	ToneSetZone4	0x4018, 0x00, -40						; zone 4
+	ToneSetZone4	0x4019, 0x00, -48						; zone 5
+	ToneSetZone4	0x401a, 0x00, -48						; zone 6
+	ToneSetZone4	0x401a, 0x00, -52						; zone 7
+	ToneSetZone4	0x401a, 0x00, -56						; zone 8
+	ToneSetZone4	0x401a, 0x00, -60						; zone 9
+	ToneSetZone4	0x401a, 0x00, -64						; zone 10
 ; SET 242 key map (descriptor 242: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..7 of 8.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec242_A:
+ToneSet_242_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   7,   7	; +0x04 bands 0-15 -> zone
 	.byte	  7,   7,   7,   7,   7							; +0x14 bands 16-20 -> zone
 ; SET 242 zone records: 8 x 6 bytes (descriptor flags bit 7 set), selectors 0x4028..0x402e;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec242_B:
-	ToneEnvZone6	0x4028, 0x00, -4, -3072						; zone 0, coarse -12.00 st
-	ToneEnvZone6	0x4029, 0x00, -4, -4347						; zone 1, coarse -16.98 st
-	ToneEnvZone6	0x402a, 0x00, -10, -3072					; zone 2, coarse -12.00 st
-	ToneEnvZone6	0x402b, 0x00, -13, -3072					; zone 3, coarse -12.00 st
-	ToneEnvZone6	0x402c, 0x00, -18, -3072					; zone 4, coarse -12.00 st
-	ToneEnvZone6	0x402d, 0x00, -19, -3072					; zone 5, coarse -12.00 st
-	ToneEnvZone6	0x402e, 0x00, -28, -3072					; zone 6, coarse -12.00 st
-	ToneEnvZone6	0x402e, 0x00, -36, -3072					; zone 7, coarse -12.00 st
+ToneSet_242_Zones:
+	ToneSetZone6	0x4028, 0x00, -4, -3072						; zone 0, coarse -12.00 st
+	ToneSetZone6	0x4029, 0x00, -4, -4347						; zone 1, coarse -16.98 st
+	ToneSetZone6	0x402a, 0x00, -10, -3072					; zone 2, coarse -12.00 st
+	ToneSetZone6	0x402b, 0x00, -13, -3072					; zone 3, coarse -12.00 st
+	ToneSetZone6	0x402c, 0x00, -18, -3072					; zone 4, coarse -12.00 st
+	ToneSetZone6	0x402d, 0x00, -19, -3072					; zone 5, coarse -12.00 st
+	ToneSetZone6	0x402e, 0x00, -28, -3072					; zone 6, coarse -12.00 st
+	ToneSetZone6	0x402e, 0x00, -36, -3072					; zone 7, coarse -12.00 st
 ; SET 276 key map (descriptor 276: flags 0x81, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec276_A:
+ToneSet_276_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1	; +0x14 bands 16-31 -> zone
@@ -6392,55 +6396,55 @@ ToneEnv_Rec276_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 276 zone records: 10 x 6 bytes (descriptor flags bit 7 set), selectors 0x0082..0x0092;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec276_B:
-	ToneEnvZone6	0x0084, 0x00, -20, -2144					; zone 0, coarse -8.38 st
-	ToneEnvZone6	0x0086, 0x00, -4, -1011						; zone 1, coarse -3.95 st
-	ToneEnvZone6	0x0088, 0x00, -10, -2221					; zone 2, coarse -8.68 st
-	ToneEnvZone6	0x008a, 0x00, -6, -989						; zone 3, coarse -3.86 st
-	ToneEnvZone6	0x008c, 0x00, -7, -2498						; zone 4, coarse -9.76 st
-	ToneEnvZone6	0x008e, 0x00, -8, -999						; zone 5, coarse -3.90 st
-	ToneEnvZone6	0x0090, 0x00, -11, -2552					; zone 6, coarse -9.97 st
-	ToneEnvZone6	0x0092, 0x00, -10, -922						; zone 7, coarse -3.60 st
-	ToneEnvZone6	0x0082, 0x00, -11, -1003					; zone 8, coarse -3.92 st
-	ToneEnvZone6	0x0092, 0x00, -10, -922						; zone 9, coarse -3.60 st
+ToneSet_276_Zones:
+	ToneSetZone6	0x0084, 0x00, -20, -2144					; zone 0, coarse -8.38 st
+	ToneSetZone6	0x0086, 0x00, -4, -1011						; zone 1, coarse -3.95 st
+	ToneSetZone6	0x0088, 0x00, -10, -2221					; zone 2, coarse -8.68 st
+	ToneSetZone6	0x008a, 0x00, -6, -989						; zone 3, coarse -3.86 st
+	ToneSetZone6	0x008c, 0x00, -7, -2498						; zone 4, coarse -9.76 st
+	ToneSetZone6	0x008e, 0x00, -8, -999						; zone 5, coarse -3.90 st
+	ToneSetZone6	0x0090, 0x00, -11, -2552					; zone 6, coarse -9.97 st
+	ToneSetZone6	0x0092, 0x00, -10, -922						; zone 7, coarse -3.60 st
+	ToneSetZone6	0x0082, 0x00, -11, -1003					; zone 8, coarse -3.92 st
+	ToneSetZone6	0x0092, 0x00, -10, -922						; zone 9, coarse -3.60 st
 ; SET 287 key map (descriptor 287: flags 0x81, keys 12..101): key->band table ToneDB_VelocityCurve_1,
 ; 21 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec287_A:
+ToneSet_287_KeyMap:
 	.long	ToneDB_VelocityCurve_1 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   2,   3,   4,   5,   6,   6	; +0x04 bands 0-15 -> zone
 	.byte	  6,   6,   6,   6,   6							; +0x14 bands 16-20 -> zone
 ; SET 287 zone records: 7 x 6 bytes (descriptor flags bit 7 set), selectors 0x00b9..0x00bf;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec287_B:
-	ToneEnvZone6	0x00b9, 0x00, -13, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x00ba, 0x00, -22, -1237					; zone 1, coarse -4.83 st
-	ToneEnvZone6	0x00bb, 0x00, -11, -2761					; zone 2, coarse -10.79 st
-	ToneEnvZone6	0x00bc, 0x00, -11, -1275					; zone 3, coarse -4.98 st
-	ToneEnvZone6	0x00bd, 0x00, -9, -2819						; zone 4, coarse -11.01 st
-	ToneEnvZone6	0x00be, 0x00, -13, -1285					; zone 5, coarse -5.02 st
-	ToneEnvZone6	0x00bf, 0x00, -4, 0						; zone 6, coarse +0.00 st
+ToneSet_287_Zones:
+	ToneSetZone6	0x00b9, 0x00, -13, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x00ba, 0x00, -22, -1237					; zone 1, coarse -4.83 st
+	ToneSetZone6	0x00bb, 0x00, -11, -2761					; zone 2, coarse -10.79 st
+	ToneSetZone6	0x00bc, 0x00, -11, -1275					; zone 3, coarse -4.98 st
+	ToneSetZone6	0x00bd, 0x00, -9, -2819						; zone 4, coarse -11.01 st
+	ToneSetZone6	0x00be, 0x00, -13, -1285					; zone 5, coarse -5.02 st
+	ToneSetZone6	0x00bf, 0x00, -4, 0						; zone 6, coarse +0.00 st
 ; SET 299 key map (descriptor 299: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec299_A:
+ToneSet_299_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2	; +0x04 bands 0-15 -> zone
 	.byte	  3,   3,   3,   3,   4,   4,   4,   4,   5,   5,   5,   5,   6,   7,   7,   7	; +0x14 bands 16-31 -> zone
 	.byte	  8,   8,   8								; +0x24 bands 32-34 -> zone
 ; SET 299 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x1093..0x3131;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec299_B:
-	ToneEnvZone4	0x312d, 0x80, -16						; zone 0
-	ToneEnvZone4	0x312d, 0x00, -16						; zone 1
-	ToneEnvZone4	0x312c, 0x00, -16						; zone 2
-	ToneEnvZone4	0x312e, 0x00, -16						; zone 3
-	ToneEnvZone4	0x312f, 0x00, -16						; zone 4
-	ToneEnvZone4	0x3130, 0x00, -16						; zone 5
-	ToneEnvZone4	0x3131, 0x00, -16						; zone 6
-	ToneEnvZone4	0x1093, 0x00, -13						; zone 7
-	ToneEnvZone4	0x1094, 0x00, -13						; zone 8
+ToneSet_299_Zones:
+	ToneSetZone4	0x312d, 0x80, -16						; zone 0
+	ToneSetZone4	0x312d, 0x00, -16						; zone 1
+	ToneSetZone4	0x312c, 0x00, -16						; zone 2
+	ToneSetZone4	0x312e, 0x00, -16						; zone 3
+	ToneSetZone4	0x312f, 0x00, -16						; zone 4
+	ToneSetZone4	0x3130, 0x00, -16						; zone 5
+	ToneSetZone4	0x3131, 0x00, -16						; zone 6
+	ToneSetZone4	0x1093, 0x00, -13						; zone 7
+	ToneSetZone4	0x1094, 0x00, -13						; zone 8
 ; SET 322 key map (descriptor 322: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec322_A:
+ToneSet_322_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6451,26 +6455,26 @@ ToneEnv_Rec322_A:
 	.byte	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6		; +0x64 bands 96-107 -> zone
 ; SET 322 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0062;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec322_B:
-	ToneEnvZone4	0x005f, 0x00, -7						; zone 0
-	ToneEnvZone4	0x0060, 0x00, -7						; zone 1
-	ToneEnvZone4	0x0061, 0x00, -7						; zone 2
-	ToneEnvZone4	0x0062, 0x00, -7						; zone 3
-	ToneEnvZone4	0x005c, 0x00, -16						; zone 4
-	ToneEnvZone4	0x0009, 0x00, -24						; zone 5
-	ToneEnvZone4	0x0000, 0x00, -32						; zone 6
+ToneSet_322_Zones:
+	ToneSetZone4	0x005f, 0x00, -7						; zone 0
+	ToneSetZone4	0x0060, 0x00, -7						; zone 1
+	ToneSetZone4	0x0061, 0x00, -7						; zone 2
+	ToneSetZone4	0x0062, 0x00, -7						; zone 3
+	ToneSetZone4	0x005c, 0x00, -16						; zone 4
+	ToneSetZone4	0x0009, 0x00, -24						; zone 5
+	ToneSetZone4	0x0000, 0x00, -32						; zone 6
 ; SET 338 key map (descriptor 338: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec338_A:
+ToneSet_338_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 338 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x313d..0x313d;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec338_B:
-	ToneEnvZone6	0x313d, 0x00, -11, 2244						; zone 0, coarse +8.77 st
+ToneSet_338_Zones:
+	ToneSetZone6	0x313d, 0x00, -11, 2244						; zone 0, coarse +8.77 st
 ; SET 016 key map (descriptor 016: flags 0x00, keys 12..114): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..9 of 10.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec016_A:
+ToneSet_016_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -6481,37 +6485,37 @@ ToneEnv_Rec016_A:
 	.byte	  9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9,   9		; +0x64 bands 96-107 -> zone
 ; SET 016 zone records: 10 x 4 bytes (descriptor flags bit 7 clear), selectors 0x201b..0x2033;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec016_B:
-	ToneEnvZone4	0x202d, 0x80, -19						; zone 0
-	ToneEnvZone4	0x202d, 0x00, -19						; zone 1
-	ToneEnvZone4	0x202c, 0x00, -19						; zone 2
-	ToneEnvZone4	0x202e, 0x00, -14						; zone 3
-	ToneEnvZone4	0x202f, 0x00, -20						; zone 4
-	ToneEnvZone4	0x2030, 0x00, -26						; zone 5
-	ToneEnvZone4	0x2031, 0x00, -10						; zone 6
-	ToneEnvZone4	0x2032, 0x00, -10						; zone 7
-	ToneEnvZone4	0x2033, 0x00, -10						; zone 8
-	ToneEnvZone4	0x201b, 0x00, -14						; zone 9
+ToneSet_016_Zones:
+	ToneSetZone4	0x202d, 0x80, -19						; zone 0
+	ToneSetZone4	0x202d, 0x00, -19						; zone 1
+	ToneSetZone4	0x202c, 0x00, -19						; zone 2
+	ToneSetZone4	0x202e, 0x00, -14						; zone 3
+	ToneSetZone4	0x202f, 0x00, -20						; zone 4
+	ToneSetZone4	0x2030, 0x00, -26						; zone 5
+	ToneSetZone4	0x2031, 0x00, -10						; zone 6
+	ToneSetZone4	0x2032, 0x00, -10						; zone 7
+	ToneSetZone4	0x2033, 0x00, -10						; zone 8
+	ToneSetZone4	0x201b, 0x00, -14						; zone 9
 ; SET 024 key map (descriptor 024: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_3,
 ; 35 bands -> zone index 0..6 of 7.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec024_A:
+ToneSet_024_KeyMap:
 	.long	ToneDB_VelocityCurve_3 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  1,   1,   1,   1,   2,   2,   2,   2,   3,   4,   4,   4,   5,   5,   5,   5	; +0x14 bands 16-31 -> zone
 	.byte	  6,   6,   6								; +0x24 bands 32-34 -> zone
 ; SET 024 zone records: 7 x 4 bytes (descriptor flags bit 7 clear), selectors 0x2072..0x2080;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec024_B:
-	ToneEnvZone4	0x207d, 0x90, -11						; zone 0
-	ToneEnvZone4	0x207e, 0x00, -11						; zone 1
-	ToneEnvZone4	0x207f, 0x00, -13						; zone 2
-	ToneEnvZone4	0x2080, 0x00, -13						; zone 3
-	ToneEnvZone4	0x207b, 0x00, -16						; zone 4
-	ToneEnvZone4	0x207c, 0x00, -16						; zone 5
-	ToneEnvZone4	0x2072, 0x00, -14						; zone 6
+ToneSet_024_Zones:
+	ToneSetZone4	0x207d, 0x90, -11						; zone 0
+	ToneSetZone4	0x207e, 0x00, -11						; zone 1
+	ToneSetZone4	0x207f, 0x00, -13						; zone 2
+	ToneSetZone4	0x2080, 0x00, -13						; zone 3
+	ToneSetZone4	0x207b, 0x00, -16						; zone 4
+	ToneSetZone4	0x207c, 0x00, -16						; zone 5
+	ToneSetZone4	0x2072, 0x00, -14						; zone 6
 ; SET 117 key map (descriptor 117: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..10 of 11.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec117_A:
+ToneSet_117_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4	; +0x14 bands 16-31 -> zone
@@ -6522,21 +6526,21 @@ ToneEnv_Rec117_A:
 	.byte	 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10		; +0x64 bands 96-107 -> zone
 ; SET 117 zone records: 11 x 4 bytes (descriptor flags bit 7 clear), selectors 0x31a6..0x5098;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec117_B:
-	ToneEnvZone4	0x31a7, 0x80, -9						; zone 0
-	ToneEnvZone4	0x31a7, 0x00, -9						; zone 1
-	ToneEnvZone4	0x31a6, 0x00, -9						; zone 2
-	ToneEnvZone4	0x31ad, 0x00, -8						; zone 3
-	ToneEnvZone4	0x31ac, 0x00, -8						; zone 4
-	ToneEnvZone4	0x31ae, 0x00, -8						; zone 5
-	ToneEnvZone4	0x31af, 0x00, -8						; zone 6
-	ToneEnvZone4	0x31b0, 0x00, -8						; zone 7
-	ToneEnvZone4	0x31ab, 0x00, -9						; zone 8
-	ToneEnvZone4	0x5097, 0x00, -6						; zone 9
-	ToneEnvZone4	0x5098, 0x00, -6						; zone 10
+ToneSet_117_Zones:
+	ToneSetZone4	0x31a7, 0x80, -9						; zone 0
+	ToneSetZone4	0x31a7, 0x00, -9						; zone 1
+	ToneSetZone4	0x31a6, 0x00, -9						; zone 2
+	ToneSetZone4	0x31ad, 0x00, -8						; zone 3
+	ToneSetZone4	0x31ac, 0x00, -8						; zone 4
+	ToneSetZone4	0x31ae, 0x00, -8						; zone 5
+	ToneSetZone4	0x31af, 0x00, -8						; zone 6
+	ToneSetZone4	0x31b0, 0x00, -8						; zone 7
+	ToneSetZone4	0x31ab, 0x00, -9						; zone 8
+	ToneSetZone4	0x5097, 0x00, -6						; zone 9
+	ToneSetZone4	0x5098, 0x00, -6						; zone 10
 ; SET 128 key map (descriptor 128: flags 0x00, keys 12..102): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..8 of 9.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec128_A:
+ToneSet_128_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1	; +0x04 bands 0-15 -> zone
 	.byte	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3,   3,   3	; +0x14 bands 16-31 -> zone
@@ -6547,19 +6551,19 @@ ToneEnv_Rec128_A:
 	.byte	  8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   8		; +0x64 bands 96-107 -> zone
 ; SET 128 zone records: 9 x 4 bytes (descriptor flags bit 7 clear), selectors 0x50a2..0x7030;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec128_B:
-	ToneEnvZone4	0x50a3, 0x80, -13						; zone 0
-	ToneEnvZone4	0x50a3, 0x00, -13						; zone 1
-	ToneEnvZone4	0x50a2, 0x00, -13						; zone 2
-	ToneEnvZone4	0x50a4, 0x00, -13						; zone 3
-	ToneEnvZone4	0x50a5, 0x00, -13						; zone 4
-	ToneEnvZone4	0x50a6, 0x00, -13						; zone 5
-	ToneEnvZone4	0x50a7, 0x00, -13						; zone 6
-	ToneEnvZone4	0x702f, 0xc0, -5						; zone 7
-	ToneEnvZone4	0x7030, 0xc0, -10						; zone 8
+ToneSet_128_Zones:
+	ToneSetZone4	0x50a3, 0x80, -13						; zone 0
+	ToneSetZone4	0x50a3, 0x00, -13						; zone 1
+	ToneSetZone4	0x50a2, 0x00, -13						; zone 2
+	ToneSetZone4	0x50a4, 0x00, -13						; zone 3
+	ToneSetZone4	0x50a5, 0x00, -13						; zone 4
+	ToneSetZone4	0x50a6, 0x00, -13						; zone 5
+	ToneSetZone4	0x50a7, 0x00, -13						; zone 6
+	ToneSetZone4	0x702f, 0xc0, -5						; zone 7
+	ToneSetZone4	0x7030, 0xc0, -10						; zone 8
 ; SET 309 key map (descriptor 309: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec309_A:
+ToneSet_309_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6570,15 +6574,15 @@ ToneEnv_Rec309_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 309 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x004c..0x0092;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec309_B:
-	ToneEnvZone6	0x004c, 0x00, -11, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x004d, 0x00, -11, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x0092, 0x00, -10, -922						; zone 2, coarse -3.60 st
-	ToneEnvZone6	0x0082, 0x00, -11, -1003					; zone 3, coarse -3.92 st
-	ToneEnvZone6	0x0092, 0x00, -10, -922						; zone 4, coarse -3.60 st
+ToneSet_309_Zones:
+	ToneSetZone6	0x004c, 0x00, -11, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x004d, 0x00, -11, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x0092, 0x00, -10, -922						; zone 2, coarse -3.60 st
+	ToneSetZone6	0x0082, 0x00, -11, -1003					; zone 3, coarse -3.92 st
+	ToneSetZone6	0x0092, 0x00, -10, -922						; zone 4, coarse -3.60 st
 ; SET 316 key map (descriptor 316: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..3 of 4.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec316_A:
+ToneSet_316_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6589,14 +6593,14 @@ ToneEnv_Rec316_A:
 	.byte	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3		; +0x64 bands 96-107 -> zone
 ; SET 316 zone records: 4 x 6 bytes (descriptor flags bit 7 set), selectors 0x0047..0x0050;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec316_B:
-	ToneEnvZone6	0x004f, 0x00, -3, 0						; zone 0, coarse +0.00 st
-	ToneEnvZone6	0x0050, 0x00, -5, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x0047, 0x00, -6, -2159						; zone 2, coarse -8.43 st
-	ToneEnvZone6	0x0049, 0x00, -7, -1718						; zone 3, coarse -6.71 st
+ToneSet_316_Zones:
+	ToneSetZone6	0x004f, 0x00, -3, 0						; zone 0, coarse +0.00 st
+	ToneSetZone6	0x0050, 0x00, -5, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x0047, 0x00, -6, -2159						; zone 2, coarse -8.43 st
+	ToneSetZone6	0x0049, 0x00, -7, -1718						; zone 3, coarse -6.71 st
 ; SET 323 key map (descriptor 323: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..5 of 6.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec323_A:
+ToneSet_323_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -6607,580 +6611,580 @@ ToneEnv_Rec323_A:
 	.byte	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5		; +0x64 bands 96-107 -> zone
 ; SET 323 zone records: 6 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0000..0x0067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec323_B:
-	ToneEnvZone4	0x0063, 0x00, -8						; zone 0
-	ToneEnvZone4	0x0064, 0x00, -8						; zone 1
-	ToneEnvZone4	0x0065, 0x00, -8						; zone 2
-	ToneEnvZone4	0x0066, 0x00, -8						; zone 3
-	ToneEnvZone4	0x0067, 0x00, -8						; zone 4
-	ToneEnvZone4	0x0000, 0x00, -16						; zone 5
+ToneSet_323_Zones:
+	ToneSetZone4	0x0063, 0x00, -8						; zone 0
+	ToneSetZone4	0x0064, 0x00, -8						; zone 1
+	ToneSetZone4	0x0065, 0x00, -8						; zone 2
+	ToneSetZone4	0x0066, 0x00, -8						; zone 3
+	ToneSetZone4	0x0067, 0x00, -8						; zone 4
+	ToneSetZone4	0x0000, 0x00, -16						; zone 5
 ; SET 003 key map (descriptor 003: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec003_A:
+ToneSet_003_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 003 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x4099..0x4099;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec003_B:
-	ToneEnvZone6	0x4099, 0x00, -16, 541						; zone 0, coarse +2.11 st
+ToneSet_003_Zones:
+	ToneSetZone6	0x4099, 0x00, -16, 541						; zone 0, coarse +2.11 st
 ; SET 007 key map (descriptor 007: flags 0x80, keys 24..86): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec007_A:
+ToneSet_007_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 007 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x409a..0x409a;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec007_B:
-	ToneEnvZone6	0x409a, 0x00, -4, -5091						; zone 0, coarse -19.89 st
+ToneSet_007_Zones:
+	ToneSetZone6	0x409a, 0x00, -4, -5091						; zone 0, coarse -19.89 st
 ; SET 017 key map (descriptor 017: flags 0x00, keys 14..92): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec017_A:
+ToneSet_017_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 017 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409d..0x409d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec017_B:
-	ToneEnvZone4	0x409d, 0x00, -14						; zone 0
+ToneSet_017_Zones:
+	ToneSetZone4	0x409d, 0x00, -14						; zone 0
 ; SET 026 key map (descriptor 026: flags 0x00, keys 12..78): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec026_A:
+ToneSet_026_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 026 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409b..0x409b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec026_B:
-	ToneEnvZone4	0x409b, 0x00, -6						; zone 0
+ToneSet_026_Zones:
+	ToneSetZone4	0x409b, 0x00, -6						; zone 0
 ; SET 033 key map (descriptor 033: flags 0x80, keys 12..100): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec033_A:
+ToneSet_033_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 033 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40a2..0x40a2;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec033_B:
-	ToneEnvZone6	0x40a2, 0x80, -15, -96						; zone 0, coarse -0.38 st
+ToneSet_033_Zones:
+	ToneSetZone6	0x40a2, 0x80, -15, -96						; zone 0, coarse -0.38 st
 ; SET 040 key map (descriptor 040: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec040_A:
+ToneSet_040_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 040 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x10b0..0x10b0;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec040_B:
-	ToneEnvZone6	0x10b0, 0x00, -5, 3072						; zone 0, coarse +12.00 st
+ToneSet_040_Zones:
+	ToneSetZone6	0x10b0, 0x00, -5, 3072						; zone 0, coarse +12.00 st
 ; SET 043 key map (descriptor 043: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec043_A:
+ToneSet_043_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 043 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x3061..0x3061;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec043_B:
-	ToneEnvZone6	0x3061, 0x80, -7, 3072						; zone 0, coarse +12.00 st
+ToneSet_043_Zones:
+	ToneSetZone6	0x3061, 0x80, -7, 3072						; zone 0, coarse +12.00 st
 ; SET 046 key map (descriptor 046: flags 0x00, keys 17..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec046_A:
+ToneSet_046_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 046 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3086..0x3086;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec046_B:
-	ToneEnvZone4	0x3086, 0x80, -10						; zone 0
+ToneSet_046_Zones:
+	ToneSetZone4	0x3086, 0x80, -10						; zone 0
 ; SET 047 key map (descriptor 047: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec047_A:
+ToneSet_047_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 047 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x302a..0x302a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec047_B:
-	ToneEnvZone4	0x302a, 0x80, 0							; zone 0
+ToneSet_047_Zones:
+	ToneSetZone4	0x302a, 0x80, 0							; zone 0
 ; SET 048 key map (descriptor 048: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec048_A:
+ToneSet_048_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 048 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x302b..0x302b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec048_B:
-	ToneEnvZone4	0x302b, 0x80, 0							; zone 0
+ToneSet_048_Zones:
+	ToneSetZone4	0x302b, 0x80, 0							; zone 0
 ; SET 053 key map (descriptor 053: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec053_A:
+ToneSet_053_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 053 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x305f..0x305f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec053_B:
-	ToneEnvZone6	0x305f, 0x80, -14, 3072						; zone 0, coarse +12.00 st
+ToneSet_053_Zones:
+	ToneSetZone6	0x305f, 0x80, -14, 3072						; zone 0, coarse +12.00 st
 ; SET 055 key map (descriptor 055: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec055_A:
+ToneSet_055_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 055 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40a8..0x40a8;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec055_B:
-	ToneEnvZone6	0x40a8, 0x00, -5, 2756						; zone 0, coarse +10.77 st
+ToneSet_055_Zones:
+	ToneSetZone6	0x40a8, 0x00, -5, 2756						; zone 0, coarse +10.77 st
 ; SET 058 key map (descriptor 058: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec058_A:
+ToneSet_058_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 058 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40a7..0x40a7;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec058_B:
-	ToneEnvZone6	0x40a7, 0x00, -7, 2756						; zone 0, coarse +10.77 st
+ToneSet_058_Zones:
+	ToneSetZone6	0x40a7, 0x00, -7, 2756						; zone 0, coarse +10.77 st
 ; SET 062 key map (descriptor 062: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_4,
 ; 35 bands -> zone index 0..13 of 14.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec062_A:
+ToneSet_062_KeyMap:
 	.long	ToneDB_VelocityCurve_4 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   2,   2,   3,   3,   4,   5	; +0x04 bands 0-15 -> zone
 	.byte	  6,   6,   7,   7,   7,   7,   8,   8,   9,   9,   9,   9,  10,  10,  11,  11	; +0x14 bands 16-31 -> zone
 	.byte	 12,  13,  13								; +0x24 bands 32-34 -> zone
 ; SET 062 zone records: 14 x 6 bytes (descriptor flags bit 7 set), selectors 0x6028..0x6068;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec062_B:
-	ToneEnvZone6	0x6028, 0xb0, -33, 10496					; zone 0, coarse +41.00 st
-	ToneEnvZone6	0x6028, 0xb0, -33, 7424						; zone 1, coarse +29.00 st
-	ToneEnvZone6	0x6030, 0xb0, -12, 5120						; zone 2, coarse +20.00 st
-	ToneEnvZone6	0x6038, 0xb0, -25, 4352						; zone 3, coarse +17.00 st
-	ToneEnvZone6	0x6038, 0xb0, -25, 4352						; zone 4, coarse +17.00 st
-	ToneEnvZone6	0x6040, 0xb0, -10, 1792						; zone 5, coarse +7.00 st
-	ToneEnvZone6	0x6048, 0xb0, -15, 0						; zone 6, coarse +0.00 st
-	ToneEnvZone6	0x6050, 0xb0, -7, -2048						; zone 7, coarse -8.00 st
-	ToneEnvZone6	0x6058, 0xb0, -18, -3072					; zone 8, coarse -12.00 st
-	ToneEnvZone6	0x6060, 0xb0, -11, -5632					; zone 9, coarse -22.00 st
-	ToneEnvZone6	0x6068, 0xb0, -39, -8448					; zone 10, coarse -33.00 st
-	ToneEnvZone6	0x6068, 0xb0, -39, -8448					; zone 11, coarse -33.00 st
-	ToneEnvZone6	0x6068, 0xb0, -39, -8448					; zone 12, coarse -33.00 st
-	ToneEnvZone6	0x6068, 0xb0, -39, -8448					; zone 13, coarse -33.00 st
+ToneSet_062_Zones:
+	ToneSetZone6	0x6028, 0xb0, -33, 10496					; zone 0, coarse +41.00 st
+	ToneSetZone6	0x6028, 0xb0, -33, 7424						; zone 1, coarse +29.00 st
+	ToneSetZone6	0x6030, 0xb0, -12, 5120						; zone 2, coarse +20.00 st
+	ToneSetZone6	0x6038, 0xb0, -25, 4352						; zone 3, coarse +17.00 st
+	ToneSetZone6	0x6038, 0xb0, -25, 4352						; zone 4, coarse +17.00 st
+	ToneSetZone6	0x6040, 0xb0, -10, 1792						; zone 5, coarse +7.00 st
+	ToneSetZone6	0x6048, 0xb0, -15, 0						; zone 6, coarse +0.00 st
+	ToneSetZone6	0x6050, 0xb0, -7, -2048						; zone 7, coarse -8.00 st
+	ToneSetZone6	0x6058, 0xb0, -18, -3072					; zone 8, coarse -12.00 st
+	ToneSetZone6	0x6060, 0xb0, -11, -5632					; zone 9, coarse -22.00 st
+	ToneSetZone6	0x6068, 0xb0, -39, -8448					; zone 10, coarse -33.00 st
+	ToneSetZone6	0x6068, 0xb0, -39, -8448					; zone 11, coarse -33.00 st
+	ToneSetZone6	0x6068, 0xb0, -39, -8448					; zone 12, coarse -33.00 st
+	ToneSetZone6	0x6068, 0xb0, -39, -8448					; zone 13, coarse -33.00 st
 ; SET 065 key map (descriptor 065: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec065_A:
+ToneSet_065_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 065 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a5..0x40a5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec065_B:
-	ToneEnvZone4	0x40a5, 0x80, -13						; zone 0
+ToneSet_065_Zones:
+	ToneSetZone4	0x40a5, 0x80, -13						; zone 0
 ; SET 069 key map (descriptor 069: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec069_A:
+ToneSet_069_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 069 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a0..0x40a0;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec069_B:
-	ToneEnvZone4	0x40a0, 0x00, -43						; zone 0
+ToneSet_069_Zones:
+	ToneSetZone4	0x40a0, 0x00, -43						; zone 0
 ; SET 081 key map (descriptor 081: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec081_A:
+ToneSet_081_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 081 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a3..0x40a3;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec081_B:
-	ToneEnvZone4	0x40a3, 0x80, -13						; zone 0
+ToneSet_081_Zones:
+	ToneSetZone4	0x40a3, 0x80, -13						; zone 0
 ; SET 084 key map (descriptor 084: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec084_A:
+ToneSet_084_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 084 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5022..0x5022;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec084_B:
-	ToneEnvZone6	0x5022, 0x00, 1, 2756						; zone 0, coarse +10.77 st
+ToneSet_084_Zones:
+	ToneSetZone6	0x5022, 0x00, 1, 2756						; zone 0, coarse +10.77 st
 ; SET 092 key map (descriptor 092: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec092_A:
+ToneSet_092_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 092 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5028..0x5028;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec092_B:
-	ToneEnvZone6	0x5028, 0x00, -1, 2756						; zone 0, coarse +10.77 st
+ToneSet_092_Zones:
+	ToneSetZone6	0x5028, 0x00, -1, 2756						; zone 0, coarse +10.77 st
 ; SET 095 key map (descriptor 095: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec095_A:
+ToneSet_095_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 095 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x502f..0x502f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec095_B:
-	ToneEnvZone6	0x502f, 0x00, -16, 1211						; zone 0, coarse +4.73 st
+ToneSet_095_Zones:
+	ToneSetZone6	0x502f, 0x00, -16, 1211						; zone 0, coarse +4.73 st
 ; SET 100 key map (descriptor 100: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec100_A:
+ToneSet_100_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 100 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5037..0x5037;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec100_B:
-	ToneEnvZone6	0x5037, 0x00, -6, 1211						; zone 0, coarse +4.73 st
+ToneSet_100_Zones:
+	ToneSetZone6	0x5037, 0x00, -6, 1211						; zone 0, coarse +4.73 st
 ; SET 108 key map (descriptor 108: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec108_A:
+ToneSet_108_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 108 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x505d..0x505d;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec108_B:
-	ToneEnvZone6	0x505d, 0x80, -11, 2756						; zone 0, coarse +10.77 st
+ToneSet_108_Zones:
+	ToneSetZone6	0x505d, 0x80, -11, 2756						; zone 0, coarse +10.77 st
 ; SET 114 key map (descriptor 114: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec114_A:
+ToneSet_114_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 114 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5030..0x5030;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec114_B:
-	ToneEnvZone6	0x5030, 0x00, -19, 1211						; zone 0, coarse +4.73 st
+ToneSet_114_Zones:
+	ToneSetZone6	0x5030, 0x00, -19, 1211						; zone 0, coarse +4.73 st
 ; SET 118 key map (descriptor 118: flags 0x80, keys 12..104): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec118_A:
+ToneSet_118_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 118 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x503c..0x503c;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec118_B:
-	ToneEnvZone6	0x503c, 0x00, -3, 5632						; zone 0, coarse +22.00 st
+ToneSet_118_Zones:
+	ToneSetZone6	0x503c, 0x00, -3, 5632						; zone 0, coarse +22.00 st
 ; SET 122 key map (descriptor 122: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec122_A:
+ToneSet_122_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 122 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x503e..0x503e;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec122_B:
-	ToneEnvZone6	0x503e, 0x00, -11, 3072						; zone 0, coarse +12.00 st
+ToneSet_122_Zones:
+	ToneSetZone6	0x503e, 0x00, -11, 3072						; zone 0, coarse +12.00 st
 ; SET 129 key map (descriptor 129: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec129_A:
+ToneSet_129_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 129 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x503f..0x503f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec129_B:
-	ToneEnvZone6	0x503f, 0x00, -3, 2816						; zone 0, coarse +11.00 st
+ToneSet_129_Zones:
+	ToneSetZone6	0x503f, 0x00, -3, 2816						; zone 0, coarse +11.00 st
 ; SET 133 key map (descriptor 133: flags 0x80, keys 12..104): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec133_A:
+ToneSet_133_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 133 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5041..0x5041;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec133_B:
-	ToneEnvZone6	0x5041, 0x00, -4, 5456						; zone 0, coarse +21.31 st
+ToneSet_133_Zones:
+	ToneSetZone6	0x5041, 0x00, -4, 5456						; zone 0, coarse +21.31 st
 ; SET 138 key map (descriptor 138: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec138_A:
+ToneSet_138_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 138 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x505b..0x505b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec138_B:
-	ToneEnvZone6	0x505b, 0x00, -14, 2756						; zone 0, coarse +10.77 st
+ToneSet_138_Zones:
+	ToneSetZone6	0x505b, 0x00, -14, 2756						; zone 0, coarse +10.77 st
 ; SET 142 key map (descriptor 142: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec142_A:
+ToneSet_142_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 142 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x505a..0x505a;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec142_B:
-	ToneEnvZone6	0x505a, 0x00, -49, 2756						; zone 0, coarse +10.77 st
+ToneSet_142_Zones:
+	ToneSetZone6	0x505a, 0x00, -49, 2756						; zone 0, coarse +10.77 st
 ; SET 146 key map (descriptor 146: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec146_A:
+ToneSet_146_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 146 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5046..0x5046;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec146_B:
-	ToneEnvZone6	0x5046, 0x00, -9, 3072						; zone 0, coarse +12.00 st
+ToneSet_146_Zones:
+	ToneSetZone6	0x5046, 0x00, -9, 3072						; zone 0, coarse +12.00 st
 ; SET 149 key map (descriptor 149: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec149_A:
+ToneSet_149_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 149 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5047..0x5047;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec149_B:
-	ToneEnvZone6	0x5047, 0x00, -3, 2756						; zone 0, coarse +10.77 st
+ToneSet_149_Zones:
+	ToneSetZone6	0x5047, 0x00, -3, 2756						; zone 0, coarse +10.77 st
 ; SET 151 key map (descriptor 151: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec151_A:
+ToneSet_151_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 151 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5048..0x5048;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec151_B:
-	ToneEnvZone6	0x5048, 0x00, -2, 2756						; zone 0, coarse +10.77 st
+ToneSet_151_Zones:
+	ToneSetZone6	0x5048, 0x00, -2, 2756						; zone 0, coarse +10.77 st
 ; SET 156 key map (descriptor 156: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec156_A:
+ToneSet_156_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 156 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5049..0x5049;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec156_B:
-	ToneEnvZone6	0x5049, 0x00, -11, 3072						; zone 0, coarse +12.00 st
+ToneSet_156_Zones:
+	ToneSetZone6	0x5049, 0x00, -11, 3072						; zone 0, coarse +12.00 st
 ; SET 160 key map (descriptor 160: flags 0x80, keys 12..77): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec160_A:
+ToneSet_160_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 160 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x504b..0x504b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec160_B:
-	ToneEnvZone6	0x504b, 0x00, -12, 3072						; zone 0, coarse +12.00 st
+ToneSet_160_Zones:
+	ToneSetZone6	0x504b, 0x00, -12, 3072						; zone 0, coarse +12.00 st
 ; SET 162 key map (descriptor 162: flags 0x00, keys 16..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec162_A:
+ToneSet_162_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 162 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5056..0x5056;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec162_B:
-	ToneEnvZone4	0x5056, 0x00, -14						; zone 0
+ToneSet_162_Zones:
+	ToneSetZone4	0x5056, 0x00, -14						; zone 0
 ; SET 167 key map (descriptor 167: flags 0x80, keys 12..99): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec167_A:
+ToneSet_167_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 167 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x507a..0x507a;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec167_B:
-	ToneEnvZone6	0x507a, 0x00, -6, 2756						; zone 0, coarse +10.77 st
+ToneSet_167_Zones:
+	ToneSetZone6	0x507a, 0x00, -6, 2756						; zone 0, coarse +10.77 st
 ; SET 170 key map (descriptor 170: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec170_A:
+ToneSet_170_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 170 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x504e..0x504e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec170_B:
-	ToneEnvZone4	0x504e, 0x00, -11						; zone 0
+ToneSet_170_Zones:
+	ToneSetZone4	0x504e, 0x00, -11						; zone 0
 ; SET 172 key map (descriptor 172: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec172_A:
+ToneSet_172_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 172 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5051..0x5051;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec172_B:
-	ToneEnvZone4	0x5051, 0x00, -21						; zone 0
+ToneSet_172_Zones:
+	ToneSetZone4	0x5051, 0x00, -21						; zone 0
 ; SET 173 key map (descriptor 173: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec173_A:
+ToneSet_173_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 173 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5054..0x5054;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec173_B:
-	ToneEnvZone4	0x5054, 0x00, -21						; zone 0
+ToneSet_173_Zones:
+	ToneSetZone4	0x5054, 0x00, -21						; zone 0
 ; SET 174 key map (descriptor 174: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec174_A:
+ToneSet_174_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 174 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x504f..0x504f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec174_B:
-	ToneEnvZone4	0x504f, 0x00, -11						; zone 0
+ToneSet_174_Zones:
+	ToneSetZone4	0x504f, 0x00, -11						; zone 0
 ; SET 178 key map (descriptor 178: flags 0x80, keys 9..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec178_A:
+ToneSet_178_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 178 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x506e..0x506e;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec178_B:
-	ToneEnvZone6	0x506e, 0x00, -8, 1800						; zone 0, coarse +7.03 st
+ToneSet_178_Zones:
+	ToneSetZone6	0x506e, 0x00, -8, 1800						; zone 0, coarse +7.03 st
 ; SET 182 key map (descriptor 182: flags 0x80, keys 16..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec182_A:
+ToneSet_182_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 182 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x506f..0x506f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec182_B:
-	ToneEnvZone6	0x506f, 0x00, -5, 264						; zone 0, coarse +1.03 st
+ToneSet_182_Zones:
+	ToneSetZone6	0x506f, 0x00, -5, 264						; zone 0, coarse +1.03 st
 ; SET 185 key map (descriptor 185: flags 0x80, keys 16..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec185_A:
+ToneSet_185_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 185 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5069..0x5069;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec185_B:
-	ToneEnvZone6	0x5069, 0x00, -3, 256						; zone 0, coarse +1.00 st
+ToneSet_185_Zones:
+	ToneSetZone6	0x5069, 0x00, -3, 256						; zone 0, coarse +1.00 st
 ; SET 191 key map (descriptor 191: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec191_A:
+ToneSet_191_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 191 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5082..0x5082;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec191_B:
-	ToneEnvZone6	0x5082, 0x00, -5, 4896						; zone 0, coarse +19.12 st
+ToneSet_191_Zones:
+	ToneSetZone6	0x5082, 0x00, -5, 4896						; zone 0, coarse +19.12 st
 ; SET 193 key map (descriptor 193: flags 0x80, keys 12..104): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec193_A:
+ToneSet_193_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 193 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5083..0x5083;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec193_B:
-	ToneEnvZone6	0x5083, 0x00, -24, 4516						; zone 0, coarse +17.64 st
+ToneSet_193_Zones:
+	ToneSetZone6	0x5083, 0x00, -24, 4516						; zone 0, coarse +17.64 st
 ; SET 196 key map (descriptor 196: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec196_A:
+ToneSet_196_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 196 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5084..0x5084;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec196_B:
-	ToneEnvZone6	0x5084, 0x00, -3, 2048						; zone 0, coarse +8.00 st
+ToneSet_196_Zones:
+	ToneSetZone6	0x5084, 0x00, -3, 2048						; zone 0, coarse +8.00 st
 ; SET 199 key map (descriptor 199: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec199_A:
+ToneSet_199_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 199 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5085..0x5085;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec199_B:
-	ToneEnvZone6	0x5085, 0x00, -19, 1792						; zone 0, coarse +7.00 st
+ToneSet_199_Zones:
+	ToneSetZone6	0x5085, 0x00, -19, 1792						; zone 0, coarse +7.00 st
 ; SET 203 key map (descriptor 203: flags 0x80, keys 0..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec203_A:
+ToneSet_203_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 203 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x508b..0x508b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec203_B:
-	ToneEnvZone6	0x508b, 0x00, -6, 1084						; zone 0, coarse +4.23 st
+ToneSet_203_Zones:
+	ToneSetZone6	0x508b, 0x00, -6, 1084						; zone 0, coarse +4.23 st
 ; SET 206 key map (descriptor 206: flags 0x80, keys 21..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec206_A:
+ToneSet_206_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 206 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x508d..0x508d;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec206_B:
-	ToneEnvZone6	0x508d, 0x00, -1, -1408						; zone 0, coarse -5.50 st
+ToneSet_206_Zones:
+	ToneSetZone6	0x508d, 0x00, -1, -1408						; zone 0, coarse -5.50 st
 ; SET 208 key map (descriptor 208: flags 0x80, keys 17..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec208_A:
+ToneSet_208_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 208 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x508c..0x508c;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec208_B:
-	ToneEnvZone6	0x508c, 0x00, 0, -352						; zone 0, coarse -1.38 st
+ToneSet_208_Zones:
+	ToneSetZone6	0x508c, 0x00, 0, -352						; zone 0, coarse -1.38 st
 ; SET 212 key map (descriptor 212: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec212_A:
+ToneSet_212_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 212 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5081..0x5081;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec212_B:
-	ToneEnvZone6	0x5081, 0x00, 0, 2756						; zone 0, coarse +10.77 st
+ToneSet_212_Zones:
+	ToneSetZone6	0x5081, 0x00, 0, 2756						; zone 0, coarse +10.77 st
 ; SET 215 key map (descriptor 215: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec215_A:
+ToneSet_215_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 215 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5077..0x5077;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec215_B:
-	ToneEnvZone6	0x5077, 0x00, -2, 2756						; zone 0, coarse +10.77 st
+ToneSet_215_Zones:
+	ToneSetZone6	0x5077, 0x00, -2, 2756						; zone 0, coarse +10.77 st
 ; SET 221 key map (descriptor 221: flags 0x80, keys 12..84): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec221_A:
+ToneSet_221_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 221 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x507f..0x507f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec221_B:
-	ToneEnvZone6	0x507f, 0x00, -7, 2756						; zone 0, coarse +10.77 st
+ToneSet_221_Zones:
+	ToneSetZone6	0x507f, 0x00, -7, 2756						; zone 0, coarse +10.77 st
 ; SET 228 key map (descriptor 228: flags 0x80, keys 12..84): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec228_A:
+ToneSet_228_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 228 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x507e..0x507e;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec228_B:
-	ToneEnvZone6	0x507e, 0x00, -9, 2756						; zone 0, coarse +10.77 st
+ToneSet_228_Zones:
+	ToneSetZone6	0x507e, 0x00, -9, 2756						; zone 0, coarse +10.77 st
 ; SET 232 key map (descriptor 232: flags 0x80, keys 12..84): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec232_A:
+ToneSet_232_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 232 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x507d..0x507d;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec232_B:
-	ToneEnvZone6	0x507d, 0x00, -2, 2756						; zone 0, coarse +10.77 st
+ToneSet_232_Zones:
+	ToneSetZone6	0x507d, 0x00, -2, 2756						; zone 0, coarse +10.77 st
 ; SET 235 key map (descriptor 235: flags 0x80, keys 12..65): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec235_A:
+ToneSet_235_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 235 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5063..0x5063;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec235_B:
-	ToneEnvZone6	0x5063, 0x00, -11, 2756						; zone 0, coarse +10.77 st
+ToneSet_235_Zones:
+	ToneSetZone6	0x5063, 0x00, -11, 2756						; zone 0, coarse +10.77 st
 ; SET 237 key map (descriptor 237: flags 0x80, keys 12..89): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec237_A:
+ToneSet_237_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 237 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5076..0x5076;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec237_B:
-	ToneEnvZone6	0x5076, 0x00, -8, 3132						; zone 0, coarse +12.23 st
+ToneSet_237_Zones:
+	ToneSetZone6	0x5076, 0x00, -8, 3132						; zone 0, coarse +12.23 st
 ; SET 240 key map (descriptor 240: flags 0x80, keys 12..89): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec240_A:
+ToneSet_240_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 240 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5075..0x5075;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec240_B:
-	ToneEnvZone6	0x5075, 0x00, -8, 3132						; zone 0, coarse +12.23 st
+ToneSet_240_Zones:
+	ToneSetZone6	0x5075, 0x00, -8, 3132						; zone 0, coarse +12.23 st
 ; SET 243 key map (descriptor 243: flags 0x80, keys 21..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec243_A:
+ToneSet_243_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 243 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5073..0x5073;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec243_B:
-	ToneEnvZone6	0x5073, 0x00, -6, -992						; zone 0, coarse -3.88 st
+ToneSet_243_Zones:
+	ToneSetZone6	0x5073, 0x00, -6, -992						; zone 0, coarse -3.88 st
 ; SET 245 key map (descriptor 245: flags 0x00, keys 12..79): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec245_A:
+ToneSet_245_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 245 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5089..0x5089;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec245_B:
-	ToneEnvZone4	0x5089, 0x00, -6						; zone 0
+ToneSet_245_Zones:
+	ToneSetZone4	0x5089, 0x00, -6						; zone 0
 ; SET 247 key map (descriptor 247: flags 0x80, keys 28..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec247_A:
+ToneSet_247_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 247 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5088..0x5088;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec247_B:
-	ToneEnvZone6	0x5088, 0x00, -7, -6144						; zone 0, coarse -24.00 st
+ToneSet_247_Zones:
+	ToneSetZone6	0x5088, 0x00, -7, -6144						; zone 0, coarse -24.00 st
 ; SET 249 key map (descriptor 249: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_5,
 ; 108 bands -> zone index 0..4 of 5.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec249_A:
+ToneSet_249_KeyMap:
 	.long	ToneDB_VelocityCurve_5 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x04 bands 0-15 -> zone
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; +0x14 bands 16-31 -> zone
@@ -7191,1758 +7195,1758 @@ ToneEnv_Rec249_A:
 	.byte	  4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4		; +0x64 bands 96-107 -> zone
 ; SET 249 zone records: 5 x 6 bytes (descriptor flags bit 7 set), selectors 0x1093..0x5062;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec249_B:
-	ToneEnvZone6	0x5062, 0x00, -1, -576						; zone 0, coarse -2.25 st
-	ToneEnvZone6	0x3115, 0x00, -21, 0						; zone 1, coarse +0.00 st
-	ToneEnvZone6	0x3116, 0x00, -21, 0						; zone 2, coarse +0.00 st
-	ToneEnvZone6	0x1093, 0x00, -21, 0						; zone 3, coarse +0.00 st
-	ToneEnvZone6	0x1094, 0x00, -21, 0						; zone 4, coarse +0.00 st
+ToneSet_249_Zones:
+	ToneSetZone6	0x5062, 0x00, -1, -576						; zone 0, coarse -2.25 st
+	ToneSetZone6	0x3115, 0x00, -21, 0						; zone 1, coarse +0.00 st
+	ToneSetZone6	0x3116, 0x00, -21, 0						; zone 2, coarse +0.00 st
+	ToneSetZone6	0x1093, 0x00, -21, 0						; zone 3, coarse +0.00 st
+	ToneSetZone6	0x1094, 0x00, -21, 0						; zone 4, coarse +0.00 st
 ; SET 250 key map (descriptor 250: flags 0x80, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec250_A:
+ToneSet_250_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 250 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5064..0x5064;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec250_B:
-	ToneEnvZone6	0x5064, 0x00, -4, 1744						; zone 0, coarse +6.81 st
+ToneSet_250_Zones:
+	ToneSetZone6	0x5064, 0x00, -4, 1744						; zone 0, coarse +6.81 st
 ; SET 254 key map (descriptor 254: flags 0x00, keys 12..79): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec254_A:
+ToneSet_254_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 254 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5086..0x5086;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec254_B:
-	ToneEnvZone4	0x5086, 0x00, -2						; zone 0
+ToneSet_254_Zones:
+	ToneSetZone4	0x5086, 0x00, -2						; zone 0
 ; SET 257 key map (descriptor 257: flags 0x80, keys 19..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec257_A:
+ToneSet_257_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 257 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x508e..0x508e;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec257_B:
-	ToneEnvZone6	0x508e, 0x00, -9, -3712						; zone 0, coarse -14.50 st
+ToneSet_257_Zones:
+	ToneSetZone6	0x508e, 0x00, -9, -3712						; zone 0, coarse -14.50 st
 ; SET 259 key map (descriptor 259: flags 0x00, keys 16..90): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec259_A:
+ToneSet_259_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 259 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x508a..0x508a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec259_B:
-	ToneEnvZone4	0x508a, 0x00, -9						; zone 0
+ToneSet_259_Zones:
+	ToneSetZone4	0x508a, 0x00, -9						; zone 0
 ; SET 262 key map (descriptor 262: flags 0x80, keys 24..91): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec262_A:
+ToneSet_262_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 262 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5080..0x5080;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec262_B:
-	ToneEnvZone6	0x5080, 0x00, -11, -1536					; zone 0, coarse -6.00 st
+ToneSet_262_Zones:
+	ToneSetZone6	0x5080, 0x00, -11, -1536					; zone 0, coarse -6.00 st
 ; SET 263 key map (descriptor 263: flags 0x80, keys 19..91): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec263_A:
+ToneSet_263_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 263 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5065..0x5065;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec263_B:
-	ToneEnvZone6	0x5065, 0x00, -13, -316						; zone 0, coarse -1.23 st
+ToneSet_263_Zones:
+	ToneSetZone6	0x5065, 0x00, -13, -316						; zone 0, coarse -1.23 st
 ; SET 269 key map (descriptor 269: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec269_A:
+ToneSet_269_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 269 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40ab..0x40ab;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec269_B:
-	ToneEnvZone6	0x40ab, 0x00, -22, 2756						; zone 0, coarse +10.77 st
+ToneSet_269_Zones:
+	ToneSetZone6	0x40ab, 0x00, -22, 2756						; zone 0, coarse +10.77 st
 ; SET 271 key map (descriptor 271: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec271_A:
+ToneSet_271_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 271 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40ac..0x40ac;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec271_B:
-	ToneEnvZone6	0x40ac, 0x00, -29, 2756						; zone 0, coarse +10.77 st
+ToneSet_271_Zones:
+	ToneSetZone6	0x40ac, 0x00, -29, 2756						; zone 0, coarse +10.77 st
 ; SET 281 key map (descriptor 281: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec281_A:
+ToneSet_281_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 281 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40b4..0x40b4;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec281_B:
-	ToneEnvZone6	0x40b4, 0x00, -13, 2756						; zone 0, coarse +10.77 st
+ToneSet_281_Zones:
+	ToneSetZone6	0x40b4, 0x00, -13, 2756						; zone 0, coarse +10.77 st
 ; SET 291 key map (descriptor 291: flags 0x00, keys 19..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec291_A:
+ToneSet_291_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 291 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5066..0x5066;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec291_B:
-	ToneEnvZone4	0x5066, 0x00, -22						; zone 0
+ToneSet_291_Zones:
+	ToneSetZone4	0x5066, 0x00, -22						; zone 0
 ; SET 300 key map (descriptor 300: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec300_A:
+ToneSet_300_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 300 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40b3..0x40b3;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec300_B:
-	ToneEnvZone6	0x40b3, 0x00, -27, 2756						; zone 0, coarse +10.77 st
+ToneSet_300_Zones:
+	ToneSetZone6	0x40b3, 0x00, -27, 2756						; zone 0, coarse +10.77 st
 ; SET 302 key map (descriptor 302: flags 0x80, keys 12..81): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec302_A:
+ToneSet_302_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 302 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40b2..0x40b2;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec302_B:
-	ToneEnvZone6	0x40b2, 0x00, -16, 2756						; zone 0, coarse +10.77 st
+ToneSet_302_Zones:
+	ToneSetZone6	0x40b2, 0x00, -16, 2756						; zone 0, coarse +10.77 st
 ; SET 305 key map (descriptor 305: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec305_A:
+ToneSet_305_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 305 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40b5..0x40b5;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec305_B:
-	ToneEnvZone6	0x40b5, 0x00, -20, 2756						; zone 0, coarse +10.77 st
+ToneSet_305_Zones:
+	ToneSetZone6	0x40b5, 0x00, -20, 2756						; zone 0, coarse +10.77 st
 ; SET 310 key map (descriptor 310: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec310_A:
+ToneSet_310_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 310 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40ad..0x40ad;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec310_B:
-	ToneEnvZone6	0x40ad, 0x00, -17, 2756						; zone 0, coarse +10.77 st
+ToneSet_310_Zones:
+	ToneSetZone6	0x40ad, 0x00, -17, 2756						; zone 0, coarse +10.77 st
 ; SET 339 key map (descriptor 339: flags 0x00, keys 12..79): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec339_A:
+ToneSet_339_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 339 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5090..0x5090;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec339_B:
-	ToneEnvZone4	0x5090, 0x00, -21						; zone 0
+ToneSet_339_Zones:
+	ToneSetZone4	0x5090, 0x00, -21						; zone 0
 ; SET 027 key map (descriptor 027: flags 0x00, keys 12..78): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec027_A:
+ToneSet_027_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 027 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409c..0x409c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec027_B:
-	ToneEnvZone4	0x409c, 0x00, -6						; zone 0
+ToneSet_027_Zones:
+	ToneSetZone4	0x409c, 0x00, -6						; zone 0
 ; SET 034 key map (descriptor 034: flags 0x80, keys 12..100): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec034_A:
+ToneSet_034_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 034 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40a1..0x40a1;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec034_B:
-	ToneEnvZone6	0x40a1, 0x80, -15, -96						; zone 0, coarse -0.38 st
+ToneSet_034_Zones:
+	ToneSetZone6	0x40a1, 0x80, -15, -96						; zone 0, coarse -0.38 st
 ; SET 044 key map (descriptor 044: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec044_A:
+ToneSet_044_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 044 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x3060..0x3060;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec044_B:
-	ToneEnvZone6	0x3060, 0x80, -4, 3072						; zone 0, coarse +12.00 st
+ToneSet_044_Zones:
+	ToneSetZone6	0x3060, 0x80, -4, 3072						; zone 0, coarse +12.00 st
 ; SET 056 key map (descriptor 056: flags 0x80, keys 12..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec056_A:
+ToneSet_056_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 056 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40a9..0x40a9;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec056_B:
-	ToneEnvZone6	0x40a9, 0x00, -5, 2756						; zone 0, coarse +10.77 st
+ToneSet_056_Zones:
+	ToneSetZone6	0x40a9, 0x00, -5, 2756						; zone 0, coarse +10.77 st
 ; SET 059 key map (descriptor 059: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec059_A:
+ToneSet_059_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 059 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40a6..0x40a6;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec059_B:
-	ToneEnvZone6	0x40a6, 0x00, -3, 2756						; zone 0, coarse +10.77 st
+ToneSet_059_Zones:
+	ToneSetZone6	0x40a6, 0x00, -3, 2756						; zone 0, coarse +10.77 st
 ; SET 085 key map (descriptor 085: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec085_A:
+ToneSet_085_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 085 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x502b..0x502b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec085_B:
-	ToneEnvZone6	0x502b, 0x00, -2, 2756						; zone 0, coarse +10.77 st
+ToneSet_085_Zones:
+	ToneSetZone6	0x502b, 0x00, -2, 2756						; zone 0, coarse +10.77 st
 ; SET 087 key map (descriptor 087: flags 0x80, keys 17..114): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec087_A:
+ToneSet_087_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 087 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5078..0x5078;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec087_B:
-	ToneEnvZone6	0x5078, 0x00, -15, 3132						; zone 0, coarse +12.23 st
+ToneSet_087_Zones:
+	ToneSetZone6	0x5078, 0x00, -15, 3132						; zone 0, coarse +12.23 st
 ; SET 088 key map (descriptor 088: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec088_A:
+ToneSet_088_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 088 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x502a..0x502a;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec088_B:
-	ToneEnvZone6	0x502a, 0x00, -4, 2756						; zone 0, coarse +10.77 st
+ToneSet_088_Zones:
+	ToneSetZone6	0x502a, 0x00, -4, 2756						; zone 0, coarse +10.77 st
 ; SET 098 key map (descriptor 098: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec098_A:
+ToneSet_098_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 098 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5079..0x5079;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec098_B:
-	ToneEnvZone6	0x5079, 0x00, -12, 3132						; zone 0, coarse +12.23 st
+ToneSet_098_Zones:
+	ToneSetZone6	0x5079, 0x00, -12, 3132						; zone 0, coarse +12.23 st
 ; SET 109 key map (descriptor 109: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec109_A:
+ToneSet_109_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 109 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x503b..0x503b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec109_B:
-	ToneEnvZone6	0x503b, 0x00, -14, 1211						; zone 0, coarse +4.73 st
+ToneSet_109_Zones:
+	ToneSetZone6	0x503b, 0x00, -14, 1211						; zone 0, coarse +4.73 st
 ; SET 123 key map (descriptor 123: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec123_A:
+ToneSet_123_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 123 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5045..0x5045;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec123_B:
-	ToneEnvZone6	0x5045, 0x00, -1, 4036						; zone 0, coarse +15.77 st
+ToneSet_123_Zones:
+	ToneSetZone6	0x5045, 0x00, -1, 4036						; zone 0, coarse +15.77 st
 ; SET 154 key map (descriptor 154: flags 0x80, keys 12..84): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec154_A:
+ToneSet_154_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 154 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x505f..0x505f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec154_B:
-	ToneEnvZone6	0x505f, 0x80, -11, 2756						; zone 0, coarse +10.77 st
+ToneSet_154_Zones:
+	ToneSetZone6	0x505f, 0x80, -11, 2756						; zone 0, coarse +10.77 st
 ; SET 158 key map (descriptor 158: flags 0x80, keys 12..77): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec158_A:
+ToneSet_158_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 158 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5061..0x5061;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec158_B:
-	ToneEnvZone6	0x5061, 0x80, -14, 2756						; zone 0, coarse +10.77 st
+ToneSet_158_Zones:
+	ToneSetZone6	0x5061, 0x80, -14, 2756						; zone 0, coarse +10.77 st
 ; SET 163 key map (descriptor 163: flags 0x00, keys 16..93): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec163_A:
+ToneSet_163_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 163 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5057..0x5057;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec163_B:
-	ToneEnvZone4	0x5057, 0x00, -4						; zone 0
+ToneSet_163_Zones:
+	ToneSetZone4	0x5057, 0x00, -4						; zone 0
 ; SET 175 key map (descriptor 175: flags 0x00, keys 12..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec175_A:
+ToneSet_175_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 175 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5052..0x5052;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec175_B:
-	ToneEnvZone4	0x5052, 0x00, -21						; zone 0
+ToneSet_175_Zones:
+	ToneSetZone4	0x5052, 0x00, -21						; zone 0
 ; SET 179 key map (descriptor 179: flags 0x80, keys 9..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec179_A:
+ToneSet_179_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 179 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5072..0x5072;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec179_B:
-	ToneEnvZone6	0x5072, 0x00, -8, 2056						; zone 0, coarse +8.03 st
+ToneSet_179_Zones:
+	ToneSetZone6	0x5072, 0x00, -8, 2056						; zone 0, coarse +8.03 st
 ; SET 244 key map (descriptor 244: flags 0x80, keys 12..103): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec244_A:
+ToneSet_244_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 244 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5074..0x5074;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec244_B:
-	ToneEnvZone6	0x5074, 0x00, -1, 4096						; zone 0, coarse +16.00 st
+ToneSet_244_Zones:
+	ToneSetZone6	0x5074, 0x00, -1, 4096						; zone 0, coarse +16.00 st
 ; SET 255 key map (descriptor 255: flags 0x80, keys 12..95): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec255_A:
+ToneSet_255_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 255 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x507b..0x507b;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec255_B:
-	ToneEnvZone6	0x507b, 0x00, -1, 2756						; zone 0, coarse +10.77 st
+ToneSet_255_Zones:
+	ToneSetZone6	0x507b, 0x00, -1, 2756						; zone 0, coarse +10.77 st
 ; SET 311 key map (descriptor 311: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec311_A:
+ToneSet_311_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 311 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40ae..0x40ae;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec311_B:
-	ToneEnvZone6	0x40ae, 0x00, -17, 2756						; zone 0, coarse +10.77 st
+ToneSet_311_Zones:
+	ToneSetZone6	0x40ae, 0x00, -17, 2756						; zone 0, coarse +10.77 st
 ; SET 340 key map (descriptor 340: flags 0x00, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec340_A:
+ToneSet_340_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 340 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5091..0x5091;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec340_B:
-	ToneEnvZone4	0x5091, 0x00, -26						; zone 0
+ToneSet_340_Zones:
+	ToneSetZone4	0x5091, 0x00, -26						; zone 0
 ; SET 057 key map (descriptor 057: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec057_A:
+ToneSet_057_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 057 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40aa..0x40aa;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec057_B:
-	ToneEnvZone6	0x40aa, 0x00, -5, 2756						; zone 0, coarse +10.77 st
+ToneSet_057_Zones:
+	ToneSetZone6	0x40aa, 0x00, -5, 2756						; zone 0, coarse +10.77 st
 ; SET 089 key map (descriptor 089: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec089_A:
+ToneSet_089_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 089 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5029..0x5029;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec089_B:
-	ToneEnvZone6	0x5029, 0x00, -3, 2756						; zone 0, coarse +10.77 st
+ToneSet_089_Zones:
+	ToneSetZone6	0x5029, 0x00, -3, 2756						; zone 0, coarse +10.77 st
 ; SET 101 key map (descriptor 101: flags 0x80, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec101_A:
+ToneSet_101_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 101 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x5036..0x5036;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec101_B:
-	ToneEnvZone6	0x5036, 0x00, -6, 1211						; zone 0, coarse +4.73 st
+ToneSet_101_Zones:
+	ToneSetZone6	0x5036, 0x00, -6, 1211						; zone 0, coarse +4.73 st
 ; SET 256 key map (descriptor 256: flags 0x00, keys 12..79): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec256_A:
+ToneSet_256_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 256 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5087..0x5087;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec256_B:
-	ToneEnvZone4	0x5087, 0x00, -16						; zone 0
+ToneSet_256_Zones:
+	ToneSetZone4	0x5087, 0x00, -16						; zone 0
 ; SET 312 key map (descriptor 312: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec312_A:
+ToneSet_312_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 312 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40af..0x40af;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec312_B:
-	ToneEnvZone6	0x40af, 0x00, -17, 2756						; zone 0, coarse +10.77 st
+ToneSet_312_Zones:
+	ToneSetZone6	0x40af, 0x00, -17, 2756						; zone 0, coarse +10.77 st
 ; SET 313 key map (descriptor 313: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec313_A:
+ToneSet_313_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 313 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40b0..0x40b0;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec313_B:
-	ToneEnvZone6	0x40b0, 0x00, -17, 2756						; zone 0, coarse +10.77 st
+ToneSet_313_Zones:
+	ToneSetZone6	0x40b0, 0x00, -17, 2756						; zone 0, coarse +10.77 st
 ; SET 018 key map (descriptor 018: flags 0x01, keys 14..92): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec018_A:
+ToneSet_018_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 018 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409e..0x409e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec018_B:
-	ToneEnvZone4	0x409e, 0x00, -14						; zone 0
+ToneSet_018_Zones:
+	ToneSetZone4	0x409e, 0x00, -14						; zone 0
 ; SET 060 key map (descriptor 060: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec060_A:
+ToneSet_060_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 060 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x508f..0x508f;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec060_B:
-	ToneEnvZone6	0x508f, 0x00, -5, 1857						; zone 0, coarse +7.25 st
+ToneSet_060_Zones:
+	ToneSetZone6	0x508f, 0x00, -5, 1857						; zone 0, coarse +7.25 st
 ; SET 082 key map (descriptor 082: flags 0x00, keys 16..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec082_A:
+ToneSet_082_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 082 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a4..0x40a4;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec082_B:
-	ToneEnvZone4	0x40a4, 0x80, -8						; zone 0
+ToneSet_082_Zones:
+	ToneSetZone4	0x40a4, 0x80, -8						; zone 0
 ; SET 164 key map (descriptor 164: flags 0x00, keys 16..92): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec164_A:
+ToneSet_164_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 164 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5058..0x5058;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec164_B:
-	ToneEnvZone4	0x5058, 0x00, -10						; zone 0
+ToneSet_164_Zones:
+	ToneSetZone4	0x5058, 0x00, -10						; zone 0
 ; SET 264 key map (descriptor 264: flags 0x80, keys 12..102): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec264_A:
+ToneSet_264_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 264 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x507c..0x507c;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec264_B:
-	ToneEnvZone6	0x507c, 0x00, 3, 2756						; zone 0, coarse +10.77 st
+ToneSet_264_Zones:
+	ToneSetZone6	0x507c, 0x00, 3, 2756						; zone 0, coarse +10.77 st
 ; SET 314 key map (descriptor 314: flags 0x80, keys 12..108): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec314_A:
+ToneSet_314_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 314 zone records: 1 x 6 bytes (descriptor flags bit 7 set), selectors 0x40b1..0x40b1;
 ; emitted by WaveSel_Emit_ZoneRecord_S6 (0x022AC5) -- fields in the chunk header above.
-ToneEnv_Rec314_B:
-	ToneEnvZone6	0x40b1, 0x00, -23, 2756						; zone 0, coarse +10.77 st
+ToneSet_314_Zones:
+	ToneSetZone6	0x40b1, 0x00, -23, 2756						; zone 0, coarse +10.77 st
 ; SET 165 key map (descriptor 165: flags 0x00, keys 16..96): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec165_A:
+ToneSet_165_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 165 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5059..0x5059;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec165_B:
-	ToneEnvZone4	0x5059, 0x00, -9						; zone 0
+ToneSet_165_Zones:
+	ToneSetZone4	0x5059, 0x00, -9						; zone 0
 ; SET 341 key map (descriptor 341: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec341_A:
+ToneSet_341_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 341 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x0002..0x0002;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec341_B:
-	ToneEnvZone4	0x0002, 0x00, -8						; zone 0
+ToneSet_341_Zones:
+	ToneSetZone4	0x0002, 0x00, -8						; zone 0
 ; SET 343 key map (descriptor 343: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec343_A:
+ToneSet_343_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 343 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5022..0x5022;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec343_B:
-	ToneEnvZone4	0x5022, 0x00, 1							; zone 0
+ToneSet_343_Zones:
+	ToneSetZone4	0x5022, 0x00, 1							; zone 0
 ; SET 344 key map (descriptor 344: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec344_A:
+ToneSet_344_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 344 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5023..0x5023;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec344_B:
-	ToneEnvZone4	0x5023, 0x00, -7						; zone 0
+ToneSet_344_Zones:
+	ToneSetZone4	0x5023, 0x00, -7						; zone 0
 ; SET 345 key map (descriptor 345: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec345_A:
+ToneSet_345_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 345 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5024..0x5024;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec345_B:
-	ToneEnvZone4	0x5024, 0x00, -2						; zone 0
+ToneSet_345_Zones:
+	ToneSetZone4	0x5024, 0x00, -2						; zone 0
 ; SET 346 key map (descriptor 346: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec346_A:
+ToneSet_346_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 346 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5025..0x5025;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec346_B:
-	ToneEnvZone4	0x5025, 0x00, -2						; zone 0
+ToneSet_346_Zones:
+	ToneSetZone4	0x5025, 0x00, -2						; zone 0
 ; SET 347 key map (descriptor 347: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec347_A:
+ToneSet_347_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 347 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5026..0x5026;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec347_B:
-	ToneEnvZone4	0x5026, 0x00, -1						; zone 0
+ToneSet_347_Zones:
+	ToneSetZone4	0x5026, 0x00, -1						; zone 0
 ; SET 348 key map (descriptor 348: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec348_A:
+ToneSet_348_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 348 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5027..0x5027;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec348_B:
-	ToneEnvZone4	0x5027, 0x00, -23						; zone 0
+ToneSet_348_Zones:
+	ToneSetZone4	0x5027, 0x00, -23						; zone 0
 ; SET 349 key map (descriptor 349: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec349_A:
+ToneSet_349_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 349 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5028..0x5028;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec349_B:
-	ToneEnvZone4	0x5028, 0x00, -1						; zone 0
+ToneSet_349_Zones:
+	ToneSetZone4	0x5028, 0x00, -1						; zone 0
 ; SET 350 key map (descriptor 350: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec350_A:
+ToneSet_350_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 350 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5029..0x5029;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec350_B:
-	ToneEnvZone4	0x5029, 0x00, -3						; zone 0
+ToneSet_350_Zones:
+	ToneSetZone4	0x5029, 0x00, -3						; zone 0
 ; SET 351 key map (descriptor 351: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec351_A:
+ToneSet_351_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 351 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x502a..0x502a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec351_B:
-	ToneEnvZone4	0x502a, 0x00, -4						; zone 0
+ToneSet_351_Zones:
+	ToneSetZone4	0x502a, 0x00, -4						; zone 0
 ; SET 352 key map (descriptor 352: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec352_A:
+ToneSet_352_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 352 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x502b..0x502b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec352_B:
-	ToneEnvZone4	0x502b, 0x00, -2						; zone 0
+ToneSet_352_Zones:
+	ToneSetZone4	0x502b, 0x00, -2						; zone 0
 ; SET 353 key map (descriptor 353: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec353_A:
+ToneSet_353_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 353 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x502c..0x502c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec353_B:
-	ToneEnvZone4	0x502c, 0x00, -5						; zone 0
+ToneSet_353_Zones:
+	ToneSetZone4	0x502c, 0x00, -5						; zone 0
 ; SET 354 key map (descriptor 354: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec354_A:
+ToneSet_354_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 354 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5078..0x5078;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec354_B:
-	ToneEnvZone4	0x5078, 0x00, -15						; zone 0
+ToneSet_354_Zones:
+	ToneSetZone4	0x5078, 0x00, -15						; zone 0
 ; SET 355 key map (descriptor 355: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec355_A:
+ToneSet_355_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 355 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x502d..0x502d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec355_B:
-	ToneEnvZone4	0x502d, 0x00, 2							; zone 0
+ToneSet_355_Zones:
+	ToneSetZone4	0x502d, 0x00, 2							; zone 0
 ; SET 356 key map (descriptor 356: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec356_A:
+ToneSet_356_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 356 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x502e..0x502e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec356_B:
-	ToneEnvZone4	0x502e, 0x00, 2							; zone 0
+ToneSet_356_Zones:
+	ToneSetZone4	0x502e, 0x00, 2							; zone 0
 ; SET 358 key map (descriptor 358: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec358_A:
+ToneSet_358_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 358 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5031..0x5031;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec358_B:
-	ToneEnvZone4	0x5031, 0x00, -6						; zone 0
+ToneSet_358_Zones:
+	ToneSetZone4	0x5031, 0x00, -6						; zone 0
 ; SET 360 key map (descriptor 360: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec360_A:
+ToneSet_360_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 360 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5033..0x5033;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec360_B:
-	ToneEnvZone4	0x5033, 0x00, -1						; zone 0
+ToneSet_360_Zones:
+	ToneSetZone4	0x5033, 0x00, -1						; zone 0
 ; SET 361 key map (descriptor 361: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec361_A:
+ToneSet_361_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 361 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5034..0x5034;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec361_B:
-	ToneEnvZone4	0x5034, 0x00, -6						; zone 0
+ToneSet_361_Zones:
+	ToneSetZone4	0x5034, 0x00, -6						; zone 0
 ; SET 362 key map (descriptor 362: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec362_A:
+ToneSet_362_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 362 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5035..0x5035;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec362_B:
-	ToneEnvZone4	0x5035, 0x00, -22						; zone 0
+ToneSet_362_Zones:
+	ToneSetZone4	0x5035, 0x00, -22						; zone 0
 ; SET 363 key map (descriptor 363: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec363_A:
+ToneSet_363_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 363 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5036..0x5036;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec363_B:
-	ToneEnvZone4	0x5036, 0x00, -6						; zone 0
+ToneSet_363_Zones:
+	ToneSetZone4	0x5036, 0x00, -6						; zone 0
 ; SET 364 key map (descriptor 364: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec364_A:
+ToneSet_364_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 364 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5037..0x5037;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec364_B:
-	ToneEnvZone4	0x5037, 0x00, -6						; zone 0
+ToneSet_364_Zones:
+	ToneSetZone4	0x5037, 0x00, -6						; zone 0
 ; SET 365 key map (descriptor 365: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec365_A:
+ToneSet_365_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 365 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5038..0x5038;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec365_B:
-	ToneEnvZone4	0x5038, 0x00, -7						; zone 0
+ToneSet_365_Zones:
+	ToneSetZone4	0x5038, 0x00, -7						; zone 0
 ; SET 366 key map (descriptor 366: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec366_A:
+ToneSet_366_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 366 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5039..0x5039;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec366_B:
-	ToneEnvZone4	0x5039, 0x00, 1							; zone 0
+ToneSet_366_Zones:
+	ToneSetZone4	0x5039, 0x00, 1							; zone 0
 ; SET 367 key map (descriptor 367: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec367_A:
+ToneSet_367_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 367 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x503a..0x503a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec367_B:
-	ToneEnvZone4	0x503a, 0x00, -14						; zone 0
+ToneSet_367_Zones:
+	ToneSetZone4	0x503a, 0x00, -14						; zone 0
 ; SET 368 key map (descriptor 368: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec368_A:
+ToneSet_368_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 368 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x505d..0x505d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec368_B:
-	ToneEnvZone4	0x505d, 0x00, -11						; zone 0
+ToneSet_368_Zones:
+	ToneSetZone4	0x505d, 0x00, -11						; zone 0
 ; SET 370 key map (descriptor 370: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec370_A:
+ToneSet_370_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 370 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x503b..0x503b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec370_B:
-	ToneEnvZone4	0x503b, 0x00, -14						; zone 0
+ToneSet_370_Zones:
+	ToneSetZone4	0x503b, 0x00, -14						; zone 0
 ; SET 371 key map (descriptor 371: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec371_A:
+ToneSet_371_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 371 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5079..0x5079;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec371_B:
-	ToneEnvZone4	0x5079, 0x00, -12						; zone 0
+ToneSet_371_Zones:
+	ToneSetZone4	0x5079, 0x00, -12						; zone 0
 ; SET 372 key map (descriptor 372: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec372_A:
+ToneSet_372_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 372 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5030..0x5030;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec372_B:
-	ToneEnvZone4	0x5030, 0x00, -19						; zone 0
+ToneSet_372_Zones:
+	ToneSetZone4	0x5030, 0x00, -19						; zone 0
 ; SET 373 key map (descriptor 373: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec373_A:
+ToneSet_373_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 373 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409a..0x409a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec373_B:
-	ToneEnvZone4	0x409a, 0x00, -4						; zone 0
+ToneSet_373_Zones:
+	ToneSetZone4	0x409a, 0x00, -4						; zone 0
 ; SET 374 key map (descriptor 374: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec374_A:
+ToneSet_374_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 374 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x505a..0x505a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec374_B:
-	ToneEnvZone4	0x505a, 0x00, -49						; zone 0
+ToneSet_374_Zones:
+	ToneSetZone4	0x505a, 0x00, -49						; zone 0
 ; SET 375 key map (descriptor 375: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec375_A:
+ToneSet_375_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 375 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x505b..0x505b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec375_B:
-	ToneEnvZone4	0x505b, 0x00, -14						; zone 0
+ToneSet_375_Zones:
+	ToneSetZone4	0x505b, 0x00, -14						; zone 0
 ; SET 376 key map (descriptor 376: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec376_A:
+ToneSet_376_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 376 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5046..0x5046;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec376_B:
-	ToneEnvZone4	0x5046, 0x00, -9						; zone 0
+ToneSet_376_Zones:
+	ToneSetZone4	0x5046, 0x00, -9						; zone 0
 ; SET 377 key map (descriptor 377: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec377_A:
+ToneSet_377_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 377 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5047..0x5047;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec377_B:
-	ToneEnvZone4	0x5047, 0x00, -3						; zone 0
+ToneSet_377_Zones:
+	ToneSetZone4	0x5047, 0x00, -3						; zone 0
 ; SET 378 key map (descriptor 378: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec378_A:
+ToneSet_378_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 378 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5048..0x5048;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec378_B:
-	ToneEnvZone4	0x5048, 0x00, -2						; zone 0
+ToneSet_378_Zones:
+	ToneSetZone4	0x5048, 0x00, -2						; zone 0
 ; SET 379 key map (descriptor 379: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec379_A:
+ToneSet_379_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 379 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x503c..0x503c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec379_B:
-	ToneEnvZone4	0x503c, 0x00, -3						; zone 0
+ToneSet_379_Zones:
+	ToneSetZone4	0x503c, 0x00, -3						; zone 0
 ; SET 381 key map (descriptor 381: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec381_A:
+ToneSet_381_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 381 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5042..0x5042;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec381_B:
-	ToneEnvZone4	0x5042, 0x00, 8							; zone 0
+ToneSet_381_Zones:
+	ToneSetZone4	0x5042, 0x00, 8							; zone 0
 ; SET 383 key map (descriptor 383: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec383_A:
+ToneSet_383_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 383 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x503d..0x503d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec383_B:
-	ToneEnvZone4	0x503d, 0x00, -18						; zone 0
+ToneSet_383_Zones:
+	ToneSetZone4	0x503d, 0x00, -18						; zone 0
 ; SET 384 key map (descriptor 384: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec384_A:
+ToneSet_384_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 384 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5044..0x5044;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec384_B:
-	ToneEnvZone4	0x5044, 0x00, -17						; zone 0
+ToneSet_384_Zones:
+	ToneSetZone4	0x5044, 0x00, -17						; zone 0
 ; SET 385 key map (descriptor 385: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec385_A:
+ToneSet_385_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 385 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x503e..0x503e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec385_B:
-	ToneEnvZone4	0x503e, 0x00, -11						; zone 0
+ToneSet_385_Zones:
+	ToneSetZone4	0x503e, 0x00, -11						; zone 0
 ; SET 386 key map (descriptor 386: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec386_A:
+ToneSet_386_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 386 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5045..0x5045;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec386_B:
-	ToneEnvZone4	0x5045, 0x00, -1						; zone 0
+ToneSet_386_Zones:
+	ToneSetZone4	0x5045, 0x00, -1						; zone 0
 ; SET 387 key map (descriptor 387: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec387_A:
+ToneSet_387_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 387 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x503f..0x503f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec387_B:
-	ToneEnvZone4	0x503f, 0x00, -3						; zone 0
+ToneSet_387_Zones:
+	ToneSetZone4	0x503f, 0x00, -3						; zone 0
 ; SET 388 key map (descriptor 388: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec388_A:
+ToneSet_388_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 388 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x505c..0x505c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec388_B:
-	ToneEnvZone4	0x505c, 0x00, -1						; zone 0
+ToneSet_388_Zones:
+	ToneSetZone4	0x505c, 0x00, -1						; zone 0
 ; SET 389 key map (descriptor 389: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec389_A:
+ToneSet_389_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 389 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5040..0x5040;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec389_B:
-	ToneEnvZone4	0x5040, 0x00, 0							; zone 0
+ToneSet_389_Zones:
+	ToneSetZone4	0x5040, 0x00, 0							; zone 0
 ; SET 390 key map (descriptor 390: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec390_A:
+ToneSet_390_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 390 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5049..0x5049;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec390_B:
-	ToneEnvZone4	0x5049, 0x00, -11						; zone 0
+ToneSet_390_Zones:
+	ToneSetZone4	0x5049, 0x00, -11						; zone 0
 ; SET 392 key map (descriptor 392: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec392_A:
+ToneSet_392_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 392 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x505f..0x505f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec392_B:
-	ToneEnvZone4	0x505f, 0x00, -11						; zone 0
+ToneSet_392_Zones:
+	ToneSetZone4	0x505f, 0x00, -11						; zone 0
 ; SET 394 key map (descriptor 394: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec394_A:
+ToneSet_394_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 394 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409a..0x409a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec394_B:
-	ToneEnvZone4	0x409a, 0x00, -4						; zone 0
+ToneSet_394_Zones:
+	ToneSetZone4	0x409a, 0x00, -4						; zone 0
 ; SET 395 key map (descriptor 395: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec395_A:
+ToneSet_395_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 395 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x504b..0x504b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec395_B:
-	ToneEnvZone4	0x504b, 0x00, -12						; zone 0
+ToneSet_395_Zones:
+	ToneSetZone4	0x504b, 0x00, -12						; zone 0
 ; SET 396 key map (descriptor 396: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec396_A:
+ToneSet_396_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 396 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5061..0x5061;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec396_B:
-	ToneEnvZone4	0x5061, 0x00, -14						; zone 0
+ToneSet_396_Zones:
+	ToneSetZone4	0x5061, 0x00, -14						; zone 0
 ; SET 397 key map (descriptor 397: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec397_A:
+ToneSet_397_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 397 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409a..0x409a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec397_B:
-	ToneEnvZone4	0x409a, 0x00, -4						; zone 0
+ToneSet_397_Zones:
+	ToneSetZone4	0x409a, 0x00, -4						; zone 0
 ; SET 398 key map (descriptor 398: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec398_A:
+ToneSet_398_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 398 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x504c..0x504c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec398_B:
-	ToneEnvZone4	0x504c, 0x00, -14						; zone 0
+ToneSet_398_Zones:
+	ToneSetZone4	0x504c, 0x00, -14						; zone 0
 ; SET 399 key map (descriptor 399: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec399_A:
+ToneSet_399_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 399 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5056..0x5056;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec399_B:
-	ToneEnvZone4	0x5056, 0x00, -14						; zone 0
+ToneSet_399_Zones:
+	ToneSetZone4	0x5056, 0x00, -14						; zone 0
 ; SET 401 key map (descriptor 401: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec401_A:
+ToneSet_401_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 401 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5058..0x5058;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec401_B:
-	ToneEnvZone4	0x5058, 0x00, -10						; zone 0
+ToneSet_401_Zones:
+	ToneSetZone4	0x5058, 0x00, -10						; zone 0
 ; SET 402 key map (descriptor 402: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec402_A:
+ToneSet_402_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 402 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5059..0x5059;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec402_B:
-	ToneEnvZone4	0x5059, 0x00, -9						; zone 0
+ToneSet_402_Zones:
+	ToneSetZone4	0x5059, 0x00, -9						; zone 0
 ; SET 403 key map (descriptor 403: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec403_A:
+ToneSet_403_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 403 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x507a..0x507a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec403_B:
-	ToneEnvZone4	0x507a, 0x00, -6						; zone 0
+ToneSet_403_Zones:
+	ToneSetZone4	0x507a, 0x00, -6						; zone 0
 ; SET 404 key map (descriptor 404: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec404_A:
+ToneSet_404_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 404 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x504e..0x504e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec404_B:
-	ToneEnvZone4	0x504e, 0x00, -11						; zone 0
+ToneSet_404_Zones:
+	ToneSetZone4	0x504e, 0x00, -11						; zone 0
 ; SET 405 key map (descriptor 405: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec405_A:
+ToneSet_405_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 405 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5051..0x5051;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec405_B:
-	ToneEnvZone4	0x5051, 0x00, -21						; zone 0
+ToneSet_405_Zones:
+	ToneSetZone4	0x5051, 0x00, -21						; zone 0
 ; SET 406 key map (descriptor 406: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec406_A:
+ToneSet_406_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 406 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5054..0x5054;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec406_B:
-	ToneEnvZone4	0x5054, 0x00, -21						; zone 0
+ToneSet_406_Zones:
+	ToneSetZone4	0x5054, 0x00, -21						; zone 0
 ; SET 407 key map (descriptor 407: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec407_A:
+ToneSet_407_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 407 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5052..0x5052;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec407_B:
-	ToneEnvZone4	0x5052, 0x00, -21						; zone 0
+ToneSet_407_Zones:
+	ToneSetZone4	0x5052, 0x00, -21						; zone 0
 ; SET 408 key map (descriptor 408: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec408_A:
+ToneSet_408_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 408 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5062..0x5062;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec408_B:
-	ToneEnvZone4	0x5062, 0x00, -1						; zone 0
+ToneSet_408_Zones:
+	ToneSetZone4	0x5062, 0x00, -1						; zone 0
 ; SET 409 key map (descriptor 409: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec409_A:
+ToneSet_409_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 409 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5063..0x5063;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec409_B:
-	ToneEnvZone4	0x5063, 0x00, -11						; zone 0
+ToneSet_409_Zones:
+	ToneSetZone4	0x5063, 0x00, -11						; zone 0
 ; SET 410 key map (descriptor 410: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec410_A:
+ToneSet_410_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 410 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5064..0x5064;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec410_B:
-	ToneEnvZone4	0x5064, 0x00, -4						; zone 0
+ToneSet_410_Zones:
+	ToneSetZone4	0x5064, 0x00, -4						; zone 0
 ; SET 411 key map (descriptor 411: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec411_A:
+ToneSet_411_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 411 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5065..0x5065;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec411_B:
-	ToneEnvZone4	0x5065, 0x00, -13						; zone 0
+ToneSet_411_Zones:
+	ToneSetZone4	0x5065, 0x00, -13						; zone 0
 ; SET 412 key map (descriptor 412: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec412_A:
+ToneSet_412_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 412 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5088..0x5088;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec412_B:
-	ToneEnvZone4	0x5088, 0x00, -7						; zone 0
+ToneSet_412_Zones:
+	ToneSetZone4	0x5088, 0x00, -7						; zone 0
 ; SET 414 key map (descriptor 414: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec414_A:
+ToneSet_414_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 414 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3112..0x3112;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec414_B:
-	ToneEnvZone4	0x3112, 0x00, -13						; zone 0
+ToneSet_414_Zones:
+	ToneSetZone4	0x3112, 0x00, -13						; zone 0
 ; SET 415 key map (descriptor 415: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec415_A:
+ToneSet_415_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 415 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x20ae..0x20ae;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec415_B:
-	ToneEnvZone4	0x20ae, 0x00, 0							; zone 0
+ToneSet_415_Zones:
+	ToneSetZone4	0x20ae, 0x00, 0							; zone 0
 ; SET 417 key map (descriptor 417: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec417_A:
+ToneSet_417_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 417 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5067..0x5067;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec417_B:
-	ToneEnvZone4	0x5067, 0x00, -30						; zone 0
+ToneSet_417_Zones:
+	ToneSetZone4	0x5067, 0x00, -30						; zone 0
 ; SET 421 key map (descriptor 421: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec421_A:
+ToneSet_421_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 421 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x506b..0x506b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec421_B:
-	ToneEnvZone4	0x506b, 0x00, -37						; zone 0
+ToneSet_421_Zones:
+	ToneSetZone4	0x506b, 0x00, -37						; zone 0
 ; SET 427 key map (descriptor 427: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec427_A:
+ToneSet_427_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 427 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5082..0x5082;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec427_B:
-	ToneEnvZone4	0x5082, 0x00, -5						; zone 0
+ToneSet_427_Zones:
+	ToneSetZone4	0x5082, 0x00, -5						; zone 0
 ; SET 429 key map (descriptor 429: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec429_A:
+ToneSet_429_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 429 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a2..0x40a2;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec429_B:
-	ToneEnvZone4	0x40a2, 0x00, -15						; zone 0
+ToneSet_429_Zones:
+	ToneSetZone4	0x40a2, 0x00, -15						; zone 0
 ; SET 433 key map (descriptor 433: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec433_A:
+ToneSet_433_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 433 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30ed..0x30ed;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec433_B:
-	ToneEnvZone4	0x30ed, 0x00, -1						; zone 0
+ToneSet_433_Zones:
+	ToneSetZone4	0x30ed, 0x00, -1						; zone 0
 ; SET 434 key map (descriptor 434: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec434_A:
+ToneSet_434_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 434 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5073..0x5073;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec434_B:
-	ToneEnvZone4	0x5073, 0x00, -6						; zone 0
+ToneSet_434_Zones:
+	ToneSetZone4	0x5073, 0x00, -6						; zone 0
 ; SET 436 key map (descriptor 436: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec436_A:
+ToneSet_436_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 436 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5075..0x5075;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec436_B:
-	ToneEnvZone4	0x5075, 0x00, -8						; zone 0
+ToneSet_436_Zones:
+	ToneSetZone4	0x5075, 0x00, -8						; zone 0
 ; SET 438 key map (descriptor 438: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec438_A:
+ToneSet_438_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 438 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5077..0x5077;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec438_B:
-	ToneEnvZone4	0x5077, 0x00, -2						; zone 0
+ToneSet_438_Zones:
+	ToneSetZone4	0x5077, 0x00, -2						; zone 0
 ; SET 439 key map (descriptor 439: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec439_A:
+ToneSet_439_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 439 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x507d..0x507d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec439_B:
-	ToneEnvZone4	0x507d, 0x00, -2						; zone 0
+ToneSet_439_Zones:
+	ToneSetZone4	0x507d, 0x00, -2						; zone 0
 ; SET 440 key map (descriptor 440: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec440_A:
+ToneSet_440_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 440 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x507e..0x507e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec440_B:
-	ToneEnvZone4	0x507e, 0x00, -9						; zone 0
+ToneSet_440_Zones:
+	ToneSetZone4	0x507e, 0x00, -9						; zone 0
 ; SET 441 key map (descriptor 441: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec441_A:
+ToneSet_441_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 441 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x507f..0x507f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec441_B:
-	ToneEnvZone4	0x507f, 0x00, -7						; zone 0
+ToneSet_441_Zones:
+	ToneSetZone4	0x507f, 0x00, -7						; zone 0
 ; SET 442 key map (descriptor 442: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec442_A:
+ToneSet_442_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 442 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5080..0x5080;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec442_B:
-	ToneEnvZone4	0x5080, 0x00, -11						; zone 0
+ToneSet_442_Zones:
+	ToneSetZone4	0x5080, 0x00, -11						; zone 0
 ; SET 444 key map (descriptor 444: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec444_A:
+ToneSet_444_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 444 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5084..0x5084;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec444_B:
-	ToneEnvZone4	0x5084, 0x00, -3						; zone 0
+ToneSet_444_Zones:
+	ToneSetZone4	0x5084, 0x00, -3						; zone 0
 ; SET 446 key map (descriptor 446: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec446_A:
+ToneSet_446_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 446 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5086..0x5086;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec446_B:
-	ToneEnvZone4	0x5086, 0x00, -2						; zone 0
+ToneSet_446_Zones:
+	ToneSetZone4	0x5086, 0x00, -2						; zone 0
 ; SET 448 key map (descriptor 448: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec448_A:
+ToneSet_448_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 448 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x507b..0x507b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec448_B:
-	ToneEnvZone4	0x507b, 0x00, -1						; zone 0
+ToneSet_448_Zones:
+	ToneSetZone4	0x507b, 0x00, -1						; zone 0
 ; SET 449 key map (descriptor 449: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec449_A:
+ToneSet_449_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 449 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x508a..0x508a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec449_B:
-	ToneEnvZone4	0x508a, 0x00, -9						; zone 0
+ToneSet_449_Zones:
+	ToneSetZone4	0x508a, 0x00, -9						; zone 0
 ; SET 450 key map (descriptor 450: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec450_A:
+ToneSet_450_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 450 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x508b..0x508b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec450_B:
-	ToneEnvZone4	0x508b, 0x00, -6						; zone 0
+ToneSet_450_Zones:
+	ToneSetZone4	0x508b, 0x00, -6						; zone 0
 ; SET 451 key map (descriptor 451: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec451_A:
+ToneSet_451_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 451 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x508c..0x508c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec451_B:
-	ToneEnvZone4	0x508c, 0x00, 0							; zone 0
+ToneSet_451_Zones:
+	ToneSetZone4	0x508c, 0x00, 0							; zone 0
 ; SET 452 key map (descriptor 452: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec452_A:
+ToneSet_452_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 452 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x508d..0x508d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec452_B:
-	ToneEnvZone4	0x508d, 0x00, -1						; zone 0
+ToneSet_452_Zones:
+	ToneSetZone4	0x508d, 0x00, -1						; zone 0
 ; SET 453 key map (descriptor 453: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec453_A:
+ToneSet_453_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 453 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5081..0x5081;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec453_B:
-	ToneEnvZone4	0x5081, 0x00, 0							; zone 0
+ToneSet_453_Zones:
+	ToneSetZone4	0x5081, 0x00, 0							; zone 0
 ; SET 454 key map (descriptor 454: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec454_A:
+ToneSet_454_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 454 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a7..0x40a7;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec454_B:
-	ToneEnvZone4	0x40a7, 0x00, -7						; zone 0
+ToneSet_454_Zones:
+	ToneSetZone4	0x40a7, 0x00, -7						; zone 0
 ; SET 456 key map (descriptor 456: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec456_A:
+ToneSet_456_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 456 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a1..0x40a1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec456_B:
-	ToneEnvZone4	0x40a1, 0x00, -15						; zone 0
+ToneSet_456_Zones:
+	ToneSetZone4	0x40a1, 0x00, -15						; zone 0
 ; SET 457 key map (descriptor 457: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec457_A:
+ToneSet_457_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 457 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40ad..0x40ad;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec457_B:
-	ToneEnvZone4	0x40ad, 0x00, -17						; zone 0
+ToneSet_457_Zones:
+	ToneSetZone4	0x40ad, 0x00, -17						; zone 0
 ; SET 462 key map (descriptor 462: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec462_A:
+ToneSet_462_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 462 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40b5..0x40b5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec462_B:
-	ToneEnvZone4	0x40b5, 0x00, -20						; zone 0
+ToneSet_462_Zones:
+	ToneSetZone4	0x40b5, 0x00, -20						; zone 0
 ; SET 463 key map (descriptor 463: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec463_A:
+ToneSet_463_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 463 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a8..0x40a8;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec463_B:
-	ToneEnvZone4	0x40a8, 0x00, -5						; zone 0
+ToneSet_463_Zones:
+	ToneSetZone4	0x40a8, 0x00, -5						; zone 0
 ; SET 466 key map (descriptor 466: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec466_A:
+ToneSet_466_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 466 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40b3..0x40b3;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec466_B:
-	ToneEnvZone4	0x40b3, 0x00, -27						; zone 0
+ToneSet_466_Zones:
+	ToneSetZone4	0x40b3, 0x00, -27						; zone 0
 ; SET 467 key map (descriptor 467: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec467_A:
+ToneSet_467_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 467 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40b2..0x40b2;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec467_B:
-	ToneEnvZone4	0x40b2, 0x00, -16						; zone 0
+ToneSet_467_Zones:
+	ToneSetZone4	0x40b2, 0x00, -16						; zone 0
 ; SET 468 key map (descriptor 468: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec468_A:
+ToneSet_468_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 468 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40b4..0x40b4;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec468_B:
-	ToneEnvZone4	0x40b4, 0x00, -13						; zone 0
+ToneSet_468_Zones:
+	ToneSetZone4	0x40b4, 0x00, -13						; zone 0
 ; SET 469 key map (descriptor 469: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec469_A:
+ToneSet_469_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 469 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x30ec..0x30ec;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec469_B:
-	ToneEnvZone4	0x30ec, 0x00, -1						; zone 0
+ToneSet_469_Zones:
+	ToneSetZone4	0x30ec, 0x00, -1						; zone 0
 ; SET 470 key map (descriptor 470: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec470_A:
+ToneSet_470_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 470 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x00d4..0x00d4;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec470_B:
-	ToneEnvZone4	0x00d4, 0x00, -8						; zone 0
+ToneSet_470_Zones:
+	ToneSetZone4	0x00d4, 0x00, -8						; zone 0
 ; SET 473 key map (descriptor 473: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec473_A:
+ToneSet_473_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 473 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409b..0x409b;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec473_B:
-	ToneEnvZone4	0x409b, 0x00, -6						; zone 0
+ToneSet_473_Zones:
+	ToneSetZone4	0x409b, 0x00, -6						; zone 0
 ; SET 475 key map (descriptor 475: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec475_A:
+ToneSet_475_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 475 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3061..0x3061;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec475_B:
-	ToneEnvZone4	0x3061, 0x00, -7						; zone 0
+ToneSet_475_Zones:
+	ToneSetZone4	0x3061, 0x00, -7						; zone 0
 ; SET 479 key map (descriptor 479: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec479_A:
+ToneSet_479_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 479 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x305f..0x305f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec479_B:
-	ToneEnvZone4	0x305f, 0x00, -14						; zone 0
+ToneSet_479_Zones:
+	ToneSetZone4	0x305f, 0x00, -14						; zone 0
 ; SET 480 key map (descriptor 480: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec480_A:
+ToneSet_480_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 480 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a5..0x40a5;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec480_B:
-	ToneEnvZone4	0x40a5, 0x00, -13						; zone 0
+ToneSet_480_Zones:
+	ToneSetZone4	0x40a5, 0x00, -13						; zone 0
 ; SET 481 key map (descriptor 481: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec481_A:
+ToneSet_481_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 481 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x508f..0x508f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec481_B:
-	ToneEnvZone4	0x508f, 0x00, -5						; zone 0
+ToneSet_481_Zones:
+	ToneSetZone4	0x508f, 0x00, -5						; zone 0
 ; SET 482 key map (descriptor 482: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec482_A:
+ToneSet_482_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 482 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5090..0x5090;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec482_B:
-	ToneEnvZone4	0x5090, 0x00, -21						; zone 0
+ToneSet_482_Zones:
+	ToneSetZone4	0x5090, 0x00, -21						; zone 0
 ; SET 484 key map (descriptor 484: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec484_A:
+ToneSet_484_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 484 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5066..0x5066;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec484_B:
-	ToneEnvZone4	0x5066, 0x00, -22						; zone 0
+ToneSet_484_Zones:
+	ToneSetZone4	0x5066, 0x00, -22						; zone 0
 ; SET 485 key map (descriptor 485: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec485_A:
+ToneSet_485_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 485 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x507c..0x507c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec485_B:
-	ToneEnvZone4	0x507c, 0x00, 3							; zone 0
+ToneSet_485_Zones:
+	ToneSetZone4	0x507c, 0x00, 3							; zone 0
 ; SET 486 key map (descriptor 486: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec486_A:
+ToneSet_486_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 486 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a0..0x40a0;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec486_B:
-	ToneEnvZone4	0x40a0, 0x00, -43						; zone 0
+ToneSet_486_Zones:
+	ToneSetZone4	0x40a0, 0x00, -43						; zone 0
 ; SET 342 key map (descriptor 342: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec342_A:
+ToneSet_342_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 342 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x001d..0x001d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec342_B:
-	ToneEnvZone4	0x001d, 0x00, -15						; zone 0
+ToneSet_342_Zones:
+	ToneSetZone4	0x001d, 0x00, -15						; zone 0
 ; SET 357 key map (descriptor 357: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec357_A:
+ToneSet_357_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 357 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x502f..0x502f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec357_B:
-	ToneEnvZone4	0x502f, 0x00, -16						; zone 0
+ToneSet_357_Zones:
+	ToneSetZone4	0x502f, 0x00, -16						; zone 0
 ; SET 359 key map (descriptor 359: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec359_A:
+ToneSet_359_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 359 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5032..0x5032;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec359_B:
-	ToneEnvZone4	0x5032, 0x00, -7						; zone 0
+ToneSet_359_Zones:
+	ToneSetZone4	0x5032, 0x00, -7						; zone 0
 ; SET 369 key map (descriptor 369: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec369_A:
+ToneSet_369_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 369 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x505e..0x505e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec369_B:
-	ToneEnvZone4	0x505e, 0x00, -2						; zone 0
+ToneSet_369_Zones:
+	ToneSetZone4	0x505e, 0x00, -2						; zone 0
 ; SET 413 key map (descriptor 413: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec413_A:
+ToneSet_413_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 413 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5089..0x5089;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec413_B:
-	ToneEnvZone4	0x5089, 0x00, -6						; zone 0
+ToneSet_413_Zones:
+	ToneSetZone4	0x5089, 0x00, -6						; zone 0
 ; SET 418 key map (descriptor 418: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec418_A:
+ToneSet_418_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 418 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5068..0x5068;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec418_B:
-	ToneEnvZone4	0x5068, 0x00, -59						; zone 0
+ToneSet_418_Zones:
+	ToneSetZone4	0x5068, 0x00, -59						; zone 0
 ; SET 422 key map (descriptor 422: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec422_A:
+ToneSet_422_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 422 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x506c..0x506c;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec422_B:
-	ToneEnvZone4	0x506c, 0x00, -45						; zone 0
+ToneSet_422_Zones:
+	ToneSetZone4	0x506c, 0x00, -45						; zone 0
 ; SET 428 key map (descriptor 428: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec428_A:
+ToneSet_428_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 428 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5083..0x5083;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec428_B:
-	ToneEnvZone4	0x5083, 0x00, -24						; zone 0
+ToneSet_428_Zones:
+	ToneSetZone4	0x5083, 0x00, -24						; zone 0
 ; SET 435 key map (descriptor 435: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec435_A:
+ToneSet_435_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 435 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5074..0x5074;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec435_B:
-	ToneEnvZone4	0x5074, 0x00, -1						; zone 0
+ToneSet_435_Zones:
+	ToneSetZone4	0x5074, 0x00, -1						; zone 0
 ; SET 437 key map (descriptor 437: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec437_A:
+ToneSet_437_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 437 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5076..0x5076;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec437_B:
-	ToneEnvZone4	0x5076, 0x00, -8						; zone 0
+ToneSet_437_Zones:
+	ToneSetZone4	0x5076, 0x00, -8						; zone 0
 ; SET 443 key map (descriptor 443: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec443_A:
+ToneSet_443_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 443 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a1..0x40a1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec443_B:
-	ToneEnvZone4	0x40a1, 0x00, -15						; zone 0
+ToneSet_443_Zones:
+	ToneSetZone4	0x40a1, 0x00, -15						; zone 0
 ; SET 445 key map (descriptor 445: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec445_A:
+ToneSet_445_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 445 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5085..0x5085;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec445_B:
-	ToneEnvZone4	0x5085, 0x00, -19						; zone 0
+ToneSet_445_Zones:
+	ToneSetZone4	0x5085, 0x00, -19						; zone 0
 ; SET 447 key map (descriptor 447: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec447_A:
+ToneSet_447_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 447 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5087..0x5087;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec447_B:
-	ToneEnvZone4	0x5087, 0x00, -16						; zone 0
+ToneSet_447_Zones:
+	ToneSetZone4	0x5087, 0x00, -16						; zone 0
 ; SET 455 key map (descriptor 455: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec455_A:
+ToneSet_455_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 455 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a6..0x40a6;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec455_B:
-	ToneEnvZone4	0x40a6, 0x00, -3						; zone 0
+ToneSet_455_Zones:
+	ToneSetZone4	0x40a6, 0x00, -3						; zone 0
 ; SET 458 key map (descriptor 458: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec458_A:
+ToneSet_458_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 458 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40ae..0x40ae;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec458_B:
-	ToneEnvZone4	0x40ae, 0x00, -17						; zone 0
+ToneSet_458_Zones:
+	ToneSetZone4	0x40ae, 0x00, -17						; zone 0
 ; SET 464 key map (descriptor 464: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec464_A:
+ToneSet_464_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 464 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40a9..0x40a9;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec464_B:
-	ToneEnvZone4	0x40a9, 0x00, -5						; zone 0
+ToneSet_464_Zones:
+	ToneSetZone4	0x40a9, 0x00, -5						; zone 0
 ; SET 471 key map (descriptor 471: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec471_A:
+ToneSet_471_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 471 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40ab..0x40ab;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec471_B:
-	ToneEnvZone4	0x40ab, 0x00, -22						; zone 0
+ToneSet_471_Zones:
+	ToneSetZone4	0x40ab, 0x00, -22						; zone 0
 ; SET 474 key map (descriptor 474: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec474_A:
+ToneSet_474_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 474 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x409d..0x409d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec474_B:
-	ToneEnvZone4	0x409d, 0x00, -50						; zone 0
+ToneSet_474_Zones:
+	ToneSetZone4	0x409d, 0x00, -50						; zone 0
 ; SET 476 key map (descriptor 476: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec476_A:
+ToneSet_476_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 476 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3060..0x3060;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec476_B:
-	ToneEnvZone4	0x3060, 0x00, -4						; zone 0
+ToneSet_476_Zones:
+	ToneSetZone4	0x3060, 0x00, -4						; zone 0
 ; SET 483 key map (descriptor 483: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec483_A:
+ToneSet_483_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 483 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5091..0x5091;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec483_B:
-	ToneEnvZone4	0x5091, 0x00, -26						; zone 0
+ToneSet_483_Zones:
+	ToneSetZone4	0x5091, 0x00, -26						; zone 0
 ; SET 423 key map (descriptor 423: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec423_A:
+ToneSet_423_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 423 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x506d..0x506d;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec423_B:
-	ToneEnvZone4	0x506d, 0x00, -3						; zone 0
+ToneSet_423_Zones:
+	ToneSetZone4	0x506d, 0x00, -3						; zone 0
 ; SET 430 key map (descriptor 430: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec430_A:
+ToneSet_430_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 430 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5072..0x5072;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec430_B:
-	ToneEnvZone4	0x5072, 0x00, -8						; zone 0
+ToneSet_430_Zones:
+	ToneSetZone4	0x5072, 0x00, -8						; zone 0
 ; SET 459 key map (descriptor 459: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec459_A:
+ToneSet_459_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 459 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40af..0x40af;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec459_B:
-	ToneEnvZone4	0x40af, 0x00, -17						; zone 0
+ToneSet_459_Zones:
+	ToneSetZone4	0x40af, 0x00, -17						; zone 0
 ; SET 465 key map (descriptor 465: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec465_A:
+ToneSet_465_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 465 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40aa..0x40aa;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec465_B:
-	ToneEnvZone4	0x40aa, 0x00, -5						; zone 0
+ToneSet_465_Zones:
+	ToneSetZone4	0x40aa, 0x00, -5						; zone 0
 ; SET 472 key map (descriptor 472: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec472_A:
+ToneSet_472_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 472 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40ac..0x40ac;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec472_B:
-	ToneEnvZone4	0x40ac, 0x00, -29						; zone 0
+ToneSet_472_Zones:
+	ToneSetZone4	0x40ac, 0x00, -29						; zone 0
 ; SET 419 key map (descriptor 419: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec419_A:
+ToneSet_419_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 419 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5069..0x5069;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec419_B:
-	ToneEnvZone4	0x5069, 0x00, -3						; zone 0
+ToneSet_419_Zones:
+	ToneSetZone4	0x5069, 0x00, -3						; zone 0
 ; SET 424 key map (descriptor 424: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec424_A:
+ToneSet_424_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 424 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x506e..0x506e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec424_B:
-	ToneEnvZone4	0x506e, 0x00, -8						; zone 0
+ToneSet_424_Zones:
+	ToneSetZone4	0x506e, 0x00, -8						; zone 0
 ; SET 431 key map (descriptor 431: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec431_A:
+ToneSet_431_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 431 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5071..0x5071;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec431_B:
-	ToneEnvZone4	0x5071, 0x00, -11						; zone 0
+ToneSet_431_Zones:
+	ToneSetZone4	0x5071, 0x00, -11						; zone 0
 ; SET 460 key map (descriptor 460: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec460_A:
+ToneSet_460_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 460 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40b0..0x40b0;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec460_B:
-	ToneEnvZone4	0x40b0, 0x00, -17						; zone 0
+ToneSet_460_Zones:
+	ToneSetZone4	0x40b0, 0x00, -17						; zone 0
 ; SET 380 key map (descriptor 380: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec380_A:
+ToneSet_380_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 380 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5041..0x5041;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec380_B:
-	ToneEnvZone4	0x5041, 0x00, -4						; zone 0
+ToneSet_380_Zones:
+	ToneSetZone4	0x5041, 0x00, -4						; zone 0
 ; SET 382 key map (descriptor 382: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec382_A:
+ToneSet_382_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 382 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5043..0x5043;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec382_B:
-	ToneEnvZone4	0x5043, 0x00, -1						; zone 0
+ToneSet_382_Zones:
+	ToneSetZone4	0x5043, 0x00, -1						; zone 0
 ; SET 393 key map (descriptor 393: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec393_A:
+ToneSet_393_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 393 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5060..0x5060;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec393_B:
-	ToneEnvZone4	0x5060, 0x00, 0							; zone 0
+ToneSet_393_Zones:
+	ToneSetZone4	0x5060, 0x00, 0							; zone 0
 ; SET 400 key map (descriptor 400: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec400_A:
+ToneSet_400_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 400 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5057..0x5057;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec400_B:
-	ToneEnvZone4	0x5057, 0x00, -4						; zone 0
+ToneSet_400_Zones:
+	ToneSetZone4	0x5057, 0x00, -4						; zone 0
 ; SET 416 key map (descriptor 416: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec416_A:
+ToneSet_416_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 416 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x20b8..0x20b8;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec416_B:
-	ToneEnvZone4	0x20b8, 0x00, -3						; zone 0
+ToneSet_416_Zones:
+	ToneSetZone4	0x20b8, 0x00, -3						; zone 0
 ; SET 420 key map (descriptor 420: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec420_A:
+ToneSet_420_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 420 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x506a..0x506a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec420_B:
-	ToneEnvZone4	0x506a, 0x00, -8						; zone 0
+ToneSet_420_Zones:
+	ToneSetZone4	0x506a, 0x00, -8						; zone 0
 ; SET 425 key map (descriptor 425: flags 0x08, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec425_A:
+ToneSet_425_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 425 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x506e..0x506e;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec425_B:
-	ToneEnvZone4	0x506e, 0x00, -8						; zone 0
+ToneSet_425_Zones:
+	ToneSetZone4	0x506e, 0x00, -8						; zone 0
 ; SET 461 key map (descriptor 461: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec461_A:
+ToneSet_461_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 461 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x40b1..0x40b1;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec461_B:
-	ToneEnvZone4	0x40b1, 0x00, -23						; zone 0
+ToneSet_461_Zones:
+	ToneSetZone4	0x40b1, 0x00, -23						; zone 0
 ; SET 477 key map (descriptor 477: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec477_A:
+ToneSet_477_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 477 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x10b0..0x10b0;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec477_B:
-	ToneEnvZone4	0x10b0, 0x00, -5						; zone 0
+ToneSet_477_Zones:
+	ToneSetZone4	0x10b0, 0x00, -5						; zone 0
 ; SET 426 key map (descriptor 426: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec426_A:
+ToneSet_426_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 426 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x506f..0x506f;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec426_B:
-	ToneEnvZone4	0x506f, 0x00, -5						; zone 0
+ToneSet_426_Zones:
+	ToneSetZone4	0x506f, 0x00, -5						; zone 0
 ; SET 478 key map (descriptor 478: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec478_A:
+ToneSet_478_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 478 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x3086..0x3086;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec478_B:
-	ToneEnvZone4	0x3086, 0x00, -10						; zone 0
+ToneSet_478_Zones:
+	ToneSetZone4	0x3086, 0x00, -10						; zone 0
 ; SET 391 key map (descriptor 391: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec391_A:
+ToneSet_391_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 391 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x504a..0x504a;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec391_B:
-	ToneEnvZone4	0x504a, 0x00, -14						; zone 0
+ToneSet_391_Zones:
+	ToneSetZone4	0x504a, 0x00, -14						; zone 0
 ; SET 432 key map (descriptor 432: flags 0x00, keys 12..120): key->band table ToneDB_VelocityCurve_0,
 ; 11 bands -> zone index 0..0 of 1.  Walked by WaveSel_StageB_Build_Reg040 (0x023849); layout above.
-ToneEnv_Rec432_A:
+ToneSet_432_KeyMap:
 	.long	ToneDB_VelocityCurve_0 - ToneDB_Base					; +0x00 key -> band table
 	.byte	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0			; +0x04 bands 0-10 -> zone
 ; SET 432 zone records: 1 x 4 bytes (descriptor flags bit 7 clear), selectors 0x5070..0x5070;
 ; emitted by WaveSel_Emit_ZoneRecord_S4 (0x022AE7) -- fields in the chunk header above.
-ToneEnv_Rec432_B:
-	ToneEnvZone4	0x5070, 0x00, 0							; zone 0
+ToneSet_432_Zones:
+	ToneSetZone4	0x5070, 0x00, 0							; zone 0
 
 ; -----------------------------------------------------------------------------
 ; 26 drum-kit records x 295 bytes: 16-char display name + 279 parameter bytes.
@@ -14878,7 +14882,7 @@ DrawbarPreset_EnvDescTable:
 ; Drawbar envelope data blobs (6-byte segment lists, same 70 60 00 xx xx xx
 ; format family as the ToneEnv chunks).
 ; CORRECTED 2026-09-25: not segment lists -- ZONE RECORDS, stride 6, the same
-; record as a ToneEnv B chunk's (typed rows: ToneEnvZone6).  Their reader is
+; record as a ToneEnv B chunk's (typed rows: ToneSetZone6).  Their reader is
 ; WaveSel_StageB_Build_Reg040_Footage (subcpu 0x0238F8): for voice states 0-2
 ; the row is Voice_KeyIndex_Pack3Nibbles (0x02B2C2) = d2*81 + d1*9 + d0, three
 ; base-9 digits (9*9*9 = 729 = the record count of EnvData_0 and _1), times 6;
@@ -14889,1474 +14893,1474 @@ DrawbarPreset_EnvDescTable:
 ; Drawbar SET zone records for DrawbarPreset_EnvDescTable record(s) 0: 729 x 6 = 9*9*9,
 ; row = d2*81 + d1*9 + d0 (Voice_KeyIndex_Pack3Nibbles 0x02B2C2, three base-9 digits).
 DrawbarPreset_EnvData_0:
-	ToneEnvZone6	0x6070, 0x00, -128, 0						; digits 000, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -90, 0						; digits 001, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -74, 0						; digits 002, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -62, 0						; digits 003, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -54, 0						; digits 004, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -46, 0						; digits 005, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -38, 0						; digits 006, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -30, 0						; digits 007, coarse +0.00 st
-	ToneEnvZone6	0x6070, 0x00, -22, 0						; digits 008, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -95, 0						; digits 010, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -79, 0						; digits 011, coarse +0.00 st
-	ToneEnvZone6	0x6071, 0x00, -69, 0						; digits 012, coarse +0.00 st
-	ToneEnvZone6	0x6072, 0x00, -59, 0						; digits 013, coarse +0.00 st
-	ToneEnvZone6	0x6073, 0x00, -52, 0						; digits 014, coarse +0.00 st
-	ToneEnvZone6	0x6074, 0x00, -45, 0						; digits 015, coarse +0.00 st
-	ToneEnvZone6	0x6075, 0x00, -37, 0						; digits 016, coarse +0.00 st
-	ToneEnvZone6	0x6076, 0x00, -30, 0						; digits 017, coarse +0.00 st
-	ToneEnvZone6	0x6077, 0x00, -22, 0						; digits 018, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -79, 0						; digits 020, coarse +0.00 st
-	ToneEnvZone6	0x6078, 0x00, -70, 0						; digits 021, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -63, 0						; digits 022, coarse +0.00 st
-	ToneEnvZone6	0x6079, 0x00, -56, 0						; digits 023, coarse +0.00 st
-	ToneEnvZone6	0x607a, 0x00, -50, 0						; digits 024, coarse +0.00 st
-	ToneEnvZone6	0x607b, 0x00, -43, 0						; digits 025, coarse +0.00 st
-	ToneEnvZone6	0x607c, 0x00, -36, 0						; digits 026, coarse +0.00 st
-	ToneEnvZone6	0x607d, 0x00, -29, 0						; digits 027, coarse +0.00 st
-	ToneEnvZone6	0x607e, 0x00, -21, 0						; digits 028, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -67, 0						; digits 030, coarse +0.00 st
-	ToneEnvZone6	0x607f, 0x00, -61, 0						; digits 031, coarse +0.00 st
-	ToneEnvZone6	0x6080, 0x00, -56, 0						; digits 032, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -51, 0						; digits 033, coarse +0.00 st
-	ToneEnvZone6	0x608d, 0x00, -46, 0						; digits 034, coarse +0.00 st
-	ToneEnvZone6	0x608a, 0x00, -41, 0						; digits 035, coarse +0.00 st
-	ToneEnvZone6	0x6087, 0x00, -35, 0						; digits 036, coarse +0.00 st
-	ToneEnvZone6	0x6084, 0x00, -28, 0						; digits 037, coarse +0.00 st
-	ToneEnvZone6	0x6081, 0x00, -21, 0						; digits 038, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -59, 0						; digits 040, coarse +0.00 st
-	ToneEnvZone6	0x6082, 0x00, -55, 0						; digits 041, coarse +0.00 st
-	ToneEnvZone6	0x6083, 0x00, -51, 0						; digits 042, coarse +0.00 st
-	ToneEnvZone6	0x6095, 0x00, -47, 0						; digits 043, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -43, 0						; digits 044, coarse +0.00 st
-	ToneEnvZone6	0x608d, 0x00, -38, 0						; digits 045, coarse +0.00 st
-	ToneEnvZone6	0x608a, 0x00, -33, 0						; digits 046, coarse +0.00 st
-	ToneEnvZone6	0x6087, 0x00, -27, 0						; digits 047, coarse +0.00 st
-	ToneEnvZone6	0x6084, 0x00, -20, 0						; digits 048, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -51, 0						; digits 050, coarse +0.00 st
-	ToneEnvZone6	0x6085, 0x00, -48, 0						; digits 051, coarse +0.00 st
-	ToneEnvZone6	0x6086, 0x00, -45, 0						; digits 052, coarse +0.00 st
-	ToneEnvZone6	0x6094, 0x00, -42, 0						; digits 053, coarse +0.00 st
-	ToneEnvZone6	0x6095, 0x00, -39, 0						; digits 054, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -35, 0						; digits 055, coarse +0.00 st
-	ToneEnvZone6	0x608d, 0x00, -30, 0						; digits 056, coarse +0.00 st
-	ToneEnvZone6	0x608a, 0x00, -25, 0						; digits 057, coarse +0.00 st
-	ToneEnvZone6	0x6087, 0x00, -19, 0						; digits 058, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -43, 0						; digits 060, coarse +0.00 st
-	ToneEnvZone6	0x6088, 0x00, -41, 0						; digits 061, coarse +0.00 st
-	ToneEnvZone6	0x6089, 0x00, -39, 0						; digits 062, coarse +0.00 st
-	ToneEnvZone6	0x6093, 0x00, -36, 0						; digits 063, coarse +0.00 st
-	ToneEnvZone6	0x6094, 0x00, -34, 0						; digits 064, coarse +0.00 st
-	ToneEnvZone6	0x6095, 0x00, -31, 0						; digits 065, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -27, 0						; digits 066, coarse +0.00 st
-	ToneEnvZone6	0x608d, 0x00, -22, 0						; digits 067, coarse +0.00 st
-	ToneEnvZone6	0x608a, 0x00, -17, 0						; digits 068, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -35, 0						; digits 070, coarse +0.00 st
-	ToneEnvZone6	0x608b, 0x00, -34, 0						; digits 071, coarse +0.00 st
-	ToneEnvZone6	0x608c, 0x00, -32, 0						; digits 072, coarse +0.00 st
-	ToneEnvZone6	0x6092, 0x00, -30, 0						; digits 073, coarse +0.00 st
-	ToneEnvZone6	0x6093, 0x00, -28, 0						; digits 074, coarse +0.00 st
-	ToneEnvZone6	0x6094, 0x00, -26, 0						; digits 075, coarse +0.00 st
-	ToneEnvZone6	0x6095, 0x00, -23, 0						; digits 076, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -19, 0						; digits 077, coarse +0.00 st
-	ToneEnvZone6	0x608d, 0x00, -14, 0						; digits 078, coarse +0.00 st
-	ToneEnvZone6	0x608e, 0x00, -27, 0						; digits 080, coarse +0.00 st
-	ToneEnvZone6	0x608f, 0x00, -26, 0						; digits 081, coarse +0.00 st
-	ToneEnvZone6	0x6090, 0x00, -25, 0						; digits 082, coarse +0.00 st
-	ToneEnvZone6	0x6091, 0x00, -24, 0						; digits 083, coarse +0.00 st
-	ToneEnvZone6	0x6092, 0x00, -22, 0						; digits 084, coarse +0.00 st
-	ToneEnvZone6	0x6093, 0x00, -20, 0						; digits 085, coarse +0.00 st
-	ToneEnvZone6	0x6094, 0x00, -18, 0						; digits 086, coarse +0.00 st
-	ToneEnvZone6	0x6095, 0x00, -15, 0						; digits 087, coarse +0.00 st
-	ToneEnvZone6	0x6096, 0x00, -11, 0						; digits 088, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -90, 0						; digits 100, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -74, 0						; digits 101, coarse +0.00 st
-	ToneEnvZone6	0x6097, 0x00, -65, 0						; digits 102, coarse +0.00 st
-	ToneEnvZone6	0x6098, 0x00, -56, 0						; digits 103, coarse +0.00 st
-	ToneEnvZone6	0x6099, 0x00, -50, 0						; digits 104, coarse +0.00 st
-	ToneEnvZone6	0x609a, 0x00, -43, 0						; digits 105, coarse +0.00 st
-	ToneEnvZone6	0x609b, 0x00, -36, 0						; digits 106, coarse +0.00 st
-	ToneEnvZone6	0x609c, 0x00, -28, 0						; digits 107, coarse +0.00 st
-	ToneEnvZone6	0x609d, 0x00, -21, 0						; digits 108, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -76, 0						; digits 110, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, -68, 0						; digits 111, coarse +0.00 st
-	ToneEnvZone6	0x609e, 0x00, -62, 0						; digits 112, coarse +0.00 st
-	ToneEnvZone6	0x609f, 0x00, -55, 0						; digits 113, coarse +0.00 st
-	ToneEnvZone6	0x60a0, 0x00, -49, 0						; digits 114, coarse +0.00 st
-	ToneEnvZone6	0x60a1, 0x00, -42, 0						; digits 115, coarse +0.00 st
-	ToneEnvZone6	0x60a2, 0x00, -35, 0						; digits 116, coarse +0.00 st
-	ToneEnvZone6	0x60a3, 0x00, -28, 0						; digits 117, coarse +0.00 st
-	ToneEnvZone6	0x60a4, 0x00, -21, 0						; digits 118, coarse +0.00 st
-	ToneEnvZone6	0x60a5, 0x00, -68, 0						; digits 120, coarse +0.00 st
-	ToneEnvZone6	0x60a6, 0x00, -62, 0						; digits 121, coarse +0.00 st
-	ToneEnvZone6	0x60a7, 0x00, -57, 0						; digits 122, coarse +0.00 st
-	ToneEnvZone6	0x60a8, 0x00, -52, 0						; digits 123, coarse +0.00 st
-	ToneEnvZone6	0x60a9, 0x00, -47, 0						; digits 124, coarse +0.00 st
-	ToneEnvZone6	0x60aa, 0x00, -41, 0						; digits 125, coarse +0.00 st
-	ToneEnvZone6	0x60ab, 0x00, -35, 0						; digits 126, coarse +0.00 st
-	ToneEnvZone6	0x60ac, 0x00, -28, 0						; digits 127, coarse +0.00 st
-	ToneEnvZone6	0x60ad, 0x00, -20, 0						; digits 128, coarse +0.00 st
-	ToneEnvZone6	0x60ae, 0x00, -60, 0						; digits 130, coarse +0.00 st
-	ToneEnvZone6	0x60af, 0x00, -55, 0						; digits 131, coarse +0.00 st
-	ToneEnvZone6	0x60b0, 0x00, -52, 0						; digits 132, coarse +0.00 st
-	ToneEnvZone6	0x60b1, 0x00, -47, 0						; digits 133, coarse +0.00 st
-	ToneEnvZone6	0x60b2, 0x00, -44, 0						; digits 134, coarse +0.00 st
-	ToneEnvZone6	0x60b3, 0x00, -39, 0						; digits 135, coarse +0.00 st
-	ToneEnvZone6	0x60b4, 0x00, -34, 0						; digits 136, coarse +0.00 st
-	ToneEnvZone6	0x60b5, 0x00, -27, 0						; digits 137, coarse +0.00 st
-	ToneEnvZone6	0x60b6, 0x00, -20, 0						; digits 138, coarse +0.00 st
-	ToneEnvZone6	0x60b7, 0x00, -54, 0						; digits 140, coarse +0.00 st
-	ToneEnvZone6	0x60b8, 0x00, -50, 0						; digits 141, coarse +0.00 st
-	ToneEnvZone6	0x60b9, 0x00, -47, 0						; digits 142, coarse +0.00 st
-	ToneEnvZone6	0x60ba, 0x00, -44, 0						; digits 143, coarse +0.00 st
-	ToneEnvZone6	0x60bb, 0x00, -40, 0						; digits 144, coarse +0.00 st
-	ToneEnvZone6	0x60bc, 0x00, -36, 0						; digits 145, coarse +0.00 st
-	ToneEnvZone6	0x60bd, 0x00, -32, 0						; digits 146, coarse +0.00 st
-	ToneEnvZone6	0x60be, 0x00, -26, 0						; digits 147, coarse +0.00 st
-	ToneEnvZone6	0x60bf, 0x00, -19, 0						; digits 148, coarse +0.00 st
-	ToneEnvZone6	0x60c0, 0x00, -47, 0						; digits 150, coarse +0.00 st
-	ToneEnvZone6	0x60c1, 0x00, -45, 0						; digits 151, coarse +0.00 st
-	ToneEnvZone6	0x60c2, 0x00, -42, 0						; digits 152, coarse +0.00 st
-	ToneEnvZone6	0x60c3, 0x00, -39, 0						; digits 153, coarse +0.00 st
-	ToneEnvZone6	0x60c4, 0x00, -37, 0						; digits 154, coarse +0.00 st
-	ToneEnvZone6	0x60c5, 0x00, -33, 0						; digits 155, coarse +0.00 st
-	ToneEnvZone6	0x60c6, 0x00, -29, 0						; digits 156, coarse +0.00 st
-	ToneEnvZone6	0x60c7, 0x00, -24, 0						; digits 157, coarse +0.00 st
-	ToneEnvZone6	0x60c8, 0x00, -19, 0						; digits 158, coarse +0.00 st
-	ToneEnvZone6	0x60c9, 0x00, -40, 0						; digits 160, coarse +0.00 st
-	ToneEnvZone6	0x60ca, 0x00, -38, 0						; digits 161, coarse +0.00 st
-	ToneEnvZone6	0x60cb, 0x00, -36, 0						; digits 162, coarse +0.00 st
-	ToneEnvZone6	0x60cc, 0x00, -34, 0						; digits 163, coarse +0.00 st
-	ToneEnvZone6	0x60cd, 0x00, -32, 0						; digits 164, coarse +0.00 st
-	ToneEnvZone6	0x60ce, 0x00, -29, 0						; digits 165, coarse +0.00 st
-	ToneEnvZone6	0x60cf, 0x00, -26, 0						; digits 166, coarse +0.00 st
-	ToneEnvZone6	0x60d0, 0x00, -22, 0						; digits 167, coarse +0.00 st
-	ToneEnvZone6	0x60d1, 0x00, -17, 0						; digits 168, coarse +0.00 st
-	ToneEnvZone6	0x60d2, 0x00, -33, 0						; digits 170, coarse +0.00 st
-	ToneEnvZone6	0x60d3, 0x00, -32, 0						; digits 171, coarse +0.00 st
-	ToneEnvZone6	0x60d4, 0x00, -30, 0						; digits 172, coarse +0.00 st
-	ToneEnvZone6	0x60d5, 0x00, -28, 0						; digits 173, coarse +0.00 st
-	ToneEnvZone6	0x60d6, 0x00, -27, 0						; digits 174, coarse +0.00 st
-	ToneEnvZone6	0x60d7, 0x00, -25, 0						; digits 175, coarse +0.00 st
-	ToneEnvZone6	0x60d8, 0x00, -22, 0						; digits 176, coarse +0.00 st
-	ToneEnvZone6	0x60d9, 0x00, -18, 0						; digits 177, coarse +0.00 st
-	ToneEnvZone6	0x60da, 0x00, -14, 0						; digits 178, coarse +0.00 st
-	ToneEnvZone6	0x60db, 0x00, -26, 0						; digits 180, coarse +0.00 st
-	ToneEnvZone6	0x60dc, 0x00, -25, 0						; digits 181, coarse +0.00 st
-	ToneEnvZone6	0x60dd, 0x00, -24, 0						; digits 182, coarse +0.00 st
-	ToneEnvZone6	0x60de, 0x00, -22, 0						; digits 183, coarse +0.00 st
-	ToneEnvZone6	0x60df, 0x00, -21, 0						; digits 184, coarse +0.00 st
-	ToneEnvZone6	0x60e0, 0x00, -19, 0						; digits 185, coarse +0.00 st
-	ToneEnvZone6	0x60e1, 0x00, -17, 0						; digits 186, coarse +0.00 st
-	ToneEnvZone6	0x60e2, 0x00, -14, 0						; digits 187, coarse +0.00 st
-	ToneEnvZone6	0x60e3, 0x00, -10, 0						; digits 188, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -74, 0						; digits 200, coarse +0.00 st
-	ToneEnvZone6	0x60e4, 0x00, -65, 0						; digits 201, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -58, 0						; digits 202, coarse +0.00 st
-	ToneEnvZone6	0x60e5, 0x00, -51, 0						; digits 203, coarse +0.00 st
-	ToneEnvZone6	0x60e6, 0x00, -46, 0						; digits 204, coarse +0.00 st
-	ToneEnvZone6	0x60e7, 0x00, -40, 0						; digits 205, coarse +0.00 st
-	ToneEnvZone6	0x60e8, 0x00, -34, 0						; digits 206, coarse +0.00 st
-	ToneEnvZone6	0x60e9, 0x00, -27, 0						; digits 207, coarse +0.00 st
-	ToneEnvZone6	0x60ea, 0x00, -20, 0						; digits 208, coarse +0.00 st
-	ToneEnvZone6	0x60eb, 0x00, -66, 0						; digits 210, coarse +0.00 st
-	ToneEnvZone6	0x60ec, 0x00, -60, 0						; digits 211, coarse +0.00 st
-	ToneEnvZone6	0x60ed, 0x00, -56, 0						; digits 212, coarse +0.00 st
-	ToneEnvZone6	0x60ee, 0x00, -50, 0						; digits 213, coarse +0.00 st
-	ToneEnvZone6	0x60ef, 0x00, -45, 0						; digits 214, coarse +0.00 st
-	ToneEnvZone6	0x60f0, 0x00, -39, 0						; digits 215, coarse +0.00 st
-	ToneEnvZone6	0x60f1, 0x00, -33, 0						; digits 216, coarse +0.00 st
-	ToneEnvZone6	0x60f2, 0x00, -27, 0						; digits 217, coarse +0.00 st
-	ToneEnvZone6	0x60f3, 0x00, -20, 0						; digits 218, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -60, 0						; digits 220, coarse +0.00 st
-	ToneEnvZone6	0x60f4, 0x00, -56, 0						; digits 221, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, -52, 0						; digits 222, coarse +0.00 st
-	ToneEnvZone6	0x60f5, 0x00, -48, 0						; digits 223, coarse +0.00 st
-	ToneEnvZone6	0x60f6, 0x00, -44, 0						; digits 224, coarse +0.00 st
-	ToneEnvZone6	0x60f7, 0x00, -39, 0						; digits 225, coarse +0.00 st
-	ToneEnvZone6	0x60f8, 0x00, -33, 0						; digits 226, coarse +0.00 st
-	ToneEnvZone6	0x60f9, 0x00, -26, 0						; digits 227, coarse +0.00 st
-	ToneEnvZone6	0x60fa, 0x00, -19, 0						; digits 228, coarse +0.00 st
-	ToneEnvZone6	0x60fb, 0x00, -54, 0						; digits 230, coarse +0.00 st
-	ToneEnvZone6	0x60fc, 0x00, -51, 0						; digits 231, coarse +0.00 st
-	ToneEnvZone6	0x60fd, 0x00, -48, 0						; digits 232, coarse +0.00 st
-	ToneEnvZone6	0x60fe, 0x00, -44, 0						; digits 233, coarse +0.00 st
-	ToneEnvZone6	0x60ff, 0x00, -41, 0						; digits 234, coarse +0.00 st
-	ToneEnvZone6	0x6100, 0x00, -37, 0						; digits 235, coarse +0.00 st
-	ToneEnvZone6	0x6101, 0x00, -32, 0						; digits 236, coarse +0.00 st
-	ToneEnvZone6	0x6102, 0x00, -26, 0						; digits 237, coarse +0.00 st
-	ToneEnvZone6	0x6103, 0x00, -19, 0						; digits 238, coarse +0.00 st
-	ToneEnvZone6	0x6104, 0x00, -49, 0						; digits 240, coarse +0.00 st
-	ToneEnvZone6	0x6105, 0x00, -46, 0						; digits 241, coarse +0.00 st
-	ToneEnvZone6	0x6106, 0x00, -44, 0						; digits 242, coarse +0.00 st
-	ToneEnvZone6	0x6107, 0x00, -41, 0						; digits 243, coarse +0.00 st
-	ToneEnvZone6	0x6108, 0x00, -38, 0						; digits 244, coarse +0.00 st
-	ToneEnvZone6	0x6109, 0x00, -34, 0						; digits 245, coarse +0.00 st
-	ToneEnvZone6	0x610a, 0x00, -30, 0						; digits 246, coarse +0.00 st
-	ToneEnvZone6	0x610b, 0x00, -25, 0						; digits 247, coarse +0.00 st
-	ToneEnvZone6	0x610c, 0x00, -19, 0						; digits 248, coarse +0.00 st
-	ToneEnvZone6	0x610d, 0x00, -44, 0						; digits 250, coarse +0.00 st
-	ToneEnvZone6	0x610e, 0x00, -42, 0						; digits 251, coarse +0.00 st
-	ToneEnvZone6	0x610f, 0x00, -39, 0						; digits 252, coarse +0.00 st
-	ToneEnvZone6	0x6110, 0x00, -37, 0						; digits 253, coarse +0.00 st
-	ToneEnvZone6	0x6111, 0x00, -34, 0						; digits 254, coarse +0.00 st
-	ToneEnvZone6	0x6112, 0x00, -31, 0						; digits 255, coarse +0.00 st
-	ToneEnvZone6	0x6113, 0x00, -28, 0						; digits 256, coarse +0.00 st
-	ToneEnvZone6	0x6114, 0x00, -23, 0						; digits 257, coarse +0.00 st
-	ToneEnvZone6	0x6115, 0x00, -18, 0						; digits 258, coarse +0.00 st
-	ToneEnvZone6	0x6116, 0x00, -38, 0						; digits 260, coarse +0.00 st
-	ToneEnvZone6	0x6117, 0x00, -36, 0						; digits 261, coarse +0.00 st
-	ToneEnvZone6	0x6118, 0x00, -34, 0						; digits 262, coarse +0.00 st
-	ToneEnvZone6	0x6119, 0x00, -32, 0						; digits 263, coarse +0.00 st
-	ToneEnvZone6	0x611a, 0x00, -30, 0						; digits 264, coarse +0.00 st
-	ToneEnvZone6	0x611b, 0x00, -28, 0						; digits 265, coarse +0.00 st
-	ToneEnvZone6	0x611c, 0x00, -24, 0						; digits 266, coarse +0.00 st
-	ToneEnvZone6	0x611d, 0x00, -20, 0						; digits 267, coarse +0.00 st
-	ToneEnvZone6	0x611e, 0x00, -16, 0						; digits 268, coarse +0.00 st
-	ToneEnvZone6	0x611f, 0x00, -31, 0						; digits 270, coarse +0.00 st
-	ToneEnvZone6	0x6120, 0x00, -30, 0						; digits 271, coarse +0.00 st
-	ToneEnvZone6	0x6121, 0x00, -29, 0						; digits 272, coarse +0.00 st
-	ToneEnvZone6	0x6122, 0x00, -27, 0						; digits 273, coarse +0.00 st
-	ToneEnvZone6	0x6123, 0x00, -25, 0						; digits 274, coarse +0.00 st
-	ToneEnvZone6	0x6124, 0x00, -23, 0						; digits 275, coarse +0.00 st
-	ToneEnvZone6	0x6125, 0x00, -21, 0						; digits 276, coarse +0.00 st
-	ToneEnvZone6	0x6126, 0x00, -17, 0						; digits 277, coarse +0.00 st
-	ToneEnvZone6	0x6127, 0x00, -13, 0						; digits 278, coarse +0.00 st
-	ToneEnvZone6	0x6128, 0x00, -24, 0						; digits 280, coarse +0.00 st
-	ToneEnvZone6	0x6129, 0x00, -23, 0						; digits 281, coarse +0.00 st
-	ToneEnvZone6	0x612a, 0x00, -22, 0						; digits 282, coarse +0.00 st
-	ToneEnvZone6	0x612b, 0x00, -21, 0						; digits 283, coarse +0.00 st
-	ToneEnvZone6	0x612c, 0x00, -20, 0						; digits 284, coarse +0.00 st
-	ToneEnvZone6	0x612d, 0x00, -18, 0						; digits 285, coarse +0.00 st
-	ToneEnvZone6	0x612e, 0x00, -16, 0						; digits 286, coarse +0.00 st
-	ToneEnvZone6	0x612f, 0x00, -13, 0						; digits 287, coarse +0.00 st
-	ToneEnvZone6	0x6130, 0x00, -10, 0						; digits 288, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -62, 0						; digits 300, coarse +0.00 st
-	ToneEnvZone6	0x6131, 0x00, -56, 0						; digits 301, coarse +0.00 st
-	ToneEnvZone6	0x6132, 0x00, -51, 0						; digits 302, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -46, 0						; digits 303, coarse +0.00 st
-	ToneEnvZone6	0x61e7, 0x00, -42, 0						; digits 304, coarse +0.00 st
-	ToneEnvZone6	0x61ba, 0x00, -37, 0						; digits 305, coarse +0.00 st
-	ToneEnvZone6	0x618d, 0x00, -31, 0						; digits 306, coarse +0.00 st
-	ToneEnvZone6	0x6160, 0x00, -25, 0						; digits 307, coarse +0.00 st
-	ToneEnvZone6	0x6133, 0x00, -18, 0						; digits 308, coarse +0.00 st
-	ToneEnvZone6	0x6134, 0x00, -57, 0						; digits 310, coarse +0.00 st
-	ToneEnvZone6	0x6135, 0x00, -53, 0						; digits 311, coarse +0.00 st
-	ToneEnvZone6	0x6136, 0x00, -50, 0						; digits 312, coarse +0.00 st
-	ToneEnvZone6	0x6137, 0x00, -45, 0						; digits 313, coarse +0.00 st
-	ToneEnvZone6	0x6138, 0x00, -41, 0						; digits 314, coarse +0.00 st
-	ToneEnvZone6	0x6139, 0x00, -36, 0						; digits 315, coarse +0.00 st
-	ToneEnvZone6	0x613a, 0x00, -31, 0						; digits 316, coarse +0.00 st
-	ToneEnvZone6	0x613b, 0x00, -25, 0						; digits 317, coarse +0.00 st
-	ToneEnvZone6	0x613c, 0x00, -18, 0						; digits 318, coarse +0.00 st
-	ToneEnvZone6	0x613d, 0x00, -53, 0						; digits 320, coarse +0.00 st
-	ToneEnvZone6	0x613e, 0x00, -50, 0						; digits 321, coarse +0.00 st
-	ToneEnvZone6	0x613f, 0x00, -47, 0						; digits 322, coarse +0.00 st
-	ToneEnvZone6	0x6140, 0x00, -43, 0						; digits 323, coarse +0.00 st
-	ToneEnvZone6	0x6141, 0x00, -40, 0						; digits 324, coarse +0.00 st
-	ToneEnvZone6	0x6142, 0x00, -36, 0						; digits 325, coarse +0.00 st
-	ToneEnvZone6	0x6143, 0x00, -30, 0						; digits 326, coarse +0.00 st
-	ToneEnvZone6	0x6144, 0x00, -24, 0						; digits 327, coarse +0.00 st
-	ToneEnvZone6	0x6145, 0x00, -18, 0						; digits 328, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -48, 0						; digits 330, coarse +0.00 st
-	ToneEnvZone6	0x6146, 0x00, -46, 0						; digits 331, coarse +0.00 st
-	ToneEnvZone6	0x6147, 0x00, -43, 0						; digits 332, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, -40, 0						; digits 333, coarse +0.00 st
-	ToneEnvZone6	0x6208, 0x00, -37, 0						; digits 334, coarse +0.00 st
-	ToneEnvZone6	0x61d8, 0x00, -34, 0						; digits 335, coarse +0.00 st
-	ToneEnvZone6	0x61a8, 0x00, -30, 0						; digits 336, coarse +0.00 st
-	ToneEnvZone6	0x6178, 0x00, -24, 0						; digits 337, coarse +0.00 st
-	ToneEnvZone6	0x6148, 0x00, -18, 0						; digits 338, coarse +0.00 st
-	ToneEnvZone6	0x6209, 0x00, -45, 0						; digits 340, coarse +0.00 st
-	ToneEnvZone6	0x6149, 0x00, -42, 0						; digits 341, coarse +0.00 st
-	ToneEnvZone6	0x614a, 0x00, -40, 0						; digits 342, coarse +0.00 st
-	ToneEnvZone6	0x6210, 0x00, -37, 0						; digits 343, coarse +0.00 st
-	ToneEnvZone6	0x6211, 0x00, -35, 0						; digits 344, coarse +0.00 st
-	ToneEnvZone6	0x61db, 0x00, -32, 0						; digits 345, coarse +0.00 st
-	ToneEnvZone6	0x61ab, 0x00, -28, 0						; digits 346, coarse +0.00 st
-	ToneEnvZone6	0x617b, 0x00, -23, 0						; digits 347, coarse +0.00 st
-	ToneEnvZone6	0x614b, 0x00, -17, 0						; digits 348, coarse +0.00 st
-	ToneEnvZone6	0x61dc, 0x00, -40, 0						; digits 350, coarse +0.00 st
-	ToneEnvZone6	0x614c, 0x00, -38, 0						; digits 351, coarse +0.00 st
-	ToneEnvZone6	0x614d, 0x00, -36, 0						; digits 352, coarse +0.00 st
-	ToneEnvZone6	0x61e2, 0x00, -34, 0						; digits 353, coarse +0.00 st
-	ToneEnvZone6	0x61e3, 0x00, -32, 0						; digits 354, coarse +0.00 st
-	ToneEnvZone6	0x61e4, 0x00, -29, 0						; digits 355, coarse +0.00 st
-	ToneEnvZone6	0x61ae, 0x00, -26, 0						; digits 356, coarse +0.00 st
-	ToneEnvZone6	0x617e, 0x00, -22, 0						; digits 357, coarse +0.00 st
-	ToneEnvZone6	0x614e, 0x00, -17, 0						; digits 358, coarse +0.00 st
-	ToneEnvZone6	0x61af, 0x00, -35, 0						; digits 360, coarse +0.00 st
-	ToneEnvZone6	0x614f, 0x00, -33, 0						; digits 361, coarse +0.00 st
-	ToneEnvZone6	0x6150, 0x00, -32, 0						; digits 362, coarse +0.00 st
-	ToneEnvZone6	0x61b4, 0x00, -30, 0						; digits 363, coarse +0.00 st
-	ToneEnvZone6	0x61b5, 0x00, -28, 0						; digits 364, coarse +0.00 st
-	ToneEnvZone6	0x61b6, 0x00, -26, 0						; digits 365, coarse +0.00 st
-	ToneEnvZone6	0x61b7, 0x00, -23, 0						; digits 366, coarse +0.00 st
-	ToneEnvZone6	0x6181, 0x00, -19, 0						; digits 367, coarse +0.00 st
-	ToneEnvZone6	0x6151, 0x00, -15, 0						; digits 368, coarse +0.00 st
-	ToneEnvZone6	0x6182, 0x00, -29, 0						; digits 370, coarse +0.00 st
-	ToneEnvZone6	0x6152, 0x00, -28, 0						; digits 371, coarse +0.00 st
-	ToneEnvZone6	0x6153, 0x00, -26, 0						; digits 372, coarse +0.00 st
-	ToneEnvZone6	0x6186, 0x00, -25, 0						; digits 373, coarse +0.00 st
-	ToneEnvZone6	0x6187, 0x00, -23, 0						; digits 374, coarse +0.00 st
-	ToneEnvZone6	0x6188, 0x00, -22, 0						; digits 375, coarse +0.00 st
-	ToneEnvZone6	0x6189, 0x00, -19, 0						; digits 376, coarse +0.00 st
-	ToneEnvZone6	0x618a, 0x00, -16, 0						; digits 377, coarse +0.00 st
-	ToneEnvZone6	0x6154, 0x00, -12, 0						; digits 378, coarse +0.00 st
-	ToneEnvZone6	0x6155, 0x00, -23, 0						; digits 380, coarse +0.00 st
-	ToneEnvZone6	0x6156, 0x00, -22, 0						; digits 381, coarse +0.00 st
-	ToneEnvZone6	0x6157, 0x00, -21, 0						; digits 382, coarse +0.00 st
-	ToneEnvZone6	0x6158, 0x00, -19, 0						; digits 383, coarse +0.00 st
-	ToneEnvZone6	0x6159, 0x00, -18, 0						; digits 384, coarse +0.00 st
-	ToneEnvZone6	0x615a, 0x00, -17, 0						; digits 385, coarse +0.00 st
-	ToneEnvZone6	0x615b, 0x00, -15, 0						; digits 386, coarse +0.00 st
-	ToneEnvZone6	0x615c, 0x00, -12, 0						; digits 387, coarse +0.00 st
-	ToneEnvZone6	0x615d, 0x00, -9, 0						; digits 388, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -54, 0						; digits 400, coarse +0.00 st
-	ToneEnvZone6	0x615e, 0x00, -50, 0						; digits 401, coarse +0.00 st
-	ToneEnvZone6	0x615f, 0x00, -46, 0						; digits 402, coarse +0.00 st
-	ToneEnvZone6	0x6219, 0x00, -42, 0						; digits 403, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -38, 0						; digits 404, coarse +0.00 st
-	ToneEnvZone6	0x61e7, 0x00, -34, 0						; digits 405, coarse +0.00 st
-	ToneEnvZone6	0x61ba, 0x00, -29, 0						; digits 406, coarse +0.00 st
-	ToneEnvZone6	0x618d, 0x00, -23, 0						; digits 407, coarse +0.00 st
-	ToneEnvZone6	0x6160, 0x00, -17, 0						; digits 408, coarse +0.00 st
-	ToneEnvZone6	0x6161, 0x00, -50, 0						; digits 410, coarse +0.00 st
-	ToneEnvZone6	0x6162, 0x00, -47, 0						; digits 411, coarse +0.00 st
-	ToneEnvZone6	0x6163, 0x00, -45, 0						; digits 412, coarse +0.00 st
-	ToneEnvZone6	0x6164, 0x00, -41, 0						; digits 413, coarse +0.00 st
-	ToneEnvZone6	0x6165, 0x00, -37, 0						; digits 414, coarse +0.00 st
-	ToneEnvZone6	0x6166, 0x00, -33, 0						; digits 415, coarse +0.00 st
-	ToneEnvZone6	0x6167, 0x00, -28, 0						; digits 416, coarse +0.00 st
-	ToneEnvZone6	0x6168, 0x00, -23, 0						; digits 417, coarse +0.00 st
-	ToneEnvZone6	0x6169, 0x00, -17, 0						; digits 418, coarse +0.00 st
-	ToneEnvZone6	0x616a, 0x00, -47, 0						; digits 420, coarse +0.00 st
-	ToneEnvZone6	0x616b, 0x00, -45, 0						; digits 421, coarse +0.00 st
-	ToneEnvZone6	0x616c, 0x00, -42, 0						; digits 422, coarse +0.00 st
-	ToneEnvZone6	0x616d, 0x00, -39, 0						; digits 423, coarse +0.00 st
-	ToneEnvZone6	0x616e, 0x00, -37, 0						; digits 424, coarse +0.00 st
-	ToneEnvZone6	0x616f, 0x00, -33, 0						; digits 425, coarse +0.00 st
-	ToneEnvZone6	0x6170, 0x00, -28, 0						; digits 426, coarse +0.00 st
-	ToneEnvZone6	0x6171, 0x00, -22, 0						; digits 427, coarse +0.00 st
-	ToneEnvZone6	0x6172, 0x00, -16, 0						; digits 428, coarse +0.00 st
-	ToneEnvZone6	0x6251, 0x00, -44, 0						; digits 430, coarse +0.00 st
-	ToneEnvZone6	0x6173, 0x00, -41, 0						; digits 431, coarse +0.00 st
-	ToneEnvZone6	0x6174, 0x00, -39, 0						; digits 432, coarse +0.00 st
-	ToneEnvZone6	0x6258, 0x00, -37, 0						; digits 433, coarse +0.00 st
-	ToneEnvZone6	0x6259, 0x00, -34, 0						; digits 434, coarse +0.00 st
-	ToneEnvZone6	0x6205, 0x00, -31, 0						; digits 435, coarse +0.00 st
-	ToneEnvZone6	0x61d5, 0x00, -27, 0						; digits 436, coarse +0.00 st
-	ToneEnvZone6	0x61a5, 0x00, -22, 0						; digits 437, coarse +0.00 st
-	ToneEnvZone6	0x6175, 0x00, -16, 0						; digits 438, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -40, 0						; digits 440, coarse +0.00 st
-	ToneEnvZone6	0x6176, 0x00, -38, 0						; digits 441, coarse +0.00 st
-	ToneEnvZone6	0x6177, 0x00, -36, 0						; digits 442, coarse +0.00 st
-	ToneEnvZone6	0x6261, 0x00, -34, 0						; digits 443, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, -32, 0						; digits 444, coarse +0.00 st
-	ToneEnvZone6	0x6208, 0x00, -29, 0						; digits 445, coarse +0.00 st
-	ToneEnvZone6	0x61d8, 0x00, -26, 0						; digits 446, coarse +0.00 st
-	ToneEnvZone6	0x61a8, 0x00, -22, 0						; digits 447, coarse +0.00 st
-	ToneEnvZone6	0x6178, 0x00, -16, 0						; digits 448, coarse +0.00 st
-	ToneEnvZone6	0x6209, 0x00, -37, 0						; digits 450, coarse +0.00 st
-	ToneEnvZone6	0x6179, 0x00, -35, 0						; digits 451, coarse +0.00 st
-	ToneEnvZone6	0x617a, 0x00, -33, 0						; digits 452, coarse +0.00 st
-	ToneEnvZone6	0x620f, 0x00, -31, 0						; digits 453, coarse +0.00 st
-	ToneEnvZone6	0x6210, 0x00, -29, 0						; digits 454, coarse +0.00 st
-	ToneEnvZone6	0x6211, 0x00, -27, 0						; digits 455, coarse +0.00 st
-	ToneEnvZone6	0x61db, 0x00, -24, 0						; digits 456, coarse +0.00 st
-	ToneEnvZone6	0x61ab, 0x00, -20, 0						; digits 457, coarse +0.00 st
-	ToneEnvZone6	0x617b, 0x00, -15, 0						; digits 458, coarse +0.00 st
-	ToneEnvZone6	0x61dc, 0x00, -32, 0						; digits 460, coarse +0.00 st
-	ToneEnvZone6	0x617c, 0x00, -30, 0						; digits 461, coarse +0.00 st
-	ToneEnvZone6	0x617d, 0x00, -29, 0						; digits 462, coarse +0.00 st
-	ToneEnvZone6	0x61e1, 0x00, -27, 0						; digits 463, coarse +0.00 st
-	ToneEnvZone6	0x61e2, 0x00, -26, 0						; digits 464, coarse +0.00 st
-	ToneEnvZone6	0x61e3, 0x00, -24, 0						; digits 465, coarse +0.00 st
-	ToneEnvZone6	0x61e4, 0x00, -21, 0						; digits 466, coarse +0.00 st
-	ToneEnvZone6	0x61ae, 0x00, -18, 0						; digits 467, coarse +0.00 st
-	ToneEnvZone6	0x617e, 0x00, -14, 0						; digits 468, coarse +0.00 st
-	ToneEnvZone6	0x61af, 0x00, -27, 0						; digits 470, coarse +0.00 st
-	ToneEnvZone6	0x617f, 0x00, -26, 0						; digits 471, coarse +0.00 st
-	ToneEnvZone6	0x6180, 0x00, -24, 0						; digits 472, coarse +0.00 st
-	ToneEnvZone6	0x61b3, 0x00, -23, 0						; digits 473, coarse +0.00 st
-	ToneEnvZone6	0x61b4, 0x00, -22, 0						; digits 474, coarse +0.00 st
-	ToneEnvZone6	0x61b5, 0x00, -20, 0						; digits 475, coarse +0.00 st
-	ToneEnvZone6	0x61b6, 0x00, -18, 0						; digits 476, coarse +0.00 st
-	ToneEnvZone6	0x61b7, 0x00, -15, 0						; digits 477, coarse +0.00 st
-	ToneEnvZone6	0x6181, 0x00, -11, 0						; digits 478, coarse +0.00 st
-	ToneEnvZone6	0x6182, 0x00, -21, 0						; digits 480, coarse +0.00 st
-	ToneEnvZone6	0x6183, 0x00, -20, 0						; digits 481, coarse +0.00 st
-	ToneEnvZone6	0x6184, 0x00, -19, 0						; digits 482, coarse +0.00 st
-	ToneEnvZone6	0x6185, 0x00, -18, 0						; digits 483, coarse +0.00 st
-	ToneEnvZone6	0x6186, 0x00, -17, 0						; digits 484, coarse +0.00 st
-	ToneEnvZone6	0x6187, 0x00, -15, 0						; digits 485, coarse +0.00 st
-	ToneEnvZone6	0x6188, 0x00, -14, 0						; digits 486, coarse +0.00 st
-	ToneEnvZone6	0x6189, 0x00, -11, 0						; digits 487, coarse +0.00 st
-	ToneEnvZone6	0x618a, 0x00, -8, 0						; digits 488, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -46, 0						; digits 500, coarse +0.00 st
-	ToneEnvZone6	0x618b, 0x00, -43, 0						; digits 501, coarse +0.00 st
-	ToneEnvZone6	0x618c, 0x00, -40, 0						; digits 502, coarse +0.00 st
-	ToneEnvZone6	0x6218, 0x00, -37, 0						; digits 503, coarse +0.00 st
-	ToneEnvZone6	0x6219, 0x00, -34, 0						; digits 504, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -30, 0						; digits 505, coarse +0.00 st
-	ToneEnvZone6	0x61e7, 0x00, -26, 0						; digits 506, coarse +0.00 st
-	ToneEnvZone6	0x61ba, 0x00, -21, 0						; digits 507, coarse +0.00 st
-	ToneEnvZone6	0x618d, 0x00, -15, 0						; digits 508, coarse +0.00 st
-	ToneEnvZone6	0x618e, 0x00, -43, 0						; digits 510, coarse +0.00 st
-	ToneEnvZone6	0x618f, 0x00, -41, 0						; digits 511, coarse +0.00 st
-	ToneEnvZone6	0x6190, 0x00, -39, 0						; digits 512, coarse +0.00 st
-	ToneEnvZone6	0x6191, 0x00, -36, 0						; digits 513, coarse +0.00 st
-	ToneEnvZone6	0x6192, 0x00, -33, 0						; digits 514, coarse +0.00 st
-	ToneEnvZone6	0x6193, 0x00, -30, 0						; digits 515, coarse +0.00 st
-	ToneEnvZone6	0x6194, 0x00, -25, 0						; digits 516, coarse +0.00 st
-	ToneEnvZone6	0x6195, 0x00, -20, 0						; digits 517, coarse +0.00 st
-	ToneEnvZone6	0x6196, 0x00, -15, 0						; digits 518, coarse +0.00 st
-	ToneEnvZone6	0x6197, 0x00, -41, 0						; digits 520, coarse +0.00 st
-	ToneEnvZone6	0x6198, 0x00, -39, 0						; digits 521, coarse +0.00 st
-	ToneEnvZone6	0x6199, 0x00, -37, 0						; digits 522, coarse +0.00 st
-	ToneEnvZone6	0x619a, 0x00, -35, 0						; digits 523, coarse +0.00 st
-	ToneEnvZone6	0x619b, 0x00, -32, 0						; digits 524, coarse +0.00 st
-	ToneEnvZone6	0x619c, 0x00, -29, 0						; digits 525, coarse +0.00 st
-	ToneEnvZone6	0x619d, 0x00, -25, 0						; digits 526, coarse +0.00 st
-	ToneEnvZone6	0x619e, 0x00, -20, 0						; digits 527, coarse +0.00 st
-	ToneEnvZone6	0x619f, 0x00, -15, 0						; digits 528, coarse +0.00 st
-	ToneEnvZone6	0x6248, 0x00, -38, 0						; digits 530, coarse +0.00 st
-	ToneEnvZone6	0x61a0, 0x00, -36, 0						; digits 531, coarse +0.00 st
-	ToneEnvZone6	0x61a1, 0x00, -35, 0						; digits 532, coarse +0.00 st
-	ToneEnvZone6	0x624e, 0x00, -32, 0						; digits 533, coarse +0.00 st
-	ToneEnvZone6	0x624f, 0x00, -30, 0						; digits 534, coarse +0.00 st
-	ToneEnvZone6	0x6250, 0x00, -28, 0						; digits 535, coarse +0.00 st
-	ToneEnvZone6	0x6202, 0x00, -25, 0						; digits 536, coarse +0.00 st
-	ToneEnvZone6	0x61d2, 0x00, -20, 0						; digits 537, coarse +0.00 st
-	ToneEnvZone6	0x61a2, 0x00, -14, 0						; digits 538, coarse +0.00 st
-	ToneEnvZone6	0x6251, 0x00, -36, 0						; digits 540, coarse +0.00 st
-	ToneEnvZone6	0x61a3, 0x00, -34, 0						; digits 541, coarse +0.00 st
-	ToneEnvZone6	0x61a4, 0x00, -32, 0						; digits 542, coarse +0.00 st
-	ToneEnvZone6	0x6257, 0x00, -30, 0						; digits 543, coarse +0.00 st
-	ToneEnvZone6	0x6258, 0x00, -29, 0						; digits 544, coarse +0.00 st
-	ToneEnvZone6	0x6259, 0x00, -26, 0						; digits 545, coarse +0.00 st
-	ToneEnvZone6	0x6205, 0x00, -23, 0						; digits 546, coarse +0.00 st
-	ToneEnvZone6	0x61d5, 0x00, -19, 0						; digits 547, coarse +0.00 st
-	ToneEnvZone6	0x61a5, 0x00, -14, 0						; digits 548, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -32, 0						; digits 550, coarse +0.00 st
-	ToneEnvZone6	0x61a6, 0x00, -31, 0						; digits 551, coarse +0.00 st
-	ToneEnvZone6	0x61a7, 0x00, -30, 0						; digits 552, coarse +0.00 st
-	ToneEnvZone6	0x6260, 0x00, -28, 0						; digits 553, coarse +0.00 st
-	ToneEnvZone6	0x6261, 0x00, -26, 0						; digits 554, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, -24, 0						; digits 555, coarse +0.00 st
-	ToneEnvZone6	0x6208, 0x00, -21, 0						; digits 556, coarse +0.00 st
-	ToneEnvZone6	0x61d8, 0x00, -18, 0						; digits 557, coarse +0.00 st
-	ToneEnvZone6	0x61a8, 0x00, -14, 0						; digits 558, coarse +0.00 st
-	ToneEnvZone6	0x6209, 0x00, -29, 0						; digits 560, coarse +0.00 st
-	ToneEnvZone6	0x61a9, 0x00, -27, 0						; digits 561, coarse +0.00 st
-	ToneEnvZone6	0x61aa, 0x00, -26, 0						; digits 562, coarse +0.00 st
-	ToneEnvZone6	0x620e, 0x00, -25, 0						; digits 563, coarse +0.00 st
-	ToneEnvZone6	0x620f, 0x00, -23, 0						; digits 564, coarse +0.00 st
-	ToneEnvZone6	0x6210, 0x00, -21, 0						; digits 565, coarse +0.00 st
-	ToneEnvZone6	0x6211, 0x00, -19, 0						; digits 566, coarse +0.00 st
-	ToneEnvZone6	0x61db, 0x00, -16, 0						; digits 567, coarse +0.00 st
-	ToneEnvZone6	0x61ab, 0x00, -12, 0						; digits 568, coarse +0.00 st
-	ToneEnvZone6	0x61dc, 0x00, -24, 0						; digits 570, coarse +0.00 st
-	ToneEnvZone6	0x61ac, 0x00, -23, 0						; digits 571, coarse +0.00 st
-	ToneEnvZone6	0x61ad, 0x00, -22, 0						; digits 572, coarse +0.00 st
-	ToneEnvZone6	0x61e0, 0x00, -21, 0						; digits 573, coarse +0.00 st
-	ToneEnvZone6	0x61e1, 0x00, -19, 0						; digits 574, coarse +0.00 st
-	ToneEnvZone6	0x61e2, 0x00, -18, 0						; digits 575, coarse +0.00 st
-	ToneEnvZone6	0x61e3, 0x00, -16, 0						; digits 576, coarse +0.00 st
-	ToneEnvZone6	0x61e4, 0x00, -13, 0						; digits 577, coarse +0.00 st
-	ToneEnvZone6	0x61ae, 0x00, -10, 0						; digits 578, coarse +0.00 st
-	ToneEnvZone6	0x61af, 0x00, -19, 0						; digits 580, coarse +0.00 st
-	ToneEnvZone6	0x61b0, 0x00, -18, 0						; digits 581, coarse +0.00 st
-	ToneEnvZone6	0x61b1, 0x00, -17, 0						; digits 582, coarse +0.00 st
-	ToneEnvZone6	0x61b2, 0x00, -16, 0						; digits 583, coarse +0.00 st
-	ToneEnvZone6	0x61b3, 0x00, -15, 0						; digits 584, coarse +0.00 st
-	ToneEnvZone6	0x61b4, 0x00, -14, 0						; digits 585, coarse +0.00 st
-	ToneEnvZone6	0x61b5, 0x00, -12, 0						; digits 586, coarse +0.00 st
-	ToneEnvZone6	0x61b6, 0x00, -10, 0						; digits 587, coarse +0.00 st
-	ToneEnvZone6	0x61b7, 0x00, -7, 0						; digits 588, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -38, 0						; digits 600, coarse +0.00 st
-	ToneEnvZone6	0x61b8, 0x00, -36, 0						; digits 601, coarse +0.00 st
-	ToneEnvZone6	0x61b9, 0x00, -34, 0						; digits 602, coarse +0.00 st
-	ToneEnvZone6	0x6217, 0x00, -31, 0						; digits 603, coarse +0.00 st
-	ToneEnvZone6	0x6218, 0x00, -29, 0						; digits 604, coarse +0.00 st
-	ToneEnvZone6	0x6219, 0x00, -26, 0						; digits 605, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -22, 0						; digits 606, coarse +0.00 st
-	ToneEnvZone6	0x61e7, 0x00, -18, 0						; digits 607, coarse +0.00 st
-	ToneEnvZone6	0x61ba, 0x00, -13, 0						; digits 608, coarse +0.00 st
-	ToneEnvZone6	0x61bb, 0x00, -36, 0						; digits 610, coarse +0.00 st
-	ToneEnvZone6	0x61bc, 0x00, -34, 0						; digits 611, coarse +0.00 st
-	ToneEnvZone6	0x61bd, 0x00, -33, 0						; digits 612, coarse +0.00 st
-	ToneEnvZone6	0x61be, 0x00, -31, 0						; digits 613, coarse +0.00 st
-	ToneEnvZone6	0x61bf, 0x00, -28, 0						; digits 614, coarse +0.00 st
-	ToneEnvZone6	0x61c0, 0x00, -25, 0						; digits 615, coarse +0.00 st
-	ToneEnvZone6	0x61c1, 0x00, -22, 0						; digits 616, coarse +0.00 st
-	ToneEnvZone6	0x61c2, 0x00, -17, 0						; digits 617, coarse +0.00 st
-	ToneEnvZone6	0x61c3, 0x00, -12, 0						; digits 618, coarse +0.00 st
-	ToneEnvZone6	0x61c4, 0x00, -34, 0						; digits 620, coarse +0.00 st
-	ToneEnvZone6	0x61c5, 0x00, -33, 0						; digits 621, coarse +0.00 st
-	ToneEnvZone6	0x61c6, 0x00, -31, 0						; digits 622, coarse +0.00 st
-	ToneEnvZone6	0x61c7, 0x00, -29, 0						; digits 623, coarse +0.00 st
-	ToneEnvZone6	0x61c8, 0x00, -28, 0						; digits 624, coarse +0.00 st
-	ToneEnvZone6	0x61c9, 0x00, -25, 0						; digits 625, coarse +0.00 st
-	ToneEnvZone6	0x61ca, 0x00, -21, 0						; digits 626, coarse +0.00 st
-	ToneEnvZone6	0x61cb, 0x00, -17, 0						; digits 627, coarse +0.00 st
-	ToneEnvZone6	0x61cc, 0x00, -12, 0						; digits 628, coarse +0.00 st
-	ToneEnvZone6	0x623f, 0x00, -32, 0						; digits 630, coarse +0.00 st
-	ToneEnvZone6	0x61cd, 0x00, -31, 0						; digits 631, coarse +0.00 st
-	ToneEnvZone6	0x61ce, 0x00, -29, 0						; digits 632, coarse +0.00 st
-	ToneEnvZone6	0x6244, 0x00, -28, 0						; digits 633, coarse +0.00 st
-	ToneEnvZone6	0x6245, 0x00, -26, 0						; digits 634, coarse +0.00 st
-	ToneEnvZone6	0x6246, 0x00, -24, 0						; digits 635, coarse +0.00 st
-	ToneEnvZone6	0x6247, 0x00, -21, 0						; digits 636, coarse +0.00 st
-	ToneEnvZone6	0x61ff, 0x00, -17, 0						; digits 637, coarse +0.00 st
-	ToneEnvZone6	0x61cf, 0x00, -12, 0						; digits 638, coarse +0.00 st
-	ToneEnvZone6	0x6248, 0x00, -30, 0						; digits 640, coarse +0.00 st
-	ToneEnvZone6	0x61d0, 0x00, -29, 0						; digits 641, coarse +0.00 st
-	ToneEnvZone6	0x61d1, 0x00, -28, 0						; digits 642, coarse +0.00 st
-	ToneEnvZone6	0x624d, 0x00, -26, 0						; digits 643, coarse +0.00 st
-	ToneEnvZone6	0x624e, 0x00, -24, 0						; digits 644, coarse +0.00 st
-	ToneEnvZone6	0x624f, 0x00, -22, 0						; digits 645, coarse +0.00 st
-	ToneEnvZone6	0x6250, 0x00, -20, 0						; digits 646, coarse +0.00 st
-	ToneEnvZone6	0x6202, 0x00, -17, 0						; digits 647, coarse +0.00 st
-	ToneEnvZone6	0x61d2, 0x00, -12, 0						; digits 648, coarse +0.00 st
-	ToneEnvZone6	0x6251, 0x00, -28, 0						; digits 650, coarse +0.00 st
-	ToneEnvZone6	0x61d3, 0x00, -26, 0						; digits 651, coarse +0.00 st
-	ToneEnvZone6	0x61d4, 0x00, -25, 0						; digits 652, coarse +0.00 st
-	ToneEnvZone6	0x6256, 0x00, -24, 0						; digits 653, coarse +0.00 st
-	ToneEnvZone6	0x6257, 0x00, -22, 0						; digits 654, coarse +0.00 st
-	ToneEnvZone6	0x6258, 0x00, -21, 0						; digits 655, coarse +0.00 st
-	ToneEnvZone6	0x6259, 0x00, -18, 0						; digits 656, coarse +0.00 st
-	ToneEnvZone6	0x6205, 0x00, -15, 0						; digits 657, coarse +0.00 st
-	ToneEnvZone6	0x61d5, 0x00, -11, 0						; digits 658, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -24, 0						; digits 660, coarse +0.00 st
-	ToneEnvZone6	0x61d6, 0x00, -23, 0						; digits 661, coarse +0.00 st
-	ToneEnvZone6	0x61d7, 0x00, -22, 0						; digits 662, coarse +0.00 st
-	ToneEnvZone6	0x625f, 0x00, -21, 0						; digits 663, coarse +0.00 st
-	ToneEnvZone6	0x6260, 0x00, -20, 0						; digits 664, coarse +0.00 st
-	ToneEnvZone6	0x6261, 0x00, -18, 0						; digits 665, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, -16, 0						; digits 666, coarse +0.00 st
-	ToneEnvZone6	0x6208, 0x00, -13, 0						; digits 667, coarse +0.00 st
-	ToneEnvZone6	0x61d8, 0x00, -10, 0						; digits 668, coarse +0.00 st
-	ToneEnvZone6	0x6209, 0x00, -21, 0						; digits 670, coarse +0.00 st
-	ToneEnvZone6	0x61d9, 0x00, -20, 0						; digits 671, coarse +0.00 st
-	ToneEnvZone6	0x61da, 0x00, -19, 0						; digits 672, coarse +0.00 st
-	ToneEnvZone6	0x620d, 0x00, -18, 0						; digits 673, coarse +0.00 st
-	ToneEnvZone6	0x620e, 0x00, -17, 0						; digits 674, coarse +0.00 st
-	ToneEnvZone6	0x620f, 0x00, -15, 0						; digits 675, coarse +0.00 st
-	ToneEnvZone6	0x6210, 0x00, -13, 0						; digits 676, coarse +0.00 st
-	ToneEnvZone6	0x6211, 0x00, -11, 0						; digits 677, coarse +0.00 st
-	ToneEnvZone6	0x61db, 0x00, -8, 0						; digits 678, coarse +0.00 st
-	ToneEnvZone6	0x61dc, 0x00, -16, 0						; digits 680, coarse +0.00 st
-	ToneEnvZone6	0x61dd, 0x00, -15, 0						; digits 681, coarse +0.00 st
-	ToneEnvZone6	0x61de, 0x00, -14, 0						; digits 682, coarse +0.00 st
-	ToneEnvZone6	0x61df, 0x00, -14, 0						; digits 683, coarse +0.00 st
-	ToneEnvZone6	0x61e0, 0x00, -13, 0						; digits 684, coarse +0.00 st
-	ToneEnvZone6	0x61e1, 0x00, -11, 0						; digits 685, coarse +0.00 st
-	ToneEnvZone6	0x61e2, 0x00, -10, 0						; digits 686, coarse +0.00 st
-	ToneEnvZone6	0x61e3, 0x00, -8, 0						; digits 687, coarse +0.00 st
-	ToneEnvZone6	0x61e4, 0x00, -5, 0						; digits 688, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -30, 0						; digits 700, coarse +0.00 st
-	ToneEnvZone6	0x61e5, 0x00, -28, 0						; digits 701, coarse +0.00 st
-	ToneEnvZone6	0x61e6, 0x00, -27, 0						; digits 702, coarse +0.00 st
-	ToneEnvZone6	0x6216, 0x00, -25, 0						; digits 703, coarse +0.00 st
-	ToneEnvZone6	0x6217, 0x00, -23, 0						; digits 704, coarse +0.00 st
-	ToneEnvZone6	0x6218, 0x00, -21, 0						; digits 705, coarse +0.00 st
-	ToneEnvZone6	0x6219, 0x00, -18, 0						; digits 706, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -14, 0						; digits 707, coarse +0.00 st
-	ToneEnvZone6	0x61e7, 0x00, -10, 0						; digits 708, coarse +0.00 st
-	ToneEnvZone6	0x61e8, 0x00, -29, 0						; digits 710, coarse +0.00 st
-	ToneEnvZone6	0x61e9, 0x00, -27, 0						; digits 711, coarse +0.00 st
-	ToneEnvZone6	0x61ea, 0x00, -26, 0						; digits 712, coarse +0.00 st
-	ToneEnvZone6	0x61eb, 0x00, -24, 0						; digits 713, coarse +0.00 st
-	ToneEnvZone6	0x61ec, 0x00, -23, 0						; digits 714, coarse +0.00 st
-	ToneEnvZone6	0x61ed, 0x00, -20, 0						; digits 715, coarse +0.00 st
-	ToneEnvZone6	0x61ee, 0x00, -17, 0						; digits 716, coarse +0.00 st
-	ToneEnvZone6	0x61ef, 0x00, -14, 0						; digits 717, coarse +0.00 st
-	ToneEnvZone6	0x61f0, 0x00, -10, 0						; digits 718, coarse +0.00 st
-	ToneEnvZone6	0x61f1, 0x00, -27, 0						; digits 720, coarse +0.00 st
-	ToneEnvZone6	0x61f2, 0x00, -26, 0						; digits 721, coarse +0.00 st
-	ToneEnvZone6	0x61f3, 0x00, -25, 0						; digits 722, coarse +0.00 st
-	ToneEnvZone6	0x61f4, 0x00, -24, 0						; digits 723, coarse +0.00 st
-	ToneEnvZone6	0x61f5, 0x00, -22, 0						; digits 724, coarse +0.00 st
-	ToneEnvZone6	0x61f6, 0x00, -20, 0						; digits 725, coarse +0.00 st
-	ToneEnvZone6	0x61f7, 0x00, -17, 0						; digits 726, coarse +0.00 st
-	ToneEnvZone6	0x61f8, 0x00, -14, 0						; digits 727, coarse +0.00 st
-	ToneEnvZone6	0x61f9, 0x00, -9, 0						; digits 728, coarse +0.00 st
-	ToneEnvZone6	0x6236, 0x00, -26, 0						; digits 730, coarse +0.00 st
-	ToneEnvZone6	0x61fa, 0x00, -25, 0						; digits 731, coarse +0.00 st
-	ToneEnvZone6	0x61fb, 0x00, -24, 0						; digits 732, coarse +0.00 st
-	ToneEnvZone6	0x623a, 0x00, -22, 0						; digits 733, coarse +0.00 st
-	ToneEnvZone6	0x623b, 0x00, -21, 0						; digits 734, coarse +0.00 st
-	ToneEnvZone6	0x623c, 0x00, -19, 0						; digits 735, coarse +0.00 st
-	ToneEnvZone6	0x623d, 0x00, -17, 0						; digits 736, coarse +0.00 st
-	ToneEnvZone6	0x623e, 0x00, -13, 0						; digits 737, coarse +0.00 st
-	ToneEnvZone6	0x61fc, 0x00, -9, 0						; digits 738, coarse +0.00 st
-	ToneEnvZone6	0x623f, 0x00, -24, 0						; digits 740, coarse +0.00 st
-	ToneEnvZone6	0x61fd, 0x00, -23, 0						; digits 741, coarse +0.00 st
-	ToneEnvZone6	0x61fe, 0x00, -22, 0						; digits 742, coarse +0.00 st
-	ToneEnvZone6	0x6243, 0x00, -21, 0						; digits 743, coarse +0.00 st
-	ToneEnvZone6	0x6244, 0x00, -20, 0						; digits 744, coarse +0.00 st
-	ToneEnvZone6	0x6245, 0x00, -18, 0						; digits 745, coarse +0.00 st
-	ToneEnvZone6	0x6246, 0x00, -16, 0						; digits 746, coarse +0.00 st
-	ToneEnvZone6	0x6247, 0x00, -13, 0						; digits 747, coarse +0.00 st
-	ToneEnvZone6	0x61ff, 0x00, -9, 0						; digits 748, coarse +0.00 st
-	ToneEnvZone6	0x6248, 0x00, -22, 0						; digits 750, coarse +0.00 st
-	ToneEnvZone6	0x6200, 0x00, -21, 0						; digits 751, coarse +0.00 st
-	ToneEnvZone6	0x6201, 0x00, -20, 0						; digits 752, coarse +0.00 st
-	ToneEnvZone6	0x624c, 0x00, -19, 0						; digits 753, coarse +0.00 st
-	ToneEnvZone6	0x624d, 0x00, -18, 0						; digits 754, coarse +0.00 st
-	ToneEnvZone6	0x624e, 0x00, -16, 0						; digits 755, coarse +0.00 st
-	ToneEnvZone6	0x624f, 0x00, -14, 0						; digits 756, coarse +0.00 st
-	ToneEnvZone6	0x6250, 0x00, -12, 0						; digits 757, coarse +0.00 st
-	ToneEnvZone6	0x6202, 0x00, -9, 0						; digits 758, coarse +0.00 st
-	ToneEnvZone6	0x6251, 0x00, -20, 0						; digits 760, coarse +0.00 st
-	ToneEnvZone6	0x6203, 0x00, -19, 0						; digits 761, coarse +0.00 st
-	ToneEnvZone6	0x6204, 0x00, -18, 0						; digits 762, coarse +0.00 st
-	ToneEnvZone6	0x6255, 0x00, -17, 0						; digits 763, coarse +0.00 st
-	ToneEnvZone6	0x6256, 0x00, -16, 0						; digits 764, coarse +0.00 st
-	ToneEnvZone6	0x6257, 0x00, -14, 0						; digits 765, coarse +0.00 st
-	ToneEnvZone6	0x6258, 0x00, -13, 0						; digits 766, coarse +0.00 st
-	ToneEnvZone6	0x6259, 0x00, -10, 0						; digits 767, coarse +0.00 st
-	ToneEnvZone6	0x6205, 0x00, -7, 0						; digits 768, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -16, 0						; digits 770, coarse +0.00 st
-	ToneEnvZone6	0x6206, 0x00, -16, 0						; digits 771, coarse +0.00 st
-	ToneEnvZone6	0x6207, 0x00, -15, 0						; digits 772, coarse +0.00 st
-	ToneEnvZone6	0x625e, 0x00, -14, 0						; digits 773, coarse +0.00 st
-	ToneEnvZone6	0x625f, 0x00, -13, 0						; digits 774, coarse +0.00 st
-	ToneEnvZone6	0x6260, 0x00, -12, 0						; digits 775, coarse +0.00 st
-	ToneEnvZone6	0x6261, 0x00, -10, 0						; digits 776, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, -8, 0						; digits 777, coarse +0.00 st
-	ToneEnvZone6	0x6208, 0x00, -5, 0						; digits 778, coarse +0.00 st
-	ToneEnvZone6	0x6209, 0x00, -13, 0						; digits 780, coarse +0.00 st
-	ToneEnvZone6	0x620a, 0x00, -12, 0						; digits 781, coarse +0.00 st
-	ToneEnvZone6	0x620b, 0x00, -11, 0						; digits 782, coarse +0.00 st
-	ToneEnvZone6	0x620c, 0x00, -10, 0						; digits 783, coarse +0.00 st
-	ToneEnvZone6	0x620d, 0x00, -10, 0						; digits 784, coarse +0.00 st
-	ToneEnvZone6	0x620e, 0x00, -9, 0						; digits 785, coarse +0.00 st
-	ToneEnvZone6	0x620f, 0x00, -7, 0						; digits 786, coarse +0.00 st
-	ToneEnvZone6	0x6210, 0x00, -5, 0						; digits 787, coarse +0.00 st
-	ToneEnvZone6	0x6211, 0x00, -3, 0						; digits 788, coarse +0.00 st
-	ToneEnvZone6	0x6212, 0x00, -22, 0						; digits 800, coarse +0.00 st
-	ToneEnvZone6	0x6213, 0x00, -21, 0						; digits 801, coarse +0.00 st
-	ToneEnvZone6	0x6214, 0x00, -20, 0						; digits 802, coarse +0.00 st
-	ToneEnvZone6	0x6215, 0x00, -18, 0						; digits 803, coarse +0.00 st
-	ToneEnvZone6	0x6216, 0x00, -17, 0						; digits 804, coarse +0.00 st
-	ToneEnvZone6	0x6217, 0x00, -15, 0						; digits 805, coarse +0.00 st
-	ToneEnvZone6	0x6218, 0x00, -13, 0						; digits 806, coarse +0.00 st
-	ToneEnvZone6	0x6219, 0x00, -10, 0						; digits 807, coarse +0.00 st
-	ToneEnvZone6	0x621a, 0x00, -6, 0						; digits 808, coarse +0.00 st
-	ToneEnvZone6	0x621b, 0x00, -21, 0						; digits 810, coarse +0.00 st
-	ToneEnvZone6	0x621c, 0x00, -20, 0						; digits 811, coarse +0.00 st
-	ToneEnvZone6	0x621d, 0x00, -19, 0						; digits 812, coarse +0.00 st
-	ToneEnvZone6	0x621e, 0x00, -18, 0						; digits 813, coarse +0.00 st
-	ToneEnvZone6	0x621f, 0x00, -17, 0						; digits 814, coarse +0.00 st
-	ToneEnvZone6	0x6220, 0x00, -15, 0						; digits 815, coarse +0.00 st
-	ToneEnvZone6	0x6221, 0x00, -12, 0						; digits 816, coarse +0.00 st
-	ToneEnvZone6	0x6222, 0x00, -9, 0						; digits 817, coarse +0.00 st
-	ToneEnvZone6	0x6223, 0x00, -6, 0						; digits 818, coarse +0.00 st
-	ToneEnvZone6	0x6224, 0x00, -20, 0						; digits 820, coarse +0.00 st
-	ToneEnvZone6	0x6225, 0x00, -19, 0						; digits 821, coarse +0.00 st
-	ToneEnvZone6	0x6226, 0x00, -18, 0						; digits 822, coarse +0.00 st
-	ToneEnvZone6	0x6227, 0x00, -17, 0						; digits 823, coarse +0.00 st
-	ToneEnvZone6	0x6228, 0x00, -16, 0						; digits 824, coarse +0.00 st
-	ToneEnvZone6	0x6229, 0x00, -15, 0						; digits 825, coarse +0.00 st
-	ToneEnvZone6	0x622a, 0x00, -12, 0						; digits 826, coarse +0.00 st
-	ToneEnvZone6	0x622b, 0x00, -9, 0						; digits 827, coarse +0.00 st
-	ToneEnvZone6	0x622c, 0x00, -6, 0						; digits 828, coarse +0.00 st
-	ToneEnvZone6	0x622d, 0x00, -19, 0						; digits 830, coarse +0.00 st
-	ToneEnvZone6	0x622e, 0x00, -18, 0						; digits 831, coarse +0.00 st
-	ToneEnvZone6	0x622f, 0x00, -17, 0						; digits 832, coarse +0.00 st
-	ToneEnvZone6	0x6230, 0x00, -16, 0						; digits 833, coarse +0.00 st
-	ToneEnvZone6	0x6231, 0x00, -15, 0						; digits 834, coarse +0.00 st
-	ToneEnvZone6	0x6232, 0x00, -14, 0						; digits 835, coarse +0.00 st
-	ToneEnvZone6	0x6233, 0x00, -12, 0						; digits 836, coarse +0.00 st
-	ToneEnvZone6	0x6234, 0x00, -9, 0						; digits 837, coarse +0.00 st
-	ToneEnvZone6	0x6235, 0x00, -6, 0						; digits 838, coarse +0.00 st
-	ToneEnvZone6	0x6236, 0x00, -18, 0						; digits 840, coarse +0.00 st
-	ToneEnvZone6	0x6237, 0x00, -17, 0						; digits 841, coarse +0.00 st
-	ToneEnvZone6	0x6238, 0x00, -16, 0						; digits 842, coarse +0.00 st
-	ToneEnvZone6	0x6239, 0x00, -15, 0						; digits 843, coarse +0.00 st
-	ToneEnvZone6	0x623a, 0x00, -14, 0						; digits 844, coarse +0.00 st
-	ToneEnvZone6	0x623b, 0x00, -13, 0						; digits 845, coarse +0.00 st
-	ToneEnvZone6	0x623c, 0x00, -11, 0						; digits 846, coarse +0.00 st
-	ToneEnvZone6	0x623d, 0x00, -9, 0						; digits 847, coarse +0.00 st
-	ToneEnvZone6	0x623e, 0x00, -5, 0						; digits 848, coarse +0.00 st
-	ToneEnvZone6	0x623f, 0x00, -16, 0						; digits 850, coarse +0.00 st
-	ToneEnvZone6	0x6240, 0x00, -15, 0						; digits 851, coarse +0.00 st
-	ToneEnvZone6	0x6241, 0x00, -15, 0						; digits 852, coarse +0.00 st
-	ToneEnvZone6	0x6242, 0x00, -14, 0						; digits 853, coarse +0.00 st
-	ToneEnvZone6	0x6243, 0x00, -13, 0						; digits 854, coarse +0.00 st
-	ToneEnvZone6	0x6244, 0x00, -12, 0						; digits 855, coarse +0.00 st
-	ToneEnvZone6	0x6245, 0x00, -10, 0						; digits 856, coarse +0.00 st
-	ToneEnvZone6	0x6246, 0x00, -8, 0						; digits 857, coarse +0.00 st
-	ToneEnvZone6	0x6247, 0x00, -5, 0						; digits 858, coarse +0.00 st
-	ToneEnvZone6	0x6248, 0x00, -14, 0						; digits 860, coarse +0.00 st
-	ToneEnvZone6	0x6249, 0x00, -13, 0						; digits 861, coarse +0.00 st
-	ToneEnvZone6	0x624a, 0x00, -13, 0						; digits 862, coarse +0.00 st
-	ToneEnvZone6	0x624b, 0x00, -12, 0						; digits 863, coarse +0.00 st
-	ToneEnvZone6	0x624c, 0x00, -11, 0						; digits 864, coarse +0.00 st
-	ToneEnvZone6	0x624d, 0x00, -10, 0						; digits 865, coarse +0.00 st
-	ToneEnvZone6	0x624e, 0x00, -8, 0						; digits 866, coarse +0.00 st
-	ToneEnvZone6	0x624f, 0x00, -6, 0						; digits 867, coarse +0.00 st
-	ToneEnvZone6	0x6250, 0x00, -4, 0						; digits 868, coarse +0.00 st
-	ToneEnvZone6	0x6251, 0x00, -12, 0						; digits 870, coarse +0.00 st
-	ToneEnvZone6	0x6252, 0x00, -11, 0						; digits 871, coarse +0.00 st
-	ToneEnvZone6	0x6253, 0x00, -10, 0						; digits 872, coarse +0.00 st
-	ToneEnvZone6	0x6254, 0x00, -10, 0						; digits 873, coarse +0.00 st
-	ToneEnvZone6	0x6255, 0x00, -9, 0						; digits 874, coarse +0.00 st
-	ToneEnvZone6	0x6256, 0x00, -8, 0						; digits 875, coarse +0.00 st
-	ToneEnvZone6	0x6257, 0x00, -6, 0						; digits 876, coarse +0.00 st
-	ToneEnvZone6	0x6258, 0x00, -5, 0						; digits 877, coarse +0.00 st
-	ToneEnvZone6	0x6259, 0x00, -2, 0						; digits 878, coarse +0.00 st
-	ToneEnvZone6	0x625a, 0x00, -8, 0						; digits 880, coarse +0.00 st
-	ToneEnvZone6	0x625b, 0x00, -8, 0						; digits 881, coarse +0.00 st
-	ToneEnvZone6	0x625c, 0x00, -7, 0						; digits 882, coarse +0.00 st
-	ToneEnvZone6	0x625d, 0x00, -7, 0						; digits 883, coarse +0.00 st
-	ToneEnvZone6	0x625e, 0x00, -6, 0						; digits 884, coarse +0.00 st
-	ToneEnvZone6	0x625f, 0x00, -5, 0						; digits 885, coarse +0.00 st
-	ToneEnvZone6	0x6260, 0x00, -4, 0						; digits 886, coarse +0.00 st
-	ToneEnvZone6	0x6261, 0x00, -2, 0						; digits 887, coarse +0.00 st
-	ToneEnvZone6	0x6262, 0x00, 0, 0						; digits 888, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -128, 0						; digits 000, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -90, 0						; digits 001, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -74, 0						; digits 002, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -62, 0						; digits 003, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -54, 0						; digits 004, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -46, 0						; digits 005, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -38, 0						; digits 006, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -30, 0						; digits 007, coarse +0.00 st
+	ToneSetZone6	0x6070, 0x00, -22, 0						; digits 008, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -95, 0						; digits 010, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -79, 0						; digits 011, coarse +0.00 st
+	ToneSetZone6	0x6071, 0x00, -69, 0						; digits 012, coarse +0.00 st
+	ToneSetZone6	0x6072, 0x00, -59, 0						; digits 013, coarse +0.00 st
+	ToneSetZone6	0x6073, 0x00, -52, 0						; digits 014, coarse +0.00 st
+	ToneSetZone6	0x6074, 0x00, -45, 0						; digits 015, coarse +0.00 st
+	ToneSetZone6	0x6075, 0x00, -37, 0						; digits 016, coarse +0.00 st
+	ToneSetZone6	0x6076, 0x00, -30, 0						; digits 017, coarse +0.00 st
+	ToneSetZone6	0x6077, 0x00, -22, 0						; digits 018, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -79, 0						; digits 020, coarse +0.00 st
+	ToneSetZone6	0x6078, 0x00, -70, 0						; digits 021, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -63, 0						; digits 022, coarse +0.00 st
+	ToneSetZone6	0x6079, 0x00, -56, 0						; digits 023, coarse +0.00 st
+	ToneSetZone6	0x607a, 0x00, -50, 0						; digits 024, coarse +0.00 st
+	ToneSetZone6	0x607b, 0x00, -43, 0						; digits 025, coarse +0.00 st
+	ToneSetZone6	0x607c, 0x00, -36, 0						; digits 026, coarse +0.00 st
+	ToneSetZone6	0x607d, 0x00, -29, 0						; digits 027, coarse +0.00 st
+	ToneSetZone6	0x607e, 0x00, -21, 0						; digits 028, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -67, 0						; digits 030, coarse +0.00 st
+	ToneSetZone6	0x607f, 0x00, -61, 0						; digits 031, coarse +0.00 st
+	ToneSetZone6	0x6080, 0x00, -56, 0						; digits 032, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -51, 0						; digits 033, coarse +0.00 st
+	ToneSetZone6	0x608d, 0x00, -46, 0						; digits 034, coarse +0.00 st
+	ToneSetZone6	0x608a, 0x00, -41, 0						; digits 035, coarse +0.00 st
+	ToneSetZone6	0x6087, 0x00, -35, 0						; digits 036, coarse +0.00 st
+	ToneSetZone6	0x6084, 0x00, -28, 0						; digits 037, coarse +0.00 st
+	ToneSetZone6	0x6081, 0x00, -21, 0						; digits 038, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -59, 0						; digits 040, coarse +0.00 st
+	ToneSetZone6	0x6082, 0x00, -55, 0						; digits 041, coarse +0.00 st
+	ToneSetZone6	0x6083, 0x00, -51, 0						; digits 042, coarse +0.00 st
+	ToneSetZone6	0x6095, 0x00, -47, 0						; digits 043, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -43, 0						; digits 044, coarse +0.00 st
+	ToneSetZone6	0x608d, 0x00, -38, 0						; digits 045, coarse +0.00 st
+	ToneSetZone6	0x608a, 0x00, -33, 0						; digits 046, coarse +0.00 st
+	ToneSetZone6	0x6087, 0x00, -27, 0						; digits 047, coarse +0.00 st
+	ToneSetZone6	0x6084, 0x00, -20, 0						; digits 048, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -51, 0						; digits 050, coarse +0.00 st
+	ToneSetZone6	0x6085, 0x00, -48, 0						; digits 051, coarse +0.00 st
+	ToneSetZone6	0x6086, 0x00, -45, 0						; digits 052, coarse +0.00 st
+	ToneSetZone6	0x6094, 0x00, -42, 0						; digits 053, coarse +0.00 st
+	ToneSetZone6	0x6095, 0x00, -39, 0						; digits 054, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -35, 0						; digits 055, coarse +0.00 st
+	ToneSetZone6	0x608d, 0x00, -30, 0						; digits 056, coarse +0.00 st
+	ToneSetZone6	0x608a, 0x00, -25, 0						; digits 057, coarse +0.00 st
+	ToneSetZone6	0x6087, 0x00, -19, 0						; digits 058, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -43, 0						; digits 060, coarse +0.00 st
+	ToneSetZone6	0x6088, 0x00, -41, 0						; digits 061, coarse +0.00 st
+	ToneSetZone6	0x6089, 0x00, -39, 0						; digits 062, coarse +0.00 st
+	ToneSetZone6	0x6093, 0x00, -36, 0						; digits 063, coarse +0.00 st
+	ToneSetZone6	0x6094, 0x00, -34, 0						; digits 064, coarse +0.00 st
+	ToneSetZone6	0x6095, 0x00, -31, 0						; digits 065, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -27, 0						; digits 066, coarse +0.00 st
+	ToneSetZone6	0x608d, 0x00, -22, 0						; digits 067, coarse +0.00 st
+	ToneSetZone6	0x608a, 0x00, -17, 0						; digits 068, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -35, 0						; digits 070, coarse +0.00 st
+	ToneSetZone6	0x608b, 0x00, -34, 0						; digits 071, coarse +0.00 st
+	ToneSetZone6	0x608c, 0x00, -32, 0						; digits 072, coarse +0.00 st
+	ToneSetZone6	0x6092, 0x00, -30, 0						; digits 073, coarse +0.00 st
+	ToneSetZone6	0x6093, 0x00, -28, 0						; digits 074, coarse +0.00 st
+	ToneSetZone6	0x6094, 0x00, -26, 0						; digits 075, coarse +0.00 st
+	ToneSetZone6	0x6095, 0x00, -23, 0						; digits 076, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -19, 0						; digits 077, coarse +0.00 st
+	ToneSetZone6	0x608d, 0x00, -14, 0						; digits 078, coarse +0.00 st
+	ToneSetZone6	0x608e, 0x00, -27, 0						; digits 080, coarse +0.00 st
+	ToneSetZone6	0x608f, 0x00, -26, 0						; digits 081, coarse +0.00 st
+	ToneSetZone6	0x6090, 0x00, -25, 0						; digits 082, coarse +0.00 st
+	ToneSetZone6	0x6091, 0x00, -24, 0						; digits 083, coarse +0.00 st
+	ToneSetZone6	0x6092, 0x00, -22, 0						; digits 084, coarse +0.00 st
+	ToneSetZone6	0x6093, 0x00, -20, 0						; digits 085, coarse +0.00 st
+	ToneSetZone6	0x6094, 0x00, -18, 0						; digits 086, coarse +0.00 st
+	ToneSetZone6	0x6095, 0x00, -15, 0						; digits 087, coarse +0.00 st
+	ToneSetZone6	0x6096, 0x00, -11, 0						; digits 088, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -90, 0						; digits 100, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -74, 0						; digits 101, coarse +0.00 st
+	ToneSetZone6	0x6097, 0x00, -65, 0						; digits 102, coarse +0.00 st
+	ToneSetZone6	0x6098, 0x00, -56, 0						; digits 103, coarse +0.00 st
+	ToneSetZone6	0x6099, 0x00, -50, 0						; digits 104, coarse +0.00 st
+	ToneSetZone6	0x609a, 0x00, -43, 0						; digits 105, coarse +0.00 st
+	ToneSetZone6	0x609b, 0x00, -36, 0						; digits 106, coarse +0.00 st
+	ToneSetZone6	0x609c, 0x00, -28, 0						; digits 107, coarse +0.00 st
+	ToneSetZone6	0x609d, 0x00, -21, 0						; digits 108, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -76, 0						; digits 110, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, -68, 0						; digits 111, coarse +0.00 st
+	ToneSetZone6	0x609e, 0x00, -62, 0						; digits 112, coarse +0.00 st
+	ToneSetZone6	0x609f, 0x00, -55, 0						; digits 113, coarse +0.00 st
+	ToneSetZone6	0x60a0, 0x00, -49, 0						; digits 114, coarse +0.00 st
+	ToneSetZone6	0x60a1, 0x00, -42, 0						; digits 115, coarse +0.00 st
+	ToneSetZone6	0x60a2, 0x00, -35, 0						; digits 116, coarse +0.00 st
+	ToneSetZone6	0x60a3, 0x00, -28, 0						; digits 117, coarse +0.00 st
+	ToneSetZone6	0x60a4, 0x00, -21, 0						; digits 118, coarse +0.00 st
+	ToneSetZone6	0x60a5, 0x00, -68, 0						; digits 120, coarse +0.00 st
+	ToneSetZone6	0x60a6, 0x00, -62, 0						; digits 121, coarse +0.00 st
+	ToneSetZone6	0x60a7, 0x00, -57, 0						; digits 122, coarse +0.00 st
+	ToneSetZone6	0x60a8, 0x00, -52, 0						; digits 123, coarse +0.00 st
+	ToneSetZone6	0x60a9, 0x00, -47, 0						; digits 124, coarse +0.00 st
+	ToneSetZone6	0x60aa, 0x00, -41, 0						; digits 125, coarse +0.00 st
+	ToneSetZone6	0x60ab, 0x00, -35, 0						; digits 126, coarse +0.00 st
+	ToneSetZone6	0x60ac, 0x00, -28, 0						; digits 127, coarse +0.00 st
+	ToneSetZone6	0x60ad, 0x00, -20, 0						; digits 128, coarse +0.00 st
+	ToneSetZone6	0x60ae, 0x00, -60, 0						; digits 130, coarse +0.00 st
+	ToneSetZone6	0x60af, 0x00, -55, 0						; digits 131, coarse +0.00 st
+	ToneSetZone6	0x60b0, 0x00, -52, 0						; digits 132, coarse +0.00 st
+	ToneSetZone6	0x60b1, 0x00, -47, 0						; digits 133, coarse +0.00 st
+	ToneSetZone6	0x60b2, 0x00, -44, 0						; digits 134, coarse +0.00 st
+	ToneSetZone6	0x60b3, 0x00, -39, 0						; digits 135, coarse +0.00 st
+	ToneSetZone6	0x60b4, 0x00, -34, 0						; digits 136, coarse +0.00 st
+	ToneSetZone6	0x60b5, 0x00, -27, 0						; digits 137, coarse +0.00 st
+	ToneSetZone6	0x60b6, 0x00, -20, 0						; digits 138, coarse +0.00 st
+	ToneSetZone6	0x60b7, 0x00, -54, 0						; digits 140, coarse +0.00 st
+	ToneSetZone6	0x60b8, 0x00, -50, 0						; digits 141, coarse +0.00 st
+	ToneSetZone6	0x60b9, 0x00, -47, 0						; digits 142, coarse +0.00 st
+	ToneSetZone6	0x60ba, 0x00, -44, 0						; digits 143, coarse +0.00 st
+	ToneSetZone6	0x60bb, 0x00, -40, 0						; digits 144, coarse +0.00 st
+	ToneSetZone6	0x60bc, 0x00, -36, 0						; digits 145, coarse +0.00 st
+	ToneSetZone6	0x60bd, 0x00, -32, 0						; digits 146, coarse +0.00 st
+	ToneSetZone6	0x60be, 0x00, -26, 0						; digits 147, coarse +0.00 st
+	ToneSetZone6	0x60bf, 0x00, -19, 0						; digits 148, coarse +0.00 st
+	ToneSetZone6	0x60c0, 0x00, -47, 0						; digits 150, coarse +0.00 st
+	ToneSetZone6	0x60c1, 0x00, -45, 0						; digits 151, coarse +0.00 st
+	ToneSetZone6	0x60c2, 0x00, -42, 0						; digits 152, coarse +0.00 st
+	ToneSetZone6	0x60c3, 0x00, -39, 0						; digits 153, coarse +0.00 st
+	ToneSetZone6	0x60c4, 0x00, -37, 0						; digits 154, coarse +0.00 st
+	ToneSetZone6	0x60c5, 0x00, -33, 0						; digits 155, coarse +0.00 st
+	ToneSetZone6	0x60c6, 0x00, -29, 0						; digits 156, coarse +0.00 st
+	ToneSetZone6	0x60c7, 0x00, -24, 0						; digits 157, coarse +0.00 st
+	ToneSetZone6	0x60c8, 0x00, -19, 0						; digits 158, coarse +0.00 st
+	ToneSetZone6	0x60c9, 0x00, -40, 0						; digits 160, coarse +0.00 st
+	ToneSetZone6	0x60ca, 0x00, -38, 0						; digits 161, coarse +0.00 st
+	ToneSetZone6	0x60cb, 0x00, -36, 0						; digits 162, coarse +0.00 st
+	ToneSetZone6	0x60cc, 0x00, -34, 0						; digits 163, coarse +0.00 st
+	ToneSetZone6	0x60cd, 0x00, -32, 0						; digits 164, coarse +0.00 st
+	ToneSetZone6	0x60ce, 0x00, -29, 0						; digits 165, coarse +0.00 st
+	ToneSetZone6	0x60cf, 0x00, -26, 0						; digits 166, coarse +0.00 st
+	ToneSetZone6	0x60d0, 0x00, -22, 0						; digits 167, coarse +0.00 st
+	ToneSetZone6	0x60d1, 0x00, -17, 0						; digits 168, coarse +0.00 st
+	ToneSetZone6	0x60d2, 0x00, -33, 0						; digits 170, coarse +0.00 st
+	ToneSetZone6	0x60d3, 0x00, -32, 0						; digits 171, coarse +0.00 st
+	ToneSetZone6	0x60d4, 0x00, -30, 0						; digits 172, coarse +0.00 st
+	ToneSetZone6	0x60d5, 0x00, -28, 0						; digits 173, coarse +0.00 st
+	ToneSetZone6	0x60d6, 0x00, -27, 0						; digits 174, coarse +0.00 st
+	ToneSetZone6	0x60d7, 0x00, -25, 0						; digits 175, coarse +0.00 st
+	ToneSetZone6	0x60d8, 0x00, -22, 0						; digits 176, coarse +0.00 st
+	ToneSetZone6	0x60d9, 0x00, -18, 0						; digits 177, coarse +0.00 st
+	ToneSetZone6	0x60da, 0x00, -14, 0						; digits 178, coarse +0.00 st
+	ToneSetZone6	0x60db, 0x00, -26, 0						; digits 180, coarse +0.00 st
+	ToneSetZone6	0x60dc, 0x00, -25, 0						; digits 181, coarse +0.00 st
+	ToneSetZone6	0x60dd, 0x00, -24, 0						; digits 182, coarse +0.00 st
+	ToneSetZone6	0x60de, 0x00, -22, 0						; digits 183, coarse +0.00 st
+	ToneSetZone6	0x60df, 0x00, -21, 0						; digits 184, coarse +0.00 st
+	ToneSetZone6	0x60e0, 0x00, -19, 0						; digits 185, coarse +0.00 st
+	ToneSetZone6	0x60e1, 0x00, -17, 0						; digits 186, coarse +0.00 st
+	ToneSetZone6	0x60e2, 0x00, -14, 0						; digits 187, coarse +0.00 st
+	ToneSetZone6	0x60e3, 0x00, -10, 0						; digits 188, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -74, 0						; digits 200, coarse +0.00 st
+	ToneSetZone6	0x60e4, 0x00, -65, 0						; digits 201, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -58, 0						; digits 202, coarse +0.00 st
+	ToneSetZone6	0x60e5, 0x00, -51, 0						; digits 203, coarse +0.00 st
+	ToneSetZone6	0x60e6, 0x00, -46, 0						; digits 204, coarse +0.00 st
+	ToneSetZone6	0x60e7, 0x00, -40, 0						; digits 205, coarse +0.00 st
+	ToneSetZone6	0x60e8, 0x00, -34, 0						; digits 206, coarse +0.00 st
+	ToneSetZone6	0x60e9, 0x00, -27, 0						; digits 207, coarse +0.00 st
+	ToneSetZone6	0x60ea, 0x00, -20, 0						; digits 208, coarse +0.00 st
+	ToneSetZone6	0x60eb, 0x00, -66, 0						; digits 210, coarse +0.00 st
+	ToneSetZone6	0x60ec, 0x00, -60, 0						; digits 211, coarse +0.00 st
+	ToneSetZone6	0x60ed, 0x00, -56, 0						; digits 212, coarse +0.00 st
+	ToneSetZone6	0x60ee, 0x00, -50, 0						; digits 213, coarse +0.00 st
+	ToneSetZone6	0x60ef, 0x00, -45, 0						; digits 214, coarse +0.00 st
+	ToneSetZone6	0x60f0, 0x00, -39, 0						; digits 215, coarse +0.00 st
+	ToneSetZone6	0x60f1, 0x00, -33, 0						; digits 216, coarse +0.00 st
+	ToneSetZone6	0x60f2, 0x00, -27, 0						; digits 217, coarse +0.00 st
+	ToneSetZone6	0x60f3, 0x00, -20, 0						; digits 218, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -60, 0						; digits 220, coarse +0.00 st
+	ToneSetZone6	0x60f4, 0x00, -56, 0						; digits 221, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, -52, 0						; digits 222, coarse +0.00 st
+	ToneSetZone6	0x60f5, 0x00, -48, 0						; digits 223, coarse +0.00 st
+	ToneSetZone6	0x60f6, 0x00, -44, 0						; digits 224, coarse +0.00 st
+	ToneSetZone6	0x60f7, 0x00, -39, 0						; digits 225, coarse +0.00 st
+	ToneSetZone6	0x60f8, 0x00, -33, 0						; digits 226, coarse +0.00 st
+	ToneSetZone6	0x60f9, 0x00, -26, 0						; digits 227, coarse +0.00 st
+	ToneSetZone6	0x60fa, 0x00, -19, 0						; digits 228, coarse +0.00 st
+	ToneSetZone6	0x60fb, 0x00, -54, 0						; digits 230, coarse +0.00 st
+	ToneSetZone6	0x60fc, 0x00, -51, 0						; digits 231, coarse +0.00 st
+	ToneSetZone6	0x60fd, 0x00, -48, 0						; digits 232, coarse +0.00 st
+	ToneSetZone6	0x60fe, 0x00, -44, 0						; digits 233, coarse +0.00 st
+	ToneSetZone6	0x60ff, 0x00, -41, 0						; digits 234, coarse +0.00 st
+	ToneSetZone6	0x6100, 0x00, -37, 0						; digits 235, coarse +0.00 st
+	ToneSetZone6	0x6101, 0x00, -32, 0						; digits 236, coarse +0.00 st
+	ToneSetZone6	0x6102, 0x00, -26, 0						; digits 237, coarse +0.00 st
+	ToneSetZone6	0x6103, 0x00, -19, 0						; digits 238, coarse +0.00 st
+	ToneSetZone6	0x6104, 0x00, -49, 0						; digits 240, coarse +0.00 st
+	ToneSetZone6	0x6105, 0x00, -46, 0						; digits 241, coarse +0.00 st
+	ToneSetZone6	0x6106, 0x00, -44, 0						; digits 242, coarse +0.00 st
+	ToneSetZone6	0x6107, 0x00, -41, 0						; digits 243, coarse +0.00 st
+	ToneSetZone6	0x6108, 0x00, -38, 0						; digits 244, coarse +0.00 st
+	ToneSetZone6	0x6109, 0x00, -34, 0						; digits 245, coarse +0.00 st
+	ToneSetZone6	0x610a, 0x00, -30, 0						; digits 246, coarse +0.00 st
+	ToneSetZone6	0x610b, 0x00, -25, 0						; digits 247, coarse +0.00 st
+	ToneSetZone6	0x610c, 0x00, -19, 0						; digits 248, coarse +0.00 st
+	ToneSetZone6	0x610d, 0x00, -44, 0						; digits 250, coarse +0.00 st
+	ToneSetZone6	0x610e, 0x00, -42, 0						; digits 251, coarse +0.00 st
+	ToneSetZone6	0x610f, 0x00, -39, 0						; digits 252, coarse +0.00 st
+	ToneSetZone6	0x6110, 0x00, -37, 0						; digits 253, coarse +0.00 st
+	ToneSetZone6	0x6111, 0x00, -34, 0						; digits 254, coarse +0.00 st
+	ToneSetZone6	0x6112, 0x00, -31, 0						; digits 255, coarse +0.00 st
+	ToneSetZone6	0x6113, 0x00, -28, 0						; digits 256, coarse +0.00 st
+	ToneSetZone6	0x6114, 0x00, -23, 0						; digits 257, coarse +0.00 st
+	ToneSetZone6	0x6115, 0x00, -18, 0						; digits 258, coarse +0.00 st
+	ToneSetZone6	0x6116, 0x00, -38, 0						; digits 260, coarse +0.00 st
+	ToneSetZone6	0x6117, 0x00, -36, 0						; digits 261, coarse +0.00 st
+	ToneSetZone6	0x6118, 0x00, -34, 0						; digits 262, coarse +0.00 st
+	ToneSetZone6	0x6119, 0x00, -32, 0						; digits 263, coarse +0.00 st
+	ToneSetZone6	0x611a, 0x00, -30, 0						; digits 264, coarse +0.00 st
+	ToneSetZone6	0x611b, 0x00, -28, 0						; digits 265, coarse +0.00 st
+	ToneSetZone6	0x611c, 0x00, -24, 0						; digits 266, coarse +0.00 st
+	ToneSetZone6	0x611d, 0x00, -20, 0						; digits 267, coarse +0.00 st
+	ToneSetZone6	0x611e, 0x00, -16, 0						; digits 268, coarse +0.00 st
+	ToneSetZone6	0x611f, 0x00, -31, 0						; digits 270, coarse +0.00 st
+	ToneSetZone6	0x6120, 0x00, -30, 0						; digits 271, coarse +0.00 st
+	ToneSetZone6	0x6121, 0x00, -29, 0						; digits 272, coarse +0.00 st
+	ToneSetZone6	0x6122, 0x00, -27, 0						; digits 273, coarse +0.00 st
+	ToneSetZone6	0x6123, 0x00, -25, 0						; digits 274, coarse +0.00 st
+	ToneSetZone6	0x6124, 0x00, -23, 0						; digits 275, coarse +0.00 st
+	ToneSetZone6	0x6125, 0x00, -21, 0						; digits 276, coarse +0.00 st
+	ToneSetZone6	0x6126, 0x00, -17, 0						; digits 277, coarse +0.00 st
+	ToneSetZone6	0x6127, 0x00, -13, 0						; digits 278, coarse +0.00 st
+	ToneSetZone6	0x6128, 0x00, -24, 0						; digits 280, coarse +0.00 st
+	ToneSetZone6	0x6129, 0x00, -23, 0						; digits 281, coarse +0.00 st
+	ToneSetZone6	0x612a, 0x00, -22, 0						; digits 282, coarse +0.00 st
+	ToneSetZone6	0x612b, 0x00, -21, 0						; digits 283, coarse +0.00 st
+	ToneSetZone6	0x612c, 0x00, -20, 0						; digits 284, coarse +0.00 st
+	ToneSetZone6	0x612d, 0x00, -18, 0						; digits 285, coarse +0.00 st
+	ToneSetZone6	0x612e, 0x00, -16, 0						; digits 286, coarse +0.00 st
+	ToneSetZone6	0x612f, 0x00, -13, 0						; digits 287, coarse +0.00 st
+	ToneSetZone6	0x6130, 0x00, -10, 0						; digits 288, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -62, 0						; digits 300, coarse +0.00 st
+	ToneSetZone6	0x6131, 0x00, -56, 0						; digits 301, coarse +0.00 st
+	ToneSetZone6	0x6132, 0x00, -51, 0						; digits 302, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -46, 0						; digits 303, coarse +0.00 st
+	ToneSetZone6	0x61e7, 0x00, -42, 0						; digits 304, coarse +0.00 st
+	ToneSetZone6	0x61ba, 0x00, -37, 0						; digits 305, coarse +0.00 st
+	ToneSetZone6	0x618d, 0x00, -31, 0						; digits 306, coarse +0.00 st
+	ToneSetZone6	0x6160, 0x00, -25, 0						; digits 307, coarse +0.00 st
+	ToneSetZone6	0x6133, 0x00, -18, 0						; digits 308, coarse +0.00 st
+	ToneSetZone6	0x6134, 0x00, -57, 0						; digits 310, coarse +0.00 st
+	ToneSetZone6	0x6135, 0x00, -53, 0						; digits 311, coarse +0.00 st
+	ToneSetZone6	0x6136, 0x00, -50, 0						; digits 312, coarse +0.00 st
+	ToneSetZone6	0x6137, 0x00, -45, 0						; digits 313, coarse +0.00 st
+	ToneSetZone6	0x6138, 0x00, -41, 0						; digits 314, coarse +0.00 st
+	ToneSetZone6	0x6139, 0x00, -36, 0						; digits 315, coarse +0.00 st
+	ToneSetZone6	0x613a, 0x00, -31, 0						; digits 316, coarse +0.00 st
+	ToneSetZone6	0x613b, 0x00, -25, 0						; digits 317, coarse +0.00 st
+	ToneSetZone6	0x613c, 0x00, -18, 0						; digits 318, coarse +0.00 st
+	ToneSetZone6	0x613d, 0x00, -53, 0						; digits 320, coarse +0.00 st
+	ToneSetZone6	0x613e, 0x00, -50, 0						; digits 321, coarse +0.00 st
+	ToneSetZone6	0x613f, 0x00, -47, 0						; digits 322, coarse +0.00 st
+	ToneSetZone6	0x6140, 0x00, -43, 0						; digits 323, coarse +0.00 st
+	ToneSetZone6	0x6141, 0x00, -40, 0						; digits 324, coarse +0.00 st
+	ToneSetZone6	0x6142, 0x00, -36, 0						; digits 325, coarse +0.00 st
+	ToneSetZone6	0x6143, 0x00, -30, 0						; digits 326, coarse +0.00 st
+	ToneSetZone6	0x6144, 0x00, -24, 0						; digits 327, coarse +0.00 st
+	ToneSetZone6	0x6145, 0x00, -18, 0						; digits 328, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -48, 0						; digits 330, coarse +0.00 st
+	ToneSetZone6	0x6146, 0x00, -46, 0						; digits 331, coarse +0.00 st
+	ToneSetZone6	0x6147, 0x00, -43, 0						; digits 332, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, -40, 0						; digits 333, coarse +0.00 st
+	ToneSetZone6	0x6208, 0x00, -37, 0						; digits 334, coarse +0.00 st
+	ToneSetZone6	0x61d8, 0x00, -34, 0						; digits 335, coarse +0.00 st
+	ToneSetZone6	0x61a8, 0x00, -30, 0						; digits 336, coarse +0.00 st
+	ToneSetZone6	0x6178, 0x00, -24, 0						; digits 337, coarse +0.00 st
+	ToneSetZone6	0x6148, 0x00, -18, 0						; digits 338, coarse +0.00 st
+	ToneSetZone6	0x6209, 0x00, -45, 0						; digits 340, coarse +0.00 st
+	ToneSetZone6	0x6149, 0x00, -42, 0						; digits 341, coarse +0.00 st
+	ToneSetZone6	0x614a, 0x00, -40, 0						; digits 342, coarse +0.00 st
+	ToneSetZone6	0x6210, 0x00, -37, 0						; digits 343, coarse +0.00 st
+	ToneSetZone6	0x6211, 0x00, -35, 0						; digits 344, coarse +0.00 st
+	ToneSetZone6	0x61db, 0x00, -32, 0						; digits 345, coarse +0.00 st
+	ToneSetZone6	0x61ab, 0x00, -28, 0						; digits 346, coarse +0.00 st
+	ToneSetZone6	0x617b, 0x00, -23, 0						; digits 347, coarse +0.00 st
+	ToneSetZone6	0x614b, 0x00, -17, 0						; digits 348, coarse +0.00 st
+	ToneSetZone6	0x61dc, 0x00, -40, 0						; digits 350, coarse +0.00 st
+	ToneSetZone6	0x614c, 0x00, -38, 0						; digits 351, coarse +0.00 st
+	ToneSetZone6	0x614d, 0x00, -36, 0						; digits 352, coarse +0.00 st
+	ToneSetZone6	0x61e2, 0x00, -34, 0						; digits 353, coarse +0.00 st
+	ToneSetZone6	0x61e3, 0x00, -32, 0						; digits 354, coarse +0.00 st
+	ToneSetZone6	0x61e4, 0x00, -29, 0						; digits 355, coarse +0.00 st
+	ToneSetZone6	0x61ae, 0x00, -26, 0						; digits 356, coarse +0.00 st
+	ToneSetZone6	0x617e, 0x00, -22, 0						; digits 357, coarse +0.00 st
+	ToneSetZone6	0x614e, 0x00, -17, 0						; digits 358, coarse +0.00 st
+	ToneSetZone6	0x61af, 0x00, -35, 0						; digits 360, coarse +0.00 st
+	ToneSetZone6	0x614f, 0x00, -33, 0						; digits 361, coarse +0.00 st
+	ToneSetZone6	0x6150, 0x00, -32, 0						; digits 362, coarse +0.00 st
+	ToneSetZone6	0x61b4, 0x00, -30, 0						; digits 363, coarse +0.00 st
+	ToneSetZone6	0x61b5, 0x00, -28, 0						; digits 364, coarse +0.00 st
+	ToneSetZone6	0x61b6, 0x00, -26, 0						; digits 365, coarse +0.00 st
+	ToneSetZone6	0x61b7, 0x00, -23, 0						; digits 366, coarse +0.00 st
+	ToneSetZone6	0x6181, 0x00, -19, 0						; digits 367, coarse +0.00 st
+	ToneSetZone6	0x6151, 0x00, -15, 0						; digits 368, coarse +0.00 st
+	ToneSetZone6	0x6182, 0x00, -29, 0						; digits 370, coarse +0.00 st
+	ToneSetZone6	0x6152, 0x00, -28, 0						; digits 371, coarse +0.00 st
+	ToneSetZone6	0x6153, 0x00, -26, 0						; digits 372, coarse +0.00 st
+	ToneSetZone6	0x6186, 0x00, -25, 0						; digits 373, coarse +0.00 st
+	ToneSetZone6	0x6187, 0x00, -23, 0						; digits 374, coarse +0.00 st
+	ToneSetZone6	0x6188, 0x00, -22, 0						; digits 375, coarse +0.00 st
+	ToneSetZone6	0x6189, 0x00, -19, 0						; digits 376, coarse +0.00 st
+	ToneSetZone6	0x618a, 0x00, -16, 0						; digits 377, coarse +0.00 st
+	ToneSetZone6	0x6154, 0x00, -12, 0						; digits 378, coarse +0.00 st
+	ToneSetZone6	0x6155, 0x00, -23, 0						; digits 380, coarse +0.00 st
+	ToneSetZone6	0x6156, 0x00, -22, 0						; digits 381, coarse +0.00 st
+	ToneSetZone6	0x6157, 0x00, -21, 0						; digits 382, coarse +0.00 st
+	ToneSetZone6	0x6158, 0x00, -19, 0						; digits 383, coarse +0.00 st
+	ToneSetZone6	0x6159, 0x00, -18, 0						; digits 384, coarse +0.00 st
+	ToneSetZone6	0x615a, 0x00, -17, 0						; digits 385, coarse +0.00 st
+	ToneSetZone6	0x615b, 0x00, -15, 0						; digits 386, coarse +0.00 st
+	ToneSetZone6	0x615c, 0x00, -12, 0						; digits 387, coarse +0.00 st
+	ToneSetZone6	0x615d, 0x00, -9, 0						; digits 388, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -54, 0						; digits 400, coarse +0.00 st
+	ToneSetZone6	0x615e, 0x00, -50, 0						; digits 401, coarse +0.00 st
+	ToneSetZone6	0x615f, 0x00, -46, 0						; digits 402, coarse +0.00 st
+	ToneSetZone6	0x6219, 0x00, -42, 0						; digits 403, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -38, 0						; digits 404, coarse +0.00 st
+	ToneSetZone6	0x61e7, 0x00, -34, 0						; digits 405, coarse +0.00 st
+	ToneSetZone6	0x61ba, 0x00, -29, 0						; digits 406, coarse +0.00 st
+	ToneSetZone6	0x618d, 0x00, -23, 0						; digits 407, coarse +0.00 st
+	ToneSetZone6	0x6160, 0x00, -17, 0						; digits 408, coarse +0.00 st
+	ToneSetZone6	0x6161, 0x00, -50, 0						; digits 410, coarse +0.00 st
+	ToneSetZone6	0x6162, 0x00, -47, 0						; digits 411, coarse +0.00 st
+	ToneSetZone6	0x6163, 0x00, -45, 0						; digits 412, coarse +0.00 st
+	ToneSetZone6	0x6164, 0x00, -41, 0						; digits 413, coarse +0.00 st
+	ToneSetZone6	0x6165, 0x00, -37, 0						; digits 414, coarse +0.00 st
+	ToneSetZone6	0x6166, 0x00, -33, 0						; digits 415, coarse +0.00 st
+	ToneSetZone6	0x6167, 0x00, -28, 0						; digits 416, coarse +0.00 st
+	ToneSetZone6	0x6168, 0x00, -23, 0						; digits 417, coarse +0.00 st
+	ToneSetZone6	0x6169, 0x00, -17, 0						; digits 418, coarse +0.00 st
+	ToneSetZone6	0x616a, 0x00, -47, 0						; digits 420, coarse +0.00 st
+	ToneSetZone6	0x616b, 0x00, -45, 0						; digits 421, coarse +0.00 st
+	ToneSetZone6	0x616c, 0x00, -42, 0						; digits 422, coarse +0.00 st
+	ToneSetZone6	0x616d, 0x00, -39, 0						; digits 423, coarse +0.00 st
+	ToneSetZone6	0x616e, 0x00, -37, 0						; digits 424, coarse +0.00 st
+	ToneSetZone6	0x616f, 0x00, -33, 0						; digits 425, coarse +0.00 st
+	ToneSetZone6	0x6170, 0x00, -28, 0						; digits 426, coarse +0.00 st
+	ToneSetZone6	0x6171, 0x00, -22, 0						; digits 427, coarse +0.00 st
+	ToneSetZone6	0x6172, 0x00, -16, 0						; digits 428, coarse +0.00 st
+	ToneSetZone6	0x6251, 0x00, -44, 0						; digits 430, coarse +0.00 st
+	ToneSetZone6	0x6173, 0x00, -41, 0						; digits 431, coarse +0.00 st
+	ToneSetZone6	0x6174, 0x00, -39, 0						; digits 432, coarse +0.00 st
+	ToneSetZone6	0x6258, 0x00, -37, 0						; digits 433, coarse +0.00 st
+	ToneSetZone6	0x6259, 0x00, -34, 0						; digits 434, coarse +0.00 st
+	ToneSetZone6	0x6205, 0x00, -31, 0						; digits 435, coarse +0.00 st
+	ToneSetZone6	0x61d5, 0x00, -27, 0						; digits 436, coarse +0.00 st
+	ToneSetZone6	0x61a5, 0x00, -22, 0						; digits 437, coarse +0.00 st
+	ToneSetZone6	0x6175, 0x00, -16, 0						; digits 438, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -40, 0						; digits 440, coarse +0.00 st
+	ToneSetZone6	0x6176, 0x00, -38, 0						; digits 441, coarse +0.00 st
+	ToneSetZone6	0x6177, 0x00, -36, 0						; digits 442, coarse +0.00 st
+	ToneSetZone6	0x6261, 0x00, -34, 0						; digits 443, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, -32, 0						; digits 444, coarse +0.00 st
+	ToneSetZone6	0x6208, 0x00, -29, 0						; digits 445, coarse +0.00 st
+	ToneSetZone6	0x61d8, 0x00, -26, 0						; digits 446, coarse +0.00 st
+	ToneSetZone6	0x61a8, 0x00, -22, 0						; digits 447, coarse +0.00 st
+	ToneSetZone6	0x6178, 0x00, -16, 0						; digits 448, coarse +0.00 st
+	ToneSetZone6	0x6209, 0x00, -37, 0						; digits 450, coarse +0.00 st
+	ToneSetZone6	0x6179, 0x00, -35, 0						; digits 451, coarse +0.00 st
+	ToneSetZone6	0x617a, 0x00, -33, 0						; digits 452, coarse +0.00 st
+	ToneSetZone6	0x620f, 0x00, -31, 0						; digits 453, coarse +0.00 st
+	ToneSetZone6	0x6210, 0x00, -29, 0						; digits 454, coarse +0.00 st
+	ToneSetZone6	0x6211, 0x00, -27, 0						; digits 455, coarse +0.00 st
+	ToneSetZone6	0x61db, 0x00, -24, 0						; digits 456, coarse +0.00 st
+	ToneSetZone6	0x61ab, 0x00, -20, 0						; digits 457, coarse +0.00 st
+	ToneSetZone6	0x617b, 0x00, -15, 0						; digits 458, coarse +0.00 st
+	ToneSetZone6	0x61dc, 0x00, -32, 0						; digits 460, coarse +0.00 st
+	ToneSetZone6	0x617c, 0x00, -30, 0						; digits 461, coarse +0.00 st
+	ToneSetZone6	0x617d, 0x00, -29, 0						; digits 462, coarse +0.00 st
+	ToneSetZone6	0x61e1, 0x00, -27, 0						; digits 463, coarse +0.00 st
+	ToneSetZone6	0x61e2, 0x00, -26, 0						; digits 464, coarse +0.00 st
+	ToneSetZone6	0x61e3, 0x00, -24, 0						; digits 465, coarse +0.00 st
+	ToneSetZone6	0x61e4, 0x00, -21, 0						; digits 466, coarse +0.00 st
+	ToneSetZone6	0x61ae, 0x00, -18, 0						; digits 467, coarse +0.00 st
+	ToneSetZone6	0x617e, 0x00, -14, 0						; digits 468, coarse +0.00 st
+	ToneSetZone6	0x61af, 0x00, -27, 0						; digits 470, coarse +0.00 st
+	ToneSetZone6	0x617f, 0x00, -26, 0						; digits 471, coarse +0.00 st
+	ToneSetZone6	0x6180, 0x00, -24, 0						; digits 472, coarse +0.00 st
+	ToneSetZone6	0x61b3, 0x00, -23, 0						; digits 473, coarse +0.00 st
+	ToneSetZone6	0x61b4, 0x00, -22, 0						; digits 474, coarse +0.00 st
+	ToneSetZone6	0x61b5, 0x00, -20, 0						; digits 475, coarse +0.00 st
+	ToneSetZone6	0x61b6, 0x00, -18, 0						; digits 476, coarse +0.00 st
+	ToneSetZone6	0x61b7, 0x00, -15, 0						; digits 477, coarse +0.00 st
+	ToneSetZone6	0x6181, 0x00, -11, 0						; digits 478, coarse +0.00 st
+	ToneSetZone6	0x6182, 0x00, -21, 0						; digits 480, coarse +0.00 st
+	ToneSetZone6	0x6183, 0x00, -20, 0						; digits 481, coarse +0.00 st
+	ToneSetZone6	0x6184, 0x00, -19, 0						; digits 482, coarse +0.00 st
+	ToneSetZone6	0x6185, 0x00, -18, 0						; digits 483, coarse +0.00 st
+	ToneSetZone6	0x6186, 0x00, -17, 0						; digits 484, coarse +0.00 st
+	ToneSetZone6	0x6187, 0x00, -15, 0						; digits 485, coarse +0.00 st
+	ToneSetZone6	0x6188, 0x00, -14, 0						; digits 486, coarse +0.00 st
+	ToneSetZone6	0x6189, 0x00, -11, 0						; digits 487, coarse +0.00 st
+	ToneSetZone6	0x618a, 0x00, -8, 0						; digits 488, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -46, 0						; digits 500, coarse +0.00 st
+	ToneSetZone6	0x618b, 0x00, -43, 0						; digits 501, coarse +0.00 st
+	ToneSetZone6	0x618c, 0x00, -40, 0						; digits 502, coarse +0.00 st
+	ToneSetZone6	0x6218, 0x00, -37, 0						; digits 503, coarse +0.00 st
+	ToneSetZone6	0x6219, 0x00, -34, 0						; digits 504, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -30, 0						; digits 505, coarse +0.00 st
+	ToneSetZone6	0x61e7, 0x00, -26, 0						; digits 506, coarse +0.00 st
+	ToneSetZone6	0x61ba, 0x00, -21, 0						; digits 507, coarse +0.00 st
+	ToneSetZone6	0x618d, 0x00, -15, 0						; digits 508, coarse +0.00 st
+	ToneSetZone6	0x618e, 0x00, -43, 0						; digits 510, coarse +0.00 st
+	ToneSetZone6	0x618f, 0x00, -41, 0						; digits 511, coarse +0.00 st
+	ToneSetZone6	0x6190, 0x00, -39, 0						; digits 512, coarse +0.00 st
+	ToneSetZone6	0x6191, 0x00, -36, 0						; digits 513, coarse +0.00 st
+	ToneSetZone6	0x6192, 0x00, -33, 0						; digits 514, coarse +0.00 st
+	ToneSetZone6	0x6193, 0x00, -30, 0						; digits 515, coarse +0.00 st
+	ToneSetZone6	0x6194, 0x00, -25, 0						; digits 516, coarse +0.00 st
+	ToneSetZone6	0x6195, 0x00, -20, 0						; digits 517, coarse +0.00 st
+	ToneSetZone6	0x6196, 0x00, -15, 0						; digits 518, coarse +0.00 st
+	ToneSetZone6	0x6197, 0x00, -41, 0						; digits 520, coarse +0.00 st
+	ToneSetZone6	0x6198, 0x00, -39, 0						; digits 521, coarse +0.00 st
+	ToneSetZone6	0x6199, 0x00, -37, 0						; digits 522, coarse +0.00 st
+	ToneSetZone6	0x619a, 0x00, -35, 0						; digits 523, coarse +0.00 st
+	ToneSetZone6	0x619b, 0x00, -32, 0						; digits 524, coarse +0.00 st
+	ToneSetZone6	0x619c, 0x00, -29, 0						; digits 525, coarse +0.00 st
+	ToneSetZone6	0x619d, 0x00, -25, 0						; digits 526, coarse +0.00 st
+	ToneSetZone6	0x619e, 0x00, -20, 0						; digits 527, coarse +0.00 st
+	ToneSetZone6	0x619f, 0x00, -15, 0						; digits 528, coarse +0.00 st
+	ToneSetZone6	0x6248, 0x00, -38, 0						; digits 530, coarse +0.00 st
+	ToneSetZone6	0x61a0, 0x00, -36, 0						; digits 531, coarse +0.00 st
+	ToneSetZone6	0x61a1, 0x00, -35, 0						; digits 532, coarse +0.00 st
+	ToneSetZone6	0x624e, 0x00, -32, 0						; digits 533, coarse +0.00 st
+	ToneSetZone6	0x624f, 0x00, -30, 0						; digits 534, coarse +0.00 st
+	ToneSetZone6	0x6250, 0x00, -28, 0						; digits 535, coarse +0.00 st
+	ToneSetZone6	0x6202, 0x00, -25, 0						; digits 536, coarse +0.00 st
+	ToneSetZone6	0x61d2, 0x00, -20, 0						; digits 537, coarse +0.00 st
+	ToneSetZone6	0x61a2, 0x00, -14, 0						; digits 538, coarse +0.00 st
+	ToneSetZone6	0x6251, 0x00, -36, 0						; digits 540, coarse +0.00 st
+	ToneSetZone6	0x61a3, 0x00, -34, 0						; digits 541, coarse +0.00 st
+	ToneSetZone6	0x61a4, 0x00, -32, 0						; digits 542, coarse +0.00 st
+	ToneSetZone6	0x6257, 0x00, -30, 0						; digits 543, coarse +0.00 st
+	ToneSetZone6	0x6258, 0x00, -29, 0						; digits 544, coarse +0.00 st
+	ToneSetZone6	0x6259, 0x00, -26, 0						; digits 545, coarse +0.00 st
+	ToneSetZone6	0x6205, 0x00, -23, 0						; digits 546, coarse +0.00 st
+	ToneSetZone6	0x61d5, 0x00, -19, 0						; digits 547, coarse +0.00 st
+	ToneSetZone6	0x61a5, 0x00, -14, 0						; digits 548, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -32, 0						; digits 550, coarse +0.00 st
+	ToneSetZone6	0x61a6, 0x00, -31, 0						; digits 551, coarse +0.00 st
+	ToneSetZone6	0x61a7, 0x00, -30, 0						; digits 552, coarse +0.00 st
+	ToneSetZone6	0x6260, 0x00, -28, 0						; digits 553, coarse +0.00 st
+	ToneSetZone6	0x6261, 0x00, -26, 0						; digits 554, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, -24, 0						; digits 555, coarse +0.00 st
+	ToneSetZone6	0x6208, 0x00, -21, 0						; digits 556, coarse +0.00 st
+	ToneSetZone6	0x61d8, 0x00, -18, 0						; digits 557, coarse +0.00 st
+	ToneSetZone6	0x61a8, 0x00, -14, 0						; digits 558, coarse +0.00 st
+	ToneSetZone6	0x6209, 0x00, -29, 0						; digits 560, coarse +0.00 st
+	ToneSetZone6	0x61a9, 0x00, -27, 0						; digits 561, coarse +0.00 st
+	ToneSetZone6	0x61aa, 0x00, -26, 0						; digits 562, coarse +0.00 st
+	ToneSetZone6	0x620e, 0x00, -25, 0						; digits 563, coarse +0.00 st
+	ToneSetZone6	0x620f, 0x00, -23, 0						; digits 564, coarse +0.00 st
+	ToneSetZone6	0x6210, 0x00, -21, 0						; digits 565, coarse +0.00 st
+	ToneSetZone6	0x6211, 0x00, -19, 0						; digits 566, coarse +0.00 st
+	ToneSetZone6	0x61db, 0x00, -16, 0						; digits 567, coarse +0.00 st
+	ToneSetZone6	0x61ab, 0x00, -12, 0						; digits 568, coarse +0.00 st
+	ToneSetZone6	0x61dc, 0x00, -24, 0						; digits 570, coarse +0.00 st
+	ToneSetZone6	0x61ac, 0x00, -23, 0						; digits 571, coarse +0.00 st
+	ToneSetZone6	0x61ad, 0x00, -22, 0						; digits 572, coarse +0.00 st
+	ToneSetZone6	0x61e0, 0x00, -21, 0						; digits 573, coarse +0.00 st
+	ToneSetZone6	0x61e1, 0x00, -19, 0						; digits 574, coarse +0.00 st
+	ToneSetZone6	0x61e2, 0x00, -18, 0						; digits 575, coarse +0.00 st
+	ToneSetZone6	0x61e3, 0x00, -16, 0						; digits 576, coarse +0.00 st
+	ToneSetZone6	0x61e4, 0x00, -13, 0						; digits 577, coarse +0.00 st
+	ToneSetZone6	0x61ae, 0x00, -10, 0						; digits 578, coarse +0.00 st
+	ToneSetZone6	0x61af, 0x00, -19, 0						; digits 580, coarse +0.00 st
+	ToneSetZone6	0x61b0, 0x00, -18, 0						; digits 581, coarse +0.00 st
+	ToneSetZone6	0x61b1, 0x00, -17, 0						; digits 582, coarse +0.00 st
+	ToneSetZone6	0x61b2, 0x00, -16, 0						; digits 583, coarse +0.00 st
+	ToneSetZone6	0x61b3, 0x00, -15, 0						; digits 584, coarse +0.00 st
+	ToneSetZone6	0x61b4, 0x00, -14, 0						; digits 585, coarse +0.00 st
+	ToneSetZone6	0x61b5, 0x00, -12, 0						; digits 586, coarse +0.00 st
+	ToneSetZone6	0x61b6, 0x00, -10, 0						; digits 587, coarse +0.00 st
+	ToneSetZone6	0x61b7, 0x00, -7, 0						; digits 588, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -38, 0						; digits 600, coarse +0.00 st
+	ToneSetZone6	0x61b8, 0x00, -36, 0						; digits 601, coarse +0.00 st
+	ToneSetZone6	0x61b9, 0x00, -34, 0						; digits 602, coarse +0.00 st
+	ToneSetZone6	0x6217, 0x00, -31, 0						; digits 603, coarse +0.00 st
+	ToneSetZone6	0x6218, 0x00, -29, 0						; digits 604, coarse +0.00 st
+	ToneSetZone6	0x6219, 0x00, -26, 0						; digits 605, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -22, 0						; digits 606, coarse +0.00 st
+	ToneSetZone6	0x61e7, 0x00, -18, 0						; digits 607, coarse +0.00 st
+	ToneSetZone6	0x61ba, 0x00, -13, 0						; digits 608, coarse +0.00 st
+	ToneSetZone6	0x61bb, 0x00, -36, 0						; digits 610, coarse +0.00 st
+	ToneSetZone6	0x61bc, 0x00, -34, 0						; digits 611, coarse +0.00 st
+	ToneSetZone6	0x61bd, 0x00, -33, 0						; digits 612, coarse +0.00 st
+	ToneSetZone6	0x61be, 0x00, -31, 0						; digits 613, coarse +0.00 st
+	ToneSetZone6	0x61bf, 0x00, -28, 0						; digits 614, coarse +0.00 st
+	ToneSetZone6	0x61c0, 0x00, -25, 0						; digits 615, coarse +0.00 st
+	ToneSetZone6	0x61c1, 0x00, -22, 0						; digits 616, coarse +0.00 st
+	ToneSetZone6	0x61c2, 0x00, -17, 0						; digits 617, coarse +0.00 st
+	ToneSetZone6	0x61c3, 0x00, -12, 0						; digits 618, coarse +0.00 st
+	ToneSetZone6	0x61c4, 0x00, -34, 0						; digits 620, coarse +0.00 st
+	ToneSetZone6	0x61c5, 0x00, -33, 0						; digits 621, coarse +0.00 st
+	ToneSetZone6	0x61c6, 0x00, -31, 0						; digits 622, coarse +0.00 st
+	ToneSetZone6	0x61c7, 0x00, -29, 0						; digits 623, coarse +0.00 st
+	ToneSetZone6	0x61c8, 0x00, -28, 0						; digits 624, coarse +0.00 st
+	ToneSetZone6	0x61c9, 0x00, -25, 0						; digits 625, coarse +0.00 st
+	ToneSetZone6	0x61ca, 0x00, -21, 0						; digits 626, coarse +0.00 st
+	ToneSetZone6	0x61cb, 0x00, -17, 0						; digits 627, coarse +0.00 st
+	ToneSetZone6	0x61cc, 0x00, -12, 0						; digits 628, coarse +0.00 st
+	ToneSetZone6	0x623f, 0x00, -32, 0						; digits 630, coarse +0.00 st
+	ToneSetZone6	0x61cd, 0x00, -31, 0						; digits 631, coarse +0.00 st
+	ToneSetZone6	0x61ce, 0x00, -29, 0						; digits 632, coarse +0.00 st
+	ToneSetZone6	0x6244, 0x00, -28, 0						; digits 633, coarse +0.00 st
+	ToneSetZone6	0x6245, 0x00, -26, 0						; digits 634, coarse +0.00 st
+	ToneSetZone6	0x6246, 0x00, -24, 0						; digits 635, coarse +0.00 st
+	ToneSetZone6	0x6247, 0x00, -21, 0						; digits 636, coarse +0.00 st
+	ToneSetZone6	0x61ff, 0x00, -17, 0						; digits 637, coarse +0.00 st
+	ToneSetZone6	0x61cf, 0x00, -12, 0						; digits 638, coarse +0.00 st
+	ToneSetZone6	0x6248, 0x00, -30, 0						; digits 640, coarse +0.00 st
+	ToneSetZone6	0x61d0, 0x00, -29, 0						; digits 641, coarse +0.00 st
+	ToneSetZone6	0x61d1, 0x00, -28, 0						; digits 642, coarse +0.00 st
+	ToneSetZone6	0x624d, 0x00, -26, 0						; digits 643, coarse +0.00 st
+	ToneSetZone6	0x624e, 0x00, -24, 0						; digits 644, coarse +0.00 st
+	ToneSetZone6	0x624f, 0x00, -22, 0						; digits 645, coarse +0.00 st
+	ToneSetZone6	0x6250, 0x00, -20, 0						; digits 646, coarse +0.00 st
+	ToneSetZone6	0x6202, 0x00, -17, 0						; digits 647, coarse +0.00 st
+	ToneSetZone6	0x61d2, 0x00, -12, 0						; digits 648, coarse +0.00 st
+	ToneSetZone6	0x6251, 0x00, -28, 0						; digits 650, coarse +0.00 st
+	ToneSetZone6	0x61d3, 0x00, -26, 0						; digits 651, coarse +0.00 st
+	ToneSetZone6	0x61d4, 0x00, -25, 0						; digits 652, coarse +0.00 st
+	ToneSetZone6	0x6256, 0x00, -24, 0						; digits 653, coarse +0.00 st
+	ToneSetZone6	0x6257, 0x00, -22, 0						; digits 654, coarse +0.00 st
+	ToneSetZone6	0x6258, 0x00, -21, 0						; digits 655, coarse +0.00 st
+	ToneSetZone6	0x6259, 0x00, -18, 0						; digits 656, coarse +0.00 st
+	ToneSetZone6	0x6205, 0x00, -15, 0						; digits 657, coarse +0.00 st
+	ToneSetZone6	0x61d5, 0x00, -11, 0						; digits 658, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -24, 0						; digits 660, coarse +0.00 st
+	ToneSetZone6	0x61d6, 0x00, -23, 0						; digits 661, coarse +0.00 st
+	ToneSetZone6	0x61d7, 0x00, -22, 0						; digits 662, coarse +0.00 st
+	ToneSetZone6	0x625f, 0x00, -21, 0						; digits 663, coarse +0.00 st
+	ToneSetZone6	0x6260, 0x00, -20, 0						; digits 664, coarse +0.00 st
+	ToneSetZone6	0x6261, 0x00, -18, 0						; digits 665, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, -16, 0						; digits 666, coarse +0.00 st
+	ToneSetZone6	0x6208, 0x00, -13, 0						; digits 667, coarse +0.00 st
+	ToneSetZone6	0x61d8, 0x00, -10, 0						; digits 668, coarse +0.00 st
+	ToneSetZone6	0x6209, 0x00, -21, 0						; digits 670, coarse +0.00 st
+	ToneSetZone6	0x61d9, 0x00, -20, 0						; digits 671, coarse +0.00 st
+	ToneSetZone6	0x61da, 0x00, -19, 0						; digits 672, coarse +0.00 st
+	ToneSetZone6	0x620d, 0x00, -18, 0						; digits 673, coarse +0.00 st
+	ToneSetZone6	0x620e, 0x00, -17, 0						; digits 674, coarse +0.00 st
+	ToneSetZone6	0x620f, 0x00, -15, 0						; digits 675, coarse +0.00 st
+	ToneSetZone6	0x6210, 0x00, -13, 0						; digits 676, coarse +0.00 st
+	ToneSetZone6	0x6211, 0x00, -11, 0						; digits 677, coarse +0.00 st
+	ToneSetZone6	0x61db, 0x00, -8, 0						; digits 678, coarse +0.00 st
+	ToneSetZone6	0x61dc, 0x00, -16, 0						; digits 680, coarse +0.00 st
+	ToneSetZone6	0x61dd, 0x00, -15, 0						; digits 681, coarse +0.00 st
+	ToneSetZone6	0x61de, 0x00, -14, 0						; digits 682, coarse +0.00 st
+	ToneSetZone6	0x61df, 0x00, -14, 0						; digits 683, coarse +0.00 st
+	ToneSetZone6	0x61e0, 0x00, -13, 0						; digits 684, coarse +0.00 st
+	ToneSetZone6	0x61e1, 0x00, -11, 0						; digits 685, coarse +0.00 st
+	ToneSetZone6	0x61e2, 0x00, -10, 0						; digits 686, coarse +0.00 st
+	ToneSetZone6	0x61e3, 0x00, -8, 0						; digits 687, coarse +0.00 st
+	ToneSetZone6	0x61e4, 0x00, -5, 0						; digits 688, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -30, 0						; digits 700, coarse +0.00 st
+	ToneSetZone6	0x61e5, 0x00, -28, 0						; digits 701, coarse +0.00 st
+	ToneSetZone6	0x61e6, 0x00, -27, 0						; digits 702, coarse +0.00 st
+	ToneSetZone6	0x6216, 0x00, -25, 0						; digits 703, coarse +0.00 st
+	ToneSetZone6	0x6217, 0x00, -23, 0						; digits 704, coarse +0.00 st
+	ToneSetZone6	0x6218, 0x00, -21, 0						; digits 705, coarse +0.00 st
+	ToneSetZone6	0x6219, 0x00, -18, 0						; digits 706, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -14, 0						; digits 707, coarse +0.00 st
+	ToneSetZone6	0x61e7, 0x00, -10, 0						; digits 708, coarse +0.00 st
+	ToneSetZone6	0x61e8, 0x00, -29, 0						; digits 710, coarse +0.00 st
+	ToneSetZone6	0x61e9, 0x00, -27, 0						; digits 711, coarse +0.00 st
+	ToneSetZone6	0x61ea, 0x00, -26, 0						; digits 712, coarse +0.00 st
+	ToneSetZone6	0x61eb, 0x00, -24, 0						; digits 713, coarse +0.00 st
+	ToneSetZone6	0x61ec, 0x00, -23, 0						; digits 714, coarse +0.00 st
+	ToneSetZone6	0x61ed, 0x00, -20, 0						; digits 715, coarse +0.00 st
+	ToneSetZone6	0x61ee, 0x00, -17, 0						; digits 716, coarse +0.00 st
+	ToneSetZone6	0x61ef, 0x00, -14, 0						; digits 717, coarse +0.00 st
+	ToneSetZone6	0x61f0, 0x00, -10, 0						; digits 718, coarse +0.00 st
+	ToneSetZone6	0x61f1, 0x00, -27, 0						; digits 720, coarse +0.00 st
+	ToneSetZone6	0x61f2, 0x00, -26, 0						; digits 721, coarse +0.00 st
+	ToneSetZone6	0x61f3, 0x00, -25, 0						; digits 722, coarse +0.00 st
+	ToneSetZone6	0x61f4, 0x00, -24, 0						; digits 723, coarse +0.00 st
+	ToneSetZone6	0x61f5, 0x00, -22, 0						; digits 724, coarse +0.00 st
+	ToneSetZone6	0x61f6, 0x00, -20, 0						; digits 725, coarse +0.00 st
+	ToneSetZone6	0x61f7, 0x00, -17, 0						; digits 726, coarse +0.00 st
+	ToneSetZone6	0x61f8, 0x00, -14, 0						; digits 727, coarse +0.00 st
+	ToneSetZone6	0x61f9, 0x00, -9, 0						; digits 728, coarse +0.00 st
+	ToneSetZone6	0x6236, 0x00, -26, 0						; digits 730, coarse +0.00 st
+	ToneSetZone6	0x61fa, 0x00, -25, 0						; digits 731, coarse +0.00 st
+	ToneSetZone6	0x61fb, 0x00, -24, 0						; digits 732, coarse +0.00 st
+	ToneSetZone6	0x623a, 0x00, -22, 0						; digits 733, coarse +0.00 st
+	ToneSetZone6	0x623b, 0x00, -21, 0						; digits 734, coarse +0.00 st
+	ToneSetZone6	0x623c, 0x00, -19, 0						; digits 735, coarse +0.00 st
+	ToneSetZone6	0x623d, 0x00, -17, 0						; digits 736, coarse +0.00 st
+	ToneSetZone6	0x623e, 0x00, -13, 0						; digits 737, coarse +0.00 st
+	ToneSetZone6	0x61fc, 0x00, -9, 0						; digits 738, coarse +0.00 st
+	ToneSetZone6	0x623f, 0x00, -24, 0						; digits 740, coarse +0.00 st
+	ToneSetZone6	0x61fd, 0x00, -23, 0						; digits 741, coarse +0.00 st
+	ToneSetZone6	0x61fe, 0x00, -22, 0						; digits 742, coarse +0.00 st
+	ToneSetZone6	0x6243, 0x00, -21, 0						; digits 743, coarse +0.00 st
+	ToneSetZone6	0x6244, 0x00, -20, 0						; digits 744, coarse +0.00 st
+	ToneSetZone6	0x6245, 0x00, -18, 0						; digits 745, coarse +0.00 st
+	ToneSetZone6	0x6246, 0x00, -16, 0						; digits 746, coarse +0.00 st
+	ToneSetZone6	0x6247, 0x00, -13, 0						; digits 747, coarse +0.00 st
+	ToneSetZone6	0x61ff, 0x00, -9, 0						; digits 748, coarse +0.00 st
+	ToneSetZone6	0x6248, 0x00, -22, 0						; digits 750, coarse +0.00 st
+	ToneSetZone6	0x6200, 0x00, -21, 0						; digits 751, coarse +0.00 st
+	ToneSetZone6	0x6201, 0x00, -20, 0						; digits 752, coarse +0.00 st
+	ToneSetZone6	0x624c, 0x00, -19, 0						; digits 753, coarse +0.00 st
+	ToneSetZone6	0x624d, 0x00, -18, 0						; digits 754, coarse +0.00 st
+	ToneSetZone6	0x624e, 0x00, -16, 0						; digits 755, coarse +0.00 st
+	ToneSetZone6	0x624f, 0x00, -14, 0						; digits 756, coarse +0.00 st
+	ToneSetZone6	0x6250, 0x00, -12, 0						; digits 757, coarse +0.00 st
+	ToneSetZone6	0x6202, 0x00, -9, 0						; digits 758, coarse +0.00 st
+	ToneSetZone6	0x6251, 0x00, -20, 0						; digits 760, coarse +0.00 st
+	ToneSetZone6	0x6203, 0x00, -19, 0						; digits 761, coarse +0.00 st
+	ToneSetZone6	0x6204, 0x00, -18, 0						; digits 762, coarse +0.00 st
+	ToneSetZone6	0x6255, 0x00, -17, 0						; digits 763, coarse +0.00 st
+	ToneSetZone6	0x6256, 0x00, -16, 0						; digits 764, coarse +0.00 st
+	ToneSetZone6	0x6257, 0x00, -14, 0						; digits 765, coarse +0.00 st
+	ToneSetZone6	0x6258, 0x00, -13, 0						; digits 766, coarse +0.00 st
+	ToneSetZone6	0x6259, 0x00, -10, 0						; digits 767, coarse +0.00 st
+	ToneSetZone6	0x6205, 0x00, -7, 0						; digits 768, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -16, 0						; digits 770, coarse +0.00 st
+	ToneSetZone6	0x6206, 0x00, -16, 0						; digits 771, coarse +0.00 st
+	ToneSetZone6	0x6207, 0x00, -15, 0						; digits 772, coarse +0.00 st
+	ToneSetZone6	0x625e, 0x00, -14, 0						; digits 773, coarse +0.00 st
+	ToneSetZone6	0x625f, 0x00, -13, 0						; digits 774, coarse +0.00 st
+	ToneSetZone6	0x6260, 0x00, -12, 0						; digits 775, coarse +0.00 st
+	ToneSetZone6	0x6261, 0x00, -10, 0						; digits 776, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, -8, 0						; digits 777, coarse +0.00 st
+	ToneSetZone6	0x6208, 0x00, -5, 0						; digits 778, coarse +0.00 st
+	ToneSetZone6	0x6209, 0x00, -13, 0						; digits 780, coarse +0.00 st
+	ToneSetZone6	0x620a, 0x00, -12, 0						; digits 781, coarse +0.00 st
+	ToneSetZone6	0x620b, 0x00, -11, 0						; digits 782, coarse +0.00 st
+	ToneSetZone6	0x620c, 0x00, -10, 0						; digits 783, coarse +0.00 st
+	ToneSetZone6	0x620d, 0x00, -10, 0						; digits 784, coarse +0.00 st
+	ToneSetZone6	0x620e, 0x00, -9, 0						; digits 785, coarse +0.00 st
+	ToneSetZone6	0x620f, 0x00, -7, 0						; digits 786, coarse +0.00 st
+	ToneSetZone6	0x6210, 0x00, -5, 0						; digits 787, coarse +0.00 st
+	ToneSetZone6	0x6211, 0x00, -3, 0						; digits 788, coarse +0.00 st
+	ToneSetZone6	0x6212, 0x00, -22, 0						; digits 800, coarse +0.00 st
+	ToneSetZone6	0x6213, 0x00, -21, 0						; digits 801, coarse +0.00 st
+	ToneSetZone6	0x6214, 0x00, -20, 0						; digits 802, coarse +0.00 st
+	ToneSetZone6	0x6215, 0x00, -18, 0						; digits 803, coarse +0.00 st
+	ToneSetZone6	0x6216, 0x00, -17, 0						; digits 804, coarse +0.00 st
+	ToneSetZone6	0x6217, 0x00, -15, 0						; digits 805, coarse +0.00 st
+	ToneSetZone6	0x6218, 0x00, -13, 0						; digits 806, coarse +0.00 st
+	ToneSetZone6	0x6219, 0x00, -10, 0						; digits 807, coarse +0.00 st
+	ToneSetZone6	0x621a, 0x00, -6, 0						; digits 808, coarse +0.00 st
+	ToneSetZone6	0x621b, 0x00, -21, 0						; digits 810, coarse +0.00 st
+	ToneSetZone6	0x621c, 0x00, -20, 0						; digits 811, coarse +0.00 st
+	ToneSetZone6	0x621d, 0x00, -19, 0						; digits 812, coarse +0.00 st
+	ToneSetZone6	0x621e, 0x00, -18, 0						; digits 813, coarse +0.00 st
+	ToneSetZone6	0x621f, 0x00, -17, 0						; digits 814, coarse +0.00 st
+	ToneSetZone6	0x6220, 0x00, -15, 0						; digits 815, coarse +0.00 st
+	ToneSetZone6	0x6221, 0x00, -12, 0						; digits 816, coarse +0.00 st
+	ToneSetZone6	0x6222, 0x00, -9, 0						; digits 817, coarse +0.00 st
+	ToneSetZone6	0x6223, 0x00, -6, 0						; digits 818, coarse +0.00 st
+	ToneSetZone6	0x6224, 0x00, -20, 0						; digits 820, coarse +0.00 st
+	ToneSetZone6	0x6225, 0x00, -19, 0						; digits 821, coarse +0.00 st
+	ToneSetZone6	0x6226, 0x00, -18, 0						; digits 822, coarse +0.00 st
+	ToneSetZone6	0x6227, 0x00, -17, 0						; digits 823, coarse +0.00 st
+	ToneSetZone6	0x6228, 0x00, -16, 0						; digits 824, coarse +0.00 st
+	ToneSetZone6	0x6229, 0x00, -15, 0						; digits 825, coarse +0.00 st
+	ToneSetZone6	0x622a, 0x00, -12, 0						; digits 826, coarse +0.00 st
+	ToneSetZone6	0x622b, 0x00, -9, 0						; digits 827, coarse +0.00 st
+	ToneSetZone6	0x622c, 0x00, -6, 0						; digits 828, coarse +0.00 st
+	ToneSetZone6	0x622d, 0x00, -19, 0						; digits 830, coarse +0.00 st
+	ToneSetZone6	0x622e, 0x00, -18, 0						; digits 831, coarse +0.00 st
+	ToneSetZone6	0x622f, 0x00, -17, 0						; digits 832, coarse +0.00 st
+	ToneSetZone6	0x6230, 0x00, -16, 0						; digits 833, coarse +0.00 st
+	ToneSetZone6	0x6231, 0x00, -15, 0						; digits 834, coarse +0.00 st
+	ToneSetZone6	0x6232, 0x00, -14, 0						; digits 835, coarse +0.00 st
+	ToneSetZone6	0x6233, 0x00, -12, 0						; digits 836, coarse +0.00 st
+	ToneSetZone6	0x6234, 0x00, -9, 0						; digits 837, coarse +0.00 st
+	ToneSetZone6	0x6235, 0x00, -6, 0						; digits 838, coarse +0.00 st
+	ToneSetZone6	0x6236, 0x00, -18, 0						; digits 840, coarse +0.00 st
+	ToneSetZone6	0x6237, 0x00, -17, 0						; digits 841, coarse +0.00 st
+	ToneSetZone6	0x6238, 0x00, -16, 0						; digits 842, coarse +0.00 st
+	ToneSetZone6	0x6239, 0x00, -15, 0						; digits 843, coarse +0.00 st
+	ToneSetZone6	0x623a, 0x00, -14, 0						; digits 844, coarse +0.00 st
+	ToneSetZone6	0x623b, 0x00, -13, 0						; digits 845, coarse +0.00 st
+	ToneSetZone6	0x623c, 0x00, -11, 0						; digits 846, coarse +0.00 st
+	ToneSetZone6	0x623d, 0x00, -9, 0						; digits 847, coarse +0.00 st
+	ToneSetZone6	0x623e, 0x00, -5, 0						; digits 848, coarse +0.00 st
+	ToneSetZone6	0x623f, 0x00, -16, 0						; digits 850, coarse +0.00 st
+	ToneSetZone6	0x6240, 0x00, -15, 0						; digits 851, coarse +0.00 st
+	ToneSetZone6	0x6241, 0x00, -15, 0						; digits 852, coarse +0.00 st
+	ToneSetZone6	0x6242, 0x00, -14, 0						; digits 853, coarse +0.00 st
+	ToneSetZone6	0x6243, 0x00, -13, 0						; digits 854, coarse +0.00 st
+	ToneSetZone6	0x6244, 0x00, -12, 0						; digits 855, coarse +0.00 st
+	ToneSetZone6	0x6245, 0x00, -10, 0						; digits 856, coarse +0.00 st
+	ToneSetZone6	0x6246, 0x00, -8, 0						; digits 857, coarse +0.00 st
+	ToneSetZone6	0x6247, 0x00, -5, 0						; digits 858, coarse +0.00 st
+	ToneSetZone6	0x6248, 0x00, -14, 0						; digits 860, coarse +0.00 st
+	ToneSetZone6	0x6249, 0x00, -13, 0						; digits 861, coarse +0.00 st
+	ToneSetZone6	0x624a, 0x00, -13, 0						; digits 862, coarse +0.00 st
+	ToneSetZone6	0x624b, 0x00, -12, 0						; digits 863, coarse +0.00 st
+	ToneSetZone6	0x624c, 0x00, -11, 0						; digits 864, coarse +0.00 st
+	ToneSetZone6	0x624d, 0x00, -10, 0						; digits 865, coarse +0.00 st
+	ToneSetZone6	0x624e, 0x00, -8, 0						; digits 866, coarse +0.00 st
+	ToneSetZone6	0x624f, 0x00, -6, 0						; digits 867, coarse +0.00 st
+	ToneSetZone6	0x6250, 0x00, -4, 0						; digits 868, coarse +0.00 st
+	ToneSetZone6	0x6251, 0x00, -12, 0						; digits 870, coarse +0.00 st
+	ToneSetZone6	0x6252, 0x00, -11, 0						; digits 871, coarse +0.00 st
+	ToneSetZone6	0x6253, 0x00, -10, 0						; digits 872, coarse +0.00 st
+	ToneSetZone6	0x6254, 0x00, -10, 0						; digits 873, coarse +0.00 st
+	ToneSetZone6	0x6255, 0x00, -9, 0						; digits 874, coarse +0.00 st
+	ToneSetZone6	0x6256, 0x00, -8, 0						; digits 875, coarse +0.00 st
+	ToneSetZone6	0x6257, 0x00, -6, 0						; digits 876, coarse +0.00 st
+	ToneSetZone6	0x6258, 0x00, -5, 0						; digits 877, coarse +0.00 st
+	ToneSetZone6	0x6259, 0x00, -2, 0						; digits 878, coarse +0.00 st
+	ToneSetZone6	0x625a, 0x00, -8, 0						; digits 880, coarse +0.00 st
+	ToneSetZone6	0x625b, 0x00, -8, 0						; digits 881, coarse +0.00 st
+	ToneSetZone6	0x625c, 0x00, -7, 0						; digits 882, coarse +0.00 st
+	ToneSetZone6	0x625d, 0x00, -7, 0						; digits 883, coarse +0.00 st
+	ToneSetZone6	0x625e, 0x00, -6, 0						; digits 884, coarse +0.00 st
+	ToneSetZone6	0x625f, 0x00, -5, 0						; digits 885, coarse +0.00 st
+	ToneSetZone6	0x6260, 0x00, -4, 0						; digits 886, coarse +0.00 st
+	ToneSetZone6	0x6261, 0x00, -2, 0						; digits 887, coarse +0.00 st
+	ToneSetZone6	0x6262, 0x00, 0, 0						; digits 888, coarse +0.00 st
 ; Drawbar SET zone records for DrawbarPreset_EnvDescTable record(s) 1/2: 729 x 6 = 9*9*9,
 ; row = d2*81 + d1*9 + d0 (Voice_KeyIndex_Pack3Nibbles 0x02B2C2, three base-9 digits).
 DrawbarPreset_EnvData_1:
-	ToneEnvZone6	0x6263, 0x00, -128, 0						; digits 000, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -87, 0						; digits 001, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -71, 0						; digits 002, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -59, 0						; digits 003, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -51, 0						; digits 004, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -43, 0						; digits 005, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -35, 0						; digits 006, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -27, 0						; digits 007, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -19, 0						; digits 008, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -87, 3072						; digits 010, coarse +12.00 st
-	ToneEnvZone6	0x6288, 0x00, -74, 0						; digits 011, coarse +0.00 st
-	ToneEnvZone6	0x6264, 0x00, -65, 0						; digits 012, coarse +0.00 st
-	ToneEnvZone6	0x6265, 0x00, -56, 0						; digits 013, coarse +0.00 st
-	ToneEnvZone6	0x6266, 0x00, -49, 0						; digits 014, coarse +0.00 st
-	ToneEnvZone6	0x6267, 0x00, -42, 0						; digits 015, coarse +0.00 st
-	ToneEnvZone6	0x6268, 0x00, -34, 0						; digits 016, coarse +0.00 st
-	ToneEnvZone6	0x6269, 0x00, -26, 0						; digits 017, coarse +0.00 st
-	ToneEnvZone6	0x626a, 0x00, -19, 0						; digits 018, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -71, 3072						; digits 020, coarse +12.00 st
-	ToneEnvZone6	0x626b, 0x00, -63, 0						; digits 021, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -58, 0						; digits 022, coarse +0.00 st
-	ToneEnvZone6	0x626c, 0x00, -51, 0						; digits 023, coarse +0.00 st
-	ToneEnvZone6	0x626d, 0x00, -46, 0						; digits 024, coarse +0.00 st
-	ToneEnvZone6	0x626e, 0x00, -40, 0						; digits 025, coarse +0.00 st
-	ToneEnvZone6	0x626f, 0x00, -33, 0						; digits 026, coarse +0.00 st
-	ToneEnvZone6	0x6270, 0x00, -26, 0						; digits 027, coarse +0.00 st
-	ToneEnvZone6	0x6271, 0x00, -18, 0						; digits 028, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -59, 3072						; digits 030, coarse +12.00 st
-	ToneEnvZone6	0x6272, 0x00, -54, 0						; digits 031, coarse +0.00 st
-	ToneEnvZone6	0x6273, 0x00, -50, 0						; digits 032, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -46, 0						; digits 033, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -41, 0						; digits 034, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -37, 0						; digits 035, coarse +0.00 st
-	ToneEnvZone6	0x627a, 0x00, -31, 0						; digits 036, coarse +0.00 st
-	ToneEnvZone6	0x6277, 0x00, -24, 0						; digits 037, coarse +0.00 st
-	ToneEnvZone6	0x6274, 0x00, -17, 0						; digits 038, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -51, 3072						; digits 040, coarse +12.00 st
-	ToneEnvZone6	0x6275, 0x00, -47, 0						; digits 041, coarse +0.00 st
-	ToneEnvZone6	0x6276, 0x00, -44, 0						; digits 042, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -41, 0						; digits 043, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -38, 0						; digits 044, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -33, 0						; digits 045, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -29, 0						; digits 046, coarse +0.00 st
-	ToneEnvZone6	0x627a, 0x00, -23, 0						; digits 047, coarse +0.00 st
-	ToneEnvZone6	0x6277, 0x00, -16, 0						; digits 048, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -43, 3072						; digits 050, coarse +12.00 st
-	ToneEnvZone6	0x6278, 0x00, -40, 0						; digits 051, coarse +0.00 st
-	ToneEnvZone6	0x6279, 0x00, -38, 0						; digits 052, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -35, 0						; digits 053, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -33, 0						; digits 054, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -30, 0						; digits 055, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -25, 0						; digits 056, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -21, 0						; digits 057, coarse +0.00 st
-	ToneEnvZone6	0x627a, 0x00, -15, 0						; digits 058, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -35, 3072						; digits 060, coarse +12.00 st
-	ToneEnvZone6	0x627b, 0x00, -33, 0						; digits 061, coarse +0.00 st
-	ToneEnvZone6	0x627c, 0x00, -31, 0						; digits 062, coarse +0.00 st
-	ToneEnvZone6	0x6285, 0x00, -29, 0						; digits 063, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -27, 0						; digits 064, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -25, 0						; digits 065, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -22, 0						; digits 066, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -17, 0						; digits 067, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -13, 0						; digits 068, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -27, 3072						; digits 070, coarse +12.00 st
-	ToneEnvZone6	0x627e, 0x00, -26, 0						; digits 071, coarse +0.00 st
-	ToneEnvZone6	0x627f, 0x00, -24, 0						; digits 072, coarse +0.00 st
-	ToneEnvZone6	0x6284, 0x00, -23, 0						; digits 073, coarse +0.00 st
-	ToneEnvZone6	0x6285, 0x00, -21, 0						; digits 074, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -19, 0						; digits 075, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -17, 0						; digits 076, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -14, 0						; digits 077, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -9, 0						; digits 078, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -19, 3072						; digits 080, coarse +12.00 st
-	ToneEnvZone6	0x6281, 0x00, -18, 0						; digits 081, coarse +0.00 st
-	ToneEnvZone6	0x6282, 0x00, -17, 0						; digits 082, coarse +0.00 st
-	ToneEnvZone6	0x6283, 0x00, -16, 0						; digits 083, coarse +0.00 st
-	ToneEnvZone6	0x6284, 0x00, -15, 0						; digits 084, coarse +0.00 st
-	ToneEnvZone6	0x6285, 0x00, -13, 0						; digits 085, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -11, 0						; digits 086, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -9, 0						; digits 087, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -6, 0						; digits 088, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -87, 6144						; digits 100, coarse +24.00 st
-	ToneEnvZone6	0x63ee, 0x00, -72, 0						; digits 101, coarse +0.00 st
-	ToneEnvZone6	0x6289, 0x00, -62, 0						; digits 102, coarse +0.00 st
-	ToneEnvZone6	0x628a, 0x00, -54, 0						; digits 103, coarse +0.00 st
-	ToneEnvZone6	0x628b, 0x00, -48, 0						; digits 104, coarse +0.00 st
-	ToneEnvZone6	0x628c, 0x00, -41, 0						; digits 105, coarse +0.00 st
-	ToneEnvZone6	0x628d, 0x00, -33, 0						; digits 106, coarse +0.00 st
-	ToneEnvZone6	0x628e, 0x00, -26, 0						; digits 107, coarse +0.00 st
-	ToneEnvZone6	0x628f, 0x00, -18, 0						; digits 108, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -74, 3072						; digits 110, coarse +12.00 st
-	ToneEnvZone6	0x642e, 0x00, -68, 0						; digits 111, coarse +0.00 st
-	ToneEnvZone6	0x6290, 0x00, -63, 0						; digits 112, coarse +0.00 st
-	ToneEnvZone6	0x6291, 0x00, -57, 0						; digits 113, coarse +0.00 st
-	ToneEnvZone6	0x6292, 0x00, -50, 0						; digits 114, coarse +0.00 st
-	ToneEnvZone6	0x6293, 0x00, -42, 0						; digits 115, coarse +0.00 st
-	ToneEnvZone6	0x6294, 0x00, -34, 0						; digits 116, coarse +0.00 st
-	ToneEnvZone6	0x6295, 0x00, -26, 0						; digits 117, coarse +0.00 st
-	ToneEnvZone6	0x6296, 0x00, -19, 0						; digits 118, coarse +0.00 st
-	ToneEnvZone6	0x6264, 0x00, -65, 3072						; digits 120, coarse +12.00 st
-	ToneEnvZone6	0x6297, 0x00, -60, 0						; digits 121, coarse +0.00 st
-	ToneEnvZone6	0x6298, 0x00, -56, 0						; digits 122, coarse +0.00 st
-	ToneEnvZone6	0x6299, 0x00, -52, 0						; digits 123, coarse +0.00 st
-	ToneEnvZone6	0x629a, 0x00, -48, 0						; digits 124, coarse +0.00 st
-	ToneEnvZone6	0x629b, 0x00, -42, 0						; digits 125, coarse +0.00 st
-	ToneEnvZone6	0x629c, 0x00, -35, 0						; digits 126, coarse +0.00 st
-	ToneEnvZone6	0x629d, 0x00, -27, 0						; digits 127, coarse +0.00 st
-	ToneEnvZone6	0x629e, 0x00, -19, 0						; digits 128, coarse +0.00 st
-	ToneEnvZone6	0x6265, 0x00, -56, 3072						; digits 130, coarse +12.00 st
-	ToneEnvZone6	0x629f, 0x00, -52, 0						; digits 131, coarse +0.00 st
-	ToneEnvZone6	0x62a0, 0x00, -50, 0						; digits 132, coarse +0.00 st
-	ToneEnvZone6	0x62a1, 0x00, -46, 0						; digits 133, coarse +0.00 st
-	ToneEnvZone6	0x62a2, 0x00, -42, 0						; digits 134, coarse +0.00 st
-	ToneEnvZone6	0x62a3, 0x00, -38, 0						; digits 135, coarse +0.00 st
-	ToneEnvZone6	0x62a4, 0x00, -33, 0						; digits 136, coarse +0.00 st
-	ToneEnvZone6	0x62a5, 0x00, -26, 0						; digits 137, coarse +0.00 st
-	ToneEnvZone6	0x62a6, 0x00, -18, 0						; digits 138, coarse +0.00 st
-	ToneEnvZone6	0x6266, 0x00, -49, 3072						; digits 140, coarse +12.00 st
-	ToneEnvZone6	0x62a7, 0x00, -46, 0						; digits 141, coarse +0.00 st
-	ToneEnvZone6	0x62a8, 0x00, -44, 0						; digits 142, coarse +0.00 st
-	ToneEnvZone6	0x62a9, 0x00, -41, 0						; digits 143, coarse +0.00 st
-	ToneEnvZone6	0x62aa, 0x00, -38, 0						; digits 144, coarse +0.00 st
-	ToneEnvZone6	0x62ab, 0x00, -34, 0						; digits 145, coarse +0.00 st
-	ToneEnvZone6	0x62ac, 0x00, -30, 0						; digits 146, coarse +0.00 st
-	ToneEnvZone6	0x62ad, 0x00, -24, 0						; digits 147, coarse +0.00 st
-	ToneEnvZone6	0x62ae, 0x00, -18, 0						; digits 148, coarse +0.00 st
-	ToneEnvZone6	0x6267, 0x00, -42, 3072						; digits 150, coarse +12.00 st
-	ToneEnvZone6	0x62af, 0x00, -40, 0						; digits 151, coarse +0.00 st
-	ToneEnvZone6	0x62b0, 0x00, -38, 0						; digits 152, coarse +0.00 st
-	ToneEnvZone6	0x62b1, 0x00, -35, 0						; digits 153, coarse +0.00 st
-	ToneEnvZone6	0x62b2, 0x00, -33, 0						; digits 154, coarse +0.00 st
-	ToneEnvZone6	0x62b3, 0x00, -30, 0						; digits 155, coarse +0.00 st
-	ToneEnvZone6	0x62b4, 0x00, -26, 0						; digits 156, coarse +0.00 st
-	ToneEnvZone6	0x62b5, 0x00, -22, 0						; digits 157, coarse +0.00 st
-	ToneEnvZone6	0x62b6, 0x00, -16, 0						; digits 158, coarse +0.00 st
-	ToneEnvZone6	0x6268, 0x00, -34, 3072						; digits 160, coarse +12.00 st
-	ToneEnvZone6	0x62b7, 0x00, -33, 0						; digits 161, coarse +0.00 st
-	ToneEnvZone6	0x62b8, 0x00, -31, 0						; digits 162, coarse +0.00 st
-	ToneEnvZone6	0x62b9, 0x00, -29, 0						; digits 163, coarse +0.00 st
-	ToneEnvZone6	0x62ba, 0x00, -28, 0						; digits 164, coarse +0.00 st
-	ToneEnvZone6	0x62bb, 0x00, -25, 0						; digits 165, coarse +0.00 st
-	ToneEnvZone6	0x62bc, 0x00, -22, 0						; digits 166, coarse +0.00 st
-	ToneEnvZone6	0x62bd, 0x00, -18, 0						; digits 167, coarse +0.00 st
-	ToneEnvZone6	0x62be, 0x00, -13, 0						; digits 168, coarse +0.00 st
-	ToneEnvZone6	0x6269, 0x00, -26, 3072						; digits 170, coarse +12.00 st
-	ToneEnvZone6	0x62bf, 0x00, -25, 0						; digits 171, coarse +0.00 st
-	ToneEnvZone6	0x62c0, 0x00, -24, 0						; digits 172, coarse +0.00 st
-	ToneEnvZone6	0x62c1, 0x00, -23, 0						; digits 173, coarse +0.00 st
-	ToneEnvZone6	0x62c2, 0x00, -21, 0						; digits 174, coarse +0.00 st
-	ToneEnvZone6	0x62c3, 0x00, -20, 0						; digits 175, coarse +0.00 st
-	ToneEnvZone6	0x62c4, 0x00, -17, 0						; digits 176, coarse +0.00 st
-	ToneEnvZone6	0x62c5, 0x00, -14, 0						; digits 177, coarse +0.00 st
-	ToneEnvZone6	0x62c6, 0x00, -10, 0						; digits 178, coarse +0.00 st
-	ToneEnvZone6	0x626a, 0x00, -19, 3072						; digits 180, coarse +12.00 st
-	ToneEnvZone6	0x62c7, 0x00, -18, 0						; digits 181, coarse +0.00 st
-	ToneEnvZone6	0x62c8, 0x00, -17, 0						; digits 182, coarse +0.00 st
-	ToneEnvZone6	0x62c9, 0x00, -16, 0						; digits 183, coarse +0.00 st
-	ToneEnvZone6	0x62ca, 0x00, -15, 0						; digits 184, coarse +0.00 st
-	ToneEnvZone6	0x62cb, 0x00, -13, 0						; digits 185, coarse +0.00 st
-	ToneEnvZone6	0x62cc, 0x00, -12, 0						; digits 186, coarse +0.00 st
-	ToneEnvZone6	0x62cd, 0x00, -9, 0						; digits 187, coarse +0.00 st
-	ToneEnvZone6	0x62ce, 0x00, -6, 0						; digits 188, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -71, 6144						; digits 200, coarse +24.00 st
-	ToneEnvZone6	0x62cf, 0x00, -62, 0						; digits 201, coarse +0.00 st
-	ToneEnvZone6	0x63ee, 0x00, -56, 0						; digits 202, coarse +0.00 st
-	ToneEnvZone6	0x62d0, 0x00, -49, 0						; digits 203, coarse +0.00 st
-	ToneEnvZone6	0x62d1, 0x00, -44, 0						; digits 204, coarse +0.00 st
-	ToneEnvZone6	0x62d2, 0x00, -38, 0						; digits 205, coarse +0.00 st
-	ToneEnvZone6	0x62d3, 0x00, -32, 0						; digits 206, coarse +0.00 st
-	ToneEnvZone6	0x62d4, 0x00, -25, 0						; digits 207, coarse +0.00 st
-	ToneEnvZone6	0x62d5, 0x00, -17, 0						; digits 208, coarse +0.00 st
-	ToneEnvZone6	0x626b, 0x00, -63, 3072						; digits 210, coarse +12.00 st
-	ToneEnvZone6	0x62d6, 0x00, -60, 0						; digits 211, coarse +0.00 st
-	ToneEnvZone6	0x62d7, 0x00, -57, 0						; digits 212, coarse +0.00 st
-	ToneEnvZone6	0x62d8, 0x00, -52, 0						; digits 213, coarse +0.00 st
-	ToneEnvZone6	0x62d9, 0x00, -46, 0						; digits 214, coarse +0.00 st
-	ToneEnvZone6	0x62da, 0x00, -39, 0						; digits 215, coarse +0.00 st
-	ToneEnvZone6	0x62db, 0x00, -33, 0						; digits 216, coarse +0.00 st
-	ToneEnvZone6	0x62dc, 0x00, -25, 0						; digits 217, coarse +0.00 st
-	ToneEnvZone6	0x62dd, 0x00, -18, 0						; digits 218, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -58, 3072						; digits 220, coarse +12.00 st
-	ToneEnvZone6	0x62de, 0x00, -55, 0						; digits 221, coarse +0.00 st
-	ToneEnvZone6	0x642e, 0x00, -52, 0						; digits 222, coarse +0.00 st
-	ToneEnvZone6	0x62df, 0x00, -49, 0						; digits 223, coarse +0.00 st
-	ToneEnvZone6	0x62e0, 0x00, -45, 0						; digits 224, coarse +0.00 st
-	ToneEnvZone6	0x62e1, 0x00, -41, 0						; digits 225, coarse +0.00 st
-	ToneEnvZone6	0x62e2, 0x00, -34, 0						; digits 226, coarse +0.00 st
-	ToneEnvZone6	0x62e3, 0x00, -26, 0						; digits 227, coarse +0.00 st
-	ToneEnvZone6	0x62e4, 0x00, -18, 0						; digits 228, coarse +0.00 st
-	ToneEnvZone6	0x626c, 0x00, -51, 3072						; digits 230, coarse +12.00 st
-	ToneEnvZone6	0x62e5, 0x00, -49, 0						; digits 231, coarse +0.00 st
-	ToneEnvZone6	0x62e6, 0x00, -47, 0						; digits 232, coarse +0.00 st
-	ToneEnvZone6	0x62e7, 0x00, -44, 0						; digits 233, coarse +0.00 st
-	ToneEnvZone6	0x62e8, 0x00, -41, 0						; digits 234, coarse +0.00 st
-	ToneEnvZone6	0x62e9, 0x00, -37, 0						; digits 235, coarse +0.00 st
-	ToneEnvZone6	0x62ea, 0x00, -33, 0						; digits 236, coarse +0.00 st
-	ToneEnvZone6	0x62eb, 0x00, -27, 0						; digits 237, coarse +0.00 st
-	ToneEnvZone6	0x62ec, 0x00, -19, 0						; digits 238, coarse +0.00 st
-	ToneEnvZone6	0x626d, 0x00, -46, 3072						; digits 240, coarse +12.00 st
-	ToneEnvZone6	0x62ed, 0x00, -44, 0						; digits 241, coarse +0.00 st
-	ToneEnvZone6	0x62ee, 0x00, -42, 0						; digits 242, coarse +0.00 st
-	ToneEnvZone6	0x62ef, 0x00, -39, 0						; digits 243, coarse +0.00 st
-	ToneEnvZone6	0x62f0, 0x00, -37, 0						; digits 244, coarse +0.00 st
-	ToneEnvZone6	0x62f1, 0x00, -34, 0						; digits 245, coarse +0.00 st
-	ToneEnvZone6	0x62f2, 0x00, -30, 0						; digits 246, coarse +0.00 st
-	ToneEnvZone6	0x62f3, 0x00, -25, 0						; digits 247, coarse +0.00 st
-	ToneEnvZone6	0x62f4, 0x00, -19, 0						; digits 248, coarse +0.00 st
-	ToneEnvZone6	0x626e, 0x00, -40, 3072						; digits 250, coarse +12.00 st
-	ToneEnvZone6	0x62f5, 0x00, -38, 0						; digits 251, coarse +0.00 st
-	ToneEnvZone6	0x62f6, 0x00, -36, 0						; digits 252, coarse +0.00 st
-	ToneEnvZone6	0x62f7, 0x00, -34, 0						; digits 253, coarse +0.00 st
-	ToneEnvZone6	0x62f8, 0x00, -32, 0						; digits 254, coarse +0.00 st
-	ToneEnvZone6	0x62f9, 0x00, -30, 0						; digits 255, coarse +0.00 st
-	ToneEnvZone6	0x62fa, 0x00, -26, 0						; digits 256, coarse +0.00 st
-	ToneEnvZone6	0x62fb, 0x00, -22, 0						; digits 257, coarse +0.00 st
-	ToneEnvZone6	0x62fc, 0x00, -17, 0						; digits 258, coarse +0.00 st
-	ToneEnvZone6	0x626f, 0x00, -33, 3072						; digits 260, coarse +12.00 st
-	ToneEnvZone6	0x62fd, 0x00, -32, 0						; digits 261, coarse +0.00 st
-	ToneEnvZone6	0x62fe, 0x00, -30, 0						; digits 262, coarse +0.00 st
-	ToneEnvZone6	0x62ff, 0x00, -29, 0						; digits 263, coarse +0.00 st
-	ToneEnvZone6	0x6300, 0x00, -27, 0						; digits 264, coarse +0.00 st
-	ToneEnvZone6	0x6301, 0x00, -25, 0						; digits 265, coarse +0.00 st
-	ToneEnvZone6	0x6302, 0x00, -22, 0						; digits 266, coarse +0.00 st
-	ToneEnvZone6	0x6303, 0x00, -18, 0						; digits 267, coarse +0.00 st
-	ToneEnvZone6	0x6304, 0x00, -14, 0						; digits 268, coarse +0.00 st
-	ToneEnvZone6	0x6270, 0x00, -26, 3072						; digits 270, coarse +12.00 st
-	ToneEnvZone6	0x6305, 0x00, -25, 0						; digits 271, coarse +0.00 st
-	ToneEnvZone6	0x6306, 0x00, -24, 0						; digits 272, coarse +0.00 st
-	ToneEnvZone6	0x6307, 0x00, -22, 0						; digits 273, coarse +0.00 st
-	ToneEnvZone6	0x6308, 0x00, -21, 0						; digits 274, coarse +0.00 st
-	ToneEnvZone6	0x6309, 0x00, -19, 0						; digits 275, coarse +0.00 st
-	ToneEnvZone6	0x630a, 0x00, -17, 0						; digits 276, coarse +0.00 st
-	ToneEnvZone6	0x630b, 0x00, -14, 0						; digits 277, coarse +0.00 st
-	ToneEnvZone6	0x630c, 0x00, -10, 0						; digits 278, coarse +0.00 st
-	ToneEnvZone6	0x6271, 0x00, -18, 3072						; digits 280, coarse +12.00 st
-	ToneEnvZone6	0x630d, 0x00, -17, 0						; digits 281, coarse +0.00 st
-	ToneEnvZone6	0x630e, 0x00, -17, 0						; digits 282, coarse +0.00 st
-	ToneEnvZone6	0x630f, 0x00, -16, 0						; digits 283, coarse +0.00 st
-	ToneEnvZone6	0x6310, 0x00, -15, 0						; digits 284, coarse +0.00 st
-	ToneEnvZone6	0x6311, 0x00, -13, 0						; digits 285, coarse +0.00 st
-	ToneEnvZone6	0x6312, 0x00, -12, 0						; digits 286, coarse +0.00 st
-	ToneEnvZone6	0x6313, 0x00, -9, 0						; digits 287, coarse +0.00 st
-	ToneEnvZone6	0x6314, 0x00, -6, 0						; digits 288, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -59, 6144						; digits 300, coarse +24.00 st
-	ToneEnvZone6	0x6315, 0x00, -53, 0						; digits 301, coarse +0.00 st
-	ToneEnvZone6	0x6316, 0x00, -49, 0						; digits 302, coarse +0.00 st
-	ToneEnvZone6	0x63ee, 0x00, -44, 0						; digits 303, coarse +0.00 st
-	ToneEnvZone6	0x63bf, 0x00, -39, 0						; digits 304, coarse +0.00 st
-	ToneEnvZone6	0x6395, 0x00, -34, 0						; digits 305, coarse +0.00 st
-	ToneEnvZone6	0x636b, 0x00, -29, 0						; digits 306, coarse +0.00 st
-	ToneEnvZone6	0x6341, 0x00, -23, 0						; digits 307, coarse +0.00 st
-	ToneEnvZone6	0x6317, 0x00, -16, 0						; digits 308, coarse +0.00 st
-	ToneEnvZone6	0x6272, 0x00, -54, 3072						; digits 310, coarse +12.00 st
-	ToneEnvZone6	0x6318, 0x00, -52, 0						; digits 311, coarse +0.00 st
-	ToneEnvZone6	0x6319, 0x00, -50, 0						; digits 312, coarse +0.00 st
-	ToneEnvZone6	0x631a, 0x00, -46, 0						; digits 313, coarse +0.00 st
-	ToneEnvZone6	0x631b, 0x00, -41, 0						; digits 314, coarse +0.00 st
-	ToneEnvZone6	0x631c, 0x00, -36, 0						; digits 315, coarse +0.00 st
-	ToneEnvZone6	0x631d, 0x00, -30, 0						; digits 316, coarse +0.00 st
-	ToneEnvZone6	0x631e, 0x00, -24, 0						; digits 317, coarse +0.00 st
-	ToneEnvZone6	0x631f, 0x00, -17, 0						; digits 318, coarse +0.00 st
-	ToneEnvZone6	0x6273, 0x00, -50, 3072						; digits 320, coarse +12.00 st
-	ToneEnvZone6	0x6320, 0x00, -48, 0						; digits 321, coarse +0.00 st
-	ToneEnvZone6	0x6321, 0x00, -46, 0						; digits 322, coarse +0.00 st
-	ToneEnvZone6	0x6322, 0x00, -44, 0						; digits 323, coarse +0.00 st
-	ToneEnvZone6	0x6323, 0x00, -42, 0						; digits 324, coarse +0.00 st
-	ToneEnvZone6	0x6324, 0x00, -37, 0						; digits 325, coarse +0.00 st
-	ToneEnvZone6	0x6325, 0x00, -31, 0						; digits 326, coarse +0.00 st
-	ToneEnvZone6	0x6326, 0x00, -24, 0						; digits 327, coarse +0.00 st
-	ToneEnvZone6	0x6327, 0x00, -17, 0						; digits 328, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -46, 3072						; digits 330, coarse +12.00 st
-	ToneEnvZone6	0x6328, 0x00, -44, 0						; digits 331, coarse +0.00 st
-	ToneEnvZone6	0x6329, 0x00, -42, 0						; digits 332, coarse +0.00 st
-	ToneEnvZone6	0x642e, 0x00, -40, 0						; digits 333, coarse +0.00 st
-	ToneEnvZone6	0x63de, 0x00, -38, 0						; digits 334, coarse +0.00 st
-	ToneEnvZone6	0x63b1, 0x00, -35, 0						; digits 335, coarse +0.00 st
-	ToneEnvZone6	0x6384, 0x00, -32, 0						; digits 336, coarse +0.00 st
-	ToneEnvZone6	0x6357, 0x00, -25, 0						; digits 337, coarse +0.00 st
-	ToneEnvZone6	0x632a, 0x00, -18, 0						; digits 338, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -41, 3072						; digits 340, coarse +12.00 st
-	ToneEnvZone6	0x632b, 0x00, -40, 0						; digits 341, coarse +0.00 st
-	ToneEnvZone6	0x632c, 0x00, -38, 0						; digits 342, coarse +0.00 st
-	ToneEnvZone6	0x63e5, 0x00, -37, 0						; digits 343, coarse +0.00 st
-	ToneEnvZone6	0x63e6, 0x00, -35, 0						; digits 344, coarse +0.00 st
-	ToneEnvZone6	0x63b4, 0x00, -32, 0						; digits 345, coarse +0.00 st
-	ToneEnvZone6	0x6387, 0x00, -29, 0						; digits 346, coarse +0.00 st
-	ToneEnvZone6	0x635a, 0x00, -25, 0						; digits 347, coarse +0.00 st
-	ToneEnvZone6	0x632d, 0x00, -18, 0						; digits 348, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -37, 3072						; digits 350, coarse +12.00 st
-	ToneEnvZone6	0x632e, 0x00, -35, 0						; digits 351, coarse +0.00 st
-	ToneEnvZone6	0x632f, 0x00, -34, 0						; digits 352, coarse +0.00 st
-	ToneEnvZone6	0x63ba, 0x00, -32, 0						; digits 353, coarse +0.00 st
-	ToneEnvZone6	0x63bb, 0x00, -31, 0						; digits 354, coarse +0.00 st
-	ToneEnvZone6	0x63bc, 0x00, -28, 0						; digits 355, coarse +0.00 st
-	ToneEnvZone6	0x638a, 0x00, -26, 0						; digits 356, coarse +0.00 st
-	ToneEnvZone6	0x635d, 0x00, -22, 0						; digits 357, coarse +0.00 st
-	ToneEnvZone6	0x6330, 0x00, -17, 0						; digits 358, coarse +0.00 st
-	ToneEnvZone6	0x627a, 0x00, -31, 3072						; digits 360, coarse +12.00 st
-	ToneEnvZone6	0x6331, 0x00, -30, 0						; digits 361, coarse +0.00 st
-	ToneEnvZone6	0x6332, 0x00, -29, 0						; digits 362, coarse +0.00 st
-	ToneEnvZone6	0x638f, 0x00, -27, 0						; digits 363, coarse +0.00 st
-	ToneEnvZone6	0x6390, 0x00, -26, 0						; digits 364, coarse +0.00 st
-	ToneEnvZone6	0x6391, 0x00, -24, 0						; digits 365, coarse +0.00 st
-	ToneEnvZone6	0x6392, 0x00, -22, 0						; digits 366, coarse +0.00 st
-	ToneEnvZone6	0x6360, 0x00, -18, 0						; digits 367, coarse +0.00 st
-	ToneEnvZone6	0x6333, 0x00, -14, 0						; digits 368, coarse +0.00 st
-	ToneEnvZone6	0x6277, 0x00, -24, 3072						; digits 370, coarse +12.00 st
-	ToneEnvZone6	0x6334, 0x00, -24, 0						; digits 371, coarse +0.00 st
-	ToneEnvZone6	0x6335, 0x00, -23, 0						; digits 372, coarse +0.00 st
-	ToneEnvZone6	0x6364, 0x00, -22, 0						; digits 373, coarse +0.00 st
-	ToneEnvZone6	0x6365, 0x00, -20, 0						; digits 374, coarse +0.00 st
-	ToneEnvZone6	0x6366, 0x00, -19, 0						; digits 375, coarse +0.00 st
-	ToneEnvZone6	0x6367, 0x00, -17, 0						; digits 376, coarse +0.00 st
-	ToneEnvZone6	0x6368, 0x00, -14, 0						; digits 377, coarse +0.00 st
-	ToneEnvZone6	0x6336, 0x00, -10, 0						; digits 378, coarse +0.00 st
-	ToneEnvZone6	0x6274, 0x00, -17, 3072						; digits 380, coarse +12.00 st
-	ToneEnvZone6	0x6337, 0x00, -17, 0						; digits 381, coarse +0.00 st
-	ToneEnvZone6	0x6338, 0x00, -16, 0						; digits 382, coarse +0.00 st
-	ToneEnvZone6	0x6339, 0x00, -15, 0						; digits 383, coarse +0.00 st
-	ToneEnvZone6	0x633a, 0x00, -14, 0						; digits 384, coarse +0.00 st
-	ToneEnvZone6	0x633b, 0x00, -13, 0						; digits 385, coarse +0.00 st
-	ToneEnvZone6	0x633c, 0x00, -11, 0						; digits 386, coarse +0.00 st
-	ToneEnvZone6	0x633d, 0x00, -9, 0						; digits 387, coarse +0.00 st
-	ToneEnvZone6	0x633e, 0x00, -6, 0						; digits 388, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -51, 6144						; digits 400, coarse +24.00 st
-	ToneEnvZone6	0x633f, 0x00, -47, 0						; digits 401, coarse +0.00 st
-	ToneEnvZone6	0x6340, 0x00, -43, 0						; digits 402, coarse +0.00 st
-	ToneEnvZone6	0x63ed, 0x00, -39, 0						; digits 403, coarse +0.00 st
-	ToneEnvZone6	0x63ee, 0x00, -36, 0						; digits 404, coarse +0.00 st
-	ToneEnvZone6	0x63bf, 0x00, -31, 0						; digits 405, coarse +0.00 st
-	ToneEnvZone6	0x6395, 0x00, -26, 0						; digits 406, coarse +0.00 st
-	ToneEnvZone6	0x636b, 0x00, -21, 0						; digits 407, coarse +0.00 st
-	ToneEnvZone6	0x6341, 0x00, -15, 0						; digits 408, coarse +0.00 st
-	ToneEnvZone6	0x6275, 0x00, -47, 3072						; digits 410, coarse +12.00 st
-	ToneEnvZone6	0x6342, 0x00, -46, 0						; digits 411, coarse +0.00 st
-	ToneEnvZone6	0x6343, 0x00, -44, 0						; digits 412, coarse +0.00 st
-	ToneEnvZone6	0x6344, 0x00, -41, 0						; digits 413, coarse +0.00 st
-	ToneEnvZone6	0x6345, 0x00, -37, 0						; digits 414, coarse +0.00 st
-	ToneEnvZone6	0x6346, 0x00, -33, 0						; digits 415, coarse +0.00 st
-	ToneEnvZone6	0x6347, 0x00, -28, 0						; digits 416, coarse +0.00 st
-	ToneEnvZone6	0x6348, 0x00, -22, 0						; digits 417, coarse +0.00 st
-	ToneEnvZone6	0x6349, 0x00, -15, 0						; digits 418, coarse +0.00 st
-	ToneEnvZone6	0x6276, 0x00, -44, 3072						; digits 420, coarse +12.00 st
-	ToneEnvZone6	0x634a, 0x00, -43, 0						; digits 421, coarse +0.00 st
-	ToneEnvZone6	0x634b, 0x00, -41, 0						; digits 422, coarse +0.00 st
-	ToneEnvZone6	0x634c, 0x00, -40, 0						; digits 423, coarse +0.00 st
-	ToneEnvZone6	0x634d, 0x00, -38, 0						; digits 424, coarse +0.00 st
-	ToneEnvZone6	0x634e, 0x00, -34, 0						; digits 425, coarse +0.00 st
-	ToneEnvZone6	0x634f, 0x00, -29, 0						; digits 426, coarse +0.00 st
-	ToneEnvZone6	0x6350, 0x00, -22, 0						; digits 427, coarse +0.00 st
-	ToneEnvZone6	0x6351, 0x00, -16, 0						; digits 428, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -41, 3072						; digits 430, coarse +12.00 st
-	ToneEnvZone6	0x6352, 0x00, -39, 0						; digits 431, coarse +0.00 st
-	ToneEnvZone6	0x6353, 0x00, -38, 0						; digits 432, coarse +0.00 st
-	ToneEnvZone6	0x6425, 0x00, -36, 0						; digits 433, coarse +0.00 st
-	ToneEnvZone6	0x6426, 0x00, -35, 0						; digits 434, coarse +0.00 st
-	ToneEnvZone6	0x63db, 0x00, -32, 0						; digits 435, coarse +0.00 st
-	ToneEnvZone6	0x63ae, 0x00, -29, 0						; digits 436, coarse +0.00 st
-	ToneEnvZone6	0x6381, 0x00, -23, 0						; digits 437, coarse +0.00 st
-	ToneEnvZone6	0x6354, 0x00, -17, 0						; digits 438, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -38, 3072						; digits 440, coarse +12.00 st
-	ToneEnvZone6	0x6355, 0x00, -36, 0						; digits 441, coarse +0.00 st
-	ToneEnvZone6	0x6356, 0x00, -35, 0						; digits 442, coarse +0.00 st
-	ToneEnvZone6	0x642d, 0x00, -34, 0						; digits 443, coarse +0.00 st
-	ToneEnvZone6	0x642e, 0x00, -32, 0						; digits 444, coarse +0.00 st
-	ToneEnvZone6	0x63de, 0x00, -30, 0						; digits 445, coarse +0.00 st
-	ToneEnvZone6	0x63b1, 0x00, -27, 0						; digits 446, coarse +0.00 st
-	ToneEnvZone6	0x6384, 0x00, -24, 0						; digits 447, coarse +0.00 st
-	ToneEnvZone6	0x6357, 0x00, -17, 0						; digits 448, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -33, 3072						; digits 450, coarse +12.00 st
-	ToneEnvZone6	0x6358, 0x00, -32, 0						; digits 451, coarse +0.00 st
-	ToneEnvZone6	0x6359, 0x00, -31, 0						; digits 452, coarse +0.00 st
-	ToneEnvZone6	0x63e4, 0x00, -30, 0						; digits 453, coarse +0.00 st
-	ToneEnvZone6	0x63e5, 0x00, -29, 0						; digits 454, coarse +0.00 st
-	ToneEnvZone6	0x63e6, 0x00, -27, 0						; digits 455, coarse +0.00 st
-	ToneEnvZone6	0x63b4, 0x00, -24, 0						; digits 456, coarse +0.00 st
-	ToneEnvZone6	0x6387, 0x00, -21, 0						; digits 457, coarse +0.00 st
-	ToneEnvZone6	0x635a, 0x00, -17, 0						; digits 458, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -29, 3072						; digits 460, coarse +12.00 st
-	ToneEnvZone6	0x635b, 0x00, -28, 0						; digits 461, coarse +0.00 st
-	ToneEnvZone6	0x635c, 0x00, -27, 0						; digits 462, coarse +0.00 st
-	ToneEnvZone6	0x63b9, 0x00, -26, 0						; digits 463, coarse +0.00 st
-	ToneEnvZone6	0x63ba, 0x00, -24, 0						; digits 464, coarse +0.00 st
-	ToneEnvZone6	0x63bb, 0x00, -23, 0						; digits 465, coarse +0.00 st
-	ToneEnvZone6	0x63bc, 0x00, -20, 0						; digits 466, coarse +0.00 st
-	ToneEnvZone6	0x638a, 0x00, -18, 0						; digits 467, coarse +0.00 st
-	ToneEnvZone6	0x635d, 0x00, -14, 0						; digits 468, coarse +0.00 st
-	ToneEnvZone6	0x627a, 0x00, -23, 3072						; digits 470, coarse +12.00 st
-	ToneEnvZone6	0x635e, 0x00, -22, 0						; digits 471, coarse +0.00 st
-	ToneEnvZone6	0x635f, 0x00, -21, 0						; digits 472, coarse +0.00 st
-	ToneEnvZone6	0x638e, 0x00, -20, 0						; digits 473, coarse +0.00 st
-	ToneEnvZone6	0x638f, 0x00, -19, 0						; digits 474, coarse +0.00 st
-	ToneEnvZone6	0x6390, 0x00, -18, 0						; digits 475, coarse +0.00 st
-	ToneEnvZone6	0x6391, 0x00, -16, 0						; digits 476, coarse +0.00 st
-	ToneEnvZone6	0x6392, 0x00, -14, 0						; digits 477, coarse +0.00 st
-	ToneEnvZone6	0x6360, 0x00, -10, 0						; digits 478, coarse +0.00 st
-	ToneEnvZone6	0x6277, 0x00, -16, 3072						; digits 480, coarse +12.00 st
-	ToneEnvZone6	0x6361, 0x00, -16, 0						; digits 481, coarse +0.00 st
-	ToneEnvZone6	0x6362, 0x00, -15, 0						; digits 482, coarse +0.00 st
-	ToneEnvZone6	0x6363, 0x00, -14, 0						; digits 483, coarse +0.00 st
-	ToneEnvZone6	0x6364, 0x00, -14, 0						; digits 484, coarse +0.00 st
-	ToneEnvZone6	0x6365, 0x00, -12, 0						; digits 485, coarse +0.00 st
-	ToneEnvZone6	0x6366, 0x00, -11, 0						; digits 486, coarse +0.00 st
-	ToneEnvZone6	0x6367, 0x00, -9, 0						; digits 487, coarse +0.00 st
-	ToneEnvZone6	0x6368, 0x00, -6, 0						; digits 488, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -43, 6144						; digits 500, coarse +24.00 st
-	ToneEnvZone6	0x6369, 0x00, -40, 0						; digits 501, coarse +0.00 st
-	ToneEnvZone6	0x636a, 0x00, -37, 0						; digits 502, coarse +0.00 st
-	ToneEnvZone6	0x63ec, 0x00, -34, 0						; digits 503, coarse +0.00 st
-	ToneEnvZone6	0x63ed, 0x00, -31, 0						; digits 504, coarse +0.00 st
-	ToneEnvZone6	0x63ee, 0x00, -28, 0						; digits 505, coarse +0.00 st
-	ToneEnvZone6	0x63bf, 0x00, -23, 0						; digits 506, coarse +0.00 st
-	ToneEnvZone6	0x6395, 0x00, -18, 0						; digits 507, coarse +0.00 st
-	ToneEnvZone6	0x636b, 0x00, -13, 0						; digits 508, coarse +0.00 st
-	ToneEnvZone6	0x6278, 0x00, -40, 3072						; digits 510, coarse +12.00 st
-	ToneEnvZone6	0x636c, 0x00, -39, 0						; digits 511, coarse +0.00 st
-	ToneEnvZone6	0x636d, 0x00, -38, 0						; digits 512, coarse +0.00 st
-	ToneEnvZone6	0x636e, 0x00, -36, 0						; digits 513, coarse +0.00 st
-	ToneEnvZone6	0x636f, 0x00, -33, 0						; digits 514, coarse +0.00 st
-	ToneEnvZone6	0x6370, 0x00, -29, 0						; digits 515, coarse +0.00 st
-	ToneEnvZone6	0x6371, 0x00, -24, 0						; digits 516, coarse +0.00 st
-	ToneEnvZone6	0x6372, 0x00, -19, 0						; digits 517, coarse +0.00 st
-	ToneEnvZone6	0x6373, 0x00, -13, 0						; digits 518, coarse +0.00 st
-	ToneEnvZone6	0x6279, 0x00, -38, 3072						; digits 520, coarse +12.00 st
-	ToneEnvZone6	0x6374, 0x00, -37, 0						; digits 521, coarse +0.00 st
-	ToneEnvZone6	0x6375, 0x00, -36, 0						; digits 522, coarse +0.00 st
-	ToneEnvZone6	0x6376, 0x00, -34, 0						; digits 523, coarse +0.00 st
-	ToneEnvZone6	0x6377, 0x00, -33, 0						; digits 524, coarse +0.00 st
-	ToneEnvZone6	0x6378, 0x00, -30, 0						; digits 525, coarse +0.00 st
-	ToneEnvZone6	0x6379, 0x00, -25, 0						; digits 526, coarse +0.00 st
-	ToneEnvZone6	0x637a, 0x00, -20, 0						; digits 527, coarse +0.00 st
-	ToneEnvZone6	0x637b, 0x00, -14, 0						; digits 528, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -35, 3072						; digits 530, coarse +12.00 st
-	ToneEnvZone6	0x637c, 0x00, -34, 0						; digits 531, coarse +0.00 st
-	ToneEnvZone6	0x637d, 0x00, -33, 0						; digits 532, coarse +0.00 st
-	ToneEnvZone6	0x641c, 0x00, -32, 0						; digits 533, coarse +0.00 st
-	ToneEnvZone6	0x641d, 0x00, -31, 0						; digits 534, coarse +0.00 st
-	ToneEnvZone6	0x641e, 0x00, -29, 0						; digits 535, coarse +0.00 st
-	ToneEnvZone6	0x63d8, 0x00, -26, 0						; digits 536, coarse +0.00 st
-	ToneEnvZone6	0x63ab, 0x00, -21, 0						; digits 537, coarse +0.00 st
-	ToneEnvZone6	0x637e, 0x00, -15, 0						; digits 538, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -33, 3072						; digits 540, coarse +12.00 st
-	ToneEnvZone6	0x637f, 0x00, -32, 0						; digits 541, coarse +0.00 st
-	ToneEnvZone6	0x6380, 0x00, -31, 0						; digits 542, coarse +0.00 st
-	ToneEnvZone6	0x6424, 0x00, -30, 0						; digits 543, coarse +0.00 st
-	ToneEnvZone6	0x6425, 0x00, -28, 0						; digits 544, coarse +0.00 st
-	ToneEnvZone6	0x6426, 0x00, -27, 0						; digits 545, coarse +0.00 st
-	ToneEnvZone6	0x63db, 0x00, -24, 0						; digits 546, coarse +0.00 st
-	ToneEnvZone6	0x63ae, 0x00, -21, 0						; digits 547, coarse +0.00 st
-	ToneEnvZone6	0x6381, 0x00, -15, 0						; digits 548, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -30, 3072						; digits 550, coarse +12.00 st
-	ToneEnvZone6	0x6382, 0x00, -29, 0						; digits 551, coarse +0.00 st
-	ToneEnvZone6	0x6383, 0x00, -28, 0						; digits 552, coarse +0.00 st
-	ToneEnvZone6	0x642c, 0x00, -27, 0						; digits 553, coarse +0.00 st
-	ToneEnvZone6	0x642d, 0x00, -26, 0						; digits 554, coarse +0.00 st
-	ToneEnvZone6	0x642e, 0x00, -24, 0						; digits 555, coarse +0.00 st
-	ToneEnvZone6	0x63de, 0x00, -22, 0						; digits 556, coarse +0.00 st
-	ToneEnvZone6	0x63b1, 0x00, -19, 0						; digits 557, coarse +0.00 st
-	ToneEnvZone6	0x6384, 0x00, -16, 0						; digits 558, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -25, 3072						; digits 560, coarse +12.00 st
-	ToneEnvZone6	0x6385, 0x00, -25, 0						; digits 561, coarse +0.00 st
-	ToneEnvZone6	0x6386, 0x00, -24, 0						; digits 562, coarse +0.00 st
-	ToneEnvZone6	0x63e3, 0x00, -23, 0						; digits 563, coarse +0.00 st
-	ToneEnvZone6	0x63e4, 0x00, -22, 0						; digits 564, coarse +0.00 st
-	ToneEnvZone6	0x63e5, 0x00, -21, 0						; digits 565, coarse +0.00 st
-	ToneEnvZone6	0x63e6, 0x00, -19, 0						; digits 566, coarse +0.00 st
-	ToneEnvZone6	0x63b4, 0x00, -16, 0						; digits 567, coarse +0.00 st
-	ToneEnvZone6	0x6387, 0x00, -13, 0						; digits 568, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -21, 3072						; digits 570, coarse +12.00 st
-	ToneEnvZone6	0x6388, 0x00, -20, 0						; digits 571, coarse +0.00 st
-	ToneEnvZone6	0x6389, 0x00, -19, 0						; digits 572, coarse +0.00 st
-	ToneEnvZone6	0x63b8, 0x00, -18, 0						; digits 573, coarse +0.00 st
-	ToneEnvZone6	0x63b9, 0x00, -18, 0						; digits 574, coarse +0.00 st
-	ToneEnvZone6	0x63ba, 0x00, -16, 0						; digits 575, coarse +0.00 st
-	ToneEnvZone6	0x63bb, 0x00, -15, 0						; digits 576, coarse +0.00 st
-	ToneEnvZone6	0x63bc, 0x00, -12, 0						; digits 577, coarse +0.00 st
-	ToneEnvZone6	0x638a, 0x00, -10, 0						; digits 578, coarse +0.00 st
-	ToneEnvZone6	0x627a, 0x00, -15, 3072						; digits 580, coarse +12.00 st
-	ToneEnvZone6	0x638b, 0x00, -14, 0						; digits 581, coarse +0.00 st
-	ToneEnvZone6	0x638c, 0x00, -14, 0						; digits 582, coarse +0.00 st
-	ToneEnvZone6	0x638d, 0x00, -13, 0						; digits 583, coarse +0.00 st
-	ToneEnvZone6	0x638e, 0x00, -12, 0						; digits 584, coarse +0.00 st
-	ToneEnvZone6	0x638f, 0x00, -11, 0						; digits 585, coarse +0.00 st
-	ToneEnvZone6	0x6390, 0x00, -10, 0						; digits 586, coarse +0.00 st
-	ToneEnvZone6	0x6391, 0x00, -8, 0						; digits 587, coarse +0.00 st
-	ToneEnvZone6	0x6392, 0x00, -6, 0						; digits 588, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -35, 6144						; digits 600, coarse +24.00 st
-	ToneEnvZone6	0x6393, 0x00, -33, 0						; digits 601, coarse +0.00 st
-	ToneEnvZone6	0x6394, 0x00, -31, 0						; digits 602, coarse +0.00 st
-	ToneEnvZone6	0x63eb, 0x00, -28, 0						; digits 603, coarse +0.00 st
-	ToneEnvZone6	0x63ec, 0x00, -26, 0						; digits 604, coarse +0.00 st
-	ToneEnvZone6	0x63ed, 0x00, -23, 0						; digits 605, coarse +0.00 st
-	ToneEnvZone6	0x63ee, 0x00, -20, 0						; digits 606, coarse +0.00 st
-	ToneEnvZone6	0x63bf, 0x00, -15, 0						; digits 607, coarse +0.00 st
-	ToneEnvZone6	0x6395, 0x00, -10, 0						; digits 608, coarse +0.00 st
-	ToneEnvZone6	0x627b, 0x00, -33, 3072						; digits 610, coarse +12.00 st
-	ToneEnvZone6	0x6396, 0x00, -32, 0						; digits 611, coarse +0.00 st
-	ToneEnvZone6	0x6397, 0x00, -31, 0						; digits 612, coarse +0.00 st
-	ToneEnvZone6	0x6398, 0x00, -29, 0						; digits 613, coarse +0.00 st
-	ToneEnvZone6	0x6399, 0x00, -27, 0						; digits 614, coarse +0.00 st
-	ToneEnvZone6	0x639a, 0x00, -24, 0						; digits 615, coarse +0.00 st
-	ToneEnvZone6	0x639b, 0x00, -20, 0						; digits 616, coarse +0.00 st
-	ToneEnvZone6	0x639c, 0x00, -16, 0						; digits 617, coarse +0.00 st
-	ToneEnvZone6	0x639d, 0x00, -11, 0						; digits 618, coarse +0.00 st
-	ToneEnvZone6	0x627c, 0x00, -31, 3072						; digits 620, coarse +12.00 st
-	ToneEnvZone6	0x639e, 0x00, -31, 0						; digits 621, coarse +0.00 st
-	ToneEnvZone6	0x639f, 0x00, -30, 0						; digits 622, coarse +0.00 st
-	ToneEnvZone6	0x63a0, 0x00, -29, 0						; digits 623, coarse +0.00 st
-	ToneEnvZone6	0x63a1, 0x00, -28, 0						; digits 624, coarse +0.00 st
-	ToneEnvZone6	0x63a2, 0x00, -25, 0						; digits 625, coarse +0.00 st
-	ToneEnvZone6	0x63a3, 0x00, -21, 0						; digits 626, coarse +0.00 st
-	ToneEnvZone6	0x63a4, 0x00, -17, 0						; digits 627, coarse +0.00 st
-	ToneEnvZone6	0x63a5, 0x00, -12, 0						; digits 628, coarse +0.00 st
-	ToneEnvZone6	0x6285, 0x00, -29, 3072						; digits 630, coarse +12.00 st
-	ToneEnvZone6	0x63a6, 0x00, -29, 0						; digits 631, coarse +0.00 st
-	ToneEnvZone6	0x63a7, 0x00, -28, 0						; digits 632, coarse +0.00 st
-	ToneEnvZone6	0x6413, 0x00, -27, 0						; digits 633, coarse +0.00 st
-	ToneEnvZone6	0x6414, 0x00, -26, 0						; digits 634, coarse +0.00 st
-	ToneEnvZone6	0x6415, 0x00, -24, 0						; digits 635, coarse +0.00 st
-	ToneEnvZone6	0x6416, 0x00, -22, 0						; digits 636, coarse +0.00 st
-	ToneEnvZone6	0x63d5, 0x00, -18, 0						; digits 637, coarse +0.00 st
-	ToneEnvZone6	0x63a8, 0x00, -12, 0						; digits 638, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -27, 3072						; digits 640, coarse +12.00 st
-	ToneEnvZone6	0x63a9, 0x00, -27, 0						; digits 641, coarse +0.00 st
-	ToneEnvZone6	0x63aa, 0x00, -26, 0						; digits 642, coarse +0.00 st
-	ToneEnvZone6	0x641b, 0x00, -25, 0						; digits 643, coarse +0.00 st
-	ToneEnvZone6	0x641c, 0x00, -24, 0						; digits 644, coarse +0.00 st
-	ToneEnvZone6	0x641d, 0x00, -23, 0						; digits 645, coarse +0.00 st
-	ToneEnvZone6	0x641e, 0x00, -21, 0						; digits 646, coarse +0.00 st
-	ToneEnvZone6	0x63d8, 0x00, -18, 0						; digits 647, coarse +0.00 st
-	ToneEnvZone6	0x63ab, 0x00, -13, 0						; digits 648, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -25, 3072						; digits 650, coarse +12.00 st
-	ToneEnvZone6	0x63ac, 0x00, -24, 0						; digits 651, coarse +0.00 st
-	ToneEnvZone6	0x63ad, 0x00, -23, 0						; digits 652, coarse +0.00 st
-	ToneEnvZone6	0x6423, 0x00, -23, 0						; digits 653, coarse +0.00 st
-	ToneEnvZone6	0x6424, 0x00, -22, 0						; digits 654, coarse +0.00 st
-	ToneEnvZone6	0x6425, 0x00, -20, 0						; digits 655, coarse +0.00 st
-	ToneEnvZone6	0x6426, 0x00, -19, 0						; digits 656, coarse +0.00 st
-	ToneEnvZone6	0x63db, 0x00, -16, 0						; digits 657, coarse +0.00 st
-	ToneEnvZone6	0x63ae, 0x00, -13, 0						; digits 658, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -22, 3072						; digits 660, coarse +12.00 st
-	ToneEnvZone6	0x63af, 0x00, -21, 0						; digits 661, coarse +0.00 st
-	ToneEnvZone6	0x63b0, 0x00, -20, 0						; digits 662, coarse +0.00 st
-	ToneEnvZone6	0x642b, 0x00, -20, 0						; digits 663, coarse +0.00 st
-	ToneEnvZone6	0x642c, 0x00, -19, 0						; digits 664, coarse +0.00 st
-	ToneEnvZone6	0x642d, 0x00, -18, 0						; digits 665, coarse +0.00 st
-	ToneEnvZone6	0x642e, 0x00, -16, 0						; digits 666, coarse +0.00 st
-	ToneEnvZone6	0x63de, 0x00, -14, 0						; digits 667, coarse +0.00 st
-	ToneEnvZone6	0x63b1, 0x00, -11, 0						; digits 668, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -17, 3072						; digits 670, coarse +12.00 st
-	ToneEnvZone6	0x63b2, 0x00, -17, 0						; digits 671, coarse +0.00 st
-	ToneEnvZone6	0x63b3, 0x00, -16, 0						; digits 672, coarse +0.00 st
-	ToneEnvZone6	0x63e2, 0x00, -16, 0						; digits 673, coarse +0.00 st
-	ToneEnvZone6	0x63e3, 0x00, -15, 0						; digits 674, coarse +0.00 st
-	ToneEnvZone6	0x63e4, 0x00, -14, 0						; digits 675, coarse +0.00 st
-	ToneEnvZone6	0x63e5, 0x00, -13, 0						; digits 676, coarse +0.00 st
-	ToneEnvZone6	0x63e6, 0x00, -11, 0						; digits 677, coarse +0.00 st
-	ToneEnvZone6	0x63b4, 0x00, -8, 0						; digits 678, coarse +0.00 st
-	ToneEnvZone6	0x627d, 0x00, -13, 3072						; digits 680, coarse +12.00 st
-	ToneEnvZone6	0x63b5, 0x00, -12, 0						; digits 681, coarse +0.00 st
-	ToneEnvZone6	0x63b6, 0x00, -12, 0						; digits 682, coarse +0.00 st
-	ToneEnvZone6	0x63b7, 0x00, -11, 0						; digits 683, coarse +0.00 st
-	ToneEnvZone6	0x63b8, 0x00, -10, 0						; digits 684, coarse +0.00 st
-	ToneEnvZone6	0x63b9, 0x00, -10, 0						; digits 685, coarse +0.00 st
-	ToneEnvZone6	0x63ba, 0x00, -8, 0						; digits 686, coarse +0.00 st
-	ToneEnvZone6	0x63bb, 0x00, -7, 0						; digits 687, coarse +0.00 st
-	ToneEnvZone6	0x63bc, 0x00, -4, 0						; digits 688, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -27, 6144						; digits 700, coarse +24.00 st
-	ToneEnvZone6	0x63bd, 0x00, -25, 0						; digits 701, coarse +0.00 st
-	ToneEnvZone6	0x63be, 0x00, -24, 0						; digits 702, coarse +0.00 st
-	ToneEnvZone6	0x63ea, 0x00, -22, 0						; digits 703, coarse +0.00 st
-	ToneEnvZone6	0x63eb, 0x00, -20, 0						; digits 704, coarse +0.00 st
-	ToneEnvZone6	0x63ec, 0x00, -18, 0						; digits 705, coarse +0.00 st
-	ToneEnvZone6	0x63ed, 0x00, -15, 0						; digits 706, coarse +0.00 st
-	ToneEnvZone6	0x63ee, 0x00, -12, 0						; digits 707, coarse +0.00 st
-	ToneEnvZone6	0x63bf, 0x00, -7, 0						; digits 708, coarse +0.00 st
-	ToneEnvZone6	0x627e, 0x00, -26, 3072						; digits 710, coarse +12.00 st
-	ToneEnvZone6	0x63c0, 0x00, -25, 0						; digits 711, coarse +0.00 st
-	ToneEnvZone6	0x63c1, 0x00, -24, 0						; digits 712, coarse +0.00 st
-	ToneEnvZone6	0x63c2, 0x00, -23, 0						; digits 713, coarse +0.00 st
-	ToneEnvZone6	0x63c3, 0x00, -21, 0						; digits 714, coarse +0.00 st
-	ToneEnvZone6	0x63c4, 0x00, -19, 0						; digits 715, coarse +0.00 st
-	ToneEnvZone6	0x63c5, 0x00, -16, 0						; digits 716, coarse +0.00 st
-	ToneEnvZone6	0x63c6, 0x00, -12, 0						; digits 717, coarse +0.00 st
-	ToneEnvZone6	0x63c7, 0x00, -8, 0						; digits 718, coarse +0.00 st
-	ToneEnvZone6	0x627f, 0x00, -24, 3072						; digits 720, coarse +12.00 st
-	ToneEnvZone6	0x63c8, 0x00, -24, 0						; digits 721, coarse +0.00 st
-	ToneEnvZone6	0x63c9, 0x00, -23, 0						; digits 722, coarse +0.00 st
-	ToneEnvZone6	0x63ca, 0x00, -22, 0						; digits 723, coarse +0.00 st
-	ToneEnvZone6	0x63cb, 0x00, -21, 0						; digits 724, coarse +0.00 st
-	ToneEnvZone6	0x63cc, 0x00, -20, 0						; digits 725, coarse +0.00 st
-	ToneEnvZone6	0x63cd, 0x00, -17, 0						; digits 726, coarse +0.00 st
-	ToneEnvZone6	0x63ce, 0x00, -13, 0						; digits 727, coarse +0.00 st
-	ToneEnvZone6	0x63cf, 0x00, -8, 0						; digits 728, coarse +0.00 st
-	ToneEnvZone6	0x6284, 0x00, -23, 3072						; digits 730, coarse +12.00 st
-	ToneEnvZone6	0x63d0, 0x00, -22, 0						; digits 731, coarse +0.00 st
-	ToneEnvZone6	0x63d1, 0x00, -22, 0						; digits 732, coarse +0.00 st
-	ToneEnvZone6	0x640a, 0x00, -21, 0						; digits 733, coarse +0.00 st
-	ToneEnvZone6	0x640b, 0x00, -20, 0						; digits 734, coarse +0.00 st
-	ToneEnvZone6	0x640c, 0x00, -19, 0						; digits 735, coarse +0.00 st
-	ToneEnvZone6	0x640d, 0x00, -17, 0						; digits 736, coarse +0.00 st
-	ToneEnvZone6	0x640e, 0x00, -14, 0						; digits 737, coarse +0.00 st
-	ToneEnvZone6	0x63d2, 0x00, -9, 0						; digits 738, coarse +0.00 st
-	ToneEnvZone6	0x6285, 0x00, -21, 3072						; digits 740, coarse +12.00 st
-	ToneEnvZone6	0x63d3, 0x00, -21, 0						; digits 741, coarse +0.00 st
-	ToneEnvZone6	0x63d4, 0x00, -20, 0						; digits 742, coarse +0.00 st
-	ToneEnvZone6	0x6412, 0x00, -20, 0						; digits 743, coarse +0.00 st
-	ToneEnvZone6	0x6413, 0x00, -19, 0						; digits 744, coarse +0.00 st
-	ToneEnvZone6	0x6414, 0x00, -18, 0						; digits 745, coarse +0.00 st
-	ToneEnvZone6	0x6415, 0x00, -16, 0						; digits 746, coarse +0.00 st
-	ToneEnvZone6	0x6416, 0x00, -14, 0						; digits 747, coarse +0.00 st
-	ToneEnvZone6	0x63d5, 0x00, -10, 0						; digits 748, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -19, 3072						; digits 750, coarse +12.00 st
-	ToneEnvZone6	0x63d6, 0x00, -19, 0						; digits 751, coarse +0.00 st
-	ToneEnvZone6	0x63d7, 0x00, -18, 0						; digits 752, coarse +0.00 st
-	ToneEnvZone6	0x641a, 0x00, -18, 0						; digits 753, coarse +0.00 st
-	ToneEnvZone6	0x641b, 0x00, -17, 0						; digits 754, coarse +0.00 st
-	ToneEnvZone6	0x641c, 0x00, -16, 0						; digits 755, coarse +0.00 st
-	ToneEnvZone6	0x641d, 0x00, -15, 0						; digits 756, coarse +0.00 st
-	ToneEnvZone6	0x641e, 0x00, -13, 0						; digits 757, coarse +0.00 st
-	ToneEnvZone6	0x63d8, 0x00, -10, 0						; digits 758, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -17, 3072						; digits 760, coarse +12.00 st
-	ToneEnvZone6	0x63d9, 0x00, -16, 0						; digits 761, coarse +0.00 st
-	ToneEnvZone6	0x63da, 0x00, -16, 0						; digits 762, coarse +0.00 st
-	ToneEnvZone6	0x6422, 0x00, -15, 0						; digits 763, coarse +0.00 st
-	ToneEnvZone6	0x6423, 0x00, -15, 0						; digits 764, coarse +0.00 st
-	ToneEnvZone6	0x6424, 0x00, -14, 0						; digits 765, coarse +0.00 st
-	ToneEnvZone6	0x6425, 0x00, -12, 0						; digits 766, coarse +0.00 st
-	ToneEnvZone6	0x6426, 0x00, -11, 0						; digits 767, coarse +0.00 st
-	ToneEnvZone6	0x63db, 0x00, -8, 0						; digits 768, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -14, 3072						; digits 770, coarse +12.00 st
-	ToneEnvZone6	0x63dc, 0x00, -13, 0						; digits 771, coarse +0.00 st
-	ToneEnvZone6	0x63dd, 0x00, -13, 0						; digits 772, coarse +0.00 st
-	ToneEnvZone6	0x642a, 0x00, -12, 0						; digits 773, coarse +0.00 st
-	ToneEnvZone6	0x642b, 0x00, -12, 0						; digits 774, coarse +0.00 st
-	ToneEnvZone6	0x642c, 0x00, -11, 0						; digits 775, coarse +0.00 st
-	ToneEnvZone6	0x642d, 0x00, -10, 0						; digits 776, coarse +0.00 st
-	ToneEnvZone6	0x642e, 0x00, -8, 0						; digits 777, coarse +0.00 st
-	ToneEnvZone6	0x63de, 0x00, -6, 0						; digits 778, coarse +0.00 st
-	ToneEnvZone6	0x6280, 0x00, -9, 3072						; digits 780, coarse +12.00 st
-	ToneEnvZone6	0x63df, 0x00, -9, 0						; digits 781, coarse +0.00 st
-	ToneEnvZone6	0x63e0, 0x00, -9, 0						; digits 782, coarse +0.00 st
-	ToneEnvZone6	0x63e1, 0x00, -8, 0						; digits 783, coarse +0.00 st
-	ToneEnvZone6	0x63e2, 0x00, -8, 0						; digits 784, coarse +0.00 st
-	ToneEnvZone6	0x63e3, 0x00, -7, 0						; digits 785, coarse +0.00 st
-	ToneEnvZone6	0x63e4, 0x00, -6, 0						; digits 786, coarse +0.00 st
-	ToneEnvZone6	0x63e5, 0x00, -5, 0						; digits 787, coarse +0.00 st
-	ToneEnvZone6	0x63e6, 0x00, -3, 0						; digits 788, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -19, 6144						; digits 800, coarse +24.00 st
-	ToneEnvZone6	0x63e7, 0x00, -18, 0						; digits 801, coarse +0.00 st
-	ToneEnvZone6	0x63e8, 0x00, -17, 0						; digits 802, coarse +0.00 st
-	ToneEnvZone6	0x63e9, 0x00, -15, 0						; digits 803, coarse +0.00 st
-	ToneEnvZone6	0x63ea, 0x00, -14, 0						; digits 804, coarse +0.00 st
-	ToneEnvZone6	0x63eb, 0x00, -12, 0						; digits 805, coarse +0.00 st
-	ToneEnvZone6	0x63ec, 0x00, -10, 0						; digits 806, coarse +0.00 st
-	ToneEnvZone6	0x63ed, 0x00, -7, 0						; digits 807, coarse +0.00 st
-	ToneEnvZone6	0x63ee, 0x00, -4, 0						; digits 808, coarse +0.00 st
-	ToneEnvZone6	0x6281, 0x00, -18, 3072						; digits 810, coarse +12.00 st
-	ToneEnvZone6	0x63ef, 0x00, -17, 0						; digits 811, coarse +0.00 st
-	ToneEnvZone6	0x63f0, 0x00, -17, 0						; digits 812, coarse +0.00 st
-	ToneEnvZone6	0x63f1, 0x00, -16, 0						; digits 813, coarse +0.00 st
-	ToneEnvZone6	0x63f2, 0x00, -15, 0						; digits 814, coarse +0.00 st
-	ToneEnvZone6	0x63f3, 0x00, -13, 0						; digits 815, coarse +0.00 st
-	ToneEnvZone6	0x63f4, 0x00, -11, 0						; digits 816, coarse +0.00 st
-	ToneEnvZone6	0x63f5, 0x00, -8, 0						; digits 817, coarse +0.00 st
-	ToneEnvZone6	0x63f6, 0x00, -4, 0						; digits 818, coarse +0.00 st
-	ToneEnvZone6	0x6282, 0x00, -17, 3072						; digits 820, coarse +12.00 st
-	ToneEnvZone6	0x63f7, 0x00, -17, 0						; digits 821, coarse +0.00 st
-	ToneEnvZone6	0x63f8, 0x00, -16, 0						; digits 822, coarse +0.00 st
-	ToneEnvZone6	0x63f9, 0x00, -16, 0						; digits 823, coarse +0.00 st
-	ToneEnvZone6	0x63fa, 0x00, -15, 0						; digits 824, coarse +0.00 st
-	ToneEnvZone6	0x63fb, 0x00, -13, 0						; digits 825, coarse +0.00 st
-	ToneEnvZone6	0x63fc, 0x00, -11, 0						; digits 826, coarse +0.00 st
-	ToneEnvZone6	0x63fd, 0x00, -8, 0						; digits 827, coarse +0.00 st
-	ToneEnvZone6	0x63fe, 0x00, -4, 0						; digits 828, coarse +0.00 st
-	ToneEnvZone6	0x6283, 0x00, -16, 3072						; digits 830, coarse +12.00 st
-	ToneEnvZone6	0x63ff, 0x00, -16, 0						; digits 831, coarse +0.00 st
-	ToneEnvZone6	0x6400, 0x00, -15, 0						; digits 832, coarse +0.00 st
-	ToneEnvZone6	0x6401, 0x00, -14, 0						; digits 833, coarse +0.00 st
-	ToneEnvZone6	0x6402, 0x00, -14, 0						; digits 834, coarse +0.00 st
-	ToneEnvZone6	0x6403, 0x00, -13, 0						; digits 835, coarse +0.00 st
-	ToneEnvZone6	0x6404, 0x00, -12, 0						; digits 836, coarse +0.00 st
-	ToneEnvZone6	0x6405, 0x00, -9, 0						; digits 837, coarse +0.00 st
-	ToneEnvZone6	0x6406, 0x00, -5, 0						; digits 838, coarse +0.00 st
-	ToneEnvZone6	0x6284, 0x00, -15, 3072						; digits 840, coarse +12.00 st
-	ToneEnvZone6	0x6407, 0x00, -14, 0						; digits 841, coarse +0.00 st
-	ToneEnvZone6	0x6408, 0x00, -14, 0						; digits 842, coarse +0.00 st
-	ToneEnvZone6	0x6409, 0x00, -13, 0						; digits 843, coarse +0.00 st
-	ToneEnvZone6	0x640a, 0x00, -13, 0						; digits 844, coarse +0.00 st
-	ToneEnvZone6	0x640b, 0x00, -12, 0						; digits 845, coarse +0.00 st
-	ToneEnvZone6	0x640c, 0x00, -11, 0						; digits 846, coarse +0.00 st
-	ToneEnvZone6	0x640d, 0x00, -9, 0						; digits 847, coarse +0.00 st
-	ToneEnvZone6	0x640e, 0x00, -6, 0						; digits 848, coarse +0.00 st
-	ToneEnvZone6	0x6285, 0x00, -13, 3072						; digits 850, coarse +12.00 st
-	ToneEnvZone6	0x640f, 0x00, -13, 0						; digits 851, coarse +0.00 st
-	ToneEnvZone6	0x6410, 0x00, -13, 0						; digits 852, coarse +0.00 st
-	ToneEnvZone6	0x6411, 0x00, -12, 0						; digits 853, coarse +0.00 st
-	ToneEnvZone6	0x6412, 0x00, -12, 0						; digits 854, coarse +0.00 st
-	ToneEnvZone6	0x6413, 0x00, -11, 0						; digits 855, coarse +0.00 st
-	ToneEnvZone6	0x6414, 0x00, -10, 0						; digits 856, coarse +0.00 st
-	ToneEnvZone6	0x6415, 0x00, -8, 0						; digits 857, coarse +0.00 st
-	ToneEnvZone6	0x6416, 0x00, -6, 0						; digits 858, coarse +0.00 st
-	ToneEnvZone6	0x6286, 0x00, -11, 3072						; digits 860, coarse +12.00 st
-	ToneEnvZone6	0x6417, 0x00, -11, 0						; digits 861, coarse +0.00 st
-	ToneEnvZone6	0x6418, 0x00, -11, 0						; digits 862, coarse +0.00 st
-	ToneEnvZone6	0x6419, 0x00, -10, 0						; digits 863, coarse +0.00 st
-	ToneEnvZone6	0x641a, 0x00, -10, 0						; digits 864, coarse +0.00 st
-	ToneEnvZone6	0x641b, 0x00, -9, 0						; digits 865, coarse +0.00 st
-	ToneEnvZone6	0x641c, 0x00, -8, 0						; digits 866, coarse +0.00 st
-	ToneEnvZone6	0x641d, 0x00, -7, 0						; digits 867, coarse +0.00 st
-	ToneEnvZone6	0x641e, 0x00, -5, 0						; digits 868, coarse +0.00 st
-	ToneEnvZone6	0x6287, 0x00, -9, 3072						; digits 870, coarse +12.00 st
-	ToneEnvZone6	0x641f, 0x00, -9, 0						; digits 871, coarse +0.00 st
-	ToneEnvZone6	0x6420, 0x00, -8, 0						; digits 872, coarse +0.00 st
-	ToneEnvZone6	0x6421, 0x00, -8, 0						; digits 873, coarse +0.00 st
-	ToneEnvZone6	0x6422, 0x00, -7, 0						; digits 874, coarse +0.00 st
-	ToneEnvZone6	0x6423, 0x00, -7, 0						; digits 875, coarse +0.00 st
-	ToneEnvZone6	0x6424, 0x00, -6, 0						; digits 876, coarse +0.00 st
-	ToneEnvZone6	0x6425, 0x00, -4, 0						; digits 877, coarse +0.00 st
-	ToneEnvZone6	0x6426, 0x00, -3, 0						; digits 878, coarse +0.00 st
-	ToneEnvZone6	0x6288, 0x00, -6, 3072						; digits 880, coarse +12.00 st
-	ToneEnvZone6	0x6427, 0x00, -5, 0						; digits 881, coarse +0.00 st
-	ToneEnvZone6	0x6428, 0x00, -5, 0						; digits 882, coarse +0.00 st
-	ToneEnvZone6	0x6429, 0x00, -5, 0						; digits 883, coarse +0.00 st
-	ToneEnvZone6	0x642a, 0x00, -4, 0						; digits 884, coarse +0.00 st
-	ToneEnvZone6	0x642b, 0x00, -4, 0						; digits 885, coarse +0.00 st
-	ToneEnvZone6	0x642c, 0x00, -3, 0						; digits 886, coarse +0.00 st
-	ToneEnvZone6	0x642d, 0x00, -2, 0						; digits 887, coarse +0.00 st
-	ToneEnvZone6	0x642e, 0x00, 0, 0						; digits 888, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -128, 0						; digits 000, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -87, 0						; digits 001, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -71, 0						; digits 002, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -59, 0						; digits 003, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -51, 0						; digits 004, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -43, 0						; digits 005, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -35, 0						; digits 006, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -27, 0						; digits 007, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -19, 0						; digits 008, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -87, 3072						; digits 010, coarse +12.00 st
+	ToneSetZone6	0x6288, 0x00, -74, 0						; digits 011, coarse +0.00 st
+	ToneSetZone6	0x6264, 0x00, -65, 0						; digits 012, coarse +0.00 st
+	ToneSetZone6	0x6265, 0x00, -56, 0						; digits 013, coarse +0.00 st
+	ToneSetZone6	0x6266, 0x00, -49, 0						; digits 014, coarse +0.00 st
+	ToneSetZone6	0x6267, 0x00, -42, 0						; digits 015, coarse +0.00 st
+	ToneSetZone6	0x6268, 0x00, -34, 0						; digits 016, coarse +0.00 st
+	ToneSetZone6	0x6269, 0x00, -26, 0						; digits 017, coarse +0.00 st
+	ToneSetZone6	0x626a, 0x00, -19, 0						; digits 018, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -71, 3072						; digits 020, coarse +12.00 st
+	ToneSetZone6	0x626b, 0x00, -63, 0						; digits 021, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -58, 0						; digits 022, coarse +0.00 st
+	ToneSetZone6	0x626c, 0x00, -51, 0						; digits 023, coarse +0.00 st
+	ToneSetZone6	0x626d, 0x00, -46, 0						; digits 024, coarse +0.00 st
+	ToneSetZone6	0x626e, 0x00, -40, 0						; digits 025, coarse +0.00 st
+	ToneSetZone6	0x626f, 0x00, -33, 0						; digits 026, coarse +0.00 st
+	ToneSetZone6	0x6270, 0x00, -26, 0						; digits 027, coarse +0.00 st
+	ToneSetZone6	0x6271, 0x00, -18, 0						; digits 028, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -59, 3072						; digits 030, coarse +12.00 st
+	ToneSetZone6	0x6272, 0x00, -54, 0						; digits 031, coarse +0.00 st
+	ToneSetZone6	0x6273, 0x00, -50, 0						; digits 032, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -46, 0						; digits 033, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -41, 0						; digits 034, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -37, 0						; digits 035, coarse +0.00 st
+	ToneSetZone6	0x627a, 0x00, -31, 0						; digits 036, coarse +0.00 st
+	ToneSetZone6	0x6277, 0x00, -24, 0						; digits 037, coarse +0.00 st
+	ToneSetZone6	0x6274, 0x00, -17, 0						; digits 038, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -51, 3072						; digits 040, coarse +12.00 st
+	ToneSetZone6	0x6275, 0x00, -47, 0						; digits 041, coarse +0.00 st
+	ToneSetZone6	0x6276, 0x00, -44, 0						; digits 042, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -41, 0						; digits 043, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -38, 0						; digits 044, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -33, 0						; digits 045, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -29, 0						; digits 046, coarse +0.00 st
+	ToneSetZone6	0x627a, 0x00, -23, 0						; digits 047, coarse +0.00 st
+	ToneSetZone6	0x6277, 0x00, -16, 0						; digits 048, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -43, 3072						; digits 050, coarse +12.00 st
+	ToneSetZone6	0x6278, 0x00, -40, 0						; digits 051, coarse +0.00 st
+	ToneSetZone6	0x6279, 0x00, -38, 0						; digits 052, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -35, 0						; digits 053, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -33, 0						; digits 054, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -30, 0						; digits 055, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -25, 0						; digits 056, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -21, 0						; digits 057, coarse +0.00 st
+	ToneSetZone6	0x627a, 0x00, -15, 0						; digits 058, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -35, 3072						; digits 060, coarse +12.00 st
+	ToneSetZone6	0x627b, 0x00, -33, 0						; digits 061, coarse +0.00 st
+	ToneSetZone6	0x627c, 0x00, -31, 0						; digits 062, coarse +0.00 st
+	ToneSetZone6	0x6285, 0x00, -29, 0						; digits 063, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -27, 0						; digits 064, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -25, 0						; digits 065, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -22, 0						; digits 066, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -17, 0						; digits 067, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -13, 0						; digits 068, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -27, 3072						; digits 070, coarse +12.00 st
+	ToneSetZone6	0x627e, 0x00, -26, 0						; digits 071, coarse +0.00 st
+	ToneSetZone6	0x627f, 0x00, -24, 0						; digits 072, coarse +0.00 st
+	ToneSetZone6	0x6284, 0x00, -23, 0						; digits 073, coarse +0.00 st
+	ToneSetZone6	0x6285, 0x00, -21, 0						; digits 074, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -19, 0						; digits 075, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -17, 0						; digits 076, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -14, 0						; digits 077, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -9, 0						; digits 078, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -19, 3072						; digits 080, coarse +12.00 st
+	ToneSetZone6	0x6281, 0x00, -18, 0						; digits 081, coarse +0.00 st
+	ToneSetZone6	0x6282, 0x00, -17, 0						; digits 082, coarse +0.00 st
+	ToneSetZone6	0x6283, 0x00, -16, 0						; digits 083, coarse +0.00 st
+	ToneSetZone6	0x6284, 0x00, -15, 0						; digits 084, coarse +0.00 st
+	ToneSetZone6	0x6285, 0x00, -13, 0						; digits 085, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -11, 0						; digits 086, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -9, 0						; digits 087, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -6, 0						; digits 088, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -87, 6144						; digits 100, coarse +24.00 st
+	ToneSetZone6	0x63ee, 0x00, -72, 0						; digits 101, coarse +0.00 st
+	ToneSetZone6	0x6289, 0x00, -62, 0						; digits 102, coarse +0.00 st
+	ToneSetZone6	0x628a, 0x00, -54, 0						; digits 103, coarse +0.00 st
+	ToneSetZone6	0x628b, 0x00, -48, 0						; digits 104, coarse +0.00 st
+	ToneSetZone6	0x628c, 0x00, -41, 0						; digits 105, coarse +0.00 st
+	ToneSetZone6	0x628d, 0x00, -33, 0						; digits 106, coarse +0.00 st
+	ToneSetZone6	0x628e, 0x00, -26, 0						; digits 107, coarse +0.00 st
+	ToneSetZone6	0x628f, 0x00, -18, 0						; digits 108, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -74, 3072						; digits 110, coarse +12.00 st
+	ToneSetZone6	0x642e, 0x00, -68, 0						; digits 111, coarse +0.00 st
+	ToneSetZone6	0x6290, 0x00, -63, 0						; digits 112, coarse +0.00 st
+	ToneSetZone6	0x6291, 0x00, -57, 0						; digits 113, coarse +0.00 st
+	ToneSetZone6	0x6292, 0x00, -50, 0						; digits 114, coarse +0.00 st
+	ToneSetZone6	0x6293, 0x00, -42, 0						; digits 115, coarse +0.00 st
+	ToneSetZone6	0x6294, 0x00, -34, 0						; digits 116, coarse +0.00 st
+	ToneSetZone6	0x6295, 0x00, -26, 0						; digits 117, coarse +0.00 st
+	ToneSetZone6	0x6296, 0x00, -19, 0						; digits 118, coarse +0.00 st
+	ToneSetZone6	0x6264, 0x00, -65, 3072						; digits 120, coarse +12.00 st
+	ToneSetZone6	0x6297, 0x00, -60, 0						; digits 121, coarse +0.00 st
+	ToneSetZone6	0x6298, 0x00, -56, 0						; digits 122, coarse +0.00 st
+	ToneSetZone6	0x6299, 0x00, -52, 0						; digits 123, coarse +0.00 st
+	ToneSetZone6	0x629a, 0x00, -48, 0						; digits 124, coarse +0.00 st
+	ToneSetZone6	0x629b, 0x00, -42, 0						; digits 125, coarse +0.00 st
+	ToneSetZone6	0x629c, 0x00, -35, 0						; digits 126, coarse +0.00 st
+	ToneSetZone6	0x629d, 0x00, -27, 0						; digits 127, coarse +0.00 st
+	ToneSetZone6	0x629e, 0x00, -19, 0						; digits 128, coarse +0.00 st
+	ToneSetZone6	0x6265, 0x00, -56, 3072						; digits 130, coarse +12.00 st
+	ToneSetZone6	0x629f, 0x00, -52, 0						; digits 131, coarse +0.00 st
+	ToneSetZone6	0x62a0, 0x00, -50, 0						; digits 132, coarse +0.00 st
+	ToneSetZone6	0x62a1, 0x00, -46, 0						; digits 133, coarse +0.00 st
+	ToneSetZone6	0x62a2, 0x00, -42, 0						; digits 134, coarse +0.00 st
+	ToneSetZone6	0x62a3, 0x00, -38, 0						; digits 135, coarse +0.00 st
+	ToneSetZone6	0x62a4, 0x00, -33, 0						; digits 136, coarse +0.00 st
+	ToneSetZone6	0x62a5, 0x00, -26, 0						; digits 137, coarse +0.00 st
+	ToneSetZone6	0x62a6, 0x00, -18, 0						; digits 138, coarse +0.00 st
+	ToneSetZone6	0x6266, 0x00, -49, 3072						; digits 140, coarse +12.00 st
+	ToneSetZone6	0x62a7, 0x00, -46, 0						; digits 141, coarse +0.00 st
+	ToneSetZone6	0x62a8, 0x00, -44, 0						; digits 142, coarse +0.00 st
+	ToneSetZone6	0x62a9, 0x00, -41, 0						; digits 143, coarse +0.00 st
+	ToneSetZone6	0x62aa, 0x00, -38, 0						; digits 144, coarse +0.00 st
+	ToneSetZone6	0x62ab, 0x00, -34, 0						; digits 145, coarse +0.00 st
+	ToneSetZone6	0x62ac, 0x00, -30, 0						; digits 146, coarse +0.00 st
+	ToneSetZone6	0x62ad, 0x00, -24, 0						; digits 147, coarse +0.00 st
+	ToneSetZone6	0x62ae, 0x00, -18, 0						; digits 148, coarse +0.00 st
+	ToneSetZone6	0x6267, 0x00, -42, 3072						; digits 150, coarse +12.00 st
+	ToneSetZone6	0x62af, 0x00, -40, 0						; digits 151, coarse +0.00 st
+	ToneSetZone6	0x62b0, 0x00, -38, 0						; digits 152, coarse +0.00 st
+	ToneSetZone6	0x62b1, 0x00, -35, 0						; digits 153, coarse +0.00 st
+	ToneSetZone6	0x62b2, 0x00, -33, 0						; digits 154, coarse +0.00 st
+	ToneSetZone6	0x62b3, 0x00, -30, 0						; digits 155, coarse +0.00 st
+	ToneSetZone6	0x62b4, 0x00, -26, 0						; digits 156, coarse +0.00 st
+	ToneSetZone6	0x62b5, 0x00, -22, 0						; digits 157, coarse +0.00 st
+	ToneSetZone6	0x62b6, 0x00, -16, 0						; digits 158, coarse +0.00 st
+	ToneSetZone6	0x6268, 0x00, -34, 3072						; digits 160, coarse +12.00 st
+	ToneSetZone6	0x62b7, 0x00, -33, 0						; digits 161, coarse +0.00 st
+	ToneSetZone6	0x62b8, 0x00, -31, 0						; digits 162, coarse +0.00 st
+	ToneSetZone6	0x62b9, 0x00, -29, 0						; digits 163, coarse +0.00 st
+	ToneSetZone6	0x62ba, 0x00, -28, 0						; digits 164, coarse +0.00 st
+	ToneSetZone6	0x62bb, 0x00, -25, 0						; digits 165, coarse +0.00 st
+	ToneSetZone6	0x62bc, 0x00, -22, 0						; digits 166, coarse +0.00 st
+	ToneSetZone6	0x62bd, 0x00, -18, 0						; digits 167, coarse +0.00 st
+	ToneSetZone6	0x62be, 0x00, -13, 0						; digits 168, coarse +0.00 st
+	ToneSetZone6	0x6269, 0x00, -26, 3072						; digits 170, coarse +12.00 st
+	ToneSetZone6	0x62bf, 0x00, -25, 0						; digits 171, coarse +0.00 st
+	ToneSetZone6	0x62c0, 0x00, -24, 0						; digits 172, coarse +0.00 st
+	ToneSetZone6	0x62c1, 0x00, -23, 0						; digits 173, coarse +0.00 st
+	ToneSetZone6	0x62c2, 0x00, -21, 0						; digits 174, coarse +0.00 st
+	ToneSetZone6	0x62c3, 0x00, -20, 0						; digits 175, coarse +0.00 st
+	ToneSetZone6	0x62c4, 0x00, -17, 0						; digits 176, coarse +0.00 st
+	ToneSetZone6	0x62c5, 0x00, -14, 0						; digits 177, coarse +0.00 st
+	ToneSetZone6	0x62c6, 0x00, -10, 0						; digits 178, coarse +0.00 st
+	ToneSetZone6	0x626a, 0x00, -19, 3072						; digits 180, coarse +12.00 st
+	ToneSetZone6	0x62c7, 0x00, -18, 0						; digits 181, coarse +0.00 st
+	ToneSetZone6	0x62c8, 0x00, -17, 0						; digits 182, coarse +0.00 st
+	ToneSetZone6	0x62c9, 0x00, -16, 0						; digits 183, coarse +0.00 st
+	ToneSetZone6	0x62ca, 0x00, -15, 0						; digits 184, coarse +0.00 st
+	ToneSetZone6	0x62cb, 0x00, -13, 0						; digits 185, coarse +0.00 st
+	ToneSetZone6	0x62cc, 0x00, -12, 0						; digits 186, coarse +0.00 st
+	ToneSetZone6	0x62cd, 0x00, -9, 0						; digits 187, coarse +0.00 st
+	ToneSetZone6	0x62ce, 0x00, -6, 0						; digits 188, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -71, 6144						; digits 200, coarse +24.00 st
+	ToneSetZone6	0x62cf, 0x00, -62, 0						; digits 201, coarse +0.00 st
+	ToneSetZone6	0x63ee, 0x00, -56, 0						; digits 202, coarse +0.00 st
+	ToneSetZone6	0x62d0, 0x00, -49, 0						; digits 203, coarse +0.00 st
+	ToneSetZone6	0x62d1, 0x00, -44, 0						; digits 204, coarse +0.00 st
+	ToneSetZone6	0x62d2, 0x00, -38, 0						; digits 205, coarse +0.00 st
+	ToneSetZone6	0x62d3, 0x00, -32, 0						; digits 206, coarse +0.00 st
+	ToneSetZone6	0x62d4, 0x00, -25, 0						; digits 207, coarse +0.00 st
+	ToneSetZone6	0x62d5, 0x00, -17, 0						; digits 208, coarse +0.00 st
+	ToneSetZone6	0x626b, 0x00, -63, 3072						; digits 210, coarse +12.00 st
+	ToneSetZone6	0x62d6, 0x00, -60, 0						; digits 211, coarse +0.00 st
+	ToneSetZone6	0x62d7, 0x00, -57, 0						; digits 212, coarse +0.00 st
+	ToneSetZone6	0x62d8, 0x00, -52, 0						; digits 213, coarse +0.00 st
+	ToneSetZone6	0x62d9, 0x00, -46, 0						; digits 214, coarse +0.00 st
+	ToneSetZone6	0x62da, 0x00, -39, 0						; digits 215, coarse +0.00 st
+	ToneSetZone6	0x62db, 0x00, -33, 0						; digits 216, coarse +0.00 st
+	ToneSetZone6	0x62dc, 0x00, -25, 0						; digits 217, coarse +0.00 st
+	ToneSetZone6	0x62dd, 0x00, -18, 0						; digits 218, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -58, 3072						; digits 220, coarse +12.00 st
+	ToneSetZone6	0x62de, 0x00, -55, 0						; digits 221, coarse +0.00 st
+	ToneSetZone6	0x642e, 0x00, -52, 0						; digits 222, coarse +0.00 st
+	ToneSetZone6	0x62df, 0x00, -49, 0						; digits 223, coarse +0.00 st
+	ToneSetZone6	0x62e0, 0x00, -45, 0						; digits 224, coarse +0.00 st
+	ToneSetZone6	0x62e1, 0x00, -41, 0						; digits 225, coarse +0.00 st
+	ToneSetZone6	0x62e2, 0x00, -34, 0						; digits 226, coarse +0.00 st
+	ToneSetZone6	0x62e3, 0x00, -26, 0						; digits 227, coarse +0.00 st
+	ToneSetZone6	0x62e4, 0x00, -18, 0						; digits 228, coarse +0.00 st
+	ToneSetZone6	0x626c, 0x00, -51, 3072						; digits 230, coarse +12.00 st
+	ToneSetZone6	0x62e5, 0x00, -49, 0						; digits 231, coarse +0.00 st
+	ToneSetZone6	0x62e6, 0x00, -47, 0						; digits 232, coarse +0.00 st
+	ToneSetZone6	0x62e7, 0x00, -44, 0						; digits 233, coarse +0.00 st
+	ToneSetZone6	0x62e8, 0x00, -41, 0						; digits 234, coarse +0.00 st
+	ToneSetZone6	0x62e9, 0x00, -37, 0						; digits 235, coarse +0.00 st
+	ToneSetZone6	0x62ea, 0x00, -33, 0						; digits 236, coarse +0.00 st
+	ToneSetZone6	0x62eb, 0x00, -27, 0						; digits 237, coarse +0.00 st
+	ToneSetZone6	0x62ec, 0x00, -19, 0						; digits 238, coarse +0.00 st
+	ToneSetZone6	0x626d, 0x00, -46, 3072						; digits 240, coarse +12.00 st
+	ToneSetZone6	0x62ed, 0x00, -44, 0						; digits 241, coarse +0.00 st
+	ToneSetZone6	0x62ee, 0x00, -42, 0						; digits 242, coarse +0.00 st
+	ToneSetZone6	0x62ef, 0x00, -39, 0						; digits 243, coarse +0.00 st
+	ToneSetZone6	0x62f0, 0x00, -37, 0						; digits 244, coarse +0.00 st
+	ToneSetZone6	0x62f1, 0x00, -34, 0						; digits 245, coarse +0.00 st
+	ToneSetZone6	0x62f2, 0x00, -30, 0						; digits 246, coarse +0.00 st
+	ToneSetZone6	0x62f3, 0x00, -25, 0						; digits 247, coarse +0.00 st
+	ToneSetZone6	0x62f4, 0x00, -19, 0						; digits 248, coarse +0.00 st
+	ToneSetZone6	0x626e, 0x00, -40, 3072						; digits 250, coarse +12.00 st
+	ToneSetZone6	0x62f5, 0x00, -38, 0						; digits 251, coarse +0.00 st
+	ToneSetZone6	0x62f6, 0x00, -36, 0						; digits 252, coarse +0.00 st
+	ToneSetZone6	0x62f7, 0x00, -34, 0						; digits 253, coarse +0.00 st
+	ToneSetZone6	0x62f8, 0x00, -32, 0						; digits 254, coarse +0.00 st
+	ToneSetZone6	0x62f9, 0x00, -30, 0						; digits 255, coarse +0.00 st
+	ToneSetZone6	0x62fa, 0x00, -26, 0						; digits 256, coarse +0.00 st
+	ToneSetZone6	0x62fb, 0x00, -22, 0						; digits 257, coarse +0.00 st
+	ToneSetZone6	0x62fc, 0x00, -17, 0						; digits 258, coarse +0.00 st
+	ToneSetZone6	0x626f, 0x00, -33, 3072						; digits 260, coarse +12.00 st
+	ToneSetZone6	0x62fd, 0x00, -32, 0						; digits 261, coarse +0.00 st
+	ToneSetZone6	0x62fe, 0x00, -30, 0						; digits 262, coarse +0.00 st
+	ToneSetZone6	0x62ff, 0x00, -29, 0						; digits 263, coarse +0.00 st
+	ToneSetZone6	0x6300, 0x00, -27, 0						; digits 264, coarse +0.00 st
+	ToneSetZone6	0x6301, 0x00, -25, 0						; digits 265, coarse +0.00 st
+	ToneSetZone6	0x6302, 0x00, -22, 0						; digits 266, coarse +0.00 st
+	ToneSetZone6	0x6303, 0x00, -18, 0						; digits 267, coarse +0.00 st
+	ToneSetZone6	0x6304, 0x00, -14, 0						; digits 268, coarse +0.00 st
+	ToneSetZone6	0x6270, 0x00, -26, 3072						; digits 270, coarse +12.00 st
+	ToneSetZone6	0x6305, 0x00, -25, 0						; digits 271, coarse +0.00 st
+	ToneSetZone6	0x6306, 0x00, -24, 0						; digits 272, coarse +0.00 st
+	ToneSetZone6	0x6307, 0x00, -22, 0						; digits 273, coarse +0.00 st
+	ToneSetZone6	0x6308, 0x00, -21, 0						; digits 274, coarse +0.00 st
+	ToneSetZone6	0x6309, 0x00, -19, 0						; digits 275, coarse +0.00 st
+	ToneSetZone6	0x630a, 0x00, -17, 0						; digits 276, coarse +0.00 st
+	ToneSetZone6	0x630b, 0x00, -14, 0						; digits 277, coarse +0.00 st
+	ToneSetZone6	0x630c, 0x00, -10, 0						; digits 278, coarse +0.00 st
+	ToneSetZone6	0x6271, 0x00, -18, 3072						; digits 280, coarse +12.00 st
+	ToneSetZone6	0x630d, 0x00, -17, 0						; digits 281, coarse +0.00 st
+	ToneSetZone6	0x630e, 0x00, -17, 0						; digits 282, coarse +0.00 st
+	ToneSetZone6	0x630f, 0x00, -16, 0						; digits 283, coarse +0.00 st
+	ToneSetZone6	0x6310, 0x00, -15, 0						; digits 284, coarse +0.00 st
+	ToneSetZone6	0x6311, 0x00, -13, 0						; digits 285, coarse +0.00 st
+	ToneSetZone6	0x6312, 0x00, -12, 0						; digits 286, coarse +0.00 st
+	ToneSetZone6	0x6313, 0x00, -9, 0						; digits 287, coarse +0.00 st
+	ToneSetZone6	0x6314, 0x00, -6, 0						; digits 288, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -59, 6144						; digits 300, coarse +24.00 st
+	ToneSetZone6	0x6315, 0x00, -53, 0						; digits 301, coarse +0.00 st
+	ToneSetZone6	0x6316, 0x00, -49, 0						; digits 302, coarse +0.00 st
+	ToneSetZone6	0x63ee, 0x00, -44, 0						; digits 303, coarse +0.00 st
+	ToneSetZone6	0x63bf, 0x00, -39, 0						; digits 304, coarse +0.00 st
+	ToneSetZone6	0x6395, 0x00, -34, 0						; digits 305, coarse +0.00 st
+	ToneSetZone6	0x636b, 0x00, -29, 0						; digits 306, coarse +0.00 st
+	ToneSetZone6	0x6341, 0x00, -23, 0						; digits 307, coarse +0.00 st
+	ToneSetZone6	0x6317, 0x00, -16, 0						; digits 308, coarse +0.00 st
+	ToneSetZone6	0x6272, 0x00, -54, 3072						; digits 310, coarse +12.00 st
+	ToneSetZone6	0x6318, 0x00, -52, 0						; digits 311, coarse +0.00 st
+	ToneSetZone6	0x6319, 0x00, -50, 0						; digits 312, coarse +0.00 st
+	ToneSetZone6	0x631a, 0x00, -46, 0						; digits 313, coarse +0.00 st
+	ToneSetZone6	0x631b, 0x00, -41, 0						; digits 314, coarse +0.00 st
+	ToneSetZone6	0x631c, 0x00, -36, 0						; digits 315, coarse +0.00 st
+	ToneSetZone6	0x631d, 0x00, -30, 0						; digits 316, coarse +0.00 st
+	ToneSetZone6	0x631e, 0x00, -24, 0						; digits 317, coarse +0.00 st
+	ToneSetZone6	0x631f, 0x00, -17, 0						; digits 318, coarse +0.00 st
+	ToneSetZone6	0x6273, 0x00, -50, 3072						; digits 320, coarse +12.00 st
+	ToneSetZone6	0x6320, 0x00, -48, 0						; digits 321, coarse +0.00 st
+	ToneSetZone6	0x6321, 0x00, -46, 0						; digits 322, coarse +0.00 st
+	ToneSetZone6	0x6322, 0x00, -44, 0						; digits 323, coarse +0.00 st
+	ToneSetZone6	0x6323, 0x00, -42, 0						; digits 324, coarse +0.00 st
+	ToneSetZone6	0x6324, 0x00, -37, 0						; digits 325, coarse +0.00 st
+	ToneSetZone6	0x6325, 0x00, -31, 0						; digits 326, coarse +0.00 st
+	ToneSetZone6	0x6326, 0x00, -24, 0						; digits 327, coarse +0.00 st
+	ToneSetZone6	0x6327, 0x00, -17, 0						; digits 328, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -46, 3072						; digits 330, coarse +12.00 st
+	ToneSetZone6	0x6328, 0x00, -44, 0						; digits 331, coarse +0.00 st
+	ToneSetZone6	0x6329, 0x00, -42, 0						; digits 332, coarse +0.00 st
+	ToneSetZone6	0x642e, 0x00, -40, 0						; digits 333, coarse +0.00 st
+	ToneSetZone6	0x63de, 0x00, -38, 0						; digits 334, coarse +0.00 st
+	ToneSetZone6	0x63b1, 0x00, -35, 0						; digits 335, coarse +0.00 st
+	ToneSetZone6	0x6384, 0x00, -32, 0						; digits 336, coarse +0.00 st
+	ToneSetZone6	0x6357, 0x00, -25, 0						; digits 337, coarse +0.00 st
+	ToneSetZone6	0x632a, 0x00, -18, 0						; digits 338, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -41, 3072						; digits 340, coarse +12.00 st
+	ToneSetZone6	0x632b, 0x00, -40, 0						; digits 341, coarse +0.00 st
+	ToneSetZone6	0x632c, 0x00, -38, 0						; digits 342, coarse +0.00 st
+	ToneSetZone6	0x63e5, 0x00, -37, 0						; digits 343, coarse +0.00 st
+	ToneSetZone6	0x63e6, 0x00, -35, 0						; digits 344, coarse +0.00 st
+	ToneSetZone6	0x63b4, 0x00, -32, 0						; digits 345, coarse +0.00 st
+	ToneSetZone6	0x6387, 0x00, -29, 0						; digits 346, coarse +0.00 st
+	ToneSetZone6	0x635a, 0x00, -25, 0						; digits 347, coarse +0.00 st
+	ToneSetZone6	0x632d, 0x00, -18, 0						; digits 348, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -37, 3072						; digits 350, coarse +12.00 st
+	ToneSetZone6	0x632e, 0x00, -35, 0						; digits 351, coarse +0.00 st
+	ToneSetZone6	0x632f, 0x00, -34, 0						; digits 352, coarse +0.00 st
+	ToneSetZone6	0x63ba, 0x00, -32, 0						; digits 353, coarse +0.00 st
+	ToneSetZone6	0x63bb, 0x00, -31, 0						; digits 354, coarse +0.00 st
+	ToneSetZone6	0x63bc, 0x00, -28, 0						; digits 355, coarse +0.00 st
+	ToneSetZone6	0x638a, 0x00, -26, 0						; digits 356, coarse +0.00 st
+	ToneSetZone6	0x635d, 0x00, -22, 0						; digits 357, coarse +0.00 st
+	ToneSetZone6	0x6330, 0x00, -17, 0						; digits 358, coarse +0.00 st
+	ToneSetZone6	0x627a, 0x00, -31, 3072						; digits 360, coarse +12.00 st
+	ToneSetZone6	0x6331, 0x00, -30, 0						; digits 361, coarse +0.00 st
+	ToneSetZone6	0x6332, 0x00, -29, 0						; digits 362, coarse +0.00 st
+	ToneSetZone6	0x638f, 0x00, -27, 0						; digits 363, coarse +0.00 st
+	ToneSetZone6	0x6390, 0x00, -26, 0						; digits 364, coarse +0.00 st
+	ToneSetZone6	0x6391, 0x00, -24, 0						; digits 365, coarse +0.00 st
+	ToneSetZone6	0x6392, 0x00, -22, 0						; digits 366, coarse +0.00 st
+	ToneSetZone6	0x6360, 0x00, -18, 0						; digits 367, coarse +0.00 st
+	ToneSetZone6	0x6333, 0x00, -14, 0						; digits 368, coarse +0.00 st
+	ToneSetZone6	0x6277, 0x00, -24, 3072						; digits 370, coarse +12.00 st
+	ToneSetZone6	0x6334, 0x00, -24, 0						; digits 371, coarse +0.00 st
+	ToneSetZone6	0x6335, 0x00, -23, 0						; digits 372, coarse +0.00 st
+	ToneSetZone6	0x6364, 0x00, -22, 0						; digits 373, coarse +0.00 st
+	ToneSetZone6	0x6365, 0x00, -20, 0						; digits 374, coarse +0.00 st
+	ToneSetZone6	0x6366, 0x00, -19, 0						; digits 375, coarse +0.00 st
+	ToneSetZone6	0x6367, 0x00, -17, 0						; digits 376, coarse +0.00 st
+	ToneSetZone6	0x6368, 0x00, -14, 0						; digits 377, coarse +0.00 st
+	ToneSetZone6	0x6336, 0x00, -10, 0						; digits 378, coarse +0.00 st
+	ToneSetZone6	0x6274, 0x00, -17, 3072						; digits 380, coarse +12.00 st
+	ToneSetZone6	0x6337, 0x00, -17, 0						; digits 381, coarse +0.00 st
+	ToneSetZone6	0x6338, 0x00, -16, 0						; digits 382, coarse +0.00 st
+	ToneSetZone6	0x6339, 0x00, -15, 0						; digits 383, coarse +0.00 st
+	ToneSetZone6	0x633a, 0x00, -14, 0						; digits 384, coarse +0.00 st
+	ToneSetZone6	0x633b, 0x00, -13, 0						; digits 385, coarse +0.00 st
+	ToneSetZone6	0x633c, 0x00, -11, 0						; digits 386, coarse +0.00 st
+	ToneSetZone6	0x633d, 0x00, -9, 0						; digits 387, coarse +0.00 st
+	ToneSetZone6	0x633e, 0x00, -6, 0						; digits 388, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -51, 6144						; digits 400, coarse +24.00 st
+	ToneSetZone6	0x633f, 0x00, -47, 0						; digits 401, coarse +0.00 st
+	ToneSetZone6	0x6340, 0x00, -43, 0						; digits 402, coarse +0.00 st
+	ToneSetZone6	0x63ed, 0x00, -39, 0						; digits 403, coarse +0.00 st
+	ToneSetZone6	0x63ee, 0x00, -36, 0						; digits 404, coarse +0.00 st
+	ToneSetZone6	0x63bf, 0x00, -31, 0						; digits 405, coarse +0.00 st
+	ToneSetZone6	0x6395, 0x00, -26, 0						; digits 406, coarse +0.00 st
+	ToneSetZone6	0x636b, 0x00, -21, 0						; digits 407, coarse +0.00 st
+	ToneSetZone6	0x6341, 0x00, -15, 0						; digits 408, coarse +0.00 st
+	ToneSetZone6	0x6275, 0x00, -47, 3072						; digits 410, coarse +12.00 st
+	ToneSetZone6	0x6342, 0x00, -46, 0						; digits 411, coarse +0.00 st
+	ToneSetZone6	0x6343, 0x00, -44, 0						; digits 412, coarse +0.00 st
+	ToneSetZone6	0x6344, 0x00, -41, 0						; digits 413, coarse +0.00 st
+	ToneSetZone6	0x6345, 0x00, -37, 0						; digits 414, coarse +0.00 st
+	ToneSetZone6	0x6346, 0x00, -33, 0						; digits 415, coarse +0.00 st
+	ToneSetZone6	0x6347, 0x00, -28, 0						; digits 416, coarse +0.00 st
+	ToneSetZone6	0x6348, 0x00, -22, 0						; digits 417, coarse +0.00 st
+	ToneSetZone6	0x6349, 0x00, -15, 0						; digits 418, coarse +0.00 st
+	ToneSetZone6	0x6276, 0x00, -44, 3072						; digits 420, coarse +12.00 st
+	ToneSetZone6	0x634a, 0x00, -43, 0						; digits 421, coarse +0.00 st
+	ToneSetZone6	0x634b, 0x00, -41, 0						; digits 422, coarse +0.00 st
+	ToneSetZone6	0x634c, 0x00, -40, 0						; digits 423, coarse +0.00 st
+	ToneSetZone6	0x634d, 0x00, -38, 0						; digits 424, coarse +0.00 st
+	ToneSetZone6	0x634e, 0x00, -34, 0						; digits 425, coarse +0.00 st
+	ToneSetZone6	0x634f, 0x00, -29, 0						; digits 426, coarse +0.00 st
+	ToneSetZone6	0x6350, 0x00, -22, 0						; digits 427, coarse +0.00 st
+	ToneSetZone6	0x6351, 0x00, -16, 0						; digits 428, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -41, 3072						; digits 430, coarse +12.00 st
+	ToneSetZone6	0x6352, 0x00, -39, 0						; digits 431, coarse +0.00 st
+	ToneSetZone6	0x6353, 0x00, -38, 0						; digits 432, coarse +0.00 st
+	ToneSetZone6	0x6425, 0x00, -36, 0						; digits 433, coarse +0.00 st
+	ToneSetZone6	0x6426, 0x00, -35, 0						; digits 434, coarse +0.00 st
+	ToneSetZone6	0x63db, 0x00, -32, 0						; digits 435, coarse +0.00 st
+	ToneSetZone6	0x63ae, 0x00, -29, 0						; digits 436, coarse +0.00 st
+	ToneSetZone6	0x6381, 0x00, -23, 0						; digits 437, coarse +0.00 st
+	ToneSetZone6	0x6354, 0x00, -17, 0						; digits 438, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -38, 3072						; digits 440, coarse +12.00 st
+	ToneSetZone6	0x6355, 0x00, -36, 0						; digits 441, coarse +0.00 st
+	ToneSetZone6	0x6356, 0x00, -35, 0						; digits 442, coarse +0.00 st
+	ToneSetZone6	0x642d, 0x00, -34, 0						; digits 443, coarse +0.00 st
+	ToneSetZone6	0x642e, 0x00, -32, 0						; digits 444, coarse +0.00 st
+	ToneSetZone6	0x63de, 0x00, -30, 0						; digits 445, coarse +0.00 st
+	ToneSetZone6	0x63b1, 0x00, -27, 0						; digits 446, coarse +0.00 st
+	ToneSetZone6	0x6384, 0x00, -24, 0						; digits 447, coarse +0.00 st
+	ToneSetZone6	0x6357, 0x00, -17, 0						; digits 448, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -33, 3072						; digits 450, coarse +12.00 st
+	ToneSetZone6	0x6358, 0x00, -32, 0						; digits 451, coarse +0.00 st
+	ToneSetZone6	0x6359, 0x00, -31, 0						; digits 452, coarse +0.00 st
+	ToneSetZone6	0x63e4, 0x00, -30, 0						; digits 453, coarse +0.00 st
+	ToneSetZone6	0x63e5, 0x00, -29, 0						; digits 454, coarse +0.00 st
+	ToneSetZone6	0x63e6, 0x00, -27, 0						; digits 455, coarse +0.00 st
+	ToneSetZone6	0x63b4, 0x00, -24, 0						; digits 456, coarse +0.00 st
+	ToneSetZone6	0x6387, 0x00, -21, 0						; digits 457, coarse +0.00 st
+	ToneSetZone6	0x635a, 0x00, -17, 0						; digits 458, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -29, 3072						; digits 460, coarse +12.00 st
+	ToneSetZone6	0x635b, 0x00, -28, 0						; digits 461, coarse +0.00 st
+	ToneSetZone6	0x635c, 0x00, -27, 0						; digits 462, coarse +0.00 st
+	ToneSetZone6	0x63b9, 0x00, -26, 0						; digits 463, coarse +0.00 st
+	ToneSetZone6	0x63ba, 0x00, -24, 0						; digits 464, coarse +0.00 st
+	ToneSetZone6	0x63bb, 0x00, -23, 0						; digits 465, coarse +0.00 st
+	ToneSetZone6	0x63bc, 0x00, -20, 0						; digits 466, coarse +0.00 st
+	ToneSetZone6	0x638a, 0x00, -18, 0						; digits 467, coarse +0.00 st
+	ToneSetZone6	0x635d, 0x00, -14, 0						; digits 468, coarse +0.00 st
+	ToneSetZone6	0x627a, 0x00, -23, 3072						; digits 470, coarse +12.00 st
+	ToneSetZone6	0x635e, 0x00, -22, 0						; digits 471, coarse +0.00 st
+	ToneSetZone6	0x635f, 0x00, -21, 0						; digits 472, coarse +0.00 st
+	ToneSetZone6	0x638e, 0x00, -20, 0						; digits 473, coarse +0.00 st
+	ToneSetZone6	0x638f, 0x00, -19, 0						; digits 474, coarse +0.00 st
+	ToneSetZone6	0x6390, 0x00, -18, 0						; digits 475, coarse +0.00 st
+	ToneSetZone6	0x6391, 0x00, -16, 0						; digits 476, coarse +0.00 st
+	ToneSetZone6	0x6392, 0x00, -14, 0						; digits 477, coarse +0.00 st
+	ToneSetZone6	0x6360, 0x00, -10, 0						; digits 478, coarse +0.00 st
+	ToneSetZone6	0x6277, 0x00, -16, 3072						; digits 480, coarse +12.00 st
+	ToneSetZone6	0x6361, 0x00, -16, 0						; digits 481, coarse +0.00 st
+	ToneSetZone6	0x6362, 0x00, -15, 0						; digits 482, coarse +0.00 st
+	ToneSetZone6	0x6363, 0x00, -14, 0						; digits 483, coarse +0.00 st
+	ToneSetZone6	0x6364, 0x00, -14, 0						; digits 484, coarse +0.00 st
+	ToneSetZone6	0x6365, 0x00, -12, 0						; digits 485, coarse +0.00 st
+	ToneSetZone6	0x6366, 0x00, -11, 0						; digits 486, coarse +0.00 st
+	ToneSetZone6	0x6367, 0x00, -9, 0						; digits 487, coarse +0.00 st
+	ToneSetZone6	0x6368, 0x00, -6, 0						; digits 488, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -43, 6144						; digits 500, coarse +24.00 st
+	ToneSetZone6	0x6369, 0x00, -40, 0						; digits 501, coarse +0.00 st
+	ToneSetZone6	0x636a, 0x00, -37, 0						; digits 502, coarse +0.00 st
+	ToneSetZone6	0x63ec, 0x00, -34, 0						; digits 503, coarse +0.00 st
+	ToneSetZone6	0x63ed, 0x00, -31, 0						; digits 504, coarse +0.00 st
+	ToneSetZone6	0x63ee, 0x00, -28, 0						; digits 505, coarse +0.00 st
+	ToneSetZone6	0x63bf, 0x00, -23, 0						; digits 506, coarse +0.00 st
+	ToneSetZone6	0x6395, 0x00, -18, 0						; digits 507, coarse +0.00 st
+	ToneSetZone6	0x636b, 0x00, -13, 0						; digits 508, coarse +0.00 st
+	ToneSetZone6	0x6278, 0x00, -40, 3072						; digits 510, coarse +12.00 st
+	ToneSetZone6	0x636c, 0x00, -39, 0						; digits 511, coarse +0.00 st
+	ToneSetZone6	0x636d, 0x00, -38, 0						; digits 512, coarse +0.00 st
+	ToneSetZone6	0x636e, 0x00, -36, 0						; digits 513, coarse +0.00 st
+	ToneSetZone6	0x636f, 0x00, -33, 0						; digits 514, coarse +0.00 st
+	ToneSetZone6	0x6370, 0x00, -29, 0						; digits 515, coarse +0.00 st
+	ToneSetZone6	0x6371, 0x00, -24, 0						; digits 516, coarse +0.00 st
+	ToneSetZone6	0x6372, 0x00, -19, 0						; digits 517, coarse +0.00 st
+	ToneSetZone6	0x6373, 0x00, -13, 0						; digits 518, coarse +0.00 st
+	ToneSetZone6	0x6279, 0x00, -38, 3072						; digits 520, coarse +12.00 st
+	ToneSetZone6	0x6374, 0x00, -37, 0						; digits 521, coarse +0.00 st
+	ToneSetZone6	0x6375, 0x00, -36, 0						; digits 522, coarse +0.00 st
+	ToneSetZone6	0x6376, 0x00, -34, 0						; digits 523, coarse +0.00 st
+	ToneSetZone6	0x6377, 0x00, -33, 0						; digits 524, coarse +0.00 st
+	ToneSetZone6	0x6378, 0x00, -30, 0						; digits 525, coarse +0.00 st
+	ToneSetZone6	0x6379, 0x00, -25, 0						; digits 526, coarse +0.00 st
+	ToneSetZone6	0x637a, 0x00, -20, 0						; digits 527, coarse +0.00 st
+	ToneSetZone6	0x637b, 0x00, -14, 0						; digits 528, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -35, 3072						; digits 530, coarse +12.00 st
+	ToneSetZone6	0x637c, 0x00, -34, 0						; digits 531, coarse +0.00 st
+	ToneSetZone6	0x637d, 0x00, -33, 0						; digits 532, coarse +0.00 st
+	ToneSetZone6	0x641c, 0x00, -32, 0						; digits 533, coarse +0.00 st
+	ToneSetZone6	0x641d, 0x00, -31, 0						; digits 534, coarse +0.00 st
+	ToneSetZone6	0x641e, 0x00, -29, 0						; digits 535, coarse +0.00 st
+	ToneSetZone6	0x63d8, 0x00, -26, 0						; digits 536, coarse +0.00 st
+	ToneSetZone6	0x63ab, 0x00, -21, 0						; digits 537, coarse +0.00 st
+	ToneSetZone6	0x637e, 0x00, -15, 0						; digits 538, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -33, 3072						; digits 540, coarse +12.00 st
+	ToneSetZone6	0x637f, 0x00, -32, 0						; digits 541, coarse +0.00 st
+	ToneSetZone6	0x6380, 0x00, -31, 0						; digits 542, coarse +0.00 st
+	ToneSetZone6	0x6424, 0x00, -30, 0						; digits 543, coarse +0.00 st
+	ToneSetZone6	0x6425, 0x00, -28, 0						; digits 544, coarse +0.00 st
+	ToneSetZone6	0x6426, 0x00, -27, 0						; digits 545, coarse +0.00 st
+	ToneSetZone6	0x63db, 0x00, -24, 0						; digits 546, coarse +0.00 st
+	ToneSetZone6	0x63ae, 0x00, -21, 0						; digits 547, coarse +0.00 st
+	ToneSetZone6	0x6381, 0x00, -15, 0						; digits 548, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -30, 3072						; digits 550, coarse +12.00 st
+	ToneSetZone6	0x6382, 0x00, -29, 0						; digits 551, coarse +0.00 st
+	ToneSetZone6	0x6383, 0x00, -28, 0						; digits 552, coarse +0.00 st
+	ToneSetZone6	0x642c, 0x00, -27, 0						; digits 553, coarse +0.00 st
+	ToneSetZone6	0x642d, 0x00, -26, 0						; digits 554, coarse +0.00 st
+	ToneSetZone6	0x642e, 0x00, -24, 0						; digits 555, coarse +0.00 st
+	ToneSetZone6	0x63de, 0x00, -22, 0						; digits 556, coarse +0.00 st
+	ToneSetZone6	0x63b1, 0x00, -19, 0						; digits 557, coarse +0.00 st
+	ToneSetZone6	0x6384, 0x00, -16, 0						; digits 558, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -25, 3072						; digits 560, coarse +12.00 st
+	ToneSetZone6	0x6385, 0x00, -25, 0						; digits 561, coarse +0.00 st
+	ToneSetZone6	0x6386, 0x00, -24, 0						; digits 562, coarse +0.00 st
+	ToneSetZone6	0x63e3, 0x00, -23, 0						; digits 563, coarse +0.00 st
+	ToneSetZone6	0x63e4, 0x00, -22, 0						; digits 564, coarse +0.00 st
+	ToneSetZone6	0x63e5, 0x00, -21, 0						; digits 565, coarse +0.00 st
+	ToneSetZone6	0x63e6, 0x00, -19, 0						; digits 566, coarse +0.00 st
+	ToneSetZone6	0x63b4, 0x00, -16, 0						; digits 567, coarse +0.00 st
+	ToneSetZone6	0x6387, 0x00, -13, 0						; digits 568, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -21, 3072						; digits 570, coarse +12.00 st
+	ToneSetZone6	0x6388, 0x00, -20, 0						; digits 571, coarse +0.00 st
+	ToneSetZone6	0x6389, 0x00, -19, 0						; digits 572, coarse +0.00 st
+	ToneSetZone6	0x63b8, 0x00, -18, 0						; digits 573, coarse +0.00 st
+	ToneSetZone6	0x63b9, 0x00, -18, 0						; digits 574, coarse +0.00 st
+	ToneSetZone6	0x63ba, 0x00, -16, 0						; digits 575, coarse +0.00 st
+	ToneSetZone6	0x63bb, 0x00, -15, 0						; digits 576, coarse +0.00 st
+	ToneSetZone6	0x63bc, 0x00, -12, 0						; digits 577, coarse +0.00 st
+	ToneSetZone6	0x638a, 0x00, -10, 0						; digits 578, coarse +0.00 st
+	ToneSetZone6	0x627a, 0x00, -15, 3072						; digits 580, coarse +12.00 st
+	ToneSetZone6	0x638b, 0x00, -14, 0						; digits 581, coarse +0.00 st
+	ToneSetZone6	0x638c, 0x00, -14, 0						; digits 582, coarse +0.00 st
+	ToneSetZone6	0x638d, 0x00, -13, 0						; digits 583, coarse +0.00 st
+	ToneSetZone6	0x638e, 0x00, -12, 0						; digits 584, coarse +0.00 st
+	ToneSetZone6	0x638f, 0x00, -11, 0						; digits 585, coarse +0.00 st
+	ToneSetZone6	0x6390, 0x00, -10, 0						; digits 586, coarse +0.00 st
+	ToneSetZone6	0x6391, 0x00, -8, 0						; digits 587, coarse +0.00 st
+	ToneSetZone6	0x6392, 0x00, -6, 0						; digits 588, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -35, 6144						; digits 600, coarse +24.00 st
+	ToneSetZone6	0x6393, 0x00, -33, 0						; digits 601, coarse +0.00 st
+	ToneSetZone6	0x6394, 0x00, -31, 0						; digits 602, coarse +0.00 st
+	ToneSetZone6	0x63eb, 0x00, -28, 0						; digits 603, coarse +0.00 st
+	ToneSetZone6	0x63ec, 0x00, -26, 0						; digits 604, coarse +0.00 st
+	ToneSetZone6	0x63ed, 0x00, -23, 0						; digits 605, coarse +0.00 st
+	ToneSetZone6	0x63ee, 0x00, -20, 0						; digits 606, coarse +0.00 st
+	ToneSetZone6	0x63bf, 0x00, -15, 0						; digits 607, coarse +0.00 st
+	ToneSetZone6	0x6395, 0x00, -10, 0						; digits 608, coarse +0.00 st
+	ToneSetZone6	0x627b, 0x00, -33, 3072						; digits 610, coarse +12.00 st
+	ToneSetZone6	0x6396, 0x00, -32, 0						; digits 611, coarse +0.00 st
+	ToneSetZone6	0x6397, 0x00, -31, 0						; digits 612, coarse +0.00 st
+	ToneSetZone6	0x6398, 0x00, -29, 0						; digits 613, coarse +0.00 st
+	ToneSetZone6	0x6399, 0x00, -27, 0						; digits 614, coarse +0.00 st
+	ToneSetZone6	0x639a, 0x00, -24, 0						; digits 615, coarse +0.00 st
+	ToneSetZone6	0x639b, 0x00, -20, 0						; digits 616, coarse +0.00 st
+	ToneSetZone6	0x639c, 0x00, -16, 0						; digits 617, coarse +0.00 st
+	ToneSetZone6	0x639d, 0x00, -11, 0						; digits 618, coarse +0.00 st
+	ToneSetZone6	0x627c, 0x00, -31, 3072						; digits 620, coarse +12.00 st
+	ToneSetZone6	0x639e, 0x00, -31, 0						; digits 621, coarse +0.00 st
+	ToneSetZone6	0x639f, 0x00, -30, 0						; digits 622, coarse +0.00 st
+	ToneSetZone6	0x63a0, 0x00, -29, 0						; digits 623, coarse +0.00 st
+	ToneSetZone6	0x63a1, 0x00, -28, 0						; digits 624, coarse +0.00 st
+	ToneSetZone6	0x63a2, 0x00, -25, 0						; digits 625, coarse +0.00 st
+	ToneSetZone6	0x63a3, 0x00, -21, 0						; digits 626, coarse +0.00 st
+	ToneSetZone6	0x63a4, 0x00, -17, 0						; digits 627, coarse +0.00 st
+	ToneSetZone6	0x63a5, 0x00, -12, 0						; digits 628, coarse +0.00 st
+	ToneSetZone6	0x6285, 0x00, -29, 3072						; digits 630, coarse +12.00 st
+	ToneSetZone6	0x63a6, 0x00, -29, 0						; digits 631, coarse +0.00 st
+	ToneSetZone6	0x63a7, 0x00, -28, 0						; digits 632, coarse +0.00 st
+	ToneSetZone6	0x6413, 0x00, -27, 0						; digits 633, coarse +0.00 st
+	ToneSetZone6	0x6414, 0x00, -26, 0						; digits 634, coarse +0.00 st
+	ToneSetZone6	0x6415, 0x00, -24, 0						; digits 635, coarse +0.00 st
+	ToneSetZone6	0x6416, 0x00, -22, 0						; digits 636, coarse +0.00 st
+	ToneSetZone6	0x63d5, 0x00, -18, 0						; digits 637, coarse +0.00 st
+	ToneSetZone6	0x63a8, 0x00, -12, 0						; digits 638, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -27, 3072						; digits 640, coarse +12.00 st
+	ToneSetZone6	0x63a9, 0x00, -27, 0						; digits 641, coarse +0.00 st
+	ToneSetZone6	0x63aa, 0x00, -26, 0						; digits 642, coarse +0.00 st
+	ToneSetZone6	0x641b, 0x00, -25, 0						; digits 643, coarse +0.00 st
+	ToneSetZone6	0x641c, 0x00, -24, 0						; digits 644, coarse +0.00 st
+	ToneSetZone6	0x641d, 0x00, -23, 0						; digits 645, coarse +0.00 st
+	ToneSetZone6	0x641e, 0x00, -21, 0						; digits 646, coarse +0.00 st
+	ToneSetZone6	0x63d8, 0x00, -18, 0						; digits 647, coarse +0.00 st
+	ToneSetZone6	0x63ab, 0x00, -13, 0						; digits 648, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -25, 3072						; digits 650, coarse +12.00 st
+	ToneSetZone6	0x63ac, 0x00, -24, 0						; digits 651, coarse +0.00 st
+	ToneSetZone6	0x63ad, 0x00, -23, 0						; digits 652, coarse +0.00 st
+	ToneSetZone6	0x6423, 0x00, -23, 0						; digits 653, coarse +0.00 st
+	ToneSetZone6	0x6424, 0x00, -22, 0						; digits 654, coarse +0.00 st
+	ToneSetZone6	0x6425, 0x00, -20, 0						; digits 655, coarse +0.00 st
+	ToneSetZone6	0x6426, 0x00, -19, 0						; digits 656, coarse +0.00 st
+	ToneSetZone6	0x63db, 0x00, -16, 0						; digits 657, coarse +0.00 st
+	ToneSetZone6	0x63ae, 0x00, -13, 0						; digits 658, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -22, 3072						; digits 660, coarse +12.00 st
+	ToneSetZone6	0x63af, 0x00, -21, 0						; digits 661, coarse +0.00 st
+	ToneSetZone6	0x63b0, 0x00, -20, 0						; digits 662, coarse +0.00 st
+	ToneSetZone6	0x642b, 0x00, -20, 0						; digits 663, coarse +0.00 st
+	ToneSetZone6	0x642c, 0x00, -19, 0						; digits 664, coarse +0.00 st
+	ToneSetZone6	0x642d, 0x00, -18, 0						; digits 665, coarse +0.00 st
+	ToneSetZone6	0x642e, 0x00, -16, 0						; digits 666, coarse +0.00 st
+	ToneSetZone6	0x63de, 0x00, -14, 0						; digits 667, coarse +0.00 st
+	ToneSetZone6	0x63b1, 0x00, -11, 0						; digits 668, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -17, 3072						; digits 670, coarse +12.00 st
+	ToneSetZone6	0x63b2, 0x00, -17, 0						; digits 671, coarse +0.00 st
+	ToneSetZone6	0x63b3, 0x00, -16, 0						; digits 672, coarse +0.00 st
+	ToneSetZone6	0x63e2, 0x00, -16, 0						; digits 673, coarse +0.00 st
+	ToneSetZone6	0x63e3, 0x00, -15, 0						; digits 674, coarse +0.00 st
+	ToneSetZone6	0x63e4, 0x00, -14, 0						; digits 675, coarse +0.00 st
+	ToneSetZone6	0x63e5, 0x00, -13, 0						; digits 676, coarse +0.00 st
+	ToneSetZone6	0x63e6, 0x00, -11, 0						; digits 677, coarse +0.00 st
+	ToneSetZone6	0x63b4, 0x00, -8, 0						; digits 678, coarse +0.00 st
+	ToneSetZone6	0x627d, 0x00, -13, 3072						; digits 680, coarse +12.00 st
+	ToneSetZone6	0x63b5, 0x00, -12, 0						; digits 681, coarse +0.00 st
+	ToneSetZone6	0x63b6, 0x00, -12, 0						; digits 682, coarse +0.00 st
+	ToneSetZone6	0x63b7, 0x00, -11, 0						; digits 683, coarse +0.00 st
+	ToneSetZone6	0x63b8, 0x00, -10, 0						; digits 684, coarse +0.00 st
+	ToneSetZone6	0x63b9, 0x00, -10, 0						; digits 685, coarse +0.00 st
+	ToneSetZone6	0x63ba, 0x00, -8, 0						; digits 686, coarse +0.00 st
+	ToneSetZone6	0x63bb, 0x00, -7, 0						; digits 687, coarse +0.00 st
+	ToneSetZone6	0x63bc, 0x00, -4, 0						; digits 688, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -27, 6144						; digits 700, coarse +24.00 st
+	ToneSetZone6	0x63bd, 0x00, -25, 0						; digits 701, coarse +0.00 st
+	ToneSetZone6	0x63be, 0x00, -24, 0						; digits 702, coarse +0.00 st
+	ToneSetZone6	0x63ea, 0x00, -22, 0						; digits 703, coarse +0.00 st
+	ToneSetZone6	0x63eb, 0x00, -20, 0						; digits 704, coarse +0.00 st
+	ToneSetZone6	0x63ec, 0x00, -18, 0						; digits 705, coarse +0.00 st
+	ToneSetZone6	0x63ed, 0x00, -15, 0						; digits 706, coarse +0.00 st
+	ToneSetZone6	0x63ee, 0x00, -12, 0						; digits 707, coarse +0.00 st
+	ToneSetZone6	0x63bf, 0x00, -7, 0						; digits 708, coarse +0.00 st
+	ToneSetZone6	0x627e, 0x00, -26, 3072						; digits 710, coarse +12.00 st
+	ToneSetZone6	0x63c0, 0x00, -25, 0						; digits 711, coarse +0.00 st
+	ToneSetZone6	0x63c1, 0x00, -24, 0						; digits 712, coarse +0.00 st
+	ToneSetZone6	0x63c2, 0x00, -23, 0						; digits 713, coarse +0.00 st
+	ToneSetZone6	0x63c3, 0x00, -21, 0						; digits 714, coarse +0.00 st
+	ToneSetZone6	0x63c4, 0x00, -19, 0						; digits 715, coarse +0.00 st
+	ToneSetZone6	0x63c5, 0x00, -16, 0						; digits 716, coarse +0.00 st
+	ToneSetZone6	0x63c6, 0x00, -12, 0						; digits 717, coarse +0.00 st
+	ToneSetZone6	0x63c7, 0x00, -8, 0						; digits 718, coarse +0.00 st
+	ToneSetZone6	0x627f, 0x00, -24, 3072						; digits 720, coarse +12.00 st
+	ToneSetZone6	0x63c8, 0x00, -24, 0						; digits 721, coarse +0.00 st
+	ToneSetZone6	0x63c9, 0x00, -23, 0						; digits 722, coarse +0.00 st
+	ToneSetZone6	0x63ca, 0x00, -22, 0						; digits 723, coarse +0.00 st
+	ToneSetZone6	0x63cb, 0x00, -21, 0						; digits 724, coarse +0.00 st
+	ToneSetZone6	0x63cc, 0x00, -20, 0						; digits 725, coarse +0.00 st
+	ToneSetZone6	0x63cd, 0x00, -17, 0						; digits 726, coarse +0.00 st
+	ToneSetZone6	0x63ce, 0x00, -13, 0						; digits 727, coarse +0.00 st
+	ToneSetZone6	0x63cf, 0x00, -8, 0						; digits 728, coarse +0.00 st
+	ToneSetZone6	0x6284, 0x00, -23, 3072						; digits 730, coarse +12.00 st
+	ToneSetZone6	0x63d0, 0x00, -22, 0						; digits 731, coarse +0.00 st
+	ToneSetZone6	0x63d1, 0x00, -22, 0						; digits 732, coarse +0.00 st
+	ToneSetZone6	0x640a, 0x00, -21, 0						; digits 733, coarse +0.00 st
+	ToneSetZone6	0x640b, 0x00, -20, 0						; digits 734, coarse +0.00 st
+	ToneSetZone6	0x640c, 0x00, -19, 0						; digits 735, coarse +0.00 st
+	ToneSetZone6	0x640d, 0x00, -17, 0						; digits 736, coarse +0.00 st
+	ToneSetZone6	0x640e, 0x00, -14, 0						; digits 737, coarse +0.00 st
+	ToneSetZone6	0x63d2, 0x00, -9, 0						; digits 738, coarse +0.00 st
+	ToneSetZone6	0x6285, 0x00, -21, 3072						; digits 740, coarse +12.00 st
+	ToneSetZone6	0x63d3, 0x00, -21, 0						; digits 741, coarse +0.00 st
+	ToneSetZone6	0x63d4, 0x00, -20, 0						; digits 742, coarse +0.00 st
+	ToneSetZone6	0x6412, 0x00, -20, 0						; digits 743, coarse +0.00 st
+	ToneSetZone6	0x6413, 0x00, -19, 0						; digits 744, coarse +0.00 st
+	ToneSetZone6	0x6414, 0x00, -18, 0						; digits 745, coarse +0.00 st
+	ToneSetZone6	0x6415, 0x00, -16, 0						; digits 746, coarse +0.00 st
+	ToneSetZone6	0x6416, 0x00, -14, 0						; digits 747, coarse +0.00 st
+	ToneSetZone6	0x63d5, 0x00, -10, 0						; digits 748, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -19, 3072						; digits 750, coarse +12.00 st
+	ToneSetZone6	0x63d6, 0x00, -19, 0						; digits 751, coarse +0.00 st
+	ToneSetZone6	0x63d7, 0x00, -18, 0						; digits 752, coarse +0.00 st
+	ToneSetZone6	0x641a, 0x00, -18, 0						; digits 753, coarse +0.00 st
+	ToneSetZone6	0x641b, 0x00, -17, 0						; digits 754, coarse +0.00 st
+	ToneSetZone6	0x641c, 0x00, -16, 0						; digits 755, coarse +0.00 st
+	ToneSetZone6	0x641d, 0x00, -15, 0						; digits 756, coarse +0.00 st
+	ToneSetZone6	0x641e, 0x00, -13, 0						; digits 757, coarse +0.00 st
+	ToneSetZone6	0x63d8, 0x00, -10, 0						; digits 758, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -17, 3072						; digits 760, coarse +12.00 st
+	ToneSetZone6	0x63d9, 0x00, -16, 0						; digits 761, coarse +0.00 st
+	ToneSetZone6	0x63da, 0x00, -16, 0						; digits 762, coarse +0.00 st
+	ToneSetZone6	0x6422, 0x00, -15, 0						; digits 763, coarse +0.00 st
+	ToneSetZone6	0x6423, 0x00, -15, 0						; digits 764, coarse +0.00 st
+	ToneSetZone6	0x6424, 0x00, -14, 0						; digits 765, coarse +0.00 st
+	ToneSetZone6	0x6425, 0x00, -12, 0						; digits 766, coarse +0.00 st
+	ToneSetZone6	0x6426, 0x00, -11, 0						; digits 767, coarse +0.00 st
+	ToneSetZone6	0x63db, 0x00, -8, 0						; digits 768, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -14, 3072						; digits 770, coarse +12.00 st
+	ToneSetZone6	0x63dc, 0x00, -13, 0						; digits 771, coarse +0.00 st
+	ToneSetZone6	0x63dd, 0x00, -13, 0						; digits 772, coarse +0.00 st
+	ToneSetZone6	0x642a, 0x00, -12, 0						; digits 773, coarse +0.00 st
+	ToneSetZone6	0x642b, 0x00, -12, 0						; digits 774, coarse +0.00 st
+	ToneSetZone6	0x642c, 0x00, -11, 0						; digits 775, coarse +0.00 st
+	ToneSetZone6	0x642d, 0x00, -10, 0						; digits 776, coarse +0.00 st
+	ToneSetZone6	0x642e, 0x00, -8, 0						; digits 777, coarse +0.00 st
+	ToneSetZone6	0x63de, 0x00, -6, 0						; digits 778, coarse +0.00 st
+	ToneSetZone6	0x6280, 0x00, -9, 3072						; digits 780, coarse +12.00 st
+	ToneSetZone6	0x63df, 0x00, -9, 0						; digits 781, coarse +0.00 st
+	ToneSetZone6	0x63e0, 0x00, -9, 0						; digits 782, coarse +0.00 st
+	ToneSetZone6	0x63e1, 0x00, -8, 0						; digits 783, coarse +0.00 st
+	ToneSetZone6	0x63e2, 0x00, -8, 0						; digits 784, coarse +0.00 st
+	ToneSetZone6	0x63e3, 0x00, -7, 0						; digits 785, coarse +0.00 st
+	ToneSetZone6	0x63e4, 0x00, -6, 0						; digits 786, coarse +0.00 st
+	ToneSetZone6	0x63e5, 0x00, -5, 0						; digits 787, coarse +0.00 st
+	ToneSetZone6	0x63e6, 0x00, -3, 0						; digits 788, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -19, 6144						; digits 800, coarse +24.00 st
+	ToneSetZone6	0x63e7, 0x00, -18, 0						; digits 801, coarse +0.00 st
+	ToneSetZone6	0x63e8, 0x00, -17, 0						; digits 802, coarse +0.00 st
+	ToneSetZone6	0x63e9, 0x00, -15, 0						; digits 803, coarse +0.00 st
+	ToneSetZone6	0x63ea, 0x00, -14, 0						; digits 804, coarse +0.00 st
+	ToneSetZone6	0x63eb, 0x00, -12, 0						; digits 805, coarse +0.00 st
+	ToneSetZone6	0x63ec, 0x00, -10, 0						; digits 806, coarse +0.00 st
+	ToneSetZone6	0x63ed, 0x00, -7, 0						; digits 807, coarse +0.00 st
+	ToneSetZone6	0x63ee, 0x00, -4, 0						; digits 808, coarse +0.00 st
+	ToneSetZone6	0x6281, 0x00, -18, 3072						; digits 810, coarse +12.00 st
+	ToneSetZone6	0x63ef, 0x00, -17, 0						; digits 811, coarse +0.00 st
+	ToneSetZone6	0x63f0, 0x00, -17, 0						; digits 812, coarse +0.00 st
+	ToneSetZone6	0x63f1, 0x00, -16, 0						; digits 813, coarse +0.00 st
+	ToneSetZone6	0x63f2, 0x00, -15, 0						; digits 814, coarse +0.00 st
+	ToneSetZone6	0x63f3, 0x00, -13, 0						; digits 815, coarse +0.00 st
+	ToneSetZone6	0x63f4, 0x00, -11, 0						; digits 816, coarse +0.00 st
+	ToneSetZone6	0x63f5, 0x00, -8, 0						; digits 817, coarse +0.00 st
+	ToneSetZone6	0x63f6, 0x00, -4, 0						; digits 818, coarse +0.00 st
+	ToneSetZone6	0x6282, 0x00, -17, 3072						; digits 820, coarse +12.00 st
+	ToneSetZone6	0x63f7, 0x00, -17, 0						; digits 821, coarse +0.00 st
+	ToneSetZone6	0x63f8, 0x00, -16, 0						; digits 822, coarse +0.00 st
+	ToneSetZone6	0x63f9, 0x00, -16, 0						; digits 823, coarse +0.00 st
+	ToneSetZone6	0x63fa, 0x00, -15, 0						; digits 824, coarse +0.00 st
+	ToneSetZone6	0x63fb, 0x00, -13, 0						; digits 825, coarse +0.00 st
+	ToneSetZone6	0x63fc, 0x00, -11, 0						; digits 826, coarse +0.00 st
+	ToneSetZone6	0x63fd, 0x00, -8, 0						; digits 827, coarse +0.00 st
+	ToneSetZone6	0x63fe, 0x00, -4, 0						; digits 828, coarse +0.00 st
+	ToneSetZone6	0x6283, 0x00, -16, 3072						; digits 830, coarse +12.00 st
+	ToneSetZone6	0x63ff, 0x00, -16, 0						; digits 831, coarse +0.00 st
+	ToneSetZone6	0x6400, 0x00, -15, 0						; digits 832, coarse +0.00 st
+	ToneSetZone6	0x6401, 0x00, -14, 0						; digits 833, coarse +0.00 st
+	ToneSetZone6	0x6402, 0x00, -14, 0						; digits 834, coarse +0.00 st
+	ToneSetZone6	0x6403, 0x00, -13, 0						; digits 835, coarse +0.00 st
+	ToneSetZone6	0x6404, 0x00, -12, 0						; digits 836, coarse +0.00 st
+	ToneSetZone6	0x6405, 0x00, -9, 0						; digits 837, coarse +0.00 st
+	ToneSetZone6	0x6406, 0x00, -5, 0						; digits 838, coarse +0.00 st
+	ToneSetZone6	0x6284, 0x00, -15, 3072						; digits 840, coarse +12.00 st
+	ToneSetZone6	0x6407, 0x00, -14, 0						; digits 841, coarse +0.00 st
+	ToneSetZone6	0x6408, 0x00, -14, 0						; digits 842, coarse +0.00 st
+	ToneSetZone6	0x6409, 0x00, -13, 0						; digits 843, coarse +0.00 st
+	ToneSetZone6	0x640a, 0x00, -13, 0						; digits 844, coarse +0.00 st
+	ToneSetZone6	0x640b, 0x00, -12, 0						; digits 845, coarse +0.00 st
+	ToneSetZone6	0x640c, 0x00, -11, 0						; digits 846, coarse +0.00 st
+	ToneSetZone6	0x640d, 0x00, -9, 0						; digits 847, coarse +0.00 st
+	ToneSetZone6	0x640e, 0x00, -6, 0						; digits 848, coarse +0.00 st
+	ToneSetZone6	0x6285, 0x00, -13, 3072						; digits 850, coarse +12.00 st
+	ToneSetZone6	0x640f, 0x00, -13, 0						; digits 851, coarse +0.00 st
+	ToneSetZone6	0x6410, 0x00, -13, 0						; digits 852, coarse +0.00 st
+	ToneSetZone6	0x6411, 0x00, -12, 0						; digits 853, coarse +0.00 st
+	ToneSetZone6	0x6412, 0x00, -12, 0						; digits 854, coarse +0.00 st
+	ToneSetZone6	0x6413, 0x00, -11, 0						; digits 855, coarse +0.00 st
+	ToneSetZone6	0x6414, 0x00, -10, 0						; digits 856, coarse +0.00 st
+	ToneSetZone6	0x6415, 0x00, -8, 0						; digits 857, coarse +0.00 st
+	ToneSetZone6	0x6416, 0x00, -6, 0						; digits 858, coarse +0.00 st
+	ToneSetZone6	0x6286, 0x00, -11, 3072						; digits 860, coarse +12.00 st
+	ToneSetZone6	0x6417, 0x00, -11, 0						; digits 861, coarse +0.00 st
+	ToneSetZone6	0x6418, 0x00, -11, 0						; digits 862, coarse +0.00 st
+	ToneSetZone6	0x6419, 0x00, -10, 0						; digits 863, coarse +0.00 st
+	ToneSetZone6	0x641a, 0x00, -10, 0						; digits 864, coarse +0.00 st
+	ToneSetZone6	0x641b, 0x00, -9, 0						; digits 865, coarse +0.00 st
+	ToneSetZone6	0x641c, 0x00, -8, 0						; digits 866, coarse +0.00 st
+	ToneSetZone6	0x641d, 0x00, -7, 0						; digits 867, coarse +0.00 st
+	ToneSetZone6	0x641e, 0x00, -5, 0						; digits 868, coarse +0.00 st
+	ToneSetZone6	0x6287, 0x00, -9, 3072						; digits 870, coarse +12.00 st
+	ToneSetZone6	0x641f, 0x00, -9, 0						; digits 871, coarse +0.00 st
+	ToneSetZone6	0x6420, 0x00, -8, 0						; digits 872, coarse +0.00 st
+	ToneSetZone6	0x6421, 0x00, -8, 0						; digits 873, coarse +0.00 st
+	ToneSetZone6	0x6422, 0x00, -7, 0						; digits 874, coarse +0.00 st
+	ToneSetZone6	0x6423, 0x00, -7, 0						; digits 875, coarse +0.00 st
+	ToneSetZone6	0x6424, 0x00, -6, 0						; digits 876, coarse +0.00 st
+	ToneSetZone6	0x6425, 0x00, -4, 0						; digits 877, coarse +0.00 st
+	ToneSetZone6	0x6426, 0x00, -3, 0						; digits 878, coarse +0.00 st
+	ToneSetZone6	0x6288, 0x00, -6, 3072						; digits 880, coarse +12.00 st
+	ToneSetZone6	0x6427, 0x00, -5, 0						; digits 881, coarse +0.00 st
+	ToneSetZone6	0x6428, 0x00, -5, 0						; digits 882, coarse +0.00 st
+	ToneSetZone6	0x6429, 0x00, -5, 0						; digits 883, coarse +0.00 st
+	ToneSetZone6	0x642a, 0x00, -4, 0						; digits 884, coarse +0.00 st
+	ToneSetZone6	0x642b, 0x00, -4, 0						; digits 885, coarse +0.00 st
+	ToneSetZone6	0x642c, 0x00, -3, 0						; digits 886, coarse +0.00 st
+	ToneSetZone6	0x642d, 0x00, -2, 0						; digits 887, coarse +0.00 st
+	ToneSetZone6	0x642e, 0x00, 0, 0						; digits 888, coarse +0.00 st
 ; Drawbar SET zone records for DrawbarPreset_EnvDescTable record(s) 3: 4 x 6 bytes,
 ; indexed by WaveSel_StageB_Build_Reg040_Footage (0x0238F8) with stride 6 (header above).
 DrawbarPreset_EnvData_2:
-	ToneEnvZone6	0x6263, 0x00, -128, 0						; row 0, coarse +0.00 st
-	ToneEnvZone6	0x6263, 0x00, -19, 3072						; row 1, coarse +12.00 st
-	ToneEnvZone6	0x6263, 0x00, -19, 4864						; row 2, coarse +19.00 st
-	ToneEnvZone6	0x642f, 0x00, 0, 0						; row 3, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -128, 0						; row 0, coarse +0.00 st
+	ToneSetZone6	0x6263, 0x00, -19, 3072						; row 1, coarse +12.00 st
+	ToneSetZone6	0x6263, 0x00, -19, 4864						; row 2, coarse +19.00 st
+	ToneSetZone6	0x642f, 0x00, 0, 0						; row 3, coarse +0.00 st
 
 ; -----------------------------------------------------------------------------
 ; 333 records x 16 bytes (dir +0x50): 13-char source name + 3 id/flag bytes.

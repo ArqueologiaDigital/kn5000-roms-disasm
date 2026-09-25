@@ -5,14 +5,16 @@ QUESTION THIS ANSWERS
     table_data/tone_database_aux.s spells four large families of records as
     anonymous 16-byte `.byte` rows under a descriptive label, with the layout
     stated once in a section header:
-      * ToneEnv_RecNNN_A / _B   974 chunks: each SET's key map and zone records
+      * ToneSet_NNN_KeyMap / _Zones  974 chunks: each SET's key map and zone records
+        (named ToneEnv_RecNNN_A / _B before 2026-09-25,
+        scripts/renaming/rename_tonedb_set_chunks.sed)
       * DrawbarPreset_EnvData_0..2  the drawbar SETs' zone records
       * DrumKit_NN_*            26 drum-kit records
       * PercInst_NNN_*          610 drum-instrument (sub-tone) records
     The subcpu readers that consume them are known (cited in the section
     headers and in notes/tonedb-2026-09-25/README.md), so each object can be
     spelled in its record structure: a zone record is one typed row
-    (ToneEnvZone4 / ToneEnvZone6 macros = .short selector, .byte field, .byte
+    (ToneSetZone4 / ToneSetZone6 macros = .short selector, .byte field, .byte
     trim [, .short coarse]); a key map is `.long <curve label> - ToneDB_Base`
     plus its band->zone bytes; a drum kit is its head plus 128 (wave, slot)
     note pairs with the drum instrument each note resolves to; and every object
@@ -51,15 +53,15 @@ blob = lambda a, n: ROM[a - B:a - B + n]
 dslot = lambda s: DB + u32(DB + s)
 
 MACROS = """\
-; Typed zone-record rows (ToneEnv_*_B and DrawbarPreset_EnvData_*): one row =
+; Typed zone-record rows (ToneSet_*_Zones and DrawbarPreset_EnvData_*): one row =
 ; one zone record, fields as documented in the ToneEnv chunk header below.
-;   ToneEnvZone4  selector (LE16), level-field byte, s8 fine trim
-;   ToneEnvZone6  the same + s16 coarse trim (8.8 semitones)
-.macro ToneEnvZone4 sel, fld, trim
+;   ToneSetZone4  selector (LE16), level-field byte, s8 fine trim
+;   ToneSetZone6  the same + s16 coarse trim (8.8 semitones)
+.macro ToneSetZone4 sel, fld, trim
 	.short	\\sel
 	.byte	\\fld, \\trim
 .endm
-.macro ToneEnvZone6 sel, fld, trim, coarse
+.macro ToneSetZone6 sel, fld, trim, coarse
 	.short	\\sel
 	.byte	\\fld, \\trim
 	.short	\\coarse
@@ -74,7 +76,7 @@ MACROS = """\
 	.byte	\\e
 .endm
 """
-MACRO_MARK = ".macro ToneEnvZone4 sel, fld, trim"
+MACRO_MARK = ".macro ToneSetZone4 sel, fld, trim"
 DESC_MARK = ".macro ToneSetDesc flags, keymap, zones"
 
 
@@ -135,10 +137,10 @@ def spell(lines, sym):
             out += (sym[a[1]] - DB).to_bytes(4, "little") + (sym[a[2]] - DB).to_bytes(4, "little")
             out += bytes([int(a[3], 0), int(a[4], 0), int(a[5], 0)])
             out += int(a[6], 0).to_bytes(2, "little") + bytes([int(a[7], 0)])
-        elif op in ("ToneEnvZone4", "ToneEnvZone6"):
+        elif op in ("ToneSetZone4", "ToneSetZone6"):
             v = [int(x, 0) for x in re.findall(NUM, args)]
             out += (v[0] & 0xFFFF).to_bytes(2, "little") + bytes([v[1] & 0xFF, v[2] & 0xFF])
-            if op == "ToneEnvZone6":
+            if op == "ToneSetZone6":
                 out += (v[3] & 0xFFFF).to_bytes(2, "little")
         else:
             raise SystemExit("cannot spell %r" % ln)
@@ -221,10 +223,10 @@ def zone_rows(a, count, stride, comment):
         sel, fld, trim = u16(r), u8(r + 2), s8(u8(r + 3))
         if stride == 6:
             co = s16(u16(r + 4))
-            rows.append(pad("\tToneEnvZone6\t0x%04x, 0x%02x, %d, %d" % (sel, fld, trim, co),
+            rows.append(pad("\tToneSetZone6\t0x%04x, 0x%02x, %d, %d" % (sel, fld, trim, co),
                             comment(z) + ", coarse %+.2f st" % (co / 256.0)))
         else:
-            rows.append(pad("\tToneEnvZone4\t0x%04x, 0x%02x, %d" % (sel, fld, trim), comment(z)))
+            rows.append(pad("\tToneSetZone4\t0x%04x, 0x%02x, %d" % (sel, fld, trim), comment(z)))
     return rows
 
 
@@ -367,7 +369,7 @@ def emit_default_block(label, D, sym):
     return [], rows
 
 
-LABEL = re.compile(r'^(ToneEnv_Rec(\d{3})_([AB])|DrumKit_\d\d_\w+|PercInst_\d{3}_\w+|'
+LABEL = re.compile(r'^(ToneSet_(\d{3})_(KeyMap|Zones)|DrumKit_\d\d_\w+|PercInst_\d{3}_\w+|'
                    r'DrawbarPreset_EnvData_\d|DrawbarPreset_Jazz|DrawbarPreset_Rock|ToneDB_DefaultLayerParams):\s*$')
 MY_HEADERS = [re.compile(x) for x in (
     r'^; SET \d{3} (key map|zone records)', r'^; \d+ bands -> zone index',
@@ -410,9 +412,9 @@ def main():
                 if want != blob(base + 15 * k, 15):
                     raise SystemExit("EnvDescTable record %d: old rows do not spell the ROM" % k)
                 cmt = old[0].split(";", 1)[1].strip() if ";" in old[0] else str(k)
-                code = "\tToneSetDesc\t0x%02x, ToneEnv_Rec%03d_A, ToneEnv_Rec%03d_B, %d, %d, 0x%02x, 0x%04x, %d" % (
+                code = "\tToneSetDesc\t0x%02x, ToneSet_%03d_KeyMap, ToneSet_%03d_Zones, %d, %d, 0x%02x, 0x%04x, %d" % (
                     d["f"], k, k, d["lo"], d["hi"], d["root"], d["bp"], d["e"])
-                assert sym["ToneEnv_Rec%03d_A" % k] == d["A"] and sym["ToneEnv_Rec%03d_B" % k] == d["B"]
+                assert sym["ToneSet_%03d_KeyMap" % k] == d["A"] and sym["ToneSet_%03d_Zones" % k] == d["B"]
                 row = code + "\t; " + cmt
                 if spell([row], sym) != want:
                     raise SystemExit("EnvDescTable record %d: new row spells different bytes" % k)
@@ -435,10 +437,10 @@ def main():
             j += 1
         old = lines[i + 1:j]
         addr = sym[label]
-        if label.startswith("ToneEnv"):
+        if label.startswith("ToneSet_"):
             d = descs[int(m.group(2))]
-            assert addr == (d["A"] if m.group(3) == "A" else d["B"]), label
-            hdr, rows = (emit_A if m.group(3) == "A" else emit_B)(d, D, sym)
+            assert addr == (d["A"] if m.group(3) == "KeyMap" else d["B"]), label
+            hdr, rows = (emit_A if m.group(3) == "KeyMap" else emit_B)(d, D, sym)
             kind = "ToneEnv"
         elif label == "ToneDB_DefaultLayerParams":
             hdr, rows = emit_default_block(label, D, sym)
@@ -472,7 +474,7 @@ def main():
         i = j
     text = "\n".join(out)
     if MACRO_MARK in text and DESC_MARK not in text:
-        zend = text.index(".endm\n", text.index(".macro ToneEnvZone6")) + len(".endm\n")
+        zend = text.index(".endm\n", text.index(".macro ToneSetZone6")) + len(".endm\n")
         dm = MACROS[MACROS.index("; One SET descriptor"):]
         text = text[:zend] + dm + text[zend:]
     if MACRO_MARK not in text:
