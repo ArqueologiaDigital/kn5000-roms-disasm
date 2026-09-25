@@ -32,7 +32,8 @@ import hdae5000_line_map as hlm  # noqa: E402
 # address: (name, evidence)
 RAM = {
     0x23A1A2: ("MainWorkspacePtr", "the main CPU's workspace; every call into it is (this)->0x0E88 or"
-                                   " ->0x0E0A table + offset (init image: HDAE5000_Workspace_Ptr_Init)"),
+                                   " ->0x0E0A table + offset (init image: 4 bytes after HDAE5000_LyricBoxObj_Init;"
+                                   " the object table at 0x027ED2)"),
     0x200222: ("AtaError", "drive error byte: 0 = ok; set by the HDAE5000_ATA_* routines, tested"
                            " after every disk operation"),
     0x229D92: ("HdInitResult", "HDAE5000_HD_Init's step code, returned by HDAE5000_Check_HD_Present"),
@@ -79,6 +80,20 @@ RAM = {
     0x239168: ("PportPacket", "the 256-byte PC-link packet (HDAE5000_PPORT_SendPacket/RecvPacket)"),
     0x2390D4: ("PportError", "PC-link error flag, set to 1 by PPORT_RecvByte/SendByte/EndBlock"),
     0x2390FC: ("PportChecksum", "32-bit running sum of the PC-link block in transfer"),
+    # second run (lyrics player; the three setting names are the firmware's
+    # own handler names in HDAE5000_ObjHandler_Table, each returning the
+    # address of its byte)
+    0x229DAC: ("LyricJump", "sector-1 setting byte; handler \"LyricJumpEditCheck\" returns its address"),
+    0x229DAD: ("LyricForeColor", "sector-1 setting byte 0..4; \"LyricForeColorCheck\"; palette code"
+                                 " via HDAE5000_Lyrics_ResetState"),
+    0x229DAE: ("LyricBackColor", "sector-1 setting byte 0..4; \"LyricBackColorCheck\"; palette code"
+                                 " via HDAE5000_Lyrics_ResetState"),
+    0x22B430: ("LyricBuffer", "the lyric file, 0x5000 bytes: TLhd/TLtr chunks, events from +22"
+                              " (HDAE5000_Lyrics_ClearBuffer, _ParseEvent)"),
+    0x23A0AA: ("LyricLines", "six 40-byte text lines of the lyric window (HDAE5000_Lyrics_FillLines)"),
+    0x23A19C: ("LyricLoaded", "1 once a lyric file passed its checks (HDAE5000_Lyrics_CheckFile)"),
+    0x23A19E: ("LyricBoxObj", "the open lyric box's object id, 0xFFFFFFFF when closed"
+                              " (HDAE5000_LyricBoxProc); redraw events go to it"),
 }
 FILE_MAIN = "hd-ae5000_v2_06i.s"
 NUM = re.compile(r"(?<![\w.$+\-])(0x[0-9a-fA-F]+|\d{6,})(?![\w.$])")
@@ -117,6 +132,19 @@ def main(apply):
     if not apply:
         return
     L = src[FILE_MAIN]
+    have = [i for i, ln in enumerate(L) if ln.startswith("\t.equ HDAE5000_RAM_")]
+    if have:
+        # a block from an earlier run exists: add only the missing names, in
+        # address order, after its last line (re-running is idempotent)
+        present = {re.match(r"\t\.equ (\w+),", L[i]).group(1) for i in have}
+        new = ["\t.equ %s, 0x%06x\t; %s" % (sym[a], a, RAM[a][1]) for a in sorted(RAM) if sym[a] not in present]
+        L[have[-1] + 1:have[-1] + 1] = new
+        print("added %d .equ lines to the existing block" % len(new))
+        for rel, L2 in src.items():
+            open(os.path.join(hlm.HDAE, rel), "w", encoding="latin-1").write("\n".join(L2))
+        hlm.build_map()
+        print("applied; relinked mirror byte-identical")
+        return
     at = next(i for i, ln in enumerate(L) if ln.strip().startswith('.include "shared/event_codes.s"'))
     block = ["",
              "; ----------------------------------------------------------------------------",

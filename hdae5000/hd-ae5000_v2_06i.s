@@ -50,7 +50,14 @@
 	.equ HDAE5000_RAM_SeparateDrumPart, 0x23a0a0	; drum part, 0 = NONE (SeparateDrumPartCheck's value; _Apply)
 	.equ HDAE5000_RAM_SeparateDrumPartSent, 0x23a0a2	; drum part last sent by HDAE5000_SeparateOutput_Apply
 	.equ HDAE5000_RAM_SeparateBassPartSent, 0x23a0a4	; bass part last sent by HDAE5000_SeparateOutput_Apply
-	.equ HDAE5000_RAM_MainWorkspacePtr, 0x23a1a2	; the main CPU's workspace; every call into it is (this)->0x0E88 or ->0x0E0A table + offset (init image: HDAE5000_Workspace_Ptr_Init)
+	.equ HDAE5000_RAM_MainWorkspacePtr, 0x23a1a2	; the main CPU's workspace; every call into it is (this)->0x0E88 or ->0x0E0A table + offset (init image: 4 bytes after HDAE5000_LyricBoxObj_Init; the object table at 0x027ED2)
+	.equ HDAE5000_RAM_LyricJump, 0x229dac	; sector-1 setting byte; handler "LyricJumpEditCheck" returns its address
+	.equ HDAE5000_RAM_LyricForeColor, 0x229dad	; sector-1 setting byte 0..4; "LyricForeColorCheck"; palette code via HDAE5000_Lyrics_ResetState
+	.equ HDAE5000_RAM_LyricBackColor, 0x229dae	; sector-1 setting byte 0..4; "LyricBackColorCheck"; palette code via HDAE5000_Lyrics_ResetState
+	.equ HDAE5000_RAM_LyricBuffer, 0x22b430	; the lyric file, 0x5000 bytes: TLhd/TLtr chunks, events from +22 (HDAE5000_Lyrics_ClearBuffer, _ParseEvent)
+	.equ HDAE5000_RAM_LyricLines, 0x23a0aa	; six 40-byte text lines of the lyric window (HDAE5000_Lyrics_FillLines)
+	.equ HDAE5000_RAM_LyricLoaded, 0x23a19c	; 1 once a lyric file passed its checks (HDAE5000_Lyrics_CheckFile)
+	.equ HDAE5000_RAM_LyricBoxObj, 0x23a19e	; the open lyric box's object id, 0xFFFFFFFF when closed (HDAE5000_LyricBoxProc); redraw events go to it
 
 ; ----------------------------------------------------------------------------
 ; The main CPU's function tables, as the HD-AE5000 reaches them: workspace
@@ -416,53 +423,61 @@ HDAE5000_ENTRY_4:	; 28001Ch
 ; ----------------------------------------------------------------------------
 ; HDAE5000_Handler_Registration (0x280020 - 0x28030D)
 ;
-; Registers 11 callback handlers with the main CPU workspace dispatch system,
-; plus a final special dispatch call via offset 0x0270.
-; Called from HDAE5000_Boot_Init after workspace pointer is stored.
+; Registers this module's eleven object tables with the main CPU's
+; RootFn_RegisterObjectTable, then its title with RootFn_RegisterTitle -- the
+; same sequence, with the same class ids and procs, as the main CPU's own
+; InitializeRoot (module 0) and InitializeHama (module 9) in the v10 source;
+; the HD-AE5000 is module 0x0A: table index = kind + 0x0A.
+; Called from HDAE5000_Boot_Init after the workspace pointer is stored.
 ;
-; The workspace dispatch system works via function tables:
-;   WORKSPACE_PTR (0x23A1A2) -> Handler Table A (offset 0x0E0A)
-;   Handler Table A + offset -> Function pointer or sub-table
+; The workspace is the main CPU's object table at 0x027ED2: 14-byte records
+; at 0x027ED2 + 14 * index (RegisterObjectTable), each {+0 class id,
+; +4 proc, +8 count, +10 data}.  (Tables 0x100 and 0x109 are the ones this ROM
+; calls through: WS_RootFnTable / WS_HamaFnTable.)
 ;
-; Registration structure (14 bytes on stack):
-;   (XSP+0x00): PPI port address (identifies handler type)
-;   (XSP+0x04): Handler function pointer (from workspace table)
-;   (XSP+0x08): Data size (byte/word count)
-;   (XSP+0x0A): Data pointer (RAM or ROM address)
+; Registration record (14 bytes on the stack):
+;   (XSP+0x00): class id of the proc (0x016000nn -- InitializeRoot pairs the
+;               same ids with the same procs)
+;   (XSP+0x04): the proc, read from the main CPU's function table
+;   (XSP+0x08): entry count
+;   (XSP+0x0A): table pointer
 ;
 ; Handler Registration Table:
-;   ID     Port        TableOff  Size   DataPtr    Description
-;   0x016A 0x01600004  0x0168    13     0x29C0AA   DISK MENU / UI (13 sub-objects, ClassProc)
-;   0x01CA 0x0160000C  0x013C    var    0x2397EA   RAM data area
-;   0x01EA 0x0160000D  0x0140    var    0x239824   RAM data area
-;   0x012A 0x01600002  0x0248    0x45   0x23952A   Init data copy dest
-;   0x042A 0x01600002  0x0248    0x45   0x239642   Init data area
-;   0x010A 0x01600001  0x0244    0x0D   0x239872   RAM data
-;   0x040A 0x01600001  0x0244    0x0D   0x2398AA   RAM data
-;   0x014A 0x01600003  0x024C    0x0E   0x239FD2   RAM data
-;   0x044A 0x01600003  0x024C    0x0E   0x23A00E   RAM data
-;   0x007F 0x01600010  0x0280    0x315  0x2A5D2C   UI object descriptor table
-;   0x037F 0x0160000F  0x0148    0x315  0x2A6984   UI object name table
+;   index  class id    proc              count  table
+;   0x016A 0x01600004  ClassProc         13     0x29C0AA   classes (13 records)
+;   0x01CA 0x0160000C  ResEventProc      var    0x2397EA
+;   0x01EA 0x0160000D  ResMethodProc     var    0x239824
+;   0x012A 0x01600002  ApFunctionProc    0x45   0x23952A   ApFunction table
+;   0x042A 0x01600002  ApFunctionProc    0x45   0x239642   ... its names
+;   0x010A 0x01600001  FunctionProc      0x0D   0x239872   Function table
+;   0x040A 0x01600001  FunctionProc      0x0D   0x2398AA   ... its names
+;   0x014A 0x01600003  MainFunctionProc  0x0E   0x239FD2   MainFunction table
+;   0x044A 0x01600003  MainFunctionProc  0x0E   0x23A00E   ... its names
+;   0x007F 0x01600010  ViewableProc      0x315  0x2A5D2C   UI object descriptor table
+;   0x037F 0x0160000F  ResNameProc       0x315  0x2A6984   UI object name table
+;   (0x7F / 0x37F replace the empty tables InitializeHama registers there.)
 ;          (for these two the "Size" word is an ENTRY COUNT: 0x315 = 789
 ;           objects; both tables hold 790 .long entries, the last a
 ;           terminator - see hdae5000_data_tables.s)
-;   (special call via 0x0270 with 0x2A849A and params 0x7F, 0x014A0000, 0x7F01EE)
+;   then RegisterTitle(0x7F, 0x014A0000, HDAE5000_OBJ_IV_HDDMENU; stack: name
+;   "TT_HDDEXT" at 0x2A849A, module 0x0A) -- InitializeHama registers title
+;   0x7F the same way with 0x01490000 and module 9.
 ;
-; Each registration calls workspace[0x0E0A][0x00E4] with:
-;   WA = handler ID
-;   XBC = pointer to parameter block on stack
+; Each registration calls RootFn_RegisterObjectTable with:
+;   WA = table index
+;   XBC = pointer to the record on the stack
 ; ----------------------------------------------------------------------------
 
 HDAE5000_Handler_Registration:	; 280020h
 	; Allocate 14-byte parameter block on stack
 	lda xsp, (xsp - 14)	; lda XSP, XSP - 0Eh  (allocate 14 bytes)
 
-	; === Handler 1: DISK MENU / UI components (ID=0x016A, port=0x01600004) ===
+	; === table 0x16A: ClassProc, the module's 13 classes (class id 0x01600004) ===
 	; Record count = 13 (from ROM at 0x29D97E)
 	; Data table = 0x29C0AA (13 records x 24 bytes each)
 	; Handler function = ClassProc (0xFA44E2) via workspace[0x0E0A][0x0168]
-	ld xwa, 0x1600004	; PPI port address
-	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA  ; port address
+	ld xwa, 0x1600004	; class id
+	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA  ; class id
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)             ; Handler dispatch table
 	ld XWA, (xwa + RootFn_ClassProc)             ; Handler function via table offset 0x0168
@@ -479,8 +494,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x16A	; Handler ID
 	call (xhl)	; Register handler
 
-	; === Handler 2: RAM data area A (ID=0x01CA, port=0x0160000C) ===
-	ld xwa, 0x160000C	; PPI port address
+	; === table 0x1CA: ResEventProc (class id 0x0160000C) ===
+	ld xwa, 0x160000C	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -498,8 +513,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x1CA	; Handler ID
 	call (xhl)
 
-	; === Handler 3: RAM data area B (ID=0x01EA, port=0x0160000D) ===
-	ld xwa, 0x160000D	; PPI port address
+	; === table 0x1EA: ResMethodProc (class id 0x0160000D) ===
+	ld xwa, 0x160000D	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -517,8 +532,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x1EA	; Handler ID
 	call (xhl)
 
-	; === Handler 4: Init data primary (ID=0x012A, port=0x01600002) ===
-	ld xwa, 0x1600002	; PPI port address
+	; === table 0x12A: ApFunctionProc, the module's ApFunction table (class id 0x01600002) ===
+	ld xwa, 0x1600002	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -535,8 +550,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x12A	; Handler ID
 	call (xhl)
 
-	; === Handler 5: Init data secondary (ID=0x042A, port=0x01600002) ===
-	ld xwa, 0x1600002	; PPI port address
+	; === table 0x42A: the names of table 0x12A ===
+	ld xwa, 0x1600002	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -553,8 +568,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x42A	; Handler ID
 	call (xhl)
 
-	; === Handler 6: Serial data primary (ID=0x010A, port=0x01600001) ===
-	ld xwa, 0x1600001	; PPI port address
+	; === table 0x10A: FunctionProc, the module's Function table (class id 0x01600001) ===
+	ld xwa, 0x1600001	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -571,8 +586,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x10A	; Handler ID
 	call (xhl)
 
-	; === Handler 7: Serial data secondary (ID=0x040A, port=0x01600001) ===
-	ld xwa, 0x1600001	; PPI port address
+	; === table 0x40A: the names of table 0x10A ===
+	ld xwa, 0x1600001	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -589,8 +604,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x40A	; Handler ID
 	call (xhl)
 
-	; === Handler 8: Parallel data primary (ID=0x014A, port=0x01600003) ===
-	ld xwa, 0x1600003	; PPI port address
+	; === table 0x14A: MainFunctionProc, the module's MainFunction table (class id 0x01600003) ===
+	ld xwa, 0x1600003	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -607,8 +622,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x14A	; Handler ID
 	call (xhl)
 
-	; === Handler 9: Parallel data secondary (ID=0x044A, port=0x01600003) ===
-	ld xwa, 0x1600003	; PPI port address
+	; === table 0x44A: the names of table 0x14A ===
+	ld xwa, 0x1600003	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -625,7 +640,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x44A	; Handler ID
 	call (xhl)
 
-	; === Handler 10: UI object descriptor table (ID=0x007F, port=0x01600010) ===
+	; === table 0x7F: ViewableProc, the UI object descriptor table (class id 0x01600010) ===
 	ld xwa, 0x1600010	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
@@ -643,8 +658,8 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x7F	; Handler ID
 	call (xhl)
 
-	; === Handler 11: UI object name table (ID=0x037F, port=0x0160000F) ===
-	ld xwa, 0x160000F	; PPI port address
+	; === table 0x37F: ResNameProc, the UI object names (class id 0x0160000F) ===
+	ld xwa, 0x160000F	; class id
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -661,20 +676,19 @@ HDAE5000_Handler_Registration:	; 280020h
 	ldw wa, 0x37F	; Handler ID
 	call (xhl)
 
-	; === Final special call via workspace dispatch offset 0x0270 ===
-	; Passes additional parameters for graphics initialization
-	pushw 0xA	; push 10 bytes (param size)
+	; === RootFn_RegisterTitle: title 0x7F = "TT_HDDEXT" ===
+	pushw 0xA	; module number 0x0A (InitializeHama pushes 9)
 	lda xwa, (0x2a849a:24)
-	push xwa	; push pointer to init params
+	push xwa	; the title's name, "TT_HDDEXT"
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
-	ld XHL, (xwa + RootFn_RegisterTitle)             ; Special dispatch function
-	ld xwa, 0x7F	; Graphics handler ID
-	ld xbc, 0x14A0000	; Parallel data handler ref
-	ld xde, HDAE5000_OBJ_IV_HDDMENU	; Combined handler ID + flags
+	ld XHL, (xwa + RootFn_RegisterTitle)
+	ld xwa, 0x7F	; title number
+	ld xbc, 0x14A0000	; entry 0 of MainFunction table 0x14A
+	ld xde, HDAE5000_OBJ_IV_HDDMENU	; the title's view object
 	call (xhl)
 
-	; Deallocate parameter block + final call stack (14 bytes)
+	; Deallocate the 14-byte record (RegisterTitle's retd 6 popped its pushes)
 	lda xsp, (xsp + 14)	; lda XSP, XSP + 0Eh  (deallocate 14 bytes)
 	ret
 
@@ -3805,7 +3819,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + RootFn_UpdateScreen)             ; e3 e1 84 00 23 — (xwa+0x0084) init fn
 	call (xhl)					; b3 e8 — call init
-	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
+	call HDAE5000_YieldUntilSem1Zero		; 1d 2b b2 28
 	lda xwa, (HDAE5000_Str_PPORTTEST:24); f2 e4 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 17 ff — register handler
 	calr HDAE5000_HardTest_PortTest		; 1e 47 03
@@ -3851,7 +3865,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + RootFn_UpdateScreen)             ; e3 e1 84 00 23 — init fn
 	call (xhl)					; b3 e8
-	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
+	call HDAE5000_YieldUntilSem1Zero		; 1d 2b b2 28
 	lda xwa, (HDAE5000_Str_HDDIDREAD:24); f2 f0 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 6b fe
 	calr HDAE5000_HardTest_HddIdRead			; 1e e2 02
@@ -3896,7 +3910,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + RootFn_UpdateScreen)             ; e3 e1 84 00 23
 	call (xhl)					; b3 e8
-	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
+	call HDAE5000_YieldUntilSem1Zero		; 1d 2b b2 28
 	lda xwa, (HDAE5000_Str_FDTEST:24); f2 fc 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e bf fd
 	; Check disk status via 0x0e88 table

@@ -1,6 +1,6 @@
 HDAE5000_FdList_Scan:	; 0x282E8D (1126 bytes)
 	; Scan the floppy: needs disk status 2 or 3 from the main CPU (workspace
-	; 0x0E88 table +0x08; else HDAE5000_HD_Shutdown(2) and HL = 0xFFFF),
+	; 0x0E88 table +0x08; else HDAE5000_ShowErrorMessageTitle(2) and HL = 0xFFFF),
 	; blanks the list (HDAE5000_FdList_Clear), shows the volume label, then
 	; walks "*.*" with the find-first/next/close callbacks (+0x94/+0x98/+0x9C):
 	; every name whose HDAE5000_FdName_SongNumber is n gets flag 0x22AB9C[n]
@@ -213,7 +213,7 @@ HDAE5000_FdList_Scan:	; 0x282E8D (1126 bytes)
 .Lsd_not_ready:
 	; Disk not ready: call shutdown with error code 2
 	ld wa, 2:i3					; d8 aa
-	calr HDAE5000_HD_Shutdown			; 1e fc 7b
+	calr HDAE5000_ShowErrorMessageTitle			; 1e fc 7b
 	ldw	(xsp+4), 0xffff
 .Lsd_epilogue:
 	ld hl, (xsp + 0x04)				; 9f 04 23
@@ -1652,7 +1652,7 @@ HDAE5000_AttenDelDirSwCatch:
 	ld	xbc, 0x01c00001
 	ld	xde, 3:i3
 	call	(xhl)
-	calr	HDAE5000_Wait_Callback_Loop
+	calr	HDAE5000_YieldUntilSem1Zero
 	ld	wa, (HDAE5000_RAM_CurDir:24)
 	ld	bc, 1:i3
 	ld	de, 0:i3
@@ -1744,7 +1744,7 @@ HDAE5000_AttenDelFileSwCatch:
 	ld	xbc, 0x01c00001
 	ld	xde, 3:i3
 	call	(xhl)
-	calr	HDAE5000_Wait_Callback_Loop
+	calr	HDAE5000_YieldUntilSem1Zero
 	pushw 0x0001
 	pushw 0x0000
 	ld	wa, (HDAE5000_RAM_CurDir:24)
@@ -1804,7 +1804,7 @@ HDAE5000_FileLoadSwCatch:
 	ld	bc, (HDAE5000_RAM_CurSong:24)
 	ld	de, (HDAE5000_RAM_SaveOptions:24)
 	calr	HDAE5000_LoadSongWithUi
-	cp	(0x229DAC:24), 2
+	cp	(HDAE5000_RAM_LyricJump:24), 2
 	jr nz, .LHRW_4267                      ; [6e 2c] jr NZ,0x284267
 	ld	wa, (HDAE5000_RAM_SaveOptions:24)
 	and	wa, 0x0100
@@ -1882,7 +1882,7 @@ HDAE5000_HDDNamingCheck:
 	cp	xde, 0x0000008a
 	jrl nz, .LHRW_4469                     ; [7e 52 01] jrl NZ,0x284469
 	lda xwa, (0x22ac7e:24)
-	calr	HDAE5000_Validate_String
+	calr	HDAE5000_NameHistory_Recall
 	ld	xiz, xhl
 	ld	xwa, xiz
 	or xwa, xwa                             ; or XWA,XWA
@@ -2030,7 +2030,7 @@ HDAE5000_HDD_DIRNAMECheck:
 	cp	xde, 0x0000008a
 	jrl nz, .LHRW_4592                     ; [7e a9 00] jrl NZ,0x284592
 	lda xwa, (0x22abf2:24)
-	calr	HDAE5000_Validate_String
+	calr	HDAE5000_NameHistory_Recall
 	ld	xiz, xhl
 	ld	xwa, xiz
 	or xwa, xwa                             ; or XWA,XWA
@@ -2076,7 +2076,7 @@ HDAE5000_HDD_DIRNAMECheck:
 	ld	wa, (HDAE5000_RAM_CurDir:24)
 	lda xbc, (0x23a06e:24)
 	ld	xde, HDAE5000_OBJ_SELECT_DIR
-	calr	HDAE5000_Menu_Handler
+	calr	HDAE5000_DirName_StoreWithUi
 	ld	xwa, HDAE5000_OBJ_SEL_DIR
 	calr	HDAE5000_DirList_BuildPage
 .LHRW_4592:
@@ -4625,7 +4625,7 @@ HDAE5000_LyricJumpEditCheck_Ev01E00044:
 	ld	xhl, 1:i3
 	jr t, .LHCM_5f89                       ; [68 11] jr T,0x285f89
 HDAE5000_LyricJumpEditCheck_Ev01E00045:
-	lda xhl, (0x229dac:24)
+	lda xhl, (HDAE5000_RAM_LyricJump:24)
 	jr t, .LHCM_5f89                       ; [68 0a] jr T,0x285f89
 HDAE5000_LyricJumpEditCheck_Ev01E00046:
 	ld	xhl, 1:i3
@@ -4720,7 +4720,7 @@ HDAE5000_LyricForeColorCheck_Ev01E00044:
 	ld	xhl, 0:i3
 	jr t, .LHCM_6063                       ; [68 11] jr T,0x286063
 HDAE5000_LyricForeColorCheck_Ev01E00045:
-	lda xhl, (0x229dad:24)
+	lda xhl, (HDAE5000_RAM_LyricForeColor:24)
 	jr t, .LHCM_6063                       ; [68 0a] jr T,0x286063
 HDAE5000_LyricForeColorCheck_Ev01E00046:
 	ld	xhl, 1:i3
@@ -4779,7 +4779,7 @@ HDAE5000_LyricBackColorCheck_Ev01E00044:
 	ld	xhl, 0:i3
 	jr t, .LHCM_60e2                       ; [68 11] jr T,0x2860e2
 HDAE5000_LyricBackColorCheck_Ev01E00045:
-	lda xhl, (0x229dae:24)
+	lda xhl, (HDAE5000_RAM_LyricBackColor:24)
 	jr t, .LHCM_60e2                       ; [68 0a] jr T,0x2860e2
 HDAE5000_LyricBackColorCheck_Ev01E00046:
 	ld	xhl, 1:i3
@@ -5536,7 +5536,7 @@ HDAE5000_AttenHDFormatSwCatch_Case6:
 	ld xbc, 0x01c00001
 	ld xde, 0:i3
 	call (xhl)
-	calr HDAE5000_Wait_Callback_Loop
+	calr HDAE5000_YieldUntilSem1Zero
 	ld wa, 1:i3
 	call HDAE5000_HD_FormatDrive
 	cp hl, 0:i3
@@ -5601,7 +5601,7 @@ HDAE5000_AttenHDFormatSwCatch_Case6:
 	ld xbc, 0x01c00001
 	ld xde, 0:i3
 	call (xhl)
-	calr HDAE5000_Wait_Callback_Loop
+	calr HDAE5000_YieldUntilSem1Zero
 	ld wa, 0:i3
 	call HDAE5000_HD_StoreSettings
 	cp hl, 0xffff
@@ -6048,7 +6048,7 @@ HDAE5000_LBNLoadSwCatch:
 	ld bc, 0:i3
 	ld de, 6:i3
 	calr HDAE5000_Lbn_ShowEntry
-	cp (0x229dac:24), 0x02
+	cp (HDAE5000_RAM_LyricJump:24), 0x02
 	jr nz, .LHD_SR__b_exit
 	ld wa, (HDAE5000_RAM_SaveOptions:24)
 	and wa, 0x0100
@@ -6229,7 +6229,7 @@ HDAE5000_Lbn_TypeDigit:	; 0x286E50 (646 bytes)
 	ld de, 6:i3				; da ae
 	calr HDAE5000_Lbn_ShowEntry			; 1e xx xx
 	; Check second disk flag
-	cp (0x229dac:24), 0x02; c2 ac 9d 22 3f 02
+	cp (HDAE5000_RAM_LyricJump:24), 0x02; c2 ac 9d 22 3f 02
 	jr nz, .Lsw_exit			; 6e xx
 	; Check bit 8 of aa4c entry
 	ld wa, (HDAE5000_RAM_SaveOptions:24); d2 4c aa 22 20

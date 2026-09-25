@@ -707,13 +707,15 @@ HDAE5000_Browser_PageRows:
 				; ^ = HDAE5000_RAM_SeparateBassPartSent
 	.short 2			; RAM 0x23a0a6
 	.short 0			; RAM 0x23a0a8
-HDAE5000_Dir_EntrySlots:
-	; six 40-byte directory-entry slots from RAM 0x23a0aa; the backup path in
-	; hdae5000_filesystem.s shifts five of them one slot along (0x23a0aa->0x23a0d2)
+HDAE5000_LyricLines_Init:
+	; RAM 0x23a0aa = HDAE5000_RAM_LyricLines: the six 40-byte text lines of the
+	; lyric window; HDAE5000_Lyrics_FillLines (hdae5000_ui_display.s) scrolls
+	; them up one line (0x23a0d2 -> 0x23a0aa) before refilling the last
 	.zero 240
-	.zero 4			; RAM 0x23a19a, unused
-HDAE5000_Workspace_Ptr_Init:
-	.long 0xffffffff	; RAM 0x23a19e (secondary workspace pointer) starts unset
+	.zero 4			; RAM 0x23a19a (set to 1 by HDAE5000_Lyrics_ResetState) and
+				; 0x23a19c (HDAE5000_RAM_LyricLoaded)
+HDAE5000_LyricBoxObj_Init:
+	.long 0xffffffff	; RAM 0x23a19e = HDAE5000_RAM_LyricBoxObj: no lyric box open
 	.zero 10		; RAM 0x23a1a2 (main workspace pointer) + 6 bytes; last byte of
 				; the copied image is 0x23a1ab = 0x23952a + 0x0c82 - 1
 

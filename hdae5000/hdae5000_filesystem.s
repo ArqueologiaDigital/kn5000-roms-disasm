@@ -1466,28 +1466,26 @@ HDAE5000_FlsList_BuildPage:	; 0x287F55 (832 bytes)
 	cp iz, 0x0018
 	jrl c, .LFS_RdFSB__loop	; loop while IZ < 24
 .LFS_RdFSB__loop_done:
-	; --- Register event handlers with UI framework ---
-	; The UI framework uses a vtable-based dispatch system:
-	;   0x23A1A2 → UI framework object pointer
-	;   object + 0x0E0A → active display context
-	;   context + 0x0124 → RegisterEventHandler method
-	;   context + 0x050C → GetCurrentSelection method
-	;   context + 0x0100 → SetDisplayCell method
+	; --- post two events to the list object SEL_FLS ---
+	; (workspace + 0x0E0A = WS_RootFnTable, the main CPU's function table
+	; 0x100; the offsets are the firmware's own function names:
+	; +0x0124 ApPostEvent, +0x050C GetNamingWindowID, +0x0100 SendEvent --
+	; scripts/converters/hdae5000_symbolize_fn_tables.py)
 	lda xwa, (0x22a2ca:24); XWA = display buffer base (handler data ptr)
 	ld xde, xwa
-	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); XWA = UI framework ptr
-	ld xwa, (xwa + WS_RootFnTable)             ; XWA = active display context
-	ld xhl, (xwa + RootFn_ApPostEvent)             ; XHL = RegisterEventHandler method
-	ld xwa, HDAE5000_OBJ_SEL_FLS                      ; params: handlerA, VRAM tile ID 0xFB
-	ld xbc, 0x01ea000a                      ; event mask: register handler A
-	call (xhl)                              ; RegisterEventHandler(handlerA)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
-	ld xwa, HDAE5000_OBJ_SEL_FLS                      ; params: same tile ID
-	ld xbc, 0x01c0000f                      ; event mask: register completion handler
-	ld xde, 0xffffffff                      ; no filter
-	call (xhl)                              ; RegisterEventHandler(completion)
+	ld xwa, HDAE5000_OBJ_SEL_FLS		; object SEL_FLS
+	ld xbc, 0x01ea000a		; event 0x01EA000A
+	call (xhl)		; RootFn_ApPostEvent
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
+	ld xwa, (xwa + WS_RootFnTable)
+	ld xhl, (xwa + RootFn_ApPostEvent)
+	ld xwa, HDAE5000_OBJ_SEL_FLS		; object SEL_FLS
+	ld xbc, 0x01c0000f		; event 0x01C0000F
+	ld xde, 0xffffffff		; param 0xFFFFFFFF
+	call (xhl)		; RootFn_ApPostEvent
 	popw iz                                 ; pop iz (compact)
 	lda xsp, (xsp + 0x16)		; dealloc stack frame
 	ret
@@ -1549,7 +1547,7 @@ HDAE5000_FlsNamingCheck:
 	jrl nz, .LFS_RdFSB__a_done
 	; Sub-code 0x8A: Validate filename string and update display
 	lda xwa, (0x22ad0a:24); XWA = filename string buffer
-	calr HDAE5000_Validate_String            ; validate/sanitize string
+	calr HDAE5000_NameHistory_Recall            ; validate/sanitize string
 	ld xiz, xhl                              ; XIZ = validated string ptr (or NULL)
 	ld xwa, xiz
 	or xwa, xwa
@@ -1564,22 +1562,22 @@ HDAE5000_FlsNamingCheck:
 	push xwa
 	call HDAE5000_MemCopy                            ; MemCopy — copy validated name to tile
 	lda xsp, (xsp + 0x0e)
-	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); UI framework → GetCurrentSelection
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_GetNamingWindowID: the naming window's object id
 	ld xwa, (xwa + WS_RootFnTable)
-	ld xix, (xwa + RootFn_GetNamingWindowID)             ; XIX = GetCurrentSelection method
-	call (xix)                               ; XHL = current selection index
+	ld xix, (xwa + RootFn_GetNamingWindowID)
+	call (xix)		; XHL = the naming window
 	lda xwa, (0x23a06e:24); XDE = tile buffer ptr
 	ld xbc, xwa
-	ld xwa, xhl                              ; XWA = selection index
+	ld xwa, xhl                              ; XWA = the naming window
 	ld xde, xbc                              ; XDE = tile data
-	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24); UI framework → SetDisplayCell
+	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_SendEvent(window, 0x01E00086, name): show the recalled name
 	ld xbc, (xbc + WS_RootFnTable)
-	ld_sril xhl, (xbc + RootFn_SendEvent)             ; XHL = SetDisplayCell method
-	ld xbc, 0x01e00086                       ; event code = write tile + clear dirty
-	call (xhl)                               ; SetDisplayCell(selection, tile, 0x86)
+	ld_sril xhl, (xbc + RootFn_SendEvent)
+	ld xbc, 0x01e00086                       ; event 0x01E00086 (this handler answers it at .LFS_RdFSB__a_evt86)
+	call (xhl)		; RootFn_SendEvent(window, 0x01E00086, name): show the recalled name
 	jr t, .LFS_RdFSB__a_done
 .LFS_RdFSB__a_case0b:			; Sub-code 0x0B: Navigate to item — refresh display
-	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); GetCurrentSelection
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_GetNamingWindowID: the naming window's object id
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xix, (xwa + RootFn_GetNamingWindowID)
 	call (xix)
@@ -1587,7 +1585,7 @@ HDAE5000_FlsNamingCheck:
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
-	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24); SetDisplayCell with evt 0x3A (read tile)
+	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_SendEvent(window, 0x01E0003A, buffer): read the typed name
 	ld xbc, (xbc + WS_RootFnTable)
 	ld_sril xhl, (xbc + RootFn_SendEvent)
 	ld xbc, 0x01e0003a
@@ -1595,7 +1593,7 @@ HDAE5000_FlsNamingCheck:
 	ld wa, (HDAE5000_RAM_CurFls:24); WA = display row base
 	lda xbc, (0x23a06e:24); XBC = tile buffer
 	ld xde, HDAE5000_OBJ_FLS_SELECT                       ; params: left pane tile ID 0xF0
-	calr HDAE5000_Menu_Callback              ; update menu display
+	calr HDAE5000_FlsName_StoreWithUi		; store the name: please-wait, error screen, name history
 	calr HDAE5000_FlsList_BuildPage	; recursive call — refresh page
 .LFS_RdFSB__a_done:
 	ld xhl, 0:i3
@@ -1655,7 +1653,7 @@ HDAE5000_FlsNamingCheck2:
 	jrl nz, .LFS_RdFSB__b_done
 	; Sub-code 0x8A: Validate filename and update display (same as handler A)
 	lda xwa, (0x22ad0a:24); filename string buffer
-	calr HDAE5000_Validate_String
+	calr HDAE5000_NameHistory_Recall
 	ld xiz, xhl
 	ld xwa, xiz
 	or xwa, xwa
@@ -1670,7 +1668,7 @@ HDAE5000_FlsNamingCheck2:
 	push xwa
 	call HDAE5000_MemCopy                            ; MemCopy — name to tile buffer
 	lda xsp, (xsp + 0x0e)
-	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); GetCurrentSelection
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_GetNamingWindowID: the naming window's object id
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xix, (xwa + RootFn_GetNamingWindowID)
 	call (xix)
@@ -1678,14 +1676,14 @@ HDAE5000_FlsNamingCheck2:
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
-	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24); SetDisplayCell(selection, tile, 0x86)
+	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_SendEvent(window, 0x01E00086, name): show the recalled name
 	ld xbc, (xbc + WS_RootFnTable)
 	ld_sril xhl, (xbc + RootFn_SendEvent)
 	ld xbc, 0x01e00086
 	call (xhl)
 	jr t, .LFS_RdFSB__b_done
 .LFS_RdFSB__b_case0b:			; Sub-code 0x0B: Navigate — save and refresh
-	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); GetCurrentSelection
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_GetNamingWindowID: the naming window's object id
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xix, (xwa + RootFn_GetNamingWindowID)
 	call (xix)
@@ -1693,7 +1691,7 @@ HDAE5000_FlsNamingCheck2:
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
-	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24); SetDisplayCell with evt 0x3A
+	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)		; RootFn_SendEvent(window, 0x01E0003A, buffer): read the typed name
 	ld xbc, (xbc + WS_RootFnTable)
 	ld_sril xhl, (xbc + RootFn_SendEvent)
 	ld xbc, 0x01e0003a
@@ -1701,7 +1699,7 @@ HDAE5000_FlsNamingCheck2:
 	ld wa, (HDAE5000_RAM_CurFls:24); WA = display row base
 	lda xbc, (0x23a06e:24); XBC = tile buffer
 	ld xde, HDAE5000_OBJ_FLS_EDIT                       ; params: right pane tile ID 0x0163
-	calr HDAE5000_Menu_Callback              ; update menu display
+	calr HDAE5000_FlsName_StoreWithUi		; store the name: please-wait, error screen, name history
 	ld wa, 1:i3                                ; WA = operation mode 1
 	ld bc, 2:i3                                ; BC = sector count 2
 	calr HDAE5000_FlsScreen_Refresh               ; → write FSB to disk (save operation)
@@ -2253,7 +2251,7 @@ HDAE5000_FlsLoadScreen:
 	calr	HDAE5000_LoadSongWithUi
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 d1 02] jrl Z,0x288c1a
-	cp	(0x229DAC:24), 2
+	cp	(HDAE5000_RAM_LyricJump:24), 2
 	jr nz, .LFWF_897a                      ; [6e 29] jr NZ,0x28897a
 	ld	wa, iz
 	and	wa, 0x0100
@@ -2317,7 +2315,7 @@ HDAE5000_FlsLoadScreen:
 	calr	HDAE5000_LoadSongWithUi
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 fb 01] jrl Z,0x288c1a
-	cp	(0x229DAC:24), 2
+	cp	(HDAE5000_RAM_LyricJump:24), 2
 	jr nz, .LFWF_8a50                      ; [6e 29] jr NZ,0x288a50
 	ld	wa, iz
 	and	wa, 0x0100
@@ -2660,7 +2658,7 @@ HDAE5000_FlsEditScreen:
 	ld_sril	xhl, (xwa + HamaFn_pdly_tim_X)
 	ldw	wa, 0x0064
 	call	(xhl)
-	calr	HDAE5000_Wait_Callback_Loop
+	calr	HDAE5000_YieldUntilSem1Zero
 	ld	wa, 0:i3
 	call HDAE5000_HD_StoreTables
 	cp	hl, 0xffff
@@ -3061,7 +3059,7 @@ HDAE5000_FlsFileSelScreen:
 	ld_sril	xhl, (xwa + HamaFn_pdly_tim_X)
 	ldw	wa, 0x0064
 	call	(xhl)
-	calr	HDAE5000_Wait_Callback_Loop
+	calr	HDAE5000_YieldUntilSem1Zero
 	ld	wa, (HDAE5000_RAM_CurFls:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (HDAE5000_RAM_CurDir:24)
@@ -3213,7 +3211,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xbc, 0x01c00001
 	ld	xde, 5:i3
 	call	(xhl)
-	calr	HDAE5000_Wait_Callback_Loop
+	calr	HDAE5000_YieldUntilSem1Zero
 	ld	wa, (HDAE5000_RAM_CurFls:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (HDAE5000_RAM_CurDir:24)
@@ -4112,7 +4110,7 @@ HDAE5000_CP_FD_DIRNAMECheck:
 	jrl nz, .LFSD__hB_default
 	; Key 0x8A: validate string + copy
 	lda xwa, (0x22abf2:24)
-	calr HDAE5000_Validate_String
+	calr HDAE5000_NameHistory_Recall
 	ld xiz, xhl
 	ld xwa, xiz
 	or xwa, xwa
@@ -4159,7 +4157,7 @@ HDAE5000_CP_FD_DIRNAMECheck:
 	ld wa, (HDAE5000_RAM_CurDir:24)
 	lda xbc, (0x23a06e:24)
 	ld xde, HDAE5000_OBJ_CP_FD_DIRSEL
-	calr HDAE5000_Menu_Handler
+	calr HDAE5000_DirName_StoreWithUi
 	ld xwa, HDAE5000_OBJ_SEL_DIR
 	calr HDAE5000_DirList_BuildPage
 .LFSD__hB_default:
