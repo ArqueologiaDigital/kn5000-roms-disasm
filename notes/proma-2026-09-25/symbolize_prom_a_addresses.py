@@ -48,6 +48,13 @@ RUN
     python3 notes/proma-2026-09-25/symbolize_prom_a_addresses.py                   # dry run
     python3 notes/proma-2026-09-25/symbolize_prom_a_addresses.py --apply
     python3 notes/proma-2026-09-25/symbolize_prom_a_addresses.py --check-equates
+    python3 notes/proma-2026-09-25/symbolize_prom_a_addresses.py --arms --offsets [--apply]
+      --arms   labels an UNLABELLED instruction start that a .long/ld/lda/add names,
+               when unidasm also sees an instruction start there and the bytes are
+               not text: sub_<ADDR> when the code before it is a terminator or data
+               (a routine start), else .L<ADDR>; an `lda` return point is .L<ADDR>
+      --offsets spells a value inside DATA as <nearest data label>+0xN (N <= 0x1000),
+               the object plus its offset; a mid-instruction value stays numeric
     make gate-wsa1
 """
 import argparse
@@ -82,6 +89,8 @@ FORMS = [
     ("add", re.compile(r'^(?P<pre>add\s+' + XR + r'\s*,\s*)' + NUM + r'(?P<post>\s*)$', re.I)),
     ("lda", re.compile(r'^(?P<pre>lda\s+' + XR + r'\s*,\s*\(\s*)' + NUM + r'(?P<post>\s*:\s*24\s*\)\s*)$', re.I)),
 ]
+ABSURD = re.compile(r'^(halt|incf|decf|ldf|normal|max|min)\b|^(jr|jrl)\s+[a-z]+\s*,\s*(0x)?0+$'
+                    r'|^(jr|jrl)\s+f\s*,')
 UNI_MN = {"jp": ("jp",), "call": ("call",), "ld": ("ld",), "add": ("add",), "lda": ("lda",)}
 
 
@@ -152,7 +161,7 @@ def block_of(lines):
         return None
 
 
-def analyse():
+def analyse(arms=False, offsets=False):
     img = snb.image_by_key("prom_a")
     sh(["make", "-C", WSA1, "rebuilt_ROMs/wsa1_prom_a.llvm.elf", "rebuilt_ROMs/wsa1_prom_b.llvm.elf"])
     a_lab, a_names = elf_labels(os.path.join(WSA1, "rebuilt_ROMs/wsa1_prom_a.llvm.elf"))
@@ -178,6 +187,90 @@ def analyse():
     own = a_names - set(eq_now)
     stats = collections.Counter()
     edits, equates = {}, {}
+    import bisect
+    starts = [sp[0] for sp in spans]
+    rom = open(os.path.join(snb.ROOT, img["rom"]), "rb").read()
+    new_labels = {}                 # tli -> name  (inserted before line tli)
+    lab_addrs = sorted(a for a, ns in a_lab.items() if any(not STRUCT.search(n) for n in ns))
+
+    def src_label_at(tli):
+        """a label (any, .L included) written directly above line tli"""
+        j = tli - 1
+        while j >= 0:
+            t = lines[j].strip()
+            m = drc.LABEL_RE.match(t)
+            if m and not snb.code_of(lines[j]):
+                return m.group(1)
+            if t and not t.startswith(";"):
+                return None
+            j -= 1
+        return None
+
+    def plan_new(v, kind):
+        """--arms / --offsets: a name for an unlabelled prom_a address, or None."""
+        k = bisect.bisect_right(starts, v) - 1
+        if k < 0 or spans[k][2] != REL:
+            return None
+        a0, _, _, tli = spans[k]
+        bk, _ = drc.classify_line(lines[tli], macros)
+        if bk == "code" and a0 == v and arms and kind != "add":
+            # (an `add xRR,N` names a TABLE base; one that lands on "code" is
+            #  misframe evidence, not a routine -- never labelled here)
+            if v not in uni:
+                stats["arm_refused_second_decoder"] += 1
+                return None
+            blob = rom[v - 0xF80000:v - 0xF80000 + 16]
+            if sum(0x20 <= c < 0x7F for c in blob) >= 13:
+                stats["arm_refused_text"] += 1
+                return None
+            # R3's rule: no data-as-code marker within 12 statement lines either side
+            near, j = [], tli - 1
+            while j >= 0 and len(near) < 12:
+                c = snb.code_of(lines[j]).lower()
+                if c:
+                    near.append(c)
+                j -= 1
+            j = tli
+            while j < len(lines) and len(near) < 24:
+                c = snb.code_of(lines[j]).lower()
+                if c:
+                    near.append(c)
+                j += 1
+            if any(ABSURD.match(c) for c in near) or sum(c == "nop" for c in near) >= 2:
+                stats["arm_refused_absurd_neighbourhood"] += 1
+                return None
+            have = src_label_at(tli)
+            if have:
+                return have
+            if tli in new_labels:
+                return new_labels[tli]
+            prev = None
+            for j in range(tli - 1, max(-1, tli - 400), -1):
+                bj, _ = drc.classify_line(lines[j], macros)
+                if bj in ("data", "fill"):
+                    prev = "DATA"
+                    break
+                if bj == "code":
+                    prev = snb.code_of(lines[j]).lower()
+                    break
+            routine = prev == "DATA" or (prev and re.match(r'^(ret|reti|retd|jp\s+[^,]+$|jr\s+[^,]+$|jrl\s+[^,]+$)', prev))
+            name = ("sub_%06X" if (routine and kind != "lda") else ".L%06X") % v
+            new_labels[tli] = name
+            return name
+        if bk in ("data", "fill") and offsets:
+            j = bisect.bisect_right(lab_addrs, v) - 1
+            if j < 0 or v - lab_addrs[j] > 0x1000:
+                return None
+            base = lab_addrs[j]
+            kb = bisect.bisect_right(starts, base) - 1
+            if kb < 0 or spans[kb][2] != REL:
+                return None
+            bb, _ = drc.classify_line(lines[spans[kb][3]], macros)
+            if bb not in ("data", "fill"):
+                return None
+            nm = sorted([n for n in a_lab[base] if not STRUCT.search(n)], key=lambda n: rank(n, order))[0]
+            return nm if base == v else "%s+0x%X" % (nm, v - base)
+        return None
     for li, text in enumerate(lines):
         if blk and blk[0] <= li <= blk[1]:
             continue
@@ -201,7 +294,10 @@ def analyse():
             continue
         stats["candidate_%s_%s" % (kind, img_of)] += 1
         cands = a_lab.get(v, []) if img_of == "a" else [n for n in b_lab.get(v, []) if n not in own]
-        if not cands:
+        made = None
+        if not cands and img_of == "a" and (arms or offsets):
+            made = plan_new(v, kind)
+        if not cands and not made:
             stats["no_label_%s_%s" % (kind, img_of)] += 1
             continue
         if kind != "long":
@@ -217,7 +313,9 @@ def analyse():
             if not ok:
                 stats["refused_second_decoder_%s" % kind] += 1
                 continue
-        name = sorted(cands, key=lambda n: rank(n, order))[0]
+        name = made or sorted(cands, key=lambda n: rank(n, order))[0]
+        if made:
+            stats["made_%s_%s" % ("offset" if "+" in made else "label", kind)] += 1
         if img_of == "b":
             equates[name] = v
         new_code = m.group("pre") + name + m.group("post").rstrip()
@@ -229,7 +327,7 @@ def analyse():
             edits[li] = lead + new_code
         stats["replaced_%s_%s" % (kind, img_of)] += 1
     return dict(lines=lines, edits=edits, equates=equates, stats=stats, blk=blk, eq_now=eq_now,
-                b_lab=b_lab)
+                b_lab=b_lab, new_labels=new_labels)
 
 
 def render_block(equates):
@@ -248,8 +346,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--check-equates", action="store_true")
+    ap.add_argument("--arms", action="store_true",
+                    help="also LABEL unlabelled instruction starts that a .long/ld/lda/add names "
+                         "(unidasm must see an instruction start there; sub_<ADDR> after a "
+                         "terminator or data, else .L<ADDR>; lda return points are .L)")
+    ap.add_argument("--offsets", action="store_true",
+                    help="also spell a value inside DATA as <nearest data label>+0xN (N <= 0x1000)")
     a = ap.parse_args()
-    res = analyse()
+    res = analyse(a.arms, a.offsets)
     if a.check_equates:
         bad = [(n, v) for n, v in res["eq_now"].items() if n not in res["b_lab"].get(v, [])]
         for n, v in bad:
@@ -264,6 +368,8 @@ def main():
     lines = list(res["lines"])
     for li, t in res["edits"].items():
         lines[li] = t
+    for tli in sorted(res["new_labels"], reverse=True):
+        lines[tli:tli] = ["%s:" % res["new_labels"][tli]]
     eq = dict(res["eq_now"])
     eq.update(res["equates"])
     blk = block_of(lines)
@@ -274,7 +380,8 @@ def main():
         i = lines.index(ANCHOR)
         lines[i + 1:i + 1] = new_blk
     open(PATH, "wb").write("\n".join(lines).encode("latin-1"))
-    print("APPLIED: %d operands, %d equates" % (len(res["edits"]), len(eq)))
+    print("APPLIED: %d operands, %d equates, %d labels inserted" % (len(res["edits"]), len(eq),
+                                                                  len(res["new_labels"])))
 
 
 if __name__ == "__main__":
