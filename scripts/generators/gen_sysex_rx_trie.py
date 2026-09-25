@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-r"""INCOMING-SYSEX RECOGNITION TRIE (maincpu 0xEE3678-0xEE4A0F): prove, emit, apply.
+r"""INCOMING-SYSEX RECOGNITION TRIE (maincpu 0xEE3678-0xEE49E7): prove, emit, apply.
 
 QUESTION ANSWERED
 -----------------
@@ -7,7 +7,9 @@ What are the bytes the tree called DisplayScript_NullNode .. DisplayScript_NodeC
 and WidgetParam_Entry_000..018 (partly decoded as `swi 7 / jrl -4554 / reti`)?
 An array of 817 six-byte entries {u8 key, u8 action, u32 next} that the MIDI
 receive code walks to recognise system-exclusive messages byte by byte,
-followed by four small tables.
+followed by three small tables.  (The MIDI control records that start at
+0xEE49E8 were first emitted here as one 40-byte object; they are now typed by
+notes/uimisc-specs/mk_spec_ee49e8.py, so this generator stops at 0xEE49E8.)
 
 THE READER (midi/*, v10 addresses; the routine names there are older guesses)
   MidiSeq_AssignVoiceSlots 0xFD5F57 / MidiSeq_ScanSlot0_Loop 0xFD5F74:
@@ -29,14 +31,15 @@ WHAT --probe ASSERTS
   2. no 32-bit word outside the array points into it on its 6-byte grid (an
      entry or an entry's +2); the only instruction references are 0xEE493E and
      0xEE4940 (the root list and its +2 field);
-  3. v10, v9 and v7 hold identical bytes over 0xEE3678-0xEE4A0F.
+  3. v10, v9 and v7 hold identical bytes over 0xEE3678-0xEE49E7.
 
 RUN
     python3 scripts/generators/gen_sysex_rx_trie.py --probe
     python3 scripts/generators/gen_sysex_rx_trie.py --apply v10 v9 v7
       (needs a fresh line map: uses scripts/analysis/file_line_addresses.py;
-       replaces the lines from 0xEE3678 up to the line at 0xEE4A10, i.e. up to
-       `ToneKit_FrequencyTable:` and the comments above it; then `make gate`)
+       replaces the lines from 0xEE3678 up to the line at 0xEE49E8 and the
+       comments above it; first application only -- it refuses a block that
+       already holds comments; then `make gate`)
 """
 import argparse
 import os
@@ -46,7 +49,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 B = 0xE00000
-LO, END_TRIE, HI = 0xEE3678, 0xEE499E, 0xEE4A10
+LO, END_TRIE, HI = 0xEE3678, 0xEE499E, 0xEE49E8
 N = (END_TRIE - LO) // 6
 ROOT_E = 801
 KEEP_ALIAS = {795: "WidgetParam_Entry_018"}   # shared/positional_labels.s base
@@ -148,15 +151,6 @@ def emit(d):
     w("; (`ld xiy,<this>; ld xix,xde; ldw bc,8; ldirw`).")
     w("ArpQueue_InitTemplate:")
     w("\t.byte " + ", ".join("0x%02x" % b for b in d[0xEE49D8 - B:0xEE49E8 - B]))
-    w("; 40 bytes of MIDI control records.  0xEE49E8 is the sentinel")
-    w("; MidiPkt_MatchParamInTable (0xFDA258) stops at (`lda xix,(<this>)`, `cp xix,xhl;")
-    w("; ret z`) and MidiPkt_EnqueueControl_3354 (0xFDA278) compares record pointers against;")
-    w("; readers take +2/+3/+7/+8/+11 of such records.  Record boundaries inside")
-    w("; these 40 bytes (and in the records after them) are not established yet.")
-    w("MidiCtl_SentinelRecord:")
-    seg = d[0xEE49E8 - B:HI - B]
-    for j in range(0, len(seg), 10):
-        w("\t.byte " + ", ".join("0x%02x" % b for b in seg[j:j + 10]))
     return "\n".join(L) + "\n"
 
 

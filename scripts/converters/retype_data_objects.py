@@ -107,10 +107,15 @@ RENAMES = {}
 NEAREST = {"on": False, "addrs": None, "v10": None}
 
 
+SPEC_SYMS = {}   # lo -> label of every object in the spec (new names win)
+
+
 def symname(v, syms, at=None):
-    """Exact label; else (with --nearest, for ROM code/data addresses)
-    `Nearest + N` plus a note, the form the v7 tree already used for pointers
-    whose target has no label; else hex."""
+    """A label this spec defines at v; else an exact existing label; else (with
+    --nearest, for ROM code/data addresses) `Nearest + N` plus a note, the form
+    the v7 tree already used for pointers whose target has no label; else hex."""
+    if v in SPEC_SYMS:
+        return SPEC_SYMS[v]
     if v in syms and v:
         n = syms[v][0]
         return RENAMES.get(n, n)
@@ -216,7 +221,7 @@ def render(obj, data, lo, syms, keep_labels):
             for nm in keep_labels[a]:
                 out.append("%s:" % nm)
         v = int.from_bytes(data[i:i + size], "little")
-        if t == "long" and a in OLD_LONG:
+        if t == "long" and a in OLD_LONG and v not in SPEC_SYMS:
             txt = OLD_LONG[a]           # keep the operand the source already used
             txt = RENAMES.get(txt, txt)
         elif t == "long":
@@ -304,6 +309,8 @@ def main():
     if isinstance(spec, dict):
         RENAMES.update(spec.get("renames", {}))
         spec = spec["objects"]
+    for o in spec:
+        SPEC_SYMS.setdefault(int(o["lo"], 0), o["label"])
     path = os.path.join(ROOT, a.image, "maincpu", a.file)
     ent = fla.build(a.image, a.file)
     rom = open(os.path.join(ROOT, "original_ROMs/kn5000_%s_program.rom" % a.image), "rb").read()
