@@ -31,6 +31,13 @@
 ; SLIDE_Decompress_8K_Init).  Each database decompresses to exactly 0x9000
 ; bytes: a self-referential pointer table plus help-string pool, based at
 ; RAM 0x69800.  Strings use "~0d" as the newline escape.
+; Precisely (v10, 2026-09-25): HelpLang_SetFlashAndLoadSlide (0xF4779A) and
+; HelpLang_LoadSlide (0xF477BA) both do ld a,(0x0340E4) / sll a,2 / add
+; xwa,0x988018 / ld xwa,(xwa) / ld xbc,0x69800 / call SLIDE_Parse_Header
+; (0xEF41E3); HelpMenuCheck (0xF2E718) returns 0x988000 (the intro-string
+; table) for message 0x1E0009F.  Each of the five live decompressed
+; databases is 200 absolute 32-bit pointers at RAM 0x69800-0x69B1F into a
+; NUL-terminated string pool that starts at 0x69B20.
 ;
 ; SLIDE8K CONTAINER (see scripts/build/decompress_slide8k.py for the full
 ; format, and SLIDE_Decompress_8K_Init for the hardware decoder):
@@ -114,6 +121,8 @@ HelpIntro_LanguageTable:
 	.long	Str_HelpIntro_English	; slot 4: no 5th translation, reuses English
 	.long	Str_HelpIntro_Indonesian
 
+; read by HelpLang_LoadSlide (0xF477BA) / HelpLang_SetFlashAndLoadSlide
+; (0xF4779A) at 0x988018 + 4 * (RAM 0x0340E4)
 HelpDB_LanguageTable:
 	.long	HelpDB_English
 	.long	HelpDB_German
@@ -128,6 +137,8 @@ HelpDB_LanguageTable:
 ; start on even addresses; a single arbitrary-value filler byte follows a
 ; string whose terminator lands on an even address.
 ; -----------------------------------------------------------------------------
+; HelpIntro_LanguageTable slot 0 and 4 (the table HelpMenuCheck, 0xF2E718,
+; hands out); Latin-1, "~0d" = newline
 Str_HelpIntro_English:
 	.ascii	"After pressing the Help button, press any button on the KN5000 and the "
 	.ascii	"screen will give you information about the button's use. Press the HELP "
@@ -136,6 +147,8 @@ Str_HelpIntro_English:
 	.asciz	"and press OK.~0d"
 	.byte	0xAC			; even-alignment filler (arbitrary leftover value)
 
+; HelpIntro_LanguageTable slot 1 (the table HelpMenuCheck, 0xF2E718,
+; hands out); Latin-1, "~0d" = newline
 Str_HelpIntro_German:
 	.ascii	"Dr\374cken Sie eine beliebige Taste am KN5000 und das Display gibt Ihnen "
 	.ascii	"Informationen \374ber die Funktion der gew\344hlten Taste. Mit den Tasten HELP "
@@ -144,6 +157,8 @@ Str_HelpIntro_German:
 	.asciz	"best\344tigen Sie mit OK.~0d"
 	.byte	0x00			; even-alignment filler
 
+; HelpIntro_LanguageTable slot 2 (the table HelpMenuCheck, 0xF2E718,
+; hands out); Latin-1, "~0d" = newline
 Str_HelpIntro_French:
 	.ascii	"Apr\350s avoir activ\351 le bouton Help, pressez n'importe quel bouton du "
 	.ascii	"KN5000 et l'\351cran vous donnera des informations sur la d\351finition et "
@@ -152,6 +167,8 @@ Str_HelpIntro_French:
 	.ascii	"situ\351s en haut de l'\351cran, s\351lectionnez une langue d'affichage de HELP, "
 	.asciz	"puis pressez OK.~0d"
 
+; HelpIntro_LanguageTable slot 3 (the table HelpMenuCheck, 0xF2E718,
+; hands out); Latin-1, "~0d" = newline
 Str_HelpIntro_Spanish:
 	.ascii	"Despu\351s de oprimir el bot\363n HELP (ayuda), presione cualquier bot\363n del "
 	.ascii	"KN5000 y la pantalla le suministrar\341 informaci\363n acerca del mismo. "
@@ -159,6 +176,8 @@ Str_HelpIntro_Spanish:
 	.ascii	"la funci\363n de ayuda.~0dUtilice los botones en la parte inferior de esta "
 	.asciz	"pantalla para cambiar el idioma del Help (Ayuda) y oprima OK.~0d"
 
+; HelpIntro_LanguageTable slot 5 (the table HelpMenuCheck, 0xF2E718,
+; hands out); Latin-1, "~0d" = newline
 Str_HelpIntro_Indonesian:
 	.ascii	"Setelah menekan tombol Help, tekan sembarang tombol pada KN5000 dan "
 	.ascii	"layar akan memberikan informasi kepada anda mengenai fungsi tombol "
@@ -171,26 +190,51 @@ Str_HelpIntro_Indonesian:
 ; build).  Blocks tile contiguously: each *_compressed.bin ends with the one
 ; alignment pad byte, so the next block starts immediately after it.
 ; -----------------------------------------------------------------------------
+; English help database: HelpDB_LanguageTable slot 0 and slot 4 (RAM 0x0340E4 value).
+; HelpLang_LoadSlide (0xF477BA) passes it to SLIDE_Parse_Header (0xEF41E3),
+; whose '8' branch runs SLIDE_Decompress_8K_Init (0xEF40C5) into RAM
+; 0x69800: 0x9000 B = 200 pointers + string pool.  Source (decompressed):
+; includes/help_databases/help_db_english.bin.
 HelpDB_English:
 	.asciz	"SLIDE8K"
 	.byte	0x00, 0x90, 0x00	; decompressed size = 0x9000 (24-bit big-endian)
 	.incbin	"includes/help_databases/help_db_english_compressed.bin"
 
+; German help database: HelpDB_LanguageTable slot 1 (RAM 0x0340E4 value).
+; HelpLang_LoadSlide (0xF477BA) passes it to SLIDE_Parse_Header (0xEF41E3),
+; whose '8' branch runs SLIDE_Decompress_8K_Init (0xEF40C5) into RAM
+; 0x69800: 0x9000 B = 200 pointers + string pool.  Source (decompressed):
+; includes/help_databases/help_db_german.bin.
 HelpDB_German:
 	.asciz	"SLIDE8K"
 	.byte	0x00, 0x90, 0x00	; decompressed size = 0x9000 (24-bit big-endian)
 	.incbin	"includes/help_databases/help_db_german_compressed.bin"
 
+; French help database: HelpDB_LanguageTable slot 2 (RAM 0x0340E4 value).
+; HelpLang_LoadSlide (0xF477BA) passes it to SLIDE_Parse_Header (0xEF41E3),
+; whose '8' branch runs SLIDE_Decompress_8K_Init (0xEF40C5) into RAM
+; 0x69800: 0x9000 B = 200 pointers + string pool.  Source (decompressed):
+; includes/help_databases/help_db_french.bin.
 HelpDB_French:
 	.asciz	"SLIDE8K"
 	.byte	0x00, 0x90, 0x00	; decompressed size = 0x9000 (24-bit big-endian)
 	.incbin	"includes/help_databases/help_db_french_compressed.bin"
 
+; Spanish help database: HelpDB_LanguageTable slot 3 (RAM 0x0340E4 value).
+; HelpLang_LoadSlide (0xF477BA) passes it to SLIDE_Parse_Header (0xEF41E3),
+; whose '8' branch runs SLIDE_Decompress_8K_Init (0xEF40C5) into RAM
+; 0x69800: 0x9000 B = 200 pointers + string pool.  Source (decompressed):
+; includes/help_databases/help_db_spanish.bin.
 HelpDB_Spanish:
 	.asciz	"SLIDE8K"
 	.byte	0x00, 0x90, 0x00	; decompressed size = 0x9000 (24-bit big-endian)
 	.incbin	"includes/help_databases/help_db_spanish_compressed.bin"
 
+; Indonesian help database: HelpDB_LanguageTable slot 5 (RAM 0x0340E4 value).
+; HelpLang_LoadSlide (0xF477BA) passes it to SLIDE_Parse_Header (0xEF41E3),
+; whose '8' branch runs SLIDE_Decompress_8K_Init (0xEF40C5) into RAM
+; 0x69800: 0x9000 B = 200 pointers + string pool.  Source (decompressed):
+; includes/help_databases/help_db_indonesian.bin.
 HelpDB_Indonesian:
 	.asciz	"SLIDE8K"
 	.byte	0x00, 0x90, 0x00	; decompressed size = 0x9000 (24-bit big-endian)

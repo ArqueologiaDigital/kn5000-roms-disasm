@@ -42,6 +42,13 @@ CHECKS (the signal each one reads)
     demo        the 19 SLIDE4K blocks behind DemoSongPreset_PointerTable: magic,
                 big-endian size == len(decompressed .bin), "ZZZZ" image head,
                 and the 16-char field at +0x100 the headers quote.
+    helpdb      0x988000/0x988018 six-slot tables (slot 4 == slot 0); every
+                live block starts "SLIDE8K\0" 00 90 00; each decompressed
+                database is 200 pointers into a string pool at RAM 0x69B20.
+    panelmem    80 records x 674 B at 0x99ECA0, each a 34-chunk (tag, length,
+                payload) stream ending 0xFF 0xFF.
+    stylerec    the 96-byte residue after StyleRec_PtrTable_Default (0x987FA0)
+                equals ROM 0x98FF98..0x98FFF7, inside HelpDB_French.
 """
 import os
 import re
@@ -244,8 +251,61 @@ def check_demo():
     return ok
 
 
+def check_helpdb():
+    ok = True
+    intro = [struct.unpack("<I", td(0x988000 + 4 * i, 4))[0] for i in range(6)]
+    dbs = [struct.unpack("<I", td(0x988018 + 4 * i, 4))[0] for i in range(6)]
+    ok &= intro[4] == intro[0] and dbs[4] == dbs[0]
+    print("  intro table %s" % [hex(x) for x in intro])
+    print("  db table    %s" % [hex(x) for x in dbs])
+    for l in ("english", "german", "french", "spanish", "indonesian"):
+        b = open(os.path.join(ROOT, "table_data/includes/help_databases/help_db_%s.bin" % l), "rb").read()
+        p = [struct.unpack_from("<I", b, 4 * i)[0] for i in range(200)]
+        good = len(b) == 0x9000 and all(0x69B20 <= v < 0x69800 + 0x9000 and b[v - 0x69800 - 1] == 0
+                                        for v in p if v != 0x69B20)
+        ok &= good
+        print("  %-12s %d B, 200 pointers into the pool at 0x69B20: %s" % (l, len(b), good))
+    for a in dbs[:4] + dbs[5:]:
+        ok &= td(a, 11) == b"SLIDE8K\0\x00\x90\x00"
+    return ok
+
+
+def check_panelmem():
+    ok = True
+    names = td(0x99EC00, 160)
+    print("  bank names: %s" % [names[16 * i:16 * i + 16].decode() for i in range(10)])
+    for i in range(80):
+        r = td(0x99ECA0 + 674 * i, 674)
+        good = r[:2] == bytes([0x78, 18]) and r[-2:] == b"\xff\xff"
+        # walk the chunk stream: (tag, len, payload) until tag 0xff
+        p, n = 0, 0
+        while r[p] != 0xFF:
+            p += 2 + r[p + 1]
+            n += 1
+        good &= p == 672 and n == 34
+        ok &= good
+        if not good:
+            print("  record %d BAD (end %d, %d chunks)" % (i, p, n))
+    print("  80 records x 674 B at 0x99ECA0: each a 34-chunk (tag,len,payload) stream"
+          " ending 0xFF 0xFF: %s" % ok)
+    return ok
+
+
+def check_stylerec():
+    r = td(0x987FA0, 96)
+    dup = td(0x98FF98, 96)
+    first = TD.find(r)
+    second = TD.find(r, first + 1)
+    print("  Default-page residue == ROM 0x98FF98..+96 (HelpDB_French +0x%X): %s;"
+          " occurrences at 0x%06X, 0x%06X" % (0x98FF98 - 0x98F0DA, r == dup,
+                                             first + TD_BASE, second + TD_BASE))
+    return r == dup and 0x98F0DA <= 0x98FF98 < 0x992A0C
+
+
 CHECKS = {"sec07": check_sec07, "accessors": check_accessors, "sec10pad": check_sec10pad,
-          "fdemo": check_fdemo, "wallpaper": check_wallpaper, "demo": check_demo}
+          "fdemo": check_fdemo, "wallpaper": check_wallpaper, "demo": check_demo,
+          "helpdb": check_helpdb, "panelmem": check_panelmem,
+          "stylerec": check_stylerec}
 
 
 def main():
