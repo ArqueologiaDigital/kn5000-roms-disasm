@@ -48,11 +48,32 @@ AudioMode_CopyAccentFlags:
 	ld (0x3362:16), a
 	ret
 
-AccPedal_BytecodeBlock1:
-	.byte 0x28, 0x3d, 0xc1, 0x63, 0x33, 0x3c, 0xfe, 0x45
-	.byte 0x00, 0x48, 0x09, 0x00, 0xed, 0xc8, 0x10, 0x00
-	.byte 0x00, 0x00, 0x85, 0x21, 0xc9, 0x33, 0x00, 0x66
-	.byte 0x05, 0xc1, 0x63, 0x33, 0x3e, 0x01, 0x5d, 0x48
+; -----------------------------------------------------------------------------
+; AccPedal_LoadFlagFromStyleMem -- bit 0 of RAM 0x3363 (13155) :=
+; bit 0 of the byte at RAM 0x094810.  Preserves WA and XIY.
+; 0x094800 is the RAM copy of the composer factory user-style memory
+; (technics-docs memory-map.md: table data 0x9B4000-0x9C3FFF is copied to RAM
+; 0x94800), so the byte read is offset 0x10 of that image.  Sibling of
+; AccPedal_SetFlag13155 below, which sets the same bit unconditionally.
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v10 0xF537A9 finds no
+; absolute 24-bit reference in any KN5000 image and no calr/jr/jrl landing
+; here (computed word-offset jumps not searched).  Was `.byte` until
+; 2026-09-25; decodes cleanly, both decoders agree
+; (notes/sequi-2026-09-25/reframe-v10-seq_audio_mode.log).
+; -----------------------------------------------------------------------------
+AccPedal_LoadFlagFromStyleMem:
+	pushw wa
+	push xiy
+	and (0x3363:16), 0xfe
+	ld xiy, 0x00094800
+	add xiy, 16
+	ld a, (xiy)
+	bit 0, a
+	jr z, AccPedal_LoadFlagFromStyleMem_Done
+	or (0x3363:16), 0x01
+AccPedal_LoadFlagFromStyleMem_Done:
+	pop xiy
+	popw wa
 	ret
 
 AccPedal_SetFlag13155:
@@ -63,11 +84,24 @@ AccPedal_SetFlag13155:
 	popw wa
 	ret
 
-AccPedal_PartOffsetTable:
-	.byte 0x00, 0x00, 0x30, 0x00, 0x00, 0x98, 0x31, 0x00
-	.byte 0x00, 0x00, 0x33, 0x00, 0x00, 0x98, 0x34, 0x00
-	.byte 0x00, 0x00, 0x36, 0x00, 0x00, 0x98, 0x37, 0x00
-	.byte 0x00, 0x00, 0x39, 0x00
+; -----------------------------------------------------------------------------
+; AccPedal_BankBaseTableCopy -- 7 x 32-bit addresses, value-for-value the same
+; as AccVoice_BankBaseTable entries 1-7 (all in the Custom Data Flash window
+; 0x300000-0x3FFFFF).  Extent: from here to AccPedal_ProcessAllChanges, a
+; called routine (28 bytes = 7 longs).
+; NO READER FOUND: scripts/analysis/sequi_find_refs.py v10 --window 64 0xF537D4
+; -- the only hits are the call to AccPedal_ProcessAllChanges (+28), operand
+; bytes of unrelated instructions and table-data bytes.  Kept as data: the bytes
+; do not decode as code (0x98 at +5 is undecodable) and they follow a `ret`.
+; -----------------------------------------------------------------------------
+AccPedal_BankBaseTableCopy:
+	.long 0x00300000
+	.long 0x00319800
+	.long 0x00330000
+	.long 0x00349800
+	.long 0x00360000
+	.long 0x00379800
+	.long 0x00390000
 
 AccPedal_ProcessAllChanges:
 	xor wa, wa
@@ -182,15 +216,38 @@ AccChannel_StoreCurrentState:
 	ld (0x32e8:16), a
 	ret
 
-AccChannel_BytecodeBlock2:
-	.byte 0xc1, 0xf5, 0x32, 0x21, 0xc1, 0xf6, 0x32, 0xf1
-	.byte 0x6e, 0x1d, 0xc9, 0xcf, 0x80, 0x6f, 0x2e, 0xc1
-	.byte 0xf7, 0x32, 0x21, 0xc9, 0xcc, 0x7f, 0xc9, 0xcc
-	.byte 0x07, 0xc1, 0xf8, 0x32, 0x20, 0xc8, 0xcc, 0x7f
-	.byte 0xc8, 0xcc, 0x07, 0xc8, 0xf1, 0x66, 0x16, 0xc1
-	.byte 0xf5, 0x32, 0x21, 0xf1, 0xe7, 0x32, 0x41, 0xc1
-	.byte 0xf7, 0x32, 0x21, 0xc8, 0xcc, 0x7f, 0xc8, 0xcc
-	.byte 0x07, 0xf1, 0xe8, 0x32, 0x41, 0x0e
+; -----------------------------------------------------------------------------
+; AccChannel_StoreStateIfChanged -- the conditional form of
+; AccChannel_StoreCurrentState (just above): when RAM 0x32F5 differs from
+; 0x32F6, or it is below 0x80 and the low 3 bits of 0x32F7 and 0x32F8 differ,
+; copy 0x32F5 -> 0x32E7 and 0x32F7 -> 0x32E8.  (Like the routine above, the
+; `and w` masks are applied to W, not to the A that is stored.)
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v10 0xF538EC (forms as
+; above).  Was `.byte` until 2026-09-25; decodes cleanly, both decoders agree.
+; -----------------------------------------------------------------------------
+AccChannel_StoreStateIfChanged:
+	ld a, (0x32f5:16)
+	cp a, (0x32f6:16)
+	jr nz, AccChannel_StoreStateIfChanged_Store
+	cp a, 128
+	jr nc, AccChannel_StoreStateIfChanged_Return
+	ld a, (0x32f7:16)
+	and a, 127
+	and a, 7
+	ld w, (0x32f8:16)
+	and w, 127
+	and w, 7
+	cp a, w
+	jr z, AccChannel_StoreStateIfChanged_Return
+AccChannel_StoreStateIfChanged_Store:
+	ld a, (0x32f5:16)
+	ld (0x32e7:16), a
+	ld a, (0x32f7:16)
+	and w, 127
+	and w, 7
+	ld (0x32e8:16), a
+AccChannel_StoreStateIfChanged_Return:
+	ret
 
 AccChannel_SetDirtyIfActive:
 	ld wa, (0x32e3:16)
@@ -606,7 +663,7 @@ AccVoice_ComputeParamOffset:
 	ld a, (0x32e6:16)
 	extz wa
 	sla wa, 2
-	ld xix, AccVoice_PartOffsetTable2
+	ld xix, AccVoice_BankBaseTable
 	ld_sril3 XIX, 0x07, 0xf0, 0xe0
 	add xiy, xix
 	add xiy, 0x60
@@ -614,11 +671,33 @@ AccVoice_ComputeParamOffset:
 	pop xwa
 	ret
 
-AccVoice_PartOffsetTable2:
-	.byte 0x00, 0x48, 0x09, 0x00, 0x00, 0x00, 0x30, 0x00
-	.byte 0x00, 0x98, 0x31, 0x00, 0x00, 0x00, 0x33, 0x00
-	.byte 0x00, 0x98, 0x34, 0x00, 0x00, 0x00, 0x36, 0x00
-	.byte 0x00, 0x98, 0x37, 0x00, 0x00, 0x00, 0x39, 0x00
+; -----------------------------------------------------------------------------
+; AccVoice_BankBaseTable -- 8 x 32-bit base addresses indexed by RAM byte
+; 0x32E6.
+; Reader: AccVoice_ComputeParamOffset (0xF53D2E, the tail of
+; AccVoice_ResolveParamAddr 0xF53D20): `ld xix, AccVoice_BankBaseTable` then
+; `ld_sril3 XIX, 0x07, 0xf0, 0xe0` = ld xix, (xix + wa) with wa = (0x32E6)*4.
+; The entry is added to the 32-bit offset the routine first loaded from
+; RhythmTiming_OffsetTable[A] (A clamped to 0..0x1D), plus 0x60; the sum is
+; returned in XIY.  So each entry is the base of a bank that those offsets
+; index into.
+; Stride 4 (the reader's `sla wa, 2`); 8 entries = 32 bytes, from here to
+; AccVoice_ComputeChannelIndex (a called routine).
+; Entry 0 is RAM 0x094800, the RAM copy of the composer factory user-style
+; memory (technics-docs memory-map.md); entries 1-7 lie in the Custom Data
+; Flash window 0x300000-0x3FFFFF, alternately 0x19800 and 0x16800 apart.
+; Which style slot each bank index stands for is decided by the writers of the
+; index byte, which were not examined for this header.
+; -----------------------------------------------------------------------------
+AccVoice_BankBaseTable:
+	.long 0x00094800
+	.long 0x00300000
+	.long 0x00319800
+	.long 0x00330000
+	.long 0x00349800
+	.long 0x00360000
+	.long 0x00379800
+	.long 0x00390000
 
 AccVoice_ComputeChannelIndex:
 	and h, 0x7
@@ -1328,22 +1407,77 @@ VoiceParams_LoadFiveSequential:
 	call Rhythm_SendByte
 	ret
 
-AccVoice_BytecodeBlock3:
-	.byte 0x1e, 0x0d, 0x00, 0x1e, 0x15, 0x00, 0x1e, 0x1d
-	.byte 0x00, 0x1e, 0x25, 0x00, 0x1e, 0x2d, 0x00, 0x0e
-	.byte 0xf1, 0x46, 0x32, 0x00, 0x06, 0xf1, 0x47, 0x32
-	.byte 0x00, 0x00, 0x0e, 0xf1, 0x4d, 0x32, 0x00, 0x00
-	.byte 0xf1, 0x4e, 0x32, 0x00, 0x00, 0x0e, 0xf1, 0x54
-	.byte 0x32, 0x00, 0x00, 0xf1, 0x55, 0x32, 0x00, 0x00
-	.byte 0x0e, 0xf1, 0x5b, 0x32, 0x00, 0x00, 0xf1, 0x5c
-	.byte 0x32, 0x00, 0x00, 0x0e, 0xf1, 0x62, 0x32, 0x00
-	.byte 0x00, 0xf1, 0x63, 0x32, 0x00, 0x00, 0x0e, 0xf1
-	.byte 0xf5, 0x32, 0x00, 0x0f, 0xc1, 0xf7, 0x32, 0x3c
-	.byte 0xf8, 0xc1, 0xf7, 0x32, 0x3e, 0x00, 0x0e, 0x0e
-	.byte 0x1d, 0xe9, 0x5b, 0xf5, 0xf1, 0x2b, 0x33, 0x45
-	.byte 0x0e, 0xc1, 0x5a, 0xfc, 0x21, 0xc1, 0x5b, 0xfc
-	.byte 0x24, 0x1d, 0xb3, 0x5b, 0xf5, 0xf1, 0x2b, 0x33
-	.byte 0x41, 0x0e
+; -----------------------------------------------------------------------------
+; Nine small routines between VoiceParams_LoadFiveSequential and
+; RhythmROM_CheckValid, `.byte` until 2026-09-25.  Both decoders agree on every
+; instruction (notes/sequi-2026-09-25/reframe-v10-seq_audio_mode.log), every
+; internal calr lands on an instruction boundary, and the calls reach the
+; independently known Rhythm_DispatchNote / Rhythm_DispatchNote_Helper.
+; NO CALLER FOUND for the five entry points that nothing here calls
+; (AccTuning_ResetFiveParts, AccChannel_ResetCurrentState,
+; AccVoice_EmptyStub, Rhythm_StoreDispatchHelperResult,
+; Rhythm_DispatchNoteFromFC5A): scripts/analysis/sequi_find_refs.py v10
+; 0xF544BD 0xF54504 0xF54514 0xF54515 0xF5451E -> none.
+; -----------------------------------------------------------------------------
+
+; Writes the first two bytes of the first five 7-byte records at RAM 0x3246,
+; 0x324D, 0x3254, 0x325B, 0x3262 (record 0 byte 0 := 6, the other nine := 0).
+; Those are the per-part tuning records: AccTuning_CopyAllPartsFromStyle
+; copies 7 bytes per part from the style into 0x3246, 0x324D, ...;
+; AccVoice_LoadTuningBlock copies all 0x31 bytes (7 records) at once.
+AccTuning_ResetFiveParts:
+	calr AccTuning_ResetFiveParts_Rec0
+	calr AccTuning_ResetFiveParts_Rec1
+	calr AccTuning_ResetFiveParts_Rec2
+	calr AccTuning_ResetFiveParts_Rec3
+	calr AccTuning_ResetFiveParts_Rec4
+	ret
+AccTuning_ResetFiveParts_Rec0:
+	ld (0x3246:16), 6
+	ld (0x3247:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec1:
+	ld (0x324d:16), 0
+	ld (0x324e:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec2:
+	ld (0x3254:16), 0
+	ld (0x3255:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec3:
+	ld (0x325b:16), 0
+	ld (0x325c:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec4:
+	ld (0x3262:16), 0
+	ld (0x3263:16), 0
+	ret
+
+; RAM 0x32F5 := 15 and the low 3 bits of 0x32F7 := 0 -- the two bytes
+; AccChannel_StoreCurrentState copies out.
+AccChannel_ResetCurrentState:
+	ld (0x32f5:16), 15
+	and (0x32f7:16), 0xf8
+	or (0x32f7:16), 0x00
+	ret
+
+AccVoice_EmptyStub:
+	ret
+
+; Stores the E that Rhythm_DispatchNote_Helper returns into RAM 0x332B.
+Rhythm_StoreDispatchHelperResult:
+	call Rhythm_DispatchNote_Helper
+	ld (0x332b:16), e
+	ret
+
+; Rhythm_DispatchNote with A = RAM 0xFC5A and D = RAM 0xFC5B; the A it
+; returns is stored into RAM 0x332B.
+Rhythm_DispatchNoteFromFC5A:
+	ld a, (0xfc5a:16)
+	ld d, (0xfc5b:16)
+	call Rhythm_DispatchNote
+	ld (0x332b:16), a
+	ret
 
 RhythmROM_CheckValid:
 	ld c, 0x0:opc
@@ -1366,27 +1500,34 @@ RhythmROM_InvalidIncrement:
 RhythmROM_CheckDone:
 	ret
 
-RhythmROM_BytecodeBlock4:
+; -----------------------------------------------------------------------------
+; Heap_AllocAndFreeTwoBlocks -- Malloc(0x400) (pointer kept in RAM 0x355C),
+; Malloc(0x1000), Free(second), Free(first), return.  A heap round trip with
+; no lasting effect except RAM 0x355C.  C-compiler shaped (`ld xwa,xhl;
+; ld xwa,xwa; push xwa`).  NO CALLER FOUND: scripts/analysis/sequi_find_refs.py
+; v10 0xF5455C -> none.  Was a mix of `.byte`, `.asciz "\\5c@"` and `addr24`
+; until 2026-09-25 (the text was the operand bytes of `ld (0x355c:16), xhl`).
+; -----------------------------------------------------------------------------
+Heap_AllocAndFreeTwoBlocks:
 	ld	xwa, 1024
 	push	xwa
 	call	Malloc
 	add	xsp, 4
-	.byte 0xf1
-	.asciz "\\5c@"
-	.byte 0x10, 0x00
-	.byte 0x00, 0x38, 0x1d
-	addr24 Malloc
-	.byte 0xef, 0xc8
-	.byte 0x04, 0x00, 0x00, 0x00, 0xeb, 0x88, 0xe8, 0x88
-	.byte 0x38, 0x1d
-	addr24 Free
-	.byte 0xef, 0xc8, 0x04
-	.byte 0x00, 0x00, 0x00, 0xe1
-	.ascii "\\5 8"
-	.byte 0x1d
-	addr24 Free
-	.byte 0xef, 0xc8, 0x04, 0x00
-	.byte 0x00, 0x00, 0x0e
+	ld (0x355c:16), xhl
+	ld xwa, 4096
+	push xwa
+	call Malloc
+	add xsp, 4
+	ld xwa, xhl
+	ld xwa, xwa
+	push xwa
+	call Free
+	add xsp, 4
+	ld xwa, (0x355c:16)
+	push xwa
+	call Free
+	add xsp, 4
+	ret
 
 AccentData_ComparePart1:
 	ld xix, 0x3214

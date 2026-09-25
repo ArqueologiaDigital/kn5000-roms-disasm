@@ -1,0 +1,208 @@
+0xF540B9-0xF5412B: 15 old lines (15 dirty) -> 34 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF540B9  calr 13                                  || unidasm: calr 0xf540c9
+    0xF540BC  calr 21                                  || unidasm: calr 0xf540d4
+    0xF540BF  calr 29                                  || unidasm: calr 0xf540df
+    0xF540C2  calr 37                                  || unidasm: calr 0xf540ea
+    0xF540C5  calr 45                                  || unidasm: calr 0xf540f5
+    0xF540C8  ret                                      || unidasm: ret
+    0xF540C9  ld (0x31aa:16), 6                        || unidasm: ld (0x31aa),0x06
+    0xF540CE  ld (0x31ab:16), 0                        || unidasm: ld (0x31ab),0x00
+    0xF540D3  ret                                      || unidasm: ret
+    0xF540D4  ld (0x31b1:16), 0                        || unidasm: ld (0x31b1),0x00
+    0xF540D9  ld (0x31b2:16), 0                        || unidasm: ld (0x31b2),0x00
+    0xF540DE  ret                                      || unidasm: ret
+    0xF540DF  ld (0x31b8:16), 0                        || unidasm: ld (0x31b8),0x00
+    0xF540E4  ld (0x31b9:16), 0                        || unidasm: ld (0x31b9),0x00
+    0xF540E9  ret                                      || unidasm: ret
+    0xF540EA  ld (0x31bf:16), 0                        || unidasm: ld (0x31bf),0x00
+    0xF540EF  ld (0x31c0:16), 0                        || unidasm: ld (0x31c0),0x00
+    0xF540F4  ret                                      || unidasm: ret
+    0xF540F5  ld (0x31c6:16), 0                        || unidasm: ld (0x31c6),0x00
+    0xF540FA  ld (0x31c7:16), 0                        || unidasm: ld (0x31c7),0x00
+    0xF540FF  ret                                      || unidasm: ret
+    0xF54100  ld (0x3259:16), 15                       || unidasm: ld (0x3259),0x0f
+    0xF54105  and (0x325b:16), 0xf8                    || unidasm: and (0x325b),0xf8
+    0xF5410A  or (0x325b:16), 0x00                     || unidasm: or (0x325b),0x00
+    0xF5410F  ret                                      || unidasm: ret
+    0xF54110  ret                                      || unidasm: ret
+    0xF54111  call Rhythm_DispatchNote_Helper          || unidasm: call 0xf557e5
+    0xF54115  ld (0x328f:16), e                        || unidasm: ld (0x328f),E
+    0xF54119  ret                                      || unidasm: ret
+    0xF5411A  ld a, (0xfc5a:16)                        || unidasm: ld A,(0xfc5a)
+    0xF5411E  ld d, (0xfc5b:16)                        || unidasm: ld D,(0xfc5b)
+    0xF54122  call Rhythm_DispatchNote                 || unidasm: call 0xf557af
+    0xF54126  ld (0x328f:16), a                        || unidasm: ld (0x328f),A
+    0xF5412A  ret                                      || unidasm: ret
+0xF534E8-0xF53526: 8 old lines (8 dirty) -> 20 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF534E8  ld a, (0x3259:16)                        || unidasm: ld A,(0x3259)
+    0xF534EC  cp a, (0x325a:16)                        || unidasm: cp A,(0x325a)
+    0xF534F0  jr nz, 29                                || unidasm: jr NZ,0xf5350f
+    0xF534F2  cp a, 128                                || unidasm: cp A,0x80
+    0xF534F5  jr nc, 46                                || unidasm: jr NC,0xf53525
+    0xF534F7  ld a, (0x325b:16)                        || unidasm: ld A,(0x325b)
+    0xF534FB  and a, 127                               || unidasm: and A,0x7f
+    0xF534FE  and a, 7                                 || unidasm: and A,0x07
+    0xF53501  ld w, (0x325c:16)                        || unidasm: ld W,(0x325c)
+    0xF53505  and w, 127                               || unidasm: and W,0x7f
+    0xF53508  and w, 7                                 || unidasm: and W,0x07
+    0xF5350B  cp a, w                                  || unidasm: cp A,W
+    0xF5350D  jr z, 22                                 || unidasm: jr Z,0xf53525
+    0xF5350F  ld a, (0x3259:16)                        || unidasm: ld A,(0x3259)
+    0xF53513  ld (0x324b:16), a                        || unidasm: ld (0x324b),A
+    0xF53517  ld a, (0x325b:16)                        || unidasm: ld A,(0x325b)
+    0xF5351B  and w, 127                               || unidasm: and W,0x7f
+    0xF5351E  and w, 7                                 || unidasm: and W,0x07
+    0xF53521  ld (0x324c:16), a                        || unidasm: ld (0x324c),A
+    0xF53525  ret                                      || unidasm: ret
+0xF533EC-0xF53437: 16 old lines (13 dirty) -> 21 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF533F7  bit_dri 0, 0x07, 0xec, 0xe0              || unidasm: bit 0,(XHL+WA)
+    0xF533FC  jrl z, 116                               || unidasm: jrl Z,0xf53473
+    0xF533FF  xor a, a                                 || unidasm: xor A,A
+    0xF53401  bit 0, (0x325f:16)                       || unidasm: bit 0,(0x325f)
+    0xF53405  jr z, 3                                  || unidasm: jr Z,0xf5340a
+    0xF53407  or a, 64                                 || unidasm: or A,0x40
+    0xF5340A  bit 1, (0x325f:16)                       || unidasm: bit 1,(0x325f)
+    0xF5340E  jr z, 3                                  || unidasm: jr Z,0xf53413
+    0xF53410  or a, 128                                || unidasm: or A,0x80
+    0xF53413  bit 0, (0x3261:16)                       || unidasm: bit 0,(0x3261)
+    0xF53417  jr z, 3                                  || unidasm: jr Z,0xf5341c
+    0xF53419  or a, 16                                 || unidasm: or A,0x10
+    0xF5341C  bit 1, (0x3261:16)                       || unidasm: bit 1,(0x3261)
+    0xF53420  jr z, 3                                  || unidasm: jr Z,0xf53425
+    0xF53422  or a, 32                                 || unidasm: or A,0x20
+    0xF53425  bit 0, (0x3263:16)                       || unidasm: bit 0,(0x3263)
+    0xF53429  jr z, 3                                  || unidasm: jr Z,0xf5342e
+    0xF5342B  or a, 4                                  || unidasm: or A,0x04
+    0xF5342E  bit 1, (0x3263:16)                       || unidasm: bit 1,(0x3263)
+    0xF53432  jr z, 3                                  || unidasm: jr Z,0xf53437
+    0xF53434  or a, 8                                  || unidasm: or A,0x08
+0xF533C6-0xF533D0: 6 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -; dropped 1 comment(s) matching --drop-comment
+    0xF533C8  or (0x32c7:16), 0x01                     || unidasm: or (0x32c7),0x01
+0xF533A5-0xF533C6: 6 old lines (4 dirty) -> 10 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF533A5  pushw wa                                 || unidasm: push WA
+    0xF533A6  push xiy                                 || unidasm: push XIY
+    0xF533A7  and (0x32c7:16), 0xfe                    || unidasm: and (0x32c7),0xfe
+    0xF533AC  ld xiy, 0x00094800                       || unidasm: ld XIY,0x00094800
+    0xF533B1  add xiy, 16                              || unidasm: add XIY,0x00000010
+    0xF533B7  ld a, (xiy)                              || unidasm: ld A,(XIY)
+    0xF533B9  bit 0, a                                 || unidasm: bit 0x00,A
+    0xF533BC  jr z, 5                                  || unidasm: jr Z,0xf533c3
+    0xF533BE  or (0x32c7:16), 0x01                     || unidasm: or (0x32c7),0x01
+    0xF533C3  pop xiy                                  || unidasm: pop XIY
+VERIFIED: v7 byte-identical after 5 span(s)
+0xF53BE8-0xF53C06: 8 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53BFD  and (0x3290:16), 0xfc                    || unidasm: and (0x3290),0xfc
+    0xF53C02  call AccVoiceReg_WritePart1              || unidasm: call 0xf5c600
+0xF53B38-0xF53B4F: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53B4B  call AccTuning_LoadTranspose             || unidasm: call 0xf594f2
+0xF53B14-0xF53B2B: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53B27  call AccTuning_LoadOctave                || unidasm: call 0xf594c5
+0xF53AF0-0xF53B07: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53B03  call AccTuning_LoadFine                  || unidasm: call 0xf59498
+0xF53ACC-0xF53AE3: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53ADF  call AccTuning_LoadCoarse                || unidasm: call 0xf5946b
+0xF53AA9-0xF53ABF: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53ABB  call AccTuning_LoadMaster                || unidasm: call 0xf5944a
+REFUSED 0xF53943: unidasm cannot decode 0xF5395C
+0xF53831-0xF5389F: 19 old lines (13 dirty) -> 28 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53841  bit 3, (0x326e:16)                       || unidasm: bit 3,(0x326e)
+    0xF53845  jr z, 37                                 || unidasm: jr Z,0xf5386c
+    0xF53847  cp c, (0x32ca:16)                        || unidasm: cp C,(0x32ca)
+    0xF5384B  jr z, 31                                 || unidasm: jr Z,0xf5386c
+    0xF5384D  and (0x326e:16), 0xf7                    || unidasm: and (0x326e),0xf7
+    0xF53852  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+    0xF53857  and (0x3263:16), 0xfb                    || unidasm: and (0x3263),0xfb
+    0xF5385C  and (0xfc5f:16), 0xfb                    || unidasm: and (0xfc5f),0xfb
+    0xF53861  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF53863  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF53865  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF53867  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF53869  calr 63615                               || unidasm: calr 0xf530eb
+    0xF5386C  ld a, (0x328d:16)                        || unidasm: ld A,(0x328d)
+    0xF53870  and a, 63                                || unidasm: and A,0x3f
+    0xF53873  jr z, 42                                 || unidasm: jr Z,0xf5389f
+    0xF53875  bit 0, (0x325f:16)                       || unidasm: bit 0,(0x325f)
+    0xF53879  jr z, 13                                 || unidasm: jr Z,0xf53888
+    0xF5387B  cp c, (0x32cc:16)                        || unidasm: cp C,(0x32cc)
+    0xF5387F  jr z, 30                                 || unidasm: jr Z,0xf5389f
+    0xF53881  and (0x328d:16), 0xc0                    || unidasm: and (0x328d),0xc0
+    0xF53886  jr 23                                    || unidasm: jr T,0xf5389f
+    0xF53888  bit 1, (0x325f:16)                       || unidasm: bit 1,(0x325f)
+    0xF5388C  jr z, 17                                 || unidasm: jr Z,0xf5389f
+    0xF5388E  ld xhl, Display_FontPalette_Table_0x1D58 || unidasm: ld XHL,0x00e46bb0
+    0xF53893  bit_dri 0, 0x03, 0xec, 0xe4              || unidasm: bit 0,(XHL+C)
+    0xF53898  jr z, 5                                  || unidasm: jr Z,0xf5389f
+    0xF5389A  and (0x328d:16), 0xc0                    || unidasm: and (0x328d),0xc0
+0xF5374D-0xF5382B: 34 old lines (28 dirty) -> 56 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF5375E  calr 652                                 || unidasm: calr 0xf539ed
+    0xF53761  ld c, a                                  || unidasm: ld C,A
+    0xF53763  xor a, a                                 || unidasm: xor A,A
+    0xF53765  bit 0, (0x326e:16)                       || unidasm: bit 0,(0x326e)
+    0xF53769  jr z, 24                                 || unidasm: jr Z,0xf53783
+    0xF5376B  cp c, (0x32c8:16)                        || unidasm: cp C,(0x32c8)
+    0xF5376F  jr z, 18                                 || unidasm: jr Z,0xf53783
+    0xF53771  and (0x326e:16), 0xfe                    || unidasm: and (0x326e),0xfe
+    0xF53776  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+    0xF5377B  and (0x3263:16), 0xfe                    || unidasm: and (0x3263),0xfe
+    0xF53780  or a, 4                                  || unidasm: or A,0x04
+    0xF53783  bit 2, (0x326e:16)                       || unidasm: bit 2,(0x326e)
+    0xF53787  jr z, 30                                 || unidasm: jr Z,0xf537a7
+    0xF53789  ld xhl, Display_FontPalette_Table_0x1D58 || unidasm: ld XHL,0x00e46bb0
+    0xF5378E  bit_dri 0, 0x03, 0xec, 0xe4              || unidasm: bit 0,(XHL+C)
+    0xF53793  jr z, 18                                 || unidasm: jr Z,0xf537a7
+    0xF53795  and (0x326e:16), 0xfb                    || unidasm: and (0x326e),0xfb
+    0xF5379A  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+    0xF5379F  and (0x3263:16), 0xfd                    || unidasm: and (0x3263),0xfd
+    0xF537A4  or a, 8                                  || unidasm: or A,0x08
+    0xF537A7  bit 0, (0x326d:16)                       || unidasm: bit 0,(0x326d)
+    0xF537AB  jr z, 24                                 || unidasm: jr Z,0xf537c5
+    0xF537AD  cp c, (0x32cc:16)                        || unidasm: cp C,(0x32cc)
+    0xF537B1  jr z, 18                                 || unidasm: jr Z,0xf537c5
+    0xF537B3  and (0x326d:16), 0xfe                    || unidasm: and (0x326d),0xfe
+    0xF537B8  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+    0xF537BD  and (0x325f:16), 0xfe                    || unidasm: and (0x325f),0xfe
+    0xF537C2  or a, 64                                 || unidasm: or A,0x40
+    0xF537C5  bit 1, (0x326d:16)                       || unidasm: bit 1,(0x326d)
+    0xF537C9  jr z, 24                                 || unidasm: jr Z,0xf537e3
+    0xF537CB  cp c, (0x32ce:16)                        || unidasm: cp C,(0x32ce)
+    0xF537CF  jr z, 18                                 || unidasm: jr Z,0xf537e3
+    0xF537D1  and (0x326d:16), 0xfd                    || unidasm: and (0x326d),0xfd
+    0xF537D6  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+    0xF537DB  and (0x325f:16), 0xfd                    || unidasm: and (0x325f),0xfd
+    0xF537E0  or a, 128                                || unidasm: or A,0x80
+    0xF537E3  bit 0, (0x326f:16)                       || unidasm: bit 0,(0x326f)
+    0xF537E7  jr z, 30                                 || unidasm: jr Z,0xf53807
+    0xF537E9  cp c, (0x32d0:16)                        || unidasm: cp C,(0x32d0)
+    0xF537ED  jr z, 24                                 || unidasm: jr Z,0xf53807
+    0xF537EF  and (0x326f:16), 0xfe                    || unidasm: and (0x326f),0xfe
+    0xF537F4  and (0x3261:16), 0xfe                    || unidasm: and (0x3261),0xfe
+    0xF537F9  or a, 16                                 || unidasm: or A,0x10
+    0xF537FC  bit 0, (0x3270:16)                       || unidasm: bit 0,(0x3270)
+    0xF53800  jr nz, 5                                 || unidasm: jr NZ,0xf53807
+    0xF53802  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+    0xF53807  bit 1, (0x326f:16)                       || unidasm: bit 1,(0x326f)
+    0xF5380B  jr z, 30                                 || unidasm: jr Z,0xf5382b
+    0xF5380D  cp c, (0x32d2:16)                        || unidasm: cp C,(0x32d2)
+    0xF53811  jr z, 24                                 || unidasm: jr Z,0xf5382b
+    0xF53813  and (0x326f:16), 0xfd                    || unidasm: and (0x326f),0xfd
+    0xF53818  and (0x3261:16), 0xfd                    || unidasm: and (0x3261),0xfd
+    0xF5381D  or a, 32                                 || unidasm: or A,0x20
+    0xF53820  bit 0, (0x3270:16)                       || unidasm: bit 0,(0x3270)
+    0xF53824  jr nz, 5                                 || unidasm: jr NZ,0xf5382b
+    0xF53826  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+0xF5346F-0xF5348F: 8 old lines (2 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF53482  ld_rrb a, xhl, wa                        || unidasm: ld A,(XHL+WA)
+    0xF53487  bit 0, (0x31e7:16)                       || unidasm: bit 0,(0x31e7)
+    0xF5348B  jr nz, 2                                 || unidasm: jr NZ,0xf5348f
+    0xF5348D  ld a, 0:opc                              || unidasm: ld A,0x00
+0xF53440-0xF53465: 9 old lines (3 dirty) -> 8 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF5344F  bit 2, (0x3263:16)                       || unidasm: bit 2,(0x3263)
+    0xF53453  jr z, 16                                 || unidasm: jr Z,0xf53465
+    0xF53455  and (0xfc60:16), 0xfb                    || unidasm: and (0xfc60),0xfb
+    0xF5345A  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF5345C  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF5345E  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF53460  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF53462  calr 64646                               || unidasm: calr 0xf530eb
+REFUSED 0xF533C6: unidasm cannot decode 0xF533D5
+VERIFIED: v7 byte-identical after 10 span(s)

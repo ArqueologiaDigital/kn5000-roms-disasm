@@ -1,0 +1,214 @@
+0xF35B6E-0xF35BA6: 10 old lines (5 dirty) -> 9 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF35B85  pushw 0x0005                             || unidasm: push 0x0005
+    0xF35B88  ld xwa, NakaData_WidgetDescriptors_0x1530 || unidasm: ld XWA,0x00e32390
+    0xF35B8D  jrl 194                                  || unidasm: jrl T,0xf35c52
+    0xF35B90  pushw 0x0005                             || unidasm: push 0x0005
+    0xF35B93  ld xwa, 0x00e322f0                       || unidasm: ld XWA,0x00e322f0
+    0xF35B98  jrl 183                                  || unidasm: jrl T,0xf35c52
+    0xF35B9B  pushw 0x0005                             || unidasm: push 0x0005
+    0xF35B9E  ld xwa, NakaData_WidgetDescriptors_0x139A || unidasm: ld XWA,0x00e321fa
+    0xF35BA3  jrl 172                                  || unidasm: jrl T,0xf35c52
+0xF34EC9-0xF34EE1: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34EDB  ldb_d8 a, (0x270c)                       || unidasm: ld A,(0x270c)
+    0xF34EDF  jr 34                                    || unidasm: jr T,0xf34f03
+0xF34EB3-0xF34EC8: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34EC3  ld xwa, NakaInst_2d                      || unidasm: ld XWA,0x00e34c50
+0xF34E68-0xF34E97: 19 old lines (7 dirty) -> 3 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34E7B  ld xbc, LongStr_1_2_3                    || unidasm: ld XBC,0x00e34944
+    0xF34E8E  pushdi_w (0xf1e7)                        || unidasm: pushw (0xf1e7)
+    0xF34E92  ld xwa, 0x00e34c44                       || unidasm: ld XWA,0x00e34c44
+0xF34E4C-0xF34E60: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34E5C  pushdi_w (0x262e)                        || unidasm: pushw (0x262e)
+0xF34E31-0xF34E47: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34E43  pushdi_w (0xf1e2)                        || unidasm: pushw (0xf1e2)
+0xF34DF4-0xF34E0A: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34E06  pushdi_w (0xf1ef)                        || unidasm: pushw (0xf1ef)
+0xF34DD5-0xF34DE9: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34DE5  pushdi_w (0x2628)                        || unidasm: pushw (0x2628)
+0xF34DB9-0xF34DD0: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34DCC  pushdi_w (0xf1ea)                        || unidasm: pushw (0xf1ea)
+0xF34BED-0xF34C10: 16 old lines (4 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34BFB  ld xwa, FmtStr_pluspct3d                 || unidasm: ld XWA,0x00e34bb6
+    0xF34C0B  ld xwa, FmtStr_minuspct3d                || unidasm: ld XWA,0x00e34bbe
+0xF34BA4-0xF34BB8: 7 old lines (1 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34BB4  pushw de                                 || unidasm: push DE
+    0xF34BB5  pushw 0x00e3                             || unidasm: push 0x00e3
+0xF34B3E-0xF34B9C: 38 old lines (21 dirty) -> 8 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34B56  pushdi_w (0x2612)                        || unidasm: pushw (0x2612)
+    0xF34B61  pushdi_w (0x2620)                        || unidasm: pushw (0x2620)
+    0xF34B6C  pushdi_w (0x262c)                        || unidasm: pushw (0x262c)
+    0xF34B77  pushdi_w (0x2626)                        || unidasm: pushw (0x2626)
+    0xF34B7B  ld xwa, NakaInst_3d                      || unidasm: ld XWA,0x00e34b88
+    0xF34B82  pushdi_w (0x25fc)                        || unidasm: pushw (0x25fc)
+    0xF34B8D  pushdi_w (0x25fa)                        || unidasm: pushw (0x25fa)
+    0xF34B98  pushdi_w (0x2608)                        || unidasm: pushw (0x2608)
+0xF34AC6-0xF34B24: 36 old lines (20 dirty) -> 9 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34ADE  pushdi_w (0x2610)                        || unidasm: pushw (0x2610)
+    0xF34AE9  pushdi_w (0x261e)                        || unidasm: pushw (0x261e)
+    0xF34AF4  pushdi_w (0xf1d7)                        || unidasm: pushw (0xf1d7)
+    0xF34AFF  pushdi_w (0xf1dc)                        || unidasm: pushw (0xf1dc)
+    0xF34B03  ld xwa, FmtStr_pct3d_4B5E                || unidasm: ld XWA,0x00e34b5e
+    0xF34B0A  pushdi_w (0xf1f2)                        || unidasm: pushw (0xf1f2)
+    0xF34B0E  ld xwa, 0x00e34b64                       || unidasm: ld XWA,0x00e34b64
+    0xF34B15  pushdi_w (0xf229)                        || unidasm: pushw (0xf229)
+    0xF34B20  pushdi_w (0x2606)                        || unidasm: pushw (0x2606)
+0xF347DA-0xF347FA: 13 old lines (5 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF347EB  pushdi_w (0x2522)                        || unidasm: pushw (0x2522)
+    0xF347F6  pushdi_w (0x251e)                        || unidasm: pushw (0x251e)
+0xF347B5-0xF347D5: 13 old lines (5 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF347C6  pushdi_w (0x2520)                        || unidasm: pushw (0x2520)
+    0xF347D1  pushdi_w (0x251c)                        || unidasm: pushw (0x251c)
+0xF3478D-0xF347A0: 11 old lines (5 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3479B  cpdi8 (0x283a), 0                        || unidasm: cp (0x283a),0x00
+0xF34751-0xF34781: 19 old lines (9 dirty) -> 8 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34761  bitda 0, (0x28b1)                        || unidasm: bit 0,(0x28b1)
+    0xF34765  jr z, 7                                  || unidasm: jr Z,0xf3476e
+    0xF34774  ld xwa, (xbc)                            || unidasm: ld XWA,(XBC)
+    0xF34776  push xwa                                 || unidasm: push XWA
+    0xF34777  jr 54                                    || unidasm: jr T,0xf347af
+    0xF34779  ld xbc, (xbc)                            || unidasm: ld XBC,(XBC)
+    0xF3477B  bitda 1, (0x28b1)                        || unidasm: bit 1,(0x28b1)
+    0xF3477F  jr z, 7                                  || unidasm: jr Z,0xf34788
+0xF3413E-0xF34162: 9 old lines (4 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF34154  jr 42                                    || unidasm: jr T,0xf34180
+    0xF34156  ld xbc, 0x01e80064                       || unidasm: ld XBC,0x01e80064
+    0xF3415B  jr 35                                    || unidasm: jr T,0xf34180
+    0xF3415D  ld xbc, 0x01e80065                       || unidasm: ld XBC,0x01e80065
+0xF32618-0xF3262D: 11 old lines (5 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF32627  pushm (xhl+22)                           || unidasm: pushw (XHL+0x16)
+    0xF3262A  pushm (xhl+24)                           || unidasm: pushw (XHL+0x18)
+0xF325E0-0xF325F3: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF325EF  sub wa, (xiy)                            || unidasm: sub WA,(XIY)
+    0xF325F1  exts xwa                                 || unidasm: exts XWA
+0xF32560-0xF32573: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3256F  sub wa, (xiy)                            || unidasm: sub WA,(XIY)
+    0xF32571  exts xwa                                 || unidasm: exts XWA
+0xF3250F-0xF32524: 11 old lines (5 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3251E  pushm (xhl+22)                           || unidasm: pushw (XHL+0x16)
+    0xF32521  pushm (xhl+24)                           || unidasm: pushw (XHL+0x18)
+0xF312DF-0xF312F6: 11 old lines (5 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF312F0  pushm (xhl+22)                           || unidasm: pushw (XHL+0x16)
+    0xF312F3  pushm (xhl+24)                           || unidasm: pushw (XHL+0x18)
+0xF30D52-0xF30D67: 11 old lines (5 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF30D61  pushm (xhl+22)                           || unidasm: pushw (XHL+0x16)
+    0xF30D64  pushm (xhl+24)                           || unidasm: pushw (XHL+0x18)
+0xF3058F-0xF305A9: 10 old lines (4 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF305A5  cpw (xde), 0                             || unidasm: cp (XDE),0x0000
+0xF30569-0xF30581: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3057F  pushm (xde)                              || unidasm: pushw (XDE)
+0xF3053C-0xF30552: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3054D  cpl_sri_rm xwa, 0x07, 0xf0, 0xf4         || unidasm: cp XWA,(XIX+IY)
+0xF3051B-0xF30535: 10 old lines (4 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF30531  ldw (xhl), 1                             || unidasm: ld (XHL),0x0001
+0xF304B3-0xF304EB: 26 old lines (19 dirty) -> 7 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF304C6  ld_rrw wa, xix, wa                       || unidasm: ld WA,(XIX+WA)
+    0xF304CB  lda_24 xix, (0xf304d5)                   || unidasm: lda XIX,0xf304d5
+    0xF304D0  jp_rr 8, xix, wa                         || unidasm: jp T,XIX+WA
+    0xF304D5  ld xde, (xsp+62)                         || unidasm: ld XDE,(XSP+0x3e)
+    0xF304D8  sla hl, 2                                || unidasm: sla 0x02,HL
+    0xF304E0  ld_rrl xwa, xwa, hl                      || unidasm: ld XWA,(XWA+HL)
+    0xF304E5  cp xde, 0x01c0001a                       || unidasm: cp XDE,0x01c0001a
+0xF3048D-0xF304AE: 15 old lines (9 dirty) -> 5 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3049F  ld qwa, 0                                || unidasm: ld QWA,0
+    0xF304A2  ld (xbc), wa                             || unidasm: ld (XBC),WA
+    0xF304A4  ld xhl, (xsp+58)                         || unidasm: ld XHL,(XSP+0x3a)
+    0xF304A7  ld (xbc+2), hl                           || unidasm: ld (XBC+0x02),HL
+    0xF304AA  cpw (xbc), 1                             || unidasm: cp (XBC),0x0001
+0xF30407-0xF3042F: 19 old lines (13 dirty) -> 5 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3041A  ld_rrw wa, xix, wa                       || unidasm: ld WA,(XIX+WA)
+    0xF3041F  lda_24 xix, (0xf30429)                   || unidasm: lda XIX,0xf30429
+    0xF30424  jp_rr 8, xix, wa                         || unidasm: jp T,XIX+WA
+    0xF30429  ld xbc, (xsp+62)                         || unidasm: ld XBC,(XSP+0x3e)
+    0xF3042C  sla de, 2                                || unidasm: sla 0x02,DE
+0xF303E1-0xF30402: 15 old lines (9 dirty) -> 5 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF303F3  ld qwa, 0                                || unidasm: ld QWA,0
+    0xF303F6  ld (xbc), wa                             || unidasm: ld (XBC),WA
+    0xF303F8  ld xde, (xsp+58)                         || unidasm: ld XDE,(XSP+0x3a)
+    0xF303FB  ld (xbc+2), de                           || unidasm: ld (XBC+0x02),DE
+    0xF303FE  cpw (xbc), 1                             || unidasm: cp (XBC),0x0001
+0xF2F8BC-0xF2F8CD: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F8C9  sub wa, (xix)                            || unidasm: sub WA,(XIX)
+    0xF2F8CB  exts xwa                                 || unidasm: exts XWA
+0xF2F829-0xF2F83A: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F836  sub wa, (xix)                            || unidasm: sub WA,(XIX)
+    0xF2F838  exts xwa                                 || unidasm: exts XWA
+0xF2F75E-0xF2F776: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F772  sub wa, (xhl)                            || unidasm: sub WA,(XHL)
+    0xF2F774  exts xwa                                 || unidasm: exts XWA
+0xF2F6E0-0xF2F6F1: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F6ED  sub wa, (xix)                            || unidasm: sub WA,(XIX)
+    0xF2F6EF  exts xwa                                 || unidasm: exts XWA
+0xF2F643-0xF2F659: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F655  sub bc, (xwa)                            || unidasm: sub BC,(XWA)
+    0xF2F657  exts xbc                                 || unidasm: exts XBC
+0xF2F61E-0xF2F63B: 11 old lines (5 dirty) -> 3 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F631  ldw (xix), 49                            || unidasm: ld (XIX),0x0031
+    0xF2F635  pushm (xsp+10)                           || unidasm: pushw (XSP+0x0a)
+    0xF2F638  pushw 0x00e3                             || unidasm: push 0x00e3
+0xF2F5DD-0xF2F5F9: 12 old lines (6 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F5ED  ldw (xix), 49                            || unidasm: ld (XIX),0x0031
+    0xF2F5F1  cpib_erp 251, 0                          || unidasm: cp QIZH,0
+    0xF2F5F4  jr nz, 10                                || unidasm: jr NZ,0xf2f600
+    0xF2F5F6  pushm (xsp+8)                            || unidasm: pushw (XSP+0x08)
+0xF2F590-0xF2F5A9: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F5A4  ldw (xsp+10), 1                          || unidasm: ld (XSP+0x0a),0x0001
+0xF2F53C-0xF2F552: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F54E  sub bc, (xwa)                            || unidasm: sub BC,(XWA)
+    0xF2F550  exts xbc                                 || unidasm: exts XBC
+0xF2F517-0xF2F531: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F52B  pushm (xsp+10)                           || unidasm: pushw (XSP+0x0a)
+    0xF2F52E  pushw 0x00e3                             || unidasm: push 0x00e3
+0xF2F4CB-0xF2F4EC: 12 old lines (6 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F4DF  cpib_erp 251, 0                          || unidasm: cp QIZH,0
+    0xF2F4E2  jr nz, 10                                || unidasm: jr NZ,0xf2f4ee
+    0xF2F4E4  pushm (xsp+8)                            || unidasm: pushw (XSP+0x08)
+    0xF2F4E7  ld xwa, FmtStr_pct3d                     || unidasm: ld XWA,0x00e34614
+0xF2F485-0xF2F49E: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F499  ldw (xsp+10), 1                          || unidasm: ld (XSP+0x0a),0x0001
+0xF2F444-0xF2F458: 8 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F452  add de, (xix+70)                         || unidasm: add DE,(XIX+0x46)
+    0xF2F455  ld (xbc+2), de                           || unidasm: ld (XBC+0x02),DE
+0xF2F3B6-0xF2F3E2: 17 old lines (5 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F3CA  add hl, (xbc+4)                          || unidasm: add HL,(XBC+0x04)
+    0xF2F3D4  add iy, (xbc+6)                          || unidasm: add IY,(XBC+0x06)
+    0xF2F3DE  sub wa, (xix)                            || unidasm: sub WA,(XIX)
+    0xF2F3E0  exts xwa                                 || unidasm: exts XWA
+0xF2F360-0xF2F374: 9 old lines (3 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F36E  ld (xix+2), bc                           || unidasm: ld (XIX+0x02),BC
+    0xF2F371  pushw 0x00e3                             || unidasm: push 0x00e3
+0xF2F327-0xF2F353: 17 old lines (5 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F33B  add hl, (xbc+4)                          || unidasm: add HL,(XBC+0x04)
+    0xF2F345  add iy, (xbc+6)                          || unidasm: add IY,(XBC+0x06)
+    0xF2F34F  sub wa, (xix)                            || unidasm: sub WA,(XIX)
+    0xF2F351  exts xwa                                 || unidasm: exts XWA
+0xF2F305-0xF2F31D: 10 old lines (4 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F319  cpw (xix), 0                             || unidasm: cp (XIX),0x0000
+0xF2F2C9-0xF2F2E2: 10 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2F2D7  add bc, (xde+4)                          || unidasm: add BC,(XDE+0x04)
+    0xF2F2DF  add bc, (xde+6)                          || unidasm: add BC,(XDE+0x06)
+0xF2D1D4-0xF2D1ED: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2D1E8  ld xwa, PlayModeStr_Pause                || unidasm: ld XWA,0x00e267de
+0xF2D15C-0xF2D175: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2D170  ld xwa, PlayModeStr_Play                 || unidasm: ld XWA,0x00e267be
+0xF2D0E4-0xF2D0FD: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2D0F8  ld xwa, MedleyDisp_Blank                 || unidasm: ld XWA,0x00e26792
+0xF2C622-0xF2C640: 13 old lines (7 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2C634  ld (0x021082:24), (0x2873:16)            || unidasm: ld (0x021082),(0x2873)
+    0xF2C63B  ld xwa, 0x0147001c                       || unidasm: ld XWA,0x0147001c
+0xF2C4E6-0xF2C504: 13 old lines (7 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2C4F8  ld (0x021082:24), (0x2873:16)            || unidasm: ld (0x021082),(0x2873)
+    0xF2C4FF  ld xwa, 0x0147001c                       || unidasm: ld XWA,0x0147001c
+0xF2C431-0xF2C446: 10 old lines (4 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2C440  ld_rrb l, xbc, wa                        || unidasm: ld L,(XBC+WA)
+    0xF2C445  ret                                      || unidasm: ret
+0xF2BE7C-0xF2BE95: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2BE92  muls wa, (xhl+40)                        || unidasm: muls XWA,(XHL+0x28)
+0xF2BDAB-0xF2BDBD: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2BDBA  divs de, (xhl+38)                        || unidasm: divs XDE,(XHL+0x26)
+0xF2BD79-0xF2BD8F: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2BD8C  muls bc, (xwa+40)                        || unidasm: muls XBC,(XWA+0x28)
+0xF2BD13-0xF2BD2A: 9 old lines (3 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2BD27  mul wa, (xsp+20)                         || unidasm: mul XWA,(XSP+0x14)
+0xF2BCF0-0xF2BD06: 8 old lines (2 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF2BD03  divs bc, (xwa+38)                        || unidasm: divs XBC,(XWA+0x26)
+VERIFIED: v10 byte-identical after 61 span(s)

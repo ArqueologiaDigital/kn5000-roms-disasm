@@ -1,0 +1,11 @@
+0xF4EAB1-0xF4EAD4: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4EAD0  res 3, (0x28a7:16)                       || unidasm: res 3,(0x28a7)
+0xF4EA75-0xF4EAA9: 14 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4EA89  ldw (xsp+4), (0xf22f)                    || unidasm: ldw (XSP+0x04),(0xf22f)
+    0xF4EAA4  ldw (0xf22f), (xsp+4)                    || unidasm: ldw (0xf22f),(XSP+0x04)
+0xF4EA57-0xF4EA70: 7 old lines (1 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4EA62  ld (0xf247:16), (0x00ffe3:24)            || unidasm: ld (0xf247),(0x00ffe3)
+    0xF4EA69  ldw (0xf248:16), (0x00ffec:24)           || unidasm: ldw (0xf248),(0x00ffec)
+0xF4CECD-0xF4CEE9: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4CEE3  ldmm8 0x25d8, 0x25d6                     || unidasm: ld (0x25d8),(0x25d6)
+VERIFIED: v10 byte-identical after 4 span(s)

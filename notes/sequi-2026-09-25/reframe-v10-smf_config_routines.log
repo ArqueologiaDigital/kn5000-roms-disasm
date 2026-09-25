@@ -1,0 +1,29 @@
+0xF299E5-0xF29A22: 8 old lines (8 dirty) -> 21 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF299E5  ld a, (0x112a:16)                        || unidasm: ld A,(0x112a)
+    0xF299E9  cp a, 2:i3                               || unidasm: cp A,2
+    0xF299EB  jr z, 4                                  || unidasm: jr Z,0xf299f1
+    0xF299ED  cp a, 3:i3                               || unidasm: cp A,3
+    0xF299EF  jr nz, 48                                || unidasm: jr NZ,0xf29a21
+    0xF299F1  cp (0x2873:16), 15                       || unidasm: cp (0x2873),0x0f
+    0xF299F6  jr nz, 41                                || unidasm: jr NZ,0xf29a21
+    0xF299F8  cp (xiy+2), 20                           || unidasm: cp (XIY+0x02),0x14
+    0xF299FC  jr nz, 35                                || unidasm: jr NZ,0xf29a21
+    0xF299FE  cp (xiy+3), 4                            || unidasm: cp (XIY+0x03),0x04
+    0xF29A02  jr nz, 29                                || unidasm: jr NZ,0xf29a21
+    0xF29A04  ld a, (xiy+2)                            || unidasm: ld A,(XIY+0x02)
+    0xF29A07  calr 63060                               || unidasm: calr 0xf2905e
+    0xF29A0A  bit 7, a                                 || unidasm: bit 0x07,A
+    0xF29A0D  jr z, 6                                  || unidasm: jr Z,0xf29a15
+    0xF29A0F  and a, 127                               || unidasm: and A,0x7f
+    0xF29A12  ormi8 (xiy), 4                           || unidasm: or (XIY),0x04
+    0xF29A15  ld (xiy+2), a                            || unidasm: ld (XIY+0x02),A
+    0xF29A18  ld (xiy+3), 2                            || unidasm: ld (XIY+0x03),0x02
+    0xF29A1C  or (0x113b:16), 0x01                     || unidasm: or (0x113b),0x01
+    0xF29A21  ret                                      || unidasm: ret
+VERIFIED: v10 byte-identical after 1 span(s)
+REFUSED 0xF29CF8: absurd decode 'normal' at 0xF29D0C
+0xF29493-0xF294A9: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF294A7  bitm 7, (xhl)                            || unidasm: bit 7,(XHL)
+REFUSED 0xF28ACE: absurd decode 'normal' at 0xF28ADD
+REFUSED 0xF28229: unidasm cannot decode 0xF2823F
+VERIFIED: v10 byte-identical after 1 span(s)

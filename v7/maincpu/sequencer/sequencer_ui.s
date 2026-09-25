@@ -8,559 +8,61 @@
 
 InitializeYoko:
 	lda xsp, (xsp - 0x0e)
-	lda XBC, (XSP)
-	ld XWA,0x01600004
-	ld (XBC),XWA
-	lda xwa, (ClassProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe20cae:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xe208ec:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0167
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000c
-	ld (XBC),XWA
-	lda xwa, (ResEventProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe20e22:24)
-	ld (XBC+0x08),WA
-	lda xwa, (EvtName_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01c7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000d
-	ld (XBC),XWA
-	lda xwa, (ResMethodProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe2106a:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xe20e24:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01e7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002e
-	lda xwa, (0xe20260:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0127
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002e
-	lda xwa, (0xe2031c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0427
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe2106c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0107
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe21074:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0407
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001f
-	lda xwa, (0xe25042:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0147
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001f
-	lda xwa, (0xe250c2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0447
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002b
-	lda xwa, (0xe240ac:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x006f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002b
-	lda xwa, (0xe24578:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x036f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2415c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0070
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe246c8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0370
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe24190:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0071
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe2472e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0371
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe241c0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0072
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe24788:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0372
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe241e0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0073
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe247ca:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0373
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe24224:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0074
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe24844:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0374
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000d
-	lda xwa, (0xe24264:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0075
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000d
-	lda xwa, (0xe248cc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0375
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2429c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0076
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2493a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0376
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001e
-	lda xwa, (0xe242c0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0078
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001e
-	lda xwa, (0xe2497c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0378
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2433c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x007a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24a3e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x037a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24370:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0089
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24a94:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0389
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe24388:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe24abe:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe24390:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe24aca:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe243ec:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe24b80:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24460:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe24c70:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe24478:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe24c9c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe24494:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0092
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe24cce:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0392
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe244a8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe24cf8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe244ac:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe24cfe:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a9
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe244c8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe24d32:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe244dc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24d58:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24510:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24de6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24544:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe24e78:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e3
-	call RegisterObjectTable
+	RegObjTable 0x1600004, ClassProc, 0xe20cae, 0xe208ec, 0x167
+	RegObjTable 0x160000c, ResEventProc, 0xe20e22, EvtName_PtrTable, 0x1c7
+	RegObjTable 0x160000d, ResMethodProc, 0xe2106a, 0xe20e24, 0x1e7
+	RegObjTabl 0x1600002, ApFunctionProc, 0x2e, 0xe20260, 0x127
+	RegObjTabl 0x1600002, ApFunctionProc, 0x2e, 0xe2031c, 0x427
+	RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe2106c, 0x107
+	RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe21074, 0x407
+	RegObjTabl 0x1600003, MainFunctionProc, 0x1f, 0xe25042, 0x147
+	RegObjTabl 0x1600003, MainFunctionProc, 0x1f, 0xe250c2, 0x447
+	RegObjTabl 0x1600010, ViewableProc, 0x2b, 0xe240ac, 0x6f
+	RegObjTabl 0x160000f, ResNameProc, 0x2b, 0xe24578, 0x36f
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2415c, 0x70
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe246c8, 0x370
+	RegObjTabl 0x1600010, ViewableProc, 0xb, 0xe24190, 0x71
+	RegObjTabl 0x160000f, ResNameProc, 0xb, 0xe2472e, 0x371
+	RegObjTabl 0x1600010, ViewableProc, 0x7, 0xe241c0, 0x72
+	RegObjTabl 0x160000f, ResNameProc, 0x7, 0xe24788, 0x372
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe241e0, 0x73
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe247ca, 0x373
+	RegObjTabl 0x1600010, ViewableProc, 0xf, 0xe24224, 0x74
+	RegObjTabl 0x160000f, ResNameProc, 0xf, 0xe24844, 0x374
+	RegObjTabl 0x1600010, ViewableProc, 0xd, 0xe24264, 0x75
+	RegObjTabl 0x160000f, ResNameProc, 0xd, 0xe248cc, 0x375
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2429c, 0x76
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2493a, 0x376
+	RegObjTabl 0x1600010, ViewableProc, 0x1e, 0xe242c0, 0x78
+	RegObjTabl 0x160000f, ResNameProc, 0x1e, 0xe2497c, 0x378
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2433c, 0x7a
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24a3e, 0x37a
+	RegObjTabl 0x1600010, ViewableProc, 0x5, 0xe24370, 0x89
+	RegObjTabl 0x160000f, ResNameProc, 0x5, 0xe24a94, 0x389
+	RegObjTabl 0x1600010, ViewableProc, 0x1, 0xe24388, 0x8a
+	RegObjTabl 0x160000f, ResNameProc, 0x1, 0xe24abe, 0x38a
+	RegObjTabl 0x1600010, ViewableProc, 0x16, 0xe24390, 0x8b
+	RegObjTabl 0x160000f, ResNameProc, 0x16, 0xe24aca, 0x38b
+	RegObjTabl 0x1600010, ViewableProc, 0x1c, 0xe243ec, 0x8c
+	RegObjTabl 0x160000f, ResNameProc, 0x1c, 0xe24b80, 0x38c
+	RegObjTabl 0x1600010, ViewableProc, 0x5, 0xe24460, 0x8e
+	RegObjTabl 0x160000f, ResNameProc, 0x5, 0xe24c70, 0x38e
+	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe24478, 0x8f
+	RegObjTabl 0x160000f, ResNameProc, 0x6, 0xe24c9c, 0x38f
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe24494, 0x92
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe24cce, 0x392
+	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe244a8, 0xa7
+	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe24cf8, 0x3a7
+	RegObjTabl 0x1600010, ViewableProc, 0x6, 0xe244ac, 0xa9
+	RegObjTabl 0x160000f, ResNameProc, 0x6, 0xe24cfe, 0x3a9
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe244c8, 0xe0
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe24d32, 0x3e0
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe244dc, 0xe1
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24d58, 0x3e1
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe24510, 0xe2
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24de6, 0x3e2
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe24544, 0xe3
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe24e78, 0x3e3
 	pushw 0x0007
 	pushw 0x00e2
 	pushw 0x4f10
@@ -1555,12 +1057,23 @@ LyricsTrack_ReadAndParse:
 	jr	c, LyricsTrack_CheckEmpty
 	ld	(134767:24), 0
 LyricsTrack_CheckEmpty:
-	.byte 0xf2, 0x4e, 0x0e, 0x02, 0x30, 0x80, 0x3f, 0x00
-	.byte 0xb0, 0xf6, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef
-	.byte 0x64, 0xdb, 0x69, 0xeb, 0x12, 0xf2, 0x4e, 0x0e
-	.byte 0x02, 0x30, 0xe8, 0x8a, 0xeb, 0x82, 0x82, 0x23
-	.byte 0x38, 0xcb, 0xcf, 0x0a, 0x66, 0x06, 0xcb, 0xcf
-	.byte 0x0d, 0x7e, 0x8e, 0x00
+	lda_24 xwa, (0x20e4e)
+	cp (xwa), 0
+	ret z
+	push xwa
+	call LyricsTrack_ReadAndParse_Helper2
+	inc 4, xsp
+	dec 1, hl
+	extz xhl
+	lda_24 xwa, (0x20e4e)
+	ld xde, xwa
+	add xde, xhl
+	ld c, (xde)
+	push xwa
+	cp c, 10
+	jr z, LyricsTrack_HandleNewline
+	cp c, 13
+	jrl nz, LyricsTrack_HandleNormalChar
 LyricsTrack_HandleNewline:
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -1739,21 +1252,41 @@ LyricsFile_CheckLinefeed:
 	jr LyricsBox_PopIzRet
 
 LyricsFile_InsertNormalChar:
-	.byte 0x91, 0x80, 0xc3, 0x07, 0xec, 0xe0, 0x3f, 0x0d
-	.byte 0xf2, 0x57, 0xb0, 0xf2, 0xe6, 0x0b, 0x02, 0x00
-	.byte 0x0b, 0x4e, 0x0f, 0x1d, 0xc3, 0x07, 0xff, 0xdb
-	.byte 0x8e, 0x2e, 0x0b, 0x02, 0x00, 0x0b, 0x4e, 0x0f
-	.byte 0xf2, 0x42, 0x0e, 0x02, 0x30, 0x98, 0x02, 0x21
-	.byte 0xd9, 0xec, 0x06, 0x90, 0x81, 0xf2, 0xbe, 0x0c
-	.byte 0x02, 0x30, 0xf3, 0x07, 0xe0, 0xe4, 0x30, 0x38
-	.byte 0x1d, 0x16, 0x05, 0xff, 0xbf, 0x0e, 0x37, 0xf2
-	.byte 0x42, 0x0e, 0x02, 0x30, 0xde, 0x89, 0x90, 0x81
-	.byte 0xb0, 0x51, 0x40, 0x27, 0x00, 0x6f, 0x00, 0x41
-	.byte 0x0c, 0x00, 0xc7, 0x01, 0xea, 0xa8, 0x1d, 0x53
-	.byte 0x92, 0xfa, 0x1d, 0x10, 0xa2, 0xfa, 0xf2, 0x42
-	.byte 0x0e, 0x02, 0x30, 0x98, 0x02, 0x21, 0xd9, 0xec
-	.byte 0x06, 0x90, 0x81, 0xf2, 0xbe, 0x0c, 0x02, 0x30
-	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x3f, 0x0d, 0x6e, 0x03
+	add wa, (xbc)
+	cpib_sri 0x07, 0xec, 0xe0, 0x0d
+	call_24 z, (LyricsTrack_ResetAllBuffers)
+	pushw 0x0002
+	pushw 0x0f4e
+	call LyricsTrack_ReadAndParse_Helper2
+	ld iz, hl
+	pushw iz
+	pushw 0x0002
+	pushw 0x0f4e
+	lda_24 xwa, (0x20e42)
+	ld bc, (xwa+2)
+	sla bc, 6
+	add bc, (xwa)
+	lda_24 xwa, (0x20cbe)
+	lda_rr xwa, xwa, bc
+	push xwa
+	call 16712982
+	lda xsp, (xsp+14)
+	lda_24 xwa, (0x20e42)
+	ld bc, iz
+	add bc, (xwa)
+	ld (xwa), bc
+	ld xwa, 0x006f0027
+	ld xbc, 0x01c7000c
+	ld xde, 0:i3
+	call SendEvent
+	call LcdOff_Epilogue
+	lda_24 xwa, (0x20e42)
+	ld bc, (xwa+2)
+	sla bc, 6
+	add bc, (xwa)
+	lda_24 xwa, (0x20cbe)
+	cpib_sri 0x07, 0xe0, 0xe4, 0x0d
+	jr nz, LyricsBox_PopIzRet
 LyricsFile_ResetBuffers:
 	calr LyricsTrack_ResetAllBuffers
 
@@ -2223,10 +1756,15 @@ MeasureBoxFunc:
 	jr MeasureBoxFunc_Epilogue
 
 MeasureBoxFunc_DrawMeasure:
-	.byte 0xd1, 0x68, 0x26, 0x04, 0x0b, 0xe2, 0x00, 0x0b
-	.byte 0x00, 0x62, 0xaa, 0x12, 0x20, 0x38, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xbf, 0x0a, 0x37, 0xee, 0x8b, 0x68
-	.byte 0x04
+	pushm (0x2668:16)
+	pushw 0x00e2
+	pushw 0x6200
+	ld xwa, (xde+18)
+	push xwa
+	call Scoop_EventLoop_12Entry_Helper
+	lda xsp, (xsp+10)
+	ld xhl, xiz
+	jr MeasureBoxFunc_Epilogue
 MeasureBoxFunc_LoadAddr:
 	lda xhl, (9832:16)
 
@@ -2816,7 +2354,7 @@ IvNamingExit_ScreenData:
 	ld	xwa, (xiz+34)
 	ld	xbc, 31916034
 	call	MainFuncCall
-	.byte 0x9e, 0x2e, 0x3f, 0x00, 0x00
+	cpw (xiz+46), 0
 	jrl	z, IvNamingExit_ScreenData_Join3
 	ld	xwa, (xsp+178)
 	ld	xbc, 29360152
@@ -2843,17 +2381,17 @@ IvNamingExit_ScreenData_Skip:
 	ld	xde, (xsp+170)
 	call	MainFuncCall
 	ld	xwa, (xsp+22)
-	.byte 0x98, 0x26, 0x3f, 0x02, 0x00
+	cpw (xwa+38), 2
 	jrl	lt, IvNamingExit_ScreenData_Join3
 	lda	xbc, (xsp+154)
 	ld	xwa, (xsp+178)
 	call	GetClientBox
 	lda	xde, (xsp+154)
 	ld	bc, (xde+4)
-	.byte 0x92, 0xa1
+	sub bc, (xde)
 	exts	xbc
 	ld	xwa, (xsp+22)
-	.byte 0x98, 0x26, 0x59
+	divs bc, (xwa+38)
 	ld	(xsp+8), bc
 	ld	wa, (xde+2)
 	inc	1, wa
@@ -2865,7 +2403,7 @@ IvNamingExit_ScreenData_Skip:
 	jr	IvNamingExit_ScreenData_Join
 IvNamingExit_ScreenData_Loop:
 	ld	wa, (xsp+8)
-	.byte 0x9f, 0x14, 0x40
+	mul wa, (xsp+20)
 	ld	bc, (xsp+154)
 	add	bc, wa
 	dec	1, bc
@@ -2897,7 +2435,7 @@ IvNamingExit_ScreenData_Skip2:
 	or	xde, xde
 	jrl	z, IvNamingExit_ScreenData_Skip4
 	ld	bc, (xwa+38)
-	.byte 0x98, 0x28, 0x49
+	muls bc, (xwa+40)
 	ld	a, (xde)
 	exts	wa
 	cp	wa, bc
@@ -2909,10 +2447,10 @@ IvNamingExit_ScreenData_Skip2:
 	lda	xwa, (xbc+4)
 	ld	(xsp+18), xwa
 	ld	de, (xwa)
-	.byte 0x91, 0xa2
+	sub de, (xbc)
 	exts	xde
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x26, 0x5a
+	divs de, (xhl+38)
 	ld	(xsp+8), de
 	lda	xwa, (xbc+6)
 	ld	(xsp+14), xwa
@@ -2951,7 +2489,7 @@ IvNamingExit_ScreenData_Skip2:
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)
-	.byte 0x9f, 0x08, 0x82
+	add de, (xsp+8)
 	ld	xwa, (xsp+18)
 	ld	(xwa), de
 	lda	xde, (xsp+166)
@@ -2976,7 +2514,7 @@ IvNamingExit_ScreenData_Skip2:
 	lda	xhl, (xbc+28)
 	lda	xbc, (xsp+166)
 	lda	xwa, (xsp+154)
-	.byte 0x94, 0xf5
+	cp iy, (xix)
 	jr	nz, IvNamingExit_ScreenData_Skip3
 	ld	xhl, (xhl)
 	push	xhl
@@ -2987,16 +2525,16 @@ IvNamingExit_ScreenData_Skip3:
 	ld	xhl, (xhl)
 	push	xhl
 	ld	xhl, (xsp+14)
-	.byte 0x9b, 0x20, 0x04
+	pushm (xhl+32)
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04
+	pushm (xhl+22)
 IvNamingExit_ScreenData_Join2:
 	call	DrawString
 IvNamingExit_ScreenData_Skip4:
 	ld	xwa, (xsp+178)
 	call	GetViewInstance
 	ld	wa, (xhl+38)
-	.byte 0x9b, 0x28, 0x48
+	muls wa, (xhl+40)
 	exts	xwa
 	cp	(xsp+170), xwa
 	jr	nc, IvNamingExit_ScreenData_Join3
@@ -3016,7 +2554,7 @@ IvNamingExit_ScreenData_Skip5:
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	MainFuncCall
-	.byte 0x9e, 0x30, 0x3f, 0x00, 0x00
+	cpw (xiz+48), 0
 	jr	z, IvNamingExit_ScreenData_Join3
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
@@ -3488,25 +3026,30 @@ TrAsGrid_LookupTable:
 	ldw_sri HL, 0x07, 0xe4, 0xe0
 	ret
 
-TrAsGrid_ByteData1:
+; TrAsGrid_StepListValue (formerly TrAsGrid_ByteData1: it is code) -- A :=
+; position of value A in the 20-entry list NakaWidgetPtrTbl_SmfDp_0x23B8; step
+; it up (C == 0, stopping at 19) or down (stopping at 0); return in L the
+; list value at the new position from NakaWidgetPtrTbl_SmfDp_0x23CC.  Called
+; by the TrAsGridCheck cases.
+TrAsGrid_StepListValue:
 	extz	wa
 	lda	xde, (NakaWidgetPtrTbl_SmfDp_0x23B8:24)
 	ld_rrb a, xde, wa
 	cp c, 0:i3
-	jr nz, 9
+	jr nz, TrAsGrid_StepListValue_Skip
 	cp a, 19
-	jr	nc, 10
+	jr	nc, TrAsGrid_StepListValue_Join
 	inc	1, a
-	jr	6
+	jr	TrAsGrid_StepListValue_Join
+TrAsGrid_StepListValue_Skip:
 	cp	a, 0:i3
-	jr	z, 2
+	jr	z, TrAsGrid_StepListValue_Join
 	dec	1, a
+TrAsGrid_StepListValue_Join:
 	extz	wa
 	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x23CC
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ld	l, 14:opc
+	ld_rrb l, xbc, wa
+	ret
 
 TrAsGrid_CheckTrackType:
 	cp a, 0:i3
@@ -3552,10 +3095,13 @@ TrAsGridCheck:
 	add xwa, xwa
 	add xwa, NakaWidgetPtrTbl_SmfDp_0x2420
 	ld wa, (xwa)
-	lda xix, (TrAsGridChk_ByteData:24)
+	lda xix, (TrAsGridCheck_Cases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-TrAsGridChk_ByteData:
+; Case bodies of the `jp_ind` switch in TrAsGridCheck (events 0x1C00017-0x1C0001D; word offsets at NakaWidgetPtrTbl_SmfDp_0x2420): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+TrAsGridCheck_Cases:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
@@ -3575,19 +3121,14 @@ TrAsGridChk_ByteData:
 	cp	bc, 2:i3
 	jr	z, TrAsGrid_CheckTrackType_Skip
 	cp	bc, 1:i3
-	jrl	nz, 1197
+	jrl	nz, TrAsGridChk_ReturnZero
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 0:i3
-	calr	65318
+	calr	TrAsGrid_StepListValue
 	ld	(0x2873:16), l
-	.byte 0xf2, 0x82
-	rcf
-	push	sr
-	push_a
-	jrl ule, 16424
-	call16 18176
-	normal
+	ld (0x021082:24), (0x2873:16)
+	ld xwa, 0x0147001c
 	ld	xbc, 0x01e70006
 	ld	xde, xiz
 	call	MainFuncCall
@@ -3685,19 +3226,14 @@ TrAsGrid_CheckTrackType_Join2:
 	cp	bc, 2:i3
 	jr	z, TrAsGrid_CheckTrackType_Skip5
 	cp	bc, 1:i3
-	jrl	nz, 881
+	jrl	nz, TrAsGridChk_ReturnZero
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 1:i3
-	calr	65002
+	calr	TrAsGrid_StepListValue
 	ld	(0x2873:16), l
-	.byte 0xf2, 0x82
-	rcf
-	push	sr
-	push_a
-	jrl ule, 16424
-	call16 18176
-	normal
+	ld (0x021082:24), (0x2873:16)
+	ld xwa, 0x0147001c
 	ld	xbc, 0x01e70007
 	ld	xde, xiz
 	call	MainFuncCall
@@ -5033,1043 +4569,147 @@ IvExitTrSel_Epilogue:
 
 
 InitializeKubo:
-	lda xsp, (xsp - 0x0e)
-	lda XBC, (XSP)
-	ld XWA,0x01600004
-	ld (XBC),XWA
-	lda xwa, (ClassProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe27596:24)
-	ld (XBC+0x08),WA
-	lda xwa, (0xe27180:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0168
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000c
-	ld (XBC),XWA
-	lda xwa, (ResEventProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (0xe275f8:24)
-	ld (XBC+0x08),WA
-	lda xwa, (EvtEffDraw_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01c8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000d
-	ld (XBC),XWA
-	lda xwa, (ResMethodProc:24)
-	ld (XBC+0x04),XWA
-	ld wa, (EffectsEditor_GapByte:24)
-	ld (XBC+0x08),WA
-	lda xwa, (MT_FuncName_PtrTable:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x01e8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0049
-	lda xwa, (0xe26804:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0128
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600002
-	ld (XBC),XWA
-	lda xwa, (ApFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0049
-	lda xwa, (0xe2692c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0428
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0x03df10:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0108
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600001
-	ld (XBC),XWA
-	lda xwa, (FunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0x03df14:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0408
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe3051c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0148
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600003
-	ld (XBC),XWA
-	lda xwa, (MainFunctionProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe305d0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0448
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e624:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f0ac:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e658:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f0fa:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe2e68c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe2f148:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e724:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x000e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f232:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x030e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e758:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0080
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f280:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0380
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe2e78c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0081
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe2f2ce:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0381
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2e800:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0082
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2f3aa:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0382
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2e824:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0083
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2f3e0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0383
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000a
-	lda xwa, (0xe2e868:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0084
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000a
-	lda xwa, (0xe2f446:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0384
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2e894:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0085
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2f488:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0385
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe2e8fc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0086
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe2f560:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0386
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0018
-	lda xwa, (0xe2e92c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0087
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0018
-	lda xwa, (0xe2f5b2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0387
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2e990:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0088
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe2f66a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0388
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2e9c4:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x008d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2f6c2:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x038d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2e9d8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0090
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2f6e0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0390
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xe2ea20:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0091
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0013
-	lda xwa, (0xe2f758:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0391
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2ea70:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0093
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2f7dc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0393
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2eadc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0094
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2f898:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0394
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001b
-	lda xwa, (0xe2eaf0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0095
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001b
-	lda xwa, (0xe2f8b6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0395
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2eb60:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0096
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2f966:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0396
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2eb84:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0097
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe2f99c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0397
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2eb98:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0098
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x001a
-	lda xwa, (0xe2f9ba:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0398
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2ec04:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0099
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe2fa64:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x0399
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000e
-	lda xwa, (0xe2ec28:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000e
-	lda xwa, (0xe2fa9a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039a
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe2ec64:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe2fb02:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039b
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xe2ecc0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xe2fb9a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039c
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ed18:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fc28:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039d
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ed5c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fc9a:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039e
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2eda0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x009f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0019
-	lda xwa, (0xe2fd0c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x039f
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ee08:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fdb4:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a0
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2ee4c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe2fe24:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a1
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2ee90:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2fe96:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a2
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe2eed8:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe2ff0c:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a3
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2ef18:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0011
-	lda xwa, (0xe2ff78:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a4
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2ef60:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00a8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2fff0:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03a8
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2ef64:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00aa
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe2fff6:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03aa
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xe2ef68:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00ab
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xe2fffc:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03ab
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe2ef74:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00d6
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe3000e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03d6
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x01600010
-	ld (XBC),XWA
-	lda xwa, (ViewableProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x003d
-	lda xwa, (0xe2efb4:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x00e7
-	call RegisterObjectTable
-	lda XBC, (XSP)
-	ld XWA,0x0160000f
-	ld (XBC),XWA
-	lda xwa, (ResNameProc:24)
-	ld (XBC+0x04),XWA
-	ldw (XBC+0x08), 0x003d
-	lda xwa, (0xe3009e:24)
-	ld (XBC+0x0a),XWA
-	ldw WA, 0x03e7
-	call RegisterObjectTable
-	pushw 0x0008
-	pushw 0x00e3
-	pushw 0x02f8
-	.byte 0xe8, 0xaf, 0x41, 0x00, 0x00, 0x20, 0x01, 0x42
-	.byte 0xd6, 0x00, 0xa0, 0x01, 0x1d, 0x1e, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x08
-	.byte 0x03, 0x40, 0x08, 0x00, 0x00, 0x00, 0x41, 0x04
-	.byte 0x00, 0x48, 0x01, 0x42, 0x80, 0x00, 0xa0, 0x01
-	.byte 0x1d, 0x1e, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x10, 0x03, 0x40, 0x09, 0x00
-	.byte 0x00, 0x00, 0x41, 0x07, 0x00, 0x48, 0x01, 0x42
-	.byte 0x83, 0x00, 0xa0, 0x01, 0x1d, 0x1e, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x1c
-	.byte 0x03, 0x40, 0x0a, 0x00, 0x00, 0x00, 0x41, 0x06
-	.byte 0x00, 0x48, 0x01, 0x42, 0x81, 0x00, 0xa0, 0x01
-	.byte 0x1d, 0x1e, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x28, 0x03, 0x40, 0x0b, 0x00
-	.byte 0x00, 0x00, 0x41, 0x05, 0x00, 0x48, 0x01, 0x42
-	.byte 0x85, 0x00, 0xa0, 0x01, 0x1d, 0x1e, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x34
-	.byte 0x03, 0x40, 0x0c, 0x00, 0x00, 0x00, 0x41, 0x08
-	.byte 0x00, 0x48, 0x01, 0x42, 0x93, 0x00, 0xa0, 0x01
-	.byte 0x1d, 0x1e, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x40, 0x03, 0x40, 0x14, 0x00
-	.byte 0x00, 0x00, 0x41, 0x26, 0x00, 0x48, 0x01, 0x42
-	.byte 0xe7, 0x00, 0xa0, 0x01, 0x1d, 0x1e, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x48
-	.byte 0x03, 0x40, 0x0a, 0x00, 0x00, 0x00, 0x41, 0x20
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x0a, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x54, 0x03, 0x40, 0x0b, 0x00
-	.byte 0x00, 0x00, 0x41, 0x21, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x0b, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x60
-	.byte 0x03, 0x40, 0x0c, 0x00, 0x00, 0x00, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x0c, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x70, 0x03, 0x40, 0x0e, 0x00
-	.byte 0x00, 0x00, 0x41, 0x22, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x0e, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x7c
-	.byte 0x03, 0x40, 0x80, 0x00, 0x00, 0x00, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x80, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x86, 0x03, 0x40, 0x81, 0x00
-	.byte 0x00, 0x00, 0x41, 0x0a, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x81, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x90
-	.byte 0x03, 0x40, 0x82, 0x00, 0x00, 0x00, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x82, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x9c, 0x03, 0x40, 0x83, 0x00
-	.byte 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01, 0x42
-	.byte 0x00, 0x00, 0x83, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xaa
-	.byte 0x03, 0x40, 0x84, 0x00, 0x00, 0x00, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x84, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0xb6, 0x03, 0x40, 0x85, 0x00
-	.byte 0x00, 0x00, 0x41, 0x09, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x85, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xc4
-	.byte 0x03, 0x40, 0x86, 0x00, 0x00, 0x00, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x86, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0xd0, 0x03, 0x40, 0x87, 0x00
-	.byte 0x00, 0x00, 0x41, 0x0b, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x87, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xdc
-	.byte 0x03, 0x40, 0x88, 0x00, 0x00, 0x00, 0x41, 0x0c
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x88, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0xe8, 0x03, 0x40, 0x8d, 0x00
-	.byte 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01, 0x42
-	.byte 0x00, 0x00, 0x8d, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xf4
-	.byte 0x03, 0x40, 0x90, 0x00, 0x00, 0x00, 0x41, 0x13
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x90, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x00, 0x04, 0x40, 0x91, 0x00
-	.byte 0x00, 0x00, 0x41, 0x17, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x91, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x0c
-	.byte 0x04, 0x40, 0x93, 0x00, 0x00, 0x00, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x93, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x18, 0x04, 0x40, 0x94, 0x00
-	.byte 0x00, 0x00, 0x41, 0x1d, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x94, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x26
-	.byte 0x04, 0x40, 0x95, 0x00, 0x00, 0x00, 0x41, 0x1c
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x95, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x34, 0x04, 0x40, 0x96, 0x00
-	.byte 0x00, 0x00, 0x41, 0x24, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x96, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x42
-	.byte 0x04, 0x40, 0x97, 0x00, 0x00, 0x00, 0x41, 0x1b
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x97, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x4e, 0x04, 0x40, 0x98, 0x00
-	.byte 0x00, 0x00, 0x41, 0x1a, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x98, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x5a
-	.byte 0x04, 0x40, 0x99, 0x00, 0x00, 0x00, 0x41, 0x25
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x99, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x68, 0x04, 0x40, 0x9a, 0x00
-	.byte 0x00, 0x00, 0x41, 0x16, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x9a, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x74
-	.byte 0x04, 0x40, 0x9b, 0x00, 0x00, 0x00, 0x41, 0x18
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x9b, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x80, 0x04, 0x40, 0x9c, 0x00
-	.byte 0x00, 0x00, 0x41, 0x0d, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x9c, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x8a
-	.byte 0x04, 0x40, 0x9d, 0x00, 0x00, 0x00, 0x41, 0x11
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x9d, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x94, 0x04, 0x40, 0x9e, 0x00
-	.byte 0x00, 0x00, 0x41, 0x10, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0x9e, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xa2
-	.byte 0x04, 0x40, 0x9f, 0x00, 0x00, 0x00, 0x41, 0x12
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x9f, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0xb0, 0x04, 0x40, 0xa0, 0x00
-	.byte 0x00, 0x00, 0x41, 0x19, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0xa0, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xbc
-	.byte 0x04, 0x40, 0xa1, 0x00, 0x00, 0x00, 0x41, 0x0f
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0xa1, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0xc6, 0x04, 0x40, 0xa2, 0x00
-	.byte 0x00, 0x00, 0x41, 0x14, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0xa2, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xd0
-	.byte 0x04, 0x40, 0xa3, 0x00, 0x00, 0x00, 0x41, 0x0e
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0xa3, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0xda, 0x04, 0x40, 0xa4, 0x00
-	.byte 0x00, 0x00, 0x41, 0x15, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0xa4, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xe4
-	.byte 0x04, 0x40, 0xa8, 0x00, 0x00, 0x00, 0x41, 0x17
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0x91, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0xf0, 0x04, 0x40, 0xaa, 0x00
-	.byte 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01, 0x42
-	.byte 0x00, 0x00, 0x8d, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0xfc
-	.byte 0x04, 0x40, 0xab, 0x00, 0x00, 0x00, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0xab, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x08, 0x00, 0x0b
-	.byte 0xe3, 0x00, 0x0b, 0x08, 0x05, 0x40, 0xd6, 0x00
-	.byte 0x00, 0x00, 0x41, 0x2a, 0x00, 0x48, 0x01, 0x42
-	.byte 0x00, 0x00, 0xd6, 0x00, 0x1d, 0x73, 0x49, 0xfa
-	.byte 0x0b, 0x08, 0x00, 0x0b, 0xe3, 0x00, 0x0b, 0x12
-	.byte 0x05, 0x40, 0xe7, 0x00, 0x00, 0x00, 0x41, 0x27
-	.byte 0x00, 0x48, 0x01, 0x42, 0x00, 0x00, 0xe7, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0xbf, 0x0e, 0x37, 0x0e
+	lda xsp, (xsp - 14)
+
+	RegObjTable 0x1600004, ClassProc, 0xe27596, 0xe27180, 0x168
+	RegObjTable 0x160000c, ResEventProc, 0xe275f8, EvtEffDraw_PtrTable, 0x1c8
+	RegObjTable 0x160000d, ResMethodProc, EffectsEditor_GapByte, MT_FuncName_PtrTable, 0x1e8
+	RegObjTabl 0x1600002, ApFunctionProc, 0x49, 0xe26804, 0x128
+	RegObjTabl 0x1600002, ApFunctionProc, 0x49, 0xe2692c, 0x428
+	RegObjTabl 0x1600001, FunctionProc, 0x0, 0x3df10, 0x108
+	RegObjTabl 0x1600001, FunctionProc, 0x0, 0x3df14, 0x408
+	RegObjTabl 0x1600003, MainFunctionProc, 0x2c, 0xe3051c, 0x148
+	RegObjTabl 0x1600003, MainFunctionProc, 0x2c, 0xe305d0, 0x448
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e624, 0xa
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f0ac, 0x30a
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e658, 0xb
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f0fa, 0x30b
+	RegObjTabl 0x1600010, ViewableProc, 0x25, 0xe2e68c, 0xc
+	RegObjTabl 0x160000f, ResNameProc, 0x25, 0xe2f148, 0x30c
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e724, 0xe
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f232, 0x30e
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e758, 0x80
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f280, 0x380
+	RegObjTabl 0x1600010, ViewableProc, 0x1c, 0xe2e78c, 0x81
+	RegObjTabl 0x160000f, ResNameProc, 0x1c, 0xe2f2ce, 0x381
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2e800, 0x82
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2f3aa, 0x382
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2e824, 0x83
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2f3e0, 0x383
+	RegObjTabl 0x1600010, ViewableProc, 0xa, 0xe2e868, 0x84
+	RegObjTabl 0x160000f, ResNameProc, 0xa, 0xe2f446, 0x384
+	RegObjTabl 0x1600010, ViewableProc, 0x19, 0xe2e894, 0x85
+	RegObjTabl 0x160000f, ResNameProc, 0x19, 0xe2f488, 0x385
+	RegObjTabl 0x1600010, ViewableProc, 0xb, 0xe2e8fc, 0x86
+	RegObjTabl 0x160000f, ResNameProc, 0xb, 0xe2f560, 0x386
+	RegObjTabl 0x1600010, ViewableProc, 0x18, 0xe2e92c, 0x87
+	RegObjTabl 0x160000f, ResNameProc, 0x18, 0xe2f5b2, 0x387
+	RegObjTabl 0x1600010, ViewableProc, 0xc, 0xe2e990, 0x88
+	RegObjTabl 0x160000f, ResNameProc, 0xc, 0xe2f66a, 0x388
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe2e9c4, 0x8d
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe2f6c2, 0x38d
+	RegObjTabl 0x1600010, ViewableProc, 0x11, 0xe2e9d8, 0x90
+	RegObjTabl 0x160000f, ResNameProc, 0x11, 0xe2f6e0, 0x390
+	RegObjTabl 0x1600010, ViewableProc, 0x13, 0xe2ea20, 0x91
+	RegObjTabl 0x160000f, ResNameProc, 0x13, 0xe2f758, 0x391
+	RegObjTabl 0x1600010, ViewableProc, 0x1a, 0xe2ea70, 0x93
+	RegObjTabl 0x160000f, ResNameProc, 0x1a, 0xe2f7dc, 0x393
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe2eadc, 0x94
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe2f898, 0x394
+	RegObjTabl 0x1600010, ViewableProc, 0x1b, 0xe2eaf0, 0x95
+	RegObjTabl 0x160000f, ResNameProc, 0x1b, 0xe2f8b6, 0x395
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2eb60, 0x96
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2f966, 0x396
+	RegObjTabl 0x1600010, ViewableProc, 0x4, 0xe2eb84, 0x97
+	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe2f99c, 0x397
+	RegObjTabl 0x1600010, ViewableProc, 0x1a, 0xe2eb98, 0x98
+	RegObjTabl 0x160000f, ResNameProc, 0x1a, 0xe2f9ba, 0x398
+	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xe2ec04, 0x99
+	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xe2fa64, 0x399
+	RegObjTabl 0x1600010, ViewableProc, 0xe, 0xe2ec28, 0x9a
+	RegObjTabl 0x160000f, ResNameProc, 0xe, 0xe2fa9a, 0x39a
+	RegObjTabl 0x1600010, ViewableProc, 0x16, 0xe2ec64, 0x9b
+	RegObjTabl 0x160000f, ResNameProc, 0x16, 0xe2fb02, 0x39b
+	RegObjTabl 0x1600010, ViewableProc, 0x15, 0xe2ecc0, 0x9c
+	RegObjTabl 0x160000f, ResNameProc, 0x15, 0xe2fb9a, 0x39c
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ed18, 0x9d
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fc28, 0x39d
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ed5c, 0x9e
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fc9a, 0x39e
+	RegObjTabl 0x1600010, ViewableProc, 0x19, 0xe2eda0, 0x9f
+	RegObjTabl 0x160000f, ResNameProc, 0x19, 0xe2fd0c, 0x39f
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ee08, 0xa0
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fdb4, 0x3a0
+	RegObjTabl 0x1600010, ViewableProc, 0x10, 0xe2ee4c, 0xa1
+	RegObjTabl 0x160000f, ResNameProc, 0x10, 0xe2fe24, 0x3a1
+	RegObjTabl 0x1600010, ViewableProc, 0x11, 0xe2ee90, 0xa2
+	RegObjTabl 0x160000f, ResNameProc, 0x11, 0xe2fe96, 0x3a2
+	RegObjTabl 0x1600010, ViewableProc, 0xf, 0xe2eed8, 0xa3
+	RegObjTabl 0x160000f, ResNameProc, 0xf, 0xe2ff0c, 0x3a3
+	RegObjTabl 0x1600010, ViewableProc, 0x11, 0xe2ef18, 0xa4
+	RegObjTabl 0x160000f, ResNameProc, 0x11, 0xe2ff78, 0x3a4
+	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe2ef60, 0xa8
+	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe2fff0, 0x3a8
+	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe2ef64, 0xaa
+	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe2fff6, 0x3aa
+	RegObjTabl 0x1600010, ViewableProc, 0x2, 0xe2ef68, 0xab
+	RegObjTabl 0x160000f, ResNameProc, 0x2, 0xe2fffc, 0x3ab
+	RegObjTabl 0x1600010, ViewableProc, 0xf, 0xe2ef74, 0xd6
+	RegObjTabl 0x160000f, ResNameProc, 0xf, 0xe3000e, 0x3d6
+	RegObjTabl 0x1600010, ViewableProc, 0x3d, 0xe2efb4, 0xe7
+	RegObjTabl 0x160000f, ResNameProc, 0x3d, 0xe3009e, 0x3e7
+
+	RegMode 0x8, 0xe3, 0x2f8, 0x7, 0x1200000, 0x1a000d6
+	RegMode 0x8, 0xe3, 0x308, 0x8, 0x1480004, 0x1a00080
+	RegMode 0x8, 0xe3, 0x310, 0x9, 0x1480007, 0x1a00083
+	RegMode 0x8, 0xe3, 0x31c, 0xa, 0x1480006, 0x1a00081
+	RegMode 0x8, 0xe3, 0x328, 0xb, 0x1480005, 0x1a00085
+	RegMode 0x8, 0xe3, 0x334, 0xc, 0x1480008, 0x1a00093
+	RegMode 0x8, 0xe3, 0x340, 0x14, 0x1480026, 0x1a000e7
+
+	RegTitle 0x8, 0xe3, 0x348, 0xa, 0x1480020, 0xa0000
+	RegTitle 0x8, 0xe3, 0x354, 0xb, 0x1480021, 0xb0000
+	RegTitle 0x8, 0xe3, 0x360, 0xc, 0x1200000, 0xc0000
+	RegTitle 0x8, 0xe3, 0x370, 0xe, 0x1480022, 0xe0000
+	RegTitle 0x8, 0xe3, 0x37c, 0x80, 0x1200000, 0x800000
+	RegTitle 0x8, 0xe3, 0x386, 0x81, 0x148000a, 0x810000
+	RegTitle 0x8, 0xe3, 0x390, 0x82, 0x1200000, 0x820000
+	RegTitle 0x8, 0xe3, 0x39c, 0x83, 0x1200000, 0x830000
+	RegTitle 0x8, 0xe3, 0x3aa, 0x84, 0x1200000, 0x840000
+	RegTitle 0x8, 0xe3, 0x3b6, 0x85, 0x1480009, 0x850000
+	RegTitle 0x8, 0xe3, 0x3c4, 0x86, 0x1200000, 0x860000
+	RegTitle 0x8, 0xe3, 0x3d0, 0x87, 0x148000b, 0x870000
+	RegTitle 0x8, 0xe3, 0x3dc, 0x88, 0x148000c, 0x880000
+	RegTitle 0x8, 0xe3, 0x3e8, 0x8d, 0x1200000, 0x8d0000
+	RegTitle 0x8, 0xe3, 0x3f4, 0x90, 0x1480013, 0x900000
+	RegTitle 0x8, 0xe3, 0x400, 0x91, 0x1480017, 0x910000
+	RegTitle 0x8, 0xe3, 0x40c, 0x93, 0x1200000, 0x930000
+	RegTitle 0x8, 0xe3, 0x418, 0x94, 0x148001d, 0x940000
+	RegTitle 0x8, 0xe3, 0x426, 0x95, 0x148001c, 0x950000
+	RegTitle 0x8, 0xe3, 0x434, 0x96, 0x1480024, 0x960000
+	RegTitle 0x8, 0xe3, 0x442, 0x97, 0x148001b, 0x970000
+	RegTitle 0x8, 0xe3, 0x44e, 0x98, 0x148001a, 0x980000
+	RegTitle 0x8, 0xe3, 0x45a, 0x99, 0x1480025, 0x990000
+	RegTitle 0x8, 0xe3, 0x468, 0x9a, 0x1480016, 0x9a0000
+	RegTitle 0x8, 0xe3, 0x474, 0x9b, 0x1480018, 0x9b0000
+	RegTitle 0x8, 0xe3, 0x480, 0x9c, 0x148000d, 0x9c0000
+	RegTitle 0x8, 0xe3, 0x48a, 0x9d, 0x1480011, 0x9d0000
+	RegTitle 0x8, 0xe3, 0x494, 0x9e, 0x1480010, 0x9e0000
+	RegTitle 0x8, 0xe3, 0x4a2, 0x9f, 0x1480012, 0x9f0000
+	RegTitle 0x8, 0xe3, 0x4b0, 0xa0, 0x1480019, 0xa00000
+	RegTitle 0x8, 0xe3, 0x4bc, 0xa1, 0x148000f, 0xa10000
+	RegTitle 0x8, 0xe3, 0x4c6, 0xa2, 0x1480014, 0xa20000
+	RegTitle 0x8, 0xe3, 0x4d0, 0xa3, 0x148000e, 0xa30000
+	RegTitle 0x8, 0xe3, 0x4da, 0xa4, 0x1480015, 0xa40000
+	RegTitle 0x8, 0xe3, 0x4e4, 0xa8, 0x1480017, 0x910000
+	RegTitle 0x8, 0xe3, 0x4f0, 0xaa, 0x1200000, 0x8d0000
+	RegTitle 0x8, 0xe3, 0x4fc, 0xab, 0x1200000, 0xab0000
+	RegTitle 0x8, 0xe3, 0x508, 0xd6, 0x148002a, 0xd60000
+	RegTitle 0x8, 0xe3, 0x512, 0xe7, 0x1480027, 0xe70000
+
+	lda xsp, (xsp + 14)
+	ret
+
 AutoPunchTtlRqFunc:
 	cp xbc, 0x1c00007
 	jr nz, IvRealRecCheck_ReturnZero
@@ -7464,36 +6104,36 @@ NoteEditBox_SetupGrid:
 NoteEditBox_EventDispatch1:
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80054
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80055
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80057
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80058
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e8005a
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80056
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8005b
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80059
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 
 NoteEditBoxProc_SetupGridDisplay:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003e
-InitializeKubo_Join:
+NoteEditBoxProc_SetupGridDisplay_Join:
 	call ApFuncCall
 	lda xwa, (xsp + 28)
 	lda xbc, (xsp + 24)
@@ -7533,9 +6173,9 @@ NoteEditBox_EventDispatch2:
 	call	GetTitleNow
 	ld	(xsp+10), 3
 	cp	xhl, 27263125
-	jr	nz, InitializeKubo_Skip
+	jr	nz, NoteEditBox_EventDispatch2_Skip
 	ld	(xsp+10), 2
-InitializeKubo_Skip:
+NoteEditBox_EventDispatch2_Skip:
 	lda	xwa, (xsp+28)
 	ld	c, (xsp+10)
 	extz	bc
@@ -7548,10 +6188,10 @@ InitializeKubo_Skip:
 	ld	bc, (xde+2)
 	ld	(xhl), bc
 	ld	bc, (xwa)
-	.byte 0x9a, 0x04, 0x81
+	add bc, (xde+4)
 	ld	(xwa+4), bc
 	ld	bc, (xhl)
-	.byte 0x9a, 0x06, 0x81
+	add bc, (xde+6)
 	ld	(xwa+6), bc
 	ld	bc, 0:i3
 	ldw	de, 245
@@ -7559,9 +6199,9 @@ InitializeKubo_Skip:
 	call	GetTitleNow
 	ld	(xsp+10), 7
 	cp	xhl, 27263125
-	jr	nz, InitializeKubo_Skip2
+	jr	nz, NoteEditBox_EventDispatch2_Skip2
 	ld	(xsp+10), 6
-InitializeKubo_Skip2:
+NoteEditBox_EventDispatch2_Skip2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981649
@@ -7569,8 +6209,8 @@ InitializeKubo_Skip2:
 	call	ApFuncCall
 	lda	xix, (xsp+28)
 	ld	(xix), hl
-	.byte 0x94, 0x3f, 0x00, 0x00
-	jr	z, InitializeKubo_Skip3
+	cpw (xix), 0
+	jr	z, NoteEditBox_EventDispatch2_Skip3
 	lda	xde, (xix+2)
 	ld	a, (xsp+10)
 	extz	wa
@@ -7580,15 +6220,15 @@ InitializeKubo_Skip2:
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xix)
@@ -7616,7 +6256,7 @@ InitializeKubo_Skip2:
 	pushw 251
 	pushw 245
 	call	DrawStringLeftJustify
-InitializeKubo_Skip3:
+NoteEditBox_EventDispatch2_Skip3:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981650
@@ -7633,15 +6273,15 @@ InitializeKubo_Skip3:
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xix)
@@ -7668,7 +6308,7 @@ InitializeKubo_Skip3:
 	push	xhl
 	pushw 251
 	pushw 245
-	jrl	InitializeKubo_Join8
+	jrl	NoteEditBox_EventDispatch2_Join7
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981651
@@ -7684,7 +6324,7 @@ InitializeKubo_Skip3:
 	ld	de, (xwa)
 	ld	(xbc), de
 	ld	de, (xhl)
-	.byte 0x9c, 0x46, 0x82
+	add de, (xix+70)
 	ld	(xbc+2), de
 	ldw	de, 242
 	call	DrawLine
@@ -7692,11 +6332,11 @@ InitializeKubo_Skip3:
 	ld	xwa, 9764884
 	ld	xbc, 29360141
 	ld	xde, (xsp+90)
-	jr	InitializeKubo_Join2
+	jr	NoteEditBox_EventDispatch2_Join
 	ld	xwa, 9961489
 	ld	xbc, 29360141
 	ld	xde, (xsp+90)
-InitializeKubo_Join2:
+NoteEditBox_EventDispatch2_Join:
 	call	SendEvent
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
@@ -7707,7 +6347,7 @@ InitializeKubo_Join2:
 	ld	(xsp+8), hl
 	ldw	(xsp+10), 1
 	ldib_erp	251, 0
-InitializeKubo_Loop:
+NoteEditBox_EventDispatch2_Loop:
 	stb_erp	a, 251
 	extz	wa
 	add	wa, wa
@@ -7721,18 +6361,18 @@ InitializeKubo_Loop:
 	ld	xbc, 31981661
 	call	ApFuncCall
 	or	xhl, xhl
-	jr	z, InitializeKubo_Skip5
+	jr	z, NoteEditBox_EventDispatch2_Skip5
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
 	ldw	(xwa+2), 32
 	ldw	(xwa+6), 43
 	cpib_erp	251, 0
-	jr	nz, InitializeKubo_Skip4
-	.byte 0x9f, 0x08, 0x04
+	jr	nz, NoteEditBox_EventDispatch2_Skip4
+	pushm (xsp+8)
 	ld	xwa, 14894612
-	jr	InitializeKubo_Join3
-InitializeKubo_Skip4:
+	jr	NoteEditBox_EventDispatch2_Join2
+NoteEditBox_EventDispatch2_Skip4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
@@ -7740,7 +6380,7 @@ InitializeKubo_Skip4:
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, 14894616
-InitializeKubo_Join3:
+NoteEditBox_EventDispatch2_Join2:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
@@ -7748,25 +6388,27 @@ InitializeKubo_Join3:
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
-	jr	InitializeKubo_Join4
-InitializeKubo_Skip5:
+	jr	NoteEditBox_EventDispatch2_Join3
+NoteEditBox_EventDispatch2_Skip5:
 	ld	xwa, 3:i3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
 	ldw	(xwa+2), 33
 	ldw	(xwa+6), 42
-	.byte 0x9f, 0x0a, 0x04, 0x0b, 0xe3, 0x00, 0x0b, 0x1c, 0x46
+	pushm (xsp+10)
+	pushw 0x00e3
+	pushw 0x461c
 	lda	xwa, (xsp+42)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+10)
-InitializeKubo_Join4:
+NoteEditBox_EventDispatch2_Join3:
 	lda	xwa, (xsp+28)
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90, 0xa1
+	sub bc, (xwa)
 	exts	xbc
 	divs	bc, 2
 	ld	de, (xwa)
@@ -7788,7 +6430,7 @@ InitializeKubo_Join4:
 	call	DrawStringLeftJustify
 	inc1b_erp	251
 	cp_erpb	251, 11
-	jrl	c, InitializeKubo_Loop
+	jrl	c, NoteEditBox_EventDispatch2_Loop
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -7798,7 +6440,7 @@ InitializeKubo_Join4:
 	ld	(xsp+8), hl
 	ldw	(xsp+10), 1
 	ldib_erp	251, 0
-InitializeKubo_Loop2:
+NoteEditBox_EventDispatch2_Loop2:
 	stb_erp	a, 251
 	extz	wa
 	add	wa, wa
@@ -7816,17 +6458,17 @@ InitializeKubo_Loop2:
 	lda	xbc, (xwa+2)
 	lda	xix, (xwa+6)
 	or	xhl, xhl
-	jr	z, InitializeKubo_Skip7
+	jr	z, NoteEditBox_EventDispatch2_Skip7
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 	ldw	(xbc), 38
 	ldw	(xix), 49
 	cpib_erp	251, 0
-	jr	nz, InitializeKubo_Skip6
-	.byte 0x9f, 0x08, 0x04
+	jr	nz, NoteEditBox_EventDispatch2_Skip6
+	pushm (xsp+8)
 	ld	xwa, 14894624
-	jr	InitializeKubo_Join5
-InitializeKubo_Skip6:
+	jr	NoteEditBox_EventDispatch2_Join4
+NoteEditBox_EventDispatch2_Skip6:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
@@ -7834,30 +6476,32 @@ InitializeKubo_Skip6:
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, 14894628
-InitializeKubo_Join5:
+NoteEditBox_EventDispatch2_Join4:
 	push	xwa
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
-	jr	InitializeKubo_Join6
-InitializeKubo_Skip7:
+	jr	NoteEditBox_EventDispatch2_Join5
+NoteEditBox_EventDispatch2_Skip7:
 	ld	xwa, 3:i3
 	ld	(xsp+4), xwa
 	ldw	(xbc), 40
 	ldw	(xix), 49
-	.byte 0x9f, 0x0a, 0x04, 0x0b, 0xe3, 0x00, 0x0b, 0x28, 0x46
+	pushm (xsp+10)
+	pushw 0x00e3
+	pushw 0x4628
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+10)
-InitializeKubo_Join6:
+NoteEditBox_EventDispatch2_Join5:
 	lda	xwa, (xsp+28)
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90, 0xa1
+	sub bc, (xwa)
 	exts	xbc
 	divs	bc, 2
 	ld	de, (xwa)
@@ -7879,23 +6523,23 @@ InitializeKubo_Join6:
 	call	DrawStringLeftJustify
 	inc1b_erp	251
 	cp_erpb	251, 8
-	jrl	c, InitializeKubo_Loop2
+	jrl	c, NoteEditBox_EventDispatch2_Loop2
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981662
 	ld	xde, 0:i3
-	jr	InitializeKubo_Join7
+	jr	NoteEditBox_EventDispatch2_Join6
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981663
 	ld	xde, 0:i3
-	jr	InitializeKubo_Join7
+	jr	NoteEditBox_EventDispatch2_Join6
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981664
 	ld	xde, 0:i3
-InitializeKubo_Join7:
+NoteEditBox_EventDispatch2_Join6:
 	call	ApFuncCall
 	jrl	NoteEdit_ReturnZero
 	lda	xix, (xsp+28)
@@ -7911,7 +6555,7 @@ InitializeKubo_Join7:
 	inc	6, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -7936,10 +6580,10 @@ InitializeKubo_Join7:
 	ld	(xde+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-InitializeKubo_Loop3:
+NoteEditBox_EventDispatch2_Loop3:
 	stib_dsp	224, 0
 	cp	xwa, xbc
-	jr	c, InitializeKubo_Loop3
+	jr	c, NoteEditBox_EventDispatch2_Loop3
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981674
@@ -7958,7 +6602,7 @@ InitializeKubo_Loop3:
 	lda	xde, (xhl+6)
 	ldw	(xde), 161
 	ld	wa, (xhl+4)
-	.byte 0x93, 0xa0
+	sub wa, (xhl)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xhl)
@@ -7992,7 +6636,7 @@ InitializeKubo_Loop3:
 	push	xhl
 	pushw 0
 	pushw 255
-InitializeKubo_Join8:
+NoteEditBox_EventDispatch2_Join7:
 	call	DrawStringLeftJustify
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
@@ -8006,12 +6650,12 @@ InitializeKubo_Join8:
 	ld	(xwa+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-InitializeKubo_Loop4:
+NoteEditBox_EventDispatch2_Loop4:
 	stib_dsp	224, 0
 	cp	xwa, xbc
-	jr	c, InitializeKubo_Loop4
+	jr	c, NoteEditBox_EventDispatch2_Loop4
 	ld	(135318:24), 0
-InitializeKubo_Loop5:
+NoteEditBox_EventDispatch2_Loop5:
 	lda	xix, (xsp+28)
 	ldw	(xix), 2
 	lda	xde, (xix+4)
@@ -8028,7 +6672,7 @@ InitializeKubo_Loop5:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -8050,22 +6694,22 @@ InitializeKubo_Loop5:
 	lda	xbc, (xsp+24)
 	ld	a, (135318:24)
 	cp	a, (10144:16)
-	jr	nz, InitializeKubo_Skip8
+	jr	nz, NoteEditBox_EventDispatch2_Skip8
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
 	pushw 255
 	pushw 242
-	jr	InitializeKubo_Join9
-InitializeKubo_Skip8:
+	jr	NoteEditBox_EventDispatch2_Join8
+NoteEditBox_EventDispatch2_Skip8:
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
 	pushw 242
 	pushw 255
-InitializeKubo_Join9:
+NoteEditBox_EventDispatch2_Join8:
 	call	DrawStringLeftJustify
 	lda	xix, (xsp+28)
 	ldw	(xix), 23
@@ -8083,7 +6727,7 @@ InitializeKubo_Join9:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -8114,7 +6758,7 @@ InitializeKubo_Join9:
 	inc	1, a
 	ld	(135318:24), a
 	cp	a, 11
-	jrl	ule, InitializeKubo_Loop5
+	jrl	ule, NoteEditBox_EventDispatch2_Loop5
 	jrl	NoteEdit_ReturnZero
 NoteEditBoxProc_ClassifyGridPosition:
 	ld xwa, (xsp + 90)
@@ -8290,7 +6934,7 @@ NoteEdit_FormatTempoString:
 	ld	xwa, 14894708
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
-	.byte 0xd1, 0x84, 0x27, 0x04
+	pushm (0x2784:16)
 	ld	xwa, 14894714
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
@@ -8440,9 +7084,12 @@ NoteEdit_GetParamValue:
 	add xde, xde
 	add xde, ExtDevice_ModeDispatch_Table_0x200
 	ld de, (xde)
-	lda xix, (NoteEdit_ParamJumpTable:24)
+	lda xix, (NoteEdit_GetParamValue_Cases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
-NoteEdit_ParamJumpTable:
+; Case bodies of the `jp_ind` switch in NoteEdit_GetParamValue (xde-1 = 0..13; word offsets at ExtDevice_ModeDispatch_Table_0x200): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+NoteEdit_GetParamValue_Cases:
 	ld	hl, (0x2782:16)
 	extz	xhl
 	jrl	NoteEdit_Epilogue
@@ -9162,7 +7809,7 @@ SndParam_Dispatch:
 	ld	(xbc), wa
 	ld	xde, (xsp+58)
 	ld	(xbc+2), de
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw (xbc), 1
 	jrl	nz, SndParam_ReturnZero
 	ld	wa, de
 	cp	wa, 0:i3
@@ -9214,7 +7861,7 @@ SndParam_Dispatch_Join:
 	ld	(xbc), wa
 	ld	xhl, (xsp+58)
 	ld	(xbc+2), hl
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw (xbc), 1
 	jrl	nz, SndParam_ReturnZero
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -9265,7 +7912,7 @@ SndParam_Dispatch_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
+	cpl_sri_rm xwa, 0x07, 0xf0, 0xf4
 	jr	z, SndParam_Dispatch_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -9283,7 +7930,9 @@ SndParam_Dispatch_Skip3:
 	jr	z, SndParam_Dispatch_Skip4
 	cp	xhl, 16705
 	jrl	nz, SndParam_ReturnZero
-	.byte 0x92, 0x04, 0x0b, 0xe3, 0x00, 0x0b, 0x7e, 0x47
+	pushm (xde)
+	pushw 0x00e3
+	pushw 0x477e
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -9294,7 +7943,7 @@ SndParam_Dispatch_Skip3:
 	jrl	SndParam_SendEventReturnZero
 SndParam_Dispatch_Skip4:
 	ld	xwa, 14894994
-	.byte 0x92, 0x3f, 0x00, 0x00
+	cpw (xde), 0
 	jr	z, SndParam_Dispatch_Skip5
 	ld	xwa, 14894984
 SndParam_Dispatch_Skip5:
@@ -9391,11 +8040,11 @@ EntGridCheck_Handle4E00:
 	call	16712982
 	lda	xsp, (xsp+10)
 	ld	(xsp+57), 0
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	602
+	jrl	SndParam_SendEventReturnZero
 EntGridCheck_Handle4E10:
 	ld	xwa, (xsp+20)
 	ld	(xwa), 32
@@ -9499,8 +8148,8 @@ EntGridCheck_Handle4E13:
 	lda xde, (xsp + 40)
 
 	ld xbc, 0x1e0008c
+	jrl SndParam_SendEventReturnZero	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
-	.byte 0x78, 0x52, 0x01	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
 
 
@@ -9543,15 +8192,15 @@ EntGridCheck_Return:
 
 	ld (xsp + 57), 0x0
 
-	call	16400579
+	call	GetFocusObject
 
 	ld xwa, xhl
 
 	lda xde, (xsp + 40)
 
 	ld xbc, 0x1e0008c
+	jrl SndParam_SendEventReturnZero	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
-	.byte 0x78, 0x0e, 0x01	; jrl SndParam_SendEventReturnZero (v7 displacement)
 
 
 
@@ -9620,7 +8269,7 @@ EntGridCheck_DefaultCase1:
 	ld	(xwa+6), 72
 	ld	(xwa+7), 122
 	ld	(xwa+8), 32
-	jr	53
+	jr	EntGridCheck_NullTerminate
 EntGridCheck_DefaultCase2:
 	ld	(xbc), 32
 	ld	xwa, (xsp+36)
@@ -10026,12 +8675,15 @@ SqplyVal_HandleExtraParams:
 	add xhl, xhl
 	add xhl, ExtDevice_ModeDispatch_Table_0x334
 	ld hl, (xhl)
-	lda xix, (SqplyVal_ExtraParamsData:24)
+	lda xix, (SqplyVal_ParamCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
-SqplyVal_ExtraParamsData:
+; Case bodies of the `jp_ind` switch in the SqplyVal handler above (index 0..7; word offsets at ExtDevice_ModeDispatch_Table_0x334): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+SqplyVal_ParamCases:
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80041
-SqplyVal_ExtraParamsData_Join:
+SqplyVal_ParamCases_Join:
 	call	ApFuncCall
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+26)
@@ -10042,40 +8694,37 @@ SqplyVal_ExtraParamsData_Join:
 	lda	xbc, (xsp+48)
 	lda	xde, (xsp+32)
 	or	xhl, xhl
-	jr	z, SqplyVal_ExtraParamsData_Skip
+	jr	z, SqplyVal_ParamCases_Skip
 	ld	xhl, 0:i3
 	push	xhl
 	pushw	0
 	pushw	255
-	jr	SqplyVal_ExtraParamsData_Join2
+	jr	SqplyVal_ParamCases_Join2
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80042
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80043
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e8004e
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e8004f
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80050
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80047
-	jr	SqplyVal_ExtraParamsData_Join
-SqplyVal_ExtraParamsData_Skip:
+	jr	SqplyVal_ParamCases_Join
+SqplyVal_ParamCases_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+10)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
-SqplyVal_ExtraParamsData_Join2:
+	pushm (xhl+22)
+	pushm (xhl+24)
+SqplyVal_ParamCases_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+68)
 	ld	xbc, 0x01c00017
@@ -10460,14 +9109,17 @@ SqedtVal_ClearDrawBuffer:
 	add xwa, xwa
 	add xwa, ExtDevice_ModeDispatch_Table_0x344
 	ld wa, (xwa)
-	lda xix, (SqedtVal_DrawParamsData:24)
+	lda xix, (SqedtVal_ParamCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-SqedtVal_DrawParamsData:
+; Case bodies of the `jp_ind` switch in the SqedtVal handler above (index 0..14; word offsets at ExtDevice_ModeDispatch_Table_0x344): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+SqedtVal_ParamCases:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80016
-SqedtVal_DrawParamsData_Join:
+SqedtVal_ParamCases_Join:
 	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
@@ -10478,78 +9130,75 @@ SqedtVal_DrawParamsData_Join:
 	lda	xbc, (xsp+54)
 	lda	xde, (xsp+30)
 	or	xhl, xhl
-	jrl	z, SqedtVal_DrawParamsData_Skip
+	jrl	z, SqedtVal_ParamCases_Skip
 	ld	xhl, 0:i3
 	push	xhl
 	pushw	0
 	pushw	255
-	jrl	SqedtVal_DrawParamsData_Join2
+	jrl	SqedtVal_ParamCases_Join2
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80017
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80018
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80019
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001a
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001b
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001c
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001d
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001e
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001f
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80020
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80021
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80022
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80023
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80024
-	jrl	SqedtVal_DrawParamsData_Join
-SqedtVal_DrawParamsData_Skip:
+	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ParamCases_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
-SqedtVal_DrawParamsData_Join2:
+	pushm (xhl+22)
+	pushm (xhl+24)
+SqedtVal_ParamCases_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+74)
 	ld	xbc, 0x01c00017
@@ -12192,11 +10841,8 @@ AccIll_Dispatch_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 AccIll_Dispatch_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+4)
@@ -12221,9 +10867,8 @@ AccIll_Dispatch_Join2:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95
-	or	(xwa), xwa
-	zcf
+	sub wa, (xiy)
+	exts xwa
 	divs	wa, 2
 	ld	iy, (xiy)
 	add	iy, wa
@@ -12270,9 +10915,8 @@ AccIll_Dispatch_Skip2:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95
-	or	(xwa), xwa
-	zcf
+	sub wa, (xiy)
+	exts xwa
 	divs	wa, 2
 	ld	iy, (xiy)
 	add	iy, wa
@@ -12294,11 +10938,8 @@ AccIll_Dispatch_Skip3:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b
-	ex_ff
-	.byte 0x04, 0x9b
-	push_f
-	.byte 0x04
+	pushm (xhl+22)
+	pushm (xhl+24)
 AccIll_Dispatch_Join4:
 	call	DrawStringLeftJustify
 	jrl	AccIll_ReturnZero2
@@ -13734,26 +12375,59 @@ EffectBox_FillBufferLoop2:
 	ld iz, 0:i3
 
 EffectBox_PostFillSetup:
-	.byte 0xf3, 0xfd, 0x3e, 0x01, 0x32, 0xba, 0x02, 0x31
-	.byte 0xde, 0x88, 0xe8, 0x12, 0x43, 0x82, 0x35, 0xe3
-	.byte 0x00, 0xe8, 0x83, 0x83, 0x21, 0xd8, 0x12, 0xb1
-	.byte 0x50, 0xd8, 0xc8, 0x0c, 0x00, 0xba, 0x06, 0x50
-	.byte 0x91, 0x21, 0xd9, 0xa0, 0xe8, 0x13, 0xd8, 0x0b
-	.byte 0x02, 0x00, 0xd8, 0x81, 0xf3, 0xfd, 0x3c, 0x01
-	.byte 0x51, 0x0b, 0x11, 0x00, 0xde, 0x88, 0xd8, 0x08
-	.byte 0x11, 0x00, 0xbf, 0x3c, 0x31, 0xe8, 0x81, 0x39
-	.byte 0xbf, 0x2c, 0x30, 0x38, 0x1d, 0x16, 0x05, 0xff
-	.byte 0xbf, 0x0a, 0x37, 0xf3, 0xfd, 0x3e, 0x01, 0x30
-	.byte 0xf3, 0xfd, 0x3a, 0x01, 0x31, 0xbf, 0x26, 0x32
-	.byte 0xeb, 0xa8, 0x3b, 0x0b, 0xff, 0x00, 0xaf, 0x0a
-	.byte 0x23, 0x9b, 0x16, 0x04, 0x1d, 0x3d, 0xcb, 0xfa
-	.byte 0xde, 0x61, 0xde, 0xcf, 0x08, 0x00, 0x67, 0x90
-	.byte 0xf3, 0xfd, 0x3e, 0x01, 0x31, 0xb1, 0x02, 0x00
-	.byte 0x01, 0x30, 0x00, 0x01, 0xd8, 0xc8, 0x14, 0x00
-	.byte 0xb9, 0x04, 0x50, 0x91, 0xa0, 0xe8, 0x13, 0xd8
-	.byte 0x0b, 0x02, 0x00, 0x91, 0x21, 0xd8, 0x81, 0xf3
-	.byte 0xfd, 0x3a, 0x01, 0x51, 0xbf, 0x26, 0x31, 0xe9
-	.byte 0x88, 0xb9, 0x14, 0x31
+	lda xde, (xsp+318)
+	lda xbc, (xde+2)
+	ld wa, iz
+	extz xwa
+	ld xhl, NakaInst_NO_OPERATION_0x1A
+	add xhl, xwa
+	ld a, (xhl)
+	extz wa
+	ld (xbc), wa
+	add wa, 12
+	ld (xde+6), wa
+	ld bc, (xbc)
+	sub wa, bc
+	exts xwa
+	divs wa, 2
+	add bc, wa
+	ld (xsp+316), bc
+	pushw 0x0011
+	ld wa, iz
+	mul wa, 17
+	lda xbc, (xsp+60)
+	add xbc, xwa
+	push xbc
+	lda xwa, (xsp+44)
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	lda xwa, (xsp+318)
+	lda xbc, (xsp+314)
+	lda xde, (xsp+38)
+	ld xhl, 0:i3
+	push xhl
+	pushw 0x00ff
+	ld xhl, (xsp+10)
+	pushm (xhl+22)
+	call DrawStringLeftJustify
+	inc 1, iz
+	cp iz, 8
+	jr c, EffectBox_PostFillSetup
+	lda xbc, (xsp+318)
+	ldw (xbc), 256
+	ldw wa, 256
+	add wa, 20
+	ld (xbc+4), wa
+	sub wa, (xbc)
+	exts xwa
+	divs wa, 2
+	ld bc, (xbc)
+	add bc, wa
+	ld (xsp+314), bc
+	lda xbc, (xsp+38)
+	ld xwa, xbc
+	lda xbc, (xbc+20)
 EffectBox_FillBufferLoop3:
 	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
@@ -13796,7 +12470,7 @@ EffectBox_PostFill3Setup:
 	push	xhl
 	pushw 255
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04
+	pushm (xhl+22)
 	call	DrawStringLeftJustify
 	inc	1, iz
 	cp	iz, 8
@@ -13812,7 +12486,7 @@ EffectBox_PostFill3Setup:
 	lda	xhl, (xix+6)
 	ldw	(xhl), 84
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -13833,7 +12507,7 @@ EffectBox_PostFill3Setup:
 	call	ApFuncCall
 	or	xhl, xhl
 	jr	z, EffectBox_SetEmptyString1
-	.byte 0x0b, 0x04, 0x00
+	pushw 0x0004
 	lda	xwa, (xsp+14)
 	push	xwa
 	lda	xwa, (xsp+44)
@@ -13854,7 +12528,7 @@ EffectBox_DrawField1:
 	push	xhl
 	pushw 255
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04
+	pushm (xhl+22)
 	call	DrawStringLeftJustify
 	lda	xbc, (xsp+318)
 	lda	xwa, (xbc+2)
@@ -13886,7 +12560,7 @@ EffectBox_DrawField1:
 	lda	xwa, (xsp+38)
 	or	xhl, xhl
 	jr	z, EffectBox_SetEmptyString2
-	.byte 0x0b, 0x04, 0x00
+	pushw 0x0004
 	lda	xbc, (xsp+10)
 	push	xbc
 	push	xwa
@@ -14002,38 +12676,54 @@ EffectBox_NameSetup:
 EffectBox_Dispatch:
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80002
-	jr	65
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80003
-	jr	56
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80004
-	jr	47
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80005
-	jr	38
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80006
-	jr	29
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80007
-	jr	20
+	jr	EffectBox_Dispatch_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80008
-	jr	11
+	jr	EffectBox_Dispatch_Join
 
 EffectBoxProc_CopyNameAndSetup:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x1c, 0x20, 0x41, 0x01
-	.byte 0x00, 0xe8, 0x01, 0x1d, 0xaa, 0x45, 0xfa, 0x0b
-	.byte 0x07, 0x00, 0xbf, 0x3c, 0x30, 0x38, 0xbf, 0x2c
-	.byte 0x30, 0x38, 0x1d, 0x16, 0x05, 0xff, 0xbf, 0x0a
-	.byte 0x37, 0xaf, 0x04, 0x20, 0xa8, 0x1c, 0x20, 0x41
-	.byte 0x0b, 0x00, 0xe8, 0x01, 0xea, 0xa8, 0x1d, 0xaa
-	.byte 0x45, 0xfa, 0xf3, 0xfd, 0x3e, 0x01, 0x30, 0xf3
-	.byte 0xfd, 0x3a, 0x01, 0x31, 0xe3, 0xfd, 0x4e, 0x01
-	.byte 0xf3, 0x6e, 0x0e, 0xbf, 0x26, 0x32, 0xeb, 0xa8
-	.byte 0x3b, 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00, 0x68
-	.byte 0x0f
+	ld xwa, (xsp+4)
+	ld xwa, (xwa+28)
+	ld xbc, 0x01e80001
+EffectBox_Dispatch_Join:
+	call ApFuncCall
+	pushw 0x0007
+	lda xwa, (xsp+60)
+	push xwa
+	lda xwa, (xsp+44)
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	ld xwa, (xsp+4)
+	ld xwa, (xwa+28)
+	ld xbc, 0x01e8000b
+	ld xde, 0:i3
+	call ApFuncCall
+	lda xwa, (xsp+318)
+	lda xbc, (xsp+314)
+	cp xhl, (xsp+334)
+	jr nz, EffectBox_DrawWithFBColor
+	lda xde, (xsp+38)
+	ld xhl, 0:i3
+	push xhl
+	pushw 0x0000
+	pushw 0x00ff
+	jr EffectBox_DrawStringAndSetDial
 EffectBox_DrawWithFBColor:
 	lda xde, (xsp + 38)
 	ld xhl, 0:i3
@@ -14536,10 +13226,10 @@ SeqAccomp_Dispatch:
 	ld	xbc, 0x01e80062
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join
 	ld	xbc, 0x01e80063
-	.asciz "h*Ad"
-	.byte 0xe8, 0x01
-	.asciz "h#Ae"
-	.byte 0xe8, 0x01
+	jr EffectBoxProc_CopyNameAndSetup_Code_Join
+	ld xbc, 0x01e80064
+	jr EffectBoxProc_CopyNameAndSetup_Code_Join
+	ld xbc, 0x01e80065
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join
 	ld	xbc, 0x01e80066
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join
@@ -15036,9 +13726,12 @@ SqplyFunc:
 	add xhl, xhl
 	add xhl, ExtDevice_ModeDispatch_Table_0x660
 	ld hl, (xhl)
-	lda xix, (SqplyFunc_ParamFormatData:24)
+	lda xix, (SqplyFunc_FormatCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
-SqplyFunc_ParamFormatData:
+; Case bodies of the `jp_ind` switch in the SqplyFunc handler above (events 0x1E8003E-0x1E80047; word offsets at ExtDevice_ModeDispatch_Table_0x660): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+SqplyFunc_FormatCases:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	wa, de
@@ -15083,7 +13776,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip2:
 	lda	xbc, (xwa+18)
 	cp	l, 130
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip4
-	.byte 0xf1, 0xb1, 0x28, 0xc8
+	bit 0, (0x28b1:16)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip3
 	ld	xwa, 14895794
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join3
@@ -15096,7 +13789,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join3:
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
 EffectBoxProc_CopyNameAndSetup_Code_Skip4:
 	ld	xbc, (xbc)
-	.byte 0xf1, 0xb1, 0x28, 0xc9
+	bit 1, (0x28b1:16)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip5
 	ld	xwa, 14895806
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join4
@@ -15126,11 +13819,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join5:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry
-	.byte 0xd1, 0x20, 0x25, 0x04
+	pushm (0x2520:16)
 	ld	xwa, 14895830
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join6
 EffectBoxProc_CopyNameAndSetup_Code_Entry:
-	.byte 0xd1, 0x1c, 0x25, 0x04
+	pushm (0x251c:16)
 	ld	xwa, 14895836
 EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	jrl	SqplyFunc_PushFormatAddr
@@ -15139,11 +13832,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry2
-	.byte 0xd1, 0x22, 0x25, 0x04
+	pushm (0x2522:16)
 	ld	xwa, 14895842
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join7
 EffectBoxProc_CopyNameAndSetup_Code_Entry2:
-	.byte 0xd1, 0x1e, 0x25, 0x04
+	pushm (0x251e:16)
 	ld	xwa, 14895848
 EffectBoxProc_CopyNameAndSetup_Code_Join7:
 	jr	SqplyFunc_PushFormatAddr
@@ -15470,46 +14163,26 @@ EffectBoxProc_CopyNameAndSetup_Code_Join9:
 	ld_rrw	hl, xix, hl
 	lda	xix, (15944372:24)
 	jp_rr	8, xix, hl
-	.byte 0xd1	; v10 does not spell this byte either
-	rcf
-	ld	h, 4:opc
+	pushm (0x2610:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x674
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	calr	1062
+	pushm (0x261e:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x67A
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0xd7	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
+	pushm (0xf1d7:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x680
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	cp	bc, ix
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0x5e	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	pushm (0xf1dc:16)
+	ld xwa, FmtStr_pct3d_4B5E
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	(4195569:24), xix
-	popw	hl
-	.byte 0xe3	; v10 does not spell this byte either
-	nop
+	pushm (0xf1f2:16)
+	ld xwa, 0x00e34b64
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	bc
-	.byte 0xf2	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
+	pushm (0xf229:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x692
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
 EffectBoxProc_CopyNameAndSetup_Code_Entry3:
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	ld	h, 4:opc
+	pushm (0x2606:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x698
 EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
@@ -15520,65 +14193,48 @@ EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	cp	hl, 0:i3
 	jr	lt, EffectBoxProc_CopyNameAndSetup_Code_Entry4
 	cp	hl, 7:i3
-	jr	gt, 88
+	jr	gt, EffectBoxProc_CopyNameAndSetup_Code_Entry4
 	add	hl, hl
 	lda	xix, (NakaInst_2d_0xA0:24)
 	ld_rrw	hl, xix, hl
 	lda	xix, (15944492:24)
 	jp_rr	8, xix, hl
-	.byte 0xd1	; v10 does not spell this byte either
-	ccf
-	ld	h, 4:opc
+	pushm (0x2612:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E
-	jr	64
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	w, 38:opc
-	max
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	pushm (0x2620:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
-	jr	53
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	ix
-	ld	h, 4:opc
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	pushm (0x262c:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA
-	jr	42
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	h, 38:opc
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0x88	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
-	jr	31
-	.byte 0xd1	; v10 does not spell this byte either
-	swi	4
-	ld	e, 4:opc
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	pushm (0x2626:16)
+	ld xwa, NakaInst_3d
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	pushm (0x25fc:16)
 	ld	xwa, NakaInst_3d_0x6
-	jr	20
-	.byte 0xd1	; v10 does not spell this byte either
-	swi	2
-	ld	e, 4:opc
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	pushm (0x25fa:16)
 	ld	xwa, NakaInst_3d_0xC
-	jr	9
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
 EffectBoxProc_CopyNameAndSetup_Code_Entry4:
-	.byte 0xd1	; v10 does not spell this byte either
-	ld	(38:8), 4:io
+	pushm (0x2608:16)
 	ld	xwa, NakaInst_3d_0x12
-	jrl	1031
+EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join:
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9740:16)
 	cp	e, 0:i3
-	jr	le, 17
+	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Entry4_Skip
 	exts	de
-	.byte 0x2a	; v10 does not spell this byte either
-	.byte 0x0b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	pushw de
+	pushw 0x00e3
 	pushw	19360
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join11
+EffectBoxProc_CopyNameAndSetup_Code_Entry4_Skip:
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+18)
 	cp	e, 0:i3
@@ -15605,11 +14261,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip8:
 	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Skip9
 	exts	de
 	pushw	de
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0xb6	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xwa, FmtStr_pluspct3d
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join12
 EffectBoxProc_CopyNameAndSetup_Code_Skip9:
 	cp	e, 0:i3
@@ -15617,11 +14269,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip9:
 	neg	e
 	exts	de
 	pushw	de
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0xbe	; v10 does not spell this byte either
-	.byte 0x4b	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xwa, FmtStr_minuspct3d
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join12
 EffectBoxProc_CopyNameAndSetup_Code_Skip10:
 	exts	de
@@ -15785,51 +14433,45 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x92
-	jrl	501
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61929:16)
-	jrl	175
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	cp	xbc, xde
-	max
+	pushm (0xf1ea:16)
 	ld	xwa, NakaInst_3d_0x98
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	409
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	wa
-	ld	h, 4:opc
+	pushm (0x2628:16)
 	ld	xwa, NakaInst_3d_0x9E
-	jrl	442
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61934:16)
-	jr	117
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	cp	xbc, xsp
-	max
+	pushm (0xf1ef:16)
 	ld	xwa, NakaInst_3d_0xA4
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	351
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9770:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0xAA
-	jrl	381
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
@@ -15837,10 +14479,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0xe2	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
+	pushm (0xf1e2:16)
 	ld	xwa, NakaInst_3d_0xB0
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -15848,9 +14487,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	pushw	iz
-	ld	h, 4:opc
+	pushm (0x262e:16)
 	ld	xwa, NakaInst_3d_0xB6
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
@@ -15860,23 +14497,15 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	extz	wa
 	muls	wa, 5
-	.byte 0x41	; v10 does not spell this byte either
-	.byte 0x44	; v10 does not spell this byte either
-	.byte 0x49	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xbc, LongStr_1_2_3
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
 	jrl	SqedtFunc_ModeC_Entry
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xd1	; v10 does not spell this byte either
-	.byte 0xe7	; v10 does not spell this byte either
-	ld	(16388:16), d
-	popw	ix
-	.byte 0xe3	; v10 does not spell this byte either
-	nop
+	pushm (0xf1e7:16)
+	ld xwa, 0x00e34c44
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -15893,35 +14522,28 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	ld	a, (9992:16)
 	extz	wa
 	pushw	wa
-	.byte 0x40	; v10 does not spell this byte either
-	.byte 0x50	; v10 does not spell this byte either
-	.byte 0x4c	; v10 does not spell this byte either
-	.byte 0xe3	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	ld xwa, NakaInst_2d
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jrl	166
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
-	.byte 0xc1	; v10 does not spell this byte either
-	incf
-	.byte 0x27	; v10 does not spell this byte either
-	.byte 0x21	; v10 does not spell this byte either
-	.byte 0x68	; v10 does not spell this byte either
-	.byte 0x22	; v10 does not spell this byte either
+	ld a, (0x270c:16)
+	jr EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join2
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9994:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_2d_0x6
-	jrl	181
+	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
 	ld	a, (9998:16)
+EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join2:
 	extz	wa
 	muls	wa, 3
 	ld	xbc, ExtDevice_ModeDispatch_Table_0x4C6
@@ -16665,37 +15287,92 @@ DspItem0_DisplayEffectName:
 	ld	(xsp), xde
 	ldw	(xsp+18), 0
 DspItem0_DisplayParamNames:
-	.byte 0x0b, 0x11, 0x00, 0xc2, 0x98, 0x10, 0x02, 0x21
-	.byte 0xd8, 0x12, 0x9f, 0x14, 0x80, 0xf1, 0xac, 0x29
-	.byte 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x80, 0x21, 0xd8
-	.byte 0x12, 0xd8, 0x09, 0x11, 0x00, 0xf2, 0xc4, 0x24
-	.byte 0xe3, 0x31, 0xe8, 0x13, 0xe9, 0x80, 0x38, 0x9f
-	.byte 0x18, 0x21, 0xd9, 0x08, 0x11, 0x00, 0xaf, 0x06
-	.byte 0x20, 0xa8, 0x12, 0x20, 0xe9, 0x80, 0x38, 0x1d
-	.byte 0x16, 0x05, 0xff, 0xbf, 0x0a, 0x37, 0x9f, 0x12
-	.byte 0x61, 0x9f, 0x12, 0x3f, 0x08, 0x00, 0x67, 0xb8
-	.byte 0xbf, 0x12, 0x02, 0x00, 0x00
+	pushw 0x0011
+	ldb_da a, (0x21098)
+	extz wa
+	add wa, (xsp+20)
+	lda_d16 xbc, (0x29ac)
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)
+	extz wa
+	muls wa, 17
+	lda_24 xbc, (DspParamName_00_Blank)
+	exts xwa
+	add xwa, xbc
+	push xwa
+	ld bc, (xsp+24)
+	mul bc, 17
+	ld xwa, (xsp+6)
+	ld xwa, (xwa+18)
+	add xwa, xbc
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	incm 1, (xsp+18)
+	cpw (xsp+18), 8
+	jr c, DspItem0_DisplayParamNames
+	ldw (xsp+18), 0
 DspItem0_DisplayParamValues:
-	.byte 0x0b, 0x02, 0x00, 0xc2, 0x98, 0x10, 0x02, 0x21
-	.byte 0xd8, 0x12, 0x9f, 0x14, 0x80, 0xf1, 0xac, 0x29
-	.byte 0x31, 0xe8, 0x12, 0xe9, 0x80, 0x80, 0x21, 0xd8
-	.byte 0x12, 0xd8, 0x80, 0xf2, 0x18, 0x24, 0xe3, 0x31
-	.byte 0xe8, 0x13, 0xe9, 0x80, 0x38, 0x9f, 0x18, 0x20
-	.byte 0xd8, 0x80, 0xe8, 0x12, 0xf3, 0xe1, 0x88, 0x00
-	.byte 0x31, 0xaf, 0x06, 0x20, 0xa8, 0x12, 0x20, 0xe9
-	.byte 0x80, 0x38, 0x1d, 0x16, 0x05, 0xff, 0xbf, 0x0a
-	.byte 0x37, 0x9f, 0x12, 0x61, 0x9f, 0x12, 0x3f, 0x08
-	.byte 0x00, 0x67, 0xb5, 0x68, 0x6c, 0xb7, 0x62, 0xaa
-	.byte 0x12, 0x22, 0xd9, 0x88, 0xea, 0x89, 0x68, 0x41
-	.byte 0xb7, 0x62, 0xaa, 0x12, 0x21, 0x68, 0x3a, 0xb7
-	.byte 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x08, 0x20, 0x68
-	.byte 0x30, 0xb7, 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x0a
-	.byte 0x20, 0x68, 0x26, 0xb7, 0x62, 0xaa, 0x12, 0x21
-	.byte 0x9f, 0x0c, 0x20, 0x68, 0x1c, 0xb7, 0x62, 0xaa
-	.byte 0x12, 0x21, 0x9f, 0x0e, 0x20, 0x68, 0x12, 0xb7
-	.byte 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x10, 0x20, 0x68
-	.byte 0x08, 0xb7, 0x62, 0xaa, 0x12, 0x21, 0x9f, 0x12
-	.byte 0x20
+	pushw 0x0002
+	ldb_da a, (0x21098)
+	extz wa
+	add wa, (xsp+20)
+	lda_d16 xbc, (0x29ac)
+	extz xwa
+	add xwa, xbc
+	ld a, (xwa)
+	extz wa
+	add wa, wa
+	lda_24 xbc, (DspParamUnit_Table)
+	exts xwa
+	add xwa, xbc
+	push xwa
+	ld wa, (xsp+24)
+	add wa, wa
+	extz xwa
+	lda xbc, (xwa+136)
+	ld xwa, (xsp+6)
+	ld xwa, (xwa+18)
+	add xwa, xbc
+	push xwa
+	call 16712982
+	lda xsp, (xsp+10)
+	incm 1, (xsp+18)
+	cpw (xsp+18), 8
+	jr c, DspItem0_DisplayParamValues
+	jr DspItem0_ExitWithHL
+	ld (xsp), xde
+	ld xde, (xde+18)
+	ld wa, bc
+	ld xbc, xde
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+8)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+10)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+12)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+14)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+16)
+	jr DspItem0_FormatParamValue
+	ld (xsp), xde
+	ld xbc, (xde+18)
+	ld wa, (xsp+18)
 DspItem0_FormatParamValue:
 	calr FormatParamValueStr
 	jr DspItem0_ExitWithHL
@@ -16992,11 +15669,11 @@ FormatEqParam_CopyAndReturn:
 	call	16712982
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
-	jr	12
-	call	16405594
+	jr	Equalizer_PopIzRet
+	call	GetTitleNow
 	ld	h, 0:opc
 	extz	xhl
-	jr	2
+	jr	Equalizer_PopIzRet
 Equalizer_ParamString:
 	ld xhl, 0:i3
 
@@ -17156,15 +15833,22 @@ Equalizer_FormatDispatch:
 	sll wa, 1
 	ld xix, NakaInst_2d_0x204
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda xix, (EqFormat_DispatchTable:24)
+	lda xix, (Equalizer_FormatCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-EqFormat_DispatchTable:
-	.byte 0x0b, 0x05, 0x00, 0x40, 0x90, 0x23, 0xe3, 0x00
-	.byte 0x78, 0xc2, 0x00, 0x0b, 0x05, 0x00, 0x40, 0xf0
-	.byte 0x22, 0xe3, 0x00, 0x78, 0xb7, 0x00, 0x0b, 0x05
-	.byte 0x00, 0x40, 0xfa, 0x21, 0xe3, 0x00, 0x78, 0xac
-	nop
+; Case bodies of the `jp_ind` switch in Equalizer_FormatDispatch (word offsets at NakaInst_2d_0x204): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+Equalizer_FormatCases:
+	pushw 0x0005
+	ld xwa, NakaData_WidgetDescriptors_0x1530
+	jrl FormatParamStr_CopyEnumName
+	pushw 0x0005
+	ld xwa, 0x00e322f0
+	jrl FormatParamStr_CopyEnumName
+	pushw 0x0005
+	ld xwa, NakaData_WidgetDescriptors_0x139A
+	jrl FormatParamStr_CopyEnumName
 
 FormatParamString:
 	pushw 0x5

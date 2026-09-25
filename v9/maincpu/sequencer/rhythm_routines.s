@@ -433,9 +433,12 @@ Rhythm_NoteRangeCheck:
 Rhythm_NoteRangeReturn:
 	ret
 
+; Two zero bytes between Rhythm_NoteRangeCheck's `ret` and the called routine
+; Rhythm_VelocityLookup_A.  No reference found (scripts/analysis/
+; sequi_find_refs.py v10 0xF55051 0xF55052 -> none); inter-routine padding by
+; position, nothing established beyond that.  Was `nop / nop` until 2026-09-25.
 Rhythm_NoteRangeData:
-	nop
-	nop
+	.byte 0x00, 0x00
 
 Rhythm_VelocityLookup_A:
 	push xiy
@@ -494,26 +497,42 @@ Rhythm_InstrBaseLookup:
 	pop xiy
 	ret
 
+; -----------------------------------------------------------------------------
+; Rhythm_InstrMapTable_Default -- 3 variants x 49 bytes.  Each maps the RAM
+; byte 0x32D8 (index clamped to 0..0x2F, anything larger reads entry 0) to a
+; ROW NUMBER of the 16-byte-row table at Display_FontPalette_Table_0x136A.
+; Readers (all the same pattern): Rhythm_VelocityLookup_A, Rhythm_VoiceMapLookup
+; (second half) and Rhythm_TranspMod_BaseApply:
+;     ld xiy, <variant> / ldb_sri L, ..., 0xf4, 0xec     ; L := variant[L]
+;     sla hl, 4 / ld xiy, Display_FontPalette_Table_0x136A
+;     lda_dri XIY, ...  ; xiy += row*16  /  ldb_sri A, ... ; A := row[A]
+;     add w, a                                           ; note += row[col]
+; where the column A came from Rhythm_InstrBaseLookup (a byte of
+; Display_FontPalette_Table_0x12EA indexed by the note).
+; Variant choice: bit 2 of RAM 0x32F4 selects +0x31 (the positional alias
+; Rhythm_InstrMapTable_Default_0x31), bit 3 selects +0x62 (..._0x62) and,
+; being tested second, wins over bit 2;
+; Rhythm_TranspMod_BaseApply always uses +0x31.  Stride 0x31 = 49 is pinned by
+; those two aliases; the tables end exactly at Rhythm_TransposeNote (147 B).
+; Values 0..20 = row numbers.  What each 16-byte row holds belongs to the
+; documentation of Display_FontPalette_Table_0x136A (C data, another file).
+; -----------------------------------------------------------------------------
 Rhythm_InstrMapTable_Default:
-	.byte 0x00, 0x00, 0x00, 0x01, 0x05, 0x00, 0x03, 0x09
-	.byte 0x0a, 0x07, 0x04, 0x02, 0x05, 0x06, 0x06, 0x00
-	.byte 0x00, 0x01, 0x02, 0x08, 0x0a, 0x03, 0x08, 0x04
-	.byte 0x00, 0x12, 0x13, 0x14, 0x00, 0x05, 0x00, 0x00
-	.byte 0x05, 0x00, 0x00, 0x01, 0x01, 0x06, 0x04, 0x05
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x05, 0x00, 0x03
-	.byte 0x09, 0x0a, 0x07, 0x04, 0x02, 0x05, 0x06, 0x06
-	.byte 0x0b, 0x0c, 0x0e, 0x0f, 0x08, 0x0a, 0x10, 0x11
-	.byte 0x04, 0x0d, 0x12, 0x13, 0x14, 0x00, 0x05, 0x0c
-	.byte 0x0d, 0x05, 0x0c, 0x0d, 0x01, 0x01, 0x06, 0x04
-	.byte 0x05, 0x0b, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x05, 0x00
-	.byte 0x03, 0x09, 0x0a, 0x07, 0x04, 0x02, 0x05, 0x06
-	.byte 0x06, 0x00, 0x00, 0x01, 0x02, 0x08, 0x0a, 0x03
-	.byte 0x08, 0x04, 0x00, 0x12, 0x13, 0x14, 0x00, 0x05
-	.byte 0x00, 0x00, 0x05, 0x00, 0x00, 0x01, 0x01, 0x06
-	.byte 0x04, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00
+	; +0x00: default (bits 2 and 3 of 0x32F4 clear)
+	.byte 0, 0, 0, 1, 5, 0, 3, 9, 10, 7, 4, 2, 5, 6, 6, 0
+	.byte 0, 1, 2, 8, 10, 3, 8, 4, 0, 18, 19, 20, 0, 5, 0, 0
+	.byte 5, 0, 0, 1, 1, 6, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0
+	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
+	; +0x31: bit 2 of 0x32F4 set; always used by Rhythm_TranspMod_BaseApply
+	.byte 0, 0, 0, 1, 5, 0, 3, 9, 10, 7, 4, 2, 5, 6, 6, 11
+	.byte 12, 14, 15, 8, 10, 16, 17, 4, 13, 18, 19, 20, 0, 5, 12, 13
+	.byte 5, 12, 13, 1, 1, 6, 4, 5, 11, 16, 0, 0, 0, 0, 0, 0
+	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
+	; +0x62: bit 3 of 0x32F4 set (tested after bit 2, so it wins)
+	.byte 0, 0, 0, 1, 5, 0, 3, 9, 10, 7, 4, 2, 5, 6, 6, 0
+	.byte 0, 1, 2, 8, 10, 3, 8, 4, 0, 18, 19, 20, 0, 5, 0, 0
+	.byte 5, 0, 0, 1, 1, 6, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0
+	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 
 Rhythm_TransposeNote:
 	ld a, (0x32d9:16)
@@ -654,83 +673,30 @@ Rhythm_VoiceMap_Done:
 	pop xiy
 	ret
 
+; -----------------------------------------------------------------------------
+; Rhythm_PitchShiftTable_Default -- 2 variants x 49 bytes of SHIFT SELECTORS,
+; indexed like Rhythm_InstrMapTable_Default by RAM 0x32D8 (clamped 0..0x2F).
+; Reader: Rhythm_VoiceMapLookup, first half: `ld xiy, <variant>`,
+; `ldb_sri L, ..., 0xf4, 0xec` (L := variant[L]); then
+;     0 -> no shift;  1 -> shift byte RAM 0x3433;  2 -> shift byte RAM 0x3434,
+; where a shift byte with bit 5 set returns 0 (muted), bit 4 set subtracts and
+; clear adds its low nibble to A.  Rhythm_NoteRangeCheck clears both bytes.
+; Variant: bit 3 of RAM 0x32F4 selects +0x31 (alias
+; Rhythm_PitchShiftTable_Default_0x31).  98 bytes = 2 x 49, to
+; Rhythm_VelocityCompute.  Was framed as `nop` / `normal` / `push sr`
+; (0x00 / 0x01 / 0x02) until 2026-09-25.
+; -----------------------------------------------------------------------------
 Rhythm_PitchShiftTable_Default:
-	nop
-	nop
-	normal
-	normal
-	nop
-	push sr
-	normal
-	normal
-	push sr
-	normal
-	normal
-	normal
-	normal
-	nop
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	push sr
-	normal
-	normal
-	nop
-	normal
-	normal
-	normal
-	normal
-	normal
-	nop
-	normal
-	normal
-	.fill 8, 1, 0x01
-	nop
-	push sr
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	normal
-	normal
-	push sr
-	normal
-	normal
-	push sr
-	normal
-	normal
-	normal
-	normal
-	nop
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	push sr
-	normal
-	normal
-	nop
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	normal
-	.fill 8, 1, 0x01
-	.byte 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
+	; +0x00: default (bit 3 of 0x32F4 clear)
+	.byte 0, 0, 1, 1, 0, 2, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1
+	.byte 1, 1, 1, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1
+	.byte 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0
+	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
+	; +0x31: bit 3 of 0x32F4 set
+	.byte 0, 0, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1
+	.byte 1, 1, 1, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1
+	.byte 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0
+	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 
 Rhythm_VelocityCompute:
 	push xiy
@@ -776,20 +742,30 @@ Rhythm_VelComp_Done:
 	pop xiy
 	ret
 
+; -----------------------------------------------------------------------------
+; Rhythm_VelocityTable_A -- 2 variants x 49 bytes, the same kind of table as
+; Rhythm_InstrMapTable_Default (row numbers into the 16-byte rows at
+; Display_FontPalette_Table_0x136A), for a different reader.
+; Reader: Rhythm_VelocityCompute -- `ld xiy, <variant>`, L := variant[L]
+; (L = RAM 0x32D8 clamped 0..0x2F), `sla hl, 4`, row lookup, `add w, a`,
+; `calr Rhythm_TransposeNote`: identical to Rhythm_VelocityLookup_A.
+; Variant: bit 2 of RAM 0x32F4 selects +0x31 (alias Rhythm_VelocityTable_A_0x31).
+; 98 bytes = 2 x 49, to Rhythm_FourChannelDispatch.  The two variants differ
+; from Rhythm_InstrMapTable_Default's first two only at entry 7 (0 here, 9
+; there).  The "Velocity" in the name is not supported by the reader, which
+; adds the row value to the NOTE in W.
+; -----------------------------------------------------------------------------
 Rhythm_VelocityTable_A:
-	.byte 0x00, 0x00, 0x00, 0x01, 0x05, 0x00, 0x03, 0x00
-	.byte 0x0a, 0x07, 0x04, 0x02, 0x05, 0x06, 0x06, 0x00
-	.byte 0x00, 0x01, 0x02, 0x08, 0x0a, 0x03, 0x08, 0x04
-	.byte 0x00, 0x12, 0x13, 0x14, 0x00, 0x05, 0x00, 0x00
-	.byte 0x05, 0x00, 0x00, 0x01, 0x01, 0x06, 0x04, 0x05
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x05, 0x00, 0x03
-	.byte 0x00, 0x0a, 0x07, 0x04, 0x02, 0x05, 0x06, 0x06
-	.byte 0x0b, 0x0c, 0x0e, 0x0f, 0x08, 0x0a, 0x10, 0x11
-	.byte 0x04, 0x0d, 0x12, 0x13, 0x14, 0x00, 0x05, 0x0c
-	.byte 0x0d, 0x05, 0x0c, 0x0d, 0x01, 0x01, 0x06, 0x04
-	.byte 0x05, 0x0b, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
+	; +0x00: default (bit 2 of 0x32F4 clear)
+	.byte 0, 0, 0, 1, 5, 0, 3, 0, 10, 7, 4, 2, 5, 6, 6, 0
+	.byte 0, 1, 2, 8, 10, 3, 8, 4, 0, 18, 19, 20, 0, 5, 0, 0
+	.byte 5, 0, 0, 1, 1, 6, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0
+	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
+	; +0x31: bit 2 of 0x32F4 set
+	.byte 0, 0, 0, 1, 5, 0, 3, 0, 10, 7, 4, 2, 5, 6, 6, 11
+	.byte 12, 14, 15, 8, 10, 16, 17, 4, 13, 18, 19, 20, 0, 5, 12, 13
+	.byte 5, 12, 13, 1, 1, 6, 4, 5, 11, 16, 0, 0, 0, 0, 0, 0
+	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 
 Rhythm_FourChannelDispatch:
 	calr Rhythm_DispatchCh_D7
@@ -1529,14 +1505,36 @@ Rhythm_SeqReset_Store:
 	ld (0x34cf:16), a
 	ret
 
+; -----------------------------------------------------------------------------
+; Rhythm_SeqResetTable -- 17 x 32-bit RAM pointers (or 0), indexed by RAM byte
+; 0x379B.
+; Reader: Rhythm_SeqResetCheck -- when bit 2 of RAM 0x34CF is set and bit 4
+; clear: L := (0x379B), `sla l, 2`, `ld xiy, Rhythm_SeqResetTable`,
+; `ld_sril3 XIX, 0x07, 0xf4, 0xec` (xix := table[L]); if non-zero, with
+; interrupts masked (`ei 6` .. `ei 0`) the word at (xix+6) is copied to
+; (xix+4).  Stride 4 from `sla l, 2`; 17 entries = 68 bytes, to
+; Rhythm_TransposeWithMod.  Non-zero entries: [1] 0x2D94, [2] 0x2E94,
+; [4] 0x2F94, [8] 0x2C94, [16] 0x2A94.  This table only selects which structure Rhythm_SeqResetCheck
+; updates; the structures themselves are not described here.
+; -----------------------------------------------------------------------------
 Rhythm_SeqResetTable:
-	.byte 0x00, 0x00, 0x00, 0x00, 0x94, 0x2d, 0x00, 0x00
-	.byte 0x94, 0x2e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x94, 0x2f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x94, 0x2c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 24
-	.byte 0x94, 0x2a, 0x00, 0x00
+	.long 0x00000000	; [0]
+	.long 0x00002d94	; [1]
+	.long 0x00002e94	; [2]
+	.long 0x00000000	; [3]
+	.long 0x00002f94	; [4]
+	.long 0x00000000	; [5]
+	.long 0x00000000	; [6]
+	.long 0x00000000	; [7]
+	.long 0x00002c94	; [8]
+	.long 0x00000000	; [9]
+	.long 0x00000000	; [10]
+	.long 0x00000000	; [11]
+	.long 0x00000000	; [12]
+	.long 0x00000000	; [13]
+	.long 0x00000000	; [14]
+	.long 0x00000000	; [15]
+	.long 0x00002a94	; [16]
 
 Rhythm_TransposeWithMod:
 	cp (0x32d8:16), 0
