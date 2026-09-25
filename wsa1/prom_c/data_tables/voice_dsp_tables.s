@@ -122,6 +122,13 @@ Voice_Reg080_NoteField_Table:
 ; top of this curve reads back NEGATIVE here (0xA8 -> -88) where the KN5000 reads
 ; +168.  Whether the WSA1 simply never indexes that far, or this is a narrowing bug,
 ; is NOT ESTABLISHED -- it needs the caller of 0xFA8016 traced.
+; ★ TRACED 2026-09-25 (lane promcd): the index is the high byte of the voice's pitch
+; word, which Voice_ComputePitch builds as (note << 8) + 0x80 plus master tune, part
+; transpose, fine tune and octave shift (0xFA7F3A-0xFA7F7F), and 0xFA8016-0xFA8023
+; shift it and add this table with NO clamp between.  So an untransposed note of 115
+; or above does read the wrapped rows (0x86 .. 0xA8 = -122 .. -88); the WSA1 does
+; index that far.  Whether the narrowing was intended stays open.
+;   python3 notes/lanes/promcd-2026-09-25/keybend_index_trace.py
 ; ----------------------------------------------------------------------------
 Voice_KeyBend_Curve_0:
 	.byte	0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4, 0xd4
