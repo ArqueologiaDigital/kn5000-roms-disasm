@@ -1284,7 +1284,10 @@ FileIdentifierStringsTable:
 ; (0x9FBFC4) assigns them from the FileIdentifierStringsTable slot matched:
 ; 1 Program 1/2, 2 Program 2/2, 3 Table 1/2, 4 Table 2/2, 5 CMPCUSTOMDATA,
 ; 6 HD-AEPRG, 7 Program PCK, 8 Table PCK.  The second disks of a set (2, 4)
-; go to the error handler.  (The handlers were labelled __ldd_type1..5 and
+; go to the error handler.  The program ROM's own update dispatcher
+; (HANDLE_UPDATE_OFFSETS, the commented ASL listing further down) has the same
+; 8-way shape, with its two second-disk slots sending to
+; SHOW_ILLEGAL_DISK_MESSAGE.  (The handlers were labelled __ldd_type1..5 and
 ; __ldd_type678 in address order until 2026-09-25; renamed after the disk
 ; type that reaches them -- scripts/renaming/rename_tdata_loaddiskdata_handlers.sed.)
 Boot_LoadDiskData_JumpOffsets:
@@ -1312,7 +1315,11 @@ Boot_LoadDiskData_JumpOffsets:
 
 	.org 0x9FA150 - 0x800000, 0xFF
 
-BootscreenSlideMarker:
+; The 5-byte signature LZSS_ParseHeader (0x9FC9B3) compares the first bytes
+; of a compressed update stream against: it pushes 0x00FF / 0xA150, i.e. the
+; pointer 0x00FFA150 = this string's boot-time alias, with length 5.  (Renamed
+; from BootscreenSlideMarker 2026-09-25; nothing referenced the old name.)
+LZSS_SlideSignature:
 	.asciz "SLIDE"
 
 ; Boot/flash-update screen bitmaps (headerless 1bpp, 224x22, 616 bytes
