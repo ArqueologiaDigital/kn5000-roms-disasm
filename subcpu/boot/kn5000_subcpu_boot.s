@@ -2226,10 +2226,10 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	lda xde, (ToneGen_VelCurve_ModeParams_Mode6:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
-	muls xbc, xhl	; XBC = BC * HL (signed)
+	muls xbc, hl	; XBC = BC * HL (signed)
 	ld hl, (ToneGen_VelCurve_Divisor:24); HL = ToneGen_VelCurve_Divisor (128)
 	exts xbc	; Sign-extend XBC
-	divs xbc, xhl	; XBC = XBC / HL (signed)
+	divs xbc, hl	; XBC = XBC / HL (signed)
 	ld hl, bc	; HL = quotient
 	ld c, (xde + 1)	; C = table[1] (offset)
 	extz bc	; Zero-extend BC

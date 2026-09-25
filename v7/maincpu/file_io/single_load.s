@@ -177,7 +177,7 @@ SLSrcBankList_FuncBody:
 	lda	xiz, (34995:16)
 	ld	a, (35168:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	inc	1, a
 	extz	wa
 	ld	bc, 0:i3
@@ -204,7 +204,7 @@ SLSrcBankList_FuncBody_Helper8:
 	lda	xiz, (xwa+22)
 	ld	a, (35168:16)
 	extz	wa
-	div8rr	a, c
+	div	wa, c
 	extz	wa
 	call	SLSrcBankList_FuncBody_Helper
 	ld	xbc, xhl
@@ -243,7 +243,7 @@ SLSrcBankList_FuncBody_Helper9:
 	lda	xiz, (35037:16)
 	ld	a, (35168:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -405,7 +405,7 @@ SLSrcBankList_FuncBody_Skip6:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -424,7 +424,7 @@ SLSrcBankList_FuncBody_Skip7:
 	ld	e, (15337810:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip8
@@ -578,7 +578,7 @@ SLSrcBankList_FuncBody_Helper11:
 	lda	xwa, (35015:16)
 	ld	c, (35170:16)
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
@@ -600,7 +600,7 @@ SLSrcBankList_FuncBody_Helper12:
 	ld	(xsp+8), xwa
 	ld	a, (35170:16)
 	extz	wa
-	div	a, (xsp+0x6)
+	div	wa, (xsp+0x6)
 	ld	a, w
 	extz	wa
 	ld	(xsp+4), wa
@@ -650,7 +650,7 @@ SLSrcBankList_FuncBody_Entry:
 	jr	c, SLSrcBankList_FuncBody_Epilogue3
 	ld	c, (35170:16)
 	extz	bc
-	div	c, (xsp+0x6)
+	div	bc, (xsp+0x6)
 	extz	bc
 	pushw 3
 	ld	de, (xsp+6)
@@ -671,7 +671,7 @@ SLSrcBankList_FuncBody_Helper13:
 	ld	(xsp+4), xwa
 	ld	a, (35170:16)
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	c, w
 	extz	bc
 	cp	(35166:16), 0
@@ -683,7 +683,7 @@ SLSrcBankList_FuncBody_Helper13:
 	lda	xiz, (xwa+64)
 	ld	a, (35170:16)
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	extz	wa
 	call	SLSrcBankList_FuncBody_Helper4
 	ld	xbc, xhl
@@ -790,7 +790,7 @@ SLSrcBankList_FuncBody_Skip18:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -809,7 +809,7 @@ SLSrcBankList_FuncBody_Skip19:
 	ld	e, (15337844:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip20
@@ -938,7 +938,7 @@ SLSrcBankList_FuncBody_Helper15:
 	jr	nc, SLSrcBankList_FuncBody_Epilogue5
 	lda	xwa, (35015:16)
 	extz	bc
-	div	c, (xsp)
+	div	bc, (xsp)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName3
@@ -1014,7 +1014,7 @@ SLSrcBankList_FuncBody_Helper17:
 SLSrcBankList_FuncBody_Skip28:
 	ld	xiz, xwa
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	ld	a, b
 	inc	1, a
 	extz	wa
@@ -1211,7 +1211,7 @@ SLSrcBankList_FuncBody_Skip36:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -1252,7 +1252,7 @@ SLSrcBankList_FuncBody_Skip38:
 	jr	nc, SLSrcBankList_FuncBody_Skip39
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip40
@@ -1548,7 +1548,7 @@ SLDstBankList_FuncBody:
 	lda	xiz, (35079:16)
 	ld	a, (35174:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	inc	1, a
 	extz	wa
 	ld	bc, 0:i3
@@ -1562,7 +1562,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35099:16)
 	ld	c, (35174:16)
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetConfigName
@@ -1617,7 +1617,7 @@ SLDstBankList_FuncBody_Skip:
 	lda	xiz, (35121:16)
 	ld	a, (35174:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -1738,7 +1738,7 @@ SLDstBankList_FuncBody_Skip5:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -1757,7 +1757,7 @@ SLDstBankList_FuncBody_Skip6:
 	ld	e, (15337928:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip7
@@ -1805,11 +1805,11 @@ SLDstBankList_FuncBody_Skip10:
 	jr	z, SLDstBankList_FuncBody_Skip11
 	ld	a, (35168:16)
 	extz	wa
-	div8rr	a, c
+	div	wa, c
 	extz	wa
 	ld	e, (35174:16)
 	extz	de
-	div8rr	e, c
+	div	de, c
 	extz	de
 	ld	bc, de
 	call	SLDstBankList_FuncBody_Helper
@@ -1984,7 +1984,7 @@ SLDstBankList_FuncBody_Helper8:
 	lda	xwa, (35099:16)
 	ld	c, (35178:16)
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
@@ -2022,7 +2022,7 @@ SLDstBankList_FuncBody_Helper9:
 	lda	xiz, (35121:16)
 	ld	a, (35178:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	extz	wa
 	calr	WP_GetPresetPtr
@@ -2046,10 +2046,10 @@ SLDstBankList_FuncBody_Skip18:
 	ld	e, (35178:16)
 	ld	c, e
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	extz	de
-	div	e, (xsp+0x4)
+	div	de, (xsp+0x4)
 	ld	e, d
 	extz	de
 	pushw 3
@@ -2158,7 +2158,7 @@ SLDstBankList_FuncBody_Skip22:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -2177,7 +2177,7 @@ SLDstBankList_FuncBody_Skip23:
 	ld	e, (15337964:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip24
@@ -2225,12 +2225,12 @@ SLDstBankList_FuncBody_Skip27:
 	jr	z, SLDstBankList_FuncBody_Skip28
 	ld	a, (35170:16)
 	extz	wa
-	div8rr	a, c
+	div	wa, c
 	add	a, 30
 	extz	wa
 	ld	e, (35178:16)
 	extz	de
-	div8rr	e, c
+	div	de, c
 	add	e, 30
 	extz	de
 	ld	bc, de
@@ -2273,7 +2273,7 @@ SLDstBankList_FuncBody_Helper10:
 	cp	c, e
 	jr	nc, SLDstBankList_FuncBody_Skip29
 	extz	bc
-	div	c, (xsp)
+	div	bc, (xsp)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName3
@@ -2375,7 +2375,7 @@ SLDstBankList_FuncBody_Skip31:
 	lda	xiz, (35121:16)
 	ld	a, (35180:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -2528,7 +2528,7 @@ SLDstBankList_FuncBody_Skip37:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -2569,7 +2569,7 @@ SLDstBankList_FuncBody_Skip39:
 	jr	nc, SLDstBankList_FuncBody_Skip40
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip41
@@ -2637,11 +2637,11 @@ SLDstBankList_FuncBody_Skip44:
 	jr	z, SLDstBankList_FuncBody_Skip45
 	ld	a, (35172:16)
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	extz	wa
 	ld	c, (35180:16)
 	extz	bc
-	div8rr	c, e
+	div	bc, e
 	extz	bc
 	call	SLDstBankList_FuncBody_Helper5
 	exts	xhl

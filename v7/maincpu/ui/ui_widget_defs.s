@@ -448,9 +448,9 @@ PsEditBox_Paint:
 	lda xde, (xwa + 0x04)
 	ld BC,(XDE)
 	sub BC,(XWA)
-	mul	xbc, xhl
+	mul	xbc, hl
 	extz	xbc
-	div	xbc, xiz
+	div	xbc, iz
 	ld	hl, (xwa)
 	add	hl, bc
 	ld	(xde), hl
@@ -511,9 +511,9 @@ PsEditBox_Confirm:
 	ld DE,(XHL)
 	ld IX,DE
 	sub	ix, (xwa)
-	mul	xbc, xix
+	mul	xbc, ix
 	extz	xbc
-	div	xbc, xiy
+	div	xbc, iy
 	sub	de, bc
 	ld	(xwa), de
 	decw	6, (xhl)
@@ -8310,7 +8310,7 @@ AcTrkSw_Reset_DrawTrack:
 	ld	xwa, (xsp+20)
 	ld	bc, (xwa+36)
 	extz	xde
-	div	xde, xbc
+	div	xde, bc
 	ld	(xsp+8), de
 	ldw	(xsp+18), 0
 	cp	bc, 0:i3

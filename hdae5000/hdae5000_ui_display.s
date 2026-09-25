@@ -16926,7 +16926,7 @@ HDAE5000_PPORT_Cmd04_SendFsbToPc:			; 0x29572E — command 04 "Sending FSB to PC
 	nop
 	ld de, (xix + 0x32)			; sectors high
 	nop
-	mul xde, xbc				; XDE = DE × BC (total sectors)
+	mul xde, bc				; XDE = DE × BC (total sectors)
 	ld xiy, (xix + 0x2C)			; region start
 	nop
 	call HDAE5000_PPORT_SendBlock				; call 0x296AF8 — read region
@@ -16939,7 +16939,7 @@ HDAE5000_PPORT_Cmd04_SendFsbToPc:			; 0x29572E — command 04 "Sending FSB to PC
 	nop
 	ld de, (xix + 0x3A)
 	nop
-	mul xde, xbc
+	mul xde, bc
 	ld xiy, (xix + 0x34)
 	nop
 	call HDAE5000_PPORT_SendBlock
@@ -16952,7 +16952,7 @@ HDAE5000_PPORT_Cmd04_SendFsbToPc:			; 0x29572E — command 04 "Sending FSB to PC
 	nop
 	ld de, (xix + 0x42)
 	nop
-	mul xde, xbc
+	mul xde, bc
 	ld xiy, (xix + 0x3C)
 	nop
 	call HDAE5000_PPORT_SendBlock
@@ -17010,7 +17010,7 @@ HDAE5000_PPORT_Cmd05_RcvFsbFromPc:			; 0x295802 — command 05 "Rcv FSB from PC"
 	nop
 	ld de, (xix + 0x32)
 	nop
-	mul xde, xbc
+	mul xde, bc
 	ld xiy, (xix + 0x2C)
 	nop
 	call HDAE5000_PPORT_RecvBlock				; call 0x296B7E — write region
@@ -17023,7 +17023,7 @@ HDAE5000_PPORT_Cmd05_RcvFsbFromPc:			; 0x295802 — command 05 "Rcv FSB from PC"
 	nop
 	ld de, (xix + 0x3A)
 	nop
-	mul xde, xbc
+	mul xde, bc
 	ld xiy, (xix + 0x34)
 	nop
 	call HDAE5000_PPORT_RecvBlock
@@ -17036,7 +17036,7 @@ HDAE5000_PPORT_Cmd05_RcvFsbFromPc:			; 0x295802 — command 05 "Rcv FSB from PC"
 	nop
 	ld de, (xix + 0x42)
 	nop
-	mul xde, xbc
+	mul xde, bc
 	ld xiy, (xix + 0x3C)
 	nop
 	call HDAE5000_PPORT_RecvBlock
@@ -20240,15 +20240,15 @@ HDAE5000_HD_Mul32:	; 0x297925 (37 bytes)
 	push xhl
 	push xix
 	ld hl, bc			; HL = low(BC)
-	mul xhl, xwa			; XHL = low(BC) * WA
+	mul xhl, wa			; XHL = low(BC) * WA
 	ld xix, xhl			; accumulate in XIX
 	ld hl, bc			; HL = low(BC) again
-	mul	hl, qwa
+	mul	xhl, qwa
 	ld	qhl, hl
 	ld hl, 0:i3			; clear low HL
 	add xix, xhl			; add shifted partial product
 	ld	hl, qbc
-	mul xhl, xwa			; XHL = high(BC) * WA
+	mul xhl, wa			; XHL = high(BC) * WA
 	ld	qhl, hl
 	ld hl, 0:i3			; clear low HL
 	add xix, xhl			; add shifted partial product
@@ -25474,7 +25474,7 @@ HDAE5000_IToA:
 	ld de, bc			; DE = radix (divisor)
 	ld wa, qbc		; ld WA, QBC (current value)
 	extz xwa			; zero-extend WA to XWA
-	div xwa, xde			; XWA = WA / DE (quot in WA, rem in high)
+	div xwa, de			; XWA = WA / DE (quot in WA, rem in high)
 	ld wa, qwa		; ld WA, QWA (get remainder)
 	add a, 0x30			; convert to ASCII '0'-'9'
 	ld (xiy), a			; store digit
@@ -25484,7 +25484,7 @@ HDAE5000_IToA:
 .Lppi_digit_ok:
 	ld wa, qbc		; ld WA, QBC (reload quotient)
 	extz xwa			; zero-extend
-	div xwa, xde			; divide again to get next quotient
+	div xwa, de			; divide again to get next quotient
 	ld qbc, wa		; ld QBC, WA (save new quotient)
 	cp qbc, 0		; cp QBC, 0 (quotient == 0?)
 	jr z, .Lppi_digits_done		; → all digits extracted

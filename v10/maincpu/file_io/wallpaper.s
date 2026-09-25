@@ -509,7 +509,7 @@ WP_GetNameByOffset:
 	lda xwa, (0x1ed350:24)
 	ld hl, (xwa + 13)	; Get entry size from config
 	ld xix, xwa
-	mul xhl, xbc	; Calculate offset
+	mul xhl, bc	; Calculate offset
 	add xix, xhl
 	lda_dri XBC, 0xf1, 0xb2, 0x00	; Offset to name field
 	lda_dpi XIY, 0xf8

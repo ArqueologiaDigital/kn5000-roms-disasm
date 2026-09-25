@@ -1085,11 +1085,11 @@ Kernel_StartTask:
 	push XIY                                     ; F857E1/F98346  3d   push XIY
 	push XIZ                                     ; F857E2/F98347  3e   push XIZ   seven pushes: the same set Kernel_ResumeTask pops
 	ld l, 0x0c:opc                                  ; F857E3/F98348  27 0c   ld L,0x0c
-	mul8rr l, a                                  ; F857E5/F9834A  c9 47   mul HL,A   HL = 12 * A
+	mul hl, a                                  ; F857E5/F9834A  c9 47   mul HL,A   HL = 12 * A
 	extz XHL                                     ; F857E7/F9834C  eb 12   extz XHL
 	add XHL,KERNEL_TCB_TEMPLATE                  ; F857E9/F9834E  a=eb c8 7e 5e f8 ff c=eb c8 de 80 f9 ff   c: add XHL,0xfff980de   XHL = EntryPoint_Records + (A-1)*12; only the low 24 bits reach the bus
 	ld c, 0x0c:opc                                  ; F857EF/F98354  23 0c   ld C,0x0c
-	mul8rr c, a                                  ; F857F1/F98356  c9 43   mul BC,A   BC = 12 * A
+	mul bc, a                                  ; F857F1/F98356  c9 43   mul BC,A   BC = 12 * A
 	add BC,KERNEL_TCB_BASE-12                    ; F857F3/F98358  a=d9 c8 f4 02 c=d9 c8 f4 00   c: add BC,0x00f4   XBC = 0x0300 + (A-1)*12, the task control block
 	extz XBC                                     ; F857F7/F9835C  e9 12   extz XBC
 	ld XIX,XBC                                   ; F857F9/F9835E  e9 8c   ld XIX,XBC

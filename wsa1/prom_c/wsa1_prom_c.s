@@ -1011,7 +1011,7 @@ sub_FAC34D:
 	pushw	hl                                   ; FAC3FD  push HL
 	call	Dev10C_WriteAllChanRegs                              ; FAC3FE  call 0xfb713a
 	ld	c, 68:opc                                  ; FAC402  ld C,0x44
-	mul8rr	c, d                                ; FAC404  mul BC,D
+	mul	bc, d                                ; FAC404  mul BC,D
 	add	bc, 41                                 ; FAC406  add BC,0x0029
 	extz	xbc                                   ; FAC40A  extz XBC
 	ld	wa, (xbc+0x3BCF)                        ; FAC40C  ld WA,(XBC+0x3bcf)
@@ -1897,7 +1897,7 @@ sub_FACA40__FACA50:
 	cp	h, 64                                   ; FACA52  cp H,0x40
 	jr nc, sub_FACA40__FACAB3                  ; FACA55  jr NC,0xfacab3
 	ld	c, 68:opc                                  ; FACA57  ld C,0x44
-	mul8rr	c, h                                ; FACA59  mul BC,H
+	mul	bc, h                                ; FACA59  mul BC,H
 	ld	de, bc                                  ; FACA5B  ld DE,BC
 	ldw	hl, 0x3BCF                             ; FACA5D  ld HL,0x3bcf
 	add	hl, bc                                 ; FACA60  add HL,BC
@@ -1980,7 +1980,7 @@ sub_FACAB7__FACACB:
 	cp	h, 64                                   ; FACACD  cp H,0x40
 	jrl nc, sub_FACAB7__FACBA1                 ; FACAD0  jrl NC,0xfacba1
 	ld	c, 68:opc                                  ; FACAD3  ld C,0x44
-	mul8rr	c, h                                ; FACAD5  mul BC,H
+	mul	bc, h                                ; FACAD5  mul BC,H
 	ld	(xiz-4), bc                             ; FACAD7  ld (XIZ+0xfc),BC
 	ldw	hl, 0x3BCF                             ; FACADA  ld HL,0x3bcf
 	add	hl, bc                                 ; FACADD  add HL,BC

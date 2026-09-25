@@ -6714,7 +6714,7 @@ GetFileEntryByIndex_Skip5:
 	call	FileIO_ReadByte
 	sll	hl, 8
 	or	iz, hl
-	mul	iz, (xsp+0x1c)
+	mul	xiz, (xsp+0x1c)
 	ld	xwa, xiz
 	add	xwa, 178
 	ld	bc, 0:i3

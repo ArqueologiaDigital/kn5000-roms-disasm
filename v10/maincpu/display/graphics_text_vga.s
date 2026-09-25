@@ -1240,7 +1240,7 @@ DrawText_ExtendedLayout_Skip2:
 	lda	xix, (xsp+16)
 	ld	a, (xsp+6)
 	extz	wa
-	mul	wa, (xsp+4)
+	mul	xwa, (xsp+4)
 	ld	xbc, xwa
 	ld	xde, 0:i3
 DrawText_ExtendedLayout_Loop:

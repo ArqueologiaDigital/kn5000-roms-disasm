@@ -156,7 +156,7 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	add	bc, bc
 	lda	xwa, (0xeda3d2:24)
 	ld	de, (xwa+bc)
-	mul	xhl, xde
+	mul	xhl, de
 	lda	xwa, (0xeda3ea:24)
 	ld	wa, (xwa+bc)
 	sub	hl, wa

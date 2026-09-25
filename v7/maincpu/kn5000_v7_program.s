@@ -2421,7 +2421,7 @@ TextRender_CustomFontWidth:
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	ld	wa, (xsp+20)
-	mul	xwa, xhl
+	mul	xwa, hl
 	jr	TextRender_AddToDrawPos
 TextRender_ProcessStringLoop:
 	ld xwa, (xsp + 30)
@@ -2507,7 +2507,7 @@ TextRender_CharEncodeAndDraw:
 	sub a, 0x20
 	extz wa
 	mrdw3 0x9f, 0x16, 0x40
-	mul xwa, xbc
+	mul xwa, bc
 	ld (xsp + 16), xwa
 	ld xwa, (xsp + 12)
 	add (xsp + 16), xwa

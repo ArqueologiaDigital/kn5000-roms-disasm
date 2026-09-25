@@ -609,7 +609,7 @@ Voice_ComputePitch__FA8046:
 	extz	xwa                                   ; FA8057  extz XWA
 	ld	(xiz-8), xwa                            ; FA8059  ld (XIZ+0xf8),XWA
 	ld	c, 12:opc                                  ; FA805C  ld C,0x0c
-	mul8rr	c, h                                ; FA805E  mul BC,H
+	mul	bc, h                                ; FA805E  mul BC,H
 	extz	xbc                                   ; FA8060  extz XBC
 	add	xbc, xwa                               ; FA8062  add XBC,XWA
 	add	xbc, Voice_ChromaticBend_Table                          ; FA8064  add XBC,0x00fdf2c3
@@ -4374,7 +4374,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA99A7:
 	inc	6, xsp                                 ; FA99C5  inc 6,XSP
 Voice_StageChanSel_Reg0440_Reg0480__FA99C7:
 	ldw	bc, 27                                 ; FA99C7  ld BC,0x001b
-	mul	xbc, xde                               ; FA99CA  mul XBC,DE
+	mul	xbc, de                               ; FA99CA  mul XBC,DE
 	ld	(xiz-10), bc                            ; FA99CC  ld (XIZ+0xf6),BC
 	ldw	ix, 0x4CCF                             ; FA99CF  ld IX,0x4ccf
 	add	ix, bc                                 ; FA99D2  add IX,BC
@@ -4734,7 +4734,7 @@ Voice_StageRegs_0180_AB__FA9CDE:
 	inc	6, xsp                                 ; FA9CFE  inc 6,XSP
 Voice_StageRegs_0180_AB__FA9D00:
 	ldw	bc, 27                                 ; FA9D00  ld BC,0x001b
-	mul	xbc, xix                               ; FA9D03  mul XBC,IX
+	mul	xbc, ix                               ; FA9D03  mul XBC,IX
 	add	bc, 9                                  ; FA9D05  add BC,0x0009
 	ld	(xiz-10), bc                            ; FA9D09  ld (XIZ+0xf6),BC
 	ldw	de, 0x4CCF                             ; FA9D0C  ld DE,0x4ccf
@@ -5012,7 +5012,7 @@ Voice_StageChanSel_Reg04C0:
 	ld	h, (xiy+34)                             ; FA9F45  ld H,(XIY+0x22)
 	and	h, 3                                   ; FA9F48  and H,0x03
 	ld	c, 4:opc                                   ; FA9F4B  ld C,0x04
-	mul8rr	c, h                                ; FA9F4D  mul BC,H
+	mul	bc, h                                ; FA9F4D  mul BC,H
 	extz	xbc                                   ; FA9F4F  extz XBC
 	ld	xix, xbc                                ; FA9F51  ld XIX,XBC
 	add	xix, 0x79                              ; FA9F53  add XIX,0x00000079
@@ -5058,7 +5058,7 @@ Voice_StageChanSel_Reg04C0__FA9F94:
 	inc	6, xsp                                 ; FA9FB2  inc 6,XSP
 Voice_StageChanSel_Reg04C0__FA9FB4:
 	ldw	bc, 27                                 ; FA9FB4  ld BC,0x001b
-	mul	xbc, xix                               ; FA9FB7  mul XBC,IX
+	mul	xbc, ix                               ; FA9FB7  mul XBC,IX
 	add	bc, 18                                 ; FA9FB9  add BC,0x0012
 	ld	(xiz-8), bc                             ; FA9FBD  ld (XIZ+0xf8),BC
 	ldw	de, 0x4CCF                             ; FA9FC0  ld DE,0x4ccf
@@ -7820,7 +7820,7 @@ KeyScale_LevelFromPitch:
 	sub	wa, iy                                 ; FAB4CB  sub WA,IY
 	muls	wa, 0xFFC0                            ; FAB4CD  muls WA,0xffc0
 	exts	xwa                                   ; FAB4D1  exts XWA
-	divs	xwa, xbc                              ; FAB4D3  divs XWA,BC
+	divs	xwa, bc                              ; FAB4D3  divs XWA,BC
 	jr sub_FAB48A__FAB511                      ; FAB4D5  jr T,0xfab511
 sub_FAB48A__FAB4D7:
 	ld	c, (xix+32)                             ; FAB4D7  ld C,(XIX+0x20)
@@ -7846,7 +7846,7 @@ sub_FAB48A__FAB4F0:
 	sub	iy, bc                                 ; FAB501  sub IY,BC
 	muls	iy, 0xFFC0                            ; FAB503  muls IY,0xffc0
 	exts	xiy                                   ; FAB507  exts XIY
-	divs	xiy, xwa                              ; FAB509  divs XIY,WA
+	divs	xiy, wa                              ; FAB509  divs XIY,WA
 	ld	wa, iy                                  ; FAB50B  ld WA,IY
 	jr sub_FAB48A__FAB511                      ; FAB50D  jr T,0xfab511
 sub_FAB48A__FAB50F:
@@ -7910,7 +7910,7 @@ VelScale_LevelFromVelocity:
 	sub	iy, wa                                 ; FAB557  sub IY,WA
 	muls	iy, 0xFFC0                            ; FAB559  muls IY,0xffc0
 	exts	xiy                                   ; FAB55D  exts XIY
-	divs	xiy, xbc                              ; FAB55F  divs XIY,BC
+	divs	xiy, bc                              ; FAB55F  divs XIY,BC
 	ld	wa, iy                                  ; FAB561  ld WA,IY
 	jr sub_FAB517__FAB59F                      ; FAB563  jr T,0xfab59f
 sub_FAB517__FAB565:
@@ -7937,7 +7937,7 @@ sub_FAB517__FAB57E:
 	sub	iy, bc                                 ; FAB58F  sub IY,BC
 	muls	iy, 0xFFC0                            ; FAB591  muls IY,0xffc0
 	exts	xiy                                   ; FAB595  exts XIY
-	divs	xiy, xwa                              ; FAB597  divs XIY,WA
+	divs	xiy, wa                              ; FAB597  divs XIY,WA
 	ld	wa, iy                                  ; FAB599  ld WA,IY
 	jr sub_FAB517__FAB59F                      ; FAB59B  jr T,0xfab59f
 sub_FAB517__FAB59D:
@@ -8015,7 +8015,7 @@ sub_FAB5A5__FAB5CA:
 	exts	bc                                    ; FAB5FB  exts BC
 	cpl	bc                                     ; FAB5FD  cpl BC
 	inc	1, bc                                  ; FAB5FF  inc 1,BC
-	muls	xwa, xbc                              ; FAB601  muls XWA,BC
+	muls	xwa, bc                              ; FAB601  muls XWA,BC
 	ld	hl, wa                                  ; FAB603  ld HL,WA
 	jr sub_FAB5A5__FAB61F                      ; FAB605  jr T,0xfab61f
 sub_FAB5A5__FAB607:
@@ -8027,7 +8027,7 @@ sub_FAB5A5__FAB607:
 	ld	(xiz-2), wa                             ; FAB613  ld (XIZ+0xfe),WA
 	ld	c, (xix+24)                             ; FAB616  ld C,(XIX+0x18)
 	exts	bc                                    ; FAB619  exts BC
-	muls	xwa, xbc                              ; FAB61B  muls XWA,BC
+	muls	xwa, bc                              ; FAB61B  muls XWA,BC
 	ld	hl, wa                                  ; FAB61D  ld HL,WA
 sub_FAB5A5__FAB61F:
 	pop	xiy                                    ; FAB61F  pop XIY
@@ -8158,7 +8158,7 @@ Voice_ComputeLevelBase_CD:
 	exts	bc                                    ; FAB71E  exts BC
 	cpl	bc                                     ; FAB720  cpl BC
 	inc	1, bc                                  ; FAB722  inc 1,BC
-	muls	xwa, xbc                              ; FAB724  muls XWA,BC
+	muls	xwa, bc                              ; FAB724  muls XWA,BC
 	ld	hl, wa                                  ; FAB726  ld HL,WA
 	jr sub_FAB6D5__FAB742                      ; FAB728  jr T,0xfab742
 sub_FAB6D5__FAB72A:
@@ -8170,7 +8170,7 @@ sub_FAB6D5__FAB72A:
 	ld	(xiz-2), wa                             ; FAB736  ld (XIZ+0xfe),WA
 	ld	c, (xix+7)                              ; FAB739  ld C,(XIX+0x07)
 	exts	bc                                    ; FAB73C  exts BC
-	muls	xwa, xbc                              ; FAB73E  muls XWA,BC
+	muls	xwa, bc                              ; FAB73E  muls XWA,BC
 	ld	hl, wa                                  ; FAB740  ld HL,WA
 sub_FAB6D5__FAB742:
 	pop	xiy                                    ; FAB742  pop XIY
@@ -8409,7 +8409,7 @@ Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E:
 	cp	h, 64                                   ; FAB880  cp H,0x40
 	jr nc, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C7                  ; FAB883  jr NC,0xfab8c7
 	ld	c, 68:opc                                  ; FAB885  ld C,0x44
-	mul8rr	c, h                                ; FAB887  mul BC,H
+	mul	bc, h                                ; FAB887  mul BC,H
 	add	bc, 19                                 ; FAB889  add BC,0x0013
 	extz	xbc                                   ; FAB88D  extz XBC
 	ld	xwa, (xbc+0x3BCF)                       ; FAB88F  ld XWA,(XBC+0x3bcf)
@@ -8420,7 +8420,7 @@ Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E:
 	extpfx3 0x8E, 0x0A, 0xF6                   ; FAB89E  cp H,(XIZ+0x0a)
 	jr z, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C3                   ; FAB8A1  jr Z,0xfab8c3
 	ld	c, 68:opc                                  ; FAB8A3  ld C,0x44
-	mul8rr	c, h                                ; FAB8A5  mul BC,H
+	mul	bc, h                                ; FAB8A5  mul BC,H
 	inc	1, bc                                  ; FAB8A7  inc 1,BC
 	extz	xbc                                   ; FAB8A9  extz XBC
 	extpfx7 0xD3, 0xE5, 0xCF, 0x3B, 0x3E, 0x00, 0x10 ; FAB8AB  or (XBC+0x3bcf),0x1000
@@ -9262,7 +9262,7 @@ sub_FABDAC__FABDED:
 	extz	bc                                    ; FABE0A  extz BC
 	ld	wa, de                                  ; FABE0C  ld WA,DE
 	extz	xwa                                   ; FABE0E  extz XWA
-	div	xwa, xbc                               ; FABE10  div XWA,BC
+	div	xwa, bc                               ; FABE10  div XWA,BC
 	jr sub_FABDAC__FABE2B                      ; FABE12  jr T,0xfabe2b
 sub_FABDAC__FABE14:
 	extz	xde                                   ; FABE14  extz XDE

@@ -1016,13 +1016,13 @@ HDAE5000_Multiply:	; 0x29B72D
 	;   follow, each under its own label below.
 
 	ld	hl, qwa
-	mul	xhl, xbc
+	mul	xhl, bc
 	ld	de, qbc
-	mul	xde, xwa
+	mul	xde, wa
 	add	xhl, xde
 	ld	qhl, hl
 	ld	hl, 0:i3
-	mul	xwa, xbc
+	mul	xwa, bc
 	add	xhl, xwa
 	ret
 
@@ -1277,7 +1277,7 @@ HDAE5000_UDivMod32:	; 0x29B8C5
 	cp	qbc, 0
 	jr nz, .LDIV_b915                      ; [6e 3d] jr NZ,0x29b915
 	ld	xde, xwa
-	div	xwa, xbc
+	div	xwa, bc
 	jr	ov, .LDIV_b8e8
 	ld	xhl, 0:i3
 	ld	xde, xhl
@@ -1288,10 +1288,10 @@ HDAE5000_UDivMod32:	; 0x29B8C5
 .LDIV_b8e8:
 	ld	wa, qde
 	extz xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	qhl, wa
 	ld	wa, de
-	div	xwa, xbc
+	div	xwa, bc
 	ld	hl, wa
 	ld	de, qwa
 	extz xde                                ; extz XDE

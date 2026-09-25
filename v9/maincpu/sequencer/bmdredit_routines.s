@@ -3816,7 +3816,7 @@ BmDrEdit_ProcessVoiceSection:
 	extz bc
 	ld wa, (3299:16)
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld bc, wa
 	ld xde, (xsp + 4)
 	ld (xde), bc
@@ -3824,7 +3824,7 @@ BmDrEdit_ProcessVoiceSection:
 	extz bc
 	ld wa, (3299:16)
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	stw_erp BC, 0xe2
 	ld xwa, (xsp)
 	ld (xwa), bc

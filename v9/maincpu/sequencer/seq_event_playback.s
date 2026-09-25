@@ -1423,7 +1423,7 @@ Voice_GetBankEntryPointer:
 Voice_CalcBankOffset:
 	ld xiy, 0x1e8820
 	ld w, 0x10:opc
-	mul8rr a, w
+	mul wa, w
 	and xwa, 0xffff
 	add xiy, xwa
 	ret

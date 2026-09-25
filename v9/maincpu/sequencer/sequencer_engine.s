@@ -14136,7 +14136,7 @@ SeqCount_ShiftDivLoop:
 	jr ugt, SeqCount_ShiftDivLoop
 	mul iz, 0x64
 	extz xiz
-	div xiz, xde
+	div xiz, de
 	cp iz, 0x64
 	jr nz, SeqCount_CheckZeroPercent
 	dec 1, iz
@@ -17687,7 +17687,7 @@ Rhythm_ComputeNoteAllocation_Skip:
 	ld	wa, (xsp+4)
 	sub	wa, hl
 	extz	xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	wa, qwa
 	add	wa, hl
 	ld	(xsp+4), wa
@@ -17695,7 +17695,7 @@ Rhythm_ComputeNoteAllocation_Skip:
 Rhythm_ComputeNoteAllocation_Skip2:
 	ld	wa, (xsp+4)
 	extz	xwa
-	div	xwa, xiz
+	div	xwa, iz
 	ld	wa, qwa
 	ld	(xsp+4), wa
 Rhythm_ComputeNoteAllocation_Join:
@@ -17802,7 +17802,7 @@ Rhythm_DispatchNoteAlloc:
 	dec 1, bc
 	ld a, (xwa)
 	extz wa
-	mul xwa, xbc
+	mul xwa, bc
 	ld bc, wa
 	ld xwa, (xsp + 18)
 	ld (xwa), bc
@@ -17863,7 +17863,7 @@ Rhythm_AllocEndSection:
 	inc 1, iz
 	ld wa, (xsp + 22)
 	sub wa, iz
-	mul xwa, xbc
+	mul xwa, bc
 	ld bc, wa
 	add (xhl), bc
 	ld iz, (xsp + 22)
@@ -17959,7 +17959,7 @@ Rhythm_ExtendedNoteAlloc:
 	extz bc
 	ld wa, (xsp + 24)
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld bc, wa
 	inc 1, bc
 	ld xwa, (xsp + 20)
@@ -18026,10 +18026,10 @@ Rhythm_ExtAllocEndSection:
 	sub de, (xsp + 6)
 	ld wa, de
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	add (xsp + 4), wa
 	extz xde
-	div xde, xbc
+	div xde, bc
 	stw_erp WA, 0xea
 	ldb_erp A, 0xf9
 	jr Rhythm_NoteAllocation_Finalize
@@ -19655,7 +19655,7 @@ Seq_ComputePercent_NormalizeLoop:
 Seq_ComputePercent_Compute:
 	mul wa, 0x64
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld l, a
 	cp l, 0x64
 	ret nz
@@ -28522,9 +28522,9 @@ Portamento_DispatchAndCompute:
 	ld bc, (9632:16)
 	ld iy, bc
 	extz xiy
-	div xiy, xix
+	div xiy, ix
 	extz xbc
-	div xbc, xix
+	div xbc, ix
 	stw_erp WA, 0xe6
 	ld e, (9650:16)
 	ld (9646:16), e
@@ -28532,7 +28532,7 @@ Portamento_DispatchAndCompute:
 	jr z, Portamento_IncrementAndWrap
 	cp wa, 1:i3
 	jr nc, Portamento_IncrementAndWrap
-	mul xiy, xix
+	mul xiy, ix
 	ld wa, (9648:16)
 	add wa, iy
 	ld (9648:16), wa
@@ -28541,7 +28541,7 @@ Portamento_DispatchAndCompute:
 
 Portamento_IncrementAndWrap:
 	inc 1, iy
-	mul xix, xiy
+	mul xix, iy
 	ld bc, (9648:16)
 	add bc, ix
 	ld (9648:16), bc
@@ -28577,9 +28577,9 @@ Portamento_DecrementPosition:
 	jr ule, Portamento_SubtractDirect2
 	ld iy, iz
 	extz xiy
-	div xiy, xhl
+	div xiy, hl
 	inc 1, iy
-	mul xhl, xiy
+	mul xhl, iy
 	sub bc, hl
 	jr Portamento_StoreFinalPosition
 
@@ -28617,7 +28617,7 @@ Portamento_ComputeAndStore:
 	extz bc
 	call Rhythm_NoteDispatchWrapper
 	ld wa, iz
-	div8rr a, l
+	div wa, l
 	ld (1079:16), w
 	stb_erp A, 0xfb
 	ld (1078:16), a
@@ -33303,7 +33303,7 @@ SeqPart_VelCalcSubtract:
 	add e, 0x64
 
 SeqPart_VelCalcMultiply:
-	mul8rr l, e
+	mul hl, e
 	extz hl
 	div l, 0x64
 	ld e, c
@@ -33531,7 +33531,7 @@ SeqPart_VelExprComplete:
 SeqPart_VelExprUpdate:
 	extz wa
 	extz bc
-	mul xwa, xbc
+	mul xwa, bc
 	extz xwa
 	div wa, 0x64
 	ld b, e

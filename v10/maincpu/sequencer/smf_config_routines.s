@@ -61,7 +61,7 @@ SMF_IncrementPosition:
 	incw 1, (3946:16)
 	ld wa, (3946:16)
 	ldw de, 0x60
-	mul xwa, xde
+	mul xwa, de
 	stw_erp DE, 0xe2
 	add (3938:16), wa
 	ld (3940:16), de
@@ -391,12 +391,12 @@ SMF_CalcTempoRate:
 	ldw de, 0x9
 	ldw wa, 0x27c0
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	ldw hl, 0x64
 	xor de, de
 	extz xwa
-	muls xwa, xhl
+	muls xwa, hl
 	stw_erp DE, 0xe2
 	ld (3948:16), wa
 	ld (3950:16), de
@@ -606,7 +606,7 @@ SMF_WriteByte_NewSector:
 	xor de, de
 	ld hl, 4:i3
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	cp de, 0:i3
 	jr nz, SMF_WriteByte_AlignCheck

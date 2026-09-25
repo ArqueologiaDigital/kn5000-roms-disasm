@@ -269,7 +269,7 @@ ToneGen_VelocityFromTouch:
 	ld	a, w
 	exts	wa
 	add	wa, de
-	muls	xbc, xwa
+	muls	xbc, wa
 	exts	xbc
 	extpfx5	0xD2, 0xC7, 0xC5, 0xFC, 0x59
 	exts	xbc

@@ -3664,7 +3664,7 @@ DrawBitmapFile_Impl_ParseDimensions:
 	ld (xsp+8), xwa
 	ld xbc, 8
 	ld xwa, (xsp+4)
-	div bc, (xwa+14)
+	div xbc, (xwa+14)
 	ld iz, bc
 	extz xiz
 	ld xbc, xiz
@@ -4151,7 +4151,7 @@ DrawString_Impl_ClampDirtyBottom:
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	ld	wa, (xsp+16)
-	mul	xwa, xhl
+	mul	xwa, hl
 	jr	DrawString_Impl_ComputeDirtyRect
 DrawString_Impl_VariableWidthLoop:
 	ld xwa, (xsp + 24)
@@ -4232,7 +4232,7 @@ DrawString_Impl_CharLoop:
 	sub a, 0x20
 	extz wa
 	mrdw3 0x9f, 0x12, 0x40
-	mul xwa, xbc
+	mul xwa, bc
 	ld xde, xwa
 	add xde, (xsp + 12)
 	jr DrawString_Impl_GlyphSetup

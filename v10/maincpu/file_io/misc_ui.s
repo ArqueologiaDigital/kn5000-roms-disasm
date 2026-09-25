@@ -743,7 +743,7 @@ PsFileNameBox_Confirm_Execute:
 
 PsFileNameBox_Confirm_MultiItem:
 	ld wa, (xhl)
-	muls xwa, xde
+	muls xwa, de
 	ld de, wa
 	ld_sril XWA, (xsp + 0x00a2)
 	ld a, (xwa)
@@ -769,19 +769,19 @@ PsFileNameBox_Confirm_MultiItem:
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 40)
 	exts xiz
-	divs xiz, xde
+	divs xiz, de
 	ld_sril XWA, (xsp + 0x00a2)
 	ld a, (xwa)
 	exts wa
 	exts xwa
-	divs xwa, xde
+	divs xwa, de
 	stw_erp WA, 0xe2
 	ldw_erp WA, 0xea
 	ld_sril XWA, (xsp + 0x00a2)
 	ld a, (xwa)
 	exts wa
 	exts xwa
-	divs xwa, xde
+	divs xwa, de
 	ld de, wa
 	ld wa, iz
 	mulw_erp WA, 0xea
@@ -791,7 +791,7 @@ PsFileNameBox_Confirm_MultiItem:
 	add hl, iz
 	ld (xiy), hl
 	ld wa, (xsp + 8)
-	mul xwa, xde
+	mul xwa, de
 	inc 2, wa
 	add (xbc), wa
 	ld de, (xbc)

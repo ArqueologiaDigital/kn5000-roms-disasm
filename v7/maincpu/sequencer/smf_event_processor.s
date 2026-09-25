@@ -1813,7 +1813,7 @@ SMF_MetaTiming_GetNextLoop:
 SMF_MetaTiming_ApplyMultiplier:
 	ld wa, (3946:16)
 	ldw de, 0x60
-	mul xwa, xde
+	mul xwa, de
 	stw_erp DE, 0xe2
 	add (3938:16), wa
 	ld (3940:16), de
@@ -2142,7 +2142,7 @@ SMF_NoteOn_StoreVoiceData:
 	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld a, (4216:16)
 	ld w, 0x60:opc
-	muls8rr a, w
+	muls wa, w
 	xor hl, hl
 	ld l, (4215:16)
 	add wa, hl
@@ -6397,7 +6397,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip16:
 	extz	wa
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	mul	bc, (xwa+48)
+	mul	xbc, (xwa+48)
 	ld	xwa, (xsp+4)
 	ld	xde, (xwa+24)
 	add	xde, xbc
@@ -6409,7 +6409,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip16:
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa+44)
 	extz	xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	bc, wa
 	ld	xwa, (xsp+4)
 	ld	(xwa+46), bc
@@ -6442,7 +6442,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip16:
 	extz	wa
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	mul	bc, (xwa+48)
+	mul	xbc, (xwa+48)
 	ld	xhl, xbc
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa+46)
@@ -6630,7 +6630,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+8)
-	div	bc, (xwa+40)
+	div	xbc, (xwa+40)
 	ld	(xsp+4), bc
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+40)
@@ -6827,7 +6827,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip:
 	ld	(xsp+6), xwa
 	ld	xbc, (xiz+22)
 	ld	xwa, (xsp+6)
-	div	bc, (xwa+40)
+	div	xbc, (xwa+40)
 	ld	(xsp+4), bc
 	ld	wa, (xsp+28)
 	exts	xwa
@@ -6899,7 +6899,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip9:
 	ld	bc, (xsp+4)
 	extz	xbc
 	ld	xwa, (xsp+6)
-	div	bc, (xwa+38)
+	div	xbc, (xwa+38)
 	ld	(xsp+4), bc
 	ld	xbc, (xiz+34)
 	lda	xbc, (xbc+16)
@@ -6955,13 +6955,13 @@ SeqByteBlock_StyleBitmapRef_Code_Join3:
 SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip3:
 	ld	bc, (xsp+4)
 	ld	xwa, (xsp+6)
-	mul	bc, (xwa+38)
+	mul	xbc, (xwa+38)
 	ld	hl, bc
 SeqByteBlock_StyleBitmapRef_Code_Helper5_Join:
 	ld	bc, hl
 	extz	xbc
 	ld	xwa, (xsp+6)
-	div	bc, (xwa+40)
+	div	xbc, (xwa+40)
 	sub	(xiz+44), bc
 	ld	xwa, (xiz+34)
 	ld	(xwa+22), 0
@@ -8126,7 +8126,7 @@ SeqChan_ByteBlockE:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	div	bc, (xwa+50)
+	div	xbc, (xwa+50)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	ld	wa, qbc
@@ -8139,14 +8139,14 @@ SeqChan_ByteBlockE:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	div	bc, (xwa+52)
+	div	xbc, (xwa+52)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	ld	wa, qbc
 	ld	(xsp+6), wa
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	div	hl, (xwa+52)
+	div	xhl, (xwa+52)
 	ld	(xsp+8), hl
 SeqChan_ByteBlockD_Helper_Loop:
 	ld	xwa, (xsp+22)
@@ -8197,7 +8197,7 @@ SeqChan_ByteBlockD_Helper_Skip6:
 	ld	bc, iz
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	mul	bc, (xwa+38)
+	mul	xbc, (xwa+38)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	add	xbc, (xde)
@@ -8264,7 +8264,7 @@ SeqChan_ByteBlockF:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	div	bc, (xwa+50)
+	div	xbc, (xwa+50)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	ld	wa, qbc
@@ -8277,14 +8277,14 @@ SeqChan_ByteBlockF:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	div	bc, (xwa+52)
+	div	xbc, (xwa+52)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	ld	wa, qbc
 	ld	(xsp+6), wa
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	div	hl, (xwa+52)
+	div	xhl, (xwa+52)
 	ld	(xsp+8), hl
 SeqChan_ByteBlockD_Helper_Loop3:
 	ld	xwa, (xsp+22)
@@ -8335,7 +8335,7 @@ SeqChan_ByteBlockD_Helper_Skip9:
 	ld	bc, iz
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
-	mul	bc, (xwa+38)
+	mul	xbc, (xwa+38)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	add	xbc, (xde)

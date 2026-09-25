@@ -4056,7 +4056,7 @@ DrawString_Impl_ClampDirtyBottom:
 	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 16)
-	mul xwa, xhl
+	mul xwa, hl
 	jr DrawString_Impl_ComputeDirtyRect
 
 DrawString_Impl_VariableWidthLoop:
@@ -4138,7 +4138,7 @@ DrawString_Impl_CharLoop:
 	sub a, 0x20
 	extz wa
 	mrdw3 0x9f, 0x12, 0x40
-	mul xwa, xbc
+	mul xwa, bc
 	ld xde, xwa
 	add xde, (xsp + 12)
 	jr DrawString_Impl_GlyphSetup

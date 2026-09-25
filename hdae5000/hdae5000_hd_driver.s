@@ -822,7 +822,7 @@ HDAE5000_DirList_BuildPage:	; 0x28370E (702 bytes)
 	lda xwa, (HDAE5000_Str_Chr2020203A2020:24)
 	push xwa
 	ldw wa, 0x0015
-	muls xwa, xiz			; XWA = IZ * 21
+	muls xwa, iz			; XWA = IZ * 21
 	lda xbc, (0x22a0d0:24)
 	exts xwa
 	add xwa, xbc			; XWA = buffer + IZ*21
@@ -843,7 +843,7 @@ HDAE5000_DirList_BuildPage:	; 0x28370E (702 bytes)
 	lda xwa, (xsp + 0x18)
 	push xwa
 	ldw wa, 0x0015
-	muls xwa, xiz
+	muls xwa, iz
 	lda xbc, (0x22a0d0:24)
 	exts xwa
 	add xwa, xbc
@@ -859,7 +859,7 @@ HDAE5000_DirList_BuildPage:	; 0x28370E (702 bytes)
 	pushw 0x0010
 	push xhl
 	ldw wa, 0x0015
-	muls xwa, xiz
+	muls xwa, iz
 	lda xbc, (0x22a0d4:24)
 	exts xwa
 	add xwa, xbc
@@ -1354,7 +1354,7 @@ HDAE5000_SongScreen_Refresh:	; 0x283B68 (4737 bytes)
 	lda xwa, (HDAE5000_Str_Chr3A2020202020:24)
 	push xwa
 	ldw	wa, 0x001e
-	muls	xwa, xiz
+	muls	xwa, iz
 	lda xbc, (0x22ae40:24)
 	exts xwa                                ; exts XWA
 	add	xwa, xbc
@@ -1372,7 +1372,7 @@ HDAE5000_SongScreen_Refresh:	; 0x283B68 (4737 bytes)
 	lda	xwa, (xsp+24)
 	push xwa
 	ldw	wa, 0x001e
-	muls	xwa, xiz
+	muls	xwa, iz
 	lda xbc, (0x22ae3e:24)
 	exts xwa                                ; exts XWA
 	add	xwa, xbc
@@ -1385,7 +1385,7 @@ HDAE5000_SongScreen_Refresh:	; 0x283B68 (4737 bytes)
 	pushw 0x001a
 	push xhl
 	ldw	wa, 0x001e
-	muls	xwa, xiz
+	muls	xwa, iz
 	lda xbc, (0x22ae41:24)
 	exts xwa                                ; exts XWA
 	add	xwa, xbc

@@ -159,7 +159,7 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	add bc, bc	; Word index
 	lda xwa, (ENCODER_LUT_BREATH_MULT:24); Multiplier table
 	ldw_sri DE, 0x07, 0xe0, 0xe4	; Get multiplier
-	mul xhl, xde	; Multiply
+	mul xhl, de	; Multiply
 	lda xwa, (ENCODER_LUT_BREATH_OFFSET:24); Offset table
 	ldw_sri WA, 0x07, 0xe0, 0xe4	; Get offset
 	sub hl, wa	; Subtract offset

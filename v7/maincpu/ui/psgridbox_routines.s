@@ -173,10 +173,10 @@ PsGridBox_ShowHide_CalcWidth:
 	call LyricsTrack_ReadAndParse_Helper2
 	inc 4, xsp
 	ld wa, (xsp+8)
-	mul xwa, xhl
+	mul xwa, hl
 	ld bc, (xsp+10)
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld hl, wa
 	ld bc, (xsp+12)
 	dec 1, bc

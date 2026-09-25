@@ -5060,7 +5060,7 @@ Multiply32:
 	ld	a, 16:opc                                  ; FCB120  ld A,0x10
 	ld	iy, (xiz+8)                             ; FCB122  ld IY,(XIZ+0x08)
 	ld	ix, (xiz+12)                            ; FCB125  ld IX,(XIZ+0x0c)
-	mul	xiy, xix                               ; FCB128  mul XIY,IX
+	mul	xiy, ix                               ; FCB128  mul XIY,IX
 	extpfx3 0x9E, 0x0A, 0x44                   ; FCB12A  mul XIX,(XIZ+0x0a)
 	extpfx2 0xEC, 0xFE                         ; FCB12D  sll A,XIX
 	add	xiy, xix                               ; FCB12F  add XIY,XIX

@@ -7,12 +7,18 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: da00420dba8d (da00420dba8da43f8d4a25051ddc4df6b37f257d)
-Date: 2026-09-05
-Subject: [TLCS900] Delete the nine encoding-selector legacy aliases
+Commit: 8e188b215251 (8e188b2152519310f5dc5e4af593e2fb50c51e90)
+Date: 2026-09-25
+Subject: [TLCS900] MUL/MULS/DIV/DIVS name the register the CPU writes
 
-Binary: llvm-mc sha256 a7ee33d53676fa9ebb4360b5e72d1748f647f3b9e937d05f76691264d5875d5c
+Binary: llvm-mc sha256 a67c563269fc72817bfaab561e4f8df41bfd8c629a87910c018aedafe132ce55
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
+        (built from the committed tree; `ninja -n llvm-mc` = no work to do)
+
+⚠ PIN PROMOTED 2026-09-25 (UPDATE 17, toolchain lane wave 3a): da00420dba8d /
+  a7ee33d5 -> 8e188b215251 / a67c5632, in the same commit as the MUL/DIV
+  source respell, which only this binary assembles.  Prior snapshot kept at
+  llvm-mc.snap.da00420dba8d-a7ee33d5.  The LLVM: trailer is now 8e188b215251.
 
 ⚠ PIN PROMOTED TWICE ON 2026-09-05: 86332721969d / 850b013e ->
   7a7a3fd6318b / 35829d3c to enable the encoding-selector source conversion
@@ -67,6 +73,7 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # real code from every automated audit for months.
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: da00420dba8d  [TLCS900] Delete the nine encoding-selector legacy aliases  (binary a7ee33d5)
 #   Commit: 58fb7f2afaed  [TLCS900] Narrow the ALU-direct-address register fix; add GPR-typed _da24 siblings
 #   Commit: 6fe210fb0a81  [TLCS900] Add a regression test for the signed-d8 spelling-trap warning
 #   Commit: 63ff7d92fb5f  [TLCS900] Disambiguate the (Xrr) vs explicit (Xrr+d8=0) print collision
@@ -778,3 +785,101 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   136,863 -> 65,196 sites (-71,667), 350 -> 344 names (six retired; lds8 had
 #   no sites). The &7 immediate masking and the untagged path into the short
 #   encodings are gone. The selector convergence (SPEC steps 0-10) is COMPLETE.
+
+# UPDATE 17 (2026-09-25): SEMANTIC BUGS -- text the tools produced and
+# accepted that said something false about byte-exact code (wave 3a, toolchain
+# lane; leads in notes/lanes/wave2-2026-09-25/WAVE3-LEADS.md).  Six commits on
+# top of da00420dba8d / 4d7fa4f6b37c (test-only), each with lit tests whose
+# every byte string quotes MAME's unidasm reading of it:
+#
+#   6488ae7d520a  `di` is EI 7 (06 07), parse-only.  The alias said (EI 0), so
+#                 `di` assembled to 06 00 -- IFF=0, EVERY level accepted, the
+#                 opposite -- and 06 00 printed back as `di`.  ed19eeef had
+#                 respelled 213 source lines `ei 0`; 13 came back the same day
+#                 through lane lifts of decoder output (respelled again in
+#                 96a03043, with the PINNED binary, before this commit).
+#   c9359c381fa4  register-indirect DISPLACEMENT WIDTH `(xrr+D:8)` /
+#                 `(xrr+D:16)`.  The literal 256 was a SENTINEL for "(Xrr+d8)
+#                 carrying 0": `lda xwa, (xsp+256)` assembled to bf 00 30,
+#                 which is (xsp+0), in silence, and the ROM's real
+#                 f3 fd 00 01 30 printed the same "+256" text.  The decoder
+#                 now prints `+0:8` / `+D:16` (every d16 whose D fits d8, not
+#                 only 0 -- `c3 f9 05 00` printed "(xiz+5)" and reassembled two
+#                 bytes shorter), and SRI mode 00 (`c3 e4 21`, (XBC) through
+#                 the long prefix) is REFUSED rather than printed as the d8
+#                 form it is not.  ⚠ LEGACY kept for the null run: a literal
+#                 256 still means d8+0 until the tree stops spelling it.
+#   ac3f1ed19ab6  POST-INCREMENT `(R+)` / PRE-DECREMENT `(-R)` as a real MEMri
+#                 operand, for every memory instruction, with the step
+#                 `(R+:1|2|4)` defaulting to the data size (LDA/JP/CALL must
+#                 write it) and bank registers xwa0..xhl3.  `(+R)` and `(R-)`
+#                 are named errors -- `ld (+xde),a` used to assemble the
+#                 ABSOLUTE address of an undefined symbol `xde`.  The decoder
+#                 routes C4/C5/D4/D5/E4/E5/F4/F5 through decodeMemPrefix, which
+#                 fixes: the SWAPPED F5/F4 sub-opcodes (`f5 e0 31` = lda
+#                 XBC,(XWA+) printed `stb_dpi a, 224`; `f5 e8 41` = ld (XDE+),A
+#                 printed `lda_dpi xbc, 232`), pre-decrement word INC/DEC and
+#                 store-immediate decoding to the POST-increment pseudo, LDA
+#                 r16 (dst 0x20+r) decoding as a LOAD (`b1 20` printed "ld xwa,
+#                 (xbc)"), and dst 0x08 decoding as a 32-bit store-immediate
+#                 the CPU does not have (MAME: db).  LDA16 added.
+#   910b50efab49  DIRECT-ADDRESS forms decode through decodeMemPrefix with a
+#                 direct MEMri, so the 8/16-bit ALU forms stop printing their
+#                 register through the 32-bit table: `c1 1e 23 f1` is `cp a,
+#                 (8990:16)` (was `cpda8 xbc, (8990)`), `d1 1e 23 81` `add bc,`
+#                 (was addda16 xbc), `d1 1e 23 c3` `and hl,` (was andda16 xhl),
+#                 `c1 7f c0 c1` `and a, (49279:16)` (was andda8 xbc), `f1 40 10
+#                 20` `lda wa, (4160:16)` (was the LOAD ldda32).  The legacy
+#                 memory-form aliases (bitm, pushm, incm8, andmi8, addiw_da,
+#                 ...) become parse-only -- with the default priority the
+#                 printer had preferred them over the real names they were
+#                 added beside; CHGm/TSETm take "chg"/"tset".
+#   8e188b215251  MUL/MULS/DIV/DIVS name the register the CPU writes:
+#                 `d9 50` is `div xwa, bc` (was div xwa, xbc), `ce 43` `mul
+#                 bc, h` (was mul8rr c, h), `81 41` `mul wa, (xbc)` (was mul a,
+#                 (xbc)), `91 40` `mul xwa, (xbc)` (was mul wa, (xbc)), `d7 fa
+#                 42` `mul xde, qiz`.  The old spellings are REFUSED: `mul wa,
+#                 (xbc)` now names the byte multiply, so no alias could keep
+#                 both readings -- LOCKSTEP respell.  A byte multiply with an
+#                 even register field (MAME `mul ??,A`) is refused.  ⚠ The
+#                 IMMEDIATE forms keep the prefix register (`mul a, 5` = c9 08
+#                 05) because that is MAME's text; ASL writes the result
+#                 register there (`MUL WA,5`).  The references disagree; the
+#                 decoder of record wins until the owner rules.
+#
+# llvm-lit TLCS900 (MC + Disassembler + CodeGen + the ambiguity .td): 87/87 at
+# the old pin -> 94/94 at 8e188b215251; ambiguity guard still 1 pair.
+#
+# THE NULL RUNS -- the old tree under the new assembler, expected delta ZERO:
+#   binary c9359c381fa4 (L1+L2, llvm-mc f9840d551c78): 9/9 IDENTICAL, 4/4 ok,
+#     every object rebuilt after the binary's mtime.
+#   binary 910b50efab49 (L1-L4, llvm-mc b211a23195df): 9/9 IDENTICAL, 4/4 ok,
+#     8/8 assemble, prerequisite 8/8 + 4/4.
+#   ⚠ The first attempt at the second one went RED -- 7 of 8 images "do not
+#     assemble" -- and the cause was the gate: assert_images_assemble.py ignored
+#     LLVM_MC and judged the shared build/bin/llvm-mc, which the next stage's
+#     build had just replaced.  Fixed in aaed92bf; the rerun is the green above.
+#   8e188b215251 is NOT null by design (MUL/DIV lockstep): the unconverted tree
+#     fails to assemble under it (7 images, the same run), and the converted
+#     tree is 13/13 IDENTICAL.  FOIL: one converted site reverted to its old
+#     spelling (`mul wa, (xsp+6)`, v10 semenu_routines.s:3627) assembles in
+#     SILENCE and the gate reports v10 "2 BYTES DIFFER"; restored -> green.
+#
+# SOURCE RESPELLS gated with this pin (scripts/converters/wave3a_respell.py,
+# every site assembled OLD-line-by-OLD-binary vs NEW-line-by-NEW-binary and
+# required identical before any write):
+#   muldiv   1,565 lines, 113 files, 0 mismatches.  2 more sites were
+#            `div8rr h, e` (even field, no instruction; misframed pointer table
+#            in v10/v9 accompaniment_engine.s) and are now `.byte 0xcd, 0x56`.
+#
+# Two-decoder SYNTHETIC SWEEP (notes/wave3a-toolchain-probes/two_decoder_sweep.py:
+# 9,984 probes, every addressing prefix x every sub-opcode + the primary map;
+# llvm-objdump vs unidasm; out/ has the per-probe TSVs):
+#                 old pin da00420   ->  910b50efab49  ->  8e188b215251
+#   AGREE              2,882              5,525             5,958
+#   REG_DIFF           1,247                672               110
+#   MNEM_DIFF            320                127               111
+#   MAME_ONLY          2,722                847               992 (+145 = the
+#                                             refused even-field byte MUL/DIV)
+#   ASYM (llvm text does not re-encode) 100 -> 42 -> 42;  LEN_DIFF 0 throughout.
+

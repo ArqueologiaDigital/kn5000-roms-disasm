@@ -1498,16 +1498,16 @@ HDAE5000_SelectListProc:
 	ld	bc, (xwa+44)
 	ld	wa, (xsp+8)
 	extz xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	hl, qwa
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld	bc, (xwa+44)
 	ld	wa, (xsp+8)
 	extz xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	de, wa
 	ld	wa, (xsp+14)
-	mul	xwa, xhl
+	mul	xwa, hl
 	ld	bc, (xsp+82)
 	add	bc, wa
 	inc	1, bc
@@ -1517,7 +1517,7 @@ HDAE5000_SelectListProc:
 	dec	1, wa
 	ld (xsp + 0x4e), wa                     ; ld (XSP+0x4e),WA
 	ld	wa, (xsp+12)
-	mul	xwa, xde
+	mul	xwa, de
 	ld	bc, (xsp+80)
 	add	bc, wa
 	inc	1, bc

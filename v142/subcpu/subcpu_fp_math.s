@@ -658,13 +658,13 @@ FP_sin_Epilog:
 ; exponent handling - this is an integer helper, not floating point.
 FP_MulAccum64:
 	stw_erp HL, 0xE2
-	mul xhl, xbc
+	mul xhl, bc
 	stw_erp DE, 0xE6
-	mul xde, xwa
+	mul xde, wa
 	add xhl, xde
 	ldw_erp HL, 0xEE
 	ld hl, 0:i3
-	mul xwa, xbc
+	mul xwa, bc
 	add xhl, xwa
 	ret
 
@@ -1123,7 +1123,7 @@ FP_UnsignedDiv:
 	cpiw_erp 0xE6, 0
 	jr nz, FP_UnsignedDiv_General
 	ld xde, xwa
-	div xwa, xbc
+	div xwa, bc
 	jr ov, FP_UnsignedDiv_Overflow
 	ld xhl, 0:i3
 	ld xde, xhl
@@ -1135,10 +1135,10 @@ FP_UnsignedDiv:
 FP_UnsignedDiv_Overflow:
 	stw_erp WA, 0xEA
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ldw_erp WA, 0xEE
 	ld wa, de
-	div xwa, xbc
+	div xwa, bc
 	ld hl, wa
 	stw_erp DE, 0xE2
 	extz xde
@@ -3592,10 +3592,10 @@ FP_SP_MulAdd:
 	stw_erp DE, 0xE2
 	ld hl, de
 	stw_erp IX, 0xE6
-	mul xde, xix
-	mul xhl, xbc
-	mul xix, xwa
-	mul xwa, xbc
+	mul xde, ix
+	mul xhl, bc
+	mul xix, wa
+	mul xwa, bc
 	add xhl, xix
 	ex_erpw_rr DE, 0xEA
 	add xde, xhl
@@ -3638,10 +3638,10 @@ FP_MulMantissa64x64:
 	stw_erp DE, 0xEE
 	ld ix, de
 	stw_erp IZ, 0xF6
-	mul xde, xiz
-	mul xix, xiy
-	mul xiz, xhl
-	mul xhl, xiy
+	mul xde, iz
+	mul xix, iy
+	mul xiz, hl
+	mul xhl, iy
 	add xix, xiz
 	adc_erpw 0xEA, 0x00, 0x00
 	add_erpw_rr DE, 0xF2

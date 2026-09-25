@@ -3324,9 +3324,9 @@ Timer_ParamCompareAlt_Skip20:
 	ld	a, (3521:16)
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	inc	1, a
-	mul8rr	a, l
+	mul	wa, l
 	ld	e, a
 	popw	wa
 	ret
@@ -3334,7 +3334,7 @@ Timer_ParamCompareAlt_Skip20:
 	ld	a, (3521:16)
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	cp	w, 0:i3
 	jrl	nz, Timer_ParamCompareAlt_Skip4
 	cp	a, 0:i3
@@ -3345,7 +3345,7 @@ Timer_ParamCompareAlt_Skip3:
 	dec	1, a
 Timer_ParamCompareAlt_Skip4:
 	xor	w, w
-	mul8rr	a, l
+	mul	wa, l
 	ld	e, a
 	popw	wa
 	ret
@@ -5323,7 +5323,7 @@ VoiceSlot_TableSetup_Code_Skip4:
 	call	VoiceSlot_FlagCheck
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	ld	c, a
 	pop	xix
 	ldb_erp a, 60
@@ -6493,7 +6493,7 @@ SerialPort_ModeHandler_0_Skip6:
 	add	de, bc
 	ld	wa, de
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	ld	(0x342f:16), w
 	ld	(0x3430:16), a
 	ld	a, (0x3716:16)
@@ -6504,7 +6504,7 @@ SerialPort_ModeHandler_0_Skip6:
 	xor	de, de
 	ld	hl, 5:i3
 	ld	qwa, de
-	div	xwa, xhl
+	div	xwa, hl
 	ld	de, qwa
 	jp	SerialPort_ModeHandler_0_0x19D
 SerialPort_ModeHandler_0_Skip7:
@@ -6518,7 +6518,7 @@ SerialPort_ModeHandler_0_Skip7:
 	xor	de, de
 	ldw	hl, 20
 	ld	qwa, de
-	div	xwa, xhl
+	div	xwa, hl
 	ld	de, qwa
 	jp	SerialPort_ModeHandler_0_0x19D
 SerialPort_ModeHandler_0_Skip3:
@@ -6531,7 +6531,7 @@ SerialPort_ModeHandler_0_Skip8:
 	srl	de, 2
 	ld	wa, de
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	ld	(0x342d:16), w
 	ld	(0x342e:16), a
 	ret
@@ -10041,7 +10041,7 @@ VoiceSlot_FinalRetZ_Skip2:
 	xor	de, de
 	ldw	bc, 251
 	ld	qwa, de
-	div	xwa, xbc
+	div	xwa, bc
 	ld de, qwa
 	inc 1, wa
 	ld	bc, wa
@@ -11321,7 +11321,7 @@ VoiceState_DataBlock2_Helper:
 	ld	a, (3822:16)
 	dec	1, a
 	ld	w, 3:opc
-	mul8rr	a, w
+	mul	wa, w
 	ld	hl, wa
 	ld	w, 255:opc
 	push	xde
@@ -11371,7 +11371,7 @@ VoiceState_DataBlock2_Code_Skip9:
 	popw	de
 	bitda	7, (0x1108)
 	jrl	nz, VoiceState_DataBlock2_Code_Return2
-	mul8rr	a, e
+	mul	wa, e
 VoiceState_DataBlock2_Code_Return2:
 	ret
 	cpdi8	(0x0d65), 3
@@ -11620,7 +11620,7 @@ ScoopParam_ValueTable_Helper11_Skip7:
 	ld	a, (3415:16)
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	add	h, a
 	inc	1, h
 	cp	h, 32
@@ -11655,7 +11655,7 @@ VoiceState_DataBlock2_Code_Skip16:
 	pushw	wa
 	ld	xhl, 0xf250
 	ld	c, 3:opc
-	mul8rr	a, c
+	mul	wa, c
 	ld	iy, wa
 	bit_dri 7, 0x07, 0xec, 0xf4	; bit 7,(XHL+IY)
 	jrl	z, ScoopParam_ValueTable_Helper12_Skip
@@ -11722,7 +11722,7 @@ VoiceState_DataBlock2_Code_Skip19:
 	ld	a, (3766:16)
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	pushw	bc
 	ld	c, a
 	ldb_erp a, 60
@@ -12977,7 +12977,7 @@ PerfMode_ParamHandler_11_Skip58:
 	add	wa, de
 	ld	(3778:16), wa
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	cp	a, 0:i3
 	jrl	z, PerfMode_ParamHandler_11_Skip60
 	ld	c, a
@@ -13170,7 +13170,7 @@ OscScope_Handler_7_Helper:
 	push	xhl
 	ld	a, (3770:16)
 	ld	w, 96:opc
-	muls8rr	a, w
+	muls	wa, w
 	ld	l, (3769:16)
 	xor	h, h
 	add	wa, hl
@@ -13189,7 +13189,7 @@ OscScope_UpdateDisplay:
 	cp	wa, 48
 	jrl	z, OscScope_UpdateDisplay_Skip
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	cp	w, 48
 	jrl	z, OscScope_UpdateDisplay_Skip2
 	exts	wa
@@ -13203,12 +13203,12 @@ OscScope_UpdateDisplay:
 OscScope_UpdateDisplay_Skip2:
 	ld	wa, (3778:16)
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	cp	a, 0:i3
 	jrl	z, OscScope_UpdateDisplay_Skip
 	ld	c, a
 	ld	l, 96:opc
-	muls8rr	a, l
+	muls	wa, l
 	sub (3778:16), wa
 	ld a, c
 	dec	1, a
@@ -13228,13 +13228,13 @@ OscScope_UpdateDisplay_Skip:
 OscScope_RefreshLoop:
 	ld	wa, (3778:16)
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	ld	c, a
 	ld	e, w
 	cp	c, 0:i3
 	jrl	z, OscScope_RefreshLoop_Skip
 	ld	a, 96:opc
-	muls8rr	a, c
+	muls	wa, c
 	sub (3778:16), wa
 	xor b, b
 	pushw	bc
@@ -14052,7 +14052,7 @@ Display_BytecodeBlock_F_Skip:
 Display_BytecodeBlock_F_Skip2:
 	call	PartCtrl_WriteProgramChange
 	ld	a, 9:opc
-	mul8rr	a, l
+	mul	wa, l
 	ld	hl, wa
 	push	xde
 	xor	xwa, xwa
@@ -14167,7 +14167,7 @@ Str_Off2:
 	and	w, 127
 	or	a, e
 	ldw	de, 1000
-	div	xwa, xde
+	div	xwa, de
 	push	xwa
 	call	ParamDigit_ExtractAndFormat
 	pop	xwa
@@ -14191,7 +14191,7 @@ Str_Off2:
 	pushw	hl
 	sla	wa, 1
 	ld	l, 3:opc
-	div8rr	a, l
+	div	wa, l
 	popw	hl
 	xor	w, w
 Display_BytecodeBlock_F_Skip9:
@@ -14308,7 +14308,7 @@ SNS_LoadKeyAndChord:
 	ld l, (3438:16)
 	and l, 0x3f
 	ld a, 0x5:opc
-	muls8rr a, l
+	muls wa, l
 	ld hl, wa
 	extz xhl
 	ld xiy, Tbl_ChordTypeNames
@@ -14440,7 +14440,7 @@ Disp_ShowNoteValueFields:
 	ld	l, (0x3715:16)
 	and	l, 15
 	ld	a, 5:opc
-	muls8rr	a, l
+	muls	wa, l
 	ld	hl, wa
 	ld	xiy, Tbl_NoteValuePlusNames
 	lda_rr xiy, xiy, hl
@@ -14548,7 +14548,7 @@ Disp_ShowNoteNameAndVelocity_Skip:
 	xor	wa, wa
 	ld	a, (0x3718:16)
 	ld	l, 12:opc
-	divs8rr	a, l
+	divs	wa, l
 	ld	xiy, Tbl_NoteNamesSharp
 	xor	bc, bc
 	ld	c, w
@@ -15732,7 +15732,7 @@ ParamPopup_PartPedal_Skip7:
 ParamPopup_PartPedal_Skip8:
 	ld	wa, (4468:16)
 	ldw	bc, 96
-	muls	xwa, xbc
+	muls	xwa, bc
 	ld	de, qwa
 	add	hl, wa
 	ld	(4470:16), hl
@@ -15760,11 +15760,11 @@ ParamPopup_PartPedal_Skip10:
 	xor	b, b
 	ld	c, 96:opc
 	ld	qwa, de
-	div	xwa, xbc
+	div	xwa, bc
 	ld de, qwa
 	ld bc, wa
 	ldw	hl, 96
-	muls	xwa, xhl
+	muls	xwa, hl
 	ld	de, qwa
 	ld	de, (3778:16)
 	sub	de, wa
@@ -15826,7 +15826,7 @@ ParamPopup_PartPedal_Skip14:
 ParamPopup_PartPedal_Skip15:
 	ld	wa, hl
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	ld	(3952:16), w
 	cpdi8	(0x116e), 129
 	jrl	z, ParamPopup_PartPedal_Skip16
@@ -15898,7 +15898,7 @@ ParamPopup_PartPedal_Return:
 	ret
 	ld	a, (4467:16)
 	ld	w, 96:opc
-	muls8rr	a, w
+	muls	wa, w
 	ld	l, (4466:16)
 	xor	h, h
 	add	wa, hl
@@ -16441,7 +16441,7 @@ Scoop_SidePanel_NextPart:
 	jr ge, Scoop_SidePanel_DrawValues
 	add xiy, 0x4
 	ld a, 0x8:opc
-	mul8rr a, c
+	mul wa, c
 	extz xwa
 	sub xix, xwa
 	add xix, 0x708
@@ -16797,7 +16797,7 @@ Scoop_EventHandler_MenuSwitch:
 	xor bc, bc
 	ld c, (1075:16)
 	ldw_erp DE, 0xe2
-	div xwa, xbc
+	div xwa, bc
 	stw_erp DE, 0xe2
 	ld c, e
 	ld de, wa
@@ -17538,7 +17538,7 @@ Scoop_CurveUpdate_End:
 	add xix, xwa
 	ld a, (xsp + 6)
 	extz wa
-	mul xwa, xde
+	mul xwa, de
 	ld hl, iy
 	extz xhl
 	add xhl, xwa
@@ -17637,7 +17637,7 @@ Scoop_CurveUpdate_SegmentEnd_Loop:
 	add	xix, xwa
 	ld	a, (xsp+8)
 	extz	wa
-	mul	xwa, xde
+	mul	xwa, de
 	ld	hl, iy
 	extz	xhl
 	add	xhl, xwa
@@ -18976,7 +18976,7 @@ Scoop_EventLoop_36Entry_Loop:
 	add	xhl, xwa
 	ld	a, (xsp+4)
 	extz	wa
-	mul	xwa, xiy
+	mul	xwa, iy
 	ld	bc, ix
 	extz	xbc
 	add	xbc, xwa

@@ -827,11 +827,11 @@ AccompSeq_FadeOutApplyVol:
 	ld l, (0x7dd6:16)
 	xor H,H
 	ld wa, (0x7dd4:16)
-	mul xwa, xhl
+	mul xwa, hl
 	ld DE,QWA
 	ldw HL, 0x0800
 	ld QWA,DE
-	div xwa, xhl
+	div xwa, hl
 	ld DE,QWA
 	ld E,A
 	ld W, 0x05:opc
@@ -844,11 +844,11 @@ AccompSeq_FadeOut_Ch2Volume:
 	ld l, (0x7dd7:16)
 	xor H,H
 	ld wa, (0x7dd4:16)
-	mul xwa, xhl
+	mul xwa, hl
 	ld DE,QWA
 	ldw HL, 0x0800
 	ld QWA,DE
-	div xwa, xhl
+	div xwa, hl
 	ld DE,QWA
 	ld E,A
 	ld W, 0x05:opc
@@ -871,11 +871,11 @@ AccompSeq_PortaFadeOut:
 	ld l, (0x7dbb:16)
 	xor H,H
 	ld wa, (0x7dd4:16)
-	mul	xwa, xhl
+	mul	xwa, hl
 	ld	de, qwa
 	ldw	hl, 2048
 	ld	qwa, de
-	div	xwa, xhl
+	div	xwa, hl
 	ld	de, qwa
 	pop	xde
 	pop	xhl
@@ -1143,7 +1143,7 @@ AccompSeq_LookupStyle_Internal:
 	call	Voice_DecodeNoteChannel2
 	xor	xwa, xwa
 	ldw	wa, 32
-	mul	xwa, xhl
+	mul	xwa, hl
 	add	xwa, 14991782
 	ld	(32142:16), wa
 	ld	wa, qwa

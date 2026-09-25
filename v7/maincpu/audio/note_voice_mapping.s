@@ -22753,7 +22753,7 @@ MIDI_DistributeParamToChannels_Helper_Join:
 	add	xhl, xbc
 	ld	c, (xhl)
 	extz	bc
-	mul	xbc, xde
+	mul	xbc, de
 	ld	xde, xix
 	add	xde, 0x80
 	add	xde, xbc
@@ -22819,7 +22819,7 @@ FetchOscTableEntry_Compute:
 	add	xbc, (xsp + 4)
 	ld	xix, (xbc)
 	ld	c, w
-	mul8rr	c, e
+	mul	bc, e
 	extz	hl
 	add	hl, bc
 	add	hl, hl
@@ -22870,7 +22870,7 @@ SeMenu_SetDisplayValue_Helper_Join:
 	add	xhl, xbc
 	ld	c, (xhl)
 	extz	bc
-	mul	xbc, xde
+	mul	xbc, de
 	ld	xde, xix
 	add	xde, 0x80
 	add	xde, xbc
@@ -26354,13 +26354,13 @@ ParseInt32_Return:
 InitializeKubo_Helper:
 Math_MultiplyAccumulate:
 	stw_erp	HL, 0xe2
-	mul	xhl, xbc
+	mul	xhl, bc
 	stw_erp	DE, 0xe6
-	mul	xde, xwa
+	mul	xde, wa
 	add	xhl, xde
 	ldw_erp	HL, 0xee
 	ld	hl, 0:i3
-	mul	xwa, xbc
+	mul	xwa, bc
 	add	xhl, xwa
 	ret
 ; =============================================================================
@@ -26575,7 +26575,7 @@ Math_DivideU32:
 	cpiw_erp	0xe6, 0
 	jr	nz, Math_DivideU32_ClearByte
 	ld	xde, xwa
-	div	xwa, xbc
+	div	xwa, bc
 	jr	ov, Math_DivideU32_Block
 			; Note: OV (Overflow) is the same as PE = Parity Even
 	ld	xhl, 0:i3
@@ -26586,10 +26586,10 @@ Math_DivideU32:
 Math_DivideU32_Block:
 	stw_erp	WA, 0xea
 	extz	xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ldw_erp	WA, 0xee
 	ld	wa, de
-	div	xwa, xbc
+	div	xwa, bc
 	ld	hl, wa
 	stw_erp	DE, 0xe2
 	extz	xde
@@ -26875,7 +26875,7 @@ NumFormat_DivideAndConvert:
 	ld	de, bc
 	stw_erp	WA, 0xe6
 	extz	xwa
-	div	xwa, xde
+	div	xwa, de
 	stw_erp	WA, 0xe2
 	add	a, 0x30
 	ld	(xiy), a
@@ -26885,7 +26885,7 @@ NumFormat_DivideAndConvert:
 NumFormat_DivideAndC_Block:
 	stw_erp	WA, 0xe6
 	extz	xwa
-	div	xwa, xde
+	div	xwa, de
 	ldw_erp	WA, 0xe6
 	cpiw_erp	0xe6, 0
 	jr	z, NumFormat_DivideAndC_Compare

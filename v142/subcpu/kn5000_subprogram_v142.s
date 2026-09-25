@@ -1010,11 +1010,11 @@ TaskSched_SpawnTask:
 	push xiz
 	ld w, a
 	ld l, 0xC:opc
-	mul8rr l, a
+	mul hl, a
 	extz xhl
 	add xhl, TaskSched_TaskDescriptorTable - 12
 	ld c, 0xC:opc
-	mul8rr c, a
+	mul bc, a
 	add bc, 0x103C
 	extz xbc
 	ld xix, xbc
@@ -4725,7 +4725,7 @@ Voice_AdvanceSlotIterator:
 	dec 2, xsp
 	push xiz
 	ld c, 0x30:opc
-	mul8rr c, a
+	mul bc, a
 	ld iz, bc
 	ld (xsp + 4), iz
 	addiw_da (xsp + 4), 0x30
@@ -14099,7 +14099,7 @@ Voice_InterpolatePanCurve_LowRange:
 	muls wa, 0xFFC0
 	ld hl, wa
 	exts xwa
-	divs xwa, xix
+	divs xwa, ix
 	ld hl, wa
 	jr Voice_InterpolatePanCurve_Done
 
@@ -14133,7 +14133,7 @@ Voice_InterpolatePanCurve_HighRange:
 	muls wa, 0xFFC0
 	ld hl, wa
 	exts xwa
-	divs xwa, xix
+	divs xwa, ix
 	ld hl, wa
 	jr Voice_InterpolatePanCurve_Done
 
@@ -14181,7 +14181,7 @@ Voice_InterpolateNoteCurve_LowRange:
 	muls wa, 0xFFC0
 	ld hl, wa
 	exts xwa
-	divs xwa, xix
+	divs xwa, ix
 	ld hl, wa
 	jr Voice_InterpolateNoteCurve_Done
 
@@ -14215,7 +14215,7 @@ Voice_InterpolateNoteCurve_HighRange:
 	muls wa, 0xFFC0
 	ld hl, wa
 	exts xwa
-	divs xwa, xix
+	divs xwa, ix
 	ld hl, wa
 	jr Voice_InterpolateNoteCurve_Done
 
@@ -14333,7 +14333,7 @@ Voice_ComputePitch_NormalTune:
 	ld bc, wa
 	inc 1, bc
 	ld wa, hl
-	muls xwa, xbc
+	muls xwa, bc
 	ld hl, wa
 	jr Voice_ComputePitch_PortaScale
 
@@ -14352,7 +14352,7 @@ Voice_ComputePitch_PortaPositive:
 	ld c, a
 	exts bc
 	ld wa, hl
-	muls xwa, xbc
+	muls xwa, bc
 	ld hl, wa
 
 ; Common scaling of the detuned value: >>5 (arithmetic) then bias +0xD8.
@@ -14522,7 +14522,7 @@ Voice_ComputePitch_Mono_CheckPorta:
 	ld bc, wa
 	inc 1, bc
 	ld wa, hl
-	muls xwa, xbc
+	muls xwa, bc
 	ld hl, wa
 	jr Voice_ComputePitch_Mono_PortaScale
 
@@ -14538,7 +14538,7 @@ Voice_ComputePitch_Mono_PortaPositive:
 	ld c, a
 	exts bc
 	ld wa, hl
-	muls xwa, xbc
+	muls xwa, bc
 	ld hl, wa
 
 ; >>5 then bias +0xD8.
@@ -15352,7 +15352,7 @@ Voice_AdvanceLFOPhase_Triangle:
 	extz bc
 	ld wa, hl
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld hl, wa
 	jr Voice_AdvanceLFOPhase_Done
 
@@ -18273,7 +18273,7 @@ AudioMod_Scale_To_Part_1C:
 	ld	de, bc
 	add	de, de
 	ld	bc, de
-	mul	xbc, xhl
+	mul	xbc, hl
 	ld	de, bc
 	jr	AudioMod_Scale_To_Part_1C_Common
 AudioMod_Scale_To_Part_1C_Unipolar:
@@ -18283,7 +18283,7 @@ AudioMod_Scale_To_Part_1C_Unipolar:
 	ld	e, c
 	extz	de
 	ld	bc, de
-	mul	xbc, xhl
+	mul	xbc, hl
 	ld	de, bc
 AudioMod_Scale_To_Part_1C_Common:
 	srl	de, 6
@@ -18304,7 +18304,7 @@ AudioMod_Scale_To_Part_1B:
 	ld	de, bc
 	add	de, de
 	ld	bc, de
-	mul	xbc, xhl
+	mul	xbc, hl
 	ld	de, bc
 	jr	AudioMod_Scale_To_Part_1B_Common
 AudioMod_Scale_To_Part_1B_Unipolar:
@@ -18314,7 +18314,7 @@ AudioMod_Scale_To_Part_1B_Unipolar:
 	ld	e, c
 	extz	de
 	ld	bc, de
-	mul	xbc, xhl
+	mul	xbc, hl
 	ld	de, bc
 AudioMod_Scale_To_Part_1B_Common:
 	srl	de, 6
@@ -18414,7 +18414,7 @@ AudioMod_Scale_To_Part_1F:
 	ld	de, bc
 	add	de, de
 	ld	bc, de
-	muls	xbc, xhl
+	muls	xbc, hl
 	ld	de, bc
 	jr	AudioMod_Scale_To_Part_1F_Join
 AudioMod_Scale_To_Part_1F_Skip:
@@ -18424,7 +18424,7 @@ AudioMod_Scale_To_Part_1F_Skip:
 	ld	e, c
 	extz	de
 	ld	bc, de
-	muls	xbc, xhl
+	muls	xbc, hl
 	ld	de, bc
 AudioMod_Scale_To_Part_1F_Join:
 	sra	de, 1
@@ -18449,7 +18449,7 @@ AudioMod_Scale_To_Part_20:
 	ld	de, bc
 	add	de, de
 	ld	bc, de
-	muls	xbc, xhl
+	muls	xbc, hl
 	ld	de, bc
 	jr	AudioMod_Scale_To_Part_20_Join
 AudioMod_Scale_To_Part_20_Skip:
@@ -18459,7 +18459,7 @@ AudioMod_Scale_To_Part_20_Skip:
 	ld	e, c
 	extz	de
 	ld	bc, de
-	muls	xbc, xhl
+	muls	xbc, hl
 	ld	de, bc
 AudioMod_Scale_To_Part_20_Join:
 	ld	bc, de
@@ -18570,7 +18570,7 @@ AudioMod_Apply_Slot_Field2A_Join2:
 	ldb_erp	e, 0xf0	; ld IXL,E
 	extz	ix
 	ld	de, iy
-	mul	xde, xix
+	mul	xde, ix
 	ld	iy, de
 	srl	iy, 6
 	jr	nz, AudioMod_Apply_Slot_Field2A_Skip3
@@ -18691,7 +18691,7 @@ AudioMod_Apply_Slot_Field29_Join2:
 	ldb_erp	e, 0xf0	; ld IXL,E
 	extz	ix
 	ld	de, iy
-	mul	xde, xix
+	mul	xde, ix
 	ld	iy, de
 	srl	iy, 6
 	jr	nz, AudioMod_Apply_Slot_Field29_Skip3
@@ -22888,7 +22888,7 @@ Voice_PortamentoTarget_ComputePitch:
 	add xwa, xbc
 	lda_dri XBC, 0x07, 0xE0, 0xF4
 	ld wa, de
-	mul xwa, xix
+	mul xwa, ix
 	add xwa, xhl
 	add xwa, (283408:24)
 	ld (xbc + 8), xwa
@@ -37426,7 +37426,7 @@ WaveSel_StageA1_IndexLookup:
 	add xwa, (283408:24)
 	ld xwa, (xwa)
 	ld bc, iy
-	mul xbc, xwa
+	mul xbc, wa
 	add xbc, xix
 	ld xhl, xbc
 	add xhl, (283408:24)
@@ -37820,7 +37820,7 @@ WaveSel_StageA2_IndexLookup:
 	ld xwa, (xwa)
 	ld hl, wa
 	ld wa, iz
-	mul xwa, xhl
+	mul xwa, hl
 	add xwa, xiy
 	ld xhl, xwa
 	add xhl, (283408:24)
@@ -38063,7 +38063,7 @@ ToneDB_Resolve_NamedToneRecord:
 	ld xwa, (xwa)
 	ld iy, wa
 	ld wa, hl
-	mul xwa, xiy
+	mul xwa, iy
 	add xwa, xbc
 	add xwa, (283408:24)
 	ld xix, xwa
@@ -43126,7 +43126,7 @@ DSP_Stub_RetC:
 ; ToneGen_SetupPolyVoice, which ORs the result into the staging word at 0x3B20.
 DSP_VelocityToVolume:
 	ld bc, wa
-	mul xbc, xwa
+	mul xbc, wa
 	srl bc, 2
 	ld hl, bc
 	add hl, 0x3F
@@ -58750,10 +58750,10 @@ Keybed_Decode_Event:	; 03D11Fh
 	lda xde, (ToneGen_VelCurve_ModeParams:24)
 	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
-	muls xbc, xhl
+	muls xbc, hl
 	ld de, (ToneGen_VelCurve_Divisor:24)
 	exts xbc
-	divs xbc, xde
+	divs xbc, de
 	ld hl, bc
 	ld c, (19016:16)
 	extz bc

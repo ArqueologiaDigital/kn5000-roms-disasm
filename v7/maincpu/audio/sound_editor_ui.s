@@ -19066,7 +19066,7 @@ ParaListBox_HandleEvtB:
 
 ParaListBox_DrawLineLoop_Body:
 	ld wa, (xsp + 4)
-	mul xwa, xiz
+	mul xwa, iz
 	ldw_sri0 BC, (xsp + 0x008e)
 	add bc, wa
 	dec 1, bc
@@ -19122,29 +19122,29 @@ ParaListBox_HandleEvtF:
 	sub	iz, hl
 	ld	de, (xwa+36)
 	exts	xiz
-	divs	xiz, xde
+	divs	xiz, de
 	ld	xwa, (xsp+158)
 	ld	a, (xwa)
 	exts	wa
 	exts	xwa
-	divs	xwa, xde
+	divs	xwa, de
 	ld	wa, qwa
 	ld	qde, wa
 	ld	xwa, (xsp+158)
 	ld	a, (xwa)
 	exts	wa
 	exts	xwa
-	divs	xwa, xde
+	divs	xwa, de
 	ld	de, wa
 	ld	wa, iz
-	mul	wa, qde
+	mul	xwa, qde
 	inc	2, wa
 	add	hl, wa
 	ld	(xix), hl
 	add	hl, iz
 	ld	(xiy), hl
 	ld	wa, (xsp+4)
-	mul	xwa, xde
+	mul	xwa, de
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)

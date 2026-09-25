@@ -1420,7 +1420,7 @@ HDAE5000_FlsList_BuildPage:	; 0x287F55 (832 bytes)
 	lda xwa, (HDAE5000_Str_Chr2020203A2020_FlsList_BuildPage:24); src = ROM template "   :                \t"
 	push xwa
 	ldw wa, 0x0015			; 21 bytes per entry
-	mul xwa, xiz			; offset = IZ * 21
+	mul xwa, iz			; offset = IZ * 21
 	ld xbc, 0x0022a2ca                      ; dest = display buffer + offset
 	add xbc, xwa
 	push xbc
@@ -1442,7 +1442,7 @@ HDAE5000_FlsList_BuildPage:	; 0x287F55 (832 bytes)
 	lda xwa, (xsp + 0x04)                   ; XWA = validated string ptr
 	push xwa
 	ldw wa, 0x0015
-	mul xwa, xiz
+	mul xwa, iz
 	ld xbc, 0x0022a2ca
 	add xbc, xwa
 	push xbc                                ; dest = entry buffer
@@ -1454,7 +1454,7 @@ HDAE5000_FlsList_BuildPage:	; 0x287F55 (832 bytes)
 	pushw 0x0010                            ; size = 16 bytes (display tile only)
 	push xhl                                ; dest = VRAM tile address
 	ldw wa, 0x0015
-	mul xwa, xiz
+	mul xwa, iz
 	inc 4, wa			; offset + 4 → skip 4-byte header, point to tile data
 	extz xwa
 	ld xbc, 0x0022a2ca
@@ -1806,7 +1806,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	lda xwa, (HDAE5000_Str_Chr3A2020202020_FlsScreen_Refresh:24)
 	push xwa
 	ldw	wa, 0x0025
-	mul	xwa, xiz
+	mul	xwa, iz
 	inc	2, wa
 	extz xwa
 	ld	xbc, 0x0022b020
@@ -1830,7 +1830,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	lda	xwa, (xsp+10)
 	push xwa
 	ldw	wa, 0x0025
-	mul	xwa, xiz
+	mul	xwa, iz
 	ld	xbc, 0x0022b020
 	add	xbc, xwa
 	push xbc
@@ -1843,7 +1843,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	pushw 0x001a
 	push xhl
 	ldw	wa, 0x0025
-	mul	xwa, xiz
+	mul	xwa, iz
 	inc	3, wa
 	extz xwa
 	ld	xbc, 0x0022b020
@@ -1862,7 +1862,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	cp	(xsp+6), 0x01
 	jr nz, .LFWF_8462                      ; [6e 15] jr NZ,0x288462
 	ldw	wa, 0x0025
-	mul	xwa, xiz
+	mul	xwa, iz
 	add	wa, 0x0020
 	extz xwa
 	ld	xbc, 0x0022b020
@@ -1872,7 +1872,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	cp	(xsp+7), 0x01
 	jr nz, .LFWF_847d                      ; [6e 15] jr NZ,0x28847d
 	ldw	wa, 0x0025
-	mul	xwa, xiz
+	mul	xwa, iz
 	add	wa, 0x0023
 	extz xwa
 	ld	xbc, 0x0022b020

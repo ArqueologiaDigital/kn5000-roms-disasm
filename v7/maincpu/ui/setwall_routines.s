@@ -2073,7 +2073,7 @@ SetWall_MiscDataAndCode_Skip4:
 	ld	xde, xbc
 	mul	bc, 100
 	ld	hl, (10349:16)
-	div	xbc, xhl
+	div	xbc, hl
 	inc	1, bc
 	cp	bc, 100
 	jr	c, SetWall_MiscDataAndCode_Skip5

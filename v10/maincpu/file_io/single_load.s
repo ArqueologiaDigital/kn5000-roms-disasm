@@ -182,7 +182,7 @@ SLSrcBankList_FuncBody:
 	lda	xiz, (0x894f:16)
 	ld	a, (0x89fc:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	inc	1, a
 	extz	wa
 	ld	bc, 0:i3
@@ -209,7 +209,7 @@ SLSrcBankList_FuncBody_Helper:
 	lda	xiz, (xwa+22)
 	ld	a, (0x89fc:16)
 	extz	wa
-	div8rr	a, c
+	div	wa, c
 	extz	wa
 	call	FileIO_ByteBlock_DemoProc2_0x2D
 	ld	xbc, xhl
@@ -248,7 +248,7 @@ SLSrcBankList_FuncBody_Helper2:
 	lda	xiz, (0x8979:16)
 	ld	a, (0x89fc:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -410,7 +410,7 @@ SLSrcBankList_FuncBody_Skip5:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -429,7 +429,7 @@ SLSrcBankList_FuncBody_Skip6:
 	ld	e, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip7
@@ -583,7 +583,7 @@ SLSrcBankList_FuncBody_Helper4:
 	lda	xwa, (0x8963:16)
 	ld	c, (0x89fe:16)
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
@@ -605,7 +605,7 @@ SLSrcBankList_FuncBody_Helper5:
 	ld	(xsp+8), xwa
 	ld	a, (0x89fe:16)
 	extz	wa
-	div	a, (xsp+0x6)
+	div	wa, (xsp+0x6)
 	ld	a, w
 	extz	wa
 	ld	(xsp+4), wa
@@ -655,7 +655,7 @@ SLSrcBankList_FuncBody_Helper5_Skip2:
 	jr	c, SLSrcBankList_FuncBody_Helper5_Epilogue
 	ld	c, (0x89fe:16)
 	extz	bc
-	div	c, (xsp+0x6)
+	div	bc, (xsp+0x6)
 	extz	bc
 	pushw	3
 	ld	de, (xsp+6)
@@ -676,7 +676,7 @@ SLSrcBankList_FuncBody_Helper6:
 	ld	(xsp+4), xwa
 	ld	a, (0x89fe:16)
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	c, w
 	extz	bc
 	cp	(0x89fa:16), 0
@@ -688,7 +688,7 @@ SLSrcBankList_FuncBody_Helper6:
 	lda	xiz, (xwa+64)
 	ld	a, (0x89fe:16)
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	extz	wa
 	call	FileIO_ByteBlock_DemoProc2_0x1B4
 	ld	xbc, xhl
@@ -795,7 +795,7 @@ SLSrcBankList_FuncBody_Skip15:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -814,7 +814,7 @@ SLSrcBankList_FuncBody_Skip16:
 	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip17
@@ -943,7 +943,7 @@ SLSrcBankList_FuncBody_Helper8:
 	jr	nc, SLSrcBankList_FuncBody_Epilogue
 	lda	xwa, (0x8963:16)
 	extz	bc
-	div	c, (xsp)
+	div	bc, (xsp)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName3
@@ -1019,7 +1019,7 @@ SLSrcBankList_FuncBody_Helper10:
 SLSrcBankList_FuncBody_Helper10_Skip:
 	ld	xiz, xwa
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	ld	a, b
 	inc	1, a
 	extz	wa
@@ -1216,7 +1216,7 @@ SLSrcBankList_FuncBody_Skip30:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -1257,7 +1257,7 @@ SLSrcBankList_FuncBody_Skip32:
 	jr	nc, SLSrcBankList_FuncBody_Skip33
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip34
@@ -1566,7 +1566,7 @@ SLDstBankList_FuncBody:
 	lda	xiz, (0x89a3:16)
 	ld	a, (0x8a02:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	inc	1, a
 	extz	wa
 	ld	bc, 0:i3
@@ -1580,7 +1580,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (0x89b7:16)
 	ld	c, (0x8a02:16)
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetConfigName
@@ -1636,7 +1636,7 @@ SLDstBankList_FuncBody_Helper_Skip:
 	lda	xiz, (0x89cd:16)
 	ld	a, (0x8a02:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -1757,7 +1757,7 @@ SLDstBankList_FuncBody_Skip4:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -1776,7 +1776,7 @@ SLDstBankList_FuncBody_Skip5:
 	ld	e, (Str_AllOption_EA09B2_0x16:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip6
@@ -1824,11 +1824,11 @@ SLDstBankList_FuncBody_Skip9:
 	jr	z, SLDstBankList_FuncBody_Helper_Skip2
 	ld	a, (0x89fc:16)
 	extz	wa
-	div8rr	a, c
+	div	wa, c
 	extz	wa
 	ld	e, (0x8a02:16)
 	extz	de
-	div8rr	e, c
+	div	de, c
 	extz	de
 	ld	bc, de
 	call	FileIO_ByteBlock_DemoProc1_0xD8
@@ -2003,7 +2003,7 @@ SLDstBankList_FuncBody_Helper3:
 	lda	xwa, (0x89b7:16)
 	ld	c, (0x8a06:16)
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
@@ -2041,7 +2041,7 @@ SLDstBankList_FuncBody_Helper4:
 	lda	xiz, (0x89cd:16)
 	ld	a, (0x8a06:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	extz	wa
 	calr	WP_GetPresetPtr
@@ -2065,10 +2065,10 @@ SLDstBankList_FuncBody_Helper4_Skip2:
 	ld	e, (0x8a06:16)
 	ld	c, e
 	extz	bc
-	div	c, (xsp+0x4)
+	div	bc, (xsp+0x4)
 	extz	bc
 	extz	de
-	div	e, (xsp+0x4)
+	div	de, (xsp+0x4)
 	ld	e, d
 	extz	de
 	pushw	3
@@ -2177,7 +2177,7 @@ SLDstBankList_FuncBody_Skip18:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -2196,7 +2196,7 @@ SLDstBankList_FuncBody_Skip19:
 	ld	e, (Str_AllOption_EA09B2_0x3A:24)
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip20
@@ -2244,12 +2244,12 @@ SLDstBankList_FuncBody_Skip23:
 	jr	z, SLDstBankList_FuncBody_Helper4_Skip3
 	ld	a, (0x89fe:16)
 	extz	wa
-	div8rr	a, c
+	div	wa, c
 	add	a, 30
 	extz	wa
 	ld	e, (0x8a06:16)
 	extz	de
-	div8rr	e, c
+	div	de, c
 	add	e, 30
 	extz	de
 	ld	bc, de
@@ -2292,7 +2292,7 @@ SLDstBankList_FuncBody_Helper5:
 	cp	c, e
 	jr	nc, SLDstBankList_FuncBody_Helper5_Skip
 	extz	bc
-	div	c, (xsp)
+	div	bc, (xsp)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName3
@@ -2394,7 +2394,7 @@ SLDstBankList_FuncBody_Helper6_Skip2:
 	lda	xiz, (0x89cd:16)
 	ld	a, (0x8a08:16)
 	extz	wa
-	div	a, (xsp+0x4)
+	div	wa, (xsp+0x4)
 	ld	a, w
 	inc	1, a
 	extz	wa
@@ -2547,7 +2547,7 @@ SLDstBankList_FuncBody_Skip29:
 	ld	l, e
 	ld	a, c
 	extz	wa
-	div8rr	a, l
+	div	wa, l
 	ld	a, w
 	inc	1, a
 	cp	a, e
@@ -2588,7 +2588,7 @@ SLDstBankList_FuncBody_Skip31:
 	jr	nc, SLDstBankList_FuncBody_Skip32
 	ld	a, c
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip33
@@ -2656,11 +2656,11 @@ SLDstBankList_FuncBody_Skip36:
 	jr	z, SLDstBankList_FuncBody_Helper6_Skip3
 	ld	a, (0x8a00:16)
 	extz	wa
-	div8rr	a, e
+	div	wa, e
 	extz	wa
 	ld	c, (0x8a08:16)
 	extz	bc
-	div8rr	c, e
+	div	bc, e
 	extz	bc
 	call	FileIO_ByteBlock_DemoProc1_0x4AC
 	exts	xhl

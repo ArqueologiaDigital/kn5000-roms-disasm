@@ -140,7 +140,7 @@ FloppyIO_ReadNextByte:
 	xor de, de
 	ld hl, 4:i3
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	cp de, 0:i3
 	jrl nz, FloppyIO_ReadNextByte_DivDone
@@ -461,7 +461,7 @@ SeqTrack_ComputeTempoScaling:
 	xor wa, wa
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	add (3946:16), wa
 	popw wa
@@ -475,7 +475,7 @@ SeqTrack_ComputeTempoScaling:
 	ld de, 1:i3
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	add (3946:16), wa
 	popw wa
@@ -488,7 +488,7 @@ SeqTrack_ComputeTempo_Phase2:
 	jrl ule, SeqTrack_ComputeTempo_Phase3
 	ld de, 1:i3
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	add (3946:16), wa
 	pushw wa
@@ -511,7 +511,7 @@ SeqTrack_ComputeTempo_Phase3:
 	jrl c, SeqTrack_ComputeTempo_Phase3Store
 	xor de, de
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	add (3946:16), wa
 	ld wa, de
@@ -541,7 +541,7 @@ SeqTrack_ComputeTempo_NoDelta:
 	ld de, 1:i3
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	add (3946:16), wa
 	pushw wa
@@ -563,7 +563,7 @@ SeqTrack_ComputeTempo_NoDeltaDirect:
 	jrl c, SeqTrack_ComputeTempo_NoDeltaStore
 	xor de, de
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	add (3946:16), wa
 	pushw wa
@@ -1632,31 +1632,31 @@ SeqTrack_ComputeScaledDelta:
 	cp e, 0:i3
 	jrl z, SeqTrack_ScaledDelta_NoDivide3
 	ldw hl, 0x60
-	mul xwa, xhl
+	mul xwa, hl
 	stw_erp DE, 0xe2
 	ld (4333:16), wa
 	ld (4335:16), de
 	xor w, w
 	ld a, (4213:16)
-	mul xwa, xhl
+	mul xwa, hl
 	stw_erp DE, 0xe2
 	add wa, (4335:16)
 	ld de, wa
 	ld wa, (4333:16)
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	jrl SeqTrack_ScaledDelta_Return
 
 SeqTrack_ScaledDelta_NoDivide3:
 	ld wa, (4211:16)
 	ldw hl, 0x60
-	mul xwa, xhl
+	mul xwa, hl
 	stw_erp DE, 0xe2
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	jrl SeqTrack_ScaledDelta_Return
 
@@ -1708,7 +1708,7 @@ Sequencer_AdvanceBlockPosition:
 	xor de, de
 	ld hl, 4:i3
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	cp de, 0:i3
 	jrl nz, Sequencer_Advance_DivDone
@@ -1782,7 +1782,7 @@ SMF_SetTempo_ComputeBPM:
 	ldw wa, 0x9387
 	ld de, 3:i3
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	cp wa, 0x28
 	jrl ugt, SMF_SetTempo_ClampMax
@@ -2571,11 +2571,11 @@ SoundGen_ScalePitchByTempo:
 	cp hl, 0x60
 	jrl z, SoundGen_ScalePitch_NoScale
 	ldw hl, 0x60
-	mul xwa, xhl
+	mul xwa, hl
 	stw_erp DE, 0xe2
 	ld hl, (3936:16)
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 
 SoundGen_ScalePitch_NoScale:
@@ -2805,7 +2805,7 @@ MidiNoteOff_ScanActiveA_Loop:
 	pop xiy
 	ld wa, (xiy + 5)
 	ld l, 0x60:opc
-	divs8rr a, l
+	divs wa, l
 	cp a, 0:i3
 	jrl nz, Scoop_ApplyMatchedVoiceEntry
 	cp w, 4:i3
@@ -3533,7 +3533,7 @@ MidiNoteOff_ScanActiveB_Loop:
 	pop xiy
 	ld wa, (xiy + 5)
 	ld l, 0x60:opc
-	divs8rr a, l
+	divs wa, l
 	cp a, 0:i3
 	jrl nz, Scoop_ApplyMatchedVoiceEntryAlt
 	cp w, 4:i3

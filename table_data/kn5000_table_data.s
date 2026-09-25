@@ -4051,7 +4051,7 @@ LZSS_ReadByte__read_sectors:
 	ld wa, (3124:16); LD WA, (0x0C34)
 	extz xwa	; EXTZ XWA
 	ldw bc, 0x2400	; LD BC, 0x2400 - sector size
-	mul xbc, xiz	; MUL XBC, IZ
+	mul xbc, iz	; MUL XBC, IZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4 - buffer base
 	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012

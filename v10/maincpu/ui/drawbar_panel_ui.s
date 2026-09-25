@@ -8936,7 +8936,7 @@ PleaseWait_BuildScrollStr:
 	add ix, ix
 	ld wa, (0x02477a:24)
 	exts xwa
-	divs xwa, xix
+	divs xwa, ix
 	stw_erp HL, 0xe2
 	ld a, (0x0340e4:24)
 	extz wa
@@ -13138,7 +13138,7 @@ PsMixer_CalcGridCellPoint:
 	divs	wa, 4
 	add	wa, wa
 	inc	1, wa
-	muls	xwa, xix
+	muls	xwa, ix
 	ld	ix, (xde)
 	add	ix, wa
 	inc	2, ix
@@ -13155,7 +13155,7 @@ PsMixer_CalcGridCellPoint:
 	ld wa, qhl
 	add	wa, wa
 	inc	1, wa
-	muls	xwa, xde
+	muls	xwa, de
 	add	bc, wa
 	inc	2, bc
 	ld	(xiy+2), bc

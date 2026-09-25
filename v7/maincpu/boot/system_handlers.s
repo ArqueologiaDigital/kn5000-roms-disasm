@@ -2281,11 +2281,11 @@ Show_ScreenGroup_Entry:
 	push xiz
 	ld w, a
 	ld l, 0xc:opc
-	mul8rr l, a
+	mul hl, a
 	extz xhl
 	add xhl, Checksum_ComputeComplement_0x4
 	ld c, 0xc:opc
-	mul8rr c, a
+	mul bc, a
 	add bc, 0x47d
 	extz xbc
 	ld xix, xbc
@@ -8343,7 +8343,7 @@ Parport_RefillBuffer_Loop:
 	ld wa, (1618:16)
 	extz xwa
 	ldw bc, 0x2400
-	mul xbc, xiz
+	mul xbc, iz
 	ld xde, 0x69800
 	add xde, xbc
 	ldw bc, 0x12

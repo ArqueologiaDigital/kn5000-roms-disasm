@@ -890,7 +890,7 @@ DrawProgH_CalcDimensions:
 	ld bc, (xhl + 4)
 	ld wa, bc
 	sub wa, (xhl)
-	mul xwa, xde
+	mul xwa, de
 	ld iz, wa
 	extz xiz
 	div iz, 0x64
@@ -1093,7 +1093,7 @@ DrawProgV_CalcDimensions:
 	ld bc, (xix)
 	ld wa, bc
 	sub wa, (xhl)
-	mul xwa, xde
+	mul xwa, de
 	ldw_erp WA, 0xfa
 	extz xwa
 	div wa, 0x64

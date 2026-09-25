@@ -3624,7 +3624,7 @@ SeMenu_ApplyPartEdit_Skip38:
 	extz	wa
 	ld	(xsp+4), wa
 	ld	wa, (xsp+4)
-	mul	wa, (xsp+6)
+	mul	xwa, (xsp+6)
 	ld	(xsp+4), wa
 	ld	l, 100:opc
 	sub	l, e
@@ -3637,7 +3637,7 @@ SeMenu_ApplyPartEdit_Skip38:
 SeMenu_ApplyPartEdit_Skip39:
 	ld	wa, (xsp+4)
 	extz	xwa
-	div	xwa, xhl
+	div	xwa, hl
 	ld	(xsp+4), wa
 SeMenu_ApplyPartEdit_Join21:
 	ld	a, (xbc+3)
@@ -3660,14 +3660,14 @@ SeMenu_ApplyPartEdit_Join21:
 	ld	hl, (xsp+10)
 	.byte 0x9f, 0x06, 0xa3
 	ld	wa, (xsp+8)
-	mul	xwa, xhl
+	mul	xwa, hl
 	ld	(xsp+8), wa
 	jr	SeMenu_ApplyPartEdit_Join22
 SeMenu_ApplyPartEdit_Skip10:
 	ld	hl, (xsp+6)
 	sub	hl, (xsp+10)
 	ld	wa, (xsp+8)
-	mul	xwa, xhl
+	mul	xwa, hl
 	ld	(xsp+8), wa
 SeMenu_ApplyPartEdit_Join22:
 	ld	l, 100:opc
@@ -3682,7 +3682,7 @@ SeMenu_ApplyPartEdit_Join22:
 SeMenu_ApplyPartEdit_Skip11:
 	ld	wa, (xsp+8)
 	extz	xwa
-	div	xwa, xhl
+	div	xwa, hl
 	ld	(xsp+8), wa
 SeMenu_ApplyPartEdit_Join23:
 	ld	a, (xbc+5)
@@ -3702,14 +3702,14 @@ SeMenu_ApplyPartEdit_Join23:
 	ld	hl, qiz
 	sub	hl, (xsp+10)
 	ld	wa, iz
-	mul	xwa, xhl
+	mul	xwa, hl
 	ld	iz, wa
 	jr	SeMenu_ApplyPartEdit_Join24
 SeMenu_ApplyPartEdit_Skip40:
 	ld	hl, (xsp+10)
 	sub hl, qiz
 	ld wa, iz
-	mul	xwa, xhl
+	mul	xwa, hl
 	ld	iz, wa
 SeMenu_ApplyPartEdit_Join24:
 	ld	l, 100:opc
@@ -3724,13 +3724,13 @@ SeMenu_ApplyPartEdit_Join24:
 SeMenu_ApplyPartEdit_Skip12:
 	ld	wa, iz
 	extz	xwa
-	div	xwa, xhl
+	div	xwa, hl
 	ld	iz, wa
 SeMenu_ApplyPartEdit_Join8:
 	ld	c, (xbc+6)
 	ld	e, c
 	extz	de
-	mul de, qiz
+	mul xde, qiz
 	ld l, 100:opc
 	sub l, c
 	extz	hl
@@ -3740,7 +3740,7 @@ SeMenu_ApplyPartEdit_Join8:
 	jr	SeMenu_ApplyPartEdit_Join9
 SeMenu_ApplyPartEdit_Skip13:
 	extz	xde
-	div	xde, xhl
+	div	xde, hl
 SeMenu_ApplyPartEdit_Join9:
 	ld	bc, (xsp+4)
 	add	bc, (xsp+8)
@@ -3767,18 +3767,18 @@ SeMenu_ApplyPartEdit_Skip42:
 	extz	bc
 	ld	wa, (xsp+4)
 	extz	xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	(xsp+4), wa
 	addiw_da	(xsp+4), 51
 	ld	wa, (xsp+8)
 	extz	xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	(xsp+8), wa
 	ld	wa, (xsp+4)
 	add	(xsp+8), wa
 	ld	wa, iz
 	extz	xwa
-	div	xwa, xbc
+	div	xwa, bc
 	ld	iz, wa
 	add	iz, (xsp+8)
 	ldw	wa, 146
@@ -3826,7 +3826,7 @@ SeMenu_ApplyPartEdit_Skip43:
 	extz	de
 	ldw	ix, 146
 	sub	ix, bc
-	mul	xde, xix
+	mul	xde, ix
 	ld	a, 100:opc
 	sub	a, l
 	ld	l, a
@@ -3837,12 +3837,12 @@ SeMenu_ApplyPartEdit_Skip43:
 	jr	SeMenu_ApplyPartEdit_Join10
 SeMenu_ApplyPartEdit_Skip14:
 	extz	xde
-	div	xde, xhl
+	div	xde, hl
 SeMenu_ApplyPartEdit_Join10:
 	ld	l, (xsp+12)
 	extz	hl
 	extz	xde
-	div	xde, xhl
+	div	xde, hl
 	add	de, 213
 	pushw	146
 	ldw	wa, 214
@@ -3867,10 +3867,10 @@ SeMenu_ApplyPartEdit_Helper6:
 	sub	de, wa
 	ld	iy, de
 	ld	de, hl
-	muls	xde, xiy
+	muls	xde, iy
 	ld	hl, de
 	exts	xde
-	divs	xde, xix
+	divs	xde, ix
 	ld	hl, de
 	add	hl, bc
 	ld	iy, hl
@@ -3886,10 +3886,10 @@ SeMenu_ApplyPartEdit_Skip15:
 	sub	de, wa
 	ld	iy, de
 	ld	de, hl
-	muls	xde, xiy
+	muls	xde, iy
 	ld	hl, de
 	exts	xde
-	divs	xde, xix
+	divs	xde, ix
 	ld	hl, de
 	add	hl, bc
 	ld	iy, hl
@@ -3989,7 +3989,7 @@ SeMenu_ApplyPartEdit_Skip17:
 	ld	e, c
 	extz	de
 	ld	wa, (xsp+8)
-	muls	xwa, xde
+	muls	xwa, de
 	ld	(xsp+8), wa
 	ld	a, 100:opc
 	sub	a, c
@@ -4004,7 +4004,7 @@ SeMenu_ApplyPartEdit_Skip18:
 	extz	bc
 	ld	wa, (xsp+8)
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld	(xsp+8), wa
 SeMenu_ApplyPartEdit_Helper7_Join:
 	lda	xbc, (xsp+24)
@@ -4043,7 +4043,7 @@ SeMenu_ApplyPartEdit_Helper7_Join:
 	ld	e, c
 	extz	de
 	ld	wa, (xsp+12)
-	muls	xwa, xde
+	muls	xwa, de
 	ld	(xsp+12), wa
 	ld	a, 100:opc
 	sub	a, c
@@ -4058,7 +4058,7 @@ SeMenu_ApplyPartEdit_Helper7_Skip:
 	extz	bc
 	ld	wa, (xsp+12)
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld	(xsp+12), wa
 SeMenu_ApplyPartEdit_Helper7_Join2:
 	lda	xbc, (xsp+25)
@@ -4097,7 +4097,7 @@ SeMenu_ApplyPartEdit_Helper7_Join2:
 	ld	e, c
 	extz	de
 	ld	wa, (xsp+16)
-	muls	xwa, xde
+	muls	xwa, de
 	ld	(xsp+16), wa
 	ld	a, 100:opc
 	sub	a, c
@@ -4112,7 +4112,7 @@ SeMenu_ApplyPartEdit_Skip19:
 	extz	bc
 	ld	wa, (xsp+16)
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld	(xsp+16), wa
 SeMenu_ApplyPartEdit_Join12:
 	lda	xbc, (xsp+26)
@@ -4151,7 +4151,7 @@ SeMenu_ApplyPartEdit_Join12:
 	ld e, c
 	extz	de
 	ld wa, qiz
-	muls	xwa, xde
+	muls	xwa, de
 	ld qiz, wa
 	ld a, 100:opc
 	sub	a, c
@@ -4171,7 +4171,7 @@ SeMenu_ApplyPartEdit_Join12:
 	extz	bc
 	ld wa, qiz
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld qiz, wa
 	ld	wa, (xsp+8)
 	add	wa, (xsp+12)
@@ -4202,18 +4202,18 @@ SeMenu_ApplyPartEdit_Join13:
 	extz	bc
 	ld	wa, (xsp+8)
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld	(xsp+8), wa
 	addiw_da	(xsp+8), 51
 	ld	wa, (xsp+12)
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld	(xsp+12), wa
 	ld	wa, (xsp+8)
 	add	(xsp+12), wa
 	ld	wa, (xsp+16)
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld	(xsp+16), wa
 	ld	wa, (xsp+12)
 	add	(xsp+16), wa
@@ -4288,7 +4288,7 @@ SeMenu_ApplyPartEdit_Skip21:
 	ld e, c
 	extz	de
 	ld wa, qiz
-	muls	xwa, xde
+	muls	xwa, de
 	ld qiz, wa
 	ld a, 100:opc
 	sub	a, c
@@ -4308,13 +4308,13 @@ SeMenu_ApplyPartEdit_Skip21:
 	extz	bc
 	ld wa, qiz
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	ld qiz, wa
 	ld	c, (xsp+4)
 	extz	bc
 	ld wa, qiz
 	exts	xwa
-	divs	xwa, xbc
+	divs	xwa, bc
 	.byte 0xd7
 	swi	2
 	cp	(xwa-41), de
@@ -4362,14 +4362,14 @@ SeMenu_ApplyPartEdit_Helper8_Skip2:
 	jr	lt, SeMenu_ApplyPartEdit_Skip22
 	ld	c, (xsp+6)
 	exts	bc
-	muls	xde, xbc
+	muls	xde, bc
 	jr	SeMenu_ApplyPartEdit_Join14
 SeMenu_ApplyPartEdit_Skip22:
 	ld	c, (xsp+6)
 	neg	c
 	ld	(xsp+6), c
 	exts	bc
-	muls	xde, xbc
+	muls	xde, bc
 	neg	de
 SeMenu_ApplyPartEdit_Join14:
 	exts	xde
@@ -4505,9 +4505,9 @@ SeMenu_ApplyPartEdit_Helper9_Epilogue:
 	lda	xsp, (xsp+10)
 	retd	2
 SeMenu_ApplyPartEdit_Helper9_Helper:
-	mul	xwa, xbc
+	mul	xwa, bc
 	extz	xwa
-	div	xwa, xde
+	div	xwa, de
 	ld	hl, wa
 	ret
 SeMenu_ApplyPartEdit_Helper10:
@@ -4658,13 +4658,13 @@ SeMenu_ApplyPartEdit_Skip25:
 	ld	c, (xsp+20)
 	extz	bc
 	exts	xhl
-	divs	xhl, xbc
+	divs	xhl, bc
 	ld	ix, (xsp+8)
-	muls	xix, xbc
+	muls	xix, bc
 	exts	xix
 	divs	ix, 50
 	ld	de, (xsp+10)
-	muls	xde, xbc
+	muls	xde, bc
 	exts	xde
 	divs	de, 50
 	ldw	iz, 97

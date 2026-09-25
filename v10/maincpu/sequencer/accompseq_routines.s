@@ -854,11 +854,11 @@ AccompSeq_FadeOutApplyVol:
 	ld l, (0x7e72:16)
 	xor h, h
 	ld wa, (0x7e70:16)
-	mul xwa, xhl
+	mul xwa, hl
 	stw_erp DE, 0xe2
 	ldw hl, 0x800
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	ld e, a
 	ld w, 0x5:opc
@@ -871,11 +871,11 @@ AccompSeq_FadeOut_Ch2Volume:
 	ld l, (0x7e73:16)
 	xor h, h
 	ld wa, (0x7e70:16)
-	mul xwa, xhl
+	mul xwa, hl
 	stw_erp DE, 0xe2
 	ldw hl, 0x800
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	ld e, a
 	ld w, 0x5:opc
@@ -899,11 +899,11 @@ AccompSeq_PortaFadeOut:
 	ld l, (0x7e57:16)
 	xor h, h
 	ld wa, (0x7e70:16)
-	mul xwa, xhl
+	mul xwa, hl
 	stw_erp DE, 0xe2
 	ldw hl, 0x800
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	stw_erp DE, 0xe2
 	pop xde
 	pop xhl
@@ -1176,7 +1176,7 @@ AccompSeq_LookupStyle_Internal:
 	call Voice_DecodeNoteChannel2
 	xor xwa, xwa
 	ldw wa, 0x20
-	mul xwa, xhl
+	mul xwa, hl
 	add xwa, NakaInst_OFF_Str_0xD4
 	ld (0x7e2a:16), wa
 	stw_erp WA, 0xe2

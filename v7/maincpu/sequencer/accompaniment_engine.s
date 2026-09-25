@@ -10030,7 +10030,7 @@ AccProcess_Entry_Skip:
 AccProcess_Entry_Skip2:
 	ld	bc, wa
 	ld	xwa, 30000
-	div	xwa, xbc
+	div	xwa, bc
 	pushw	wa
 	calr	AccProcess_Entry_Helper
 	popw	wa
@@ -13228,7 +13228,7 @@ AccPatch_CheckAndInitDemo_Helper4:
 	ld	xwa, 0:i3
 	ld	a, 160:opc
 	ld	c, (13370:16)
-	mul8rr	a, c
+	mul	wa, c
 	ld	xbc, 0:i3
 	ld	c, (14079:16)
 	and	c, 31
@@ -13684,7 +13684,7 @@ AccPatch_FillEntryWithVoiceData:
 	ld xbc, 0:i3
 	ld b, (xiy + 13)
 	inc 1, b
-	mul8rr a, b
+	mul wa, b
 	popw hl
 	calr AccPatch_GetEntryAddr
 	add xix, 0x6
@@ -13864,7 +13864,7 @@ AccPatch_InitAllSentinels:
 
 	inc 1, b
 
-	mul8rr a, b
+	mul wa, b
 
 	ld c, a
 
@@ -14003,7 +14003,7 @@ AccPatch_RebuildChannelSlot:
 	ld	l, (0x343b:16)
 	and	l, 7
 	inc	1, l
-	mul8rr	l, a
+	mul	hl, a
 	and	hl, 127
 	ld	c, l
 	ld	hl, (0x33a1:16)
@@ -14039,7 +14039,7 @@ AccPatch_ComputeSeqPosition:
 	ld	xwa, 0:i3
 	ld	a, (12823:16)
 	ld	c, (13373:16)
-	mul8rr	a, c
+	mul	wa, c
 	add	a, (12772:16)
 	ld	l, a
 	ld	a, (12771:16)
@@ -14051,7 +14051,7 @@ AccPatch_ComputeSeqPosition:
 	ld	a, (13373:16)
 	ld	c, (13371:16)
 	inc	1, c
-	mul8rr	a, c
+	mul	wa, c
 	cp	a, l
 	jr	nz, AccPatch_SeqPosition_Store
 	ld	l, 0:opc
@@ -14273,7 +14273,7 @@ AccPatch_MiscDataBlock:
 	ld	xwa, 100
 	.byte	0xd1, 0x38, 0x34, 0x40	; mul XWA, (0x3438) (unidasm; no llvm-mc spelling)
 	ldw	hl, 190
-	div	xwa, xhl
+	div	xwa, hl
 	cp	a, 100
 	jr	c, AccPatch_CountSlotsAlt_Body_Skip
 	ld	a, 99:opc
@@ -15066,7 +15066,7 @@ AccPatch_CallParamLookup_Helper6:
 	ld	xbc, 0:i3
 	ld	b, (xiy+13)
 	inc	1, b
-	mul8rr	a, b
+	mul	wa, b
 	popw	hl
 	calr	AccPatch_GetEntryAddr
 	add	xix, 6
@@ -15154,7 +15154,7 @@ AccPatch_FillSlotWithVoiceData:
 	ld xbc, 0:i3
 	ld b, (xiy + 13)
 	inc 1, b
-	mul8rr a, b
+	mul wa, b
 	popw hl
 	calr AccPatch_ResolveSlotAddr
 	add xix, 0x6
@@ -15469,7 +15469,7 @@ AccPatch_InitSeq_LoadTempo:
 	ei	0
 	and	(0x35ae:16), 254
 	ld	b, (0x343d:16)
-	mul8rr	a, b
+	mul	wa, b
 	add	c, a
 	xor	b, b
 	pushw	bc
@@ -15503,7 +15503,7 @@ AccPatch_ResetSeqCounters_Loop:
 	ei	0
 	and	(0x35ae:16), 254
 	ld	b, (0x343d:16)
-	mul8rr	a, b
+	mul	wa, b
 	add	c, a
 	xor	b, b
 	pushw	bc
@@ -15749,7 +15749,7 @@ AccPatch_SeekForwardSteps:
 	ld	a, (13661:16)
 	ld	c, (13931:16)
 	ld	b, (13373:16)
-	mul8rr	a, b
+	mul	wa, b
 	add	c, a
 	xor	b, b
 	pushw	bc
@@ -17916,12 +17916,12 @@ AccTiming_StorePartA:
 AccTiming_ComputeOffset:
 	ld	w, (13407:16)
 	ld	a, 8:opc
-	muls8rr	a, w
+	muls	wa, w
 	ld	h, a
 	ld	a, (13408:16)
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	add	h, a
 	inc	1, h
 	ld	a, (13406:16)
@@ -17931,7 +17931,7 @@ AccTiming_ComputeOffset:
 	jr	c, 2
 	ld	w, 64:opc
 AccTiming_UseFullBar:
-	muls8rr	a, w
+	muls	wa, w
 	add	h, a
 	ld	(13939:16), h
 	jr	12
@@ -18005,12 +18005,12 @@ AccVoice_InitPatternBuffer:
 	calr AccPlayback_InitPartAssignment
 	ld a, (0x36aa:16)
 	ld w, (0x343d:16)
-	muls8rr	a, w
+	muls	wa, w
 	ld	c, a
 	jr	ToneGen_SkipToNoteEntry
 	ld	a, (13406:16)
 	ld	w, (13373:16)
-	muls8rr	a, w
+	muls	wa, w
 	ld	c, a
 	cp	(13373:16), 5
 	jr	c, ToneGen_SkipToNoteEntry
@@ -18117,7 +18117,7 @@ ToneGen_MapNoteToOctaveBitmask:
 	ld a, (xix)
 	xor w, w
 	ld l, 0xc:opc
-	div8rr a, l
+	div wa, l
 	pushw bc
 	push xix
 	and a, 0x7
@@ -18348,7 +18348,7 @@ ToneGen_ProcessRestore_CalcNote:
 	ld	e, a
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	cp	w, 0:i3
 	jr	nz, ToneGen_ProcessRestore_AdjNote
 	ld	w, 12:opc
@@ -18479,7 +18479,7 @@ ToneGen_CalcEventVelocity_WithFlags:
 	jr	nz, ToneGen_Velocity_Multiply
 	ld	w, (0x343b:16)
 ToneGen_Velocity_Multiply:
-	muls8rr a, w
+	muls wa, w
 	add b, a
 	jr ToneGen_Velocity_Store
 
@@ -18505,7 +18505,7 @@ ToneGen_Velocity_DefaultCalc:
 VoiceVelocity_CalcDone:
 	ld	a, (13373:16)
 	ld	w, (13406:16)
-	muls8rr	a, w
+	muls	wa, w
 	add	b, a
 ToneGen_Velocity_Store:
 	; stda16 (0x3520), xbc (v7 patched)
@@ -18525,12 +18525,12 @@ ToneGen_CalcNotePosition:
 	ld	e, a
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	ld	d, (13407:16)
 	ld	bc, wa
 	ld	a, (13373:16)
 	ld	w, (13406:16)
-	muls8rr	a, w
+	muls	wa, w
 	add	d, a
 	ld	wa, bc
 	cp	w, 0:i3
@@ -18640,7 +18640,7 @@ ToneGen_CalcEventVelocity_Restored:
 	ld	b, (13407:16)
 	ld	a, (13373:16)
 	ld	w, (13406:16)
-	muls8rr	a, w
+	muls	wa, w
 	add	b, a
 	jr	20
 ToneGen_ScanRestored_EndMarker:
@@ -18649,7 +18649,7 @@ ToneGen_ScanRestored_EndMarker:
 	inc	1, b
 	ld	a, (13373:16)
 	ld	w, (13406:16)
-	muls8rr	a, w
+	muls	wa, w
 	add	b, a
 ToneGen_ScanRestored_Return:
 	ret
@@ -18681,7 +18681,7 @@ ToneGen_CalcNoteWithWrap:
 	ld	e, a
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	ld	a, e
 	sub	a, w
 	add	a, 12
@@ -18694,7 +18694,7 @@ ToneGen_CalcWrap_Store:
 	ld	hl, wa
 	ld	a, (13373:16)
 	ld	w, (13406:16)
-	muls8rr	a, w
+	muls	wa, w
 	add	h, a
 	ld	wa, hl
 	ret
@@ -18707,7 +18707,7 @@ ToneGen_RecalcAndRestart:
 	ld	e, a
 	xor	w, w
 	ld	l, 12:opc
-	div8rr	a, l
+	div	wa, l
 	ld	a, e
 	sub	a, w
 	add	a, 12
@@ -19297,7 +19297,7 @@ ToneGen_ProcessVoiceSlots:
 	ldw (0x33ad:16), 0x0006
 	ld a, (0x345e:16)
 	ld w, (0x343d:16)
-	muls8rr	a, w
+	muls	wa, w
 	ld	d, a
 	ld	a, (0x345f:16)
 	add	d, a
@@ -19408,7 +19408,7 @@ AccPlayback_Ongoing_AdvSlot:
 	ld	a, (13371:16)
 	inc	1, a
 	ld	w, (13373:16)
-	muls8rr	a, w
+	muls	wa, w
 	dec	1, a
 	ld	b, a
 	xor	c, c
@@ -19791,7 +19791,7 @@ ToneGen_CalcTempo_Lookup:
 	pop	xix
 	ld	wa, de
 	ld	l, 96:opc
-	div8rr	a, l
+	div	wa, l
 	ld	(13203:16), w
 	ld	(13204:16), a
 	ld	a, (13946:16)
@@ -19802,7 +19802,7 @@ ToneGen_CalcTempo_Lookup:
 	xor	de, de
 	ld	hl, 5:i3
 	ld	qwa, de
-	div	xwa, xhl
+	div	xwa, hl
 	jr	ToneGen_CalcTempoBeatsAndTicks	; -> 0xF621AC
 ToneGen_CalcTempo_Mode0:
 	cp a, 0:i3
@@ -19815,7 +19815,7 @@ ToneGen_CalcTempo_Mode0:
 	xor de, de
 	ldw hl, 0x14
 	ldw_erp DE, 0xe2
-	div xwa, xhl
+	div xwa, hl
 	jr ToneGen_CalcTempoBeatsAndTicks
 
 ToneGen_CalcTempo_Mode2:
@@ -21774,7 +21774,7 @@ RhythmROM_ProcessPattern:
 	ld_rrb	a, xhl, wa
 	ex8	a, e
 	xor	w, w
-	div8rr	a, e
+	div	wa, e
 	dec	1, a
 	cp	w, 0:i3
 	jr	z, 52	; -> 0xF633D4
@@ -22483,7 +22483,7 @@ RhythmBuf_FillEmptyPattern:
 	ld A,(XIY+0x0d)
 	and A,0x07
 	inc 1,A
-	mul8rr	a, w
+	mul	wa, w
 	push	xwa
 	ld	hl, de
 	calr	AccPat_IndexToAddress
@@ -24910,7 +24910,7 @@ DrumVoice_NotifyEE_Helper5:
 	ld	xbc, 0:i3
 	ld	a, 32:opc
 	ld	c, (14446:16)
-	mul8rr	a, c
+	mul	wa, c
 	add	xwa, 608256
 	add	xwa, 2976
 	ld	xiy, xwa
@@ -25936,7 +25936,7 @@ SeqRec_InitChannels:
 
 	ldw_erp WA, 0xfa
 
-	mul xwa, xbc
+	mul xwa, bc
 
 	ldw_erp WA, 0xfa
 
@@ -32762,7 +32762,7 @@ AccDraw_Secondary_Helper11:
 	ld	xix, xiy
 	ld	a, 35:opc
 	ld	c, (13986:16)
-	mul8rr	a, c
+	mul	wa, c
 	extz	xwa
 	add	xix, xwa
 	calr	AccAudio_DataBlock1
@@ -32786,7 +32786,7 @@ AccDraw_Secondary_Helper13:
 	ld	xix, xiy
 	add	xix, 10
 	ld	a, 20:opc
-	mul8rr	a, c
+	mul	wa, c
 	cp	a, 0:i3
 	jr	z, AccDraw_Secondary_Return10
 	extz	xwa
@@ -32861,7 +32861,7 @@ AccDraw_Secondary_Skip4:
 	jr	ge, AccDraw_Secondary_Return11
 	add	xiy, 4
 	ld	a, 8:opc
-	mul8rr	a, c
+	mul	wa, c
 	extz	xwa
 	sub	xix, xwa
 	add	xix, 1200
@@ -32907,7 +32907,7 @@ AccDraw_Secondary_Helper16:
 AccDraw_Secondary_Skip5:
 	and	a, 127
 	ld	c, 32:opc
-	div8rr	a, c
+	div	wa, c
 	ld	(14621:16), a
 	sla	wa, 1
 	xor	xhl, xhl
@@ -32941,7 +32941,7 @@ AccDraw_Secondary_Helper17:
 AccDraw_Secondary_Skip6:
 	and	a, 127
 	ld	c, 32:opc
-	div8rr	a, c
+	div	wa, c
 	ld	(14621:16), a
 	ret
 AccDraw_Secondary_Helper18:
@@ -32974,7 +32974,7 @@ AccScreen_CalcTempoParams:
 	xor	wa, wa
 	ld	a, (13948:16)
 	ld	l, 12:opc
-	divs8rr	a, l
+	divs	wa, l
 	ld	(14620:16), w
 	ld	(14622:16), a
 	ret
@@ -33347,7 +33347,7 @@ AccPatch_IterateSlot_NextBlock:
 	xor	xhl, xhl
 	ld	wa, (14066:16)
 	ldw	hl, 256
-	mul	xwa, xhl
+	mul	xwa, hl
 	add	xwa, 5120
 	add	xwa, 1023
 	and	xwa, 4294966272
@@ -33426,7 +33426,7 @@ AccPatch_UpdateLink_Return:
 AccPatch_CalcSlotBufferAddr:
 	xor	xiz, xiz
 	ld	xiz, 256
-	mul	xiz, xhl
+	mul	xiz, hl
 	add	xiz, (14610:16)
 	add	xiz, 5120
 	ret
@@ -33496,7 +33496,7 @@ AccPatch_VoiceAssignDataBlock_Entry:
 	ld	d, 0:opc
 	ld	xbc, 0:i3
 	ldw	bc, 256
-	mul	xbc, xde
+	mul	xbc, de
 	pop d
 	add	xix, xbc
 	add	xiy, xbc
@@ -33622,7 +33622,7 @@ AccPatch_VoiceAssignDataBlock_Skip9:
 AccPatch_VoiceAssignDataBlock_Helper:
 	xor	xiz, xiz
 	ld	xiz, 256
-	mul	xiz, xhl
+	mul	xiz, hl
 	add	xiz, 613376
 	ret
 	push	xiz
@@ -33722,14 +33722,14 @@ AccPatch_VoiceAssignDataBlock_Helper6:
 	call	AccScreen_GetByte_0x353C
 	ld	l, a
 	ld	a, 96:opc
-	mul8rr	a, l
+	mul	wa, l
 	add	wa, 96
 	ld	(14558:16), wa
 	xor	xwa, xwa
 	call	AccScreen_GetByte_0x353E
 	ld	l, a
 	ld	a, 96:opc
-	mul8rr	a, l
+	mul	wa, l
 	add	wa, 96
 	ld	(14560:16), wa
 	cpw	(14558:16), 960
@@ -34059,7 +34059,7 @@ AccPatch_VoiceAssignDataBlock_Helper21:
 	ld	hl, (14548:16)
 	sub	wa, hl
 	ldw	hl, 256
-	mul	xwa, xhl
+	mul	xwa, hl
 	ld	(14558:16), wa
 	ret
 AccPatch_VoiceAssignDataBlock_Helper22:
@@ -34804,8 +34804,8 @@ DialUI_CalcProlog:
 	push xiz
 	ld iz, wa
 	extz xde
-	div xde, xiz
-	mul xde, xiz
+	div xde, iz
+	mul xde, iz
 	ld (xsp + 4), de
 	ldiw_erp 0xfa, 0
 	cp iz, 0:i3

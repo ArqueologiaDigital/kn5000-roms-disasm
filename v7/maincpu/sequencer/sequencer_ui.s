@@ -2391,7 +2391,7 @@ IvNamingExit_ScreenData_Skip:
 	sub bc, (xde)
 	exts	xbc
 	ld	xwa, (xsp+22)
-	divs bc, (xwa+38)
+	divs xbc, (xwa+38)
 	ld	(xsp+8), bc
 	ld	wa, (xde+2)
 	inc	1, wa
@@ -2403,7 +2403,7 @@ IvNamingExit_ScreenData_Skip:
 	jr	IvNamingExit_ScreenData_Join
 IvNamingExit_ScreenData_Loop:
 	ld	wa, (xsp+8)
-	mul wa, (xsp+20)
+	mul xwa, (xsp+20)
 	ld	bc, (xsp+154)
 	add	bc, wa
 	dec	1, bc
@@ -2435,7 +2435,7 @@ IvNamingExit_ScreenData_Skip2:
 	or	xde, xde
 	jrl	z, IvNamingExit_ScreenData_Skip4
 	ld	bc, (xwa+38)
-	muls bc, (xwa+40)
+	muls xbc, (xwa+40)
 	ld	a, (xde)
 	exts	wa
 	cp	wa, bc
@@ -2450,7 +2450,7 @@ IvNamingExit_ScreenData_Skip2:
 	sub de, (xbc)
 	exts	xde
 	ld	xhl, (xsp+10)
-	divs de, (xhl+38)
+	divs xde, (xhl+38)
 	ld	(xsp+8), de
 	lda	xwa, (xbc+6)
 	ld	(xsp+14), xwa
@@ -2462,21 +2462,21 @@ IvNamingExit_ScreenData_Skip2:
 	sub	ix, de
 	ld	hl, (xhl+40)
 	exts	xix
-	divs	xix, xhl
+	divs	xix, hl
 	ld	xwa, (xsp+170)
 	ld	a, (xwa)
 	exts	wa
 	exts	xwa
-	divs	xwa, xhl
+	divs	xwa, hl
 	ld	iy, qwa
 	ld	xwa, (xsp+170)
 	ld	a, (xwa)
 	exts	wa
 	exts	xwa
-	divs	xwa, xhl
+	divs	xwa, hl
 	ld	hl, wa
 	ld	wa, ix
-	mul	xwa, xiy
+	mul	xwa, iy
 	inc	2, wa
 	add	de, wa
 	ld	xiy, (xsp+22)
@@ -2485,7 +2485,7 @@ IvNamingExit_ScreenData_Skip2:
 	ld	xwa, (xsp+14)
 	ld	(xwa), de
 	ld	wa, (xsp+8)
-	mul	xwa, xhl
+	mul	xwa, hl
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)
@@ -2534,7 +2534,7 @@ IvNamingExit_ScreenData_Skip4:
 	ld	xwa, (xsp+178)
 	call	GetViewInstance
 	ld	wa, (xhl+38)
-	muls wa, (xhl+40)
+	muls xwa, (xhl+40)
 	exts	xwa
 	cp	(xsp+170), xwa
 	jr	nc, IvNamingExit_ScreenData_Join3

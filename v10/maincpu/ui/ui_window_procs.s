@@ -2227,7 +2227,7 @@ TextBox_SetupWordwrap:
 	ld xwa, (xsp + 18)
 	ld bc, (xwa + 38)
 	extz xde
-	div xde, xbc
+	div xde, bc
 	ld (xsp + 8), de
 	ldw (xsp + 16), 0x0
 	cp bc, 0:i3
@@ -3346,7 +3346,7 @@ PsListBox_Confirm_Layout:
 	lda xix, (xiz + 36)
 	ld bc, (xix)
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld (xsp + 8), wa
 	add de, (xsp + 8)
 	inc 3, de

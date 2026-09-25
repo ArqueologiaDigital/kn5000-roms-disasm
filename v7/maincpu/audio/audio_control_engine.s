@@ -8441,14 +8441,14 @@ SeqTimer_ClampToDefault:
 SeqTimer_ComputeRegValue:
 	ld	(0xbc9e:16), wa
 	ldw	de, 0x40
-	mul	xwa, xde
+	mul	xwa, de
 	ld	xde, 0x4c4b400
 	call	Boot_ReadFDCStatus
 	cp	l, 4:i3
 	jr	nz, SeqTimer_AdjustForMode4
 	ld	xde, 0x3938700
 SeqTimer_AdjustForMode4:
-	div	xde, xwa
+	div	xde, wa
 	ld	xbc, xde
 	srl	xbc, 0
 	srl	wa, 1

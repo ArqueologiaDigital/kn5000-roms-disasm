@@ -18745,7 +18745,7 @@ ParaListBox_HandleEvtB:
 
 ParaListBox_DrawLineLoop_Body:
 	ld wa, (xsp + 4)
-	mul xwa, xiz
+	mul xwa, iz
 	ldw_sri0 BC, (xsp + 0x008e)
 	add bc, wa
 	dec 1, bc
@@ -18801,19 +18801,19 @@ ParaListBox_HandleEvtF:
 	sub iz, hl
 	ld de, (xwa + 36)
 	exts xiz
-	divs xiz, xde
+	divs xiz, de
 	ld_sril XWA, (xsp + 0x009e)
 	ld a, (xwa)
 	exts wa
 	exts xwa
-	divs xwa, xde
+	divs xwa, de
 	stw_erp WA, 0xe2
 	ldw_erp WA, 0xea
 	ld_sril XWA, (xsp + 0x009e)
 	ld a, (xwa)
 	exts wa
 	exts xwa
-	divs xwa, xde
+	divs xwa, de
 	ld de, wa
 	ld wa, iz
 	mulw_erp WA, 0xea
@@ -18823,7 +18823,7 @@ ParaListBox_HandleEvtF:
 	add hl, iz
 	ld (xiy), hl
 	ld wa, (xsp + 4)
-	mul xwa, xde
+	mul xwa, de
 	inc 2, wa
 	add (xbc), wa
 	ld de, (xbc)
@@ -19103,7 +19103,7 @@ StylCnvStorOkFunc_DataBlock_Join2:
 	ld	bc, (xhl+4)
 	ld	wa, bc
 	sub	wa, (xhl)
-	mul	xwa, xde
+	mul	xwa, de
 	ld	iz, wa
 	extz	xiz
 	div	iz, 100
@@ -19113,7 +19113,7 @@ StylCnvStorOkFunc_DataBlock_Join2:
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa)
 	sub	wa, (xde)
-	mul	wa, (xsp+40)
+	mul	xwa, (xsp+40)
 	ld	ix, wa
 	extz	xix
 	div	ix, 100
@@ -19291,7 +19291,7 @@ StylCnvStorOkFunc_DataBlock_Join5:
 	ld	bc, (xix)
 	ld	wa, bc
 	sub	wa, (xhl)
-	mul	xwa, xde
+	mul	xwa, de
 	ld	qiz, wa
 	extz	xwa
 	div	wa, 100
@@ -19300,7 +19300,7 @@ StylCnvStorOkFunc_DataBlock_Join5:
 	lda	xiy, (xhl+2)
 	ld	wa, (xde)
 	sub	wa, (xiy)
-	mul	wa, (xsp+42)
+	mul	xwa, (xsp+42)
 	ld	iz, wa
 	extz	xwa
 	div	wa, 100

@@ -20034,7 +20034,7 @@ sub_FC28B5:
 	extpfx3 0x8E, 0x08, 0x43                   ; FC28C3  mul BC,(XIZ+0x08)
 	ld	(xiz-10), bc                            ; FC28C6  ld (XIZ+0xf6),BC
 	ldw	wa, 0x12C                              ; FC28C9  ld WA,0x012c
-	mul	xwa, xde                               ; FC28CC  mul XWA,DE
+	mul	xwa, de                               ; FC28CC  mul XWA,DE
 	ld	(xiz-8), xwa                            ; FC28CE  ld (XIZ+0xf8),XWA
 	extz	xbc                                   ; FC28D1  extz XBC
 	ld	(xiz-4), xbc                            ; FC28D3  ld (XIZ+0xfc),XBC
@@ -20182,7 +20182,7 @@ DrawbarPreset_GetDescriptor:
 	ld	xiy, (xwa+0x70)                         ; FC2995  ld XIY,(XWA+0x70)
 	ld	xix, xiy                                ; FC2998  ld XIX,XIY
 	ld	bc, (xwa+0xEC)                          ; FC299A  ld BC,(XWA+0x00ec)
-	mul	xbc, xhl                               ; FC299F  mul XBC,HL
+	mul	xbc, hl                               ; FC299F  mul XBC,HL
 	add	xiy, xbc                               ; FC29A1  add XIY,XBC
 	ld	xix, xiy                                ; FC29A3  ld XIX,XIY
 	add	xix, (0xD7ED:24)                   ; FC29A5  add XIX,(0x00d7ed)
@@ -20691,7 +20691,7 @@ sub_FC2CD5:
 	push	xix                                   ; FC2CDB  push XIX
 	ld	h, (xiz+8)                              ; FC2CDC  ld H,(XIZ+0x08)
 	ld	c, 23:opc                                  ; FC2CDF  ld C,0x17
-	mul8rr	c, h                                ; FC2CE1  mul BC,H
+	mul	bc, h                                ; FC2CE1  mul BC,H
 	extz	xbc                                   ; FC2CE3  extz XBC
 	add	xbc, 0xDC0E                            ; FC2CE5  add XBC,0x0000dc0e
 	ld	(xiz-4), xbc                            ; FC2CEB  ld (XIZ+0xfc),XBC
@@ -20743,7 +20743,7 @@ sub_FC2CD5__FC2D4F:
 	push	h                                     ; FC2D51  push H
 	calr sub_FC2C2D                 ; FC2D53  calr 0xfc2c2d
 	ld	c, 23:opc                                  ; FC2D56  ld C,0x17
-	mul8rr	c, h                                ; FC2D58  mul BC,H
+	mul	bc, h                                ; FC2D58  mul BC,H
 	extz	xbc                                   ; FC2D5A  extz XBC
 	ld	xix, xbc                                ; FC2D5C  ld XIX,XBC
 	inc	8, xbc                                 ; FC2D5E  inc 0,XBC
@@ -20807,7 +20807,7 @@ sub_FC2DA3:
 	push	xix                                   ; FC2DA9  push XIX
 	ld	h, (xiz+8)                              ; FC2DAA  ld H,(XIZ+0x08)
 	ld	c, 23:opc                                  ; FC2DAD  ld C,0x17
-	mul8rr	c, h                                ; FC2DAF  mul BC,H
+	mul	bc, h                                ; FC2DAF  mul BC,H
 	extz	xbc                                   ; FC2DB1  extz XBC
 	ld	(xiz-8), xbc                            ; FC2DB3  ld (XIZ+0xf8),XBC
 	add	xbc, 0xDC0E                            ; FC2DB6  add XBC,0x0000dc0e
@@ -20915,7 +20915,7 @@ sub_FC2E4B:
 	push	xix                                   ; FC2E51  push XIX
 	ld	h, (xiz+8)                              ; FC2E52  ld H,(XIZ+0x08)
 	ld	c, 23:opc                                  ; FC2E55  ld C,0x17
-	mul8rr	c, h                                ; FC2E57  mul BC,H
+	mul	bc, h                                ; FC2E57  mul BC,H
 	extz	xbc                                   ; FC2E59  extz XBC
 	ld	(xiz-8), xbc                            ; FC2E5B  ld (XIZ+0xf8),XBC
 	add	xbc, 0xDC0E                            ; FC2E5E  add XBC,0x0000dc0e
@@ -21038,7 +21038,7 @@ sub_FC2F1A:
 	push	xix                                   ; FC2F20  push XIX
 	ld	h, (xiz+8)                              ; FC2F21  ld H,(XIZ+0x08)
 	ld	c, 23:opc                                  ; FC2F24  ld C,0x17
-	mul8rr	c, h                                ; FC2F26  mul BC,H
+	mul	bc, h                                ; FC2F26  mul BC,H
 	extz	xbc                                   ; FC2F28  extz XBC
 	ld	(xiz-8), xbc                            ; FC2F2A  ld (XIZ+0xf8),XBC
 	add	xbc, 0xDC0E                            ; FC2F2D  add XBC,0x0000dc0e
@@ -21161,7 +21161,7 @@ sub_FC2FE9:
 	push	xix                                   ; FC2FEF  push XIX
 	ld	h, (xiz+8)                              ; FC2FF0  ld H,(XIZ+0x08)
 	ld	c, 23:opc                                  ; FC2FF3  ld C,0x17
-	mul8rr	c, h                                ; FC2FF5  mul BC,H
+	mul	bc, h                                ; FC2FF5  mul BC,H
 	extz	xbc                                   ; FC2FF7  extz XBC
 	ld	(xiz-8), xbc                            ; FC2FF9  ld (XIZ+0xf8),XBC
 	add	xbc, 0xDC0E                            ; FC2FFC  add XBC,0x0000dc0e
@@ -21283,7 +21283,7 @@ sub_FC30B7:
 	push	xix                                   ; FC30BD  push XIX
 	ld	h, (xiz+8)                              ; FC30BE  ld H,(XIZ+0x08)
 	ld	c, 23:opc                                  ; FC30C1  ld C,0x17
-	mul8rr	c, h                                ; FC30C3  mul BC,H
+	mul	bc, h                                ; FC30C3  mul BC,H
 	extz	xbc                                   ; FC30C5  extz XBC
 	ld	(xiz-8), xbc                            ; FC30C7  ld (XIZ+0xf8),XBC
 	add	xbc, 0xDC0E                            ; FC30CA  add XBC,0x0000dc0e

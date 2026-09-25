@@ -292,7 +292,7 @@ Boot_UDivMod32:
 	cp qbc, 0		; divisor fits in 16 bits?
 	jr nz, Boot_UDivMod32__long_division
 	ld xde, xwa		; save dividend for the overflow path
-	div xwa, xbc		; hardware 32/16: WA = quotient, QWA = remainder
+	div xwa, bc		; hardware 32/16: WA = quotient, QWA = remainder
 	jr ov, Boot_UDivMod32__hw_overflow
 	ld xhl, 0:i3
 	ld xde, xhl
@@ -304,10 +304,10 @@ Boot_UDivMod32__hw_overflow:
 	; word with the interim remainder carried in the upper half of XWA.
 	ld wa, qde		; high word of the saved dividend
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld qhl, wa		; quotient high word
 	ld wa, de		; low word of the saved dividend
-	div xwa, xbc
+	div xwa, bc
 	ld hl, wa		; quotient low word
 	ld de, qwa		; remainder
 	extz xde

@@ -1242,7 +1242,7 @@ DrawText_ExtendedLayout_Skip2:
 	lda	xix, (xsp+16)
 	ld	a, (xsp+6)
 	extz	wa
-	mul	wa, (xsp+4)
+	mul	xwa, (xsp+4)
 	ld	xbc, xwa
 	ld	xde, 0:i3
 DrawText_ExtendedLayout_Loop:
@@ -2064,7 +2064,7 @@ CalcTotalWidth:
 	ld XBC,(XIZ+0x0c)
 	or XBC,XBC
 	jr nz, CalcTotalWidth_KerningLoop_Init
-	muls	hl, (xiz)
+	muls	xhl, (xiz)
 	ld	iz, hl
 	jr	CalcTotalWidth_FreeAndReturn
 CalcTotalWidth_KerningLoop_Init:

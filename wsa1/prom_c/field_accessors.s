@@ -480,7 +480,7 @@ sub_FC35DB__FC3657:
 	ldw	hl, 0                                  ; FC365B  ld HL,0x0000
 sub_FC35DB__FC365E:
 	ldw	bc, 2                                  ; FC365E  ld BC,0x0002
-	muls	xbc, xhl                              ; FC3661  muls XBC,HL
+	muls	xbc, hl                              ; FC3661  muls XBC,HL
 	add	xbc, Curve_FE13D6                          ; FC3663  add XBC,0x00fe13d6
 	ld	bc, (xbc)                               ; FC3669  ld BC,(XBC)
 	extz	xbc                                   ; FC366B  extz XBC
@@ -1501,7 +1501,7 @@ NotePool8_LevelFromVelocity:
 	add	bc, 31                                 ; FC3CCE  add BC,0x001f
 	ld	hl, bc                                  ; FC3CD2  ld HL,BC
 	ld	a, 2:opc                                   ; FC3CD4  ld A,0x02
-	mul8rr	a, d                                ; FC3CD6  mul WA,D
+	mul	wa, d                                ; FC3CD6  mul WA,D
 	extz	xwa                                   ; FC3CD8  extz XWA
 	add	xwa, NotePool8_LevelCapByVariant                          ; FC3CDA  add XWA,0x00fe158b
 	ld	wa, (xwa)                               ; FC3CE0  ld WA,(XWA)
@@ -1509,7 +1509,7 @@ NotePool8_LevelFromVelocity:
 	jr le, NotePool8_LevelFromVelocity__FC3CF4                  ; FC3CE4  jr LE,0xfc3cf4
 NotePool8_LevelFromVelocity__FC3CE6:
 	ld	c, 2:opc                                   ; FC3CE6  ld C,0x02
-	mul8rr	c, d                                ; FC3CE8  mul BC,D
+	mul	bc, d                                ; FC3CE8  mul BC,D
 	extz	xbc                                   ; FC3CEA  extz XBC
 	add	xbc, NotePool8_LevelCapByVariant                          ; FC3CEC  add XBC,0x00fe158b
 	ld	hl, (xbc)                               ; FC3CF2  ld HL,(XBC)
@@ -1744,7 +1744,7 @@ NotePool8_StageVoice_Var1:
 	sll	bc, 8                                  ; FC3DCC  sll 0x08,BC
 	or	(xix+14), bc                            ; FC3DCF  or (XIX+0x0e),BC
 	ld	c, 2:opc                                   ; FC3DD2  ld C,0x02
-	mul8rr	c, h                                ; FC3DD4  mul BC,H
+	mul	bc, h                                ; FC3DD4  mul BC,H
 	extz	xbc                                   ; FC3DD6  extz XBC
 	add	xbc, NotePool8_Word0_ByPitchClass_Var1                          ; FC3DD8  add XBC,0x00fe15c9
 	ld	bc, (xbc)                               ; FC3DDE  ld BC,(XBC)
@@ -3553,7 +3553,7 @@ Pack104_UnpackWaveSelRec_ToSubRecord__FC4976:
 	ldw	hl, 44                                 ; FC497C  ld HL,0x002c
 Pack104_UnpackWaveSelRec_ToSubRecord__FC497F:
 	ldw	bc, 2                                  ; FC497F  ld BC,0x0002
-	muls	xbc, xhl                              ; FC4982  muls XBC,HL
+	muls	xbc, hl                              ; FC4982  muls XBC,HL
 	ld	(xiz-4), xbc                            ; FC4984  ld (XIZ+0xfc),XBC
 	add	xbc, Curve_Muting_Cutoff_Q16_128                          ; FC4987  add XBC,0x00fe04c9
 	ld	hl, (xbc)                               ; FC498D  ld HL,(XBC)
@@ -3653,7 +3653,7 @@ Pack104_StageRegs_00C0_0100_0240__FC49D7:
 	ldw	hl, 0                                  ; FC49DB  ld HL,0x0000
 Pack104_StageRegs_00C0_0100_0240__FC49DE:
 	ldw	bc, 2                                  ; FC49DE  ld BC,0x0002
-	muls	xbc, xhl                              ; FC49E1  muls XBC,HL
+	muls	xbc, hl                              ; FC49E1  muls XBC,HL
 	ld	xix, xbc                                ; FC49E3  ld XIX,XBC
 	add	xbc, Curve_Position_Log2Period_251                          ; FC49E5  add XBC,0x00fdfae0
 	ld	hl, (xbc)                               ; FC49EB  ld HL,(XBC)
@@ -3738,7 +3738,7 @@ Pack104_StageRegs_00C0_0100_0240__FC4AAE:
 	ldw	hl, 0                                  ; FC4AB2  ld HL,0x0000
 Pack104_StageRegs_00C0_0100_0240__FC4AB5:
 	ldw	bc, 2                                  ; FC4AB5  ld BC,0x0002
-	muls	xbc, xhl                              ; FC4AB8  muls XBC,HL
+	muls	xbc, hl                              ; FC4AB8  muls XBC,HL
 	add	xbc, Curve_Fitting_Exp2Rise_128                          ; FC4ABA  add XBC,0x00fdf9e0
 	ld	hl, (xbc)                               ; FC4AC0  ld HL,(XBC)
 	ld	bc, hl                                  ; FC4AC2  ld BC,HL
@@ -3814,7 +3814,7 @@ Pack104_StageReg_0280__FC4B0F:
 	ldw	hl, 0                                  ; FC4B13  ld HL,0x0000
 Pack104_StageReg_0280__FC4B16:
 	ldw	bc, 2                                  ; FC4B16  ld BC,0x0002
-	muls	xbc, xhl                              ; FC4B19  muls XBC,HL
+	muls	xbc, hl                              ; FC4B19  muls XBC,HL
 	add	xbc, Curve_Exp2Gain_Percent_101                          ; FC4B1B  add XBC,0x00fdfecc
 	ld	hl, (xbc)                               ; FC4B21  ld HL,(XBC)
 	ld	xbc, (xiz+8)                            ; FC4B23  ld XBC,(XIZ+0x08)
@@ -4071,7 +4071,7 @@ Pack104_SetInputs_SubRecordPair:
 	lda	xix, (0xE086:24)                       ; FC4C8C  lda XIX,0x00e086
 	ld	l, (xiz+8)                              ; FC4C91  ld L,(XIZ+0x08)
 	ld	c, 42:opc                                  ; FC4C94  ld C,0x2a
-	mul8rr	c, l                                ; FC4C96  mul BC,L
+	mul	bc, l                                ; FC4C96  mul BC,L
 	add	bc, 19                                 ; FC4C98  add BC,0x0013
 	ld	de, bc                                  ; FC4C9C  ld DE,BC
 	add	de, (0xE082:24)                    ; FC4C9E  add DE,(0x00e082)
@@ -4573,7 +4573,7 @@ Dev104_PackStagingStruct__FC4F85:
 	add	xbc, xix                               ; FC4F8B  add XBC,XIX
 	ld	a, (xbc)                                ; FC4F8D  ld A,(XBC)
 	exts	wa                                    ; FC4F8F  exts WA
-	muls	xwa, xhl                              ; FC4F91  muls XWA,HL
+	muls	xwa, hl                              ; FC4F91  muls XWA,HL
 	sra	wa, 5                                  ; FC4F93  sra 0x05,WA
 	ld	(xiz-8), wa                             ; FC4F96  ld (XIZ+0xf8),WA
 Dev104_PackStagingStruct__FC4F99:
@@ -4621,7 +4621,7 @@ Dev104_PackStagingStruct__FC4FF7:
 	ldw	hl, 0                                  ; FC4FFB  ld HL,0x0000
 Dev104_PackStagingStruct__FC4FFE:
 	ldw	bc, 2                                  ; FC4FFE  ld BC,0x0002
-	muls	xbc, xhl                              ; FC5001  muls XBC,HL
+	muls	xbc, hl                              ; FC5001  muls XBC,HL
 	add	xbc, Curve_Fitting_Exp2Decay_256                          ; FC5003  add XBC,0x00fdf7e0
 	ld	bc, (xbc)                               ; FC5009  ld BC,(XBC)
 	ld	(xiz-10), bc                            ; FC500B  ld (XIZ+0xf6),BC
@@ -4653,7 +4653,7 @@ Dev104_PackStagingStruct__FC5042:
 	add	xbc, xix                               ; FC5048  add XBC,XIX
 	ld	a, (xbc)                                ; FC504A  ld A,(XBC)
 	exts	wa                                    ; FC504C  exts WA
-	muls	xwa, xhl                              ; FC504E  muls XWA,HL
+	muls	xwa, hl                              ; FC504E  muls XWA,HL
 	sra	wa, 5                                  ; FC5050  sra 0x05,WA
 	ld	(xiz-12), wa                            ; FC5053  ld (XIZ+0xf4),WA
 Dev104_PackStagingStruct__FC5056:
@@ -4701,7 +4701,7 @@ Dev104_PackStagingStruct__FC50B4:
 	ldw	hl, 0                                  ; FC50B8  ld HL,0x0000
 Dev104_PackStagingStruct__FC50BB:
 	ldw	bc, 2                                  ; FC50BB  ld BC,0x0002
-	muls	xbc, xhl                              ; FC50BE  muls XBC,HL
+	muls	xbc, hl                              ; FC50BE  muls XBC,HL
 	add	xbc, Curve_Fitting_Exp2Decay_256                          ; FC50C0  add XBC,0x00fdf7e0
 	ld	hl, (xbc)                               ; FC50C6  ld HL,(XBC)
 	ld	a, (0xE089:24)                         ; FC50C8  ld A,(0x00e089)
@@ -4768,7 +4768,7 @@ Dev104_PackStagingStruct__FC5170:
 	add	xbc, xix                               ; FC5176  add XBC,XIX
 	ld	a, (xbc)                                ; FC5178  ld A,(XBC)
 	exts	wa                                    ; FC517A  exts WA
-	muls	xwa, xhl                              ; FC517C  muls XWA,HL
+	muls	xwa, hl                              ; FC517C  muls XWA,HL
 	ld	hl, wa                                  ; FC517E  ld HL,WA
 	sra	wa, 5                                  ; FC5180  sra 0x05,WA
 	ld	hl, wa                                  ; FC5183  ld HL,WA
@@ -4846,7 +4846,7 @@ Dev104_PackStagingStruct__FC5230:
 	sub	de, wa                                 ; FC523A  sub DE,WA
 	ld	a, (xbc+28)                             ; FC523C  ld A,(XBC+0x1c)
 	exts	wa                                    ; FC523F  exts WA
-	muls	xwa, xde                              ; FC5241  muls XWA,DE
+	muls	xwa, de                              ; FC5241  muls XWA,DE
 	sra	wa, 5                                  ; FC5243  sra 0x05,WA
 	ld	(xiz-14), wa                            ; FC5246  ld (XIZ+0xf2),WA
 Dev104_PackStagingStruct__FC5249:
@@ -4878,7 +4878,7 @@ Dev104_PackStagingStruct__FC527B:
 	add	xbc, xix                               ; FC5281  add XBC,XIX
 	ld	a, (xbc)                                ; FC5283  ld A,(XBC)
 	exts	wa                                    ; FC5285  exts WA
-	muls	xwa, xhl                              ; FC5287  muls XWA,HL
+	muls	xwa, hl                              ; FC5287  muls XWA,HL
 	ld	hl, wa                                  ; FC5289  ld HL,WA
 	sra	wa, 5                                  ; FC528B  sra 0x05,WA
 	ld	hl, wa                                  ; FC528E  ld HL,WA
@@ -4914,7 +4914,7 @@ Dev104_PackStagingStruct__FC52D2:
 Dev104_PackStagingStruct__FC52D8:
 	ld	de, hl                                  ; FC52D8  ld DE,HL
 	ldw	bc, 2                                  ; FC52DA  ld BC,0x0002
-	muls	xbc, xde                              ; FC52DD  muls XBC,DE
+	muls	xbc, de                              ; FC52DD  muls XBC,DE
 	ld	xix, xbc                                ; FC52DF  ld XIX,XBC
 	add	xbc, Curve_Muting_Cutoff_Q16_128                          ; FC52E1  add XBC,0x00fe04c9
 	ld	bc, (xbc)                               ; FC52E7  ld BC,(XBC)
@@ -4958,7 +4958,7 @@ Dev104_PackStagingStruct__FC5343:
 	ldw	hl, 0                                  ; FC5347  ld HL,0x0000
 Dev104_PackStagingStruct__FC534A:
 	ldw	bc, 2                                  ; FC534A  ld BC,0x0002
-	muls	xbc, xhl                              ; FC534D  muls XBC,HL
+	muls	xbc, hl                              ; FC534D  muls XBC,HL
 	add	xbc, Curve_Fitting_Exp2Rise_128                          ; FC534F  add XBC,0x00fdf9e0
 	ld	hl, (xbc)                               ; FC5355  ld HL,(XBC)
 	ld	bc, hl                                  ; FC5357  ld BC,HL
@@ -5002,7 +5002,7 @@ Dev104_PackStagingStruct__FC53A6:
 	sub	de, wa                                 ; FC53B0  sub DE,WA
 	ld	a, (xbc+40)                             ; FC53B2  ld A,(XBC+0x28)
 	exts	wa                                    ; FC53B5  exts WA
-	muls	xwa, xde                              ; FC53B7  muls XWA,DE
+	muls	xwa, de                              ; FC53B7  muls XWA,DE
 	sra	wa, 5                                  ; FC53B9  sra 0x05,WA
 	ld	(xiz-14), wa                            ; FC53BC  ld (XIZ+0xf2),WA
 Dev104_PackStagingStruct__FC53BF:
@@ -5034,7 +5034,7 @@ Dev104_PackStagingStruct__FC53F1:
 	add	xbc, xix                               ; FC53F7  add XBC,XIX
 	ld	a, (xbc)                                ; FC53F9  ld A,(XBC)
 	exts	wa                                    ; FC53FB  exts WA
-	muls	xwa, xhl                              ; FC53FD  muls XWA,HL
+	muls	xwa, hl                              ; FC53FD  muls XWA,HL
 	ld	hl, wa                                  ; FC53FF  ld HL,WA
 	sra	wa, 5                                  ; FC5401  sra 0x05,WA
 	ld	hl, wa                                  ; FC5404  ld HL,WA
@@ -5070,7 +5070,7 @@ Dev104_PackStagingStruct__FC5448:
 Dev104_PackStagingStruct__FC544E:
 	ld	de, hl                                  ; FC544E  ld DE,HL
 	ldw	bc, 2                                  ; FC5450  ld BC,0x0002
-	muls	xbc, xde                              ; FC5453  muls XBC,DE
+	muls	xbc, de                              ; FC5453  muls XBC,DE
 	ld	xix, xbc                                ; FC5455  ld XIX,XBC
 	add	xbc, Curve_Muting_Cutoff_Q16_128                          ; FC5457  add XBC,0x00fe04c9
 	ld	bc, (xbc)                               ; FC545D  ld BC,(XBC)
@@ -5114,7 +5114,7 @@ Dev104_PackStagingStruct__FC54B9:
 	ldw	hl, 0                                  ; FC54BD  ld HL,0x0000
 Dev104_PackStagingStruct__FC54C0:
 	ldw	bc, 2                                  ; FC54C0  ld BC,0x0002
-	muls	xbc, xhl                              ; FC54C3  muls XBC,HL
+	muls	xbc, hl                              ; FC54C3  muls XBC,HL
 	add	xbc, Curve_Fitting_Exp2Rise_128                          ; FC54C5  add XBC,0x00fdf9e0
 	ld	hl, (xbc)                               ; FC54CB  ld HL,(XBC)
 	ld	bc, hl                                  ; FC54CD  ld BC,HL
@@ -5186,7 +5186,7 @@ Dev104_PackStagingStruct__FC5533:
 	extz	xbc                                   ; FC5581  extz XBC
 	ld	a, (xbc+40)                             ; FC5583  ld A,(XBC+0x28)
 	extz	wa                                    ; FC5586  extz WA
-	muls	xwa, xhl                              ; FC5588  muls XWA,HL
+	muls	xwa, hl                              ; FC5588  muls XWA,HL
 	exts	xwa                                   ; FC558A  exts XWA
 	divs	wa, 50                                ; FC558C  divs WA,0x0032
 	ld	bc, (0xE086:24)                        ; FC5590  ld BC,(0x00e086)
@@ -5243,7 +5243,7 @@ Dev104_PackStagingStruct__FC5612:
 	add	xbc, xix                               ; FC5618  add XBC,XIX
 	ld	a, (xbc)                                ; FC561A  ld A,(XBC)
 	exts	wa                                    ; FC561C  exts WA
-	muls	xwa, xhl                              ; FC561E  muls XWA,HL
+	muls	xwa, hl                              ; FC561E  muls XWA,HL
 	ld	hl, wa                                  ; FC5620  ld HL,WA
 	sra	wa, 5                                  ; FC5622  sra 0x05,WA
 	ld	hl, wa                                  ; FC5625  ld HL,WA
@@ -8541,7 +8541,7 @@ sub_FC6D6E__FC6ED5:
 	ldw	hl, 0                                  ; FC6ED9  ld HL,0x0000
 sub_FC6D6E__FC6EDC:
 	ldw	bc, 2                                  ; FC6EDC  ld BC,0x0002
-	muls	xbc, xhl                              ; FC6EDF  muls XBC,HL
+	muls	xbc, hl                              ; FC6EDF  muls XBC,HL
 	add	xbc, Curve_Exp2Gain_Percent_101                          ; FC6EE1  add XBC,0x00fdfecc
 	ld	bc, (xbc)                               ; FC6EE7  ld BC,(XBC)
 	ld	(xiz-26), bc                            ; FC6EE9  ld (XIZ+0xe6),BC
@@ -8560,7 +8560,7 @@ sub_FC6D6E__FC6EFF:
 	ldw	hl, 0                                  ; FC6F03  ld HL,0x0000
 sub_FC6D6E__FC6F06:
 	ldw	bc, 2                                  ; FC6F06  ld BC,0x0002
-	muls	xbc, xhl                              ; FC6F09  muls XBC,HL
+	muls	xbc, hl                              ; FC6F09  muls XBC,HL
 	add	xbc, Curve_Exp2Gain_Percent_101                          ; FC6F0B  add XBC,0x00fdfecc
 	ld	bc, (xbc)                               ; FC6F11  ld BC,(XBC)
 	ld	(xiz-26), bc                            ; FC6F13  ld (XIZ+0xe6),BC
@@ -8801,7 +8801,7 @@ sub_FC6FFD__FC7101:
 	ldw	hl, 0                                  ; FC7105  ld HL,0x0000
 sub_FC6FFD__FC7108:
 	ldw	bc, 2                                  ; FC7108  ld BC,0x0002
-	muls	xbc, xhl                              ; FC710B  muls XBC,HL
+	muls	xbc, hl                              ; FC710B  muls XBC,HL
 	add	xbc, Curve_Exp2Gain_Percent_101                          ; FC710D  add XBC,0x00fdfecc
 	ld	bc, (xbc)                               ; FC7113  ld BC,(XBC)
 	ld	(xiz-26), bc                            ; FC7115  ld (XIZ+0xe6),BC
@@ -8820,7 +8820,7 @@ sub_FC6FFD__FC712B:
 	ldw	hl, 0                                  ; FC712F  ld HL,0x0000
 sub_FC6FFD__FC7132:
 	ldw	bc, 2                                  ; FC7132  ld BC,0x0002
-	muls	xbc, xhl                              ; FC7135  muls XBC,HL
+	muls	xbc, hl                              ; FC7135  muls XBC,HL
 	add	xbc, Curve_Exp2Gain_Percent_101                          ; FC7137  add XBC,0x00fdfecc
 	ld	bc, (xbc)                               ; FC713D  ld BC,(XBC)
 	ld	(xiz-26), bc                            ; FC713F  ld (XIZ+0xe6),BC
@@ -9067,7 +9067,7 @@ sub_FC723F__FC7343:
 	ldw	hl, 0                                  ; FC7347  ld HL,0x0000
 sub_FC723F__FC734A:
 	ldw	bc, 2                                  ; FC734A  ld BC,0x0002
-	muls	xbc, xhl                              ; FC734D  muls XBC,HL
+	muls	xbc, hl                              ; FC734D  muls XBC,HL
 	add	xbc, Curve_Exp2Gain_Percent_101                          ; FC734F  add XBC,0x00fdfecc
 	ld	bc, (xbc)                               ; FC7355  ld BC,(XBC)
 	ld	(xiz-26), bc                            ; FC7357  ld (XIZ+0xe6),BC
@@ -9086,7 +9086,7 @@ sub_FC723F__FC736D:
 	ldw	hl, 0                                  ; FC7371  ld HL,0x0000
 sub_FC723F__FC7374:
 	ldw	bc, 2                                  ; FC7374  ld BC,0x0002
-	muls	xbc, xhl                              ; FC7377  muls XBC,HL
+	muls	xbc, hl                              ; FC7377  muls XBC,HL
 	add	xbc, Curve_Exp2Gain_Percent_101                          ; FC7379  add XBC,0x00fdfecc
 	ld	bc, (xbc)                               ; FC737F  ld BC,(XBC)
 	ld	(xiz-26), bc                            ; FC7381  ld (XIZ+0xe6),BC
@@ -10204,7 +10204,7 @@ Pack104_TickPositionMovement_ForVoice:
 	extz	xwa                                   ; FC7C9F  extz XWA
 	ld	c, (xwa+29)                             ; FC7CA1  ld C,(XWA+0x1d)
 	extz	bc                                    ; FC7CA4  extz BC
-	muls	xbc, xhl                              ; FC7CA6  muls XBC,HL
+	muls	xbc, hl                              ; FC7CA6  muls XBC,HL
 	exts	xbc                                   ; FC7CA8  exts XBC
 	divs	bc, 50                                ; FC7CAA  divs BC,0x0032
 	ld	hl, bc                                  ; FC7CAE  ld HL,BC
@@ -10450,7 +10450,7 @@ sub_FC7E10:
 	extz	xbc                                   ; FC7E3B  extz XBC
 	ld	a, (xbc+0x1523)                         ; FC7E3D  ld A,(XBC+0x1523)
 	extz	wa                                    ; FC7E42  extz WA
-	mul	xwa, xhl                               ; FC7E44  mul XWA,HL
+	mul	xwa, hl                               ; FC7E44  mul XWA,HL
 	sra	wa, 3                                  ; FC7E46  sra 0x03,WA
 	lda	xbc, (0xE17C:24)                       ; FC7E49  lda XBC,0x00e17c
 	add	xbc, xix                               ; FC7E4E  add XBC,XIX
@@ -10784,7 +10784,7 @@ sub_FC7FCA__FC8061:
 	extz	xix                                   ; FC8061  extz XIX
 	ld	d, (xix+4)                              ; FC8063  ld D,(XIX+0x04)
 	ld	c, 4:opc                                   ; FC8066  ld C,0x04
-	mul8rr	c, d                                ; FC8068  mul BC,D
+	mul	bc, d                                ; FC8068  mul BC,D
 	extz	xbc                                   ; FC806A  extz XBC
 	ld	(xiz-4), xbc                            ; FC806C  ld (XIZ+0xfc),XBC
 	ld	a, (xix+3)                              ; FC806F  ld A,(XIX+0x03)
@@ -10968,7 +10968,7 @@ PartRec_TallyScaledField_80_40:
 	extz	xiy                                   ; FC818F  extz XIY
 	ld	c, (xiy+0x1523)                         ; FC8191  ld C,(XIY+0x1523)
 	extz	bc                                    ; FC8196  extz BC
-	mul	xwa, xbc                               ; FC8198  mul XWA,BC
+	mul	xwa, bc                               ; FC8198  mul XWA,BC
 	ld	hl, wa                                  ; FC819A  ld HL,WA
 	srl	wa, 3                                  ; FC819C  srl 0x03,WA
 	ld	hl, wa                                  ; FC819F  ld HL,WA

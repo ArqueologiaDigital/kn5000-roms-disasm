@@ -737,7 +737,7 @@ PsFileNameBox_Confirm_Execute:
 
 PsFileNameBox_Confirm_MultiItem:
 	ld WA,(XHL)
-	muls xwa, xde
+	muls xwa, de
 	ld DE,WA
 	ld XWA,(XSP+0x00a2)
 	ld A,(XWA)
@@ -753,7 +753,7 @@ PsFileNameBox_Confirm_MultiItem:
 	sub DE,(XBC)
 	exts XDE
 	ld XWA,(XSP+0x0a)
-	divs	de, (xwa+0x26)
+	divs	xde, (xwa+0x26)
 	ld	(xsp+8), de
 	lda	xiy, (xbc+6)
 	lda	xix, (xbc+2)
@@ -763,29 +763,29 @@ PsFileNameBox_Confirm_MultiItem:
 	ld	xwa, (xsp+4)
 	ld	de, (xwa+40)
 	exts	xiz
-	divs	xiz, xde
+	divs	xiz, de
 	ld	xwa, (xsp+162)
 	ld	a, (xwa)
 	exts	wa
 	exts	xwa
-	divs	xwa, xde
+	divs	xwa, de
 	ld	wa, qwa
 	ld	qde, wa
 	ld	xwa, (xsp+162)
 	ld	a, (xwa)
 	exts	wa
 	exts	xwa
-	divs	xwa, xde
+	divs	xwa, de
 	ld	de, wa
 	ld	wa, iz
-	mul	wa, qde
+	mul	xwa, qde
 	inc	2, wa
 	add	hl, wa
 	ld	(xix), hl
 	add	hl, iz
 	ld	(xiy), hl
 	ld	wa, (xsp+8)
-	mul	xwa, xde
+	mul	xwa, de
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)

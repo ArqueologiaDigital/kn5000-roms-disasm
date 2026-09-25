@@ -100,7 +100,7 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	pushw wa
 	ld xhl, 62032
 	ld	c, 3:opc
-	mul8rr	a, c
+	mul	wa, c
 	ld	iy, wa
 	.byte 0xf3
 	reti

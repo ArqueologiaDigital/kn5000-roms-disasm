@@ -815,7 +815,7 @@ Dev10C_ChanPlus2_SetRegs_09xx:
 	inc	2, hl                              ; FB6E14  inc 2,HL
 	and	hl, 63                             ; FB6E16  and HL,0x003f
 	ldw	bc, 68                             ; FB6E1A  ld BC,0x0044
-	mul	xbc, xhl                           ; FB6E1D  mul XBC,HL
+	mul	xbc, hl                           ; FB6E1D  mul XBC,HL
 	ld	ix, bc                              ; FB6E1F  ld IX,BC
 	inc	1, bc                              ; FB6E21  inc 1,BC
 	ld	ix, bc                              ; FB6E23  ld IX,BC
@@ -829,7 +829,7 @@ Dev10C_ChanPlus2_SetRegs_09xx:
 	set	10, wa                             ; FB6E3A  set 0x0a,WA
 	ld	(xbc+0x3BCF), wa                    ; FB6E3D  ld (XBC+0x3bcf),WA
 	ldw	bc, 2                              ; FB6E42  ld BC,0x0002
-	mul	xbc, xhl                           ; FB6E45  mul XBC,HL
+	mul	xbc, hl                           ; FB6E45  mul XBC,HL
 	add	xbc, 0xE21D                        ; FB6E47  add XBC,0x0000e21d
 	ld	bc, (xbc)                           ; FB6E4D  ld BC,(XBC)
 	ld	de, bc                              ; FB6E4F  ld DE,BC
@@ -886,14 +886,14 @@ Dev10C_ChanMinus2_SetReg_0080_Bit15:
 	dec	2, hl                              ; FB6E96  dec 2,HL
 	and	hl, 63                             ; FB6E98  and HL,0x003f
 	ldw	bc, 68                             ; FB6E9C  ld BC,0x0044
-	mul	xbc, xhl                           ; FB6E9F  mul XBC,HL
+	mul	xbc, hl                           ; FB6E9F  mul XBC,HL
 	inc	1, bc                              ; FB6EA1  inc 1,BC
 	extz	xbc                               ; FB6EA3  extz XBC
 	ld	wa, (xbc+0x3BCF)                    ; FB6EA5  ld WA,(XBC+0x3bcf)
 	cp	wa, 0:i3                              ; FB6EAA  cp WA,0
 	jr z, Dev10C_ChanMinus2_SetReg_0080_Bit15__FB6ED6                        ; FB6EAC  jr Z,0xfb6ed6
 	ldw	bc, 2                              ; FB6EAE  ld BC,0x0002
-	mul	xbc, xhl                           ; FB6EB1  mul XBC,HL
+	mul	xbc, hl                           ; FB6EB1  mul XBC,HL
 	add	xbc, 0xD85B                        ; FB6EB3  add XBC,0x0000d85b
 	ld	bc, (xbc)                           ; FB6EB9  ld BC,(XBC)
 	ld	de, bc                              ; FB6EBB  ld DE,BC
@@ -935,14 +935,14 @@ Dev10C_ChanMinus2_ClrReg_0080_Bit15:
 	dec	2, hl                              ; FB6EE6  dec 2,HL
 	and	hl, 63                             ; FB6EE8  and HL,0x003f
 	ldw	bc, 68                             ; FB6EEC  ld BC,0x0044
-	mul	xbc, xhl                           ; FB6EEF  mul XBC,HL
+	mul	xbc, hl                           ; FB6EEF  mul XBC,HL
 	inc	1, bc                              ; FB6EF1  inc 1,BC
 	extz	xbc                               ; FB6EF3  extz XBC
 	ld	wa, (xbc+0x3BCF)                    ; FB6EF5  ld WA,(XBC+0x3bcf)
 	cp	wa, 0:i3                              ; FB6EFA  cp WA,0
 	jr z, Dev10C_ChanMinus2_ClrReg_0080_Bit15__FB6F26                        ; FB6EFC  jr Z,0xfb6f26
 	ldw	bc, 2                              ; FB6EFE  ld BC,0x0002
-	mul	xbc, xhl                           ; FB6F01  mul XBC,HL
+	mul	xbc, hl                           ; FB6F01  mul XBC,HL
 	add	xbc, 0xD85B                        ; FB6F03  add XBC,0x0000d85b
 	ld	bc, (xbc)                           ; FB6F09  ld BC,(XBC)
 	ld	de, bc                              ; FB6F0B  ld DE,BC
@@ -1026,7 +1026,7 @@ sub_FB6F2C:
 	lda	xix, (Dev10C_ChanMinus2_SetReg_0080_Bit15:24)                 ; FB6F33  lda XIX,0xfb6e8c
 	ld	de, (xiz+8)                         ; FB6F38  ld DE,(XIZ+0x08)
 	ldw	bc, 68                             ; FB6F3B  ld BC,0x0044
-	mul	xbc, xde                           ; FB6F3E  mul XBC,DE
+	mul	xbc, de                           ; FB6F3E  mul XBC,DE
 	inc	1, bc                              ; FB6F40  inc 1,BC
 	extz	xbc                               ; FB6F42  extz XBC
 	ld	wa, (xbc+0x3BCF)                    ; FB6F44  ld WA,(XBC+0x3bcf)
@@ -1076,12 +1076,12 @@ sub_FB6F2C__FB6FA5:
 	jp	(xix)                               ; FB6FAC  jp T,XIX
 sub_FB6F2C__FB6FAE:
 	ldw	bc, 68                             ; FB6FAE  ld BC,0x0044
-	mul	xbc, xde                           ; FB6FB1  mul XBC,DE
+	mul	xbc, de                           ; FB6FB1  mul XBC,DE
 	inc	1, bc                              ; FB6FB3  inc 1,BC
 	extz	xbc                               ; FB6FB5  extz XBC
 	extpfx7 0xD3, 0xE5, 0xCF, 0x3B, 0x3C, 0xFF, 0xFB ; FB6FB7  and (XBC+0x3bcf),0xfbff   [llvm-mc cannot encode this]
 	ldw	bc, 2                              ; FB6FBE  ld BC,0x0002
-	mul	xbc, xde                           ; FB6FC1  mul XBC,DE
+	mul	xbc, de                           ; FB6FC1  mul XBC,DE
 	add	xbc, 0xE21D                        ; FB6FC3  add XBC,0x0000e21d
 	ld	hl, (xbc)                           ; FB6FC9  ld HL,(XBC)
 	pushw	de                               ; FB6FCB  push DE
@@ -1183,7 +1183,7 @@ Dev10C_SetChanReg_0080_ClrBit15:
 	ld	de, wa                              ; FB7065  ld DE,WA
 	set	15, de                             ; FB7067  set 0x0f,DE
 	ldw	wa, 2                              ; FB706A  ld WA,0x0002
-	mul	xwa, xhl                           ; FB706D  mul XWA,HL
+	mul	xwa, hl                           ; FB706D  mul XWA,HL
 	add	xwa, 0xD85B                        ; FB706F  add XWA,0x0000d85b
 	ld	(xwa), de                           ; FB7075  ld (XWA),DE
 	popw	bc                                ; FB7077  pop BC
@@ -1262,7 +1262,7 @@ sub_FB707E__FB70B1:
 	jp	(xix)                               ; FB70B8  jp T,XIX
 sub_FB707E__FB70BA:
 	ldw	bc, 68                             ; FB70BA  ld BC,0x0044
-	mul	xbc, xhl                           ; FB70BD  mul XBC,HL
+	mul	xbc, hl                           ; FB70BD  mul XBC,HL
 	inc	1, bc                              ; FB70BF  inc 1,BC
 	extz	xbc                               ; FB70C1  extz XBC
 	extpfx7 0xD3, 0xE5, 0xCF, 0x3B, 0x3C, 0xFF, 0xFB ; FB70C3  and (XBC+0x3bcf),0xfbff   [llvm-mc cannot encode this]
@@ -1731,7 +1731,7 @@ Dev10C_WriteAllChanRegs:
 	ld	de, bc                              ; FB7312  ld DE,BC
 	res	15, de                             ; FB7314  res 0x0f,DE
 	ldw	bc, 2                              ; FB7317  ld BC,0x0002
-	mul	xbc, xhl                           ; FB731A  mul XBC,HL
+	mul	xbc, hl                           ; FB731A  mul XBC,HL
 	add	xbc, 0xD85B                        ; FB731C  add XBC,0x0000d85b
 	ld	(xbc), de                           ; FB7322  ld (XBC),DE
 	inc	8, xsp                             ; FB7324  inc 0,XSP
@@ -2354,7 +2354,7 @@ sub_FB7521:
 	ld	hl, bc                                  ; FB7616  ld HL,BC
 	extpfx3 0x9E, 0xEC, 0xC3                   ; FB7618  and HL,(XIZ+0xec)
 	ldw	bc, 2                                  ; FB761B  ld BC,0x0002
-	mul	xbc, xde                               ; FB761E  mul XBC,DE
+	mul	xbc, de                               ; FB761E  mul XBC,DE
 	add	xbc, 0xD85B                            ; FB7620  add XBC,0x0000d85b
 	ld	(xbc), hl                               ; FB7626  ld (XBC),HL
 	popw	bc                                    ; FB7628  pop BC

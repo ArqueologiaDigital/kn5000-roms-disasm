@@ -2003,7 +2003,7 @@ SetWall_MiscDataAndCode_Loop:
 	ld	xde, xbc
 	mul	bc, 100
 	ld	hl, (0x286d:16)
-	div	xbc, xhl
+	div	xbc, hl
 	inc	1, bc
 	cp	bc, 100
 	jr	c, SetWall_MiscDataAndCode_Entry

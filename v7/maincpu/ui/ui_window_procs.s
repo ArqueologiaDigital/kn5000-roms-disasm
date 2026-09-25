@@ -2325,7 +2325,7 @@ TextBox_SetupWordwrap:
 	ld xwa, (xsp + 18)
 	ld bc, (xwa + 38)
 	extz xde
-	div xde, xbc
+	div xde, bc
 	ld (xsp + 8), de
 	ldw (xsp + 16), 0x0
 	cp bc, 0:i3
@@ -3436,7 +3436,7 @@ PsListBox_Confirm_Layout:
 	lda xix, (xiz + 36)
 	ld bc, (xix)
 	extz xwa
-	div xwa, xbc
+	div xwa, bc
 	ld (xsp + 8), wa
 	add de, (xsp + 8)
 	inc 3, de
@@ -6337,7 +6337,7 @@ SplashBMP_ReadInfoHeader:
 	ld	xwa, (xbc+8)
 	ld	(xsp+2), xwa
 	ld	xwa, 8
-	div	wa, (xbc+14)
+	div	xwa, (xbc+14)
 	extz	xwa
 	ld	(xsp+30), xwa
 	sla	xwa, 2
@@ -6562,7 +6562,7 @@ Gfx_ProcessSplashData:
 	cpw (XSP+0x16), 0x0018
 	jrl z, SplashData_Epilogue
 	ld	xiz, 8
-	div	iz, (xsp+22)
+	div	xiz, (xsp+22)
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, (xsp+24)
