@@ -272,12 +272,15 @@ AccompSeq_AdvanceDone:
 
 AccompSeq_VRAMHelperData:
 	cp	(0x7e25:16), 128
-	jr	c, 5
-	calr	9
-	jr	6
+	jr	c, AccompSeq_VRAMHelperData_Skip
+	calr	AccompSeq_VRAMHelperData_Helper
+	jr	AccompSeq_VRAMHelperData_Return
+AccompSeq_VRAMHelperData_Skip:
 	ld	wa, (0x7e42:16)
 	ld	iy, wa
+AccompSeq_VRAMHelperData_Return:
 	ret
+AccompSeq_VRAMHelperData_Helper:
 	ld	wa, (0x7e42:16)
 	and	xwa, 4095
 	sla	xwa, 8
@@ -969,24 +972,25 @@ AccompSeq_PortaFadeOut_Return:
 	ld	a, 159:opc
 	ld	w, 127:opc
 	ld	e, 127:opc
-	calr	11
+	calr	AccompSeq_PortaFadeOut_Helper_Helper
 	ret
 	ld	a, 223:opc
 	ld	w, 127:opc
 	ld	e, 127:opc
-	calr	1
+	calr	AccompSeq_PortaFadeOut_Helper_Helper
 	ret
+AccompSeq_PortaFadeOut_Helper_Helper:
 	pushw	iy
 	ld	xhl, 0x7aec
 	ei	6
 	ld	iy, (xhl+4)
 	ld	bc, (xhl+2)
 	st_rrb	e, xiy, hl
-	calr	65164
+	calr	AccompSeq_AdvanceBufferPtr
 	st_rrb	d, xiy, hl
-	calr	65156
+	calr	AccompSeq_AdvanceBufferPtr
 	st_rrb	a, xiy, hl
-	calr	65148
+	calr	AccompSeq_AdvanceBufferPtr
 	ld	(xhl+4), iy
 	ei	0
 	popw	iy
@@ -1003,16 +1007,17 @@ AccompSeq_PortaFadeOut_Return:
 	cp	a, w
 	jr	z, AccompSeq_PortaFadeOut_Return2
 	bit	0, (0x7e5f:16)
-	jr	z, 60
+	jr	z, AccompSeq_PortaFadeOut_Return2
 	and	(0x7e5f:16), 254
 	ld	l, (0x7e60:16)
 	ld	h, (0x7e61:16)
 	ld	a, (0x7e24:16)
 	and	a, (0x03:8)
 	cp	a, 0:i3
-	jr	nz, 6
+	jr	nz, AccompSeq_PortaFadeOut_Helper_Skip
 	call	AccompSeq_InitPartFull
 	jr	AccompSeq_PortaFadeOut_Join
+AccompSeq_PortaFadeOut_Helper_Skip:
 	call	AccompSeq_ReinitPart
 AccompSeq_PortaFadeOut_Join:
 	ei	6
@@ -1526,11 +1531,13 @@ AccompSeq_ProcessAfterNote_Helper:
 	bit	2, (0x7e27:16)
 	jr	z, 19
 	bit	7, (0x7e24:16)
-	jr	nz, 13
+	jr	nz, AccompSeq_ProcessAfterNote_Helper_Skip
 	ldw	(0x7e70:16), 2048
 	or	(0x7e24:16), 128
-	jr	3
-	calr	124
+	jr	AccompSeq_ProcessAfterNote_Helper_Return
+AccompSeq_ProcessAfterNote_Helper_Skip:
+	calr	AccompSeq_CleanupSequence
+AccompSeq_ProcessAfterNote_Helper_Return:
 	ret
 
 AccompSeq_AllNotesOffImpl:

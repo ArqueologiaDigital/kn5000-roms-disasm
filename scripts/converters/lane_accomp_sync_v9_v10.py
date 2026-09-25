@@ -35,6 +35,12 @@ Measured by reading every hunk (the `--list` output):
     v7 code-relocation delta).  HEAD_FIX below re-spells those 51 bytes as
     v9 does and keeps the other 13 bytes of the fourth row as data.
 
+(The CORRECTED note first said "one RAM operand"; --diff shows two, and the
+text below and in the sources was fixed on 2026-09-25 in the commit after
+6f1e6d24.  The helper labels were later renamed by
+scripts/renaming/rename_accomp_screen_head.sed -- this script is the record of
+the one-shot sync and is not meant to be re-run.)
+
 The merged text is written to BOTH files.  Lines equal up to whitespace take
 v10's spelling.  No v9 comment is lost: v9 has none that v10 lacks (checked
 here, and again by scripts/analysis/assert_comments_preserved.py).
@@ -69,8 +75,9 @@ HEAD_CODE = [
     "; positional label.  Evidence: clean llvm-mc/unidasm decode ending on `ret` at",
     "; +0x32; the calls land on Display_DeferOrDrawWall / Display_DeferOrUpdateScreen;",
     "; and v7's copy of this block differs from v10's here in exactly those two call",
-    "; operands (by -0x40D, v7's code-relocation delta for that range) and in one",
-    "; RAM operand -- scripts/converters/lane_accomp_v7_uidatablock.py --diff.",
+    "; operands (by -0x40D, v7's code-relocation delta for that range) and in two",
+    "; RAM operands, (0x379b) and (0x39b8), each 0x9C lower in v7 --",
+    "; scripts/converters/lane_accomp_v7_uidatablock.py --diff.",
     "; The four 16-byte .byte rows these 51 bytes were spelled as carried these",
     "; ascii renderings:",
     "; |......#.!.!..6..|",
