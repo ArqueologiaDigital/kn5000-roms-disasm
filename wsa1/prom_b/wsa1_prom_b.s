@@ -50738,6 +50738,11 @@ Font_Svc17_8x8:
 ; Unknown: nothing calls service 0x1C with a literal service number
 ;   (notes/swi7_call_sites.py).
 ; Entry count: 200 = (0xF203B0 - 0xF1EAB0) / 32, exact.
+; ⚠ ANSWERED 2026-09-25 (lane promb): the service IS used, through display
+;   lists rather than a literal `ld A,0x1C / swi 7`.  An interpreter-A record
+;   with op 0x1C runs DLHandler_2Words_Text, which loads A = the op and does
+;   `swi 7`; this file frames 149 such records -- the screen titles, e.g.
+;   DL_SoundEditWriteCopy's "SOUND EDIT".
 ; --------------------------------------------------------------------------
 Font_Svc1C_16x16:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F1EAB0  [0x00] blank
@@ -50959,6 +50964,8 @@ Font_Svc1C_16x16:
 ;   ⚠ CORRECTED 2026-09-25: this line used to file the encoding under the
 ;   open questions; its layout is established by the section it cites.
 ; Entry count: 120 = (0xF212B0 - 0xF203B0) / 32, exact.
+; Used by: DL_JpChordTrackAlreadyExists / DL_JpControlTrackAlreadyExists
+;   (op 0x1D records: がすでにあります。, つの, を, に, できません。).
 ; --------------------------------------------------------------------------
 Font_Svc1D_16x16:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F203B0  [0x00] blank
@@ -51224,6 +51231,11 @@ Font_Svc16_8x14:
 ;   cross-check as service 0x1D above.
 ; Unknown: code 0x66, a small filled diamond this face alone defines.
 ; Entry count: 120 = (0xF22840 - 0xF21940) / 32, exact.
+; Used by: DL_JpChordTrackAlreadyExists / DL_JpControlTrackAlreadyExists
+;   (op 0x19 records), the one Japanese text in the firmware.  Its
+;   トラック fixes 0x46 as small ッ, so the small-kana block 0x3E-0x46 reads
+;   ァィゥェォャュョッ -- 0x3E's hooked bar (ァ) and 0x46's three strokes (ッ)
+;   are checked by notes/promb-2026-09-25/japanese_messages_probe.py.
 ; --------------------------------------------------------------------------
 Font_Svc19_16x16:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F21940  [0x00] blank
@@ -51384,6 +51396,13 @@ Font_Svc19_16x16:
 ;   though set B looks like a second batch collected after this one was
 ;   closed.  FINDINGS-fonts.md sec.5 and 6.1.
 ; Entry count: 240 = (0xF24640 - 0xF22840) / 32, exact.
+; ⚠ CORRECTED 2026-09-25 (lane promb): "It is not in any of the four images"
+;   is wrong for prom_b.  DL_JpChordTrackAlreadyExists and
+;   DL_JpControlTrackAlreadyExists (0xF2E91A) are two Japanese messages that
+;   use this face (指 0x8D, 定 0x44) with the kana faces; the census looks for
+;   RUNS and a display list stores 1..9-character pieces between 4-byte
+;   record headers.  Two kanji cannot be the text the ORDER came from, so
+;   that question stands.  notes/promb-2026-09-25/japanese_messages_probe.py.
 ; --------------------------------------------------------------------------
 Font_Svc1A_16x16:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F22840  [0x00] blank
@@ -61594,7 +61613,34 @@ DL_Error:
 ; ------------------------------------------------------------------
 ; 0xF2E91A-0xF2E9E2 -- 28 records, 201 bytes -- interpreter A
 ; ------------------------------------------------------------------
-DL_F2E91A:
+; DL_JpChordTrackAlreadyExists -- 0xF2E91A-0xF2E979, 14 interpreter-A
+;   records: a message in JAPANESE, the only Japanese text found in the
+;   firmware.  In reading order (IX = row*40 + byte column):
+;     row  84  コードトラックがすでにあります。
+;     row 110  2つのトラックをコードトラックに
+;     row 136  指定できません。
+;   "A chord track already exists.  Two tracks cannot be designated as the
+;   chord track." -- the Japanese twin of DLTable_ARhythmTrackAlreadyExists
+;   [1] "A Chord Track already exists." and the "Tracks to Chord." string
+;   after it.  The next list, DL_JpControlTrackAlreadyExists, is the same
+;   sentence for the CONTROL track.
+; Records: op 0x19 = LCD_Svc_19 katakana (Font_Svc19_16x16), op 0x1D =
+;   hiragana (Font_Svc1D_16x16), op 0x1A = kanji set A (Font_Svc1A_16x16: 指
+;   0x8D, 定 0x44 in notes/fonts-kanji/kanji_transcription.txt), op 0x07 =
+;   the 8x16 Latin "2" -- each a DLHandler_IX_Text record: op, length,
+;   IX, characters.  A sentence is cut into one-script pieces of 1..9
+;   characters, which is why a search for RUNS of kana finds nothing.
+; Read by: no start is named anywhere.  prom_a's PtrTable_F99121 holds the
+;   (start, end) pairs T_DisplayListB_Run_Stack is given, and 0xF2E91A occurs
+;   in it only as the END of DL_Error's pair (0xF2E910, 0xF2E91A); 0xF2E97A
+;   is spelled in neither image (24- or 32-bit).  So the two lists look like
+;   a Japanese build's text left in place, not a screen this build draws --
+;   an inference from the absence of a reader, stated as such.
+; Evidence: python3 notes/promb-2026-09-25/japanese_messages_probe.py walks
+;   the records by their own length bytes (ending exactly at 0xF2E9E3),
+;   decodes them and checks both sentences and the reader search.
+; ------------------------------------------------------------------
+DL_JpChordTrackAlreadyExists:
 	.byte 0x19, 0x05	; op 19, 5 bytes -> handler 0xF31A3A
 	.short 0x0D24
 	.byte 0x19	; character codes below 0x20
@@ -61651,6 +61697,15 @@ DL_F2E91A:
 	.ascii "."
 	.byte 0x1D	; character codes below 0x20
 	.ascii "=a"
+; DL_JpControlTrackAlreadyExists -- 0xF2E97A-0xF2E9E2, 14 records, the
+;   same message for the CONTROL track:
+;     row  84  コントロールトラックがすでにあります。
+;     row 110  2つのトラックをコントロールトラックに
+;     row 136  指定できません。
+;   (DLTable_ARhythmTrackAlreadyExists [2] "A Control Track already
+;   exists.").  Its last record carries three 0x0F bytes after 。 that no
+;   hiragana cell defines.  See DL_JpChordTrackAlreadyExists above.
+DL_JpControlTrackAlreadyExists:
 	.byte 0x19, 0x08	; op 19, 8 bytes -> handler 0xF31A3A
 	.short 0x0D21
 	.byte 0x19	; character codes below 0x20
