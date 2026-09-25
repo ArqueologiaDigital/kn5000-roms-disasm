@@ -135,6 +135,9 @@
 ; means, with its evidence and grade, is in analysis/disk-format-probes/
 ; README-lsw-part-record-fields.md, README-lsw-nonpart-records.md and
 ; README-lsw-drawbar-records.md; [I] marks what those notes grade inference.
+; Part 03 is "PART 4" at index 3 of the part-name table 0xE9F374 (indices
+; 0/1/2 are RIGHT1/RIGHT2/LEFT); which panel part that is on the instrument is
+; not established here.
 ; The style number is constant within a style name except "German Schlager",
 ; which is two styles (90 and 1400) sharing one name.
 ; Reproduce every number in this header:
