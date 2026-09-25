@@ -1785,27 +1785,26 @@ Unref_EF6BD3_Tbl:
 	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3424:16)`
 	; also read by PerfMode_Evt04_VolumeHandler
 PerfMode_VoiceAddressTable:
-	.byte	0xb9, 0xf9, 0x00
-	.long	0x00f9ed00
-	.long	0x00f9d300
-	.long	0x00fa6f00
-	.long	0x00fa8900
-	.long	0x00faa300
-	.long	0x00fabd00
-	.long	0x00fad700
-	.long	0x00fa2100
-	.long	0x00fa3b00
-	.long	0x00fa5500
-	.long	0x00fa0700
-	.long	0x00fb3f00
-	.long	0x00fbdb00
-	.long	0x00fbdb00
-	.long	0x00f9b900
-	.long	0x00f9b900
-	.long	0x00faf100
-	.long	0x00fb0b00
-	.long	0x00fb2500
-	.byte	0x00
+	.long	0x0000f9b9
+	.long	0x0000f9ed
+	.long	0x0000f9d3
+	.long	0x0000fa6f
+	.long	0x0000fa89
+	.long	0x0000faa3
+	.long	0x0000fabd
+	.long	0x0000fad7
+	.long	0x0000fa21
+	.long	0x0000fa3b
+	.long	0x0000fa55
+	.long	0x0000fa07
+	.long	0x0000fb3f
+	.long	0x0000fbdb
+	.long	0x0000fbdb
+	.long	0x0000f9b9
+	.long	0x0000f9b9
+	.long	0x0000faf1
+	.long	0x0000fb0b
+	.long	0x0000fb25
 	bit	7, w
 	jrl	nz, PerfMode_VoiceAddressTable_Code_Skip
 	cp	a, h
