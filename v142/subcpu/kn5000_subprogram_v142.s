@@ -611,6 +611,10 @@ DSP_ChecksumRange_Loop:
 ; DSP apply-task loop DSP_ApplyTask_Body).  The three stack tops partition DRAM
 ; 0x040000.. as: task 1 below 0x04069A, task 3 0x04069A-0x040A9B, the scheduler's own stack
 ; (`ld xsp, 0x40B1E`) 0x040A9C-0x040B1D, task 2 0x040B1E-0x040C1F.
+; Independent corroboration: wsa1/notes/FINDINGS-kernel-in-the-kn5000.md (section 8) aligns the
+; SX-WSA1R prom_c kernel with this one instruction by instruction and pairs its "TCB template"
+; operand 0xFFF980DE with this code's 0x0001FD8C (= this table - 12), and its "ROM image of the
+; semaphore counts" with 0x0001FDBC (TaskSched_EventFlagInit below).
 TaskSched_TaskDescriptorTable:
 	.long	Task1_AudioMain_Entry, 0x0004069a	; task 1: entry, stack top
 	.short	0x8800					;         initial SR
@@ -1976,8 +1980,16 @@ Task_Reassign_Guard_Return:
 ; that TaskSched_SpawnTask (0x01FFFD) tests for. Runs at interrupt level 6, saves
 ; WA/XIX/XIY/XHL, plain RET (it never kills the *running* task's stack, so the caller must
 ; not be task A itself).  Input: A = task id.
-RingBuf_Access_Opaque_A:
-	.ascii "(<=;"
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from RingBuf_Access_Opaque_A.
+; Note: its first four bytes were `.ascii "(<=;"` -- they are `push wa / push xix / push xiy / push xhl`, matching the pops at the end.
+TaskSched_TerminateTask:
+	pushw	wa
+	push	xix
+	push	xiy
+	push	xhl
 	ei	6
 	mul	a, 12
 	add	wa, 4156
@@ -2035,27 +2047,50 @@ FIFO1K_Get:
 	pushw	ix
 	push	xde
 	lda	xde, (265262:24)
-	calr	RingBuf_WrappedRead_Opaque_C
+	calr	FIFO_Engine1K_Get
 	pop	xde
 	popw	ix
 	ret
 ; Push one byte onto the 1 KB FIFO. Stack-argument calling convention (link XIZ,0;
 ; A = (XIZ+8)), then the 1K engine's PUT (0x020BF1).  Output: HL = free space left,
 ; or 0xFFFF if the FIFO was full and the byte was dropped.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO1K_Put:
-	.byte 0xee
-	.byte 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08, 0x21
-	.byte 0xf2, 0x2e, 0x0c, 0x04, 0x32, 0x1e, 0x78, 0x03
-	.byte 0x5a, 0x4c, 0xee, 0x0d, 0x0e
+	link	xiz, 0
+	pushw	ix
+	push	xde
+	ld	a, (xiz+8)
+	lda	xde, (0x040c2e:24)
+	calr	FIFO_Engine1K_Put
+	pop	xde
+	popw	ix
+	unlk32	xiz
+	ret
 ; Push BC bytes from (XIY) onto the 1 KB FIFO; both taken from the stack frame
 ; ((XIZ+8) = count, (XIZ+0x0A) = source pointer). Loops over the engine's PUT; note it does
 ; not stop when PUT reports "full", so overflow silently drops the tail.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO1K_Put_Block:
-	.byte 0xee, 0x0c, 0x00
-	.byte 0x00, 0x3d, 0x3c, 0x3a, 0x9e, 0x08, 0x21, 0xae
-	.byte 0x0a, 0x25, 0xf2, 0x2e, 0x0c, 0x04, 0x32, 0x85
-	.byte 0x21, 0x1e, 0x5c, 0x03, 0xed, 0x61, 0xd9, 0x1c
-	.byte 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
+	link	xiz, 0
+	push	xiy
+	push	xix
+	push	xde
+	ld	bc, (xiz+8)
+	ld	xiy, (xiz+10)
+	lda	xde, (0x040c2e:24)
+	ld	a, (xiy)
+	calr	FIFO_Engine1K_Put
+	inc	1, xiy
+	djnz16	bc, -10
+	pop	xde
+	pop	xix
+	pop	xiy
+	unlk32	xiz
+	ret
 ; HL = 0xFFFF when write index (0x040C2A) == read index (0x040C26), else 0.
 FIFO1K_Is_Empty:
 	ld	hl, (265258:24)
@@ -2126,22 +2161,46 @@ FIFO256_Get:
 	pushw	ix
 	push	xde
 	lda	xde, (266296:24)
-	calr	RingBuf_WrappedRead_Opaque_A
+	calr	FIFO_Engine256_Get
 	pop	xde
 	popw	ix
 	ret
 ; Stack-arg push of one byte onto the 256-byte FIFO (engine 0x020AD3).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO256_Put:
-	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
-	.byte 0x21, 0xf2, 0x38, 0x10, 0x04, 0x32, 0x1e, 0xac
-	.byte 0x01, 0x5a, 0x4c, 0xee, 0x0d, 0x0e
+	link	xiz, 0
+	pushw	ix
+	push	xde
+	ld	a, (xiz+8)
+	lda	xde, (0x041038:24)
+	calr	FIFO_Engine256_Put
+	pop	xde
+	popw	ix
+	unlk32	xiz
+	ret
 ; Stack-arg push of a count/pointer block onto the 256-byte FIFO.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO256_Put_Block:
-	.byte 0xee, 0x0c
-	.byte 0x00, 0x00, 0x3d, 0x3c, 0x3a, 0x9e, 0x08, 0x21
-	.byte 0xae, 0x0a, 0x25, 0xf2, 0x38, 0x10, 0x04, 0x32
-	.byte 0x85, 0x21, 0x1e, 0x90, 0x01, 0xed, 0x61, 0xd9
-	.byte 0x1c, 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
+	link	xiz, 0
+	push	xiy
+	push	xix
+	push	xde
+	ld	bc, (xiz+8)
+	ld	xiy, (xiz+10)
+	lda	xde, (0x041038:24)
+	ld	a, (xiy)
+	calr	FIFO_Engine256_Put
+	inc	1, xiy
+	djnz16	bc, -10
+	pop	xde
+	pop	xix
+	pop	xiy
+	unlk32	xiz
+	ret
 ; HL = 0xFFFF when write index (0x041034) == read index (0x041030).
 FIFO256_Is_Empty:
 	ld	hl, (266292:24)
@@ -2209,22 +2268,46 @@ FIFO512_Get:
 	pushw	ix
 	push	xde
 	lda	xde, (266562:24)
-	calr	RingBuf_WrappedRead_Opaque_B
+	calr	FIFO_Engine512_Get
 	pop	xde
 	popw	ix
 	ret
 ; Stack-arg push of one byte onto the 512-byte FIFO (engine 0x020B62).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO512_Put:
-	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
-	.byte 0x21, 0xf2, 0x42, 0x11, 0x04, 0x32, 0x1e, 0x8d
-	.byte 0x01, 0x5a, 0x4c, 0xee, 0x0d, 0x0e
+	link	xiz, 0
+	pushw	ix
+	push	xde
+	ld	a, (xiz+8)
+	lda	xde, (0x041142:24)
+	calr	FIFO_Engine512_Put
+	pop	xde
+	popw	ix
+	unlk32	xiz
+	ret
 ; Stack-arg push of a count/pointer block onto the 512-byte FIFO.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO512_Put_Block:
-	.byte 0xee, 0x0c
-	.byte 0x00, 0x00, 0x3d, 0x3c, 0x3a, 0x9e, 0x08, 0x21
-	.byte 0xae, 0x0a, 0x25, 0xf2, 0x42, 0x11, 0x04, 0x32
-	.byte 0x85, 0x21, 0x1e, 0x71, 0x01, 0xed, 0x61, 0xd9
-	.byte 0x1c, 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
+	link	xiz, 0
+	push	xiy
+	push	xix
+	push	xde
+	ld	bc, (xiz+8)
+	ld	xiy, (xiz+10)
+	lda	xde, (0x041142:24)
+	ld	a, (xiy)
+	calr	FIFO_Engine512_Put
+	inc	1, xiy
+	djnz16	bc, -10
+	pop	xde
+	pop	xix
+	pop	xiy
+	unlk32	xiz
+	ret
 ; HL = 0xFFFF when write index (0x04113E) == read index (0x04113A).
 FIFO512_Is_Empty:
 	ld	hl, (266558:24)
@@ -2300,32 +2383,74 @@ RingBuf_Reset_256:
 	ldw (xde - 2), 0xFF
 	ret
 
-RingBuf_WrappedRead_Opaque_A:
-	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
-	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
-	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x00, 0xba
-	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from RingBuf_WrappedRead_Opaque_A.
+; Note: the engine GET: pop at the read index (XDE-8) until it meets the write index (XDE-4), then increment the free count (XDE-2).
+FIFO_Engine256_Get:
+	ld	ix, (xde-8)
+	cp	ix, (xde-4)
+	jr	nz, FIFO_Engine256_Get_NotEmpty
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine256_Get_NotEmpty:
+	xor	hl, hl
+	ld_rrb	l, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x00	; minc1 0x00ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-8), ix
+	incm	1, (xde-2)
+	ret
 ; Engine: pop at the mark cursor (XDE-10), stop when it equals the commit index (XDE-6).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO_Engine256_Get_Marked:
-	.byte 0x9a, 0xf6
-	.byte 0x24, 0x9a, 0xfa, 0xf4, 0x6e, 0x04, 0x33, 0xff
-	.byte 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07, 0xe8, 0xf0
-	.byte 0x27, 0xdc, 0x38, 0xff, 0x00, 0xba, 0xf6, 0x54
-	.byte 0x0e
+	ld	ix, (xde-10)
+	cp	ix, (xde-6)
+	jr	nz, FIFO_Engine256_Get_Marked_NotEmpty
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine256_Get_Marked_NotEmpty:
+	xor	hl, hl
+	ld_rrb	l, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x00	; minc1 0x00ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-10), ix
+	ret
 ; Engine: pop at the mark cursor (XDE-10), stop when it equals the write index (XDE-4).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO_Engine256_Get_From_Mark:
-	.byte 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
-	.byte 0x04, 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3
-	.byte 0x07, 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x00
-	.byte 0xba, 0xf6, 0x54, 0x0e
+	ld	ix, (xde-10)
+	cp	ix, (xde-4)
+	jr	nz, FIFO_Engine256_Get_From_Mark_NotEmpty
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine256_Get_From_Mark_NotEmpty:
+	xor	hl, hl
+	ld_rrb	l, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x00	; minc1 0x00ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-10), ix
+	ret
 ; Engine: if free count (XDE-2) is zero return HL=0xFFFF; else store A at (XDE + writeidx),
 ; advance the write index modulo 0x0FF, decrement the free count, return it in HL.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO_Engine256_Put:
-	.byte 0x9a, 0xfe, 0x3f, 0x00
-	.byte 0x00, 0x6e, 0x04, 0x33, 0xff, 0xff, 0x0e, 0x9a
-	.byte 0xfc, 0x24, 0xf3, 0x07, 0xe8, 0xf0, 0x41, 0xdc
-	.byte 0x38, 0xff, 0x00, 0xba, 0xfc, 0x54, 0x9a, 0xfe
-	.byte 0x69, 0x9a, 0xfe, 0x23, 0x0e
+	cpw	(xde-2), 0
+	jr	nz, FIFO_Engine256_Put_HasRoom
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine256_Put_HasRoom:
+	ld	ix, (xde-4)
+	st_rrb	a, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x00	; minc1 0x00ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-4), ix
+	decm	1, (xde-2)
+	ld	hl, (xde-2)
+	ret
 
 RingBuf_Reset_512:
 	ldw (xde - 10), 0x0
@@ -2335,11 +2460,24 @@ RingBuf_Reset_512:
 	ldw (xde - 2), 0x1FF
 	ret
 
-RingBuf_WrappedRead_Opaque_B:
-	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
-	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
-	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x01, 0xba
-	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from RingBuf_WrappedRead_Opaque_B.
+; Note: the 512-byte twin of FIFO_Engine256_Get.
+FIFO_Engine512_Get:
+	ld	ix, (xde-8)
+	cp	ix, (xde-4)
+	jr	nz, FIFO_Engine512_Get_NotEmpty
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine512_Get_NotEmpty:
+	xor	hl, hl
+	ld_rrb	l, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x01	; minc1 0x01ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-8), ix
+	incm	1, (xde-2)
+	ret
 ; 512-byte twin of 0x020A9D (wrap mask 0x1FF).
 FIFO_Engine512_Get_Marked:
 	ld	ix, (xde-10)
@@ -2367,12 +2505,22 @@ LABEL_020B53:
 	ld	(xde-10), ix
 	ret
 ; 512-byte twin of 0x020AD3 (wrap mask 0x1FF).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO_Engine512_Put:
-	.byte 0x9a, 0xfe, 0x3f, 0x00
-	.byte 0x00, 0x6e, 0x04, 0x33, 0xff, 0xff, 0x0e, 0x9a
-	.byte 0xfc, 0x24, 0xf3, 0x07, 0xe8, 0xf0, 0x41, 0xdc
-	.byte 0x38, 0xff, 0x01, 0xba, 0xfc, 0x54, 0x9a, 0xfe
-	.byte 0x69, 0x9a, 0xfe, 0x23, 0x0e
+	cpw	(xde-2), 0
+	jr	nz, FIFO_Engine512_Put_HasRoom
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine512_Put_HasRoom:
+	ld	ix, (xde-4)
+	st_rrb	a, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x01	; minc1 0x01ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-4), ix
+	decm	1, (xde-2)
+	ld	hl, (xde-2)
+	ret
 
 RingBuf_Reset_1K:
 	ldw (xde - 10), 0x0
@@ -2382,31 +2530,73 @@ RingBuf_Reset_1K:
 	ldw (xde - 2), 0x3FF
 	ret
 
-RingBuf_WrappedRead_Opaque_C:
-	.byte 0x9a, 0xf8, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
-	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
-	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba
-	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from RingBuf_WrappedRead_Opaque_C.
+; Note: the 1K twin of FIFO_Engine256_Get.
+FIFO_Engine1K_Get:
+	ld	ix, (xde-8)
+	cp	ix, (xde-4)
+	jr	nz, FIFO_Engine1K_Get_NotEmpty
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine1K_Get_NotEmpty:
+	xor	hl, hl
+	ld_rrb	l, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x03	; minc1 0x03ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-8), ix
+	incm	1, (xde-2)
+	ret
 ; 1 KB twin of 0x020A9D (wrap mask 0x3FF).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO_Engine1K_Get_Marked:
-	.byte 0x9a, 0xf6
-	.byte 0x24, 0x9a, 0xfa, 0xf4, 0x6e, 0x04, 0x33, 0xff
-	.byte 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07, 0xe8, 0xf0
-	.byte 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba, 0xf6, 0x54
-	.byte 0x0e
+	ld	ix, (xde-10)
+	cp	ix, (xde-6)
+	jr	nz, FIFO_Engine1K_Get_Marked_NotEmpty
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine1K_Get_Marked_NotEmpty:
+	xor	hl, hl
+	ld_rrb	l, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x03	; minc1 0x03ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-10), ix
+	ret
 ; 1 KB twin of 0x020AB8 (wrap mask 0x3FF).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO_Engine1K_Get_From_Mark:
-	.byte 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e
-	.byte 0x04, 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3
-	.byte 0x07, 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x03
-	.byte 0xba, 0xf6, 0x54, 0x0e
+	ld	ix, (xde-10)
+	cp	ix, (xde-4)
+	jr	nz, FIFO_Engine1K_Get_From_Mark_NotEmpty
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine1K_Get_From_Mark_NotEmpty:
+	xor	hl, hl
+	ld_rrb	l, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x03	; minc1 0x03ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-10), ix
+	ret
 ; 1 KB twin of 0x020AD3 (wrap mask 0x3FF).
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 FIFO_Engine1K_Put:
-	.byte 0x9a, 0xfe, 0x3f, 0x00
-	.byte 0x00, 0x6e, 0x04, 0x33, 0xff, 0xff, 0x0e, 0x9a
-	.byte 0xfc, 0x24, 0xf3, 0x07, 0xe8, 0xf0, 0x41, 0xdc
-	.byte 0x38, 0xff, 0x03, 0xba, 0xfc, 0x54, 0x9a, 0xfe
-	.byte 0x69, 0x9a, 0xfe, 0x23, 0x0e
+	cpw	(xde-2), 0
+	jr	nz, FIFO_Engine1K_Put_HasRoom
+	ldw	hl, 0xffff
+	ret
+FIFO_Engine1K_Put_HasRoom:
+	ld	ix, (xde-4)
+	st_rrb	a, xde, ix
+	.byte	0xdc, 0x38, 0xff, 0x03	; minc1 0x03ff,IX  (unidasm; no llvm-mc spelling)
+	ld	(xde-4), ix
+	decm	1, (xde-2)
+	ld	hl, (xde-2)
+	ret
 
 Audio_CmdHandler_C0_FF:
 	ld hl, 0:i3
@@ -2567,8 +2757,12 @@ DMA_Chunk_Wait_MSTAT1_Set:
 ; E3_Wait_MSTAT1_Set (0x020D37), which give up after 60001 iterations (compare 0xEA60);
 ; on the gate-1 timeout it returns having sent nothing, on the gate-2 timeout it raises
 ; SSTAT0 first. BC is used as the retry counter. No caller found by branch-target scan.
-InterCPU_LatchProtocol_Opaque:
-	.byte 0xd9, 0xa8
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from InterCPU_LatchProtocol_Opaque.
+InterCPU_Send_E3_Command:
+	ld	bc, 0:i3
 ; Poll MSTAT1 high, then drop SSTAT0 and write 0xE3 to the latch at 0x120000.
 InterCPU_E3_Gate1:
 	bit_dd8	4, 52
@@ -2629,18 +2823,34 @@ InterCPU_LatchProtocol_Opaque_Code_Loop2:
 	jr	nz, E2_Wait_MSTAT1_Set
 
 ; Header acknowledged: stage the 10-byte block at 010D4h, program DMAS2/DMAC2/DMA2V and start timer 2.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 E2_Start_Transfer:
-	.byte 0xf0, 0x34, 0xb8, 0xf1, 0xd4, 0x10, 0x33, 0xb3
-	.byte 0x60, 0xbb, 0x04, 0x62, 0xbb, 0x08, 0x51, 0xeb
-	.byte 0x2e, 0x08, 0x30, 0x0a, 0x00, 0xd8, 0x2e, 0x48
-	.byte 0xf1, 0x02, 0x01, 0x00, 0x16, 0xf0, 0x80, 0xba
-	.byte 0xf1, 0xfe, 0x04, 0xbf
+	set_dd8	0, 0x34
+	lda	xhl, (0x10d4:16)
+	ld	(xhl), xwa
+	ld	(xhl+4), xde
+	ld	(xhl+8), bc
+	.byte	0xeb, 0x2e, 0x08	; ldc DMAS2,XHL  (unidasm; no llvm-mc spelling)
+	ldw	wa, 10
+	.byte	0xd8, 0x2e, 0x48	; ldc cr[0x48],WA -- word to control register 0x48 (unidasm prints it as
+				; `unknown`); the DMAC2 count per this routine's header.  No llvm-mc spelling.
+	stdi8	(0x102), 22
+	set_dd8	2, 0x80
+	setda	7, (0x4fe)
 ; Tail of InterCPU_E2_DMA_Transfer: spins on DMA_XFER_STATE (0x10E8) until the micro-DMA
 ; channel-2 completion ISR (0x020F01) zeroes it. NO TIMEOUT -- see the findings.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 InterCPU_E2_Wait_DMA_Done:
-	.byte 0xc1, 0xe8, 0x10, 0x3f
-	.byte 0x00, 0xb0, 0xf6, 0xc1, 0xe8, 0x10, 0x3f, 0x00
-	.byte 0x6e, 0xf9, 0x0e
+	cpdi8	(0x10e8), 0
+	ret	z
+InterCPU_E2_Wait_DMA_Done_Spin:
+	cpdi8	(0x10e8), 0
+	jr	nz, InterCPU_E2_Wait_DMA_Done_Spin
+	ret
 
 ; Retry counter for the 0xE2 header acknowledge; spins back to 020D6Dh while MSTAT1 is still high.
 E2_Wait_MSTAT1_Set:
@@ -3904,7 +4114,7 @@ ExtVoice_Alloc_StreamSlot_Search:
 	ld a, (xsp + 4)
 	and a, 0x1F
 	extz wa
-	lda xbc, (0x00f48c:24)
+	lda xbc, (Voice_PolyphonyLimits_Table:24)
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	ldb_erp A, 0xFA
 	ld a, (xsp + 4)
@@ -4102,13 +4312,33 @@ ExtVoice_Alloc_StreamSlot_Return:
 ;         Voice_ScanSlots_ReassignSources (0x02150D) is called with WA = A.
 ; Output: HL = ((C & 0x3F) << 8) | 0x00FF, i.e. part in the high byte and 0xFF ("no slot
 ;         yet") in the low byte.  Only caller: 0x0219BB.
-VoiceState_OpaqueData1:
-	.byte 0xef, 0x6a, 0xb7, 0x43, 0x87, 0x3c, 0x3f, 0xc9
-	.byte 0xcf, 0x40, 0x67, 0x0f, 0x87, 0x21, 0xd8, 0x12
-	.byte 0xd8, 0xee, 0x08, 0xd8, 0x8b, 0xdb, 0xce, 0xff
-	.byte 0x00, 0x68, 0x12, 0xd8, 0x12, 0x1e, 0x71, 0xfb
-	.byte 0x87, 0x21, 0xd8, 0x12, 0xd8, 0xee, 0x08, 0xd8
-	.byte 0x8b, 0xdb, 0xce, 0xff, 0x00, 0xef, 0x62, 0x0e
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from VoiceState_OpaqueData1.
+Voice_MakePartHandle:
+	dec	2, xsp
+	ld	(xsp), c
+	andmi8	(xsp), 63
+	cp	a, 64
+	jr	c, Voice_MakePartHandle_NoRefresh
+	ld	a, (xsp)
+	extz	wa
+	sll	wa, 8
+	ld	hl, wa
+	or	hl, 255
+	jr	Voice_MakePartHandle_Epilogue
+Voice_MakePartHandle_NoRefresh:
+	extz	wa
+	calr	Voice_ScanSlots_ReassignSources
+	ld	a, (xsp)
+	extz	wa
+	sll	wa, 8
+	ld	hl, wa
+	or	hl, 255
+Voice_MakePartHandle_Epilogue:
+	inc	2, xsp
+	ret
 ; Stack-argument front end that turns a (part, selector, key) triple into an assigned voice
 ; slot: saves C and A in a local frame, calls VOICE_PART_HANDLE_MAKE (0x02197C) with
 ; C = E, then calls ExtVoice_Alloc_StreamSlot (0x02177E) with WA = the saved A, C = the saved C and
@@ -4123,7 +4353,7 @@ Voice_Part_Assign:
 	extz	wa
 	ld	c, e
 	extz	bc
-	calr	VoiceState_OpaqueData1
+	calr	Voice_MakePartHandle
 	ld	a, (xsp+2)
 	ld	l, a
 	extz	hl
@@ -4147,30 +4377,77 @@ Voice_Part_Assign:
 ; matched against the group and is also the high byte of the emitted word. The low byte is
 ; whatever ExtVoice_Fold_SlotNumber (0x0210A2) returns for (WA = the raw byte, BC = i).
 ; Output: XHL = 0x00286B (the list). No caller found by branch-target scan.
+; CODE, converted from a 178-byte .byte run on 2026-09-25 (convert_v142_byte_block.py): llvm-mc
+; and unidasm agree on all 63 instruction boundaries, every instruction re-assembles to its own
+; bytes, and it is instruction-for-instruction the 4-entry twin of Voice_BuildOutputList below
+; (same frame, same ERP counter, same `calr ExtVoice_Fold_SlotNumber`).
 Voice_Build_PartSlot_List:
-	.byte 0xbf, 0xf4, 0x37, 0xd7, 0xfa, 0x04, 0xcd, 0x06
-	.byte 0xbf, 0x08, 0x45, 0x8f, 0x08, 0xc3, 0xbf, 0x06
-	.byte 0x43, 0xd8, 0x12, 0xd8, 0x09, 0x0c, 0x00, 0xf1
-	.byte 0xe6, 0x24, 0x31, 0xe8, 0x13, 0xe9, 0x80, 0xbf
-	.byte 0x02, 0x60, 0xf1, 0x6b, 0x28, 0x30, 0xbf, 0x0a
-	.byte 0x60, 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0xdc, 0x6f
-	.byte 0x6f, 0xc7, 0xfb, 0x89, 0xd8, 0x12, 0xd8, 0x89
-	.byte 0xd9, 0x60, 0xaf, 0x02, 0x20, 0xc3, 0x07, 0xe0
-	.byte 0xe4, 0x25, 0xcd, 0x89, 0xc9, 0xcf, 0xc0, 0x6f
-	.byte 0x4f, 0xcd, 0x89, 0xd8, 0x12, 0xd8, 0x09, 0x05
-	.byte 0x00, 0xf1, 0x29, 0x21, 0x31, 0xc3, 0x07, 0xe4
-	.byte 0xe0, 0x21, 0xd8, 0x12, 0xf2, 0xec, 0xf4, 0x00
-	.byte 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xc7, 0xfa
-	.byte 0x99, 0x8f, 0x08, 0xc1, 0x8f, 0x06, 0xf1, 0x6e
-	.byte 0x27, 0xda, 0x12, 0xc7, 0xfb, 0x89, 0xc9, 0x8b
-	.byte 0xd9, 0x12, 0xda, 0x88, 0x1e, 0x47, 0xf6, 0xcf
-	.byte 0x8b, 0xd9, 0x12, 0xc7, 0xfa, 0x89, 0xd8, 0x12
-	.byte 0xd8, 0xee, 0x08, 0xd8, 0x8a, 0xd9, 0xe2, 0xaf
-	.byte 0x0a, 0x20, 0xf5, 0xe1, 0x52, 0xbf, 0x0a, 0x60
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc, 0x67, 0x91
-	.byte 0xaf, 0x0a, 0x20, 0xb0, 0x02, 0xff, 0xff, 0xf1
-	.byte 0x6b, 0x28, 0x33, 0xd7, 0xfa, 0x05, 0xbf, 0x0c
-	.byte 0x37, 0x0e
+	lda	xsp, (xsp-12)
+	push	qiz
+	cpl	e
+	ld	(xsp+8), e
+	and	c, (xsp+8)
+	ld	(xsp+6), c
+	extz	wa
+	muls	wa, 12
+	lda	xbc, (0x24e6:16)
+	exts	xwa
+	add	xwa, xbc
+	ld	(xsp+2), xwa
+	lda	xwa, (0x286b:16)
+	ld	(xsp+10), xwa
+	ldib_erp	251, 0
+	cpib_erp	251, 4
+	jr	nc, Voice_Build_PartSlot_List_Done
+Voice_Build_PartSlot_List_Loop:
+	stb_erp	a, 251
+	extz	wa
+	ld	bc, wa
+	inc	8, bc
+	ld	xwa, (xsp+2)
+	ld_rrb	e, xwa, bc
+	ld	a, e
+	cp	a, 192
+	jr	nc, Voice_Build_PartSlot_List_Next
+	ld	a, e
+	extz	wa
+	muls	wa, 5
+	lda	xbc, (0x2129:16)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	lda	xbc, (Voice_CommandIndexTable:24)
+	ld_rrb	a, xbc, wa
+	ldb_erp	a, 250
+	and	a, (xsp+8)
+	cp	a, (xsp+6)
+	jr	nz, Voice_Build_PartSlot_List_Next
+	extz	de
+	stb_erp	a, 251
+	ld	c, a
+	extz	bc
+	ld	wa, de
+	calr	ExtVoice_Fold_SlotNumber
+	ld	c, l
+	extz	bc
+	stb_erp	a, 250
+	extz	wa
+	sll	wa, 8
+	ld	de, wa
+	or	de, bc
+	ld	xwa, (xsp+10)
+	stw_dpi	de, 225
+	ld	(xsp+10), xwa
+Voice_Build_PartSlot_List_Next:
+	inc1b_erp	251
+	cpib_erp	251, 4
+	jr	c, Voice_Build_PartSlot_List_Loop
+Voice_Build_PartSlot_List_Done:
+	ld	xwa, (xsp+10)
+	ldw	(xwa), 0xffff
+	lda	xhl, (0x286b:16)
+	pop	qiz
+	lda	xsp, (xsp+12)
+	ret
 
 Voice_BuildOutputList:
 	lda xsp, (xsp - 12)
@@ -4202,7 +4479,7 @@ Voice_BuildOutputList_Loop:
 	jr nc, Voice_BuildOutputList_Next
 	stb_erp A, 0xFA
 	extz wa
-	lda xbc, (0x00f4ec:24)
+	lda xbc, (Voice_CommandIndexTable:24)
 	ldb_sri A, 0x07, 0xE4, 0xE0
 	ldb_erp A, 0xFB
 	and a, (xsp + 8)
@@ -4211,7 +4488,7 @@ Voice_BuildOutputList_Loop:
 	stb_erp A, 0xFB
 	and a, 0x1F
 	extz wa
-	lda xbc, (0x00f48c:24)
+	lda xbc, (Voice_PolyphonyLimits_Table:24)
 	ldb_sri C, 0x07, 0xE4, 0xE0
 	ld a, e
 	extz wa
@@ -4252,30 +4529,79 @@ Voice_BuildOutputList_Return:
 ; until the chain byte repeats. Output: XHL = 0x0028ED.
 ; LOW confidence: the chain walk at 0x021BB7..0x021BE2 is understood mechanically but its
 ; purpose (layer chaining? unison? drum-map expansion?) is not proven. No caller found.
-VoiceState_OpaqueData2:
-	.byte 0x2e, 0xcd, 0x06, 0xcd, 0xc3, 0xd8, 0x12, 0xd8
-	.byte 0x09, 0x1b, 0x00, 0xf1, 0x4d, 0x1e, 0x33, 0xf3
-	.byte 0x07, 0xec, 0xe0, 0x34, 0xf1, 0xed, 0x28, 0x33
-	.byte 0x22, 0x00, 0xca, 0xcf, 0x1b, 0x7f, 0x8d, 0x00
-	.byte 0xca, 0x89, 0xd8, 0x12, 0xc3, 0x07, 0xf0, 0xe0
-	.byte 0x21, 0xc7, 0xe2, 0x99, 0xc9, 0xcf, 0xc0, 0x6f
-	.byte 0x74, 0xca, 0x89, 0xd8, 0x12, 0xf2, 0xec, 0xf4
-	.byte 0x00, 0x35, 0xc3, 0x07, 0xf4, 0xe0, 0x24, 0xcc
-	.byte 0x89, 0xcd, 0xc1, 0xcb, 0xf1, 0x6e, 0x5e, 0xc7
-	.byte 0xe2, 0x89, 0xd8, 0x12, 0xd8, 0x09, 0x05, 0x00
-	.byte 0xf1, 0x2a, 0x21, 0x35, 0xc3, 0x07, 0xf4, 0xe0
-	.byte 0x21, 0xc7, 0xe6, 0x99, 0xc9, 0xcf, 0x40, 0x6f
-	.byte 0x44, 0xc7, 0xe6, 0x89, 0xc7, 0xe2, 0x99, 0xcc
-	.byte 0x89, 0xc9, 0xcc, 0x1f, 0xd8, 0x12, 0xf2, 0x8c
-	.byte 0xf4, 0x00, 0x35, 0xc3, 0x07, 0xf4, 0xe0, 0x24
-	.byte 0xc7, 0xe6, 0x89, 0xf5, 0xec, 0x41, 0xcc, 0x89
-	.byte 0xd8, 0x12, 0xd8, 0x8e, 0xc7, 0xe2, 0x89, 0xd8
-	.byte 0x12, 0xd8, 0x09, 0x0c, 0x00, 0xf1, 0xe6, 0x24
-	.byte 0x35, 0xe8, 0x13, 0xed, 0x80, 0xde, 0x8d, 0xed
-	.byte 0x12, 0xe8, 0x85, 0x85, 0x21, 0xc7, 0xe2, 0x99
-	.byte 0xc7, 0xe6, 0xf1, 0x6e, 0xd3, 0xca, 0x61, 0xca
-	.byte 0xcf, 0x1b, 0x77, 0x73, 0xff, 0xb3, 0x00, 0xff
-	.byte 0xf1, 0xed, 0x28, 0x33, 0x4e, 0x0e
+; CODE, converted from a 182-byte .byte run on 2026-09-25 (was `VoiceState_OpaqueData2`):
+; llvm-mc and unidasm agree on all 65 instruction boundaries and every instruction
+; re-assembles to its own bytes.  Still no caller found (no numeric or symbolic branch targets it).
+Voice_Build_SoundingVoiceList:
+	pushw	iz
+	cpl	e
+	and	c, e
+	extz	wa
+	muls	wa, 27
+	lda	xhl, (0x1e4d:16)
+	lda_rr	xix, xhl, wa
+	lda	xhl, (0x28ed:16)
+	ld	b, 0:opc
+	cp	b, 27
+	jrl	nc, Voice_Build_SoundingVoiceList_Done
+Voice_Build_SoundingVoiceList_Loop:
+	ld	a, b
+	extz	wa
+	ld_rrb	a, xix, wa
+	ldb_erp	a, 226
+	cp	a, 192
+	jr	nc, Voice_Build_SoundingVoiceList_Next
+	ld	a, b
+	extz	wa
+	lda	xiy, (Voice_CommandIndexTable:24)
+	ld_rrb	d, xiy, wa
+	ld	a, d
+	and	a, e
+	cp	a, c
+	jr	nz, Voice_Build_SoundingVoiceList_Next
+	stb_erp	a, 226
+	extz	wa
+	muls	wa, 5
+	lda	xiy, (0x212a:16)
+	ld_rrb	a, xiy, wa
+	ldb_erp	a, 230
+	cp	a, 64
+	jr	nc, Voice_Build_SoundingVoiceList_Next
+	stb_erp	a, 230
+	ldb_erp	a, 226
+	ld	a, d
+	and	a, 31
+	extz	wa
+	lda	xiy, (Voice_PolyphonyLimits_Table:24)
+	ld_rrb	d, xiy, wa
+Voice_Build_SoundingVoiceList_ChainLoop:
+	stb_erp	a, 230
+	lda_dpi	xbc, 236
+	ld	a, d
+	extz	wa
+	ld	iz, wa
+	stb_erp	a, 226
+	extz	wa
+	muls	wa, 12
+	lda	xiy, (0x24e6:16)
+	exts	xwa
+	add	xwa, xiy
+	ld	iy, iz
+	extz	xiy
+	add	xiy, xwa
+	ld	a, (xiy)
+	ldb_erp	a, 226
+	cpb_erp	a, 230
+	jr	nz, Voice_Build_SoundingVoiceList_ChainLoop
+Voice_Build_SoundingVoiceList_Next:
+	inc	1, b
+	cp	b, 27
+	jrl	c, Voice_Build_SoundingVoiceList_Loop
+Voice_Build_SoundingVoiceList_Done:
+	ld	(xhl), 255
+	lda	xhl, (0x28ed:16)
+	popw	iz
+	ret
 
 Voice_AdvanceSlotIterator:
 	dec 2, xsp
@@ -5891,27 +6217,41 @@ Velocity_Select_Split_Zone_Alt_Return:
 ; any other value (dead case). No caller found by absolute or relative call scan.
 ; Held as raw .byte in the LLVM source, so its internal branch targets are unlabelled
 ; (see the four [LABEL] proposals at 0x022892..0x02289C).
-VoiceDispatch_OpaqueData:
-	.byte 0xd8, 0x12, 0xd8, 0x09, 0x47, 0x00, 0xf2, 0x8f
-	.byte 0x30, 0x04, 0x31, 0xd3, 0x07, 0xe4, 0xe0, 0x20
-	.byte 0xd8, 0xcc, 0xc0, 0x00, 0xd8, 0xcf, 0xc0, 0x00
-	.byte 0x66, 0x1c, 0xd8, 0xcf, 0x80, 0x00, 0x66, 0x12
-	.byte 0xd8, 0xcf, 0x40, 0x00, 0x66, 0x08, 0xd8, 0xd8
-	.byte 0xb0, 0xfe, 0x27, 0x00, 0x68, 0x0a
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from VoiceDispatch_OpaqueData.
+; Note: its internal targets are now labelled, so the [LABEL] proposals above are applied.
+VoiceRec_Decode2BitField:
+	extz	wa
+	muls	wa, 71
+	lda	xbc, (0x04308f:24)
+	ld_rrw	wa, xbc, wa
+	and	wa, 192
+	cp	wa, 192
+	jr	z, VoiceRec_Decode2BitField_Is3
+	cp	wa, 128
+	jr	z, VoiceDispatch_Field_Is2
+	cp	wa, 64
+	jr	z, VoiceDispatch_Field_Is1
+	cp	wa, 0:i3
+	ret	nz
+	ld	l, 0:opc
+	jr	VoiceRec_Decode2BitField_Return
 ; Field value 0x40: L = 1. Inside a raw .byte blob in the LLVM source, hence unlabelled.
 VoiceDispatch_Field_Is1:
 	ld	l, 1:opc
-	jr	6
+	jr	VoiceRec_Decode2BitField_Return
 ; Field value 0x80: L = 2.
 VoiceDispatch_Field_Is2:
 	ld	l, 2:opc
-	jr	2
+	jr	VoiceRec_Decode2BitField_Return
 ; Field value 0xC0: L = 3.
-VoiceDispatch_Field_Is3:
-	.byte 0x27, 0x03
+VoiceRec_Decode2BitField_Is3:
+	ld	l, 3:opc
 ; Shared return of the 2-bit field decoder at 0x022864.
-VoiceDispatch_OpaqueData_Return:
-	.byte 0x0e
+VoiceRec_Decode2BitField_Return:
+	ret
 
 ; COPY THE HIGH NIBBLE OF A PATCH'S BYTE +0x2A INTO THE PER-PART PROGRAM BYTE.
 ; In: A = part index. Record stride is 0x011F bytes throughout this family:
@@ -6889,16 +7229,31 @@ EGEnv_Compute_A_Simple:
 
 ; BYTE-IDENTICAL DUPLICATE of EGEnv_Compute_A_Simple (0x022EBA) - same table, same
 ; shift, same clamp. No caller found by a call/calr scan over the whole ROM.
-EGEnv_OpaqueData:
-	.byte 0xd8, 0x12, 0xd8, 0x09, 0x1b, 0x00, 0xf2, 0x4e
-	.byte 0x42, 0x04, 0x31, 0xf3, 0x07, 0xe4, 0xe0, 0x32
-	.byte 0x8a, 0x03, 0x21, 0xd8, 0x12, 0xd8, 0x80, 0xf2
-	.byte 0x64, 0x09, 0x01, 0x31, 0xd3, 0x07, 0xe4, 0xe0
-	.byte 0x23, 0xeb, 0x12, 0x8a, 0x04, 0x21, 0xe9, 0xa8
-	.byte 0xc9, 0x8b, 0xeb, 0x88, 0x1d, 0xca, 0xd8, 0x03
-	.byte 0xeb, 0xef, 0x07, 0xeb, 0xcf, 0xff, 0x3f, 0x00
-	.byte 0x00, 0xb0, 0xf3, 0x43, 0xff, 0x3f, 0x00, 0x00
-	.byte 0x0e
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from EGEnv_OpaqueData.
+EGEnv_Compute_A_Simple_Dup:
+	extz	wa
+	muls	wa, 27
+	lda	xbc, (0x04424e:24)
+	lda_rr	xde, xbc, wa
+	ld	a, (xde+3)
+	extz	wa
+	add	wa, wa
+	lda	xbc, (0x010964:24)
+	ld_rrw	hl, xbc, wa
+	extz	xhl
+	ld	a, (xde+4)
+	ld	xbc, 0:i3
+	ld	c, a
+	ld	xwa, xhl
+	call	FP_MulAccum64
+	srl	xhl, 7
+	cp	xhl, 0x3fff
+	ret	ule
+	ld	xhl, 0x3fff
+	ret
 
 ; Envelope value B: identical structure to EGEnv_Compute_A but the record base is
 ; 0x044257 (= 0x04424E + 9, the second 9-byte sub-record) and the base-value table is
@@ -6994,14 +7349,29 @@ EGEnv_Compute_B_Simple:
 ; In: WA = index; record 0x044257 + index*0x1B; (rec+0x03) indexes the u16 table at
 ; 0x010964, multiplied by (rec+0x04) via FP_MulAccum64, >> 7. Out: XHL.
 ; No caller found by a call/calr scan.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 Voice_Freq_ComputeLeft_Raw:
-	.byte 0xd8, 0x12, 0xd8, 0x09, 0x1b, 0x00, 0xf2, 0x57
-	.byte 0x42, 0x04, 0x31, 0xe8, 0x13, 0xe9, 0x80, 0xe8
-	.byte 0x8a, 0x8a, 0x03, 0x21, 0xd8, 0x12, 0xd8, 0x80
-	.byte 0xf2, 0x64, 0x09, 0x01, 0x31, 0xd3, 0x07, 0xe4
-	.byte 0xe0, 0x23, 0xeb, 0x12, 0x8a, 0x04, 0x21, 0xe9
-	.byte 0xa8, 0xc9, 0x8b, 0xeb, 0x88, 0x1d, 0xca, 0xd8
-	.byte 0x03, 0xeb, 0xef, 0x07, 0x0e
+	extz	wa
+	muls	wa, 27
+	lda	xbc, (0x044257:24)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, xwa
+	ld	a, (xde+3)
+	extz	wa
+	add	wa, wa
+	lda	xbc, (0x010964:24)
+	ld_rrw	hl, xbc, wa
+	extz	xhl
+	ld	a, (xde+4)
+	ld	xbc, 0:i3
+	ld	c, a
+	ld	xwa, xhl
+	call	FP_MulAccum64
+	srl	xhl, 7
+	ret
 
 ; COMPUTE AND STORE THE LEFT-CHANNEL FREQUENCY WORD.
 ; In: A = index (0..0x7F). Record = 0x044260 + index*0x1B (the third 9-byte
@@ -7200,21 +7570,41 @@ Voice_Freq_WriteRight_Return:
 ; Emitted as raw .byte in the LLVM source, so its internal branch targets and the small
 ; clamp helper that follows it at 0x023242 carry no symbols - see the [LABEL] and
 ; [ROUTINE] proposals for 0x023226..0x02324B.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Note: its internal branch targets are now labelled by the branch symboliser.
 Voice_Freq_ComputeRight_Raw:
-	.byte 0xef, 0x6a, 0xb7, 0x41, 0x87, 0x21, 0xd8, 0x12
-	.byte 0xd8, 0x09, 0x1b, 0x00, 0xf2, 0x60, 0x42, 0x04
-	.byte 0x31, 0xe8, 0x13, 0xe9, 0x80, 0xe8, 0x8a, 0x8a
-	.byte 0x03, 0x21, 0xd8, 0x12, 0xd8, 0x80, 0xf2, 0x64
-	.byte 0x09, 0x01, 0x31, 0xd3, 0x07, 0xe4, 0xe0, 0x23
-	.byte 0xeb, 0x12, 0x8a, 0x04, 0x21, 0xe9, 0xa8, 0xc9
-	.byte 0x8b, 0xeb, 0x88, 0x1d, 0xca, 0xd8, 0x03, 0xeb
-	.byte 0xef, 0x07, 0x87, 0x3f, 0x40, 0x6f, 0x14, 0xeb
-	.byte 0xcf, 0xff, 0x3f, 0x00, 0x00, 0x63, 0x05, 0x43
-	.byte 0xff, 0x3f, 0x00, 0x00
+	dec	2, xsp
+	ld	(xsp), a
+	ld	a, (xsp)
+	extz	wa
+	muls	wa, 27
+	lda	xbc, (0x044260:24)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, xwa
+	ld	a, (xde+3)
+	extz	wa
+	add	wa, wa
+	lda	xbc, (0x010964:24)
+	ld_rrw	hl, xbc, wa
+	extz	xhl
+	ld	a, (xde+4)
+	ld	xbc, 0:i3
+	ld	c, a
+	ld	xwa, xhl
+	call	FP_MulAccum64
+	srl	xhl, 7
+	cp	(xsp), 64
+	jr	nc, Voice_Freq_ComputeRight_Raw_HiRange
+	cp	xhl, 0x3fff
+	jr	ule, Voice_Freq_ComputeRight_Raw_StoreLow
+	ld	xhl, 0x3fff
 ; Index < 0x40: store the clamped value to the low-bank staging word 0x045206.
 Voice_Freq_ComputeRight_Raw_StoreLow:
 	ld	(283142:24), hl
-	jr	18
+	jr	Voice_Freq_ComputeRight_Raw_Return
 ; Index >= 0x40: clamp for the upper voice bank.
 Voice_Freq_ComputeRight_Raw_HiRange:
 	cp	xhl, 16383
@@ -39692,17 +40082,35 @@ DSP_AlgoType_D3_Arm_Type05_SubNZ:
 	.byte 0x68, 0x48
 ; Arm for algorithm types 0x0A and 0x0B (AlgoJumpTable3 offset 0xE7).  Returns immediately for
 ; E != 0 or descriptor[0x5E] == 0; otherwise 0x00C0 / 0x0040 on sub-record bit 3.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 DSP_AlgoType_D3_Arm_TypeAB:
-	.byte 0xcd
-	.byte 0xd8, 0xb0, 0xfe, 0xd8, 0x12, 0xd8, 0x09, 0x1f
-	.byte 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x32, 0xe3, 0x07
-	.byte 0xe8, 0xe0, 0x20, 0x88, 0x5e, 0x3f, 0x00, 0xb0
-	.byte 0xf6, 0xcb, 0x89, 0xd8, 0x12, 0xd8, 0x09, 0x05
-	.byte 0x00, 0xd8, 0x8a, 0xda, 0xc8, 0x13, 0x00, 0xca
-	.byte 0x89, 0xd8, 0x12, 0xd8, 0x09, 0x27, 0x00, 0xf2
-	.byte 0x16, 0x1e, 0x01, 0x31, 0xe8, 0x13, 0xe9, 0x80
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0xcb, 0x66, 0x05, 0x33
-	.byte 0xc0, 0x00, 0x68, 0x03, 0x33, 0x40, 0x00
+	cp	e, 0:i3
+	ret	nz
+	extz	wa
+	muls	wa, 0x11f
+	lda	xde, (0x04136e:24)
+	ld_rrl	xwa, xde, wa
+	cp	(xwa+94), 0
+	ret	z
+	ld	a, c
+	extz	wa
+	muls	wa, 5
+	ld	de, wa
+	add	de, 19
+	ld	a, b
+	extz	wa
+	muls	wa, 39
+	lda	xbc, (0x011e16:24)
+	exts	xwa
+	add	xwa, xbc
+	.byte	0xf3, 0x07, 0xe0, 0xe8, 0xcb	; bit 3,(XWA+DE)  (unidasm; no llvm-mc spelling)
+	jr	z, DSP_AlgoType_D3_Arm_TypeAB_Bit3Clear
+	ldw	hl, 192
+	jr	DSP_AlgoType_D3_Return
+DSP_AlgoType_D3_Arm_TypeAB_Bit3Clear:
+	ldw	hl, 64
 ; The shared `ret`; also the no-op arm for algorithm types 6, 8 and 9.
 DSP_AlgoType_D3_Return:
 	ret
@@ -49259,10 +49667,18 @@ DSP_State_LookupAlgoIndex:
 ; 0x00480E. Returns HL = 0. A config-block SNAPSHOT/SAVE.
 ; It has NO caller: an exhaustive search of the payload's disassembly for the address
 ; 0x037E3E (and for the 3-byte little-endian pointer) returns nothing. Dead code.
-DSP_State_Dispatcher_Data:
-	.byte 0x45, 0xec, 0x46, 0x00, 0x00, 0x44, 0x0e, 0x48
-	.byte 0x00, 0x00, 0x31, 0x91, 0x00, 0x95, 0x11, 0xdb
-	.byte 0xa8, 0x0e
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from DSP_State_Dispatcher_Data.
+; Note: the rename argued for above is applied.
+EFF_ConfigSnapshot_Save:
+	ld	xiy, 0x46ec
+	ld	xix, 0x480e
+	ldw	bc, 145
+	ldirw
+	ld	hl, 0:i3
+	ret
 ; No symbol at this address in symbols/subcpu_symbols_reference.txt -- genuinely new.
 ; The exact inverse of the routine above: XIY = 0x00480E (source), XIX = 0x0046EC
 ; (destination), BC = 0x91, LDIRW, return HL = 0. Copies 290 bytes back.
@@ -49270,10 +49686,16 @@ DSP_State_Dispatcher_Data:
 ; 0x0045CA + 290, i.e. the block immediately after the live shadow block, and 0x00480E is
 ; 290 bytes after that; this pair is almost certainly a vestige of an earlier RAM layout
 ; in which the shadow was double-buffered.
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 EFF_ConfigSnapshot_Restore:
-	.byte 0x45, 0x0e, 0x48, 0x00, 0x00, 0x44
-	.byte 0xec, 0x46, 0x00, 0x00, 0x31, 0x91, 0x00, 0x95
-	.byte 0x11, 0xdb, 0xa8, 0x0e
+	ld	xiy, 0x480e
+	ld	xix, 0x46ec
+	ldw	bc, 145
+	ldirw
+	ld	hl, 0:i3
+	ret
 
 ; Already correctly named in both sources; documented here only.
 ; Entry: WA = chip number, used ONLY for the debug trace ("DSP %d reset", strings at
@@ -57096,11 +57518,21 @@ DSP_Translator_ReadOpcode:
 ; not a jump table: DSP_State_LoadAndApply_InlineData (0x038E9F) then DSP_WriteOscParam
 ; (0x0387E6), then `jrl DSP_Translator_PostDispatch`.  The real table is at 0x014745.
 ; Proposing the existing name unchanged so integration stays mechanical.
-DSP_Translator_JumpTable:
-	.byte 0xbf, 0x2a, 0x30, 0xea, 0x89, 0x1d, 0x9f, 0x8e
-	.byte 0x03, 0x9f, 0x04, 0x04, 0xde, 0x88, 0xeb, 0x89
-	.byte 0x9f, 0x16, 0x22, 0x1d, 0xe6, 0x87, 0x03, 0xbf
-	.byte 0x0e, 0x53
+; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
+; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
+; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
+; Renamed from DSP_Translator_JumpTable.
+; Note: the misleading name noted above is replaced.
+DSP_Op_0x61_LinearEval:
+	lda	xwa, (xsp+42)
+	ld	xbc, xde
+	call	DSP_State_LoadAndApply_InlineData
+	pushm	(xsp+4)
+	ld	wa, iz
+	ld	xbc, xhl
+	ld	de, (xsp+22)
+	call	DSP_WriteOscParam
+	ld	(xsp+14), hl
 
 ; Common return point for all 27 opcode arms.  If the frame word at +0x14 is 1 it runs
 ; DSP2_SPI_BusIdle and DSP_Bytecode_NotifyStateChange (a task yield) before falling into
