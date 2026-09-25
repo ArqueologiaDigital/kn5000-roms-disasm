@@ -31748,7 +31748,15 @@ sub_F90CD4:
 ;          `cp HL,0x001F / jr ugt` -- index 0x1F is the last one it lets
 ;          through.  The shape run measured by notes/prom_a_ptr_tables.py
 ;          agrees: 32 entries, 0 nulls.
-; Unknown:  what the 32 slots select between.
+; Selector: the panel BUTTON CODE.  sub_F90CCA (0xF90CCA) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0x21 (prom_b
+;          slot 0xF41528); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          (this + 4*L) after `cp HL,0x001F`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
 ; ---------------------------------------------------------------------
 
 DisplayListPtrs_F90CD8:
@@ -34999,7 +35007,7 @@ ScreenLeave_GroupSoundDisplayHold:
 ; Was `sub_F92C58`.
 ; ---------------------------------------------------------------------
 ScreenButton_GroupSoundDisplayHold:
-	ld XIX,DisplayListPtrs_F92C66                        ; F92C58  44 66 2c f9 00
+	ld XIX,ScreenButtonHandlers_GroupSoundDisplayHold                        ; F92C58  44 66 2c f9 00
 	call T_F41B08                                        ; F92C5D  1d 08 1b f4
 	ret                                                  ; F92C61  0e
 ; ==============================================================================
@@ -35025,7 +35033,7 @@ sub_F92C62:
 	calr sub_F93123                                          ; F92C62  1e be 04
 	ret                                                  ; F92C65  0e
 ; ---------------------------------------------------------------------
-; DisplayListPtrs_F92C66 -- 32 LE32 pointers
+; ScreenButtonHandlers_GroupSoundDisplayHold -- 32 LE32 pointers
 ;
 ; Read by: ONE site, 0xF92C58 `ld XIX,0x00F92C66 / call T_F41B08`.
 ; ENTRY COUNT 32: T_F41B08 resolves to prom_a 0xF8BDC5, whose first instruction
@@ -35035,9 +35043,17 @@ sub_F92C62:
 ;          resumes.  It is also the minimum value any entry holds.
 ; Evidence: the reader, the callee's own bound, and the shape run measured by
 ;          notes/prom_a_ptr_tables.py; all three agree.
-; Unknown:  what the 32 slots select between.
+; Selector: the panel BUTTON CODE.  ScreenButton_GroupSoundDisplayHold (0xF92C58) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0xC1 (prom_b
+;          slot 0xF41558); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          (this + 4*L) after `cp HL,0x001F`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
 ; ---------------------------------------------------------------------
-DisplayListPtrs_F92C66:
+ScreenButtonHandlers_GroupSoundDisplayHold:
 	.long sub_F92F24                                 ; F92C66  [  0]
 	.long sub_F92F28                                 ; F92C6A  [  1]
 	.long sub_F92F2C                                 ; F92C6E  [  2]
@@ -36136,21 +36152,30 @@ ScreenLeave_CombinationGroupMenu:
 ; Was `sub_F93549`.
 ; ---------------------------------------------------------------------
 ScreenButton_CombinationGroupMenu:
-	ld XIX,DisplayListPtrs_F93557                        ; F93549  44 57 35 f9 00
+	ld XIX,ScreenButtonHandlers_CombinationGroupMenu                        ; F93549  44 57 35 f9 00
 	call T_F41B08                                        ; F9354E  1d 08 1b f4
 	ret                                                  ; F93552  0e
 sub_F93553:
 	calr 0x02cc                                          ; F93553  1e cc 02
 	ret                                                  ; F93556  0e
 ; ---------------------------------------------------------------------
-; DisplayListPtrs_F93557 -- 32 LE32 pointers, same shape as DisplayListPtrs_F92C66
+; ScreenButtonHandlers_CombinationGroupMenu -- 32 LE32 pointers, same shape as ScreenButtonHandlers_GroupSoundDisplayHold
 ;
 ; Read by: 0xF93549 `ld XIX,0x00F93557 / call T_F41B08`.
 ; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF935D7,
 ;          where the word is 0x013EC6C0 -- not pointer-shaped.
-; Evidence / Unknown: as DisplayListPtrs_F92C66.
+; Selector: the panel BUTTON CODE.  ScreenButton_CombinationGroupMenu (0xF93549) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0xC5 (prom_b
+;          slot 0xF41578); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          (this + 4*L) after `cp HL,0x001F`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Evidence: as ScreenButtonHandlers_GroupSoundDisplayHold.
 ; ---------------------------------------------------------------------
-DisplayListPtrs_F93557:
+ScreenButtonHandlers_CombinationGroupMenu:
 	.long sub_F93708                                 ; F93557  [  0]
 	.long sub_F93740                                 ; F9355B  [  1]
 	.long sub_F93741                                 ; F9355F  [  2]
@@ -36499,21 +36524,30 @@ ScreenLeave_GroupCombiDisplayHold:
 ; Was `sub_F9382B`.
 ; ---------------------------------------------------------------------
 ScreenButton_GroupCombiDisplayHold:
-	ld XIX,DisplayListPtrs_F93839                        ; F9382B  44 39 38 f9 00
+	ld XIX,ScreenButtonHandlers_GroupCombiDisplayHold                        ; F9382B  44 39 38 f9 00
 	call T_F41B08                                        ; F93830  1d 08 1b f4
 	ret                                                  ; F93834  0e
 sub_F93835:
 	calr 0x0480                                          ; F93835  1e 80 04
 	ret                                                  ; F93838  0e
 ; ---------------------------------------------------------------------
-; DisplayListPtrs_F93839 -- 32 LE32 pointers, same shape
+; ScreenButtonHandlers_GroupCombiDisplayHold -- 32 LE32 pointers, same shape
 ;
 ; Read by: 0xF9382B `ld XIX,0x00F93839 / call T_F41B08`.
 ; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF938B9,
 ;          where the word is 0xCE2673F1 -- not pointer-shaped.
-; Evidence / Unknown: as DisplayListPtrs_F92C66.
+; Selector: the panel BUTTON CODE.  ScreenButton_GroupCombiDisplayHold (0xF9382B) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0xC6 (prom_b
+;          slot 0xF41588); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          (this + 4*L) after `cp HL,0x001F`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Evidence: as ScreenButtonHandlers_GroupSoundDisplayHold.
 ; ---------------------------------------------------------------------
-DisplayListPtrs_F93839:
+ScreenButtonHandlers_GroupCombiDisplayHold:
 	.long sub_F93ADE                                 ; F93839  [  0]
 	.long sub_F93AE2                                 ; F9383D  [  1]
 	.long sub_F93AE3                                 ; F93841  [  2]
@@ -37425,7 +37459,16 @@ sub_F9408A:
 ; Read by: 0xF94080 `ld XIX,0x00F9408E / call T_F41B08`.
 ; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF9410E,
 ;          where the word is 0x0E00011E -- not pointer-shaped.
-; Evidence / Unknown: as DisplayListPtrs_F92C66.
+; Selector: the panel BUTTON CODE.  sub_F94080 (0xF94080) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0xCA (prom_b
+;          slot 0xF41518); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          (this + 4*L) after `cp HL,0x001F`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Evidence: as ScreenButtonHandlers_GroupSoundDisplayHold.
 ; ---------------------------------------------------------------------
 DisplayListPtrs_F9408E:
 	.long sub_F92CE6                                 ; F9408E  [  0]
@@ -46140,7 +46183,16 @@ sub_F99F5E:
 ;          entry holds -- the table abuts its own first arm.  31 or 33 entries
 ;          break that.  Re-derived by notes/prom_a_jumptables.py.
 ; Evidence: the reader shape, the bound, and the abutment above.
-; Unknown:  the selector.  Six distinct arms among the 32 slots.
+; Selector: the panel BUTTON CODE.  sub_F99F5E (0xF99F5E) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0x90 (prom_b
+;          slot 0xF41658); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld L,(XIZ+0x08)` ... `ld C,L / cp BC,0x001F / sll 2,BC /
+;          add XBC,<this> / ld XBC,(XBC) / jp (XBC)`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Six distinct arms among the 32 slots.
 ; ---------------------------------------------------------------------
 JumpTable_F99F96:
 	.long sub_F9A044                                 ; F99F96  [  0]
@@ -46538,19 +46590,28 @@ ScreenButton_MidiTotalMode:
 	cp BC,0x001f                                         ; F9A293  d9 cf 1f 00
 	jrl ugt, .LF9A346                                        ; F9A297  7b ac 00
 	sll bc, 0x02                                         ; F9A29A  d9 ee 02
-	add XBC,JumpTable_F9A2A7                             ; F9A29D  e9 c8 a7 a2 f9 00
+	add XBC,ScreenButtonHandlers_MidiTotalMode                             ; F9A29D  e9 c8 a7 a2 f9 00
 	ld XBC,(XBC)                                         ; F9A2A3  a1 21
 	jp (xbc)                                             ; F9A2A5  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_F9A2A7 -- 32 LE32 branch targets, same reader shape
+; ScreenButtonHandlers_MidiTotalMode -- 32 LE32 branch targets, same reader shape
 ;
 ; Read by: `cp BC,0x001F / ... / add XBC,0x00F9A2A7 / ld XBC,(XBC) / jp T,XBC`
 ;          at 0xF9A293-0xF9A2A6.  Default arm 0xF9A346.
 ; ENTRY COUNT 32 from that `cp`.  ★ LAST-ENTRY TEST: base + 128 = 0xF9A327 =
 ;          the minimum entry value.  Four distinct arms.
-; Evidence / Unknown: as JumpTable_F99F96.
+; Selector: the panel BUTTON CODE.  ScreenButton_MidiTotalMode (0xF9A26F) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0x9D (prom_b
+;          slot 0xF41744); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld L,(XIZ+0x08)` ... `ld C,L / cp BC,0x001F / sll 2,BC /
+;          add XBC,<this> / ld XBC,(XBC) / jp (XBC)`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Evidence: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
-JumpTable_F9A2A7:
+ScreenButtonHandlers_MidiTotalMode:
 	.long sub_F9A330                                 ; F9A2A7  [  0]
 	.long sub_F9A330                                 ; F9A2AB  [  1]
 	.long sub_F9A330                                 ; F9A2AF  [  2]
@@ -47169,17 +47230,26 @@ ScreenButton_MidiRealtimeMessages:
 	cp BC,0x001f                                         ; F9A77A  d9 cf 1f 00
 	jrl ugt, .LF9A836                                        ; F9A77E  7b b5 00
 	sll bc, 0x02                                         ; F9A781  d9 ee 02
-	add XBC,JumpTable_F9A78E                             ; F9A784  e9 c8 8e a7 f9 00
+	add XBC,ScreenButtonHandlers_MidiRealtimeMessages                             ; F9A784  e9 c8 8e a7 f9 00
 	ld XBC,(XBC)                                         ; F9A78A  a1 21
 	jp (xbc)                                             ; F9A78C  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_F9A78E -- 32 LE32 branch targets, same reader shape
+; ScreenButtonHandlers_MidiRealtimeMessages -- 32 LE32 branch targets, same reader shape
 ;
 ; Read by: `cp BC,0x001F / ... / add XBC,0x00F9A78E` at 0xF9A77A-0xF9A78D.
 ; ENTRY COUNT 32 from that `cp`.  ★ base + 128 = 0xF9A80E = the minimum entry.
-; Evidence / Unknown: as JumpTable_F99F96.
+; Selector: the panel BUTTON CODE.  ScreenButton_MidiRealtimeMessages (0xF9A756) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0x95 (prom_b
+;          slot 0xF41698); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld L,(XIZ+0x08)` ... `ld C,L / cp BC,0x001F / sll 2,BC /
+;          add XBC,<this> / ld XBC,(XBC) / jp (XBC)`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Evidence: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
-JumpTable_F9A78E:
+ScreenButtonHandlers_MidiRealtimeMessages:
 	.long sub_F9A833                                 ; F9A78E  [  0]
 	.long sub_F9A833                                 ; F9A792  [  1]
 	.long sub_F9A833                                 ; F9A796  [  2]
@@ -47523,17 +47593,26 @@ ScreenButton_MidiInputOutputFilter:
 	cp BC,0x001f                                         ; F9AA75  d9 cf 1f 00
 	jrl ugt, .LF9AB28                                        ; F9AA79  7b ac 00
 	sll bc, 0x02                                         ; F9AA7C  d9 ee 02
-	add XBC,JumpTable_F9AA89                             ; F9AA7F  e9 c8 89 aa f9 00
+	add XBC,ScreenButtonHandlers_MidiInputOutputFilter                             ; F9AA7F  e9 c8 89 aa f9 00
 	ld XBC,(XBC)                                         ; F9AA85  a1 21
 	jp (xbc)                                             ; F9AA87  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_F9AA89 -- 32 LE32 branch targets, same reader shape
+; ScreenButtonHandlers_MidiInputOutputFilter -- 32 LE32 branch targets, same reader shape
 ;
 ; Read by: `cp BC,0x001F / ... / add XBC,0x00F9AA89` at 0xF9AA75-0xF9AA88.
 ; ENTRY COUNT 32 from that `cp`.  ★ base + 128 = 0xF9AB09 = the minimum entry.
-; Evidence / Unknown: as JumpTable_F99F96.
+; Selector: the panel BUTTON CODE.  ScreenButton_MidiInputOutputFilter (0xF9AA51) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0x9E (prom_b
+;          slot 0xF41754); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld L,(XIZ+0x08)` ... `ld C,L / cp BC,0x001F / sll 2,BC /
+;          add XBC,<this> / ld XBC,(XBC) / jp (XBC)`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Evidence: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
-JumpTable_F9AA89:
+ScreenButtonHandlers_MidiInputOutputFilter:
 	.long sub_F9AB12                                 ; F9AA89  [  0]
 	.long sub_F9AB12                                 ; F9AA8D  [  1]
 	.long sub_F9AB12                                 ; F9AA91  [  2]
@@ -48251,18 +48330,27 @@ ScreenButton_MidiOutProgramChange:
 	cp BC,0x001f                                         ; F9B084  d9 cf 1f 00
 	jrl ugt, .LF9B145                                        ; F9B088  7b ba 00
 	sll bc, 0x02                                         ; F9B08B  d9 ee 02
-	add XBC,JumpTable_F9B098                             ; F9B08E  e9 c8 98 b0 f9 00
+	add XBC,ScreenButtonHandlers_MidiOutProgramChange                             ; F9B08E  e9 c8 98 b0 f9 00
 	ld XBC,(XBC)                                         ; F9B094  a1 21
 	jp (xbc)                                             ; F9B096  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_F9B098 -- 32 LE32 branch targets, same reader shape
+; ScreenButtonHandlers_MidiOutProgramChange -- 32 LE32 branch targets, same reader shape
 ;
 ; Read by: `cp BC,0x001F / ... / add XBC,0x00F9B098` at 0xF9B084-0xF9B097.
 ; ENTRY COUNT 32 from that `cp`.  ★ base + 128 = 0xF9B118 = the minimum entry.
-; Evidence / Unknown: as JumpTable_F99F96.  This is the last of the five
+; Selector: the panel BUTTON CODE.  ScreenButton_MidiOutProgramChange (0xF9B060) is the +8
+;          BUTTON method of PanelScreen_VtableTable entry 0x9F (prom_b
+;          slot 0xF41764); PanelButton_Route calls it with the code in HL
+;          and at (XIZ+8), and it indexes this table with it:
+;          `ld L,(XIZ+0x08)` ... `ld C,L / cp BC,0x001F / sll 2,BC /
+;          add XBC,<this> / ld XBC,(XBC) / jp (XBC)`.
+;          Dispatch_FF3D39's CONTROL LEGEND names each code.
+;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
+; ★ 2026-09-25 (lane proma): the selector was recorded as open here.
+; Evidence: as JumpTable_F99F96.  This is the last of the five
 ;          32-entry tables notes/prom_a_jumptables.py finds in the span.
 ; ---------------------------------------------------------------------
-JumpTable_F9B098:
+ScreenButtonHandlers_MidiOutProgramChange:
 	.long sub_F9B12A                                 ; F9B098  [  0]
 	.long sub_F9B12A                                 ; F9B09C  [  1]
 	.long sub_F9B12A                                 ; F9B0A0  [  2]
