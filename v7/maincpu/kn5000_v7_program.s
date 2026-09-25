@@ -4113,45 +4113,45 @@ ROM_PaddingFF:
 
 	.set FlashRead_BlockData_Field7, 0xf15872
 
-	.set DrumDetailEdit_Entry_01, 0xf15fdc
+	.set DrumDetailEdit_Entry_01, SeScreenData_0x5400
 
-	.set DrumDetailEdit_Entry_02, 0xf15ffe
+	.set DrumDetailEdit_Entry_02, SeScreenData_0x5422
 
-	.set DrumDetailEdit_Entry_03, 0xf16020
+	.set DrumDetailEdit_Entry_03, SeScreenData_0x5444
 
-	.set DrumDetailEdit_Entry_04, 0xf1602c
+	.set DrumDetailEdit_Entry_04, SeScreenData_0x5450
 
-	.set DrumDetailEdit_Entry_05, 0xf16039
+	.set DrumDetailEdit_Entry_05, SeScreenData_0x545D
 
-	.set DrumDetailEdit_Entry_06, 0xf16046
+	.set DrumDetailEdit_Entry_06, SeScreenData_0x546A
 
-	.set DrumDetailEdit_Entry_07, 0xf16068
+	.set DrumDetailEdit_Entry_07, SeScreenData_0x548C
 
-	.set DrumDetailEdit_Entry_08, 0xf16074
+	.set DrumDetailEdit_Entry_08, SeScreenData_0x5498
 
-	.set DrumDetailEdit_Entry_09, 0xf16081
+	.set DrumDetailEdit_Entry_09, SeScreenData_0x54A5
 
-	.set Data_Dispatch_Entry, 0xf1608e
+	.set Data_Dispatch_Entry, SeScreenData_0x54B2
 
-	.set Data_Dispatch_Entry_0x39, 0xf160c7
+	.set Data_Dispatch_Entry_0x39, SeScreenData_0x54EB
 
-	.set Data_Dispatch_Entry_0x45, 0xf160d3
+	.set Data_Dispatch_Entry_0x45, SeScreenData_0x54F7
 
-	.set EffectParamEdit_Entry_01, 0xf16471
+	.set EffectParamEdit_Entry_01, SeScreenData_0x5895
 
-	.set EffectParamEdit_Entry_02, 0xf1647c
+	.set EffectParamEdit_Entry_02, SeScreenData_0x58A0
 
-	.set EffectParamEdit_Entry_03, 0xf1648b
+	.set EffectParamEdit_Entry_03, SeScreenData_0x58AF
 
-	.set EffectParamEdit_Entry_04, 0xf16496
+	.set EffectParamEdit_Entry_04, SeScreenData_0x58BA
 
-	.set EffectParamEdit_Entry_05, 0xf164a1
+	.set EffectParamEdit_Entry_05, SeScreenData_0x58C5
 
-	.set EffectParamEdit_Entry_06, 0xf164ac
+	.set EffectParamEdit_Entry_06, SeScreenData_0x58D0
 
-	.set EffectParamEdit_Entry_07, 0xf164b7
+	.set EffectParamEdit_Entry_07, SeScreenData_0x58DB
 
-	.set EffectParamEdit_Entry_08, 0xf164c2
+	.set EffectParamEdit_Entry_08, SeScreenData_0x58E6
 
 	.set SeqVoice_ValidateAndProcessState_0x13, 0xf400de
 

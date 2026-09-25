@@ -561,15 +561,15 @@
 	.set DrawText_LayoutAndRender_Variant1_0x6CA, DrawText_LayoutAndRender_Variant1 + 1738
 	.set DrawText_PopAndReturn_0x7, DrawText_PopAndReturn + 7
 	.set DrawWall_Deferred_0x11, DrawWall_Deferred + 17
-	.set DrumDetailEdit_Menu_Table_0x1A4, DrumDetailEdit_Menu_Table + 420
-	.set DrumDetailEdit_Menu_Table_0x27B, DrumDetailEdit_Menu_Table + 635
-	.set DrumDetailEdit_Menu_Table_0x2B2, DrumDetailEdit_Menu_Table + 690
-	.set DrumDetailEdit_Menu_Table_0x2C6, DrumDetailEdit_Menu_Table + 710
-	.set DrumDetailEdit_Menu_Table_0x2D0, DrumDetailEdit_Menu_Table + 720
-	.set DrumDetailEdit_Menu_Table_0x2E8, DrumDetailEdit_Menu_Table + 744
-	.set DrumDetailEdit_Menu_Table_0x32A, DrumDetailEdit_Menu_Table + 810
-	.set DrumDetailEdit_Menu_Table_0x35E, DrumDetailEdit_Menu_Table + 862
-	.set DrumDetailEdit_Menu_Table_0x3C8, DrumDetailEdit_Menu_Table + 968
+	.set DrumDetailEdit_Menu_Table_0x1A4, SeScreenData_0x56CD
+	.set DrumDetailEdit_Menu_Table_0x27B, SeScreenData_0x57A4
+	.set DrumDetailEdit_Menu_Table_0x2B2, SeScreenData_0x57DB
+	.set DrumDetailEdit_Menu_Table_0x2C6, SeScreenData_0x57EF
+	.set DrumDetailEdit_Menu_Table_0x2D0, SeScreenData_0x57F9
+	.set DrumDetailEdit_Menu_Table_0x2E8, SeScreenData_0x5811
+	.set DrumDetailEdit_Menu_Table_0x32A, SeScreenData_0x5853
+	.set DrumDetailEdit_Menu_Table_0x35E, SeScreenData_0x5887
+	.set DrumDetailEdit_Menu_Table_0x3C8, SeScreenData_0x58F1
 	.set DrumKitExit_DataPad_0x1, DrumKitExit_DataPad + 1
 	.set DrumKit_GroupAssignTable_0x1E, DrumKit_GroupAssignTable + 30
 	.set DrumKit_GroupAssignTable_0x3C, DrumKit_GroupAssignTable + 60
@@ -846,15 +846,15 @@
 	.set Filename_TemplateArea_0x70, Filename_TemplateArea + 112
 	.set Filename_TemplateArea_0x76, Filename_TemplateArea + 118
 	.set Filename_TemplateArea_0xA, Filename_TemplateArea + 10
-	.set FlashWrite_BlockRef_Type6_0x10, FlashWrite_BlockRef_Type6 + 16
-	.set FlashWrite_BlockRef_Type6_0x118, FlashWrite_BlockRef_Type6 + 280
-	.set FlashWrite_BlockRef_Type6_0x295, FlashWrite_BlockRef_Type6 + 661
-	.set FlashWrite_BlockRef_Type6_0x40, FlashWrite_BlockRef_Type6 + 64
-	.set FlashWrite_BlockRef_Type6_0x561, FlashWrite_BlockRef_Type6 + 1377
-	.set FlashWrite_BlockRef_Type6_0x633, FlashWrite_BlockRef_Type6 + 1587
-	.set FlashWrite_BlockRef_Type6_0x655, FlashWrite_BlockRef_Type6 + 1621
-	.set FlashWrite_BlockRef_Type6_0x690, FlashWrite_BlockRef_Type6 + 1680
-	.set FlashWrite_BlockRef_Type6_0x69A, FlashWrite_BlockRef_Type6 + 1690
+	.set FlashWrite_BlockRef_Type6_0x10, SeScreenData_0x4E9B
+	.set FlashWrite_BlockRef_Type6_0x118, SeScreenData_0x4FA3
+	.set FlashWrite_BlockRef_Type6_0x295, SeScreenData_0x5120
+	.set FlashWrite_BlockRef_Type6_0x40, SeScreenData_0x4ECB
+	.set FlashWrite_BlockRef_Type6_0x561, SeScreenData_0x53EC
+	.set FlashWrite_BlockRef_Type6_0x633, SeScreenData_0x54BE
+	.set FlashWrite_BlockRef_Type6_0x655, SeScreenData_0x54E0
+	.set FlashWrite_BlockRef_Type6_0x690, SeScreenData_0x551B
+	.set FlashWrite_BlockRef_Type6_0x69A, SeScreenData_0x5525
 	.set Flash_InitBytecodeBlock_0x2BF, Flash_InitBytecodeBlock + 703
 	.set Flash_SlotUpdateOpsBlock_0x336, Flash_SlotUpdateOpsBlock + 822
 	.set Flash_SlotUpdateOpsBlock_0x480, Flash_SlotUpdateOpsBlock + 1152
