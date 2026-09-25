@@ -30,6 +30,10 @@
 ; CONSUMERS (Main CPU ROM v7/v9/v10, ui/drawing_primitives.s):
 ;   DrawBitmap / DrawBitmapFast  index * 8 into 0x913000 (BitmapDescriptorTable)
 ;   DrawFrameSP                  index * 8 into 0x934000 (FrameDescriptorTable)
+; v10 addresses (2026-09-25): DrawBitmap_Impl 0xFABC98 (add xhl,0x913000),
+; DrawBitmapFast_Impl 0xFABE6F (add xiz,0x913000), DrawFrameSP_Impl 0xFAC0E7
+; (add xbc,0x934000); GetFrameSPSize (0xFB25F3, display/graphics_text_vga.s)
+; also reads a frame piece's {w,h} at 0x934000 + 8*index.
 ; The maincpu code still uses the numeric addresses (`add xhl, 0x913000` /
 ; `add xbc, 0x934000`); those sites should eventually reference these labels.
 ; =============================================================================
@@ -243,10 +247,10 @@ Bitmap_SoundIcon_Microphone:		.incbin "includes/generated/Bitmap_SoundIcon_Micro
 ; -----------------------------------------------------------------------------
 ; These six blocks are indexed by SectionDirectory_Table entries 6 and 28-32
 ; (floppy save/load banks), but their factory content is a set of full UI
-; [CORRECTED 2026-09-25: "floppy save/load banks" had no evidence; every
-; directory entry is a bitmap and no firmware reader of the directory was
-; found -- see preset_banks.s, whose accessor routines also give these six
-; images' width and height]
+; [CORRECTED 2026-09-25: nothing supported "floppy save/load banks"; every
+; directory entry is a bitmap, and a search of all our ROMs for the
+; directory's target addresses finds only the table-data accessor routines
+; (preset_banks.s), which also give these six images' width and height]
 ; images, each byte-identical to an extraction already checked in under
 ; v10/maincpu/images/ -- so they are emitted from those files here (same
 ; single-sourcing as the Bitmap_1bit_* boot screens below).  The maincpu

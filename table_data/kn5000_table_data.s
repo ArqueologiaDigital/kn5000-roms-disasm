@@ -416,6 +416,8 @@ Wallpaper_1:	; Technics branded texture
 ; =============================================================================
 ; These icons are used in menus and UI elements. Referenced by the
 ; DrawIcons routine at 0xFABF9B in Main CPU ROM.
+; (In v10 0xFABF9B is DrawIcons_Impl, reached through DrawIcons at 0xFABF3F;
+; it loads 0x938000 and indexes it by icon number * 8.)
 ;
 ; Format: ALL 176 icons are 24x24 pixels @ 4bpp (16 colors), 288 bytes each
 ;   - 2 pixels per byte: high nibble = first pixel, low nibble = second
@@ -643,6 +645,8 @@ Icon_175:	desc_entry	28, 28, IconPixels_175
 ; icon; DrawIcons hardcodes the geometry).  Emitted as offset/length slices of
 ; includes/icon_pixel_data.bin so each icon is individually addressable.
 ; Extracted gallery: table_data/images/icons/Icon_NNN.png.
+; DrawIcons_Impl (v10 0xFABF9B) reaches each run through the +4 pointer of
+; its IconTable entry.
 IconPixels_000:	.incbin "includes/generated/IconPixels_000.bin"
 IconPixels_001:	.incbin "includes/generated/IconPixels_001.bin"
 IconPixels_002:	.incbin "includes/generated/IconPixels_002.bin"
