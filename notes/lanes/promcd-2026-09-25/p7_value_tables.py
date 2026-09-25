@@ -23,8 +23,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 C = open(os.path.join(ROOT, "wsa1", "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
 SRC = os.path.join(ROOT, "wsa1", "prom_c", "p7", "p7_stream_pool.s")
 CODE = [(0xF9F7D5, "81 21"), (0xF9F7F9, "d8 0b 0c 00"), (0xF9F84F, "1e ce e7")]
-NEW = (";      Layout (corrected 2026-09-25, lane promcd -- this line said it was not\n"
-       ";      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest\n"
+NEW = (";      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it\n"
+       ";      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest\n"
        ";      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four\n"
        ";      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of\n"
        ";      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.\n")
@@ -40,8 +40,8 @@ OLD3 = "\t;           A second entry point into this object; its own extent is n
 NEW3 = ("\t;           A second entry point into this object.  Its extent is 109 bytes, 1 + the\n"
         "\t;           0x6C length P7Unit_SelectStreamsForRecord installs beside the pointer --\n"
         "\t;           the three 109-byte tables tile the 327-byte object exactly (banner at the\n"
-        "\t;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line said the\n"
-        "\t;           extent was not established.\n")
+        "\t;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line used to\n"
+        "\t;           leave the extent open.\n")
 
 
 if __name__ == "__main__":

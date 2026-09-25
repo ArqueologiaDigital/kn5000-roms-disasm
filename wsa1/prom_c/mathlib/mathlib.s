@@ -5334,43 +5334,50 @@ Shift8_Left__FCB279:
 Float64_ConstantPool:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0xf9, 0x3f   ; [ 0] 0xFCB27E = 1.5707963267948966  (pi/2)
 	;      no loading site located
-; Read at 2 sites: sub_FC8BB2 0xFC8BCA, 0xFC8BD2.
+; Pool element at 0xFCB286: f64 1.0. Read at 2 sites: sub_FC8BB2 0xFC8BCA, 0xFC8BD2.
 F64_1p0:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [ 1] 0xFCB286 = 1.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC8BB2 0xFC8BDC, 0xFC8BE2.
+; Pool element at 0xFCB28E: f64 0.0. Read at 2 sites: sub_FC8BB2 0xFC8BDC, 0xFC8BE2.
 F64_0p0:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [ 2] 0xFCB28E = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC8C45 0xFC8DDF, 0xFC8DE5.
+; Pool element at 0xFCB296: f64 1.0536712127723509e-08. Read at 2 sites: sub_FC8C45
+; 0xFC8DDF, 0xFC8DE5.
 F64_1p0536712127723509em08:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0x3e   ; [ 3] 0xFCB296 = 1.0536712127723509e-08
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC8C45 0xFC8D9E, 0xFC8DA4.
+; Pool element at 0xFCB29E: f64 3.141592653589793  (pi). Read at 2 sites: sub_FC8C45
+; 0xFC8D9E, 0xFC8DA4.
 F64_3p141592653589793:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x09, 0x40   ; [ 4] 0xFCB29E = 3.141592653589793  (pi)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 6 sites: sub_FC8C45 0xFC8CFA, 0xFC8D00, 0xFC8D39, 0xFC8D3F +2 more.
+; Pool element at 0xFCB2A6: f64 0.5. Read at 6 sites: sub_FC8C45 0xFC8CFA, 0xFC8D00,
+; 0xFC8D39, 0xFC8D3F +2 more.
 F64_0p5_2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [ 5] 0xFCB2A6 = 0.5
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC8C45 0xFC8CE7, 0xFC8CED.
+; Pool element at 0xFCB2AE: f64 0.3183098861837907  (1/pi). Read at 2 sites: sub_FC8C45
+; 0xFC8CE7, 0xFC8CED.
 F64_0p3183098861837907:
 	.byte	0x83, 0xc8, 0xc9, 0x6d, 0x30, 0x5f, 0xd4, 0x3f   ; [ 6] 0xFCB2AE = 0.3183098861837907  (1/pi)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC8C45 0xFC8CB8, 0xFC8CBE.
+; Pool element at 0xFCB2B6: f64 298156826.0. Read at 2 sites: sub_FC8C45 0xFC8CB8, 0xFC8CBE.
 F64_298156826p0:
 	.byte	0x00, 0x00, 0x00, 0x1a, 0x83, 0xc5, 0xb1, 0x41   ; [ 7] 0xFCB2B6 = 298156826.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC8C45 0xFC8C81, 0xFC8C87.
+; Pool element at 0xFCB2BE: f64 1.414847550405688e+16. Read at 2 sites: sub_FC8C45 0xFC8C81,
+; 0xFC8C87.
 F64_1p414847550405688e16:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x49, 0x43   ; [ 8] 0xFCB2BE = 1.414847550405688e+16
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 6 sites: sub_FC8C45 0xFC8C4E, 0xFC8C54, 0xFC8CA6, 0xFC8CAE +2 more.
+; Pool element at 0xFCB2C6: f64 0.0. Read at 6 sites: sub_FC8C45 0xFC8C4E, 0xFC8C54,
+; 0xFC8CA6, 0xFC8CAE +2 more.
 F64_0p0_2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [ 9] 0xFCB2C6 = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC8C45 0xFC8E16, 0xFC8E20.
+; Pool element at 0xFCB2CE: f64 2.7204790957888847e-15. Read at 2 sites: sub_FC8C45
+; 0xFC8E16, 0xFC8E20.
 F64_2p7204790957888847em15:
 	.byte	0x95, 0xdf, 0x93, 0x69, 0xff, 0x80, 0xe8, 0x3c   ; [10] 0xFCB2CE = 2.7204790957888847e-15
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
@@ -5395,59 +5402,71 @@ F64_0p008333333333333165:
 F64_neg0p16666666666666666:
 	.byte	0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0xc5, 0xbf   ; [17] 0xFCB306 = -0.16666666666666666  (= -1/3!  exactly)
 	;      no loading site located
-; Read at 3 sites: sub_FC8EE5 0xFC8F84, 0xFC9056, 0xFC905E.
+; Pool element at 0xFCB30E: f64 0.0. Read at 3 sites: sub_FC8EE5 0xFC8F84, 0xFC9056,
+; 0xFC905E.
 F64_0p0_3:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [18] 0xFCB30E = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC9210, 0xFC9216.
+; Pool element at 0xFCB316: f64 2147483647.0  (INT32_MAX). Read at 2 sites: sub_FC9140
+; 0xFC9210, 0xFC9216.
 F64_2147483647p0:
 	.byte	0x00, 0x00, 0xc0, 0xff, 0xff, 0xff, 0xdf, 0x41   ; [19] 0xFCB316 = 2147483647.0  (INT32_MAX)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC93D1, 0xFC93D9.
+; Pool element at 0xFCB31E: f64 1.0. Read at 2 sites: sub_FC9140 0xFC93D1, 0xFC93D9.
 F64_1p0_2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [20] 0xFCB31E = 1.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC93B5, 0xFC93BB.
+; Pool element at 0xFCB326: f64 1.0536712127723509e-08. Read at 2 sites: sub_FC9140
+; 0xFC93B5, 0xFC93BB.
 F64_1p0536712127723509em08_2:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0x3e   ; [21] 0xFCB326 = 1.0536712127723509e-08
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC9399, 0xFC939F.
+; Pool element at 0xFCB32E: f64 -1.0536712127723509e-08. Read at 2 sites: sub_FC9140
+; 0xFC9399, 0xFC939F.
 F64_neg1p0536712127723509em08:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0xbe   ; [22] 0xFCB32E = -1.0536712127723509e-08
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC9331, 0xFC9337.
+; Pool element at 0xFCB336: f64 1.5707963267948966  (pi/2). Read at 2 sites: sub_FC9140
+; 0xFC9331, 0xFC9337.
 F64_1p5707963267948966:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0xf9, 0x3f   ; [23] 0xFCB336 = 1.5707963267948966  (pi/2)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC92BF, 0xFC92C5.
+; Pool element at 0xFCB33E: f64 -4.454455103380769e-06. Read at 2 sites: sub_FC9140
+; 0xFC92BF, 0xFC92C5.
 F64_neg4p454455103380769em06:
 	.byte	0x9e, 0xe5, 0x9e, 0x4b, 0xef, 0xae, 0xd2, 0xbe   ; [24] 0xFCB33E = -4.454455103380769e-06
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC9276, 0xFC927C.
+; Pool element at 0xFCB346: f64 1.57080078125. Read at 2 sites: sub_FC9140 0xFC9276,
+; 0xFC927C.
 F64_1p57080078125:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x22, 0xf9, 0x3f   ; [25] 0xFCB346 = 1.57080078125
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 6 sites: sub_FC9140 0xFC91F5, 0xFC91FB, 0xFC930E, 0xFC9314 +2 more.
+; Pool element at 0xFCB34E: f64 0.5. Read at 6 sites: sub_FC9140 0xFC91F5, 0xFC91FB,
+; 0xFC930E, 0xFC9314 +2 more.
 F64_0p5_3:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [26] 0xFCB34E = 0.5
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC91E2, 0xFC91E8.
+; Pool element at 0xFCB356: f64 0.6366197723675814  (2/pi). Read at 2 sites: sub_FC9140
+; 0xFC91E2, 0xFC91E8.
 F64_0p6366197723675814:
 	.byte	0x83, 0xc8, 0xc9, 0x6d, 0x30, 0x5f, 0xe4, 0x3f   ; [27] 0xFCB356 = 0.6366197723675814  (2/pi)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC91B7, 0xFC91BD.
+; Pool element at 0xFCB35E: f64 149078413.0. Read at 2 sites: sub_FC9140 0xFC91B7, 0xFC91BD.
 F64_149078413p0:
 	.byte	0x00, 0x00, 0x00, 0x1a, 0x83, 0xc5, 0xa1, 0x41   ; [28] 0xFCB35E = 149078413.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC9180, 0xFC9186.
+; Pool element at 0xFCB366: f64 7074237752028440.0. Read at 2 sites: sub_FC9140 0xFC9180,
+; 0xFC9186.
 F64_7074237752028440p0:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x39, 0x43   ; [29] 0xFCB366 = 7074237752028440.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 4 sites: sub_FC9140 0xFC914B, 0xFC9151, 0xFC91A5, 0xFC91AD.
+; Pool element at 0xFCB36E: f64 0.0. Read at 4 sites: sub_FC9140 0xFC914B, 0xFC9151,
+; 0xFC91A5, 0xFC91AD.
 F64_0p0_4:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [30] 0xFCB36E = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9140 0xFC93FE, 0xFC9408.
+; Pool element at 0xFCB376: f64 -1.7861707342254424e-05. Read at 2 sites: sub_FC9140
+; 0xFC93FE, 0xFC9408.
 F64_neg1p7861707342254424em05:
 	.byte	0x23, 0xc7, 0xa2, 0x2e, 0xb7, 0xba, 0xf2, 0xbe   ; [31] 0xFCB376 = -1.7861707342254424e-05
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
@@ -5457,7 +5476,8 @@ F64_0p003424887823589059:
 F64_neg0p1333835000642196:
 	.byte	0xff, 0x08, 0x4d, 0xe5, 0xb5, 0x12, 0xc1, 0xbf   ; [33] 0xFCB386 = -0.1333835000642196
 	;      no loading site located
-; Read at 2 sites: sub_FC9140 0xFC949B, 0xFC94A5.
+; Pool element at 0xFCB38E: f64 4.981943399378651e-07. Read at 2 sites: sub_FC9140 0xFC949B,
+; 0xFC94A5.
 F64_4p981943399378651em07:
 	.byte	0xe9, 0x78, 0x76, 0xf0, 0x74, 0xb7, 0xa0, 0x3e   ; [34] 0xFCB38E = 4.981943399378651e-07
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
@@ -5473,71 +5493,87 @@ F64_neg0p46671683339755293:
 F64_1p0_3:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [38] 0xFCB3AE = 1.0
 	;      no loading site located
-; Read at 2 sites: sub_FC9576 0xFC976C, 0xFC9772.
+; Pool element at 0xFCB3B6: f64 -709.7827. Read at 2 sites: sub_FC9576 0xFC976C, 0xFC9772.
 F64_neg709p7827:
 	.byte	0xa2, 0xb4, 0x37, 0xf8, 0x42, 0x2e, 0x86, 0xc0   ; [39] 0xFCB3B6 = -709.7827
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3BE: f64 709.782712893384  (ln(DBL_MAX), the exp overflow bound).
 ; Read at 2 sites: sub_FC9576 0xFC9738, 0xFC973E.
 F64_709p782712893384:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0x86, 0x40   ; [40] 0xFCB3BE = 709.782712893384  (ln(DBL_MAX), the exp overflow bound)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 4 sites: sub_FC9576 0xFC965A, 0xFC9660, 0xFC9680, 0xFC9686.
+; Pool element at 0xFCB3C6: f64 0.5. Read at 4 sites: sub_FC9576 0xFC965A, 0xFC9660,
+; 0xFC9680, 0xFC9686.
 F64_0p5_4:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [41] 0xFCB3C6 = 0.5
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9576 0xFC95FC, 0xFC9602.
+; Pool element at 0xFCB3CE: f64 2147483647.0  (INT32_MAX). Read at 2 sites: sub_FC9576
+; 0xFC95FC, 0xFC9602.
 F64_2147483647p0_2:
 	.byte	0x00, 0x00, 0xc0, 0xff, 0xff, 0xff, 0xdf, 0x41   ; [42] 0xFCB3CE = 2147483647.0  (INT32_MAX)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 8 sites: sub_FC9576 0xFC95A9, 0xFC95AF, 0xFC95CE, 0xFC95D4 +4 more.
+; Pool element at 0xFCB3D6: f64 0.0. Read at 8 sites: sub_FC9576 0xFC95A9, 0xFC95AF,
+; 0xFC95CE, 0xFC95D4 +4 more.
 F64_0p0_5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [43] 0xFCB3D6 = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 4 sites: sub_FC9576 0xFC957C, 0xFC9582, 0xFC96BC, 0xFC96C2.
+; Pool element at 0xFCB3DE: f64 1.0. Read at 4 sites: sub_FC9576 0xFC957C, 0xFC9582,
+; 0xFC96BC, 0xFC96C2.
 F64_1p0_4:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [44] 0xFCB3DE = 1.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9844 0xFC9A23, 0xFC9A29.
+; Pool element at 0xFCB3E6: f64 0.6931471805599453  (ln 2). Read at 2 sites: sub_FC9844
+; 0xFC9A23, 0xFC9A29.
 F64_0p6931471805599453:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0xe6, 0x3f   ; [45] 0xFCB3E6 = 0.6931471805599453  (ln 2)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 4 sites: sub_FC9844 0xFC99E9, 0xFC99EF; sub_FC9ACB 0xFC9B7A, 0xFC9B80.
+; Pool element at 0xFCB3EE: f64 0.5. Read at 4 sites: sub_FC9844 0xFC99E9, 0xFC99EF;
+; sub_FC9ACB 0xFC9B7A, 0xFC9B80.
 F64_0p5_5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [46] 0xFCB3EE = 0.5
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9844 0xFC99D6, 0xFC99DC.
+; Pool element at 0xFCB3F6: f64 1.4426950408889634  (1/ln 2 = log2(e)). Read at 2 sites:
+; sub_FC9844 0xFC99D6, 0xFC99DC.
 F64_1p4426950408889634:
 	.byte	0xfe, 0x82, 0x2b, 0x65, 0x47, 0x15, 0xf7, 0x3f   ; [47] 0xFCB3F6 = 1.4426950408889634  (1/ln 2 = log2(e))
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 4 sites: sub_FC9844 0xFC9980, 0xFC9986, 0xFC99A3, 0xFC99A9.
+; Pool element at 0xFCB3FE: f64 1.0. Read at 4 sites: sub_FC9844 0xFC9980, 0xFC9986,
+; 0xFC99A3, 0xFC99A9.
 F64_1p0_5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [48] 0xFCB3FE = 1.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9844 0xFC9958, 0xFC995E.
+; Pool element at 0xFCB406: f64 1.0536712127723509e-08. Read at 2 sites: sub_FC9844
+; 0xFC9958, 0xFC995E.
 F64_1p0536712127723509em08_3:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0x3e   ; [49] 0xFCB406 = 1.0536712127723509e-08
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9844 0xFC98ED, 0xFC98F5.
+; Pool element at 0xFCB40E: f64 8.988465674311579e+307  (DBL_MAX/2). Read at 2 sites:
+; sub_FC9844 0xFC98ED, 0xFC98F5.
 F64_8p988465674311579e307:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xdf, 0x7f   ; [50] 0xFCB40E = 8.988465674311579e+307  (DBL_MAX/2)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB416: f64 709.782712893384  (ln(DBL_MAX), the exp overflow bound).
 ; Read at 4 sites: sub_FC9844 0xFC98B3, 0xFC98B9, 0xFC98CF, 0xFC98D5.
 F64_709p782712893384_2:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0x86, 0x40   ; [51] 0xFCB416 = 709.782712893384  (ln(DBL_MAX), the exp overflow bound)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 4 sites: sub_FC9844 0xFC98A1, 0xFC98A9, 0xFC9924, 0xFC992A.
+; Pool element at 0xFCB41E: f64 0.0. Read at 4 sites: sub_FC9844 0xFC98A1, 0xFC98A9,
+; 0xFC9924, 0xFC992A.
 F64_0p0_6:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [52] 0xFCB41E = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9844 0xFC9886, 0xFC988E.
+; Pool element at 0xFCB426: f64 2.2250738585072014e-308  (DBL_MIN). Read at 2 sites:
+; sub_FC9844 0xFC9886, 0xFC988E.
 F64_2p2250738585072014em308:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00   ; [53] 0xFCB426 = 2.2250738585072014e-308  (DBL_MIN)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 4 sites: sub_FC9844 0xFC984C, 0xFC9852, 0xFC9868, 0xFC986E.
+; Pool element at 0xFCB42E: f64 -709.7827. Read at 4 sites: sub_FC9844 0xFC984C, 0xFC9852,
+; 0xFC9868, 0xFC986E.
 F64_neg709p7827_2:
 	.byte	0xa2, 0xb4, 0x37, 0xf8, 0x42, 0x2e, 0x86, 0xc0   ; [54] 0xFCB42E = -709.7827
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9844 0xFC9A82, 0xFC9A8C.
+; Pool element at 0xFCB436: f64 3.1555192765684645e-05. Read at 2 sites: sub_FC9844
+; 0xFC9A82, 0xFC9A8C.
 F64_3p1555192765684645em05:
 	.byte	0x1e, 0x92, 0xe6, 0x2a, 0x44, 0x8b, 0x00, 0x3f   ; [55] 0xFCB436 = 3.1555192765684645e-05
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
@@ -5547,7 +5583,8 @@ F64_0p007575318015942277:
 F64_0p25:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x3f   ; [57] 0xFCB446 = 0.25
 	;      no loading site located
-; Read at 2 sites: sub_FC9ACB 0xFC9AF1, 0xFC9AFB.
+; Pool element at 0xFCB44E: f64 7.510402839987004e-07. Read at 2 sites: sub_FC9ACB 0xFC9AF1,
+; 0xFC9AFB.
 F64_7p510402839987004em07:
 	.byte	0x55, 0x04, 0xe5, 0x0c, 0x63, 0x33, 0xa9, 0x3e   ; [58] 0xFCB44E = 7.510402839987004e-07
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
@@ -5560,35 +5597,40 @@ F64_0p056817302698551224:
 F64_0p5_6:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [61] 0xFCB466 = 0.5
 	;      no loading site located
-; Read at 4 sites: sub_FC9BBC 0xFC9BC4, 0xFC9BCA, 0xFC9C36, 0xFC9C3E.
+; Pool element at 0xFCB46E: f64 0.0. Read at 4 sites: sub_FC9BBC 0xFC9BC4, 0xFC9BCA,
+; 0xFC9C36, 0xFC9C3E.
 F64_0p0_7:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [62] 0xFCB46E = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9D12 0xFC9F66, 0xFC9F6C.
+; Pool element at 0xFCB476: f64 0.6931471805599453  (ln 2). Read at 2 sites: sub_FC9D12
+; 0xFC9F66, 0xFC9F6C.
 F64_0p6931471805599453_2:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0xe6, 0x3f   ; [63] 0xFCB476 = 0.6931471805599453  (ln 2)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9D12 0xFC9DC5, 0xFC9DCD.
+; Pool element at 0xFCB47E: f64 0.5. Read at 2 sites: sub_FC9D12 0xFC9DC5, 0xFC9DCD.
 F64_0p5_7:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [64] 0xFCB47E = 0.5
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9D12 0xFC9DA6, 0xFC9DAC.
+; Pool element at 0xFCB486: f64 0.7071067811865476  (1/sqrt 2). Read at 2 sites: sub_FC9D12
+; 0xFC9DA6, 0xFC9DAC.
 F64_0p7071067811865476:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0xe6, 0x3f   ; [65] 0xFCB486 = 0.7071067811865476  (1/sqrt 2)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9D12 0xFC9D7F, 0xFC9D87.
+; Pool element at 0xFCB48E: f64 1.0. Read at 2 sites: sub_FC9D12 0xFC9D7F, 0xFC9D87.
 F64_1p0_6:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [66] 0xFCB48E = 1.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9D12 0xFC9D41, 0xFC9D47.
+; Pool element at 0xFCB496: f64 0.0. Read at 2 sites: sub_FC9D12 0xFC9D41, 0xFC9D47.
 F64_0p0_8:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [67] 0xFCB496 = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9D12 0xFC9D19, 0xFC9D1F.
+; Pool element at 0xFCB49E: f64 8.988465674311579e+307  (DBL_MAX/2). Read at 2 sites:
+; sub_FC9D12 0xFC9D19, 0xFC9D1F.
 F64_8p988465674311579e307_2:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xdf, 0x7f   ; [68] 0xFCB49E = 8.988465674311579e+307  (DBL_MAX/2)
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
-; Read at 2 sites: sub_FC9D12 0xFC9E4B, 0xFC9E55.
+; Pool element at 0xFCB4A6: f64 -0.7895611288749126. Read at 2 sites: sub_FC9D12 0xFC9E4B,
+; 0xFC9E55.
 F64_neg0p7895611288749126:
 	.byte	0x29, 0xbd, 0x56, 0xb3, 0x15, 0x44, 0xe9, 0xbf   ; [69] 0xFCB4A6 = -0.7895611288749126
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
@@ -5598,7 +5640,7 @@ F64_16p383943563021536:
 F64_neg64p12494342374558:
 	.byte	0x9a, 0xb5, 0xb3, 0x12, 0xff, 0x07, 0x50, 0xc0   ; [71] 0xFCB4B6 = -64.12494342374558
 	;      no loading site located
-; Read at 2 sites: sub_FC9D12 0xFC9EA3, 0xFC9EAD.
+; Pool element at 0xFCB4BE: f64 1.0. Read at 2 sites: sub_FC9D12 0xFC9EA3, 0xFC9EAD.
 F64_1p0_7:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [72] 0xFCB4BE = 1.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
@@ -5611,7 +5653,8 @@ F64_312p03222091924533:
 F64_neg769p4993210849487:
 	.byte	0x77, 0x90, 0x0d, 0x9c, 0xfe, 0x0b, 0x88, 0xc0   ; [75] 0xFCB4D6 = -769.4993210849487
 	;      no loading site located
-; Read at 4 sites: sub_FC9FA3 0xFC9FAB, 0xFC9FB1, 0xFCA008, 0xFCA010.
+; Pool element at 0xFCB4DE: f64 0.0. Read at 4 sites: sub_FC9FA3 0xFC9FAB, 0xFC9FB1,
+; 0xFCA008, 0xFCA010.
 F64_0p0_9:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [76] 0xFCB4DE = 0.0
 ;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)

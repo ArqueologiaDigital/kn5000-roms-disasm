@@ -2174,8 +2174,8 @@ P7Stream_FD0527:
 ;      this said the ELEMENT SIZE was not proved by any instruction.  It is three
 ;      bytes, the width P7Unit_SendValueTable reads with Stream_ReadU24BE at
 ;      0xF9F84F -- see the Layout line below.)
-;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
-;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
 ;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
 ;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
 ;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
@@ -3367,8 +3367,8 @@ P7Stream_FD27D5:
 ; ---- 0xFD28C7-0xFD292A  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA4828, LDA instruction at 0xFA485E
-;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
-;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
 ;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
 ;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
 ;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
@@ -3991,8 +3991,8 @@ P7Stream_FD3A82:
 ; ---- 0xFD3B60-0xFD3BC3  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA483C
-;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
-;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
 ;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
 ;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
 ;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
@@ -4750,8 +4750,8 @@ P7Stream_FD4CBD:
 ; ---- 0xFD4E13-0xFD4E76  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA4832
-;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
-;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
 ;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
 ;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
 ;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
@@ -7586,8 +7586,8 @@ P7Stream_FDA3C8:
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA48C5
 ;      Also pointed at inside it: 0xFDA554, 0xFDA5C1
-;      Layout (corrected 2026-09-25, lane promcd -- this line said it was not
-;      established): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
 ;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
 ;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
 ;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
@@ -7603,8 +7603,8 @@ P7Stream_Data_FDA4E7:
 	;           A second entry point into this object.  Its extent is 109 bytes, 1 + the
 	;           0x6C length P7Unit_SelectStreamsForRecord installs beside the pointer --
 	;           the three 109-byte tables tile the 327-byte object exactly (banner at the
-	;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line said the
-	;           extent was not established.
+	;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line used to
+	;           leave the extent open.
 P7Stream_Data_FDA554:
 	.byte	0x1d, 0x14, 0x72, 0x25, 0x48, 0x7d, 0x93, 0x77, 0x98, 0x57, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff   ; 0xFDA554
 	.byte	0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x54   ; 0xFDA564
@@ -7617,8 +7617,8 @@ P7Stream_Data_FDA554:
 	;           A second entry point into this object.  Its extent is 109 bytes, 1 + the
 	;           0x6C length P7Unit_SelectStreamsForRecord installs beside the pointer --
 	;           the three 109-byte tables tile the 327-byte object exactly (banner at the
-	;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line said the
-	;           extent was not established.
+	;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line used to
+	;           leave the extent open.
 P7Stream_Data_FDA5C1:
 	.byte	0x1d, 0x00, 0x00, 0x00, 0x15, 0x55, 0x55, 0x2a, 0xaa, 0xaa, 0x40, 0x00, 0x00, 0x55, 0x55, 0x55   ; 0xFDA5C1
 	.byte	0x6a, 0xaa, 0xaa, 0x7f, 0xff, 0xff, 0x6a, 0xaa, 0xaa, 0x55, 0x55, 0x55, 0x40, 0x00, 0x00, 0x2a   ; 0xFDA5D1
